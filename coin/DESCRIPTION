@@ -1,5 +1,5 @@
 Package: coin
-Title: Conditional Inference Procedures in a Randomisation Framework
+Title: Conditional Inference Procedures in a Permutation Test Framework
 Date: $Date$
 Version: 0.2-4
 Author: Torsten Hothorn <Torsten.Hothorn@R-project.org> and
