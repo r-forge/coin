@@ -112,6 +112,20 @@ if (require(multcomp)) {
     print(pvalue(rtt, adjusted = TRUE))
 }
 
+### strength of cotton, StatXact 6 manual, page 467
+sc <- data.frame(block = factor(c(rep(1, 5), rep(2, 5), rep(3, 5))),
+                 potash = ordered(rep(c(144, 108, 72, 54, 36), 3)),
+                 strength = c(7.46, 7.17, 7.76, 8.14, 7.63,
+                              7.68, 7.57, 7.73, 8.15, 8.00,
+                              7.21, 7.80, 7.74, 7.87, 7.93))
+
+### Page test
+friedman_test(strength ~ potash | block, data = sc)
+
+### approximate null distribution via Monte-Carlo
+pvalue(friedman_test(strength ~ potash | block, data = sc, 
+                     distribution = "approx", B = 9999))
+
 ### Opinions on Pre- and Extramarital Sex, Agresti (2000), page 421
 opinions <- c("always wrong", "almost always wrong", 
               "wrong only sometimes", "not wrong at all")

@@ -14,3 +14,6 @@ o	check order of observations in friedman_test (ranks in blocks)
 	-> bug in stats:::friedman.test.default
 
 o	check contrast_test with ranks
+
+o	check Monte-Carlo P-value for Page test against StatXact, page 467.
+
