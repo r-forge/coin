@@ -12,10 +12,6 @@ o	check dimensions of objects returned by yfun() and xfun()
 
 o	check contrast_test with ranks
 
-o	check Monte-Carlo P-values against exact ones in StatXact.
-
-o	bowker_test -> mh_test (Marginal Homogenity, Agresti 1990?)
-
 o	check storage.mode of all vars going into C code (MC)
 
 o	add wilcoxon-gehan scores, check logrank scores!
