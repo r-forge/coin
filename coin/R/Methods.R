@@ -262,7 +262,10 @@ setMethod(f = "ApproxNullDistribution",
 
 confint.ScalarIndependenceTestConfint <- function(object, parm, level = 0.95, 
     ...) {
-        x <- object@confint(level)
+        if ("level" %in% names(match.call()))
+            x <- object@confint(level)
+        else
+            x <- object@confint(object@conf.level)
         class(x) <- "ci"
         return(x)
 }

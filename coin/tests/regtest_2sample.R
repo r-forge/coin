@@ -188,3 +188,29 @@ median_test(y ~ x, dat = dat)
 median_test(y ~ x, dat = dat, alternative = "less")
 median_test(y ~ x, dat = dat, alternative = "greater")
 
+### confidence intervals, cf Bauer 1972
+location <- data.frame(y = c(6, 20, 27, 38, 46, 51, 54, 57,
+                             10, 12, 15, 21, 32, 40, 41, 45),
+                       x = gl(2, 8))
+
+ci <- confint(normal_test(y ~ x, data = location, 
+                          conf.int = TRUE, di = "ex"))
+stopifnot(isequal(ci$conf.int, c(-6, 30)))
+stopifnot(isequal(ci$estimate, 11))
+
+wt <- wilcox.test(y ~ x, data = location, 
+                  conf.int = TRUE)
+ci <- confint(wilcox_test(y ~ x, data = location, 
+                          conf.int = TRUE, di = "ex"))
+stopifnot(isequal(wt$confint, ci$confint))
+stopifnot(isequal(wt$estimate, ci$estimate))
+
+scale <- data.frame(y = c(-101, -35, -13, 10, 130, 236, 370, 556,
+                          -145, -140, -40, -30, 2, 27, 68, 290),
+                    x = gl(2, 8))
+
+ci <- confint(ansari_test(y ~ x, data = scale, conf.int = TRUE, 
+                          di = "ex", conf.level = 0.988))
+stopifnot(isequal(ci$conf.int, c(10, 556) / c(68, 27)))
+stopifnot(isequal(ci$estimate, mean(c(35/30, 370 / 290))))
+
