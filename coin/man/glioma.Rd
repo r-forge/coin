@@ -52,7 +52,7 @@ plot(survfit(Surv(Survival, Cens) ~ Group, data=g3),
      xlab="Survival Time in Month")
 
 ### logrank test
-logrank_test(Surv(Survival, Cens) ~ Group, data = g3, 
+surv_test(Surv(Survival, Cens) ~ Group, data = g3, 
              distribution = "exact")
 
 ### Grade IV glioma
@@ -66,11 +66,11 @@ plot(survfit(Surv(Survival, Cens) ~ Group, data=gbm),
      xlab="Survival Time in Month")
    
 ### logrank test
-logrank_test(Surv(Survival, Cens) ~ Group, data = gbm, 
+surv_test(Surv(Survival, Cens) ~ Group, data = gbm, 
              distribution = "exact")
 
 ### stratified logrank test
-logrank_test(Surv(Survival, Cens) ~ Group | Histology, data = glioma,
+surv_test(Surv(Survival, Cens) ~ Group | Histology, data = glioma,
              distribution = "approx", B = 10000)
 
 }

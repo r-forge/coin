@@ -229,29 +229,6 @@ if (require(multcomp)) {
 
 
 
-cleanEx(); ..nameEx <- "LogrankTest"
-
-### * LogrankTest
-
-flush(stderr()); flush(stdout())
-
-### Name: LogrankTest
-### Title: Independent Two- and K-Sample Tests for Censored Data
-### Aliases: logrank_test logrank_test.formula
-###   logrank_test.IndependenceProblem
-### Keywords: htest
-
-### ** Examples
-
-
-data(ocarcinoma, package = "coin")
-
-logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
-             distribution = "exact")
-
-
-
-
 cleanEx(); ..nameEx <- "MarginalHomogenityTest"
 
 ### * MarginalHomogenityTest
@@ -436,6 +413,28 @@ flush(stderr()); flush(stdout())
 
 
 spearman_test(CONT ~ INTG, data = USJudgeRatings)
+
+
+
+
+cleanEx(); ..nameEx <- "SurvTest"
+
+### * SurvTest
+
+flush(stderr()); flush(stdout())
+
+### Name: SurvTest
+### Title: Independent Two- and K-Sample Tests for Censored Data
+### Aliases: surv_test surv_test.formula surv_test.IndependenceProblem
+### Keywords: htest
+
+### ** Examples
+
+
+data(ocarcinoma, package = "coin")
+
+surv_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
+             distribution = "exact")
 
 
 
@@ -675,7 +674,7 @@ plot(survfit(Surv(Survival, Cens) ~ Group, data=g3),
      xlab="Survival Time in Month")
 
 ### logrank test
-logrank_test(Surv(Survival, Cens) ~ Group, data = g3, 
+surv_test(Surv(Survival, Cens) ~ Group, data = g3, 
              distribution = "exact")
 
 ### Grade IV glioma
@@ -689,11 +688,11 @@ plot(survfit(Surv(Survival, Cens) ~ Group, data=gbm),
      xlab="Survival Time in Month")
    
 ### logrank test
-logrank_test(Surv(Survival, Cens) ~ Group, data = gbm, 
+surv_test(Surv(Survival, Cens) ~ Group, data = gbm, 
              distribution = "exact")
 
 ### stratified logrank test
-logrank_test(Surv(Survival, Cens) ~ Group | Histology, data = glioma,
+surv_test(Surv(Survival, Cens) ~ Group | Histology, data = glioma,
              distribution = "approx", B = 10000)
 
 
@@ -769,7 +768,7 @@ flush(stderr()); flush(stdout())
 data(ocarcinoma, package = "coin")
 
 ### logrank test with exact two-sided p-value
-lrt <- logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma,
+lrt <- surv_test(Surv(time, cens) ~ stadium, data = ocarcinoma,
                     distribution = "exact")
 
 ### the test statistic

@@ -358,38 +358,6 @@ IV-III 0.9998777778
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "LogrankTest"
-> 
-> ### * LogrankTest
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: LogrankTest
-> ### Title: Independent Two- and K-Sample Tests for Censored Data
-> ### Aliases: logrank_test logrank_test.formula
-> ###   logrank_test.IndependenceProblem
-> ### Keywords: htest
-> 
-> ### ** Examples
-> 
-> 
-> data(ocarcinoma, package = "coin")
-> 
-> logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
-+              distribution = "exact")
-
-	Exact Logrank Test
-
-data:  y by groups II, IIA 
-T = -2.3341, p-value = 0.01837
-alternative hypothesis: two.sided 
-null values:
-numeric(0)
-
-> 
-> 
-> 
-> 
 > cleanEx(); ..nameEx <- "MarginalHomogenityTest"
 > 
 > ### * MarginalHomogenityTest
@@ -628,6 +596,37 @@ Control 0.00250025 0.5948595
 data:  CONT by INTG 
 T = -1.1437, p-value = 0.2527
 alternative hypothesis: true mu is not equal to 0 
+
+> 
+> 
+> 
+> 
+> cleanEx(); ..nameEx <- "SurvTest"
+> 
+> ### * SurvTest
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: SurvTest
+> ### Title: Independent Two- and K-Sample Tests for Censored Data
+> ### Aliases: surv_test surv_test.formula surv_test.IndependenceProblem
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> 
+> data(ocarcinoma, package = "coin")
+> 
+> surv_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
++              distribution = "exact")
+
+	Exact Logrank Test
+
+data:  y by groups II, IIA 
+T = -2.3341, p-value = 0.01837
+alternative hypothesis: two.sided 
+null values:
+numeric(0)
 
 > 
 > 
@@ -981,7 +980,7 @@ attr(,"conf.level")
 +      xlab="Survival Time in Month")
 > 
 > ### logrank test
-> logrank_test(Surv(Survival, Cens) ~ Group, data = g3, 
+> surv_test(Surv(Survival, Cens) ~ Group, data = g3, 
 +              distribution = "exact")
 
 	Exact Logrank Test
@@ -1004,7 +1003,7 @@ numeric(0)
 +      xlab="Survival Time in Month")
 >    
 > ### logrank test
-> logrank_test(Surv(Survival, Cens) ~ Group, data = gbm, 
+> surv_test(Surv(Survival, Cens) ~ Group, data = gbm, 
 +              distribution = "exact")
 
 	Exact Logrank Test
@@ -1017,7 +1016,7 @@ numeric(0)
 
 > 
 > ### stratified logrank test
-> logrank_test(Surv(Survival, Cens) ~ Group | Histology, data = glioma,
+> surv_test(Surv(Survival, Cens) ~ Group | Histology, data = glioma,
 +              distribution = "approx", B = 10000)
 
 	Approximative Logrank Test
@@ -1129,7 +1128,7 @@ alternative hypothesis: true mu is less than 0
 > data(ocarcinoma, package = "coin")
 > 
 > ### logrank test with exact two-sided p-value
-> lrt <- logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma,
+> lrt <- surv_test(Surv(time, cens) ~ stadium, data = ocarcinoma,
 +                     distribution = "exact")
 > 
 > ### the test statistic
@@ -1330,7 +1329,7 @@ coverstorey
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", env = .CheckExEnv),"\n")
-Time elapsed:  19.64 0.12 19.9 0 0 
+Time elapsed:  19.2 0.15 19.81 0 0 
 > grDevices::dev.off()
 null device 
           1 

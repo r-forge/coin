@@ -13,7 +13,7 @@ export(independence_test,
        cmh_test,
        lbl_test,
        mh_test,
-       logrank_test,
+       surv_test,
        maxstat_test,
        spearman_test,
        friedman_test,
@@ -57,8 +57,8 @@ S3method(ansari_test, IndependenceProblem)
 S3method(fligner_test, formula)
 S3method(fligner_test, IndependenceProblem)
 
-S3method(logrank_test, formula)
-S3method(logrank_test, IndependenceProblem)
+S3method(surv_test, formula)
+S3method(surv_test, IndependenceProblem)
 
 S3method(maxstat_test, formula)
 S3method(maxstat_test, IndependenceProblem)

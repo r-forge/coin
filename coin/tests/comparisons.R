@@ -333,7 +333,7 @@ stopifnot(pci[1] < pvalue(atel) & pci[2] > pvalue(atel))
 ### StatXact 6 manual, 413
 load("lungcancer.rda")
 
-lta <- logrank_test(Surv(time, cens) ~ group, data = lungcancer)
+lta <- surv_test(Surv(time, cens) ~ group, data = lungcancer)
 
 # <CHECK>
 # test statistic, page 415
@@ -343,27 +343,27 @@ isequal(round(statistic(lta), 3), 2.949)
 isequal(round(pvalue(lta), 4), 0.0032)
 # </CHECK>
 
-lte <- logrank_test(Surv(time, cens) ~ group, data = lungcancer, 
+lte <- surv_test(Surv(time, cens) ~ group, data = lungcancer, 
                     distribution = "exact")
 
 # two-sided exact p-value, page 415
 stopifnot(isequal(round(pvalue(lte), 4), 0.0010))
 
-ltel <- logrank_test(Surv(time, cens) ~ group, data = lungcancer, 
+ltel <- surv_test(Surv(time, cens) ~ group, data = lungcancer, 
                      distribution = "exact", alternative = "less")
 
 # one-sided exact p-value, page 415
 stopifnot(isequal(round(pvalue(ltel), 4), 0.0010))
 
 # two-sided approximated p-value
-ltMC <- logrank_test(Surv(time, cens) ~ group, data = lungcancer, 
+ltMC <- surv_test(Surv(time, cens) ~ group, data = lungcancer, 
                      distribution = "approx", B = 10000)
 pci <- attr(pvalue(ltMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(lte) & pci[2] > pvalue(lte))
 
 # one-sided approximated p-value
-ltMC <- logrank_test(Surv(time, cens) ~ group, data = lungcancer, 
+ltMC <- surv_test(Surv(time, cens) ~ group, data = lungcancer, 
                      alternative = "less", distribution = "approx", 
                      B = 10000)
 pci <- attr(pvalue(ltMC), "conf.int")
@@ -379,9 +379,9 @@ srv <- data.frame(time = c(3, 5, 7, 8, 18, 12, 19, 20, 20, 33),
                                     "M", "M", "F", "F", "F")))
 
 # <CHECK>, page 419
-logrank_test(Surv(time, event) ~ treatment | gender, data = srv)
+surv_test(Surv(time, event) ~ treatment | gender, data = srv)
 
-pvalue(logrank_test(Surv(time, event) ~ treatment | gender, data = srv, 
+pvalue(surv_test(Surv(time, event) ~ treatment | gender, data = srv, 
               distribution = "approx", B = 10000))
 # </CHECK>
 
@@ -545,7 +545,7 @@ brain <- data.frame(time = c(4,  5,  9, 12, 20, 25, 30,
                                              c(rep(1, 7), rep(2, 7),
                                                rep(3, 8), rep(3, 8)))))
 
-lta <- logrank_test(Surv(time, event) ~ treatment, data = brain)
+lta <- surv_test(Surv(time, event) ~ treatment, data = brain)
 
 # test statistic, page 516
 isequal(round(statistic(lta), 3), 5.012)
@@ -574,7 +574,7 @@ stopifnot(isequal(round(pvalue(pta), 4), 0.007))
 
 brain$treatment <- ordered(brain$treatment)
 
-lta <- logrank_test(Surv(time, event) ~ treatment, data = brain)
+lta <- surv_test(Surv(time, event) ~ treatment, data = brain)
 
 # test statistic, page 536
 isequal(round(statistic(lta), 3), 1.773)

@@ -330,21 +330,21 @@ ansari_test.IndependenceProblem <- function(object,
 }
 
 
-### Logrank test
-logrank_test <- function(object, ...) UseMethod("logrank_test")
+### Survival tests -> Logrank only, for the moment
+surv_test <- function(object, ...) UseMethod("surv_test")
 
-logrank_test.formula <- function(formula, data = list(), subset = NULL, 
+surv_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
     d <- formula2data(formula, data, subset, ...)  
     w <- formula2weights(weights, data, subset, ...)
     ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
               weights = w)
-    RET <- do.call("logrank_test", c(list(object = ip), list(...)))
+    RET <- do.call("surv_test", c(list(object = ip), list(...)))
     return(RET)
 }
     
-logrank_test.IndependenceProblem <- function(object,  
+surv_test.IndependenceProblem <- function(object,  
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"), ...) {
 

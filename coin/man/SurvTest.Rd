@@ -1,15 +1,15 @@
-\name{LogrankTest}
-\alias{logrank_test}
-\alias{logrank_test.formula}
-\alias{logrank_test.IndependenceProblem}
+\name{SurvTest}
+\alias{surv_test}
+\alias{surv_test.formula}
+\alias{surv_test.IndependenceProblem}
 \title{ Independent Two- and K-Sample Tests for Censored Data }
 \description{
     
 }
 \usage{
-\method{logrank_test}{formula}(formula, data, subset = NULL, 
+\method{surv_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{logrank_test}{IndependenceProblem}(object, 
+\method{surv_test}{IndependenceProblem}(object, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"), ...)
 }
@@ -55,7 +55,7 @@
 
 data(ocarcinoma, package = "coin")
 
-logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
+surv_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
              distribution = "exact")
 
 }
