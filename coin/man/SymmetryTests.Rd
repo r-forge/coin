@@ -23,8 +23,7 @@
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}
-    is a numeric (\code{friedman_test,wilcoxsign_test}) variable 
-    or factor (\code{mh_test}) giving the data values and 
+    is a numeric variable giving the data values and 
     \code{x} a factor with two (\code{wilcoxsign_test}) 
     or more levels giving the corresponding groups. \code{block} is an
     optional factor (which is generated automatically when omitted).}
@@ -32,8 +31,7 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
-  \item{x}{an object inheriting from class \code{SymmetryProblem} or a table 
-           with identical dimnames.}
+  \item{x}{an object inheriting from class \code{SymmetryProblem}.}
   \item{distribution}{the null distribution of the test statistic
     can be computed (\code{exact}) or can be approximated by its
     \code{asymptotic} distribution (\code{asympt}) 
@@ -54,8 +52,17 @@
   methods \code{show}, \code{pvalue} and \code{statistic}.
 
 }
+\references{
+
+        Myles Hollander & Douglas A. Wolfe (1999),  
+        \emph{Nonparametric Statistical Methods, 2nd Edition}.
+        New York: John Wiley & Sons.
+}
 \examples{
 
+### Hollander & Wolfe (1999), Table 7.1, page 274
+### Comparison of three methods ("round out", "narrow angle", and
+###  "wide angle") for rounding first base. 
 RoundingTimes <- data.frame(times = c(5.40, 5.50, 5.55,
     5.85, 5.70, 5.75,
     5.20, 5.60, 5.50,
@@ -92,6 +99,7 @@ axis(2)
 
 ### where do the differences come from?
 ### Wilcoxon-Nemenyi-McDonald-Thompson test
+### Hollander & Wolfe, page 295
 if (require(multcomp)) {
 
     ### setup SymmetryProblem (need to rank here)
@@ -120,7 +128,7 @@ if (require(multcomp)) {
     print(pvalue(rtt, adjusted = TRUE))
 }
 
-### strength of cotton, StatXact 6 manual, page 467
+### Strength Index of Cotton, Hollander & Wolfe (1999), Table 7.5, page 286
 sc <- data.frame(block = factor(c(rep(1, 5), rep(2, 5), rep(3, 5))),
                  potash = ordered(rep(c(144, 108, 72, 54, 36), 3)),
                  strength = c(7.46, 7.17, 7.76, 8.14, 7.63,
@@ -128,7 +136,11 @@ sc <- data.frame(block = factor(c(rep(1, 5), rep(2, 5), rep(3, 5))),
                               7.21, 7.80, 7.74, 7.87, 7.93))
 
 ### Page test
-friedman_test(strength ~ potash | block, data = sc)
+ft <- friedman_test(strength ~ potash | block, data = sc)
+ft
+
+### one-sided p-value
+1 - pnorm(sqrt(statistic(ft)))
 
 ### approximate null distribution via Monte-Carlo
 pvalue(friedman_test(strength ~ potash | block, data = sc, 

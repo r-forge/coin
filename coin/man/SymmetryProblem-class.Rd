@@ -4,17 +4,17 @@
 \alias{initialize,SymmetryProblem-method}
 
 \title{Class "SymmetryProblem" }
-\description{  ~~ A concise (1-5 lines) description of what the class is.  ~~}
+\description{  The main class for data handling for symmetry problems. }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("SymmetryProblem", x, y, block, weights)}.
-    ~~ describe objects here ~~ 
 }
 \section{Slots}{
   \describe{
-    \item{x}{Object of class \code{"data.frame"} ~~ }
-    \item{y}{Object of class \code{"data.frame"} ~~ }
-    \item{weights}{Object of class \code{"numeric"} ~~ }
-    \item{block}{Object of class \code{"factor"} ~~ }
+    \item{\code{x}:}{Object of class \code{"data.frame"}.}
+    \item{\code{y}:}{Object of class \code{"data.frame"}.}
+    \item{\code{weights}:}{Object of class \code{"numeric"}, however,
+      integer values are expected (and checked).}
+    \item{\code{block}:}{Object of class \code{"factor"}.}
   }
 }
 \section{Extends}{
@@ -24,8 +24,5 @@ Class \code{"IndependenceProblem"}, directly.
   \describe{
     \item{initialize}{\code{signature(.Object = "SymmetryProblem")}: ... }
   }
-}
-\examples{
-##---- Should be DIRECTLY executable !! ----
 }
 \keyword{classes}
