@@ -84,13 +84,14 @@ RoundingTimes <- data.frame(times = c(5.40, 5.50, 5.55,
     5.65, 5.60, 5.40,
     5.70, 5.65, 5.55,
     6.30, 6.30, 6.25),
-    methods = factor(rep(c("Round Out", "Narrow Angle", "Wide Angle"), 22)))
+    methods = factor(rep(c("Round Out", "Narrow Angle", "Wide Angle"), 22)),
+    block = factor(rep(1:22, rep(3, 22))))
 
 ### classical global test
-friedman_test(times ~ methods, data = RoundingTimes)
+friedman_test(times ~ methods | block, data = RoundingTimes)
 
 ### parallel coordinates plot
-matplot(t(matrix(RoundingTimes$time, ncol = 3, byrow = TRUE)), 
+matplot(t(matrix(RoundingTimes$times, ncol = 3, byrow = TRUE)), 
         type = "l", col = 1, lty = 1, axes = FALSE, ylab = "Time", 
         xlim = c(0.5, 3.5))
 axis(1, at = 1:3, labels = levels(RoundingTimes$methods))
@@ -101,23 +102,16 @@ axis(2)
 ### Hollander & Wolfe, page 295
 if (require(multcomp)) {
 
-    ### setup SymmetryProblem (need to rank here)
-    r <- as.vector(apply(matrix(RoundingTimes[["times"]], 
-                                ncol = 3, byrow = TRUE),
-                         1, rank))
-    sp <- new("SymmetryProblem", RoundingTimes["methods"],
-              data.frame(r = r))
-
-    ### Friedman test, again
-    print(symmetry_test(sp, teststat = "quadtype"))
-
     ### all pair comparisons
-    rtt <- symmetry_test(sp, teststat = "maxtype",
+    rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
+         teststat = "maxtype",
          xtrafo = function(data)
              trafo(data, factor_trafo = function(x)
-                 model.matrix(~ x - 1) \%*\% t(contrMat(table(x), "Tukey"))
-             )
-     )
+                 model.matrix(~ x - 1) %*% t(contrMat(table(x), "Tukey"))
+             ),
+         ytrafo = function(data)
+             trafo(data, numeric_trafo = rank, block = RoundingTimes$block)
+    )
 
     ### a global test, again
     print(pvalue(rtt))
