@@ -20,4 +20,4 @@ o	visualize deviations from H_0 for all problems (in a way
 
 o	mh_test with weights
 
-o	make `FreeW' work
+o	free W1 and W2 in `vandeWiel.c' in case of an error

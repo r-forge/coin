@@ -68,28 +68,24 @@ celW** reserveerW(int a, int b)
     for (i = 0; i <= a; i++) {
         for (j = i; j <= b; j++) {
             res = (long) binomi(j,i);
-            W[i][j].c = Calloc(res, double);
-            W[i][j].x = Calloc(res, double);
+            /* the majority of memory is freed on exit and error
+               thanks to S_alloc */
+            W[i][j].c = (double *) S_alloc(res, sizeof(double));
+            W[i][j].x = (double *) S_alloc(res, sizeof(double));
         }
+        R_CheckUserInterrupt();
     }
     return(W);
 }
 
-void FreeW(int a, int b, celW **W)
+void FreeW(int a, celW **W)
 {
-    int i, j;
-
-    for (i = 0; i <= a; i++) {
-        for (j = i; j <= b; j++) {
-            Free(W[i][j].c);
-            Free(W[i][j].x);
-        }
-    }
-
-    for (i = 0; i <= a; i++)
-        Free(W[i]);
-        
-    Free(W);
+     int i;
+ 
+     for (i = a; i >= 0; i--)
+         Free(W[i]);
+         
+     Free(W);
 }
 
 
@@ -142,6 +138,7 @@ void plus(celW **W, celW *tempie, int a, int b) {
             tempie[0].x[tempie[0].length + k] = W[a][b-1].x[i];
             k++;
         }
+        R_CheckUserInterrupt();
     }
     tempie[0].length += k;
 }
@@ -182,7 +179,8 @@ void mergesort(celW temptw, long tijd)
                 temptw.c[j] = copiep.c[t1];
                 t1++;
             }
-        }          
+        }   
+        R_CheckUserInterrupt();       
     } 
     Free(copiep.c);
     Free(copiep.x);
@@ -261,6 +259,7 @@ void maakW(celW **W, int a, int b, int start, double *rs) {
             } else {
                 spiegelW(W, i, j, start, rs);
             }                               
+            R_CheckUserInterrupt();
         }
     }
 }
@@ -343,9 +342,10 @@ SEXP R_split_up_2sample(SEXP scores, SEXP m, SEXP obs) {
     /* probability */
     prob = tot/bino; 
     
-    /* free memory */
-    FreeW(c, (b+1)/2, W1);
-    FreeW(c, (b+1)/2, W2);
+    /* free memory: this will _not_ take place 
+       in case of an error */
+    FreeW(c, W1);
+    FreeW(c, W2);
 
     /* return to R */
     PROTECT(ans = allocVector(REALSXP, 1));
