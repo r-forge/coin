@@ -97,5 +97,29 @@ median_test(bp ~ group, data = bloodp)
 median_test(bp ~ group, data = bloodp, distribution = "exact")
 median_test(bp ~ group, data = bloodp, distribution = "approx", B = 9999)
 
+# Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
+# Hollander and Wolfe, 1999, pages 200 and 244 
+# (where Steel-Dwass results are given)
+if (require(multcomp)) {
+    YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44, 
+                                 42, 60, 32, 42, 45, 58, 27, 51, 42, 52, 
+                                 38, 33, 26, 25, 28, 28, 26, 27, 27, 27, 
+                                 31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
+                      site = factor(c(rep("I", 10), rep("II", 10),
+                                      rep("III", 10), rep("IV", 10))))
+
+    NDWD <- perm_test(length ~ site, data = YOY,
+        ytrafo = function(data) trafo(data, numeric_trafo = rank),
+        xtrafo = function(data) trafo(data, factor_trafo = function(x)
+            model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))),
+        teststat = "maxtype", distribution = "approx", B = 90000)
+
+    # global p-value
+    print(pvalue(NDWD))
+
+    # sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
+    print(pvalue(NDWD, adjusted = TRUE))
+}
+
 }
 \keyword{htest}

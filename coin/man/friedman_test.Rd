@@ -90,25 +90,29 @@ axis(1, at = 1:3, labels = levels(RoundingTimes$methods))
 axis(2)
 
 ### where do the differences come from?
+### Wilcoxon-Nemenyi-McDonald-Thompson
 if (require(multcomp)) {
 
-    ### setup SymmetryProblem
+    ### setup SymmetryProblem (need to rank here)
+    r <- as.vector(apply(matrix(RoundingTimes[["times"]], 
+                                ncol = 3, byrow = TRUE),
+                         1, rank))
     sp <- new("SymmetryProblem", RoundingTimes["methods"],
-              RoundingTimes["times"])
+              data.frame(r = r))
 
-    ### asymptotic Tukey all pair comparisons (without rank transformation)
+    ### all pair comparisons
     rtt <- symmetry_test(sp, teststat = "maxtype",
-        xtrafo = function(data) 
-            trafo(data, factor_trafo = function(x)
-                model.matrix(~ x) \%*\% t(contrMat(table(x), "Tukey"))
-            )
-    )
+         xtrafo = function(data)
+             trafo(data, factor_trafo = function(x)
+                 model.matrix(~ x - 1) %*% t(contrMat(table(x), "Tukey"))
+             )
+     )
 
     ### a global test, again
     print(pvalue(rtt))
 
     ### simultaneous P-values for all pair comparisons
-    ### indicate _no_ difference between Narrow Angle and Round Out
+    ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
     print(pvalue(rtt, adjusted = TRUE))
 }
 
