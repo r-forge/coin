@@ -1,0 +1,52 @@
+\name{SymmetryTest}
+\alias{symmetry_test}
+\title{ General Symmetry Test } 
+\description{
+    Testing the symmetry of a response for repeated measurements in a
+    complete block design.
+}
+\usage{
+\method{symmetry_test}{formula}(formula, data, subset = NULL, \dots)
+\method{symmetry_test}{SymmetryProblem}(x, 
+    teststat = c("maxtype", "quadtype", "scalar"),
+    distribution = c("asympt", "approx", "exact"),
+    alternative = c("two.sided", "less", "greater"),
+    xtrafo = trafo, ytrafo = trafo, check = NULL, ...)
+\method{independence_test}{table}(x, 
+    distribution = c("asympt", "approx"), ...)
+}
+\arguments{
+  \item{formula}{a formula of the form 
+    \code{y1 + y2 + ... + yp ~ x1 + x2 + ... xq | block} where the variables
+    on the left and right hand side may be measured on arbitrary scales
+    (including censored ones) and \code{block} is an optional factor for 
+    stratification.}
+  \item{data}{an optional data frame containing the variables in the
+    model formula.}
+  \item{subset}{an optional vector specifying a subset of observations
+    to be used.}
+  \item{x}{an object inheriting from class \code{SymmetryProblem} or an
+           object of class \code{table}.}
+  \item{alternative}{the alternative hypothesis must be
+    one of \code{"two.sided"} (default), \code{"greater"} or    
+    \code{"less"}.  You can specify just the initial letter.}   
+  \item{distribution}{the null distribution of the test statistic
+    can be computed (\code{exact}) or can be approximated by its
+    \code{asymptotic} distribution (\code{asympt}) 
+    or via Monte-Carlo resampling (\code{approx}).}
+  \item{xtrafo}{a function of transformations to be applied to the right hand side of
+    \code{formula} or \code{x@x} see below.}
+  \item{ytrafo}{a function of transformations to be applied to the left hand side of
+    \code{formula} or \code{x@y} see below.}
+  \item{check}{a function to be applied to objects of class
+      \code{SymmetryTest} in order to check for specific forms, see below.}
+  \item{\dots}{further arguments to be passed to or from methods.}
+}
+\details{
+
+}
+\value{
+  An object inheriting from class \code{IndependenceTest} with
+  methods \code{show}, \code{pvalue} and \code{statistic}.
+}
+\keyword{htest}

@@ -41,6 +41,7 @@ independence_test.table <- function(x, distribution = c("asympt", "approx"), ...
     return(RET)
 }
 
+
 independence_test.IndependenceProblem <- function(x,
     teststat = c("maxtype", "quadtype", "scalar"),
     distribution = c("asympt", "approx", "exact"), 
@@ -782,6 +783,30 @@ maxstat_test.IndependenceProblem <- function(x,
 
 ### EXPERIMENTAL ###
 
+### a generic test procedure for classical (and not so classical) tests
+symmetry_test <- function(x, ...) UseMethod("symmetry_test")
+
+symmetry_test.formula <- function(formula, data = list(), subset = NULL,
+    ...) {
+
+    d <- formula2data(formula, data, subset, ...)
+    x <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
+    RET <- do.call("symmetry_test", c(list(x = x), list(...)))
+    return(RET)
+
+}
+
+symmetry_test.SymmetryProblem <- function(x,
+    teststat = c("maxtype", "quadtype", "scalar"),
+    distribution = c("asympt", "approx", "exact"), 
+    alternative = c("two.sided", "less", "greater"), 
+    xtrafo = trafo, ytrafo = trafo, check = NULL, ...) {
+    class(x) <- "IndependenceProblem"
+    independence_test(x, teststat, distribution, alternative, xtrafo,
+                      ytrafo, check, ...)
+}
+
+
 ### Friedman-Test
 friedman_test <- function(x, ...) UseMethod("friedman_test")
 
@@ -804,7 +829,7 @@ friedman_test.SymmetryProblem <- function(x,
 
     distribution <- match.arg(distribution)
 
-    RET <- independence_test(x, 
+    RET <- symmetry_test(x, 
         distribution = distribution, teststat = "quadtype", ...)
 
     RET@method <- paste("Friedman Test")
@@ -832,7 +857,7 @@ bowker_test.SymmetryProblem <- function(x,
 
     distribution <- match.arg(distribution)
 
-    RET <- independence_test(x, 
+    RET <- symmetry_test(x, 
         distribution = distribution, teststat = "quadtype", ...)
 
     RET@method <- paste("Bowker Test")
