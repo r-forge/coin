@@ -781,13 +781,15 @@ stopifnot(isequal(round(pvalue(cta), 4), 0.3345))
 cta <- cmh_test(jobsatisfaction, 
     scores = list(Job.Satisfaction = c(1, 3, 4, 5)))
 
-# teststatistic, page 1018
-(isequal(round(statistic(cta), 3), 9.226))
+# teststatistic, page 1018, is _wrong_ (but StatXact itself
+# computes the correct result)
+# (isequal(round(statistic(cta), 3), 9.226))
 # Agresti, 2002, Table 7.12, page 297
 stopifnot(isequal(round(statistic(cta), 4), 9.0342))
 
-# asymptotical p-value, page 1018
-(isequal(round(pvalue(cta), 4), 0.02643))
+# asymptotical p-value, page 1018, is _wrong_ (but StatXact itself    
+# computes the correct result) 
+# (isequal(round(pvalue(cta), 4), 0.02643))
 # Agresti, 2002, Table 7.12, page 297
 stopifnot(isequal(round(pvalue(cta), 4), 0.0288))
 
