@@ -642,9 +642,14 @@ tumor <- data.frame(number = c( 0,  0,  0,  1,
                                    levels = paste(c(0, 1, 5, 50), "units")),
                     stratum = factor(rep(paste("Stratum", 3:5), rep(8, 3))))
 
-# <CHECK>
-lbl_test(tumor ~ dose | stratum, data = tumor, weights = tumor$number)
-# </CHECK>
+lta <- lbl_test(tumor ~ dose | stratum, data = tumor, weights = ~ number,
+    xscores = c(0, 1, 5, 50))
+
+# test statistic, page 812
+stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.739))
+
+# asymptotic p-value, page 812
+stopifnot(isequal(round(pvalue(lta), 3), 0.082))
 
 lta <- lbl_test(xtabs(number ~ dose + tumor + stratum, data = tumor),
                 xscores = c(0, 1, 5, 50))
@@ -656,13 +661,11 @@ stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.739))
 stopifnot(isequal(round(pvalue(lta), 3), 0.082))
 
 ltMC <- lbl_test(xtabs(number ~ dose + tumor + stratum, data = tumor), 
+                 xscores = c(0, 1, 5, 50), 
                  distribution = "approx", B = 10000)
 
-# <CHECK>
-print(pvalue(ltMC))
 pci <- attr(pvalue(ltMC), "conf.int")
-(pci[1] < 0.0769 & pci[2] > 0.0769)
-# </CHECK>
+stopifnot(pci[1] < 0.0769 & pci[2] > 0.0769)
 
 
 ### StatXact 6 manual, page 832

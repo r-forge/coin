@@ -90,6 +90,26 @@ formula2data <- function(formula, data, subset, ...) {
     return(list(x = x, y = y, block = block, bl = block[[1]]))
 }
 
+formula2weights <- function(weights, data, subset, ...) {
+
+    if (is.null(weights)) return(NULL)
+
+    if (class(weights) != "formula") 
+        stop(sQuote("weights"), " is not a formula object")
+
+    dat <- ModelEnvFormula(formula = weights, data = data,
+                           subset = subset, ...)
+
+    if (has(dat, "input"))
+        weights <- dat@get("input")
+    else 
+        stop("missing right hand side of formula ", sQuote("weights"))
+
+    if (length(weights) > 1 || has(dat, "response"))
+        stop("only one right hand side variable allowed in ", sQuote("weights"))
+
+    return(weights[[1]])
+}
 
 table2df <- function(x) {
     if (!is.table(x))
