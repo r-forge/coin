@@ -58,16 +58,16 @@ setMethod(f = "initialize",
         .Object@scores <- diag(p * q)
 
         if (ncol(x) > 1 || ncol(y) > 1) {
-            colnames(.Object@xtrans) <- paste(rep(colnames(x), 
-                                                  table(attr(.Object@xtrans, "assign"))), 
-                                              colnames(.Object@xtrans), sep = ".")
-            colnames(.Object@xtrans)[attr(.Object@xtrans, "assign") %in% which(!xfact)] <- 
-                colnames(x)[!xfact]
-            colnames(.Object@ytrans) <- paste(rep(colnames(y), 
-                                                  table(attr(.Object@ytrans, "assign"))), 
-                                              colnames(.Object@ytrans), sep = ".")
-            colnames(.Object@ytrans)[attr(.Object@ytrans, "assign") %in% which(!yfact)] <- 
-                colnames(y)[!yfact]
+            colnames(.Object@xtrans) <- paste(
+                rep(colnames(x), table(attr(.Object@xtrans, "assign"))), 
+                    colnames(.Object@xtrans), sep = ".")
+            colnames(.Object@xtrans)[attr(.Object@xtrans, "assign") 
+                %in% which(!xfact)] <- colnames(x)[!xfact]
+            colnames(.Object@ytrans) <- paste(
+                rep(colnames(y), table(attr(.Object@ytrans, "assign"))), 
+                    colnames(.Object@ytrans), sep = ".")
+            colnames(.Object@ytrans)[attr(.Object@ytrans, "assign") 
+                %in% which(!yfact)] <- colnames(y)[!yfact]
         }
 
         ### check if scores are attached

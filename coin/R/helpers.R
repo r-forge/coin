@@ -122,7 +122,8 @@ setscores <- function(x, scores) {
 
     missing <- varnames[!varnames %in% c(colnames(x@x), colnames(x@y))]
     if (length(missing) > 0)
-        stop("Variable(s)", paste(missing, sep = ", "), " not found in ", sQuote("x"))
+        stop("Variable(s)", paste(missing, sep = ", "), 
+             " not found in ", sQuote("x"))
 
 
     for (var in varnames) {
@@ -221,7 +222,8 @@ is_contingency <- function(object) {
     groups <- (ncol(x) == 1 && is.factor(x[[1]]))
     y <- object@y
     values <- (ncol(y) == 1 && is.factor(y[[1]]))
-    trans <- all(rowSums(object@xtrans) %in% c(0,1)) && all(rowSums(object@ytrans) %in% c(0, 1))
+    trans <- all(rowSums(object@xtrans) %in% c(0,1)) && 
+             all(rowSums(object@ytrans) %in% c(0, 1))
     return((groups && values) && trans)       
 }
 

@@ -1,4 +1,6 @@
 
+o	check confidence intervals
+
 o	definition of two-sided p-values in ansari.test contradicts the one
         used here in some cases (-> regtest_2samples.R)
 
@@ -15,3 +17,5 @@ o	maximally selected McNemar statistics -> Betensky, Biometrics, 2000
 
 o	visualize deviations from H_0 for all problems (in a way
 	motivated by shaded mosaicplots)
+
+o	mh_test with weights

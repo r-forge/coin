@@ -119,7 +119,11 @@ confint_location <- function(object, nulldistr, level = 0.95,
         ### was: median(steps) which will not work for blocks etc.
         u <- jumps - object@expectation
         sgr <- ifelse(decreasing, min(steps[u <= 0]), max(steps[u <= 0]))
+
+        ### <CHECK>: u >= 0 ???
         sle <- ifelse(decreasing, max(steps[u > 0]), min(steps[u > 0]))
+        ### </CHECK>
+
         ESTIMATE <- mean(c(sle, sgr), na.rm = TRUE)
         names(ESTIMATE) <- "difference in location"
     } else {
@@ -304,7 +308,9 @@ confint_scale <- function(object, nulldistr, level = 0.95,
         attr(cint, "conf.level") <- level    
         u <- jumps - object@expectation
         sgr <- ifelse(decreasing, min(steps[u <= 0]), max(steps[u <= 0]))
+        ### <CHECK> u >= 0 ???
         sle <- ifelse(decreasing, max(steps[u > 0]), min(steps[u > 0]))
+        ### </CHECK>
         ESTIMATE <- mean(c(sle, sgr), na.rm = TRUE)
         names(ESTIMATE) <- "ratio of scales"
     } else {

@@ -7,7 +7,8 @@ SR_shift_2sample <- function(object) {
              sQuote("ScalarIndependenceTestStatistic"))
 
     if (!is_2sample(object)) 
-        stop(sQuote("object"), " does not represent an independent two-sample problem")
+        stop(sQuote("object"), 
+             " does not represent an independent two-sample problem")
 
     if (!(max(abs(object@weights - 1.0)) < sqrt(.Machine$double.eps)))
         stop("cannot compute exact distribution with non-unity weights")

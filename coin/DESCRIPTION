@@ -1,7 +1,7 @@
 Package: coin
 Title: Conditional Inference Procedures in a Randomisation Framework
 Date: $Date$
-Version: 0.2-1
+Version: 0.2-2
 Author: Torsten Hothorn <Torsten.Hothorn@R-project.org> and
   Kurt Hornik <Kurt.Hornik@R-project.org>, with contributions by
   Mark van de Wiel <m.a.v.d.wiel@TUE.nl> and Achim Zeileis

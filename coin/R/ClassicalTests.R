@@ -14,7 +14,8 @@ independence_test.formula <- function(formula, data = list(), subset = NULL,
 
 }
 
-independence_test.table <- function(x, distribution = c("asympt", "approx"), ...) {
+independence_test.table <- function(x, distribution = c("asympt", "approx"), 
+    ...) {
 
     distribution <- match.arg(distribution)
     ### <FIXME> approx must be able to deal with weights </FIXME>
@@ -25,8 +26,8 @@ independence_test.table <- function(x, distribution = c("asympt", "approx"), ...
                      weights = df[["Freq"]])
         if (ncol(df) == 4) {
             attr(df[[3]], "blockname") <- colnames(df)[3]
-            x <- new("IndependenceProblem", x = df[1], y = df[2], block = df[[3]], 
-                     weights = df[["Freq"]])
+            x <- new("IndependenceProblem", x = df[1], y = df[2], 
+                     block = df[[3]], weights = df[["Freq"]])
         }
     } else {
         x <- table2df(x)
@@ -38,7 +39,8 @@ independence_test.table <- function(x, distribution = c("asympt", "approx"), ...
         }
     }
     ### </FIXME>
-    RET <- do.call("independence_test", c(list(x = x, distribution = distribution), 
+    RET <- do.call("independence_test", 
+                   c(list(x = x, distribution = distribution), 
                    list(...)))
     return(RET)
 }
@@ -170,7 +172,8 @@ wilcox_test.IndependenceProblem <- function(x,
         RET <- new("ScalarIndependenceTestConfint", RET)
         RET@confint <- function(level)
             confint_location(RET@statistic, RET@distribution, 
-                             level = level, approx = (distribution == "asympt"))
+                             level = level, 
+                             approx = (distribution == "asympt"))
         RET@conf.level <- conf.level
     }
     return(RET)
@@ -219,7 +222,8 @@ normal_test.IndependenceProblem <- function(x,
         RET <- new("ScalarIndependenceTestConfint", RET)
         RET@confint <- function(level)
             confint_location(RET@statistic, RET@distribution,
-                             level = level, approx = (distribution == "asympt"))
+                             level = level, 
+                             approx = (distribution == "asympt"))
         RET@conf.level <- conf.level
     }
     return(RET)
@@ -266,7 +270,8 @@ median_test.IndependenceProblem <- function(x,
         RET <- new("ScalarIndependenceTestConfint", RET)
         RET@confint <- function(level)
             confint_location(RET@statistic, RET@distribution,
-                             level = level, approx = (distribution == "asympt"))
+                             level = level, 
+                             approx = (distribution == "asympt"))
         RET@conf.level <- conf.level
     }
     return(RET)
@@ -315,7 +320,8 @@ ansari_test.IndependenceProblem <- function(x,
         RET <- new("ScalarIndependenceTestConfint", RET)
         RET@confint <- function(level)
             confint_scale(RET@statistic, RET@distribution,
-                          level = level, approx = (distribution == "asympt"))
+                          level = level, 
+                          approx = (distribution == "asympt"))
         RET@conf.level <- conf.level
     }
     return(RET)
@@ -468,7 +474,8 @@ spearman_test.IndependenceProblem <- function(x,
 
     check <- function(x) {
         if (!is_corr(x))
-            stop(sQuote("x"), " does not represent a univariate correlation problem")
+            stop(sQuote("x"), 
+                 " does not represent a univariate correlation problem")
         return(TRUE)
     }
 
@@ -509,12 +516,12 @@ cmh_test.table <- function(x, distribution = c("asympt", "approx"), ...) {
     if (distribution == "asympt") {
         df <- as.data.frame(x)
         if (ncol(df) == 3)
-            x <- new("IndependenceProblem", x = df[1], y = df[2], block = NULL, 
-                     weights = df[["Freq"]])
+            x <- new("IndependenceProblem", x = df[1], y = df[2], 
+                     block = NULL, weights = df[["Freq"]])
         if (ncol(df) == 4) {
             attr(df[[3]], "blockname") <- colnames(df)[3]
-            x <- new("IndependenceProblem", x = df[1], y = df[2], block = df[[3]], 
-                     weights = df[["Freq"]])
+            x <- new("IndependenceProblem", x = df[1], y = df[2], 
+                     block = df[[3]], weights = df[["Freq"]])
         }
     } else {
         x <- table2df(x)
@@ -526,7 +533,8 @@ cmh_test.table <- function(x, distribution = c("asympt", "approx"), ...) {
         }
     }
     ### </FIXME>
-    RET <- do.call("cmh_test", c(list(x = x, distribution = distribution), list(...)))
+    RET <- do.call("cmh_test", c(list(x = x, distribution = distribution), 
+                   list(...)))
     return(RET)
 }
 
@@ -579,8 +587,8 @@ chisq_test.table <- function(x, distribution = c("asympt", "approx"), ...) {
                      weights = df[["Freq"]])
         if (ncol(df) == 4) {
             attr(df[[3]], "blockname") <- colnames(df)[3]
-            x <- new("IndependenceProblem", x = df[1], y = df[2], block = df[[3]], 
-                     weights = df[["Freq"]])
+            x <- new("IndependenceProblem", x = df[1], y = df[2], 
+                     block = df[[3]], weights = df[["Freq"]])
         }
     } else {
         x <- table2df(x)
@@ -592,7 +600,8 @@ chisq_test.table <- function(x, distribution = c("asympt", "approx"), ...) {
         }
     }
     ### </FIXME>
-    RET <- do.call("chisq_test", c(list(x = x, distribution = distribution), list(...)))
+    RET <- do.call("chisq_test", c(list(x = x, distribution = distribution), 
+                   list(...)))
     return(RET)
 }
 
@@ -679,13 +688,14 @@ lbl_test.table <- function(x, distribution = c("asympt", "approx"), ...) {
             x <- new("IndependenceProblem", x = x[1], y = x[2], block = NULL) 
         }
     }
-    ### </FIXME>
-    RET <- do.call("lbl_test", c(list(x = x, distribution = distribution), list(...)))
+    RET <- do.call("lbl_test", c(list(x = x, distribution = distribution), 
+                   list(...)))
     return(RET)
 }
 
 
-lbl_test.IndependenceProblem <- function(x, distribution = c("asympt", "approx"), ...) {
+lbl_test.IndependenceProblem <- function(x, 
+    distribution = c("asympt", "approx"), ...) {
 
     check <- function(x) {
         if (!is_ordered(x))

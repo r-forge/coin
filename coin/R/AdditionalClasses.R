@@ -17,18 +17,18 @@ setClass(Class = "ExpectCovarInfluence",
     contains = "ExpectCovar"
 )
 
-### some code from the modeltools package (in preparation) needed
+### some code from the modeltools package (in preparation) is needed
 ### modeltools has
-#Package: modeltools
-#Title: Tools and Classes for Statistical Models
-#Date: $Date$
-#Version: 0.0-3
-#Author: Torsten Hothorn <Torsten.Hothorn@rzmail.uni-erlangen.de> and
-#  Friedrich Leisch <Friedrich.Leisch@ci.tuwien.ac.at>
-#Maintainer: Torsten Hothorn <Torsten.Hothorn@rzmail.uni-erlangen.de>
-#Description: A collection of tools to deal with abstract models
-#Depends: R (>= 1.9.0)
-#License: GPL
+# Package: modeltools
+# Title: Tools and Classes for Statistical Models
+# Date: $Date$
+# Version: 0.0-3
+# Author: Torsten Hothorn <Torsten.Hothorn@rzmail.uni-erlangen.de> and
+#   Friedrich Leisch <Friedrich.Leisch@ci.tuwien.ac.at>
+# Maintainer: Torsten Hothorn <Torsten.Hothorn@rzmail.uni-erlangen.de>
+# Description: A collection of tools to deal with abstract models
+# Depends: R (>= 1.9.0)
+# License: GPL
 
 setClass("StatModelCapabilities",
          representation(weights = "logical",
