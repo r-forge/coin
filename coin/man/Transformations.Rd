@@ -48,7 +48,8 @@ f_trafo(x)
 }
 \details{
 
-  Those utility functions implement the influence functions.
+  The utility functions documented here are used to define special
+  independence tests.
 
   \code{trafo} applies its arguments to the elements of \code{data}
   according to the classes of the elements.
@@ -77,19 +78,19 @@ f_trafo(x)
 }
 \examples{
 
-# dummy matrices, 2-sample problem (only one column)
+### dummy matrices, 2-sample problem (only one column)
 f_trafo(y <- gl(2, 5))
 
-# K-sample problem (K columns)
+### K-sample problem (K columns)
 f_trafo(y <- gl(5, 2))
 
-# normal scores
+### normal scores
 normal_trafo(x <- rnorm(10))
 
-# and now together
+### and now together
 trafo(data.frame(x = x, y = y), numeric_trafo = normal_trafo)
 
-# maximally selected statistics
+### maximally selected statistics
 maxstat_trafo(rnorm(10))
 
 }

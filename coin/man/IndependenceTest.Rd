@@ -36,23 +36,26 @@
            object of class \code{table}.}
   \item{teststat}{the type of test statistic to be applied: either a
     standardized scalar test statistic (\code{scalar}), or a 
-    maximum type \code{maxtype} or a quadratic form \code{quadform}.}
+    maximum type statistic (\code{maxtype}) or a quadratic form
+    (\code{quadform}).}
   \item{alternative}{the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   
   \item{distribution}{the null distribution of the test statistic
-    can be computed (\code{exact}) or can be approximated by its
+    can be computed \code{exact}ly or can be approximated by its
     asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
-  \item{xtrafo}{a function of transformations to be applied to the right hand side of
+  \item{xtrafo}{a function of transformations (see \code{\link{trafo}})
+    to be applied to the right hand side of
     \code{formula} or \code{x@x} see below.}
-  \item{ytrafo}{a function of transformations to be applied to the left hand side of
+  \item{ytrafo}{a function of transformations (see \code{\link{trafo}})
+    to be applied to the left hand side of
     \code{formula} or \code{x@y} see below.}
   \item{scores}{a named list of scores to be attached to ordered factors. In
       case a variable is an unordered factor, it is coerced to
       \code{ordered} first.}
   \item{check}{a function to be applied to objects of class
-      \code{IndendenceTest} in order to check for specific forms, see below.}
+      \code{IndendenceTest} in order to check for specific forms.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
@@ -78,11 +81,24 @@
   replications \code{B} for the approximation of the null distribution
   or arguments to \code{\link[mvtnorm]{pmvnorm}}.
 
+  The fundament of this function is the framework for conditional inference
+  procedures by Strasser & Weber (1999). 
+
 }
 \value{
 
-  An object inheriting from class \code{IndependenceTest} with
-  methods \code{show}, \code{pvalue} and \code{statistic}.
+  An object inheriting from class \code{\link{IndependenceTest-class}} with
+  methods \code{\link{show}}, \code{\link{statistic}}, \code{\link{expectation}},
+  \code{\link{covariance}} and \code{\link{pvalue}}. The null distribution
+  can be inspected by \code{\link{pperm}}, \code{\link{dperm}},
+  \code{\link{qperm}} and \code{\link{support}} methods.
+
+}
+\references{
+
+    Helmut Strasser & Christian Weber (1999),
+    On the asymptotic theory of permutation statistics. 
+    \emph{Mathematical Methods of Statistics}, \bold{8}, 220--250.
 
 }
 \examples{
@@ -98,7 +114,7 @@ independence_test(asat ~ group, data = asat,
     ### one-sided test
     alternative = "greater",
 
-    ### apply normal scores to bp
+    ### apply normal scores to asat$asat
     ytrafo = function(data) trafo(data, numeric_trafo = normal_trafo),
 
     ### indicator matrix of 1st level of group

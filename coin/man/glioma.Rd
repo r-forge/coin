@@ -41,35 +41,35 @@ data(glioma)
 
 par(mfrow=c(1,2))
 
-# Grade III glioma
+### Grade III glioma
 g3 <- subset(glioma, Histology == "Grade3")
 
-# Plot Kaplan-Meier curves
+### Plot Kaplan-Meier curves
 plot(survfit(Surv(Survival, Cens) ~ Group, data=g3), 
      main="Grade III Glioma", lty=c(2,1), 
      legend.text=c("Control", "Treated"),
      legend.bty=1, ylab="Probability", 
      xlab="Survival Time in Month")
 
-# logrank test
+### logrank test
 logrank_test(Surv(Survival, Cens) ~ Group, data = g3, 
              distribution = "exact")
 
-# Grade IV glioma
+### Grade IV glioma
 gbm <- subset(glioma, Histology == "GBM")
 
-# Plot Kaplan-Meier curves
+### Plot Kaplan-Meier curves
 plot(survfit(Surv(Survival, Cens) ~ Group, data=gbm), 
      main="Grade IV Glioma", lty=c(2,1), 
      legend.text=c("Control", "Treated"),
      legend.bty=1, legend.pos=1, ylab="Probability", 
      xlab="Survival Time in Month")
    
-# logrank test
+### logrank test
 logrank_test(Surv(Survival, Cens) ~ Group, data = gbm, 
              distribution = "exact")
 
-# stratified logrank test
+### stratified logrank test
 logrank_test(Surv(Survival, Cens) ~ Group | Histology, data = glioma,
              distribution = "approx", B = 10000)
 

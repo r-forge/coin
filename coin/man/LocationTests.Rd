@@ -71,7 +71,7 @@
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   
   \item{distribution}{the null distribution of the test statistic
-    can be computed (\code{exact}) or can be approximated by its
+    can be computed \code{exact}ly or can be approximated by its
     asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
   \item{ties.method}{two methods are available to adjust scores for ties,
@@ -92,8 +92,8 @@
   Wolfe (1999).
 
   The test procedures apply a rank transformation to the response values 
-  (\code{y}), except of \code{oneway_test} which computes a test statistic
-  using the raw response values.
+  \code{y}, except of \code{oneway_test} which computes a test statistic
+  using the untransformed response values.
 
   The asymptotic null distribution is computed by default for all
   procedures. Exact p-values may be computed for the two-sample problems and
@@ -113,9 +113,12 @@
 }
 \value{
 
-  An object inheriting from class \code{IndependenceTest} with
-  methods \code{show}, \code{pvalue}, \code{statistic}, \code{expectation},
-  \code{covariance} and (optionally) \code{confint}.
+  An object inheriting from class \code{\link{IndependenceTest-class}} with
+  methods \code{\link{show}}, \code{\link{statistic}}, \code{\link{expectation}},
+  \code{\link{covariance}} and \code{\link{pvalue}}. The null distribution
+  can be inspected by \code{\link{pperm}}, \code{\link{dperm}},
+  \code{\link{qperm}} and \code{\link{support}} methods. Confidence
+  intervals can be extracted by \code{confint}.
 
 }
 \references{

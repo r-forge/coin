@@ -10,7 +10,7 @@ for a control and treatment group.
 \format{
   A data frame with 58 observations on the following 2 variables.
   \describe{
-    \item{pain}{Pain scores: ln(baseline/final).}
+    \item{pain}{pain scores: ln(baseline/final).}
     \item{group}{a factor with levels \code{control} and \code{treat}.} }
 }
 \details{

@@ -33,8 +33,7 @@
     to be used.}
   \item{x}{an object inheriting from class \code{SymmetryProblem}.}
   \item{distribution}{the null distribution of the test statistic
-    can be computed (\code{exact}) or can be approximated by its
-    \code{asymptotic} distribution (\code{asympt}) 
+    can be approximated by its asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
   \item{\dots}{further arguments to be passed to or from methods.}
 }

@@ -13,7 +13,7 @@
 \alias{lbl_test}
 \title{ Independence in general I x K x J contingency tables }
 \description{
-    Testing the independence of two, possibly ordered, factors.
+    Testing the Independence of Two Possibly Ordered Factors.
 }
 \usage{
 
@@ -75,8 +75,11 @@
 }
 \value{
 
-  An object inheriting from class \code{IndependenceTest} with
-  methods \code{show}, \code{pvalue} and \code{statistic}.
+  An object inheriting from class \code{\link{IndependenceTest-class}} with
+  methods \code{\link{show}}, \code{\link{statistic}}, \code{\link{expectation}}, 
+  \code{\link{covariance}} and \code{\link{pvalue}}. The null distribution 
+  can be inspected by \code{\link{pperm}}, \code{\link{dperm}},
+  \code{\link{qperm}} and \code{\link{support}} methods.
 
 }
 \references{

@@ -31,8 +31,8 @@
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   
   \item{distribution}{the null distribution of the test statistic
-    can be computed (\code{exact}) or can be approximated by its
-    \code{asymptotic} distribution (\code{asympt}) 
+    can be computed \code{exact}ly or can be approximated by its
+    asymptotic distribution (\code{asympt})  
     or via Monte-Carlo resampling (\code{approx}).}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
@@ -43,8 +43,12 @@
 
 }
 \value{
-  An object inheriting from class \code{ScalarIndependenceTest} with
-  methods \code{show}, \code{pvalue} and \code{statistic}. 
+
+  An object inheriting from class \code{\link{IndependenceTest-class}} with
+  methods \code{\link{show}}, \code{\link{statistic}}, \code{\link{expectation}},
+  \code{\link{covariance}} and \code{\link{pvalue}}. The null distribution
+  can be inspected by \code{\link{pperm}}, \code{\link{dperm}},  
+  \code{\link{qperm}} and \code{\link{support}} methods.
 
 }
 \examples{

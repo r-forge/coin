@@ -3,7 +3,7 @@
 \alias{mh_test.table}
 \alias{mh_test.formula}
 \alias{mh_test.SymmetryProblem}
-\title{ Marginal Homogenity Tests }
+\title{ Marginal Homogenity Test }
 \description{
     Testing marginal homogenity in a complete block design.
 }
@@ -34,7 +34,7 @@
 
   The null hypothesis of independence of row and column totals is tested.
   The corresponding test for binary factors \code{x} and \code{y} is known
-  as McNemar test and was extended by Bowker to the general situation. 
+  as McNemar test.
 
   Scores must be a list of length one (row and column scores coincide). When
   scores are given or if \code{x} is ordered, the corresponding 
