@@ -7,6 +7,8 @@ set.seed(290875)
 library(coin)
 isequal <- coin:::isequal
 
+thisversion <- paste(R.version$major, R.version$minor, sep = ".")
+
 ### generate data: 2 x 2 x K
 dat <- data.frame(x = gl(2, 50), y = gl(2, 50)[sample(1:100)], 
                   block = gl(10, 10)[sample(1:100)])[sample(1:100, 75),]
@@ -34,8 +36,10 @@ dat <- data.frame(x = gl(4, 25), y = gl(4, 25)[sample(1:100)],
 ptwo <- drop(mantelhaen.test(table(dat$y, dat$x, dat$block), 
                              correct = FALSE)$p.value)
 
-(isequal(pvalue(cmh_test(y ~ x | block, data = dat)), ptwo))
-(isequal(pvalue(cmh_test(table(dat$y, dat$x, dat$block))), ptwo))
+if (compareVersion(thisversion, "2.1.0") >= 0) {
+    stopifnot(isequal(pvalue(cmh_test(y ~ x | block, data = dat)), ptwo))
+    stopifnot(isequal(pvalue(cmh_test(table(dat$y, dat$x, dat$block))), ptwo))
+}
 
 ### generate data: r x c x K
 dat <- data.frame(x = gl(4, 25), y = gl(5, 20)[sample(1:100)], 
@@ -46,7 +50,9 @@ dat <- data.frame(x = gl(4, 25), y = gl(5, 20)[sample(1:100)],
 ptwo <- drop(mantelhaen.test(table(dat$y, dat$x, dat$block),
                              correct = FALSE)$p.value)
 
-(isequal(pvalue(cmh_test(y ~ x | block, data = dat)), ptwo))
-(isequal(pvalue(cmh_test(table(dat$y, dat$x, dat$block))), ptwo))
+if (compareVersion(thisversion, "2.1.0") >= 0) {
+    stopifnot(isequal(pvalue(cmh_test(y ~ x | block, data = dat)), ptwo))
+    stopifnot(isequal(pvalue(cmh_test(table(dat$y, dat$x, dat$block))), ptwo))
+}
 
 ### see `comparison.R' for more regression tests
