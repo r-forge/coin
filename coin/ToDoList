@@ -14,4 +14,4 @@ o	check storage.mode of all vars going into C code (MC)
 
 o	add wilcoxon-gehan scores, check logrank scores!
 
-o	what means "trend test for clustered data"?
+o	check if trend test for clustered data are part of the framework

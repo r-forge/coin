@@ -3,34 +3,40 @@
 \alias{wilcox_test}
 \alias{normal_test}
 \alias{median_test}
+\alias{kruskal_test}
 \title{ Independent Two- and K-Sample Location Tests }
 \description{
     Testing the equality of the distributions of a numeric response in 
     two or more independent groups against shift alternatives.
 }
 \usage{
-\method{perm_test}{formula}(formula, data, subset = NULL, \dots)
+\method{perm_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
 \method{perm_test}{IndependenceProblem}(x, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"), ...)
-\method{wilcox_test}{formula}(formula, data, subset = NULL, \dots)
+\method{wilcox_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
 \method{wilcox_test}{IndependenceProblem}(x, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"),
     conf.int = FALSE, conf.level = 0.95, ...)
-\method{kruskal_test}{formula}(formula, data, subset = NULL, \dots)
-\method{kruskal_test}{IndependenceProblem}(x, 
-    distribution = c("asympt", "approx"), ...)
-\method{normal_test}{formula}(formula, data, subset = NULL, \dots)
+\method{normal_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
 \method{normal_test}{IndependenceProblem}(x, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"),
     conf.int = FALSE, conf.level = 0.95, ...)
-\method{median_test}{formula}(formula, data, subset = NULL, \dots)
+\method{median_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
 \method{median_test}{IndependenceProblem}(x, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"),
     conf.int = FALSE, conf.level = 0.95, ...)
+\method{kruskal_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
+\method{kruskal_test}{IndependenceProblem}(x, 
+    distribution = c("asympt", "approx"), ...)
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}
@@ -41,13 +47,15 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
-  \item{x}
+  \item{subset}{an optional formula of the form \code{~ w} defining
+      integer valued weights for the observations.}
+  \item{x}{an object of class \code{IndependenceProblem}.}
   \item{alternative}{the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   
   \item{distribution}{the null distribution of the test statistic
     can be computed (\code{exact}) or can be approximated by its
-    \code{asymptotic} distribution (\code{asympt}) 
+    asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
   \item{conf.int}{a logical indicating whether a confidence interval
     for the difference in location should be computed.}
@@ -60,10 +68,17 @@
   the groups given by \code{x} is tested. In particular, the methods
   documented here are designed to detect shift alternatives. 
 
-  
+  The test procedures apply a rank transformation to the response values 
+  (\code{y}), except of \code{perm_test} which computes a test statistic
+  using the raw response values.
+
+  The asymptotic null distribution is computed by default for all
+  procedures. Exact p-values may be computed for the two-sample problems and
+  can be approximated via Monte-Carlo for all procedures.
 
 }
 \value{
+
   An object inheriting from class \code{IndependenceTest} with
   methods \code{show}, \code{pvalue}, \code{statistic} and (optionally)
   \code{confint}.
@@ -75,38 +90,54 @@ data(bloodp)
 
 # Permutation test
 
+# asymptotic p-value
 perm_test(bp ~ group, data = bloodp)
-perm_test(bp ~ group, data = bloodp, distribution = "exact")
-perm_test(bp ~ group, data = bloodp, distribution = "approx", B = 9999)
+# approximate p-value (with 99% confidence interval)
+pvalue(perm_test(bp ~ group, data = bloodp, 
+                 distribution = "approx", B = 9999))
+# exact p-value
+pt <- perm_test(bp ~ group, data = bloodp, distribution = "exact")
+pvalue(pt)
+
+# plot density and distribution of the standardised 
+# test statistic
+layout(matrix(1:2, nrow = 2))
+s <- support(pt)
+d <- sapply(s, function(x) dperm(pt, x))
+p <- sapply(s, function(x) pperm(pt, x))
+plot(s, d, type = "S", xlab = "Teststatistic", ylab = "Density")
+plot(s, p, type = "S", xlab = "Teststatistic", ylab = "Cumm. Probability")
+
 
 # Wilcoxon-Mann-Whitney test
 
-wilcox_test(bp ~ group, data = bloodp)
-wilcox_test(bp ~ group, data = bloodp, distribution = "exact")
-wilcox_test(bp ~ group, data = bloodp, distribution = "approx", B = 9999)
+# exact p-value and confidence interval for the difference in location
+wt <- wilcox_test(bp ~ group, data = bloodp, 
+            distribution = "exact", conf.int = TRUE)
+pvalue(wt)
+confint(wt)
 
-# the v.d. Waerden test
 
-normal_test(bp ~ group, data = bloodp)
-normal_test(bp ~ group, data = bloodp, distribution = "exact")
-normal_test(bp ~ group, data = bloodp, distribution = "approx", B = 9999)
+# Kruskal-Wallis test (data in Hollander and Wolfe, page 200)
+YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44, 
+                             42, 60, 32, 42, 45, 58, 27, 51, 42, 52, 
+                             38, 33, 26, 25, 28, 28, 26, 27, 27, 27, 
+                             31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
+                  site = factor(c(rep("I", 10), rep("II", 10),
+                                  rep("III", 10), rep("IV", 10))))
 
-# Median
+# approximate exact p-value
+kw <- kruskal_test(length ~ site, data = YOY, 
+             distribution = "approx", B = 9999)
 
-median_test(bp ~ group, data = bloodp)
-median_test(bp ~ group, data = bloodp, distribution = "exact")
-median_test(bp ~ group, data = bloodp, distribution = "approx", B = 9999)
+kw
+pvalue(kw)
+
 
 # Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
 # Hollander and Wolfe, 1999, pages 200 and 244 
 # (where Steel-Dwass results are given)
 if (require(multcomp)) {
-    YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44, 
-                                 42, 60, 32, 42, 45, 58, 27, 51, 42, 52, 
-                                 38, 33, 26, 25, 28, 28, 26, 27, 27, 27, 
-                                 31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
-                      site = factor(c(rep("I", 10), rep("II", 10),
-                                      rep("III", 10), rep("IV", 10))))
 
     NDWD <- perm_test(length ~ site, data = YOY,
         ytrafo = function(data) trafo(data, numeric_trafo = rank),
