@@ -47,11 +47,14 @@ independence_test.IndependenceProblem <- function(x,
     teststat = c("maxtype", "quadtype", "scalar"),
     distribution = c("asympt", "approx", "exact"), 
     alternative = c("two.sided", "less", "greater"), 
-    xtrafo = trafo, ytrafo = trafo, check = NULL, ...) {
+    xtrafo = trafo, ytrafo = trafo, scores = NULL, check = NULL, ...) {
 
     teststat <- match.arg(teststat)
     alternative <- match.arg(alternative)
     distribution <- match.arg(distribution) 
+
+    ### convert factors to ordered and attach scores if requested
+    x <- setscores(x, scores)
 
     ### transform data if requested and setup a test problem
     itp <- new("IndependenceTestProblem", x, xtrafo = xtrafo, 
@@ -660,8 +663,7 @@ lbl_test.table <- function(x, distribution = c("asympt", "approx"), ...) {
 }
 
 
-lbl_test.IndependenceProblem <- function(x, xscores = NULL, 
-    yscores = NULL, distribution = c("asympt", "approx"), ...) {
+lbl_test.IndependenceProblem <- function(x, distribution = c("asympt", "approx"), ...) {
 
     check <- function(x) {
         if (!is_ordered(x))
@@ -670,22 +672,31 @@ lbl_test.IndependenceProblem <- function(x, xscores = NULL,
         return(TRUE)
     }
 
-    if (!is.null(xscores)) {
-        if (length(xscores) != nlevels(x@x[[1]]))
-            stop(sQuote("xscores"), " don't match")
-        attr(x@x[[1]], "scores") <- xscores
-    }
-
-    if (!is.null(yscores)) {
-        if (length(yscores) != nlevels(x@y[[1]]))
-            stop(sQuote("yscores"), " don't match")
-        attr(x@y[[1]], "scores") <- yscores
+    addargs <- list(...)
+    if (is.null(addargs$scores)) {
+        scores <- list(1:nlevels(x@x[[1]]), 1:nlevels(x@y[[1]]))
+        names(scores) <- c(colnames(x@x), colnames(x@y))
+    } else {
+        scores <- addargs$scores
+        addargs$scores <- NULL
+        if (length(scores) == 1) {
+            if (names(scores)[1] == colnames(x@x)) {
+                scores <- c(scores, list(1:nlevels(x@y[[1]])))
+                names(scores)[2] <- colnames(x@y)
+            }
+            if (names(scores)[1] == colnames(x@y)) {
+                scores <- c(scores, list(1:nlevels(x@x[[1]])))
+                names(scores)[2] <- colnames(x@x)
+            }
+        }
     }
 
     distribution <- match.arg(distribution)
 
-    RET <- independence_test(x, 
-        teststat = "quadtype", distribution = distribution, check = check, ...)
+    RET <- do.call("independence_test", 
+        c(list(x = x, scores = scores, 
+               teststat = "quadtype", distribution = distribution, 
+               check = check), addargs))
 
     RET@method <- paste("Linear-by-Linear Association Test")
     return(RET)
@@ -883,28 +894,24 @@ friedman_test.SymmetryProblem <- function(x,
 }
 
 ### Bowker-Test
-bowker_test <- function(x, ...) UseMethod("bowker_test")
+mh_test <- function(x, ...) UseMethod("mh_test")
 
-bowker_test.formula <- function(formula, data = list(), subset = NULL, ...)
+mh_test.formula <- function(formula, data = list(), subset = NULL, ...)
 {
     d <- formula2data(formula, data, subset, ...)
     x <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
-    RET <- do.call("bowker_test", c(list(x = x), list(...)))
+    RET <- do.call("mh_test", c(list(x = x), list(...)))
     return(RET)
 }   
 
-bowker_test.table <- function(x, yscores = NULL, ...) {
+mh_test.table <- function(x, ...) {
     x <- table2df_sym(x)
-    if (!is.null(yscores)) {
-        x$response <- ordered(x$response)
-        attr(x$response, "scores") <- yscores
-    }
     x <- new("SymmetryProblem", x = x["groups"], y = x["response"])
-    RET <- do.call("bowker_test", c(list(x = x), list(...))) 
+    RET <- do.call("mh_test", c(list(x = x), list(...))) 
     return(RET)
 }
 
-bowker_test.SymmetryProblem <- function(x, 
+mh_test.SymmetryProblem <- function(x, 
     distribution = c("asympt", "approx"), ...) {
     
     if (!is_completeblock(x))

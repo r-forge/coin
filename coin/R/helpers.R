@@ -111,6 +111,47 @@ formula2weights <- function(weights, data, subset, ...) {
     return(weights[[1]])
 }
 
+setscores <- function(x, scores) {
+
+    if (is.null(scores)) return(x)
+
+    if (!is.list(scores) || is.null(names(scores)))
+       stop(sQuote("scores"), " is not a named list")
+
+    varnames <- names(scores)
+
+    missing <- varnames[!varnames %in% c(colnames(x@x), colnames(x@y))]
+    if (length(missing) > 0)
+        stop("Variable(s)", paste(missing, sep = ", "), " not found in ", sQuote("x"))
+
+
+    for (var in varnames) {
+        if (!is.null(x@x[[var]])) {
+
+            if (!is.factor(x@x[[var]]))
+                stop(var, " is not a factor")
+
+            if (nlevels(x@x[[var]]) != length(scores[[var]]))
+                stop("scores for variable ", var, " don't match")
+            
+            x@x[[var]] <- ordered(x@x[[var]], levels = levels(x@x[[var]]))
+            attr(x@x[[var]], "scores") <- scores[[var]]
+        }
+        if (!is.null(x@y[[var]])) {
+
+            if (!is.factor(x@y[[var]]))
+                stop(var, " is not a factor")
+
+            if (nlevels(x@y[[var]]) != length(scores[[var]]))
+                stop("scores for variable ", var, " don't match")
+            
+            x@y[[var]] <- ordered(x@y[[var]], levels = levels(x@y[[var]]))
+            attr(x@y[[var]], "scores") <- scores[[var]]
+        }
+    }
+    return(x)
+}
+
 table2df <- function(x) {
     if (!is.table(x))
         stop(sQuote("x"), " is not of class ", sQuote("table"))

@@ -1,6 +1,6 @@
 \name{SymmetryTests}
 \alias{friedman_test}
-\alias{bowker_test}
+\alias{mh_test}
 \alias{wilcoxsign_test}
 \title{ Symmetry Tests }
 \description{
@@ -11,9 +11,9 @@
 \method{friedman_test}{formula}(formula, data, subset = NULL, \dots)
 \method{friedman_test}{SymmetryProblem}(x, 
     distribution = c("asympt", "approx"), ...) 
-\method{bowker_test}{formula}(formula, data, subset = NULL, \dots)
-\method{bowker_test}{table}(x, yscores = NULL, ...)
-\method{bowker_test}{SymmetryProblem}(x, 
+\method{mh_test}{formula}(formula, data, subset = NULL, \dots)
+\method{mh_test}{table}(x, yscores = NULL, ...)
+\method{mh_test}{SymmetryProblem}(x, 
     distribution = c("asympt", "approx"), ...) 
 \method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
 \method{wilcoxsign_test}{SymmetryProblem}(x, 
@@ -22,7 +22,7 @@
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}
     is a numeric (\code{friedman_test,wilcoxsign_test}) variable 
-    or factor (\code{bowker_test}) giving the data values and 
+    or factor (\code{mh_test}) giving the data values and 
     \code{x} a factor with two (\code{wilcoxsign_test}) 
     or more levels giving the corresponding groups. \code{block} is an
     optional factor (which is generated automatically when omitted).}
@@ -138,10 +138,10 @@ PreExSex <- as.table(matrix(c(144, 33, 84, 126,
                                             ExtramaritalSex = opinions)))
 
 ### treating response as nominal
-bowker_test(PreExSex)
+mh_test(PreExSex)
 
 ### and as ordinal
-bowker_test(PreExSex, yscores = 1:length(opinions))
+mh_test(PreExSex, scores = list(response = 1:length(opinions)))
 
 }
 \keyword{htest}

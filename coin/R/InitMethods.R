@@ -102,7 +102,7 @@ setMethod(f = "initialize",
                 PACKAGE = "coin")
         if (xORDINAL && yORDINAL)
             ### grrr: class(kronecker(1:4, 1:3)) == "array"  
-            .Object@scores <- matrix(kronecker(xscores, yscores), nrow = 1)
+            .Object@scores <- matrix(kronecker(yscores, xscores), nrow = 1)
         if (!xORDINAL && yORDINAL)
             .Object@scores <- .Call("R_scmatright", 
                     as.double(yscores), as.integer(p * q),

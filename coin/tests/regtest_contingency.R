@@ -66,14 +66,14 @@ attr(df$Job.Satisfaction, "scores") <- c(1, 3, 4, 5)
 cmh_test(Job.Satisfaction ~ Income | Gender, data = df)
 
 cmh_test(Job.Satisfaction ~ Income | Gender, data = df, 
-         yscores = c(2500, 10000, 20000, 30000))
+         scores = list(Income = c(2500, 10000, 20000, 30000)))
 lbl_test(Job.Satisfaction ~ Income | Gender, data = df, 
-         yscores = c(2500, 10000, 20000, 30000))
+         scors = list(Income = c(2500, 10000, 20000, 30000)))
 
 ### StatXact 6 manual, page 
 stopifnot(isequal(round(pvalue(lbl_test(jobsatisfaction, 
-                      yscores = c(3, 10, 20, 35), 
-                      xscores = c(1, 3, 4, 5))), 
+                      scores = list(Income = c(3, 10, 20, 35), 
+                                    Job.Satisfaction = c(1, 3, 4, 5)))), 
              5), 0.01309))
 
 ### congenital sex organ malformation, StatXact 6 manual, page 793
@@ -88,10 +88,10 @@ stopifnot(isequal(round(pvalue(lbl_test(csom)), 4),
                   round(prop.trend.test(csom[2,], colSums(csom))$p.value, 4)))
 
 ### asympototic p-value permutation test with scores (page 807)
-p <- pvalue(lbl_test(csom, yscores = c(0, 0.5, 1.5, 4, 7)))
+p <- pvalue(lbl_test(csom, scores = list(Alcohol = c(0, 0.5, 1.5, 4, 7))))
 stopifnot(isequal(round(p, 4), 0.0104))
 stopifnot(isequal(round(pvalue(lbl_test(csom, 
-                               yscores = c(0, 0.5, 1.5, 4, 7))), 4),
+                               scores = list(Alcohol = c(0, 0.5, 1.5, 4, 7)))), 4),
                   round(prop.trend.test(csom[2,], colSums(csom),
                         score = c(0, 0.5, 1.5, 4, 7))$p.value, 4)))
 
@@ -112,7 +112,7 @@ dr <- as.table(matrix(c(100, 18, 50, 50, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1), nr
 stopifnot(isequal(round(pvalue(lbl_test(dr)), 4), 0.0708))
 
 ### with alternative scores, page 997
-stopifnot(isequal(round(pvalue(lbl_test(dr, xscores = c(1, 3, 9, 27))), 4), 
+stopifnot(isequal(round(pvalue(lbl_test(dr, scores = list(tox = c(1, 3, 9, 27)))), 4), 
                   0.0828))
 
 ### army: with blocks, page 1014

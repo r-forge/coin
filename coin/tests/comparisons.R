@@ -9,7 +9,7 @@ presidents <- as.table(matrix(c(28, 7, 13, 27), nrow = 2,
     dimnames = list(BeforeTVDebate = c("Carter", "Reagan"),
                     AfterTVDebate = c("Carter", "Reagan"))))
 
-bta <- bowker_test(presidents)
+bta <- mh_test(presidents)
 
 # test statistic, page 306 
 stopifnot(isequal(round(sqrt(statistic(bta)), 3), 1.342))
@@ -18,7 +18,7 @@ stopifnot(isequal(round(sqrt(statistic(bta)), 3), 1.342))
 stopifnot(isequal(round(pvalue(bta), 4), 0.1797))
 
 # exact p-value, page 306
-btMC <- bowker_test(presidents, distribution = "approx", B = 10000)
+btMC <- mh_test(presidents, distribution = "approx", B = 10000)
 pci <- attr(pvalue(btMC), "conf.int")
 stopifnot(pci[1] < 0.2632 & pci[2] > 0.2632)
 
@@ -31,7 +31,8 @@ endometrial_cancer <- as.table(matrix(c(6, 9, 9, 12,
                           dimnames = list(Cases = c(0, 0.2, 0.5125, 0.7),
                                           Controls = c(0, 0.2, 0.5125, 0.7))))
 
-bta <- bowker_test(endometrial_cancer, yscores = c(0, 0.2, 0.5125, 0.7))
+bta <- mh_test(endometrial_cancer, 
+                   scores = list(response = c(0, 0.2, 0.5125, 0.7)))
 
 # test statistic, page 311 
 stopifnot(isequal(round(sqrt(statistic(bta)), 3), 3.735))
@@ -48,7 +49,8 @@ pathologists <- as.table(matrix(c(22,  5,  0,  0, 0,
     dimnames = list(Pathologist1 = paste("Level", 1:5, sep = "-"),
                     Pathologist2 = paste("Level", 1:5, sep = "-"))))
 
-bta <- bowker_test(pathologists, yscores = 1:5)
+bta <- mh_test(pathologists, 
+                   scores = list(response = 1:5))
 
 # test statistic, page 313
 stopifnot(isequal(round(sqrt(statistic(bta)), 3), 1.152))
@@ -57,7 +59,7 @@ stopifnot(isequal(round(sqrt(statistic(bta)), 3), 1.152))
 stopifnot(isequal(round(pvalue(bta), 4), 0.2492))
 
 # exact p-value, page 313
-btMC <- bowker_test(pathologists, yscores = 1:5, 
+btMC <- mh_test(pathologists, scores = list(response = 1:5), 
                     distribution = "approx", B = 10000)
 pci <- attr(pvalue(btMC), "conf.int")
 stopifnot(pci[1] < 0.3073 & pci[2] > 0.3073)
@@ -399,13 +401,13 @@ analgesic_eff <- data.frame(response = factor(
     treatment = factor(rep(c("Placebo", "Aspirin", "NewDrug"), 12)),
     subject = factor(rep(1:12, rep(3, 12))))
 
-bta <- bowker_test(response ~  treatment | subject, data = analgesic_eff)
+bta <- mh_test(response ~  treatment | subject, data = analgesic_eff)
 
 # asymptotic p-value, page 459 (no frame, see text!)
 stopifnot(isequal(round(pvalue(bta), 3), 0.02))
 
 # approximative p-value
-btMC <- bowker_test(response ~  treatment | subject, 
+btMC <- mh_test(response ~  treatment | subject, 
     data = analgesic_eff, distribution = "approx", B = 10000)
 
 pci <- attr(pvalue(btMC), "conf.int")
@@ -585,7 +587,7 @@ csom <- as.table(matrix(c(17066, 48, 14464, 38, 788, 5, 126, 1, 37, 1), nrow = 2
     dimnames = list(Malformation = c("Absent", "Present"),
                     Alcohol = c("0", "<1", "1-2", "3-5", ">=6"))))
 
-lta <- lbl_test(csom, yscores = 0:4)
+lta <- lbl_test(csom, scores = list(Alcohol = 0:4))
 
 # test statistic, page 796
 stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.352))
@@ -600,7 +602,7 @@ ltMC <- lbl_test(csom, distribution = "approx", B = 100)
 pci <- attr(pvalue(ltMC), "conf.int")
 stopifnot(pci[1] < 0.179 & pci[2] > 0.179)
 
-lta <- lbl_test(csom, yscores = c(0, 0.5, 1.5, 4, 7))
+lta <- lbl_test(csom, scores = list(Alcohol = c(0, 0.5, 1.5, 4, 7)))
 
 # test statistic, page 807
 stopifnot(isequal(round(sqrt(statistic(lta)), 3), 2.563))
@@ -608,7 +610,7 @@ stopifnot(isequal(round(sqrt(statistic(lta)), 3), 2.563))
 # asymptotic p-value, page 807
 stopifnot(isequal(round(pvalue(lta), 4), 0.0104))
 stopifnot(isequal(round(pvalue(lbl_test(csom,
-                               yscores = c(0, 0.5, 1.5, 4, 7))), 4),
+                               scores = list(Alcohol = c(0, 0.5, 1.5, 4, 7)))), 4),
                   round(prop.trend.test(csom[2,], colSums(csom),
                         score = c(0, 0.5, 1.5, 4, 7))$p.value, 4)))
 
@@ -643,7 +645,7 @@ tumor <- data.frame(number = c( 0,  0,  0,  1,
                     stratum = factor(rep(paste("Stratum", 3:5), rep(8, 3))))
 
 lta <- lbl_test(tumor ~ dose | stratum, data = tumor, weights = ~ number,
-    xscores = c(0, 1, 5, 50))
+    scores = list(dose = c(0, 1, 5, 50)))
 
 # test statistic, page 812
 stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.739))
@@ -652,7 +654,7 @@ stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.739))
 stopifnot(isequal(round(pvalue(lta), 3), 0.082))
 
 lta <- lbl_test(xtabs(number ~ dose + tumor + stratum, data = tumor),
-                xscores = c(0, 1, 5, 50))
+                scores = list(dose = c(0, 1, 5, 50)))
 
 # test statistic, page 812
 stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.739))
@@ -661,7 +663,7 @@ stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.739))
 stopifnot(isequal(round(pvalue(lta), 3), 0.082))
 
 ltMC <- lbl_test(xtabs(number ~ dose + tumor + stratum, data = tumor), 
-                 xscores = c(0, 1, 5, 50), 
+                 scores = list(dose = c(0, 1, 5, 50)), 
                  distribution = "approx", B = 10000)
 
 pci <- attr(pvalue(ltMC), "conf.int")
@@ -674,7 +676,7 @@ endo <- as.table(matrix(c(6, 9, 9, 12, 2, 4, 2, 1, 3, 2, 3, 2, 1, 1, 1, 1),
         list(Cases = c("0", "0.1-0.299", "0.3-0.625", ">0.625"),
              Controls = c("0", "0.1-0.299", "0.3-0.625", ">0.625"))))
 
-bta <- bowker_test(endo, yscores = c(0, 0.2, 0.512, 0.7))
+bta <- mh_test(endo, scores = list(response = c(0, 0.2, 0.512, 0.7)))
 
 # test statistic, page 837
 stopifnot(isequal(round(sqrt(statistic(bta)), 3), 3.735))
@@ -683,7 +685,7 @@ stopifnot(isequal(round(sqrt(statistic(bta)), 3), 3.735))
 stopifnot(isequal(round(pvalue(bta), 6), 0.000188))
 
 # <CHECK>
-btMC <- bowker_test(endo, yscores = c(0, 0.2, 0.512, 0.7),
+btMC <- mh_test(endo, scores = list(response = c(0, 0.2, 0.512, 0.7)),
                     distribution = "approx", B = 10000)
 
 print(pvalue(btMC))
@@ -723,7 +725,7 @@ dr <- as.table(matrix(c(100, 18, 50, 50, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1), nr
     dimnames = list(dose = paste((1:4)*100, "mg"),
                     tox = c("mild", "moderate", "severe", "death"))))
 
-lta <- lbl_test(dr)
+lta <- lbl_test(dr, scores = list(dose = (1:4)*100, tox = 1:4))
 
 # teststatistic, page 993
 stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.807))
@@ -737,7 +739,7 @@ pci <- attr(pvalue(ltMC), "conf.int")
 stopifnot(pci[1] < 0.0792 & pci[2] > 0.0792)
 
 
-lta <- lbl_test(dr, xscores = c(1, 3, 9, 27))
+lta <- lbl_test(dr, scores = list(tox = c(1, 3, 9, 27)))
 
 # teststatistic, page 993
 stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.734))
@@ -745,7 +747,7 @@ stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.734))
 # asymptotical p-value, page 993
 stopifnot(isequal(round(pvalue(lta), 4), 0.0828))
 
-ltMC <- lbl_test(dr, xscores = c(1, 3, 9, 27), 
+ltMC <- lbl_test(dr, scores = list(tox = c(1, 3, 9, 27)), 
                  distribution = "approx", B = 10000)
 
 pci <- attr(pvalue(ltMC), "conf.int")
@@ -775,11 +777,38 @@ stopifnot(isequal(round(statistic(cta), 1), 10.2))
 # asymptotical p-value, page 1017
 stopifnot(isequal(round(pvalue(cta), 4), 0.3345))
 
-lta <- lbl_test(jobsatisfaction, xscores = c(1, 3, 4, 5), 
-                yscores = c(3, 10, 20, 35))
+# only Job.Satisfaction ordered
+cta <- cmh_test(jobsatisfaction, 
+    scores = list(Job.Satisfaction = c(1, 3, 4, 5)))
+
+# teststatistic, page 1018
+(isequal(round(statistic(cta), 3), 9.226))
+# Agresti, 2002, Table 7.12, page 297
+stopifnot(isequal(round(statistic(cta), 4), 9.0342))
+
+# asymptotical p-value, page 1018
+(isequal(round(pvalue(cta), 4), 0.02643))
+# Agresti, 2002, Table 7.12, page 297
+stopifnot(isequal(round(pvalue(cta), 4), 0.0288))
+
+
+lta <- lbl_test(jobsatisfaction, 
+    scores = list(Job.Satisfaction = c(1, 3, 4, 5), 
+                  Income = c(3, 10, 20, 35)))
 
 # teststatistic, page 1020
 stopifnot(isequal(round(sqrt(statistic(lta)), 3), 2.481))
 
 # asymptotical p-value, page 1020
 stopifnot(isequal(round(pvalue(lta), 5), 0.01309))
+
+lta <- cmh_test(jobsatisfaction, 
+    scores = list(Job.Satisfaction = c(1, 3, 4, 5), 
+                  Income = c(3, 10, 20, 35)))
+
+# teststatistic, page 1020
+stopifnot(isequal(round(sqrt(statistic(lta)), 3), 2.481))
+
+# asymptotical p-value, page 1020
+stopifnot(isequal(round(pvalue(lta), 5), 0.01309))
+

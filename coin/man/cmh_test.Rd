@@ -79,10 +79,10 @@ lbl_test(tox)
 pvalue(lbl_test(tox, distribution = "approx", B = 9999))
 
 ### 0.0828, page 997
-lbl_test(tox, xscores = c(1, 3, 9, 27))
+lbl_test(tox, scores = list(tox = c(1, 3, 9, 27)))
 
 ## 0.0780, page 997
-pvalue(lbl_test(tox, xscores = c(1, 3, 9, 27), distribution = "approx", B = 9999))
+pvalue(lbl_test(tox, scores = list(tox = c(1, 3, 9, 27)), distribution = "approx", B = 9999))
 
 }
 \keyword{htest}
