@@ -66,8 +66,12 @@ framework for permutation tests given by \cite{StrasserWeber1999}. For a
 very flexible formulation of multivariate linear statistics,
 \cite{StrasserWeber1999} derived the conditional expectation and covariance
 of the conditional (permutation) distribution as well as the multivariate 
-limiting distribution. A large amount of classical test procedures for 
-continuous, categorical and censored data fits into this framework, for
+limiting distribution. 
+
+
+Conditional counterparts of a large amount of classical (unconditional) 
+test procedures for 
+continuous, categorical and censored data are part of this framework, for
 example the Cochran-Mantel-Haenszel test for independence in general
 contingency tables, linear association tests for ordered categorical 
 data, linear rank tests and multivariate permutation tests.
@@ -76,8 +80,8 @@ The conceptual framework of permutation tests by \cite{StrasserWeber1999}
 for arbitrary problems is available via the generic
 \texttt{independence\_test}. Because concenience functions for the most
 prominent problems are available, users will not have to use this
-extremely flexible procedure. Currently, the following test procedures are
-available: 
+extremely flexible procedure. Currently, the conditional variants of the 
+following test procedures are available: 
 \begin{center}
 \begin{tabular}{ll}
 \texttt{oneway\_test} & two- and $K$-sample permutation test \\
@@ -115,7 +119,8 @@ In the following we assume that we are provided with $n$ observations
 \begin{eqnarray*}
 (\Y_i, \X_i, w_i, b_i), \quad i = 1, \dots, n.
 \end{eqnarray*}
-The variables $\Y$ and $\X$ may
+The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
+$\mathcal{X}$ may
 be measured at arbitrary scales and may be multivariate as well. In addition
 to those measurements, case weights $w$ and a factor $b$ coding blocks may
 be available. For the sake of simplicity, we assume $w_i = 1$ and $b_i = 0,
@@ -133,9 +138,9 @@ of the form
 \T = \vec\left(\sum_{i = 1}^n w_i g(\X_i) h(\Y_i, (\Y_1, \dots, \Y_n))^\top\right)
 \in \R^{pq}.
 \end{eqnarray}
-Here, $g: \X \rightarrow \R^{p}$ is a transformation of
+Here, $g: \mathcal{X} \rightarrow \R^{p}$ is a transformation of
 the $\X$ measurements and the \emph{influence function}
-$h: \Y \times \Y^n \rightarrow
+$h: \mathcal{Y} \times \mathcal{Y}^n \rightarrow
 \R^q$ depends on the responses $(\Y_1, \dots, \Y_n)$ in a permutation
 symmetric way. We will give specific examples how to choose $g$ and $h$
 later on.
@@ -177,7 +182,7 @@ influence function is
 with corresponding $q \times q$ covariance matrix
 \begin{eqnarray*}
 \V(h | S) = \ws^{-1} \sum_i w_i \left(h(\Y_i, (\Y_1, \dots, \Y_n))
-- \E(h | )
+- \E(h | S)
 \right) \\
 \left(h(\Y_i, (\Y_1, \dots, \Y_n)) - \E(h | S)\right)^\top.
 \end{eqnarray*}
@@ -226,7 +231,7 @@ probabilities can be computed efficiently.
 
 The main workhorse \texttt{independence\_test} essentially allows for the
 specification of $\Y, \X$ and $b$ through a formula interface of the form
-\texttt{y ~ x | b}, weights can be defined by a formula with one variable on
+\verb/y ~ x | b/, weights can be defined by a formula with one variable on
 the right hand side only. Four additional arguments are available for the
 specification of the transformation $g$ (\texttt{xtrans}), the influence 
 function $h$ (\texttt{ytrans}), the form of the test statistic $c$ 
@@ -342,7 +347,7 @@ lbl_test(jobsatisfaction,
 
 \section{Quality Assurance}
 
-The test procedures implemented in package `coin' are continuously checked
+The test procedures implemented in package \texttt{coin} are continuously checked
 against results obtained by the corresponding implementations in package
 \texttt{stats} (where available). In addition, the test statistics and 
 exact, approximativ and asymptotic $p$-values for data examples given in the 
@@ -353,7 +358,7 @@ the \textsf{R}-transcript files in directory \texttt{coin/tests}.
 
 
 \bibliographystyle{plainnat}
-\bibliography{litdbTH}
+\bibliography{coinrefs}
 
 \end{document}
 
