@@ -139,7 +139,7 @@ SEXP R_MonteCarloIndependenceTest (SEXP x, SEXP y, SEXP block, SEXP B) {
 
     int n, p, q, pq, i, *index, *permindex, b, Bsim;
     SEXP ans, blocksetup, linstat;
-    double *dx, *dy;
+    double *dx, *dy, f = 0.1;
     
     n = nrow(x);
     p = ncol(x);
@@ -162,9 +162,16 @@ SEXP R_MonteCarloIndependenceTest (SEXP x, SEXP y, SEXP block, SEXP B) {
     GetRNGstate();
         
     for (b = 0; b < Bsim; b++) {
+
         C_blockperm(blocksetup, permindex);
         SET_VECTOR_ELT(ans, b, linstat = allocVector(REALSXP, pq));
         C_PermutedLinearStatistic(dx, p, dy, q, n, n, index, permindex, REAL(linstat));
+        
+        /* check user interrupts */
+        if (b > Bsim * f) {
+            R_CheckUserInterrupt();
+            f += 0.1;
+        }
     }
 
     PutRNGstate();
