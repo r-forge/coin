@@ -58,7 +58,11 @@
 
 \section{Permutation Tests}
 
-$(\Y_i, \X_i, w_i, b_i), i = 1, \dots, n)$
+$(\Y_i, \X_i, w_i, b_i), i = 1, \dots, n.$
+
+\begin{eqnarray*}
+H_0: D(\Y | \X) = D(\Y)
+\end{eqnarray*}
 
 \begin{eqnarray} \label{linstat}
 \T = \vec\left(\sum_{i = 1}^n w_i g(\X_i) h(\Y_i, (\Y_1, \dots, \Y_n))^\top\right)
