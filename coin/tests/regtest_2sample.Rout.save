@@ -1,0 +1,310 @@
+
+R : Copyright 2004, The R Foundation for Statistical Computing
+Version 2.0.1  (2004-11-15), ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for a HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> PKG <- "ConditionalInference"
+> 
+> ### Regression tests for the 2 sample problem, i.e.,
+> ### testing the independence of a numeric variable
+> ### `y' and a binary factor `x' (possibly blocked)
+> 
+> set.seed(290875)
+> library(PKG, character.only = TRUE)
+Loading required package: survival 
+Loading required package: splines 
+Loading required package: mvtnorm 
+> 
+> ### generate data
+> dat <- data.frame(x = gl(2, 50), y = rnorm(100), block = gl(5, 20))[sample(1:100,
++ 75),]
+> 
+> ### Wilcoxon Mann-Whitney Rank Sum Test
+> 
+> ### asymptotic distribution
+> ptwo <- wilcox.test(y ~ x, data = dat, correct = FALSE, exact = FALSE)$p.value
+> pless <- wilcox.test(y ~ x, data = dat, alternative = "less", 
++                      correct = FALSE, exact = FALSE)$p.value
+> pgreater <- wilcox.test(y ~ x, data = dat, alternative = "greater", 
++                         correct = FALSE, exact = FALSE)$p.value
+> 
+> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat)), ptwo))
+> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "less")),
++                   pless))
+> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater")), 
++                   pgreater))
+> 
+> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
++     ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
+> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
++     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
++     alternative = "less")), pless))
+> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
++     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
++     alternative = "greater")), pgreater))
+> 
+> ### exact distribution
+> ptwo <- wilcox.test(y ~ x, data = dat, exact = TRUE)$p.value
+> pless <- wilcox.test(y ~ x, data = dat, alternative = "less", exact = TRUE)$p.value
+> pgreater <- wilcox.test(y ~ x, data = dat, alternative = "greater", 
++                         exact = TRUE)$p.value
+> 
+> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, distribution = "exact")), 
++                   ptwo))
+> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "less", 
++                              distribution = "exact")), pless))
+> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater",
++                              distribution = "exact")), pgreater))
+> 
+> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
++     ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
+> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
++     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
++     alternative = "less")), pless))
+> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
++     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
++     alternative = "greater")), pgreater))
+> 
+> ### approximated distribution
+> rtwo <- pvalue(wilcox_test(y ~ x, data = dat, distribution = "approx")) / ptwo
+> rless <- pvalue(wilcox_test(y ~ x, data = dat, alternative = "less",
++                    distribution = "approx")) / pless
+> rgreater <- pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater",
++                    distribution = "approx")) / pgreater
+> stopifnot(all(c(rtwo, rless, rgreater) > 0.9 & 
++               c(rtwo, rless, rgreater) < 1.1))
+> 
+> ### <FIXME> add block examples </FIXME>
+> 
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "asympt"))
+[1] 0.1794892
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx"))
+[1] 0.197
+attr(,"conf.int")
+[1] 0.1656172 0.2313194
+attr(,"conf.int")attr(,"conf.level")
+[1] 0.99
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact"))
+[1] 0.1847028
+> 
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "asympt", 
++                    alternative = "less"))
+[1] 0.0897446
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx", 
++                    alternative = "less"))
+[1] 0.099
+attr(,"conf.int")
+[1] 0.07613518 0.12577658
+attr(,"conf.int")attr(,"conf.level")
+[1] 0.99
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact", 
++                    alternative = "less"))
+[1] 0.09335664
+> 
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "asympt", 
++                    alternative = "greater"))
+[1] 0.9102554
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx", 
++                    alternative = "greater"))
+[1] 0.917
+attr(,"conf.int")
+[1] 0.8919859 0.9379376
+attr(,"conf.int")attr(,"conf.level")
+[1] 0.99
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact", 
++                    alternative = "greater"))
+[1] 0.9098776
+> 
+> ### StatXact 6 manual, page 345-346
+> data(employment, package = PKG)
+> stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
++                          distribution = "exact")), 4), 0.04))
+> stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
++                          distribution = "exact", alternative = "less")), 4), 0.04))
+> stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
++                          distribution = "exact", alternative = "greater")), 4), 1))
+> stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
++                          distribution = "asympt")), 4), 0.0578))
+> stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
++                          distribution = "asympt", alternative = "less")), 4), 0.0289))
+> 
+> ### sanify checks
+> try(wilcox_test(x ~ y, data = dat))
+Error in wilcox_test.IndependenceProblem(x = list()) : 
+	'x' does not represent a two sample problem
+> try(wilcox_test(x ~ y | y, data = dat))
+Error in checkSlotAssignment(object, name, value) : 
+	Assignment of an object of class "numeric" is not valid for slot "block" in an object of class "IndependenceProblem"; is(value, "factor") is not TRUE
+> 
+> ### Ansari-Bradley Test 
+> 
+> ### asymptotic distribution
+> ### <FIXME> alternative is defined in another way here </FIXME>
+> ptwo <- ansari.test(y ~ x, data = dat, correct = FALSE, exact = FALSE)$p.value
+> pless <- ansari.test(y ~ x, data = dat, alternative = "greater", 
++                      correct = FALSE, exact = FALSE)$p.value
+> pgreater <- ansari.test(y ~ x, data = dat, alternative = "less", 
++                         correct = FALSE, exact = FALSE)$p.value
+> 
+> stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat)), ptwo))
+> stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "less")),
++                   pless))
+> stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "greater")), 
++                   pgreater))
+> 
+> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
++     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
+> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
++     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
++     alternative = "less")), pless))
+> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
++     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
++     alternative = "greater")), pgreater))
+> 
+> ### exact distribution
+> ptwo <- ansari.test(y ~ x, data = dat, exact = TRUE)$p.value
+> pless <- ansari.test(y ~ x, data = dat, alternative = "greater", exact = TRUE)$p.value
+> pgreater <- ansari.test(y ~ x, data = dat, alternative = "less", 
++                         exact = TRUE)$p.value
+> 
+> ### <FIXME>: Definition of two-sided P-values! </FIXME>
+> (isequal(pvalue(ansari_test(y ~ x, data = dat, distribution = "exact")), 
++                   ptwo))
+[1] 0.2125862712
+[1] 0.2135741290
+[1] FALSE
+> stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "less", 
++                              distribution = "exact")), pless))
+> stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "greater",
++                              distribution = "exact")), pgreater))
+> 
+> ### <FIXME>: Definition of two-sided P-values! </FIXME>
+> (isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
++     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
+[1] 0.2125862712
+[1] 0.2135741290
+[1] FALSE
+> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
++     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
++     alternative = "less")), pless))
+> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
++     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
++     alternative = "greater")), pgreater))
+> 
+> ### approximated distribution
+> rtwo <- pvalue(ansari_test(y ~ x, data = dat, distribution = "approx")) / ptwo
+> rless <- pvalue(ansari_test(y ~ x, data = dat, alternative = "less",
++                    distribution = "approx")) / pless
+> rgreater <- pvalue(ansari_test(y ~ x, data = dat, alternative = "greater",
++                    distribution = "approx")) / pgreater
+> ### <FIXME> ??? </FIXME>
+> (all(c(rtwo, rless, rgreater) > 0.9 & 
++               c(rtwo, rless, rgreater) < 1.1))
+[1] FALSE
+> 
+> ### <FIXME> add block examples </FIXME>
+> 
+> ### sanify checks
+> try(ansari_test(x ~ y, data = dat))
+Error in ansari_test.IndependenceProblem(x = list()) : 
+	'x' does not represent a two sample problem
+> try(ansari_test(x ~ y | y, data = dat))
+Error in checkSlotAssignment(object, name, value) : 
+	Assignment of an object of class "numeric" is not valid for slot "block" in an object of class "IndependenceProblem"; is(value, "factor") is not TRUE
+> 
+> ### the remaining three candidates
+> ### asymptotic distribution
+> ptwo <- wilcox.test(y ~ x, data = dat, correct = FALSE)$p.value
+> pless <- wilcox.test(y ~ x, data = dat, alternative = "less",
++                      correct = FALSE)$p.value
+> pgreater <- wilcox.test(y ~ x, data = dat, alternative = "greater", 
++                         correct = FALSE)$p.value
+> 
+> perm_test(y ~ x, dat = dat)
+
+	Asymptotical Permutation Test
+
+data:  y by groups 1, 2 
+T = -0.7774, p-value = 0.4369
+alternative hypothesis: true mu is not equal to 0 
+
+> perm_test(y ~ x, dat = dat, alternative = "less")
+
+	Asymptotical Permutation Test
+
+data:  y by groups 1, 2 
+T = -0.7774, p-value = 0.2185
+alternative hypothesis: true mu is less than 0 
+
+> perm_test(y ~ x, dat = dat, alternative = "greater")
+
+	Asymptotical Permutation Test
+
+data:  y by groups 1, 2 
+T = -0.7774, p-value = 0.7815
+alternative hypothesis: true mu is greater than 0 
+
+> 
+> normal_test(y ~ x, dat = dat)
+
+	Asymptotical Normal Quantile (van der Waerden) Test
+
+data:  y by groups 1, 2 
+T = -0.8596, p-value = 0.39
+alternative hypothesis: true mu is not equal to 0 
+
+> normal_test(y ~ x, dat = dat, alternative = "less")
+
+	Asymptotical Normal Quantile (van der Waerden) Test
+
+data:  y by groups 1, 2 
+T = -0.8596, p-value = 0.195
+alternative hypothesis: true mu is less than 0 
+
+> normal_test(y ~ x, dat = dat, alternative = "greater")
+
+	Asymptotical Normal Quantile (van der Waerden) Test
+
+data:  y by groups 1, 2 
+T = -0.8596, p-value = 0.805
+alternative hypothesis: true mu is greater than 0 
+
+> 
+> median_test(y ~ x, dat = dat)
+
+	Asymptotical Median Test
+
+data:  y by groups 1, 2 
+T = -0.8015, p-value = 0.4228
+alternative hypothesis: true mu is not equal to 0 
+
+> median_test(y ~ x, dat = dat, alternative = "less")
+
+	Asymptotical Median Test
+
+data:  y by groups 1, 2 
+T = -0.8015, p-value = 0.2114
+alternative hypothesis: true mu is less than 0 
+
+> median_test(y ~ x, dat = dat, alternative = "greater")
+
+	Asymptotical Median Test
+
+data:  y by groups 1, 2 
+T = -0.8015, p-value = 0.7886
+alternative hypothesis: true mu is greater than 0 
+
+> 
+> 
