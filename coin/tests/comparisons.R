@@ -1,4 +1,7 @@
 
+### compare output for examples from StatXact 6 manual with
+### StatXact 6 output as given in the manual
+
 library(coin)
 set.seed(290875)
 isequal <- coin:::isequal
