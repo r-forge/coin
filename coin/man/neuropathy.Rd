@@ -27,11 +27,17 @@ for a control and treatment group.
 \examples{
 
 data(neuropathy)
-# compare with Table 2 of Conover & Salsburg (1988)
+
+### compare with Table 2 of Conover & Salsburg (1988)
+oneway_test(pain ~ group, data = neuropathy, alternative = "less",
+            distribution = "exact")
+
 wilcox_test(pain ~ group, data = neuropathy, alternative = "less", 
             distribution = "exact")
+
 css <- consal_trafo(neuropathy$pain)
-perm_test(css ~ group, data = neuropathy, distribution = "approx")
+oneway_test(css ~ group, data = neuropathy, distribution = "approx",
+            alternative = "less")
 
 }
 \keyword{datasets}

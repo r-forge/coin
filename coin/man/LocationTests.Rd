@@ -1,7 +1,7 @@
 \name{LocationTests}
-\alias{perm_test.formula}
-\alias{perm_test.IndependenceProblem}
-\alias{perm_test}
+\alias{oneway_test.formula}
+\alias{oneway_test.IndependenceProblem}
+\alias{oneway_test}
 \alias{wilcox_test.formula}
 \alias{wilcox_test.IndependenceProblem}
 \alias{wilcox_test}
@@ -21,9 +21,9 @@
 }
 \usage{
 
-\method{perm_test}{formula}(formula, data, subset = NULL, 
+\method{oneway_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{perm_test}{IndependenceProblem}(x, 
+\method{oneway_test}{IndependenceProblem}(x, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"), ...)
 
@@ -92,7 +92,7 @@
   Wolfe (1999).
 
   The test procedures apply a rank transformation to the response values 
-  (\code{y}), except of \code{perm_test} which computes a test statistic
+  (\code{y}), except of \code{oneway_test} which computes a test statistic
   using the raw response values.
 
   The asymptotic null distribution is computed by default for all
@@ -176,13 +176,13 @@ pvalue(wt)
 
 
 ### Permutation test, asymptotic p-value
-perm_test(pd ~ age, data = water_transfer)
+oneway_test(pd ~ age, data = water_transfer)
 
 ### approximate p-value (with 99% confidence interval)
-pvalue(perm_test(pd ~ age, data = water_transfer, 
+pvalue(oneway_test(pd ~ age, data = water_transfer, 
                  distribution = "approx", B = 9999))
 ### exact p-value
-pt <- perm_test(pd ~ age, data = water_transfer, distribution = "exact")
+pt <- oneway_test(pd ~ age, data = water_transfer, distribution = "exact")
 pvalue(pt)
 
 ### plot density and distribution of the standardised 
@@ -215,7 +215,7 @@ pvalue(kw)
 ### (where Steel-Dwass results are given)
 if (require(multcomp)) {
 
-    NDWD <- perm_test(length ~ site, data = YOY,
+    NDWD <- oneway_test(length ~ site, data = YOY,
         ytrafo = function(data) trafo(data, numeric_trafo = rank),
         xtrafo = function(data) trafo(data, factor_trafo = function(x)
             model.matrix(~x - 1) \%*\% t(contrMat(table(x), "Tukey"))),

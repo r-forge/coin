@@ -2,7 +2,7 @@
 import(methods)
 
 export(independence_test,
-       perm_test,
+       oneway_test,
        wilcox_test,
        normal_test,
        median_test,
@@ -42,8 +42,8 @@ exportMethods("initialize", "show", "pvalue", "statistic",
 S3method(independence_test, formula)
 S3method(independence_test, IndependenceProblem)
 
-S3method(perm_test, formula)
-S3method(perm_test, IndependenceProblem)
+S3method(oneway_test, formula)
+S3method(oneway_test, IndependenceProblem)
 S3method(wilcox_test, formula)
 S3method(wilcox_test, IndependenceProblem)
 S3method(normal_test, formula)

@@ -726,20 +726,20 @@ lbl_test.IndependenceProblem <- function(x, distribution = c("asympt", "approx")
 
 
 ### permutation test without transformations
-perm_test <- function(x, ...) UseMethod("perm_test")
+oneway_test <- function(x, ...) UseMethod("oneway_test")
 
-perm_test.formula <- function(formula, data = list(), subset = NULL, 
+oneway_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
     d <- formula2data(formula, data, subset, ...)
     w <- formula2weights(weights, data, subset, ...)
     x <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
              weights = w)
-    RET <- do.call("perm_test", c(list(x = x), list(...)))  
+    RET <- do.call("oneway_test", c(list(x = x), list(...)))  
     return(RET)
 }
 
-perm_test.IndependenceProblem <- function(x, 
+oneway_test.IndependenceProblem <- function(x, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"), ...) {
 
@@ -763,15 +763,15 @@ perm_test.IndependenceProblem <- function(x,
     return(RET)
 }
 
-perm_test.SymmetryProblem <- function(x, 
-    alternative = c("two.sided", "less", "greater"),
-    distribution = c("asympt", "approx", "exact"), ...) {
-
-    class(x) <- "IndependenceProblem"
-    RET <- perm_test(x, alternative = alternative, 
-                     distribution = distribution, ...)
-   return(RET)
-}
+# oneway_test.SymmetryProblem <- function(x, 
+#     alternative = c("two.sided", "less", "greater"),
+#     distribution = c("asympt", "approx", "exact"), ...) {
+# 
+#     class(x) <- "IndependenceProblem"
+#     RET <- oneway_test(x, alternative = alternative, 
+#                      distribution = distribution, ...)
+#    return(RET)
+# }
 
 ### Contrast test
 contrast_test <- function(x, ...) UseMethod("contrast_test")

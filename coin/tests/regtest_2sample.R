@@ -26,12 +26,12 @@ stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "less")),
 stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater")), 
                   pgreater))
 
-stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
     ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
-stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
     alternative = "less")), pless))
-stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
     alternative = "greater")), pgreater))
 
@@ -48,12 +48,12 @@ stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "less",
 stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater",
                              distribution = "exact")), pgreater))
 
-stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
     ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
-stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
     alternative = "less")), pless))
-stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
     alternative = "greater")), pgreater))
 
@@ -119,12 +119,12 @@ stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "less")),
 stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "greater")), 
                   pgreater))
 
-stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
-stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
     alternative = "less")), pless))
-stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
     alternative = "greater")), pgreater))
 
@@ -143,12 +143,12 @@ stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "greater",
                              distribution = "exact")), pgreater))
 
 ### <FIXME>: Definition of two-sided P-values! </FIXME>
-(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
-stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
     alternative = "less")), pless))
-stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
     alternative = "greater")), pgreater))
 
@@ -176,9 +176,9 @@ pless <- wilcox.test(y ~ x, data = dat, alternative = "less",
 pgreater <- wilcox.test(y ~ x, data = dat, alternative = "greater", 
                         correct = FALSE)$p.value
 
-perm_test(y ~ x, dat = dat)
-perm_test(y ~ x, dat = dat, alternative = "less")
-perm_test(y ~ x, dat = dat, alternative = "greater")
+oneway_test(y ~ x, dat = dat)
+oneway_test(y ~ x, dat = dat, alternative = "less")
+oneway_test(y ~ x, dat = dat, alternative = "greater")
 
 normal_test(y ~ x, dat = dat)
 normal_test(y ~ x, dat = dat, alternative = "less")

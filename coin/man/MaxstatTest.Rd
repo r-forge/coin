@@ -1,0 +1,75 @@
+\name{MaxstatTest}
+\alias{maxstat_test.formula}
+\alias{maxstat_test.IndependenceProblem}
+\alias{maxstat_test}
+\title{ Maximally selected test statistics }
+\description{
+    Testing the independence of a set of ordered or numeric covariates and a
+    response of arbitrary measurement scale against cutpoint alternatives. 
+}
+\usage{
+\method{maxstat_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
+\method{maxstat_test}{IndependenceProblem}(x, 
+    distribution = c("asympt", "approx", ...)
+}
+\arguments{
+  \item{formula}{a formula of the form \code{y ~ x1 + ... + xp | block} where \code{y}
+    is a variable measured at arbitrary scale and the covariates \code{x1}
+    to \code{xp} are at least of class \code{ordered}; \code{block} is an
+    optional factor for stratification.}
+  \item{data}{an optional data frame containing the variables in the
+    model formula.}
+  \item{subset}{an optional vector specifying a subset of observations
+    to be used.}
+  \item{weights}{an optional formula of the form \code{~ w} defining
+    integer valued weights for the observations.}   
+  \item{x}{an object inheriting from class \code{IndependenceProblem}.}
+  \item{distribution}{the null distribution of the test statistic
+    can be approximated by its
+    \code{asymptotic} distribution (\code{asympt}) 
+    or via Monte-Carlo resampling (\code{approx}).}
+  \item{\dots}{further arguments to be passed to or from methods.}
+}
+\details{
+
+  The null hypothesis of independence of all covariates to the response
+  \code{y} against cutpoint alternatives is tested.
+
+}
+\value{
+
+  An object inheriting from class \code{IndependenceTest} with
+  methods \code{show}, \code{pvalue} and \code{statistic}.
+
+}
+\references{
+
+   Rupert Miller & David Siegmund (1982),
+   Maximally Selected Chi Square Statistics. 
+   \emph{Biometrics} \bold{38}, 1011--1016.
+
+   Berthold Lausen & Martin Schumacher (1992),
+   Maximally Selected Rank Statistics.
+   \bold{Biometrics} \bold{48}, 73--85.
+
+   Torsten Hothorn & Berthold Lausen (2003),
+   On the Exact Distribution of Maximally Selected Rank
+   Statistics. \emph{Computational Statistics \& Data Analysis}
+   \bold{43}, 121--137.
+
+   Berthold Lausen, Torsten Hothorn, Frank Bretz &
+   Martin Schumacher (2004), Optimally Selected Prognostic Factors.
+   \emph{Biometrical Journal}, \bold{46}, 364--374.
+
+}
+}
+  
+\examples{
+
+data(treepipit)
+
+maxstat_test(counts ~ coverstorey, data = treepipit)
+
+}
+\keyword{htest}

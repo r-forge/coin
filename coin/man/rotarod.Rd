@@ -45,7 +45,7 @@ try(wilcox_test(time ~ group, data=rotarod, conf.int = TRUE, distribution =
 wilcox_test(time ~ group, data=rotarod, distribution = "approx")
 wilcox_test(time ~ group, data=rotarod)
 # the permutation test
-perm_test(time ~ group, data=rotarod, distribution = "exact")
-perm_test(time ~ group, data=rotarod)
+oneway_test(time ~ group, data=rotarod, distribution = "exact")
+oneway_test(time ~ group, data=rotarod)
 }
 \keyword{datasets}

@@ -139,7 +139,7 @@ pci <- attr(pvalue(ntMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(ntel) & pci[2] > pvalue(ntel))
 
-pta <- perm_test(bp ~ group, data = bloodp)
+pta <- oneway_test(bp ~ group, data = bloodp)
 
 # test statistic, page 394
 stopifnot(isequal(round(statistic(pta), 3), 1.612))
@@ -147,26 +147,26 @@ stopifnot(isequal(round(statistic(pta), 3), 1.612))
 # two-sided asymptotic p-value, page 394
 stopifnot(isequal(round(pvalue(pta), 4), 0.1070))
 
-pte <- perm_test(bp ~ group, data = bloodp, distribution = "exact")
+pte <- oneway_test(bp ~ group, data = bloodp, distribution = "exact")
 
 # two-sided exact p-value, page 394
 stopifnot(isequal(round(pvalue(pte), 4), 0.1040))
 
-ptel <- perm_test(bp ~ group, data = bloodp, distribution = "exact",
+ptel <- oneway_test(bp ~ group, data = bloodp, distribution = "exact",
                   alternative = "greater")
 
 # one-sided exact p-value, page 394
 stopifnot(isequal(round(pvalue(ptel), 4), 0.0564))
 
 # two-sided approximated p-value
-ptMC <- perm_test(bp ~ group, data = bloodp, 
+ptMC <- oneway_test(bp ~ group, data = bloodp, 
                   distribution = "approx", B = 10000)
 pci <- attr(pvalue(ptMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(pte) & pci[2] > pvalue(pte))
 
 # one-sided approximated p-value
-ptMC <- perm_test(bp ~ group, data = bloodp, alternative = "greater",
+ptMC <- oneway_test(bp ~ group, data = bloodp, alternative = "greater",
                   distribution = "approx", B = 10000)
 pci <- attr(pvalue(ptMC), "conf.int")
 
@@ -248,7 +248,7 @@ pci <- attr(pvalue(ntMC), "conf.int")
 
 stopifnot(pci[1] < 0.04 & pci[2] > 0.04)
 
-pta <- perm_test(Salary ~ Gender | Year, data = employment)
+pta <- oneway_test(Salary ~ Gender | Year, data = employment)
 
 # test statistic, page 396
 stopifnot(isequal(round(statistic(pta), 3), -1.873))
@@ -256,27 +256,27 @@ stopifnot(isequal(round(statistic(pta), 3), -1.873))
 # two-sided asymptotic p-value, page 396
 stopifnot(isequal(round(pvalue(pta), 4), 0.0610))
 
-pte <- perm_test(Salary ~ Gender | Year, data = employment, 
+pte <- oneway_test(Salary ~ Gender | Year, data = employment, 
                  distribution = "exact")
 
 # two-sided exact p-value, page 396
 stopifnot(isequal(round(pvalue(pte), 4), 0.04))
 
-ptel <- perm_test(Salary ~ Gender | Year, data = employment, 
+ptel <- oneway_test(Salary ~ Gender | Year, data = employment, 
                   distribution = "exact", alternative = "less")
 
 # one-sided exact p-value, page 396
 stopifnot(isequal(round(pvalue(ptel), 4), 0.04))
 
 # two-sided approximated p-value
-ptMC <- perm_test(Salary ~ Gender | Year, data = employment, 
+ptMC <- oneway_test(Salary ~ Gender | Year, data = employment, 
                   distribution = "approx", B = 10000)
 pci <- attr(pvalue(ptMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(pte) & pci[2] > pvalue(pte))
 
 # one-sided approximated p-value
-ptMC <- perm_test(Salary ~ Gender | Year, data = employment, 
+ptMC <- oneway_test(Salary ~ Gender | Year, data = employment, 
                     alternative = "less", distribution = "approx", 
                     B = 10000)
 pci <- attr(pvalue(ptMC), "conf.int")
@@ -520,7 +520,7 @@ stopifnot(isequal(round(statistic(kta), 3), 9.415))
 # asymptotic p-value, page 493
 stopifnot(isequal(round(pvalue(kta), 4), 0.0515))
 
-pta <- perm_test(response ~ drug, data = tox, teststat = "quadtype")
+pta <- oneway_test(response ~ drug, data = tox, teststat = "quadtype")
 
 # test statistic, page 508
 stopifnot(isequal(round(statistic(pta), 2), 10.98))
@@ -561,7 +561,7 @@ oring <- data.frame(temp = c(66, 67, 67, 67, 68, 68, 70, 70, 72,
                                           rep("Two", 1), rep("Three", 1)),
                                         levels = c("None", "One", "Two", "Three")))
 
-pta <- perm_test(temp ~ incidents, data = oring)
+pta <- oneway_test(temp ~ incidents, data = oring)
 
 # test statistic, page 524
 stopifnot(isequal(round(statistic(pta), 3), 2.698))
