@@ -103,23 +103,35 @@ pci <- attr(pvalue(wtMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(wtel) & pci[2] > pvalue(wtel))
 
-nta <- normal_test(bp ~ group, data = bloodp)
+# deal with ties as described in StatXact 6 manual, page 329ff
+# Normal scores
+n_trafo <- function(x) {
+    r <- rank(x, ties = "random")
+    s <- qnorm(r/(length(x) + 1))
+    dup <- x[duplicated(x)]
+    for (d in dup)
+        s[d == x] <- mean(s[d == x])
+    s 
+}
+
+nta <- perm_test(bp ~ group, data = bloodp, ytrafo = function(data)
+                 trafo(data, numeric_trafo = n_trafo))
 
 # test statistic, page 354
 stopifnot(isequal(round(statistic(nta), 3), 1.789))
 
-# <CHECK>
 # two-sided asymptotic p-value, page 354 
-isequal(round(pvalue(nta), 3), 0.0737)
-# </CHECK>
+stopifnot(isequal(round(pvalue(nta), 4), 0.0737))
 
-nte <- normal_test(bp ~ group, data = bloodp, distribution = "exact")
+nte <- perm_test(bp ~ group, data = bloodp, distribution = "exact",
+                 ytrafo = function(data) trafo(data, numeric_trafo = n_trafo))
 
 # two-sided exact p-value, page 354
 stopifnot(isequal(round(pvalue(nte), 4), 0.0799))
 
-ntel <- normal_test(bp ~ group, data = bloodp, distribution = "exact",
-                     alternative = "greater")
+ntel <- perm_test(bp ~ group, data = bloodp, distribution = "exact",
+                  alternative = "greater", ytrafo = function(data)
+                  trafo(data, numeric_trafo = n_trafo))
 
 # one-sided exact p-value, page 354
 stopifnot(isequal(round(pvalue(ntel), 4), 0.0462))
@@ -210,26 +222,27 @@ pci <- attr(pvalue(wtMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(wtel) & pci[2] > pvalue(wtel))
 
-nta <- normal_test(Salary ~ Gender | Year, data = employment)
+nta <- perm_test(Salary ~ Gender | Year, data = employment,
+    ytrafo = function(data) trafo(data, numeric_trafo = n_trafo))
 
 # <CHECK>
 # test statistic, page 358
-isequal(round(statistic(nta), 3), -1.802)
+stopifnot(isequal(round(statistic(nta), 3), -1.802))
 
 # two-sided asymptotic p-value, page 358
-isequal(round(pvalue(nta), 4), 0.0716)
+stopifnot(isequal(round(pvalue(nta), 4), 0.0716))
 # </CHECK>
 
 # blocks not yet implemented
 # nte <- normal_test(Salary ~ Gender | Year, data = employment, 
 #                   distribution = "exact")
-
+#
 # two-sided exact p-value, page 358
 # stopifnot(isequal(round(pvalue(nte), 4), 0.04))
 #
 # ntel <- normal_test(Salary ~ Gender | Year, data = employment, 
 #                    distribution = "exact", alternative = "less")
-
+#
 # one-sided exact p-value, page 358
 # stopifnot(isequal(round(pvalue(ntel), 4), 0.04))
 
@@ -290,16 +303,55 @@ machines <- data.frame(cereal = c(10.8, 11.1, 10.4, 10.1, 11.3,
                                   10.7, 10.8),
                        machine = factor(rep(c("Present", "New"), c(5, 7))))
 
-# <CHECK>
-# statistic = -1.998, asym. p-value = 0.457, exact 0.0581
-ansari_test(cereal ~ machine, data = machines)
-ansari_test(cereal ~ machine, data = machines, distribution = "exact")
+# deal with ties as described in StatXact 6 manual, page 329ff
+# Ansari-Scores
+a_trafo <- function(x) {
+    r <- rank(x, ties = "random")
+    s <- pmin(r, length(x) - r + 1)
+    dup <- x[duplicated(x)]
+    for (d in dup)         
+        s[d == x] <- mean(s[d == x])
+    s 
+}
 
-# page 373, ranks for ties???
-ansari_trafo(machines$cereal)
+pta <- perm_test(cereal ~ machine, data = machines, 
+    ytrafo = function(data) trafo(data, numeric_trafo = a_trafo))
 
-# </CHECK>
+# test statistic, page 372
+stopifnot(isequal(round(statistic(pta), 3), 1.998))
 
+# two-sided asymptotic p-value, page 372
+stopifnot(isequal(round(pvalue(pta), 4), 0.0457))
+
+pte <- perm_test(cereal ~ machine, data = machines, 
+    ytrafo = function(data) trafo(data, numeric_trafo = a_trafo),
+    distribution = "exact")
+
+stopifnot(isequal(round(pvalue(pte), 4), 0.0581))
+
+# two-sided approximated p-value
+ptMC <- perm_test(cereal ~ machine, data = machines, 
+    ytrafo = function(data) trafo(data, numeric_trafo = a_trafo),
+    distribution = "approx", B = 10000)
+
+pci <- attr(pvalue(ptMC), "conf.int")
+
+stopifnot(pci[1] < pvalue(pte) & pci[2] > pvalue(pte))
+
+ptel <- perm_test(cereal ~ machine, data = machines, 
+    ytrafo = function(data) trafo(data, numeric_trafo = a_trafo),
+    distribution = "exact", alternative = "greater")
+
+# one-sided exact p-value, page 372
+stopifnot(isequal(round(pvalue(ptel), 4), 0.0253))
+
+# one-sided approximated p-value
+ptMC <- perm_test(cereal ~ machine, data = machines,
+    ytrafo = function(data) trafo(data, numeric_trafo = a_trafo),
+    distribution = "approx", B = 20000, alternative = "greater")
+pci <- attr(pvalue(ptMC), "conf.int")
+
+stopifnot(pci[1] < pvalue(ptel) & pci[2] > pvalue(ptel))
 
 ### StatXact 6 manual, 413
 data(lungcancer)
@@ -458,17 +510,21 @@ tox <- data.frame(response = c(0,  1,  8, 10,
                                                 rep(4, 9), 
                                                 rep(5, 5)))))
 
+
 mta <- independence_test(response ~ drug, data = tox,
                          ytrafo = function(data) 
                              trafo(data, numeric_trafo = median_trafo),
                          teststat = "quadtype")
 
-# <CHECK>
+# StatXact reports results of scaled Pearson statistic!
+a <- factor(tox$response <= 7)
+mta <-  chisq_test(a ~ drug, data = tox)
+
 # test statistic, page 487
-(isequal(round(statistic(mta), 3), 4.317))
+stopifnot(isequal(round(statistic(mta), 3), 4.317))
 
 # asymptotic p-value, page 487
-(isequal(round(pvalue(mta), 4), 0.3648))
+stopifnot(isequal(round(pvalue(mta), 4), 0.3648))
 
 mtMC <- independence_test(response ~ drug, data = tox,
                           ytrafo = function(data) 
@@ -479,8 +535,8 @@ mtMC <- independence_test(response ~ drug, data = tox,
 pci <- attr(pvalue(mtMC), "conf.int")
 pvalue(mtMC)
 
-(pci[1] < 0.4289 & pci[2] > 0.4289)
-# </CHECK>
+stopifnot(pci[1] < 0.4289 & pci[2] > 0.4289)
+
 
 kta <- kruskal_test(response ~ drug, data = tox)
 
@@ -528,21 +584,16 @@ oring <- data.frame(temp = c(66, 67, 67, 67, 68, 68, 70, 70, 72,
                              75,
                              53),
                     incidents = ordered(c(rep("None", 17), rep("One", 5),
-                                          rep("Two", 1), rep("Three", 1))))
+                                          rep("Two", 1), rep("Three", 1)),
+                                        levels = c("None", "One", "Two", "Three")))
 
-# <CHECK>
-# try(perm_test(temp ~ incidents, data = oring))
-# </CHECK>
+pta <- perm_test(temp ~ incidents, data = oring)
 
-kta <- kruskal_test(temp ~ incidents, data = oring)
-
-# <CHECK>
 # test statistic, page 524
-isequal(round(sqrt(statistic(lta)), 3), 2.698)
+stopifnot(isequal(round(statistic(pta), 3), 2.698))
 
-# asymptotic p-value, page 524
-isequal(round(pvalue(lta), 4), 0.007)
-# </CHECK>
+stopifnot(isequal(round(pvalue(pta), 4), 0.007))
+
 
 brain$treatment <- ordered(brain$treatment)
 
