@@ -86,19 +86,6 @@ pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx",
 pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact", 
                    alternative = "greater"))
 
-### StatXact 6 manual, page 345-346
-load("employment.rda")
-stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
-                         distribution = "exact")), 4), 0.04))
-stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
-                         distribution = "exact", alternative = "less")), 4), 0.04))
-stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
-                         distribution = "exact", alternative = "greater")), 4), 1))
-stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
-                         distribution = "asympt")), 4), 0.0578))
-stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
-                         distribution = "asympt", alternative = "less")), 4), 0.0289))
-
 ### sanify checks
 try(wilcox_test(x ~ y, data = dat))
 try(wilcox_test(x ~ y | y, data = dat))

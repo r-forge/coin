@@ -90,6 +90,10 @@
 }
 \examples{
 
+\dontshow{
+    set.seed(290875)
+}
+
 data(jobsatisfaction, package = "coin")
 
 ### for females only

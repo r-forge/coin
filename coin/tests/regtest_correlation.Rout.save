@@ -20,10 +20,11 @@ Type 'q()' to quit R.
 > ### `x' and `y' (possibly blocked)
 > 
 > set.seed(290875)
-> library(ConditionalInference)
+> library(coin)
 Loading required package: survival 
 Loading required package: splines 
 Loading required package: mvtnorm 
+> isequal <- coin:::isequal
 > 
 > ### generate data
 > dat <- data.frame(x = rnorm(100), y = rnorm(100), block = gl(10, 10))
@@ -59,8 +60,7 @@ Loading required package: mvtnorm
 > ### sanity checks, those should be errors
 > dat <- data.frame(x = gl(2, 50), y = rnorm(100), block = rnorm(100))
 > try(spearman_test(y ~ x, data = dat))
-Error in spearman_test.IndependenceProblem(x = list()) : 
-	'x' does not represent a correlation problem
+Error in check(itp) : 'object' does not represent a univariate correlation problem
 > try(spearman_test(y ~ x | block, data = dat))
 Error in checkSlotAssignment(object, name, value) : 
 	Assignment of an object of class "numeric" is not valid for slot "block" in an object of class "IndependenceProblem"; is(value, "factor") is not TRUE

@@ -32,7 +32,6 @@ assign("ptime", proc.time(), env = .CheckExEnv)
 grDevices::postscript("coin-Examples.ps")
 assign("par.postscript", graphics::par(no.readonly = TRUE), env = .CheckExEnv)
 options(contrasts = c(unordered = "contr.treatment", ordered = "contr.poly"))
-options(warn = 1)    
 library('coin')
 
 assign(".oldSearch", search(), env = .CheckExEnv)
@@ -54,7 +53,11 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-data(jobsatisfaction)
+## Don't show: 
+    set.seed(290875)
+## End Don't show
+
+data(jobsatisfaction, package = "coin")
 
 ### for females only
 chisq_test(as.table(jobsatisfaction[,,"Female"]), 
@@ -93,7 +96,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-data(asat)
+data(asat, package = "coin")
 
 ### independence of bp and group via normal scores test
 independence_test(asat ~ group, data = asat,
@@ -241,7 +244,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-data(ocarcinoma)
+data(ocarcinoma, package = "coin")
 
 logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
              distribution = "exact")
@@ -298,7 +301,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-data(treepipit)
+data(treepipit, package = "coin")
 
 maxstat_test(counts ~ coverstorey, data = treepipit)
 
@@ -583,14 +586,11 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-data(asat)
-
-# does not really look symmetric
-plot(asat ~ group, data = asat)
+data(asat, package = "coin")
 
 # proof-of-safety based on ratio of medians
 pos <- wilcox_test(I(log(asat)) ~ group, data = asat, alternative = "less", 
-                   conf.int=TRUE, distribution = "exact")
+                   conf.int = TRUE, distribution = "exact")
 
 # one-sided confidence set. Safety cannot be concluded since the effect of
 # the compound exceeds 20% of the control median
@@ -660,7 +660,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-data(glioma)
+data(glioma, package = "coin")
 
 par(mfrow=c(1,2))
 
@@ -713,7 +713,8 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-data(jobsatisfaction)
+
+data(jobsatisfaction, package = "coin")
 
 # Generalized Cochran-Mantel-Haenzel test
 cmh_test(jobsatisfaction)
@@ -735,7 +736,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-data(neuropathy)
+data(neuropathy, package = "coin")
 
 ### compare with Table 2 of Conover & Salsburg (1988)
 oneway_test(pain ~ group, data = neuropathy, alternative = "less",
@@ -765,7 +766,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-data(ocarcinoma)
+data(ocarcinoma, package = "coin")
 
 ### logrank test with exact two-sided p-value
 lrt <- logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma,
@@ -824,7 +825,8 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-data(rotarod)
+data(rotarod, package = "coin")
+
 # Wilcoxon-Mann-Whitney Rank Sum Test
 wilcox_test(time ~ group, data = rotarod, 
     alternative = "greater", distribution = "exact")
@@ -889,9 +891,11 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 
-data(treepipit)
+data(treepipit, package = "coin")
 
-maxstat_test(counts ~ ., data = treepipit)
+maxstat_test(counts ~ age + coverstorey + coverregen + meanregen +
+                      coniferous + deadtree + cbpiles + ivytree,
+             data = treepipit)
 
 
 

@@ -1,6 +1,6 @@
 
-R : Copyright 2005, The R Foundation for Statistical Computing
-Version 2.1.0 Under development (unstable) (2005-02-13), ISBN 3-900051-07-0
+R : Copyright 2004, The R Foundation for Statistical Computing
+Version 2.0.1  (2004-11-15), ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -48,11 +48,10 @@ Type 'q()' to quit R.
 > grDevices::postscript("coin-Examples.ps")
 > assign("par.postscript", graphics::par(no.readonly = TRUE), env = .CheckExEnv)
 > options(contrasts = c(unordered = "contr.treatment", ordered = "contr.poly"))
-> options(warn = 1)    
 > library('coin')
-Loading required package: survival
-Loading required package: splines
-Loading required package: mvtnorm
+Loading required package: survival 
+Loading required package: splines 
+Loading required package: mvtnorm 
 > 
 > assign(".oldSearch", search(), env = .CheckExEnv)
 > assign(".oldNS", loadedNamespaces(), env = .CheckExEnv)
@@ -73,7 +72,11 @@ Loading required package: mvtnorm
 > ### ** Examples
 > 
 > 
-> data(jobsatisfaction)
+> ## Don't show: 
+>     set.seed(290875)
+> ## End Don't show
+> 
+> data(jobsatisfaction, package = "coin")
 > 
 > ### for females only
 > chisq_test(as.table(jobsatisfaction[,,"Female"]), 
@@ -82,7 +85,7 @@ Loading required package: mvtnorm
 	Approximative Pearson's Chi-Squared Test
 
 data:  Job.Satisfaction by groups <5000, 5000-15000, 15000-25000, >25000 
-T = 6.8203, p-value = 0.6848
+T = 6.8203, p-value = 0.6891
 
 > 
 > ### both Income and Job.Satisfaction unordered
@@ -121,7 +124,7 @@ T = 6.1563, df = 1, p-value = 0.01309
 	Approximative Linear-by-Linear Association Test
 
 data:  Job.Satisfaction (ordered) by groups <5000 < 5000-15000 < 15000-25000 < >25000 stratified by Gender 
-T = 6.1563, p-value = 0.0116
+T = 6.1563, p-value = 0.0123
 
 > 
 > 
@@ -142,7 +145,7 @@ T = 6.1563, p-value = 0.0116
 > ### ** Examples
 > 
 > 
-> data(asat)
+> data(asat, package = "coin")
 > 
 > ### independence of bp and group via normal scores test
 > independence_test(asat ~ group, data = asat,
@@ -339,7 +342,7 @@ T = 22.8524, p-value < 2.2e-16
 +     ### sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
 +     print(pvalue(NDWD, adjusted = TRUE))
 + }
-Loading required package: multcomp
+Loading required package: multcomp 
 [1] 0.0004888889
 99 percent confidence interval:
  0.0003199269 0.0007126921 
@@ -370,7 +373,7 @@ IV-III 0.9998777778
 > ### ** Examples
 > 
 > 
-> data(ocarcinoma)
+> data(ocarcinoma, package = "coin")
 > 
 > logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
 +              distribution = "exact")
@@ -448,7 +451,7 @@ T = 270.7402, df = 1, p-value < 2.2e-16
 > ### ** Examples
 > 
 > 
-> data(treepipit)
+> data(treepipit, package = "coin")
 > 
 > maxstat_test(counts ~ coverstorey, data = treepipit)
 
@@ -671,19 +674,20 @@ alternative hypothesis: true mu is not equal to 0
 +     5.65, 5.60, 5.40,
 +     5.70, 5.65, 5.55,
 +     6.30, 6.30, 6.25),
-+     methods = factor(rep(c("Round Out", "Narrow Angle", "Wide Angle"), 22)))
++     methods = factor(rep(c("Round Out", "Narrow Angle", "Wide Angle"), 22)),
++     block = factor(rep(1:22, rep(3, 22))))
 > 
 > ### classical global test
-> friedman_test(times ~ methods, data = RoundingTimes)
+> friedman_test(times ~ methods | block, data = RoundingTimes)
 
 	Asymptotical Friedman Test
 
-data:  times by groups Narrow Angle, Round Out, Wide Angle stratified by  
+data:  times by groups Narrow Angle, Round Out, Wide Angle stratified by block 
 T = 11.1429, df = 2, p-value = 0.003805
 
 > 
 > ### parallel coordinates plot
-> matplot(t(matrix(RoundingTimes$time, ncol = 3, byrow = TRUE)), 
+> matplot(t(matrix(RoundingTimes$times, ncol = 3, byrow = TRUE)), 
 +         type = "l", col = 1, lty = 1, axes = FALSE, ylab = "Time", 
 +         xlim = c(0.5, 3.5))
 > axis(1, at = 1:3, labels = levels(RoundingTimes$methods))
@@ -694,23 +698,16 @@ T = 11.1429, df = 2, p-value = 0.003805
 > ### Hollander & Wolfe, page 295
 > if (require(multcomp)) {
 + 
-+     ### setup SymmetryProblem (need to rank here)
-+     r <- as.vector(apply(matrix(RoundingTimes[["times"]], 
-+                                 ncol = 3, byrow = TRUE),
-+                          1, rank))
-+     sp <- new("SymmetryProblem", RoundingTimes["methods"],
-+               data.frame(r = r))
-+ 
-+     ### Friedman test, again
-+     print(symmetry_test(sp, teststat = "quadtype"))
-+ 
 +     ### all pair comparisons
-+     rtt <- symmetry_test(sp, teststat = "maxtype",
++     rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
++          teststat = "maxtype",
 +          xtrafo = function(data)
 +              trafo(data, factor_trafo = function(x)
-+                  model.matrix(~ x - 1) %*% t(contrMat(table(x), "Tukey"))
-+              )
-+      )
++                  model.matrix(~ x - 1) 
++              ),
++          ytrafo = function(data)
++              trafo(data, numeric_trafo = rank, block = RoundingTimes$block)
++     )
 + 
 +     ### a global test, again
 +     print(pvalue(rtt))
@@ -719,21 +716,15 @@ T = 11.1429, df = 2, p-value = 0.003805
 +     ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
 +     print(pvalue(rtt, adjusted = TRUE))
 + }
-Loading required package: multcomp
-
-	Asymptotical General Independence Test
-
-data:  r by groups Narrow Angle, Round Out, Wide Angle stratified by  
-T = 11.1429, df = 2, p-value = 0.003805
-
-[1] 0.003455914
+Loading required package: multcomp 
+[1] 0.00387132
  percent confidence interval:
- 0.003205723 0.003706106 
+ 0.003609045 0.004133595 
 
-                               [,1]
-Round Out-Narrow Angle  0.623924061
-Wide Angle-Narrow Angle 0.053791966
-Wide Angle-Round Out    0.003398077
+                     [,1]
+xNarrow Angle 0.701908847
+xRound Out    0.042678917
+xWide Angle   0.003811824
 > 
 > ### Strength Index of Cotton, Hollander & Wolfe (1999), Table 7.5, page 286
 > sc <- data.frame(block = factor(c(rep(1, 5), rep(2, 5), rep(3, 5))),
@@ -862,14 +853,11 @@ attr(,"assign")
 > ### ** Examples
 > 
 > 
-> data(asat)
-> 
-> # does not really look symmetric
-> plot(asat ~ group, data = asat)
+> data(asat, package = "coin")
 > 
 > # proof-of-safety based on ratio of medians
 > pos <- wilcox_test(I(log(asat)) ~ group, data = asat, alternative = "less", 
-+                    conf.int=TRUE, distribution = "exact")
++                    conf.int = TRUE, distribution = "exact")
 > 
 > # one-sided confidence set. Safety cannot be concluded since the effect of
 > # the compound exceeds 20% of the control median
@@ -978,7 +966,7 @@ attr(,"conf.level")
 > ### ** Examples
 > 
 > 
-> data(glioma)
+> data(glioma, package = "coin")
 > 
 > par(mfrow=c(1,2))
 > 
@@ -1058,7 +1046,8 @@ numeric(0)
 > 
 > ### ** Examples
 > 
-> data(jobsatisfaction)
+> 
+> data(jobsatisfaction, package = "coin")
 > 
 > # Generalized Cochran-Mantel-Haenzel test
 > cmh_test(jobsatisfaction)
@@ -1086,7 +1075,7 @@ T = 10.2001, df = 9, p-value = 0.3345
 > ### ** Examples
 > 
 > 
-> data(neuropathy)
+> data(neuropathy, package = "coin")
 > 
 > ### compare with Table 2 of Conover & Salsburg (1988)
 > oneway_test(pain ~ group, data = neuropathy, alternative = "less",
@@ -1137,7 +1126,7 @@ alternative hypothesis: true mu is less than 0
 > ### ** Examples
 > 
 > 
-> data(ocarcinoma)
+> data(ocarcinoma, package = "coin")
 > 
 > ### logrank test with exact two-sided p-value
 > lrt <- logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma,
@@ -1206,7 +1195,8 @@ alternative hypothesis: true mu is not equal to 1
 > ### ** Examples
 > 
 > 
-> data(rotarod)
+> data(rotarod, package = "coin")
+> 
 > # Wilcoxon-Mann-Whitney Rank Sum Test
 > wilcox_test(time ~ group, data = rotarod, 
 +     alternative = "greater", distribution = "exact")
@@ -1319,18 +1309,19 @@ alternative hypothesis: true mu is not equal to 0
 > ### ** Examples
 > 
 > 
-> data(treepipit)
+> data(treepipit, package = "coin")
 > 
-> maxstat_test(counts ~ ., data = treepipit)
-Warning: number of items to replace is not a multiple of replacement length
+> maxstat_test(counts ~ age + coverstorey + coverregen + meanregen +
++                       coniferous + deadtree + cbpiles + ivytree,
++              data = treepipit)
 
 	Asymptotical Maxstat Test
 
-data:  counts by age, coverstorey, coverregen, meanregen, coniferous, deadtree, cbpiles, ivytree, fdist 
-T = 4.5486, p-value = 0.0001593
+data:  counts by age, coverstorey, coverregen, meanregen, coniferous, deadtree, cbpiles, ivytree 
+T = 4.3139, p-value = 0.0008564
 sample estimates:
-fdist 
-  280 
+coverstorey 
+         40 
 
 > 
 > 
@@ -1339,7 +1330,7 @@ fdist
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", env = .CheckExEnv),"\n")
-Time elapsed:  22.76 0.13 23.61 0 0 
+Time elapsed:  19.64 0.12 19.9 0 0 
 > grDevices::dev.off()
 null device 
           1 

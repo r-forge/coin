@@ -20,10 +20,11 @@ Type 'q()' to quit R.
 > ### `y' and a factor `x' (possibly blocked)
 > 
 > set.seed(290875)
-> library(ConditionalInference)
+> library(coin)
 Loading required package: survival 
 Loading required package: splines 
 Loading required package: mvtnorm 
+> isequal <- coin:::isequal
 > 
 > ### generate data
 > dat <- data.frame(x = gl(4, 25), y = rnorm(100), block = gl(5, 20))[sample(1:100, 50),]
@@ -35,7 +36,7 @@ Loading required package: mvtnorm
 > 
 > stopifnot(isequal(pvalue(kruskal_test(y ~ x, data = dat)), ptwo))
 > 
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
 +                                    teststat = "quadtype",
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
 > 
@@ -48,8 +49,7 @@ Loading required package: mvtnorm
 > 
 > ### sanify checks
 > try(kruskal_test(x ~ y, data = dat))
-Error in kruskal_test.IndependenceProblem(x = list()) : 
-	'x' does not represent a K sample problem
+Error in check(itp) : 'object' does not represent a K sample problem
 > try(kruskal_test(x ~ y | y, data = dat))
 Error in checkSlotAssignment(object, name, value) : 
 	Assignment of an object of class "numeric" is not valid for slot "block" in an object of class "IndependenceProblem"; is(value, "factor") is not TRUE
@@ -62,7 +62,7 @@ Error in checkSlotAssignment(object, name, value) :
 > stopifnot(isequal(pvalue(fligner_test(y ~ x, data = dat)), ptwo))
 > 
 > dat$yy <- dat$y - tapply(dat$y, dat$x, median)[dat$x]
-> stopifnot(isequal(pvalue(perm_test(yy ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(yy ~ x, data = dat, distribution = "asympt", 
 +                                    teststat = "quadtype",
 +     ytrafo = function(data) trafo(data, numeric_trafo = fligner_trafo))), ptwo))
 > 
@@ -75,8 +75,7 @@ Error in checkSlotAssignment(object, name, value) :
 > 
 > ### sanify checks
 > try(fligner_test(x ~ y, data = dat)) 
-Error in fligner_test.IndependenceProblem(x = list()) : 
-	'x' does not represent a K sample problem
+Error in FUN(X[[1]], ...) : need numeric data
 > try(fligner_test(x ~ y | y, data = dat))
 Error in checkSlotAssignment(object, name, value) : 
 	Assignment of an object of class "numeric" is not valid for slot "block" in an object of class "IndependenceProblem"; is(value, "factor") is not TRUE

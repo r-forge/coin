@@ -15,17 +15,16 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > 
-> PKG <- "ConditionalInference"
-> 
 > ### Regression tests for the 2 sample problem, i.e.,
 > ### testing the independence of a numeric variable
 > ### `y' and a binary factor `x' (possibly blocked)
 > 
 > set.seed(290875)
-> library(PKG, character.only = TRUE)
+> library(coin)
 Loading required package: survival 
 Loading required package: splines 
 Loading required package: mvtnorm 
+> isequal <- coin:::isequal
 > 
 > ### generate data
 > dat <- data.frame(x = gl(2, 50), y = rnorm(100), block = gl(5, 20))[sample(1:100,
@@ -46,12 +45,12 @@ Loading required package: mvtnorm
 > stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater")), 
 +                   pgreater))
 > 
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
 +     alternative = "less")), pless))
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
 +     alternative = "greater")), pgreater))
 > 
@@ -68,12 +67,12 @@ Loading required package: mvtnorm
 > stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater",
 +                              distribution = "exact")), pgreater))
 > 
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
 +     alternative = "less")), pless))
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
 +     alternative = "greater")), pgreater))
 > 
@@ -92,10 +91,9 @@ Loading required package: mvtnorm
 [1] 0.1794892
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx"))
 [1] 0.197
-attr(,"conf.int")
-[1] 0.1656172 0.2313194
-attr(,"conf.int")attr(,"conf.level")
-[1] 0.99
+99 percent confidence interval:
+ 0.1656172 0.2313194 
+
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact"))
 [1] 0.1847028
 > 
@@ -105,10 +103,9 @@ attr(,"conf.int")attr(,"conf.level")
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx", 
 +                    alternative = "less"))
 [1] 0.099
-attr(,"conf.int")
-[1] 0.07613518 0.12577658
-attr(,"conf.int")attr(,"conf.level")
-[1] 0.99
+99 percent confidence interval:
+ 0.07613518 0.12577658 
+
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact", 
 +                    alternative = "less"))
 [1] 0.09335664
@@ -119,31 +116,16 @@ attr(,"conf.int")attr(,"conf.level")
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx", 
 +                    alternative = "greater"))
 [1] 0.917
-attr(,"conf.int")
-[1] 0.8919859 0.9379376
-attr(,"conf.int")attr(,"conf.level")
-[1] 0.99
+99 percent confidence interval:
+ 0.8919859 0.9379376 
+
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact", 
 +                    alternative = "greater"))
 [1] 0.9098776
 > 
-> ### StatXact 6 manual, page 345-346
-> data(employment, package = PKG)
-> stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
-+                          distribution = "exact")), 4), 0.04))
-> stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
-+                          distribution = "exact", alternative = "less")), 4), 0.04))
-> stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
-+                          distribution = "exact", alternative = "greater")), 4), 1))
-> stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
-+                          distribution = "asympt")), 4), 0.0578))
-> stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
-+                          distribution = "asympt", alternative = "less")), 4), 0.0289))
-> 
 > ### sanify checks
 > try(wilcox_test(x ~ y, data = dat))
-Error in wilcox_test.IndependenceProblem(x = list()) : 
-	'x' does not represent a two sample problem
+Error in check(itp) : 'object' does not represent a two sample problem
 > try(wilcox_test(x ~ y | y, data = dat))
 Error in checkSlotAssignment(object, name, value) : 
 	Assignment of an object of class "numeric" is not valid for slot "block" in an object of class "IndependenceProblem"; is(value, "factor") is not TRUE
@@ -164,12 +146,12 @@ Error in checkSlotAssignment(object, name, value) :
 > stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "greater")), 
 +                   pgreater))
 > 
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
 +     alternative = "less")), pless))
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
 +     alternative = "greater")), pgreater))
 > 
@@ -191,15 +173,15 @@ Error in checkSlotAssignment(object, name, value) :
 +                              distribution = "exact")), pgreater))
 > 
 > ### <FIXME>: Definition of two-sided P-values! </FIXME>
-> (isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+> (isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
 [1] 0.2125862712
 [1] 0.2135741290
 [1] FALSE
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
 +     alternative = "less")), pless))
-> stopifnot(isequal(pvalue(perm_test(y ~ x, data = dat, distribution = "exact", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
 +     alternative = "greater")), pgreater))
 > 
@@ -218,8 +200,7 @@ Error in checkSlotAssignment(object, name, value) :
 > 
 > ### sanify checks
 > try(ansari_test(x ~ y, data = dat))
-Error in ansari_test.IndependenceProblem(x = list()) : 
-	'x' does not represent a two sample problem
+Error in check(itp) : 'object' does not represent a two sample problem
 > try(ansari_test(x ~ y | y, data = dat))
 Error in checkSlotAssignment(object, name, value) : 
 	Assignment of an object of class "numeric" is not valid for slot "block" in an object of class "IndependenceProblem"; is(value, "factor") is not TRUE
@@ -232,25 +213,25 @@ Error in checkSlotAssignment(object, name, value) :
 > pgreater <- wilcox.test(y ~ x, data = dat, alternative = "greater", 
 +                         correct = FALSE)$p.value
 > 
-> perm_test(y ~ x, dat = dat)
+> oneway_test(y ~ x, dat = dat)
 
-	Asymptotical Permutation Test
+	Asymptotical 2-Sample Permutation Test
 
 data:  y by groups 1, 2 
 T = -0.7774, p-value = 0.4369
 alternative hypothesis: true mu is not equal to 0 
 
-> perm_test(y ~ x, dat = dat, alternative = "less")
+> oneway_test(y ~ x, dat = dat, alternative = "less")
 
-	Asymptotical Permutation Test
+	Asymptotical 2-Sample Permutation Test
 
 data:  y by groups 1, 2 
 T = -0.7774, p-value = 0.2185
 alternative hypothesis: true mu is less than 0 
 
-> perm_test(y ~ x, dat = dat, alternative = "greater")
+> oneway_test(y ~ x, dat = dat, alternative = "greater")
 
-	Asymptotical Permutation Test
+	Asymptotical 2-Sample Permutation Test
 
 data:  y by groups 1, 2 
 T = -0.7774, p-value = 0.7815
@@ -287,7 +268,7 @@ alternative hypothesis: true mu is greater than 0
 	Asymptotical Median Test
 
 data:  y by groups 1, 2 
-T = -0.8015, p-value = 0.4228
+T = 0.8015, p-value = 0.4228
 alternative hypothesis: true mu is not equal to 0 
 
 > median_test(y ~ x, dat = dat, alternative = "less")
@@ -295,7 +276,7 @@ alternative hypothesis: true mu is not equal to 0
 	Asymptotical Median Test
 
 data:  y by groups 1, 2 
-T = -0.8015, p-value = 0.2114
+T = 0.8015, p-value = 0.7886
 alternative hypothesis: true mu is less than 0 
 
 > median_test(y ~ x, dat = dat, alternative = "greater")
@@ -303,8 +284,34 @@ alternative hypothesis: true mu is less than 0
 	Asymptotical Median Test
 
 data:  y by groups 1, 2 
-T = -0.8015, p-value = 0.7886
+T = 0.8015, p-value = 0.2114
 alternative hypothesis: true mu is greater than 0 
 
+> 
+> ### confidence intervals, cf Bauer 1972
+> location <- data.frame(y = c(6, 20, 27, 38, 46, 51, 54, 57,
++                              10, 12, 15, 21, 32, 40, 41, 45),
++                        x = gl(2, 8))
+> 
+> ci <- confint(normal_test(y ~ x, data = location, 
++                           conf.int = TRUE, di = "ex"))
+> stopifnot(isequal(ci$conf.int, c(-6, 30)))
+> stopifnot(isequal(ci$estimate, 11))
+> 
+> wt <- wilcox.test(y ~ x, data = location, 
++                   conf.int = TRUE)
+> ci <- confint(wilcox_test(y ~ x, data = location, 
++                           conf.int = TRUE, di = "ex"))
+> stopifnot(isequal(wt$confint, ci$confint))
+> stopifnot(isequal(wt$estimate, ci$estimate))
+> 
+> scale <- data.frame(y = c(-101, -35, -13, 10, 130, 236, 370, 556,
++                           -145, -140, -40, -30, 2, 27, 68, 290),
++                     x = gl(2, 8))
+> 
+> ci <- confint(ansari_test(y ~ x, data = scale, conf.int = TRUE, 
++                           di = "ex", conf.level = 0.988))
+> stopifnot(isequal(ci$conf.int, c(10, 556) / c(68, 27)))
+> stopifnot(isequal(ci$estimate, mean(c(35/30, 370 / 290))))
 > 
 > 
