@@ -92,4 +92,7 @@ S3method(wilcoxsign_test, IndependenceProblem)
 
 S3method(confint, ScalarIndependenceTestConfint)
 
+S3method(print, ci)
+S3method(print, MCp)
+
 useDynLib(coin)

@@ -240,6 +240,7 @@ is_censored <- function(object) {
 }
 
 isequal <- function(a, b) {
+    attributes(a) <- NULL
     if (!identical(all.equal(a, b), TRUE)) {
         print(a, digits = 10)
         print(b, digits = 10)

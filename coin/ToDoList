@@ -15,3 +15,5 @@ o	check storage.mode of all vars going into C code (MC)
 o	add wilcoxon-gehan scores, check logrank scores!
 
 o	check if trend test for clustered data are part of the framework
+
+o	maximally selected McNemar statistics -> Betensky, Biometrics, 2000

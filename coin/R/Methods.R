@@ -46,6 +46,7 @@ setMethod(f = "AsymptNullDistribution",
                   error <- attr(p, "error")
                   attr(p, "error") <- NULL
                   attr(p, "conf.int") <- c(max(0, p - error), min(p + error, 1))
+                  class(p) <- "MCp"
                   p
               }
               RET@q <- function(p) {
@@ -63,6 +64,7 @@ setMethod(f = "AsymptNullDistribution",
               RET@pvalue <- function(q) {
                   p <- 1 - RET@p(q)
                   attr(p, "conf.int") <- 1 - attr(p, "conf.int")[c(2,1)]
+                  class(p) <- "MCp"
                   p
               }
 
@@ -133,6 +135,7 @@ setMethod(f = "ApproxNullDistribution",
                   p <- mean(pls <= round(q, 10))
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
+                  class(p) <- "MCp"
                   p
               }
 
@@ -151,6 +154,7 @@ setMethod(f = "ApproxNullDistribution",
                   )
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
+                  class(p) <- "MCp"
                   p
               }
               RET@support <- function(p = 1e-5) unique(pls)
@@ -187,6 +191,7 @@ setMethod(f = "ApproxNullDistribution",
                   p <- mean(pls <= round(q, 10))
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
+                  class(p) <- "MCp"
                   p
               }
 
@@ -196,6 +201,7 @@ setMethod(f = "ApproxNullDistribution",
                   p <- mean(pls >= round(q, 10))
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
+                  class(p) <- "MCp"
                   p
               }
               RET@support <- function(p = 1e-5) unique(pls)
@@ -235,6 +241,7 @@ setMethod(f = "ApproxNullDistribution",
                   p <- mean(pls <= round(q, 10))
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
+                  class(p) <- "MCp"
                   p
               }
 
@@ -244,6 +251,7 @@ setMethod(f = "ApproxNullDistribution",
                   p <- mean(pls >= round(q, 10))
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
+                  class(p) <- "MCp"
                   p
               }
               RET@support <- function(p = 1e-5) unique(pls)
@@ -254,5 +262,7 @@ setMethod(f = "ApproxNullDistribution",
 
 confint.ScalarIndependenceTestConfint <- function(object, parm, level = 0.95, 
     ...) {
-        object@confint(level)
+        x <- object@confint(level)
+        class(x) <- "ci"
+        return(x)
 }

@@ -153,3 +153,29 @@ setMethod(f = "show", signature = "ScalarIndependenceTestConfint",
         print(RET)
     }
 )
+
+print.ci <- function(x, ...) {
+
+    if(!is.null(x$conf.int)) {
+        cat(format(100 * attr(x$conf.int, "conf.level")),
+            "percent confidence interval:\n",
+            format(c(x$conf.int[1], x$conf.int[2])), "\n")
+    }
+    if(!is.null(x$estimate)) {
+        cat("sample estimates:\n")
+        print(x$estimate, ...)
+    }
+    cat("\n")
+    invisible(x)
+}
+
+print.MCp <- function(x, ...) {
+
+    p <- x
+    attributes(p) <- NULL
+    print(p)
+    ci <- list(conf.int = attr(x, "conf.int"))
+    class(ci) <- "ci"
+    print(ci)
+    invisible(x)
+}
