@@ -8,8 +8,8 @@ inference procedures, commonly known as \emph{permutation tests},
 theoretically derived by Strasser & Weber (1999). The conditional
 expectation and covariance for a broad class of multivariate linear
 statistics as well as the corresponding multivariate limiting distribution
-was derived by Strasser & Weber (1999). The results can be utilized to construct
-tests for independence between two sets of variables. 
+was derived by Strasser & Weber (1999). These results are 
+utilized to construct tests for independence between two sets of variables. 
 
 Beside a general implementation of the abstract framework the package offers
 a rather huge set of convenience functions implementing well known classical
@@ -23,14 +23,18 @@ tests for marginal homogenity and symmetry. Conditional counterparts of
 most of the classical procedures
 given in famous text books like Hollander & Wolfe (1999) or Agresti (2002)
 can be implemented as part of the general framework without much effort.
-Approximations of the exact null-distribution via the limiting distribution and 
+Approximations of the exact null distribution via the limiting distribution and 
 conditional Monte-Carlo procedures are available for every test while the 
-exact null-distribution is currently available for two-sample problems only. 
+exact null distribution is currently available for two-sample problems only. 
 
-This package is the result of collaborative efforts of Torsten Hothorn
-<Torsten.Hothorn@R-project.org>, Kurt Hornik <Kurt.Hornik@R-project.org>,   
-Mark van de Wiel <m.a.v.d.wiel@TUE.nl> and 
-Achim Zeileis <Achim.Zeileis@R-project.org>.
+}
+\authors{
+
+    This package is written by \cr
+    Torsten Hothorn <Torsten.Hothorn@R-project.org>, \cr 
+    Kurt Hornik <Kurt.Hornik@R-project.org>, \cr
+    Mark van de Wiel <m.a.v.d.wiel@TUE.nl> and \cr
+    Achim Zeileis <Achim.Zeileis@R-project.org>.
 
 }
 \references{

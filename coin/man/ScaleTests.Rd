@@ -139,13 +139,13 @@ ansari_test(serum ~ method, data = sid, distribution = "exact")
 
 
 ### Platelet Counts of Newborn Infants
-### Hollander & Wolfe, Table 5.4, page 171
+### Hollander & Wolfe (1999), Table 5.4, page 171
 platalet_counts <- data.frame(
     counts = c(120, 124, 215, 90, 67, 95, 190, 180, 135, 399, 
                12, 20, 112, 32, 60, 40),
     treatment = factor(c(rep("Prednisone", 10), rep("Control", 6))))
 
-### Lepage test, Hollander & Wolfe, page 172 
+### Lepage test, Hollander & Wolfe (1999), page 172 
 lt <- independence_test(counts ~ treatment, data = platalet_counts,
     ytrafo = function(data) trafo(data, numeric_trafo = function(x)       
         cbind(rank(x), ansari_trafo(x))),

@@ -84,7 +84,7 @@
   replications \code{B} for the approximation of the null distribution
   or arguments to \code{\link[mvtnorm]{pmvnorm}}.
 
-  The fundament of this function is the framework for conditional inference
+  The basis of this function is the framework for conditional inference
   procedures by Strasser & Weber (1999). 
 
 }

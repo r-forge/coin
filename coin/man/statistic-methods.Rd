@@ -46,7 +46,7 @@ statistic(ct, type = "linear")
 table(df$x, df$y)
 
 ### and the standardized contingency table for illustrating
-### departures from the null-hypothesis of independence of x and y
+### departures from the null hypothesis of independence of x and y
 statistic(ct, type = "standardized")
 }
 \keyword{methods}

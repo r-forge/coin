@@ -51,7 +51,7 @@
 \details{
 
   The null hypothesis of the independence of \code{y} and \code{x} is
-  tested, where \code{block} defines a factor for stratification. 
+  tested, \code{block} defines an optional factor for stratification. 
   \code{chisq_test} implements Pearson's chi-squared test, 
    \code{cmh_test} the Cochran-Mantel-Haenzsel
   test and \code{lbl_test} the linear-by-linear association test for ordered

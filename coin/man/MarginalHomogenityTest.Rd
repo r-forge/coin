@@ -1,11 +1,11 @@
-\name{MarginalHomogenityTest}
+\name{MarginalHomogeneityTest}
 \alias{mh_test}
 \alias{mh_test.table}
 \alias{mh_test.formula}
 \alias{mh_test.SymmetryProblem}
-\title{ Marginal Homogenity Test }
+\title{ Marginal Homogeneity Test }
 \description{
-    Testing marginal homogenity in a complete block design.
+    Testing marginal homogeneity in a complete block design.
 }
 \usage{
 \method{mh_test}{formula}(formula, data, subset = NULL, \dots)

@@ -64,7 +64,7 @@ f_trafo(x)
 
   \code{normal_trafo}, \code{median_trafo} and \code{consal_trafo}
   implement normal scores, median scores or Conover-Salburg scores
-  (see \code{\link{neuropathy}} for location problems, 
+  (see \code{\link{neuropathy}}) for location problems, 
   \code{logrank_trafo} returns Logrank scores for censored data.
 
   A \code{trafo} function with modified default arguments is usually

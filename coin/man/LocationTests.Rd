@@ -209,7 +209,7 @@ plot(s, p, type = "S", xlab = "Teststatistic", ylab = "Cumm. Probability")
 
 
 ### Length of YOY Gizzard Shad from Kokosing Lake, Ohio,
-### sampled in Summer 1984, Hollander & Wolfe, Table 6.3, page 200
+### sampled in Summer 1984, Hollander & Wolfe (1999), Table 6.3, page 200
 YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44, 
                              42, 60, 32, 42, 45, 58, 27, 51, 42, 52, 
                              38, 33, 26, 25, 28, 28, 26, 27, 27, 27, 
@@ -224,7 +224,7 @@ kw
 pvalue(kw)
 
 ### Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
-### Hollander & Wolfe, 1999, page 244 
+### Hollander & Wolfe (1999), page 244 
 ### (where Steel-Dwass results are given)
 if (require(multcomp)) {
 

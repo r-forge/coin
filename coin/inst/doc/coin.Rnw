@@ -54,7 +54,7 @@
 \newline
 
 <<setup, echo = FALSE, results = hide>>=
-options(width = 60)
+options(width = 65)
 @
 
 \section{Introduction}
@@ -78,7 +78,7 @@ data, linear rank tests and multivariate permutation tests.
 
 The conceptual framework of permutation tests by \cite{StrasserWeber1999}
 for arbitrary problems is available via the generic
-\texttt{independence\_test}. Because concenience functions for the most
+\texttt{independence\_test}. Because convenience functions for the most
 prominent problems are available, users will not have to use this
 extremely flexible procedure. Currently, the conditional variants of the 
 following test procedures are available: 
@@ -99,7 +99,7 @@ following test procedures are available:
 \texttt{spearman\_test} & Spearman's test \\
 \texttt{friedman\_test} & Friedman test \\
 \texttt{wilcoxsign\_test} & Wilcoxon-Signed-Rank test \\
-\texttt{mh\_test} &  marginal homogenity test. \\
+\texttt{mh\_test} &  marginal homogeneity test. \\
 \end{tabular}
 \end{center}
 
@@ -107,9 +107,9 @@ Those convenience functions essentially perform a certain transformation of
 the data, e.g., a rank transformation, and call \texttt{independence\_test}
 for the computation of linear statistics, expectation and covariance and the
 test statistic as well as 
-their null-distribution. The exact null-distribution can
+their null distribution. The exact null distribution can
 be approximated either by the asymptotic distribution or via conditional
-Monte-Carlo for all test procedures, the exact null-distribution is
+Monte-Carlo for all test procedures, the exact null distribution is
 available for special cases. Moreover, all test procedures allow for the
 specification of blocks for stratification.
 
@@ -123,10 +123,10 @@ The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
 $\mathcal{X}$ may
 be measured at arbitrary scales and may be multivariate as well. In addition
 to those measurements, case weights $w$ and a factor $b$ coding blocks may
-be available. For the sake of simplicity, we assume $w_i = 1$ and $b_i = 0,
-i = 1, \dots, n$ for the moment. 
+be available. For the sake of simplicity, we assume $w_i = 1$ and $b_i = 0$
+for all observations $i = 1, \dots, n$ for the moment. 
 
-We are interested in testing the null-hypothesis of independence of $\Y$ and
+We are interested in testing the null hypothesis of independence of $\Y$ and
 $\X$
 \begin{eqnarray*}
 H_0: D(\Y | \X) = D(\Y)
@@ -235,7 +235,7 @@ specification of $\Y, \X$ and $b$ through a formula interface of the form
 the right hand side only. Four additional arguments are available for the
 specification of the transformation $g$ (\texttt{xtrans}), the influence 
 function $h$ (\texttt{ytrans}), the form of the test statistic $c$ 
-(\texttt{teststat}) and the null-distribution (\texttt{distribution}).
+(\texttt{teststat}) and the null distribution (\texttt{distribution}).
 
 \paragraph{Independent $K$-Sample Problems.}
 
@@ -277,7 +277,7 @@ The conditional expectation and covariance are available from
 expectation(it)
 covariance(it)
 @
-and the standardized linear statistic $(\T - \mu)\text{diag}(\Sigma)^{1/2}$
+and the standardized linear statistic $(\T - \mu)\text{diag}(\Sigma)^{-1/2}$
 is
 <<YOY-S, echo = TRUE>>=
 statistic(it, "standardized")
@@ -295,7 +295,7 @@ pvalue(it)
 
 Life is much simpler with convenience functions very similar to those
 available in package \texttt{stats} for a long time. The exact
-null-distribution of the Kruskal-Wallis test can be approximated by $9999$
+null distribution of the Kruskal-Wallis test can be approximated by $9999$
 Monte-Carlo replications via
 <<YOY-KW, echo = TRUE>>=
 kw <- kruskal_test(length ~ site, data = YOY, distribution = "approx", B = 9999)
@@ -322,7 +322,7 @@ it
 @
 
 The standardized contingency table allowing for an inspection of the
-deviation from the null-hypothesis of independence of income and
+deviation from the null hypothesis of independence of income and
 jobsatisfaction (stratified by gender) is 
 <<jobsatisfaction-s, echo = TRUE>>=
 statistic(it, "standardized")
@@ -357,9 +357,9 @@ lbl_test(jobsatisfaction,
 The test procedures implemented in package \texttt{coin} are continuously checked
 against results obtained by the corresponding implementations in package
 \texttt{stats} (where available). In addition, the test statistics and 
-exact, approximativ and asymptotic $p$-values for data examples given in the 
+exact, approximative and asymptotic $p$-values for data examples given in the 
 \texttt{StatXact-6} 
-user manual \cite{StatXact6} are compared with the results reported in the
+user manual \citep{StatXact6} are compared with the results reported in the
 \texttt{StatXact-6} manual. For details on the test procedures we refer to
 the \textsf{R}-transcript files in directory \texttt{coin/tests}.
 

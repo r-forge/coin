@@ -98,7 +98,7 @@ axis(2)
 
 ### where do the differences come from?
 ### Wilcoxon-Nemenyi-McDonald-Thompson test
-### Hollander & Wolfe, page 295
+### Hollander & Wolfe (1999), page 295
 if (require(multcomp)) {
 
     ### all pairwise comparisons
@@ -127,7 +127,7 @@ sc <- data.frame(block = factor(c(rep(1, 5), rep(2, 5), rep(3, 5))),
                               7.68, 7.57, 7.73, 8.15, 8.00,
                               7.21, 7.80, 7.74, 7.87, 7.93))
 
-### Page test
+### Page test for ordered alternatives
 ft <- friedman_test(strength ~ potash | block, data = sc)
 ft
 
