@@ -15,6 +15,9 @@ confint_location <- function(object, nulldistr, level = 0.95,
         stop("Argument ", sQuote("nulldistr"), " is not of class ",
              sQuote("NullDistribution"))
 
+    if (nlevels(object@block) != 1 || max(abs(object@weights - 1)) > 0)
+        stop("cannot compute confidence intervals with blocks or weights")
+
     alternative <- object@alternative
 
     if(!((length(level) == 1)         
@@ -24,11 +27,11 @@ confint_location <- function(object, nulldistr, level = 0.95,
        stop("level must be a single number between 0 and 1")         
 
     scores <- object@y[[1]]
-    groups <- object@x[[1]]
+    groups <- object@xtrans[,1]
 
     ### raw data
-    x <- sort(split(scores, groups)[[1]])
-    y <- sort(split(scores, groups)[[2]])
+    x <- sort(scores[groups > 0])
+    y <- sort(scores[groups < 1])
     alpha <- 1 - level
  
     foo <- function(x, d) x - d
@@ -202,6 +205,9 @@ confint_scale <- function(object, nulldistr, level = 0.95,
         warning(sQuote("object"), " does not represent a two sample problem")
     ### </FIXME>
 
+    if (nlevels(object@block) != 1 || max(abs(object@weights - 1)) > 0)
+        stop("cannot compute confidence intervals with blocks or weights")
+
     alternative <- object@alternative
 
     if(!((length(level) == 1)         
@@ -211,11 +217,11 @@ confint_scale <- function(object, nulldistr, level = 0.95,
        stop("level must be a single number between 0 and 1")         
 
     scores <- object@y[[1]]
-    groups <- object@x[[1]]
+    groups <- object@xtrans[,1]
 
     ### raw data
-    x <- sort(split(scores, groups)[[1]])
-    y <- sort(split(scores, groups)[[2]])
+    x <- sort(scores[groups > 0])
+    y <- sort(scores[groups < 1])
     alpha <- 1 - level
  
     foo <- function(x, d) x / d

@@ -21,3 +21,5 @@ o	visualize deviations from H_0 for all problems (in a way
 o	mh_test with weights
 
 o	free W1 and W2 in `vandeWiel.c' in case of an error
+
+o	enable confidence intervals in the presence of blocks or weights

@@ -101,8 +101,14 @@
   are computed either by the shift algorithm (Streitberg & Roehmel, 1986,
   1987) or by the split-up algorithm (van de Wiel, 2001).
 
-  Confidence intervals for the difference in location are available for the 
-  rank-based procedures and are computed according to Bauer (1972). 
+  The linear rank tests for two samples (\code{wilcox_test},
+  \code{normal_test} and \code{median_test}) can be used to test the 
+  two-sided hypothesis \eqn{Y_1 - Y_2 = 0}, where \eqn{Y_i} is the median
+  of the responses in the ith group. Confidence intervals for the difference 
+  in location are available for the rank-based procedures and are computed 
+  according to Bauer (1972). In case \code{alternative = "less"}, the
+  null hypothesis \eqn{Y_1 - Y_2 \ge 0} is tested and 
+  \code{alternative = "greater"} corresponds to \eqn{Y_1 - Y_2 \le 0}.
 
   In case \code{x} is an ordered factor, \code{kruskal_test} computes the
   linear-by-linear association test for ordered alternatives.
@@ -160,6 +166,7 @@ water_transfer <- data.frame(
 
 ### Wilcoxon-Mann-Whitney test, cf. Hollander & Wolfe (1999), page 111
 ### exact p-value and confidence interval for the difference in location
+### (At term - 12-26 Weeks)
 wt <- wilcox_test(pd ~ age, data = water_transfer, 
             distribution = "exact", conf.int = TRUE)
 print(wt)
@@ -176,6 +183,12 @@ covariance(wt)
 
 ### and, finally, the exact two-sided p-value
 pvalue(wt)
+
+### Confidence interval for difference (12-26 Weeks - At term)
+wilcox_test(pd ~ age, data = water_transfer, 
+    xtrafo = function(data) 
+        trafo(data, factor_trafo = function(x) as.numeric(x == levels(x)[2])),
+        distribution = "exact", conf.int = TRUE)
 
 
 ### Permutation test, asymptotic p-value

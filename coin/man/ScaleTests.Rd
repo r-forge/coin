@@ -71,8 +71,14 @@
   (Streitberg & Roehmel, 1986, 1987) or by the split-up algorithm 
   (van de Wiel, 2001).
 
-  Confidence intervals for the ratio of scales are available for the
-  Ansari-Bradley test and are computed according to Bauer (1972). 
+  The Ansari-Bradley test can be used to test the
+  two-sided hypothesis \eqn{var(Y_1) / var(Y_2) = 1}, where \eqn{var(Y_i)} 
+  is the variance of the responses in the ith group. Confidence intervals 
+  for the ratio of scales are available for the
+  Ansari-Bradley test and are computed according to Bauer (1972).
+  In case \code{alternative = "less"}, the
+  null hypothesis \eqn{var(Y_1) / var(Y_2) \ge 1} is tested and
+  \code{alternative = "greater"} corresponds to \eqn{var(Y_1) / var(Y_2) \le 1}.
 
   For the adjustment of scores for tied values see Hajek, Sidak and Sen
   (1999), page 131ff.
