@@ -906,13 +906,16 @@ friedman_test.SymmetryProblem <- function(x,
     if (!is_completeblock(x))
         stop("Not an unreplicated complete block design")
 
-    for (lev in levels(x@block))
-        x@y[[1]][x@block == lev] <- rank(x@y[[1]][x@block == lev])
+    ### for (lev in levels(x@block))
+    ###    x@y[[1]][x@block == lev] <- rank(x@y[[1]][x@block == lev])
 
     distribution <- match.arg(distribution)
 
     RET <- symmetry_test(x, 
-        distribution = distribution, teststat = "quadtype", ...)
+        distribution = distribution, teststat = "quadtype", 
+        ytrafo = function(data) 
+            trafo(data, numeric_trafo = rank, block = x@block), 
+        ...)
 
     if (is_ordered(RET@statistic))  
         RET@method <- "Page Test"

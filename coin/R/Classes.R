@@ -13,7 +13,7 @@ setClass(Class = "IndependenceProblem",
         dims <- ((nrow(object@x) == nrow(object@y)) && 
                  (nrow(object@x) == length(object@block))) 
         dims <- dims && (length(object@block) == length(object@weights))
-        Wint <- max(abs(weights - floor(weights))) < sqrt(.Machine$double.eps)
+        Wint <- max(abs(object@weights - floor(object@weights))) < sqrt(.Machine$double.eps)
         block <- all(table(object@block) > 1)
         NAs <- all(complete.cases(object@x) & complete.cases(object@y))
         return((dims && block) && (NAs && Wint))
@@ -34,7 +34,9 @@ setClass(Class = "IndependenceTestProblem",
         scores     = "matrix"
     ),
     contains = "IndependenceProblem",
-    validity = function(object) TRUE
+    validity = function(object) 
+        storage.mode(object@xtrans) == "double" && 
+        storage.mode(object@ytrans) == "double"
 )
 
 ### back-transformation

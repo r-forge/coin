@@ -1,14 +1,9 @@
 
-o	check dimensions of x, y, xtrans and ytrans slots more carefully
-
 o	definition of two-sided p-values in ansari.test contradicts the one
         used here in some cases (-> regtest_2samples.R)
 
 o	confint() after contrast_test:	how to check if ranks were used???
 	labels of `contrMat' and direction of differences don't match
-
-o	check dimensions of objects returned by yfun() and xfun()
-	dim(x) and dim(xtrans) may differ (max-test)
 
 o	check storage.mode of all vars going into C code (MC)
 
@@ -17,3 +12,6 @@ o	add wilcoxon-gehan scores, check logrank scores!
 o	check if trend test for clustered data are part of the framework
 
 o	maximally selected McNemar statistics -> Betensky, Biometrics, 2000
+
+o	visualize deviations from H_0 for all problems (in a way
+	motivated by shaded mosaicplots)

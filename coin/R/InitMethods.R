@@ -23,6 +23,9 @@ setMethod(f = "initialize",
         } else {
             .Object@weights <- as.double(weights)
         }
+        if (!validObject(.Object))
+            stop("not a valid object of class ",
+                 sQuote("IndependenceProblem"))
         .Object
     }
 )
@@ -45,10 +48,9 @@ setMethod(f = "initialize",
         xfact <- sapply(x, is.factor)
         yfact <- sapply(y, is.factor)
 
-        .Object@xtrans <- xtrafo(x)
-        storage.mode(.Object@xtrans) <- "double"
-        .Object@ytrans <- ytrafo(y)
-        storage.mode(.Object@ytrans) <- "double"
+        tr <- check_trafo(xtrafo(x), ytrafo(y))
+        .Object@xtrans <- tr$xtrafo
+        .Object@ytrans <- tr$ytrafo
         .Object@xtrafo <- xtrafo
         .Object@ytrafo <- ytrafo
         p <- ncol(.Object@xtrans)

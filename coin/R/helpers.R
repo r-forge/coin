@@ -152,6 +152,20 @@ setscores <- function(x, scores) {
     return(x)
 }
 
+check_trafo <- function(tx, ty) {
+
+    if (!is.matrix(tx))
+        stop(sQuote("xtrafo"), " does not return a matrix")
+    if (!is.matrix(ty))
+        stop(sQuote("ytrafo"), " does not return a matrix")
+    if (nrow(tx) != nrow(ty))
+        stop("Dimensions of returns of ", sQuote("xtrafo"), " and ",
+             sQuote("ytrafo"), " don't match")
+    storage.mode(tx) <- "double"
+    storage.mode(ty) <- "double"
+    list(xtrafo = tx, ytrafo = ty)
+}
+
 table2df <- function(x) {
     if (!is.table(x))
         stop(sQuote("x"), " is not of class ", sQuote("table"))

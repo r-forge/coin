@@ -15,7 +15,7 @@
 }
 \usage{
 trafo(data, numeric_trafo = id_trafo, 
-    factor_trafo = f_trafo, surv_trafo = logrank_trafo)
+    factor_trafo = f_trafo, surv_trafo = logrank_trafo, block = NULL)
 id_trafo(x)
 ansari_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 fligner_trafo(x, ties.method = c("mid-ranks", "average-scores"))
@@ -38,6 +38,8 @@ f_trafo(x)
   \item{surv_trafo}{a function to by applied to 
     elements of class \code{Surv} of \code{data} returning a 
     matrix with \code{nrow(data)} rows and an arbitrary number of columns.}
+  \item{block}{an optional factor those levels are interpreted as blocks.
+    \code{trafo} is applied to each level of \code{block} separately.}
   \item{x}{an object of classes \code{numeric}, \code{factor} or
     \code{Surv}.}
   \item{ties.method}{two methods are available to adjust scores for ties.

@@ -113,7 +113,28 @@ f_trafo <- function(x) {
 
 ### transformation function
 trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo, 
-                 surv_trafo = logrank_trafo) {
+                 surv_trafo = logrank_trafo, block = NULL) {
+
+    if (!(is.data.frame(data) || is.list(data)))
+        stop(sQuote("data"), " is not a data.frame or list")
+
+    if (!is.null(block)) {
+        if (!is.factor(block) || length(block) != nrow(data))
+            stop(sQuote("block"), " is not a factor with ", 
+                 nrow(data), " elements")
+
+        ### need to check dimension of matrix returned by 
+        ### user supplied functions
+        ret <- trafo(data, numeric_trafo, factor_trafo, surv_trafo)
+
+        ### apply trafo to each block separately
+        for (lev in levels(block)) {
+            ret[block == lev, ] <- trafo(data[block == lev, ,drop = FALSE], 
+                numeric_trafo, factor_trafo, surv_trafo)
+        }
+        return(ret)
+    }
+
     tr <- lapply(data, function(x) {
         if (is.factor(x))
             return(factor_trafo(x))
@@ -123,6 +144,12 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
             return(numeric_trafo(x))
         stop("data class ", class(x), " is not supported")
     })
+
+    chk <- sapply(tr, function(x) (is.matrix(x) && nrow(x) == nrow(data)) ||
+                           (is.vector(x) && length(x) == nrow(data)))
+    if (!all(chk))
+        stop("transformations are not of length / nrow", nrow(data))
+
     RET <- c()
     assignvar <- c()
     for (i in 1:length(tr)) {
