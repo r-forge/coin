@@ -569,16 +569,23 @@ chisq_test.IndependenceProblem <- function(x,
     distribution <- match.arg(distribution)
 
     RET <- independence_test(x, 
-        teststat = "quadtype", distribution = distribution, check = check, ...)
+        teststat = "quadtype", distribution = "asympt", check = check, ...)
 
     ### use the classical chisq statistic based on Pearson 
     ### residuals (O - E)^2 / E
     ### see Th. 3.1 and its proof in Strasser & Weber (1999).
+
     RET@statistic@teststatistic <- 
         RET@statistic@teststatistic * n / (n - 1)
-    ### <FIXME> approx? </FIXME>
     RET@statistic@covariance <- 
         RET@statistic@covariance * (n - 1) / n
+    RET@statistic@covarianceplus <- MPinv(RET@statistic@covariance)$MPinv
+
+    if (distribution == "approx") {
+        nd <- ApproxNullDistribution(RET@statistic, ...)
+        RET <- new("QuadTypeIndependenceTest", statistic = RET@statistic,
+                distribution = nd)
+    }
 
     RET@method <- paste("Pearson's Chi-Squared Test")
     return(RET)
