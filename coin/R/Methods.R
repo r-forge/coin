@@ -112,13 +112,13 @@ setMethod(f = "ApproxNullDistribution",
                   PACKAGE = "coin")
 
               ### <FIXME> can transform p, q, x instead of those </FIXME>
-              pls <- sort((unlist(pls) - object@expectation) / 
-                          drop(sqrt(object@covariance)))
+              pls <- sort(round((unlist(pls) - object@expectation) / 
+                          drop(sqrt(object@covariance)), 10))
 
               RET <- new("ApproxNullDistribution")
 
               RET@p <- function(q) {
-                  p <- mean(pls <= q)
+                  p <- mean(pls <= round(q, 10))
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
                   p
@@ -128,9 +128,10 @@ setMethod(f = "ApproxNullDistribution",
               RET@d <- function(x) length(pls == x)
               RET@pvalue <- function(q) {
                   p <- switch(object@alternative,
-                      "less"      = mean(pls <= q), 
-                      "greater"   = mean(pls >= q),
+                      "less"      = mean(pls <= round(q, 10)), 
+                      "greater"   = mean(pls >= round(q, 10)),
                       "two.sided" = {
+                          q <- round(q, 10)
                           if (q == 0) 1
                           mean(pls <= ifelse(q >  0, -q,  q)) +
                           mean(pls >= ifelse(q >= 0,  q, -q))
@@ -165,12 +166,12 @@ setMethod(f = "ApproxNullDistribution",
               pls <- lapply(pls, function(x) 
                          max(abs(x - object@expectation) / dcov)
                      )
-              pls <- sort(unlist(pls))
+              pls <- sort(round(unlist(pls), 10))
 
               RET <- new("ApproxNullDistribution")
 
               RET@p <- function(q) {
-                  p <- mean(pls <= q)
+                  p <- mean(pls <= round(q, 10))
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
                   p
@@ -179,7 +180,7 @@ setMethod(f = "ApproxNullDistribution",
               RET@q <- function(p) pls[length(pls) * p]
               RET@d <- function(x) length(pls == x)
               RET@pvalue <- function(q) {
-                  p <- mean(pls > q)
+                  p <- mean(pls >= round(q, 10))
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
                   p
@@ -212,12 +213,12 @@ setMethod(f = "ApproxNullDistribution",
                                 drop(a %*% dcov %*% a)
                             }
                      )
-              pls <- sort(unlist(pls))
+              pls <- sort(round(unlist(pls), 10))
 
               RET <- new("ApproxNullDistribution")
 
               RET@p <- function(q) {
-                  p <- mean(pls <= q)
+                  p <- mean(pls <= round(q, 10))
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
                   p
@@ -226,7 +227,7 @@ setMethod(f = "ApproxNullDistribution",
               RET@q <- function(p) pls[length(pls) * p]
               RET@d <- function(x) length(pls == x)
               RET@pvalue <- function(q) {
-                  p <- mean(pls > q)
+                  p <- mean(pls >= round(q, 10))
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
                   p
