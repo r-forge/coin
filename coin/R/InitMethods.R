@@ -46,7 +46,9 @@ setMethod(f = "initialize",
         yfact <- sapply(y, is.factor)
 
         .Object@xtrans <- xtrafo(x)
+        storage.mode(.Object@xtrans) <- "double"
         .Object@ytrans <- ytrafo(y)
+        storage.mode(.Object@ytrans) <- "double"
         .Object@xtrafo <- xtrafo
         .Object@ytrafo <- ytrafo
         p <- ncol(.Object@xtrans)
