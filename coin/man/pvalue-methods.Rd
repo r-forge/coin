@@ -1,5 +1,6 @@
 \name{pvalue-methods}
 \docType{methods}
+\alias{pvalue}
 \alias{pvalue-methods}
 \alias{pvalue,NullDistribution-method}
 \alias{pvalue,IndependenceTest-method}

@@ -1,5 +1,6 @@
 \name{statistic-methods}
 \docType{methods}
+\alias{statistic}
 \alias{statistic-methods}
 \alias{statistic,IndependenceTest-method}
 \alias{statistic,ScalarIndependenceTestStatistic-method}
