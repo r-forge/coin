@@ -58,22 +58,31 @@
   The null hypothesis of the independence of \code{y} and \code{x} in each
   stratum given by \code{block} is tested.
 
-  In case either \code{x} or \code{y} or both are ordered factors, the
+  In case either \code{x} or \code{y} are ordered factors, the
   corresponding linear-by-linear association test is performed.
   \code{lbl_test} coerces factors to class \code{ordered} under any
   circumstances. The default scores are \code{1:nlevels(x)} and 
   \code{1:nlevels(y)}, respectively. The default scores can be changed 
-  via the \code{scores} argument (see \code{\link{independence_test}}). 
+  via the \code{scores} argument (see \code{\link{independence_test}}), 
   \code{scores = list(y = 1:k, x = c(1, 4, 6))} first triggers a coercion
   to class \code{ordered} of both variables and attaches the list elements
   as scores. The length of a score vector needs to be equal the number of
   levels of the factor of interest.
+
+  The authoratative source for details on the documented test procedures
+  is Agresti (2002).
 
 }
 \value{
 
   An object inheriting from class \code{IndependenceTest} with
   methods \code{show}, \code{pvalue} and \code{statistic}.
+
+}
+\references{
+
+    Alan Agresti (2002), \emph{Categorical Data Analysis}. Hoboken, New
+    Jersey: John Wiley & Sons.
 
 }
 \examples{
