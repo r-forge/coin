@@ -1,11 +1,14 @@
 \name{SpearmanTest}
+\alias{spearman_test.formula}
+\alias{spearman_test.IndependenceProblem}
 \alias{spearman_test}
 \title{ Spearman's Test on Independence }
 \description{
     Testing the independence of two numeric variables.
 }
 \usage{
-\method{spearman_test}{formula}(formula, data, subset = NULL, \dots)
+\method{spearman_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
 \method{spearman_test}{IndependenceProblem}(x,
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx"), ...) 
@@ -18,7 +21,9 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
-  \item{x}
+  \item{weights}{an optional formula of the form \code{~ w} defining
+      integer valued weights for the observations.}
+  \item{x}{an object of class \code{IndependenceProblem}.}
   \item{alternative}{the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   

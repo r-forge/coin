@@ -1,8 +1,18 @@
 \name{LocationTests}
+\alias{perm_test.formula}
+\alias{perm_test.IndependenceProblem}
 \alias{perm_test}
+\alias{wilcox_test.formula}
+\alias{wilcox_test.IndependenceProblem}
 \alias{wilcox_test}
+\alias{normal_test.formula}
+\alias{normal_test.IndependenceProblem}
 \alias{normal_test}
+\alias{median_test.formula}
+\alias{median_test.IndependenceProblem}
 \alias{median_test}
+\alias{kruskal_test.formula}
+\alias{kruskal_test.IndependenceProblem}
 \alias{kruskal_test}
 \title{ Independent Two- and K-Sample Location Tests }
 \description{

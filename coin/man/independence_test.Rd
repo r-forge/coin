@@ -1,5 +1,8 @@
 \name{IndependenceTest}
 \alias{independence_test}
+\alias{independence_test.formula}
+\alias{independence_test.IndependenceProblem}
+\alias{independence_test.table}
 \title{ General Independence Test } 
 \description{
     The independence between two sets of variables of arbitrary measurement
@@ -31,6 +34,9 @@
     integer valued weights for the observations.}
   \item{x}{an object inheriting from class \code{IndependenceProblem} or an
            object of class \code{table}.}
+  \item{teststat}{the type of test statistic to be applied: either a
+    standardized scalar test statistic (\code{scalar}), or a 
+    maximum type \code{maxtype} or a quadratic form \code{quadform}.}
   \item{alternative}{the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   

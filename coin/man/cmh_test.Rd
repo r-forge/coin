@@ -1,6 +1,15 @@
 \name{ContingencyTests}
+\alias{chisq_test.formula}
+\alias{chisq_test.table}
+\alias{chisq_test.IndependenceProblem}
 \alias{chisq_test}
+\alias{cmh_test.formula}
+\alias{cmh_test.table}
+\alias{cmh_test.IndependenceProblem}
 \alias{cmh_test}
+\alias{lbl_test.formula}
+\alias{lbl_test.table}
+\alias{lbl_test.IndependenceProblem}
 \alias{lbl_test}
 \title{ Independence in general I x K x J contingency tables }
 \description{

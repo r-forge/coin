@@ -1,5 +1,9 @@
 \name{SymmetryTests}
+\alias{friedman_test.formula}
+\alias{friedman_test.SymmetryProblem}
 \alias{friedman_test}
+\alias{wilcoxsign_test.formula}
+\alias{wilcoxsign_test.IndependenceProblem}
 \alias{wilcoxsign_test}
 \title{ Symmetry Tests }
 \description{
@@ -30,9 +34,6 @@
     to be used.}
   \item{x}{an object inheriting from class \code{SymmetryProblem} or a table 
            with identical dimnames.}
-  \item{alternative}{the alternative hypothesis must be
-    one of \code{"two.sided"} (default), \code{"greater"} or    
-    \code{"less"}.  You can specify just the initial letter.}   
   \item{distribution}{the null distribution of the test statistic
     can be computed (\code{exact}) or can be approximated by its
     \code{asymptotic} distribution (\code{asympt}) 

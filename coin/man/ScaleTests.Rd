@@ -1,5 +1,9 @@
 \name{ScaleTests}
+\alias{ansari_test.formula}
+\alias{ansari_test.IndependenceProblem}
 \alias{ansari_test}
+\alias{fligner_test.formula}
+\alias{fligner_test.IndependenceProblem}
 \alias{fligner_test}
 \title{ Independent Two- and K-Sample Scale Tests }
 \description{

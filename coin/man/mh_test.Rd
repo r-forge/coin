@@ -1,4 +1,7 @@
 \name{MarginalHomogenityTest}
+\alias{mh_test.table}
+\alias{mh_test.formula}
+\alias{mh_test.SymmetryProblem}
 \alias{mh_test}
 \title{ Marginal Homogenity Tests }
 \description{
@@ -21,8 +24,6 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
-  \item{weights}{an optional formula of the form \code{~ w} defining
-    integer valued weights for the observations.}   
   \item{x}{an object inheriting from class \code{SymmetryProblem} or a table 
            with identical dimnames.}
   \item{distribution}{the null distribution of the test statistic

@@ -1,4 +1,6 @@
 \name{MaxstatTest}
+\alias{maxstat_test.formula}
+\alias{maxstat_test.IndependenceProblem}
 \alias{maxstat_test}
 \title{ Maximally selected test statistics }
 \description{

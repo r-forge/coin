@@ -1,11 +1,14 @@
 \name{LogrankTest}
+\alias{logrank_test.formula}
+\alias{logrank_test.IndependenceProblem}
 \alias{logrank_test}
 \title{ Independent Two- and K-Sample Tests for Censored Data }
 \description{
     
 }
 \usage{
-\method{logrank_test}{formula}(formula, data, subset = NULL, \dots)
+\method{logrank_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
 \method{logrank_test}{IndependenceProblem}(x, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"), ...)
@@ -21,7 +24,9 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
-  \item{x}
+  \item{weights}{an optional formula of the form \code{~ w} defining
+      integer valued weights for the observations.}
+  \item{x}{an object of class \code{IndependenceProblem}.}
   \item{alternative}{the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   

@@ -1,5 +1,8 @@
 \name{SymmetryTest}
 \alias{symmetry_test}
+\alias{symmetry_test.formula}
+\alias{symmetry_test.SymmetryProblem}
+\alias{symmetry_test.table}
 \title{ General Symmetry Test } 
 \description{
     Testing the symmetry of a response for repeated measurements in a
@@ -13,8 +16,7 @@
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL, 
     check = NULL, ...)
-\method{independence_test}{table}(x, 
-    distribution = c("asympt", "approx"), ...)
+\method{symmetry_test}{table}(x, ...)
 }
 \arguments{
   \item{formula}{a formula of the form 
@@ -28,6 +30,9 @@
     to be used.}
   \item{x}{an object inheriting from class \code{SymmetryProblem} or an
            object of class \code{table}.}
+  \item{teststat}{the type of test statistic to be applied: either a
+    standardized scalar test statistic (\code{scalar}), or a 
+    maximum type \code{maxtype} or a quadratic form \code{quadform}.}
   \item{alternative}{the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   
