@@ -33,17 +33,29 @@ setMethod(f = "AsymptNullDistribution",
               corr <- cov2cor(object@covariance)
               RET <- new("AsymptNullDistribution")
               RET@p <- function(q) {
-                  p <- pmvnorm(lower = -abs(q), upper = abs(q), 
-                          mean = rep(0, length(object@expectation)), 
-                          corr = corr, ...)
+
+                  if (length(corr) > 1) 
+                      p <- pmvnorm(lower = -abs(q), upper = abs(q), 
+                              mean = rep(0, length(object@expectation)), 
+                              corr = corr, ...)
+                  else
+                      p <- pmvnorm(lower = -abs(q), upper = abs(q),
+                              mean = rep(0, length(object@expectation)),
+                              sigma = 1, ...)
+
                   error <- attr(p, "error")
                   attr(p, "error") <- NULL
                   attr(p, "conf.int") <- c(max(0, p - error), min(p + error, 1))
                   p
               }
               RET@q <- function(p) {
-                  q <- qmvnorm(p, mean = rep(0, length(object@expectation)), 
-                          corr = corr, tail = "both.tails", ...)$quantile
+                  if (length(corr) > 1) 
+                      q <- qmvnorm(p, mean = rep(0, length(object@expectation)), 
+                              corr = corr, tail = "both.tails", ...)$quantile
+                  else
+                      q <- qmvnorm(p, mean = rep(0, length(object@expectation)),
+                              sigma = 1, tail = "both.tails", ...)$quantile   
+
                   attributes(q) <- NULL
                   q
               }
