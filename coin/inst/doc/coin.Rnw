@@ -1,0 +1,178 @@
+
+\documentclass[letter]{article}
+\usepackage{amstext}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{hyperref}
+
+%%\VignetteIndexEntry{coin: A Computational Framework for Conditional Inference}
+
+\input{head}
+
+\hypersetup{%
+  pdftitle = {coin: A Computational Framework for Conditional Inference},
+  pdfsubject = {Manuscript},
+  pdfauthor = {Torsten Hothorn, Kurt Hornik, 
+               Mark van de Wiel and Achim Zeileis},
+%% change colorlinks to false for pretty printing
+  colorlinks = {true},
+  linkcolor = {blue},
+  citecolor = {blue},
+  urlcolor = {red},
+  hyperindex = {true},
+  linktocpage = {true},
+}
+
+
+\begin{document}
+
+\title{\texttt{coin}: A Computational Framework for Conditional Inference}
+\author{Torsten Hothorn$^1$, Kurt Hornik$^2$, Mark van de Wiel$^3$ 
+        and Achim Zeileis$^2$}
+\date{}
+\maketitle
+
+\noindent$^1$Institut f\"ur Medizininformatik, Biometrie und Epidemiologie\\
+     Friedrich-Alexander-Universit\"at Erlangen-N\"urnberg\\
+     Waldstra{\ss}e 6, D-91054 Erlangen, Germany \\
+     \texttt{Torsten.Hothorn@R-project.org}
+\newline
+
+\noindent$^2$Institut f\"ur Statistik und Mathematik,
+             Wirtschaftsuniversit\"at Wien \\
+       Augasse 2-6, A-1090 Wien, Austria \\
+       \texttt{Kurt.Hornik@R-project.org} \\
+       \texttt{Achim.Zeileis@R-project.org} 
+\newline
+
+\noindent$^3$ Department of Mathematics and Computer Science \\
+              Eindhoven University of Technology \\
+              HG 9.25, P.O. Box 513 \\
+              5600 MB Eindhoven, The Netherlands \\
+              \texttt{markvdw@win.tue.nl}
+\newline
+
+
+\section{Introduction}
+
+\section{Permutation Tests}
+
+$(\Y_i, \X_i, w_i, b_i), i = 1, \dots, n)$
+
+\begin{eqnarray} \label{linstat}
+\T = \vec\left(\sum_{i = 1}^n w_i g(\X_i) h(\Y_i, (\Y_1, \dots, \Y_n))^\top\right)
+\in \R^pq
+\end{eqnarray}
+
+The conditional expectation $\mu \in \R^{pq}$ and covariance $\Sigma \in \R^{pq \times pq}$ 
+of $\T$ under $H_0$ given
+all permutations $\sigma \in S$ of the responses are derived by
+\cite{StrasserWeber1999}:
+\begin{eqnarray}
+\mu & = & \E(\T | S) = \vec \left( \left( \sum_{i = 1}^n w_i g(\X_i) \right) \E(h | S)^\top
+\right), \nonumber \\
+\Sigma & = & \V(\T | S) \nonumber \\
+& = &
+    \frac{\ws}{\ws - 1}  \V(h | S) \otimes
+        \left(\sum_i w_i  g(\X_i) \otimes w_i  g(\X_i)^\top \right)
+\label{expectcovar}
+\\
+& - & \frac{1}{\ws - 1}  \V(h | S)  \otimes \left(
+        \sum_i w_i g(\X_i) \right)
+\otimes \left( \sum_i w_i g(\X_i)\right)^\top
+\nonumber
+\end{eqnarray}
+where $\ws = \sum_{i = 1}^n w_i$ denotes the sum of the case weights,
+and $\otimes$ is the Kronecker product. The conditional expectation of the
+influence function is
+\begin{eqnarray*}
+\E(h | S) = \ws^{-1} \sum_i w_i h(\Y_i, (\Y_1, \dots, \Y_n)) \in
+\R^q
+\end{eqnarray*}
+with corresponding $q \times q$ covariance matrix
+\begin{eqnarray*}
+\V(h | S) = \ws^{-1} \sum_i w_i \left(h(\Y_i, (\Y_1, \dots, \Y_n))
+- \E(h | )
+\right) \\
+\left(h(\Y_i, (\Y_1, \dots, \Y_n)) - \E(h | S)\right)^\top.
+\end{eqnarray*}
+
+Having the conditional expectation and covariance at hand we are able to
+standardize a linear statistic $\T \in \R^{pq}$ of the form
+(\ref{linstat}). Univariate test statistics~$c$ mapping an observed linear
+statistic $\t \in
+\R^{pq}$ into the real line can be of arbitrary form.  An obvious choice is
+the maximum of the absolute values of the standardized linear statistic
+\begin{eqnarray*}
+c_\text{max}(\t, \mu, \Sigma)  = \max \left| \frac{\t -
+\mu}{\text{diag}(\Sigma)^{1/2}} \right|
+\end{eqnarray*}
+utilizing the conditional expectation $\mu$ and covariance matrix
+$\Sigma$. The application of a quadratic form $c_\text{quad}(\t, \mu,
+\Sigma)  =
+(\t - \mu) \Sigma^+ (\t - \mu)^\top$ is one alternative, although
+computationally more expensive because the Moore-Penrose 
+inverse $\Sigma^+$ of $\Sigma$ is involved.
+
+The conditional distribution and thus the $P$-value
+of the statistics $c(\t, \mu, \Sigma)$ can be
+computed in several different ways. For some special forms of the
+linear statistic, the exact distribution of the test statistic is trackable.
+Conditional Monte-Carlo procedures can be used to approximate the exact
+distribution. \cite{StrasserWeber1999} proved (Theorem 2.3) that the   
+conditional distribution of linear statistics $\T$ with conditional    
+expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
+distribution with parameters $\mu$ and $\Sigma$ as $n, s \rightarrow
+\infty$. Thus, the asymptotic conditional distribution of test statistics of
+the
+form $c_\text{max}$ is normal and
+can be computed directly in the univariate case ($pq = 1$)
+or approximated by means of quasi-randomized Monte-Carlo  
+procedures in the multivariate setting \citep{numerical-:1992}. For
+quadratic forms
+$c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom 
+given by the rank of $\Sigma$ \citep[Theorem 6.20, ][]{Rasch1995}, exact
+probabilities can be computed efficiently.
+
+\section{Examples}
+
+\paragraph{Independent $K$-Sample Problems}
+
+$\Y$ is univariate numeric (or censored) 
+and $\X$ a factor at $K$ levels. $g$ is the dummy
+matrix and $h$ by be arbitrary.
+
+<<YOY-kruskal, echo = TRUE>>=
+library(coin)
+YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44, 
+                             42, 60, 32, 42, 45, 58, 27, 51, 42, 52, 
+                             38, 33, 26, 25, 28, 28, 26, 27, 27, 27, 
+                             31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
+                  site = factor(c(rep("I", 10), rep("II", 10),
+                                  rep("III", 10), rep("IV", 10))))
+
+kruskal_test(length ~ site, data = YOY)
+
+it <- independence_test(length ~ site, data = YOY,
+    ytrafo = function(data) trafo(data, numeric_trafo = rank),
+    teststat = "quadtype")
+statistic(it, "linear")
+expectation(it)
+covariance(it)
+statistic(it, "standardized")
+statistic(it)
+pvalue(it)
+@
+
+
+\paragraph{Independence in Contingency Tables}
+
+
+\paragraph{Ordered Alternatives}
+
+\paragraph{Multivariate Problems}
+
+
+\end{document}
+
