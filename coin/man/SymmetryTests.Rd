@@ -101,6 +101,9 @@ if (require(multcomp)) {
     sp <- new("SymmetryProblem", RoundingTimes["methods"],
               data.frame(r = r))
 
+    ### Friedman test, again
+    print(symmetry_test(sp, teststat = "quadtype"))
+
     ### all pair comparisons
     rtt <- symmetry_test(sp, teststat = "maxtype",
          xtrafo = function(data)
