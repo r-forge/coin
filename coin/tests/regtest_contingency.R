@@ -70,6 +70,12 @@ cmh_test(Job.Satisfaction ~ Income | Gender, data = df,
 lbl_test(Job.Satisfaction ~ Income | Gender, data = df, 
          yscores = c(2500, 10000, 20000, 30000))
 
+### StatXact 6 manual, page 
+stopifnot(isequal(round(pvalue(lbl_test(jobsatisfaction, 
+                      yscores = c(3, 10, 20, 35), 
+                      xscores = c(1, 3, 4, 5))), 
+             5), 0.01309))
+
 ### congenital sex organ malformation, StatXact 6 manual, page 793
 csom <- as.table(matrix(c(17066, 48, 14464, 38, 788, 5, 126, 1, 37, 1), nrow = 2,
     dimnames = list(Malformation = c("Absent", "Present"),
@@ -108,3 +114,8 @@ stopifnot(isequal(round(pvalue(lbl_test(dr)), 4), 0.0708))
 ### with alternative scores, page 997
 stopifnot(isequal(round(pvalue(lbl_test(dr, xscores = c(1, 3, 9, 27))), 4), 
                   0.0828))
+
+### army: with blocks, page 1014
+data(army)
+stopifnot(isequal(round(pvalue(cmh_test(army)), 6), 0.002774))
+

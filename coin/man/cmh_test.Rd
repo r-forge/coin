@@ -66,5 +66,23 @@ cmh_test(jobsatisfaction)
 ### both Income and Job.Satisfaction ordered
 lbl_test(jobsatisfaction)
 
+### dose response data, StatXact 6 manual, 984 
+tox <- as.table(matrix(c(100, 18, 50, 50, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1),
+                       nrow = 4,
+                       dimnames = list(dose = paste((1:4)*100, "mg"),
+                                       tox = c("mild", "moderate", "severe", "death"))))
+
+### 0.0708, page 993
+lbl_test(tox)
+
+### 0.0792, page 993
+pvalue(lbl_test(tox, distribution = "approx", B = 9999))
+
+### 0.0828, page 997
+lbl_test(tox, xscores = c(1, 3, 9, 27))
+
+## 0.0780, page 997
+pvalue(lbl_test(tox, xscores = c(1, 3, 9, 27), distribution = "approx", B = 9999))
+
 }
 \keyword{htest}
