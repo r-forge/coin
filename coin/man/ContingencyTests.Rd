@@ -11,29 +11,24 @@
 \alias{lbl_test.table}
 \alias{lbl_test.IndependenceProblem}
 \alias{lbl_test}
-\title{ Independence in General I x K x J Contingency Tables }
+\title{ Independence in Three-Way Contingency Tables }
 \description{
-    Testing the independence of two possibly ordered factors.
+    Testing the independence of two possibly ordered factors, eventually
+    stratified by a third factor.
 }
 \usage{
 
-\method{cmh_test}{formula}(formula, data, subset = NULL, 
-    weights = NULL, \dots)
+\method{cmh_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{cmh_test}{table}(object, distribution = c("asympt", "approx"), ...)
-\method{cmh_test}{IndependenceProblem}(object, 
-    distribution = c("asympt", "approx"), ...)
+\method{cmh_test}{IndependenceProblem}(object, distribution = c("asympt", "approx"), ...)
 
-\method{chisq_test}{formula}(formula, data, subset = NULL, 
-    weights = NULL, \dots)
+\method{chisq_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{chisq_test}{table}(object, distribution = c("asympt", "approx"), ...)
-\method{chisq_test}{IndependenceProblem}(object, 
-    distribution = c("asympt", "approx"), ...)
+\method{chisq_test}{IndependenceProblem}(object, distribution = c("asympt", "approx"), ...)
 
-\method{lbl_test}{formula}(formula, data, subset = NULL, 
-    weights = NULL, \dots)
+\method{lbl_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{lbl_test}{table}(object, distribution = c("asympt", "approx"), ...)
-\method{lbl_test}{IndependenceProblem}(object, 
-    distribution = c("asympt", "approx"), ...)
+\method{lbl_test}{IndependenceProblem}(object, distribution = c("asympt", "approx"), ...)
 
 }
 \arguments{
@@ -46,18 +41,19 @@
     to be used.}
   \item{weights}{an optional formula of the form \code{~ w} defining
     integer valued weights for the observations.}
-  \item{object}{an object inheriting from class \code{IndependenceProblem} or an
+  \item{object}{an object inheriting from class \code{"IndependenceProblem"} or an
     object of class \code{table}.}
-  \item{distribution}{the null distribution of the test statistic
-    can be approximated by its asymptotic distribution (\code{asympt}) 
-    or via Monte-Carlo resampling (\code{approx}).}
+  \item{distribution}{a character, the null distribution of the test statistic
+    can be approximated by its asymptotic distribution (\code{"asympt"}) 
+    or via Monte-Carlo resampling (\code{"approx"}).}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
 
-  The null hypothesis of the independence of \code{y} and \code{x} in each
-  stratum given by \code{block} is tested. \code{chisq_test} implements
-  Pearson's chi-squared test, \code{cmh_test} the Cochran-Mantel-Haenzsel
+  The null hypothesis of the independence of \code{y} and \code{x} is
+  tested, where \code{block} defines a factor for stratification. 
+  \code{chisq_test} implements Pearson's chi-squared test, 
+   \code{cmh_test} the Cochran-Mantel-Haenzsel
   test and \code{lbl_test} the linear-by-linear association test for ordered
   data.
 

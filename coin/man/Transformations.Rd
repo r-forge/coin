@@ -9,9 +9,9 @@
 \alias{maxstat_trafo}
 \alias{logrank_trafo}
 \alias{f_trafo}
-\title{ Functions for Data Transformations and Score Computations }
+\title{ Functions for Data Transformations }
 \description{
-  Transforming original data to contrast matrices or scores.  
+  Rank-transformations for numerical data or dummy codings of factors.
 }
 \usage{
 trafo(data, numeric_trafo = id_trafo, 
@@ -67,7 +67,7 @@ f_trafo(x)
   (see \code{\link{neuropathy}} for location problems, 
   \code{logrank_trafo} returns Logrank scores for censored data.
 
-  A \code{trafo} funciton with modified default arguments is usually
+  A \code{trafo} function with modified default arguments is usually
   feeded into \code{\link{independence_test}} via the \code{xtrafo}
   or \code{ytrafo} arguments.
 

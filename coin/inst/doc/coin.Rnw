@@ -266,6 +266,12 @@ can be extracted via
 <<YOY-T, echo = TRUE>>=
 statistic(it, "linear")
 @
+Note that \texttt{statistic(..., "linear")} currently returns the linear
+statistic in matrix form, i.e.
+\begin{eqnarray*}
+\sum_{i = 1}^n w_i g(\X_i) h(\Y_i, (\Y_1, \dots, \Y_n))^\top \in \R^{p
+\times q}.
+\end{eqnarray*}
 The conditional expectation and covariance are available from
 <<YOY-EV, echo = TRUE>>=
 expectation(it)
@@ -331,7 +337,8 @@ $\Y$ and $\X$ are associated with score vectors $\xi \in
 combination of the linear statistic $\T$ of the form
 \begin{eqnarray*}
 \M \T & = & \vec \left( \sum_{i=1}^n w_i \gamma^\top g(\X_i)
-            \left(\xi^\top h(\Y_i, (\Y_1, \dots, \Y_n)\right)^\top \right).
+            \left(\xi^\top h(\Y_i, (\Y_1, \dots, \Y_n)\right)^\top \right)
+\in \R \text{ with } \M = \xi \otimes \gamma.
 \end{eqnarray*}
 By default, scores are $\xi = 1, \dots, J$ and $\gamma = 1, \dots, K$.
 <<jobsatisfaction-lbl, echo = TRUE>>=

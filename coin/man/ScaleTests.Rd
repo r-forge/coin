@@ -12,16 +12,14 @@
 }
 \usage{
 
-\method{ansari_test}{formula}(formula, data, subset = NULL, 
-    weights = NULL, \dots)
+\method{ansari_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{ansari_test}{IndependenceProblem}(object, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"),
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...)
 
-\method{fligner_test}{formula}(formula, data, subset = NULL, 
-    weights = NULL, \dots)
+\method{fligner_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{fligner_test}{IndependenceProblem}(object, 
     ties.method = c("mid-ranks", "average-scores"),
     distribution = c("asympt", "approx"), 
@@ -40,14 +38,14 @@
   \item{weights}{an optional formula of the form \code{~ w} defining
       integer valued weights for the observations.}
   \item{object}{an object of class \code{IndependenceProblem}.}
-  \item{alternative}{the alternative hypothesis must be
+  \item{alternative}{a character, the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   
-  \item{distribution}{the null distribution of the test statistic
+  \item{distribution}{a character, the null distribution of the test statistic
     can be computed \code{exact}ly or can be approximated by its
     asymptotic distribution (\code{asympt})   
     or via Monte-Carlo resampling (\code{approx}).}
-  \item{ties.method}{two methods are available to adjust scores for ties,
+  \item{ties.method}{a character, two methods are available to adjust scores for ties,
       either the score generating function is applied to \code{mid-ranks}
       or the scores computed based on random ranks are averaged for all tied
       values (\code{average-scores}).}

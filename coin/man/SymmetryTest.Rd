@@ -29,14 +29,14 @@
     to be used.}
   \item{object}{an object inheriting from class \code{SymmetryProblem} or an
            object of class \code{table}.}
-  \item{teststat}{the type of test statistic to be applied: either a
+  \item{teststat}{a character, the type of test statistic to be applied: either a
     standardized scalar test statistic (\code{scalar}), or a
     maximum type statistic (\code{maxtype}) or a quadratic form
     (\code{quadform}).}
-  \item{alternative}{the alternative hypothesis must be
+  \item{alternative}{a character, the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   
-  \item{distribution}{the null distribution of the test statistic
+  \item{distribution}{a character, the null distribution of the test statistic
     can be computed \code{exact}ly or can be approximated by its
     asymptotic distribution (\code{asympt})
     or via Monte-Carlo resampling (\code{approx}).}

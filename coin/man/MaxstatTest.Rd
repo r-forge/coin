@@ -8,8 +8,7 @@
     response of arbitrary measurement scale against cutpoint alternatives. 
 }
 \usage{
-\method{maxstat_test}{formula}(formula, data, subset = NULL, 
-    weights = NULL, \dots)
+\method{maxstat_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{maxstat_test}{IndependenceProblem}(object, 
     distribution = c("asympt", "approx"), 
     teststat = c("maxtype", "quadtype"),
@@ -27,15 +26,17 @@
   \item{weights}{an optional formula of the form \code{~ w} defining
     integer valued weights for the observations.}   
   \item{object}{an object inheriting from class \code{IndependenceProblem}.}
-  \item{distribution}{the null distribution of the test statistic
+  \item{distribution}{a character, the null distribution of the test statistic
     can be approximated by its asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
-  \item{teststat}{the type of test statistic to be applied: a
+  \item{teststat}{a character, the type of test statistic to be applied: a
     maximum type statistic (\code{maxtype}) or a quadratic form
     (\code{quadform}).}
-  \item{minprob}{consider only cutpoints greater than 
+  \item{minprob}{a fraction between 0 and 0.5; 
+    consider only cutpoints greater than 
     the \code{minprob} * 100 \% quantile of \code{x}.}
-  \item{maxprob}{consider only cutpoints smaller than 
+  \item{maxprob}{a fraction between 0.5 and 1; 
+    consider only cutpoints smaller than 
     the \code{maxprob} * 100 \% quantile of \code{x}.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }

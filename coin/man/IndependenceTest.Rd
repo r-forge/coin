@@ -9,16 +9,14 @@
     scales, possibly stratified in blocks, is tested conditional on the data.
 }
 \usage{
-\method{independence_test}{formula}(formula, data, subset = NULL, 
-    weights = NULL, \dots)
+\method{independence_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{independence_test}{IndependenceProblem}(object, 
     teststat = c("maxtype", "quadtype", "scalar"),
     distribution = c("asympt", "approx", "exact"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL, 
     check = NULL, ...)
-\method{independence_test}{table}(object, 
-    distribution = c("asympt", "approx"), ...)
+\method{independence_test}{table}(object, distribution = c("asympt", "approx"), ...)
 }
 \arguments{
   \item{formula}{a formula of the form 
@@ -34,14 +32,14 @@
     integer valued weights for the observations.}
   \item{object}{an object inheriting from class \code{IndependenceProblem} or an
            object of class \code{table}.}
-  \item{teststat}{the type of test statistic to be applied: either a
+  \item{teststat}{a character, the type of test statistic to be applied: either a
     standardized scalar test statistic (\code{scalar}), or a 
     maximum type statistic (\code{maxtype}) or a quadratic form
     (\code{quadform}).}
-  \item{alternative}{the alternative hypothesis must be
+  \item{alternative}{a character, the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   
-  \item{distribution}{the null distribution of the test statistic
+  \item{distribution}{a character, the null distribution of the test statistic
     can be computed \code{exact}ly or can be approximated by its
     asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
@@ -57,7 +55,9 @@
   \item{check}{a function to be applied to objects of class
       \code{IndendenceTest} in order to check for specific properties 
       of the data.}
-  \item{\dots}{further arguments to be passed to or from methods.}
+  \item{\dots}{further arguments to be passed to or from methods such as
+               the number of Monte-Carlo replications \code{B} or
+               arguments to \code{\link{pmvnorm}}.}
 }
 \details{
 

@@ -13,12 +13,10 @@
 \usage{
 
 \method{friedman_test}{formula}(formula, data, subset = NULL, \dots)
-\method{friedman_test}{SymmetryProblem}(object, 
-    distribution = c("asympt", "approx"), ...) 
+\method{friedman_test}{SymmetryProblem}(object, distribution = c("asympt", "approx"), ...) 
 
 \method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
-\method{wilcoxsign_test}{IndependenceProblem}(object, 
-    distribution = c("asympt", "approx"), ...) 
+\method{wilcoxsign_test}{IndependenceProblem}(object, distribution = c("asympt", "approx"), ...) 
 
 }
 \arguments{
@@ -32,7 +30,7 @@
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
   \item{object}{an object inheriting from class \code{SymmetryProblem}.}
-  \item{distribution}{the null distribution of the test statistic
+  \item{distribution}{a character, the null distribution of the test statistic
     can be approximated by its asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
   \item{\dots}{further arguments to be passed to or from methods.}

@@ -1,10 +1,9 @@
 \name{coin}
 \alias{coin}
 \title{General Information on the coin Package}
-\non_function{}
 \description{
 
-The \code{coin} package implements a general framework for conditional
+The \pkg{coin} package implements a general framework for conditional
 inference procedures, commonly known as \emph{permutation tests},
 theoretically derived by Strasser & Weber (1999). The conditional
 expectation and covariance for a broad class of multivariate linear
@@ -14,18 +13,24 @@ tests for independence between two sets of variables.
 
 Beside a general implementation of the abstract framework the package offers
 a rather huge set of convenience functions implementing well known classical
-as well as less well known classical and non-classical test procedures
-fitting in this framework. Representatives are linear rank statistics for
+as well as less prominent classical and non-classical test procedures 
+in a conditional inference framework. Examples are linear rank statistics for
 the two- and K-sample location and scale problem against ordered and
 unordered alternatives including post-hoc tests for arbitrary contrasts,
 tests of independence for contingency tables, two- and K-sample tests for
 censored data, tests for independence of two continuous variables as well as 
-tests for marginal homogenity and symmetry. Most of the classical procedures
+tests for marginal homogenity and symmetry. Conditional counterparts of 
+most of the classical procedures
 given in famous text books like Hollander & Wolfe (1999) or Agresti (2002)
 can be implemented as part of the general framework without much effort.
 Approximations of the exact null-distribution via the limiting distribution and 
 conditional Monte-Carlo procedures are available for every test while the 
 exact null-distribution is currently available for two-sample problems only. 
+
+This package is the result of collaborative efforts of Torsten Hothorn
+<Torsten.Hothorn@R-project.org>, Kurt Hornik <Kurt.Hornik@R-project.org>,   
+Mark van de Wiel <m.a.v.d.wiel@TUE.nl> and 
+Achim Zeileis <Achim.Zeileis@R-project.org>.
 
 }
 \references{
@@ -40,14 +45,6 @@ exact null-distribution is currently available for two-sample problems only.
 
     Alan Agresti (2002), \emph{Categorical Data Analysis}. Hoboken, New
     Jersey: John Wiley & Sons.
-
-}
-\author{
-
-    Torsten Hothorn <Torsten.Hothorn@R-project.org>,
-    Kurt Hornik <Kurt.Hornik@R-project.org>, 
-    Mark van de Wiel <m.a.v.d.wiel@TUE.nl> and 
-    Achim Zeileis <Achim.Zeileis@R-project.org>
 
 }
 \keyword{misc}

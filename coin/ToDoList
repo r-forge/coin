@@ -1,5 +1,7 @@
 
-o	check for zero variances
+o	check spearman_test vs. cor.test
+
+o	formula interface + NA's and weights
 
 o	definition of two-sided p-values in ansari.test contradicts the one
         used here in some cases (-> regtest_2samples.R)
@@ -38,5 +40,4 @@ o	Kurt: distribution argument may be character, function or object
 	(including parameters such as B or maxabs)
 
 o	Kurt: trafo as family of transformations (see glm(..., family,...)
-
 

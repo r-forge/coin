@@ -7,8 +7,7 @@
     Testing the independence of two numeric variables.
 }
 \usage{
-\method{spearman_test}{formula}(formula, data, subset = NULL, 
-    weights = NULL, \dots)
+\method{spearman_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{spearman_test}{IndependenceProblem}(object,
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx"), ...) 
@@ -24,10 +23,10 @@
   \item{weights}{an optional formula of the form \code{~ w} defining
       integer valued weights for the observations.}
   \item{object}{an object of class \code{IndependenceProblem}.}
-  \item{alternative}{the alternative hypothesis must be
+  \item{alternative}{a character, the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   
-  \item{distribution}{the null distribution of the test statistic
+  \item{distribution}{a character, the null distribution of the test statistic
     can be approximated by its
     \code{asymptotic} distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
@@ -36,8 +35,7 @@
 \details{
 
   The null hypothesis of the independence of \code{y} and \code{x} 
-  is tested. Note that \code{\link{cor.test}} uses a different test
-  statistic.
+  is tested. 
 
 }
 \value{
