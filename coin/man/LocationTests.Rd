@@ -6,7 +6,7 @@
 \alias{kruskal_test}
 \title{ Independent Two- and K-Sample Location Tests }
 \description{
-    Testing the equality of the distributions of a numeric response in 
+    Testing the equality of the distributions of a numeric response in
     two or more independent groups against shift alternatives.
 }
 \usage{
@@ -74,7 +74,12 @@
 
   The asymptotic null distribution is computed by default for all
   procedures. Exact p-values may be computed for the two-sample problems and
-  can be approximated via Monte-Carlo for all procedures.
+  can be approximated via Monte-Carlo for all procedures. Exact p-values
+  are computed either by the shift algorithm (Streitberg & Roehmel, 1986,
+  1987) or by the split-up algorithm (van de Wiel, 2001).
+
+  Confidence intervals for the difference in location are available for the 
+  rank-based procedures and are computed according to Bauer (1972). 
 
 }
 \value{
@@ -82,6 +87,27 @@
   An object inheriting from class \code{IndependenceTest} with
   methods \code{show}, \code{pvalue}, \code{statistic} and (optionally)
   \code{confint}.
+
+}
+\references{
+
+        Bernd Streitberg & Joachim R\"ohmel (1986),
+        Exact distributions for permutations and rank tests: 
+        An introduction to some recently published algorithms.
+        \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
+
+        Bernd Streitberg & Joachim R\"ohmel (1987),
+        Exakte Verteilungen f\"ur Rang- und Randomisierungstests
+        im allgemeinen $c$-Stichprobenfall.
+        \emph{EDV in Medizin und Biologie} \bold{18}(1), 12--19.
+
+        Mark A. van de Wiel (2001), The split-up algorithm: a fast 
+        symbolic method for computing p-values of rank statistics.
+        \emph{Computational Statistics} \bold{16}, 519--538.
+
+        David F. Bauer (1972), Constructing confidence sets using 
+        rank statistics. \emph{Journal of the American Statistical Association}
+        \bold{67}, 687--690.
 
 }
 \examples{
