@@ -317,7 +317,7 @@ stopifnot(pci[1] < pvalue(ate) & pci[2] > pvalue(ate))
 
 atel <- ansari_test(cereal ~ machine, data = machines, 
     ties.method = "average",
-    distribution = "exact", alternative = "greater")
+    distribution = "exact", alternative = "less")
 
 # one-sided exact p-value, page 372
 stopifnot(isequal(round(pvalue(atel), 4), 0.0253))
@@ -325,7 +325,7 @@ stopifnot(isequal(round(pvalue(atel), 4), 0.0253))
 # one-sided approximated p-value
 atMC <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average",
-    distribution = "approx", B = 10000, alternative = "greater")
+    distribution = "approx", B = 10000, alternative = "less")
 pci <- attr(pvalue(atMC), "conf.int")
 pvalue(atMC)
 stopifnot(pci[1] < pvalue(atel) & pci[2] > pvalue(atel))

@@ -93,11 +93,10 @@ try(wilcox_test(x ~ y | y, data = dat))
 ### Ansari-Bradley Test 
 
 ### asymptotic distribution
-### <FIXME> alternative is defined in another way here </FIXME>
 ptwo <- ansari.test(y ~ x, data = dat, correct = FALSE, exact = FALSE)$p.value
-pless <- ansari.test(y ~ x, data = dat, alternative = "greater", 
+pless <- ansari.test(y ~ x, data = dat, alternative = "less", 
                      correct = FALSE, exact = FALSE)$p.value
-pgreater <- ansari.test(y ~ x, data = dat, alternative = "less", 
+pgreater <- ansari.test(y ~ x, data = dat, alternative = "greater", 
                         correct = FALSE, exact = FALSE)$p.value
 
 stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat)), ptwo))
@@ -110,15 +109,15 @@ stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt",
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
-    alternative = "less")), pless))
+    alternative = "greater")), pless))
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
-    alternative = "greater")), pgreater))
+    alternative = "less")), pgreater))
 
 ### exact distribution
 ptwo <- ansari.test(y ~ x, data = dat, exact = TRUE)$p.value
-pless <- ansari.test(y ~ x, data = dat, alternative = "greater", exact = TRUE)$p.value
-pgreater <- ansari.test(y ~ x, data = dat, alternative = "less", 
+pless <- ansari.test(y ~ x, data = dat, alternative = "less", exact = TRUE)$p.value
+pgreater <- ansari.test(y ~ x, data = dat, alternative = "greater", 
                         exact = TRUE)$p.value
 
 ### <FIXME>: Definition of two-sided P-values! </FIXME>
@@ -134,10 +133,10 @@ stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "greater",
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
-    alternative = "less")), pless))
+    alternative = "greater")), pless))
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
-    alternative = "greater")), pgreater))
+    alternative = "less")), pgreater))
 
 ### approximated distribution
 rtwo <- pvalue(ansari_test(y ~ x, data = dat, distribution = "approx")) / ptwo

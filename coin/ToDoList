@@ -3,8 +3,6 @@ o	add hohnloser data
 
 o	check var(Y1) / var(Y2) or reverse in ansari_test documentation
 
-o	check confidence intervals
-
 o	check for zero variances
 
 o	definition of two-sided p-values in ansari.test contradicts the one
@@ -30,16 +28,7 @@ o	free W1 and W2 in `vandeWiel.c' in case of an error
 
 o	enable confidence intervals in the presence of blocks or weights
 
-
 o	check whats happening here
-
-d <- data.frame(y = rnorm(20), x = gl(2, 10))
-d$y <- d$y + (d$x == "1") * 1.2
-
-wt <- wilcox_test(y ~ x, data = d, di = "ex", conf.int = TRUE)
-pvalue(wt)
-
-confint(wt, level = 1 - pvalue(wt))
 
 d <- data.frame(y = rnorm(20), x = gl(2, 10))
 d$y[d$x == "1"] <- d$y[d$x == "1"] * 2

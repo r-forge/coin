@@ -307,6 +307,12 @@ ansari_test.IndependenceProblem <- function(object,
     }
 
     alternative <- match.arg(alternative)
+    if (alternative == "less") {
+        alternative <- "greater"
+    } else {
+        if (alternative == "greater") 
+            alternative <- "less"
+    }
     distribution <- match.arg(distribution)
 
     RET <- independence_test(object, teststat = "scalar",
