@@ -40,8 +40,8 @@ logrank_test(Surv(left, lcens) ~ group, data = ears)
 logrank_test(Surv(right, rcens) ~ group, data = ears)
 lear <- Surv(ears$left, ears$lcens)
 rear <- Surv(ears$right, ears$rcens)
-perm_test(lear ~ rear | group, data = ears)
-perm_test(group ~ lear + rear, data = ears)
+independence_test(lear ~ rear | group, data = ears)
+independence_test(group ~ lear + rear, data = ears)
 ### </FIXME>
 
 }
