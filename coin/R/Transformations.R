@@ -28,7 +28,8 @@ consal_trafo <- function(x)
 maxstat_trafo <- function(x, minprob = 0.1, maxprob = 0.9) {
     qx <- quantile(x, prob = c(minprob, maxprob), type = 1)
     ux <- unique(x)
-    cutpoints <- ux[ux > qx[1] & ux <= qx[2]] 
+    ux <- ux[ux < max(x) & ux > min(x)]
+    cutpoints <- ux[ux > qx[1] & ux <= qx[2]]
     cm <- matrix(unlist(sapply(cutpoints, function(cut)
         as.numeric(x <= cut))), nrow = length(x))
     cm
