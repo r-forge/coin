@@ -1,7 +1,7 @@
 \name{LocationTests}
+\alias{oneway_test}
 \alias{oneway_test.formula}
 \alias{oneway_test.IndependenceProblem}
-\alias{oneway_test}
 \alias{wilcox_test.formula}
 \alias{wilcox_test.IndependenceProblem}
 \alias{wilcox_test}

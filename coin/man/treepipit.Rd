@@ -12,24 +12,24 @@
   the following 10 variables:
   \describe{
     \item{counts}{the number of tree pipits observed.}
-    \item{age}{The ages of the overstorey oaks taken from
+    \item{age}{the ages of the overstorey oaks taken from
                forest data.}
-    \item{coverstorey}{Percentage of cover of canopy overstorey.
+    \item{coverstorey}{percentage of cover of canopy overstorey.
                        The crown cover is described relative to a fully
                        stocked stand. Very dense overstorey with multiple 
                        crown cover could reach values greater than 100
                        percent.}
-    \item{coverregen}{Percentage of cover of regeneration and shrubs.}
-    \item{meanregen}{Mean height of regeneration and shrubs.}
-    \item{coniferous}{Percentage of coniferous trees.}
-    \item{deadtree}{Number of dead trees per grid.}
-    \item{cbpiles}{Number of crowns and branch piles.
+    \item{coverregen}{percentage of cover of regeneration and shrubs.}
+    \item{meanregen}{mean height of regeneration and shrubs.}
+    \item{coniferous}{percentage of coniferous trees.}
+    \item{deadtree}{number of dead trees per grid.}
+    \item{cbpiles}{number of crowns and branch piles.
                    All laying crowns and branch piles per hectare were 
                    counted. These were induced by logging and the creation 
                    of wind breaks.}
-    \item{ivytree}{Number of ivied trees. All ivied trees were counted per
+    \item{ivytree}{number of ivied trees. All ivied trees were counted per
                    hectare.}
-    \item{fdist}{Distance to the forest edge.
+    \item{fdist}{distance to the forest edge.
                  The closest distance to the forest edge was measured 
                  from the centre of each grid.}
   }

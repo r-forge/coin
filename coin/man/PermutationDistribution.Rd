@@ -29,7 +29,7 @@
 \alias{support,MaxTypeIndependenceTest-method}
 \alias{support,QuadTypeIndependenceTest-method}
 
-\title{ Permutation distribution of conditional independence tests }
+\title{ Permutation Distribution of Conditional Independence Tests }
 
 \description{
  Distribution, density, quantile and support of permutation distributions

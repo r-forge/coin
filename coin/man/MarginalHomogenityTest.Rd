@@ -1,8 +1,8 @@
 \name{MarginalHomogenityTest}
+\alias{mh_test}
 \alias{mh_test.table}
 \alias{mh_test.formula}
 \alias{mh_test.SymmetryProblem}
-\alias{mh_test}
 \title{ Marginal Homogenity Tests }
 \description{
     Testing marginal homogenity in a complete block design.

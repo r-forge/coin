@@ -1,7 +1,7 @@
 \name{SpearmanTest}
+\alias{spearman_test}
 \alias{spearman_test.formula}
 \alias{spearman_test.IndependenceProblem}
-\alias{spearman_test}
 \title{ Spearman's Test on Independence }
 \description{
     Testing the independence of two numeric variables.

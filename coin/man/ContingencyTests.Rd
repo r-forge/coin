@@ -1,8 +1,8 @@
 \name{ContingencyTests}
+\alias{chisq_test}
 \alias{chisq_test.formula}
 \alias{chisq_test.table}
 \alias{chisq_test.IndependenceProblem}
-\alias{chisq_test}
 \alias{cmh_test.formula}
 \alias{cmh_test.table}
 \alias{cmh_test.IndependenceProblem}

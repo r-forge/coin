@@ -1,7 +1,7 @@
 \name{LogrankTest}
+\alias{logrank_test}
 \alias{logrank_test.formula}
 \alias{logrank_test.IndependenceProblem}
-\alias{logrank_test}
 \title{ Independent Two- and K-Sample Tests for Censored Data }
 \description{
     

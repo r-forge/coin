@@ -1,7 +1,7 @@
 \name{SymmetryTests}
+\alias{friedman_test}
 \alias{friedman_test.formula}
 \alias{friedman_test.SymmetryProblem}
-\alias{friedman_test}
 \alias{wilcoxsign_test.formula}
 \alias{wilcoxsign_test.IndependenceProblem}
 \alias{wilcoxsign_test}

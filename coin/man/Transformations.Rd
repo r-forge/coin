@@ -1,4 +1,4 @@
-\name{DataTransformations}
+\name{Transformations}
 \alias{trafo}
 \alias{id_trafo}
 \alias{ansari_trafo}
@@ -9,9 +9,9 @@
 \alias{maxstat_trafo}
 \alias{logrank_trafo}
 \alias{f_trafo}
-\title{ Functions for data transformations }
+\title{ Functions for Data Transformations and Score Computations }
 \description{
-
+  Transforming original data to contrast matrices or scores.  
 }
 \usage{
 trafo(data, numeric_trafo = id_trafo, 
@@ -42,7 +42,7 @@ f_trafo(x)
     \code{Surv}.}
   \item{ties.method}{two methods are available to adjust scores for ties.
     Either the score generating function is applied to \code{mid-ranks}
-    or scores, based on random ranks, are averaged \code{average-scores}.}
+	    or scores, based on random ranks, are averaged \code{average-scores}.}
   \item{minprob}{a fraction between 0 and 0.5.}
   \item{maxprob}{a fraction between 0.5 and 1.}
 }
@@ -61,8 +61,8 @@ f_trafo(x)
 
   \code{normal_trafo}, \code{median_trafo} and \code{consal_trafo}
   implement normal scores, median scores or Conover-Salburg scores
-  for location problems, \code{logrank_trafo} returns Logrank scores
-  for censored data.
+  (see \code{\link{neuropathy}} for location problems, 
+  \code{logrank_trafo} returns Logrank scores for censored data.
 
   A \code{trafo} funciton with modified default arguments is usually
   feeded into \code{\link{independence_test}} via the \code{xtrafo}

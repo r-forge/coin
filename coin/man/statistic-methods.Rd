@@ -9,8 +9,8 @@
 \title{ Extract test statistics, linear statistics and standardized
   statistics }
 \description{
- Extract test statistics, linear statistics and standardized
-  statistics
+ Extract Test Statistics, Linear Statistics and Standardized
+ Statistics
 }
 \section{Methods}{
 \describe{

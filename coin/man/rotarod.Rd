@@ -24,9 +24,9 @@ group medians are identical.
 
 This dataset serves as the basis of an comparision of the results of the 
 Wilcoxon-Mann-Whitney test computed by 11 statistical packages in Bergmann
-et al. (2000). The exact conditional p-value is $0.0373$ (two-sided) and
-$0.0186$ (one-sided). The asymptotic two-sided 
-p-value (corrected for ties) is reported as $0.0147$.
+et al. (2000). The exact conditional p-value is 0.0373 (two-sided) and
+0.0186 (one-sided). The asymptotic two-sided 
+p-value (corrected for ties) is reported as 0.0147.
 }
 \source{
 
@@ -39,13 +39,14 @@ p-value (corrected for ties) is reported as $0.0147$.
 \examples{
 
 data(rotarod)
-wilcox_test(time ~ group, data=rotarod, alternative = "greater", distribution = "exact")
-try(wilcox_test(time ~ group, data=rotarod, conf.int = TRUE, distribution =
-"exact"))
-wilcox_test(time ~ group, data=rotarod, distribution = "approx")
-wilcox_test(time ~ group, data=rotarod)
-# the permutation test
+# Wilcoxon-Mann-Whitney Rank Sum Test
+wilcox_test(time ~ group, data = rotarod, 
+    alternative = "greater", distribution = "exact")
+wilcox_test(time ~ group, data = rotarod)
+
+# Permutation test with data scores
 oneway_test(time ~ group, data=rotarod, distribution = "exact")
 oneway_test(time ~ group, data=rotarod)
+
 }
 \keyword{datasets}

@@ -1,7 +1,7 @@
 \name{ScaleTests}
-\alias{ansari_test.formula}
-\alias{ansari_test.IndependenceProblem}
 \alias{ansari_test}
+\\alias{ansari_test.formula}
+\alias{ansari_test.IndependenceProblem}
 \alias{fligner_test.formula}
 \alias{fligner_test.IndependenceProblem}
 \alias{fligner_test}

@@ -1,8 +1,8 @@
 \name{MaxstatTest}
+\alias{maxstat_test}
 \alias{maxstat_test.formula}
 \alias{maxstat_test.IndependenceProblem}
-\alias{maxstat_test}
-\title{ Maximally selected test statistics }
+\title{ Maximally Selected Statistics }
 \description{
     Testing the independence of a set of ordered or numeric covariates and a
     response of arbitrary measurement scale against cutpoint alternatives. 

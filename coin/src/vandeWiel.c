@@ -4,7 +4,8 @@
     van de Wiel split-up Algorithm
 
     Author: Mark van de Wiel (2001-2005) <m.a.v.d.wiel@TUE.nl>
-            with modifications for R by Torsten Hothorn <Torsten.Hothorn@R-project.org>
+            with modifications for R by 
+            Torsten Hothorn <Torsten.Hothorn@R-project.org>
       
     *\file $RCSfile$
     *\author $Author$
@@ -22,7 +23,8 @@
     REFERENCE
     
     M.A. van de Wiel (2001). The split-up algorithm: a fast symbolic method 
-    for computing p-values of rank statistics, Computational Statistics, 16, 519-538.
+    for computing p-values of rank statistics, Computational Statistics, 
+    16, 519-538.
     
 */
                                         
@@ -52,6 +54,12 @@ celW** reserveerW(int a, int b)
     int i, j;
     celW** W;
     
+    /* <FIXME>: need to free memory in case Calloc barfs
+       Writing R Extension advertises .on.exit but
+       I still need a pointer to the memory.
+       </FIXME>
+    */
+
     W = Calloc(a + 1, celW*);
 
     for (i = 0; i <= a; i++)
@@ -66,6 +74,24 @@ celW** reserveerW(int a, int b)
     }
     return(W);
 }
+
+void FreeW(int a, int b, celW **W)
+{
+    int i, j;
+
+    for (i = 0; i <= a; i++) {
+        for (j = i; j <= b; j++) {
+            Free(W[i][j].c);
+            Free(W[i][j].x);
+        }
+    }
+
+    for (i = 0; i <= a; i++)
+        Free(W[i]);
+        
+    Free(W);
+}
+
 
 void initW(int a, int b, celW **W) {
 
@@ -297,6 +323,9 @@ SEXP R_split_up_2sample(SEXP scores, SEXP m, SEXP obs) {
     d = b - INTEGER(m)[0];
     ob = REAL(obs)[0];
 
+    /* total number of possible permutations */
+    bino = binomi(b, c);
+
     /* allocate and initialise memory */
     W1 = reserveerW(c, (b+1)/2);
     initW(c, (b+1)/2, W1);
@@ -311,14 +340,12 @@ SEXP R_split_up_2sample(SEXP scores, SEXP m, SEXP obs) {
     /* number of permutations <= ob */
     tot = aantalklein(c, b, ob, W1, W2);
     
-    /* total number of possible permutations */
-    bino = binomi(b, c);
-    
     /* probability */
     prob = tot/bino; 
     
-    Free(W1);
-    Free(W2);
+    /* free memory */
+    FreeW(c, (b+1)/2, W1);
+    FreeW(c, (b+1)/2, W2);
 
     /* return to R */
     PROTECT(ans = allocVector(REALSXP, 1));
