@@ -95,7 +95,7 @@ following test procedures are available:
 \texttt{cmh\_test} & Cochran-Mantel-Haenszel test \\
 \texttt{lbl\_test} & linear-by-linear association test \\
 \texttt{surv\_test} & two- and $K$-sample logrank test \\
-\texttt{maxstat\_test} & maximally selected statistics) \\
+\texttt{maxstat\_test} & maximally selected statistics \\
 \texttt{spearman\_test} & Spearman's test \\
 \texttt{friedman\_test} & Friedman test \\
 \texttt{wilcoxsign\_test} & Wilcoxon-Signed-Rank test \\

@@ -1,4 +1,6 @@
 
+o	compare multiple test procedures with multtest
+
 o	check spearman_test vs. cor.test
 
 o	formula interface + NA's and weights
