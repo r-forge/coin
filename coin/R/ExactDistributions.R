@@ -102,6 +102,8 @@ cSR_shift_2sample <- function(scores, m) {
 ### van de Wiel split-up algorithm for independent two samples
 vdW_split_up_2sample <- function(object) {
 
+    ### <FIXME> on.exit(ex <- .C("FreeW", PACKAGE = "coin")) </FIXME>
+
     if (!extends(class(object), "ScalarIndependenceTestStatistic"))
         stop("Argument ", sQuote("object"), " is not of class ",
              sQuote("ScalarIndependenceTestStatistic"))

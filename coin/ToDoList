@@ -19,3 +19,5 @@ o	visualize deviations from H_0 for all problems (in a way
 	motivated by shaded mosaicplots)
 
 o	mh_test with weights
+
+o	make `FreeW' work
