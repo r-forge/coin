@@ -87,7 +87,21 @@ formula2data <- function(formula, data, subset, ...) {
         event <- dat@get("censored")
         y <- data.frame(y = Surv(y[[1]], event[[1]]))    
     } 
-    return(list(x = x, y = y, block = block, bl = block[[1]]))
+
+    RET <- list(x = x, y = y, block = block, bl = block[[1]])
+
+    ### <FIXME>
+    if (any(sapply(RET, function(x) {
+        if (is.null(x)) return(FALSE)
+        if (is.list(x)) 
+            return(any(sapply(x, is.na)))
+        else
+            return(any(is.na(x)))
+    })))
+        stop("NA handling currently not implemented")
+    ### </FIXME>
+
+    return(RET)
 }
 
 formula2weights <- function(weights, data, subset, ...) {

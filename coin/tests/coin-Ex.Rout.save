@@ -84,7 +84,8 @@ Loading required package: mvtnorm
 
 	Approximative Pearson's Chi-Squared Test
 
-data:  Job.Satisfaction by groups <5000, 5000-15000, 15000-25000, >25000 
+data:  Job.Satisfaction by
+	 groups <5000, 5000-15000, 15000-25000, >25000 
 T = 6.8203, p-value = 0.6891
 
 > 
@@ -93,7 +94,9 @@ T = 6.8203, p-value = 0.6891
 
 	Asymptotical Generalised Cochran-Mantel-Haenszel Test
 
-data:  Job.Satisfaction by groups <5000, 5000-15000, 15000-25000, >25000 stratified by Gender 
+data:  Job.Satisfaction by
+	 groups <5000, 5000-15000, 15000-25000, >25000 
+	 stratified by Gender 
 T = 10.2001, df = 9, p-value = 0.3345
 
 > 
@@ -102,7 +105,9 @@ T = 10.2001, df = 9, p-value = 0.3345
 
 	Asymptotical Linear-by-Linear Association Test
 
-data:  Job.Satisfaction (ordered) by groups <5000 < 5000-15000 < 15000-25000 < >25000 stratified by Gender 
+data:  Job.Satisfaction (ordered) by
+	 groups <5000 < 5000-15000 < 15000-25000 < >25000 
+	 stratified by Gender 
 T = 6.6235, df = 1, p-value = 0.01006
 
 > 
@@ -112,7 +117,9 @@ T = 6.6235, df = 1, p-value = 0.01006
 
 	Asymptotical Linear-by-Linear Association Test
 
-data:  Job.Satisfaction (ordered) by groups <5000 < 5000-15000 < 15000-25000 < >25000 stratified by Gender 
+data:  Job.Satisfaction (ordered) by
+	 groups <5000 < 5000-15000 < 15000-25000 < >25000 
+	 stratified by Gender 
 T = 6.1563, df = 1, p-value = 0.01309
 
 > 
@@ -123,7 +130,9 @@ T = 6.1563, df = 1, p-value = 0.01309
 
 	Approximative Linear-by-Linear Association Test
 
-data:  Job.Satisfaction (ordered) by groups <5000 < 5000-15000 < 15000-25000 < >25000 stratified by Gender 
+data:  Job.Satisfaction (ordered) by
+	 groups <5000 < 5000-15000 < 15000-25000 < >25000 
+	 stratified by Gender 
 T = 6.1563, p-value = 0.0123
 
 > 
@@ -169,8 +178,6 @@ T = 6.1563, p-value = 0.0123
 data:  asat by groups Compound, Control 
 T = 1.4269, p-value = 0.07809
 alternative hypothesis: greater 
-null values:
-numeric(0)
 
 > 
 > ### same as
@@ -388,7 +395,9 @@ IV-III 0.9998777778
 
 	Asymptotical Marginal-Homogenity Test
 
-data:  response by groups ExtramaritalSex, PremaritalSex stratified by  
+data:  response by
+	 groups ExtramaritalSex, PremaritalSex 
+	 stratified by  
 T = 271.9222, df = 3, p-value < 2.2e-16
 
 > 
@@ -397,7 +406,9 @@ T = 271.9222, df = 3, p-value < 2.2e-16
 
 	Asymptotical Marginal-Homogenity Test for Ordered Data
 
-data:  response (ordered) by groups ExtramaritalSex, PremaritalSex stratified by  
+data:  response (ordered) by
+	 groups ExtramaritalSex, PremaritalSex 
+	 stratified by  
 T = 270.7402, df = 1, p-value < 2.2e-16
 
 > 
@@ -428,8 +439,8 @@ T = 270.7402, df = 1, p-value < 2.2e-16
 data:  counts by coverstorey 
 T = 4.3139, p-value = 0.0001951
 sample estimates:
-coverstorey 
-         40 
+cutpoint in  coverstorey 
+                      40 
 
 > 
 > 
@@ -625,8 +636,6 @@ alternative hypothesis: true mu is not equal to 0
 data:  y by groups II, IIA 
 T = -2.3341, p-value = 0.01837
 alternative hypothesis: two.sided 
-null values:
-numeric(0)
 
 > 
 > 
@@ -682,7 +691,9 @@ numeric(0)
 
 	Asymptotical Friedman Test
 
-data:  times by groups Narrow Angle, Round Out, Wide Angle stratified by block 
+data:  times by
+	 groups Narrow Angle, Round Out, Wide Angle 
+	 stratified by block 
 T = 11.1429, df = 2, p-value = 0.003805
 
 > 
@@ -739,7 +750,9 @@ xWide Angle   0.003811824
 
 	Asymptotical Page Test
 
-data:  strength by groups 36 < 54 < 72 < 108 < 144 stratified by block 
+data:  strength by
+	 groups 36 < 54 < 72 < 108 < 144 
+	 stratified by block 
 T = 7.0533, df = 1, p-value = 0.007912
 
 > 
@@ -1016,8 +1029,6 @@ attr(,"conf.level")
 data:  y by groups Control, RIT 
 T = 2.1711, p-value = 0.02877
 alternative hypothesis: two.sided 
-null values:
-numeric(0)
 
 > 
 > ### Grade IV glioma
@@ -1039,8 +1050,6 @@ numeric(0)
 data:  y by groups Control, RIT 
 T = 3.2444, p-value = 0.0001429
 alternative hypothesis: two.sided 
-null values:
-numeric(0)
 
 > 
 > ### stratified logrank test
@@ -1049,11 +1058,11 @@ numeric(0)
 
 	Approximative Logrank Test
 
-data:  y by groups Control, RIT stratified by histology 
+data:  y by
+	 groups Control, RIT 
+	 stratified by histology 
 T = 3.6818, p-value < 2.2e-16
 alternative hypothesis: two.sided 
-null values:
-numeric(0)
 
 > 
 > 
@@ -1081,7 +1090,9 @@ numeric(0)
 
 	Asymptotical Generalised Cochran-Mantel-Haenszel Test
 
-data:  Job.Satisfaction by groups <5000, 5000-15000, 15000-25000, >25000 stratified by Gender 
+data:  Job.Satisfaction by
+	 groups <5000, 5000-15000, 15000-25000, >25000 
+	 stratified by Gender 
 T = 10.2001, df = 9, p-value = 0.3345
 
 > 
@@ -1281,8 +1292,8 @@ alternative hypothesis: true mu is not equal to 0
 data:  y by SPF 
 T = 2.4033, p-value = 0.1559
 sample estimates:
-SPF 
-107 
+cutpoint in  SPF 
+             107 
 
 > 
 > 
@@ -1368,11 +1379,12 @@ SPF
 
 	Asymptotical Maxstat Test
 
-data:  counts by age, coverstorey, coverregen, meanregen, coniferous, deadtree, cbpiles, ivytree 
+data:  counts by
+	 age, coverstorey, coverregen, meanregen, coniferous, deadtree, cbpiles, ivytree 
 T = 4.3139, p-value = 0.0008564
 sample estimates:
-coverstorey 
-         40 
+cutpoint in  coverstorey 
+                      40 
 
 > 
 > 
@@ -1381,7 +1393,7 @@ coverstorey
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", env = .CheckExEnv),"\n")
-Time elapsed:  20.4 0.15 20.7 0 0 
+Time elapsed:  20.67 0.15 20.99 0 0 
 > grDevices::dev.off()
 null device 
           1 

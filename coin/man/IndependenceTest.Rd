@@ -57,7 +57,7 @@
       of the data.}
   \item{\dots}{further arguments to be passed to or from methods such as
                the number of Monte-Carlo replications \code{B} or
-               arguments to \code{\link{pmvnorm}}.}
+               arguments to \code{\link[mvtnorm]{pmvnorm}}.}
 }
 \details{
 
