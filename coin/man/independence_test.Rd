@@ -98,10 +98,8 @@ independence_test(bp ~ group, data = bloodp,
 
     ### indicator matrix of 2nd level of group
     xtrafo = function(data) trafo(data, factor_trafo = function(x)
-        matrix(x == levels(x)[2], ncol = 1)),
-
-    ### check if this is a independent two sample problem
-    check = is_2sample)
+        matrix(x == levels(x)[2], ncol = 1))
+)
 
 ### same as
 normal_test(bp ~ group, data = bloodp, distribution = "exact", 

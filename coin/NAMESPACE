@@ -1,41 +1,24 @@
 
-useDynLib(coin)
+import(methods)
 
 export(independence_test,
-
-       # Location Problems
        perm_test,
        wilcox_test,
        normal_test,
        median_test,
        kruskal_test,
-
-       # Scale Problems
        ansari_test,
        fligner_test,
-
-       # Contingency Problems
        chisq_test,
        cmh_test,
        lbl_test,
-
-       # Marginal Homogenity
        mh_test,
-
-       # Censored data
        logrank_test,
-
-       # Maximally selected statistics
        maxstat_test,
-
-       # Rank correlation
        spearman_test,
-
-       # Symmetry Problems
        friedman_test,
        wilcoxsign_test,
-
-       # transformations
+       symmetry_test,
        trafo,
        id_trafo,
        ansari_trafo,
@@ -73,6 +56,15 @@ S3method(ansari_test, IndependenceProblem)
 S3method(fligner_test, formula)
 S3method(fligner_test, IndependenceProblem)
 
+S3method(logrank_test, formula)
+S3method(logrank_test, IndependenceProblem)
+
+S3method(maxstat_test, formula)
+S3method(maxstat_test, IndependenceProblem)
+
+S3method(spearman_test, formula)
+S3method(spearman_test, IndependenceProblem)
+
 S3method(cmh_test, formula)
 S3method(cmh_test, IndependenceProblem)
 S3method(cmh_test, table)
@@ -87,6 +79,10 @@ S3method(mh_test, formula)
 S3method(mh_test, SymmetryProblem)
 S3method(mh_test, table)
 
+
+S3method(symmetry_test, formula)
+S3method(symmetry_test, SymmetryProblem)
+S3method(symmetry_test, table)
 S3method(friedman_test, formula)
 S3method(friedman_test, SymmetryProblem)
 
@@ -94,3 +90,5 @@ S3method(wilcoxsign_test, formula)
 S3method(wilcoxsign_test, IndependenceProblem)
 
 S3method(confint, ScalarIndependenceTestConfint)
+
+useDynLib(coin)

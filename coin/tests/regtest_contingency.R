@@ -5,6 +5,7 @@
 
 set.seed(290875)
 library(coin)
+isequal <- coin:::isequal
 
 ### generate data: 2 x 2 x K
 dat <- data.frame(x = gl(2, 50), y = gl(2, 50)[sample(1:100)], 
@@ -55,7 +56,7 @@ data(jobsatisfaction, package = "coin")
 stopifnot(isequal(round(pvalue(cmh_test(jobsatisfaction)), 4), 0.3345))
 
 # linear-by-linear association tests
-df <- table2df(jobsatisfaction)
+df <- coin:::table2df(jobsatisfaction)
 df$Income <- ordered(df$Income)
 cmh_test(Job.Satisfaction ~ Income | Gender, data = df)
 

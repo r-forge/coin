@@ -1,12 +1,11 @@
 
-PKG <- "coin"
-
 ### Regression tests for the 2 sample problem, i.e.,
 ### testing the independence of a numeric variable
 ### `y' and a binary factor `x' (possibly blocked)
 
 set.seed(290875)
-library(PKG, character.only = TRUE)
+library(coin)
+isequal <- coin:::isequal
 
 ### generate data
 dat <- data.frame(x = gl(2, 50), y = rnorm(100), block = gl(5, 20))[sample(1:100,

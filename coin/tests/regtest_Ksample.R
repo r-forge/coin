@@ -5,6 +5,7 @@
 
 set.seed(290875)
 library(coin)
+isequal <- coin:::isequal
 
 ### generate data
 dat <- data.frame(x = gl(4, 25), y = rnorm(100), block = gl(5, 20))[sample(1:100, 50),]
