@@ -22,7 +22,7 @@ tests of independence for contingency tables, two- and K-sample tests for
 censored data, tests for independence of two continuous variables as well as 
 tests for marginal homogenity and symmetry. Most of the classical procedures
 given in famous text books like Hollander & Wolfe (1999) or Agresti (2002)
-can be implemented as part of the general framework with much effort.
+can be implemented as part of the general framework without much effort.
 Approximations of the exact null-distribution via the limiting distribution and 
 conditional Monte-Carlo procedures are available for every test while the 
 exact null-distribution is currently available for two-sample problems only. 
@@ -42,7 +42,7 @@ exact null-distribution is currently available for two-sample problems only.
     Jersey: John Wiley & Sons.
 
 }
-\authors{
+\author{
 
     Torsten Hothorn <Torsten.Hothorn@R-project.org>,
     Kurt Hornik <Kurt.Hornik@R-project.org>, 
