@@ -940,8 +940,18 @@ mh_test.SymmetryProblem <- function(x,
 
     distribution <- match.arg(distribution)
 
-    RET <- symmetry_test(x, 
-        distribution = distribution, teststat = "quadtype", ...)
+    addargs <- list(...)
+    scores <- addargs$scores
+    if (!is.null(addargs$scores)) {
+        if (length(scores) > 1)
+            stop("length of ", sQuote("scores"), " must be equal one")
+        names(scores) <- "response"
+        addargs$scores <- NULL
+    }
+ 
+    RET <- do.call("symmetry_test", 
+        c(list(x = x, distribution = distribution, 
+               teststat = "quadtype", scores = scores), addargs))
 
     if (is_ordered(RET@statistic))  
         RET@method <- "Marginal-Homogenity Test for Ordered Data"

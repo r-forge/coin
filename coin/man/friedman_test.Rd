@@ -1,6 +1,5 @@
 \name{SymmetryTests}
 \alias{friedman_test}
-\alias{mh_test}
 \alias{wilcoxsign_test}
 \title{ Symmetry Tests }
 \description{
@@ -10,10 +9,6 @@
 \usage{
 \method{friedman_test}{formula}(formula, data, subset = NULL, \dots)
 \method{friedman_test}{SymmetryProblem}(x, 
-    distribution = c("asympt", "approx"), ...) 
-\method{mh_test}{formula}(formula, data, subset = NULL, \dots)
-\method{mh_test}{table}(x, yscores = NULL, ...)
-\method{mh_test}{SymmetryProblem}(x, 
     distribution = c("asympt", "approx"), ...) 
 \method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
 \method{wilcoxsign_test}{SymmetryProblem}(x, 
