@@ -11,7 +11,8 @@
     teststat = c("maxtype", "quadtype", "scalar"),
     distribution = c("asympt", "approx", "exact"),
     alternative = c("two.sided", "less", "greater"),
-    xtrafo = trafo, ytrafo = trafo, check = NULL, ...)
+    xtrafo = trafo, ytrafo = trafo, scores = NULL, 
+    check = NULL, ...)
 \method{independence_test}{table}(x, 
     distribution = c("asympt", "approx"), ...)
 }
@@ -38,15 +39,21 @@
     \code{formula} or \code{x@x} see below.}
   \item{ytrafo}{a function of transformations to be applied to the left hand side of
     \code{formula} or \code{x@y} see below.}
+  \item{scores}{a named list of scores to be attached to ordered factors. In
+      case a variable is an unordered factor, it is coerced to
+      \code{ordered} first.}
   \item{check}{a function to be applied to objects of class
       \code{SymmetryTest} in order to check for specific forms, see below.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
 
+
 }
 \value{
+
   An object inheriting from class \code{IndependenceTest} with
   methods \code{show}, \code{pvalue} and \code{statistic}.
+
 }
 \keyword{htest}

@@ -867,10 +867,11 @@ symmetry_test.SymmetryProblem <- function(x,
     teststat = c("maxtype", "quadtype", "scalar"),
     distribution = c("asympt", "approx", "exact"), 
     alternative = c("two.sided", "less", "greater"), 
-    xtrafo = trafo, ytrafo = trafo, check = NULL, ...) {
+    xtrafo = trafo, ytrafo = trafo, scores = NULL, 
+    check = NULL, ...) {
     class(x) <- "IndependenceProblem"
     independence_test(x, teststat, distribution, alternative, xtrafo,
-                      ytrafo, check, ...)
+                      ytrafo, scores, check, ...)
 }
 
 symmetry_test.table <- function(x, ...) {
