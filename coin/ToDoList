@@ -23,3 +23,22 @@ o	mh_test with weights
 o	free W1 and W2 in `vandeWiel.c' in case of an error
 
 o	enable confidence intervals in the presence of blocks or weights
+
+o	check whats happening here
+
+d <- data.frame(y = rnorm(20), x = gl(2, 10))
+d$y <- d$y + (d$x == "1") * 1.2
+
+wt <- wilcox_test(y ~ x, data = d, di = "ex", conf.int = TRUE)
+pvalue(wt)
+
+confint(wt, level = 1 - pvalue(wt))
+
+d <- data.frame(y = rnorm(20), x = gl(2, 10))
+d$y[d$x == "1"] <- d$y[d$x == "1"] * 2
+
+wt <- ansari_test(y ~ x, data = d, di = "ex", conf.int = TRUE)
+pvalue(wt)
+
+confint(wt, level = 1 - pvalue(wt))  
+
