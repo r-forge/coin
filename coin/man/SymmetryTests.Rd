@@ -7,12 +7,15 @@
     complete block design.
 }
 \usage{
+
 \method{friedman_test}{formula}(formula, data, subset = NULL, \dots)
 \method{friedman_test}{SymmetryProblem}(x, 
     distribution = c("asympt", "approx"), ...) 
+
 \method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
-\method{wilcoxsign_test}{SymmetryProblem}(x, 
+\method{wilcoxsign_test}{IndependenceProblem}(x, 
     distribution = c("asympt", "approx"), ...) 
+
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}

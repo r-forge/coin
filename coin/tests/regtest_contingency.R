@@ -49,7 +49,7 @@ ptwo <- drop(mantelhaen.test(table(dat$y, dat$x, dat$block),
 (isequal(pvalue(cmh_test(table(dat$y, dat$x, dat$block))), ptwo))
 
 ### Job Satisfaction, Agresti, 2002, Table 7.8, page 288
-data(jobsatisfaction)
+data(jobsatisfaction, package = "coin")
 
 # both unordered, results in Agresti, 2002, Table 7.12, 3rd row.
 stopifnot(isequal(round(pvalue(cmh_test(jobsatisfaction)), 4), 0.3345))
@@ -97,7 +97,7 @@ stopifnot(isequal(round(pvalue(lbl_test(csom,
 
 ### case-control study on oral contraceptives and smoking / myocardial
 ### infact, StatXact 6 manual, page 797
-data(oral_contraceptives)
+load("oral_contraceptives.rda")
 
 ### standardized test statistic, page 799
 stopifnot(isequal(round(sqrt(statistic(lbl_test(oral_contraceptives))), 3), 
@@ -116,6 +116,6 @@ stopifnot(isequal(round(pvalue(lbl_test(dr, scores = list(tox = c(1, 3, 9, 27)))
                   0.0828))
 
 ### army: with blocks, page 1014
-data(army)
+load("army.rda")
 stopifnot(isequal(round(pvalue(cmh_test(army)), 6), 0.002774))
 

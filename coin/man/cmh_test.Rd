@@ -7,21 +7,25 @@
     Testing the independence of two, possibly ordered, factors.
 }
 \usage{
+
 \method{cmh_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
 \method{cmh_test}{table}(x, distribution = c("asympt", "approx"), ...)
 \method{cmh_test}{IndependenceProblem}(x, 
     distribution = c("asympt", "approx"), ...)
+
 \method{chisq_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
 \method{chisq_test}{table}(x, distribution = c("asympt", "approx"), ...)
 \method{chisq_test}{IndependenceProblem}(x, 
     distribution = c("asympt", "approx"), ...)
+
 \method{lbl_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
 \method{lbl_test}{table}(x, distribution = c("asympt", "approx"), ...)
 \method{lbl_test}{IndependenceProblem}(x, 
     distribution = c("asympt", "approx"), ...)
+
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}

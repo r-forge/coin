@@ -32,7 +32,7 @@
 data(jobsatisfaction)
 
 # Generalized Cochran-Mantel-Haenzel test
-cmh(jobsatisfaction)
+cmh_test(jobsatisfaction)
 
 }
 \keyword{datasets}

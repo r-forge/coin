@@ -1,0 +1,96 @@
+
+useDynLib(coin)
+
+export(independence_test,
+
+       # Location Problems
+       perm_test,
+       wilcox_test,
+       normal_test,
+       median_test,
+       kruskal_test,
+
+       # Scale Problems
+       ansari_test,
+       fligner_test,
+
+       # Contingency Problems
+       chisq_test,
+       cmh_test,
+       lbl_test,
+
+       # Marginal Homogenity
+       mh_test,
+
+       # Censored data
+       logrank_test,
+
+       # Maximally selected statistics
+       maxstat_test,
+
+       # Rank correlation
+       spearman_test,
+
+       # Symmetry Problems
+       friedman_test,
+       wilcoxsign_test,
+
+       # transformations
+       trafo,
+       id_trafo,
+       ansari_trafo,
+       fligner_trafo,
+       normal_trafo,
+       median_trafo,
+       consal_trafo,
+       maxstat_trafo,
+       logrank_trafo,
+       f_trafo)       
+
+exportClasses("IndependenceProblem", "IndependenceTest", 
+              "SymmetryProblem", "ExpectCovarInfluence", "ExpectCovar",
+              "QuadTypeIndependenceTest", "ScalarIndependenceTest",
+              "ScalarIndependenceTestConfint", "MaxTypeIndependenceTest")
+
+exportMethods("initialize", "show", "pvalue", "statistic", 
+              "pperm", "dperm", "qperm", "support")
+
+S3method(independence_test, formula)
+S3method(independence_test, IndependenceProblem)
+
+S3method(perm_test, formula)
+S3method(perm_test, IndependenceProblem)
+S3method(wilcox_test, formula)
+S3method(wilcox_test, IndependenceProblem)
+S3method(normal_test, formula)
+S3method(normal_test, IndependenceProblem)
+S3method(kruskal_test, formula)
+S3method(kruskal_test, IndependenceProblem)
+S3method(median_test, formula)
+S3method(median_test, IndependenceProblem)
+S3method(ansari_test, formula)
+S3method(ansari_test, IndependenceProblem)
+S3method(fligner_test, formula)
+S3method(fligner_test, IndependenceProblem)
+
+S3method(cmh_test, formula)
+S3method(cmh_test, IndependenceProblem)
+S3method(cmh_test, table)
+S3method(lbl_test, formula)
+S3method(lbl_test, IndependenceProblem)
+S3method(lbl_test, table)
+S3method(chisq_test, formula)
+S3method(chisq_test, IndependenceProblem)
+S3method(chisq_test, table)
+
+S3method(mh_test, formula)
+S3method(mh_test, SymmetryProblem)
+S3method(mh_test, table)
+
+S3method(friedman_test, formula)
+S3method(friedman_test, SymmetryProblem)
+
+S3method(wilcoxsign_test, formula)
+S3method(wilcoxsign_test, IndependenceProblem)
+
+S3method(confint, ScalarIndependenceTestConfint)

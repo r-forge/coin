@@ -10,17 +10,20 @@
     two or more independent groups against shift alternatives.
 }
 \usage{
+
 \method{perm_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
 \method{perm_test}{IndependenceProblem}(x, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"), ...)
+
 \method{wilcox_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
 \method{wilcox_test}{IndependenceProblem}(x, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"),
     conf.int = FALSE, conf.level = 0.95, ...)
+
 \method{normal_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
 \method{normal_test}{IndependenceProblem}(x, 
@@ -28,16 +31,19 @@
     distribution = c("asympt", "approx", "exact"),
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...)
+
 \method{median_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
 \method{median_test}{IndependenceProblem}(x, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"),
     conf.int = FALSE, conf.level = 0.95, ...)
+
 \method{kruskal_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
 \method{kruskal_test}{IndependenceProblem}(x, 
     distribution = c("asympt", "approx"), ...)
+
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}

@@ -174,7 +174,7 @@ stopifnot(pci[1] < pvalue(ptel) & pci[2] > pvalue(ptel))
 
 
 ### StatXact 6 manual, page 345
-data(employment, package = "coin")
+load("employment.rda")
 
 wta <- wilcox_test(Salary ~ Gender | Year, data = employment)
 
@@ -641,7 +641,7 @@ stopifnot(isequal(round(pvalue(lbl_test(csom,
 
 
 ### StatXact manual 6, page 797
-data(oral_contraceptives)
+load("oral_contraceptives.rda")
 
 lta <- lbl_test(oral_contraceptives)
 
@@ -780,7 +780,7 @@ stopifnot(pci[1] < 0.078 & pci[2] > 0.078)
 
 
 ### StatXact 6 manual, page 1012
-data(army)
+load("army.rda")
 
 cta <- cmh_test(army)
 

@@ -43,7 +43,8 @@ Schulgen (2002).
 data(ocarcinoma)
 
 # logrank test with exact two-sided p-value
-lrt <- logrank_test(Surv(time, cens) ~ stadium), distribution = "exact")
+lrt <- logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma,
+                    distribution = "exact")
 
 # the test statistic
 statistic(lrt)

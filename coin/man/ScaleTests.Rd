@@ -7,6 +7,7 @@
     two or more independent groups against scale alternatives.
 }
 \usage{
+
 \method{ansari_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
 \method{ansari_test}{IndependenceProblem}(x, 
@@ -14,12 +15,14 @@
     distribution = c("asympt", "approx", "exact"),
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...)
+
 \method{fligner_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
 \method{fligner_test}{IndependenceProblem}(x, 
     ties.method = c("mid-ranks", "average-scores"),
     distribution = c("asympt", "approx"), 
     ...)
+
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}

@@ -88,7 +88,7 @@ pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact",
                    alternative = "greater"))
 
 ### StatXact 6 manual, page 345-346
-data(employment, package = PKG)
+load("employment.rda")
 stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
                          distribution = "exact")), 4), 0.04))
 stopifnot(isequal(round(pvalue(wilcox_test(Salary ~ Gender | Year, data = employment, 
