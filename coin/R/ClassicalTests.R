@@ -893,7 +893,7 @@ friedman_test.SymmetryProblem <- function(x,
     return(RET)
 }
 
-### Bowker-Test
+### Marginal-Homogenity-Test
 mh_test <- function(x, ...) UseMethod("mh_test")
 
 mh_test.formula <- function(formula, data = list(), subset = NULL, ...)
@@ -924,7 +924,7 @@ mh_test.SymmetryProblem <- function(x,
     RET <- symmetry_test(x, 
         distribution = distribution, teststat = "quadtype", ...)
 
-    RET@method <- paste("Bowker Test")
+    RET@method <- paste("Marginal-Homogenity Test")
     return(RET)
 }
 
