@@ -1,8 +1,4 @@
 
-o	add hohnloser data
-
-o	check var(Y1) / var(Y2) or reverse in ansari_test documentation
-
 o	check for zero variances
 
 o	definition of two-sided p-values in ansari.test contradicts the one
