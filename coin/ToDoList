@@ -10,8 +10,6 @@ o	confint() after contrast_test:	how to check if ranks were used???
 o	check dimensions of objects returned by yfun() and xfun()
 	dim(x) and dim(xtrans) may differ (max-test)
 
-o	check contrast_test with ranks
-
 o	check storage.mode of all vars going into C code (MC)
 
 o	add wilcoxon-gehan scores, check logrank scores!

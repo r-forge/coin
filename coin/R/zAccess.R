@@ -264,7 +264,7 @@ setMethod(f = "statistic",
 
 setMethod(f = "statistic",
           signature = "QuadTypeIndependenceTestStatistic",
-          definition = function(object, type = c("test", "linear"), 
+          definition = function(object, type = c("test", "linear", "standardized"), 
               ...) {
               type <- match.arg(type)
               switch(type, "test" = object@teststatistic,
@@ -274,7 +274,16 @@ setMethod(f = "statistic",
                                       ncol = ncol(object@ytrans),
                                       dimnames = list(colnames(object@xtrans), 
                                                       colnames(object@ytrans)))
-                           })
+                           },
+                           "standardized" = {
+                               matrix((object@linearstatistic - object@expectation) /
+                                     sqrt(diag(object@covariance)), 
+                                     nrow = ncol(object@xtrans),
+                                     ncol = ncol(object@ytrans),
+                                     dimnames = list(colnames(object@xtrans),
+                                                     colnames(object@ytrans)))
+                           }
+              )              
           }
 )
 
