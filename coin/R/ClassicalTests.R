@@ -354,7 +354,10 @@ logrank_test.IndependenceProblem <- function(x,
     if (extends(class(RET@statistic), "ScalarIndependenceTest"))
         RET@nullvalue <- 0
 
-    RET@method <- "Logrank Test"
+    if (is_ordered(RET@statistic))
+        RET@method <- "Linear-by-Linear Association (Tarone-Ware) Test"
+    else
+        RET@method <- "Logrank Test"
     return(RET)
 }
 
@@ -389,7 +392,10 @@ kruskal_test.IndependenceProblem <- function(x,
         ytrafo = function(data) trafo(data, numeric_trafo = rank), 
         check = check, ...)
 
-    RET@method <- paste("Kruskal-Wallis Test")
+    if (is_ordered(RET@statistic))
+        RET@method <- "Linear-by-Linear Association Test"
+    else
+        RET@method <- "Kruskal-Wallis Test"
     return(RET)
 }
 
@@ -414,6 +420,8 @@ fligner_test.IndependenceProblem <- function(x,
     check <- function(x) {
         if (!(is_Ksample(x) && is_numeric_y(x)))
             stop(sQuote("x"), " does not represent a K sample problem")
+        if (is_ordered(x))
+            stop(colnames(x@x), " is an ordered factor")
         return(TRUE)
     }
  
@@ -427,7 +435,7 @@ fligner_test.IndependenceProblem <- function(x,
         ytrafo = function(data) trafo(data, numeric_trafo = fligner_trafo), 
         check = check, ...)
 
-    RET@method <- paste("Fligner-Killeen Test")
+    RET@method <- "Fligner-Killeen Test"
     return(RET)
 }
 
@@ -467,7 +475,7 @@ spearman_test.IndependenceProblem <- function(x,
         check = check, ...)
 
     RET@nullvalue <- 0
-    RET@method <- paste("Spearman Correlation Test")
+    RET@method <- "Spearman Correlation Test"
     return(RET)
 }
 
@@ -530,7 +538,10 @@ cmh_test.IndependenceProblem <- function(x,
         teststat = "quadtype", distribution = distribution, check = check, 
         ...)
 
-    RET@method <- paste("Generalised Cochran-Mantel-Haenszel Test")
+    if (is_ordered(RET@statistic)) 
+        RET@method <- "Linear-by-Linear Association Test"
+    else
+        RET@method <- "Generalised Cochran-Mantel-Haenszel Test"
     return(RET)
 }
 
@@ -611,7 +622,10 @@ chisq_test.IndependenceProblem <- function(x,
                 distribution = nd)
     }
 
-    RET@method <- paste("Pearson's Chi-Squared Test")
+    if (is_ordered(RET@statistic)) 
+        RET@method <- "Linear-by-Linear Association Test"
+    else
+        RET@method <- "Pearson's Chi-Squared Test"
     return(RET)
 }
 
@@ -698,7 +712,7 @@ lbl_test.IndependenceProblem <- function(x, distribution = c("asympt", "approx")
                teststat = "quadtype", distribution = distribution, 
                check = check), addargs))
 
-    RET@method <- paste("Linear-by-Linear Association Test")
+    RET@method <- "Linear-by-Linear Association Test"
     return(RET)
 }
 
@@ -783,7 +797,7 @@ contrast_test.IndependenceProblem <- function(x,
 
     RET <- independence_test(x, teststat = "maxtype",
         distribution = distribution, xtrafo = xtrafo, ...)
-    RET@method <- paste("Contrast Test")
+    RET@method <- "General Contrast Test"
     
     return(RET)
 }
@@ -828,7 +842,7 @@ maxstat_test.IndependenceProblem <- function(x,
     estimate <- max(x@x[[whichvar]][maxcontr > 0])
     names(estimate) <- colnames(x@x)[whichvar]
     RET@statistic@estimates <- list(estimate = estimate)
-    RET@method <- paste("Maxstat Test")
+    RET@method <- "Maxstat Test"
     
     return(RET)
 }
@@ -891,7 +905,10 @@ friedman_test.SymmetryProblem <- function(x,
     RET <- symmetry_test(x, 
         distribution = distribution, teststat = "quadtype", ...)
 
-    RET@method <- paste("Friedman Test")
+    if (is_ordered(RET@statistic))  
+        RET@method <- "Page Test"
+    else
+        RET@method <- "Friedman Test"
     return(RET)
 }
 
@@ -926,7 +943,10 @@ mh_test.SymmetryProblem <- function(x,
     RET <- symmetry_test(x, 
         distribution = distribution, teststat = "quadtype", ...)
 
-    RET@method <- paste("Marginal-Homogenity Test")
+    if (is_ordered(RET@statistic))  
+        RET@method <- "Marginal-Homogenity Test for Ordered Data"
+    else
+        RET@method <- "Marginal-Homogenity Test"
     return(RET)
 }
 
@@ -968,7 +988,7 @@ wilcoxsign_test.IndependenceProblem <- function(x,
     RET <- independence_test(ip,
         distribution = distribution, teststat = "scalar", ...)
 
-    RET@method <- paste("Wilcoxon-Signed-Rank Test")
+    RET@method <- "Wilcoxon-Signed-Rank Test"
     RET@nullvalue <- 0
     return(RET)
 }
