@@ -17,3 +17,15 @@ o	check contrast_test with ranks
 
 o	check Monte-Carlo P-values against exact ones in StatXact.
 
+o	bowker_test -> mh_test (Marginal Homogenity, Agresti 1990?)
+
+o	check storage.mode of all vars going into C code (MC)
+
+o	add wilcoxon-gehan scores, check logrank scores!
+
+o	check interrupt during MC
+
+o	order x/yscores in lbl_test / response and input?
+        (..., scores = list(var1 = c(1,..), var2 = c(...))
+
+o	what means "trend test for clustered data"?
