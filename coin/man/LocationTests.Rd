@@ -47,7 +47,7 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
-  \item{subset}{an optional formula of the form \code{~ w} defining
+  \item{weights}{an optional formula of the form \code{~ w} defining
       integer valued weights for the observations.}
   \item{x}{an object of class \code{IndependenceProblem}.}
   \item{alternative}{the alternative hypothesis must be
@@ -80,6 +80,9 @@
 
   Confidence intervals for the difference in location are available for the 
   rank-based procedures and are computed according to Bauer (1972). 
+
+  In case \code{x} is an ordered factor, \code{kruskal_test} computes the
+  linear-by-linear association test for ordered alternatives.
 
 }
 \value{

@@ -1,24 +1,26 @@
 \name{ContingencyTests}
+\alias{chisq_test}
 \alias{cmh_test}
 \alias{lbl_test}
-\alias{chisq_test}
 \title{ Independence in general I x K x J contingency tables }
 \description{
     Testing the independence of two, possibly ordered, factors.
 }
 \usage{
-\method{cmh_test}{formula}(formula, data, subset = NULL, \dots)
+\method{cmh_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
 \method{cmh_test}{table}(x, distribution = c("asympt", "approx"), ...)
 \method{cmh_test}{IndependenceProblem}(x, 
     distribution = c("asympt", "approx"), ...)
-\method{chisq_test}{formula}(formula, data, subset = NULL, \dots)
+\method{chisq_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
 \method{chisq_test}{table}(x, distribution = c("asympt", "approx"), ...)
 \method{chisq_test}{IndependenceProblem}(x, 
     distribution = c("asympt", "approx"), ...)
-\method{lbl_test}{formula}(formula, data, subset = NULL, \dots)
+\method{lbl_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
 \method{lbl_test}{table}(x, distribution = c("asympt", "approx"), ...)
 \method{lbl_test}{IndependenceProblem}(x, 
-    xscores = NULL, yscores = NULL, 
     distribution = c("asympt", "approx"), ...)
 }
 \arguments{
@@ -29,25 +31,34 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
+  \item{weights}{an optional formula of the form \code{~ w} defining
+    integer valued weights for the observations.}
   \item{x}{an object inheriting from class \code{IndependenceProblem} or an
     object of class \code{table}.}
   \item{distribution}{the null distribution of the test statistic
-    can be approximated by its
-    \code{asymptotic} distribution (\code{asympt}) 
+    can be approximated by its asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
-  \item{xscores}{if \code{x} is ordered, a vector of length
-      \code{nlevels(x)} with alternative scores.}
-  \item{yscores}{if \code{y} is ordered, a vector of length
-      \code{nlevels(y)} with alternative scores.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
 
-  The null hypothesis of the independence of \code{y} and \code{x} is
-  tested.
+  The null hypothesis of the independence of \code{y} and \code{x} in each
+  stratum given by \code{block} is tested.
+
+  In case either \code{x} or \code{y} or both are ordered factors, the
+  corresponding linear-by-linear association test is performed.
+  \code{lbl_test} coerces factors to class \code{ordered} under any
+  circumstances. The default scores are \code{1:nlevels(x)} and 
+  \code{1:nlevels(y)}, respectively. The default scores can be changed 
+  via the \code{scores} argument (see \code{\link{independence_test}}). 
+  \code{scores = list(y = 1:k, x = c(1, 4, 6))} first triggers a coercion
+  to class \code{ordered} of both variables and attaches the list elements
+  as scores. The length of a score vector needs to be equal the number of
+  levels of the factor of interest.
 
 }
 \value{
+
   An object inheriting from class \code{IndependenceTest} with
   methods \code{show}, \code{pvalue} and \code{statistic}.
 
@@ -63,26 +74,17 @@ chisq_test(as.table(jobsatisfaction[,,"Female"]),
 ### both Income and Job.Satisfaction unordered
 cmh_test(jobsatisfaction)
 
-### both Income and Job.Satisfaction ordered
+### both Income and Job.Satisfaction ordered, default scores
 lbl_test(jobsatisfaction)
 
-### dose response data, StatXact 6 manual, 984 
-tox <- as.table(matrix(c(100, 18, 50, 50, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1),
-                       nrow = 4,
-                       dimnames = list(dose = paste((1:4)*100, "mg"),
-                                       tox = c("mild", "moderate", "severe", "death"))))
+### both Income and Job.Satisfaction ordered, alternative scores
+lbl_test(jobsatisfaction, scores = list(Job.Satisfaction = c(1, 3, 4, 5),
+                                        Income = c(3, 10, 20, 35)))
 
-### 0.0708, page 993
-lbl_test(tox)
-
-### 0.0792, page 993
-pvalue(lbl_test(tox, distribution = "approx", B = 9999))
-
-### 0.0828, page 997
-lbl_test(tox, scores = list(tox = c(1, 3, 9, 27)))
-
-## 0.0780, page 997
-pvalue(lbl_test(tox, scores = list(tox = c(1, 3, 9, 27)), distribution = "approx", B = 9999))
+### the same, null distribution approximated
+cmh_test(jobsatisfaction, scores = list(Job.Satisfaction = c(1, 3, 4, 5),
+                                        Income = c(3, 10, 20, 35)),
+         distribution = "approx", B = 10000)
 
 }
 \keyword{htest}

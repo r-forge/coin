@@ -6,7 +6,8 @@
     response of arbitrary measurement scale against cutpoint alternatives. 
 }
 \usage{
-\method{maxstat_test}{formula}(formula, data, subset = NULL, \dots)
+\method{maxstat_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
 \method{maxstat_test}{IndependenceProblem}(x, 
     distribution = c("asympt", "approx", ...)
 }
@@ -19,6 +20,8 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
+  \item{weights}{an optional formula of the form \code{~ w} defining
+    integer valued weights for the observations.}   
   \item{x}{an object inheriting from class \code{IndependenceProblem}.}
   \item{distribution}{the null distribution of the test statistic
     can be approximated by its
@@ -33,6 +36,7 @@
 
 }
 \value{
+
   An object inheriting from class \code{IndependenceTest} with
   methods \code{show}, \code{pvalue} and \code{statistic}.
 
