@@ -68,7 +68,7 @@ stopifnot(pci[1] < 0.3073 & pci[2] > 0.3073)
 ### Two independent samples
 
 ### StatXact 6 manual, page 340
-data(bloodp, package = "coin")
+load("bloodp.rda")
 
 wta <- wilcox_test(bp ~ group, data = bloodp)
 
@@ -328,7 +328,7 @@ pvalue(atMC)
 stopifnot(pci[1] < pvalue(atel) & pci[2] > pvalue(atel))
 
 ### StatXact 6 manual, 413
-data(lungcancer)
+load("lungcancer.rda")
 
 lta <- logrank_test(Surv(time, cens) ~ group, data = lungcancer)
 

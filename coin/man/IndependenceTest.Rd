@@ -3,7 +3,7 @@
 \alias{independence_test.formula}
 \alias{independence_test.IndependenceProblem}
 \alias{independence_test.table}
-\title{ General Independence Test } 
+\title{ General Independence Tests } 
 \description{
     The independence between two sets of variables of arbitrary measurement
     scales, possibly stratified in blocks, is tested conditional on the data.
@@ -73,6 +73,11 @@
   as scores. The length of a score vector needs to be equal the number of 
   levels of the factor of interest.
 
+  Additional arguments are passed to functions for the computation of the 
+  null distribution. Such arguments may be the number of Monte-Carlo
+  replications \code{B} for the approximation of the null distribution
+  or arguments to \code{\link[mvtnorm]{pmvnorm}}.
+
 }
 \value{
 
@@ -82,27 +87,27 @@
 }
 \examples{
 
-data(bloodp)
+data(asat)
 
 ### independence of bp and group via normal scores test
-independence_test(bp ~ group, data = bloodp,
+independence_test(asat ~ group, data = asat,
 
     ### exact null distribution
     distribution = "exact", 
 
     ### one-sided test
-    alternative = "less",
+    alternative = "greater",
 
     ### apply normal scores to bp
     ytrafo = function(data) trafo(data, numeric_trafo = normal_trafo),
 
-    ### indicator matrix of 2nd level of group
+    ### indicator matrix of 1st level of group
     xtrafo = function(data) trafo(data, factor_trafo = function(x)
-        matrix(x == levels(x)[2], ncol = 1))
+        matrix(x == levels(x)[1], ncol = 1))
 )
 
 ### same as
-normal_test(bp ~ group, data = bloodp, distribution = "exact", 
+normal_test(asat ~ group, data = asat, distribution = "exact", 
             alternative = "greater")
 
 }

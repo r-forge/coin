@@ -49,12 +49,9 @@
 }
 \examples{
 
-data(lungcancer)
+data(ocarcinoma)
 
-logrank_test(Surv(time, cens) ~ group, data = lungcancer)
-logrank_test(Surv(time, cens) ~ group, data = lungcancer,
-             distribution = "approx", B = 9999)
-logrank_test(Surv(time, cens) ~ group, data = lungcancer,
+logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
              distribution = "exact")
 
 }

@@ -15,10 +15,9 @@
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}
-    is a numeric (\code{friedman_test,wilcoxsign_test}) variable 
-    or factor (\code{mh_test}) giving the data values and 
-    \code{x} a factor with two (\code{wilcoxsign_test}) 
-    or more levels giving the corresponding groups. \code{block} is an
+    is a factor giving the data values and 
+    \code{x} a factor with two or more levels giving the corresponding
+    replications. \code{block} is an
     optional factor (which is generated automatically when omitted).}
   \item{data}{an optional data frame containing the variables in the
     model formula.}
@@ -37,7 +36,9 @@
   The corresponding test for binary factors \code{x} and \code{y} is known
   as McNemar test and was extended by Bowker to the general situation. 
 
-  Scores must be a list of length one (row and column scores coincide).
+  Scores must be a list of length one (row and column scores coincide). When
+  scores are given or if \code{x} is ordered, the corresponding 
+  linear association test is computed (Agresti, 2002).
 
 }
 \value{
@@ -46,9 +47,15 @@
   methods \code{show}, \code{pvalue} and \code{statistic}.
 
 }
+\references{
+
+    Alan Agresti (2002), \emph{Categorical Data Analysis}. Hoboken, New  
+    Jersey: John Wiley & Sons.
+
+}
 \examples{
 
-### Opinions on Pre- and Extramarital Sex, Agresti (2000), page 421
+### Opinions on Pre- and Extramarital Sex, Agresti (2002), page 421
 opinions <- c("always wrong", "almost always wrong", 
               "wrong only sometimes", "not wrong at all")
 

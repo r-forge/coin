@@ -132,6 +132,11 @@ setMethod(f = "initialize",
         .Object@linearstatistic <- drop(S %*% LinearStatistic(xtrans, 
                                                               ytrans, weights))
         
+        ### <REMAINDER>
+        ### for teststat = "maxtype" and distribution = "approx"
+        ### we don't need to covariance matrix but the variances only
+        ### </REMAINDER>
+
         ### possibly stratified by block
         if (nlevels(itp@block) == 1) {
             expcov <- ExpectCovarLinearStatistic(xtrans, ytrans, weights)

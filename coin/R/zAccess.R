@@ -287,3 +287,73 @@ setMethod(f = "statistic",
           }
 )
 
+### generic method for extracting expectations from objects
+setGeneric("expectation", function(object, ...) 
+    standardGeneric("expectation")
+)
+
+setMethod(f = "expectation",
+          signature = "IndependenceTest",
+          definition = function(object, ...) 
+              expectation(object@statistic, ...)
+)
+
+setMethod(f = "expectation",
+          signature = "ScalarIndependenceTestStatistic",
+          definition = function(object, ...) 
+              object@expectation
+)
+
+setMethod(f = "expectation",
+          signature = "MaxTypeIndependenceTestStatistic",
+          definition = function(object, ...) {
+
+              x <- object@expectation
+              matrix(x, nrow = ncol(object@xtrans),
+                        ncol = ncol(object@ytrans),
+                        dimnames = list(colnames(object@xtrans), 
+                                        colnames(object@ytrans)))
+          }
+)
+
+setMethod(f = "expectation",
+          signature = "QuadTypeIndependenceTestStatistic",
+          definition = function(object, ...) {
+
+              x <- object@expectation
+              matrix(x, nrow = ncol(object@xtrans),
+                        ncol = ncol(object@ytrans),
+                        dimnames = list(colnames(object@xtrans), 
+                                        colnames(object@ytrans)))
+          }
+)
+
+### generic method for extracting the covariance matrix from objects
+setGeneric("covariance", function(object, ...) 
+    standardGeneric("covariance")
+)
+
+setMethod(f = "covariance",
+          signature = "IndependenceTest",
+          definition = function(object, ...) 
+              covariance(object@statistic, ...)
+)
+
+setMethod(f = "covariance",
+          signature = "ScalarIndependenceTestStatistic",
+          definition = function(object, ...) 
+              object@covariance
+)
+
+setMethod(f = "covariance",
+          signature = "MaxTypeIndependenceTestStatistic",
+          definition = function(object, ...)
+              object@covariance
+)
+
+setMethod(f = "covariance",
+          signature = "QuadTypeIndependenceTestStatistic",
+          definition = function(object, ...)
+              object@covariance
+)
+

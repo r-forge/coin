@@ -3,7 +3,7 @@
 \docType{data}
 \title{ Income and Jobsatisfaction }
 \description{
-  Income and jobsatisfaction for male and females.
+  Income and job satisfaction by gender.
 }
 \usage{data(jobsatisfaction)}
 \format{
