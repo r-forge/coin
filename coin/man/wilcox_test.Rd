@@ -111,7 +111,7 @@ if (require(multcomp)) {
     NDWD <- perm_test(length ~ site, data = YOY,
         ytrafo = function(data) trafo(data, numeric_trafo = rank),
         xtrafo = function(data) trafo(data, factor_trafo = function(x)
-            model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))),
+            model.matrix(~x - 1) \%*\% t(contrMat(table(x), "Tukey"))),
         teststat = "maxtype", distribution = "approx", B = 90000)
 
     # global p-value

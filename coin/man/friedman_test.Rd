@@ -104,7 +104,7 @@ if (require(multcomp)) {
     rtt <- symmetry_test(sp, teststat = "maxtype",
          xtrafo = function(data)
              trafo(data, factor_trafo = function(x)
-                 model.matrix(~ x - 1) %*% t(contrMat(table(x), "Tukey"))
+                 model.matrix(~ x - 1) \%*\% t(contrMat(table(x), "Tukey"))
              )
      )
 
