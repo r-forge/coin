@@ -37,7 +37,7 @@
 }
 \examples{
 
-data(glioma)
+data(glioma, package = "coin")
 
 par(mfrow=c(1,2))
 

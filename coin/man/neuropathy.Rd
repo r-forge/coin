@@ -26,7 +26,7 @@ for a control and treatment group.
 }
 \examples{
 
-data(neuropathy)
+data(neuropathy, package = "coin")
 
 ### compare with Table 2 of Conover & Salsburg (1988)
 oneway_test(pain ~ group, data = neuropathy, alternative = "less",

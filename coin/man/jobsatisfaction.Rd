@@ -29,7 +29,8 @@
 
 }
 \examples{
-data(jobsatisfaction)
+
+data(jobsatisfaction, package = "coin")
 
 # Generalized Cochran-Mantel-Haenzel test
 cmh_test(jobsatisfaction)

@@ -90,7 +90,7 @@
 }
 \examples{
 
-data(jobsatisfaction)
+data(jobsatisfaction, package = "coin")
 
 ### for females only
 chisq_test(as.table(jobsatisfaction[,,"Female"]), 

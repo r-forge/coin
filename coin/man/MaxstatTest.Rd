@@ -67,7 +67,7 @@
 }
 \examples{
 
-data(treepipit)
+data(treepipit, package = "coin")
 
 maxstat_test(counts ~ coverstorey, data = treepipit)
 

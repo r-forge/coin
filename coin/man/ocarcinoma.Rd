@@ -40,7 +40,7 @@ Schulgen (2002).
 }
 \examples{
 
-data(ocarcinoma)
+data(ocarcinoma, package = "coin")
 
 ### logrank test with exact two-sided p-value
 lrt <- logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma,

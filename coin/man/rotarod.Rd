@@ -38,7 +38,8 @@ p-value (corrected for ties) is reported as 0.0147.
 }
 \examples{
 
-data(rotarod)
+data(rotarod, package = "coin")
+
 # Wilcoxon-Mann-Whitney Rank Sum Test
 wilcox_test(time ~ group, data = rotarod, 
     alternative = "greater", distribution = "exact")

@@ -53,7 +53,7 @@
 }
 \examples{
 
-data(ocarcinoma)
+data(ocarcinoma, package = "coin")
 
 logrank_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
              distribution = "exact")

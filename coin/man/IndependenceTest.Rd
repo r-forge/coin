@@ -103,7 +103,7 @@
 }
 \examples{
 
-data(asat)
+data(asat, package = "coin")
 
 ### independence of bp and group via normal scores test
 independence_test(asat ~ group, data = asat,
