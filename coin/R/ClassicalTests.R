@@ -867,7 +867,7 @@ maxstat_test.IndependenceProblem <- function(object,
     whichvar <- attr(RET@statistic@xtrans, "assign")[wm]
     maxcontr <- RET@statistic@xtrans[,wm]
     estimate <- max(object@x[[whichvar]][maxcontr > 0])
-    names(estimate) <- colnames(object@x)[whichvar]
+    names(estimate) <- paste("cutpoint in ", colnames(object@x)[whichvar])
     RET@statistic@estimates <- list(estimate = estimate)
     RET@method <- "Maxstat Test"
     

@@ -27,9 +27,15 @@ varnames <- function(object) {
 
     if (nlevels(object@block) > 1)
         xnames <- paste(xnames,  
-            paste("stratified by", attr(object@block, "blockname")))
+            paste("\n\t stratified by", attr(object@block, "blockname")))
 
-    return(paste(ynames, "by", xnames, collapse = ""))
+    if (nchar(xnames) > options("width")$width/2) { 
+        strg <- paste(ynames, "by\n\t", xnames, collapse = "")
+    } else {
+        strg <- paste(ynames, "by", xnames, collapse = "")
+    }
+
+    return(strg)
 }
 
 setMethod(f = "show", signature = "QuadTypeIndependenceTest", 
@@ -110,10 +116,11 @@ setMethod(f = "show", signature = "ScalarIndependenceTest",
 
         RET <- list(statistic = stat,
                     p.value = x@distribution@pvalue(stat),
-                    null.value = c(mu = x@nullvalue),
                     alternative = x@statistic@alternative,
                     data.name = dataname,
                     method = paste(distname, x@method))
+        if (length(x@nullvalue > 0)) 
+            RET$null.value = c(mu = x@nullvalue)
         if (length(x@statistic@estimates) > 0)
             RET <- c(RET, x@statistic@estimates)
         class(RET) <- "htest"
@@ -141,12 +148,13 @@ setMethod(f = "show", signature = "ScalarIndependenceTestConfint",
 
         RET <- list(statistic = stat,
                     p.value = x@distribution@pvalue(stat),
-                    null.value = c(mu = x@nullvalue),
                     alternative = x@statistic@alternative,
                     method = paste(distname, x@method),
                     data.name = dataname,
                     conf.int = ci$conf.int,
                     estimate = ci$estimate)
+        if (length(x@nullvalue > 0)) 
+            RET$null.value = c(mu = x@nullvalue)
         if (length(x@statistic@estimates) > 0)
             RET <- c(RET, x@statistic@estimates)
         class(RET) <- "htest"

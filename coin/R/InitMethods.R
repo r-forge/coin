@@ -160,6 +160,9 @@ setMethod(f = "initialize",
         ### multiply with score matrix
         .Object@expectation <- drop(S %*% exp)
         .Object@covariance <- S %*% cov %*% t(S)
+        if (any(diag(.Object@covariance) < sqrt(.Machine$double.eps)))
+            warning("The conditional covariance matrix has ",
+                    "zero diagonal elements")
         .Object
     }
 )
