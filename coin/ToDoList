@@ -1,6 +1,8 @@
 
 o	check confidence intervals
 
+o	check for zero variances
+
 o	definition of two-sided p-values in ansari.test contradicts the one
         used here in some cases (-> regtest_2samples.R)
 
@@ -23,6 +25,7 @@ o	mh_test with weights
 o	free W1 and W2 in `vandeWiel.c' in case of an error
 
 o	enable confidence intervals in the presence of blocks or weights
+
 
 o	check whats happening here
 
