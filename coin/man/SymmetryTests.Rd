@@ -39,7 +39,9 @@
 \details{
 
   The null hypothesis of symmetry of \code{y} across \code{x} is 
-  tested.
+  tested. In case \code{x} is an ordered factor \code{friedman_test}
+  performs the Page test, scores can be altered by the \code{scores}
+  argument (see \code{\link{symmetry_test}}).
 
 }
 \value{
@@ -85,7 +87,7 @@ axis(1, at = 1:3, labels = levels(RoundingTimes$methods))
 axis(2)
 
 ### where do the differences come from?
-### Wilcoxon-Nemenyi-McDonald-Thompson
+### Wilcoxon-Nemenyi-McDonald-Thompson test
 if (require(multcomp)) {
 
     ### setup SymmetryProblem (need to rank here)
@@ -124,23 +126,6 @@ friedman_test(strength ~ potash | block, data = sc)
 ### approximate null distribution via Monte-Carlo
 pvalue(friedman_test(strength ~ potash | block, data = sc, 
                      distribution = "approx", B = 9999))
-
-### Opinions on Pre- and Extramarital Sex, Agresti (2000), page 421
-opinions <- c("always wrong", "almost always wrong", 
-              "wrong only sometimes", "not wrong at all")
-
-PreExSex <- as.table(matrix(c(144, 33, 84, 126, 
-                                2,  4, 14,  29, 
-                                0,  2,  6,  25, 
-                                0,  0,  1,  5), nrow = 4, 
-                            dimnames = list(PremaritalSex = opinions,
-                                            ExtramaritalSex = opinions)))
-
-### treating response as nominal
-mh_test(PreExSex)
-
-### and as ordinal
-mh_test(PreExSex, scores = list(response = 1:length(opinions)))
 
 }
 \keyword{htest}
