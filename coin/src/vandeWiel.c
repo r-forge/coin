@@ -48,7 +48,7 @@ double binomi(int m, int n) {
     return(bin);
 }
 
-celW** reserveerW(int a, int b)
+celW** reserveW(int a, int b)
 {
     long res = 0;
     int i, j;
@@ -88,7 +88,6 @@ void FreeW(int a, celW **W)
      Free(W);
 }
 
-
 void initW(int a, int b, celW **W) {
 
     int i, j;
@@ -106,12 +105,26 @@ void initW(int a, int b, celW **W) {
 
 void mult(celW *tem, int a, int b, int rank, double *rs) {
 
+    /*
+
+    mult multiplies the polynomial c_i*x^(l_i) by x^(rs[rank]), 
+    which means adding the exponents
+
+    */
+
     int j;
     for (j = 0; j < tem[0].length; j++)
         tem[0].x[j] += rs[rank];
 }
 
 void plus(celW **W, celW *tempie, int a, int b) {
+
+    /*
+
+    plus adds terms with the same exponents after multiplication 
+    with 1 + x^(rs[rank]), so c1*x^j + c2*x^j becomes (c1+c2)*x^j
+
+    */
 
     int elep = 0;
     int k = 0;
@@ -145,6 +158,15 @@ void plus(celW **W, celW *tempie, int a, int b) {
 
 void mergesort(celW temptw, long tijd)
 {
+
+    /*
+    
+    mergesort composes one sorted list (increasing exponents of 
+    the polynomial) from two separately sorted lists. c1*x^3 + c2*x^5 
+    and  c3*x^4 + c4*x^7  becomes  c1*x^3 + c3*x^4 + c2*x^5 + c4*x^7.
+
+    */
+
     celW copiep;
     int t1 = 0; 
     int t2 = 0;
@@ -186,14 +208,25 @@ void mergesort(celW temptw, long tijd)
     Free(copiep.x);
 }
 
-void vulcel(celW **W, int i1, int j1, int r, double *rs) {
+void fillcell(celW **W, int i1, int j1, int r, double *rs) {
     
+    /*
+
+    fillcell makes the new recursive polynomial W[i1][j1] from 
+    W[i1 - 1][j1 - 1] and W[i1][j1 - 1]. j1 is the total number of 
+    rank scores assigned so far to either of the two groups, 
+    i1 is the number of rank scores assigned to the smallest sample.
+
+    */
+
     long tijd;
     celW temp2;
     int j, j2;
 
-    temp2.c = Calloc(W[i1 - 1][j1 - 1].length + W[i1][j1 - 1].length, double);
-    temp2.x = Calloc(W[i1 - 1][j1 - 1].length + W[i1][j1 - 1].length, double);
+    temp2.c = Calloc(W[i1 - 1][j1 - 1].length + 
+                     W[i1][j1 - 1].length, double);
+    temp2.x = Calloc(W[i1 - 1][j1 - 1].length + 
+                     W[i1][j1 - 1].length, double);
     temp2.length = W[i1 - 1][j1 - 1].length;
 
     for (j = 0; j < temp2.length; j++) {
@@ -221,7 +254,14 @@ void vulcel(celW **W, int i1, int j1, int r, double *rs) {
     Free(temp2.x);
 }
 
-void spiegelW(celW **W,int ce, int bep, int start, double *rs) {   
+void mirrorW(celW **W,int ce, int bep, int start, double *rs) {   
+
+    /* 
+
+    mirrorW contains a trick to speed op computations considerably. 
+    By symmetry arguments it is easy to find W[i][tot] from W[tot-i][tot]
+
+    */
 
     double totsum = 0;
     long len;
@@ -238,7 +278,16 @@ void spiegelW(celW **W,int ce, int bep, int start, double *rs) {
     }
 }
 
-void maakW(celW **W, int a, int b, int start, double *rs) {
+void makeW(celW **W, int a, int b, int start, double *rs) {
+
+
+    /* 
+
+    makeW simply determines whether a new polynomial W[i][j] 
+    can be found from mirrorW (if W[j-i][j] is available) or needs 
+    to be constructed via multiplication etc.
+
+    */
 
     long i,j;
     int rank;
@@ -255,9 +304,9 @@ void maakW(celW **W, int a, int b, int start, double *rs) {
         for (i=1; i <= hulp; i++) {   
             if (i <= j/2 || j == 1) {
                 rank = start+j;
-                vulcel(W, i, j, rank - 1, rs);
+                fillcell(W, i, j, rank - 1, rs);
             } else {
-                spiegelW(W, i, j, start, rs);
+                mirrorW(W, i, j, start, rs);
             }                               
             R_CheckUserInterrupt();
         }
@@ -266,16 +315,35 @@ void maakW(celW **W, int a, int b, int start, double *rs) {
 
 void cumulcoef(celW **W, int i1, int j1) {
 
-     double coef = 0;
-     int i;
+
+    /*
+
+    cumulcoef recursively adds the coefficients of the 
+    sorted polynomial. So, 3*x^4 + 4*x^6 + 2*x^7  becomes  
+    3*x^4 + 7*x^6 + 9*x^7.  
+
+    */
+    double coef = 0;
+    int i;
      
-     for(i = 0; i < W[i1][j1].length; i++) {
-         W[i1][j1].c[i] += coef;
-         coef = W[i1][j1].c[i];
-     }
+    for(i = 0; i < W[i1][j1].length; i++) {
+        W[i1][j1].c[i] += coef;
+        coef = W[i1][j1].c[i];
+    }
 }
 
-double aantalklein(int c, int b, double ob, celW **W1, celW **W2) {
+double numbersmall(int c, int b, double ob, celW **W1, celW **W2) {
+
+
+    /*
+
+    numbersmall is the core of the split-up algorithm. 
+    
+    It efficiently combines two polynomials which have used 
+    complementary sets of rank scores and computes their contribution 
+    to the tail-probability. 
+
+    */
 
     double tot = 0;
     long le;
@@ -303,9 +371,19 @@ double aantalklein(int c, int b, double ob, celW **W1, celW **W2) {
     }
     return(tot);
 }
-
        
 SEXP R_split_up_2sample(SEXP scores, SEXP m, SEXP obs) {
+	
+    /*
+
+    R interface to the split-up algorithm. 
+
+    `scores' is a REAL vector giving the scores of the total sample 
+    and `m' is a scalar integer with the sample size of one group.
+    `obs' is the scalar observed test statistic, namely the
+    sum of the `m' scores measured in one group.
+
+    */
 
     int b, c, d, u;
     double tot, bino, prob;
@@ -326,18 +404,18 @@ SEXP R_split_up_2sample(SEXP scores, SEXP m, SEXP obs) {
     bino = binomi(b, c);
 
     /* allocate and initialise memory */
-    W1 = reserveerW(c, (b+1)/2);
+    W1 = reserveW(c, (b+1)/2);
     initW(c, (b+1)/2, W1);
-    W2 = reserveerW(c, (b+1)/2);
+    W2 = reserveW(c, (b+1)/2);
     initW(c, (b+1)/2, W2);
     
-    maakW(W1, c, b/2, 0, rs);  
-    maakW(W2, c, (b+1)/2, b/2, rs);
+    makeW(W1, c, b/2, 0, rs);  
+    makeW(W2, c, (b+1)/2, b/2, rs);
 
     for (u = 0; u <= c; u++) cumulcoef(W2, u, (b+1)/2);
 
     /* number of permutations <= ob */
-    tot = aantalklein(c, b, ob, W1, W2);
+    tot = numbersmall(c, b, ob, W1, W2);
     
     /* probability */
     prob = tot/bino; 
