@@ -163,8 +163,9 @@ setMethod(f = "ApproxNullDistribution",
               } 
 
               dcov <- sqrt(diag(object@covariance))
+              expect <- object@expectation
               pls <- lapply(pls, function(x) 
-                         max(abs(x - object@expectation) / dcov)
+                         max(abs(x - expect) / dcov)
                      )
               pls <- sort(round(unlist(pls), 10))
 
@@ -208,8 +209,9 @@ setMethod(f = "ApproxNullDistribution",
               }
 
               dcov <- object@covarianceplus
+              expect <- object@expectation
               pls <- lapply(pls, function(x) {
-                                a <- x - object@expectation
+                                a <- x - expect
                                 drop(a %*% dcov %*% a)
                             }
                      )
