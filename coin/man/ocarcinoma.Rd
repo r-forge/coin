@@ -11,7 +11,8 @@ IIA.
   A data frame with 35 observations on the following 3 variables.
   \describe{
     \item{time}{time in days.}
-    \item{cens}{censoring indicator: 0 censored, 1 event.}
+    \item{event}{censoring indicator: \code{FALSE} means 
+                 censored, \code{TRUE} is an event.}
     \item{stadium}{a factor with levels \code{II} and \code{IIA}. }
   }
 }
@@ -43,7 +44,7 @@ Schulgen (2002).
 data(ocarcinoma, package = "coin")
 
 ### logrank test with exact two-sided p-value
-lrt <- surv_test(Surv(time, cens) ~ stadium, data = ocarcinoma,
+lrt <- surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
                     distribution = "exact")
 
 ### the test statistic

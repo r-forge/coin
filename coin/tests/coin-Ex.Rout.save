@@ -62,7 +62,7 @@ Loading required package: mvtnorm
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: ContingencyTests
-> ### Title: Independence in general I x K x J contingency tables
+> ### Title: Independence in General I x K x J Contingency Tables
 > ### Aliases: chisq_test chisq_test.formula chisq_test.table
 > ###   chisq_test.IndependenceProblem cmh_test.formula cmh_test.table
 > ###   cmh_test.IndependenceProblem cmh_test lbl_test.formula lbl_test.table
@@ -147,7 +147,7 @@ T = 6.1563, p-value = 0.0123
 > 
 > data(asat, package = "coin")
 > 
-> ### independence of bp and group via normal scores test
+> ### independence of asat and group via normal scores test
 > independence_test(asat ~ group, data = asat,
 + 
 +     ### exact null distribution
@@ -279,7 +279,7 @@ T = -1.5225, p-value = 0.1279
 alternative hypothesis: true mu is not equal to 0 
 
 > 
-> ### approximate p-value (with 99
+> ### approximate p-value (with 99% confidence interval)
 > pvalue(oneway_test(pd ~ age, data = water_transfer, 
 +                  distribution = "approx", B = 9999))
 [1] 0.1311131
@@ -617,7 +617,7 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > data(ocarcinoma, package = "coin")
 > 
-> surv_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
+> surv_test(Surv(time, event) ~ stadium, data = ocarcinoma, 
 +              distribution = "exact")
 
 	Exact Logrank Test
@@ -651,28 +651,29 @@ numeric(0)
 > ### Hollander & Wolfe (1999), Table 7.1, page 274
 > ### Comparison of three methods ("round out", "narrow angle", and
 > ###  "wide angle") for rounding first base. 
-> RoundingTimes <- data.frame(times = c(5.40, 5.50, 5.55,
-+     5.85, 5.70, 5.75,
-+     5.20, 5.60, 5.50,
-+     5.55, 5.50, 5.40,
-+     5.90, 5.85, 5.70,
-+     5.45, 5.55, 5.60,
-+     5.40, 5.40, 5.35,
-+     5.45, 5.50, 5.35,
-+     5.25, 5.15, 5.00,
-+     5.85, 5.80, 5.70,
-+     5.25, 5.20, 5.10,
-+     5.65, 5.55, 5.45,
-+     5.60, 5.35, 5.45,
-+     5.05, 5.00, 4.95,
-+     5.50, 5.50, 5.40,
-+     5.45, 5.55, 5.50,
-+     5.55, 5.55, 5.35,
-+     5.45, 5.50, 5.55,
-+     5.50, 5.45, 5.25,
-+     5.65, 5.60, 5.40,
-+     5.70, 5.65, 5.55,
-+     6.30, 6.30, 6.25),
+> RoundingTimes <- data.frame(
++     times = c(5.40, 5.50, 5.55,
++               5.85, 5.70, 5.75,
++               5.20, 5.60, 5.50,
++               5.55, 5.50, 5.40,
++               5.90, 5.85, 5.70,
++               5.45, 5.55, 5.60,
++               5.40, 5.40, 5.35,
++               5.45, 5.50, 5.35,
++               5.25, 5.15, 5.00,
++               5.85, 5.80, 5.70,
++               5.25, 5.20, 5.10,
++               5.65, 5.55, 5.45,
++               5.60, 5.35, 5.45,
++               5.05, 5.00, 4.95,
++               5.50, 5.50, 5.40,
++               5.45, 5.55, 5.50,
++               5.55, 5.55, 5.35,
++               5.45, 5.50, 5.55,
++               5.50, 5.45, 5.25,
++               5.65, 5.60, 5.40,
++               5.70, 5.65, 5.55,
++               6.30, 6.30, 6.25),
 +     methods = factor(rep(c("Round Out", "Narrow Angle", "Wide Angle"), 22)),
 +     block = factor(rep(1:22, rep(3, 22))))
 > 
@@ -697,7 +698,7 @@ T = 11.1429, df = 2, p-value = 0.003805
 > ### Hollander & Wolfe, page 295
 > if (require(multcomp)) {
 + 
-+     ### all pair comparisons
++     ### all pairwise comparisons
 +     rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
 +          teststat = "maxtype",
 +          xtrafo = function(data)
@@ -835,6 +836,32 @@ attr(,"assign")
  [9,]    0    0    1    0    0    1    1    0
 [10,]    0    0    1    0    0    1    1    1
 > 
+> ### apply transformation blockwise (e.g. for Friedman test)
+> trafo(data.frame(y = 1:20), numeric_trafo = rank, block = gl(4, 5))
+      [,1]
+ [1,]    1
+ [2,]    2
+ [3,]    3
+ [4,]    4
+ [5,]    5
+ [6,]    1
+ [7,]    2
+ [8,]    3
+ [9,]    4
+[10,]    5
+[11,]    1
+[12,]    2
+[13,]    3
+[14,]    4
+[15,]    5
+[16,]    1
+[17,]    2
+[18,]    3
+[19,]    4
+[20,]    5
+attr(,"assign")
+[1] 1
+> 
 > 
 > 
 > 
@@ -854,16 +881,17 @@ attr(,"assign")
 > 
 > data(asat, package = "coin")
 > 
-> # proof-of-safety based on ratio of medians
+> ### proof-of-safety based on ratio of medians
 > pos <- wilcox_test(I(log(asat)) ~ group, data = asat, alternative = "less", 
 +                    conf.int = TRUE, distribution = "exact")
 > 
-> # one-sided confidence set. Safety cannot be concluded since the effect of
-> # the compound exceeds 20% of the control median
+> ### one-sided confidence set. Safety cannot be concluded since the effect of
+> ### the compound exceeds 20% of the control median
 > exp(confint(pos)$conf.int)
 [1] 0.000000 1.337778
 attr(,"conf.level")
 [1] 0.95
+> 
 > 
 > 
 > 
@@ -970,17 +998,17 @@ attr(,"conf.level")
 > par(mfrow=c(1,2))
 > 
 > ### Grade III glioma
-> g3 <- subset(glioma, Histology == "Grade3")
+> g3 <- subset(glioma, histology == "Grade3")
 > 
 > ### Plot Kaplan-Meier curves
-> plot(survfit(Surv(Survival, Cens) ~ Group, data=g3), 
+> plot(survfit(Surv(time, event) ~ group, data=g3), 
 +      main="Grade III Glioma", lty=c(2,1), 
 +      legend.text=c("Control", "Treated"),
 +      legend.bty=1, ylab="Probability", 
 +      xlab="Survival Time in Month")
 > 
 > ### logrank test
-> surv_test(Surv(Survival, Cens) ~ Group, data = g3, 
+> surv_test(Surv(time, event) ~ group, data = g3, 
 +              distribution = "exact")
 
 	Exact Logrank Test
@@ -993,17 +1021,17 @@ numeric(0)
 
 > 
 > ### Grade IV glioma
-> gbm <- subset(glioma, Histology == "GBM")
+> gbm <- subset(glioma, histology == "GBM")
 > 
 > ### Plot Kaplan-Meier curves
-> plot(survfit(Surv(Survival, Cens) ~ Group, data=gbm), 
+> plot(survfit(Surv(time, event) ~ group, data=gbm), 
 +      main="Grade IV Glioma", lty=c(2,1), 
 +      legend.text=c("Control", "Treated"),
 +      legend.bty=1, legend.pos=1, ylab="Probability", 
 +      xlab="Survival Time in Month")
 >    
 > ### logrank test
-> surv_test(Surv(Survival, Cens) ~ Group, data = gbm, 
+> surv_test(Surv(time, event) ~ group, data = gbm, 
 +              distribution = "exact")
 
 	Exact Logrank Test
@@ -1016,12 +1044,12 @@ numeric(0)
 
 > 
 > ### stratified logrank test
-> surv_test(Surv(Survival, Cens) ~ Group | Histology, data = glioma,
+> surv_test(Surv(time, event) ~ group | histology, data = glioma,
 +              distribution = "approx", B = 10000)
 
 	Approximative Logrank Test
 
-data:  y by groups Control, RIT stratified by Histology 
+data:  y by groups Control, RIT stratified by histology 
 T = 3.6818, p-value < 2.2e-16
 alternative hypothesis: two.sided 
 null values:
@@ -1039,7 +1067,7 @@ numeric(0)
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: jobsatisfaction
-> ### Title: Income and Jobsatisfaction
+> ### Title: Income and Job Satisfaction
 > ### Aliases: jobsatisfaction
 > ### Keywords: datasets
 > 
@@ -1128,7 +1156,7 @@ alternative hypothesis: true mu is less than 0
 > data(ocarcinoma, package = "coin")
 > 
 > ### logrank test with exact two-sided p-value
-> lrt <- surv_test(Surv(time, cens) ~ stadium, data = ocarcinoma,
+> lrt <- surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
 +                     distribution = "exact")
 > 
 > ### the test statistic
@@ -1196,7 +1224,9 @@ alternative hypothesis: true mu is not equal to 1
 > 
 > data(rotarod, package = "coin")
 > 
-> # Wilcoxon-Mann-Whitney Rank Sum Test
+> ### Wilcoxon-Mann-Whitney Rank Sum Test
+> 
+> ### one-sided exact (0.0186)
 > wilcox_test(time ~ group, data = rotarod, 
 +     alternative = "greater", distribution = "exact")
 
@@ -1206,6 +1236,16 @@ data:  time by groups control, treatment
 T = 2.4389, p-value = 0.01863
 alternative hypothesis: true mu is greater than 0 
 
+> ### two-sided exact (0.0373)
+> wilcox_test(time ~ group, data = rotarod, distribution = "exact")
+
+	Exact Wilcoxon Mann-Whitney Rank Sum Test
+
+data:  time by groups control, treatment 
+T = 2.4389, p-value = 0.03727
+alternative hypothesis: true mu is not equal to 0 
+
+> ### two-sided asymptotical (0.0147)
 > wilcox_test(time ~ group, data = rotarod)
 
 	Asymptotical Wilcoxon Mann-Whitney Rank Sum Test
@@ -1215,22 +1255,34 @@ T = 2.4389, p-value = 0.01473
 alternative hypothesis: true mu is not equal to 0 
 
 > 
-> # Permutation test with data scores
-> oneway_test(time ~ group, data=rotarod, distribution = "exact")
+> 
+> 
+> 
+> cleanEx(); ..nameEx <- "sphase"
+> 
+> ### * sphase
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sphase
+> ### Title: S-phase Fraction of Tumor Cells
+> ### Aliases: sphase
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> 
+> data(sphase, package = "coin")
+> 
+> maxstat_test(Surv(RFS, event) ~ SPF, data = sphase)
 
-	Exact 2-Sample Permutation Test
+	Asymptotical Maxstat Test
 
-data:  time by groups control, treatment 
-T = 2.1394, p-value = 0.03727
-alternative hypothesis: true mu is not equal to 0 
-
-> oneway_test(time ~ group, data=rotarod)
-
-	Asymptotical 2-Sample Permutation Test
-
-data:  time by groups control, treatment 
-T = 2.1394, p-value = 0.0324
-alternative hypothesis: true mu is not equal to 0 
+data:  y by SPF 
+T = 2.4033, p-value = 0.1559
+sample estimates:
+SPF 
+107 
 
 > 
 > 
@@ -1329,7 +1381,7 @@ coverstorey
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", env = .CheckExEnv),"\n")
-Time elapsed:  19.2 0.15 19.81 0 0 
+Time elapsed:  20.4 0.15 20.7 0 0 
 > grDevices::dev.off()
 null device 
           1 

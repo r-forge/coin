@@ -22,7 +22,7 @@
 }
 \arguments{
   \item{formula}{a formula of the form 
-    \code{y1 + y2 + ... + yp ~ x1 + x2 + ... xq | block} where the variables
+    \code{y1 + ... + yp ~ x1 + ... + xq | block} where the variables
     on the left and right hand side may be measured on arbitrary scales
     (including censored ones on the left hand side) and \code{block} is an 
     optional factor for stratification.}
@@ -46,26 +46,29 @@
     asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
   \item{xtrafo}{a function of transformations (see \code{\link{trafo}})
-    to be applied to the right hand side of
-    \code{formula} or \code{x@x} see below.}
+    to be applied to the variables on the right hand side of
+    \code{formula}, see below.}
   \item{ytrafo}{a function of transformations (see \code{\link{trafo}})
-    to be applied to the left hand side of
-    \code{formula} or \code{x@y} see below.}
+    to be applied to the variables on the left hand side of
+    \code{formula}, see below.}
   \item{scores}{a named list of scores to be attached to ordered factors. In
       case a variable is an unordered factor, it is coerced to
       \code{ordered} first.}
   \item{check}{a function to be applied to objects of class
-      \code{IndendenceTest} in order to check for specific forms.}
+      \code{IndendenceTest} in order to check for specific properties 
+      of the data.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
 
-  The null hypothesis of the independence between the left hand side and the
+  The null hypothesis of the independence between the variables on the 
+  left hand side and the variables on the 
   right hand side of \code{formula}, possibly stratified by \code{block}, is
-  tested. 
+  tested. The vector supplied via the \code{weights} argument is 
+  interpreted as observation counts.
 
   This function is the basic workhorse called by all other convenience
-  functions, mainly supplying transformations via the \code{xtrans} and
+  functions, mainly by supplying transformations via the \code{xtrans} and
   \code{ytrans} arguments.
 
   The \code{scores} argument leads to linear-by-linear association tests
@@ -105,7 +108,7 @@
 
 data(asat, package = "coin")
 
-### independence of bp and group via normal scores test
+### independence of asat and group via normal scores test
 independence_test(asat ~ group, data = asat,
 
     ### exact null distribution

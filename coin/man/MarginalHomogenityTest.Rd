@@ -23,8 +23,8 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
-  \item{object}{an object inheriting from class \code{SymmetryProblem} or a table 
-           with identical dimnames.}
+  \item{object}{an object inheriting from class \code{SymmetryProblem} or a 
+           \code{table} with identical \code{dimnames} attributes.}
   \item{distribution}{the null distribution of the test statistic
     can be approximated by its asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
@@ -38,7 +38,7 @@
 
   Scores must be a list of length one (row and column scores coincide). When
   scores are given or if \code{x} is ordered, the corresponding 
-  linear association test is computed (Agresti, 2002).
+  linear association test is computed (see Agresti, 2002).
 
 }
 \value{

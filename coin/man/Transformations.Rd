@@ -95,5 +95,8 @@ trafo(data.frame(x = x, y = y), numeric_trafo = normal_trafo)
 ### maximally selected statistics
 maxstat_trafo(rnorm(10))
 
+### apply transformation blockwise (e.g. for Friedman test)
+trafo(data.frame(y = 1:20), numeric_trafo = rank, block = gl(4, 5))
+
 }
 \keyword{manip}

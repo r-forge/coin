@@ -3,7 +3,8 @@
 \alias{ExpectCovarInfluence-class}
 
 \title{Class "ExpectCovarInfluence"}
-\description{  Conditional Expectation and Covariance of Influence Functions
+\description{  
+Conditional expectation and covariance of influence functions
 }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("ExpectCovarInfluence", ...)}.

@@ -43,7 +43,7 @@ cleanEx(); ..nameEx <- "ContingencyTests"
 flush(stderr()); flush(stdout())
 
 ### Name: ContingencyTests
-### Title: Independence in general I x K x J contingency tables
+### Title: Independence in General I x K x J Contingency Tables
 ### Aliases: chisq_test chisq_test.formula chisq_test.table
 ###   chisq_test.IndependenceProblem cmh_test.formula cmh_test.table
 ###   cmh_test.IndependenceProblem cmh_test lbl_test.formula lbl_test.table
@@ -98,7 +98,7 @@ flush(stderr()); flush(stdout())
 
 data(asat, package = "coin")
 
-### independence of bp and group via normal scores test
+### independence of asat and group via normal scores test
 independence_test(asat ~ group, data = asat,
 
     ### exact null distribution
@@ -177,7 +177,7 @@ wilcox_test(pd ~ age, data = water_transfer,
 ### Permutation test, asymptotic p-value
 oneway_test(pd ~ age, data = water_transfer)
 
-### approximate p-value (with 99
+### approximate p-value (with 99% confidence interval)
 pvalue(oneway_test(pd ~ age, data = water_transfer, 
                  distribution = "approx", B = 9999))
 ### exact p-value
@@ -433,7 +433,7 @@ flush(stderr()); flush(stdout())
 
 data(ocarcinoma, package = "coin")
 
-surv_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
+surv_test(Surv(time, event) ~ stadium, data = ocarcinoma, 
              distribution = "exact")
 
 
@@ -458,28 +458,29 @@ flush(stderr()); flush(stdout())
 ### Hollander & Wolfe (1999), Table 7.1, page 274
 ### Comparison of three methods ("round out", "narrow angle", and
 ###  "wide angle") for rounding first base. 
-RoundingTimes <- data.frame(times = c(5.40, 5.50, 5.55,
-    5.85, 5.70, 5.75,
-    5.20, 5.60, 5.50,
-    5.55, 5.50, 5.40,
-    5.90, 5.85, 5.70,
-    5.45, 5.55, 5.60,
-    5.40, 5.40, 5.35,
-    5.45, 5.50, 5.35,
-    5.25, 5.15, 5.00,
-    5.85, 5.80, 5.70,
-    5.25, 5.20, 5.10,
-    5.65, 5.55, 5.45,
-    5.60, 5.35, 5.45,
-    5.05, 5.00, 4.95,
-    5.50, 5.50, 5.40,
-    5.45, 5.55, 5.50,
-    5.55, 5.55, 5.35,
-    5.45, 5.50, 5.55,
-    5.50, 5.45, 5.25,
-    5.65, 5.60, 5.40,
-    5.70, 5.65, 5.55,
-    6.30, 6.30, 6.25),
+RoundingTimes <- data.frame(
+    times = c(5.40, 5.50, 5.55,
+              5.85, 5.70, 5.75,
+              5.20, 5.60, 5.50,
+              5.55, 5.50, 5.40,
+              5.90, 5.85, 5.70,
+              5.45, 5.55, 5.60,
+              5.40, 5.40, 5.35,
+              5.45, 5.50, 5.35,
+              5.25, 5.15, 5.00,
+              5.85, 5.80, 5.70,
+              5.25, 5.20, 5.10,
+              5.65, 5.55, 5.45,
+              5.60, 5.35, 5.45,
+              5.05, 5.00, 4.95,
+              5.50, 5.50, 5.40,
+              5.45, 5.55, 5.50,
+              5.55, 5.55, 5.35,
+              5.45, 5.50, 5.55,
+              5.50, 5.45, 5.25,
+              5.65, 5.60, 5.40,
+              5.70, 5.65, 5.55,
+              6.30, 6.30, 6.25),
     methods = factor(rep(c("Round Out", "Narrow Angle", "Wide Angle"), 22)),
     block = factor(rep(1:22, rep(3, 22))))
 
@@ -498,7 +499,7 @@ axis(2)
 ### Hollander & Wolfe, page 295
 if (require(multcomp)) {
 
-    ### all pair comparisons
+    ### all pairwise comparisons
     rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
          teststat = "maxtype",
          xtrafo = function(data)
@@ -568,6 +569,9 @@ trafo(data.frame(x = x, y = y), numeric_trafo = normal_trafo)
 ### maximally selected statistics
 maxstat_trafo(rnorm(10))
 
+### apply transformation blockwise (e.g. for Friedman test)
+trafo(data.frame(y = 1:20), numeric_trafo = rank, block = gl(4, 5))
+
 
 
 
@@ -587,13 +591,14 @@ flush(stderr()); flush(stdout())
 
 data(asat, package = "coin")
 
-# proof-of-safety based on ratio of medians
+### proof-of-safety based on ratio of medians
 pos <- wilcox_test(I(log(asat)) ~ group, data = asat, alternative = "less", 
                    conf.int = TRUE, distribution = "exact")
 
-# one-sided confidence set. Safety cannot be concluded since the effect of
-# the compound exceeds 20% of the control median
+### one-sided confidence set. Safety cannot be concluded since the effect of
+### the compound exceeds 20% of the control median
 exp(confint(pos)$conf.int)
+
 
 
 
@@ -664,35 +669,35 @@ data(glioma, package = "coin")
 par(mfrow=c(1,2))
 
 ### Grade III glioma
-g3 <- subset(glioma, Histology == "Grade3")
+g3 <- subset(glioma, histology == "Grade3")
 
 ### Plot Kaplan-Meier curves
-plot(survfit(Surv(Survival, Cens) ~ Group, data=g3), 
+plot(survfit(Surv(time, event) ~ group, data=g3), 
      main="Grade III Glioma", lty=c(2,1), 
      legend.text=c("Control", "Treated"),
      legend.bty=1, ylab="Probability", 
      xlab="Survival Time in Month")
 
 ### logrank test
-surv_test(Surv(Survival, Cens) ~ Group, data = g3, 
+surv_test(Surv(time, event) ~ group, data = g3, 
              distribution = "exact")
 
 ### Grade IV glioma
-gbm <- subset(glioma, Histology == "GBM")
+gbm <- subset(glioma, histology == "GBM")
 
 ### Plot Kaplan-Meier curves
-plot(survfit(Surv(Survival, Cens) ~ Group, data=gbm), 
+plot(survfit(Surv(time, event) ~ group, data=gbm), 
      main="Grade IV Glioma", lty=c(2,1), 
      legend.text=c("Control", "Treated"),
      legend.bty=1, legend.pos=1, ylab="Probability", 
      xlab="Survival Time in Month")
    
 ### logrank test
-surv_test(Surv(Survival, Cens) ~ Group, data = gbm, 
+surv_test(Surv(time, event) ~ group, data = gbm, 
              distribution = "exact")
 
 ### stratified logrank test
-surv_test(Surv(Survival, Cens) ~ Group | Histology, data = glioma,
+surv_test(Surv(time, event) ~ group | histology, data = glioma,
              distribution = "approx", B = 10000)
 
 
@@ -706,7 +711,7 @@ cleanEx(); ..nameEx <- "jobsatisfaction"
 flush(stderr()); flush(stdout())
 
 ### Name: jobsatisfaction
-### Title: Income and Jobsatisfaction
+### Title: Income and Job Satisfaction
 ### Aliases: jobsatisfaction
 ### Keywords: datasets
 
@@ -768,7 +773,7 @@ flush(stderr()); flush(stdout())
 data(ocarcinoma, package = "coin")
 
 ### logrank test with exact two-sided p-value
-lrt <- surv_test(Surv(time, cens) ~ stadium, data = ocarcinoma,
+lrt <- surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
                     distribution = "exact")
 
 ### the test statistic
@@ -826,14 +831,36 @@ flush(stderr()); flush(stdout())
 
 data(rotarod, package = "coin")
 
-# Wilcoxon-Mann-Whitney Rank Sum Test
+### Wilcoxon-Mann-Whitney Rank Sum Test
+
+### one-sided exact (0.0186)
 wilcox_test(time ~ group, data = rotarod, 
     alternative = "greater", distribution = "exact")
+### two-sided exact (0.0373)
+wilcox_test(time ~ group, data = rotarod, distribution = "exact")
+### two-sided asymptotical (0.0147)
 wilcox_test(time ~ group, data = rotarod)
 
-# Permutation test with data scores
-oneway_test(time ~ group, data=rotarod, distribution = "exact")
-oneway_test(time ~ group, data=rotarod)
+
+
+
+cleanEx(); ..nameEx <- "sphase"
+
+### * sphase
+
+flush(stderr()); flush(stdout())
+
+### Name: sphase
+### Title: S-phase Fraction of Tumor Cells
+### Aliases: sphase
+### Keywords: datasets
+
+### ** Examples
+
+
+data(sphase, package = "coin")
+
+maxstat_test(Surv(RFS, event) ~ SPF, data = sphase)
 
 
 

@@ -9,7 +9,7 @@ inference procedures, commonly known as \emph{permutation tests},
 theoretically derived by Strasser & Weber (1999). The conditional
 expectation and covariance for a broad class of multivariate linear
 statistics as well as the corresponding multivariate limiting distribution
-was derived by Strasser & Weber (1999) which can be utilized to construct
+was derived by Strasser & Weber (1999). The results can be utilized to construct
 tests for independence between two sets of variables. 
 
 Beside a general implementation of the abstract framework the package offers

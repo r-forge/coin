@@ -11,9 +11,9 @@
 \alias{lbl_test.table}
 \alias{lbl_test.IndependenceProblem}
 \alias{lbl_test}
-\title{ Independence in general I x K x J contingency tables }
+\title{ Independence in General I x K x J Contingency Tables }
 \description{
-    Testing the Independence of Two Possibly Ordered Factors.
+    Testing the independence of two possibly ordered factors.
 }
 \usage{
 
@@ -56,20 +56,25 @@
 \details{
 
   The null hypothesis of the independence of \code{y} and \code{x} in each
-  stratum given by \code{block} is tested.
+  stratum given by \code{block} is tested. \code{chisq_test} implements
+  Pearson's chi-squared test, \code{cmh_test} the Cochran-Mantel-Haenzsel
+  test and \code{lbl_test} the linear-by-linear association test for ordered
+  data.
 
   In case either \code{x} or \code{y} are ordered factors, the
-  corresponding linear-by-linear association test is performed.
+  corresponding linear-by-linear association test is performed by all the
+  procedures.
   \code{lbl_test} coerces factors to class \code{ordered} under any
   circumstances. The default scores are \code{1:nlevels(x)} and 
   \code{1:nlevels(y)}, respectively. The default scores can be changed 
   via the \code{scores} argument (see \code{\link{independence_test}}), 
-  \code{scores = list(y = 1:k, x = c(1, 4, 6))} first triggers a coercion
+  for example
+  \code{scores = list(y = 1:3, x = c(1, 4, 6))} first triggers a coercion
   to class \code{ordered} of both variables and attaches the list elements
-  as scores. The length of a score vector needs to be equal the number of
-  levels of the factor of interest.
+  as scores to the corresponding factors. The length of a score vector needs 
+  to be equal the number of levels of the factor of interest.
 
-  The authoratative source for details on the documented test procedures
+  The authoritative source for details on the documented test procedures
   is Agresti (2002).
 
 }

@@ -15,14 +15,12 @@ Objects can be created by calls of the form \code{new("IndependenceProblem", x, 
     \item{\code{x}:}{Object of class \code{"data.frame"}.}
     \item{\code{y}:}{Object of class \code{"data.frame"}.}
     \item{\code{weights}:}{Object of class \code{"numeric"}, however, 
-      integer values are expected (and checked).}
+      integer values greater or equal zero are expected (and checked).}
     \item{\code{block}:}{Object of class \code{"factor"}.}
   }
 }
 \section{Methods}{
   \describe{
-    \item{coerce}{\code{signature(from = "IndependenceTestProblem", to = "IndependenceProblem")}: ... }
-    \item{coerce<-}{\code{signature(from = "IndependenceTestProblem", to = "IndependenceProblem")}: ... }
     \item{initialize}{\code{signature(.Object = "IndependenceProblem")}: ... }
   }
 }

@@ -14,7 +14,7 @@
 }
 \details{
 The 24 rats received a fixed oral dose of a centrally acting muscle relaxant
-(treatment) or a saline solvent (control). They were placed on a rotating
+(\code{treatment}) or a saline solvent (\code{control}). They were placed on a rotating
 cylinder and the length of time each rat remains on the cylinder is
 measured, up to a maximum of 300 seconds.
 The rats were randomly assigned to the control and treatment group.
@@ -40,14 +40,15 @@ p-value (corrected for ties) is reported as 0.0147.
 
 data(rotarod, package = "coin")
 
-# Wilcoxon-Mann-Whitney Rank Sum Test
+### Wilcoxon-Mann-Whitney Rank Sum Test
+
+### one-sided exact (0.0186)
 wilcox_test(time ~ group, data = rotarod, 
     alternative = "greater", distribution = "exact")
+### two-sided exact (0.0373)
+wilcox_test(time ~ group, data = rotarod, distribution = "exact")
+### two-sided asymptotical (0.0147)
 wilcox_test(time ~ group, data = rotarod)
-
-# Permutation test with data scores
-oneway_test(time ~ group, data=rotarod, distribution = "exact")
-oneway_test(time ~ group, data=rotarod)
 
 }
 \keyword{datasets}

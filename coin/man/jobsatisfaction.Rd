@@ -1,7 +1,7 @@
 \name{jobsatisfaction}
 \alias{jobsatisfaction}
 \docType{data}
-\title{ Income and Jobsatisfaction }
+\title{ Income and Job Satisfaction }
 \description{
   Income and job satisfaction by gender.
 }

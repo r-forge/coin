@@ -20,10 +20,9 @@
 }
 \arguments{
   \item{formula}{a formula of the form 
-    \code{y1 + y2 + ... + yp ~ x1 + x2 + ... xq | block} where the variables
+    \code{y1 + ... + yp ~ x1 + ... + xq | block} where the variables
     on the left and right hand side may be measured on arbitrary scales
-    (including censored ones) and \code{block} is an optional factor for 
-    stratification.}
+    and \code{block} is an optional factor for stratification.}
   \item{data}{an optional data frame containing the variables in the
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
@@ -31,19 +30,22 @@
   \item{object}{an object inheriting from class \code{SymmetryProblem} or an
            object of class \code{table}.}
   \item{teststat}{the type of test statistic to be applied: either a
-    standardized scalar test statistic (\code{scalar}), or a 
-    maximum type \code{maxtype} or a quadratic form \code{quadform}.}
+    standardized scalar test statistic (\code{scalar}), or a
+    maximum type statistic (\code{maxtype}) or a quadratic form
+    (\code{quadform}).}
   \item{alternative}{the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   
   \item{distribution}{the null distribution of the test statistic
-    can be computed (\code{exact}) or can be approximated by its
-    \code{asymptotic} distribution (\code{asympt}) 
+    can be computed \code{exact}ly or can be approximated by its
+    asymptotic distribution (\code{asympt})
     or via Monte-Carlo resampling (\code{approx}).}
-  \item{xtrafo}{a function of transformations to be applied to the right hand side of
-    \code{formula} or \code{x@x} see below.}
-  \item{ytrafo}{a function of transformations to be applied to the left hand side of
-    \code{formula} or \code{x@y} see below.}
+  \item{xtrafo}{a function of transformations (see \code{\link{trafo}})
+    to be applied to the variables on the right hand side of
+    \code{formula}, see below.}
+  \item{ytrafo}{a function of transformations (see \code{\link{trafo}})
+    to be applied to the variables on the left hand side of
+    \code{formula}, see below.}
   \item{scores}{a named list of scores to be attached to ordered factors. In
       case a variable is an unordered factor, it is coerced to
       \code{ordered} first.}
@@ -53,6 +55,8 @@
 }
 \details{
 
+  This function handles symmetry problems where each block corresponds to
+  exactly one observation with repeated measurements.
 
 }
 \value{

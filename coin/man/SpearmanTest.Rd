@@ -36,7 +36,8 @@
 \details{
 
   The null hypothesis of the independence of \code{y} and \code{x} 
-  is tested. 
+  is tested. Note that \code{\link{cor.test}} uses a different test
+  statistic.
 
 }
 \value{

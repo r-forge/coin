@@ -10,14 +10,14 @@
 \format{
   A data frame with 37 observations on the following 7 variables.
   \describe{
-    \item{No.}{patient number.}
-    \item{Age}{patients ages in years.}
-    \item{Sex}{a factor with levels \code{F}(emale) and \code{M}(ale). }
-    \item{Histology}{a factor with levels \code{GBM} (grade IV) and 
+    \item{no.}{patient number.}
+    \item{age}{patients ages in years.}
+    \item{sex}{a factor with levels \code{F}(emale) and \code{M}(ale). }
+    \item{histology}{a factor with levels \code{GBM} (grade IV) and 
                      \code{Grade3} (grade III)}
-    \item{Survival}{survival times in month.}
-    \item{Cens}{censoring indicator: \code{0} censored and \code{1} dead.}
-    \item{Group}{a factor with levels \code{Control} and \code{RIT}.}
+    \item{time}{survival times in month.}
+    \item{event}{censoring indicator: \code{FALSE} censored and \code{TRUE} dead.}
+    \item{group}{a factor with levels \code{Control} and \code{RIT}.}
   }
 }
 \details{
@@ -42,37 +42,36 @@ data(glioma, package = "coin")
 par(mfrow=c(1,2))
 
 ### Grade III glioma
-g3 <- subset(glioma, Histology == "Grade3")
+g3 <- subset(glioma, histology == "Grade3")
 
 ### Plot Kaplan-Meier curves
-plot(survfit(Surv(Survival, Cens) ~ Group, data=g3), 
+plot(survfit(Surv(time, event) ~ group, data=g3), 
      main="Grade III Glioma", lty=c(2,1), 
      legend.text=c("Control", "Treated"),
      legend.bty=1, ylab="Probability", 
      xlab="Survival Time in Month")
 
 ### logrank test
-surv_test(Surv(Survival, Cens) ~ Group, data = g3, 
+surv_test(Surv(time, event) ~ group, data = g3, 
              distribution = "exact")
 
 ### Grade IV glioma
-gbm <- subset(glioma, Histology == "GBM")
+gbm <- subset(glioma, histology == "GBM")
 
 ### Plot Kaplan-Meier curves
-plot(survfit(Surv(Survival, Cens) ~ Group, data=gbm), 
+plot(survfit(Surv(time, event) ~ group, data=gbm), 
      main="Grade IV Glioma", lty=c(2,1), 
      legend.text=c("Control", "Treated"),
      legend.bty=1, legend.pos=1, ylab="Probability", 
      xlab="Survival Time in Month")
    
 ### logrank test
-surv_test(Surv(Survival, Cens) ~ Group, data = gbm, 
+surv_test(Surv(time, event) ~ group, data = gbm, 
              distribution = "exact")
 
 ### stratified logrank test
-surv_test(Surv(Survival, Cens) ~ Group | Histology, data = glioma,
+surv_test(Surv(time, event) ~ group | histology, data = glioma,
              distribution = "approx", B = 10000)
 
-}
 }
 \keyword{datasets}

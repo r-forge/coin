@@ -11,7 +11,9 @@
 \method{maxstat_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
 \method{maxstat_test}{IndependenceProblem}(object, 
-    distribution = c("asympt", "approx", ...)
+    distribution = c("asympt", "approx"), 
+    teststat = c("maxtype", "quadtype"),
+    minprob = 0.1, maxprob = 0.9, ...)
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x1 + ... + xp | block} where \code{y}
@@ -28,12 +30,19 @@
   \item{distribution}{the null distribution of the test statistic
     can be approximated by its asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
+  \item{teststat}{the type of test statistic to be applied: a
+    maximum type statistic (\code{maxtype}) or a quadratic form
+    (\code{quadform}).}
+  \item{minprob}{consider only cutpoints greater than 
+    the \code{minprob} * 100 \% quantile of \code{x}.}
+  \item{maxprob}{consider only cutpoints smaller than 
+    the \code{maxprob} * 100 \% quantile of \code{x}.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
 
   The null hypothesis of independence of all covariates to the response
-  \code{y} against cutpoint alternatives is tested.
+  \code{y} against simple cutpoint alternatives is tested.
 
 }
 \value{

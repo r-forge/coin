@@ -3,7 +3,7 @@
 \alias{ExpectCovar-class}
 
 \title{Class "ExpectCovar"}
-\description{  Conditional Expectation and Covariance of Linear Statistics }
+\description{  Conditional expectation and covariance of linear statistics }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("ExpectCovar", ...)}.
 Normally, this class is used internally only.

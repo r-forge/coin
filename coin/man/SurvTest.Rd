@@ -55,7 +55,7 @@
 
 data(ocarcinoma, package = "coin")
 
-surv_test(Surv(time, cens) ~ stadium, data = ocarcinoma, 
+surv_test(Surv(time, event) ~ stadium, data = ocarcinoma, 
              distribution = "exact")
 
 }

@@ -21,7 +21,7 @@ statistic(object, type = c("test", "linear", "standardized"), ...)
     \code{\link{IndependenceTest-class}}.}
   \item{type}{either \code{test} for test statistic, \code{linear}
     for the unstandardized linear statistic or \code{standardized}
-    for the standardized one.}
+    for the standardized linear statistic.}
   \item{\dots}{further arguments (currently ignored).}
 }
 \section{Methods}{

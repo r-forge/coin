@@ -97,18 +97,20 @@
 
   The asymptotic null distribution is computed by default for all
   procedures. Exact p-values may be computed for the two-sample problems and
-  can be approximated via Monte-Carlo for all procedures. Exact p-values
+  can be approximated via Monte-Carlo resampling 
+  for all procedures. Exact p-values
   are computed either by the shift algorithm (Streitberg & Roehmel, 1986,
   1987) or by the split-up algorithm (van de Wiel, 2001).
 
   The linear rank tests for two samples (\code{wilcox_test},
   \code{normal_test} and \code{median_test}) can be used to test the 
-  two-sided hypothesis \eqn{Y_1 - Y_2 = 0}, where \eqn{Y_i} is the median
+  two-sided hypothesis \eqn{H_0: Y_1 - Y_2 = 0}, where \eqn{Y_i} is the median
   of the responses in the ith group. Confidence intervals for the difference 
   in location are available for the rank-based procedures and are computed 
   according to Bauer (1972). In case \code{alternative = "less"}, the
-  null hypothesis \eqn{Y_1 - Y_2 \ge 0} is tested and 
-  \code{alternative = "greater"} corresponds to \eqn{Y_1 - Y_2 \le 0}.
+  null hypothesis \eqn{H_0: Y_1 - Y_2 \ge 0} is tested and 
+  \code{alternative = "greater"} corresponds to a null hypothesis 
+  \eqn{H_0: Y_1 - Y_2 \le 0}.
 
   In case \code{x} is an ordered factor, \code{kruskal_test} computes the
   linear-by-linear association test for ordered alternatives.
@@ -194,7 +196,7 @@ wilcox_test(pd ~ age, data = water_transfer,
 ### Permutation test, asymptotic p-value
 oneway_test(pd ~ age, data = water_transfer)
 
-### approximate p-value (with 99% confidence interval)
+### approximate p-value (with 99\% confidence interval)
 pvalue(oneway_test(pd ~ age, data = water_transfer, 
                  distribution = "approx", B = 9999))
 ### exact p-value
