@@ -837,7 +837,8 @@ maxstat_test.formula <- function(formula, data = list(), subset = NULL,
 
 maxstat_test.IndependenceProblem <- function(object, 
     distribution = c("asympt", "approx"), 
-    teststat = c("maxtype", "quadtype"), ...) {
+    teststat = c("maxtype", "quadtype"), 
+    minprob = 0.1, maxprob = 0.9, ...) {
 
     check <- function(object) {
         if (!is_ordered_x(object))
@@ -849,7 +850,8 @@ maxstat_test.IndependenceProblem <- function(object,
     distribution <- match.arg(distribution)
     teststat <- match.arg(teststat)
 
-    xtrafo <- function(data) trafo(data, numeric_trafo = maxstat_trafo)
+    mm <- function(x) maxstat_trafo(x, minprob = minprob, maxprob = maxprob)
+    xtrafo <- function(data) trafo(data, numeric_trafo = mm)
 
     RET <- independence_test(object, teststat = teststat,
         distribution = distribution, xtrafo = xtrafo, check = check, ...)
