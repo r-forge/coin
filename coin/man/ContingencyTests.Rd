@@ -19,20 +19,20 @@
 
 \method{cmh_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{cmh_test}{table}(x, distribution = c("asympt", "approx"), ...)
-\method{cmh_test}{IndependenceProblem}(x, 
+\method{cmh_test}{table}(object, distribution = c("asympt", "approx"), ...)
+\method{cmh_test}{IndependenceProblem}(object, 
     distribution = c("asympt", "approx"), ...)
 
 \method{chisq_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{chisq_test}{table}(x, distribution = c("asympt", "approx"), ...)
-\method{chisq_test}{IndependenceProblem}(x, 
+\method{chisq_test}{table}(object, distribution = c("asympt", "approx"), ...)
+\method{chisq_test}{IndependenceProblem}(object, 
     distribution = c("asympt", "approx"), ...)
 
 \method{lbl_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{lbl_test}{table}(x, distribution = c("asympt", "approx"), ...)
-\method{lbl_test}{IndependenceProblem}(x, 
+\method{lbl_test}{table}(object, distribution = c("asympt", "approx"), ...)
+\method{lbl_test}{IndependenceProblem}(object, 
     distribution = c("asympt", "approx"), ...)
 
 }
@@ -46,7 +46,7 @@
     to be used.}
   \item{weights}{an optional formula of the form \code{~ w} defining
     integer valued weights for the observations.}
-  \item{x}{an object inheriting from class \code{IndependenceProblem} or an
+  \item{object}{an object inheriting from class \code{IndependenceProblem} or an
     object of class \code{table}.}
   \item{distribution}{the null distribution of the test statistic
     can be approximated by its asymptotic distribution (\code{asympt}) 

@@ -23,20 +23,20 @@
 
 \method{oneway_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{oneway_test}{IndependenceProblem}(x, 
+\method{oneway_test}{IndependenceProblem}(object, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"), ...)
 
 \method{wilcox_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{wilcox_test}{IndependenceProblem}(x, 
+\method{wilcox_test}{IndependenceProblem}(object, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"),
     conf.int = FALSE, conf.level = 0.95, ...)
 
 \method{normal_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{normal_test}{IndependenceProblem}(x, 
+\method{normal_test}{IndependenceProblem}(object, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"),
     ties.method = c("mid-ranks", "average-scores"),
@@ -44,14 +44,14 @@
 
 \method{median_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{median_test}{IndependenceProblem}(x, 
+\method{median_test}{IndependenceProblem}(object, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"),
     conf.int = FALSE, conf.level = 0.95, ...)
 
 \method{kruskal_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{kruskal_test}{IndependenceProblem}(x, 
+\method{kruskal_test}{IndependenceProblem}(object, 
     distribution = c("asympt", "approx"), ...)
 
 }
@@ -66,7 +66,7 @@
     to be used.}
   \item{weights}{an optional formula of the form \code{~ w} defining
       integer valued weights for the observations.}
-  \item{x}{an object of class \code{IndependenceProblem}.}
+  \item{object}{an object of class \code{IndependenceProblem}.}
   \item{alternative}{the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   

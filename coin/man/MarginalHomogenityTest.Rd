@@ -9,8 +9,8 @@
 }
 \usage{
 \method{mh_test}{formula}(formula, data, subset = NULL, \dots)
-\method{mh_test}{table}(x, ...)
-\method{mh_test}{SymmetryProblem}(x, 
+\method{mh_test}{table}(object, ...)
+\method{mh_test}{SymmetryProblem}(object, 
     distribution = c("asympt", "approx"), ...) 
 }
 \arguments{
@@ -23,7 +23,7 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
-  \item{x}{an object inheriting from class \code{SymmetryProblem} or a table 
+  \item{object}{an object inheriting from class \code{SymmetryProblem} or a table 
            with identical dimnames.}
   \item{distribution}{the null distribution of the test statistic
     can be approximated by its asymptotic distribution (\code{asympt}) 

@@ -9,7 +9,7 @@
 \usage{
 \method{spearman_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{spearman_test}{IndependenceProblem}(x,
+\method{spearman_test}{IndependenceProblem}(object,
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx"), ...) 
 }
@@ -23,7 +23,7 @@
     to be used.}
   \item{weights}{an optional formula of the form \code{~ w} defining
       integer valued weights for the observations.}
-  \item{x}{an object of class \code{IndependenceProblem}.}
+  \item{object}{an object of class \code{IndependenceProblem}.}
   \item{alternative}{the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   

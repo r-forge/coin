@@ -11,13 +11,13 @@
 \usage{
 \method{independence_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{independence_test}{IndependenceProblem}(x, 
+\method{independence_test}{IndependenceProblem}(object, 
     teststat = c("maxtype", "quadtype", "scalar"),
     distribution = c("asympt", "approx", "exact"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL, 
     check = NULL, ...)
-\method{independence_test}{table}(x, 
+\method{independence_test}{table}(object, 
     distribution = c("asympt", "approx"), ...)
 }
 \arguments{
@@ -32,7 +32,7 @@
     to be used.}
   \item{weights}{an optional formula of the form \code{~ w} defining
     integer valued weights for the observations.}
-  \item{x}{an object inheriting from class \code{IndependenceProblem} or an
+  \item{object}{an object inheriting from class \code{IndependenceProblem} or an
            object of class \code{table}.}
   \item{teststat}{the type of test statistic to be applied: either a
     standardized scalar test statistic (\code{scalar}), or a 

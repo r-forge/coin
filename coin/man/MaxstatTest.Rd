@@ -10,7 +10,7 @@
 \usage{
 \method{maxstat_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
-\method{maxstat_test}{IndependenceProblem}(x, 
+\method{maxstat_test}{IndependenceProblem}(object, 
     distribution = c("asympt", "approx", ...)
 }
 \arguments{
@@ -24,7 +24,7 @@
     to be used.}
   \item{weights}{an optional formula of the form \code{~ w} defining
     integer valued weights for the observations.}   
-  \item{x}{an object inheriting from class \code{IndependenceProblem}.}
+  \item{object}{an object inheriting from class \code{IndependenceProblem}.}
   \item{distribution}{the null distribution of the test statistic
     can be approximated by its asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}

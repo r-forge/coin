@@ -10,13 +10,13 @@
 }
 \usage{
 \method{symmetry_test}{formula}(formula, data, subset = NULL, \dots)
-\method{symmetry_test}{SymmetryProblem}(x, 
+\method{symmetry_test}{SymmetryProblem}(object, 
     teststat = c("maxtype", "quadtype", "scalar"),
     distribution = c("asympt", "approx", "exact"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL, 
     check = NULL, ...)
-\method{symmetry_test}{table}(x, ...)
+\method{symmetry_test}{table}(object, ...)
 }
 \arguments{
   \item{formula}{a formula of the form 
@@ -28,7 +28,7 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
-  \item{x}{an object inheriting from class \code{SymmetryProblem} or an
+  \item{object}{an object inheriting from class \code{SymmetryProblem} or an
            object of class \code{table}.}
   \item{teststat}{the type of test statistic to be applied: either a
     standardized scalar test statistic (\code{scalar}), or a 
