@@ -1,6 +1,47 @@
 
-### a generic function for classical (and not so classical) test procedures
-generic_independence_test <- function(ip, 
+### a generic test procedure for classical (and not so classical) tests
+independence_test <- function(x, ...) UseMethod("independence_test")
+
+independence_test.formula <- function(formula, data = list(), subset = NULL, 
+    ...) {
+
+    d <- formula2data(formula, data, subset, ...)
+    x <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl)
+    RET <- do.call("independence_test", c(list(x = x), list(...)))
+    return(RET)
+
+}
+
+independence_test.table <- function(x, distribution = c("asympt", "approx"), ...) {
+
+    distribution <- match.arg(distribution)
+    ### <FIXME> approx must be able to deal with weights </FIXME>
+    if (distribution == "asympt") {
+        df <- as.data.frame(x)
+        if (ncol(df) == 3)
+            x <- new("IndependenceProblem", x = df[1], y = df[2], block = NULL, 
+                     weights = df[["Freq"]])
+        if (ncol(df) == 4) {
+            attr(df[[3]], "blockname") <- colnames(df)[3]
+            x <- new("IndependenceProblem", x = df[1], y = df[2], block = df[[3]], 
+                     weights = df[["Freq"]])
+        }
+    } else {
+        x <- table2df(x)
+        if (ncol(x) == 3) {
+            attr(x[[3]], "blockname") <- colnames(x)[3]
+            x <- new("IndependenceProblem", x = x[1], y = x[2], block = x[[3]])
+        } else {
+            x <- new("IndependenceProblem", x = x[1], y = x[2], block = NULL) 
+        }
+    }
+    ### </FIXME>
+    RET <- do.call("independence_test", c(list(x = x, distribution = distribution), 
+                   list(...)))
+    return(RET)
+}
+
+independence_test.IndependenceProblem <- function(x,
     teststat = c("maxtype", "quadtype", "scalar"),
     distribution = c("asympt", "approx", "exact"), 
     alternative = c("two.sided", "less", "greater"), 
@@ -11,7 +52,7 @@ generic_independence_test <- function(ip,
     distribution <- match.arg(distribution) 
 
     ### transform data if requested and setup a test problem
-    itp <- new("IndependenceTestProblem", ip, xtrafo = xtrafo, 
+    itp <- new("IndependenceTestProblem", x, xtrafo = xtrafo, 
                ytrafo = ytrafo, ...)
 
     if (!is.null(check)) {
@@ -108,7 +149,7 @@ wilcox_test.IndependenceProblem <- function(x,
     alternative <- match.arg(alternative)
     distribution <- match.arg(distribution) 
 
-    RET <- generic_independence_test(x, teststat = "scalar", 
+    RET <- independence_test(x, teststat = "scalar", 
         alternative = alternative, distribution = distribution, 
         ytrafo = function(data) trafo(data, numeric_trafo = rank), 
         check = check, ...)
@@ -153,7 +194,7 @@ normal_test.IndependenceProblem <- function(x,
     alternative <- match.arg(alternative)
     distribution <- match.arg(distribution) 
 
-    RET <- generic_independence_test(x, teststat = "scalar", 
+    RET <- independence_test(x, teststat = "scalar", 
         alternative = alternative, distribution = distribution, 
         ytrafo = function(data) trafo(data, numeric_trafo = normal_trafo), 
         check = check, ...)
@@ -198,7 +239,7 @@ median_test.IndependenceProblem <- function(x,
     alternative <- match.arg(alternative)
     distribution <- match.arg(distribution) 
 
-    RET <- generic_independence_test(x, teststat = "scalar", 
+    RET <- independence_test(x, teststat = "scalar", 
         alternative = alternative, distribution = distribution, 
         ytrafo = function(data) trafo(data, numeric_trafo = median_trafo), 
         check = check, ...)
@@ -243,7 +284,7 @@ ansari_test.IndependenceProblem <- function(x,
     alternative <- match.arg(alternative)
     distribution <- match.arg(distribution)
 
-    RET <- generic_independence_test(x, teststat = "scalar",
+    RET <- independence_test(x, teststat = "scalar",
         alternative = alternative, distribution = distribution,
         ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
         check = check, ...)
@@ -291,7 +332,7 @@ logrank_test.IndependenceProblem <- function(x,
     scalar <- FALSE
     if (is.factor(x@x[[1]])) scalar <- nlevels(x@x[[1]]) == 2
 
-    RET <- generic_independence_test(x, 
+    RET <- independence_test(x, 
         teststat = ifelse(scalar, "scalar", "quadtype"), 
         distribution = distribution, check = check, ...)
  
@@ -326,7 +367,7 @@ kruskal_test.IndependenceProblem <- function(x,
  
     distribution <- match.arg(distribution)
 
-    RET <- generic_independence_test(x, 
+    RET <- independence_test(x, 
         distribution = distribution, teststat = "quadtype",
         ytrafo = function(data) trafo(data, numeric_trafo = rank), 
         check = check, ...)
@@ -362,7 +403,7 @@ fligner_test.IndependenceProblem <- function(x,
     ### eliminate location differences (see `stats/R/fligner.test')
     x@y[[1]] <- x@y[[1]] - tapply(x@y[[1]], x@x[[1]], median)[x@x[[1]]]
 
-    RET <- generic_independence_test(x,  
+    RET <- independence_test(x,  
         distribution = distribution, teststat = "quadtype",
         ytrafo = function(data) trafo(data, numeric_trafo = fligner_trafo), 
         check = check, ...)
@@ -397,7 +438,7 @@ spearman_test.IndependenceProblem <- function(x,
     alternative <- match.arg(alternative)
     distribution <- match.arg(distribution) 
 
-    RET <- generic_independence_test(x, 
+    RET <- independence_test(x, 
         teststat = "scalar", alternative = alternative, 
         distribution = distribution, 
         xtrafo = function(data) trafo(data, numeric_trafo = rank),
@@ -462,7 +503,7 @@ cmh_test.IndependenceProblem <- function(x,
 
     distribution <- match.arg(distribution)
 
-    RET <- generic_independence_test(x, 
+    RET <- independence_test(x, 
         teststat = "quadtype", distribution = distribution, check = check, 
         ...)
 
@@ -526,7 +567,7 @@ chisq_test.IndependenceProblem <- function(x,
 
     distribution <- match.arg(distribution)
 
-    RET <- generic_independence_test(x, 
+    RET <- independence_test(x, 
         teststat = "quadtype", distribution = distribution, check = check, ...)
 
     ### use the classical chisq statistic based on Pearson 
@@ -611,7 +652,7 @@ lbl_test.IndependenceProblem <- function(x, xscores = NULL,
 
     distribution <- match.arg(distribution)
 
-    RET <- generic_independence_test(x, 
+    RET <- independence_test(x, 
         teststat = "quadtype", distribution = distribution, check = check, ...)
 
     RET@method <- paste("Linear-by-Linear Association Test")
@@ -637,12 +678,20 @@ perm_test.IndependenceProblem <- function(x,
     alternative <- match.arg(alternative)
     distribution <- match.arg(distribution) 
 
-    RET <- generic_independence_test(x, 
-        alternative = alternative, distribution = distribution, ...)
+    check <- function(x) {
+        if (!(is_Ksample(x) && is_numeric_y(x)))
+            stop(sQuote("x"), " does not represent a K sample problem")
+        return(TRUE)
+    }
+
+    RET <- independence_test(x, 
+        alternative = alternative, distribution = distribution, 
+        check = check, ...)
 
     if (is_scalar(RET@statistic))
         RET@nullvalue <- 0
-    RET@method <- paste("Permutation Test")
+    RET@method <- paste(ifelse(is_scalar(RET@statistic), "2-", "K-"), 
+                        paste("Sample Permutation Test"), sep = "")
     return(RET)
 }
 
@@ -683,7 +732,7 @@ contrast_test.IndependenceProblem <- function(x,
 
     xtrafo <- function(data) trafo(data) %*% cmatrix
 
-    RET <- generic_independence_test(x, teststat = "maxtype",
+    RET <- independence_test(x, teststat = "maxtype",
         distribution = distribution, xtrafo = xtrafo, ...)
     RET@method <- paste("Contrast Test")
     
@@ -716,7 +765,7 @@ maxstat_test.IndependenceProblem <- function(x,
 
     xtrafo <- function(data) trafo(data, numeric_trafo = maxstat_trafo)
 
-    RET <- generic_independence_test(x, teststat = "maxtype",
+    RET <- independence_test(x, teststat = "maxtype",
         distribution = distribution, xtrafo = xtrafo, check = check, ...)
 
     wm <- which.max(apply(abs(statistic(RET, "standardized")), 1, max))
@@ -755,7 +804,7 @@ friedman_test.SymmetryProblem <- function(x,
 
     distribution <- match.arg(distribution)
 
-    RET <- generic_independence_test(x, 
+    RET <- independence_test(x, 
         distribution = distribution, teststat = "quadtype", ...)
 
     RET@method <- paste("Friedman Test")
@@ -783,7 +832,7 @@ bowker_test.SymmetryProblem <- function(x,
 
     distribution <- match.arg(distribution)
 
-    RET <- generic_independence_test(x, 
+    RET <- independence_test(x, 
         distribution = distribution, teststat = "quadtype", ...)
 
     RET@method <- paste("Bowker Test")
@@ -826,7 +875,7 @@ wilcoxsign_test.IndependenceProblem <- function(x,
     ip <- new("IndependenceProblem", x = data.frame(x = xx), 
               y = data.frame(y = yy), block = block)
 
-    RET <- generic_independence_test(ip,
+    RET <- independence_test(ip,
         distribution = distribution, teststat = "scalar", ...)
 
     RET@method <- paste("Wilcoxon-Signed-Rank Test")
