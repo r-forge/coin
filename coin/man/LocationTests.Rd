@@ -26,6 +26,7 @@
 \method{normal_test}{IndependenceProblem}(x, 
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"),
+    ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...)
 \method{median_test}{formula}(formula, data, subset = NULL, 
     weights = NULL, \dots)
@@ -57,6 +58,9 @@
     can be computed (\code{exact}) or can be approximated by its
     asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
+  \item{ties.method}{two methods are available to adjust scores for ties.
+      Either the score generating function is applied to \code{mid-ranks}
+      or scores, based on random ranks, are averaged \code{average-scores}.}
   \item{conf.int}{a logical indicating whether a confidence interval
     for the difference in location should be computed.}
   \item{conf.level}{confidence level of the interval.}
@@ -83,6 +87,9 @@
 
   In case \code{x} is an ordered factor, \code{kruskal_test} computes the
   linear-by-linear association test for ordered alternatives.
+
+  For the adjustment of scores for tied values see Hajek, Sidak and Sen
+  (1999), page 131ff.
 
 }
 \value{
@@ -111,6 +118,9 @@
         David F. Bauer (1972), Constructing confidence sets using 
         rank statistics. \emph{Journal of the American Statistical Association}
         \bold{67}, 687--690.
+
+        Jaroslav Hajek, Zbynek Sidak & Pranab K. Sen (1999), 
+        \emph{Theory of Rank Tests}. San Diego, London: Academic Press.
 
 }
 \examples{

@@ -104,18 +104,7 @@ pci <- attr(pvalue(wtMC), "conf.int")
 stopifnot(pci[1] < pvalue(wtel) & pci[2] > pvalue(wtel))
 
 # deal with ties as described in StatXact 6 manual, page 329ff
-# Normal scores
-n_trafo <- function(x) {
-    r <- rank(x, ties = "random")
-    s <- qnorm(r/(length(x) + 1))
-    dup <- x[duplicated(x)]
-    for (d in dup)
-        s[d == x] <- mean(s[d == x])
-    s 
-}
-
-nta <- perm_test(bp ~ group, data = bloodp, ytrafo = function(data)
-                 trafo(data, numeric_trafo = n_trafo))
+nta <- normal_test(bp ~ group, data = bloodp, ties.method = "average")
 
 # test statistic, page 354
 stopifnot(isequal(round(statistic(nta), 3), 1.789))
@@ -123,21 +112,20 @@ stopifnot(isequal(round(statistic(nta), 3), 1.789))
 # two-sided asymptotic p-value, page 354 
 stopifnot(isequal(round(pvalue(nta), 4), 0.0737))
 
-nte <- perm_test(bp ~ group, data = bloodp, distribution = "exact",
-                 ytrafo = function(data) trafo(data, numeric_trafo = n_trafo))
+nte <- normal_test(bp ~ group, data = bloodp, distribution = "exact",
+    ties.method = "average")
 
 # two-sided exact p-value, page 354
 stopifnot(isequal(round(pvalue(nte), 4), 0.0799))
 
-ntel <- perm_test(bp ~ group, data = bloodp, distribution = "exact",
-                  alternative = "greater", ytrafo = function(data)
-                  trafo(data, numeric_trafo = n_trafo))
+ntel <- normal_test(bp ~ group, data = bloodp, distribution = "exact",
+    ties.method = "average", alternative = "greater")
 
 # one-sided exact p-value, page 354
 stopifnot(isequal(round(pvalue(ntel), 4), 0.0462))
 
 # two-sided approximated p-value
-ntMC <- normal_test(bp ~ group, data = bloodp, 
+ntMC <- normal_test(bp ~ group, data = bloodp, ties.method = "average",
                     distribution = "approx", B = 10000)
 pci <- attr(pvalue(ntMC), "conf.int")
 
@@ -145,7 +133,8 @@ stopifnot(pci[1] < pvalue(nte) & pci[2] > pvalue(nte))
 
 # one-sided approximated p-value
 ntMC <- normal_test(bp ~ group, data = bloodp, alternative = "greater",
-                    distribution = "approx", B = 10000)
+                    distribution = "approx", B = 10000, 
+                    ties.method = "average")
 pci <- attr(pvalue(ntMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(ntel) & pci[2] > pvalue(ntel))
@@ -222,16 +211,14 @@ pci <- attr(pvalue(wtMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(wtel) & pci[2] > pvalue(wtel))
 
-nta <- perm_test(Salary ~ Gender | Year, data = employment,
-    ytrafo = function(data) trafo(data, numeric_trafo = n_trafo))
+nta <- normal_test(Salary ~ Gender | Year, data = employment,
+    ties.method = "average")
 
-# <CHECK>
 # test statistic, page 358
 stopifnot(isequal(round(statistic(nta), 3), -1.802))
 
 # two-sided asymptotic p-value, page 358
 stopifnot(isequal(round(pvalue(nta), 4), 0.0716))
-# </CHECK>
 
 # blocks not yet implemented
 # nte <- normal_test(Salary ~ Gender | Year, data = employment, 
@@ -248,7 +235,7 @@ stopifnot(isequal(round(pvalue(nta), 4), 0.0716))
 
 # two-sided approximated p-value
 ntMC <- normal_test(Salary ~ Gender | Year, data = employment, 
-                    distribution = "approx", B = 10000)
+    ties.method = "average", distribution = "approx", B = 10000)
 pci <- attr(pvalue(ntMC), "conf.int")
 
 stopifnot(pci[1] < 0.04 & pci[2] > 0.04)
@@ -256,7 +243,7 @@ stopifnot(pci[1] < 0.04 & pci[2] > 0.04)
 # one-sided approximated p-value
 ntMC <- normal_test(Salary ~ Gender | Year, data = employment, 
                     alternative = "less", distribution = "approx", 
-                    B = 10000)
+                    B = 10000, ties.method = "average")
 pci <- attr(pvalue(ntMC), "conf.int")
 
 stopifnot(pci[1] < 0.04 & pci[2] > 0.04)
@@ -303,55 +290,42 @@ machines <- data.frame(cereal = c(10.8, 11.1, 10.4, 10.1, 11.3,
                                   10.7, 10.8),
                        machine = factor(rep(c("Present", "New"), c(5, 7))))
 
-# deal with ties as described in StatXact 6 manual, page 329ff
-# Ansari-Scores
-a_trafo <- function(x) {
-    r <- rank(x, ties = "random")
-    s <- pmin(r, length(x) - r + 1)
-    dup <- x[duplicated(x)]
-    for (d in dup)         
-        s[d == x] <- mean(s[d == x])
-    s 
-}
-
-pta <- perm_test(cereal ~ machine, data = machines, 
-    ytrafo = function(data) trafo(data, numeric_trafo = a_trafo))
+ata <- ansari_test(cereal ~ machine, data = machines, 
+    ties.method = "average")
 
 # test statistic, page 372
-stopifnot(isequal(round(statistic(pta), 3), 1.998))
+stopifnot(isequal(round(statistic(ata), 3), 1.998))
 
 # two-sided asymptotic p-value, page 372
-stopifnot(isequal(round(pvalue(pta), 4), 0.0457))
+stopifnot(isequal(round(pvalue(ata), 4), 0.0457))
 
-pte <- perm_test(cereal ~ machine, data = machines, 
-    ytrafo = function(data) trafo(data, numeric_trafo = a_trafo),
-    distribution = "exact")
+ate <- ansari_test(cereal ~ machine, data = machines, 
+    ties.method = "average", distribution = "exact")
 
-stopifnot(isequal(round(pvalue(pte), 4), 0.0581))
+stopifnot(isequal(round(pvalue(ate), 4), 0.0581))
 
 # two-sided approximated p-value
-ptMC <- perm_test(cereal ~ machine, data = machines, 
-    ytrafo = function(data) trafo(data, numeric_trafo = a_trafo),
-    distribution = "approx", B = 10000)
+atMC <- ansari_test(cereal ~ machine, data = machines, 
+    ties.method = "average", distribution = "approx", B = 10000)
 
-pci <- attr(pvalue(ptMC), "conf.int")
+pci <- attr(pvalue(atMC), "conf.int")
 
-stopifnot(pci[1] < pvalue(pte) & pci[2] > pvalue(pte))
+stopifnot(pci[1] < pvalue(ate) & pci[2] > pvalue(ate))
 
-ptel <- perm_test(cereal ~ machine, data = machines, 
-    ytrafo = function(data) trafo(data, numeric_trafo = a_trafo),
+atel <- ansari_test(cereal ~ machine, data = machines, 
+    ties.method = "average",
     distribution = "exact", alternative = "greater")
 
 # one-sided exact p-value, page 372
-stopifnot(isequal(round(pvalue(ptel), 4), 0.0253))
+stopifnot(isequal(round(pvalue(atel), 4), 0.0253))
 
 # one-sided approximated p-value
-ptMC <- perm_test(cereal ~ machine, data = machines,
-    ytrafo = function(data) trafo(data, numeric_trafo = a_trafo),
-    distribution = "approx", B = 20000, alternative = "greater")
-pci <- attr(pvalue(ptMC), "conf.int")
-
-stopifnot(pci[1] < pvalue(ptel) & pci[2] > pvalue(ptel))
+atMC <- ansari_test(cereal ~ machine, data = machines,
+    ties.method = "average",
+    distribution = "approx", B = 10000, alternative = "greater")
+pci <- attr(pvalue(atMC), "conf.int")
+pvalue(atMC)
+stopifnot(pci[1] < pvalue(atel) & pci[2] > pvalue(atel))
 
 ### StatXact 6 manual, 413
 data(lungcancer)

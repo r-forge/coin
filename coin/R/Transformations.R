@@ -1,28 +1,83 @@
 
+### compute average scores, see Hajek, Sidak, Sen (page 131ff)
+average_scores <- function(s, x) {
+    dup <- x[duplicated(x)]
+    for (d in dup)
+        s[x == d] <- mean(s[x == d])
+    return(s)
+} 
+
 ### identity transformation
 id_trafo <- function(x) x
 
 ### Ansari-Bradley
-ansari_trafo <- function(x) {
-    r <- rank(x)
-    pmin(r, length(x) - r + 1)
+ansari_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
+    ties.method <- match.arg(ties.method)
+    scores <- switch(ties.method, 
+        "mid-ranks" = {
+            r <- rank(x)
+            pmin(r, length(x) - r + 1)
+        },
+        "average-scores" = {
+            r <- rank(x, ties.method = "random")
+            s <- pmin(r, length(x) - r + 1)
+            average_scores(s, x)
+        }
+    )
+    return(scores)
 }
 
 ### Fligner
-fligner_trafo <- function(x) 
-    qnorm((1 + rank(abs(x))/(length(x) + 1))/2)
+fligner_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
+    ties.method <- match.arg(ties.method)
+    scores <- switch(ties.method, 
+        "mid-ranks" = {
+            qnorm((1 + rank(abs(x))/(length(x) + 1))/2)
+        },
+        "average-scores" = {
+            r <- rank(abs(x), ties.method = "random")
+            s <- qnorm((1 + r/(length(x) + 1))/2)
+            average_scores(s, x)
+        }
+    )
+    return(scores)
+}
 
 ### Normal Scores (van der Waerden)
-normal_trafo <- function(x)
-    qnorm(rank(x)/(length(x) + 1))
-
+normal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
+    ties.method <- match.arg(ties.method)
+    scores <- switch(ties.method,
+        "mid-ranks" = { 
+            qnorm(rank(x)/(length(x) + 1))
+        },
+        "average-scores" = {
+            r <- rank(x, ties.method = "random")
+            s <- qnorm(r/(length(x) + 1))
+            average_scores(s, x)
+        }
+    )
+    return(scores)
+}
+ 
 ### Median Scores
 median_trafo <- function(x)
-    ifelse(rank(x) <= (length(x) + 1)/2, 0, 1)
+    as.numeric(x <= median(x))
 
 ### Conover & Salsburg (1988)
-consal_trafo <- function(x)
-    (rank(x)/(length(x) + 1))^4
+consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
+    ties.method <- match.arg(ties.method)
+    scores <- switch(ties.method,
+        "mid-ranks" = { 
+            (rank(x)/(length(x) + 1))^4
+        },
+        "average-scores" = {
+            r <- rank(x, ties.method = "random")
+            s <- (r/(length(x) + 1))^4
+            average_scores(s, x)
+        }
+    )
+    return(scores)
+}
 
 ### maximally selected (rank, chi^2, whatsoever) statistics
 maxstat_trafo <- function(x, minprob = 0.1, maxprob = 0.9) {

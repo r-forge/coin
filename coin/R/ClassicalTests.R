@@ -122,6 +122,8 @@ independence_test.IndependenceProblem <- function(x,
                 distribution = nd)
         })
 
+    RET@method <- "General Independence Test"
+
     ### return object inheriting from class `IndependenceTest'
     return(RET)
 }
@@ -192,6 +194,7 @@ normal_test.formula <- function(formula, data = list(), subset = NULL,
 normal_test.IndependenceProblem <- function(x,  
     alternative = c("two.sided", "less", "greater"),
     distribution = c("asympt", "approx", "exact"), 
+    ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
     check <- function(x) {
@@ -205,7 +208,8 @@ normal_test.IndependenceProblem <- function(x,
 
     RET <- independence_test(x, teststat = "scalar", 
         alternative = alternative, distribution = distribution, 
-        ytrafo = function(data) trafo(data, numeric_trafo = normal_trafo), 
+        ytrafo = function(data) trafo(data, numeric_trafo = function(x)
+            normal_trafo(x, ties.method = ties.method)), 
         check = check, ...)
 
     RET@nullvalue <- 0
@@ -285,7 +289,8 @@ ansari_test.formula <- function(formula, data = list(), subset = NULL,
 
 ansari_test.IndependenceProblem <- function(x,
     alternative = c("two.sided", "less", "greater"),
-    distribution = c("asympt", "approx", "exact"),  
+    distribution = c("asympt", "approx", "exact"), 
+    ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {     
 
     check <- function(x) {
@@ -299,7 +304,8 @@ ansari_test.IndependenceProblem <- function(x,
 
     RET <- independence_test(x, teststat = "scalar",
         alternative = alternative, distribution = distribution,
-        ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
+        ytrafo = function(data) trafo(data, numeric_trafo = function(x)
+            ansari_trafo(x, ties.method = ties.method)), 
         check = check, ...)
  
     RET@nullvalue <- 1
@@ -415,6 +421,7 @@ fligner_test.formula <- function(formula, data = list(), subset = NULL,
 }   
 
 fligner_test.IndependenceProblem <- function(x,  
+    ties.method = c("mid-ranks", "average-scores"),
     distribution = c("asympt", "approx"), ...) {
 
     check <- function(x) {
@@ -432,7 +439,8 @@ fligner_test.IndependenceProblem <- function(x,
 
     RET <- independence_test(x,  
         distribution = distribution, teststat = "quadtype",
-        ytrafo = function(data) trafo(data, numeric_trafo = fligner_trafo), 
+        ytrafo = function(data) trafo(data, numeric_trafo = function(x)
+            fligner_trafo(x, ties.method = ties.method)), 
         check = check, ...)
 
     RET@method <- "Fligner-Killeen Test"
