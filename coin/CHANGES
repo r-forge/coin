@@ -1,0 +1,7 @@
+
+
+		CHANGES IN `coin' VERSION 0.2-8
+
+    o	`mergesort' is already defined in `/usr/include/stdlib.h:270' on
+	some platforms.
+
