@@ -19,12 +19,8 @@ stopifnot(isequal(round(pvalue(bta), 4), 0.1797))
 
 # exact p-value, page 306
 btMC <- bowker_test(presidents, distribution = "approx", B = 10000)
-btMC
 pci <- attr(pvalue(btMC), "conf.int")
-
-# <CHECK>
-pci[1] < 0.2632 & pci[2] > 0.2632
-# </CHECK>
+stopifnot(pci[1] < 0.2632 & pci[2] > 0.2632)
 
 
 ### StatXact 6 manual, page 308
@@ -64,10 +60,8 @@ stopifnot(isequal(round(pvalue(bta), 4), 0.2492))
 btMC <- bowker_test(pathologists, yscores = 1:5, 
                     distribution = "approx", B = 10000)
 pci <- attr(pvalue(btMC), "conf.int")
+stopifnot(pci[1] < 0.3073 & pci[2] > 0.3073)
 
-# <CHECK>
-pci[1] < 0.3073 & pci[2] > 0.3073
-# </CHECK>
 
 ### Two independent samples
 
@@ -410,18 +404,15 @@ bta <- bowker_test(response ~  treatment | subject, data = analgesic_eff)
 # asymptotic p-value, page 459 (no frame, see text!)
 stopifnot(isequal(round(pvalue(bta), 3), 0.02))
 
-# <CHECK>
 # approximative p-value
 btMC <- bowker_test(response ~  treatment | subject, 
     data = analgesic_eff, distribution = "approx", B = 10000)
 
 pci <- attr(pvalue(btMC), "conf.int")
-pvalue(btMC)
+stopifnot(pci[1] < 0.026 & pci[2] > 0.026)
 
-(pci[1] < 0.026 & pci[2] > 0.026)
-# </CHECK>
 
-# StatXact 6 manual, page 467, Page test
+### StatXact 6 manual, page 467, Page test
 cotton <- data.frame(strength = c(7.46, 7.17, 7.76, 8.14, 7.63,
                                   7.68, 7.57, 7.73, 8.15, 8.00,
                                   7.21, 7.80, 7.74, 7.87, 7.93),
@@ -440,12 +431,8 @@ stopifnot(isequal(round(pvalue(fta), 4), 0.0079))
 ftMC <- friedman_test(strength ~ potash | block, data = cotton,
                       distribution = "approx", B = 10000)
 
-# <CHECK>
 pci <- attr(pvalue(ftMC), "conf.int")
-pvalue(ftMC)
-
-(pci[1] < 0.005 & pci[2] > 0.005)
-# </CHECK>
+stopifnot(pci[1] < 0.005 & pci[2] > 0.005)
 
 class(cotton$potash) <- "factor"
 
@@ -453,12 +440,8 @@ class(cotton$potash) <- "factor"
 ftMC <- friedman_test(strength ~ potash | block, data = cotton,
                       distribution = "approx", B = 10000)
 
-# <CHECK>
 pci <- attr(pvalue(ftMC), "conf.int")
-pvalue(ftMC)
-
-(pci[1] < 0.0376 & pci[2] > 0.0376)
-# </CHECK>
+stopifnot(pci[1] < 0.0376 & pci[2] > 0.0376)
 
 
 ### StatXact 6 manual, page 486
@@ -505,12 +488,6 @@ stopifnot(isequal(round(statistic(kta), 3), 9.415))
 # asymptotic p-value, page 493
 stopifnot(isequal(round(pvalue(kta), 4), 0.0515))
 
-ktMC <- kruskal_test(response ~ drug, data = tox,
-                          distribution = "approx", B = 10000)
-
-pci <- attr(pvalue(ktMC), "conf.int")
-pvalue(ktMC)
-
 pta <- perm_test(response ~ drug, data = tox, teststat = "quadtype")
 
 # test statistic, page 508
@@ -518,13 +495,6 @@ stopifnot(isequal(round(statistic(pta), 2), 10.98))
 
 # asymptotic p-value, page 508
 stopifnot(isequal(round(pvalue(pta), 4), 0.0268))
-
-ptMC <- perm_test(response ~ drug, data = tox,
-                  distribution = "approx", B = 10000, 
-                  teststat = "quadtype")
-
-pci <- attr(pvalue(ptMC), "conf.int")
-pvalue(ptMC)
 
 
 ### StatXact 6 manual, page 509
@@ -599,19 +569,16 @@ stopifnot(isequal(round(statistic(cta), 2), 3.81))
 # asymptotic p-value, page 673
 stopifnot(isequal(round(pvalue(cta), 3), 0.051))
 
-# <CHECK>
 ctMC <- chisq_test(a, distribution = "approx", B = 10000)
-print(pvalue(ctMC))
 pci <- attr(pvalue(ctMC), "conf.int")
 
-pci[1] < 0.1409 & pci[2] > 0.1409
+stopifnot(pci[1] < 0.1409 & pci[2] > 0.1409)
 
 ctMC <- cmh_test(a, distribution = "approx", B = 10000)
-print(pvalue(ctMC))
 pci <- attr(pvalue(ctMC), "conf.int")
 
-pci[1] < 0.1409 & pci[2] > 0.1409
-# </CHECK>
+stopifnot(pci[1] < 0.1409 & pci[2] > 0.1409)
+
 
 ### StatXact 6 manual, page 793
 csom <- as.table(matrix(c(17066, 48, 14464, 38, 788, 5, 126, 1, 37, 1), nrow = 2,
@@ -736,14 +703,15 @@ stopifnot(isequal(round(statistic(cta), 1), 22.1))
 # asymptotic p-value, page 947
 stopifnot(isequal(round(pvalue(cta), 2), 0.14))
 
-# <CHECK>
-pvalue(chisq_test(oral_lesions, distribution = "approx", B = 10000))
-# </CHECK>
+ctMC <- chisq_test(oral_lesions, distribution = "approx", B = 10000)
+
+pci <- attr(pvalue(ctMC), "conf.int")
+stopifnot(pci[1] < 0.0269 & pci[2] > 0.0269)
+
 
 # approximate p-value, page 947
 ctMC <- cmh_test(oral_lesions, distribution = "approx", B = 10000)
 
-print(pvalue(ctMC))
 pci <- attr(pvalue(ctMC), "conf.int")
 stopifnot(pci[1] < 0.0269 & pci[2] > 0.0269)
 
@@ -760,13 +728,11 @@ stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.807))
 # asymptotical p-value, page 993
 stopifnot(isequal(round(pvalue(lta), 4), 0.0708))
 
-# <CHECK>
 ltMC <- lbl_test(dr, distribution = "approx", B = 10000)
-
-print(pvalue(ltMC))
 pci <- attr(pvalue(ltMC), "conf.int")
-(pci[1] < 0.0792 & pci[2] > 0.0792)
-# </CHECK>
+
+stopifnot(pci[1] < 0.0792 & pci[2] > 0.0792)
+
 
 lta <- lbl_test(dr, xscores = c(1, 3, 9, 27))
 
@@ -779,9 +745,8 @@ stopifnot(isequal(round(pvalue(lta), 4), 0.0828))
 ltMC <- lbl_test(dr, xscores = c(1, 3, 9, 27), 
                  distribution = "approx", B = 10000)
 
-print(pvalue(ltMC))
 pci <- attr(pvalue(ltMC), "conf.int")
-(pci[1] < 0.078 & pci[2] > 0.078)
+stopifnot(pci[1] < 0.078 & pci[2] > 0.078)
 
 
 ### StatXact 6 manual, page 1012
