@@ -12,6 +12,7 @@
 \method{friedman_test}{SymmetryProblem}(x, 
     distribution = c("asympt", "approx"), ...) 
 \method{bowker_test}{formula}(formula, data, subset = NULL, \dots)
+\method{bowker_test}{table}(x, yscores = NULL, ...)
 \method{bowker_test}{SymmetryProblem}(x, 
     distribution = c("asympt", "approx"), ...) 
 \method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
@@ -29,7 +30,8 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
-  \item{x}{an object inheriting from class \code{SymmetryProblem}.}
+  \item{x}{an object inheriting from class \code{SymmetryProblem} or a table 
+           with identical dimnames.}
   \item{alternative}{the alternative hypothesis must be
     one of \code{"two.sided"} (default), \code{"greater"} or    
     \code{"less"}.  You can specify just the initial letter.}   
@@ -103,12 +105,29 @@ if (require(multcomp)) {
     )
 
     ### a global test, again
-    pvalue(rtt)
+    print(pvalue(rtt))
 
     ### simultaneous P-values for all pair comparisons
     ### indicate _no_ difference between Narrow Angle and Round Out
-    pvalue(rtt, adjusted = TRUE)
+    print(pvalue(rtt, adjusted = TRUE))
 }
+
+### Opinions on Pre- and Extramarital Sex, Agresti (2000), page 421
+opinions <- c("always wrong", "almost always wrong", 
+              "wrong only sometimes", "not wrong at all")
+
+PreExSex <- as.table(matrix(c(144, 33, 84, 126, 
+                                2,  4, 14,  29, 
+                                0,  2,  6,  25, 
+                                0,  0,  1,  5), nrow = 4, 
+                            dimnames = list(PremaritalSex = opinions,
+                                            ExtramaritalSex = opinions)))
+
+### treating response as nominal
+bowker_test(PreExSex)
+
+### and as ordinal
+bowker_test(PreExSex, yscores = 1:length(opinions))
 
 }
 \keyword{htest}

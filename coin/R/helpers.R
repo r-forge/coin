@@ -101,6 +101,19 @@ table2df <- function(x) {
     return(x[,colnames(x) != "Freq"])
 }
 
+table2df_sym <- function(x) {
+    x <- table2df(x)
+    lx <- levels(x[[1]])
+    if (!all(sapply(x, function(x) all(levels(x) == lx))))
+        stop("table ", sQuote("x"), " does not represent a symmetry problem")
+    n <- nrow(x)
+    p <- ncol(x)
+    y <- data.frame(groups = factor(rep(colnames(x), rep(n, p))),
+                    response = factor(unlist(x), labels = lx))
+    rownames(y) <- 1:(n*p)
+    y
+}
+
 is_2sample <- function(object) {
     groups <- ((ncol(object@x) == 1 && is.factor(object@x[[1]])) && 
                 nlevels(object@x[[1]]) == 2)

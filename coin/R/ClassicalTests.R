@@ -806,6 +806,12 @@ symmetry_test.SymmetryProblem <- function(x,
                       ytrafo, check, ...)
 }
 
+symmetry_test.table <- function(x, ...) {
+    x <- table2df_sym(x)
+    x <- new("SymmetryProblem", x = x["groups"], y = x["response"])
+    RET <- do.call("symmetry_test", c(list(x = x), list(...))) 
+    return(RET)
+}
 
 ### Friedman-Test
 friedman_test <- function(x, ...) UseMethod("friedman_test")
@@ -847,6 +853,17 @@ bowker_test.formula <- function(formula, data = list(), subset = NULL, ...)
     return(RET)
 }   
 
+bowker_test.table <- function(x, yscores = NULL, ...) {
+    x <- table2df_sym(x)
+    if (!is.null(yscores)) {
+        x$response <- ordered(x$response)
+        attr(x$response, "scores") <- yscores
+    }
+    x <- new("SymmetryProblem", x = x["groups"], y = x["response"])
+    RET <- do.call("bowker_test", c(list(x = x), list(...))) 
+    return(RET)
+}
+
 bowker_test.SymmetryProblem <- function(x, 
     distribution = c("asympt", "approx"), ...) {
     
@@ -863,7 +880,6 @@ bowker_test.SymmetryProblem <- function(x,
     RET@method <- paste("Bowker Test")
     return(RET)
 }
-
 
 
 ### Wilcoxon-Signed-Rank Test
