@@ -2,20 +2,17 @@
 \docType{class}
 \alias{ExpectCovar-class}
 
-\title{Class "ExpectCovar" ~~~ }
-\description{  ~~ A concise (1-5 lines) description of what the class is.  ~~}
+\title{Class "ExpectCovar"}
+\description{  Conditional Expectation and Covariance of Linear Statistics }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("ExpectCovar", ...)}.
-    ~~ describe objects here ~~ 
+Normally, this class is used internally only.
 }
 \section{Slots}{
   \describe{
-    \item{\code{expectation}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{covariance}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{dimension}:}{Object of class \code{"integer"} ~~ }
+    \item{\code{expectation}:}{Object of class \code{"numeric"}}
+    \item{\code{covariance}:}{Object of class \code{"matrix"}}
+    \item{\code{dimension}:}{Object of class \code{"integer"}}
   }
-}
-\section{Methods}{
-No methods defined with class "ExpectCovar" in the signature.
 }
 \keyword{classes}

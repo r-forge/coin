@@ -1,12 +1,12 @@
-\name{ASAT}
-\alias{ASAT}
+\name{asat}
+\alias{asat}
 \docType{data}
 \title{ Toxicological Study on Female Wistar Rats }
 \description{
-  ASAT-Values for a new compound and a control group of 34 female Wistar
+  ASAT-values for a new compound and a control group of 34 female Wistar
 rats.
 }
-\usage{data(ASAT)}
+\usage{data(asat)}
 \format{
   A data frame with 34 observations on the following 2 variables.
   \describe{
@@ -40,13 +40,13 @@ Hauschke et al. (1999).
 }
 \examples{
 
-data(ASAT)
+data(asat)
+
 # does not really look symmetric
+plot(asat ~ group, data = asat)
 
-plot(asat ~ group, data=ASAT)
-
-# proof-of-safety based on ration of medians
-pos <- wilcox_test(I(log(asat)) ~ group, data = ASAT, alternative = "less", 
+# proof-of-safety based on ratio of medians
+pos <- wilcox_test(I(log(asat)) ~ group, data = asat, alternative = "less", 
                    conf.int=TRUE, distribution = "exact")
 
 # one-sided confidence set. Safety cannot be concluded since the effect of

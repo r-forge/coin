@@ -2,18 +2,19 @@
 \docType{class}
 \alias{ExpectCovarInfluence-class}
 
-\title{Class "ExpectCovarInfluence" ~~~ }
-\description{  ~~ A concise (1-5 lines) description of what the class is.  ~~}
+\title{Class "ExpectCovarInfluence"}
+\description{  Conditional Expectation and Covariance of Influence Functions
+}
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("ExpectCovarInfluence", ...)}.
-    ~~ describe objects here ~~ 
+Normally, this class is used internally only.
 }
 \section{Slots}{
   \describe{
-    \item{\code{sumweights}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{expectation}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{covariance}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{dimension}:}{Object of class \code{"integer"} ~~ }
+    \item{\code{sumweights}:}{Object of class \code{"numeric"}.}
+    \item{\code{expectation}:}{Object of class \code{"numeric"}.}
+    \item{\code{covariance}:}{Object of class \code{"matrix"}.}
+    \item{\code{dimension}:}{Object of class \code{"integer"}.}
   }
 }
 \section{Extends}{

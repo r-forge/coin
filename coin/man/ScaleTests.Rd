@@ -47,9 +47,10 @@
     can be computed (\code{exact}) or can be approximated by its
     \code{asymptotic} distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
-  \item{ties.method}{two methods are available to adjust scores for ties.
-    Either the score generating function is applied to \code{mid-ranks}
-    or scores, based on random ranks, are averaged \code{average-scores}.}
+  \item{ties.method}{two methods are available to adjust scores for ties,
+      either the score generating function is applied to \code{mid-ranks}
+      or the scores computed based on random ranks are averaged for all tied
+      values (\code{average-scores}).}
   \item{conf.int}{a logical indicating whether a confidence interval
     for the difference in location should be computed.}
   \item{conf.level}{confidence level of the interval.}
@@ -59,20 +60,36 @@
 
   The null hypothesis of the equality of the distribution of \code{y} in
   the groups given by \code{x} is tested. In particular, the methods
-  documented here are designed to detect scale alternatives. 
+  documented here are designed to detect scale alternatives. For a general
+  description of the test procedures documented here we refer to Hollander &
+  Wolfe (1999).
+
+  The asymptotic null distribution is computed by default for both
+  procedures. Exact p-values may be computed for the Ansari-Bradley test 
+  can be approximated via Monte-Carlo for the Fligner-Killeen procedure. 
+  Exact p-values are computed either by the shift algorithm 
+  (Streitberg & Roehmel, 1986, 1987) or by the split-up algorithm 
+  (van de Wiel, 2001).
+
+  Confidence intervals for the ratio of scales are available for the
+  Ansari-Bradley test and are computed according to Bauer (1972). 
 
   For the adjustment of scores for tied values see Hajek, Sidak and Sen
   (1999), page 131ff.
 
-
 }
 \value{
+
   An object inheriting from class \code{IndependenceTest} with
   methods \code{show}, \code{pvalue}, \code{statistic} and (optionally)
   \code{confint}.
 
 }
 \references{
+
+        Myles Hollander & Douglas A. Wolfe (1999),  
+        \emph{Nonparametric Statistical Methods, 2nd Edition}.
+        New York: John Wiley & Sons.
 
         Bernd Streitberg & Joachim R\"ohmel (1986),
         Exact distributions for permutations and rank tests:
@@ -98,20 +115,30 @@
 }
 \examples{
 
-data(bloodp)
+### Serum Iron Determination Using Hyland Control Sera
+### Hollander & Wolfe (1999), page 147
+sid <- data.frame(
+    serum = c(111, 107, 100, 99, 102, 106, 109, 108, 104, 99,
+              101, 96, 97, 102, 107, 113, 116, 113, 110, 98,
+              107, 108, 106, 98, 105, 103, 110, 105, 104,
+              100, 96, 108, 103, 104, 114, 114, 113, 108, 106, 99),
+    method = factor(gl(2, 20), labels = c("Ramsay", "Jung-Parekh")))
 
-# Ansari-Bradley test
+### Ansari-Bradley test, asymptotical p-value
+ansari_test(serum ~ method, data = sid)
 
-ansari_test(bp ~ group, data = bloodp)
-ansari_test(bp ~ group, data = bloodp, distribution = "exact")
-ansari_test(bp ~ group, data = bloodp, distribution = "approx", B = 9999)
+### exact p-value
+ansari_test(serum ~ method, data = sid, distribution = "exact")
 
-# Lepage test, Hollander & Wolfe, page 169ff
+
+### Platelet Counts of Newborn Infants
+### Hollander & Wolfe, Table 5.4, page 171
 platalet_counts <- data.frame(
     counts = c(120, 124, 215, 90, 67, 95, 190, 180, 135, 399, 
                12, 20, 112, 32, 60, 40),
-    treatment = factor(c(rep("Prednisons", 10), rep("Control", 6))))
+    treatment = factor(c(rep("Prednisone", 10), rep("Control", 6))))
 
+### Lepage test, Hollander & Wolfe, page 172 
 lt <- independence_test(counts ~ treatment, data = platalet_counts,
     ytrafo = function(data) trafo(data, numeric_trafo = function(x)       
         cbind(rank(x), ansari_trafo(x))),
@@ -119,14 +146,21 @@ lt <- independence_test(counts ~ treatment, data = platalet_counts,
 
 lt
 
-# where does the rejection come from?
-lt2 <- independence_test(counts ~ treatment, data = platalet_counts,
+### where did the rejection come from? Use maximum statistic
+### instead of a quadratic form
+ltmax <- independence_test(counts ~ treatment, data = platalet_counts,
     ytrafo = function(data) trafo(data, numeric_trafo = function(x) 
         matrix(c(rank(x), ansari_trafo(x)), ncol = 2,
                dimnames = list(1:length(x), c("Location", "Scale")))),
     teststat = "maxtype", distribution = "approx", B = 9999)
 
-pvalue(lt2, adjusted = TRUE)
+### points to a difference in location
+pvalue(ltmax, adjusted = TRUE)
+
+### Funny: We could have used a simple Bonferroni procedure
+### since the correlation between the Wilcoxon and Ansari-Bradley 
+### test statistics is zero
+covariance(ltmax)
 
 }
 \keyword{htest}

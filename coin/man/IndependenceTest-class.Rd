@@ -11,16 +11,18 @@
 \alias{QuadTypeIndependenceTest-class}
 \alias{initialize,QuadTypeIndependenceTest-method}
 
-\title{Class "IndependenceTest" ~~~ }
-\description{  ~~ A concise (1-5 lines) description of what the class is.  ~~}
+\title{Class "IndependenceTest"}
+\description{  Objects of class "IndependenceTest" represent the results of
+independence tests, including data, transformations, linear and test
+statistics as well as their null distribution. }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("IndependenceTest", ...)}.
-    ~~ describe objects here ~~ 
+Normally, this class is only used internally.
 }
 \section{Slots}{
   \describe{
-    \item{\code{distribution}:}{Object of class \code{"NullDistribution"} ~~ }
-    \item{\code{method}:}{Object of class \code{"character"} ~~ }
+    \item{\code{distribution}:}{Object of class \code{"NullDistribution"}.}
+    \item{\code{method}:}{Object of class \code{"character"}.}
   }
 }
 \section{Methods}{
@@ -28,5 +30,4 @@ Objects can be created by calls of the form \code{new("IndependenceTest", ...)}.
     \item{initialize}{\code{signature(.Object = "IndependenceTest")}: ...}
   }
 }
-
 \keyword{classes}

@@ -74,9 +74,10 @@
     can be computed (\code{exact}) or can be approximated by its
     asymptotic distribution (\code{asympt}) 
     or via Monte-Carlo resampling (\code{approx}).}
-  \item{ties.method}{two methods are available to adjust scores for ties.
-      Either the score generating function is applied to \code{mid-ranks}
-      or scores, based on random ranks, are averaged \code{average-scores}.}
+  \item{ties.method}{two methods are available to adjust scores for ties,
+      either the score generating function is applied to \code{mid-ranks}
+      or the scores computed based on random ranks are averaged for all tied
+      values (\code{average-scores}).}
   \item{conf.int}{a logical indicating whether a confidence interval
     for the difference in location should be computed.}
   \item{conf.level}{confidence level of the interval.}
@@ -86,7 +87,9 @@
 
   The null hypothesis of the equality of the distribution of \code{y} in
   the groups given by \code{x} is tested. In particular, the methods
-  documented here are designed to detect shift alternatives. 
+  documented here are designed to detect shift alternatives. For a general 
+  description of the test procedures documented here we refer to Hollander &
+  Wolfe (1999).
 
   The test procedures apply a rank transformation to the response values 
   (\code{y}), except of \code{perm_test} which computes a test statistic
@@ -111,11 +114,15 @@
 \value{
 
   An object inheriting from class \code{IndependenceTest} with
-  methods \code{show}, \code{pvalue}, \code{statistic} and (optionally)
-  \code{confint}.
+  methods \code{show}, \code{pvalue}, \code{statistic}, \code{expectation},
+  \code{covariance} and (optionally) \code{confint}.
 
 }
 \references{
+
+        Myles Hollander & Douglas A. Wolfe (1999),  
+        \emph{Nonparametric Statistical Methods, 2nd Edition}. 
+        New York: John Wiley & Sons.
 
         Bernd Streitberg & Joachim R\"ohmel (1986),
         Exact distributions for permutations and rank tests: 
@@ -141,21 +148,45 @@
 }
 \examples{
 
-data(bloodp)
+### Tritiated Water Diffusion Across Human Chorioamnion
+### Hollander & Wolfe (1999), Table 4.1, page 110
+water_transfer <- data.frame(
+    pd = c(0.80, 0.83, 1.89, 1.04, 1.45, 1.38, 1.91, 1.64, 0.73, 1.46,
+           1.15, 0.88, 0.90, 0.74, 1.21),
+    age = factor(c(rep("At term", 10), rep("12-26 Weeks", 5))))
 
-# Permutation test
+### Wilcoxon-Mann-Whitney test, cf. Hollander & Wolfe (1999), page 111
+### exact p-value and confidence interval for the difference in location
+wt <- wilcox_test(pd ~ age, data = water_transfer, 
+            distribution = "exact", conf.int = TRUE)
+print(wt)
 
-# asymptotic p-value
-perm_test(bp ~ group, data = bloodp)
-# approximate p-value (with 99% confidence interval)
-pvalue(perm_test(bp ~ group, data = bloodp, 
+### extract observed Wilcoxon statistic, i.e, the sum of the
+### ranks for age = "12-26 Weeks"
+statistic(wt, "linear")
+
+### its expectation
+expectation(wt)
+
+### and variance
+covariance(wt)
+
+### and, finally, the exact two-sided p-value
+pvalue(wt)
+
+
+### Permutation test, asymptotic p-value
+perm_test(pd ~ age, data = water_transfer)
+
+### approximate p-value (with 99% confidence interval)
+pvalue(perm_test(pd ~ age, data = water_transfer, 
                  distribution = "approx", B = 9999))
-# exact p-value
-pt <- perm_test(bp ~ group, data = bloodp, distribution = "exact")
+### exact p-value
+pt <- perm_test(pd ~ age, data = water_transfer, distribution = "exact")
 pvalue(pt)
 
-# plot density and distribution of the standardised 
-# test statistic
+### plot density and distribution of the standardised 
+### test statistic
 layout(matrix(1:2, nrow = 2))
 s <- support(pt)
 d <- sapply(s, function(x) dperm(pt, x))
@@ -164,16 +195,8 @@ plot(s, d, type = "S", xlab = "Teststatistic", ylab = "Density")
 plot(s, p, type = "S", xlab = "Teststatistic", ylab = "Cumm. Probability")
 
 
-# Wilcoxon-Mann-Whitney test
-
-# exact p-value and confidence interval for the difference in location
-wt <- wilcox_test(bp ~ group, data = bloodp, 
-            distribution = "exact", conf.int = TRUE)
-pvalue(wt)
-confint(wt)
-
-
-# Kruskal-Wallis test (data in Hollander and Wolfe, page 200)
+### Length of YOY Gizzard Shad from Kokosing Lake, Ohio,
+### sampled in Summer 1984, Hollander & Wolfe, Table 6.3, page 200
 YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44, 
                              42, 60, 32, 42, 45, 58, 27, 51, 42, 52, 
                              38, 33, 26, 25, 28, 28, 26, 27, 27, 27, 
@@ -181,17 +204,15 @@ YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,
                   site = factor(c(rep("I", 10), rep("II", 10),
                                   rep("III", 10), rep("IV", 10))))
 
-# approximate exact p-value
+### Kruskal-Wallis test, approximate exact p-value
 kw <- kruskal_test(length ~ site, data = YOY, 
              distribution = "approx", B = 9999)
-
 kw
 pvalue(kw)
 
-
-# Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
-# Hollander and Wolfe, 1999, pages 200 and 244 
-# (where Steel-Dwass results are given)
+### Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
+### Hollander & Wolfe, 1999, page 244 
+### (where Steel-Dwass results are given)
 if (require(multcomp)) {
 
     NDWD <- perm_test(length ~ site, data = YOY,
@@ -200,10 +221,10 @@ if (require(multcomp)) {
             model.matrix(~x - 1) \%*\% t(contrMat(table(x), "Tukey"))),
         teststat = "maxtype", distribution = "approx", B = 90000)
 
-    # global p-value
+    ### global p-value
     print(pvalue(NDWD))
 
-    # sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
+    ### sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
     print(pvalue(NDWD, adjusted = TRUE))
 }
 
