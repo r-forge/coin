@@ -3,6 +3,8 @@
 		CHANGES IN `coin' VERSION 0.2-10
 
 
+    o   asymptotical -> asymptotic in print methods
+
     o   `mercuryfish' example added
 
     o   {x,y}trafo now can return matrices with number of columns
