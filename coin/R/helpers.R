@@ -1,4 +1,24 @@
 
+
+asymptotic <- function(maxpts = 25000, abseps = 0.001, releps = 0) {
+    RET <- list(maxpts = maxpts, abseps = abseps, releps = releps)
+    class(RET) <- "asymptotic"
+    RET
+}
+
+approximate <- function(B = 1000) {
+    RET <- list(B = B)
+    class(RET) <- "approximate"
+    RET
+}
+
+exact <- function(algorithm = c("shift", "split-up"), fact = NULL) {
+    algorithm <- match.arg(algorithm)
+    RET <- list(algorithm = algorithm, fact = fact)
+    class(RET) <- "exact"
+    RET
+}
+
 LinearStatistic <- function(x, y, weights) {
     storage.mode(x) <- "double"
     storage.mode(y) <- "double"
@@ -280,4 +300,17 @@ isequal <- function(a, b) {
     } else {
         return(TRUE)
     }
+}
+
+check_distribution_arg <- function(distribution, 
+    values = c("asymptotic", "approximate", "exact")) {
+    if (is.character(distribution)) {
+        distribution <- match.arg(distribution[1], values)
+        distribution <- eval(parse(text = 
+                                   paste(distribution, "()", sep = "")))
+    }
+    if (!any(class(distribution) %in% values))
+       stop(sQuote("distribution"), " is not of classes ",
+       paste(values, collapse = ", "))
+    distribution
 }

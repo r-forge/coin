@@ -28,7 +28,8 @@ export(independence_test,
        consal_trafo,
        maxstat_trafo,
        logrank_trafo,
-       f_trafo)       
+       f_trafo,
+       asymptotic, exact, approximate)       
 
 exportClasses("IndependenceProblem", "IndependenceTest", 
               "SymmetryProblem", "ExpectCovarInfluence", "ExpectCovar",

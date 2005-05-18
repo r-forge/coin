@@ -1,5 +1,13 @@
 
 
+		CHANGES IN `coin' VERSION 0.2-11
+
+    o   the `distribution' argument now takes the return values of
+        functions `exact()', `approximate()' or `asymptotic()' as well.
+        Those functions can be used to specify parameters, such as the
+        number of Monte-Carlo replications via
+        ..., distribution = approximate(B = 9999), ...
+
 		CHANGES IN `coin' VERSION 0.2-10
 
 

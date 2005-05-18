@@ -57,7 +57,7 @@ data(jobsatisfaction, package = "coin")
 
 ### for females only
 chisq_test(as.table(jobsatisfaction[,,"Female"]), 
-    distribution = "approx", B = 9999)
+    distribution = approximate(B = 9999))
 
 ### both Income and Job.Satisfaction unordered
 cmh_test(jobsatisfaction)
@@ -72,7 +72,7 @@ lbl_test(jobsatisfaction, scores = list(Job.Satisfaction = c(1, 3, 4, 5),
 ### the same, null distribution approximated
 cmh_test(jobsatisfaction, scores = list(Job.Satisfaction = c(1, 3, 4, 5),
                                         Income = c(3, 10, 20, 35)),
-         distribution = "approx", B = 10000)
+         distribution = approximate(B = 10000))
 
 
 
@@ -175,7 +175,7 @@ oneway_test(pd ~ age, data = water_transfer)
 
 ### approximate p-value (with 99% confidence interval)
 pvalue(oneway_test(pd ~ age, data = water_transfer, 
-                 distribution = "approx", B = 9999))
+                 distribution = approximate(B = 9999)))
 ### exact p-value
 pt <- oneway_test(pd ~ age, data = water_transfer, distribution = "exact")
 pvalue(pt)
@@ -200,7 +200,7 @@ YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,
 
 ### Kruskal-Wallis test, approximate exact p-value
 kw <- kruskal_test(length ~ site, data = YOY, 
-             distribution = "approx", B = 9999)
+             distribution = approximate(B = 9999))
 kw
 pvalue(kw)
 
@@ -213,7 +213,7 @@ if (require(multcomp)) {
         ytrafo = function(data) trafo(data, numeric_trafo = rank),
         xtrafo = function(data) trafo(data, factor_trafo = function(x)
             model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))),
-        teststat = "maxtype", distribution = "approx", B = 90000)
+        teststat = "maxtype", distribution = approximate(B = 90000))
 
     ### global p-value
     print(pvalue(NDWD))
@@ -370,7 +370,7 @@ platalet_counts <- data.frame(
 lt <- independence_test(counts ~ treatment, data = platalet_counts,
     ytrafo = function(data) trafo(data, numeric_trafo = function(x)       
         cbind(rank(x), ansari_trafo(x))),
-    teststat = "quadtype", distribution = "approx", B = 9999)
+    teststat = "quadtype", distribution = approximate(B = 9999))
 
 lt
 
@@ -380,7 +380,7 @@ ltmax <- independence_test(counts ~ treatment, data = platalet_counts,
     ytrafo = function(data) trafo(data, numeric_trafo = function(x) 
         matrix(c(rank(x), ansari_trafo(x)), ncol = 2,
                dimnames = list(1:length(x), c("Location", "Scale")))),
-    teststat = "maxtype", distribution = "approx", B = 9999)
+    teststat = "maxtype", distribution = approximate(B = 9999))
 
 ### points to a difference in location
 pvalue(ltmax, adjusted = TRUE)
@@ -530,7 +530,7 @@ ft
 
 ### approximate null distribution via Monte-Carlo
 pvalue(friedman_test(strength ~ potash | block, data = sc, 
-                     distribution = "approx", B = 9999))
+                     distribution = approximate(B = 9999)))
 
 
 
@@ -694,7 +694,7 @@ surv_test(Surv(time, event) ~ group, data = gbm,
 
 ### stratified logrank test
 surv_test(Surv(time, event) ~ group | histology, data = glioma,
-             distribution = "approx", B = 10000)
+             distribution = approximate(B = 10000))
 
 
 
@@ -745,9 +745,10 @@ oneway_test(pain ~ group, data = neuropathy, alternative = "less",
 wilcox_test(pain ~ group, data = neuropathy, alternative = "less", 
             distribution = "exact")
 
-oneway_test(pain ~ group, data = neuropathy, distribution = "approx",
+oneway_test(pain ~ group, data = neuropathy, 
+            distribution = approximate(B = 10000),
             alternative = "less", ytrafo = function(data) trafo(data,
-            numeric_trafo = consal_trafo), B = 10000)
+            numeric_trafo = consal_trafo))
 
 
 

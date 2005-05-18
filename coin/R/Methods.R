@@ -102,10 +102,15 @@ setGeneric("ExactNullDistribution", function(object, ...)
 
 setMethod(f = "ExactNullDistribution",
           signature = "ScalarIndependenceTestStatistic",
-          definition = function(object, ...) {
+          definition = function(object, algorithm = c("shift", "split-up"), 
+                                ...) {
 
-              if (is_2sample(object)) 
-                  return(SR_shift_2sample(object))
+              if (is_2sample(object)) {
+                  if (algorithm == "shift")
+                      return(SR_shift_2sample(object, ...))
+                  if (algorithm == "split-up")
+                      return(vdW_split_up_2sample(object))
+              }
               error(sQuote("object"), " is not a two sample problem")
 
           }

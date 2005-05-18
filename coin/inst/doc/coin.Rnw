@@ -298,7 +298,7 @@ available in package \texttt{stats} for a long time. The exact
 null distribution of the Kruskal-Wallis test can be approximated by $9999$
 Monte-Carlo replications via
 <<YOY-KW, echo = TRUE>>=
-kw <- kruskal_test(length ~ site, data = YOY, distribution = "approx", B = 9999)
+kw <- kruskal_test(length ~ site, data = YOY, distribution = approximate(B = 9999))
 kw
 @
 with $p$-value (and $99\%$ confidence interval) of 
