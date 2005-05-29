@@ -1,4 +1,22 @@
 
+### new("CovarianceMatrix", ...)
+setMethod(f = "initialize", 
+    signature = "CovarianceMatrix",
+    definition = function(.Object, x) {
+        .Object@covariance <- x
+        .Object
+    }
+)
+
+### new("Variance", ...)
+setMethod(f = "initialize", 
+    signature = "Variance",
+    definition = function(.Object, x) {
+        .Object@variance <- x
+        .Object
+    }
+)
+
 ### new("IndependenceProblem", ...)
 ### initialized data
 setMethod(f = "initialize", 
@@ -136,10 +154,10 @@ setMethod(f = "initialize",
         .Object@linearstatistic <- drop(S %*% LinearStatistic(xtrans, 
                                                               ytrans, weights))
         
-        ### <REMAINDER>
+        ### <REMINDER>
         ### for teststat = "maxtype" and distribution = "approx"
         ### we don't need to covariance matrix but the variances only
-        ### </REMAINDER>
+        ### </REMINDER>
 
         ### possibly stratified by block
         if (nlevels(itp@block) == 1) {
@@ -158,11 +176,16 @@ setMethod(f = "initialize",
                 cov <- cov + ec@covariance
             }
         }
-     
-        ### multiply with score matrix
-        .Object@expectation <- drop(S %*% exp)
-        .Object@covariance <- S %*% cov %*% t(S)
-        if (any(diag(.Object@covariance) < sqrt(.Machine$double.eps)))
+
+        ### multiply with score matrix if necessary
+        if (itp@has_scores) {
+            .Object@expectation <- drop(S %*% exp)
+            .Object@covariance <- new("CovarianceMatrix", S %*% cov %*% t(S))
+        } else {
+            .Object@expectation <- drop(exp)
+            .Object@covariance <- new("CovarianceMatrix", cov)
+        }
+        if (any(variance(.Object) < sqrt(.Machine$double.eps)))
             warning("The conditional covariance matrix has ",
                     "zero diagonal elements")
         .Object
@@ -183,8 +206,8 @@ setMethod(f = "initialize",
         .Object <- copyslots(its, .Object)
         .Object@alternative <- match.arg(alternative)
 
-        standstat <- (its@linearstatistic - its@expectation) / 
-                     sqrt(its@covariance)
+        standstat <- (its@linearstatistic - expectation(its)) / 
+                     sqrt(variance(its))
         .Object@teststatistic <- drop(standstat)
 
         .Object
@@ -202,8 +225,8 @@ setMethod(f = "initialize",
 
         .Object <- copyslots(its, .Object)
 
-        standstat <- (its@linearstatistic - its@expectation) / 
-                      sqrt(diag(its@covariance))
+        standstat <- (its@linearstatistic - expectation(its)) / 
+                      sqrt(variance(its))
         .Object@teststatistic <- drop(max(abs(standstat)))
         .Object@standardizedlinearstatistic <- standstat
 
@@ -222,12 +245,12 @@ setMethod(f = "initialize",
 
         .Object <- copyslots(its, .Object)
 
-        covm <- its@covariance
+        covm <- covariance(its)
         mp <- MPinv(covm)
         .Object@covarianceplus <- mp$MPinv
         .Object@df <- mp$rank
 
-        stand <- (its@linearstatistic - its@expectation)
+        stand <- (its@linearstatistic - expectation(its))
         .Object@teststatistic <- 
             drop(stand %*% .Object@covarianceplus %*% stand)
 

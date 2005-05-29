@@ -38,7 +38,7 @@ exportClasses("IndependenceProblem", "IndependenceTest",
 
 exportMethods("initialize", "show", "pvalue", "statistic", 
               "pperm", "dperm", "qperm", "support", "expectation", 
-              "covariance")
+              "covariance", "variance")
 
 S3method(independence_test, formula)
 S3method(independence_test, IndependenceProblem)

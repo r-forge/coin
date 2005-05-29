@@ -12,7 +12,13 @@
 \alias{covariance,ScalarIndependenceTestStatistic-method}
 \alias{covariance,MaxTypeIndependenceTestStatistic-method}
 \alias{covariance,QuadTypeIndependenceTestStatistic-method}
-\title{ Extract the Expectation and Covariance of Linear Statistics }
+\alias{variance}
+\alias{variance-methods}
+\alias{variance,IndependenceTest-method}
+\alias{variance,ScalarIndependenceTestStatistic-method}
+\alias{variance,MaxTypeIndependenceTestStatistic-method}
+\alias{variance,QuadTypeIndependenceTestStatistic-method}
+\title{ Extract the Expectation and Variance / Covariance of Linear Statistics }
 \description{
 
   Extracts the conditional expectation and covariance 
@@ -22,6 +28,7 @@
 \usage{
 expectation(object, ...)
 covariance(object, ...)
+variance(object, ...)
 }
 \arguments{
   \item{object}{an object inheriting from class
@@ -33,6 +40,8 @@ covariance(object, ...)
     \item{expectation}{extracts the expectation of the linear 
       statistic of \code{object}.}
     \item{covariance}{extracts the covariance of the linear 
+      statistic of \code{object}.}
+    \item{variance}{extracts the variance of the linear 
       statistic of \code{object}.}
   }
 }
@@ -56,7 +65,8 @@ Vl <- covariance(ct)
 Vl
 
 ### the standardized contingency table (hard way)
-(l - El) / matrix(sqrt(diag(Vl)), ncol = nrow(El))
+(l - El) / sqrt(variance(ct))
+#matrix(sqrt(diag(Vl)), ncol = nrow(El))
 
 ### easy way
 statistic(ct, type = "standardized")

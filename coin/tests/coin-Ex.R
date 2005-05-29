@@ -638,7 +638,7 @@ Vl <- covariance(ct)
 Vl
 
 ### the standardized contingency table (hard way)
-(l - El) / matrix(sqrt(diag(Vl)), ncol = nrow(El))
+(l - El) / sqrt(variance(ct))
 
 ### easy way
 statistic(ct, type = "standardized")

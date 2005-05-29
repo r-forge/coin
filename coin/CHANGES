@@ -8,6 +8,13 @@
         number of Monte-Carlo replications via
         ..., distribution = approximate(B = 9999), ...
 
+    o   `show()' returns objects (of class `htest', for example) invisibly
+
+    o   `expectation()' returns a vector, not a matrix
+
+    o   new generic `variance()' for extracting the variance(s) of 
+        linear statistics
+
 		CHANGES IN `coin' VERSION 0.2-10
 
 

@@ -41,7 +41,7 @@ SR_shift_2sample <- function(object, fact = NULL) {
 
     }
 
-    T <- (T - object@expectation)/sqrt(object@covariance)
+    T <- (T - expectation(object)) / sqrt(variance(object))
 
     RET@p <- function(q) sum(Prob[T <= q])
     RET@q <- function(p) {
@@ -125,7 +125,7 @@ vdW_split_up_2sample <- function(object) {
     storage.mode(m) <- "integer"
 
     RET@p <- function(q) {
-        obs <- q*sqrt(object@covariance) + object@expectation
+        obs <- q * sqrt(variance(object)) + expectation(object)
         .Call("R_split_up_2sample", scores, m, obs, PACKAGE = "coin")
     }
 

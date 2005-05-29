@@ -658,8 +658,8 @@ chisq_test.IndependenceProblem <- function(object,
     RET@statistic@teststatistic <- 
         RET@statistic@teststatistic * n / (n - 1)
     RET@statistic@covariance <- 
-        RET@statistic@covariance * (n - 1) / n
-    RET@statistic@covarianceplus <- MPinv(RET@statistic@covariance)$MPinv
+        new("CovarianceMatrix", covariance(RET) * (n - 1) / n)
+    RET@statistic@covarianceplus <- MPinv(covariance(RET))$MPinv
 
     if (class(distribution) == "approximate") {
         nd <- do.call("ApproxNullDistribution", 
