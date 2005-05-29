@@ -138,7 +138,7 @@ setMethod(f = "initialize",
 ### compute test statistics and their expectation / covariance matrix
 setMethod(f = "initialize", 
     signature = "IndependenceTestStatistic", 
-    definition = function(.Object, itp) {
+    definition = function(.Object, itp, varonly = FALSE) {
 
         if (!extends(class(itp), "IndependenceTestProblem"))
             stop("Argument ", sQuote("itp"), " is not of class ",
@@ -149,10 +149,17 @@ setMethod(f = "initialize",
         xtrans <- itp@xtrans
         ytrans <- itp@ytrans
         weights <- itp@weights
+        SCORES <- itp@has_scores
         S <- itp@scores
+        varonly <- varonly && (!SCORES)
 
-        .Object@linearstatistic <- drop(S %*% LinearStatistic(xtrans, 
-                                                              ytrans, weights))
+        if (SCORES) {
+            .Object@linearstatistic <- drop(S %*% LinearStatistic(xtrans, 
+                                       ytrans, weights))
+        } else {
+            .Object@linearstatistic <- drop(LinearStatistic(xtrans,
+                                       ytrans, weights))
+        }
         
         ### <REMINDER>
         ### for teststat = "maxtype" and distribution = "approx"
@@ -161,7 +168,8 @@ setMethod(f = "initialize",
 
         ### possibly stratified by block
         if (nlevels(itp@block) == 1) {
-            expcov <- ExpectCovarLinearStatistic(xtrans, ytrans, weights)
+            expcov <- ExpectCovarLinearStatistic(xtrans, ytrans, weights,
+                                                 varonly = varonly)
             exp <- expcov@expectation
             cov <- expcov@covariance
         } else {
@@ -171,19 +179,24 @@ setMethod(f = "initialize",
                 indx <- (itp@block == lev)
                 ec <- ExpectCovarLinearStatistic(xtrans[indx,,drop = FALSE], 
                                                  ytrans[indx,,drop = FALSE], 
-                                                 weights[indx])
+                                                 weights[indx],
+                                                 varonly = varonly)
                 exp <- exp + ec@expectation
                 cov <- cov + ec@covariance
             }
         }
 
         ### multiply with score matrix if necessary
-        if (itp@has_scores) {
+        if (SCORES) {
             .Object@expectation <- drop(S %*% exp)
             .Object@covariance <- new("CovarianceMatrix", S %*% cov %*% t(S))
         } else {
             .Object@expectation <- drop(exp)
-            .Object@covariance <- new("CovarianceMatrix", cov)
+            if (varonly) {
+                .Object@covariance <- new("Variance", drop(cov))
+            } else {
+                .Object@covariance <- new("CovarianceMatrix", cov)
+            }
         }
         if (any(variance(.Object) < sqrt(.Machine$double.eps)))
             warning("The conditional covariance matrix has ",

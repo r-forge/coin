@@ -15,6 +15,10 @@
     o   new generic `variance()' for extracting the variance(s) of 
         linear statistics
 
+    o   only variances (instead of the whole covariance matrix) is 
+        computed when the distribution of maximum type test statistics 
+        is to be _approximated_.
+
 		CHANGES IN `coin' VERSION 0.2-10
 
 

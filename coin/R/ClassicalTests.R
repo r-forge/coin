@@ -98,7 +98,8 @@ independence_test.IndependenceProblem <- function(object,
 
     ### compute linear statistic, conditional expectation and
     ### conditional covariance
-    its <- new("IndependenceTestStatistic", itp)
+    its <- new("IndependenceTestStatistic", itp, 
+        varonly = class(distribution) == "approximate" && teststat == "maxtype")
 
     ### compute test statistic and corresponding null distribution
     RET <- switch(teststat,

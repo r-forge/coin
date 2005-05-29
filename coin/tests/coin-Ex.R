@@ -380,7 +380,7 @@ ltmax <- independence_test(counts ~ treatment, data = platalet_counts,
     ytrafo = function(data) trafo(data, numeric_trafo = function(x) 
         matrix(c(rank(x), ansari_trafo(x)), ncol = 2,
                dimnames = list(1:length(x), c("Location", "Scale")))),
-    teststat = "maxtype", distribution = approximate(B = 9999))
+    teststat = "maxtype")
 
 ### points to a difference in location
 pvalue(ltmax, adjusted = TRUE)

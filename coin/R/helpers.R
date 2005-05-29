@@ -34,13 +34,32 @@ ExpectCovarInfluence <- function(y, weights) {
           PACKAGE = "coin")
 }
 
-ExpectCovarLinearStatistic <- function(x, y, weights) {
-    storage.mode(x) <- "double"
-    storage.mode(y) <- "double"
-    storage.mode(weights) <- "double"
-    expcovinf <- ExpectCovarInfluence(y, weights)
-    .Call("R_ExpectCovarLinearStatistic", x, y, weights, expcovinf,
-          PACKAGE = "coin")
+ExpectCovarLinearStatistic <- function(x, y, weights, varonly = FALSE) {
+    if (varonly) {
+        indx <- rep(1:nrow(x), weights)
+        x <- x[indx,,drop = FALSE]
+        y <- y[indx,,drop = FALSE]
+        n <- nrow(x)
+        Ey <- colMeans(y)
+        Vy <- rowMeans((t(y) - Ey)^2)
+
+        rSx <- colSums(x)
+        rSx2 <- colSums(x^2)
+        E <- rSx * Ey
+        V <- n / (n - 1) * kronecker(Vy, rSx2)
+        V <- V - 1 / (n - 1) * kronecker(Vy, rSx^2) 
+        RET <- new("ExpectCovar")
+        RET@expectation <- drop(E)
+        RET@covariance <- matrix(V, nrow = 1)
+        return(RET)
+    } else {
+        storage.mode(x) <- "double"
+        storage.mode(y) <- "double"
+        storage.mode(weights) <- "double"
+        expcovinf <- ExpectCovarInfluence(y, weights)
+        .Call("R_ExpectCovarLinearStatistic", x, y, weights, expcovinf,
+               PACKAGE = "coin")
+    }
 }
 
 ### copied from package MASS
