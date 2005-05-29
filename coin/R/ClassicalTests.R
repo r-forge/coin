@@ -56,7 +56,7 @@ independence_test.IndependenceProblem <- function(object,
 
     addargs <- list(...)
     if (length(addargs) > 0) 
-        warning("addtional arguments ", 
+        warning("additional arguments ", 
                 paste(names(addargs), collapse = ", "),
                 " will be ignored")
 
