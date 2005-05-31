@@ -2,6 +2,7 @@
 
 		CHANGES IN `coin' VERSION 0.2-11
 
+
     o   the `distribution' argument now takes the return values of
         functions `exact()', `approximate()' or `asymptotic()' as well.
         Those functions can be used to specify parameters, such as the
@@ -18,6 +19,9 @@
     o   only variances (instead of the whole covariance matrix) is 
         computed when the distribution of maximum type test statistics 
         is to be _approximated_.
+
+    o   `data' may be an object of class `exprSet' (-> Biobase)
+
 
 		CHANGES IN `coin' VERSION 0.2-10
 
