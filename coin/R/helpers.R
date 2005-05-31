@@ -94,14 +94,27 @@ copyslots <- function(source, target) {
 
 formula2data <- function(formula, data, subset, ...) {
 
-    dat <- ModelEnvFormula(formula = formula, data = data,
-                           subset = subset, ...)
+    ### in case `data' is an exprSet object 
+    if (extends(class(data), "exprSet")) {
+        dat <- ModelEnvFormula(formula = formula, 
+                               data = pData(phenoData(data)),
+                               subset = subset, ...)
 
-    ### rhs of formula
-    if (has(dat, "input"))
-        x <- dat@get("input")
-    else 
-        stop("missing right hand side of formula")
+        ### x are _all_ expression levels, always
+        x <- as.data.frame(t(exprs(data)))
+
+    } else {
+
+        dat <- ModelEnvFormula(formula = formula, 
+                               data = data,
+                               subset = subset, ...)
+
+        ### rhs of formula
+        if (has(dat, "input"))
+            x <- dat@get("input")
+        else 
+            stop("missing right hand side of formula")
+    }
 
     ### ~ x + y is allowed
     if (has(dat, "response"))
@@ -149,6 +162,8 @@ formula2weights <- function(weights, data, subset, ...) {
 
     if (class(weights) != "formula") 
         stop(sQuote("weights"), " is not a formula object")
+
+    if (extends(class(data), "exprSet")) data <- pData(phenoData(data))
 
     dat <- ModelEnvFormula(formula = weights, data = data,
                            subset = subset, ...)
