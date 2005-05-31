@@ -3,18 +3,24 @@
 \alias{expectation}
 \alias{expectation-methods}
 \alias{expectation,IndependenceTest-method}
+\alias{expectation,IndependenceTestStatistic-method}
 \alias{expectation,ScalarIndependenceTestStatistic-method}
 \alias{expectation,MaxTypeIndependenceTestStatistic-method}
 \alias{expectation,QuadTypeIndependenceTestStatistic-method}
 \alias{covariance}
 \alias{covariance-methods}
+\alias{covariance,CovarianceMatrix-method}
 \alias{covariance,IndependenceTest-method}
+\alias{covariance,IndependenceTestStatistic-method}
 \alias{covariance,ScalarIndependenceTestStatistic-method}
 \alias{covariance,MaxTypeIndependenceTestStatistic-method}
 \alias{covariance,QuadTypeIndependenceTestStatistic-method}
 \alias{variance}
 \alias{variance-methods}
+\alias{variance,Variance-method}
+\alias{variance,CovarianceMatrix-method}
 \alias{variance,IndependenceTest-method}
+\alias{variance,IndependenceTestStatistic-method}
 \alias{variance,ScalarIndependenceTestStatistic-method}
 \alias{variance,MaxTypeIndependenceTestStatistic-method}
 \alias{variance,QuadTypeIndependenceTestStatistic-method}
@@ -66,7 +72,6 @@ Vl
 
 ### the standardized contingency table (hard way)
 (l - El) / sqrt(variance(ct))
-#matrix(sqrt(diag(Vl)), ncol = nrow(El))
 
 ### easy way
 statistic(ct, type = "standardized")
