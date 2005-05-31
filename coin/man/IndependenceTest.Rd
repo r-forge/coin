@@ -9,14 +9,16 @@
     scales, possibly stratified in blocks, is tested conditional on the data.
 }
 \usage{
-\method{independence_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{independence_test}{formula}(formula, data, subset = NULL, 
+    weights = NULL, \dots)
 \method{independence_test}{IndependenceProblem}(object, 
     teststat = c("maxtype", "quadtype", "scalar"),
     distribution = c("asymptotic", "approximate", "exact"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL, 
     check = NULL, ...)
-\method{independence_test}{table}(object, distribution = c("asymptotic", "approximate"), ...)
+\method{independence_test}{table}(object, 
+    distribution = c("asymptotic", "approximate"), ...)
 }
 \arguments{
   \item{formula}{a formula of the form 
@@ -25,7 +27,11 @@
     (including censored ones on the left hand side) and \code{block} is an 
     optional factor for stratification.}
   \item{data}{an optional data frame containing the variables in the
-    model formula.}
+    model formula. Alternatively, an object of class
+    \code{\link[Biobase]{exprSet}} may be specified. In this case,
+    all variables in \code{formula}, except \code{.}, 
+    are first evaluated in the \code{pData} data.frame. The dot (\code{.}) 
+    refers to the matrix of expression levels (\code{exprs} slot).}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
   \item{weights}{an optional formula of the form \code{~ w} defining
@@ -125,6 +131,7 @@ independence_test(asat ~ group, data = asat,
 ### same as
 normal_test(asat ~ group, data = asat, distribution = "exact", 
             alternative = "greater")
+
 
 }
 \keyword{htest}
