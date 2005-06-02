@@ -56,7 +56,7 @@
   \deqn{a_i = \delta_i - \sum_{j: X_j \le X_i} \delta_j / (n - |\{k: X_k < X_j\}|)}
   for a linear rank statistic \eqn{T = \sum_{i = 1}^ n a_i U_i} 
   (in the two-sample situations, where \eqn{U_i = 0} or \eqn{U_i = 1} denotes
-  the groups. The second method is described in Hothorn & Lausen (2003) where
+  the groups). The second method is described in Hothorn & Lausen (2003) where
   the coefficients
   \deqn{a_i = \delta_i - \sum_{j: X_j \le X_i} \delta_j / (n - |\{k: X_k \le X_j\}| + 1)}
   are suggested.
@@ -103,7 +103,6 @@ survdiff(Surv(time, event) ~ group, data = exdata)
 ### p = 0.0505
 surv_test(Surv(time, event) ~ group, data = exdata, 
           distribution = exact())
-
 
 }
 \keyword{htest}

@@ -20,7 +20,11 @@
         computed when the distribution of maximum type test statistics 
         is to be _approximated_.
 
-    o   `data' may be an object of class `exprSet' (-> Biobase)
+    o   `data' may be an object of class `exprSet' (-> Biobase), the
+        vignette has an example
+
+    o   `logrank_trafo' (and `surv_test') now have a `ties.method' argument,
+        see ?surv_test for more information
 
 
 		CHANGES IN `coin' VERSION 0.2-10
