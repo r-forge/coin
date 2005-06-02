@@ -361,10 +361,15 @@ surv_test.formula <- function(formula, data = list(), subset = NULL,
     
 surv_test.IndependenceProblem <- function(object,  
     alternative = c("two.sided", "less", "greater"),
-    distribution = c("asymptotic", "approximate", "exact"), ...) {
+    distribution = c("asymptotic", "approximate", "exact"), 
+    ties.method = c("logrank", "HL"), ...) {
 
     alternative <- match.arg(alternative)
     distribution <- check_distribution_arg(distribution)
+    ties.method <- match.arg(ties.method)
+
+    ytrafo <- function(data) trafo(data, surv_trafo = function(x)
+        logrank_trafo(x, ties.method = ties.method))
 
     check <- function(object) {
         if (!(is_Ksample(object) && is_censored_y(object)))
@@ -378,7 +383,8 @@ surv_test.IndependenceProblem <- function(object,
 
     RET <- independence_test(object, 
         teststat = ifelse(scalar, "scalar", "quadtype"), 
-        distribution = distribution, check = check, ...)
+        distribution = distribution, check = check, ytrafo = ytrafo, 
+        ...)
  
     if (extends(class(RET@statistic), "ScalarIndependenceTest"))
         RET@nullvalue <- 0

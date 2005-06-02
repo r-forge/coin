@@ -333,6 +333,9 @@ stopifnot(pci[1] < pvalue(atel) & pci[2] > pvalue(atel))
 ### StatXact 6 manual, 413
 load("lungcancer.rda")
 
+### NOTE: StatXact uses another tie handling method, see Callaert (2003)
+### and the examples below (at the end of this file)
+
 lta <- surv_test(Surv(time, cens) ~ group, data = lungcancer)
 
 # <CHECK>
@@ -842,3 +845,18 @@ stopifnot(isequal(round(sqrt(statistic(lta)), 3), 2.481))
 # asymptotical p-value, page 1020
 stopifnot(isequal(round(pvalue(lta), 5), 0.01309))
 
+
+### --------------------------------------------------------- ###
+
+# some additional checks (always add new tests at the end because of the RNG's)
+
+lta <- surv_test(Surv(time, event) ~ treatment | gender, data = srv)
+stopifnot(isequal(round(pvalue(lta), 4), 0.1224))
+
+### example from Callaert (2003), AmStat 57, 214-217
+exdata <- data.frame(time = c(1, 1, 5, 6, 6, 6, 6, 2, 2, 2, 3, 4, 4, 5, 5),
+                     event = rep(TRUE, 15),
+                     group = factor(c(rep(0, 7), rep(1, 8))))
+p <- pvalue(surv_test(Surv(time, event) ~ group, data = exdata, 
+          distribution = exact()))
+stopifnot(isequal(round(p, 4), 0.0505))
