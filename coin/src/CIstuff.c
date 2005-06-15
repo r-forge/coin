@@ -179,3 +179,35 @@ SEXP R_MonteCarloIndependenceTest (SEXP x, SEXP y, SEXP block, SEXP B) {
     UNPROTECT(2);
     return(ans);
 }
+
+
+SEXP R_maxstattrafo(SEXP x, SEXP cutpoints) {
+
+    int i, j, n, nc, jn;
+    SEXP ans;
+    double *dans, *dx, *dcutpoints, cj;
+    
+    if (!isReal(x) || !isReal(cutpoints))
+        error("x or cutpoints are not of type REALSXP");
+        
+    n = LENGTH(x);
+    nc = LENGTH(cutpoints);
+    PROTECT(ans = allocMatrix(REALSXP, n, nc));
+    dans = REAL(ans);
+    dx = REAL(x);
+    dcutpoints = REAL(cutpoints);
+    
+    for (j = 0; j < nc; j++) {
+        jn = j * n;
+        cj = dcutpoints[j];
+        for (i = 0; i < n; i++) {
+            if (dx[i] > cj) {
+                dans[jn + i] = 0.0;
+            } else {
+                dans[jn + i] = 1.0;
+            }
+        }
+    }
+    UNPROTECT(1);
+    return(ans);
+}
