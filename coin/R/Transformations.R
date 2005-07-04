@@ -152,8 +152,9 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
         stop("data class ", class(x), " is not supported")
     })
 
+    ### <FIXME> class "AsIs" may happen </FIXME> 
     chk <- sapply(tr, function(x) (is.matrix(x) && nrow(x) == nrow(data)) ||
-                           (is.vector(x) && length(x) == nrow(data)))
+                           (!is.matrix(x) && (length(x) == nrow(data))))
     if (!all(chk))
         stop("transformations are not of length / nrow", nrow(data))
 
