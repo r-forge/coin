@@ -1,7 +1,4 @@
 
-o	class "AsIs" may be the result of I() in formulae and
-        is.vector() will be FALSE (in dimension checks in trafo)
-
 o	some classes are the same in `coin' and `party': can they conflict?
 
 o	maxstat_tests scales poorly for very large problems (number of obs)
@@ -49,3 +46,4 @@ o	check whats happening here
 o	Kurt: trafo as family of transformations (see glm(..., family,...)
 
 o	should be have `distribution = "none"'?
+
