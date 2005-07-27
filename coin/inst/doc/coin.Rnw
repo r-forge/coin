@@ -373,8 +373,14 @@ if (require(multcomp)) {
     print(pvalue(it, adjusted = TRUE))
 }
 @
-In the above example, single-step adjusted $p$-values based on maximum-type
-statistics are computed. 
+When either $g$ or $h$ are multivariate, single-step adjusted $p$-values based on 
+maximum-type statistics are computed as described in \cite{WestfallYoung1993}, 
+algorithm 2.5 (page 47) and equation (2.8), page 50. Note that for the
+example shown above only the \textit{minimum} $p$-value is adjusted
+appropriately because the subset pivotality condition is violated, i.e., the
+distribution of the test statistics under the complete null-hypothesis of no
+treatment effect of \texttt{site} is the basis of all adjustments instead of
+the corresponding partial null-hypothesis. 
 
 Another important application are simultaneous tests for many response
 variables. This problem frequently occurs in microarray expression studies

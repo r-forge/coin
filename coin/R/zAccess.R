@@ -174,7 +174,7 @@ setGeneric("support", function(object, p, ...)
 setMethod(f = "support",
           signature = "NullDistribution",
           definition = function(object, p, ...) {
-              object@support(p)
+              object@support(p, ...)
           }
 )
 
@@ -195,14 +195,14 @@ setMethod(f = "support",
 setMethod(f = "support",
           signature = "MaxTypeIndependenceTest",
           definition = function(object, p, ...) {
-              support(object@distribution, p)
+              support(object@distribution, p, ...)
           }
 )
 
 setMethod(f = "support",
           signature = "QuadTypeIndependenceTest",
           definition = function(object, p, ...) {
-              support(object@distribution, p)
+              support(object@distribution, p, ...)
           }
 )
 

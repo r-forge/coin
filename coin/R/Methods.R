@@ -128,7 +128,7 @@ setMethod(f = "ApproxNullDistribution",
               if (!(max(abs(object@weights - 1.0)) < sqrt(.Machine$double.eps)))
                   stop("cannot approximate distribution with non-unity weights")
 
-              pls <- .Call("R_MonteCarloIndependenceTest", object@xtrans, 
+              pls <- plsraw <- .Call("R_MonteCarloIndependenceTest", object@xtrans, 
                   object@ytrans, as.integer(object@block), as.integer(B), 
                   PACKAGE = "coin")
 
@@ -164,7 +164,10 @@ setMethod(f = "ApproxNullDistribution",
                   class(p) <- "MCp"
                   p
               }
-              RET@support <- function(p = 1e-5) unique(pls)
+              RET@support <- function(p = 1e-5, raw = FALSE) {
+                  if (raw) return(plsraw)
+                  unique(pls)
+              }
               return(RET)
           }
 )
@@ -176,13 +179,13 @@ setMethod(f = "ApproxNullDistribution",
               if (!(max(abs(object@weights - 1.0)) < sqrt(.Machine$double.eps)))
                   stop("cannot approximate distribution with non-unity weights")
 
-              pls <- .Call("R_MonteCarloIndependenceTest", object@xtrans, 
+              pls <- plsraw <- .Call("R_MonteCarloIndependenceTest", object@xtrans, 
                   object@ytrans, as.integer(object@block), as.integer(B), 
                   PACKAGE = "coin")
 
               if (object@has_scores) {
                   S <- object@scores
-                  pls <- lapply(pls, function(x) S %*% x)     
+                  pls <- plsraw <- lapply(pls, function(x) S %*% x)     
               } 
 
               dcov <- sqrt(variance(object))
@@ -211,7 +214,10 @@ setMethod(f = "ApproxNullDistribution",
                   class(p) <- "MCp"
                   p
               }
-              RET@support <- function(p = 1e-5) unique(pls)
+              RET@support <- function(p = 1e-5, raw = FALSE) {
+                  if (raw) return(plsraw)
+                  unique(pls)
+              }
               RET@name = "MonteCarlo distribution"
               return(RET)
           }
@@ -224,13 +230,13 @@ setMethod(f = "ApproxNullDistribution",
               if (!(max(abs(object@weights - 1.0)) < sqrt(.Machine$double.eps)))
                   stop("cannot approximate distribution with non-unity weights")
 
-              pls <- .Call("R_MonteCarloIndependenceTest", object@xtrans, 
+              pls <- plsraw <- .Call("R_MonteCarloIndependenceTest", object@xtrans, 
                   object@ytrans, as.integer(object@block), as.integer(B), 
                   PACKAGE = "coin")
 
               if (object@has_scores) {
                   S <- object@scores
-                  pls <- lapply(pls, function(x) S %*% x)
+                  pls <- plsraw <- lapply(pls, function(x) S %*% x)
               }
 
               dcov <- object@covarianceplus
@@ -261,7 +267,10 @@ setMethod(f = "ApproxNullDistribution",
                   class(p) <- "MCp"
                   p
               }
-              RET@support <- function(p = 1e-5) unique(pls)
+              RET@support <- function(p = 1e-5, raw = FALSE) {
+                  if (raw) return(plsraw)
+                  unique(pls)
+              }
               RET@name = "MonteCarlo distribution"
               return(RET)
           }
