@@ -1,6 +1,6 @@
 
 /**
-    Some additional functionality for package `ConditionalInference'
+    Some additional functionality for package `coin'
     *\file CIstuff.c
     *\author $Author$
     *\date $Date$
