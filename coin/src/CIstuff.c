@@ -1,7 +1,7 @@
 
 /**
     Some additional functionality for package `ConditionalInference'
-    *\file $RCSfile$
+    *\file CIstuff.c
     *\author $Author$
     *\date $Date$
 */
@@ -89,8 +89,8 @@ SEXP R_blocksetup (SEXP block) {
 
 /**
     Block permutation
-    *\param index 
-    *\param block integer vector coding for blocks
+    *\param blocksetup as computed by `R_blocksetup'
+    *\param ans integer vector 
 */
                                 
 void C_blockperm (SEXP blocksetup, int *ans) {

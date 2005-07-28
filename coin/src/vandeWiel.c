@@ -7,7 +7,7 @@
             with modifications for R by 
             Torsten Hothorn <Torsten.Hothorn@R-project.org>
       
-    *\file $RCSfile$
+    *\file vandeWiel.c
     *\author $Author$
     *\date $Date$
 */
