@@ -6,6 +6,8 @@ o	maxstat_tests scales poorly for very large problems (number of obs)
 
 o	compare multiple test procedures with multtest
 
+        -> implement Bonferroni resampling (Westfall & Wolfinger 1997)
+
 o	check spearman_test vs. cor.test
 
 o	formula interface + NA's and weights
