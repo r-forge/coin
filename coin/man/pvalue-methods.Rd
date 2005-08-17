@@ -46,7 +46,7 @@ pvalue(object, ...)
   pivotality condition holds.
 
   When \code{method = "step-down"} the free step-down resampling method
-  (algorithm 2.8 and formula 2.8 in Westfall & Young) is used, the above
+  (algorithm 2.8 and formula 2.8 in Westfall & Young, 1993) is used, the above
   comments apply as well.
 
   With \code{method = "discrete"}, the Bonferroni adjustment as suggested by
