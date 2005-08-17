@@ -98,6 +98,7 @@ dbonf <- function(object, ...) {
         ### order of original statistics
         ts <- abs(statistic(object, "standardized"))
     } else {
+        error("one-sided p-value adjustment currently not implemented")
         pls <- lapply(pls, function(x)
             (x - expect) / dcov
         )
