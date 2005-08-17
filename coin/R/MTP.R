@@ -1,6 +1,7 @@
 
 ### <FIXME>: implement one-sided cases </FIXME>
 
+### single step maxT multiple testing procedure
 singlestep <- function(object, ...) {
 
     ts <- abs(statistic(object, "standardized"))
@@ -55,7 +56,7 @@ stepdown <- function(object, aggregate = FALSE, MARGIN = 2, ...) {
    ret
 }
 
-### Bonferroni permutation method (Westfall & Young, 1997, AmStat 51, 3-8)
+### Bonferroni permutation method (Westfall & Wolfinger, 1997, AmStat 51, 3-8)
 dbonf <- function(object, ...) {
 
    ### <FIXME> this should be possible when the _exact_ marginal
