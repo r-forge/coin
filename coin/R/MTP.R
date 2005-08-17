@@ -34,12 +34,12 @@ stepdown <- function(object, ...) {
         pls <- lapply(pls, function(x)
             (abs(x - expect) / dcov)
         )
-        ts <- drop(abs(statistic(object, "standardized")))
+        ts <- abs(statistic(object, "standardized"))
     } else {
         pls <- lapply(pls, function(x)
             (x - expect) / dcov
         )
-        ts <- drop(statistic(object, "standardized"))
+        ts <- statistic(object, "standardized")
     }
 
     ### order of original statistics
