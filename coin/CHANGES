@@ -1,4 +1,17 @@
 
+
+		CHANGES IN `coin' VERSION 0.3-1
+
+    o   alternative = "less" and alternative = "greater" are now defined
+        for maxtype statistics as well
+
+    o   one- and two-sided single-step and step-down maxT p-value
+        adjustments are now available from the appropriate 
+        `pvalue' method (NOTE: those procedures have not been tested
+                         carefully, yet)
+
+
+
 		CHANGES IN `coin' VERSION 0.2-14
 
     o   distribution = "approximate" for maxtype statistics was wrong
