@@ -208,6 +208,22 @@ $\Sigma$. The application of a quadratic form $c_\text{quad}(\mathbf{t}, \mu,
 computationally more expensive because the Moore-Penrose 
 inverse $\Sigma^+$ of $\Sigma$ is involved.
 
+The definition of one- and two-sided $p$-values used for the computations in
+the \texttt{coin} package is 
+\begin{eqnarray*}
+P(c(\T, \mu, \Sigma) &\le& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(less)} \\
+P(c(\T, \mu, \Sigma) &\ge& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(greater)}\\
+P(|c(\T, \mu, \Sigma)| &\le& |c(\mathbf{t}, \mu, \Sigma)|) \quad \text{(two-sided).}
+\end{eqnarray*}
+Note that for quadratic forms only two-sided $p$-values are available 
+and that in the one-sided case maximum type test statistics are replaced by
+\begin{eqnarray*}
+\min \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right) 
+    \quad \text{(less) and } 
+\max \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right) 
+    \quad \text{(greater).}
+\end{eqnarray*}
+
 The conditional distribution and thus the $p$-value
 of the statistics $c(\mathbf{t}, \mu, \Sigma)$ can be
 computed in several different ways. For some special forms of the
