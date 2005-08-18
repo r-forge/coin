@@ -1,6 +1,4 @@
 
-o	implement one-sided p-values in dbonf.
-
 o	some classes are the same in `coin' and `party': can they conflict?
 
 o	maxstat_tests scales poorly for very large problems (number of obs)

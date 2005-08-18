@@ -20,11 +20,10 @@ pvalue(object, ...)
 \arguments{
   \item{object}{an object inheriting from class
     \code{\link{IndependenceTest-class}}.}
-  \item{\dots}{additional arguments, such as \code{adjusted}, 
-      a logical indicating whether adjusted p-values should be
-      computed and \code{method}, a character specifying the type of 
+  \item{\dots}{additional arguments: \code{method}, 
+      a character specifying the type of 
       adjustment (\code{single-step}, \code{step-down} or \code{discrete})
-      should be used.}
+      should be used. The default is \code{global}.}
 }
 \section{Methods}{
   \describe{
@@ -38,7 +37,9 @@ pvalue(object, ...)
   distribution (which may be the case even when \code{distribution =
   "asypmtotic"} was used). 
 
-  By default, adjusted p-values are obtained from a single-step max-T procedure
+  By default, a global p-value is returned. When \code{method =
+  "single-step"}, adjusted p-values are obtained from a 
+  single-step max-T procedure
   (Westfall & Young, 1993, algorithm 2.5 and formula 2.8). Note that the
   minimum of the adjusted p-values always controls the familywise error 
   rate (FWER) but the maximum type I error, i.e. the error for
@@ -54,8 +55,6 @@ pvalue(object, ...)
   permutation distributions is available, however, without taking
   correlations between the test statistics into account. Here, the p-values are
   valid even without assuming subset pivotality.
-
-  Note that currently only two-sided p-values are available. 
 
 }
 \references{
@@ -85,11 +84,12 @@ pvalue(at)
 df <- data.frame(y1 = rnorm(20) + c(rep(0, 10), rep(1, 10)), 
                  y2 = rnorm(20), 
                  x = gl(2, 10))
+
 it <- independence_test(y1 + y2 ~ x, data = df, 
-       distribution = approximate(B = 9999))
-pvalue(it, adjusted = TRUE, method = "single-step")
-pvalue(it, adjusted = TRUE, method = "step-down")
-pvalue(it, adjusted = TRUE, method = "discrete")
+                        distribution = approximate(B = 9999))
+pvalue(it, method = "single-step")
+pvalue(it, method = "step-down")
+pvalue(it, method = "discrete")
 
 }
 \keyword{methods}

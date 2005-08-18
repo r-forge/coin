@@ -430,7 +430,7 @@ if (require(multcomp)) {
                      model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))),
                  teststat = "max", distribution = approximate(B = 9999))
     print(pvalue(it))
-    print(pvalue(it, adjusted = TRUE))
+    print(pvalue(it, method = "single-step"))
 }
 @
 When either $g$ or $h$ are multivariate, single-step adjusted $p$-values based on 
@@ -464,7 +464,7 @@ if (require(Biobase)) {
                       distribution = approximate(B = 1000))
 
     print(pvalue(it))
-    print(which(pvalue(it, adjusted = TRUE) < 0.05))
+    print(which(pvalue(it, method = "step-down") < 0.05))
 
 }
 @

@@ -10,6 +10,13 @@
         `pvalue' method (NOTE: those procedures have not been tested
                          carefully, yet)
 
+        In addition, the Bonferroni-adjustment by Westfall & Wolfinger
+        (1997) is available now. Note that the interface to `pvalue'
+        changed slightly, `adjustment = TRUE' was replaced by
+        `method = "single-step"'.
+
+    o   more examples added to the vignette.
+
 
 
 		CHANGES IN `coin' VERSION 0.2-14
