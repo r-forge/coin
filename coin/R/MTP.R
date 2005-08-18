@@ -69,8 +69,6 @@ stepdown <- function(object, ...) {
     ret
 }
 
-### <FIXME>: implement one-sided cases </FIXME>
-
 ### Bonferroni permutation method (Westfall & Wolfinger, 1997, AmStat 51, 3-8)
 dbonf <- function(object, ...) {
 
@@ -84,38 +82,46 @@ dbonf <- function(object, ...) {
             sQuote("MaxTypeIndependenceTest"),
             " or distribution was not approximated via Monte-Carlo")
 
-   ### raw simulation results, scores have been handled already
-   pls <- support(object, raw = TRUE)
+   alternative <- object@statistic@alternative
 
    ### standardize
    dcov <- sqrt(variance(object))
    expect <- expectation(object)
 
-    if (object@statistic@alternative == "two.sided") {
-        pls <- lapply(pls, function(x)
-            (abs(x - expect) / dcov)
-        )
-        ### order of original statistics
-        ts <- abs(statistic(object, "standardized"))
-    } else {
-        error("one-sided p-value adjustment currently not implemented")
-        pls <- lapply(pls, function(x)
-            (x - expect) / dcov
-        )
-        ts <- statistic(object, "standardized")
-    }
-   pls <- matrix(unlist(pls), nrow = length(pls), byrow = TRUE)
+   ### raw simulation results, scores have been handled already
+   pls <- support(object, raw = TRUE)
+   pls <- lapply(pls, function(x)
+            (x - expect) / dcov)
+   pls <- t(matrix(unlist(pls), nrow = length(pls), byrow = TRUE))
+   ts <- (statistic(object, "standardized"))
+   
+   pvals <- switch(alternative,
+           "less" = rowMeans(pls <= drop(ts)),
+           "greater" = rowMeans(pls >= drop(ts)),
+           "two.sided" = rowMeans(abs(pls) >= abs(drop(ts))))
+
+   foo <- function(x, t)
+       switch(alternative,
+           "less" = mean(x <= t),
+           "greater" = mean(x >= t),
+           "two.sided" = mean(abs(x) >= abs(t)))
+
+   p <- vector(mode = "list", length = nrow(pls))
+   for (i in 1:nrow(pls)) {
+       ux <- unique(pls[i,])
+       p[[i]] <- sapply(ux, foo, x = pls[i,])
+   } 
 
    ### Bonferroni adjustment (Westfall & Wolfinger, 1997)
-   adjp <- rep(0, length(ts))
-   for (i in 1:length(ts)) {
-       for (q in 1:ncol(pls)) {
-           x <- pls[pls[,q] >= ts[i],q]
+   adjp <- rep(1, length(ts))
+   for (i in 1:length(pvals)) {
+       for (q in 1:length(p)) {
+           x <- p[[q]][p[[q]] <= pvals[i]]
            if (length(x) > 0)
-               adjp[i] <- adjp[i] + mean(pls[,q] >= min(x))
+               adjp[i] <- adjp[i] * (1 - max(x))
        }
    }
-   ret <- matrix(pmin(adjp, 1), nrow = nrow(ts), ncol = ncol(ts))
+   ret <- matrix(1 - pmin(adjp, 1), nrow = nrow(ts), ncol = ncol(ts))
    rownames(ret) <- rownames(ts)
    colnames(ret) <- colnames(ts)
    ret

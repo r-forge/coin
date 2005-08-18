@@ -26,20 +26,18 @@ setMethod(f = "pvalue",
 
 setMethod(f = "pvalue",
           signature = "MaxTypeIndependenceTest",
-          definition = function(object, adjusted = FALSE, 
-              method = c("single-step", "step-down", "discrete"), ...) {
+          definition = function(object, 
+              method = c("global", "single-step", "step-down", "discrete"), ...) {
 
               method <- match.arg(method)
               x <- object@statistic
-              if (adjusted) {
-                  RET <- switch(method, 
-                      "single-step" = singlestep(object, ...),
-                      "step-down" = stepdown(object, ...),
-                      "discrete" = dbonf(object, ...))
-              } else {
-                  RET <- pvalue(object@distribution, 
-                                object@statistic@teststatistic)
-              }
+              RET <- switch(method, 
+                   "global" = pvalue(object@distribution, 
+                                    object@statistic@teststatistic),
+                   "single-step" = singlestep(object, ...),
+                   "step-down" = stepdown(object, ...),
+                   "discrete" = dbonf(object, ...)
+              )
               return(RET)
           }
 )
