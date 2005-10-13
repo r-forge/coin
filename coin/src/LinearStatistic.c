@@ -43,6 +43,32 @@ void C_kronecker (const double *A, const int m, const int n,
 
 
 /**
+    R-interface to C_kronecker\n
+    *\param A matrix
+    *\param B matrix
+*/
+
+SEXP R_kronecker(SEXP A, SEXP B) {
+
+    int m, n, r, s;
+    SEXP ans;
+
+    if (!isReal(A) || !isReal(B))
+        error("R_kronecker: A and / or B are not of type REALSXP");
+
+    m = nrow(A);
+    n = ncol(A);
+    r = nrow(B);
+    s = ncol(B);
+    
+    PROTECT(ans = allocVector(REALSXP, m * n * r * s));
+    C_kronecker(REAL(A), m, n, REAL(B), r, s, REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+
+
+/**
     Conditional expectation and covariance of the influence function\n
     *\param y values of the influence function
     *\param q dimension of the influence function
