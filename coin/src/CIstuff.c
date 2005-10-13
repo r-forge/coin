@@ -9,11 +9,25 @@
 #include "CI_common.h"
 
 int nrow(SEXP x) {
-    return(INTEGER(getAttrib(x, R_DimSymbol))[0]);
+    SEXP a;
+
+    a = getAttrib(x, R_DimSymbol);
+    if (a == R_NilValue) {
+        return(LENGTH(x));
+    } else {
+        return(INTEGER(getAttrib(x, R_DimSymbol))[0]);
+    }
 }
     
 int ncol(SEXP x) {
-    return(INTEGER(getAttrib(x, R_DimSymbol))[1]);
+    SEXP a;
+    
+    a = getAttrib(x, R_DimSymbol);
+    if (a == R_NilValue) {
+        return(1);
+    } else {
+        return(INTEGER(getAttrib(x, R_DimSymbol))[1]);
+    }
 }
         
 
