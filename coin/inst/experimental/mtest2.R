@@ -52,6 +52,31 @@ dgp <- function(n = 100, mu = rep(0, 2)) {
     data.frame(group = group, X)
 }
 
+cmax <- function(x) {
+    do.call(pmax, as.data.frame(t(x)))
+}
+
+
+pval <- function(Z, Tobs, alternative = c("two.sided", "less", "greater")) {
+
+    alternative <- match.arg(alternative)
+    Tobs <- drop(Tobs)
+    EZ <- rowMeans(Z)
+    Z <- Z - EZ
+    Tobs <- Tobs - EZ
+    switch(alternative, "two.sided" = {
+        maxabsZ <- cmax(abs(Z))
+        sapply(abs(Tobs), function(x) mean(maxabsZ > x))
+    }, "less" = {
+        rowMeans(cmax(Z) > max(Tobs))
+        maxZ <- cmax(Z)
+        sapply(abs(Tobs), function(x) mean(maxZ > x))
+    }, "greater" = {
+        maxZ <- cmax(Z)
+        sapply(abs(Tobs), function(x) mean(maxZ < x))
+    })
+}
+
 ### a simple two sample problem
 mydf <- dgp(n = 40, mu = 0.5)
 mydf$X <- round(mydf$X, 3) * 1000
@@ -60,6 +85,13 @@ it <- independence_test(X ~ group, data = mydf, distribution = exact())
 ### generate scaled and shifted bootstrap distribution
 a <- mboot(it, B = 49999)
 Z <- drop(a)
+
+### pvalues
+pval(a, statistic(it, "linear"))
+pvalue(it)
+t.test(X ~ group, data = mydf, var.equal = TRUE)$p.value
+MTP(t(as.matrix(mydf[["X"]])), Y = mydf[["group"]],
+    test = "t.twosamp.equalvar", B = 9999)@adjp
 
 ### quantile of 
 q <- c(0.01, 0.025, 0.05, 0.1, 0.9, 0.95, 0.975, 0.99)
@@ -81,8 +113,8 @@ mtest <- function(n = 100, mu = c(0, 2), B = 1000) {
     fm <- as.formula(paste(paste(xnames, collapse = "+"), "~ group"))
     it <- independence_test(fm, data = mydf)
     Tobs <- drop(statistic(it, "linear"))
-    Z <- drop(mboot(it, B = B))
-    p <- rowMeans(Z < Tobs)
+    Z <- mboot(it, B = B)
+    p <- pval(Z, Tobs)
     names(p) <- xnames
     p
 }
@@ -95,4 +127,17 @@ for (i in 1:1000) {
     p <- rbind(p, mtest(mu = c(seq(from = 0, to = 0.8, by = 0.1), 0)))
 }
 colMeans(p <= 0.05)
+mean(pmin(p[,1], p[,10]) <= 0.05)
 
+### comparison with multtest
+B <- 1000
+mydf <- dgp(n = 100, mu = c(seq(from = 0, to = 0.8, by = 0.1), 0))
+xnames <- names(mydf)[names(mydf) != "group"]
+fm <- as.formula(paste(paste(xnames, collapse = "+"), "~ group"))
+it <- independence_test(fm, data = mydf)
+Tobs <- drop(statistic(it, "linear"))
+Z <- mboot(it, B = B)
+pval(Z, Tobs)
+
+MTP(t(as.matrix(mydf[,xnames])), Y = mydf[["group"]], 
+    test = "t.twosamp.equalvar")@adjp
