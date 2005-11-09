@@ -1,4 +1,7 @@
 
+o       add checks on achieved alpha in confing (see wilcox.test changes by
+        Thomas L)
+
 o	some classes are the same in `coin' and `party': can they conflict?
 
 o	maxstat_tests scales poorly for very large problems (number of obs)
