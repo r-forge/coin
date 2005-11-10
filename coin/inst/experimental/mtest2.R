@@ -22,14 +22,12 @@ mboot <- function(it, B = 1000) {
     tau0 <- variance(it)
 
     ### for each bootstrap sample, calculate _multivariate_ linear statistic
-    bootT <- vector(mode = "list", length = ncol(bs))
+    T <- matrix(0, nrow = length(statistic(it, "linear")), ncol = ncol(bs))
     for (i in 1:ncol(bs))
         ### multivariate linear statistic
-        bootT[[i]] <- .Call("R_LinearStatistic", xtrans, ytrans, bs[,i], PACKAGE = "coin")
+        T[,i] <- .Call("R_LinearStatistic", xtrans, ytrans, bs[,i], PACKAGE = "coin")
 
-    ### compute Z matrix
-    T <- matrix(unlist(bootT), ncol = length(bootT))
-    ### bootstrap shifted test statistics
+    ### compute Z matrix: bootstrap scaled and shifted test statistics
     ET <- rowMeans(T)
     VT <- apply(T, 1, var)
     fact <- sqrt(pmin(1, tau0 / VT))
@@ -56,7 +54,7 @@ cmax <- function(x) {
     do.call(pmax, as.data.frame(t(x)))
 }
 
-
+### single-step maxT
 pval <- function(Z, Tobs, alternative = c("two.sided", "less", "greater")) {
 
     alternative <- match.arg(alternative)
@@ -68,7 +66,6 @@ pval <- function(Z, Tobs, alternative = c("two.sided", "less", "greater")) {
         maxabsZ <- cmax(abs(Z))
         sapply(abs(Tobs), function(x) mean(maxabsZ > x))
     }, "less" = {
-        rowMeans(cmax(Z) > max(Tobs))
         maxZ <- cmax(Z)
         sapply(abs(Tobs), function(x) mean(maxZ > x))
     }, "greater" = {
@@ -110,8 +107,8 @@ mtest <- function(n = 100, mu = c(0, 2), B = 1000) {
 
     mydf <- dgp(n = n, mu = mu)
     xnames <- names(mydf)[names(mydf) != "group"]
-    fm <- as.formula(paste(paste(xnames, collapse = "+"), "~ group"))
-    it <- independence_test(fm, data = mydf)
+    ip <- new("IndependenceProblem", x = mydf[xnames], y = mydf["group"])
+    it <- independence_test(ip)
     Tobs <- drop(statistic(it, "linear"))
     Z <- mboot(it, B = B)
     p <- pval(Z, Tobs)
@@ -119,15 +116,21 @@ mtest <- function(n = 100, mu = c(0, 2), B = 1000) {
     p
 }
 
+Rprof("mtest")
+a <- mtest(B = 10000)
+Rprof(NULL)
+
 ### small simulation: X1 and X10 under H0, the others under `increasing'
 ### alternative
 p <- c()
 for (i in 1:1000) {
     print(i)
-    p <- rbind(p, mtest(mu = c(seq(from = 0, to = 0.8, by = 0.1), 0)))
+    ##p <- rbind(p, mtest(mu = c(seq(from = 0, to = 0.8, by = 0.1), 0)))
+    p <- rbind(p, mtest(mu = rep(0, 5)))
 }
+save(p, file = "p.rda")
 colMeans(p <= 0.05)
-mean(pmin(p[,1], p[,10]) <= 0.05)
+mean(apply(p, 1, min) <= 0.05)
 
 ### comparison with multtest
 B <- 1000
