@@ -163,13 +163,7 @@ setMethod(f = "ApproxNullDistribution",
                   p <- switch(object@alternative,
                       "less"      = mean(pls <= round(q, 10)), 
                       "greater"   = mean(pls >= round(q, 10)),
-                      "two.sided" = {
-                          q <- round(q, 10)
-                          if (q == 0) 1
-                          mean(pls <= ifelse(q >  0, -q,  q)) +
-                          mean(pls >= ifelse(q >= 0,  q, -q))
-                      }
-                  )
+                      "two.sided" = mean(abs(pls) >= round(abs(q), 10)))
                   attr(p, "conf.int") <- binom.test(round(p * B), B, 
                       conf.level = 0.99)$conf.int
                   class(p) <- "MCp"
@@ -206,7 +200,11 @@ setMethod(f = "ApproxNullDistribution",
               dcov <- sqrt(variance(object))
               expect <- expectation(object)
               pls <- (pls - expect) / dcov
-              pls <- sort(round(apply(pls, 2, fun), 10))
+              pls <- switch(object@alternative,
+                  "less" = do.call("pmin", as.data.frame(t(pls))),
+                  "greater" = do.call("pmax", as.data.frame(t(pls))),
+                  "two.sided" = do.call("pmax", as.data.frame(t(abs(pls)))))
+              pls <- sort(round(pls, 10))
 
               RET <- new("ApproxNullDistribution")
 
