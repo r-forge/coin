@@ -26,10 +26,12 @@ sdmaxT <- function(pls, ts) {
     ### algorithm 2.8 (Free Step-Down Resampling Method) in 
     ### Westfall & Young (1993), page 66 _using standardized
     ### statistics instead of p-values_!
-    q <- pls[,rts]
+    q <- pls[,rts, drop = FALSE]
 
-    for (j in 2:ncol(q))
-        q[,j] <- pmax(q[,j], q[,j-1])
+    if (ncol(q) > 1) {
+        for (j in 2:ncol(q))
+            q[,j] <- pmax(q[,j], q[,j-1])
+    }
     ret <- matrix(rowMeans(t(q) >= ts[rts])[rank(ts)],
                   nrow = nrow(ts), ncol = ncol(ts))
     
