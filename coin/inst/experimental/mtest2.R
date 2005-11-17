@@ -55,23 +55,27 @@ cmax <- function(x) {
 }
 
 ### single-step maxT
-pval <- function(Z, Tobs, alternative = c("two.sided", "less", "greater")) {
+pval <- function(Z, Tobs, type = c("ss", "sd"), alternative = c("two.sided", "less", "greater")) {
 
     alternative <- match.arg(alternative)
+    type <- match.arg(type)
     Tobs <- drop(Tobs)
     EZ <- rowMeans(Z)
-    Z <- Z - EZ
-    Tobs <- Tobs - EZ
-    switch(alternative, "two.sided" = {
-        maxabsZ <- cmax(abs(Z))
-        sapply(abs(Tobs), function(x) mean(maxabsZ > x))
-    }, "less" = {
-        maxZ <- cmax(Z)
-        sapply(abs(Tobs), function(x) mean(maxZ > x))
-    }, "greater" = {
-        maxZ <- cmax(Z)
-        sapply(abs(Tobs), function(x) mean(maxZ < x))
-    })
+    sdZ <- apply(Z, 1, sd)
+    Z <- (Z - EZ)/sdZ
+    Tobs <- (Tobs - EZ)/sdZ
+    if (alternative == "two.sided") {
+        Z <- abs(Z)
+        Tobs <- abs(Tobs)
+    }
+    if (alternative == "less") {
+        Z <- -Z
+        Tobs <- -Tobs
+    }
+    if (type == "ss")
+        return(sapply(Tobs, function(x) mean(cmax(Z) > x)))
+    if (type == "sd")
+        return(drop(coin:::sdmaxT(t(Z), matrix(Tobs))))
 }
 
 ### a simple two sample problem
@@ -85,10 +89,16 @@ Z <- drop(a)
 
 ### pvalues
 pval(a, statistic(it, "linear"))
+pval(a, statistic(it, "linear"), type = "sd")
 pvalue(it)
 t.test(X ~ group, data = mydf, var.equal = TRUE)$p.value
 MTP(t(as.matrix(mydf[["X"]])), Y = mydf[["group"]],
     test = "t.twosamp.equalvar", B = 9999)@adjp
+
+t.test(X ~ group, data = mydf, var.equal = TRUE, alt = "less")$p.value
+pval(a, statistic(it, "linear"), alt = "less")
+t.test(X ~ group, data = mydf, var.equal = TRUE, alt = "greater")$p.value
+pval(a, statistic(it, "linear"), alt = "greater")
 
 mt.maxT(t(as.matrix(mydf[["X"]])), classlabel = as.numeric(mydf[["group"]]) -1)
 
@@ -114,7 +124,7 @@ mtest <- function(n = 100, mu = c(0, 2), B = 1000) {
     it <- independence_test(ip)
     Tobs <- drop(statistic(it, "linear"))
     Z <- mboot(it, B = B)
-    p <- pval(Z, Tobs)
+    p <- pval(Z, Tobs, type = "sd")
     names(p) <- xnames
     p
 }
