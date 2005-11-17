@@ -144,7 +144,7 @@ setMethod(f = "ApproxNullDistribution",
                   PACKAGE = "coin")
 
               ### <FIXME> can transform p, q, x instead of those </FIXME>
-              pls <- sort(round((unlist(pls) - expectation(object)) / 
+              pls <- sort(round((pls - expectation(object)) / 
                          sqrt(variance(object)), 10))
 
               RET <- new("ApproxNullDistribution")
@@ -194,10 +194,8 @@ setMethod(f = "ApproxNullDistribution",
                   object@ytrans, as.integer(object@block), as.integer(B), 
                   PACKAGE = "coin")
 
-              if (object@has_scores) {
-                  S <- object@scores
-                  pls <- plsraw <- lapply(pls, function(x) S %*% x)     
-              } 
+              if (object@has_scores)
+                  pls <- plsraw <- object@scores %*% pls
 
               fun <- switch(object@alternative,
                   "less" = min,
@@ -207,10 +205,8 @@ setMethod(f = "ApproxNullDistribution",
 
               dcov <- sqrt(variance(object))
               expect <- expectation(object)
-              pls <- lapply(pls, function(x) 
-                         fun((x - expect) / dcov)
-                     )
-              pls <- sort(round(unlist(pls), 10))
+              pls <- (pls - expect) / dcov
+              pls <- sort(round(apply(pls, 2, fun), 10))
 
               RET <- new("ApproxNullDistribution")
 
@@ -260,19 +256,14 @@ setMethod(f = "ApproxNullDistribution",
                   object@ytrans, as.integer(object@block), as.integer(B), 
                   PACKAGE = "coin")
 
-              if (object@has_scores) {
-                  S <- object@scores
-                  pls <- plsraw <- lapply(pls, function(x) S %*% x)
-              }
+              if (object@has_scores)
+                  pls <- plsraw <- object@scores %*% pls
 
               dcov <- object@covarianceplus
               expect <- expectation(object)
-              pls <- lapply(pls, function(x) {
-                                a <- x - expect
-                                drop(a %*% dcov %*% a)
-                            }
-                     )
-              pls <- sort(round(unlist(pls), 10))
+              a <- pls - expect
+              pls <- rowSums((t(a) %*% dcov) * t(a))
+              pls <- sort(round(pls, 10))
 
               RET <- new("ApproxNullDistribution")
 

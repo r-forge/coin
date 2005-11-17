@@ -30,15 +30,11 @@ stepdown <- function(object, ...) {
     ### standardize
     dcov <- sqrt(variance(object))
     expect <- expectation(object) 
+    pls <- t((pls - expect) / dcov)
     if (object@statistic@alternative == "two.sided") {
-        pls <- lapply(pls, function(x)
-            (abs(x - expect) / dcov)
-        )
+        pls <- abs(pls)
         ts <- abs(statistic(object, "standardized"))
     } else {
-        pls <- lapply(pls, function(x)
-            (x - expect) / dcov
-        )
         ts <- statistic(object, "standardized")
     }
 
@@ -49,8 +45,7 @@ stepdown <- function(object, ...) {
     ### algorithm 2.8 (Free Step-Down Resampling Method) in
     ### Westfall & Young (1993), page 66 _using standardized 
     ### statistics instead of p-values_!
-    q <- matrix(unlist(pls), nrow = length(pls), 
-                byrow = TRUE)[,rts]
+    q <- pls[,rts]
 
     if (object@statistic@alternative == "less") {
         for (j in 2:ncol(q))
@@ -90,9 +85,7 @@ dbonf <- function(object, ...) {
 
    ### raw simulation results, scores have been handled already
    pls <- support(object, raw = TRUE)
-   pls <- lapply(pls, function(x)
-            (x - expect) / dcov)
-   pls <- t(matrix(unlist(pls), nrow = length(pls), byrow = TRUE))
+   pls <- (pls - expect) / dcov
    ts <- (statistic(object, "standardized"))
    
    pvals <- switch(alternative,

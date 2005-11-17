@@ -90,6 +90,9 @@ t.test(X ~ group, data = mydf, var.equal = TRUE)$p.value
 MTP(t(as.matrix(mydf[["X"]])), Y = mydf[["group"]],
     test = "t.twosamp.equalvar", B = 9999)@adjp
 
+mt.maxT(t(as.matrix(mydf[["X"]])), classlabel = as.numeric(mydf[["group"]]) -1)
+
+
 ### quantile of 
 q <- c(0.01, 0.025, 0.05, 0.1, 0.9, 0.95, 0.975, 0.99)
 
