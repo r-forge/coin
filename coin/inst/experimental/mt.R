@@ -1,42 +1,11 @@
 
 library("coin")
+### get rid of namespace
+load(file.path(.find.package("coin"), "R", "all.rda"))
+source("bootstrap.R")
+
 library("multtest")
 set.seed(290875)
-
-mboot <- function(it, B = 1000) {
-
-    ### get transformation g(X) and influence function h(Y)
-    xtrans <- coin:::get_xtrans(it)
-    ytrans <- coin:::get_ytrans(it)
-    ### weights
-    weights <- coin:::get_weights(it)
-
-    ### generate B bootstrap samples (via weights from multinomial
-    ### distribution)
-    n <- sum(weights)
-    bs <- rmultinom(B, n, weights / n)
-    storage.mode(bs) <- "double"
-
-    ### null values (\lambda_0 and \tau_0)
-    lambda0 <- expectation(it)
-    tau0 <- variance(it)
-
-    ### for each bootstrap sample, calculate _multivariate_ linear statistic
-    T <- matrix(0, nrow = length(statistic(it, "linear")), ncol = ncol(bs))
-    for (i in 1:ncol(bs))
-        ### multivariate linear statistic
-        T[,i] <- .Call("R_LinearStatistic", xtrans, ytrans, bs[,i], PACKAGE = "coin")
-
-    ### compute Z matrix: bootstrap scaled and shifted test statistics
-    ET <- rowMeans(T)
-    VT <- apply(T, 1, var)
-    fact <- sqrt(pmin(1, tau0 / VT))
-    ### typo on page 42: Z = nu_0(T - ET) + lambda_0 is right
-    Z <- fact * (T - ET) + lambda0
-    # rownames(RET) <- rownames(statistic(it, "linear"))
-    ### this is a (M x B) matrix of bootstrap T statistics
-    return(Z)
-}
 
 ### data generating process: two groups
 dgp <- function(n = 100, mu = rep(0, 2)) {
@@ -50,34 +19,6 @@ dgp <- function(n = 100, mu = rep(0, 2)) {
     data.frame(group = group, X)
 }
 
-cmax <- function(x) {
-    do.call(pmax, as.data.frame(t(x)))
-}
-
-### single-step maxT
-pval <- function(Z, Tobs, type = c("ss", "sd"), alternative = c("two.sided", "less", "greater")) {
-
-    alternative <- match.arg(alternative)
-    type <- match.arg(type)
-    Tobs <- drop(Tobs)
-    EZ <- rowMeans(Z)
-    sdZ <- apply(Z, 1, sd)
-    Z <- (Z - EZ)/sdZ
-    Tobs <- (Tobs - EZ)/sdZ
-    if (alternative == "two.sided") {
-        Z <- abs(Z)
-        Tobs <- abs(Tobs)
-    }
-    if (alternative == "less") {
-        Z <- -Z
-        Tobs <- -Tobs
-    }
-    if (type == "ss")
-        return(sapply(Tobs, function(x) mean(cmax(Z) > x)))
-    if (type == "sd")
-        return(drop(coin:::sdmaxT(t(Z), matrix(Tobs))))
-}
-
 ### a simple two sample problem
 mydf <- dgp(n = 40, mu = 0.5)
 mydf$X <- round(mydf$X, 3) * 1000
@@ -89,7 +30,7 @@ Z <- drop(a)
 
 ### pvalues
 pval(a, statistic(it, "linear"))
-pval(a, statistic(it, "linear"), type = "sd")
+pval(a, statistic(it, "linear"), type = "single-step")
 pvalue(it)
 t.test(X ~ group, data = mydf, var.equal = TRUE)$p.value
 MTP(t(as.matrix(mydf[["X"]])), Y = mydf[["group"]],
@@ -124,7 +65,7 @@ mtest <- function(n = 100, mu = c(0, 2), B = 1000) {
     it <- independence_test(ip)
     Tobs <- drop(statistic(it, "linear"))
     Z <- mboot(it, B = B)
-    p <- pval(Z, Tobs, type = "sd")
+    p <- pval(Z, Tobs, type = "step-down")
     names(p) <- xnames
     p
 }
