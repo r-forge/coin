@@ -123,7 +123,7 @@ setMethod(f = "ExactNullDistribution",
                   if (algorithm == "split-up")
                       return(vdW_split_up_2sample(object))
               }
-              stop(sQuote("object"), " is not a two sample problem")
+              error(sQuote("object"), " is not a two sample problem")
 
           }
 )

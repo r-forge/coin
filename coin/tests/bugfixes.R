@@ -25,3 +25,8 @@ if (require(multcomp)) {
 }
 
 
+### `statistic' for linear and standardized statistics was wrong in case of 
+### scores
+data("jobsatisfaction")
+stopifnot(unique(dim(statistic(lbl_test(jobsatisfaction), "linear"))) == 1)
+stopifnot(unique(dim(statistic(lbl_test(jobsatisfaction), "standardized"))) == 1)
