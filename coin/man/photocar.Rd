@@ -1,7 +1,7 @@
 \name{photocar}
 \alias{photocar}
 \docType{data}
-\title{ Multiple Dosing Photococarcinogenicity Experiement }
+\title{ Multiple Dosing Photococarcinogenicity Experiment }
 \description{
     Survival time, time to first tumor and total number of tumors for three
     groups of animals from a photococarcinogenicity study.

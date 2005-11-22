@@ -1,7 +1,7 @@
 \name{mercuryfish}
 \alias{mercuryfish}
 \docType{data}
-\title{ Chromosomal effects of mercury contaminated fish consumption }
+\title{ Chromosomal Effects of Mercury Contaminated Fish Consumption }
 \description{
     The mercury level in the blood, the proportion of cells with
     abnormalities and the proportion of cells with chromosome aberrations
