@@ -15,7 +15,7 @@ expectvarcontrast <- function(x, y, w) {
 
 
 ### bootstrap scaled and shifted test statistics
-mboot <- function(it, B = 1000, xcontrast = TRUE) {
+mboot <- function(it, B = 1000, xcontrast = FALSE) {
 
     ### get transformation g(X) and influence function h(Y)
     xtrans <- coin:::get_xtrans(it)
