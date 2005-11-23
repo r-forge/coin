@@ -167,41 +167,41 @@ setMethod(f = "dperm",
 )
 
 ### generic method for the permutation distribution from objects
-setGeneric("support", function(object, p, ...)
+setGeneric("support", function(object, ...)
     standardGeneric("support"))
 
 setMethod(f = "support",
           signature = "NullDistribution",
-          definition = function(object, p, ...) {
-              object@support(p, ...)
+          definition = function(object, ...) {
+              object@support(...)
           }
 )
 
 setMethod(f = "support",
           signature = "IndependenceTest",
-          definition = function(object, p, ...) {
-              support(object@distribution, p)
+          definition = function(object, ...) {
+              support(object@distribution, ...)
           }
 )
 
 setMethod(f = "support",
           signature = "ScalarIndependenceTest",
-          definition = function(object, p, ...) {
-              support(object@distribution, p)
+          definition = function(object, ...) {
+              support(object@distribution, ...)
           }
 )
 
 setMethod(f = "support",
           signature = "MaxTypeIndependenceTest",
-          definition = function(object, p, ...) {
-              support(object@distribution, p, ...)
+          definition = function(object, ...) {
+              support(object@distribution, ...)
           }
 )
 
 setMethod(f = "support",
           signature = "QuadTypeIndependenceTest",
-          definition = function(object, p, ...) {
-              support(object@distribution, p, ...)
+          definition = function(object, ...) {
+              support(object@distribution, ...)
           }
 )
 

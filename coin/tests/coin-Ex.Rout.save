@@ -506,6 +506,9 @@ cutpoint in  coverstorey
 > ### density of the exact distribution of the Ansari-Bradley statistic
 > dens <- sapply(support(at), dperm, object = at)
 > 
+> ### plot density
+> plot(support(at), dens, type = "s")
+> 
 > ### 95% quantile
 > qperm(at, 0.95)
 [1] 1.669331
@@ -1667,7 +1670,7 @@ cutpoint in  coverstorey
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", env = .CheckExEnv),"\n")
-Time elapsed:  31.61 0.39 32.22 0 0 
+Time elapsed:  31.31 0.82 32.29 0 0 
 > grDevices::dev.off()
 null device 
           1 

@@ -337,6 +337,9 @@ at <- ansari_test(y ~ x, data = df, distribution = "exact")
 ### density of the exact distribution of the Ansari-Bradley statistic
 dens <- sapply(support(at), dperm, object = at)
 
+### plot density
+plot(support(at), dens, type = "s")
+
 ### 95% quantile
 qperm(at, 0.95)
 
