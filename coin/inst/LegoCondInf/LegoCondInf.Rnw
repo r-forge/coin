@@ -1,0 +1,171 @@
+\documentclass{article}
+\usepackage{amstext}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage[round]{natbib}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\newcommand{\Rpackage}[1]{\textit{#1}}
+\newcommand{\Robject}[1]{\texttt{#1}}
+\newcommand{\Rclass}[1]{\textit{#1}}
+\newcommand{\Rcmd}[1]{\texttt{#1}}
+\newcommand{\Roperator}[1]{\texttt{#1}}
+\newcommand{\Rarg}[1]{\texttt{#1}}
+\newcommand{\Rlevel}[1]{\texttt{#1}}
+
+\setkeys{Gin}{width=1.5\textwidth}
+
+\title{A Lego-System for Conditional Inference}
+
+\author{Torsten Hothorn$^1$, Kurt Hornik$^2$, Mark van de Wiel$^3$ and Achim
+Zeileis$^2$}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\noindent$^1$Institut f\"ur Medizininformatik, Biometrie und Epidemiologie\\
+     Friedrich-Alexander-Universit\"at Erlangen-N\"urnberg\\
+     Waldstra{\ss}e 6, D-91054 Erlangen, Germany \\
+     \texttt{Torsten.Hothorn@R-project.org}
+\newline
+
+\noindent$^2$Department f\"ur Statistik und Mathematik,
+             Wirtschaftsuniversit\"at Wien \\
+       Augasse 2-6, A-1090 Wien, Austria \\
+       \texttt{Kurt.Hornik@R-project.org} \\
+       \texttt{Achim.Zeileis@R-project.org}
+\newline
+
+\noindent$^3$ Department of Mathematics and Computer Science \\
+              Eindhoven University of Technology \\
+              HG 9.25, P.O. Box 513 \\
+              5600 MB Eindhoven, The Netherlands \\
+              \texttt{markvdw@win.tue.nl}
+\newline
+
+<<setup, echo = FALSE, results = hide>>=
+options(width = 60)
+require("coin")
+require("Biobase")
+require("multcomp")
+set.seed(290875)
+@
+
+\section{Introduction}
+
+\section{Conditional Inference}
+
+\section{Lego with \Rpackage{coin}}
+
+\subsection{Contingency Tables}
+
+\cite{SalibHillier1997}
+
+<<alzheimer-rxc, echo = TRUE>>=
+data("alzheimer", package = "coin")
+cmh_test(alzheimer)
+#it <- independence_test(alzheimer, teststat = "maxabs")
+#pvalue(it)
+#statistic(it, "standardized")
+@
+
+<<alzheimer-ordered, echo = TRUE>>=
+data("alzheimer", package = "coin")
+cmh_test(alzheimer, scores = list(smoking = c(0, 5, 15, 25)))
+@
+
+\subsection{Multivariate Response}
+
+\cite{Molefeetal2005}
+
+<<photocar-data, echo = TRUE>>=
+data("photocar", package = "coin")
+@
+
+\begin{figure}
+\begin{center}
+<<photocar-plot, echo = FALSE, fig = TRUE, width = 8, height = 3>>=
+layout(matrix(1:3, ncol = 3))
+plot(survfit(Surv(time, event) ~ group, data = photocar), xmax = 50,
+     lty = 1:3, main = "Survival Time")
+     legend("bottomleft", lty = 1:3, levels(photocar$group), bty = "n")
+plot(survfit(Surv(dmin, tumor) ~ group, data = photocar), xmax = 50,
+     lty = 1:3, main = "Time to First Tumor")
+     legend("bottomleft", lty = 1:3, levels(photocar$group), bty = "n")
+     boxplot(ntumor ~ group, data = photocar, main = "Number of Tumors")
+@
+\caption{Kaplan-Meier estimates of time to death and time to first tumor as
+         well as boxplots of the total number of tumors in three treatment
+         groups.}
+\end{center}
+\end{figure}
+
+<<photocar-global, echo = TRUE>>=
+independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
+                  data = photocar)
+@
+
+<<photocar-global, echo = TRUE>>=
+it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
+                  data = photocar, distribution = approximate(50000))
+pvalue(it, method = "step-down")
+@
+
+\cite{Rosenbaum2005}
+
+
+<<mercurysfish, echo = TRUE>>=
+data("mercuryfish")
+
+coherence <- function(data) {
+    x <- as.matrix(data)
+    matrix(apply(x, 1, function(y)
+           sum(colSums(t(x) < y) == ncol(x)) - 
+           sum(colSums(t(x) > y) == ncol(x))), ncol = 1)
+}
+poset <- independence_test(mercury + abnormal + ccells ~ group, data =
+                           mercuryfish, ytrafo = coherence, distribution = exact())
+statistic(poset, "linear")
+expectation(poset)
+variance(poset)
+statistic(poset)
+pvalue(poset)
+@
+
+\begin{figure}
+\begin{center}
+<<mercuryfish-plot, echo = FALSE, fig = TRUE, height = 4, width = 8>>=
+ite <- poset
+ita <- independence_test(mercury + abnormal + ccells ~ group, data =     
+                           mercuryfish, ytrafo = coherence)
+site <- support(ite)
+layout(matrix(1:2, ncol = 2))
+site <- site[site <= qperm(ite, 0.1) & site > -3]
+pite <- sapply(site, function(x) pperm(ite, x))
+pita <- sapply(site, function(x) pperm(ita, x))
+
+plot(site, pite, type = "S", ylab = "Distribution", xlab = "Statistic")
+lines(site, pita)
+
+site <- support(ite)
+site <- site[site >= qperm(ite, 0.9) & site < 3]
+pite <- sapply(site, function(x) pperm(ite, x))
+pita <- sapply(site, function(x) pperm(ita, x))
+
+plot(site, pite, type = "S", ylab = "Distribution", xlab = "Statistic")
+lines(site, pita)
+@
+\caption{Distribution functions}
+\end{center}
+\end{figure}
+
+
+\section{Discussion}
+
+\bibliographystyle{asa}
+\bibliography{litdbTH}
+
+\end{document}
