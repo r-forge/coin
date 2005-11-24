@@ -41,7 +41,7 @@
      \texttt{Torsten.Hothorn@R-project.org}
 \newline
 
-\noindent$^2$Institut f\"ur Statistik und Mathematik,
+\noindent$^2$Department f\"ur Statistik und Mathematik,
              Wirtschaftsuniversit\"at Wien \\
        Augasse 2-6, A-1090 Wien, Austria \\
        \texttt{Kurt.Hornik@R-project.org} \\
