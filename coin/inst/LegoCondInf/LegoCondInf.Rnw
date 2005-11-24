@@ -14,13 +14,73 @@
 \newcommand{\Rarg}[1]{\texttt{#1}}
 \newcommand{\Rlevel}[1]{\texttt{#1}}
 
+\newcommand{\R}{\mathbb{R} }
+\newcommand{\Prob}{\mathbb{P} }
+\newcommand{\N}{\mathbb{N} }
+\newcommand{\C}{\mathbb{C} }
+\newcommand{\V}{\mathbb{V}} %% cal{\mbox{\textnormal{Var}}} }
+\newcommand{\E}{\mathbb{E}} %%mathcal{\mbox{\textnormal{E}}} }
+\newcommand{\Var}{\mathbb{V}} %%mathcal{\mbox{\textnormal{Var}}} }
+\newcommand{\argmin}{\operatorname{argmin}\displaylimits}
+\newcommand{\argmax}{\operatorname{argmax}\displaylimits}
+\newcommand{\LS}{\mathcal{L}_n}
+\newcommand{\TS}{\mathcal{T}_n}
+\newcommand{\LSc}{\mathcal{L}_{\text{comb},n}}
+\newcommand{\LSbc}{\mathcal{L}^*_{\text{comb},n}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\yn}{y_{\text{new}}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\sX}{\mathcal{X}}
+\newcommand{\sY}{\mathcal{Y}}
+\newcommand{\T}{\mathbf{T}}
+\newcommand{\x}{\mathbf{x}}
+\renewcommand{\a}{\mathbf{a}}
+\newcommand{\xn}{\mathbf{x}_{\text{new}}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\ws}{\mathbf{w}_\cdot}
+\renewcommand{\t}{\mathbf{t}}
+\newcommand{\M}{\mathbf{M}}
+\renewcommand{\vec}{\text{vec}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\K}{\mathbf{K}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\D}{\mathbf{D}}
+\newcommand{\I}{\mathbf{I}}
+\newcommand{\bS}{\mathbf{S}}
+\newcommand{\cellx}{\pi_n[\x]}
+\newcommand{\partn}{\pi_n(\mathcal{L}_n)}
+\newcommand{\err}{\text{Err}}
+\newcommand{\ea}{\widehat{\text{Err}}^{(a)}}
+\newcommand{\ecv}{\widehat{\text{Err}}^{(cv1)}}
+\newcommand{\ecvten}{\widehat{\text{Err}}^{(cv10)}}
+\newcommand{\eone}{\widehat{\text{Err}}^{(1)}}
+\newcommand{\eplus}{\widehat{\text{Err}}^{(.632+)}}
+\newcommand{\eoob}{\widehat{\text{Err}}^{(oob)}}
 
 \SweaveOpts{engine=R,eps=FALSE}
 
+\hypersetup{%
+  pdftitle = {A Lego-System for Conditional Inference},
+  pdfsubject = {Manuscript},
+  pdfauthor = {Torsten Hothorn, Kurt Hornik,
+               Mark van de Wiel and Achim Zeileis},
+%% change colorlinks to false for pretty printing
+  colorlinks = {true},
+  linkcolor = {blue},
+  citecolor = {blue},
+  urlcolor = {red},
+  hyperindex = {true},
+  linktocpage = {true},
+}
+
 \title{A Lego-System for Conditional Inference}
 
-\author{Torsten Hothorn$^1$, Kurt Hornik$^2$, Mark van de Wiel$^3$ and Achim
-Zeileis$^2$}
+\author{Torsten Hothorn$^1$, Kurt Hornik$^2$, \\ 
+        Mark van de Wiel$^3$ and Achim Zeileis$^2$}
 \date{}
 
 \begin{document}
@@ -62,6 +122,132 @@ set.seed(290875)
 
 \section{Conditional Inference}
 
+In the following we assume that we are provided with $n$ observations
+\begin{eqnarray*}
+(\Y_i, \X_i, b_i), \quad i = 1, \dots, n.
+\end{eqnarray*}
+The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
+$\mathcal{X}$ may
+be measured at arbitrary scales and may be multivariate as well. In addition
+to those measurements a factor $b$ coding blocks may  
+be available.
+
+We are interested in testing the null hypothesis of independence of $\Y$ and $\X$
+\begin{eqnarray*}
+H_0: D(\Y | \X) = D(\Y)
+\end{eqnarray*}
+against arbitrary alternatives. \cite{StrasserWeber1999} suggest to derive
+scalar test statistics for testing $H_0$ from multivariate linear statistics
+of the form 
+\begin{eqnarray} \label{linstat}
+\T = \vec\left(\sum_{i = 1}^n g(\X_i) h(\Y_i, (\Y_1, \dots, \Y_n))^\top\right)
+\in \R^{pq}.
+\end{eqnarray}
+Here, $g: \mathcal{X} \rightarrow \R^{p}$ is a transformation of
+the $\X$ measurements and the \emph{influence function}
+$h: \mathcal{Y} \times \mathcal{Y}^n \rightarrow
+\R^q$ depends on the responses $(\Y_1, \dots, \Y_n)$ in a permutation
+symmetric way. We will give specific examples how to choose $g$ and $h$
+later on.
+
+The distribution of $\T$  depends on the joint
+distribution of $\Y$ and $\X$, which is unknown under almost all practical
+circumstances. At least under the null hypothesis one can dispose of this 
+dependency by fixing $\X_1, \dots, \X_n$ and conditioning on all possible 
+permutations $S$ of the responses $\Y_1, \dots, \Y_n$. 
+This principle leads to test procedures known
+as \textit{permutation tests}. 
+
+The conditional expectation $\mu \in \R^{pq}$ and covariance
+$\Sigma \in \R^{pq \times pq}$ of $\T$ under $H_0$ given
+all permutations $\sigma \in S$ of the responses are derived by
+\cite{StrasserWeber1999}:
+\begin{eqnarray}
+\mu = \E(\T | S) & = & \vec \left( \left( \sum_{i = 1}^n g(\X_i) \right)
+\E(h | S)^\top \right), \nonumber \\
+\Sigma = \V(\T | S) & = &
+    \frac{n}{n - 1}  \V(h | S) \otimes
+        \left(\sum_i g(\X_i) \otimes  g(\X_i)^\top \right)
+\label{expectcovar}
+\\
+& - & \frac{1}{n - 1}  \V(h | S)  \otimes \left(
+        \sum_i g(\X_i) \right) \otimes \left( \sum_i g(\X_i)\right)^\top
+\nonumber
+\end{eqnarray}
+where $\otimes$ denote the Kronecker product. The conditional expectation of the
+influence function is
+\begin{eqnarray*}
+\E(h | S) = n^{-1} \sum_i h(\Y_i, (\Y_1, \dots, \Y_n)) \in
+\R^q
+\end{eqnarray*}
+with corresponding $q \times q$ covariance matrix $\V(h | S)$ given by
+\begin{eqnarray*}
+n^{-1} \sum_i \left(h(\Y_i, (\Y_1, \dots, \Y_n)) - \E(h | S)
+\right) \left(h(\Y_i, (\Y_1, \dots, \Y_n)) - \E(h | S)\right)^\top.
+\end{eqnarray*}
+
+Having the conditional expectation and covariance at hand we are able to
+standardize a linear statistic $\T \in \R^{pq}$ of the form
+(\ref{linstat}). Univariate test statistics~$c$ mapping an observed linear
+statistic $\mathbf{t} \in
+\R^{pq}$ into the real line can be of arbitrary form.  An obvious choice is
+the maximum of the absolute values of the standardized linear statistic
+\begin{eqnarray*}
+c_\text{max}(\mathbf{t}, \mu, \Sigma)  = \max \left| \frac{\mathbf{t} -
+\mu}{\text{diag}(\Sigma)^{1/2}} \right|
+\end{eqnarray*}
+utilizing the conditional expectation $\mu$ and covariance matrix
+$\Sigma$. The application of a quadratic form $c_\text{quad}(\mathbf{t},
+\mu,
+\Sigma)  =
+(\mathbf{t} - \mu) \Sigma^+ (\mathbf{t} - \mu)^\top$ is one alternative,
+although
+computationally more expensive because the Moore-Penrose
+inverse $\Sigma^+$ of $\Sigma$ is involved.
+
+The definition of one- and two-sided $p$-values used for the computations in
+the \Rpackage{coin} package is
+\begin{eqnarray*}
+P(c(\T, \mu, \Sigma) &\le& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(less)}
+\\  
+P(c(\T, \mu, \Sigma) &\ge& c(\mathbf{t}, \mu, \Sigma)) \quad
+\text{(greater)}\\
+P(|c(\T, \mu, \Sigma)| &\le& |c(\mathbf{t}, \mu, \Sigma)|) \quad
+\text{(two-sided).}
+\end{eqnarray*}
+Note that for quadratic forms only two-sided $p$-values are available 
+and that in the one-sided case maximum type test statistics are replaced by
+\begin{eqnarray*}
+\min \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
+    \quad \text{(less) and } 
+\max \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
+    \quad \text{(greater).}
+\end{eqnarray*}
+
+The conditional distribution and thus the $p$-value
+of the statistics $c(\mathbf{t}, \mu, \Sigma)$ can be
+computed in several different ways. For some special forms of the
+linear statistic, the exact distribution of the test statistic is trackable.
+For two-sample problems, the shift-algorithm by \cite{axact-dist:1986} 
+and \cite{exakte-ver:1987} and the split-up algorithm by 
+\cite{vdWiel2001} are implemented as part of the package.
+Conditional Monte-Carlo procedures can be used to approximate the exact
+distribution. \cite{StrasserWeber1999} proved (Theorem 2.3) that the   
+conditional distribution of linear statistics $\T$ with conditional    
+expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
+distribution with parameters $\mu$ and $\Sigma$ as $n, s \rightarrow
+\infty$. Thus, the asymptotic conditional distribution of test statistics of
+the
+form $c_\text{max}$ is normal and
+can be computed directly in the univariate case ($pq = 1$)
+or approximated by means of quasi-randomized Monte-Carlo  
+procedures in the multivariate setting \citep{numerical-:1992}. For
+quadratic forms
+$c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
+given by the rank of $\Sigma$ \citep[Theorem 6.20, ][]{Rasch1995}, exact
+probabilities can be computed efficiently.
+
+
 \section{Lego with \Rpackage{coin}}
 
 \subsection{Contingency Tables}
@@ -70,15 +256,13 @@ set.seed(290875)
 
 <<alzheimer-rxc, echo = TRUE>>=
 data("alzheimer", package = "coin")
-cmh_test(alzheimer)
-#it <- independence_test(alzheimer, teststat = "maxabs")
-#pvalue(it)
-#statistic(it, "standardized")
+it <- independence_test(alzheimer, teststat = "maxtype")
+pvalue(it)
+statistic(it, "standardized")
 @
 
 <<alzheimer-ordered, echo = TRUE>>=
-data("alzheimer", package = "coin")
-cmh_test(alzheimer, scores = list(smoking = c(0, 5, 15, 25)))
+independence_test(alzheimer, scores = list(smoking = c(0, 5, 15, 25)))
 @
 
 \subsection{Multivariate Response}
@@ -91,7 +275,7 @@ data("photocar", package = "coin")
 
 \begin{figure}
 \begin{center}
-<<photocar-plot, echo = FALSE, fig = TRUE, width = 8, height = 3>>=
+<<photocar-plot, echo = FALSE, fig = TRUE, width = 6, height = 3>>=
 layout(matrix(1:3, ncol = 3))
 plot(survfit(Surv(time, event) ~ group, data = photocar), xmax = 50,
      lty = 1:3, main = "Survival Time")
@@ -141,7 +325,7 @@ pvalue(poset)
 
 \begin{figure}
 \begin{center}
-<<mercuryfish-plot, echo = FALSE, fig = TRUE, height = 5, width = 8>>=
+<<mercuryfish-plot, echo = FALSE, fig = TRUE, height = 4, width = 6>>=
 ite <- poset
 ita <- independence_test(mercury + abnormal + ccells ~ group, data =     
                            mercuryfish, ytrafo = coherence)
