@@ -157,7 +157,7 @@ circumstances. At least under the null hypothesis one can dispose of this
 dependency by fixing $\X_1, \dots, \X_n$ and conditioning on all possible
 permutations $S$ of the responses $\Y_1, \dots, \Y_n$. 
 This principle leads to test procedures known
-as \textsl{permutation tests}. 
+as \textit{permutation tests}. 
 
 The conditional expectation $\mu \in \R^{pq}$ and covariance 
 $\Sigma \in \R^{pq \times pq}$ 
