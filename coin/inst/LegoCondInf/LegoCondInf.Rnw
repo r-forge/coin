@@ -14,7 +14,8 @@
 \newcommand{\Rarg}[1]{\texttt{#1}}
 \newcommand{\Rlevel}[1]{\texttt{#1}}
 
-\setkeys{Gin}{width=1.5\textwidth}
+
+\SweaveOpts{engine=R,eps=FALSE}
 
 \title{A Lego-System for Conditional Inference}
 
@@ -23,6 +24,9 @@ Zeileis$^2$}
 \date{}
 
 \begin{document}
+
+\setkeys{Gin}{width=0.95\textwidth}
+
 
 \maketitle
 
@@ -137,7 +141,7 @@ pvalue(poset)
 
 \begin{figure}
 \begin{center}
-<<mercuryfish-plot, echo = FALSE, fig = TRUE, height = 4, width = 8>>=
+<<mercuryfish-plot, echo = FALSE, fig = TRUE, height = 5, width = 8>>=
 ite <- poset
 ita <- independence_test(mercury + abnormal + ccells ~ group, data =     
                            mercuryfish, ytrafo = coherence)
