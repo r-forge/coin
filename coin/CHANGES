@@ -1,4 +1,9 @@
 
+		CHANGES in `coin' VERSION 0.3-8
+
+    o    export `independence_test.table'
+
+
 		CHANGES in `coin' VERSION 0.3-7
 
     o    `statistic()' now returns correct linear and standardized 
