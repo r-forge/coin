@@ -116,6 +116,9 @@ require("coin")
 require("Biobase")
 require("multcomp")
 set.seed(290875)
+data("alzheimer", package = "coin")
+data("photocar", package = "coin")
+data("mercuryfish", package = "coin")
 @
 
 \section{Introduction}
@@ -208,11 +211,9 @@ inverse $\Sigma^+$ of $\Sigma$ is involved.
 The definition of one- and two-sided $p$-values used for the computations in
 the \Rpackage{coin} package is
 \begin{eqnarray*}
-P(c(\T, \mu, \Sigma) &\le& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(less)}
-\\  
-P(c(\T, \mu, \Sigma) &\ge& c(\mathbf{t}, \mu, \Sigma)) \quad
-\text{(greater)}\\
-P(|c(\T, \mu, \Sigma)| &\le& |c(\mathbf{t}, \mu, \Sigma)|) \quad
+& & P(c(\T, \mu, \Sigma)\le c(\mathbf{t}, \mu, \Sigma)) \quad \text{(less)} \\  
+& & P(c(\T, \mu, \Sigma) \ge c(\mathbf{t}, \mu, \Sigma)) \quad \text{(greater)}\\
+& & P(|c(\T, \mu, \Sigma)| \le |c(\mathbf{t}, \mu, \Sigma)|) \quad
 \text{(two-sided).}
 \end{eqnarray*}
 Note that for quadratic forms only two-sided $p$-values are available 
@@ -250,9 +251,42 @@ probabilities can be computed efficiently.
 
 \section{Lego with \Rpackage{coin}}
 
-\subsection{Contingency Tables}
+\paragraph{Smoking and Alzheimer's Disease}
 
-\cite{SalibHillier1997}
+\cite{SalibHillier1997} report results of a case-control study on
+Alzheimer's disease and smoking behaviour of 
+$\Sexpr{colSums(margin.table(alzheimer, margin = c(1,2)))["Alzheimer's"]}$
+patients suffering from Alzheimer's disease and 
+$\Sexpr{sum(colSums(margin.table(alzheimer, margin = c(1,2)))[-1])}$
+controls. The data shown in Table~\ref{alzheimertab} have been 
+re-constructed from Table~4 in \cite{SalibHillier1997}.
+
+\begin{table}
+\begin{center}
+\caption{Smoking and Alzheimer's disease. \label{alzheimertab}}
+\begin{tabular}{lrrrr} \hline \hline
+ & \multicolumn{4}{c}{No. of cigarettes daily} \\
+ & None & <10 & 10--20 & >20 \\ \hline
+\textit{Female} & & & & \\
+<<alzheimer-tab, echo = FALSE, results = tex>>=
+x <- t(alzheimer[,,"Female"])
+lines <- paste(paste(dimnames(x)$disease, " & "), 
+               paste(apply(x, 1, function(l) paste(l, collapse = " & ")), "\\\\"))
+for (i in 1:length(lines)) cat(lines[i], "\n")
+@
+
+& & & & \\
+\textit{Male} & & & & \\
+<<alzheimer-tab, echo = FALSE, results = tex>>=
+x <- t(alzheimer[,,"Male"])
+lines <- paste(paste(dimnames(x)$disease, " & "), 
+               paste(apply(x, 1, function(l) paste(l, collapse = " & ")), "\\\\"))
+for (i in 1:length(lines)) cat(lines[i], "\n")
+@
+\hline
+\end{tabular}
+\end{center}
+\end{table}
 
 <<alzheimer-rxc, echo = TRUE>>=
 data("alzheimer", package = "coin")
@@ -265,9 +299,23 @@ statistic(it, "standardized")
 independence_test(alzheimer, scores = list(smoking = c(0, 5, 15, 25)))
 @
 
-\subsection{Multivariate Response}
+\paragraph{Photococarcinogenicity Experiments}
 
-\cite{Molefeetal2005}
+The effect on tumor frequency and latency in photococarcinogenicity
+experiments are measured by means of (at least) three response variables:
+the survival time, the time to first tumor and the total number of tumors. 
+The animals were exposed to different levels of UVR exposure
+(group A: topical vehicle and 600 RBUs of UVR, group B: no topical
+vehicle and 600 RBUs of UVR and group C: no topical vehicle and
+1200 RBUs of UVR). The data are taken from Tables~1 to 3 in 
+\cite{Molefeetal2005}.
+
+The main interest is testing the global null of no treatment
+effect with respect to survival time, time to first tumor and
+number of tumors (Molefe et al., 2005, analyse the detection time
+of tumors in addition, this data is not given here). In case the
+global null hypothesis can be rejected, the deviations from the
+partial hypotheses are of special interest.
 
 <<photocar-data, echo = TRUE>>=
 data("photocar", package = "coin")
@@ -302,7 +350,32 @@ it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
 pvalue(it, method = "step-down")
 @
 
-\cite{Rosenbaum2005}
+\paragraph{Contaminated Fish}
+
+Subjects who ate contaminated fish for more than three years in
+the 'exposed' group and subjects of a control group are to be
+compared. Instead of a multivariate comparison, \cite{Rosenbaum1994a}
+applied a coherence criterion. The observations are partially
+ordered: an observation is than another when all three variables
+('mercury', 'abnormal' and 'ccells') are smaller and a score
+reflecting the `ranking' is attached to each observation. The
+ distribution of the scores in both groups is to be compared and
+the corresponding test is called `POSET-test' (partially ordered
+sets).
+
+\begin{figure}
+\begin{center}
+<<mercuryfish-plot, echo = FALSE, fig = TRUE, width = 6, height = 3>>=
+layout(matrix(1:3, ncol = 3))
+boxplot(mercury ~ group, data = mercuryfish, main = "Mercury blood level")
+boxplot(abnormal ~ group, data = mercuryfish, 
+        main = "Abnormal cells", ylab = "Cells in per cent")
+boxplot(ccells ~ group, data = mercuryfish, 
+        main = "Chomosome aberrations", ylab = "Cells in per cent")
+@
+\caption{Three response variables}
+\end{center}
+\end{figure}
 
 
 <<mercurysfish, echo = TRUE>>=
@@ -325,7 +398,7 @@ pvalue(poset)
 
 \begin{figure}
 \begin{center}
-<<mercuryfish-plot, echo = FALSE, fig = TRUE, height = 4, width = 6>>=
+<<mercuryfish-ppermplot, echo = FALSE, fig = TRUE, height = 4, width = 6>>=
 ite <- poset
 ita <- independence_test(mercury + abnormal + ccells ~ group, data =     
                            mercuryfish, ytrafo = coherence)
