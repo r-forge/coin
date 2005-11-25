@@ -14,7 +14,10 @@
 \newcommand{\Rarg}[1]{\texttt{#1}}
 \newcommand{\Rlevel}[1]{\texttt{#1}}
 
-\newcommand{\R}{\mathbb{R} }
+\newcommand{\R}{\textsf{R}} 
+\newcommand{\rR}{{R}}
+\renewcommand{\S}{\textsf{S}}
+
 \newcommand{\Prob}{\mathbb{P} }
 \newcommand{\N}{\mathbb{N} }
 \newcommand{\C}{\mathbb{C} }
@@ -123,7 +126,76 @@ data("mercuryfish", package = "coin")
 
 \section{Introduction}
 
-\section{Conditional Inference}
+The distribution of a test statistic under the circumstances of a certain
+null hypothesis clearly depends on the unkown distribution of the data and
+thus is unknown as well.
+Two concepts are commonly applied to dispose of this dependency.
+Unconditional tests impose assumptions on the distribution of the data such
+that the null distribution can be derived analytically. Conditional tests
+replace the unknown null distribution by the conditional null distribution,
+i.e. the distribution of the test statistic given the observed data. The
+latter approach is known as \textit{permutation testing} and was developed
+by R. A. Fisher in the 1930s \citep{Fisher1935}. 
+
+The pros and cons of both approaches have been discussed in extensio
+\citep[e.g. by][]{why-permut:1998,pros-and-c:2000,Shuster2005} and we
+refrain from stepping into this mostly philosphical debate, noting that most
+conditional test procedures are asymptotically equivalent to their
+unconditional counterparts anyway.
+
+For the construction of permutation tests it is common exercise to `recycle'
+test statistics well known from the unconditional world, such as linear rank
+statistics, ANOVA $F$ statistics or $\chi^2$ statistics for
+contingency tables, and to replace the unconditional null distribution with
+the conditional distribution of the test statistic under the null
+hypothesis \citep{Edgington1987,Good2000,Pesarin2001}. 
+Such a classification into inference problems (categorical data
+analysis, multivariate analysis, $K$-sample location problems, correlation
+etc) each being associated with a `natural' form of the test statistic
+obstructs our view on the common foundations of all permutation tests. 
+Theoretical advances in the last decade
+\citep{StrasserWeber1999,JanssenPauls2003} helped us to understand the strong
+connections between the `classical' permutation tests and open up the way to
+a simple construction principle for test procedures in new and
+challenging inference problems.
+
+Especially attractive for this purpose is the theoretical framework for
+permutation tests developed by \cite{StrasserWeber1999}. This unifying
+theory is based on a flexible form of multivariate linear statistics for the
+general independence problem those conditional expectation and covariance is
+trackable. The classical procedures, such as a permuation $t$ test, are part
+of this framework and, even more interesting, new test procedures can be
+embedded into the same theory. 
+
+It is one mission, if not \textit{the} mission, of statistical computing to
+transform new theoretical developments into flexible software tools for the
+data analyst. Currently, our toolbox consists of rather inflexible spanners,
+such as \Rcmd{wilcox.test} for the Wilcoxon-Mann-Whitney test or
+\Rcmd{mantelhaen.test} for the Cochran-Mantel-Haenszel chi-squared test in
+\S{} languages. The implementation of permutation tests with user interfaces
+designed to deal with very special cases only \citep[see the Tables in][for
+an overview on procedures implemented in StatXact, LogXact, Strata, SAS and
+Testimate]{Oster2002,Oster2003} leads to the classical `cook book'
+statistics. Such cook books, and thus software implementations, 
+typically teach recipes and hide the concepts which are necessary to go beyond 
+the implemented procedures when the data analyst is faced with non-standard
+inference problems or wants to perform a test not supported by the prefered
+software package.
+
+With this work, we add an adjustable spanner to the statisticians toolbox 
+which helps to address both the common as well as new or unusual inference 
+problems with the appropriate conditional test procedures. The
+\Rpackage{coin} add-on package to the \R{} system for statistical computing
+\citep{Rcore2005} essentially is a software instance of the Strasser-Weber
+framework for the generalized independence problem which allows for
+computations directly on the theory those main concepts are sketched
+in Section~\ref{CI}. In the main part of this paper we show how one can
+build permutation tests `on the fly' by plugging together Lego bricks for
+the multivariate linear statistic, the test statistic and the conditional
+null distribution. 
+
+
+\section{Conditional Inference \label{CI}}
 
 In the following we assume that we are provided with $n$ observations
 \begin{eqnarray*}
@@ -350,7 +422,7 @@ it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
 pvalue(it, method = "step-down")
 @
 
-\paragraph{Contaminated Fish}
+\paragraph{Contaminated Fish Consumption}
 
 Subjects who ate contaminated fish for more than three years in
 the 'exposed' group and subjects of a control group are to be
@@ -427,6 +499,6 @@ lines(site, pita)
 \section{Discussion}
 
 \bibliographystyle{asa}
-\bibliography{litdbTH}
+\bibliography{litdbTH,addrefs}
 
 \end{document}
