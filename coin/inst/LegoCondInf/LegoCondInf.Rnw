@@ -148,7 +148,7 @@ test statistics well known from the unconditional world, such as linear rank
 statistics, ANOVA $F$ statistics or $\chi^2$ statistics for
 contingency tables, and to replace the unconditional null distribution with
 the conditional distribution of the test statistic under the null
-hypothesis \citep{Edgington1987,Good2000,Pesarin2001}. 
+hypothesis \citep{Edgington1987,Good2000,Pesarin2001,Ernst2004}. 
 Such a classification into inference problems (categorical data
 analysis, multivariate analysis, $K$-sample location problems, correlation
 etc) each being associated with a `natural' form of the test statistic
@@ -364,11 +364,16 @@ for (i in 1:length(lines)) cat(lines[i], "\n")
 data("alzheimer", package = "coin")
 it <- independence_test(alzheimer, teststat = "maxtype")
 pvalue(it)
+qperm(it, 0.975)
 statistic(it, "standardized")
+pvalue(independence_test(alzheimer, distribution = approximate(B = 50000)),
+"step-down")
 @
 
 <<alzheimer-ordered, echo = TRUE>>=
-independence_test(alzheimer, scores = list(smoking = c(0, 5, 15, 25)))
+it <- independence_test(alzheimer, scores = list(smoking = c(0, 5, 15, 25)))
+it
+pvalue(it, "single-step")
 @
 
 \paragraph{Photococarcinogenicity Experiments}
