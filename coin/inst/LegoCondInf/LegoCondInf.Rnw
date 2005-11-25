@@ -14,10 +14,10 @@
 \newcommand{\Rarg}[1]{\texttt{#1}}
 \newcommand{\Rlevel}[1]{\texttt{#1}}
 
-\newcommand{\R}{\textsf{R}} 
-\newcommand{\rR}{{R}}
+\newcommand{\RR}{\textsf{R}} 
 \renewcommand{\S}{\textsf{S}}
 
+\newcommand{\R}{\mathbb{R} }
 \newcommand{\Prob}{\mathbb{P} }
 \newcommand{\N}{\mathbb{N} }
 \newcommand{\C}{\mathbb{C} }
@@ -185,7 +185,7 @@ software package.
 With this work, we add an adjustable spanner to the statisticians toolbox 
 which helps to address both the common as well as new or unusual inference 
 problems with the appropriate conditional test procedures. The
-\Rpackage{coin} add-on package to the \R{} system for statistical computing
+\Rpackage{coin} add-on package to the \RR{} system for statistical computing
 \citep{Rcore2005} essentially is a software instance of the Strasser-Weber
 framework for the generalized independence problem which allows for
 computations directly on the theory those main concepts are sketched
@@ -197,15 +197,14 @@ null distribution.
 
 \section{Conditional Inference \label{CI}}
 
-In the following we assume that we are provided with $n$ observations
+To fix ideas we assume that we are provided with $n$ observations
 \begin{eqnarray*}
 (\Y_i, \X_i, b_i), \quad i = 1, \dots, n.
 \end{eqnarray*}
 The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
 $\mathcal{X}$ may
 be measured at arbitrary scales and may be multivariate as well. In addition
-to those measurements a factor $b$ coding blocks may  
-be available.
+to those measurements a factor $b$ coding blocks may be available.
 
 We are interested in testing the null hypothesis of independence of $\Y$ and $\X$
 \begin{eqnarray*}
@@ -223,15 +222,13 @@ the $\X$ measurements and the \emph{influence function}
 $h: \mathcal{Y} \times \mathcal{Y}^n \rightarrow
 \R^q$ depends on the responses $(\Y_1, \dots, \Y_n)$ in a permutation
 symmetric way. We will give specific examples how to choose $g$ and $h$
-later on.
+for specific inference problems later on.
 
-The distribution of $\T$  depends on the joint
-distribution of $\Y$ and $\X$, which is unknown under almost all practical
-circumstances. At least under the null hypothesis one can dispose of this 
+The distribution of $\T$  depends on the joint distribution of $\Y$ and $\X$, 
+which is unknown under almost all practical circumstances. 
+At least under the null hypothesis one can dispose of this 
 dependency by fixing $\X_1, \dots, \X_n$ and conditioning on all possible 
 permutations $S$ of the responses $\Y_1, \dots, \Y_n$. 
-This principle leads to test procedures known
-as \textit{permutation tests}. 
 
 The conditional expectation $\mu \in \R^{pq}$ and covariance
 $\Sigma \in \R^{pq \times pq}$ of $\T$ under $H_0$ given
@@ -264,64 +261,67 @@ n^{-1} \sum_i \left(h(\Y_i, (\Y_1, \dots, \Y_n)) - \E(h | S)
 Having the conditional expectation and covariance at hand we are able to
 standardize a linear statistic $\T \in \R^{pq}$ of the form
 (\ref{linstat}). Univariate test statistics~$c$ mapping an observed linear
-statistic $\mathbf{t} \in
-\R^{pq}$ into the real line can be of arbitrary form.  An obvious choice is
+statistic $\mathbf{t} \in \R^{pq}$ 
+into the real line can be of arbitrary form.  An obvious choice is
 the maximum of the absolute values of the standardized linear statistic
 \begin{eqnarray*}
 c_\text{max}(\mathbf{t}, \mu, \Sigma)  = \max \left| \frac{\mathbf{t} -
 \mu}{\text{diag}(\Sigma)^{1/2}} \right|
 \end{eqnarray*}
 utilizing the conditional expectation $\mu$ and covariance matrix
-$\Sigma$. The application of a quadratic form $c_\text{quad}(\mathbf{t},
-\mu,
-\Sigma)  =
-(\mathbf{t} - \mu) \Sigma^+ (\mathbf{t} - \mu)^\top$ is one alternative,
-although
-computationally more expensive because the Moore-Penrose
-inverse $\Sigma^+$ of $\Sigma$ is involved.
+$\Sigma$. A prominent alternative are quadratic forms 
+$c_\text{quad}(\mathbf{t}, \mu, \Sigma)  =
+(\mathbf{t} - \mu) \Sigma^+ (\mathbf{t} - \mu)^\top$ involving 
+the Moore-Penrose inverse $\Sigma^+$ of $\Sigma$.
 
-The definition of one- and two-sided $p$-values used for the computations in
-the \Rpackage{coin} package is
-\begin{eqnarray*}
-& & P(c(\T, \mu, \Sigma)\le c(\mathbf{t}, \mu, \Sigma)) \quad \text{(less)} \\  
-& & P(c(\T, \mu, \Sigma) \ge c(\mathbf{t}, \mu, \Sigma)) \quad \text{(greater)}\\
-& & P(|c(\T, \mu, \Sigma)| \le |c(\mathbf{t}, \mu, \Sigma)|) \quad
-\text{(two-sided).}
-\end{eqnarray*}
-Note that for quadratic forms only two-sided $p$-values are available 
-and that in the one-sided case maximum type test statistics are replaced by
-\begin{eqnarray*}
-\min \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
-    \quad \text{(less) and } 
-\max \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
-    \quad \text{(greater).}
-\end{eqnarray*}
+%%The definition of one- and two-sided $p$-values used for the computations in
+%%the \Rpackage{coin} package is
+%%\begin{eqnarray*}
+%%& & P(c(\T, \mu, \Sigma)\le c(\mathbf{t}, \mu, \Sigma)) \quad \text{(less)} \\  
+%%& & P(c(\T, \mu, \Sigma) \ge c(\mathbf{t}, \mu, \Sigma)) \quad \text{(greater)}\\
+%%& & P(|c(\T, \mu, \Sigma)| \le |c(\mathbf{t}, \mu, \Sigma)|) \quad
+%%\text{(two-sided).}
+%%\end{eqnarray*}
+%%Note that for quadratic forms only two-sided $p$-values are available 
+%%and that in the one-sided case maximum type test statistics are replaced by
+%%\begin{eqnarray*}
+%%\min \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
+%%    \quad \text{(less) and } 
+%%\max \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
+%%    \quad \text{(greater).}
+%%\end{eqnarray*}
 
 The conditional distribution and thus the $p$-value
-of the statistics $c(\mathbf{t}, \mu, \Sigma)$ can be
+of the statistic $c(\mathbf{t}, \mu, \Sigma)$ can be
 computed in several different ways. For some special forms of the
-linear statistic, the exact distribution of the test statistic is trackable.
-For two-sample problems, the shift-algorithm by \cite{axact-dist:1986} 
-and \cite{exakte-ver:1987} and the split-up algorithm by 
-\cite{vdWiel2001} are implemented as part of the package.
-Conditional Monte-Carlo procedures can be used to approximate the exact
-distribution. \cite{StrasserWeber1999} proved (Theorem 2.3) that the   
+multivariate linear statistic the exact distribution of some 
+test statistics is trackable for small to moderate sample sizes.
+%%For two-sample problems, the shift-algorithm by \cite{axact-dist:1986} 
+%%and \cite{exakte-ver:1987} and the split-up algorithm by 
+%%\cite{vdWiel2001} are implemented as part of the package.
+
+The conditional distribution can be approximated by the limit distribution
+under all circumstances. \cite{StrasserWeber1999} proved (Theorem 2.3) that the   
 conditional distribution of linear statistics $\T$ with conditional    
 expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
-distribution with parameters $\mu$ and $\Sigma$ as $n, s \rightarrow
+distribution with parameters $\mu$ and $\Sigma$ as $n \rightarrow
 \infty$. Thus, the asymptotic conditional distribution of test statistics of
-the
-form $c_\text{max}$ is normal and
+the form $c_\text{max}$ is normal and
 can be computed directly in the univariate case ($pq = 1$)
-or approximated by means of quasi-randomized Monte-Carlo  
+or itself being approximated by means of quasi-randomized Monte-Carlo  
 procedures in the multivariate setting \citep{numerical-:1992}. For
 quadratic forms
 $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
-given by the rank of $\Sigma$ \citep[Theorem 6.20, ][]{Rasch1995}, exact
+given by the rank of $\Sigma$ \citep[e.g. Theorem 6.20, ][]{Rasch1995}, exact
 probabilities can be computed efficiently.
 
+Conditional Monte-Carlo procedures can also be used to 
+approximate the exact distribution up to any desired accuracy by evaluating
+the test statistic for a random sample from the set all permutations $S$.
 
-\section{Lego with \Rpackage{coin}}
+\section{Playing Lego with \Rpackage{coin}}
+
+
 
 \paragraph{Smoking and Alzheimer's Disease}
 
