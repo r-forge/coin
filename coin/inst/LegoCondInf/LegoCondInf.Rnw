@@ -116,7 +116,6 @@
 <<setup, echo = FALSE, results = hide>>=
 options(width = 60)
 require("coin")
-require("Biobase")
 require("multcomp")
 set.seed(290875)
 data("alzheimer", package = "coin")
@@ -321,17 +320,31 @@ the test statistic for a random sample from the set all permutations $S$.
 
 \section{Playing Lego with \Rpackage{coin}}
 
+\paragraph{Smoking and Alzheimer's Disease.}
 
-
-\paragraph{Smoking and Alzheimer's Disease}
+<<alzheimer-demographics, echo = FALSE>>=
+total <- sum(alzheimer)
+stopifnot(total == 538)
+male <- sum(alzheimer[,,"Male"])
+stopifnot(male == 200)
+female <- sum(alzheimer[,,"Female"])
+stopifnot(female == 338)
+disease <- colSums(margin.table(alzheimer, margin = c(1,2)))
+smoked <- sum(rowSums(margin.table(alzheimer, margin = c(1,2)))[-1])
+### there is a discrepancy between Table 1 (32% smokers of 117 women 
+### suffering from other diagnoses) and Table 4 (63% non-smokers).
+### We used the data as given in Table 4.
+@
 
 \cite{SalibHillier1997} report results of a case-control study on
 Alzheimer's disease and smoking behaviour of 
-$\Sexpr{colSums(margin.table(alzheimer, margin = c(1,2)))["Alzheimer's"]}$
+$\Sexpr{disease["Alzheimer's"]}$
 patients suffering from Alzheimer's disease and 
-$\Sexpr{sum(colSums(margin.table(alzheimer, margin = c(1,2)))[-1])}$
+$\Sexpr{disease[names(disease) != "Alzheimer's"]}$
 controls. The data shown in Table~\ref{alzheimertab} have been 
-re-constructed from Table~4 in \cite{SalibHillier1997}.
+re-constructed from Table~4 in \cite{SalibHillier1997}. 
+The authors conclude that `cigarette smoking is less frequent in 
+men with Alzheimer's disease'. 
 
 \begin{table}
 \begin{center}
@@ -360,23 +373,114 @@ for (i in 1:length(lines)) cat(lines[i], "\n")
 \end{center}
 \end{table}
 
-<<alzheimer-rxc, echo = TRUE>>=
+Ignoring the ordinal structure of the smoking behaviour, the null hypothesis
+of independence between smoking and disease status treating gender as a
+block factor with a $c_{quad}$-type test statistic, i.e. the conditional
+version of the Cochran-Mantel-Haenszel test
+<<alzheimer-mantelhaen, echo = TRUE>>=
 data("alzheimer", package = "coin")
-it <- independence_test(alzheimer, teststat = "maxtype")
-pvalue(it)
-qperm(it, 0.975)
-statistic(it, "standardized")
-pvalue(independence_test(alzheimer, distribution = approximate(B = 50000)),
-"step-down")
+it_alz <- independence_test(alzheimer, teststat = "quadtype")
+it_alz
 @
+suggests that there is some deviation from independence. 
+By default, the influence function $g$ and the transformation $h$ 
+are dummy codings of the smoking behavior and the disease status and
+the linear multivariate statistic $\T$ is the contincency table of 
+both variables 
+<<alzheimer-statistic, echo = TRUE>>=
+statistic(it_alz, "linear")
+margin.table(alzheimer, 1:2)
+@
+with conditional expectation
+<<alzheimer-statistic, echo = TRUE>>=
+expectation(it_alz)
+@
+and conditional covariance
+<<alzheimer-statistic, echo = TRUE, eval = FALSE>>=
+covariance(it_alz)
+@
+<<alzheimer-statistic, echo = FALSE>>=
+round(covariance(it_alz), 3)
+@
+Here, the 
+conditional distribution was approximated by its limiting distribution
+which leads to the same $p$-value as the unconditional test
+<<alzheimer-mantelhaen.test, echo = TRUE>>=
+pvalue(it_alz)
+mantelhaen.test(alzheimer)$p.value
+@
+The form of the deviation from independence is of special interest,
+however, a chi-squared statistic is not particular useful for this purpose.
+Instead, we define the test statistic as the maximum of the 
+standardized contingency table via
+<<alzheimer-max, echo = TRUE>>=
+it_alzmax <- independence_test(alzheimer, teststat = "maxtype")
+it_alzmax
+@
+which leads to virtually the same $p$-value. The standardized contingency
+table
+<<alzheimer-maxstat, echo = TRUE>>=
+statistic(it_alzmax, "standardized")
+@
+leads to the impression that patients suffering from Alzheimer's disease
+smoked less cigarettes than expected under independence and, to a much larger
+degree, patients with other dementias smoked much more than expected.
+However, interpreting the standardized contingency table either requires
+knowledge about the distribution of the standardized statistics, 
+i.e. via an approximation of the $97.5\%$ quantile of the conditional 
+null distribution (two-sided test)
+<<alzheimer-qperm, echo = TRUE>>=
+qperm(it_alzmax, 0.975)
+@
+Alternatively and more conveniently, we want to switch to the $p$-value scale. 
+Here, we choose step-down
+adjusted resampling-based $p$-values \citep{WestfallYoung1993}. First,
+we approximate the conditional distribution by $50.000$ Monte-Carlo 
+replications
+<<alzheimer-MC, echo = TRUE>>=
+it_alzMC <- independence_test(alzheimer, 
+                              distribution = approximate(B = 50000))
+pvalue(it_alzMC)
+@
+and apply Algorithm 2.8 in \cite{WestfallYoung1993} to obtain $p$-values
+adjusted for multiple comparisons
+<<alzheimer-MTP, echo = TRUE>>=
+pvalue(it_alzMC, method = "step-down")
+@
+The above results support the conclusion that the rejection of the null hypothesis of
+independence is due to a large number of heavy smokers with other dementias
+but seems rather unrelated to Alzheimer's disease itself.
 
+Of course, ignoring the ordinal structure of one of the variables is only
+suboptimal. Ordinal variables can be incorporated into the general framework
+via linear-by-linear association tests \citep{Agresti2002}. 
+When $\Y$ is measured at $J$ levels and $\X$ at $K$ levels,
+$\Y$ and $\X$ are associated with score vectors $\xi \in
+\R^J$ and $\gamma \in \R^K$, respectively. The linear statistic is now a linear
+combination of the linear statistic $\T$ of the form
+\begin{eqnarray*}
+\M \T = \vec \left( \sum_{i=1}^n \gamma^\top g(\X_i)
+            \left(\xi^\top h(\Y_i, (\Y_1, \dots, \Y_n)\right)^\top \right)
+\in \R \text{ with } \M = \xi \otimes \gamma.
+\end{eqnarray*}
+
+For smoking, a natural choice of the scores are the midpoints of
+the internals used to discretize the smoking measurements and we can setup
+a linear-by-linear association test with $c_{max}$ type test statistic via
 <<alzheimer-ordered, echo = TRUE>>=
-it <- independence_test(alzheimer, scores = list(smoking = c(0, 5, 15, 25)))
-it
-pvalue(it, "single-step")
+it_alzL <- independence_test(alzheimer, scores = list(smoking = c(0, 5, 15, 25)))
+statistic(it_alzL, type = "standardized")
+pvalue(it_alzL)
 @
+and the single-step adjusted $p$-values 
+<<alzheimer-orderedp, echo = TRUE>>=
+pvalue(it_alzL, method = "single-step")
+@
+supports the conclusion that smoking is associated with other dementia and, 
+therefore, smoking is less frequent in patients suffering from Alzheimer's 
+disease.
 
-\paragraph{Photococarcinogenicity Experiments}
+\paragraph{Photococarcinogenicity Experiments.}
 
 The effect on tumor frequency and latency in photococarcinogenicity
 experiments are measured by means of (at least) three response variables:
