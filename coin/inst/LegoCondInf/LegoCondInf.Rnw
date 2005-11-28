@@ -88,7 +88,7 @@
 
 \begin{document}
 
-\setkeys{Gin}{width=0.95\textwidth}
+\setkeys{Gin}{width=\textwidth}
 
 
 \maketitle
@@ -114,13 +114,15 @@
 \newline
 
 <<setup, echo = FALSE, results = hide>>=
-options(width = 60)
+options(width = 65)
 require("coin")
 require("multcomp")
 set.seed(290875)
 data("alzheimer", package = "coin")
 data("photocar", package = "coin")
 data("mercuryfish", package = "coin")
+### get rid of the NAMESPACE
+load(file.path(.find.package("coin"), "R", "all.rda"))
 @
 
 \section{Introduction}
@@ -348,7 +350,7 @@ men with Alzheimer's disease'.
 
 \begin{table}
 \begin{center}
-\caption{Smoking and Alzheimer's disease. \label{alzheimertab}}
+\caption{\Robject{alzheimer} data: Smoking and Alzheimer's disease. \label{alzheimertab}}
 \begin{tabular}{lrrrr} \hline \hline
  & \multicolumn{4}{c}{No. of cigarettes daily} \\
  & None & <10 & 10--20 & >20 \\ \hline
@@ -375,36 +377,29 @@ for (i in 1:length(lines)) cat(lines[i], "\n")
 
 Ignoring the ordinal structure of the smoking behaviour, the null hypothesis
 of independence between smoking and disease status treating gender as a
-block factor with a $c_{quad}$-type test statistic, i.e. the conditional
+block factor with a $c_\text{quad}$-type test statistic, i.e. the conditional
 version of the Cochran-Mantel-Haenszel test
 <<alzheimer-mantelhaen, echo = TRUE>>=
 data("alzheimer", package = "coin")
 it_alz <- independence_test(alzheimer, teststat = "quadtype")
 it_alz
 @
-suggests that there is some deviation from independence. 
+suggests that there is a clear deviation from independence. 
 By default, the influence function $g$ and the transformation $h$ 
-are dummy codings of the smoking behavior and the disease status and
-the linear multivariate statistic $\T$ is the contincency table of 
-both variables 
+are dummy codings of the smoking behavior and the disease status
+, i.e. $h(\Y_i, (\Y_1, \dots,
+\Y_n)) = (1, 0, 0)$ and $g(\X_i) = (1, 0, 0 ,0)$ for a non-smoking Alzheimer
+patient. Consequently, 
+the linear multivariate statistic $\T$ based in $g$ and $h$ 
+is the contincency table of both variables 
 <<alzheimer-statistic, echo = TRUE>>=
 statistic(it_alz, "linear")
-margin.table(alzheimer, 1:2)
 @
-with conditional expectation
-<<alzheimer-statistic, echo = TRUE>>=
-expectation(it_alz)
-@
-and conditional covariance
-<<alzheimer-statistic, echo = TRUE, eval = FALSE>>=
-covariance(it_alz)
-@
-<<alzheimer-statistic, echo = FALSE>>=
-round(covariance(it_alz), 3)
-@
-Here, the 
-conditional distribution was approximated by its limiting distribution
-which leads to the same $p$-value as the unconditional test
+with conditional expectation \Rcmd{expectation(it\_alz)} and
+conditional covariance \Rcmd{covariance(it\_alz)}. Here, the 
+conditional distribution was approximated by its limiting $\chi^2$ 
+distribution which leads to exactly 
+the same $p$-value as the unconditional test
 <<alzheimer-mantelhaen.test, echo = TRUE>>=
 pvalue(it_alz)
 mantelhaen.test(alzheimer)$p.value
@@ -418,11 +413,12 @@ it_alzmax <- independence_test(alzheimer, teststat = "maxtype")
 it_alzmax
 @
 which leads to virtually the same $p$-value. The standardized contingency
-table
+table sheds some light on the deviations from independence
 <<alzheimer-maxstat, echo = TRUE>>=
 statistic(it_alzmax, "standardized")
 @
-leads to the impression that patients suffering from Alzheimer's disease
+and leads to the impression that patients suffering 
+from Alzheimer's disease
 smoked less cigarettes than expected under independence and, to a much larger
 degree, patients with other dementias smoked much more than expected.
 However, interpreting the standardized contingency table either requires
@@ -432,16 +428,20 @@ null distribution (two-sided test)
 <<alzheimer-qperm, echo = TRUE>>=
 qperm(it_alzmax, 0.975)
 @
-Alternatively and more conveniently, we want to switch to the $p$-value scale. 
-Here, we choose step-down
+Alternatively and more conveniently, we can 
+to switch to the $p$-value scale. Here, we choose step-down
 adjusted resampling-based $p$-values \citep{WestfallYoung1993}. First,
 we approximate the conditional distribution by $50.000$ Monte-Carlo 
 replications
 <<alzheimer-MC, echo = TRUE>>=
 it_alzMC <- independence_test(alzheimer, 
                               distribution = approximate(B = 50000))
+@
+with global $p$-value
+<<alzheimer-MCp, echo = TRUE>>=
 pvalue(it_alzMC)
 @
+(the normal approximation seems is rather accurate)
 and apply Algorithm 2.8 in \cite{WestfallYoung1993} to obtain $p$-values
 adjusted for multiple comparisons
 <<alzheimer-MTP, echo = TRUE>>=
@@ -465,8 +465,9 @@ combination of the linear statistic $\T$ of the form
 \end{eqnarray*}
 
 For smoking, a natural choice of the scores are the midpoints of
-the internals used to discretize the smoking measurements and we can setup
-a linear-by-linear association test with $c_{max}$ type test statistic via
+the internals used to discretize the number of cigarettes per day 
+and we can setup
+a linear-by-linear association test with $c_\text{max}$ type test statistic via
 <<alzheimer-ordered, echo = TRUE>>=
 it_alzL <- independence_test(alzheimer, scores = list(smoking = c(0, 5, 15, 25)))
 statistic(it_alzL, type = "standardized")
@@ -483,103 +484,194 @@ disease.
 \paragraph{Photococarcinogenicity Experiments.}
 
 The effect on tumor frequency and latency in photococarcinogenicity
-experiments are measured by means of (at least) three response variables:
-the survival time, the time to first tumor and the total number of tumors. 
-The animals were exposed to different levels of UVR exposure
-(group A: topical vehicle and 600 RBUs of UVR, group B: no topical
-vehicle and 600 RBUs of UVR and group C: no topical vehicle and
-1200 RBUs of UVR). The data are taken from Tables~1 to 3 in 
-\cite{Molefeetal2005}.
+experiments, where carcinogenic doses of ultraviolet radiation (UVR) are
+administered, are measured by means of (at least) three response variables:
+the survival time, the time to first tumor and the total number of tumors of
+animals in different treatment groups. 
+The main interest is testing the global null of no treatment 
+effect with respect to survival time, time to first tumor or
+number of tumors \citep[][analyse the detection time
+of tumors in addition, this data is not given here]{Molefeetal2005}. 
+In case the  global null hypothesis can be rejected, the deviations 
+from the partial hypotheses are of special interest.
 
-The main interest is testing the global null of no treatment
-effect with respect to survival time, time to first tumor and
-number of tumors (Molefe et al., 2005, analyse the detection time
-of tumors in addition, this data is not given here). In case the
-global null hypothesis can be rejected, the deviations from the
-partial hypotheses are of special interest.
+\cite{Molefeetal2005} report data of an experiment where
+$\Sexpr{nrow(photocar)}$ animals were exposed to different levels 
+of UVR exposure (group A: topical vehicle and 600 Robertson--Berger units 
+of UVR, group B: no topical vehicle and 600 Robertson--Berger units of UVR and group C: 
+no topical vehicle and 1200 Robertson--Berger units of UVR). 
+The data are taken from Tables~1 to 3 in \cite{Molefeetal2005}, where a 
+parametric test procedure is proposed. Figure
+\ref{photocarfig} depicts the group effects for all three response
+variables. 
 
-<<photocar-data, echo = TRUE>>=
-data("photocar", package = "coin")
-@
 
 \begin{figure}
 \begin{center}
-<<photocar-plot, echo = FALSE, fig = TRUE, width = 6, height = 3>>=
+<<photocar-plot, echo = FALSE, fig = TRUE, width = 7, height = 3>>=
+par(cex.lab = 1.3, cex.axis = 1.3)
 layout(matrix(1:3, ncol = 3))
 plot(survfit(Surv(time, event) ~ group, data = photocar), xmax = 50,
-     lty = 1:3, main = "Survival Time")
+     xlab = "Survival Time (in weeks)", ylab = "Probability",
+     lty = 1:3)
      legend("bottomleft", lty = 1:3, levels(photocar$group), bty = "n")
 plot(survfit(Surv(dmin, tumor) ~ group, data = photocar), xmax = 50,
-     lty = 1:3, main = "Time to First Tumor")
+     xlab = "Time to First Tumor (in weeks)", ylab = "Probability",
+     lty = 1:3)
      legend("bottomleft", lty = 1:3, levels(photocar$group), bty = "n")
-     boxplot(ntumor ~ group, data = photocar, main = "Number of Tumors")
+boxplot(ntumor ~ group, data = photocar, 
+        ylab = "Number of Tumors", xlab = "Treatment Group")
 @
-\caption{Kaplan-Meier estimates of time to death and time to first tumor as
+\caption{\Robject{photocar} data: 
+         Kaplan-Meier estimates of time to death and time to first tumor as
          well as boxplots of the total number of tumors in three treatment
-         groups.}
+         groups. \label{photocarfig}}
 \end{center}
 \end{figure}
 
+First, we construct a global test for the null hypothesis of independence
+of treatment and \textit{all} three response variables. A
+$c_\text{max}$-type test based on the standardized multivariate          
+linear statistic and an approximation of the conditional distribution
+utilizing the asymptotic distribution simply reads
 <<photocar-global, echo = TRUE>>=
-independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
-                  data = photocar)
+data("photocar", package = "coin")
+it_ph <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
+                           data = photocar)
+it_ph 
 @
+Here, the influence function $h$ computes the logrank scores of the survival
+time and time to first tumor and the number of tumors, i.e. for the 
+first animal in the first group $h(\Y_1, (\Y_1, \dots, \Y_n)) =
+\Sexpr{paste("(", paste(round(it_ph@statistic@ytrans[1,], 2), collapse = ","), ")")}$
+and $g(\X_1) = (1, 0, 0)$. The multivariate statistic is the sum of each of
+the three elements of the influence function $h$ in each of the groups, i.e.
+<<photocar-linear, echo = TRUE>>=
+statistic(it_ph, type = "linear")
+@
+It is important to note that the global test utilizes the complete
+covariance matrix 
+<<photocar-covar, echo = TRUE, eval = FALSE>>=
+cov2cor(covariance(it_ph))
+@
+<<photocar-covar, echo = FALSE>>=
+round(cov2cor(covariance(it_ph)), 2)
+@
+<<photocar-quad, echo = FALSE>>=
+it_phq <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~group,
+                           data = photocar, teststat = "quadtype")
+@
+when $p$-values are computed via quasi-randomized Monte-Carlo
+procedures in the multivariate setting \citep{numerical-:1992}.
+Alternatively, a test statistic based on the quadratic form $c_\text{quad}$
+directly incorporates the covariances structure and leads to a very similar 
+$p$-value. 
+%%%% $\Sexpr{round(pvalue(it_phq), 5)}$.
 
-<<photocar-global, echo = TRUE>>=
+The deviations from the partial null hypotheses, i.e. the independence of
+each single response and the treatments, can be inspected by the standardized
+linear statistic $\T$
+<<photocar-stand, echo = FALSE>>=
+statistic(it_ph, type = "standardized")
+@
+or by means of adjusted $p$-values
+<<photocar-stand, echo = TRUE, eval = FALSE>>=
+pvalue(it_ph, method = "single-step")
+@
+<<photocar-stand, echo = FALSE>>=
+round(pvalue(it_ph, method = "single-step"), 5)
+@
+Of course, the goodness of the asymptotic procedure can be checked against
+the Monte-Carlo approximation which is computed by
+<<photocar-MC, echo = TRUE>>=
 it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
                   data = photocar, distribution = approximate(50000))
+pvalue(it, method = "single-step")
+@
+The more powerful step-down adjusted $p$-values are 
+<<photocar-MC2, echo = TRUE>>=    
 pvalue(it, method = "step-down")
 @
+Clearly, the rejection of the global null hypothesis is due to the
+group differences in both survival time and time to first tumor whereas 
+no treatment effect on the total number of tumors can be observed.
 
-\paragraph{Contaminated Fish Consumption}
+\paragraph{Contaminated Fish Consumption.}
 
-Subjects who ate contaminated fish for more than three years in
-the 'exposed' group and subjects of a control group are to be
-compared. Instead of a multivariate comparison, \cite{Rosenbaum1994a}
-applied a coherence criterion. The observations are partially
-ordered: an observation is than another when all three variables
-('mercury', 'abnormal' and 'ccells') are smaller and a score
-reflecting the `ranking' is attached to each observation. The
- distribution of the scores in both groups is to be compared and
+In the former two applications, standard transformations for $g$ and $h$
+such as dummy codings and logrank scores have been applied. In the third 
+application, we will show how one can utilize the \Rpackage{coin}
+functionality to implement a complete new test procedure. 
+
+\cite{Rosenbaum1994a} proposed to compare groups by means of a
+\textit{coherence criterion} and studied a dataset of subjects 
+who ate contaminated fish for more than three years in
+the 'exposed' group and a control group. Three response variables are
+available: the mercury level of the blood, the percentage of cells with
+structural abnormalities and the proportion of cells with asymmetrical or
+incomplete-symmetrical chomosome aberrations (see Figure \ref{mercurybox}). 
+The observations are partially
+ordered: an observation is smaller than another when all three variables
+are smaller. The rank score for observation $i$ is the number of
+observations what are larger (following the above criterion) 
+than observation $i$ minus the number of
+observations that are smaller. The
+distribution of the rank scores in both groups is to be compared and
 the corresponding test is called `POSET-test' (partially ordered
 sets).
 
 \begin{figure}
 \begin{center}
-<<mercuryfish-plot, echo = FALSE, fig = TRUE, width = 6, height = 3>>=
+<<mercuryfish-plot, echo = FALSE, fig = TRUE, width = 7, height = 3>>=
+par(cex.lab = 1.3, cex.axis = 1.3)
 layout(matrix(1:3, ncol = 3))
-boxplot(mercury ~ group, data = mercuryfish, main = "Mercury blood level")
+boxplot(I(log(mercury)) ~ group, data = mercuryfish, ylab = "Mercury Blood Level (log scale)")
 boxplot(abnormal ~ group, data = mercuryfish, 
-        main = "Abnormal cells", ylab = "Cells in per cent")
+        ylab = "Abnormal Cells (in %)")
 boxplot(ccells ~ group, data = mercuryfish, 
-        main = "Chomosome aberrations", ylab = "Cells in per cent")
+        ylab = "Chomosome Aberrations (in %)")
 @
-\caption{Three response variables}
+\caption{\Robject{mercuryfish} data: 
+         Distribution of all three response variables in the exposed group
+         and control group. \label{mercurybox}}
 \end{center}
 \end{figure}
 
-
-<<mercurysfish, echo = TRUE>>=
-data("mercuryfish")
-
+The coherence criterion can be formulated in a simple function
+<<mercurysfish-score, echo = TRUE>>=
+data("mercuryfish", package = "coin")
 coherence <- function(data) {
-    x <- as.matrix(data)
-    matrix(apply(x, 1, function(y)
-           sum(colSums(t(x) < y) == ncol(x)) - 
-           sum(colSums(t(x) > y) == ncol(x))), ncol = 1)
+    x <- t(as.matrix(data))
+    matrix(apply(x, 2, function(y)
+           sum(colSums(x < y) == nrow(x)) - 
+           sum(colSums(x > y) == nrow(x))), ncol = 1)
 }
-poset <- independence_test(mercury + abnormal + ccells ~ group, data =
-                           mercuryfish, ytrafo = coherence, distribution = exact())
-statistic(poset, "linear")
-expectation(poset)
-variance(poset)
-statistic(poset)
+@
+which is now defined as influence function $h$ via the \Rcmd{ytrafo} argument
+<<mercuryfish-poset, echo = TRUE>>=
+poset <- independence_test(mercury + abnormal + ccells ~ group, 
+    data = mercuryfish, ytrafo = coherence, distribution = exact())
+@
+Once the transformations $g$ (a zero-one coding of the exposed and control
+group) and $h$ (the coherence criterion) are defined, we enjoy the whole
+functionality of the framework, including an exact two-sided $p$-value
+<<mercuryfish-pvalue, echo = TRUE>>=
 pvalue(poset)
 @
+and density (\Rcmd{dperm}), distribution (\Rcmd{pperm}) and quantile functions 
+(\Rcmd{qperm}) for the conditional distribution. When only a small number of
+observations is available, it might be interesting to compare the exact
+conditional distribution and its approximation via the limiting distribution.
+For the \Robject{mercuryfish} data, the relevant parts of 
+both distribution functions are shown in Figure~\ref{distplot}. It 
+turns out the the normal approximation would be sufficient for all practical
+purposes in this application.
 
+\setkeys{Gin}{width=0.8\textwidth}
 \begin{figure}
 \begin{center}
-<<mercuryfish-ppermplot, echo = FALSE, fig = TRUE, height = 4, width = 6>>=
+<<mercuryfish-ppermplot, echo = FALSE, fig = TRUE, height = 5, width = 8>>=
+par(cex.lab = 1.3, cex.axis = 1.1)
 ite <- poset
 ita <- independence_test(mercury + abnormal + ccells ~ group, data =     
                            mercuryfish, ytrafo = coherence)
@@ -589,18 +681,22 @@ site <- site[site <= qperm(ite, 0.1) & site > -3]
 pite <- sapply(site, function(x) pperm(ite, x))
 pita <- sapply(site, function(x) pperm(ita, x))
 
-plot(site, pite, type = "S", ylab = "Distribution", xlab = "Statistic")
-lines(site, pita)
+plot(site, pite, type = "S", ylab = "Distribution", xlab = "Standardized Statistic")
+lines(site, pita, lty = 3)
+legend("topleft", lty = c(1,3), legend = c("Conditional Distribution",
+"Approximation"), bty = "n")
 
 site <- support(ite)
 site <- site[site >= qperm(ite, 0.9) & site < 3]
 pite <- sapply(site, function(x) pperm(ite, x))
 pita <- sapply(site, function(x) pperm(ita, x))
 
-plot(site, pite, type = "S", ylab = "Distribution", xlab = "Statistic")
-lines(site, pita)
+plot(site, pite, type = "S", ylab = "Distribution", xlab = "Standardized Statistic")
+lines(site, pita, lty = 3)
 @
-\caption{Distribution functions}
+\caption{\Robject{mercuryfish} data: 
+         Conditional distribution and asymptotic normal approximation 
+         for the POSET test. \label{distplot}}
 \end{center}
 \end{figure}
 
