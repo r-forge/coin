@@ -5,6 +5,8 @@
 
     o    add `conf.level' attribute for `MCp' objects when quasi-randomized 
          Monte-Carlo procedures (from `mvtnorm') have been used
+
+    o    add new `var_trafo' argument to `trafo'
  
 
 		CHANGES in `coin' VERSION 0.3-7

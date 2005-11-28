@@ -65,3 +65,10 @@ stopifnot(max(abs(statistic(i1, "standardized")[,1] -
                   statistic(i2, "stand"))) < sqrt(.Machine$double.eps))
 stopifnot(max(abs(statistic(i1, "standardized")[,2] - 
                   statistic(i3, "stand"))) < sqrt(.Machine$double.eps))
+
+### check new var_trafo argument
+x <- rnorm(20)
+y <- gl(2, 10)
+a <- trafo(data.frame(x = x, y = y), numeric_trafo = normal_trafo)
+b <- trafo(data.frame(x = x, y = y), var_trafo = list(x = normal_trafo))
+stopifnot(all.equal(a, b))
