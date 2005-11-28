@@ -65,7 +65,7 @@ statistic(poset, "linear")
 ### expectation
 expectation(poset)
 
-### variance (Rosenbaum, 1994, uses the unconditional approach)
+### variance (there is a typo in Rosenbaum, 1994)
 covariance(poset)
 
 ### the standardized statistic
