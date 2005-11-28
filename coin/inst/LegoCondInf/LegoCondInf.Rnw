@@ -125,6 +125,13 @@ data("mercuryfish", package = "coin")
 load(file.path(.find.package("coin"), "R", "all.rda"))
 @
 
+\begin{abstract}
+
+\end{abstract}
+
+\noindent
+KEY WORDS: Permutation tests; Multiple testing; Independence; Software.
+
 \section{Introduction}
 
 The distribution of a test statistic under the circumstances of a certain
@@ -132,7 +139,8 @@ null hypothesis clearly depends on the unkown distribution of the data and
 thus is unknown as well.
 Two concepts are commonly applied to dispose of this dependency.
 Unconditional tests impose assumptions on the distribution of the data such
-that the null distribution can be derived analytically. Conditional tests
+that the null distribution can be derived analytically. In contrast, 
+conditional tests
 replace the unknown null distribution by the conditional null distribution,
 i.e. the distribution of the test statistic given the observed data. The
 latter approach is known as \textit{permutation testing} and was developed
@@ -152,7 +160,7 @@ the conditional distribution of the test statistic under the null
 hypothesis \citep{Edgington1987,Good2000,Pesarin2001,Ernst2004}. 
 Such a classification into inference problems (categorical data
 analysis, multivariate analysis, $K$-sample location problems, correlation
-etc) each being associated with a `natural' form of the test statistic
+etc.) each being associated with a `natural' form of the test statistic
 obstructs our view on the common foundations of all permutation tests. 
 Theoretical advances in the last decade
 \citep{StrasserWeber1999,JanssenPauls2003} helped us to understand the strong
@@ -198,14 +206,11 @@ null distribution.
 
 \section{Conditional Inference \label{CI}}
 
-To fix ideas we assume that we are provided with $n$ observations
-\begin{eqnarray*}
-(\Y_i, \X_i, b_i), \quad i = 1, \dots, n.
-\end{eqnarray*}
+To fix ideas we assume that we are provided with observations
+$(\Y_i, \X_i)$ for $i = 1, \dots, n$.
 The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
 $\mathcal{X}$ may
-be measured at arbitrary scales and may be multivariate as well. In addition
-to those measurements a factor $b$ coding blocks may be available.
+be measured at arbitrary scales and may be multivariate as well. 
 
 We are interested in testing the null hypothesis of independence of $\Y$ and $\X$
 \begin{eqnarray*}
@@ -237,7 +242,7 @@ all permutations $\sigma \in S$ of the responses are derived by
 \cite{StrasserWeber1999}:
 \begin{eqnarray}
 \mu = \E(\T | S) & = & \vec \left( \left( \sum_{i = 1}^n g(\X_i) \right)
-\E(h | S)^\top \right), \nonumber \\
+\E(h | S)^\top \right) \nonumber \\
 \Sigma = \V(\T | S) & = &
     \frac{n}{n - 1}  \V(h | S) \otimes
         \left(\sum_i g(\X_i) \otimes  g(\X_i)^\top \right)
@@ -259,9 +264,10 @@ n^{-1} \sum_i \left(h(\Y_i, (\Y_1, \dots, \Y_n)) - \E(h | S)
 \right) \left(h(\Y_i, (\Y_1, \dots, \Y_n)) - \E(h | S)\right)^\top.
 \end{eqnarray*}
 
-Having the conditional expectation and covariance at hand we are able to
-standardize a linear statistic $\T \in \R^{pq}$ of the form
-(\ref{linstat}). Univariate test statistics~$c$ mapping an observed linear
+The key step for the construction of test statistics from the multivariate
+linear statistic $\T$ is its standardization utilizing the 
+the conditional expectation $\mu$ and covariance matrix $\Sigma$. 
+Univariate test statistics~$c$ mapping an observed linear
 statistic $\mathbf{t} \in \R^{pq}$ 
 into the real line can be of arbitrary form.  An obvious choice is
 the maximum of the absolute values of the standardized linear statistic
@@ -292,9 +298,10 @@ the Moore-Penrose inverse $\Sigma^+$ of $\Sigma$.
 %%    \quad \text{(greater).}
 %%\end{eqnarray*}
 
-The conditional distribution and thus the $p$-value
-of the statistic $c(\mathbf{t}, \mu, \Sigma)$ can be
-computed in several different ways. For some special forms of the
+The conditional distribution $\Prob(c(\T, \mu, \Sigma) \le z | S)$
+is the number of permutations $\sigma \in S$ of the data 
+with corresponding test statistic less than $z$ divided by the total number
+of permutations in $S$. For some special forms of the
 multivariate linear statistic the exact distribution of some 
 test statistics is trackable for small to moderate sample sizes.
 %%For two-sample problems, the shift-algorithm by \cite{axact-dist:1986} 
@@ -319,8 +326,24 @@ probabilities can be computed efficiently.
 Conditional Monte-Carlo procedures can also be used to 
 approximate the exact distribution up to any desired accuracy by evaluating
 the test statistic for a random sample from the set all permutations $S$.
+It is important to note that the presence of a grouping of the observations
+into blocks, only permutations within blocks are elegible and that the
+conditional expectation and covariance matrix needs to be computed
+separately for each block.
+
 
 \section{Playing Lego with \Rpackage{coin}}
+
+The \Rpackage{coin} package implements software infrastructure for the main
+components of the theoretical framework sketched above, namely the linear
+statistic $\T$ with user-defined transformations $g$ and influence functions
+$h$, functions for the computation of the conditional expectation $\mu$ and
+covariance matrix $\Sigma$ as in (\ref{expectcovar}) and utilities for the
+computation of the conditional distribution of $c_\text{max}$ or
+$c_\text{quad}$ test statistics. Thus, the flexibility of the theoretical
+framework is translated and preserved in a software instance which enables
+the data analyst to benefit from this conceptually simple methodology in
+every day's data analysis.
 
 \paragraph{Smoking and Alzheimer's Disease.}
 
@@ -339,7 +362,7 @@ smoked <- sum(rowSums(margin.table(alzheimer, margin = c(1,2)))[-1])
 @
 
 \cite{SalibHillier1997} report results of a case-control study on
-Alzheimer's disease and smoking behaviour of 
+Alzheimer's disease and smoking behavior of 
 $\Sexpr{disease["Alzheimer's"]}$
 patients suffering from Alzheimer's disease and 
 $\Sexpr{disease[names(disease) != "Alzheimer's"]}$
@@ -348,7 +371,7 @@ re-constructed from Table~4 in \cite{SalibHillier1997}.
 The authors conclude that `cigarette smoking is less frequent in 
 men with Alzheimer's disease'. 
 
-\begin{table}
+\begin{table}[h]
 \begin{center}
 \caption{\Robject{alzheimer} data: Smoking and Alzheimer's disease. \label{alzheimertab}}
 \begin{tabular}{lrrrr} \hline \hline
@@ -375,7 +398,7 @@ for (i in 1:length(lines)) cat(lines[i], "\n")
 \end{center}
 \end{table}
 
-Ignoring the ordinal structure of the smoking behaviour, the null hypothesis
+Ignoring the ordinal structure of the smoking behavior, the null hypothesis
 of independence between smoking and disease status treating gender as a
 block factor with a $c_\text{quad}$-type test statistic, i.e. the conditional
 version of the Cochran-Mantel-Haenszel test
@@ -385,23 +408,22 @@ it_alz <- independence_test(alzheimer, teststat = "quadtype")
 it_alz
 @
 suggests that there is a clear deviation from independence. 
-By default, the influence function $g$ and the transformation $h$ 
-are dummy codings of the smoking behavior and the disease status
-, i.e. $h(\Y_i, (\Y_1, \dots,
-\Y_n)) = (1, 0, 0)$ and $g(\X_i) = (1, 0, 0 ,0)$ for a non-smoking Alzheimer
-patient. Consequently, 
-the linear multivariate statistic $\T$ based in $g$ and $h$ 
+By default, the influence function $h$ and the transformation $g$ 
+are dummy codings of the disease status $\Y$ and the smoking behavior $\X$, 
+i.e. $h(\Y_i, (\Y_1, \dots, \Y_n)) = (1, 0, 0)$ 
+and $g(\X_i) = (1, 0, 0 ,0)$ for a non-smoking Alzheimer patient. 
+Consequently, the linear multivariate statistic $\T$ based on $g$ and $h$ 
 is the contincency table of both variables 
 <<alzheimer-statistic, echo = TRUE>>=
-statistic(it_alz, "linear")
+statistic(it_alz, type = "linear")
 @
-with conditional expectation \Rcmd{expectation(it\_alz)} and
-conditional covariance \Rcmd{covariance(it\_alz)}. Here, the 
-conditional distribution was approximated by its limiting $\chi^2$ 
-distribution which leads to exactly 
-the same $p$-value as the unconditional test
-<<alzheimer-mantelhaen.test, echo = TRUE>>=
-pvalue(it_alz)
+with conditional expectation \Rcmd{expectation(it\_alz)} and conditional
+covariance \Rcmd{covariance(it\_alz)} which are available for standardizing
+the contingency table $\T$. The conditional distribution is approximated by
+its limiting $\chi^2$ distribution by default. This leads to exactly the
+same $p$-value as the unconditional test 
+<<alzheimer-mantelhaen.test, echo = TRUE>>= 
+pvalue(it_alz) 
 mantelhaen.test(alzheimer)$p.value
 @
 The form of the deviation from independence is of special interest,
@@ -424,7 +446,7 @@ degree, patients with other dementias smoked much more than expected.
 However, interpreting the standardized contingency table either requires
 knowledge about the distribution of the standardized statistics, 
 i.e. via an approximation of the $97.5\%$ quantile of the conditional 
-null distribution (two-sided test)
+null distribution (two-sided test) which is available from
 <<alzheimer-qperm, echo = TRUE>>=
 qperm(it_alzmax, 0.975)
 @
@@ -441,7 +463,7 @@ with global $p$-value
 <<alzheimer-MCp, echo = TRUE>>=
 pvalue(it_alzMC)
 @
-(the normal approximation seems is rather accurate)
+(the normal approximation is rather accurate)
 and apply Algorithm 2.8 in \cite{WestfallYoung1993} to obtain $p$-values
 adjusted for multiple comparisons
 <<alzheimer-MTP, echo = TRUE>>=
@@ -470,14 +492,18 @@ and we can setup
 a linear-by-linear association test with $c_\text{max}$ type test statistic via
 <<alzheimer-ordered, echo = TRUE>>=
 it_alzL <- independence_test(alzheimer, scores = list(smoking = c(0, 5, 15, 25)))
-statistic(it_alzL, type = "standardized")
 pvalue(it_alzL)
 @
 and the single-step adjusted $p$-values 
-<<alzheimer-orderedp, echo = TRUE>>=
+<<alzheimer-orderedp, echo = TRUE, eval = FALSE>>=
 pvalue(it_alzL, method = "single-step")
 @
-supports the conclusion that smoking is associated with other dementia and, 
+<<alzheimer-orderedp, echo = FALSE>>=
+p <- pvalue(it_alzL, method = "single-step")
+rownames(p) <- ""
+p
+@
+support the conclusion that smoking is associated with other dementia and, 
 therefore, smoking is less frequent in patients suffering from Alzheimer's 
 disease.
 
@@ -540,8 +566,8 @@ it_ph <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ grou
                            data = photocar)
 it_ph 
 @
-Here, the influence function $h$ computes the logrank scores of the survival
-time and time to first tumor and the number of tumors, i.e. for the 
+Here, the influence function $h$ consists of the logrank scores of the survival
+time and time to first tumor as well as the number of tumors, i.e. for the 
 first animal in the first group $h(\Y_1, (\Y_1, \dots, \Y_n)) =
 \Sexpr{paste("(", paste(round(it_ph@statistic@ytrans[1,], 2), collapse = ","), ")")}$
 and $g(\X_1) = (1, 0, 0)$. The multivariate statistic is the sum of each of
@@ -549,8 +575,8 @@ the three elements of the influence function $h$ in each of the groups, i.e.
 <<photocar-linear, echo = TRUE>>=
 statistic(it_ph, type = "linear")
 @
-It is important to note that the global test utilizes the complete
-covariance matrix 
+It is important to note that this global test utilizes the complete
+correlation structure 
 <<photocar-covar, echo = TRUE, eval = FALSE>>=
 cov2cor(covariance(it_ph))
 @
@@ -564,12 +590,12 @@ it_phq <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~grou
 when $p$-values are computed via quasi-randomized Monte-Carlo
 procedures in the multivariate setting \citep{numerical-:1992}.
 Alternatively, a test statistic based on the quadratic form $c_\text{quad}$
-directly incorporates the covariances structure and leads to a very similar 
+directly incorporates the covariance matrix and leads to a very similar 
 $p$-value. 
 %%%% $\Sexpr{round(pvalue(it_phq), 5)}$.
 
-The deviations from the partial null hypotheses, i.e. the independence of
-each single response and the treatments, can be inspected by the standardized
+The deviations from the partial null hypotheses, i.e. independence of
+each single response and treatment groups, can be inspected by the standardized
 linear statistic $\T$
 <<photocar-stand, echo = FALSE>>=
 statistic(it_ph, type = "standardized")
@@ -601,7 +627,7 @@ no treatment effect on the total number of tumors can be observed.
 In the former two applications, standard transformations for $g$ and $h$
 such as dummy codings and logrank scores have been applied. In the third 
 application, we will show how one can utilize the \Rpackage{coin}
-functionality to implement a complete new test procedure. 
+functionality to implement a newly invented test procedure. 
 
 \cite{Rosenbaum1994a} proposed to compare groups by means of a
 \textit{coherence criterion} and studied a dataset of subjects 
@@ -611,9 +637,9 @@ available: the mercury level of the blood, the percentage of cells with
 structural abnormalities and the proportion of cells with asymmetrical or
 incomplete-symmetrical chomosome aberrations (see Figure \ref{mercurybox}). 
 The observations are partially
-ordered: an observation is smaller than another when all three variables
+ordered: an observation is said to be smaller than another when all three variables
 are smaller. The rank score for observation $i$ is the number of
-observations what are larger (following the above criterion) 
+observations that are larger (following the above criterion) 
 than observation $i$ minus the number of
 observations that are smaller. The
 distribution of the rank scores in both groups is to be compared and
@@ -639,7 +665,6 @@ boxplot(ccells ~ group, data = mercuryfish,
 
 The coherence criterion can be formulated in a simple function
 <<mercurysfish-score, echo = TRUE>>=
-data("mercuryfish", package = "coin")
 coherence <- function(data) {
     x <- t(as.matrix(data))
     matrix(apply(x, 2, function(y)
@@ -649,6 +674,7 @@ coherence <- function(data) {
 @
 which is now defined as influence function $h$ via the \Rcmd{ytrafo} argument
 <<mercuryfish-poset, echo = TRUE>>=
+data("mercuryfish", package = "coin")
 poset <- independence_test(mercury + abnormal + ccells ~ group, 
     data = mercuryfish, ytrafo = coherence, distribution = exact())
 @
@@ -659,7 +685,7 @@ functionality of the framework, including an exact two-sided $p$-value
 pvalue(poset)
 @
 and density (\Rcmd{dperm}), distribution (\Rcmd{pperm}) and quantile functions 
-(\Rcmd{qperm}) for the conditional distribution. When only a small number of
+(\Rcmd{qperm}) of the conditional distribution. When only a small number of
 observations is available, it might be interesting to compare the exact
 conditional distribution and its approximation via the limiting distribution.
 For the \Robject{mercuryfish} data, the relevant parts of 
@@ -670,7 +696,7 @@ purposes in this application.
 \setkeys{Gin}{width=0.8\textwidth}
 \begin{figure}
 \begin{center}
-<<mercuryfish-ppermplot, echo = FALSE, fig = TRUE, height = 5, width = 8>>=
+<<mercuryfish-ppermplot, echo = FALSE, fig = TRUE, height = 5, width = 9>>=
 par(cex.lab = 1.3, cex.axis = 1.1)
 ite <- poset
 ita <- independence_test(mercury + abnormal + ccells ~ group, data =     
@@ -701,7 +727,7 @@ lines(site, pita, lty = 3)
 \end{figure}
 
 
-\section{Discussion}
+\section{Conclusion}
 
 \bibliographystyle{asa}
 \bibliography{litdbTH,addrefs}
