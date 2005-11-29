@@ -147,9 +147,13 @@ beyond pre-packaged test procedures.
 
 \noindent
 KEY WORDS: Permutation tests; Multiple testing; Independence; Software.
+\newline
 
-\noident
-Version: $Id$
+\noindent
+Version:
+\begin{verbatim}
+$Id$
+\end{verbatim}
 
 \newpage
 
