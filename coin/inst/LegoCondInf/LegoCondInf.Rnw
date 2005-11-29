@@ -5,6 +5,8 @@
 \usepackage[round]{natbib}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{rotating}
+\usepackage[nolists]{endfloat}
 
 \newcommand{\Rpackage}[1]{\textit{#1}}
 \newcommand{\Robject}[1]{\texttt{#1}}
@@ -88,7 +90,7 @@
 
 \begin{document}
 
-\setkeys{Gin}{width=\textwidth}
+\setkeys{Gin}{width=\textheight}
 
 
 \maketitle
@@ -125,6 +127,8 @@ data("mercuryfish", package = "coin")
 load(file.path(.find.package("coin"), "R", "all.rda"))
 @
 
+\thispagestyle{empty}
+
 \begin{abstract}
 Conditioning on the observed data is an important and flexible 
 design principle for statistical test procedures. Although generally
@@ -135,7 +139,7 @@ transfer of such a theory to practical data analysis has important
 implications in many applications and requires a software implementation 
 that enables the
 data analyst to compute on the theoretical concepts as closely as possible.
-We re-analyse data where non-standard inference procedures are
+We re-analyze data where non-standard inference procedures are
 required utilizing the \Rpackage{coin} add-on package in the \textsf{R}
 system for statistical computing and show what one can gain from going
 beyond pre-packaged test procedures.
@@ -144,10 +148,12 @@ beyond pre-packaged test procedures.
 \noindent
 KEY WORDS: Permutation tests; Multiple testing; Independence; Software.
 
+\newpage
+
 \section{Introduction}
 
 The distribution of a test statistic under the circumstances of a certain
-null hypothesis clearly depends on the unkown distribution of the data and
+null hypothesis clearly depends on the unknown distribution of the data and
 thus is unknown as well.
 Two concepts are commonly applied to dispose of this dependency.
 Unconditional tests impose assumptions on the distribution of the data such
@@ -160,7 +166,7 @@ by R. A. Fisher in the 1930s \citep{Fisher1935}.
 
 The pros and cons of both approaches have been discussed in extensio
 \citep[e.g. by][]{why-permut:1998,pros-and-c:2000,Shuster2005} and we
-refrain from stepping into this mostly philosphical debate, noting that most
+refrain from stepping into this mostly philosophical debate, noting that most
 conditional test procedures are asymptotically equivalent to their
 unconditional counterparts anyway.
 
@@ -184,7 +190,7 @@ Especially attractive for this purpose is the theoretical framework for
 permutation tests developed by \cite{StrasserWeber1999}. This unifying
 theory is based on a flexible form of multivariate linear statistics for the
 general independence problem those conditional expectation and covariance is
-trackable. The classical procedures, such as a permuation $t$ test, are part
+trackable. The classical procedures, such as a permutation $t$ test, are part
 of this framework and, even more interesting, new test procedures can be
 embedded into the same theory. 
 
@@ -200,7 +206,7 @@ Testimate]{Oster2002,Oster2003} leads to the classical `cook book'
 statistics. Such cook books, and thus software implementations, 
 typically teach recipes and hide the concepts which are necessary to go beyond 
 the implemented procedures when the data analyst is faced with non-standard
-inference problems or wants to perform a test not supported by the prefered
+inference problems or wants to perform a test not supported by the preferred
 software package.
 
 With this work, we add an adjustable spanner to the statisticians toolbox 
@@ -339,7 +345,7 @@ Conditional Monte-Carlo procedures can also be used to
 approximate the exact distribution up to any desired accuracy by evaluating
 the test statistic for a random sample from the set all permutations $S$.
 It is important to note that the presence of a grouping of the observations
-into blocks, only permutations within blocks are elegible and that the
+into blocks, only permutations within blocks are eligible and that the
 conditional expectation and covariance matrix needs to be computed
 separately for each block.
 
@@ -425,7 +431,7 @@ are dummy codings of the disease status $\Y$ and the smoking behavior $\X$,
 i.e. $h(\Y_i, (\Y_1, \dots, \Y_n)) = (1, 0, 0)$ 
 and $g(\X_i) = (1, 0, 0 ,0)$ for a non-smoking Alzheimer patient. 
 Consequently, the linear multivariate statistic $\T$ based on $g$ and $h$ 
-is the contincency table of both variables 
+is the contingency table of both variables 
 <<alzheimer-statistic, echo = TRUE>>=
 statistic(it_alz, type = "linear")
 @
@@ -528,7 +534,7 @@ the survival time, the time to first tumor and the total number of tumors of
 animals in different treatment groups. 
 The main interest is testing the global null of no treatment 
 effect with respect to survival time, time to first tumor or
-number of tumors \citep[][analyse the detection time
+number of tumors \citep[][analyze the detection time
 of tumors in addition, this data is not given here]{Molefeetal2005}. 
 In case the  global null hypothesis can be rejected, the deviations 
 from the partial hypotheses are of special interest.
@@ -544,7 +550,7 @@ parametric test procedure is proposed. Figure
 variables. 
 
 
-\begin{figure}
+\begin{sidewaysfigure}
 \begin{center}
 <<photocar-plot, echo = FALSE, fig = TRUE, width = 7, height = 3>>=
 par(cex.lab = 1.3, cex.axis = 1.3)
@@ -565,7 +571,7 @@ boxplot(ntumor ~ group, data = photocar,
          well as boxplots of the total number of tumors in three treatment
          groups. \label{photocarfig}}
 \end{center}
-\end{figure}
+\end{sidewaysfigure}
 
 First, we construct a global test for the null hypothesis of independence
 of treatment and \textit{all} three response variables. A
@@ -647,7 +653,7 @@ who ate contaminated fish for more than three years in
 the 'exposed' group and a control group. Three response variables are
 available: the mercury level of the blood, the percentage of cells with
 structural abnormalities and the proportion of cells with asymmetrical or
-incomplete-symmetrical chomosome aberrations (see Figure \ref{mercurybox}). 
+incomplete-symmetrical chromosome aberrations (see Figure \ref{mercurybox}). 
 The observations are partially
 ordered: an observation is said to be smaller than another when all three variables
 are smaller. The rank score for observation $i$ is the number of
@@ -658,7 +664,7 @@ distribution of the rank scores in both groups is to be compared and
 the corresponding test is called `POSET-test' (partially ordered
 sets).
 
-\begin{figure}
+\begin{sidewaysfigure}
 \begin{center}
 <<mercuryfish-plot, echo = FALSE, fig = TRUE, width = 7, height = 3>>=
 par(cex.lab = 1.3, cex.axis = 1.3)
@@ -668,13 +674,13 @@ boxplot(I(log(mercury)) ~ group, data = mercuryfish,
 boxplot(abnormal ~ group, data = mercuryfish, 
         ylab = "Abnormal Cells (in %)")
 boxplot(ccells ~ group, data = mercuryfish, 
-        ylab = "Chomosome Aberrations (in %)")
+        ylab = "Chromosome Aberrations (in %)")
 @
 \caption{\Robject{mercuryfish} data: 
          Distribution of all three response variables in the exposed group
          and control group. \label{mercurybox}}
 \end{center}
-\end{figure}
+\end{sidewaysfigure}
 
 The coherence criterion can be formulated in a simple function
 <<mercurysfish-score, echo = TRUE>>=
@@ -706,8 +712,8 @@ both distribution functions are shown in Figure~\ref{distplot}. It
 turns out the the normal approximation would be sufficient for all practical
 purposes in this application.
 
-\setkeys{Gin}{width=0.8\textwidth}
-\begin{figure}
+\setkeys{Gin}{width=0.8\textheight}
+\begin{sidewaysfigure}
 \begin{center}
 <<mercuryfish-ppermplot, echo = FALSE, fig = TRUE, height = 5, width = 9>>=
 par(cex.lab = 1.3, cex.axis = 1.1)
@@ -737,7 +743,7 @@ lines(site, pita, lty = 3)
          Conditional distribution and asymptotic normal approximation 
          for the POSET test. \label{distplot}}
 \end{center}
-\end{figure}
+\end{sidewaysfigure}
 
 
 \section{Conclusion}
