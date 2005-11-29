@@ -126,7 +126,19 @@ load(file.path(.find.package("coin"), "R", "all.rda"))
 @
 
 \begin{abstract}
-
+Conditioning on the observed data is an important and flexible 
+design principle for statistical test procedures. Although generally
+applicable, most text book and software implementations are limited to
+the treatment of special cases. A new theoretical framework for permutation
+tests opens up the way to a unified and generalized view. We argue that the
+transfer of such a theory to practical data analysis has important
+implications in many applications and requires a software implementation 
+that enables the
+data analyst to compute on the theoretical concepts as closely as possible.
+We re-analyse data where non-standard inference procedures are
+required utilizing the \Rpackage{coin} add-on package in the \textsf{R}
+system for statistical computing and show what one can gain from going
+beyond pre-packaged test procedures.
 \end{abstract}
 
 \noindent
@@ -651,7 +663,8 @@ sets).
 <<mercuryfish-plot, echo = FALSE, fig = TRUE, width = 7, height = 3>>=
 par(cex.lab = 1.3, cex.axis = 1.3)
 layout(matrix(1:3, ncol = 3))
-boxplot(I(log(mercury)) ~ group, data = mercuryfish, ylab = "Mercury Blood Level (log scale)")
+boxplot(I(log(mercury)) ~ group, data = mercuryfish, 
+        ylab = "Mercury Blood Level (log scale)")
 boxplot(abnormal ~ group, data = mercuryfish, 
         ylab = "Abnormal Cells (in %)")
 boxplot(ccells ~ group, data = mercuryfish, 
@@ -728,6 +741,62 @@ lines(site, pita, lty = 3)
 
 
 \section{Conclusion}
+
+Conditioning on the observed data is a simple, yet powerful, design
+principle for statistical tests. Conceptually, one only needs to choose
+an appropriate test statistic and evaluate it for all admissible 
+permutations of the data \citep[][gives an example with Hotelling
+'s $T^2$]{Ernst2004}. In practical setups, an implementation of this
+procedure requires a certain amount of programming and computing time. 
+Often, permutation tests are regarded as being `computationally impractical'
+for larger sample sizes \citep{BalkinMallows2001}. Therefore, popular
+software packages offer implementations for the most prominent conditional
+tests, such as the permutation $t$ test, where either fast algorithms for
+the computation of conditional $p$-values are available or the limiting
+distribution is known.
+
+The permutation test framework by \cite{StrasserWeber1999} makes at least 
+two important contributions: analytic formulae for the 
+conditional expectation and covariance and the limiting normal distribution
+of a class of multivariate linear statistics. Thus, test statistics can be
+defined for appropriately standardized linear statistics and a fast
+approximation of the conditional distribution is available, even for large
+sample sizes. 
+
+The \Rpackage{coin} package is an attempt to translate the theoretical concepts of 
+\cite{StrasserWeber1999} into software as closely as possible preserving the
+simplicity and flexibility of conditional inference. Basically, the package
+implements \textit{one} function for computing the linear statistic $\T$,
+\textit{one} function for the conditional expectation $\mu$ and covariance $\Sigma$
+and plug-ins for several test statistics $c$. Moreover, normal, $\chi^2$ or
+Monte-Carlo approximations of the conditional distribution only need to be
+implemented \textit{once}.
+
+But who stands to benefit from such a software infrastructure? We argue 
+that better data analysis is possible in cases when the appropriate 
+conditional test is not available from standard software packages.
+Statisticians can modify existing test procedures or even try new ideas by
+computing directly on the theory. A high-level Lego-system is attractive for
+software developers, because only the transformation $g$ and influence
+function $h$ need to be newly implemented, but the burden of implementing a
+Monte-Carlo procedure, or even thinking about asymptotics, 
+is waived. Since the \Rpackage{coin} package consists
+of only a few core functions that need to be tested, the setup of quality
+assurance tools is rather simple in this case. Many text books
+\citep[e.g.][]{HollanderWolfe1999} or software manuals \citep[first of all
+the excellent StatXact handbook][]{StatXact6} include examples and results
+of the associated test procedures which have been reproduced with
+\Rpackage{coin}. 
+
+Since the \Rpackage{coin} package is part of the Comprehensive \RR{} Archive
+Network (CRAN, \url{http://CRAN.R-project.org}) we have been able to help
+several people asking `Is the xyz-test available in \RR{}' on the
+\texttt{r-help} email list with the answer `No, but its only those 
+two lines of \RR{} code in \Rpackage{coin}'. With the \Rpackage{coin}
+functionality being available we are no longer limited to already
+implemented test procedures or forced to self-implementation. Instead, 
+the appropriate conditional test procedure for the problem at hand is only a
+matter of choosing appropriate transformation and influence functions. 
 
 \bibliographystyle{asa}
 \bibliography{litdbTH,addrefs}
