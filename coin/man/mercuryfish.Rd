@@ -16,7 +16,7 @@
     \item{mercury}{the level of mercury in the blood.}
     \item{abnormal}{the proportion of cells with structural abnormalities.}
     \item{ccells}{the proportion of cells with asymmetrical or
-                  incomplete-symmetrical chomosome aberrations called 
+                  incomplete-symmetrical chromosome aberrations called 
                   \eqn{C_u} cells.}
   }
 }
