@@ -7,6 +7,8 @@
          Monte-Carlo procedures (from `mvtnorm') have been used
 
     o    add new `var_trafo' argument to `trafo'
+
+    o    documentation updates
  
 
 		CHANGES in `coin' VERSION 0.3-7
