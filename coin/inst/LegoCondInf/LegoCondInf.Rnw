@@ -196,11 +196,11 @@ embedded into the same theory.
 
 It is one mission, if not \textit{the} mission, of statistical computing to
 transform new theoretical developments into flexible software tools for the
-data analyst. Currently, our toolbox consists of rather inflexible spanners,
+data analyst. Currently, the statisticians toolbox consists of rather inflexible spanners,
 such as \Rcmd{wilcox.test} for the Wilcoxon-Mann-Whitney test or
 \Rcmd{mantelhaen.test} for the Cochran-Mantel-Haenszel chi-squared test in
 \S{} languages. The implementation of permutation tests with user interfaces
-designed to deal with very special cases only \citep[see the Tables in][for
+designed to deal with special cases \citep[see the Tables in][for
 an overview on procedures implemented in StatXact, LogXact, Strata, SAS and
 Testimate]{Oster2002,Oster2003} leads to the classical `cook book'
 statistics. Such cook books, and thus software implementations, 
@@ -229,7 +229,6 @@ $(\Y_i, \X_i)$ for $i = 1, \dots, n$.
 The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
 $\mathcal{X}$ may
 be measured at arbitrary scales and may be multivariate as well. 
-
 We are interested in testing the null hypothesis of independence of $\Y$ and $\X$
 \begin{eqnarray*}
 H_0: D(\Y | \X) = D(\Y)
@@ -346,7 +345,7 @@ approximate the exact distribution up to any desired accuracy by evaluating
 the test statistic for a random sample from the set all permutations $S$.
 It is important to note that the presence of a grouping of the observations
 into blocks, only permutations within blocks are eligible and that the
-conditional expectation and covariance matrix needs to be computed
+conditional expectation and covariance matrix need to be computed
 separately for each block.
 
 
@@ -354,7 +353,8 @@ separately for each block.
 
 The \Rpackage{coin} package implements software infrastructure for the main
 components of the theoretical framework sketched above, namely the linear
-statistic $\T$ with user-defined transformations $g$ and influence functions
+statistic $\T$ (\ref{linstat}) 
+with user-defined transformations $g$ and influence functions
 $h$, functions for the computation of the conditional expectation $\mu$ and
 covariance matrix $\Sigma$ as in (\ref{expectcovar}) and utilities for the
 computation of the conditional distribution of $c_\text{max}$ or
@@ -362,6 +362,11 @@ $c_\text{quad}$ test statistics. Thus, the flexibility of the theoretical
 framework is translated and preserved in a software instance which enables
 the data analyst to benefit from this conceptually simple methodology in
 every day's data analysis.
+
+In the following, we will adress some inference problems which require
+functionality not available in standard software packages. The data are
+included in the \Rpackage{coin} package and our analyses can be reproduced
+from the package vignette.
 
 \paragraph{Smoking and Alzheimer's Disease.}
 
@@ -431,7 +436,7 @@ are dummy codings of the disease status $\Y$ and the smoking behavior $\X$,
 i.e. $h(\Y_i, (\Y_1, \dots, \Y_n)) = (1, 0, 0)$ 
 and $g(\X_i) = (1, 0, 0 ,0)$ for a non-smoking Alzheimer patient. 
 Consequently, the linear multivariate statistic $\T$ based on $g$ and $h$ 
-is the contingency table of both variables 
+is the (vectorized) contingency table of both variables 
 <<alzheimer-statistic, echo = TRUE>>=
 statistic(it_alz, type = "linear")
 @
@@ -520,6 +525,15 @@ pvalue(it_alzL, method = "single-step")
 p <- pvalue(it_alzL, method = "single-step")
 rownames(p) <- ""
 p
+@
+for the standardized linear statistic
+<<alzheimer-linstat, echo = TRUE, eval = FALSE>>=
+statistic(it_alzL, type = "standardized")
+@
+<<alzheimer-linstat, echo = FALSE>>=
+s <- statistic(it_alzL, type = "standardized")  
+rownames(s) <- ""
+s
 @
 support the conclusion that smoking is associated with other dementia and, 
 therefore, smoking is less frequent in patients suffering from Alzheimer's 
@@ -751,14 +765,14 @@ lines(site, pita, lty = 3)
 Conditioning on the observed data is a simple, yet powerful, design
 principle for statistical tests. Conceptually, one only needs to choose
 an appropriate test statistic and evaluate it for all admissible 
-permutations of the data \citep[][gives an example with Hotelling
-'s $T^2$]{Ernst2004}. In practical setups, an implementation of this
+permutations of the data \citep[][gives an example with Hotelling's 
+$T^2$]{Ernst2004}. In practical setups, an implementation of this
 procedure requires a certain amount of programming and computing time. 
 Often, permutation tests are regarded as being `computationally impractical'
 for larger sample sizes \citep{BalkinMallows2001}. Therefore, popular
 software packages offer implementations for the most prominent conditional
-tests, such as the permutation $t$ test, where either fast algorithms for
-the computation of conditional $p$-values are available or the limiting
+tests, such as the permutation $t$ test, where fast algorithms for
+the computation of conditional $p$-values are available and the limiting
 distribution is known.
 
 The permutation test framework by \cite{StrasserWeber1999} makes at least 
@@ -766,7 +780,7 @@ two important contributions: analytic formulae for the
 conditional expectation and covariance and the limiting normal distribution
 of a class of multivariate linear statistics. Thus, test statistics can be
 defined for appropriately standardized linear statistics and a fast
-approximation of the conditional distribution is available, even for large
+approximation of the conditional distribution is available, especially for large
 sample sizes. 
 
 The \Rpackage{coin} package is an attempt to translate the theoretical concepts of 
@@ -790,7 +804,7 @@ is waived. Since the \Rpackage{coin} package consists
 of only a few core functions that need to be tested, the setup of quality
 assurance tools is rather simple in this case. Many text books
 \citep[e.g.][]{HollanderWolfe1999} or software manuals \citep[first of all
-the excellent StatXact handbook][]{StatXact6} include examples and results
+the excellent StatXact handbook by][]{StatXact6} include examples and results
 of the associated test procedures which have been reproduced with
 \Rpackage{coin}. 
 
@@ -800,7 +814,7 @@ several people asking `Is the xyz-test available in \RR{}' on the
 \texttt{r-help} email list with the answer `No, but its only those 
 two lines of \RR{} code in \Rpackage{coin}'. With the \Rpackage{coin}
 functionality being available we are no longer limited to already
-implemented test procedures or forced to self-implementation. Instead, 
+implemented test procedures nor are forced to self-implementation. Instead, 
 the appropriate conditional test procedure for the problem at hand is only a
 matter of choosing appropriate transformation and influence functions. 
 
