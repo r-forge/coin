@@ -148,6 +148,9 @@ beyond pre-packaged test procedures.
 \noindent
 KEY WORDS: Permutation tests; Multiple testing; Independence; Software.
 
+\noident
+Version: $Id$
+
 \newpage
 
 \section{Introduction}
@@ -802,7 +805,8 @@ function $h$ need to be newly implemented, but the burden of implementing a
 Monte-Carlo procedure, or even thinking about asymptotics, 
 is waived. Since the \Rpackage{coin} package consists
 of only a few core functions that need to be tested, the setup of quality
-assurance tools is rather simple in this case. Many text books
+assurance tools is rather simple in this case \citep[the need for such tests
+is obvious,[]{different-:2000}. Many text books
 \citep[e.g.][]{HollanderWolfe1999} or software manuals \citep[first of all
 the excellent StatXact handbook by][]{StatXact6} include examples and results
 of the associated test procedures which have been reproduced with
