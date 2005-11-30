@@ -110,10 +110,10 @@ logrank_trafo <- function(x, ties.method = c("logrank", "HL")) {
 
 ### factor handling
 f_trafo <- function(x) {
-    ### remove unused levels
-    x <- x[ , drop = TRUE]
     mm <- model.matrix(~ x - 1)
     colnames(mm) <- levels(x)
+    ### remove unused levels
+    mm <- mm[,colSums(mm) > 0,drop = FALSE]
     ### the two-sample situations
     if (ncol(mm) == 2) mm <- mm[,-2,drop = FALSE]
     return(mm)

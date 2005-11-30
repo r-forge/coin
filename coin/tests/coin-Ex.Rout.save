@@ -872,12 +872,6 @@ T = 7.0533, df = 1, p-value = 0.007912
 8  0 0 0 1 0
 9  0 0 0 0 1
 10 0 0 0 0 1
-attr(,"assign")
-[1] 1 1 1 1 1
-attr(,"contrasts")
-attr(,"contrasts")$x
-[1] "contr.treatment"
-
 > 
 > ### normal scores
 > normal_trafo(x <- rnorm(10))
@@ -1682,7 +1676,7 @@ cutpoint in  coverstorey
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", env = .CheckExEnv),"\n")
-Time elapsed:  32.72 0.44 33.45 0 0 
+Time elapsed:  35.45 0.58 36.89 0 0 
 > grDevices::dev.off()
 null device 
           1 
