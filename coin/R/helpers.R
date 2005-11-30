@@ -346,8 +346,9 @@ statnames <- function(object) {
             }
     }
     list(dimnames = dn, 
-         names = paste(rep(abbreviate(dn[[1]]), nc), 
-                       rep(abbreviate(dn[[2]]), rep(nr, nc)), sep = ":"))
+         names = paste(rep((dn[[1]]), nc), 
+                       rep((dn[[2]]), rep(nr, nc)), 
+                       sep = ifelse(nc == 1 && nr == 1, "", ":")))
 }
 
 eps <- function() sqrt(.Machine$double.eps)
