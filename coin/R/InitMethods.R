@@ -27,13 +27,20 @@ setMethod(f = "initialize",
             stop(sQuote("x"), " contains missing values")
         if (any(is.na(y))) 
             stop(sQuote("y"), " contains missing values")
-        if (!is.null(block) && any(is.na(y))) 
+        if (!is.null(block) && !is.factor(block))
+            stop(sQuote("block"), " is not a factor")
+        if (!is.null(block) && any(is.na(block))) 
             stop(sQuote("block"), " contains missing values")
+        if (!is.null(weights) && any(is.na(weights))) 
+            stop(sQuote("weights"), " contains missing values")
         .Object@x <- x
         .Object@y <- y
         if (is.null(block)) {
             .Object@block <- factor(rep(0, nrow(x)))
         } else {
+            if (any(table(block) < 2))
+                stop(sQuote("block"), 
+                     " contains levels with less than two observations")
             .Object@block <- block
         }
         if (is.null(weights)) {
@@ -74,21 +81,6 @@ setMethod(f = "initialize",
         p <- ncol(.Object@xtrans)
         q <- ncol(.Object@ytrans)
         .Object@scores <- diag(p * q)
-
-        if (((ncol(x) > 1 && ncol(tr$xtrafo) > 1) || 
-             (ncol(y) > 1 && ncol(tr$ytrafo) > 1)) && 
-             any(xfact || yfact)) {
-            colnames(.Object@xtrans) <- paste(
-                rep(colnames(x), table(attr(.Object@xtrans, "assign"))), 
-                    colnames(.Object@xtrans), sep = ".")
-            colnames(.Object@xtrans)[attr(.Object@xtrans, "assign") 
-                %in% which(!xfact)] <- colnames(x)[!xfact]
-            colnames(.Object@ytrans) <- paste(
-                rep(colnames(y), table(attr(.Object@ytrans, "assign"))), 
-                    colnames(.Object@ytrans), sep = ".")
-            colnames(.Object@ytrans)[attr(.Object@ytrans, "assign") 
-                %in% which(!yfact)] <- colnames(y)[!yfact]
-        }
 
         ### check if scores are attached
         ### <FIXME> more careful checks!
@@ -259,7 +251,7 @@ setMethod(f = "initialize",
 ### new("QuadTypeIndependenceTestStatistic", ...)
 setMethod(f = "initialize", 
     signature = "QuadTypeIndependenceTestStatistic",
-    definition = function(.Object, its, tol = sqrt(.Machine$double.eps)) {
+    definition = function(.Object, its, ...) {
 
         if (!extends(class(its), "IndependenceTestStatistic"))
             stop("Argument ", sQuote("its"), " is not of class ",
@@ -268,7 +260,7 @@ setMethod(f = "initialize",
         .Object <- copyslots(its, .Object)
 
         covm <- covariance(its)
-        mp <- MPinv(covm)
+        mp <- MPinv(covm, ...)
         .Object@covarianceplus <- mp$MPinv
         .Object@df <- mp$rank
 
