@@ -192,7 +192,7 @@ setMethod(f = "initialize",
                 .Object@covariance <- new("CovarianceMatrix", cov)
             }
         }
-        if (any(variance(.Object) < sqrt(.Machine$double.eps)))
+        if (any(variance(.Object) < eps()))
             warning("The conditional covariance matrix has ",
                     "zero diagonal elements")
         .Object
