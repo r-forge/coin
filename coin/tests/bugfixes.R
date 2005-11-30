@@ -72,3 +72,19 @@ y <- gl(2, 10)
 a <- trafo(data.frame(x = x, y = y), numeric_trafo = normal_trafo)
 b <- trafo(data.frame(x = x, y = y), var_trafo = list(x = normal_trafo))
 stopifnot(all.equal(a, b))
+
+### check for multiple ordered factors
+mydf <- data.frame(x = ordered(gl(4, 5)), y = ordered(gl(5, 4)), 
+                   z = rnorm(20))
+try(independence_test(x + y ~ z , data = mydf))
+try(independence_test(x + z ~ y , data = mydf))
+try(independence_test(z ~ x + y , data = mydf))
+
+### NA's and weights
+mydf <- data.frame(x = 1:10, y = gl(2, 5), w = rep(2, 10))
+s <- statistic(independence_test(x ~ y, data = mydf, weights = ~ w), "linear")
+stopifnot(s == 30)
+mydf$x[1] <- NA
+s <- statistic(independence_test(x ~ y, data = mydf, weights = ~ w), "linear")
+stopifnot(s == 28)
+
