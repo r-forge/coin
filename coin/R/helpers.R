@@ -101,17 +101,18 @@ copyslots <- function(source, target) {
     return(target)
 }
 
-formula2data <- function(formula, data, subset, ...) {
+formula2data <- function(formula, data, subset, weights = NULL, ...) {
+
+    other <- list()
+    if (!is.null(weights)) other = list(weights = weights)
 
     ### in case `data' is an exprSet object 
     if (extends(class(data), "exprSet")) {
-        ### <FIXME> terms(y ~ ., data = tmpdf) only works (as from R-2.2.0)
-        ### when tmpdf has variables additional to y which might not be true
-        tmpdf <- cbind(pData(phenoData(data)), 1)
-        ### </FIXME>
         dat <- ModelEnvFormula(formula = formula, 
-                               data = tmpdf,
-                               subset = subset, ...)
+                               data = pData(phenoData(data)),
+                               subset = subset, other = other,
+                               na.action = na.omit, 
+                               ...)
 
         ### x are _all_ expression levels, always
         x <- as.data.frame(t(exprs(data)))
@@ -120,7 +121,9 @@ formula2data <- function(formula, data, subset, ...) {
 
         dat <- ModelEnvFormula(formula = formula, 
                                data = data,
-                               subset = subset, ...)
+                               subset = subset, other = other, 
+                               na.action = na.omit, 
+                               ...)
 
         ### rhs of formula
         if (has(dat, "input"))
@@ -147,49 +150,10 @@ formula2data <- function(formula, data, subset, ...) {
     } else 
         block <- NULL
 
-    ### Surv(y, event) ~ x or Surv(y, event) ~ x | block
-    if (has(dat, "censored")) {
-        event <- dat@get("censored")
-        y <- data.frame(y = Surv(y[[1]], event[[1]]))    
-    } 
-
-    RET <- list(x = x, y = y, block = block, bl = block[[1]])
-
-    ### <FIXME>
-    if (any(sapply(RET, function(x) {
-        if (is.null(x)) return(FALSE)
-        if (is.list(x)) 
-            return(any(sapply(x, is.na)))
-        else
-            return(any(is.na(x)))
-    })))
-        stop("NA handling currently not implemented")
-    ### </FIXME>
+    RET <- list(x = x, y = y, block = block, bl = block[[1]], w = NULL)
+    if (!is.null(weights)) RET$w <- dat@get("weights")[[1]]
 
     return(RET)
-}
-
-formula2weights <- function(weights, data, subset, ...) {
-
-    if (is.null(weights)) return(NULL)
-
-    if (class(weights) != "formula") 
-        stop(sQuote("weights"), " is not a formula object")
-
-    if (extends(class(data), "exprSet")) data <- pData(phenoData(data))
-
-    dat <- ModelEnvFormula(formula = weights, data = data,
-                           subset = subset, ...)
-
-    if (has(dat, "input"))
-        weights <- dat@get("input")
-    else 
-        stop("missing right hand side of formula ", sQuote("weights"))
-
-    if (length(weights) > 1 || has(dat, "response"))
-        stop("only one right hand side variable allowed in ", sQuote("weights"))
-
-    return(weights[[1]])
 }
 
 setscores <- function(x, scores) {
