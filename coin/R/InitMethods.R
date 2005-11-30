@@ -70,8 +70,6 @@ setMethod(f = "initialize",
 
         x <- ip@x
         y <- ip@y
-        xfact <- sapply(x, is.factor)
-        yfact <- sapply(y, is.factor)
 
         tr <- check_trafo(xtrafo(x), ytrafo(y))
         .Object@xtrans <- tr$xtrafo
@@ -82,44 +80,48 @@ setMethod(f = "initialize",
         q <- ncol(.Object@ytrans)
         .Object@scores <- diag(p * q)
 
-        ### check if scores are attached
-        ### <FIXME> more careful checks!
-        xORDINAL <- (ncol(x) == 1 && is.ordered(x[[1]])) && 
-                    (nlevels(x[[1]]) > 2)
-        yORDINAL <- (ncol(y) == 1 && is.ordered(y[[1]])) && 
-                    (nlevels(y[[1]]) > 2) 
+        xORDINAL <- sapply(x, is.ordered)
+        yORDINAL <- sapply(y, is.ordered)
+
+        ### <FIXME> implement handling of multiple ordered factors
+        if ((any(xORDINAL) && length(xORDINAL) > 1) ||
+            (any(yORDINAL) && length(yORDINAL) > 1))
+            stop("handling of multiple ordered factors currently not implemented")
+
         .Object@has_scores <- xORDINAL || yORDINAL
         .Object@xordinal <- xORDINAL
         .Object@yordinal <- yORDINAL
 
-        if (xORDINAL) {
-            if (is.null(attr(x[[1]], "scores")) && is.null(xscores))
-                xscores <- 1:nlevels(x[[1]])
-            else {
-                if (is.null(xscores)) 
-                    xscores <- attr(x[[1]], "scores")
+        xscores <- c()
+        for (i in 1:ncol(x)) {
+            if (is.ordered(x[[i]])) {
+                sc <- attr(x[[i]], "scores")
+                if (is.null(sc)) sc <- 1:nlevels(x[[i]])
+            } else {
+                sc <- rep(0, sum(attr(tr$xtrafo, "assign") == i))
             }
-            if (length(xscores) != ncol(.Object@xtrans)) 
-                stop(sQuote("xscores"), " don't match")
+            xscores <- c(xscores, sc)
         }
-        if (yORDINAL) {
-            if (is.null(attr(y[[1]], "scores")))
-                yscores <-  1:nlevels(y[[1]])
-            else {
-                if (is.null(yscores))
-                    yscores <- attr(y[[1]], "scores")
+
+        yscores <- c()
+        for (i in 1:ncol(y)) {
+            if (is.ordered(y[[i]])) {
+                sc <- attr(y[[i]], "scores")
+                if (is.null(sc)) sc <- 1:nlevels(y[[i]])
+            } else {
+                sc <- rep(0, sum(attr(tr$ytrafo, "assign") == i))
             }
-            if (length(yscores) != ncol(.Object@ytrans)) 
-                stop(sQuote("yscores"), " don't match")
+            yscores <- c(yscores, sc)
         }
-        if (xORDINAL && !yORDINAL)
+
+        if (any(xORDINAL) && !any(yORDINAL))
             .Object@scores <- .Call("R_scmatleft",
                 as.double(xscores), as.integer(p * q), 
                 PACKAGE = "coin")
-        if (xORDINAL && yORDINAL)
+        if (any(xORDINAL) && any(yORDINAL))
             ### grrr: class(kronecker(1:4, 1:3)) == "array"  
             .Object@scores <- matrix(kronecker(yscores, xscores), nrow = 1)
-        if (!xORDINAL && yORDINAL)
+        if (!any(xORDINAL) && any(yORDINAL))
             .Object@scores <- .Call("R_scmatright", 
                     as.double(yscores), as.integer(p * q),
                     PACKAGE = "coin")

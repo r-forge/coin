@@ -742,32 +742,26 @@ lbl_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    addargs <- list(...)
-    if (is.null(addargs$scores)) {
-        scores <- list(1:nlevels(object@x[[1]]), 1:nlevels(object@y[[1]]))
-        names(scores) <- c(colnames(object@x), colnames(object@y))
-    } else {
-        scores <- addargs$scores
-        addargs$scores <- NULL
-        if (length(scores) == 1) {
-            if (names(scores)[1] == colnames(object@x)) {
-                scores <- c(scores, list(1:nlevels(object@y[[1]])))
-                names(scores)[2] <- colnames(object@y)
-            }
-            if (names(scores)[1] == colnames(object@y)) {
-                scores <- c(scores, list(1:nlevels(object@x[[1]])))
-                names(scores)[2] <- colnames(object@x)
-            }
-        }
-    }
+    ### convert factors to ordered
+    object@x <- as.data.frame(lapply(object@x, 
+        function(x) if (is.factor(x) && nlevels(x) > 2) {
+                        return(ordered(x))
+                    } else {
+                        return(x)
+                    }))
+    object@y <- as.data.frame(lapply(object@y, 
+        function(x) if (is.factor(x) && nlevels(x) > 2) {
+                        return(ordered(x))
+                    } else {
+                        return(x)
+                    }))
 
     distribution <- check_distribution_arg(distribution, 
         values = c("asymptotic", "approximate"))
 
     RET <- do.call("independence_test", 
-        c(list(object = object, scores = scores, 
-               teststat = "quadtype", distribution = distribution, 
-               check = check), addargs))
+        c(list(object = object, teststat = "quadtype", distribution = distribution, 
+               check = check), list(...)))
 
     RET@method <- "Linear-by-Linear Association Test"
     return(RET)
