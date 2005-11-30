@@ -89,8 +89,8 @@ setMethod(f = "initialize",
             stop("handling of multiple ordered factors currently not implemented")
 
         .Object@has_scores <- xORDINAL || yORDINAL
-        .Object@xordinal <- xORDINAL
-        .Object@yordinal <- yORDINAL
+        .Object@xordinal <- any(xORDINAL)
+        .Object@yordinal <- any(yORDINAL)
 
         xscores <- c()
         for (i in 1:ncol(x)) {
@@ -182,6 +182,7 @@ setMethod(f = "initialize",
             }
         }
 
+
         ### multiply with score matrix if necessary
         if (SCORES) {
             .Object@expectation <- drop(S %*% exp)
@@ -194,6 +195,18 @@ setMethod(f = "initialize",
                 .Object@covariance <- new("CovarianceMatrix", cov)
             }
         }
+
+        ### pretty names
+        nm <- statnames(itp)$names
+        names(.Object@expectation) <- nm
+
+        if (extends(class(.Object@covariance), "CovarianceMatrix")) {
+                colnames(.Object@covariance@covariance) <- nm
+                rownames(.Object@covariance@covariance) <- nm
+        }
+        if (extends(class(.Object@covariance), "Variance"))
+                names(.Object@covariance@variance) <- nm
+
         if (any(variance(.Object) < eps()))
             warning("The conditional covariance matrix has ",
                     "zero diagonal elements")

@@ -324,6 +324,32 @@ check_distribution_arg <- function(distribution,
     distribution
 }
 
+statnames <- function(object) {
+    nc <- ncol(object@ytrans)
+    nr <- ncol(object@xtrans)
+    dn <- list(colnames(object@xtrans),
+               colnames(object@ytrans))
+    if (object@has_scores) {
+        if (object@xordinal) {
+            x <- object@x[[1]]
+            nr <- 1
+            dn[[1]] <- paste(attr(x, "scores"), "*",
+                             abbreviate(levels(x)),
+                             collapse = " + ", sep = "")
+        }
+        if (object@yordinal) {
+            y <- object@y[[1]] 
+            nc <- 1
+            dn[[2]] <- paste(attr(y, "scores"), "*",  
+                             abbreviate(levels(y)), 
+                             collapse = " + ", sep = "")
+            }
+    }
+    list(dimnames = dn, 
+         names = paste(rep(abbreviate(dn[[1]]), nc), 
+                       rep(abbreviate(dn[[2]]), rep(nr, nc)), sep = ":"))
+}
+
 eps <- function() sqrt(.Machine$double.eps)
 
 ### don't use! never!
