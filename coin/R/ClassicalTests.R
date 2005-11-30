@@ -93,12 +93,12 @@ independence_test.IndependenceProblem <- function(object,
                     sQuote("maxtype"), " test statistic")
             teststat <- "maxtype"
         }
-        if (alternative != "two.sided" && teststat == "quadform")
-            warning(sQuote("alternative"), " is ignored for ", 
-                    teststat, " type test statistics")
     } else {
         if (teststat == "maxtype") teststat <- "scalar"
     }
+    if (alternative != "two.sided" && teststat == "quadtype")
+        warning(sQuote("alternative"), " is ignored for ", 
+                teststat, " type test statistics")
 
     ### compute linear statistic, conditional expectation and
     ### conditional covariance
