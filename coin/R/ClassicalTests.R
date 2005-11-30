@@ -1,16 +1,21 @@
 
+ft <- function(test, formula, data = list(), subset = NULL,
+    weights = NULL, ...) {
+
+    d <- formula2data(formula, data, subset, weights = weights, ...)
+    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
+              weights = d$w)
+    RET <- do.call(test, c(list(object = ip), list(...)))
+    return(RET)
+}
+
 ### a generic test procedure for classical (and not so classical) tests
 independence_test <- function(object, ...) UseMethod("independence_test")
 
 independence_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("independence_test", c(list(object = ip), list(...)))
-    return(RET)
-
+    ft("independence_test", formula, data, subset, weights, ...)
 }
 
 independence_test.table <- function(object, 
@@ -156,12 +161,7 @@ wilcox_test <- function(object, ...) UseMethod("wilcox_test")
 wilcox_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("wilcox_test", c(list(object = ip), list(...)))
-    return(RET)
-
+    ft("wilcox_test", formula, data, subset, weights, ...)
 }
 
 wilcox_test.IndependenceProblem <- function(object,  
@@ -205,11 +205,7 @@ normal_test <- function(object, ...) UseMethod("normal_test")
 normal_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("normal_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("normal_test", formula, data, subset, weights, ...)
 }   
 
 normal_test.IndependenceProblem <- function(object,  
@@ -254,11 +250,7 @@ median_test <- function(object, ...) UseMethod("median_test")
 median_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("median_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("median_test", formula, data, subset, weights, ...)
 }   
 
 median_test.IndependenceProblem <- function(object,     
@@ -301,11 +293,7 @@ ansari_test <- function(object, ...) UseMethod("ansari_test")
 ansari_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)  
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("ansari_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("ansari_test", formula, data, subset, weights, ...)
 }   
 
 ansari_test.IndependenceProblem <- function(object,
@@ -356,11 +344,7 @@ surv_test <- function(object, ...) UseMethod("surv_test")
 surv_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)  
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("surv_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("surv_test", formula, data, subset, weights, ...)
 }
     
 surv_test.IndependenceProblem <- function(object,  
@@ -407,11 +391,7 @@ kruskal_test <- function(object, ...) UseMethod("kruskal_test")
 kruskal_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("kruskal_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("kruskal_test", formula, data, subset, weights, ...)
 }   
 
 kruskal_test.IndependenceProblem <- function(object,  
@@ -445,11 +425,7 @@ fligner_test <- function(object, ...) UseMethod("fligner_test")
 fligner_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("fligner_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("fligner_test", formula, data, subset, weights, ...)
 }   
 
 fligner_test.IndependenceProblem <- function(object,  
@@ -488,11 +464,7 @@ spearman_test <- function(object, ...) UseMethod("spearman_test")
 spearman_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("spearman_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("spearman_test", formula, data, subset, weights, ...)
 }   
 
 spearman_test.IndependenceProblem <- function(object, 
@@ -529,11 +501,7 @@ cmh_test <- function(object, ...) UseMethod("cmh_test")
 cmh_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("cmh_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("cmh_test", formula, data, subset, weights, ...)
 }   
 
 cmh_test.table <- function(object, distribution = c("asymptotic", "approximate"), ...) {
@@ -598,11 +566,7 @@ chisq_test <- function(object, ...) UseMethod("chisq_test")
 chisq_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("chisq_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("chisq_test", formula, data, subset, weights, ...)
 }   
 
 chisq_test.table <- function(object, distribution = c("asymptotic", "approximate"), ...) {
@@ -687,14 +651,11 @@ lbl_test <- function(object, ...) UseMethod("lbl_test")
 lbl_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl, 
-              weights = d$w)
-    RET <- do.call("lbl_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("lbl_test", formula, data, subset, weights, ...)
 }   
 
-lbl_test.table <- function(object, distribution = c("asymptotic", "approximate"), ...) {
+lbl_test.table <- function(object, 
+    distribution = c("asymptotic", "approximate"), ...) {
 
     distribution <- check_distribution_arg(distribution, 
         values = c("asymptotic", "approximate"))
@@ -772,11 +733,7 @@ oneway_test <- function(object, ...) UseMethod("oneway_test")
 oneway_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("oneway_test", c(list(object = ip), list(...)))  
-    return(RET)
+    ft("oneway_test", formula, data, subset, weights, ...)
 }
 
 oneway_test.IndependenceProblem <- function(object, 
@@ -810,11 +767,7 @@ contrast_test <- function(object, ...) UseMethod("contrast_test")
 contrast_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("contrast_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("contrast_test", formula, data, subset, weights, ...)
 }
 
 contrast_test.IndependenceProblem <- function(object, 
@@ -849,11 +802,7 @@ maxstat_test <- function(object, ...) UseMethod("maxstat_test")
 maxstat_test.formula <- function(formula, data = list(), subset = NULL, 
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
-    RET <- do.call("maxstat_test", c(list(object = ip), list(...)))
-    return(RET)
+    ft("maxstat_test", formula, data, subset, weights, ...)
 }
 
 maxstat_test.IndependenceProblem <- function(object, 
