@@ -330,8 +330,7 @@ is_ordered_x <- function(object) {
 }
 
 is_integer <- function(x, fact = c(1, 2, 10, 100, 1000))
-    sapply(fact, function(f) max(abs(round(x * f) - (x * f))) < 
-           sqrt(.Machine$double.eps))
+    sapply(fact, function(f) max(abs(round(x * f) - (x * f))) < eps())
 
 is_censored <- function(object) {
     ncol(object@y) == 1 && class(object@y[[1]]) == "Surv"
@@ -360,6 +359,8 @@ check_distribution_arg <- function(distribution,
        paste(values, collapse = ", "))
     distribution
 }
+
+eps <- function() sqrt(.Machine$double.eps)
 
 ### don't use! never!
 get_weights <- function(object) object@statistic@weights
