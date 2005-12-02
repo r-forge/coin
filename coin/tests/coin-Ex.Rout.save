@@ -1251,7 +1251,7 @@ T = 10.2001, df = 9, p-value = 0.3345
 > 
 > ### linear statistic (T in Rosenbaum's, 1994, notation)
 > statistic(poset, "linear")
-        [,1]
+            
 control -237
 > 
 > ### expectation
@@ -1676,7 +1676,7 @@ cutpoint in  coverstorey
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", env = .CheckExEnv),"\n")
-Time elapsed:  35.45 0.58 36.89 0 0 
+Time elapsed:  46.51 1.08 49.81 0 0 
 > grDevices::dev.off()
 null device 
           1 
