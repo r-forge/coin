@@ -108,3 +108,8 @@ it <- independence_test(length ~ site, data = YOY,
 expectation(it)
 covariance(it)
 
+mydf <- data.frame(x = rnorm(10), y = rnorm(10), z = gl(2, 5))
+it <- independence_test(x + y ~ z, data = mydf)
+statistic(it, "linear")
+expectation(it)
+covariance(it)
