@@ -329,6 +329,8 @@ statnames <- function(object) {
     nr <- ncol(object@xtrans)
     dn <- list(colnames(object@xtrans),
                colnames(object@ytrans))
+    if (is.null(dn[[1]])) dn[[1]] <- ""
+    if (is.null(dn[[2]])) dn[[2]] <- ""
     if (object@has_scores) {
         if (object@xordinal) {
             x <- object@x[[1]]
@@ -348,7 +350,7 @@ statnames <- function(object) {
     list(dimnames = dn, 
          names = paste(rep((dn[[1]]), nc), 
                        rep((dn[[2]]), rep(nr, nc)), 
-                       sep = ifelse(nc == 1 && nr == 1, "", ":")))
+                       sep = ifelse(dn[[1]] == "" || dn[[2]] == "", "", ":")))
 }
 
 eps <- function() sqrt(.Machine$double.eps)
