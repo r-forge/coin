@@ -1,3 +1,6 @@
+
+%%% initial version, more biased towards software
+
 \documentclass{article}
 \usepackage{amstext}
 \usepackage{amsfonts}
@@ -118,9 +121,13 @@
 <<setup, echo = FALSE, results = hide>>=
 options(width = 65)
 require("coin")
+require("multcomp")
 set.seed(290875)
+data("alzheimer", package = "coin")
+data("photocar", package = "coin")
+data("mercuryfish", package = "coin")
 ### get rid of the NAMESPACE
-### load(file.path(.find.package("coin"), "R", "all.rda"))
+load(file.path(.find.package("coin"), "R", "all.rda"))
 @
 
 \thispagestyle{empty}
@@ -136,7 +143,7 @@ implications in many applications and requires a software implementation
 that enables the
 data analyst to compute on the theoretical concepts as closely as possible.
 We re-analyze data where non-standard inference procedures are
-required utilizing the \Rpackage{coin} add-on package in the \RR{}
+required utilizing the \Rpackage{coin} add-on package in the \textsf{R}
 system for statistical computing and show what one can gain from going
 beyond pre-packaged test procedures.
 \end{abstract}
@@ -184,7 +191,7 @@ analysis, multivariate analysis, $K$-sample location problems, correlation
 etc.) each being associated with a `natural' form of the test statistic
 obstructs our view on the common foundations of all permutation tests. 
 Theoretical advances in the last decade
-\citep{StrasserWeber1999,JanssenPauls2003} help us to understand the strong
+\citep{StrasserWeber1999,JanssenPauls2003} helped us to understand the strong
 connections between the `classical' permutation tests and open up the way to
 a simple construction principle for test procedures in new and
 challenging inference problems.
@@ -351,6 +358,7 @@ into blocks, only permutations within blocks are eligible and that the
 conditional expectation and covariance matrix need to be computed
 separately for each block.
 
+
 \section{Playing Lego with \Rpackage{coin}}
 
 The \Rpackage{coin} package implements software infrastructure for the main
@@ -369,69 +377,6 @@ In the following, we will adress some inference problems which require
 functionality not available in standard software packages. The data are
 included in the \Rpackage{coin} package and our analyses can be reproduced
 from the package vignette.
-
-\paragraph{Genetic Components of Alcoholism}
-
-\cite{Boenscheta2005} investigate the association between allel lengths
-(measured in three groups) and expression levels of alpha synuclein mRNA,
-a gene assumed to play some role in alcoholism.
-
-\setkeys{Gin}{width=0.4\textheight}
-
-\begin{sidewaysfigure}
-\begin{center}
-<<alpha-data-figure, echo = FALSE, fig = TRUE>>=
-"alpha" <-
-structure(list(group = structure(as.integer(c(1, 2, 2, 2, 2,
-2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 3, 2, 1, 2, 2, 1, 2, 2, 2, 3, 2,
-2, 2, 2, 2, 3, 3, 2, 2, 2, 1, 2, 3, 2, 2, 2, 2, 2, 2, 3, 2, 2,
-2, 2, 3, 2, 2, 3, 3, 3, 3, 2, 2, 2, 2, 3, 3, 2, 3, 2, 2, 2, 2,
-2, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,   
-1, 2, 1, 1, 2, 2, 1, 1)), .Label = c("1", "2", "3"), class = "factor"),
-    level = c(1.43, -1.9, 1.55, 3.27, 0.3, 1.9, 2.53, 2.83, 3.1,
-    2.07, 1.63, 2.53, 0.1, 2.53, -2.83, 1.6, 2.27, 1.23, 0.7,   
-    3.8, -1.47, -2.37, 0.67, -0.37, 3.6, 3.2, 3.05, 1.97, 3.33, 
-    2.9, 1.45, 4.1, 2.77, 4.05, 2.13, 2.57, 3.53, 3.37, 3.67,    
-    2.13, 1.4, 3.5, 3.53, 2.2, 3.2, 4.23, 2.87, 3.2, 3.4, 3.2,  
-    4.17, 4.3, 4.23, 3.43, 4.4, 3.27, 3.07, 4.03, 3.07, 4.43,  
-    1.75, 1.77, 1.33, 3.43, 1.03, 3.13, 4.17, 2.7, 3.93, 3.5, 
-    3.9, 2.17, 3.13, -2.4, 1.9, 3, 5.63, 2.8, 3.17, 2, 2.93,  
-    2.87, 1.83, 1.05, 1, 2.77, 1.43, 5.8, 2.8, 1.17, 1.6, 0.47,
-    2.33, 0.67, 0.73, 1.47, 0.1)), .Names = c("length", "elevel" 
-), row.names = c("1", "2", "3", "4", "5", "6", "7", "8", "9",  
-"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
-"21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31",
-"32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42",
-"43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53",
-"54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64",
-"65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75",
-"76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86",
-"87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97" 
-), class = "data.frame")
-levels(alpha$length) <- c("short", "intermediate", "long")
-par(cex.lab = 1.3, cex.axis = 1.3)
-boxplot(elevel ~ length, data = alpha, ylab = "Log Gene Expression Level",
-        xlab = "Allele Length")
-rankif <- function(data) trafo(data, numeric_trafo = rank)
-@
-\caption{Distribution of the logarithm of gene expression levels 
-         of alpha synuclein in three groups defined by the allele lengths.
-         \label{alpha-box}}
-\end{center}
-\end{sidewaysfigure}
-
-\setkeys{Gin}{width=\textheight}
-
-<<alpha-kruskal, echo = TRUE>>=
-independence_test(elevel ~ length, data = alpha, ytrafo = rankif, 
-                  teststat = "quad")
-@
-
-<<alpha-kruskal-ordered, echo = TRUE>>=
-independence_test(elevel ~ length, data = alpha, ytrafo = rankif, 
-                  scores = list(length = c(2, 7, 11)))
-@
-
 
 \paragraph{Smoking and Alzheimer's Disease.}
 
@@ -491,6 +436,7 @@ of independence between smoking and disease status treating gender as a
 block factor with a $c_\text{quad}$-type test statistic, i.e. the conditional
 version of the Cochran-Mantel-Haenszel test
 <<alzheimer-mantelhaen, echo = TRUE>>=
+data("alzheimer", package = "coin")
 it_alz <- independence_test(alzheimer, teststat = "quadtype")
 it_alz
 @
@@ -657,6 +603,7 @@ $c_\text{max}$-type test based on the standardized multivariate
 linear statistic and an approximation of the conditional distribution
 utilizing the asymptotic distribution simply reads
 <<photocar-global, echo = TRUE>>=
+data("photocar", package = "coin")
 it_ph <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
                            data = photocar)
 it_ph 
@@ -770,6 +717,7 @@ coherence <- function(data) {
 @
 which is now defined as influence function $h$ via the \Rcmd{ytrafo} argument
 <<mercuryfish-poset, echo = TRUE>>=
+data("mercuryfish", package = "coin")
 poset <- independence_test(mercury + abnormal + ccells ~ group, 
     data = mercuryfish, ytrafo = coherence, distribution = exact())
 @
@@ -883,7 +831,5 @@ matter of choosing appropriate transformation and influence functions.
 
 \bibliographystyle{asa}
 \bibliography{litdbTH,addrefs}
-
-\pagestyle{empty}
 
 \end{document}
