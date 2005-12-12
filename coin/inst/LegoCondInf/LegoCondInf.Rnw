@@ -372,9 +372,12 @@ from the package vignette.
 
 \paragraph{Genetic Components of Alcoholism}
 
-\cite{Boenscheta2005} investigate the association between allel lengths
-(measured in three groups) and expression levels of alpha synuclein mRNA,
-a gene assumed to play some role in alcoholism.
+Various studies have linked alcohol dependence phenotypes to chromosome 4.  
+One candidate gene is NACP (non-amyloid component of plaques), coding for alpha synuclein. 
+\cite{Boenscheta2005} found longer alleles of
+$NACP$-REP1 in alcohol-dependent patients compared with healthy controls
+and report that the allele lengths show some
+association with levels of expressed alpha synuclein mRNA. 
 
 \setkeys{Gin}{width=0.4\textheight}
 
@@ -410,12 +413,12 @@ structure(list(group = structure(as.integer(c(1, 2, 2, 2, 2,
 ), class = "data.frame")
 levels(alpha$length) <- c("short", "intermediate", "long")
 par(cex.lab = 1.3, cex.axis = 1.3)
-boxplot(elevel ~ length, data = alpha, ylab = "Log Gene Expression Level",
+boxplot(elevel ~ length, data = alpha, ylab = "Expression Level",
         xlab = "Allele Length")
 rankif <- function(data) trafo(data, numeric_trafo = rank)
 @
-\caption{Distribution of the logarithm of gene expression levels 
-         of alpha synuclein in three groups defined by the allele lengths.
+\caption{Distribution of levels of expressed alpha synuclein mRNA
+         in three groups defined by the $NACP$-REP1 allele lengths.
          \label{alpha-box}}
 \end{center}
 \end{sidewaysfigure}
