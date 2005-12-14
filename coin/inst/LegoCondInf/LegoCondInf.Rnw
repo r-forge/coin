@@ -72,7 +72,7 @@
   pdftitle = {A Lego System for Conditional Inference},
   pdfsubject = {Manuscript},
   pdfauthor = {Torsten Hothorn, Kurt Hornik,
-               Mark van de Wiel and Achim Zeileis},
+               Mark A. van de Wiel and Achim Zeileis},
 %% change colorlinks to false for pretty printing
   colorlinks = {true},
   linkcolor = {blue},
@@ -85,7 +85,7 @@
 \title{A Lego System for Conditional Inference}
 
 \author{Torsten Hothorn$^1$, Kurt Hornik$^2$, \\ 
-        Mark van de Wiel$^3$ and Achim Zeileis$^2$}
+        Mark A. van de Wiel$^3$ and Achim Zeileis$^2$}
 \date{}
 
 \begin{document}
