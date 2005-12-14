@@ -69,7 +69,7 @@
 \SweaveOpts{engine=R,eps=FALSE}
 
 \hypersetup{%
-  pdftitle = {A Lego-System for Conditional Inference},
+  pdftitle = {A Lego System for Conditional Inference},
   pdfsubject = {Manuscript},
   pdfauthor = {Torsten Hothorn, Kurt Hornik,
                Mark van de Wiel and Achim Zeileis},
@@ -82,7 +82,7 @@
   linktocpage = {true},
 }
 
-\title{A Lego-System for Conditional Inference}
+\title{A Lego System for Conditional Inference}
 
 \author{Torsten Hothorn$^1$, Kurt Hornik$^2$, \\ 
         Mark van de Wiel$^3$ and Achim Zeileis$^2$}
@@ -116,7 +116,7 @@
 \newline
 
 <<setup, echo = FALSE, results = hide>>=
-options(width = 63)
+options(width = 65)
 require("coin")
 set.seed(290875)
 ### get rid of the NAMESPACE
@@ -128,17 +128,17 @@ load(file.path(.find.package("coin"), "R", "all.rda"))
 \begin{abstract}
 Conditioning on the observed data is an important and flexible 
 design principle for statistical test procedures. Although generally
-applicable, most text book and software implementations are limited to
-the treatment of special cases. A new theoretical framework for permutation
+applicable, permutation tests currently in use are limited to 
+the treatment of special cases, such as contingency tables or $K$-sample
+problems. A new theoretical framework for permutation
 tests opens up the way to a unified and generalized view. We argue that the
 transfer of such a theory to practical data analysis has important
-implications in many applications and requires a software implementation 
-that enables the
+implications in many applications and requires tools that enables the
 data analyst to compute on the theoretical concepts as closely as possible.
 We re-analyze data where non-standard inference procedures are
 required utilizing the \Rpackage{coin} add-on package in the \RR{}
 system for statistical computing and show what one can gain from going
-beyond pre-packaged test procedures.
+beyond the `classical' test procedures.
 \end{abstract}
 
 \noindent
@@ -166,12 +166,11 @@ replace the unknown null distribution by the conditional null distribution,
 i.e., the distribution of the test statistic given the observed data. The
 latter approach is known as \textit{permutation testing} and was developed
 by R. A. Fisher more than 70 years ago \citep{Fisher1935}. 
-
-The pros and cons of both approaches have been discussed in extensio
-\citep[e.g. by][]{why-permut:1998,pros-and-c:2000,Shuster2005} and we
-refrain from stepping into this mostly philosophical debate, noting that most
-conditional test procedures are asymptotically equivalent to their
-unconditional counterparts anyway.
+The pros and cons of both approaches in different fields of application 
+have been widely discussed \citep[e.g.
+by][]{why-permut:1998,pros-and-c:2000,Shuster2005}.
+Here, we focus on the practical aspects of permutation testing rather than
+dealing with its philosophical foundations.
 
 For the construction of permutation tests it is common exercise to `recycle'
 test statistics well known from the unconditional world, such as linear rank
@@ -179,13 +178,14 @@ statistics, ANOVA $F$ statistics or $\chi^2$ statistics for
 contingency tables, and to replace the unconditional null distribution with
 the conditional distribution of the test statistic under the null
 hypothesis \citep{Edgington1987,Good2000,Pesarin2001,Ernst2004}. 
-Because the choice of the test statistic is the only `degree of freedom',
+Because the choice of the test statistic is the only `degree of freedom' for
+the data analyst,
 the classical view on permutation tests requires 
 a `cook book' classification of inference problems (categorical data
 analysis, multivariate analysis, $K$-sample location problems, correlation,
 etc.), each being associated with a `natural' form of the test statistic.
 
-The theoretical advances of the last decade \citep{StrasserWeber1999,JanssenPauls2003}
+The theoretical advances of the last decade \citep[notably]{StrasserWeber1999,JanssenPauls2003}
 give us a much better understanding of the strong connections between the 
 `classical' permutation tests defined for different inference problems. 
 As we will argue in this paper, the new
@@ -196,7 +196,7 @@ permutation tests developed by \cite{StrasserWeber1999}. This unifying
 theory is based on a flexible form of multivariate linear statistics for the
 general independence problem. 
 
-The framework provides us with a conceptual Lego-system for the construction
+This framework provides us with a conceptual Lego system for the construction
 of permutation tests consisting of Lego bricks for linear statistics
 suitable for different inference problems (contingency tables, multivariate
 problems, etc.), different forms of test statistics, such as quadratic forms
@@ -204,24 +204,24 @@ for global tests or test statistics suitable for multiple comparison
 procedures, and several ways to compute or approximate the conditional null
 distribution. The classical procedures, such as a permutation $t$ test, are part
 of this framework and, even more interesting, new test procedures can be
-embedded into the same theory those main ideas are sketched in
+embedded into the same theory whose main ideas are sketched in
 Section~\ref{CI}.
 
 Currently, the statisticians toolbox consists of rather inflexible spanners,
 such as the Wilcoxon-Mann-Whitney test for comparing two distributions 
-or the Cochran-Mantel-Haenszel chi-squared test for independence in
+or the Cochran-Mantel-Haenszel $\chi^2$ test for independence in
 contingency tables. With this work, we add an adjustable spanner to the 
 statisticians toolbox which helps to address both the common as well 
 as new or unusual inference problems with the appropriate 
 conditional test procedures. In the main part of this paper we show how one can
-build permutation tests `on the fly' by plugging together Lego bricks for
+construct and implement permutation tests `on the fly' by plugging together Lego bricks for
 the multivariate linear statistic, the test statistic and the conditional
 null distribution, both conceptually and practically by means of the 
 \Rpackage{coin} add-on package to the \RR{} system for statistical computing
 \citep{Rcore2005}.
 
 
-\section{A Conceptual Lego-System \label{CI}}
+\section{A Conceptual Lego System \label{CI}}
 
 To fix ideas we assume that we are provided with observations
 $(\Y_i, \X_i)$ for $i = 1, \dots, n$.
@@ -268,10 +268,7 @@ all permutations $\sigma \in S$ of the responses are derived by
 \nonumber
 \end{eqnarray*}
 where $\otimes$ denote the Kronecker product. The conditional expectation of the
-influence function is
-\begin{eqnarray*}
-\E(h | S) = n^{-1} \sum_i h(\Y_i)
-\end{eqnarray*}
+influence function is $\E(h | S) = n^{-1} \sum_i h(\Y_i)$
 with corresponding $q \times q$ covariance matrix
 \begin{eqnarray*}
 \V(h | S) = n^{-1} \sum_i \left(h(\Y_i) - \E(h | S) \right) \left(h(\Y_i) - \E(h | S)\right)^\top.
@@ -319,23 +316,7 @@ test statistics is trackable for small and moderate sample sizes.
 %%For two-sample problems, the shift-algorithm by \cite{axact-dist:1986} 
 %%and \cite{exakte-ver:1987} and the split-up algorithm by 
 %%\cite{vdWiel2001} are implemented as part of the package.
-
-The conditional distribution can be approximated by the limit distribution
-under all circumstances. \cite{StrasserWeber1999} proved (Theorem 2.3) that the   
-conditional distribution of linear statistics $\T$ with conditional    
-expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
-distribution with parameters $\mu$ and $\Sigma$ as $n \rightarrow
-\infty$. Thus, the asymptotic conditional distribution of test statistics of
-the form $c_\text{max}$ is normal and
-can be computed directly in the univariate case ($pq = 1$)
-or itself being approximated by means of quasi-randomized Monte-Carlo  
-procedures in the multivariate setting \citep{numerical-:1992}. For
-quadratic forms
-$c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
-given by the rank of $\Sigma$ \citep[e.g. Theorem 6.20, ][]{Rasch1995}, exact
-probabilities can be computed efficiently.
-
-Conditional Monte-Carlo procedures (`resampling') can also be used to 
+Conditional Monte-Carlo procedures (`resampling') can always be used to 
 approximate the exact distribution up to any desired accuracy by evaluating
 the test statistic for a random sample from the set all permutations $S$.
 It is important to note that the presence of a grouping of the observations
@@ -343,9 +324,25 @@ into blocks, only permutations within blocks are eligible and that the
 conditional expectation and covariance matrix need to be computed
 separately for each block.
 
+Less well known is the fact that 
+the conditional distribution can be approximated by the limit distribution
+under all circumstances. \cite{StrasserWeber1999} proved (Theorem 2.3) that the   
+conditional distribution of linear statistics $\T$ with conditional    
+expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
+distribution with parameters $\mu$ and $\Sigma$ as $n \rightarrow
+\infty$. Thus, the asymptotic conditional distribution of test statistics of
+the form $c_\text{max}$ is normal and
+can be computed directly in the univariate case ($pq = 1$). The evaluation
+of multivariate normal distributions is possible by 
+means of quasi-randomized Monte-Carlo procedures \citep{numerical-:1992}. For
+quadratic forms
+$c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
+given by the rank of $\Sigma$ \citep[e.g. Theorem 6.20, ][]{Rasch1995}, exact
+probabilities can be computed efficiently.
+
 \section{Playing Lego \label{play}}
 
-The Lego-system sketched in the previous section consists of Lego bricks for 
+The Lego system sketched in the previous section consists of Lego bricks for 
 the multivariate linear statistic $\T$, namely the transformation $g$ and
 influence function $h$, multiple forms of the test statistic $c$ and several choices
 of approximations of the null distribution. In this section, we will show how
@@ -410,13 +407,12 @@ axis(3, at = 1:3, labels = paste("n = ", n))
 rankif <- function(data) trafo(data, numeric_trafo = rank)
 levels(alpha$length) <- c("short", "intermediate", "long")
 @
-\caption{Distribution of levels of expressed alpha synuclein mRNA
+\caption{\Robject{alpha} data: Distribution of levels of expressed alpha synuclein mRNA
          in three groups defined by the \textit{NACP}-REP1 allele lengths.
          \label{alpha-box}}
 \end{center}
 \end{sidewaysfigure}
-
-A first attempt to test for different levels of gene expression in the three
+Our first attempt to test for different levels of gene expression in the three
 groups is the classical Kruskal-Wallis test. Here, the transformation 
 $g$ is a dummy coding of the allele length ($g(\X_i) = (0, 1, 0)^\top$ for
 intermediate length, for example) and the value of the influence function 
@@ -428,7 +424,7 @@ utilzing the conditional expectation $\mu$ and covariance matrix $\Sigma$.
 
 In order to compute the linear statistic we need to define an
 influence function performing a ranking of the expression levels.
-Under the null hypothesis, the Kruskal-Wallis 
+Under the null hypothesis, the $c_\text{quad}$-type Kruskal-Wallis 
 test statistic tends to a $\chi^2$
 distribution with two degrees of freedom (the rank of the conditional
 covariance matrix $\Sigma$) from which a $p$-value can be
@@ -461,7 +457,7 @@ $\gamma \in \R^{K \times 1}$, the linear statistic reads
 \end{eqnarray*}
 Here, the mid-points of the intervals used to categorize the allele lengths
 are a possible choice for the score vector $\gamma$ and the linear-by-linear
-association test can be performed by attaching the scores to the variabel
+association test can be performed by attaching the scores to the variable
 \Robject{length}:
 <<alpha-kruskal-ordered, echo = TRUE>>=
 independence_test(elevel ~ length, data = alpha, ytrafo = function(data)
@@ -524,7 +520,6 @@ for (i in 1:length(lines)) cat(lines[i], "\n")
 \end{tabular}
 \end{center}
 \end{table}
-
 Ignoring the ordinal structure of the smoking behavior, the null hypothesis
 of independence between smoking and disease status treating gender as a
 block factor with a $c_\text{quad}$-type test statistic, i.e., the 
@@ -548,12 +543,24 @@ covariance \Rcmd{covariance(it\_alz)} which are available for standardizing
 the contingency table $\T$. The conditional distribution is approximated by
 its limiting $\chi^2$ distribution by default. 
 
-The form of the deviation from independence is of special interest,
-however, a $c_\text{quad}$-type test statistic is not particular useful for this purpose.
+When we investigate the association between smoking and Alzheimer's disease
+separately for women and men it turns out that the deviation from independence
+is due to men only
+<<alzheimer-men, echo = TRUE>>=
+pvalue(independence_test(as.table(alzheimer[,,"Male"]), teststat = "quadtype"))
+pvalue(independence_test(as.table(alzheimer[,,"Female"]), teststat = "quadtype"))
+@
+and thus we focus on the male patients in the following.
+
+The form of the deviation from independence is of special interest.
+However, a $c_\text{quad}$-type test statistic is not particular useful 
+for this purpose because the contributions of all cells in the contingency
+table are collapsed in this quadratic form.
 Instead, we define the test statistic as the maximum of the 
 standardized contingency table via
 <<alzheimer-max, echo = TRUE>>=
-it_alzmax <- independence_test(alzheimer, teststat = "maxtype")
+males <- as.table(alzheimer[,,"Male"])
+it_alzmax <- independence_test(males, teststat = "maxtype")
 it_alzmax
 @
 The standardized contingency table sheds some light on the deviations from independence
@@ -562,46 +569,33 @@ statistic(it_alzmax, "standardized")
 @
 and leads to the impression that patients suffering 
 from Alzheimer's disease
-smoked less cigarettes than expected under independence and, to a much larger
+smoked less cigarettes than expected under independence and, to an even larger
 degree, patients with other dementias smoked much more than expected.
 However, interpreting the standardized contingency table either requires
 knowledge about the distribution of the standardized statistics, 
-i.e., via an approximation of the $97.5\%$ quantile of the permutation 
-null distribution (two-sided test) which is available from
+i.e., via an approximation of the $95\%$ quantile of the permutation 
+null distribution which is available from
 <<alzheimer-qperm, echo = TRUE>>=
-qperm(it_alzmax, 0.975)
+qperm(it_alzmax, 0.95)
 @
 Alternatively and more conveniently, we can 
-to switch to the $p$-value scale. Here, we choose step-down
-adjusted resampling-based $p$-values \citep{WestfallYoung1993}. First,
-we approximate the conditional distribution by $50.000$ Monte-Carlo 
-replications
-<<alzheimer-MC, echo = TRUE>>=
-it_alzMC <- independence_test(alzheimer, 
-                              distribution = approximate(B = 50000))
-@
-with global $p$-value
-<<alzheimer-MCp, echo = TRUE>>=
-pvalue(it_alzMC)
-@
-(the normal approximation is rather accurate)
-and apply Algorithm 2.8 in \cite{WestfallYoung1993} to obtain $p$-values
-adjusted for multiple comparisons
+to switch to the $p$-value scale:
 <<alzheimer-MTP, echo = TRUE>>=
-pvalue(it_alzMC, method = "step-down")
+pvalue(it_alzmax, method = "single-step")
 @
-The above results support the conclusion that the rejection of the null hypothesis of
-independence is due to a large number of heavy smokers with other dementias
-but seems rather unrelated to Alzheimer's disease itself.
+The above results support the conclusion that the rejection of the 
+null hypothesis of independence is due to a large number of heavy smokers 
+with other dementias and a small number of heavy smokers suffering from 
+Alzheimer's disease.
 
 The levels of smoking arise from a underlying discrete variable and we
 should make use of this information by applying a linear-by-linear
 association test. A natural choice of the scores are the mid-points of
 the internals used to discretize the number of cigarettes per day 
-and we can setup a linear-by-linear association test with $c_\text{max}$-type 
+and we can set up a linear-by-linear association test with $c_\text{max}$-type 
 test statistic by attaching scores to variable \Robject{smoking}:
 <<alzheimer-ordered, echo = TRUE>>=
-it_alzL <- independence_test(alzheimer, scores = list(smoking = c(0, 5, 15, 25)))
+it_alzL <- independence_test(males, scores = list(smoking = c(0, 5, 15, 25)))
 pvalue(it_alzL)
 @
 The single-step adjusted $p$-values 
@@ -613,9 +607,8 @@ p <- pvalue(it_alzL, method = "single-step")
 rownames(p) <- ""
 p
 @
-support the conclusion that smoking is associated with other dementia and, 
-therefore, smoking is less frequent in patients suffering from Alzheimer's 
-disease.
+support the conclusion that smoking is associated with both other dementia and
+Alzheimer's disease.
 
 \paragraph{Photococarcinogenicity Experiments.}
 
@@ -664,7 +657,6 @@ boxplot(ntumor ~ group, data = photocar,
          groups. \label{photocarfig}}
 \end{center}
 \end{sidewaysfigure}
-
 First, we construct a global test for the null hypothesis of independence
 of treatment and \textit{all} three response variables. A
 $c_\text{max}$-type test based on the standardized multivariate          
@@ -713,7 +705,8 @@ it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
                   data = photocar, distribution = approximate(50000))
 pvalue(it, method = "single-step")
 @
-The more powerful step-down adjusted $p$-values are 
+The more powerful step-down adjusted $p$-values 
+\citep[Algorithm 2.8 in][]{WestfallYoung1993} are 
 <<photocar-MC2, echo = TRUE>>=    
 pvalue(it, method = "step-down")
 @
@@ -725,7 +718,7 @@ no treatment effect on the total number of tumors can be observed.
 
 In the former three applications, standard transformations for $g$ and $h$
 such as dummy codings, ranks and logrank scores have been applied. In the third 
-application, we will show how one can utilize the Lego-system 
+application, we will show how one can utilize the Lego system 
 to implement a newly invented test procedure. 
 
 \cite{Rosenbaum1994a} proposed to compare groups by means of a
@@ -743,7 +736,8 @@ than observation $i$ minus the number of
 observations that are smaller. The
 distribution of the rank scores in both groups is to be compared and
 the corresponding test is called `POSET-test' (partially ordered
-sets test).
+sets test) and may be viewed as a multivariate form of the
+Wilcoxon-Mann-Whitney test.
 
 \begin{sidewaysfigure}
 \begin{center}
@@ -762,7 +756,6 @@ boxplot(ccells ~ group, data = mercuryfish,
          and control group. \label{mercurybox}}
 \end{center}
 \end{sidewaysfigure}
-
 The coherence criterion can be formulated in a simple function
 <<mercurysfish-score, echo = TRUE>>=
 coherence <- function(data) {
@@ -805,7 +798,7 @@ site <- site[site <= qperm(ite, 0.1) & site > -3]
 pite <- sapply(site, function(x) pperm(ite, x))
 pita <- sapply(site, function(x) pperm(ita, x))
 
-plot(site, pite, type = "S", ylab = "Distribution", xlab = "Standardized Statistic")
+plot(site, pite, type = "S", ylab = "Probability", xlab = "Standardized Statistic")
 lines(site, pita, lty = 3)
 legend("topleft", lty = c(1,3), legend = c("Conditional Distribution",
 "Approximation"), bty = "n")
@@ -815,7 +808,7 @@ site <- site[site >= qperm(ite, 0.9) & site < 3]
 pite <- sapply(site, function(x) pperm(ite, x))
 pita <- sapply(site, function(x) pperm(ita, x))
 
-plot(site, pite, type = "S", ylab = "Distribution", xlab = "Standardized Statistic")
+plot(site, pite, type = "S", ylab = "Probability", xlab = "Standardized Statistic")
 lines(site, pita, lty = 3)
 @
 \caption{\Robject{mercuryfish} data: 
@@ -824,14 +817,13 @@ lines(site, pita, lty = 3)
 \end{center}
 \end{sidewaysfigure}
 
-
 \section{Discussion}
 
 Conditioning on the observed data is a simple, yet powerful, design
 principle for statistical tests. Conceptually, one only needs to choose
 an appropriate test statistic and evaluate it for all admissible 
-permutations of the data \citep[][gives an example with Hotelling's 
-$T^2$]{Ernst2004}. In practical setups, an implementation of this
+permutations of the data \citep[][gives some examples]{Ernst2004}. 
+In practical set ups, an implementation of this
 two-step procedure requires a certain amount of programming 
 and computing time. Sometimes, permutation tests are even regarded 
 as being `computationally impractical'
@@ -854,7 +846,7 @@ as closely as possible preserving the simplicity and flexibility of
 the theory. With this package, the rather inflexible spanners
 currently in use,
 such as \Rcmd{wilcox.test} for the Wilcoxon-Mann-Whitney test or
-\Rcmd{mantelhaen.test} for the Cochran-Mantel-Haenszel chi-squared test in
+\Rcmd{mantelhaen.test} for the Cochran-Mantel-Haenszel $\chi^2$ test in
 \S{} languages and \texttt{NPAR1WAY} for linear rank statistics in \textsf{SAS}
 \citep[see the Tables in][for
 an overview on procedures implemented in \textsf{StatXact}, \textsf{LogXact},
@@ -862,10 +854,10 @@ an overview on procedures implemented in \textsf{StatXact}, \textsf{LogXact},
 are extended by \Rcmd{independence\_test}, a much more flexible and adjustable spanner.
 
 But who stands to benefit from such a software infrastructure? We argue 
-that better data analysis is possible in cases when the appropriate 
+that an improved data analysis is possible in cases when the appropriate 
 conditional test is not available from standard software packages.
 Statisticians can modify existing test procedures or even try new ideas by
-computing directly on the theory. A high-level Lego-system is attractive for
+computing directly on the theory. A high-level Lego system is attractive for
 both researchers and software developers, because only the transformation $g$ and influence
 function $h$ need to be newly implemented, but the burden of implementing a
 Monte-Carlo procedure, or even thinking about asymptotics, 
@@ -883,9 +875,10 @@ is waived.
 Since the \Rpackage{coin} package is part of the Comprehensive \RR{} Archive
 Network (CRAN, \url{http://CRAN.R-project.org}) we have been able to help
 several people asking `Is the xyz-test available in \RR{}' on the
-\texttt{r-help} email list with the answer `No, but its only those 
-two lines of \RR{} code'. With the \Rpackage{coin}
-functionality being available we are no longer limited to already
+\texttt{r-help} email list with the answer `No, but its only whose 
+two lines of \RR{} code'. With the \cite{StrasserWeber1999} conceptual Lego
+system and the practical Lego system implemented in \Rpackage{coin}, 
+we are no longer limited to already
 implemented test procedures nor are forced to self-implementation. Instead, 
 the appropriate conditional test procedure for the problem at hand is only a
 matter of choosing appropriate transformation and influence functions. 
