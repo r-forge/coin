@@ -133,7 +133,7 @@ the treatment of special cases, such as contingency tables or $K$-sample
 problems. A new theoretical framework for permutation
 tests opens up the way to a unified and generalized view. We argue that the
 transfer of such a theory to practical data analysis has important
-implications in many applications and requires tools that enables the
+implications in many applications and requires tools that enable the
 data analyst to compute on the theoretical concepts as closely as possible.
 We re-analyze data where non-standard inference procedures are
 required utilizing the \Rpackage{coin} add-on package in the \RR{}
@@ -167,8 +167,7 @@ i.e., the distribution of the test statistic given the observed data. The
 latter approach is known as \textit{permutation testing} and was developed
 by R. A. Fisher more than 70 years ago \citep{Fisher1935}. 
 The pros and cons of both approaches in different fields of application 
-have been widely discussed \citep[e.g.
-by][]{why-permut:1998,pros-and-c:2000,Shuster2005}.
+have been widely discussed \citep[e.g.~by][]{why-permut:1998,pros-and-c:2000,Shuster2005}.
 Here, we focus on the practical aspects of permutation testing rather than
 dealing with its philosophical foundations.
 
@@ -185,7 +184,7 @@ a `cook book' classification of inference problems (categorical data
 analysis, multivariate analysis, $K$-sample location problems, correlation,
 etc.), each being associated with a `natural' form of the test statistic.
 
-The theoretical advances of the last decade \citep[notably]{StrasserWeber1999,JanssenPauls2003}
+The theoretical advances of the last decade \citep[notably][]{StrasserWeber1999,JanssenPauls2003}
 give us a much better understanding of the strong connections between the 
 `classical' permutation tests defined for different inference problems. 
 As we will argue in this paper, the new
@@ -203,15 +202,15 @@ problems, etc.), different forms of test statistics, such as quadratic forms
 for global tests or test statistics suitable for multiple comparison
 procedures, and several ways to compute or approximate the conditional null
 distribution. The classical procedures, such as a permutation $t$ test, are part
-of this framework and, even more interesting, new test procedures can be
+of this framework and, even more interestingly, new test procedures can be
 embedded into the same theory whose main ideas are sketched in
 Section~\ref{CI}.
 
-Currently, the statisticians toolbox consists of rather inflexible spanners,
+Currently, the statistician's toolbox consists of rather inflexible spanners,
 such as the Wilcoxon-Mann-Whitney test for comparing two distributions 
 or the Cochran-Mantel-Haenszel $\chi^2$ test for independence in
 contingency tables. With this work, we add an adjustable spanner to the 
-statisticians toolbox which helps to address both the common as well 
+statistician's toolbox which helps to address both the common as well 
 as new or unusual inference problems with the appropriate 
 conditional test procedures. In the main part of this paper we show how one can
 construct and implement permutation tests `on the fly' by plugging together Lego bricks for
@@ -267,9 +266,9 @@ all permutations $\sigma \in S$ of the responses are derived by
         \sum_i g(\X_i) \right) \otimes \left( \sum_i g(\X_i)\right)^\top
 \nonumber
 \end{eqnarray*}
-where $\otimes$ denote the Kronecker product. The conditional expectation of the
-influence function is $\E(h | S) = n^{-1} \sum_i h(\Y_i)$
-with corresponding $q \times q$ covariance matrix
+where $\otimes$ denote the Kronecker product, and the conditional
+expectation of the influence function is $\E(h | S) = n^{-1} \sum_i
+h(\Y_i)$ with corresponding $q \times q$ covariance matrix
 \begin{eqnarray*}
 \V(h | S) = n^{-1} \sum_i \left(h(\Y_i) - \E(h | S) \right) \left(h(\Y_i) - \E(h | S)\right)^\top.
 \end{eqnarray*}
@@ -337,7 +336,7 @@ of multivariate normal distributions is possible by
 means of quasi-randomized Monte-Carlo procedures \citep{numerical-:1992}. For
 quadratic forms
 $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
-given by the rank of $\Sigma$ \citep[e.g. Theorem 6.20, ][]{Rasch1995}, exact
+given by the rank of $\Sigma$ \citep[e.g.~Theorem 6.20, ][]{Rasch1995}, exact
 probabilities can be computed efficiently.
 
 \section{Playing Lego \label{play}}
@@ -420,7 +419,7 @@ $h(\Y_i)$ is the rank of $\Y_i$ among the ranks of $\Y_1, \dots, \Y_n$.
 Thus, the observed linear statistic $\mathbf{t}$ is the vector of rank sums in each of the 
 three groups and the test statistic is a quadratic form 
 $(\mathbf{t} - \mu) \Sigma^+ (\mathbf{t} - \mu)^\top$ 
-utilzing the conditional expectation $\mu$ and covariance matrix $\Sigma$.
+utilzing the conditional expectation~$\mu$ and covariance matrix~$\Sigma$.
 
 In order to compute the linear statistic we need to define an
 influence function performing a ranking of the expression levels.
@@ -492,7 +491,7 @@ $\Sexpr{disease[names(disease) != "Alzheimer's"]}$
 controls. The data shown in Table~\ref{alzheimertab} have been 
 re-constructed from Table~4 in \cite{SalibHillier1997}. 
 The authors conclude that `cigarette smoking is less frequent in 
-men with Alzheimer's disease'. 
+men with Alzheimer's disease.' 
 
 \begin{table}[h]
 \begin{center}
