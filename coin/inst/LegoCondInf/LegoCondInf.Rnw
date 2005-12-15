@@ -169,7 +169,7 @@ by R. A. Fisher more than 70 years ago \citep{Fisher1935}.
 The pros and cons of both approaches in different fields of application 
 have been widely discussed \citep[e.g.~by][]{why-permut:1998,pros-and-c:2000,Shuster2005}.
 Here, we focus on the practical aspects of permutation testing rather than
-dealing with its philosophical foundations.
+dealing with its methodological foundations.
 
 For the construction of permutation tests it is common exercise to `recycle'
 test statistics well known from the unconditional world, such as linear rank
@@ -216,7 +216,7 @@ conditional test procedures. In the main part of this paper we show how one can
 construct and implement permutation tests `on the fly' by plugging together Lego bricks for
 the multivariate linear statistic, the test statistic and the conditional
 null distribution, both conceptually and practically by means of the 
-\Rpackage{coin} add-on package to the \RR{} system for statistical computing
+\Rpackage{coin} add-on package \citep{PKG:coin} in the \RR{} system for statistical computing
 \citep{Rcore2005}.
 
 
@@ -239,9 +239,9 @@ linear statistics of the form
 \in \R^{pq \times 1}.
 \end{eqnarray*}
 Here, $g: \mathcal{X} \rightarrow \R^{p \times 1}$ is a transformation of
-the $\X$ measurements and the \emph{influence function}
-$h: \mathcal{Y} \rightarrow
-\R^{q \times 1}$ may depend on the responses $(\Y_1, \dots, \Y_n)$ in a permutation
+the $\X$ measurements and $h: \mathcal{Y} \rightarrow
+\R^{q \times 1}$ is called \emph{influence function}. The function $h(\Y_i)
+= h(\Y_i, (\Y_1, \dots, \Y_n))$ must depend on the responses $(\Y_1, \dots, \Y_n)$ in a permutation
 symmetric way. We will give specific examples how to choose $g$ and $h$
 for specific inference problems in Section~\ref{play}.
 
@@ -308,7 +308,7 @@ the Moore-Penrose inverse $\Sigma^+$ of $\Sigma$.
 
 The conditional distribution $\Prob(c(\T, \mu, \Sigma) \le z | S)$
 is the number of permutations $\sigma \in S$ of the data 
-with corresponding test statistic less than $z$ divided by the total number
+with corresponding test statistic not exceeding $z$ divided by the total number
 of permutations in $S$. For some special forms of the
 multivariate linear statistic the exact distribution of some 
 test statistics is trackable for small and moderate sample sizes.
@@ -870,20 +870,24 @@ is waived.
 %%the excellent StatXact handbook by][]{StatXact6} include examples and results
 %%of the associated test procedures which have been reproduced with
 %%\Rpackage{coin}. 
+%%Since the \Rpackage{coin} package is part of the Comprehensive \RR{} Archive
+%%Network (CRAN, \url{http://CRAN.R-project.org}) we have been able to help
+%%several people asking `Is the xyz-test available in \RR{}' on the
+%%\texttt{r-help} email list with the answer `No, but its only whose 
+%%two lines of \RR{} code'. 
 
-Since the \Rpackage{coin} package is part of the Comprehensive \RR{} Archive
-Network (CRAN, \url{http://CRAN.R-project.org}) we have been able to help
-several people asking `Is the xyz-test available in \RR{}' on the
-\texttt{r-help} email list with the answer `No, but its only whose 
-two lines of \RR{} code'. With the \cite{StrasserWeber1999} conceptual Lego
-system and the practical Lego system implemented in \Rpackage{coin}, 
-we are no longer limited to already
-implemented test procedures nor are forced to self-implementation. Instead, 
-the appropriate conditional test procedure for the problem at hand is only a
-matter of choosing appropriate transformation and influence functions. 
+With a unifying conceptual framework in mind and a software implementation, such as
+\Rpackage{coin}, at hand, we are no longer limited to already published and 
+implemented permutation test procedures and are free to define our own transformations and
+influence functions, can choose several forms of suitable test statistics and
+utilize several methods for the computation or approximation of 
+the conditional distribution of the test statistic of interest. Thus, the
+construction of an appropriate permutation test, for both classical 
+new inference problems, is only a matter of putting together
+adequate Lego bricks.
 
 \bibliographystyle{asa}
-\bibliography{litdbTH,addrefs}
+\bibliography{litdbTH,addrefs,coin}
 
 \setkeys{Gin}{width=0.9\textheight}
 \pagestyle{empty}
