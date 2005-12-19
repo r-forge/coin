@@ -887,7 +887,7 @@ new inference problems, is only a matter of putting together
 adequate Lego bricks.
 
 \bibliographystyle{asa}
-\bibliography{litdbTH,addrefs,coin}
+\bibliography{LegoCondInf}
 
 \setkeys{Gin}{width=0.9\textheight}
 \pagestyle{empty}
