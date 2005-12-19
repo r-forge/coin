@@ -68,6 +68,17 @@
 
 \SweaveOpts{engine=R,eps=FALSE}
 
+\begin{document}
+
+<<setup, echo = FALSE, results = hide>>=
+options(width = 65)
+require("coin")
+set.seed(290875)
+### get rid of the NAMESPACE
+load(file.path(.find.package("coin"), "R", "all.rda"))
+anonymous <- FALSE
+@
+
 \hypersetup{%
   pdftitle = {A Lego System for Conditional Inference},
   pdfsubject = {Manuscript},
@@ -84,43 +95,42 @@
 
 \title{A Lego System for Conditional Inference}
 
-\author{Torsten Hothorn$^1$, Kurt Hornik$^2$, \\ 
-        Mark A. van de Wiel$^3$ and Achim Zeileis$^2$}
-\date{}
-
-\begin{document}
+<<authors, echo = FALSE, results = tex>>=
+if(!anonymous) {
+    cat("\\author{Torsten Hothorn$^1$, Kurt Hornik$^2$, \\\\ 
+            Mark A. van de Wiel$^3$ and Achim Zeileis$^2$}\n")
+} else  {
+    cat("\\author{Anonymous}\n")
+}
+@
 
 %% \setkeys{Gin}{height=\textheight}
 
+\date{}
 
 \maketitle
 
-\noindent$^1$Institut f\"ur Medizininformatik, Biometrie und Epidemiologie\\
-     Friedrich-Alexander-Universit\"at Erlangen-N\"urnberg\\
-     Waldstra{\ss}e 6, D-91054 Erlangen, Germany \\
-     \texttt{Torsten.Hothorn@R-project.org}
-\newline
+<<affil, echo = FALSE, results = tex>>=
+if(!anonymous)
+    cat("\\noindent$^1$ Institut f\\\"ur Medizininformatik, Biometrie und Epidemiologie\\\\
+           Friedrich-Alexander-Universit\\\"at Erlangen-N\"urnberg\\\\
+           Waldstra{\\ss}e 6, D-91054 Erlangen, Germany \\\\
+           \\texttt{Torsten.Hothorn@R-project.org}
+         \\newline
 
-\noindent$^2$Department f\"ur Statistik und Mathematik,
-             Wirtschaftsuniversit\"at Wien \\
-       Augasse 2-6, A-1090 Wien, Austria \\
-       \texttt{Kurt.Hornik@R-project.org} \\
-       \texttt{Achim.Zeileis@R-project.org}
-\newline
+         \\noindent$^2$ Department f\\\"ur Statistik und Mathematik,
+            Wirtschaftsuniversit\\\"at Wien \\\\
+            Augasse 2-6, A-1090 Wien, Austria \\\\
+            \\texttt{Kurt.Hornik@R-project.org} \\\\
+            \texttt{Achim.Zeileis@R-project.org}
+         \\newline
 
-\noindent$^3$ Department of Mathematics and Computer Science \\
-              Eindhoven University of Technology \\
-              HG 9.25, P.O. Box 513 \\
-              5600 MB Eindhoven, The Netherlands \\
-              \texttt{markvdw@win.tue.nl}
-\newline
-
-<<setup, echo = FALSE, results = hide>>=
-options(width = 65)
-require("coin")
-set.seed(290875)
-### get rid of the NAMESPACE
-load(file.path(.find.package("coin"), "R", "all.rda"))
+         \\noindent$^3$ Department of Mathematics and Computer Science \\\\
+            Eindhoven University of Technology \\\\
+            HG 9.25, P.O. Box 513 \\\\
+            5600 MB Eindhoven, The Netherlands \\\\
+            \\texttt{markvdw@win.tue.nl}
+         \\newline\n")
 @
 
 \thispagestyle{empty}
@@ -146,10 +156,7 @@ KEY WORDS: Permutation tests; Multiple testing; Independence; Software.
 \newline
 
 \noindent
-Version:
-\begin{verbatim}
-$Id$
-\end{verbatim}
+Date: $Date Version: $Version
 
 \newpage
 
@@ -216,7 +223,15 @@ conditional test procedures. In the main part of this paper we show how one can
 construct and implement permutation tests `on the fly' by plugging together Lego bricks for
 the multivariate linear statistic, the test statistic and the conditional
 null distribution, both conceptually and practically by means of the 
-\Rpackage{coin} add-on package \citep{PKG:coin} in the \RR{} system for statistical computing
+\Rpackage{coin} add-on package 
+<<coincite, echo = FALSE, results = tex>>=
+if (anonymous) {
+    cat("(Anonymous)")
+} else {
+    cat("\\citep{PKG:coin}\n")
+}
+@
+in the \RR{} system for statistical computing
 \citep{Rcore2005}.
 
 
