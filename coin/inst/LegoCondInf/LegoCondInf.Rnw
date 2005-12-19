@@ -68,17 +68,6 @@
 
 \SweaveOpts{engine=R,eps=FALSE}
 
-\begin{document}
-
-<<setup, echo = FALSE, results = hide>>=
-options(width = 65)
-require("coin")
-set.seed(290875)
-### get rid of the NAMESPACE
-load(file.path(.find.package("coin"), "R", "all.rda"))
-anonymous <- FALSE
-@
-
 \hypersetup{%
   pdftitle = {A Lego System for Conditional Inference},
   pdfsubject = {Manuscript},
@@ -92,6 +81,18 @@ anonymous <- FALSE
   hyperindex = {true},
   linktocpage = {true},
 }
+
+\begin{document}
+
+<<setup, echo = FALSE, results = hide>>=
+options(width = 65)
+require("coin")
+set.seed(290875)
+### get rid of the NAMESPACE
+load(file.path(.find.package("coin"), "R", "all.rda"))
+anonymous <- TRUE
+@
+
 
 \title{A Lego System for Conditional Inference}
 
@@ -157,7 +158,9 @@ KEY WORDS: Permutation tests; Multiple testing; Independence; Software.
 
 \noindent
 \begin{verbatim}
-$Date$ $Revision$ $Name$
+$Date$ 
+$Revision$ 
+$Name$
 \end{verbatim}
 
 \newpage
@@ -228,9 +231,9 @@ null distribution, both conceptually and practically by means of the
 \Rpackage{coin} add-on package 
 <<coincite, echo = FALSE, results = tex>>=
 if (anonymous) {
-    cat("(Anonymous)")
+    cat(" \\citep{PKG:coina} ")
 } else {
-    cat("\\citep{PKG:coin}\n")
+    cat(" \\citep{PKG:coin} ")
 }
 @
 in the \RR{} system for statistical computing
