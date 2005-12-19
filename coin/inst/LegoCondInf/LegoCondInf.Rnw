@@ -156,7 +156,7 @@ KEY WORDS: Permutation tests; Multiple testing; Independence; Software.
 \newline
 
 \noindent
-Date: $Date Version: $Version
+Date: $Date$ Version: $Version$
 
 \newpage
 
