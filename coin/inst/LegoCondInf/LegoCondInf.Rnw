@@ -157,7 +157,7 @@ KEY WORDS: Permutation tests; Multiple testing; Independence; Software.
 
 \noindent
 \begin{verbatim}
-$Date$ $Revision$
+$Date$ $Revision$ $Name$
 \end{verbatim}
 
 \newpage
