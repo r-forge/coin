@@ -145,7 +145,7 @@ if(!anonymous)
             Eindhoven University of Technology \\\\
             HG 9.25, P.O. Box 513 \\\\
             5600 MB Eindhoven, The Netherlands \\\\
-            \\texttt{markvdw@win.tue.nl}
+            \\texttt{m.a.v.d.wiel@TUE.nl}
          \\newline\n")
 @
 
