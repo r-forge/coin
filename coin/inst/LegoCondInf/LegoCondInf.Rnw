@@ -66,6 +66,21 @@
 \newcommand{\eplus}{\widehat{\text{Err}}^{(.632+)}}
 \newcommand{\eoob}{\widehat{\text{Err}}^{(oob)}}
 
+\RequirePackage[T1]{fontenc}
+\RequirePackage{graphicx,ae,fancyvrb}
+\IfFileExists{upquote.sty}{\RequirePackage{upquote}}{}
+\usepackage{relsize}
+
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{baselinestretch=1}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{fontfamily=courier,
+                                              baselinestretch=1,
+                                              fontshape=it,
+                                              fontsize=\relsize{-1}}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{}
+\newenvironment{Schunk}{}{}
+
+\renewcommand{\baselinestretch}{1.7}
+
 \SweaveOpts{engine=R,eps=FALSE}
 
 \hypersetup{%
@@ -82,8 +97,6 @@
   linktocpage = {true},
 }
 
-\begin{document}
-
 <<setup, echo = FALSE, results = hide>>=
 options(width = 65)
 require("coin")
@@ -93,6 +106,8 @@ load(file.path(.find.package("coin"), "R", "all.rda"))
 anonymous <- TRUE
 @
 
+
+\begin{document}
 
 \title{A Lego System for Conditional Inference}
 
@@ -165,7 +180,9 @@ $Name$
 
 \newpage
 
-\section{Introduction}
+
+
+\section{INTRODUCTION}
 
 The distribution of a test statistic under the circumstances of a certain
 null hypothesis clearly depends on the unknown distribution of the data and
@@ -240,7 +257,7 @@ in the \RR{} system for statistical computing
 \citep{Rcore2005}.
 
 
-\section{A Conceptual Lego System \label{CI}}
+\section{A CONCEPTUAL LEGO SYSTEM \label{CI}}
 
 To fix ideas we assume that we are provided with observations
 $(\Y_i, \X_i)$ for $i = 1, \dots, n$.
@@ -359,7 +376,7 @@ $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
 given by the rank of $\Sigma$ \citep[e.g.~Theorem 6.20, ][]{Rasch1995}, exact
 probabilities can be computed efficiently.
 
-\section{Playing Lego \label{play}}
+\section{PLAYING LEGO \label{play}}
 
 The Lego system sketched in the previous section consists of Lego bricks for 
 the multivariate linear statistic $\T$, namely the transformation $g$ and
@@ -836,7 +853,7 @@ lines(site, pita, lty = 3)
 \end{center}
 \end{sidewaysfigure}
 
-\section{Discussion}
+\section{DISCUSSION}
 
 Conditioning on the observed data is a simple, yet powerful, design
 principle for statistical tests. Conceptually, one only needs to choose
@@ -906,8 +923,13 @@ construction of an appropriate permutation test, for both classical
 new inference problems, is only a matter of putting together
 adequate Lego bricks.
 
+\renewcommand{\baselinestretch}{1}
+%% \setlength{\bibsep}{1mm}
+
 \bibliographystyle{asa}
 \bibliography{LegoCondInf}
+
+\clearpage
 
 \setkeys{Gin}{width=0.9\textheight}
 \pagestyle{empty}
