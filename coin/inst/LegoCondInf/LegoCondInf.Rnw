@@ -313,17 +313,17 @@ h(\Y_i)$ with corresponding $q \times q$ covariance matrix
 The key step for the construction of test statistics based on the multivariate
 linear statistic $\T$ is its standardization utilizing the 
 conditional expectation $\mu$ and covariance matrix $\Sigma$. 
-Univariate test statistics~$c$ mapping an observed linear
-statistic $\mathbf{t} \in \R^{pq \times 1}$ 
+Univariate test statistics~$c$ mapping a linear
+statistic $\T \in \R^{pq \times 1}$ 
 into the real line can be of arbitrary form.  An obvious choice is
 the maximum of the absolute values of the standardized linear statistic
 \begin{eqnarray*}
-c_\text{max}(\mathbf{t}, \mu, \Sigma)  = \max \left| \frac{\mathbf{t} -
+c_\text{max}(\T, \mu, \Sigma)  = \max \left| \frac{\T -
 \mu}{\text{diag}(\Sigma)^{1/2}} \right|.
 \end{eqnarray*}
 A prominent alternative are quadratic forms 
-$c_\text{quad}(\mathbf{t}, \mu, \Sigma)  =
-(\mathbf{t} - \mu) \Sigma^+ (\mathbf{t} - \mu)^\top$ involving 
+$c_\text{quad}(\T, \mu, \Sigma)  =
+(\T - \mu) \Sigma^+ (\T - \mu)^\top$ involving 
 the Moore-Penrose inverse $\Sigma^+$ of $\Sigma$.
 
 %%The definition of one- and two-sided $p$-values used for the computations in
@@ -453,9 +453,9 @@ groups is the classical Kruskal-Wallis test. Here, the transformation
 $g$ is a dummy coding of the allele length ($g(\X_i) = (0, 1, 0)^\top$ for
 intermediate length, for example) and the value of the influence function 
 $h(\Y_i)$ is the rank of $\Y_i$ among the ranks of $\Y_1, \dots, \Y_n$.
-Thus, the observed linear statistic $\mathbf{t}$ is the vector of rank sums in each of the 
+Thus, the linear statistic $\T$ is the vector of rank sums in each of the 
 three groups and the test statistic is a quadratic form 
-$(\mathbf{t} - \mu) \Sigma^+ (\mathbf{t} - \mu)^\top$ 
+$(\T - \mu) \Sigma^+ (\T - \mu)^\top$ 
 utilzing the conditional expectation~$\mu$ and covariance matrix~$\Sigma$.
 
 In order to compute the linear statistic we need to define an
@@ -615,7 +615,7 @@ null distribution which is available from
 qperm(it_alzmax, 0.95)
 @
 Alternatively and more conveniently, we can 
-to switch to the $p$-value scale:
+to switch to multiple testing adjusted $p$-values:
 <<alzheimer-MTP, echo = TRUE>>=
 pvalue(it_alzmax, method = "single-step")
 @
@@ -634,7 +634,7 @@ test statistic by attaching scores to variable \Robject{smoking}:
 it_alzL <- independence_test(males, scores = list(smoking = c(0, 5, 15, 25)))
 pvalue(it_alzL)
 @
-The single-step adjusted $p$-values 
+The single-step multiple testing adjusted $p$-values 
 <<alzheimer-orderedp, echo = TRUE, eval = FALSE>>=
 pvalue(it_alzL, method = "single-step")
 @
@@ -741,7 +741,7 @@ it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
                   data = photocar, distribution = approximate(50000))
 pvalue(it, method = "single-step")
 @
-The more powerful step-down adjusted $p$-values 
+The more powerful step-down multiple testing adjusted $p$-values 
 \citep[Algorithm 2.8 in][]{WestfallYoung1993} are 
 <<photocar-MC2, echo = TRUE>>=    
 pvalue(it, method = "step-down")
