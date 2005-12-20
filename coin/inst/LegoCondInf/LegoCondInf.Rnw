@@ -161,10 +161,14 @@ tests opens up the way to a unified and generalized view. We argue that the
 transfer of such a theory to practical data analysis has important
 implications in many applications and requires tools that enable the
 data analyst to compute on the theoretical concepts as closely as possible.
-We re-analyze data where non-standard inference procedures are
-required utilizing the \Rpackage{coin} add-on package in the \RR{}
-system for statistical computing and show what one can gain from going
-beyond the `classical' test procedures.
+%FIXME%
+We re-analyze four data sets
+by adapting the general conceptual framework to these non-standard inference procedures
+and
+utilizing the \Rpackage{coin} add-on package in the \RR{} system for statistical computing
+to show what one can gain from going beyond the `classical' test procedures.
+%FIXME% tried to make a bit more clear that there are two contributions
+%FIXME% 1. conceptual adaption, 2. practical application
 \end{abstract}
 
 \noindent
@@ -259,7 +263,8 @@ in the \RR{} system for statistical computing
 
 \section{A CONCEPTUAL LEGO SYSTEM \label{CI}}
 
-To fix ideas we assume that we are provided with observations
+To fix notations, %Z% was: ideas
+we assume that we are provided with observations
 $(\Y_i, \X_i)$ for $i = 1, \dots, n$.
 The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
 $\mathcal{X}$ may
@@ -279,7 +284,7 @@ Here, $g: \mathcal{X} \rightarrow \R^{p \times 1}$ is a transformation of
 the $\X$ measurements and $h: \mathcal{Y} \rightarrow
 \R^{q \times 1}$ is called \emph{influence function}. The function $h(\Y_i)
 = h(\Y_i, (\Y_1, \dots, \Y_n))$ must depend on the responses $(\Y_1, \dots, \Y_n)$ in a permutation
-symmetric way. We will give specific examples how to choose $g$ and $h$
+symmetric way. We will give several examples how to choose $g$ and $h$
 for specific inference problems in Section~\ref{play}.
 
 The distribution of $\T$  depends on the joint distribution of $\Y$ and $\X$, 
@@ -303,7 +308,7 @@ all permutations $\sigma \in S$ of the responses are derived by
         \sum_i g(\X_i) \right) \otimes \left( \sum_i g(\X_i)\right)^\top
 \nonumber
 \end{eqnarray*}
-where $\otimes$ denote the Kronecker product, and the conditional
+where $\otimes$ denotes the Kronecker product, and the conditional
 expectation of the influence function is $\E(h | S) = n^{-1} \sum_i
 h(\Y_i)$ with corresponding $q \times q$ covariance matrix
 \begin{eqnarray*}
@@ -354,24 +359,24 @@ test statistics is trackable for small and moderate sample sizes.
 %%\cite{vdWiel2001} are implemented as part of the package.
 Conditional Monte-Carlo procedures (`resampling') can always be used to 
 approximate the exact distribution up to any desired accuracy by evaluating
-the test statistic for a random sample from the set all permutations $S$.
+the test statistic for a random sample from the set of all permutations $S$.
 It is important to note that the presence of a grouping of the observations
 into blocks, only permutations within blocks are eligible and that the
 conditional expectation and covariance matrix need to be computed
 separately for each block.
 
 Less well known is the fact that 
-the conditional distribution can be approximated by the limit distribution
-under all circumstances. \cite{StrasserWeber1999} proved (Theorem 2.3) that the   
+the conditional distribution can be approximated by its limiting distribution
+under all circumstances. \cite{StrasserWeber1999} showed in their Theorem~2.3 that the   
 conditional distribution of linear statistics $\T$ with conditional    
 expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
 distribution with parameters $\mu$ and $\Sigma$ as $n \rightarrow
 \infty$. Thus, the asymptotic conditional distribution of test statistics of
 the form $c_\text{max}$ is normal and
-can be computed directly in the univariate case ($pq = 1$). The evaluation
-of multivariate normal distributions is possible by 
-means of quasi-randomized Monte-Carlo procedures \citep{numerical-:1992}. For
-quadratic forms
+can be computed directly in the univariate case ($pq = 1$) and by numerical 
+algorithms in the multivariate case \citep[e.g., using the quasi-randomized
+Monte-Carlo procedures of][]{numerical-:1992}. %Z% tried to clarify that this is a different MC algorithm...
+For quadratic forms
 $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
 given by the rank of $\Sigma$ \citep[e.g.~Theorem 6.20, ][]{Rasch1995}, exact
 probabilities can be computed efficiently.
@@ -386,12 +391,12 @@ classical procedures, starting with the conditional Kruskal-Wallis test and
 the Cochran-Mantel-Haenszel test, can be embedded into this general theory
 and, much more interesting from our point of view, how new conditional test
 procedures can be constructed conceptually \textit{and} practically. 
-Therefore, each inference problem goes along with \RR{} code necessary to perform the
+Therefore, each inference problem comes with \RR{} code performing the
 appropriate conditional test using the \Rpackage{coin} functionality 
 which enables the data analyst to benefit from this
 simple methodology in every day's data analysis. All analyses are
 reproducible from the \Rpackage{coin} package vignette available from
-\url{http://CRAN.R-project.org}.
+\url{http://CRAN.R-project.org/}.
 
 \paragraph{Genetic Components of Alcoholism.}
 
@@ -556,10 +561,30 @@ for (i in 1:length(lines)) cat(lines[i], "\n")
 \end{tabular}
 \end{center}
 \end{table}
+
+%FIXME% add visualization, e.g.
+%FIXME% par(mfrow = c(1, 2))
+%FIXME% spineplot(alzheimer[,,"Male"], main = "Male")
+%FIXME% spineplot(alzheimer[,,"Female"], main = "Female")
+%FIXME% par(mfrow = c(1, 1))
+
+%FIXME% omit discussion of ordinal structure
+
+%FIXME% modify discussion stream:
+%FIXME%   - main task: assess whether there is any association between smoking
+%FIXME%     Alzheimer's (or other dementia) diseases,
+%FIXME%   - step 1: using a global test, assess whether there is association
+%FIXME%     in any of the gender strata (-> yes)
+%FIXME%   - step 2: investigate which stratum is responsible for the rejection
+%FIXME%     of the global test (-> male)
+%FIXME%   - step 3: further investigate what led to the rejection within the
+%FIXME%     male patients (-> max-type tests for male patients only)
+
 Ignoring the ordinal structure of the smoking behavior, the null hypothesis
 of independence between smoking and disease status treating gender as a
 block factor with a $c_\text{quad}$-type test statistic, i.e., the 
 Cochran-Mantel-Haenszel test:
+%FIXME% transform data to employ formula interface?
 <<alzheimer-mantelhaen, echo = TRUE>>=
 it_alz <- independence_test(alzheimer, teststat = "quadtype")
 it_alz
@@ -603,6 +628,12 @@ The standardized contingency table sheds some light on the deviations from indep
 <<alzheimer-maxstat, echo = TRUE>>=
 statistic(it_alzmax, "standardized")
 @
+%FIXME% The following discussion is down column-wise, but it is
+%FIXME% more natural to do the discussion row-wise, as the rows
+%FIXME% correspond to the explanatory variable `smoking'
+%FIXME% (which is the cause, not the effect).
+%FIXME% This discussion can also refer to the visualization
+%FIXME% highlighting that the heavy smokers group is the most interesting.
 and leads to the impression that patients suffering 
 from Alzheimer's disease
 smoked less cigarettes than expected under independence and, to an even larger
@@ -624,6 +655,7 @@ null hypothesis of independence is due to a large number of heavy smokers
 with other dementias and a small number of heavy smokers suffering from 
 Alzheimer's disease.
 
+%FIXME% omit linear-by-linear discussion
 The levels of smoking arise from a underlying discrete variable and we
 should make use of this information by applying a linear-by-linear
 association test. A natural choice of the scores are the mid-points of
@@ -654,7 +686,7 @@ administered, are measured by means of (at least) three response variables:
 the survival time, the time to first tumor and the total number of tumors of
 animals in different treatment groups. 
 The main interest is testing the global null of no treatment 
-effect with respect to survival time, time to first tumor or
+effect with respect to any of the three responses survival time, time to first tumor or
 number of tumors \citep[][analyze the detection time
 of tumors in addition, this data is not given here]{Molefeetal2005}. 
 In case the  global null hypothesis can be rejected, the deviations 
@@ -727,7 +759,7 @@ linear statistic $\T$
 <<photocar-stand, echo = TRUE>>=
 statistic(it_ph, type = "standardized")
 @
-or by means of adjusted $p$-values
+or again by means of the corresponding adjusted $p$-values
 <<photocar-stand, echo = TRUE, eval = FALSE>>=
 pvalue(it_ph, method = "single-step")
 @
@@ -752,10 +784,12 @@ no treatment effect on the total number of tumors can be observed.
 
 \paragraph{Contaminated Fish Consumption.}
 
-In the former three applications, standard transformations for $g$ and $h$
-such as dummy codings, ranks and logrank scores have been applied. In the third 
-application, we will show how one can utilize the Lego system 
-to implement a newly invented test procedure. 
+In the former three applications, pre-fabricated Lego bricks---i.e.,
+standard transformations for $g$ and $h$ such as dummy codings, ranks
+and logrank scores---have been employed.
+In the third application, we will show how the Lego system can be used
+to construct new bricks and implement a newly invented test procedure. 
+%Z% added some more Lego jargon
 
 \cite{Rosenbaum1994a} proposed to compare groups by means of a
 \textit{coherence criterion} and studied a dataset of subjects 
@@ -878,8 +912,8 @@ It is one mission, if not \textit{the} mission, of statistical computing to
 transform new theoretical developments into flexible software tools for the
 data analyst. The \Rpackage{coin} package is an attempt to translate 
 the theoretical concepts of \cite{StrasserWeber1999} into software tools 
-as closely as possible preserving the simplicity and flexibility of 
-the theory. With this package, the rather inflexible spanners
+preserving the simplicity and flexibility of 
+the theory as closely as possible. With this package, the rather inflexible spanners
 currently in use,
 such as \Rcmd{wilcox.test} for the Wilcoxon-Mann-Whitney test or
 \Rcmd{mantelhaen.test} for the Cochran-Mantel-Haenszel $\chi^2$ test in
@@ -908,7 +942,7 @@ is waived.
 %%of the associated test procedures which have been reproduced with
 %%\Rpackage{coin}. 
 %%Since the \Rpackage{coin} package is part of the Comprehensive \RR{} Archive
-%%Network (CRAN, \url{http://CRAN.R-project.org}) we have been able to help
+%%Network (CRAN, \url{http://CRAN.R-project.org/}) we have been able to help
 %%several people asking `Is the xyz-test available in \RR{}' on the
 %%\texttt{r-help} email list with the answer `No, but its only whose 
 %%two lines of \RR{} code'. 
@@ -919,7 +953,7 @@ implemented permutation test procedures and are free to define our own transform
 influence functions, can choose several forms of suitable test statistics and
 utilize several methods for the computation or approximation of 
 the conditional distribution of the test statistic of interest. Thus, the
-construction of an appropriate permutation test, for both classical 
+construction of an appropriate permutation test, for both classical and
 new inference problems, is only a matter of putting together
 adequate Lego bricks.
 
