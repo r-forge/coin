@@ -170,14 +170,11 @@ tests opens up the way to a unified and generalized view. We argue that the
 transfer of such a theory to practical data analysis has important
 implications in many applications and requires tools that enable the
 data analyst to compute on the theoretical concepts as closely as possible.
-%FIXME%
 We re-analyze four data sets
 by adapting the general conceptual framework to these non-standard inference procedures
 and
 utilizing the \Rpackage{coin} add-on package in the \RR{} system for statistical computing
 to show what one can gain from going beyond the `classical' test procedures.
-%FIXME% tried to make a bit more clear that there are two contributions
-%FIXME% 1. conceptual adaption, 2. practical application
 \end{abstract}
 
 \noindent
@@ -264,7 +261,7 @@ in the \RR{} system for statistical computing
 
 \section{A CONCEPTUAL LEGO SYSTEM \label{CI}}
 
-To fix notations, %Z% was: ideas
+To fix notations,
 we assume that we are provided with observations
 $(\Y_i, \X_i)$ for $i = 1, \dots, n$.
 The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
@@ -376,7 +373,7 @@ distribution with parameters $\mu$ and $\Sigma$ as $n \rightarrow
 the form $c_\text{max}$ is normal and
 can be computed directly in the univariate case ($pq = 1$) and by numerical 
 algorithms in the multivariate case \citep[e.g., using the quasi-randomized
-Monte-Carlo procedures of][]{numerical-:1992}. %Z% tried to clarify that this is a different MC algorithm...
+Monte-Carlo procedures of][]{numerical-:1992}.
 For quadratic forms
 $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
 given by the rank of $\Sigma$ \citep[e.g.~Theorem 6.20, ][]{Rasch1995}, exact
@@ -538,36 +535,17 @@ for (i in 1:length(lines)) cat(lines[i], "\n")
 
 \begin{sidewaysfigure}
 \begin{center}
-<<alzheimer-plot, echo = FALSE, fig = TRUE, width = 11, height = 6.75>>=
+<<alzheimer-plot, echo = FALSE, fig = TRUE, width = 11, height = 6>>=
 layout(matrix(1:2, ncol = 2))
 spineplot(disease ~ smoking, data = alzheimer, subset = gender == "Male",
-main = "Male", xlab = "Smoking", ylab = "Disease")
+main = "Male", xlab = "Smoking", ylab = "Disease", tol = 1)
 spineplot(disease ~ smoking, data = alzheimer, subset = gender == "Female",
-main = "Female", xlab = "Smoking", ylab = "Disease")
+main = "Female", xlab = "Smoking", ylab = "Disease", tol = 1)
 @
 \caption{\Robject{alzheimer} data: Association of
-smoking behavior and disease status visualized by spineplots. \label{alz-plot}}
+smoking behavior and disease status stratified by gender. \label{alz-plot}}
 \end{center}
 \end{sidewaysfigure}
-
-
-%FIXME% add visualization, e.g.
-%FIXME% par(mfrow = c(1, 2))
-%FIXME% spineplot(alzheimer[,,"Male"], main = "Male")
-%FIXME% spineplot(alzheimer[,,"Female"], main = "Female")
-%FIXME% par(mfrow = c(1, 1))
-
-%FIXME% omit discussion of ordinal structure
-
-%FIXME% modify discussion stream:
-%FIXME%   - main task: assess whether there is any association between smoking
-%FIXME%     Alzheimer's (or other dementia) diseases,
-%FIXME%   - step 1: using a global test, assess whether there is association
-%FIXME%     in any of the gender strata (-> yes)
-%FIXME%   - step 2: investigate which stratum is responsible for the rejection
-%FIXME%     of the global test (-> male)
-%FIXME%   - step 3: further investigate what led to the rejection within the
-%FIXME%     male patients (-> max-type tests for male patients only)
 
 We are interested to assess whether there is any association
 between smoking and Alzheimer's (or other dementia) diseases and, in a
@@ -596,10 +574,10 @@ covariance \Rcmd{covariance(it\_alz)} which are available for standardizing
 the contingency table $\T$. The conditional distribution is approximated by
 its limiting $\chi^2$ distribution by default. 
 
-The form of the above detected deviation from independence is of special
-interest. We therefore investigate the association between smoking and 
-Alzheimer's disease separately for women and men it turns out that the 
-deviation from independence is due to men only
+Given that there is significant departure from independence, we further
+investigate the structure of association between smoking and Alzheimer's
+disease. First we assess for which gender the violation of independence 
+occured
 <<alzheimer-men, echo = TRUE>>=
 females <- alzheimer$gender == "Female"
 pvalue(independence_test(disease ~ smoking, data = alzheimer,
@@ -607,9 +585,10 @@ pvalue(independence_test(disease ~ smoking, data = alzheimer,
 pvalue(independence_test(disease ~ smoking, data = alzheimer,
        subset = !females, teststat = "quadtype"))
 @
-and thus we further focus on the male patients only. 
-
-A $c_\text{quad}$-type test statistic is not particular useful 
+where it turns out that the association is due to the male patients only
+(see also Figure~\ref{alz-plot}). Thus, we focus on the male patients in 
+the following.
+Furthermore, a $c_\text{quad}$-type test statistic is not particularly useful 
 for gaining insight into the association structure of contingency tables
 because the contributions of all cells are collapsed in such a quadratic form.
 Instead, we define the test statistic as the maximum of the 
@@ -619,35 +598,30 @@ it_alzmax <- independence_test(disease ~ smoking, data = alzheimer,
        subset = !females, teststat = "maxtype")
 it_alzmax
 @
-The standardized contingency table sheds some light on the deviations from independence
+where the underlying standardized contingency table highlights the cells with
+deviations from independence
 <<alzheimer-maxstat, echo = TRUE>>=
 statistic(it_alzmax, "standardized")
 @
-%FIXME% The following discussion is down column-wise, but it is
-%FIXME% more natural to do the discussion row-wise, as the rows
-%FIXME% correspond to the explanatory variable `smoking'
-%FIXME% (which is the cause, not the effect).
-%FIXME% This discussion can also refer to the visualization
-%FIXME% highlighting that the heavy smokers group is the most interesting.
-and leads to the impression that heavy smokers suffer from Alzheimer's
-disease less frequently than expected under independence. Furthermore,
-patients with other dementias are overrepresented in the group of heavy
-smokers. However, interpreting the standardized contingency table either requires
+This leads to the impression that heavy smokers suffer less frequently
+from Alzheimer's disease but more frequently from other dementias
+than expected under independence.
+However, interpreting the standardized contingency table requires
 knowledge about the distribution of the standardized statistics, 
-i.e., via an approximation of the $95\%$ quantile of the permutation 
+e.g., via an approximation of the $95\%$ quantile of the permutation 
 null distribution which is available from
 <<alzheimer-qperm, echo = TRUE>>=
 qperm(it_alzmax, 0.95)
 @
-Alternatively and more conveniently, we can 
-to switch to multiple testing adjusted $p$-values:
+or alternatively (and more conveniently) by
+switching to $p$-values adjusted for multiple testing:
 <<alzheimer-MTP, echo = TRUE>>=
 pvalue(it_alzmax, method = "single-step")
 @
-The above results support the conclusion that the rejection of the 
-null hypothesis of independence is due to a large number of heavy smokers 
-with other dementias and a small number of heavy smokers suffering from 
-Alzheimer's disease. In addition, there is some evidence that, for the small
+These results support the conclusion that the rejection of the 
+null hypothesis of independence is due to a large number of patients
+with other dementias and a small number with Alzheimer's disease in the heavy
+smoking group. In addition, there is some evidence that, for the small
 group of men smoking less than ten cigarettes per day, the reverse
 association is true.
 
@@ -762,7 +736,6 @@ standard transformations for $g$ and $h$ such as dummy codings, ranks
 and logrank scores---have been employed.
 In the third application, we will show how the Lego system can be used
 to construct new bricks and implement a newly invented test procedure. 
-%Z% added some more Lego jargon
 
 \cite{Rosenbaum1994a} proposed to compare groups by means of a
 \textit{coherence criterion} and studied a dataset of subjects 
