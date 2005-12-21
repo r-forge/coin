@@ -126,6 +126,8 @@ if(!anonymous) {
 
 \maketitle
 
+\thispagestyle{empty}
+
 <<affil, echo = FALSE, results = tex>>=
 if(!anonymous)
     cat("\\noindent$^1$ Institut f\\\"ur Medizininformatik, Biometrie und Epidemiologie\\\\
@@ -149,7 +151,13 @@ if(!anonymous)
          \\newline\n")
 @
 
-\thispagestyle{empty}
+\noindent
+\begin{verbatim}
+$Date$ 
+$Revision$ 
+$Name$
+\end{verbatim}
+
 
 \begin{abstract}
 Conditioning on the observed data is an important and flexible 
@@ -175,16 +183,8 @@ to show what one can gain from going beyond the `classical' test procedures.
 KEY WORDS: Permutation tests; Multiple testing; Independence; Software.
 \newline
 
-\noindent
-\begin{verbatim}
-$Date$ 
-$Revision$ 
-$Name$
-\end{verbatim}
 
-\newpage
-
-
+%% \newpage
 
 \section{INTRODUCTION}
 
@@ -531,7 +531,8 @@ $\Sexpr{disease["Alzheimer's"]}$
 patients suffering from Alzheimer's disease and 
 $\Sexpr{disease[names(disease) != "Alzheimer's"]}$
 controls. The data shown in Table~\ref{alzheimertab} have been 
-re-constructed from Table~4 in \cite{SalibHillier1997}. 
+re-constructed from Table~4 in \cite{SalibHillier1997} and are depicted in
+Figure~\ref{alz-plot}. 
 The authors conclude that `cigarette smoking is less frequent in 
 men with Alzheimer's disease.' 
 
@@ -551,7 +552,7 @@ for (i in 1:length(lines)) cat(lines[i], "\n")
 
 & & & & \\
 \textit{Male} & & & & \\
-<<alzheimer-tab, echo = FALSE, results = tex>>=
+<<alzheimer-tab, echo = FALSE, results = tex, width = 10>>=
 x <- t(alzheimer[,,"Male"])
 lines <- paste(paste(dimnames(x)$disease, " & "), 
                paste(apply(x, 1, function(l) paste(l, collapse = " & ")), "\\\\"))
@@ -561,6 +562,19 @@ for (i in 1:length(lines)) cat(lines[i], "\n")
 \end{tabular}
 \end{center}
 \end{table}
+
+\begin{sidewaysfigure}
+\begin{center}
+<<alzheimer-plot, echo = FALSE, fig = TRUE, width = 11, height = 7>>=
+layout(matrix(1:2, ncol = 2))
+spineplot(alzheimer[,,"Male"], main = "Male")
+spineplot(alzheimer[,,"Female"], main = "Female")
+@
+\caption{\Robject{alzheimer} data: Association of
+smoking behavior and disease status visualized by spineplots. \label{alz-plot}}
+\end{center}
+\end{sidewaysfigure}
+
 
 %FIXME% add visualization, e.g.
 %FIXME% par(mfrow = c(1, 2))
@@ -580,16 +594,23 @@ for (i in 1:length(lines)) cat(lines[i], "\n")
 %FIXME%   - step 3: further investigate what led to the rejection within the
 %FIXME%     male patients (-> max-type tests for male patients only)
 
-Ignoring the ordinal structure of the smoking behavior, the null hypothesis
-of independence between smoking and disease status treating gender as a
-block factor with a $c_\text{quad}$-type test statistic, i.e., the 
+We are interested to assess whether there is any association
+between smoking and Alzheimer's (or other dementia) diseases and, in a
+second step, how a potential association can be described. First,
+the global null hypothesis of independence between smoking behavior and disease
+status for both females and males, i.e., treating gender as a
+block factor, can be tested with a $c_\text{quad}$-type test statistic, i.e., the 
 Cochran-Mantel-Haenszel test:
 %FIXME% transform data to employ formula interface?
+<<alzheimer-df, echo = FALSE, results = hide>>=
+alzheimer <- coin:::table2df(alzheimer)
+@
 <<alzheimer-mantelhaen, echo = TRUE>>=
-it_alz <- independence_test(alzheimer, teststat = "quadtype")
+it_alz <- independence_test(disease ~ smoking | gender, data = alzheimer, 
+                            teststat = "quadtype")
 it_alz
 @
-suggests that there is a clear deviation from independence. 
+which suggests that there is a clear deviation from independence. 
 By default, the influence function $h$ and the transformation $g$ 
 are dummy codings of the disease status $\Y$ and the smoking behavior $\X$, 
 i.e., $h(\Y_i) = (1, 0, 0)^\top$ 
@@ -604,24 +625,27 @@ covariance \Rcmd{covariance(it\_alz)} which are available for standardizing
 the contingency table $\T$. The conditional distribution is approximated by
 its limiting $\chi^2$ distribution by default. 
 
-When we investigate the association between smoking and Alzheimer's disease
-separately for women and men it turns out that the deviation from independence
-is due to men only
+The form of the above detected deviation from independence is of special
+interest. We therefore investigate the association between smoking and 
+Alzheimer's disease separately for women and men it turns out that the 
+deviation from independence is due to men only
 <<alzheimer-men, echo = TRUE>>=
-pvalue(independence_test(as.table(alzheimer[,,"Male"]), teststat = "quadtype"))
-pvalue(independence_test(as.table(alzheimer[,,"Female"]), teststat = "quadtype"))
+females <- alzheimer$gender == "Female"
+pvalue(independence_test(disease ~ smoking, data = alzheimer,
+       subset = females, teststat = "quadtype"))
+pvalue(independence_test(disease ~ smoking, data = alzheimer,
+       subset = !females, teststat = "quadtype"))
 @
-and thus we focus on the male patients in the following.
+and thus we further focus on the male patients only. 
 
-The form of the deviation from independence is of special interest.
-However, a $c_\text{quad}$-type test statistic is not particular useful 
-for this purpose because the contributions of all cells in the contingency
-table are collapsed in this quadratic form.
+A $c_\text{quad}$-type test statistic is not particular useful 
+for gaining insight into the association structure of contingency tables
+because the contributions of all cells are collapsed in such a quadratic form.
 Instead, we define the test statistic as the maximum of the 
 standardized contingency table via
 <<alzheimer-max, echo = TRUE>>=
-males <- as.table(alzheimer[,,"Male"])
-it_alzmax <- independence_test(males, teststat = "maxtype")
+it_alzmax <- independence_test(disease ~ smoking, data = alzheimer,
+       subset = !females, teststat = "maxtype")
 it_alzmax
 @
 The standardized contingency table sheds some light on the deviations from independence
@@ -634,11 +658,10 @@ statistic(it_alzmax, "standardized")
 %FIXME% (which is the cause, not the effect).
 %FIXME% This discussion can also refer to the visualization
 %FIXME% highlighting that the heavy smokers group is the most interesting.
-and leads to the impression that patients suffering 
-from Alzheimer's disease
-smoked less cigarettes than expected under independence and, to an even larger
-degree, patients with other dementias smoked much more than expected.
-However, interpreting the standardized contingency table either requires
+and leads to the impression that heavy smokers suffer from Alzheimer's
+disease less frequently than expected under independence. Furthermore,
+patients with other dementias are overrepresented in the group of heavy
+smokers. However, interpreting the standardized contingency table either requires
 knowledge about the distribution of the standardized statistics, 
 i.e., via an approximation of the $95\%$ quantile of the permutation 
 null distribution which is available from
@@ -653,30 +676,9 @@ pvalue(it_alzmax, method = "single-step")
 The above results support the conclusion that the rejection of the 
 null hypothesis of independence is due to a large number of heavy smokers 
 with other dementias and a small number of heavy smokers suffering from 
-Alzheimer's disease.
-
-%FIXME% omit linear-by-linear discussion
-The levels of smoking arise from a underlying discrete variable and we
-should make use of this information by applying a linear-by-linear
-association test. A natural choice of the scores are the mid-points of
-the internals used to discretize the number of cigarettes per day 
-and we can set up a linear-by-linear association test with $c_\text{max}$-type 
-test statistic by attaching scores to variable \Robject{smoking}:
-<<alzheimer-ordered, echo = TRUE>>=
-it_alzL <- independence_test(males, scores = list(smoking = c(0, 5, 15, 25)))
-pvalue(it_alzL)
-@
-The single-step multiple testing adjusted $p$-values 
-<<alzheimer-orderedp, echo = TRUE, eval = FALSE>>=
-pvalue(it_alzL, method = "single-step")
-@
-<<alzheimer-orderedp, echo = FALSE>>=
-p <- pvalue(it_alzL, method = "single-step")
-rownames(p) <- ""
-p
-@
-support the conclusion that smoking is associated with both other dementia and
-Alzheimer's disease.
+Alzheimer's disease. In addition, there is some evidence that, for the small
+group of men smoking less than ten cigarettes per day, the reverse
+association is true.
 
 \paragraph{Photococarcinogenicity Experiments.}
 
