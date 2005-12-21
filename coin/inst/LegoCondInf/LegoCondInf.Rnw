@@ -3,6 +3,7 @@
 \usepackage{amsfonts}
 \usepackage{hyperref}
 \usepackage[round]{natbib}
+\renewcommand{\refname}{REFERENCES}
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{rotating}
@@ -71,15 +72,15 @@
 \IfFileExists{upquote.sty}{\RequirePackage{upquote}}{}
 \usepackage{relsize}
 
-\DefineVerbatimEnvironment{Sinput}{Verbatim}{baselinestretch=1}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{baselinestretch=1.05}
 \DefineVerbatimEnvironment{Soutput}{Verbatim}{fontfamily=courier,
-                                              baselinestretch=1,
+                                              baselinestretch=1.05,
                                               fontshape=it,
                                               fontsize=\relsize{-1}}
 \DefineVerbatimEnvironment{Scode}{Verbatim}{}
 \newenvironment{Schunk}{}{}
 
-\renewcommand{\baselinestretch}{1.7}
+\renewcommand{\baselinestretch}{1.65}
 
 \SweaveOpts{engine=R,eps=FALSE}
 
@@ -98,7 +99,7 @@
 }
 
 <<setup, echo = FALSE, results = hide>>=
-options(width = 65)
+options(width = 65, prompt = "R> ")
 require("coin")
 set.seed(290875)
 ### get rid of the NAMESPACE
@@ -540,9 +541,9 @@ for (i in 1:length(lines)) cat(lines[i], "\n")
 <<alzheimer-plot, echo = FALSE, fig = TRUE, width = 11, height = 6.75>>=
 layout(matrix(1:2, ncol = 2))
 spineplot(disease ~ smoking, data = alzheimer, subset = gender == "Male",
-main = "Male")
+main = "Male", xlab = "Smoking", ylab = "Disease")
 spineplot(disease ~ smoking, data = alzheimer, subset = gender == "Female",
-main = "Female")
+main = "Female", xlab = "Smoking", ylab = "Disease")
 @
 \caption{\Robject{alzheimer} data: Association of
 smoking behavior and disease status visualized by spineplots. \label{alz-plot}}
@@ -802,9 +803,9 @@ The coherence criterion can be formulated in a simple function
 <<mercurysfish-score, echo = TRUE>>=
 coherence <- function(data) {
     x <- t(as.matrix(data))
-    matrix(apply(x, 2, function(y)
-           sum(colSums(x < y) == nrow(x)) - 
-           sum(colSums(x > y) == nrow(x))), ncol = 1)
+    f <- function(y) 
+        sum(colSums(x < y) == nrow(x)) - sum(colSums(x > y) == nrow(x))
+    matrix(apply(x, 2, f), ncol = 1)
 }
 @
 which is now defined as influence function $h$ via the \Rcmd{ytrafo} argument
@@ -930,7 +931,7 @@ new inference problems, is only a matter of putting together
 adequate Lego bricks.
 
 \renewcommand{\baselinestretch}{1}
-%% \setlength{\bibsep}{1mm}
+%%\setlength{\bibsep}{2mm}
 
 \bibliographystyle{asa}
 \bibliography{LegoCondInf}
