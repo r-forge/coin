@@ -1,4 +1,8 @@
 \documentclass{article}
+
+%%\VignetteIndexEntry{A Lego System for Conditional Inference}
+%%\VignetteDepends{coin}
+
 \usepackage{amstext}
 \usepackage{amsfonts}
 \usepackage{hyperref}
