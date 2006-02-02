@@ -1,4 +1,10 @@
 
+		CHANGES in `coin' VERSION 0.4-3
+
+
+    o    make R CMD check happy and move src/README to inst/README
+
+
 		CHANGES in `coin' VERSION 0.4-2
 
     o    isequal must not check equality of attributes
