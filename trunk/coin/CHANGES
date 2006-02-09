@@ -1,0 +1,212 @@
+
+		CHANGES in `coin' VERSION 0.4-4
+
+
+    o    make R CMD check happy and move src/README to inst/README
+
+
+		CHANGES in `coin' VERSION 0.4-3
+
+    o    isequal must not check equality of attributes
+
+
+		CHANGES in `coin' VERSION 0.4-2
+
+    o    new data set `alpha'
+
+    o    data set `alzheimer' is now a data.frame, not a table
+
+    o    new vignette with more applications
+
+
+
+		CHANGES in `coin' VERSION 0.4-1
+
+    o    documentation updates
+
+    o    remove unused setAs definitions
+
+    o    expectation(), variance() and covariance() return 
+         named vectors or matrices. Names for objects returned
+         by statistic() have been partially improved.
+
+    o    all observations with NA's are removed now
+
+    o    some internal improvements (removed unused code, avoid duplicated
+         code chunks etc.)
+
+    o    more checks on NA's, blocks and multiple ordinal variables (one
+         univariate problems are currently allowed to have ordinal
+         variables)
+
+
+		CHANGES in `coin' VERSION 0.3-8
+
+    o    export `independence_test.table'
+
+    o    add `conf.level' attribute for `MCp' objects when quasi-randomized 
+         Monte-Carlo procedures (from `mvtnorm') have been used
+
+    o    add new `var_trafo' argument to `trafo'
+
+    o    documentation updates
+ 
+
+		CHANGES in `coin' VERSION 0.3-7
+
+    o    `statistic()' now returns correct linear and standardized 
+         statistics when scores are in play
+
+    o    `alzheimer' data added
+
+    o    `photocar' data added
+
+    o    documentation updates
+
+    o    `support()' and `dperm()' methods have been improved for asymptotic and
+         approximate null distributions
+
+
+		CHANGES in `coin' VERSION 0.3-6
+
+    o    internal C function `R_MonteCarloIndependenceTest' returns
+         a (pq x B) matrix instead of a list with B elements 
+         (the linear statistic for each random permutation of the data)
+
+    o    various simplifications for the computations of adjusted p-values
+
+    o    I() in formulae could still cause trouble with class `AsIs', now
+         fixed.
+
+    o    logical variables are now allowed in formulae 
+         (and are treated like factors)
+
+
+		CHANGES in `coin' VERSION 0.3-5
+
+    o    fix print method for marginal homogeneity tests 
+         (...stratified by block...)
+
+    o    R_kronecker in C now available
+
+    o    C versions of nrow and ncol return 1 or length for vectors
+
+    o    some internal optimisation
+
+
+		CHANGES IN `coin' VERSION 0.3-4
+
+    o    C functions `nrow(x)' and `ncol(x)' return LENGTH(x) or 1 when
+         x has no dim attribute
+
+    o    new R-interface function `R_kronecker' to `C_kronecker' (which
+         returns a _vector_!)
+
+    o    speedup of variance computations in internal functions
+
+
+		CHANGES IN `coin' VERSION 0.3-3
+
+
+    o    fix more problems reported by new `codetools'. Try to work around
+         the `terms(y ~ ., data = data.frame(1:10))' problem in R-2.2.0.
+
+
+		CHANGES IN `coin' VERSION 0.3-2
+
+
+    o   fix some problems reported by `codetools'
+
+
+		CHANGES IN `coin' VERSION 0.3-1
+
+
+    o   alternative = "less" and alternative = "greater" are now defined
+        for maxtype statistics as well
+
+    o   one- and two-sided single-step and step-down maxT p-value
+        adjustments are now available from the appropriate 
+        `pvalue' method (NOTE: those procedures have not been tested
+                         carefully, yet)
+
+        In addition, the Bonferroni-adjustment by Westfall & Wolfinger
+        (1997) is available now. Note that the interface to `pvalue'
+        changed slightly, `adjustment = TRUE' was replaced by
+        `method = "single-step"'.
+
+    o   more examples added to the vignette.
+
+
+		CHANGES IN `coin' VERSION 0.2-14
+
+
+    o   distribution = "approximate" for maxtype statistics was wrong
+        in case both xtrafo _and_ ytrafo were multivariate (the conditional
+        expectation was computed incorrectly)
+
+
+		CHANGES IN `coin' VERSION 0.2-13
+
+
+    o   I() in formulae returns objects of class `AsIs' which caused
+        troubles in `trafo'
+
+
+		CHANGES IN `coin' VERSION 0.2-12
+
+
+    o   functionality for formula parsing and evaluation is now imported
+        from package `modeltools'
+
+    o   `show()' returns objects (of class `htest', for example) invisibly,
+         really.
+
+    o   `maxstat_trafo' is much faster now and returns a matrix with
+        both row- and column names set appropriately
+
+
+		CHANGES IN `coin' VERSION 0.2-11
+
+
+    o   the `distribution' argument now takes the return values of
+        functions `exact()', `approximate()' or `asymptotic()' as well.
+        Those functions can be used to specify parameters, such as the
+        number of Monte-Carlo replications via
+        ..., distribution = approximate(B = 9999), ...
+
+    o   `show()' returns objects (of class `htest', for example) invisibly
+
+    o   `expectation()' returns a vector, not a matrix
+
+    o   new generic `variance()' for extracting the variance(s) of 
+        linear statistics
+
+    o   only variances (instead of the whole covariance matrix) is 
+        computed when the distribution of maximum type test statistics 
+        is to be _approximated_.
+
+    o   `data' may be an object of class `exprSet' (-> Biobase), the
+        vignette has an example
+
+    o   `logrank_trafo' (and `surv_test') now have a `ties.method' argument,
+        see ?surv_test for more information
+
+
+		CHANGES IN `coin' VERSION 0.2-10
+
+
+    o   asymptotical -> asymptotic in print methods
+
+    o   `mercuryfish' example added
+
+    o   {x,y}trafo now can return matrices with number of columns
+        different from the lhs and rhs of `formula'
+
+
+		CHANGES IN `coin' VERSION 0.2-9
+
+
+    o	`mergesort' is already defined in `/usr/include/stdlib.h:270' on
+	some platforms.
+
+    o	`delay' is deprecated in R 2.1.0
