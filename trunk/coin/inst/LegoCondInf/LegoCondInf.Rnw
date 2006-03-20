@@ -171,14 +171,14 @@ transfer of such a theory to practical data analysis has important
 implications in many applications and requires tools that enable the
 data analyst to compute on the theoretical concepts as closely as possible.
 We re-analyze four data sets
-by adapting the general conceptual framework to these non-standard inference procedures
-and
+by adapting the general conceptual framework to these challenging inference
+problems and
 utilizing the \Rpackage{coin} add-on package in the \RR{} system for statistical computing
 to show what one can gain from going beyond the `classical' test procedures.
 \end{abstract}
 
 \noindent
-KEY WORDS: Permutation tests; Multiple testing; Independence; Software.
+KEY WORDS: Permutation tests; Independence; Approximations; Software.
 \newline
 
 
@@ -186,7 +186,7 @@ KEY WORDS: Permutation tests; Multiple testing; Independence; Software.
 
 \section{INTRODUCTION}
 
-The distribution of a test statistic under the circumstances of a certain
+The distribution of a test statistic under the circumstances of a 
 null hypothesis clearly depends on the unknown distribution of the data and
 thus is unknown as well.
 Two concepts are commonly applied to dispose of this dependency.
@@ -237,7 +237,7 @@ of this framework and, even more interestingly, new test procedures can be
 embedded into the same theory whose main ideas are sketched in
 Section~\ref{CI}.
 
-Currently, the statistician's toolbox consists of rather inflexible spanners,
+Currently, the statistician's toolbox consists of rather specialized spanners,
 such as the Wilcoxon-Mann-Whitney test for comparing two distributions 
 or the Cochran-Mantel-Haenszel $\chi^2$ test for independence in
 contingency tables. With this work, we add an adjustable spanner to the 
@@ -262,8 +262,9 @@ in the \RR{} system for statistical computing
 \section{A CONCEPTUAL LEGO SYSTEM \label{CI}}
 
 To fix notations,
-we assume that we are provided with observations
-$(\Y_i, \X_i)$ for $i = 1, \dots, n$.
+we assume that we are provided with independent and identical distributed 
+observations
+$(\Y_i, \X_i)$ for $i = 1, \dots, n$, possibly organized in independent blocks.
 The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
 $\mathcal{X}$ may
 be measured at arbitrary scales and may be multivariate as well. 
@@ -281,15 +282,19 @@ linear statistics of the form
 Here, $g: \mathcal{X} \rightarrow \R^{p \times 1}$ is a transformation of
 the $\X$ measurements and $h: \mathcal{Y} \rightarrow
 \R^{q \times 1}$ is called \emph{influence function}. The function $h(\Y_i)
-= h(\Y_i, (\Y_1, \dots, \Y_n))$ must depend on the responses $(\Y_1, \dots, \Y_n)$ in a permutation
-symmetric way. We will give several examples how to choose $g$ and $h$
+= h(\Y_i, (\Y_1, \dots, \Y_n))$ must depend on the responses $(\Y_1, \dots, \Y_n)$ 
+in a permutation symmetric way, i.e., the value of the
+function must not depend on the order in which $\Y_1, \dots, \Y_n$ appear.
+We will give several examples how to choose $g$ and $h$
 for specific inference problems in Section~\ref{play}.
 
 The distribution of $\T$  depends on the joint distribution of $\Y$ and $\X$, 
 which is unknown under almost all practical circumstances. 
 At least under the null hypothesis one can dispose of this 
 dependency by fixing $\X_1, \dots, \X_n$ and conditioning on all possible 
-permutations $S$ of the responses $\Y_1, \dots, \Y_n$. 
+permutations $S$ of the responses $\Y_1, \dots, \Y_n$. Tests that have been 
+constructed by means of this conditioning principle are called 
+permutation tests.
 
 The conditional expectation $\mu \in \R^{pq \times 1}$ and covariance
 $\Sigma \in \R^{pq \times pq}$ of $\T$ under $H_0$ given
@@ -355,7 +360,7 @@ test statistics is trackable for small and moderate sample sizes.
 %%For two-sample problems, the shift-algorithm by \cite{axact-dist:1986} 
 %%and \cite{exakte-ver:1987} and the split-up algorithm by 
 %%\cite{vdWiel2001} are implemented as part of the package.
-Conditional Monte-Carlo procedures (`resampling') can always be used to 
+Resampling procedures can always be used to 
 approximate the exact distribution up to any desired accuracy by evaluating
 the test statistic for a random sample from the set of all permutations $S$.
 It is important to note that in the presence of a grouping of the observations
@@ -364,16 +369,16 @@ conditional expectation and covariance matrix need to be computed
 separately for each block.
 
 Less well known is the fact that 
-the conditional distribution can be approximated by its limiting distribution
-under all circumstances. \cite{StrasserWeber1999} showed in their Theorem~2.3 that the   
+a normal approximation of the conditional distribution can be computed 
+for arbitrary choices of $g$ and $h$. 
+\cite{StrasserWeber1999} showed in their Theorem~2.3 that the   
 conditional distribution of linear statistics $\T$ with conditional    
 expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
 distribution with parameters $\mu$ and $\Sigma$ as $n \rightarrow
 \infty$. Thus, the asymptotic conditional distribution of test statistics of
 the form $c_\text{max}$ is normal and
 can be computed directly in the univariate case ($pq = 1$) and by numerical 
-algorithms in the multivariate case \citep[e.g., using the quasi-randomized
-Monte-Carlo procedures of][]{numerical-:1992}.
+algorithms in the multivariate case \citep{numerical-:1992}.
 For quadratic forms
 $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
 given by the rank of $\Sigma$ \citep[e.g.~Theorem 6.20, ][]{Rasch1995}, exact
@@ -392,11 +397,11 @@ procedures can be constructed conceptually \textit{and} practically.
 Therefore, each inference problem comes with \RR{} code performing the
 appropriate conditional test using the \Rpackage{coin} functionality 
 which enables the data analyst to benefit from this
-simple methodology in every day's data analysis. All analyses are
+simple methodology in typical data analysis. All analyses are
 reproducible from the \Rpackage{coin} package vignette available from
 \url{http://CRAN.R-project.org/}.
 
-\paragraph{Genetic Components of Alcoholism.}
+\paragraph{Independent $K$ Samples: Genetic Components of Alcoholism.}
 
 Various studies have linked alcohol dependence phenotypes to chromosome 4.  
 One candidate gene is \textit{NACP} (non-amyloid component of plaques), 
@@ -404,8 +409,11 @@ coding for alpha synuclein.
 \cite{Boenscheta2005} found longer alleles of
 \textit{NACP}-REP1 in alcohol-dependent patients compared with healthy controls
 and report that the allele lengths show some
-association with levels of expressed alpha synuclein mRNA (see
-Figure~\ref{alpha-box}).
+association with levels of expressed alpha synuclein mRNA in
+alcohol-dependent subjects (see Figure~\ref{alpha-box}). Allele length is
+measured as a sum score built from additive dinucleotide repeat length and
+categorized into three groups: short ($0-4$, $n = 24$), intermediate ($6-8$,
+$n = 58$) and long ($10-12$, $n = 15$).
 
 \begin{sidewaysfigure}
 \begin{center}
@@ -438,11 +446,22 @@ Under the null hypothesis, the $c_\text{quad}$-type Kruskal-Wallis
 test statistic tends to a $\chi^2$
 distribution with two degrees of freedom (the rank of the conditional
 covariance matrix $\Sigma$) from which a $p$-value can be
-computed. In \RR{}, the function \Rcmd{independence\_test} takes a formula
+computed. 
+
+In \RR{}, the function \Rcmd{independence\_test} takes a formula 
 describing the inference problem, i.e., the independence of expression
-levels (\Robject{elevel}) and allele lengths (\Robject{alength}), the
-influence function is specified via the \Rcmd{ytrafo} argument and we ask
-for a $c_\text{quad}$-type test statistic (\Rcmd{teststat}) as follows:
+levels (\Robject{elevel}) and allele lengths (\Robject{alength}) is
+formulated as \verb|elevel ~ alength|. Furthermore, the
+influence function $h$ is specified via the \Rcmd{ytrafo} argument. Here, we
+implement a rank transformation by choosing the \Rcmd{rank} function as
+\Rcmd{numeric\_trafo} argument to the \Rcmd{trafo} function which handles
+all data transformations. The default influence function for numeric
+responses is the identity. The transformation $g$ can be specified by
+the \Rcmd{xtrafo} argument of \Rcmd{independence\_test} which, by default,
+assigns the usual dummy coding to factors. Finally, we ask
+for a $c_\text{quad}$-type test statistic (\Rcmd{teststat}) and obtain the
+Kruskal-Wallis statistic with limiting $\chi^2$ distribution (the default) 
+as follows:
 <<alpha-kruskal, echo = TRUE>>=
 independence_test(elevel ~ alength, data = alpha, ytrafo = function(data)
                   trafo(data, numeric_trafo = rank), teststat = "quadtype")
@@ -465,8 +484,9 @@ $\gamma \in \R^{K \times 1}$, the linear statistic reads
 \T_\gamma = \vec \left( \sum_{i=1}^n \gamma^\top g(\X_i)
             h(\Y_i)^\top \right).
 \end{eqnarray*}
-Here, the mid-points of the intervals used to categorize the allele lengths
-are a possible choice for the score vector $\gamma$ and the linear-by-linear
+Here, the mid-points of the intervals ($0-4$, $6-8$, $10-12$) 
+used to categorize the allele lengths
+are a natural choice for the score vector $\gamma$ and the linear-by-linear
 association test can be performed by attaching the scores to the variable
 \Robject{alength}:
 <<alpha-kruskal-ordered, echo = TRUE>>=
@@ -474,11 +494,11 @@ independence_test(elevel ~ alength, data = alpha, ytrafo = function(data)
                   trafo(data, numeric_trafo = rank), 
                   scores = list(alength = c(2, 7, 11)))
 @
-The smaller $p$-value corresponds well with Figure~\ref{alpha-box}, i.e., 
+This $p$-value corresponds well with Figure~\ref{alpha-box}, i.e., 
 the impression that the expression levels increase with increasing 
 allele lengths. 
 
-\paragraph{Smoking and Alzheimer's Disease.}
+\paragraph{Contingency Tables: Smoking and Alzheimer's Disease.}
 
 <<alzheimer-demographics, echo = FALSE>>=
 total <- nrow(alzheimer)
@@ -498,7 +518,7 @@ atab <- xtabs(~ smoking + + disease + gender, data = alzheimer)
 \cite{SalibHillier1997} report results of a case-control study on
 Alzheimer's disease and smoking behavior of 
 $\Sexpr{disease["Alzheimer's"]}$
-patients suffering from Alzheimer's disease and 
+women and men suffering from Alzheimer's disease and 
 $\Sexpr{disease[names(disease) != "Alzheimer's"]}$
 controls. The data shown in Table~\ref{alzheimertab} have been 
 re-constructed from Table~4 in \cite{SalibHillier1997} and are depicted in
@@ -560,8 +580,9 @@ it_alz <- independence_test(disease ~ smoking | gender, data = alzheimer,
 it_alz
 @
 which suggests that there is a clear deviation from independence. 
-By default, the influence function $h$ and the transformation $g$ 
-are dummy codings of the disease status $\Y$ and the smoking behavior $\X$, 
+By default, the influence function $h$ (the \Rcmd{ytrafo} argument)
+and the transformation $g$ (\Rcmd{xtrafo} argument)
+are dummy codings of the factors disease status $\Y$ and smoking behavior $\X$, 
 i.e., $h(\Y_i) = (1, 0, 0)^\top$ 
 and $g(\X_i) = (1, 0, 0 ,0)^\top$ for a non-smoking Alzheimer patient. 
 Consequently, the linear multivariate statistic $\T$ based on $g$ and $h$ 
@@ -577,7 +598,8 @@ its limiting $\chi^2$ distribution by default.
 Given that there is significant departure from independence, we further
 investigate the structure of association between smoking and Alzheimer's
 disease. First we assess for which gender the violation of independence 
-occured
+occured, i.e., perform independence tests for either all female or male
+subjects separately
 <<alzheimer-men, echo = TRUE>>=
 females <- alzheimer$gender == "Female"
 pvalue(independence_test(disease ~ smoking, data = alzheimer,
@@ -607,14 +629,18 @@ This leads to the impression that heavy smokers suffer less frequently
 from Alzheimer's disease but more frequently from other dementias
 than expected under independence.
 However, interpreting the standardized contingency table requires
-knowledge about the distribution of the standardized statistics, 
-e.g., via an approximation of the $95\%$ quantile of the permutation 
+knowledge about the distribution of the standardized statistics. An
+approximation of the joint distribution of all elements of the standardized
+contincency table can be obtained by means of the $16$-dimensional
+multivariate normal distribution of the linear statistic $\T$. Most
+useful, an approximation of the $95\%$ quantile of the permutation 
 null distribution which is available from
 <<alzheimer-qperm, echo = TRUE>>=
 qperm(it_alzmax, 0.95)
 @
 or alternatively (and more conveniently) by
-switching to $p$-values adjusted for multiple testing:
+switching to $p$-values adjusted for multiple testing by an max-$\T$
+multiple testing approach:
 <<alzheimer-MTP, echo = TRUE>>=
 pvalue(it_alzmax, method = "single-step")
 @
@@ -625,7 +651,7 @@ smoking group. In addition, there is some evidence that, for the small
 group of men smoking less than ten cigarettes per day, the reverse
 association is true.
 
-\paragraph{Photococarcinogenicity Experiments.}
+\paragraph{Multivariate Response: Photococarcinogenicity Experiments.}
 
 The effect on tumor frequency and latency in photococarcinogenicity
 experiments, where carcinogenic doses of ultraviolet radiation (UVR) are
@@ -640,10 +666,10 @@ In case the  global null hypothesis can be rejected, the deviations
 from the partial hypotheses are of special interest.
 
 \cite{Molefeetal2005} report data of an experiment where
-$\Sexpr{nrow(photocar)}$ animals were exposed to different levels 
-of UVR exposure (group A: topical vehicle and 600 Robertson--Berger units 
-of UVR, group B: no topical vehicle and 600 Robertson--Berger units of UVR and group C: 
-no topical vehicle and 1200 Robertson--Berger units of UVR). 
+$\Sexpr{nrow(photocar)}$ female mice were exposed to different levels 
+of UVR exposure (group A: $n = 36$ with topical vehicle and 600 Robertson--Berger units 
+of UVR, group B: $n = 36$ without topical vehicle and 600 Robertson--Berger units of UVR and group C: 
+$n = 36$ without topical vehicle and 1200 Robertson--Berger units of UVR). 
 The data are taken from Tables~1 to 3 in \cite{Molefeetal2005}, where a 
 parametric test procedure is proposed. Figure
 \ref{photocarfig} depicts the group effects for all three response
@@ -664,7 +690,8 @@ plot(survfit(Surv(dmin, tumor) ~ group, data = photocar), xmax = 50,
      lty = 1:3)
      legend("bottomleft", lty = 1:3, levels(photocar$group), bty = "n")
 boxplot(ntumor ~ group, data = photocar, 
-        ylab = "Number of Tumors", xlab = "Treatment Group")
+        ylab = "Number of Tumors", xlab = "Treatment Group", 
+        varwidth = TRUE)
 @
 \caption{\Robject{photocar} data: 
          Kaplan-Meier estimates of time to death and time to first tumor as
@@ -713,41 +740,42 @@ pvalue(it_ph, method = "single-step")
 <<photocar-stand, echo = FALSE>>=
 round(pvalue(it_ph, method = "single-step"), 5)
 @
-Of course, the goodness of the asymptotic procedure can be checked against
-the Monte-Carlo approximation which is computed by
-<<photocar-MC, echo = TRUE>>=
-it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
-                  data = photocar, distribution = approximate(50000))
-pvalue(it, method = "single-step")
-@
-The more powerful step-down multiple testing adjusted $p$-values 
-\citep[Algorithm 2.8 in][]{WestfallYoung1993} are 
-<<photocar-MC2, echo = TRUE>>=    
-pvalue(it, method = "step-down")
-@
+%%Of course, the goodness of the asymptotic procedure can be checked against
+%%the Monte-Carlo approximation which is computed by
+%%<<photocar-MC, echo = TRUE>>=
+%%it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
+%%                  data = photocar, distribution = approximate(50000))
+%%pvalue(it, method = "single-step")
+%%@
+%%The more powerful step-down multiple testing adjusted $p$-values 
+%%\citep[Algorithm 2.8 in][]{WestfallYoung1993} are 
+%%<<photocar-MC2, echo = TRUE>>=    
+%%pvalue(it, method = "step-down")
+%%@
 Clearly, the rejection of the global null hypothesis is due to the
 group differences in both survival time and time to first tumor whereas 
 no treatment effect on the total number of tumors can be observed.
 
-\paragraph{Contaminated Fish Consumption.}
+\paragraph{Two Independent Samples: Contaminated Fish Consumption.}
 
 In the former three applications, pre-fabricated Lego bricks---i.e.,
 standard transformations for $g$ and $h$ such as dummy codings, ranks
 and logrank scores---have been employed.
-In the third application, we will show how the Lego system can be used
+In the fourth application, we will show how the Lego system can be used
 to construct new bricks and implement a newly invented test procedure. 
 
 \cite{Rosenbaum1994a} proposed to compare groups by means of a
 \textit{coherence criterion} and studied a dataset of subjects 
 who ate contaminated fish for more than three years in
-the `exposed' group and a control group. Three response variables are
+the `exposed' group ($n = 23$) and a control group ($n = 16$). 
+Three response variables are
 available: the mercury level of the blood, the percentage of cells with
 structural abnormalities and the proportion of cells with asymmetrical or
 incomplete-symmetrical chromosome aberrations (see Figure \ref{mercurybox}). 
 The observations are partially
 ordered: an observation is said to be smaller than another when all three variables
 are smaller. The rank score for observation $i$ is the number of
-observations that are larger (following the above criterion) 
+observations that are larger (following the above sketched coherence criterion) 
 than observation $i$ minus the number of
 observations that are smaller. The
 distribution of the rank scores in both groups is to be compared and
@@ -761,11 +789,11 @@ Wilcoxon-Mann-Whitney test.
 par(cex.lab = 1.3, cex.axis = 1.3)
 layout(matrix(1:3, ncol = 3))
 boxplot(I(log(mercury)) ~ group, data = mercuryfish, 
-        ylab = "Mercury Blood Level (log scale)")
+        ylab = "Mercury Blood Level (log scale)", varwidth = TRUE)
 boxplot(abnormal ~ group, data = mercuryfish, 
-        ylab = "Abnormal Cells (in %)")
+        ylab = "Abnormal Cells (in %)", varwidth = TRUE)
 boxplot(ccells ~ group, data = mercuryfish, 
-        ylab = "Chromosome Aberrations (in %)")
+        ylab = "Chromosome Aberrations (in %)", varwidth = TRUE)
 @
 \caption{\Robject{mercuryfish} data: 
          Distribution of all three response variables in the exposed group
@@ -798,8 +826,9 @@ observations is available, it might be interesting to compare the exact
 conditional distribution and its approximation via the limiting distribution.
 For the \Robject{mercuryfish} data, the relevant parts of 
 both distribution functions are shown in Figure~\ref{distplot}. It 
-turns out that using the normal approximation would be sufficient for all practical
-purposes in this application.
+turns out that the quality of the normal approximation is excellent for this
+particular problem and using the normal approximation would be sufficient 
+for all practical purposes in this application.
 
 \begin{sidewaysfigure}
 \begin{center}
@@ -859,15 +888,16 @@ transform new theoretical developments into flexible software tools for the
 data analyst. The \Rpackage{coin} package is an attempt to translate 
 the theoretical concepts of \cite{StrasserWeber1999} into software tools 
 preserving the simplicity and flexibility of 
-the theory as closely as possible. With this package, the rather inflexible spanners
+the theory as closely as possible. With this package, the specialized spanners
 currently in use,
 such as \Rcmd{wilcox.test} for the Wilcoxon-Mann-Whitney test or
-\Rcmd{mantelhaen.test} for the Cochran-Mantel-Haenszel $\chi^2$ test in
-\S{} languages and \texttt{NPAR1WAY} for linear rank statistics in \textsf{SAS}
+\Rcmd{mantelhaen.test} for the Cochran-Mantel-Haenszel $\chi^2$ test in the 
+\S{} language and \texttt{NPAR1WAY} for linear rank statistics in \textsf{SAS}
 \citep[see the Tables in][for
 an overview on procedures implemented in \textsf{StatXact}, \textsf{LogXact},
 \textsf{Stata}, \textsf{SAS} and \textsf{Testimate}]{Oster2002,Oster2003}, 
-are extended by \Rcmd{independence\_test}, a much more flexible and adjustable spanner.
+are extended by \Rcmd{independence\_test}, a much more flexible and 
+adjustable spanner.
 
 But who stands to benefit from such a software infrastructure? We argue 
 that an improved data analysis is possible in cases when the appropriate 
@@ -876,8 +906,8 @@ Statisticians can modify existing test procedures or even try new ideas by
 computing directly on the theory. A high-level Lego system is attractive for
 both researchers and software developers, because only the transformation $g$ and influence
 function $h$ need to be newly implemented, but the burden of implementing a
-Monte-Carlo procedure, or even thinking about asymptotics, 
-is waived. 
+Monte-Carlo procedure, or even deriving the limiting distribution of a newly
+invented test statistic, is waived. 
 
 %%Since the \Rpackage{coin} package consists
 %%of only a few core functions that need to be tested, the setup of quality

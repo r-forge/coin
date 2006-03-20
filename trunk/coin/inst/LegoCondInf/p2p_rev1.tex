@@ -28,14 +28,31 @@ TAS MS05-239, Reviewer \#1}
               original context. It is often not clear what one gain with the methods presented here 
               that would not be obtained with standard methods.}
 
+The comments by referee \#1 have been extremely helpful for us when
+identifying short comings in both the description of the theoretical
+building blocks as well as the applications. We refer to a list of modifications
+as indicated in the point to point answers to the specific comments below.
+
 \item \textsl{The documentation for the new R-procedure \texttt{independence\_test()} is also just not 
               adequate. The paper needs to state exactly what each input and output from the 
               software means. Also, do not assume that the typical reader will be willing to 
               read through S-type or R-type code or output without careful guidance. Most will 
               simply gloss over the code or output.}
 
+We thank the referee for pointing our places with insuffcient documentation
+of the procedures applied in this manuscript. We hope that the modifications
+and extensions made to the corresponding paragraphs enhance the readability
+for the unexperienced \textsf{S} user (please see below for specific
+changes).
+
 \item \textsl{As a side point, is this R-procedure appropriately named, or should it be called 
               something else that reflects the conditional nature of the inference?}
+
+The name of the package (\texttt{coin}) was choosen in order to reflect that
+all methods implemented are conditional by nature. The names of the specific
+functions either come from the corresponding classical test
+(\texttt{kruskal\_test}) or the test problem addressed (most general:
+\texttt{independence\_test}).
 
 \item \textsl{It should also be noted that 'Lego' is a registered trademark and should not be used 
               as an adjective to describe a procedure. Furthermore, there is nothing about the 
@@ -43,8 +60,19 @@ TAS MS05-239, Reviewer \#1}
               let alone any other building blocks (beyond the most metaphorical sense). The 
               metaphor of the 'spanner' also seems stretched.}
 
+We checked on this issue prior to submitting the manuscript to TAS. Our
+reading of \url{http://www.lego.com/eng/info/default.asp?page=fairplay} is
+that the use of the word `Lego' (which is a trademark) is admissible for our
+purposes. Moreover, there are other scientific publications which used the
+term `Lego' for building block concepts, for example
+\url{http://ieeexplore.ieee.org/xpl/abs_free.jsp?arNumber=129414}.
+
 \item \textsl{page 1:  What is meant by "non-standard inference procedures" here? The classical 
               approaches seem pretty standard.}
+
+This formulation was misleading, we wanted to say that the data analysis
+problems are non-standard (ordered alternatives, multiple responses etc.).
+This has been clarified.
 
 \item \textsl{page 2:  The introduction needs to be much clearer. Make it clear what is meant by 
               "certain null hypotheses." For example, there are null hypotheses that specify the 
@@ -54,21 +82,50 @@ TAS MS05-239, Reviewer \#1}
               exact permutation tests and conditional asymptotic tests. Also, mention some of 
               the pros and cons of permutation tests explicitly here.}
 
+The first sentence referes to statistical test procedures in general,
+without having a special test problem or null hypothesis in mind. We removed
+`certain' here. In this paper, the null hypotheses are always defined in
+terms of independence without an explicit formulation of the alternative
+(1st paragraph in Section 2).
+
+We refer to permutation tests as to inference procedures conditioning on all
+permutations of the data, regardless of how the null distribution of a test
+statistic is computed or approximated. Therefore, a test which is obtained
+from an normal approximation of the null distribution (which itself is
+`exact' by definition) is again a permutation test. A clarification has been
+added to the second paragraph in Section 2.
+
 \item \textsl{page 3:  The Wilcoxon-Mann-Whitney and Cochran-Mantel-Haenszel tests are not 
               so much inflexible as specific to particular problems. It is indeed nice that they 
               can be generalized, but this in no way detracts from their value or utility, where 
               appropriate. Conversely, generalized methods lack some of the specificity of 
               simpler methods and become hard to interpret.}
 
+The term `specific' is much more adequate to express our meanings here,
+thank your very much for this suggestion! Referee \#2 seems to like this
+metaphore, so we decided to keep this formulation as a bridge bitween
+introduction and summary. 
+
 \item \textsl{page 4:  Elaborate on "permutation symmetric way" here, meaning the value of the 
               function does not depend on the order in which the Y-variables appear.}
+
+We simplified the original notation of \cite{StrasserWeber1999} here in
+order to keep things simple. We added an explanation on `permutation
+symmetry' to this paragraph.
+
  
-\item \textsl{page 5:  Regarding the last sentence, "Less well known ..." It is not obvious that 
+\item \label{asympt} \textsl{page 5:  Regarding the last sentence, "Less well known ..." It is not obvious that 
               the conditional distribution can be approximated by its limiting distribution 
               under - all - circumstances, but in any case the accuracy of this approximation 
               is what is of most concern. The implications of this and the theory in the rest of 
               this paragraph should be developed more clearly. }
- 
+
+The first sentence in this paragraph was misleading, that you very much for
+pointing this out. We wanted to say that it is \textit{possible} to
+approximate the conditional distribution using asymptotic arguments but did
+not comment on the quality of this approximation, which of course depend on
+the data at hand. We reformulated this sentence.
+
 \item \textsl{pages 6-8:  In the "genetic components of alcoholism" example, some essential details are 
               missing from the text, such as the sample size in each group, that there are three allele 
               lengths (short, intermediate, long), and how this relates to the case-control study from 
@@ -85,18 +142,45 @@ TAS MS05-239, Reviewer \#1}
               ignore other factors, like absolute magnitude, that may also be important. After all, 
               both p-values are pretty small.}
 
+The above comments have been most valueable for us in order to come up with
+a desciption of the practical steps which are assessible for non-\textsf{S}
+users. The study design and the experimental setup are now described in more
+detail. The paragraph explaining the arguments of the
+\texttt{independence\_test} function has been extended. The scores are
+obtained from the discrete variable underlying the allel length measurements
+and are thus not data driven. The Jonckheere-Terpestra could be rewritten in
+terms of Helmert-contrasts, however, the pairwise ranking (instead of a
+joint-ranking) induces problems whose solution would exceed the scope of
+our manuscript.
+
+We didn't mean to compare two tests by means of $p$-values but wanted to
+indicate that using a test which takes the ordering information into account
+seems to be appropriate. The formulation has been changed.
+
 \item \textsl{page 9:  In the "smoking and Alzheimer's disease" example, the paper assumes that the 
               readers will recognize the nesting structure (within gender) in the R-code. Also, 
               why did the "ytrafo" and "trafo" statements disappear? }
  
+We added a note on gender to the first paragraph. The default values for
+\texttt{xtrafo} and \texttt{ytrafo} are explained in more detail now.
+
 \item \textsl{page 10:  It would help to state in plain English that the R-code restricts the 
               analysis to a particular subset (males, females).}
  
+fixed.
+
 \item \textsl{page 11:  The paper needs to explain the calculation of the quantiles of the 
               permutation distribution better. Why is the 95% quantile (2.81) so large compared to the 
               usual two-sided normal-score of 1.96 (and is this the correct comparison)? Also, 
               the paper needs to explain how the p-values were adjusted for multiple testing 
               (Bonferroni?).}
+
+The quantile is obtained from the $16$-dimensional limiting normal distribution
+of the contingency table $T$ and thus $p$-values can be adjusted by a
+max-T multiple testing approach (since the complete covariance matrix is
+known in our case). This has been clarified in the paper, however, we do not
+comment on multiple testing issues in more detail following a suggestion of
+the editor of TAS.
  
 \item \textsl{pages 12-14:  There are several details about the "photo-carcinogenicity experiments" 
               that are unclear. Access to the data would help. Were there 36 animals (rats? mice?) 
@@ -105,11 +189,28 @@ TAS MS05-239, Reviewer \#1}
               In addition, if groups A and B have similar survival times and times to first tumor, 
               as the figures show, how do we see these results with the test statistics? }
 
+Details on sample sizes and animals have been added. All data sets analysed
+here are contained in the \texttt{coin} package, i.e., \texttt{data("photocar", package =
+"coin")} gives you full control. Moreover, one of \texttt{coin} package
+vignettes contains the complete \textsf{R} sources of our manuscript, i.e.,
+all research results reported in this manuscript are fully reproducible.
+
+Comparing group differences by multiple testing procedures is complicated by
+the fact that suset pivotality does not hold under those circumstances and
+thus one would have to go into the details of multiple testing here. As
+noted above, we followed a suggestion of the editor not to do so in order to
+keep the focus clear. Parts of this analysis requiring a background in
+multiple testing have been removed.
+
 \item \textsl{pages 14-16:  Likewise, there are several details about the "contaminated fish 
               consumption" example that are unclear. What were the sample sizes? What is the 
               "coherence criterion?" Why does the partially ordered comparison make biological 
               sense? What did these tests tell us about the subject-matter example? How do we 
               interpret Figure 5? }
+
+We added the required informations to the problem description. Figure 5 can
+be used to judge the quality of the normal approximation (compared to the
+true `exact' distribution, please see point \ref{asympt} in addition).
  
 \item \textsl{pages 16-17:  The discussion provides a fairly accurate summary of this paper. 
               Still, one must have reservations about a highly automated conditional inference 
@@ -117,30 +218,19 @@ TAS MS05-239, Reviewer \#1}
               about asymptotics, is waived." Some good diagnostic procedures for this last 
               assumption would be reassuring. }
  
+Again, our formulation regarding the limiting distribution were misleading.
+We only claim that on \textit{can} compute such an approximation with the
+tools described in the manuscript but, as always, their quality need to be
+assessed by the data analyst.
+
 \item \textsl{This paper has relatively few grammatical errors, and all should be found when 
               revising this paper.}
 
 \end{enumerate}
 
+\bibliographystyle{asa}
+\bibliography{LegoCondInf}
+
+
 \end{document}
   
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-    [ Part 2, Application/PDF  19KB. ]
-    [ Unable to print this part. ]
-
