@@ -42,7 +42,7 @@ as indicated in the point to point answers to the specific comments below.
 We thank the referee for pointing our places with insuffcient documentation
 of the procedures applied in this manuscript. We hope that the modifications
 and extensions made to the corresponding paragraphs enhance the readability
-for the unexperienced \textsf{S} user (please see below for specific
+for the non-\textsf{S} user (please see below for specific
 changes).
 
 \item \textsl{As a side point, is this R-procedure appropriately named, or should it be called 
@@ -66,6 +66,10 @@ that the use of the word `Lego' (which is a trademark) is admissible for our
 purposes. Moreover, there are other scientific publications which used the
 term `Lego' for building block concepts, for example
 \url{http://ieeexplore.ieee.org/xpl/abs_free.jsp?arNumber=129414}.
+Referee \#2 seems to like the spanner
+metaphore, so we decided to keep this formulation as a bridge bitween
+introduction and summary.
+
 
 \item \textsl{page 1:  What is meant by "non-standard inference procedures" here? The classical 
               approaches seem pretty standard.}
@@ -95,6 +99,14 @@ from an normal approximation of the null distribution (which itself is
 `exact' by definition) is again a permutation test. A clarification has been
 added to the second paragraph in Section 2.
 
+Our impression is that a rather long debate on pros and cons of permutation
+tests (the main contributions are cited in the introduction) lead to standoff
+between the `pro' community and statisticians from a more parametric
+modeling school. Our interest in this research clearly induces a bias
+towards arguments from the first community and we hesitate to make
+statements about the usefulness of permutation tests in general or to
+re-state facts and opinions which have been made in the past.
+
 \item \textsl{page 3:  The Wilcoxon-Mann-Whitney and Cochran-Mantel-Haenszel tests are not 
               so much inflexible as specific to particular problems. It is indeed nice that they 
               can be generalized, but this in no way detracts from their value or utility, where 
@@ -102,9 +114,7 @@ added to the second paragraph in Section 2.
               simpler methods and become hard to interpret.}
 
 The term `specific' is much more adequate to express our meanings here,
-thank your very much for this suggestion! Referee \#2 seems to like this
-metaphore, so we decided to keep this formulation as a bridge bitween
-introduction and summary. 
+thank your very much for this suggestion! 
 
 \item \textsl{page 4:  Elaborate on "permutation symmetric way" here, meaning the value of the 
               function does not depend on the order in which the Y-variables appear.}
@@ -120,10 +130,10 @@ symmetry' to this paragraph.
               is what is of most concern. The implications of this and the theory in the rest of 
               this paragraph should be developed more clearly. }
 
-The first sentence in this paragraph was misleading, that you very much for
+The first sentence in this paragraph was misleading, thank you very much for
 pointing this out. We wanted to say that it is \textit{possible} to
 approximate the conditional distribution using asymptotic arguments but did
-not comment on the quality of this approximation, which of course depend on
+not comment on the quality of this approximation, which of course depends on
 the data at hand. We reformulated this sentence.
 
 \item \textsl{pages 6-8:  In the "genetic components of alcoholism" example, some essential details are 
@@ -143,15 +153,17 @@ the data at hand. We reformulated this sentence.
               both p-values are pretty small.}
 
 The above comments have been most valueable for us in order to come up with
-a desciption of the practical steps which are assessible for non-\textsf{S}
+a desciption of the practical steps which should now be easier 
+assessible for non-\textsf{S}
 users. The study design and the experimental setup are now described in more
 detail. The paragraph explaining the arguments of the
 \texttt{independence\_test} function has been extended. The scores are
 obtained from the discrete variable underlying the allel length measurements
-and are thus not data driven. The Jonckheere-Terpestra could be rewritten in
+and are thus not data driven. The Jonckheere-Terpestra test 
+could be re-written in
 terms of Helmert-contrasts, however, the pairwise ranking (instead of a
-joint-ranking) induces problems whose solution would exceed the scope of
-our manuscript.
+joint ranking) induces problems whose solution would exceed the scope of
+this manuscript.
 
 We didn't mean to compare two tests by means of $p$-values but wanted to
 indicate that using a test which takes the ordering information into account
@@ -170,7 +182,7 @@ We added a note on gender to the first paragraph. The default values for
 fixed.
 
 \item \textsl{page 11:  The paper needs to explain the calculation of the quantiles of the 
-              permutation distribution better. Why is the 95% quantile (2.81) so large compared to the 
+              permutation distribution better. Why is the 95\% quantile (2.81) so large compared to the 
               usual two-sided normal-score of 1.96 (and is this the correct comparison)? Also, 
               the paper needs to explain how the p-values were adjusted for multiple testing 
               (Bonferroni?).}
@@ -179,7 +191,7 @@ The quantile is obtained from the $16$-dimensional limiting normal distribution
 of the contingency table $T$ and thus $p$-values can be adjusted by a
 max-T multiple testing approach (since the complete covariance matrix is
 known in our case). This has been clarified in the paper, however, we do not
-comment on multiple testing issues in more detail following a suggestion of
+comment on multiple testing issues in more detail following a suggestion by
 the editor of TAS.
  
 \item \textsl{pages 12-14:  There are several details about the "photo-carcinogenicity experiments" 
@@ -191,14 +203,14 @@ the editor of TAS.
 
 Details on sample sizes and animals have been added. All data sets analysed
 here are contained in the \texttt{coin} package, i.e., \texttt{data("photocar", package =
-"coin")} gives you full control. Moreover, one of \texttt{coin} package
+"coin")} gives you full control. Moreover, one of the \texttt{coin} package
 vignettes contains the complete \textsf{R} sources of our manuscript, i.e.,
 all research results reported in this manuscript are fully reproducible.
 
 Comparing group differences by multiple testing procedures is complicated by
 the fact that suset pivotality does not hold under those circumstances and
 thus one would have to go into the details of multiple testing here. As
-noted above, we followed a suggestion of the editor not to do so in order to
+noted above, we followed a suggestion by the editor not to do so in order to
 keep the focus clear. Parts of this analysis requiring a background in
 multiple testing have been removed.
 
@@ -208,7 +220,7 @@ multiple testing have been removed.
               sense? What did these tests tell us about the subject-matter example? How do we 
               interpret Figure 5? }
 
-We added the required informations to the problem description. Figure 5 can
+We added the required information to the problem description. Figure 5 can
 be used to judge the quality of the normal approximation (compared to the
 true `exact' distribution, please see point \ref{asympt} in addition).
  
@@ -218,13 +230,15 @@ true `exact' distribution, please see point \ref{asympt} in addition).
               about asymptotics, is waived." Some good diagnostic procedures for this last 
               assumption would be reassuring. }
  
-Again, our formulation regarding the limiting distribution were misleading.
+Our formulation regarding the limiting distribution was misleading.
 We only claim that on \textit{can} compute such an approximation with the
 tools described in the manuscript but, as always, their quality need to be
-assessed by the data analyst.
+assessed by the data analyst (and we included Figure 5 for this reason).
 
 \item \textsl{This paper has relatively few grammatical errors, and all should be found when 
               revising this paper.}
+
+fixed (hopefully).
 
 \end{enumerate}
 

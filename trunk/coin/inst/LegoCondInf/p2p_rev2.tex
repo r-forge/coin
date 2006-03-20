@@ -33,7 +33,7 @@ distribution. This has been clarified in the paper.
 \item \textsl{Page 6 – 5 lines from the bottom – change “every day’s data analysis” to
               “typical data analysis” or “ordinary data analysis”}
 
-fixed, thanks!
+changed.
 
 \item \textsl{Page 14 – 10 lines from the bottom – change “third application” to
               “fourth application”}
@@ -46,20 +46,21 @@ fixed, thanks!
               parameters or contrived data that are fixed in advance to obtain a specific
               result.}
 
-It would indeed be very interesting to study and illustrated the behaviour of the
+It would indeed be very interesting to study and illustrate the behaviour of the
 permutation tests that can be performed using \texttt{coin} by means of
-simulation experiments in well-known (e.g. permutation $t$ test) and new
+simulation experiments in well known (e.g. permutation $t$ test) and new
 challenging situations. However, following a suggestion by referee \#1, we
 decided to add more details on the underlying theory to the manuscript
 which, at least for the interested reader, can serve as a guide to both
 theoretical conclusions and self-designed simple simulation experiments. 
 
-On the other hand, it is extremely useful to check the results of implementations
-implementations against settled knowledge for quality assurance reasons. We
+However, it is extremely useful to check the results of implementations
+against settled knowledge for quality assurance reasons by means of
+simulations. We
 think that this is beyond the scope of our manuscript and would like to
-refere the referee \#2 to the \texttt{coin/tests} directory in the source
+refer referee \#2 to the \texttt{coin/tests} directory in the source
 package, which contains extensive quality assurance procedures comparing our
-implementations against well-known results.
+implementations against well known results.
 
 \item \textsl{The authors should attempt to address whether the theoretical concepts of
               Strasser and Weber can be translated into software routines using 
@@ -73,40 +74,20 @@ In principle, one can implement functions for computing linear statistics
 and tools for corresponding tests in any programming language. The design of
 the \texttt{coin} implementation heavily depends on concepts like lexical
 scoping and functions being first class objects one can compute on. For
-example, the function \texttt{independence\_test} does not only computes a
+example, the function \texttt{independence\_test} does not only compute a
 fixed $p$-value but returns a \textit{function} which can be used to
 evaluate the complete distribution function.
 
 To our knowledge, such constructs are currently only available in two
-statistical languages: \textsf{XLispStat} and \textsf{R} and thus a direct
+statistical languages (\textsf{XLispStat} and \textsf{R}) and thus a direct
 `translation' to \textsf{SAS/IML} would be burdensome. However, we would
 very much welcome such an implementation and it is our hope that the
-publication of this manuscript might be a motivation to transfer our ideas
+publication of this manuscript will be a motivation to transfer our ideas
 to other computing environments. We feel that an explicit note on those
-issues could be misinterpreted (some people have very strong feelings about
-their prefered analysis system) and so we tend to omit such a statement.
+issues could be misinterpreted (since some readers might have very strong 
+feelings about their prefered analysis system) and so we tend to omit 
+such a statement.
 
 \end{enumerate}
 
 \end{document}
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-    [ Part 2, Application/PDF  19KB. ]
-    [ Unable to print this part. ]
-

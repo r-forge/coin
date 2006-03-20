@@ -179,6 +179,7 @@ to show what one can gain from going beyond the `classical' test procedures.
 
 \noindent
 KEY WORDS: Permutation tests; Independence; Approximations; Software.
+\marginpar{FIXME \\ Approximations?}
 \newline
 
 
@@ -233,7 +234,7 @@ problems, etc.), different forms of test statistics, such as quadratic forms
 for global tests or test statistics suitable for multiple comparison
 procedures, and several ways to compute or approximate the conditional null
 distribution. The classical procedures, such as a permutation $t$ test, are part
-of this framework and, even more interestingly, new test procedures can be
+of this framework and, even more interesting, new test procedures can be
 embedded into the same theory whose main ideas are sketched in
 Section~\ref{CI}.
 
@@ -264,7 +265,7 @@ in the \RR{} system for statistical computing
 To fix notations,
 we assume that we are provided with independent and identical distributed 
 observations
-$(\Y_i, \X_i)$ for $i = 1, \dots, n$, possibly organized in independent blocks.
+$(\Y_i, \X_i)$ for $i = 1, \dots, n$.
 The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
 $\mathcal{X}$ may
 be measured at arbitrary scales and may be multivariate as well. 
@@ -364,7 +365,8 @@ Resampling procedures can always be used to
 approximate the exact distribution up to any desired accuracy by evaluating
 the test statistic for a random sample from the set of all permutations $S$.
 It is important to note that in the presence of a grouping of the observations
-into blocks, only permutations within blocks are eligible and that the
+into independent blocks, 
+only permutations within blocks are eligible and that the
 conditional expectation and covariance matrix need to be computed
 separately for each block.
 
@@ -397,11 +399,11 @@ procedures can be constructed conceptually \textit{and} practically.
 Therefore, each inference problem comes with \RR{} code performing the
 appropriate conditional test using the \Rpackage{coin} functionality 
 which enables the data analyst to benefit from this
-simple methodology in typical data analysis. All analyses are
+simple methodology in typical data analyses. All following analyses are
 reproducible from the \Rpackage{coin} package vignette available from
 \url{http://CRAN.R-project.org/}.
 
-\paragraph{Independent $K$ Samples: Genetic Components of Alcoholism.}
+\paragraph{Independent $K$-Samples: Genetic Components of Alcoholism.}
 
 Various studies have linked alcohol dependence phenotypes to chromosome 4.  
 One candidate gene is \textit{NACP} (non-amyloid component of plaques), 
@@ -447,20 +449,20 @@ test statistic tends to a $\chi^2$
 distribution with two degrees of freedom (the rank of the conditional
 covariance matrix $\Sigma$) from which a $p$-value can be
 computed. 
-
 In \RR{}, the function \Rcmd{independence\_test} takes a formula 
 describing the inference problem, i.e., the independence of expression
 levels (\Robject{elevel}) and allele lengths (\Robject{alength}) is
 formulated as \verb|elevel ~ alength|. Furthermore, the
 influence function $h$ is specified via the \Rcmd{ytrafo} argument. Here, we
 implement a rank transformation by choosing the \Rcmd{rank} function as
-\Rcmd{numeric\_trafo} argument to the \Rcmd{trafo} function which handles
+the \Rcmd{numeric\_trafo} argument to the \Rcmd{trafo} function which handles
 all data transformations. The default influence function for numeric
 responses is the identity. The transformation $g$ can be specified by
 the \Rcmd{xtrafo} argument of \Rcmd{independence\_test} which, by default,
 assigns the usual dummy coding to factors. Finally, we ask
 for a $c_\text{quad}$-type test statistic (\Rcmd{teststat}) and obtain the
-Kruskal-Wallis statistic with limiting $\chi^2$ distribution (the default) 
+Kruskal-Wallis statistic with limiting $\chi^2$ distribution (the default
+for quadratic test statistics) 
 as follows:
 <<alpha-kruskal, echo = TRUE>>=
 independence_test(elevel ~ alength, data = alpha, ytrafo = function(data)
@@ -581,7 +583,7 @@ it_alz
 @
 which suggests that there is a clear deviation from independence. 
 By default, the influence function $h$ (the \Rcmd{ytrafo} argument)
-and the transformation $g$ (\Rcmd{xtrafo} argument)
+and the transformation $g$ (the \Rcmd{xtrafo} argument)
 are dummy codings of the factors disease status $\Y$ and smoking behavior $\X$, 
 i.e., $h(\Y_i) = (1, 0, 0)^\top$ 
 and $g(\X_i) = (1, 0, 0 ,0)^\top$ for a non-smoking Alzheimer patient. 
@@ -598,7 +600,7 @@ its limiting $\chi^2$ distribution by default.
 Given that there is significant departure from independence, we further
 investigate the structure of association between smoking and Alzheimer's
 disease. First we assess for which gender the violation of independence 
-occured, i.e., perform independence tests for either all female or male
+occured, i.e., perform independence tests for female and male
 subjects separately
 <<alzheimer-men, echo = TRUE>>=
 females <- alzheimer$gender == "Female"
@@ -631,14 +633,14 @@ than expected under independence.
 However, interpreting the standardized contingency table requires
 knowledge about the distribution of the standardized statistics. An
 approximation of the joint distribution of all elements of the standardized
-contincency table can be obtained by means of the $16$-dimensional
-multivariate normal distribution of the linear statistic $\T$. Most
-useful, an approximation of the $95\%$ quantile of the permutation 
+contincency table can be obtained from the $16$-dimensional
+multivariate limiting normal distribution of the linear statistic $\T$. Most
+useful is an approximation of the $95\%$ quantile of the permutation 
 null distribution which is available from
 <<alzheimer-qperm, echo = TRUE>>=
 qperm(it_alzmax, 0.95)
 @
-or alternatively (and more conveniently) by
+Alternatively, and more conveniently, one can
 switching to $p$-values adjusted for multiple testing by an max-$\T$
 multiple testing approach:
 <<alzheimer-MTP, echo = TRUE>>=
@@ -721,8 +723,7 @@ statistic(it_ph, type = "linear")
 @
 It is important to note that this global test utilizes the complete
 covariance structure $\Sigma$
-when $p$-values are computed via quasi-randomized Monte-Carlo
-procedures in the multivariate setting \citep{numerical-:1992}.
+when $p$-values are computed \citep{numerical-:1992}.
 Alternatively, a test statistic based on the quadratic form $c_\text{quad}$
 directly incorporates the covariance matrix and leads to a very similar 
 $p$-value. 
@@ -756,7 +757,7 @@ Clearly, the rejection of the global null hypothesis is due to the
 group differences in both survival time and time to first tumor whereas 
 no treatment effect on the total number of tumors can be observed.
 
-\paragraph{Two Independent Samples: Contaminated Fish Consumption.}
+\paragraph{Independent Two-Samples: Contaminated Fish Consumption.}
 
 In the former three applications, pre-fabricated Lego bricks---i.e.,
 standard transformations for $g$ and $h$ such as dummy codings, ranks
@@ -772,8 +773,8 @@ Three response variables are
 available: the mercury level of the blood, the percentage of cells with
 structural abnormalities and the proportion of cells with asymmetrical or
 incomplete-symmetrical chromosome aberrations (see Figure \ref{mercurybox}). 
-The observations are partially
-ordered: an observation is said to be smaller than another when all three variables
+The coherence criterion defines a partial ordering: 
+an observation is said to be smaller than another when all three variables
 are smaller. The rank score for observation $i$ is the number of
 observations that are larger (following the above sketched coherence criterion) 
 than observation $i$ minus the number of
@@ -814,7 +815,7 @@ which is now defined as influence function $h$ via the \Rcmd{ytrafo} argument
 poset <- independence_test(mercury + abnormal + ccells ~ group, 
     data = mercuryfish, ytrafo = coherence, distribution = exact())
 @
-Once the transformations $g$ (a zero-one coding of the exposed and control
+Once the transformations $g$ (the default zero-one coding of the exposed and control
 group) and $h$ (the coherence criterion) are defined, we enjoy the whole
 functionality of the framework, including an exact two-sided $p$-value
 <<mercuryfish-pvalue, echo = TRUE>>=
@@ -906,7 +907,7 @@ Statisticians can modify existing test procedures or even try new ideas by
 computing directly on the theory. A high-level Lego system is attractive for
 both researchers and software developers, because only the transformation $g$ and influence
 function $h$ need to be newly implemented, but the burden of implementing a
-Monte-Carlo procedure, or even deriving the limiting distribution of a newly
+resampling procedure, or even deriving the limiting distribution of a newly
 invented test statistic, is waived. 
 
 %%Since the \Rpackage{coin} package consists
