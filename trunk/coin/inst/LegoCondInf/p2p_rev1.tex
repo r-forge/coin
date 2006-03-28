@@ -29,7 +29,7 @@ TAS MS05-239, Reviewer \#1}
               that would not be obtained with standard methods.}
 
 The comments by referee \#1 have been extremely helpful for us when
-identifying short comings in both the description of the theoretical
+identifying shortcomings in both the description of the theoretical
 building blocks as well as the applications. We refer to a list of modifications
 as indicated in the point to point answers to the specific comments below.
 
@@ -39,7 +39,7 @@ as indicated in the point to point answers to the specific comments below.
               read through S-type or R-type code or output without careful guidance. Most will 
               simply gloss over the code or output.}
 
-We thank the referee for pointing our places with insuffcient documentation
+We thank the referee for pointing our places with insufficient documentation
 of the procedures applied in this manuscript. We hope that the modifications
 and extensions made to the corresponding paragraphs enhance the readability
 for the non-\textsf{S} user (please see below for specific
@@ -48,7 +48,7 @@ changes).
 \item \textsl{As a side point, is this R-procedure appropriately named, or should it be called 
               something else that reflects the conditional nature of the inference?}
 
-The name of the package (\texttt{coin}) was choosen in order to reflect that
+The name of the package (\texttt{coin}) was chosen in order to reflect that
 all methods implemented are conditional by nature. The names of the specific
 functions either come from the corresponding classical test
 (\texttt{kruskal\_test}) or the test problem addressed (most general:
@@ -67,7 +67,7 @@ purposes. Moreover, there are other scientific publications which used the
 term `Lego' for building block concepts, for example
 \url{http://ieeexplore.ieee.org/xpl/abs_free.jsp?arNumber=129414}.
 Referee \#2 seems to like the spanner
-metaphore, so we decided to keep this formulation as a bridge bitween
+metaphor, so we decided to keep this formulation as a bridge between
 introduction and summary.
 
 
@@ -86,7 +86,7 @@ This has been clarified.
               exact permutation tests and conditional asymptotic tests. Also, mention some of 
               the pros and cons of permutation tests explicitly here.}
 
-The first sentence referes to statistical test procedures in general,
+The first sentence refers to statistical test procedures in general,
 without having a special test problem or null hypothesis in mind. We removed
 `certain' here. In this paper, the null hypotheses are always defined in
 terms of independence without an explicit formulation of the alternative
@@ -145,21 +145,21 @@ the data at hand. We reformulated this sentence.
               statement is not explained either.  As for the alternative approach, why were these 
               particular scores (2, 7, 11) chosen, other than that they were chosen before? 
               These choices seem to be data driven. 
-              Using the Jonkheere-Terpestra test seems to be a better way to get at the ordering of 
+              Using the Jonkheere-Terpstra test seems to be a better way to get at the ordering of 
               these allele levels. Can this test be implemented in the new procedure? 
               Finally, it is not advisable to compare methods based on p-values, since they measure 
               the statistical significance of effects with respect to particular hypotheses, but 
               ignore other factors, like absolute magnitude, that may also be important. After all, 
               both p-values are pretty small.}
 
-The above comments have been most valueable for us in order to come up with
-a desciption of the practical steps which should now be easier 
-assessible for non-\textsf{S}
+The above comments have been most valuable for us in order to come up with
+a description of the practical steps which should now be more easily
+accessible for non-\textsf{S}
 users. The study design and the experimental setup are now described in more
 detail. The paragraph explaining the arguments of the
 \texttt{independence\_test} function has been extended. The scores are
-obtained from the discrete variable underlying the allel length measurements
-and are thus not data driven. The Jonckheere-Terpestra test 
+obtained from the discrete variable underlying the allele length measurements
+and are thus not data driven. The Jonckheere-Terpstra test 
 could be re-written in
 terms of Helmert-contrasts, however, the pairwise ranking (instead of a
 joint ranking) induces problems whose solution would exceed the scope of
@@ -201,14 +201,14 @@ the editor of TAS.
               In addition, if groups A and B have similar survival times and times to first tumor, 
               as the figures show, how do we see these results with the test statistics? }
 
-Details on sample sizes and animals have been added. All data sets analysed
+Details on sample sizes and animals have been added. All data sets analyzed
 here are contained in the \texttt{coin} package, i.e., \texttt{data("photocar", package =
 "coin")} gives you full control. Moreover, one of the \texttt{coin} package
 vignettes contains the complete \textsf{R} sources of our manuscript, i.e.,
 all research results reported in this manuscript are fully reproducible.
 
 Comparing group differences by multiple testing procedures is complicated by
-the fact that suset pivotality does not hold under those circumstances and
+the fact that subset pivotality does not hold under those circumstances and
 thus one would have to go into the details of multiple testing here. As
 noted above, we followed a suggestion by the editor not to do so in order to
 keep the focus clear. Parts of this analysis requiring a background in
