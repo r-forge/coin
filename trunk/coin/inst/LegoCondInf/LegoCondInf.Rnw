@@ -263,7 +263,7 @@ in the \RR{} system for statistical computing
 \section{A CONCEPTUAL LEGO SYSTEM \label{CI}}
 
 To fix notations,
-we assume that we are provided with independent and identical distributed 
+we assume that we are provided with independent and identically distributed 
 observations
 $(\Y_i, \X_i)$ for $i = 1, \dots, n$.
 The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
@@ -295,7 +295,7 @@ At least under the null hypothesis one can dispose of this
 dependency by fixing $\X_1, \dots, \X_n$ and conditioning on all possible 
 permutations $S$ of the responses $\Y_1, \dots, \Y_n$. Tests that have been 
 constructed by means of this conditioning principle are called 
-permutation tests.
+\emph{permutation tests}.
 
 The conditional expectation $\mu \in \R^{pq \times 1}$ and covariance
 $\Sigma \in \R^{pq \times pq}$ of $\T$ under $H_0$ given
@@ -440,7 +440,7 @@ $h(\Y_i)$ is the rank of $\Y_i$ among the ranks of $\Y_1, \dots, \Y_n$.
 Thus, the linear statistic $\T$ is the vector of rank sums in each of the 
 three groups and the test statistic is a quadratic form 
 $(\T - \mu) \Sigma^+ (\T - \mu)^\top$ 
-utilzing the conditional expectation~$\mu$ and covariance matrix~$\Sigma$.
+utilizing the conditional expectation~$\mu$ and covariance matrix~$\Sigma$.
 
 In order to compute the linear statistic we need to define an
 influence function performing a ranking of the expression levels.
@@ -633,7 +633,7 @@ than expected under independence.
 However, interpreting the standardized contingency table requires
 knowledge about the distribution of the standardized statistics. An
 approximation of the joint distribution of all elements of the standardized
-contincency table can be obtained from the $16$-dimensional
+contingency table can be obtained from the $16$-dimensional
 multivariate limiting normal distribution of the linear statistic $\T$. Most
 useful is an approximation of the $95\%$ quantile of the permutation 
 null distribution which is available from
@@ -673,9 +673,8 @@ of UVR exposure (group A: $n = 36$ with topical vehicle and 600 Robertson--Berge
 of UVR, group B: $n = 36$ without topical vehicle and 600 Robertson--Berger units of UVR and group C: 
 $n = 36$ without topical vehicle and 1200 Robertson--Berger units of UVR). 
 The data are taken from Tables~1 to 3 in \cite{Molefeetal2005}, where a 
-parametric test procedure is proposed. Figure
-\ref{photocarfig} depicts the group effects for all three response
-variables. 
+parametric test procedure is proposed.  Figure~\ref{photocarfig} depicts
+the group effects for all three response variables. 
 
 
 \begin{sidewaysfigure}
@@ -766,13 +765,13 @@ In the fourth application, we will show how the Lego system can be used
 to construct new bricks and implement a newly invented test procedure. 
 
 \cite{Rosenbaum1994a} proposed to compare groups by means of a
-\textit{coherence criterion} and studied a dataset of subjects 
+\textit{coherence criterion} and studied a data set of subjects 
 who ate contaminated fish for more than three years in
 the `exposed' group ($n = 23$) and a control group ($n = 16$). 
 Three response variables are
 available: the mercury level of the blood, the percentage of cells with
 structural abnormalities and the proportion of cells with asymmetrical or
-incomplete-symmetrical chromosome aberrations (see Figure \ref{mercurybox}). 
+incomplete-symmetrical chromosome aberrations (see Figure~\ref{mercurybox}). 
 The coherence criterion defines a partial ordering: 
 an observation is said to be smaller than another when all three variables
 are smaller. The rank score for observation $i$ is the number of
@@ -869,7 +868,7 @@ Conditioning on the observed data is a simple, yet powerful, design
 principle for statistical tests. Conceptually, one only needs to choose
 an appropriate test statistic and evaluate it for all admissible 
 permutations of the data \citep[][gives some examples]{Ernst2004}. 
-In practical set ups, an implementation of this
+In practical setups, an implementation of this
 two-step procedure requires a certain amount of programming 
 and computing time. Sometimes, permutation tests are even regarded 
 as being `computationally impractical'
