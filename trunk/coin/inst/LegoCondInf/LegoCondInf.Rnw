@@ -442,66 +442,67 @@ Thus, the linear statistic $\T$ is the vector of rank sums in each of the
 three groups and the test statistic is a quadratic form 
 $(\T - \mu) \Sigma^+ (\T - \mu)^\top$ 
 utilizing the conditional expectation~$\mu$ and covariance matrix~$\Sigma$.
+For computing $p$ values, the limiting $\chi^2$ distribution is typically used.
 
-In \RR{}, the well known function \Rcmd{kruskal.test} takes a formula
-describing the inference problem, i.e., the independence of expression
+In \RR{}, this specific test is readily implemented in the well-established
+function \Rcmd{kruskal.test} which takes a symbolic formula description of the
+inference problem and a data set containing the actual observations as its main
+arguments. Here, the independence of expression
 levels (\Robject{elevel}) and allele lengths (\Robject{alength}) is   
-formulated as \verb|elevel ~ alength|. In addition, the \Rcmd{data} argument
-can be used to specify a \Rclass{data.frame}, i.e., an object with the usual 
-rectangular representation of $n$ observations:
+formulated as \verb|elevel ~ alength|, the associated observations are available
+in a data frame \Rcmd{alpha}:
 <<alpha-kruskal, echo = TRUE>>=
 kruskal.test(elevel ~ alength, data = alpha)
 @
-The implementation of the classical Kruskal-Wallis test as a part of the more 
-general framework using the \Rpackage{coin} package requires the definition of an 
-influence function performing a ranking of the 
-expression levels. Under the null hypothesis, the $c_\text{quad}$-type Kruskal-Wallis 
-test statistic tends to a $\chi^2$
-distribution with two degrees of freedom (the rank of the conditional
-covariance matrix $\Sigma$) from which a $p$-value can be
-computed. 
-Similar to \Rcmd{kruskal.test}, the function \Rcmd{independence\_test} takes a formula 
-\verb|elevel ~ alength| and, in addition, the
-influence function $h$ is specified via the \Rcmd{ytrafo} argument. Here, we
-implement a rank transformation by simply choosing the \Rcmd{rank} function.
-The default influence function for numeric
-responses is the identity. The transformation $g$ can be specified by
-the \Rcmd{xtrafo} argument of \Rcmd{independence\_test} which, by default,
-assigns the usual dummy coding to factors. Finally, we ask
-for a $c_\text{quad}$-type test statistic (\Rcmd{teststat}) and obtain the
-Kruskal-Wallis statistic with limiting $\chi^2$ distribution (the default
-for quadratic test statistics) 
-as follows:
+
+Alternatively, the same result can be obtained by embedding the classical Kruskal-Wallis
+test into the more general conditional inference framework implemented in the
+\Rcmd{independence\_test} function in the \Rpackage{coin} package. This also takes
+a formula and a data frame as its main arguments and additionally allows for the
+specification of the transformations $g(\cdot)$ and $h(\cdot)$ via 
+\Rcmd{xtrafo} and \Rcmd{ytrafo}, respectively, as well as setting \Rcmd{teststat}
+to \Rcmd{"max"} or \Rcmd{"quad"} (for $c_\text{max}$ or $c_\text{quad}$, respectively)
+and the \Rcmd{distribution} to be used. Thus, for computing the Kruskal-Wallis test
+\Rcmd{ytrafo} has to be set to the function \Rcmd{rank} for computing ranks, in \Rcmd{xtrafo}
+dummy codings have to be used (the default for categorical variables), \Rcmd{teststat}
+is the \Rcmd{"quad"} type statistic $c_\text{quad}$ and the default asymptotic
+\Rcmd{distribution} is used:
 <<alpha-kruskal, echo = TRUE>>=
-independence_test(elevel ~ alength, data = alpha, ytrafo = rank,
-                  teststat = "quadtype")
+independence_test(elevel ~ alength, data = alpha, ytrafo = rank, teststat = "quad")
 @
-Note that the results are equivalent to the results reported by \Rcmd{kruskal.test},
-the `classical' interface to the Kruskal-Wallis test in \RR{}.
-However, going beyond the functionality implemented in \Rcmd{kruskal.test}
-would require extensive programming but is easily possible with the
-\Rpackage{coin} functionality being available. For example, 
-ignoring the ordinal structure of the allele length is only
+which gives equivalent results as reported by \Rcmd{kruskal.test} above.
+So what is the advantage of using \Rcmd{independence\_test}?
+Going beyond the classical functionality in \Rcmd{kruskal.test}
+would require extensive programming but is easily possible in
+\Rcmd{independence\_test}. For example, 
+ignoring the ordinal structure of the allele length is
 suboptimal, especially when we have an ordered alternative in mind. 
-Ordinal variables can be incorporated into the general framework
-via linear-by-linear association tests \citep{Agresti2002}. 
-When $\X$ is measured at $K$ levels associated with a score vector 
-$\gamma \in \R^{K \times 1}$, the influence function is simply the
-$n$-vector of scores attached to the level of each observation.
-Here, the mid-points of the intervals ($0-4$, $5-9$, $10-12$) 
-used to categorize the allele lengths
-are a natural choice for those scores and the linear-by-linear
-association test can be performed by attaching the scores to the variable
-\Robject{alength}:
-<<alpha-kruskal-ordered, echo = TRUE>>=
-independence_test(elevel ~ alength, data = alpha, ytrafo = rank,
-                  xtrafo = function(x) c(2, 7, 11)[x$alength])
+An intuitive idea for capturing the ordinal information would be to
+assign numeric scores to the length categories in the transformation
+$g(\cdot)$ rather than the dummy codings used above. A natural 
+choice of scores would be the mid-points of the intervals originally 
+used to categorize the allele lengths, i.e., $g(X_i) = 2$ for short
+($\in [0, 4]$), $7$ for intermediate ($\in [5, 9]$) and $11$ for
+long ($\in [10, 12]$) allele lengths. In \RR{}, this is easily
+implemented as the function
+<<mpoints, echo = TRUE>>=
+mpoints <- function(x) c(2, 7, 11)[x$alength]
 @
-This $p$-value corresponds well with Figure~\ref{alpha-box}, i.e., 
-the impression that the expression levels increase with increasing 
-allele lengths. Note that in the above situation $c_\text{max}$- and 
-$c_\text{quad}$-type test statistics are equivalent for the univariate 
-linear statistic $\T$.
+%FIXME% preferably without $alength
+which can then be passed as \Rcmd{xtrafo} to \Rcmd{independence\_test}:
+<<alpha-kruskal-ordered, echo = TRUE>>=
+independence_test(elevel ~ alength, data = alpha, ytrafo = rank, xtrafo = mpoints)
+@
+This $p$-value emphasizes the impression from Figure~\ref{alpha-box}
+that the expression levels increase with increasing allele lengths.
+Note that due to usage of scalar transformations $g(\cdot)$ and 
+$h(\cdot)$, the $c_\text{max}$- and $c_\text{quad}$-type test statistics are
+equivalent and hence \Rcmd{teststat} is not set (defaulting to \Rcmd{"max"}).
+Furthermore, it should be pointed out that using such a numerical
+transformation for ordinal variables relies on the same ideas as
+linear-by-linear association tests \citep{Agresti2002} for which further
+convenience infrastructure is available in the \Rcmd{independence\_test}
+function via the \Rcmd{scores} argument.
 
 \paragraph{Contingency Tables: Smoking and Alzheimer's Disease.}
 
