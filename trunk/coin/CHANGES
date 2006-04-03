@@ -1,4 +1,13 @@
 
+		CHANGES in `coin' VERSION 0.4-5
+
+    o    user-supplied transformations can return a vector which
+         is coerced to matrix(..., ncol = 1) internally
+
+    o    `ytrafo' and `xtrafo' may take functions like `rank' directly.
+         However, the use of `trafo' is recommended.
+
+
 		CHANGES in `coin' VERSION 0.4-4
 
 

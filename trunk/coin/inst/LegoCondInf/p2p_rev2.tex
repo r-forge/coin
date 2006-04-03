@@ -13,7 +13,7 @@
 \title{Point to Point Answers for Manuscript \\
 `A Lego System for Conditional Inference' \\
 TAS MS05-239, Reviewer \#2}
-\author{Anonymous}
+\author{}
 \maketitle
 
 \begin{enumerate}
@@ -72,14 +72,15 @@ implementations against well known results.
 
 In principle, one can implement functions for computing linear statistics
 and tools for corresponding tests in any programming language. The design of
-the \texttt{coin} implementation heavily depends on concepts like lexical
+the \texttt{coin} implementation heavily depends on a functional language 
+with concepts like lexical
 scoping and functions being first class objects one can compute on. For
 example, the function \texttt{independence\_test} does not only compute a
 fixed $p$-value but returns a \textit{function} which can be used to
 evaluate the complete distribution function.
 
 To our knowledge, such constructs are currently only available in two
-statistical languages (\textsf{XLispStat} and \textsf{R}) and thus a direct
+statistical languages (\textsf{XLISP-STAT} and \textsf{R}) and thus a direct
 `translation' to \textsf{SAS/IML} would be burdensome. However, we would
 very much welcome such an implementation and it is our hope that the
 publication of this manuscript will be a motivation to transfer our ideas

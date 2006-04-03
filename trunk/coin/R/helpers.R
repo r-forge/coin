@@ -198,15 +198,19 @@ setscores <- function(x, scores) {
     return(x)
 }
 
+### user-supplied trafo functions may return a vector or matrices
+### with NROW being equal for the x and y variables
 check_trafo <- function(tx, ty) {
 
-    if (!is.matrix(tx))
-        stop(sQuote("xtrafo"), " does not return a matrix")
-    if (!is.matrix(ty))
-        stop(sQuote("ytrafo"), " does not return a matrix")
-    if (nrow(tx) != nrow(ty))
+    if (!(is.numeric(tx) || is.logical(tx)))
+        stop(sQuote("xtrafo"), " does not return a numeric or logical vector")
+    if (!(is.numeric(ty) || is.logical(ty)))
+        stop(sQuote("ytrafo"), " does not return a numeric or logical vector")
+    if (NROW(tx) != NROW(ty))
         stop("Dimensions of returns of ", sQuote("xtrafo"), " and ",
              sQuote("ytrafo"), " don't match")
+    if (!is.matrix(tx)) tx <- matrix(tx, ncol = 1)
+    if (!is.matrix(ty)) ty <- matrix(ty, ncol = 1)
     storage.mode(tx) <- "double"
     storage.mode(ty) <- "double"
     list(xtrafo = tx, ytrafo = ty)

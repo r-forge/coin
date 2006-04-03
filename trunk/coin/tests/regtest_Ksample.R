@@ -28,7 +28,7 @@ stopifnot(all(rtwo > 0.9 &
 
 ### <FIXME> add block examples </FIXME>
 
-### sanify checks
+### sanity checks
 try(kruskal_test(x ~ y, data = dat))
 try(kruskal_test(x ~ y | y, data = dat))
 
@@ -51,7 +51,7 @@ stopifnot(all(rtwo > 0.9 &
 
 ### <FIXME> add block examples </FIXME>
 
-### sanify checks
+### sanity checks
 try(fligner_test(x ~ y, data = dat)) 
 try(fligner_test(x ~ y | y, data = dat))
 

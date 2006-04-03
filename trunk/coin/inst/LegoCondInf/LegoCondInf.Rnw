@@ -117,7 +117,7 @@ if(!anonymous) {
     cat("\\author{Torsten Hothorn$^1$, Kurt Hornik$^2$, \\\\ 
             Mark A. van de Wiel$^3$ and Achim Zeileis$^2$}\n")
 } else  {
-    cat("\\author{Anonymous}\n")
+    cat("\\author{TAS MS05-239, Revision}\n")
 }
 @
 
@@ -178,8 +178,7 @@ to show what one can gain from going beyond the `classical' test procedures.
 \end{abstract}
 
 \noindent
-KEY WORDS: Permutation tests; Independence; Approximations; Software.
-\marginpar{FIXME \\ Approximations?}
+KEY WORDS: Permutation tests; Independence; Asymptotic distribution; Software.
 \newline
 
 
@@ -197,7 +196,7 @@ conditional tests
 replace the unknown null distribution by the conditional null distribution,
 i.e., the distribution of the test statistic given the observed data. The
 latter approach is known as \textit{permutation testing} and was developed
-by R. A. Fisher more than 70 years ago \citep{Fisher1935}. 
+by R.~A.~Fisher more than 70 years ago \citep{Fisher1935}. 
 The pros and cons of both approaches in different fields of application 
 have been widely discussed \citep[e.g.~by][]{why-permut:1998,pros-and-c:2000,Shuster2005}.
 Here, we focus on the practical aspects of permutation testing rather than
@@ -230,10 +229,11 @@ general independence problem.
 This framework provides us with a conceptual Lego system for the construction
 of permutation tests consisting of Lego bricks for linear statistics
 suitable for different inference problems (contingency tables, multivariate
-problems, etc.), different forms of test statistics, such as quadratic forms
+problems, etc.), different forms of test statistics (such as quadratic forms
 for global tests or test statistics suitable for multiple comparison
-procedures, and several ways to compute or approximate the conditional null
-distribution. The classical procedures, such as a permutation $t$ test, are part
+procedures), and several ways to derive the conditional null
+distribution (by means of exact computations or approximations). 
+The classical procedures, such as a permutation $t$ test, are part
 of this framework and, even more interesting, new test procedures can be
 embedded into the same theory whose main ideas are sketched in
 Section~\ref{CI}.
@@ -283,7 +283,8 @@ linear statistics of the form
 Here, $g: \mathcal{X} \rightarrow \R^{p \times 1}$ is a transformation of
 the $\X$ measurements and $h: \mathcal{Y} \rightarrow
 \R^{q \times 1}$ is called \emph{influence function}. The function $h(\Y_i)
-= h(\Y_i, (\Y_1, \dots, \Y_n))$ must depend on the responses $(\Y_1, \dots, \Y_n)$ 
+= h(\Y_i, (\Y_1, \dots, \Y_n))$ may depend on the full vector of responses 
+$(\Y_1, \dots, \Y_n)$, however only 
 in a permutation symmetric way, i.e., the value of the
 function must not depend on the order in which $\Y_1, \dots, \Y_n$ appear.
 We will give several examples how to choose $g$ and $h$
@@ -414,7 +415,7 @@ and report that the allele lengths show some
 association with levels of expressed alpha synuclein mRNA in
 alcohol-dependent subjects (see Figure~\ref{alpha-box}). Allele length is
 measured as a sum score built from additive dinucleotide repeat length and
-categorized into three groups: short ($0-4$, $n = 24$), intermediate ($6-8$,
+categorized into three groups: short ($0-4$, $n = 24$), intermediate ($5-9$,
 $n = 58$) and long ($10-12$, $n = 15$).
 
 \begin{sidewaysfigure}
@@ -436,27 +437,34 @@ Our first attempt to test for different levels of gene expression in the three
 groups is the classical Kruskal-Wallis test. Here, the transformation 
 $g$ is a dummy coding of the allele length ($g(\X_i) = (0, 1, 0)^\top$ for
 intermediate length, for example) and the value of the influence function 
-$h(\Y_i)$ is the rank of $\Y_i$ among the ranks of $\Y_1, \dots, \Y_n$.
+$h(\Y_i)$ is the rank of $\Y_i$ in $\Y_1, \dots, \Y_n$.
 Thus, the linear statistic $\T$ is the vector of rank sums in each of the 
 three groups and the test statistic is a quadratic form 
 $(\T - \mu) \Sigma^+ (\T - \mu)^\top$ 
 utilizing the conditional expectation~$\mu$ and covariance matrix~$\Sigma$.
 
-In order to compute the linear statistic we need to define an
-influence function performing a ranking of the expression levels.
-Under the null hypothesis, the $c_\text{quad}$-type Kruskal-Wallis 
+In \RR{}, the well known function \Rcmd{kruskal.test} takes a formula
+describing the inference problem, i.e., the independence of expression
+levels (\Robject{elevel}) and allele lengths (\Robject{alength}) is   
+formulated as \verb|elevel ~ alength|. In addition, the \Rcmd{data} argument
+can be used to specify a \Rclass{data.frame}, i.e., an object with the usual 
+rectangular representation of $n$ observations:
+<<alpha-kruskal, echo = TRUE>>=
+kruskal.test(elevel ~ alength, data = alpha)
+@
+The implementation of the classical Kruskal-Wallis test as a part of the more 
+general framework using the \Rpackage{coin} package requires the definition of an 
+influence function performing a ranking of the 
+expression levels. Under the null hypothesis, the $c_\text{quad}$-type Kruskal-Wallis 
 test statistic tends to a $\chi^2$
 distribution with two degrees of freedom (the rank of the conditional
 covariance matrix $\Sigma$) from which a $p$-value can be
 computed. 
-In \RR{}, the function \Rcmd{independence\_test} takes a formula 
-describing the inference problem, i.e., the independence of expression
-levels (\Robject{elevel}) and allele lengths (\Robject{alength}) is
-formulated as \verb|elevel ~ alength|. Furthermore, the
+Similar to \Rcmd{kruskal.test}, the function \Rcmd{independence\_test} takes a formula 
+\verb|elevel ~ alength| and, in addition, the
 influence function $h$ is specified via the \Rcmd{ytrafo} argument. Here, we
-implement a rank transformation by choosing the \Rcmd{rank} function as
-the \Rcmd{numeric\_trafo} argument to the \Rcmd{trafo} function which handles
-all data transformations. The default influence function for numeric
+implement a rank transformation by simply choosing the \Rcmd{rank} function.
+The default influence function for numeric
 responses is the identity. The transformation $g$ can be specified by
 the \Rcmd{xtrafo} argument of \Rcmd{independence\_test} which, by default,
 assigns the usual dummy coding to factors. Finally, we ask
@@ -465,14 +473,11 @@ Kruskal-Wallis statistic with limiting $\chi^2$ distribution (the default
 for quadratic test statistics) 
 as follows:
 <<alpha-kruskal, echo = TRUE>>=
-independence_test(elevel ~ alength, data = alpha, ytrafo = function(data)
-                  trafo(data, numeric_trafo = rank), teststat = "quadtype")
+independence_test(elevel ~ alength, data = alpha, ytrafo = rank,
+                  teststat = "quadtype")
 @
-The results are equivalent to the results reported by \Rcmd{kruskal.test},
-the `classical' interface to the Kruskal-Wallis test in \RR{}
-<<alpha-kruskal, echo = TRUE>>=
-kruskal.test(elevel ~ alength, data = alpha)
-@
+Note that the results are equivalent to the results reported by \Rcmd{kruskal.test},
+the `classical' interface to the Kruskal-Wallis test in \RR{}.
 However, going beyond the functionality implemented in \Rcmd{kruskal.test}
 would require extensive programming but is easily possible with the
 \Rpackage{coin} functionality being available. For example, 
@@ -481,24 +486,22 @@ suboptimal, especially when we have an ordered alternative in mind.
 Ordinal variables can be incorporated into the general framework
 via linear-by-linear association tests \citep{Agresti2002}. 
 When $\X$ is measured at $K$ levels associated with a score vector 
-$\gamma \in \R^{K \times 1}$, the linear statistic reads
-\begin{eqnarray*}
-\T_\gamma = \vec \left( \sum_{i=1}^n \gamma^\top g(\X_i)
-            h(\Y_i)^\top \right).
-\end{eqnarray*}
-Here, the mid-points of the intervals ($0-4$, $6-8$, $10-12$) 
+$\gamma \in \R^{K \times 1}$, the influence function is simply the
+$n$-vector of scores attached to the level of each observation.
+Here, the mid-points of the intervals ($0-4$, $5-9$, $10-12$) 
 used to categorize the allele lengths
-are a natural choice for the score vector $\gamma$ and the linear-by-linear
+are a natural choice for those scores and the linear-by-linear
 association test can be performed by attaching the scores to the variable
 \Robject{alength}:
 <<alpha-kruskal-ordered, echo = TRUE>>=
-independence_test(elevel ~ alength, data = alpha, ytrafo = function(data)
-                  trafo(data, numeric_trafo = rank), 
-                  scores = list(alength = c(2, 7, 11)))
+independence_test(elevel ~ alength, data = alpha, ytrafo = rank,
+                  xtrafo = function(x) c(2, 7, 11)[x$alength])
 @
 This $p$-value corresponds well with Figure~\ref{alpha-box}, i.e., 
 the impression that the expression levels increase with increasing 
-allele lengths. 
+allele lengths. Note that in the above situation $c_\text{max}$- and 
+$c_\text{quad}$-type test statistics are equivalent for the univariate 
+linear statistic $\T$.
 
 \paragraph{Contingency Tables: Smoking and Alzheimer's Disease.}
 
@@ -517,12 +520,12 @@ atab <- xtabs(~ smoking + + disease + gender, data = alzheimer)
 ### We used the data as given in Table 4.
 @
 
-\cite{SalibHillier1997} report results of a case-control study on
-Alzheimer's disease and smoking behavior of 
-$\Sexpr{disease["Alzheimer's"]}$
-women and men suffering from Alzheimer's disease and 
-$\Sexpr{disease[names(disease) != "Alzheimer's"]}$
-controls. The data shown in Table~\ref{alzheimertab} have been 
+\cite{SalibHillier1997} 
+report results of a case-control study on Alzheimer's disease
+and smoking behavior of $\Sexpr{disease["Alzheimer's"]}$ female
+and male Alzheimer patients and 
+$\Sexpr{disease[names(disease) != "Alzheimer's"]}$ controls.
+The data shown in Table~\ref{alzheimertab} have been 
 re-constructed from Table~4 in \cite{SalibHillier1997} and are depicted in
 Figure~\ref{alz-plot}. 
 The authors conclude that `cigarette smoking is less frequent in 
@@ -604,22 +607,25 @@ occured, i.e., perform independence tests for female and male
 subjects separately
 <<alzheimer-men, echo = TRUE>>=
 females <- alzheimer$gender == "Female"
+males <- alzheimer$gender == "Male"
 pvalue(independence_test(disease ~ smoking, data = alzheimer,
        subset = females, teststat = "quadtype"))
 pvalue(independence_test(disease ~ smoking, data = alzheimer,
-       subset = !females, teststat = "quadtype"))
+       subset = males, teststat = "quadtype"))
 @
 where it turns out that the association is due to the male patients only
 (see also Figure~\ref{alz-plot}). Thus, we focus on the male patients in 
 the following.
-Furthermore, a $c_\text{quad}$-type test statistic is not particularly useful 
-for gaining insight into the association structure of contingency tables
-because the contributions of all cells are collapsed in such a quadratic form.
-Instead, we define the test statistic as the maximum of the 
-standardized contingency table via
+A standardized contingency table is useful for gaining insight into the 
+association structure of contingency tables. 
+Thus, a test statistic based on the standardized linear statistic 
+$\T$ (and thus the standardized contingency table) would be more useful than a
+$c_\text{quad}$-type test statistic where the contributions of all cells are 
+collapsed in such a quadratic form. Therefore, we choose the 
+maximum of the standardized contingency table as $c_\text{max}$ test statistic via
 <<alzheimer-max, echo = TRUE>>=
 it_alzmax <- independence_test(disease ~ smoking, data = alzheimer,
-       subset = !females, teststat = "maxtype")
+       subset = males, teststat = "maxtype")
 it_alzmax
 @
 where the underlying standardized contingency table highlights the cells with
@@ -641,7 +647,7 @@ null distribution which is available from
 qperm(it_alzmax, 0.95)
 @
 Alternatively, and more conveniently, one can
-switching to $p$-values adjusted for multiple testing by an max-$\T$
+switch to $p$-values adjusted for multiple testing by a single-step max-$T$
 multiple testing approach:
 <<alzheimer-MTP, echo = TRUE>>=
 pvalue(it_alzmax, method = "single-step")
@@ -669,7 +675,7 @@ from the partial hypotheses are of special interest.
 
 \cite{Molefeetal2005} report data of an experiment where
 $\Sexpr{nrow(photocar)}$ female mice were exposed to different levels 
-of UVR exposure (group A: $n = 36$ with topical vehicle and 600 Robertson--Berger units 
+of UVR (group A: $n = 36$ with topical vehicle and 600 Robertson--Berger units 
 of UVR, group B: $n = 36$ without topical vehicle and 600 Robertson--Berger units of UVR and group C: 
 $n = 36$ without topical vehicle and 1200 Robertson--Berger units of UVR). 
 The data are taken from Tables~1 to 3 in \cite{Molefeetal2005}, where a 
@@ -710,7 +716,8 @@ it_ph <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ grou
                            data = photocar)
 it_ph 
 @
-Here, the influence function $h$ consists of the logrank scores of the survival
+Here, the influence function $h$ consists of the logrank scores 
+(the default \Rcmd{ytrafo} argument for censored observations) of the survival
 time and time to first tumor as well as the number of tumors, i.e., for the 
 first animal in the first group $h(\Y_1) =
 \Sexpr{paste("(", paste(round(it_ph@statistic@ytrans[1,], 2), collapse = ","), ")")}^\top$
@@ -722,7 +729,7 @@ statistic(it_ph, type = "linear")
 @
 It is important to note that this global test utilizes the complete
 covariance structure $\Sigma$
-when $p$-values are computed \citep{numerical-:1992}.
+when $p$-values are computed.
 Alternatively, a test statistic based on the quadratic form $c_\text{quad}$
 directly incorporates the covariance matrix and leads to a very similar 
 $p$-value. 
@@ -804,9 +811,8 @@ The coherence criterion can be formulated in a simple function
 <<mercurysfish-score, echo = TRUE>>=
 coherence <- function(data) {
     x <- t(as.matrix(data))
-    f <- function(y) 
-        sum(colSums(x < y) == nrow(x)) - sum(colSums(x > y) == nrow(x))
-    matrix(apply(x, 2, f), ncol = 1)
+    apply(x, 2, function(y) 
+        sum(colSums(x < y) == nrow(x)) - sum(colSums(x > y) == nrow(x)))
 }
 @
 which is now defined as influence function $h$ via the \Rcmd{ytrafo} argument
@@ -893,9 +899,9 @@ currently in use,
 such as \Rcmd{wilcox.test} for the Wilcoxon-Mann-Whitney test or
 \Rcmd{mantelhaen.test} for the Cochran-Mantel-Haenszel $\chi^2$ test in the 
 \S{} language and \texttt{NPAR1WAY} for linear rank statistics in \textsf{SAS}
-\citep[see the Tables in][for
-an overview on procedures implemented in \textsf{StatXact}, \textsf{LogXact},
-\textsf{Stata}, \textsf{SAS} and \textsf{Testimate}]{Oster2002,Oster2003}, 
+as well as the tools implemented in \textsf{StatXact}, \textsf{LogXact},
+\textsf{Stata}, and \textsf{Testimate} 
+\citep[see][for an overview]{Oster2002,Oster2003},
 are extended by \Rcmd{independence\_test}, a much more flexible and 
 adjustable spanner.
 

@@ -13,7 +13,7 @@
 \title{Point to Point Answers for Manuscript \\
 `A Lego System for Conditional Inference' \\
 TAS MS05-239, Reviewer \#1}
-\author{Anonymous}
+\author{}
 \maketitle
 
 \begin{enumerate}
@@ -28,10 +28,15 @@ TAS MS05-239, Reviewer \#1}
               original context. It is often not clear what one gain with the methods presented here 
               that would not be obtained with standard methods.}
 
+
 The comments by referee \#1 have been extremely helpful for us when
 identifying shortcomings in both the description of the theoretical
 building blocks as well as the applications. We refer to a list of modifications
 as indicated in the point to point answers to the specific comments below.
+
+Indeed, the original publication is difficult to access, we therefore added a link
+to a preprint to the list of references.
+
 
 \item \textsl{The documentation for the new R-procedure \texttt{independence\_test()} is also just not 
               adequate. The paper needs to state exactly what each input and output from the 
@@ -60,7 +65,7 @@ functions either come from the corresponding classical test
               let alone any other building blocks (beyond the most metaphorical sense). The 
               metaphor of the 'spanner' also seems stretched.}
 
-We checked on this issue prior to submitting the manuscript to TAS. Our
+We checked on the legal issue prior to submitting the manuscript to TAS. Our
 reading of \url{http://www.lego.com/eng/info/default.asp?page=fairplay} is
 that the use of the word `Lego' (which is a trademark) is admissible for our
 purposes. Moreover, there are other scientific publications which used the
@@ -93,11 +98,13 @@ terms of independence without an explicit formulation of the alternative
 (1st paragraph in Section 2).
 
 We refer to permutation tests as to inference procedures conditioning on all
+\marginpar{wo liegt das problem?}
 permutations of the data, regardless of how the null distribution of a test
 statistic is computed or approximated. Therefore, a test which is obtained
-from an normal approximation of the null distribution (which itself is
+from a normal approximation of the null distribution (which itself is
 `exact' by definition) is again a permutation test. A clarification has been
-added to the second paragraph in Section 2.
+added to the second paragraph in Section 2 and we now use the keyword 
+`Asymptotic distribution' instead of `Approximations'.
 
 Our impression is that a rather long debate on pros and cons of permutation
 tests (the main contributions are cited in the introduction) lead to standoff
@@ -119,10 +126,8 @@ thank your very much for this suggestion!
 \item \textsl{page 4:  Elaborate on "permutation symmetric way" here, meaning the value of the 
               function does not depend on the order in which the Y-variables appear.}
 
-We simplified the original notation of \cite{StrasserWeber1999} here in
-order to keep things simple. We added an explanation on `permutation
+Yes, we added an explanation on `permutation
 symmetry' to this paragraph.
-
  
 \item \label{asympt} \textsl{page 5:  Regarding the last sentence, "Less well known ..." It is not obvious that 
               the conditional distribution can be approximated by its limiting distribution 
@@ -141,7 +146,7 @@ the data at hand. We reformulated this sentence.
               lengths (short, intermediate, long), and how this relates to the case-control study from 
               which the data were taken, etc. Some of these details can be figured out from the figure 
               and subsequent text, but the logical flow is awkward.  As for the R-code, it would help 
-              to include explicitly the formula statement: "formula = elevel ~ alevel". The "trafo" 
+              to include explicitly the formula statement: "formula = elevel $\sim$ alevel". The "trafo" 
               statement is not explained either.  As for the alternative approach, why were these 
               particular scores (2, 7, 11) chosen, other than that they were chosen before? 
               These choices seem to be data driven. 
@@ -157,10 +162,15 @@ a description of the practical steps which should now be more easily
 accessible for non-\textsf{S}
 users. The study design and the experimental setup are now described in more
 detail. The paragraph explaining the arguments of the
-\texttt{independence\_test} function has been extended. The scores are
+\texttt{independence\_test} function has been restructured. We now start with the 
+conventional function \texttt{kruskal.test} which at least the \textsf{S} users
+are familiar with. Then, the additional arguments required for \texttt{independence\_test}
+are explained in more detail.
+
+The scores for the allele length variable are
 obtained from the discrete variable underlying the allele length measurements
 and are thus not data driven. The Jonckheere-Terpstra test 
-could be re-written in
+can be re-written in
 terms of Helmert-contrasts, however, the pairwise ranking (instead of a
 joint ranking) induces problems whose solution would exceed the scope of
 this manuscript.
@@ -231,8 +241,8 @@ true `exact' distribution, please see point \ref{asympt} in addition).
               assumption would be reassuring. }
  
 Our formulation regarding the limiting distribution was misleading.
-We only claim that on \textit{can} compute such an approximation with the
-tools described in the manuscript but, as always, their quality need to be
+We only claim that one \textit{can} compute such an approximation with the
+tools described in the manuscript, however, its quality needs to be
 assessed by the data analyst (and we included Figure 5 for this reason).
 
 \item \textsl{This paper has relatively few grammatical errors, and all should be found when 
@@ -241,10 +251,6 @@ assessed by the data analyst (and we included Figure 5 for this reason).
 fixed (hopefully).
 
 \end{enumerate}
-
-\bibliographystyle{asa}
-\bibliography{LegoCondInf}
-
 
 \end{document}
   
