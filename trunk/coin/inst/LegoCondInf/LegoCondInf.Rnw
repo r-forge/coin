@@ -582,7 +582,7 @@ block factor, can be tested with a $c_\text{quad}$-type test statistic, i.e., th
 Cochran-Mantel-Haenszel test:
 <<alzheimer-mantelhaen, echo = TRUE>>=
 it_alz <- independence_test(disease ~ smoking | gender, data = alzheimer, 
-                            teststat = "quadtype")
+                            teststat = "quad")
 it_alz
 @
 which suggests that there is a clear deviation from independence. 
@@ -610,9 +610,9 @@ subjects separately
 females <- alzheimer$gender == "Female"
 males <- alzheimer$gender == "Male"
 pvalue(independence_test(disease ~ smoking, data = alzheimer,
-       subset = females, teststat = "quadtype"))
+       subset = females, teststat = "quad"))
 pvalue(independence_test(disease ~ smoking, data = alzheimer,
-       subset = males, teststat = "quadtype"))
+       subset = males, teststat = "quad"))
 @
 where it turns out that the association is due to the male patients only
 (see also Figure~\ref{alz-plot}). Thus, we focus on the male patients in 
@@ -626,7 +626,7 @@ collapsed in such a quadratic form. Therefore, we choose the
 maximum of the standardized contingency table as $c_\text{max}$ test statistic via
 <<alzheimer-max, echo = TRUE>>=
 it_alzmax <- independence_test(disease ~ smoking, data = alzheimer,
-       subset = males, teststat = "maxtype")
+       subset = males, teststat = "max")
 it_alzmax
 @
 where the underlying standardized contingency table highlights the cells with

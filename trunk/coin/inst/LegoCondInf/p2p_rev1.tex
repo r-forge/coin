@@ -98,8 +98,9 @@ terms of independence without an explicit formulation of the alternative
 (1st paragraph in Section 2).
 
 We refer to permutation tests as to inference procedures conditioning on all
-\marginpar{wo liegt das problem?}
-permutations of the data, regardless of how the null distribution of a test
+possible permutations of the data \citep[in the sense
+of][]{edgington1987,good2000,pesarin2001,ernst2004},
+regardless of how the null distribution of a test
 statistic is computed or approximated. Therefore, a test which is obtained
 from a normal approximation of the null distribution (which itself is
 `exact' by definition) is again a permutation test. A clarification has been
@@ -169,11 +170,12 @@ are explained in more detail.
 
 The scores for the allele length variable are
 obtained from the discrete variable underlying the allele length measurements
-and are thus not data driven. The Jonckheere-Terpstra test 
-can be re-written in
-terms of Helmert-contrasts, however, the pairwise ranking (instead of a
-joint ranking) induces problems whose solution would exceed the scope of
-this manuscript.
+and are thus not data driven. We think that the Jonckheere-Terpstra test 
+can be re-written in terms of Helmert-contrasts, however, the pairwise ranking (instead of a
+joint ranking) induces technical problems whose solution seems not to be
+obvious. Using the original observations, i.e., applying the 
+identity transformation instead of ranks, would be simple remedy for those
+difficulties.
 
 We didn't mean to compare two tests by means of $p$-values but wanted to
 indicate that using a test which takes the ordering information into account
@@ -251,6 +253,9 @@ assessed by the data analyst (and we included Figure 5 for this reason).
 fixed (hopefully).
 
 \end{enumerate}
+
+\bibliographystyle{plainnat}
+\bibliography{LegoCondInf}
 
 \end{document}
   
