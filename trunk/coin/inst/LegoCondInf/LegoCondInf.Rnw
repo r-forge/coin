@@ -486,7 +486,7 @@ used to categorize the allele lengths, i.e., $g(X_i) = 2$ for short
 long ($\in [10, 12]$) allele lengths. In \RR{}, this is easily
 implemented as the function
 <<mpoints, echo = TRUE>>=
-mpoints <- function(x) c(2, 7, 11)[x$alength]
+mpoints <- function(x) c(2, 7, 11)[unlist(x)]
 @
 %FIXME% preferably without $alength
 which can then be passed as \Rcmd{xtrafo} to \Rcmd{independence\_test}:
