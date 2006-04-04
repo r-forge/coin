@@ -18,7 +18,7 @@ NDWD <- oneway_test(length ~ site, data = YOY,
 #             ytrafo = function(data) trafo(data, numeric_trafo = rank),
              xtrafo = function(data) trafo(data, factor_trafo = function(x)
                  model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))),
-             teststat = "maxtype")
+             teststat = "max")
 
 mt.bootstrap(NDWD, B = 10000, xcontrast = FALSE)
 mt.bootstrap(NDWD, B = 10000, xcontrast = TRUE)
@@ -33,7 +33,7 @@ mtest <- function(mu = 0.5) {
     it <- oneway_test(y ~ x, data = mydf,
              xtrafo = function(data) trafo(data, factor_trafo = function(x)
                  model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))),
-             teststat = "maxtype")
+             teststat = "max")
     # print(drop(pvalue(it, "single")))
     mt.bootstrap(it, B = 1000, xcontrast = TRUE)
 }
