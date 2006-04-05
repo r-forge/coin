@@ -401,8 +401,13 @@ Therefore, each inference problem comes with \RR{} code performing the
 appropriate conditional test using the \Rpackage{coin} functionality 
 which enables the data analyst to benefit from this
 simple methodology in typical data analyses. All following analyses are
-reproducible from the \Rpackage{coin} package vignette available from
-\url{http://CRAN.R-project.org/}.
+reproducible from the \Rpackage{coin} package vignette
+\begin{Schunk}
+\begin{Sinput}
+R> vignette("LegoCondInf", package = "coin")
+\end{Sinput}
+\end{Schunk}
+directly in \RR{}.
 
 \paragraph{Independent $K$-Samples: Genetic Components of Alcoholism.}
 
@@ -416,7 +421,7 @@ association with levels of expressed alpha synuclein mRNA in
 alcohol-dependent subjects (see Figure~\ref{alpha-box}). Allele length is
 measured as a sum score built from additive dinucleotide repeat length and
 categorized into three groups: short ($0-4$, $n = 24$), intermediate ($5-9$,
-$n = 58$) and long ($10-12$, $n = 15$).
+$n = 58$), and long ($10-12$, $n = 15$).
 
 \begin{sidewaysfigure}
 \begin{center}
@@ -442,9 +447,9 @@ Thus, the linear statistic $\T$ is the vector of rank sums in each of the
 three groups and the test statistic is a quadratic form 
 $(\T - \mu) \Sigma^+ (\T - \mu)^\top$ 
 utilizing the conditional expectation~$\mu$ and covariance matrix~$\Sigma$.
-For computing $p$ values, the limiting $\chi^2$ distribution is typically used.
+For computing $p$-values, the limiting $\chi^2$ distribution is typically used.
 
-In \RR{}, this specific test is readily implemented in the well-established
+In \RR{}, this specific test is readily implemented in the well established
 function \Rcmd{kruskal.test} which takes a symbolic formula description of the
 inference problem and a data set containing the actual observations as its main
 arguments. Here, the independence of expression
@@ -466,7 +471,7 @@ and the \Rcmd{distribution} to be used. Thus, for computing the Kruskal-Wallis t
 \Rcmd{ytrafo} has to be set to the function \Rcmd{rank} for computing ranks, in \Rcmd{xtrafo}
 dummy codings have to be used (the default for categorical variables), \Rcmd{teststat}
 is the \Rcmd{"quad"} type statistic $c_\text{quad}$ and the default asymptotic
-\Rcmd{distribution} is used:
+\Rcmd{distribution} is applied:
 <<alpha-kruskal, echo = TRUE>>=
 independence_test(elevel ~ alength, data = alpha, ytrafo = rank, teststat = "quad")
 @
@@ -478,12 +483,12 @@ would require extensive programming but is easily possible in
 ignoring the ordinal structure of the allele length is
 suboptimal, especially when we have an ordered alternative in mind. 
 An intuitive idea for capturing the ordinal information would be to
-assign numeric scores to the length categories in the transformation
+assign numeric scores to the allele length categories in the transformation
 $g(\cdot)$ rather than the dummy codings used above. A natural 
 choice of scores would be the mid-points of the intervals originally 
 used to categorize the allele lengths, i.e., $g(X_i) = 2$ for short
 ($\in [0, 4]$), $7$ for intermediate ($\in [5, 9]$) and $11$ for
-long ($\in [10, 12]$) allele lengths. In \RR{}, this is easily
+long ($\in [10, 12]$) alleles. In \RR{}, this is easily
 implemented as the function
 <<mpoints, echo = TRUE>>=
 mpoints <- function(x) c(2, 7, 11)[unlist(x)]
@@ -498,8 +503,8 @@ that the expression levels increase with increasing allele lengths.
 Note that due to usage of scalar transformations $g(\cdot)$ and 
 $h(\cdot)$, the $c_\text{max}$- and $c_\text{quad}$-type test statistics are
 equivalent and hence \Rcmd{teststat} is not set (defaulting to \Rcmd{"max"}).
-Furthermore, it should be pointed out that using such a numerical
-transformation for ordinal variables relies on the same ideas as
+Furthermore, it should be pointed out that a test based on such a numerical
+transformation for ordinal variables is equivalent to 
 linear-by-linear association tests \citep{Agresti2002} for which further
 convenience infrastructure is available in the \Rcmd{independence\_test}
 function via the \Rcmd{scores} argument.
@@ -615,7 +620,7 @@ pvalue(independence_test(disease ~ smoking, data = alzheimer,
        subset = males, teststat = "quad"))
 @
 where it turns out that the association is due to the male patients only
-(see also Figure~\ref{alz-plot}). Thus, we focus on the male patients in 
+(see also Figure~\ref{alz-plot}) and we therefore focus on the male patients in 
 the following.
 A standardized contingency table is useful for gaining insight into the 
 association structure of contingency tables. 
@@ -640,7 +645,8 @@ than expected under independence.
 However, interpreting the standardized contingency table requires
 knowledge about the distribution of the standardized statistics. An
 approximation of the joint distribution of all elements of the standardized
-contingency table can be obtained from the $16$-dimensional
+contingency table can be obtained from the
+$\Sexpr{length(statistic(it_alzmax, "standardized"))}$-dimensional
 multivariate limiting normal distribution of the linear statistic $\T$. Most
 useful is an approximation of the $95\%$ quantile of the permutation 
 null distribution which is available from
@@ -667,7 +673,7 @@ experiments, where carcinogenic doses of ultraviolet radiation (UVR) are
 administered, are measured by means of (at least) three response variables:
 the survival time, the time to first tumor and the total number of tumors of
 animals in different treatment groups. 
-The main interest is testing the global null of no treatment 
+The main interest is testing the global null hypothesis of no treatment 
 effect with respect to any of the three responses survival time, time to first tumor or
 number of tumors \citep[][analyze the detection time
 of tumors in addition, this data is not given here]{Molefeetal2005}. 
@@ -679,7 +685,7 @@ $\Sexpr{nrow(photocar)}$ female mice were exposed to different levels
 of UVR (group A: $n = 36$ with topical vehicle and 600 Robertson--Berger units 
 of UVR, group B: $n = 36$ without topical vehicle and 600 Robertson--Berger units of UVR and group C: 
 $n = 36$ without topical vehicle and 1200 Robertson--Berger units of UVR). 
-The data are taken from Tables~1 to 3 in \cite{Molefeetal2005}, where a 
+The data are taken from Tables~1--3 in \cite{Molefeetal2005}, where a 
 parametric test procedure is proposed.  Figure~\ref{photocarfig} depicts
 the group effects for all three response variables. 
 
@@ -722,7 +728,7 @@ Here, the influence function $h$ consists of the logrank scores
 time and time to first tumor as well as the number of tumors, i.e., for the 
 first animal in the first group $h(\Y_1) =
 \Sexpr{paste("(", paste(round(it_ph@statistic@ytrans[1,], 2), collapse = ","), ")")}^\top$
-and $g(\X_1) = (1, 0, 0)^\top$. The multivariate statistic is the sum of each of
+and $g(\X_1) = (1, 0, 0)^\top$. The multivariate linear statistic $\T$ is the sum of each of
 the three elements of the influence function $h$ in each of the groups,
 i.e.,
 <<photocar-linear, echo = TRUE>>=
@@ -783,7 +789,7 @@ incomplete-symmetrical chromosome aberrations (see Figure~\ref{mercurybox}).
 The coherence criterion defines a partial ordering: 
 an observation is said to be smaller than another when all three variables
 are smaller. The rank score for observation $i$ is the number of
-observations that are larger (following the above sketched coherence criterion) 
+observations that are larger (following the above sketched partial ordering) 
 than observation $i$ minus the number of
 observations that are smaller. The
 distribution of the rank scores in both groups is to be compared and
@@ -912,7 +918,7 @@ conditional test is not available from standard software packages.
 Statisticians can modify existing test procedures or even try new ideas by
 computing directly on the theory. A high-level Lego system is attractive for
 both researchers and software developers, because only the transformation $g$ and influence
-function $h$ need to be newly implemented, but the burden of implementing a
+function $h$ need to be newly defined, but the burden of implementing a
 resampling procedure, or even deriving the limiting distribution of a newly
 invented test statistic, is waived. 
 
