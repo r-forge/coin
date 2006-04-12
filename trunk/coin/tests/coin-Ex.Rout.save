@@ -1,6 +1,6 @@
 
 R : Copyright 2006, The R Foundation for Statistical Computing
-Version 2.3.0 Under development (unstable) (2006-02-14 r37355)
+Version 2.3.0 alpha (2006-04-04 r37647)
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -410,7 +410,6 @@ T = 22.8524, p-value < 2.2e-16
 +     print(pvalue(NDWD, method = "single-step"))
 + }
 Loading required package: multcomp
-Warning: use of NULL environment is deprecated
 [1] 0.0004888889
 99 percent confidence interval:
  0.0003199269 0.0007126921 
@@ -1751,7 +1750,7 @@ cutpoint in  coverstorey
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", env = .CheckExEnv),"\n")
-Time elapsed:  31.99 0.3 32.34 0 0 
+Time elapsed:  30.76 0.94 31.83 0 0 
 > grDevices::dev.off()
 null device 
           1 
