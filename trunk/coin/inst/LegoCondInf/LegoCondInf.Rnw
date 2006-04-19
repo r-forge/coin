@@ -9,7 +9,7 @@
 \usepackage{rotating}
 \usepackage[nolists]{endfloat}
 
-\newcommand{\Rpackage}[1]{\textit{#1}}
+\newcommand{\Rpackage}[1]{{\normalfont\fontseries{b}\selectfont #1}}
 \newcommand{\Robject}[1]{\texttt{#1}}
 \newcommand{\Rclass}[1]{\textit{#1}}
 \newcommand{\Rcmd}[1]{\texttt{#1}}
@@ -99,7 +99,7 @@
 }
 
 <<setup, echo = FALSE, results = hide>>=
-options(width = 65, prompt = "R> ")
+options(width = 65, prompt = "R> ", continue = "   ")
 require("coin")
 set.seed(290875)
 ### get rid of the NAMESPACE
@@ -141,14 +141,12 @@ if(!anonymous)
             Wirtschaftsuniversit\\\"at Wien \\\\
             Augasse 2-6, A-1090 Wien, Austria \\\\
             \\texttt{Kurt.Hornik@R-project.org} \\\\
-            \texttt{Achim.Zeileis@R-project.org}
+            \\texttt{Achim.Zeileis@R-project.org}
          \\newline
 
-         \\noindent$^3$ Department of Mathematics and Computer Science \\\\
-            Eindhoven University of Technology \\\\
-            HG 9.25, P.O. Box 513 \\\\
-            5600 MB Eindhoven, The Netherlands \\\\
-            \\texttt{m.a.v.d.wiel@TUE.nl}
+         \\noindent$^3$ Department of Mathematics, Vrije Universiteit \\\\
+                        De Boelelaan 1081a, 1081 HV Amsterdam, The Netherlands \\\\
+            \\texttt{mark.vdwiel@vumc.nl}
          \\newline\n")
 @
 
@@ -215,7 +213,8 @@ a `cook book' classification of inference problems (categorical data
 analysis, multivariate analysis, $K$-sample location problems, correlation,
 etc.), each being associated with a `natural' form of the test statistic.
 
-The theoretical advances of the last decade \citep[notably][]{StrasserWeber1999,JanssenPauls2003}
+The theoretical advances of the last decade \citep[notably][]{StrasserWeber1999,
+Pesarin2001,JanssenPauls2003}
 give us a much better understanding of the strong connections between the 
 `classical' permutation tests defined for different inference problems. 
 As we will argue in this paper, the new
@@ -362,7 +361,7 @@ test statistics is trackable for small and moderate sample sizes.
 %%For two-sample problems, the shift-algorithm by \cite{axact-dist:1986} 
 %%and \cite{exakte-ver:1987} and the split-up algorithm by 
 %%\cite{vdWiel2001} are implemented as part of the package.
-Resampling procedures can always be used to 
+In principle, resampling procedures can always be used to 
 approximate the exact distribution up to any desired accuracy by evaluating
 the test statistic for a random sample from the set of all permutations $S$.
 It is important to note that in the presence of a grouping of the observations
@@ -401,7 +400,8 @@ Therefore, each inference problem comes with \RR{} code performing the
 appropriate conditional test using the \Rpackage{coin} functionality 
 which enables the data analyst to benefit from this
 simple methodology in typical data analyses. All following analyses are
-reproducible from the \Rpackage{coin} package vignette
+reproducible from the \Rpackage{coin} package vignette; this document 
+can be accessed via
 \begin{Schunk}
 \begin{Sinput}
 R> vignette("LegoCondInf", package = "coin")
@@ -464,7 +464,7 @@ Alternatively, the same result can be obtained by embedding the classical Kruska
 test into the more general conditional inference framework implemented in the
 \Rcmd{independence\_test} function in the \Rpackage{coin} package. This also takes
 a formula and a data frame as its main arguments and additionally allows for the
-specification of the transformations $g(\cdot)$ and $h(\cdot)$ via 
+specification of the transformations $g$ and $h$ via 
 \Rcmd{xtrafo} and \Rcmd{ytrafo}, respectively, as well as setting \Rcmd{teststat}
 to \Rcmd{"max"} or \Rcmd{"quad"} (for $c_\text{max}$ or $c_\text{quad}$, respectively)
 and the \Rcmd{distribution} to be used. Thus, for computing the Kruskal-Wallis test
@@ -475,7 +475,7 @@ is the \Rcmd{"quad"} type statistic $c_\text{quad}$ and the default asymptotic
 <<alpha-kruskal, echo = TRUE>>=
 independence_test(elevel ~ alength, data = alpha, ytrafo = rank, teststat = "quad")
 @
-which gives equivalent results as reported by \Rcmd{kruskal.test} above.
+The output gives equivalent results as reported by \Rcmd{kruskal.test} above.
 So what is the advantage of using \Rcmd{independence\_test}?
 Going beyond the classical functionality in \Rcmd{kruskal.test}
 would require extensive programming but is easily possible in
@@ -484,24 +484,24 @@ ignoring the ordinal structure of the allele length is
 suboptimal, especially when we have an ordered alternative in mind. 
 An intuitive idea for capturing the ordinal information would be to
 assign numeric scores to the allele length categories in the transformation
-$g(\cdot)$ rather than the dummy codings used above. A natural 
+$g$ rather than the dummy codings used above. A natural 
 choice of scores would be the mid-points of the intervals originally 
 used to categorize the allele lengths, i.e., $g(X_i) = 2$ for short
 ($\in [0, 4]$), $7$ for intermediate ($\in [5, 9]$) and $11$ for
-long ($\in [10, 12]$) alleles. In \RR{}, this is easily
-implemented as the function
+long ($\in [10, 12]$) alleles. In \RR{}, such a function $g$ is easily
+implemented as
 <<mpoints, echo = TRUE>>=
 mpoints <- function(x) c(2, 7, 11)[unlist(x)]
 @
-%FIXME% preferably without $alength
-which can then be passed as \Rcmd{xtrafo} to \Rcmd{independence\_test}:
+which returns an $n$-vector and 
+can then be passed as \Rcmd{xtrafo} argument to \Rcmd{independence\_test}:
 <<alpha-kruskal-ordered, echo = TRUE>>=
 independence_test(elevel ~ alength, data = alpha, ytrafo = rank, xtrafo = mpoints)
 @
 This $p$-value emphasizes the impression from Figure~\ref{alpha-box}
 that the expression levels increase with increasing allele lengths.
-Note that due to usage of scalar transformations $g(\cdot)$ and 
-$h(\cdot)$, the $c_\text{max}$- and $c_\text{quad}$-type test statistics are
+Note that due to usage of scalar transformations $g$ and 
+$h$, the $c_\text{max}$- and $c_\text{quad}$-type test statistics are
 equivalent and hence \Rcmd{teststat} is not set (defaulting to \Rcmd{"max"}).
 Furthermore, it should be pointed out that a test based on such a numerical
 transformation for ordinal variables is equivalent to 
@@ -814,7 +814,8 @@ boxplot(ccells ~ group, data = mercuryfish,
          and control group. \label{mercurybox}}
 \end{center}
 \end{sidewaysfigure}
-The coherence criterion can be formulated in a simple function
+The coherence criterion can be formulated in a simple function by utilizing 
+column-wise sums of indicator functions applied to all individuals
 <<mercurysfish-score, echo = TRUE>>=
 coherence <- function(data) {
     x <- t(as.matrix(data))
@@ -945,6 +946,10 @@ the conditional distribution of the test statistic of interest. Thus, the
 construction of an appropriate permutation test, for both classical and
 new inference problems, is only a matter of putting together
 adequate Lego bricks.
+
+%%\section*{ACKNOWLEDGEMENTS}
+
+%%Strasser, Dominikus, editor / AE + referees
 
 \renewcommand{\baselinestretch}{1}
 %%\setlength{\bibsep}{2mm}

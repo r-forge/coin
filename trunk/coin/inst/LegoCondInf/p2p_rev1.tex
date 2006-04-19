@@ -107,8 +107,11 @@ from a normal approximation of the null distribution (which itself is
 added to the second paragraph in Section 2 and we now use the keyword 
 `Asymptotic distribution' instead of `Approximations'.
 
+In this sense, Fisher's test is a permutation test. However, its 
+test statistic is not covered by the theoretical framework we make use of. 
+
 Our impression is that a rather long debate on pros and cons of permutation
-tests (the main contributions are cited in the introduction) lead to a standoff
+tests (the main contributions are cited in the introduction) led to a standoff
 between the `pro' community and statisticians from a more parametric
 modeling school. Our interest in this research clearly induces a bias
 towards arguments from the first community and we hesitate to make
@@ -173,7 +176,10 @@ obtained from the discrete variable underlying the allele length measurements
 and are thus not data driven. We think that the Jonckheere-Terpstra test 
 can be re-written in terms of Helmert-contrasts, however, the pairwise ranking (instead of a
 joint ranking) induces technical problems whose solution seems not to be
-obvious. Using the original observations, i.e., applying the 
+obvious. However, since the test statistic is a sum of independence linear rank 
+statistics, it should by possible to derive the asymptotic and exact distribution 
+\citep{wieletal1999}.
+Using the original measurements, i.e., applying the 
 identity transformation instead of ranks, would be simple remedy for those
 difficulties.
 
@@ -199,8 +205,12 @@ fixed.
               the paper needs to explain how the p-values were adjusted for multiple testing 
               (Bonferroni?).}
 
-The quantile is obtained from the $12$-dimensional limiting normal distribution
-of the contingency table $T$ and thus $p$-values can be adjusted by a
+The fact that the quantile is much larger than $1.96$ is simply
+a consequence of the fact that we consider a $c_\text{max}$ 
+statistic where the maximum is taken over $12$
+normal components, i.e., the contingency table $T$. 
+Such a statistic naturally has a larger quantile than that of the standard
+normal and $p$-values can be adjusted by a
 max-T multiple testing approach (since the complete covariance matrix is
 known in our case). This has been clarified in the paper, however, we do not
 comment on multiple testing issues in more detail following a suggestion by
@@ -232,10 +242,12 @@ multiple testing have been removed.
               sense? What did these tests tell us about the subject-matter example? How do we 
               interpret Figure 5? }
 
-We added the required information to the problem description. Figure 5 can
+We added the required information to the problem description. 
+The test effectively aggregates the results of all three measures of contamination
+such that conflicting comparisons (e.g. one up, two down) are not counted. Figure 5 can
 be used to judge the quality of the normal approximation (compared to the
 true `exact' distribution, please see point \ref{asympt} in addition).
- 
+
 \item \textsl{pages 16-17:  The discussion provides a fairly accurate summary of this paper. 
               Still, one must have reservations about a highly automated conditional inference 
               system where "the burden of implementing a Monte-Carlo procedure, or even thinking 
