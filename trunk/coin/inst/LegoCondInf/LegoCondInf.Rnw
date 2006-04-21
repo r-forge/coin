@@ -803,7 +803,7 @@ Wilcoxon-Mann-Whitney test.
 par(cex.lab = 1.3, cex.axis = 1.3)
 layout(matrix(1:3, ncol = 3))
 boxplot(I(log(mercury)) ~ group, data = mercuryfish, 
-        ylab = "Mercury Blood Level (log scale)", varwidth = TRUE)
+        ylab = "Mercury Blood Level (in logs)", varwidth = TRUE)
 boxplot(abnormal ~ group, data = mercuryfish, 
         ylab = "Abnormal Cells (in %)", varwidth = TRUE)
 boxplot(ccells ~ group, data = mercuryfish, 
