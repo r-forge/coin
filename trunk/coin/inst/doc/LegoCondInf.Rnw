@@ -1,8 +1,4 @@
 \documentclass{article}
-
-%%\VignetteIndexEntry{A Lego System for Conditional Inference}
-%%\VignetteDepends{coin}
-
 \usepackage{amstext}
 \usepackage{amsfonts}
 \usepackage{hyperref}
@@ -322,16 +318,14 @@ linear statistic $\T$ is its standardization utilizing the
 conditional expectation $\mu$ and covariance matrix $\Sigma$. 
 Univariate test statistics~$c$ mapping a linear
 statistic $\T \in \R^{pq \times 1}$ 
-into the real line can be of arbitrary form.  An obvious choice is
+into the real line can be of arbitrary form.  Obvious choices are
 the maximum of the absolute values of the standardized linear statistic
+or a quadratic form:
 \begin{eqnarray*}
-c_\text{max}(\T, \mu, \Sigma)  = \max \left| \frac{\T -
-\mu}{\text{diag}(\Sigma)^{1/2}} \right|.
+c_\text{max}(\T, \mu, \Sigma)  & = & \max \left| \frac{\T - \mu}{\text{diag}(\Sigma)^{1/2}} \right|, \\
+c_\text{quad}(\T, \mu, \Sigma)  & = & (\T - \mu) \Sigma^+ (\T - \mu)^\top,
 \end{eqnarray*}
-A prominent alternative are quadratic forms 
-$c_\text{quad}(\T, \mu, \Sigma)  =
-(\T - \mu) \Sigma^+ (\T - \mu)^\top$ involving 
-the Moore-Penrose inverse $\Sigma^+$ of $\Sigma$.
+involving the Moore-Penrose inverse $\Sigma^+$ of $\Sigma$.
 
 %%The definition of one- and two-sided $p$-values used for the computations in
 %%the \Rpackage{coin} package is
@@ -381,7 +375,7 @@ can be computed directly in the univariate case ($pq = 1$) and by numerical
 algorithms in the multivariate case \citep{numerical-:1992}.
 For quadratic forms
 $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
-given by the rank of $\Sigma$ \citep[e.g.~Theorem 6.20, ][]{Rasch1995}, exact
+given by the rank of $\Sigma$ \citep[see][Chapter 29]{johnsonkotz1970}, exact
 probabilities can be computed efficiently.
 
 \section{PLAYING LEGO \label{play}}
@@ -478,8 +472,9 @@ The output gives equivalent results as reported by \Rcmd{kruskal.test} above.
 So what is the advantage of using \Rcmd{independence\_test}?
 Going beyond the classical functionality in \Rcmd{kruskal.test}
 would require extensive programming but is easily possible in
-\Rcmd{independence\_test}. For example, 
-ignoring the ordinal structure of the allele length is
+\Rcmd{independence\_test}. For example, the resampling distribution instead of
+the asymptotic distribution could be used by setting \Rcmd{distribution = approximate()}.
+More interestingly, ignoring the ordinal structure of the allele length is
 suboptimal, especially when we have an ordered alternative in mind. 
 An intuitive idea for capturing the ordinal information would be to
 assign numeric scores to the allele length categories in the transformation
@@ -511,7 +506,6 @@ function via the \Rcmd{scores} argument.
 \paragraph{Contingency Tables: Smoking and Alzheimer's Disease.}
 
 \setkeys{Gin}{width=\textwidth}
-
 <<alzheimer-demographics, echo = FALSE>>=
 total <- nrow(alzheimer)
 stopifnot(total == 538)
@@ -730,7 +724,7 @@ time and time to first tumor as well as the number of tumors, i.e., for the
 first animal in the first group $h(\Y_1) =
 \Sexpr{paste("(", paste(round(it_ph@statistic@ytrans[1,], 2), collapse = ","), ")")}^\top$
 and $g(\X_1) = (1, 0, 0)^\top$. The multivariate linear statistic $\T$ is the sum of each of
-the three elements of the influence function $h$ in each of the groups,
+the three components of the influence function $h$ in each of the groups,
 i.e.,
 <<photocar-linear, echo = TRUE>>=
 statistic(it_ph, type = "linear")
@@ -743,8 +737,9 @@ directly incorporates the covariance matrix and leads to a very similar
 $p$-value. 
 
 The deviations from the partial null hypotheses, i.e., independence of
-each single response and treatment groups, can be inspected by the standardized
-linear statistic $\T$
+each single response and treatment groups, can be inspected by comparing the standardized
+linear statistic $\T$ to its critical value \Sexpr{round(qperm(it_ph, 0.95), digits = 3)}
+(which can be obtained by \verb+qperm(it_ph, 0.95)+)
 <<photocar-stand, echo = TRUE>>=
 statistic(it_ph, type = "standardized")
 @
@@ -804,7 +799,7 @@ Wilcoxon-Mann-Whitney test.
 par(cex.lab = 1.3, cex.axis = 1.3)
 layout(matrix(1:3, ncol = 3))
 boxplot(I(log(mercury)) ~ group, data = mercuryfish, 
-        ylab = "Mercury Blood Level (log scale)", varwidth = TRUE)
+        ylab = "Mercury Blood Level (in logs)", varwidth = TRUE)
 boxplot(abnormal ~ group, data = mercuryfish, 
         ylab = "Abnormal Cells (in %)", varwidth = TRUE)
 boxplot(ccells ~ group, data = mercuryfish, 
