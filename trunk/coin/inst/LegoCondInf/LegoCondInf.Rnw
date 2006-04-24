@@ -104,7 +104,7 @@ require("coin")
 set.seed(290875)
 ### get rid of the NAMESPACE
 load(file.path(.find.package("coin"), "R", "all.rda"))
-anonymous <- TRUE
+anonymous <- FALSE
 @
 
 
