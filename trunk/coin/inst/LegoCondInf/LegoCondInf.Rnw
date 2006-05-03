@@ -82,7 +82,7 @@
 
 \renewcommand{\baselinestretch}{1.65}
 
-\SweaveOpts{engine=R,eps=FALSE}
+\SweaveOpts{engine=R,eps=TRUE}
 
 \hypersetup{%
   pdftitle = {A Lego System for Conditional Inference},
