@@ -387,12 +387,11 @@ classical procedures, starting with the conditional Kruskal-Wallis test and
 the Cochran-Mantel-Haenszel test, can be embedded into this general theory
 and, much more interesting from our point of view, how new conditional test
 procedures can be constructed conceptually \textit{and} practically. 
-An extended version of this document is available as a package vignette for
-reproducing the following analyses and can be accessed via
+We highlight the important aspects of the application in \RR{} and the full
+computational details for reproducing the following analyses are 
+available as a package vignette via the command
 \Rcmd{vignette("LegoCondInf", package = "coin")}
-directly in \RR{}. For a general introduction to the \S{} language and the \RR{}
-system we refer to textbooks such as \cite{R:Venables+Ripley:2002} or
-\cite{R:Everitt+Hothorn:2006}.
+directly in \RR{}. 
 
 \paragraph{Independent $K$-Samples: Genetic Components of Alcoholism.}
 
@@ -408,10 +407,10 @@ measured as a sum score built from additive dinucleotide repeat length and
 categorized into three groups: short ($0-4$, $n = 24$), intermediate ($5-9$,
 $n = 58$), and long ($10-12$, $n = 15$).
 
-\setkeys{Gin}{width=0.6\textwidth}
+\setkeys{Gin}{width=0.7\textwidth}
 \begin{figure}
 \begin{center}
-<<alpha-data-figure, echo = FALSE, fig = TRUE>>=
+<<alpha-data-figure, echo = FALSE, fig = TRUE, width = 7, height = 5>>=
 n <- table(alpha$alength)
 par(cex.lab = 1.3, cex.axis = 1.3)
 boxplot(elevel ~ alength, data = alpha, ylab = "Expression Level",
@@ -597,7 +596,7 @@ collapsed in such a quadratic form. Therefore, we choose the
 maximum of the standardized contingency table as $c_\text{max}$ test statistic via
 <<alzheimer-max, echo = TRUE>>=
 it_alzmax <- independence_test(disease ~ smoking, data = alzheimer,
-       subset = males, teststat = "max")
+       subset = alzheimer$gender == "Male", teststat = "max")
 it_alzmax
 @
 where the underlying standardized contingency table highlights the cells with
@@ -862,10 +861,9 @@ We would like to thank Helmut Strasser for fruitful discussions on
 conditional inference procedures and Dominikus B{\"o}nsch for 
 providing access to the alpha synuclein expression data. In addition,
 we are indepted to two anonymous referees, one associate editor and
-the editor of \textit{TAS} 
-for their valuable comments which lead to substantial
-improvements. The work of T. Hothorn was supported by Deutsche
-Forschungsgemeinschaft (DFG) under grant HO 3242/1-1.
+editor Peter Westfall for their valuable comments which lead to 
+substantial improvements. The work of T. Hothorn was supported 
+by Deutsche Forschungsgemeinschaft (DFG) under grant HO 3242/1-1.
 
 \renewcommand{\baselinestretch}{1}
 %%\setlength{\bibsep}{2mm}
