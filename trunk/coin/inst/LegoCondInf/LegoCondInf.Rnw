@@ -7,7 +7,7 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{rotating}
-\usepackage[nolists]{endfloat}
+%%\usepackage[nolists]{endfloat}
 
 \newcommand{\Rpackage}[1]{{\normalfont\fontseries{b}\selectfont #1}}
 \newcommand{\Robject}[1]{\texttt{#1}}
@@ -149,13 +149,6 @@ if(!anonymous)
             \\texttt{mark.vdwiel@vumc.nl}
          \\newline\n")
 @
-
-\noindent
-\begin{verbatim}
-$Date$ 
-$Revision$ 
-$Name$
-\end{verbatim}
 
 
 \begin{abstract}
@@ -394,18 +387,12 @@ classical procedures, starting with the conditional Kruskal-Wallis test and
 the Cochran-Mantel-Haenszel test, can be embedded into this general theory
 and, much more interesting from our point of view, how new conditional test
 procedures can be constructed conceptually \textit{and} practically. 
-Therefore, each inference problem comes with \RR{} code performing the
-appropriate conditional test using the \Rpackage{coin} functionality 
-which enables the data analyst to benefit from this
-simple methodology in typical data analyses. All following analyses are
-reproducible from the \Rpackage{coin} package vignette; this document 
-can be accessed via
-\begin{Schunk}
-\begin{Sinput}
-R> vignette("LegoCondInf", package = "coin")
-\end{Sinput}
-\end{Schunk}
-directly in \RR{}.
+An extended version of this document is available as a package vignette for
+reproducing the following analyses and can be accessed via
+\Rcmd{vignette("LegoCondInf", package = "coin")}
+directly in \RR{}. For a general introduction to the \S{} language and the \RR{}
+system we refer to textbooks such as \cite{R:Venables+Ripley:2002} or
+\cite{R:Everitt+Hothorn:2006}.
 
 \paragraph{Independent $K$-Samples: Genetic Components of Alcoholism.}
 
@@ -421,7 +408,8 @@ measured as a sum score built from additive dinucleotide repeat length and
 categorized into three groups: short ($0-4$, $n = 24$), intermediate ($5-9$,
 $n = 58$), and long ($10-12$, $n = 15$).
 
-\begin{sidewaysfigure}
+\setkeys{Gin}{width=0.6\textwidth}
+\begin{figure}
 \begin{center}
 <<alpha-data-figure, echo = FALSE, fig = TRUE>>=
 n <- table(alpha$alength)
@@ -435,7 +423,7 @@ rankif <- function(data) trafo(data, numeric_trafo = rank)
          in three groups defined by the \textit{NACP}-REP1 allele lengths.
          \label{alpha-box}}
 \end{center}
-\end{sidewaysfigure}
+\end{figure}
 Our first attempt to test for different levels of gene expression in the three
 groups is the classical Kruskal-Wallis test. Here, the transformation 
 $g$ is a dummy coding of the allele length ($g(\X_i) = (0, 1, 0)^\top$ for
@@ -492,17 +480,19 @@ implemented as
 <<mpoints, echo = TRUE>>=
 mpoints <- function(x) c(2, 7, 11)[unlist(x)]
 @
-which returns an $n$-vector and 
-can then be passed as \Rcmd{xtrafo} argument to \Rcmd{independence\_test}:
-<<alpha-kruskal-ordered, echo = TRUE>>=
-independence_test(elevel ~ alength, data = alpha, ytrafo = rank, xtrafo = mpoints)
+which 
+%%returns an $n$-vector and 
+can then be passed as \Rcmd{xtrafo} argument to \Rcmd{independence\_test}.
+<<alpha-kruskal-ordered, echo = FALSE>>=
+pval <- pvalue(independence_test(elevel ~ alength, data = alpha, ytrafo = rank, xtrafo = mpoints))
 @
-This $p$-value emphasizes the impression from Figure~\ref{alpha-box}
+The resulting $p$-value is $p = \Sexpr{round(pval, 3)}$ and 
+emphasizes the impression from Figure~\ref{alpha-box}
 that the expression levels increase with increasing allele lengths.
-Note that due to usage of scalar transformations $g$ and 
-$h$, the $c_\text{max}$- and $c_\text{quad}$-type test statistics are
-equivalent and hence \Rcmd{teststat} is not set (defaulting to \Rcmd{"max"}).
-Furthermore, it should be pointed out that a test based on such a numerical
+%%Note that due to usage of scalar transformations $g$ and 
+%%$h$, the $c_\text{max}$- and $c_\text{quad}$-type test statistics are
+%%equivalent and hence \Rcmd{teststat} is not set (defaulting to \Rcmd{"max"}).
+It should be pointed out that a test based on such a numerical
 transformation for ordinal variables is equivalent to 
 linear-by-linear association tests \citep{Agresti2002} for which further
 convenience infrastructure is available in the \Rcmd{independence\_test}
@@ -530,40 +520,16 @@ report results of a case-control study on Alzheimer's disease
 and smoking behavior of $\Sexpr{disease["Alzheimer's"]}$ female
 and male Alzheimer patients and 
 $\Sexpr{disease[names(disease) != "Alzheimer's"]}$ controls.
-The data shown in Table~\ref{alzheimertab} have been 
-re-constructed from Table~4 in \cite{SalibHillier1997} and are depicted in
-Figure~\ref{alz-plot}. 
+The \Robject{alzheimer} data 
+%% shown in Table~\ref{alzheimertab}
+have been 
+re-constructed from Table~4 in \cite{SalibHillier1997}.
+%% and are depicted in Figure~\ref{alz-plot}.
 The authors conclude that `cigarette smoking is less frequent in 
 men with Alzheimer's disease.' 
 
-\begin{table}[h]
-\begin{center}
-\caption{\Robject{alzheimer} data: Smoking and Alzheimer's disease. \label{alzheimertab}}
-\begin{tabular}{lrrrr} \hline \hline
- & \multicolumn{4}{c}{No. of cigarettes daily} \\
- & None & <10 & 10--20 & >20 \\ \hline
-\textit{Female} & & & & \\
-<<alzheimer-tab, echo = FALSE, results = tex>>=
-x <- t(atab[,,"Female"])
-lines <- paste(paste(dimnames(x)$disease, " & "), 
-               paste(apply(x, 1, function(l) paste(l, collapse = " & ")), "\\\\"))
-for (i in 1:length(lines)) cat(lines[i], "\n")
-@
-
-& & & & \\
-\textit{Male} & & & & \\
-<<alzheimer-tab, echo = FALSE, results = tex, width = 10>>=
-x <- t(atab[,,"Male"])
-lines <- paste(paste(dimnames(x)$disease, " & "), 
-               paste(apply(x, 1, function(l) paste(l, collapse = " & ")), "\\\\"))
-for (i in 1:length(lines)) cat(lines[i], "\n")
-@
-\hline
-\end{tabular}
-\end{center}
-\end{table}
-
-\begin{sidewaysfigure}
+\setkeys{Gin}{width=0.9\textwidth} 
+\begin{figure}
 \begin{center}
 <<alzheimer-plot, echo = FALSE, fig = TRUE, width = 11, height = 6>>=
 layout(matrix(1:2, ncol = 2))
@@ -575,7 +541,7 @@ main = "Female", xlab = "Smoking", ylab = "Disease", tol = 1)
 \caption{\Robject{alzheimer} data: Association of
 smoking behavior and disease status stratified by gender. \label{alz-plot}}
 \end{center}
-\end{sidewaysfigure}
+\end{figure}
 
 We are interested to assess whether there is any association
 between smoking and Alzheimer's (or other dementia) diseases and, in a
@@ -605,22 +571,23 @@ covariance \Rcmd{covariance(it\_alz)} which are available for standardizing
 the contingency table $\T$. The conditional distribution is approximated by
 its limiting $\chi^2$ distribution by default. 
 
-Given that there is significant departure from independence, we further
-investigate the structure of association between smoking and Alzheimer's
-disease. First we assess for which gender the violation of independence 
-occured, i.e., perform independence tests for female and male
-subjects separately
-<<alzheimer-men, echo = TRUE>>=
+<<alzheimer-men, echo = FALSE>>=
 females <- alzheimer$gender == "Female"
 males <- alzheimer$gender == "Male"
-pvalue(independence_test(disease ~ smoking, data = alzheimer,
+pfemale <- pvalue(independence_test(disease ~ smoking, data = alzheimer,
        subset = females, teststat = "quad"))
-pvalue(independence_test(disease ~ smoking, data = alzheimer,
+pmale <- pvalue(independence_test(disease ~ smoking, data = alzheimer,
        subset = males, teststat = "quad"))
 @
-where it turns out that the association is due to the male patients only
-(see also Figure~\ref{alz-plot}) and we therefore focus on the male patients in 
-the following.
+Given that there is significant departure from independence, we further
+investigate the structure of association between smoking and Alzheimer's
+disease. When we assess for which gender the violation of independence  
+occured, i.e., perform independence tests for female and male
+subjects separately, 
+it turns out that the association is due to the male patients only
+($p < 0.001$ for male patients and $p = \Sexpr{round(pfemale, 3)}$
+for female patients, see also Figure~\ref{alz-plot}). 
+We therefore focus on the male patients in the following.
 A standardized contingency table is useful for gaining insight into the 
 association structure of contingency tables. 
 Thus, a test statistic based on the standardized linear statistic 
@@ -652,12 +619,12 @@ null distribution which is available from
 <<alzheimer-qperm, echo = TRUE>>=
 qperm(it_alzmax, 0.95)
 @
-Alternatively, and more conveniently, one can
-switch to $p$-values adjusted for multiple testing by a single-step max-$T$
-multiple testing approach:
-<<alzheimer-MTP, echo = TRUE>>=
-pvalue(it_alzmax, method = "single-step")
-@
+%%Alternatively, and more conveniently, one can
+%%switch to $p$-values adjusted for multiple testing by a single-step max-$T$
+%%multiple testing approach:
+%%<<alzheimer-MTP, echo = TRUE>>=
+%%pvalue(it_alzmax, method = "single-step")
+%%@
 These results support the conclusion that the rejection of the 
 null hypothesis of independence is due to a large number of patients
 with other dementias and a small number with Alzheimer's disease in the heavy
@@ -689,7 +656,8 @@ parametric test procedure is proposed.  Figure~\ref{photocarfig} depicts
 the group effects for all three response variables. 
 
 
-\begin{sidewaysfigure}
+\setkeys{Gin}{width=0.99\textwidth} 
+\begin{figure}
 \begin{center}
 <<photocar-plot, echo = FALSE, fig = TRUE, width = 7, height = 3>>=
 par(cex.lab = 1.3, cex.axis = 1.3)
@@ -711,7 +679,7 @@ boxplot(ntumor ~ group, data = photocar,
          well as boxplots of the total number of tumors in three treatment
          groups. \label{photocarfig}}
 \end{center}
-\end{sidewaysfigure}
+\end{figure}
 First, we construct a global test for the null hypothesis of independence
 of treatment and \textit{all} three response variables. A
 $c_\text{max}$-type test based on the standardized multivariate          
@@ -728,11 +696,7 @@ time and time to first tumor as well as the number of tumors, i.e., for the
 first animal in the first group $h(\Y_1) =
 \Sexpr{paste("(", paste(round(it_ph@statistic@ytrans[1,], 2), collapse = ","), ")")}^\top$
 and $g(\X_1) = (1, 0, 0)^\top$. The multivariate linear statistic $\T$ is the sum of each of
-the three components of the influence function $h$ in each of the groups,
-i.e.,
-<<photocar-linear, echo = TRUE>>=
-statistic(it_ph, type = "linear")
-@
+the three components of the influence function $h$ in each of the groups.
 It is important to note that this global test utilizes the complete
 covariance structure $\Sigma$
 when $p$-values are computed.
@@ -747,13 +711,13 @@ linear statistic $\T$ to its critical value \Sexpr{round(qperm(it_ph, 0.95), dig
 <<photocar-stand, echo = TRUE>>=
 statistic(it_ph, type = "standardized")
 @
-or again by means of the corresponding adjusted $p$-values
-<<photocar-stand, echo = TRUE, eval = FALSE>>=
-pvalue(it_ph, method = "single-step")
-@
-<<photocar-stand, echo = FALSE>>=
-round(pvalue(it_ph, method = "single-step"), 5)
-@
+%%or again by means of the corresponding adjusted $p$-values
+%%<<photocar-stand, echo = TRUE, eval = FALSE>>=
+%%pvalue(it_ph, method = "single-step")
+%%@
+%%<<photocar-stand, echo = FALSE>>=
+%%round(pvalue(it_ph, method = "single-step"), 5)
+%%@
 %%Of course, the goodness of the asymptotic procedure can be checked against
 %%the Monte-Carlo approximation which is computed by
 %%<<photocar-MC, echo = TRUE>>=
@@ -785,7 +749,8 @@ the `exposed' group ($n = 23$) and a control group ($n = 16$).
 Three response variables are
 available: the mercury level of the blood, the percentage of cells with
 structural abnormalities and the proportion of cells with asymmetrical or
-incomplete-symmetrical chromosome aberrations (see Figure~\ref{mercurybox}). 
+incomplete-symmetrical chromosome aberrations.
+%% (see Figure~\ref{mercurybox}). 
 The coherence criterion defines a partial ordering: 
 an observation is said to be smaller than another when all three variables
 are smaller. The rank score for observation $i$ is the number of
@@ -797,23 +762,6 @@ the corresponding test is called `POSET-test' (partially ordered
 sets test) and may be viewed as a multivariate form of the
 Wilcoxon-Mann-Whitney test.
 
-\begin{sidewaysfigure}
-\begin{center}
-<<mercuryfish-plot, echo = FALSE, fig = TRUE, width = 7, height = 3>>=
-par(cex.lab = 1.3, cex.axis = 1.3)
-layout(matrix(1:3, ncol = 3))
-boxplot(I(log(mercury)) ~ group, data = mercuryfish, 
-        ylab = "Mercury Blood Level (in logs)", varwidth = TRUE)
-boxplot(abnormal ~ group, data = mercuryfish, 
-        ylab = "Abnormal Cells (in %)", varwidth = TRUE)
-boxplot(ccells ~ group, data = mercuryfish, 
-        ylab = "Chromosome Aberrations (in %)", varwidth = TRUE)
-@
-\caption{\Robject{mercuryfish} data: 
-         Distribution of all three response variables in the exposed group
-         and control group. \label{mercurybox}}
-\end{center}
-\end{sidewaysfigure}
 The coherence criterion can be formulated in a simple function by utilizing 
 column-wise sums of indicator functions applied to all individuals
 <<mercurysfish-score, echo = TRUE>>=
@@ -835,46 +783,7 @@ functionality of the framework, including an exact two-sided $p$-value
 pvalue(poset)
 @
 and density (\Rcmd{dperm}), distribution (\Rcmd{pperm}) and quantile functions 
-(\Rcmd{qperm}) of the conditional distribution. When only a small number of
-observations is available, it might be interesting to compare the exact
-conditional distribution and its approximation via the limiting distribution.
-For the \Robject{mercuryfish} data, the relevant parts of 
-both distribution functions are shown in Figure~\ref{distplot}. It 
-turns out that the quality of the normal approximation is excellent for this
-particular problem and using the normal approximation would be sufficient 
-for all practical purposes in this application.
-
-\begin{sidewaysfigure}
-\begin{center}
-<<mercuryfish-ppermplot, echo = FALSE, fig = TRUE, height = 5, width = 9>>=
-par(cex.lab = 1.3, cex.axis = 1.1)
-ite <- poset
-ita <- independence_test(mercury + abnormal + ccells ~ group, data =     
-                           mercuryfish, ytrafo = coherence)
-site <- support(ite)
-layout(matrix(1:2, ncol = 2))
-site <- site[site <= qperm(ite, 0.1) & site > -3]
-pite <- sapply(site, function(x) pperm(ite, x))
-pita <- sapply(site, function(x) pperm(ita, x))
-
-plot(site, pite, type = "S", ylab = "Probability", xlab = "Standardized Statistic")
-lines(site, pita, lty = 3)
-legend("topleft", lty = c(1,3), legend = c("Conditional Distribution",
-"Approximation"), bty = "n")
-
-site <- support(ite)
-site <- site[site >= qperm(ite, 0.9) & site < 3]
-pite <- sapply(site, function(x) pperm(ite, x))
-pita <- sapply(site, function(x) pperm(ita, x))
-
-plot(site, pite, type = "S", ylab = "Probability", xlab = "Standardized Statistic")
-lines(site, pita, lty = 3)
-@
-\caption{\Robject{mercuryfish} data: 
-         Conditional distribution and asymptotic normal approximation 
-         for the POSET test. \label{distplot}}
-\end{center}
-\end{sidewaysfigure}
+(\Rcmd{qperm}) of the conditional distribution. 
 
 \section{DISCUSSION}
 
@@ -937,8 +846,8 @@ invented test statistic, is waived.
 %%\texttt{r-help} email list with the answer `No, but its only whose 
 %%two lines of \RR{} code'. 
 
-With a unifying conceptual framework in mind and a software implementation, such as
-\Rpackage{coin}, at hand, we are no longer limited to already published and 
+With a unifying conceptual framework in mind and a software implementation
+at hand, we are no longer limited to already published and 
 implemented permutation test procedures and are free to define our own transformations and
 influence functions, can choose several forms of suitable test statistics and
 utilize several methods for the computation or approximation of 
@@ -947,19 +856,21 @@ construction of an appropriate permutation test, for both classical and
 new inference problems, is only a matter of putting together
 adequate Lego bricks.
 
-%%\section*{ACKNOWLEDGEMENTS}
+\section*{ACKNOWLEDGEMENTS}
 
-%%Strasser, Dominikus, editor / AE + referees
+We would like to thank Helmut Strasser for fruitful discussions on 
+conditional inference procedures and Dominikus B{\"o}nsch for 
+providing access to the alpha synuclein expression data. In addition,
+we are indepted to two anonymous referees, one associate editor and
+the editor of \textit{TAS} 
+for their valuable comments which lead to substantial
+improvements. The work of T. Hothorn was supported by Deutsche
+Forschungsgemeinschaft (DFG) under grant HO 3242/1-1.
 
 \renewcommand{\baselinestretch}{1}
 %%\setlength{\bibsep}{2mm}
 
 \bibliographystyle{asa}
 \bibliography{LegoCondInf}
-
-\clearpage
-
-\setkeys{Gin}{width=0.9\textheight}
-\pagestyle{empty}
 
 \end{document}
