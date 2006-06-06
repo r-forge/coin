@@ -80,7 +80,7 @@
 \DefineVerbatimEnvironment{Scode}{Verbatim}{}
 \newenvironment{Schunk}{}{}
 
-\renewcommand{\baselinestretch}{1.625}
+\renewcommand{\baselinestretch}{1.65}
 
 
 
@@ -416,7 +416,8 @@ R> kruskal.test(elevel ~ alength, data = alpha)
 	Kruskal-Wallis rank sum test
 
 data:  elevel by alength 
-Kruskal-Wallis chi-squared = 8.8302, df = 2, p-value = 0.01209
+Kruskal-Wallis chi-squared = 8.8302, df =
+2, p-value = 0.01209
 \end{Soutput}
 \end{Schunk}
 
@@ -440,8 +441,10 @@ R> independence_test(elevel ~ alength, data = alpha,
 \begin{Soutput}
 	Asymptotic General Independence Test
 
-data:  elevel by groups short, intermediate, long 
-chi-squared = 8.8302, df = 2, p-value = 0.01209
+data:  elevel by
+	 groups short, intermediate, long 
+chi-squared = 8.8302, df = 2, p-value =
+0.01209
 \end{Soutput}
 \end{Schunk}
 The output gives equivalent results as reported by \Rcmd{kruskal.test} above.
@@ -514,16 +517,19 @@ block factor, can be tested with a $c_\text{quad}$-type test statistic, i.e., th
 Cochran-Mantel-Haenszel test:
 \begin{Schunk}
 \begin{Sinput}
-R> it_alz <- independence_test(disease ~ smoking | gender, 
-       data = alzheimer, teststat = "quad")
+R> it_alz <- independence_test(disease ~ 
+       smoking | gender, data = alzheimer, 
+       teststat = "quad")
 R> it_alz
 \end{Sinput}
 \begin{Soutput}
 	Asymptotic General Independence Test
 
-data:  disease by groups None, <10, 10-20, >20 
+data:  disease by
+	 groups None, <10, 10-20, >20 
 	 stratified by gender 
-chi-squared = 23.3163, df = 6, p-value = 0.0006972
+chi-squared = 23.3163, df = 6, p-value =
+0.0006972
 \end{Soutput}
 \end{Schunk}
 which suggests that there is a clear deviation from independence. 
@@ -539,11 +545,16 @@ is the contingency table of both variables
 R> statistic(it_alz, type = "linear")
 \end{Sinput}
 \begin{Soutput}
-      Alzheimer's Other dementias Other diagnoses
-None          126              79             104
-<10            15               8               5
-10-20          30              33              47
->20            27              44              20
+      Alzheimer's Other dementias
+None          126              79
+<10            15               8
+10-20          30              33
+>20            27              44
+      Other diagnoses
+None              104
+<10                 5
+10-20              47
+>20                20
 \end{Soutput}
 \end{Schunk}
 with conditional expectation \Rcmd{expectation(it\_alz)} and conditional
@@ -569,15 +580,16 @@ collapsed in such a quadratic form. Therefore, we choose the
 maximum of the standardized contingency table as $c_\text{max}$ test statistic via
 \begin{Schunk}
 \begin{Sinput}
-R> it_alzmax <- independence_test(disease ~ smoking, 
-       data = alzheimer, subset = alzheimer$gender == "Male", 
-       teststat = "max")
+R> it_alzmax <- independence_test(disease ~ 
+       smoking, data = alzheimer, subset = alzheimer$gender == 
+       "Male", teststat = "max")
 R> it_alzmax
 \end{Sinput}
 \begin{Soutput}
 	Asymptotic General Independence Test
 
-data:  disease by groups None, <10, 10-20, >20 
+data:  disease by
+	 groups None, <10, 10-20, >20 
 maxT = 4.9504, p-value = 1.148e-05
 \end{Soutput}
 \end{Schunk}
@@ -588,11 +600,16 @@ deviations from independence
 R> statistic(it_alzmax, "standardized")
 \end{Sinput}
 \begin{Soutput}
-      Alzheimer's Other dementias Other diagnoses
-None    2.5900465       -2.340275      -0.1522407
-<10     2.9713093       -2.056864      -0.8446233
-10-20  -0.7765307       -1.237441       2.1146396
->20    -3.6678046        4.950373      -1.5303056
+      Alzheimer's Other dementias
+None    2.5900465       -2.340275
+<10     2.9713093       -2.056864
+10-20  -0.7765307       -1.237441
+>20    -3.6678046        4.950373
+      Other diagnoses
+None       -0.1522407
+<10        -0.8446233
+10-20       2.1146396
+>20        -1.5303056
 \end{Soutput}
 \end{Schunk}
 This leads to the impression that heavy smokers suffer less frequently
@@ -668,15 +685,15 @@ linear statistic and an approximation of the conditional distribution
 utilizing the asymptotic distribution simply reads
 \begin{Schunk}
 \begin{Sinput}
-R> it_ph <- independence_test(Surv(time, event) + 
-       Surv(dmin, tumor) + ntumor ~ group, data = photocar)
+R> it_ph <- independence_test(Surv(time, 
+       event) + Surv(dmin, tumor) + ntumor ~ 
+       group, data = photocar)
 R> it_ph
 \end{Sinput}
 \begin{Soutput}
 	Asymptotic General Independence Test
 
-data:  Surv(time, event), Surv(dmin, tumor), ntumor 
-       by groups A, B, C 
+data:  Surv(time, event), Surv(dmin, tumor), ntumor by groups A, B, C 
 maxT = 7.0777, p-value = 8.1e-12
 \end{Soutput}
 \end{Schunk}
@@ -703,10 +720,14 @@ linear statistic $\T$ to its critical value 2.715
 R> statistic(it_ph, type = "standardized")
 \end{Sinput}
 \begin{Soutput}
-  Surv(time, event) Surv(dmin, tumor)     ntumor
-A         -2.327338         -2.178704  0.2642120
-B         -4.750336         -4.106039  0.1509783
-C          7.077674          6.284743 -0.4151904
+  Surv(time, event) Surv(dmin, tumor)
+A         -2.327338         -2.178704
+B         -4.750336         -4.106039
+C          7.077674          6.284743
+      ntumor
+A  0.2642120
+B  0.1509783
+C -0.4151904
 \end{Soutput}
 \end{Schunk}
 %%or again by means of the corresponding adjusted $p$-values
@@ -764,18 +785,20 @@ The coherence criterion can be formulated in a simple function by utilizing
 column-wise sums of indicator functions applied to all individuals
 \begin{Schunk}
 \begin{Sinput}
-R> coherence <- function(data)
-       apply(x <- t(as.matrix(data)), 2, function(y) 
-           sum(colSums(x < y) == nrow(x)) - 
-           sum(colSums(x > y) == nrow(x)))
+R> coherence <- function(data) {
+       x <- t(as.matrix(data))
+       apply(x, 2, function(y) sum(colSums(x < 
+           y) == nrow(x)) - sum(colSums(x > 
+           y) == nrow(x)))
+   }
 \end{Sinput}
 \end{Schunk}
 which is now defined as influence function $h$ via the \Rcmd{ytrafo} argument
 \begin{Schunk}
 \begin{Sinput}
-R> poset <- independence_test(mercury + abnormal + ccells ~ group, 
-       data = mercuryfish, ytrafo = coherence, 
-       distribution = exact())
+R> poset <- independence_test(mercury + 
+       abnormal + ccells ~ group, data = mercuryfish, 
+       ytrafo = coherence, distribution = exact())
 \end{Sinput}
 \end{Schunk}
 Once the transformations $g$ (the default zero-one coding of the exposed and control
@@ -876,116 +899,7 @@ by Deutsche Forschungsgemeinschaft (DFG) under grant HO 3242/1-1.
 \renewcommand{\baselinestretch}{1}
 %%\setlength{\bibsep}{2mm}
 
-\begin{thebibliography}{22}
-\newcommand{\enquote}[1]{``#1''}
-\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
-
-\bibitem[{Agresti(2002)}]{Agresti2002}
-Agresti, A. (2002), \textit{Categorical Data Analysis}, Hoboken, New Jersey:
-  John Wiley \& Sons, 2nd ed.
-
-\bibitem[{Balkin and Mallows(2001)}]{BalkinMallows2001}
-Balkin, S.~D. and Mallows, C.~L. (2001), \enquote{An Adjusted, Asymmetric
-  Two-Sample $t$ Test,} \textit{The American Statistician}, 55, 203--206.
-
-\bibitem[{Berger(2000)}]{pros-and-c:2000}
-Berger, V.~W. (2000), \enquote{Pros and Cons of Permutation Tests in Clinical
-  Trials,} \textit{Statistics in Medicine}, 19, 1319--1328.
-
-\bibitem[{B{\"o}nsch et~al.(2005)B{\"o}nsch, Lederer, Reulbach, Hothorn,
-  Kornhuber, and Bleich}]{Boenscheta2005}
-B{\"o}nsch, D., Lederer, T., Reulbach, U., Hothorn, T., Kornhuber, J., and
-  Bleich, S. (2005), \enquote{Joint Analysis of the {NACP-REP1} Marker Within
-  the Alpha Synuclein Gene Concludes Association with Alcohol Dependence,}
-  \textit{Human Molecular Genetics}, 14, 967--971.
-
-\bibitem[{Edgington(1987)}]{Edgington1987}
-Edgington, E.~S. (1987), \textit{Randomization Tests}, New York, USA: Marcel
-  Dekker.
-
-\bibitem[{Ernst(2004)}]{Ernst2004}
-Ernst, M.~D. (2004), \enquote{Permutation Methods: {A} Basis for Exact
-  Inference,} \textit{Statistical Science}, 19, 676--685.
-
-\bibitem[{Fisher(1935)}]{Fisher1935}
-Fisher, R.~A. (1935), \textit{The Design of Experiments}, Edinburgh, UK: Oliver
-  and Boyd.
-
-\bibitem[{Genz(1992)}]{numerical-:1992}
-Genz, A. (1992), \enquote{Numerical Computation of Multivariate Normal
-  Probabilities,} \textit{Journal of Computational and Graphical Statistics},
-  1, 141--149.
-
-\bibitem[{Good(2000)}]{Good2000}
-Good, P.~I. (2000), \textit{Permutation Tests: {A} Practical Guide to
-  Resampling Methods for Testing}, New York, USA: Springer-Verlag.
-
-\bibitem[{Hothorn et~al.(2006)Hothorn, Hornik, van~de Wiel, and
-  Zeileis}]{PKG:coin}
-Hothorn, T., Hornik, K., van~de Wiel, M., and Zeileis, A. (2006), \textit{coin:
-  Conditional Inference Procedures in a Permutation Test Framework}, {R}
-  package version 0.4-6, \url{http://CRAN.R-project.org/}.
-
-\bibitem[{Janssen and Pauls(2003)}]{JanssenPauls2003}
-Janssen, A. and Pauls, T. (2003), \enquote{How Do Bootstrap and Permutation
-  Tests Work?} \textit{The Annals of Statistics}, 31, 768--806.
-
-\bibitem[{Johnson and Kotz(1970)}]{johnsonkotz1970}
-Johnson, N.~L. and Kotz, S. (1970), \textit{Distributions in Statistics:
-  Continuous Univariate Distributions 2}, New York: John Wiley \& Sons.
-
-\bibitem[{Ludbrook and Dudley(1998)}]{why-permut:1998}
-Ludbrook, J. and Dudley, H. (1998), \enquote{Why Permutation Tests are Superior
-  to $t$ and {$F$} Tests in Biomedical Research,} \textit{The American
-  Statistician}, 52, 127--132.
-
-\bibitem[{Molefe et~al.(2005)Molefe, Chen, Howard, Miller, Sambuco, Forbes, and
-  Kodell}]{Molefeetal2005}
-Molefe, D.~F., Chen, J.~J., Howard, P.~C., Miller, B.~J., Sambuco, C.~P.,
-  Forbes, P.~D., and Kodell, R.~L. (2005), \enquote{Tests for Effects on Tumor
-  Frequency and Latency in Multiple Dosing Photococarcinogenicity Experiments,}
-  \textit{Journal of Statistical Planning and Inference}, 129, 39--58.
-
-\bibitem[{Oster(2002)}]{Oster2002}
-Oster, R.~A. (2002), \enquote{An Examination of Statistical Software Packages
-  for Categorical Data Analysis Using Exact Methods,} \textit{The American
-  Statistician}, 56, 235--246.
-
-\bibitem[{Oster(2003)}]{Oster2003}
---- (2003), \enquote{An Examination of Statistical Software Packages for
-  Categorical Data Analysis Using Exact Methods--{P}art II,} \textit{The
-  American Statistician}, 57, 201--213.
-
-\bibitem[{Pesarin(2001)}]{Pesarin2001}
-Pesarin, F. (2001), \textit{Multivariate Permutation Tests: With Applications
-  to Biostatistics}, Chichester, UK: John Wiley \& Sons.
-
-\bibitem[{{R Development Core Team}(2005)}]{Rcore2005}
-{R Development Core Team} (2005), \textit{\textsf{R}: A Language and
-  Environment for Statistical Computing}, R Foundation for Statistical
-  Computing, Vienna, Austria, {ISBN} 3-900051-00-3.
-
-\bibitem[{Rosenbaum(1994)}]{Rosenbaum1994a}
-Rosenbaum, P.~R. (1994), \enquote{Coherence in Observational Studies,}
-  \textit{Biometrics}, 50, 368--374.
-
-\bibitem[{Salib and Hillier(1997)}]{SalibHillier1997}
-Salib, E. and Hillier, V. (1997), \enquote{A Case-Control Study of Smoking and
-  Alzheimer's Disease,} \textit{International Journal of Geriatric Psychiatry},
-  12, 295--300.
-
-\bibitem[{Shuster(2005)}]{Shuster2005}
-Shuster, J.~J. (2005), \enquote{Diagnostics for Assumptions in Moderate to
-  Large Simple Clinical Trials: {D}o They Really Help?} \textit{Statistics in
-  Medicine}, 24, 2431--2438.
-
-\bibitem[{Strasser and Weber(1999)}]{StrasserWeber1999}
-Strasser, H. and Weber, C. (1999), \enquote{On the Asymptotic Theory of
-  Permutation Statistics,} \textit{Mathematical Methods of Statistics}, 8,
-  220--250, preprint available from
-  \url{http://epub.wu-wien.ac.at/dyn/openURL?id=oai:epub.wu-wien.ac.at:epub-wu%
--01_94c}.
-
-\end{thebibliography}
+\bibliographystyle{asa}
+\bibliography{LegoCondInf}
 
 \end{document}
