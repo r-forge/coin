@@ -1,0 +1,130 @@
+From henric.nilsson@phadia.com Fri May 26 11:13:09 2006
+Date: Fri, 26 May 2006 11:11:25 +0200
+From: "Nilsson, Henric" <henric.nilsson@phadia.com>
+To: Torsten Hothorn <Torsten.Hothorn@rzmail.uni-erlangen.de>
+Cc: torsten@hothorn.de
+Subject: RE: mh_test question
+
+Hi Torsten,
+
+Sorry for the delayed answer, but I'm pretty busy myself at the moment
+and tonight I'm off to Copenhagen for a week. Hopefully I'll find some
+time to do a proper check then. However, I'm now somewhat convinced that
+`mh_test' computes Stuart's test (p.422) rather than Bowker's test
+(p.424).
+
+I tried SAS 8.2, which supposedly computes Bowker's test, and it didn't
+match the output from `mh_test', but gave X^2=238.0800 on _6_ df.
+
+The output from `mh_test' has X^2=235.4957 on 3 df. Note that Agresti
+(p.422), quoting Ireland (1969), gives a link between the tests of
+Bhapkar (W) and Stuart (W0):
+W=W0/(1-W0/n)=235.4957/(1-235.4957/55981)=236.4905. And numerically this
+corresponds very well to the figure quoted for Bhapkar's test by Agresti
+on p.423: W=236.5 on _3_ df. At least for this table, Bowker's test
+seems rather more conservative than Bhapkar's. Since they seem to test
+the same hypothesis, I do wonder which of these are closest to having
+the correct size?]
+
+In any case, if `mh_test' indeed is supposed to compute Bowker's test,
+and apart from the test statistic, the df can't be correct. My reading
+of p.424 (and SAS, which, of course, by no means correspond to the
+universal truth) suggests that the df should be I*(I-1)/2=4*3/2=6 rather
+than 3.
+
+
+Best,
+Henric 
+
+
+
+> -----Original Message-----
+> From: Torsten Hothorn [mailto:Torsten.Hothorn@rzmail.uni-erlangen.de] 
+> Sent: den 18 maj 2006 15:35
+> To: Nilsson, Henric
+> Cc: torsten@hothorn.de
+> Subject: Re: mh_test question
+> 
+> 
+> On Tue, 16 May 2006, Nilsson, Henric wrote:
+> 
+> > Hi Torsten,
+> >
+> 
+> Hi Henric,
+> 
+> > I'm trying to use the `mh_test' function in the `coin' 
+> package. (BTW, 
+> > `coin' is really fantastic. So simple to use, and yet so powerful.
+> > Statistical computing at its best!)
+> 
+> yep, that is exactly the aim it was designed for ;-)
+> 
+> >
+> > In order to get a better understanding, I tried matching 
+> the results 
+> > of Agresti's example on p. 423 (Table 10.6 and Section 
+> 10.3.4) to the 
+> > output from `mh_test'. Since the computation took quite a 
+> while, I'm 
+> > reproducing the results below.
+> >
+> > Agresti computes two test statistics in the text: ML and Bhapkar's 
+> > statistic (p. 423). None of these match the results from `mh_test'
+> > exactly. According to Agresti (p. 422), Bhapkar's statisic 
+> is a Wald 
+> > statistic. Since `mh_test' computes McNemar's test in the 2x2 case, 
+> > and this is a score test, my guess is that the more general case is 
+> > also a score test [Stuart (1955) according to Agresti (p. 422)].
+> >
+> 
+> hm, I'm not sure here but thanks for the hint. mh_test uses a 
+> chi^2 statistic based on the standardized table (where 
+> expectation and covariance are computed in each block, i.e., 
+> for each observation). I think it should be equal to X^2 at 
+> page 424 but I'm not really sure. 
+> I'm terribly busy at the moment, but maybe you could check 
+> this? Use a simpler example (with smaller n) otherwise it 
+> will run forever.
+> 
+> Thanks and best wishes,
+> 
+> Torsten
+> 
+> > I'd be greatful if you'd be able to shed some light on this matter.
+> >
+> > Thanks!
+> >
+> > Best wishes,
+> > Henric
+> >
+> > - - -
+> >
+> > ### Migration from 1980 to 1985, Agresti (2002, p .423) ### 
+> Note: The 
+> > count in row 3, column 2 has been changed to 225
+> > ###       per Agresti's errata list
+> >> residence <- c("northeast", "midwest", "south", "west")
+> >> migration <- as.table(matrix(c(11607,    100,   366,   124,
+> > +                                   87,  13677,   515,   302,
+> > +                                  172,    225, 17819,   270,
+> > +                                   63,    176,   286, 10192),
+> > +                       nrow = 4, byrow = TRUE,
+> > +                       dimnames = list(Residence80 = residence,
+> > +                                       Residence85 = residence)))
+> >> addmargins(migration)
+> >           Residence85
+> > Residence80 northeast midwest south  west   Sum
+> >  northeast     11607     100   366   124 12197
+> >  midwest          87   13677   515   302 14581
+> >  south           172     225 17819   270 18486
+> >  west             63     176   286 10192 10717
+> >  Sum           11929   14178 18986 10888 55981
+> >> mh_test(migration)
+> >
+> >        Asymptotic Marginal-Homogenity Test
+> >
+> > data:  response by
+> >         groups Residence80, Residence85
+> >         stratified by block
+> > chi-squared = 235.4957, df = 3, p-value < 2.2e-16
