@@ -1,4 +1,9 @@
 
+		CHANGES in `coin' VERSION 0.4-x
+
+    o   fix typo: Homegeneity
+
+
 		CHANGES in `coin' VERSION 0.4-8
 
     o    clarify that the Stuart-Maxwell test is computed by mh_test and add
