@@ -1,4 +1,16 @@
 
+		CHANGES in `coin' VERSION 0.4-10
+
+    o   add codetools checks to tests
+
+    o   maxstat_test(y ~ x) is now able to deal with unordered x variables
+
+    o   maxstat_test returns estimates of both the selected variable and the
+        cutpoint in multivariate situations
+
+    o   more checks for maxstat_test
+
+
 		CHANGES in `coin' VERSION 0.4-9
 
     o   fix typo: Homegeneity
