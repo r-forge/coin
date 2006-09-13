@@ -153,6 +153,12 @@ independence_test(asat ~ group, data = asat,
 normal_test(asat ~ group, data = asat, distribution = "exact", 
             alternative = "greater")
 
+### if you are interested in the internals:
+## Not run: 
+##D     browseURL(system.file("documentation/html/index.html", 
+##D                           package = "coin"))
+## End(Not run)
+
 
 
 
