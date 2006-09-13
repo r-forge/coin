@@ -202,6 +202,11 @@ setMethod(f = "ApproxNullDistribution",
               dcov <- sqrt(variance(object))
               expect <- expectation(object)
               pls <- (pls - expect) / dcov
+
+### <FIXME>: use 
+### mean((colSums(abs(pls) >= Tmax))> 0)
+### </FIXME>
+
               pls <- switch(object@alternative,
                   "less" = do.call("pmin", as.data.frame(t(pls))),
                   "greater" = do.call("pmax", as.data.frame(t(pls))),
