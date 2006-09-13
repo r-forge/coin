@@ -1,5 +1,5 @@
 
-R version 2.4.0 alpha (2006-09-11 r39258)
+R version 2.4.0 alpha (2006-09-13 r39286)
 Copyright (C) 2006 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -20,11 +20,39 @@ Type 'q()' to quit R.
 > ### * <HEADER>
 > ###
 > attach(NULL, name = "CheckExEnv")
-> ## add some hooks to label plot pages for base and grid graphics
-> setHook("plot.new", ".newplot.hook")
-> setHook("persp", ".newplot.hook")
-> setHook("grid.newpage", ".gridplot.hook")
-> 
+> assign("nameEx", 
++        local({
++ 	   s <- "__{must remake R-ex/*.R}__"
++            function(new) {
++                if(!missing(new)) s <<- new else s
++            }
++        }),
++        pos = "CheckExEnv")
+> ## Add some hooks to label plot pages for base and grid graphics
+> assign("base_plot_hook",
++        function() {
++            pp <- par(c("mfg","mfcol","oma","mar"))
++            if(all(pp$mfg[1:2] == c(1, pp$mfcol[2]))) {
++                outer <- (oma4 <- pp$oma[4]) > 0; mar4 <- pp$mar[4]
++                mtext(sprintf("help(\"%s\")", nameEx()), side = 4,
++                      line = if(outer)max(1, oma4 - 1) else min(1, mar4 - 1),
++               outer = outer, adj = 1, cex = .8, col = "orchid", las=3)
++            }
++        },
++        pos = "CheckExEnv")
+> assign("grid_plot_hook",
++        function() {
++            pushViewport(viewport(width=unit(1, "npc") - unit(1, "lines"),
++                                  x=0, just="left"))
++            grid.text(sprintf("help(\"%s\")", nameEx()),
++                      x=unit(1, "npc") + unit(0.5, "lines"),
++                      y=unit(0.8, "npc"), rot=90,
++                      gp=gpar(col="orchid"))
++        },
++        pos = "CheckExEnv")
+> setHook("plot.new",     get("base_plot_hook", pos = "CheckExEnv"))
+> setHook("persp",        get("base_plot_hook", pos = "CheckExEnv"))
+> setHook("grid.newpage", get("grid_plot_hook", pos = "CheckExEnv"))
 > assign("cleanEx",
 +        function(env = .GlobalEnv) {
 + 	   rm(list = ls(envir = env, all.names = TRUE), envir = env)
@@ -46,7 +74,6 @@ Type 'q()' to quit R.
 + 		       " have been removed from the search path")
 +        },
 +        pos = "CheckExEnv")
-> assign("..nameEx", "__{must remake R-ex/*.R}__", pos = "CheckExEnv") # for now
 > assign("ptime", proc.time(), pos = "CheckExEnv")
 > grDevices::postscript("coin-Ex.ps")
 > assign("par.postscript", graphics::par(no.readonly = TRUE), pos = "CheckExEnv")
@@ -60,8 +87,7 @@ Loading required package: modeltools
 > 
 > assign(".oldSearch", search(), pos = 'CheckExEnv')
 > assign(".oldNS", loadedNamespaces(), pos = 'CheckExEnv')
-> cleanEx(); ..nameEx <- "ContingencyTests"
-> 
+> cleanEx(); nameEx("ContingencyTests");
 > ### * ContingencyTests
 > 
 > flush(stderr()); flush(stdout())
@@ -200,8 +226,7 @@ chi-squared = 10.6381, df = 1, p-value = 0.001108
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "IndependenceTest"
-> 
+> cleanEx(); nameEx("IndependenceTest");
 > ### * IndependenceTest
 > 
 > flush(stderr()); flush(stdout())
@@ -261,8 +286,7 @@ alternative hypothesis: true mu is greater than 0
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "LocationTests"
-> 
+> cleanEx(); nameEx("LocationTests");
 > ### * LocationTests
 > 
 > flush(stderr()); flush(stdout())
@@ -433,8 +457,7 @@ IV-III 0.9998777778
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "MarginalHomogeneityTest"
-> 
+> cleanEx(); nameEx("MarginalHomogeneityTest");
 > ### * MarginalHomogeneityTest
 > 
 > flush(stderr()); flush(stdout())
@@ -502,8 +525,7 @@ chi-squared = 13.7647, df = 2, p-value = 0.001026
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "MaxstatTest"
-> 
+> cleanEx(); nameEx("MaxstatTest");
 > ### * MaxstatTest
 > 
 > flush(stderr()); flush(stdout())
@@ -591,8 +613,7 @@ $cutpoint
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "PermutationDistribution"
-> 
+> cleanEx(); nameEx("PermutationDistribution");
 > ### * PermutationDistribution
 > 
 > flush(stderr()); flush(stdout())
@@ -643,8 +664,7 @@ $cutpoint
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "ScaleTests"
-> 
+> cleanEx(); nameEx("ScaleTests");
 > ### * ScaleTests
 > 
 > flush(stderr()); flush(stdout())
@@ -733,8 +753,7 @@ Control:Scale                   0            21
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "SpearmanTest"
-> 
+> cleanEx(); nameEx("SpearmanTest");
 > ### * SpearmanTest
 > 
 > flush(stderr()); flush(stdout())
@@ -760,8 +779,7 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "SurvTest"
-> 
+> cleanEx(); nameEx("SurvTest");
 > ### * SurvTest
 > 
 > flush(stderr()); flush(stdout())
@@ -822,8 +840,7 @@ alternative hypothesis: two.sided
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "SymmetryTests"
-> 
+> cleanEx(); nameEx("SymmetryTests");
 > ### * SymmetryTests
 > 
 > flush(stderr()); flush(stdout())
@@ -952,8 +969,7 @@ chi-squared = 7.0533, df = 1, p-value = 0.007912
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "Transformations"
-> 
+> cleanEx(); nameEx("Transformations");
 > ### * Transformations
 > 
 > flush(stderr()); flush(stdout())
@@ -1087,8 +1103,7 @@ attr(,"assign")
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "alpha"
-> 
+> cleanEx(); nameEx("alpha");
 > ### * alpha
 > 
 > flush(stderr()); flush(stdout())
@@ -1114,8 +1129,7 @@ chi-squared = 8.8302, df = 2, p-value = 0.01209
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "alzheimer"
-> 
+> cleanEx(); nameEx("alzheimer");
 > ### * alzheimer
 > 
 > flush(stderr()); flush(stdout())
@@ -1151,8 +1165,7 @@ chi-squared = 23.3163, df = 6, p-value = 0.0006972
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "asat"
-> 
+> cleanEx(); nameEx("asat");
 > ### * asat
 > 
 > flush(stderr()); flush(stdout())
@@ -1181,8 +1194,7 @@ attr(,"conf.level")
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "expectation-methods"
-> 
+> cleanEx(); nameEx("expectation-methods");
 > ### * expectation-methods
 > 
 > flush(stderr()); flush(stdout())
@@ -1275,8 +1287,7 @@ attr(,"conf.level")
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "glioma"
-> 
+> cleanEx(); nameEx("glioma");
 > ### * glioma
 > 
 > flush(stderr()); flush(stdout())
@@ -1352,8 +1363,7 @@ alternative hypothesis: two.sided
 > 
 > 
 > graphics::par(get("par.postscript", pos = 'CheckExEnv'))
-> cleanEx(); ..nameEx <- "hohnloser"
-> 
+> cleanEx(); nameEx("hohnloser");
 > ### * hohnloser
 > 
 > flush(stderr()); flush(stdout())
@@ -1383,8 +1393,7 @@ $cutpoint
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "jobsatisfaction"
-> 
+> cleanEx(); nameEx("jobsatisfaction");
 > ### * jobsatisfaction
 > 
 > flush(stderr()); flush(stdout())
@@ -1413,8 +1422,7 @@ chi-squared = 10.2001, df = 9, p-value = 0.3345
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "mercuryfish"
-> 
+> cleanEx(); nameEx("mercuryfish");
 > ### * mercuryfish
 > 
 > flush(stderr()); flush(stdout())
@@ -1494,8 +1502,7 @@ control 0.00719172 0.01705445 0.03836982
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "neuropathy"
-> 
+> cleanEx(); nameEx("neuropathy");
 > ### * neuropathy
 > 
 > flush(stderr()); flush(stdout())
@@ -1546,8 +1553,7 @@ alternative hypothesis: true mu is less than 0
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "ocarcinoma"
-> 
+> cleanEx(); nameEx("ocarcinoma");
 > ### * ocarcinoma
 > 
 > flush(stderr()); flush(stdout())
@@ -1578,8 +1584,7 @@ alternative hypothesis: true mu is less than 0
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "photocar"
-> 
+> cleanEx(); nameEx("photocar");
 > ### * photocar
 > 
 > flush(stderr()); flush(stdout())
@@ -1628,8 +1633,7 @@ C             0.000            0.0000 0.9988
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "pvalue-methods"
-> 
+> cleanEx(); nameEx("pvalue-methods");
 > ### * pvalue-methods
 > 
 > flush(stderr()); flush(stdout())
@@ -1683,8 +1687,7 @@ alternative hypothesis: true mu is not equal to 1
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "rotarod"
-> 
+> cleanEx(); nameEx("rotarod");
 > ### * rotarod
 > 
 > flush(stderr()); flush(stdout())
@@ -1733,8 +1736,7 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "sphase"
-> 
+> cleanEx(); nameEx("sphase");
 > ### * sphase
 > 
 > flush(stderr()); flush(stdout())
@@ -1778,8 +1780,7 @@ $cutpoint
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "statistic-methods"
-> 
+> cleanEx(); nameEx("statistic-methods");
 > ### * statistic-methods
 > 
 > flush(stderr()); flush(stdout())
@@ -1833,8 +1834,7 @@ $cutpoint
 > 
 > 
 > 
-> cleanEx(); ..nameEx <- "treepipit"
-> 
+> cleanEx(); nameEx("treepipit");
 > ### * treepipit
 > 
 > flush(stderr()); flush(stdout())
@@ -1873,7 +1873,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  51.579 0.42 53.084 0 0 
+Time elapsed:  51.599 1.016 72.751 0 0 
 > grDevices::dev.off()
 null device 
           1 
