@@ -194,6 +194,8 @@ SEXP R_MonteCarloIndependenceTest (SEXP x, SEXP y, SEXP block, SEXP B) {
 
     PutRNGstate();
 
+    Free(index); Free(permindex);
+
     UNPROTECT(3);
     return(ans);
 }
