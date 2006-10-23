@@ -1,4 +1,6 @@
 
+o       formula interface to wilcoxsign_test is brain damaged
+
 o       don't print in show() and return objects of class htest
 
 o       implement `pperm(x, q, lower.tail = TRUE)'
