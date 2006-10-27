@@ -1,5 +1,7 @@
 
 o       formula interface to wilcoxsign_test is brain damaged
+        y ~ 1 must be OK
+        
 
 o       don't print in show() and return objects of class htest
 
