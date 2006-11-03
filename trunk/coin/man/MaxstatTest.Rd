@@ -12,7 +12,7 @@
 \method{maxstat_test}{IndependenceProblem}(object, 
     distribution = c("asymptotic", "approximate"), 
     teststat = c("max", "quad"),
-    minprob = 0.1, maxprob = 0.9, ...)
+    minprob = 0.1, maxprob = 1 - minprob, ...)
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x1 + ... + xp | block} where \code{y}
