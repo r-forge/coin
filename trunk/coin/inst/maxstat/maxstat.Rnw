@@ -1,0 +1,42 @@
+\documentclass{Z}
+
+%% need no \usepackage{Sweave}
+\SweaveOpts{engine=R, eps=FALSE, echo=FALSE, results=hide}
+
+\newcommand{\indic}{\mathbf{1}}
+
+\title{Conditionally Selected Statistics}
+\author{Torsten Hothorn\\Friedrich-Alexander-Universit\"at\\Erlangen-N\"urnberg
+  \And Achim Zeileis\\Wirtschaftsuniversit\"at Wien}
+\Plainauthor{Torsten Hothorn, Achim Zeileis}
+\Keywords{conditional inference, asymptotic distribution, exact distribution, maximally-selected statistics}
+
+\Abstract{
+}
+
+\begin{document}
+
+<<packages>>=
+rseed <- 20061103
+@
+
+\section{Introduction} \label{sec:introduction}
+
+
+\section*{Acknowledgements}
+
+The work of T. Hothorn was supported by Deutsche Forschungsgemeinschaft (DFG) under grant HO 3242/1-3.
+
+\bibliography{maxstat}
+
+\begin{appendix}
+
+\section{Proofs}
+
+The (asymptotic) distribution of the multivariate statistic $Z = (Z_{\pi_1}, \dots, Z_{\pi_m})^\top$
+is derived by embedding the statistic into the framework of \cite{permsc:Strasser+Weber:1999},
+as discussed in \cite{permsc:Hothorn+Hornik+VanDeWiel:2006}. 
+
+\end{appendix}
+
+\end{document}
