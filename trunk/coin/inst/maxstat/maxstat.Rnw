@@ -41,7 +41,7 @@ library("survival")
 
 Dichotomization of variables measured at higher scale levels 
 prior to model building is bad practice 
-\citep[][amoung many others]{Royston2006}.
+\citep[][among many others]{Royston2006}.
 It will result in loss of power and sophisticated regression
 models that adapt itself to the complexity of the regression 
 problem at hand are widely available. However, we need to acknowledge
@@ -51,19 +51,19 @@ decision rules.
 
 Such rules of thumb are frequently used to investigate new predictor variables
 for patient survival in oncology. \cite{Galon2006} estimate cutpoints for
-various characteristice of immune cells within colorectal tumor samples, 
+various characteristics of immune cells within colorectal tumor samples, 
 such as type, density or location, with respect to their ability to differentiate
 between patients with good and poor prognosis. \cite{Buccisano2006} follow
-a similar approach, obtaining a treshold for residual leukemic cells in AML 
+a similar approach, obtaining a threshold for residual leukemic cells in AML 
 patients. The ability for expression levels of HER2 and coamplified genes 
 to predict breast cancer survival is investigated by \cite{Vinatzer2005} 
-utilitzing maximally selected log-rank statistics. Beyond applications
+utilizing maximally selected log-rank statistics. Beyond applications
 in oncology, cutpoints for habitat factors discriminating between forest systems
 with low and high abundance of certain indicator species 
 \citep{Muller2004} are currently implemented by the largest
 European forest enterprise. A review of currently published scholary articles
-citing one of the latest statistical papers in this area 
-\citep[for example][]{Mazumdar2003,HothornLausen2003} reveals many 
+citing one of the statistical papers in this area 
+\citep[for example][]{Mazumdar2000,HothornLausen2003} reveals many 
 more applications.
 
 Two questions arise from a statistical point of view. In a first step, we
@@ -96,9 +96,11 @@ We embed the different statistics known so far into a common framework and take
 a conditional view on maximally selected statistics. Conditioning on permutations
 of the data allow for a unified treatment of maximally selected rank statistics
 within the theory of permutation tests described by \cite{StrasserWeber1999}.
-
-
-\cite{Hothornetal2006}
+The conditional asymptotic distribution for a large class of maximally selected 
+statistics is derived. Furthermore, our new conditional formulation of maximally selected
+statistics make an implementation of the methodology for nominal, ordered and 
+multivariate covariates as well as nominal, ordered, discrete and continuous numeric, censored and 
+multivariate response variables extremely easy \citep{Hothornetal2006}.
 
 \section{Binary Partitions and Two-Sample Statistics} \label{sec:stat}
 
