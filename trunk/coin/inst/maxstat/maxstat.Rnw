@@ -3,13 +3,28 @@
 %% need no \usepackage{Sweave}
 \SweaveOpts{engine=R, eps=FALSE, echo=FALSE, results=hide}
 
-\newcommand{\indic}{\mathbf{1}}
+\usepackage{amstext}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\newcommand{\V}{\mathbb{V}} %% cal{\mbox{\textnormal{Var}}} }
+\renewcommand{\E}{\mathbb{E}} %%mathcal{\mbox{\textnormal{E}}} }
+\newcommand{\Var}{\mathbb{V}} %%mathcal{\mbox{\textnormal{Var}}} }
+\newcommand{\argmin}{\operatorname{argmin}\displaylimits}
+\newcommand{\argmax}{\operatorname{argmax}\displaylimits}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\T}{\mathbf{T}}  
+\renewcommand{\vec}{\text{vec}}
+\newcommand{\R}{\mathbb{R}}  
 
-\title{Conditionally Selected Statistics}
+\newcommand{\indic}{I}
+
+\title{A Unifying Conditional View on Maximally Selected Statistics and Cutpoint Estimation}
 \author{Torsten Hothorn\\Friedrich-Alexander-Universit\"at\\Erlangen-N\"urnberg
   \And Achim Zeileis\\Wirtschaftsuniversit\"at Wien}
 \Plainauthor{Torsten Hothorn, Achim Zeileis}
-\Keywords{conditional inference, asymptotic distribution, exact distribution, maximally-selected statistics}
+\Keywords{conditional inference, asymptotic distribution,  
+          maximally selected statistics, changepoint}
 
 \Abstract{
 }
@@ -18,9 +33,213 @@
 
 <<packages>>=
 rseed <- 20061103
+library("xtable")
+library("survival")
 @
 
 \section{Introduction} \label{sec:introduction}
+
+\section{Binary Partitions and Two-Sample Statistics}
+
+We are provided with independent and identically distributed
+observations $(\Y_i, \X_i)$ for $i = 1, \dots, n$ and 
+are interested in testing the null hypothesis of independence of the response 
+variable $\Y$ and and covariate $\X$
+\begin{eqnarray*}
+H_0: D(\Y | \X) = D(\Y)
+\end{eqnarray*}
+against shift alternatives. That is, departures from the null hypothesis
+where the distribution of the response variable varies between two groups
+of observations are of special interest.
+Such binary partitions are defined in advance by $p$ sets $\{A_1, \dots, A_p\}$
+partitioning the observations into two groups based on the $\X$ measurements only. Here,
+\begin{eqnarray*}
+g_j(\X_i) = \indic(\X_i \in A_j)
+\end{eqnarray*}
+denotes the indicator function. Only binary partitions $A_j$ satisfying the
+constraint $\sum_i g_i(\X_i) \in (n\varepsilon, n - n\varepsilon)$ 
+for some fixed $\varepsilon \in (0, 0.5)$ are taken into account. 
+Depending on the measurement scale of $\X$, the partitions are induced by 
+cutpoints ($\X$ ordered; $A_j = (-\infty, \mu_j)$) or by potentially 
+all $2^{k - 1}$ binary partitions of the $k$ levels of a factor $\X$.
+
+The two-sample problem associated with the binary partition $A_j$ 
+can be tested using a linear statistic
+\begin{eqnarray*}
+\T_j = \vec\left(\sum_{i = 1}^n g_j(\X_i) h(\Y_i)^\top\right) \in \R^{q \times 1}
+\end{eqnarray*}
+where $h: \mathcal{Y} \rightarrow
+\R^{q \times 1}$ is the \emph{influence function} applied to the responses.
+The function $h(\Y_i) = h(\Y_i, (\Y_1, \dots, \Y_n))$ may depend on the full 
+vector of responses $(\Y_1, \dots, \Y_n)$, however only
+in a permutation symmetric way, i.e., the value of the
+function must not depend on the order in which $\Y_1, \dots, \Y_n$ appear.
+For example, with $h$ being a rank transformation for a 
+continuous response $\Y$, the linear
+statistic is the sum of the ranks in the first group, i.e., equals the 
+Wilcoxon-Mann-Whitney statistic. 
+
+A global test for all binary partitions is based on the statistic
+\begin{eqnarray*}
+\T = (\T_1, \dots, \T_p) = \vec\left(\sum_{i = 1}^n g(\X_i) h(\Y_i)^\top\right)
+\in \R^{pq \times 1}
+\end{eqnarray*}
+utilizing all $p$ two-sample indicator functions 
+$g(\X_i) = (g_1(\X_i), \dots, g_p(\X_i))$ simultaneously.
+
+\section{Standardization, Inference and Estimation}
+
+The distribution of $\T$  depends on the joint distribution of $\Y$ and $\X$,
+which is unknown under almost all practical circumstances. 
+At least under the null hypothesis one can dispose of this 
+dependency by fixing $\X_1, \dots, \X_n$ and conditioning on all possible
+permutations $S$ of the responses $\Y_1, \dots, \Y_n$. Tests that have been
+constructed by means of this conditioning principle are called 
+\emph{permutation tests} and we adopt this conditional view for inference and estimation
+as follows.
+
+The conditional expectation $\mu \in \R^{pq \times 1}$ and covariance
+$\Sigma \in \R^{pq \times pq}$ of $\T$ under $H_0$ given
+all permutations $\sigma \in S$ of the responses are derived by
+\cite{StrasserWeber1999}:
+\begin{eqnarray*}
+\mu = \E(\T | S) & = & \vec \left( \left( \sum_{i = 1}^n g(\X_i) \right)
+\E(h | S)^\top \right) \\
+\Sigma = \V(\T | S) & = &
+    \frac{n}{n - 1}  \V(h | S) \otimes
+        \left(\sum_i g(\X_i) \otimes  g(\X_i)^\top \right)
+\\
+& - & \frac{1}{n - 1}  \V(h | S)  \otimes \left(
+        \sum_i g(\X_i) \right) \otimes \left( \sum_i g(\X_i)\right)^\top
+\nonumber
+\end{eqnarray*}
+where $\otimes$ denotes the Kronecker product, and the conditional
+expectation of the influence function is $\E(h | S) = n^{-1} \sum_i
+h(\Y_i)$ with corresponding $q \times q$ covariance matrix
+\begin{eqnarray*}
+\V(h | S) = n^{-1} \sum_i \left(h(\Y_i) - \E(h | S) \right) \left(h(\Y_i) - \E(h | S)\right)^\top.
+\end{eqnarray*}
+
+The key step for the construction of a maximally selected 
+test statistic based on the multivariate
+linear statistic $\T$ is its standardization utilizing the
+conditional expectation $\mu$ and the diagonal elements of the 
+covariance matrix $\Sigma$: the 
+maximum of the absolute values of the standardized linear statistic
+is used as test statistic
+\begin{eqnarray*}
+T  & = & \max \left| \frac{\T - \mu}{\text{diag}(\Sigma)^{1/2}} \right|.
+\end{eqnarray*}
+
+The distribution of $T$ under $H_0$ can be approximated by Monte-Carlo methods 
+(randomly draw a number of permutations of $1, \dots, n$ and evaluate the test statistic
+$T$ for shuffeled responses $\Y$) or by its limiting distribution. As $n \rightarrow \infty$ the
+distribution of the multivariate linear statistic $\T$ tends to a multivariate normal distribution
+with mean $\mu$ and covariance matrix $\Sigma$. 
+
+When the test statistic is large enough to indicate a deviation from the null hypothesis, we
+are interested in determining the partition with largest standardized statistic:
+the best partition is $A_{j^\star}$ with 
+\begin{eqnarray*}
+j^\star = \argmax_j \left|\T_j - \mu_j\right| \times \Sigma_{jj}^{-1/2}.
+\end{eqnarray*}
+Note that, for ordered $\X$, this corresponds to the estimation of a cutpoint.
+
+\section{Applications}
+
+The measurement scale of $\X$ only determines the way binary partitions $A_j, j = 1, \dots, p$, 
+are defined; for ordered $\X$ all possible cutpoints 
+\begin{eqnarray*}
+\{\mu | \min(\X_i) < \mu < \max(\X_i), i = 1, \dots, n\}
+\end{eqnarray*}
+are considered. For nominal $\X$, the levels are partitioned into two groups.
+
+Appropriate influence functions $h$ for different measurement scales of $\Y$ are given in the following.
+
+\paragraph{Nominal Response:}
+$h$ is simply a dummy coding of the $k$ factor levels, i.e., $h(\Y_i)$ is the unit vector of length $k$. 
+In fact, it is sufficient to code for the first $k - 1$ levels only. For binary responses,
+the statistic $T$ is equivalent to a maximally selected $\chi^2$ statistic 
+\citep{MillerSiegmund1982,Koziol1991}. For nominal responses with $k > 2$ levels,
+the $T$ statistic is the maxmimum over the maximum of 
+standardized $k \times 2$ tables, an alternative to maximally selected $\chi^2$ statistics
+for larger tables \citep{Betensky1999}. \cite{Boulesteix2006a,Boulesteix2006b} derived 
+the exact unconditional distribution maximally selected $\chi^2$ statistics for $2 \times 2$ tables.
+
+\paragraph{Ordinal Response:}
+$h$ is the vector of numeric scores attached to each level of $\Y$, corresponding to a
+maximally selected Cochran-Armitage statistic \citep{Betensky1999}, with arbitrary scores. 
+
+\paragraph{Numeric Response:}
+The identify transformation is a natural choice, rank transformations are possible as well. 
+The test statistic $T$ correspond to maximally selected rank statistics \citep{LausenSchumacher1992}
+who derived the an approximate for the unconditional asymptotic distribution.
+
+\paragraph{Censored Response:}
+The log-rank transformation $h$ can be used for censored response variables, 
+leading to maximally selected log-rank statistics \citep{LausenSchumacher1992} 
+in its conditional form, Savage scores are an alternative.
+
+\paragraph{Multivariate Response:}
+The influence function $h$ is a combination of 
+influence functions appropriate for any of the univariate response variables
+discussed in the previous paragraphs.
+
+\paragraph{Blocked Observations:}
+In the presence of a grouping of the observations
+into independent blocks, only permutations within blocks are eligible and that the
+conditional expectation and covariance matrix need to be computed
+separately for each block. Therefore, it is easily possible to take a block randomization
+scheme in a randomized clinical trial into account or, in the extreme case of each observation
+being a block in repeated measurements, $T$ corresponds to maximally selected McNemar's statistics
+for binary responses \citep{Rabinowitz2000}.
+
+
+\begin{table}
+\begin{center}
+\caption{survival}
+<<tntab, echo = FALSE, results = tex>>=
+load("example/preOP_maxstat.rda")
+tc <- preOP$tclass
+nc <- preOP$nclass
+levels(tc) <- gsub("p", "", levels(tc))
+levels(nc) <- gsub("p", "", levels(nc))
+tab <- xtabs(~ tc + nc, data = preOP)
+names(dimnames(tab)) <- c("T category", "N category")
+tab <- cbind(tab, rowSums(tab))
+tab <- rbind(tab, colSums(tab))
+cat("\\begin{tabular}{rrrrr} \\hline \\hline \n")
+cat(" & \\multicolumn{3}{c}{N category} & \\\\  \\hline \n")
+cat("T category & ", paste(levels(nc), collapse = " & "), " & $n$ \\\\ \\hline ")
+for (i in levels(tc))
+cat(i, " & ", paste(tab[i,], collapse = " & "), "\\\\", "\n")
+cat("$n$ & ", paste(tab[nrow(tab),], collapse = " & "), "\\\\ \\hline", "\n")
+cat("\\end{tabular} \n")
+@
+\end{center}
+\end{table}
+
+\setkeys{Gin}{width = 0.95\textwidth}
+\begin{figure}
+\begin{center}
+\caption{Survival}
+<<maxstat, echo = FALSE, fig = TRUE, width = 10, height = 5>>=
+load("example/maxstat.rda")
+risk <- preOP$tn %in% cutpoint
+layout(matrix(1:2, ncol = 2))
+plot(abs(stat), xlab = "Index", ylab = "T")
+plot(survfit(Surv(time, event) ~ risk, data = preOP), ylab = "Survival Time (in months)",
+     xlab = "Probability")
+text(90, 0.90, paste("N0 or (N1 but not T4); n =",table(risk)[2]))
+text(90, 0.30, paste("N2, N3 or (N1 and T4); n =", table(risk)[1]))
+@
+\end{center}
+\end{figure}
+
+
+%%c_\text{quad}(\T, \mu, \Sigma)  & = & (\T - \mu) \Sigma^+ (\T - \mu)^\top,
+%%\end{eqnarray*}
+%%involving the Moore-Penrose inverse $\Sigma^+$ of $\Sigma$.
 
 
 \section*{Acknowledgements}
@@ -28,15 +247,5 @@ rseed <- 20061103
 The work of T. Hothorn was supported by Deutsche Forschungsgemeinschaft (DFG) under grant HO 3242/1-3.
 
 \bibliography{maxstat}
-
-\begin{appendix}
-
-\section{Proofs}
-
-The (asymptotic) distribution of the multivariate statistic $Z = (Z_{\pi_1}, \dots, Z_{\pi_m})^\top$
-is derived by embedding the statistic into the framework of \cite{permsc:Strasser+Weber:1999},
-as discussed in \cite{permsc:Hothorn+Hornik+VanDeWiel:2006}. 
-
-\end{appendix}
 
 \end{document}

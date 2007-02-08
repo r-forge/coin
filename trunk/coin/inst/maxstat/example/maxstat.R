@@ -7,9 +7,16 @@ load("preOP_maxstat.rda")
 mt <- maxstat_test(Surv(time, event) ~ tn, data = preOP, 
     distribution = approximate(B = 1000))
 
-save(mt, file = "maxstat.rda")
 
-risk <- preOP$tn %in% mt@statistic@estimates$estimate$cutpoint
+
+teststat <- statistic(mt)
+stat <- statistic(mt, "standardized")
+cutpoint <- mt@statistic@estimates$estimate$cutpoint
+pval <- pvalue(mt)
+
+save(teststat, cutpoint, pval, stat, file = "maxstat.rda")
+
+risk <- preOP$tn %in% cutpoint
 table(risk)
 pvalue(mt)
 
