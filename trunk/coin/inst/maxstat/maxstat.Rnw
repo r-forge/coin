@@ -139,7 +139,7 @@ distribution obtained for maximally selected rank statistics by \cite{HothornLau
 When the dimensionality $pq$ becomes too large, we can approximate the exact conditional
 distribution of $t$ by Monte-Carlo methods 
 (randomly draw a number of permutations of $1, \dots, n$ and evaluate the test statistic
-$T$ for shuffeled responses $\Y$).
+$T$ for shuffled responses $\Y$).
 
 When the test statistic is large enough to indicate a deviation from the null hypothesis, we
 are interested in determining the partition with largest standardized statistic:
@@ -153,10 +153,10 @@ j^\star = \argmax_j \left|\T_j - \mu_j\right| \times \Sigma_{jj}^{-1/2}.
 Maximally selected statistics as described in Section~\ref{sec:stat} can be
 applied to covariates $\X$ and responses $\Y$ measured at arbitrary scales; appropriate 
 influence functions $h$ for nominal, ordered, numeric, censored and multivariate response
-variables are given in the sequel, preceeded by a description of how to
+variables are given in the sequel, preceded by a description of how to
 partition the covariate space for nominal, ordered and multivariate covariates.
 
-The most important situation of an unvariate and at least ordinally measured covariate $\X$ leads
+The most important situation of an univariate and at least ordinally measured covariate $\X$ leads
 to partitions induced by cutpoints defined by the realizations $\X_1, \dots, X_n$. More specifically,
 $A_j = (-\infty, \mu_j)$, where $\mu_j$ is the $j$th element of the increasingly sorted unique 
 realizations of $\X$ (the sample size constraints apply, of course). Thus, having
@@ -173,17 +173,18 @@ $k$ factor levels, i.e., $h(\Y_i)$ is the unit vector of length $k$.
 It is sufficient to code for the first $k - 1$ levels only. For binary responses,
 the statistic $T$ is equivalent to a maximally selected $\chi^2$ statistic 
 \citep{MillerSiegmund1982,Koziol1991}. For nominal responses with $k > 2$ levels,
-the $T$ statistic is the maxmimum over the maximum of 
+the $T$ statistic is the maximum over the maximum of 
 standardized $k \times 2$ tables, an alternative to maximally selected $\chi^2$ statistics
 for larger tables \citep{Betensky1999}. \cite{Boulesteix2006a,Boulesteix2006b} derived 
-the exact unconditional distribution maximally selected $\chi^2$ statistics for $2 \times 2$ tables.
+the exact unconditional distribution maximally selected $\chi^2$ statistics for 
+$2 \times 2$ tables.
 
 An ordinal response $\Y$ requires the specification of scores attached to each of the $k$ levels and 
 $h$ is the vector of those numeric scores. For equidistant scores $1, \dots, k$, the statistic $T$ 
 is equivalent to a maximally selected Cochran-Armitage statistic \citep{Betensky1999}, however, 
 no restrictions to the choice of scores apply here.
 
-Many possible influence functions are available for discrete or continous covariates;
+Many possible influence functions are available for discrete or continuous covariates;
 the identify transformation is the most natural choice, rank transformations are possible as well. 
 For the latter, the test statistic $T$ correspond to maximally selected rank statistics 
 \citep{LausenSchumacher1992}. \cite{LausenSchumacher1992} derived an approximation for the 
@@ -203,13 +204,13 @@ for binary responses \citep{Rabinowitz2000}.
 
 \begin{table}
 \begin{center}
-\caption{T and N category of $351$ rectal cancer patients treated with a preoperative 
-         radiochemotherapy. \label{tab:tn}}
+\caption{Pathological T and N category of $351$ rectal cancer patients 
+         treated with a preoperative chemoradiotherapy. \label{tab:tn}}
 <<tntab, echo = FALSE, results = tex>>=
 load("example/preOP_maxstat.rda")
 tc <- preOP$tclass
 nc <- preOP$nclass
-levels(tc) <- gsub("p", "", levels(tc))
+levels(tc) <- gsub("p", "yp", levels(tc))
 levels(nc) <- gsub("p", "", levels(nc))
 tab <- xtabs(~ tc + nc, data = preOP)
 names(dimnames(tab)) <- c("T category", "N category")
@@ -239,24 +240,27 @@ layout(matrix(1:2, ncol = 2))
 plot(abs(stat), xlab = "Index", ylab = "T")
 plot(survfit(Surv(time, event) ~ risk, data = preOP), ylab = "Survival Time (in months)",
      xlab = "Probability")
-text(90, 0.90, paste("N0 or (N1 but not T4); n =",table(risk)[2]))
-text(90, 0.30, paste("N2 + N3 or (N1 and T4); n =", table(risk)[1]))
+text(85, 0.92, paste("N0 or (N1 but not ypT4); n =",table(risk)[2]))
+text(85, 0.30, paste("N2 + N3 or (N1 and ypT4); n =", table(risk)[1]))
 @
 \end{center}
 \end{figure}
 
 
 As an illustration, we want to identify a high-risk group of patients suffering from rectal 
-carcinoma, treated with a neo-adjuvant radiochemotherapy regime. Here, we
-search for a combination of T and N categories that can help to differentiat between two risk groups.
-Survival times of $n = \Sexpr{length(tc)}$ patients from the novum arm of CAO/ARO/AIO-94 trial 
-\citep{Sauer2004} are under test. The response variable is censored, so the influence function 
-$h$ computes log-rank scores. From the potentially $\Sexpr{2^(nlevels(preOP$tn)-1)}$ partitions,
+cancer treated with a neo-adjuvant chemoradiotherapy regime. Here, we
+search for a combination of pathological T and N categories that can help to 
+differentiate between two risk groups.
+Survival times of $n = \Sexpr{length(tc)}$ patients from the preoperative arm 
+of the CAO/ARO/AIO-94 trial \citep{Sauer2004} are under test ($48$ patients with distant
+metastases found at surgery were excluded from this analysis). 
+The response variable is censored, so we choose a log-rank transformation as influence function $h$.
+From the potentially $\Sexpr{2^(nlevels(preOP$tn)-1)}$ partitions,
 $\Sexpr{length(stat)}$ meet the sample size constraints. The maximum of the absolute values
 of the corresponding \Sexpr{length(stat)} standardized statistics is \Sexpr{round(teststat, 3)}. The null
-hypothesis can be rejected. All patient with N2 or N3 are under high risk; in addition, one patient 
-with T4 and N1 is under high-risk as well. Figure~\ref{fig:maxstat} depicts the absolute 
-standardized statistics, showing two competing classes or patitions and Kaplan-Meier 
+hypothesis can be rejected. All patient with N category N2 or N3 are under high risk; in addition, one patient 
+with ypT4 and N1 is under high-risk as well. Figure~\ref{fig:maxstat} depicts the absolute 
+standardized statistics, showing two competing classes or partitions and Kaplan-Meier 
 estimates of the survival times in the two risk groups.
 
 \section{Discussion}
