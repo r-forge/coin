@@ -39,6 +39,67 @@ library("survival")
 
 \section{Introduction} \label{sec:introduction}
 
+Dichotomization of variables measured at higher scale levels 
+prior to model building is bad practice 
+\citep[][amoung many others]{Royston2006}.
+It will result in loss of power and sophisticated regression
+models that adapt itself to the complexity of the regression 
+problem at hand are widely available. However, we need to acknowledge
+that the implementation of scientific results to the real world, such as
+clinical practice, requires simple `good-bad' or `high-low' 
+decision rules.
+
+Such rules of thumb are frequently used to investigate new predictor variables
+for patient survival in oncology. \cite{Galon2006} estimate cutpoints for
+various characteristice of immune cells within colorectal tumor samples, 
+such as type, density or location, with respect to their ability to differentiate
+between patients with good and poor prognosis. \cite{Buccisano2006} follow
+a similar approach, obtaining a treshold for residual leukemic cells in AML 
+patients. The ability for expression levels of HER2 and coamplified genes 
+to predict breast cancer survival is investigated by \cite{Vinatzer2005} 
+utilitzing maximally selected log-rank statistics. Beyond applications
+in oncology, cutpoints for habitat factors discriminating between forest systems
+with low and high abundance of certain indicator species 
+\citep{Muller2004} are currently implemented by the largest
+European forest enterprise. A review of currently published scholary articles
+citing one of the latest statistical papers in this area 
+\citep[for example][]{Mazumdar2003,HothornLausen2003} reveals many 
+more applications.
+
+Two questions arise from a statistical point of view. In a first step, we
+have to make sure that a simple cutpoint model has, at least, some meaning and
+in a second step, we want to estimate the `best' cutpoint. It is convenient
+to separate between both problems. The first problem needs to be addressed by
+a formal hypothesis test for the null hypothesis of independence between covariate 
+(to be dichotomized)
+and response variable. A test with power against shift alternatives, i.e.,
+departures from the null hypothesis where the distribution of the response variable 
+varies between two groups of observations, is of special interest. 
+Once we are able to reject the null hypothesis, we are interested in the 
+alternative which lead to the rejection, i.e., want to estimate a `cutpoint'.
+
+The first non-parametric test, utilizing the maximum over multiple $\chi^2$ statistics
+for $2 \times 2$ tables, was described by \cite{MillerSiegmund1982}. 
+\cite{LausenSchumacher1992} derived an approximation for the unconditional asymptotical
+distribution of maximally selected rank statistics, extending the area of application
+to continuous and censored response variables. \cite{Betensky1999} propose
+a maximally selected $\chi^2$ test for nominal response variables measured at
+$k > 2$ levels and ordered categorical data (maximally selected Cochran-Armitage test).
+Finally, \cite{Rabinowitz2000} suggested a maximally selected McNemar's test.
+
+In the last years, improvements for the approximation of the null distribution
+of maximally selected statistics where published by \cite{HothornLausen2003} and
+\cite{Boulesteix2006a,Boulesteix2006b}. \cite{Lausenetal2004} extended 
+maximally selected rank statistics to more than one covariate.
+
+We embed the different statistics known so far into a common framework and take
+a conditional view on maximally selected statistics. Conditioning on permutations
+of the data allow for a unified treatment of maximally selected rank statistics
+within the theory of permutation tests described by \cite{StrasserWeber1999}.
+
+
+\cite{Hothornetal2006}
+
 \section{Binary Partitions and Two-Sample Statistics} \label{sec:stat}
 
 We are provided with independent and identically distributed
@@ -76,7 +137,7 @@ continuous response $\Y$, the linear
 statistic is the sum of the ranks in the first group, i.e., equals the 
 Wilcoxon-Mann-Whitney statistic. 
 
-A global linear statistic for all binary partitions is
+A joint linear statistic for all binary partitions is
 \begin{eqnarray*}
 \T = (\T_1, \dots, \T_p) = \vec\left(\sum_{i = 1}^n g(\X_i) h(\Y_i)^\top\right)
 \in \R^{pq \times 1}
@@ -157,7 +218,7 @@ variables are given in the sequel, preceded by a description of how to
 partition the covariate space for nominal, ordered and multivariate covariates.
 
 The most important situation of an univariate and at least ordinally measured covariate $\X$ leads
-to partitions induced by cutpoints defined by the realizations $\X_1, \dots, X_n$. More specifically,
+to partitions induced by cutpoints defined by the realizations $\X_1, \dots, \X_n$. More specifically,
 $A_j = (-\infty, \mu_j)$, where $\mu_j$ is the $j$th element of the increasingly sorted unique 
 realizations of $\X$ (the sample size constraints apply, of course). Thus, having
 identified the best separating partition $A_{j^\star}$, the estimated cutpoint is
@@ -175,9 +236,7 @@ the statistic $T$ is equivalent to a maximally selected $\chi^2$ statistic
 \citep{MillerSiegmund1982,Koziol1991}. For nominal responses with $k > 2$ levels,
 the $T$ statistic is the maximum over the maximum of 
 standardized $k \times 2$ tables, an alternative to maximally selected $\chi^2$ statistics
-for larger tables \citep{Betensky1999}. \cite{Boulesteix2006a,Boulesteix2006b} derived 
-the exact unconditional distribution maximally selected $\chi^2$ statistics for 
-$2 \times 2$ tables.
+for larger tables \citep{Betensky1999}. 
 
 An ordinal response $\Y$ requires the specification of scores attached to each of the $k$ levels and 
 $h$ is the vector of those numeric scores. For equidistant scores $1, \dots, k$, the statistic $T$ 
@@ -185,10 +244,9 @@ is equivalent to a maximally selected Cochran-Armitage statistic \citep{Betensky
 no restrictions to the choice of scores apply here.
 
 Many possible influence functions are available for discrete or continuous covariates;
-the identify transformation is the most natural choice, rank transformations are possible as well. 
+the identity transformation is the most natural choice, rank transformations are possible as well. 
 For the latter, the test statistic $T$ correspond to maximally selected rank statistics 
-\citep{LausenSchumacher1992}. \cite{LausenSchumacher1992} derived an approximation for the 
-unconditional asymptotic distribution. When a numeric response is censored, log-rank transformations or
+\citep{LausenSchumacher1992}.  When a numeric response is censored, log-rank transformations or
 Savage scores can be applied.
 
 For a multivariate response, possibly consisting of variables with different scale levels,
@@ -238,8 +296,8 @@ load("example/maxstat.rda")
 risk <- preOP$tn %in% cutpoint
 layout(matrix(1:2, ncol = 2))
 plot(abs(stat), xlab = "Index", ylab = "T")
-plot(survfit(Surv(time, event) ~ risk, data = preOP), ylab = "Survival Time (in months)",
-     xlab = "Probability")
+plot(survfit(Surv(time, event) ~ risk, data = preOP), xlab = "Time (in months)",
+     ylab = "Overall Survival Prob.")
 text(85, 0.92, paste("N0 or (N1 but not ypT4); n =",table(risk)[2]))
 text(85, 0.30, paste("N2 + N3 or (N1 and ypT4); n =", table(risk)[1]))
 @
@@ -247,7 +305,8 @@ text(85, 0.30, paste("N2 + N3 or (N1 and ypT4); n =", table(risk)[1]))
 \end{figure}
 
 
-As an illustration, we want to identify a high-risk group of patients suffering from rectal 
+As an illustration, we attempt to identify patients with high risk among $n = \Sexpr{length(tc)}$
+patients suffering from rectal 
 cancer treated with a neo-adjuvant chemoradiotherapy regime. Here, we
 search for a combination of pathological T and N categories that can help to 
 differentiate between two risk groups.
@@ -264,6 +323,10 @@ standardized statistics, showing two competing classes or partitions and Kaplan-
 estimates of the survival times in the two risk groups.
 
 \section{Discussion}
+
+
+\cite{LausenSchumacher1992} derived an approximation for the 
+unconditional asymptotic distribution.
 
 %%c_\text{quad}(\T, \mu, \Sigma)  & = & (\T - \mu) \Sigma^+ (\T - \mu)^\top,
 %%\end{eqnarray*}
