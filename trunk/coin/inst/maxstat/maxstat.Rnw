@@ -45,8 +45,8 @@ prior to model building is bad practice
 It will result in loss of power and sophisticated regression
 models that adapt itself to the complexity of the regression 
 problem at hand are widely available. However, we need to acknowledge
-that the implementation of scientific results to the real world, such as
-clinical practice, requires simple `good-bad' or `high-low' 
+that the implementation of scientific results into the real world, such as
+clinical practice, requires simple `good-poor' or `high-low' 
 decision rules.
 
 Such rules of thumb are frequently used to investigate new predictor variables
@@ -54,21 +54,21 @@ for patient survival in oncology. \cite{Galon2006} estimate cutpoints for
 various characteristics of immune cells within colorectal tumor samples, 
 such as type, density or location, with respect to their ability to differentiate
 between patients with good and poor prognosis. \cite{Buccisano2006} follow
-a similar approach, obtaining a threshold for residual leukemic cells in AML 
-patients. The ability for expression levels of HER2 and coamplified genes 
+a similar approach, obtaining a threshold for residual leukemic cells in acute myeloid 
+lymphoma  patients. The ability for expression levels of HER2 and coamplified genes 
 to predict breast cancer survival is investigated by \cite{Vinatzer2005} 
 utilizing maximally selected log-rank statistics. Beyond applications
 in oncology, cutpoints for habitat factors discriminating between forest systems
 with low and high abundance of certain indicator species 
 \citep{Muller2004} are currently implemented by the largest
 European forest enterprise. A review of currently published scholary articles
-citing one of the statistical papers in this area 
+citing one of the last statistical papers in this area 
 \citep[for example][]{Mazumdar2000,HothornLausen2003} reveals many 
 more applications.
 
 Two questions arise from a statistical point of view. In a first step, we
 have to make sure that a simple cutpoint model has, at least, some meaning and
-in a second step, we want to estimate the `best' cutpoint. It is convenient
+in a second step we want to estimate the `best' cutpoint. It is convenient
 to separate between both problems. The first problem needs to be addressed by
 a formal hypothesis test for the null hypothesis of independence between covariate 
 (to be dichotomized)
@@ -78,7 +78,7 @@ varies between two groups of observations, is of special interest.
 Once we are able to reject the null hypothesis, we are interested in the 
 alternative which lead to the rejection, i.e., want to estimate a `cutpoint'.
 
-The first non-parametric test, utilizing the maximum over multiple $\chi^2$ statistics
+The first procedure of this kind, utilizing the maximum over multiple $\chi^2$ statistics
 for $2 \times 2$ tables, was described by \cite{MillerSiegmund1982}. 
 \cite{LausenSchumacher1992} derived an approximation for the unconditional asymptotical
 distribution of maximally selected rank statistics, extending the area of application
@@ -96,11 +96,13 @@ We embed the different statistics known so far into a common framework and take
 a conditional view on maximally selected statistics. Conditioning on permutations
 of the data allow for a unified treatment of maximally selected rank statistics
 within the theory of permutation tests described by \cite{StrasserWeber1999}.
-The conditional asymptotic distribution for a large class of maximally selected 
-statistics is derived. Furthermore, our new conditional formulation of maximally selected
-statistics make an implementation of the methodology for nominal, ordered and 
-multivariate covariates as well as nominal, ordered, discrete and continuous numeric, censored and 
-multivariate response variables extremely easy \citep{Hothornetal2006}.
+The complete correlation structure of all statistics can be computed efficiently and 
+the conditional asymptotic distribution for a large class of maximally selected 
+statistics can be derived from Theorem 3 \cite{StrasserWeber1999}. 
+Since no assumptions on the scale level of neither the covariate to be dichotomized nor
+the response variable are necessary, the concept can be used to implement
+already published procedures and to extend the methodology to new areas of 
+application.
 
 \section{Binary Partitions and Two-Sample Statistics} \label{sec:stat}
 
@@ -117,9 +119,10 @@ of observations are of special interest.
 Such binary partitions are defined in advance by $p$ sets $A_1, \dots, A_p$
 partitioning the observations into two groups based on the $\X$ measurements only. Here,
 \begin{eqnarray*}
-g_j(\X_i) = \indic(\X_i \in A_j)
+g_j(\X_i) = \indic(\X_i \in A_j); i = 1, \dots n
 \end{eqnarray*}
-denotes the indicator function. Only binary partitions $A_j$ satisfying the
+denotes the indicator function partitioning the observations 1, \dots, n into two groups. 
+Only binary partitions satisfying the sample size 
 constraint $\sum_i g_i(\X_i) \in (n\varepsilon, n - n\varepsilon)$ 
 for some fixed $\varepsilon \in (0, 0.5)$ are taken into account. 
 
@@ -136,8 +139,8 @@ in a permutation symmetric way, i.e., the value of the
 function must not depend on the order in which $\Y_1, \dots, \Y_n$ appear.
 For example, with $h$ being a rank transformation for a 
 continuous response $\Y$, the linear
-statistic is the sum of the ranks in the first group, i.e., equals the 
-Wilcoxon-Mann-Whitney statistic. 
+statistic is the sum of the ranks for observations $i$ with $g_j(\X_i) = 1$, 
+i.e., equals the Wilcoxon-Mann-Whitney statistic. 
 
 A joint linear statistic for all binary partitions is
 \begin{eqnarray*}
@@ -145,7 +148,7 @@ A joint linear statistic for all binary partitions is
 \in \R^{pq \times 1}
 \end{eqnarray*}
 looking all $p$ two-sample partitions $g(\X_i) = (g_1(\X_i), \dots, g_p(\X_i))$ 
-simultaneously.
+simultaneously for testing $H_0$.
 
 \section{Standardization, Inference and Estimation} \label{sec:inf}
 
@@ -181,7 +184,7 @@ h(\Y_i)$ with corresponding $q \times q$ covariance matrix
 \end{eqnarray*}
 
 The key step for the construction of a maximally selected 
-test statistic based on the multivariate
+statistic based on the multivariate
 linear statistic $\T$ is its standardization utilizing the
 conditional expectation $\mu$ and the diagonal elements of the 
 covariance matrix $\Sigma$: the 
@@ -192,7 +195,7 @@ T  & = & \max \left| \frac{\T - \mu}{\text{diag}(\Sigma)^{1/2}} \right|.
 \end{eqnarray*}
 
 The exact conditional distribution of $T$ under $H_0$ can be approximated by 
-its limiting distribution. As $n \rightarrow \infty$ the
+its limiting distribution. For $n \rightarrow \infty$ the
 distribution of the multivariate linear statistic $\T$ tends to a multivariate 
 normal distribution with mean $\mu$ and covariance matrix $\Sigma$ \citep{StrasserWeber1999}.
 Thus, we have to evaluate $\Prob(T > \max(|Z_1|, ..., |Z_{pq}|)$ for standard normal
@@ -200,13 +203,13 @@ random variables $Z_1, \dots, Z_{pq}$ with correlation matrix $\text{cor}(\Sigma
 this conditional asymptotical distribution coincides with the unconditional asymptotical
 distribution obtained for maximally selected rank statistics by \cite{HothornLausen2003}.
 When the dimensionality $pq$ becomes too large, we can approximate the exact conditional
-distribution of $t$ by Monte-Carlo methods 
+distribution of $T$ by Monte-Carlo methods 
 (randomly draw a number of permutations of $1, \dots, n$ and evaluate the test statistic
 $T$ for shuffled responses $\Y$).
 
 When the test statistic is large enough to indicate a deviation from the null hypothesis, we
 are interested in determining the partition with largest standardized statistic:
-the best partition is $A_{j^\star}$ with 
+the best separating partition is $A_{j^\star}$ with 
 \begin{eqnarray*}
 j^\star = \argmax_j \left|\T_j - \mu_j\right| \times \Sigma_{jj}^{-1/2}.
 \end{eqnarray*}
@@ -247,7 +250,7 @@ no restrictions to the choice of scores apply here.
 
 Many possible influence functions are available for discrete or continuous covariates;
 the identity transformation is the most natural choice, rank transformations are possible as well. 
-For the latter, the test statistic $T$ correspond to maximally selected rank statistics 
+For the latter, the test statistic $T$ corresponds to maximally selected rank statistics 
 \citep{LausenSchumacher1992}.  When a numeric response is censored, log-rank transformations or
 Savage scores can be applied.
 
@@ -258,7 +261,7 @@ as suggested below. In the presence of a grouping of the observations
 into independent blocks, only permutations within blocks are eligible and the
 conditional expectation and covariance matrix need to be computed
 separately for each block. Therefore, it is easily possible to take a block randomization
-scheme in a randomized clinical trial into account or, in the extreme case of each observation
+scheme in a randomized clinical trial into account. In the extreme case of each observation
 being a block in repeated measurements, $T$ corresponds to maximally selected McNemar's statistics
 for binary responses \citep{Rabinowitz2000}.
 
@@ -293,11 +296,11 @@ cat("\\end{tabular} \n")
 \caption{Absolute standardized test statistics (left panel) and survival times
 of rectum cancer patients in two risk groups identified by a maximally selected log-rank
 statistic. \label{fig:maxstat}}
-<<maxstat, echo = FALSE, fig = TRUE, width = 10, height = 5>>=
+<<maxstat, echo = FALSE, fig = TRUE, width = 6, height = 6>>=
 load("example/maxstat.rda")
 risk <- preOP$tn %in% cutpoint
-layout(matrix(1:2, ncol = 2))
-plot(abs(stat), xlab = "Index", ylab = "T")
+###layout(matrix(1:2, ncol = 2))
+###plot(abs(stat), xlab = "Index", ylab = "T")
 plot(survfit(Surv(time, event) ~ risk, data = preOP), xlab = "Time (in months)",
      ylab = "Overall Survival Prob.")
 text(85, 0.92, paste("N0 or (N1 but not ypT4); n =",table(risk)[2]))
@@ -307,7 +310,7 @@ text(85, 0.30, paste("N2 + N3 or (N1 and ypT4); n =", table(risk)[1]))
 \end{figure}
 
 
-As an illustration, we attempt to identify patients with high risk among $n = \Sexpr{length(tc)}$
+As an illustration, we attempt to identify patients with poor prognosis among 
 patients suffering from rectal 
 cancer treated with a neo-adjuvant chemoradiotherapy regime. Here, we
 search for a combination of pathological T and N categories that can help to 
@@ -320,11 +323,16 @@ From the potentially $\Sexpr{2^(nlevels(preOP$tn)-1)}$ partitions,
 $\Sexpr{length(stat)}$ meet the sample size constraints. The maximum of the absolute values
 of the corresponding \Sexpr{length(stat)} standardized statistics is \Sexpr{round(teststat, 3)}. The null
 hypothesis can be rejected. All patient with N category N2 or N3 are under high risk; in addition, one patient 
-with ypT4 and N1 is under high-risk as well. Figure~\ref{fig:maxstat} depicts the absolute 
-standardized statistics, showing two competing classes or partitions and Kaplan-Meier 
+with ypT4 and N1 is under high-risk as well. Figure~\ref{fig:maxstat} depicts Kaplan-Meier 
 estimates of the survival times in the two risk groups.
 
 \section{Discussion}
+
+
+Furthermore, our new conditional formulation of maximally selected
+statistics make an implementation of the methodology for nominal, ordered and 
+multivariate covariates as well as nominal, ordered, discrete and continuous numeric, censored and 
+multivariate response variables extremely easy \citep{Hothornetal2006}.
 
 
 \cite{LausenSchumacher1992} derived an approximation for the 
