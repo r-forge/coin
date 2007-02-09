@@ -16,6 +16,7 @@
 \newcommand{\T}{\mathbf{T}}  
 \renewcommand{\vec}{\text{vec}}
 \newcommand{\R}{\mathbb{R}}  
+\newcommand{\Rpackage}[1]{{\normalfont\fontseries{b}\selectfont #1}}
 
 \newcommand{\indic}{I}
 
@@ -27,6 +28,13 @@
           maximally selected statistics, changepoint}
 
 \Abstract{
+Maximally selected statistics for the estimation of simple cutpoint models
+are embedded into a powerful conceptual framework for conditional inference
+procedures. The conditional counterparts of most of the published test 
+procedures are described. The conditional asymptotic distribution for a 
+large class of maximally selected statistics is given. The new framework
+is used to search for a high-risk group of rectal cancer patients
+treated with a neo-adjuvant chemoradiotherapy.
 }
 
 \begin{document}
@@ -49,17 +57,18 @@ that the implementation of scientific results into the real world, such as
 clinical practice, requires simple `good-poor' or `high-low' 
 decision rules.
 
-Such rules of thumb are frequently used to investigate new predictor variables
-for patient survival in oncology. \cite{Galon2006} estimate cutpoints for
-various characteristics of immune cells within colorectal tumor samples, 
-such as type, density or location, with respect to their ability to differentiate
-between patients with good and poor prognosis. \cite{Buccisano2006} follow
-a similar approach, obtaining a threshold for residual leukemic cells in acute myeloid 
-lymphoma  patients. The ability for expression levels of HER2 and coamplified genes 
-to predict breast cancer survival is investigated by \cite{Vinatzer2005} 
-utilizing maximally selected log-rank statistics. Beyond applications
-in oncology, cutpoints for habitat factors discriminating between forest systems
-with low and high abundance of certain indicator species 
+Such rules of thumb are frequently used to investigate new predictor
+variables for patient survival in oncology. \cite{Galon2006} estimate
+cutpoints for various characteristics of immune cells within colorectal
+tumor samples, such as type, density or location, with respect to their
+ability to differentiate between patients with good and poor prognosis.
+\cite{Buccisano2006} follow a similar approach, obtaining a threshold for
+residual leukemic cells in acute myeloid leukemia patients. The ability for
+expression levels of HER2 and coamplified genes to predict breast cancer
+survival is investigated by \cite{Vinatzer2005} utilizing maximally selected
+log-rank statistics. Beyond applications in oncology, cutpoints for habitat
+factors discriminating between forest systems with low and high abundance of
+certain indicator species
 \citep{Muller2004} are currently implemented by the largest
 European forest enterprise. A review of currently published scholary articles
 citing one of the last statistical papers in this area 
@@ -265,10 +274,7 @@ scheme in a randomized clinical trial into account. In the extreme case of each 
 being a block in repeated measurements, $T$ corresponds to maximally selected McNemar's statistics
 for binary responses \citep{Rabinowitz2000}.
 
-\begin{table}
-\begin{center}
-\caption{Pathological T and N category of $351$ rectal cancer patients 
-         treated with a preoperative chemoradiotherapy. \label{tab:tn}}
+<<cao-data>>=
 <<tntab, echo = FALSE, results = tex>>=
 load("example/preOP_maxstat.rda")
 tc <- preOP$tclass
@@ -277,38 +283,9 @@ levels(tc) <- gsub("p", "yp", levels(tc))
 levels(nc) <- gsub("p", "", levels(nc))
 tab <- xtabs(~ tc + nc, data = preOP)
 names(dimnames(tab)) <- c("T category", "N category")
-tab <- cbind(tab, rowSums(tab))
-tab <- rbind(tab, colSums(tab))
-cat("\\begin{tabular}{rrrrr} \\hline \\hline \n")
-cat(" & \\multicolumn{3}{c}{N category} & \\\\  \\hline \n")
-cat("T category & ", paste(levels(nc), collapse = " & "), " & $n$ \\\\ \\hline ")
-for (i in levels(tc))
-cat(i, " & ", paste(tab[i,], collapse = " & "), "\\\\", "\n")
-cat("$n$ & ", paste(tab[nrow(tab),], collapse = " & "), "\\\\ \\hline", "\n")
-cat("\\end{tabular} \n")
-@
-\end{center}
-\end{table}
-
-\setkeys{Gin}{width = 0.95\textwidth}
-\begin{figure}[t]
-\begin{center}
-\caption{Absolute standardized test statistics (left panel) and survival times
-of rectum cancer patients in two risk groups identified by a maximally selected log-rank
-statistic. \label{fig:maxstat}}
-<<maxstat, echo = FALSE, fig = TRUE, width = 6, height = 6>>=
 load("example/maxstat.rda")
 risk <- preOP$tn %in% cutpoint
-###layout(matrix(1:2, ncol = 2))
-###plot(abs(stat), xlab = "Index", ylab = "T")
-plot(survfit(Surv(time, event) ~ risk, data = preOP), xlab = "Time (in months)",
-     ylab = "Overall Survival Prob.")
-text(85, 0.92, paste("N0 or (N1 but not ypT4); n =",table(risk)[2]))
-text(85, 0.30, paste("N2 + N3 or (N1 and ypT4); n =", table(risk)[1]))
 @
-\end{center}
-\end{figure}
-
 
 As an illustration, we attempt to identify patients with poor prognosis among 
 patients suffering from rectal 
@@ -326,22 +303,77 @@ hypothesis can be rejected. All patient with N category N2 or N3 are under high 
 with ypT4 and N1 is under high-risk as well. Figure~\ref{fig:maxstat} depicts Kaplan-Meier 
 estimates of the survival times in the two risk groups.
 
+
+\begin{table}[t]
+\begin{center}
+\caption{Pathological T and N category of $351$ rectal cancer patients 
+         treated with a preoperative chemoradiotherapy. \label{tab:tn}}
+<<tntab, echo = FALSE, results = tex>>=
+tab <- cbind(tab, rowSums(tab))
+tab <- rbind(tab, colSums(tab))
+cat("\\begin{tabular}{rrrrr} \\hline \\hline \n")
+cat(" & \\multicolumn{3}{c}{N category} & \\\\  \\hline \n")
+cat("T category & ", paste(levels(nc), collapse = " & "), " & $n$ \\\\ \\hline ")
+for (i in levels(tc))
+cat(i, " & ", paste(tab[i,], collapse = " & "), "\\\\", "\n")
+cat("$n$ & ", paste(tab[nrow(tab),], collapse = " & "), "\\\\ \\hline", "\n")
+cat("\\end{tabular} \n")
+@
+\end{center}
+\end{table}
+
+\setkeys{Gin}{width = 0.75\textwidth}
+\begin{figure}[h!]
+\begin{center}
+\caption{Absolute standardized test statistics (left panel) and survival times
+of rectum cancer patients in two risk groups identified by a maximally selected log-rank
+statistic. \label{fig:maxstat}}
+<<maxstat, echo = FALSE, fig = TRUE, width = 5, height = 5>>=
+###layout(matrix(1:2, ncol = 2))
+###plot(abs(stat), xlab = "Index", ylab = "T")
+plot(survfit(Surv(time, event) ~ risk, data = preOP), xlab = "Time (in months)",
+     ylab = "Overall Survival Probability")
+text(85, 0.92, paste("N0 or (N1 but not ypT4); n =",table(risk)[2]))
+text(85, 0.30, paste("N2 + N3 or (N1 and ypT4); n =", table(risk)[1]))
+@
+\end{center}
+\end{figure}
+
+
 \section{Discussion}
 
+Maximally selected statistics for the estimation of simple cutpoint models have been
+in use since many years. From an academic point of view, such models are almost always an
+over-simplification. However, many researchers appreciate a model that is easy to 
+communicate and easy to implement in practical situations. The tradeoff between 
+between simplicity and accuracy has to be carefully investigated.
 
-Furthermore, our new conditional formulation of maximally selected
-statistics make an implementation of the methodology for nominal, ordered and 
-multivariate covariates as well as nominal, ordered, discrete and continuous numeric, censored and 
-multivariate response variables extremely easy \citep{Hothornetal2006}.
+The conceptual framework by \cite{StrasserWeber1999} allows for a unified treatment 
+of different kinds of maximally selected statistics. When we are faced with a new problem, 
+only the influence function $h$ needs to be newly designed. The complete correlation 
+structure is then available from the covariate matrix $\Sigma$. Moreover, the asymptotic
+distribution of the maximum statistic is known as well.
 
+The implementation of (known and newly designed) maximally selected statistics 
+only requires the specification of the binary partitions, via a function $g$, and
+a problem-specific influence function $h$. Linear statistics $\T$ and the test statistic
+$T$ can be computed utilizing the \texttt{maxstat\_test()} function in the
+\textsf{R} add-on-package \Rpackage{coin} \citep{Hothornetal2006,PKG:coin}. The distribution
+of $T$ can be approximated by its asymptotic distribution or my Monte-Carlo methods 
+(also in the presence of a grouping of the observations into independent blocks) readily
+available from the same package.
 
-\cite{LausenSchumacher1992} derived an approximation for the 
-unconditional asymptotic distribution.
+In summary, a unified treatment of maximally selected rank statistics 
+for nominal, ordered, discrete and continuous numeric, censored and
+multivariate response variables as well as nominal, ordered and 
+multivariate covariates to be dichotomized is now possible conceptually and practically.
 
+%% TODO
+%% wollen wir quadratische Formen mit einbauen?
 %%c_\text{quad}(\T, \mu, \Sigma)  & = & (\T - \mu) \Sigma^+ (\T - \mu)^\top,
-%%\end{eqnarray*}
 %%involving the Moore-Penrose inverse $\Sigma^+$ of $\Sigma$.
-
+%%
+%% kann man nicht eine ganz einfache approximation fuer P(T > max(Z1, ..., Zpq)) herleiten?
 
 \section*{Acknowledgements}
 
