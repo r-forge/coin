@@ -1,4 +1,4 @@
-\documentclass{Z}
+\documentclass[shortnames]{Z}
 
 %% need no \usepackage{Sweave}
 \SweaveOpts{engine=R, eps=FALSE, echo=FALSE, results=hide}
@@ -21,6 +21,8 @@
 \newcommand{\indic}{I}
 
 \title{A Unifying Conditional View on Maximally Selected Statistics and Cutpoint Estimation}
+%Z% Stress "conditional"?
+%Z% Or maybe "exact" or "permutation"?
 \author{Torsten Hothorn\\Friedrich-Alexander-Universit\"at\\Erlangen-N\"urnberg
   \And Achim Zeileis\\Wirtschaftsuniversit\"at Wien}
 \Plainauthor{Torsten Hothorn, Achim Zeileis}
@@ -30,11 +32,13 @@
 \Abstract{
 Maximally selected statistics for the estimation of simple cutpoint models
 are embedded into a powerful conceptual framework for conditional inference
-procedures. The conditional counterparts of most of the published test 
-procedures are described. The conditional asymptotic distribution for a 
-large class of maximally selected statistics is given. The new framework
-is used to search for a high-risk group of rectal cancer patients
-treated with a neo-adjuvant chemoradiotherapy.
+procedures.
+%Z% Both the abstract and the intro could send a clearer message, I guess...
+The conditional counterparts of most of the published test procedures are
+described. The conditional asymptotic distribution for a large class of
+maximally selected statistics is given.
+The new framework is used to search for a high-risk group of rectal
+cancer patients treated with a neo-adjuvant chemoradiotherapy.
 }
 
 \begin{document}
@@ -54,8 +58,10 @@ It will result in loss of power and sophisticated regression
 models that adapt itself to the complexity of the regression 
 problem at hand are widely available. However, we need to acknowledge
 that the implementation of scientific results into the real world, such as
-clinical practice, requires simple `good-poor' or `high-low' 
+clinical practice, requires simple `good--poor' or `high--low' 
 decision rules.
+%Z% Is this the only justification?
+%Z% Capturing step-shaped relationships should be another one?
 
 Such rules of thumb are frequently used to investigate new predictor
 variables for patient survival in oncology. \cite{Galon2006} estimate
@@ -68,15 +74,18 @@ expression levels of HER2 and coamplified genes to predict breast cancer
 survival is investigated by \cite{Vinatzer2005} utilizing maximally selected
 log-rank statistics. Beyond applications in oncology, cutpoints for habitat
 factors discriminating between forest systems with low and high abundance of
-certain indicator species
-\citep{Muller2004} are currently implemented by the largest
-European forest enterprise. A review of currently published scholary articles
+certain indicator species \citep{Muller2004} are currently implemented by
+the largest European forest enterprise. %Z% interesting to Biometrics?
+A review of currently published scholary articles
 citing one of the last statistical papers in this area 
 \citep[for example][]{Mazumdar2000,HothornLausen2003} reveals many 
-more applications.
+more applications. %Z% You mean Google Scholar "review"?
 
 Two questions arise from a statistical point of view. In a first step, we
 have to make sure that a simple cutpoint model has, at least, some meaning and
+%Z% I know what you want to say...however, readers might misunderstand
+%Z% this: We have no built-in check that either the null or alternative
+%Z% hypothesis actually fits the data.
 in a second step we want to estimate the `best' cutpoint. It is convenient
 to separate between both problems. The first problem needs to be addressed by
 a formal hypothesis test for the null hypothesis of independence between covariate 
@@ -98,8 +107,8 @@ Finally, \cite{Rabinowitz2000} suggested a maximally selected McNemar's test.
 
 In the last years, improvements for the approximation of the null distribution
 of maximally selected statistics where published by \cite{HothornLausen2003} and
-\cite{Boulesteix2006a,Boulesteix2006b}. \cite{Lausenetal2004} extended 
-maximally selected rank statistics to more than one covariate.
+\cite{Boulesteix2006a,Boulesteix2006b}. \cite{Lausenetal2004} extended maximally
+selected rank statistics to more than one covariate.
 
 We embed the different statistics known so far into a common framework and take
 a conditional view on maximally selected statistics. Conditioning on permutations
@@ -113,7 +122,7 @@ the response variable are necessary, the concept can be used to implement
 already published procedures and to extend the methodology to new areas of 
 application.
 
-\section{Binary Partitions and Two-Sample Statistics} \label{sec:stat}
+\section{Binary partitions and two-sample statistics} \label{sec:stat}
 
 We are provided with independent and identically distributed
 observations $(\Y_i, \X_i)$ for $i = 1, \dots, n$ and 
@@ -128,8 +137,9 @@ of observations are of special interest.
 Such binary partitions are defined in advance by $p$ sets $A_1, \dots, A_p$
 partitioning the observations into two groups based on the $\X$ measurements only. Here,
 \begin{eqnarray*}
-g_j(\X_i) = \indic(\X_i \in A_j); i = 1, \dots n
+g_j(\X_i) \quad = \quad \indic(\X_i \in A_j) \qquad (i = 1, \dots n)
 \end{eqnarray*}
+%Z% highlight special case of cutpoints?
 denotes the indicator function partitioning the observations 1, \dots, n into two groups. 
 Only binary partitions satisfying the sample size 
 constraint $\sum_i g_i(\X_i) \in (n\varepsilon, n - n\varepsilon)$ 
@@ -138,7 +148,7 @@ for some fixed $\varepsilon \in (0, 0.5)$ are taken into account.
 The two-sample problem associated with the $j$th binary partition
 can be tested using a linear statistic
 \begin{eqnarray*}
-\T_j = \vec\left(\sum_{i = 1}^n g_j(\X_i) h(\Y_i)^\top\right) \in \R^{q \times 1}
+\T_j \quad = \quad \vec\left(\sum_{i = 1}^n g_j(\X_i) h(\Y_i)^\top\right) \in \R^{q \times 1}
 \end{eqnarray*}
 where $h: \mathcal{Y} \rightarrow
 \R^{q \times 1}$ is an \emph{influence function} applied to the responses.
@@ -153,13 +163,13 @@ i.e., equals the Wilcoxon-Mann-Whitney statistic.
 
 A joint linear statistic for all binary partitions is
 \begin{eqnarray*}
-\T = (\T_1, \dots, \T_p) = \vec\left(\sum_{i = 1}^n g(\X_i) h(\Y_i)^\top\right)
+\T \quad = \quad (\T_1, \dots, \T_p) = \vec\left(\sum_{i = 1}^n g(\X_i) h(\Y_i)^\top\right)
 \in \R^{pq \times 1}
 \end{eqnarray*}
-looking all $p$ two-sample partitions $g(\X_i) = (g_1(\X_i), \dots, g_p(\X_i))$ 
+including all $p$ two-sample partitions $g(\X_i) = (g_1(\X_i), \dots, g_p(\X_i))$ 
 simultaneously for testing $H_0$.
 
-\section{Standardization, Inference and Estimation} \label{sec:inf}
+\section{Standardization, inference and estimation} \label{sec:inf}
 
 The distribution of $\T$  depends on the joint distribution of $\Y$ and $\X$,
 which is unknown under almost all practical circumstances. 
@@ -169,6 +179,8 @@ permutations $S$ of the responses $\Y_1, \dots, \Y_n$. Tests that have been
 constructed by means of this conditioning principle are called 
 \emph{permutation tests} and we adopt this conditional view for inference and estimation
 in the following.
+%Z% Should we try to make the dependency on our previous work
+%Z% a little less obvious?
 
 The conditional expectation $\mu \in \R^{pq \times 1}$ and covariance
 $\Sigma \in \R^{pq \times pq}$ of $\T$ under $H_0$ given
@@ -202,6 +214,8 @@ is used as test statistic
 \begin{eqnarray*}
 T  & = & \max \left| \frac{\T - \mu}{\text{diag}(\Sigma)^{1/2}} \right|.
 \end{eqnarray*}
+%Z% Maybe it's easier if we call this $M$ or $\T_\max$, otherwise it's easy
+%Z% to confuse T and \T.
 
 The exact conditional distribution of $T$ under $H_0$ can be approximated by 
 its limiting distribution. For $n \rightarrow \infty$ the
@@ -211,8 +225,10 @@ Thus, we have to evaluate $\Prob(T > \max(|Z_1|, ..., |Z_{pq}|)$ for standard no
 random variables $Z_1, \dots, Z_{pq}$ with correlation matrix $\text{cor}(\Sigma)$. In fact,
 this conditional asymptotical distribution coincides with the unconditional asymptotical
 distribution obtained for maximally selected rank statistics by \cite{HothornLausen2003}.
-When the dimensionality $pq$ becomes too large, we can approximate the exact conditional
-distribution of $T$ by Monte-Carlo methods 
+When the dimensionality $pq$ becomes too large,
+%Z% Well, you can always use the Monte-Carlo approximation and probably one would
+%Z% want to do so if $n$ is small, right?
+we can approximate the exact conditional distribution of $T$ by Monte-Carlo methods 
 (randomly draw a number of permutations of $1, \dots, n$ and evaluate the test statistic
 $T$ for shuffled responses $\Y$).
 
@@ -222,8 +238,10 @@ the best separating partition is $A_{j^\star}$ with
 \begin{eqnarray*}
 j^\star = \argmax_j \left|\T_j - \mu_j\right| \times \Sigma_{jj}^{-1/2}.
 \end{eqnarray*}
+%Z% Either use the same layout as above or simply refer to the argmax
+%Z% in the formula above.
 
-\section{Applications and Illustration}
+\section{Applications and illustration}
 
 Maximally selected statistics as described in Section~\ref{sec:stat} can be
 applied to covariates $\X$ and responses $\Y$ measured at arbitrary scales; appropriate 
@@ -299,7 +317,8 @@ The response variable is censored, so we choose a log-rank transformation as inf
 From the potentially $\Sexpr{2^(nlevels(preOP$tn)-1)}$ partitions,
 $\Sexpr{length(stat)}$ meet the sample size constraints. The maximum of the absolute values
 of the corresponding \Sexpr{length(stat)} standardized statistics is \Sexpr{round(teststat, 3)}. The null
-hypothesis can be rejected. All patient with N category N2 or N3 are under high risk; in addition, one patient 
+hypothesis can be rejected. All patient with N category N2 or N3 are under high risk; in addition,
+one patient %Z% One should probably add some remark about this...
 with ypT4 and N1 is under high-risk as well. Figure~\ref{fig:maxstat} depicts Kaplan-Meier 
 estimates of the survival times in the two risk groups.
 
@@ -311,12 +330,12 @@ estimates of the survival times in the two risk groups.
 <<tntab, echo = FALSE, results = tex>>=
 tab <- cbind(tab, rowSums(tab))
 tab <- rbind(tab, colSums(tab))
-cat("\\begin{tabular}{rrrrr} \\hline \\hline \n")
-cat(" & \\multicolumn{3}{c}{N category} & \\\\  \\hline \n")
-cat("T category & ", paste(levels(nc), collapse = " & "), " & $n$ \\\\ \\hline ")
+cat("\\begin{tabular}{|r|rrr|r|} \\hline \n")
+cat(" & \\multicolumn{3}{|c|}{N category} & \\\\ \n")
+cat("T category & ", paste(levels(nc), collapse = " & "), " & \\\\ \\hline ")
 for (i in levels(tc))
-cat(i, " & ", paste(tab[i,], collapse = " & "), "\\\\", "\n")
-cat("$n$ & ", paste(tab[nrow(tab),], collapse = " & "), "\\\\ \\hline", "\n")
+cat(i, " & ", paste(tab[i,], collapse = " & "), "\\\\", ifelse(i=="ypT4", "\\hline", ""), "\n")
+cat(" & ", paste(tab[nrow(tab),], collapse = " & "), "\\\\ \\hline", "\n")
 cat("\\end{tabular} \n")
 @
 \end{center}
@@ -325,10 +344,10 @@ cat("\\end{tabular} \n")
 \setkeys{Gin}{width = 0.75\textwidth}
 \begin{figure}[h!]
 \begin{center}
-\caption{Absolute standardized test statistics (left panel) and survival times
-of rectum cancer patients in two risk groups identified by a maximally selected log-rank
+\caption{%FIXME: omitted?% Absolute standardized test statistics (left panel) and 
+Survival times of rectum cancer patients in two risk groups identified by a maximally selected log-rank
 statistic. \label{fig:maxstat}}
-<<maxstat, echo = FALSE, fig = TRUE, width = 5, height = 5>>=
+<<maxstat, echo = FALSE, fig = TRUE, width = 7, height = 6>>=
 ###layout(matrix(1:2, ncol = 2))
 ###plot(abs(stat), xlab = "Index", ylab = "T")
 plot(survfit(Surv(time, event) ~ risk, data = preOP), xlab = "Time (in months)",
@@ -357,8 +376,9 @@ distribution of the maximum statistic is known as well.
 The implementation of (known and newly designed) maximally selected statistics 
 only requires the specification of the binary partitions, via a function $g$, and
 a problem-specific influence function $h$. Linear statistics $\T$ and the test statistic
-$T$ can be computed utilizing the \texttt{maxstat\_test()} function in the
-\textsf{R} add-on-package \Rpackage{coin} \citep{Hothornetal2006,PKG:coin}. The distribution
+$T$ can be computed utilizing the \texttt{maxstat\_test()} function in
+\textsf{R} \citep{PKG:R} in the add-on package \Rpackage{coin} \citep{Hothornetal2006,PKG:coin}.
+The distribution
 of $T$ can be approximated by its asymptotic distribution or my Monte-Carlo methods 
 (also in the presence of a grouping of the observations into independent blocks) readily
 available from the same package.
