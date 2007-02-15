@@ -6,16 +6,16 @@
     *\date $Date$
 */
 
-#include "CI_common.h"
+#include "coin_common.h"
 
 SEXP 
-    CI_expectationSym,
-    CI_covarianceSym,
-    CI_sumweightsSym;
+    coin_expectationSym,
+    coin_covarianceSym,
+    coin_sumweightsSym;
 
 SEXP coin_init(void) {
-    CI_expectationSym = install("expectation");
-    CI_covarianceSym = install("covariance");
-    CI_sumweightsSym = install("sumweights");
+    coin_expectationSym = install("expectation");
+    coin_covarianceSym = install("covariance");
+    coin_sumweightsSym = install("sumweights");
     return(R_NilValue);
 }

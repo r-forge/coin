@@ -1,4 +1,9 @@
 
+		CHANGES in `coin' VERSION 0.5-3
+
+    o    rename some C source files & update doxygen documentation
+
+
 		CHANGES in `coin' VERSION 0.5-2
 
     o    maxstat_trafo did not always choose the correct maximal

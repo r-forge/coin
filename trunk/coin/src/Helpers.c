@@ -1,12 +1,12 @@
 
 /**
     Some additional functionality for package `coin'
-    *\file CIstuff.c
+    *\file Helpers.c
     *\author $Author$
     *\date $Date$
 */
                 
-#include "CI_common.h"
+#include "coin_common.h"
 
 int nrow(SEXP x) {
     SEXP a;
