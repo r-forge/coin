@@ -66,6 +66,8 @@
 
 \input{head}
 
+\SweaveOpts{eps=FALSE,keep.source=TRUE,echo=FALSE}
+
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 <<coin-setup, echo = FALSE, results = hide>>=
@@ -73,6 +75,46 @@ library("coin")
 set.seed(290875)
 ### get rid of the NAMESPACE
 load(file.path(.find.package("coin"), "R", "all.rda"))
+
+### extract slots of a class
+c2t <- function(x) {        
+
+    classdef <- getClassDef(x)
+
+    extends <- names(classdef@contains)[1]
+    if (!is.null(extends)) {
+        eslots <- names(getClassDef(extends)@slots)
+        slots <- classdef@slots[!names(classdef@slots) %in% eslots]
+    } else {
+        slots <- classdef@slots
+    }
+
+    RET <- cbind(names(slots), slots)
+    attr(RET, "contains") <- extends 
+    attr(RET, "name") <- x
+    class(RET) <- "c2t"        
+    RET
+}
+ 
+### pretty printing
+toLatex.c2t <- function(object, ...) {        
+
+    RET <- c("\\\\", "\\begin{tabular}{ll}",
+             paste("\\multicolumn{2}{l}{Class: \\Rclass{", attr(object, "name"), "}} \\\\", sep = ""),
+             "Slot & Type \\\\ \\hline \\hline",
+             apply(object, 1, function(x) {
+                 x <- paste("\\Rcmd{", x, "}", sep = "")
+                 paste(paste(paste(x, collapse = " & "), "\\\\"))
+             }),
+             "\\hline")
+    if (!is.null(attr(object, "contains")))
+        RET <- c(RET, paste("\\multicolumn{2}{l}{Contains: \\Rclass{", 
+                            attr(object, "contains"), "}} \\\\", sep = ""))
+
+    RET <- c(RET, "\\end{tabular} \\\\")
+    class(RET) <- "Latex"
+    return(RET)
+}
 @
 
 \begin{document}
@@ -83,7 +125,7 @@ load(file.path(.find.package("coin"), "R", "all.rda"))
 \section{Introduction}
 %% Note: If there is markup in \(sub)section, then it has to be escape as above.
 
-\section{Theory and Implementation}
+\section{Theory and Classes}
 
 \subsection{Data}
 
@@ -96,8 +138,8 @@ $\mathcal{X}$ may
 be measured at arbitrary scales and may be multivariate as well. In addition
 to those measurements, case weights $w$ and a factor $b$ coding blocks may
 be available. The data structure is represented by class \Rclass{IndependenceProblem}:
-<<IndependenceProblem>>=
-showClass("IndependenceProblem")
+<<IndependenceProblem, results = tex>>=
+toLatex(c2t("IndependenceProblem"))
 @
 
 \subsection{Test Problem and Linear Statistic}
@@ -122,8 +164,8 @@ symmetric way.
 The transformation $g$ and influence function $h$ as well as 
 $g(\X_i)$ and $h(\Y_i), i = 1, \dots, n$, are attached to the data structure
 by extending class \Rclass{IndependenceProblem}:
-<<IndependenceTestProblem>>=
-showClass("IndependenceTestProblem")
+<<IndependenceTestProblem, results = tex>>=
+toLatex(c2t("IndependenceTestProblem"))
 @
 
 \subsection{Conditional Expectation and Covariance}
@@ -173,8 +215,8 @@ with corresponding $q \times q$ covariance matrix
 The linear statistic $\T$, its conditional expectation and covariance 
 are stored in objects of class \Rclass{IndependenceTestStatistic} extending
 \Rclass{IndependenceTestProblem}:
-<<IndependenceTestStatistic>>=
-showClass("IndependenceTestStatistic")
+<<IndependenceTestStatistic, results = tex>>=
+toLatex(c2t("IndependenceTestStatistic"))
 @
 Class \Rclass{VarCovar} represents either a complete covariance matrix 
 or its diagonal elements only.
@@ -198,26 +240,8 @@ $\Sigma$. The application of a quadratic form $c_\text{quad}(\mathbf{t}, \mu,
 computationally more expensive because the Moore-Penrose 
 inverse $\Sigma^+$ of $\Sigma$ is involved.
 
-Three classes, all extending class \Rclass{IndependenceTestStatistic}, are defined for
-the different test statistics. For univariate problems ($pq = 1$), a special class
-<<ScalarIndependenceTestStatistic>>=
-showClass("ScalarIndependenceTestStatistic")
-@
-is available. For the more general case, maximum-type statistics are represented by
-objects of class \Rclass{MaxTypeIndependenceTestStatistic}:
-<<MaxTypeIndependenceTestStatistic>>=
-showClass("MaxTypeIndependenceTestStatistic")
-@
-and quadratic forms via
-<<QuadTypeIndependenceTestStatistic>>=
-showClass("QuadTypeIndependenceTestStatistic")
-@
-
-
-\subsection{Reference Distribution}
-
 The definition of one- and two-sided $p$-values used for the computations in
-the \texttt{coin} package is 
+the \pkg{coin} package is 
 \begin{eqnarray*}
 P(c(\T, \mu, \Sigma) &\le& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(less)} \\
 P(c(\T, \mu, \Sigma) &\ge& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(greater)}\\
@@ -231,6 +255,24 @@ and that in the one-sided case maximum type test statistics are replaced by
 \max \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right) 
     \quad \text{(greater).}
 \end{eqnarray*}
+
+Three classes, all extending class \Rclass{IndependenceTestStatistic}, are defined for
+the different test statistics. For univariate problems ($pq = 1$), a special class
+<<ScalarIndependenceTestStatistic, results = tex>>=
+toLatex(c2t("ScalarIndependenceTestStatistic"))
+@
+is available. For the more general case, maximum-type statistics are represented by
+objects of class \Rclass{MaxTypeIndependenceTestStatistic}:
+<<MaxTypeIndependenceTestStatistic, results = tex>>=
+toLatex(c2t("MaxTypeIndependenceTestStatistic"))
+@
+and quadratic forms via
+<<QuadTypeIndependenceTestStatistic, results = tex>>=
+toLatex(c2t("QuadTypeIndependenceTestStatistic"))
+@
+
+
+\subsection{Reference Distribution}
 
 The conditional distribution and thus the $p$-value
 of the statistics $c(\mathbf{t}, \mu, \Sigma)$ can be
@@ -254,8 +296,57 @@ quadratic forms
 $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom 
 given by the rank of $\Sigma$ \citep[see][Chapter 29]{johnsonkotz1970}, exact
 probabilities can be computed efficiently.
+<<PValue, results = tex>>=
+toLatex(c2t("PValue"))
+@
+<<NullDistribution, results = tex>>=
+toLatex(c2t("NullDistribution"))
+@
 
+\subsection{Classes for Conditional Tests}
+
+All tests are based on objects of class \Rclass{IndependenceTest}:
+<<IndependenceTest, results = tex>>=
+toLatex(c2t("IndependenceTest"))
+@
+
+For example
+<<ScalarIndependenceTest, results = tex>>=
+toLatex(c2t("ScalarIndependenceTest"))
+@
+
+or
+<<QuadTypeIndependenceTest, results = tex>>=
+toLatex(c2t("QuadTypeIndependenceTest"))
+@
 
 %%% ToDo: Blocks!
+
+\section{Methods}
+
+
+pvalue
+pperm
+dperm
+qperm
+support
+
+statistic
+expectation
+covariance
+variance
+
+\section{Internal Functionality}
+
+Zeitmessung
+
+
+\section{User Interfaces}
+
+trafo
+independence\_test
+
+convenience functions (Tabelle)
+
 
 \end{document}
