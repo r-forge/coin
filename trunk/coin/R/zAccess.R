@@ -119,9 +119,14 @@ setGeneric("statistic", function(object,
 setMethod(f = "statistic",
           signature = "IndependenceTest",
           definition = function(object, 
+              type = c("test", "linear", "standardized"), ...)
+              statistic(object@statistic, type = type)
+)
+
+setMethod(f = "statistic",
+          signature = "IndependenceTestStatistic",
+          definition = function(object, 
               type = c("test", "linear", "standardized"), ...) {
-              ### <FIXME> it is not sure that object@statistic exists! </FIXME>
-              object <- object@statistic
               nc <- ncol(object@ytrans)
               nr <- ncol(object@xtrans)
               type <- match.arg(type)
