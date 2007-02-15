@@ -5,7 +5,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% almost as usual
-\author{Torsten Hothorn \\ Friedrich--Alexander--Universit\"at Erlangen--N\"urnberg \And
+\author{Torsten Hothorn \\ Friedrich--Alexander--Universit\"at \\ Erlangen--N\"urnberg \And
         Kurt Hornik \\Wirtschaftsuniversit\"at Wien \And
         Mark A. van de Wiel \\Vrije Universiteit Amsterdam \And
         Achim Zeileis\\Wirtschaftsuniversit\"at Wien}
@@ -97,21 +97,33 @@ c2t <- function(x) {
 }
  
 ### pretty printing
-toLatex.c2t <- function(object, ...) {        
+toLatex.c2t <- function(object, center = TRUE, ...) {        
 
-    RET <- c("\\\\", "\\begin{tabular}{ll}",
-             paste("\\multicolumn{2}{l}{Class: \\Rclass{", attr(object, "name"), "}} \\\\", sep = ""),
-             "Slot & Type \\\\ \\hline \\hline",
+    RET <- c()
+
+    if (center) RET <- c(RET, "\\begin{center}")
+
+    ### class name
+    RET <- c(RET, "\\begin{tabular}{ll}",
+                  paste("\\multicolumn{2}{l}{Class \\Rclass{", 
+                        attr(object, "name"), "}} \\\\", sep = "")) 
+
+    ### extends?
+    if (!is.null(attr(object, "contains")))
+        RET <- c(RET, paste("\\multicolumn{2}{l}{Contains \\Rclass{", 
+                            attr(object, "contains"), "}} \\\\", sep = ""))
+
+    ### slots
+    RET <- c(RET, " & \\\\", "Slots & Type \\\\ \\hline ",
              apply(object, 1, function(x) {
                  x <- paste("\\Rcmd{", x, "}", sep = "")
                  paste(paste(paste(x, collapse = " & "), "\\\\"))
              }),
              "\\hline")
-    if (!is.null(attr(object, "contains")))
-        RET <- c(RET, paste("\\multicolumn{2}{l}{Contains: \\Rclass{", 
-                            attr(object, "contains"), "}} \\\\", sep = ""))
+    RET <- c(RET, "\\end{tabular}")
 
-    RET <- c(RET, "\\end{tabular} \\\\")
+    if (center) RET <- c(RET, "\\end{center}")
+
     class(RET) <- "Latex"
     return(RET)
 }
@@ -213,13 +225,16 @@ with corresponding $q \times q$ covariance matrix
 \end{eqnarray*}
 
 The linear statistic $\T$, its conditional expectation and covariance 
-are stored in objects of class \Rclass{IndependenceTestStatistic} extending
-\Rclass{IndependenceTestProblem}:
+are stored in objects of class \Rclass{IndependenceTestStatistic}:
 <<IndependenceTestStatistic, results = tex>>=
 toLatex(c2t("IndependenceTestStatistic"))
 @
 Class \Rclass{VarCovar} represents either a complete covariance matrix 
-or its diagonal elements only.
+or its diagonal elements only. The slot \Rarg{standardizedlinearstatistic}
+contains the (possibly multivariate) linear statistic standardize by its 
+conditional expectation and variance. The univariate test statistic, 
+two types of test statistics are given in the next section,
+are stored in slot \Rarg{teststatistic}.
 
 \subsection{Test Statistics}
 
@@ -266,13 +281,16 @@ objects of class \Rclass{MaxTypeIndependenceTestStatistic}:
 <<MaxTypeIndependenceTestStatistic, results = tex>>=
 toLatex(c2t("MaxTypeIndependenceTestStatistic"))
 @
-and quadratic forms via
+both defining a character vector specifying the alternative to test against (\Rcmd{two.sided},
+\Rcmd{greater} and \Rcmd{less}. Quadratic forms always lead to two-sided tests but
+require the Moore-Penrose inverse of the conditional covariance matrix $\Sigma^+$ and
+its rank (degrees of freedom) to be known:
 <<QuadTypeIndependenceTestStatistic, results = tex>>=
 toLatex(c2t("QuadTypeIndependenceTestStatistic"))
 @
 
 
-\subsection{Reference Distribution}
+\subsection{Null Distribution}
 
 The conditional distribution and thus the $p$-value
 of the statistics $c(\mathbf{t}, \mu, \Sigma)$ can be
@@ -296,57 +314,154 @@ quadratic forms
 $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom 
 given by the rank of $\Sigma$ \citep[see][Chapter 29]{johnsonkotz1970}, exact
 probabilities can be computed efficiently.
+
+A null distribution is represented by either a distribution (and $P$-value) function
+only
 <<PValue, results = tex>>=
 toLatex(c2t("PValue"))
 @
+or, where possible, is enriched by its density and quantile function:
 <<NullDistribution, results = tex>>=
 toLatex(c2t("NullDistribution"))
 @
+Currently, there are three classes extending \Rclass{NullDistribution} (without 
+defining additional slots at the moment): \Rclass{ExactNullDistribution} (exact conditional
+null distribution, computed for example via Streitberg/Roehmel),
+\Rclass{ApproxNullDistribution} (Monte-Carlo procedures) and \Rclass{AsymptNullDistribution}
+(asyptotic approximations via multivariate normal or $\chi^2$ distribution).
 
 \subsection{Classes for Conditional Tests}
 
-All tests are based on objects of class \Rclass{IndependenceTest}:
+A conditional test is represented by it null distribution and
+a character string giving the name of the test in class \Rclass{IndependenceTest}:
 <<IndependenceTest, results = tex>>=
 toLatex(c2t("IndependenceTest"))
 @
-
-For example
+However, the null distribution itself needs to be extended by a description
+of the test problem this distribution is useful for. Here, the 
+type of test statistic used constitutes three classes for the description of
+conditional tests. Objects of class \Rclass{ScalarIndependenceTest} describe 
+tests with scalar test statistics ($pq = 1$)
 <<ScalarIndependenceTest, results = tex>>=
 toLatex(c2t("ScalarIndependenceTest"))
 @
-
-or
+whereas maximum-type and quadratic statistics are given by classes
+<<MaxTypeIndependenceTest, results = tex>>=
+toLatex(c2t("MaxTypeIndependenceTest"))
+@
+and
 <<QuadTypeIndependenceTest, results = tex>>=
 toLatex(c2t("QuadTypeIndependenceTest"))
 @
+
+
 
 %%% ToDo: Blocks!
 
 \section{Methods}
 
+The following methods are defined for class \Rclass{IndependenceTestStatistic}:
+\begin{itemize}
+\item[\Rcmd{statistic()}:] extracts the linear statistic $\T$, 
+                           the standardized statistic or test statistic.
+\item[\Rcmd{expectation()}:] extracts the conditional expectation $\E(\T | S)$.
+\item[\Rcmd{covariance()}:] extracts the complete conditional covariance matrix 
+                            $\Sigma$ (if available).
+\item[\Rcmd{variance()}:] extracts the diagonal elements of the conditional covariance matrix
+                          $\text{diag}(\Sigma)$.
+\end{itemize}
 
-pvalue
-pperm
-dperm
-qperm
-support
+For null distributions (class \Rclass{NullDistribution}), the following methods
+are available:
+\begin{itemize}
+\item[\Rcmd{pvalue()}:] computes the $P$-value.
+\item[\Rcmd{pperm()}:] evaluates the distribution function.
+\item[\Rcmd{dperm()}:] evaluates the density function. 
+\item[\Rcmd{qperm()}:] evaluates the quantile function.
+\item[\Rcmd{support()}:] returns the support of the null distribution.
+\end{itemize}.
 
-statistic
-expectation
-covariance
-variance
+Of course, all methods are defined for objects inheriting from class 
+\Rclass{IndependenceTest} as well.
 
 \section{Internal Functionality}
 
-Zeitmessung
-
+Functions for computing the linear statistic $\T$ for the original data as well
+for permuted versions of the original data, the conditional expectation $\mu$
+and conditional covariate matrix $\Sigma$ are coded in \proglang{C}. (In addition,
+some helper functions, e.g. the Kronecker product etc., are implemented in \proglang{C} as well.)
+The complete source-code and documentation can be accessed via
+<<coin-doxygen, echo = TRUE, eval = FALSE>>=
+browseURL(system.file("documentation/html/index.html", 
+          package = "coin"))
+@
 
 \section{User Interfaces}
 
-trafo
-independence\_test
+\subsection{General Independence Tests}
 
-convenience functions (Tabelle)
+\begin{Sinput}
+independence_test(object, 
+    teststat = c("max", "quad", "scalar"),
+    distribution = c("asymptotic", "approximate", "exact"),
+    alternative = c("two.sided", "less", "greater"),
+    xtrafo = trafo, ytrafo = trafo, scores = NULL, 
+    check = NULL, ...)
+\end{Sinput}
 
+\begin{Sinput}
+trafo(data, numeric_trafo = id_trafo, 
+    factor_trafo = f_trafo, surv_trafo = logrank_trafo, 
+    var_trafo = NULL, block = NULL)
+\end{Sinput}
+
+\subsection{Specialized Convenience Functions}
+
+\begin{sidewaystable}
+\begin{center}
+\begin{tabular}{lllll} \\
+\multicolumn{5}{c}{Independent Samples} \\
+Test & Function & \Rcmd{xtrafo} & \Rcmd{ytrafo} & \Rcmd{teststat} \\ \hline
+Wilcoxon-Mann-Whitney & \Rcmd{wilcox\_test} & \Rcmd{factor\_trafo} & \Rcmd{rank} &
+\Rcmd{scalar} \\
+Normal Quantiles & \Rcmd{normal\_test} & \Rcmd{factor\_trafo} & \Rcmd{normal\_trafo} &
+\Rcmd{scalar} \\
+Median Test & \Rcmd{median\_test} & \Rcmd{factor\_trafo} & \Rcmd{median\_trafo} &
+\Rcmd{scalar} \\
+Ansari-Bradley & \Rcmd{ansari\_test} & \Rcmd{factor\_trafo} & \Rcmd{ansari\_trafo} &
+\Rcmd{scalar} \\
+Log Rank Test & \Rcmd{surv\_test} & \Rcmd{factor\_trafo} & \Rcmd{logrank\_trafo} &
+\Rcmd{quad} \\
+Kruskal-Wallis & \Rcmd{kruskal\_test} & \Rcmd{factor\_trafo} & \Rcmd{rank} &
+\Rcmd{quad} \\
+Fligner Test & \Rcmd{fligner\_test} & \Rcmd{factor\_trafo} & \Rcmd{fligner\_trafo} &
+\Rcmd{quad} \\
+Spearman Test & \Rcmd{spearman\_test} & \Rcmd{rank} & \Rcmd{rank} &
+\Rcmd{scalar} \\
+Cochran-Mantel-Haenzsel & \Rcmd{cmh\_test} & \Rcmd{factor\_trafo} & \Rcmd{factor\_trafo} &
+\Rcmd{quad} \\
+Pearson's $\chi^2$ Test & \Rcmd{chisq\_test} & \Rcmd{factor\_trafo} & \Rcmd{factor\_trafo} &
+\Rcmd{quad} \\
+Cochran-Armitage / Linear Association & \Rcmd{lbl\_test} & Scores & any &
+\Rcmd{scalar} \\
+Permutation test & \Rcmd{oneway\_test} & \Rcmd{factor\_trafo} & any & any \\
+\multicolumn{5}{c}{Dependent Samples} \\
+Test & Function & \Rcmd{xtrafo} & \Rcmd{ytrafo} & \Rcmd{teststat} \\ \hline
+Friedman Test & \Rcmd{friedman\_test} & \Rcmd{factor\_trafo} & \Rcmd{rank} &
+\Rcmd{quad} \\
+Maxwell-Stuart & \Rcmd{mh\_test} & \Rcmd{factor\_trafo} & \Rcmd{factor\_trafo} &
+\Rcmd{quad} \\
+Wilcoxon Signed Rank & \Rcmd{wilcoxsign\_test} & \Rcmd{factor\_trafo} & \Rcmd{rank} &
+\Rcmd{scalar} \\
+\end{tabular}
+\caption{Convenience Functions}
+\end{center}
+\end{sidewaystable}
+
+\section{Quality Assurance}
+
+
+
+\bibliography{coin_jss}
 
 \end{document}
