@@ -1,0 +1,78 @@
+\documentclass[article]{jss}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% almost as usual
+\author{Torsten Hothorn \\ Friedrich--Alexander--Universit\"at Erlangen--N\"urnberg \And
+        Kurt Hornik \\Wirtschaftsuniversit\"at Wien \And
+        Mark A. van de Wiel \\Vrije Universiteit Amsterdam \And
+        Achim Zeileis\\Wirtschaftsuniversit\"at Wien}
+\title{\pkg{coin}: Implementing a Class of Permutation Tests}
+
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{Torsten Hothorn, Kurt Hornik, Mark A. van de Wiel, Achim Zeileis} %% comma-separated
+\Plaintitle{\pkg{coin}: Implementing a Class of Permutation Tests} %% without formatting
+\Shorttitle{Implementing a Class of Permutation Tests} %% a short title (if necessary)
+
+%% an abstract and keywords
+\Abstract{
+  The abstract of the article.
+}
+\Keywords{conditional inference, \proglang{R}}
+\Plainkeywords{conditional inference, R} %% without formatting
+%% at least one keyword must be supplied
+
+%% publication information
+%% NOTE: This needs to filled out ONLY IF THE PAPER WAS ACCEPTED.
+%% If it was not (yet) accepted, leave them commented.
+%% \Volume{13}
+%% \Issue{9}
+%% \Month{September}
+%% \Year{2004}
+%% \Submitdate{2004-09-29}
+%% \Acceptdate{2004-09-29}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  Torsten Hothorn \\
+  Institut f\"ur Medizininformatik, Biometrie und Epidemiologie\\
+  Friedrich-Alexander-Universit\"at Erlangen-N\"urnberg\\
+  Waldstra{\ss}e 6, D-91054 Erlangen, Germany \\  
+  Email: \email{Torsten.Hothorn@R-project.org}
+
+  Kurt Hornik and Achim Zeileis\\
+  Institut f\"ur Statistik \& Mathematik\\
+  Wirtschaftsuniversit\"at Wien\\
+  1090 Wien, Austria\\
+  E-mail: \email{Kurt.Hornik@R-project.org}\\
+  E-mail: \email{Achim.Zeileis@R-project.org}\\
+
+  Mark A. van de Wiel \\
+  Department of Mathematics, Vrije Universiteit \\
+  De Boelelaan 1081a, 1081 HV Amsterdam, The Netherlands \\
+  Email: \email{mark.vdwiel@vumc.nl}
+
+}
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/1/31336-5053
+%% Fax: +43/1/31336-734
+
+%% for those who use Sweave please include the following line (with % symbols):
+%% need no \usepackage{Sweave.sty}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%% include your article here, just as usual
+%% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
+
+\section[Introduction]{Introduction}
+%% Note: If there is markup in \(sub)section, then it has to be escape as above.
+
+\end{document}
