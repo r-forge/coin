@@ -1,6 +1,6 @@
 
-R version 2.5.0 Under development (unstable) (2006-11-02 r39774)
-Copyright (C) 2006 The R Foundation for Statistical Computing
+R version 2.5.0 Under development (unstable) (2007-02-04 r40641)
+Copyright (C) 2007 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -84,6 +84,7 @@ Loading required package: survival
 Loading required package: splines
 Loading required package: mvtnorm
 Loading required package: modeltools
+Loading required package: stats4
 > 
 > assign(".oldSearch", search(), pos = 'CheckExEnv')
 > assign(".oldNS", loadedNamespaces(), pos = 'CheckExEnv')
@@ -1239,22 +1240,13 @@ attr(,"conf.level")
 > ###   Statistics
 > ### Aliases: expectation expectation-methods
 > ###   expectation,IndependenceTest-method
-> ###   expectation,IndependenceTestStatistic-method
-> ###   expectation,ScalarIndependenceTestStatistic-method
-> ###   expectation,MaxTypeIndependenceTestStatistic-method
-> ###   expectation,QuadTypeIndependenceTestStatistic-method covariance
+> ###   expectation,IndependenceTestStatistic-method covariance
 > ###   covariance-methods covariance,CovarianceMatrix-method
 > ###   covariance,IndependenceTest-method
-> ###   covariance,IndependenceTestStatistic-method
-> ###   covariance,ScalarIndependenceTestStatistic-method
-> ###   covariance,MaxTypeIndependenceTestStatistic-method
-> ###   covariance,QuadTypeIndependenceTestStatistic-method variance
-> ###   variance-methods variance,Variance-method
-> ###   variance,CovarianceMatrix-method variance,IndependenceTest-method
+> ###   covariance,IndependenceTestStatistic-method variance variance-methods
+> ###   variance,Variance-method variance,CovarianceMatrix-method
+> ###   variance,IndependenceTest-method
 > ###   variance,IndependenceTestStatistic-method
-> ###   variance,ScalarIndependenceTestStatistic-method
-> ###   variance,MaxTypeIndependenceTestStatistic-method
-> ###   variance,QuadTypeIndependenceTestStatistic-method
 > ### Keywords: methods
 > 
 > ### ** Examples
@@ -1824,6 +1816,7 @@ $cutpoint
 > ### Title: Extract Test Statistics, Linear Statistics and Standardized
 > ###   Statistics
 > ### Aliases: statistic statistic-methods statistic,IndependenceTest-method
+> ###   statistic,IndependenceTestStatistic-method
 > ### Keywords: methods
 > 
 > ### ** Examples
@@ -1908,7 +1901,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  34.238 1.428 35.812 0 0 
+Time elapsed:  37.71 1.824 40.291 0 0 
 > grDevices::dev.off()
 null device 
           1 
