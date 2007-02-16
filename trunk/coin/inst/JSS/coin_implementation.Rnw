@@ -493,7 +493,7 @@ tests, are listed in Table~\ref{confct}.
 \begin{sidewaystable}
 \begin{center}
 \begin{tabular}{lllll} \\
-\multicolumn{5}{c}{Independent Samples} \\
+%%%\multicolumn{5}{c}{Independent Samples} \\
 Test & Function & \Rcmd{xtrafo} & \Rcmd{ytrafo} & \Rcmd{teststat} \\ \hline
 \multicolumn{5}{c}{} \\
 \multicolumn{5}{c}{Independent Samples} \\
@@ -521,7 +521,7 @@ Pearson's $\chi^2$ & \Rcmd{chisq\_test()} & \Rcmd{f\_trafo()} & \Rcmd{f\_trafo()
 Cochran-Armitage / Linear Association & \Rcmd{lbl\_test()} & Scores & any &
 \Rcmd{"scalar"} \\
 K-Sample Permutation test & \Rcmd{oneway\_test()} & \Rcmd{f\_trafo()} & any & any \\
-Maximally Selected Statistics & \Rcmd{maxstat\_test()} & \Rcmd{maxstat\_trafo()} & any & "max" \\
+Maximally Selected Statistics & \Rcmd{maxstat\_test()} & \Rcmd{maxstat\_trafo()} & any & \Rcmd{"max"} \\
 \multicolumn{5}{c}{} \\
 \multicolumn{5}{c}{Dependent Samples} \\
 \multicolumn{5}{c}{} \\
@@ -530,7 +530,7 @@ Friedman & \Rcmd{friedman\_test()} & \Rcmd{f\_trafo()} & \Rcmd{rank()} &
 Maxwell-Stuart & \Rcmd{mh\_test()} & \Rcmd{f\_trafo()} & \Rcmd{f\_trafo()} &
 \Rcmd{"quad"} \\
 Wilcoxon Signed Rank & \Rcmd{wilcoxsign\_test()} & \Rcmd{f\_trafo()} & \Rcmd{rank()} &
-\Rcmd{"scalar"} \\
+\Rcmd{"scalar"} \\ \hline
 \end{tabular}
 \caption{Convenience functions implementing the conditional counterparts of 
          the most important classical tests. \label{confct}}
@@ -539,7 +539,7 @@ Wilcoxon Signed Rank & \Rcmd{wilcoxsign\_test()} & \Rcmd{f\_trafo()} & \Rcmd{ran
 
 \subsection{An Example}
 
-The job satisfaction data \citep[Table 7.8][]{agresti2002} is a three-dimensional
+The job satisfaction data \citep[Table 7.8,][]{agresti2002} is a three-dimensional
 contingency table with variables \Robject{Income} and \Robject{Job.Satisfaction}
 for both \Robject{Gender}s. Here, we focus on conditional tests on independence 
 of income and job satisfaction. The conditional Cochran-Mantel-Haenszel is
