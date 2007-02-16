@@ -18,7 +18,7 @@
 
 %% an abstract and keywords
 \Abstract{
-  The abstract of the article.
+  Internal structure of \pkg{coin} and design of user interfaces.
 }
 \Keywords{conditional inference, \proglang{R}}
 \Plainkeywords{conditional inference, R} %% without formatting
@@ -222,7 +222,7 @@ The conditinal expectation of the linear statistic $\T_j$ in block $j$ is
 \Sigma_j & = & \V(\T | S_j) \nonumber \\
 & = &
     \frac{w_{\cdot j}}{w_{\cdot j} - 1}  \V(h | S_j) \otimes
-        \left(\sum_i I(b_i = j) w_i  g(\X_i) \otimes I(b_i = j) w_i  g(\X_i)^\top \right)
+        \left(\sum_i I(b_i = j) w_i  \left( g(\X_i) \otimes g(\X_i)^\top\right) \right)
 \label{expectcovar}
 \\
 & - & \frac{1}{w_{\cdot j} - 1}  \V(h | S_j)  \otimes \left(
@@ -264,10 +264,10 @@ standardize a linear statistic $\T \in \R^{pq}$ of the form
 In case of univariate linear statistics $\T$ (with $pq = 1$), the test statistic $c$
 is simply the standardized linear statistic
 \begin{eqnarray*}
-c_\text{scalar}(\T, \mu, \Sigma) = (\t - \mu) \times \Sigma^{-1/2}.
-\end{eqnarray*}
-In the multivariate case ($pq > 1$), the choice of the test statistic depends
-on the alternative we have in mind:
+c_\text{scalar}(\T, \mu, \Sigma) = \frac{\t - \mu}{\sqrt{\Sigma}}.
+\end{eqnarray*} 
+In the multivariate case ($pq > 1$), the choice of the test
+statistic depends on the alternative we have in mind:
 \begin{eqnarray*}
 c_\text{max}(\mathbf{t}, \mu, \Sigma)  = \max \left| \frac{\mathbf{t} -
 \mu}{\text{diag}(\Sigma)^{1/2}} \right|
@@ -361,7 +361,7 @@ toLatex(c2t("IndependenceTest"))
 \section{Methods}
 
 The following methods are defined for class \Rclass{IndependenceTestStatistic}:
-\begin{itemize}
+\begin{description}
 \item[\Rcmd{statistic()}:] extracts the linear statistic $\T$, 
                            the standardized statistic or test statistic.
 \item[\Rcmd{expectation()}:] extracts the conditional expectation $\mu$.
@@ -369,20 +369,31 @@ The following methods are defined for class \Rclass{IndependenceTestStatistic}:
                             $\Sigma$ (if available).
 \item[\Rcmd{variance()}:] extracts the diagonal elements of the conditional covariance matrix
                           $\text{diag}(\Sigma)$.
-\end{itemize}
+\end{description}
 
 For null distributions (class \Rclass{NullDistribution}), the following methods
 are available:
-\begin{itemize}
-\item[\Rcmd{pvalue()}:] computes the $P$-value.
+\begin{description}
+\item[\Rcmd{pvalue()}:] computes the $P$-value (plus a confidence interval, in case
+ Monte-Carlo procedures have been used).
 \item[\Rcmd{pperm()}:] evaluates the distribution function.
 \item[\Rcmd{dperm()}:] evaluates the density function. 
 \item[\Rcmd{qperm()}:] evaluates the quantile function.
 \item[\Rcmd{support()}:] returns the support of the null distribution.
-\end{itemize}.
-
+\end{description}
 Of course, all methods are defined for objects inheriting from class 
-\Rclass{IndependenceTest} as well.
+\Rclass{IndependenceTest} as well. In addition, \Rcmd{show()} methods
+are defined for class \Rclass{ScalarIndependenceTest}, \Rclass{MaxTypeIndependenceTest}
+and \Rclass{QuadTypeIndependenceTest}, converting these \proglang{S4} 
+objects to an informal \proglang{S3} object of class \Rclass{htest} for which
+a \Rcmd{print()} method most \proglang{R} users are familiar with is available.
+
+For the conditional versions of two-sample linear rank statistics for
+location and scale parameters \citep{theory-of-:-1999}, e.g. Wilcoxon-Mann-Whitney,
+Normal Scores and Ansari-Bradley tests, parameter estimates and
+confidence intervals based on the conditional distribution of the test statistics
+are implemented following the methods proposed by \cite{constructi:1972}. 
+A \Rcmd{confint()} method is available for these special cases.
 
 \section{Internal Functionality}
 
@@ -399,6 +410,11 @@ The complete \proglang{C} source code and its documentation can be accessed via
 <<coin-doxygen, echo = TRUE, eval = FALSE>>=
 browseURL(system.file("documentation/html/index.html", package = "coin"))
 @
+The naming scheme of the \proglang{C} routines distinguishes between functions
+only called at \proglang{C} level (\code{C\_<foo>}) and functions which can 
+be called from \proglang{R} via the \code{.Call} interface (\code{R\_<foo>}). 
+Such functions are available for most of the internal \proglang{C} functions to enable
+unit testing.
 
 \section{User Interfaces}
 
@@ -410,15 +426,8 @@ as closely as possible.
 
 \subsection{General Independence Tests}
 
-The generic function \Rcmd{independence\_test} has methods for tables (both
-$\X$ and $\Y$ being univariate factors), formulae of the form
-\begin{Sinput}
-y ~ x | block
-\end{Sinput}
-or
-\begin{Sinput}
-y1 + y2 + ... ~ x1 + x2 + ... | block             
-\end{Sinput}
+The \proglang{S3} generic function \Rcmd{independence\_test} has methods for tables (both
+$\X$ and $\Y$ being univariate factors), formulae and 
 and objects of class \Rclass{IndependenceProblem}. The definition of the latter is
 \begin{Sinput}
 independence_test(object, 
@@ -447,6 +456,26 @@ trafo(data, numeric_trafo = id_trafo,
     factor_trafo = f_trafo, surv_trafo = logrank_trafo, 
     var_trafo = NULL, block = NULL)
 \end{Sinput}
+The framework is extensible by user-supplied transformations $g$ or influence functions $h$ 
+specified as arguments to \Rcmd{trafo()}.
+
+\subsection{Formula and Table Methods}
+
+A \Rclass{formula} interface as well as a \Rclass{table} method for \Rcmd{independence\_test} 
+are available in addition. The left hand side variables of a formula are interpreted 
+as $\Y$ variables (univariate and possibly multivariate), the right hand side is taken
+for $\X$ (univariate and multivariate as well). The blocking factor is specified after the pipe
+symbol. So, for example, the formula
+\begin{Sinput}
+y1 + y2 ~ x1 + x2 | block
+\end{Sinput}
+leads to a test of independence between two $\Y$ variables and two $\X$ variables (in case
+all variables are numeric our linear statistic is four-dimensional with 
+$p = 2$ and $q = 2$) for each level in \Robject{block}. As usual, \Rarg{data}, \Rarg{weights}
+and \Rarg{subset} arguments can be specified as well.
+
+Two- and three-dimensional tables can be supplied to the \Rclass{table} method of
+\Rcmd{independence\_test}. The third variable is then interpreted as block.
 
 \subsection{Specialized Convenience Functions}
 
@@ -460,37 +489,37 @@ tests, are listed in Table~\ref{confct}.
 \begin{tabular}{lllll} \\
 \multicolumn{5}{c}{Independent Samples} \\
 Test & Function & \Rcmd{xtrafo} & \Rcmd{ytrafo} & \Rcmd{teststat} \\ \hline
-Wilcoxon-Mann-Whitney & \Rcmd{wilcox\_test} & \Rcmd{f\_trafo} & \Rcmd{rank} &
-\Rcmd{scalar} \\
-Normal Quantiles & \Rcmd{normal\_test} & \Rcmd{f\_trafo} & \Rcmd{normal\_trafo} &
-\Rcmd{scalar} \\
-Median Test & \Rcmd{median\_test} & \Rcmd{f\_trafo} & \Rcmd{median\_trafo} &
-\Rcmd{scalar} \\
-Ansari-Bradley & \Rcmd{ansari\_test} & \Rcmd{f\_trafo} & \Rcmd{ansari\_trafo} &
-\Rcmd{scalar} \\
-Log Rank Test & \Rcmd{surv\_test} & \Rcmd{f\_trafo} & \Rcmd{logrank\_trafo} &
-\Rcmd{quad} \\
-Kruskal-Wallis & \Rcmd{kruskal\_test} & \Rcmd{f\_trafo} & \Rcmd{rank} &
-\Rcmd{quad} \\
-Fligner Test & \Rcmd{fligner\_test} & \Rcmd{f\_trafo} & \Rcmd{fligner\_trafo} &
-\Rcmd{quad} \\
-Spearman Test & \Rcmd{spearman\_test} & \Rcmd{rank} & \Rcmd{rank} &
-\Rcmd{scalar} \\
-Cochran-Mantel-Haenzsel & \Rcmd{cmh\_test} & \Rcmd{f\_trafo} & \Rcmd{f\_trafo} &
-\Rcmd{quad} \\
-Pearson's $\chi^2$ Test & \Rcmd{chisq\_test} & \Rcmd{f\_trafo} & \Rcmd{f\_trafo} &
-\Rcmd{quad} \\
-Cochran-Armitage / Linear Association & \Rcmd{lbl\_test} & Scores & any &
-\Rcmd{scalar} \\
-Permutation test & \Rcmd{oneway\_test} & \Rcmd{f\_trafo} & any & any \\
+Wilcoxon-Mann-Whitney & \Rcmd{wilcox\_test()} & \Rcmd{f\_trafo()} & \Rcmd{rank()} &
+\Rcmd{"scalar"} \\
+Normal Quantiles & \Rcmd{normal\_test()} & \Rcmd{f\_trafo()} & \Rcmd{normal\_trafo()} &
+\Rcmd{"scalar"} \\
+Median & \Rcmd{median\_test()} & \Rcmd{f\_trafo()} & \Rcmd{median\_trafo()} &
+\Rcmd{"scalar"} \\
+Ansari-Bradley & \Rcmd{ansari\_test()} & \Rcmd{f\_trafo()} & \Rcmd{ansari\_trafo()} &
+\Rcmd{"scalar"} \\
+Log Rank & \Rcmd{surv\_test()} & \Rcmd{f\_trafo()} & \Rcmd{logrank\_trafo()} &
+\Rcmd{"quad"} \\
+Kruskal-Wallis & \Rcmd{kruskal\_test()} & \Rcmd{f\_trafo()} & \Rcmd{rank()} &
+\Rcmd{"quad"} \\
+Fligner & \Rcmd{fligner\_test()} & \Rcmd{f\_trafo()} & \Rcmd{fligner\_trafo()} &
+\Rcmd{"quad"} \\
+Spearman & \Rcmd{spearman\_test()} & \Rcmd{rank()} & \Rcmd{rank()} &
+\Rcmd{"scalar"} \\
+Cochran-Mantel-Haenzsel & \Rcmd{cmh\_test()} & \Rcmd{f\_trafo()} & \Rcmd{f\_trafo()} &
+\Rcmd{"quad"} \\
+Pearson's $\chi^2$ & \Rcmd{chisq\_test()} & \Rcmd{f\_trafo()} & \Rcmd{f\_trafo()} &
+\Rcmd{"quad"} \\
+Cochran-Armitage / Linear Association & \Rcmd{lbl\_test()} & Scores & any &
+\Rcmd{"scalar"} \\
+K-Sample Permutation test & \Rcmd{oneway\_test()} & \Rcmd{f\_trafo()} & any & any \\
 \multicolumn{5}{c}{Dependent Samples} \\
-Test & Function & \Rcmd{xtrafo} & \Rcmd{ytrafo} & \Rcmd{teststat} \\ \hline
-Friedman Test & \Rcmd{friedman\_test} & \Rcmd{f\_trafo} & \Rcmd{rank} &
-\Rcmd{quad} \\
-Maxwell-Stuart & \Rcmd{mh\_test} & \Rcmd{f\_trafo} & \Rcmd{f\_trafo} &
-\Rcmd{quad} \\
-Wilcoxon Signed Rank & \Rcmd{wilcoxsign\_test} & \Rcmd{f\_trafo} & \Rcmd{rank} &
-\Rcmd{scalar} \\
+Test & Function & \Rcmd{xtrafo()} & \Rcmd{ytrafo} & \Rcmd{teststat} \\ \hline
+Friedman & \Rcmd{friedman\_test()} & \Rcmd{f\_trafo()} & \Rcmd{rank()} &
+\Rcmd{"quad"} \\
+Maxwell-Stuart & \Rcmd{mh\_test()} & \Rcmd{f\_trafo()} & \Rcmd{f\_trafo()} &
+\Rcmd{"quad"} \\
+Wilcoxon Signed Rank & \Rcmd{wilcoxsign\_test()} & \Rcmd{f\_trafo()} & \Rcmd{rank()} &
+\Rcmd{"scalar"} \\
 \end{tabular}
 \caption{Convenience Functions \label{confct}}
 \end{center}
@@ -520,7 +549,7 @@ table is easily defined:
 independence_test(jobsatisfaction, teststat = "max")
 @
 with its conditional asymptotical null distribution being 
-immidiately available. Taking the ordinal scale level of both
+immediately available. Taking the ordinal scale level of both
 variables into account, a linear by linear association test
 is easily obtainable via
 <<jobsatisfaction-ordinal, echo = TRUE>>=
@@ -550,6 +579,8 @@ the \proglang{R}-transcript files in directory \code{coin/tests}.
  
 We would like to thank Helmut Strasser for discussions on the theoretical framework.
 Henric Nilsson provided clarification and examples for the Stuart-Maxwell test.
+The work of T. Hothorn was supported by Deutsche Forschungsgemeinschaft (DFG) 
+under grant HO 3242/1-3.
 
 \bibliography{coin_jss}
 
