@@ -114,10 +114,11 @@ toLatex.c2t <- function(object, center = TRUE, ...) {
                             attr(object, "contains"), "}} \\\\", sep = ""))
 
     ### slots
-    RET <- c(RET, " & \\\\", "Slots & Type \\\\ \\hline ",
+    RET <- c(RET, " & \\\\", "Slot & Class \\\\ \\hline ",
              apply(object, 1, function(x) {
-                 x <- paste("\\Rcmd{", x, "}", sep = "")
-                 paste(paste(paste(x, collapse = " & "), "\\\\"))
+                 x <- cbind(paste("\\Rcmd{", x[1], "}", sep = ""),
+                            paste("\\Rclass{", x[2], "}", sep = ""))
+                 paste(paste(x, collapse = " & "), "\\\\")
              }),
              "\\hline")
     RET <- c(RET, "\\end{tabular}")
@@ -155,7 +156,7 @@ The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
 $\mathcal{X}$ may
 be measured at arbitrary scales and may be multivariate as well. In addition
 to those measurements, case weights $w$ and a factor $b$ coding for $k$ blocks 
-($b_i \in \{1, \dots, k\}$) may
+($b_i = 1, \dots, k$) may
 be available. The data structure is represented by class \Rclass{IndependenceProblem}:
 <<IndependenceProblem, results = tex>>=
 toLatex(c2t("IndependenceProblem"))
@@ -215,7 +216,7 @@ with corresponding $q \times q$ covariance matrix
 \V(h | S_j) = w_{\cdot j}^{-1} \sum_i I(b_i = j)w_i \left(h(\Y_i) - \E(h | S_j)
 \right) \left(h(\Y_i) - \E(h | S_j)\right)^\top.
 \end{eqnarray*}
-The conditinal expectation of the linear statistic $\T_j$ in block $j$ is 
+The conditional expectation of the linear statistic $\T_j$ in block $j$ is 
 \begin{eqnarray}
 \mu_j & = & \E(\T | S_j) = \vec \left( \left( \sum_{i = 1}^n I(b_i = j)w_i g(\X_i) \right) \E(h | S_j)^\top
 \right), \nonumber \\
@@ -280,11 +281,16 @@ for the two-sided situation is to be replaced by
     \quad \text{(greater).}
 \end{eqnarray*}
 The definition of one- and two-sided $p$-values used for the computations in
-the \pkg{coin} package is \begin{eqnarray*}
-P(c(\T, \mu, \Sigma) &\le& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(less)} \\
-P(c(\T, \mu, \Sigma) &\ge& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(greater)}\\
-P(|c(\T, \mu, \Sigma)| &\le& |c(\mathbf{t}, \mu, \Sigma)|) \quad \text{(two-sided).}
-\end{eqnarray*}
+the \pkg{coin} package is 
+
+\begin{center}
+\begin{tabular}{ll}
+less & $\Prob(c(\T, \mu, \Sigma) \le c(\mathbf{t}, \mu, \Sigma))$ \\
+greater & $\Prob(c(\T, \mu, \Sigma) \ge c(\mathbf{t}, \mu, \Sigma))$ \\
+two-sided & $\Prob(|c(\T, \mu, \Sigma)| \le |c(\mathbf{t}, \mu, \Sigma)|)$.
+\end{tabular}
+\end{center}
+
 For univariate statistics $c_\text{scalar}$ a special class
 <<ScalarIndependenceTestStatistic, results = tex>>=
 toLatex(c2t("ScalarIndependenceTestStatistic"))
@@ -313,7 +319,7 @@ toLatex(c2t("QuadTypeIndependenceTestStatistic"))
 The conditional distribution and thus the $p$-value
 of the statistics $c(\mathbf{t}, \mu, \Sigma)$ can be
 computed in several different ways. For some special forms of the
-linear statistic, the exact distribution of the test statistic is trackable.
+linear statistic, the exact distribution of the test statistic is tractable.
 For two-sample problems, the shift-algorithm by \cite{axact-dist:1986} 
 and \cite{exakte-ver:1987} and the split-up algorithm by 
 \cite{vdWiel2001} are implemented as part of the package.
@@ -346,12 +352,12 @@ defining additional slots at the moment): \Rclass{ExactNullDistribution} (exact 
 null distribution, computed for example via the shift-algorithm),
 \Rclass{ApproxNullDistribution} (approximations of the exact conditional 
 distribution using conditional Monte-Carlo procedures) and \Rclass{AsymptNullDistribution}
-(asyptotic approximations via multivariate normal or $\chi^2$ distribution).
+(asymptotic approximations via multivariate normal or $\chi^2$ distribution).
 
 \subsection{Conditional Tests}
 
 A conditional test is represented by a test statistic and its conditional null 
-distribution (or an approximation therof). In addition, 
+distribution (or an approximation thereof). In addition, 
 a character string giving the name of the test procedure is defined 
 in class \Rclass{IndependenceTest}:
 <<IndependenceTest, results = tex>>=
@@ -403,7 +409,7 @@ and conditional covariate matrix $\Sigma$ are coded in \proglang{C}.
 The shift and split-up algorithms \citep{axact-dist:1986,exakte-ver:1987,vdWiel2001}
 for computing the exact null distribution in univariate two-sample problems
 as well as conditional Monte-Carlo procedures for approximating the
-exact contitional null distribution are implemented in \proglang{C} as well.
+exact conditional null distribution are implemented in \proglang{C} as well.
 (In addition,
 some helper functions, e.g. the Kronecker product etc., are coded in \proglang{C}.)
 The complete \proglang{C} source code and its documentation can be accessed via
@@ -420,7 +426,7 @@ unit testing.
 
 While the internal structures make use of the \proglang{S4} class system,
 the user interface is written in \proglang{S3} style. At least partially, 
-this choice is due to the lazyness of the authors, however, it was our aim
+this choice is due to the laziness of the authors, however, it was our aim
 to mimic the user interfaces of the classical tests, such as \Rcmd{wilcox.test},
 as closely as possible.
 
@@ -438,11 +444,11 @@ independence_test(object,
     check = NULL, ...)
 \end{Sinput}
 Here, \Robject{object} describes the data and thus the null hypothesis. Argument 
-\Rarg{xtrafo} referes to the transformation $g$ and \Rarg{ytrafo} to the 
+\Rarg{xtrafo} refers to the transformation $g$ and \Rarg{ytrafo} to the 
 influence function $h$ (function \Rcmd{trafo} implements reasonable defaults, 
 see below) defining the linear statistic and its conditional expectation and covariance.
 Three types of test statistics are hard-coded. The (approximation) of the 
-null distribution to be used as reference distribution can be choosen either by a
+null distribution to be used as reference distribution can be chosen either by a
 character string or by function \Rcmd{exact}, \Rcmd{approximate} and \Rcmd{asymptotic}
 which also take care for the correct specification of additional arguments, 
 such as the number of permutations to draw randomly in a conditional Monte-Carlo procedure.
@@ -489,6 +495,9 @@ tests, are listed in Table~\ref{confct}.
 \begin{tabular}{lllll} \\
 \multicolumn{5}{c}{Independent Samples} \\
 Test & Function & \Rcmd{xtrafo} & \Rcmd{ytrafo} & \Rcmd{teststat} \\ \hline
+\multicolumn{5}{c}{} \\
+\multicolumn{5}{c}{Independent Samples} \\
+\multicolumn{5}{c}{} \\
 Wilcoxon-Mann-Whitney & \Rcmd{wilcox\_test()} & \Rcmd{f\_trafo()} & \Rcmd{rank()} &
 \Rcmd{"scalar"} \\
 Normal Quantiles & \Rcmd{normal\_test()} & \Rcmd{f\_trafo()} & \Rcmd{normal\_trafo()} &
@@ -505,15 +514,17 @@ Fligner & \Rcmd{fligner\_test()} & \Rcmd{f\_trafo()} & \Rcmd{fligner\_trafo()} &
 \Rcmd{"quad"} \\
 Spearman & \Rcmd{spearman\_test()} & \Rcmd{rank()} & \Rcmd{rank()} &
 \Rcmd{"scalar"} \\
-Cochran-Mantel-Haenzsel & \Rcmd{cmh\_test()} & \Rcmd{f\_trafo()} & \Rcmd{f\_trafo()} &
+Cochran-Mantel-Haenszel & \Rcmd{cmh\_test()} & \Rcmd{f\_trafo()} & \Rcmd{f\_trafo()} &
 \Rcmd{"quad"} \\
 Pearson's $\chi^2$ & \Rcmd{chisq\_test()} & \Rcmd{f\_trafo()} & \Rcmd{f\_trafo()} &
 \Rcmd{"quad"} \\
 Cochran-Armitage / Linear Association & \Rcmd{lbl\_test()} & Scores & any &
 \Rcmd{"scalar"} \\
 K-Sample Permutation test & \Rcmd{oneway\_test()} & \Rcmd{f\_trafo()} & any & any \\
+Maximally Selected Statistics & \Rcmd{maxstat\_test()} & \Rcmd{maxstat\_trafo()} & any & "max" \\
+\multicolumn{5}{c}{} \\
 \multicolumn{5}{c}{Dependent Samples} \\
-Test & Function & \Rcmd{xtrafo()} & \Rcmd{ytrafo} & \Rcmd{teststat} \\ \hline
+\multicolumn{5}{c}{} \\
 Friedman & \Rcmd{friedman\_test()} & \Rcmd{f\_trafo()} & \Rcmd{rank()} &
 \Rcmd{"quad"} \\
 Maxwell-Stuart & \Rcmd{mh\_test()} & \Rcmd{f\_trafo()} & \Rcmd{f\_trafo()} &
@@ -521,17 +532,22 @@ Maxwell-Stuart & \Rcmd{mh\_test()} & \Rcmd{f\_trafo()} & \Rcmd{f\_trafo()} &
 Wilcoxon Signed Rank & \Rcmd{wilcoxsign\_test()} & \Rcmd{f\_trafo()} & \Rcmd{rank()} &
 \Rcmd{"scalar"} \\
 \end{tabular}
-\caption{Convenience Functions \label{confct}}
+\caption{Convenience functions implementing the conditional counterparts of 
+         the most important classical tests. \label{confct}}
 \end{center}
 \end{sidewaystable}
 
 \subsection{An Example}
 
-Job satisfaction data
+The job satisfaction data \citep[Table 7.8][]{agresti2002} is a three-dimensional
+contingency table with variables \Robject{Income} and \Robject{Job.Satisfaction}
+for both \Robject{Gender}s. Here, we focus on conditional tests on independence 
+of income and job satisfaction. The conditional Cochran-Mantel-Haenszel is
+simply a $\chi^2$ statistic derived from the contingency table:
 <<jobsatisfaction-it, echo = TRUE>>=
 independence_test(jobsatisfaction, teststat = "quad")
 @
-same as 
+which is the same as 
 <<jobsatisfaction-it, echo = TRUE>>=
 cmh_test(jobsatisfaction)
 @
@@ -539,19 +555,26 @@ with linear statistic
 <<jobsatisfaction-T, echo = TRUE>>=
 statistic(cmh_test(jobsatisfaction), "linear")
 @
-and standardized contingency table
+This is the exactly the two-way classification
+<<jobsatisfaction-margin, echo = TRUE>>=
+margin.table(jobsatisfaction, 1:2)
+@
+i.e., the three-dimensional table aggregated over the block factor \Robject{Gender}.
+This contingency table in standardized form reads
 <<jobsatisfaction-stat, echo = TRUE>>=
 statistic(cmh_test(jobsatisfaction), "standardized")
 @
-A new test, based on the maximum of the standardized contingency
-table is easily defined:
+Instead of using a $\chi^2$ statistic collapsing the whole table via a quadratic form, we might
+want to use the maximum of the absolute values of the standardized cells as test statistic.
+This new (?) test is easily defined:
 <<jobsatisfaction-max, echo = TRUE>>=
 independence_test(jobsatisfaction, teststat = "max")
 @
 with its conditional asymptotical null distribution being 
-immediately available. Taking the ordinal scale level of both
-variables into account, a linear by linear association test
-is easily obtainable via
+immediately available (because of the joint multivariate normal probability
+of the contingency table). Taking the ordinal scale level of both
+variables into account, a linear by linear association test \citep{agresti2002}
+is easily performed
 <<jobsatisfaction-ordinal, echo = TRUE>>=
 it <- independence_test(jobsatisfaction, 
     scores = list(Job.Satisfaction = c(1, 3, 4, 5),
@@ -559,8 +582,8 @@ it <- independence_test(jobsatisfaction,
     distribution = approximate(B = 10000))
 pvalue(it)
 @
-
-See \cite{Hothorn:2006:AmStat}.
+For other examples, including examples with numeric variables, 
+we refer to \cite{Hothorn:2006:AmStat}.
 
 \section{Quality Assurance}
 
@@ -575,7 +598,7 @@ checked against results reported by \Rcmd{mt.maxT} from package
 \pkg{multtest} \citep{PKG:multtest}. For details on the test procedures we refer to
 the \proglang{R}-transcript files in directory \code{coin/tests}.
 
-\section{Acknowledgements}
+\section{Acknowledgments}
  
 We would like to thank Helmut Strasser for discussions on the theoretical framework.
 Henric Nilsson provided clarification and examples for the Stuart-Maxwell test.
