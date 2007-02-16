@@ -53,7 +53,7 @@
 }
 \examples{
 
-spearman_test(CONT ~ INTG, data = USJudgeRatings)
+  spearman_test(CONT ~ INTG, data = USJudgeRatings)
 
 }
 \keyword{htest}

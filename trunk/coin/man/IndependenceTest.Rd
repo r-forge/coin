@@ -115,10 +115,8 @@
 }
 \examples{
 
-data("asat", package = "coin")
-
-### independence of asat and group via normal scores test
-independence_test(asat ~ group, data = asat,
+  ### independence of asat and group via normal scores test
+  independence_test(asat ~ group, data = asat,
 
     ### exact null distribution
     distribution = "exact", 
@@ -132,18 +130,18 @@ independence_test(asat ~ group, data = asat,
     ### indicator matrix of 1st level of group
     xtrafo = function(data) trafo(data, factor_trafo = function(x)
         matrix(x == levels(x)[1], ncol = 1))
-)
+  )
 
-### same as
-normal_test(asat ~ group, data = asat, distribution = "exact", 
-            alternative = "greater")
+  ### same as
+  normal_test(asat ~ group, data = asat, distribution = "exact", 
+              alternative = "greater")
 
 
-### if you are interested in the internals:
-\dontrun{
-    browseURL(system.file("documentation/html/index.html", 
-                          package = "coin"))
-}
+  ### if you are interested in the internals:
+  \dontrun{
+      browseURL(system.file("documentation/html/index.html", 
+                            package = "coin"))
+  }
 
 }
 \keyword{htest}

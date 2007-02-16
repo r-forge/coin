@@ -90,20 +90,19 @@
 }    
 \examples{
 
-### asymptotic tests for carcinoma data
-data(ocarcinoma, package = "coin")
-surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)
-survdiff(Surv(time, event) ~ stadium, data = ocarcinoma)
+  ### asymptotic tests for carcinoma data
+  surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)
+  survdiff(Surv(time, event) ~ stadium, data = ocarcinoma)
 
-### example data given in Callaert (2003)
-exdata <- data.frame(time = c(1, 1, 5, 6, 6, 6, 6, 2, 2, 2, 3, 4, 4, 5, 5),
-                     event = rep(TRUE, 15),
-                     group = factor(c(rep(0, 7), rep(1, 8))))
-### p = 0.0523
-survdiff(Surv(time, event) ~ group, data = exdata)
-### p = 0.0505
-surv_test(Surv(time, event) ~ group, data = exdata, 
-          distribution = exact())
+  ### example data given in Callaert (2003)
+  exdata <- data.frame(time = c(1, 1, 5, 6, 6, 6, 6, 2, 2, 2, 3, 4, 4, 5, 5),
+                       event = rep(TRUE, 15),
+                       group = factor(c(rep(0, 7), rep(1, 8))))
+  ### p = 0.0523
+  survdiff(Surv(time, event) ~ group, data = exdata)
+  ### p = 0.0505
+  surv_test(Surv(time, event) ~ group, data = exdata, 
+            distribution = exact())
 
 }
 \keyword{htest}

@@ -44,28 +44,28 @@ variance(object, ...)
 }
 \examples{
 
-df <- data.frame(y = gl(3, 2), x = gl(3, 2)[sample(1:6)])
+  df <- data.frame(y = gl(3, 2), x = gl(3, 2)[sample(1:6)])
 
-### Cochran-Mantel-Haenzel Test
-ct <- cmh_test(y ~ x, data = df)
+  ### Cochran-Mantel-Haenzel Test
+  ct <- cmh_test(y ~ x, data = df)
  
-### the linear statistic, i.e, the contingency table
-l <- statistic(ct, type = "linear")
-l
+  ### the linear statistic, i.e, the contingency table
+  l <- statistic(ct, type = "linear")
+  l
 
-### expectation
-El <- expectation(ct)
-El
+  ### expectation
+  El <- expectation(ct)
+  El
 
-### covariance
-Vl <- covariance(ct)
-Vl
+  ### covariance
+  Vl <- covariance(ct)
+  Vl
 
-### the standardized contingency table (hard way)
-(l - El) / sqrt(variance(ct))
+  ### the standardized contingency table (hard way)
+  (l - El) / sqrt(variance(ct))
 
-### easy way
-statistic(ct, type = "standardized")
+  ### easy way
+  statistic(ct, type = "standardized")
 
 }
 \keyword{methods}
