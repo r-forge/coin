@@ -111,6 +111,7 @@ formula2data <- function(formula, data, subset, weights = NULL, ...) {
         dat <- ModelEnvFormula(formula = formula, 
                                data = Biobase::pData(Biobase::phenoData(data)),
                                subset = subset, other = other,
+                               designMatrix = FALSE, responseMatrix = FALSE,
                                na.action = na.omit, 
                                ...)
 
@@ -123,6 +124,7 @@ formula2data <- function(formula, data, subset, weights = NULL, ...) {
                                data = data,
                                subset = subset, other = other, 
                                na.action = na.omit, 
+                               designMatrix = FALSE, responseMatrix = FALSE,
                                ...)
 
         ### rhs of formula

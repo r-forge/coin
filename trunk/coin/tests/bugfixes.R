@@ -101,7 +101,7 @@ s <- statistic(independence_test(x ~ y, data = mydf, weights = ~ w), "linear")
 stopifnot(s == 28)
 
 ### two observations only
-mydf <- data.frame(x = 1:10, y = gl(2, 5))
+mydf <- data.frame(x = 1:10, y = factor(rep(c(1, 2), 5)))
 independence_test(y ~ x, data = mydf, subset = c(1, 6))
 independence_test(y ~ x, data = mydf, subset = c(1, 2))
 try(independence_test(y ~ x, data = mydf, subset = 1))
@@ -143,3 +143,8 @@ foo(a, b)
 x <- 1
 y <- 1
 foo(a, b)
+
+### factors with only one level
+dat <- data.frame(y = rnorm(100), x1 = runif(100), x2 = factor(rep(0, 100)))
+try(independence_test(y ~ x1  + x2, data = dat))
+

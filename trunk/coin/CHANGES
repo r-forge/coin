@@ -7,6 +7,10 @@
 
     o    documentation updates
 
+    o    deal with factors containing only one level
+
+    o    don't compute design matrices in `ModelEnvFormula'
+
 
 		CHANGES in `coin' VERSION 0.5-2
 

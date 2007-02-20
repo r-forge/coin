@@ -72,8 +72,7 @@ framework for permutation tests given by \cite{StrasserWeber1999}. For a
 very flexible formulation of multivariate linear statistics,
 \cite{StrasserWeber1999} derived the conditional expectation and covariance
 of the conditional (permutation) distribution as well as the multivariate 
-limiting distribution. 
-
+limiting distribution. For a more detailed overview see \cite{Hothorn:2006:AmStat}.
 
 Conditional counterparts of a large amount of classical (unconditional) 
 test procedures for 
