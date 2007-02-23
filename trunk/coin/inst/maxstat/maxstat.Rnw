@@ -17,12 +17,11 @@
 \renewcommand{\vec}{\text{vec}}
 \newcommand{\R}{\mathbb{R}}  
 \newcommand{\Rpackage}[1]{{\normalfont\fontseries{b}\selectfont #1}}
+\newcommand{\Tmax}{T_\text{max}}
 
 \newcommand{\indic}{I}
 
-\title{A Unifying Conditional View on Maximally Selected Statistics and Cutpoint Estimation}
-%Z% Stress "conditional"?
-%Z% Or maybe "exact" or "permutation"?
+\title{A Permutation-based View on Maximally Selected Statistics and Cutpoint Estimation}
 \author{Torsten Hothorn\\Friedrich-Alexander-Universit\"at\\Erlangen-N\"urnberg
   \And Achim Zeileis\\Wirtschaftsuniversit\"at Wien}
 \Plainauthor{Torsten Hothorn, Achim Zeileis}
@@ -34,7 +33,7 @@ Maximally selected statistics for the estimation of simple cutpoint models
 are embedded into a powerful conceptual framework for conditional inference
 procedures.
 %Z% Both the abstract and the intro could send a clearer message, I guess...
-The conditional counterparts of most of the published test procedures are
+The conditional counterparts of most of the published procedures in this area are
 described. The conditional asymptotic distribution for a large class of
 maximally selected statistics is given.
 The new framework is used to search for a high-risk group of rectal
@@ -72,14 +71,16 @@ ability to differentiate between patients with good and poor prognosis.
 residual leukemic cells in acute myeloid leukemia patients. The ability for
 expression levels of HER2 and coamplified genes to predict breast cancer
 survival is investigated by \cite{Vinatzer2005} utilizing maximally selected
-log-rank statistics. Beyond applications in oncology, cutpoints for habitat
-factors discriminating between forest systems with low and high abundance of
-certain indicator species \citep{Muller2004} are currently implemented by
-the largest European forest enterprise. %Z% interesting to Biometrics?
-A review of currently published scholary articles
-citing one of the last statistical papers in this area 
+log-rank statistics. Beyond applications in oncology, 
+cutpoints for habitat factors discriminating between ecosystems with 
+low and high abundance of certain indicator species 
+are of increasing interest \citep[see][]{Huggett2005}. For example,
+\cite{Muller2004} derive cutpoint-based rules of thumb for certain 
+bird species and habitat factors in oak forests.
+An inspection of currently published scholary articles
+citing one of the statistical papers in this area 
 \citep[for example][]{Mazumdar2000,HothornLausen2003} reveals many 
-more applications. %Z% You mean Google Scholar "review"?
+more applications.
 
 Two questions arise from a statistical point of view. In a first step, we
 have to make sure that a simple cutpoint model has, at least, some meaning and
@@ -87,7 +88,7 @@ have to make sure that a simple cutpoint model has, at least, some meaning and
 %Z% this: We have no built-in check that either the null or alternative
 %Z% hypothesis actually fits the data.
 in a second step we want to estimate the `best' cutpoint. It is convenient
-to separate between both problems. The first problem needs to be addressed by
+to deal with both problems separately. The first problem needs to be addressed by
 a formal hypothesis test for the null hypothesis of independence between covariate 
 (to be dichotomized)
 and response variable. A test with power against shift alternatives, i.e.,
@@ -112,11 +113,11 @@ selected rank statistics to more than one covariate.
 
 We embed the different statistics known so far into a common framework and take
 a conditional view on maximally selected statistics. Conditioning on permutations
-of the data allow for a unified treatment of maximally selected rank statistics
+of the data allows for a unified treatment of maximally selected statistics
 within the theory of permutation tests described by \cite{StrasserWeber1999}.
 The complete correlation structure of all statistics can be computed efficiently and 
 the conditional asymptotic distribution for a large class of maximally selected 
-statistics can be derived from Theorem 3 \cite{StrasserWeber1999}. 
+statistics can be derived from Theorem 3 of \cite{StrasserWeber1999}. 
 Since no assumptions on the scale level of neither the covariate to be dichotomized nor
 the response variable are necessary, the concept can be used to implement
 already published procedures and to extend the methodology to new areas of 
@@ -127,7 +128,7 @@ application.
 We are provided with independent and identically distributed
 observations $(\Y_i, \X_i)$ for $i = 1, \dots, n$ and 
 are interested in testing the null hypothesis of independence of the response 
-variable $\Y$ and and covariate $\X$
+variable $\Y$ and and covariate(s) $\X$
 \begin{eqnarray*}
 H_0: D(\Y | \X) = D(\Y)
 \end{eqnarray*}
@@ -212,31 +213,30 @@ covariance matrix $\Sigma$: the
 maximum of the absolute values of the standardized linear statistic
 is used as test statistic
 \begin{eqnarray*}
-T  & = & \max \left| \frac{\T - \mu}{\text{diag}(\Sigma)^{1/2}} \right|.
+\Tmax  & = & \max \left| \frac{\T - \mu}{\text{diag}(\Sigma)^{1/2}} \right|.
 \end{eqnarray*}
-%Z% Maybe it's easier if we call this $M$ or $\T_\max$, otherwise it's easy
-%Z% to confuse T and \T.
 
-The exact conditional distribution of $T$ under $H_0$ can be approximated by 
-its limiting distribution. For $n \rightarrow \infty$ the
+The exact conditional distribution of $\Tmax$ under $H_0$ can be approximated by 
+Monte Carlo methods (randomly draw a number of permutations of $1, \dots, n$ 
+and evaluate the test statistic $\Tmax$ for shuffled responses $\Y$)
+or by its limiting distribution. For $n \rightarrow \infty$ the
 distribution of the multivariate linear statistic $\T$ tends to a multivariate 
-normal distribution with mean $\mu$ and covariance matrix $\Sigma$ \citep{StrasserWeber1999}.
-Thus, we have to evaluate $\Prob(T > \max(|Z_1|, ..., |Z_{pq}|)$ for standard normal
-random variables $Z_1, \dots, Z_{pq}$ with correlation matrix $\text{cor}(\Sigma)$. In fact,
+normal distribution with mean $\mu$ and covariance matrix $\Sigma$ \citep[Theorem 3][]{StrasserWeber1999}.
+Thus, we have to evaluate $\Prob(\Tmax > c) = \Prob(\max(|Z_1|, ..., |Z_{pq}| > c)$ for standard normal
+random variables $Z_1, \dots, Z_{pq}$ with correlation matrix $\text{cor}(\Sigma)$ and some $c > 0$. In fact,
 this conditional asymptotical distribution coincides with the unconditional asymptotical
-distribution obtained for maximally selected rank statistics by \cite{HothornLausen2003}.
-When the dimensionality $pq$ becomes too large,
-%Z% Well, you can always use the Monte-Carlo approximation and probably one would
-%Z% want to do so if $n$ is small, right?
-we can approximate the exact conditional distribution of $T$ by Monte-Carlo methods 
-(randomly draw a number of permutations of $1, \dots, n$ and evaluate the test statistic
-$T$ for shuffled responses $\Y$).
+distribution obtained for maximally selected rank statistics \citep[e.g.][]{HothornLausen2003}.
+When the dimensionality $pq$ becomes too large to evaluate the 
+the corresponding $pq$-dimensional multivariate normal distribution ($pq > 100$, say), 
+the inequality presented by \cite{Worsley1982} provides us with an upper bound
+for $\Prob(\Tmax > c)$ as $n \rightarrow \infty$ 
+(see Appendix).
 
 When the test statistic is large enough to indicate a deviation from the null hypothesis, we
 are interested in determining the partition with largest standardized statistic:
 the best separating partition is $A_{j^\star}$ with 
 \begin{eqnarray*}
-j^\star = \argmax_j \left|\T_j - \mu_j\right| \times \Sigma_{jj}^{-1/2}.
+j^\star = \argmax_j \left|\T_j - \mu_j\right| \times \Sigma_{j,j}^{-1/2}.
 \end{eqnarray*}
 %Z% Either use the same layout as above or simply refer to the argmax
 %Z% in the formula above.
@@ -251,10 +251,10 @@ partition the covariate space for nominal, ordered and multivariate covariates.
 
 The most important situation of an univariate and at least ordinally measured covariate $\X$ leads
 to partitions induced by cutpoints defined by the realizations $\X_1, \dots, \X_n$. More specifically,
-$A_j = (-\infty, \mu_j)$, where $\mu_j$ is the $j$th element of the increasingly sorted unique 
+$A_j = (-\infty, \xi_j]$, where $\xi_j$ is the $j$th element of the increasingly sorted unique 
 realizations of $\X$ (the sample size constraints apply, of course). Thus, having
 identified the best separating partition $A_{j^\star}$, the estimated cutpoint is
-$\mu_{j^\star}$. For nominal covariates, all $2^{k-1}$ binary partitions of the $k$ levels 
+$\xi_{j^\star}$. For nominal covariates, all $2^{k-1}$ binary partitions of the $k$ levels 
 that meet the sample size constraints are taken into account.
 For multiple covariates, we simply look at all binary partitions induced by all covariates
 simultaneously. This has been suggested for the special case of maximally selected rank statistics
@@ -264,20 +264,20 @@ The influence function $h$ has to be chosen depending on the scale level of the
 response variable $\Y$. For nominal responses, $h$ is simply a dummy coding of the 
 $k$ factor levels, i.e., $h(\Y_i)$ is the unit vector of length $k$. 
 It is sufficient to code for the first $k - 1$ levels only. For binary responses,
-the statistic $T$ is equivalent to a maximally selected $\chi^2$ statistic 
+the statistic $\Tmax$ is equivalent to a maximally selected $\chi^2$ statistic 
 \citep{MillerSiegmund1982,Koziol1991}. For nominal responses with $k > 2$ levels,
-the $T$ statistic is the maximum over the maximum of 
+the $\Tmax$ statistic is the maximum over the maximum of 
 standardized $k \times 2$ tables, an alternative to maximally selected $\chi^2$ statistics
 for larger tables \citep{Betensky1999}. 
 
 An ordinal response $\Y$ requires the specification of scores attached to each of the $k$ levels and 
-$h$ is the vector of those numeric scores. For equidistant scores $1, \dots, k$, the statistic $T$ 
+$h$ is the vector of those numeric scores. For equidistant scores $1, \dots, k$, the statistic $\Tmax$ 
 is equivalent to a maximally selected Cochran-Armitage statistic \citep{Betensky1999}, however, 
 no restrictions to the choice of scores apply here.
 
 Many possible influence functions are available for discrete or continuous covariates;
 the identity transformation is the most natural choice, rank transformations are possible as well. 
-For the latter, the test statistic $T$ corresponds to maximally selected rank statistics 
+For the latter, the test statistic $\Tmax$ corresponds to maximally selected rank statistics 
 \citep{LausenSchumacher1992}.  When a numeric response is censored, log-rank transformations or
 Savage scores can be applied.
 
@@ -289,7 +289,7 @@ into independent blocks, only permutations within blocks are eligible and the
 conditional expectation and covariance matrix need to be computed
 separately for each block. Therefore, it is easily possible to take a block randomization
 scheme in a randomized clinical trial into account. In the extreme case of each observation
-being a block in repeated measurements, $T$ corresponds to maximally selected McNemar's statistics
+being a block in repeated measurements, $\Tmax$ corresponds to maximally selected McNemar's statistics
 for binary responses \citep{Rabinowitz2000}.
 
 <<cao-data>>=
@@ -317,7 +317,7 @@ The response variable is censored, so we choose a log-rank transformation as inf
 From the potentially $\Sexpr{2^(nlevels(preOP$tn)-1)}$ partitions,
 $\Sexpr{length(stat)}$ meet the sample size constraints. The maximum of the absolute values
 of the corresponding \Sexpr{length(stat)} standardized statistics is \Sexpr{round(teststat, 3)}. The null
-hypothesis can be rejected. All patient with N category N2 or N3 are under high risk; in addition,
+hypothesis can be rejected. All patients with N category N2 or N3 are under high risk; in addition,
 one patient %Z% One should probably add some remark about this...
 with ypT4 and N1 is under high-risk as well. Figure~\ref{fig:maxstat} depicts Kaplan-Meier 
 estimates of the survival times in the two risk groups.
@@ -370,16 +370,16 @@ between simplicity and accuracy has to be carefully investigated.
 The conceptual framework by \cite{StrasserWeber1999} allows for a unified treatment 
 of different kinds of maximally selected statistics. When we are faced with a new problem, 
 only the influence function $h$ needs to be newly designed. The complete correlation 
-structure is then available from the covariate matrix $\Sigma$. Moreover, the asymptotic
+structure is then available from the covariance matrix $\Sigma$. Moreover, the asymptotic
 distribution of the maximum statistic is known as well.
 
 The implementation of (known and newly designed) maximally selected statistics 
 only requires the specification of the binary partitions, via a function $g$, and
 a problem-specific influence function $h$. Linear statistics $\T$ and the test statistic
-$T$ can be computed utilizing the \texttt{maxstat\_test()} function in
+$\Tmax$ can be computed utilizing the \texttt{maxstat\_test()} function in
 \textsf{R} \citep{PKG:R} in the add-on package \Rpackage{coin} \citep{Hothornetal2006,PKG:coin}.
 The distribution
-of $T$ can be approximated by its asymptotic distribution or my Monte-Carlo methods 
+of $\Tmax$ can be approximated by its asymptotic distribution or by Monte-Carlo methods 
 (also in the presence of a grouping of the observations into independent blocks) readily
 available from the same package.
 
@@ -400,5 +400,22 @@ multivariate covariates to be dichotomized is now possible conceptually and prac
 The work of T. Hothorn was supported by Deutsche Forschungsgemeinschaft (DFG) under grant HO 3242/1-3.
 
 \bibliography{maxstat}
+
+\section*{Appendix}
+
+Let $A_j = (-\infty, \xi_j]$ with $\xi_j < \xi_k$ for $1 \le j < k \le p$ and $q = 1$. Then,
+the correlation between $\T_j$ and $\T_k$ is given by
+\begin{eqnarray*}
+\rho_{j,k} = \frac{\Sigma_{j,k}}{\sqrt{\Sigma_{j,j} \Sigma_{k,k}}} = 
+\sqrt{\frac{\left(n - \sum_i g_k(\X_i)\right) \sum_i g_j(\X_i)}
+                        {\left(n - \sum_i g_j(\X_i)\right) \sum_i g_k(\X_i)}}.
+\end{eqnarray*}
+By the same arguments as used in Section~3.3 of \cite{Worsley1982}, for some $c > 0$
+\begin{eqnarray*}
+\Prob(\Tmax > c) = \Prob\left(\bigcup_{j = 1}^p |Z_j| > c\right) \le
+\sum_{j = 1}^p \Prob(|Z_j| > c) - \sum_{j = 1}^{p - 1} \Prob\left(|Z_j| > c \cap |Z_{j+1}| > c\right)
+\end{eqnarray*}
+where computing $\Prob\left(|Z_j| > c \cap |Z_{j+1}| > c\right)$ only requires the evaluation
+of a bivariate standard normal distribution with correlation $\rho_{j,j+1}$.
 
 \end{document}
