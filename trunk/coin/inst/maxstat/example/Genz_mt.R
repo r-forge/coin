@@ -8,7 +8,7 @@ pmt <- function(mt) {
 
     xt <- mt@statistic@xtrans
     if(!all(order(colSums(xt)) == 1:ncol(xt)))
-        stop(sQuote("mt"), " does has no ordered covariate")
+        stop(sQuote("mt"), " does not have an ordered covariate")
     R <- cov2cor(covariance(mt))
     R1 <- solve(R)
 
