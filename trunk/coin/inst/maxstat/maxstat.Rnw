@@ -12,10 +12,12 @@
 \newcommand{\argmin}{\operatorname{argmin}\displaylimits}
 \newcommand{\argmax}{\operatorname{argmax}\displaylimits}
 \newcommand{\X}{\mathbf{X}}
+\newcommand{\z}{\mathbf{z}}
 \newcommand{\Y}{\mathbf{Y}}
 \newcommand{\T}{\mathbf{T}}  
 \renewcommand{\vec}{\text{vec}}
 \newcommand{\R}{\mathbb{R}}  
+\newcommand{\Rb}{\mathbf{R}}  
 \newcommand{\Rpackage}[1]{{\normalfont\fontseries{b}\selectfont #1}}
 \newcommand{\Tmax}{T_\text{max}}
 
@@ -417,5 +419,58 @@ By the same arguments as used in Section~3.3 of \cite{Worsley1982}, for some $c 
 \end{eqnarray*}
 where computing $\Prob\left(|Z_j| > c \cap |Z_{j+1}| > c\right)$ only requires the evaluation
 of a bivariate standard normal distribution with correlation $\rho_{j,j+1}$.
+
+We have to evaluate the probability that any of $|Z_1|, \dots, |Z_p|$ exceeds
+$c > 0$:
+\begin{eqnarray*}
+\Prob(\Tmax > c) & = & 1 - 
+\frac{1}{\sqrt{|\Rb| (2\pi)^p}} \int\limits_{-c}^{c} 
+\exp\left(-\frac{1}{2}\z^\top \Rb^{-1}\z \right) d\z.
+\end{eqnarray*}
+The inverse of the covariance matrix $\Rb = \text{cor}(\Sigma)$ is tridiagonal
+and symmetric, i.e.,
+\begin{eqnarray*}
+\Rb^{-1} = \left( \begin{array}{cccccc}
+r_{1,1} & r_{1,2} & 0       & 0 & \dots & 0 \\
+r_{1,2} & r_{2,2} & r_{2,3} & 0 & \dots & 0 \\
+      0 & r_{2,3} & r_{3,3} & r_{3,4} & \dots & 0  \\
+      0 & 0 & r_{3,4} & r_{4,4} & \dots & 0  \\
+\vdots & \vdots   &  \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & 0 & r_{p-1,p-1}& r_{p-1,p} \\
+0 & 0 & 0 & 0 & 0 & r_{p,p} 
+\end{array}
+\right)
+\end{eqnarray*}
+Thus, the quadratic form $\z^\top \Rb^{-1}\z$ simplifies to
+\begin{eqnarray*}
+\z^\top\Rb^{-1}\z = r_{1,1}z_1^2 + 2r_{2,1}z_1z_2 + r_{2,2} z_2^2 + \dots +
+2r_{p,p-1} z_pz_{p-1} + r_{p,p}z_p^2.
+\end{eqnarray*}
+With $\phi(z) = \exp\left(-z/2\right)$ we have
+\begin{eqnarray*}
+& & \frac{1}{\sqrt{|\Rb| (2\pi)^p}} \int\limits_{-c}^{c} 
+\phi\left(\z^\top \Rb^{-1}\z \right) d\z = \\
+& & \int\limits_{-c}^c \phi(r_{1,1}z_1^2)
+\int\limits_{-c}^c \phi(2r_{2,1}z_1z_2 + r_{2,2} z_2^2)
+\int\limits_{-c}^c \dots
+\int\limits_{-c}^c \phi(2r_{p,p-1} z_pz_{p-1} + r_{p,p}z_p^2) d \z
+\end{eqnarray*}
+Now with recursively defined functions $f_j$ ($j = 2, \dots, p + 1$)
+\begin{eqnarray*}
+f_j(z) & = & \int\limits_{-c}^c \phi\left(2 r_{j, j-1} z \tilde{z} + r_{j,j} \tilde{z}^2\right)
+             f_{j+1}(\tilde{z}) d\tilde{z} 
+            \quad \forall j = 2, \dots, p \\
+f_{p+1}(z) & = & 1
+\end{eqnarray*}
+the above integral can be fomulated recursively:
+\begin{eqnarray*}
+\frac{1}{\sqrt{|\Rb| (2\pi)^p}} \int\limits_{-c}^{c} 
+\phi\left(\z^\top \Rb^{-1}\z \right) d\z = 
+\int\limits_{-c}^c \phi(r_{1,1}z^2) f_2(z) dz.
+\end{eqnarray*}
+This integral can be approximated numerically in $O(p)$ starting with $f_p$. For a grid
+over $z \in [-c, c]$ and $\tilde{z} \in [-c,c]$ values, the function $f_j$ is
+evaluated and aggregated over $\tilde{z}$ only, yielding values
+of $f_j(z)$ over a grid of $z$ values. For $f_{j-1}$, this grid is simply reused.
 
 \end{document}
