@@ -13,6 +13,7 @@
 \newcommand{\argmax}{\operatorname{argmax}\displaylimits}
 \newcommand{\X}{\mathbf{X}}
 \newcommand{\z}{\mathbf{z}}
+\renewcommand{\v}{\mathbf{v}}
 \newcommand{\Y}{\mathbf{Y}}
 \newcommand{\T}{\mathbf{T}}  
 \renewcommand{\vec}{\text{vec}}
@@ -20,6 +21,8 @@
 \newcommand{\Rb}{\mathbf{R}}  
 \newcommand{\Rpackage}[1]{{\normalfont\fontseries{b}\selectfont #1}}
 \newcommand{\Tmax}{T_\text{max}}
+
+\setkeys{Gin}{width = 0.75\textwidth}
 
 \newcommand{\indic}{I}
 
@@ -37,7 +40,8 @@ procedures.
 %Z% Both the abstract and the intro could send a clearer message, I guess...
 The conditional counterparts of most of the published procedures in this area are
 described. The conditional asymptotic distribution for a large class of
-maximally selected statistics is given.
+maximally selected statistics is given and a new algorithm for the efficient 
+evaluation of this potenially high-dimensional normal distribution is proposed.
 The new framework is used to search for a high-risk group of rectal
 cancer patients treated with a neo-adjuvant chemoradiotherapy.
 }
@@ -107,11 +111,22 @@ to continuous and censored response variables. \cite{Betensky1999} propose
 a maximally selected $\chi^2$ test for nominal response variables measured at
 $k > 2$ levels and ordered categorical data (maximally selected Cochran-Armitage test).
 Finally, \cite{Rabinowitz2000} suggested a maximally selected McNemar's test.
+\cite{Lausenetal2004} extended maximally selected rank statistics to more 
+than one covariate.
 
-In the last years, improvements for the approximation of the null distribution
-of maximally selected statistics where published by \cite{HothornLausen2003} and
-\cite{Boulesteix2006a,Boulesteix2006b}. \cite{Lausenetal2004} extended maximally
-selected rank statistics to more than one covariate.
+Although the above sketched procedures are quite popular, most of them rely
+on rather rough approximations of the reference distribution. The exact conditional 
+distribution for small samples has been derived for binary response variables 
+by \cite{Boulesteix2006a,Boulesteix2006b} and an upper bound for the exact $p$-value
+in the more general case of binary, numeric and censored responses is given
+by \cite{HothornLausen2003}. The unconditional asymptotic distribution is the distribution
+of the maximum of the absolute values of standard normal variables with known
+correlation structure \cite{HothornLausen2003}. For a potentially large number
+of cutpoints, this distribution is hard to evaluate and approximations, based
+on the supremum of a Brownian bridge or Ornstein-Uhlenbeck processes and
+an improved Bonferroni inequality, have to be used. As \cite{HothornLausen2003}, Section 6,
+point out, those approximations are rather inefficient even for a large number of
+possible cutpoints and number of observations.
 
 We embed the different statistics known so far into a common framework and take
 a conditional view on maximally selected statistics. Conditioning on permutations
@@ -120,8 +135,13 @@ within the theory of permutation tests described by \cite{StrasserWeber1999}.
 The complete correlation structure of all statistics can be computed efficiently and 
 the conditional asymptotic distribution for a large class of maximally selected 
 statistics can be derived from Theorem 3 of \cite{StrasserWeber1999}. 
+A linear-time algorithm for the evaluation of this asymptotic distribution
+for potentially large numbers of cutpoints under test is proposed which 
+significantly improves upon approximations for the asymptotic distribution
+currently in use.
+
 Since no assumptions on the scale level of neither the covariate to be dichotomized nor
-the response variable are necessary, the concept can be used to implement
+the response variable are necessary, the general concept can be used to implement
 already published procedures and to extend the methodology to new areas of 
 application.
 
@@ -218,23 +238,7 @@ is used as test statistic
 \Tmax  & = & \max \left| \frac{\T - \mu}{\text{diag}(\Sigma)^{1/2}} \right|.
 \end{eqnarray*}
 
-The exact conditional distribution of $\Tmax$ under $H_0$ can be approximated by 
-Monte Carlo methods (randomly draw a number of permutations of $1, \dots, n$ 
-and evaluate the test statistic $\Tmax$ for shuffled responses $\Y$)
-or by its limiting distribution. For $n \rightarrow \infty$ the
-distribution of the multivariate linear statistic $\T$ tends to a multivariate 
-normal distribution with mean $\mu$ and covariance matrix $\Sigma$ \citep[Theorem 3][]{StrasserWeber1999}.
-Thus, we have to evaluate $\Prob(\Tmax > c) = \Prob(\max(|Z_1|, ..., |Z_{pq}| > c)$ for standard normal
-random variables $Z_1, \dots, Z_{pq}$ with correlation matrix $\text{cor}(\Sigma)$ and some $c > 0$. In fact,
-this conditional asymptotical distribution coincides with the unconditional asymptotical
-distribution obtained for maximally selected rank statistics \citep[e.g.][]{HothornLausen2003}.
-When the dimensionality $pq$ becomes too large to evaluate the 
-the corresponding $pq$-dimensional multivariate normal distribution ($pq > 100$, say), 
-the inequality presented by \cite{Worsley1982} provides us with an upper bound
-for $\Prob(\Tmax > c)$ as $n \rightarrow \infty$ 
-(see Appendix).
-
-When the test statistic is large enough to indicate a deviation from the null hypothesis, we
+When the test statistic is large enough to indicate a deviation from the null hypothesis we
 are interested in determining the partition with largest standardized statistic:
 the best separating partition is $A_{j^\star}$ with 
 \begin{eqnarray*}
@@ -242,6 +246,129 @@ j^\star = \argmax_j \left|\T_j - \mu_j\right| \times \Sigma_{j,j}^{-1/2}.
 \end{eqnarray*}
 %Z% Either use the same layout as above or simply refer to the argmax
 %Z% in the formula above.
+
+
+\section{Approximations of the Reference Distribution}
+
+The exact conditional distribition of $\Tmax$ under the conditions of $H_0$
+is tracktable only under special conditions \citep{Boulesteix2006a,Boulesteix2006b}, especially
+for small numbers of observations and a limited number of potential cutpoint.
+In the general case, the 
+exact conditional distribution of $\Tmax$ under $H_0$ can be approximated by 
+Monte Carlo methods: Randomly draw a number of permutations of $1, \dots, n$, 
+evaluate the test statistic $\Tmax$ for shuffled responses $\Y$ and compute the
+proportion of random permutations where $\Tmax$ exceeds the test statistic for
+the permutation $1, \dots, n$.
+
+Moreover, the exact conditional distribution can be approximated by its
+limiting distribution. For $n \rightarrow \infty$ the
+distribution of the multivariate linear statistic $\T$ tends to a multivariate 
+normal distribution with mean $\mu$ and covariance matrix $\Sigma$ 
+\citep[Theorem 3][]{StrasserWeber1999}.
+Thus, we have to evaluate $\Prob(\Tmax > c) = \Prob(\max(|Z_1|, ..., |Z_{pq}| > c)$ 
+for standard normal random variables $Z_1, \dots, Z_{pq}$ with correlation matrix 
+$\Rb = \text{cor}(\Sigma)$ and some $c > 0$. In fact,
+this conditional asymptotical distribution coincides with the unconditional asymptotical
+distribution obtained for maximally selected rank statistics \citep[e.g.][]{HothornLausen2003}.
+So far, even the asymptotic distribution of $\Tmax$ had to be approximated by
+approximations of the distribution of the supremum of a Brownian bridge \citep{MillerSiegmund1982} 
+or Ornstein-Uhlenbeck process \citep{LausenSchumacher1992} over some interval for higher
+dimensions ($pq > 50$, say). It should be noted that both approximations ignore the 
+special correlation structure. \cite{LausenSchumacher1996} proposed to
+use an improved Bonferroni inequality presented by \cite{Worsley1982} which
+provides us with an upper bound for $\Prob(\Tmax > c)$ as $n \rightarrow \infty$ (see Appendix).
+
+However, for the most important case of statistics maximally selected
+over cutpoints induced by an ordered covariate $\X$, the probability
+$\Prob(\Tmax > c)$ can be evaluated numerically by an algorithm with
+computing time being linear in the number of cutpoints considered. 
+
+Let $A_j = (-\infty, \xi_j]$ with $\xi_j < \xi_k$ for $1 \le j < k \le p$ 
+denote the partitioning sets and let $q = 1$ (i.e., numeric or binary response variable). 
+Then, the correlation between $\T_j$ and $\T_k$ is given by
+\begin{eqnarray*}
+\rho_{j,k} = \frac{\Sigma_{j,k}}{\sqrt{\Sigma_{j,j} \Sigma_{k,k}}} = 
+\sqrt{\frac{\left(n - \sum_i g_k(\X_i)\right) \sum_i g_j(\X_i)}
+                        {\left(n - \sum_i g_j(\X_i)\right) \sum_i g_k(\X_i)}}.
+\end{eqnarray*}
+It follows that the correlation matrix is completely determined by the 
+subdiagonal elements $\rho_{j,j-1}, j = 2, \dots, p$ and 
+it holds that 
+\begin{eqnarray*}
+\rho_{1,k} = \prod_{j = 2}^k \rho_{j,j-1}.
+\end{eqnarray*}
+With $\v = (\rho_{1,1}, \dots, \rho_{1,p})$ the lower triangular part of the correlation
+matrix $\Rb$ can be written as $\v (1/\v)^\top$ and it follows that the
+inverse $\Rb^{-1}$ of the correlation matrix is a tridiagonal symmetric band matrix:
+\begin{eqnarray*}
+\Rb^{-1} = \left( \begin{array}{cccccc}
+r_{1,1} & r_{1,2} & 0       & 0 & \dots & 0 \\
+r_{1,2} & r_{2,2} & r_{2,3} & 0 & \dots & 0 \\
+      0 & r_{2,3} & r_{3,3} & r_{3,4} & \dots & 0  \\
+      0 & 0 & r_{3,4} & r_{4,4} & \ddots & 0  \\
+\vdots & \vdots   &  \vdots & \ddots & \ddots & \vdots \\
+0 & 0 & 0 & 0 & r_{p-1,p-1}& r_{p-1,p} \\
+0 & 0 & 0 & 0 & r_{p-1,p} & r_{p,p} 
+\end{array}
+\right).
+\end{eqnarray*}
+
+We have to evaluate the probability that any of $|Z_1|, \dots, |Z_p|$ exceeds
+$c > 0$, i.e., the probability
+\begin{eqnarray*}
+\Prob(\Tmax > c) & = & 1 - 
+\frac{1}{\sqrt{|\Rb| (2\pi)^p}} \int\limits_{-c}^{c} 
+\exp\left(-\frac{1}{2}\z^\top \Rb^{-1}\z \right) d\z.
+\end{eqnarray*}
+Because of the special band structure of $\Rb^{-1}$ the quadratic form $\z^\top \Rb^{-1}\z$ simplifies to
+\begin{eqnarray*}
+\z^\top\Rb^{-1}\z = r_{1,1}z_1^2 + 2r_{2,1}z_1z_2 + r_{2,2} z_2^2 + \dots +
+2r_{p,p-1} z_pz_{p-1} + r_{p,p}z_p^2.
+\end{eqnarray*}
+With $\phi(z) = \exp\left(-z/2\right)$ we have
+\begin{eqnarray*}
+\int\limits_{-c}^{c} \phi\left(\z^\top \Rb^{-1}\z \right) d\z =
+\int\limits_{-c}^c \phi(r_{1,1}z_1^2)
+\int\limits_{-c}^c \phi(2r_{2,1}z_1z_2 + r_{2,2} z_2^2)
+\int\limits_{-c}^c \dots
+\int\limits_{-c}^c \phi(2r_{p,p-1} z_pz_{p-1} + r_{p,p}z_p^2) d \z
+\end{eqnarray*}
+and with recursively defined functions $f_j$ ($j = 2, \dots, p + 1$)
+\begin{eqnarray*}
+f_j(z) & = & \int\limits_{-c}^c \phi\left(2 r_{j, j-1} z \tilde{z} + r_{j,j} \tilde{z}^2\right)
+             f_{j+1}(\tilde{z}) d\tilde{z} 
+            \quad \forall j = 2, \dots, p \\
+f_{p+1}(z) & \equiv & 1
+\end{eqnarray*}
+the above integral can be re-formulated recursively:
+\begin{eqnarray*}
+\Prob(\Tmax > c) = 1 - \frac{1}{\sqrt{|\Rb| (2\pi)^p}} \int\limits_{-c}^{c} 
+\phi\left(\z^\top \Rb^{-1}\z \right) d\z = 1 - \frac{1}{\sqrt{|\Rb| (2\pi)^p}}
+\int\limits_{-c}^c \phi(r_{1,1}z^2) f_2(z) dz.
+\end{eqnarray*}
+This integral can be evaluated numerically in $O(p)$ starting with $f_p$
+utilizing the techniques described by \cite{Miwa2000}. For a two-dimensional grid
+of $z \in [-c, c]$ and $\tilde{z} \in [-c,c]$ values, the function $f_j$ is
+evaluated and aggregated over $\tilde{z}$ only, yielding values
+of $f_j(z)$ for a grid of $z$ values. For computing $f_{j-1}$, 
+these values can be reused. Using these $p$-values leads to a much
+more powerful test for larger number of potential cutpoints compared
+to the best approximation available for this situation so far (see Figure~\ref{approx}).
+
+\begin{figure}[h]
+\begin{center}
+<<approx, echo = FALSE, fig = TRUE, width = 7, height = 6>>=
+load("example/approx.rda")
+plot(g, pex, type = "l", lty = 1, xlab = expression(c), ylab = expression(P(T[max] <= c)))
+lines(g, pap, lty = 2)
+legend("bottomright", lty = c(1, 2), legend = c("Exact Asymptotic", "Improved Bonferroni"), bty = "n")
+@
+\caption{Asymptotic distribution and approximation based on the improved Bonferroni
+         inequality for $n = 10.000$ observations and $p = 100$ cutpoints. The
+         test based on the numerically evaluated exact asymptotic distribution
+         is much more powerful than the test based on the approximation. \label{approx}}
+\end{center}
+\end{figure}
 
 \section{Applications and illustration}
 
@@ -343,7 +470,7 @@ cat("\\end{tabular} \n")
 \end{center}
 \end{table}
 
-\setkeys{Gin}{width = 0.75\textwidth}
+
 \begin{figure}[h!]
 \begin{center}
 \caption{%FIXME: omitted?% Absolute standardized test statistics (left panel) and 
@@ -373,7 +500,10 @@ The conceptual framework by \cite{StrasserWeber1999} allows for a unified treatm
 of different kinds of maximally selected statistics. When we are faced with a new problem, 
 only the influence function $h$ needs to be newly designed. The complete correlation 
 structure is then available from the covariance matrix $\Sigma$. Moreover, the asymptotic
-distribution of the maximum statistic is known as well.
+distribution of the maximum statistic is known as well and can be evaluated efficiently
+in the most important situations by numerical integration techniques. We thereby extend
+the area of application of maximally selected statistics to problems with
+a potentially large number of possible cutpoints.
 
 The implementation of (known and newly designed) maximally selected statistics 
 only requires the specification of the binary partitions, via a function $g$, and
@@ -397,21 +527,15 @@ multivariate covariates to be dichotomized is now possible conceptually and prac
 %%
 %% kann man nicht eine ganz einfache approximation fuer P(T > max(Z1, ..., Zpq)) herleiten?
 
-\section*{Acknowledgements}
+%%\section*{Acknowledgements}
 
-The work of T. Hothorn was supported by Deutsche Forschungsgemeinschaft (DFG) under grant HO 3242/1-3.
+%%We would like to thank Alan Genz for pointing us to \cite{Miwa2000}.
+%%The work of T. Hothorn was supported by Deutsche Forschungsgemeinschaft (DFG) under grant HO 3242/1-3.
 
 \bibliography{maxstat}
 
 \section*{Appendix}
 
-Let $A_j = (-\infty, \xi_j]$ with $\xi_j < \xi_k$ for $1 \le j < k \le p$ and $q = 1$. Then,
-the correlation between $\T_j$ and $\T_k$ is given by
-\begin{eqnarray*}
-\rho_{j,k} = \frac{\Sigma_{j,k}}{\sqrt{\Sigma_{j,j} \Sigma_{k,k}}} = 
-\sqrt{\frac{\left(n - \sum_i g_k(\X_i)\right) \sum_i g_j(\X_i)}
-                        {\left(n - \sum_i g_j(\X_i)\right) \sum_i g_k(\X_i)}}.
-\end{eqnarray*}
 By the same arguments as used in Section~3.3 of \cite{Worsley1982}, for some $c > 0$
 \begin{eqnarray*}
 \Prob(\Tmax > c) = \Prob\left(\bigcup_{j = 1}^p |Z_j| > c\right) \le
@@ -419,58 +543,5 @@ By the same arguments as used in Section~3.3 of \cite{Worsley1982}, for some $c 
 \end{eqnarray*}
 where computing $\Prob\left(|Z_j| > c \cap |Z_{j+1}| > c\right)$ only requires the evaluation
 of a bivariate standard normal distribution with correlation $\rho_{j,j+1}$.
-
-We have to evaluate the probability that any of $|Z_1|, \dots, |Z_p|$ exceeds
-$c > 0$:
-\begin{eqnarray*}
-\Prob(\Tmax > c) & = & 1 - 
-\frac{1}{\sqrt{|\Rb| (2\pi)^p}} \int\limits_{-c}^{c} 
-\exp\left(-\frac{1}{2}\z^\top \Rb^{-1}\z \right) d\z.
-\end{eqnarray*}
-The inverse of the covariance matrix $\Rb = \text{cor}(\Sigma)$ is tridiagonal
-and symmetric, i.e.,
-\begin{eqnarray*}
-\Rb^{-1} = \left( \begin{array}{cccccc}
-r_{1,1} & r_{1,2} & 0       & 0 & \dots & 0 \\
-r_{1,2} & r_{2,2} & r_{2,3} & 0 & \dots & 0 \\
-      0 & r_{2,3} & r_{3,3} & r_{3,4} & \dots & 0  \\
-      0 & 0 & r_{3,4} & r_{4,4} & \dots & 0  \\
-\vdots & \vdots   &  \vdots & \vdots & \ddots & \vdots \\
-0 & 0 & 0 & 0 & r_{p-1,p-1}& r_{p-1,p} \\
-0 & 0 & 0 & 0 & 0 & r_{p,p} 
-\end{array}
-\right)
-\end{eqnarray*}
-Thus, the quadratic form $\z^\top \Rb^{-1}\z$ simplifies to
-\begin{eqnarray*}
-\z^\top\Rb^{-1}\z = r_{1,1}z_1^2 + 2r_{2,1}z_1z_2 + r_{2,2} z_2^2 + \dots +
-2r_{p,p-1} z_pz_{p-1} + r_{p,p}z_p^2.
-\end{eqnarray*}
-With $\phi(z) = \exp\left(-z/2\right)$ we have
-\begin{eqnarray*}
-& & \frac{1}{\sqrt{|\Rb| (2\pi)^p}} \int\limits_{-c}^{c} 
-\phi\left(\z^\top \Rb^{-1}\z \right) d\z = \\
-& & \int\limits_{-c}^c \phi(r_{1,1}z_1^2)
-\int\limits_{-c}^c \phi(2r_{2,1}z_1z_2 + r_{2,2} z_2^2)
-\int\limits_{-c}^c \dots
-\int\limits_{-c}^c \phi(2r_{p,p-1} z_pz_{p-1} + r_{p,p}z_p^2) d \z
-\end{eqnarray*}
-Now with recursively defined functions $f_j$ ($j = 2, \dots, p + 1$)
-\begin{eqnarray*}
-f_j(z) & = & \int\limits_{-c}^c \phi\left(2 r_{j, j-1} z \tilde{z} + r_{j,j} \tilde{z}^2\right)
-             f_{j+1}(\tilde{z}) d\tilde{z} 
-            \quad \forall j = 2, \dots, p \\
-f_{p+1}(z) & = & 1
-\end{eqnarray*}
-the above integral can be fomulated recursively:
-\begin{eqnarray*}
-\frac{1}{\sqrt{|\Rb| (2\pi)^p}} \int\limits_{-c}^{c} 
-\phi\left(\z^\top \Rb^{-1}\z \right) d\z = 
-\int\limits_{-c}^c \phi(r_{1,1}z^2) f_2(z) dz.
-\end{eqnarray*}
-This integral can be approximated numerically in $O(p)$ starting with $f_p$. For a grid
-over $z \in [-c, c]$ and $\tilde{z} \in [-c,c]$ values, the function $f_j$ is
-evaluated and aggregated over $\tilde{z}$ only, yielding values
-of $f_j(z)$ over a grid of $z$ values. For $f_{j-1}$, this grid is simply reused.
 
 \end{document}
