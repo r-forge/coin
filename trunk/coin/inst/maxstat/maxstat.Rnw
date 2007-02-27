@@ -192,7 +192,7 @@ A joint linear statistic for all binary partitions is
 including all $p$ two-sample partitions $g(\X_i) = (g_1(\X_i), \dots, g_p(\X_i))$ 
 simultaneously for testing $H_0$.
 
-\section{Standardization, inference and estimation} \label{sec:inf}
+\section{Standardization and estimation} \label{sec:inf}
 
 The distribution of $\T$  depends on the joint distribution of $\Y$ and $\X$,
 which is unknown under almost all practical circumstances. 
@@ -248,7 +248,7 @@ j^\star = \argmax_j \left|\T_j - \mu_j\right| \times \Sigma_{j,j}^{-1/2}.
 %Z% in the formula above.
 
 
-\section{Approximations of the Reference Distribution}
+\section{Inference}
 
 The exact conditional distribition of $\Tmax$ under the conditions of $H_0$
 is tracktable only under special conditions \citep{Boulesteix2006a,Boulesteix2006b}, especially
@@ -355,7 +355,7 @@ these values can be reused. Using these $p$-values leads to a much
 more powerful test for larger number of potential cutpoints compared
 to the best approximation available for this situation so far (see Figure~\ref{approx}).
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \begin{center}
 <<approx, echo = FALSE, fig = TRUE, width = 7, height = 6>>=
 load("example/approx.rda")
