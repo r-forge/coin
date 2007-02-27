@@ -4,7 +4,7 @@ x <- sort(runif(50))
 y <- rnorm(length(x))
 mt <- maxstat_test(y ~ x)
 
-pmt <- function(mt) {
+pmt <- function(mt, tstat = NULL) {
 
     xt <- mt@statistic@xtrans
     if(!all(order(colSums(xt)) == 1:ncol(xt)))
@@ -12,7 +12,8 @@ pmt <- function(mt) {
     R <- cov2cor(covariance(mt))
     R1 <- solve(R)
 
-    tstat <- statistic(mt)
+    if (is.null(tstat))
+        tstat <- statistic(mt)
     g <- seq(from = -tstat, to = tstat, length = 512)
     g2 <- g^2
     dg <- (g[2] - g[1]) / sqrt(2 * pi)
@@ -30,7 +31,40 @@ pmt <- function(mt) {
     1 - (1 / sqrt(det(R))) * sum(f * exp(-r[1] * g2)) * dg
 }
 
+worsley <- function(mt, tstat = NULL) {
+
+    cr <- cov2cor(covariance(mt))
+    if (is.null(tstat))
+        tstat <- statistic(mt)
+    k <- nrow(cr)
+    if (tstat < 0) stop("tstat must be greater zero")
+    up <- 2 * pnorm(-tstat)
+
+    bp <- numeric(k-1)
+    for (i in 2:k)
+        bp[i-1] <-
+            2 * pmvnorm(c(tstat, tstat), c(Inf, Inf), corr = cr[c(i-1,i), c(i-1,i)]) +
+            2 * pmvnorm(c(-Inf, tstat), c(-tstat, Inf), corr = cr[c(i-1,i), c(i-1,i)])
+    k * up - sum(bp)
+}
+
+
 system.time(p1 <- pmt(mt))
 
-system.time(p2 <- pvalue(mt))
+system.time(p2 <- worley(mt))
 
+system.time(p3 <- pvalue(mt))
+
+x <- ordered(cut(1:10000, breaks = seq(from = 0, to = 10000, by = 100)))
+y <- rnorm(10000)
+mt <- maxstat_test(y ~ x)
+
+g <- seq(from = 2.3, to = 4, by = 0.1)
+pex <- sapply(g, function(i) 1 - pmt(mt, i))
+pap<- sapply(g, function(i) 1 - worsley(mt, i))
+
+save(g, pex, pap, file = "approx.rda")
+
+plot(g, pex, type = "l", lty = 1, xlab = expression(c), ylab = expression(P(T[max] <= c)))
+lines(g, pap, lty = 2)
+legend("bottomright", lty = c(1, 2), legend = c("Exact Asymptotic", "Improved Bonferroni"), bty = "n")
