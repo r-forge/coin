@@ -1,9 +1,11 @@
 
-		CHANGES in `coin' VERSION 0.5-3
+		CHANGES in `coin' VERSION 0.6-0
 
     o    rename some C source files & update doxygen documentation
 
-    o    implify some methods and the class structure
+    o    simplify some methods and the class structure
+
+    o    clean up code and simplify wrapper functions
 
     o    documentation updates
 
@@ -15,6 +17,11 @@
 
     o    assign names to user-specified transformation in case they are
          missing
+
+    o    the `distribution' argument may now be a function with one
+         argument allowing for user-specified distributions.
+
+    o    surv_test() ignored the `alternative' argument
 
 
 		CHANGES in `coin' VERSION 0.5-2

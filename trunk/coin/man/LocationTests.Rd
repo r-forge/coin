@@ -22,27 +22,19 @@
 \usage{
 
 \method{oneway_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{oneway_test}{IndependenceProblem}(object, 
-    alternative = c("two.sided", "less", "greater"),
-    distribution = c("asymptotic", "approximate", "exact"), ...)
+\method{oneway_test}{IndependenceProblem}(object, ...)
 
 \method{wilcox_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{wilcox_test}{IndependenceProblem}(object, 
-    alternative = c("two.sided", "less", "greater"),
-    distribution = c("asymptotic", "approximate", "exact"),
     conf.int = FALSE, conf.level = 0.95, ...)
 
 \method{normal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{normal_test}{IndependenceProblem}(object, 
-    alternative = c("two.sided", "less", "greater"),
-    distribution = c("asymptotic", "approximate", "exact"),
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...)
 
 \method{median_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{median_test}{IndependenceProblem}(object, 
-    alternative = c("two.sided", "less", "greater"),
-    distribution = c("asymptotic", "approximate", "exact"),
     conf.int = FALSE, conf.level = 0.95, ...)
 
 \method{kruskal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
@@ -62,9 +54,6 @@
   \item{weights}{an optional formula of the form \code{~ w} defining
       integer valued weights for the observations.}
   \item{object}{an object of class \code{IndependenceProblem}.}
-  \item{alternative}{a character, the alternative hypothesis must be
-    one of \code{"two.sided"} (default), \code{"greater"} or
-    \code{"less"}.  You can specify just the initial letter.}
   \item{distribution}{a character, the null distribution of the test statistic
     can be computed \code{exact}ly or can be approximated by its
     asymptotic distribution (\code{asymptotic})

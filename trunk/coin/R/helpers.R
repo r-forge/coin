@@ -1,20 +1,24 @@
 
 
 asymptotic <- function(maxpts = 25000, abseps = 0.001, releps = 0) {
-    RET <- list(maxpts = maxpts, abseps = abseps, releps = releps)
+    RET <- function(object)
+        AsymptNullDistribution(object, maxpts = maxpts, 
+                               abseps = abseps, releps = releps)
     class(RET) <- "asymptotic"
     RET
 }
 
 approximate <- function(B = 1000) {
-    RET <- list(B = B)
+    RET <- function(object)
+        ApproxNullDistribution(object, B = B)
     class(RET) <- "approximate"
     RET
 }
 
 exact <- function(algorithm = c("shift", "split-up"), fact = NULL) {
     algorithm <- match.arg(algorithm)
-    RET <- list(algorithm = algorithm, fact = fact)
+    RET <- function(object)
+        ExactNullDistribution(object, algorithm = algorithm, fact = fact)
     class(RET) <- "exact"
     RET
 }
@@ -239,6 +243,20 @@ table2df_sym <- function(x) {
                     response = factor(unlist(x), labels = lx))
     rownames(y) <- 1:(n*p)
     y
+}
+
+table2IndependenceProblem <- function(object) {
+
+    df <- as.data.frame(object)
+    if (ncol(df) == 3)
+        ip <- new("IndependenceProblem", x = df[1], y = df[2],
+                  block = NULL, weights = df[["Freq"]])
+    if (ncol(df) == 4) {
+        attr(df[[3]], "blockname") <- colnames(df)[3]
+        ip <- new("IndependenceProblem", x = df[1], y = df[2],
+                  block = df[[3]], weights = df[["Freq"]])
+    }
+    ip
 }
 
 is_2sample <- function(object) {

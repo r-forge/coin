@@ -10,8 +10,6 @@ wilcox_test.formula <- function(formula, data = list(), subset = NULL,
 }
 
 wilcox_test.IndependenceProblem <- function(object,  
-    alternative = c("two.sided", "less", "greater"),
-    distribution = c("asymptotic", "approximate", "exact"), 
     conf.int = FALSE, conf.level = 0.95, ...) {
 
     check <- function(object) {
@@ -20,11 +18,7 @@ wilcox_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    alternative <- match.arg(alternative)
-    distribution <- check_distribution_arg(distribution)
-
     RET <- independence_test(object, teststat = "scalar", 
-        alternative = alternative, distribution = distribution, 
         ytrafo = function(data) trafo(data, numeric_trafo = rank), 
         check = check, ...)
 
@@ -35,8 +29,7 @@ wilcox_test.IndependenceProblem <- function(object,
         RET <- new("ScalarIndependenceTestConfint", RET)
         RET@confint <- function(level)
             confint_location(RET@statistic, RET@distribution, 
-                             level = level, 
-                             approx = (class(distribution) == "asymptotic"))
+                             level = level)
         RET@conf.level <- conf.level
     }
 
@@ -54,8 +47,6 @@ normal_test.formula <- function(formula, data = list(), subset = NULL,
 }   
 
 normal_test.IndependenceProblem <- function(object,  
-    alternative = c("two.sided", "less", "greater"),
-    distribution = c("asymptotic", "approximate", "exact"), 
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
@@ -65,11 +56,8 @@ normal_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    alternative <- match.arg(alternative)
-    distribution <- check_distribution_arg(distribution)
 
     RET <- independence_test(object, teststat = "scalar", 
-        alternative = alternative, distribution = distribution, 
         ytrafo = function(data) trafo(data, numeric_trafo = function(x)
             normal_trafo(x, ties.method = ties.method)), 
         check = check, ...)
@@ -81,8 +69,7 @@ normal_test.IndependenceProblem <- function(object,
         RET <- new("ScalarIndependenceTestConfint", RET)
         RET@confint <- function(level)
             confint_location(RET@statistic, RET@distribution,
-                             level = level, 
-                             approx = (class(distribution) == "asympt"))
+                             level = level)
         RET@conf.level <- conf.level
     }
     return(RET)
@@ -99,8 +86,6 @@ median_test.formula <- function(formula, data = list(), subset = NULL,
 }   
 
 median_test.IndependenceProblem <- function(object,     
-    alternative = c("two.sided", "less", "greater"),
-    distribution = c("asymptotic", "approximate", "exact"), 
     conf.int = FALSE, conf.level = 0.95, ...) {
 
     check <- function(object) {
@@ -109,11 +94,7 @@ median_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    alternative <- match.arg(alternative)
-    distribution <- check_distribution_arg(distribution)
-
     RET <- independence_test(object, teststat = "scalar", 
-        alternative = alternative, distribution = distribution, 
         ytrafo = function(data) trafo(data, numeric_trafo = median_trafo), 
         check = check, ...)
  
@@ -124,8 +105,7 @@ median_test.IndependenceProblem <- function(object,
         RET <- new("ScalarIndependenceTestConfint", RET)
         RET@confint <- function(level)
             confint_location(RET@statistic, RET@distribution,
-                             level = level, 
-                             approx = (class(distribution) == "asymptotic"))
+                             level = level)
         RET@conf.level <- conf.level
     }
     return(RET)
@@ -143,7 +123,6 @@ ansari_test.formula <- function(formula, data = list(), subset = NULL,
 
 ansari_test.IndependenceProblem <- function(object,
     alternative = c("two.sided", "less", "greater"),
-    distribution = c("asymptotic", "approximate", "exact"), 
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {     
 
@@ -160,10 +139,9 @@ ansari_test.IndependenceProblem <- function(object,
         if (alternative == "greater") 
             alternative <- "less"
     }
-    distribution <- check_distribution_arg(distribution)
 
     RET <- independence_test(object, teststat = "scalar",
-        alternative = alternative, distribution = distribution,
+        alternative = alternative, 
         ytrafo = function(data) trafo(data, numeric_trafo = function(x)
             ansari_trafo(x, ties.method = ties.method)), 
         check = check, ...)
@@ -175,8 +153,7 @@ ansari_test.IndependenceProblem <- function(object,
         RET <- new("ScalarIndependenceTestConfint", RET)
         RET@confint <- function(level)
             confint_scale(RET@statistic, RET@distribution,
-                          level = level, 
-                          approx = (class(distribution) == "asymptotic"))
+                          level = level)
         RET@conf.level <- conf.level
     }
     return(RET)
@@ -193,12 +170,8 @@ surv_test.formula <- function(formula, data = list(), subset = NULL,
 }
     
 surv_test.IndependenceProblem <- function(object,  
-    alternative = c("two.sided", "less", "greater"),
-    distribution = c("asymptotic", "approximate", "exact"), 
     ties.method = c("logrank", "HL"), ...) {
 
-    alternative <- match.arg(alternative)
-    distribution <- check_distribution_arg(distribution)
     ties.method <- match.arg(ties.method)
 
     ytrafo <- function(data) trafo(data, surv_trafo = function(x)
@@ -216,8 +189,7 @@ surv_test.IndependenceProblem <- function(object,
 
     RET <- independence_test(object, 
         teststat = ifelse(scalar, "scalar", "quad"), 
-        distribution = distribution, check = check, ytrafo = ytrafo, 
-        ...)
+        check = check, ytrafo = ytrafo, ...)
  
     if (extends(class(RET@statistic), "ScalarIndependenceTest"))
         RET@nullvalue <- 0
@@ -313,7 +285,6 @@ spearman_test.formula <- function(formula, data = list(), subset = NULL,
 }   
 
 spearman_test.IndependenceProblem <- function(object, 
-    alternative = c("two.sided", "less", "greater"),
     distribution = c("asymptotic", "approximate"), ...) {
 
     check <- function(object) {
@@ -323,12 +294,11 @@ spearman_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    alternative <- match.arg(alternative)
     distribution <- check_distribution_arg(distribution, 
         values = c("asymptotic", "approximate"))
 
     RET <- independence_test(object, 
-        teststat = "scalar", alternative = alternative, 
+        teststat = "scalar", 
         distribution = distribution, 
         xtrafo = function(data) trafo(data, numeric_trafo = rank),
         ytrafo = function(data) trafo(data, numeric_trafo = rank), 
@@ -349,33 +319,12 @@ cmh_test.formula <- function(formula, data = list(), subset = NULL,
     ft("cmh_test", formula, data, subset, weights, ...)
 }   
 
-cmh_test.table <- function(object, distribution = c("asymptotic", "approximate"), ...) {
+cmh_test.table <- function(object, 
+    distribution = c("asymptotic", "approximate"), ...) {
 
     distribution <- check_distribution_arg(distribution, 
         values = c("asymptotic", "approximate"))
-    ### <FIXME> approx must be able to deal with weights </FIXME>
-    if (class(distribution) == "asymptotic") {
-        df <- as.data.frame(object)
-        if (ncol(df) == 3)
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], 
-                      block = NULL, weights = df[["Freq"]])
-        if (ncol(df) == 4) {
-            attr(df[[3]], "blockname") <- colnames(df)[3]
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], 
-                      block = df[[3]], weights = df[["Freq"]])
-        }
-    } else {
-        df <- table2df(object)
-        if (ncol(df) == 3) {
-            attr(df[[3]], "blockname") <- colnames(df)[3]
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], 
-                      block = df[[3]])
-        } else {
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], 
-                      block = NULL) 
-        }
-    }
-    ### </FIXME>
+    ip <- table2IndependenceProblem(object)
     RET <- do.call("cmh_test", c(list(object = ip, distribution = distribution), 
                    list(...)))
     return(RET)
@@ -414,33 +363,12 @@ chisq_test.formula <- function(formula, data = list(), subset = NULL,
     ft("chisq_test", formula, data, subset, weights, ...)
 }   
 
-chisq_test.table <- function(object, distribution = c("asymptotic", "approximate"), ...) {
+chisq_test.table <- function(object, 
+    distribution = c("asymptotic", "approximate"), ...) {
 
     distribution <- check_distribution_arg(distribution, 
         values = c("asymptotic", "approximate"))
-    ### <FIXME> approx must be able to deal with weights </FIXME>
-    if (class(distribution) == "asymptotic") {
-        df <- as.data.frame(object)
-        if (ncol(df) == 3)
-            ip <- new("IndependenceProblem", x = df[1], y = df[2],
-                      block = NULL, weights = df[["Freq"]])
-        if (ncol(df) == 4) {
-            attr(df[[3]], "blockname") <- colnames(df)[3]
-            ip <- new("IndependenceProblem", x = df[1], y = df[2],
-                      block = df[[3]], weights = df[["Freq"]])
-        }
-    } else {
-        df <- table2df(object)
-        if (ncol(df) == 3) {
-            attr(df[[3]], "blockname") <- colnames(df)[3]
-            ip <- new("IndependenceProblem", x = df[1], y = df[2],
-                      block = df[[3]])
-        } else {
-            ip <- new("IndependenceProblem", x = df[1], y = df[2],
-                      block = NULL)
-        }
-    }
-    ### </FIXME>
+    ip <- table2IndependenceProblem(object)
     RET <- do.call("chisq_test", c(list(object = ip, distribution = distribution), 
                    list(...)))
     return(RET)
@@ -462,25 +390,44 @@ chisq_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution, 
         values = c("asymptotic", "approximate"))
 
-    RET <- independence_test(object, 
-        teststat = "quad", distribution = "asymptotic", check = check, ...)
+    ### expand weights if conditional MC is requested
+    if (class(distribution) == "approximate") {
+        w <- object@weights
+        if (chkone(w)) {   
+            indx <- rep(1:length(w), w)
+            object <- new("IndependenceProblem",
+                          x = object@x[indx,,drop = FALSE],
+                          y = object@y[indx,,drop = FALSE],
+                          block = object@block[indx])
+        }
+    }
+
+    scores <- list(...)$scores
+    ### convert factors to ordered and attach scores if requested
+    object <- setscores(object, scores)
+
+    ### transform data if requested and setup a test problem
+    itp <- new("IndependenceTestProblem", object)
+
+    if (!check(itp))
+        stop(sQuote("check"), " failed")
+
+    its <- new("IndependenceTestStatistic", itp, varonly = FALSE)
+
+    ts <- new("QuadTypeIndependenceTestStatistic", its)
 
     ### use the classical chisq statistic based on Pearson 
     ### residuals (O - E)^2 / E
     ### see Th. 3.1 and its proof in Strasser & Weber (1999).
 
-    RET@statistic@teststatistic <- 
-        RET@statistic@teststatistic * n / (n - 1)
-    RET@statistic@covariance <- 
-        new("CovarianceMatrix", covariance(RET) * (n - 1) / n)
-    RET@statistic@covarianceplus <- MPinv(covariance(RET))$MPinv
+    ts@teststatistic <- ts@teststatistic * n / (n - 1)
+    ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
+    ts@covarianceplus <- MPinv(covariance(ts))$MPinv
 
-    if (class(distribution) == "approximate") {
-        nd <- do.call("ApproxNullDistribution", 
-                      c(list(object = RET@statistic), distribution))
-        RET <- new("QuadTypeIndependenceTest", statistic = RET@statistic,
-                distribution = nd)
-    }
+    nd <- distribution(ts)
+
+    RET <- new("QuadTypeIndependenceTest", statistic = ts,
+        distribution = nd)
 
     if (is_ordered(RET@statistic)) 
         RET@method <- "Linear-by-Linear Association Test"
@@ -504,32 +451,7 @@ lbl_test.table <- function(object,
 
     distribution <- check_distribution_arg(distribution, 
         values = c("asymptotic", "approximate"))
-    ### <FIXME> approx must be able to deal with weights </FIXME>
-    if (class(distribution) == "asymptotic") {
-        df <- as.data.frame(object)
-        if (nlevels(df[[1]]) > 2) df[[1]] <- ordered(df[[1]])
-        if (nlevels(df[[2]]) > 2) df[[2]] <- ordered(df[[2]])
-        if (ncol(df) == 3)
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], block = NULL, 
-                      weights = df[["Freq"]])
-        if (ncol(df) == 4) {
-            attr(df[[3]], "blockname") <- colnames(df)[3]
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], 
-                      block = df[[3]], weights = df[["Freq"]])
-        }
-    } else {
-        df <- table2df(object)
-        if (nlevels(df[[1]]) > 2) df[[1]] <- ordered(df[[1]])
-        if (nlevels(df[[2]]) > 2) df[[2]] <- ordered(df[[2]])
-        if (ncol(df) == 3) {
-            attr(df[[3]], "blockname") <- colnames(df)[3]
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], 
-                      block = df[[3]])
-        } else {
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], 
-                      block = NULL) 
-        }
-    }
+    ip <- table2IndependenceProblem(object)
     RET <- do.call("lbl_test", c(list(object = ip, distribution = distribution), 
                    list(...)))
     return(RET)
@@ -564,7 +486,8 @@ lbl_test.IndependenceProblem <- function(object,
         values = c("asymptotic", "approximate"))
 
     RET <- do.call("independence_test", 
-        c(list(object = object, teststat = "quad", distribution = distribution, 
+        c(list(object = object, teststat = "quad", 
+               distribution = distribution, 
                check = check), list(...)))
 
     RET@method <- "Linear-by-Linear Association Test"
@@ -581,12 +504,7 @@ oneway_test.formula <- function(formula, data = list(), subset = NULL,
     ft("oneway_test", formula, data, subset, weights, ...)
 }
 
-oneway_test.IndependenceProblem <- function(object, 
-    alternative = c("two.sided", "less", "greater"),
-    distribution = c("asymptotic", "approximate", "exact"), ...) {
-
-    alternative <- match.arg(alternative)
-    distribution <- check_distribution_arg(distribution)
+oneway_test.IndependenceProblem <- function(object, ...) {
 
     check <- function(object) {
         if (!(is_Ksample(object) && is_numeric_y(object)))
@@ -594,9 +512,7 @@ oneway_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    RET <- independence_test(object, 
-        alternative = alternative, distribution = distribution, 
-        check = check, ...)
+    RET <- independence_test(object, check = check, ...)
 
     if (is_scalar(RET@statistic))
         RET@nullvalue <- 0
@@ -818,8 +734,7 @@ wilcoxsign_test.formula <- function(formula, data = list(),
     return(RET)
 }   
 
-wilcoxsign_test.IndependenceProblem <- function(object, 
-    distribution = c("asymptotic", "approximate", "exact"), ...) {
+wilcoxsign_test.IndependenceProblem <- function(object, ...) {
 
     y <- object@y[[1]]
     x <- object@x[[1]]
@@ -846,14 +761,10 @@ wilcoxsign_test.IndependenceProblem <- function(object,
     yy <- drop(as.vector(t(cbind(pos, neg))))
     xx <- factor(rep(c("pos", "neg"), length(diffs)))
 
-    distribution <- check_distribution_arg(distribution, 
-        values = c("asymptotic", "approximate", "exact"))
-
     ip <- new("IndependenceProblem", x = data.frame(x = xx), 
               y = data.frame(y = yy), block = block)
 
-    RET <- independence_test(ip,
-        distribution = distribution, teststat = "scalar", ...)
+    RET <- independence_test(ip, teststat = "scalar", ...)
 
     RET@method <- "Wilcoxon-Signed-Rank Test"
     RET@nullvalue <- 0

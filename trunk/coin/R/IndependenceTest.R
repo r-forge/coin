@@ -26,29 +26,7 @@ independence_test.table <- function(object,
 
     distribution <- check_distribution_arg(distribution, 
                                            c("asymptotic", "approximate"))
-    ### <FIXME> approx must be able to deal with weights </FIXME>
-    if (class(distribution) == "asymptotic") {
-        df <- as.data.frame(object)
-        if (ncol(df) == 3)
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], block = NULL, 
-                      weights = df[["Freq"]])
-        if (ncol(df) == 4) {
-            attr(df[[3]], "blockname") <- colnames(df)[3]
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], 
-                      block = df[[3]], weights = df[["Freq"]])
-        }
-    } else {
-        df <- table2df(object)
-        if (ncol(df) == 3) {
-            attr(df[[3]], "blockname") <- colnames(df)[3]
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], 
-                      block = df[[3]])
-        } else {
-            ip <- new("IndependenceProblem", x = df[1], y = df[2], 
-                      block = NULL) 
-        }
-    }
-    ### </FIXME>
+    ip <- table2IndependenceProblem(object)
     RET <- do.call("independence_test", 
                    c(list(object = ip, distribution = distribution), 
                    list(...)))
@@ -81,10 +59,12 @@ independence_test.IndependenceProblem <- function(object,
         w <- object@weights
         if (chkone(w)) {
             indx <- rep(1:length(w), w)
+            bn <- attr(object@block, "blockname")
             object <- new("IndependenceProblem", 
                           x = object@x[indx,,drop = FALSE],
                           y = object@y[indx,,drop = FALSE], 
                           block = object@block[indx])
+            attr(object@block, "blockname") <- bn
         }
     }
 
@@ -130,40 +110,18 @@ independence_test.IndependenceProblem <- function(object,
         "scalar" = {
             ts <- new("ScalarIndependenceTestStatistic", its, 
                       alternative = alternative)
-
-            nd <- switch(class(distribution),
-                "asymptotic" = do.call("AsymptNullDistribution", 
-                                       c(list(object = ts), distribution)),
-                "exact"  = do.call("ExactNullDistribution", 
-                                   c(list(object = ts), distribution)),
-                "approximate" = do.call("ApproxNullDistribution", 
-                                        c(list(object = ts), distribution))
-            )
+            nd <- distribution(ts)
             new("ScalarIndependenceTest", statistic = ts, distribution = nd)
         },
         "max" = {
             ts <- new("MaxTypeIndependenceTestStatistic", its, 
                       alternative = alternative)
-            nd <- switch(class(distribution),
-                "asymptotic" = do.call("AsymptNullDistribution", 
-                                       c(list(object = ts), distribution)),
-                "exact"  = do.call("ExactNullDistribution", 
-                                   c(list(object = ts), distribution)),
-                "approximate" = do.call("ApproxNullDistribution", 
-                                        c(list(object = ts), distribution))
-                      )
+            nd <- distribution(ts)
             new("MaxTypeIndependenceTest", statistic = ts, distribution = nd)
         },
         "quad" = {
             ts <- new("QuadTypeIndependenceTestStatistic", its)
-            nd <- switch(class(distribution),
-                "asymptotic" = do.call("AsymptNullDistribution", 
-                                       c(list(object = ts), distribution)),
-                "exact"  = do.call("ExactNullDistribution", 
-                                   c(list(object = ts), distribution)),
-                "approximate" = do.call("ApproxNullDistribution", 
-                                        c(list(object = ts), distribution))
-            )
+            nd <- distribution(ts)
             new("QuadTypeIndependenceTest", statistic = ts, 
                 distribution = nd)
         })

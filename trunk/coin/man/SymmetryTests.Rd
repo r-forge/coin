@@ -17,9 +17,7 @@
               ...) 
 
 \method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
-\method{wilcoxsign_test}{IndependenceProblem}(object, 
-                distribution = c("asymptotic", "approximate", "exact"), 
-                ...) 
+\method{wilcoxsign_test}{IndependenceProblem}(object, ...)
 
 }
 \arguments{

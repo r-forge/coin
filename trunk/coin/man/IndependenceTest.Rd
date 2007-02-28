@@ -51,7 +51,10 @@
     or via Monte-Carlo resampling (\code{approximate}). Alternatively, the functions
     \code{\link{exact}}, \code{\link{approximate}} or \code{\link{asymptotic}} can be
     used to specify how the exact conditional distribution of the test statistic 
-    should be calculated or approximated.}
+    should be calculated or approximated. It is also possible to specify a
+    function with one argument (taking objects inheriting from 
+    \code{IndependenceTestStatistic})
+    which return an object of class \code{NullDistribution}.}
   \item{xtrafo}{a function of transformations (see \code{\link{trafo}})
     to be applied to the variables on the right hand side of
     \code{formula}, see below.}
