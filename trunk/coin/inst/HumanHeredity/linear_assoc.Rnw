@@ -1,0 +1,277 @@
+\documentclass{article}
+
+%% almost as usual
+\author{Torsten Hothorn} 
+\title{Linear Association with Multiple Scores}
+\usepackage{Sweave}
+\usepackage[round]{natbib}
+
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amstext}
+\usepackage{amsmath}
+%%\usepackage{amsthm}
+%%\usepackage[round]{natbib}
+%%\usepackage{bibentry}
+%%\usepackage{hyperref}
+\usepackage{thumbpdf}
+\usepackage{rotating}
+%%\usepackage{floatflt}
+
+\newcommand{\R}{\mathbb{R} }
+\newcommand{\Prob}{\mathbb{P} }
+\newcommand{\N}{\mathbb{N} }
+\newcommand{\C}{\mathbb{C} }
+\newcommand{\V}{\mathbb{V}} %% cal{\mbox{\textnormal{Var}}} }
+\newcommand{\E}{\mathbb{E}} %%mathcal{\mbox{\textnormal{E}}} }
+\newcommand{\Var}{\mathbb{V}} %%mathcal{\mbox{\textnormal{Var}}} }
+\newcommand{\argmin}{\operatorname{argmin}\displaylimits}
+\newcommand{\argmax}{\operatorname{argmax}\displaylimits}
+\newcommand{\LS}{\mathcal{L}_n}
+\newcommand{\TS}{\mathcal{T}_n}
+\newcommand{\LSc}{\mathcal{L}_{\text{comb},n}}
+\newcommand{\LSbc}{\mathcal{L}^*_{\text{comb},n}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\yn}{y_{\text{new}}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\sX}{\mathcal{X}}
+\newcommand{\sY}{\mathcal{Y}}
+\newcommand{\T}{\mathbf{T}}
+\newcommand{\x}{\mathbf{x}}
+\renewcommand{\a}{\mathbf{a}}
+\newcommand{\xn}{\mathbf{x}_{\text{new}}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\ws}{\mathbf{w}_\cdot}
+\renewcommand{\t}{\mathbf{t}}
+\newcommand{\M}{\mathbf{M}}
+\renewcommand{\vec}{\text{vec}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\K}{\mathbf{K}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\D}{\mathbf{D}}
+\newcommand{\I}{\mathbf{I}}
+\newcommand{\bS}{\mathbf{S}}
+\newcommand{\cellx}{\pi_n[\x]}
+\newcommand{\partn}{\pi_n(\mathcal{L}_n)}
+\newcommand{\err}{\text{Err}}
+\newcommand{\ea}{\widehat{\text{Err}}^{(a)}}
+\newcommand{\ecv}{\widehat{\text{Err}}^{(cv1)}}
+\newcommand{\ecvten}{\widehat{\text{Err}}^{(cv10)}}
+\newcommand{\eone}{\widehat{\text{Err}}^{(1)}}
+\newcommand{\eplus}{\widehat{\text{Err}}^{(.632+)}}
+\newcommand{\eoob}{\widehat{\text{Err}}^{(oob)}}
+
+\hyphenation{Qua-dra-tic}
+
+\newcommand{\Rpackage}[1]{{\normalfont\fontseries{b}\selectfont #1}}
+\newcommand{\Robject}[1]{\texttt{#1}}
+\newcommand{\Rclass}[1]{\textit{#1}}
+\newcommand{\Rcmd}[1]{\texttt{#1}}
+\newcommand{\Roperator}[1]{\texttt{#1}}
+\newcommand{\Rarg}[1]{\texttt{#1}}
+\newcommand{\Rlevel}[1]{\texttt{#1}}
+
+\newcommand{\RR}{\textsf{R}}
+\renewcommand{\S}{\textsf{S}}
+
+\SweaveOpts{eps=FALSE,keep.source=TRUE,echo=FALSE}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<<coin-setup, echo = FALSE, results = hide>>=
+library("coin")
+set.seed(290875)
+@
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+We are faced with a contingeny table of two groups (cases and controls) and genotypes:
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{lrrr}
+ & aa & Aa & AA \\
+Cases & $r_0$ & $r_1$ & $r_2$ \\
+Controls & $s_0$ & $s_1$ & $s_2$ \\
+\end{tabular}
+\caption{Genotype distribution.}
+\end{center}
+\end{table}
+
+It is convenient to reformulate the problem first. 
+Let $\Y_i$ denote the groups (cases and controls) and $\X_i$ the genotype
+for all cells $i = 1, \dots, n = 6$. The weights $w_i$ represent the number of observations in each cell.
+The so-called \textit{influence function} $h$ provides us with a zero-one dummy coding of the groups (being one for
+cases and zero for controls).
+Moreover, three transformations $g$ of the genotype are under test: $g_\text{dom}$ assigns scores $(0, 1, 1)$ to
+genotypes $(\text{aa}, \text{Aa}, \text{AA})$, $g_\text{add}$ assigns scores $(0, 1, 2)$ and $g_\text{rez}$
+implements scores $(0, 0, 1)$. See Table~\ref{gd}.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{lllc|cccc}
+$i$ & $\Y_i$  &  $\X_i$  & $w_i$ & $h(\Y_i)$ & $g_\text{add}(\X_i)$ & $g_\text{dom}(\X_i)$ & $g_\text{rez}(\X_i)$ \\ \hline
+1 & Case & aa & $r_1$ & 1 & 0 & 0 & 0 \\
+2 & Case & Aa & $r_2$ & 1 & 1 & 1 & 0 \\
+3 & Case & AA & $r_3$ & 1 & 2 & 1 & 1 \\
+4 & Control & aa & $s_0$ & 0 & 0 & 0 & 0 \\
+5 & Control & Aa & $s_1$ & 0 & 1 & 1 & 0 \\
+6 & Control & AA & $s_2$ & 0 & 2 & 1 & 1 \\
+\end{tabular}
+\caption{Genotype distribution reformulated. \label{gd}}
+\end{center}
+\end{table}
+
+\section{Inference Problem and Linear Statistic}
+
+We are interested in testing the null hypothesis of independence of grouping $\Y$ and genotype $\X$
+\begin{eqnarray*}
+H_0: D(\Y | \X) = D(\Y)
+\end{eqnarray*}
+against ordered alternatives. First, we define a three-dimensional
+statistic $\T$, each dimension being associated with one of the 
+scores $g_\text{add}$, $g_\text{dom}$, and $g_\text{rez}$.
+Each statistic is basically the sum of the scores multiplied by the weights over cases only:
+\begin{eqnarray} \label{linstat}
+\T = (\T_\text{add}, \T_\text{dom}, \T_\text{rez}) = 
+\sum_{i = 1}^n w_i g(\X_i) h(\Y_i) \in \R^{3} 
+\end{eqnarray}
+with $g(\X_i) = (g_\text{add}(\X_i), g_\text{dom}(\X_i), g_\text{rez}(\X_i))$.
+
+\subsection{Conditional Expectation and Covariance}
+
+The distribution of $\T$  depends on the joint
+distribution of $\Y$ and $\X$, which is unknown under almost all practical
+circumstances. At least under the null hypothesis one can dispose of this
+dependency by fixing the genotypes and conditioning on all possible
+permutations of the groups. 
+This principle leads to test procedures known as \textit{permutation tests}. 
+
+\cite{StrasserWeber1999} derived closed-form expressions for the conditional 
+expectation $\mu \in \R^{pq}$ and covariance $\Sigma \in \R^{3 \times 3}$ 
+of $\T$ under $H_0$ given all permutations of the groupings.
+
+Let $w_\cdot = \sum_{i = 1}^n w_i$ denote the sum of the weights.
+The conditional expectation of the influence function $h$ is
+\begin{eqnarray*}
+\E(h) = w_\cdot^{-1} \sum_i w_i h(\Y_i) \in \R
+\end{eqnarray*}
+with corresponding variance
+\begin{eqnarray*}
+\V(h) = w_\cdot^{-1} \sum_i w_i \left(h(\Y_i) - \E(h)\right)^2
+\end{eqnarray*}
+The conditional expectation of the linear statistic $\T$ is 
+\begin{eqnarray}
+\mu & = & \E(\T) = \E(h) \sum_{i = 1}^n w_i g(\X_i), \nonumber \\
+\Sigma & = & \V(\T) \nonumber \\
+& = &
+    \frac{w_\cdot}{w_\cdot - 1}  \V(h) \times
+        \left(\sum_i w_i \left( g(\X_i) g(\X_i)^\top\right) \right)
+\label{expectcovar}
+\\
+& - & \frac{1}{w_\cdot - 1}  \V(h)  \times \left(
+        \sum_i  w_i g(\X_i) \right) \left( \sum_i w_i g(\X_i)\right)^\top.
+\nonumber
+\end{eqnarray}
+
+Note that the complete covariance structure, and thus the correlation between the elements
+of the three-dimensional statistic $\T$ is known and can be computed for the data at hand.
+
+\section{Test Statistics}
+
+Based on the three-dimensional statistic $\T$ and its expectation $\mu$ and covariance matrix $\Sigma$,
+we can easily construct test statistics and derive their distribution under the conditions
+described in the null hypothesis. As the sum of the weights $w_\cdot$ tends to infinity, \cite{StrasserWeber1999}
+proved that the limiting distribution of the three-dimensional statistic $\T$ is a three-dimensional
+normal distribution with mean $\mu$ and covariance $\Sigma$. Thus, the asymptotic distribution
+of a maximum-type statistic
+\begin{eqnarray*}
+c_\text{max}(\T, \mu, \Sigma)  = \max \left| \frac{\T - \mu}{\text{diag}(\Sigma)^{1/2}} \right|
+\end{eqnarray*}
+can be evaluated by computing three-dimensional normal probabilities. Alternatively, a quadratic
+form 
+\begin{eqnarray*}
+c_\text{quad}(\T, \mu, \Sigma)  = (\T - \mu)^\top \Sigma^+ (\T - \mu)
+\end{eqnarray*}
+follows a $\chi^2_2$ distribution. Note that, under any circumstances, the exact conditional
+distribution can be approximated by conditional Monte-Carlo methods, which is especially attractive
+for small sample sizes $w_\cdot$ when we can't expect asymptotics to work well.
+
+\section{Example}
+
+        \begin{table}[h]
+                \centering
+                \caption{Melanoma data. \label{mel}}
+                \begin{tabular}{l l l l l}
+                \hline
+       & AA     & AG& GG      & Total   \\
+                        \hline
+                        In situ& 6 & 8& 10 &24 \\
+                        Controls& 32 &47 & 20 &99 \\
+                        Total& 38 &55 & 30 & 123\\
+                \hline
+                        \end{tabular}
+                \end{table}
+<<melanoma-table, echo = FALSE>>=
+me <- as.table(matrix(c( 6,  8, 10,
+               32, 47, 20), byrow = TRUE, nrow = 2,
+    dimnames = list(group = c("In situ", "Control"),
+                    genotype = c("AA", "AG", "GG"))))
+@
+                
+Consider the data shown in Table~\ref{mel}. In \RR, we have the data in
+the classical form and the form of Table~\ref{gd}:
+<<melanoma-data, echo = TRUE>>=
+me
+medf <- as.data.frame(me)
+medf
+@
+We only have to implement the function $g$, which returns a matrix with three columns
+<<melanoma-setup, echo = TRUE>>=
+add <- c(0, 1, 2)
+dom <- c(0, 1, 1)
+rez <- c(0, 0, 1)
+g <- function(x) {
+    x <- unlist(x)
+    cbind(add = add[x], dom = dom[x], rez = rez[x])
+}
+@
+The function \Rcmd{independence\_test} from the \Rpackage{coin} \citep{PKG:coin}
+can now be used to perform the test as described above:
+<<melanoma-test, echo = TRUE>>=
+it <- independence_test(group ~ genotype, 
+    data = medf, weights = ~ Freq, xtrafo = g)
+@
+The statistic $\T$ is
+<<melanoma-stat, echo = TRUE>>=
+statistic(it, "linear")
+@
+and the test statistic $c_\text{max}$ with asymptotic $p$-value is
+<<melanoma-tp, echo = TRUE>>=
+statistic(it)
+pvalue(it)
+@
+<<melanoma-resampl, echo = FALSE>>=
+dummy <- medf[rep(1:nrow(medf), medf$Freq),]
+it <- independence_test(group ~ genotype,
+    data = dummy, xtrafo = g,
+    distribution = approximate(B = 49999))
+p <- pvalue(it)
+@
+We might want to check whether the asymptotic works well enough, however,
+the $p$-value based on Monte-Carlo resampling is $\Sexpr{round(p, 4)}$.
+
+See \cite{Hothorn:2006:AmStat} for more examples.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
