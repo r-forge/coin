@@ -11,6 +11,11 @@
 
     o    don't compute design matrices in `ModelEnvFormula'
 
+    o    expand weights if distribution = approximate()
+
+    o    assign names to user-specified transformation in case they are
+         missing
+
 
 		CHANGES in `coin' VERSION 0.5-2
 

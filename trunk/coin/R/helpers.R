@@ -337,8 +337,20 @@ statnames <- function(object) {
     nr <- ncol(object@xtrans)
     dn <- list(colnames(object@xtrans),
                colnames(object@ytrans))
-    if (is.null(dn[[1]])) dn[[1]] <- ""
-    if (is.null(dn[[2]])) dn[[2]] <- ""
+    if (is.null(dn[[1]])) {
+        if (nr == 1) {
+            dn[[1]] <- ""
+        } else {
+            dn[[1]] <- paste("X", 1:nr, sep = "")
+        }
+    }
+    if (is.null(dn[[2]])) {
+        if (nc == 1) {
+            dn[[2]] <- ""
+        } else {
+            dn[[2]] <- paste("Y", 1:nc, sep = "")
+        }
+    }
     list(dimnames = dn, 
          names = paste(rep((dn[[1]]), nc), 
                        rep((dn[[2]]), rep(nr, nc)), 
@@ -351,3 +363,6 @@ eps <- function() sqrt(.Machine$double.eps)
 get_weights <- function(object) object@statistic@weights
 get_xtrans <- function(object) object@statistic@xtrans
 get_ytrans <- function(object) object@statistic@ytrans
+
+chkone <- function(w)
+    !(max(abs(w - 1.0)) < eps())

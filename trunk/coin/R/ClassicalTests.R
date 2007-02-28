@@ -76,6 +76,18 @@ independence_test.IndependenceProblem <- function(object,
     alternative <- match.arg(alternative)
     distribution <- check_distribution_arg(distribution)
 
+    ### expand weights if conditional MC is requested
+    if (class(distribution) == "approximate") {
+        w <- object@weights
+        if (chkone(w)) {
+            indx <- rep(1:length(w), w)
+            object <- new("IndependenceProblem", 
+                          x = object@x[indx,,drop = FALSE],
+                          y = object@y[indx,,drop = FALSE], 
+                          block = object@block[indx])
+        }
+    }
+
     ### convert factors to ordered and attach scores if requested
     object <- setscores(object, scores)
 

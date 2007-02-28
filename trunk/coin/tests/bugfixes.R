@@ -148,3 +148,28 @@ foo(a, b)
 dat <- data.frame(y = rnorm(100), x1 = runif(100), x2 = factor(rep(0, 100)))
 try(independence_test(y ~ x1  + x2, data = dat))
 
+### user specified g: names, MC
+me <- as.table(matrix(c( 6,  8, 10,
+               32, 47, 20), byrow = TRUE, nrow = 2,
+    dimnames = list(group = c("In situ", "Control"),
+                    genotype = c("AA", "AG", "GG"))))
+medf <- as.data.frame(me)
+
+add <- c(0, 1, 2)
+dom <- c(0, 1, 1)
+rez <- c(0, 0, 1)
+g <- function(x) {
+    x <- unlist(x)
+    cbind(add[x], dom[x], rez[x])
+}
+it <- independence_test(group ~ genotype, 
+    data = medf, weights = ~ Freq, xtrafo = g)
+statistic(it, "linear")
+
+it <- independence_test(group ~ genotype,
+    data = medf, weights = ~ Freq, xtrafo = g,
+    distribution = approximate(B = 49999))
+pvalue(it)
+
+stopifnot(all.equal(statistic(independence_test(t(me), xtrafo = g), "linear"),
+                    statistic(it, "linear")))
