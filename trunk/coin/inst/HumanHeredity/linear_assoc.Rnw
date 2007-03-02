@@ -1,8 +1,16 @@
 \documentclass{article}
 
 %% almost as usual
-\author{Torsten Hothorn} 
-\title{Linear Association with Multiple Scores}
+\author{Ludwig A. Hothorn \\
+Institute of Biostatistics, Leibniz University of Hannover, Germany\\
+Torsten Hothorn \\
+Institute for Medical Informatics, Biometry and Epidemiology\\
+Friedrich--Alexander--Universit\"at Erlangen--N\"urnberg, Erlangen, Germany}
+
+\title{Order-restricted scores test for the evaluation of population-based 
+       case-control studies when the genetic model is unknown}
+%% TH: kopier Dir bitte das Sweave.sty in Deinen tex-Pfad oder einfach in 
+%% Verzeichnis, in dem Du Tex rennen laesst.
 \usepackage{Sweave}
 \usepackage[round]{natbib}
 
@@ -92,33 +100,74 @@ set.seed(290875)
 
 \maketitle
 
+\paragraph{Key Words:}
+Candidate gene association, Cochran-Armitage trend test, maximum test, conditional inference.
+
+%% TH: die wollen die Einteilung in Objectives, Methods, Results, Conclusions
+\begin{abstract}
+	The linear trend test for proportions according to Cochran-Armitage is commonly used for genotype-based analysis of candidate gene association. Depending on the underlying genetic model, the use of model-specific scores maximizes the power. Commonly, the underlying genetic model is a priori unknown. Maximum tests using standardized Cochran-Armitage tests with the specified scores were proposed. We re-formulate the problem into a maximum test of scores-specific linear-by-linear association tests. For both maximum-type and quadratic form of test statistics the asymptotic expectation and covariance can be derived in a closed form. 
+	The maximum-type test for three scores, sensitve for the additive, dominant and recessive model, is three-variate normal distributed.	A simple software using the R-package coin is presented.
+	   
+\end{abstract}
+
+
 \section{Introduction}
 
-We are faced with a contingeny table of two groups (cases and controls) and genotypes:
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{lrrr}
- & aa & Aa & AA \\
-Cases & $r_0$ & $r_1$ & $r_2$ \\
-Controls & $s_0$ & $s_1$ & $s_2$ \\
-\end{tabular}
-\caption{Genotype distribution.}
-\end{center}
-\end{table}
+In population-based case-control studies the association between a candidate allele 
+and a disease can be evaluated by the Cochran-Armitage trend test \citep[CA-test][]{Armitage:1955} 
+whether or not Hardy-Weinberg equilibrium holds according to \cite{Sasieni:1997}. Such case-control 
+studies are widespread used, although serious bias may occur. For simplicity we assume that no 
+population stratification occurs. For a simple bi-allelic marker the data can be presented 
+in a $3 \times 2$ contingency table, where A is the high risk candidate allele and a is 
+any of the other alleles (see Table~\ref{gdistr}). 
 
-It is convenient to reformulate the problem first. 
-Let $\Y_i$ denote the groups (cases and controls) and $\X_i$ the genotype
+\begin{table}
+\centering
+\caption{Genotype distribution. \label{gdistr}}
+  \begin{tabular}{l l l l}
+    \hline
+       & Cases & Controls & Total \\
+ \hline
+ aa		& 		$r_0$ & $s_0$	& $n_0$\\
+ aA		& 		$r_1$ & $s_1$	& $n_1$ \\
+ AA		& 		$r_2$ & $s_2$	& $n_2$ \\
+ Total& 		$R$ 	& $S$		& $N$  \\
+  \hline
+ \end{tabular}
+ \end{table}
+
+
+Because in case-control studies random samples from cases and control of size $R$ and $S$ are drawn,
+$r_0$,$r_1$,$r_2$ and $s_0$,$s_1$,$s_2$ follow a trinomial distribution for the genotypes
+aa, aA and AA with probabilities $p_0$,$p_1$,$p_2$ and $q_0$,$q_1$,$q_2$ respectively. 
+Therefore, a test problem for comparing two trinomial distributions for stochastic order exists:  
+$H_0:p_i=q_i H_1:p_i\prec q_i i(0,1,2)$
+
+For likelihood ratio order can be demonstrated that the order restricted test for comparing 
+two multinomials and the order-resticted test for comparing c binomials are asymptotically 
+equivalent \citep{Agresti:2002}. In association studies we assume sufficient large sample sizes, 
+that generally asymptotic tests can be used. 
+The nominator of the CA-test depends on the scores $x_i$:
+$Nom_{CA}=\frac{1}{N}\sum{x_i(Sr_i-Rs_i)}$. For the dominant model the scores $x=(0,1,1)$, 
+for the additive model the scores  $x=(0,1,2)$ and for the recessive model the 
+scores $x=(0,0,1)$ are power optimal [2, 4]. However, a priori the underlying genetic model is 
+rarely known. Therefore, \cite{Freidlin:2002} proposed the maximum of three standardized CA-tests, each with 
+model-specific scores, as a global test for association. However, the asymptotic 
+distribution of this test is not available nor software is  up to now.
+
+\section{Reformulation of the problem}
+Let $\Y_i$ denote the both groups (cases and controls) and $\X_i$ the genotype
 for all cells $i = 1, \dots, n = 6$. The weights $w_i$ represent the number of observations in each cell.
 The so-called \textit{influence function} $h$ provides us with a zero-one dummy coding of the groups (being one for
 cases and zero for controls).
 Moreover, three transformations $g$ of the genotype are under test: $g_\text{dom}$ assigns scores $(0, 1, 1)$ to
-genotypes $(\text{aa}, \text{Aa}, \text{AA})$, $g_\text{add}$ assigns scores $(0, 1, 2)$ and $g_\text{rez}$
+genotypes $(\text{aa}, \text{Aa}, \text{AA})$, $g_\text{add}$ assigns scores $(0, 1, 2)$ and $g_\text{rec}$
 implements scores $(0, 0, 1)$. See Table~\ref{gd}.
 
 \begin{table}
 \begin{center}
 \begin{tabular}{lllc|cccc}
-$i$ & $\Y_i$  &  $\X_i$  & $w_i$ & $h(\Y_i)$ & $g_\text{add}(\X_i)$ & $g_\text{dom}(\X_i)$ & $g_\text{rez}(\X_i)$ \\ \hline
+$i$ & $\Y_i$  &  $\X_i$  & $w_i$ & $h(\Y_i)$ & $g_\text{add}(\X_i)$ & $g_\text{dom}(\X_i)$ & $g_\text{rec}(\X_i)$ \\ \hline
 1 & Case & aa & $r_1$ & 1 & 0 & 0 & 0 \\
 2 & Case & Aa & $r_2$ & 1 & 1 & 1 & 0 \\
 3 & Case & AA & $r_3$ & 1 & 2 & 1 & 1 \\
@@ -138,13 +187,13 @@ H_0: D(\Y | \X) = D(\Y)
 \end{eqnarray*}
 against ordered alternatives. First, we define a three-dimensional
 statistic $\T$, each dimension being associated with one of the 
-scores $g_\text{add}$, $g_\text{dom}$, and $g_\text{rez}$.
+scores $g_\text{add}$, $g_\text{dom}$, and $g_\text{rec}$.
 Each statistic is basically the sum of the scores multiplied by the weights over cases only:
 \begin{eqnarray} \label{linstat}
-\T = (\T_\text{add}, \T_\text{dom}, \T_\text{rez}) = 
+\T = (\T_\text{add}, \T_\text{dom}, \T_\text{rec}) = 
 \sum_{i = 1}^n w_i g(\X_i) h(\Y_i) \in \R^{3} 
 \end{eqnarray}
-with $g(\X_i) = (g_\text{add}(\X_i), g_\text{dom}(\X_i), g_\text{rez}(\X_i))$.
+with $g(\X_i) = (g_\text{add}(\X_i), g_\text{dom}(\X_i), g_\text{rec}(\X_i))$.
 
 \subsection{Conditional Expectation and Covariance}
 
@@ -201,54 +250,60 @@ form
 \begin{eqnarray*}
 c_\text{quad}(\T, \mu, \Sigma)  = (\T - \mu)^\top \Sigma^+ (\T - \mu)
 \end{eqnarray*}
-follows a $\chi^2_2$ distribution. Note that, under any circumstances, the exact conditional
+follows a $\chi^2_2$ distribution. The quadratic form reveals high power for an average alternative while the maximum-type form for a particular genetic alternative. Therefore, we focus on the maximum-type statistics, particularly because information on the elementary genetic alternative is available by adjusted p-values. 
+ Note that, under any circumstances, the exact conditional
 distribution can be approximated by conditional Monte-Carlo methods, which is especially attractive
 for small sample sizes $w_\cdot$ when we can't expect asymptotics to work well.
 
-\section{Example}
+\section{An Example}
+\cite{Freidlin:2002} published the data for a 2 by 3 table for the association 
+between a variant of the epidermal growth factor 
+(EGF) gene and malignant melanoma according to \cite{Shahbazi:2002} (see Table~\ref{mel}).
 
-        \begin{table}[h]
-                \centering
-                \caption{Melanoma data. \label{mel}}
-                \begin{tabular}{l l l l l}
-                \hline
-       & AA     & AG& GG      & Total   \\
-                        \hline
-                        In situ& 6 & 8& 10 &24 \\
-                        Controls& 32 &47 & 20 &99 \\
-                        Total& 38 &55 & 30 & 123\\
-                \hline
-                        \end{tabular}
-                \end{table}
 <<melanoma-table, echo = FALSE>>=
 me <- as.table(matrix(c( 6,  8, 10,
                32, 47, 20), byrow = TRUE, nrow = 2,
     dimnames = list(group = c("In situ", "Control"),
                     genotype = c("AA", "AG", "GG"))))
+me <- t(me)
 @
+
+\begin{table}[h]
+\begin{center}
+\caption{Melanoma data. \label{mel}}
+\begin{tabular}{l l l l l} \hline
+<<melanoma-tabular, echo = FALSE, results = tex>>=
+metab <- cbind(me, Total = rowSums(me))
+metab <- rbind(metab, Total = colSums(metab))
+cat(" & ", paste(colnames(metab), collapse = " & "), "\\\\ \\hline \n")
+tmp <- sapply(1:nrow(metab), function(i)
+    cat(rownames(metab)[i], " & ", paste(metab[i,], collapse = " & "), 
+        " \\\\ \n"))
+@
+\hline
+\end{tabular}
+\end{center}
+\end{table}
                 
 Consider the data shown in Table~\ref{mel}. In \RR, we have the data in
 the classical form and the form of Table~\ref{gd}:
 <<melanoma-data, echo = TRUE>>=
 me
-medf <- as.data.frame(me)
-medf
 @
 We only have to implement the function $g$, which returns a matrix with three columns
 <<melanoma-setup, echo = TRUE>>=
 add <- c(0, 1, 2)
 dom <- c(0, 1, 1)
-rez <- c(0, 0, 1)
+rec <- c(0, 0, 1)
 g <- function(x) {
     x <- unlist(x)
-    cbind(add = add[x], dom = dom[x], rez = rez[x])
+    cbind(add = add[x], dom = dom[x], rec = rec[x])
 }
 @
 The function \Rcmd{independence\_test} from the \Rpackage{coin} \citep{PKG:coin}
 can now be used to perform the test as described above:
 <<melanoma-test, echo = TRUE>>=
-it <- independence_test(group ~ genotype, 
-    data = medf, weights = ~ Freq, xtrafo = g)
+it <- independence_test(me, xtrafo = g, alternative = "greater")
 @
 The statistic $\T$ is
 <<melanoma-stat, echo = TRUE>>=
@@ -258,20 +313,106 @@ and the test statistic $c_\text{max}$ with asymptotic $p$-value is
 <<melanoma-tp, echo = TRUE>>=
 statistic(it)
 pvalue(it)
+pvalue(it, method = "single-step")
 @
-<<melanoma-resampl, echo = FALSE>>=
-dummy <- medf[rep(1:nrow(medf), medf$Freq),]
-it <- independence_test(group ~ genotype,
-    data = dummy, xtrafo = g,
-    distribution = approximate(B = 49999))
-p <- pvalue(it)
+We might want to check whether the asymptotic works well enough
+by conditional Monte-Carlo resampling:
+<<melanoma-resampl, echo = TRUE>>=
+pvalue(independence_test(me, xtrafo = g,
+    distribution = approximate(B = 49999), 
+    alternative = "greater"), method = "step-down")
 @
-We might want to check whether the asymptotic works well enough, however,
-the $p$-value based on Monte-Carlo resampling is $\Sexpr{round(p, 4)}$.
+
 
 See \cite{Hothorn:2006:AmStat} for more examples.
+
+
+\section{A simulation study}
+Many different patterns of penetrances $f_i$, disease prevalence $p$, sample size of cases and controls $R$, $S$ can be investigated in a simulation study. We will focus on a high prevalent disease (i.e. $p=0.5$), penetrances according to a pure additive, recessive and dominant genetic model (as well as no association) for a total sample size of $N=400$ divided into the balanced $R=S=200$ and several unbalanced sampling schemes. Unbalanced data are of interest because real data examples exist with seriously more controls, see e.g. the data in Table 1, or with seriously more cases, see e.g. the IL13 polymorphism in atopic dermatitis [10, Table 4]. For the proposed asymptotic order-restricted test (ASM-test) both the global power $\pi_{global}$(the decision rate in favor of any alternative) and the correct model identification rates $\nu_{add}$,$\nu_{rec}$,$\nu_{dom}$ are compared with the power of the individual genetic model tests $\pi_{add}$, $\pi_{rec}$, $\pi_{dom}$ in Table 4.
+
+\begin{table}
+\centering
+\caption{Type I error rate and empirical power estimates: prevalence $p=0.5$, 10000 runs}
+  \begin{tabular}{l l l l l l l l l l}
+    \hline
+        Model & R & S & $\pi_{global}$ &  $\nu_{add}$ & $\nu_{rec}$ & $\nu_{dom}$ & $\pi_{add}$ & $\pi_{rec}$ & $\pi_{dom}$   \\
+ \hline
+ Null & 200 & 200 & 0.048&	0.012 &	0.017& 	0.019 			&	0.051 &	0.047 &	0.049 \\
+ Dom  & 200 & 200 & 0.85 &	0.13 &	0.01 &	\textit{0.71} &	0.75 &	0.23 &	\textbf{0.91} \\
+ Add  & 200 & 200 & 0.84 &	\textit{0.53} &	0.10  &	0.21 &	\textbf{0.88} &	0.71 &	0.78 \\
+ Rec  & 200 & 200 & 0.86 &	0.16 &	\textit{0.69} &	0.01 & 	0.80 &	\textbf{0.91} &	0.28 \\
+ Dom  & 100 & 300 & 0.72 &	0.16 &	0.01 &	\textit{0.55}&	0.63 &	0.21 & \textbf{0.80} \\
+ Add  & 100 & 300 & 0.73 &	\textit{0.43} &	0.14 &	0.16 &	\textbf{0.78} &	0.60 &	0.65 \\
+ Rec  & 100 & 300 & 0.77 &	0.16 &	\textit{0.60} &	0.01 &	0.67 &	\textbf{0.82} &	0.22  \\
+ Dom  & 300 & 100 & 0.76 &	0.11 &	0.01 &	\textit{0.64} &	0.66 &	0.19 &	\textbf{0.82} \\
+ Add  & 300 & 100 & 0.75 &	\textit{0.42} &	0.09 &	0.24 &	\textbf{0.79} &	0.59 &	0.69 \\
+ Rec  & 300 & 100 & 0.75 &	0.17 &	\textit{0.55} &	0.01 &	0.69 &	\textbf{0.82 }&	0.24 \\
+\hline
+ \end{tabular}
+ \end{table} 
+
+ 
+Per definition all tests control the type I error rates. Clearly, the power is maximal for the individual, unadjusted tests when the genetic model is known (bold). But the a priori knowledge of the genetic model is unrealistic. For balanced samples sizes the power of the order restricted scores test (ORS-test) is independent of the underlying genetic model and non-inferior smaller compared with the maximum power for the known model. Additionally to the global decision that a significant association exists, the ORS-test provide an adjusted p-value for the most likely genetic model. Clearly, these model identification rates are seriously smaller then the global power. Hereby is the identification of the additive model most difficult because of the both equal competitors, where the identification of the dominant or recessive model is easier (and equal) because only the additive model is the competitor. For unbalanced designs the power decreases although the total sample size remains constant.
+
+\section{Discussion}
+After re-formulation of Sasieni's problem, a three-variate normal distributed maximum-type 
+order-restricted scores test was proposed. The decision for or against the global 
+hypothesis of association can be performed by a global p-value. If the global 
+null hypothesis can be rejected, the likeliness of a selected genetic alternatives, 
+i.e. the dominant or additive or recessive model, can be stated by means of 
+multiplicity-adjusted p-values. Simulations show that the loss of the global 
+power of the new approach compared with that assuming a particular genetic 
+model is acceptable. After a significant global test is the identification of 
+either the dominant or the recessive model feasible. The identification of an 
+additive model is more difficult because of two competing alternatives. 
+A simple software solution using the R -package coin is available.
+
 
 \bibliographystyle{plainnat}
 \bibliography{references}
 
+
 \end{document}
+
+
+\section{References}
+\begin{list}{}{\setlength{\itemindent}{-0.5cm}
+\setlength{\leftmargin}{0.5cm}   \setlength{\itemsep}{0cm}}
+
+\begin{enumerate}
+
+\item Armitage P: Tests for linear trends in proportions
+and frequencies. 
+	\emph{Biometrics} 1955;11:375-386
+
+\item Sasieni PD: From genotypes to genes: Doubling the sample size. 
+	\emph{Biometrics} 1997; 53: 1253-1261.
+
+\item	Agresti A, Coull BA: The analysis of contingency tables under inequality constraints.
+ \emph{J Statist Plan Inferen} 2002; 107: 45-73.
+
+\item	Slager SL, Schaid DJ: Case-control studies of genetic markers: Power and sample size approximations for Armitage's test for 	trend. \emph {Hum Hered} 2001;52: 149-153. 
+
+\item Freidlin B, Zheng G, Li ZH: Trend tests for case-control studies of genetic markers: Power, sample size and robustness. 
+ \emph{Hum Hered} 2002;53: 146-152. 
+
+\item Zhen G, Freidlin B, Gastwirth JL: Robust genomic control for association studies.
+\emph{Am J Human Genetics} 2006; 78; 350-356.
+ 
+\item Shahbazi M, Pravica P, Nasreen N, Fakhoury H, Fryer AA, Strange RC, Hutchinson PE,
+	Osborne JE, Lear JT, Smith AG, Hutchinson IV: Association between functional polymorphism
+	in EGF gene and malignant melanoma.  
+	\emph{Lancet} 2002;359:397–401.
+	
+
+\item	Zheng G, Freidlin B, Li ZH:. Choice of scores in trend tests for case-control studies of candidate-gene associations \emph{Biometr J} 2003; 45: 335-348.
+
+\item Neuhaeuser M: Exact tests for the analysis of case-control studies of genetic markers.
+\emph{Human Heredity} 2002; 54; 151-156.
+
+\end{enumerate}
+
+\end{list}
+
+
+
