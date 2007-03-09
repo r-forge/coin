@@ -89,6 +89,8 @@ set.seed(290875)
 ### get rid of the NAMESPACE
 load(file.path(.find.package("coin"), "R", "all.rda"))
 
+### use UML? http://argouml.tigris.org/
+
 ### extract slots of a class
 c2t <- function(x) {        
 
