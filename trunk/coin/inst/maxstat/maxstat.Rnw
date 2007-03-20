@@ -276,7 +276,8 @@ or Ornstein-Uhlenbeck process \citep{LausenSchumacher1992} over some interval fo
 dimensions ($pq > 50$, say). It should be noted that both approximations ignore the 
 special correlation structure. \cite{LausenSchumacher1996} proposed to
 use an improved Bonferroni inequality presented by \cite{Worsley1982} which
-provides us with an upper bound for $\Prob(\Tmax > c)$ as $n \rightarrow \infty$ (see Appendix).
+provides us with an upper bound for $\Prob(\Tmax > c)$ as $n \rightarrow \infty$.
+%% (see Appendix).
 
 However, for the most important case of statistics maximally selected
 over cutpoints induced by an ordered covariate $\X$, the probability
@@ -298,7 +299,8 @@ it holds that
 \rho_{1,k} = \prod_{j = 2}^k \rho_{j,j-1}.
 \end{eqnarray*}
 With $\v = (\rho_{1,1}, \dots, \rho_{1,p})$ the lower triangular part of the correlation
-matrix $\Rb$ can be written as $\v (1/\v)^\top$ and it follows that the
+matrix $\Rb$ can be written as $\v (1/\v)^\top$ and it follows \citep[from][Section 2.1]{Meurant1992} 
+that the
 inverse $\Rb^{-1}$ of the correlation matrix is a tridiagonal symmetric band matrix:
 \begin{eqnarray*}
 \Rb^{-1} = \left( \begin{array}{cccccc}
@@ -320,11 +322,14 @@ $c > 0$, i.e., the probability
 \frac{1}{\sqrt{|\Rb| (2\pi)^p}} \int\limits_{-c}^{c} 
 \exp\left(-\frac{1}{2}\z^\top \Rb^{-1}\z \right) d\z.
 \end{eqnarray*}
-Because of the special band structure of $\Rb^{-1}$ the quadratic form $\z^\top \Rb^{-1}\z$ simplifies to
+Because of the special band structure of $\Rb^{-1}$ the quadratic form $\z^\top \Rb^{-1}\z$ 
+simplifies to
 \begin{eqnarray*}
 \z^\top\Rb^{-1}\z = r_{1,1}z_1^2 + 2r_{2,1}z_1z_2 + r_{2,2} z_2^2 + \dots +
 2r_{p,p-1} z_pz_{p-1} + r_{p,p}z_p^2.
 \end{eqnarray*}
+and one can make use of this structure when evaluating the
+multivariate normal distribution numerically \citep{GenzKahaner1986}.
 With $\phi(z) = \exp\left(-z/2\right)$ we have
 \begin{eqnarray*}
 \int\limits_{-c}^{c} \phi\left(\z^\top \Rb^{-1}\z \right) d\z =
@@ -534,14 +539,14 @@ multivariate covariates to be dichotomized is now possible conceptually and prac
 
 \bibliography{maxstat}
 
-\section*{Appendix}
+%%\section*{Appendix}
 
-By the same arguments as used in Section~3.3 of \cite{Worsley1982}, for some $c > 0$
-\begin{eqnarray*}
-\Prob(\Tmax > c) = \Prob\left(\bigcup_{j = 1}^p |Z_j| > c\right) \le
-\sum_{j = 1}^p \Prob(|Z_j| > c) - \sum_{j = 1}^{p - 1} \Prob\left(|Z_j| > c \cap |Z_{j+1}| > c\right)
-\end{eqnarray*}
-where computing $\Prob\left(|Z_j| > c \cap |Z_{j+1}| > c\right)$ only requires the evaluation
-of a bivariate standard normal distribution with correlation $\rho_{j,j+1}$.
+%%By the same arguments as used in Section~3.3 of \cite{Worsley1982}, for some $c > 0$
+%%\begin{eqnarray*}
+%%\Prob(\Tmax > c) = \Prob\left(\bigcup_{j = 1}^p |Z_j| > c\right) \le
+%%\sum_{j = 1}^p \Prob(|Z_j| > c) - \sum_{j = 1}^{p - 1} \Prob\left(|Z_j| > c \cap |Z_{j+1}| > c\right)
+%%\end{eqnarray*}
+%%where computing $\Prob\left(|Z_j| > c \cap |Z_{j+1}| > c\right)$ only requires the evaluation
+%%of a bivariate standard normal distribution with correlation $\rho_{j,j+1}$.
 
 \end{document}
