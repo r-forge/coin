@@ -442,3 +442,188 @@ A simple software solution using the R -package coin is available.
 \end{document}
 
 
+\section{Generalizations}
+A straightforward generalization is the consideration of $3-by-k$ tables instead of $3-by-2$ tables, where sub-types of cases are compared with a control. For example, early and late disease onset are compared with the control investigating the association between psoriasis and polymorphisms of genes encoding tumor necrosis Factor-$\alpha$ and Interleukin-$1\beta$ see \cite{Reich:2002}, where for the IL1B-511 locus the related $3by2$ table data are given in Table 5.
+
+<<psoriasis-table, echo = FALSE>>=
+ps <- as.table(matrix(c( 80,62,12,
+												46,23,6,	
+               					151, 162, 32), byrow = TRUE, nrow = 3,
+    dimnames = list(group = c("Early onset","Late onset", "Control"),
+                    genotype = c("aa", "aA", "AA"))))
+ps <- t(ps)
+@
+
+
+\begin{table}[h]
+\begin{center}
+\caption{Psoriasis data IL1B-511 locus. \label{pso}}
+\begin{tabular}{l l l l l} \hline
+<<psoriasis-tabular, echo = FALSE, results = tex>>=
+pstab <- cbind(ps, Total = rowSums(ps))
+pstab <- rbind(pstab, Total = colSums(pstab))
+cat(" & ", paste(colnames(pstab), collapse = " & "), "\\\\ \\hline \n")
+tmp <- sapply(1:nrow(pstab), function(i)
+    cat(rownames(pstab)[i], " & ", paste(pstab[i,], collapse = " & "), 
+        " \\\\ \n"))
+@
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Using the function \Rcmd{independence\_test} we can now perform the test as described above:
+<<psoriasis-test, echo = TRUE>>=
+il <- independence_test(ps, xtrafo = g, alternative = "greater")
+@
+
+The statistic $\T$ is
+<<psoriasis-stat, echo = TRUE>>=
+statistic(il, "linear")
+@
+
+We immediately are provided with the covariance matrix
+$\Sigma$ and corresponding correlation matrix
+<<melanoma-cor, echo = TRUE>>=
+cov2cor(covariance(il))
+@
+
+The MAX test with test statistic $c_\text{max}$ and its 
+asymptotic $p$-value is
+<<psoriasis-tp, echo = TRUE>>=
+statistic(il)
+pvalue(il)
+@
+
+Multiplicity-adjusted $p$-values for each of the additive, dominant and recessive tests, indicate
+which model is likely (see Section~\ref{sim} in addition):
+<<psoriasis-adj, echo = TRUE>>=
+pvalue(il, method = "single-step")
+@
+
+
+A further generalization is the consideration of $3-by-k$ tables with strata where in the psoriasis study \cite{Reich:2002} gender or family history were used as strata, see for the IL1B-511 locus the related  gender-stratified $3by2$ table data given in Table 6.
+
+<<gender-table, echo = FALSE>>=
+ge <- as.table(matrix(c( 54,44,7,
+													26,20,5,
+													29,13,4,
+													17,10,2,
+													75,93,14,
+													76, 69, 18), byrow = TRUE, nrow = 6,
+    dimnames = list(group = c("Early onset","Late onset", "Control"),
+    								gender=c("Males", "Females"),
+                    genotype = c("aa", "aA", "AA"))))
+ge <- t(ge)
+@
+
+
+\begin{table}[h]
+\begin{center}
+\caption{Gender-specific psoriasis data IL1B-511 locus. \label{pso}}
+\begin{tabular}{l l l l l} \hline
+<<psoriasis-tabular, echo = FALSE, results = tex>>=
+getab <- cbind(ge, Total = rowSums(ge))
+getab <- rbind(getab, Total = colSums(getab))
+cat(" & ", paste(colnames(getab), collapse = " & "), "\\\\ \\hline \n")
+tmp <- sapply(1:nrow(getab), function(i)
+    cat(rownames(getab)[i], " & ", paste(getab[i,], collapse = " & "), 
+        " \\\\ \n"))
+@
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Using the function \Rcmd{independence\_test} we can now perform the test as described above:
+<<gender-test, echo = TRUE>>=
+gt <- independence_test(ps, xtrafo = g, alternative = "greater")
+@
+
+The statistic $\T$ is
+<<gender-stat, echo = TRUE>>=
+statistic(gt, "linear")
+@
+
+We immediately are provided with the covariance matrix
+$\Sigma$ and corresponding correlation matrix
+<<gender-cor, echo = TRUE>>=
+cov2cor(covariance(gt))
+@
+
+The MAX test with test statistic $c_\text{max}$ and its 
+asymptotic $p$-value is
+<<gender-tp, echo = TRUE>>=
+statistic(gt)
+pvalue(gt)
+@
+
+Multiplicity-adjusted $p$-values for each of the additive, dominant and recessive tests, indicate
+which model is likely (see Section~\ref{sim} in addition):
+<<gender-adj, echo = TRUE>>=
+pvalue(gt, method = "single-step")
+@
+
+
+A interesting generalization is the consideration of $3-by-k$ tables with multiple loci. Although  in the psoriasis study \cite{Reich:2002} five loci were used, a Bonferroni-type multiplicity-adjusted analysis was performed for the two relevant loci TNFA-238 and IL1B-511, see Table 7.
+
+<<loci-table, echo = FALSE>>=
+lo <- as.table(matrix(c( 114,41,1,
+													64,11,0,
+													316,29,0,
+													80,64,12,
+													46,23,6,
+													151,162,32), byrow = TRUE, nrow = 6,
+    dimnames = list(group = c("Early onset","Late onset", "Control"),
+    								gender=c("TNFA-238", "IL1B-511"),
+                    genotype = c("aa", "aA", "AA"))))
+lo <- t(lo)
+@
+
+
+\begin{table}[h]
+\begin{center}
+\caption{Locus-specific psoriasis data. \label{pso}}
+\begin{tabular}{l l l l l} \hline
+<<loci-tabular, echo = FALSE, results = tex>>=
+lotab <- cbind(lo, Total = rowSums(lo))
+lotab <- rbind(getab, Total = colSums(lotab))
+cat(" & ", paste(colnames(lotab), collapse = " & "), "\\\\ \\hline \n")
+tmp <- sapply(1:nrow(lotab), function(i)
+    cat(rownames(lotab)[i], " & ", paste(lotab[i,], collapse = " & "), 
+        " \\\\ \n"))
+@
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Using the function \Rcmd{independence\_test} we can now perform the test as described above:
+<<loci-test, echo = TRUE>>=
+lo <- independence_test(ps, xtrafo = g, alternative = "greater")
+@
+
+The statistic $\T$ is
+<<loci-stat, echo = TRUE>>=
+statistic(lo, "linear")
+@
+
+We immediately are provided with the covariance matrix
+$\Sigma$ and corresponding correlation matrix
+<<loci-cor, echo = TRUE>>=
+cov2cor(covariance(lo))
+@
+
+The MAX test with test statistic $c_\text{max}$ and its 
+asymptotic $p$-value is
+<<loci-tp, echo = TRUE>>=
+statistic(lo)
+pvalue(lo)
+@
+
+Multiplicity-adjusted $p$-values -taking the correlation between both the three genetic model as well as between the tow locis into account - for each of the additive, dominant and recessive tests, indicate
+which model is likely (see Section~\ref{sim} in addition):
+<<loci-adj, echo = TRUE>>=
+pvalue(lo, method = "single-step")
+@
+
