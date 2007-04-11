@@ -83,15 +83,17 @@ the identification of ecological thresholds is of
 increasing interest \citep[see][]{Huggett2005},
 e.g., the estimation of cutpoints for habitat factors discriminating between 
 ecosystems with low and high abundance of certain indicator species 
-\cite{Muller2004}.
+\citep{Muller2004}.
 
 Two questions arise from a statistical point of view. In a first step, we
-have to make sure that there is some association between response and covariate 
+have to make sure that there is some 
+relevant association between response and covariate 
 and
 %Z% I know what you want to say...however, readers might misunderstand
 %Z% this: We have no built-in check that either the null or alternative
 %Z% hypothesis actually fits the data.
-in a second step we want to estimate the `best' cutpoint describing this relationship. 
+in a second step we want to estimate the `best' cutpoint 
+in order to approximate this relationship by a simple model. 
 It is convenient to deal with both problems separately. The first problem needs to be addressed by
 a formal hypothesis test for the null hypothesis of independence between covariate 
 (to be dichotomized)
@@ -103,8 +105,9 @@ alternative which lead to the rejection, i.e., want to estimate a `cutpoint'.
 
 The first procedure of this kind, utilizing the maximum over multiple $\chi^2$ statistics
 for $2 \times 2$ tables, was described by \cite{MillerSiegmund1982}. 
-\cite{LausenSchumacher1992} derived an approximation for the unconditional asymptotical
-distribution of maximally selected rank statistics, extending the area of application
+\cite{LausenSchumacher1992} derived an approximation for the asymptotical
+distribution of maximally selected rank statistics, extending the area of 
+application
 to continuous and censored response variables. \cite{Betensky1999} propose
 a maximally selected $\chi^2$ test for nominal response variables measured at
 $k > 2$ levels and ordered categorical data (maximally selected Cochran-Armitage test).
@@ -116,7 +119,8 @@ We embed the different statistics known so far into a common framework and take
 a conditional view on maximally selected statistics. Conditioning on permutations
 of the data allows for a unified treatment of maximally selected statistics
 within the theory of permutation tests described by \cite{StrasserWeber1999}.
-The complete correlation structure of all statistics can be computed efficiently and 
+The complete correlation structure of the statistics to be maximized 
+can be computed efficiently and 
 the conditional asymptotic distribution for a large class of maximally selected 
 statistics can be derived from Theorem 3 of \cite{StrasserWeber1999}. 
 A linear-time algorithm for the evaluation of this asymptotic distribution
@@ -162,9 +166,9 @@ Such binary partitions are defined in advance by $p$ sets $A_1, \dots, A_p$
 partitioning the observations into two groups based on the $\X$ 
 measurements only. Here,
 \begin{eqnarray*}
-g_j(\X_i) \quad = \quad \indic(\X_i \in A_j) \qquad (i = 1, \dots n)
+g_j(\X_i) \quad = \quad \indic(\X_i \in A_j) \qquad (i = 1, \dots, n)
 \end{eqnarray*}
-denotes the indicator function partitioning the observations 1, \dots, n 
+denotes the indicator function partitioning the observations $1, \dots, n$ 
 into two groups. In case of ordered $\X$, each partition is associated with
 a cutpoint. Only binary partitions satisfying the sample size 
 constraint $\sum_i g_i(\X_i) \in (n\varepsilon, n - n\varepsilon)$ 
@@ -209,11 +213,11 @@ requires a model to operate under and can be tedious. Alternatively,
 we can apply the permutation test framework established
 by \cite{StrasserWeber1999} by conditioning on all possible  
 permutations $S$ of the responses $\Y_1, \dots, \Y_n$. Within this 
-framework, closed-form expression of the conditional expectation 
+framework, closed-form expressions of the conditional expectation 
 $\mu = \E(\T | S) \in \R^{pq \times 1}$ and covariance
 $\Sigma = \V(\T | S) \in \R^{pq \times pq}$ of $\T$ under $H_0$ given
 all permutations $\sigma \in S$ of the responses are given by
-\cite{StrasserWeber1999} and in \cite{Hothornetal2006}.
+\cite{StrasserWeber1999} and can be found in \cite{Hothornetal2006} as well.
 
 %%\begin{eqnarray*}
 %%\mu = \E(\T | S) & = & \vec \left( \left( \sum_{i = 1}^n g(\X_i) \right)
@@ -241,7 +245,7 @@ covariance matrix $\Sigma$: the
 maximum of the absolute values of the standardized linear statistic
 is used as test statistic
 \begin{eqnarray*}
-\Tmax  & = & \max \frac{|\T - \mu|}{\sqrt{\text{diag}(\Sigma)}}
+\Tmax  & = & \max \frac{|\T - \mu|}{\sqrt{\text{diag}(\Sigma)}}.
 \end{eqnarray*}
 When the test statistic is large enough to indicate a deviation 
 from the null hypothesis we
@@ -365,11 +369,11 @@ the above integral can be re-formulated recursively:
 \int\limits_{-c}^c \phi(r_{1,1}z^2) f_2(z) dz.
 \end{eqnarray*}
 This integral can be evaluated numerically in $O(p)$ starting with $f_p$
-utilizing the techniques described by \cite{Miwa2000}. For a two-dimensional grid
+utilizing the techniques described by \cite{Miwa2000}: For a two-dimensional grid
 of $z \in [-c, c]$ and $\tilde{z} \in [-c,c]$ values, the function $f_j$ is
 evaluated and aggregated over $\tilde{z}$ only, yielding values
-of $f_j(z)$ for a grid of $z$ values. For computing $f_{j-1}$, 
-these values can be reused. 
+of $f_j(z)$ for a grid of $z$ values. 
+These values are then reused when computing $f_{j-1}$. 
 %%Using these $p$-values leads to a much
 %%more powerful test for larger number of potential cutpoints compared
 %%to the best approximation available for this situation so far (see Figure~\ref{approx}).
@@ -394,7 +398,7 @@ these values can be reused.
 Maximally selected statistics as described in Section~\ref{sec:stat} can be
 applied to covariates $\X$ and responses $\Y$ measured at arbitrary scales; appropriate 
 influence functions $h$ for nominal, ordered, numeric, censored and multivariate response
-variables are given in the sequel \citep[further details are given by][]{Hothornetal2006}, 
+variables are given in the sequel \citep[further details can be found in][]{Hothornetal2006}, 
 followed by a description of how to
 partition the covariate space for nominal, ordered and multivariate covariates and 
 the derivation of a novel maximally selected statistic.
@@ -406,7 +410,7 @@ An ordinal response $\Y$ requires the specification of scores attached to each o
 $h$ is the vector of those numeric scores. 
 Many possible influence functions are available for discrete or continuous covariates;
 the identity transformation is the most natural choice, rank transformations are possible as well. 
-When a numeric response is censored, log-rank transformations or
+When a numeric response is censored, the log-rank transformation or
 Savage scores can be applied.
 For a multivariate response, possibly consisting of variables with different scale levels,
 the influence function $h$ is a combination of 
@@ -428,10 +432,10 @@ that meet the sample size constraints are taken into account.
 For multiple covariates, we simply look at all binary partitions induced by all covariates
 simultaneously. 
 
-This flexible framework can know be utilized to implement already 
-the conditional versions of published test statistics and to develop 
-maximally selected statistics 
-for new applications. For binary responses and ordered covariates,
+This flexible framework can know be utilized to implement 
+the conditional versions of already published maximally selected 
+statistics and to develop new maximally selected statistics 
+for other applications. For binary responses and ordered covariates,
 the statistic $\Tmax$ is equivalent to a maximally selected $\chi^2$ statistic 
 \citep{MillerSiegmund1982,Koziol1991}. For nominal responses with $k > 2$ levels,
 the $\Tmax$ statistic is the maximum over the maximum of 
@@ -444,8 +448,7 @@ For numeric or censored responses, $\Tmax$ corresponds to maximally selected ran
 \citep{LausenSchumacher1992}.
 In the extreme case of each observation being a block in repeated measurements, 
 our test statistic $\Tmax$ for binary responses 
-corresponds to maximally selected McNemar's statistics
-for binary responses \citep{Rabinowitz2000}.
+corresponds to maximally selected McNemar's statistics \citep{Rabinowitz2000}.
 The special case of maximally selected rank statistics
 for multiple covariates has first been studied by \cite{Lausenetal2004}.
 
@@ -529,7 +532,8 @@ in use since many years.
 %%From an academic point of view, such models are almost always an
 %%over-simplification. 
 Many researchers appreciate a model that is easy to 
-communicate and easy to implement in practical situations. The tradeoff between 
+communicate and easy to implement in practical situations. 
+Of course, the tradeoff between 
 between simplicity and accuracy has to be carefully investigated.
 
 The conceptual framework by \cite{StrasserWeber1999} allows for a unified treatment 
@@ -551,10 +555,11 @@ of $\Tmax$ can be approximated by its asymptotic distribution or by Monte-Carlo 
 (also in the presence of a grouping of the observations into independent blocks) readily
 available from the same package.
 
-In summary, a unified treatment of maximally selected rank statistics 
+In summary, a unified treatment of maximally selected statistics 
 for nominal, ordered, discrete and continuous numeric, censored and
 multivariate response variables as well as nominal, ordered and 
-multivariate covariates to be dichotomized is now possible conceptually and practically.
+multivariate covariates to be dichotomized is now possible 
+both conceptually and practically.
 
 %% TODO
 %% wollen wir quadratische Formen mit einbauen?
