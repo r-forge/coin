@@ -17,24 +17,26 @@
 \Shorttitle{Implementing a Class of Permutation Tests} %% a short title (if necessary)
 
 %% an abstract and keywords
-\Abstract{
-The \pkg{coin} add-on package implements a unified approach to permutation
-tests. A huge class of test procedures for nominal, ordered, numeric, censored
-as well as multivariate independence problems can be embedded into a common theory.
-We propose an \proglang{S4} class structure and generic functions modeling
-the theory as close as possible. As a consequence, the computational
-tools implemented by the \pkg{coin} package inherit the flexibility described
-by the underlying theory. Conditional independence tests for 
-location and scale problems for two or multiple samples, for two- or three-way
-contingency tables or for ordered categorical and multivariate data can
-be set-up easily using the function described here.
-In this paper, we focus on the technical aspects
-of the transition of a theoretical concept into computational tools.
-}
-\Keywords{conditional inference, exact distribution, conditional Monte-Carlo, 
-          categorical data analysis, \proglang{R}}
-\Plainkeywords{conditional inference, exact distribution, conditional Monte-Carlo, 
-          categorical data analysis, R} %% without formatting
+\Abstract{ The \pkg{coin} add-on package for \proglang{R} implements a
+  unified approach to permutation tests. A huge class of test procedures
+  for nominal, ordered, numeric, censored as well as multivariate
+  independence problems can be embedded into a common theory.  We
+  propose an \proglang{S4} class structure and generic functions
+  modeling the theory as closely as possible. As a consequence, the
+  computational tools implemented by the \pkg{coin} package inherit the
+  flexibility provided by the underlying theory. Conditional
+  independence tests for location and scale problems for two or multiple
+  samples, for two- or three-way contingency tables or for ordered
+  categorical and multivariate data can be set-up easily using the
+  functionality described here.  In this paper, we focus on the technical
+  aspects of the transition of a theoretical concept into computational
+  tools.  }
+
+\Keywords{conditional inference, exact distribution, conditional
+  Monte-Carlo, categorical data analysis, \proglang{R}}
+
+\Plainkeywords{conditional inference, exact distribution, conditional
+  Monte-Carlo, categorical data analysis, R} %% without formatting
 %% at least one keyword must be supplied
 
 %% publication information
@@ -161,18 +163,20 @@ all follow the classical classification scheme of inference procedures and
 offer procedures for location problems, scale problems, correlation, 
 or nominal and ordered categorical data. Thus, each test procedure is 
 implemented independently, maybe with the exception of conditional 
-versions of linear rank statistics \cite{theory-of-:-1999}.
+versions of linear rank statistics \citep{theory-of-:-1999}.
 
-Novel theoretical insights by \cite{StrasserWeber1999} open up the way to
-a unified treatment of a huge class of permutation tests. \cite{Hothorn:2006:AmStat} 
-introduce the computational counterpart of the theoretical framework for
-permutation tests by \cite{StrasserWeber1999}. The computational framework
-is implemented in the \pkg{coin} \citep{pkg:coin} add-on package to the \proglang{R} system
-for statistical computing \citep{rcore2007}. The transition from theory to practice
-has been described and illustrated by \cite{Hothorn:2006:AmStat}. Here,
-we focus in the design principles the \pkg{coin} implementation is based on 
-and on the more technical issues that needs to be addressed during the
-implementation of conceptual tools.
+Novel theoretical insights by \cite{StrasserWeber1999} open up the way
+to a unified treatment of a huge class of permutation
+tests. \cite{Hothorn:2006:AmStat} introduce the computational
+counterpart of the theoretical framework for permutation tests by
+\cite{StrasserWeber1999}. The computational framework is implemented in
+the \pkg{coin} \citep{pkg:coin} add-on package to the \proglang{R}
+system for statistical computing \citep{rcore2007}. The transition from
+theory to practice has been described and illustrated by
+\cite{Hothorn:2006:AmStat}. Here, we focus on the design principles the
+\pkg{coin} implementation is based upon and on the more technical issues
+that need to be addressed in the implementation of such conceptual
+tools.
 
 Formal \proglang{S4} classes describe the data model and conditional tests, 
 consisting of multivariate linear statistics, univariate test statistics 
@@ -204,7 +208,7 @@ the \pkg{coin} tools so that both preceeding packages will become deprecated in 
 
 We first focus on the conceptual framework for conditional inference procedures
 as proposed by \cite{StrasserWeber1999} along with the class structure the \pkg{coin}
-package is based on. Formal \proglang{S4} classes defining data objects, objects describing
+package is based upon. Formal \proglang{S4} classes defining data objects, objects describing
 the inference problem and conditional test procedure are introduced and explained.
 
 \subsection{Data}
@@ -332,7 +336,7 @@ standardize a linear statistic $\T \in \R^{pq}$ of the form
 In case of univariate linear statistics $\T$ (with $pq = 1$), the test statistic $c$
 is simply the standardized linear statistic
 \begin{eqnarray*}
-c_\text{scalar}(\T, \mu, \Sigma) = \frac{\t - \mu}{\sqrt{\Sigma}}.
+c_\text{scalar}(\t, \mu, \Sigma) = \frac{\t - \mu}{\sqrt{\Sigma}}.
 \end{eqnarray*} 
 In the multivariate case ($pq > 1$), the choice of the test
 statistic depends on the alternative we have in mind:
@@ -405,7 +409,7 @@ $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
 given by the rank of $\Sigma$ \citep[see][Chapter 29]{johnsonkotz1970}, exact
 probabilities can be computed efficiently.
 
-A null distribution is represented by either a distribution (and $P$-value) function
+A null distribution is represented by either a distribution (and $p$-value) function
 only
 <<PValue, results = tex>>=
 toLatex(c2t("PValue"))
@@ -453,7 +457,7 @@ class \Rclass{IndependenceTestStatistic}:
 For null distributions (class \Rclass{NullDistribution}), the following methods
 are available:
 \begin{description}
-\item[\Rcmd{pvalue()}:] computes the $P$-value (plus a confidence interval, in case
+\item[\Rcmd{pvalue()}:] computes the $p$-value (plus a confidence interval, in case
  Monte-Carlo procedures have been used).
 \item[\Rcmd{pperm()}:] evaluates the distribution function.
 \item[\Rcmd{dperm()}:] evaluates the density function. 
@@ -468,7 +472,7 @@ objects to an informal \proglang{S3} object of class \Rclass{htest} for which
 a \Rcmd{print()} method most \proglang{R} users are familiar with is available.
 
 For the conditional versions of two-sample linear rank statistics for
-location and scale parameters \citep{theory-of-:-1999}, e.g. Wilcoxon-Mann-Whitney,
+location and scale parameters \citep{theory-of-:-1999}, e.g., Wilcoxon-Mann-Whitney,
 Normal Scores and Ansari-Bradley tests, parameter estimates and
 confidence intervals based on the conditional distribution of the test statistics
 are implemented following the methods proposed by \cite{constructi:1972}. 
@@ -578,7 +582,7 @@ Pearson's $\chi^2$ & \Rcmd{chisq\_test()} & \Rcmd{f\_trafo()} & \Rcmd{f\_trafo()
 \Rcmd{"quad"} \\
 Cochran-Armitage / Linear Association & \Rcmd{lbl\_test()} & Scores & any &
 \Rcmd{"scalar"} \\
-K-Sample Permutation test & \Rcmd{oneway\_test()} & \Rcmd{f\_trafo()} & any & any \\
+$K$-Sample Permutation test & \Rcmd{oneway\_test()} & \Rcmd{f\_trafo()} & any & any \\
 Maximally Selected Statistics & \Rcmd{maxstat\_test()} & \Rcmd{maxstat\_trafo()} & any & \Rcmd{"max"} \\
 \multicolumn{5}{c}{} \\
 \multicolumn{5}{c}{Dependent Samples} \\
@@ -599,13 +603,13 @@ Wilcoxon Signed Rank & \Rcmd{wilcoxsign\_test()} & \Rcmd{f\_trafo()} & \Rcmd{ran
 
 Functions for computing the linear statistic $\T$ for the original data as well
 for permuted versions of the original data, the conditional expectation $\mu$
-and conditional covariate matrix $\Sigma$ are coded in \proglang{C}. 
+and conditional covariate matrix~$\Sigma$ are coded in \proglang{C}. 
 The shift and split-up algorithms \citep{axact-dist:1986,exakte-ver:1987,vdWiel2001}
 for computing the exact null distribution in univariate two-sample problems
 as well as conditional Monte-Carlo procedures for approximating the
 exact conditional null distribution are implemented in \proglang{C} as well.
 (In addition,
-some helper functions, e.g. the Kronecker product etc., are coded in \proglang{C}.)
+some helper functions, e.g., the Kronecker product etc., are coded in \proglang{C}.)
 The complete \proglang{C} source code and its documentation can be accessed via
 <<coin-doxygen, echo = TRUE, eval = FALSE>>=
 browseURL(system.file("documentation/html/index.html", package = "coin"))
