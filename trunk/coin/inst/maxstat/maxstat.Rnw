@@ -537,8 +537,11 @@ both conceptually and practically.
 
 %%\section*{Acknowledgements}
 
-%%We would like to thank Alan Genz for pointing us to \cite{Miwa2000}.
+%%We would like to thank Alan Genz for pointing us to \cite{Miwa2000}. Claus R\"odel
+%%kindly gave us permission to illustrate the framework by an application
+%%to the CAO/ARO/AIO-94 trial data.
 %%The work of T. Hothorn was supported by Deutsche Forschungsgemeinschaft (DFG) under grant HO 3242/1-3.
+%%
 
 \bibliography{maxstat}
 
