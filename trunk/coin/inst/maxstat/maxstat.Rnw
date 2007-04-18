@@ -429,7 +429,7 @@ names(dimnames(tab)) <- c("T category", "N category")
 %% nur geordnete zulassen?
 \begin{table}
 \begin{center}
-\caption{Pathological T and N category of $351$ rectal cancer patients 
+\caption{Pathological T and N category of $\Sexpr{length(tc)}$ rectal cancer patients 
          treated with a preoperative chemoradiotherapy. \label{tab:tn}}
 <<tntab, echo = FALSE, results = tex>>=
 tab <- cbind(tab, rowSums(tab))
@@ -451,6 +451,10 @@ cat("\\end{tabular} \n")
 \end{table}
 
 \setkeys{Gin}{width = 0.7\textwidth}
+<<gin, echo = FALSE, results = tex>>=
+if (style == "Biometrics")
+    cat("\\setkeys{Gin}{width = 0.95\\textwidth}\n")
+@
 \begin{figure}
 \begin{center}
 \caption{Survival times of rectum cancer patients in two risk groups identified by a maximally selected log-rank
@@ -545,13 +549,10 @@ both conceptually and practically.
 %%
 %% kann man nicht eine ganz einfache approximation fuer P(T > max(Z1, ..., Zpq)) herleiten?
 
-%%\section*{Acknowledgements}
-
-%%We would like to thank Alan Genz for pointing us to \cite{Miwa2000}. Claus R\"odel
-%%kindly gave us permission to illustrate the framework by an application
-%%to the CAO/ARO/AIO-94 trial data.
-%%The work of T. Hothorn was supported by Deutsche Forschungsgemeinschaft (DFG) under grant HO 3242/1-3.
-%%
+<<ack, echo = FALSE, results = tex>>=
+if (style == "Z")
+    cat("\\input{acknowledgement}\n")
+@
 
 \bibliography{maxstat}
 
