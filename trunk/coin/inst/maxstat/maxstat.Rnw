@@ -1,7 +1,7 @@
 
 <<style, echo = FALSE, results = tex>>=
-style <- "Biometrics"
-#style <- "Z"
+#style <- "Biometrics"
+style <- "Z"
 if (style == "Z")
     cat("\\input{headerZ}\n")
 if (style == "Biometrics")
@@ -129,7 +129,7 @@ typically constructed via cutpoints, i.e., $A_j = \{\X | \X \le \xi_j\}$. Here,
 \begin{eqnarray*}
 g_j(\X) \quad = \quad \indic(\X \in A_j)
 \end{eqnarray*}
-denotes the indicator function partitioning the observations $1, \dots, n$ 
+denotes the indicator function partitioning the observations
 into two groups. Only partitions satisfying a sample size 
 constraint $\sum_i g_j(\X_i) \in (n\varepsilon, n - n\varepsilon)$ 
 for some fixed $\varepsilon \in (0, 0.5)$ are taken into account. 
