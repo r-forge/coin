@@ -418,15 +418,13 @@ for multiple covariates has first been studied by \cite{Lausenetal2004}.
 
 <<cao-data>>=
 <<tntab, echo = FALSE, results = tex>>=
-load("example/preOP_maxstat.rda")
+load("example/maxstat.rda")
 tc <- preOP$tclass
 nc <- preOP$nclass
 levels(tc) <- gsub("p", "yp", levels(tc))
 levels(nc) <- gsub("p", "", levels(nc))
 tab <- xtabs(~ tc + nc, data = preOP)
 names(dimnames(tab)) <- c("T category", "N category")
-load("example/maxstat.rda")
-risk <- preOP$tn %in% cutpoint
 @
 
 %% nur geordnete zulassen?
@@ -461,6 +459,7 @@ statistic. \label{fig:maxstat}}
 <<maxstat, echo = FALSE, fig = TRUE, width = 7, height = 6>>=
 ###layout(matrix(1:2, ncol = 2))
 ###plot(abs(stat), xlab = "Index", ylab = "T")
+risk <- as.factor(cutpoint)
 plot(survfit(Surv(time, event) ~ risk, data = preOP), xlab = "Time (in months)",
      ylab = "Overall Survival Probability")
 text(85, 0.92, paste("N0 or N1 (excluding N1 and ypT4); n =",table(risk)[2]))
@@ -479,11 +478,14 @@ for a censored response and two unordered covariates.
 Survival times of $n = \Sexpr{length(tc)}$ patients from the preoperative arm 
 of the CAO/ARO/AIO-94 trial \citep{Sauer2004} are under test ($48$ patients with distant
 metastases found at surgery were excluded from this analysis). 
-The response variable is censored, so we choose a log-rank transformation as influence function $h$.
-From the potential $\Sexpr{2^(nlevels(preOP$tn)-1)}$ partitions,
-$\Sexpr{length(stat)}$ meet the sample size constraints. The maximum of the absolute values
+The response variable is censored, so we choose a log-rank transformation 
+as influence function $h$.
+%%From the potential $\Sexpr{2^(nlevels(preOP$tn)-1)}$ partitions,
+$\Sexpr{length(stat)}$ possible partitions 
+meet the sample size constraints. The maximum 
+of the absolute values
 of the corresponding \Sexpr{length(stat)} standardized statistics is 
-\Sexpr{round(teststat, 3)} ($p$-value smaller than $0.001$). 
+\Sexpr{round(teststat, 3)} ($p$-value smaller than $0.0001$). 
 The partition chosen by the algorithm identifies all patients with
 N category N2 or N3 as being under high risk and almost all patients
 from N0 and N1 as being under low risk. As an exception,
