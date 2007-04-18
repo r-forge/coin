@@ -37,7 +37,7 @@ tumor samples, such as type, density or location, with respect to their
 ability to differentiate between patients with good and poor prognosis.
 \cite{Buccisano2006} follow a similar approach, obtaining a threshold for
 residual leukemic cells in acute myeloid leukemia patients. The ability for
-expression levels of HER2 and coamplified genes to predict breast cancer
+expression levels of HER2 and co-amplified genes to predict breast cancer
 survival is investigated by \cite{Vinatzer2005} utilizing maximally selected
 log-rank statistics. Beyond applications in oncology, 
 the identification of ecological thresholds is of
@@ -49,11 +49,7 @@ ecosystems with low and high abundance of certain indicator species
 Two questions arise from a statistical point of view. In a first step, we
 have to make sure that there is some 
 relevant association between response and covariate 
-and
-%Z% I know what you want to say...however, readers might misunderstand
-%Z% this: We have no built-in check that either the null or alternative
-%Z% hypothesis actually fits the data.
-in a second step we want to estimate the `best' cutpoint 
+and in a second step we want to estimate the `best' cutpoint 
 in order to approximate this relationship by a simple model. 
 It is convenient to deal with both problems separately. The first problem needs to be addressed by
 a formal hypothesis test for the null hypothesis of independence between covariate 
@@ -62,7 +58,8 @@ and response variable. A test with power against shift alternatives, i.e.,
 departures from the null hypothesis where the distribution of the response variable 
 varies between two groups of observations, is of special interest. 
 Once we are able to reject the null hypothesis, we are interested in the 
-alternative which lead to the rejection, i.e., want to estimate a `cutpoint'.
+alternative which lead to the rejection, i.e., want to estimate a cutpoint
+or partition.
 
 The first procedure of this kind, utilizing the maximum over multiple $\chi^2$ statistics
 for $2 \times 2$ tables, was described by \cite{MillerSiegmund1982}. 
@@ -83,7 +80,7 @@ within the theory of permutation tests described by \cite{StrasserWeber1999}.
 The complete correlation structure of the statistics to be maximized 
 can be computed efficiently and 
 the conditional asymptotic distribution for a large class of maximally selected 
-statistics can be derived from Theorem 3 of \cite{StrasserWeber1999}. 
+statistics can be derived on the basis of \citet[Theorem~3]{StrasserWeber1999}. 
 A linear-time algorithm for the evaluation of this asymptotic distribution
 for potentially large numbers of cutpoints under test is proposed which 
 significantly improves upon approximations for the asymptotic distribution
@@ -125,13 +122,13 @@ where the distribution of the response variable varies between two groups
 of observations are of special interest.
 Such binary partitions are defined in advance by $p$ sets $A_1, \dots, A_p$
 partitioning the observations into two groups based on the $\X$ 
-measurements only. Here,
+measurements only. For ordered covariates $\X$, these sets are
+typically constructed via cutpoints, i.e., $A_j = \{\X \le \xi_j\}$. Here,
 \begin{eqnarray*}
 g_j(\X_i) \quad = \quad \indic(\X_i \in A_j) \qquad (i = 1, \dots, n)
 \end{eqnarray*}
 denotes the indicator function partitioning the observations $1, \dots, n$ 
-into two groups. In case of ordered $\X$, each partition is associated with
-a cutpoint. Only binary partitions satisfying the sample size 
+into two groups. Only partitions satisfying a sample size 
 constraint $\sum_i g_i(\X_i) \in (n\varepsilon, n - n\varepsilon)$ 
 for some fixed $\varepsilon \in (0, 0.5)$ are taken into account. 
 
@@ -177,8 +174,8 @@ permutations $S$ of the responses $\Y_1, \dots, \Y_n$. Within this
 framework, closed-form expressions of the conditional expectation 
 $\mu = \E(\T | S) \in \R^{pq \times 1}$ and covariance
 $\Sigma = \V(\T | S) \in \R^{pq \times pq}$ of $\T$ under $H_0$ given
-all permutations $\sigma \in S$ of the responses are given by
-\cite{StrasserWeber1999} and can be found in \cite{Hothornetal2006} as well.
+all permutations $\sigma \in S$ of the responses are available, see
+\cite{StrasserWeber1999} or \cite{Hothornetal2006}.
 
 %%\begin{eqnarray*}
 %%\mu = \E(\T | S) & = & \vec \left( \left( \sum_{i = 1}^n g(\X_i) \right)
@@ -209,10 +206,11 @@ is used as test statistic
 \Tmax  & = & \max \frac{|\T - \mu|}{\sqrt{\text{diag}(\Sigma)}}.
 \end{eqnarray*}
 When the test statistic is large enough to indicate a deviation 
-from the null hypothesis we
-are interested in determining the partition with largest standardized statistic:
-the best separating partition is $A_{j^\star}$ where
-the absolute value of the standardized statistic $\T_{j^\star}$ equals $\Tmax$.
+from the null hypothesis we are interested in determining the
+partition with largest standardized statistic: the best
+separating partition $A_{j^\star}$ is the one for which the maximum is
+attained, i.e., for which the absolute value of the standardized
+statistic $\T_{j^\star}$ equals $\Tmax$.
 %%\begin{eqnarray*}
 %%j^\star = \argmax_j \left|\T_j - \mu_j\right| \times \Sigma_{j,j}^{-1/2}.
 %%\end{eqnarray*}
@@ -235,7 +233,7 @@ Moreover, the exact conditional distribution can be approximated by its
 limiting distribution. For $n \rightarrow \infty$ the
 distribution of the multivariate linear statistic $\T$ tends to a multivariate 
 normal distribution with mean $\mu$ and covariance matrix $\Sigma$ 
-\citep[Theorem 3 in][]{StrasserWeber1999}.
+\citep[Theorem 3]{StrasserWeber1999}.
 Thus, in order to approximate $\Prob(\Tmax > c)$ we have to evaluate
 the probability $\Prob(\max(|Z_1|, ..., |Z_{pq}|) > c)$ 
 for standard normal random variables $Z_1, \dots, Z_{pq}$ with correlation matrix 
@@ -335,7 +333,7 @@ utilizing the techniques described by \cite{Miwa2000}: For a two-dimensional gri
 of $z \in [-c, c]$ and $\tilde{z} \in [-c,c]$ values, the function $f_j$ is
 evaluated and aggregated over $\tilde{z}$ only, yielding values
 of $f_j(z)$ for a grid of $z$ values. 
-These values are then reused when computing $f_{j-1}$. 
+These values are then re-used when computing $f_{j-1}$. 
 %%Using these $p$-values leads to a much
 %%more powerful test for larger number of potential cutpoints compared
 %%to the best approximation available for this situation so far (see Figure~\ref{approx}).
@@ -366,24 +364,25 @@ partition the covariate space for nominal, ordered and multivariate covariates a
 the derivation of a novel maximally selected statistic.
 
 For nominal responses, $h$ is typically a straightforward 
-dummy coding of the $k$ factor levels. 
-It is sufficient to code for the first $k - 1$ levels only. 
-An ordinal response $\Y$ requires the specification of scores attached to each of the $k$ levels and 
+dummy coding of the $k$ factor levels (where it is sufficient
+to code for the first $k - 1$ levels only). For ordinal responses,
+scores are usually attached to each of the $k$ levels and 
 $h$ is the vector of those numeric scores. 
 Many possible influence functions are available for discrete or continuous covariates;
-the identity transformation is the most natural choice, rank transformations are possible as well. 
+the identity transformation is the most natural choice; square root, log, or
+rank transformations are possible as well. 
 When a numeric response is censored, the log-rank transformation or
 Savage scores can be applied.
 For a multivariate response, possibly consisting of variables with different scale levels,
 the influence function $h$ is a combination of 
 influence functions appropriate for any of the univariate response variables
-as suggested below. In the presence of a grouping of the observations
+as suggested above. In the presence of a grouping of the observations
 into independent blocks, only permutations within blocks are eligible and the
 conditional expectation and covariance matrix need to be computed
 separately for each block. Therefore, it is easily possible to take a block randomization
 scheme in a randomized clinical trial into account. 
 
-The most important situation of an univariate and at least ordinally measured covariate $\X$ leads
+The most important situation of a univariate and at least ordinally measured covariate $\X$ leads
 to partitions, and thus functions $g_j$, 
 induced by cutpoints defined by the realizations $\X_1, \dots, \X_n$. More specifically,
 $A_j = (-\infty, \xi_j]$, where $\xi_j$ is the $j$th element of the increasingly sorted unique 
@@ -483,12 +482,13 @@ $\Sexpr{length(stat)}$ meet the sample size constraints. The maximum of the abso
 of the corresponding \Sexpr{length(stat)} standardized statistics is 
 \Sexpr{round(teststat, 3)} ($p$-value smaller than $0.001$). 
 The partition chosen by the algorithm identifies all patients with
-N category N2 or N3 as being under high risk. As an exception,
-a single patient %Z% One should probably add some remark about this...
-with ypT4 and N1 is assigned to the high risk group as well,
-wheather or not this decision is sensible cannot be judged based on one observations. 
-Figure~\ref{fig:maxstat} 
-depicts Kaplan-Meier estimates of the survival times in the two risk groups.
+N category N2 or N3 as being under high risk and almost all patients
+from N0 and N1 as being under low risk. As an exception,
+a single patient with ypT4 and N1 is assigned to the high risk group as
+well---whether or not this decision is sensible or results from random variation
+cannot be judged based on one observation alone.
+Figure~\ref{fig:maxstat} depicts Kaplan-Meier estimates of the survival
+times in the two risk groups.
 
 
 
@@ -508,17 +508,18 @@ of different kinds of maximally selected statistics. When we are faced with a ne
 only the influence function $h$ needs to be newly designed. The complete correlation 
 structure is then available from the covariance matrix $\Sigma$. Moreover, the asymptotic
 distribution of the maximum statistic is known as well and can be evaluated efficiently
-in the most important situations by numerical integration techniques. We thereby extend
+%% in the most important situations %FIXME% simply omit
+by numerical integration techniques. We thereby extend
 the area of application of maximally selected statistics to problems with
 a potentially large number of possible cutpoints.
 
 The implementation of (known and newly designed) maximally selected statistics 
 only requires the specification of the binary partitions, via a function $g$, and
 a problem-specific influence function $h$. Linear statistics $\T$ and the test statistic
-$\Tmax$ can be computed utilizing the \texttt{maxstat\_test()} function in
-\textsf{R} \citep{PKG:R} in the add-on package \Rpackage{coin} 
-\citep{Hothornetal2006,PKG:coin}. The distribution
-of $\Tmax$ can be approximated by its asymptotic distribution or by Monte-Carlo methods 
+$\Tmax$ can be computed in the \textsf{R} system for statistical computing \citep{PKG:R}
+utilizing the function \texttt{maxstat\_test()} from the add-on package
+\Rpackage{coin} \citep{Hothornetal2006,PKG:coin}.
+The distribution of $\Tmax$ can be approximated by its asymptotic distribution or by Monte-Carlo methods 
 (also in the presence of a grouping of the observations into independent blocks) readily
 available from the same package.
 
