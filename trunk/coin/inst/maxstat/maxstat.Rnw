@@ -113,7 +113,7 @@ namely T and N-category of rectal cancer patients.
 We are provided with independent and identically distributed
 observations $(\Y_i, \X_i)$ for $i = 1, \dots, n$ and 
 are interested in testing the null hypothesis of independence of the response 
-variable $\Y$ and and covariate(s) $\X$
+variable $\Y \in \mathcal{Y}$ and and covariate(s) $\X \in \mathcal{X}$
 \begin{eqnarray*}
 H_0: D(\Y | \X) = D(\Y)
 \end{eqnarray*}
@@ -123,13 +123,13 @@ of observations are of special interest.
 Such binary partitions are defined in advance by $p$ sets $A_1, \dots, A_p$
 partitioning the observations into two groups based on the $\X$ 
 measurements only. For ordered covariates $\X$, these sets are
-typically constructed via cutpoints, i.e., $A_j = \{\X \le \xi_j\}$. Here,
+typically constructed via cutpoints, i.e., $A_j = \{\X | \X \le \xi_j\}$. Here,
 \begin{eqnarray*}
-g_j(\X_i) \quad = \quad \indic(\X_i \in A_j) \qquad (i = 1, \dots, n)
+g_j(\X) \quad = \quad \indic(\X \in A_j)
 \end{eqnarray*}
 denotes the indicator function partitioning the observations $1, \dots, n$ 
 into two groups. Only partitions satisfying a sample size 
-constraint $\sum_i g_i(\X_i) \in (n\varepsilon, n - n\varepsilon)$ 
+constraint $\sum_i g_j(\X_i) \in (n\varepsilon, n - n\varepsilon)$ 
 for some fixed $\varepsilon \in (0, 0.5)$ are taken into account. 
 
 The two-sample problem associated with the $j$th binary partition
@@ -146,7 +146,7 @@ in a permutation symmetric way, i.e., the value of the
 function must not depend on the order in which $\Y_1, \dots, \Y_n$ appear.
 For example, with $h$ being a rank transformation for a 
 continuous response $\Y$, the linear
-statistic is the sum of the ranks for observations $i$ with $g_j(\X_i) = 1$, 
+statistic $\T_j$ is the sum of the ranks for observations from $A_j$, 
 i.e., equals the Wilcoxon-Mann-Whitney statistic. 
 
 A joint linear statistic for all binary partitions is
@@ -154,7 +154,7 @@ A joint linear statistic for all binary partitions is
 \T \quad = \quad (\T_1, \dots, \T_p) = \vec\left(\sum_{i = 1}^n g(\X_i) h(\Y_i)^\top\right)
 \in \R^{pq \times 1}
 \end{eqnarray*}
-including all $p$ two-sample partitions $g(\X_i) = (g_1(\X_i), \dots, g_p(\X_i))$ 
+including all $p$ two-sample partitions, as defined by $g(\X) = (g_1(\X), \dots, g_p(\X))$,
 simultaneously for testing $H_0$.
 
 \section{Standardization and estimation} \label{sec:inf}
@@ -167,6 +167,9 @@ absolute standardized statistics and the best separating partition
 is the one for which the maximum is attained.
 
 Obtaining valid estimates of the mean and covariance of $\T$ 
+%FIXME% requires specification of a parametric model or the
+% "adoption" of non-parametric techniques such as permutation
+% or re-sampling approaches. Here, we adopt the latter and...
 requires a model to operate under and can be tedious. Alternatively,
 we can apply the permutation test framework established
 by \cite{StrasserWeber1999} by conditioning on all possible  
@@ -368,8 +371,8 @@ dummy coding of the $k$ factor levels (where it is sufficient
 to code for the first $k - 1$ levels only). For ordinal responses,
 scores are usually attached to each of the $k$ levels and 
 $h$ is the vector of those numeric scores. 
-Many possible influence functions are available for discrete or continuous covariates;
-the identity transformation is the most natural choice; square root, log, or
+Many possible influence functions are available for discrete or continuous covariates:
+The identity transformation is the most natural choice; square root, log, or
 rank transformations are possible as well. 
 When a numeric response is censored, the log-rank transformation or
 Savage scores can be applied.
