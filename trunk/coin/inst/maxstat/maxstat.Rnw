@@ -1,7 +1,7 @@
 
 <<style, echo = FALSE, results = tex>>=
-#style <- "Biometrics"
-style <- "Z"
+style <- "Biometrics"
+#style <- "Z"
 if (style == "Z")
     cat("\\input{headerZ}\n")
 if (style == "Biometrics")
@@ -74,7 +74,7 @@ Finally, \cite{Rabinowitz2000} suggested a maximally selected McNemar's test.
 than one covariate.
 
 Based on the ideas underlying these established techniques, we suggest a new
-generalized class of maximally selected statstics that contains the tests
+generalized class of maximally selected statistics that contains the tests
 above as special cases but also allows for direct construction of new test
 procedures for less standard test problems. For evaluating the distribution of
 the test statistics, a conditional inference approach is adopted by embedding
@@ -484,7 +484,7 @@ of the CAO/ARO/AIO-94 trial \citep{Sauer2004} are under test ($48$ patients with
 metastases found at surgery were excluded from this analysis). 
 Therefore, we propose a new maximally selected statistic for a censored response
 and two ordered covariates with potential interactions. Log-rank scores are used
-as influence function $h$ for the censored response and the potential paritions
+as influence function $h$ for the censored response and the potential partitions
 $g$ are constructed from all combinations of the five T and three N categories.
 As both categories are ordered, only those partitions are used which are ordered
 in T given N and vice versa. This yields 194 %FIXME% can we compute this?
