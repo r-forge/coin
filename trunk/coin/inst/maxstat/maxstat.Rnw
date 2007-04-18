@@ -73,26 +73,28 @@ Finally, \cite{Rabinowitz2000} suggested a maximally selected McNemar's test.
 \cite{Lausenetal2004} extended maximally selected rank statistics to more 
 than one covariate.
 
-We embed the different statistics known so far into a common framework and take
-a conditional view on maximally selected statistics. Conditioning on permutations
-of the data allows for a unified treatment of maximally selected statistics
-within the theory of permutation tests described by \cite{StrasserWeber1999}.
-The complete correlation structure of the statistics to be maximized 
-can be computed efficiently and 
-the conditional asymptotic distribution for a large class of maximally selected 
-statistics can be derived on the basis of \citet[Theorem~3]{StrasserWeber1999}. 
-A linear-time algorithm for the evaluation of this asymptotic distribution
-for potentially large numbers of cutpoints under test is proposed which 
-significantly improves upon approximations for the asymptotic distribution
+Based on the ideas underlying these established techniques, we suggest a new
+generalized class of maximally selected statstics that contains the tests
+above as special cases but also allows for direct construction of new test
+procedures for less standard test problems. For evaluating the distribution of
+the test statistics, a conditional inference approach is adopted by embedding
+the tests into the theory of permutation tests of \cite{StrasserWeber1999}.
+This permits efficient computation of the complete correlation structure
+of the statistics to be maximized. For statistics derived from cutpoints,
+the correlations have a special product form which we exploit for evaluation
+of the conditional asymptotic distribution: A new linear-time algorithm is proposed
+which enables the fast assessment of a large number of cutpoints and
+and improves significantly upon approximations for the asymptotic distribution
 currently in use. 
+
 Since no assumptions on the scale level of neither the covariate to be dichotomized nor
-the response variable are necessary, the general concept can be used to implement
-already published procedures and to extend the methodology to new areas of 
-application. As an application of the proposed framework we construct and
-apply a maximally selected log-rank statistic for an unordered bivariate covariate,
-namely T and N-category of rectal cancer patients.
-
-
+the response variable are necessary, the class of generalized maximally selected
+statistics can not only be used to implement already published procedures but also
+extend the methodology to new areas of application. We do so by constructing
+a maximally selected log-rank statistic for a censored response partitioned with
+respect to two ordered categorical covariates and potential interactions.
+This new test is employed to search for a high-risk group determined by the T and N-category
+of rectal cancer patients.
 %%Although the above sketched procedures are quite popular, most of them rely
 %%on rather rough approximations of the reference distribution. The exact conditional 
 %%distribution for small samples has been derived for binary response variables 
@@ -166,19 +168,16 @@ Consequently, inference can be based on the maximally selected
 absolute standardized statistics and the best separating partition 
 is the one for which the maximum is attained.
 
-Obtaining valid estimates of the mean and covariance of $\T$ 
-%FIXME% requires specification of a parametric model or the
-% "adoption" of non-parametric techniques such as permutation
-% or re-sampling approaches. Here, we adopt the latter and...
-requires a model to operate under and can be tedious. Alternatively,
-we can apply the permutation test framework established
-by \cite{StrasserWeber1999} by conditioning on all possible  
-permutations $S$ of the responses $\Y_1, \dots, \Y_n$. Within this 
-framework, closed-form expressions of the conditional expectation 
-$\mu = \E(\T | S) \in \R^{pq \times 1}$ and covariance
-$\Sigma = \V(\T | S) \in \R^{pq \times pq}$ of $\T$ under $H_0$ given
-all permutations $\sigma \in S$ of the responses are available, see
-\cite{StrasserWeber1999} or \cite{Hothornetal2006}.
+For obtaining valid estimates of the mean and covariance of $\T$, 
+either a parametric model needs to be specified or non-parametric techniques
+can be employed, such as permutation or re-sampling approaches.
+Here, we adopt the latter and utilize the permutation test framework
+established by \cite{StrasserWeber1999}. Thus, $\T$ is standardized
+via its conditional expectation $\mu = \E(\T | S) \in \R^{pq \times 1}$
+and covariance $\Sigma = \V(\T | S) \in \R^{pq \times pq}$, derived under
+$H_0$ by conditioning on all possible permutations $S$ of the responses
+$\Y_1, \dots, \Y_n$. Closed-form expressions for $\mu$ and $\Sigma$ are
+available, see \cite{StrasserWeber1999} or \cite{Hothornetal2006}.
 
 %%\begin{eqnarray*}
 %%\mu = \E(\T | S) & = & \vec \left( \left( \sum_{i = 1}^n g(\X_i) \right)
@@ -451,10 +450,10 @@ cat("\\end{tabular} \n")
 \end{center}
 \end{table}
 
+\setkeys{Gin}{width = 0.7\textwidth}
 \begin{figure}
 \begin{center}
-\caption{%FIXME: omitted?% Absolute standardized test statistics (left panel) and 
-Survival times of rectum cancer patients in two risk groups identified by a maximally selected log-rank
+\caption{Survival times of rectum cancer patients in two risk groups identified by a maximally selected log-rank
 statistic. \label{fig:maxstat}}
 <<maxstat, echo = FALSE, fig = TRUE, width = 7, height = 6>>=
 ###layout(matrix(1:2, ncol = 2))
@@ -469,21 +468,24 @@ text(85, 0.30, paste("N2 and N3 (plus N1 and ypT4); n =", table(risk)[1]))
 \end{figure}
 
 
-As an illustration, we attempt to identify patients with poor prognosis among 
-patients suffering from rectal 
-cancer treated with a neo-adjuvant chemoradiotherapy regime. Here, we
-search for a combination of pathological T and N categories that can help to 
-differentiate between two risk groups and develop a new maximally selected statistic
-for a censored response and two unordered covariates.
+Going beyond these established techniques is also easily possibly in less
+standard situations: New tests can be constructed by choosing an influence function 
+$h(\cdot)$ determined by the scale level of the response, and selecting a set of potential
+partitions $g(\cdot)$ determined by the available covariates.
+As an illustration, we attempt to identify a high- and low-risk groups of
+rectal cancer patients---treated with a neo-adjuvant chemoradiotherapy regime---by
+differentiating them with respect to their combination of pathological T and N category.
 Survival times of $n = \Sexpr{length(tc)}$ patients from the preoperative arm 
 of the CAO/ARO/AIO-94 trial \citep{Sauer2004} are under test ($48$ patients with distant
 metastases found at surgery were excluded from this analysis). 
-The response variable is censored, so we choose a log-rank transformation 
-as influence function $h$.
-%%From the potential $\Sexpr{2^(nlevels(preOP$tn)-1)}$ partitions,
-$\Sexpr{length(stat)}$ possible partitions 
-meet the sample size constraints. The maximum 
-of the absolute values
+Therefore, we propose a new maximally selected statistic for a censored response
+and two ordered covariates with potential interactions. Log-rank scores are used
+as influence function $h$ for the censored response and the potential paritions
+$g$ are constructed from all combinations of the five T and three N categories.
+As both categories are ordered, only those partitions are used which are ordered
+in T given N and vice versa. This yields 194 %FIXME% can we compute this?
+potential partitions, $\Sexpr{length(stat)}$ of which meet the sample size constraints.
+The maximum of the absolute values
 of the corresponding \Sexpr{length(stat)} standardized statistics is 
 \Sexpr{round(teststat, 3)} ($p$-value smaller than $0.0001$). 
 The partition chosen by the algorithm identifies all patients with
@@ -508,15 +510,17 @@ communicate and easy to implement in practical situations.
 Of course, the tradeoff between 
 between simplicity and accuracy has to be carefully investigated.
 
-The conceptual framework by \cite{StrasserWeber1999} allows for a unified treatment 
-of different kinds of maximally selected statistics. When we are faced with a new problem, 
-only the influence function $h$ needs to be newly designed. The complete correlation 
-structure is then available from the covariance matrix $\Sigma$. Moreover, the asymptotic
-distribution of the maximum statistic is known as well and can be evaluated efficiently
-%% in the most important situations %FIXME% simply omit
-by numerical integration techniques. We thereby extend
-the area of application of maximally selected statistics to problems with
-a potentially large number of possible cutpoints.
+The new class of generalized maximally selected statistics based on
+the conditional inference framework of \cite{StrasserWeber1999} allows for a unified treatment 
+of different kinds of maximally selected statistics. Test procedures from
+this framework can be adapted to new test problems by specifying an influence
+function $h$, suitable for the scale level of the response, and setting up a set
+of potential partitions $g$ determined from the available covariates. As
+the number of potential partitions can become large, efficient algorithms are
+required for evaluating the distribution of the maximum statistic. For
+partitions based on cutpoints, we provide such an algorithm that computes
+the asymptotic distribution in linear time by exploiting the special product
+structure of the correlation matrix and utilizing numerical integration techniques.
 
 The implementation of (known and newly designed) maximally selected statistics 
 only requires the specification of the binary partitions, via a function $g$, and
