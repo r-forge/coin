@@ -8,27 +8,29 @@ we hereby would like to submit our manuscript entitled
 
     Generalized Maximally Selected Statistics
 
-to Biometrics; the manuscript is attached to this email 
+to Biometrics; the manuscript is attached to this e-mail 
 as a PDF file.
 
 Maximally selected statistics for cutpoint estimation first appeared
 (as maximally selected chi-square statistics) in a Biometrics paper 
-in 1982. Since then, many extentions to continuous, censored or ordered 
-response variables have been proposed, mostly published by Biometrics 
+in 1982. Since then, many extensions to continuous, censored or ordered 
+response variables have been proposed, mostly published in Biometrics 
 as well. The technique is well established in applied research and 
-used extensively today, as studies published in highly
-ranked medical and biological journals indicate.
+used extensively today, as studies published in highly ranked
+medical and biological journals indicate.
 
-We show that most maximally selected statistics published so far 
-can be treated as special cases of a more general theory of conditional inference 
-procedures. As a consequence, methods for new situations can be derived 
-rather easily and we do so proposing a new method for maximally selected
-log-rank statistics in two ordered categorical variables.
+We propose a new class of generalized maximally selected statistics
+based on conditional inference techniques that contains many of the 
+published tests as special cases and can easily be utilized to construct
+new test procedures in less standard situations. We do so by deriving
+a maximally selected log-rank statistic in two ordered categorical
+variables (and their interaction) and applying it to survival times
+of rectal cancer patients. Moreover, a special correlation structure
+can be used to compute the asymptotic distribution of a large class
+of maximally selected statistics in linear time.
 
-Moreover, a special correlation structure can be used to compute the
-asymptotic distribution of a large class of maximally selected statistics
-in linear time. Because of its unifying nature, we think that our manuscript 
-is appropriate for the `Consultant's Forum'-Section of Biometrics.
+Because of its unifying nature, we think that our manuscript is
+appropriate for the `Consultant's Forum'-Section of Biometrics.
 
 Sincerely yours,
 
