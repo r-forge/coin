@@ -9,10 +9,11 @@ we hereby would like to submit our manuscript entitled
     Generalized Maximally Selected Statistics
 
 to Biometrics; the manuscript is attached to this email 
-as PDF file.
+as a PDF file.
 
-The first method of this kind, maximally selected chi-square statistics,
-was published by Biometrics in 1982. Since then, many extensions to
+The first maximally selected statistics procedure, namely maximally selected 
+chi-square statistics, was published by Biometrics in 1982. 
+Since then, many extentions to
 continuous, censored or ordered response variables have been proposed,
 mostly published by Biometrics as well. The technique is well established in
 applied research and used extensively today, as studies published in highly
@@ -22,7 +23,7 @@ We show that most maximally selected statistics known today can be treated
 as special cases of a more general theory of conditional inference 
 procedures. As a consequence, methods for new situations can be derived 
 rather easily and we do so proposing a new method for maximally selected
-log-rank statistics in two unordered variables.
+log-rank statistics in two ordered categorical variables.
 
 Moreover, a special correlation structure can be used to compute the
 asymptotic distribution of a large class of maximally selected statistics

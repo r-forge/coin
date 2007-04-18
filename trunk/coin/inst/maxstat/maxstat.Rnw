@@ -82,7 +82,7 @@ the tests into the theory of permutation tests of \cite{StrasserWeber1999}.
 This permits efficient computation of the complete correlation structure
 of the statistics to be maximized. For statistics derived from cutpoints,
 the correlations have a special product form which we exploit for evaluation
-of the conditional asymptotic distribution: A new linear-time algorithm is proposed
+of the conditional asymptotic distribution: A linear-time algorithm is described
 which enables the fast assessment of a large number of cutpoints and
 and improves significantly upon approximations for the asymptotic distribution
 currently in use. 
