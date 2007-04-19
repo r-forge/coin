@@ -512,7 +512,7 @@ in use since many years.
 Many researchers appreciate a model that is easy to 
 communicate and easy to implement in practical situations. 
 Of course, the tradeoff between 
-between simplicity and accuracy has to be carefully investigated.
+simplicity and accuracy has to be carefully investigated.
 
 The new class of generalized maximally selected statistics based on
 the conditional inference framework of \cite{StrasserWeber1999} allows for a unified treatment 
