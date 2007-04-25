@@ -1,0 +1,89 @@
+From biometrics@tibs.org Wed Apr 25 09:47:00 2007
+Date: Tue, 24 Apr 2007 13:19:31 -0500
+From: Biometrics <biometrics@tibs.org>
+To: torsten@hothorn.de
+Subject: Re: Submission #070428CF
+
+Dear Dr. Hothorn,
+
+Thank you for submitting your paper entitled, "Generalized maximally
+selected statistics," to Biometrics. The paper has been coded as 070428CF.
+Please quote this number in all future correspondence.
+
+You may check the status of the review of your paper at any time on the
+Journal's web site http://www.tibs.org/biometrics under Information for
+Authors. The current login name is your manuscript number and the password
+is the first author's last name (all lowercase).  We encourage you to change
+your password once you login.
+
+Once the review of your paper is complete we will e-mail the decision letter
+and any reports to you. Please keep us informed if your mail is changed.
+
+Details about preferred manuscript length and format are given on the
+Journal's web site.  Additional information about the review process and how
+Biometrics achieves an excellent performance for review times is also given.
+
+The review process has now started on your paper. I hope to be able to send
+a report to you within three months.
+
+Sincerely yours,
+
+Laurence Freedman
+
+_______________________________________________________________
+
+Biometrics - A Journal of the International Biometric Society
+
+Executive Editor:  Marie Davidian
+Co-Editors:  Laurence Freedman, Geert Molenberghs, Naisyin Wang
+Editorial Manager: Ann Hanhart
+
+Department of Physics
+The University of Texas at Arlington
+P.O. Box 19059
+Arlington, TX 76019-0059
+
+Phone:  817-272-7171
+Fax:  817-272-7172
+E-mail:  biometrics@tibs.org
+http://www.tibs.org/biometrics
+______________________________________________________________
+
+
+
+Torsten Hothorn wrote:
+
+> 
+> Dear Prof. Davidian,
+> 
+> we hereby would like to submit our manuscript entitled
+> 
+>     Generalized Maximally Selected Statistics
+> 
+> to Biometrics; the manuscript is attached to this e-mail
+> as a PDF file.
+> 
+> Maximally selected statistics for cutpoint estimation first appeared
+> (as maximally selected chi-square statistics) in a Biometrics paper
+> in 1982. Since then, many extensions to continuous, censored or ordered
+> response variables have been proposed, mostly published in Biometrics
+> as well. The technique is well established in applied research and
+> used extensively today, as studies published in highly ranked
+> medical and biological journals indicate.
+> 
+> We propose a new class of generalized maximally selected statistics
+> based on conditional inference techniques that contains many of the
+> published tests as special cases and can easily be utilized to construct
+> new test procedures in less standard situations. We do so by deriving
+> a maximally selected log-rank statistic in two ordered categorical
+> variables (and their interaction) and applying it to survival times
+> of rectal cancer patients. Moreover, a special correlation structure
+> can be used to compute the asymptotic distribution of a large class
+> of maximally selected statistics in linear time.
+> 
+> Because of its unifying nature, we think that our manuscript is
+> appropriate for the `Consultant's Forum'-Section of Biometrics.
+> 
+> Sincerely yours,
+> 
+> Torsten Hothorn and Achim Zeileis
