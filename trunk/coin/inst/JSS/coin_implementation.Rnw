@@ -64,7 +64,7 @@
   Kurt Hornik and Achim Zeileis\\
   Institut f\"ur Statistik \& Mathematik\\
   Wirtschaftsuniversit\"at Wien\\
-  1090 Wien, Austria\\
+  A-1090 Wien, Austria\\
   E-mail: \email{Kurt.Hornik@R-project.org}\\
   E-mail: \email{Achim.Zeileis@R-project.org}\\
 
@@ -91,7 +91,6 @@
 library("coin")
 set.seed(290875)
 ### get rid of the NAMESPACE
-## load(file.path(.find.package("coin"), "R", "all.rda"))
 attach(asNamespace("coin"))
 
 ### use UML? http://argouml.tigris.org/
@@ -158,7 +157,8 @@ toLatex.c2t <- function(object, center = TRUE, ...) {
 \section{Introduction}
 
 Conditioning on all admissible permutations of the data for testing 
-independence hypotheses is a very old, yet very powerful, idea. Conditional
+independence hypotheses is a very old, yet very powerful, idea
+\citep{fisher1935,Ernst2004}. Conditional
 inference procedures, or simply \textit{permutation} or \textit{re-randomization}
 tests, are rather popular and, consequently, are implemented in 
 many different statistical computing environments. These implementations
@@ -243,9 +243,13 @@ toLatex(c2t("IndependenceProblem"))
 scalar test statistics for testing $H_0$ from multivariate linear statistics
 of the form 
 \begin{eqnarray} \label{linstat}
-\T_j = \vec\left(\sum_{i = 1}^n I(b_i = j) w_i g(\X_i) h(\Y_i)^\top\right)
-\in \R^{pq} \text{ with } \T =  \sum_{j = 1}^k \T_j.
+\T =  \sum_{j = 1}^k \T_j \in \R^{pq}
 \end{eqnarray}
+where the linear statistic for each block is given by
+\begin{eqnarray*}
+\T_j = \vec\left(\sum_{i = 1}^n I(b_i = j) w_i g(\X_i) h(\Y_i)^\top\right)
+\in \R^{pq}.
+\end{eqnarray*}
 with `vec' and ${}^\top$ denoting the vec operator (which stacks the
 columns of a matrix one underneath the other) and transpose,
 respectively.  
@@ -320,17 +324,12 @@ then given by
 
 
 The linear statistic $\T$, its conditional expectation and covariance 
-are stored in objects of class \Rclass{IndependenceTestStatistic}:
-<<IndependenceTestStatistic, results = tex>>=
-toLatex(c2t("IndependenceTestStatistic"))
+are stored in objects of class \Rclass{IndependenceLinearStatistic}:
+<<IndependenceLinearStatistic, results = tex>>=
+toLatex(c2t("IndependenceLinearStatistic"))
 @
 Class \Rclass{VarCovar} represents either a complete covariance matrix 
-or its diagonal elements only. The slot \Rarg{standardizedlinearstatistic}
-contains the (possibly multivariate) linear statistic standardized by its 
-conditional expectation and variance. A univariate test statistic, 
-we high-light two important types of test statistics below,
-is stored in slot \Rarg{teststatistic}. The \Rarg{estimates} slot
-may contain parameter estimates where available.
+or its diagonal elements only. 
 
 \subsection{Test Statistics}
 
@@ -372,6 +371,16 @@ two-sided: & $\Prob(|c(\T, \mu, \Sigma)| \le |c(\mathbf{t}, \mu, \Sigma)|)$.
 \end{tabular}
 \end{center}
 
+Test statistics are represented by class \Rclass{IndependenceTestStatistic}
+<<IndependenceTestStatistic, results = tex>>=
+toLatex(c2t("IndependenceTestStatistic"))
+@
+The slot \Rarg{standardizedlinearstatistic}
+contains the (possibly multivariate) linear statistic standardized by its 
+conditional expectation and variance. An univariate test statistic $c$ is
+stored in slot \Rarg{teststatistic}. The \Rarg{estimates} slot
+may contain parameter estimates where available.
+
 For univariate statistics $c_\text{scalar}$ a special class
 <<ScalarIndependenceTestStatistic, results = tex>>=
 toLatex(c2t("ScalarIndependenceTestStatistic"))
@@ -400,8 +409,8 @@ The conditional distribution and thus the $p$-value
 of the statistic $c(\mathbf{t}, \mu, \Sigma)$ can be
 computed in several different ways. For some special forms of the
 linear statistic, the exact distribution of the test statistic is tractable.
-For two-sample problems, the shift-algorithm by \cite{axact-dist:1986} 
-and \cite{exakte-ver:1987} and the split-up algorithm by 
+For two-sample problems, the shift-algorithm by \cite{axact-dist:1986,exakte-ver:1987} 
+and the split-up algorithm by 
 \cite{vdWiel2001} are implemented as part of the package.
 Conditional Monte-Carlo procedures can be used to approximate the exact
 distribution. \citet[Theorem 2.3]{StrasserWeber1999} proved that the   
@@ -471,7 +480,8 @@ For conditional null distributions (class \Rclass{NullDistribution}),
 the following methods are available:
 \begin{description}
 \item[\Rcmd{pvalue()}:] computes the $p$-value (plus a confidence interval, in case
- Monte-Carlo procedures have been used).
+ Monte-Carlo procedures have been used) based on an observed test statistic $c$ and its
+ conditional null distribution.
 \item[\Rcmd{pperm()}:] evaluates the distribution function.
 \item[\Rcmd{dperm()}:] evaluates the density function. 
 \item[\Rcmd{qperm()}:] evaluates the quantile function.
@@ -658,11 +668,11 @@ js <- jobsatisfaction
 dimnames(js)$Job.Satisfaction <- c("VeryDiss", "ModDiss", 
                                    "ModSat", "VerySat")
 ftable(Job.Satisfaction ~ Gender + Income, data = js)
-@ %
-Here, we focus on conditional tests on independence of income and job
-satisfaction.  The conditional Cochran-Mantel-Haenszel test is simply
-based on a $\chi^2$ (quad-type) statistic derived from the contingency
-table: 
+@
+Here, we focus on conditional tests on independence 
+of income and job satisfaction. The conditional Cochran-Mantel-Haenszel test is
+based on a $\chi^2$ (quadratic form) statistic derived from the contingency table
+and a $\chi^2$ approximation of the null distribution is utilized traditionally:
 <<jobsatisfaction-it, echo = TRUE>>=
 independence_test(js, teststat = "quad")
 @
