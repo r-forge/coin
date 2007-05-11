@@ -20,8 +20,8 @@
 \Abstract{ The \pkg{coin} add-on package for \proglang{R} implements a
   unified approach to permutation tests. A huge class of test procedures
   for nominal, ordered, numeric, censored as well as multivariate
-  independence problems can be embedded into a common theory providing
-  a rich and flexible conceptual framework.  We
+  independence-type problems can be embedded into a common theory
+  providing a rich and flexible conceptual framework.  We
   propose and discuss an \proglang{S4} class structure and generic functions
   modeling the theory as closely as possible. As a consequence, the
   computational tools implemented by the \pkg{coin} package inherit the
@@ -91,7 +91,8 @@
 library("coin")
 set.seed(290875)
 ### get rid of the NAMESPACE
-load(file.path(.find.package("coin"), "R", "all.rda"))
+## load(file.path(.find.package("coin"), "R", "all.rda"))
+attach(asNamespace("coin"))
 
 ### use UML? http://argouml.tigris.org/
 
@@ -164,7 +165,7 @@ many different statistical computing environments. These implementations
 all follow the classical classification scheme of inference procedures and
 offer procedures for location problems, scale problems, correlation, 
 or nominal and ordered categorical data. Thus, each test procedure is 
-implemented independently, maybe with the exception of conditional 
+implemented separately, maybe with the exception of conditional 
 versions of linear rank statistics \citep{theory-of-:-1999}.
 
 Novel theoretical insights by \cite{StrasserWeber1999} open up the way
@@ -206,19 +207,19 @@ as proposed by \cite{StrasserWeber1999} along with the class structure the \pkg{
 package is based upon. Formal \proglang{S4} classes defining data objects, objects describing
 the inference problem and conditional test procedure are introduced and explained.
 
-We are dealing with variables $\Y$ and $\X$ from sample spaces 
+We deal with variables $\Y$ and $\X$ from sample spaces 
 $\mathcal{Y}$ and $\mathcal{X}$ which may
 be measured at arbitrary scales and may be multivariate as well.
 In addition, a factor $b$ measured at $k$ levels indicates a certain block
 structure of the observations, for example centers in a multi-center randomized
 clinical trial where only a re-randomization of observations within blocks
 is admissible. 
-We are interested in testing the null hypothesis of independence of $\Y$ and
-$\X$
+We are interested in testing the null hypothesis
 \begin{eqnarray*}
-H_0: D(\Y | \X, b) = D(\Y | b)
+  H_0: D(\Y | \X, b) = D(\Y | b)
 \end{eqnarray*}
-against arbitrary alternatives. 
+of conditional independence of $\Y$ and $\X$ within blocks~$b$ against
+arbitrary alternatives.
 
 \subsection{Data}
 
@@ -230,7 +231,7 @@ In addition to variables $\X$, $\Y$, and $b$ it is convenient (for
 example to efficiently represent large contingency tables)
 to allow for some integer-valued case weights $w_i$, indicating
 that $w_i$ observations with realizations $\Y_i$, $\X_i$ and $b_i$ 
-are available, defaulting to $w_i \equiv 1$.
+are available, with default $w_i \equiv 1$.
 This data structure is represented by class \Rclass{IndependenceProblem}:
 <<IndependenceProblem, results = tex>>=
 toLatex(c2t("IndependenceProblem"))
@@ -245,6 +246,9 @@ of the form
 \T_j = \vec\left(\sum_{i = 1}^n I(b_i = j) w_i g(\X_i) h(\Y_i)^\top\right)
 \in \R^{pq} \text{ with } \T =  \sum_{j = 1}^k \T_j.
 \end{eqnarray}
+with `vec' and ${}^\top$ denoting the vec operator (which stacks the
+columns of a matrix one underneath the other) and transpose,
+respectively.  
 Here, $g: \mathcal{X} \rightarrow \R^{p \times 1}$ is a transformation of
 the $\X$ measurements and $h: \mathcal{Y} \rightarrow
 \R^{q \times 1}$ is called \emph{influence function}. The function $h(\Y_i)
@@ -252,7 +256,7 @@ the $\X$ measurements and $h: \mathcal{Y} \rightarrow
 $(\Y_1, \dots, \Y_n)$, however only 
 in a permutation symmetric way, i.e., the value of the
 function must not depend on the order in which $\Y_1, \dots, \Y_n$ appear.
-The transformation $g$ and influence function $h$ as well as 
+The transformation~$g$ and influence function $h$ as well as 
 $g(\X_i)$ and $h(\Y_i), i = 1, \dots, n$, are attached to the data structure
 by extending class \Rclass{IndependenceProblem}:
 <<IndependenceTestProblem, results = tex>>=
@@ -279,7 +283,7 @@ all permutations $\sigma \in S$ of the responses are derived by
 
 Let $w_{\cdot j} = \sum_{i = 1}^n I(b_i = j)w_i$ denote the sum of the weights
 in block $j$. The conditional expectation of the influence 
-function $h$ in block $j$ is
+function $h$ in block $j$ 
 \begin{eqnarray*}
 \E(h | S_j) = w_{\cdot j}^{-1} \sum_i I(b_i = j)w_i h(\Y_i) \in \R^q
 \end{eqnarray*}
@@ -288,10 +292,14 @@ with corresponding $q \times q$ covariance matrix
 \V(h | S_j) = w_{\cdot j}^{-1} \sum_i I(b_i = j)w_i \left(h(\Y_i) - \E(h | S_j)
 \right) \left(h(\Y_i) - \E(h | S_j)\right)^\top.
 \end{eqnarray*}
-The conditional expectation and covariance of the linear statistic $\T_j$ in block $j$ is 
+The conditional expectation and covariance of the linear statistic
+$\T_j$ in block $j$ are
 \begin{eqnarray*}
 \mu_j & = & \E(\T | S_j) = \vec \left( \left( \sum_{i = 1}^n I(b_i = j)w_i g(\X_i) \right) \E(h | S_j)^\top
-\right) \text{ and } \nonumber \\
+\right)
+\end{eqnarray*}
+and
+\begin{eqnarray*}
 \Sigma_j & = & \V(\T | S_j) \nonumber \\
 & = &
     \frac{w_{\cdot j}}{w_{\cdot j} - 1}  \V(h | S_j) \otimes
@@ -303,10 +311,11 @@ The conditional expectation and covariance of the linear statistic $\T_j$ in blo
 \otimes \left( \sum_i I(b_i = j) w_i g(\X_i)\right)^\top
 \nonumber
 \end{eqnarray*}
-where $\otimes$ is the Kronecker product. The conditional expectation and
-covariance of $\T$, aggregated over all $k$ blocks, are then given by
+respectively, where $\otimes$ is the Kronecker product. The conditional
+expectation and covariance of $\T$, aggregated over all $k$ blocks, are
+then given by
 \begin{eqnarray*}
-\mu  = \sum_{j = 1}^k \mu_j \text{ and } \Sigma = \sum_{j = 1}^k \Sigma_j.
+\mu  = \sum_{j = 1}^k \mu_j, \qquad \Sigma = \sum_{j = 1}^k \Sigma_j.
 \end{eqnarray*}
 
 
@@ -318,9 +327,9 @@ toLatex(c2t("IndependenceTestStatistic"))
 Class \Rclass{VarCovar} represents either a complete covariance matrix 
 or its diagonal elements only. The slot \Rarg{standardizedlinearstatistic}
 contains the (possibly multivariate) linear statistic standardized by its 
-conditional expectation and variance. An univariate test statistic, 
+conditional expectation and variance. A univariate test statistic, 
 we high-light two important types of test statistics below,
-are stored in slot \Rarg{teststatistic}. The \Rarg{estimates} slot
+is stored in slot \Rarg{teststatistic}. The \Rarg{estimates} slot
 may contain parameter estimates where available.
 
 \subsection{Test Statistics}
@@ -373,15 +382,14 @@ objects of class \Rclass{MaxTypeIndependenceTestStatistic}:
 toLatex(c2t("MaxTypeIndependenceTestStatistic"))
 @
 both defining a character vector specifying the alternative to 
-test against (\Rcmd{two.sided}, \Rcmd{greater} and \Rcmd{less}).
+test against (\Rcmd{"two.sided"}, \Rcmd{"greater"} and \Rcmd{"less"}).
 
 Alternatively, a quadratic form $c_\text{quad}(\mathbf{t}, \mu, \Sigma)  =
 (\mathbf{t} - \mu) \Sigma^+ (\mathbf{t} - \mu)^\top$ can be used as test statistic. It
 is computationally more expensive because the Moore-Penrose 
 inverse $\Sigma^+$ of $\Sigma$ is involved. Such statistics are represented
 by objects of class \Rclass{QuadTypeIndependenceTestStatistic} defining slots 
-for the conditional covariance matrix $\Sigma^+$ and
-its rank (degrees of freedom):
+for $\Sigma^+$ and its rank (degrees of freedom):
 <<QuadTypeIndependenceTestStatistic, results = tex>>=
 toLatex(c2t("QuadTypeIndependenceTestStatistic"))
 @
@@ -396,7 +404,7 @@ For two-sample problems, the shift-algorithm by \cite{axact-dist:1986}
 and \cite{exakte-ver:1987} and the split-up algorithm by 
 \cite{vdWiel2001} are implemented as part of the package.
 Conditional Monte-Carlo procedures can be used to approximate the exact
-distribution. \cite{StrasserWeber1999} proved (Theorem 2.3) that the   
+distribution. \citet[Theorem 2.3]{StrasserWeber1999} proved that the   
 conditional distribution of linear statistics $\T$ with conditional    
 expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
 distribution with parameters $\mu$ and $\Sigma$ as $w_{\cdot j} \rightarrow \infty$ for all $j = 1, \dots, k$. 
@@ -429,10 +437,10 @@ A new method for computing or approximating the conditional distribution
 can be implemented by defining a dedicated class (and corresponding methods) 
 extending \Rclass{NullDistribution}.
 
-For maximum-type statistics $c_\text{max}$, single-step and step-down 
-multiplicity adjusted $p$-values based on the limiting distribution and 
-conditional Monte-Carlo methods \citep[see][]{WestfallYoung1993} are available
-in addition.
+For maximum-type statistics $c_\text{max}$, single-step and step-down
+multiplicity adjusted $p$-values based on the limiting distribution and
+conditional Monte-Carlo methods \citep[see][]{WestfallYoung1993} are
+available as well.
 
 \subsection{Conditional Tests}
 
@@ -459,8 +467,8 @@ class \Rclass{IndependenceTestStatistic}:
                           $\text{diag}(\Sigma)$.
 \end{description}
 
-For null distributions (class \Rclass{NullDistribution}), the following methods
-are available:
+For conditional null distributions (class \Rclass{NullDistribution}),
+the following methods are available:
 \begin{description}
 \item[\Rcmd{pvalue()}:] computes the $p$-value (plus a confidence interval, in case
  Monte-Carlo procedures have been used).
@@ -471,7 +479,7 @@ are available:
 \end{description}
 Of course, all methods are defined for objects inheriting from class 
 \Rclass{IndependenceTest} as well. In addition, \Rcmd{show()} methods
-are defined for class \Rclass{ScalarIndependenceTest}, \Rclass{MaxTypeIndependenceTest}
+are defined for classes \Rclass{ScalarIndependenceTest}, \Rclass{MaxTypeIndependenceTest}
 and \Rclass{QuadTypeIndependenceTest}, converting these \proglang{S4} 
 objects to an informal \proglang{S3} object of class \Rclass{htest} for which
 a \Rcmd{print()} method most \proglang{R} users are familiar with is available.
@@ -486,20 +494,20 @@ A \Rcmd{confint()} method is available for these special cases.
 
 \section{User Interfaces}
 
-While the internal structures make use of the \proglang{S4} class system,
-the user interface is written in \proglang{S3} style. At least partially, 
-this choice is due to the laziness of the authors, however, it was our aim
-to mimic the user interfaces of the classical tests, such as 
+While the internal structures make use of the \proglang{S4} class
+system, the user interface is written in \proglang{S3} style to mimic
+the familiar user interfaces of the classical tests, such as
 \Rcmd{wilcox.test}, as closely as possible. Formula and table methods
-are implemented for \Rcmd{independence\_test} and wrapper functions (where appropriate);
-existing methods for \Rclass{htest} are utilized for formatting output.
+are implemented for \Rcmd{independence\_test} and wrapper functions
+(where appropriate); existing methods for \Rclass{htest} are utilized
+for formatting output.
 
 \subsection{General Independence Tests}
 
-The \proglang{S3} generic function \Rcmd{independence\_test} has methods for tables 
-(in case both
-$\X$ and $\Y$ being univariate factors), formulae and 
-and objects of class \Rclass{IndependenceProblem}. The definition of the latter is
+The \proglang{S3} generic function \Rcmd{independence\_test} has methods
+for tables (in case both $\X$ and $\Y$ are univariate factors), formulae
+and objects of class \Rclass{IndependenceProblem}.  The definition of
+the latter is
 \begin{Sinput}
 independence_test(object, 
     teststat = c("max", "quad", "scalar"),
@@ -515,7 +523,7 @@ see below) defining the linear statistic and its conditional expectation and cov
 Three types of test statistics are hard-coded. The (approximation) of the 
 null distribution to be used as reference distribution can be chosen either by a
 character string or by functions \Rcmd{exact()}, \Rcmd{approximate()} and \Rcmd{asymptotic()}
-which also take care for the correct specification of additional arguments, 
+which also take care of the correct specification of additional arguments, 
 such as the number of permutations to draw randomly in a conditional Monte-Carlo procedure.
 This mechanism allows for user-supplied algorithms to compute or
 approximate the exact conditional distribution: An function taking an
@@ -537,16 +545,17 @@ specified as arguments to \Rcmd{trafo()}.
 
 \subsection{Formula and Table Methods}
 
-A \Rclass{formula} interface as well as a \Rclass{table} method for \Rcmd{independence\_test} 
-are available in addition. The left hand side variables of a formula are interpreted 
-as $\Y$ variables (univariate and possibly multivariate), the right hand side is taken
-for $\X$ (univariate and multivariate as well). The blocking factor is specified after the pipe
-symbol. So, for example, the formula
+A \Rclass{formula} interface as well as a \Rclass{table} method for
+\Rcmd{independence\_test} are available in addition. The left hand side
+variables of a formula are interpreted as $\Y$ variables (univariate or
+possibly multivariate), the right hand side is taken for $\X$
+(univariate or multivariate as well). The blocking factor can specified
+after a vertical bar.  So, for example, the formula
 \begin{Sinput}
 y1 + y2 ~ x1 + x2 | block
 \end{Sinput}
 leads to a test of independence between two $\Y$ variables and two $\X$ variables (in case
-all variables are numeric our linear statistic is four-dimensional with 
+all variables are numeric the linear statistic is four-dimensional with 
 $p = 2$ and $q = 2$) for each level in \Robject{block}. As usual, \Rarg{data}, \Rarg{weights}
 and \Rarg{subset} arguments can be specified as well.
 
@@ -555,14 +564,16 @@ Two- and three-dimensional tables can be supplied to the \Rclass{table} method o
 
 \subsection{Specialized Convenience Functions}
 
-For a bunch of classical tests (some of them already implemented in base 
-package \pkg{stats}), their conditional counterpart is made easily accessible. Wrapper functions
-for the most important procedures, such as the Wilcoxon Mann-Whitney or Cochran-Mantel-Haenszel
-tests, are listed in Table~\ref{confct}.
-Almost all special-purpose functionality implemented in packages \pkg{exactRankTests} 
-\citep{Rnews:Hothorn:2001,HothornHornik:2002:CompStat,pkg:exactRankTests} and \pkg{maxstat}
-\citep{Rnews:Hothorn+Lausen:2002,pkg:maxstat} has been rewritten with
-the \pkg{coin} tools so that both preceding packages will become deprecated in the future.
+For a variety of classical tests (some of them already implemented in
+base package \pkg{stats}), their conditional counterpart is made easily
+accessible. Wrapper functions for the most important procedures, such as
+the Wilcoxon Mann-Whitney or Cochran-Mantel-Haenszel tests, are listed
+in Table~\ref{confct}.  Almost all special-purpose functionality
+implemented in packages \pkg{exactRankTests}
+\citep{Rnews:Hothorn:2001,HothornHornik:2002:CompStat,pkg:exactRankTests}
+and \pkg{maxstat} \citep{Rnews:Hothorn+Lausen:2002,pkg:maxstat} can
+conveniently be provided within the \pkg{coin} framework, so that both
+these packages will become deprecated in the future.
 
 
 \begin{sidewaystable}
@@ -616,8 +627,8 @@ Wilcoxon Signed Rank & \Rcmd{wilcoxsign\_test()} & \Rcmd{f\_trafo()} & \Rcmd{ran
 
 The core functionality, i.e., a small set of 
 functions computing the linear statistic $\T$ for the original data as well
-for permuted versions of the original data, the conditional expectation $\mu$
-and conditional covariate matrix~$\Sigma$, is coded in \proglang{C}. 
+for permuted versions of the original data, the conditional expectation~$\mu$
+and conditional covariance matrix~$\Sigma$, is coded in \proglang{C}. 
 The shift and split-up algorithms \citep{axact-dist:1986,exakte-ver:1987,vdWiel2001}
 for computing the exact null distribution in univariate two-sample problems
 as well as conditional Monte-Carlo procedures for approximating the
@@ -638,18 +649,20 @@ unit testing.
 
 \section{An Example}
 
-The job satisfaction data \citep[Table 7.8,][]{agresti2002} is a three-dimensional
-contingency table with variables \Robject{Income} and \Robject{Job.Satisfaction}
-for both \Robject{Gender}s (labels slightly modified for convenience):
+The job satisfaction data \citep[Table 7.8,][]{agresti2002} is a
+three-dimensional contingency table with variables \Robject{Income} and
+\Robject{Job.Satisfaction} according to \Robject{Gender} (labels
+slightly modified for convenience):
 <<js, echo = TRUE>>=
 js <- jobsatisfaction
 dimnames(js)$Job.Satisfaction <- c("VeryDiss", "ModDiss", 
-                                   "ModSat.", "VerySat")
+                                   "ModSat", "VerySat")
 ftable(Job.Satisfaction ~ Gender + Income, data = js)
-@
-Here, we focus on conditional tests on independence 
-of income and job satisfaction. The conditional Cochran-Mantel-Haenszel is
-simply a $\chi^2$ statistic derived from the contingency table:
+@ %
+Here, we focus on conditional tests on independence of income and job
+satisfaction.  The conditional Cochran-Mantel-Haenszel test is simply
+based on a $\chi^2$ (quad-type) statistic derived from the contingency
+table: 
 <<jobsatisfaction-it, echo = TRUE>>=
 independence_test(js, teststat = "quad")
 @
@@ -670,14 +683,15 @@ This contingency table in standardized form reads
 <<jobsatisfaction-stat, echo = TRUE>>=
 statistic(cmh_test(js), "standardized")
 @
-Instead of using a $\chi^2$ statistic collapsing the whole table via a quadratic form, we might
+Instead of using a $\chi^2$ statistic collapsing the whole table via a quadratic form, one might
 want to use the maximum of the absolute values of the standardized cells as test statistic.
-This new test (at least we are not aware of a name for such a procedure) is easily set-up:
+This new test (at least we are not aware of a name for such a procedure)
+is set up  easily:
 <<jobsatisfaction-max, echo = TRUE>>=
 independence_test(js, teststat = "max")
 @
 with its conditional asymptotical null distribution being 
-immediately available (because of the joint multivariate normal probability
+available immediately (because of the joint multivariate normal probability
 of the contingency table $\T$). Single-step adjusted $p$-values for each
 cell of the contingency table corresponding to this maximum-test
 can be computed via
@@ -700,16 +714,16 @@ we refer to \cite{Hothorn:2006:AmStat}.
 
 \section{Quality Assurance}
 
-The test procedures implemented in package \pkg{coin} are continuously checked
-against results obtained by the corresponding implementations in package
-\pkg{stats} (where available). In addition, the test statistics and   
-exact, approximative and asymptotic $p$-values for data examples given in the
-\pkg{StatXact-6} 
-user manual \citep{StatXact6} are compared with the results reported in the
-\pkg{StatXact-6} manual. Step-down multiple adjusted $p$-values have been
-checked against results reported by \Rcmd{mt.maxT} from package
-\pkg{multtest} \citep{PKG:multtest}. For details on the test procedures we refer to
-the \proglang{R}-transcript files in directory \code{coin/tests}.
+The test procedures implemented in package \pkg{coin} are continuously
+checked against results obtained by the corresponding implementations in
+package \pkg{stats} (where available). In addition, the test statistics
+and exact, approximative and asymptotic $p$-values for data examples
+given in the \pkg{StatXact-6} user manual \citep{StatXact6} are compared
+with the results reported there. Step-down multiple adjusted $p$-values
+have been checked against results reported by \Rcmd{mt.maxT} from
+package \pkg{multtest} \citep{PKG:multtest}. For details on the test
+procedures we refer to the \proglang{R} transcript files in directory
+\code{coin/tests} of the \pkg{coin} package sources.
 
 \section{Computational Details}
 
