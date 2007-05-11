@@ -536,7 +536,7 @@ character string or by functions \Rcmd{exact()}, \Rcmd{approximate()} and \Rcmd{
 which also take care of the correct specification of additional arguments, 
 such as the number of permutations to draw randomly in a conditional Monte-Carlo procedure.
 This mechanism allows for user-supplied algorithms to compute or
-approximate the exact conditional distribution: An function taking an
+approximate the exact conditional distribution: A function taking an
 object inheriting from \Rclass{IndependenceTestStatistic} and returning
 an object of class \Rclass{NullDistribution} can be specified as \Rcmd{distribution}
 argument to \Rcmd{independence\_test}.
@@ -727,7 +727,7 @@ we refer to \cite{Hothorn:2006:AmStat}.
 The test procedures implemented in package \pkg{coin} are continuously
 checked against results obtained by the corresponding implementations in
 package \pkg{stats} (where available). In addition, the test statistics
-and exact, approximative and asymptotic $p$-values for data examples
+and exact, approximate and asymptotic $p$-values for data examples
 given in the \pkg{StatXact-6} user manual \citep{StatXact6} are compared
 with the results reported there. Step-down multiple adjusted $p$-values
 have been checked against results reported by \Rcmd{mt.maxT} from
