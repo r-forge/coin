@@ -48,7 +48,7 @@
   permutation tests providing a huge class of independence tests  
   for nominal, ordered, numeric, and censored data as well as
   multivariate data at mixed scales. Based on a rich and flexible
-  conceptual framework that embeds the underlying test procedures into a common
+  conceptual framework that embeds different permutation test procedures into a common
   theory, a computational framework is established in \pkg{coin} that
   likewise embeds the corresponding \proglang{R} functionality in a common
   \proglang{S4} class structure with associated generic functions.
@@ -151,7 +151,7 @@ toLatex.c2t <- function(object, center = TRUE, ...) {
     ### slots
     RET <- c(RET, " & \\\\", "Slot & Class \\\\ \\hline ",
              apply(object, 1, function(x) {
-                 x <- cbind(paste("\\Rcmd{", x[1], "}", sep = ""),
+                 x <- cbind(paste("\\code{", x[1], "}", sep = ""),
                             paste("\\Rclass{", x[2], "}", sep = ""))
                  paste(paste(x, collapse = " & "), "\\\\")
              }),
@@ -212,16 +212,16 @@ are offered as well.
 \section{Theory and classes}
 
 We first focus on the conceptual framework for conditional inference procedures
-as proposed by \cite{StrasserWeber1999} along with the class structure the \pkg{coin}
-upon which the package is based. Formal \proglang{S4} classes defining data objects, objects describing
+as proposed by \cite{StrasserWeber1999} along with the class structure upon which
+the \pkg{coin} package is based. Formal \proglang{S4} classes defining data objects, objects describing
 the inference problem and conditional test procedure are introduced and explained.
 
 We deal with variables $\Y$ and $\X$ from sample spaces 
 $\mathcal{Y}$ and $\mathcal{X}$ which may
 be measured at arbitrary scales and may be multivariate as well.
 In addition, $b \in \{1, \dots, k\}$, a factor measured at $k$ levels, indicates a certain block
-structure of the observations: for example centers in a multi-center randomized
-clinical trial where only a re-randomization of observations within blocks
+structure of the observations: for example study centers in a
+multi-center randomized clinical trial where only a re-randomization of observations within blocks
 is admissible. 
 We are interested in testing the null hypothesis
 \begin{eqnarray*}
@@ -619,7 +619,7 @@ these packages will become deprecated in the future.
 \begin{center}
 \begin{tabular}{lllll} \\
 %%%\multicolumn{5}{c}{Independent Samples} \\
-Test & Wrapper Function & \Rcmd{xtrafo} $g$ & \Rcmd{ytrafo} $h$ & \Rcmd{teststat} $c$ \\ \hline
+Test & Wrapper Function & \code{xtrafo} $g$ & \code{ytrafo} $h$ & \code{teststat} $c$ \\ \hline
 \multicolumn{5}{c}{} \\
 \multicolumn{5}{c}{Independent Samples} \\
 \multicolumn{5}{c}{} \\
