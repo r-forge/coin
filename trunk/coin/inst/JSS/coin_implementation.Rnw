@@ -170,17 +170,24 @@ toLatex.c2t <- function(object, center = TRUE, ...) {
 \section{Introduction}
 
 Conditioning on all admissible permutations of the data for testing 
-independence hypotheses is a very old, yet very powerful, %Z% this sounds somewhat weak
+independence hypotheses is a very old, yet very powerful and popular, 
 idea \citep{fisher1935,Ernst2004}. Conditional
 inference procedures, or simply \textit{permutation} or \textit{re-randomization}
-tests, are rather popular %Z% this is definitely to weak
-and, consequently, are implemented in 
-many different statistical computing environments. These implementations %Z% examples?
+tests, are implemented in 
+many different statistical computing environments.
+These implementations, for example 
+\Rcmd{wilcox.test} for the Wilcoxon-Mann-Whitney test or
+\Rcmd{mantelhaen.test} for the Cochran-Mantel-Haenszel $\chi^2$ test in the
+\proglang{S} language or the tools implemented in \proglang{StatXact}, \proglang{LogXact},
+\proglang{Stata}, and \proglang{Testimate}
+\citep[see][for an overview]{Oster2002,Oster2003},
 all follow the classical classification scheme of inference procedures and
 offer procedures for location problems, scale problems, correlation, 
-or nominal and ordered categorical data. Thus, each test procedure is 
+or nominal and ordered categorical data. 
+Thus, each test procedure is 
 implemented separately, maybe with the exception of conditional 
-versions of linear rank statistics \citep{theory-of-:-1999}.
+versions of linear rank statistics \citep{theory-of-:-1999} in \texttt{NPAR1WAY}
+as available in \proglang{SAS}.
 
 Novel theoretical insights by \cite{StrasserWeber1999} open up the way
 to a unified treatment of a huge class of permutation
@@ -228,8 +235,8 @@ We are interested in testing the null hypothesis
   H_0: D(\Y | \X, b) = D(\Y | b)
 \end{eqnarray*}
 of conditional independence of $\Y$ and $\X$ within blocks~$b$ against
-arbitrary alternatives. %Z% expand on this so that later on it is clear what
-                        %Z% one- or two-sided alternatives are.
+arbitrary alternatives, for example shift or scale alternatives, linear trends,
+association in contingency tables etc.
 
 \subsection{Data} \label{sec:data}
 
@@ -278,10 +285,12 @@ toLatex(c2t("IndependenceTestProblem"))
 The \code{ytrafo} and \code{xtrafo} slots correspond to the influence
 function $h$ and transformation $g$, respectively. The $i$th row of the 
 $n \times q$ matrix \code{ytrans} corresponds to $h(\Y_i)$. Similar, 
-the rows of \code{xtrans} ($n \times p$) correspond to $g(\X_i)$.
-%Z% The role of g() and h() has to be illustrated at least briefly
-%Z% to give the readers a chance to understand what is going on.
-%Z% (The paper should be self-contained.)
+the rows of \code{xtrans} ($n \times p$) correspond to $g(\X_i)$. 
+
+In the simplest case of both $\X$ and $\Y$ being univariate 
+factors at $p$ and $q$ levels, $g$ and $h$ are 
+the corresponding dummy codings and the linear statistic $\T$ is the
+(vectorized) $p \times q$ contingency table of $\X$ and $\Y$.
 
 \subsection{Conditional expectation and covariance}
 
@@ -346,19 +355,29 @@ or its diagonal elements only.
 
 \subsection{Test statistics}
 
-%Z% I guess this could be re-structured, first giving the general approach (with implementation)
-%Z% and then the three special cases. Currently, the mixing is somewhat confusing.
-
 Univariate test statistics~$c$ mapping an observed linear
 statistic $\mathbf{t} \in
 \R^{pq}$ into the real line can be of arbitrary form. 
 Having the conditional expectation and covariance at hand we are able to
 standardize an observed linear statistic $\t \in \R^{pq}$ of the form
 (\ref{linstat}) by
-\begin{eqnarray*}
-\frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}}. %Z% we really need a symbol for this
-                                                    %Z% maybe \z? :-)
-\end{eqnarray*}
+\begin{eqnarray} \label{standstat}
+\z = \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}}. 
+\end{eqnarray}
+Test statistics are represented by class \Rclass{IndependenceTestStatistic}
+<<IndependenceTestStatistic, results = tex>>=
+toLatex(c2t("IndependenceTestStatistic"))
+@
+The slot \code{standardizedlinearstatistic}
+contains $\z$, the (possibly multivariate) linear statistic standardized by its 
+conditional expectation and variance (\ref{standstat}). 
+A univariate test statistic $c$ is
+stored in slot \code{teststatistic}. The \code{estimates} slot
+may contain parameter estimates where available, for example 
+an estimate and corresponding confidence interval for a shift parameter
+derived from a conditional Wilcoxon-Mann-Whitney test.
+
+
 In case of univariate linear statistics $\t$ (with $pq = 1$), the test statistic $c$
 is simply the standardized linear statistic
 \begin{eqnarray*}
@@ -366,14 +385,13 @@ c_\text{scalar}(\t, \mu, \Sigma) = \frac{\t - \mu}{\sqrt{\Sigma}}.
 \end{eqnarray*} 
 In the multivariate case ($pq > 1$), a maximum-type statistic of the form
 \begin{eqnarray*}
-c_\text{max}(\mathbf{t}, \mu, \Sigma)  = \max \left| \frac{\mathbf{t} -
-\mu}{\text{diag}(\Sigma)^{1/2}} \right|
+c_\text{max}(\mathbf{t}, \mu, \Sigma)  = \max \left| \z \right|
 \end{eqnarray*}
 is appropriate. This version for the two-sided situation is to be replaced by
 \begin{eqnarray*}
-\min \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
+\min \left( \z \right)
     \quad \text{(less) and } 
-\max \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
+\max \left( \z \right)
     \quad \text{(greater)}
 \end{eqnarray*}
 in the one-sided case.
@@ -388,19 +406,7 @@ two-sided: & $\Prob(|c(\T, \mu, \Sigma)| \le |c(\mathbf{t}, \mu, \Sigma)|)$.
 \end{tabular}
 \end{center}
 
-%Z% Without further explanation the alternative discussion is a bit cryptic.
-
-Test statistics are represented by class \Rclass{IndependenceTestStatistic}
-<<IndependenceTestStatistic, results = tex>>=
-toLatex(c2t("IndependenceTestStatistic"))
-@
-The slot \code{standardizedlinearstatistic}
-contains the (possibly multivariate) linear statistic standardized by its 
-conditional expectation and variance. A univariate test statistic $c$ is
-stored in slot \code{teststatistic}. The \code{estimates} slot
-may contain parameter estimates where available. %Z% This is rather vague...
-
-For univariate statistics $c_\text{scalar}$ a special class
+For univariate statistics $c_\text{scalar}(\t, \mu, \Sigma)$ a special class
 <<ScalarIndependenceTestStatistic, results = tex>>=
 toLatex(c2t("ScalarIndependenceTestStatistic"))
 @
@@ -438,7 +444,7 @@ expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
 distribution with parameters $\mu$ and $\Sigma$ as $w_{\cdot j} \rightarrow \infty$ for all $j = 1, \dots, k$. 
 Thus, the asymptotic conditional distribution of test statistics of the
 form $c_\text{max}$ is normal and
-can be computed directly in the univariate case ($pq = 1$) %Z% shouldn't we use the c_scalar notation now?
+can be computed directly in the univariate case ($pq = 1$) 
 or approximated by numerical algorithms
 \citep[quasi-randomized Monte-Carlo procedures][]{numerical-:1992}
 in the multivariate setting. For quadratic forms
@@ -486,8 +492,8 @@ toLatex(c2t("IndependenceTest"))
 Methods for the following generic functions are defined for 
 class \Rclass{IndependenceTestStatistic}:
 \begin{description}
-\item[\Rcmd{statistic}:] extracts the linear statistic $\T$, 
-                           the standardized statistic or test statistic.
+\item[\Rcmd{statistic}:] extracts the linear statistic $\t$, 
+                           the standardized statistic $\z$ or test statistic $c(\t, \mu, \Sigma)$.
 \item[\Rcmd{expectation}:] extracts the conditional expectation $\mu$.
 \item[\Rcmd{covariance}:] extracts the complete conditional covariance matrix 
                             $\Sigma$ (if available).
@@ -507,9 +513,7 @@ the following methods are available:
 \item[\Rcmd{support}:] returns the support of the null distribution. %Z% in which form?
 \end{description}
 Of course, all methods are defined for objects inheriting from class 
-\Rclass{IndependenceTest} as well. %Z% ...simply extracting the corresponding quantity
-                                   %Z% from the contained \Rclass{IndependenceTestStatistic}. ?
-In addition, \Rcmd{show} methods
+\Rclass{IndependenceTest} as well. In addition, \Rcmd{show} methods
 are defined for classes \Rclass{ScalarIndependenceTest}, \Rclass{MaxTypeIndependenceTest}
 and \Rclass{QuadTypeIndependenceTest}, converting these \proglang{S4} 
 objects to an informal \proglang{S3} object of class \Rclass{htest} for which
@@ -611,10 +615,6 @@ and \pkg{maxstat} \citep{Rnews:Hothorn+Lausen:2002,pkg:maxstat} can
 conveniently be provided within the \pkg{coin} framework, so that both
 these packages will become deprecated in the future.
 
-%Z% Maybe cor_test() as an analogon to cor.test()?
-%Z% Or maybe change spearman_test() to cor_test() with a similar interface
-%Z% as cor.test and also report sample estimates?
-
 \begin{sidewaystable}
 \begin{center}
 \begin{tabular}{lllll} \\
@@ -646,7 +646,7 @@ Pearson's $\chi^2$ & \Rcmd{chisq_test} & \Rcmd{f_trafo} & \Rcmd{f_trafo} &
 Cochran-Armitage / Linear Association & \Rcmd{lbl_test} & scores & any &
 \code{"scalar"} \\
 $K$-sample permutation test & \Rcmd{oneway_test} & \Rcmd{f_trafo} & any & any \\
-Maximally Selected Statistics & \Rcmd{maxstat_test} & \Rcmd{maxstat_trafo} & any & \code{"max"} \\
+Maximally selected statistics & \Rcmd{maxstat_test} & \Rcmd{maxstat_trafo} & any & \code{"max"} \\
 \multicolumn{5}{c}{} \\
 \multicolumn{5}{c}{Dependent Samples} \\
 \multicolumn{5}{c}{} \\
@@ -687,6 +687,10 @@ be called from \proglang{R} via the \Rcmd{.Call} interface (\code{R_}\textit{foo
 Such functions are available for most of the internal \proglang{C} functions to enable
 unit testing.
 
+The \pkg{coin} package imports packages \pkg{mvtnorm} \cite{PKG:mvtnorm} 
+for the
+evaluation of the multivariate normal distribution and package \pkg{modeltools}
+\cite{PKG:modeltools} for formula parsing.
 
 \section{An example}
 
@@ -726,10 +730,7 @@ statistic(cmh_test(js), "standardized")
 @
 Instead of using a $\chi^2$ statistic collapsing the whole table via a quadratic form, one might
 want to use the maximum of the absolute values of the standardized cells as test statistic.
-This new test (at least we are not aware of a name for such a procedure)
-%Z% I wouldn't know a name either, but the test is definitely not new...
-%Z% Simply omit the remarks pertaining to novelty.
-is set up  easily:
+This maximum-type test is set up  easily:
 <<jobsatisfaction-max, echo = TRUE>>=
 independence_test(js, teststat = "max")
 @
@@ -761,7 +762,7 @@ The test procedures implemented in package \pkg{coin} are continuously
 checked against results obtained by the corresponding implementations in
 package \pkg{stats} (where available). In addition, the test statistics
 and exact, approximate and asymptotic $p$~values for data examples
-given in the \pkg{StatXact}~6 user manual \citep{StatXact6} are compared
+given in the \proglang{StatXact}~6 user manual \citep{StatXact6} are compared
 with the results reported there. Step-down multiple adjusted $p$~values
 have been checked against results reported by \Rcmd{mt.maxT} from
 package \pkg{multtest} \citep{PKG:multtest}. For details on the test
