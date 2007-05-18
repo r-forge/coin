@@ -360,7 +360,7 @@ statistic $\mathbf{t} \in
 \R^{pq}$ into the real line can be of arbitrary form. 
 Having the conditional expectation and covariance at hand we are able to
 standardize an observed linear statistic $\t \in \R^{pq}$ of the form
-(\ref{linstat}) by
+given in Equation~\ref{linstat} by
 \begin{eqnarray} \label{standstat}
 \z = \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}}. 
 \end{eqnarray}
@@ -370,7 +370,7 @@ toLatex(c2t("IndependenceTestStatistic"))
 @
 The slot \code{standardizedlinearstatistic}
 contains $\z$, the (possibly multivariate) linear statistic standardized by its 
-conditional expectation and variance (\ref{standstat}). 
+conditional expectation and variance (Equation~\ref{standstat}). 
 A univariate test statistic $c$ is
 stored in slot \code{teststatistic}. The \code{estimates} slot
 may contain parameter estimates where available, for example 
@@ -687,10 +687,10 @@ be called from \proglang{R} via the \Rcmd{.Call} interface (\code{R_}\textit{foo
 Such functions are available for most of the internal \proglang{C} functions to enable
 unit testing.
 
-The \pkg{coin} package imports packages \pkg{mvtnorm} \cite{PKG:mvtnorm} 
-for the
-evaluation of the multivariate normal distribution and package \pkg{modeltools}
-\cite{PKG:modeltools} for formula parsing.
+The \pkg{coin} package imports packages \pkg{mvtnorm}
+\citep{PKG:mvtnorm} for the evaluation of the multivariate normal
+distribution and package \pkg{modeltools} \citep{PKG:modeltools} for
+formula parsing.
 
 \section{An example}
 
