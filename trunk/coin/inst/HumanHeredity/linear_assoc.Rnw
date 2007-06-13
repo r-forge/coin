@@ -366,36 +366,36 @@ For a simple bi-allelic marker the data can be presented in a $3 \times 2$ conti
     \hline
        & Cases & Controls & Total \\
  \hline
- aa		& 		$r_0$ & $s_0$	& $n_0$\\
- aA		& 		$r_1$ & $s_1$	& $n_1$ \\
- AA		& 		$r_2$ & $s_2$	& $n_2$ \\
+ $aa$		& 		$r_{aa}$ & $s_{aa}$	& $n_{aa}$\\
+ $aA$		& 		$r_{aA}$ & $s_{aA}$	& $n_{aA}$ \\
+ $AA$		& 		$r_{AA}$ & $s_{AA}$	& $n_{AA}$ \\
  Total& 		$R$ 	& $S$		& $N$  \\
   \hline
  \end{tabular}
  \end{table}
 
 
-Because in case-control studies random samples from cases and control of size $R$ and $S$ are drawn,
-$r_0$,$r_1$,$r_2$ and $s_0$,$s_1$,$s_2$ follow a trinomial distribution for the genotypes
-$aa$, $aA$ and $AA$ with probabilities $p_0, p_1, p_2$ and $q_0, q_1, q_2$ respectively. 
-Therefore, we are interested in comparing two trinomial distributions against ordered
-alternatives:
+In case-control studies we are interested in comparing the
+genotype distributions of cases and controls, i.e., 
+probabilities $p_j = P(\text{case has genotype } j)$ and
+$q_j = P(\text{control has genotype } j)$ for $j \in \{aa, aA, AA\}$.
+We are especially interested in ordered alternatives, i.e., a test problem
 \begin{eqnarray*}
-H_0: p_j = q_j \text{ vs. } H_1: p_j < q_j \quad \text{for } j \in \{0,1,2\}.
+H_0: p_j = q_j \text{ vs. } H_1: p_j < q_j \quad \text{for } j \in \{aa, aA, AA\}.
 \end{eqnarray*}
 
-The CA test statistic with scores $\xi = (\xi_0, \xi_1, \xi_2)$ basically (modulo standardization) 
-simply reads
-\begin{eqnarray*}
-\text{CA}_\xi = \xi_0 \times r_0 + \xi_1 \times r_1 + \xi_2 \times r_2.
-\end{eqnarray*}
-For the dominant model the scores $\xi_\text{dom}=(0,1,1)$, 
-for the additive model the scores  $\xi_\text{add}=(0,1,2)$ and for the recessive model the 
-scores $\xi_\text{rec}=(0,0,1)$ are power optimal \citep{Sasieni:1997,Slager:2001}. 
+The CA test statistic with scores $\mathbb{\xi} = (\xi_{aa}, \xi_{aA}, \xi_{AA})$ 
+basically (modulo standardization) reads
+\begin{eqnarray} \label{CAstat}
+\text{CA}_{\mathbb{\xi}} = \sum_{j \in \{aa, aA, AA\}} \xi_j r_j.
+\end{eqnarray}
+For the dominant model the scores $\mathbb{\xi}_\text{dom}=(0,1,1)$, 
+for the additive model the scores  $\mathbb{\xi}_\text{add}=(0,1,2)$ and for the recessive model the 
+scores $\mathbb{\xi}_\text{rec}=(0,0,1)$ are power optimal \citep{Sasieni:1997,Slager:2001}. 
 However, a priori the underlying genetic model is rarely known. Therefore, \cite{Freidlin:2002} 
 proposed the maximum of three standardized CA tests (called MAX test), each with 
 model-specific scores, as a global test for association. Alternatively, the optimal $\eta$ can be identified 
-in $\xi_\text{dom}^\text{mod}=(0,\eta,1)$ according to \cite{Zheng:2003}. 
+in $\mathbb{\xi}_\text{dom}^\text{mod}=(0,\eta,1)$ according to \cite{Zheng:2003}. 
 
 In the following, we embed the MAX test into a more general framework for conditional inference,
 derive its asymptotic distribution and give an example how to practically
@@ -415,12 +415,12 @@ implements scores $\xi_\text{rec}$. See Table~\ref{gd}.
 \begin{center}
 \begin{tabular}{lllc|cccc}
 $i$ & $\Y_i$  &  $\X_i$  & $w_i$ & $h(\Y_i)$ & $g_\text{add}(\X_i)$ & $g_\text{dom}(\X_i)$ & $g_\text{rec}(\X_i)$ \\ \hline
-1 & Case & aa & $r_1$ & 1 & 0 & 0 & 0 \\
-2 & Case & Aa & $r_2$ & 1 & 1 & 1 & 0 \\
-3 & Case & AA & $r_3$ & 1 & 2 & 1 & 1 \\
-4 & Control & aa & $s_0$ & 0 & 0 & 0 & 0 \\
-5 & Control & Aa & $s_1$ & 0 & 1 & 1 & 0 \\
-6 & Control & AA & $s_2$ & 0 & 2 & 1 & 1 \\
+1 & Case & $aa$ & $r_{aa}$ & 1 & 0 & 0 & 0 \\
+2 & Case & $Aa$ & $r_{aA}$ & 1 & 1 & 1 & 0 \\
+3 & Case & $AA$ & $r_{AA}$ & 1 & 2 & 1 & 1 \\
+4 & Control & $aa$ & $s_{aa}$ & 0 & 0 & 0 & 0 \\
+5 & Control & $Aa$ & $s_{aA}$ & 0 & 1 & 1 & 0 \\
+6 & Control & $AA$ & $s_{AA}$ & 0 & 2 & 1 & 1 \\
 \end{tabular}
 \caption{Genotype distribution reformulated. \label{gd}}
 \end{center}
@@ -435,12 +435,16 @@ H_0: D(\Y | \X) = D(\Y)
 against ordered alternatives. First, we define a three-dimensional
 statistic $\T$, each dimension being associated with one of the 
 scores $g_\text{add}$, $g_\text{dom}$, and $g_\text{rec}$.
-Each statistic is basically the sum of the scores multiplied by the weights over cases only:
+Each statistic is basically the sum of the scores multiplied by the weights over cases only,
+i.e., is equivalent to the Cochran-Armitage statistic (\ref{CAstat}):
 \begin{eqnarray} \label{linstat}
 \T = (\T_\text{add}, \T_\text{dom}, \T_\text{rec}) = 
 \sum_{i = 1}^n w_i g(\X_i) h(\Y_i) \in \R^{3} 
 \end{eqnarray}
-with $g(\X_i) = (g_\text{add}(\X_i), g_\text{dom}(\X_i), g_\text{rec}(\X_i))$.
+with $g(\X_i) = 
+(g_\text{add}(\X_i), g_\text{dom}(\X_i), g_\text{rec}(\X_i))$. Thus, the 
+three-dimensional linear statistic $\T$ consists of the unstandardized
+Cochran-Armitage statistics for the additive, dominant and recessive model.
 
 \subsubsection{Conditional Expectation and Covariance}
 
@@ -454,28 +458,33 @@ This principle leads to test procedures known as \textit{permutation tests}.
 expectation $\mu \in \R^{pq}$ and covariance $\Sigma \in \R^{3 \times 3}$ 
 of $\T$ under $H_0$ given all permutations of the groupings.
 
-Let $w_\cdot = \sum_{i = 1}^n w_i$ denote the sum of the weights.
+Let $N = \sum_{i = 1}^n w_i$ denote the sum of the weights (that is, the number 
+of observations, see Table \ref{gdistr}).
 The conditional expectation of the influence function $h$ is
 \begin{eqnarray*}
-\E(h) = w_\cdot^{-1} \sum_i w_i h(\Y_i) \in \R
+\E(h) = N^{-1} \sum_i w_i h(\Y_i) \in \R
 \end{eqnarray*}
 with corresponding variance
 \begin{eqnarray*}
-\V(h) = w_\cdot^{-1} \sum_i w_i \left(h(\Y_i) - \E(h)\right)^2
+\V(h) = N^{-1} \sum_i w_i \left(h(\Y_i) - \E(h)\right)^2
 \end{eqnarray*}
 The conditional expectation of the linear statistic $\T$ is 
 \begin{eqnarray}
 \mu & = & \E(\T) = \E(h) \sum_{i = 1}^n w_i g(\X_i), \nonumber \\
 \Sigma & = & \V(\T) \nonumber \\
 & = &
-    \frac{w_\cdot}{w_\cdot - 1}  \V(h) \times
+    \frac{N}{N - 1}  \V(h) \times
         \left(\sum_i w_i \left( g(\X_i) g(\X_i)^\top\right) \right)
 \label{expectcovar}
 \\
-& - & \frac{1}{w_\cdot - 1}  \V(h)  \times \left(
+& - & \frac{1}{N - 1}  \V(h)  \times \left(
         \sum_i  w_i g(\X_i) \right) \left( \sum_i w_i g(\X_i)\right)^\top.
 \nonumber
 \end{eqnarray}
+The three-dimensional expectation $\mu$ and the three diagonal elements
+of the covariance matrix $\Sigma$ contain the mean and the variances
+for the additive, dominant and recessive (unstandardized) Cochran-Armitage statistics
+as given in (\ref{CAstat}) and (\ref{linstat}), respectively.
 
 Note that the complete covariance structure, and thus the correlation between the elements
 of the three-dimensional statistic $\T$ is known and can be computed for the data at hand.
@@ -487,7 +496,7 @@ obtained for the three CA-test statistic by \cite{Freidlin:2002}.
 Based on the three-dimensional statistic $\T$ and its expectation 
 $\mu$ and covariance matrix $\Sigma$,
 we can easily construct test statistics and derive their distribution under the conditions
-described in the null hypothesis. As the sum of the weights $w_\cdot$ tends to infinity, 
+described in the null hypothesis. As the number of observations $N$ tends to infinity, 
 \cite{StrasserWeber1999}
 proved that the limiting distribution of the three-dimensional statistic $\T$ is a three-dimensional
 normal distribution with mean $\mu$ and covariance $\Sigma$. Thus, the asymptotic distribution
@@ -500,13 +509,14 @@ form
 \begin{eqnarray*}
 c_\text{quad}(\T, \mu, \Sigma)  = (\T - \mu)^\top \Sigma^+ (\T - \mu)
 \end{eqnarray*}
-follows a $\chi^2_{\nu=2}$ distribution. The quadratic form, which is a competitor for the MAX test statistic,
+follows a $\chi^2$ distribution with two degrees of freedom. 
+The quadratic form, which is a competitor for the MAX test statistic,
 reveals high power for an average alternative 
 while the maximum-type form for a particular genetic alternative. Therefore, we focus on the 
 maximum-type statistics, particularly because information on the elementary genetic alternative 
 is available by multiplicity-adjusted $p$-values. Note that, under any circumstances, the exact conditional
 distribution can be approximated by conditional Monte-Carlo methods, which is especially attractive
-for small sample sizes $w_\cdot$ when we can't expect asymptotics to work well.
+for small sample sizes $N$ when we can't expect asymptotics to work well.
 
 
 \subsection{Illustration}
@@ -606,14 +616,28 @@ We refer to \cite{Hothorn:2006:AmStat} for more examples of linear-by-linear ass
 
 
 \subsection{A simulation study \label{sim}}
-Many different patterns of penetrances $f_i$, disease prevalence $p$, sample size of cases and controls $R$, $S$ can be investigated in a simulation study. We will focus on a high prevalent disease (i.e. $p=0.5$), penetrances according to a additive, recessive and dominant genetic model (as well as no association characterizing the null hypothesis) for a total sample size of $N=400$ divided into the balanced $R=S=200$ and several unbalanced sampling schemes. Unbalanced data are of interest because real data examples exist with seriously more controls, see e.g. the data in Table 1, or with seriously more cases, see e.g. the IL13 polymorphism in atopic dermatitis \cite{Neuhauser:2002}, Table 4. For the proposed MAX test both the global power $\pi_{global}$(the decision rate in favor of any alternative) and the correct model identification rates $\psi_{add}$,$\psi_{rec}$,$\psi_{dom}$ are compared with the power of the individual genetic model tests $\pi_{add}$, $\pi_{rec}$, $\pi_{dom}$ in Table 4.
+Many different patterns of penetrances $f_i$, 
+disease prevalence $p$, sample size of cases and controls 
+$R$, $S$ can be investigated in a simulation study. We will 
+focus on a high prevalent disease (i.e. $p=0.5$), penetrances according 
+to a additive, recessive and dominant genetic model (as well as no 
+association characterizing the null hypothesis) for a total sample size 
+of $N=400$ divided into the balanced $R=S=200$ and several unbalanced sampling schemes. 
+Unbalanced data are of interest because real data examples exist with 
+seriously more controls, see e.g. the data in Table 1, 
+or with seriously more cases, see e.g. the IL13 polymorphism in atopic 
+dermatitis \cite{Neuhauser:2002}, Table 4. For the proposed MAX test both the global 
+power $\pi_\text{global}$(the decision rate in favor of any alternative) and the 
+correct model identification rates $\psi_\text{add}$,$\psi_\text{rec}$,$\psi_\text{dom}$ 
+are compared with the power of the individual genetic model tests 
+$\pi_\text{add}$, $\pi_\text{rec}$, $\pi_\text{dom}$ in Table~4.
 
 \begin{table}
 \centering
 \caption{Type I error rate and empirical power estimates: prevalence $p=0.5$, 10000 runs}
   \begin{tabular}{l l l l| l l l |l l l}
     \hline
-        Model & R & S & $\pi_{\text{global}}$ &  $\psi_{add}$ & $\psi_{rec}$ & $\psi_{dom}$ & $\pi_{add}$ & $\pi_{rec}$ & $\pi_{dom}$   \\
+        Model & R & S & $\pi_{\text{global}}$ &  $\psi_{add}$ & $\psi_\text{rec}$ & $\psi_\text{dom}$ & $\pi_\text{add}$ & $\pi_\text{rec}$ & $\pi_\text{dom}$   \\
  \hline
  Null & 200 & 200 & 0.048&	0.012 &	0.017& 	0.019 			&	0.051 &	0.047 &	0.049 \\
  Dom  & 200 & 200 & 0.85 &	0.13 &	0.01 &	\textit{0.71} &	0.75 &	0.23 &	\textbf{0.91} \\
@@ -630,14 +654,28 @@ Many different patterns of penetrances $f_i$, disease prevalence $p$, sample siz
  \end{table} 
 
  
-Per definition all tests control the type I error rates. Clearly, the power is maximal for the individual, unadjusted tests when the genetic model is known (bold marked). But the a priori knowledge of the genetic model is unrealistic. For balanced samples sizes the power of the MAX test is independent of the underlying genetic model and non-inferior smaller compared with the maximum power for the known model. Additionally to the global decision that a significant association exists, the MAX test provide an adjusted p-value for the most likely genetic model. Clearly, these model identification rates are seriously smaller then the global power. Hereby is the identification of the additive model most difficult because of the both equal competitors, where the identification of the dominant or recessive model is easier (and equal) because only the additive model is the competitor. For unbalanced designs the power decreases although the total sample size remains constant.
+Per definition all tests control the type I error rates. Clearly, the power is maximal for 
+the individual, unadjusted tests when the genetic model is known (bold marked). But the a 
+priori knowledge of the genetic model is unrealistic. For balanced samples sizes the power 
+of the MAX test is independent of the underlying genetic model and non-inferior smaller 
+compared with the maximum power for the known model. Additionally to the global decision 
+that a significant association exists, the MAX test provide an adjusted p-value for the 
+most likely genetic model. Clearly, these model identification rates are seriously smaller 
+then the global power. Hereby is the identification of the additive model most difficult 
+because of the both equal competitors, where the identification of the dominant or recessive 
+model is easier (and equal) because only the additive model is the competitor. For unbalanced 
+designs the power decreases although the total sample size remains constant.
 
 
 
 
 \subsection{Generalizations}
-A straightforward generalization is the consideration of $3-by-k$ tables instead of $3-by-2$ tables, where sub-types of cases are compared with a control. For example, early and late disease onset are compared with the control investigating the association between psoriasis and polymorphisms of genes encoding tumor necrosis Factor-$\alpha$ and Interleukin-$1\beta$ see \cite{Reich:2002}, where for the IL1B-511 locus the related $3 \times 2$ 
-table data are given in Table 5.
+A straightforward generalization is the consideration of $3 \times k$ tables instead of 
+$3 \times 2$ tables, where sub-types of cases are compared with a control. For example, 
+early and late disease onset are compared with the control investigating the association 
+between psoriasis and polymorphisms of genes encoding tumor necrosis Factor-$\alpha$ and 
+Interleukin-$1\beta$ see \cite{Reich:2002}, where for the IL1B-511 locus the related 
+$3 \times 2$ table data are given in Table~5.
 
 <<IL1B_511, echo = FALSE>>=
 male <- matrix(c(75, 93, 14, 54, 44, 7, 29, 13, 4), nrow = 3,
