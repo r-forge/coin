@@ -4,11 +4,11 @@
 %% almost as usual
 \author{Ludwig A. Hothorn$^1$ and Torsten Hothorn$^2$}
 
-\title{Order-restricted scores test for the evaluation of \\
-       population-based case-control studies when the \\
-       genetic model is unknown}
+\title{Order-restricted Scores Test for the Evaluation of \\
+       Population-based Case-control Studies when the \\
+       Genetic Model is Unknown}
 \usepackage{Sweave}
-\usepackage[round]{natbib}
+\usepackage[numbers]{natbib}
 
 \usepackage{verbatim}
 \usepackage{graphicx}
@@ -306,43 +306,70 @@ structure(list(gender = structure(as.integer(c(2, 2, 2, 2, 2,
 
 @
 
-\date{}
-
 \begin{document}
 
 \maketitle
+
+\vspace*{2cm}
+
+\thispagestyle{empty}
+
 \noindent
 $^1$Institut f\"ur Biostatistik, Leibniz-Universit\"at Hannover \\
-Herrenh{\"a}user Stra{\ss}e 2, D--30419 Hannover, Germany
+Herrenh{\"a}user Stra{\ss}e 2, D--30419 Hannover, Germany \\
+Telephone: ++49--511--7625566 \\
+Fax: ++49--511--7624966 \\
+Email: \texttt{hothorn@biostat.uni-hannover.de}
 
+\vspace*{1cm}
 \noindent
 $^2$Institut f\"ur Statistik, Ludwig-Maximilians-Universit\"at M\"unchen \\
-  Ludwigstra{\ss}e 33, D--80539 M\"unchen, Germany
+Ludwigstra{\ss}e 33, D--80539 M\"unchen, Germany \\
+Telephone: ++49--89--21806407 \\
+Fax: ++49--89--21805040 \\
+Email: \texttt{Torsten.Hothorn@R-project.org}
 
-
-\begin{abstract}
-The linear trend test for proportions according to Cochran-Armitage is commonly 
-used for genotype-based analysis of candidate gene association. Depending on 
-the underlying genetic model, the use of model-specific scores maximises 
-the power. Commonly, the underlying genetic model, i.e.,
-additive, dominant or recessive mode of inheritance, is a priori unknown. 
-Maximum tests using standardised Cochran-Armitage tests for 
-power under all three models have been proposed for case-control studies. 
-We reformulate the problem and propose a conditional maximum test 
-of scores-specific linear-by-linear association tests. For both maximum-type 
-and quadratic form of test statistics the asymptotic expectation and covariance 
-can be derived in a closed form and the limiting distribution
-is known. We extend the area of application to stratified designs,
-studies involving more than two groups and the simultaneous analysis
-of multiple loci by means of multiplicity-adjusted $p$-values for the
-underlying multiple Cochran-Armitage trend tests. The use of
-already available software for such analyses is illustrated.
-	   
-\end{abstract}
+\vspace*{3cm}
 
 \paragraph{Key Words:}
 Candidate gene association, Cochran-Armitage trend test, 
 Maximum test, Asymptotical distribution, Conditional inference.
+
+\newpage
+
+
+\begin{abstract}
+\textbf{Objective}: 
+The Cochran-Armitage linear trend test for proportions is commonly 
+used for genotype-based analysis of candidate gene association. Depending on 
+the underlying genetic mode of inheritance, the use of model-specific scores maximises 
+the power. Commonly, the underlying genetic model, i.e.,
+additive, dominant or recessive mode of inheritance, is a priori unknown.
+Permutation tests for the analysis of association studies appropriate
+for both inference and estimation of the underlying mode of inheritance are suggested.
+
+\textbf{Methods}:
+Maximum tests using standardised Cochran-Armitage tests having
+power under all three models have been proposed for case-control studies. 
+We reformulate the problem and propose a conditional maximum test 
+of scores-specific linear-by-linear association tests. For both maximum-type 
+and quadratic test statistics the asymptotic expectation and covariance 
+can be derived in a closed form and the limiting distribution
+is known.
+
+\textbf{Results}: We extend the area of application to stratified designs,
+studies involving more than two groups and the simultaneous analysis
+of multiple loci by means of multiplicity-adjusted $p$-values for the
+underlying multiple Cochran-Armitage trend tests. The new test is applied
+to reanalyse a study investigating genetic components of 
+different subtypes of psoriasis.
+
+\textbf{Conclusion}: A new and flexible inference tool for association
+studies is available both theoretically as well as practically since 
+already available software packages can be easily used to implement
+the suggested test procedures.
+\end{abstract}
+
 
 
 \section{Objectives}
@@ -361,7 +388,7 @@ Thus, if the underlying mode of inheritance is known, the choice of
 an appropriate score vector and thus trend test test is obvious. 
 However, in situations where the underlying genetic model is unknown
 choosing the `wrong' score vector leads to a substantial loss of power
-as shown by \cite{Freidlin:2002}.
+as shown by \citet{Freidlin:2002}.
 Consequently, inference procedures
 with good power under \textit{all} three genetic models 
 are of special interest.
@@ -369,17 +396,17 @@ An intuitive idea is to construct a test based on all three possible
 trend tests, for example utilising the maximum of the standardised 
 test statistics of the CA tests which are optimal under the dominant, 
 additive, and recessive model.
-Actually, such a test was proposed and investigated by \cite{Freidlin:2002}. 
+Actually, such a test was proposed and investigated by \citet{Freidlin:2002}. 
 The distribution of this maximum test, called MAX test hereafter,
 under the null hypothesis of equal genotype distribution
 in cases and controls is approximated by simulation procedures
-by \cite{Freidlin:2002}
+by \citet{Freidlin:2002}
 since the unconditional asymptotic distribution is hard to derive.
 
 In this paper, we embed the MAX test as suggested by 
-\cite{Freidlin:2002} into a flexible framework for 
+\citet{Freidlin:2002} into a flexible framework for 
 conditional independence tests introduced by 
-\citep{StrasserWeber1999}. The merits of doing so are
+\citet{StrasserWeber1999}. The merits of doing so are
 i) the distribution for the MAX test can be easily 
 approximated by a three-dimensional normal distribution,
 ii) tests for stratified designs, designs with more than two
@@ -391,7 +418,7 @@ three CA statistics under test, and iv) the analysis of
 genetic association studies using the MAX test and its newly
 introduced extension can be performed by already
 available software implementations of the 
-\citep{StrasserWeber1999} framework.
+\citet{StrasserWeber1999} framework.
 
 \section{Methods}
 
@@ -446,7 +473,7 @@ by scores $\mathbb{\xi}_\text{add}=(0,1,2)$ should be chosen
 when the mode if inheritance is additive \citep{Sasieni:1997,Slager:2001}. 
 However, the underlying genetic model is rarely known \textit{a priori}. 
 Motivated by the problem of choosing the `right' score vector, 
-\cite{Freidlin:2002} proposed the MAX test as the maximum of three standardised 
+\citet{Freidlin:2002} proposed the MAX test as the maximum of three standardised 
 CA tests with scores 
 $\mathbb{\xi}_\text{dom}, \mathbb{\xi}_\text{add}$, and $\mathbb{\xi}_\text{rec}$
 as a global test for association. An alternative approach \citep{Zheng:2003}
@@ -459,7 +486,7 @@ for conditional inference procedures, derive its limiting
 distribution and propose extensions to stratified designs, 
 more than two groups and multiple loci. 
 
-\subsubsection{Reformulation of the problem}
+\subsubsection{Reformulation of the Problem}
 Let $\Y_i$ denote the both groups (cases and controls) and $\X_i$ the genotype
 for all cells $i = 1, \dots, n = 6$. The weights $w_i$ represent the number of 
 observations in each cell with total number of observations $N = \sum_i w_i$.
@@ -520,7 +547,7 @@ circumstances. At least under the null hypothesis one can dispose of this
 dependency by fixing the genotypes and conditioning on all possible
 permutations of the groups. 
 This principle leads to test procedures known as \textit{permutation tests}. 
-\cite{StrasserWeber1999} derived closed-form expressions for the conditional 
+\citet{StrasserWeber1999} derived closed-form expressions for the conditional 
 expectation $\mu \in \R^{pq}$ and covariance $\Sigma \in \R^{3 \times 3}$ 
 of $\T$ under $H_0$ given all permutations of the groupings.
 
@@ -555,7 +582,7 @@ Note that the complete covariance structure, and thus the
 correlation between the elements of the three-dimensional statistic 
 $\T$ is known and can be computed for the data at hand.
 The corresponding correlation matrix coincides with the correlations
-obtained for the three CA test statistics by \cite{Freidlin:2002}.
+obtained for the three CA test statistics by \citet{Freidlin:2002}.
 
 \subsubsection{Test Statistics}
 
@@ -563,7 +590,7 @@ Based on the three-dimensional statistic $\T$ and its expectation
 $\mu$ and covariance matrix $\Sigma$, we can easily construct test 
 statistics and derive their distribution under the conditions
 described in the null hypothesis. As the number of observations 
-$N$ tends to infinity, \cite{StrasserWeber1999}
+$N$ tends to infinity, \citet{StrasserWeber1999}
 proved that the limiting distribution of the three-dimensional 
 statistic $\T$ is a three-dimensional normal distribution with 
 expectation $\mu$ and covariance $\Sigma$. Thus, the asymptotic distribution
@@ -590,10 +617,10 @@ to work well.
 \subsection{Illustration}
 
 In order to compare the above test and its implementation with the
-results reported by \cite{Freidlin:2002}, we reanalyse a study on association
+results reported by \citet{Freidlin:2002}, we reanalyse a study on association
 between a variant of the epidermal growth factor 
-(EGF) gene and malignant melanoma according 
-\citep[Table~\ref{mel},][]{Shahbazi:2002}.
+(EGF) gene and malignant melanoma according to
+\citet[Table~\ref{mel},][]{Shahbazi:2002}.
 
 <<melanoma-table, echo = FALSE>>=
 me <- as.table(matrix(c( 6,  8, 10,
@@ -667,7 +694,7 @@ for (i in 1:nrow(S))
 \end{eqnarray*}
 those values are rather similar to the correlations between the 
 three different CA test statistics as reported by
-\cite{Freidlin:2002}.
+\citet{Freidlin:2002}.
 
 \begin{table}[h]
 \begin{center}
@@ -689,7 +716,7 @@ The MAX test has a test statistic equal to
 $\Sexpr{round(max(CAstand), 4)}$  and its asymptotic $p$-value 
 is \Sexpr{round(min(pasympt), 4)} (the minimum of $p_\text{asympt}$ in
 Table~\ref{melres})
-which is roughly the same $p$-value as shown in Table~8 of \cite{Freidlin:2002}.
+which is roughly the same $p$-value as shown in Table~8 of \citet{Freidlin:2002}.
 However, this global $p$-value does not give any information about the
 underlying genetic model. Multiplicity-adjusted $p$-values
 ($p_\text{asympt}$ in Table~\ref{melres})
@@ -777,7 +804,7 @@ xtable(xtabs(~ TNFA_238 + group + gender, data = psoriasis))
 \end{table}
 
 
-\cite{Reich:2002} investigate the association between psoriasis and 
+\citet{Reich:2002} investigate the association between psoriasis and 
 polymorphisms of genes encoding tumor necrosis Factor-$\alpha$ and 
 Interleukin-$1\beta$ where for the IL1B\_511 locus the related 
 $3 \times 2$ table data are given in Table~\ref{reich}.
@@ -807,7 +834,7 @@ the data. We can simultaneously reject the null hypothesis of independence
 between the genotype distribution of the IL1B\_511 locus and the three groups.
 Here, the dominant model seems to explain the data best. 
 
-Our analysis improves upon the original analysis of these data by \cite{Reich:2002}
+Our analysis improves upon the original analysis of these data by \citet{Reich:2002}
 with respect to three points: All three groups and the stratification
 by gender are taken into account and and the new test makes use of the
 correlation between the two loci instead of applying a Bonferroni correction
@@ -830,7 +857,7 @@ for (i in 1:nrow(pvals))
 \end{table}
 
 
-\subsection{A simulation study \label{sim}}
+\subsection{Simulation Experiments \label{sim}}
 
 It might be questioned if the minimal $p$-value can be observed for the
 correct mode of inheritance and thus how good the `estimator' 
@@ -892,27 +919,36 @@ designs the power decreases although the total sample size remains constant.
 
 \section{Conclusions}
 
-We embed the MAX test proposed by \cite{Freidlin:2002} into a conditional 
-inference framework leading to a permutation test for association of a 
-bi-allelic marker with a disease in population-based case-control studies.
-The joint conditional asymptotic distribution of the three underlying 
-linear association tests is known and can be used to approximate the 
-distribution of the MAX statistic.
-Not only a global $p$-value can be computed but also the multiplicity-adjusted 
-$p$-value for each individual model. For small sample sizes, a better 
-approximation of the $p$-values can be derived from Monte Carlo experiments.
-When the mode of inheritance is unknown, still remarkably high correct model 
+We propose a flexible approach to permutation tests for association of a    
+bi-allelic marker with a disease in population-based case-control 
+studies. The joint conditional asymptotic distribution of the 
+three underlying 
+linear association tests, i.e., Cochran-Armitage tests with optimal
+scores for additive, dominant, and recessive modes of inheritance,
+is known and can be used to approximate the distribution of the 
+corresponding maximum statistic.
+Not only a global $p$-value can be derived this way but also
+multiplicity-adjusted $p$-values for each of the individual models. 
+When the mode of inheritance is unknown, remarkably high correct model 
 selection rates can be achieved. Based on a general framework for conditional 
 inference we extend the MAX test to stratified designs, $3 \times k$ tables 
 as well as multiple endpoints, i.e., multiple loci. Correlations between 
 loci and corresponding association tests are taken into account leading to 
-more powerful multiple test procedure. The proposed procedures are easily applicable
-using the computational tools provided by the \textsf{R} add-on package 
-\Rpackage{coin} as illustrated in the Appendix and a dedicated package vignette.
- 
+more powerful multiple test procedure. 
+For small sample sizes, a better approximation of the $p$-values 
+can be obtained from Monte Carlo resampling techniques.
+The proposed procedures are easily 
+applicable using the computational tools provided by the \textsf{R} 
+add-on package \Rpackage{coin} as illustrated in the Appendix 
+and a dedicated package vignette.
+
 \section{Acknowledgements} 
-Andreas Ziegler and Inke Koenig for providing us with the psoriasis 
-data.
+We would like to thank Andreas Ziegler and Inke R. Koenig for providing 
+us with the psoriasis data.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
 
 \section*{Appendix}
 
@@ -926,7 +962,7 @@ me <- as.table(matrix(c( 6,  8, 10,
 me <- t(me)
 me
 @
-The function $g$ is implemented by a function
+The function $g$ is implemented by the following function:
 <<Ag, echo = TRUE>>=
 add <- c(0, 1, 2)
 dom <- c(0, 1, 1)
@@ -942,12 +978,15 @@ library("coin")
 it <- independence_test(me, xtrafo = g, alternative = "greater")
 it
 @
-Multiplicity-adjusted $p$-values are computed via
-<<Ap, echo = TRUE>>=
+The multiplicity-adjusted $p$-values for both inference and
+estimating the underlying mode of inheritance are computed 
+via:
+<<Ap, echo = TRUE, eval = FALSE>>=
 pvalue(it, method = "single-step")
 @
+<<Ap, echo = FALSE>>=
+drop(pvalue(it, method = "single-step"))
+@
 
-\bibliographystyle{plainnat}
-\bibliography{references}
 
 \end{document}
