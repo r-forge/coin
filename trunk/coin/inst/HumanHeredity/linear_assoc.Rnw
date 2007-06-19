@@ -1,6 +1,9 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{a4wide}
 
+%%\VignetteIndexEntry{Order-restricted scores test}
+%%\VignetteDepends{coin,xtable}
+
 %% almost as usual
 \author{Ludwig A. Hothorn$^1$ and Torsten Hothorn$^2$}
 
@@ -333,7 +336,8 @@ Email: \texttt{Torsten.Hothorn@R-project.org}
 
 \paragraph{Key Words:}
 Candidate gene association, Cochran-Armitage trend test, 
-Maximum test, Asymptotical distribution, Conditional inference.
+Maximum test, Asymptotical distribution, Conditional inference, 
+Model identification.
 
 \newpage
 
@@ -346,7 +350,8 @@ the underlying genetic mode of inheritance, the use of model-specific scores max
 the power. Commonly, the underlying genetic model, i.e.,
 additive, dominant or recessive mode of inheritance, is a priori unknown.
 Permutation tests for the analysis of association studies appropriate
-for both inference and estimation of the underlying mode of inheritance are suggested.
+for both inference and identification of the 
+underlying mode of inheritance are suggested.
 
 \textbf{Methods}:
 Maximum tests using standardised Cochran-Armitage tests having
@@ -438,10 +443,10 @@ high risk candidate allele and $a$ is any of the other alleles
   \begin{tabular}{l l l l}
        & Cases & Controls & Total \\
  \hline
- $aa$		& 		$r_{aa}$ & $s_{aa}$	& $n_{aa}$\\
- $aA$		& 		$r_{aA}$ & $s_{aA}$	& $n_{aA}$ \\
- $AA$		& 		$r_{AA}$ & $s_{AA}$	& $n_{AA}$ \\
- Total& 		$R$ 	& $S$		& $N$  \\
+ $aa$       &       $r_{aa}$ & $s_{aa}$ & $n_{aa}$\\
+ $aA$       &       $r_{aA}$ & $s_{aA}$ & $n_{aA}$ \\
+ $AA$       &       $r_{AA}$ & $s_{AA}$ & $n_{AA}$ \\
+ Total&         $R$     & $S$       & $N$  \\
   \hline
  \end{tabular}
 \end{center}
@@ -536,8 +541,8 @@ Cochran-Armitage statistic (\ref{CAstat}):
 with $g(\X_i) = 
 (g_\text{add}(\X_i), g_\text{dom}(\X_i), g_\text{rec}(\X_i))$. Thus, the 
 three-dimensional linear statistic $\T$ is the vector of the unstandardised
-Cochran-Armitage statistics $(CA(\xi_\text{dom}), CA(\xi_\text{add}), 
-CA(\xi_\text{rec})$ for the dominant, additive, and recessive model.
+Cochran-Armitage statistics $(\text{CA}(\xi_\text{dom}), \text{CA}(\xi_\text{add}), 
+\text{CA}(\xi_\text{rec}))$ for the dominant, additive, and recessive model.
 
 \subsubsection{Conditional Expectation and Covariance}
 
@@ -759,7 +764,7 @@ we can look at all six CA tests by defining a linear statistic
 $\T$ containing the three CA tests for the first as well 
 as the three CA tests for the second locus. As a consequence,
 we can compute the complete covariance matrix and take the 
-underlying correlations between the two loci into account.
+underlying correlations between the two loci as well as between the three genetical models into account.
 
 \subsection{Computational Details}
 
@@ -843,9 +848,9 @@ in order to maintain an overall significance level.
 
 \begin{table}
 \begin{center}
-\caption{MAX test for Psoriasis data: Asymptotic adjusted $p$-values \label{pstab}}
+\caption{MAX test for psoriasis data: Asymptotic adjusted $p$-values \label{pstab}}
 \vspace*{0.5cm}
-\begin{tabular}{ccc}
+\begin{tabular}{lrr}
  & TNFA\_238 & IL1B\_511 \\ \hline
 <<ps-res, echo = FALSE, results = tex>>=
 for (i in 1:nrow(pvals))
@@ -888,16 +893,16 @@ $\pi_\text{add}$, $\pi_\text{rec}$, $\pi_\text{dom}$ in Table~\ref{simtab}.
   \begin{tabular}{l l l l| l l l |l l l}
         Model & R & S & $\pi_{\text{global}}$ &  $\psi_{add}$ & $\psi_\text{rec}$ & $\psi_\text{dom}$ & $\pi_\text{add}$ & $\pi_\text{rec}$ & $\pi_\text{dom}$   \\
  \hline
- Null & 200 & 200 & 0.048&	0.012 &	0.017& 	0.019 			&	0.051 &	0.047 &	0.049 \\
- Dom  & 200 & 200 & 0.85 &	0.13 &	0.01 &	\textit{0.71} &	0.75 &	0.23 &	\textbf{0.91} \\
- Add  & 200 & 200 & 0.84 &	\textit{0.53} &	0.10  &	0.21 &	\textbf{0.88} &	0.71 &	0.78 \\
- Rec  & 200 & 200 & 0.86 &	0.16 &	\textit{0.69} &	0.01 & 	0.80 &	\textbf{0.91} &	0.28 \\
- Dom  & 100 & 300 & 0.72 &	0.16 &	0.01 &	\textit{0.55}&	0.63 &	0.21 & \textbf{0.80} \\
- Add  & 100 & 300 & 0.73 &	\textit{0.43} &	0.14 &	0.16 &	\textbf{0.78} &	0.60 &	0.65 \\
- Rec  & 100 & 300 & 0.77 &	0.16 &	\textit{0.60} &	0.01 &	0.67 &	\textbf{0.82} &	0.22  \\
- Dom  & 300 & 100 & 0.76 &	0.11 &	0.01 &	\textit{0.64} &	0.66 &	0.19 &	\textbf{0.82} \\
- Add  & 300 & 100 & 0.75 &	\textit{0.42} &	0.09 &	0.24 &	\textbf{0.79} &	0.59 &	0.69 \\
- Rec  & 300 & 100 & 0.75 &	0.17 &	\textit{0.55} &	0.01 &	0.69 &	\textbf{0.82 }&	0.24 \\
+ Null & 200 & 200 & 0.048&  0.012 & 0.017&  0.019           &   0.051 & 0.047 & 0.049 \\
+ Dom  & 200 & 200 & 0.85 &  0.13 &  0.01 &  \textit{0.71} & 0.75 &  0.23 &  \textbf{0.91} \\
+ Add  & 200 & 200 & 0.84 &  \textit{0.53} & 0.10  & 0.21 &  \textbf{0.88} & 0.71 &  0.78 \\
+ Rec  & 200 & 200 & 0.86 &  0.16 &  \textit{0.69} & 0.01 &  0.80 &  \textbf{0.91} & 0.28 \\
+ Dom  & 100 & 300 & 0.72 &  0.16 &  0.01 &  \textit{0.55}&  0.63 &  0.21 & \textbf{0.80} \\
+ Add  & 100 & 300 & 0.73 &  \textit{0.43} & 0.14 &  0.16 &  \textbf{0.78} & 0.60 &  0.65 \\
+ Rec  & 100 & 300 & 0.77 &  0.16 &  \textit{0.60} & 0.01 &  0.67 &  \textbf{0.82} & 0.22  \\
+ Dom  & 300 & 100 & 0.76 &  0.11 &  0.01 &  \textit{0.64} & 0.66 &  0.19 &  \textbf{0.82} \\
+ Add  & 300 & 100 & 0.75 &  \textit{0.42} & 0.09 &  0.24 &  \textbf{0.79} & 0.59 &  0.69 \\
+ Rec  & 300 & 100 & 0.75 &  0.17 &  \textit{0.55} & 0.01 &  0.69 &  \textbf{0.82 }& 0.24 \\
 \hline
  \end{tabular}
 \end{center}
@@ -906,14 +911,13 @@ $\pi_\text{add}$, $\pi_\text{rec}$, $\pi_\text{dom}$ in Table~\ref{simtab}.
  
 Per definition all tests control the type I error rates. Clearly, the power is maximal for 
 the individual, unadjusted tests when the genetic model is known (bold marked). But the a 
-priori knowledge of the genetic model is unrealistic. For balanced samples sizes the power 
+priori knowledge of the genetic model is commonly unrealistic. For balanced samples sizes the power 
 of the MAX test is independent of the underlying genetic model and non-inferior smaller 
 compared with the maximum power for the known model. Additionally to the global decision 
 that a significant association exists, the MAX test provide an adjusted $p$-value for the 
-most likely genetic model. Clearly, these model identification rates are seriously smaller 
-then the global power. Hereby is the identification of the additive model most difficult 
+most likely genetic model. In this case, the identification of the additive model is most difficult 
 because of the both equal competitors, where the identification of the dominant or recessive 
-model is easier (and equal) because only the additive model is the competitor. For unbalanced 
+model is easier (and equal) because the additive model is the only competitor. For unbalanced 
 designs the power decreases although the total sample size remains constant.
 
 
@@ -940,7 +944,10 @@ can be obtained from Monte Carlo resampling techniques.
 The proposed procedures are easily 
 applicable using the computational tools provided by the \textsf{R} 
 add-on package \Rpackage{coin} as illustrated in the Appendix 
-and a dedicated package vignette.
+and a dedicated package vignette. A future modification will be 
+the use of model-specific genomic-control corrected tests 
+analogously to \citet{Zang:2007} in the possible case of 
+population stratification.
 
 \section{Acknowledgements} 
 We would like to thank Andreas Ziegler and Inke R. Koenig for providing 
