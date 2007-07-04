@@ -54,10 +54,13 @@
   \proglang{S4} class structure with associated generic functions.
   As a consequence, the computational tools in \pkg{coin} inherit
   the flexibility of the underlying theory and conditional inference
-  functions for important special cases can be set up easily. Specialized
-  convenience functions are available for location and scale problems in
-  two or more sample, independence in two- or three-way contingency tables,
-  or association problems for censored, ordered categorical or multivariate data.
+  functions for important special cases can be set up easily. 
+  Conditional versions of classical tests---such 
+  as tests for location and scale problems in
+  two or more samples, independence in two- or three-way contingency tables,
+  or association problems for censored, ordered categorical or multivariate data---
+  can be easily be implemented as special cases using this computational 
+  toolbox by choosing appropriate transformations of the observations.
   The paper gives a detailed exposition of both the internal structure
   of the package and the provided user interfaces.
 }
@@ -178,8 +181,8 @@ many different statistical computing environments.
 These implementations, for example 
 \Rcmd{wilcox.test} for the Wilcoxon-Mann-Whitney test or
 \Rcmd{mantelhaen.test} for the Cochran-Mantel-Haenszel $\chi^2$ test in the
-\proglang{S} language or the tools implemented in \proglang{StatXact}, \proglang{LogXact},
-\proglang{Stata}, and \proglang{Testimate}
+\proglang{S} language or the tools implemented in \pkg{StatXact} \citep{StatXact6}, 
+\pkg{LogXact} \citep{LogXact8}, or \proglang{Stata} \citep{Stata}
 \citep[see][for an overview]{Oster2002,Oster2003},
 all follow the classical classification scheme of inference procedures and
 offer procedures for location problems, scale problems, correlation, 
@@ -187,7 +190,7 @@ or nominal and ordered categorical data.
 Thus, each test procedure is 
 implemented separately, maybe with the exception of conditional 
 versions of linear rank statistics \citep{theory-of-:-1999} in \texttt{NPAR1WAY}
-as available in \proglang{SAS}.
+as available in \proglang{SAS} \citep{SAS}.
 
 Novel theoretical insights by \cite{StrasserWeber1999} open up the way
 to a unified treatment of a huge class of permutation
@@ -209,12 +212,11 @@ distribution are available.
 The most important user-visible function is  \Rcmd{independence_test},
 the computational counterpart of the theoretical framework of \cite{StrasserWeber1999},
 providing the same flexibility in software as in the
-underlying theory. For convenience, a set of wrapper 
-functions for the most popular test procedures, such as 2- and 
-$K$-sample permutation tests for location or scale differences,
-are offered as well.
-
-
+underlying theory. 
+%%For convenience, a set of wrapper 
+%%functions for the most popular test procedures, such as 2- and 
+%%$K$-sample permutation tests for location or scale differences,
+%%are offered as well.
 
 \section{Theory and classes}
 
@@ -529,14 +531,13 @@ A \Rcmd{confint} method is available for these special cases.
 
 \section{User interfaces}
 
-While the internal structures make use of the \proglang{S4} class
+While the internal structures presented in the previous sections 
+make use of the \proglang{S4} class
 system, the user interface is written in \proglang{S3} style to mimic
-the familiar user interfaces of the classical tests, such as
-\Rcmd{wilcox.test}, as closely as possible. The workhorse is the
+the familiar user interfaces of the classical tests. The workhorse is the
 \Rcmd{independence_test} method for \Rclass{IndependenceProblem} objects.
-But for convenience additional wrapper functions for certain special
-cases are available along with corresponding \Rclass{formula}
-and \Rclass{table} methods to provide user with the same type of interfaces
+In addition, corresponding \Rclass{formula}
+and \Rclass{table} methods provide the user with the same type of interfaces
 they are used to from base \proglang{R}.
 Existing methods for \Rclass{htest} objects are utilized for formatting output.
 
@@ -599,68 +600,72 @@ all variables are numeric the linear statistic is four-dimensional with
 $p = 2$ and $q = 2$) for each level in \code{block}. As usual, \code{data}, \code{weights}
 and \code{subset} arguments can be specified as well.
 
-Two- and three-dimensional tables can be supplied to the \Rclass{table} method of
+Two- and three-dimensional tables can be supplied to the \Rclass{table} method of \linebreak
 \Rcmd{independence_test}. The third variable is then interpreted as block.
 
-\subsection{Specialized convenience functions}
-
-For a variety of classical tests (some of them already implemented in
-base package \pkg{stats}), their conditional counterpart is made easily
-accessible. Wrapper functions for the most important procedures, such as
-the Wilcoxon Mann-Whitney or Cochran-Mantel-Haenszel tests, are listed
-in Table~\ref{confct}.  Almost all special-purpose functionality
-implemented in packages \pkg{exactRankTests}
-\citep{Rnews:Hothorn:2001,HothornHornik:2002:CompStat,pkg:exactRankTests}
-and \pkg{maxstat} \citep{Rnews:Hothorn+Lausen:2002,pkg:maxstat} can
-conveniently be provided within the \pkg{coin} framework, so that both
-these packages will become deprecated in the future.
 
 \begin{sidewaystable}
 \begin{center}
 \begin{tabular}{lllll} \\
 %%%\multicolumn{5}{c}{Independent Samples} \\
-Test & Wrapper Function & \code{xtrafo} $g$ & \code{ytrafo} $h$ & \code{teststat} $c$ \\ \hline
-\multicolumn{5}{c}{} \\
-\multicolumn{5}{c}{Independent Samples} \\
-\multicolumn{5}{c}{} \\
-Wilcoxon-Mann-Whitney & \Rcmd{wilcox_test} & \Rcmd{f_trafo} & \Rcmd{rank} &
+Test & \code{xtrafo} $g$ & \code{ytrafo} $h$ & \code{teststat} $c$ \\ \hline
+\multicolumn{4}{c}{} \\
+\multicolumn{4}{c}{Independent Samples} \\
+\multicolumn{4}{c}{} \\
+Wilcoxon-Mann-Whitney & \Rcmd{f_trafo} & \Rcmd{rank} &
 \code{"scalar"} \\
-Normal quantiles & \Rcmd{normal_test} & \Rcmd{f_trafo} & \Rcmd{normal_trafo} &
+Normal quantiles & \Rcmd{f_trafo} & \Rcmd{normal_trafo} &
 \code{"scalar"} \\
-Median & \Rcmd{median_test} & \Rcmd{f_trafo} & \Rcmd{median_trafo} &
+Median &  \Rcmd{f_trafo} & \Rcmd{median_trafo} &
 \code{"scalar"} \\
-Ansari-Bradley & \Rcmd{ansari_test} & \Rcmd{f_trafo} & \Rcmd{ansari_trafo} &
+Ansari-Bradley &  \Rcmd{f_trafo} & \Rcmd{ansari_trafo} &
 \code{"scalar"} \\
-Log rank & \Rcmd{surv_test} & \Rcmd{f_trafo} & \Rcmd{logrank_trafo} &
+Log rank & \Rcmd{f_trafo} & \Rcmd{logrank_trafo} &
 \code{"quad"} \\
-Kruskal-Wallis & \Rcmd{kruskal_test} & \Rcmd{f_trafo} & \Rcmd{rank} &
+Kruskal-Wallis &  \Rcmd{f_trafo} & \Rcmd{rank} &
 \code{"quad"} \\
-Fligner & \Rcmd{fligner_test} & \Rcmd{f_trafo} & \Rcmd{fligner_trafo} &
+Fligner & \Rcmd{f_trafo} & \Rcmd{fligner_trafo} &
 \code{"quad"} \\
-Spearman & \Rcmd{spearman_test} & \Rcmd{rank} & \Rcmd{rank} &
+Spearman &  \Rcmd{rank} & \Rcmd{rank} &
 \code{"scalar"} \\
-Cochran-Mantel-Haenszel & \Rcmd{cmh_test} & \Rcmd{f_trafo} & \Rcmd{f_trafo} &
+Cochran-Mantel-Haenszel & \Rcmd{f_trafo} & \Rcmd{f_trafo} &
 \code{"quad"} \\
-Pearson's $\chi^2$ & \Rcmd{chisq_test} & \Rcmd{f_trafo} & \Rcmd{f_trafo} &
+Pearson's $\chi^2$ &  \Rcmd{f_trafo} & \Rcmd{f_trafo} &
 \code{"quad"} \\
-Cochran-Armitage / Linear Association & \Rcmd{lbl_test} & scores & any &
+Cochran-Armitage / Linear Association &  scores & any &
 \code{"scalar"} \\
-$K$-sample permutation test & \Rcmd{oneway_test} & \Rcmd{f_trafo} & any & any \\
-Maximally selected statistics & \Rcmd{maxstat_test} & \Rcmd{maxstat_trafo} & any & \code{"max"} \\
-\multicolumn{5}{c}{} \\
-\multicolumn{5}{c}{Dependent Samples} \\
-\multicolumn{5}{c}{} \\
-Friedman & \Rcmd{friedman_test} & \Rcmd{f_trafo} & \Rcmd{rank} &
+$K$-sample permutation test &  \Rcmd{f_trafo} & any & any \\
+Maximally selected statistics &  \Rcmd{maxstat_trafo} & any & \code{"max"} \\
+\multicolumn{4}{c}{} \\
+\multicolumn{4}{c}{Dependent Samples} \\
+\multicolumn{4}{c}{} \\
+Friedman &  \Rcmd{f_trafo} & \Rcmd{rank} &
 \code{"quad"} \\
-Maxwell-Stuart & \Rcmd{mh_test} & \Rcmd{f_trafo} & \Rcmd{f_trafo} &
+Maxwell-Stuart &  \Rcmd{f_trafo} & \Rcmd{f_trafo} &
 \code{"quad"} \\
-Wilcoxon signed rank & \Rcmd{wilcoxsign_test} & \Rcmd{f_trafo} & \Rcmd{rank} &
+Wilcoxon signed rank &  \Rcmd{f_trafo} & \Rcmd{rank} &
 \code{"scalar"} \\ \hline
 \end{tabular}
 \caption{Convenience functions implementing the conditional counterparts of 
          the most important classical tests. \label{confct}}
 \end{center}
 \end{sidewaystable}
+
+\subsection{Conditional versions of classical tests}
+
+For a variety of classical tests (some of them already implemented in
+base package \pkg{stats}), their conditional counterpart is made easily
+accessible. Some of the most important procedures, such as
+the Wilcoxon-Mann-Whitney or Cochran-Mantel-Haenszel tests, 
+can be obtained as listed in Table~\ref{confct}, just by choosing the
+appropriate \code{xtrafo}, \code{ytrafo} and \code{teststat} arguments.  
+Almost all special-purpose functionality
+implemented in packages \pkg{exactRankTests}
+\citep{Rnews:Hothorn:2001,HothornHornik:2002:CompStat,pkg:exactRankTests}
+and \pkg{maxstat} \citep{Rnews:Hothorn+Lausen:2002,pkg:maxstat} can
+conveniently be provided within the \pkg{coin} framework, so that both
+these packages will become deprecated in the future.
+
 
 \section{Internal functionality}
 
@@ -694,7 +699,7 @@ formula parsing.
 
 \section{An example}
 
-The job satisfaction data \citep[Table 7.8,][]{agresti2002} is a
+The job satisfaction data \citep[Table 7.8,][]{agresti2002}, see Figure~\ref{jsplot}, is a
 three-dimensional \Rclass{table} with variables \code{Income} and
 \code{Job.Satisfaction} according to \code{Gender} (labels
 slightly modified for convenience):
@@ -704,20 +709,32 @@ dimnames(js)$Job.Satisfaction <- c("VeryDiss", "ModDiss",
                                    "ModSat", "VerySat")
 ftable(Job.Satisfaction ~ Gender + Income, data = js)
 @
+\setkeys{Gin}{width=\textwidth}
+\begin{figure}
+\begin{center}
+<<js-plot, echo = FALSE, fig = TRUE, width = 13, height = 6.5>>=
+library("vcd")
+cotabplot(js, split_vertical = TRUE, gp = gpar(fill = rev(gray.colors(4))),
+          spacing = spacing_highlighting, 
+          labeling_args = list(rot_labels = 0, varnames = FALSE, 
+                               just_labels = c("center", "right")), 
+          panel_args = list(margins = c(3,1,2,3.5)))
+@
+\caption{Conditional mosaic plot of job satisfaction and incoming given gender.
+         \label{jsplot}}
+\end{center}
+\end{figure}
 Here, we focus on conditional tests for independence 
 of income and job satisfaction. The conditional Cochran-Mantel-Haenszel test is
 based on a $c_\text{quad}$ statistic derived from the contingency table
 and a $\chi^2$ approximation of the null distribution is utilized traditionally:
 <<jobsatisfaction-it, echo = TRUE>>=
-independence_test(js, teststat = "quad")
-@
-which is the same as 
-<<jobsatisfaction-it, echo = TRUE>>=
-cmh_test(js)
+it <- independence_test(js, teststat = "quad", distribution = asymptotic())
+it
 @
 with linear statistic
 <<jobsatisfaction-T, echo = TRUE>>=
-statistic(cmh_test(js), "linear")
+statistic(it, "linear")
 @
 This is exactly the two-way classification
 <<jobsatisfaction-margin, echo = TRUE>>=
@@ -726,7 +743,7 @@ margin.table(js, 1:2)
 i.e., the three-dimensional table aggregated over the block factor \code{Gender}.
 This contingency table in standardized form reads
 <<jobsatisfaction-stat, echo = TRUE>>=
-statistic(cmh_test(js), "standardized")
+statistic(it, "standardized")
 @
 Instead of using a $\chi^2$ statistic collapsing the whole table via a quadratic form, one might
 want to use the maximum of the absolute values of the standardized cells as test statistic.
