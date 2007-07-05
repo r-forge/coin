@@ -1,0 +1,271 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{a4wide}
+
+\begin{document}
+
+\textbf{\large Associate Editor}
+
+\begin{enumerate}
+
+  \item \textit{The paper advertises in several places (Abstract,
+        Introduction, and Example) that their approach is novel because
+	of partitioning based on an interaction between two covariates.
+	However, Sections 2--4 appear to just discuss two-sample statistics,
+	and so appear not to relate to interactions let alone address them
+	explicitly.}
+	
+	Interactions are also used for splits into two samples, pointed
+	out more clearly in Section~2.
+	
+  \item \textit{There is literature on competing methods for finding cutpoints
+        especially with interaction models (e.g., CART and recursive partitioning).
+	The authors need to mention such methods and how their method conceptually
+	compares to these methods.}
+	
+	Interactions are not determined recursively but splits are computed in
+	interactions directly (e.g., XOR can be solved directly).
+
+  \item \textit{Why isn't the asymptotic distribution more like that described
+        in Lausen and Schumacher (1992), which entails an Ornstein-Uhlenbeck process
+	especially for rank statistics based on censored data such as in the example
+	of the current paper.}
+	
+	fixed $p$ vs.\ increasing $p$
+	
+  \item \textit{What happens to the asymptotics when the number of cutpoints, $p$,
+        is large relative to the number of subjects, $n$?}
+	
+	Nothing (as long as the normal approximation works), e.g., split in
+	categorical variable with large number of categories. It just takes more
+	time to evaluate the statistic and its distribution.
+	
+	Example: 10 categories with 10 observations each leads to $n = 100$ but
+	$p = 2^{10 - 1} = 512$.
+	
+  \item \textit{On p.~11, ordinal responses are often analyzed with ordinal
+        logistic models (proportional odds models) based on the multinomial
+	distribution. How would such an approach be accommodated with the
+	authors' approach?}
+	
+	Ordinal responses would be incorporated into the generalized framework
+	by choosing appropriate scores for the ordered levels in the influence
+	function $h(\cdot)$ and then taking the maximum over two-sample statistics.
+	Each of these statistics evaluates the significance of a single binary
+	covariate in a proportional odds logistic regression (POLR). However, in
+	POLR the inference is typically based on the likelihood ratio statistic
+	rather than a Pearson-type $\chi^2$ statistic (as computed from our
+	framework).
+	
+  \item Minor issues:
+  
+  \begin{itemize}
+  
+    \item[(a)] \textit{The name ``influence'' function implies to some readers a
+               robustness influence function. Such a function clearly needs to be
+	       defined when it is introduced and how it is defined in practice
+	       for the different scales of outcomes. Similarly, $q$ needs to be
+	       explained here as well.}
+	       
+	       $h(\cdot)$ is explained earlier, 
+	       
+	       Robust influence functions (i.e., bounded influence functions) can
+	       be easily employed as well.
+	       
+    \item[(b)] \textit{In the first paragraph of the introduction, the authors need to
+               clarify the terms ``step-shaped''.}
+	       
+	       Done by adding an example: single jump in mean function.
+	       
+    \item[(c)] \textit{On p.~8, why doesn't the $\varrho$ correlation function for the
+               elements of $R$ involve the influence function, $h(\cdot)$?}
+	       
+	       Added formula for $\Sigma$.
+	       
+    \item[(d)] \textit{On p.~9, where are the $r_{ij}$ elements defined for $R$? Are
+               they the $\varrho$ elements defined on p.~8?}
+    
+               The elements of $R$ are the correlations corresponding to the covariances
+	       in $\Sigma$. The $\varrho$ elements are special cases for $q = 1$.
+	       Both is pointed out more clearly now.
+
+    \item[(e)] \textit{On p.~9, how is $c$ chosen?}
+    
+               $c$ denotes an (arbitrary) quantile (or critical value) of the distribution
+	       of $\max  |Z_1|, \dots, |Z_p|$.
+	       
+    \item[(f)] \textit{On p.~11, ``blocks'' needs to be defined clearly.}
+               
+	       Done.
+	       
+    \item[(g)] \textit{On p.~11 (line 12 from the bottom), why does partitioning 
+               ``lead to'' or determine $g(\cdot)$. Shouldn't the link function be
+	       determined by the outcome, $Y$?}
+	       
+	       The function $g(\cdot)$ is a transformation of the covariate(s) $X$
+	       only, pertaining to the set of all potential two-sample splits.
+	       The outcome is transformed by the influence function $h(\cdot)$.
+	       
+    \item[(h)] \textit{The first part of Section~5 (Applications and illustration)
+              from bottom of p.~10 to the end of the text at ``Table 1 about here''
+	       should be put in a separate section (``Special cases'') with the
+	       remainder of the text in Section~5 being left in the Illustration
+	       section.}
+	       
+	       Re-organized.
+	       
+    \item[(i)] \textit{Similarly, the second paragraph on p.~11 should be in the
+               estimation or inference section.}
+	       
+	       Re-organized.
+	       
+    \item[(j)] \textit{Finally, the example needs to be elaborated on more in terms
+               of different cutpoints for different types of outcomes in addition to
+	       the survival outcome. Also, does the cutpoint make sense to the
+	       clinicians and does it relate to any apriori clinically defined
+	       cutpoints. The interaction issue needs more elaboration as well in
+	       terms of its magnitude relative to observed means of the outcome for
+	       each of the cells represented by the cutpoints.}
+	       
+	       Oh come on \dots
+
+  \end{itemize}
+  
+\end{enumerate}
+
+\textbf{\large Associate Editor}
+
+General comments:
+
+\begin{itemize}
+
+  \item \textit{The authors claim that most published results on maximally selected
+        statistics are special cases of their generalized framework. This sounds very
+	attractive, but this affirmation lacks a few explanations/proofs. The
+        connections/similarities/equivalences to the other asymptotic approaches
+        proposed in previous literature should be outlined/proven in more detail. In
+        particular, the present approach is conditional, while most of the previous
+        methods are not conditional.}
+	
+	In Section~6, we show now in more detail how previously established statistics
+	are special cases of the generalized framework. Furthermore, we point out 
+	more clearly what the differences between different asymptotic approximations
+	for the distribution of the test statistics are.
+	
+  \item \textit{A simple search in Google Scholar yields other articles: Hothorn and
+        Lausen (2003, CSDA), Halpern (1999, Biometrics), Schlittgen (1999, Biom J),
+	Burr (2001, Statistics in Medicine), Boulesteix and Strobl (2007),
+	Lingyun (1997, JSPI). How do these papers fit into the framework presented here?
+	Since the authors' aim is to ``generalize'' maximally selected statistics, as
+	many special cases as possible should be enclosed.}
+	
+	All pointed out in Section~6.
+	
+  \item \textit{A discussion of the asymptotic approximation's quality would be appreciated.
+        What is the behaviour compared to other asymptotic approximations already
+        proposed in the literature?}
+	
+	Added.
+	
+  \item \textit{Can the proposed approach be applied to the problem of confidence
+        intervals in the vein of Hollander et al.\ (2005, Stat.Med.)?}
+	
+	TH will check.
+	
+\end{itemize}
+
+Minor concerns:
+
+\begin{itemize}
+  
+  \item \textit{p5: Please define D.}
+        
+	Done.
+	
+  \item \textit{p5: Although I seem to understand the meaning of the sentence
+        ``by $p$ sets $A_1, \dots , A_p$ partitioning the observations into two
+	groups'', it is a bit awkward.}
+	
+	The discussion of the sets $A_j$ and their corresponding indicator functions
+	$g_j(\cdot)$ has been improved and extended.
+	
+  \item \textit{p5: The expression $A_j = \{ X | X \le \dots\}$ is confusing since
+        $X$ is multi-dimensional.}
+	
+	Improved together with the comments above.
+	
+  \item \textit{p5: bottom formula. If $h$ is in $R^{q \times 1}$, $h^\top$ should be
+        in $R^{1 \times q}$.}
+	
+	It is always transformed to a column vector by the vec operator.
+	
+  \item \textit{p6: There seems to be a dimension problem here. $g(X)$ seems to be
+        in $R^{1 \times p}$ and $h^\top$ in $R^{1 \times q}$. I think I understand
+	what is meant, but this should be corrected or explained.}
+	
+	This is also due to the vec operator.
+	
+  \item \textit{p6: The closed form expressions for $\mu$ and $\sigma$ may be
+        given here, since they are of central importance for generalized maximally
+	selected statistics.}
+	
+	Added.
+	
+  \item \textit{p7: The beginning of the ``inference'' section is quite general,
+        whereas most of the section is devoted to the improved algorithm for the
+	multivariate normal distribution. My suggestion is to separate these two
+	subparts of the section. The beginning can be seen as the conclusion of
+	the previous section. The rest would form an independent section with a
+	more explicit title (perhaps something like ``A new algorithm for \dots''),
+	thus emphasizing this important contribution.}
+	
+	Re-structured.
+	
+  \item \textit{p8: The formulae of $\varrho_{j,k}$ and $\varrho_{1,k}$ should be
+        explained in more detail. They are not straightforward. Does the outlined
+	method apply only for $q = 1$ or can it be generalized to $q > 1$?}
+	
+	Now an explicit formula is given for $\Sigma$ and it is explained in more
+	detail how the corresponding correlation matrix $R$ is derived. This
+	helps to point out how the special cases $\varrho_{j, k}$ are
+	derived the specific $g(\cdot)$ functions and univariate responses.
+	
+	A generalization for $q > 1$ is not possible because the joint correlation
+	matrix does not have a band structure.
+	
+  \item \textit{p8: The notation $R = \mbox{cor}(\Sigma)$ is maybe intuitive, but unusual.}
+  
+        Yes, this is now explained verbally now which should be un-ambiguous.
+	
+  \item \textit{p12: Are there references for the equivalences of $T_{\max}$ with maximally
+        selected $\chi^2$ statistics, McNemar statistics, etc.?}
+	
+	Pointed out in Section~6 now.
+	
+  \item \textit{p12: Citing Koziol (1991) at this stage is a bit confusing, since
+        Koziol's method is exact.}
+	
+	We distinguish more carefully now between test statistics and the reference
+	distribution used.
+	
+  \item \textit{p13: It is not clear to me how one obtains 194 potential partitions.
+        Is this approach for interactions documented anywhere else? If not, it should be
+        explained in more details here, because it constitutes one of the three major
+        contributions of this article.}
+	
+	Give more details about construction: From all possible interactions those are
+	deleted that are not ``marginally ordered''.
+	
+  \item \textit{p13: It would be interesting to give both unadjusted and adjusted $p$~values
+        for the example.}
+	
+	Well, $2 \cdot (1 - \Phi(8.69))$ is tiny \dots
+	
+  \item \textit{p14: Does the `coin' package include the new algorithm presented in
+        Section~4?}
+	
+	It is not yet contained because we are currently working together with Alan Genz
+	on an improved version of the code.
+    
+\end{itemize}
+
+\end{document}
