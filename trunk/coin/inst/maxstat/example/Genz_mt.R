@@ -1,5 +1,6 @@
 
 library("coin")
+set.seed(290875)
 x <- sort(runif(50))
 y <- rnorm(length(x))
 mt <- maxstat_test(y ~ x)
@@ -51,7 +52,7 @@ worsley <- function(mt, tstat = NULL) {
 
 system.time(p1 <- pmt(mt))
 
-system.time(p2 <- worley(mt))
+system.time(p2 <- worsley(mt))
 
 system.time(p3 <- pvalue(mt))
 
@@ -59,12 +60,18 @@ x <- ordered(cut(1:10000, breaks = seq(from = 0, to = 10000, by = 100)))
 y <- rnorm(10000)
 mt <- maxstat_test(y ~ x)
 
+mta <- maxstat_test(y ~ x, distribution = approximate(20000))
+
+
 g <- seq(from = 2.3, to = 4, by = 0.1)
 pex <- sapply(g, function(i) 1 - pmt(mt, i))
 pap<- sapply(g, function(i) 1 - worsley(mt, i))
+ex <- sapply(g, function(i) pperm(mta, i))
 
-save(g, pex, pap, file = "approx.rda")
+save(g, pex, pap, ex, file = "approx.rda")
 
 plot(g, pex, type = "l", lty = 1, xlab = expression(c), ylab = expression(P(T[max] <= c)))
 lines(g, pap, lty = 2)
-legend("bottomright", lty = c(1, 2), legend = c("Exact Asymptotic", "Improved Bonferroni"), bty = "n")
+lines(g, pap, lty = 3)
+legend("bottomright", lty = c(1, 2, 3), 
+       legend = c("Exact Asymptotic", "Improved Bonferroni", "Exact"), bty = "n")
