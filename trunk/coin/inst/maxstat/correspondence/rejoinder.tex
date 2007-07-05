@@ -30,16 +30,70 @@
 	especially for rank statistics based on censored data such as in the example
 	of the current paper.}
 	
-	fixed $p$ vs.\ increasing $p$
+        The different asymptotic distributions are in fact more similar than obivous
+	from their representations via the multivariate normal distribution and the
+	crossing probability of the Ornstein-Uhlenbeck process (or scaled Brownian
+	bridge), respectively. 
 	
+	For illustration, we employ a univariate influence function ($q = 1$) and
+	$p$ potential splits. The statistic $T_{\max}$ is then the absolute maximum over
+	$p$ standardized (to zero mean and unit variance) statistics $Z_1, \dots, Z_p$
+	with correlation $\mbox{COV}[Z_j, Z_k] = \rho_{j, k}$. The asymptotic distribution
+	(both, conditional or unconditional) of each $Z_j$ is standard normal.
+	
+	Approach~1 (fixed $p$): If $p$ is fixed (as in our approach), the asymptotic
+	distribution of $T_{\max}$ is the maximum from a $p$-dimensional normal
+	distribution with correlation/covariance matrix $R$ (formed from correlations
+	$\rho_{j, k}$ and unit variances).
+	
+	Approach~2 (increasing $p$): If $p \rightarrow \infty$ as $n \rightarrow \infty$,
+	the statistic $T_{\max}$ converges to the absolute supremum over a continuous process
+	$Z^0(t)$. As shown for example in Miller and Siegmund (1982) or
+	Lausen and Schumacher (1992), the process $Z^0(t)$ can be written as
+	  \[ Z^0(t) \quad = \quad \frac{B^0(t)}{\sqrt{t (1 - t)}}, \]
+	where $B^0(t)$ is a standard Brownian bridge. This process has continuous paths,
+	zero mean, unit variance, and correlation
+	  \[ \mbox{COV}[Z^0(s), Z^0(t)] \quad = \quad \sqrt{\frac{s (1 - t)}{t (1 - s)}}, \]
+	if $s < t$. Thus, the correlation structure structure is exactly the same as
+	above. More formally, with $t_j = n^{-1} \sum_{i = 1, \dots, n} g_j(X_i)$,
+	the statistic $Z_j$ and $Z^0(t_j)$ are identical in distribution.
+	
+	Therefore, the difference between the two approaches is that in the latter case
+	the supremum over the process in interval $[\varepsilon, 1 - \varepsilon]$ is taken
+	  \[ \sup_{t \in [\varepsilon, 1 - \varepsilon]} Z^0(t) \]
+	whereas the former uses the maximum over a fixed set of time points
+	$\{t_1, \dots, t_p\}$:	
+	  \[ \max_{t \in \{t_1, \dots, t_p\}} Z^0(t). \]
+	Therefore, the supremum over the full interval will always be larger than the 
+	maximum over a subset of times/partitions because the additional variation
+	in the intervals $(t_j, t_{j + 1})$ is ignored. However, the difference is negligible
+	if the differences $t_{j+1} - t_j$ are sufficiently small.
+	
+	Which of these two asymptotic approximations can be justified by theoretical arguments
+	depends on various considerations. In a conditional setting, it is always more natural
+	to treat $p$ as fixed. In unconditional settings, it depends on the partition-generating
+	procedure. If the partitions are derived from (interactions of) categorical variables
+	then $p$ is fixed because with increasing $n$ the number of categories will not increase.
+	However, if the partitions are cutpoints in a continuous variable, then the number
+	of potential splits will increase with $n$. If in the testing procedure, all potential
+	cutpoints are always used, then the ``increasing $p$'' approach is more appropriate.
+	However, if the cutpoints are chosen at a given number of quantiles, then the ``fixed $p$''
+	approach is appropriate.
+	
+	For all practical purposes, the two approaches lead to virtually identical results for
+	large $p$, e.g., $p \ge 30$.
+	
+	This is pointed out (more briefly) in the discussion of distributions in Section~X.
+		
   \item \textit{What happens to the asymptotics when the number of cutpoints, $p$,
         is large relative to the number of subjects, $n$?}
 	
-	Nothing (as long as the normal approximation works), e.g., split in
-	categorical variable with large number of categories. It just takes more
-	time to evaluate the statistic and its distribution.
-	
-	Example: 10 categories with 10 observations each leads to $n = 100$ but
+	Nothing, it just takes more time to evaluate the statistic and its distribution.	
+        More generally, for the joint asymptotics to work, one just has to assure that the
+	asymptotic approximation for each individual statistic is reasonable.
+
+	Example: Split in categorical variable with large number of categories, e.g.,
+	10 categories with 10 observations each leads to $n = 100$ but
 	$p = 2^{10 - 1} = 512$.
 	
   \item \textit{On p.~11, ordinal responses are often analyzed with ordinal
@@ -76,16 +130,16 @@
 	       
 	       Done by adding an example: single jump in mean function.
 	       
-    \item[(c)] \textit{On p.~8, why doesn't the $\varrho$ correlation function for the
+    \item[(c)] \textit{On p.~8, why doesn't the $\rho$ correlation function for the
                elements of $R$ involve the influence function, $h(\cdot)$?}
 	       
 	       Added formula for $\Sigma$.
 	       
     \item[(d)] \textit{On p.~9, where are the $r_{ij}$ elements defined for $R$? Are
-               they the $\varrho$ elements defined on p.~8?}
+               they the $\rho$ elements defined on p.~8?}
     
                The elements of $R$ are the correlations corresponding to the covariances
-	       in $\Sigma$. The $\varrho$ elements are special cases for $q = 1$.
+	       in $\Sigma$. The $\rho$ elements are special cases for $q = 1$.
 	       Both is pointed out more clearly now.
 
     \item[(e)] \textit{On p.~9, how is $c$ chosen?}
@@ -132,7 +186,7 @@
   
 \end{enumerate}
 
-\textbf{\large Associate Editor}
+\textbf{\large Referee}
 
 General comments:
 
@@ -220,13 +274,13 @@ Minor concerns:
 	
 	Re-structured.
 	
-  \item \textit{p8: The formulae of $\varrho_{j,k}$ and $\varrho_{1,k}$ should be
+  \item \textit{p8: The formulae of $\rho_{j,k}$ and $\rho_{1,k}$ should be
         explained in more detail. They are not straightforward. Does the outlined
 	method apply only for $q = 1$ or can it be generalized to $q > 1$?}
 	
 	Now an explicit formula is given for $\Sigma$ and it is explained in more
 	detail how the corresponding correlation matrix $R$ is derived. This
-	helps to point out how the special cases $\varrho_{j, k}$ are
+	helps to point out how the special cases $\rho_{j, k}$ are
 	derived the specific $g(\cdot)$ functions and univariate responses.
 	
 	A generalization for $q > 1$ is not possible because the joint correlation
