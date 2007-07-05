@@ -107,6 +107,7 @@
 \SweaveOpts{eps = FALSE, keep.source = TRUE, echo = FALSE}
 
 <<coin-setup, echo = FALSE, results = hide>>=
+options(prompt = "R> ")
 library("coin")
 set.seed(290875)
 ### get rid of the NAMESPACE
@@ -657,8 +658,8 @@ For a variety of classical tests (some of them already implemented in
 base package \pkg{stats}), their conditional counterpart is made easily
 accessible. Some of the most important procedures, such as
 the Wilcoxon-Mann-Whitney or Cochran-Mantel-Haenszel tests, 
-can be obtained as listed in Table~\ref{confct}, just by choosing the
-appropriate \code{xtrafo}, \code{ytrafo} and \code{teststat} arguments.  
+can be obtained as listed in Table~\ref{confct}, just by setting the
+\code{xtrafo}, \code{ytrafo} and \code{teststat} arguments appropriately.  
 Almost all special-purpose functionality
 implemented in packages \pkg{exactRankTests}
 \citep{Rnews:Hothorn:2001,HothornHornik:2002:CompStat,pkg:exactRankTests}
@@ -676,7 +677,7 @@ functions computing the linear statistic $\T$ (both for the original and
 permuted data), the conditional expectation~$\mu$
 and conditional covariance matrix~$\Sigma$, is coded in \proglang{C}. 
 The shift and split-up algorithms \citep{axact-dist:1986,exakte-ver:1987,vdWiel2001}
-for computing the exact null distribution in univariate 2-sample problems
+for computing the exact null distribution in 2-sample problems with univariate response
 as well as conditional Monte-Carlo procedures for approximating the
 exact conditional null distribution are implemented in \proglang{C} as well.
 (In addition,
@@ -705,8 +706,7 @@ three-dimensional \Rclass{table} with variables \code{Income} and
 slightly modified for convenience):
 <<js, echo = TRUE>>=
 js <- jobsatisfaction
-dimnames(js)$Job.Satisfaction <- c("VeryDiss", "ModDiss", 
-                                   "ModSat", "VerySat")
+dimnames(js)[[2]] <- c("VeryDiss", "ModDiss", "ModSat", "VerySat")
 ftable(Job.Satisfaction ~ Gender + Income, data = js)
 @
 \setkeys{Gin}{width=\textwidth}
@@ -779,7 +779,7 @@ The test procedures implemented in package \pkg{coin} are continuously
 checked against results obtained by the corresponding implementations in
 package \pkg{stats} (where available). In addition, the test statistics
 and exact, approximate and asymptotic $p$~values for data examples
-given in the \proglang{StatXact}~6 user manual \citep{StatXact6} are compared
+given in the \pkg{StatXact}~6 user manual \citep{StatXact6} are compared
 with the results reported there. Step-down multiple adjusted $p$~values
 have been checked against results reported by \Rcmd{mt.maxT} from
 package \pkg{multtest} \citep{PKG:multtest}. For details on the test
