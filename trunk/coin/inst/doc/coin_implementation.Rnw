@@ -1,7 +1,6 @@
-\documentclass[article]{jss}
+\documentclass{Z}
 
 %% packages
-\usepackage{thumbpdf}
 \usepackage{amsfonts,amstext,amsmath}
 \usepackage{rotating}
 %% need no \usepackage{Sweave.sty}
@@ -43,7 +42,6 @@
 \Shorttitle{Implementing a Class of Permutation Tests}
 
 \Abstract{
-  %Z% re-formulated:
   The \proglang{R} package \pkg{coin} implements a unified approach to
   permutation tests providing a huge class of independence tests  
   for nominal, ordered, numeric, and censored data as well as
@@ -70,39 +68,6 @@
 
 \Plainkeywords{conditional inference, exact distribution, conditional
   Monte Carlo, categorical data analysis, R}
-
-%% \Volume{13}
-%% \Issue{9}
-%% \Month{September}
-%% \Year{2004}
-%% \Submitdate{2004-09-29}
-%% \Acceptdate{2004-09-29}
-
-\Address{
-  Torsten Hothorn \\
-  Institut f\"ur Statistik \\
-  Ludwig-Maximilians-Universit\"at M\"unchen \\
-  Ludwigstra{\ss}e 33\\
-  D-80539 M\"unchen, Germany \\
-  E-mail: \email{Torsten.Hothorn@R-project.org} \\
-  URL: \url{http://www.stat.uni-muenchen.de/~hothorn/}\\
-
-  Kurt Hornik, Achim Zeileis\\
-  Department of Statistics and Mathematics\\
-  Wirtschaftsuniversit\"at Wien\\
-  Augasse 2--6\\
-  A-1090 Wien, Austria\\
-  E-mail: \email{Kurt.Hornik@R-project.org}\\
-  E-mail: \email{Achim.Zeileis@R-project.org}\\
-
-  Mark A.\ van de Wiel \\
-  Department of Mathematics\\
-  Vrije Universiteit Amsterdam\\
-  De Boelelaan 1081a\\
-  1081 HV Amsterdam, The Netherlands \\
-  E-mail: \email{mark.vdwiel@vumc.nl}
-}
-
 
 \SweaveOpts{eps = FALSE, keep.source = TRUE, echo = FALSE}
 
@@ -513,11 +478,11 @@ the following methods are available:
 \item[\Rcmd{pperm}:] evaluates the cumulative distribution function.
 \item[\Rcmd{dperm}:] evaluates the probability density function. 
 \item[\Rcmd{qperm}:] evaluates the quantile function.
-\item[\Rcmd{support}:] returns the support of the null distribution. %Z% in which form?
+\item[\Rcmd{support}:] returns the support of the null distribution.
 \end{description}
 Of course, all methods are defined for objects inheriting from class 
 \Rclass{IndependenceTest} as well. In addition, \Rcmd{show} methods
-are defined for classes \Rclass{ScalarIndependenceTest}, \Rclass{MaxTypeIndependenceTest}
+are defined for classes \Rclass{ScalarIndependenceTest}, \linebreak \Rclass{MaxTypeIndependenceTest}
 and \Rclass{QuadTypeIndependenceTest}, converting these \proglang{S4} 
 objects to an informal \proglang{S3} object of class \Rclass{htest} for which
 a \Rcmd{print} method is available that most \proglang{R} users are familiar with.
@@ -670,8 +635,6 @@ these packages will become deprecated in the future.
 
 \section{Internal functionality}
 
-%Z% mention required functionality somewhere, such as modeltools and mvtnorm
-
 The core functionality, i.e., a small set of 
 functions computing the linear statistic $\T$ (both for the original and
 permuted data), the conditional expectation~$\mu$
@@ -793,8 +756,6 @@ based on \pkg{coin} version \Sexpr{packageDescription("coin")$Version}, availabl
 under the terms of the General Public License from \url{http://CRAN.R-project.org/}. 
 \proglang{R} version \Sexpr{paste(version$major, version$minor, sep = ".")} was used for 
 the computations, see \url{http://www.R-project.org/}.
-
-%Z% also mention required packages and their version.
 
 \section*{Acknowledgments}
  
