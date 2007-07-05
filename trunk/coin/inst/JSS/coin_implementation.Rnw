@@ -799,7 +799,7 @@ the computations, see \url{http://www.R-project.org/}.
 \section*{Acknowledgments}
  
 We would like to thank Helmut Strasser for discussions on the theoretical framework.
-Henric Nilsson provided clarification and examples for the Stuart-Maxwell test and helped
+Henric Nilsson provided clarification and examples for the Maxwell-Stuart test and helped
 identifying bugs. The work of T.~Hothorn was supported by Deutsche Forschungsgemeinschaft (DFG) 
 under grant HO 3242/1-3.
 
