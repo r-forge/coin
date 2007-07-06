@@ -1,6 +1,6 @@
 
-library("coin")
 library("maxstat")
+library("coin")
 set.seed(290875)
 
 pmt <- function(mt, tstat = NULL) {
@@ -50,7 +50,7 @@ worsley <- function(mt, tstat = NULL) {
 
 
 x <- ordered(cut(1:100, breaks = seq(from = 0, to = 100, by = 5)))
-y <- rnorm(100)
+y <- rank(rnorm(100))
 mt <- maxstat_test(y ~ x)
 
 system.time(p1 <- pmt(mt))

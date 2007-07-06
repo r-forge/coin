@@ -376,7 +376,7 @@ more powerful test compared to the approximations so far (see Figure~\ref{approx
 \begin{figure}
 \begin{center}
 \caption{Approximations of the distribution of a maximally selected statistic
-         for $n = 100$ observations and $p = 10$ cutpoints. The exact distribution
+         for $n = 100$ observations (response rank-transformed) and $p = 20$ cutpoints. The exact distribution
          as approximated by $30.000$ random permutations of the data is
          shown as a solid line. The conditional asymptotic distribution suggested here
          is rather close. The approximations via the improved Bonferroni correction
