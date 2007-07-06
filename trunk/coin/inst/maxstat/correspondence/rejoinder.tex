@@ -1,5 +1,6 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{a4wide}
+\usepackage{amstext}
 
 \begin{document}
 
@@ -14,8 +15,14 @@
 	and so appear not to relate to interactions let alone address them
 	explicitly.}
 	
-	Interactions are also used for splits into two samples, pointed
-	out more clearly in Section~2.
+        Each partition induces a two-sample statistic to be maximized
+        over multiple partitions. When two covariates $X_1$ and $X_2$ are available,
+        one can i) consider all partitions in either $X_1$ and $X_2$ (CART follows
+        this approach) or ii) consider the interaction of $X_1$ and $X_2$ 
+        and define paritions with respect to this interaction variable.
+        We follow the latter approach which, to the best of our knowledge is novel.
+
+        The differences are now explained in Section 6.
 	
   \item \textit{There is literature on competing methods for finding cutpoints
         especially with interaction models (e.g., CART and recursive partitioning).
@@ -23,7 +30,8 @@
 	compares to these methods.}
 	
 	Interactions are not determined recursively but splits are computed in
-	interactions directly (e.g., XOR can be solved directly).
+	interactions directly (e.g., XOR can be solved directly). Section 6
+        clarifies this issue.
 
   \item \textit{Why isn't the asymptotic distribution more like that described
         in Lausen and Schumacher (1992), which entails an Ornstein-Uhlenbeck process
@@ -149,7 +157,9 @@
 	       
     \item[(f)] \textit{On p.~11, ``blocks'' needs to be defined clearly.}
                
-	       Done.
+	       Blocks are now defined in Section 3 and the implications
+               of having a block structure are pointed out.
+               
 	       
     \item[(g)] \textit{On p.~11 (line 12 from the bottom), why does partitioning 
                ``lead to'' or determine $g(\cdot)$. Shouldn't the link function be
@@ -165,12 +175,12 @@
 	       remainder of the text in Section~5 being left in the Illustration
 	       section.}
 	       
-	       Re-organized.
+	       The section has been re-organized as suggested.
 	       
     \item[(i)] \textit{Similarly, the second paragraph on p.~11 should be in the
                estimation or inference section.}
 	       
-	       Re-organized.
+	       We moved the most important examples to section 2.
 	       
     \item[(j)] \textit{Finally, the example needs to be elaborated on more in terms
                of different cutpoints for different types of outcomes in addition to
@@ -180,9 +190,14 @@
 	       terms of its magnitude relative to observed means of the outcome for
 	       each of the cells represented by the cutpoints.}
 	       
-	       Oh come on \dots
+Our interest was motivated by a research project re-analysing the CAO/ARO/AIO-94
+data with respect to possible prognostic factors. The manuscript uses 
+a different univariate methodology, however, the result is qualitatively the same
+and corresponds rather well to established clinical cutpoints. 
+This manuscript is currently under consideration by a medical journal and will
+be added to the list of references once it is published.
 
-  \end{itemize}
+\end{itemize}
   
 \end{enumerate}
 
@@ -212,18 +227,36 @@ General comments:
 	Since the authors' aim is to ``generalize'' maximally selected statistics, as
 	many special cases as possible should be enclosed.}
 	
-	All pointed out in Section~6.
+        Hothorn \& Lausen (2003) investigate the exact distribution of maximally
+        selected rank statistics (now cited in new section 6). Schlittgen (1999)
+        proposes an asymptotic approximation but there is doubt if this
+        is correct (see Hothorn \& Lausen, 2003). 
+
+        Halpern (1999) suggests to minimize $p$-values instead of maximizing 
+        statistics which is equivalent to other approaches discussed in the paper 
+        as long as the asymptotic distribution is used (an exact version is suggested 
+        by Halpern in addition).
+        Boulesteix and Strobl (2007) propose an exact algorithm for maximally
+        $\chi^2$ statistics, which are now explained in more detail in section 6.
+        Burr (2001) focuses on sums of standard normal distributed statistics
+        to detect clusters in a general multiple testing framework 
+        and we can't see how this would fix into 
+        the regression context considered here.
 	
   \item \textit{A discussion of the asymptotic approximation's quality would be appreciated.
         What is the behaviour compared to other asymptotic approximations already
         proposed in the literature?}
 	
-	Added.
+	We added a comparison of approximations of the exact conditional
+        null distribution in Figure 1.
 	
   \item \textit{Can the proposed approach be applied to the problem of confidence
         intervals in the vein of Hollander et al.\ (2005, Stat.Med.)?}
 	
-	TH will check.
+	The approach is applicable for cutpoint estimators in a single ordered
+        covariate but we can't see how it generalizes to multiple covariates
+        or nominal covariates where one would have to consider confidence `intervals'
+        for partitions of the covariate space.
 	
 \end{itemize}
 
@@ -240,7 +273,7 @@ Minor concerns:
 	groups'', it is a bit awkward.}
 	
 	The discussion of the sets $A_j$ and their corresponding indicator functions
-	$g_j(\cdot)$ has been improved and extended.
+	$g_j(\cdot)$ has been improved and extended. The sentence has been reformulated.
 	
   \item \textit{p5: The expression $A_j = \{ X | X \le \dots\}$ is confusing since
         $X$ is multi-dimensional.}
@@ -250,7 +283,8 @@ Minor concerns:
   \item \textit{p5: bottom formula. If $h$ is in $R^{q \times 1}$, $h^\top$ should be
         in $R^{1 \times q}$.}
 	
-	It is always transformed to a column vector by the vec operator.
+	The statistic is always transformed to a column vector by the vec operator
+        (maps any $q \times p$ matrix into a $pq$ vector columnwise).
 	
   \item \textit{p6: There seems to be a dimension problem here. $g(X)$ seems to be
         in $R^{1 \times p}$ and $h^\top$ in $R^{1 \times q}$. I think I understand
@@ -262,7 +296,7 @@ Minor concerns:
         given here, since they are of central importance for generalized maximally
 	selected statistics.}
 	
-	Added.
+	We added the formulae for the conditional expectation and the covariance matrix.
 	
   \item \textit{p7: The beginning of the ``inference'' section is quite general,
         whereas most of the section is devoted to the improved algorithm for the
@@ -272,7 +306,9 @@ Minor concerns:
 	more explicit title (perhaps something like ``A new algorithm for \dots''),
 	thus emphasizing this important contribution.}
 	
-	Re-structured.
+	The section as been re-structured as suggested. Moreover, 
+        we compare the conditional asymptotic distribution with
+        other approximations.
 	
   \item \textit{p8: The formulae of $\rho_{j,k}$ and $\rho_{1,k}$ should be
         explained in more detail. They are not straightforward. Does the outlined
@@ -288,12 +324,13 @@ Minor concerns:
 	
   \item \textit{p8: The notation $R = \mbox{cor}(\Sigma)$ is maybe intuitive, but unusual.}
   
-        Yes, this is now explained verbally now which should be un-ambiguous.
+        This is now explained verbally now which should be un-ambiguous.
 	
   \item \textit{p12: Are there references for the equivalences of $T_{\max}$ with maximally
         selected $\chi^2$ statistics, McNemar statistics, etc.?}
 	
-	Pointed out in Section~6 now.
+	The equivalence of the statistic $T_\text{max}$ to already published
+        statistics is now pointed out in Section~6 explicitely.
 	
   \item \textit{p12: Citing Koziol (1991) at this stage is a bit confusing, since
         Koziol's method is exact.}
@@ -312,14 +349,41 @@ Minor concerns:
   \item \textit{p13: It would be interesting to give both unadjusted and adjusted $p$~values
         for the example.}
 	
-	Well, $2 \cdot (1 - \Phi(8.69))$ is tiny \dots
+	The unadjusted $p$-value is $2 \cdot (1 - \Phi(8.69))$ and is reported in 
+        Section `Illustration'.
 	
   \item \textit{p14: Does the `coin' package include the new algorithm presented in
         Section~4?}
 	
 	It is not yet contained because we are currently working together with Alan Genz
-	on an improved version of the code.
-    
+	on an improved version of the code. This is the (unoptimized) R function
+        used in our experiments:
+\begin{verbatim}
+pmt <- function(mt) {
+
+    R <- cov2cor(covariance(mt))
+    R1 <- solve(R)
+    tstat <- statistic(mt)
+
+    g <- seq(from = -tstat, to = tstat, length = 512)
+    g2 <- g^2
+    dg <- (g[2] - g[1]) / sqrt(2 * pi)
+    ggt <- g %*% t(g)
+    r <- diag(R1) / 2
+    R1m <- R1 * (-1)
+
+    phi <- function(k)
+        exp(R1m[k,k-1] * ggt - r[k] * g2)
+
+    f <- rep(1, length(g))
+    for (i in nrow(R):2)
+        f <- colSums(phi(i) * f) * dg
+
+    1 - (1 / sqrt(det(R))) * sum(f * exp(-r[1] * g2)) * dg
+}
+\end{verbatim}    
+
+
 \end{itemize}
 
 \end{document}

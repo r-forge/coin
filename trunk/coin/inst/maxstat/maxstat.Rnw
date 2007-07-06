@@ -17,15 +17,19 @@ library("xtable")
 library("survival")
 @
 
+
+\setcounter{page}{1}
+
 \section{Introduction} \label{sec:introduction}
 
 Dichotomization of variables measured at higher scale levels 
 prior to model building is bad practice 
 \citep[][among many others]{Royston2006}.
 It will result in loss of power and sophisticated regression
-models that adapt itself to the complexity of the regression 
+models that adapt themselves to the complexity of the regression 
 problem at hand are widely available. However, simple regression
-models capturing step-shaped relationships between two variables
+models capturing step-shaped relationships
+between two variables (e.g., a single jump in a mean function) 
 are valuable for the implementation of scientific results into the 
 real world: a one-parameter `good--poor' or `high--low' 
 decision rule is attractive to practitioners because of its simplicity.
@@ -58,7 +62,7 @@ and response variable. A test with power against shift alternatives, i.e.,
 departures from the null hypothesis where the distribution of the response variable 
 varies between two groups of observations, is of special interest. 
 Once we are able to reject the null hypothesis, we are interested in the 
-alternative which lead to the rejection, i.e., want to estimate a cutpoint
+alternative which led to the rejection, i.e., want to estimate a cutpoint
 or partition.
 
 The first procedure of this kind, utilizing the maximum over multiple $\chi^2$ statistics
@@ -74,8 +78,8 @@ Finally, \cite{Rabinowitz2000} suggested a maximally selected McNemar's test.
 than one covariate.
 
 Based on the ideas underlying these established techniques, we suggest a new
-generalized class of maximally selected statistics that contains the tests
-above as special cases but also allows for direct construction of new test
+generalized class of maximally selected statistics that contains the statistics
+sketched above as special cases but also allows for direct construction of new test
 procedures for less standard test problems. For evaluating the distribution of
 the test statistics, a conditional inference approach is adopted by embedding
 the tests into the theory of permutation tests of \cite{StrasserWeber1999}.
@@ -84,7 +88,7 @@ of the statistics to be maximized. For statistics derived from cutpoints,
 the correlations have a special product form which we exploit for evaluation
 of the conditional asymptotic distribution: A linear-time algorithm is described
 which enables the fast assessment of a large number of cutpoints and
-and improves significantly upon approximations for the asymptotic distribution
+improves upon approximations for the asymptotic distribution
 currently in use. 
 
 Since no assumptions on the scale level of neither the covariate to be dichotomized nor
@@ -94,7 +98,8 @@ extend the methodology to new areas of application. We do so by constructing
 a maximally selected log-rank statistic for a censored response partitioned with
 respect to two ordered categorical covariates and potential interactions.
 This new test is employed to search for a high-risk group determined by the T and N-category
-of rectal cancer patients.
+of rectal cancer patients. Further examples include maximally selected statistics for 
+multivariate responses or maximally selected permutation tests.
 %%Although the above sketched procedures are quite popular, most of them rely
 %%on rather rough approximations of the reference distribution. The exact conditional 
 %%distribution for small samples has been derived for binary response variables 
@@ -115,22 +120,28 @@ of rectal cancer patients.
 We are provided with independent and identically distributed
 observations $(\Y_i, \X_i)$ for $i = 1, \dots, n$ and 
 are interested in testing the null hypothesis of independence of the response 
-variable $\Y \in \mathcal{Y}$ and and covariate(s) $\X \in \mathcal{X}$
+variable $\Y \in \mathcal{Y}$ and covariate(s) $\X \in \mathcal{X}$
 \begin{eqnarray*}
 H_0: D(\Y | \X) = D(\Y)
 \end{eqnarray*}
-against shift alternatives. That is, departures from the null hypothesis
+against shift alternatives ($D$ describes the distribution of
+a random variable). That is, departures from the null hypothesis
 where the distribution of the response variable varies between two groups
 of observations are of special interest.
-Such binary partitions are defined in advance by $p$ sets $A_1, \dots, A_p$
-partitioning the observations into two groups based on the $\X$ 
-measurements only. For ordered covariates $\X$, these sets are
-typically constructed via cutpoints, i.e., $A_j = \{\X | \X \le \xi_j\}$. Here,
+
+Such binary partitions are defined in advance by $p$ sets $A_1, \dots, A_p$.
+Each set $A_j$ partitions the observations into two 
+groups based on the covariate(s) only. For an ordered univariate covariate 
+$\X$, these sets are
+typically constructed via cutpoints, i.e., $A_j = \{\X | \X \le \xi_j\}$. 
+When $\X$ is a factor at $k$ levels, there are $p = 2^{k-1}$ possible
+partitions of the observations into two samples.
+A simple zero--one dummy coding for the $j$th partition is 
 \begin{eqnarray*}
 g_j(\X) \quad = \quad \indic(\X \in A_j)
 \end{eqnarray*}
-denotes the indicator function partitioning the observations
-into two groups. Only partitions satisfying a sample size 
+where $\indic$ denotes the indicator function. 
+Only partitions satisfying a sample size 
 constraint $\sum_i g_j(\X_i) \in (n\varepsilon, n - n\varepsilon)$ 
 for some fixed $\varepsilon \in (0, 0.5)$ are taken into account. 
 
@@ -149,7 +160,12 @@ function must not depend on the order in which $\Y_1, \dots, \Y_n$ appear.
 For example, with $h$ being a rank transformation for a 
 continuous response $\Y$, the linear
 statistic $\T_j$ is the sum of the ranks for observations from $A_j$, 
-i.e., equals the Wilcoxon-Mann-Whitney statistic. 
+i.e., equals the Wilcoxon-Mann-Whitney statistic. When $\Y$ is a factor 
+measured at $k$ levels, $h \in \R^{k - 1 \times 1}$ 
+is the corresponding dummy coding and $\T_j$ corresponds
+to the $2 \times k$ contingency table of the transformation $g_j(\X)$ and response 
+$\Y$. (Because the margins are fixed, we only need to compute the first $k - 1$ columns
+of the first row of this contingency table.)
 
 A joint linear statistic for all binary partitions is
 \begin{eqnarray*}
@@ -177,25 +193,33 @@ via its conditional expectation $\mu = \E(\T | S) \in \R^{pq \times 1}$
 and covariance $\Sigma = \V(\T | S) \in \R^{pq \times pq}$, derived under
 $H_0$ by conditioning on all possible permutations $S$ of the responses
 $\Y_1, \dots, \Y_n$. Closed-form expressions for $\mu$ and $\Sigma$ are
-available, see \cite{StrasserWeber1999} or \cite{Hothornetal2006}.
-
-%%\begin{eqnarray*}
-%%\mu = \E(\T | S) & = & \vec \left( \left( \sum_{i = 1}^n g(\X_i) \right)
-%%\E(h | S)^\top \right) \\
-%%\Sigma = \V(\T | S) & = &
-%%    \frac{n}{n - 1}  \V(h | S) \otimes
-%%        \left(\sum_i g(\X_i) \otimes  g(\X_i)^\top \right)
-%%\\
-%%& - & \frac{1}{n - 1}  \V(h | S)  \otimes \left(
-%%        \sum_i g(\X_i) \right) \otimes \left( \sum_i g(\X_i)\right)^\top
-%%\nonumber
-%%\end{eqnarray*}
-%%where $\otimes$ denotes the Kronecker product, and the conditional
-%%expectation of the influence function is $\E(h | S) = n^{-1} \sum_i
-%%h(\Y_i)$ with corresponding $q \times q$ covariance matrix
-%%\begin{eqnarray*}
-%%\V(h | S) = n^{-1} \sum_i \left(h(\Y_i) - \E(h | S) \right) \left(h(\Y_i) - \E(h | S)\right)^\top.
-%%\end{eqnarray*}
+as given by \cite{StrasserWeber1999}:
+\begin{eqnarray*}
+\mu = \E(\T | S) & = & \vec \left( \left( \sum_{i = 1}^n g(\X_i) \right)
+\E(h | S)^\top \right) \\
+\Sigma = \V(\T | S) & = &
+    \frac{n}{n - 1}  \V(h | S) \otimes
+        \left(\sum_i g(\X_i) \otimes  g(\X_i)^\top \right)
+\\
+& - & \frac{1}{n - 1}  \V(h | S)  \otimes \left(
+        \sum_i g(\X_i) \right) \otimes \left( \sum_i g(\X_i)\right)^\top
+\nonumber
+\end{eqnarray*}
+where $\otimes$ denotes the Kronecker product, and the conditional
+expectation of the influence function is $\E(h | S) = n^{-1} \sum_i
+h(\Y_i)$ with corresponding $q \times q$ covariance matrix
+\begin{eqnarray*}
+\V(h | S) = n^{-1} \sum_i \left(h(\Y_i) - \E(h | S) \right) \left(h(\Y_i) - \E(h | S)\right)^\top.
+\end{eqnarray*}
+When the observations are organized in independent blocks (such as centers
+in a multicenter trial), only permutations within blocks are admissible 
+and thus expectations and covariance matrices have
+to be computed separately within each block. The expectation $\mu$ and covariance
+matrix $\Sigma$ of $\T$ are then obtained as the sum over all expectations and
+covariance matrices.
+Therefore, it is easily possible to take a block randomization
+scheme in a randomized clinical trial or dependent sample designs (where
+each observation forms a block) into account.
 
 The key step for the construction of a maximally selected 
 statistic based on the multivariate
@@ -239,7 +263,7 @@ normal distribution with mean $\mu$ and covariance matrix $\Sigma$
 Thus, in order to approximate $\Prob(\Tmax > c)$ we have to evaluate
 the probability $\Prob(\max(|Z_1|, ..., |Z_{pq}|) > c)$ 
 for standard normal random variables $Z_1, \dots, Z_{pq}$ with correlation matrix 
-$\Rb = \text{cor}(\Sigma)$ and some $c > 0$. 
+$\Rb$ corresponding to the covariance matrix $\Sigma$ and some $c > 0$. 
 %%In fact,
 %%this conditional asymptotical distribution coincides with the unconditional asymptotical
 %%distribution obtained for maximally selected rank statistics \citep[e.g.,][]{HothornLausen2003}.
@@ -256,28 +280,30 @@ for higher dimensions.
 %%provides us with an upper bound for $\Prob(\Tmax > c)$ as $n \rightarrow \infty$.
 %% (see Appendix).
 However, for the most important case of statistics maximally selected
-over cutpoints induced by an ordered covariate $\X$ and an ordered or binary response 
-$\Y$, the distribution of the maximum of standard normal variables 
+over cutpoints induced by an ordered covariate $\X$ and an ordered, censored 
+or binary response $\Y$, the distribution of the maximum of standard normal variables 
 can be evaluated numerically by an algorithm with
-computing time being linear in the number of cutpoints considered as will be shown 
+computing time being linear in the number of cutpoints $p$ as will be shown 
 in the following.
 
+\section{A new and fast approximation}
+
 Let $A_j = (-\infty, \xi_j]$ with $\xi_j < \xi_k$ for $1 \le j < k \le p$ 
-denote the partitioning sets and let $q = 1$ (i.e., ordered or binary response variable). 
+denote the partitioning sets and let $q = 1$ (i.e., ordered, censored or binary response variable). 
 Then, the correlation between $\T_j$ and $\T_k$ is given by
 \begin{eqnarray*}
 \rho_{j,k} = \frac{\Sigma_{j,k}}{\sqrt{\Sigma_{j,j} \Sigma_{k,k}}} = 
 \sqrt{\frac{\left(n - \sum_i g_k(\X_i)\right) \sum_i g_j(\X_i)}
                         {\left(n - \sum_i g_j(\X_i)\right) \sum_i g_k(\X_i)}}.
 \end{eqnarray*}
-It follows that the correlation matrix is completely determined by the 
-subdiagonal elements $\rho_{j,j-1}, j = 2, \dots, p$ and 
-it holds that 
+It follows that the correlation matrix $\Rb = (\rho_{j,k})_{j,k = 1, \dots, p}$
+is completely determined by the 
+subdiagonal elements $\rho_{j,j-1}, j = 2, \dots, p$ and it holds that 
 \begin{eqnarray*}
 \rho_{1,k} = \prod_{j = 2}^k \rho_{j,j-1}.
 \end{eqnarray*}
-With $\v = (\rho_{1,1}, \dots, \rho_{1,p})$ the lower triangular part of the correlation
-matrix $\Rb$ can be written as $\v (1/\v)^\top$ and it follows 
+With $\mathbf{v} = (\rho_{1,1}, \dots, \rho_{1,p})$ the lower triangular part of the correlation
+matrix $\Rb$ can be written as $\mathbf{v} (1/\mathbf{v})^\top$ and it follows 
 \citep[from][Section 2.1]{Meurant1992} that the
 inverse $\Rb^{-1}$ of the correlation matrix is a tridiagonal symmetric band matrix:
 \begin{eqnarray*}
@@ -304,7 +330,7 @@ Because of the special band structure of $\Rb^{-1}$ the quadratic form
 $\z^\top \Rb^{-1}\z$ simplifies to
 \begin{eqnarray*}
 \z^\top\Rb^{-1}\z = r_{1,1}z_1^2 + 2r_{2,1}z_1z_2 + r_{2,2} z_2^2 + \dots +
-2r_{p,p-1} z_pz_{p-1} + r_{p,p}z_p^2.
+2r_{p,p-1} z_pz_{p-1} + r_{p,p}z_p^2
 \end{eqnarray*}
 and one can make use of this structure when evaluating the
 multivariate normal distribution numerically \citep{GenzKahaner1986}.
@@ -336,26 +362,62 @@ of $z \in [-c, c]$ and $\tilde{z} \in [-c,c]$ values, the function $f_j$ is
 evaluated and aggregated over $\tilde{z}$ only, yielding values
 of $f_j(z)$ for a grid of $z$ values. 
 These values are then re-used when computing $f_{j-1}$. 
-%%Using these $p$-values leads to a much
-%%more powerful test for larger number of potential cutpoints compared
-%%to the best approximation available for this situation so far (see Figure~\ref{approx}).
-%%
-%%\begin{figure}[h!]
-%%\begin{center}
-%%\caption{Asymptotic distribution and approximation based on the improved Bonferroni
-%%         inequality for $n = 10.000$ observations and $p = 100$ cutpoints. The
-%%         test based on the numerically evaluated exact asymptotic distribution
-%%         is much more powerful than the test based on the approximation. \label{approx}}
-%%<<approx, echo = FALSE, fig = TRUE, width = 7, height = 6>>=
-%%load("example/approx.rda")
-%%plot(g, pex, type = "l", lty = 1, xlab = expression(c), ylab = expression(P(T[max] <= c)))
-%%lines(g, pap, lty = 2)
-%%legend("bottomright", lty = c(1, 2), legend = c("Exact Asymptotic", "Improved Bonferroni"), bty = "n")
-%%@
-%%\end{center}
-%%\end{figure}
 
-\section{Applications and illustration}
+It should be noted that in a conditional setting, the number of cutpoints $p$
+is treated as fix (this is obvious for nominal $\X$ at $k$ levels 
+where $p = 2^{k-1}$ or when sample quantiles define the cutpoints). Also,
+the approximation suggested by \cite{LausenSchumacher1996} using
+an improved Bonferroni inequality conditions on $p$. In contrast,
+the limiting Ornstein-Uhlenbeck process of $(T - \mu) / \sqrt{\text{diag}(\Sigma)}$ 
+\citep{LausenSchumacher1992}
+assumes $p \rightarrow \infty$ as $n \rightarrow \infty$.
+Using the conditional asymptotic distribution leads to a
+more powerful test compared to the approximations so far (see Figure~\ref{approx}).
+\begin{figure}
+\begin{center}
+\caption{Approximations of the distribution of a maximally selected statistic
+         for $n = 100$ observations and $p = 10$ cutpoints. The exact distribution
+         as approximated by $30.000$ random permutations of the data is
+         shown as a solid line. The conditional asymptotic distribution suggested here
+         is rather close. The approximations via the improved Bonferroni correction
+         and two approximations of the distribution of the supremum of an Ornstein-Uhlenbeck
+         process less accurate. \label{approx}}
+<<approx, echo = FALSE, fig = TRUE, width = 7, height = 6>>=
+load("example/approx.rda")
+psupT <- function(q, from = 0.1, to = 1 - from, lower.tail = TRUE, method = c("Jennen", "Hansen"))
+{
+  method <- match.arg(method)
+  lambda <- (to * (1 - from)) / ((1 - to) * from)
+
+  if(method == "Jennen") {
+    pval <- function(x) 4 * dnorm(x)/x + dnorm(x) * (x - 1/x) * log(lambda)
+  } else {
+    pval <- function(x) strucchange::pvalue.Fstats(x^2, type = "supF", k = 1, lambda = lambda)
+  }
+
+  rval <- sapply(q, pval)
+  if(lower.tail) rval <- 1 - rval
+  return(rval)
+}
+ph <- psupT(g, method = "Hans")
+
+plot(g, ex, type = "l", lty = 1, xlab = expression(c), ylab = expression(P(T[max] <= c)))
+lines(g, pex, lty = 2)
+lines(g, pap, lty = 3) 
+lines(g, ph, lty = 4)
+lines(g, pl, lty = 5)
+legend("bottomright", lty = 1:5, 
+       legend = c("Conditional Monte-Carlo", 
+                  "Conditional Asymptotic", 
+                  "Improved Bonferroni, Worsley (1982)", 
+                  "sup Ornstein-Uhlenbeck, Hansen (1999)",
+                  "sup Ornstein-Uhlenbeck, Jennen (1985)"),  
+       bty = "n")
+@
+\end{center}
+\end{figure}
+
+\section{Applications and special cases}
 
 Maximally selected statistics as described in Section~\ref{sec:stat} can be
 applied to covariates $\X$ and responses $\Y$ measured at arbitrary scales; appropriate 
@@ -375,45 +437,114 @@ The identity transformation is the most natural choice; square root, log, or
 rank transformations are possible as well. 
 When a numeric response is censored, the log-rank transformation or
 Savage scores can be applied.
-For a multivariate response, possibly consisting of variables with different scale levels,
-the influence function $h$ is a combination of 
-influence functions appropriate for any of the univariate response variables
-as suggested above. In the presence of a grouping of the observations
-into independent blocks, only permutations within blocks are eligible and the
-conditional expectation and covariance matrix need to be computed
-separately for each block. Therefore, it is easily possible to take a block randomization
-scheme in a randomized clinical trial into account. 
+%%For a multivariate response, possibly consisting of variables with different scale levels,
+%%the influence function $h$ is a combination of 
+%%influence functions appropriate for any of the univariate response variables
+%%as suggested above. 
 
-The most important situation of a univariate and at least ordinally measured covariate $\X$ leads
-to partitions, and thus functions $g_j$, 
+The most important situation of a univariate and at least ordinally measured covariate 
+$\X$ leads to partitions, and thus functions $g_j$, 
 induced by cutpoints defined by the realizations $\X_1, \dots, \X_n$. More specifically,
 $A_j = (-\infty, \xi_j]$, where $\xi_j$ is the $j$th element of the increasingly sorted unique 
 realizations of $\X$ (the sample size constraints apply, of course). Thus, having
 identified the best separating partition $A_{j^\star}$, the estimated cutpoint is
 $\xi_{j^\star}$. For nominal covariates, all $2^{k-1}$ binary partitions of the $k$ levels 
 that meet the sample size constraints are taken into account.
-For multiple covariates, we simply look at all binary partitions induced by all covariates
-simultaneously. 
+For multiple covariates, we simply look at all binary partitions induced by all 
+covariates simultaneously. 
 
 This flexible framework can know be utilized to implement 
 the conditional versions of already published maximally selected 
-statistics and to develop new maximally selected statistics 
-for other applications. For binary responses and ordered covariates,
-the statistic $\Tmax$ is equivalent to a maximally selected $\chi^2$ statistic 
-\citep{MillerSiegmund1982,Koziol1991}. For nominal responses with $k > 2$ levels,
-the $\Tmax$ statistic is the maximum over the maximum of 
-standardized $k \times 2$ tables, an alternative to maximally selected 
-$\chi^2$ statistics for larger tables \citep{Betensky1999}. 
-For equidistant scores $1, \dots, k$ attached to an ordered response, 
-the statistic $\Tmax$  is equivalent to a maximally selected Cochran-Armitage 
-statistic \citep{Betensky1999}, however, no restrictions to the choice of scores apply here.
-For numeric or censored responses, $\Tmax$ corresponds to maximally selected rank statistics 
-\citep{LausenSchumacher1992}.
+statistics, which usually utilize an unconditional null distribution,
+and to develop new maximally selected statistics 
+for novel applications.
+
+\paragraph{Maximally selected $\chi^2$ statistics.} 
+The response variable is a factor at two levels $a$ and $b$, say, and $h = I(\Y_i = a)$
+is a dummy coding of the levels.
+The ordered univariate covariate $\X$ offers $p \le n - 1$ cutpoints $\xi_1, \dots, \xi_p$ 
+leading to $g_j(\X_i) = I(X_i \le \xi_j)$. Thus,
+\begin{eqnarray*}
+\T_j = \sum_{i = 1}^n g_j(\X_i) h(Y_i)^\top = \sum_{i = 1}^n I(X_i \le \xi_j) I(\Y_i = a) \in \R
+\end{eqnarray*}
+is the number of observations $i$ with $\X_i \le \xi_j$ and
+$\Y_i = a$. Thus, $\T_j$ is one element of the $2 \times 2$ contingency
+table for $I(\X \le \xi_j)$ and $I(\Y = a)$ and determines the 
+complete table because the margins are fix. 
+The statistic $(\T - \mu)^2 / \text{diag}(\Sigma)$
+is equivalent to the usual $\chi^2$ statistic and our maximally selected 
+statistic $\Tmax$ is a monotone transformation of the
+maximally selected $\chi^2$ statistic proposed by 
+\cite{MillerSiegmund1982}.
+For nominal responses with $k > 2$ levels, the statistic 
+$\T_j$ corresponds to the first $k - 1$ columns of the first
+row of the $2 \times k$ contingency table of $\X_i \le \xi_j$ and $\Y$.
+The $\Tmax$ statistic is the maximum over the maximum of $p$ standardized contingency tables, 
+an alternative to maximally selected $\chi^2$ statistics for larger tables 
+\citep{Betensky1999}. 
 In the extreme case of each observation being a block in repeated measurements, 
 our test statistic $\Tmax$ for binary responses 
 corresponds to maximally selected McNemar's statistics \citep{Rabinowitz2000}.
-The special case of maximally selected rank statistics
-for multiple covariates has first been studied by \cite{Lausenetal2004}.
+
+\paragraph{Maximally selected Cochran-Armitage statistics.}
+The ordered response $\Y$ is measured at $k$ ordered levels 
+$\Y \in \{l_1, \dots, l_k\}$, say. To each level 
+a score $\gamma_j, j = 1, \dots, k$, is attached and the
+influence function reads $h(\Y) = \gamma_{\Y}$. For arbitrary
+scores, the corresponding test is known as linear-by-linear
+association test \citep{agresti2002}, for the special case
+$\gamma_j = j$ this corresponds to the Cochran-Armitage test.
+Consequently, the statistic $\Tmax$  is equivalent to a maximally 
+selected Cochran-Armitage statistic \citep{Betensky1999}, 
+however, no restrictions to the choice of scores apply here.
+
+\paragraph{Maximally selected rank statistics.} 
+Let $h$ denote the rank transformation of a univariate response $\Y$.
+Then, the statistic
+\begin{eqnarray*}
+\T_j = \sum_{i = 1}^n I(\X_i \le \xi_j) h(\Y_i)^\top = \sum_{i: \X_i \le \xi_j} \text{rank}(\Y_i)
+\end{eqnarray*}
+is the sum of the ranks for all observations with $\X_i \le \xi_j$, i.e., the
+Wilcoxon rank sum statistic. More general, $h$ can be any rank transformation
+(normal scores, median scores, log-rank scores etc.) and the 
+linear statistic $\T_j$ is equivalent to a linear rank statistic 
+\citep{HajekSidak1999}. Consequently, $\Tmax$ is equivalent to 
+a maximally selected rank statistic in the sense of 
+\cite{LausenSchumacher1992, LausenSchumacher1996} and \cite{HothornLausen2003}.
+
+\paragraph{Maximally selected statistics for multiple covariates.}
+When multiple covariates are under test simultaneously, we
+consider all unique  partitions induced by all possible cutpoints in
+each covariate. For an ordered response, this special case of 
+maximally selected rank statistics for multiple covariates has first
+been studied by \cite{Lausenetal2004}.
+
+\paragraph{Three novel maximally selected statistics procedures.}
+Since no restrictions to the measurement scales of covariate(s)
+or response(s) apply, we are free to define new maximally selected
+statistics for a wide range of problems. Here, concentrate on three 
+applications: maximally selected permutation tests, maximally selected 
+statistics for multivariate responses and maximally selected statistics
+for interactions. If there doesn't exist a good justification for
+choosing a special rank transformation as influence function $h$, such
+as ranks or normal scores, the identity transformation $h(\Y) = \Y$ 
+can be applied. Each linear statistic $\T_j$ corresponds to
+a two-sample permutation test against location alternatives. 
+For a multivariate response, such as 
+abundances of multiple species under investigation
+\citep{Death2002}, the influence function $h$ is a combination of 
+influence functions appropriate for any of the univariate response variables
+as suggested above.
+
+Finally, consider the situation of two ordered covariates. Instead
+of looking at all splits in the first and second variable,
+we only search for splits in all admissible interactions of 
+both variables. In contrast to recursive partitioning
+procedures selecting only one covariate for splitting in each node, 
+such as CART \citep{CART1984} for example, we search for a
+simultaneous split in both variables; such a procedure can solve
+the famous XOR problem. \marginpar{ref?}
+An application is given in the next section.
 
 <<cao-data>>=
 <<tntab, echo = FALSE, results = tex>>=
@@ -471,12 +602,13 @@ text(85, 0.30, paste("N2 and N3 (plus N1 and ypT4); n =", table(risk)[1]))
 \end{center}
 \end{figure}
 
+\section{Illustration}
 
-Going beyond these established techniques is also easily possibly in less
-standard situations: New tests can be constructed by choosing an influence function 
-$h(\cdot)$ determined by the scale level of the response, and selecting a set of potential
-partitions $g(\cdot)$ determined by the available covariates.
-As an illustration, we attempt to identify a high- and low-risk groups of
+%%Going beyond these established techniques is also easily possibly in less
+%%standard situations: New tests can be constructed by choosing an influence function 
+%%$h(\cdot)$ determined by the scale level of the response, and selecting a set of potential
+%%partitions $g(\cdot)$ determined by the available covariates.
+We attempt to identify high- and low-risk groups of
 rectal cancer patients---treated with a neo-adjuvant chemoradiotherapy regime---by
 differentiating them with respect to their combination of pathological T and N category.
 Survival times of $n = \Sexpr{length(tc)}$ patients from the preoperative arm 
@@ -491,7 +623,8 @@ in T given N and vice versa. This yields 194 %FIXME% can we compute this?
 potential partitions, $\Sexpr{length(stat)}$ of which meet the sample size constraints.
 The maximum of the absolute values
 of the corresponding \Sexpr{length(stat)} standardized statistics is 
-\Sexpr{round(teststat, 3)} ($p$-value smaller than $0.0001$). 
+\Sexpr{round(teststat, 3)} (adjusted $p$-value smaller than $0.0001$; the
+unadjusted $p$-value is about $2 \times \exp(\Sexpr{round(pnorm(teststat, lower.tail = FALSE, log = TRUE))})$. 
 The partition chosen by the algorithm identifies all patients with
 N category N2 or N3 as being under high risk and almost all patients
 from N0 and N1 as being under low risk. As an exception,
