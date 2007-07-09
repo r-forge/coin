@@ -384,7 +384,7 @@ The correlation of $Z^0(s)$ and $Z^0(t)$ for $s \le t$ is
 $\sqrt{s (1 - t)}/ \sqrt{t (1 - s)}$
 and is the exactly the same as above. 
 More formally, with $t_j = \lim_{n \rightarrow \infty} n^{-1} \sum_i g_j(\X_i)$,
-the standardized version of $\T_j$ and $Z^0(t_j)$ are asymptotically identical in distribution.
+the statistics $Z_j$ and $Z^0(t_j)$ are asymptotically identical in distribution.
 Therefore, the difference between the two approaches is that for increasing $p$
 the asymptotical distribution is given by $\sup_{t \in [\varepsilon, 1 - \varepsilon]} Z^0(t)$
 whereas for fixed $p$ it is $\max_{t \in \{t_1, \dots, t_p\}} Z^0(t)$.
