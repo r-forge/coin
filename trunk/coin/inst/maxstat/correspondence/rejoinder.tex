@@ -1,4 +1,3 @@
-
 \documentclass[11pt,a4paper]{article}
 \usepackage{a4wide}
 \usepackage{amstext}
@@ -8,13 +7,41 @@
 \begin{center}
 \textbf{\large Point-to-Point Answers to Manuscript \#070428CF \\
 Generalized Maximally Selected Statistics} \\
-by T. Hothorn and A. Zeileis
+by Torsten Hothorn and Achim Zeileis
 \end{center}
 
-We would like to thank the referee, the associate editor and the editor of Biometrics 
-for a fast and very helpful review of our manuscript. The revision addresses
-the specific points and questions raised by the AE and referee as explained 
-in the following.
+\textit{FIXME: include the first part in a formal cover letter}
+
+Dear Prof.~Freedman,
+
+we would like to thank you, the associate editor and the referee
+for a fast and very useful review of our manuscript that helped to 
+substantially improve the manuscript in various respects. In particular,
+we made three major changes:
+
+\begin{enumerate}
+  \item \textit{Special cases of the general framework:} In Section~6
+        of the revised manuscript we discuss in more detail how the general
+	framework can be adapted to specific data analysis tasks.
+	Previously suggested maximally selected chi-squared statistics,
+	rank statistics, and Cochran-Armitage statistics are shown to
+	be special cases of the framework.
+  \item \textit{Asymptotic distributions:} We compare our new algorithm
+        for computing the conditional asymptotic distribution to unconditional
+	asymptotic approximations previously suggested in the literature.
+  \item \textit{Interactions and recursive partitioning:} Techniques for
+        detecting splits in interactions of multiple covariates are
+	discussed more consistently and in more detail throughout the paper.
+	Similarities and differences with respect to recursive partitioning
+	algorithms (such as CART) are addressed in Section~6.  
+\end{enumerate}
+
+A detailed point-to-point reply to the referee and associate editor is included below.
+
+Best regards,
+
+Torsten Hothorn
+
 
 \vspace*{1cm}
 
@@ -34,7 +61,7 @@ General comments:
 	
 	In Section~6, we show now in more detail how previously established statistics
 	are special cases of the generalized framework. Furthermore, we point out 
-	more clearly what the differences between different asymptotic approximations
+	more clearly (in Section~5) what the differences between different asymptotic approximations
 	for the distribution of the test statistics are.
 	
   \item \textit{A simple search in Google Scholar yields other articles: Hothorn and
@@ -45,9 +72,9 @@ General comments:
 	many special cases as possible should be enclosed.}
 	
         Hothorn \& Lausen (2003) investigate the exact distribution of maximally
-        selected rank statistics (now cited in new section 6). Schlittgen (1999)
-        proposes an asymptotic approximation but there is doubt if this
-        is correct (see Hothorn \& Lausen, 2003). 
+        selected rank statistics (now cited in new Section~6). Schlittgen (1999)
+        proposes an asymptotic approximation that was assessed in Hothorn \& Lausen (2003)
+	and found to be problematic. 
 
         Halpern (1999) suggests to minimize $p$-values instead of maximizing 
         statistics which is equivalent to other approaches discussed in the paper 
@@ -56,24 +83,24 @@ General comments:
         Boulesteix and Strobl (2007) propose another exact algorithm for maximally
         $\chi^2$ statistics, the reference has been added.
         Burr (2001) focuses on sums of standard normal distributed statistics
-        to detect clusters in a general multiple testing framework 
-        and we can't see how this would fix into 
-        the regression context considered here.
+        to detect clusters in a general multiple testing framework that differs
+	from the covariate-based approach considered here.
 	
   \item \textit{A discussion of the asymptotic approximation's quality would be appreciated.
         What is the behaviour compared to other asymptotic approximations already
         proposed in the literature?}
 	
-	We added a comparison of approximations of the exact conditional
-        null distribution in Figure 1.
+	We discuss various asymptotic approximations in Section~5, both for fixed $p$
+	and increasing $p$, and show that our new algorithm approximates the exact
+	conditional null distribution very closely in Figure~1.
 	
   \item \textit{Can the proposed approach be applied to the problem of confidence
         intervals in the vein of Hollander et al.\ (2005, Stat.Med.)?}
 	
 	The approach is applicable for cutpoint estimators in a single ordered
-        covariate but we can't see how it generalizes to multiple covariates
-        or nominal covariates where one would have to consider confidence `intervals'
-        for partitions of the covariate space.
+        covariate. However, for more general partitions (e.g., in unordered factors
+	or interactions), there is no single cutpoint and therefore no cutpoint
+	estimator associated with a confidence interval.
 	
 \end{itemize}
 
@@ -83,14 +110,14 @@ Minor concerns:
   
   \item \textit{p5: Please define D.}
         
-	Done.
+	Added.
 	
   \item \textit{p5: Although I seem to understand the meaning of the sentence
         ``by $p$ sets $A_1, \dots , A_p$ partitioning the observations into two
 	groups'', it is a bit awkward.}
 	
 	The discussion of the sets $A_j$ and their corresponding indicator functions
-	$g_j(\cdot)$ has been improved and extended. The sentence has been reformulated.
+	$g_j(\cdot)$ has been improved and extended. The sentence has been re-formulated.
 	
   \item \textit{p5: The expression $A_j = \{ X | X \le \dots\}$ is confusing since
         $X$ is multi-dimensional.}
@@ -101,7 +128,7 @@ Minor concerns:
         in $R^{1 \times q}$.}
 	
 	The statistic is always transformed to a column vector by the vec operator
-        (maps any $q \times p$ matrix into a $pq$ vector columnwise).
+        (columnwise mapping of a $q \times p$ matrix into a $pq$ vector).
 	
   \item \textit{p6: There seems to be a dimension problem here. $g(X)$ seems to be
         in $R^{1 \times p}$ and $h^\top$ in $R^{1 \times q}$. I think I understand
@@ -113,7 +140,8 @@ Minor concerns:
         given here, since they are of central importance for generalized maximally
 	selected statistics.}
 	
-	We added the formulae for the conditional expectation and the covariance matrix.
+	The explicit formulae for the conditional expectation and the covariance matrix
+	have been added.
 	
   \item \textit{p7: The beginning of the ``inference'' section is quite general,
         whereas most of the section is devoted to the improved algorithm for the
@@ -131,17 +159,19 @@ Minor concerns:
         explained in more detail. They are not straightforward. Does the outlined
 	method apply only for $q = 1$ or can it be generalized to $q > 1$?}
 	
-	Now an explicit formula is given for $\Sigma$ and it is explained in more
-	detail how the corresponding correlation matrix $R$ is derived. This
-	helps to point out how the special cases $\rho_{j, k}$ are
-	derived the specific $g(\cdot)$ functions and univariate responses.
+	Now an explicit formula is given for $\Sigma$ and it is explained that
+	matrix $R$ is the corresponding correlation matrix. This
+	helps to point out how---for the special case of searching cutpoints
+	for a univariate response---the correlations $\rho_{j, k}$ are
+	derived as a special case of $R$.
 	
 	A generalization for $q > 1$ is not possible because the joint correlation
 	matrix does not have a band structure.
 	
   \item \textit{p8: The notation $R = \mbox{cor}(\Sigma)$ is maybe intuitive, but unusual.}
   
-        This is now explained verbally now which should be un-ambiguous.
+        Instead of the admittedly unstandard notation above, we now employ
+	a verbal explanation that should be un-ambiguous.
 	
   \item \textit{p12: Are there references for the equivalences of $T_{\max}$ with maximally
         selected $\chi^2$ statistics, McNemar statistics, etc.?}
@@ -160,22 +190,35 @@ Minor concerns:
         explained in more details here, because it constitutes one of the three major
         contributions of this article.}
 	
-	We give more details about the construction principle for partitions: 
-        Basically, from all possible interactions those are deleted that are not 
-        ``marginally ordered''.
+	We now give more details about the construction principle for partitions.
+        For two unordered categorical covariates, we set up the candidate partitions
+	as all combinations of (sets of) levels of the individual covariates.	
+	For two ordered covariates (as in our application), we omit all the interaction
+	partitions that have more than one cutpoint in one variable given the
+	level of the other variable (and vice versa). A more detailed description of
+	this and other partitioning strategies is provided in Section~6.
 	
+	 	
   \item \textit{p13: It would be interesting to give both unadjusted and adjusted $p$~values
         for the example.}
 	
-	The unadjusted $p$-value is $2 \cdot (1 - \Phi(8.69))$ and is reported in 
-        Section `Illustration'.
+	The term ``adjusted'' was not introduced in our first version of
+	the manuscript and hence somewhat confusing. What was meant was that
+	we computed $P(T_{\max} > 8.69)$ from the joint asymptotic multivariate normal	
+	distribution of $T$ rather than using the ``unadjusted''
+	$P(|Z| > 8.69) = 2 \cdot (1 - \Phi(8.69))$ from the univariate normal
+	distribution.
+	
+	As the distinction between adjusted and unadjusted $p$-values is not
+	made anywhere else in the manuscript, we simply dropped the confusing term ``adjusted''.
 	
   \item \textit{p14: Does the `coin' package include the new algorithm presented in
         Section~4?}
 	
 	It is not yet contained because we are currently working together with Alan Genz
-	on an improved version of the code. This is the (unoptimized) R function
+	on an improved version of the code. This is the (unoptimized) \textsf{R} function
         used in our experiments:
+
 \begin{verbatim}
 pmt <- function(mt) {
 
@@ -216,14 +259,17 @@ pmt <- function(mt) {
 	and so appear not to relate to interactions let alone address them
 	explicitly.}
 	
-        Each partition induces a two-sample statistic to be maximized
-        over multiple partitions. When two covariates $X_1$ and $X_2$ are available,
-        one can i) consider all partitions in either $X_1$ and $X_2$ (CART follows
-        this approach) or ii) consider the interaction of $X_1$ and $X_2$ 
-        and define paritions with respect to this interaction variable.
-        We follow the latter approach which, to the best of our knowledge is novel.
+        Each partition induces a two-sample statistic which is to be maximized
+        over multiple candidate partitions. When two covariates $X_1$ and $X_2$ are available,
+        one can (1)~consider all partitions in either $X_1$ or $X_2$ (CART follows
+        this approach) or (2)~consider the interaction of $X_1$ and $X_2$ 
+        and define paritions with respect to this interaction variable. The full set
+	of interaction partitions also includes splits in only one of the variables
+        as well checkerboard-type splits necessary to solve for example the XOR problem.
 
-        The differences are now explained in Section 6.
+        We follow the second approach which, to the best of our knowledge, is novel
+	for maximally selected statistics.
+        The differences between the approaches are now explained in Section~6.
 	
   \item \textit{There is literature on competing methods for finding cutpoints
         especially with interaction models (e.g., CART and recursive partitioning).
@@ -232,8 +278,7 @@ pmt <- function(mt) {
 	
 	Our suggestion incorporates interactions that 
         are not determined recursively (the CART way) but uses splits computed based on 
-	interactions directly (e.g., XOR can be solved directly). Section 6
-        clarifies this issue.
+	interactions directly. Section~6 clarifies this issue.
 
   \item \textit{Why isn't the asymptotic distribution more like that described
         in Lausen and Schumacher (1992), which entails an Ornstein-Uhlenbeck process
@@ -243,64 +288,30 @@ pmt <- function(mt) {
         The different asymptotic distributions are in fact more similar than obivous
 	from their representations via the multivariate normal distribution and the
 	crossing probability of the Ornstein-Uhlenbeck process (or scaled Brownian
-	bridge), respectively. 
+	bridge), respectively. The main difference between the approaches is that
+	in the former case $p$ is kept fixed while in the latter it increases
+	together with $n$.
 	
-	For illustration, we employ a univariate influence function ($q = 1$) and
-	$p$ potential splits. The statistic $T_{\max}$ is then the absolute maximum over
-	$p$ standardized (to zero mean and unit variance) statistics $Z_1, \dots, Z_p$
-	with correlation $\mbox{COV}[Z_j, Z_k] = \rho_{j, k}$. The asymptotic distribution
-	(both, conditional or unconditional) of each $Z_j$ is standard normal.
-	
-	Approach~1 (fixed $p$): If $p$ is fixed (as in our approach), the asymptotic
-	distribution of $T_{\max}$ is the maximum from a $p$-dimensional normal
-	distribution with correlation/covariance matrix $R$ (formed from correlations
-	$\rho_{j, k}$ and unit variances).
-	
-	Approach~2 (increasing $p$): If $p \rightarrow \infty$ as $n \rightarrow \infty$,
-	the statistic $T_{\max}$ converges to the absolute supremum over a continuous process
-	$Z^0(t)$. As shown for example in Miller and Siegmund (1982) or
-	Lausen and Schumacher (1992), the process $Z^0(t)$ can be written as
+	We show in Section~5 that both distributions can be expressed as functionals
+	of the stochastic process	
 	  \[ Z^0(t) \quad = \quad \frac{B^0(t)}{\sqrt{t (1 - t)}}, \]
-	where $B^0(t)$ is a standard Brownian bridge. This process has continuous paths,
-	zero mean, unit variance, and correlation
-	  \[ \mbox{COV}[Z^0(s), Z^0(t)] \quad = \quad \sqrt{\frac{s (1 - t)}{t (1 - s)}}, \]
-	if $s < t$. Thus, the correlation structure structure is exactly the same as
-	above. More formally, with $t_j = n^{-1} \sum_{i = 1, \dots, n} g_j(X_i)$,
-	the statistic $Z_j$ and $Z^0(t_j)$ are identical in distribution.
-	
-	Therefore, the difference between the two approaches is that in the latter case
-	the supremum over the process in interval $[\varepsilon, 1 - \varepsilon]$ is taken
-	  \[ \sup_{t \in [\varepsilon, 1 - \varepsilon]} Z^0(t) \]
-	whereas the former uses the maximum over a fixed set of time points
-	$\{t_1, \dots, t_p\}$:	
-	  \[ \max_{t \in \{t_1, \dots, t_p\}} Z^0(t). \]
-	Therefore, the supremum over the full interval will always be larger than the 
-	maximum over a subset of times/partitions because the additional variation
-	in the intervals $(t_j, t_{j + 1})$ is ignored. However, the difference is negligible
-	if the differences $t_{j+1} - t_j$ are sufficiently small.
-	
-%%	Which of these two asymptotic approximations can be justified by theoretical arguments
-%%	depends on various considerations. In a conditional setting, it is always more natural
-%%	to treat $p$ as fixed. In unconditional settings, it depends on the partition-generating
-%%	procedure. If the partitions are derived from (interactions of) categorical variables
-%%	then $p$ is fixed because with increasing $n$ the number of categories will not increase.
-%%	However, if the partitions are cutpoints in a continuous variable, then the number
-%%	of potential splits will increase with $n$. If in the testing procedure, all potential
-%%	cutpoints are always used, then the ``increasing $p$'' approach is more appropriate.
-%%	However, if the cutpoints are chosen at a given number of quantiles, then the ``fixed $p$''
-%%	approach is appropriate.
-%%	
-%%	For all practical purposes, the two approaches lead to virtually identical results for
-%%	large $p$, e.g., $p \ge 30$.
-%%	
-	This is pointed out (more briefly) in the discussion of distributions in Section~5.
+	where $B^0(t)$ is a standard Brownian bridge. The fixed $p$ approach leads to
+	a distribution of type
+	  \[ \max_{t \in \{t_1, \dots, t_p\}} Z^0(t), \]
+	where the maximum is taken over a fixed set of time points. Similarly, the increasing $p$
+	approach takes the supremum over a full interval
+	  \[ \sup_{t \in [\varepsilon, 1 - \varepsilon]} Z^0(t). \]
+        Both approaches yield similar results for sufficiently large $p$.
+
+	This is pointed out in more detail in Section~5.
 		
   \item \textit{What happens to the asymptotics when the number of cutpoints, $p$,
         is large relative to the number of subjects, $n$?}
 	
-	Nothing, it just takes more time to evaluate the statistic and its distribution.	
-        More generally, for the joint asymptotics to work, one just has to assure that the
-	asymptotic approximation for each individual statistic is reasonable.
+	The approach works as before, it just takes more time to evaluate the statistic
+	and its distribution. More generally, for the joint asymptotics to work, one
+	just has to assure that the asymptotic approximation for each individual statistic
+	is reasonable.
 
 	Example: Split in categorical variable with large number of categories, e.g.,
 	10 categories with 10 observations each leads to $n = 100$ but
@@ -332,29 +343,28 @@ pmt <- function(mt) {
 	       
 	       The two most prominent examples, namely a rank transformation
                (with $q = 1$) and a dummy coding of $k$ levels (with $q = k - 1$)
-               now immediately follows the definition of $h$. 
+               are included in Section~2 following the definition of $h$. 
 	       
-	       Robust influence functions (i.e., bounded influence functions) can
-	       be easily employed as $h$ as well.
-	       
+	       Ranks are one possibility for a robust function, other choices
+	       (such as Huber's $\psi$) are also feasible.
+	       	       
     \item[(b)] \textit{In the first paragraph of the introduction, the authors need to
                clarify the terms ``step-shaped''.}
 	       
-	       Done by adding an example: single jump in mean function.
+	       Done by adding the example of a single jump in the mean function.
 	       
     \item[(c)] \textit{On p.~8, why doesn't the $\rho$ correlation function for the
                elements of $R$ involve the influence function, $h(\cdot)$?}
 	       
-	       We added a closed-form expression for $\Sigma$ which allows,
-               after some basic algebra, for computing the correlation.
+	       We added a closed-form expression for $\Sigma$ which allows
+               for computing the correlation:
 
-               Computing the covariance of $g_j$ and $g_k$:
-\begin{eqnarray*}
-\Sigma_{j,k} = \frac{V(h | S)}{n-1}\left(n \sum_i g_j(X_i) g_k(X_i) - \sum_i g_j(X_i) \sum_i g_k(X_i)\right)
-\end{eqnarray*}
-and for $j = k$ the term $\sum_i g_j(X_i) g_k(X_i)$ simplifies to 
-$\sum_i g_j(X_i)^2 = \sum_i g_j(X_i)$ because $g_i \in \{0, 1\}$. The factor $V(h | S) / (n-1)$
-cancels out in the covariance term.
+                 \[ \Sigma_{j,k} \quad = \quad \frac{V(h | S)}{n-1}
+	            \left(n \sum_i g_j(X_i) g_k(X_i) - \sum_i g_j(X_i) \sum_i g_k(X_i)\right). \]
+               
+	       For $j = k$ the term $\sum_i g_j(X_i) g_k(X_i)$ simplifies to 
+               $\sum_i g_j(X_i)^2 = \sum_i g_j(X_i)$ because all $g_j(X_i) \in \{0, 1\}$.
+	       The factor $V(h | S) / (n-1)$ cancels out in the covariance term.
 	       
     \item[(d)] \textit{On p.~9, where are the $r_{ij}$ elements defined for $R$? Are
                they the $\rho$ elements defined on p.~8?}
@@ -366,13 +376,13 @@ cancels out in the covariance term.
     \item[(e)] \textit{On p.~9, how is $c$ chosen?}
     
                $c$ denotes an (arbitrary) quantile (or critical value) of the distribution
-	       of $\max  |Z_1|, \dots, |Z_p|$.
+	       of $T_{\max}$ or $\max  |Z_1|, \dots, |Z_p|$.
 	       
     \item[(f)] \textit{On p.~11, ``blocks'' needs to be defined clearly.}
                
 	       Blocks are now defined in Section 3 and the implications
                of having a block structure (for example in multicenter trials) 
-               are pointed out.
+               are discussed.
                
 	       
     \item[(g)] \textit{On p.~11 (line 12 from the bottom), why does partitioning 
@@ -380,7 +390,7 @@ cancels out in the covariance term.
 	       determined by the outcome, $Y$?}
 	       
 	       The function $g(\cdot)$ is a transformation of the covariate(s) $X$
-	       only, pertaining to the set of all potential two-sample splits.
+	       only, pertaining to the set of all candidate two-sample splits.
 	       The outcome is transformed by the influence function $h(\cdot)$.
 	       
     \item[(h)] \textit{The first part of Section~5 (Applications and illustration)
