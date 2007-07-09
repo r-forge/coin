@@ -10,7 +10,7 @@
 \usepackage{hyperref}
 
 \renewcommand{\baselinestretch}{1.6}
-
+\renewcommand{\arraystretch}{0.5}
 \definecolor{Red}{rgb}{0.7,0,0}
 \definecolor{Blue}{rgb}{0,0,0.8}
 \hypersetup{%
@@ -30,7 +30,9 @@
 %  make sure that the document has 25 lines per page (it is 12 pt)
 
 \setlength{\textheight}{575pt}
+%%\setlength{\textwidth}{420pt}
 \setlength{\baselineskip}{23pt}
+\setlength{\bibsep}{5pt}
 
 \newcommand{\E}{E}
 \input{definitions}
@@ -38,6 +40,7 @@
 
 %  IMPORTANT -- place the \title, \author, etc, \begin{summary}...
 %  \end{summary} \keywords statements in the order demonstrated below
+
 
 \title{Generalized Maximally Selected Statistics}
 
@@ -62,6 +65,7 @@
 
 \thispagestyle{empty}
 
+\vspace*{-0.5cm}
 \begin{summary}
 \input{abstract}
 \end{summary}

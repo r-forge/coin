@@ -1,205 +1,22 @@
+
 \documentclass[11pt,a4paper]{article}
 \usepackage{a4wide}
 \usepackage{amstext}
 
 \begin{document}
 
-\textbf{\large Associate Editor}
+\begin{center}
+\textbf{\large Point-to-Point Answers to Manuscript \\
+Generalized Maximally Selected Statistics} \\
+by T. Hothorn and A. Zeileis
+\end{center}
 
-\begin{enumerate}
+We would like to thank the referee, the associate editor and the editor of Biometrics 
+for a fast and very helpful review of our manuscript. The revision addresses
+the specific points and questions raised by the AE and referee as explained 
+in the following.
 
-  \item \textit{The paper advertises in several places (Abstract,
-        Introduction, and Example) that their approach is novel because
-	of partitioning based on an interaction between two covariates.
-	However, Sections 2--4 appear to just discuss two-sample statistics,
-	and so appear not to relate to interactions let alone address them
-	explicitly.}
-	
-        Each partition induces a two-sample statistic to be maximized
-        over multiple partitions. When two covariates $X_1$ and $X_2$ are available,
-        one can i) consider all partitions in either $X_1$ and $X_2$ (CART follows
-        this approach) or ii) consider the interaction of $X_1$ and $X_2$ 
-        and define paritions with respect to this interaction variable.
-        We follow the latter approach which, to the best of our knowledge is novel.
-
-        The differences are now explained in Section 6.
-	
-  \item \textit{There is literature on competing methods for finding cutpoints
-        especially with interaction models (e.g., CART and recursive partitioning).
-	The authors need to mention such methods and how their method conceptually
-	compares to these methods.}
-	
-	Interactions are not determined recursively but splits are computed in
-	interactions directly (e.g., XOR can be solved directly). Section 6
-        clarifies this issue.
-
-  \item \textit{Why isn't the asymptotic distribution more like that described
-        in Lausen and Schumacher (1992), which entails an Ornstein-Uhlenbeck process
-	especially for rank statistics based on censored data such as in the example
-	of the current paper.}
-	
-        The different asymptotic distributions are in fact more similar than obivous
-	from their representations via the multivariate normal distribution and the
-	crossing probability of the Ornstein-Uhlenbeck process (or scaled Brownian
-	bridge), respectively. 
-	
-	For illustration, we employ a univariate influence function ($q = 1$) and
-	$p$ potential splits. The statistic $T_{\max}$ is then the absolute maximum over
-	$p$ standardized (to zero mean and unit variance) statistics $Z_1, \dots, Z_p$
-	with correlation $\mbox{COV}[Z_j, Z_k] = \rho_{j, k}$. The asymptotic distribution
-	(both, conditional or unconditional) of each $Z_j$ is standard normal.
-	
-	Approach~1 (fixed $p$): If $p$ is fixed (as in our approach), the asymptotic
-	distribution of $T_{\max}$ is the maximum from a $p$-dimensional normal
-	distribution with correlation/covariance matrix $R$ (formed from correlations
-	$\rho_{j, k}$ and unit variances).
-	
-	Approach~2 (increasing $p$): If $p \rightarrow \infty$ as $n \rightarrow \infty$,
-	the statistic $T_{\max}$ converges to the absolute supremum over a continuous process
-	$Z^0(t)$. As shown for example in Miller and Siegmund (1982) or
-	Lausen and Schumacher (1992), the process $Z^0(t)$ can be written as
-	  \[ Z^0(t) \quad = \quad \frac{B^0(t)}{\sqrt{t (1 - t)}}, \]
-	where $B^0(t)$ is a standard Brownian bridge. This process has continuous paths,
-	zero mean, unit variance, and correlation
-	  \[ \mbox{COV}[Z^0(s), Z^0(t)] \quad = \quad \sqrt{\frac{s (1 - t)}{t (1 - s)}}, \]
-	if $s < t$. Thus, the correlation structure structure is exactly the same as
-	above. More formally, with $t_j = n^{-1} \sum_{i = 1, \dots, n} g_j(X_i)$,
-	the statistic $Z_j$ and $Z^0(t_j)$ are identical in distribution.
-	
-	Therefore, the difference between the two approaches is that in the latter case
-	the supremum over the process in interval $[\varepsilon, 1 - \varepsilon]$ is taken
-	  \[ \sup_{t \in [\varepsilon, 1 - \varepsilon]} Z^0(t) \]
-	whereas the former uses the maximum over a fixed set of time points
-	$\{t_1, \dots, t_p\}$:	
-	  \[ \max_{t \in \{t_1, \dots, t_p\}} Z^0(t). \]
-	Therefore, the supremum over the full interval will always be larger than the 
-	maximum over a subset of times/partitions because the additional variation
-	in the intervals $(t_j, t_{j + 1})$ is ignored. However, the difference is negligible
-	if the differences $t_{j+1} - t_j$ are sufficiently small.
-	
-	Which of these two asymptotic approximations can be justified by theoretical arguments
-	depends on various considerations. In a conditional setting, it is always more natural
-	to treat $p$ as fixed. In unconditional settings, it depends on the partition-generating
-	procedure. If the partitions are derived from (interactions of) categorical variables
-	then $p$ is fixed because with increasing $n$ the number of categories will not increase.
-	However, if the partitions are cutpoints in a continuous variable, then the number
-	of potential splits will increase with $n$. If in the testing procedure, all potential
-	cutpoints are always used, then the ``increasing $p$'' approach is more appropriate.
-	However, if the cutpoints are chosen at a given number of quantiles, then the ``fixed $p$''
-	approach is appropriate.
-	
-	For all practical purposes, the two approaches lead to virtually identical results for
-	large $p$, e.g., $p \ge 30$.
-	
-	This is pointed out (more briefly) in the discussion of distributions in Section~X.
-		
-  \item \textit{What happens to the asymptotics when the number of cutpoints, $p$,
-        is large relative to the number of subjects, $n$?}
-	
-	Nothing, it just takes more time to evaluate the statistic and its distribution.	
-        More generally, for the joint asymptotics to work, one just has to assure that the
-	asymptotic approximation for each individual statistic is reasonable.
-
-	Example: Split in categorical variable with large number of categories, e.g.,
-	10 categories with 10 observations each leads to $n = 100$ but
-	$p = 2^{10 - 1} = 512$.
-	
-  \item \textit{On p.~11, ordinal responses are often analyzed with ordinal
-        logistic models (proportional odds models) based on the multinomial
-	distribution. How would such an approach be accommodated with the
-	authors' approach?}
-	
-	Ordinal responses would be incorporated into the generalized framework
-	by choosing appropriate scores for the ordered levels in the influence
-	function $h(\cdot)$ and then taking the maximum over two-sample statistics.
-	Each of these statistics evaluates the significance of a single binary
-	covariate in a proportional odds logistic regression (POLR). However, in
-	POLR the inference is typically based on the likelihood ratio statistic
-	rather than a Pearson-type $\chi^2$ statistic (as computed from our
-	framework).
-	
-  \item Minor issues:
-  
-  \begin{itemize}
-  
-    \item[(a)] \textit{The name ``influence'' function implies to some readers a
-               robustness influence function. Such a function clearly needs to be
-	       defined when it is introduced and how it is defined in practice
-	       for the different scales of outcomes. Similarly, $q$ needs to be
-	       explained here as well.}
-	       
-	       $h(\cdot)$ is explained earlier, 
-	       
-	       Robust influence functions (i.e., bounded influence functions) can
-	       be easily employed as well.
-	       
-    \item[(b)] \textit{In the first paragraph of the introduction, the authors need to
-               clarify the terms ``step-shaped''.}
-	       
-	       Done by adding an example: single jump in mean function.
-	       
-    \item[(c)] \textit{On p.~8, why doesn't the $\rho$ correlation function for the
-               elements of $R$ involve the influence function, $h(\cdot)$?}
-	       
-	       Added formula for $\Sigma$.
-	       
-    \item[(d)] \textit{On p.~9, where are the $r_{ij}$ elements defined for $R$? Are
-               they the $\rho$ elements defined on p.~8?}
-    
-               The elements of $R$ are the correlations corresponding to the covariances
-	       in $\Sigma$. The $\rho$ elements are special cases for $q = 1$.
-	       Both is pointed out more clearly now.
-
-    \item[(e)] \textit{On p.~9, how is $c$ chosen?}
-    
-               $c$ denotes an (arbitrary) quantile (or critical value) of the distribution
-	       of $\max  |Z_1|, \dots, |Z_p|$.
-	       
-    \item[(f)] \textit{On p.~11, ``blocks'' needs to be defined clearly.}
-               
-	       Blocks are now defined in Section 3 and the implications
-               of having a block structure are pointed out.
-               
-	       
-    \item[(g)] \textit{On p.~11 (line 12 from the bottom), why does partitioning 
-               ``lead to'' or determine $g(\cdot)$. Shouldn't the link function be
-	       determined by the outcome, $Y$?}
-	       
-	       The function $g(\cdot)$ is a transformation of the covariate(s) $X$
-	       only, pertaining to the set of all potential two-sample splits.
-	       The outcome is transformed by the influence function $h(\cdot)$.
-	       
-    \item[(h)] \textit{The first part of Section~5 (Applications and illustration)
-              from bottom of p.~10 to the end of the text at ``Table 1 about here''
-	       should be put in a separate section (``Special cases'') with the
-	       remainder of the text in Section~5 being left in the Illustration
-	       section.}
-	       
-	       The section has been re-organized as suggested.
-	       
-    \item[(i)] \textit{Similarly, the second paragraph on p.~11 should be in the
-               estimation or inference section.}
-	       
-	       We moved the most important examples to section 2.
-	       
-    \item[(j)] \textit{Finally, the example needs to be elaborated on more in terms
-               of different cutpoints for different types of outcomes in addition to
-	       the survival outcome. Also, does the cutpoint make sense to the
-	       clinicians and does it relate to any apriori clinically defined
-	       cutpoints. The interaction issue needs more elaboration as well in
-	       terms of its magnitude relative to observed means of the outcome for
-	       each of the cells represented by the cutpoints.}
-	       
-Our interest was motivated by a research project re-analysing the CAO/ARO/AIO-94
-data with respect to possible prognostic factors. The manuscript uses 
-a different univariate methodology, however, the result is qualitatively the same
-and corresponds rather well to established clinical cutpoints. 
-This manuscript is currently under consideration by a medical journal and will
-be added to the list of references once it is published.
-
-\end{itemize}
-  
-\end{enumerate}
+\vspace*{1cm}
 
 \textbf{\large Referee}
 
@@ -236,8 +53,8 @@ General comments:
         statistics which is equivalent to other approaches discussed in the paper 
         as long as the asymptotic distribution is used (an exact version is suggested 
         by Halpern in addition).
-        Boulesteix and Strobl (2007) propose an exact algorithm for maximally
-        $\chi^2$ statistics, which are now explained in more detail in section 6.
+        Boulesteix and Strobl (2007) propose another exact algorithm for maximally
+        $\chi^2$ statistics, the reference has been added.
         Burr (2001) focuses on sums of standard normal distributed statistics
         to detect clusters in a general multiple testing framework 
         and we can't see how this would fix into 
@@ -343,8 +160,9 @@ Minor concerns:
         explained in more details here, because it constitutes one of the three major
         contributions of this article.}
 	
-	Give more details about construction: From all possible interactions those are
-	deleted that are not ``marginally ordered''.
+	We give more details about the construction principle for partitions: 
+        Basically, from all possible interactions those are deleted that are not 
+        ``marginally ordered''.
 	
   \item \textit{p13: It would be interesting to give both unadjusted and adjusted $p$~values
         for the example.}
@@ -385,5 +203,217 @@ pmt <- function(mt) {
 
 
 \end{itemize}
+
+
+\textbf{\large Associate Editor}
+
+\begin{enumerate}
+
+  \item \textit{The paper advertises in several places (Abstract,
+        Introduction, and Example) that their approach is novel because
+	of partitioning based on an interaction between two covariates.
+	However, Sections 2--4 appear to just discuss two-sample statistics,
+	and so appear not to relate to interactions let alone address them
+	explicitly.}
+	
+        Each partition induces a two-sample statistic to be maximized
+        over multiple partitions. When two covariates $X_1$ and $X_2$ are available,
+        one can i) consider all partitions in either $X_1$ and $X_2$ (CART follows
+        this approach) or ii) consider the interaction of $X_1$ and $X_2$ 
+        and define paritions with respect to this interaction variable.
+        We follow the latter approach which, to the best of our knowledge is novel.
+
+        The differences are now explained in Section 6.
+	
+  \item \textit{There is literature on competing methods for finding cutpoints
+        especially with interaction models (e.g., CART and recursive partitioning).
+	The authors need to mention such methods and how their method conceptually
+	compares to these methods.}
+	
+	Our suggestion incorporates interactions that 
+        are not determined recursively (the CART way) but uses splits computed based on 
+	interactions directly (e.g., XOR can be solved directly). Section 6
+        clarifies this issue.
+
+  \item \textit{Why isn't the asymptotic distribution more like that described
+        in Lausen and Schumacher (1992), which entails an Ornstein-Uhlenbeck process
+	especially for rank statistics based on censored data such as in the example
+	of the current paper.}
+	
+        The different asymptotic distributions are in fact more similar than obivous
+	from their representations via the multivariate normal distribution and the
+	crossing probability of the Ornstein-Uhlenbeck process (or scaled Brownian
+	bridge), respectively. 
+	
+	For illustration, we employ a univariate influence function ($q = 1$) and
+	$p$ potential splits. The statistic $T_{\max}$ is then the absolute maximum over
+	$p$ standardized (to zero mean and unit variance) statistics $Z_1, \dots, Z_p$
+	with correlation $\mbox{COV}[Z_j, Z_k] = \rho_{j, k}$. The asymptotic distribution
+	(both, conditional or unconditional) of each $Z_j$ is standard normal.
+	
+	Approach~1 (fixed $p$): If $p$ is fixed (as in our approach), the asymptotic
+	distribution of $T_{\max}$ is the maximum from a $p$-dimensional normal
+	distribution with correlation/covariance matrix $R$ (formed from correlations
+	$\rho_{j, k}$ and unit variances).
+	
+	Approach~2 (increasing $p$): If $p \rightarrow \infty$ as $n \rightarrow \infty$,
+	the statistic $T_{\max}$ converges to the absolute supremum over a continuous process
+	$Z^0(t)$. As shown for example in Miller and Siegmund (1982) or
+	Lausen and Schumacher (1992), the process $Z^0(t)$ can be written as
+	  \[ Z^0(t) \quad = \quad \frac{B^0(t)}{\sqrt{t (1 - t)}}, \]
+	where $B^0(t)$ is a standard Brownian bridge. This process has continuous paths,
+	zero mean, unit variance, and correlation
+	  \[ \mbox{COV}[Z^0(s), Z^0(t)] \quad = \quad \sqrt{\frac{s (1 - t)}{t (1 - s)}}, \]
+	if $s < t$. Thus, the correlation structure structure is exactly the same as
+	above. More formally, with $t_j = n^{-1} \sum_{i = 1, \dots, n} g_j(X_i)$,
+	the statistic $Z_j$ and $Z^0(t_j)$ are identical in distribution.
+	
+	Therefore, the difference between the two approaches is that in the latter case
+	the supremum over the process in interval $[\varepsilon, 1 - \varepsilon]$ is taken
+	  \[ \sup_{t \in [\varepsilon, 1 - \varepsilon]} Z^0(t) \]
+	whereas the former uses the maximum over a fixed set of time points
+	$\{t_1, \dots, t_p\}$:	
+	  \[ \max_{t \in \{t_1, \dots, t_p\}} Z^0(t). \]
+	Therefore, the supremum over the full interval will always be larger than the 
+	maximum over a subset of times/partitions because the additional variation
+	in the intervals $(t_j, t_{j + 1})$ is ignored. However, the difference is negligible
+	if the differences $t_{j+1} - t_j$ are sufficiently small.
+	
+%%	Which of these two asymptotic approximations can be justified by theoretical arguments
+%%	depends on various considerations. In a conditional setting, it is always more natural
+%%	to treat $p$ as fixed. In unconditional settings, it depends on the partition-generating
+%%	procedure. If the partitions are derived from (interactions of) categorical variables
+%%	then $p$ is fixed because with increasing $n$ the number of categories will not increase.
+%%	However, if the partitions are cutpoints in a continuous variable, then the number
+%%	of potential splits will increase with $n$. If in the testing procedure, all potential
+%%	cutpoints are always used, then the ``increasing $p$'' approach is more appropriate.
+%%	However, if the cutpoints are chosen at a given number of quantiles, then the ``fixed $p$''
+%%	approach is appropriate.
+%%	
+%%	For all practical purposes, the two approaches lead to virtually identical results for
+%%	large $p$, e.g., $p \ge 30$.
+%%	
+	This is pointed out (more briefly) in the discussion of distributions in Section~5.
+		
+  \item \textit{What happens to the asymptotics when the number of cutpoints, $p$,
+        is large relative to the number of subjects, $n$?}
+	
+	Nothing, it just takes more time to evaluate the statistic and its distribution.	
+        More generally, for the joint asymptotics to work, one just has to assure that the
+	asymptotic approximation for each individual statistic is reasonable.
+
+	Example: Split in categorical variable with large number of categories, e.g.,
+	10 categories with 10 observations each leads to $n = 100$ but
+	$p = 2^{10 - 1} = 512$.
+	
+  \item \textit{On p.~11, ordinal responses are often analyzed with ordinal
+        logistic models (proportional odds models) based on the multinomial
+	distribution. How would such an approach be accommodated with the
+	authors' approach?}
+	
+	Ordinal responses would be incorporated into the generalized framework
+	by choosing appropriate scores for the ordered levels in the influence
+	function $h(\cdot)$ and then taking the maximum over two-sample statistics.
+	Each of these statistics evaluates the significance of a single binary
+	covariate in a proportional odds logistic regression (POLR). However, in
+	POLR the inference is typically based on the likelihood ratio statistic
+	rather than a Pearson-type $\chi^2$ statistic (as computed from our
+	framework).
+	
+  \item Minor issues:
+  
+  \begin{itemize}
+  
+    \item[(a)] \textit{The name ``influence'' function implies to some readers a
+               robustness influence function. Such a function clearly needs to be
+	       defined when it is introduced and how it is defined in practice
+	       for the different scales of outcomes. Similarly, $q$ needs to be
+	       explained here as well.}
+	       
+	       The two most prominent examples, namely a rank transformation
+               (with $q = 1$) and a dummy coding of $k$ levels (with $q = k - 1$)
+               now immediately follows the definition of $h$. 
+	       
+	       Robust influence functions (i.e., bounded influence functions) can
+	       be easily employed as $h$ as well.
+	       
+    \item[(b)] \textit{In the first paragraph of the introduction, the authors need to
+               clarify the terms ``step-shaped''.}
+	       
+	       Done by adding an example: single jump in mean function.
+	       
+    \item[(c)] \textit{On p.~8, why doesn't the $\rho$ correlation function for the
+               elements of $R$ involve the influence function, $h(\cdot)$?}
+	       
+	       We added a closed-form expression for $\Sigma$ which allows,
+               after some basic algebra, for computing the correlation.
+
+               Computing the covariance of $g_j$ and $g_k$:
+\begin{eqnarray*}
+\Sigma_{j,k} = \frac{V(h | S)}{n-1}\left(n \sum_i g_j(X_i) g_k(X_i) - \sum_i g_j(X_i) \sum_i g_k(X_i)\right)
+\end{eqnarray*}
+and for $j = k$ the term $\sum_i g_j(X_i) g_k(X_i)$ simplifies to 
+$\sum_i g_j(X_i)^2 = \sum_i g_j(X_i)$ because $g_i \in \{0, 1\}$. The factor $V(h | S) / (n-1)$
+cancels out in the covariance term.
+	       
+    \item[(d)] \textit{On p.~9, where are the $r_{ij}$ elements defined for $R$? Are
+               they the $\rho$ elements defined on p.~8?}
+    
+               The elements of $R$ are the correlations corresponding to the covariances
+	       in $\Sigma$. The $\rho$ elements are special cases for $q = 1$.
+	       Both is pointed out more clearly now.
+
+    \item[(e)] \textit{On p.~9, how is $c$ chosen?}
+    
+               $c$ denotes an (arbitrary) quantile (or critical value) of the distribution
+	       of $\max  |Z_1|, \dots, |Z_p|$.
+	       
+    \item[(f)] \textit{On p.~11, ``blocks'' needs to be defined clearly.}
+               
+	       Blocks are now defined in Section 3 and the implications
+               of having a block structure (for example in multicenter trials) 
+               are pointed out.
+               
+	       
+    \item[(g)] \textit{On p.~11 (line 12 from the bottom), why does partitioning 
+               ``lead to'' or determine $g(\cdot)$. Shouldn't the link function be
+	       determined by the outcome, $Y$?}
+	       
+	       The function $g(\cdot)$ is a transformation of the covariate(s) $X$
+	       only, pertaining to the set of all potential two-sample splits.
+	       The outcome is transformed by the influence function $h(\cdot)$.
+	       
+    \item[(h)] \textit{The first part of Section~5 (Applications and illustration)
+               from bottom of p.~10 to the end of the text at ``Table 1 about here''
+	       should be put in a separate section (``Special cases'') with the
+	       remainder of the text in Section~5 being left in the Illustration
+	       section.}
+	       
+	       The section has been re-organized as suggested.
+	       
+    \item[(i)] \textit{Similarly, the second paragraph on p.~11 should be in the
+               estimation or inference section.}
+	       
+	       We moved the most important examples to Section~2.
+	       
+    \item[(j)] \textit{Finally, the example needs to be elaborated on more in terms
+               of different cutpoints for different types of outcomes in addition to
+	       the survival outcome. Also, does the cutpoint make sense to the
+	       clinicians and does it relate to any apriori clinically defined
+	       cutpoints. The interaction issue needs more elaboration as well in
+	       terms of its magnitude relative to observed means of the outcome for
+	       each of the cells represented by the cutpoints.}
+	       
+Our interest was motivated by a research project re-analysing the CAO/ARO/AIO-94
+data with respect to possible prognostic factors. The manuscript uses 
+a different univariate methodology, however, the result is qualitatively the same
+and corresponds rather well to established clinical cutpoints. 
+This manuscript is currently under consideration by a medical journal and will
+be added to the list of references once it is published.
+
+\end{itemize}
+  
+\end{enumerate}
+
 
 \end{document}
