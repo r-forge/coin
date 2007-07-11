@@ -40,7 +40,8 @@ cutpoints for various characteristics of immune cells within colorectal
 tumor samples, such as type, density or location, with respect to their
 ability to differentiate between patients with good and poor prognosis.
 \cite{Buccisano2006} obtain a threshold for
-residual leukemic cells in acute myeloid leukemia patients. 
+residual leukemic cells in acute myeloid leukemia patients from 
+maximally selected log-rank statistics.
 %%The ability for
 %%expression levels of HER2 and co-amplified genes to predict breast cancer
 %%survival is investigated by \cite{Vinatzer2005} utilizing maximally selected
@@ -74,7 +75,8 @@ distribution of maximally selected rank statistics, extending the area of
 application
 to continuous and censored response variables. \cite{Betensky1999} propose
 a maximally selected $\chi^2$ test for nominal response variables measured at
-$k > 2$ levels and ordered categorical data (maximally selected Cochran-Armitage test).
+$k > 2$ levels and ordered categorical data.
+%% (maximally selected Cochran-Armitage test).
 %%Finally, \cite{Rabinowitz2000} suggested a maximally selected McNemar's test.
 %%\cite{Lausenetal2004} extended maximally selected rank statistics to more 
 %%than one covariate.
@@ -139,11 +141,12 @@ When $\X$ is a factor at $k$ levels, there are $p = 2^{k-1}$ possible
 partitions of the observations into two samples. For multivariate covariates, the
 $A_j$ can code splits in interactions of the components of $\X$.
 A simple zero--one dummy coding for the $j$th partition is 
-$g_j(\X) \quad = \quad \indic(\X \in A_j)$
+$g_j(\X) = \indic(\X \in A_j)$
 where $\indic$ denotes the indicator function. 
 Only partitions satisfying a sample size 
 constraint $\sum_i g_j(\X_i) \in (n\varepsilon, n - n\varepsilon)$ 
-for some fixed $\varepsilon \in (0, 0.5)$ are taken into account. 
+for some fixed $\varepsilon \in (0, 0.5)$ are taken into account (typically 
+$\varepsilon = 0.1$). 
 
 The two-sample problem associated with the $j$th binary partition
 can be tested using a linear statistic
@@ -161,7 +164,7 @@ For example, with $h$ being a rank transformation for a
 continuous response $\Y$, the linear
 statistic $\T_j$ is the sum of the ranks for observations from $A_j$, 
 i.e., equals the Wilcoxon-Mann-Whitney statistic. When $\Y$ is a factor 
-measured at $k$ levels, $h \in \R^{k - 1 \times 1}$ 
+measured at $k$ levels, $h \in \R^{(k - 1) \times 1}$ 
 is the corresponding dummy coding and $\T_j$ corresponds
 to the $2 \times k$ contingency table of the transformation $g_j(\X)$ and response 
 $\Y$. (Because the margins are fixed, we only need to compute the first $k - 1$ columns
@@ -382,7 +385,7 @@ where $B^0(t)$ is a standard Brownian bridge that is scaled to zero mean and uni
 variance \citep{MillerSiegmund1982,LausenSchumacher1996}. 
 The correlation of $Z^0(s)$ and $Z^0(t)$ for $s \le t$ is 
 $\sqrt{s (1 - t)}/ \sqrt{t (1 - s)}$
-and is the exactly the same as above. 
+and is exactly the same as above. 
 More formally, with $t_j = \lim_{n \rightarrow \infty} n^{-1} \sum_i g_j(\X_i)$,
 the statistics $Z_j$ and $Z^0(t_j)$ are asymptotically identical in distribution.
 Therefore, the difference between the two approaches is that for increasing $p$
@@ -486,16 +489,17 @@ which might differ from the unconditional distribution as pointed out above.
 The response variable is a factor at two levels $a$ and $b$, say, and $h(\Y_i) = I(\Y_i = a)$
 is a dummy coding.
 The ordered univariate covariate $\X$ offers $p \le n - 1$ cutpoints $\xi_1, \dots, \xi_p$ 
-leading to $g_j(\X_i) = I(\X_i \le \xi_j)$. Thus,
+leading to $g_j(\X_i) = I(\X_i \le \xi_j)$ for $j = 1, \dots, p$. Thus,
 \begin{eqnarray*}
-\T_j = \sum_{i = 1}^n g_j(\X_i) h(Y_i)^\top = \sum_{i = 1}^n I(\X_i \le \xi_j) I(\Y_i = a) \in \R
+\T_j = \sum_{i = 1}^n g_j(\X_i) h(\Y_i)^\top = \sum_{i = 1}^n I(\X_i \le \xi_j) I(\Y_i = a) \in \R
 \end{eqnarray*}
 is the number of observations $i$ with $\X_i \le \xi_j$ and
 $\Y_i = a$. Thus, $\T_j$ is one element of the $2 \times 2$ contingency
 table for $I(\X \le \xi_j)$ and $I(\Y = a)$ and determines the 
 complete table because the margins are fixed. 
-The statistic $(\T - \mu)^2 / \text{diag}(\Sigma)$
-is equivalent to the usual $\chi^2$ statistic and our maximally selected 
+The statistic $(\T - \mu)^2 / \text{diag}(\Sigma) \in \R^{p \times 1}$
+is equivalent to the $p$-vector of $\chi^2$ statistics for all $p$ tables
+and our maximally selected 
 statistic $\Tmax$ is a monotone transformation of the
 maximally selected $\chi^2$ statistic proposed by 
 \cite{MillerSiegmund1982}.
@@ -613,8 +617,10 @@ if (style == "Biometrics")
 @
 \begin{figure}
 \begin{center}
-\caption{Survival times of rectum cancer patients in two risk groups identified by a maximally selected log-rank
-statistic. \label{fig:maxstat}}
+\caption{Survival times of rectal cancer patients in two risk groups 
+         identified by a novel maximally selected log-rank
+         statistic based on interactions of T and N category. 
+         \label{fig:maxstat}}
 <<maxstat, echo = FALSE, fig = TRUE, width = 7, height = 6>>=
 ###layout(matrix(1:2, ncol = 2))
 ###plot(abs(stat), xlab = "Index", ylab = "T")
@@ -690,7 +696,7 @@ $\Tmax$ can be computed in the \textsf{R} system for statistical computing \cite
 utilizing the function \texttt{maxstat\_test()} from the add-on package
 \Rpackage{coin} \citep{Hothornetal2006,PKG:coin}.
 The distribution of $\Tmax$ can be approximated by its asymptotic distribution or by Monte-Carlo methods 
-(also in the presence of a grouping of the observations into independent blocks) readily
+(also in the presence of blocks, e.g., in multicenter trials) readily
 available from the same package.
 
 In summary, a unified treatment of maximally selected statistics 
@@ -701,8 +707,8 @@ both conceptually and practically.
 
 %% TODO
 %% wollen wir quadratische Formen mit einbauen?
-%%c_\text{quad}(\T, \mu, \Sigma)  & = & (\T - \mu) \Sigma^+ (\T - \mu)^\top,
-%%involving the Moore-Penrose inverse $\Sigma^+$ of $\Sigma$.
+%% c_\text{quad}(\T, \mu, \Sigma)  & = & (\T - \mu) \Sigma^+ (\T - \mu)^\top,
+%% involving the Moore-Penrose inverse $\Sigma^+$ of $\Sigma$.
 %%
 %% kann man nicht eine ganz einfache approximation fuer P(T > max(Z1, ..., Zpq)) herleiten?
 

@@ -1,47 +1,18 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage{a4wide}
 \usepackage{amstext}
+\usepackage{pdfpages}
+%%\pagestyle{empty}
 
 \begin{document}
+
+\includepdf[pages=1-]{letter.pdf}
 
 \begin{center}
 \textbf{\large Point-to-Point Answers to Manuscript \#070428CF \\
 Generalized Maximally Selected Statistics} \\
 by Torsten Hothorn and Achim Zeileis
 \end{center}
-
-\textit{FIXME: include the first part in a formal cover letter}
-
-Dear Prof.~Freedman,
-
-we would like to thank you, the associate editor and the referee
-for a fast and very useful review of our manuscript that helped to 
-substantially improve the manuscript in various respects. In particular,
-we made three major changes:
-
-\begin{enumerate}
-  \item \textit{Special cases of the general framework:} In Section~6
-        of the revised manuscript we discuss in more detail how the general
-	framework can be adapted to specific data analysis tasks.
-	Previously suggested maximally selected chi-squared statistics,
-	rank statistics, and Cochran-Armitage statistics are shown to
-	be special cases of the framework.
-  \item \textit{Asymptotic distributions:} We compare our new algorithm
-        for computing the conditional asymptotic distribution to unconditional
-	asymptotic approximations previously suggested in the literature.
-  \item \textit{Interactions and recursive partitioning:} Techniques for
-        detecting splits in interactions of multiple covariates are
-	discussed more consistently and in more detail throughout the paper.
-	Similarities and differences with respect to recursive partitioning
-	algorithms (such as CART) are addressed in Section~6.  
-\end{enumerate}
-
-A detailed point-to-point reply to the referee and associate editor is included below.
-
-Best regards,
-
-Torsten Hothorn
-
 
 \vspace*{1cm}
 
@@ -87,7 +58,7 @@ General comments:
 	from the covariate-based approach considered here.
 	
   \item \textit{A discussion of the asymptotic approximation's quality would be appreciated.
-        What is the behaviour compared to other asymptotic approximations already
+        What is the behavior compared to other asymptotic approximations already
         proposed in the literature?}
 	
 	We discuss various asymptotic approximations in Section~5, both for fixed $p$
@@ -128,7 +99,7 @@ Minor concerns:
         in $R^{1 \times q}$.}
 	
 	The statistic is always transformed to a column vector by the vec operator
-        (columnwise mapping of a $q \times p$ matrix into a $pq$ vector).
+        (column-wise mapping of a $q \times p$ matrix into a $pq$ vector).
 	
   \item \textit{p6: There seems to be a dimension problem here. $g(X)$ seems to be
         in $R^{1 \times p}$ and $h^\top$ in $R^{1 \times q}$. I think I understand
@@ -170,14 +141,14 @@ Minor concerns:
 	
   \item \textit{p8: The notation $R = \mbox{cor}(\Sigma)$ is maybe intuitive, but unusual.}
   
-        Instead of the admittedly unstandard notation above, we now employ
+        Instead of the admittedly nonstandard notation above, we now employ
 	a verbal explanation that should be un-ambiguous.
 	
   \item \textit{p12: Are there references for the equivalences of $T_{\max}$ with maximally
         selected $\chi^2$ statistics, McNemar statistics, etc.?}
 	
 	The equivalence of the statistic $T_\text{max}$ to already published
-        statistics is now pointed out in Section~6 explicitely.
+        statistics is now pointed out in Section~6 explicitly.
 	
   \item \textit{p12: Citing Koziol (1991) at this stage is a bit confusing, since
         Koziol's method is exact.}
@@ -263,7 +234,7 @@ pmt <- function(mt) {
         over multiple candidate partitions. When two covariates $X_1$ and $X_2$ are available,
         one can (1)~consider all partitions in either $X_1$ or $X_2$ (CART follows
         this approach) or (2)~consider the interaction of $X_1$ and $X_2$ 
-        and define paritions with respect to this interaction variable. The full set
+        and define partitions with respect to this interaction variable. The full set
 	of interaction partitions also includes splits in only one of the variables
         as well checkerboard-type splits necessary to solve for example the XOR problem.
 
@@ -285,7 +256,7 @@ pmt <- function(mt) {
 	especially for rank statistics based on censored data such as in the example
 	of the current paper.}
 	
-        The different asymptotic distributions are in fact more similar than obivous
+        The different asymptotic distributions are in fact more similar than obvious
 	from their representations via the multivariate normal distribution and the
 	crossing probability of the Ornstein-Uhlenbeck process (or scaled Brownian
 	bridge), respectively. The main difference between the approaches is that
@@ -315,7 +286,11 @@ pmt <- function(mt) {
 
 	Example: Split in categorical variable with large number of categories, e.g.,
 	10 categories with 10 observations each leads to $n = 100$ but
-	$p = 2^{10 - 1} = 512$.
+	$p = 2^{10 - 1} = 512$. However, a sample size constraint $\varepsilon = 0.1$
+        ensures that each two-sample statistic is based on at least
+        $10$ observations in the first and not more than $90$ observations
+        in the second group (a situation where the normal approximation
+        should work well enough).
 	
   \item \textit{On p.~11, ordinal responses are often analyzed with ordinal
         logistic models (proportional odds models) based on the multinomial
@@ -357,14 +332,18 @@ pmt <- function(mt) {
                elements of $R$ involve the influence function, $h(\cdot)$?}
 	       
 	       We added a closed-form expression for $\Sigma$ which allows
-               for computing the correlation:
+               for computing the correlations; in particular the covariance
+               between $\mathbf{T}_j$ and $\mathbf{T}_k$ for $q = 1$ is
 
                  \[ \Sigma_{j,k} \quad = \quad \frac{V(h | S)}{n-1}
 	            \left(n \sum_i g_j(X_i) g_k(X_i) - \sum_i g_j(X_i) \sum_i g_k(X_i)\right). \]
                
 	       For $j = k$ the term $\sum_i g_j(X_i) g_k(X_i)$ simplifies to 
                $\sum_i g_j(X_i)^2 = \sum_i g_j(X_i)$ because all $g_j(X_i) \in \{0, 1\}$.
-	       The factor $V(h | S) / (n-1)$ cancels out in the covariance term.
+	       The factor $V(h | S) / (n-1)$ (and thus the dependence on the influence function $h$) 
+               cancels out in the division
+               by $\sqrt{\Sigma_{jj}}$ and $\sqrt{\Sigma_{kk}}$ when
+               computing $\rho_{j,k}$.
 	       
     \item[(d)] \textit{On p.~9, where are the $r_{ij}$ elements defined for $R$? Are
                they the $\rho$ elements defined on p.~8?}
@@ -414,7 +393,7 @@ pmt <- function(mt) {
 	       terms of its magnitude relative to observed means of the outcome for
 	       each of the cells represented by the cutpoints.}
 	       
-Our interest was motivated by a research project re-analysing the CAO/ARO/AIO-94
+Our interest was motivated by a research project re-analyzing the CAO/ARO/AIO-94
 data with respect to possible prognostic factors. The manuscript uses 
 a different univariate methodology, however, the result is qualitatively the same
 and corresponds rather well to established clinical cutpoints. 
