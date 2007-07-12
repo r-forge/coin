@@ -30,6 +30,9 @@
 %% hyphenation
 \hyphenation{Qua-dra-tic}
 
+%%\VignetteIndexEntry{Implementing a Class of Permutation Tests: The coin Package}
+
+
 %% JSS
 \author{Torsten Hothorn \\ Ludwig-Maximilians-Universit\"at M\"unchen \And
         Kurt Hornik \\Wirtschaftsuniversit\"at Wien \AND
