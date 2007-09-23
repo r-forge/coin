@@ -1,89 +1,86 @@
-From biometrics@tibs.org Wed Apr 25 09:47:00 2007
-Date: Tue, 24 Apr 2007 13:19:31 -0500
+From biometrics@tibs.org Fri Sep 14 16:29:43 2007
+Date: Tue, 11 Sep 2007 10:42:59 -0500
 From: Biometrics <biometrics@tibs.org>
 To: torsten@hothorn.de
-Subject: Re: Submission #070428CF
+Cc: Achim Zeileis <Achim.Zeileis@wu-wien.ac.at>
+Subject: Review of MS #070428CFR
 
-Dear Dr. Hothorn,
+September 11, 2007
 
-Thank you for submitting your paper entitled, "Generalized maximally
-selected statistics," to Biometrics. The paper has been coded as 070428CF.
-Please quote this number in all future correspondence.
+Dr. Torsten Hothorn
+Institut fur Statistik
+Ludwig-Maximilians-Universitat Munchen
+Ludwigstrabe 33
+D-80539 Munchen, Germany
 
-You may check the status of the review of your paper at any time on the
-Journal's web site http://www.tibs.org/biometrics under Information for
-Authors. The current login name is your manuscript number and the password
-is the first author's last name (all lowercase).  We encourage you to change
-your password once you login.
+Dear Dr. Hothorn:
 
-Once the review of your paper is complete we will e-mail the decision letter
-and any reports to you. Please keep us informed if your mail is changed.
+Thank you for submitting a revision of your paper #070428CFR, "Generalized
+maximally selected statistics," to Biometrics. Your paper has been reviewed
+by the associate editor and one referee, whose reports are enclosed. Based
+upon these reports, I am happy to inform you that we would be willing to
+consider a revision that addresses the remaining concerns. The reviewers
+were much happier with this revised manuscript and ask for some relatively
+minor changes. Your main challenge will be to incorporate the additional
+comments requested while maintaining the page limit. The associate editor's
+report offers one strategy for achieving this.
 
-Details about preferred manuscript length and format are given on the
-Journal's web site.  Additional information about the review process and how
-Biometrics achieves an excellent performance for review times is also given.
+Please make sure your revision is no more than 20 pages including appendices
+and references, excluding the title page and abstract, figures and tables,
+in a 12 point font, double space with 25 lines per page, plus no more than 4
+tables and figures combined.
 
-The review process has now started on your paper. I hope to be able to send
-a report to you within three months.
+Please remove captions from figures and place them in a list on a separate
+sheet.  Equations should use the [{()}] ordering, so that it is abs
+[exp{log(x)}].
 
-Sincerely yours,
+Along with the revision, please include a point-by-point response to all
+reviewer comments, indicating how and where you have addressed them.
 
-Laurence Freedman
+I am looking forward to receiving your revision.  Thank you for your
+interest in Biometrics!
 
-_______________________________________________________________
+Yours sincerely,
 
-Biometrics - A Journal of the International Biometric Society
+Laurence S. Freedman
 
-Executive Editor:  Marie Davidian
-Co-Editors:  Laurence Freedman, Geert Molenberghs, Naisyin Wang
-Editorial Manager: Ann Hanhart
 
-Department of Physics
-The University of Texas at Arlington
-P.O. Box 19059
-Arlington, TX 76019-0059
-
-Phone:  817-272-7171
-Fax:  817-272-7172
-E-mail:  biometrics@tibs.org
-http://www.tibs.org/biometrics
-______________________________________________________________
 
 
 
 Torsten Hothorn wrote:
-
 > 
-> Dear Prof. Davidian,
+> On Fri, 22 Jun 2007, Biometrics wrote:
 > 
-> we hereby would like to submit our manuscript entitled
+> > June 22, 2007
+> > 
+> > 
+> > Dear Dr. Hothorn:
+> > 
 > 
->     Generalized Maximally Selected Statistics
+> Dear Dr. Freedman,
 > 
-> to Biometrics; the manuscript is attached to this e-mail
-> as a PDF file.
+> > Your paper #070428CF, "Generalized maximally selected statistics," has
+> > been reviewed by an associate editor and one referee, whose reports are
+> > enclosed. Based upon these reports, we would be willing to consider a
+> > revision. However, because the required modifications are extensive, I
+> > cannot guarantee that a revision would ultimately be acceptable, so you
+> > would be proceeding at your own risk.
+> > 
 > 
-> Maximally selected statistics for cutpoint estimation first appeared
-> (as maximally selected chi-square statistics) in a Biometrics paper
-> in 1982. Since then, many extensions to continuous, censored or ordered
-> response variables have been proposed, mostly published in Biometrics
-> as well. The technique is well established in applied research and
-> used extensively today, as studies published in highly ranked
-> medical and biological journals indicate.
-> 
-> We propose a new class of generalized maximally selected statistics
-> based on conditional inference techniques that contains many of the
-> published tests as special cases and can easily be utilized to construct
-> new test procedures in less standard situations. We do so by deriving
-> a maximally selected log-rank statistic in two ordered categorical
-> variables (and their interaction) and applying it to survival times
-> of rectal cancer patients. Moreover, a special correlation structure
-> can be used to compute the asymptotic distribution of a large class
-> of maximally selected statistics in linear time.
-> 
-> Because of its unifying nature, we think that our manuscript is
-> appropriate for the `Consultant's Forum'-Section of Biometrics.
+> that you very much for the fast helpful and helpful reviews. Our revision
+> of the manuscript is attached to this email as `maxstat.pdf'. A letter
+> describing the most important changes as well as detailed point to point
+> answers to the referee's comments is attached as `rejoinder.pdf'.
 > 
 > Sincerely yours,
 > 
-> Torsten Hothorn and Achim Zeileis
+> Torsten Hothorn
+
+    [ Part 2, Application/PDF  14KB. ]
+    [ Unable to print this part. ]
+
+
+    [ Part 3, Application/PDF  13KB. ]
+    [ Unable to print this part. ]
+

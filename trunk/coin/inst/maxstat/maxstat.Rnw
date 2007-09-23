@@ -92,13 +92,12 @@ of the statistics to be maximized. For statistics derived from cutpoints,
 the correlations have a special product form which we exploit for evaluation
 of the conditional asymptotic distribution: A linear-time algorithm is described
 which enables the fast assessment of a large number of cutpoints and
-improves upon approximations for the asymptotic distribution
-currently in use. 
+improves upon approximations currently in use. 
 
-Since no assumptions on the scale level of neither the covariate to be dichotomized nor
-the response variable are necessary, the class of generalized maximally selected
-statistics can not only be used to implement already published procedures but also
-to extend the methodology to new areas of application. We do so by constructing
+
+For illustrating the flexibility of the new framework for generalized maximally selected  
+statistics we exemplify how the methodology can be extended to new areas of
+application by constructing 
 a maximally selected log-rank statistic for a censored response partitioned with
 respect to two ordered categorical covariates and potential interactions.
 This new test is employed to search for a high-risk group determined by the T and N-category
@@ -167,8 +166,9 @@ i.e., equals the Wilcoxon-Mann-Whitney statistic. When $\Y$ is a factor
 measured at $k$ levels, $h \in \R^{(k - 1) \times 1}$ 
 is the corresponding dummy coding and $\T_j$ corresponds
 to the $2 \times k$ contingency table of the transformation $g_j(\X)$ and response 
-$\Y$. (Because the margins are fixed, we only need to compute the first $k - 1$ columns
-of the first row of this contingency table.)
+$\Y$. 
+%%(Because the margins are fixed, we only need to compute the first $k - 1$ columns
+%%of the first row of this contingency table.)
 
 A joint linear statistic for all binary partitions is
 \begin{eqnarray*}
@@ -220,17 +220,16 @@ to be computed separately within each block. The expectation $\mu$ and covarianc
 matrix $\Sigma$ of $\T$ are then obtained as the sum over all expectations and
 covariance matrices.
 Therefore, it is easily possible to take a block randomization
-scheme in a randomized clinical trial or dependent sample designs (where
-each observation forms a block) into account.
+scheme in a randomized clinical trial or dependent sample designs 
+into account.
 
-The key step for the construction of a maximally selected 
+The key step for constructing a maximally selected 
 statistic
 %% based on the multivariate
 %% linear statistic $\T$ is its 
 is the standardization of $\T$ by its 
 conditional expectation $\mu$ and covariance matrix $\Sigma$: the 
-maximum of the absolute values of the standardized linear statistic
-is used as test statistic
+test statistic is the absolute maximum of the standardized linear statistic
 \begin{eqnarray*}
 \Tmax  & = & \max \frac{|\T - \mu|}{\sqrt{\text{diag}(\Sigma)}}.
 \end{eqnarray*}
@@ -306,8 +305,8 @@ subdiagonal elements $\rho_{j,j-1}, j = 2, \dots, p$ and it holds that
 \begin{eqnarray*}
 \rho_{1,k} = \prod_{j = 2}^k \rho_{j,j-1}.
 \end{eqnarray*}
-With $\mathbf{v} = (\rho_{1,1}, \dots, \rho_{1,p})$ the lower triangular part of the correlation
-matrix $\Rb$ can be written as $\mathbf{v} (1/\mathbf{v})^\top$ and it follows 
+With $\mathbf{v} = (\rho_{1,1}, \dots, \rho_{1,p})$ the lower triangular part of $\Rb$ 
+can be written as $\mathbf{v} (1/\mathbf{v})^\top$ and it follows 
 from \citet[Section 2.1]{Meurant1992} that the
 inverse $\Rb^{-1}$ of the correlation matrix is a tridiagonal symmetric band matrix:
 \begin{eqnarray*}
@@ -322,21 +321,20 @@ r_{1,2} & r_{2,2} & r_{2,3} & 0 & \dots & 0 \\
 \end{array}
 \right).
 \end{eqnarray*}
-
-We have to evaluate the probability that any of $|Z_1|, \dots, |Z_p|$ exceeds
-$c > 0$, i.e., the probability
+The probability that any of $|Z_1|, \dots, |Z_p|$ exceeds
+$c > 0$ is 
 \begin{eqnarray*}
 \Prob(\Tmax > c) & = & 1 - 
 \frac{1}{\sqrt{|\Rb| (2\pi)^p}} \int\limits_{-c}^{c} 
 \exp\left(-\frac{1}{2}\z^\top \Rb^{-1}\z \right) d\z.
 \end{eqnarray*}
-Because of the special band structure of $\Rb^{-1}$ the quadratic form 
-$\z^\top \Rb^{-1}\z$ simplifies to
+Due to the band structure of $\Rb^{-1}$ the quadratic form $\z^\top \Rb^{-1}\z$ 
+simplifies to
 \begin{eqnarray*}
 \z^\top\Rb^{-1}\z = r_{1,1}z_1^2 + 2r_{2,1}z_1z_2 + r_{2,2} z_2^2 + \dots +
 2r_{p,p-1} z_pz_{p-1} + r_{p,p}z_p^2
 \end{eqnarray*}
-and one can make use of this structure when evaluating the
+which is employed for evaluating the
 multivariate normal distribution numerically \citep{GenzKahaner1986}.
 With $\phi(z) = \exp\left(-z/2\right)$ we have
 \begin{eqnarray*}
@@ -367,9 +365,9 @@ evaluated and aggregated over $\tilde{z}$ only, yielding values
 of $f_j(z)$ for a grid of $z$ values. 
 These values are then re-used when computing $f_{j-1}$. 
 
-This new approximation of the asymptotic distribution based on the multivariate
-normal distribution is compared with several previously suggested approximations
-in Figure~\ref{approx}. It should be pointed out that the approximations differ
+Comparing this new approximation of the asymptotic distribution 
+with previously suggested approximations (see Figure~\ref{approx}),
+it should be pointed out that these approximations differ
 with respect to the asymptotics for $p$, the number of cutpoints. In a conditional
 framework, it is most natural to treat $p$ as fixed (given the observed data). Taking
 an unconditional view, it depends on the partition-generating mechanism whether
@@ -381,25 +379,27 @@ continuous covariate $\X$ are considered, then $p \rightarrow \infty$ as $n \rig
 and the sequence of test statistics $Z_1, \dots, Z_p$ is known to converge to
 a stochastic Gaussian process with continuous paths:
   \[ Z^0(t) \quad = \quad \frac{B^0(t)}{\sqrt{t (1 - t)}}, \quad t \in [0, 1] \]
-where $B^0(t)$ is a standard Brownian bridge that is scaled to zero mean and unit
-variance \citep{MillerSiegmund1982,LausenSchumacher1996}. 
+where $B^0(t)$ is a Brownian bridge that is scaled to zero mean and unit
+variance \citep{MillerSiegmund1982}. 
 The correlation of $Z^0(s)$ and $Z^0(t)$ for $s \le t$ is 
 $\sqrt{s (1 - t)}/ \sqrt{t (1 - s)}$
 and is exactly the same as above. 
 More formally, with $t_j = \lim_{n \rightarrow \infty} n^{-1} \sum_i g_j(\X_i)$,
-the statistics $Z_j$ and $Z^0(t_j)$ are asymptotically identical in distribution.
+$Z_j$ and $Z^0(t_j)$ are asymptotically identical in distribution.
 Therefore, the difference between the two approaches is that for increasing $p$
 the asymptotical distribution is given by $\sup_{t \in [\varepsilon, 1 - \varepsilon]} Z^0(t)$
 whereas for fixed $p$ it is $\max_{t \in \{t_1, \dots, t_p\}} Z^0(t)$.
 Thus, the supremum over the full interval will always be larger than the 
-maximum over a subset of times/partitions because the additional variation
-in the intervals $(t_j, t_{j + 1})$ does not have to be considered. The difference between the
-two approaches is negligible if all $t_{j+1} - t_j$ are sufficiently small.
+maximum over a subset of times/partitions because of the additional variation
+in the intervals $(t_j, t_{j + 1})$. The difference between the
+two approaches decreases with $t_{j+1} - t_j$.
 Figure~\ref{approx} shows that the exact conditional distribution (approximated by
-$30,000$ permutations) is most closely captured by the conditional asymptotic distribution
+$30,000$ permutations) is most closely captured by the 
+conditional asymptotic distribution
 suggested above. Less accurate is the improved Bonferroni correction
-\citep{Worsley1982} which also uses a fixed $p$. The two approximations of
-the $\sup Z^0$ distribution for increasing $p$ \citep{Jennen:1985,Hansen:1997}
+\citep{Worsley1982} which also uses a fixed $p$. The two approximations 
+%%of the $\sup Z^0$ distribution 
+for increasing $p$ \citep{Jennen:1985,Hansen:1997}
 are (not surprisingly) clearly below.
 \begin{figure}
 \begin{center}
@@ -443,26 +443,33 @@ legend("bottomright", lty = 1:5,
 \end{center}
 \end{figure}
 
+These considerations about the asymptotic behaviour of $p$ also raise the
+question about the quality of the asymptotic
+approximation for finite samples when $p$ is large compared to $n$.
+The joint approximation is appropriate if the normal approximation
+for each two-sample statistic is. Consider a split 
+in categorical variable with large number of categories, e.g.,
+$10$ categories with $10$ observations each leads to $n = 100$ but
+$p = 2^{10 - 1} = 512$. But as each two-sample statistic is based on at least
+$10$ and $90$ observations, respectively, the normal approximation
+should work well enough.
+
 \section{Applications and special cases}
 
 Maximally selected statistics as described in Section~\ref{sec:stat} can be
 applied to covariates $\X$ and responses $\Y$ measured at arbitrary scales; appropriate 
 influence functions $h$ for nominal, ordered, numeric, censored and multivariate response
-variables are given in the sequel \citep[further details can be found in][]{Hothornetal2006}, 
+variables are given in the sequel \citep[see][for further details]{Hothornetal2006}, 
 followed by a description of how to
 partition the covariate space for nominal, ordered and multivariate covariates and 
 the derivation of a novel maximally selected statistic.
 
-For nominal responses, $h$ is typically a straightforward 
-dummy coding of the $k$ factor levels (where it is sufficient
-to code for the first $k - 1$ levels only). For ordinal responses,
-scores are usually attached to each of the $k$ levels and 
-$h$ is the vector of those numeric scores. 
-Many possible influence functions are available for discrete or continuous covariates:
-The identity transformation is the most natural choice; square root, log, or
-rank transformations are possible as well. 
-When a numeric response is censored, the log-rank transformation or
-Savage scores can be applied.
+For categorial responses, $h$ is typically a simple dummy
+coding for nominal $\Y$ and a vector of numeric scores
+(corresponding to the $k$ levels) for ordinal $\Y$.
+Many possible influence functions are available for discrete or continuous covariates, e.g.,
+identity, square root, log, or rank transformations; and for censored responses
+log-rank or Savage scores can be applied.
 %%For a multivariate response, possibly consisting of variables with different scale levels,
 %%the influence function $h$ is a combination of 
 %%influence functions appropriate for any of the univariate response variables
@@ -490,11 +497,11 @@ The response variable is a factor at two levels $a$ and $b$, say, and $h(\Y_i) =
 is a dummy coding.
 The ordered univariate covariate $\X$ offers $p \le n - 1$ cutpoints $\xi_1, \dots, \xi_p$ 
 leading to $g_j(\X_i) = I(\X_i \le \xi_j)$ for $j = 1, \dots, p$. Thus,
-\begin{eqnarray*}
+\[
 \T_j = \sum_{i = 1}^n g_j(\X_i) h(\Y_i)^\top = \sum_{i = 1}^n I(\X_i \le \xi_j) I(\Y_i = a) \in \R
-\end{eqnarray*}
+\]
 is the number of observations $i$ with $\X_i \le \xi_j$ and
-$\Y_i = a$. Thus, $\T_j$ is one element of the $2 \times 2$ contingency
+$\Y_i = a$. $\T_j$ is one element of the $2 \times 2$ contingency
 table for $I(\X \le \xi_j)$ and $I(\Y = a)$ and determines the 
 complete table because the margins are fixed. 
 The statistic $(\T - \mu)^2 / \text{diag}(\Sigma) \in \R^{p \times 1}$
@@ -509,9 +516,9 @@ row of the $2 \times k$ contingency table of $\X_i \le \xi_j$ and $\Y$.
 The $\Tmax$ statistic is the maximum over the maximum of $p$ standardized contingency tables, 
 an alternative to maximally selected $\chi^2$ statistics for larger tables 
 \citep{Betensky1999}. 
-In the extreme case of each observation being a block in repeated measurements, 
-our test statistic $\Tmax$ for binary responses 
-corresponds to maximally selected McNemar's statistics \citep{Rabinowitz2000}.
+%%In the extreme case of each observation being a block in repeated measurements, 
+%%our test statistic $\Tmax$ for binary responses 
+%%corresponds to maximally selected McNemar's statistics \citep{Rabinowitz2000}.
 
 \paragraph{Maximally selected Cochran-Armitage statistics.}
 The ordered response $\Y$ is measured at $k$ ordered levels. The influence
@@ -525,9 +532,9 @@ association statistics. %% \citep{agresti2002}.
 \paragraph{Maximally selected rank statistics.} 
 Let $h$ denote the rank transformation of a univariate response $\Y$.
 Then, the statistic
-\begin{eqnarray*}
+\[
 \T_j = \sum_{i = 1}^n I(\X_i \le \xi_j) h(\Y_i)^\top = \sum_{i: \X_i \le \xi_j} \text{rank}(\Y_i)
-\end{eqnarray*}
+\]
 is the sum of the ranks for all observations with $\X_i \le \xi_j$, i.e., the
 Wilcoxon rank sum statistic. More generally, $h$ can be any rank transformation
 (normal scores, median scores, log-rank scores etc.) and the 
@@ -544,8 +551,7 @@ maximally selected rank statistics for multiple covariates has first
 been studied by \cite{Lausenetal2004}.
 
 \paragraph{Three novel maximally selected statistics.}
-Due to the flexibility of the generalized framework---without restrictions
-regarding the measurement scales of covariate(s) and response(s)---we can
+Due to the flexibility of the generalized framework we can
 easily construct tests adapted to specific problems by choosing a suitable
 set of candidate partitions $g$ and transformation of the response $h$.
 Here, we exemplify three 
@@ -567,7 +573,9 @@ procedures \citep{Lausenetal2004} or recursive splitting algorithms
 such as CART \citep{CART1984}, we can simultaneously search for splits
 in more than one variable and thus capture interactions like the
 well-known XOR problem. Below, such a strategy is employed for splitting
-in two ordinal covariates. To reflect the ordering, it is natural to include only
+in two ordinal covariates \citep[an approach to splitting in SNP-SNP interactions 
+is given in][]{Boulesteix+Strobl:2007}. 
+To reflect the ordering, it is natural to include only
 those interactions that correspond to a single cutpoint in each covariate
 given the level of the other (and vice versa). Thus, interactions that would
 correspond to multiple cutpoints in one covariate given the level of the other
@@ -664,7 +672,7 @@ cannot be judged based on one observation alone.
 Figure~\ref{fig:maxstat} depicts Kaplan-Meier estimates of the survival
 times in the two risk groups.
 
-
+%%TH: clinical references
 
 \section{Discussion}
 
@@ -687,7 +695,8 @@ the number of potential partitions can become large, efficient algorithms are
 required for evaluating the distribution of the maximum statistic. For
 partitions based on cutpoints, we provide such an algorithm that computes
 the asymptotic distribution in linear time by exploiting the special product
-structure of the correlation matrix and utilizing numerical integration techniques.
+structure of the correlation matrix.
+%% and utilizing numerical integration techniques.
 
 The implementation of (known and newly designed) maximally selected statistics 
 only requires the specification of the binary candidate partitions, via a function $g$, and
@@ -718,6 +727,8 @@ if (style == "Z")
 @
 
 \bibliography{maxstat}
+
+%%TH: Acknowledgements
 
 %%\section*{Appendix}
 
