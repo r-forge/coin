@@ -688,7 +688,7 @@ we employ the TNM system \citep{Sobin+Wittekind:2002} for cancer classification.
 It defines three stages by fixed cutpoints in the interaction of T and N category:
 stage I vs.\ II is discriminated by the T category, stage II vs.\ III by the N category
 (an additional stage IV is based on the M category). Thus, TNM also uses the
-N catgory to distinguish more severe forms of cancer; however, it uses the split
+N category to distinguish more severe forms of cancer; however, it uses the split
 N $\le N0$ (associated with a much smaller standardized statistic of
 \Sexpr{round(n0stat, digits = 2)}) while our procedure selects N $\le N1$
 by maximizing over all partially ordered interactions (including all fixed interactions
