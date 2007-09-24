@@ -443,14 +443,14 @@ legend("bottomright", lty = 1:5,
 \end{center}
 \end{figure}
 
-These considerations about the asymptotic behaviour of $p$ also raise the
+These considerations about the asymptotic behavior of $p$ also raise the
 question about the quality of the asymptotic
 approximation for finite samples when $p$ is large compared to $n$.
 The joint approximation is appropriate if the normal approximation
 for each two-sample statistic is. Consider a split 
-in categorical variable with large number of categories, e.g.,
+in a categorical variable with large number of categories, e.g.,
 $10$ categories with $10$ observations each leads to $n = 100$ but
-$p = 2^{10 - 1} = 512$. But as each two-sample statistic is based on at least
+$p = 2^{10 - 1} = 512$. But since each two-sample statistic is based on at least
 $10$ and $90$ observations, respectively, the normal approximation
 should work well enough.
 
@@ -464,7 +464,7 @@ followed by a description of how to
 partition the covariate space for nominal, ordered and multivariate covariates and 
 the derivation of a novel maximally selected statistic.
 
-For categorial responses, $h$ is typically a simple dummy
+For categorical responses, $h$ is typically a simple dummy
 coding for nominal $\Y$ and a vector of numeric scores
 (corresponding to the $k$ levels) for ordinal $\Y$.
 Many possible influence functions are available for discrete or continuous covariates, e.g.,
@@ -665,14 +665,13 @@ of the corresponding \Sexpr{length(stat)} standardized statistics is
 \Sexpr{round(teststat, 3)} with a $p$-value smaller than $0.0001$. 
 The partition chosen by the algorithm identifies all patients with
 N category N2 or N3 as being under high risk and almost all patients
-from N0 and N1 as being under low risk. As an exception,
-a single patient with ypT4 and N1 is assigned to the high risk group as
+from N0 and N1 as being under low risk. This result coincides with findings
+recently reported by \cite{Roedel:2007}. It should be noted that, as an exception, 
+one single patient with ypT4 and N1 is assigned to the high risk group as
 well---whether or not this decision is sensible or results from random variation
 cannot be judged based on one observation alone.
 Figure~\ref{fig:maxstat} depicts Kaplan-Meier estimates of the survival
 times in the two risk groups.
-
-%%TH: clinical references
 
 \section{Discussion}
 
