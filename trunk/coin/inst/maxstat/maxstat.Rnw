@@ -683,14 +683,14 @@ times in the two risk groups.
 n0stat <- statistic(independence_test(Surv(time, event) ~ I(nclass > "pN0"), data = preOP))
 @
 
-To compare these results with current practice,
+To relate these results to current practice,
 we employ the TNM system \citep{Sobin+Wittekind:2002} for cancer classification.
 It defines three stages by fixed cutpoints in the interaction of T and N category:
 stage I vs.\ II is discriminated by the T category, stage II vs.\ III by the N category
 (an additional stage IV is based on the M category). Thus, TNM also uses the
 N category to distinguish more severe forms of cancer; however, it uses the split
-N $\le N0$ (associated with a much smaller standardized statistic of
-\Sexpr{round(n0stat, digits = 2)}) while our procedure selects N $\le N1$
+N $\le$ N0 (associated with a much smaller standardized statistic of
+\Sexpr{round(n0stat, digits = 2)}) while our procedure selects N $\le$ N1
 by maximizing over all partially ordered interactions (including all fixed interactions
 from the TNM stages). Placing category N1 in the low-risk group might be associated
 with application of chemoradiotherapy before rather than after surgical resection
