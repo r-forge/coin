@@ -689,8 +689,8 @@ It defines three stages by fixed cutpoints in the interaction of T and N categor
 stage I vs.\ II is discriminated by the T category, stage II vs.\ III by the N category
 (an additional stage IV is based on the M category). Thus, TNM also uses the
 N catgory to distinguish more severe forms of cancer; however, it uses the split
-N $\le 0$ (associated with a much smaller standardized statistic of
-\Sexpr{round(n0stat, digits = 2)}) while our procedure selects N $\le 1$
+N $\le N0$ (associated with a much smaller standardized statistic of
+\Sexpr{round(n0stat, digits = 2)}) while our procedure selects N $\le N1$
 by maximizing over all partially ordered interactions (including all fixed interactions
 from the TNM stages). Placing category N1 in the low-risk group might be associated
 with application of chemoradiotherapy before rather than after surgical resection
@@ -705,7 +705,7 @@ in use since many years.
 %%From an academic point of view, such models are almost always an
 %%over-simplification. 
 Many researchers appreciate a model that is easy to 
-communicate and easy to implement in practical situations. 
+communicate and implement in practice. 
 Of course, the trade-off between 
 simplicity and accuracy has to be carefully investigated.
 
@@ -718,19 +718,19 @@ of candidate partitions $g$ determined from the available covariates. As
 the number of potential partitions can become large, efficient algorithms are
 required for evaluating the distribution of the maximum statistic. For
 partitions based on cutpoints, we provide such an algorithm that computes
-the asymptotic distribution in linear time by exploiting the special product
-structure of the correlation matrix.
+the asymptotic distribution in linear time.
+%% by exploiting the special product structure of the correlation matrix
 %% and utilizing numerical integration techniques.
 
 The implementation of (known and newly designed) maximally selected statistics 
 only requires the specification of the binary candidate partitions, via a function $g$, and
 a problem-specific influence function $h$. Linear statistics $\T$ and the test statistic
-$\Tmax$ can be computed in the \textsf{R} system for statistical computing \citep{PKG:R}
-utilizing the function \texttt{maxstat\_test()} from the add-on package
-\Rpackage{coin} \citep{Hothornetal2006,PKG:coin}.
-The distribution of $\Tmax$ can be approximated by its asymptotic distribution or by Monte-Carlo methods 
-(also in the presence of blocks, e.g., in multicenter trials) readily
-available from the same package.
+$\Tmax$ can be computed in the \textsf{R} system \citep{PKG:R}
+utilizing the function \texttt{maxstat\_test()} from package
+\Rpackage{coin} \citep{Hothornetal2006,PKG:coin} in which approximations
+for the distribution of $\Tmax$ are readily available, both via
+the asymptotic distribution and Monte-Carlo methods (also in the presence
+of blocks, e.g., in multicenter trials).
 
 In summary, a unified treatment of maximally selected statistics 
 for nominal, ordered, discrete and continuous numeric, censored and
