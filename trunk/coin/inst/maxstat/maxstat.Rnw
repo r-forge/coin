@@ -15,6 +15,7 @@ if (style == "Biometrics")
 rseed <- 20061103
 library("xtable")
 library("survival")
+library("coin")
 @
 
 
@@ -648,21 +649,19 @@ text(85, 0.30, paste("N2 and N3 (plus N1 and ypT4); n =", table(risk)[1]))
 %%$h(\cdot)$ determined by the scale level of the response, and selecting a set of potential
 %%partitions $g(\cdot)$ determined by the available covariates.
 
-The TNM staging system \citep{Sobin+Wittekind:2002} for classifying the extent of cancer spread
-was developed on the basis of pathologic findings of patients who did 
-not undergo radiochemotherapy before surgical resection. The quality of the TNM staging 
-as a prognostic factor for survival times of 
-rectal patients patients treated before surgery is recently under investigation
-\citep[e.g.][]{Roedel:2007}. 
-Here, we attempt to identify high- and low-risk groups of
-rectal cancer patients---treated with a neo-adjuvant chemoradiotherapy regime---by
-differentiating them with respect to their combination of pathological T and N category
-and compare the resulting partition with the TNM stage groupings.
 
+We attempt to identify high- and low-risk groups of rectal cancer patients by
+differentiating them with respect to their combination of pathological T 
+and N category (ordinal assessment of tumours and lymph nodes, respectively).
+Patients were treated with a neo-adjuvant chemoradiotherapy regime starting before surgery,
+possible prognostic factors for these patients are recently under 
+investigation \citep{Roedel:2007}.
 Survival times of $n = \Sexpr{length(tc)}$ patients from the preoperative arm 
-of the CAO/\-ARO/\-AIO-94 trial \citep{Sauer2004} are under test ($48$ patients with distant
-metastases found at surgery were excluded from this analysis, so all patients are classified M0). 
-Therefore, we propose a new maximally selected statistic for a censored response
+of the CAO/\-ARO/\-AIO-94 trial \citep{Sauer2004} are under test;
+$48$ patients with M category (assessment of metastates) 
+equal to M1 were excluded from this analysis. 
+
+We propose a new maximally selected statistic for a censored response
 and two ordered covariates with potential interactions. Log-rank scores are used
 as influence function $h$ for the censored response and the potential partitions
 $g$ are constructed from all combinations of the five T and three N categories.
@@ -681,12 +680,25 @@ cannot be judged based on one observation alone.
 Figure~\ref{fig:maxstat} depicts Kaplan-Meier estimates of the survival
 times in the two risk groups.
 
-The TNM staging system defines stages I and II by ypT1/2 and ypT3/4, respectively, 
-whereas the distinction between stages I/II and III is defined via N0 vs. N1/2/3. 
-Thus, the split between N1 and N2 identified by our procedure leads to a new prognostic group
-within TNM stage III. One might argue that this could be explained by an improved
-response of N1 patients to the new therapy \citep[see][also]{Roedel:2007} but a definitive 
-statement is far beyond the scope of this paper.
+<<N0split, echo = FALSE>>=
+n0 <- as.factor(preOP$nc == "pN0")
+n0stat <- statistic(independence_test(Surv(time, event) ~ n0, data = preOP))
+@
+
+The TNM staging system \citep{Sobin+Wittekind:2002} for classifying the 
+extent of cancer spread applies 
+to patients who did not undergo chemoradiotherapy before surgical resection. 
+The TNM stagings I, II and III are defined by fixed cutpoints in
+the interaction of T and N (stage IV is based on the M category), therefore,
+our procedure automatically includes TNM stagings as possible splits.
+The T category distinguishes between stages I and II whereas the N category
+is used to separate stages I/II (N0) and III ($\ge$ N1). 
+Thus, the split between N1 and N2 identified by our procedure leads 
+to a new prognostic group within TNM stage III. The log-rank statistic
+comparing stages I/II and III is \Sexpr{round(n0stat, 3)}, so 
+the split between N1 and N2 seems to be preferable to a split between N0 and N1.
+%%\citep[details are currently under investigation][]{Roedel:2007}.
+
 
 \section{Discussion}
 
