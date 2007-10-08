@@ -1,6 +1,11 @@
 
 		CHANGES in `coin' VERSION 0.6-6
 
+    o    remove non_function entries from Rd files
+
+
+		CHANGES in `coin' VERSION 0.6-6
+
     o    fix precision problems with exact p-values (spotted by 
          Michael Fay <mfay@niaid.nih.gov>
 
