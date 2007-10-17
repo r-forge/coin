@@ -1,4 +1,4 @@
-\documentclass[shortnames]{Z}
+\documentclass[shortnames,noheadings]{Z}
 
 \input{definitions}
 
@@ -12,6 +12,22 @@
 
 \Abstract{
 \input{abstract}
+}
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{15pt}
+\renewcommand{\headrulewidth}{0pt}
+\pagestyle{fancy}
+\thispagestyle{plain}
+\fancyhf{}
+\fancyhead[RO,LE]{\thepage} 
+\fancyhead[CO]{\textit{\normalsize Torsten Hothorn and Achim Zeileis}} 
+\fancyhead[CE]{\textit{\normalsize Generalized Maximally Selected Statistics}} 
+\fancyfoot[LO,LE]{Copyright {\copyright} 2007 The International Biometric Society}
+\fancypagestyle{plain}{
+\fancyhf{}
+\fancyfoot[LO,LE]{This is a preprint of an article accepted for publication in \textit{Biometrics}.\\
+ Copyright {\copyright} 2007 The International Biometric Society} 
 }
 
 \begin{document}

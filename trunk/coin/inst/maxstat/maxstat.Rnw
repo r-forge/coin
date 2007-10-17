@@ -212,7 +212,7 @@ as given by \cite{StrasserWeber1999}:
 where $\otimes$ denotes the Kronecker product, and the conditional
 expectation of the influence function is $\E(h | S) = n^{-1} \sum_i
 h(\Y_i)$ with corresponding $q \times q$ covariance matrix
-$\V(h | S) = n^{-1} \sum_i \left\{h(\Y_i) - \E(h | S) \right\} \left\{h(\Y_i) - \E(h | S)\right\}^\top$.
+$\V(h | S) = n^{-1} \sum_i \{h(\Y_i) - \E(h | S)\} \{h(\Y_i) - \E(h | S)\}^\top$.
 
 When the observations are organized in independent blocks (such as centers
 in a multicenter trial), only permutations within blocks are admissible 
@@ -402,7 +402,7 @@ suggested above. Less accurate is the improved Bonferroni correction
 %%of the $\sup Z^0$ distribution 
 for increasing $p$ \citep{Jennen:1985,Hansen:1997}
 are (not surprisingly) clearly below.
-\begin{figure}
+\begin{figure}[t!]
 \begin{center}
 \caption{Approximations of the distribution of a maximally selected Wilcoxon-statistic
          for $n = 100$ observations and $p = 20$ cutpoints.
@@ -595,7 +595,7 @@ names(dimnames(tab)) <- c("T category", "N category")
 @
 
 \renewcommand{\arraystretch}{1}
-\begin{table}
+\begin{table}[b!]
 \begin{center}
 \caption{Pathological T and N category of $\Sexpr{length(tc)}$ rectal cancer patients 
          treated with a preoperative chemoradiotherapy. \label{tab:tn}}
@@ -623,7 +623,7 @@ cat("\\end{tabular} \n")
 if (style == "Biometrics")
     cat("\\setkeys{Gin}{width = 0.95\\textwidth}\n")
 @
-\begin{figure}
+\begin{figure}[t!]
 \begin{center}
 \caption{Survival times of rectal cancer patients in two risk groups 
          identified by a novel maximally selected log-rank
