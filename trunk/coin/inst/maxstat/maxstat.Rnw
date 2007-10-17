@@ -151,12 +151,12 @@ $\varepsilon = 0.1$).
 The two-sample problem associated with the $j$th binary partition
 can be tested using a linear statistic
 \begin{eqnarray*}
-\T_j \quad = \quad \vec\left(\sum_{i = 1}^n g_j(\X_i) h(\Y_i)^\top\right) 
+\T_j \quad = \quad \vec\left\{\sum_{i = 1}^n g_j(\X_i) h(\Y_i)^\top\right\} 
              \in \R^{q \times 1}
 \end{eqnarray*}
 where $h: \mathcal{Y} \rightarrow
 \R^{q \times 1}$ is an \emph{influence function} applied to the responses.
-The function $h(\Y_i) = h(\Y_i, (\Y_1, \dots, \Y_n))$ may depend on the full 
+The function $h(\Y_i) = h\{\Y_i, (\Y_1, \dots, \Y_n)\}$ may depend on the full 
 vector of responses $(\Y_1, \dots, \Y_n)$, however only
 in a permutation symmetric way, i.e., the value of the
 function must not depend on the order in which $\Y_1, \dots, \Y_n$ appear.
@@ -173,10 +173,10 @@ $\Y$.
 
 A joint linear statistic for all binary partitions is
 \begin{eqnarray*}
-\T \quad = \quad (\T_1, \dots, \T_p) = \vec\left(\sum_{i = 1}^n g(\X_i) h(\Y_i)^\top\right)
+\T \quad = \quad (\T_1, \dots, \T_p) = \vec\left\{\sum_{i = 1}^n g(\X_i) h(\Y_i)^\top\right\}
 \in \R^{pq \times 1}
 \end{eqnarray*}
-including all $p$ two-sample partitions, as defined by $g(\X) = (g_1(\X), \dots, g_p(\X))$,
+including all $p$ two-sample partitions, as defined by $g(\X) = \{g_1(\X), \dots, g_p(\X)\}$,
 simultaneously for testing $H_0$.
 
 \section{Standardization and estimation} \label{sec:inf}
@@ -199,20 +199,20 @@ $H_0$ by conditioning on all possible permutations $S$ of the responses
 $\Y_1, \dots, \Y_n$. Closed-form expressions are
 as given by \cite{StrasserWeber1999}:
 \begin{eqnarray*}
-\mu = \E(\T | S) & = & \vec \left( \left( \sum_{i = 1}^n g(\X_i) \right)
-\E(h | S)^\top \right) \\
+\mu = \E(\T | S) & = & \vec \left[ \left\{ \sum_{i = 1}^n g(\X_i) \right\}
+\E(h | S)^\top \right] \\
 \Sigma = \V(\T | S) & = &
     \frac{n}{n - 1}  \V(h | S) \otimes
-        \left(\sum_i g(\X_i) \otimes  g(\X_i)^\top \right)
+        \left\{\sum_i g(\X_i) \otimes  g(\X_i)^\top \right\}
 \\
-& - & \frac{1}{n - 1}  \V(h | S)  \otimes \left(
-        \sum_i g(\X_i) \right) \otimes \left( \sum_i g(\X_i)\right)^\top
+& - & \frac{1}{n - 1}  \V(h | S)  \otimes \left\{
+        \sum_i g(\X_i) \right\} \otimes \left\{ \sum_i g(\X_i)\right\}^\top
 \nonumber
 \end{eqnarray*}
 where $\otimes$ denotes the Kronecker product, and the conditional
 expectation of the influence function is $\E(h | S) = n^{-1} \sum_i
 h(\Y_i)$ with corresponding $q \times q$ covariance matrix
-$\V(h | S) = n^{-1} \sum_i \left(h(\Y_i) - \E(h | S) \right) \left(h(\Y_i) - \E(h | S)\right)^\top$.
+$\V(h | S) = n^{-1} \sum_i \left\{h(\Y_i) - \E(h | S) \right\} \left\{h(\Y_i) - \E(h | S)\right\}^\top$.
 
 When the observations are organized in independent blocks (such as centers
 in a multicenter trial), only permutations within blocks are admissible 
@@ -265,7 +265,7 @@ distribution of the multivariate linear statistic $\T$ tends to a multivariate
 normal distribution with mean $\mu$ and covariance matrix $\Sigma$ 
 \citep[Theorem 3]{StrasserWeber1999}.
 Thus, in order to approximate $\Prob(\Tmax > c)$ we have to evaluate
-the probability $\Prob(\max(|Z_1|, ..., |Z_{pq}|) > c)$ 
+the probability $\Prob\{\max(|Z_1|, ..., |Z_{pq}|) > c\}$ 
 for standard normal random variables $Z_1, \dots, Z_{pq}$ with correlation matrix 
 $\Rb$ corresponding to the covariance matrix $\Sigma$ and some $c > 0$. 
 %%In fact,
@@ -297,8 +297,8 @@ denote the partitioning sets and let $q = 1$ (i.e., ordered, censored or binary 
 Then, the correlation between $\T_j$ and $\T_k$ is given by
 \begin{eqnarray*}
 \rho_{j,k} = \frac{\Sigma_{j,k}}{\sqrt{\Sigma_{j,j} \Sigma_{k,k}}} = 
-\sqrt{\frac{\left(n - \sum_i g_k(\X_i)\right) \sum_i g_j(\X_i)}
-                        {\left(n - \sum_i g_j(\X_i)\right) \sum_i g_k(\X_i)}}.
+\sqrt{\frac{\left\{n - \sum_i g_k(\X_i)\right\} \sum_i g_j(\X_i)}
+                        {\left\{n - \sum_i g_j(\X_i)\right\} \sum_i g_k(\X_i)}}.
 \end{eqnarray*}
 It follows that the correlation matrix $\Rb = (\rho_{j,k})_{j,k = 1, \dots, p}$
 is completely determined by the 
