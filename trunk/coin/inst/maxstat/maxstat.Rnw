@@ -402,7 +402,12 @@ suggested above. Less accurate is the improved Bonferroni correction
 %%of the $\sup Z^0$ distribution 
 for increasing $p$ \citep{Jennen:1985,Hansen:1997}
 are (not surprisingly) clearly below.
-\begin{figure}[t!]
+<<fig, echo = FALSE, results = tex>>=
+if (style == "Z")
+    cat("\\begin{figure}[t!]\n")
+if (style == "Biometrics")
+    cat("\\begin{figure}\n")
+@
 \begin{center}
 \caption{Approximations of the distribution of a maximally selected Wilcoxon-statistic
          for $n = 100$ observations and $p = 20$ cutpoints.
@@ -595,7 +600,12 @@ names(dimnames(tab)) <- c("T category", "N category")
 @
 
 \renewcommand{\arraystretch}{1}
-\begin{table}[b!]
+<<fig, echo = FALSE, results = tex>>=  
+if (style == "Z")
+    cat("\\begin{table}[b!]\n")
+if (style == "Biometrics")   
+    cat("\\begin{table}\n")          
+@
 \begin{center}
 \caption{Pathological T and N category of $\Sexpr{length(tc)}$ rectal cancer patients 
          treated with a preoperative chemoradiotherapy. \label{tab:tn}}
@@ -623,7 +633,12 @@ cat("\\end{tabular} \n")
 if (style == "Biometrics")
     cat("\\setkeys{Gin}{width = 0.95\\textwidth}\n")
 @
-\begin{figure}[t!]
+<<fig, echo = FALSE, results = tex>>=  
+if (style == "Z")
+    cat("\\begin{figure}[t!]\n")
+if (style == "Biometrics")   
+    cat("\\begin{figure}\n")          
+@
 \begin{center}
 \caption{Survival times of rectal cancer patients in two risk groups 
          identified by a novel maximally selected log-rank
@@ -694,7 +709,7 @@ N $\le$ N0 (associated with a much smaller standardized statistic of
 by maximizing over all partially ordered interactions (including all fixed interactions
 from the TNM stages). Placing category N1 in the low-risk group might be associated
 with application of chemoradiotherapy before rather than after surgical resection
-(for which the TNM staging is derived). This and other prognostic factors for
+(for which the TNM staging is applied). This and other prognostic factors for
 preoperative chemoradiotherapy are currently under investigation \citep{Roedel:2007}.
 
 
@@ -745,14 +760,9 @@ both conceptually and practically.
 %%
 %% kann man nicht eine ganz einfache approximation fuer P(T > max(Z1, ..., Zpq)) herleiten?
 
-<<ack, echo = FALSE, results = tex>>=
-if (style == "Z")
-    cat("\\input{acknowledgement}\n")
-@
+\input{acknowledgement}
 
 \bibliography{maxstat}
-
-%%TH: Acknowledgements
 
 %%\section*{Appendix}
 
