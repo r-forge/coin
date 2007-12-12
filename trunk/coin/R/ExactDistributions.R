@@ -140,7 +140,7 @@ vdW_split_up_2sample <- function(object) {
 
     ### 2 groups as `x' variable
     groups <- ncol(object@xtrans) == 1 && all(object@xtrans[,1] %in% c(0, 1))
-    if (!groups) stop("cannot only deal with two-sample problems")
+    if (!groups) stop("cannot deal with two-sample problems")
  
     RET <- new("ExactNullDistribution")
 
