@@ -203,25 +203,20 @@ transition from theory to practice. Here, we focus on the design principles upon
 \pkg{coin} implementation is based as well as on the more technical issues
 that need to be addressed in the implementation of such conceptual
 tools.
-
 Formal \proglang{S4} classes describe the data model and the conditional test procedures, 
 consisting of multivariate linear statistics, univariate test statistics 
-and a reference distribution. Generic functions for obtaining
+and a reference distribution. Thus, one can work with objects representing 
+the theoretical entities nearly in the same way as one would work
+with mathematical symbols. Generic functions for obtaining
 statistics, conditional expectation and covariance matrices as well as 
 $p$~value, distribution, density and quantile functions for the reference
-distribution are available. 
+distribution help to extract information from these objects.
 The most important user-visible function is  \Rcmd{independence_test},
 the computational counterpart of the theoretical framework of \cite{StrasserWeber1999},
 providing the same flexibility in software as in the
 underlying theory. 
-%%For convenience, a set of wrapper 
-%%functions for the most popular test procedures, such as 2- and 
-%%$K$-sample permutation tests for location or scale differences,
-%%are offered as well.
-%% Beispiel, vielleicht
-%% independence_test(time ~ group, data = rotarod, ytrafo = rank, distribution = exact())
 
-Before dealing with the technical details, consider the following motivating example.
+Before dealing with the computational details of \pkg{coin}, consider the following motivating example.
 \cite{Bergmann:2000} compared test statistics and $p$ values of the Wilcoxon-Mann-Whitney
 rank sum test as reported by eleven statistical packages and observed practically 
 relevant numerical differences for a 2-sample problem with twelve observations in
@@ -231,49 +226,60 @@ placed on a rotating cylinder and the length of time each rat remains on the cyl
 measured, up to a maximum of $300$ seconds. The rats were randomly assigned to the control 
 and treatment group, thus a re-randomization test as implemented 
 in \Rcmd{independence_test} is the appropriate way to investigate
-if the response is independent of the group assignment. The theoretical
-ingredients of the \cite{StrasserWeber1999} framework and their representation
-in a class structure is described in Section~\ref{sec:theory}.
+if the response is independent of the group assignment. A rather general 
+theoretical framework
+for such re-randomization tests and a class structure for representing 
+its ingredients are described in Section~\ref{sec:theory}.
 
-The hypothesis of independence of length of time and group assigment is
-described by a formula which, together with a data frame \code{rotarod}, 
-is specified as argument of \Rcmd{independence_test} as follows
+In our example, the hypothesis of independence of length of time and group assigment is
+specified by a formula which, together with a data frame \code{rotarod}, 
+serve are arguments to \Rcmd{independence_test}:
 <<motivation-perm, echo = TRUE>>=
 library("coin")
 independence_test(time ~ group, data = rotarod)
 @
 Even beginners in \proglang{R} can easily interpret this output since
-it relys on the same print methods as the classical tests do, more details
-on the user interface are given in Section~\ref{sec:ui}
+it is represented in exactly the same way as the output
+of classical tests in \pkg{stats}. More details on the user interface are 
+given in Section~\ref{sec:ui}.
 
 Based on a normal approximation of the permutation distribution, the hypothesis
-can be rejected at level $\alpha = 0.05$. However, given the small sample
-size, it is worth the effort to compute the exact permutation distribution
-by changing the \code{distribution} argument
+can be rejected at nominal level $\alpha = 0.05$. However, given the small sample
+size, it is worth the effort to compute the exact permutation distribution as follows:
 <<motivation-perm-exact, echo = TRUE>>=
 pvalue(independence_test(time ~ group, 
-                         data = rotarod, distribution = exact()))
+                          data = rotarod, distribution = exact()))
 @
-Other methods for extracting information from the output
-of \Rcmd{independence_test}, such as the test statistic or its conditional 
-variance, are described in Section~\ref{sec:methods}.
+The \Rcmd{pvalue} method returns the exact $p$ value, other methods for extracting 
+information from the output of \Rcmd{independence_test}, such as the test statistic 
+or its conditional variance, are described in Section~\ref{sec:methods}.
 
 In order to compare both the exact and approximate results of the Wilcoxon-Mann-Whitney
 rank sum test with the numbers reported by \cite{Bergmann:2000}, we only have 
 to employ an appropriate transformation of the response variable, in this case
 average ranks. The \code{ytrans} argument takes a function, such as \Rcmd{rank} in 
-our case, for transforming the response variable:
+our case:
 <<motivation-wmw, echo = TRUE>>=
 independence_test(time ~ group, data = rotarod, ytrafo = rank)
-independence_test(time ~ group, data = rotarod, ytrafo = rank, 
+rt <- independence_test(time ~ group, data = rotarod, ytrafo = rank, 
                    distribution = exact())
+rt
+@
+Both $p$ values coincide with the results given by \cite{Bergmann:2000}.
+The test statistic is reported in its standardized form, the sum of the ranks
+in the control group is available via
+<<motivation-wmw-sum, echo = TRUE>>=
+statistic(rt, "linear")
 @
 By choosing an appropriate transformation of the data, the conditional version of 
 a large number of classical unconditional tests can easily be implemented,
-as will be discussed in Sections~\ref{sec:theory} and \ref{sec:ui}.
+as will be discussed in Sections~\ref{sec:theory} and \ref{sec:ui}. A description
+of internal functionality and source code documentation, quality assurance 
+procedures and a more elaborate example for testing independence of categorical 
+variables complete the paper.
 
 
-\section{Theory and classes} \label{sec:theory}
+\section{A class structure for permutation tests} \label{sec:theory}
 
 We first focus on the conceptual framework for conditional inference procedures
 as proposed by \cite{StrasserWeber1999} along with the class structure upon which
@@ -494,8 +500,16 @@ linear statistic, the exact distribution of the test statistic is tractable.
 For 2-sample problems, the shift-algorithm by \cite{axact-dist:1986,exakte-ver:1987} 
 and the split-up algorithm by 
 \cite{vdWiel2001} are implemented as part of the package.
+
 Conditional Monte-Carlo procedures can always be used to approximate the exact
-distribution. \citet[Theorem 2.3]{StrasserWeber1999} proved that the   
+distribution. Within each block, a sufficiently large number of
+random samples from all permutations of the observations is drawn. The 
+test statistic is computed for the permuted $\X$ values and the 
+distribution of these test statistics is an approximate to the 
+conditional reference distribution. When $p$ values are computed,
+confidence intervals are available from the binomial distribution.
+
+\citet[Theorem 2.3]{StrasserWeber1999} proved that the   
 conditional distribution of linear statistics $\T$ with conditional    
 expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
 distribution with parameters $\mu$ and $\Sigma$ as $w_{\cdot j} \rightarrow \infty$ for all $j = 1, \dots, k$. 
@@ -503,7 +517,7 @@ Thus, the asymptotic conditional distribution of test statistics of the
 form $c_\text{max}$ is normal and
 can be computed directly in the univariate case ($pq = 1$) 
 or approximated by numerical algorithms
-\citep[quasi-randomized Monte-Carlo procedures][]{numerical-:1992}
+\citep[quasi-randomized Monte-Carlo procedures,][]{numerical-:1992}
 in the multivariate setting. For quadratic forms
 $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom 
 given by the rank of $\Sigma$ \citep[see][Chapter 29]{johnsonkotz1970}, precise
