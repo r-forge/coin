@@ -59,7 +59,7 @@
   as tests for location and scale problems in
   two or more samples, independence in two- or three-way contingency tables,
   or association problems for censored, ordered categorical or multivariate data---
-  can be easily be implemented as special cases using this computational 
+  can easily be implemented as special cases using this computational 
   toolbox by choosing appropriate transformations of the observations.
   The paper gives a detailed exposition of both the internal structure
   of the package and the provided user interfaces.
@@ -218,8 +218,62 @@ underlying theory.
 %%functions for the most popular test procedures, such as 2- and 
 %%$K$-sample permutation tests for location or scale differences,
 %%are offered as well.
+%% Beispiel, vielleicht
+%% independence_test(time ~ group, data = rotarod, ytrafo = rank, distribution = exact())
 
-\section{Theory and classes}
+Before dealing with the technical details, consider the following motivating example.
+\cite{Bergmann:2000} compared test statistics and $p$ values of the Wilcoxon-Mann-Whitney
+rank sum test as reported by eleven statistical packages and observed practically 
+relevant numerical differences for a 2-sample problem with twelve observations in
+each group. More specifically, $n = 24$ rats received a fixed oral dose of a centrally 
+acting muscle relaxant as active treatment or a saline solvent as control. The animals were 
+placed on a rotating cylinder and the length of time each rat remains on the cylinder is
+measured, up to a maximum of $300$ seconds. The rats were randomly assigned to the control 
+and treatment group, thus a re-randomization test as implemented 
+in \Rcmd{independence_test} is the appropriate way to investigate
+if the response is independent of the group assignment. The theoretical
+ingredients of the \cite{StrasserWeber1999} framework and their representation
+in a class structure is described in Section~\ref{sec:theory}.
+
+The hypothesis of independence of length of time and group assigment is
+described by a formula which, together with a data frame \code{rotarod}, 
+is specified as argument of \Rcmd{independence_test} as follows
+<<motivation-perm, echo = TRUE>>=
+library("coin")
+independence_test(time ~ group, data = rotarod)
+@
+Even beginners in \proglang{R} can easily interpret this output since
+it relys on the same print methods as the classical tests do, more details
+on the user interface are given in Section~\ref{sec:ui}
+
+Based on a normal approximation of the permutation distribution, the hypothesis
+can be rejected at level $\alpha = 0.05$. However, given the small sample
+size, it is worth the effort to compute the exact permutation distribution
+by changing the \code{distribution} argument
+<<motivation-perm-exact, echo = TRUE>>=
+pvalue(independence_test(time ~ group, 
+                         data = rotarod, distribution = exact()))
+@
+Other methods for extracting information from the output
+of \Rcmd{independence_test}, such as the test statistic or its conditional 
+variance, are described in Section~\ref{sec:methods}.
+
+In order to compare both the exact and approximate results of the Wilcoxon-Mann-Whitney
+rank sum test with the numbers reported by \cite{Bergmann:2000}, we only have 
+to employ an appropriate transformation of the response variable, in this case
+average ranks. The \code{ytrans} argument takes a function, such as \Rcmd{rank} in 
+our case, for transforming the response variable:
+<<motivation-wmw, echo = TRUE>>=
+independence_test(time ~ group, data = rotarod, ytrafo = rank)
+independence_test(time ~ group, data = rotarod, ytrafo = rank, 
+                   distribution = exact())
+@
+By choosing an appropriate transformation of the data, the conditional version of 
+a large number of classical unconditional tests can easily be implemented,
+as will be discussed in Sections~\ref{sec:theory} and \ref{sec:ui}.
+
+
+\section{Theory and classes} \label{sec:theory}
 
 We first focus on the conceptual framework for conditional inference procedures
 as proposed by \cite{StrasserWeber1999} along with the class structure upon which
@@ -259,7 +313,7 @@ toLatex(c2t("IndependenceProblem"))
 
 \subsection{Inference problem and linear statistic}
 
-\cite{StrasserWeber1999} suggest to derive
+\cite{StrasserWeber1999} suggest deriving 
 scalar test statistics for testing $H_0$ from multivariate linear statistics
 of the form 
 \begin{eqnarray} \label{linstat}
@@ -360,12 +414,12 @@ or its diagonal elements only.
 
 Univariate test statistics~$c$ mapping an observed linear
 statistic $\mathbf{t} \in
-\R^{pq}$ into the real line can be of arbitrary form. 
+\R^{pq}$ onto the real line can be of arbitrary form. 
 Having the conditional expectation and covariance at hand we are able to
 standardize an observed linear statistic $\t \in \R^{pq}$ of the form
 given in Equation~\ref{linstat} by
 \begin{eqnarray} \label{standstat}
-\z = \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}}. 
+\z = \text{diag}(\Sigma)^{-1/2} (\mathbf{t} - \mu). 
 \end{eqnarray}
 Test statistics are represented by class \Rclass{IndependenceTestStatistic}
 <<IndependenceTestStatistic, results = tex>>=
@@ -490,7 +544,7 @@ toLatex(c2t("IndependenceTest"))
 @
 
 
-\section{Generic functions}
+\section{Generic functions} \label{sec:methods}
 
 Methods for the following generic functions are defined for 
 class \Rclass{IndependenceTestStatistic}:
@@ -530,7 +584,7 @@ are implemented following the methods proposed by \cite{constructi:1972}.
 A \Rcmd{confint} method is available for these special cases.
 
 
-\section{User interfaces}
+\section{User interfaces} \label{sec:ui}
 
 While the internal structures presented in the previous sections 
 make use of the \proglang{S4} class
@@ -570,7 +624,7 @@ such as the number of permutations to draw randomly in a conditional Monte-Carlo
 This mechanism allows for user-supplied algorithms to compute or
 approximate the exact conditional distribution: A function taking an
 object inheriting from \Rclass{IndependenceTestStatistic} and returning
-an object of class \Rclass{NullDistribution} can be specified as \Rcmd{distribution}
+an object of class \Rclass{NullDistribution} can be specified as \code{distribution}
 argument to \Rcmd{independence_test}.
 
 By default, the identify transformation is used for both $g$ and $h$ in case of numeric
@@ -655,7 +709,7 @@ Wilcoxon signed rank &  \Rcmd{f_trafo} & \Rcmd{rank} &
 \subsection{Conditional versions of classical tests}
 
 For a variety of classical tests (some of them already implemented in
-base package \pkg{stats}), their conditional counterpart is made easily
+package \pkg{stats}), their conditional counterpart is made easily
 accessible. Some of the most important procedures, such as
 the Wilcoxon-Mann-Whitney or Cochran-Mantel-Haenszel tests, 
 can be obtained as listed in Table~\ref{confct}, just by setting the
@@ -685,10 +739,10 @@ some helper functions, e.g., the Kronecker product etc., are coded in \proglang{
 The complete \proglang{C} source code and its documentation can be accessed via
 <<coin-doxygen, echo = TRUE, eval = FALSE>>=
 browseURL(system.file("documentation", "html", "index.html", 
-                      package = "coin"))
+                       package = "coin"))
 @
 The naming scheme of the \proglang{C} routines distinguishes between functions
-only called at \proglang{C} level (\code{C_}\textit{foo}) and functions which can 
+only called at the \proglang{C} level (\code{C_}\textit{foo}) and functions which can 
 be called from \proglang{R} via the \Rcmd{.Call} interface (\code{R_}\textit{foo}). 
 Such functions are available for most of the internal \proglang{C} functions to enable
 unit testing.
@@ -775,9 +829,9 @@ we refer to \cite{Hothorn:2006:AmStat}.
 
 \section{Quality assurance}
 
-The test procedures implemented in package \pkg{coin} are continuously
+The test procedures implemented in \pkg{coin} are continuously
 checked against results obtained by the corresponding implementations in
-package \pkg{stats} (where available). In addition, the test statistics
+\pkg{stats} (where available). In addition, the test statistics
 and exact, approximate and asymptotic $p$~values for data examples
 given in the \pkg{StatXact}~6 user manual \citep{StatXact6} are compared
 with the results reported there. Step-down multiple adjusted $p$~values
