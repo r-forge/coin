@@ -92,8 +92,7 @@
   Wirtschaftsuniversit\"at Wien\\
   Augasse 2--6\\
   A-1090 Wien, Austria\\
-  E-mail: \email{Kurt.Hornik@R-project.org}\\
-  E-mail: \email{Achim.Zeileis@R-project.org}\\
+  E-mail: \email{Kurt.Hornik@R-project.org}, \email{Achim.Zeileis@R-project.org}\\
 
   Mark A.\ van de Wiel \\
   Department of Mathematics\\
