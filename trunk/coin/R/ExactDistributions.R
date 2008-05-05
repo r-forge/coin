@@ -29,7 +29,7 @@ SR_shift_2sample <- function(object, fact = NULL) {
         ###  table(object$block, scores == 0) checken
         sc <- round(scores * fact)
         sc <- unlist(tapply(sc, object@block, function(x) {
-            if (any(x) != 0) return(x[x != 0])
+            if (any(x != 0)) return(x[x != 0])
             return(0)
         }))
         storage.mode(sc) <- "integer"
