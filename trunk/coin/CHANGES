@@ -1,4 +1,9 @@
 
+		CHANGES in `coin' VERSION 0.6-10
+
+    o    maxstat_test() with integer weights gave NA or wrong cutpoints
+
+
 		CHANGES in `coin' VERSION 0.6-9
 
     o    any() was misused in one place, spotted by
