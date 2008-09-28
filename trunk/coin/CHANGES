@@ -1,4 +1,17 @@
 
+		CHANGES in `coin' VERSION 0.6-11
+
+    o    set default for <IndependenceTest>@method to
+         "General Independence Test"
+
+    o    covariance() always returns a covariance matrix
+
+    o    add show() method for <IndependenceTest> objects
+
+    o    functions supplied via `distribution = ' doesn't need
+         to have a class
+
+
 		CHANGES in `coin' VERSION 0.6-10
 
     o    maxstat_test() with integer weights gave NA or wrong cutpoints

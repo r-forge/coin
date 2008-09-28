@@ -131,10 +131,11 @@ setClass(Class = "ExactNullDistribution", contains = "NullDistribution")
 ### the "fitted" test including data and everything
 setClass(Class = "IndependenceTest",
     representation = representation(
-        distribution = "NullDistribution",
+        distribution = "PValue", ### was: "NullDistribution",
         statistic    = "IndependenceTestStatistic",
         method       = "character"
-    )
+    ),
+    prototype = list(method = "General Independence Test")
 )
 
 ### the "fitted" test for scalar linear statistics

@@ -177,8 +177,12 @@ setMethod(f = "covariance",
 
 setMethod(f = "covariance",
           signature = "IndependenceTestStatistic",
-          definition = function(object, ...) 
+          definition = function(object, ...) {
+              if (!extends(class(object@covariance), "CovarianceMatrix"))
+                  return(covariance(new("IndependenceTestStatistic", 
+                                        object, varonly = FALSE)))
               covariance(object@covariance)
+          }
 )
 
 ### generic method for extracting the variances 
