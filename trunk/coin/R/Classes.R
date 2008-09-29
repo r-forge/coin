@@ -67,9 +67,9 @@ setClass(Class = "IndependenceLinearStatistic",
 ### Tests based on linear statistics
 setClass(Class = "IndependenceTestStatistic",
     representation = representation(
-        estimates                   = "list",
         teststatistic               = "numeric",
-        standardizedlinearstatistic = "numeric"
+        standardizedlinearstatistic = "numeric",
+        estimates                   = "list"
     ),
     contains = "IndependenceLinearStatistic",
 )

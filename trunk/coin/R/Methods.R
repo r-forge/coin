@@ -119,6 +119,7 @@ setMethod(f = "ExactNullDistribution",
           definition = function(object, algorithm = c("shift", "split-up"), 
                                 ...) {
 
+              algorithm <- match.arg(algorithm)
               if (is_2sample(object)) {
                   if (algorithm == "shift")
                       return(SR_shift_2sample(object, ...))
