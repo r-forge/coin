@@ -105,8 +105,6 @@ options(prompt = "R> ", continue = "+  ")
 library("coin")
 library("e1071")
 set.seed(290875)
-### get rid of the NAMESPACE
-attach(asNamespace("coin")) ## FIXME: This must not be necessary!
 
 ### extract slots of a class
 c2t <- function(x) {        
@@ -163,8 +161,6 @@ toLatex.c2t <- function(object, center = TRUE, ...) {
 @
 
 \begin{document}
-
-\fixme{It must be possible to execute the code without removing the NAMESPACE!!}
 
 \section{Introduction}
 
@@ -341,8 +337,7 @@ standardize an observed linear statistic $\t \in \R^{pq}$ (of the form
 given in Equation~\ref{linstat}) and aggregate it to some univariate test
 statistic $c = c(\t, \mu,\Sigma)$. Various choices for $c(\t, \mu,\Sigma)$
 are conceivable, e.g., a quadratic form or a maximum type statistic
-(see Section~\ref{sec:teststat}). \fixme{Subsubsections are not numbered in JSS.
-  Either refer to the whole subsection or split the subsection.}
+(see Section~\ref{sec:class}). 
 In the latter case, a natural first step
 is to standardize each of the $pq$ statistics in $\t$ by its expectation and
 standard deviation:
@@ -430,8 +425,7 @@ are stored, the whole covariance matrix is computed upon request
 %% + method for ApproxNullDistribution
 
 The specification of the inference procedure is completed by the definition
-of a univariate test statistic $c$ (see Section~\ref{sec:teststat} below)
-\fixme{again: subsubsections are not numbered}
+of a univariate test statistic $c$ (see below)
 which is represented by class \Rclass{IndependenceTestStatistic}
 <<IndependenceTestStatistic, results = tex>>=
 toLatex(c2t("IndependenceTestStatistic"))
@@ -439,9 +433,7 @@ toLatex(c2t("IndependenceTestStatistic"))
 The slot \code{standardizedlinearstatistic}
 contains $\z$, the (possibly multivariate) linear statistic standardized by its 
 conditional expectation and variance (Equation~\ref{standstat}). 
-A univariate test statistic $c$ is
-stored in slot \code{teststatistic}. 
-\fixme{Really? It seems to be empty in the code below.}
+A univariate test statistic $c$ is stored in slot \code{teststatistic}. 
 The \code{estimates} slot
 may contain parameter estimates where available, for example 
 an estimate and corresponding confidence interval for a shift parameter
@@ -453,8 +445,8 @@ and covariance matrix via
 <<Ex-IndependenceTestStatistic, echo = TRUE>>=
 its <- new("IndependenceTestStatistic", itp)
 @
-
-\fixme{Is the type of test statistic defined implicitely or undefined?}
+Note that the test statistic itself is computed later on by initializing
+one of the three classes extending \Rclass{"IndependenceTestStatistic"}.
 
 \begin{table}[tb]
 \begin{center}
@@ -535,16 +527,6 @@ is available for this:
 toLatex(c2t("MaxTypeIndependenceTestStatistic"))
 @
 
-The definition of one- and two-sided $p$~values 
-\fixme{This somehow interrupts the flow, we haven't mentioned p values anywhere up to this point.}
-used for the computations in the \pkg{coin} package is 
-\begin{center}
-\begin{tabular}{ll}
-less: & $\Prob(c(\T, \mu, \Sigma) \le c(\mathbf{t}, \mu, \Sigma))$ \\
-greater: & $\Prob(c(\T, \mu, \Sigma) \ge c(\mathbf{t}, \mu, \Sigma))$ \\
-two-sided: & $\Prob(|c(\T, \mu, \Sigma)| \le |c(\mathbf{t}, \mu, \Sigma)|)$.
-\end{tabular}
-\end{center}
 
 Alternatively, a quadratic form $c_\text{quad}(\mathbf{t}, \mu, \Sigma)  =
 (\mathbf{t} - \mu)^\top \Sigma^+ (\mathbf{t} - \mu)$ can be used as test statistic. It
@@ -637,7 +619,10 @@ Methods & Description \\
 \caption{\label{tab:dists} Classes and methods for conditional null distributions.}
 \end{center}
 \end{table}
-\fixme{How is the support represented? Especially for the asymptotic distribution\dots}
+The \code{support} function returns the support of a discrete distribution or
+an interval containing $99.999\%$ of the probability mass.
+
+
 
 Using these tools, the exact $p$~value for the independence test on the rotating rats
 along with the complete exact reference distribution (allowing
@@ -720,9 +705,11 @@ The three types of test discussed above are hard-coded and can be specified by
 a simple string. Similarly, the reference distribution and the alternative hypothesis
 can be supplied as strings. In addition to these simple specifications, more flexible
 specifications for the data (\code{object}), the transformations (\code{xtrafo}, \code{ytrafo}),
-and the distribution are available, as discussed in the following.
-
-\fixme{Briefly explain scores and check.}
+and the distribution are available, as discussed in the following. The \code{scores}
+argument takes a named list of numeric vectors to be used as scores for ordered
+factors. Validity checks for objects of class \Rclass{IndependenceProblem} specified
+to argument \code{check} can be used to test for certain aspects of the data, e.g.,
+when one has to make sure that two independent samples are present.
 
 \subsection{Data specification}
 
@@ -805,8 +792,8 @@ independence_test(y ~ x, data = correxample, alternative = "less",
 Note that the user has to assure that the same statistic is computed inside
 \code{sexact()} and that the same \code{alternative} (as \code{independence_test()}
 has no means of assessing whether these are in sync).
-\fixme{Could this be improved?}
-
+\fixme{Could this be improved? Schon: halt immer neu das IndependenceTestProblem aufsetzen, aber
+das dauert ca. 100 Jahre. Der Kommentar verwirrt nur.}
 
 \subsection{Transformations}
 
@@ -823,7 +810,10 @@ factors are transformed to indicator variables (\code{f_trafo()}),
 and censored variables are transformed to log rank scores (\code{logrank_trafo()}).
 In \code{f_trafo()} a set of $k$ indicator functions is used for a factor
 with $k$ levels, unless $k = 2$ for which a univariate indicator function
-is employed. \fixme{Explain var trafo and block.}
+is employed. A named list containing different transformations to be applied
+to certain variables may be specified as \code{var_trafo} argument. 
+When a factor is given as \code{block}, all transformations are applied separately 
+within each block.
 The function \code{trafo()} can also easily be re-used by supplying
 other (possibly user defined functions) as arguments to 
 \code{trafo()}.
@@ -920,11 +910,13 @@ Wilcoxon signed rank &  \code{f_trafo()} & \code{rank()} &
 
 \section{Permutation tests in practice: A categorical data example} \label{sec:practice}
 
-The job satisfaction data \citep[][Table 7.8]{agresti2002}, see Figure~\ref{jsplot}, is a
-three-dimensional \Rclass{table} with variables \code{Income} and
+
+The job satisfaction of black males in the U.S. \citep[][Table 7.8]{agresti2002} 
+is described by measures of income and job safisfaction in four (ordinal) classifications. One might postulate that as income
+increases, reported job satisfaction increases as well, and vice versa.
+The data (see Figure~\ref{jsplot}) is given as a three-dimensional \Rclass{table} with variables \code{Income} and
 \code{Job.Satisfaction} according to \code{Gender} (labels
 slightly modified for convenience):
-\fixme{One more sentence about the data and the associated test problem is really needed here.}
 <<js, echo = TRUE>>=
 data("jobsatisfaction", package = "coin")
 js <- jobsatisfaction
@@ -997,10 +989,9 @@ pvalue(it)
 @
 In this case, the null hypothesis of independence of job satisfaction
 and income can be rejected in favour of a linear dependency of both variables.
+The scores for \code{Income} are defined by the midpoint of the income intervals.
 For more practical examples, including applications with numeric variables, 
 we refer to \cite{Hothorn:2006:AmStat}.
-
-\fixme{Explain choice of scores.}
 
 \section{Odds and ends} \label{sec:oddsandends}
 

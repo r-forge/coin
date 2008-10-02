@@ -11,6 +11,8 @@
     o    functions supplied via `distribution = ' doesn't need
          to have a class
 
+    o    export all classes
+
 
 		CHANGES in `coin' VERSION 0.6-10
 
