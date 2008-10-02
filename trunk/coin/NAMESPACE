@@ -36,7 +36,9 @@ exportClasses("IndependenceProblem", "IndependenceTest",
               "ScalarIndependenceTestStatistic", "PValue", "NullDistribution",
               "SymmetryProblem", "ExpectCovarInfluence", "ExpectCovar",
               "QuadTypeIndependenceTest", "ScalarIndependenceTest",
-              "ScalarIndependenceTestConfint", "MaxTypeIndependenceTest")
+              "ScalarIndependenceTestConfint", "MaxTypeIndependenceTest", 
+              "MaxTypeIndependenceTestStatistic",
+              "QuadTypeIndependenceTestStatistic")
 
 exportMethods("initialize", "show", "pvalue", "statistic", 
               "pperm", "dperm", "qperm", "support", "expectation", 
