@@ -252,7 +252,7 @@ independence_test(time ~ group, data = rotarod,
   ytrafo = rank, distribution = exact())
 @
 Here, the conditional Wilcoxon-Mann-Whitney test was performed
-via a rank-transformation of the response, employing the exact distribution for
+via a rank transformation of the response, employing the exact distribution for
 obtaining the $p$~value (yielding the correct result outlined above).
 Users of \proglang{R} can easily interpret this output since
 it is represented in the same format as classical tests in the basic
@@ -264,7 +264,7 @@ Although the above piece of code looks embarrassingly simple,
 the underlying computations are much more sophisticated than visible at first
 sight: The data are pre-processed along with their transformations, deviations
 from independence are captured by a (possibly multivariate) linear statistic,
-standardized by conditional expactation and variance, and aggregated to
+standardized by conditional expectation and variance, and aggregated to
 a final test statistic. Subsequently, the requested reference distribution is
 computed, from which a $p$~value is derived, and everything is wrapped into
 an object that can be conveniently printed or queried for more detailed
@@ -274,7 +274,7 @@ from \cite{StrasserWeber1999} in Section~\ref{sec:theory}, we introduce formal
 Section~\ref{sec:class}. Section~\ref{sec:ui} provides further information
 about the high-level user interfaces and Section~\ref{sec:practice} illustrates
 how to employ the software in practice. Section~\ref{sec:oddsandends} concludes
-the paper with a short dicussion, some more details about the underlying theory
+the paper with a short discussion, some more details about the underlying theory
 can be found in an appendix.
 
 
@@ -446,7 +446,7 @@ and covariance matrix via
 its <- new("IndependenceTestStatistic", itp)
 @
 Note that the test statistic itself is computed later on by initializing
-one of the three classes extending \Rclass{"IndependenceTestStatistic"}.
+one of the three classes extending \Rclass{IndependenceTestStatistic}.
 
 \begin{table}[tb]
 \begin{center}
@@ -612,7 +612,7 @@ Methods & Description \\
   conditional null distribution. \\
 \code{pperm(object, q)} & Evaluation of the cumulative distribution function for quantile $q$.\\
 \code{dperm(object, x)} & Evaluation of the probability density function at $x$. \\
-\code{qperm(object, p)} & Evaluation of the quantile function for probability \code{p}.\\
+\code{qperm(object, p)} & Evaluation of the quantile function for probability $p$.\\
 \code{support(object)}  & Extraction of the support of the null distribution.\\
 \hline
 \end{tabular}
@@ -680,9 +680,9 @@ sensible defaults for most (if not all) steps in the analysis but preserving
 the possibility to extend a few steps based on user-supplied methods.
 For this purpose, \pkg{coin} provides the function \code{independence_test()}
 as the main user interface for performing independence tests. Many of its arguments
-have flexible default or can be specified by a simple character string while
+have flexible defaults or can be specified by a simple character string while
 still allowing to plug in much more complex user-defined objects, e.g., for 
-data-preparation, computation of the null distribution, or transformation functions.
+data preparation, computation of the null distribution, or transformation functions.
 
 \subsection{A convenient user interface}
 
@@ -742,7 +742,7 @@ from this and passed on to the associated method.
 
 In the simplest case, the \code{distribution} argument of the \code{independence_test()}
 methods can be specified by a simple character string. However, this
-is not flexile enough in some situations and hence it is also possible to
+is not flexible enough in some situations and hence it is also possible to
 supply a function that can compute a \Rclass{PValue} object from an
 \Rclass{IndependenceTestStatistic} object.
 
@@ -762,13 +762,13 @@ class \Rclass{PValue}.
 
 As an example, consider the computation of the exact $p$~value
 for testing independence of two continuous random variables. The identity
-transformation is used for both, $g$ and $h$, thus a conditional version of
+transformation is used for both $g$ and $h$, thus a conditional version of
 the test for the Pearson correlation is constructed. We use a tiny artificial
 example where enumeration and evaluation of all possible permutations is still
 feasible. The function \code{sexact()} extracts both variables, computes
 all permutations using the function \code{permutations()} from \pkg{e1071}
 \citep{PKG:e1071}, computes the linear test statistic for each permutation,
-standardize it by expectation and variance, and then sets up the 
+standardizes it by expectation and variance, and then sets up the 
 distribution function.
 <<Ex-distribution, echo = TRUE>>=
 set.seed(2908)
@@ -821,7 +821,7 @@ other (possibly user defined functions) as arguments to
 Instead of using \code{trafo()}, a user-defined transformation can also be
 passed directly to \code{xtrafo} or \code{ytrafo}. As an example, consider
 using a Mood test against scale alternatives for the rotating rats data.
-This amounts to using tranformation $h(Y_i) = (\text{rank}(Y_i) - (n + 1) / 2)^2)$
+This amounts to using the transformation $h(Y_i) = (\text{rank}(Y_i) - (n + 1) / 2)^2$
 for the response:
 <<echo=TRUE>>=
 mood_score <- function(y) (rank(y) - (nrow(y) + 1) / 2)^2
@@ -840,7 +840,7 @@ new("ScalarIndependenceTest", statistic = sits,
   distribution = ExactNullDistribution(sits, algorithm = "split-up"))
 @
 Alternatively, and more easily, the same result can be obtained by
-pluggin \code{mood_score()} into \code{independence_test()}:
+plugging \code{mood_score()} into \code{independence_test()}:
 <<echo = TRUE>>=
 independence_test(time ~ group, data = rotarod, ytrafo = mood_score,
   distribution = exact(algorithm = "split-up"))
@@ -975,7 +975,7 @@ can be computed via
 <<jobsatisfaction-minp, echo = TRUE>>=
 pvalue(independence_test(js, teststat = "max"), method = "single-step")
 @
-These $p$~values can be interpreted in a way simular to 
+These $p$~values can be interpreted in a way similar to 
 standardized contingency tables.
 
 Taking the ordinal scale level of both
@@ -988,7 +988,7 @@ it <- independence_test(js, distribution = approximate(B = 10000),
 pvalue(it)
 @
 In this case, the null hypothesis of independence of job satisfaction
-and income can be rejected in favour of a linear dependency of both variables.
+and income can be rejected in favor of a linear dependency of both variables.
 The scores for \code{Income} are defined by the midpoint of the income intervals.
 For more practical examples, including applications with numeric variables, 
 we refer to \cite{Hothorn:2006:AmStat}.
@@ -1030,7 +1030,7 @@ with the results reported there. Step-down multiple adjusted $p$~values
 have been checked against results reported by \code{mt.maxT()} from
 package \pkg{multtest} \citep{PKG:multtest}. For details on the test
 procedures we refer to the \proglang{R} transcript files in directory
-\code{coin/tests} of the \pkg{coin} package sources.
+`\code{tests}' of the \pkg{coin} package sources.
 
 \paragraph{Computational details.}
 
