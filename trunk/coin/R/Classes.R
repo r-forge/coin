@@ -6,8 +6,8 @@ setClass(Class = "IndependenceProblem",
     representation = representation(
         x       = "data.frame",
         y       = "data.frame",
-	weights = "numeric",
-        block   = "factor"
+        block   = "factor",
+	weights = "numeric"
     ),
     validity = function(object) {
         dims <- ((nrow(object@x) == nrow(object@y)) && 
