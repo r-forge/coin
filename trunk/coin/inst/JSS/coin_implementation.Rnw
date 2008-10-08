@@ -202,7 +202,7 @@ with mathematical symbols. Generic functions for obtaining
 statistics, conditional expectation and covariance matrices as well as 
 $p$~value, distribution, density and quantile functions for the reference
 distribution help to extract information from these objects.
-All infrastructure is conveniently interfaced in the function \code{independence_test()},
+The infrastructure is conveniently interfaced in the function \code{independence_test()},
 thus providing the computational counterpart of the theoretical framework of
 \cite{StrasserWeber1999}.
 
@@ -210,7 +210,7 @@ Here, we start out with an illustrative application of \code{independence_test()
 to a small 2-sample problem (see Table~\ref{rotarod}) and then continue to
 introduce the underlying computational building blocks using the same data set.
 The data was used previously by \cite{Bergmann:2000} as a challenging example
-in order to compare test statistics and $p$~values of the Wilcoxon-Mann-Whitney
+in a comparison of test statistics and $p$~values of the Wilcoxon-Mann-Whitney
 rank sum test as reported by eleven statistical packages. 
 More specifically, $n = 24$ rats received a fixed oral dose of a centrally 
 acting muscle relaxant as active treatment or a saline solvent as control. The animals were 
@@ -472,7 +472,7 @@ the linear statistic for the rotating rats can be extracted via
 <<Ex-IndependenceTestStatistic-statistic, echo = TRUE>>=
 statistic(its, "linear")
 @
-This is simply the sum of the average ranks in the control groups, i.e., $180 = 12 \cdot 15$
+This is simply the sum of the average ranks in the control group, i.e., $180 = 12 \cdot 15$
 because all 12 observations have the maximal average rank 15. Additionally, the associated
 conditional mean and variance under $H_0$ can be computed via:
 <<Ex-IndependenceTestStatistic-statistic, echo = TRUE>>=
@@ -484,14 +484,16 @@ based upon which we can set up a test statistic.
 
 \subsubsection{Test statistics} \label{sec:teststat}
 
-Three types of univariate test statistics are implemented in
-\pkg{coin}: scalar test statistics $c_\text{scalar}$, maximum-type statistics
-$c_\text{max}$ and quadratic forms $c_\text{quad}$ and are explained in the following.
+Three types of univariate test statistics are implemented in \pkg{coin}
+and explained in the following: scalar test statistics
+$c_\text{scalar}$, maximum-type statistics $c_\text{max}$ and quadratic
+forms $c_\text{quad}$.
 
 In case of univariate linear statistics $\t$, i.e., for $pq = 1$, a natural test statistic $c$
 is simply the standardized linear statistic
 \begin{eqnarray*}
-c_\text{scalar}(\t, \mu, \Sigma) = \frac{\t - \mu}{\sqrt{\Sigma}} = \z.
+c_\text{scalar}(\t, \mu, \Sigma) = 
+\frac{\t - \mu}{\sqrt{\Sigma}} = \z.
 \end{eqnarray*} 
 A special class is available for this
 <<ScalarIndependenceTestStatistic, results = tex>>=
@@ -509,20 +511,19 @@ statistic(sits, "standardized")
 which yields the standardized Wilcoxon-Mann-Whitney statistic reported
 in the introductory example.
 
-In the multivariate case ($pq > 1$), a natural extension is to employ a maximum-type
-statistic of the form
-\begin{eqnarray*}
-c_\text{max}(\mathbf{t}, \mu, \Sigma)  = \max \left| \z \right|,
-\end{eqnarray*}
-for the two-sided situation, or
-\begin{eqnarray*}
-\min \left( \z \right)
-    \quad \text{(less) and } 
-\max \left( \z \right)
-    \quad \text{(greater)}
-\end{eqnarray*}
-for the one-sided cases. Again a special class \Rclass{MaxTypeIndependenceTestStatistic}
-is available for this:
+In the multivariate case ($pq > 1$), a natural extension is to employ a
+maximum-type statistic of the form
+\begin{displaymath}
+  c_\text{max}(\mathbf{t}, \mu, \Sigma)  = 
+  \begin{cases}
+    \max \left| \z \right| & \text{(``two-sided'')}, \\
+    \min \left( \z \right) & \text{(``less'')}, \\
+    \max \left( \z \right) & \text{(``greater'')},
+  \end{cases}
+\end{displaymath}
+where the definition reflects the associated alternative with name given
+in quotes.  Again a special class
+\Rclass{MaxTypeIndependenceTestStatistic} is available for this:
 <<MaxTypeIndependenceTestStatistic, results = tex>>=
 toLatex(c2t("MaxTypeIndependenceTestStatistic"))
 @
@@ -605,7 +606,7 @@ Class & Description \\
 \Rclass{AsymptNullDistribution} & Asymptotic conditional 
   distribution (via multivariate normal or $\chi^2$ distribution). \\
 \hline
-Methods & Description \\
+Method & Description \\
 \hline
 \code{pvalue(object)} & Computation of the $p$~value (plus a confidence interval if
   Monte-Carlo procedures have been used) based on an observed test statistic $c$ and its
@@ -666,11 +667,7 @@ object of class \Rclass{IndependenceTest} and all methods for extracting
 information from it are readily available.
 
 
-\section{From classes and methods to inference functions} \label{sec:ui}
-
-\fixme{Better section title needed: The section illustrates how to set up convenience
-infrastructure that is needed repeatedly, but also allowing to plug in user-defined
-parts.}
+\section{Interfaces to permutation inference} \label{sec:ui}
 
 In Section~\ref{sec:class}, all the necessary computational building blocks are
 introduced for implementing the general class of permutation tests outlined
@@ -686,9 +683,10 @@ data preparation, computation of the null distribution, or transformation functi
 
 \subsection{A convenient user interface}
 
-In order to carry out all steps described in Section~\ref{sec:class} with a single
-command, \pkg{coin} provides the generic function \code{independence_test()}.
-The main workhorse behind it is the method for objects of class \Rclass{IndependenceProblem}:
+Via the generic function \code{independence_test()}, all steps described
+in Section~\ref{sec:class} can be carried out using a single command.
+The main workhorse behind it is the method for objects of class
+\Rclass{IndependenceProblem}:
 \begin{Sinput}
 independence_test(object, 
   teststat = c("max", "quad", "scalar"),
@@ -701,7 +699,7 @@ Thus, \code{object} describes the data and the null hypothesis. Arguments
 \code{xtrafo} and \code{ytrafo} refer to the transformations $g$ and $h$: Both are
 by default set to function \code{trafo()} which chooses suitable transformations
 based on the scale of the considered variables (see below). 
-The three types of test discussed above are hard-coded and can be specified by 
+The three types of univariate test statistics discussed above are hard-coded and can be specified by 
 a simple string. Similarly, the reference distribution and the alternative hypothesis
 can be supplied as strings. In addition to these simple specifications, more flexible
 specifications for the data (\code{object}), the transformations (\code{xtrafo}, \code{ytrafo}),
@@ -746,13 +744,14 @@ is not flexible enough in some situations and hence it is also possible to
 supply a function that can compute a \Rclass{PValue} object from an
 \Rclass{IndependenceTestStatistic} object.
 
-For the most important special cases, suitable function \emph{generators}
-are provided in \pkg{coin}. For example, the function \code{approximate(B = 1000)}
-returns a Monte Carlo function that draws \code{B} random permutations.
-Similarly, \code{exact()} and \code{approximate()} return functions computing
-the exact or asymptotic null distributions, respectively. Again, computational
-details in the computation of the null distribution can be controlled via arguments
-of the function generators.
+For the most important special cases, suitable function
+\emph{generators} are provided in \pkg{coin}. For example, the function
+\code{approximate(B = 1000)} returns a Monte Carlo function that draws
+\code{B} (default: 1000) random permutations.  Similarly, \code{exact()}
+and \code{approximate()} return functions computing the exact or
+asymptotic null distributions, respectively. Again, computational
+details in the computation of the null distribution can be controlled
+via arguments of the function generators.
 
 Additionally, it is also possible to set \code{distribution} to a user-supplied
 algorithm for computing the conditional null distribution. It just has to be
@@ -783,17 +782,16 @@ sexact <- function(object) {
   new("PValue", p = p, pvalue = p)
 }
 @
-This function can then be passed to \code{independence_test()} for computing the
-distribution function and $p$~value:
+Note that above implementation is kept simple for the purpose of
+illustration; it hard-codes the alternative (less) and assumes that the
+transformed variables are univariate.
+
+This function can then be passed to \code{independence_test()} for
+computing the distribution function and $p$~value:
 <<Ex-distribution, echo = TRUE>>=
 independence_test(y ~ x, data = correxample, alternative = "less",
   distribution = sexact)
 @
-Note that the user has to assure that the same statistic is computed inside
-\code{sexact()} and that the same \code{alternative} (as \code{independence_test()}
-has no means of assessing whether these are in sync).
-\fixme{Could this be improved? Schon: halt immer neu das IndependenceTestProblem aufsetzen, aber
-das dauert ca. 100 Jahre. Der Kommentar verwirrt nur.}
 
 \subsection{Transformations}
 
@@ -849,7 +847,7 @@ independence_test(time ~ group, data = rotarod, ytrafo = mood_score,
 Similarly to the Mood test, the conditional counterpart of many
 other classical tests (some of them implemented in package \pkg{stats})
 are easily available through \code{independence_test()} by specifying
-the appropriate \code{xtrafo} and \code{ytrafo} (and \code{teststat}).
+the appropriate \code{xtrafo}, \code{ytrafo} and \code{teststat}.
 This includes the Wilcoxon-Mann-Whitney or Cochran-Mantel-Haenszel tests, 
 but also many other well-known tests as shown in Table~\ref{confct}.
 
@@ -911,12 +909,13 @@ Wilcoxon signed rank &  \code{f_trafo()} & \code{rank()} &
 \section{Permutation tests in practice: A categorical data example} \label{sec:practice}
 
 
-The job satisfaction of black males in the U.S. \citep[][Table 7.8]{agresti2002} 
-is described by measures of income and job safisfaction in four (ordinal) classifications. One might postulate that as income
-increases, reported job satisfaction increases as well, and vice versa.
-The data (see Figure~\ref{jsplot}) is given as a three-dimensional \Rclass{table} with variables \code{Income} and
-\code{Job.Satisfaction} according to \code{Gender} (labels
-slightly modified for convenience):
+The job satisfaction of African-American males in the USA \citep[][Table
+7.8]{agresti2002} is described by measures of income and reported job
+safisfaction in four (ordinal) classifications.  It seems natural to
+surmise that job satisfaction increases with income.  The data (see
+Figure~\ref{jsplot}) is given as a three-dimensional \Rclass{table} with
+variables \code{Income} and \code{Job.Satisfaction} according to
+\code{Gender} (labels slightly modified for convenience):
 <<js, echo = TRUE>>=
 data("jobsatisfaction", package = "coin")
 js <- jobsatisfaction
