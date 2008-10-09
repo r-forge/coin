@@ -9,6 +9,7 @@
 \alias{initialize,ModelEnv-method}
 \alias{initialize,CovarianceMatrix-method}
 \alias{initialize,Variance-method}
+\alias{initialize,IndependenceLinearStatistic-method}
 \alias{initialize,IndependenceTestStatistic-method}
 \title{ Methods for Function initialize in Package `coin' }
 \description{
@@ -32,6 +33,8 @@
 \item{.Object = "IndependenceTestProblem"}{ ~~describe this method here }
 
 \item{.Object = "IndependenceTestStatistic"}{ ~~describe this method here }
+
+\item{.Object = "IndependenceLinearStatistic"}{ ~~describe this method here }
 
 \item{.Object = "ScalarIndependenceTestStatistic"}{ ~~describe this method here }
 

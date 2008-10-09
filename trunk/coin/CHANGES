@@ -13,6 +13,10 @@
 
     o    export all classes
 
+    o    compute linear statistics, expectations and (co)variances
+         when constructing <IndependenceLinearStatistic> instead
+         of <IndependenceTestStatistic> and define methods for this class.
+
 
 		CHANGES in `coin' VERSION 0.6-10
 

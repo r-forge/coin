@@ -68,8 +68,8 @@ setClass(Class = "IndependenceLinearStatistic",
 setClass(Class = "IndependenceTestStatistic",
     representation = representation(
         teststatistic               = "numeric",
-        standardizedlinearstatistic = "numeric",
-        estimates                   = "list"
+        standardizedlinearstatistic = "numeric"
+
     ),
     contains = "IndependenceLinearStatistic",
 )
@@ -133,6 +133,7 @@ setClass(Class = "IndependenceTest",
     representation = representation(
         distribution = "PValue", ### was: "NullDistribution",
         statistic    = "IndependenceTestStatistic",
+        estimates    = "list",
         method       = "character"
     ),
     prototype = list(method = "General Independence Test")

@@ -424,6 +424,50 @@ are stored, the whole covariance matrix is computed upon request
 %% TH: new class "UserIndependenceTestStatistic" @statistic -> function
 %% + method for ApproxNullDistribution
 
+For our object of class \Rclass{IndependenceLinearStatistic} we can now
+compute the linear statistic along with its conditional expectation
+and covariance matrix via
+<<Ex-IndependenceLinearStatistic, echo = TRUE>>=
+ils <- new("IndependenceLinearStatistic", itp)
+@
+
+\begin{table}[tb]
+\begin{center}
+\begin{tabular}{lp{9.5cm}}
+\hline
+Function & Description \\ \hline
+\code{statistic(object, type)} & Extraction of the linear statistic $\t$ (\code{type = "linear"}), 
+		     the standardized statistic $\z$ (\code{type = "standardized"})
+  		     or the final test statistic $c$ (\code{type = "test"}, only for \Rclass{IndependenceTestStatistic} objects). \\
+\code{expectation(object)} & Extraction of the conditional expectation~$\mu$. \\
+\code{covariance(object)} & Extraction of the complete conditional covariance
+  matrix~$\Sigma$. \\
+\code{variance(object)} & Extraction of the diagonal elements of the conditional covariance matrix
+                          $\text{diag}(\Sigma)$. \\ \hline
+\end{tabular}
+\caption{\label{tab:generics} List of generic functions with
+  methods for classes inheriting from \Rclass{IndependenceLinearStatistic}.}
+\end{center}
+\end{table}
+
+Using methods for suitable generic functions (see Table~\ref{tab:generics}),
+the linear statistic for the rotating rats can be extracted via
+<<Ex-IndependenceLinearStatistic-statistic, echo = TRUE>>=
+statistic(ils, "linear")
+@
+This is simply the sum of the average ranks in the control group, i.e., $180 = 12 \cdot 15$
+because all 12 observations have the maximal average rank 15. Additionally, the associated
+conditional mean and variance under $H_0$ can be computed via:
+<<Ex-IndependenceLinearStatistic-statistic, echo = TRUE>>=
+expectation(ils)
+variance(ils)
+@
+based upon which we can now set up a test statistic. 
+
+
+\subsubsection{Test statistics} \label{sec:teststat}
+
+
 The specification of the inference procedure is completed by the definition
 of a univariate test statistic $c$ (see below)
 which is represented by class \Rclass{IndependenceTestStatistic}
@@ -434,61 +478,17 @@ The slot \code{standardizedlinearstatistic}
 contains $\z$, the (possibly multivariate) linear statistic standardized by its 
 conditional expectation and variance (Equation~\ref{standstat}). 
 A univariate test statistic $c$ is stored in slot \code{teststatistic}. 
-The \code{estimates} slot
-may contain parameter estimates where available, for example 
-an estimate and corresponding confidence interval for a shift parameter
-derived from a conditional Wilcoxon-Mann-Whitney test.
-
-For our object of class \Rclass{IndependenceTestProblem} we can now
-compute the linear statistic along with its conditional expectation
-and covariance matrix via
-<<Ex-IndependenceTestStatistic, echo = TRUE>>=
-its <- new("IndependenceTestStatistic", itp)
+<<Ex-IndependenceTestStatistic, echo = TRUE>>= 
+its <- new("IndependenceTestStatistic", ils)
 @
-Note that the test statistic itself is computed later on by initializing
-one of the three classes extending \Rclass{IndependenceTestStatistic}.
+Methods for all generics listed in Table~\ref{tab:generics}
+are also available for objects of this class.
 
-\begin{table}[tb]
-\begin{center}
-\begin{tabular}{lp{9.5cm}}
-\hline
-Function & Description \\ \hline
-\code{statistic(object, type)} & Extraction of the linear statistic $\t$ (\code{type = "linear"}), 
-		     the standardized statistic $\z$ (\code{type = "standardized"})
-  		     or the final test statistic $c$ (\code{type = "test"}, the default). \\
-\code{expectation(object)} & Extraction of the conditional expectation~$\mu$. \\
-\code{covariance(object)} & Extraction of the complete conditional covariance
-  matrix~$\Sigma$. \\
-\code{variance(object)} & Extraction of the diagonal elements of the conditional covariance matrix
-                          $\text{diag}(\Sigma)$. \\ \hline
-\end{tabular}
-\caption{\label{tab:generics} List of generic functions with
-  methods for \Rclass{IndependenceTestStatistic} objects.}
-\end{center}
-\end{table}
-
-Using methods for suitable generic functions (see Table~\ref{tab:generics}),
-the linear statistic for the rotating rats can be extracted via
-<<Ex-IndependenceTestStatistic-statistic, echo = TRUE>>=
-statistic(its, "linear")
-@
-This is simply the sum of the average ranks in the control group, i.e., $180 = 12 \cdot 15$
-because all 12 observations have the maximal average rank 15. Additionally, the associated
-conditional mean and variance under $H_0$ can be computed via:
-<<Ex-IndependenceTestStatistic-statistic, echo = TRUE>>=
-expectation(its)
-variance(its)
-@
-based upon which we can set up a test statistic. 
-
-
-\subsubsection{Test statistics} \label{sec:teststat}
 
 Three types of univariate test statistics are implemented in \pkg{coin}
 and explained in the following: scalar test statistics
 $c_\text{scalar}$, maximum-type statistics $c_\text{max}$ and quadratic
 forms $c_\text{quad}$.
-
 In case of univariate linear statistics $\t$, i.e., for $pq = 1$, a natural test statistic $c$
 is simply the standardized linear statistic
 \begin{eqnarray*}
@@ -510,7 +510,6 @@ statistic(sits, "standardized")
 @
 which yields the standardized Wilcoxon-Mann-Whitney statistic reported
 in the introductory example.
-
 In the multivariate case ($pq > 1$), a natural extension is to employ a
 maximum-type statistic of the form
 \begin{displaymath}
@@ -652,6 +651,10 @@ toLatex(c2t("IndependenceTest"))
 Remember that objects of class \Rclass{IndependenceTestStatistic} 
 represent the data, hypothesis, linear statistic and test statistic along with
 conditional expectation and covariance matrix.
+The \code{estimates} slot
+may contain parameter estimates where available, for example 
+an estimate and corresponding confidence interval for a shift parameter
+derived from a conditional Wilcoxon-Mann-Whitney test.
 
 A complete description of the conditional independence test for the rotating
 rats data is given by an object of class \Rclass{IndependenceTest} which
@@ -919,7 +922,7 @@ variables \code{Income} and \code{Job.Satisfaction} according to
 <<js, echo = TRUE>>=
 data("jobsatisfaction", package = "coin")
 js <- jobsatisfaction
-dimnames(js)[[2]] <- c("VeryDiss", "ModDiss", "ModSat", "VerySat")
+dimnames(js)[[2]] <- c("VeryDiss", "LitSat", "ModSat", "VerySat")
 ftable(Job.Satisfaction ~ Gender + Income, data = js)
 @
 \setkeys{Gin}{width=\textwidth}
@@ -938,8 +941,8 @@ cotabplot(js,
          \label{jsplot}}
 \end{center}
 \end{figure}
-Here, we focus on conditional tests for independence 
-of income and job satisfaction. The conditional Cochran-Mantel-Haenszel test is
+Here, we focus on conditional tests for independence of income and job satisfaction. 
+Ignoring the ordering of the levels in both variables, the conditional Cochran-Mantel-Haenszel test is
 based on a $c_\text{quad}$ statistic derived from the contingency table
 and a $\chi^2$ approximation of the null distribution is utilized traditionally:
 <<jobsatisfaction-it, echo = TRUE>>=
@@ -960,8 +963,29 @@ This contingency table in standardized form reads
 <<jobsatisfaction-stat, echo = TRUE>>=
 statistic(it, "standardized")
 @
+The standardized contingency table can now be interpreted in the same way as 
+Pearson residuals. Althought a $p$ value of $\Sexpr{round(pvalue(it), 3)}$
+doesn't lead to a rejection of the independence hypothesis, the positive diagonal 
+and negative off-diagonal elements suggest that a test statistic taking the 
+ordering of the levels into account may very well detect a deviation from independence.
+Taking the ordinal scale level of both
+variables into account, a linear by linear association test \citep{agresti2002}
+is easily performed
+<<jobsatisfaction-ordinal, echo = TRUE>>=
+it <- independence_test(js, distribution = approximate(B = 10000),
+  scores = list(Job.Satisfaction = 1:4,
+    Income = 1:4))
+pvalue(it)
+@
+In this case, the null hypothesis of independence of job satisfaction
+and income can be rejected in favor of a linear dependency of both variables.
+\cite{agresti2002} used equidistant scores for \code{Income}, one could also 
+assign mid-points of income intervals to the \code{Income} scores---see \cite{Hothorn:2006:AmStat}
+for an application of non-equidistant scores.
+
 Instead of using a $\chi^2$ statistic collapsing the whole table via a quadratic form, one might
-want to use the maximum of the absolute values of the standardized cells as test statistic.
+want to use the maximum of the absolute values of the standardized cells as test statistic
+for norminal variables (which is, however, not the case in this particular application).
 This maximum-type test is set up  easily:
 <<jobsatisfaction-max, echo = TRUE>>=
 independence_test(js, teststat = "max")
@@ -975,22 +999,11 @@ can be computed via
 pvalue(independence_test(js, teststat = "max"), method = "single-step")
 @
 These $p$~values can be interpreted in a way similar to 
-standardized contingency tables.
-
-Taking the ordinal scale level of both
-variables into account, a linear by linear association test \citep{agresti2002}
-is easily performed
-<<jobsatisfaction-ordinal, echo = TRUE>>=
-it <- independence_test(js, distribution = approximate(B = 10000),
-  scores = list(Job.Satisfaction = c(1, 3, 4, 5),
-    Income = c(3, 10, 20, 35)))
-pvalue(it)
-@
-In this case, the null hypothesis of independence of job satisfaction
-and income can be rejected in favor of a linear dependency of both variables.
-The scores for \code{Income} are defined by the midpoint of the income intervals.
-For more practical examples, including applications with numeric variables, 
+standardized contingency tables. For more practical examples, including applications with numeric variables, 
 we refer to \cite{Hothorn:2006:AmStat}.
+
+
+
 
 \section{Odds and ends} \label{sec:oddsandends}
 

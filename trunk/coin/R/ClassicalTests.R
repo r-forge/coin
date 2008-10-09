@@ -601,7 +601,7 @@ maxstat_test.IndependenceProblem <- function(object,
     } else {
         estimate <- list(cutpoint = estimate)
     }
-    RET@statistic@estimates <- list(estimate = estimate)
+    RET@estimates <- list(estimate = estimate)
     RET@method <- "Maxstat Test"
     
     return(RET)
