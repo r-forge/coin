@@ -995,7 +995,10 @@ can be computed via
 pvalue(independence_test(js, teststat = "max"), method = "single-step")
 @
 These $p$~values can be interpreted in a way similar to 
-standardized contingency tables. For more practical examples, including
+standardized contingency tables. The discrepancy between the
+global adjusted $p$~value shown above and the minimum single-step
+ajusted $p$~value is due to simulation variance. 
+For more practical examples, including
 applications with numeric variables, we refer to \cite{Hothorn:2006:AmStat}.
 
 
