@@ -530,8 +530,7 @@ for $\Sigma^+$ and its rank (degrees of freedom):
 toLatex(c2t("QuadTypeIndependenceTestStatistic"))
 @
 A slot \code{alternative} is not needed because, by construction,
-quadratic forms are only applicable to two-sided hypotheses.
-
+quadratic forms cannot be applied to one-sided hypotheses.
 
 \subsection{Representation of conditional null distributions} \label{sec:distr}
 
