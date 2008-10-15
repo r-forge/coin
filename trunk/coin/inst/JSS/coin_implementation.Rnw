@@ -469,7 +469,7 @@ toLatex(c2t("IndependenceTestStatistic"))
 The slot \code{standardizedlinearstatistic}
 contains $\z$, the (possibly multivariate) linear statistic standardized by its 
 conditional expectation and variance (Equation~\ref{standstat}). 
-A univariate test statistic $c$ can be stored in slot \code{teststatistic}. 
+Slot \code{teststatistic} is for storing univariate test statistics $c$?
 <<Ex-IndependenceTestStatistic, echo = TRUE>>= 
 its <- new("IndependenceTestStatistic", ils)
 @
