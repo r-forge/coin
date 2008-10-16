@@ -257,23 +257,25 @@ it is represented in the same format as classical tests in the basic
 the exact conditional distribution of the test statistic \code{Z},
 the independence of group assignment and time on the cylinder can be rejected.
 
-Although the above piece of code looks embarrassingly simple,
-the underlying computations are much more sophisticated than visible at first
-sight: The data are pre-processed along with their transformations, deviations
-from independence are captured by a (possibly multivariate) linear statistic,
-standardized by conditional expectation and variance, and aggregated to
-a final test statistic. Subsequently, the requested reference distribution is
-computed, from which a $p$~value is derived, and everything is wrapped into
-an object that can be conveniently printed or queried for more detailed
-information. After briefly reviewing the underlying theory
-from \cite{StrasserWeber1999} in Section~\ref{sec:theory}, we introduce formal 
-\proglang{S}4 classes and methods capturing all the outlined steps in
-Section~\ref{sec:class}. Section~\ref{sec:ui} provides further information
-about the high-level user interfaces and Section~\ref{sec:practice} illustrates
-how to employ the software in practice. Section~\ref{sec:oddsandends} concludes
-the paper with a short discussion, some more details about the underlying theory
-can be found in an appendix.
-
+Although the above piece of code looks embarrassingly simple, the
+underlying computations are much more sophisticated than visible at
+first sight: The data are pre-processed along with their
+transformations, deviations from independence are captured by a
+(possibly multivariate) linear statistic, standardized by conditional
+expectation and variance, and aggregated to a final test
+statistic. Subsequently, the requested reference distribution is
+computed, from which a $p$~value is derived, and everything is wrapped
+into an object that can be conveniently printed or queried for more
+detailed information. After briefly reviewing the underlying theory from
+\cite{StrasserWeber1999} in Section~\ref{sec:theory}, we introduce
+formal \proglang{S}4 classes and methods capturing all the outlined
+steps in Section~\ref{sec:class}. Section~\ref{sec:ui} provides further
+information about high-level user interfaces and extensibility, and
+Section~\ref{sec:practice} further illustrates how to employ the
+software in practice using a categorical data example.
+Section~\ref{sec:oddsandends} concludes the paper with a short
+discussion, some more details about the underlying theory can be found
+in an appendix.
 
 \section{Permutation tests in a nutshell} \label{sec:theory}
 
@@ -342,10 +344,10 @@ standard deviation:
 \z = \text{diag}(\Sigma)^{-1/2} (\mathbf{t} - \mu).
 \end{eqnarray}
 
-In the following, we describe a class structure for
-representing these theoretical objects along with possible choices of
-test statistics $c$ and computations or approximations of its
-associated reference distribution.
+In the following, we describe a class structure for representing these
+theoretical objects along with possible choices of test statistics $c$
+and computations or approximations of the associated reference
+distributions.
 
 
 \section{A class structure for permutation tests} \label{sec:class}
@@ -415,7 +417,7 @@ toLatex(c2t("IndependenceLinearStatistic"))
 @
 Class \Rclass{VarCovar} represents either a complete covariance matrix 
 or its diagonal elements only. By default, only the conditional variances
-are stored, the whole covariance matrix can be computed upon request (see below).
+are stored, the whole covariance matrix can be computed as needed (see below).
 In the rotating rats example, such an object is easily created via
 
 <<Ex-IndependenceLinearStatistic, echo = TRUE>>=
@@ -581,7 +583,7 @@ All of them can be queried for probabilities, quantiles, etc., using
 suitable methods (see Table~\ref{tab:dists} for an overview).
 New methods for computing or approximating the conditional distribution
 can be integrated into the framework via suitable
-inheritance of \Rclass{PValue} (an example is given in Section~\ref{sec:ui}).
+inheritance from \Rclass{PValue} (an example is given in Section~\ref{sec:ui}).
 
 \begin{table}[tb]
 \begin{center}
@@ -756,7 +758,7 @@ class \Rclass{PValue}.
 As an example, consider the computation of the exact $p$~value
 for testing independence of two continuous random variables. The identity
 transformation is used for both $g$ and $h$, thus a conditional version of
-the test for the Pearson correlation is constructed. We use a tiny artificial
+the test for zero Pearson correlation is constructed. We use a tiny artificial
 example where enumeration and evaluation of all possible permutations is still
 feasible. The function \code{sexact()} extracts both variables, computes
 all permutations using the function \code{permutations()} from \pkg{e1071}
@@ -972,7 +974,7 @@ it <- independence_test(js, distribution = approximate(B = 10000),
 pvalue(it)
 @
 Using this strategy, the null hypothesis of independence of job satisfaction
-and income can be rejected in favor of a linear dependency of both variables.
+and income can be rejected in favor of a positive association of both variables.
 Other choices of scores are also conceivable. Especially when there is an underlying
 numeric scale, interval midpoints are often used \citep[see][for an example]{Hothorn:2006:AmStat}.
 
