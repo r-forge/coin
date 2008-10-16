@@ -239,7 +239,7 @@ treatment & \Sexpr{paste(sort(rotarod$time[13:24]), collapse = " & ")} \\
 \end{center}
 \end{table}
 
-Utilizing \pkg{coin}, the hypothesis of independence of length of time and group assigment can
+Utilizing \pkg{coin}, the hypothesis of independence of length of time and group assignment can
 be specified by a formula which, together with a data frame \code{rotarod}, 
 serve as arguments to \code{independence_test}: 
 <<Ex, echo = TRUE>>=
@@ -907,7 +907,7 @@ Wilcoxon signed rank &  \code{f_trafo()} & \code{rank()} &
 
 The job satisfaction of African-American males in the USA \citep[][Table
 7.8]{agresti2002} is described by measures of income and reported job
-safisfaction in four (ordinal) classifications.  It seems natural to
+satisfaction in four (ordinal) classifications.  It seems natural to
 surmise that job satisfaction increases with income.  The data (see
 Figure~\ref{jsplot}) is given as a three-dimensional \Rclass{table} with
 variables \code{Income} and \code{Job.Satisfaction} according to
@@ -998,7 +998,7 @@ pvalue(independence_test(js, teststat = "max"), method = "single-step")
 These $p$~values can be interpreted in a way similar to 
 standardized contingency tables. The discrepancy between the
 global adjusted $p$~value shown above and the minimum single-step
-ajusted $p$~value is due to simulation variance. 
+adjusted $p$~value is due to simulation variance. 
 For more practical examples, including
 applications with numeric variables, we refer to \cite{Hothorn:2006:AmStat}.
 
