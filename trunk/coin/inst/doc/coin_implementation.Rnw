@@ -1,9 +1,16 @@
-\documentclass[article,nojss]{jss}
+\documentclass[nojss]{jss}
 
 %% packages
 \usepackage{thumbpdf}
 \usepackage{amsfonts,amstext,amsmath}
+
 %% need no \usepackage{Sweave.sty}
+\SweaveOpts{eps = FALSE, keep.source = TRUE, echo = FALSE}
+
+%\VignetteIndexEntry{Implementing a Class of Permutation Tests: The coin Package}
+%\VignetteDepends{coin, e1071, vcd}
+%\VignetteKeywords{conditional inference, exact distribution, conditional Monte Carlo, categorical data analysis, R}
+%\VignettePackage{coin}
 
 %% math commands
 \newcommand{\R}{\mathbb{R} }
@@ -38,6 +45,10 @@
 \Shorttitle{\pkg{coin}: Implementing a Class of Permutation Tests}
 
 \Abstract{
+  This description of the \proglang{R} package \pkg{coin} is a (slightly) modified
+  version of \cite{Hothorn+Hornik+VanDeWiel:2008} published in the
+  \textit{Journal of Statistical Software}.
+
   The \proglang{R} package \pkg{coin} implements a unified approach to
   permutation tests providing a huge class of independence tests  
   for nominal, ordered, numeric, and censored data as well as
@@ -63,12 +74,12 @@
 \Keywords{conditional inference, exact distribution, conditional Monte Carlo, categorical data analysis, \proglang{R}}
 \Plainkeywords{conditional inference, exact distribution, conditional Monte Carlo, categorical data analysis, R}
 
-%% \Volume{13}
-%% \Issue{9}
-%% \Month{September}
-%% \Year{2004}
-%% \Submitdate{2004-09-29}
-%% \Acceptdate{2004-09-29}
+\Volume{28}
+\Issue{8}
+\Month{November}
+\Year{2008}
+\Submitdate{2007-07-05}
+\Acceptdate{2008-10-21}
 
 \Address{
   Torsten Hothorn\\
@@ -93,9 +104,6 @@
   NL-1081 HV Amsterdam, The Netherlands\\
   E-mail: \email{mark.vdwiel@vumc.nl}
 }
-
-\SweaveOpts{eps = FALSE, keep.source = TRUE, echo = FALSE}
-
 
 <<coin-setup, echo = FALSE, results = hide>>=
 options(prompt = "R> ", continue = "+  ")
@@ -359,6 +367,8 @@ problem, for which a test statistic is computed subsequently.
 Objects for the associated reference distribution are constructed in Section~\ref{sec:distr}.
 Finally, in Section~\ref{sec:testobj}, everything is combined in a single object
 for the whole testing procedure.
+
+\newpage
 
 \subsection{Data, independence problems and test statistics} \label{sec:data}
 
@@ -859,7 +869,7 @@ packages will become deprecated in the future.
 \begin{tabular}{lllll} \\ \hline
 Test & \code{xtrafo} $g$ & \code{ytrafo} $h$ & \code{teststat} $c$ \\ \hline
 \multicolumn{4}{c}{} \\
-\multicolumn{4}{c}{Independent Samples} \\
+\multicolumn{4}{c}{Independent samples} \\
 \multicolumn{4}{c}{} \\
 Wilcoxon-Mann-Whitney & \code{f_trafo()} & \code{rank()} &
 \code{"scalar"} \\
@@ -886,7 +896,7 @@ Association &         &     &                 \\
 $K$-sample permutation test &  \code{f_trafo()} & any & any \\
 Maximally-selected statistics &  \code{maxstat_trafo()} & any & \code{"max"} \\
 \multicolumn{4}{c}{} \\
-\multicolumn{4}{c}{Dependent Samples} \\
+\multicolumn{4}{c}{Dependent samples} \\
 \multicolumn{4}{c}{} \\
 Friedman &  \code{f_trafo()} & \code{rank()} &
 \code{"quad"} \\
