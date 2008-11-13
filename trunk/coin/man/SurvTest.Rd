@@ -11,7 +11,7 @@
 \method{surv_test}{formula}(formula, data, subset = NULL,  
     weights = NULL, \dots)
 \method{surv_test}{IndependenceProblem}(object, 
-    ties.method = c("logrank", "HL"), ...)
+    ties.method = c("logrank", "HL", "average-scores"), ...)
 }
 \arguments{
   \item{formula}{a formula of the form \code{Surv(time, event) ~ x | block} where 
@@ -38,7 +38,7 @@
 
   The test implemented here is based on the classical logrank test,
   reformulated as a linear rank test. There are several ways of dealing with
-  ties. Here, two methods are implemented. The first one (\code{ties.method = "logrank"})
+  ties. Here, three methods are implemented. The first one (\code{ties.method = "logrank"})
   is described in Callaert (2003) for the uncensored case and leads, in 
   the presence of censored observations, to coefficients 
   \deqn{a_i = \delta_i - \sum_{j: X_j \le X_i} \delta_j / (n - |\{k: X_k < X_j\}|)}
@@ -47,7 +47,7 @@
   the groups). The second method is described in Hothorn & Lausen (2003) where
   the coefficients
   \deqn{a_i = \delta_i - \sum_{j: X_j \le X_i} \delta_j / (n - |\{k: X_k \le X_j\}| + 1)}
-  are suggested.
+  are suggested. Finally, average scores are offered as well.
 
   Note, however, that the test statistics will differ from the results
   of \code{\link[survival]{survdiff}} since the conditional variance 
