@@ -1,7 +1,7 @@
 
 <<style, echo = FALSE, results = tex>>=
-style <- "Biometrics"
-#style <- "Z"
+#style <- "Biometrics"
+style <- "Z"
 if (style == "Z")
     cat("\\input{headerZ}\n")
 if (style == "Biometrics")
