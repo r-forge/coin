@@ -136,25 +136,34 @@ fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 0.9) {
 
 ### logrank scores; with two different methods of handling
 ### ties
-logrank_trafo <- function(x, ties.method = c("logrank", "HL", "average-scores")) {
+logrank_trafo <-
+function (x, ties.method = c("logrank", "HL", "average-scores"))
+{
     ties.method <- match.arg(ties.method)
-    time <- x[,1]
-    event <- x[,2]
+    time <- x[, 1]
+    event <- x[, 2]
     n <- length(time)
     ot <- order(time, event)
+
     if (ties.method == "logrank") {
-        fact <- event / (n - rank(time, ties.method = "min") + 1)
+        fact <- event/(n - rank(time, ties.method = "min") + 1)
         return(event - cumsum(fact[ot])[rank(time, ties.method = "max")])
     }
     if (ties.method == "HL") {
         rt <- rank(time, ties.method = "max")
-        fact <- event / (n - rt + 1)
+        fact <- event/(n - rt + 1)
         return(event - cumsum(fact[ot])[rt])
     }
     if (ties.method == "average-scores") {
-        rt <- rank(time, ties.method = "random")
+        tmindiff <- min(diff(sort(time[!duplicated(time)])))
+        ### ties.method = "first" for events, "min" for censored obs.
+        jitter <- sort(runif(n, max = tmindiff / 2))[ot]
+        ot <- order(time - event * jitter)
+        rt <- rank(time - event * jitter, ties.method = "min")
         fact <- event / (n - rt + 1)
-        return(average_scores(event - cumsum(fact[ot])[rt], time))
+        sc <- cumsum(fact[ot])[rt] - event
+        ### average over events only
+        return(coin:::average_scores(sc, time + (1 - event) * runif(n)))
     }
 }
 
