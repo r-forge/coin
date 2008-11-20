@@ -39,12 +39,13 @@
   The test implemented here is based on the classical logrank test,
   reformulated as a linear rank test. There are several ways of dealing with
   ties. Here, three methods are implemented. The first one (\code{ties.method = "logrank"})
-  is described in Callaert (2003) for the uncensored case and leads, in 
-  the presence of censored observations, to coefficients 
+  is described, for example, in Kalbfleisch \& Prentice (2002, page 221f) or 
+  in Callaert (2003) and lead to coefficients 
   \deqn{a_i = \delta_i - \sum_{j: X_j \le X_i} \delta_j / (n - |\{k: X_k < X_j\}|)}
   for a linear rank statistic \eqn{T = \sum_{i = 1}^ n a_i U_i} 
   (in two-sample situations where \eqn{U_i = 0} or \eqn{U_i = 1} denotes
-  the groups). For further details, see Kalbfleisch \& Prentice (2002, page 221f).
+  the groups) with survival times $X_i$ and censoring indicator $\delta_i = 0$
+  for censored observations. For further details, see Kalbfleisch \& Prentice (2002).
   The second method is described in Hothorn \& Lausen (2003) where
   the coefficients
   \deqn{a_i = \delta_i - \sum_{j: X_j \le X_i} \delta_j / (n - |\{k: X_k \le X_j\}| + 1)}
@@ -67,6 +68,10 @@
 
 }
 \references{
+
+    John D. Kalbfleisch \& Ross L. Prentice (2002),
+    \emph{The Statistical Analysis of Failure Time Data} (2nd edition).
+    John Wiley \& Sons, Hoboken, New Jersey.
 
     Herman Callaert (2003), Comparing Statistical Software Packages:
     The Case of the Logrank Test in StatXact. 

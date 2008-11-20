@@ -90,7 +90,7 @@
 
    Torsten Hothorn \& Achim Zeileis (2008).
    Generalized maximally selected statistics, \emph{Biometrics}, 
-   \bold{64}(4), 1263-–1269.
+   \bold{64}(4), 1263--1269.
 
 }
 \examples{
