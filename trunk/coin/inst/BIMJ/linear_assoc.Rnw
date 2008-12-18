@@ -792,7 +792,7 @@ to work well.
 
 \subsection{Illustration}
 
-We might wan to compare the above test and its implementation with the
+We might want to compare the above test and its implementation with the
 results reported by \citet{Freidlin:2002}, we reanalyse a study on the association
 between a variant of the epidermal growth factor 
 (EGF) gene and malignant melanoma according to
