@@ -531,11 +531,13 @@ defined by a maximum over a series of standardised Cochran-Armitage tests, becau
 such a procedure has power under all three genetic models.
 
 We reformulate the problem and propose a conditional maximum test 
-of scores-specific linear-by-linear association tests. For both maximum-type 
+of scores-specific linear-by-linear association tests. For maximum-type, sum
 and quadratic test statistics the asymptotic expectation and covariance 
 can be derived in a closed form and the limiting distribution
-is known.
-We extend the area of application to stratified designs,
+is known. Both the limiting distribution and approximations of the
+exact conditional distribution can easily be computed using standard
+software packages. In addition,
+we extend the area of application to stratified designs,
 studies involving more than two groups and the simultaneous analysis
 of multiple loci by means of multiplicity-adjusted $p$-values for the
 underlying multiple Cochran-Armitage trend tests. The new test is applied
@@ -581,12 +583,17 @@ in cases and controls is approximated by simulation procedures
 by \citet{Freidlin:2002}
 since the unconditional asymptotic distribution is hard to derive.
 
-In this paper, we embed the MAX test as suggested by 
-\citet{Freidlin:2002} into a flexible framework for 
+In this paper, we show that the MAX test is just a simple special
+case of a general class of linear statistics whose conditional
+distribution is easy to compute. Thus, without additional
+theoretical effort, the MAX test enjoys all the nice properties
+of this class of conditional tests. Therefore, we embed the MAX test as suggested by 
+\citet{Freidlin:2002} into the flexible framework for 
 conditional independence tests introduced by 
 \citet{StrasserWeber1999}. The merits of doing so are
-i) the distribution for the MAX test can be easily 
-approximated by a three-dimensional normal distribution,
+i) the conditional reference distribution for the MAX test can be easily 
+approximated either by evaluating a three-dimensional normal distribution
+or by conditional Monte-Carlo experiments,
 ii) tests for stratified designs, designs with more than two
 groups and two or more loci can be defined in a rather 
 straightforward way, iii) the most likely underlying
@@ -625,14 +632,12 @@ high risk candidate allele and $a$ is any of the other alleles
  \end{table}
 
 
-We are interested in a comparison of the
-genotype distributions of cases and controls, i.e., the 
-probabilities $p_j = P(\text{case has genotype } j)$ and
-$q_j = P(\text{control has genotype } j)$ for $j \in \{aa, aA, AA\}$,
-especially in procedures with power against ordered alternatives:
+We are interested in a comparison of the genotype distributions, 
+i.e., the penetrances $f_j = P(\text{case} | j)$ for $j \in \{aa, aA, AA\}$:
 \begin{eqnarray*}
-H_0: p_j = q_j \text{ vs. } H_1: p_j < q_j \quad \text{for } j \in \{aa, aA, AA\}.
+H_0: f_{aa} = f_{aA} = f_{AA} \text{ vs. } H_1: f_{aa} \le f_{aA} \le f_{AA}
 \end{eqnarray*}
+where at least one of the inequalties in the alternative is strikt.
 
 The CA test statistic with scores 
 $\mathbb{\xi} = (\xi_{aa}, \xi_{aA}, \xi_{AA})$ 
@@ -641,21 +646,24 @@ is essentially (modulo standardisation)
 \text{CA}(\mathbb{\xi}) = \sum_{j \in \{aa, aA, AA\}} \xi_j r_j.
 \end{eqnarray}
 If the mode of inheritance is best described by the dominant model,
-the scores $\mathbb{\xi}_\text{dom}=(0,1,1)$ (genotype
-$aa$ vs. $aA$ and $AA$) will lead to a trend test with maximal power.
+the scores $\mathbb{\xi}_\text{dom}=(0,1,1)$ 
+($f_{aa} < f_{aA} = f_{AA}$) will lead to a trend test with maximal power.
 Under the recessive model the score vector 
-$\mathbb{\xi}_\text{rec}=(0,0,1)$ ($aa$ and $aA$ vs. $AA$)
+$\mathbb{\xi}_\text{rec}=(0,0,1)$ ($f_{aa} =  f_{aA} < f_{AA}$)
 is power optimal whereas a linear trend represented
 by scores $\mathbb{\xi}_\text{add}=(0,1,2)$ should be chosen
-when the mode if inheritance is additive \citep{Sasieni:1997,Slager:2001}. 
+when the mode if inheritance is additive, i.e., $f_{aa} < f_{aA} < f_{AA}$ 
+\citep{Sasieni:1997,Slager:2001}. 
 However, the underlying genetic model is rarely known \textit{a priori}. 
 Motivated by the problem of choosing the `right' score vector, 
 \citet{Freidlin:2002} proposed the MAX test as the maximum of three standardised 
 CA tests with scores 
 $\mathbb{\xi}_\text{dom}, \mathbb{\xi}_\text{add}$, and $\mathbb{\xi}_\text{rec}$
-as a global test for association. An alternative approach \citep{Zheng:2003}
+as a global test for association. A similar approach \citep{Zheng:2003,Zheng:2008}
 is to introduce a parameter $\eta$ for the score vector 
 $\mathbb{\xi}_\eta=(0,\eta,1)$ and to choose $\eta$ in a data-driven way.
+Again, this procedure (based on a grid of $\eta$ values) is a special 
+case of the general framework described here, see Appendix.
 
 In the following, we reformulate the problem and embed the MAX test into a general framework
 for conditional inference procedures, derive its limiting 
@@ -774,14 +782,22 @@ of a maximum-type statistic
 \begin{eqnarray*}
 c_\text{max}(\T, \mu, \Sigma)  = \max \left| \frac{\T - \mu}{\text{diag}(\Sigma)^{1/2}} \right|
 \end{eqnarray*}
-can be evaluated by computing three-dimensional normal probabilities. 
-Alternatively, a quadratic form 
+can be evaluated by computing three-dimensional normal probabilities. Here,
+$\text{diag}(\Sigma)^{1/2}$ are the conditional standard deviations of
+the elements of $\T$. Alternatively, either the sum (or average) statistic
+\begin{eqnarray*}
+c_\text{sum} = \frac{\mathbf{1}^\top \T - \mathbf{1}\mu}{\mathbf{1}^\top \Sigma \mathbf{1}}, \quad \mathbf{1} = (1, 1, 1)
+\end{eqnarray*}
+or a quadratic form 
+based on the Moore-Penrose inverse $\Sigma^+$ of the conditional covariance
+matrix $\Sigma$, i.e.,
 \begin{eqnarray*}
 c_\text{quad}(\T, \mu, \Sigma)  = (\T - \mu)^\top \Sigma^+ (\T - \mu)
 \end{eqnarray*}
 follows a $\chi^2$ distribution with two degrees of freedom. 
-The quadratic form, which is a competitor for the MAX test statistic,
-reveals high power for an average alternative while the maximum-type 
+The sum and quadratic form statistics, which are competitors for the MAX 
+test statistic,
+reveal high power for an average alternative while the maximum-type 
 form for a particular genetic alternative. Therefore, we focus on the 
 maximum-type statistics, particularly because information on the elementary 
 genetic alternative is available by multiplicity-adjusted $p$-values. 
@@ -1064,7 +1080,7 @@ is under practical circumstances. The frequency of
 correct model identifications and the power of the MAX test is investigated
 in some simple situations in the following.
 
-Many different patterns of penetrances $f_i$, 
+Many different patterns of penetrances $f_j$, $j \in \{aa, aA, AA\}$, 
 disease prevalence $p$, sample size of cases and controls 
 $R$, $S$ can be investigated in a simulation study. We will 
 focus on a high prevalent disease (i.e. $p=0.5$), penetrances according 
@@ -1106,7 +1122,7 @@ $\pi_\text{add}$, $\pi_\text{rec}$, $\pi_\text{dom}$ in Table~\ref{simtab}.
 Per definition all tests control the type I error rates. Clearly, the power is maximal for 
 the individual, unadjusted tests when the genetic model is known (bold marked). But the a 
 priori knowledge of the genetic model is commonly unrealistic. For balanced samples sizes the power 
-of the MAX test is independent of the underlying genetic model and non-inferior smaller 
+of the MAX test is independent of the underlying genetic model and marginal smaller 
 compared with the maximum power for the known model. Additionally to the global decision 
 that a significant association exists, the MAX test provide an adjusted $p$-value for the 
 most likely genetic model. In this case, the identification of the additive model is most difficult 
@@ -1147,9 +1163,11 @@ multiplicity-adjusted $p$-values for each of the individual models.
 When the mode of inheritance is unknown, remarkably high correct model 
 selection rates can be achieved. Based on a general framework for conditional 
 inference we extend the MAX test to stratified designs, $3 \times k$ tables 
-as well as multiple endpoints, i.e., multiple loci. Correlations between 
+as well as multiple loci. Correlations between 
 loci and corresponding association tests are taken into account leading to 
-more powerful multiple test procedure. 
+more powerful multiple test procedure. Further modifications and extensions
+and specific choices of $g$ and $h$ are described by \cite{Hothorn:2006:AmStat} 
+and \cite{Hothorn+Hornik+VanDeWiel:2008}.
 For small sample sizes, a better approximation of the $p$-values 
 can be obtained from Monte Carlo resampling techniques.
 For genome-wide association studies, computing time is a limiting factor; 
@@ -1210,5 +1228,30 @@ pvalue(it, method = "single-step")
 drop(pvalue(it, method = "single-step"))
 @
 
+The score independent approach by \cite{Zheng:2008} maximizes the
+Cochran-Armitage statistic over potential score vectors 
+$\xi_\eta = (0, \eta, 1)$, i.e., one is interested in the test statistic
+$c_\text{max}$ where the maximium is taken over a grid of $\eta$ values.
+This procedure can be performed by choosing appropriate transformation
+$g$, i.e.,
+<<Zheng-g, echo = TRUE>>=
+gZheng <- function(x) {
+    x <- unlist(x)
+    eta <- seq(from = 0, to = 1, by = 0.01)
+    tr <- sapply(eta, function(n) c(0, n, 1)[x])
+    colnames(tr) <- paste("eta", eta, sep = "_")
+    tr
+}
+it <- independence_test(me, xtrafo = gZheng, alternative = "greater")
+it
+@
+<<pZheng, echo = TRUE, eval = FALSE>>=
+pvalue(it, method = "single-step")
+@
+<<pZheng, echo = FALSE>>=
+drop(pvalue(it, method = "single-step"))
+@
+The test statistic takes its maximum for the score $(0, 0, 1)$ 
+(as above), its adjusted $p$-value is only marginally larger. 
 
 \end{document}
