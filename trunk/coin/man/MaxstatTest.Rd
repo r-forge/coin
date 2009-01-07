@@ -81,7 +81,7 @@
    Martin Schumacher (2004). Optimally Selected Prognostic Factors.
    \emph{Biometrical Journal} \bold{46}, 364--374.
 
-   J{\"o}rg M{\"u}ller \& Torsten Hothorn (2004).
+   J\"org M\"uller \& Torsten Hothorn (2004).
    Maximally Selected Two-Sample Statistics as a new Tool for
    the Identification and Assessment of Habitat Factors with
    an Application to Breeding Bird Communities in Oak Forests.
