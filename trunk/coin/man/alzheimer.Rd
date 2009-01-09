@@ -11,7 +11,7 @@
  \describe{
      \item{smoking}{a factor at levels \code{None}, \code{<10}, \code{10-20}
                     and \code{>20} (cigarettes per day).}
-     \item{disease}{a factor at levels \code{Alzheimer's}, \code{Other dementias} 
+     \item{disease}{a factor at levels \code{Alzheimer}, \code{Other dementias} 
                     and \code{Other diagnoses}.}
      \item{gender}{a factor at levels \code{Female} and \code{Male}.}
  }

@@ -44,7 +44,7 @@
   \deqn{a_i = \delta_i - \sum_{j: X_j \le X_i} \delta_j / (n - |\{k: X_k < X_j\}|)}
   for a linear rank statistic \eqn{T = \sum_{i = 1}^ n a_i U_i} 
   (in two-sample situations where \eqn{U_i = 0} or \eqn{U_i = 1} denotes
-  the groups) with survival times $X_i$ and censoring indicator $\delta_i = 0$
+  the groups) with survival times $X_i$ and censoring indicator \eqn{\delta_i = 0}
   for censored observations. For further details, see Kalbfleisch \& Prentice (2002).
   The second method is described in Hothorn \& Lausen (2003) where
   the coefficients
