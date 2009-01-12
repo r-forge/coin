@@ -3,10 +3,20 @@
 \usepackage{amstext}
 \usepackage{natbib}
 
+\title{Point to Point Answers for Manuscript BIMJ-2008-00203}
+
 \begin{document}
 
+\maketitle
 
-\section{Referee I}
+We would like to thank both referees and the associate editor for
+their helpful comments on our manscript ``Order-restricted Scores Test for
+the Evaluation of Population-based Case-control Studies when the
+Genetic Model is Unknown''. The manuscript has been revised taking all 
+the comments and suggestions into account; we comment on details
+in the following.
+
+\section*{Referee I}
 
 \begin{itemize}
 \item \textit{The author reformulated MAX into a different frame work. 
@@ -21,8 +31,9 @@ the application of the MAX test as described by
 \cite{Freidlin:2002} burdensome. In addition, our theory
 suggests straightforward extentions, such as
 tests for stratified designs, designs with more than two
-groups and two or more loci within one framework. 
-The abstract and introduction have been clarified.
+groups and two or more loci within one framework. This is not possible
+in an unconditional world. The abstract and introduction have been rewritten
+to express these points more prominently.
 
 \item
 \textit{Page 2 two lines above eqn (1): The statement of alternative was not 
@@ -30,20 +41,24 @@ correct. Because sume of p's and q's are 1. From H1, one would have
 $1 =p_{aa}+p_{aA}+p_{AA} < q_{aa}+q_{aA}+q_{AA}=1$. 
 The order should be stated in terms of risks, e.g., $P(\text{disease}|\text{a
 genotype})$.}
+
 Thank you very much for this hint. The alternative is now formulated
 in terms of penetrances.
 
 \item
 \textit{Page 4 (last equation), $c_\text{quad}$ is the same as Pearson's test?}.
-No, $c_\text{quad}$ is a quadratic form of three correlated CA-statistics.
+
+No, $c_\text{quad}$ is a quadratic form collapsing three correlated 
+CA-statistics.
 
 \item
 \textit{Page 5 (first line in sec 2.5): "wan" should be "want".}
+
 Thanks, fixed.
 \end{itemize}
 
 
-\section{Referee II}
+\section*{Referee II}
 \begin{itemize}
 \item
 \textit{
@@ -51,24 +66,30 @@ There is a need to clarify the connection between the results derived
 by Strasser and Weber (1999) and the MAX test statistic. This is 
 important because the approximation of the distribution of the MAX 
 test statistic was based on the work by Strasser and Weber (1999).}
+
 The MAX test is a special case of the linear statistics studied
-by \cite{StrasserWeber1999}. The introduction was extended to make
-is point clear.
+by \cite{StrasserWeber1999}. The introduction and technical parts
+of the paper were extended to make this point clear.
 
 \item
 \textit{Page 4, authors need to notation in two formulas in section 2.4, 
 such as the meaning of $\text{diag}(\Sigma)^{1/2}$ and $\Sigma^+$.}
+
 Done.
 
 \item
 \textit{
 We will focus on a high prevalent disease (i.e., $p=0.5$). 
 What is the rational for such consideration?}
-We investigated several prevalences and selected the high prevalent case.
+
+For the sake of comparability we choose a simulation
+design similar to previously published one, e.g., in
+\cite{Neuhauser:2002}, which investigated the high prevalent 
+case as well.
 
 \end{itemize}
 
-\section{AE}
+\section*{AE}
 
 \begin{itemize}
 \item 
@@ -98,17 +119,22 @@ background material will assist the reader in understanding why the authors are 
 rather computationally intensive approach.}
 
 We thank the AE for these insightful comments. In fact, the interesting
-paper by Zheng (2008) was published after the submission of our manuscript
+paper by \cite{Zheng:2008} was published after the submission of our manuscript
 to Biometrical Journal. For case-control studies, where the set of
-possible scores is $(0, \eta, 1)$, the procedure by Zheng (2003, 2008)
+possible scores is $(0, \eta, 1)$, the procedure by
+\cite{Zheng:2003,Zheng:2008}
 can be implemented using the theory presented in our paper as well.
 Two actions were taken: 1) We describe the connection of several relevant MAX
 tests proposed in the literature in the introduction more carefully 
 and 2) the Appendix has been extended analysing the Melanoma data with
-the MAX test by Zheng (2008). However, we think that the extensive literature
+the MAX test by \cite{Zheng:2008}. However, we think that the extensive literature
 on the usage of max-type test statistics for robust analysis of 
-ordinal data doesn't add much to the simple MAX statistic for three 
-a priori known score vectors.
+ordinal data doesn't add something to the simple MAX statistic for three 
+a priori known score vectors. In fact, the computations associated
+with most of the procedures mentioned above are burdensome (as the recent
+paper by Zheng indicates). In contrast,
+the conditional view on the problem adopted in our manuscript provides
+us with computationally simple (i.e., well-studied) solutions.
 
 \item
 \textit{
@@ -116,13 +142,17 @@ On page 2, in section 1, the authors claim that the MAX is an intuitive approach
 even more intuitive compromise test would seem to be the AVERAGE. Of course, when
 there are more than two plausible underlying models we know from the 1966 article that
 this may not even be the most robust linear test.}
-Thank you very much for this hint, the sum (or average) statistic was added.
+
+Thank you very much for this hint. We extended the description of possible
+test statistics to the sum (or average) statistic, which can be conveniently
+be described using the techniques mentioned in our manuscript.
 
 \item
 \textit{On page 3, the use of the term influence function should be avoided as in the
 robustness area the influence function (introduced by Huber and developed further by
 Hampel and others) has an entirely different meaning and use.}
-The term \emph{influence function} is used in a more general sense here,
+
+The term influence function is used in a more general sense here,
 allowing for both robust and non-robust influence functions $h$, see
 \cite{StrasserWeber1999} for the technical details.
 
@@ -133,7 +163,8 @@ method of combining 2x2 tables (using hypergeometric variance for each table) in
 of Cochran (1954) binomial variances. Asymptotically, they become equivalent and your
 correlations and tests are also very close to the Freidlin et al. (2002)
 paper.}
-Yes, thats a feature. By the same arguments, the two-sample $t$ test and
+
+Yes, but that's a feature. By the same arguments, the two-sample $t$ test and
 its permutation version are asymptotically equivalent because the
 $t$ distribution tends to the normal distribution with $n \rightarrow
 \infty$.
@@ -152,6 +183,7 @@ stratified r x c tables; although it has been used on stratified dose response d
 multiple cases or multiple control group contexts would also be somewhat new. If the
 authors could expand the analysis here, they would respond to the criticism of one of the
 referee’s that the results aren’t really an advance.}
+
 We agree that the choice of contrasts for this example is debatable.
 In fact, stratified $3 \times k$ tables can be handled by appropriate
 choices of the influence function $h$ (as outlined in the introduction,
@@ -168,9 +200,10 @@ hypothesis of no association of either locus with the disease, the data should n
 correlated. If the loci are near each other on the same chromosome the data may well be
 correlated under the null. Some discussion of the underlying genetics is needed here in
 order to justify the claims made.}
+
 The multiple testing procedure involved adapts itself to the correlation
 of the two response variables and maintains it size whether or not the
-two loci are correlated or not.
+two loci are correlated.
 
 \item
 \textit{
@@ -180,19 +213,23 @@ three models reject the null hypothesis. This may distract the reader from the m
 of the article, the development of a conditional MAX efficiency robust test and its use on
 stratified data. Replacing this example by an expanded discussion of the meta-analysis
 example would make the paper more interesting.}
+
 The paper is reproducible from the \textit{MAXtest} package vignette which
-contains all data and analyses.
+contains all data and analyses (freely available from
+\texttt{CRAN.R-project.org}), there is no need to actually print
+tables or simulation code.
 
 \item
 \textit{
 On page 8, last paragraph of Sec. 4—what does “non-inferior smaller compared with”
 mean?}
-The sentence has been rephrased.
+
+The sentence was misleading and has been rephrased.
 
 \item
 \textit{
-In Sec. 6, are multiple loci the same as multiple end points in clinical trials?
-}
+In Sec. 6, are multiple loci the same as multiple end points in clinical trials?}
+
 The sentence has been clarified.
 
 \item
@@ -201,9 +238,11 @@ In Sec. 6, the claim that the p-values are better approximated by re-sampling te
 may well be correct but it requires far more substantiation than provided in the current
 text.
 }
+
 The \emph{exact} $p$-value can be approximated up to any desired accuracy
 by conditional Monte-Carlo methods, regardless of the sample size. 
-The limiting distribution is adequate only for large sample sizes.
+The limiting distribution is adequate only for large sample sizes, as
+explained in Section 2.5.
 
 \end{itemize}
 
