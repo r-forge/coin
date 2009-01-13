@@ -112,7 +112,7 @@ maximum test, asymptotic distribution, conditional inference, mode of inheritanc
        Genetic Model is Unknown}
 
 \author[Ludwig A. Hothorn]{Ludwig A. Hothorn \inst{1}}
-\address[\inst{1}]{Institut f\"ur Biostatistik, Leibniz-Universit\"at Hannover \\
+\address[\inst{1}]{Institut f\"ur Biostatistik, Leibniz Universit\"at Hannover \\
 Herrenh\"auser Stra{\ss}e 2, D--30419 Hannover, Germany}
 
 \author[Torsten Hothorn]{Torsten Hothorn\footnote{Corresponding
@@ -204,7 +204,8 @@ groups and two or more loci can be defined in a rather
 straightforward way, iii) the most likely underlying
 mode of inheritance can be estimated by
 multiplicity-adjusted $p$-values for the
-three CA statistics under consideration, and iv) the analysis of 
+three CA statistics under consideration, iv) the simultaneous analysis
+of multiple loci, and v) the analysis of 
 genetic association studies using the MAX test and its newly
 introduced extension can be performed by already
 available software implementations of the 
@@ -242,7 +243,7 @@ i.e., the penetrances $f_j = P(\text{case} | j)$ for $j \in \{aa, aA, AA\}$:
 \begin{eqnarray*}
 H_0: f_{aa} = f_{aA} = f_{AA} \text{ vs. } H_1: f_{aa} \le f_{aA} \le f_{AA}
 \end{eqnarray*}
-where at least one of the inequalties in the alternative is strict.
+where at least one of the inequalities in the alternative is strict.
 
 The CA test statistic with scores 
 $\mathbb{\xi} = (\xi_{aa}, \xi_{aA}, \xi_{AA})$ 
@@ -410,7 +411,7 @@ maximum-type statistics, particularly because information on the elementary
 genetic alternative is available by multiplicity-adjusted $p$-values. 
 Note that, under any circumstances, the exact conditional distribution 
 can be approximated by conditional Monte-Carlo methods, which is especially 
-attractive for small sample sizes $N$ when we can't expect asymptotics 
+attractive for small sample sizes $N$ when we can not expect asymptotics 
 to work well.
 
 \subsection{Illustration}
@@ -513,12 +514,13 @@ In stratified designs, only permutations within each stratum, gender or
 family history, are 
 admissible; therefore, the expectation $\mu$ and covariance $\Sigma$ has
 to be computed separately for each stratum and is then aggregated
-over all possible strata. A special version of a stratified design is the commonly used Meta-analysis, 
+over all possible strata. A special version of a stratified design is the commonly used 
+meta-analysis, 
 including several independent studies as strata, see e.g. \citet{Kavvoura2008}. 
 In the absence of a a priori assumption for a particular mode of inheritance, recently 
  \citet{Salanti2008} proposed a Bayesian approach.
  
- In a recent meta-analyis of genome-wide association studies variants on chromosome 9p21.3 
+ In a recent meta-analysis of genome-wide association studies variants on chromosome 9p21.3 
  were identified affecting the coronary artery disease \citep{Schunkert2008} 
  where all seven studies revealed the same additive mode of inheritance using the here proposed approach.
 
@@ -611,7 +613,8 @@ recessive  &  0.7241&0.9819 \\ \hline
 
 Recently, \citet{Bagos2007} proposed a penalty-free selection approach for the underlying mode of inheritance
 based on the parameter estimates in a logistic regression model. Here, we re-analyse their meta-analysis 
-data on the association of KIR6.2 gene polymorphism with type II diabetes (Table 1 on page 3)
+data on the association of KIR6.2 gene polymorphism with type II diabetes 
+\citep[Table~1 on page 3 in][]{Bagos2007}.
 
 
 
@@ -810,7 +813,7 @@ via:
 \end{Soutput}
 \end{Schunk}
 
-The score independent approach by \cite{Zheng:2008} maximizes the
+The score independent approach by \cite{Zheng:2008} maximises the
 Cochran-Armitage statistic over potential score vectors 
 $\xi_\eta = (0, \eta, 1)$, i.e., one is interested in the test statistic
 $c_\text{max}$ where the maximium is taken over a grid of $\eta$ values.
