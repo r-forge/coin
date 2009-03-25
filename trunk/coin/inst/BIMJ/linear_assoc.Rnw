@@ -498,8 +498,8 @@ structure(list(Study = structure(c(1L, 1L, 1L, 1L, 1L, 1L, 1L,
 \Accepteddate{xx April 2008}
 \Dateposted{xx April 2008}
 %%
-\keywords{genetic association, case-control study, Cochran-Armitage trend test,
-maximum test, asymptotic distribution, conditional inference, mode of inheritance.
+\keywords{genetic association, case-control study, robust trend test,
+maximum test, conditional inference, mode of inheritance.
 }
 
 \title[Order-restricted Scores Test]{Order-restricted Scores Test for the Evaluation of \\
@@ -531,7 +531,7 @@ defined by a maximum over a series of standardised Cochran-Armitage tests, becau
 such a procedure has power under all three genetic models.
 
 We reformulate the test problem and propose a conditional maximum test 
-of scores-specific linear-by-linear association tests. For maximum-type, sum
+of scores-specific linear-by-linear association tests \citep{bookagresti2002}. For maximum-type, sum
 and quadratic test statistics the asymptotic expectation and covariance 
 can be derived in a closed form and the limiting distribution
 is known. Both the limiting distribution and approximations of the
@@ -572,7 +572,7 @@ as shown by \citet{Freidlin:2002}.
 Therefore, inference procedures
 with good power under \textit{all} three genetic models 
 are of special interest.
-An intuitive idea is to construct a test based on all three possible
+An appealing approach is to construct a test based on all three possible
 trend tests, for example utilising the maximum of the standardised 
 test statistics of the CA tests which are optimal under the dominant, 
 additive, and recessive model.
@@ -664,7 +664,8 @@ as a global test for association. A similar approach \citep{Zheng:2003,Zheng:200
 is to introduce a parameter $\eta$ for the score vector 
 $\mathbb{\xi}_\eta=(0,\eta,1)$ and to choose $\eta$ in a data-driven way.
 This procedure (based on a grid of $\eta$ values) is a special 
-case of the general framework described in the following, see the Appendix for more details.
+case of the general framework described in the following, see the 
+\texttt{MAXtest} vignette (Section~\ref{Comp}) for more details.
 
 In the following, we reformulate the test problem and embed the MAX test into a general framework
 for conditional inference procedures, derive its limiting 
@@ -799,11 +800,16 @@ c_\text{quad}(\T, \mu, \Sigma)  = (\T - \mu)^\top \Sigma^+ (\T - \mu)
 can be used and 
 follow a standard normal or a $\chi^2$ distribution with two degrees of freedom, respectively. 
 The sum and quadratic form statistics, which are competitors for the MAX 
-test statistic,
-reveal high power for an average alternative while the maximum-type 
-form for a particular genetic alternative. Therefore, we focus on the 
-maximum-type statistics, particularly because information on the elementary 
-genetic alternative is available by multiplicity-adjusted $p$-values. 
+test statistic, reveal high power for an average alternative while the maximum-type 
+form for a particular genetic alternative.
+In addition, simple linear combinations of the standardized optimum tests for each of
+the models have been proposed \cite{Gastwirth:1985}. Often the most appropriate test is not the
+average of all these tests but a linear combination of a few ``extreme'' members. Nonlinear
+MAX type tests have greater efficiency robustness properties when the minimum
+correlation between the optimal tests for the models considered is less than $.70$ 
+\cite{Freidlin+Podgor+Gastwirth:1999} so we focus on a MAX test. A further advantage of 
+maximum-type statistics is that information about the likely genetic model underlying the data 
+is available using multiplicity-adjusted $p$-values.
 Note that, under any circumstances, the exact conditional distribution 
 can be approximated by conditional Monte-Carlo methods, which is especially 
 attractive for small sample sizes $N$ when we can not expect asymptotics 
@@ -827,7 +833,7 @@ me <- t(me)
 
 \begin{table}
 \begin{center}
-\caption{Melanoma data \label{mel}}
+\caption{Melanoma data. \label{mel}}
 \vspace*{0.5cm}
 \begin{tabular}{l l l l l}
 <<melanoma-tabular, echo = FALSE, results = tex>>=
@@ -893,7 +899,10 @@ three different CA test statistics as reported by
 
 \begin{table}
 \begin{center}
-\caption{MAX test for Melanoma data \label{melres}}
+\caption{MAX test for Melanoma data with linear statistic
+         $\T$, its conditional expectation $\mu$, standard deviation 
+         $\sigma$ and corresponding standardized statistic along with 
+         multiplicity-adjusted $p$-values. \label{melres}}
 \vspace*{0.5cm}
 \begin{tabular}{l l l l l l l l}
  & $\T$ & $\mu$ & $ \sigma$ & $(\T - \mu) / \sigma$ & $p_\text{asympt}$ & $p_\text{step-down}$ \\ \hline
@@ -918,7 +927,8 @@ underlying genetic model. Multiplicity-adjusted $p$-values
 for each of the dominant, additive, and recessive tests indicate
 which mode of inheritance describes the data best
 (see Section~\ref{sim} in addition):
-It seems that the recessive model is appropriate for the Melanoma data.
+These results suggest that the cancer follows a recessive model, although
+an additive or intermediate model cannot be ruled out based on these data.
 
 We might want to check whether the asymptotic approximation work well enough
 in this situation. The exact conditional
@@ -1028,7 +1038,7 @@ in order to maintain an overall significance level.
 
 \begin{table}
 \begin{center}
-\caption{MAX test for psoriasis data: Asymptotic adjusted $p$-values \label{pstab}}
+\caption{MAX test for psoriasis data: Asymptotic multiplicity-adjusted $p$-values. \label{pstab}}
 \vspace*{0.5cm}
 \begin{tabular}{lrr}
  & TNFA\_238 & IL1B\_511 \\ \hline
@@ -1064,7 +1074,10 @@ out[,2] <- formatC(out[,2], digits = 4, format = "f")
 
 \begin{table}
 \begin{center}
-\caption{MAX test for Type II diabetes data \label{diares}}
+\caption{MAX test for Type II diabetes data  with linear statistic  
+         $\T$, its conditional expectation $\mu$, standard deviation 
+         $\sigma$ and corresponding standardized statistic along with 
+         multiplicity-adjusted $p$-values. \label{diares}}
 \vspace*{0.5cm}
 \begin{tabular}{l l l l l l l l}
  & $\T$ & $\mu$ & $ \sigma$ & $(\T - \mu) / \sigma$ & $p_\text{asympt}$ & $p_\text{step-down}$ \\ \hline
@@ -1103,21 +1116,23 @@ $\pi_\text{add}$, $\pi_\text{rec}$, $\pi_\text{dom}$ in Table~\ref{simtab}.
 
 \begin{table}
 \begin{center}
-\caption{Type I error rate and empirical power estimates: prevalence $p=0.5$, 10000 runs \label{simtab}}
+\caption{Type I error rate and empirical power estimates ($\pi$)for prevalence $p=0.5$ based on 10000 runs
+         with sample sizes $R$ (cases) and $S$ (controls) along with correct model identification rates
+         $\psi$. \label{simtab}}
 \vspace*{0.5cm}
   \begin{tabular}{l l l l| l l l |l l l}
-        Model & R & S & $\pi_{\text{global}}$ &  $\psi_{add}$ & $\psi_\text{rec}$ & $\psi_\text{dom}$ & $\pi_\text{add}$ & $\pi_\text{rec}$ & $\pi_\text{dom}$   \\
+        Model & R & S & $\pi_{\text{global}}$ &  $\psi_\text{add}$ & $\psi_\text{rec}$ & $\psi_\text{dom}$ & $\pi_\text{add}$ & $\pi_\text{rec}$ & $\pi_\text{dom}$   \\
  \hline
  Null & 200 & 200 & 0.048&  0.012 & 0.017&  0.019           &   0.051 & 0.047 & 0.049 \\
- Dom  & 200 & 200 & 0.85 &  0.13 &  0.01 &  \textit{0.71} & 0.75 &  0.23 &  \textbf{0.91} \\
- Add  & 200 & 200 & 0.84 &  \textit{0.53} & 0.10  & 0.21 &  \textbf{0.88} & 0.71 &  0.78 \\
- Rec  & 200 & 200 & 0.86 &  0.16 &  \textit{0.69} & 0.01 &  0.80 &  \textbf{0.91} & 0.28 \\
- Dom  & 100 & 300 & 0.72 &  0.16 &  0.01 &  \textit{0.55}&  0.63 &  0.21 & \textbf{0.80} \\
- Add  & 100 & 300 & 0.73 &  \textit{0.43} & 0.14 &  0.16 &  \textbf{0.78} & 0.60 &  0.65 \\
- Rec  & 100 & 300 & 0.77 &  0.16 &  \textit{0.60} & 0.01 &  0.67 &  \textbf{0.82} & 0.22  \\
- Dom  & 300 & 100 & 0.76 &  0.11 &  0.01 &  \textit{0.64} & 0.66 &  0.19 &  \textbf{0.82} \\
- Add  & 300 & 100 & 0.75 &  \textit{0.42} & 0.09 &  0.24 &  \textbf{0.79} & 0.59 &  0.69 \\
- Rec  & 300 & 100 & 0.75 &  0.17 &  \textit{0.55} & 0.01 &  0.69 &  \textbf{0.82 }& 0.24 \\
+ dominant  & 200 & 200 & 0.85 &  0.13 &  0.01 &  \textit{0.71} & 0.75 &  0.23 &  \textbf{0.91} \\
+ additive  & 200 & 200 & 0.84 &  \textit{0.53} & 0.10  & 0.21 &  \textbf{0.88} & 0.71 &  0.78 \\
+ recessive  & 200 & 200 & 0.86 &  0.16 &  \textit{0.69} & 0.01 &  0.80 &  \textbf{0.91} & 0.28 \\
+ dominant  & 100 & 300 & 0.72 &  0.16 &  0.01 &  \textit{0.55}&  0.63 &  0.21 & \textbf{0.80} \\
+ additive  & 100 & 300 & 0.73 &  \textit{0.43} & 0.14 &  0.16 &  \textbf{0.78} & 0.60 &  0.65 \\
+ recessive  & 100 & 300 & 0.77 &  0.16 &  \textit{0.60} & 0.01 &  0.67 &  \textbf{0.82} & 0.22  \\
+ dominant  & 300 & 100 & 0.76 &  0.11 &  0.01 &  \textit{0.64} & 0.66 &  0.19 &  \textbf{0.82} \\
+ additive  & 300 & 100 & 0.75 &  \textit{0.42} & 0.09 &  0.24 &  \textbf{0.79} & 0.59 &  0.69 \\
+ recessive  & 300 & 100 & 0.75 &  0.17 &  \textit{0.55} & 0.01 &  0.69 &  \textbf{0.82 }& 0.24 \\
 \hline
  \end{tabular}
 \end{center}
@@ -1135,7 +1150,7 @@ because of the two equal competitors; whereas the identification of the dominant
 model is easier because the additive model is the only competitor. For unbalanced 
 designs the power decreases although the total sample size remains constant.
 
-\section{Computational Details}
+\section{Computational Details \label{Comp}}
 
 The \Rpackage{coin} add-on package \citep{Hothorn:2006:AmStat, PKG:coin, Hothorn+Hornik+VanDeWiel:2008}
 to the \textsf{R} system for statistical computing \citep{rcore2007}
@@ -1144,14 +1159,13 @@ sketched in this section. The analysis of an association study
 by the MAX test only requires the user to set-up the score function $g$. Then, the
 function \texttt{independence\_test} can be used to perform 
 the MAX test and to compute multiplicity-adjusted $p$-values.
-For the Melanoma data, the most important parts of such an analysis are
-given in the Appendix. All analyses presented in this paper
+All analyses presented in this paper
 are reproducible by means of the \texttt{MAXtest} package vignette
 accessible from within \textsf{R} via
 <<vignette, echo = TRUE, eval = FALSE>>=
 vignette("MAXtest", package = "coin")
 @
-
+This dynamic document also includes the simulation source code.
 
 \section{Conclusions}
 
@@ -1180,8 +1194,7 @@ a further advantage for the above approach \citep{Ziegler2008}.
 
 The proposed procedures are easily 
 applicable using the computational tools provided by the \textsf{R} 
-add-on package \Rpackage{coin} as illustrated in the Appendix 
-and a dedicated package vignette. A future modification will be 
+add-on package \Rpackage{coin} as illustrated in a dedicated package vignette. A future modification will be 
 the use of model-specific genomic-control corrected tests 
 analogously to \citet{Zang:2007} in the possible case of 
 population stratification.
@@ -1192,6 +1205,8 @@ us with the psoriasis data.
 
 \bibliographystyle{bimj}
 \bibliography{references}
+
+\end{document}
 
 \newpage
 
