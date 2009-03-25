@@ -1116,7 +1116,7 @@ $\pi_\text{add}$, $\pi_\text{rec}$, $\pi_\text{dom}$ in Table~\ref{simtab}.
 
 \begin{table}
 \begin{center}
-\caption{Type I error rate and empirical power estimates ($\pi$)for prevalence $p=0.5$ based on 10000 runs
+\caption{Type I error rate and empirical power estimates ($\pi$) for prevalence $p=0.5$ based on 10000 runs
          with sample sizes $R$ (cases) and $S$ (controls) along with correct model identification rates
          $\psi$. \label{simtab}}
 \vspace*{0.5cm}
