@@ -499,7 +499,7 @@ structure(list(Study = structure(c(1L, 1L, 1L, 1L, 1L, 1L, 1L,
 \Dateposted{xx April 2008}
 %%
 \keywords{genetic association, case-control study, robust trend test,
-maximum test, conditional inference, mode of inheritance.
+maximum test, conditional inference.
 }
 
 \title[Order-restricted Scores Test]{Order-restricted Scores Test for the Evaluation of \\
