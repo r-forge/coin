@@ -408,11 +408,11 @@ The sum and quadratic form statistics, which are competitors for the MAX
 test statistic, reveal high power for an average alternative while the maximum-type 
 form for a particular genetic alternative.
 In addition, simple linear combinations of the standardized optimum tests for each of
-the models have been proposed \cite{Gastwirth:1985}. Often the most appropriate test is not the
+the models have been proposed \citep{Gastwirth:1985}. Often the most appropriate test is not the
 average of all these tests but a linear combination of a few ``extreme'' members. Nonlinear
 MAX type tests have greater efficiency robustness properties when the minimum
 correlation between the optimal tests for the models considered is less than $.70$ 
-\cite{Freidlin+Podgor+Gastwirth:1999} so we focus on a MAX test. A further advantage of 
+\citep{Freidlin+Podgor+Gastwirth:1999}, thereofore, we focus on the MAX test. A further advantage of 
 maximum-type statistics is that information about the likely genetic model underlying the data 
 is available using multiplicity-adjusted $p$-values.
 Note that, under any circumstances, the exact conditional distribution 
@@ -670,7 +670,7 @@ $\pi_\text{add}$, $\pi_\text{rec}$, $\pi_\text{dom}$ in Table~\ref{simtab}.
 
 \begin{table}
 \begin{center}
-\caption{Type I error rate and empirical power estimates ($\pi$)for prevalence $p=0.5$ based on 10000 runs
+\caption{Type I error rate and empirical power estimates ($\pi$) for prevalence $p=0.5$ based on 10000 runs
          with sample sizes $R$ (cases) and $S$ (controls) along with correct model identification rates
          $\psi$. \label{simtab}}
 \vspace*{0.5cm}
@@ -706,7 +706,7 @@ designs the power decreases although the total sample size remains constant.
 
 \section{Computational Details \label{Comp}}
 
-The \Rpackage{coin} add-on package \citep{Hothorn:2006:AmStat, PKG:coin, Hothorn+Hornik+VanDeWiel:2008}
+The \Rpackage{coin} add-on package \citep{Hothorn:2006:AmStat, Hothorn+Hornik+VanDeWiel:2008, PKG:coin}
 to the \textsf{R} system for statistical computing \citep{rcore2007}
 provides an implementation of the conditional inference framework
 sketched in this section. The analysis of an association study 
