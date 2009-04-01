@@ -1,1 +1,0 @@
-../HumanHeredity/linear_assoc.Rnw
