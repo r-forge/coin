@@ -1038,7 +1038,7 @@ in order to maintain an overall significance level.
 
 \begin{table}
 \begin{center}
-\caption{MAX test for psoriasis data: Asymptotic multiplicity-adjusted $p$-values. \label{pstab}}
+\caption{MAX test for Psoriasis data: Asymptotic multiplicity-adjusted $p$-values. \label{pstab}}
 \vspace*{0.5cm}
 \begin{tabular}{lrr}
  & TNFA\_238 & IL1B\_511 \\ \hline
@@ -1201,7 +1201,7 @@ population stratification.
 
 \section{Acknowledgements} 
 We would like to thank Andreas Ziegler and Inke R. Koenig for providing 
-us with the psoriasis data.
+us with the Psoriasis data.
 
 \bibliographystyle{bimj}
 \bibliography{references}
