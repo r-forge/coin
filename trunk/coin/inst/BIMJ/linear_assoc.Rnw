@@ -2,7 +2,7 @@
 \documentclass[bimj,fleqn]{w-art}
 \usepackage{times}
 \usepackage{w-thm}
-\usepackage[authoryear]{natbib}
+\usepackage[authoryear,longnamesfirst]{natbib}
 \setlength{\bibsep}{2pt}
 \setlength{\bibhang}{2em}
 
@@ -531,7 +531,7 @@ defined by a maximum over a series of standardised Cochran-Armitage tests, becau
 such a procedure has power under all three genetic models.
 
 We reformulate the test problem and propose a conditional maximum test 
-of scores-specific linear-by-linear association tests \citep{bookagresti2002}. For maximum-type, sum
+of scores-specific linear-by-linear association tests. For maximum-type, sum
 and quadratic test statistics the asymptotic expectation and covariance 
 can be derived in a closed form and the limiting distribution
 is known. Both the limiting distribution and approximations of the
@@ -821,7 +821,7 @@ In order to compare the conditional test and its implementation with the
 unconditional results reported by \citet{Freidlin:2002}, we reanalyse a study on the association
 between a variant of the epidermal growth factor 
 (EGF) gene and malignant melanoma according to
-\citet[Table~\ref{mel},][]{Shahbazi:2002}.
+\cite{Shahbazi:2002}. The data are given in Table~~\ref{mel}.
 
 <<melanoma-table, echo = FALSE>>=
 me <- as.table(matrix(c( 6,  8, 10,
@@ -948,7 +948,7 @@ of the control can compare the genotype
 of cases with early and late onset of a certain disease. 
 A score can be attached to each group, for example 
 $1$ to the control group and $-1/2$ for both the early and late onset
-cases leading to a linear-by-linear association test. Alternatively,
+cases leading to a linear-by-linear association test \citep{bookagresti2002}. Alternatively,
 a trend in the onset of the disease can be described by scores $0, 1, 2$
 for the three groups.
 
@@ -1054,7 +1054,8 @@ for (i in 1:nrow(pvals))
 Recently, \citet{Bagos2007} proposed a penalty-free selection approach for the underlying mode of inheritance
 based on the parameter estimates in a logistic regression model. Here, we re-analyse their meta-analysis 
 data on the association of KIR6.2 gene polymorphism with type II diabetes 
-\citep[Table~1 on page 3 in][]{Bagos2007}.
+\citep[Table~1 on page 3 in][]{Bagos2007}. The results given in Table~\ref{diares} lead to the
+conclusion that either an additive or recessive mode of inheritance can be assumed.
 
 
 <<bagos-coin, echo = FALSE>>=
@@ -1108,7 +1109,7 @@ of $N=400$ divided into the balanced $R=S=200$ and several unbalanced sampling s
 Unbalanced data are of interest because real data examples exist with 
 seriously higher control sample size, see e.g. the data in Table~\ref{mel}, 
 or with more cases, see e.g. the IL13 polymorphism in atopic 
-dermatitis \cite{Neuhauser:2002}, Table 4. For the proposed MAX test both the global 
+dermatitis \citet[][Table~4 therein]{Neuhauser:2002}. For the proposed MAX test both the global 
 power $\pi_\text{global}$(the decision rate in favour of any alternative) and the 
 correct model identification rates $\psi_\text{add}$,$\psi_\text{rec}$,$\psi_\text{dom}$ 
 are compared with the power of the individual genetic model tests 
