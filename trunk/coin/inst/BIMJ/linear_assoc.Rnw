@@ -2,7 +2,7 @@
 \documentclass[bimj,fleqn]{w-art}
 \usepackage{times}
 \usepackage{w-thm}
-\usepackage[authoryear,longnamesfirst]{natbib}
+\usepackage[authoryear]{natbib}
 \setlength{\bibsep}{2pt}
 \setlength{\bibhang}{2em}
 
@@ -21,6 +21,10 @@
 \usepackage{thumbpdf}
 \usepackage{rotating}
 %%\usepackage{floatflt}
+
+\newenvironment{coi}{\begin{small}\paragraph{Conflict of Interests Statement}}%
+                    {\end{small}}
+
 
 \newcommand{\R}{\mathbb{R} }
 \newcommand{\Prob}{\mathbb{P} }
@@ -1200,9 +1204,15 @@ the use of model-specific genomic-control corrected tests
 analogously to \citet{Zang:2007} in the possible case of 
 population stratification.
 
-\section{Acknowledgements} 
+\begin{acknowledgement} 
 We would like to thank Andreas Ziegler and Inke R. Koenig for providing 
 us with the Psoriasis data.
+\end{acknowledgement}
+
+\begin{coi}
+The authors have declared no conflict of interest.
+\end{coi}
+
 
 \bibliographystyle{bimj}
 \bibliography{references}
