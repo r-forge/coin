@@ -1,4 +1,10 @@
 
+		CHANGES in `coin' VERSION 1.0-15
+
+    o     use `quantile(..., type = 1)' for computing approximate
+          quantiles (suggested by Fritz Scholz)
+
+
 		CHANGES in `coin' VERSION 1.0-14
 
     o     documentation Biobase:expressionSet
