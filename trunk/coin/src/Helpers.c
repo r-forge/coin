@@ -109,10 +109,10 @@ SEXP R_blocksetup (SEXP block) {
                                 
 void C_blockperm (SEXP blocksetup, int *ans) {
                   
-    int n, nlevels, l, nlev, j, *iindex, *ipindex;
+    int nlevels, l, nlev, j, *iindex, *ipindex;
     SEXP indices, dummies, pindices, index, dummy, pindex;
 
-    n = INTEGER(VECTOR_ELT(blocksetup, 0))[0];
+    /* n = INTEGER(VECTOR_ELT(blocksetup, 0))[0]; not used*/
     nlevels = INTEGER(VECTOR_ELT(blocksetup, 0))[1];
     indices = VECTOR_ELT(blocksetup, 1);
     dummies = VECTOR_ELT(blocksetup, 2);

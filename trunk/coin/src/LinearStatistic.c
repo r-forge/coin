@@ -194,7 +194,7 @@ void C_ExpectCovarLinearStatistic(const double* x, const int p,
                                   const double* weights, const int n,
                                   const SEXP expcovinf, SEXP ans) {
 
-    int i, j, k, pq, ip;
+    int i, j, k, pq;
     double sweights = 0.0, f1, f2, tmp;
     double *swx, *CT1, *CT2, *Covy_x_swx, 
            *dExp_y, *dCov_y, *dExp_T, *dCov_T;
@@ -222,7 +222,6 @@ void C_ExpectCovarLinearStatistic(const double* x, const int p,
         /*  observations with zero case weights do not contribute */
         if (weights[i] == 0.0) continue;
     
-        ip = i*p;
         for (k = 0; k < p; k++) {
             tmp = weights[i] * x[k * n + i];
             swx[k] += tmp;
@@ -329,7 +328,7 @@ void C_LinearStatistic (const double *x, const int p,
                         const double *weights, const int n,
                         double *ans) {
               
-    int i, j, k, kp, kn, ip;
+    int i, j, k, kp, kn;
     double tmp;
 
     for (k = 0; k < q; k++) {
@@ -345,7 +344,6 @@ void C_LinearStatistic (const double *x, const int p,
                 
             tmp = y[kn + i] * weights[i];
                 
-            ip = i * p;
             for (j = 0; j < p; j++)
                  ans[kp + j] += x[j*n + i] * tmp;
         }
