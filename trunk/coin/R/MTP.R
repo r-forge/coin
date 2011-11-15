@@ -130,3 +130,88 @@ dbonf <- function(object, ...) {
    ret
 }
 
+#####################################
+## Westfall (1997) method in coin ###
+#####################################
+## Basic code for npmcp() taken from pqfunctions.R in package 
+## multcomp
+
+### cf. mcp(x = "Tukey") in multcomp
+mcp_trafo <- function(...) {
+
+  args <- list(...)
+  stopifnot(length(args) == 1)
+
+  ret <- function(data) {
+
+      x <- data[[names(args)]]
+      stopifnot(is.factor(x))
+      C <- args[[1]]
+      if (is.character(C)) {
+          C <- contrMat(table(x), "Tukey")
+      } else {
+          stopifnot(is.matrix(C))
+          stopifnot(ncol(C) == nlevels(x))
+      }
+      ret <- trafo(data, 
+                   factor_trafo = function(x) {   
+                       model.matrix(~ x - 1) %*% t(C)
+                   })
+      attr(ret, "contrast") <- C
+      ret
+  }
+  ret
+}
+
+### compute p-values under subset pivotality
+npmcp <- function(object) {
+
+    ### extract from object
+    y <- object@statistic@y[[1]]
+    x <- object@statistic@x[[1]]
+    ytrafo <- object@statistic@ytrafo
+    alternative <- object@statistic@alternative
+    distribution <- object@call$distribution
+    stand_tstat <- statistic(object, type = "standardized")
+    tstat <- switch(alternative,
+                    "less" = stand_tstat,
+                    "greater" = -stand_tstat,
+                    "two.sided" = -abs(stand_tstat))
+
+    # get contrast matrix from xtrans
+    C <- attr(object@statistic@xtrans, "contrast")
+    stopifnot(inherits(C, "matrix"))
+  
+    # order test statistics, most "extreme" one comes first
+    Corder <- C[order(tstat), , drop = FALSE]
+  
+    # compute allowed subsets of hypotheses
+    # returns list consisting of lists (one for each rejection step of H0)
+    ms <- multcomp:::maxsets(Corder)
+
+    p <- sapply(ms, function(sub) { # for every list of allowed subsets
+        max(sapply(sub, function(s) { # for every subset
+            Ctmp <- Corder[s, , drop = FALSE] # current allowed subset
+            # x levels in current subset
+            xlev <- apply(Ctmp, MARGIN = 2, function(col) any(col != 0))
+      
+            dattmp <- subset(data.frame(y = y, x = x),
+                x %in% names(xlev)[xlev]) # relevant data subset
+            pvalue(
+                independence_test(y ~ x,
+                          data = dattmp,
+                          xtrafo = mcp_trafo(x = Ctmp),
+                          ytrafo = ytrafo, 
+                          distribution = distribution,
+                          alternative = alternative)
+           )
+        }))
+    })
+
+    for (i in 2:length(p))
+        p[i] <- max(p[i-1], p[i]) # forces pvalue monotonicity
+
+    ret <- matrix(p[rank(tstat)])
+    attr(ret, "dimnames") <- attr(tstat, "dimnames")
+    return(ret)
+}

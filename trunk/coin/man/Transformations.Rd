@@ -11,6 +11,7 @@
 \alias{logrank_trafo}
 \alias{f_trafo}
 \alias{of_trafo}
+\alias{mcp_trafo}
 \title{ Functions for Data Transformations }
 \description{
   Rank-transformations for numerical data or dummy codings of factors.
@@ -29,6 +30,7 @@ maxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 logrank_trafo(x, ties.method = c("logrank", "HL", "average-scores"))
 f_trafo(x)
 of_trafo(x)
+mcp_trafo(...)
 }
 \arguments{
   \item{data}{an object of class \code{data.frame}.}
@@ -57,6 +59,9 @@ of_trafo(x)
     For ties handling in case of censored data, see \code{\link{surv_test}}.}
   \item{minprob}{a fraction between 0 and 0.5.}
   \item{maxprob}{a fraction between 0.5 and 1.}
+  \item{\dots}{factor name and contrast matrix (as matrix or character)
+               in a tag = value format for multiple comparisons
+               for one single unordered factor, see \code{\link[multcomp]{mcp}}.}
 }
 \details{
 
@@ -118,6 +123,9 @@ of_trafo(x)
 
   ### apply transformation blockwise (e.g. for Friedman test)
   trafo(data.frame(y = 1:20), numeric_trafo = rank, block = gl(4, 5))
+
+  ### multiple comparisons
+  mcp_trafo(x = "Tukey")(data.frame(x = gl(3, 3)))
 
 }
 \keyword{manip}

@@ -134,7 +134,8 @@ setClass(Class = "IndependenceTest",
         distribution = "PValue", ### was: "NullDistribution",
         statistic    = "IndependenceTestStatistic",
         estimates    = "list",
-        method       = "character"
+        method       = "character",
+        call         = "call"
     ),
     prototype = list(method = "General Independence Test")
 )

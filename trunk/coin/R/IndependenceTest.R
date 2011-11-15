@@ -119,6 +119,7 @@ independence_test.IndependenceProblem <- function(object,
                 distribution = nd)
         })
 
+    RET@call <- match.call()
     ### return object inheriting from class `IndependenceTest'
     return(RET)
 }

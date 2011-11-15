@@ -20,16 +20,24 @@ setMethod(f = "pvalue",
 setMethod(f = "pvalue",
           signature = "MaxTypeIndependenceTest",
           definition = function(object, 
-              method = c("global", "single-step", "step-down", "discrete"), ...) {
+              method = c("global", "single-step", "step-down", 
+                         "discrete", "npmcp"), ...) {
 
               method <- match.arg(method)
               x <- object@statistic
+              C <- attr(object@statistic@xtrans, "contrast")
+              if (!is.null(C) && method %in% 
+                  c("single-step", "step-down", "discrete"))
+                  warning(paste("multiple comparisons might be incorrect",
+                                "due to subset pivotality; use", 
+                                sQuote("method = \"npmcp\"")))
               RET <- switch(method, 
                    "global" = pvalue(object@distribution, 
-                                    object@statistic@teststatistic),
+                                     object@statistic@teststatistic),
                    "single-step" = singlestep(object, ...),
                    "step-down" = stepdown(object, ...),
-                   "discrete" = dbonf(object, ...)
+                   "discrete" = dbonf(object, ...),
+                   "npmcp" = npmcp(object, ...)
               )
               return(RET)
           }
