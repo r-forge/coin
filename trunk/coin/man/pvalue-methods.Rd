@@ -22,8 +22,8 @@ pvalue(object, ...)
     \code{\link{IndependenceTest-class}}.}
   \item{\dots}{additional arguments: \code{method}, 
       a character specifying the type of 
-      adjustment (\code{global}, \code{single-step}, \code{step-down}, 
-      \code{discrete}, or \code{npmcp})
+      adjustment (\code{global}, \code{single-step}, \code{step-down},
+      \code{bonferroni}, \code{sidak}, \code{unadjusted}, or \code{npmcp})
       should be used. The default is \code{global}.}
 }
 \section{Methods}{
@@ -51,11 +51,14 @@ pvalue(object, ...)
   (algorithm 2.8 and formula 2.8 in Westfall & Young, 1993) is used, the above
   comments apply as well.
 
-  With \code{method = "discrete"}, the Bonferroni adjustment as suggested by
-  Westfall & Wolfinger (1997) with improvements for highly discrete
-  permutation distributions is available, however, without taking
-  correlations between the test statistics into account. Here, the p-values are
-  valid even without assuming subset pivotality.
+  With \code{method = "bonferroni"} or \code{method = "sidak"} the
+  adjustments suggested by Westfall & Wolfinger (1997) with improvements
+  for highly discrete permutation distributions are available, however,
+  without taking correlations between the test statistics into
+  account. Here, the p-values are valid even without assuming subset
+  pivotality. 
+
+  If \code{method = "unadjusted"} the unadjusted p-values are returned.
 
   For multiple comparisons of levels of one factor (defined via \code{\link{mcp_trafo}}
   p-values can be computed via \code{method = "npmcp"} that are less affected by
@@ -72,11 +75,6 @@ pvalue(object, ...)
     Peter H. Westfall \& Russell D. Wolfinger (1997).
     Multiple tests with discrete distributions. 
     \emph{The American Statistician} \bold{51}, 3--8.
-
-    Peter H. Westfall (1997). Multiple testing of general 
-    contrasts using logical constraints and correlation. 
-    \emph{Journal of the American Statistical Association}
-    \bold{92}, 299--306.
 
 }
 \examples{
@@ -99,7 +97,9 @@ pvalue(object, ...)
                           distribution = approximate(B = 9999))
   pvalue(it, method = "single-step")
   pvalue(it, method = "step-down")
-  pvalue(it, method = "discrete")
+  pvalue(it, method = "bonferroni")
+  pvalue(it, method = "sidak")
+  pvalue(it, method = "unadjusted")
 
   ### Length of YOY Gizzard Shad from Kokosing Lake, Ohio,
   ### sampled in Summer 1984, Hollander & Wolfe (1999), Table 6.3, page 200

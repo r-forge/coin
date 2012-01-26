@@ -20,8 +20,12 @@ setMethod(f = "pvalue",
 setMethod(f = "pvalue",
           signature = "MaxTypeIndependenceTest",
           definition = function(object, 
-              method = c("global", "single-step", "step-down", 
-                         "discrete", "npmcp"), ...) {
+              method = c("global", "single-step", "step-down", "bonferroni",
+                         "sidak", "unadjusted", "npmcp"), ...) {
+
+              # backward compatibility
+              if (length(method) == 1 && method == "discrete")
+                  method <- "sidak"
 
               method <- match.arg(method)
               x <- object@statistic
@@ -35,8 +39,10 @@ setMethod(f = "pvalue",
                    "global" = pvalue(object@distribution, 
                                      object@statistic@teststatistic),
                    "single-step" = singlestep(object, ...),
-                   "step-down" = stepdown(object, ...),
-                   "discrete" = dbonf(object, ...),
+                   "step-down" = stepdown(object, ...),                            
+                   "bonferroni" = discrete(object, method = "bonferroni", ...),
+                   "sidak" = discrete(object, method = "sidak", ...),
+                   "unadjusted" = unadjusted(object, ...),
                    "npmcp" = npmcp(object, ...)
               )
               return(RET)

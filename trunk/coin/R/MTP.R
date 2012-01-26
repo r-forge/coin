@@ -8,10 +8,14 @@ singlestep <- function(object, ...) {
     } else {
         ts <- statistic(object, "standardized")
     }
-    ### <FIXME> iterate over unique(ts) only and remap
-    ret <- 1 - sapply(ts, pperm, object = object, ...)  
-    ### </FIXME>
-    ret <- matrix(ret, nrow = nrow(ts), ncol = ncol(ts))
+    ### iterate over unique(ts) only and remap
+    n <- length(ts)
+    idx <- c(which(ts[-1L] != ts[-n]), n)
+    uts <- ts[idx]
+    ret <- 1 - sapply(uts, pperm, object = object, ...)
+    ### HW: Why not 1 - pperm(object, uts) ?
+    ret <- matrix(rep.int(ret, diff(c(0L, idx))),
+                  nrow = nrow(ts), ncol = ncol(ts))
     rownames(ret) <- rownames(ts)
     colnames(ret) <- colnames(ts)
     ret
@@ -35,9 +39,12 @@ sdmaxT <- function(pls, ts) {
         for (j in 2:ncol(q))
             q[,j] <- pmax(q[,j], q[,j-1])
     }
-    ret <- matrix(rowMeans(GE(t(q), ts[rts]))[rank(ts)],
-                  nrow = nrow(ts), ncol = ncol(ts))
-    
+    ret <- rowMeans(GE(t(q), ts[rts]))
+    ## enforce monotonicity
+    for (i in (length(ret) - 1):1)
+        ret[i] <- max(ret[i], ret[i + 1])
+
+    ret <- matrix(ret[rank(ts)], nrow = nrow(ts), ncol = ncol(ts))
     rownames(ret) <- rownames(ts)
     colnames(ret) <- colnames(ts)
     ret
@@ -74,8 +81,8 @@ stepdown <- function(object, ...) {
     sdmaxT(pls, ts)
 }
 
-### Bonferroni permutation method (Westfall & Wolfinger, 1997, AmStat 51, 3-8)
-dbonf <- function(object, ...) {
+### Discrete permutation method (Westfall & Wolfinger, 1997, AmStat 51, 3-8)
+discrete <- function(object, method = c("bonferroni", "sidak"), ...) {
 
    ### <FIXME> this should be possible when the _exact_ marginal
    ### distributions are available
@@ -87,44 +94,70 @@ dbonf <- function(object, ...) {
             sQuote("MaxTypeIndependenceTest"),
             " or distribution was not approximated via Monte-Carlo")
 
+   method <- match.arg(method)
+
    alternative <- object@statistic@alternative
+
+   ### raw simulation results, scores have been handled already
+   pls <- support(object, raw = TRUE)
 
    ### standardize
    dcov <- sqrt(variance(object))
    expect <- expectation(object)
+   pls <- t((pls - expect) / dcov)
+   ts <- statistic(object, "standardized")
 
-   ### raw simulation results, scores have been handled already
-   pls <- support(object, raw = TRUE)
-   pls <- (pls - expect) / dcov
-   ts <- (statistic(object, "standardized"))
-   
-   pvals <- switch(alternative,
-           "less" = rowMeans(LE(pls, as.vector(drop(ts)))),
-           "greater" = rowMeans(GE(pls, as.vector(drop(ts)))),
-           "two.sided" = rowMeans(GE(abs(pls), as.vector(abs(drop(ts))))))
-
-   foo <- function(x, t)
-       switch(alternative,
-           "less" = mean(LE(x, t)),
-           "greater" = mean(GE(x, t)),
-           "two.sided" = mean(GE(abs(x), abs(t))))
-
-   p <- vector(mode = "list", length = nrow(pls))
-   for (i in 1:nrow(pls)) {
-       ux <- unique(pls[i,])
-       p[[i]] <- sapply(ux, foo, x = pls[i,])
+   if (object@statistic@alternative == "two.sided") {
+       pls <- abs(pls)
+       ts <- abs(ts)
    } 
+   if (object@statistic@alternative == "less") {
+       pls <- -pls
+       ts <- -ts
+    }
 
-   ### Bonferroni adjustment (Westfall & Wolfinger, 1997)
-   adjp <- rep(1, length(ts))
-   for (i in 1:length(pvals)) {
-       for (q in 1:length(p)) {
-           x <- p[[q]][p[[q]] <= pvals[i]]
-           if (length(x) > 0)
-               adjp[i] <- adjp[i] * (1 - max(x))
+   ### reorder
+   rts <- order(ts)
+   pls <- pls[, rts, drop = FALSE]
+
+   ### unadjusted p-values
+   pvals <- rowMeans(GE(t(pls), ts[rts]))
+
+   foo <- function(x, t) mean(GE(x, t))
+
+   p <- vector(mode = "list", length = ncol(pls))
+   for (i in 1:ncol(pls)) {
+       ux <- unique(pls[, i])
+       p[[i]] <- sapply(ux, foo, x = pls[, i])
+   } 
+   
+   ### discrete adjustment
+   if (method == "bonferroni") {
+       adjp <- rep.int(0, length(ts))
+       for (i in 1:length(pvals)) {
+           for (q in 1:length(p)) {
+               x <- p[[q]][p[[q]] <= pvals[i]] # Below Eq. 2
+               if (length(x) > 0)
+                   adjp[i] <- adjp[i] + max(x) # Eq. 4, Bonferroni
+           }
        }
-   }
-   ret <- matrix(1 - pmin(adjp, 1), nrow = nrow(ts), ncol = ncol(ts))
+       adjp <- pmin(adjp, 1)
+   } else {
+       adjp <- rep.int(1, length(ts))
+       for (i in 1:length(pvals)) {
+           for (q in 1:length(p)) {
+               x <- p[[q]][p[[q]] <= pvals[i]] # Below Eq. 2
+               if (length(x) > 0)
+                   adjp[i] <- adjp[i] * (1 - max(x)) # Eq. 2, Sidak
+           }
+       }
+       adjp <- 1 - pmin(adjp, 1)                     
+   }   
+   ### enforce monotonicity
+   for (i in (length(adjp) - 1):1)
+       adjp[i] <- max(adjp[i], adjp[i + 1])
+   
+   ret <- matrix(adjp[rank(ts)], nrow = nrow(ts), ncol = ncol(ts))
    rownames(ret) <- rownames(ts)
    colnames(ret) <- colnames(ts)
    ret
@@ -214,4 +247,42 @@ npmcp <- function(object) {
     ret <- matrix(p[rank(tstat)])
     attr(ret, "dimnames") <- attr(tstat, "dimnames")
     return(ret)
+}
+
+### unadjusted p-values
+unadjusted <- function(object, ...) {    
+    
+    if (extends(class(object@distribution), "AsymptNullDistribution")) {                
+        ts <- statistic(object, "standardized")    
+        ret <- switch(object@statistic@alternative,
+                      "less"      = pnorm(ts),
+                      "greater"   = 1 - pnorm(ts),
+                      "two.sided" = 2 * pmin(pnorm(ts), 1 - pnorm(ts)))
+    } else {
+        ### raw simulation results, scores have been handled already
+        pls <- support(object, raw = TRUE)
+
+        ## standardize
+        dcov <- sqrt(variance(object))
+        expect <- expectation(object) 
+        pls <- t((pls - expect) / dcov)
+        ts <- statistic(object, "standardized")
+
+        if (object@statistic@alternative == "two.sided") {
+            pls <- abs(pls)
+            ts <- abs(ts)
+        } 
+        if (object@statistic@alternative == "less") {
+            pls <- -pls
+            ts <- -ts
+        }
+    
+        ## unadjusted p-values
+        ret <- matrix(rowMeans(GE(t(pls), as.vector(ts))),
+                      nrow = nrow(ts), ncol = ncol(ts))
+        rownames(ret) <- rownames(ts)
+        colnames(ret) <- colnames(ts)
+    }
+    
+    ret
 }
