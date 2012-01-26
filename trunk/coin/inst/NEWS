@@ -6,6 +6,12 @@
     o     nonparametric multiple comparisons via Westfall (1997)
           algorithm. See ?mcptrafo and ?pvalue
 
+    o     new methods 
+              pvalue(it, method = "bonferroni")
+              pvalue(it, method = "sidak")
+              pvalue(it, method = "unadjusted")
+          thanks to Henric Winell
+
 
 		CHANGES in `coin' VERSION 1.0-20
 
