@@ -1,6 +1,8 @@
 
 		CHANGES in `coin' VERSION 1.0-21
 
+    o     move vignettes to vignettes
+
     o     nonparametric multiple comparisons via Westfall (1997)
           algorithm. See ?mcptrafo and ?pvalue
 
