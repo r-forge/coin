@@ -60,4 +60,24 @@ exact null distribution is currently available for two-sample problems only.
     \url{http://www.jstatsoft.org/v28/i08/}
 
 }
+\examples{
+
+    ### if you are interested in the internals:
+    ### generate doxygen documentation
+    \dontrun{
+
+        ### download src package into temp dir
+        tmpdir <- tempdir()
+        tgz <- download.packages("coin", destdir = tmpdir)[2]
+        ### extract
+        untar(tgz, exdir = tmpdir)
+        wd <- setwd(file.path(tmpdir, "coin"))
+        ### run doxygen (assuming it is there)
+        system("doxygen doxygen.cfg")
+        setwd(wd)
+        ### have fun
+        browseURL(file.path(tmpdir, "coin", "inst",
+                            "documentation", "html", "index.html"))
+    }
+}
 \keyword{misc}

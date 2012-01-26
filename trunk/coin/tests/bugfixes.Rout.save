@@ -1,5 +1,5 @@
 
-R version 2.13.0 (2011-04-13)
+R version 2.14.1 (2011-12-22)
 Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i686-pc-linux-gnu (32-bit)
@@ -26,11 +26,8 @@ Loading required package: splines
 Loading required package: mvtnorm
 Loading required package: modeltools
 Loading required package: stats4
+Loading required package: multcomp
 > isequal <- coin:::isequal
-> 
-> ### check if doxygen documentation is there
-> stopifnot(nchar(system.file("documentation", "html", "index.html", 
-+                             package = "coin")) > 29) 
 > 
 > ### I() returns objects of class AsIs which caused an error in `trafo'
 > df <- data.frame(x1 = rnorm(100), x2 = rnorm(100), x3 = gl(2, 50))
@@ -64,7 +61,6 @@ alternative hypothesis: two.sided
 +              model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))))
 +     isequal(expectation(a), expectation(b))
 + }
-Loading required package: multcomp
 [1] TRUE
 > 
 > 

@@ -1,7 +1,8 @@
 
-R version 2.11.1 (2010-05-31)
-Copyright (C) 2010 The R Foundation for Statistical Computing
+R version 2.14.1 (2011-12-22)
+Copyright (C) 2011 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
+Platform: i686-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -26,6 +27,7 @@ Loading required package: splines
 Loading required package: mvtnorm
 Loading required package: modeltools
 Loading required package: stats4
+Loading required package: multcomp
 > 
 > assign(".oldSearch", search(), pos = 'CheckExEnv')
 > cleanEx()
@@ -394,7 +396,6 @@ chi-squared = 22.8524, p-value < 2.2e-16
 +     ### sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
 +     print(pvalue(NDWD, method = "single-step"))
 +   }
-Loading required package: multcomp
 [1] 0.0004888889
 99 percent confidence interval:
  0.0003199269 0.0007126921 
@@ -411,9 +412,6 @@ IV - III 0.9998777778
 > 
 > 
 > cleanEx()
-
-detaching ‘package:multcomp’
-
 > nameEx("MarginalHomogeneityTest")
 > ### * MarginalHomogeneityTest
 > 
@@ -918,7 +916,6 @@ chi-squared = 11.1429, df = 2, p-value = 0.003805
 +       ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
 +       print(pvalue(rtt, method = "single-step"))
 + }
-Loading required package: multcomp
 [1] 0.003455915
 99 percent confidence interval:
  0.003205721 0.003706108 
@@ -998,9 +995,6 @@ alternative hypothesis: true mu is greater than 0
 > 
 > 
 > cleanEx()
-
-detaching ‘package:multcomp’
-
 > nameEx("Transformations")
 > ### * Transformations
 > 
@@ -1010,7 +1004,7 @@ detaching ‘package:multcomp’
 > ### Title: Functions for Data Transformations
 > ### Aliases: trafo id_trafo ansari_trafo fligner_trafo normal_trafo
 > ###   median_trafo consal_trafo maxstat_trafo fmaxstat_trafo logrank_trafo
-> ###   f_trafo of_trafo
+> ###   f_trafo of_trafo mcp_trafo
 > ### Keywords: manip
 > 
 > ### ** Examples
@@ -1157,6 +1151,29 @@ attr(,"assign")
 attr(,"assign")
 [1] 1
 > 
+>   ### multiple comparisons
+>   mcp_trafo(x = "Tukey")(data.frame(x = gl(3, 3)))
+  2 - 1 3 - 1 3 - 2
+1    -1    -1     0
+2    -1    -1     0
+3    -1    -1     0
+4     1     0    -1
+5     1     0    -1
+6     1     0    -1
+7     0     1     1
+8     0     1     1
+9     0     1     1
+attr(,"assign")
+[1] 1 1 1
+attr(,"contrast")
+
+	 Multiple Comparisons of Means: Tukey Contrasts
+
+       1  2 3
+2 - 1 -1  1 0
+3 - 1 -1  0 1
+3 - 2  0 -1 1
+> 
 > 
 > 
 > 
@@ -1246,6 +1263,41 @@ chi-squared = 23.3163, df = 6, p-value = 0.0006972
 attr(,"conf.level")
 [1] 0.95
 > 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("coin")
+> ### * coin
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: coin
+> ### Title: General Information on the coin Package
+> ### Aliases: coin
+> ### Keywords: misc
+> 
+> ### ** Examples
+> 
+> 
+>     ### if you are interested in the internals:
+>     ### generate doxygen documentation
+>     ## Not run: 
+> ##D 
+> ##D         ### download src package into temp dir
+> ##D         tmpdir <- tempdir()
+> ##D         tgz <- download.packages("coin", destdir = tmpdir)[2]
+> ##D         ### extract
+> ##D         untar(tgz, exdir = tmpdir)
+> ##D         wd <- setwd(file.path(tmpdir, "coin"))
+> ##D         ### run doxygen (assuming it is there)
+> ##D         system("doxygen doxygen.cfg")
+> ##D         setwd(wd)
+> ##D         ### have fun
+> ##D         browseURL(file.path(tmpdir, "coin", "inst",
+> ##D                             "documentation", "html", "index.html"))
+> ##D     
+> ## End(Not run)
 > 
 > 
 > 
@@ -1770,8 +1822,33 @@ alternative hypothesis: true mu is not equal to 1
          y1        y2
 1 0.0110011 0.9789979
 >   pvalue(it, method = "discrete")
-          y1       y2
-1 0.01097084 0.999559
+          y1        y2
+1 0.01097084 0.9995589
+> 
+>   ### Length of YOY Gizzard Shad from Kokosing Lake, Ohio,
+>   ### sampled in Summer 1984, Hollander & Wolfe (1999), Table 6.3, page 200
+>   YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,
++                                42, 60, 32, 42, 45, 58, 27, 51, 42, 52,
++                                38, 33, 26, 25, 28, 28, 26, 27, 27, 27,
++                                31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
++                     site = factor(c(rep("I", 10), rep("II", 10),
++                                     rep("III", 10), rep("IV", 10))))
+> 
+>   ### p-value for multiple comparisons under logical constraints
+>   if (require("multcomp")) {
++       it <- independence_test(length ~ site, data = YOY,
++                               xtrafo = mcp_trafo(site = "Tukey"),
++                               distribution = approximate(10000),
++                               alternative = "two.sided")
++       print(pvalue(it, method = "npmcp"))
++   }
+               
+II - I   0.4377
+III - I  0.0006
+IV - I   0.0001
+III - II 0.0001
+IV - II  0.0000
+IV - III 0.7160
 > 
 > 
 > 
@@ -1964,7 +2041,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  36.222 0.38 36.93 0 0 
+Time elapsed:  20.565 0.428 21.018 0 0 
 > grDevices::dev.off()
 null device 
           1 
