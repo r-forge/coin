@@ -1,0 +1,86 @@
+From biometrics@tibs.org Fri Sep 14 16:29:43 2007
+Date: Tue, 11 Sep 2007 10:42:59 -0500
+From: Biometrics <biometrics@tibs.org>
+To: torsten@hothorn.de
+Cc: Achim Zeileis <Achim.Zeileis@wu-wien.ac.at>
+Subject: Review of MS #070428CFR
+
+September 11, 2007
+
+Dr. Torsten Hothorn
+Institut fur Statistik
+Ludwig-Maximilians-Universitat Munchen
+Ludwigstrabe 33
+D-80539 Munchen, Germany
+
+Dear Dr. Hothorn:
+
+Thank you for submitting a revision of your paper #070428CFR, "Generalized
+maximally selected statistics," to Biometrics. Your paper has been reviewed
+by the associate editor and one referee, whose reports are enclosed. Based
+upon these reports, I am happy to inform you that we would be willing to
+consider a revision that addresses the remaining concerns. The reviewers
+were much happier with this revised manuscript and ask for some relatively
+minor changes. Your main challenge will be to incorporate the additional
+comments requested while maintaining the page limit. The associate editor's
+report offers one strategy for achieving this.
+
+Please make sure your revision is no more than 20 pages including appendices
+and references, excluding the title page and abstract, figures and tables,
+in a 12 point font, double space with 25 lines per page, plus no more than 4
+tables and figures combined.
+
+Please remove captions from figures and place them in a list on a separate
+sheet.  Equations should use the [{()}] ordering, so that it is abs
+[exp{log(x)}].
+
+Along with the revision, please include a point-by-point response to all
+reviewer comments, indicating how and where you have addressed them.
+
+I am looking forward to receiving your revision.  Thank you for your
+interest in Biometrics!
+
+Yours sincerely,
+
+Laurence S. Freedman
+
+
+
+
+
+Torsten Hothorn wrote:
+> 
+> On Fri, 22 Jun 2007, Biometrics wrote:
+> 
+> > June 22, 2007
+> > 
+> > 
+> > Dear Dr. Hothorn:
+> > 
+> 
+> Dear Dr. Freedman,
+> 
+> > Your paper #070428CF, "Generalized maximally selected statistics," has
+> > been reviewed by an associate editor and one referee, whose reports are
+> > enclosed. Based upon these reports, we would be willing to consider a
+> > revision. However, because the required modifications are extensive, I
+> > cannot guarantee that a revision would ultimately be acceptable, so you
+> > would be proceeding at your own risk.
+> > 
+> 
+> that you very much for the fast helpful and helpful reviews. Our revision
+> of the manuscript is attached to this email as `maxstat.pdf'. A letter
+> describing the most important changes as well as detailed point to point
+> answers to the referee's comments is attached as `rejoinder.pdf'.
+> 
+> Sincerely yours,
+> 
+> Torsten Hothorn
+
+    [ Part 2, Application/PDF  14KB. ]
+    [ Unable to print this part. ]
+
+
+    [ Part 3, Application/PDF  13KB. ]
+    [ Unable to print this part. ]
+

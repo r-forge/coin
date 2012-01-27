@@ -1,0 +1,7124 @@
+FN ISI Export Format
+VR 1.0
+PT J
+AU Aue, A
+   Horvath, L
+   Huskova, M
+   Kokoszka, P
+AF Aue, Alexander
+   Horvath, Lajos
+   Huskova, Marie
+   Kokoszka, Piotr
+TI Change-point monitoring in linear models
+SO ECONOMETRICS JOURNAL
+PY 2006
+VL 9
+IS 3
+BP 373
+EP 403
+UT ISI:000241673000002
+ER
+
+PT J
+AU Deng, A
+   Perron, P
+AF Deng, Ai
+   Perron, Pierre
+TI A comparison of alternative asymptotic frameworks to analyse a
+   structural change in a linear time trend
+SO ECONOMETRICS JOURNAL
+PY 2006
+VL 9
+IS 3
+BP 423
+EP 447
+UT ISI:000241673000004
+ER
+
+PT J
+AU Escribano, A
+   Sipols, AE
+   Aparicio, F
+AF Escribano, Alvaro
+   Sipols, Ana E.
+   Aparicio, Felipe
+TI Nonlinear cointegration and nonlinear error correction: Record counting
+   cointegration tests
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PD OCT-DEC
+PY 2006
+VL 35
+IS 4
+BP 939
+EP 956
+UT ISI:000241285900008
+ER
+
+PT J
+AU Galeano, P
+   Pena, D
+AF Galeano, Pedro
+   Pena, Daniel
+TI Covariance changes detection in multivariate time series
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD JAN 1
+PY 2007
+VL 137
+IS 1
+BP 194
+EP 211
+UT ISI:000241099000017
+ER
+
+PT J
+AU Andreou, E
+   Ghysels, E
+AF Andreou, Elena
+   Ghysels, Eric
+TI Monitoring disruptions in financial markets
+SO JOURNAL OF ECONOMETRICS
+PD NOV-DEC
+PY 2006
+VL 135
+IS 1-2
+BP 77
+EP 124
+UT ISI:000241002800006
+ER
+
+PT J
+AU Hendry, DF
+AF Hendry, David F.
+TI Robustifying forecasts from equilibrium-correction systems
+SO JOURNAL OF ECONOMETRICS
+PD NOV-DEC
+PY 2006
+VL 135
+IS 1-2
+BP 399
+EP 426
+UT ISI:000241002800016
+ER
+
+PT J
+AU Andrews, DWK
+   Kim, JY
+AF Andrews, Donald W. K.
+   Kim, Jae-Young
+TI Tests for cointegration breakdown over a short time period
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD OCT
+PY 2006
+VL 24
+IS 4
+BP 379
+EP 394
+UT ISI:000241083200001
+ER
+
+PT J
+AU Carstensen, K
+AF Carstensen, Kai
+TI Stock market downswing and the stability of European monetary union
+   money demand
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD OCT
+PY 2006
+VL 24
+IS 4
+BP 395
+EP 402
+UT ISI:000241083200002
+ER
+
+PT J
+AU Perron, P
+   Qu, ZJ
+AF Perron, Pierre
+   Qu, Zhongjun
+TI Estimating restricted structural change models
+SO JOURNAL OF ECONOMETRICS
+PD OCT
+PY 2006
+VL 134
+IS 2
+BP 373
+EP 399
+UT ISI:000240893600003
+ER
+
+PT J
+AU Na, S
+   Lee, S
+   Park, H
+AF Na, Seongryong
+   Lee, Sangyeol
+   Park, Hyeonah
+TI Sequential empirical process in autoregressive models with measurement
+   errors
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD DEC 1
+PY 2006
+VL 136
+IS 12
+BP 4204
+EP 4216
+UT ISI:000240251200007
+ER
+
+PT J
+AU Clark, TE
+AF Clark, Todd E.
+TI Disaggregate evidence on the persistence of consumer price inflation
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD JUL-AUG
+PY 2006
+VL 21
+IS 5
+BP 563
+EP 587
+UT ISI:000239869900002
+ER
+
+PT J
+AU Noriega, AE
+   Ventosa-Santaularia, D
+AF Noriega, Antonio E.
+   Ventosa-Santaularia, Daniel
+TI Spurious regression under broken-trend stationarity
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD SEP
+PY 2006
+VL 27
+IS 5
+BP 671
+EP 684
+UT ISI:000239509800002
+ER
+
+PT J
+AU Dufour, JM
+   Pelletier, D
+   Renault, E
+AF Dufour, Jean-Marie
+   Pelletier, Denis
+   Renault, Eric
+TI Short run and long run causality in time series: inference
+SO JOURNAL OF ECONOMETRICS
+PD JUN
+PY 2006
+VL 132
+IS 2
+BP 337
+EP 362
+UT ISI:000239260000003
+ER
+
+PT J
+AU Rosolowski, M
+   Schmid, W
+AF Rosolowski, M.
+   Schmid, W.
+TI EWNA charts for monitoring the mean and the autocovariances of
+   stationary processes
+SO STATISTICAL PAPERS
+PD OCT
+PY 2006
+VL 47
+IS 4
+BP 595
+EP 630
+UT ISI:000239061900005
+ER
+
+PT J
+AU Wu, YH
+AF Wu, Yanhong
+TI Inference for post-change mean by a CUSUM procedure
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD OCT 1
+PY 2006
+VL 136
+IS 10
+BP 3625
+EP 3646
+UT ISI:000238893600015
+ER
+
+PT J
+AU Cook, S
+TI Testing for cointegration in the presence of mis-specified structural
+   change
+SO STATISTICS & PROBABILITY LETTERS
+PD JUL 15
+PY 2006
+VL 76
+IS 13
+BP 1380
+EP 1384
+UT ISI:000238642500011
+ER
+
+PT J
+AU Brown, M
+   Zacks, S
+TI A note on optimal stopping for possible change in the intensity of an
+   ordinary Poisson process
+SO STATISTICS & PROBABILITY LETTERS
+PD JUL 15
+PY 2006
+VL 76
+IS 13
+BP 1417
+EP 1425
+UT ISI:000238642500015
+ER
+
+PT J
+AU Galvao, ABC
+TI Structural break threshold VARs for predicting us recessions using the
+   spread
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD MAY-JUN
+PY 2006
+VL 21
+IS 4
+BP 463
+EP 487
+UT ISI:000238715400004
+ER
+
+PT J
+AU Carrion-Silvestre, JL
+   Sanso, A
+TI Joint hypothesis specification for unit root tests with a structural
+   break
+SO ECONOMETRICS JOURNAL
+PY 2006
+VL 9
+IS 2
+BP 196
+EP 224
+UT ISI:000238744900002
+ER
+
+PT J
+AU Liu, H
+   Rodriguez, G
+TI Unit root tests and structural change when the initial observation is
+   drawn from its unconditional distribution
+SO ECONOMETRICS JOURNAL
+PY 2006
+VL 9
+IS 2
+BP 225
+EP 251
+UT ISI:000238744900003
+ER
+
+PT J
+AU Carrion-I-Silvestre, JL
+   Sanso, A
+TI A guide to the computation of stationarity tests
+SO EMPIRICAL ECONOMICS
+PD JUN
+PY 2006
+VL 31
+IS 2
+BP 433
+EP 448
+UT ISI:000238667900008
+ER
+
+PT J
+AU Zeileis, A
+TI Implementing a class of structural change tests: An econometric
+   computing approach
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD JUL 20
+PY 2006
+VL 50
+IS 11
+BP 2987
+EP 3008
+UT ISI:000238471600003
+ER
+
+PT J
+AU Aue, A
+TI Testing for parameter stability in RCA(1) time series
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD SEP 1
+PY 2006
+VL 136
+IS 9
+BP 3070
+EP 3089
+UT ISI:000238307000011
+ER
+
+PT J
+AU Vexler, A
+TI Guaranteed testing for epidemic changes of a linear regression model
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD SEP 1
+PY 2006
+VL 136
+IS 9
+BP 3101
+EP 3120
+UT ISI:000238307000013
+ER
+
+PT J
+AU Muller, HG
+   Wai, N
+TI Asymptotic fluctuations of mutagrams
+SO STATISTICS & PROBABILITY LETTERS
+PD JUL 1
+PY 2006
+VL 76
+IS 12
+BP 1201
+EP 1210
+UT ISI:000238028100002
+ER
+
+PT J
+AU Chiu, G
+   Lockhart, R
+   Routledge, R
+TI Bent-cable regression theory and applications
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD JUN
+PY 2006
+VL 101
+IS 474
+BP 542
+EP 553
+UT ISI:000238033200012
+ER
+
+PT J
+AU Aparicio, F
+   Escribano, A
+   Sipols, AE
+TI Range unit-root (RUR) tests: Robust against nonlinearities, error
+   distributions, structural breaks and outliers
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD JUL
+PY 2006
+VL 27
+IS 4
+BP 545
+EP 576
+UT ISI:000237972600003
+ER
+
+PT J
+AU Gurevich, G
+TI Nonparametric AMOC changepoint tests for stochastically ordered
+   alternatives
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2006
+VL 35
+IS 5
+BP 887
+EP 903
+UT ISI:000237681200009
+ER
+
+PT J
+AU Huskova, M
+   Meintanis, SG
+TI Change point analysis based on empirical characteristic functions -
+   Empirical characteristic functions
+SO METRIKA
+PY 2006
+VL 63
+IS 2
+BP 145
+EP 168
+UT ISI:000237655500002
+ER
+
+PT J
+AU Quintana, FA
+TI A predictive view of Bayesian clustering
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD AUG 1
+PY 2006
+VL 136
+IS 8
+BP 2407
+EP 2429
+UT ISI:000237678300001
+ER
+
+PT J
+AU Jandhyala, VK
+   Fotopoulos, SB
+   Hawkins, DM
+TI On the inconsistency of the change-point estimator for the NE family
+SO METRIKA
+PD JUN
+PY 2006
+VL 63
+IS 3
+BP 309
+EP 315
+UT ISI:000237190100005
+ER
+
+PT J
+AU Westerlund, J
+TI Testing for panel cointegration with a level break
+SO ECONOMICS LETTERS
+PD APR
+PY 2006
+VL 91
+IS 1
+BP 27
+EP 33
+UT ISI:000237185500005
+ER
+
+PT J
+AU Khedhiri, S
+TI Alternative tests for parameter stability
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PD APR-JUN
+PY 2006
+VL 35
+IS 2
+BP 347
+EP 360
+UT ISI:000237274600008
+ER
+
+PT J
+AU Lee, S
+   Park, S
+   Maekawa, K
+   Kawai, KI
+TI Test for parameter change in ARIMA models
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PD APR-JUN
+PY 2006
+VL 35
+IS 2
+BP 429
+EP 439
+UT ISI:000237274600012
+ER
+
+PT J
+AU Besse, P
+   Le Gall, C
+TI Application and reliability of change-point analyses for detecting a
+   defective stage in integrated circuit manufacturing
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PD APR-JUN
+PY 2006
+VL 35
+IS 2
+BP 479
+EP 496
+UT ISI:000237274600016
+ER
+
+PT J
+AU Pan, X
+TI A simple method using CuScore to monitor changes in ARMA coefficients
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PD APR-JUN
+PY 2006
+VL 35
+IS 2
+BP 515
+EP 530
+UT ISI:000237274600018
+ER
+
+PT J
+AU Bruno, G
+   Otranto, E
+TI The choice of time interval in seasonal adjustment: A heuristic approach
+SO STATISTICAL PAPERS
+PD JUN
+PY 2006
+VL 47
+IS 3
+BP 393
+EP 417
+UT ISI:000237024200003
+ER
+
+PT J
+AU Becker, R
+   Enders, W
+   Lee, J
+TI A stationarity test in the presence of an unknown number of smooth
+   breaks
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD MAY
+PY 2006
+VL 27
+IS 3
+BP 381
+EP 409
+UT ISI:000236585000004
+ER
+
+PT J
+AU Park, C
+   Kim, WC
+TI Wavelet estimation of a regression function with a sharp change point
+   in a random design
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD JUL 1
+PY 2006
+VL 136
+IS 7
+BP 2381
+EP 2394
+UT ISI:000236564400027
+ER
+
+PT J
+AU Dejong, DN
+   Liesenfeld, R
+   Richard, JF
+TI Timing structural change: A conditional probabilistic approach
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD MAR
+PY 2006
+VL 21
+IS 2
+BP 175
+EP 190
+UT ISI:000236620300002
+ER
+
+PT J
+AU Gaffeo, E
+   Gallegati, M
+   Gallegati, M
+TI Requiem for the unit root in per capita real GDP? Additional evidence
+   from historical data
+SO EMPIRICAL ECONOMICS
+PD MAY
+PY 2005
+VL 30
+IS 1
+BP 37
+EP 63
+UT ISI:000236608300003
+ER
+
+PT J
+AU Beltratti, A
+   Morana, C
+TI Breaks and persistency: macroeconomic causes of stock market volatility
+SO JOURNAL OF ECONOMETRICS
+PD MAR-APR
+PY 2006
+VL 131
+IS 1-2
+BP 151
+EP 177
+UT ISI:000236410000007
+ER
+
+PT J
+AU Horvath, L
+   Kokoszka, P
+   Zhang, AN
+TI Monitoring constancy of variance in conditionally heteroskedastic time
+   series
+SO ECONOMETRIC THEORY
+PD JUN
+PY 2006
+VL 22
+IS 3
+BP 373
+EP 402
+UT ISI:000236456300002
+ER
+
+PT J
+AU Mazzocchi, M
+TI Time patterns in UK demand for alcohol and tobacco: an application of
+   the EM algorithm
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD MAY 1
+PY 2006
+VL 50
+IS 9
+BP 2191
+EP 2205
+UT ISI:000236458200004
+ER
+
+PT J
+AU Jacqmin-Gadda, H
+   Commenges, D
+   Dartigues, JF
+TI Random changepoint model for joint modeling of cognitive decline and
+   dementia
+SO BIOMETRICS
+PD MAR
+PY 2006
+VL 62
+IS 1
+BP 254
+EP 260
+UT ISI:000236315400032
+ER
+
+PT J
+AU Delaigle, A
+   Gijbels, I
+TI Data-driven boundary estimation in deconvolution problems
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD APR 10
+PY 2006
+VL 50
+IS 8
+BP 1965
+EP 1994
+UT ISI:000236021700005
+ER
+
+PT J
+AU Deschepper, E
+   Thas, O
+   Ottoy, JP
+TI Regional residual plots for assessing the fit of linear regression
+   models
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD APR 10
+PY 2006
+VL 50
+IS 8
+BP 1995
+EP 2013
+UT ISI:000236021700006
+ER
+
+PT J
+AU Davis, RA
+   Lee, TCM
+   Rodriguez-Yam, GA
+TI Structural break estimation for nonstationary time series models
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD MAR
+PY 2006
+VL 101
+IS 473
+BP 223
+EP 239
+UT ISI:000235958400024
+ER
+
+PT J
+AU Han, D
+   Tsung, FG
+TI A reference-free Cuscore chart for dynamic mean change detection and a
+   unified framework for charting performance comparison
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD MAR
+PY 2006
+VL 101
+IS 473
+BP 368
+EP 386
+UT ISI:000235958400036
+ER
+
+PT J
+AU Vexler, A
+   Gurevich, G
+TI Guaranteed local maximum likelihood detection of a change point in
+   nonparametric logistic regression
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2006
+VL 35
+IS 4
+BP 711
+EP 726
+UT ISI:000236011300012
+ER
+
+PT J
+AU Gill, RS
+   Keating, JP
+   Baron, MI
+TI Detecting abrupt leaks in blended underground storage tanks
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2006
+VL 35
+IS 4
+BP 727
+EP 742
+UT ISI:000236011300013
+ER
+
+PT J
+AU Rogerson, PA
+TI Formulas for the design of CUSUM quality control charts
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2006
+VL 35
+IS 2
+BP 373
+EP 383
+UT ISI:000235132600015
+ER
+
+PT J
+AU Pons, G
+TI Testing monthly seasonal unit roots with monthly and quarterly
+   information
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD MAR
+PY 2006
+VL 27
+IS 2
+BP 191
+EP 209
+UT ISI:000235044500003
+ER
+
+PT J
+AU Kim, CJ
+   Morley, JC
+   Nelson, CR
+TI The structural break in the equity premium
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD APR
+PY 2005
+VL 23
+IS 2
+BP 181
+EP 191
+UT ISI:000235043000008
+ER
+
+PT J
+AU Smith, A
+TI Level shifts and the illusion of long memory in economic time series
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JUL
+PY 2005
+VL 23
+IS 3
+BP 321
+EP 335
+UT ISI:000235043100007
+ER
+
+PT J
+AU Inoue, A
+   Rossi, B
+TI Recursive predictability tests for real-time data
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JUL
+PY 2005
+VL 23
+IS 3
+BP 336
+EP 345
+UT ISI:000235043100008
+ER
+
+PT J
+AU Harris, D
+   Leybourne, S
+   McCabe, B
+TI Panel stationarity tests for purchasing power parity with
+   cross-sectional dependence
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD OCT
+PY 2005
+VL 23
+IS 4
+BP 395
+EP 409
+UT ISI:000235043200003
+ER
+
+PT J
+AU Herrera, AM
+   Pesavento, E
+TI The decline in US output volatility: Structural changes and inventory
+   investment
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD OCT
+PY 2005
+VL 23
+IS 4
+BP 462
+EP 472
+UT ISI:000235043200009
+ER
+
+PT J
+AU Swanson, NR
+   Van Dijk, D
+TI Are statistical reporting agencies getting it right? Data rationality
+   and business cycle asymmetry
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JAN
+PY 2006
+VL 24
+IS 1
+BP 24
+EP 42
+UT ISI:000235043300003
+ER
+
+PT J
+AU Meitz, M
+   Terasvirta, T
+TI Evaluating models of autoregressive conditional duration
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JAN
+PY 2006
+VL 24
+IS 1
+BP 104
+EP 124
+UT ISI:000235043300009
+ER
+
+PT J
+AU Dupuy, JF
+TI Estimation in a change-point hazard regression model
+SO STATISTICS & PROBABILITY LETTERS
+PD JAN 15
+PY 2006
+VL 76
+IS 2
+BP 182
+EP 190
+UT ISI:000235014300009
+ER
+
+PT J
+AU Ding, KY
+   Wu, YH
+TI On the biases of change point and change magnitude estimation after
+   CUSUM test
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD APR 1
+PY 2006
+VL 136
+IS 4
+BP 1258
+EP 1280
+UT ISI:000234700200005
+ER
+
+PT J
+AU Magnus, JR
+   Sinha, AK
+TI On Theil's errors
+SO ECONOMETRICS JOURNAL
+PY 2005
+VL 8
+IS 1
+BP 39
+EP 54
+UT ISI:000234628500003
+ER
+
+PT J
+AU Carrion-i-Silvestre, JL
+   del Barrio-Castro, T
+   Lopez-Bazo, E
+TI Breaking the panels: An application to the GDP per capita
+SO ECONOMETRICS JOURNAL
+PY 2005
+VL 8
+IS 2
+BP 159
+EP 175
+UT ISI:000234629300003
+ER
+
+PT J
+AU Gadre, MP
+   Rattihalli, RN
+TI Modified Group Runs control charts to detect increases in fraction non
+   conforming and shifts in the process mean
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PD JAN-MAR
+PY 2006
+VL 35
+IS 1
+BP 225
+EP 240
+UT ISI:000234544700013
+ER
+
+PT J
+AU Saikkonen, P
+   Lutkepohl, H
+   Trenkler, C
+TI Break date estimation for var processes with level shift with an
+   application to cointegration testing
+SO ECONOMETRIC THEORY
+PD FEB
+PY 2006
+VL 22
+IS 1
+BP 15
+EP 68
+UT ISI:000234286300002
+ER
+
+PT J
+AU Han, S
+   Tian, Z
+TI Truncating estimation for the mean change-point in heavy-tailed
+   dependent observations
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2006
+VL 35
+IS 1
+BP 43
+EP 52
+UT ISI:000234389500006
+ER
+
+PT J
+AU Osorio, F
+   Galea, M
+TI Detection of a change-point in student-t linear regression models
+SO STATISTICAL PAPERS
+PD JAN
+PY 2006
+VL 47
+IS 1
+BP 31
+EP 48
+UT ISI:000234211800003
+ER
+
+PT J
+AU Hans, C
+   Dunson, DB
+TI Bayesian inferences on umbrella orderings
+SO BIOMETRICS
+PD DEC
+PY 2005
+VL 61
+IS 4
+BP 1018
+EP 1026
+UT ISI:000234062200019
+ER
+
+PT J
+AU Campa, JM
+   Goldberg, LS
+TI Exchange rate pass-through into import prices
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD NOV
+PY 2005
+VL 87
+IS 4
+BP 679
+EP 690
+UT ISI:000233871900009
+ER
+
+PT J
+AU O'Reilly, G
+   Whelan, K
+TI Has EURO-area inflation persistence changed over time?
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD NOV
+PY 2005
+VL 87
+IS 4
+BP 709
+EP 720
+UT ISI:000233871900012
+ER
+
+PT J
+AU Zeileis, A
+TI A unified approach to structural change tests based on ML scores, F
+   statistics, and OLS residuals
+SO ECONOMETRIC REVIEWS
+PY 2005
+VL 24
+IS 4
+BP 445
+EP 466
+UT ISI:000233882600004
+ER
+
+PT J
+AU Chung, Y
+   Dey, DK
+   Kim, M
+   Kim, C
+TI Bayesian model choice in exponential survival models
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2005
+VL 34
+IS 12
+BP 2311
+EP 2330
+UT ISI:000233825400008
+ER
+
+PT J
+AU Wang, CP
+   Brown, CH
+   Bandeen-Roche, K
+TI Residual diagnostics for growth mixture models: Examining the impact of
+   a preventive intervention on multiple trajectories of aggressive
+   behavior
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD SEP
+PY 2005
+VL 100
+IS 471
+BP 1054
+EP 1076
+UT ISI:000233311400034
+ER
+
+PT J
+AU Slaby, A
+TI Expectation of rank statistics under setup of stochastic inequalities
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD FEB 1
+PY 2006
+VL 136
+IS 2
+BP 311
+EP 319
+UT ISI:000232969100001
+ER
+
+PT J
+AU Banerjee, A
+   Urga, G
+TI Modelling structural breaks, long memory and stock market volatility:
+   an overview
+SO JOURNAL OF ECONOMETRICS
+PD NOV-DEC
+PY 2005
+VL 129
+IS 1-2
+BP 1
+EP 34
+UT ISI:000233003300001
+ER
+
+PT J
+AU Montanes, A
+   Olloqui, I
+   Calvo, E
+TI Selection of the break in the Perron-type tests
+SO JOURNAL OF ECONOMETRICS
+PD NOV-DEC
+PY 2005
+VL 129
+IS 1-2
+BP 41
+EP 64
+UT ISI:000233003300003
+ER
+
+PT J
+AU Perron, P
+   Zhu, XK
+TI Structural breaks with deterministic and stochastic trends
+SO JOURNAL OF ECONOMETRICS
+PD NOV-DEC
+PY 2005
+VL 129
+IS 1-2
+BP 65
+EP 119
+UT ISI:000233003300004
+ER
+
+PT J
+AU Gagliardini, P
+   Trojani, F
+   Urga, G
+TI Robust GMM tests for structural breaks
+SO JOURNAL OF ECONOMETRICS
+PD NOV-DEC
+PY 2005
+VL 129
+IS 1-2
+BP 139
+EP 182
+UT ISI:000233003300006
+ER
+
+PT J
+AU Pesaran, MH
+   Timmermann, A
+TI Small sample properties of forecasts from autoregressive models under
+   structural breaks
+SO JOURNAL OF ECONOMETRICS
+PD NOV-DEC
+PY 2005
+VL 129
+IS 1-2
+BP 183
+EP 217
+UT ISI:000233003300007
+ER
+
+PT J
+AU Lazarova, S
+TI Testing for structural change in regression with long memory processes
+SO JOURNAL OF ECONOMETRICS
+PD NOV-DEC
+PY 2005
+VL 129
+IS 1-2
+BP 329
+EP 372
+UT ISI:000233003300011
+ER
+
+PT J
+AU van Dijk, D
+   Osborn, DR
+   Sensier, M
+TI Testing for causality in variance in the presence of breaks
+SO ECONOMICS LETTERS
+PD NOV
+PY 2005
+VL 89
+IS 2
+BP 193
+EP 199
+UT ISI:000232961500009
+ER
+
+PT J
+AU Cavaliere, G
+   Taylor, AMR
+TI Stationarity tests under time-varying second moments
+SO ECONOMETRIC THEORY
+PD DEC
+PY 2005
+VL 21
+IS 6
+BP 1112
+EP 1129
+UT ISI:000232913200004
+ER
+
+PT J
+AU Belaire-Franch, J
+TI A proof of the power of Kim's test against stationary processes with
+   structural breaks
+SO ECONOMETRIC THEORY
+PD DEC
+PY 2005
+VL 21
+IS 6
+BP 1172
+EP 1176
+UT ISI:000232913200007
+ER
+
+PT J
+AU Cook, S
+TI The stationarity of consumption-income ratios: Evidence from minimum LM
+   unit root testing
+SO ECONOMICS LETTERS
+PD OCT
+PY 2005
+VL 89
+IS 1
+BP 55
+EP 60
+UT ISI:000232191800009
+ER
+
+PT J
+AU Habibi, R
+   Sadooghi-Alvandi, SM
+   Nematollahi, AR
+TI Change point detection in a general class of distributions
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2005
+VL 34
+IS 9-10
+BP 1935
+EP 1938
+UT ISI:000232137600006
+ER
+
+PT J
+AU Rossi, B
+TI Optimal tests for nested model selection with underlying parameter
+   instability
+SO ECONOMETRIC THEORY
+PD OCT
+PY 2005
+VL 21
+IS 5
+BP 962
+EP 990
+UT ISI:000231967200004
+ER
+
+PT J
+AU Bischoff, W
+   Hashorva, E
+   Husler, J
+   Miller, F
+TI Analysis of a change-point regression problem in quality control by
+   partial sums processes and Kolmogorov type tests
+SO METRIKA
+PD SEP
+PY 2005
+VL 62
+IS 1
+BP 85
+EP 98
+UT ISI:000231806700008
+ER
+
+PT J
+AU Zeileis, A
+   Kleiber, C
+TI Validating multiple structural change models - A case study
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD JUL-AUG
+PY 2005
+VL 20
+IS 5
+BP 685
+EP 690
+UT ISI:000231163300006
+ER
+
+PT J
+AU Starica, C
+   Granger, C
+TI Nonstationarities in stock returns
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD AUG
+PY 2005
+VL 87
+IS 3
+BP 503
+EP 522
+UT ISI:000231001000010
+ER
+
+PT J
+AU Gottschalk, P
+TI Downward nominal-wage flexibility: Real or measurement error?
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD AUG
+PY 2005
+VL 87
+IS 3
+BP 556
+EP 568
+UT ISI:000231001000013
+ER
+
+PT J
+AU Guegan, D
+TI How can we define the concept of long memory? An econometric survey
+SO ECONOMETRIC REVIEWS
+PY 2005
+VL 24
+IS 2
+BP 113
+EP 149
+UT ISI:000230821400001
+ER
+
+PT J
+AU Ben Hariz, S
+   Wylie, JJ
+TI Rates of convergence for the change-point estimator for long-range
+   dependent sequences
+SO STATISTICS & PROBABILITY LETTERS
+PD JUN 15
+PY 2005
+VL 73
+IS 2
+BP 155
+EP 164
+UT ISI:000230258400009
+ER
+
+PT J
+AU Hsu, CC
+TI Long memory or structural changes: An empirical examination on
+   inflation rates
+SO ECONOMICS LETTERS
+PD AUG
+PY 2005
+VL 88
+IS 2
+BP 289
+EP 294
+UT ISI:000230236100024
+ER
+
+PT J
+AU Juhl, T
+   Xiao, ZJ
+TI A nonparametric test for changing trends
+SO JOURNAL OF ECONOMETRICS
+PD AUG
+PY 2005
+VL 127
+IS 2
+BP 179
+EP 199
+UT ISI:000229958400003
+ER
+
+PT J
+AU De Wachter, S
+   Tzavalis, E
+TI Monte Carlo comparison of model and moment selection and classical
+   inference approaches to break detection in panel data models
+SO ECONOMICS LETTERS
+PD JUL
+PY 2005
+VL 88
+IS 1
+BP 91
+EP 96
+UT ISI:000229720900015
+ER
+
+PT J
+AU Yoon, G
+TI Long-memory property of nonlinear transformations of break processes
+SO ECONOMICS LETTERS
+PD JUN
+PY 2005
+VL 87
+IS 3
+BP 373
+EP 377
+UT ISI:000229534800013
+ER
+
+PT J
+AU Kruger, JJ
+TI Structural change in US manufacturing: Stationarity and
+   intra-distributional changes
+SO ECONOMICS LETTERS
+PD JUN
+PY 2005
+VL 87
+IS 3
+BP 387
+EP 392
+UT ISI:000229534800015
+ER
+
+PT J
+AU Khalaf, L
+   Kichian, M
+TI Exact tests of the stability of the Phillips curve: the Canadian case
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD APR 30
+PY 2005
+VL 49
+IS 2
+BP 445
+EP 460
+UT ISI:000229358000010
+ER
+
+PT J
+AU Lee, JH
+   Qaqish, BF
+TI A latent changepoint model using a generalized estimating equations
+   approach
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2005
+VL 34
+IS 5
+BP 1233
+EP 1242
+UT ISI:000229291200019
+ER
+
+PT J
+AU Brodsky, B
+   Darkhovsky, B
+TI Asymptotically optimal methods of change-point detection for composite
+   hypotheses
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD JUL 1
+PY 2005
+VL 133
+IS 1
+BP 123
+EP 138
+UT ISI:000229226200007
+ER
+
+PT J
+AU Lopes, ACBS
+   Montanes, A
+TI The behavior of Hegy tests for quarterly time series with seasonal mean
+   shifts
+SO ECONOMETRIC REVIEWS
+PY 2005
+VL 24
+IS 1
+BP 83
+EP 108
+UT ISI:000228860300004
+ER
+
+PT J
+AU Ninomiya, Y
+TI Information criterion for Gaussian change-point model
+SO STATISTICS & PROBABILITY LETTERS
+PD MAY 1
+PY 2005
+VL 72
+IS 3
+BP 237
+EP 247
+UT ISI:000228541300006
+ER
+
+PT J
+AU Lee, S
+   Na, O
+TI Test for parameter change in stochastic processes based on conditional
+   least-squares estimator
+SO JOURNAL OF MULTIVARIATE ANALYSIS
+PD APR
+PY 2005
+VL 93
+IS 2
+BP 375
+EP 393
+UT ISI:000228194700009
+ER
+
+PT J
+AU Paula, CJM
+   Nehring, R
+TI Product diversification, production systems, and economic performance
+   in US agricultural production
+SO JOURNAL OF ECONOMETRICS
+PD JUN
+PY 2005
+VL 126
+IS 2
+BP 525
+EP 548
+UT ISI:000227666800012
+ER
+
+PT J
+AU Gurevich, G
+   Vexler, A
+TI Change point problems in the model of logistic regression
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD MAY 1
+PY 2005
+VL 131
+IS 2
+BP 313
+EP 331
+UT ISI:000227502600006
+ER
+
+PT J
+AU Wang, ZG
+   Wang, JD
+TI Parameter estimation of some NHPP software reliability models with
+   change-point
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 2005
+VL 34
+IS 1
+BP 121
+EP 134
+UT ISI:000227416000009
+ER
+
+PT J
+AU Zeileis, A
+   Leisch, F
+   Kleiber, C
+   Hornik, K
+TI Monitoring structural change in dynamic econometric models
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD JAN-FEB
+PY 2005
+VL 20
+IS 1
+BP 99
+EP 121
+UT ISI:000227252400006
+ER
+
+PT J
+AU Majumdar, A
+   Gelfand, AE
+   Banerjee, S
+TI Spatio-temporal change-point modeling
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD MAR 1
+PY 2005
+VL 130
+IS 1-2
+BP 149
+EP 166
+UT ISI:000226645200011
+ER
+
+PT J
+AU Berkes, I
+   Horvath, L
+   Kokoszka, P
+TI Testing for parameter constancy in GARCH(p,q) models
+SO STATISTICS & PROBABILITY LETTERS
+PD DEC 15
+PY 2004
+VL 70
+IS 4
+BP 263
+EP 273
+UT ISI:000226404200004
+ER
+
+PT J
+AU Kapetanios, G
+TI Unit-root testing against the alternative hypothesis of up to m
+   structural breaks
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD JAN
+PY 2005
+VL 26
+IS 1
+BP 123
+EP 133
+UT ISI:000226420500007
+ER
+
+PT J
+AU Chen, GM
+   Choi, YK
+   Zhou, Y
+TI Nonparametric estimation of structural change points in volatility
+   models for time series
+SO JOURNAL OF ECONOMETRICS
+PD MAY
+PY 2005
+VL 126
+IS 1
+BP 79
+EP 114
+UT ISI:000226532600004
+ER
+
+PT J
+AU Steland, A
+TI On the distribution of the clipping median under a mixture model
+SO STATISTICS & PROBABILITY LETTERS
+PD JAN 1
+PY 2005
+VL 71
+IS 1
+BP 1
+EP 13
+UT ISI:000226338300001
+ER
+
+PT J
+AU Andrade, P
+   Bruneau, C
+   Gregoir, S
+TI Testing for the cointegration rank when some cointegrating directions
+   are changing
+SO JOURNAL OF ECONOMETRICS
+PD FEB
+PY 2005
+VL 124
+IS 2
+BP 269
+EP 310
+UT ISI:000226183800004
+ER
+
+PT J
+AU Loschi, RH
+   Cruz, FRB
+TI Extension to the product partition model: computing the probability of
+   a change
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD FEB 1
+PY 2005
+VL 48
+IS 2
+BP 255
+EP 268
+UT ISI:000226328700003
+ER
+
+PT J
+AU Cook, S
+   Vougas, D
+TI On the finite-sample size distortion of smooth transition unit root
+   tests
+SO STATISTICS & PROBABILITY LETTERS
+PD DEC 1
+PY 2004
+VL 70
+IS 3
+BP 175
+EP 182
+UT ISI:000225921700001
+ER
+
+PT J
+AU Knoth, S
+TI Fast initial response features for EWMA control charts
+SO STATISTICAL PAPERS
+PD JAN
+PY 2005
+VL 46
+IS 1
+BP 47
+EP 64
+UT ISI:000225836200003
+ER
+
+PT J
+AU Siegmund, D
+TI Model selection in irregular problems: Applications to mapping
+   quantitative trait loci
+SO BIOMETRIKA
+PD DEC
+PY 2004
+VL 91
+IS 4
+BP 785
+EP 800
+UT ISI:000225940000002
+ER
+
+PT J
+AU Guan, Z
+TI A semiparametric changepoint model
+SO BIOMETRIKA
+PD DEC
+PY 2004
+VL 91
+IS 4
+BP 849
+EP 862
+UT ISI:000225940000006
+ER
+
+PT J
+AU Kim, HJ
+   Fay, MP
+   Yu, BB
+   Barrett, MJ
+   Feuer, EJ
+TI Comparability of segmented line regression models
+SO BIOMETRICS
+PD DEC
+PY 2004
+VL 60
+IS 4
+BP 1005
+EP 1014
+UT ISI:000225939300018
+ER
+
+PT J
+AU Becker, R
+   Enders, W
+   Hurn, S
+TI A general test for time dependence in parameters
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD NOV-DEC
+PY 2004
+VL 19
+IS 7
+BP 899
+EP 906
+UT ISI:000225622400005
+ER
+
+PT J
+AU Clark, TE
+   McCracken, MW
+TI The power of tests of predictive ability in the presence of structural
+   breaks
+SO JOURNAL OF ECONOMETRICS
+PD JAN
+PY 2005
+VL 124
+IS 1
+BP 1
+EP 31
+UT ISI:000225381000001
+ER
+
+PT J
+AU Andersson, E
+TI The impact of intensity in surveillance of cyclical processes
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 2004
+VL 33
+IS 4
+BP 889
+EP 913
+UT ISI:000225514900002
+ER
+
+PT J
+AU Park, J
+   Park, S
+TI Estimation of the change point in the (X)over-bar and S control charts
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 2004
+VL 33
+IS 4
+BP 1115
+EP 1132
+UT ISI:000225514900015
+ER
+
+PT J
+AU Horvath, L
+   Huskova, M
+TI Testing for changes using permutations of U-statistics
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD FEB 1
+PY 2005
+VL 128
+IS 2
+BP 351
+EP 371
+UT ISI:000225335800002
+ER
+
+PT J
+AU Berkes, I
+   Gombay, E
+   Horvath, L
+   Kokoszka, P
+TI Sequential change-point detection in GARCH(p,q) models
+SO ECONOMETRIC THEORY
+PD DEC
+PY 2004
+VL 20
+IS 6
+BP 1140
+EP 1167
+UT ISI:000224941300004
+ER
+
+PT J
+AU Ghysels, E
+   Guay, A
+TI Testing for structural change in the presence of auxiliary models
+SO ECONOMETRIC THEORY
+PD DEC
+PY 2004
+VL 20
+IS 6
+BP 1168
+EP 1202
+UT ISI:000224941300005
+ER
+
+PT J
+AU Chiu, G
+   Lockhart, R
+   Routledge, R
+TI Asymptotic theory for bent-cable regression - the basic case
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD JAN 1
+PY 2005
+VL 127
+IS 1-2
+BP 143
+EP 156
+UT ISI:000224784700009
+ER
+
+PT J
+AU Kim, LY
+   Woodroofe, M
+   Wu, YH
+TI Testing for a change inn the hazard rate with staggered entry
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PD SEP
+PY 2004
+VL 33
+IS 9
+BP 2041
+EP 2058
+UT ISI:000224742500006
+ER
+
+PT J
+AU Ramanayake, A
+   Gupta, AK
+TI Epidemic change model for the exponential family
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PD SEP
+PY 2004
+VL 33
+IS 9
+BP 2175
+EP 2198
+UT ISI:000224742500014
+ER
+
+PT J
+AU Keblowski, P
+   Welfe, A
+TI The ADF-KPSS test of the joint confirmation hypothesis of unit
+   autoregressive root
+SO ECONOMICS LETTERS
+PD NOV
+PY 2004
+VL 85
+IS 2
+BP 257
+EP 263
+UT ISI:000224339000018
+ER
+
+PT J
+AU Cook, S
+   Manning, N
+TI The disappointing properties of GLS-based unit root tests in the
+   presence of structural breaks
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 2004
+VL 33
+IS 3
+BP 585
+EP 596
+UT ISI:000224360800004
+ER
+
+PT J
+AU Sibbertsen, P
+TI Long memory versus structural breaks: An overview
+SO STATISTICAL PAPERS
+PD OCT
+PY 2004
+VL 45
+IS 4
+BP 465
+EP 515
+UT ISI:000224306800001
+ER
+
+PT J
+AU Gill, R
+   Baron, M
+TI Consistent estimation in generalized broken-line regression
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD DEC 1
+PY 2004
+VL 126
+IS 2
+BP 441
+EP 460
+UT ISI:000224224300004
+ER
+
+PT J
+AU Rackauskas, A
+   Suquet, C
+TI Holder norm test statistics for epidemic change
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD DEC 1
+PY 2004
+VL 126
+IS 2
+BP 495
+EP 520
+UT ISI:000224224300007
+ER
+
+PT J
+AU Yang, TY
+TI Bayesian binary segmentation procedure for detecting streakiness in
+   sports
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES A-STATISTICS IN SOCIETY
+PY 2004
+VL 167
+PN Part 4
+BP 627
+EP 637
+UT ISI:000224243100005
+ER
+
+PT J
+AU Busetti, F
+   Taylor, AMR
+TI Tests of stationarity against a change in persistence
+SO JOURNAL OF ECONOMETRICS
+PD NOV
+PY 2004
+VL 123
+IS 1
+BP 33
+EP 66
+UT ISI:000224006500002
+ER
+
+PT J
+AU Huskova, M
+   Neuhaus, G
+TI Change point analysis for censored data
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD NOV 1
+PY 2004
+VL 126
+IS 1
+BP 207
+EP 223
+UT ISI:000223881300011
+ER
+
+PT J
+AU Horvath, L
+   Huskova, M
+   Kokoszka, P
+   Steinebach, J
+TI Monitoring changes in linear models
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD NOV 1
+PY 2004
+VL 126
+IS 1
+BP 225
+EP 251
+UT ISI:000223881300012
+ER
+
+PT J
+AU Sensier, M
+   van Dijk, D
+TI Testing for volatility changes in US macroeconomic time series
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD AUG
+PY 2004
+VL 86
+IS 3
+BP 833
+EP 839
+UT ISI:000223636100015
+ER
+
+PT J
+AU Dufour, JM
+   Khalaf, L
+   Bernard, JT
+   Genest, I
+TI Simulation-based finite-sample tests for heteroskedasticity and ARCH
+   effects
+SO JOURNAL OF ECONOMETRICS
+PD OCT
+PY 2004
+VL 122
+IS 2
+BP 317
+EP 347
+UT ISI:000223508100005
+ER
+
+PT J
+AU Gil-Alana, LA
+TI A joint test of fractional integration and structural breaks at a known
+   period of time
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD SEP
+PY 2004
+VL 25
+IS 5
+BP 691
+EP 700
+UT ISI:000222962500004
+ER
+
+PT J
+AU Kim, TH
+   Leybourne, S
+   Newbold, P
+TI Behaviour of Dickey-Fuller unit-root tests under trend misspecification
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD SEP
+PY 2004
+VL 25
+IS 5
+BP 755
+EP 764
+UT ISI:000222962500008
+ER
+
+PT J
+AU LaFrance, JT
+TI Integrability of the linear approximate almost ideal demand system
+SO ECONOMICS LETTERS
+PD SEP
+PY 2004
+VL 84
+IS 3
+BP 297
+EP 303
+UT ISI:000222962400001
+ER
+
+PT J
+AU Aue, A
+TI Strong approximation for RCA(1) time series with applications
+SO STATISTICS & PROBABILITY LETTERS
+PD JUL 15
+PY 2004
+VL 68
+IS 4
+BP 369
+EP 382
+UT ISI:000222622700005
+ER
+
+PT J
+AU Caussinus, H
+   Mestre, O
+TI Detection and correction of artificial shifts in climate series
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES C-APPLIED STATISTICS
+PY 2004
+VL 53
+PN Part 3
+BP 405
+EP 425
+UT ISI:000221978400001
+ER
+
+PT J
+AU Scott, MA
+   Norman, RG
+   Berger, KI
+TI Modelling growth and decline in lung function in Duchenne's muscular
+   dystrophy with an augmented linear mixed effects model
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES C-APPLIED STATISTICS
+PY 2004
+VL 53
+PN Part 3
+BP 507
+EP 521
+UT ISI:000221978400007
+ER
+
+PT J
+AU Grigg, O
+   Farewell, V
+TI An overview of risk-adjusted charts
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES A-STATISTICS IN SOCIETY
+PY 2004
+VL 167
+PN Part 3
+BP 523
+EP 539
+UT ISI:000222072600010
+ER
+
+PT J
+AU Kezim, B
+   Abdelli, Z
+TI A Bayesian analysis of a structural change in the parameters of a time
+   series
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PD AUG
+PY 2004
+VL 33
+IS 8
+BP 1863
+EP 1876
+UT ISI:000222166900009
+ER
+
+PT J
+AU O'Quigley, J
+   Natarajan, L
+TI Erosion of regression effect in a survival study
+SO BIOMETRICS
+PD JUN
+PY 2004
+VL 60
+IS 2
+BP 344
+EP 351
+UT ISI:000222126400006
+ER
+
+PT J
+AU O'Brien, SM
+TI Cutpoint selection for categorizing a continuous predictor
+SO BIOMETRICS
+PD JUN
+PY 2004
+VL 60
+IS 2
+BP 504
+EP 509
+UT ISI:000222126400024
+ER
+
+PT J
+AU Scholtens, D
+   Miron, A
+   Merchant, FM
+   Miller, A
+   Miron, PL
+   Iglehart, JD
+   Gentleman, R
+TI Analyzing factorial designed microarray experiments
+SO JOURNAL OF MULTIVARIATE ANALYSIS
+PD JUL
+PY 2004
+VL 90
+IS 1
+BP 19
+EP 43
+UT ISI:000221967900002
+ER
+
+PT J
+AU Ninomiya, Y
+TI Construction of conservative test for change-point problem in
+   two-dimensional random fields
+SO JOURNAL OF MULTIVARIATE ANALYSIS
+PD MAY
+PY 2004
+VL 89
+IS 2
+BP 219
+EP 242
+UT ISI:000221483200002
+ER
+
+PT J
+AU Summers, PM
+TI Bayesian evidence on the structure of unemployment
+SO ECONOMICS LETTERS
+PD JUN
+PY 2004
+VL 83
+IS 3
+BP 299
+EP 306
+UT ISI:000221376300004
+ER
+
+PT J
+AU Li, CS
+   Hunt, D
+TI Regression splines for threshold selection with application to a
+   random-effects logistic dose-response model
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD MAY 28
+PY 2004
+VL 46
+IS 1
+BP 1
+EP 9
+UT ISI:000220929400001
+ER
+
+PT J
+AU Aue, A
+   Horvath, L
+TI Delay time in sequential detection of change
+SO STATISTICS & PROBABILITY LETTERS
+PD APR 15
+PY 2004
+VL 67
+IS 3
+BP 221
+EP 231
+UT ISI:000220782400003
+ER
+
+PT J
+AU Shih, YS
+   Tsai, HW
+TI Variable selection bias in regression trees with constant fits
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD APR 10
+PY 2004
+VL 45
+IS 3
+BP 595
+EP 607
+UT ISI:000220585800013
+ER
+
+PT J
+AU Jondeau, E
+   Le Bihan, H
+   Galles, C
+TI Assessing generalized method-of-moments estimates of the Federal
+   Reserve reaction function
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD APR
+PY 2004
+VL 22
+IS 2
+BP 225
+EP 238
+UT ISI:000220467900011
+ER
+
+PT J
+AU Ramanayake, A
+TI Tests for a change point in the shape parameter of gamma random
+   variables
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PD APR
+PY 2004
+VL 33
+IS 4
+BP 821
+EP 833
+UT ISI:000220482600004
+ER
+
+PT J
+AU Gijbels, I
+   Goderniaux, AC
+TI Data-driven discontinuity detection in derivatives of a regression
+   function
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PD APR
+PY 2004
+VL 33
+IS 4
+BP 851
+EP 871
+UT ISI:000220482600006
+ER
+
+PT J
+AU Mikosch, T
+   Starica, C
+TI Nonstationarities in financial time series, the long-range dependence,
+   and the IGARCH effects
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD FEB
+PY 2004
+VL 86
+IS 1
+BP 378
+EP 390
+UT ISI:000220322400025
+ER
+
+PT J
+AU Jackson, CH
+   Sharples, LD
+TI Models for longitudinal data with censored changepoints
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES C-APPLIED STATISTICS
+PY 2004
+VL 53
+PN Part 1
+BP 149
+EP 162
+UT ISI:000220252000011
+ER
+
+PT J
+AU Fiteni, I
+TI tau-estimators of regression models with structural change of unknown
+   location
+SO JOURNAL OF ECONOMETRICS
+PD MAR
+PY 2004
+VL 119
+IS 1
+BP 19
+EP 44
+UT ISI:000220031400002
+ER
+
+PT J
+AU Cavaliere, G
+TI Testing stationarity under a permanent variance shift
+SO ECONOMICS LETTERS
+PD MAR
+PY 2004
+VL 82
+IS 3
+BP 403
+EP 408
+UT ISI:000189241700016
+ER
+
+PT J
+AU Park, CW
+   Kim, WC
+TI Estimation of a regression function with a sharp change point using
+   boundary wavelets
+SO STATISTICS & PROBABILITY LETTERS
+PD MAR 1
+PY 2004
+VL 66
+IS 4
+BP 435
+EP 448
+UT ISI:000189230600007
+ER
+
+PT J
+AU Psaradakis, Z
+   Sola, M
+   Spagnolo, F
+TI On Markov error-correction models, with an application to stock prices
+   and dividends
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD JAN-FEB
+PY 2004
+VL 19
+IS 1
+BP 69
+EP 88
+UT ISI:000189079500004
+ER
+
+PT J
+AU Datta, A
+TI Time-series tests of convergence and transitional dynamics
+SO ECONOMICS LETTERS
+PD NOV
+PY 2003
+VL 81
+IS 2
+BP 233
+EP 240
+UT ISI:000189226900012
+ER
+
+PT J
+AU Lutkepohl, H
+   Saikkonen, P
+   Trenkler, C
+TI Testing for the cointegrating rank of a VAR process with level shift at
+   unknown time
+SO ECONOMETRICA
+PD MAR
+PY 2004
+VL 72
+IS 2
+BP 647
+EP 662
+UT ISI:000189121700012
+ER
+
+PT J
+AU Lee, YD
+TI Unified solutions of integral equations of SPRT for exponential random
+   variables
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2004
+VL 33
+IS 1
+BP 65
+EP 74
+UT ISI:000189155000005
+ER
+
+PT J
+AU He, XM
+   Zhu, LX
+TI A lack-of-fit test for quantile regression
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD DEC
+PY 2003
+VL 98
+IS 464
+BP 1013
+EP 1022
+UT ISI:000188318600026
+ER
+
+PT J
+AU Bischoff, W
+   Hashorva, E
+   Husler, K
+   Miller, F
+TI On the power of the Kolmogorov test to detect the trend of a Brownian
+   bridge with applications to a change-point problem in regression models
+SO STATISTICS & PROBABILITY LETTERS
+PD JAN 15
+PY 2004
+VL 66
+IS 2
+BP 105
+EP 115
+UT ISI:000188229800002
+ER
+
+PT J
+AU Hassler, U
+   Rodrigues, PMM
+TI Seasonal unit root tests under structural breaks
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD JAN
+PY 2004
+VL 25
+IS 1
+BP 33
+EP 53
+UT ISI:000187961700003
+ER
+
+PT J
+AU Kim, CJ
+TI The less-volatile US economy: A Bayesian investigation of timing,
+   breadth, and potential explanations
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JAN
+PY 2004
+VL 22
+IS 1
+BP 80
+EP 93
+UT ISI:000187940000007
+ER
+
+PT J
+AU Fu, JC
+   Shmueli, G
+   Chang, YM
+TI A unified Markov chain approach for computing the run length
+   distribution in control charts with simple or compound rules
+SO STATISTICS & PROBABILITY LETTERS
+PD DEC 15
+PY 2003
+VL 65
+IS 4
+BP 457
+EP 466
+UT ISI:000187718400017
+ER
+
+PT J
+AU Lee, S
+   Na, S
+TI A nonparametric test for the change of the density function in strong
+   mixing processes
+SO STATISTICS & PROBABILITY LETTERS
+PD JAN 1
+PY 2004
+VL 66
+IS 1
+BP 25
+EP 34
+UT ISI:000187748900004
+ER
+
+PT J
+AU Zeileis, A
+TI Alternative boundaries for CUSUM tests
+SO STATISTICAL PAPERS
+PD JAN
+PY 2004
+VL 45
+IS 1
+BP 123
+EP 131
+UT ISI:000187492300009
+ER
+
+PT J
+AU Carrion-i-Silvestre, JL
+TI Breaking date misspecification error for the level shift KPSS test
+SO ECONOMICS LETTERS
+PD DEC
+PY 2003
+VL 81
+IS 3
+BP 365
+EP 371
+UT ISI:000186805200014
+ER
+
+PT J
+AU Lee, J
+   Strazicich, MC
+TI Minimum Lagrange multiplier unit root test with two structural breaks
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD NOV
+PY 2003
+VL 85
+IS 4
+BP 1082
+EP 1089
+UT ISI:000186322400025
+ER
+
+PT J
+AU Andrews, DWK
+TI End-of-sample instability tests
+SO ECONOMETRICA
+PD NOV
+PY 2003
+VL 71
+IS 6
+BP 1661
+EP 1694
+UT ISI:000186245600002
+ER
+
+PT J
+AU Hall, AR
+   Inoue, A
+   Peixe, FPM
+TI Covariance matrix estimation and the limiting behavior of the
+   overidentifying restrictions test in the presence of neglected
+   structural instability
+SO ECONOMETRIC THEORY
+PD DEC
+PY 2003
+VL 19
+IS 6
+BP 962
+EP 983
+UT ISI:000186186500004
+ER
+
+PT J
+AU Estrella, A
+TI Critical values and p values of bessel process distributions:
+   Computation and application to structural break tests
+SO ECONOMETRIC THEORY
+PD DEC
+PY 2003
+VL 19
+IS 6
+BP 1128
+EP 1143
+UT ISI:000186186500010
+ER
+
+PT J
+AU Altissimo, F
+   Corradi, V
+TI Strong rules for detecting the number of breaks in a time series
+SO JOURNAL OF ECONOMETRICS
+PD DEC
+PY 2003
+VL 117
+IS 2
+BP 207
+EP 244
+UT ISI:000185978300001
+ER
+
+PT J
+AU Hall, P
+   Muller, HG
+TI Order-preserving nonparametric regression, with applications to
+   conditional distribution and quantile function estimation
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD SEP
+PY 2003
+VL 98
+IS 463
+BP 598
+EP 608
+UT ISI:000185993900013
+ER
+
+PT J
+AU Busetti, F
+   Taylor, AMR
+TI Variance shifts, structural breaks, and stationarity tests
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD OCT
+PY 2003
+VL 21
+IS 4
+BP 510
+EP 531
+UT ISI:000185922400011
+ER
+
+PT J
+AU Zeileis, A
+   Kleiber, C
+   Kramer, W
+   Hornik, K
+TI Testing and dating of structural changes in practice
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD OCT 28
+PY 2003
+VL 44
+IS 1-2
+BP 109
+EP 123
+UT ISI:000185781500006
+ER
+
+PT J
+AU Lee, S
+   Lee, S
+TI Testing heterogeneity for frailty distribution in shared frailty model
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2003
+VL 32
+IS 11
+BP 2245
+EP 2253
+UT ISI:000185527200011
+ER
+
+PT J
+AU Busetti, F
+   Taylor, AMR
+TI Testing against stochastic trend and seasonality in the presence of
+   unattended breaks and unit roots
+SO JOURNAL OF ECONOMETRICS
+PD NOV
+PY 2003
+VL 117
+IS 1
+BP 21
+EP 53
+UT ISI:000185212200002
+ER
+
+PT J
+AU Piehl, AM
+   Cooper, SJ
+   Braga, AA
+   Kennedy, DM
+TI Testing for structural breaks in the evaluation of programs
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD AUG
+PY 2003
+VL 85
+IS 3
+BP 550
+EP 558
+UT ISI:000184967400005
+ER
+
+PT J
+AU Estrella, A
+   Rodrigues, AP
+   Schich, S
+TI How stable is the predictive power of the yield curve? Evidence from
+   Germany and the United States
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD AUG
+PY 2003
+VL 85
+IS 3
+BP 629
+EP 644
+UT ISI:000184967400011
+ER
+
+PT J
+AU Medeiros, MC
+   Veiga, A
+TI Diagnostic checking in a flexible nonlinear time series model
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD JUL
+PY 2003
+VL 24
+IS 4
+BP 461
+EP 482
+UT ISI:000184397500005
+ER
+
+PT J
+AU Higgins, RS
+   Johnson, PA
+TI The mean effect of structural change on the dependent variable is
+   accurately measured by the intercept change alone
+SO ECONOMICS LETTERS
+PD AUG
+PY 2003
+VL 80
+IS 2
+BP 255
+EP 259
+UT ISI:000184313100018
+ER
+
+PT J
+AU Caporale, GM
+   Pittis, N
+   Sakellis, P
+TI Testing for PPP: the erratic behaviour of unit root tests
+SO ECONOMICS LETTERS
+PD AUG
+PY 2003
+VL 80
+IS 2
+BP 277
+EP 284
+UT ISI:000184313100021
+ER
+
+PT J
+AU Zhang, HP
+   Yu, CY
+   Zhu, HT
+   Shi, J
+TI Identification of linear directions in multivariate adaptive spline
+   models
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD JUN
+PY 2003
+VL 98
+IS 462
+BP 369
+EP 376
+UT ISI:000184137400013
+ER
+
+PT J
+AU Suchard, MA
+   Weiss, RE
+   Dorman, KS
+   Sinsheimer, JS
+TI Inferring spatial phylogenetic variation along nucleotide sequences: A
+   multiple changepoint model
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD JUN
+PY 2003
+VL 98
+IS 462
+BP 427
+EP 437
+UT ISI:000184137400019
+ER
+
+PT J
+AU Krieger, AM
+   Pollak, M
+   Yakir, B
+TI Surveillance of a simple linear regression
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD JUN
+PY 2003
+VL 98
+IS 462
+BP 456
+EP 469
+UT ISI:000184137400021
+ER
+
+PT J
+AU Busetti, F
+   Harvey, A
+TI Seasonality tests
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JUL
+PY 2003
+VL 21
+IS 3
+BP 420
+EP 436
+UT ISI:000184011700007
+ER
+
+PT J
+AU Aly, EEAA
+   Abd-Rabou, AES
+   Al-Kandari, NM
+TI Tests for multiple change points under ordered alternatives
+SO METRIKA
+PY 2003
+VL 57
+IS 3
+BP 209
+EP 221
+UT ISI:000183532500001
+ER
+
+PT J
+AU Hothorn, T
+   Lausen, B
+TI On the exact distribution of maximally selected rank statistics
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD JUN 28
+PY 2003
+VL 43
+IS 2
+BP 121
+EP 137
+UT ISI:000183581900001
+ER
+
+PT J
+AU Moskvina, V
+   Zhigljavsky, A
+TI An algorithm based on singular spectrum analysis for change-point
+   detection
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 2003
+VL 32
+IS 2
+BP 319
+EP 352
+UT ISI:000183254800003
+ER
+
+PT J
+AU Ding, KY
+TI A lower confidence bound for the change point after a sequential CUSUM
+   test
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD JUL 1
+PY 2003
+VL 115
+IS 1
+BP 311
+EP 326
+UT ISI:000182996400017
+ER
+
+PT J
+AU Perron, P
+   Rodriguez, G
+TI GLS detrending, efficient unit root tests and structural change
+SO JOURNAL OF ECONOMETRICS
+PD JUL
+PY 2003
+VL 115
+IS 1
+BP 1
+EP 27
+UT ISI:000183025000001
+ER
+
+PT J
+AU Ghysels, E
+   Guay, A
+TI Structural change tests for simulated method of moments
+SO JOURNAL OF ECONOMETRICS
+PD JUL
+PY 2003
+VL 115
+IS 1
+BP 91
+EP 123
+UT ISI:000183025000005
+ER
+
+PT J
+AU Wu, CQ
+   Zhao, LC
+   Wu, YH
+TI Estimation in change-point hazard function models
+SO STATISTICS & PROBABILITY LETTERS
+PD MAY 15
+PY 2003
+VL 63
+IS 1
+BP 41
+EP 48
+UT ISI:000182859100005
+ER
+
+PT J
+AU Lamarche, JF
+TI A robust bootstrap test under heteroskedasticity
+SO ECONOMICS LETTERS
+PD JUN
+PY 2003
+VL 79
+IS 3
+BP 353
+EP 359
+UT ISI:000182815000010
+ER
+
+PT J
+AU Lundbergh, S
+   Terasvirta, T
+   van Dijk, D
+TI Time-varying smooth transition autoregressive models
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JAN
+PY 2003
+VL 21
+IS 1
+BP 104
+EP 121
+UT ISI:000182584200012
+ER
+
+PT J
+AU Guay, A
+   Scaillet, O
+TI Indirect inference, nuisance parameter, and threshold moving average
+   models
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JAN
+PY 2003
+VL 21
+IS 1
+BP 122
+EP 132
+UT ISI:000182584200013
+ER
+
+PT J
+AU Hassler, U
+TI Nonsense regressions due to neglected time-varying means
+SO STATISTICAL PAPERS
+PD APR
+PY 2003
+VL 44
+IS 2
+BP 169
+EP 182
+UT ISI:000182469500002
+ER
+
+PT J
+AU Hansen, PR
+TI Structural changes in the cointegrated vector autoregressive model
+SO JOURNAL OF ECONOMETRICS
+PD JUN
+PY 2003
+VL 114
+IS 2
+BP 261
+EP 295
+UT ISI:000182430200004
+ER
+
+PT J
+AU Busetti, F
+   Harvey, A
+TI Further comments on stationarity tests in series with structural breaks
+   at unknown points
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD MAR
+PY 2003
+VL 24
+IS 2
+BP 137
+EP 140
+UT ISI:000182292000002
+ER
+
+PT J
+AU Harvey, DI
+   Mills, TC
+TI A note on Busetti-Harvey tests for stationarity in series with
+   structural breaks
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD MAR
+PY 2003
+VL 24
+IS 2
+BP 159
+EP 164
+UT ISI:000182292000005
+ER
+
+PT J
+AU Hamilton, JD
+TI What is an oil shock?
+SO JOURNAL OF ECONOMETRICS
+PD APR
+PY 2003
+VL 113
+IS 2
+BP 363
+EP 398
+UT ISI:000181378500006
+ER
+
+PT J
+AU Bai, J
+   Perron, P
+TI Computation and analysis of multiple structural change models
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD JAN-FEB
+PY 2003
+VL 18
+IS 1
+BP 1
+EP 22
+UT ISI:000181177600001
+ER
+
+PT J
+AU Visek, T
+TI The likelihood ratio method for testing changes in the parameters of
+   double exponential observations
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD APR 1
+PY 2003
+VL 113
+IS 1
+BP 79
+EP 111
+UT ISI:000180984200007
+ER
+
+PT J
+AU Hoglund, R
+   Ostermark, R
+TI Size and power of some cointegration tests under structural breaks and
+   heteroskedastic noise
+SO STATISTICAL PAPERS
+PD JAN
+PY 2003
+VL 44
+IS 1
+BP 1
+EP 22
+UT ISI:000180857500001
+ER
+
+PT J
+AU Estrella, A
+   Fuhrer, JC
+TI Monetary policy shifts and the stability of monetary policy models
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD FEB
+PY 2003
+VL 85
+IS 1
+BP 94
+EP 104
+UT ISI:000180718900008
+ER
+
+PT J
+AU Carsoule, F
+   Franses, PH
+TI A note on monitoring time-varying parameters in an autoregression
+SO METRIKA
+PY 2003
+VL 57
+IS 1
+BP 51
+EP 62
+UT ISI:000180913200004
+ER
+
+PT J
+AU Presno, MJ
+   Lopez, AJ
+TI Response surface estimates of stationarity tests with a structural break
+SO ECONOMICS LETTERS
+PD MAR
+PY 2003
+VL 78
+IS 3
+BP 395
+EP 399
+UT ISI:000180856200015
+ER
+
+PT J
+AU Hall, CB
+   Ying, J
+   Kuo, L
+   Lipton, RB
+TI Bayesian and profile likelihood change point methods for modeling
+   cognitive function over time
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD FEB 28
+PY 2003
+VL 42
+IS 1-2
+BP 91
+EP 109
+UT ISI:000180920900006
+ER
+
+PT J
+AU Sonesson, C
+   Bock, D
+TI A review and discussion of prospective statistical surveillance in
+   public health
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES A-STATISTICS IN SOCIETY
+PY 2003
+VL 166
+PN Part 1
+BP 5
+EP 21
+UT ISI:000180772400002
+ER
+
+PT J
+AU Peel, DA
+   Ioannidis, C
+TI Empirical evidence on the relationship between the term structure of
+   interest rates and future real output changes when there are changes in
+   policy regimes
+SO ECONOMICS LETTERS
+PD FEB
+PY 2003
+VL 78
+IS 2
+BP 147
+EP 152
+UT ISI:000180611800001
+ER
+
+PT J
+AU Kim, IM
+TI Operational time of the Korea stock markets
+SO ECONOMICS LETTERS
+PD FEB
+PY 2003
+VL 78
+IS 2
+BP 181
+EP 185
+UT ISI:000180611800007
+ER
+
+PT J
+AU Andrews, DWK
+TI Tests for parameter instability and structural change with unknown
+   change point (vol 71, pg 395, 2003)
+SO ECONOMETRICA
+PD JAN
+PY 2003
+VL 71
+IS 1
+BP 395
+EP 397
+UT ISI:000180543900018
+ER
+
+PT J
+AU Dabye, AS
+   Farinetto, C
+   Kutoyants, YA
+TI On Bayesian estimators in misspecified change-point problems for
+   Poisson process
+SO STATISTICS & PROBABILITY LETTERS
+PD JAN 1
+PY 2003
+VL 61
+IS 1
+BP 17
+EP 30
+UT ISI:000180356200002
+ER
+
+PT J
+AU Huskova, M
+TI Serial rank statistics for detection of changes
+SO STATISTICS & PROBABILITY LETTERS
+PD JAN 15
+PY 2003
+VL 61
+IS 2
+BP 199
+EP 213
+UT ISI:000180356400008
+ER
+
+PT J
+AU Maravelakis, PE
+   Bersimis, S
+   Panaretos, J
+   Psarakis, S
+TI Identifying the out of control variable in a multivariate control chart
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2002
+VL 31
+IS 12
+BP 2391
+EP 2408
+UT ISI:000179962400018
+ER
+
+PT J
+AU Ray, BK
+   Tsay, RS
+TI Bayesian methods for change-point detection in long-range dependent
+   processes
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD NOV
+PY 2002
+VL 23
+IS 6
+BP 687
+EP 705
+UT ISI:000179616700004
+ER
+
+PT J
+AU Jansson, M
+   Haldrup, N
+TI Regression theory for nearly cointegrated time series
+SO ECONOMETRIC THEORY
+PD DEC
+PY 2002
+VL 18
+IS 6
+BP 1309
+EP 1335
+UT ISI:000179680500002
+ER
+
+PT J
+AU Chen, YQ
+   Rohde, CA
+   Wang, MC
+TI Additive hazards models with latent treatment effectiveness lag time
+SO BIOMETRIKA
+PD DEC
+PY 2002
+VL 89
+IS 4
+BP 917
+EP 931
+UT ISI:000179774400015
+ER
+
+PT J
+AU Staudenmayer, J
+   Spiegelman, D
+TI Segmented regression in the presence of covariate measurement error in
+   main study/validation study designs
+SO BIOMETRICS
+PD DEC
+PY 2002
+VL 58
+IS 4
+BP 871
+EP 877
+UT ISI:000179539400018
+ER
+
+PT J
+AU Gil-Alana, LA
+TI A mean shift break in the US interest rate
+SO ECONOMICS LETTERS
+PD NOV
+PY 2002
+VL 77
+IS 3
+BP 357
+EP 363
+UT ISI:000179307600009
+ER
+
+PT J
+AU Cook, S
+TI Correcting size distortion of the Dickey-Fuller test via recursive mean
+   adjustment
+SO STATISTICS & PROBABILITY LETTERS
+PD NOV 1
+PY 2002
+VL 60
+IS 1
+BP 75
+EP 79
+UT ISI:000179211100008
+ER
+
+PT J
+AU Larget, B
+   Simon, DL
+   Kadane, JB
+TI Bayesian phylogenetic inference from animal mitochondrial genome
+   arrangements
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES B-STATISTICAL
+   METHODOLOGY
+PY 2002
+VL 64
+PN Part 4
+BP 681
+EP 693
+UT ISI:000179221100005
+ER
+
+PT J
+AU Koul, HL
+   Qian, L
+TI Asymptotics of maximum likelihood estimator in a two-phase linear
+   regression model
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD NOV 1
+PY 2002
+VL 108
+IS 1-2
+BP 99
+EP 119
+UT ISI:000179154800008
+ER
+
+PT J
+AU Andreou, E
+   Ghysels, E
+TI Detecting multiple breaks in financial market volatility dynamics
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD SEP-OCT
+PY 2002
+VL 17
+IS 5
+BP 579
+EP 600
+UT ISI:000178916200010
+ER
+
+PT J
+AU Chauvet, M
+   Potter, S
+TI Predicting a recession: evidence from the yield curve in the presence
+   of structural breaks
+SO ECONOMICS LETTERS
+PD OCT
+PY 2002
+VL 77
+IS 2
+BP 245
+EP 253
+UT ISI:000178698100015
+ER
+
+PT J
+AU Gregoire, G
+   Hamrouni, Z
+TI Change point estimation by local linear smoothing
+SO JOURNAL OF MULTIVARIATE ANALYSIS
+PD OCT
+PY 2002
+VL 83
+IS 1
+BP 56
+EP 83
+UT ISI:000178596700004
+ER
+
+PT J
+AU Hansen, BE
+   Seo, B
+TI Testing for two-regime threshold cointegration in vector
+   error-correction models
+SO JOURNAL OF ECONOMETRICS
+PD OCT
+PY 2002
+VL 110
+IS 2
+BP 293
+EP 318
+UT ISI:000178065600009
+ER
+
+PT J
+AU Lundbergh, S
+   Terasvirta, T
+TI Evaluating GARCH models
+SO JOURNAL OF ECONOMETRICS
+PD OCT
+PY 2002
+VL 110
+IS 2
+BP 417
+EP 435
+UT ISI:000178065600013
+ER
+
+PT J
+AU Gospodinov, N
+TI Bootstrap-based inference in models with a nearly noninvertible moving
+   average component
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD APR
+PY 2002
+VL 20
+IS 2
+BP 254
+EP 268
+UT ISI:000178038200008
+ER
+
+PT J
+AU Gil-Alana, LA
+TI Structural breaks and fractional integration in the US output and
+   unemployment rate
+SO ECONOMICS LETTERS
+PD SEP
+PY 2002
+VL 77
+IS 1
+BP 79
+EP 84
+UT ISI:000178015900012
+ER
+
+PT J
+AU Chiu, G
+   Lockhart, R
+   Routledge, R
+TI Bent-cable asymptotics when the bend is missing
+SO STATISTICS & PROBABILITY LETTERS
+PD AUG 1
+PY 2002
+VL 59
+IS 1
+BP 9
+EP 16
+UT ISI:000177734600002
+ER
+
+PT J
+AU Noorossana, R
+   Woodall, WH
+   Amiriparian, S
+TI On the economic design of multivariate control charts
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2002
+VL 31
+IS 9
+BP 1665
+EP 1673
+UT ISI:000177653100015
+ER
+
+PT J
+AU Moeltner, K
+   Layton, DF
+TI A censored random coefficients model for pooled survey data with
+   application to the estimation of power outage costs
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD AUG
+PY 2002
+VL 84
+IS 3
+BP 552
+EP 561
+UT ISI:000177213200013
+ER
+
+PT J
+AU Carrasco, M
+TI Misspecified structural change, threshold, and Markov-switching models
+SO JOURNAL OF ECONOMETRICS
+PD AUG
+PY 2002
+VL 109
+IS 2
+BP 239
+EP 273
+UT ISI:000177307800002
+ER
+
+PT J
+AU Delgado, MA
+   Fiteni, I
+TI External bootstrap tests for parameter stability
+SO JOURNAL OF ECONOMETRICS
+PD AUG
+PY 2002
+VL 109
+IS 2
+BP 275
+EP 303
+UT ISI:000177307800003
+ER
+
+PT J
+AU Kim, TH
+   Leybourne, S
+   Newbold, P
+TI Unit root tests with a break in innovation variance
+SO JOURNAL OF ECONOMETRICS
+PD AUG
+PY 2002
+VL 109
+IS 2
+BP 365
+EP 387
+UT ISI:000177307800006
+ER
+
+PT J
+AU Jandhyala, VK
+   Fotopoulos, SB
+   Hawkins, DM
+TI Detection and estimation of abrupt changes in the variability of a
+   process
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD JUL 28
+PY 2002
+VL 40
+IS 1
+BP 1
+EP 19
+UT ISI:000177244600001
+ER
+
+PT J
+AU Steland, A
+TI Nonparametric monitoring of financial time series by jump-preserving
+   control charts
+SO STATISTICAL PAPERS
+PD JUL
+PY 2002
+VL 43
+IS 3
+BP 401
+EP 422
+UT ISI:000177146200007
+ER
+
+PT J
+AU Gabriel, VJ
+   Psaradakis, Z
+   Sola, M
+TI A simple method of testing for cointegration subject to mutiple regime
+   changes
+SO ECONOMICS LETTERS
+PD JUL
+PY 2002
+VL 76
+IS 2
+BP 213
+EP 221
+UT ISI:000177172700009
+ER
+
+PT J
+AU Harvey, DI
+   Leybourne, SJ
+   Newbold, P
+TI Seasonal unit root tests with seasonal mean shifts
+SO ECONOMICS LETTERS
+PD JUL
+PY 2002
+VL 76
+IS 2
+BP 295
+EP 302
+UT ISI:000177172700020
+ER
+
+PT J
+AU Forchini, G
+TI Optimal similar tests for structural change for the linear regression
+   model
+SO ECONOMETRIC THEORY
+PD AUG
+PY 2002
+VL 18
+IS 4
+BP 853
+EP 867
+UT ISI:000176911800002
+ER
+
+PT J
+AU Zhao, LC
+   Peng, LM
+TI Model selection under order restriction
+SO STATISTICS & PROBABILITY LETTERS
+PD MAY 1
+PY 2002
+VL 57
+IS 4
+BP 301
+EP 306
+UT ISI:000176787500001
+ER
+
+PT J
+AU Loschi, RH
+   Cruz, FRB
+TI An analysis of the influence of some prior specifications in the
+   identification of change points via product partition model
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD JUN 28
+PY 2002
+VL 39
+IS 4
+BP 477
+EP 501
+UT ISI:000176397600006
+ER
+
+PT J
+AU Davies, RB
+TI Hypothesis testing when a nuisance parameter is present only under the
+   alternative: Linear model case
+SO BIOMETRIKA
+PD JUN
+PY 2002
+VL 89
+IS 2
+BP 484
+EP 489
+UT ISI:000176520500020
+ER
+
+PT J
+AU Psaradakis, Z
+TI On the asymptotic behaviour of unit-root tests in the presence of a
+   Markov trend
+SO STATISTICS & PROBABILITY LETTERS
+PD MAR 1
+PY 2002
+VL 57
+IS 1
+BP 101
+EP 109
+UT ISI:000176359900011
+ER
+
+PT J
+AU Rukhin, AL
+TI Asymptotic behavior of posterior distribution of the change-point
+   parameter
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD JUL 1
+PY 2002
+VL 105
+IS 2
+BP 327
+EP 345
+UT ISI:000176342400004
+ER
+
+PT J
+AU Hall, P
+   Simar, L
+TI Estimating a changepoint, boundary, or frontier in the presence of
+   observation error
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD JUN
+PY 2002
+VL 97
+IS 458
+BP 523
+EP 534
+UT ISI:000176078300019
+ER
+
+PT J
+AU Jandhyala, VK
+   Hawkins, DM
+   Fotopoulos, SB
+TI Testing and locating variance changepoints with applications to stock
+   prices (vol 92, pg 738)
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD JUN
+PY 2002
+VL 97
+IS 458
+BP 661
+EP 661
+UT ISI:000176078300034
+ER
+
+PT J
+AU Balakrishnan, N
+   Brito, MR
+   Quiroz, AJ
+TI Using large order statistics of runs for tracking a changing Bernoulli
+   probability
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2002
+VL 31
+IS 5
+BP 719
+EP 732
+UT ISI:000175949800004
+ER
+
+PT J
+AU Rozenholc, Y
+TI Nonparametric tests of change-points with tapered data
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD JAN
+PY 2001
+VL 22
+IS 1
+BP 13
+EP 43
+UT ISI:000175858300002
+ER
+
+PT J
+AU Busetti, F
+   Harvey, A
+TI Testing for the presence of a random walk in series with structural
+   breaks
+SO JOURNAL OF TIME SERIES ANALYSIS
+PD MAR
+PY 2001
+VL 22
+IS 2
+BP 127
+EP 150
+UT ISI:000175858400001
+ER
+
+PT J
+AU Fu, JC
+   Spiring, FA
+   Xie, HS
+TI On the average run lengths of quality control schemes using a Markov
+   chain approach
+SO STATISTICS & PROBABILITY LETTERS
+PD FEB 15
+PY 2002
+VL 56
+IS 4
+BP 369
+EP 380
+UT ISI:000175031100004
+ER
+
+PT J
+AU Gombay, E
+   Horvath, L
+TI Rates of convergence for U-statistic processes and their bootstrapped
+   versions
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD APR 1
+PY 2002
+VL 102
+IS 2
+BP 247
+EP 272
+UT ISI:000175020100005
+ER
+
+PT J
+AU Xiao, ZJ
+   Phillips, PCB
+TI A CUSUM test for cointegration using regression residuals
+SO JOURNAL OF ECONOMETRICS
+PD MAY
+PY 2002
+VL 108
+IS 1
+BP 43
+EP 61
+UT ISI:000174797600003
+ER
+
+PT J
+AU Kurozumi, E
+TI Testing for stationarity with a break
+SO JOURNAL OF ECONOMETRICS
+PD MAY
+PY 2002
+VL 108
+IS 1
+BP 63
+EP 99
+UT ISI:000174797600004
+ER
+
+PT J
+AU Breitung, J
+TI Nonparametric tests for unit roots and cointegration
+SO JOURNAL OF ECONOMETRICS
+PD JUN
+PY 2002
+VL 108
+IS 2
+BP 343
+EP 363
+UT ISI:000174884100006
+ER
+
+PT J
+AU Huh, J
+   Carriere, KC
+TI Estimation of regression functions with a discontinuity in a derivative
+   with local polynomial fits
+SO STATISTICS & PROBABILITY LETTERS
+PD FEB 1
+PY 2002
+VL 56
+IS 3
+BP 329
+EP 343
+UT ISI:000174700500011
+ER
+
+PT J
+AU Saikkonen, P
+   Lutkepohl, H
+TI Testing for a unit root in a time series with a level shift at unknown
+   time
+SO ECONOMETRIC THEORY
+PD APR
+PY 2002
+VL 18
+IS 2
+BP 313
+EP 348
+UT ISI:000174336500005
+ER
+
+PT J
+AU Fiteni, I
+TI Robust estimation of structural break points
+SO ECONOMETRIC THEORY
+PD APR
+PY 2002
+VL 18
+IS 2
+BP 349
+EP 386
+UT ISI:000174336500006
+ER
+
+PT J
+AU Faucett, CL
+   Schenker, N
+   Taylor, JMG
+TI Survival analysis using auxiliary variables via multiple imputation,
+   with application to AIDS clinical trial data
+SO BIOMETRICS
+PD MAR
+PY 2002
+VL 58
+IS 1
+BP 37
+EP 47
+UT ISI:000174229300005
+ER
+
+PT J
+AU Luceno, A
+   Puig-Pey, J
+TI An accurate algorithm to compute the run length probability
+   distribution, and its convolutions, for a Cusum chart to control normal
+   mean
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD JAN 28
+PY 2002
+VL 38
+IS 3
+BP 249
+EP 261
+UT ISI:000173430200001
+ER
+
+PT J
+AU Aue, A
+   Steinebach, J
+TI A note on estimating the change-point of a gradually changing
+   stochastic process
+SO STATISTICS & PROBABILITY LETTERS
+PD JAN 15
+PY 2002
+VL 56
+IS 2
+BP 177
+EP 191
+UT ISI:000173230900009
+ER
+
+PT J
+AU O'Donnell, CJ
+   Rambaldi, AN
+   Doran, HE
+TI Estimating economic relationships subject to firm- and time-varying
+   equality and inequality constraints
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD NOV-DEC
+PY 2001
+VL 16
+IS 6
+BP 709
+EP 726
+UT ISI:000173094200003
+ER
+
+PT J
+AU Coenen, G
+   Vega, JL
+TI The demand for M3 in the euro area
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD NOV-DEC
+PY 2001
+VL 16
+IS 6
+BP 727
+EP 748
+UT ISI:000173094200004
+ER
+
+PT J
+AU Barry, D
+TI Bayesian smoothing with occasional jumps
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2001
+VL 30
+IS 12
+BP 2707
+EP 2719
+UT ISI:000173146500012
+ER
+
+PT J
+AU Zivot, E
+   Andrews, DWK
+TI Further evidence on the great crash, the oil-price shock, and the
+   unit-root hypothesis (Reprinted)
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JAN
+PY 2002
+VL 20
+IS 1
+BP 25
+EP 44
+UT ISI:000172708800004
+ER
+
+PT J
+AU Hansen, BE
+TI Tests for parameter instability in regressions with I(1) processes
+   (Reprinted)
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JAN
+PY 2002
+VL 20
+IS 1
+BP 45
+EP 59
+UT ISI:000172708800005
+ER
+
+PT J
+AU Ding, KY
+TI Properties of the minimum point of an unbalanced two-sided random walk
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2001
+VL 30
+IS 11
+BP 2393
+EP 2414
+UT ISI:000172624000013
+ER
+
+PT J
+AU Green, PJ
+   Mira, A
+TI Delayed rejection in reversible jump Metropolis-Hastings
+SO BIOMETRIKA
+PD DEC
+PY 2001
+VL 88
+IS 4
+BP 1035
+EP 1053
+UT ISI:000172541700010
+ER
+
+PT J
+AU Luger, R
+TI A modified CUSUM test for orthogonal structural changes
+SO ECONOMICS LETTERS
+PD DEC
+PY 2001
+VL 73
+IS 3
+BP 301
+EP 306
+UT ISI:000172386500006
+ER
+
+PT J
+AU Bartley, WA
+   Lee, JS
+   Strazicich, MC
+TI Testing the null of cointegration in the presence of a structural break
+SO ECONOMICS LETTERS
+PD DEC
+PY 2001
+VL 73
+IS 3
+BP 315
+EP 323
+UT ISI:000172386500008
+ER
+
+PT J
+AU Strauss, J
+   Yigit, T
+TI Present value model, heteroscedasticity and parameter stability tests
+SO ECONOMICS LETTERS
+PD DEC
+PY 2001
+VL 73
+IS 3
+BP 375
+EP 378
+UT ISI:000172386500016
+ER
+
+PT J
+AU Caner, M
+   Hansen, BE
+TI Threshold autoregression with a unit root
+SO ECONOMETRICA
+PD NOV
+PY 2001
+VL 69
+IS 6
+BP 1555
+EP 1596
+UT ISI:000171888600006
+ER
+
+PT J
+AU Baron, M
+   Rukhin, AL
+TI Perpetuities and asymptotic change-point analysis
+SO STATISTICS & PROBABILITY LETTERS
+PD NOV 1
+PY 2001
+VL 55
+IS 1
+BP 29
+EP 38
+UT ISI:000171485100004
+ER
+
+PT J
+AU Candelon, B
+   Lutkepohl, H
+TI On the reliability of Chow-type tests for parameter constancy in
+   multivariate dynamic models
+SO ECONOMICS LETTERS
+PD NOV
+PY 2001
+VL 73
+IS 2
+BP 155
+EP 160
+UT ISI:000171580100004
+ER
+
+PT J
+AU Berger, H
+   Jensen, H
+   Schjelderup, G
+TI To peg or not to peg? A simple model of exchange rate regime choice in
+   small economies
+SO ECONOMICS LETTERS
+PD NOV
+PY 2001
+VL 73
+IS 2
+BP 161
+EP 167
+UT ISI:000171580100005
+ER
+
+PT J
+AU Wu, WB
+   Woodroofe, M
+   Mentz, G
+TI Isotonic regression: Another look at the changepoint problem
+SO BIOMETRIKA
+PD SEP
+PY 2001
+VL 88
+IS 3
+BP 793
+EP 804
+UT ISI:000171536100014
+ER
+
+PT J
+AU Diebold, FX
+   Inoue, A
+TI Long memory and regime switching
+SO JOURNAL OF ECONOMETRICS
+PD NOV
+PY 2001
+VL 105
+IS 1
+BP 131
+EP 159
+UT ISI:000171261500007
+ER
+
+PT J
+AU Hawkins, DM
+TI Fitting multiple change-point models to data
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD SEP 28
+PY 2001
+VL 37
+IS 3
+BP 323
+EP 341
+UT ISI:000171195900003
+ER
+
+PT J
+AU Chang, YP
+TI Estimation of parameters for nonhomogeneous Poisson process: Software
+   reliability with change-point model
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 2001
+VL 30
+IS 3
+BP 623
+EP 635
+UT ISI:000170838000012
+ER
+
+PT J
+AU Chen, J
+   Gupta, AK
+TI On change point detection and estimation
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 2001
+VL 30
+IS 3
+BP 665
+EP 697
+UT ISI:000170838000014
+ER
+
+PT J
+AU Han, C
+   Carlin, BP
+TI Markov chain Monte Carlo methods for computing Bayes factors: A
+   comparative review
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD SEP
+PY 2001
+VL 96
+IS 455
+BP 1122
+EP 1132
+UT ISI:000170729300040
+ER
+
+PT J
+AU Horvath, L
+TI Change-point detection in long-memory processes
+SO JOURNAL OF MULTIVARIATE ANALYSIS
+PD AUG
+PY 2001
+VL 78
+IS 2
+BP 218
+EP 234
+UT ISI:000170671400003
+ER
+
+PT J
+AU Friede, T
+   Miller, F
+   Bischoff, W
+   Kieser, M
+TI A note on change point estimation in dose-response trials
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD AUG 28
+PY 2001
+VL 37
+IS 2
+BP 219
+EP 232
+UT ISI:000170469200007
+ER
+
+PT J
+AU Hall, P
+   Peng, L
+   Rau, C
+TI Local likelihood tracking of fault lines and boundaries
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES B-STATISTICAL
+   METHODOLOGY
+PY 2001
+VL 63
+PN Part 3
+BP 569
+EP 582
+UT ISI:000170353900008
+ER
+
+PT J
+AU Baily, MN
+   Bartelsman, EJ
+   Haltiwanger, J
+TI Labor productivity: Structural change and cyclical dynamics
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD AUG
+PY 2001
+VL 83
+IS 3
+BP 420
+EP 433
+UT ISI:000170079800003
+ER
+
+PT J
+AU Gombay, E
+TI U-statistics for change under alternatives
+SO JOURNAL OF MULTIVARIATE ANALYSIS
+PD JUL
+PY 2001
+VL 78
+IS 1
+BP 139
+EP 158
+UT ISI:000170075400007
+ER
+
+PT J
+AU Boudjellaba, H
+   MacGibbon, B
+   Sawyer, P
+TI On exact inference for change in a poisson sequence
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2001
+VL 30
+IS 3
+BP 407
+EP 434
+UT ISI:000170041600003
+ER
+
+PT J
+AU Srivastava, MS
+   Solanky, TKS
+   Sen, AK
+TI Power comparison of some tests for detecting a change in the
+   multivariate mean
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 2001
+VL 30
+IS 1
+BP 19
+EP 36
+UT ISI:000170044200004
+ER
+
+PT J
+AU Timmermann, A
+TI Structural breaks, incomplete information, and stock prices
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JUL
+PY 2001
+VL 19
+IS 3
+BP 299
+EP 314
+UT ISI:000169785400008
+ER
+
+PT J
+AU Zhang, MYJ
+   Russell, JR
+   Tsay, RS
+TI A nonlinear autoregressive conditional duration model with applications
+   to financial transaction data
+SO JOURNAL OF ECONOMETRICS
+PD AUG
+PY 2001
+VL 104
+IS 1
+BP 179
+EP 207
+UT ISI:000169710400007
+ER
+
+PT J
+AU Marcellino, M
+   Mizon, GE
+TI Small-system modelling of real wages, inflation, unemployment and
+   output per capita in Italy 1970-1994
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD MAY-JUN
+PY 2001
+VL 16
+IS 3
+BP 359
+EP 370
+UT ISI:000169635300010
+ER
+
+PT J
+AU Liechty, JC
+   Roberts, GO
+TI Markov chain Monte Carlo methods for switching diffusion models
+SO BIOMETRIKA
+PD JUN
+PY 2001
+VL 88
+IS 2
+BP 299
+EP 315
+UT ISI:000169573400001
+ER
+
+PT J
+AU Antoch, J
+   Huskova, M
+TI Permutation tests in change point analysis
+SO STATISTICS & PROBABILITY LETTERS
+PD MAY 15
+PY 2001
+VL 53
+IS 1
+BP 37
+EP 46
+UT ISI:000169303300005
+ER
+
+PT J
+AU Chen, MY
+   Kuan, CM
+TI Testing parameter constancy in models with infinite variance errors
+SO ECONOMICS LETTERS
+PD JUL
+PY 2001
+VL 72
+IS 1
+BP 11
+EP 18
+UT ISI:000169054200002
+ER
+
+PT J
+AU Skates, SJ
+   Pauler, DK
+   Jacobs, IJ
+TI Screening based on the risk of cancer calculation from Bayesian
+   hierarchical changepoint and mixture models of longitudinal markers
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD JUN
+PY 2001
+VL 96
+IS 454
+BP 429
+EP 439
+UT ISI:000168986400007
+ER
+
+PT J
+AU Avery, PJ
+TI The effect of dependence in a binary sequence on tests for a
+   changepoint or a changed segment
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES C-APPLIED STATISTICS
+PY 2001
+VL 50
+PN Part 2
+BP 243
+EP 246
+UT ISI:000168551800008
+ER
+
+PT J
+AU Chen, ZM
+   Ferger, D
+   Mi, J
+TI Estimation of the change point of a distribution based on the number of
+   failed test items
+SO METRIKA
+PY 2001
+VL 53
+IS 1
+BP 31
+EP 38
+UT ISI:000168479700003
+ER
+
+PT J
+AU Bourke, PD
+TI Sample size and the Binomial CUSUM Control Chart: the case of 100%
+   inspection
+SO METRIKA
+PY 2001
+VL 53
+IS 1
+BP 51
+EP 70
+UT ISI:000168479700005
+ER
+
+PT J
+AU Freidlin, B
+   Gastwirth, JL
+TI Changepoint tests designed for the analysis of hiring data arising in
+   employment discrimination cases
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JUL
+PY 2000
+VL 18
+IS 3
+BP 315
+EP 322
+UT ISI:000168232300005
+ER
+
+PT J
+AU Wang, JH
+   Zivot, E
+TI A Bayesian time series model of multiple structural changes in level,
+   trend, and variance
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JUL
+PY 2000
+VL 18
+IS 3
+BP 374
+EP 386
+UT ISI:000168232300010
+ER
+
+PT J
+AU Saikkonen, P
+   Lutkepohl, H
+TI Testing for the cointegrating rank of a VAR process with structural
+   shifts
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD OCT
+PY 2000
+VL 18
+IS 4
+BP 451
+EP 464
+UT ISI:000168232400006
+ER
+
+PT J
+AU Tahmiscioglu, AK
+TI Intertemporal variation in financial constraints on investment: A
+   time-varying parameter approach using panel data
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD APR
+PY 2001
+VL 19
+IS 2
+BP 153
+EP 165
+UT ISI:000168232700003
+ER
+
+PT J
+AU Lopes, ACBD
+TI The robustness of tests for seasonal differencing to structural breaks
+SO ECONOMICS LETTERS
+PD MAY
+PY 2001
+VL 71
+IS 2
+BP 173
+EP 179
+UT ISI:000168203000004
+ER
+
+PT J
+AU Julious, SA
+TI Inference and estimation in a changepoint regression problem
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES D-THE STATISTICIAN
+PY 2001
+VL 50
+PN Part 1
+BP 51
+EP 61
+UT ISI:000167620200005
+ER
+
+PT J
+AU Rogerson, PA
+TI Monitoring point patterns for the development of space-time clusters
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES A-STATISTICS IN SOCIETY
+PY 2001
+VL 164
+PN Part 1
+BP 87
+EP 96
+UT ISI:000167345200010
+ER
+
+PT J
+AU Perez-Ocon, R
+   Ruiz-Castro, JE
+   Gamiz-Perez, ML
+TI Non-homogeneous Markov models in the analysis of survival after breast
+   cancer
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES C-APPLIED STATISTICS
+PY 2001
+VL 50
+PN Part 1
+BP 111
+EP 124
+UT ISI:000166938100008
+ER
+
+PT J
+AU Yang, J
+TI Structural change tests under regression misspecifications
+SO ECONOMICS LETTERS
+PD MAR
+PY 2001
+VL 70
+IS 3
+BP 311
+EP 317
+UT ISI:000166847300003
+ER
+
+PT J
+AU Fotopoulos, S
+   Jandhyala, V
+TI Maximum likelihood estimation of a change-point for exponentially
+   distributed random variables
+SO STATISTICS & PROBABILITY LETTERS
+PD FEB 15
+PY 2001
+VL 51
+IS 4
+BP 423
+EP 429
+UT ISI:000166704800013
+ER
+
+PT J
+AU Chong, TTL
+TI Estimating the locations and number of change points by the
+   sample-splitting method
+SO STATISTICAL PAPERS
+PD JAN
+PY 2001
+VL 42
+IS 1
+BP 53
+EP 79
+UT ISI:000166512000002
+ER
+
+PT J
+AU Gombay, E
+TI U-statistics for sequential change detection
+SO METRIKA
+PY 2000
+VL 52
+IS 2
+BP 133
+EP 145
+UT ISI:000166481300003
+ER
+
+PT J
+AU Andrews, DWK
+   Lu, B
+TI Consistent model and moment selection procedures for GMM estimation
+   with application to dynamic panel data models
+SO JOURNAL OF ECONOMETRICS
+PD MAR
+PY 2001
+VL 101
+IS 1
+BP 123
+EP 164
+UT ISI:000166548600006
+ER
+
+PT J
+AU Chong, TTL
+TI Structural change in AR(1) models
+SO ECONOMETRIC THEORY
+PD FEB
+PY 2001
+VL 17
+IS 1
+BP 87
+EP 155
+UT ISI:000166464600004
+ER
+
+PT J
+AU Inoue, A
+TI Testing for distributional change in time series
+SO ECONOMETRIC THEORY
+PD FEB
+PY 2001
+VL 17
+IS 1
+BP 156
+EP 187
+UT ISI:000166464600005
+ER
+
+PT J
+AU Antoch, J
+   Huskova, M
+TI Bayesian-type estimators of change points
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD DEC 1
+PY 2000
+VL 91
+IS 2
+BP 195
+EP 208
+UT ISI:000166454200003
+ER
+
+PT J
+AU Horvath, L
+   Steinebach, J
+TI Testing for changes in the mean or variance of a stochastic process
+   under weak invariance
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD DEC 1
+PY 2000
+VL 91
+IS 2
+BP 365
+EP 376
+UT ISI:000166454200013
+ER
+
+PT J
+AU Ferger, D
+TI Exponential and polynomial tailbounds for change-point estimators
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD JAN 1
+PY 2001
+VL 92
+IS 1-2
+BP 73
+EP 109
+UT ISI:000166428200008
+ER
+
+PT J
+AU Hsu, CC
+TI Change point estimation in regressions with I(d) variables
+SO ECONOMICS LETTERS
+PD FEB
+PY 2001
+VL 70
+IS 2
+BP 147
+EP 155
+UT ISI:000166337000001
+ER
+
+PT J
+AU Kozumi, H
+TI Bayesian analysis of discrete survival data with a hidden Markov chain
+SO BIOMETRICS
+PD DEC
+PY 2000
+VL 56
+IS 4
+BP 1002
+EP 1006
+UT ISI:000165872600005
+ER
+
+PT J
+AU Alwan, LC
+TI Designing an effective exponential CUSUM chart without the use of
+   nomographs
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2000
+VL 29
+IS 12
+BP 2879
+EP 2893
+UT ISI:000165766500014
+ER
+
+PT J
+AU Stoumbos, ZG
+   Reynolds, MR
+   Ryan, TP
+   Woodall, WH
+TI The state of statistical process control as we proceed into the 21st
+   century
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD SEP
+PY 2000
+VL 95
+IS 451
+BP 992
+EP 998
+UT ISI:000165591200040
+ER
+
+PT J
+AU Pievatolo, A
+   Rotondi, R
+TI Analysing the interevent time distribution to identify seismicity
+   phases: a Bayesian nonparametric approach to the multiple-changepoint
+   problem
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES C-APPLIED STATISTICS
+PY 2000
+VL 49
+PN Part 4
+BP 543
+EP 562
+UT ISI:000165290900009
+ER
+
+PT J
+AU Leisch, F
+   Hornik, K
+   Kuan, CM
+TI Monitoring structural changes with the generalized fluctuation test
+SO ECONOMETRIC THEORY
+PD DEC
+PY 2000
+VL 16
+IS 6
+BP 835
+EP 854
+UT ISI:000165354900002
+ER
+
+PT J
+AU Funk, M
+   Strauss, J
+TI The long-run relationship between productivity and capital
+SO ECONOMICS LETTERS
+PD NOV
+PY 2000
+VL 69
+IS 2
+BP 213
+EP 217
+UT ISI:000090035100015
+ER
+
+PT J
+AU Jandhyala, VK
+   Fotopoulos, SB
+   Evaggelopoulos, NE
+TI A comparison of unconditional and conditional solutions to the maximum
+   likelihood estimation of a change-point
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD SEP 28
+PY 2000
+VL 34
+IS 3
+BP 315
+EP 334
+UT ISI:000089549100003
+ER
+
+PT J
+AU Fan, Y
+   Brooks, SP
+TI Bayesian modelling of prehistoric corbelled domes
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES D-THE STATISTICIAN
+PY 2000
+VL 49
+PN Part 3
+BP 339
+EP 354
+UT ISI:000088997300003
+ER
+
+PT J
+AU White, H
+TI A reality check for data snooping
+SO ECONOMETRICA
+PD SEP
+PY 2000
+VL 68
+IS 5
+BP 1097
+EP 1126
+UT ISI:000089021500003
+ER
+
+PT J
+AU Halpern, AL
+TI Multiple-changepoint testing for an alternating segments model of a
+   binary sequence
+SO BIOMETRICS
+PD SEP
+PY 2000
+VL 56
+IS 3
+BP 903
+EP 908
+UT ISI:000089069500037
+ER
+
+PT J
+AU Marriott, J
+   Newbold, P
+TI The strength of evidence for unit autoregressive roots and structural
+   breaks: A Bayesian perspective
+SO JOURNAL OF ECONOMETRICS
+PD SEP
+PY 2000
+VL 98
+IS 1
+BP 1
+EP 25
+UT ISI:000088819200001
+ER
+
+PT J
+AU Lavergne, P
+   Vuong, Q
+TI Nonparametric significance testing
+SO ECONOMETRIC THEORY
+PD AUG
+PY 2000
+VL 16
+IS 4
+BP 576
+EP 601
+UT ISI:000088680400005
+ER
+
+PT J
+AU Grabovsky, I
+   Horvath, L
+   Huskova, M
+TI Limit theorems for kernel-type estimators for the time of change
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD AUG 15
+PY 2000
+VL 89
+IS 1-2
+BP 25
+EP 56
+UT ISI:000088487800002
+ER
+
+PT J
+AU Huskova, M
+   Steinebach, J
+TI Limit theorems for a class of tests of gradual changes
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD AUG 15
+PY 2000
+VL 89
+IS 1-2
+BP 57
+EP 77
+UT ISI:000088487800003
+ER
+
+PT J
+AU Ferger, D
+TI Optimal tests for the general two-sample problem
+SO JOURNAL OF MULTIVARIATE ANALYSIS
+PD JUL
+PY 2000
+VL 74
+IS 1
+BP 1
+EP 35
+UT ISI:000088417600001
+ER
+
+PT J
+AU Hansen, BE
+TI Testing for structural change in conditional models
+SO JOURNAL OF ECONOMETRICS
+PD JUL
+PY 2000
+VL 97
+IS 1
+BP 93
+EP 115
+UT ISI:000088314500004
+ER
+
+PT J
+AU Gombay, E
+TI Sequential change-point detection with likelihood ratios
+SO STATISTICS & PROBABILITY LETTERS
+PD AUG 15
+PY 2000
+VL 49
+IS 2
+BP 195
+EP 204
+UT ISI:000088273100012
+ER
+
+PT J
+AU Braun, JV
+   Braun, RK
+   Muller, HG
+TI Multiple changepoint fitting via quasilikelihood, with application to
+   DNA sequence segmentation
+SO BIOMETRIKA
+PD JUN
+PY 2000
+VL 87
+IS 2
+BP 301
+EP 314
+UT ISI:000087815100005
+ER
+
+PT J
+AU Montanes, A
+   Reyes, M
+TI Structural breaks, unit roots and methods for removing the
+   autocorrelation pattern
+SO STATISTICS & PROBABILITY LETTERS
+PD JUL 15
+PY 2000
+VL 48
+IS 4
+BP 401
+EP 409
+UT ISI:000087720700011
+ER
+
+PT J
+AU Atienza, OO
+   Tang, LC
+   Ang, BW
+TI A uniformly most powerful cumulative sum scheme based on symmetry
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES D-THE STATISTICIAN
+PY 2000
+VL 49
+PN Part 2
+BP 209
+EP 217
+UT ISI:000087673400006
+ER
+
+PT J
+AU Pauler, DK
+   Laird, NM
+TI A mixture model for longitudinal data with application to assessment of
+   noncompliance
+SO BIOMETRICS
+PD JUN
+PY 2000
+VL 56
+IS 2
+BP 464
+EP 472
+UT ISI:000087677500020
+ER
+
+PT J
+AU Conniffe, D
+   Spencer, JE
+TI Approximating the distribution of the maximum partial sum of normal
+   deviates
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD JUL 1
+PY 2000
+VL 88
+IS 1
+BP 19
+EP 27
+UT ISI:000087510000002
+ER
+
+PT J
+AU Lee, J
+TI On the end-point issue in unit root tests in the presence of a
+   structural break
+SO ECONOMICS LETTERS
+PD JUL
+PY 2000
+VL 68
+IS 1
+BP 7
+EP 11
+UT ISI:000087537000002
+ER
+
+PT J
+AU Papell, DH
+   Murray, CJ
+   Ghiblawi, H
+TI The structure of unemployment
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD MAY
+PY 2000
+VL 82
+IS 2
+BP 309
+EP 315
+UT ISI:000087151700011
+ER
+
+PT J
+AU Jarpe, E
+   Wessman, P
+TI Some power aspects of methods for detecting different shifts in the mean
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 2000
+VL 29
+IS 2
+BP 633
+EP 646
+UT ISI:000087145800016
+ER
+
+PT J
+AU Hansen, BE
+TI Sample splitting and threshold estimation
+SO ECONOMETRICA
+PD MAY
+PY 2000
+VL 68
+IS 3
+BP 575
+EP 603
+UT ISI:000086794100002
+ER
+
+PT J
+AU Horvath, L
+   Kokoszka, P
+   Steinebach, J
+TI Approximations for weighted bootstrap processes with an application
+SO STATISTICS & PROBABILITY LETTERS
+PD MAY 15
+PY 2000
+VL 48
+IS 1
+BP 59
+EP 70
+UT ISI:000086405300005
+ER
+
+PT J
+AU Polzehl, J
+   Spokoiny, VG
+TI Adaptive weights smoothing with applications to image restoration
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES B-STATISTICAL
+   METHODOLOGY
+PY 2000
+VL 62
+PN Part 2
+BP 335
+EP 354
+UT ISI:000086433600008
+ER
+
+PT J
+AU Abramovich, F
+   Bailey, TC
+   Sapatinas, T
+TI Wavelet analysis and its statistical applications
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES D-THE STATISTICIAN
+PY 2000
+VL 49
+PN Part 1
+BP 1
+EP 29
+UT ISI:000086135400001
+ER
+
+PT J
+AU Martin, GM
+TI US deficit sustainability: A new approach based on multiple endogenous
+   breaks
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD JAN-FEB
+PY 2000
+VL 15
+IS 1
+BP 83
+EP 105
+UT ISI:000086136100005
+ER
+
+PT J
+AU Knorr-Held, L
+   Rasser, G
+TI Bayesian detection of clusters and discontinuities in disease maps
+SO BIOMETRICS
+PD MAR
+PY 2000
+VL 56
+IS 1
+BP 13
+EP 21
+UT ISI:000086064600002
+ER
+
+PT J
+AU Timmermann, A
+TI Moments of Markov switching models
+SO JOURNAL OF ECONOMETRICS
+PD MAY
+PY 2000
+VL 96
+IS 1
+BP 75
+EP 111
+UT ISI:000085881000004
+ER
+
+PT J
+AU Delgado, MA
+   Hidalgo, J
+TI Nonparametric inference on structural breaks
+SO JOURNAL OF ECONOMETRICS
+PD MAY
+PY 2000
+VL 96
+IS 1
+BP 113
+EP 144
+UT ISI:000085881000005
+ER
+
+PT J
+AU Morais, MC
+   Pacheco, A
+TI On the performance of combined EWMA schemes for mu and sigma: A
+   Markovian approach
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 2000
+VL 29
+IS 1
+BP 153
+EP 174
+UT ISI:000085778500010
+ER
+
+PT J
+AU Xiong, CJ
+   Milliken, GA
+TI Changepoints in stochastic ordering
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2000
+VL 29
+IS 2
+BP 381
+EP 400
+UT ISI:000085431300009
+ER
+
+PT J
+AU Kim, S
+   Cho, S
+   Lee, S
+TI On the cusum test for parameter changes in GARCH(1,1) models
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 2000
+VL 29
+IS 2
+BP 445
+EP 462
+UT ISI:000085431300013
+ER
+
+PT J
+AU Kim, JY
+TI Detection of change in persistence of a linear time series
+SO JOURNAL OF ECONOMETRICS
+PD MAR
+PY 2000
+VL 95
+IS 1
+BP 97
+EP 116
+UT ISI:000084936100005
+ER
+
+PT J
+AU Engle, RF
+   Smith, AD
+TI Stochastic permanent breaks
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD NOV
+PY 1999
+VL 81
+IS 4
+BP 553
+EP 574
+UT ISI:000084851900001
+ER
+
+PT J
+AU Kim, CJ
+   Nelson, CR
+TI Has the US economy become more stable? A Bayesian approach based on a
+   Markov-switching model of the business cycle
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD NOV
+PY 1999
+VL 81
+IS 4
+BP 608
+EP 616
+UT ISI:000084851900004
+ER
+
+PT J
+AU Parke, WR
+TI What is fractional integration?
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD NOV
+PY 1999
+VL 81
+IS 4
+BP 632
+EP 638
+UT ISI:000084851900006
+ER
+
+PT J
+AU Bahmani-Oskooee, M
+   Bohl, MT
+TI German monetary unification and the stability of the German M3 money
+   demand function
+SO ECONOMICS LETTERS
+PD FEB
+PY 2000
+VL 66
+IS 2
+BP 203
+EP 208
+UT ISI:000084845000013
+ER
+
+PT J
+AU Arize, AC
+TI Exchange-rate volatility and foreign trade: Evidence from thirteen LDC's
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JAN
+PY 2000
+VL 18
+IS 1
+BP 10
+EP 17
+UT ISI:000084737900002
+ER
+
+PT J
+AU Luceno, A
+TI Average run lengths and run length probability distributions for
+   cuscore charts to control normal mean
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD DEC 28
+PY 1999
+VL 32
+IS 2
+BP 177
+EP 195
+UT ISI:000084322700005
+ER
+
+PT J
+AU Halpern, AL
+TI Minimally selected p and other tests for a single abrupt changepoint in
+   a binary sequence
+SO BIOMETRICS
+PD DEC
+PY 1999
+VL 55
+IS 4
+BP 1044
+EP 1050
+UT ISI:000084218000007
+ER
+
+PT J
+AU Sugiura, N
+   Takaoka, N
+TI Homogeneity of variances in normal linear regression with a change point
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1999
+VL 28
+IS 12
+BP 2785
+EP 2801
+UT ISI:000084122200001
+ER
+
+PT J
+AU Avery, PJ
+   Henderson, DA
+TI Detecting a changed segment in DNA sequences
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES C-APPLIED STATISTICS
+PY 1999
+VL 48
+PN Part 4
+BP 489
+EP 503
+UT ISI:000083762200005
+ER
+
+PT J
+AU Kuan, CM
+TI A note on tests for partial parameter instability in the trend
+   stationary model
+SO ECONOMICS LETTERS
+PD DEC
+PY 1999
+VL 65
+IS 3
+BP 285
+EP 291
+UT ISI:000083767100004
+ER
+
+PT J
+AU Lutkepohl, H
+   Terasvirta, T
+   Wolters, J
+TI Investigating stability and linearity of a German M1 money demand
+   function
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD SEP-OCT
+PY 1999
+VL 14
+IS 5
+BP 511
+EP 525
+UT ISI:000083386000003
+ER
+
+PT J
+AU Arestis, P
+   Mariscal, IBF
+TI Unit roots and structural breaks in OECD unemployment
+SO ECONOMICS LETTERS
+PD NOV
+PY 1999
+VL 65
+IS 2
+BP 149
+EP 156
+UT ISI:000083304200003
+ER
+
+PT J
+AU Lumsdaine, RL
+   Ng, S
+TI Testing for ARCH in the presence of a possibly misspecified conditional
+   mean
+SO JOURNAL OF ECONOMETRICS
+PD DEC
+PY 1999
+VL 93
+IS 2
+BP 257
+EP 279
+UT ISI:000082934400003
+ER
+
+PT J
+AU Omran, MF
+   McKenzie, E
+TI Testing for covariance stationarity in the UK all-equity returns
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES D-THE STATISTICIAN
+PY 1999
+VL 48
+PN Part 3
+BP 361
+EP 369
+UT ISI:000082291500006
+ER
+
+PT J
+AU Frisen, M
+   Wessman, P
+TI Evaluations of likelihood ratio methods for surveillance. Differences
+   and robustness.
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 1999
+VL 28
+IS 3
+BP 597
+EP 622
+UT ISI:000082102600002
+ER
+
+PT J
+AU Chen, J
+   Gupta, AK
+TI Change point analysis of a Gaussian model
+SO STATISTICAL PAPERS
+PD JUL
+PY 1999
+VL 40
+IS 3
+BP 323
+EP 333
+UT ISI:000081631800005
+ER
+
+PT J
+AU Greene, CA
+TI Testing for a break at an unknown change-point: a test with known size
+   in small samples
+SO ECONOMICS LETTERS
+PD JUL
+PY 1999
+VL 64
+IS 1
+BP 13
+EP 16
+UT ISI:000081599700002
+ER
+
+PT J
+AU Bai, J
+TI Likelihood ratio tests for multiple structural changes
+SO JOURNAL OF ECONOMETRICS
+PD AUG
+PY 1999
+VL 91
+IS 2
+BP 299
+EP 323
+UT ISI:000081106400004
+ER
+
+PT J
+AU Merz, M
+TI Time series evidence of unemployment flows: The sample period matters
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JUL
+PY 1999
+VL 17
+IS 3
+BP 324
+EP 334
+UT ISI:000080935400005
+ER
+
+PT J
+AU Hall, AR
+TI Structural stability testing in models estimated by generalized method
+   of moments
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JUL
+PY 1999
+VL 17
+IS 3
+BP 335
+EP 348
+UT ISI:000080935400006
+ER
+
+PT J
+AU Leung, CS
+   Patel, MS
+   McGilchrist, CA
+TI A distribution-free regional cumulative sum for identifying
+   hyperendemic periods of disease incidence
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES D-THE STATISTICIAN
+PY 1999
+VL 48
+PN Part 2
+BP 215
+EP 225
+UT ISI:000080924200007
+ER
+
+PT J
+AU Sen, A
+TI Approximate p-values of predictive tests for structural stability
+SO ECONOMICS LETTERS
+PD JUN
+PY 1999
+VL 63
+IS 3
+BP 245
+EP 253
+UT ISI:000080830700001
+ER
+
+PT J
+AU Silvestre, JLCI
+   Rossello, ASI
+   Ortuno, MA
+TI Response surfaces estimates for the Dickey-Fuller unit root test with
+   structural breaks
+SO ECONOMICS LETTERS
+PD JUN
+PY 1999
+VL 63
+IS 3
+BP 279
+EP 283
+UT ISI:000080830700005
+ER
+
+PT J
+AU Contal, C
+   O'Quigley, J
+TI An application of changepoint methods in studying the effect of age on
+   survival in breast cancer
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD MAY 28
+PY 1999
+VL 30
+IS 3
+BP 253
+EP 270
+UT ISI:000080254300002
+ER
+
+PT J
+AU Fasso, A
+TI One-sided MEWMA control charts
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 1999
+VL 28
+IS 2
+BP 381
+EP 401
+UT ISI:000080181200006
+ER
+
+PT J
+AU Lin, CFJ
+   Terasvirta, T
+TI Testing parameter constancy in linear models against stochastic
+   stationary parameters
+SO JOURNAL OF ECONOMETRICS
+PD JUN
+PY 1999
+VL 90
+IS 2
+BP 193
+EP 213
+UT ISI:000079862500002
+ER
+
+PT J
+AU Ghysels, E
+   Guay, A
+   Hall, A
+TI Predictive tests for structural change with unknown breakpoint (vol 82,
+   pg 209, 1997)
+SO JOURNAL OF ECONOMETRICS
+PD JUN
+PY 1999
+VL 90
+IS 2
+BP 337
+EP 343
+UT ISI:000079862500008
+ER
+
+PT J
+AU Jandhyala, VK
+   Fotopoulos, SB
+TI Capturing the distributional behaviour of the maximum likelihood
+   estimator of a changepoint
+SO BIOMETRIKA
+PD MAR
+PY 1999
+VL 86
+IS 1
+BP 129
+EP 140
+UT ISI:000079566800011
+ER
+
+PT J
+AU Anraku, K
+TI An information criterion for parameters under a simple order restriction
+SO BIOMETRIKA
+PD MAR
+PY 1999
+VL 86
+IS 1
+BP 141
+EP 152
+UT ISI:000079566800012
+ER
+
+PT J
+AU Carroll, RJ
+   Roeder, K
+   Wasserman, L
+TI Flexible parametric measurement error models
+SO BIOMETRICS
+PD MAR
+PY 1999
+VL 55
+IS 1
+BP 44
+EP 54
+UT ISI:000079567100006
+ER
+
+PT J
+AU Lombard, F
+TI A rank test for constancy of a location or scale parameter
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1999
+VL 28
+IS 3-4
+BP 537
+EP 547
+UT ISI:000079396100005
+ER
+
+PT J
+AU Ogden, RT
+   Collier, GL
+TI On detecting and modeling deterministic drift in long run sequences of
+   tapping data
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1999
+VL 28
+IS 3-4
+BP 977
+EP 987
+UT ISI:000079396100029
+ER
+
+PT J
+AU Huskova, M
+TI Gradual changes versus abrupt changes
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD FEB 1
+PY 1999
+VL 76
+IS 1-2
+BP 109
+EP 125
+UT ISI:000078424300008
+ER
+
+PT J
+AU Horvath, L
+   Kokoszka, P
+   Steinebach, J
+TI Testing for changes in multivariate dependent observations with an
+   application to temperature changes
+SO JOURNAL OF MULTIVARIATE ANALYSIS
+PD JAN
+PY 1999
+VL 68
+IS 1
+BP 96
+EP 119
+UT ISI:000078185500005
+ER
+
+PT J
+AU Crowley, EM
+TI Estimation of clustered parameters
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD NOV 1
+PY 1998
+VL 74
+IS 2
+BP 273
+EP 291
+UT ISI:000077882700005
+ER
+
+PT J
+AU de la Croix, D
+   Urbain, JP
+TI Intertemporal substitution in import demand and habit formation
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD NOV-DEC
+PY 1998
+VL 13
+IS 6
+BP 589
+EP 612
+UT ISI:000077791300001
+ER
+
+PT J
+AU Ben-David, D
+   Papell, DH
+TI Slowdowns and meltdowns: Postwar growth evidence from 74 countries
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD NOV
+PY 1998
+VL 80
+IS 4
+BP 561
+EP 571
+UT ISI:000077489000007
+ER
+
+PT J
+AU Staniswalis, JG
+   Lee, JJ
+TI Nonparametric regression analysis of longitudinal data
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD DEC
+PY 1998
+VL 93
+IS 444
+BP 1403
+EP 1418
+UT ISI:000077282200016
+ER
+
+PT J
+AU Vogelsang, TJ
+TI Sources of nonmonotonic power when testing for a shift in mean of a
+   dynamic time series
+SO JOURNAL OF ECONOMETRICS
+PD FEB
+PY 1999
+VL 88
+IS 2
+BP 283
+EP 299
+UT ISI:000077248000005
+ER
+
+PT J
+AU Bai, JS
+TI Estimation of multiple-regime regressions with least absolutes deviation
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD OCT 1
+PY 1998
+VL 74
+IS 1
+BP 103
+EP 134
+UT ISI:000076915200007
+ER
+
+PT J
+AU Kokoszka, P
+   Leipus, R
+TI Change-point in the mean of dependent observations
+SO STATISTICS & PROBABILITY LETTERS
+PD NOV 15
+PY 1998
+VL 40
+IS 4
+BP 385
+EP 393
+UT ISI:000076729500010
+ER
+
+PT J
+AU Morais, MC
+   Pacheco, A
+TI Two stochastic properties of one-sided exponentially weighted moving
+   average control charts
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 1998
+VL 27
+IS 4
+BP 937
+EP 952
+UT ISI:000076658200005
+ER
+
+PT J
+AU Sullivan, JH
+   Woodall, WH
+TI Adapting control charts for the preliminary analysis of multivariate
+   observations
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 1998
+VL 27
+IS 4
+BP 953
+EP 979
+UT ISI:000076658200006
+ER
+
+PT J
+AU Park, YJ
+   Pantula, SG
+TI Variance estimators in the Chu-White test for structural change
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 1998
+VL 27
+IS 4
+BP 1019
+EP 1029
+UT ISI:000076658200009
+ER
+
+PT J
+AU Lamprecht, EA
+   Zacks, S
+TI Two armed bandits with change point in one arm
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD SEP 1
+PY 1998
+VL 73
+IS 1-2
+BP 47
+EP 60
+UT ISI:000076527100006
+ER
+
+PT J
+AU Bai, JS
+TI A note on spurious break
+SO ECONOMETRIC THEORY
+PD OCT
+PY 1998
+VL 14
+IS 5
+BP 663
+EP 669
+UT ISI:000076389000006
+ER
+
+PT J
+AU Knoth, S
+TI Quasi-stationarity of CUSUM schemes for Erlang distributions
+SO METRIKA
+PY 1998
+VL 48
+IS 1
+BP 31
+EP 48
+UT ISI:000076388100003
+ER
+
+PT J
+AU de Brouwer, G
+   Ericsson, NR
+TI Modeling inflation in Australia
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD OCT
+PY 1998
+VL 16
+IS 4
+BP 433
+EP 449
+UT ISI:000076279000007
+ER
+
+PT J
+AU Franses, PH
+   Lucas, A
+TI Outlier detection in cointegration analysis
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD OCT
+PY 1998
+VL 16
+IS 4
+BP 459
+EP 468
+UT ISI:000076279000009
+ER
+
+PT J
+AU Chen, J
+TI Testing for a change point in linear regression models
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1998
+VL 27
+IS 10
+BP 2481
+EP 2493
+UT ISI:000076365700006
+ER
+
+PT J
+AU Leybourne, SJ
+   Mills, TC
+   Newbold, P
+TI Spurious rejections by Dickey-Fuller tests in the presence of a break
+   under the null
+SO JOURNAL OF ECONOMETRICS
+PD NOV
+PY 1998
+VL 87
+IS 1
+BP 191
+EP 203
+UT ISI:000075691500008
+ER
+
+PT J
+AU Wolters, J
+   Terasvirta, T
+   Lutkepohl, H
+TI Modeling the demand for M3 in the unified Germany
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD AUG
+PY 1998
+VL 80
+IS 3
+BP 399
+EP 409
+UT ISI:000075186900006
+ER
+
+PT J
+AU Jaruskova, D
+TI Testing appearance of linear trend
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD JUL 15
+PY 1998
+VL 70
+IS 2
+BP 263
+EP 276
+UT ISI:000074828400007
+ER
+
+PT J
+AU Chib, S
+TI Estimation and comparison of multiple change-point models
+SO JOURNAL OF ECONOMETRICS
+PD OCT
+PY 1998
+VL 86
+IS 2
+BP 221
+EP 241
+UT ISI:000074512900002
+ER
+
+PT J
+AU Kuo, BS
+TI Test for partial parameter instability in regressions with I(1)
+   processes
+SO JOURNAL OF ECONOMETRICS
+PD OCT
+PY 1998
+VL 86
+IS 2
+BP 337
+EP 368
+UT ISI:000074512900006
+ER
+
+PT J
+AU Horvath, L
+TI Tests for changes under random censorship
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD JUN 15
+PY 1998
+VL 69
+IS 2
+BP 229
+EP 243
+UT ISI:000074353800003
+ER
+
+PT J
+AU Quintos, CE
+TI Fully modified vector autoregressive inference in partially
+   nonstationary models
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD JUN
+PY 1998
+VL 93
+IS 442
+BP 783
+EP 795
+UT ISI:000074030600040
+ER
+
+PT J
+AU Montanes, A
+   Reyes, M
+TI Effect of a shift in the trend function on Dickey-Fuller unit root tests
+SO ECONOMETRIC THEORY
+PD JUN
+PY 1998
+VL 14
+IS 3
+BP 355
+EP 363
+UT ISI:000074089200004
+ER
+
+PT J
+AU Clemente, J
+   Montanes, A
+   Reyes, M
+TI Testing for a unit root in variables with a double change in the mean
+SO ECONOMICS LETTERS
+PD MAY
+PY 1998
+VL 59
+IS 2
+BP 175
+EP 182
+UT ISI:000073906400006
+ER
+
+PT J
+AU Seo, B
+TI Tests for structural change in cointegrated systems
+SO ECONOMETRIC THEORY
+PD APR
+PY 1998
+VL 14
+IS 2
+BP 222
+EP 259
+UT ISI:000073954200004
+ER
+
+PT J
+AU Brooks, SP
+TI Markov chain Monte Carlo method and its application
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES D-THE STATISTICIAN
+PY 1998
+VL 47
+IS 1
+BP 69
+EP 100
+UT ISI:000073820200006
+ER
+
+PT J
+AU Wang, XD
+TI Bayesian forecasting and detecting structural changepoints in dynamic
+   models
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1998
+VL 27
+IS 6
+BP 1535
+EP 1546
+UT ISI:000073860500019
+ER
+
+PT J
+AU Wessman, P
+TI Some principles for surveillance adopted for multivariate processes
+   with a common change point
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1998
+VL 27
+IS 5
+BP 1143
+EP 1161
+UT ISI:000073639400008
+ER
+
+PT J
+AU Steiner, SH
+TI Grouped data exponentially weighted moving average control charts
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES C-APPLIED STATISTICS
+PY 1998
+VL 47
+PN Part 2
+BP 203
+EP 216
+UT ISI:000073456500003
+ER
+
+PT J
+AU Lee, CB
+TI Bayesian analysis of a change-point in exponential families with
+   applications
+SO COMPUTATIONAL STATISTICS & DATA ANALYSIS
+PD APR 3
+PY 1998
+VL 27
+IS 2
+BP 195
+EP 208
+UT ISI:000073291400005
+ER
+
+PT J
+AU Belisle, P
+   Joseph, L
+   MacGibbon, B
+   Wolfson, DB
+   du Berger, R
+TI Change-point analysis of neuron spike train data
+SO BIOMETRICS
+PD MAR
+PY 1998
+VL 54
+IS 1
+BP 113
+EP 123
+UT ISI:000072879200010
+ER
+
+PT J
+AU Gombay, E
+   Huskova, M
+TI Rank, based estimators of the change-point
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD MAR 16
+PY 1998
+VL 67
+IS 1
+BP 137
+EP 154
+UT ISI:000072749700009
+ER
+
+PT J
+AU Rossana, RJ
+TI Structural instability and the production-smoothing model of inventories
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD APR
+PY 1998
+VL 16
+IS 2
+BP 206
+EP 215
+UT ISI:000072727300012
+ER
+
+PT J
+AU de Lima, PJF
+TI Nonlinearities and nonstationarities in stock returns
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD APR
+PY 1998
+VL 16
+IS 2
+BP 227
+EP 236
+UT ISI:000072727300014
+ER
+
+PT J
+AU Wang, YZ
+TI Change curve estimation via wavelets
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD MAR
+PY 1998
+VL 93
+IS 441
+BP 163
+EP 172
+UT ISI:000072355300017
+ER
+
+PT J
+AU Stock, JH
+   Watson, MW
+TI Median unbiased estimation of coefficient variance in a time-varying
+   parameter model
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD MAR
+PY 1998
+VL 93
+IS 441
+BP 349
+EP 358
+UT ISI:000072355300035
+ER
+
+PT J
+AU Beyer, A
+TI Modelling money demand in Germany
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD JAN-FEB
+PY 1998
+VL 13
+IS 1
+BP 57
+EP 76
+UT ISI:000072362300004
+ER
+
+PT J
+AU Kuan, CM
+TI Tests for changes in models with a polynomial trend
+SO JOURNAL OF ECONOMETRICS
+PD MAY
+PY 1998
+VL 84
+IS 1
+BP 75
+EP 91
+UT ISI:000071685500004
+ER
+
+PT J
+AU Antoniadis, A
+   Gijbels, I
+   Gregoire, G
+TI Model selection using wavelet decomposition and applications
+SO BIOMETRIKA
+PD DEC
+PY 1997
+VL 84
+IS 4
+BP 751
+EP 763
+UT ISI:000071672800001
+ER
+
+PT J
+AU Davis, EP
+   Fagan, G
+TI Are financial spreads useful indicators of future inflation and output
+   growth in EU countries?
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD NOV-DEC
+PY 1997
+VL 12
+IS 6
+BP 701
+EP 714
+UT ISI:000071514200003
+ER
+
+PT J
+AU Bai, JS
+   Perron, P
+TI Estimating and testing linear models with multiple structural changes
+SO ECONOMETRICA
+PD JAN
+PY 1998
+VL 66
+IS 1
+BP 47
+EP 78
+UT ISI:000071540600002
+ER
+
+PT J
+AU Vogelsang, TJ
+TI Trend function hypothesis testing in the presence of serial correlation
+SO ECONOMETRICA
+PD JAN
+PY 1998
+VL 66
+IS 1
+BP 123
+EP 148
+UT ISI:000071540600005
+ER
+
+PT J
+AU Ma, LY
+TI The asymptotic distributions of maximum likelihood ratio test and
+   maximally selected chi(2)-test in binomial observations
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD DEC 1
+PY 1997
+VL 65
+IS 1
+BP 17
+EP 43
+UT ISI:000071469600002
+ER
+
+PT J
+AU Ng, TM
+   Li, WK
+TI F-tests for seasonal differencing with a break-point
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD DEC 1
+PY 1997
+VL 65
+IS 1
+BP 87
+EP 107
+UT ISI:000071469600005
+ER
+
+PT J
+AU Vogelsang, TJ
+TI Testing for a shift in mean without having to estimate
+   serial-correlation parameters
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JAN
+PY 1998
+VL 16
+IS 1
+BP 73
+EP 80
+UT ISI:000071459900007
+ER
+
+PT J
+AU Kongsted, HC
+TI Modeling price and quantity relations for Danish manufacturing exports
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JAN
+PY 1998
+VL 16
+IS 1
+BP 81
+EP 91
+UT ISI:000071459900008
+ER
+
+PT J
+AU Hamori, S
+   Tokihisa, A
+TI Testing for a unit root in the presence of a variance shift
+SO ECONOMICS LETTERS
+PD DEC 19
+PY 1997
+VL 57
+IS 3
+BP 245
+EP 253
+UT ISI:000071333800001
+ER
+
+PT J
+AU Durazo-Arvizu, R
+   McGee, D
+   Li, ZH
+   Cooper, R
+TI Establishing the Nadir of the body mass index mortality relationship: A
+   case study
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD DEC
+PY 1997
+VL 92
+IS 440
+BP 1312
+EP 1319
+UT ISI:000071132200012
+ER
+
+PT J
+AU Ghysels, E
+   Guay, A
+   Hall, A
+TI Predictive tests for structural change with unknown breakpoint
+SO JOURNAL OF ECONOMETRICS
+PD FEB
+PY 1998
+VL 82
+IS 2
+BP 209
+EP 233
+UT ISI:000071144700002
+ER
+
+PT J
+AU Quintos, CE
+TI Stability tests in error correction models
+SO JOURNAL OF ECONOMETRICS
+PD FEB
+PY 1998
+VL 82
+IS 2
+BP 289
+EP 315
+UT ISI:000071144700004
+ER
+
+PT J
+AU Vogelsang, TJ
+TI Wald-type tests for detecting breaks in the trend function of a dynamic
+   time series
+SO ECONOMETRIC THEORY
+PD DEC
+PY 1997
+VL 13
+IS 6
+BP 818
+EP 849
+UT ISI:000071145700004
+ER
+
+PT J
+AU Kim, IM
+TI Detecting the number of structural breaks
+SO ECONOMICS LETTERS
+PD DEC 5
+PY 1997
+VL 57
+IS 2
+BP 145
+EP 148
+UT ISI:000070986200003
+ER
+
+PT J
+AU Petrone, S
+   Raftery, AE
+TI A note on the Dirichlet process prior in Bayesian nonparametric
+   inference with partial exchangeability
+SO STATISTICS & PROBABILITY LETTERS
+PD NOV 15
+PY 1997
+VL 36
+IS 1
+BP 69
+EP 83
+UT ISI:A1997YL16600009
+ER
+
+PT J
+AU Srivastava, MS
+TI Cusum procedure for monitoring variability
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1997
+VL 26
+IS 12
+BP 2905
+EP 2926
+UT ISI:A1997YL33900005
+ER
+
+PT J
+AU Chen, JB
+   Zurbenko, I
+TI Nonparametric boundary detection
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1997
+VL 26
+IS 12
+BP 2999
+EP 3014
+UT ISI:A1997YL33900010
+ER
+
+PT J
+AU Nishina, K
+TI An alternative approach for analysis of performance of one-sided Cusum
+   charts with variable sampling intervals
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 1997
+VL 26
+IS 4
+BP 1329
+EP 1345
+UT ISI:A1997YJ67700006
+ER
+
+PT J
+AU Bai, J
+TI Estimation of a change point in multiple regression models
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD NOV
+PY 1997
+VL 79
+IS 4
+BP 551
+EP 563
+UT ISI:A1997YH83700003
+ER
+
+PT J
+AU Jose, CT
+   Ismail, B
+TI Estimation of jump points in nonparametric regression through residual
+   analysis
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1997
+VL 26
+IS 11
+BP 2583
+EP 2607
+UT ISI:A1997YF14300003
+ER
+
+PT J
+AU Luo, XL
+   Turnbull, BW
+   Clark, LC
+TI Likelihood ratio tests for a changepoint with survival data
+SO BIOMETRIKA
+PD SEP
+PY 1997
+VL 84
+IS 3
+BP 555
+EP 565
+UT ISI:A1997YE03000004
+ER
+
+PT J
+AU DeCrombrugghe, D
+   Palm, FC
+   Urbain, JP
+TI Statistical demand functions for food in the USA and the Netherlands
+SO JOURNAL OF APPLIED ECONOMETRICS
+PD SEP-OCT
+PY 1997
+VL 12
+IS 5
+BP 615
+EP 637
+UT ISI:A1997YD77900028
+ER
+
+PT J
+AU Horvath, L
+   Kokoszka, P
+TI The effect of long-range dependence on change-point estimators
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD OCT 30
+PY 1997
+VL 64
+IS 1
+BP 57
+EP 81
+UT ISI:A1997YC66800006
+ER
+
+PT J
+AU Smith, J
+   Otero, J
+TI Structural breaks and seasonal integration
+SO ECONOMICS LETTERS
+PD SEP 26
+PY 1997
+VL 56
+IS 1
+BP 13
+EP 19
+UT ISI:A1997YB88200003
+ER
+
+PT J
+AU Luo, XL
+   Boyett, JM
+TI Estimations of a threshold parameter in Cox regression
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1997
+VL 26
+IS 10
+BP 2329
+EP 2346
+UT ISI:A1997YB16300004
+ER
+
+PT J
+AU Lee, J
+   Huang, CJ
+   Shin, Y
+TI On stationary tests in the presence of structural breaks
+SO ECONOMICS LETTERS
+PD AUG 29
+PY 1997
+VL 55
+IS 2
+BP 165
+EP 172
+UT ISI:A1997XZ77600003
+ER
+
+PT J
+AU Kiviet, JF
+   Dufour, JM
+TI Exact tests in single equation autoregressive distributed lag models
+SO JOURNAL OF ECONOMETRICS
+PD OCT
+PY 1997
+VL 80
+IS 2
+BP 325
+EP 353
+UT ISI:A1997XZ23000009
+ER
+
+PT J
+AU Perron, P
+TI Further evidence on breaking trend functions in macroeconomic variables
+SO JOURNAL OF ECONOMETRICS
+PD OCT
+PY 1997
+VL 80
+IS 2
+BP 355
+EP 385
+UT ISI:A1997XZ23000010
+ER
+
+PT J
+AU Atkinson, AC
+   Koopman, SJ
+   Shephard, N
+TI Detecting shocks: Outliers and breaks in time series
+SO JOURNAL OF ECONOMETRICS
+PD OCT
+PY 1997
+VL 80
+IS 2
+BP 387
+EP 422
+UT ISI:A1997XZ23000011
+ER
+
+PT J
+AU Brostrom, G
+TI A martingale approach to the changepoint problem
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD SEP
+PY 1997
+VL 92
+IS 439
+BP 1177
+EP 1183
+UT ISI:A1997XU87800040
+ER
+
+PT J
+AU BuHamra, SS
+TI Testing for a change in repeated measures data
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 1997
+VL 26
+IS 3
+BP 841
+EP 872
+UT ISI:A1997XN23800004
+ER
+
+PT J
+AU VanBrackle, LN
+   Reynolds, MR
+TI EWMA and CUSUM control charts in the presence of correlation
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 1997
+VL 26
+IS 3
+BP 979
+EP 1008
+UT ISI:A1997XN23800010
+ER
+
+PT J
+AU Muller, HG
+   Song, KS
+TI Two-stage change-point estimators in smooth regression models
+SO STATISTICS & PROBABILITY LETTERS
+PD JUL 16
+PY 1997
+VL 34
+IS 4
+BP 323
+EP 335
+UT ISI:A1997XM03800002
+ER
+
+PT J
+AU Steinebach, J
+   Eastwood, VR
+TI Detecting changes in a multivariate renewal process
+SO METRIKA
+PY 1997
+VL 46
+IS 1
+BP 1
+EP 19
+UT ISI:A1997XL47500001
+ER
+
+PT J
+AU Gastwirth, JL
+TI Statistical evidence in discrimination cases
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES A-STATISTICS IN SOCIETY
+PY 1997
+VL 160
+PN Part 2
+BP 289
+EP 303
+UT ISI:A1997XJ40100010
+ER
+
+PT J
+AU Dey, DK
+   Purkayastha, S
+TI Bayesian approach to change point problems
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1997
+VL 26
+IS 8
+BP 2035
+EP 2047
+UT ISI:A1997XH49000015
+ER
+
+PT J
+AU Janardan, KG
+   Mohan, NR
+   Vasudeva, R
+   Hebbar, HV
+TI A stochastic model with random change point for the study of
+   oviposition tactics of weevils on beans
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD JUN 16
+PY 1997
+VL 61
+IS 2
+BP 193
+EP 201
+UT ISI:A1997XH24300001
+ER
+
+PT J
+AU Schmid, W
+TI CUSUM control schemes for Gaussian processes
+SO STATISTICAL PAPERS
+PD JUN
+PY 1997
+VL 38
+IS 2
+BP 191
+EP 217
+UT ISI:A1997XG26500004
+ER
+
+PT J
+AU Bai, JS
+TI Estimating multiple breaks one at a time
+SO ECONOMETRIC THEORY
+PD JUN
+PY 1997
+VL 13
+IS 3
+BP 315
+EP 352
+UT ISI:A1997XE30800001
+ER
+
+PT J
+AU Chen, J
+   Gupta, AK
+TI Testing and locating variance changepoints with application to stock
+   prices
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD JUN
+PY 1997
+VL 92
+IS 438
+BP 739
+EP 747
+UT ISI:A1997XE29600039
+ER
+
+PT J
+AU Franses, PH
+   Hoek, H
+   Paap, R
+TI Bayesian analysis of seasonal unit roots and seasonal mean shifts
+SO JOURNAL OF ECONOMETRICS
+PD JUN
+PY 1997
+VL 78
+IS 2
+BP 359
+EP 380
+UT ISI:A1997XC70700012
+ER
+
+PT J
+AU Franses, PH
+   McAleer, M
+TI Testing nested and non-nested periodically integrated autoregressive
+   models
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1997
+VL 26
+IS 6
+BP 1461
+EP 1475
+UT ISI:A1997XC91200011
+ER
+
+PT J
+AU Eusufzai, Z
+TI The Kuznets hypothesis: An indirect test
+SO ECONOMICS LETTERS
+PD JAN
+PY 1997
+VL 54
+IS 1
+BP 81
+EP 85
+UT ISI:A1997XC56700014
+ER
+
+PT J
+AU Aly, EEAA
+   Kochar, SC
+TI Change point tests based on U-statistics with applications in
+   reliability
+SO METRIKA
+PY 1997
+VL 45
+IS 3
+BP 259
+EP 269
+UT ISI:A1997XB89800007
+ER
+
+PT J
+AU Antoch, J
+   Huskova, M
+   Praskova, Z
+TI Effect of dependence on statistics for determination of change
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD MAY 15
+PY 1997
+VL 60
+IS 2
+BP 291
+EP 310
+UT ISI:A1997XB74400008
+ER
+
+PT J
+AU Lumsdaine, RL
+   Papell, DH
+TI Multiple trend breaks and the unit-root hypothesis
+SO REVIEW OF ECONOMICS AND STATISTICS
+PD MAY
+PY 1997
+VL 79
+IS 2
+BP 212
+EP 218
+UT ISI:A1997XB01000007
+ER
+
+PT J
+AU Srivastava, MS
+   Wu, YH
+TI Evaluation of optimum weights and average run length is in EWMA control
+   schemes
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1997
+VL 26
+IS 5
+BP 1253
+EP 1267
+UT ISI:A1997WX12500014
+ER
+
+PT J
+AU Jandhyala, VK
+   MacNeill, IB
+TI Iterated partial sum sequences of regression residuals and tests for
+   changepoints with continuity constraints
+SO JOURNAL OF THE ROYAL STATISTICAL SOCIETY SERIES B-METHODOLOGICAL
+PY 1997
+VL 59
+IS 1
+BP 147
+EP 156
+UT ISI:A1997WU41600010
+ER
+
+PT J
+AU Lyazrhi, F
+TI Bayesian criteria for discriminating among regression models with one
+   possible change point
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD APR 15
+PY 1997
+VL 59
+IS 2
+BP 337
+EP 353
+UT ISI:A1997WT47800010
+ER
+
+PT J
+AU Baron, M
+   Rukhin, AL
+TI Asymptotic behavior of confidence regions in the change-point problem
+SO JOURNAL OF STATISTICAL PLANNING AND INFERENCE
+PD MAR 15
+PY 1997
+VL 58
+IS 2
+BP 263
+EP 282
+UT ISI:A1997WP85800003
+ER
+
+PT J
+AU Schell, MJ
+   Singh, B
+TI The reduced monotonic regression method
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD MAR
+PY 1997
+VL 92
+IS 437
+BP 128
+EP 135
+UT ISI:A1997WL26500013
+ER
+
+PT J
+AU Chang, YP
+   Huang, WT
+TI Inferences for the linear errors-in-variables with changepoint models
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD MAR
+PY 1997
+VL 92
+IS 437
+BP 171
+EP 178
+UT ISI:A1997WL26500018
+ER
+
+PT J
+AU Crowley, EM
+TI Product partition models for normal means
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD MAR
+PY 1997
+VL 92
+IS 437
+BP 192
+EP 198
+UT ISI:A1997WL26500020
+ER
+
+PT J
+AU Dragalin, V
+TI The design and analysis of 2-CUSUM procedure
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 1997
+VL 26
+IS 1
+BP 67
+EP 81
+UT ISI:A1997WK37300007
+ER
+
+PT J
+AU Wiklund, SJ
+TI Parabolic CUSUM control charts
+SO COMMUNICATIONS IN STATISTICS-SIMULATION AND COMPUTATION
+PY 1997
+VL 26
+IS 1
+BP 107
+EP 123
+UT ISI:A1997WK37300009
+ER
+
+PT J
+AU Huskova, M
+TI Limit theorems for rank statistics
+SO STATISTICS & PROBABILITY LETTERS
+PD FEB 14
+PY 1997
+VL 32
+IS 1
+BP 45
+EP 55
+UT ISI:A1997WG15600005
+ER
+
+PT J
+AU Hansen, BE
+TI Approximate asymptotic p values for structural-change tests
+SO JOURNAL OF BUSINESS & ECONOMIC STATISTICS
+PD JAN
+PY 1997
+VL 15
+IS 1
+BP 60
+EP 67
+UT ISI:A1997WC09000007
+ER
+
+PT J
+AU Douglas, S
+TI Bootstrap confidence intervals in a switching regressions model
+SO ECONOMICS LETTERS
+PD OCT
+PY 1996
+VL 53
+IS 1
+BP 7
+EP 15
+UT ISI:A1996VZ00500002
+ER
+
+PT J
+AU Wright, JH
+TI Structural stability tests in the linear regression model when the
+   regressors have roots local to unity
+SO ECONOMICS LETTERS
+PD SEP
+PY 1996
+VL 52
+IS 3
+BP 257
+EP 262
+UT ISI:A1996VY25700008
+ER
+
+PT J
+AU Priebe, CE
+TI Nonhomogeneity analysis using borrowed strength
+SO JOURNAL OF THE AMERICAN STATISTICAL ASSOCIATION
+PD DEC
+PY 1996
+VL 91
+IS 436
+BP 1497
+EP 1503
+UT ISI:A1996VX91300012
+ER
+
+PT J
+AU Ghosh, JK
+   Joshi, SN
+   Mukhopadhyay, C
+TI Asymptotics of a Bayesian approach to estimating change-point in a
+   hazard rate
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1996
+VL 25
+IS 12
+BP 3147
+EP 3166
+UT ISI:A1996VW23400014
+ER
+
+PT J
+AU Edgeman, RL
+TI SPRT and CUSUM results for inverse gaussian processes
+SO COMMUNICATIONS IN STATISTICS-THEORY AND METHODS
+PY 1996
+VL 25
+IS 11
+BP 2797
+EP 2806
+UT ISI:A1996VR35500021
+ER
+
+EF

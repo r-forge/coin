@@ -1,0 +1,134 @@
+%Author    = Maekawa, Koichi
+%Author    = He, Zonglu
+%Author    = Tee, Kianheng
+%Title     = Estimating break points in a time series regression with structural changes
+%Year      = 2004
+%Journal   = Mathematics and Computers in Simulation
+%Volume    = 64
+%Number    = 1
+%Pages     = 95-101
+%Keywords  = unit root test
+%Keywords  = weighted symmetric estimation
+%Keywords  = economic time series analysis
+
+
+%Author    = Fiteni, Inmaculada
+%Title     = Robust estimation of structural break points
+%Year      = 2002
+%Journal   = Econometric Theory
+%Volume    = 18
+%Number    = 2
+%Pages     = 349-386
+%Keywords  = Linear regression
+%Keywords  = parametric inference--point estimation
+%Keywords  = robust $M$-estimators of synamic linear models with structural break of unknown location
+
+
+%Author    = Larget, Bret
+%Author    = Simon, Donald L.
+%Author    = Kadane, Joseph B.
+%Title     = Bayesian phylogenetic inference from animal mitochondrial genome arrangements
+%Year      = 2002
+%Journal   = Journal of the Royal Statistical Society, Series B: Statistical Methodology
+%Volume    = 64
+%Number    = 4
+%Pages     = 681-693
+%Keywords  = break point graph
+%Keywords  = genome rearrangement
+%Keywords  = Markov chain Monte Carlo methods
+%Keywords  = Phylogeny
+%Keywords  = signed permutations
+%Keywords  = sorting by reversal
+
+
+%Author    = Polasek, Wolfgang
+%Author    = Ren, Lei
+%Title     = Volatility analysis during the Asia crisis: A multivariate GARCH-M model for stock returns in the U.S., Germany and Japan
+%Year      = 2001
+%Journal   = Applied Stochastic Models in Business and Industry
+%Volume    = 17
+%Number    = 1
+%Pages     = 93-108
+%Keywords  = VAR-GARCH-M models
+%Keywords  = MCMC methods
+%Keywords  = marginal likelihoods criterion
+%Keywords  = structural break point and model selection
+%Keywords  = Markov chain Monte Carlo
+%Keywords  = generalized autoregressive conditional heteroscedasicity
+%Keywords  = vectorial autoregressive model
+%Keywords  = inference and prediction on financial risk management
+
+
+%Author    = Ng, Edmund T. M.
+%Author    = Chan, W. S.
+%Title     = Some seasonal unit root tests with a maintained broken trend
+%Year      = 2001
+%Journal   = Journal of Applied Statistical Science
+%Volume    = 10
+%Number    = 3
+%Pages     = 259-277
+%Keywords  = break point
+%Keywords  = Lagrange multiplier test
+%Keywords  = Structural change
+%Keywords  = Wiener process
+
+
+%Author    = Lee, Junsoo
+%Author    = Strazicich, Mark C.
+%Title     = Break point estimation and spurious rejections with endogenous unit root tests
+%Year      = 2001
+%Journal   = Oxford Bulletin of Economics and Statistics
+%Volume    = 63
+%Number    = 5
+%Pages     = 535-558
+
+
+%Author    = Johansen, Søren
+%Author    = Johansen, Soren
+%Author    = Johansen, Soeren
+%Author    = Mosconi, Rocco
+%Author    = Nielsen, Bent
+%Title     = Cointegration analysis in the presence of structural breaks in the deterministic trend
+%Year      = 2000
+%Journal   = The Econometrics Journal Online
+%Volume    = 3
+%Number    = 2
+%Pages     = 216-249
+%Keywords  = break points
+%Keywords  = common trend
+%Keywords  = piecewise linear trend
+%Keywords  = stochastic trend
+%Keywords  = vector autoregressive model
+
+
+%Author    = Morimune, Kimio
+%Author    = Mitsuru, Nakagawa
+%Title     = The discontinuous trend unit root test when the break point is misspecified
+%Year      = 1999
+%Journal   = Mathematics and Computers in Simulation
+%Volume    = 48
+%Pages     = 417-427
+%Keywords  = Time series
+
+
+%Author    = Stasinopoulos, D. M.
+%Author    = Rigby, R. A.
+%Title     = Detecting break points in generalised linear models
+%Year      = 1992
+%Journal   = Computational Statistics &amp; Data Analysis
+%Volume    = 13
+%Pages     = 461-471
+%Keywords  = Spline
+%Keywords  = Change point
+
+
+%Author    = Edler, Lutz
+%Author    = Berger, Jutta
+%Title     = Computational methods to determine a break point in linear regression
+%Year      = 1985
+%Journal   = EDV in Medizin und Biologie
+%Volume    = 16
+%Pages     = 128-134
+%Keywords  = Dose-response curve
+%Keywords  = Change point
+%Keywords  = Cumulative sum

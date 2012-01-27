@@ -1,0 +1,4894 @@
+%Author    = Wen, Chi-Chung
+%Author    = Wu, Yuh-Jenn
+%Author    = Huang, Yung-Hsiang
+%Author    = Chen, Wei-Chen
+%Author    = Liu, Shu-Chen
+%Author    = Jiang, Shih Sheng
+%Author    = Juang, Jyh-Lyh
+%Author    = Lin, Chung-Yen
+%Author    = Fang, Wen-Tsen
+%Author    = Hsiung, Chao
+%Author    = Chang, I-Shou
+%Title     = A Bayes regression approach to array-CGH data
+%Year      = 2006
+%Journal   = Statistical Applications in Genetics and Molecular Biology
+%Volume    = 5
+%Number    = 1
+%Pages     = NA-NA
+%Keywords  = change point problem
+%Keywords  = COMPARATIVE GENOMIC HYBRIDIZATION
+%Keywords  = DNA copy number imbalance
+
+
+%Author    = Hušková, Marie
+%Author    = Meintanis, Simos G.
+%Title     = Change point analysis based on empirical characteristic functions
+%Year      = 2006
+%Journal   = Metrika
+%Volume    = 63
+%Number    = 2
+%Pages     = 145-168
+%Keywords  = 62G20
+%Keywords  = 62E20
+%Keywords  = 60F17
+%Keywords  = Empirical characteristic function
+%Keywords  = change point analysis
+
+
+%Author    = Dragalin, Vladimir
+%Title     = Inference for change point and post change means after a CUSUM test. Yanhong Wu. Hoboken
+%Year      = 2006
+%Journal   = Journal of the American Statistical Association
+%Volume    = 101
+%Number    = 474
+%Pages     = 848-848
+
+
+%Author    = Dragalin, Vladimir
+%Title     = Inference for change point and post change means after a CUSUM test. Yanhong Wu.
+%Year      = 2006
+%Journal   = Journal of the American Statistical Association
+%Volume    = 101
+%Number    = 474
+%Pages     = 848-848
+
+
+%Author    = Moreno, Elías
+%Author    = Casella, George
+%Author    = Garcia-Ferrer, Antonio
+%Title     = An objective Bayesian analysis of the change point problem
+%Year      = 2005
+%Journal   = Stochastic Environmental Research and Risk Assessment
+%Volume    = 19
+%Number    = 3
+%Pages     = 191-204
+%Keywords  = Change point
+%Keywords  = Intrinsic priors
+%Keywords  = Model selection
+%Keywords  = Sequential detection
+%Keywords  = Retrospective estimation
+
+
+%Author    = Loschi, Rosangela H.
+%Author    = Moura, Cristiano R.
+%Author    = Iglesias, Pilar L.
+%Title     = Bayesian analysis for change points in the volatility of Latin American emerging markets
+%Year      = 2005
+%Journal   = Journal of Data Science
+%Volume    = 3
+%Number    = 1
+%Pages     = 101-122
+%Keywords  = Gibbs sampling
+%Keywords  = Product partition model
+%Keywords  = student-$t$ distribution
+
+
+%Author    = Son, Young
+%Author    = Kim, Seong
+%Title     = Bayesian single change point detection in a sequence of multivariate normal observations
+%Year      = 2005
+%Journal   = Statistics
+%Volume    = 39
+%Number    = 5
+%Pages     = 373-387
+%Keywords  = Change point
+%Keywords  = default Bayes factor
+%Keywords  = Intrinsic Bayes factor
+%Keywords  = Noninformative prior
+%Keywords  = Posterior probability
+
+
+%Author    = Rackauskas, A.
+%Author    = Suquet, Ch.
+%Title     = Estimation of change points of infinite dimensional parameters in short epidemics
+%Year      = 2005
+%Journal   = Lithuanian Mathematical Journal
+%Volume    = 45
+%Number    = 4
+%Pages     = 458-474
+%Keywords  = change-point location
+%Keywords  = Empirical process
+%Keywords  = Epidemic model
+%Keywords  = partial sums process in Holder space
+
+
+%Author    = Fan, Tsai-Hung
+%Author    = Chen, Wei-chen
+%Title     = Bayesian change points analysis on the seismic activity in northeastern Taiwan
+%Year      = 2005
+%Journal   = Journal of Statistical Computation and Simulation
+%Volume    = 75
+%Number    = 11
+%Pages     = 857-868
+%Keywords  = Seismic activity
+%Keywords  = Bayesian change points analysis
+%Keywords  = Reversible jump MCMC method
+%Keywords  = BIC criteria
+
+
+%Author    = Han, Dong
+%Author    = Tsung, Fugee
+%Title     = Comparison of the Cuscore, GLRT and CUSUM control charts for detecting a dynamic mean change
+%Year      = 2005
+%Journal   = Annals of the Institute of Statistical Mathematics
+%Volume    = 57
+%Number    = 3
+%Pages     = 531-552
+%Keywords  = Statistical process control
+%Keywords  = change point detection
+%Keywords  = Average run length
+
+
+%Author    = Loschi, R. H.
+%Author    = Cruz, F. R. B.
+%Author    = Arellano-Valle, R. B.
+%Title     = Multiple change point analysis for the regular exponential family using the product partition model
+%Year      = 2005
+%Journal   = Journal of Data Science
+%Volume    = 3
+%Number    = 3
+%Pages     = 305-330
+%Keywords  = conjugacy
+%Keywords  = Gibbs sampling
+%Keywords  = Relevance
+%Keywords  = Yao's cohesions
+
+
+%Author    = Ruggeri, Fabrizio
+%Author    = Sivaganesan, Siva
+%Title     = On modeling change points in non-homogeneous Poisson processes
+%Year      = 2005
+%Journal   = Statistical Inference for Stochastic Processes
+%Volume    = 8
+%Number    = 3
+%Pages     = 311-329
+%Keywords  = Bayesian inference
+%Keywords  = power law process
+%Keywords  = Markov-chain Monte Carlo methods
+%Keywords  = change points
+
+
+%Author    = Buhamra, Sana S.
+%Author    = Aly, Emad-Eldin A. A.
+%Title     = Nonparametric change point tests for LTRC data
+%Year      = 2004
+%Journal   = Advances and Applications in Statistics
+%Volume    = 4
+%Number    = 1
+%Pages     = 27-44
+%Keywords  = modified ranks
+%Keywords  = Monte Carlo
+%Keywords  = nonparametric inference--hypothesis testing
+%Keywords  = censored data models
+
+
+%Author    = Wu, Yanhong
+%Title     = Bias of estimator of change point detected by a CUSUM procedure
+%Year      = 2004
+%Journal   = Annals of the Institute of Statistical Mathematics
+%Volume    = 56
+%Number    = 1
+%Pages     = 127-142
+%Keywords  = change-point estimator
+%Keywords  = quasi-stationary bias
+%Keywords  = random walk theory
+%Keywords  = strong renewal theorem
+%Keywords  = ladder epoches
+%Keywords  = ladder heights
+
+
+%Author    = Moustakides, George V.
+%Title     = Optimality of the CUSUM procedure in continuous time
+%Year      = 2004
+%Journal   = The Annals of Statistics
+%Volume    = 32
+%Number    = 1
+%Pages     = 302-315
+%Keywords  = 62L10 (MSC2000)
+%Keywords  = 62L15 (MSC2000)
+%Keywords  = 62C10 (MSC2000)
+%Keywords  = CUSUM
+%Keywords  = Change point
+%Keywords  = Disorder problem
+%Keywords  = Sequential detection
+%Keywords  = Kullback-Leibler divergence
+%Keywords  = Sequential analysis
+
+
+%Author    = Han, Dong
+%Author    = Tsung, Fugee
+%Title     = A generalized EWMA control chart and its comparison with the optimal EWMA, CUSUM and GLR schemes
+%Year      = 2004
+%Journal   = The Annals of Statistics
+%Volume    = 32
+%Number    = 1
+%Pages     = 316-339
+%Keywords  = 62L10 (MSC2000)
+%Keywords  = 62N10 (MSC2000)
+%Keywords  = Statistical process control
+%Keywords  = change point detection
+%Keywords  = Average run length
+%Keywords  = Sequential analysis
+
+
+%Author    = Ramanayake, Asoka
+%Title     = Tests for a change point in the shape parameter of gamma random variables
+%Year      = 2004
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 33
+%Number    = 4
+%Pages     = 821-833
+%Keywords  = Likelihood
+%Keywords  = Gamma distribution
+%Keywords  = Change-point
+
+
+%Author    = Hušková, Marie
+%Title     = Weak invariance principles for regression rank statistics
+%Year      = 2004
+%Journal   = Sequential Analysis
+%Volume    = 23
+%Number    = 1
+%Pages     = 121-140
+%Keywords  = simple linear rank statistics
+%Keywords  = change point analysis
+%Keywords  = nonparametric asymptotic efficiency
+%Keywords  = Asymptotic distribution
+%Keywords  = functional limit theorems
+%Keywords  = 62G20
+%Keywords  = 62E20
+%Keywords  = 60F17
+
+
+%Author    = Zacks, S.
+%Title     = Exact determination of the run length distribution of a one-sided CUSUM procedure applied on an ordinary Poisson process
+%Year      = 2004
+%Journal   = Sequential Analysis
+%Volume    = 23
+%Number    = 2
+%Pages     = 159-178
+%Keywords  = cumulative sums control
+%Keywords  = detection of change points
+%Keywords  = distribution of run length
+%Keywords  = stopping times with linear boundaries
+%Keywords  = Stopping times
+%Keywords  = Random walk
+%Keywords  = applications of Markov renewal processes
+%Keywords  = survival analysis and censored data--quality control
+%Keywords  = 60G40
+%Keywords  = 60G50
+%Keywords  = 60K20
+%Keywords  = 62N10
+
+
+%Author    = Raimondo, Marc
+%Author    = Tajvidi, Nader
+%Title     = A peaks over threshold model for change-point detection by wavelets
+%Year      = 2004
+%Journal   = Statistica Sinica
+%Volume    = 14
+%Number    = 2
+%Pages     = 395-412
+%Keywords  = Change point
+%Keywords  = general Pareto distribution
+%Keywords  = Nonparametric regression
+%Keywords  = Peaks over threshold
+%Keywords  = tail exponent wavelets
+
+
+%Author    = Shiryaev, Albert N.
+%Title     = A remark on the quickest detection problems
+%Year      = 2004
+%Journal   = Statistics &amp; Decisions
+%Volume    = 22
+%Number    = 1
+%Pages     = 79-82
+%Keywords  = disorder
+%Keywords  = disruption
+%Keywords  = change point problems
+%Keywords  = Optimal stopping
+%Keywords  = martingales
+%Keywords  = Stochastic differential equations
+%Keywords  = Stopping times
+%Keywords  = martingales
+%Keywords  = 60G40
+%Keywords  = 60G44
+
+
+%Author    = Chen, Jie
+%Author    = Gupta, A. K.
+%Title     = Statistical inference of covariance change points in Gaussian model
+%Year      = 2004
+%Journal   = Statistics
+%Volume    = 38
+%Number    = 1
+%Pages     = 17-28
+%Keywords  = Information criterion
+%Keywords  = SIC
+%Keywords  = Asymptotic distribution
+%Keywords  = multivariate analysis--hypothesis testing
+%Keywords  = Distributions
+
+
+%Author    = Park, Junoh
+%Author    = Park, Sunghyun
+%Title     = Estimation of the change point in the X¯ and s control charts
+%Year      = 2004
+%Journal   = Communications in Statistics: Simulation and Computation
+%Volume    = 33
+%Number    = 4
+%Pages     = 1115-1132
+%Keywords  = Control charts
+%Keywords  = Detecting changes
+%Keywords  = Joint estimation of a change point
+
+
+%Author    = Huh, J.
+%Author    = Park, B.U.
+%Title     = Detection of a change point with local polynomial fits for the random design case
+%Year      = 2004
+%Journal   = Australian &amp; New Zealand Journal of Statistics
+%Volume    = 46
+%Number    = 3
+%Pages     = 425-441
+%Keywords  = discontinuity point
+%Keywords  = non-parametric regression
+%Keywords  = one-sided kernel
+%Keywords  = Rate of convergence
+%Keywords  = two-sided Brownian motion
+%Keywords  = Weak convergence
+
+
+%Author    = Kim, Hyune-Ju
+%Author    = Fay, Michael P.
+%Author    = Yu, Binbing
+%Author    = Barrett, Michael J.
+%Author    = Feuer, Eric J.
+%Title     = Comparability of segmented line regression models
+%Year      = 2004
+%Journal   = Biometrics
+%Volume    = 60
+%Number    = 4
+%Pages     = 1005-1014
+%Keywords  = Change point
+%Keywords  = Comparability
+%Keywords  = Joinpoint regression
+%Keywords  = Permutation test
+%Keywords  = Segmented regression
+%Keywords  = Spline regression
+
+
+%Author    = Albert, Paul S.
+%Author    = Hunsberger, Sally A.
+%Title     = Identifying multiple changepoints in heterogeneous binary data with an application to molecular genetics
+%Year      = 2004
+%Journal   = Biostatistics (Oxford)
+%Volume    = 5
+%Number    = 4
+%Pages     = 515-529
+%Keywords  = change point detection
+%Keywords  = Correlated binay data
+%Keywords  = Heterogeneity
+%Keywords  = loss of heterozygosity
+%Keywords  = repeated binary data
+%Keywords  = Spectral correlation
+
+
+%Author    = Herberts, Tina
+%Author    = Jensen, Uwe
+%Title     = Optimal detection of a change point in a Poisson process for different observation schemes
+%Year      = 2004
+%Journal   = Scandinavian Journal of Statistics
+%Volume    = 31
+%Number    = 3
+%Pages     = 347-366
+%Keywords  = Change point
+%Keywords  = detection problem
+%Keywords  = Optimal stopping
+%Keywords  = Point process
+%Keywords  = semimartingale representation
+
+
+%Author    = Gabbanini, Francesco
+%Author    = Vannucci, Marina
+%Author    = Bartoli, Gianni
+%Author    = Moro, Antonio
+%Title     = Wavelet packet methods for the analysis of variance of time series with application to crack widths on the brunelleschi dome
+%Year      = 2004
+%Journal   = Journal of Computational and Graphical Statistics
+%Volume    = 13
+%Number    = 3
+%Pages     = 639-658
+%Keywords  = change points detection
+%Keywords  = nondecimated transforms
+%Keywords  = Wavelet variance
+
+
+%Author    = Park, Junoh
+%Author    = Park, Sunghyun
+%Title     = Estimation of the change point in the $\bar X$ and $S$ control charts
+%Year      = 2004
+%Journal   = Communications in Statistics: Simulation and Computation
+%Volume    = 33
+%Number    = 4
+%Pages     = 1115-1132
+%Keywords  = Detecting changes
+%Keywords  = Joint estimation of a change point
+
+
+%Author    = Buhamra, Sana S.
+%Title     = Application of preliminary test and shrinkage estimation in change point analysis
+%Year      = 2004
+%Journal   = Advances and Applications in Statistics
+%Volume    = 4
+%Number    = 2
+%Pages     = 139-153
+%Keywords  = Monte Carlo
+%Keywords  = Test statistic
+%Keywords  = Survival analysis
+%Keywords  = Censored data
+%Keywords  = Estimation
+%Keywords  = probabilistic methods for computational problems in statistics
+
+
+%Author    = Habibi, Reza
+%Title     = Change points with linear trend in exponential family distribution
+%Year      = 2004
+%Journal   = Calcutta Statistical Association Bulletin
+%Volume    = 55
+%Number    = 219--220
+%Pages     = 181-198
+%Keywords  = nonparametric asymptotic efficiency
+%Keywords  = Asymptotic distribution theory
+
+
+%Author    = Fuh, Cheng-Der
+%Title     = SPRT and CUSUM in hidden Markov models
+%Year      = 2003
+%Journal   = The Annals of Statistics
+%Volume    = 31
+%Number    = 3
+%Pages     = 942-977
+%Keywords  = 60B15 (MSC2000)
+%Keywords  = 60F05 (MSC2000)
+%Keywords  = 60K15 (MSC2000)
+%Keywords  = Brownian approximation
+%Keywords  = change point detection
+%Keywords  = CUSUM
+%Keywords  = First passage time
+%Keywords  = products of random matrices
+%Keywords  = Renewal theory
+%Keywords  = Wald's identity
+%Keywords  = Wald's equation
+%Keywords  = probability measures on groups
+
+
+%Author    = Einmahl, John H. J.
+%Author    = McKeague, Ian W.
+%Title     = Empirical likelihood based hypothesis testing
+%Year      = 2003
+%Journal   = Bernoulli
+%Volume    = 9
+%Number    = 2
+%Pages     = 267-290
+%Keywords  = Change point
+%Keywords  = Distribution-free
+%Keywords  = exponentiality
+%Keywords  = Independence
+%Keywords  = nonparametric likelihood ratio
+%Keywords  = Symmetry
+%Keywords  = Two-sample problem
+
+
+%Author    = Stadie, Andreas
+%Title     = Detecting periods in which a time series model fails to predict the observed volatility
+%Year      = 2003
+%Journal   = Computational Statistics
+%Volume    = 18
+%Number    = 3
+%Pages     = 375-386
+%Keywords  = variance change points
+%Keywords  = CUSUMSQ
+%Keywords  = pseudo-residuals
+%Keywords  = evaluating density forecasts
+
+
+%Author    = Andrews, Donald W. K.
+%Title     = Correction to ``Tests for parameter instability and structural change with unknown change point'' (1993V61 p821-856)
+%Year      = 2003
+%Journal   = Econometrica
+%Volume    = 71
+%Number    = 1
+%Pages     = 395-397
+
+
+%Author    = Albin, J. M. P.
+%Author    = Jarušková, D.
+%Title     = On a test statistic for linear trend
+%Year      = 2003
+%Journal   = Extremes
+%Volume    = 6
+%Number    = 3
+%Pages     = 247-258
+%Keywords  = change point detection
+%Keywords  = $\chi^2$-process
+%Keywords  = Extremes
+%Keywords  = Gaussian process
+%Keywords  = Ornstein-Uhlenbeck process
+%Keywords  = test of linear trend
+%Keywords  = Extremal processes
+%Keywords  = stationary processes
+%Keywords  = Gaussian processes
+%Keywords  = parametric inference--asymptotic properties of estimators
+
+
+%Author    = Sertkaya, Durdu
+%Author    = Sözer, M. Tekin
+%Title     = A Bayesian approach to the constant hazard model with a change point and an application to breast cancer data
+%Year      = 2003
+%Journal   = Hacettepe Journal of Mathematics and Statistics
+%Volume    = 32
+%Pages     = 33-41
+%Keywords  = Hazard rate
+%Keywords  = Bayesian analysis
+
+
+%Author    = Chen, Dechang
+%Author    = Fries, Michael
+%Author    = Lyon, John M.
+%Title     = A statistical method of detecting bioremediation
+%Year      = 2003
+%Journal   = Journal of Data Science
+%Volume    = 1
+%Number    = 1
+%Pages     = 27-41
+%Keywords  = Change point
+%Keywords  = Linear model
+%Keywords  = Posterior distribution
+%Keywords  = Bayesian approach
+
+
+%Author    = Chen, Jie
+%Title     = A note on change point analysis in a failure rate
+%Year      = 2003
+%Journal   = Journal of Probability and Statistical Science
+%Volume    = 1
+%Number    = 1
+%Pages     = 135-140
+%Keywords  = Information criterion
+%Keywords  = Model selection
+
+
+%Author    = Kittlitz, Rudy
+%Title     = Comment on ``Detection of multiple change points from clustering individual observations'' (2002V34 p371-383)
+%Year      = 2003
+%Journal   = Journal of Quality Technology
+%Volume    = 35
+%Number    = 3
+%Pages     = 237-238
+%Keywords  = letter to the editor
+
+
+%Author    = Sullivan, Joe
+%Title     = Reply to comment on ``Detection of multiple change points from clustering individual observations'' (2002V34 p371-383)
+%Year      = 2003
+%Journal   = Journal of Quality Technology
+%Volume    = 35
+%Number    = 3
+%Pages     = 238-238
+
+
+%Author    = Vek, Tom
+%Title     = The likelihood ratio method for testing changes in the parameters of double exponential observations
+%Year      = 2003
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 113
+%Number    = 1
+%Pages     = 79-111
+%Keywords  = change point problem
+%Keywords  = least absolute deviation estimators
+%Keywords  = least absolute deviation tests
+%Keywords  = location models
+%Keywords  = scale models
+%Keywords  = extreme value type theorem
+
+
+%Author    = Gijbels, Irène
+%Author    = Gürler, Ülkü
+%Title     = Estimation of a change point in a hazard function based on censored data
+%Year      = 2003
+%Journal   = Lifetime Data Analysis
+%Volume    = 9
+%Number    = 4
+%Pages     = 395-411
+%Keywords  = change point hazard model
+%Keywords  = Cumulative hazard function
+%Keywords  = Least squares estimation
+%Keywords  = Random censoring
+
+
+%Author    = Chen, Jiahua
+%Author    = Gupta, A. K.
+%Title     = Information-theoretic approach for detecting change in the parameters of a normal model
+%Year      = 2003
+%Journal   = Mathematical Methods of Statistics
+%Volume    = 12
+%Number    = 1
+%Pages     = 116-130
+%Keywords  = Information criterion
+%Keywords  = Change point
+%Keywords  = Estimation
+%Keywords  = Location
+%Keywords  = Consistency
+%Keywords  = multivariate analysis--hypothesis testing
+%Keywords  = Distributions
+
+
+%Author    = Aly, Emad-Eldin A. A.
+%Author    = Abd-Rabou, Abd-Elnaser S.
+%Author    = Al-Kandari, Noriah M.
+%Title     = Tests for multiple change points under ordered alternatives
+%Year      = 2003
+%Journal   = Metrika
+%Volume    = 57
+%Number    = 3
+%Pages     = 209-221
+%Keywords  = Brownian bridge
+%Keywords  = Kiefer processes
+%Keywords  = Limit theorems
+%Keywords  = Jonckheere-Terpstra test
+%Keywords  = Monte Carlo simulations
+
+
+%Author    = Hu, M.
+%Title     = Serial rank statistics for detection of changes
+%Year      = 2003
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 61
+%Number    = 2
+%Pages     = 199-213
+%Keywords  = Independence
+%Keywords  = AR-sequences
+%Keywords  = change point detection
+%Keywords  = 62G20
+%Keywords  = 62E20
+%Keywords  = 60F17
+
+
+%Author    = Holmes, C. C.
+%Author    = Heard, N. A.
+%Title     = Generalized monotonic regression using random change points
+%Year      = 2003
+%Journal   = Statistics in Medicine
+%Volume    = 22
+%Number    = 4
+%Pages     = 623-638
+%Keywords  = constrained curve fitting
+%Keywords  = change point analysis
+%Keywords  = Monotonicity
+%Keywords  = Bayesian non-parametric regression
+
+
+%Author    = Liechty, John
+%Author    = Pieters, Rik
+%Author    = Wedel, Michel
+%Title     = Global and local covert visual attention: Evidence from a Bayesian hidden Markov model (Pkg: p519-562)
+%Year      = 2003
+%Journal   = Psychometrika
+%Volume    = 68
+%Number    = 4
+%Pages     = 519-541
+%Keywords  = change point models
+%Keywords  = reversible jump Markov chain Monte Carlo
+%Keywords  = variable dimension time-series models
+%Keywords  = covert attention
+%Keywords  = overt attention
+%Keywords  = eye-movements
+%Keywords  = saccades
+
+
+%Author    = Abd-Rabou, Abd-Elnaser S.
+%Title     = Nonparametric tests for shifts in nonlinear regression
+%Year      = 2003
+%Journal   = The Egyptian Statistical Journal
+%Volume    = 47
+%Number    = 1
+%Pages     = 79-92
+%Keywords  = hybrid process
+%Keywords  = change point problem
+%Keywords  = Strong approximation
+%Keywords  = Wiener process
+%Keywords  = Brownian bridge process
+%Keywords  = two-parameter Gaussian process
+
+
+%Author    = Buhamra, Sana S.
+%Author    = Aly, Emad-Eldin A. A.
+%Author    = Al-Awadhi, Shafeeqah A.
+%Title     = Nonparametric change point tests for randomly censored data
+%Year      = 2002
+%Journal   = Advances and Applications in Statistics
+%Volume    = 2
+%Number    = 2
+%Pages     = 199-216
+%Keywords  = modified rank tests
+%Keywords  = Monte Carlo
+%Keywords  = Nonparametric inference
+%Keywords  = Hypothesis testing
+%Keywords  = censored data models
+
+
+%Author    = Patra, Kaushik
+%Author    = Dey, Dipak K.
+%Title     = A general class of change point and change curve modeling for life time data
+%Year      = 2002
+%Journal   = Annals of the Institute of Statistical Mathematics
+%Volume    = 54
+%Number    = 3
+%Pages     = 517-530
+%Keywords  = Gibbs sampling
+%Keywords  = Hazard function
+%Keywords  = Posterior inference
+%Keywords  = Survival function
+
+
+%Author    = Asano, Miyoko
+%Author    = Tsubaki, Hiroe
+%Author    = Yoshizawa, Tadashi
+%Title     = Effectiveness of neural networks to regression with structural changes
+%Year      = 2002
+%Journal   = Applied Stochastic Models in Business and Industry
+%Volume    = 18
+%Number    = 3
+%Pages     = 189-195
+%Keywords  = change points problem
+%Keywords  = non-parametric regression
+%Keywords  = sigmoid decomposition
+%Keywords  = BUSINESS STATISTICS
+%Keywords  = Industrial statistics
+
+
+%Author    = Kuriki, Satoshi
+%Author    = Takemura, Akimichi
+%Title     = Application of tube formula to distributional problems in multiway layouts
+%Year      = 2002
+%Journal   = Applied Stochastic Models in Business and Industry
+%Volume    = 18
+%Number    = 3
+%Pages     = 245-257
+%Keywords  = Change point
+%Keywords  = Gaussian random field
+%Keywords  = Integral geometry
+%Keywords  = Multilinear model
+%Keywords  = Ordered categorical data
+%Keywords  = BUSINESS STATISTICS
+%Keywords  = Industrial statistics
+
+
+%Author    = Shao, Quanxi
+%Author    = Campbell, N. A.
+%Title     = Modelling trends in groundwater levels by segmented regression with constraints
+%Year      = 2002
+%Journal   = Australian &amp; New Zealand Journal of Statistics
+%Volume    = 44
+%Number    = 2
+%Pages     = 129-141
+%Keywords  = Akaike information criterion
+%Keywords  = Change point
+%Keywords  = Model selection
+
+
+%Author    = Xu, Ronghui
+%Author    = Adak, Sudeshna
+%Title     = Survival analysis with time-varying regression effects using a tree-based approach
+%Year      = 2002
+%Journal   = Biometrics
+%Volume    = 58
+%Number    = 2
+%Pages     = 305-315
+%Keywords  = Change point
+%Keywords  = Classification tree
+%Keywords  = Regression tree
+%Keywords  = maximized score test
+%Keywords  = Nonproportional hazards
+
+
+%Author    = Ango Nze, Patrick
+%Author    = Prieur, Clementine
+%Author    = Prieur, Clémentine
+%Title     = Change point estimation for a weakly dependent sequence
+%Year      = 2002
+%Journal   = Comptes Rendus: Mathématique (Paris)
+%Volume    = 335
+%Number    = 3
+%Pages     = 267-270
+%Keywords  = Central limit theorem
+
+
+%Author    = Bélisle, Patrick
+%Author    = Belisle, Patrick
+%Author    = Joseph, Lawrence
+%Author    = Wolfson, David B.
+%Author    = Zhou, Xiaojie
+%Title     = Bayesian estimation of cognitive decline in patients with Alzheimer's disease
+%Year      = 2002
+%Journal   = The Canadian Journal of Statistics / La Revue Canadienne de Statistique
+%Volume    = 30
+%Number    = 1
+%Pages     = 37-54
+%Keywords  = Bayes factors
+%Keywords  = biphasic regression
+%Keywords  = Change point
+%Keywords  = Gibbs sampler
+%Keywords  = mini-mental state exam
+
+
+%Author    = Loschi, R.H.
+%Author    = Cruz, F.R.B.
+%Title     = An analysis of the influence of some prior specifications in the identification of change points via product partition model
+%Year      = 2002
+%Journal   = Computational Statistics &amp; Data Analysis
+%Volume    = 39
+%Number    = 4
+%Pages     = 477-501
+
+
+%Author    = Sullivan, Joe H.
+%Title     = Estimating the locations of multiple change points in the mean
+%Year      = 2002
+%Journal   = Computational Statistics
+%Volume    = 17
+%Number    = 2
+%Pages     = 289-296
+%Keywords  = Schwarz information criterion
+%Keywords  = BIC
+%Keywords  = Bayes information criterion
+
+
+%Author    = Barry, Daniel
+%Title     = A Bayesian analysis for derivative change points
+%Year      = 2002
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 31
+%Number    = 8
+%Pages     = 1335-1348
+%Keywords  = smoothing splines
+
+
+%Author    = Polansky, Alan M.
+%Author    = Check, Catherine E.
+%Title     = Testing trends in environmental compliance
+%Year      = 2002
+%Journal   = Journal of Agricultural, Biological, and Environmental Statistics
+%Volume    = 7
+%Number    = 3
+%Pages     = 452-468
+%Keywords  = Change point
+%Keywords  = OZONE LEVELS
+%Keywords  = Randomization test
+%Keywords  = Two-phase regression
+
+
+%Author    = Kim, Chansoo
+%Author    = Chung, Younshik
+%Title     = Nonparametric Bayesian multiple change point problems
+%Year      = 2002
+%Journal   = Journal of the Korean Statistical Society
+%Volume    = 31
+%Number    = 1
+%Pages     = 1-16
+%Keywords  = mixture of Dirichlet process
+%Keywords  = nonparametric Bayesian Schwartz information criterion
+
+
+%Author    = Grégoire, Gérard
+%Author    = Gregoire, Gerard
+%Author    = Hamrouni, Zouhir
+%Title     = Change point estimation by local linear smoothing
+%Year      = 2002
+%Journal   = Journal of Multivariate Analysis
+%Volume    = 83
+%Number    = 1
+%Pages     = 56-83
+%Keywords  = Nonparametric regression
+%Keywords  = Local linear regression
+%Keywords  = change points
+%Keywords  = compound Poisson processes
+
+
+%Author    = Sullivan, Joe H.
+%Title     = Detection of multiple change points from clustering individual observations
+%Year      = 2002
+%Journal   = Journal of Quality Technology
+%Volume    = 34
+%Number    = 4
+%Pages     = 371-383
+%Keywords  = Quality control
+%Keywords  = Robust estimation
+%Keywords  = Statistical process control
+
+
+%Author    = Koul, Hira L.
+%Author    = Qian, Lianfen
+%Title     = Asymptotics of maximum likelihood estimator in a two-phase linear regression model
+%Year      = 2002
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 108
+%Number    = 1-2
+%Pages     = 99-119
+%Keywords  = change point estimator
+%Keywords  = fixed jump size
+%Keywords  = $n$-consistency
+%Keywords  = Compound Poisson process
+
+
+%Author    = Hall, Peter
+%Author    = Rau, Christian
+%Title     = Likelihood-based confidence bands for fault lines in response surfaces
+%Year      = 2002
+%Journal   = Probability Theory and Related Fields
+%Volume    = 124
+%Number    = 1
+%Pages     = 26-49
+%Keywords  = Boundary estimation
+%Keywords  = Change point
+%Keywords  = Edge detection
+%Keywords  = frontier analysis
+%Keywords  = Gaussian process with quadratic drift
+%Keywords  = Image analysis
+%Keywords  = jump
+%Keywords  = Kernel methods
+%Keywords  = Least squares
+%Keywords  = Locally parametric methods
+%Keywords  = multivariate confidence bands
+%Keywords  = Smoothing
+
+
+%Author    = Lim, Heejeong
+%Author    = Sun, Jianguo
+%Author    = Matthews, David E.
+%Title     = Maximum likelihood estimation of a survival function with a change point for truncated and interval-censored data
+%Year      = 2002
+%Journal   = Statistics in Medicine
+%Volume    = 21
+%Number    = 5
+%Pages     = 743-752
+%Keywords  = interval-censoring
+%Keywords  = survival function estimation
+%Keywords  = Truncation
+
+
+%Author    = RAMANAYAKE, ASOKA
+%Author    = GUPTA, ARJUN
+%Title     = Change points with linear trend followed by abrupt change for the exponential distribution
+%Year      = 2002
+%Journal   = Journal of Statistical Computation and Simulation
+%Volume    = 72
+%Number    = 4
+%Pages     = 263-278
+%Keywords  = change-points
+%Keywords  = likelihood ratio statistics
+%Keywords  = Estimation
+%Keywords  = Consistency
+%Keywords  = Asymptotic distribution
+
+
+%Author    = Cudeck, Robert
+%Author    = Klebe, Kelli J.
+%Title     = Multiphase mixed-effects models for repeated measures data
+%Year      = 2002
+%Journal   = Psychological Methods
+%Volume    = 7
+%Number    = 1
+%Pages     = 41-63
+%Keywords  = Change point
+%Keywords  = Random coefficient
+
+
+%Author    = Penzer, Jeremy
+%Title     = Measuring the significance of correlated diagnostics statistics
+%Year      = 2002
+%Journal   = Inter-Stat (London)
+%Volume    = 9
+%Number    = 2
+%Pages     = 1-12
+%Keywords  = Bonferonni inequalities
+%Keywords  = change point detection
+%Keywords  = Order statistics
+%Keywords  = Outliers
+%Keywords  = Level shifts
+%Keywords  = structural breaks
+%Keywords  = structural time series models
+
+
+%Author    = Chen, Jie
+%Author    = Balakrishnan, N.
+%Title     = Locating a change point in a Gaussian model when an outlier is present
+%Year      = 2002
+%Journal   = Journal of Applied Statistical Science
+%Volume    = 11
+%Number    = 2
+%Pages     = 101-109
+
+
+%Author    = Friede, T.
+%Author    = Miller, F.
+%Author    = Bischoff, W.
+%Author    = Kieser, M.
+%Title     = A note on change point estimation in dose-response trials
+%Year      = 2001
+%Journal   = Computational Statistics &amp; Data Analysis
+%Volume    = 37
+%Number    = 2
+%Pages     = 219-232
+%Keywords  = change point estimator
+%Keywords  = dose-response relationship
+%Keywords  = Loss function
+%Keywords  = Linex loss
+
+
+%Author    = Gupta, Ramesh C.
+%Author    = Warren, Robin
+%Title     = Determination of change points of non-monotonic failure rates
+%Year      = 2001
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 30
+%Number    = 8-9
+%Pages     = 1903-1920
+%Keywords  = Monotonicity
+%Keywords  = mixed gamma
+%Keywords  = Bathtub failure rate
+%Keywords  = upside bathtub failure rate
+
+
+%Author    = Srivastava, Muni S.
+%Author    = Solanky, Tumulesh K. S.
+%Author    = Sen, A. K.
+%Title     = Power comparison of some tests for detecting a change in the multivariate mean
+%Year      = 2001
+%Journal   = Communications in Statistics: Simulation and Computation
+%Volume    = 30
+%Number    = 1
+%Pages     = 19-36
+%Keywords  = detecting change point
+%Keywords  = Multivariate normal
+%Keywords  = Monte Carlo
+%Keywords  = Likelihood ratio test
+%Keywords  = Bayes test
+%Keywords  = simulations
+
+
+%Author    = Chen, Jie
+%Author    = Gupta, A. K.
+%Title     = On change point detection and estimation
+%Year      = 2001
+%Journal   = Communications in Statistics: Simulation and Computation
+%Volume    = 30
+%Number    = 3
+%Pages     = 665-697
+%Keywords  = Bayes solution
+%Keywords  = likelihood-ratio procedure
+%Keywords  = Information criterion
+%Keywords  = Model selection
+%Keywords  = CUSUM
+%Keywords  = Wavelet transformation
+
+
+%Author    = Hsu, Chih-Chiang
+%Author    = Kuan, Chung-Ming
+%Title     = Distinguishing between trend-break models: Method and empirical evidence
+%Year      = 2001
+%Journal   = The Econometrics Journal Online
+%Volume    = 4
+%Number    = 2
+%Pages     = 171-190
+%Keywords  = Change point
+%Keywords  = partial parameter stability
+%Keywords  = time trend model
+
+
+%Author    = Giraitis, Liudas
+%Author    = Kokoszka, Piotr
+%Author    = Leipus, Remigijus
+%Title     = Testing for long memory in the presence of a general trend
+%Year      = 2001
+%Journal   = Journal of Applied Probability
+%Volume    = 38
+%Number    = 4
+%Pages     = 1033-1054
+%Keywords  = 62M10 (MSC2000)
+%Keywords  = 62P20 (MSC2000)
+%Keywords  = 60G10 (MSC2000)
+%Keywords  = 60G50 (MSC2000)
+%Keywords  = 60F17 (MSC2000)
+%Keywords  = Long memory
+%Keywords  = Trend
+%Keywords  = Change point
+%Keywords  = ARCH
+%Keywords  = ARMA
+%Keywords  = Autoregressive conditional heteroscedasticity
+%Keywords  = Autoregressive moving average
+
+
+%Author    = Stewardson, Dave
+%Author    = Coleman, Shirley
+%Title     = Using the Summed Rank Cusum for monitoring environmental data from industrial processes
+%Year      = 2001
+%Journal   = Journal of Applied Statistics
+%Volume    = 28
+%Number    = 3-4
+%Pages     = 469-484
+%Keywords  = Change point
+%Keywords  = Wilcoxon/Mann-Whitney test
+
+
+%Author    = Thum, Yeow Meng
+%Author    = Bhattacharya, Suman K.
+%Title     = Detecting a change in school performance: A Bayesian analysis for a multilevel join point problem
+%Year      = 2001
+%Journal   = Journal of Educational and Behavioral Statistics
+%Volume    = 26
+%Number    = 4
+%Pages     = 443-468
+%Keywords  = Hierarchical Bayes
+%Keywords  = Longitudinal data
+%Keywords  = Markov chain Monte Carlo
+%Keywords  = multilevel modeling
+%Keywords  = Piecewise regression
+%Keywords  = Program evaluation
+%Keywords  = Change point
+%Keywords  = MCMC
+
+
+%Author    = Jose, C. T.
+%Author    = Ismail, B.
+%Title     = Nonparametric inference on jump regression surface
+%Year      = 2001
+%Journal   = Journal of Nonparametric Statistics
+%Volume    = 13
+%Number    = 6
+%Pages     = 791-813
+%Keywords  = Change point
+%Keywords  = discontinuity
+%Keywords  = Kernel estimator
+%Keywords  = Local polynomial regression
+%Keywords  = Nonparametric regression
+
+
+%Author    = Pignatiello, Joseph J., Jr.
+%Author    = Samuel, Thomas R.
+%Title     = Estimation of the change point of a normal process mean in SPC applications
+%Year      = 2001
+%Journal   = Journal of Quality Technology
+%Volume    = 33
+%Number    = 1
+%Pages     = 82-95
+%Keywords  = change point estimation
+%Keywords  = CUSUM control chart
+%Keywords  = EWMA control chart
+%Keywords  = Process improvement
+%Keywords  = Quality control
+%Keywords  = Shewhart $\bar X$ control chart
+%Keywords  = special cause identification
+%Keywords  = Statistical process control
+%Keywords  = Exponentially weighted moving average
+
+
+%Author    = Chakraborti, S.
+%Author    = van der Laan, P.
+%Author    = Bakir, S. T.
+%Title     = Nonparametric control charts: An overview and some results
+%Year      = 2001
+%Journal   = Journal of Quality Technology
+%Volume    = 33
+%Number    = 3
+%Pages     = 304-315
+%Keywords  = Change point
+%Keywords  = cumulative sum control charts
+%Keywords  = distribution-free procedures
+%Keywords  = exponentially weighted moving average control charts
+%Keywords  = Shewhart control charts
+
+
+%Author    = Gupta, Arjun K.
+%Author    = Ramanayake, Asoka
+%Title     = Change points with linear trend for the exponential distribution
+%Year      = 2001
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 93
+%Number    = 1-2
+%Pages     = 181-195
+%Keywords  = likelihood ratio statistics
+%Keywords  = Estimation
+%Keywords  = Consistency
+%Keywords  = Asymptotic distribution
+
+
+%Author    = Chen, Zhenmin
+%Author    = Ferger, Dietmar
+%Author    = Mi, Jie
+%Title     = Estimation of the change point of a distribution based on the number of failed test items
+%Year      = 2001
+%Journal   = Metrika
+%Volume    = 53
+%Number    = 1
+%Pages     = 31-38
+%Keywords  = Failure rate function
+%Keywords  = inspection time
+%Keywords  = Central limit theorem
+%Keywords  = Strassen-type invariance principle
+
+
+%Author    = Kundu, Subrata
+%Title     = A short note on repeated significance tests and the unified Bayesian-Frequentist measure
+%Year      = 2001
+%Journal   = Sequential Analysis
+%Volume    = 20
+%Number    = 1-2
+%Pages     = 77-86
+%Keywords  = $P$-value
+%Keywords  = Change point
+
+
+%Author    = Chong, Terence Tai-Leung
+%Title     = Estimating the locations and number of change points by the sample-splitting method
+%Year      = 2001
+%Journal   = Statistical Papers
+%Volume    = 42
+%Number    = 1
+%Pages     = 53-79
+%Keywords  = Multiple structural changes
+%Keywords  = change-point estimator
+%Keywords  = Brownian motion
+%Keywords  = Bessel process
+
+
+%Author    = Kühn, Christoph
+%Author    = Kuhn, Christoph
+%Author    = Kuehn, Christoph
+%Title     = An estimator of the number of change points based on a weak invariance principle
+%Year      = 2001
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 51
+%Number    = 2
+%Pages     = 189-196
+%Keywords  = change in the mean
+%Keywords  = Schwarz criterion
+%Keywords  = Partial sum
+%Keywords  = Renewal process
+%Keywords  = Linear process
+
+
+%Author    = Antoch, Jaromír
+%Author    = Antoch, Jaromir
+%Author    = Huskova, Marie
+%Author    = Hušková, Marie
+%Title     = Permutation tests in change point analysis
+%Year      = 2001
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 53
+%Number    = 1
+%Pages     = 37-46
+%Keywords  = changes in location model
+%Keywords  = Monte Carlo
+
+
+%Author    = Gössl, Christoff
+%Author    = Gossl, Christoff
+%Author    = Goessl, Christoff
+%Author    = Kuchenhoff, Helmut
+%Author    = Kuechenhoff, Helmut
+%Author    = Küchenhoff, Helmut
+%Title     = Bayesian analysis of logistic regression with an unknown change point and covariate measurement error
+%Year      = 2001
+%Journal   = Statistics in Medicine
+%Volume    = 20
+%Number    = 20
+%Pages     = 3109-3121
+
+
+%Author    = Hall, Charles B.
+%Author    = Ying, Jun
+%Author    = Kuo, Lynn
+%Author    = Sliwinski, Martin
+%Author    = Buschke, Herman
+%Author    = Katz, Mindy
+%Author    = Lipton, Richard B.
+%Title     = Estimation of bivariate measurements having different change points, with application to cognitive ageing
+%Year      = 2001
+%Journal   = Statistics in Medicine
+%Volume    = 20
+%Number    = 24
+%Pages     = 3695-3714
+%Keywords  = clinical biostatistics
+
+
+%Author    = Hušková, Marie
+%Author    = Antoch, Jaromír
+%Title     = $M$-estimators of structural changes in regression models
+%Year      = 2001
+%Journal   = Tatra Mountains Mathematical Publications
+%Volume    = 22
+%Pages     = 197-208
+%Keywords  = Linear regression
+%Keywords  = structural changes
+%Keywords  = change point problem
+%Keywords  = $L_1-L_2$ -estimators
+%Keywords  = $M$-estimators
+%Keywords  = Huber estimator
+%Keywords  = parametric inference--point estimation
+%Keywords  = functional limit theorems
+%Keywords  = Asymptotic distribution theory
+%Keywords  = parametric inference--asymptotic properties of estimators
+
+
+%Author    = Sofronov, G. Yu.
+%Title     = An asymptotically {$d$}-optimal test for detecting a change point
+%Year      = 2001
+%Journal   = Teoriya Verojatnostei i ee Primenenija
+%Volume    = 46
+%Number    = 3
+%Pages     = 571-572
+%Keywords  = parametric inference--hypothesis testing
+
+
+%Author    = Chen, Jie
+%Author    = Gupta, A. K.
+%Title     = Parametric statistical change point analysis
+%Year      = 2000
+%Pages     = 184
+%Publisher = BirkhГ¤user Verlag
+%City      = Basel; Cambridge, MA
+
+
+%Author    = Hall, Peter
+%Author    = Rau, Christian
+%Title     = Tracking a smooth fault line in a response surface
+%Year      = 2000
+%Journal   = The Annals of Statistics
+%Volume    = 28
+%Number    = 3
+%Pages     = 713-733
+%Keywords  = 62G07 (MSC1991)
+%Keywords  = 62H05 (MSC1991)
+%Keywords  = Boundary estimation
+%Keywords  = Change point
+%Keywords  = Edge detection
+%Keywords  = frontier analysis
+%Keywords  = Image analysis
+%Keywords  = jump
+%Keywords  = Kernel methods
+%Keywords  = Least squares
+%Keywords  = Smoothing
+%Keywords  = nonparametric function estimation
+
+
+%Author    = Greenshtein, Eitan
+%Author    = Ritov, Ya'acov
+%Title     = Sampling from a stationary process and detecting a change in the mean of a stationary distribution
+%Year      = 2000
+%Journal   = Bernoulli
+%Volume    = 6
+%Number    = 4
+%Pages     = 679-697
+%Keywords  = Change point
+%Keywords  = Sampling rate
+
+
+%Author    = Abd-Rabou, Abd-Elnaser S.
+%Author    = Aly, Emad-Eldin A. A.
+%Title     = A comparison of weighted tests for a slope change in simple regression
+%Year      = 2000
+%Journal   = Biometrical Journal
+%Volume    = 42
+%Number    = 8
+%Pages     = 1033-1038
+%Keywords  = Brownian motion
+%Keywords  = Brownian bridge
+%Keywords  = Change point
+%Keywords  = Anderson-Darling type tests
+%Keywords  = Erdós-Darling type tests
+%Keywords  = Monte Carlo powers
+
+
+%Author    = Gombay, Edit
+%Author    = Liu, Shuangquan
+%Title     = A nonparametric test for change in randomly censored data
+%Year      = 2000
+%Journal   = The Canadian Journal of Statistics / La Revue Canadienne de Statistique
+%Volume    = 28
+%Number    = 1
+%Pages     = 113-121
+%Keywords  = Brownian bridge
+%Keywords  = Change point
+%Keywords  = Limit theorem
+%Keywords  = Wilcoxon statistic
+
+
+%Author    = Reed, Willian J.
+%Title     = Reconstructing the history of forest fire frequency: Identifying hazard rate change points using the Bayes information criterion
+%Year      = 2000
+%Journal   = The Canadian Journal of Statistics / La Revue Canadienne de Statistique
+%Volume    = 28
+%Number    = 2
+%Pages     = 353-365
+%Keywords  = BIC
+%Keywords  = fire hazard rate
+%Keywords  = Model selection
+%Keywords  = Quasi-likelihood
+
+
+%Author    = Kim, Soohwa
+%Author    = Cho, Sinsup
+%Author    = Lee, Sangyeol
+%Title     = On the cusum test for parameter changes in GARCH$(1,1)$ models
+%Year      = 2000
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 29
+%Number    = 2
+%Pages     = 445-462
+%Keywords  = GARCH models
+%Keywords  = testing parameter constancy
+%Keywords  = change point detection
+%Keywords  = mixingales
+%Keywords  = Weak convergence
+%Keywords  = generalized autoregressive conditional heteroscedastocity
+
+
+%Author    = Järpe, E.
+%Author    = Jarpe, E.
+%Author    = Jaerpe, E.
+%Author    = Wessman, P.
+%Title     = Some power aspects of methods for detecting different shifts in the mean
+%Year      = 2000
+%Journal   = Communications in Statistics: Simulation and Computation
+%Volume    = 29
+%Number    = 2
+%Pages     = 633-646
+%Keywords  = Surveillance
+%Keywords  = Change point
+%Keywords  = false alarm
+%Keywords  = expected delay
+%Keywords  = Predictive value
+
+
+%Author    = Antoch, Jaromír
+%Author    = Antoch, Jaromir
+%Author    = Huskova, Marie
+%Author    = Hušková, Marie
+%Title     = Bayesian like $R$- and $M$-estimators of change points
+%Year      = 2000
+%Journal   = Discussiones Mathematicae: Probability and Statistics
+%Volume    = 20
+%Number    = 1
+%Pages     = 115-133
+%Keywords  = Rank statistics
+%Keywords  = $R$-estimators
+%Keywords  = fixed changes
+%Keywords  = local changes
+
+
+%Author    = Fewster, Rachel M.
+%Author    = Buckland, Stephen T.
+%Author    = Siriwardena, Gavin M.
+%Author    = Baillie, Stephen R.
+%Author    = Wilson, Jeremy D.
+%Title     = Analysis of population trends for farmland birds using generalized additive models
+%Year      = 2000
+%Journal   = Ecology
+%Volume    = 81
+%Number    = 7
+%Pages     = 1970-1984
+%Keywords  = bird census schemes
+%Keywords  = British birds
+%Keywords  = change points
+%Keywords  = Common Birds Census
+%Keywords  = log-linear Poisson regression
+%Keywords  = nonlinear trend
+%Keywords  = population trajectory
+%Keywords  = spatiotemporal models
+%Keywords  = Trend analysis
+
+
+%Author    = Abd-Rabou, Abd-Elnaser S.
+%Author    = Aly, Emad-Eldin A. A.
+%Title     = Change point tests when the sample size is random
+%Year      = 2000
+%Journal   = Far East Journal of Theoretical Statistics
+%Volume    = 4
+%Number    = 2
+%Pages     = 319-338
+%Keywords  = empirical processes
+%Keywords  = quantile processes
+%Keywords  = Rank tests
+%Keywords  = Brownian motion
+%Keywords  = Brownian bridge
+%Keywords  = Kiefer process
+
+
+%Author    = Hennig, Christian
+%Title     = Identifiability of models for clusterwise linear regression
+%Year      = 2000
+%Journal   = Journal of Classification
+%Volume    = 17
+%Number    = 2
+%Pages     = 273-296
+%Keywords  = partial identifiability
+%Keywords  = Switching regression
+%Keywords  = Mixture model
+%Keywords  = fixed partition model
+%Keywords  = change point problem
+%Keywords  = Gaussian mixtures with covariates
+
+
+%Author    = Antoch, Jaromír
+%Author    = Antoch, Jaromir
+%Author    = Huskova, Marie
+%Author    = Hušková, Marie
+%Title     = Bayesian-type estimators of change points
+%Year      = 2000
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 91
+%Number    = 2
+%Pages     = 195-208
+%Keywords  = fixed changes
+%Keywords  = local changes
+%Keywords  = Location model
+%Keywords  = Bootstrap
+
+
+%Author    = Lavielle, Marc
+%Author    = Moulines, Eroc
+%Title     = Least-squares estimation of an unknown number of shifts in a time series
+%Year      = 2000
+%Journal   = Journal of Time Series Analysis
+%Volume    = 21
+%Number    = 1
+%Pages     = 33-59
+%Keywords  = detection of change point
+%Keywords  = Hájek-Rényi inequality
+%Keywords  = strongly mixing processes
+%Keywords  = strongly dependent processes
+%Keywords  = Fractional Brownian motion
+%Keywords  = penalized least squares estimate
+
+
+%Author    = Pignatiello, J. J., Jr.
+%Author    = Samuel, T. R.
+%Title     = Identifying the time of a step-change in the process fraction nonconforming
+%Year      = 2000
+%Journal   = Quality Engineering
+%Volume    = 13
+%Number    = 3
+%Pages     = 357-365
+%Keywords  = change point estimation
+%Keywords  = $p$ chart
+%Keywords  = $np$ chart
+%Keywords  = Statistical process control
+
+
+%Author    = Chen, Jie
+%Author    = Gupta, A. K.
+%Title     = Detecting change point for a sequence of random vectors under nonnormality
+%Year      = 2000
+%Journal   = Random Operators and Stochastic Equations
+%Volume    = 8
+%Pages     = 127-142
+%Keywords  = change-point model
+%Keywords  = Signal detection
+%Keywords  = Random matrices
+
+
+%Author    = Horváth, Lajos
+%Author    = Horvath, Lajos
+%Author    = Kokoszka, Piotr
+%Author    = Steinebach, Josef
+%Title     = Approximations for weighted bootstrap processes with an application
+%Year      = 2000
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 48
+%Number    = 1
+%Pages     = 59-70
+%Keywords  = Erdős-Rényi law
+%Keywords  = Brownian bridge
+%Keywords  = best approximation
+%Keywords  = change point detection
+
+
+%Author    = Liang, Faming
+%Author    = Wong, Wing Hung
+%Title     = Evolutionary Monte Carlo: Applications to $C_P$ model sampling and change point problem
+%Year      = 2000
+%Journal   = Statistica Sinica
+%Volume    = 10
+%Number    = 2
+%Pages     = 317-342
+%Keywords  = change-point identification
+%Keywords  = Crossover
+%Keywords  = exchange
+%Keywords  = Genetic algorithm
+%Keywords  = Markov chain Monte Carlo
+%Keywords  = Metropolis algorithm
+%Keywords  = Mutation
+%Keywords  = parallel tempering
+%Keywords  = regression variable selection
+%Keywords  = Simulated annealing
+%Keywords  = MCMC
+
+
+%Author    = Nechval, N. A.
+%Author    = Nechval, K. N.
+%Title     = Detecting a change point in a sequence of small area statistics
+%Year      = 2000
+%Journal   = Statistics in Transition
+%Volume    = 4
+%Pages     = 699-710
+%Keywords  = change-point model
+%Keywords  = Signal detection
+%Keywords  = Non-parametric tests
+
+
+%Author    = Abd-Rabou, Abd-Elnaser S
+%Author    = Aly, Emad-Eldin A. A.
+%Title     = Weighted tests for a change in the regression slope
+%Year      = 2000
+%Journal   = Statistics &amp; Decisions
+%Volume    = 18
+%Number    = 1
+%Pages     = 79-97
+%Keywords  = Brownian motion
+%Keywords  = Brownian bridge
+%Keywords  = Change point
+%Keywords  = Anderson-Darling type tests
+%Keywords  = Erdós-Darling type tests
+
+
+%Author    = Hall, Charles B.
+%Author    = Lipton, Richard B.
+%Author    = Sliwinski, Martin
+%Author    = Stewart, Walter F.
+%Title     = A change point model for estimating the onset of cognitive decline in preclinical Alzheimer's disease
+%Year      = 2000
+%Journal   = Statistics in Medicine
+%Volume    = 19
+%Number    = 11-12
+%Pages     = 1555-1566
+%Keywords  = profile likelihood method
+
+
+%Author    = Bertrand, Pierre
+%Title     = A local method for estimating change points: The ``hat-function''
+%Year      = 2000
+%Journal   = Statistics
+%Volume    = 34
+%Number    = 3
+%Pages     = 215-235
+%Keywords  = test of existence of abrupt changes
+%Keywords  = change point estimation
+%Keywords  = more than one change
+
+
+%Author    = Wu, Yanhong
+%Title     = Second order expansions for the moments of minimum point of an unbalanced two-sided normal random walk
+%Year      = 1999
+%Journal   = Annals of the Institute of Statistical Mathematics
+%Volume    = 51
+%Pages     = 187-200
+%Keywords  = Brownian motion
+%Keywords  = Exponential family
+%Keywords  = Change point
+
+
+%Author    = Gijbels, Irene
+%Author    = Kneip, Alois
+%Author    = Kneip, Aloies
+%Author    = Hall, Peter
+%Author    = Kneip, Aloïs
+%Title     = On the estimation of jump points in smooth curves
+%Year      = 1999
+%Journal   = Annals of the Institute of Statistical Mathematics
+%Volume    = 51
+%Pages     = 231-251
+%Keywords  = Bandwidth
+%Keywords  = Change point
+%Keywords  = Least squares
+%Keywords  = Nonparametric regression
+
+
+%Author    = HorvÃ¡th, Lajos
+%Author    = Shao, Qi-Man
+%Title     = Limit theorems for quadratic forms with applications to Whittle's estimate
+%Year      = 1999
+%Journal   = The Annals of Applied Probability
+%Volume    = 9
+%Number    = 1
+%Pages     = 146-187
+%Keywords  = 60F17 (MSC1991)
+%Keywords  = 60F03 (MSC1991)
+%Keywords  = 60F15 (MSC1991)
+%Keywords  = 60G70 (MSC1991)
+%Keywords  = Strong and weak approximations
+%Keywords  = Change-point
+%Keywords  = Quadratic forms
+%Keywords  = Limit theorems
+%Keywords  = weight functions
+%Keywords  = Linear process
+%Keywords  = long-memory parameter
+%Keywords  = Change point
+%Keywords  = Long memory
+
+
+%Author    = Yakir, Benjamin
+%Author    = Krieger, Abba M.
+%Author    = Pollak, Moshe
+%Title     = Detecting a change in regression: first-order optimality
+%Year      = 1999
+%Journal   = The Annals of Statistics
+%Volume    = 27
+%Number    = 6
+%Pages     = 1896-1913
+%Keywords  = 62L10 (MSC1991)
+%Keywords  = 62N10 (MSC1991)
+%Keywords  = change point detection
+%Keywords  = Regression
+%Keywords  = Information bound
+%Keywords  = Stopping rule
+
+
+%Author    = Avery, Peter J.
+%Author    = Henderson, Daniel A.
+%Title     = Detecting a changed segment in DNA sequences
+%Year      = 1999
+%Journal   = Journal of the Royal Statistical Society, Series C: Applied Statistics
+%Volume    = 48
+%Pages     = 489-503
+%Keywords  = Kolmogorov-Smirnov statistic
+%Keywords  = Nonparametric test
+%Keywords  = Change point
+
+
+%Author    = Schmock, Uwe
+%Title     = Estimating the value of the WINCAT coupons of the Winterthur Insurance convertible bond: A study of the model risk (Disc: p165-171)
+%Year      = 1999
+%Journal   = Astin Bulletin: A Journal of the International Actuarial Association
+%Volume    = 29
+%Pages     = 101-163
+%Keywords  = Pareto distribution
+%Keywords  = Extreme value distribution
+%Keywords  = Generalized linear model
+%Keywords  = Change point
+
+
+%Author    = Carroll, Raymond J.
+%Author    = Roeder, Kathryn
+%Author    = Wasserman, Larry
+%Title     = Flexible parametric measurement error models
+%Year      = 1999
+%Journal   = Biometrics
+%Volume    = 55
+%Pages     = 44-54
+%Keywords  = Change point
+%Keywords  = Errors in variables
+%Keywords  = Markov chain Monte Carlo
+
+
+%Author    = Anraku, Kazuo
+%Title     = An information criterion for parameters under a simple order restriction
+%Year      = 1999
+%Journal   = Biometrika
+%Volume    = 86
+%Pages     = 141-152
+%Keywords  = Change point
+
+
+%Author    = Lombard, F.
+%Title     = A rank test for constancy of a location or scale parameter
+%Year      = 1999
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 28
+%Pages     = 537-547
+%Keywords  = Change point
+%Keywords  = Periodogram
+
+
+%Author    = Ogden, R. Todd
+%Author    = Collier, Geoffrey L.
+%Title     = On detecting and modeling deterministic drift in long run sequences of tapping data
+%Year      = 1999
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 28
+%Pages     = 977-987
+%Keywords  = Rank test
+%Keywords  = Change point
+
+
+%Author    = Jose, C. T.
+%Author    = Ismail, B.
+%Title     = Change points in nonparametric regression functions
+%Year      = 1999
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 28
+%Pages     = 1883-1902
+%Keywords  = Kernel estimator
+%Keywords  = Local polynomial regression
+
+
+%Author    = Sugiura, Nariaki
+%Author    = Takaoka, Naoko
+%Title     = Homogeneity of variances in normal linear regression with a change point
+%Year      = 1999
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 28
+%Pages     = 2785-2801
+%Keywords  = Likelihood ratio test
+%Keywords  = Bayesian confidence interval
+
+
+%Author    = Chen, Zhenmin
+%Author    = Mi, Jie
+%Title     = On the maximum likelihood estimators for the change point of the decreasing-constant hazard rate
+%Year      = 1999
+%Journal   = Far East Journal of Theoretical Statistics
+%Volume    = 3
+%Number    = 2
+%Pages     = 227-238
+%Keywords  = nonuniqueness
+%Keywords  = MLE
+%Keywords  = Failure rate function
+%Keywords  = Lifetime distribution
+%Keywords  = Weibull-exponential model
+
+
+%Author    = Gombay, Edit
+%Author    = Jin, Xiongsheng
+%Title     = Sign tests for change under alternatives
+%Year      = 1999
+%Journal   = Journal of Nonparametric Statistics
+%Volume    = 10
+%Pages     = 389-404
+%Keywords  = Change point
+%Keywords  = Random walk
+%Keywords  = Asymptotic distribution
+
+
+%Author    = Chang, Joseph T.
+%Author    = Fricker, Ronald D., Jr
+%Title     = Detecting when a monotonically increasing mean has crossed a threshold
+%Year      = 1999
+%Journal   = Journal of Quality Technology
+%Volume    = 31
+%Pages     = 217-234
+%Keywords  = Change point
+%Keywords  = Statistical process control
+%Keywords  = CUSUM
+
+
+%Author    = Nishiyama, Yoichi
+%Title     = Entropy methods for random fields generated by martingales and their statistical applications (Japanese)
+%Year      = 1999
+%Journal   = Proceedings of the Institute of Statistical Mathematics
+%Volume    = 47
+%Pages     = 157-174
+%Keywords  = Central limit theorem
+%Keywords  = Kernel estimator
+%Keywords  = Change point
+%Keywords  = Maximum likelihood estimator
+
+
+%Author    = Diniz, Carlos A. R.
+%Author    = Mazucheli, Josmar
+%Title     = Detecting the number of change points in a Poisson sequence: A comparative study
+%Year      = 1999
+%Journal   = Revista Brasileira de Probabilidade e Estat\’\istica
+%Volume    = 13
+%Pages     = 77-93
+
+
+%Author    = Srivastava, M. S.
+%Author    = Wu, Yanhong
+%Title     = Quasi-stationary biases of change point and change magnitude estimation after sequential CUSUM test
+%Year      = 1999
+%Journal   = Sequential Analysis
+%Volume    = 18
+%Pages     = 203-216
+%Keywords  = Bias reduction
+%Keywords  = Brownian motion
+
+
+%Author    = Chen, Jie
+%Author    = Gupta, A. K.
+%Title     = Change point analysis of a Gaussian model
+%Year      = 1999
+%Journal   = Statistical Papers
+%Volume    = 40
+%Pages     = 323-333
+%Keywords  = Bayesian information criterion
+
+
+%Author    = Scagliarini, Michele
+%Title     = Detection of changes in dynamical systems: A proposal for the choice of the parameter for the GLR algorithm (Italian: L'individuazione di variazioni in sistemi dinamici: Una proposta per la scelta dei parametri per l'algoritmo ``generalized likelihood ratio'')
+%Year      = 1999
+%Journal   = Statistica (Bologna)
+%Volume    = 59
+%Pages     = 499-514
+%Keywords  = Change point
+
+
+%Author    = Stoumbos, Zachary G.
+%Title     = The detection and estimation of the change point in a discrete-time stochastic system
+%Year      = 1999
+%Journal   = Stochastic Analysis and Applications
+%Volume    = 17
+%Pages     = 637-649
+%Keywords  = Large deviation
+%Keywords  = Likelihood ratio
+%Keywords  = Quality control
+%Keywords  = Bayes method
+
+
+%Author    = Carroll, Raymond J.
+%Author    = Roeder, Kathryn
+%Author    = Wasserman, Larry
+%Title     = Flexible parametric measurement error models
+%Year      = 1999
+%Journal   = Biometrics
+%Volume    = 55
+%Number    = 1
+%Pages     = 44-54
+%Keywords  = Berkson model
+%Keywords  = Change point
+%Keywords  = Errors-in-variables
+%Keywords  = Markov chain Monte Carlo
+%Keywords  = Normal mix-true model
+
+
+%Author    = Yakir, Benjamin
+%Title     = On the average run length to false alarm in surveillance problems which possess an invariance structure
+%Year      = 1998
+%Journal   = The Annals of Statistics
+%Volume    = 26
+%Number    = 3
+%Pages     = 1198-1214
+%Keywords  = 62L10 (MSC1991)
+%Keywords  = 62N10 (MSC1991)
+%Keywords  = change-point detection
+%Keywords  = invariant statistics
+%Keywords  = Quality control
+%Keywords  = Control chart
+%Keywords  = Change point
+
+
+%Author    = Spokoiny, V. G.
+%Title     = Estimation of a function with discontinuities via local polynomial fit with an adaptive window choice
+%Year      = 1998
+%Journal   = The Annals of Statistics
+%Volume    = 26
+%Number    = 4
+%Pages     = 1356-1378
+%Keywords  = 62G20 (MSC1991)
+%Keywords  = local polynomial fit
+%Keywords  = local structure
+%Keywords  = pointwise adaptive estimation
+%Keywords  = Change point
+%Keywords  = Nonparametric regression
+%Keywords  = Adaptive estimation
+
+
+%Author    = Raimondo, Marc
+%Title     = Minimax estimation of sharp change points
+%Year      = 1998
+%Journal   = The Annals of Statistics
+%Volume    = 26
+%Number    = 4
+%Pages     = 1379-1397
+%Keywords  = 62G05 (MSC1991)
+%Keywords  = 62G20 (MSC1991)
+%Keywords  = Change point
+%Keywords  = cusp
+%Keywords  = jump
+%Keywords  = Minimax estimation
+%Keywords  = Nonparametric regression
+%Keywords  = Wavelet
+
+
+%Author    = Bischoff, Wolfgang
+%Title     = A functional central limit theorem for regression models
+%Year      = 1998
+%Journal   = The Annals of Statistics
+%Volume    = 26
+%Number    = 4
+%Pages     = 1398-1410
+%Keywords  = Linear regression
+%Keywords  = regression residuals
+%Keywords  = partial sums process
+%Keywords  = Functional central limit theorem
+%Keywords  = functions of Brownian motion
+%Keywords  = change-point problems
+%Keywords  = tests
+%Keywords  = Brownian motion
+%Keywords  = Change point
+
+
+%Author    = Poor, H. Vincent
+%Title     = Quickest detection with exponential penalty for delay
+%Year      = 1998
+%Journal   = The Annals of Statistics
+%Volume    = 26
+%Number    = 6
+%Pages     = 2179-2205
+%Keywords  = 62L10 (MSC1991)
+%Keywords  = 60G40 (MSC1991)
+%Keywords  = 94A13 (MSC1991)
+%Keywords  = Quickest detection
+%Keywords  = change point problems
+%Keywords  = exponential cost
+%Keywords  = Change point
+%Keywords  = Optimal stopping
+
+
+%Author    = Puhalskii, Anatolii
+%Author    = Spokoiny, Vladimir
+%Title     = On large-deviation efficiency in statistical inference
+%Year      = 1998
+%Journal   = Bernoulli
+%Volume    = 4
+%Pages     = 203-272
+%Keywords  = Bahadur efficiency
+%Keywords  = Statistical experiment
+%Keywords  = Hypothesis testing
+%Keywords  = Change point
+
+
+%Author    = Achcar, Jorge Alberto
+%Author    = Loibel, Selene
+%Title     = Constant hazard function models with a change point: A Bayesian analysis using Markov chain Monte Carlo methods
+%Year      = 1998
+%Journal   = Biometrical Journal
+%Volume    = 40
+%Pages     = 543-555
+%Keywords  = Gibbs sampler
+%Keywords  = Metropolis algorithm
+
+
+%Author    = Wessman, Peter
+%Title     = Some principles for surveillance adopted for multivariate processes with a common change point
+%Year      = 1998
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 27
+%Pages     = 1143-1161
+%Keywords  = Likelihood ratio
+%Keywords  = CUSUM
+
+
+%Author    = Chen, Jie
+%Title     = Testing for a change point in linear regression models
+%Year      = 1998
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 27
+%Pages     = 2481-2493
+
+
+%Author    = Reed, William J.
+%Title     = Determining changes in historical forest fire frequency from a time-since-fire map
+%Year      = 1998
+%Journal   = Journal of Agricultural, Biological, and Environmental Statistics
+%Volume    = 3
+%Pages     = 430-450
+%Keywords  = Forest fire history
+%Keywords  = Poisson clumping heuristic
+%Keywords  = Backward elimination
+%Keywords  = Brownian bridge
+%Keywords  = Change point
+%Keywords  = Model selection
+%Keywords  = Quasi-likelihood
+%Keywords  = Selection bias
+
+
+%Author    = Wang, Yazhen
+%Title     = Change curve estimation via wavelets
+%Year      = 1998
+%Journal   = Journal of the American Statistical Association
+%Volume    = 93
+%Pages     = 163-172
+%Keywords  = Theory and Methods
+%Keywords  = Boundary estimation
+%Keywords  = Edge estimation
+%Keywords  = Jump curve
+%Keywords  = Sharp cusp curve
+%Keywords  = Multidimensional changepoint
+%Keywords  = Asymptotic theory
+%Keywords  = Image processing
+%Keywords  = Change point
+%Keywords  = Wavelet transformation
+
+
+%Author    = Cooper, Suzanne J.
+%Title     = Multiple regimes in U.S. output fluctuations
+%Year      = 1998
+%Journal   = Journal of Business &amp; Economic Statistics
+%Volume    = 16
+%Pages     = 92-100
+%Keywords  = Monte Carlo
+%Keywords  = Nonlinear time series
+%Keywords  = Regression tree
+%Keywords  = Change point
+
+
+%Author    = Barbieri, Maria Maddalena
+%Author    = Conigliani, Caterina
+%Title     = Bayesian analysis of autoregressive time series with change points
+%Year      = 1998
+%Journal   = Journal of the Italian Statistical Society
+%Volume    = 7
+%Number    = 3
+%Pages     = 243-255
+%Keywords  = change in the mean
+%Keywords  = fractional Bayes factor
+%Keywords  = noninformative prior distributions
+
+
+%Author    = Horváth, Lajos
+%Author    = Horvath, Lajos
+%Title     = Tests for changes under random censorship
+%Year      = 1998
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 69
+%Pages     = 229-243
+%Keywords  = Change point
+%Keywords  = $U$-statistic
+
+
+%Author    = Jarušková, Daniela
+%Author    = Jaruskova, Daniela
+%Title     = Testing appearance of linear trend
+%Year      = 1998
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 70
+%Pages     = 263-276
+%Keywords  = Change point
+%Keywords  = Linear regression
+
+
+%Author    = Lamprecht, E. A.
+%Author    = Zacks, S.
+%Title     = Two armed bandits with change point in one arm
+%Year      = 1998
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 73
+%Pages     = 47-60
+%Keywords  = Bernoulli trial
+%Keywords  = Sequential probability ratio test
+%Keywords  = Bayesian approach
+
+
+%Author    = Bai, Jushan
+%Title     = Estimation of multiple-regime regressions with least absolutes deviation
+%Year      = 1998
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 74
+%Pages     = 103-134
+%Keywords  = Change point
+%Keywords  = Least absolute deviation
+
+
+%Author    = Wright, Jonathan H.
+%Title     = Testing for a structural break at unknown date with long-memory disturbances
+%Year      = 1998
+%Journal   = Journal of Time Series Analysis
+%Volume    = 19
+%Pages     = 369-376
+%Keywords  = Change point
+%Keywords  = CUSUM
+%Keywords  = Wald test
+
+
+%Author    = Kim, Jaehee H.
+%Author    = Hart, Jeffrey D.
+%Title     = Tests for change in a mean function when the data are dependent
+%Year      = 1998
+%Journal   = Journal of Time Series Analysis
+%Volume    = 19
+%Pages     = 399-424
+%Keywords  = Change-point models
+%Keywords  = Nonparametric regression
+%Keywords  = Fourier series
+%Keywords  = local linear smoothing
+%Keywords  = Change point
+%Keywords  = Nonparametric regression
+%Keywords  = Local smoothing
+
+
+%Author    = Suquet, Ch.
+%Author    = Viano, M.-C.
+%Title     = Change point detection in dependent sequences: Invariance principles for some quadratic statistics
+%Year      = 1998
+%Journal   = Mathematical Methods of Statistics
+%Volume    = 7
+%Pages     = 157-191
+%Keywords  = Association
+%Keywords  = Cramér-von Mises statistic
+%Keywords  = Empirical process
+%Keywords  = Strong mixing
+
+
+%Author    = Samuel, T. R.
+%Author    = Pignatiello, J. J., Jr.
+%Author    = Calvin, J. A.
+%Title     = Identifying the time of a step change within $X$-bar control charts
+%Year      = 1998
+%Journal   = Quality Engineering
+%Volume    = 10
+%Number    = 3
+%Pages     = 521-527
+%Keywords  = change point estimation
+%Keywords  = Process improvement
+%Keywords  = Quality control
+%Keywords  = Shewhart $X$-bar control chart
+
+
+%Author    = Samuel, T. R.
+%Author    = Pignatiello, J. J., Jr.
+%Author    = Calvin, J. A.
+%Title     = Identifying the time of a step change in a normal process variance
+%Year      = 1998
+%Journal   = Quality Engineering
+%Volume    = 10
+%Number    = 3
+%Pages     = 529-538
+%Keywords  = change point estimation
+%Keywords  = dispersion control charts
+%Keywords  = Process improvement
+%Keywords  = Quality control
+
+
+%Author    = Samuel, T. R.
+%Author    = Pignatiello, J. J., Jr.
+%Title     = Identifying the time of a change in a Poisson rate parameter
+%Year      = 1998
+%Journal   = Quality Engineering
+%Volume    = 10
+%Number    = 4
+%Pages     = 673-681
+%Keywords  = change point estimation
+%Keywords  = Process improvement
+%Keywords  = Quality control
+%Keywords  = special-cause identification
+
+
+%Author    = Chaouche, A.
+%Author    = Parent, E.
+%Title     = On the contribution of Bayesian statistics to quality control Part 3: Retrospective control via change point detection in a sequence of binomial variables (French: Sur l'apport de la statistique bayésienne au contrôle de la qualité par attribut; Partie 3: Contrôle rétrospectif par détection de changement dans une série de variables binomiales)
+%Year      = 1998
+%Journal   = Revue de Statistique Appliquée
+%Volume    = 46
+%Number    = 1
+%Pages     = 5-29
+%Keywords  = Bayesian decision analysis
+%Keywords  = CUSUM
+
+
+%Author    = Lee, C.-B.
+%Title     = Bayesian estimation of the number of change points
+%Year      = 1998
+%Journal   = Statistica Sinica
+%Volume    = 8
+%Pages     = 923-940
+
+
+%Author    = Braun, Jerome V.
+%Author    = MÃ¼ller, Hans-Georg
+%Title     = Statistical methods for DNA sequence segmentation
+%Year      = 1998
+%Journal   = Statistical Science
+%Volume    = 13
+%Number    = 2
+%Pages     = 142-162
+%Keywords  = Statisical genetics
+%Keywords  = Change-point
+%Keywords  = patchiness
+%Keywords  = quasideviance
+%Keywords  = split local polynomials
+%Keywords  = chromosome banding
+%Keywords  = bacteriophage $\lambda$
+%Keywords  = Genetics
+%Keywords  = Change point
+%Keywords  = Hidden Markov chain
+
+
+%Author    = Bhatti, M. I.
+%Author    = Wang, J.
+%Title     = Power comparison of some tests for testing change point
+%Year      = 1998
+%Journal   = Statistica (Bologna)
+%Volume    = 58
+%Pages     = 127-137
+%Keywords  = $U$-statistic
+%Keywords  = Bayesian method
+%Keywords  = Likelihood ratio
+
+
+%Author    = Ghorbanzadeh, Dariush
+%Author    = Lounes, Rachid
+%Title     = A Bayes procedure for detecting change in exponential random observations
+%Year      = 1998
+%Journal   = Student
+%Volume    = 2
+%Pages     = 229-236
+%Keywords  = Change point
+
+
+%Author    = Maĭboroda, R. E.
+%Author    = Maiboroda, R. E.
+%Author    = Sugakova, O. V.
+%Title     = A fast algorithm for detecting multiple change points
+%Year      = 1998
+%Journal   = Theory of Probability and Mathematical Statistics
+%Volume    = 57
+%Pages     = 109-114
+%Keywords  = Nonparametric estimation
+
+
+%Author    = Horváth, Lajos
+%Author    = Horvath, Lajos
+%Title     = Detection of changes in linear sequences
+%Year      = 1997
+%Journal   = Annals of the Institute of Statistical Mathematics
+%Volume    = 49
+%Pages     = 271-283
+%Keywords  = Change point
+
+
+%Author    = Gordon, Louis
+%Author    = Pollak, Moshe
+%Title     = Average run length to false alarm for surveillance schemes designed with partially specified pre-change distribution
+%Year      = 1997
+%Journal   = The Annals of Statistics
+%Volume    = 25
+%Number    = 3
+%Pages     = 1284-1310
+%Keywords  = 62L10 (MSC1991)
+%Keywords  = 62N10 (MSC1991)
+%Keywords  = Change-point
+%Keywords  = disruption
+%Keywords  = Invariance
+%Keywords  = CUSUM
+%Keywords  = Change point
+
+
+%Author    = Qin, Jing
+%Author    = Sun, Jianguo
+%Title     = Statistical analysis of right-censored failure-time data with partially specified hazard rates
+%Year      = 1997
+%Journal   = The Canadian Journal of Statistics / La Revue Canadienne de Statistique
+%Volume    = 25
+%Pages     = 325-336
+%Keywords  = Bootstrap
+%Keywords  = Change point
+
+
+%Author    = Tan, Zhiping
+%Title     = Asymptotic distribution for estimator of the magnitude of jump and slope change in a model with at most one change point
+%Year      = 1997
+%Journal   = Chinese Journal of Applied Probability and Statistics
+%Volume    = 13
+%Pages     = 297-302
+
+
+%Author    = Dey, Dipak K.
+%Author    = Purkayastha, Sumitra
+%Title     = Bayesian approach to change point problems
+%Year      = 1997
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 26
+%Pages     = 2035-2047
+%Keywords  = Bayes factor
+%Keywords  = Exponential family
+
+
+%Author    = Jose, C. T.
+%Author    = Ismail, B.
+%Title     = Estimation of jump points in nonparametric regression through residual analysis
+%Year      = 1997
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 26
+%Pages     = 2583-2607
+%Keywords  = Change point
+%Keywords  = Diagnostic
+%Keywords  = Kernel estimation
+
+
+%Author    = Chen, Jianbin
+%Author    = Zurbenko, Igor
+%Title     = Nonparametric boundary detection
+%Year      = 1997
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 26
+%Pages     = 2999-3014
+%Keywords  = Change point
+%Keywords  = Kernel smoothing
+
+
+%Author    = Dragalin, Vladimir
+%Title     = The design and analysis of 2-CUSUM procedure
+%Year      = 1997
+%Journal   = Communications in Statistics: Simulation and Computation
+%Volume    = 26
+%Pages     = 67-81
+%Keywords  = Average run length
+%Keywords  = Change point
+
+
+%Author    = BuHamra, Sana S.
+%Title     = Testing for a change in repeated measures data
+%Year      = 1997
+%Journal   = Communications in Statistics: Simulation and Computation
+%Volume    = 26
+%Pages     = 841-872
+%Keywords  = Change point
+%Keywords  = Rank test
+%Keywords  = Power of a test
+
+
+%Author    = Dragalin, V.
+%Title     = The sequential change point problem (STMA V39 4657)
+%Year      = 1997
+%Journal   = Economic Quality Control
+%Volume    = 12
+%Pages     = 95-122
+
+
+%Author    = Sneyers, Raymond
+%Title     = Climate chaotic instability: Statistical determination and theoretical background
+%Year      = 1997
+%Journal   = EnvironMetrics
+%Volume    = 8
+%Pages     = 517-532
+%Keywords  = Time series
+%Keywords  = Change point
+
+
+%Author    = Sözer, M. T.
+%Author    = Sozer, M. T.
+%Author    = Soezer, M. T.
+%Author    = Sertkaya, D.
+%Title     = Estimation of change point in constant hazard model with change point and a simulation study (Turkish) (STMA V40 1941)
+%Year      = 1997
+%Journal   = Hacettepe Bulletin of Natural Sciences and Engineering
+%Volume    = 26
+%Pages     = 267-280
+
+
+%Author    = Gerard, Patrick D.
+%Author    = Schucany, William R.
+%Title     = Locating exotherms in differential thermal analysis with nonparametric regression
+%Year      = 1997
+%Journal   = Journal of Agricultural, Biological, and Environmental Statistics
+%Volume    = 2
+%Pages     = 255-268
+%Keywords  = Derivative estimation
+%Keywords  = Bandwidth
+%Keywords  = Change point
+%Keywords  = Local polynomial regression
+
+
+%Author    = Schell, Michael J.
+%Author    = Singh, Bahadur
+%Title     = The reduced monotonic regression method
+%Year      = 1997
+%Journal   = Journal of the American Statistical Association
+%Volume    = 92
+%Pages     = 128-135
+%Keywords  = Theory and Methods
+%Keywords  = Monotonicity
+%Keywords  = Change point
+%Keywords  = Isotonic regression
+%Keywords  = Nonparametric regression
+%Keywords  = Order restricted inference
+
+
+%Author    = Durazo-Arvizu, Ramón
+%Author    = Durazo-Arvizu, Ramon
+%Author    = McGee, Daniel
+%Author    = Li, Zhaohai
+%Author    = Cooper, Richard
+%Title     = Establishing the nadir of the body mass index-mortality relationship: A case study
+%Year      = 1997
+%Journal   = Journal of the American Statistical Association
+%Volume    = 92
+%Pages     = 1312-1319
+%Keywords  = Applications and Case Studies
+%Keywords  = Mortality
+%Keywords  = Obesity
+%Keywords  = Change point
+%Keywords  = Logistic regression
+%Keywords  = Quetelet index
+
+
+%Author    = Hansen, Bruce E.
+%Title     = Approximate asymptotic $P$ values for structural-change tests
+%Year      = 1997
+%Journal   = Journal of Business &amp; Economic Statistics
+%Volume    = 15
+%Pages     = 60-67
+%Keywords  = Nonstandard distributions
+%Keywords  = Change point
+%Keywords  = Computer program
+
+
+%Author    = Fraedrich, Klaus
+%Author    = Jiang, Jianmin
+%Author    = Gerstengarbe, Friedrich-Wilhelm
+%Author    = Werner, Peter C.
+%Title     = Multiscale detection of abrupt climate changes: Application to River Nile flood levels
+%Year      = 1997
+%Journal   = International Journal of Climatology
+%Volume    = 17
+%Pages     = 1301-1315
+%Keywords  = Change point
+%Keywords  = Cluster analysis
+%Keywords  = Wavelet
+
+
+%Author    = Koo, Ja-Yong
+%Title     = Spline estimation of discontinuous regression functions
+%Year      = 1997
+%Journal   = Journal of Computational and Graphical Statistics
+%Volume    = 6
+%Pages     = 266-284
+%Keywords  = Basis selection
+%Keywords  = BIC
+%Keywords  = discontinuity
+%Keywords  = Knot-merging
+%Keywords  = Multiple knots
+%Keywords  = Regression functions
+%Keywords  = Stepwise basis deletion
+%Keywords  = Stepwise knot addition
+%Keywords  = Bayesian information criterion
+%Keywords  = Change point
+%Keywords  = Spline
+%Keywords  = Stepwise procedure
+
+
+%Author    = Honda, Toshio
+%Title     = The CUSUM tests with nonparametric regression residuals
+%Year      = 1997
+%Journal   = Journal of the Japan Statistical Society
+%Volume    = 27
+%Pages     = 45-63
+%Keywords  = Structural stability
+%Keywords  = Polynomial regression
+%Keywords  = Change point
+
+
+%Author    = Gastwirth, Joseph L.
+%Title     = Statistical evidence in discrimination cases
+%Year      = 1997
+%Journal   = Journal of the Royal Statistical Society, Series A: Statistics in Society
+%Volume    = 160
+%Pages     = 289-303
+%Keywords  = Causality
+%Keywords  = Change point
+%Keywords  = Forensic statistics
+
+
+%Author    = Jandhyala, V. K.
+%Author    = MacNeill, I. B.
+%Title     = Iterated partial sum sequences of regression residuals and tests for changepoints with continuity constraints
+%Year      = 1997
+%Journal   = Journal of the Royal Statistical Society, Series B: Methodological
+%Volume    = 59
+%Pages     = 147-156
+%Keywords  = Polynomial regression
+%Keywords  = Bayesian testing
+%Keywords  = Change point
+
+
+%Author    = Lyazrhi, Faouzi
+%Title     = Bayesian criteria for discriminating among regression models with one possible change point
+%Year      = 1997
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 59
+%Pages     = 337-353
+
+
+%Author    = Antoch, J.
+%Author    = Huskova, M.
+%Author    = Praskova, Z.
+%Author    = Hušková, M.
+%Author    = Prášková, Z.
+%Title     = Effect of dependence on statistics for determination of change
+%Year      = 1997
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 60
+%Pages     = 291-310
+%Keywords  = Change point
+%Keywords  = Autoregressive process
+
+
+%Author    = Janardan, K. G.
+%Author    = Mohan, N. R.
+%Author    = Vasudeva, R.
+%Author    = Hebbar, H. V.
+%Title     = A stochastic model with random change point for the study of oviposition tactics of weevils on beans
+%Year      = 1997
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 61
+%Pages     = 193-201
+%Keywords  = Probability generating function
+
+
+%Author    = Ma, Lingyun
+%Title     = The asymptotic distributions of maximum likelihood ratio test and maximally selected $\chi^2$-test in binomial observations
+%Year      = 1997
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 65
+%Pages     = 17-43
+%Keywords  = Change point
+
+
+%Author    = Buhamra, Sana S.
+%Author    = Aly, Emad-Eldin A. A.
+%Title     = Nonparametric change point tests in two way repeated measures designs
+%Year      = 1997
+%Journal   = Journal of Statistical Research
+%Volume    = 31
+%Number    = 2
+%Pages     = 1-10
+%Keywords  = Rank tests
+%Keywords  = Repeated measurements
+%Keywords  = Monte Carlo
+%Keywords  = nonparametric inference--hypothesis testing
+%Keywords  = Experimental design
+
+
+%Author    = Hirotsu, C.
+%Author    = Nishihara, K.
+%Author    = Sugihara, M.
+%Title     = Algorithm for $p$ value, power and sample size determination for max $t$ method (Japanese)
+%Year      = 1997
+%Journal   = Japanese Journal of Applied Statistics
+%Volume    = 26
+%Pages     = 1-16
+%Keywords  = Change point
+%Keywords  = Multiple comparisons
+
+
+%Author    = Bian, Qi
+%Author    = Sakamoto, Wataru
+%Author    = Shirahata, Shingo
+%Title     = Likelihood ratio test in the two-phase linear regression problem (Japanese)
+%Year      = 1997
+%Journal   = Japanese Journal of Applied Statistics
+%Volume    = 26
+%Pages     = 135-150
+%Keywords  = Change point
+
+
+%Author    = Gupta, Ramesh C.
+%Author    = Kannan, Nandini
+%Author    = Raychaudhuri, Aparna
+%Title     = Analysis of lognormal survival data
+%Year      = 1997
+%Journal   = Mathematical Biosciences
+%Volume    = 139
+%Pages     = 103-115
+%Keywords  = Failure rate
+%Keywords  = Change point
+%Keywords  = Bootstrap
+%Keywords  = Jackknife
+
+
+%Author    = Aly, Emad-Eldin A. A.
+%Title     = Change point tests based on $U$-statistics with applications in reliability
+%Year      = 1997
+%Journal   = Metrika
+%Volume    = 45
+%Pages     = 259-269
+
+
+%Author    = Joshi, S. N.
+%Author    = MacEachern, Steven N.
+%Title     = Isotonic maximum likelihood estimation for the change point of a hazard rate
+%Year      = 1997
+%Journal   = Sankhyā, Series A
+%Volume    = 59
+%Pages     = 392-407
+%Keywords  = Failure rate
+%Keywords  = Hypothesis testing
+%Keywords  = Confidence interval
+
+
+%Author    = Riedel, Kurt S.
+%Title     = Improved asymptotics for zeros of kernel estimates via a reformulation of the Leadbetter-Cryer integral
+%Year      = 1997
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 32
+%Pages     = 351-356
+%Keywords  = Kernel smoothing
+%Keywords  = Change point
+
+
+%Author    = Csörgő, Miklós
+%Author    = Csorgo, Miklos
+%Author    = Csoergo, Miklos
+%Author    = Horvath, Lajos
+%Author    = Horváth, Lajos
+%Author    = Szyszkowicz, Barbara
+%Title     = Integral tests for suprema of Kiefer processes with application
+%Year      = 1997
+%Journal   = Statistics &amp; Decisions
+%Volume    = 15
+%Pages     = 365-377
+%Keywords  = Change point
+
+
+%Author    = Horváth, Lajos
+%Author    = Horvath, Lajos
+%Author    = Huskova, Marie
+%Author    = Hušková, Marie
+%Author    = Serbinowska, Monika
+%Title     = Estimators for the time of change in linear models
+%Year      = 1997
+%Journal   = Statistics
+%Volume    = 29
+%Pages     = 109-130
+%Keywords  = Change point
+%Keywords  = Wiener process
+%Keywords  = Confidence interval
+
+
+%Author    = Smith, Philip J.
+%Title     = Power and sample size considerations for detecting deviations from secular trends in surveillance surveys
+%Year      = 1997
+%Journal   = The Statistician: Journal of the Institute of Statisticians
+%Volume    = 46
+%Pages     = 423-432
+%Keywords  = Generalized linear model
+%Keywords  = Change point
+
+
+%Author    = Li, Ta-Hsin
+%Title     = Time series characterization, Poisson integral, and robust divergence measures
+%Year      = 1997
+%Journal   = Technometrics
+%Volume    = 39
+%Pages     = 357-371
+%Keywords  = Distortion measure
+%Keywords  = Mixed spectrum
+%Keywords  = Change point
+%Keywords  = Discrimination
+%Keywords  = Robustness
+%Keywords  = Signal processing
+
+
+%Author    = Sugakova, O. V.
+%Title     = A search for change points in a flow of independent observations
+%Year      = 1997
+%Journal   = Theory of Probability and Mathematical Statistics
+%Volume    = 55
+%Pages     = 181-186
+
+
+%Author    = Katsevich, A. I.
+%Author    = Ramm, A. G.
+%Title     = Consistency of a rank test against general alternatives of change points (surfaces) and continuous trend (STMA V37 2702)
+%Year      = 1996
+%Journal   = Acta Applicandae Mathematicae
+%Volume    = 42
+%Pages     = 105-137
+
+
+%Author    = Koul, Hira L.
+%Title     = Asymptotics of some estimators and sequential residual empiricals in nonlinear time series
+%Year      = 1996
+%Journal   = The Annals of Statistics
+%Volume    = 24
+%Number    = 1
+%Pages     = 380-404
+%Keywords  = 60F17 (MSC1991)
+%Keywords  = 62M10 (MSC1991)
+%Keywords  = Asymptotic uniform linearity
+%Keywords  = minimum distance estimators
+%Keywords  = threshold autoregression models
+%Keywords  = asymptotically distribution free
+%Keywords  = Change point
+%Keywords  = Goodness-of-fit
+
+
+%Author    = Loader, Clive R.
+%Title     = Change point estimation using nonparametric regression
+%Year      = 1996
+%Journal   = The Annals of Statistics
+%Volume    = 24
+%Number    = 4
+%Pages     = 1667-1678
+%Keywords  = 62G07 (MSC1991)
+%Keywords  = Change point
+%Keywords  = Nonparametric regression
+%Keywords  = Boundary crossing
+
+
+%Author    = Beibel, M.
+%Title     = A note on Ritov's Bayes approach to the minimax property of the cusum procedure
+%Year      = 1996
+%Journal   = The Annals of Statistics
+%Volume    = 24
+%Number    = 4
+%Pages     = 1804-1812
+%Keywords  = 62L10 (MSC1991)
+%Keywords  = 62L15 (MSC1991)
+%Keywords  = 62C10 (MSC1991)
+%Keywords  = Change-point
+%Keywords  = cusum procedures
+%Keywords  = Sequential detection
+%Keywords  = generalized parking problems
+%Keywords  = Change point
+%Keywords  = Wiener process
+%Keywords  = Bayes risk
+
+
+%Author    = Yakir, Benjamin
+%Title     = Dynamic sampling policy for detecting a change in distribution, with a probability bound on false alarm
+%Year      = 1996
+%Journal   = The Annals of Statistics
+%Volume    = 24
+%Number    = 5
+%Pages     = 2199-2214
+%Keywords  = 62L10 (MSC1991)
+%Keywords  = 62N10 (MSC1991)
+%Keywords  = Control charts
+%Keywords  = change point detection
+%Keywords  = dynamic sampling
+%Keywords  = Quality control
+%Keywords  = Control chart
+%Keywords  = Change point
+
+
+%Author    = HorvÃ¡th, Lajos
+%Author    = Shao, Qi-Man
+%Title     = Limit theorem for maximum of standardized <i>U</i>-statistics with an application
+%Year      = 1996
+%Journal   = The Annals of Statistics
+%Volume    = 24
+%Number    = 5
+%Pages     = 2266-2279
+%Keywords  = 62G20 (MSC1991)
+%Keywords  = 62G10 (MSC1991)
+%Keywords  = 60F05 (MSC1991)
+%Keywords  = Degenerate $U$-statistic
+%Keywords  = Limit distribution
+%Keywords  = standardized statistics
+%Keywords  = change-point analysis
+%Keywords  = Change point
+
+
+%Author    = Ghorbanzadeh, Dariush
+%Title     = Detection of random change point in one-parameter exponential families
+%Year      = 1996
+%Journal   = Applied Mathematics and Computation
+%Volume    = 77
+%Pages     = 167-177
+%Keywords  = Brownian motion
+
+
+%Author    = Zhan, M.
+%Author    = Dean, C. B.
+%Author    = Routledge, R.
+%Author    = Gallaugher, P.
+%Author    = Farrell, A. P.
+%Author    = Thorarensen, H.
+%Title     = Inference on segmented polynomial models
+%Year      = 1996
+%Journal   = Biometrics
+%Volume    = 52
+%Pages     = 321-327
+%Keywords  = Change point
+%Keywords  = Likelihood ratio test
+
+
+%Author    = Beran, Jan
+%Author    = Terrin, Norma
+%Title     = Testing for a change of the long-memory parameter (Corr: 1999V86 p233)
+%Year      = 1996
+%Journal   = Biometrika
+%Volume    = 83
+%Pages     = 627-638
+%Keywords  = Change point
+%Keywords  = ARIMA
+
+
+%Author    = Joseph, Lawrence
+%Author    = Vandal, Alain C.
+%Author    = Wolfson, David B.
+%Title     = Estimation in the multipath change point problem for correlated data
+%Year      = 1996
+%Journal   = The Canadian Journal of Statistics / La Revue Canadienne de Statistique
+%Volume    = 24
+%Pages     = 37-53
+%Keywords  = Autoregressive process
+%Keywords  = Mixture of distribution
+%Keywords  = Panel data
+
+
+%Author    = Aly, Emad-Eldin A. A.
+%Author    = BuHamra, Sana S.
+%Title     = Rank tests for two change points
+%Year      = 1996
+%Journal   = Computational Statistics &amp; Data Analysis
+%Volume    = 22
+%Pages     = 363-372
+%Keywords  = Brownian bridge
+%Keywords  = Rank test
+
+
+%Author    = Venter, J. H.
+%Author    = Steel, S. J.
+%Title     = Finding multiple abrupt change points
+%Year      = 1996
+%Journal   = Computational Statistics &amp; Data Analysis
+%Volume    = 22
+%Pages     = 481-504
+%Keywords  = Hypothesis testing
+
+
+%Author    = Douglas, Stratford
+%Author    = Guilkey, David K.
+%Title     = Bootstrap standard error estimates in a switching regression model with unknown switch point
+%Year      = 1996
+%Journal   = Communications in Statistics: Simulation and Computation
+%Volume    = 25
+%Pages     = 1-23
+%Keywords  = Change point
+
+
+%Author    = Dragalin, V.
+%Title     = The retrospective change point problem (STMA V38 0590)
+%Year      = 1996
+%Journal   = Economic Quality Control
+%Volume    = 11
+%Pages     = 3-22
+
+
+%Author    = Aly, Emad-Eldin A. A.
+%Author    = Bouzar, Nadjib
+%Title     = Likelihood ratio tests against epidemic change point alternatives
+%Year      = 1996
+%Journal   = Journal of Applied Statistical Science
+%Volume    = 4
+%Number    = 4
+%Pages     = 319-322
+%Keywords  = quality of life
+%Keywords  = nonparametric change point tests
+%Keywords  = Epidemiology
+
+
+%Author    = Kim, Jaehee
+%Title     = Kolmogorov-Smirnov type test for change with sample Fourier coefficients
+%Year      = 1996
+%Journal   = Journal of the Korean Statistical Society
+%Volume    = 25
+%Pages     = 123-131
+%Keywords  = Change point
+
+
+%Author    = Luo, X.
+%Title     = The asymptotic distribution of MLE of treatment lag threshold
+%Year      = 1996
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 53
+%Pages     = 33-61
+%Keywords  = Change point
+%Keywords  = Hazard rate
+
+
+%Author    = Wu, Yanhong
+%Title     = A less sensitive linear detector for the change point based on kernel smoothing method
+%Year      = 1996
+%Journal   = Metrika
+%Volume    = 43
+%Pages     = 43-55
+%Keywords  = CUSUM
+%Keywords  = Exponentially weighted moving average
+
+
+%Author    = Ghorbanzadeh, Dariush
+%Author    = Lounes, Rachid
+%Title     = Two methods for detecting change points in grouped Poisson observations (French)
+%Year      = 1996
+%Journal   = Revue de Statistique Appliquée
+%Volume    = 44
+%Number    = 3
+%Pages     = 47-61
+%Keywords  = Penalized likelihood
+%Keywords  = Brownian bridge
+
+
+%Author    = Hušková, Marie
+%Author    = Huskova, Marie
+%Title     = Estimation of a change in linear models
+%Year      = 1996
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 26
+%Pages     = 13-24
+%Keywords  = Change point
+
+
+%Author    = Stryhn, Henrik
+%Title     = The location of the maximum of asymmetric two-sided Brownian motion with triangular drift
+%Year      = 1996
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 29
+%Pages     = 279-284
+%Keywords  = Change point
+%Keywords  = Maximum likelihood
+
+
+%Author    = Kim, Hyune-Ju
+%Title     = Change point detection for correlated observations
+%Year      = 1996
+%Journal   = Statistica Sinica
+%Volume    = 6
+%Pages     = 275-287
+%Keywords  = Autoregressive process
+%Keywords  = Boundary crossing
+%Keywords  = Likelihood ratio test
+
+
+%Author    = Szyszkowicz, Barbara
+%Title     = Asymptotic results for weighted partial sums of sequential ranks
+%Year      = 1996
+%Journal   = Statistics &amp; Decisions
+%Volume    = 14
+%Pages     = 53-72
+%Keywords  = Wiener process
+%Keywords  = Change point
+
+
+%Author    = Hušková, Marie
+%Author    = Huskova, Marie
+%Title     = Tests and estimators for the change point problem based on $M$-statistics
+%Year      = 1996
+%Journal   = Statistics &amp; Decisions
+%Volume    = 14
+%Pages     = 115-136
+%Keywords  = Maximum likelihood estimator
+
+
+%Author    = Mi, Jie
+%Title     = Strongly consistent estimation for hazard rate models with a change point
+%Year      = 1996
+%Journal   = Statistics
+%Volume    = 28
+%Pages     = 35-42
+
+
+%Author    = Müller, Hans-Georg
+%Author    = Muller, Hans-Georg
+%Author    = Mueller, Hans-Georg
+%Author    = Song, Kai-Sheng
+%Title     = A set-indexed process in a two-region image
+%Year      = 1996
+%Journal   = Stochastic Processes and their Applications
+%Volume    = 62
+%Pages     = 87-101
+%Keywords  = Brownian motion
+%Keywords  = Change point
+
+
+%Author    = Ghorbanzadeh, Dariush
+%Title     = An application of the likelihood ratio test to the change point problem
+%Year      = 1996
+%Journal   = Student
+%Volume    = 1
+%Pages     = 159-168
+
+
+%Author    = Francis, Brian
+%Author    = Whittaker, Joe
+%Title     = Gassing during the growth of bacteriological infection
+%Year      = 1996
+%Journal   = Student
+%Volume    = 1
+%Pages     = 211-214
+%Keywords  = Change point
+%Keywords  = Growth curve
+
+
+%Author    = Silvestrova, Evelina D.
+%Title     = Adaptive dynamic systems in non-stationary random media
+%Year      = 1996
+%Journal   = Theory of Stochastic Processes
+%Volume    = 2
+%Number    = 1
+%Pages     = 269-272
+%Keywords  = Change point
+
+
+%Author    = Antoch, Jaromír
+%Author    = Hušková, Marie
+%Title     = Tests and estimators for epidemic alternatives
+%Year      = 1996
+%Journal   = Tatra Mountains Mathematical Publications
+%Volume    = 7
+%Pages     = 311-329
+%Keywords  = change point problem
+%Keywords  = robustness and adaptive procedures
+%Keywords  = parametric inference--hypothesis testing
+%Keywords  = nonparametric inference--hypothesis testing
+
+
+%Author    = Mitra, Murari
+%Author    = Basu, Sujit K.
+%Title     = Change point estimation in non-monotonic aging models
+%Year      = 1995
+%Journal   = Annals of the Institute of Statistical Mathematics
+%Volume    = 47
+%Pages     = 483-491
+%Keywords  = Life distribution
+
+
+%Author    = Davis, Richard A.
+%Author    = Huang, Dawei
+%Author    = Yao, Yi-Ching
+%Title     = Testing for a change in the parameter values and order of an autoregressive model
+%Year      = 1995
+%Journal   = The Annals of Statistics
+%Volume    = 23
+%Pages     = 282-304
+%Keywords  = Likelihood ratio test
+%Keywords  = Change point
+%Keywords  = Strong mixing
+
+
+%Author    = Gordon, Louis
+%Author    = Pollak, Moshe
+%Title     = A robust surveillance scheme for stochastically ordered alternatives
+%Year      = 1995
+%Journal   = The Annals of Statistics
+%Volume    = 23
+%Pages     = 1350-1375
+%Keywords  = Change point
+%Keywords  = Nonparametric test
+
+
+%Author    = Andrews, Donald W. K.
+%Author    = Ploberger, Werner
+%Title     = Admissibility of the likelihood ratio test when a nuisance parameter is present only under the alternative
+%Year      = 1995
+%Journal   = The Annals of Statistics
+%Volume    = 23
+%Pages     = 1609-1629
+%Keywords  = Change point
+
+
+%Author    = Kiuchi, Amy S.
+%Author    = Hartigan, J. A.
+%Author    = Holford, Theodore R.
+%Author    = Rubinstein, Pablo
+%Author    = Stevens, Cladd E.
+%Title     = Change points in the series of T4 counts prior to AIDS
+%Year      = 1995
+%Journal   = Biometrics
+%Volume    = 51
+%Pages     = 236-248
+%Keywords  = EM algorithm
+%Keywords  = Empirical Bayes
+%Keywords  = Hierarchical Bayes
+
+
+%Author    = Green, Peter J.
+%Title     = Reversible jump Markov chain Monte Carlo computation and Bayesian model determination
+%Year      = 1995
+%Journal   = Biometrika
+%Volume    = 82
+%Pages     = 711-732
+%Keywords  = Change point
+
+
+%Author    = Vaillancourt, Jean
+%Title     = Asymptotics for multisample statistics
+%Year      = 1995
+%Journal   = The Canadian Journal of Statistics / La Revue Canadienne de Statistique
+%Volume    = 23
+%Pages     = 171-184
+%Keywords  = Change point
+%Keywords  = Central limit theorem
+%Keywords  = Law of the iterated logarithm
+
+
+%Author    = Zhang, Heping
+%Title     = Detecting change points and monitoring biomedical data
+%Year      = 1995
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 24
+%Pages     = 1307-1324
+%Keywords  = Bayesian analysis
+%Keywords  = Likelihood ratio
+
+
+%Author    = Hidalgo, Javier
+%Title     = A nonparametric conditional moment test for structural stability
+%Year      = 1995
+%Journal   = Econometric Theory
+%Volume    = 11
+%Pages     = 671-698
+%Keywords  = Change point
+%Keywords  = Economics
+
+
+%Author    = Chu, Chia-Shang James
+%Author    = Hornik, Kurt
+%Author    = Kuan, Chung-Ming
+%Title     = The moving-estimates test for parameter stability
+%Year      = 1995
+%Journal   = Econometric Theory
+%Volume    = 11
+%Pages     = 699-720
+%Keywords  = Brownian bridge
+%Keywords  = Change point
+
+
+%Author    = Nunes, Luis C.
+%Author    = Kuan, Chung-Ming
+%Author    = Newbold, Paul
+%Title     = Spurious break
+%Year      = 1995
+%Journal   = Econometric Theory
+%Volume    = 11
+%Pages     = 736-749
+%Keywords  = Integrated process
+%Keywords  = Change point
+
+
+%Author    = Ryoo, S. B.
+%Author    = Moon, S. E.
+%Title     = Detection of warming effects due to industrialization: An accumulated intervention model with an application in Pohang, Korea
+%Year      = 1995
+%Journal   = Journal of Applied Meteorology
+%Volume    = 34
+%Pages     = 1466-1471
+%Keywords  = Change point
+%Keywords  = Forecasting
+
+
+%Author    = Easterling, David R.
+%Author    = Peterson, Thomas C.
+%Title     = A new method for detecting undocumented discontinuities in climatological time series
+%Year      = 1995
+%Journal   = International Journal of Climatology
+%Volume    = 15
+%Pages     = 369-377
+%Keywords  = Change point
+%Keywords  = Two-stage regression
+
+
+%Author    = Tartakovsky, A.
+%Title     = Asymptotic properties of CUSUM and Shiryaev's procedures for detecting a change in a nonhomogeneous Gaussian process
+%Year      = 1995
+%Journal   = Mathematical Methods of Statistics
+%Volume    = 4
+%Pages     = 389-404
+%Keywords  = Change point
+
+
+%Author    = Chen, Jie
+%Author    = Gupta, A. K.
+%Title     = Likelihood procedure for testing change point hypothesis for multivariate Gaussian model (STMA V37 1524)
+%Year      = 1995
+%Journal   = Random Operators and Stochastic Equations
+%Volume    = 3
+%Pages     = 235-244
+
+
+%Author    = Ghorbanzadeh, Dariush
+%Title     = A test for the detection of a change in mean in a Gaussian model (French)
+%Year      = 1995
+%Journal   = Revue de Statistique Appliquée
+%Volume    = 43
+%Number    = 2
+%Pages     = 67-76
+%Keywords  = Discriminant analysis
+%Keywords  = Change point
+
+
+%Author    = Lee, Chung-Bow
+%Title     = Estimating the number of change points in a sequence of independent normal random variables
+%Year      = 1995
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 25
+%Pages     = 241-248
+%Keywords  = Penalized likelihood
+
+
+%Author    = Steinebach, Josef
+%Title     = Variance estimation based on invariance principles
+%Year      = 1995
+%Journal   = Statistics
+%Volume    = 27
+%Pages     = 15-25
+%Keywords  = Renewal process
+%Keywords  = Change point
+
+
+%Author    = Hartigan, J. A.
+%Title     = Linear estimators in change point problems
+%Year      = 1994
+%Journal   = The Annals of Statistics
+%Volume    = 22
+%Pages     = 824-834
+%Keywords  = Smoothing
+
+
+%Author    = Namgung, Yearnok Y.
+%Author    = Yang, Mark C. K.
+%Title     = Outlier reduction by an option-3 measurement scheme
+%Year      = 1994
+%Journal   = Biometrics
+%Volume    = 50
+%Pages     = 173-182
+%Keywords  = Longitudinal data
+%Keywords  = Change point
+
+
+%Author    = Andrews, Donald W. K.
+%Author    = Ploberger, Werner
+%Title     = Optimal tests when a nuisance parameter is present only under the alternative (STMA V36 3473)
+%Year      = 1994
+%Journal   = Econometrica
+%Volume    = 62
+%Pages     = 1383-1414
+%Keywords  = Change point
+%Keywords  = Hypothesis testing
+
+
+%Author    = Inclán, Carla
+%Author    = Inclan, Carla
+%Author    = Tiao, George C.
+%Title     = Use of cumulative sums of squares for retrospective detection of changes of variance
+%Year      = 1994
+%Journal   = Journal of the American Statistical Association
+%Volume    = 89
+%Pages     = 913-923
+%Keywords  = Change point
+
+
+%Author    = Barry, Daniel
+%Author    = Hartigan, J. A.
+%Title     = Change points in 0-1 sequences, with an application to predicting divisional winners in major league baseball
+%Year      = 1994
+%Journal   = Journal of Applied Statistical Science
+%Volume    = 1
+%Pages     = 323-336
+%Keywords  = Markov chain Monte Carlo
+%Keywords  = Binary data
+
+
+%Author    = Raftery, Adrian E.
+%Title     = Change point and change curve modeling in stochastic processes and spatial statistics
+%Year      = 1994
+%Journal   = Journal of Applied Statistical Science
+%Volume    = 1
+%Pages     = 403-424
+%Keywords  = Bayesian approach
+%Keywords  = Kalman filter
+%Keywords  = Clustering
+
+
+%Author    = Srivastava, M. S.
+%Title     = Comparison of CUSUM and EWMA procedures for detecting a shift in the mean or an increase in the variance
+%Year      = 1994
+%Journal   = Journal of Applied Statistical Science
+%Volume    = 1
+%Pages     = 445-468
+%Keywords  = Change point
+%Keywords  = Average run length
+
+
+%Author    = Zacks, S.
+%Title     = Sequential testing of reliability system with change points
+%Year      = 1994
+%Journal   = Journal of Applied Statistical Science
+%Volume    = 1
+%Pages     = 469-483
+%Keywords  = Hazard rate
+%Keywords  = Stopping rule
+
+
+%Author    = Raj, Baldev
+%Author    = Slottje, Daniel J.
+%Title     = The trend behavior of alternative income inequality measures in the United States from 1947-1990 and the structural break
+%Year      = 1994
+%Journal   = Journal of Business &amp; Economic Statistics
+%Volume    = 12
+%Pages     = 479-487
+%Keywords  = Time series
+%Keywords  = Change point
+%Keywords  = Unit root
+
+
+%Author    = Leiva, Ricardo Aníbal
+%Author    = Leiva, Ricardo Anibal
+%Title     = Bayesian prediction of the number of change points in the piecewise linear model
+%Year      = 1994
+%Journal   = Journal of the Italian Statistical Society
+%Volume    = 3
+%Pages     = 271-289
+
+
+%Author    = Müller, Hans-Georg
+%Author    = Muller, Hans-Georg
+%Author    = Mueller, Hans-Georg
+%Author    = Song, Kai-Sheng
+%Title     = Maximin estimation of multidimensional boundaries
+%Year      = 1994
+%Journal   = Journal of Multivariate Analysis
+%Volume    = 50
+%Pages     = 265-281
+%Keywords  = Kernel estimator
+%Keywords  = Nonparametric regression
+%Keywords  = Change point
+
+
+%Author    = Bai, Jushan
+%Title     = Least squares estimation of a shift in linear processes
+%Year      = 1994
+%Journal   = Journal of Time Series Analysis
+%Volume    = 15
+%Pages     = 453-472
+%Keywords  = Least squares
+%Keywords  = Change point
+
+
+%Author    = Mi, Jie
+%Title     = Estimation in discrete failure rate models with a change point (STMA V36 0331)
+%Year      = 1994
+%Journal   = Naval Research Logistics
+%Volume    = 41
+%Pages     = 537-543
+
+
+%Author    = Cohen, Arthur
+%Author    = Kushary, Debashis
+%Title     = Adaptive and unbiased predictors in a change point regression model
+%Year      = 1994
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 20
+%Pages     = 131-138
+%Keywords  = Least squares
+
+
+%Author    = Kim, Hyungjin Myra
+%Author    = Lagakos, Stephen W.
+%Title     = Assessing drug compliance using longitudinal marker data, with application to AIDS
+%Year      = 1994
+%Journal   = Statistics in Medicine
+%Volume    = 13
+%Pages     = 2141-2153
+%Keywords  = Change point
+%Keywords  = Clinical trial
+
+
+%Author    = Szyszkowicz, Barbara
+%Title     = Weak convergence of weighted empirical type processes under contiguous and change point alternatives
+%Year      = 1994
+%Journal   = Stochastic Processes and their Applications
+%Volume    = 50
+%Pages     = 281-313
+
+
+%Author    = Ferger, D.
+%Title     = Nonparametric detection of change points for sequentially observed data
+%Year      = 1994
+%Journal   = Stochastic Processes and their Applications
+%Volume    = 51
+%Pages     = 359-372
+%Keywords  = Stopping rule
+
+
+%Author    = Taufik, A. M. Z.
+%Title     = Increasing the efficiency of the Monte-Carlo method in estimating error probabilities of likelihood-ratio tests (Russian)
+%Year      = 1994
+%Journal   = Vestnik St. Petersburg University: Mathematics
+%Volume    = 
+%Number    = 2
+%Pages     = 105-108
+%Keywords  = Change point
+
+
+%Author    = Rudemo, Mats
+%Author    = Stryhn, Henrik
+%Title     = Approximating the distribution of maximum likelihood contour estimators in two-region images.
+%Year      = 1994
+%Journal   = Scandinavian Journal of Statistics
+%Volume    = 21
+%Number    = 1
+%Pages     = 41-55
+%Keywords  = Image segmentation
+%Keywords  = Change point
+%Keywords  = starshaped contour
+%Keywords  = non-parametric curve estimation
+%Keywords  = maxima of random walks
+%Keywords  = Brownian motion with triangular drift
+%Keywords  = Brownian motion with parabolic drift
+%Keywords  = Density estimation
+%Keywords  = Asymptotic distribution theory
+%Keywords  = nonparametric asymptotic efficiency
+%Keywords  = two-region image models
+%Keywords  = univariate boundary representation
+%Keywords  = independent lattice observations
+%Keywords  = histogram-like contour estimator
+%Keywords  = region grey level distributions
+%Keywords  = locations of maxima of two-sided  Brownian motions with negative drift
+%Keywords  = triangular drift
+%Keywords  = PARABOLIC DRIFT
+
+
+%Author    = Miao, Baiqi
+%Author    = Zhao, Lincheng
+%Title     = On detection of change points using mean vectors
+%Year      = 1993
+%Journal   = Acta Mathematicae Applicatae Sinica / Yingyong Shuxue Xuebao (English Series)
+%Volume    = 9
+%Pages     = 194-203
+
+
+%Author    = Tang, S. M.
+%Author    = MacNeill, I. B.
+%Title     = The effect of serial correlation on tests for parameter change at unknown time
+%Year      = 1993
+%Journal   = The Annals of Statistics
+%Volume    = 21
+%Pages     = 552-575
+%Keywords  = Time series
+%Keywords  = Regression
+%Keywords  = Change point
+
+
+%Author    = Assaf, David
+%Author    = Pollak, Moshe
+%Author    = Ritov, Ya'acov
+%Author    = Yakir, Benjamin
+%Title     = Detecting a change of a normal mean by dynamic sampling with a probability bound on a false alarm
+%Year      = 1993
+%Journal   = The Annals of Statistics
+%Volume    = 21
+%Pages     = 1155-1165
+%Keywords  = Brownian motion
+%Keywords  = Change point
+
+
+%Author    = Wu, Yanhong
+%Author    = Srivastava, M. S.
+%Title     = Dynamic sampling plans in on-line control charts
+%Year      = 1993
+%Journal   = The Canadian Journal of Statistics / La Revue Canadienne de Statistique
+%Volume    = 21
+%Pages     = 409-419
+%Keywords  = CUSUM
+%Keywords  = Change point
+
+
+%Author    = Miao, Baiqi
+%Author    = Chao, Lin Cheng
+%Title     = On detection of change points when the number is unknown
+%Year      = 1993
+%Journal   = Chinese Journal of Applied Probability and Statistics
+%Volume    = 9
+%Pages     = 138-145
+
+
+%Author    = Mathieu, Didier
+%Author    = Maurette, Marie-Therese
+%Author    = Puech-Costes, Edith
+%Author    = Maurette, Marie-Thérèse
+%Author    = Luu, Roger Phan Tan
+%Title     = The simplex method applied to the detection and following of a discontinuity
+%Year      = 1993
+%Journal   = Chemometrics and Intelligent Laboratory Systems
+%Volume    = 20
+%Pages     = 25-34
+%Keywords  = Change point
+
+
+%Author    = Kim, Hyune-Ju
+%Title     = Two-phase regression with nonhomogeneous errors
+%Year      = 1993
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 22
+%Pages     = 647-657
+%Keywords  = Change point
+
+
+%Author    = Wang, China-Yuan
+%Author    = Lee, Chung-Bow
+%Title     = Bayesian analysis for a change in the intercept of simple linear regression
+%Year      = 1993
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 22
+%Pages     = 3031-3050
+%Keywords  = Change point
+
+
+%Author    = Andrews, Donald W. K.
+%Title     = Tests for parameter instability and structural change with unknown change point
+%Year      = 1993
+%Journal   = Econometrica
+%Volume    = 61
+%Pages     = 821-856
+
+
+%Author    = Barry, Daniel
+%Author    = Hartigan, J. A.
+%Title     = A Bayesian analysis for change point problems
+%Year      = 1993
+%Journal   = Journal of the American Statistical Association
+%Volume    = 88
+%Pages     = 309-319
+
+
+%Author    = Barry, Daniel
+%Author    = Hartigan, J. A.
+%Title     = Choice models for predicting divisional winners in major league baseball
+%Year      = 1993
+%Journal   = Journal of the American Statistical Association
+%Volume    = 88
+%Pages     = 766-774
+%Keywords  = Sports
+%Keywords  = Change point
+
+
+%Author    = Jandhyala, Venkata K.
+%Title     = A property of partial sums of regression least squares residuals and its application
+%Year      = 1993
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 37
+%Pages     = 317-326
+%Keywords  = Change point
+
+
+%Author    = Miao, Baiqi
+%Title     = Nonparametric methods for a model with at most one change point (Chinese)
+%Year      = 1993
+%Journal   = Journal of Systems Science and Mathematical Sciences / Xitong Kexue yu Shuxue (Chinese version)
+%Volume    = 13
+%Pages     = 132-140
+%Keywords  = Wilcoxon signed rank
+
+
+%Author    = Kitada, Shuichi
+%Author    = Kishino, Hirohisa
+%Title     = Evaluation of the quality of hatchery-reared fish based on mortality rates estimated from tag recoveries (Japanese)
+%Year      = 1993
+%Journal   = Proceedings of the Institute of Statistical Mathematics
+%Volume    = 41
+%Pages     = 183-195
+%Keywords  = Capture-recapture
+%Keywords  = Change point
+
+
+%Author    = de Cambry, O.
+%Title     = Asymptotic law in sequential estimation of a change point
+%Year      = 1993
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 16
+%Pages     = 379-390
+
+
+%Author    = Lee, Tze-San
+%Title     = Estimating coefficients of two-phase linear regression model with autocorrelated errors
+%Year      = 1993
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 18
+%Pages     = 113-120
+%Keywords  = Segmented regression
+%Keywords  = Change point
+
+
+%Author    = Barry, Daniel
+%Author    = Hartigan, J. A.
+%Title     = Product partition models for change point problems
+%Year      = 1992
+%Journal   = The Annals of Statistics
+%Volume    = 20
+%Pages     = 260-279
+
+
+%Author    = Hawkins, D. L.
+%Author    = Kochar, Subhash
+%Author    = Loader, Clive
+%Title     = Testing exponentiality against IDMRL distributions with unknown change point
+%Year      = 1992
+%Journal   = The Annals of Statistics
+%Volume    = 20
+%Pages     = 280-290
+%Keywords  = Reliability
+
+
+%Author    = Loader, Clive R.
+%Title     = A log-linear model for a Poisson process change point
+%Year      = 1992
+%Journal   = The Annals of Statistics
+%Volume    = 20
+%Pages     = 1391-1411
+%Keywords  = Nonhomogeneous Poisson process
+
+
+%Author    = Deutsch, Joseph
+%Title     = Linear regression under two separate regimes: An empirical distribution for Quandt's log likelihood ratio
+%Year      = 1992
+%Journal   = Applied Economics
+%Volume    = 24
+%Pages     = 123-127
+%Keywords  = Change point
+%Keywords  = CUSUM
+
+
+%Author    = Stasinopoulos, D. M.
+%Author    = Rigby, R. A.
+%Title     = Detecting break points in generalised linear models
+%Year      = 1992
+%Journal   = Computational Statistics &amp; Data Analysis
+%Volume    = 13
+%Pages     = 461-471
+%Keywords  = Spline
+%Keywords  = Change point
+
+
+%Author    = Ghosh, J. K.
+%Author    = Joshi, S. N.
+%Title     = On the asymptotic distribution of an estimate of the change point in a failure rate
+%Year      = 1992
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 21
+%Pages     = 3571-3588
+
+
+%Author    = Jensen, U.
+%Title     = The generalized change point problem as a model of quality control (STMA V34 0270)
+%Year      = 1992
+%Journal   = Economic Quality Control
+%Volume    = 7
+%Pages     = 97-104
+
+
+%Author    = Inclán, Carla
+%Author    = Inclan, Carla
+%Title     = Effect of a change in variance on the Portmanteau statistic
+%Year      = 1992
+%Journal   = Estadística
+%Volume    = 44
+%Pages     = 149-170
+%Keywords  = Time series
+%Keywords  = Change point
+
+
+%Author    = Carlstein, E.
+%Author    = Krishnamoorthy, C.
+%Title     = Boundary estimation
+%Year      = 1992
+%Journal   = Journal of the American Statistical Association
+%Volume    = 87
+%Pages     = 430-438
+%Keywords  = Change point
+
+
+%Author    = Lange, Nicholas
+%Author    = Carlin, Bradley P.
+%Author    = Gelfand, Alan E.
+%Title     = Hierarchical Bayes models for the progression of HIV infection using longitudinal CD4 T-cell numbers (Disc: p626-632)
+%Year      = 1992
+%Journal   = Journal of the American Statistical Association
+%Volume    = 87
+%Pages     = 615-626
+%Keywords  = Change point
+
+
+%Author    = Assaf, David
+%Author    = Pollak, Moshe
+%Author    = Ritov, Ya'acov
+%Title     = A new look at warning and action lines of surveillance schemes
+%Year      = 1992
+%Journal   = Journal of the American Statistical Association
+%Volume    = 87
+%Pages     = 889-895
+%Keywords  = Change point
+%Keywords  = CUSUM
+
+
+%Author    = Christiano, Lawrence J.
+%Title     = Searching for a break in GNP
+%Year      = 1992
+%Journal   = Journal of Business &amp; Economic Statistics
+%Volume    = 10
+%Pages     = 237-250
+%Keywords  = Trend
+%Keywords  = Unit root
+%Keywords  = Change point
+
+
+%Author    = Zivot, Eric
+%Author    = Andrews, Donald W. K.
+%Title     = Further evidence on the great crash, the oil-price shock, and the unit-root hypothesis
+%Year      = 1992
+%Journal   = Journal of Business &amp; Economic Statistics
+%Volume    = 10
+%Pages     = 251-270
+%Keywords  = Trend
+%Keywords  = Time series
+%Keywords  = Change point
+
+
+%Author    = Banerjee, Anindya
+%Author    = Lumsdaine, Robin L.
+%Author    = Stock, James H.
+%Title     = Recursive and sequential tests of the unit-root and trend-break hypotheses: Theory and international evidence
+%Year      = 1992
+%Journal   = Journal of Business &amp; Economic Statistics
+%Volume    = 10
+%Pages     = 271-287
+%Keywords  = Dickey-Fuller test
+%Keywords  = Change point
+
+
+%Author    = Chu, Chia-Shang James
+%Author    = White, Halbert
+%Title     = A direct test for changing trend
+%Year      = 1992
+%Journal   = Journal of Business &amp; Economic Statistics
+%Volume    = 10
+%Pages     = 289-299
+%Keywords  = Brownian bridge
+%Keywords  = Change point
+
+
+%Author    = Perron, Pierre
+%Author    = Vogelsang, Timothy J.
+%Title     = Nonstationarity and level shifts with an application to purchasing power parity
+%Year      = 1992
+%Journal   = Journal of Business &amp; Economic Statistics
+%Volume    = 10
+%Pages     = 301-320
+%Keywords  = Unit root
+%Keywords  = Change point
+
+
+%Author    = Harvey, Andrew C.
+%Author    = Koopman, Siem Jan
+%Title     = Diagnostic checking of unobserved-components time series models
+%Year      = 1992
+%Journal   = Journal of Business &amp; Economic Statistics
+%Volume    = 10
+%Pages     = 377-389
+%Keywords  = Outlier
+%Keywords  = Change point
+
+
+%Author    = Szajowski, K.
+%Title     = Optimal on-line detection of outside observations
+%Year      = 1992
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 30
+%Pages     = 413-422
+%Keywords  = Markov process
+%Keywords  = Stopping time
+%Keywords  = Change point
+
+
+%Author    = Hawkins, D. L.
+%Title     = Detecting shifts in functions of multivariate location and covariance parameters
+%Year      = 1992
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 33
+%Pages     = 233-244
+%Keywords  = $U$-statistic
+%Keywords  = Change point
+
+
+%Author    = Assaf, David
+%Author    = Ritov, Ya'acov
+%Title     = Adaptive sampling for detecting a change point in the past
+%Year      = 1992
+%Journal   = Sequential Analysis
+%Volume    = 11
+%Pages     = 237-255
+%Keywords  = Brownian motion
+
+
+%Author    = Kim, Hyune-Ju
+%Title     = Boundary crossing probabilities by nondifferentiable processes and applications to two-phase regression
+%Year      = 1992
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 14
+%Pages     = 97-102
+%Keywords  = Change point
+
+
+%Author    = Frisén, M.
+%Author    = Frisen, M.
+%Title     = Evaluations of methods for statistical surveillance
+%Year      = 1992
+%Journal   = Statistics in Medicine
+%Volume    = 11
+%Pages     = 1489-1502
+%Keywords  = Medicine
+%Keywords  = Change point
+%Keywords  = Time series
+
+
+%Author    = Eastwood, Brian J.
+%Author    = Eastwood, Vera R.
+%Title     = Percentiles for Cramér-von Mises functionals of Gaussian processes and some applications to Bayesian tests
+%Year      = 1992
+%Journal   = Stochastic Processes and their Applications
+%Volume    = 42
+%Pages     = 329-344
+%Keywords  = Change point
+
+
+%Author    = Hall, Peter
+%Author    = Titterington, D. M.
+%Title     = Edge-preserving and peak-preserving smoothing
+%Year      = 1992
+%Journal   = Technometrics
+%Volume    = 34
+%Pages     = 429-440
+%Keywords  = Change point
+%Keywords  = Nonparametric regression
+
+
+%Author    = Kashiwagi, Nobuhisa
+%Title     = Bayesian detection of structural changes
+%Year      = 1991
+%Journal   = Annals of the Institute of Statistical Mathematics
+%Volume    = 43
+%Pages     = 77-93
+%Keywords  = Change point
+
+
+%Author    = Henderson, Robin
+%Author    = Milner, Alvin
+%Title     = Aalen plots under proportional hazards
+%Year      = 1991
+%Journal   = Applied Statistics
+%Volume    = 40
+%Pages     = 401-409
+%Keywords  = Change point
+%Keywords  = Graphics
+
+
+%Author    = Frisén, Marianne
+%Author    = Frisen, Marianne
+%Author    = de Mare, Jacques
+%Author    = de Maré, Jacques
+%Title     = Optimal surveillance
+%Year      = 1991
+%Journal   = Biometrika
+%Volume    = 78
+%Pages     = 271-280
+%Keywords  = Change point
+
+
+%Author    = Kim, Dongcheol
+%Title     = A Bayesian significance test of the stationarity of regression parameters
+%Year      = 1991
+%Journal   = Biometrika
+%Volume    = 78
+%Pages     = 667-675
+%Keywords  = Behrens-Fisher problem
+%Keywords  = Change point
+
+
+%Author    = Loader, Clive R.
+%Title     = Inference for a hazard rate change point
+%Year      = 1991
+%Journal   = Biometrika
+%Volume    = 78
+%Pages     = 749-757
+%Keywords  = Likelihood ratio
+%Keywords  = Large deviation
+
+
+%Author    = Shamma, Shawky E.
+%Author    = Amin, Raid W.
+%Author    = Shamma, Amal K.
+%Title     = A double exponentially weighted moving average control procedure with variable sampling intervals
+%Year      = 1991
+%Journal   = Communications in Statistics: Simulation and Computation
+%Volume    = 20
+%Pages     = 511-528
+%Keywords  = Average run length
+%Keywords  = Change point
+
+
+%Author    = Smith, G. W.
+%Title     = Solution to a problem of stochastic process switching (STMA V32 4150)
+%Year      = 1991
+%Journal   = Econometrica
+%Volume    = 59
+%Pages     = 237-239
+%Keywords  = Change point
+
+
+%Author    = Froot, K. A.
+%Author    = Obstfeld, M.
+%Title     = Stochastic process switching: Some simple solutions (STMA V32 4140)
+%Year      = 1991
+%Journal   = Econometrica
+%Volume    = 59
+%Pages     = 241-250
+%Keywords  = Brownian motion
+%Keywords  = Change point
+
+
+%Author    = Kligienė, N.
+%Author    = Kligiene, N.
+%Title     = Likelihood inference about a change point in switching autoregression (STMA V36 1795)
+%Year      = 1991
+%Journal   = Informatica (Vilnius)
+%Volume    = 2
+%Pages     = 53-65
+
+
+%Author    = Lipeikienė, J.
+%Author    = Lipeikiene, J.
+%Title     = Robust estimation of a change point in the properties of autoregressive sequences (STMA V36 2612)
+%Year      = 1991
+%Journal   = Informatica (Vilnius)
+%Volume    = 2
+%Pages     = 66-76
+%Keywords  = Time series
+
+
+%Author    = Meelis, Evert
+%Author    = Bressers, Mientje
+%Author    = Haccou, Patsy
+%Title     = Non-parametric testing for the number of change points in a sequence of independent random variables
+%Year      = 1991
+%Journal   = Journal of Statistical Computation and Simulation
+%Volume    = 39
+%Pages     = 129-137
+%Keywords  = Kruskal-Wallis test
+
+
+%Author    = Kulasekera, K. B.
+%Author    = Saxena, K. M. Lal
+%Title     = Estimation of change point in failure rate models
+%Year      = 1991
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 29
+%Pages     = 111-124
+%Keywords  = Kernel estimator
+%Keywords  = Empirical distribution function
+
+
+%Author    = Lingappaiah, G. S.
+%Title     = Prediction in exponential life tests where average lives are successively increasing
+%Year      = 1991
+%Journal   = Pakistan Journal of Statistics, Series A
+%Volume    = 7
+%Pages     = 33-39
+%Keywords  = Change point
+%Keywords  = Order statistics
+
+
+%Author    = Ebrahimi, Nader
+%Title     = On estimating change point in a mean residual life function
+%Year      = 1991
+%Journal   = Sankhyā, Series A
+%Volume    = 53
+%Pages     = 206-219
+
+
+%Author    = Groenewald, P. C. N.
+%Title     = Multiple hypotheses and clustering for normal means -- A Bayesian analysis
+%Year      = 1991
+%Journal   = South African Statistical Journal
+%Volume    = 25
+%Pages     = 1-18
+%Keywords  = Multiple comparisons
+%Keywords  = Change point
+
+
+%Author    = Lombard, F.
+%Title     = A change point analysis of some data arising in gamma-ray astronomy
+%Year      = 1991
+%Journal   = South African Statistical Journal
+%Volume    = 25
+%Pages     = 83-98
+%Keywords  = Circular data
+%Keywords  = Uniform distribution
+
+
+%Author    = Sorour, El Sayed
+%Title     = A dynamic Kiefer-Wolfowitz stochastic approximation procedure
+%Year      = 1991
+%Journal   = Statistics &amp; Decisions
+%Volume    = 9
+%Pages     = 201-211
+%Keywords  = Change point
+
+
+%Author    = Helfenstein, U.
+%Author    = Braun-Fahrlander, C.
+%Author    = Braun-Fahrlaender, C.
+%Author    = Ackermann-Liebrich, U.
+%Author    = Braun-Fahrländer, C.
+%Author    = Wanner, H. U.
+%Title     = The environmental accident at `Schweizerhalle' and respiratory diseases in children: A time series analysis
+%Year      = 1991
+%Journal   = Statistics in Medicine
+%Volume    = 10
+%Pages     = 1481-1492
+%Keywords  = Change point
+
+
+%Author    = Novikov, A. A.
+%Title     = On the first passage time of an autoregressive process over a level and an application to a ``disorder'' problem
+%Year      = 1991
+%Journal   = Theory of Probability and its Applications
+%Volume    = 35
+%Pages     = 269-279
+%Keywords  = Change point
+
+
+%Author    = Kaplan, E. I.
+%Title     = On the disorder problem for random fields
+%Year      = 1991
+%Journal   = Theory of Probability and its Applications
+%Volume    = 35
+%Pages     = 352-358
+%Keywords  = Change point
+
+
+%Author    = Brodskii, B. E.
+%Author    = Darkhovskii, B. S.
+%Title     = Asymptotic analysis of some estimates in the a posteriori ``disorder'' problem
+%Year      = 1991
+%Journal   = Theory of Probability and its Applications
+%Volume    = 35
+%Pages     = 550-556
+%Keywords  = Change point
+%Keywords  = Kolmogorov-Smirnov statistic
+
+
+%Author    = Brodskii, B. E.
+%Author    = Darhovskii, B. S.
+%Title     = Comparative analysis of some nonparametric methods of fastest detection of the moment of ``disorder'' of a random sequence
+%Year      = 1991
+%Journal   = Theory of Probability and its Applications
+%Volume    = 35
+%Pages     = 639-652
+%Keywords  = Change point
+
+
+%Author    = Ritov, Y.
+%Title     = Asymptotic efficient estimation of the change point with unknown distributions
+%Year      = 1990
+%Journal   = The Annals of Statistics
+%Volume    = 18
+%Pages     = 1829-1839
+
+
+%Author    = Liang, Kung-Yee
+%Author    = Self, Steven G.
+%Author    = Liu, Xinhua
+%Title     = The Cox proportional hazards model with change point: An epidemiologic application
+%Year      = 1990
+%Journal   = Biometrics
+%Volume    = 46
+%Pages     = 783-793
+
+
+%Author    = Fu, Yun-Xin
+%Author    = Curnow, R. N.
+%Title     = Locating a changed segment in a sequence of Bernoulli variables (Corr: V78 p233)
+%Year      = 1990
+%Journal   = Biometrika
+%Volume    = 77
+%Pages     = 295-304
+%Keywords  = Change point
+%Keywords  = Markov chain
+
+
+%Author    = Fu, Yun-Xin
+%Author    = Curnow, R. N.
+%Title     = Maximum likelihood estimation of multiple change points
+%Year      = 1990
+%Journal   = Biometrika
+%Volume    = 77
+%Pages     = 563-573
+%Keywords  = Categorical data
+
+
+%Author    = Krishnaiah, P. R.
+%Author    = Miao, Boqi
+%Author    = Zhao, Lincheng
+%Title     = Local likelihood method in the problems related to change point
+%Year      = 1990
+%Journal   = Chinese Annals of Mathematics Series B
+%Volume    = 11
+%Pages     = 363-375
+
+
+%Author    = Razzaghi, M.
+%Title     = On the analysis of a test of contamination in a sample from a normal distribution
+%Year      = 1990
+%Journal   = Computational Statistics Quarterly
+%Volume    = 5
+%Pages     = 193-202
+%Keywords  = Change point
+
+
+%Author    = Boukai, Benzion
+%Title     = An explicit expression for the distribution of the supremum of Brownian motion with a change point
+%Year      = 1990
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 19
+%Pages     = 31-40
+
+
+%Author    = From, Steven G.
+%Title     = Nonparametric estimation of a change point in positive shift models
+%Year      = 1990
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 19
+%Pages     = 3163-3173
+%Keywords  = Monte Carlo
+
+
+%Author    = Ploberger, Werner
+%Author    = Kramer, Walter
+%Author    = Kraemer, Walter
+%Author    = Krämer, Walter
+%Title     = The local power of CUSUM and CUSUM of squares tests
+%Year      = 1990
+%Journal   = Econometric Theory
+%Volume    = 6
+%Pages     = 335-347
+%Keywords  = Regression
+%Keywords  = Change point
+
+
+%Author    = Cho, W. H.
+%Author    = Lee, J. C.
+%Title     = Nonparametric test procedures for change point problems in a scale parameter (STMA V32 2440)
+%Year      = 1990
+%Journal   = Journal of the Korean Statistical Society
+%Volume    = 19
+%Pages     = 128-138
+
+
+%Author    = Boukai, Benzion
+%Title     = The asymptotic power function of GLR tests for local change of parameter
+%Year      = 1990
+%Journal   = Journal of Statistical Planning and Inference
+%Volume    = 26
+%Pages     = 291-303
+%Keywords  = Likelihood ratio
+%Keywords  = Change point
+
+
+%Author    = Mehta, C. H.
+%Author    = Radhakrishnan, S.
+%Author    = Srikanth, G.
+%Title     = Segmentation of well logs by maximum-likelihood estimation
+%Year      = 1990
+%Journal   = Mathematical Geology
+%Volume    = 22
+%Pages     = 853-869
+%Keywords  = Time series
+%Keywords  = Change point
+
+
+%Author    = Bandyopadhyay, Uttam
+%Title     = On the sequential detection problem
+%Year      = 1989
+%Journal   = Calcutta Statistical Association Bulletin
+%Volume    = 38
+%Pages     = 129-145
+%Keywords  = Change point
+%Keywords  = Asymptotic theory
+
+
+%Author    = Yao, Qiwei
+%Title     = Interval estimation of a change point in cases with a nuisance parameter (Chinese)
+%Year      = 1989
+%Journal   = Chinese Journal of Applied Probability and Statistics
+%Volume    = 5
+%Pages     = 9-17
+
+
+%Author    = Hawkins, D. L.
+%Title     = A U-I approach to retrospective testing for shifting parameters in a linear model
+%Year      = 1989
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 18
+%Pages     = 3117-3134
+%Keywords  = Union-intersection principle
+%Keywords  = Change point
+
+
+%Author    = Nyblom, Jukka
+%Title     = Testing for the constancy of parameters over time
+%Year      = 1989
+%Journal   = Journal of the American Statistical Association
+%Volume    = 84
+%Pages     = 223-230
+%Keywords  = Martingale
+%Keywords  = Change point
+%Keywords  = Cumulative sum
+
+
+%Author    = Jun, Duk B.
+%Title     = On detecting and estimating a major level or slope change in general exponential smoothing
+%Year      = 1989
+%Journal   = Journal of Forecasting
+%Volume    = 8
+%Pages     = 55-64
+%Keywords  = Kalman filter
+%Keywords  = Change point
+
+
+%Author    = Horváth, Lajos
+%Author    = Horvath, Lajos
+%Title     = The limit distributions of likelihood ratio and cumulative sum tests for a change in a binomial probability
+%Year      = 1989
+%Journal   = Journal of Multivariate Analysis
+%Volume    = 31
+%Pages     = 148-159
+%Keywords  = Change point
+%Keywords  = Brownian bridge
+%Keywords  = Extreme value distribution
+
+
+%Author    = Awan, Hayat M.
+%Title     = The detection of change point in a switching multivariate regression model: A Bayesian approach
+%Year      = 1989
+%Journal   = Pakistan Journal of Statistics, Series A
+%Volume    = 5
+%Pages     = 143-155
+%Keywords  = Mixture of distributions
+
+
+%Author    = Yao, Yi-Ching
+%Author    = Au, S. T.
+%Title     = Least-squares estimation of a step function
+%Year      = 1989
+%Journal   = Sankhyā, Series A
+%Volume    = 51
+%Pages     = 370-381
+%Keywords  = Change point
+%Keywords  = Random walk
+
+
+%Author    = Jandhyala, V. K.
+%Author    = MacNeill, I. B.
+%Title     = Residual partial sum limit process for regression models with applications to detecting parameter changes at unknown times
+%Year      = 1989
+%Journal   = Stochastic Processes and their Applications
+%Volume    = 33
+%Pages     = 309-323
+%Keywords  = Harmonic regression
+%Keywords  = Change point
+
+
+%Author    = Miao, B. Q.
+%Author    = Zhao, L. C.
+%Title     = Detection of change points using rank methods
+%Year      = 1988
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 17
+%Pages     = 3207-3217
+%Keywords  = Directional data
+%Keywords  = Nonparametric
+
+
+%Author    = Yin, Y. Q.
+%Title     = Detection of the number, locations and magnitudes of jumps
+%Year      = 1988
+%Journal   = Communications in Statistics: Stochastic Models
+%Volume    = 4
+%Pages     = 445-455
+%Keywords  = Change point
+
+
+%Author    = Miao, B. Q.
+%Title     = Inference in a model with at most one slope-change point
+%Year      = 1988
+%Journal   = Journal of Multivariate Analysis
+%Volume    = 27
+%Pages     = 375-391
+
+
+%Author    = Haccou, Patsy
+%Author    = Meelis, Evert
+%Title     = Testing for the number of change points in a sequence of exponential random variables
+%Year      = 1988
+%Journal   = Journal of Statistical Computation and Simulation
+%Volume    = 30
+%Pages     = 285-298
+
+
+%Author    = Hušková, M.
+%Author    = Huskova, M.
+%Title     = Recursive $M$-test for detection of change
+%Year      = 1988
+%Journal   = Sequential Analysis
+%Volume    = 7
+%Pages     = 75-90
+%Keywords  = $M$-estimator
+%Keywords  = Change point
+
+
+%Author    = Huse, Vera R.
+%Title     = Asymptotic properties for the sequential CUSUM procedure
+%Year      = 1988
+%Journal   = Statistics &amp; Probability Letters
+%Volume    = 7
+%Pages     = 73-80
+%Keywords  = Change point
+
+
+%Author    = Razzaghi, M.
+%Title     = On detection of contamination in a normal distribution
+%Year      = 1988
+%Journal   = Statistics &amp; Decisions
+%Volume    = 6
+%Pages     = 149-161
+%Keywords  = Change point
+
+
+%Author    = Lombard, F.
+%Title     = Detecting change points by Fourier analysis
+%Year      = 1988
+%Journal   = Technometrics
+%Volume    = 30
+%Pages     = 305-310
+%Keywords  = Cumulative sum
+%Keywords  = Rank statistic
+
+
+%Author    = Piegorsch, Walter W.
+%Title     = Discretizing a normal prior for change point estimation in switching regressions
+%Year      = 1987
+%Journal   = Biometrical Journal
+%Volume    = 29
+%Pages     = 777-782
+%Keywords  = Nonlinear regression
+%Keywords  = Segmented regression
+%Keywords  = Bayesian approach
+
+
+%Author    = Hinkley, David
+%Author    = Schechtman, Edna
+%Title     = Conditional bootstrap methods in the mean-shift model
+%Year      = 1987
+%Journal   = Biometrika
+%Volume    = 74
+%Pages     = 85-93
+%Keywords  = Density estimation
+%Keywords  = Logistic regression
+%Keywords  = Change point
+
+
+%Author    = Rubin, D. B.
+%Author    = Stroud, T. W. F.
+%Title     = Bayesian break-point forecasting in parallel time series, with application to university admissions
+%Year      = 1987
+%Journal   = The Canadian Journal of Statistics / La Revue Canadienne de Statistique
+%Volume    = 15
+%Pages     = 1-19
+%Keywords  = Pooled cross-sectional and time series data
+%Keywords  = Change point
+
+
+%Author    = Csörgő, Miklós
+%Author    = Csorgo, Miklos
+%Author    = Horvath, Lajos
+%Author    = Horváth, Lajos
+%Title     = Detecting change in a random sequence
+%Year      = 1987
+%Journal   = Journal of Multivariate Analysis
+%Volume    = 23
+%Pages     = 119-130
+%Keywords  = Change point
+%Keywords  = Boundary crossing
+%Keywords  = Sequential ranks
+
+
+%Author    = Ryu, G. Y.
+%Author    = Cho, S. S.
+%Title     = A detection procedure for a variance change points in AR$(1)$ models (Korean) (STMA V31 0853)
+%Year      = 1987
+%Journal   = Korean Journal of Applied Statistics
+%Volume    = 1
+%Number    = 1
+%Pages     = 57-66
+
+
+%Author    = Hawkins, D. L.
+%Title     = A test for a change point in a parametric model based on a maximal Wald-type statistic
+%Year      = 1987
+%Journal   = Sankhyā, Series A
+%Volume    = 49
+%Pages     = 368-376
+%Keywords  = Brownian bridge
+
+
+%Author    = Haccou, Patsy
+%Author    = Meelis, Evert
+%Author    = van de Geer, Sara
+%Title     = The likelihood ratio test for the change point problem for exponentially distributed random variables
+%Year      = 1987
+%Journal   = Stochastic Processes and their Applications
+%Volume    = 27
+%Pages     = 121-139
+%Keywords  = Exponential distribution
+%Keywords  = Quantile process
+
+
+%Author    = Siegmund, David
+%Title     = Boundary crossing probabilities and statistical applications
+%Year      = 1986
+%Journal   = The Annals of Statistics
+%Volume    = 14
+%Pages     = 361-404
+%Keywords  = Sequential test
+%Keywords  = Change point
+%Keywords  = Brownian motion
+%Keywords  = Large deviation
+%Keywords  = Lectures, Wald
+
+
+%Author    = Hawkins, D. L.
+%Title     = A simple least squares method for estimating a change in mean
+%Year      = 1986
+%Journal   = Communications in Statistics: Simulation and Computation
+%Volume    = 15
+%Pages     = 655-679
+%Keywords  = Change point
+%Keywords  = Brownian bridge
+%Keywords  = Bessel process
+
+
+%Author    = Srivastava, M. S.
+%Author    = Worsley, K. J.
+%Title     = Likelihood ratio tests for a change in the multivariate normal mean
+%Year      = 1986
+%Journal   = Journal of the American Statistical Association
+%Volume    = 81
+%Pages     = 199-204
+%Keywords  = Change point
+%Keywords  = Binary segmentation
+%Keywords  = Bonferroni inequality
+
+
+%Author    = West, Mike
+%Author    = Harrison, P. Jeff
+%Title     = Monitoring and adaptation in Bayesian forecasting models
+%Year      = 1986
+%Journal   = Journal of the American Statistical Association
+%Volume    = 81
+%Pages     = 741-750
+%Keywords  = Change point
+%Keywords  = Outlier
+%Keywords  = prediction
+
+
+%Author    = Chan, K. S.
+%Author    = Tong, H.
+%Title     = On estimating thresholds in autoregressive models
+%Year      = 1986
+%Journal   = Journal of Time Series Analysis
+%Volume    = 7
+%Pages     = 179-190
+%Keywords  = Change point
+
+
+%Author    = Yao, Yi-Ching
+%Author    = Davis, Richard A.
+%Title     = The asymptotic behavior of the likelihood ratio statistic for testing a shift in mean in a sequence of independent normal variates
+%Year      = 1986
+%Journal   = Sankhyā, Series A
+%Volume    = 48
+%Pages     = 339-353
+%Keywords  = Change point
+%Keywords  = Bayes test
+
+
+%Author    = Freeman, James M.
+%Title     = An unknown change point and goodness of fit
+%Year      = 1986
+%Journal   = The Statistician: Journal of the Institute of Statisticians
+%Volume    = 35
+%Pages     = 335-344
+
+
+%Author    = McDonald, John Alan
+%Author    = Owen, Art B.
+%Title     = Smoothing with split linear fits
+%Year      = 1986
+%Journal   = Technometrics
+%Volume    = 28
+%Pages     = 195-208
+%Keywords  = Edge detection
+%Keywords  = Nonparametric regression
+%Keywords  = Image processing
+%Keywords  = Change point
+
+
+%Author    = Bauer, P.
+%Author    = Hackl, P.
+%Title     = The application of Hunter's inequality in simultaneous testing
+%Year      = 1985
+%Journal   = Biometrical Journal
+%Volume    = 27
+%Pages     = 25-38
+%Keywords  = Bonferroni inequality
+%Keywords  = Change point
+%Keywords  = Dunnett test
+%Keywords  = Multiple hypotheses
+
+
+%Author    = Pollak, Moshe
+%Author    = Siegmund, David
+%Title     = A diffusion process and its applications to detecting a change in the drift of Brownian motion
+%Year      = 1985
+%Journal   = Biometrika
+%Volume    = 72
+%Pages     = 267-280
+%Keywords  = Cumulative sum
+%Keywords  = Sequential analysis
+%Keywords  = Change point
+
+
+%Author    = Edler, Lutz
+%Author    = Groeger, Petra
+%Author    = Thielmann, Heinz Walter
+%Title     = Computational statistics for cell survival curves. I. Evaluation of the colony-forming ability of a single cell strain by the APL function CFALINE
+%Year      = 1985
+%Journal   = Computer Methods and Programs in Biomedicine
+%Volume    = 21
+%Pages     = 35-46
+%Keywords  = Change point
+
+
+%Author    = Edler, Lutz
+%Author    = Groeger, Petra
+%Author    = Thielmann, Heinz Walter
+%Title     = Computational statistics for cell survival curves. II. Evaluation of colony-forming ability of a group of cell strains by the APL function CFAGROUP
+%Year      = 1985
+%Journal   = Computer Methods and Programs in Biomedicine
+%Volume    = 21
+%Pages     = 47-54
+%Keywords  = Bootstrap
+%Keywords  = Change point
+
+
+%Author    = Moen, David H.
+%Author    = Salazar, Diego
+%Author    = Broemeling, Lyle D.
+%Title     = Structural changes in multivariate regression models
+%Year      = 1985
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 14
+%Pages     = 1757-1768
+%Keywords  = Change point
+%Keywords  = Precision matrix
+
+
+%Author    = Schechtman, Edna
+%Author    = Wolfe, Douglas A.
+%Title     = Multiple change points problem: Nonparametric procedures for estimation of the points of change
+%Year      = 1985
+%Journal   = Communications in Statistics: Simulation and Computation
+%Volume    = 14
+%Pages     = 615-631
+%Keywords  = Nonparametric estimation
+
+
+%Author    = Edler, Lutz
+%Author    = Berger, Jutta
+%Title     = Computational methods to determine a break point in linear regression
+%Year      = 1985
+%Journal   = EDV in Medizin und Biologie
+%Volume    = 16
+%Pages     = 128-134
+%Keywords  = Dose-response curve
+%Keywords  = Change point
+%Keywords  = Cumulative sum
+
+
+%Author    = Yao, Yi-Ching
+%Title     = Estimation of a noisy discrete-time step function: Bayes and empirical Bayes approaches
+%Year      = 1984
+%Journal   = The Annals of Statistics
+%Volume    = 12
+%Pages     = 1434-1447
+%Keywords  = Change point
+%Keywords  = Filtering
+%Keywords  = Smoothing
+
+
+%Author    = Schulze, U.
+%Title     = A method of estimation of change points in multiphasic growth models
+%Year      = 1984
+%Journal   = Biometrical Journal
+%Volume    = 26
+%Pages     = 495-504
+%Keywords  = Segmented regression
+%Keywords  = Nonlinear regression
+
+
+%Author    = Kligiene, N.
+%Title     = Explicit expressions of the change point estimates and their statistical properties (Russian) (STMA V26 827)
+%Year      = 1984
+%Journal   = Statisticheskie Problemy Upravleniya / Statistin.es Valdymo Problemos / Statistical Problems of Control
+%Volume    = 65
+%Pages     = 90-101
+
+
+%Author    = Telksnys, L.
+%Title     = Reliability and resolution power of the detection of change points in the properties of random sequences (Russian) (STMA V26 849)
+%Year      = 1984
+%Journal   = Statisticheskie Problemy Upravleniya / Statistin.es Valdymo Problemos / Statistical Problems of Control
+%Volume    = 65
+%Pages     = 179-187
+
+
+%Author    = Jurgutis, M.
+%Title     = Comparison of the statistical properties of estimations of a change point in the parameters of an autoregressive sequence (Russian) (STMA V26 821)
+%Year      = 1984
+%Journal   = Statisticheskie Problemy Upravleniya / Statistin.es Valdymo Problemos / Statistical Problems of Control
+%Volume    = 65
+%Pages     = 234-243
+
+
+%Author    = Germogenov, A. P.
+%Author    = Ronzhin, A. F.
+%Title     = A sequential chi-square test
+%Year      = 1984
+%Journal   = Theory of Probability and its Applications
+%Volume    = 29
+%Pages     = 397-403
+%Keywords  = Change point
+
+
+%Author    = Heath, A. B.
+%Author    = Anderson, J. A.
+%Title     = Estimation in a multivariable two-phase regression
+%Year      = 1983
+%Journal   = Communications in Statistics: Theory and Methods
+%Volume    = 12
+%Pages     = 809-828
+%Keywords  = Change point
+
+
+%Author    = Rowlands, R. J.
+%Author    = Griffiths, K.
+%Author    = Kemp, K. W.
+%Author    = Nix, A. B. J.
+%Author    = Richards, G.
+%Author    = Wilson, D. W.
+%Title     = Application of Cusum techniques to the routine monitoring of analytical performance in clinical laboratories
+%Year      = 1983
+%Journal   = Statistics in Medicine
+%Volume    = 2
+%Pages     = 141-145
+%Keywords  = Change point
+%Keywords  = Shewhart chart
+
+
+%Author    = Thompson, S. G.
+%Title     = A method of analysis of laboratory data in an epidemiological study where time trends are present
+%Year      = 1983
+%Journal   = Statistics in Medicine
+%Volume    = 2
+%Pages     = 147-153
+%Keywords  = Quality control
+%Keywords  = Change point
+
+
+%Author    = Carter, Randy L.
+%Author    = Blight, Barry J. N.
+%Title     = A Bayesian change point problem with an application to the prediction and detection of ovulation in women
+%Year      = 1983
+%Journal   = The Statistician: Journal of the Institute of Statisticians
+%Volume    = 32
+%Pages     = 229-230
+
+
+%Author    = Worsley, K. J.
+%Title     = Testing for a two-phase multiple regression
+%Year      = 1983
+%Journal   = Technometrics
+%Volume    = 25
+%Pages     = 35-42
+%Keywords  = Switching regression
+%Keywords  = Segmented regression
+%Keywords  = Change point
+
+
+%Author    = Kahn, Rasul A.
+%Title     = A note on Page's two-sided cumulative sum procedure
+%Year      = 1981
+%Journal   = Biometrika
+%Volume    = 68
+%Pages     = 717-719
+%Keywords  = Change point
+
+
+%Author    = Hawkins, Douglas M.
+%Title     = A cusum for a scale parameter
+%Year      = 1981
+%Journal   = Journal of Quality Technology
+%Volume    = 13
+%Pages     = 228-231
+%Keywords  = Change point
+
+
+%Author    = Shaban, S. A.
+%Title     = Change point problem and two-phase regression: An annotated bibliography
+%Year      = 1980
+%Journal   = International Statistical Review
+%Volume    = 48
+%Pages     = 83-93
+
+
+%Author    = Worsley, K. J.
+%Title     = On the likelihood ratio test for a shift in location of normal populations
+%Year      = 1979
+%Journal   = Journal of the American Statistical Association
+%Volume    = 74
+%Pages     = 365-367
+%Keywords  = Segmentation
+%Keywords  = Change point
+
+
+%Author    = Hawkins, Douglas M.
+%Title     = Testing a sequence of observations for a shift in location
+%Year      = 1977
+%Journal   = Journal of the American Statistical Association
+%Volume    = 72
+%Pages     = 180-186
+%Keywords  = Segmentation
+%Keywords  = Change point
+
+
+%Author    = Smith, A. F. M.
+%Title     = A Bayesian approach to inference about a change-point in a sequence of random variables
+%Year      = 1975
+%Journal   = Biometrika
+%Volume    = 62
+%Pages     = 407-416
+%Keywords  = Change point
+
+
+%Author    = Dagenais, Marcel G.
+%Title     = A threshold regression model
+%Year      = 1969
+%Journal   = Econometrica
+%Volume    = 37
+%Pages     = 193-203
+%Keywords  = Change point
+%Keywords  = Step function

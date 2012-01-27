@@ -1,0 +1,249 @@
+%Author    = Lamarche, Jean-François
+%Title     = A robust bootstrap test under heteroskedasticity
+%Year      = 2003
+%Journal   = Economics Letters
+%Volume    = 79
+%Number    = 3
+%Pages     = 353-359
+%Keywords  = Monte Carlo
+%Keywords  = Inference
+%Keywords  = breakpoint
+%Keywords  = Linear regression
+
+
+%Author    = Einbeck, Jochen
+%Author    = Kauermann, Göran
+%Title     = Online monitoring with local smoothing methods and adaptive ridging
+%Year      = 2003
+%Journal   = Journal of Statistical Computation and Simulation
+%Volume    = 73
+%Number    = 12
+%Pages     = 913-929
+%Keywords  = Breakpoint Detection
+%Keywords  = online monitoring
+%Keywords  = local linear smoothing
+%Keywords  = Ridging
+
+
+%Author    = Segal, Mark R.
+%Author    = Wiemels, Joseph L.
+%Title     = Clustering of translocation breakpoints
+%Year      = 2002
+%Journal   = Journal of the American Statistical Association
+%Volume    = 97
+%Number    = 457
+%Pages     = 66-76
+%Keywords  = BANDWIDTH TEST
+%Keywords  = GAP STATISTIC
+%Keywords  = GENE FUSION
+%Keywords  = Scan statistic
+%Keywords  = generalized association plot software package
+
+
+%Author    = Zivot, Eric
+%Author    = Andrews, Donald W. K.
+%Title     = Further evidence on the great crash, the oil-price shock, and the unit-root hypothesis
+%Year      = 2002
+%Journal   = Journal of Business &amp; Economic Statistics
+%Volume    = 20
+%Number    = 1
+%Pages     = 25-44
+%Keywords  = breakpoint
+%Keywords  = Gaussian process
+%Keywords  = macroeconomic time series
+%Keywords  = Structural change
+%Keywords  = Trend stationary
+%Keywords  = Weak convergence
+
+
+%Author    = Taylor, A. L.
+%Author    = Tait, S. P.
+%Author    = Porter, M. A.
+%Author    = Perry, M. J.
+%Author    = Nicolson, R. W.
+%Title     = Automatic breakpoint detection for retrospective cumulative sum charts
+%Year      = 2002
+%Journal   = Pharmaceutical Statistics
+%Volume    = 1
+%Number    = 1
+%Pages     = 25-34
+%Keywords  = automated search method
+%Keywords  = automatic breakpoint analysis
+%Keywords  = Cumulative sum charts
+%Keywords  = nearest-neighbours method
+%Keywords  = retrospective cumulative sum analysis
+%Keywords  = span method
+%Keywords  = CUSUM
+
+
+%Author    = Sobol', I. M.
+%Title     = Global sensitivity indices for nonlinear mathematical models and their Monte Carlo estimates
+%Year      = 2001
+%Journal   = Mathematics and Computers in Simulation
+%Volume    = 55
+%Number    = 1-3
+%Pages     = 271-280
+%Keywords  = Sensitivity analysis
+%Keywords  = Monte Carlo method
+%Keywords  = quasi-Monte Carlo method
+%Keywords  = mathematical modelling
+%Keywords  = Influential observations
+%Keywords  = breakpoint analysis
+
+
+%Author    = Pastor, J. T.
+%Author    = Ruiz, J. L.
+%Author    = Sirvent, I.
+%Title     = A statistical test for detecting influential operations in DEA
+%Year      = 1999
+%Journal   = European Journal of Operational Research
+%Volume    = 115
+%Pages     = 542-554
+%Keywords  = Non-parametric tests
+%Keywords  = Influential observations
+%Keywords  = breakpoint analysis
+
+
+%Author    = Soltani, A. R.
+%Author    = Shishebor, Z.
+%Title     = Weakly periodic sequences of bounded linear transformations: A spectral characterization
+%Year      = 1999
+%Journal   = Georgian Mathematical Journal
+%Volume    = 6
+%Pages     = 91-98
+%Keywords  = Influential observations
+%Keywords  = breakpoint analysis
+%Keywords  = Generalized linear model
+
+
+%Author    = Kress, M.
+%Author    = Talmor, I.
+%Title     = A new look at the 3:1 rule of combat through Markov Stochastic Lanchester models
+%Year      = 1999
+%Journal   = Journal of the Operational Research Society
+%Volume    = 50
+%Number    = 7
+%Pages     = 733-744
+%Keywords  = exchange ratio
+%Keywords  = breakpoint
+%Keywords  = force ratio
+
+
+%Author    = Kenyon, C. M.
+%Author    = Savage, S.
+%Author    = Ball, B.
+%Title     = Equivalence of linear deviation about the mean and mean absolute deviation about the mean objective functions
+%Year      = 1999
+%Journal   = Operations Research Letters
+%Volume    = 24
+%Pages     = 181-185
+%Keywords  = Influential observations
+%Keywords  = breakpoint analysis
+%Keywords  = Mathematical programming
+%Keywords  = Cluster analysis
+%Keywords  = Classification
+
+
+%Author    = van der Sluis, Pieter J.
+%Title     = Computationally attractive stability tests for the efficient method of moments
+%Year      = 1998
+%Journal   = The Econometrics Journal Online
+%Volume    = 1
+%Number    = C
+%Pages     = 203-227
+%Keywords  = parameter updates
+%Keywords  = stochastic volatility models
+%Keywords  = structural stability tests with known breakpoint
+%Keywords  = simulation methods in econometrics
+
+
+%Author    = Ghysels, Eric
+%Author    = Guay, Alain
+%Author    = Hall, Alastair
+%Title     = Predictive tests for structural change with unknown breakpoint (Corr: 1999V90 p337-343)
+%Year      = 1998
+%Journal   = Journal of Econometrics
+%Volume    = 82
+%Pages     = 209-233
+%Keywords  = Generalized method of moments
+
+
+%Author    = Ji, Qiang
+%Author    = Haralick, Robert M.
+%Title     = Breakpoint detection using covariance propagation
+%Year      = 1998
+%Journal   = IEEE Transactions on Pattern Analysis and Machine Intelligence
+%Volume    = 20
+%Number    = 8
+%Pages     = 845-851
+%Keywords  = corner detection
+%Keywords  = arc segmentation
+%Keywords  = Error propagation
+%Keywords  = change-point model
+%Keywords  = Signal detection
+
+
+%Author    = Küchenhoff, Helmut
+%Author    = Kuchenhoff, Helmut
+%Author    = Kuechenhoff, Helmut
+%Title     = An exact algorithm for estimating breakpoints in segmented generalized linear models
+%Year      = 1997
+%Journal   = Computational Statistics
+%Volume    = 12
+%Pages     = 235-247
+
+
+%Author    = Diebold, Francis X.
+%Author    = Chen, Celia
+%Title     = Testing structural stability with endogenous breakpoint: A size comparison of analytic and bootstrap procedures
+%Year      = 1996
+%Journal   = Journal of Econometrics
+%Volume    = 70
+%Pages     = 221-241
+%Keywords  = Structural change
+
+
+%Author    = Plaetke, Rosemarie
+%Author    = Schachtel, Gabriel A.
+%Title     = Two statistical tests for meiotic breakpoint analysis
+%Year      = 1995
+%Journal   = American Journal of Human Genetics
+%Volume    = 56
+%Pages     = 508-518
+%Keywords  = Genetics
+
+
+%Author    = Sansom, John
+%Title     = Rainfall discrimination and spatial variation using breakpoint data
+%Year      = 1995
+%Journal   = Journal of Climate
+%Volume    = 8
+%Pages     = 624-636
+%Keywords  = Cluster analysis
+%Keywords  = Discriminant analysis
+
+
+%Author    = Blum, Rick S.
+%Author    = Kassam, Saleem A.
+%Title     = Asymptotically optimum quantization with time invariant breakpoints for signal detection
+%Year      = 1991
+%Journal   = IEEE Transactions on Information Theory
+%Volume    = 37
+%Pages     = 402-407
+
+
+%Author    = Portnoy, Stephen
+%Title     = Asymptotic behavior of the number of regression quantile breakpoints
+%Year      = 1991
+%Journal   = SIAM Journal on Scientific and Statistical Computing
+%Volume    = 12
+%Pages     = 867-883
+
+
+%Author    = Eubank, R. L.
+%Title     = Optimal grouping, spacing, stratification, and piecewise constant approximation
+%Year      = 1988
+%Journal   = SIAM Review
+%Volume    = 30
+%Pages     = 404-420
+%Keywords  = Breakpoint selection
