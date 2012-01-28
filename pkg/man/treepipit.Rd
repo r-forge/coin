@@ -46,7 +46,7 @@
 }
 \references{
 
-  J\"org M\"uller \& Torsten Hothorn (2004). Maximally selected two-sample 
+  Joerg Mueller & Torsten Hothorn (2004). Maximally selected two-sample 
   statistics as a new tool for the identification and assessment of habitat 
   factors with an application to breeding bird communities in oak forests. 
   \emph{European Journal of Forest Research} \bold{123}, 219--228.

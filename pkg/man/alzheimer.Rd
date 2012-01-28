@@ -18,16 +18,16 @@
 }
 \details{
     198 cases of Alzheimer's disease are compared to a control group with
-    respect to smoking history. The data are published in Table 4 (Salib \&
+    respect to smoking history. The data are published in Table 4 (Salib &
     Hillier, 1997).
 }
 \source{
 
-    Emad Salib \& Valerie Hillier (1997). A case-control study of smoking
+    Emad Salib & Valerie Hillier (1997). A case-control study of smoking
     and Alzheimer's disease, \emph{International Journal of Geriatric
     Psychiatry} \bold{12}, 295--300.
 
-    Torsten Hothorn, Kurt Hornik, Mark A. van de Wiel \& Achim Zeileis (2006).
+    Torsten Hothorn, Kurt Hornik, Mark A. van de Wiel & Achim Zeileis (2006).
     A Lego system for conditional inference, \emph{The American Statistician},
     \bold{60}(3), 257--263.
 

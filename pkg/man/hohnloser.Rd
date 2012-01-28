@@ -27,12 +27,12 @@ the data used here is published in Table 1 of Lausen and Schumacher (1992).
 }
 \references{
 
-    S. H. Hohnloser, E. A. Raeder, P. J. Podrid, T. B. Graboys \& B. and Lown,
+    S. H. Hohnloser, E. A. Raeder, P. J. Podrid, T. B. Graboys & B. Lown,
     (1987). Predictors of antiarrhythmic drug efficacy in patients with
     malignant ventricular tachyarrhythmias. \emph{American Heart Journal}
     \bold{114}, 1--7.
 
-    Berthold Lausen \& Martin Schumacher (1992). Maximally selected rank statistics.
+    Berthold Lausen & Martin Schumacher (1992). Maximally selected rank statistics.
     \emph{Biometrics} \bold{48}, 73--85.
 
 }

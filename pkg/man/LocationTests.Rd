@@ -87,7 +87,7 @@
   procedures. Exact p-values may be computed for the two-sample problems and
   can be approximated via Monte-Carlo resampling 
   for all procedures. Exact p-values
-  are computed either by the shift algorithm (Streitberg & R\"ohmel, 1986,
+  are computed either by the shift algorithm (Streitberg & Roehmel, 1986,
   1987) or by the split-up algorithm (van de Wiel, 2001).
 
   The linear rank tests for two samples (\code{wilcox_test},
@@ -119,16 +119,16 @@
 }
 \references{
 
-        Myles Hollander \& Douglas A. Wolfe (1999).
+        Myles Hollander & Douglas A. Wolfe (1999).
         \emph{Nonparametric Statistical Methods, 2nd Edition}. 
         New York: John Wiley & Sons.
 
-        Bernd Streitberg \& Joachim R\"ohmel (1986).
+        Bernd Streitberg & Joachim Roehmel (1986).
         Exact distributions for permutations and rank tests: 
         An introduction to some recently published algorithms.
         \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
 
-        Bernd Streitberg \& Joachim R\"ohmel (1987).
+        Bernd Streitberg & Joachim Roehmel (1987).
         Exakte Verteilungen f\"ur Rang- und Randomisierungstests
         im allgemeinen $c$-Stichprobenfall.
         \emph{EDV in Medizin und Biologie} \bold{18}(1), 12--19.
@@ -141,7 +141,7 @@
         rank statistics. \emph{Journal of the American Statistical Association}
         \bold{67}, 687--690.
 
-        Jaroslav Hajek, Zbynek Sidak \& Pranab K. Sen (1999), 
+        Jaroslav Hajek, Zbynek Sidak & Pranab K. Sen (1999), 
         \emph{Theory of Rank Tests}. San Diego, London: Academic Press.
 
 }

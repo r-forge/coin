@@ -62,7 +62,7 @@
   discard the ranks corresponding to zero differences, but keep the
   other ranks as they are. Alternatively, zero differences are discarded 
   first and then rank the remaining absolute differences (the 
-  original proposal by Wilcoxon, as explained in Hollander \& Wolfe, 1999). 
+  original proposal by Wilcoxon, as explained in Hollander & Wolfe, 1999). 
 
   The default \code{zero.method = "Pratt"} was introduced in
   \code{coin} 1.0-16. Earlier versions had \code{ties.method = "HollanderWolfe"}
@@ -76,7 +76,7 @@
 }
 \references{
 
-    Myles Hollander \& Douglas A. Wolfe (1999). 
+    Myles Hollander & Douglas A. Wolfe (1999). 
     \emph{Nonparametric Statistical Methods, 2nd Edition}.
     New York: John Wiley & Sons.
 
@@ -84,12 +84,12 @@
     signed rank procedures. \emph{Journal of the American Statistical Association},
     \bold{54}(287), 655--667.
 
-    Bernd Streitberg \& Joachim R\"ohmel (1986).
+    Bernd Streitberg & Joachim Roehmel (1986).
     Exact distributions for permutations and rank tests: 
     An introduction to some recently published algorithms.
     \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
  
-    Bernd Streitberg \& Joachim R\"ohmel (1987).
+    Bernd Streitberg & Joachim Roehmel (1987).
     Exakte Verteilungen f\"ur Rang- und Randomisierungstests
     im allgemeinen $c$-Stichprobenfall.
     \emph{EDV in Medizin und Biologie} \bold{18}(1), 12--19.

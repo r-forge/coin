@@ -39,14 +39,14 @@
   The test implemented here is based on the classical logrank test,
   reformulated as a linear rank test. There are several ways of dealing with
   ties. Here, three methods are implemented. The first one (\code{ties.method = "logrank"})
-  is described, for example, in Kalbfleisch \& Prentice (2002, page 221f) or 
+  is described, for example, in Kalbfleisch & Prentice (2002, page 221f) or 
   in Callaert (2003) and lead to coefficients 
   \deqn{a_i = \delta_i - \sum_{j: X_j \le X_i} \delta_j / (n - |\{k: X_k < X_j\}|)}
   for a linear rank statistic \eqn{T = \sum_{i = 1}^ n a_i U_i} 
   (in two-sample situations where \eqn{U_i = 0} or \eqn{U_i = 1} denotes
   the groups) with survival times $X_i$ and censoring indicator \eqn{\delta_i = 0}
-  for censored observations. For further details, see Kalbfleisch \& Prentice (2002).
-  The second method is described in Hothorn \& Lausen (2003) where
+  for censored observations. For further details, see Kalbfleisch & Prentice (2002).
+  The second method is described in Hothorn & Lausen (2003) where
   the coefficients
   \deqn{a_i = \delta_i - \sum_{j: X_j \le X_i} \delta_j / (n - |\{k: X_k \le X_j\}| + 1)}
   are suggested. Finally, average scores (as for example used in StatXact) 
@@ -69,9 +69,9 @@
 }
 \references{
 
-    John D. Kalbfleisch \& Ross L. Prentice (2002),
+    John D. Kalbfleisch & Ross L. Prentice (2002),
     \emph{The Statistical Analysis of Failure Time Data} (2nd edition).
-    John Wiley \& Sons, Hoboken, New Jersey.
+    John Wiley & Sons, Hoboken, New Jersey.
 
     Herman Callaert (2003), Comparing Statistical Software Packages:
     The Case of the Logrank Test in StatXact. 
@@ -79,7 +79,7 @@
 
     Torsten Hothorn & Berthold Lausen (2003),
     On the Exact Distribution of Maximally Selected Rank
-    Statistics. \emph{Computational Statistics \& Data Analysis}
+    Statistics. \emph{Computational Statistics & Data Analysis}
     \bold{43}, 121--137.
 }    
 \examples{

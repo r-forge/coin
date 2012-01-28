@@ -28,12 +28,12 @@ Hauschke et al. (1999).
 }
 \references{
 
-  Dieter Hauschke, Meinhard Kieser \& Ludwig A. Hothorn (1999).
+  Dieter Hauschke, Meinhard Kieser & Ludwig A. Hothorn (1999).
   Proof of safety in
   toxicology based on the ratio of two means for normally distributed data,
   \emph{Biometrical Journal} \bold{41}(3), 295--304.
 
-  Rafael Pfl\"uger \& Torsten Hothorn (2002).
+  Rafael Pflueger & Torsten Hothorn (2002).
   Assessing equivalence tests with respect to their expected
   $p$-Value, \emph{Biometrical Journal} \bold{44}(8), 1002--1027.
 
