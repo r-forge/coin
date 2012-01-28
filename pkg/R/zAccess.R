@@ -20,18 +20,18 @@ setMethod(f = "pvalue",
 setMethod(f = "pvalue",
           signature = "MaxTypeIndependenceTest",
           definition = function(object, 
-              method = c("global", "single-step", "step-down", "bonferroni",
-                         "sidak", "unadjusted", "npmcp"), ...) {
+              method = c("global", "single-step", "step-down", "Bonferroni",
+                         "Sidak", "Bonferroni-Holm", "Sidak-Holm",
+                         "unadjusted", "npmcp"), ...) {
 
               # backward compatibility
               if (length(method) == 1 && method == "discrete")
-                  method <- "sidak"
+                  method <- "Sidak"
 
               method <- match.arg(method)
               x <- object@statistic
               C <- attr(object@statistic@xtrans, "contrast")
-              if (!is.null(C) && method %in% 
-                  c("single-step", "step-down", "discrete"))
+              if (!is.null(C) && !(method %in% c("global", "npmcp")))
                   warning(paste("multiple comparisons might be incorrect",
                                 "due to subset pivotality; use", 
                                 sQuote("method = \"npmcp\"")))
@@ -40,8 +40,10 @@ setMethod(f = "pvalue",
                                      object@statistic@teststatistic),
                    "single-step" = singlestep(object, ...),
                    "step-down" = stepdown(object, ...),                            
-                   "bonferroni" = discrete(object, method = "bonferroni", ...),
-                   "sidak" = discrete(object, method = "sidak", ...),
+                   "Bonferroni" = discrete(object, method = "Bonferroni", ...),
+                   "Sidak" = discrete(object, method = "Sidak", ...),
+                   "Bonferroni-Holm" = discrete(object, method = "Bonferroni-Holm", ...),
+                   "Sidak-Holm" = discrete(object, method = "Sidak-Holm", ...),
                    "unadjusted" = unadjusted(object, ...),
                    "npmcp" = npmcp(object, ...)
               )

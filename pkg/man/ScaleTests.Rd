@@ -164,12 +164,15 @@
                  dimnames = list(1:length(x), c("Location", "Scale")))),
       teststat = "max")
 
-  ### points to a difference in location
+  ### single-step adjustment points to a difference in location
   pvalue(ltmax, method = "single-step")
 
-  ### Funny: We could have used a simple Bonferroni procedure
-  ### since the correlation between the Wilcoxon and Ansari-Bradley 
-  ### test statistics is zero
+  ### step-down is slightly more powerful
+  pvalue(ltmax, method = "step-down")
+
+  ### Funny: We could have used simple Bonferroni or Bonferroni-Holm
+  ### procedures, respectively, since the correlation between the
+  ### Wilcoxon and Ansari-Bradley test statistics is zero
   covariance(ltmax)
 
 }

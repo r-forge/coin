@@ -3,19 +3,30 @@
 ### single step maxT multiple testing procedure
 singlestep <- function(object, ...) {
 
-    if (object@statistic@alternative == "two.sided") {
-        ts <- abs(statistic(object, "standardized"))
-    } else {
-        ts <- statistic(object, "standardized")
-    }
-    ### iterate over unique(ts) only and remap
-    n <- length(ts)
-    idx <- c(which(ts[-1L] != ts[-n]), n)
-    uts <- ts[idx]
+    ### reorder test statistics to ensure consistency with "global"/"step-down"
+    switch(object@statistic@alternative,
+           "two.sided" = {
+               ts <- abs(statistic(object, "standardized"))
+               ots <- rank(-ts) # original order
+               rts <- order(ts, decreasing = TRUE)}, # abs. largest ts first
+           "greater" = {
+               ts <- statistic(object, "standardized")
+               ots <- rank(-ts) # original order
+               rts <- order(ts, decreasing = TRUE)}, # largest ts first
+           "less" = {
+               ts <- statistic(object, "standardized")
+               ots <- rank(ts) # original order
+               rts <- order(ts) # smallest ts first
+           })
+
+    ### iterate over unique test statistics only and remap
+    pq <- length(ts)
+    tsrts <- ts[rts]
+    idx <- c(which(tsrts[-1L] != tsrts[-pq]), pq)
+    uts <- tsrts[idx] # unique ts
     ret <- 1 - sapply(uts, pperm, object = object, ...)
-    ### HW: Why not 1 - pperm(object, uts) ?
-    ret <- matrix(rep.int(ret, diff(c(0L, idx))),
-                  nrow = nrow(ts), ncol = ncol(ts))
+
+    ret <- matrix(ret[ots], nrow = nrow(ts), ncol = ncol(ts))
     rownames(ret) <- rownames(ts)
     colnames(ret) <- colnames(ts)
     ret
@@ -25,142 +36,188 @@ singlestep <- function(object, ...) {
 ### Westfall & Young (1993), page 66 _using standardized 
 ### statistics instead of p-values_!
 ### <FIXME>
-sdmaxT <- function(pls, ts) {
+rsdmaxT <- function(pls, ts) {
 
-    ### order of original statistics
-    rts <- order(ts)
+    ### reorder simulations using (increasing) test statistics
+    ots <- rank(ts) # original order
+    rts <- order(ts) # smallest ts first
+    q <- pls[, rts, drop = FALSE]
 
     ### algorithm 2.8 (Free Step-Down Resampling Method) in 
     ### Westfall & Young (1993), page 66 _using standardized
     ### statistics instead of p-values_!
-    q <- pls[,rts, drop = FALSE]
-
     if (ncol(q) > 1) {
         for (j in 2:ncol(q))
             q[,j] <- pmax(q[,j], q[,j-1])
     }
     ret <- rowMeans(GE(t(q), ts[rts]))
-    ## enforce monotonicity
     for (i in (length(ret) - 1):1)
-        ret[i] <- max(ret[i], ret[i + 1])
+        ret[i] <- max(ret[i], ret[i + 1]) # enforce monotonicity, page 67
 
-    ret <- matrix(ret[rank(ts)], nrow = nrow(ts), ncol = ncol(ts))
+    ret <- matrix(ret[ots], nrow = nrow(ts), ncol = ncol(ts))
+    rownames(ret) <- rownames(ts)
+    colnames(ret) <- colnames(ts)
+    ret
+}
+
+### step-down using the asymptotic distribution
+asdmaxT <- function(object) {
+
+    ### reorder upper and/or lower limits using test statistics
+    switch(object@statistic@alternative,
+           "two.sided" = {
+               ts <- abs(statistic(object, "standardized"))
+               pq <- length(ts)
+               ots <- rank(-ts) # original order
+               rts <- order(ts, decreasing = TRUE) # abs. largest ts first
+               upper <- ts[rts]
+               lower <- -upper},
+           "greater" = {
+               ts <- statistic(object, "standardized")
+               pq <- length(ts)
+               ots <- rank(-ts) # original order
+               rts <- order(ts, decreasing = TRUE) # largest ts first
+               upper <- ts[rts]
+               lower <- rep(-Inf, pq)},
+           "less" = {
+               ts <- statistic(object, "standardized")
+               pq <- length(ts)
+               ots <- rank(ts) # original order
+               rts <- order(ts) # smallest ts first
+               upper <- rep(Inf, pq)
+               lower <- ts[rts]})
+
+    ### correlation matrix
+    corr <- cov2cor(covariance(object))
+
+    ### step-down based on multivariate normality
+    ret <- numeric(pq)
+    ret[1] <- pmv(lower = lower[1], upper = upper[1],
+                  mean = rep(0, pq), corr = corr)
+    if (pq > 1) {
+        for (i in 2:pq) {
+            j <- rank(rts)[1] # reindexing needed in each step
+            corr <- corr[-j, -j]
+            rts <- rts[-1]
+            ret[i] <- min(ret[i - 1],
+                          pmv(lower = lower[i], upper = upper[i],
+                              mean = rep(0, length(rts)), corr = corr))
+        }
+    }
+
+    ret <- matrix(1 - ret[ots], nrow = nrow(ts), ncol = ncol(ts))
     rownames(ret) <- rownames(ts)
     colnames(ret) <- colnames(ts)
     ret
 }
     
-
 ### stepdown maxT multiple testing procedure
 stepdown <- function(object, ...) {
+
+    if (!(extends(class(object), "MaxTypeIndependenceTest")))
+        stop(sQuote("object"), " is not of class ",
+             sQuote("MaxTypeIndependenceTest"))
+
+    if (extends(class(object@distribution), "AsymptNullDistribution"))
+        ret <- asdmaxT(object)
+    else {
+        ## raw simulation results, scores have been handled already
+        pls <- support(object, raw = TRUE)
+
+        ## standardize
+        dcov <- sqrt(variance(object))
+        expect <- expectation(object)
+        switch(object@statistic@alternative,
+               "two.sided" = {
+                   pls <- abs(t((pls - expect) / dcov))
+                   ts <- abs(statistic(object, "standardized"))},
+               "greater" = {
+                   pls <- t((pls - expect) / dcov)
+                   ts <- statistic(object, "standardized")},
+               "less" = {
+                   pls <- -t((pls - expect) / dcov)
+                   ts <- -(statistic(object, "standardized"))})
+        
+        ret <- rsdmaxT(pls, ts)
+    }
+
+    ret
+}
+
+### Discrete permutation method (Westfall & Wolfinger, 1997, AmStat 51, 3-8)
+discrete <- function(object, method = c("Bonferroni", "Sidak",
+                                        "Bonferroni-Holm", "Sidak-Holm"), ...) {
+
+    ### <FIXME> this should be possible when the _exact_ marginal
+    ### distributions are available
+    ### </FIXME>
 
     if (!(extends(class(object), "MaxTypeIndependenceTest") &&
           extends(class(object@distribution), "ApproxNullDistribution")))
         stop(sQuote("object"), " is not of class ",
-             sQuote("MaxTypeIndependenceTest"), 
-             " or distribution was not approximated via Monte-Carlo") 
- 
+             sQuote("MaxTypeIndependenceTest"),
+             " or distribution was not approximated via Monte-Carlo")
+
+    method <- match.arg(method)
+
+    bonferroni <- pmatch(method, "Bonferroni-Holm", nomatch = 0)
+    stepdown <- method %in% c("Bonferroni-Holm", "Sidak-Holm")
+
     ### raw simulation results, scores have been handled already
     pls <- support(object, raw = TRUE)
 
     ### standardize
     dcov <- sqrt(variance(object))
-    expect <- expectation(object) 
-    pls <- t((pls - expect) / dcov)
-    ts <- statistic(object, "standardized")
+    expect <- expectation(object)
+    switch(object@statistic@alternative,
+           "two.sided" = {
+               pls <- abs(t((pls - expect) / dcov))
+               ts <- abs(statistic(object, "standardized"))},
+           "greater" = {
+               pls <- t((pls - expect) / dcov)
+               ts <- statistic(object, "standardized")},
+           "less" = {
+               pls <- -t((pls - expect) / dcov)
+               ts <- -(statistic(object, "standardized"))})
 
-    if (object@statistic@alternative == "two.sided") {
-        pls <- abs(pls)
-        ts <- abs(ts)
-    } 
-    if (object@statistic@alternative == "less") {
-        pls <- -pls
-        ts <- -ts
+    ### reorder simulations using the (decreasing) test statistics
+    ots <- rank(-ts) # original order
+    rts <- order(ts, decreasing = TRUE) # largest ts first
+    pls <- pls[, rts, drop = FALSE]
+
+    ### unadjusted p-values
+    pvals <- rowMeans(GE(t(pls), ts[rts]))
+
+    ### permutation distribution
+    foo <- function(x, t) mean(GE(x, t))
+    p <- vector(mode = "list", length = ncol(pls))
+    for (i in 1:ncol(pls)) {
+        ux <- unique(pls[, i])
+        p[[i]] <- sapply(ux, foo, x = pls[, i])
     }
 
-    sdmaxT(pls, ts)
-}
-
-### Discrete permutation method (Westfall & Wolfinger, 1997, AmStat 51, 3-8)
-discrete <- function(object, method = c("bonferroni", "sidak"), ...) {
-
-   ### <FIXME> this should be possible when the _exact_ marginal
-   ### distributions are available
-   ### </FIXME>
-
-   if (!(extends(class(object), "MaxTypeIndependenceTest") &&
-         extends(class(object@distribution), "ApproxNullDistribution")))
-       stop(sQuote("object"), " is not of class ",
-            sQuote("MaxTypeIndependenceTest"),
-            " or distribution was not approximated via Monte-Carlo")
-
-   method <- match.arg(method)
-
-   alternative <- object@statistic@alternative
-
-   ### raw simulation results, scores have been handled already
-   pls <- support(object, raw = TRUE)
-
-   ### standardize
-   dcov <- sqrt(variance(object))
-   expect <- expectation(object)
-   pls <- t((pls - expect) / dcov)
-   ts <- statistic(object, "standardized")
-
-   if (object@statistic@alternative == "two.sided") {
-       pls <- abs(pls)
-       ts <- abs(ts)
-   } 
-   if (object@statistic@alternative == "less") {
-       pls <- -pls
-       ts <- -ts
+    ### discrete adjustment
+    ret <- rep(1 - bonferroni, length(ts)) # zeros (ones) for Bonferroni (Sidak)
+    for (i in 1:length(pvals)) {
+        qq <- if (stepdown) i else 1 # 'i' => successively smaller subsets
+        for (q in qq:length(p)) {
+            x <- p[[q]][p[[q]] <= pvals[i]] # below eq. 2
+            if (length(x) > 0) {
+                ret[i] <- if(bonferroni) ret[i] + max(x) # eq. 4
+                           else ret[i] * (1 - max(x)) # eq. 2
+            }
+        }
     }
+    if (!bonferroni)
+        ret <- 1 - ret
+    ret <- pmin(ret, 1)
+    for (i in 2:length(ret))
+        ret[i] <- max(ret[i - 1], ret[i]) # enforce monotonicity
 
-   ### reorder
-   rts <- order(ts)
-   pls <- pls[, rts, drop = FALSE]
-
-   ### unadjusted p-values
-   pvals <- rowMeans(GE(t(pls), ts[rts]))
-
-   foo <- function(x, t) mean(GE(x, t))
-
-   p <- vector(mode = "list", length = ncol(pls))
-   for (i in 1:ncol(pls)) {
-       ux <- unique(pls[, i])
-       p[[i]] <- sapply(ux, foo, x = pls[, i])
-   } 
-   
-   ### discrete adjustment
-   if (method == "bonferroni") {
-       adjp <- rep.int(0, length(ts))
-       for (i in 1:length(pvals)) {
-           for (q in 1:length(p)) {
-               x <- p[[q]][p[[q]] <= pvals[i]] # Below Eq. 2
-               if (length(x) > 0)
-                   adjp[i] <- adjp[i] + max(x) # Eq. 4, Bonferroni
-           }
-       }
-       adjp <- pmin(adjp, 1)
-   } else {
-       adjp <- rep.int(1, length(ts))
-       for (i in 1:length(pvals)) {
-           for (q in 1:length(p)) {
-               x <- p[[q]][p[[q]] <= pvals[i]] # Below Eq. 2
-               if (length(x) > 0)
-                   adjp[i] <- adjp[i] * (1 - max(x)) # Eq. 2, Sidak
-           }
-       }
-       adjp <- 1 - pmin(adjp, 1)                     
-   }   
-   ### enforce monotonicity
-   for (i in (length(adjp) - 1):1)
-       adjp[i] <- max(adjp[i], adjp[i + 1])
-   
-   ret <- matrix(adjp[rank(ts)], nrow = nrow(ts), ncol = ncol(ts))
-   rownames(ret) <- rownames(ts)
-   colnames(ret) <- colnames(ts)
-   ret
+    ret <- matrix(ret[ots], nrow = nrow(ts), ncol = ncol(ts))
+    rownames(ret) <- rownames(ts)
+    colnames(ret) <- colnames(ts)
+    ret
 }
 
 #####################################
@@ -250,39 +307,38 @@ npmcp <- function(object) {
 }
 
 ### unadjusted p-values
-unadjusted <- function(object, ...) {    
-    
-    if (extends(class(object@distribution), "AsymptNullDistribution")) {                
-        ts <- statistic(object, "standardized")    
+unadjusted <- function(object, ...) {
+
+    if (extends(class(object@distribution), "AsymptNullDistribution")) {
+        ts <- statistic(object, "standardized")
         ret <- switch(object@statistic@alternative,
-                      "less"      = pnorm(ts),
+                      "two.sided" = 2 * pmin(pnorm(ts), 1 - pnorm(ts)),
                       "greater"   = 1 - pnorm(ts),
-                      "two.sided" = 2 * pmin(pnorm(ts), 1 - pnorm(ts)))
+                      "less"      = pnorm(ts))                     
     } else {
         ### raw simulation results, scores have been handled already
         pls <- support(object, raw = TRUE)
 
         ## standardize
         dcov <- sqrt(variance(object))
-        expect <- expectation(object) 
-        pls <- t((pls - expect) / dcov)
-        ts <- statistic(object, "standardized")
+        expect <- expectation(object)
+        switch(object@statistic@alternative,
+               "two.sided" = {
+                   pls <- abs(t((pls - expect) / dcov))
+                   ts <- abs(statistic(object, "standardized"))},
+               "greater" = {
+                   pls <- t((pls - expect) / dcov)
+                   ts <- statistic(object, "standardized")},
+               "less" = {                   
+                   pls <- -t((pls - expect) / dcov)
+                   ts <- -(statistic(object, "standardized"))})
 
-        if (object@statistic@alternative == "two.sided") {
-            pls <- abs(pls)
-            ts <- abs(ts)
-        } 
-        if (object@statistic@alternative == "less") {
-            pls <- -pls
-            ts <- -ts
-        }
-    
         ## unadjusted p-values
         ret <- matrix(rowMeans(GE(t(pls), as.vector(ts))),
                       nrow = nrow(ts), ncol = ncol(ts))
         rownames(ret) <- rownames(ts)
         colnames(ret) <- colnames(ts)
     }
-    
+
     ret
 }

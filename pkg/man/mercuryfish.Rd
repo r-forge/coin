@@ -90,8 +90,11 @@
   ### global p-value
   pvalue(mvtest)
 
-  ### adjusted univariate p-value
+  ### single-step adjusted univariate p-value
   pvalue(mvtest, method = "single-step")
+
+  ### step-down adjusted univariate p-value
+  pvalue(mvtest, method = "step-down")
 
 }
 \keyword{datasets}

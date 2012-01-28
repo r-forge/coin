@@ -20,11 +20,11 @@ pvalue(object, ...)
 \arguments{
   \item{object}{an object inheriting from class
     \code{\link{IndependenceTest-class}}.}
-  \item{\dots}{additional arguments: \code{method}, 
-      a character specifying the type of 
-      adjustment (\code{global}, \code{single-step}, \code{step-down},
-      \code{bonferroni}, \code{sidak}, \code{unadjusted}, or \code{npmcp})
-      should be used. The default is \code{global}.}
+  \item{\dots}{additional arguments: \code{method},
+      a character specifying the type of adjustment, if any (\code{global},
+      \code{single-step}, \code{step-down}, \code{Bonferroni}, \code{Sidak},
+      \code{Bonferroni-Holm}, \code{Sidak-Holm}, \code{unadjusted}, or
+      \code{npmcp} should be used). The default is \code{global}.}
 }
 \section{Methods}{
   \describe{
@@ -36,7 +36,7 @@ pvalue(object, ...)
   Univariate p-values for maximum-type statistics come with associated 99\%
   confidence interval when resampling was used to determine the null
   distribution (which may be the case even when \code{distribution =
-  "asypmtotic"} was used). 
+  "asymptotic"} was used). 
 
   By default, a global p-value is returned. When \code{method =
   "single-step"}, adjusted p-values are obtained from a 
@@ -51,14 +51,15 @@ pvalue(object, ...)
   (algorithm 2.8 and formula 2.8 in Westfall & Young, 1993) is used, the above
   comments apply as well.
 
-  With \code{method = "bonferroni"} or \code{method = "sidak"} the
-  adjustments suggested by Westfall & Wolfinger (1997) with improvements
-  for highly discrete permutation distributions are available, however,
-  without taking correlations between the test statistics into
-  account. Here, the p-values are valid even without assuming subset
-  pivotality. 
+  With \code{method = "Bonferroni"}, \code{method = "Sidak"},
+  \code{method = "Bonferroni-Holm"} or \code{method = "Sidak-Holm"} the 
+  adjustments suggested by Westfall & Wolfinger (1997) with improvements 
+  for highly discrete permutation distributions are available. Note that
+  these methods doesn't take correlations between the test statistics
+  into account.
 
-  If \code{method = "unadjusted"} the unadjusted p-values are returned.
+  Assuming subset pivotality, \code{method = "unadjusted"} returns the
+  unadjusted p-values.
 
   For multiple comparisons of levels of one factor (defined via \code{\link{mcp_trafo}}
   p-values can be computed via \code{method = "npmcp"} that are less affected by
@@ -73,8 +74,12 @@ pvalue(object, ...)
     New York: John Wiley & Sons.
 
     Peter H. Westfall \& Russell D. Wolfinger (1997).
-    Multiple tests with discrete distributions. 
+    Multiple Tests with Discrete Distributions. 
     \emph{The American Statistician} \bold{51}, 3--8.
+
+    Peter H. Westfall (1997).
+    Multiple Testing of General Contrasts Using Logical Constraints and Correlations.
+    \emph{Journal of the American Statistical Association} \bold{92}, 299--306.
 
 }
 \examples{
@@ -97,8 +102,10 @@ pvalue(object, ...)
                           distribution = approximate(B = 9999))
   pvalue(it, method = "single-step")
   pvalue(it, method = "step-down")
-  pvalue(it, method = "bonferroni")
-  pvalue(it, method = "sidak")
+  pvalue(it, method = "Bonferroni")
+  pvalue(it, method = "Sidak")
+  pvalue(it, method = "Bonferroni-Holm")
+  pvalue(it, method = "Sidak-Holm")
   pvalue(it, method = "unadjusted")
 
   ### Length of YOY Gizzard Shad from Kokosing Lake, Ohio,

@@ -7,9 +7,14 @@
           algorithm. See ?mcptrafo and ?pvalue
 
     o     new methods 
-              pvalue(it, method = "bonferroni")
-              pvalue(it, method = "sidak")
+              pvalue(it, method = "Bonferroni")
+              pvalue(it, method = "Sidak")
+              pvalue(it, method = "Bonferroni-Holm")
+              pvalue(it, method = "Sidak-Holm")
               pvalue(it, method = "unadjusted")
+          and 
+              pvalue(it, method = "step-down") now works in the
+              asymptotic case
           thanks to Henric Winell
 
 
