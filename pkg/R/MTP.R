@@ -238,7 +238,7 @@ mcp_trafo <- function(...) {
       stopifnot(is.factor(x))
       C <- args[[1]]
       if (is.character(C)) {
-          C <- contrMat(table(x), "Tukey")
+          C <- contrMat(table(x), C)
       } else {
           stopifnot(is.matrix(C))
           stopifnot(ncol(C) == nlevels(x))
@@ -261,7 +261,14 @@ npmcp <- function(object) {
     x <- object@statistic@x[[1]]
     ytrafo <- object@statistic@ytrafo
     alternative <- object@statistic@alternative
+
+    ### <FIXME> it is currently hard to ask a distribution object
+    ### for its type (and arguments). Its a design bug.
     distribution <- object@call$distribution
+    ### use default value
+    if (is.null(distribution))
+        distribution <- eval(formals(eval(object@call[[1]]))$distribution)[1]
+    ### </FIXME>
     stand_tstat <- statistic(object, type = "standardized")
     tstat <- switch(alternative,
                     "less" = stand_tstat,
