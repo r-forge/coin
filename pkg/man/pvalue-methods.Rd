@@ -118,14 +118,11 @@ pvalue(object, ...)
                                     rep("III", 10), rep("IV", 10))))
 
   ### p-value for multiple comparisons under logical constraints
-  if (require("multcomp")) {
-      it <- independence_test(length ~ site, data = YOY,
-                              xtrafo = mcp_trafo(site = "Tukey"),
-                              distribution = approximate(10000),
-                              alternative = "two.sided")
-      print(pvalue(it, method = "npmcp"))
-  }
-
+  it <- independence_test(length ~ site, data = YOY,
+                          xtrafo = mcp_trafo(site = "Tukey"),
+                          distribution = approximate(10000),
+                          alternative = "two.sided")
+  print(pvalue(it, method = "npmcp"))
 }
 \keyword{methods}
 \keyword{htest}

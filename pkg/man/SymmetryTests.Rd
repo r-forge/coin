@@ -139,26 +139,23 @@
   ### where do the differences come from?
   ### Wilcoxon-Nemenyi-McDonald-Thompson test
   ### Hollander & Wolfe (1999), page 295
-  if (require("multcomp")) {
+  ### all pairwise comparisons
+  rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
+       teststat = "max",
+       xtrafo = function(data)
+           trafo(data, factor_trafo = function(x)
+                 model.matrix(~ x - 1) \%*\% t(contrMat(table(x), "Tukey"))
+           ),
+       ytrafo = function(data)
+           trafo(data, numeric_trafo = rank, block = RoundingTimes$block)
+       )
 
-      ### all pairwise comparisons
-      rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
-           teststat = "max",
-           xtrafo = function(data)
-               trafo(data, factor_trafo = function(x)
-                   model.matrix(~ x - 1) \%*\% t(contrMat(table(x), "Tukey"))
-               ),
-           ytrafo = function(data)
-               trafo(data, numeric_trafo = rank, block = RoundingTimes$block)
-      )
+  ### a global test, again
+  print(pvalue(rtt))
 
-      ### a global test, again
-      print(pvalue(rtt))
-
-      ### simultaneous P-values for all pair comparisons
-      ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
-      print(pvalue(rtt, method = "single-step"))
-}
+  ### simultaneous P-values for all pair comparisons
+  ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
+  print(pvalue(rtt, method = "single-step"))
 
   ### Strength Index of Cotton, Hollander & Wolfe (1999), Table 7.5, page 286
   sc <- data.frame(block = factor(c(rep(1, 5), rep(2, 5), rep(3, 5))),

@@ -222,20 +222,17 @@
   ### Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
   ### Hollander & Wolfe (1999), page 244 
   ### (where Steel-Dwass results are given)
-  if (require("multcomp")) {
+  NDWD <- oneway_test(length ~ site, data = YOY,
+      ytrafo = function(data) trafo(data, numeric_trafo = rank),
+      xtrafo = function(data) trafo(data, factor_trafo = function(x)
+          model.matrix(~x - 1) \%*\% t(contrMat(table(x), "Tukey"))),
+      teststat = "max", distribution = approximate(B = 90000))
 
-    NDWD <- oneway_test(length ~ site, data = YOY,
-        ytrafo = function(data) trafo(data, numeric_trafo = rank),
-        xtrafo = function(data) trafo(data, factor_trafo = function(x)
-            model.matrix(~x - 1) \%*\% t(contrMat(table(x), "Tukey"))),
-        teststat = "max", distribution = approximate(B = 90000))
+  ### global p-value
+  print(pvalue(NDWD))
 
-    ### global p-value
-    print(pvalue(NDWD))
-
-    ### sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
-    print(pvalue(NDWD, method = "single-step"))
-  }
+  ### sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
+  print(pvalue(NDWD, method = "single-step"))
 
 }
 \keyword{htest}
