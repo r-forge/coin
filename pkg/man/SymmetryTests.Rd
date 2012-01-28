@@ -39,7 +39,7 @@
     \code{\link{approximate}} or \code{\link{asymptotic}} can be
     used to specify how the exact conditional distribution of the test statistic
     should be calculated or approximated. For the Wilcoxon signed rank test,
-    \code{\link{exact}} computes the exact distribution by means of the Streitberg-R\"ohmel
+    \code{\link{exact}} computes the exact distribution by means of the Streitberg-Roehmel
     shift algorithm.}
   \item{zero.method}{a character specifying the way zeros,
                      for example induced by tied repeated measurements, 
@@ -90,8 +90,8 @@
     \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
  
     Bernd Streitberg & Joachim Roehmel (1987).
-    Exakte Verteilungen f\"ur Rang- und Randomisierungstests
-    im allgemeinen $c$-Stichprobenfall.
+    Exakte Verteilungen fuer Rang- und Randomisierungstests
+    im allgemeinen c-Stichprobenfall.
     \emph{EDV in Medizin und Biologie} \bold{18}(1), 12--19.
 
 }

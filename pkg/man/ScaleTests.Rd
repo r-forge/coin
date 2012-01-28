@@ -107,8 +107,8 @@
         \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
 
         Bernd Streitberg & Joachim Roehmel (1987).
-        Exakte Verteilungen f\"ur Rang- und Randomisierungstests
-        im allgemeinen $c$-Stichprobenfall.
+        Exakte Verteilungen fuer Rang- und Randomisierungstests
+        im allgemeinen c-Stichprobenfall.
         \emph{EDV in Medizin und Biologie} \bold{18}(1), 12--19.
 
         Mark A. van de Wiel (2001). The split-up algorithm: a fast

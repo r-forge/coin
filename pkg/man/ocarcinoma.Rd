@@ -37,7 +37,7 @@ IIA.
 \references{
 
     Martin Schumacher & Gabi Schulgen (2002), \emph{Methodik klinischer 
-    Studien: Methodische Grundlagen der Planung, Durchf\"uhrung und
+    Studien: Methodische Grundlagen der Planung, Durchfuehrung und
     Auswertung.} Springer, Heidelberg.
 
 }

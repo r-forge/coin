@@ -19,7 +19,7 @@
 
   Various studies have linked alcohol dependence phenotypes to chromosome 4.
   One candidate gene is NACP (non-amyloid component of plaques),
-  coding for alpha synuclein. B\"onsch et al. (2005) found longer alleles of
+  coding for alpha synuclein. Boensch et al. (2005) found longer alleles of
   NACP-REP1 in alcohol-dependent patients compared with healthy
   controls and report that the allele lengths show some
   association with levels of expressed alpha synuclein mRNA.
@@ -27,7 +27,7 @@
 }
 \source{
 
-  Dominikus B\"onsch, Thomas Lederer, Udo Reulbach,  Torsten Hothorn, 
+  Dominikus Boensch, Thomas Lederer, Udo Reulbach,  Torsten Hothorn, 
   Johannes Kornhuber & Stefan Bleich (2005).
   Joint Analysis of the NACP-REP1 Marker Within the Alpha
   Synuclein Gene Concludes Association with Alcohol Dependence.
