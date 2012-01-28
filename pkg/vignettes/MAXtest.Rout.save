@@ -1,24 +1,5 @@
 
-R version 2.14.1 (2011-12-22)
-Copyright (C) 2011 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
-
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under certain conditions.
-Type 'license()' or 'licence()' for distribution details.
-
-  Natural language support but running in an English locale
-
-R is a collaborative project with many contributors.
-Type 'contributors()' for more information and
-'citation()' on how to cite R or R packages in publications.
-
-Type 'demo()' for some demos, 'help()' for on-line help, or
-'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
 > library("coin")
-Loading required package: coin
 Loading required package: survival
 Loading required package: splines
 Loading required package: mvtnorm
@@ -110,7 +91,7 @@ Total  &  24 & 99 & 123  \\
 
 > for (i in 1:nrow(out)) cat(rownames(out)[i], " & ", 
 +     paste(out[i, ], collapse = " & "), "\\\\ \n")
-dominant  &  18 & 16.5854 & 2.0391 & 0.6938 & 0.3906 & 0.3302 \\ 
+dominant  &  18 & 16.5854 & 2.0391 & 0.6938 & 0.3907 & 0.3302 \\ 
 additive  &  28 & 22.4390 & 3.2687 & 1.7013 & 0.0868 & 0.0654 \\ 
 recessive  &  10 & 5.8537 & 1.8951 & 2.1879 & 0.0303 & 0.0359 \\ 
 
@@ -179,9 +160,9 @@ recessive  &  0.7241&0.9819 \\
 
 > for (i in 1:nrow(out)) cat(rownames(out)[i], " & ", 
 +     paste(out[i, ], collapse = " & "), "\\\\ \n")
-dominant  &  337 & 320.4287 & 7.0531 & 2.3495 & 0.0208 & 0.0112 \\ 
-additive  &  438 & 404.0265 & 10.1618 & 3.3433 & 0.001 & 0.001 \\ 
-recessive  &  101 & 83.5979 & 5.2912 & 3.2889 & 0.0014 & 0.0013 \\ 
+dominant  &  337 & 320.4287 & 7.0531 & 2.3495 & 0.0207 & 0.0112 \\ 
+additive  &  438 & 404.0265 & 10.1618 & 3.3433 & 0.0012 & 0.001 \\ 
+recessive  &  101 & 83.5979 & 5.2912 & 3.2889 & 0.0012 & 0.0013 \\ 
 
 > me <- as.table(matrix(c(6, 8, 10, 32, 47, 20), byrow = TRUE, 
 +     nrow = 2, dimnames = list(Group = c("In situ", "Control"), 
@@ -221,7 +202,7 @@ maxT = 2.1879, p-value = 0.03042
 
 > drop(pvalue(it, method = "single-step"))
   dominant   additive  recessive 
-0.39063104 0.08676118 0.03038007 
+0.39063737 0.08676118 0.03040045 
 
 > gZheng <- function(x) {
 +     x <- unlist(x)
