@@ -39,12 +39,22 @@ Loading required package: multcomp
 > it <- independence_test(response ~ group, data = df,
 +                         distr = approximate(B = 100000))
 > 
+> ### Table 5, first column: OK
+> pvalue(it, method = "unadjusted")
+        Very Poor    Poor    Fair Good Excellent
+Placebo   0.00229 0.11624 0.39398    1   0.07899
+> 
+> ### Table 5, next-to-last column: OK
+> pvalue(it, method = "Sidak-Holm")
+          Very Poor      Poor      Fair Good Excellent
+Placebo 0.006991189 0.2500849 0.5782464    1 0.2309167
+> 
 > ### Table 5, last column: OK
 > pvalue(it, method = "step-down")
         Very Poor    Poor    Fair Good Excellent
 Placebo   0.00689 0.24334 0.56908    1   0.21351
 > 
-> ### example from Westfall & Wolfinger (1997), Table 2
+> ### example from Westfall & Wolfinger (1997), Table 1
 > df <- data.frame(group = factor(c(rep("Control", 50), rep("Treatment", 48))),
 +                  V1 = c(rep(0, 50), rep(1, 0), rep(0, 48 - 5), rep(1, 5)),
 +                  V2 = c(rep(0, 50 - 4), rep(1, 4), rep(0, 48 - 3), rep(1, 3)),
@@ -56,18 +66,30 @@ Placebo   0.00689 0.24334 0.56908    1   0.21351
 +                         distr = approximate(B = 100000), alt = "less")
 > 
 > ### page 4, 2nd column: adjusted p-value = 0.03665 for V1
-> pvalue(it, method = "discrete")
+> pvalue(it, method = "Sidak")
                 V1        V2        V3       V4
 Control 0.03666069 0.9842865 0.1587312 0.997373
 > 
-> ### alternative: less       
+> ### page 4, 2nd column: adjusted p-value = 0.03698 for V1
+> ### Note: 0.02521 + 0.00532 + 0 + 0.00645 = 0.03698
+> pvalue(it, method = "Bonferroni")
+             V1 V2      V3 V4
+Control 0.03699  1 0.16891  1
+> 
+> ### alternative: two
 > it <- independence_test(V1 + V2 + V3 + V4 ~ group, data = df,
 +                         distr = approximate(B = 100000), alt = "two")
 > 
 > ### page 5, 1st column: adjusted p-value = 0.05261 for V1
-> pvalue(it, method = "discrete")
+> pvalue(it, method = "Sidak")
                 V1 V2        V3        V4
 Control 0.05407491  1 0.1348184 0.9907555
+> 
+> ### page 5, 1st column: adjusted p-value = 0.05352 for V1
+> ### Note: 0.02521 + 0.01254 + 0 + 0.01577 = 0.05352
+> pvalue(it, method = "Bonferroni")
+             V1 V2      V3 V4
+Control 0.05503  1 0.14164  1
 > 
 > ### artificial example, checked against `multtest:mt.maxT'
 > 
@@ -87,6 +109,16 @@ Control 0.05407491  1 0.1348184 0.9907555
          x1          x2
 1 0.9999969 0.005414957
 > 
+> pvalue(independence_test(x1 + x2 ~ gr, alt = "two.sided"), "step-down")
+           x1          x2
+1 0.009466134 0.009466134
+> pvalue(independence_test(x1 + x2 ~ gr, alt = "less"), "step-down")
+           x1        x2
+1 0.004742767 0.9972905
+> pvalue(independence_test(x1 + x2 ~ gr, alt = "greater"), "step-down")
+         x1          x2
+1 0.9976271 0.005414957
+> 
 > pvalue(independence_test(x1 + x2 ~ gr, alt = "two.sided", 
 +                          dist = approximate(B = 10000)), "single-step")
       x1     x2
@@ -102,8 +134,8 @@ Control 0.05407491  1 0.1348184 0.9907555
 > 
 > pvalue(independence_test(x1 + x2 ~ gr, alt = "two.sided", 
 +                          dist = approximate(B = 10000)), "step-down")
-      x1    x2
-1 0.0089 0.005
+      x1     x2
+1 0.0089 0.0089
 > pvalue(independence_test(x1 + x2 ~ gr, alt = "less", 
 +                          dist = approximate(B = 10000)), "step-down")
       x1     x2
@@ -658,4 +690,127 @@ Control 0.05407491  1 0.1348184 0.9907555
 [876]  0.550808196  0.595303435  0.651943073  0.659573161  0.780895958
 [881]  0.797470508  0.841465425  0.931775502  1.098762794  1.101778475
 [886]  1.283950536
+> 
+> ### unadjusted
+> 
+> set.seed(290875)
+> 
+> gr <- gl(3, 50) 
+> x1 <- rnorm(150) + (as.numeric(gr) - 1) * 0.5
+> x2 <- rnorm(150) - (as.numeric(gr) - 1) * 0.5
+> 
+> pvalue(it1 <- independence_test(x1 + x2 ~ gr, alt = "two.sided"), "unadjusted")
+            x1           x2
+1 1.847081e-05 4.416624e-06
+2 5.281476e-01 4.753754e-01
+3 2.604284e-04 1.057581e-04
+> pvalue(it2 <- independence_test(x1 + x2 ~ gr, alt = "less"), "unadjusted")
+            x1           x2
+1 9.235407e-06 9.999978e-01
+2 7.359262e-01 2.376877e-01
+3 9.998698e-01 5.287905e-05
+> pvalue(it3 <- independence_test(x1 + x2 ~ gr, alt = "greater"), "unadjusted")
+            x1           x2
+1 0.9999907646 2.208312e-06
+2 0.2640737994 7.623123e-01
+3 0.0001302142 9.999471e-01
+> 
+> pvalue(it4 <- independence_test(x1 + x2 ~ gr, alt = "two.sided", 
++                                 dist = approximate(B = 10000)), "unadjusted")
+      x1     x2
+1 0.0000 0.0000
+2 0.5428 0.4729
+3 0.0001 0.0001
+> pvalue(it5 <- independence_test(x1 + x2 ~ gr, alt = "less", 
++                                 dist = approximate(B = 10000)), "unadjusted")
+      x1     x2
+1 0.0000 1.0000
+2 0.7370 0.2385
+3 0.9998 0.0000
+> pvalue(it6 <- independence_test(x1 + x2 ~ gr, alt = "greater", 
++                                 dist = approximate(B = 10000)), "unadjusted")
+      x1     x2
+1 1.0000 0.0000
+2 0.2653 0.7536
+3 0.0003 1.0000
+> 
+> ### consistency of minimum p-value for "global"/"single-step"/"step-down"
+> 
+> set.seed(290875); pg1 <- pvalue(it1, "global")[1]
+> set.seed(290875); pss1 <- pvalue(it1, "single-step")
+> set.seed(290875); psd1 <- pvalue(it1, "step-down")
+> identical(pg1, min(pss1))
+[1] TRUE
+> identical(pg1, min(psd1))
+[1] TRUE
+> 
+> set.seed(290875); pg2 <- pvalue(it2, "global")[1]
+> set.seed(290875); pss2 <- pvalue(it2, "single-step")
+> set.seed(290875); psd2 <- pvalue(it2, "step-down")
+> identical(pg2, min(pss2))
+[1] TRUE
+> identical(pg2, min(psd2))
+[1] TRUE
+> 
+> set.seed(290875); pg3 <- pvalue(it3, "global")[1]
+> set.seed(290875); pss3 <- pvalue(it3, "single-step")
+> set.seed(290875); psd3 <- pvalue(it3, "step-down")
+> identical(pg3, min(pss3))
+[1] TRUE
+> identical(pg3, min(psd3))
+[1] TRUE
+> 
+> pg4 <- pvalue(it4, "global")[1]
+> pss4 <- pvalue(it4, "single-step")
+> psd4 <- pvalue(it4, "step-down")
+> identical(pg4, min(pss4))
+[1] TRUE
+> identical(pg4, min(psd4))
+[1] TRUE
+> 
+> pg5 <- pvalue(it5, "global")[1]
+> pss5 <- pvalue(it5, "single-step")
+> psd5 <- pvalue(it5, "step-down")
+> identical(pg5, min(pss5))
+[1] TRUE
+> identical(pg5, min(psd5))
+[1] TRUE
+> 
+> pg6 <- pvalue(it6, "global")[1]
+> pss6 <- pvalue(it6, "single-step")
+> psd6 <- pvalue(it6, "step-down")
+> identical(pg6, min(pss6))
+[1] TRUE
+> identical(pg6, min(psd6))
+[1] TRUE
+> 
+> ### mcp
+> 
+> YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,
++                              42, 60, 32, 42, 45, 58, 27, 51, 42, 52,
++                              38, 33, 26, 25, 28, 28, 26, 27, 27, 27,
++                              31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
++                   site = factor(c(rep("I", 10), rep("II", 10),
++                                   rep("III", 10), rep("IV", 10))))
+> 
+> ### permutation based Dunnett
+> it <- independence_test(length ~ site, data = YOY,
++                         xtrafo = mcp_trafo(site = "Dunnett"),
++                         distribution = approximate(10000),
++                         alternative = "two.sided")
+> pvalue(it, method = "npmcp")
+              
+II - I  0.1994
+III - I 0.0188
+IV - I  0.0144
+> 
+> ### asymptotic Dunnett
+> it <- independence_test(length ~ site, data = YOY,
++                         xtrafo = mcp_trafo(site = "Dunnett"),
++                         alternative = "two.sided")
+> pvalue(it, method = "npmcp")
+                  
+II - I  0.18664240
+III - I 0.02105972
+IV - I  0.01584066
 > 

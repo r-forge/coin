@@ -382,24 +382,21 @@ chi-squared = 22.8524, p-value < 2.2e-16
 >   ### Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
 >   ### Hollander & Wolfe (1999), page 244 
 >   ### (where Steel-Dwass results are given)
->   if (require("multcomp")) {
-+ 
-+     NDWD <- oneway_test(length ~ site, data = YOY,
-+         ytrafo = function(data) trafo(data, numeric_trafo = rank),
-+         xtrafo = function(data) trafo(data, factor_trafo = function(x)
-+             model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))),
-+         teststat = "max", distribution = approximate(B = 90000))
-+ 
-+     ### global p-value
-+     print(pvalue(NDWD))
-+ 
-+     ### sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
-+     print(pvalue(NDWD, method = "single-step"))
-+   }
+>   NDWD <- oneway_test(length ~ site, data = YOY,
++       ytrafo = function(data) trafo(data, numeric_trafo = rank),
++       xtrafo = function(data) trafo(data, factor_trafo = function(x)
++           model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))),
++       teststat = "max", distribution = approximate(B = 90000))
+> 
+>   ### global p-value
+>   print(pvalue(NDWD))
 [1] 0.0004888889
 99 percent confidence interval:
  0.0003199269 0.0007126921 
 
+> 
+>   ### sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
+>   print(pvalue(NDWD, method = "single-step"))
                      
 II - I   0.9469666667
 III - I  0.0089333333
@@ -686,14 +683,19 @@ chi-squared = 9.3384, p-value = 0.0042
 +                  dimnames = list(1:length(x), c("Location", "Scale")))),
 +       teststat = "max")
 > 
->   ### points to a difference in location
+>   ### single-step adjustment points to a difference in location
 >   pvalue(ltmax, method = "single-step")
          Location     Scale
 Control 0.0067991 0.6189816
 > 
->   ### Funny: We could have used a simple Bonferroni procedure
->   ### since the correlation between the Wilcoxon and Ansari-Bradley 
->   ### test statistics is zero
+>   ### step-down is slightly more powerful
+>   pvalue(ltmax, method = "step-down")
+         Location     Scale
+Control 0.0067991 0.3827331
+> 
+>   ### Funny: We could have used simple Bonferroni or Bonferroni-Holm
+>   ### procedures, respectively, since the correlation between the
+>   ### Wilcoxon and Ansari-Bradley test statistics is zero
 >   covariance(ltmax)
                  Control:Location Control:Scale
 Control:Location               85             0
@@ -896,34 +898,31 @@ chi-squared = 11.1429, df = 2, p-value = 0.003805
 >   ### where do the differences come from?
 >   ### Wilcoxon-Nemenyi-McDonald-Thompson test
 >   ### Hollander & Wolfe (1999), page 295
->   if (require("multcomp")) {
-+ 
-+       ### all pairwise comparisons
-+       rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
-+            teststat = "max",
-+            xtrafo = function(data)
-+                trafo(data, factor_trafo = function(x)
-+                    model.matrix(~ x - 1) %*% t(contrMat(table(x), "Tukey"))
-+                ),
-+            ytrafo = function(data)
-+                trafo(data, numeric_trafo = rank, block = RoundingTimes$block)
-+       )
-+ 
-+       ### a global test, again
-+       print(pvalue(rtt))
-+ 
-+       ### simultaneous P-values for all pair comparisons
-+       ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
-+       print(pvalue(rtt, method = "single-step"))
-+ }
+>   ### all pairwise comparisons
+>   rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
++        teststat = "max",
++        xtrafo = function(data)
++            trafo(data, factor_trafo = function(x)
++                  model.matrix(~ x - 1) %*% t(contrMat(table(x), "Tukey"))
++            ),
++        ytrafo = function(data)
++            trafo(data, numeric_trafo = rank, block = RoundingTimes$block)
++        )
+> 
+>   ### a global test, again
+>   print(pvalue(rtt))
 [1] 0.003455915
 99 percent confidence interval:
  0.003205721 0.003706108 
 
+> 
+>   ### simultaneous P-values for all pair comparisons
+>   ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
+>   print(pvalue(rtt, method = "single-step"))
                                      
-Round Out - Narrow Angle  0.623924061
+Round Out - Narrow Angle  0.623934656
 Wide Angle - Narrow Angle 0.053791966
-Wide Angle - Round Out    0.003398076
+Wide Angle - Round Out    0.003358314
 > 
 >   ### Strength Index of Cotton, Hollander & Wolfe (1999), Table 7.5, page 286
 >   sc <- data.frame(block = factor(c(rep(1, 5), rep(2, 5), rep(3, 5))),
@@ -1638,10 +1637,15 @@ alternative hypothesis: two.sided
  0.006381220 0.007719323 
 
 > 
->   ### adjusted univariate p-value
+>   ### single-step adjusted univariate p-value
 >   pvalue(mvtest, method = "single-step")
            mercury   abnormal     ccells
 control 0.00719172 0.01726738 0.03836982
+> 
+>   ### step-down adjusted univariate p-value
+>   pvalue(mvtest, method = "step-down")
+            mercury  abnormal    ccells
+control 0.006651091 0.0111254 0.0152947
 > 
 > 
 > 
@@ -1821,9 +1825,21 @@ alternative hypothesis: true mu is not equal to 1
 >   pvalue(it, method = "step-down")
          y1        y2
 1 0.0110011 0.9789979
->   pvalue(it, method = "discrete")
+>   pvalue(it, method = "Bonferroni")
+         y1 y2
+1 0.0110011  1
+>   pvalue(it, method = "Sidak")
           y1        y2
 1 0.01097084 0.9995589
+>   pvalue(it, method = "Bonferroni-Holm")
+         y1        y2
+1 0.0110011 0.9789979
+>   pvalue(it, method = "Sidak-Holm")
+          y1        y2
+1 0.01097084 0.9789979
+>   pvalue(it, method = "unadjusted")
+          y1        y2
+1 0.00550055 0.9789979
 > 
 >   ### Length of YOY Gizzard Shad from Kokosing Lake, Ohio,
 >   ### sampled in Summer 1984, Hollander & Wolfe (1999), Table 6.3, page 200
@@ -1835,13 +1851,11 @@ alternative hypothesis: true mu is not equal to 1
 +                                     rep("III", 10), rep("IV", 10))))
 > 
 >   ### p-value for multiple comparisons under logical constraints
->   if (require("multcomp")) {
-+       it <- independence_test(length ~ site, data = YOY,
-+                               xtrafo = mcp_trafo(site = "Tukey"),
-+                               distribution = approximate(10000),
-+                               alternative = "two.sided")
-+       print(pvalue(it, method = "npmcp"))
-+   }
+>   it <- independence_test(length ~ site, data = YOY,
++                           xtrafo = mcp_trafo(site = "Tukey"),
++                           distribution = approximate(10000),
++                           alternative = "two.sided")
+>   print(pvalue(it, method = "npmcp"))
                
 II - I   0.4377
 III - I  0.0006
@@ -1849,7 +1863,6 @@ IV - I   0.0001
 III - II 0.0001
 IV - II  0.0000
 IV - III 0.7160
-> 
 > 
 > 
 > 
@@ -2041,7 +2054,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  20.565 0.428 21.018 0 0 
+Time elapsed:  46.946 0.376 47.397 0 0 
 > grDevices::dev.off()
 null device 
           1 

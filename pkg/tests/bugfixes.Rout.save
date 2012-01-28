@@ -506,3 +506,17 @@ Z = 1.633, p-value = 0.1025
 alternative hypothesis: true mu is not equal to 0 
 
 > 
+> ### monotonicity wasn't enforced for "step-down" and "discrete"
+> set.seed(290875)
+> 
+> gr <- gl(2, 50) 
+> x1 <- rnorm(100) + (as.numeric(gr) - 1) * 0.5
+> x2 <- rnorm(100) - (as.numeric(gr) - 1) * 0.5
+> 
+> it <- independence_test(x1 + x2 ~ gr, distribution = approximate(B = 1000))
+> 
+> pss <- pvalue(it, "step-down") # wasn't monotone
+> stopifnot(pss[1] == pss[2])
+> psd <- pvalue(it, "discrete")  # wasn't monotone
+> stopifnot(pss[1] == pss[2])
+> 
