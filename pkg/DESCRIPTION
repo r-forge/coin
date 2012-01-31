@@ -2,8 +2,12 @@ Package: coin
 Title: Conditional Inference Procedures in a Permutation Test Framework
 Date: 2012-01-27
 Version: 1.1-0
-Author: Torsten Hothorn, Kurt Hornik, Mark A. van de Wiel and Achim Zeileis
-Maintainer: Torsten Hothorn <Torsten.Hothorn@R-project.org>
+Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
+                    email = "Torsten.Hothorn@R-project.org"),
+             person("Kurt", "Hornik", role = "aut"),
+             person("Mark A.", "van de Wiel", role = "aut"),
+             person("Henric", "Winell", role = "ctb"),
+             person("Achim", "Zeileis", role = "aut"))
 Description: Conditional inference procedures for the general independence
   problem including two-sample, K-sample (non-parametric ANOVA), correlation, 
   censored, ordered and multivariate problems.

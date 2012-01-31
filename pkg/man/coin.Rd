@@ -33,7 +33,8 @@ exact null distribution is currently available for two-sample problems only.
     This package is written by \cr
     Torsten Hothorn <Torsten.Hothorn@R-project.org>, \cr 
     Kurt Hornik <Kurt.Hornik@R-project.org>, \cr
-    Mark van de Wiel <m.a.v.d.wiel@TUE.nl> and \cr
+    Mark van de Wiel <m.a.v.d.wiel@TUE.nl>, \cr
+    Henric Winell <henric.winell@thermofisher.com> and \cr
     Achim Zeileis <Achim.Zeileis@R-project.org>.
 
 }
