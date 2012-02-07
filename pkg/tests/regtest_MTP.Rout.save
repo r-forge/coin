@@ -1,8 +1,8 @@
 
-R version 2.14.1 (2011-12-22)
-Copyright (C) 2011 The R Foundation for Statistical Computing
+R version 2.14.1 Patched (2012-02-05 r58281)
+Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
+Platform: i386-pc-mingw32/i386 (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -813,4 +813,17 @@ IV - I  0.0144
 II - I  0.18664240
 III - I 0.02105972
 IV - I  0.01584066
+> 
+> ### asymptotic Dunnett, user-defined w/o column names
+> cm <- rbind("II  vs I" = c(-1, 1, 0, 0),
++             "III vs I" = c(-1, 0, 1, 0),
++             "IV  vs I" = c(-1, 0, 0, 1))
+> it <- independence_test(length ~ site, data = YOY,
++                         xtrafo = mcp_trafo(site = cm),
++                         alternative = "two.sided")
+> pvalue(it, method = "npmcp")
+                   
+II  vs I 0.18664240
+III vs I 0.02105972
+IV  vs I 0.01587280
 > 

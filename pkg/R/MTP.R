@@ -242,6 +242,10 @@ mcp_trafo <- function(...) {
       } else {
           stopifnot(is.matrix(C))
           stopifnot(ncol(C) == nlevels(x))
+          if (is.null(colnames(C)))
+              colnames(C) <- levels(x)
+          attr(C, "type") <- "User-defined"
+          class(C) <- c("contrMat", "matrix")
       }
       ret <- trafo(data, 
                    factor_trafo = function(x) {   

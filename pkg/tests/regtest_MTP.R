@@ -197,3 +197,12 @@ it <- independence_test(length ~ site, data = YOY,
                         xtrafo = mcp_trafo(site = "Dunnett"),
                         alternative = "two.sided")
 pvalue(it, method = "npmcp")
+
+### asymptotic Dunnett, user-defined w/o column names
+cm <- rbind("II  vs I" = c(-1, 1, 0, 0),
+            "III vs I" = c(-1, 0, 1, 0),
+            "IV  vs I" = c(-1, 0, 0, 1))
+it <- independence_test(length ~ site, data = YOY,
+                        xtrafo = mcp_trafo(site = cm),
+                        alternative = "two.sided")
+pvalue(it, method = "npmcp")
