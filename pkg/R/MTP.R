@@ -290,24 +290,25 @@ npmcp <- function(object) {
     # returns list consisting of lists (one for each rejection step of H0)
     ms <- multcomp:::maxsets(Corder)
 
-    p <- sapply(ms, function(sub) { # for every list of allowed subsets
-        max(sapply(sub, function(s) { # for every subset
-            Ctmp <- Corder[s, , drop = FALSE] # current allowed subset
-            # x levels in current subset
-            xlev <- apply(Ctmp, MARGIN = 2, function(col) any(col != 0))
+    foo <- function(s) {
+        Ctmp <- Corder[s, , drop = FALSE] # current allowed subset
+        # x levels in current subset
+        xlev <- apply(Ctmp, MARGIN = 2, function(col) any(col != 0))
       
-            dattmp <- subset(data.frame(y = y, x = x),
-                x %in% names(xlev)[xlev]) # relevant data subset
-            pvalue(
-                independence_test(y ~ x,
-                          data = dattmp,
-                          xtrafo = mcp_trafo(x = Ctmp),
-                          ytrafo = ytrafo, 
-                          distribution = distribution,
-                          alternative = alternative)
-           )
-        }))
-    })
+        dattmp <- subset(data.frame(y = y, x = x),
+            x %in% names(xlev)[xlev]) # relevant data subset
+        
+        it <- independence_test(y ~ x,
+                                data = dattmp,
+                                xtrafo = mcp_trafo(x = Ctmp),
+                                ytrafo = ytrafo, 
+                                distribution = distribution,
+                                alternative = alternative)
+        pvalue(it)
+    }
+    
+    p <- sapply(ms, function(sub) # for every list of allowed subsets
+        max(sapply(sub, foo))) # for every subset
 
     for (i in 2:length(p))
         p[i] <- max(p[i-1], p[i]) # forces pvalue monotonicity
