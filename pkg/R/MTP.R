@@ -33,7 +33,7 @@ singlestep <- function(object, ...) {
 }
 
 ### algorithm 2.8 (Free Step-Down Resampling Method) in
-### Westfall & Young (1993), page 66 _using standardized 
+### Westfall & Young (1993), page 66 _using standardized
 ### statistics instead of p-values_!
 ### <FIXME>
 rsdmaxT <- function(pls, ts) {
@@ -43,7 +43,7 @@ rsdmaxT <- function(pls, ts) {
     rts <- order(ts) # smallest ts first
     q <- pls[, rts, drop = FALSE]
 
-    ### algorithm 2.8 (Free Step-Down Resampling Method) in 
+    ### algorithm 2.8 (Free Step-Down Resampling Method) in
     ### Westfall & Young (1993), page 66 _using standardized
     ### statistics instead of p-values_!
     if (ncol(q) > 1) {
@@ -110,7 +110,7 @@ asdmaxT <- function(object) {
     colnames(ret) <- colnames(ts)
     ret
 }
-    
+
 ### stepdown maxT multiple testing procedure
 stepdown <- function(object, ...) {
 
@@ -137,7 +137,7 @@ stepdown <- function(object, ...) {
                "less" = {
                    pls <- -t((pls - expect) / dcov)
                    ts <- -(statistic(object, "standardized"))})
-        
+
         ret <- rsdmaxT(pls, ts)
     }
 
@@ -223,38 +223,36 @@ discrete <- function(object, method = c("Bonferroni", "Sidak",
 #####################################
 ## Westfall (1997) method in coin ###
 #####################################
-## Basic code for npmcp() taken from pqfunctions.R in package 
+## Basic code for npmcp() taken from pqfunctions.R in package
 ## multcomp
 
 ### cf. mcp(x = "Tukey") in multcomp
 mcp_trafo <- function(...) {
 
-  args <- list(...)
-  stopifnot(length(args) == 1)
+    args <- list(...)
+    stopifnot(length(args) == 1)
 
-  ret <- function(data) {
+    ret <- function(data) {
 
-      x <- data[[names(args)]]
-      stopifnot(is.factor(x))
-      C <- args[[1]]
-      if (is.character(C)) {
-          C <- contrMat(table(x), C)
-      } else {
-          stopifnot(is.matrix(C))
-          stopifnot(ncol(C) == nlevels(x))
-          if (is.null(colnames(C)))
-              colnames(C) <- levels(x)
-          attr(C, "type") <- "User-defined"
-          class(C) <- c("contrMat", "matrix")
-      }
-      ret <- trafo(data, 
-                   factor_trafo = function(x) {   
-                       model.matrix(~ x - 1) %*% t(C)
-                   })
-      attr(ret, "contrast") <- C
-      ret
-  }
-  ret
+        x <- data[[names(args)]]
+        stopifnot(is.factor(x))
+        C <- args[[1]]
+        if (is.character(C)) {
+            C <- contrMat(table(x), C)
+        } else {
+            stopifnot(is.matrix(C))
+            stopifnot(ncol(C) == nlevels(x))
+            if (is.null(colnames(C)))
+                colnames(C) <- levels(x)
+            attr(C, "type") <- "User-defined"
+            class(C) <- c("contrMat", "matrix")
+        }
+        ret <- trafo(data,
+                     factor_trafo = function(x) model.matrix(~ x - 1) %*% t(C))
+        attr(ret, "contrast") <- C
+        ret
+    }
+    ret
 }
 
 ### compute p-values under subset pivotality
@@ -282,10 +280,10 @@ npmcp <- function(object) {
     # get contrast matrix from xtrans
     C <- attr(object@statistic@xtrans, "contrast")
     stopifnot(inherits(C, "matrix"))
-  
+
     # order test statistics, most "extreme" one comes first
     Corder <- C[order(tstat), , drop = FALSE]
-  
+
     # compute allowed subsets of hypotheses
     # returns list consisting of lists (one for each rejection step of H0)
     ms <- multcomp:::maxsets(Corder)
@@ -294,19 +292,19 @@ npmcp <- function(object) {
         Ctmp <- Corder[s, , drop = FALSE] # current allowed subset
         # x levels in current subset
         xlev <- apply(Ctmp, MARGIN = 2, function(col) any(col != 0))
-      
+
         dattmp <- subset(data.frame(y = y, x = x),
             x %in% names(xlev)[xlev]) # relevant data subset
-        
+
         it <- independence_test(y ~ x,
                                 data = dattmp,
                                 xtrafo = mcp_trafo(x = Ctmp),
-                                ytrafo = ytrafo, 
+                                ytrafo = ytrafo,
                                 distribution = distribution,
                                 alternative = alternative)
         pvalue(it)
     }
-    
+
     p <- sapply(ms, function(sub) # for every list of allowed subsets
         max(sapply(sub, foo))) # for every subset
 
@@ -326,7 +324,7 @@ unadjusted <- function(object, ...) {
         ret <- switch(object@statistic@alternative,
                       "two.sided" = 2 * pmin(pnorm(ts), 1 - pnorm(ts)),
                       "greater"   = 1 - pnorm(ts),
-                      "less"      = pnorm(ts))                     
+                      "less"      = pnorm(ts))
     } else {
         ### raw simulation results, scores have been handled already
         pls <- support(object, raw = TRUE)
@@ -341,7 +339,7 @@ unadjusted <- function(object, ...) {
                "greater" = {
                    pls <- t((pls - expect) / dcov)
                    ts <- statistic(object, "standardized")},
-               "less" = {                   
+               "less" = {
                    pls <- -t((pls - expect) / dcov)
                    ts <- -(statistic(object, "standardized"))})
 
