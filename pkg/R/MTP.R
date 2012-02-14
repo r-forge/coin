@@ -293,11 +293,8 @@ npmcp <- function(object) {
         # x levels in current subset
         xlev <- apply(Ctmp, MARGIN = 2, function(col) any(col != 0))
 
-        dattmp <- subset(data.frame(y = y, x = x),
-            x %in% names(xlev)[xlev]) # relevant data subset
-
         it <- independence_test(y ~ x,
-                                data = dattmp,
+                                subset = x %in% names(xlev)[xlev], # relevant data subset
                                 xtrafo = mcp_trafo(x = Ctmp),
                                 ytrafo = ytrafo,
                                 distribution = distribution,
