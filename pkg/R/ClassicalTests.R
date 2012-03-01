@@ -15,7 +15,8 @@ wilcox_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!(is_2sample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a two sample problem")
+            stop(sQuote("object"), " does not represent a two sample problem",
+                                   " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
 
@@ -53,7 +54,9 @@ normal_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!(is_2sample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a two sample problem")
+            stop(sQuote("object"), " does not represent a two sample problem",
+                                   " (maybe the grouping variable is not a factor?)")
+
         return(TRUE)
     }
 
@@ -91,7 +94,8 @@ median_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!(is_2sample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a two sample problem")
+            stop(sQuote("object"), " does not represent a two sample problem",
+                                   " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
 
@@ -130,7 +134,8 @@ ansari_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!(is_2sample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a two sample problem")
+            stop(sQuote("object"), " does not represent a two sample problem",
+                                   " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
 
@@ -182,7 +187,8 @@ surv_test.IndependenceProblem <- function(object,
     check <- function(object) {
         if (!(is_Ksample(object) && is_censored_y(object)))
             stop(sQuote("object"), 
-                 " does not represent a K sample problem with censored data")
+                 " does not represent a K sample problem with censored data",
+                 " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
 
@@ -219,7 +225,8 @@ kruskal_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a K sample problem")
+            stop(sQuote("object"), " does not represent a K sample problem",
+                                   " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
  
@@ -255,7 +262,9 @@ fligner_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a K sample problem")
+            stop(sQuote("object"), " does not represent a K sample problem",
+                                   " (maybe the grouping variable is not a factor?)")
+
         if (is_ordered(object))
             stop(colnames(object@x), " is an ordered factor")
         return(TRUE)
@@ -517,7 +526,8 @@ oneway_test.IndependenceProblem <- function(object, ...) {
 
     check <- function(object) {
         if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a K sample problem")
+            stop(sQuote("object"), " does not represent a K sample problem",
+                                   " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
 
