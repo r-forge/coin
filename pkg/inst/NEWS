@@ -1,8 +1,6 @@
 
 		CHANGES in `coin' VERSION 1.0-21
 
-    o     move vignettes to vignettes
-
     o     nonparametric multiple comparisons via Westfall (1997)
           algorithm. See ?mcptrafo and ?pvalue
 
@@ -16,6 +14,13 @@
               pvalue(it, method = "step-down") now works in the
               asymptotic case
           thanks to Henric Winell
+
+
+                CHANGES in `coin' VERSION 1.0-21
+
+    o     move vignettes to vignettes
+
+    o     new CWD data
 
 
 		CHANGES in `coin' VERSION 1.0-20
