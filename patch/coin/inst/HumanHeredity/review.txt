@@ -1,0 +1,155 @@
+From hothorn@biostat.uni-hannover.de Thu Aug  2 18:28:24 2007
+Date: Thu, 02 Aug 2007 18:20:39 +0200
+From: Ludwig Hothorn <hothorn@biostat.uni-hannover.de>
+To: torsten@hothorn.de, Torsten.Hothorn@stat.uni-muenchen.de
+Subject: [Fwd: Ms. No. 200706012, Human Heredity]
+
+
+
+-------- Original-Nachricht --------
+Betreff: 	Ms. No. 200706012, Human Heredity
+Datum: 	Thu, 2 Aug 2007 18:04:04 +0200 (CEST)
+Von: 	katherine.montague@mail.rockefeller.edu
+An: 	hothorn@biostat.uni-hannover.de
+
+
+
+Dear Prof. Dr. Dr. Hothorn, 
+
+Thank you for submitting your manuscript  "Order-restricted scores test for the evaluation of population-based case-control studies when the genetic model is unknown" to Human Heredity. 
+
+I have received the comments of the reviewers and am enclosing them below.  Unfortunately, they are not sufficiently favorable to accept your manuscript for publication.  I am afraid this decision is final.
+
+These are the editors' comments:
+
+The authors cite Slager and Schaid as providing power and sample size calculations for the Cochran Armitage linear test of trend. However, as Ahn et al. (Ann Hum Genet 71: 249-U4 Part 2 2007) point out, the non-centrality parameter (the basis for power and sample size calculations) was originally computed by Chapman and Nam (Biometrics 24 (2): 315 1968). Gordon et al. (Bioinformatics 2005) have implemented this noncentrality parameter into their online power calculator, PAWE3D (http:linkage.rockefeller.edu/pawe3d/). 
+ 
+Below are the reviewer's comments: 
+
+
+Reviewer 2
+Overview:
+
+When the underlying genetic model is unknown, a priori, we can loose power by using a test statistic that assumes an incorrect underlying model. The three common models of inheritance include dominant, reccesive or additive models and previous papers have suggested using the maximum of the three corresponding score tests (or cochran-armitage tests). This paper re-phrases the problem in a conditional independence framework and extends the maximum test to allow for stratified analyses, outcomes that have more than 2 categories and the effects of numerous loci. They also mention that they can use the "adjusted" pvalues obtained to choose the most likely model. They include 2 illustrations of the method (basic and generalised) and a brief simulation study to try to obtain how well the method for selecting the most appropriate model performs.
+
+Generally the paper is well written, although there are a large number of places where more explanation is essential. The method for choosing the most likely model is ad-hoc and simplistic as is the simulation study to assess it's performance. 
+
+
+Specific points:
+
+1) Perhaps the title could be simplified - "Order-restricted Scores test" does not seem very clear to me.
+
+2) The abstract is slightly unclear, particularly the methods part. Again the term "scores-specific linear-by-linear" is somewhat confusing - I'm not sure if there is a better way of describing the test - after all it is just the maximum of three simple tests that assume different models???
+
+3) Fifth line of Objectives on page 2: I think you need to discuss these "scores" at this point as it seems as if you are talking about "score tests". Maybe you could call them genotype "codes" or something like that- rather than scores???
+
+4) Bottom of page 2: I think that you need to say explicitely that the MAX test is just the maximum of the dominant, recessive and additive tests.
+
+5) p3 section 2.1, line 7: Do you make use of these ordered alternatives at all? If you do I can't see where and this will need to be made clear. I assume that you do, given the title of the paper but if you don't then I would drop this line.
+
+6) Bottom half of p3: This is very unclear - what do you mean by "(modulo standardisation)" and what is "rj"? By reading subsequent pages I think that you mean that CA(eta) is the non-standardised cochran-armitage test (ie: without having it's mean taken away and without being divided by it's standard deviation) and rj is the number of individuals with genotype j? If this is true then you need to make this much more clear. Also you should mention that you do not need to standardise the test statistic since you are using a permutation argument to obtain appropriate pvalues.
+
+7) p4, para 1: I think you should explicitely write down what MAX test is in terms of the CA(eta)'s.
+
+8) p4, para 2: I do not understnad what you mean by "In the sequel" - are you talking about this paper or one that you will write in the future?
+
+9) p4, section 2.1.1: This is quite confusing - I think you need to define the 3*2 table and it's six cells and refer to table 2 to explain Yi and Xi. I think that you should also put in a very brief explanation about the relevence of the influence function  and the transformations and also write the functions down explicitely. You also need to define raa etc in table 2 - you could leave them as w1 to w6, as this is how they are defined in equation (2) on page 5.
+
+10) p4-5, section 2.1.1: Again a bit confusing, esp the bit about "weights associated with cases...". I think that you should say somthing like: "following standard CI theory (and give reference) the test statistic is defined...." and then just note that since h(Yi) is zero for all controls, T is defined only by measures in cases???
+
+11) p6, next line: I think that this should have three df not two, since the CA's are not linearly dependent?
+
+12) p6, lines 11-13: You say that the maximum type test is better for a particular genetic type - I think that such a statement requires a reference as it is not an obvious result.
+
+13) first half of p6: It is not clear how you use these "multiplicity-adjusted pvalues" to choose the most likely model - do you just choose the one with the minimum pvalue? Please make this clear.
+
+14) p 6, section 2.2: Not sure if I've missed someting but isn't this test essentially the same as that of Freidlin? If so why are you wanting to compare them? Is this section simply for illustrative purposes - as I think that it is helpful in this way?
+
+15) p7, below table... I think you should make it clear that the pvalue for each model in table 4 is the proportion of samples that would have max |(T-mu)/diag(Sigma)^{1/2}| greater than the observed test corresponding to that model and that the pvalue of the MAX test is simply the smallest pvalue across the three models.
+
+16) I find your example in section 2.3 a bit strange. I may be wrong but by setting the score for both early and late onset to be equal, at -0.5, aren't you just combining them into a single group and therefore converting it back into a binary outcome problem? If not please could you explain this for me- thanks?
+
+17) Section 3.1: I find this a bit confusing... If I am correct then you should have a 3*3*3*2 table of data with 54 cells so that the table equivalent to table 2 in this example has i=1-54, h(Yi) with the appropriate 0 and -1/2 codings and 6 g() functions: gadd(X1i),gdom(X1i),grec(X1i),gadd(X2i),gdom(X2i),grec(X2i), with the appropriate wi's for each cell (and with an extra column on the left for sex)? I think that perhaps this table would be more helpful than the two in table 5? 
+
+Am I correct that the permutation argument is stratified only by gender (but not for the other locus)? I think that the null that you are testing is that neither of the loci are associated with disease via any of the three models - in which case the loci are not adjusted for the effects of the other. This would mean, for example, that the test for locus 1 is not adjusted for an effect at locus 2 (and vice-versa) therefore if the locus are correlated the smallest IL1B_511 dominant pvalue could simply be due to the effect at TNFA_238, or perhaps some undelying model. In fact if the effect of the other locus was very strong this could easily distort the order of the pvalues at the weaker secondary locus. I think that these possiblities should be discussed.
+
+18) Section 3.2: I find this simulation study slightly weak as it makes arguably unrealistic assumptions of high prevalence and exact model specification. Even if we had the actual causal locus it is arguable that it's mode of inheritance is not exactly dominant, recessive or additive but is likely to have some hybrid effect. This is even more pronounced when we are testing markers. I think that at the very least these issues should be discussed in the conclusions.
+
+
+
+Spelling mistakes etc:
+
+1) p3, end of line5: ii) needs to change to iii)
+
+2) p4, l1: "if" should be "of"
+
+3) p5, end of line 11: Do you mean that mu belongs in R^3?
+
+4) p5, line 17: Do you mean "The conditional expectation and variance of the linear statistic, under the null, is:"
+
+5) p6, second equation: Sigma^+ should be Sigma^-
+
+
+Reviewer 3
+This manuscript describes the maximum tests using Cochran-Armitage tests for case-control studies when the underlying genetic model is unknown. I have several comments which are listed below.
+
+1. The merits of the proposed method over the MAX test from Freidlin et al. [1] are not convincing. The test statistic is exactly the same as that of Freidlin et al. [1] except that the variance is factored by N/(N-1). The correlation matrix is the same, and the result should not differ more than the difference in the test statistic itself caused by this factor which will diminish as the number of samples, N, becomes large.
+
+Moreover, since the CA trend test is the score test for the covariate effect in the logistic model [2], the extension to the stratified analysis is rather straightforward. The same holds for the problem with more than 2 loci.
+
+2. It is not very clearly described how the authors calculated the p-value and how they corrected the multiplicity (for e.g. in table 4). There are number of ways to obtain these and it should be clearly mentioned in the manuscript to avoid confusion. 
+
+
+For example, in Freidln et al. (who also considered the MAX test as the maximum of three dimensional normal with the same estimated correlation matrix), the p-value of the MAX was obtained by generating the multivariate normal random variables with the estimated correlation, and assessing the tail probability. In this setting, one can use the step-down MaxT method [3] to obtain the multiplicity adjusted p-value of the individual test.
+
+
+3. One of the remarks by the authors on the re-analysis of the data from Reich et al. [4] was that their approach has improved the result by taking into account the correlation between two loci instead of applying a Bonferroni. It is widely known that the Bonferroni correction is very conservative and that any sequential method or any method that takes into account the correlation between multiple tests have advantage in power over the Bonferroni correction.
+
+
+4. I am not sure whether the two-sided test is used for the Melanoma data in Table 3. This data set was analyzed by Freidlin et al. [1] using one-side test. Since the p-values of the MAX reported in the manuscript is similar to that of Freidlin et al. [1], I assumed that the authors performed the one sided analysis. Using one-sided test, I was able to reproduce the p-value of the additive and recessive models, whereas I was not successful for the dominant model. Since only the maximum of the absolute value is described in page 6, the authors should clarify this issue.
+
+References
+[1] Freidlin B, Zheng G, Li ZH, and Gastwirth JL. Trend tests for case-control studies of genetic markers: Power, sample size and robustness. Human Heredity, 53(3): 146-152, 2002.
+
+[2] Sasieni PD. From genotype to genes: Doubling the sample size. Biometrics, 53(4): 1253-1261, 1997.
+
+[3] Westfall PH and Young SS. Resampling-based Multiple Testing. John Wiley & Sons, New York, 1993.
+
+[4] Reich K et al. Promoter polymorphisms of the genes encoding tumor necrosis factor-alpha ?and interleukin-1beta are associated with different subtypes of psoriasis characterized by early and late disease onset. The journal of investigative dermatology, 118(1): 155-163, 2002.
+
+
+Regretting to be unable to give you a more favorable reply, I nevertheless hope that the reviewers' comments will be of assistance.
+
+I hope you will consider submitting future work to Human Heredity.
+
+Sincerely,
+
+Marcella Devoto
+Editor, Human Heredity
+CHOP - Division of Human Genetics
+Room 1002 ARC Bldg
+3615 Civic Center Blvd
+Philadelphia, PA 19104-4399
+Email: devoto@email.chop.edu
+
+
+
+
+					
+
+
+
+
+
+
+
+-- 
+Leibniz Universitaet Hannover
+Institut fuer Biostatistik
+Prof. Dr. L. A. Hothorn
+Herrenhaeuserstr. 2
+D-30419 Hannover
+Phone: +49 511 762 5566
+Fax: +49 511 762 4966
+URL: www.biostat.uni-hannover.de
+

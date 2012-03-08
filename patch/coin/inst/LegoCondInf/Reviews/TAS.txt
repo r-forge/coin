@@ -1,0 +1,139 @@
+From american.statistician@gmail.com Tue Mar  7 06:20:24 2006
+Date: Tue, 7 Mar 2006 04:59:46 UT
+From: american.statistician@gmail.com
+Reply-To: WESTFALL@ba.ttu.edu
+To: Torsten Hothorn <Torsten.Hothorn@rzmail.uni-erlangen.de>
+Subject: TAS MS05-239 Decision Letter
+
+March 6, 2006 
+ 
+Dr. Torsten Hothorn 
+Waldstr. 6 
+Erlangen D-91054 
+Germany 
+ 
+Re: MS05-239, "A Lego System for Conditional Inference" 
+Received: 2005-12-22 
+ 
+Dear Torsten, 
+ 
+Thank you for submitting the above manuscript "A Lego System for Conditional Inference" by Torsten Hothorn, Kurt Hornik, Mark van de Wiel and Achim Zeileis for possible publication in The American Statistician (TAS). 
+ 
+On the basis of the reports by the referee(s) and Associate Editor (AE), as well as my own evaluation, I have decided to tentatively accept your paper for publication in The American Statistician subject to satisfactory revisions. 
+ 
+Please see the attached referees' and AE reports for details.  With your revision, please provide a point-by-point response to each report in separate blinded attachments.  You do not have to satisfy every concern of every reviewer with a revision, but you should provide discussion of all points that they raise, and revisions where appropriate. 
+ 
+My specific concerns: 
+ 
+Are the assumptions needed for Lego clearly specified enough?  The readers can find the background papers, but as mentioned by a reviewer, they are in obscure places.  Therefore, the article must be more self-contained, including specific assumptions.  For example, are the (Y_i, X_i) pairs assumed independent?  Later, blocks are discussed -- what is being assumed here, specifically? 
+ 
+Another concern is that the Westfall-Young method is valid for permutation tests only when subset pivotality holds -- a reasonable assumption for multivariate endpoints but not for pairwise comparisons.  While the Lego system can undoubtedly be extended to general multiple comparisons via closure (which reduces to Westfall-Young for certain types of statistics when subset pivotality holds), that would best be a topic for another paper.  I would therefore suggest dropping MCPs from this paper in the interest of keeping the message more focused. 
+ 
+While preparing your revision, please have each author take the time to log in to the system and use the Modify/Profile button to enter all of their detailed information (assuming they did not do so at some time previously). 
+ 
+When you are ready to submit your revision, please use the link below. 
+ 
+<http://tas.allentrack.net/cgi-bin/main.plex?el=A2Bs7cm5A4BBx3I1A9uOxAKN2UAEITrEHmp9AZ> 
+
+ 
+Thank you for submitting your work to The American Statistician. 
+ 
+Sincerely, 
+ 
+Peter Westfall 
+Editor
+The American Statistician 
+ 
+--------------------------------------------------------------------------- 
+Associate Editor (Comments to the authors): 
+ 
+The examples in Section 3 are currently highlighted by the application area such as "Genetic Components of Alcoholism". The authors may consider adding the statistical method illustrated (for example, Kruskal-Wallis test) so that the reader can more easily locate the needed R code. 
+ 
+---------------------------------------------------------------------------
+ 
+Referee #1 (Comments to the authors): 
+ 
+This paper presents a theoretical framework for permutation tests that unifies several existing statistical techniques. It proposes to transfer or implement this theory through a special package added to the R-software system (called coin, for conditional inference). 
+
+The ideas raised in this paper are interesting. However, the presentation of the material lacks sufficient explanations for the interested or committed reader. Many of the sentences have compound ideas that beg for further elaboration. This is especially important because the two main sources (Strasser and Weber, 1999; Janssen and Pauls, 2003) are not physically or intellectually accessible to the typical reader (Mathematical Methods of Statistics is a Russian Journal, and I have had to order this background paper from my library). The subject-matter examples are missing important details and the numerical results are not always explained in the original context. It is often not clear what one gain with the methods presented here that would not be obtained with standard methods. 
+
+The documentation for the new R-procedure "independence_test()" is also just not adequate. The paper needs to state exactly what each input and output from the software means. Also, do not assume that the typical reader will be willing to read through S-type or R-type code or output without careful guidance. Most will simply gloss over the code or output. 
+
+(As a side point, is this R-procedure appropriately named, or should it be called something else that reflects the conditional nature of the inference?) 
+
+It should also be noted that 'Lego' is a registered trademark and should not be used as an adjective to describe a procedure. Furthermore, there is nothing about the proposed procedure that makes one think specifically of Lego building blocks, let alone any other building blocks (beyond the most metaphorical sense). The metaphor of the 'spanner' also seems stretched. 
+ 
+Specific comments for the authors. 
+
+page 1: 
+ What is meant by "non-standard inference procedures" here? The classical approaches seem pretty standard. 
+ 
+page 2: 
+ The introduction needs to be much clearer. Make it clear what is meant by "certain null hypotheses." For example, there are null hypotheses that specify the underlying cell proportions in a contingency table, and there are null hypotheses that specify only independence between rows and columns, but not the proportions. Also, not all conditional tests are permutation tests; there are both conditional exact permutation tests and conditional asymptotic tests. Also, mention some of the pros and cons of permutation tests explicitly here. 
+ 
+page 3: 
+ The Wilcoxon-Mann-Whitney and Cochran-Mantel-Haenszel tests are not so much inflexible as specific to particular problems. It is indeed nice that they can be generalized, but this in no way detracts from their value or utility, where appropriate. Conversely, generalized methods lack some of the specificity of simpler methods and become hard to interpret. 
+ 
+page 4: 
+ Elaborate on "permutation symmetric way" here, meaning the value of the function does not depend on the order in which the Y-variables appear. 
+ 
+page 5: 
+ Regarding the last sentence, "Less well known ..." It is not obvious that the conditional distribution can be approximated by its limiting distribution under - all - circumstances, but in any case the accuracy of this approximation is what is of most concern. The implications of this and the theory in the rest of this paragraph should be developed more clearly. 
+ 
+pages 6-8: 
+ In the "genetic components of alcoholism" example, some essential details are missing from the text, such as the sample size in each group, that there are three allele lengths (short, intermediate, long), and how this relates to the case-control study from which the data were taken, etc. Some of these details can be figured out from the figure and subsequent text, but the logical flow is awkward. 
+ As for the R-code, it would help to include explicitly the formula statement: "formula = elevel ~ alevel". The "trafo" statement is not explained either. 
+ As for the alternative approach, why were these particular scores (2, 7, 11) chosen, other than that they were chosen before? These choices seem to be data driven. 
+ Using the Jonkheere-Terpestra test seems to be a better way to get at the ordering of these allele levels. Can this test be implemented in the new procedure? 
+ Finally, it is not advisable to compare methods based on p-values, since they measure the statistical significance of effects with respect to particular hypotheses, but ignore other factors, like absolute magnitude, that may also be important. After all, both p-values are pretty small. 
+ 
+page 9: 
+ In the "smoking and Alzheimer's disease" example, the paper assumes that the readers will recognize the nesting structure (within gender) in the R-code. Also, why did the "ytrafo" and "trafo" statements disappear? 
+ 
+page 10: 
+ It would help to state in plain English that the R-code restricts the analysis to a particular subset (males, females). 
+ 
+page 11: 
+ The paper needs to explain the calculation of the quantiles of the permutation distribution better. Why is the 95% quantile (2.81) so large compared to the usual two-sided normal-score of 1.96 (and is this the correct comparison)? Also, the paper needs to explain how the p-values were adjusted for multiple testing (Bonferroni?). 
+ 
+pages 12-14: 
+ There are several details about the "photo-carcinogenicity experiments" that are unclear. Access to the data would help. Were there 36 animals (rats? mice?) in each group? Also, at the end of all these tests, did we learn anything more than the figures told us up-front? 
+ In addition, if groups A and B have similar survival times and times to first tumor, as the figures show, how do we see these results with the test statistics? 
+ 
+pages 14-16: 
+ Likewise, there are several details about the "contaminated fish consumption" example that are unclear. What were the sample sizes? What is the "coherence criterion?" Why does the partially ordered comparison make biological sense? What did these tests tell us about the subject-matter example? How do we interpret Figure 5? 
+ 
+pages 16-17: 
+ The discussion provides a fairly accurate summary of this paper. Still, one must have reservations about a highly automated conditional inference system where "the burden of implementing a Monte-Carlo procedure, or even thinking about asymptotics, is waived." Some good diagnostic procedures for this last assumption would be reassuring. 
+ 
+This paper has relatively few grammatical errors, and all should be found when revising this paper. 
+
+Good luck with your revisions! 
+ 
+-------------------------------------------------------------------------- 
+ 
+Referee #2(Comments to the authors): 
+ 
+Enclosed in the attached report. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+    [ Part 2, Application/PDF  19KB. ]
+    [ Unable to print this part. ]
+
