@@ -363,7 +363,7 @@ double numbersmall(int c, int b, double ob, celW **W1, celW **W2, double tol) {
             test = 1;
             for (j = tempel; j < le && test == 1; j++) {
                 th = W1[h][be].x[i] + W2[c-h][bp].x[le-j-1];
-                if (th < ob | th - ob < tol) {
+                if ((th < ob) | (th - ob < tol)) {
                     tot += W1[h][be].c[i] * W2[c - h][bp].c[le - j -1];
                     tempel = j;
                     test = 0;
