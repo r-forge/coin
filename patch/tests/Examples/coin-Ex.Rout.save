@@ -2,7 +2,7 @@
 R version 2.14.2 (2012-02-29)
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
+Platform: i386-pc-mingw32/i386 (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -21,6 +21,7 @@ Type 'q()' to quit R.
 > pkgname <- "coin"
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
+> options(pager = "console")
 > library('coin')
 Loading required package: survival
 Loading required package: splines
@@ -44,11 +45,10 @@ Loading required package: stats4
 > 
 > 
 >   data("CWD")
+>   CWD[1:6] <- 100 * CWD[1:6] # scaling (to avoid warning)
 >   maxstat_test(sample2 + sample3 + sample4 +
 +                sample6 + sample7 + sample8 ~ trend, data = CWD,
 +                distribution = approximate(1e5))
-Warning in .local(.Object, ...) :
-  The conditional covariance matrix has zero diagonal elements
 
 	Approximative Maxstat Test
 
@@ -447,7 +447,7 @@ IV - III 0.9998777778
 > 
 > cleanEx()
 
-detaching ‘package:multcomp’
+detaching 'package:multcomp'
 
 > nameEx("MarginalHomogeneityTest")
 > ### * MarginalHomogeneityTest
@@ -1034,7 +1034,7 @@ alternative hypothesis: true mu is greater than 0
 > 
 > cleanEx()
 
-detaching ‘package:multcomp’
+detaching 'package:multcomp'
 
 > nameEx("Transformations")
 > ### * Transformations
@@ -2034,7 +2034,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  20.085 0.66 20.774 0 0 
+Time elapsed:  52.11 0.81 54.22 NA NA 
 > grDevices::dev.off()
 null device 
           1 
