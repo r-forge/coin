@@ -323,7 +323,7 @@ unadjusted <- function(object, ...) {
                       "greater"   = 1 - pnorm(ts),
                       "less"      = pnorm(ts))
     } else {
-        ### raw simulation results, scores have been handled already
+        ## raw simulation results, scores have been handled already
         pls <- support(object, raw = TRUE)
 
         ## standardize
@@ -331,17 +331,17 @@ unadjusted <- function(object, ...) {
         expect <- expectation(object)
         switch(object@statistic@alternative,
                "two.sided" = {
-                   pls <- abs(t((pls - expect) / dcov))
+                   pls <- abs((pls - expect) / dcov)
                    ts <- abs(statistic(object, "standardized"))},
                "greater" = {
-                   pls <- t((pls - expect) / dcov)
+                   pls <- (pls - expect) / dcov
                    ts <- statistic(object, "standardized")},
                "less" = {
-                   pls <- -t((pls - expect) / dcov)
+                   pls <- -(pls - expect) / dcov
                    ts <- -(statistic(object, "standardized"))})
 
         ## unadjusted p-values
-        ret <- matrix(rowMeans(GE(t(pls), as.vector(ts))),
+        ret <- matrix(rowMeans(GE(pls, as.vector(ts))),
                       nrow = nrow(ts), ncol = ncol(ts))
         rownames(ret) <- rownames(ts)
         colnames(ret) <- colnames(ts)
