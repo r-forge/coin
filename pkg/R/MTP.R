@@ -26,7 +26,8 @@ singlestep <- function(object, ...) {
     uts <- tsrts[idx] # unique ts
     ret <- 1 - sapply(uts, pperm, object = object, ...)
 
-    ret <- matrix(ret[ots], nrow = nrow(ts), ncol = ncol(ts))
+    ret <- matrix(rep.int(ret, diff(c(0L, idx)))[ots], # remapping
+                  nrow = nrow(ts), ncol = ncol(ts))
     rownames(ret) <- rownames(ts)
     colnames(ret) <- colnames(ts)
     ret
