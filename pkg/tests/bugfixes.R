@@ -11,7 +11,7 @@ independence_test(I(x1 / x2) ~ x3, data = df)
 independence_test(I(x1 < 0) ~ x3, data = df)
 
 ### expectation was wrong when varonly = TRUE in case both
-### xtrafo and ytrafo were multivariate 
+### xtrafo and ytrafo were multivariate
 if (require(multcomp)) {
     df <- data.frame(x = runif(30), y = runif(30), z = gl(3, 10))
     a <- independence_test(x + y ~ z, data = df,
@@ -25,7 +25,7 @@ if (require(multcomp)) {
 }
 
 
-### `statistic' for linear and standardized statistics was wrong in case of 
+### `statistic' for linear and standardized statistics was wrong in case of
 ### scores
 data("jobsatisfaction")
 stopifnot(unique(dim(statistic(lbl_test(jobsatisfaction), "linear"))) == 1)
@@ -40,7 +40,7 @@ ite <- independence_test(I(round(x, 1)) ~ z, data = df, dist = exact())
 ae <- support(ite)
 de <- sapply(ae, function(x) dperm(ite, x))
 sum(de)
-ita <- independence_test(I(round(x, 1)) ~ z, data = df, 
+ita <- independence_test(I(round(x, 1)) ~ z, data = df,
                          dist = approximate(B = 100000))
 aa <- support(ita)
 da <- sapply(aa, function(x) dperm(ita, x))
@@ -61,9 +61,9 @@ i1 <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
 i2 <- independence_test(Surv(time, event) ~ group, data = photocar)
 i3 <- independence_test(Surv(dmin, tumor) ~ group, data = photocar)
 
-stopifnot(max(abs(statistic(i1, "standardized")[,1] - 
+stopifnot(max(abs(statistic(i1, "standardized")[,1] -
                   statistic(i2, "stand"))) < sqrt(.Machine$double.eps))
-stopifnot(max(abs(statistic(i1, "standardized")[,2] - 
+stopifnot(max(abs(statistic(i1, "standardized")[,2] -
                   statistic(i3, "stand"))) < sqrt(.Machine$double.eps))
 
 ### check new var_trafo argument
@@ -74,10 +74,10 @@ b <- trafo(data.frame(x = x, y = y), var_trafo = list(x = normal_trafo))
 stopifnot(isequal(a, b))
 
 ### check for multiple ordered factors
-mydf <- data.frame(x = ordered(gl(4, 5)), y = ordered(gl(5, 4)), 
+mydf <- data.frame(x = ordered(gl(4, 5)), y = ordered(gl(5, 4)),
                    z = rnorm(20))
 it1 <- independence_test(x + y ~ z , data = mydf)
-stopifnot(isequal(drop(statistic(it1, "linear")), 
+stopifnot(isequal(drop(statistic(it1, "linear")),
           c(statistic(independence_test(x ~ z , data = mydf), "linear"),
             statistic(independence_test(y ~ z , data = mydf), "linear"))))
 it1 <- independence_test(x + z ~ y , data = mydf)
@@ -159,7 +159,7 @@ g <- function(x) {
     x <- unlist(x)
     cbind(add[x], dom[x], rez[x])
 }
-it <- independence_test(group ~ genotype, 
+it <- independence_test(group ~ genotype,
     data = medf, weights = ~ Freq, xtrafo = g)
 statistic(it, "linear")
 
@@ -177,7 +177,7 @@ tmp <- data.frame(x = ordered(sample(1:3, 20, replace = TRUE)), y = rnorm(20))
 it1 <- independence_test(y ~ x, data = tmp, scores = list(x = c(1, 1, 2)))
 g <- function(x) c(1, 1, 2)[unlist(x)]
 it2 <- independence_test(y ~ x, data = tmp, xtrafo = g)
-it3 <- independence_test(y ~ x, data = tmp, 
+it3 <- independence_test(y ~ x, data = tmp,
     xtrafo = function(data) trafo(data, ordered_trafo = g))
 stopifnot(all.equal(statistic(it1), statistic(it2)))
 stopifnot(all.equal(statistic(it1), statistic(it3)))
@@ -197,7 +197,7 @@ stopifnot(ci[1] < pvalue(it) && ci[2] > pvalue(it))
 x <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
 y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
 ### must not give a warning
-wilcoxsign_test(x ~ y, alternative = "greater", 
+wilcoxsign_test(x ~ y, alternative = "greater",
                 distribution = exact())
 
 ### inconsistencies with confidence intervals
@@ -219,7 +219,7 @@ y <- as.data.frame(matrix(rnorm(200), ncol=2))
 group <- gl(2, 50)
 lapply(y, function(var) wilcox_test(var ~ group))
 
-### make sure a parallel design with 
+### make sure a parallel design with
 ### n = 2 isn't confused with a block design
 ### spotted by Fritz Scholz <fscholz@u.washington.edu>
 dat <- data.frame(y = c(1, 2), g = gl(2, 1))
@@ -295,13 +295,13 @@ wilcoxsign_test(x ~ y)
 ### monotonicity wasn't enforced for "step-down" and "discrete"
 set.seed(290875)
 
-gr <- gl(2, 50) 
+gr <- gl(2, 50)
 x1 <- rnorm(100) + (as.numeric(gr) - 1) * 0.5
 x2 <- rnorm(100) - (as.numeric(gr) - 1) * 0.5
 
 it <- independence_test(x1 + x2 ~ gr, distribution = approximate(B = 1000))
 
-pss <- pvalue(it, "step-down") # wasn't monotone
-stopifnot(pss[1] == pss[2])
-psd <- pvalue(it, "discrete")  # wasn't monotone
-stopifnot(pss[1] == pss[2])
+psd <- pvalue(it, "step-down") # wasn't monotone
+stopifnot(psd[1] == psd[2])
+pd <- pvalue(it, "discrete")  # wasn't monotone
+stopifnot(pd[1] == pd[2])
