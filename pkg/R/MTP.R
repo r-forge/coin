@@ -3,7 +3,7 @@
 ### single step maxT multiple testing procedure
 singlestep <- function(object, ...) {
 
-    ### reorder test statistics to ensure consistency with "global"/"step-down"
+    ## reorder test statistics to ensure consistency with "global"/"step-down"
     switch(object@statistic@alternative,
            "two.sided" = {
                ts <- abs(statistic(object, "standardized"))
@@ -19,12 +19,12 @@ singlestep <- function(object, ...) {
                rts <- order(ts) # smallest ts first
            })
 
-    ### iterate over unique test statistics only and remap
+    ## iterate over unique test statistics only and remap
     pq <- length(ts)
     tsrts <- ts[rts]
     idx <- c(which(tsrts[-1L] != tsrts[-pq]), pq)
     uts <- tsrts[idx] # unique ts
-    ret <- 1 - sapply(uts, pperm, object = object, ...)
+    ret <- sapply(uts, object@distribution@pvalue, ...)
 
     ret <- matrix(rep.int(ret, diff(c(0L, idx)))[ots], # remapping
                   nrow = nrow(ts), ncol = ncol(ts))

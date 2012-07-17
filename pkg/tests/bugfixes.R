@@ -4,6 +4,7 @@
 set.seed(290875)
 library(coin)
 isequal <- coin:::isequal
+GE <- coin:::GE
 
 ### I() returns objects of class AsIs which caused an error in `trafo'
 df <- data.frame(x1 = rnorm(100), x2 = rnorm(100), x3 = gl(2, 50))
@@ -305,3 +306,19 @@ psd <- pvalue(it, "step-down") # wasn't monotone
 stopifnot(psd[1] == psd[2])
 pd <- pvalue(it, "discrete")  # wasn't monotone
 stopifnot(pd[1] == pd[2])
+
+### single-step p-values were too small
+df <- data.frame(y1 = c(6, 7, 8, 5, 4, 3, 1, 2),
+                 y2 = c(1, 2, 5, 4, 7, 3, 8, 6),
+                 y3 = c(5, 7, 8, 6, 2, 3, 1, 4),
+                 y4 = c(4, 8, 7, 3, 6, 5, 1, 2),
+                 x = gl(2, 4, labels = c("I", "II")))
+
+set.seed(711109)
+it <- independence_test(y1 + y2 + y3 + y4 ~ x, data = df,
+                        alternative = "greater",
+                        distribution = approximate(B = 20))
+
+pss <- pvalue(it, "single-step")
+psd <- pvalue(it, "step-down")
+stopifnot(isequal(all(GE(pss, psd)), TRUE))

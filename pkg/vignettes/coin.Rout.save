@@ -1,22 +1,4 @@
 
-R version 2.14.1 (2011-12-22)
-Copyright (C) 2011 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
-
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under certain conditions.
-Type 'license()' or 'licence()' for distribution details.
-
-  Natural language support but running in an English locale
-
-R is a collaborative project with many contributors.
-Type 'contributors()' for more information and
-'citation()' on how to cite R or R packages in publications.
-
-Type 'demo()' for some demos, 'help()' for on-line help, or
-'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
 > options(width = 60)
 
 > require("coin")
@@ -30,12 +12,29 @@ Loading required package: multcomp
 
 > require("Biobase")
 Loading required package: Biobase
+Loading required package: BiocGenerics
+
+Attaching package: ‘BiocGenerics’
+
+The following object(s) are masked from ‘package:stats’:
+
+    xtabs
+
+The following object(s) are masked from ‘package:base’:
+
+    Filter, Find, Map, Position, Reduce,
+    anyDuplicated, cbind, colnames, duplicated, eval,
+    get, intersect, lapply, mapply, mget, order,
+    paste, pmax, pmax.int, pmin, pmin.int, rbind,
+    rep.int, rownames, sapply, setdiff, table,
+    tapply, union, unique
 
 Welcome to Bioconductor
 
-  Vignettes contain introductory material. To view, type
-  'openVignette()'. To cite Bioconductor, see
-  'citation("Biobase")' and for packages 'citation(pkgname)'.
+    Vignettes contain introductory material; view
+    with 'browseVignettes()'. To cite Bioconductor,
+    see 'citation("Biobase")', and for packages
+    'citation("pkgname")'.
 
 
 > require("multcomp")
@@ -199,11 +198,14 @@ alternative hypothesis: two.sided
  5.013042e-07 7.428484e-04 
 
                    
-II - I   0.64726473
-III - I  0.03680368
-IV - I   0.02110211
+II - I   0.66186619
+III - I  0.03990399
+IV - I   0.02280228
 III - II 0.00010001
 IV - II  0.00010001
-IV - III 0.99799980
+IV - III 0.99889989
 
  *** Run successfully completed ***
+> proc.time()
+   user  system elapsed 
+  1.500   0.020   1.528 
