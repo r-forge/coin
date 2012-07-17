@@ -1,21 +1,38 @@
 
 		CHANGES in `coin' VERSION 1.1-0
 
-    o     nonparametric multiple comparisons via Westfall (1997)
-          algorithm. See ?mcptrafo and ?pvalue
+    NEW FEATURES
 
-    o     new methods
-              pvalue(it, method = "Bonferroni")
-              pvalue(it, method = "Sidak")
-              pvalue(it, method = "Bonferroni-Holm")
-              pvalue(it, method = "Sidak-Holm")
-              pvalue(it, method = "unadjusted")
-          and
-              pvalue(it, method = "step-down") now works in the
-              asymptotic case
-          thanks to Henric Winell
+    o     single-step adjusted p-values are now computed slightly faster due to
+          using only the unique realization of the test statistics
+          (Long-standing <FIXME>.)
 
-   o      single-step p-values were sometimes too small
+    o     step-down adjusted p-values can now be obtained when the asymptotic
+          null distribution is used
+
+    o     adjusted p-values using the discrete method has been reimplemented
+          and now uses maxT instead of minP
+
+    o     adjusted p-values using the discrete method now allows for single-step
+          or step-down adjustments using the Bonferroni or Sidak inequalities
+          (see ?pvalue)
+
+    o     adjusted p-values for multiple comparisons can now be obtained using
+          the Westfall (1997) algorithm (see ?mcptrafo and ?pvalue)
+
+    o     the unadjusted p-values can now be obtained (see ?pvalue)
+
+    BUG FIXES
+
+    o     monotonicity of step-down adjusted p-values was not enforced when
+          using the approximative (Monte Carlo) null distribution
+
+    o     the smallest single-step and step-down adjusted p-values sometimes
+          differed from the global p-value
+
+    o     single-step adjusted p-values were too small when the support of the
+          null distribution contained values equal to the observed test
+          statistics
 
 
                 CHANGES in `coin' VERSION 1.0-22
