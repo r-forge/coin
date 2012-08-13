@@ -1,5 +1,3 @@
-
-
 ### single step maxT multiple testing procedure
 singlestep <- function(object, ...) {
 
@@ -7,26 +5,23 @@ singlestep <- function(object, ...) {
     switch(object@statistic@alternative,
            "two.sided" = {
                ts <- abs(statistic(object, "standardized"))
-               ots <- rank(-ts) # original order
-               rts <- order(ts, decreasing = TRUE)}, # abs. largest ts first
+               o <- order(ts, decreasing = TRUE)}, # abs. largest ts first
            "greater" = {
                ts <- statistic(object, "standardized")
-               ots <- rank(-ts) # original order
-               rts <- order(ts, decreasing = TRUE)}, # largest ts first
+               o <- order(ts, decreasing = TRUE)}, # largest ts first
            "less" = {
                ts <- statistic(object, "standardized")
-               ots <- rank(ts) # original order
-               rts <- order(ts) # smallest ts first
+               o <- order(ts) # smallest ts first
            })
 
     ## iterate over unique test statistics only and remap
     pq <- length(ts)
-    tsrts <- ts[rts]
-    idx <- c(which(tsrts[-1L] != tsrts[-pq]), pq)
-    uts <- tsrts[idx] # unique ts
+    ots <- ts[o]
+    idx <- c(which(ots[-1L] != ots[-pq]), pq)
+    uts <- ots[idx] # unique ts
     ret <- sapply(uts, object@distribution@pvalue, ...)
 
-    ret <- matrix(rep.int(ret, diff(c(0L, idx)))[ots], # remapping
+    ret <- matrix(rep.int(ret, diff(c(0L, idx)))[order(o)], # remapping
                   nrow = nrow(ts), ncol = ncol(ts))
     rownames(ret) <- rownames(ts)
     colnames(ret) <- colnames(ts)
@@ -39,23 +34,22 @@ singlestep <- function(object, ...) {
 ### <FIXME>
 rsdmaxT <- function(pls, ts) {
 
-    ### reorder simulations using (increasing) test statistics
-    ots <- rank(ts) # original order
-    rts <- order(ts) # smallest ts first
-    q <- pls[, rts, drop = FALSE]
+    ## reorder simulations using (increasing) test statistics
+    o <- order(ts) # smallest ts first
+    q <- pls[, o, drop = FALSE]
 
-    ### algorithm 2.8 (Free Step-Down Resampling Method) in
-    ### Westfall & Young (1993), page 66 _using standardized
-    ### statistics instead of p-values_!
+    ## algorithm 2.8 (Free Step-Down Resampling Method) in
+    ## Westfall & Young (1993), page 66 _using standardized
+    ## statistics instead of p-values_!
     if (ncol(q) > 1) {
         for (j in 2:ncol(q))
             q[,j] <- pmax(q[,j], q[,j-1])
     }
-    ret <- rowMeans(GE(t(q), ts[rts]))
+    ret <- rowMeans(GE(t(q), ts[o]))
     for (i in (length(ret) - 1):1)
         ret[i] <- max(ret[i], ret[i + 1]) # enforce monotonicity, page 67
 
-    ret <- matrix(ret[ots], nrow = nrow(ts), ncol = ncol(ts))
+    ret <- matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts))
     rownames(ret) <- rownames(ts)
     colnames(ret) <- colnames(ts)
     ret
@@ -64,49 +58,47 @@ rsdmaxT <- function(pls, ts) {
 ### step-down using the asymptotic distribution
 asdmaxT <- function(object) {
 
-    ### reorder upper and/or lower limits using test statistics
+    ## reorder upper and/or lower limits using test statistics
     switch(object@statistic@alternative,
            "two.sided" = {
                ts <- abs(statistic(object, "standardized"))
                pq <- length(ts)
-               ots <- rank(-ts) # original order
-               rts <- order(ts, decreasing = TRUE) # abs. largest ts first
-               upper <- ts[rts]
+               o <- order(ts, decreasing = TRUE) # abs. largest ts first
+               upper <- ts[o]
                lower <- -upper},
            "greater" = {
                ts <- statistic(object, "standardized")
                pq <- length(ts)
-               ots <- rank(-ts) # original order
-               rts <- order(ts, decreasing = TRUE) # largest ts first
-               upper <- ts[rts]
+               o <- order(ts, decreasing = TRUE) # largest ts first
+               upper <- ts[o]
                lower <- rep(-Inf, pq)},
            "less" = {
                ts <- statistic(object, "standardized")
                pq <- length(ts)
-               ots <- rank(ts) # original order
-               rts <- order(ts) # smallest ts first
+               o <- order(ts) # smallest ts first
                upper <- rep(Inf, pq)
-               lower <- ts[rts]})
+               lower <- ts[o]})
 
-    ### correlation matrix
+    ## correlation matrix
     corr <- cov2cor(covariance(object))
 
-    ### step-down based on multivariate normality
+    ## step-down based on multivariate normality
     ret <- numeric(pq)
     ret[1] <- pmv(lower = lower[1], upper = upper[1],
                   mean = rep(0, pq), corr = corr)
     if (pq > 1) {
+        oo <- o
         for (i in 2:pq) {
-            j <- rank(rts)[1] # reindexing needed in each step
+            j <- rank(oo)[1] # reindexing needed in each step
             corr <- corr[-j, -j]
-            rts <- rts[-1]
+            oo <- oo[-1]
             ret[i] <- min(ret[i - 1],
                           pmv(lower = lower[i], upper = upper[i],
-                              mean = rep(0, length(rts)), corr = corr))
+                              mean = rep(0, length(oo)), corr = corr))
         }
     }
 
-    ret <- matrix(1 - ret[ots], nrow = nrow(ts), ncol = ncol(ts))
+    ret <- matrix(1 - ret[order(o)], nrow = nrow(ts), ncol = ncol(ts))
     rownames(ret) <- rownames(ts)
     colnames(ret) <- colnames(ts)
     ret
@@ -149,9 +141,9 @@ stepdown <- function(object, ...) {
 discrete <- function(object, method = c("Bonferroni", "Sidak",
                                         "Bonferroni-Holm", "Sidak-Holm"), ...) {
 
-    ### <FIXME> this should be possible when the _exact_ marginal
-    ### distributions are available
-    ### </FIXME>
+    ## <FIXME> this should be possible when the _exact_ marginal
+    ## distributions are available
+    ## </FIXME>
 
     if (!(extends(class(object), "MaxTypeIndependenceTest") &&
           extends(class(object@distribution), "ApproxNullDistribution")))
@@ -164,10 +156,10 @@ discrete <- function(object, method = c("Bonferroni", "Sidak",
     bonferroni <- pmatch(method, "Bonferroni-Holm", nomatch = 0)
     stepdown <- method %in% c("Bonferroni-Holm", "Sidak-Holm")
 
-    ### raw simulation results, scores have been handled already
+    ## raw simulation results, scores have been handled already
     pls <- support(object, raw = TRUE)
 
-    ### standardize
+    ## standardize
     dcov <- sqrt(variance(object))
     expect <- expectation(object)
     switch(object@statistic@alternative,
@@ -181,15 +173,14 @@ discrete <- function(object, method = c("Bonferroni", "Sidak",
                pls <- -t((pls - expect) / dcov)
                ts <- -(statistic(object, "standardized"))})
 
-    ### reorder simulations using the (decreasing) test statistics
-    ots <- rank(-ts) # original order
-    rts <- order(ts, decreasing = TRUE) # largest ts first
-    pls <- pls[, rts, drop = FALSE]
+    ## reorder simulations using the (decreasing) test statistics
+    o <- order(ts, decreasing = TRUE) # largest ts first
+    pls <- pls[, o, drop = FALSE]
 
-    ### unadjusted p-values
-    pvals <- rowMeans(GE(t(pls), ts[rts]))
+    ## unadjusted p-values
+    pvals <- rowMeans(GE(t(pls), ts[o]))
 
-    ### permutation distribution
+    ## permutation distribution
     foo <- function(x, t) mean(GE(x, t))
     p <- vector(mode = "list", length = ncol(pls))
     for (i in 1:ncol(pls)) {
@@ -197,7 +188,7 @@ discrete <- function(object, method = c("Bonferroni", "Sidak",
         p[[i]] <- sapply(ux, foo, x = pls[, i])
     }
 
-    ### discrete adjustment
+    ## discrete adjustment
     ret <- rep(1 - bonferroni, length(ts)) # zeros (ones) for Bonferroni (Sidak)
     for (i in 1:length(pvals)) {
         qq <- if (stepdown) i else 1 # 'i' => successively smaller subsets
@@ -215,17 +206,17 @@ discrete <- function(object, method = c("Bonferroni", "Sidak",
     for (i in 2:length(ret))
         ret[i] <- max(ret[i - 1], ret[i]) # enforce monotonicity
 
-    ret <- matrix(ret[ots], nrow = nrow(ts), ncol = ncol(ts))
+    ret <- matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts))
     rownames(ret) <- rownames(ts)
     colnames(ret) <- colnames(ts)
     ret
 }
 
-#####################################
-## Westfall (1997) method in coin ###
-#####################################
-## Basic code for npmcp() taken from pqfunctions.R in package
-## multcomp
+######################################
+### Westfall (1997) method in coin ###
+######################################
+### Basic code for npmcp() taken from pqfunctions.R in package
+### multcomp
 
 ### cf. mcp(x = "Tukey") in multcomp
 mcp_trafo <- function(...) {
@@ -259,39 +250,39 @@ mcp_trafo <- function(...) {
 ### compute p-values under subset pivotality
 npmcp <- function(object) {
 
-    ### extract from object
+    ## extract from object
     y <- object@statistic@y[[1]]
     x <- object@statistic@x[[1]]
     ytrafo <- object@statistic@ytrafo
     alternative <- object@statistic@alternative
 
-    ### <FIXME> it is currently hard to ask a distribution object
-    ### for its type (and arguments). Its a design bug.
+    ## <FIXME> it is currently hard to ask a distribution object
+    ## for its type (and arguments). Its a design bug.
     distribution <- object@call$distribution
-    ### use default value
+    ## use default value
     if (is.null(distribution))
         distribution <- eval(formals(eval(object@call[[1]]))$distribution)[1]
-    ### </FIXME>
+    ## </FIXME>
     stand_tstat <- statistic(object, type = "standardized")
     tstat <- switch(alternative,
                     "less" = stand_tstat,
                     "greater" = -stand_tstat,
                     "two.sided" = -abs(stand_tstat))
 
-    # get contrast matrix from xtrans
+    ## get contrast matrix from xtrans
     C <- attr(object@statistic@xtrans, "contrast")
     stopifnot(inherits(C, "matrix"))
 
-    # order test statistics, most "extreme" one comes first
+    ## order test statistics, most "extreme" one comes first
     Corder <- C[order(tstat), , drop = FALSE]
 
-    # compute allowed subsets of hypotheses
-    # returns list consisting of lists (one for each rejection step of H0)
+    ## compute allowed subsets of hypotheses
+    ## returns list consisting of lists (one for each rejection step of H0)
     ms <- multcomp:::maxsets(Corder)
 
     foo <- function(s) {
         Ctmp <- Corder[s, , drop = FALSE] # current allowed subset
-        # x levels in current subset
+        ## x levels in current subset
         xlev <- apply(Ctmp, MARGIN = 2, function(col) any(col != 0))
 
         it <- independence_test(y ~ x,
