@@ -18,8 +18,8 @@ singlestep <- function(object, ...) {
     pq <- length(ts)
     ots <- ts[o]
     idx <- c(which(ots[-1L] != ots[-pq]), pq)
-    uts <- ots[idx] # unique ts
-    ret <- sapply(uts, object@distribution@pvalue, ...)
+    ret <- sapply(ots[idx], # unique ts
+                  object@distribution@pvalue, ...)
 
     ret <- matrix(rep.int(ret, diff(c(0L, idx)))[order(o)], # remapping
                   nrow = nrow(ts), ncol = ncol(ts))
@@ -31,7 +31,6 @@ singlestep <- function(object, ...) {
 ### algorithm 2.8 (Free Step-Down Resampling Method) in
 ### Westfall & Young (1993), page 66 _using standardized
 ### statistics instead of p-values_!
-### <FIXME>
 rsdmaxT <- function(pls, ts) {
 
     ## reorder simulations using (increasing) test statistics
@@ -43,7 +42,7 @@ rsdmaxT <- function(pls, ts) {
     ## statistics instead of p-values_!
     if (ncol(q) > 1) {
         for (j in 2:ncol(q))
-            q[,j] <- pmax(q[,j], q[,j-1])
+            q[, j] <- pmax(q[, j], q[, j - 1])
     }
     ret <- rowMeans(GE(t(q), ts[o]))
     for (i in (length(ret) - 1):1)
