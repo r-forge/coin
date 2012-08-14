@@ -3,29 +3,36 @@
 
     NEW FEATURES
 
-    o     single-step adjusted p-values are now computed slightly faster due to
-          using only the unique realization of the test statistics
-          (Long-standing <FIXME>.)
+    o     single-step adjusted p-values based on the joint distribution of the
+          test statistics are now computed slightly faster due to using only the
+          unique realizations of the test statistics
 
-    o     step-down adjusted p-values can now be obtained when the asymptotic
-          null distribution is used
+    o     step-down adjusted p-values based on the joint distribution of the test
+          statistics can now be obtained when the asymptotic null distribution is
+          used
 
-    o     adjusted p-values using the discrete method has been reimplemented
-          and now uses maxT instead of minP
+    o     adjusted p-values based on the marginal distributions of the test
+          statistics can now be obtained when the asymptotic null distribution is
+          used
 
-    o     adjusted p-values using the discrete method now allows for single-step
-          or step-down adjustments using the Bonferroni or Sidak inequalities
-          (see ?pvalue)
+    o     adjusted p-values based on the marginal distribution of the test
+          statistics now uses a maxT, instead of a minP, procedure incorporating
+          discrete distributional characteristics when the approximate (Monte
+          Carlo) null distribution is used
+
+    o     single-step or step-down adjusted p-values based on the marginal
+          distributions of the test statistics can now be obtained, using the
+          Bonferroni or the Sidak method (see ?pvalue)
 
     o     adjusted p-values for multiple comparisons can now be obtained using
           the Westfall (1997) algorithm (see ?mcptrafo and ?pvalue)
 
-    o     the unadjusted p-values can now be obtained (see ?pvalue)
+    o     unadjusted p-values can now be obtained (see ?pvalue)
 
     BUG FIXES
 
     o     monotonicity of step-down adjusted p-values was not enforced when
-          using the approximative (Monte Carlo) null distribution
+          using the approximate (Monte Carlo) null distribution
 
     o     the smallest single-step and step-down adjusted p-values sometimes
           differed from the global p-value

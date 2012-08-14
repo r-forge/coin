@@ -176,6 +176,23 @@ psd6 <- pvalue(it6, "step-down")
 identical(pg6, min(pss6))
 identical(pg6, min(psd6))
 
+### adjusted marginal asymptotic p-values
+
+pvalue(it1, "Bonferroni")
+pvalue(it1, "Sidak")
+pvalue(it1, "Bonferroni-Holm")
+pvalue(it1, "Sidak-Holm")
+
+pvalue(it2, "Bonferroni")
+pvalue(it2, "Sidak")
+pvalue(it2, "Bonferroni-Holm")
+pvalue(it2, "Sidak-Holm")
+
+pvalue(it3, "Bonferroni")
+pvalue(it3, "Sidak")
+pvalue(it3, "Bonferroni-Holm")
+pvalue(it3, "Sidak-Holm")
+
 ### mcp
 
 YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,

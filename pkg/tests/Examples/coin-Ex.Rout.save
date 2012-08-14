@@ -1851,6 +1851,11 @@ alternative hypothesis: true mu is not equal to 1
 > 
 >   it <- independence_test(y1 + y2 ~ x, data = df, 
 +                           distribution = approximate(B = 9999))
+>   pvalue(it)
+[1] 0.0110011
+99 percent confidence interval:
+ 0.008497463 0.013981565 
+
 >   pvalue(it, method = "single-step")
          y1     y2
 1 0.0110011 0.9998
@@ -2086,7 +2091,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  60.08 1.34 63 NA NA 
+Time elapsed:  71.53 1.89 138.3 NA NA 
 > grDevices::dev.off()
 null device 
           1 

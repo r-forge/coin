@@ -55,8 +55,8 @@ pvalue(object, ...)
   \code{method = "Bonferroni-Holm"} or \code{method = "Sidak-Holm"} the 
   adjustments suggested by Westfall & Wolfinger (1997) with improvements 
   for highly discrete permutation distributions are available. Note that
-  these methods doesn't take correlations between the test statistics
-  into account.
+  these methods doesn't take dependence among the test statistics into
+  account.
 
   Assuming subset pivotality, \code{method = "unadjusted"} returns the
   unadjusted p-values.
@@ -100,6 +100,7 @@ pvalue(object, ...)
 
   it <- independence_test(y1 + y2 ~ x, data = df, 
                           distribution = approximate(B = 9999))
+  pvalue(it)
   pvalue(it, method = "single-step")
   pvalue(it, method = "step-down")
   pvalue(it, method = "Bonferroni")

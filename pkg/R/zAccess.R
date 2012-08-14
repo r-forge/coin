@@ -19,7 +19,7 @@ setMethod(f = "pvalue",
 
 setMethod(f = "pvalue",
           signature = "MaxTypeIndependenceTest",
-          definition = function(object, 
+          definition = function(object,
               method = c("global", "single-step", "step-down", "Bonferroni",
                          "Sidak", "Bonferroni-Holm", "Sidak-Holm",
                          "unadjusted", "npmcp"), ...) {
@@ -33,17 +33,17 @@ setMethod(f = "pvalue",
               C <- attr(object@statistic@xtrans, "contrast")
               if (!is.null(C) && !(method %in% c("global", "npmcp")))
                   warning(paste("multiple comparisons might be incorrect",
-                                "due to subset pivotality; use", 
+                                "due to subset pivotality; use",
                                 sQuote("method = \"npmcp\"")))
-              RET <- switch(method, 
-                   "global" = pvalue(object@distribution, 
+              RET <- switch(method,
+                   "global" = pvalue(object@distribution,
                                      object@statistic@teststatistic),
                    "single-step" = singlestep(object, ...),
-                   "step-down" = stepdown(object, ...),                            
-                   "Bonferroni" = discrete(object, method = "Bonferroni", ...),
-                   "Sidak" = discrete(object, method = "Sidak", ...),
-                   "Bonferroni-Holm" = discrete(object, method = "Bonferroni-Holm", ...),
-                   "Sidak-Holm" = discrete(object, method = "Sidak-Holm", ...),
+                   "step-down" = stepdown(object, ...),
+                   "Bonferroni" = marginal(object, method = "Bonferroni", ...),
+                   "Sidak" = marginal(object, method = "Sidak", ...),
+                   "Bonferroni-Holm" = marginal(object, method = "Bonferroni-Holm", ...),
+                   "Sidak-Holm" = marginal(object, method = "Sidak-Holm", ...),
                    "unadjusted" = unadjusted(object, ...),
                    "npmcp" = npmcp(object, ...)
               )
@@ -149,30 +149,30 @@ setMethod(f = "support",
 )
 
 ### generic method for extracting statistics from objects
-setGeneric("statistic", function(object, 
-    type = c("test", "linear", "standardized"), ...) 
+setGeneric("statistic", function(object,
+    type = c("test", "linear", "standardized"), ...)
     standardGeneric("statistic")
 )
 
 setMethod(f = "statistic",
           signature = "IndependenceTest",
-          definition = function(object, 
+          definition = function(object,
               type = c("test", "linear", "standardized"), ...)
               statistic(object@statistic, type = type)
 )
 
 setMethod(f = "statistic",
           signature = "IndependenceTestStatistic",
-          definition = function(object, 
+          definition = function(object,
               type = c("test", "linear", "standardized"), ...) {
               nc <- ncol(object@ytrans)
               nr <- ncol(object@xtrans)
               type <- match.arg(type)
               dn <- statnames(object)$dimnames
               switch(type, "test" = object@teststatistic,
-                           "linear" = matrix(object@linearstatistic, 
+                           "linear" = matrix(object@linearstatistic,
                                              nrow = nr, ncol = nc, dimnames = dn),
-                           "standardized" = matrix(object@standardizedlinearstatistic, 
+                           "standardized" = matrix(object@standardizedlinearstatistic,
                                                    nrow = nr, ncol = nc, dimnames = dn)
                            )
       }
@@ -180,16 +180,16 @@ setMethod(f = "statistic",
 
 setMethod(f = "statistic",
           signature = "IndependenceLinearStatistic",
-          definition = function(object, 
+          definition = function(object,
               type = c("test", "linear", "standardized"), ...) {
               nc <- ncol(object@ytrans)
               nr <- ncol(object@xtrans)
               type <- match.arg(type)
               dn <- statnames(object)$dimnames
               switch(type, "test" = stop("type = test not defined for IndependenceLinearStatistic"),
-                           "linear" = matrix(object@linearstatistic, 
+                           "linear" = matrix(object@linearstatistic,
                                              nrow = nr, ncol = nc, dimnames = dn),
-                           "standardized" = matrix(object@standardizedlinearstatistic, 
+                           "standardized" = matrix(object@standardizedlinearstatistic,
                                                    nrow = nr, ncol = nc, dimnames = dn)
                            )
       }
@@ -198,37 +198,37 @@ setMethod(f = "statistic",
 
 
 ### generic method for extracting expectations from objects
-setGeneric("expectation", function(object, ...) 
+setGeneric("expectation", function(object, ...)
     standardGeneric("expectation")
 )
 
 setMethod(f = "expectation",
           signature = "IndependenceTest",
-          definition = function(object, ...) 
+          definition = function(object, ...)
               expectation(object@statistic, ...)
 )
 
 setMethod(f = "expectation",
           signature = "IndependenceLinearStatistic",
-          definition = function(object, ...) 
+          definition = function(object, ...)
               object@expectation
 )
 
 
 ### generic method for extracting the covariance matrix from objects
-setGeneric("covariance", function(object, ...) 
+setGeneric("covariance", function(object, ...)
     standardGeneric("covariance")
 )
 
 setMethod(f = "covariance",
           signature = "CovarianceMatrix",
-          definition = function(object, ...) 
+          definition = function(object, ...)
               object@covariance
 )
 
 setMethod(f = "covariance",
           signature = "IndependenceTest",
-          definition = function(object, ...) 
+          definition = function(object, ...)
               covariance(object@statistic, ...)
 )
 
@@ -236,38 +236,38 @@ setMethod(f = "covariance",
           signature = "IndependenceLinearStatistic",
           definition = function(object, ...) {
               if (!extends(class(object@covariance), "CovarianceMatrix"))
-                  return(covariance(new("IndependenceTestStatistic", 
+                  return(covariance(new("IndependenceTestStatistic",
                                         object, varonly = FALSE)))
               covariance(object@covariance)
           }
 )
 
-### generic method for extracting the variances 
-setGeneric("variance", function(object, ...) 
+### generic method for extracting the variances
+setGeneric("variance", function(object, ...)
     standardGeneric("variance")
 )
 
 setMethod(f = "variance",
           signature = "Variance",
-          definition = function(object, ...) 
+          definition = function(object, ...)
               object@variance
 )
 
 setMethod(f = "variance",
           signature = "CovarianceMatrix",
-          definition = function(object, ...) 
+          definition = function(object, ...)
               diag(object@covariance)
 )
 
 
 setMethod(f = "variance",
           signature = "IndependenceTest",
-          definition = function(object, ...) 
+          definition = function(object, ...)
               variance(object@statistic, ...)
 )
 
 setMethod(f = "variance",
           signature = "IndependenceLinearStatistic",
-          definition = function(object, ...) 
+          definition = function(object, ...)
               variance(object@covariance)
 )
