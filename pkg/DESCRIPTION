@@ -9,9 +9,9 @@ Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
              person("Henric", "Winell", role = "ctb"),
              person("Achim", "Zeileis", role = "aut"))
 Description: Conditional inference procedures for the general independence
-  problem including two-sample, K-sample (non-parametric ANOVA), correlation, 
+  problem including two-sample, K-sample (non-parametric ANOVA), correlation,
   censored, ordered and multivariate problems.
-Depends: R (>= 2.10.0), methods, survival, mvtnorm (>= 0.8-0), modeltools (>= 0.2-9), 
+Depends: R (>= 2.11.0), methods, survival, mvtnorm (>= 0.8-0), modeltools (>= 0.2-9),
   multcomp
 Suggests: xtable, e1071, vcd
 Enhances: Biobase

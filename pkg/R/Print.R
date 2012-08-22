@@ -4,25 +4,25 @@ varnames <- function(object) {
     x <- object@x
     y <- object@y
 
-    yordered <- sapply(y, is.ordered)
-    ynames <- paste(colnames(y), ifelse(yordered, " (ordered)", ""), sep = "", 
+    yordered <- vapply(y, is.ordered, NA)
+    ynames <- paste(colnames(y), ifelse(yordered, " (ordered)", ""), sep = "",
                     collapse = ", ")
 
     if (length(x) == 1) {
         if (is.ordered(x[[1]])) {
-            xnames <- paste(colnames(x), " (", paste(levels(x[[1]]), collapse = " < "), 
+            xnames <- paste(colnames(x), " (", paste(levels(x[[1]]), collapse = " < "),
                             ")", sep = "")
         } else {
             if (is.factor(x[[1]])) {
-                xnames <- paste(colnames(x), " (", 
+                xnames <- paste(colnames(x), " (",
                                 paste(levels(x[[1]]), collapse = ", "), ")", sep = "")
             } else {
                 xnames <- colnames(x)
             }
         }
     } else {
-        xordered <- sapply(x, is.ordered)
-        xnames <- paste(colnames(x), ifelse(xordered, "(ordered)", ""), 
+        xordered <- vapply(x, is.ordered, NA)
+        xnames <- paste(colnames(x), ifelse(xordered, "(ordered)", ""),
                         sep = "", collapse = ", ")
     }
 
@@ -32,7 +32,7 @@ varnames <- function(object) {
         xnames <- paste(xnames, paste("\n\t stratified by", bn))
     }
 
-    if (nchar(xnames) > options("width")$width/2) { 
+    if (nchar(xnames) > options("width")$width/2) {
         strg <- paste(ynames, "by\n\t", xnames, collapse = "")
     } else {
         strg <- paste(ynames, "by", xnames, collapse = "")
@@ -41,7 +41,7 @@ varnames <- function(object) {
     return(strg)
 }
 
-setMethod(f = "show", signature = "QuadTypeIndependenceTest", 
+setMethod(f = "show", signature = "QuadTypeIndependenceTest",
     definition = function(object) {
 
         x <- object
@@ -53,7 +53,7 @@ setMethod(f = "show", signature = "QuadTypeIndependenceTest",
         distname <- switch(cld,
             "AsymptNullDistribution" = "Asymptotic",
             "ApproxNullDistribution" = "Approximative",
-            "ExactNullDistribution" = "Exact") 
+            "ExactNullDistribution" = "Exact")
 
         dataname <- varnames(x@statistic)
 
@@ -61,7 +61,7 @@ setMethod(f = "show", signature = "QuadTypeIndependenceTest",
                     p.value = dist@pvalue(stat),
                     data.name = dataname,
                     method = paste(distname, x@method))
-        if (length(dist@parameters) == 1 && 
+        if (length(dist@parameters) == 1 &&
                    names(dist@parameters) == "df") {
             RET$parameter <- dist@parameters[[1]]
             names(RET$parameter) <- "df"
@@ -104,7 +104,7 @@ setMethod(f = "show", signature = "MaxTypeIndependenceTest",
 
 setMethod(f = "show", signature = "ScalarIndependenceTest",
     definition = function(object) {
-          
+
         x <- object
         stat <- x@statistic@teststatistic
         names(stat) <- "Z"
@@ -124,7 +124,7 @@ setMethod(f = "show", signature = "ScalarIndependenceTest",
                     alternative = x@statistic@alternative,
                     data.name = dataname,
                     method = paste(distname, x@method))
-        if (length(x@nullvalue > 0)) 
+        if (length(x@nullvalue > 0))
             RET$null.value = c(mu = x@nullvalue)
         if (length(x@estimates) > 0)
             RET <- c(RET, x@estimates)
@@ -136,7 +136,7 @@ setMethod(f = "show", signature = "ScalarIndependenceTest",
 
 setMethod(f = "show", signature = "IndependenceTest",
     definition = function(object) {
-          
+
         x <- object
         stat <- x@statistic@teststatistic
         names(stat) <- "c"

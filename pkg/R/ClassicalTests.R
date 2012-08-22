@@ -596,7 +596,7 @@ maxstat_test.IndependenceProblem <- function(object,
         values = c("asymptotic", "approximate"))
     teststat <- match.arg(teststat)
 
-    ORDERED <- sapply(object@x, is.ordered)
+    ORDERED <- vapply(object@x, is.ordered, NA)
     lev <- lapply(object@x, levels)
     for (i in which(ORDERED)) class(object@x[[i]]) <- "numeric"
 

@@ -18,8 +18,8 @@ singlestep <- function(object, ...) {
     pq <- length(ts)
     ots <- ts[o]
     idx <- c(which(ots[-1L] != ots[-pq]), pq)
-    ret <- sapply(ots[idx], # unique ts
-                  object@distribution@pvalue, ...)
+    ret <- vapply(ots[idx], # unique ts
+                  object@distribution@pvalue, NA_real_, ...)
 
     ret <- matrix(rep.int(ret, diff(c(0L, idx)))[order(o)], # remapping
                   nrow = nrow(ts), ncol = ncol(ts))
@@ -205,7 +205,7 @@ marginal <- function(object, method = c("Bonferroni", "Sidak",
         p <- vector(mode = "list", length = ncol(pls))
         for (i in 1:ncol(pls)) {
             ux <- unique(pls[, i])
-            p[[i]] <- sapply(ux, foo, x = pls[, i])
+            p[[i]] <- vapply(ux, foo, NA_real_, x = pls[, i])
         }
 
         ## discrete adjustment
@@ -315,8 +315,8 @@ npmcp <- function(object) {
         pvalue(it)
     }
 
-    p <- sapply(ms, function(sub) # for every list of allowed subsets
-        max(sapply(sub, foo))) # for every subset
+    p <- vapply(ms, function(sub) # for every list of allowed subsets
+        max(vapply(sub, foo, NA_real_)), NA_real_) # for every subset
 
     for (i in 2:length(p))
         p[i] <- max(p[i-1], p[i]) # forces pvalue monotonicity

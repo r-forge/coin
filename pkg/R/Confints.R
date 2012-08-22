@@ -6,7 +6,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
              sQuote("ScalarIndependenceTestStatistic"))
 
     ### <FIXME> drop unused levels!
-    if (!is_2sample(object)) 
+    if (!is_2sample(object))
         warning(sQuote("object"), " does not represent a two sample problem")
     ### </FIXME>
 
@@ -20,11 +20,11 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
 
     alternative <- object@alternative
 
-    if(!((length(level) == 1)         
-       && is.finite(level)           
-       && (level > 0)          
-       && (level < 1)))          
-       stop("level must be a single number between 0 and 1")         
+    if(!((length(level) == 1)
+       && is.finite(level)
+       && (level > 0)
+       && (level < 1)))
+       stop("level must be a single number between 0 and 1")
 
     scores <- object@y[[1]]
     groups <- object@xtrans[,1]
@@ -33,7 +33,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
     x <- sort(scores[groups > 0])
     y <- sort(scores[groups < 1])
     alpha <- 1 - level
- 
+
     foo <- function(x, d) x - d
 
     if (!approx) {
@@ -42,8 +42,8 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
         ### explicitely compute all possible steps
         for (lev in levels(object@block)) {
             thisblock <- (object@block == lev)
-            ytmp <- sort(split(scores[thisblock], groups[thisblock])[[1]])             
-            xtmp <- sort(split(scores[thisblock], groups[thisblock])[[2]])             
+            ytmp <- sort(split(scores[thisblock], groups[thisblock])[[1]])
+            xtmp <- sort(split(scores[thisblock], groups[thisblock])[[2]])
             steps <- c(steps, as.vector(outer(xtmp, ytmp, foo)))
         }
         steps <- sort(unique(steps))
@@ -53,19 +53,19 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
             sum(object@ytrafo(data.frame(c(foo(x,d),y)))[seq(along = x)])
 
         ### we need to compute the statistics just to the right of
-        ### each step       
+        ### each step
         ds <- diff(steps)
         justright <- min(abs(ds[abs(ds) > sqrt(.Machine$double.eps)]))/2
-        jumps <- sapply(steps + justright, fse)
+        jumps <- vapply(steps + justright, fse, NA_real_)
 
-        ### determine if the statistics are in- or decreasing 
+        ### determine if the statistics are in- or decreasing
         ### jumpsdiffs <- diff(jumps)
-        increasing <- all(diff(jumps[c(1,length(jumps))]) > 0)       
+        increasing <- all(diff(jumps[c(1,length(jumps))]) > 0)
         decreasing <- all(diff(jumps[c(1,length(jumps))]) < 0)
 
         ### this is safe
-        if (!(increasing || decreasing)) 
-            stop("cannot compute confidence intervals:", 
+        if (!(increasing || decreasing))
+            stop("cannot compute confidence intervals:",
                  "the step function is not monotone")
 
         cci <- function(alpha) {
@@ -77,7 +77,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
             ###
             qlower <- drop(qperm(nulldistr, alpha/2) * sqrt(variance(object)) +
                            expectation(object))
-            qupper <- drop(qperm(nulldistr, 1 - alpha/2) * 
+            qupper <- drop(qperm(nulldistr, 1 - alpha/2) *
                            sqrt(variance(object)) + expectation(object))
 
             ## Check if the statistic exceeds both quantiles first.
@@ -97,7 +97,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
                 ###  step with STATISTIC == qupper
                 ###
                 ci <- c(min(steps[qlower <= jumps]),
-                        min(steps[jumps > qupper])) 
+                        min(steps[jumps > qupper]))
             } else {
                 ###
                 ###  We do NOT reject for all steps with
@@ -113,12 +113,12 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
             }
             ci
         }
-        cint <-  switch(alternative, 
+        cint <-  switch(alternative,
                      "two.sided" = cci(alpha),
-                     "greater"   = c(cci(alpha*2)[1], Inf), 
+                     "greater"   = c(cci(alpha*2)[1], Inf),
                      "less"      = c(-Inf, cci(alpha*2)[2])
                  )
-        attr(cint, "conf.level") <- level    
+        attr(cint, "conf.level") <- level
 
         ### was: median(steps) which will not work for blocks etc.
         u <- jumps - expectation(object)
@@ -147,7 +147,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
         mumax <- max(x) - min(y)
         ccia <- function(alpha) {
             ## Check if the statistic exceeds both quantiles
-            ## first: otherwise `uniroot' won't work anyway 
+            ## first: otherwise `uniroot' won't work anyway
             statu <- fsa(mumin, zq = qperm(nulldistr, alpha/2))
             statl <- fsa(mumax, zq = qperm(nulldistr, 1 - alpha/2))
             if (sign(statu) == sign(statl)) {
@@ -156,9 +156,9 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
                               "returning NA"))
                 return(c(NA, NA))
             }
-            u <- uniroot(fsa, c(mumin, mumax), 
+            u <- uniroot(fsa, c(mumin, mumax),
                          zq = qperm(nulldistr, alpha/2), ...)$root
-            l <- uniroot(fsa, c(mumin, mumax), 
+            l <- uniroot(fsa, c(mumin, mumax),
                          zq = qperm(nulldistr, 1 - alpha/2), ...)$root
             ## The process of the statistics does not need to be
             ## increasing: sort is ok here.
@@ -166,7 +166,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
         }
         cint <- switch(alternative, two.sided = {
                     ccia(alpha)
-                }, greater= {  
+                }, greater= {
                     c(ccia(alpha*2)[1], Inf)
                 }, less= {
                     c(-Inf, ccia(alpha*2)[2])
@@ -189,16 +189,16 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
 }
 
 
-confint_scale <- function(object, nulldistr, level = 0.95, 
+confint_scale <- function(object, nulldistr, level = 0.95,
     approx = FALSE, ...) {
 
     if (!extends(class(object), "ScalarIndependenceTestStatistic"))
-        stop("Argument ", sQuote("object"), " is not of class ",    
-             sQuote("ScalarIndependenceTestStatistic"))     
+        stop("Argument ", sQuote("object"), " is not of class ",
+             sQuote("ScalarIndependenceTestStatistic"))
 
-    if (!extends(class(nulldistr), "NullDistribution"))                               
+    if (!extends(class(nulldistr), "NullDistribution"))
         stop("Argument ", sQuote("nulldistr"), " is not of class ",
-             sQuote("NullDistribution"))                               
+             sQuote("NullDistribution"))
 
     ### <FIXME> drop unused levels!
     if (!is_2sample(object))
@@ -210,11 +210,11 @@ confint_scale <- function(object, nulldistr, level = 0.95,
 
     alternative <- object@alternative
 
-    if(!((length(level) == 1)         
-       && is.finite(level)           
-       && (level > 0)          
-       && (level < 1)))          
-       stop("level must be a single number between 0 and 1")         
+    if(!((length(level) == 1)
+       && is.finite(level)
+       && (level > 0)
+       && (level < 1)))
+       stop("level must be a single number between 0 and 1")
 
     scores <- object@y[[1]]
     groups <- object@xtrans[,1]
@@ -223,7 +223,7 @@ confint_scale <- function(object, nulldistr, level = 0.95,
     x <- sort(scores[groups > 0])
     y <- sort(scores[groups < 1])
     alpha <- 1 - level
- 
+
     foo <- function(x, d) x / d
 
     if (!approx) {
@@ -245,19 +245,19 @@ confint_scale <- function(object, nulldistr, level = 0.95,
             sum(object@ytrafo(data.frame(c(foo(x,d),y)))[seq(along = x)])
 
         ### we need to compute the statistics just to the right of
-        ### each step       
+        ### each step
         ds <- diff(steps)
         justright <- min(abs(ds[abs(ds) > sqrt(.Machine$double.eps)]))/2
-        jumps <- sapply(steps + justright, fse)
+        jumps <- vapply(steps + justright, fse, NA_real_)
 
-        ### determine if the statistics are in- or decreasing 
+        ### determine if the statistics are in- or decreasing
         ### jumpsdiffs <- diff(jumps)
-        increasing <- all(diff(jumps[c(1,length(jumps))]) > 0)       
+        increasing <- all(diff(jumps[c(1,length(jumps))]) > 0)
         decreasing <- all(diff(jumps[c(1,length(jumps))]) < 0)
 
         ### this is safe
-        if (!(increasing || decreasing)) 
-            stop("cannot compute confidence intervals:", 
+        if (!(increasing || decreasing))
+            stop("cannot compute confidence intervals:",
                  "the step function is not monotone")
 
         cci <- function(alpha) {
@@ -269,7 +269,7 @@ confint_scale <- function(object, nulldistr, level = 0.95,
             ###
             qlower <- drop(qperm(nulldistr, alpha/2) * sqrt(variance(object)) +
                            expectation(object))
-            qupper <- drop(qperm(nulldistr, 1 - alpha/2) * 
+            qupper <- drop(qperm(nulldistr, 1 - alpha/2) *
                            sqrt(variance(object)) + expectation(object))
 
             ## Check if the statistic exceeds both quantiles first.
@@ -288,7 +288,7 @@ confint_scale <- function(object, nulldistr, level = 0.95,
                 ###  but the open right interval ends with the
                 ###  step with STATISTIC == qupper
                 ###
-                ci <- c(min(steps[qlower <= jumps]), 
+                ci <- c(min(steps[qlower <= jumps]),
                         min(steps[jumps > qupper]))
             } else {
                 ###
@@ -305,12 +305,12 @@ confint_scale <- function(object, nulldistr, level = 0.95,
             }
             ci
         }
-        cint <-  switch(alternative, 
+        cint <-  switch(alternative,
                      "two.sided" = cci(alpha),
-                     "greater"   = c(cci(alpha*2)[1], Inf), 
+                     "greater"   = c(cci(alpha*2)[1], Inf),
                      "less"      = c(0, cci(alpha*2)[2])
                  )
-        attr(cint, "conf.level") <- level    
+        attr(cint, "conf.level") <- level
         u <- jumps - expectation(object)
         sgr <- ifelse(decreasing, min(steps[u <= 0]), max(steps[u <= 0]))
         sle <- ifelse(decreasing, min(steps[u < 0]), min(steps[u > 0]))
@@ -352,7 +352,7 @@ confint_scale <- function(object, nulldistr, level = 0.95,
 
         ccia <- function(alpha) {
             ## Check if the statistic exceeds both quantiles
-            ## first: otherwise `uniroot' won't work anyway 
+            ## first: otherwise `uniroot' won't work anyway
             statu <- fsa(mumin, zq = qperm(nulldistr, alpha/2))
             statl <- fsa(mumax, zq = qperm(nulldistr, 1 - alpha/2))
             if (sign(statu) == sign(statl)) {
@@ -361,9 +361,9 @@ confint_scale <- function(object, nulldistr, level = 0.95,
                               "returning NA"))
                 return(c(NA, NA))
             }
-            u <- uniroot(fsa, c(mumin, mumax), 
+            u <- uniroot(fsa, c(mumin, mumax),
                          zq = qperm(nulldistr, alpha/2), ...)$root
-            l <- uniroot(fsa, c(mumin, mumax), 
+            l <- uniroot(fsa, c(mumin, mumax),
                          zq = qperm(nulldistr, 1 - alpha/2), ...)$root
             ## The process of the statistics does not need to be
             ## increasing: sort is ok here.
@@ -371,7 +371,7 @@ confint_scale <- function(object, nulldistr, level = 0.95,
         }
         cint <- switch(alternative, two.sided = {
                     ccia(alpha)
-                }, greater= {  
+                }, greater= {
                     c(ccia(alpha*2)[1], Inf)
                 }, less= {
                     c(0, ccia(alpha*2)[2])
@@ -393,13 +393,13 @@ confint_scale <- function(object, nulldistr, level = 0.95,
     RET
 }
 
-simconfint_location <- function(object, level = 0.95, 
+simconfint_location <- function(object, level = 0.95,
     approx = FALSE, ...) {
 
-    if (!(is_Ksample(object@statistic) && 
+    if (!(is_Ksample(object@statistic) &&
         extends(class(object), "MaxTypeIndependenceTest")))
         stop(sQuote("object"), " is not an object of class ",
-             sQuote("MaxTypeIndependenceTest"), 
+             sQuote("MaxTypeIndependenceTest"),
              " representing a K sample problem")
 
     xtrans <- object@statistic@xtrans
@@ -410,7 +410,7 @@ simconfint_location <- function(object, level = 0.95,
     lower <- c()
     upper <- c()
 
-    ### transform max(abs(x))-type distribution into a 
+    ### transform max(abs(x))-type distribution into a
     ### distribution symmetric around zero
     nnd <- object@distribution
     nnd@q <- function(p) {
@@ -423,16 +423,16 @@ simconfint_location <- function(object, level = 0.95,
         else
         return(q)
     }
-        
+
     for (i in 1:ncol(xtrans)) {
         thisset <- abs(xtrans[,i]) > 0
-        ip <- new("IndependenceProblem", 
+        ip <- new("IndependenceProblem",
                   object@statistic@x[thisset,,drop = FALSE],
                   object@statistic@y[thisset,,drop = FALSE],
                   object@statistic@block[thisset])
-        
-        itp <- independence_test(ip, teststat = "scalar", 
-            distribution = "asympt", alternative = "two.sided", 
+
+        itp <- independence_test(ip, teststat = "scalar",
+            distribution = "asympt", alternative = "two.sided",
             yfun = object@statistic@ytrafo, ...)
 
         ci <- confint_location(itp@statistic, nnd,

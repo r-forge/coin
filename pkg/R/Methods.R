@@ -4,8 +4,8 @@ setGeneric("AsymptNullDistribution", function(object, ...)
     standardGeneric("AsymptNullDistribution"))
 
 ### method for max-type test statistics
-setMethod(f = "AsymptNullDistribution", 
-          signature = "ScalarIndependenceTestStatistic", 
+setMethod(f = "AsymptNullDistribution",
+          signature = "ScalarIndependenceTestStatistic",
           definition = function(object, ...) {
 
               RET <- new("AsymptNullDistribution")
@@ -16,7 +16,7 @@ setMethod(f = "AsymptNullDistribution",
                   switch(object@alternative,
                       "less"      = pnorm(q),
                       "greater"   = 1 - pnorm(q),
-                      "two.sided" = 2 * min(pnorm(q), 1 - pnorm(q))  
+                      "two.sided" = 2 * min(pnorm(q), 1 - pnorm(q))
                   )
               }
               RET@support <- function(p = 1e-5) c(RET@q(p), RET@q(1 - p))
@@ -32,12 +32,12 @@ pmv <- function(lower, upper, mean, corr, ...) {
     } else {
         pmvnorm(lower = lower, upper = upper, mean = mean, sigma = 1, ...)
     }
-} 
+}
 
 
 ### method for max-type test statistics
-setMethod(f = "AsymptNullDistribution", 
-          signature = "MaxTypeIndependenceTestStatistic", 
+setMethod(f = "AsymptNullDistribution",
+          signature = "MaxTypeIndependenceTestStatistic",
           definition = function(object, ...) {
 
               corr <- cov2cor(covariance(object))
@@ -45,10 +45,10 @@ setMethod(f = "AsymptNullDistribution",
               RET <- new("AsymptNullDistribution")
               RET@p <- function(q) {
                   p <- switch(object@alternative,
-                      "less"      = pmv(lower = q, upper = Inf, 
+                      "less"      = pmv(lower = q, upper = Inf,
                                         mean = rep(0, pq),
                                         corr = corr, ...),
-                      "greater"   = pmv(lower = -Inf, upper = q, 
+                      "greater"   = pmv(lower = -Inf, upper = q,
                                         mean = rep(0, pq),
                                         corr = corr, ...),
                       "two.sided" = pmv(lower = -abs(q), upper = abs(q),
@@ -64,12 +64,12 @@ setMethod(f = "AsymptNullDistribution",
                   p
               }
               RET@q <- function(p) {
-                  if (length(corr) > 1) 
-                      q <- qmvnorm(p, mean = rep(0, pq), 
+                  if (length(corr) > 1)
+                      q <- qmvnorm(p, mean = rep(0, pq),
                               corr = corr, tail = "both.tails", ...)$quantile
                   else
                       q <- qmvnorm(p, mean = rep(0, pq),
-                              sigma = 1, tail = "both.tails", ...)$quantile   
+                              sigma = 1, tail = "both.tails", ...)$quantile
 
                   attributes(q) <- NULL
                   q
@@ -92,8 +92,8 @@ setMethod(f = "AsymptNullDistribution",
 )
 
 ### method for quad-type test statistics
-setMethod(f = "AsymptNullDistribution", 
-          signature = "QuadTypeIndependenceTestStatistic", 
+setMethod(f = "AsymptNullDistribution",
+          signature = "QuadTypeIndependenceTestStatistic",
           definition = function(object, ...) {
 
               RET <- new("AsymptNullDistribution")
@@ -116,7 +116,7 @@ setGeneric("ExactNullDistribution", function(object, ...)
 
 setMethod(f = "ExactNullDistribution",
           signature = "ScalarIndependenceTestStatistic",
-          definition = function(object, algorithm = c("shift", "split-up"), 
+          definition = function(object, algorithm = c("shift", "split-up"),
                                 ...) {
 
               algorithm <- match.arg(algorithm)
@@ -152,24 +152,25 @@ setMethod(f = "ApproxNullDistribution",
           signature = "ScalarIndependenceTestStatistic",
           definition = function(object, B = 1000, ...) {
 
-              pls <- plsraw <- MCfun(object@xtrans, 
+              pls <- plsraw <- MCfun(object@xtrans,
                   object@ytrans, object@weights, as.integer(object@block), as.integer(B))
 
               ### <FIXME> can transform p, q, x instead of those </FIXME>
-              pls <- sort((pls - expectation(object)) / 
+              pls <- sort((pls - expectation(object)) /
                          sqrt(variance(object)))
 
               RET <- new("ApproxNullDistribution")
 
               RET@p <- function(q) {
                   p <- mean(LE(pls, q))
-                  attr(p, "conf.int") <- binom.test(round(p * B), B, 
+                  attr(p, "conf.int") <- binom.test(round(p * B), B,
                       conf.level = 0.99)$conf.int
                   class(p) <- "MCp"
                   p
               }
 
-              RET@q <- function(p) quantile(pls, prob = p, type = 1)
+              RET@q <- function(p)
+                  quantile(pls, probs = p, names = FALSE, type = 1)
               RET@d <- function(x) {
                   tmp <- abs(pls - x)
                   mean(tmp == tmp[which.min(tmp)])
@@ -179,7 +180,7 @@ setMethod(f = "ApproxNullDistribution",
                       "less"      = mean(LE(pls, q)),
                       "greater"   = mean(GE(pls, q)),
                       "two.sided" = mean(GE(abs(pls), abs(q))))
-                  attr(p, "conf.int") <- binom.test(round(p * B), B, 
+                  attr(p, "conf.int") <- binom.test(round(p * B), B,
                       conf.level = 0.99)$conf.int
                   class(p) <- "MCp"
                   p
@@ -196,7 +197,7 @@ setMethod(f = "ApproxNullDistribution",
           signature = "MaxTypeIndependenceTestStatistic",
           definition = function(object, B = 1000, ...) {
 
-              pls <- plsraw <- MCfun(object@xtrans, 
+              pls <- plsraw <- MCfun(object@xtrans,
                   object@ytrans, object@weights, as.integer(object@block), as.integer(B))
 
               fun <- switch(object@alternative,
@@ -230,7 +231,7 @@ setMethod(f = "ApproxNullDistribution",
                       "greater" = mean(colSums(LE(pls, q)) == nrow(pls)),
                       "two.sided" = mean(colSums(LE(abs(pls), q)) == nrow(pls))
                   )
-                  attr(p, "conf.int") <- binom.test(round(p * B), B, 
+                  attr(p, "conf.int") <- binom.test(round(p * B), B,
                       conf.level = 0.99)$conf.int
                   class(p) <- "MCp"
                   p
@@ -238,7 +239,7 @@ setMethod(f = "ApproxNullDistribution",
 
               RET@q <- function(p) {
                   pls <- pmaxmin()
-                  quantile(pls, prob = p, type = 1)
+                  quantile(pls, probs = p, names = FALSE, type = 1)
               }
               RET@d <- function(x) {
                   pls <- pmaxmin()
@@ -247,7 +248,7 @@ setMethod(f = "ApproxNullDistribution",
               }
               RET@pvalue <- function(q) {
                   p <- switch(object@alternative,
-                      "less" = mean(colSums(LE(pls, q)) > 0), 
+                      "less" = mean(colSums(LE(pls, q)) > 0),
                       "greater" = mean(colSums(GE(pls, q)) > 0),
                       "two.sided" = mean(colSums(GE(abs(pls), q)) > 0)
                   )
@@ -271,7 +272,7 @@ setMethod(f = "ApproxNullDistribution",
           signature = "QuadTypeIndependenceTestStatistic",
           definition = function(object, B = 1000, ...) {
 
-              pls <- plsraw <- MCfun(object@xtrans, 
+              pls <- plsraw <- MCfun(object@xtrans,
                   object@ytrans, object@weights, as.integer(object@block), as.integer(B))
 
               dcov <- object@covarianceplus
@@ -284,20 +285,21 @@ setMethod(f = "ApproxNullDistribution",
 
               RET@p <- function(q) {
                   p <- mean(LE(pls, q))
-                  attr(p, "conf.int") <- binom.test(round(p * B), B, 
+                  attr(p, "conf.int") <- binom.test(round(p * B), B,
                       conf.level = 0.99)$conf.int
                   class(p) <- "MCp"
                   p
               }
 
-              RET@q <- function(p) quantile(pls, prob = p, type = 1)
+              RET@q <- function(p)
+                  quantile(pls, probs = p, names = FALSE, type = 1)
               RET@d <- function(x) {
                   tmp <- abs(pls - x)
                   mean(tmp == tmp[which.min(tmp)])
               }
               RET@pvalue <- function(q) {
                   p <- mean(GE(pls, q))
-                  attr(p, "conf.int") <- binom.test(round(p * B), B, 
+                  attr(p, "conf.int") <- binom.test(round(p * B), B,
                       conf.level = 0.99)$conf.int
                   class(p) <- "MCp"
                   p
@@ -311,7 +313,7 @@ setMethod(f = "ApproxNullDistribution",
           }
 )
 
-confint.ScalarIndependenceTestConfint <- function(object, parm, level = 0.95, 
+confint.ScalarIndependenceTestConfint <- function(object, parm, level = 0.95,
     ...) {
         if ("level" %in% names(match.call()))
             x <- object@confint(level)
