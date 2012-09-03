@@ -20,33 +20,59 @@ setMethod(f = "pvalue",
 setMethod(f = "pvalue",
           signature = "MaxTypeIndependenceTest",
           definition = function(object,
-              method = c("global", "single-step", "step-down", "Bonferroni",
-                         "Sidak", "Bonferroni-Holm", "Sidak-Holm",
-                         "unadjusted", "npmcp"), ...) {
+              method = c("global", "single-step", "step-down", "unadjusted",
+                         "npmcp"),
+###               combinations = c("free", "restricted"), # placeholder
+              distribution = c("joint", "marginal"),
+              type = c("Bonferroni", "Sidak"), ...) {
 
-              # backward compatibility
-              if (length(method) == 1 && method == "discrete")
-                  method <- "Sidak"
+              method <- match.arg(method,
+                                  choices = c("global", "single-step",
+                                              "step-down", "unadjusted",
+                                              "npmcp", "discrete"),
+                                  several.ok = TRUE)[1]
+              if (method == "discrete")
+                  warning(sQuote(paste("method =", dQuote(method))),
+                          " is deprecated; see ", sQuote("?pvalue"))
+              distribution <- match.arg(distribution)
+              type <- match.arg(type)
 
-              method <- match.arg(method)
               x <- object@statistic
               C <- attr(object@statistic@xtrans, "contrast")
               if (!is.null(C) && !(method %in% c("global", "npmcp")))
                   warning(paste("multiple comparisons might be incorrect",
                                 "due to subset pivotality; use",
-                                sQuote("method = \"npmcp\"")))
-              RET <- switch(method,
-                   "global" = pvalue(object@distribution,
-                                     object@statistic@teststatistic),
-                   "single-step" = singlestep(object, ...),
-                   "step-down" = stepdown(object, ...),
-                   "Bonferroni" = marginal(object, method = "Bonferroni", ...),
-                   "Sidak" = marginal(object, method = "Sidak", ...),
-                   "Bonferroni-Holm" = marginal(object, method = "Bonferroni-Holm", ...),
-                   "Sidak-Holm" = marginal(object, method = "Sidak-Holm", ...),
-                   "unadjusted" = unadjusted(object, ...),
-                   "npmcp" = npmcp(object, ...)
-              )
+                                sQuote(paste("method =", dQuote("npmcp")))))
+
+              RET <- if (method == "global")
+                         pvalue(object@distribution,
+                                object@statistic@teststatistic)
+                     else if (method == "single-step") {
+                         if (distribution == "joint") singlestep(object, ...)
+                         else {
+                             if (type == "Bonferroni")
+                                 marginal(object, bonferroni = TRUE,
+                                          stepdown = FALSE, ...)
+                             else
+                                 marginal(object, bonferroni = FALSE,
+                                          stepdown = FALSE, ...)
+                         }
+                     } else if (method == "step-down") {
+                         if (distribution == "joint") stepdown(object, ...)
+                         else {
+                             if (type == "Bonferroni")
+                                 marginal(object, bonferroni = TRUE,
+                                          stepdown = TRUE, ...)
+                             else
+                                 marginal(object, bonferroni = FALSE,
+                                          stepdown = TRUE, ...)
+                         }
+                     } else if (method == "npmcp") npmcp(object, ...)
+                     ## <DEPRECATED>
+                     else if (method == "discrete") dbonf(object, ...)
+                     ## </DEPRECATED>
+                     else unadjusted(object, ...)
+
               return(RET)
           }
 )

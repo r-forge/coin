@@ -293,7 +293,7 @@ x <- c(1, 2, 3)
 y <- c(0, 1, 0)
 wilcoxsign_test(x ~ y)
 
-### monotonicity wasn't enforced for "step-down" and "discrete"
+### monotonicity wasn't enforced for "step-down"
 set.seed(290875)
 
 gr <- gl(2, 50)
@@ -304,8 +304,6 @@ it <- independence_test(x1 + x2 ~ gr, distribution = approximate(B = 1000))
 
 psd <- pvalue(it, "step-down") # wasn't monotone
 stopifnot(psd[1] == psd[2])
-pd <- pvalue(it, "discrete")  # wasn't monotone
-stopifnot(pd[1] == pd[2])
 
 ### single-step p-values were too small
 df <- data.frame(y1 = c(6, 7, 8, 5, 4, 3, 1, 2),

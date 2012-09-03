@@ -7,19 +7,19 @@ isequal <- coin:::isequal
 
 ### example from Westfall & Wolfinger (1997), Table 4
 tab <- as.table(matrix(c(12, 1, 3, 8, 17, 12, 9, 9, 16, 24), nrow = 2,
-    dimnames = list(group = c("Placebo", "Active"),
-                    response = c("Very Poor", "Poor", "Fair", "Good",
-                                 "Excellent"))))
+                       dimnames = list(group = c("Placebo", "Active"),
+                                       response = c("Very Poor", "Poor", "Fair",
+                                                    "Good", "Excellent"))))
 df <- coin:::table2df(tab)
 
 it <- independence_test(response ~ group, data = df,
-                        distr = approximate(B = 100000))
+                        distribution = approximate(B = 100000))
 
 ### Table 5, first column: OK
 pvalue(it, method = "unadjusted")
 
 ### Table 5, next-to-last column: OK
-pvalue(it, method = "Sidak-Holm")
+pvalue(it, method = "step-down", distribution = "marginal", type = "Sidak")
 
 ### Table 5, last column: OK
 pvalue(it, method = "step-down")
@@ -33,55 +33,68 @@ df <- data.frame(group = factor(c(rep("Control", 50), rep("Treatment", 48))),
 
 ### alternative: less
 it <- independence_test(V1 + V2 + V3 + V4 ~ group, data = df,
-                        distr = approximate(B = 100000), alt = "less")
+                        distribution = approximate(B = 100000),
+                        alternative = "less")
 
 ### page 4, 2nd column: adjusted p-value = 0.03665 for V1
-pvalue(it, method = "Sidak")
+pvalue(it, method = "single-step", distribution = "marginal", type = "Sidak")
 
 ### page 4, 2nd column: adjusted p-value = 0.03698 for V1
 ### Note: 0.02521 + 0.00532 + 0 + 0.00645 = 0.03698
-pvalue(it, method = "Bonferroni")
+pvalue(it, method = "single-step", distribution = "marginal")
 
-### alternative: two
+### alternative: two.sided
 it <- independence_test(V1 + V2 + V3 + V4 ~ group, data = df,
-                        distr = approximate(B = 100000), alt = "two")
+                        distribution = approximate(B = 100000))
 
 ### page 5, 1st column: adjusted p-value = 0.05261 for V1
-pvalue(it, method = "Sidak")
+pvalue(it, method = "single-step", distribution = "marginal", type = "Sidak")
 
 ### page 5, 1st column: adjusted p-value = 0.05352 for V1
 ### Note: 0.02521 + 0.01254 + 0 + 0.01577 = 0.05352
-pvalue(it, method = "Bonferroni")
+pvalue(it, method = "single-step", distribution = "marginal")
 
 ### artificial example, checked against `multtest:mt.maxT'
 
 set.seed(290875)
 
-gr <- gl(2, 50) 
+gr <- gl(2, 50)
 x1 <- rnorm(100) + (as.numeric(gr) - 1) * 0.5
 x2 <- rnorm(100) - (as.numeric(gr) - 1) * 0.5
 
-pvalue(independence_test(x1 + x2 ~ gr, alt = "two.sided"), "single-step")
-pvalue(independence_test(x1 + x2 ~ gr, alt = "less"), "single-step")
-pvalue(independence_test(x1 + x2 ~ gr, alt = "greater"), "single-step")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "two.sided"),
+       method = "single-step")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "less"),
+       method = "single-step")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "greater"),
+       method = "single-step")
 
-pvalue(independence_test(x1 + x2 ~ gr, alt = "two.sided"), "step-down")
-pvalue(independence_test(x1 + x2 ~ gr, alt = "less"), "step-down")
-pvalue(independence_test(x1 + x2 ~ gr, alt = "greater"), "step-down")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "two.sided"),
+       method = "step-down")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "less"),
+       method = "step-down")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "greater"),
+       method = "step-down")
 
-pvalue(independence_test(x1 + x2 ~ gr, alt = "two.sided", 
-                         dist = approximate(B = 10000)), "single-step")
-pvalue(independence_test(x1 + x2 ~ gr, alt = "less", 
-                         dist = approximate(B = 10000)), "single-step")
-pvalue(independence_test(x1 + x2 ~ gr, alt = "greater", 
-                         dist = approximate(B = 10000)), "single-step")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "two.sided",
+                         distribution = approximate(B = 10000)),
+       method = "single-step")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "less",
+                         distribution = approximate(B = 10000)),
+       method = "single-step")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "greater",
+                         distribution = approximate(B = 10000)),
+       method = "single-step")
 
-pvalue(independence_test(x1 + x2 ~ gr, alt = "two.sided", 
-                         dist = approximate(B = 10000)), "step-down")
-pvalue(independence_test(x1 + x2 ~ gr, alt = "less", 
-                         dist = approximate(B = 10000)), "step-down")
-pvalue(independence_test(x1 + x2 ~ gr, alt = "greater", 
-                         dist = approximate(B = 10000)), "step-down")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "two.sided",
+                         distribution = approximate(B = 10000)),
+       method = "step-down")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "less",
+                         distribution = approximate(B = 10000)),
+       method = "step-down")
+pvalue(independence_test(x1 + x2 ~ gr, alternative = "greater",
+                         distribution = approximate(B = 10000)),
+       method = "step-down")
 
 if (FALSE) {
     #library("multtest")
@@ -123,75 +136,81 @@ support(mt)
 
 set.seed(290875)
 
-gr <- gl(3, 50) 
+gr <- gl(3, 50)
 x1 <- rnorm(150) + (as.numeric(gr) - 1) * 0.5
 x2 <- rnorm(150) - (as.numeric(gr) - 1) * 0.5
 
-pvalue(it1 <- independence_test(x1 + x2 ~ gr, alt = "two.sided"), "unadjusted")
-pvalue(it2 <- independence_test(x1 + x2 ~ gr, alt = "less"), "unadjusted")
-pvalue(it3 <- independence_test(x1 + x2 ~ gr, alt = "greater"), "unadjusted")
+pvalue(it1 <- independence_test(x1 + x2 ~ gr),
+       method = "unadjusted")
+pvalue(it2 <- independence_test(x1 + x2 ~ gr, alternative = "less"),
+       method = "unadjusted")
+pvalue(it3 <- independence_test(x1 + x2 ~ gr, alternative = "greater"),
+       method = "unadjusted")
 
-pvalue(it4 <- independence_test(x1 + x2 ~ gr, alt = "two.sided", 
-                                dist = approximate(B = 10000)), "unadjusted")
-pvalue(it5 <- independence_test(x1 + x2 ~ gr, alt = "less", 
-                                dist = approximate(B = 10000)), "unadjusted")
-pvalue(it6 <- independence_test(x1 + x2 ~ gr, alt = "greater", 
-                                dist = approximate(B = 10000)), "unadjusted")
+pvalue(it4 <- independence_test(x1 + x2 ~ gr,
+                                distribution = approximate(B = 10000)),
+       method = "unadjusted")
+pvalue(it5 <- independence_test(x1 + x2 ~ gr, alternative = "less",
+                                distribution = approximate(B = 10000)),
+       method = "unadjusted")
+pvalue(it6 <- independence_test(x1 + x2 ~ gr, alternative = "greater",
+                                distribution = approximate(B = 10000)),
+       method = "unadjusted")
 
 ### consistency of minimum p-value for "global"/"single-step"/"step-down"
 
-set.seed(290875); pg1 <- pvalue(it1, "global")[1]
-set.seed(290875); pss1 <- pvalue(it1, "single-step")
-set.seed(290875); psd1 <- pvalue(it1, "step-down")
+set.seed(290875); pg1 <- pvalue(it1)[1]
+set.seed(290875); pss1 <- pvalue(it1, method = "single-step")
+set.seed(290875); psd1 <- pvalue(it1, method = "step-down")
 identical(pg1, min(pss1))
 identical(pg1, min(psd1))
 
-set.seed(290875); pg2 <- pvalue(it2, "global")[1]
-set.seed(290875); pss2 <- pvalue(it2, "single-step")
-set.seed(290875); psd2 <- pvalue(it2, "step-down")
+set.seed(290875); pg2 <- pvalue(it2)[1]
+set.seed(290875); pss2 <- pvalue(it2, method = "single-step")
+set.seed(290875); psd2 <- pvalue(it2, method = "step-down")
 identical(pg2, min(pss2))
 identical(pg2, min(psd2))
 
-set.seed(290875); pg3 <- pvalue(it3, "global")[1]
-set.seed(290875); pss3 <- pvalue(it3, "single-step")
-set.seed(290875); psd3 <- pvalue(it3, "step-down")
+set.seed(290875); pg3 <- pvalue(it3)[1]
+set.seed(290875); pss3 <- pvalue(it3, method = "single-step")
+set.seed(290875); psd3 <- pvalue(it3, method = "step-down")
 identical(pg3, min(pss3))
 identical(pg3, min(psd3))
 
-pg4 <- pvalue(it4, "global")[1]
-pss4 <- pvalue(it4, "single-step")
-psd4 <- pvalue(it4, "step-down")
+pg4 <- pvalue(it4)[1]
+pss4 <- pvalue(it4, method = "single-step")
+psd4 <- pvalue(it4, method = "step-down")
 identical(pg4, min(pss4))
 identical(pg4, min(psd4))
 
-pg5 <- pvalue(it5, "global")[1]
-pss5 <- pvalue(it5, "single-step")
-psd5 <- pvalue(it5, "step-down")
+pg5 <- pvalue(it5)[1]
+pss5 <- pvalue(it5, method = "single-step")
+psd5 <- pvalue(it5, method = "step-down")
 identical(pg5, min(pss5))
 identical(pg5, min(psd5))
 
-pg6 <- pvalue(it6, "global")[1]
-pss6 <- pvalue(it6, "single-step")
-psd6 <- pvalue(it6, "step-down")
+pg6 <- pvalue(it6)[1]
+pss6 <- pvalue(it6, method = "single-step")
+psd6 <- pvalue(it6, method = "step-down")
 identical(pg6, min(pss6))
 identical(pg6, min(psd6))
 
 ### adjusted marginal asymptotic p-values
 
-pvalue(it1, "Bonferroni")
-pvalue(it1, "Sidak")
-pvalue(it1, "Bonferroni-Holm")
-pvalue(it1, "Sidak-Holm")
+pvalue(it1, method = "single-step", distribution = "marginal")
+pvalue(it1, method = "single-step", distribution = "marginal", type = "Sidak")
+pvalue(it1, method = "step-down", distribution = "marginal")
+pvalue(it1, method = "step-down", distribution = "marginal", type = "Sidak")
 
-pvalue(it2, "Bonferroni")
-pvalue(it2, "Sidak")
-pvalue(it2, "Bonferroni-Holm")
-pvalue(it2, "Sidak-Holm")
+pvalue(it2, method = "single-step", distribution = "marginal")
+pvalue(it2, method = "single-step", distribution = "marginal", type = "Sidak")
+pvalue(it2, method = "step-down", distribution = "marginal")
+pvalue(it2, method = "step-down", distribution = "marginal", type = "Sidak")
 
-pvalue(it3, "Bonferroni")
-pvalue(it3, "Sidak")
-pvalue(it3, "Bonferroni-Holm")
-pvalue(it3, "Sidak-Holm")
+pvalue(it3, method = "single-step", distribution = "marginal")
+pvalue(it3, method = "single-step", distribution = "marginal", type = "Sidak")
+pvalue(it3, method = "step-down", distribution = "marginal")
+pvalue(it3, method = "step-down", distribution = "marginal", type = "Sidak")
 
 ### mcp
 

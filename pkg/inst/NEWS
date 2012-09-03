@@ -11,21 +11,21 @@
           statistics can now be obtained when the asymptotic null distribution is
           used
 
+    o     adjusted p-values based on the marginal distribution of the test
+          statistics now uses a max-T procedure, instead of a min-P (which is now
+          deprecated), incorporating discrete distributional characteristics when
+          the approximate (Monte Carlo) null distribution is used (see ?pvalue)
+
     o     adjusted p-values based on the marginal distributions of the test
           statistics can now be obtained when the asymptotic null distribution is
           used
-
-    o     adjusted p-values based on the marginal distribution of the test
-          statistics now uses a maxT, instead of a minP, procedure incorporating
-          discrete distributional characteristics when the approximate (Monte
-          Carlo) null distribution is used
 
     o     single-step or step-down adjusted p-values based on the marginal
           distributions of the test statistics can now be obtained, using the
           Bonferroni or the Sidak method (see ?pvalue)
 
     o     adjusted p-values for multiple comparisons can now be obtained using
-          the Westfall (1997) algorithm (see ?mcptrafo and ?pvalue)
+          the Westfall (1997) algorithm (see ?mcp_trafo and ?pvalue)
 
     o     unadjusted p-values can now be obtained (see ?pvalue)
 

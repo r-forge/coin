@@ -1817,7 +1817,7 @@ C             0.000            0.0000  0.999
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: pvalue-methods
-> ### Title: Extract P-Values
+> ### Title: Extract p-Values
 > ### Aliases: pvalue pvalue-methods pvalue,NullDistribution-method
 > ###   pvalue,IndependenceTest-method pvalue,ScalarIndependenceTest-method
 > ###   pvalue,MaxTypeIndependenceTest-method
@@ -1829,7 +1829,7 @@ C             0.000            0.0000  0.999
 > 
 >   ### artificial 2-sample problem
 >   df <- data.frame(y = rnorm(20), x = gl(2, 10))
->  
+> 
 >   ### Ansari-Bradley test
 >   at <- ansari_test(y ~ x, data = df, distribution = "exact")
 >   at
@@ -1840,40 +1840,55 @@ data:  y by x (1, 2)
 Z = 0.4553, p-value = 0.7102
 alternative hypothesis: true mu is not equal to 1 
 
-> 
 >   pvalue(at)
 [1] 0.710234
 > 
 >   ### bivariate 2-sample problem
->   df <- data.frame(y1 = rnorm(20) + c(rep(0, 10), rep(1, 10)), 
-+                    y2 = rnorm(20), 
+>   df <- data.frame(y1 = rnorm(20) + rep(0:1, each = 10),
++                    y2 = rnorm(20),
 +                    x = gl(2, 10))
 > 
->   it <- independence_test(y1 + y2 ~ x, data = df, 
+>   ### bivariate Pitman-test
+>   it <- independence_test(y1 + y2 ~ x, data = df,
 +                           distribution = approximate(B = 9999))
+>   it
+
+	Approximative General Independence Test
+
+data:  y1, y2 by x (1, 2) 
+maxT = 2.6084, p-value = 0.011
+
+>   ### global p-value
 >   pvalue(it)
 [1] 0.0110011
 99 percent confidence interval:
  0.008497463 0.013981565 
 
+>   ### joint distribution single-step p-values
 >   pvalue(it, method = "single-step")
          y1     y2
 1 0.0110011 0.9998
+>   ### joint distribution (free) step-down p-values
 >   pvalue(it, method = "step-down")
          y1        y2
 1 0.0110011 0.9789979
->   pvalue(it, method = "Bonferroni")
+>   ### Bonferroni single-step p-values
+>   pvalue(it, method = "single-step", distribution = "marginal")
          y1 y2
 1 0.0110011  1
->   pvalue(it, method = "Sidak")
+>   ### Sidak single-step p-values
+>   pvalue(it, method = "single-step", distribution = "marginal", type = "Sidak")
           y1        y2
 1 0.01097084 0.9995589
->   pvalue(it, method = "Bonferroni-Holm")
+>   ### Bonferroni (free) step-down p-values
+>   pvalue(it, method = "step-down", distribution = "marginal")
          y1        y2
 1 0.0110011 0.9789979
->   pvalue(it, method = "Sidak-Holm")
+>   ### Sidak (free) step-down p-values
+>   pvalue(it, method = "step-down", distribution = "marginal", type = "Sidak")
           y1        y2
 1 0.01097084 0.9789979
+>   ### unadjusted p-values
 >   pvalue(it, method = "unadjusted")
           y1        y2
 1 0.00550055 0.9789979
@@ -1884,15 +1899,20 @@ alternative hypothesis: true mu is not equal to 1
 +                                42, 60, 32, 42, 45, 58, 27, 51, 42, 52,
 +                                38, 33, 26, 25, 28, 28, 26, 27, 27, 27,
 +                                31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
-+                     site = factor(c(rep("I", 10), rep("II", 10),
-+                                     rep("III", 10), rep("IV", 10))))
++                     site = gl(4, 10, labels = c("I", "II", "III", "IV")))
 > 
->   ### p-value for multiple comparisons under logical constraints
+>   ### joint distribution (restricted) step-down p-values for multiple comparisons
 >   it <- independence_test(length ~ site, data = YOY,
 +                           xtrafo = mcp_trafo(site = "Tukey"),
-+                           distribution = approximate(10000),
-+                           alternative = "two.sided")
->   print(pvalue(it, method = "npmcp"))
++                           distribution = approximate(B = 10000))
+>   it
+
+	Approximative General Independence Test
+
+data:  length by site (I, II, III, IV) 
+maxT = 3.953, p-value = 2e-04
+
+>   pvalue(it, method = "npmcp")
                
 II - I   0.4377
 III - I  0.0006
@@ -1900,6 +1920,7 @@ IV - I   0.0001
 III - II 0.0001
 IV - II  0.0000
 IV - III 0.7160
+> 
 > 
 > 
 > 
@@ -2091,7 +2112,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  71.53 1.89 138.3 NA NA 
+Time elapsed:  62.01 1.6 93.15 NA NA 
 > grDevices::dev.off()
 null device 
           1 

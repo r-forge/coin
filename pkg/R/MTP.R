@@ -138,8 +138,7 @@ stepdown <- function(object, ...) {
 
 ### Adjusted marginal p-values taking discreteness into account in the
 ### permutation case (Westfall and Wolfinger, 1997)
-marginal <- function(object, method = c("Bonferroni", "Sidak",
-                                        "Bonferroni-Holm", "Sidak-Holm"), ...) {
+marginal <- function(object, bonferroni, stepdown, ...) {
 
     ## <FIXME> this should be possible when the _exact_ marginal
     ## distributions are available
@@ -148,11 +147,6 @@ marginal <- function(object, method = c("Bonferroni", "Sidak",
     if (!(extends(class(object), "MaxTypeIndependenceTest")))
         stop(sQuote("object"), " is not of class ",
              sQuote("MaxTypeIndependenceTest"))
-
-    method <- match.arg(method)
-
-    bonferroni <- pmatch(method, "Bonferroni-Holm", nomatch = 0)
-    stepdown <- method %in% c("Bonferroni-Holm", "Sidak-Holm")
 
     if (extends(class(object@distribution), "AsymptNullDistribution")) {
         ## unadjusted p-values
@@ -215,7 +209,7 @@ marginal <- function(object, method = c("Bonferroni", "Sidak",
             for (q in qq:length(p)) {
                 x <- p[[q]][p[[q]] <= pu[i]] # below eq. 2
                 if (length(x) > 0) {
-                    ret[i] <- if(bonferroni) ret[i] + max(x) # eq. 4
+                    ret[i] <- if (bonferroni) ret[i] + max(x) # eq. 4
                               else ret[i] * (1 - max(x)) # eq. 2
                 }
             }
@@ -362,3 +356,61 @@ unadjusted <- function(object, ...) {
 
     ret
 }
+
+### <DEPRECATED>
+### Sidak single-step min-P permutation method (Westfall and Wolfinger, 1997)
+dbonf <- function(object, ...) {
+
+    ## <FIXME> this should be possible when the _exact_ marginal
+    ## distributions are available
+    ## </FIXME>
+
+    if (!(extends(class(object), "MaxTypeIndependenceTest") &&
+          extends(class(object@distribution), "ApproxNullDistribution")))
+        stop(sQuote("object"), " is not of class ",
+             sQuote("MaxTypeIndependenceTest"),
+             " or distribution was not approximated via Monte-Carlo")
+
+    alternative <- object@statistic@alternative
+
+    ## standardize
+    dcov <- sqrt(variance(object))
+    expect <- expectation(object)
+
+    ## raw simulation results, scores have been handled already
+    pls <- support(object, raw = TRUE)
+    pls <- (pls - expect) / dcov
+    ts <- (statistic(object, "standardized"))
+
+    pvals <- switch(alternative,
+                    "less" = rowMeans(LE(pls, as.vector(drop(ts)))),
+                    "greater" = rowMeans(GE(pls, as.vector(drop(ts)))),
+                    "two.sided" = rowMeans(GE(abs(pls), as.vector(abs(drop(ts))))))
+
+    foo <- function(x, t)
+        switch(alternative,
+               "less" = mean(LE(x, t)),
+               "greater" = mean(GE(x, t)),
+               "two.sided" = mean(GE(abs(x), abs(t))))
+
+    p <- vector(mode = "list", length = nrow(pls))
+    for (i in 1:nrow(pls)) {
+        ux <- unique(pls[i,])
+        p[[i]] <- sapply(ux, foo, x = pls[i,])
+    }
+
+    ## Sidak adjustment (Westfall and Wolfinger, 1997)
+    adjp <- rep(1, length(ts))
+    for (i in 1:length(pvals)) {
+        for (q in 1:length(p)) {
+            x <- p[[q]][p[[q]] <= pvals[i]]
+            if (length(x) > 0)
+                adjp[i] <- adjp[i] * (1 - max(x))
+        }
+    }
+    ret <- matrix(1 - pmin(adjp, 1), nrow = nrow(ts), ncol = ncol(ts))
+    rownames(ret) <- rownames(ts)
+    colnames(ret) <- colnames(ts)
+    ret
+}
+### </DEPRECATED>
