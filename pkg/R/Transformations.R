@@ -119,7 +119,7 @@ fsplits <- function(nlevel) {
 
 ### set up transformation g(x) for all possible binary splits
 ### in an unordered x
-fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 0.9) {
+fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
 
     sp <- fsplits(nlevels(x))
     lev <- levels(x)
