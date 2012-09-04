@@ -3,14 +3,14 @@
 ### OK, OK, here is the most prominent one ...
 wilcox_test <- function(object, ...) UseMethod("wilcox_test")
 
-wilcox_test.formula <- function(formula, data = list(), subset = NULL, 
+wilcox_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("wilcox_test", formula, data, subset, weights, 
+    ft("wilcox_test", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
-wilcox_test.IndependenceProblem <- function(object,  
+wilcox_test.IndependenceProblem <- function(object,
     conf.int = FALSE, conf.level = 0.95, ...) {
 
     check <- function(object) {
@@ -20,8 +20,8 @@ wilcox_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    RET <- independence_test(object, teststat = "scalar", 
-        ytrafo = function(data) trafo(data, numeric_trafo = rank), 
+    RET <- independence_test(object, teststat = "scalar",
+        ytrafo = function(data) trafo(data, numeric_trafo = rank),
         check = check, ...)
 
     RET@nullvalue <- 0
@@ -30,7 +30,7 @@ wilcox_test.IndependenceProblem <- function(object,
     if (conf.int) {
         RET <- new("ScalarIndependenceTestConfint", RET)
         RET@confint <- function(level)
-            confint_location(RET@statistic, RET@distribution, 
+            confint_location(RET@statistic, RET@distribution,
                              level = level)
         RET@conf.level <- conf.level
     }
@@ -42,13 +42,13 @@ wilcox_test.IndependenceProblem <- function(object,
 ### normal quantiles (van der Waerden) test
 normal_test <- function(object, ...) UseMethod("normal_test")
 
-normal_test.formula <- function(formula, data = list(), subset = NULL, 
+normal_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("normal_test", formula, data, subset, weights, 
-       frame = parent.frame(), ...)}   
+    ft("normal_test", formula, data, subset, weights,
+       frame = parent.frame(), ...)}
 
-normal_test.IndependenceProblem <- function(object,  
+normal_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
@@ -61,9 +61,9 @@ normal_test.IndependenceProblem <- function(object,
     }
 
 
-    RET <- independence_test(object, teststat = "scalar", 
+    RET <- independence_test(object, teststat = "scalar",
         ytrafo = function(data) trafo(data, numeric_trafo = function(x)
-            normal_trafo(x, ties.method = ties.method)), 
+            normal_trafo(x, ties.method = ties.method)),
         check = check, ...)
 
     RET@nullvalue <- 0
@@ -83,13 +83,13 @@ normal_test.IndependenceProblem <- function(object,
 ### median test
 median_test <- function(object, ...) UseMethod("median_test")
 
-median_test.formula <- function(formula, data = list(), subset = NULL, 
+median_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("median_test", formula, data, subset, weights, 
-       frame = parent.frame(), ...)}   
+    ft("median_test", formula, data, subset, weights,
+       frame = parent.frame(), ...)}
 
-median_test.IndependenceProblem <- function(object,     
+median_test.IndependenceProblem <- function(object,
     conf.int = FALSE, conf.level = 0.95, ...) {
 
     check <- function(object) {
@@ -99,10 +99,10 @@ median_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    RET <- independence_test(object, teststat = "scalar", 
-        ytrafo = function(data) trafo(data, numeric_trafo = median_trafo), 
+    RET <- independence_test(object, teststat = "scalar",
+        ytrafo = function(data) trafo(data, numeric_trafo = median_trafo),
         check = check, ...)
- 
+
     RET@nullvalue <- 0
     RET@method <- "Median Test"
 
@@ -120,17 +120,17 @@ median_test.IndependenceProblem <- function(object,
 ### Ansari-Bradley test
 ansari_test <- function(object, ...) UseMethod("ansari_test")
 
-ansari_test.formula <- function(formula, data = list(), subset = NULL, 
+ansari_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("ansari_test", formula, data, subset, weights, 
+    ft("ansari_test", formula, data, subset, weights,
        frame = parent.frame(), ...)
-}   
+}
 
 ansari_test.IndependenceProblem <- function(object,
     alternative = c("two.sided", "less", "greater"),
     ties.method = c("mid-ranks", "average-scores"),
-    conf.int = FALSE, conf.level = 0.95, ...) {     
+    conf.int = FALSE, conf.level = 0.95, ...) {
 
     check <- function(object) {
         if (!(is_2sample(object) && is_numeric_y(object)))
@@ -143,16 +143,16 @@ ansari_test.IndependenceProblem <- function(object,
     if (alternative == "less") {
         alternative <- "greater"
     } else {
-        if (alternative == "greater") 
+        if (alternative == "greater")
             alternative <- "less"
     }
 
     RET <- independence_test(object, teststat = "scalar",
-        alternative = alternative, 
+        alternative = alternative,
         ytrafo = function(data) trafo(data, numeric_trafo = function(x)
-            ansari_trafo(x, ties.method = ties.method)), 
+            ansari_trafo(x, ties.method = ties.method)),
         check = check, ...)
- 
+
     RET@nullvalue <- 1
     RET@method <- "Ansari-Bradley Test"
 
@@ -170,13 +170,13 @@ ansari_test.IndependenceProblem <- function(object,
 ### Survival tests -> Logrank only, for the moment
 surv_test <- function(object, ...) UseMethod("surv_test")
 
-surv_test.formula <- function(formula, data = list(), subset = NULL, 
+surv_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("surv_test", formula, data, subset, weights, 
+    ft("surv_test", formula, data, subset, weights,
        frame = parent.frame(), ...)}
-    
-surv_test.IndependenceProblem <- function(object,  
+
+surv_test.IndependenceProblem <- function(object,
     ties.method = c("logrank", "HL", "average-scores"), ...) {
 
     ties.method <- match.arg(ties.method)
@@ -186,7 +186,7 @@ surv_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!(is_Ksample(object) && is_censored_y(object)))
-            stop(sQuote("object"), 
+            stop(sQuote("object"),
                  " does not represent a K sample problem with censored data",
                  " (maybe the grouping variable is not a factor?)")
         return(TRUE)
@@ -195,10 +195,10 @@ surv_test.IndependenceProblem <- function(object,
     scalar <- FALSE
     if (is.factor(object@x[[1]])) scalar <- nlevels(object@x[[1]]) == 2
 
-    RET <- independence_test(object, 
-        teststat = ifelse(scalar, "scalar", "quad"), 
+    RET <- independence_test(object,
+        teststat = ifelse(scalar, "scalar", "quad"),
         check = check, ytrafo = ytrafo, ...)
- 
+
     if (extends(class(RET@statistic), "ScalarIndependenceTest"))
         RET@nullvalue <- 0
 
@@ -213,14 +213,14 @@ surv_test.IndependenceProblem <- function(object,
 ### Kruskal-Wallis test
 kruskal_test <- function(object, ...) UseMethod("kruskal_test")
 
-kruskal_test.formula <- function(formula, data = list(), subset = NULL, 
+kruskal_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("kruskal_test", formula, data, subset, weights, 
+    ft("kruskal_test", formula, data, subset, weights,
        frame = parent.frame(), ...)
-}   
+}
 
-kruskal_test.IndependenceProblem <- function(object,  
+kruskal_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
     check <- function(object) {
@@ -229,13 +229,13 @@ kruskal_test.IndependenceProblem <- function(object,
                                    " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
- 
-    distribution <- check_distribution_arg(distribution, 
+
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- independence_test(object, 
+    RET <- independence_test(object,
         distribution = distribution, teststat = "quad",
-        ytrafo = function(data) trafo(data, numeric_trafo = rank), 
+        ytrafo = function(data) trafo(data, numeric_trafo = rank),
         check = check, ...)
 
     if (is_ordered(RET@statistic))
@@ -249,14 +249,14 @@ kruskal_test.IndependenceProblem <- function(object,
 ### Fligner test
 fligner_test <- function(object, ...) UseMethod("fligner_test")
 
-fligner_test.formula <- function(formula, data = list(), subset = NULL, 
+fligner_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("fligner_test", formula, data, subset, weights, 
+    ft("fligner_test", formula, data, subset, weights,
        frame = parent.frame(), ...)
-}   
+}
 
-fligner_test.IndependenceProblem <- function(object,  
+fligner_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
     distribution = c("asymptotic", "approximate"), ...) {
 
@@ -269,18 +269,18 @@ fligner_test.IndependenceProblem <- function(object,
             stop(colnames(object@x), " is an ordered factor")
         return(TRUE)
     }
- 
-    distribution <- check_distribution_arg(distribution, 
+
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
     ### eliminate location differences (see `stats/R/fligner.test')
-    object@y[[1]] <- object@y[[1]] - 
+    object@y[[1]] <- object@y[[1]] -
         tapply(object@y[[1]], object@x[[1]], median)[object@x[[1]]]
 
-    RET <- independence_test(object,  
+    RET <- independence_test(object,
         distribution = distribution, teststat = "quad",
         ytrafo = function(data) trafo(data, numeric_trafo = function(x)
-            fligner_trafo(x, ties.method = ties.method)), 
+            fligner_trafo(x, ties.method = ties.method)),
         check = check, ...)
 
     RET@method <- "Fligner-Killeen Test"
@@ -291,31 +291,31 @@ fligner_test.IndependenceProblem <- function(object,
 ### Spearman test
 spearman_test <- function(object, ...) UseMethod("spearman_test")
 
-spearman_test.formula <- function(formula, data = list(), subset = NULL, 
+spearman_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("spearman_test", formula, data, subset, weights, 
+    ft("spearman_test", formula, data, subset, weights,
        frame = parent.frame(), ...)
-}   
+}
 
-spearman_test.IndependenceProblem <- function(object, 
+spearman_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
     check <- function(object) {
         if (!is_corr(object))
-            stop(sQuote("object"), 
+            stop(sQuote("object"),
                  " does not represent a univariate correlation problem")
         return(TRUE)
     }
 
-    distribution <- check_distribution_arg(distribution, 
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- independence_test(object, 
-        teststat = "scalar", 
-        distribution = distribution, 
+    RET <- independence_test(object,
+        teststat = "scalar",
+        distribution = distribution,
         xtrafo = function(data) trafo(data, numeric_trafo = rank),
-        ytrafo = function(data) trafo(data, numeric_trafo = rank), 
+        ytrafo = function(data) trafo(data, numeric_trafo = rank),
         check = check, ...)
 
     RET@nullvalue <- 0
@@ -327,25 +327,25 @@ spearman_test.IndependenceProblem <- function(object,
 ### Generalized Cochran-Mantel-Haenzel Test
 cmh_test <- function(object, ...) UseMethod("cmh_test")
 
-cmh_test.formula <- function(formula, data = list(), subset = NULL, 
+cmh_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("cmh_test", formula, data, subset, weights, 
+    ft("cmh_test", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
-cmh_test.table <- function(object, 
+cmh_test.table <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
-    distribution <- check_distribution_arg(distribution, 
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
     ip <- table2IndependenceProblem(object)
-    RET <- do.call("cmh_test", c(list(object = ip, distribution = distribution), 
+    RET <- do.call("cmh_test", c(list(object = ip, distribution = distribution),
                    list(...)))
     return(RET)
 }
 
-cmh_test.IndependenceProblem <- function(object, 
+cmh_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
     check <- function(object) {
@@ -354,14 +354,14 @@ cmh_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    distribution <- check_distribution_arg(distribution, 
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- independence_test(object, 
-        teststat = "quad", distribution = distribution, check = check, 
+    RET <- independence_test(object,
+        teststat = "quad", distribution = distribution, check = check,
         ...)
 
-    if (is_ordered(RET@statistic)) 
+    if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
     else
         RET@method <- "Generalized Cochran-Mantel-Haenszel Test"
@@ -372,44 +372,44 @@ cmh_test.IndependenceProblem <- function(object,
 ### Pearsons Chi-Squared Test
 chisq_test <- function(object, ...) UseMethod("chisq_test")
 
-chisq_test.formula <- function(formula, data = list(), subset = NULL, 
+chisq_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("chisq_test", formula, data, subset, weights, 
+    ft("chisq_test", formula, data, subset, weights,
        frame = parent.frame(), ...)
-}   
+}
 
-chisq_test.table <- function(object, 
+chisq_test.table <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
-    distribution <- check_distribution_arg(distribution, 
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
     ip <- table2IndependenceProblem(object)
-    RET <- do.call("chisq_test", c(list(object = ip, distribution = distribution), 
+    RET <- do.call("chisq_test", c(list(object = ip, distribution = distribution),
                    list(...)))
     return(RET)
 }
 
-chisq_test.IndependenceProblem <- function(object,  
+chisq_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
     check <- function(object) {
         if (!is_contingency(object))
             stop(sQuote("object"), " does not represent a contingency problem")
         if (nlevels(object@block) != 1)
-            stop(sQuote("object"), " contains blocks: use ", 
+            stop(sQuote("object"), " contains blocks: use ",
                  sQuote("cmh_test"), " instead")
         return(TRUE)
     }
     n <- sum(object@weights)
 
-    distribution <- check_distribution_arg(distribution, 
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
     ### expand weights if conditional MC is requested
     if (class(distribution) == "approximate") {
         w <- object@weights
-        if (chkone(w)) {   
+        if (chkone(w)) {
             indx <- rep(1:length(w), w)
             object <- new("IndependenceProblem",
                           x = object@x[indx,,drop = FALSE],
@@ -432,7 +432,7 @@ chisq_test.IndependenceProblem <- function(object,
 
     ts <- new("QuadTypeIndependenceTestStatistic", its)
 
-    ### use the classical chisq statistic based on Pearson 
+    ### use the classical chisq statistic based on Pearson
     ### residuals (O - E)^2 / E
     ### see Th. 3.1 and its proof in Strasser & Weber (1999).
 
@@ -445,7 +445,7 @@ chisq_test.IndependenceProblem <- function(object,
     RET <- new("QuadTypeIndependenceTest", statistic = ts,
         distribution = nd)
 
-    if (is_ordered(RET@statistic)) 
+    if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
     else
         RET@method <- "Pearson's Chi-Squared Test"
@@ -456,55 +456,55 @@ chisq_test.IndependenceProblem <- function(object,
 ### Linear-by-Linear Association Test
 lbl_test <- function(object, ...) UseMethod("lbl_test")
 
-lbl_test.formula <- function(formula, data = list(), subset = NULL, 
+lbl_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("lbl_test", formula, data, subset, weights, 
+    ft("lbl_test", formula, data, subset, weights,
        frame = parent.frame(), ...)
-}   
+}
 
-lbl_test.table <- function(object, 
+lbl_test.table <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
-    distribution <- check_distribution_arg(distribution, 
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
     ip <- table2IndependenceProblem(object)
-    RET <- do.call("lbl_test", c(list(object = ip, distribution = distribution), 
+    RET <- do.call("lbl_test", c(list(object = ip, distribution = distribution),
                    list(...)))
     return(RET)
 }
 
 
-lbl_test.IndependenceProblem <- function(object, 
+lbl_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
     check <- function(object) {
         if (!is_ordered(object))
-            stop(sQuote("object"), 
+            stop(sQuote("object"),
                  " does not represent a problem with ordered data")
         return(TRUE)
     }
 
     ### convert factors to ordered
-    object@x <- as.data.frame(lapply(object@x, 
+    object@x[] <- lapply(object@x,
         function(x) if (is.factor(x) && nlevels(x) > 2) {
                         return(ordered(x))
                     } else {
                         return(x)
-                    }))
-    object@y <- as.data.frame(lapply(object@y, 
+                    })
+    object@y[] <- lapply(object@y,
         function(x) if (is.factor(x) && nlevels(x) > 2) {
                         return(ordered(x))
                     } else {
                         return(x)
-                    }))
+                    })
 
-    distribution <- check_distribution_arg(distribution, 
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- do.call("independence_test", 
-        c(list(object = object, teststat = "quad", 
-               distribution = distribution, 
+    RET <- do.call("independence_test",
+        c(list(object = object, teststat = "quad",
+               distribution = distribution,
                check = check), list(...)))
 
     RET@method <- "Linear-by-Linear Association Test"
@@ -515,10 +515,10 @@ lbl_test.IndependenceProblem <- function(object,
 ### permutation test without transformations
 oneway_test <- function(object, ...) UseMethod("oneway_test")
 
-oneway_test.formula <- function(formula, data = list(), subset = NULL, 
+oneway_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("oneway_test", formula, data, subset, weights, 
+    ft("oneway_test", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -535,7 +535,7 @@ oneway_test.IndependenceProblem <- function(object, ...) {
 
     if (is_scalar(RET@statistic))
         RET@nullvalue <- 0
-    RET@method <- paste(ifelse(length(table(object@x[[1]])) == 2, "2-", "K-"), 
+    RET@method <- paste(ifelse(length(table(object@x[[1]])) == 2, "2-", "K-"),
                         paste("Sample Permutation Test"), sep = "")
     return(RET)
 }
@@ -544,27 +544,27 @@ oneway_test.IndependenceProblem <- function(object, ...) {
 ### Contrast test
 contrast_test <- function(object, ...) UseMethod("contrast_test")
 
-contrast_test.formula <- function(formula, data = list(), subset = NULL, 
+contrast_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("contrast_test", formula, data, subset, weights, 
+    ft("contrast_test", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
-contrast_test.IndependenceProblem <- function(object, 
+contrast_test.IndependenceProblem <- function(object,
     cmatrix, distribution = c("asymptotic", "approximate"), ...) {
 
     if (!(ncol(object@x) == 1 && is.factor(object@x[[1]])))
         stop(sQuote("object@x"), " is not univariate or a factor")
 
     if  (!is.matrix(cmatrix) || nrow(cmatrix) != nlevels(object@x[[1]]))
-        stop(sQuote("cmatrix"), " is not a matrix with ", 
+        stop(sQuote("cmatrix"), " is not a matrix with ",
              nlevels(object@x), " rows")
 
     if (is.null(colnames(cmatrix)))
         colnames(cmatrix) <- paste("C", 1:ncol(cmatrix), sep = "")
 
-    distribution <- check_distribution_arg(distribution, 
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
     xtrafo <- function(data) trafo(data) %*% cmatrix
@@ -572,7 +572,7 @@ contrast_test.IndependenceProblem <- function(object,
     RET <- independence_test(object, teststat = "max",
         distribution = distribution, xtrafo = xtrafo, ...)
     RET@method <- "General Contrast Test"
-    
+
     return(RET)
 }
 
@@ -580,19 +580,19 @@ contrast_test.IndependenceProblem <- function(object,
 ### Maxstat test
 maxstat_test <- function(object, ...) UseMethod("maxstat_test")
 
-maxstat_test.formula <- function(formula, data = list(), subset = NULL, 
+maxstat_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("maxstat_test", formula, data, subset, weights, 
+    ft("maxstat_test", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
-maxstat_test.IndependenceProblem <- function(object, 
-    distribution = c("asymptotic", "approximate"), 
-    teststat = c("max", "quad"), 
+maxstat_test.IndependenceProblem <- function(object,
+    distribution = c("asymptotic", "approximate"),
+    teststat = c("max", "quad"),
     minprob = 0.1, maxprob = 1 - minprob, ...) {
 
-    distribution <- check_distribution_arg(distribution, 
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
     teststat <- match.arg(teststat)
 
@@ -624,7 +624,7 @@ maxstat_test.IndependenceProblem <- function(object,
     }
     RET@estimates <- list(estimate = estimate)
     RET@method <- "Maxstat Test"
-    
+
     return(RET)
 }
 
@@ -644,9 +644,9 @@ symmetry_test.formula <- function(formula, data = list(), subset = NULL,
 
 symmetry_test.SymmetryProblem <- function(object,
     teststat = c("max", "quad", "scalar"),
-    distribution = c("asymptotic", "approximate"), 
-    alternative = c("two.sided", "less", "greater"), 
-    xtrafo = trafo, ytrafo = trafo, scores = NULL, 
+    distribution = c("asymptotic", "approximate"),
+    alternative = c("two.sided", "less", "greater"),
+    xtrafo = trafo, ytrafo = trafo, scores = NULL,
     check = NULL, ...) {
     class(object) <- "IndependenceProblem"
     independence_test(object, teststat, distribution, alternative, xtrafo,
@@ -656,7 +656,7 @@ symmetry_test.SymmetryProblem <- function(object,
 symmetry_test.table <- function(object, ...) {
     df <- table2df_sym(object)
     sp <- new("SymmetryProblem", x = df["groups"], y = df["response"])
-    RET <- do.call("symmetry_test", c(list(object = sp), list(...))) 
+    RET <- do.call("symmetry_test", c(list(object = sp), list(...)))
     return(RET)
 }
 
@@ -669,24 +669,24 @@ friedman_test.formula <- function(formula, data = list(), subset = NULL, ...)
     sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
     RET <- do.call("friedman_test", c(list(object = sp), list(...)))
     return(RET)
-}   
+}
 
-friedman_test.SymmetryProblem <- function(object, 
+friedman_test.SymmetryProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
-    
+
     if (!is_completeblock(object))
         stop("Not an unreplicated complete block design")
 
-    distribution <- check_distribution_arg(distribution, 
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- symmetry_test(object, 
-        distribution = distribution, teststat = "quad", 
-        ytrafo = function(data) 
-            trafo(data, numeric_trafo = rank, block = object@block), 
+    RET <- symmetry_test(object,
+        distribution = distribution, teststat = "quad",
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = rank, block = object@block),
         ...)
 
-    if (is_ordered(RET@statistic))  
+    if (is_ordered(RET@statistic))
         RET@method <- "Page Test"
     else
         RET@method <- "Friedman Test"
@@ -702,24 +702,24 @@ mh_test.formula <- function(formula, data = list(), subset = NULL, ...)
     sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
     RET <- do.call("mh_test", c(list(object = sp), list(...)))
     return(RET)
-}   
+}
 
 mh_test.table <- function(object, ...) {
     df <- table2df_sym(object)
     sp <- new("SymmetryProblem", x = df["groups"], y = df["response"])
-    RET <- do.call("mh_test", c(list(object = sp), list(...))) 
+    RET <- do.call("mh_test", c(list(object = sp), list(...)))
     return(RET)
 }
 
-mh_test.SymmetryProblem <- function(object, 
+mh_test.SymmetryProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
-    
+
     if (!is_completeblock(object))
         stop("Not an unreplicated complete block design")
     if (ncol(object@y) != 1 || !is.factor(object@y[[1]]))
         stop("Response variable is not a factor")
 
-    distribution <- check_distribution_arg(distribution, 
+    distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
     addargs <- list(...)
@@ -730,12 +730,12 @@ mh_test.SymmetryProblem <- function(object,
         names(scores) <- "response"
         addargs$scores <- NULL
     }
- 
-    RET <- do.call("symmetry_test", 
-        c(list(object = object, distribution = distribution, 
+
+    RET <- do.call("symmetry_test",
+        c(list(object = object, distribution = distribution,
                teststat = "quad", scores = scores), addargs))
 
-    if (is_ordered(RET@statistic))  
+    if (is_ordered(RET@statistic))
         RET@method <- "Marginal-Homogeneity Test for Ordered Data"
     else
         RET@method <- "Marginal-Homogeneity Test"
@@ -746,16 +746,16 @@ mh_test.SymmetryProblem <- function(object,
 ### Wilcoxon-Signed-Rank Test
 wilcoxsign_test <- function(object, ...) UseMethod("wilcoxsign_test")
 
-wilcoxsign_test.formula <- function(formula, data = list(), 
+wilcoxsign_test.formula <- function(formula, data = list(),
                                     subset = NULL, ...)
 {
     d <- formula2data(formula, data, subset, frame = parent.frame(), ...)
     ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl)
     RET <- do.call("wilcoxsign_test", c(list(object = ip), list(...)))
     return(RET)
-}   
+}
 
-wilcoxsign_test.IndependenceProblem <- function(object, 
+wilcoxsign_test.IndependenceProblem <- function(object,
     zero.method = c("Pratt", "Wilcoxon"), ties.method = NULL, ...) {
 
     y <- object@y[[1]]
@@ -765,8 +765,8 @@ wilcoxsign_test.IndependenceProblem <- function(object,
     Wilcoxon <- (zero.method == "Wilcoxon")
 
     if (!is.null(ties.method))
-        stop("Argument ", sQuote("ties.method"), 
-             " was replaced by ", sQuote("zero.method"), 
+        stop("Argument ", sQuote("ties.method"),
+             " was replaced by ", sQuote("zero.method"),
              " and is no longer available")
 
     if (!is.numeric(y))
@@ -776,14 +776,14 @@ wilcoxsign_test.IndependenceProblem <- function(object,
             stop(sQuote("x"), " is not a factor at two levels")
         if (!is_completeblock(object))
             stop("Not an unreplicated complete block design")
-        diffs <- odiffs <- tapply(1:length(y), block, function(b) 
+        diffs <- odiffs <- tapply(1:length(y), block, function(b)
             y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]]
         )
     }
     if (is.numeric(x))
         diffs <- odiffs <- x - y
 
-    if (Wilcoxon) 
+    if (Wilcoxon)
         diffs <- diffs[abs(diffs) > 0]
 
     if (all(abs(diffs) < .Machine$double.eps))
@@ -793,12 +793,12 @@ wilcoxsign_test.IndependenceProblem <- function(object,
     neg <- rank(abs(diffs)) * (diffs < 0)
     pos <- pos[abs(diffs) > 0]
     neg <- neg[abs(diffs) > 0]
-    
+
     yy <- drop(as.vector(t(cbind(pos, neg))))
     xx <- factor(rep(c("pos", "neg"), sum(abs(diffs) > 0)))
     block <- gl(sum(abs(diffs) > 0), 2)
 
-    ip <- new("IndependenceProblem", x = data.frame(x = xx), 
+    ip <- new("IndependenceProblem", x = data.frame(x = xx),
               y = data.frame(y = yy), block = block)
 
     RET <- independence_test(ip, teststat = "scalar", ...)
@@ -808,7 +808,7 @@ wilcoxsign_test.IndependenceProblem <- function(object,
         if (is.null(match.call()$zero.method))
             warning("Handling of zeros defaults to ", sQuote("Pratt"),
                     " in newer versions of coin")
-        RET@method <- paste(RET@method, " (zeros handled a la ", 
+        RET@method <- paste(RET@method, " (zeros handled a la ",
                             zero.method, ")", sep = "")
     }
     RET@nullvalue <- 0
