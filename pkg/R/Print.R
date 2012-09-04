@@ -92,6 +92,7 @@ setMethod(f = "show", signature = "MaxTypeIndependenceTest",
 
         RET <- list(statistic = stat,
                     p.value = x@distribution@pvalue(stat),
+                    alternative = x@statistic@alternative,
                     data.name = dataname,
                     method = paste(distname, x@method))
         if (length(x@estimates) > 0)

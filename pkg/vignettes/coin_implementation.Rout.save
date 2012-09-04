@@ -350,6 +350,7 @@ data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000) 
 	 stratified by Gender 
 maxT = 1.6258, p-value = 0.7214
+alternative hypothesis: two.sided 
 
 
 > pvalue(independence_test(js, teststat = "max"), method = "single-step")

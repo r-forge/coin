@@ -41,6 +41,9 @@
           null distribution contained values equal to the observed test
           statistics
 
+    o     the printed output from maximum-type tests did not include the
+          alternative hypothesis
+
 
                 CHANGES in `coin' VERSION 1.0-22
 

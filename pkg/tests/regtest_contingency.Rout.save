@@ -1,8 +1,8 @@
 
-R version 2.14.1 (2011-12-22)
-Copyright (C) 2011 The R Foundation for Statistical Computing
+R version 2.14.2 (2012-02-29)
+Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i686-pc-linux-gnu (32-bit)
+Platform: i386-pc-mingw32/i386 (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -96,6 +96,7 @@ Loading required package: multcomp
 
 data:  w by x 
 maxT = 2.3738, p-value = 0.1836
+alternative hypothesis: two.sided 
 sample estimates:
 $cutpoint
 [1] 0.9060508
@@ -112,6 +113,7 @@ $cutpoint
 
 data:  w by y (1, 2, 3, 4) 
 maxT = 0.7294, p-value = 0.8905
+alternative hypothesis: two.sided 
 sample estimates:
 $cutpoint
 [1] "1" "2" "3"
@@ -129,6 +131,7 @@ $cutpoint
 
 data:  w by z 
 maxT = 0.5222, p-value = 0.9125
+alternative hypothesis: two.sided 
 sample estimates:
 $cutpoint
 [1] "1"
@@ -146,6 +149,7 @@ $cutpoint
 
 data:  w by x, y, z 
 maxT = 2.3738, p-value = 0.286
+alternative hypothesis: two.sided 
 sample estimates:
 $covariable
 [1] "x"

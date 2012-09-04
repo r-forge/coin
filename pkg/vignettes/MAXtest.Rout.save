@@ -198,6 +198,7 @@ Genotype In situ Control
 
 data:  Group by Genotype (AA, AG, GG) 
 maxT = 2.1879, p-value = 0.03042
+alternative hypothesis: greater 
 
 
 > drop(pvalue(it, method = "single-step"))
@@ -218,6 +219,7 @@ maxT = 2.1879, p-value = 0.03042
 
 data:  Group by Genotype (AA, AG, GG) 
 maxT = 2.1879, p-value = 0.03151
+alternative hypothesis: greater 
 
 
 > drop(pvalue(itZ, method = "single-step"))
