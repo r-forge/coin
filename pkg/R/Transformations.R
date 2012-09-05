@@ -117,8 +117,7 @@ fsplits <- function(nlevel) {
     index[-nrow(index),, drop = FALSE]
 }
 
-### set up transformation g(x) for all possible binary splits
-### in an unordered x
+### set up transformation g(x) for all possible binary splits in an unordered x
 fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
 
     x <- factor(x) # drop unused levels
@@ -137,37 +136,39 @@ fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
     tr
 }
 
-### logrank scores; with two different methods of handling
-### ties
-logrank_trafo <-
-function (x, ties.method = c("logrank", "HL", "average-scores"))
+### logrank scores; with three different methods of handling ties
+logrank_trafo <- function(x, ties.method = c("logrank", "HL", "average-scores"))
 {
     ties.method <- match.arg(ties.method)
     time <- x[, 1]
     event <- x[, 2]
     n <- length(time)
-    ot <- order(time, event)
+    o <- order(time, event)
 
-    if (ties.method == "logrank") {
-        fact <- event/(n - rank(time, ties.method = "min") + 1)
-        return(event - cumsum(fact[ot])[rank(time, ties.method = "max")])
-    }
-    if (ties.method == "HL") {
-        rt <- rank(time, ties.method = "max")
-        fact <- event/(n - rt + 1)
-        return(event - cumsum(fact[ot])[rt])
-    }
-    if (ties.method == "average-scores") {
-        tmindiff <- min(diff(sort(time[!duplicated(time)])))
-        ### ties.method = "first" for events, "min" for censored obs.
-        jitter <- sort(runif(n, max = tmindiff / 2))[ot]
-        ot <- order(time - event * jitter)
-        rt <- rank(time - event * jitter, ties.method = "min")
-        fact <- event / (n - rt + 1)
-        sc <- cumsum(fact[ot])[rt] - event
-        ### average over events only
-        return(coin:::average_scores(sc, time + (1 - event) * runif(n)))
-    }
+    scores <- switch(ties.method,
+        "logrank" = {
+            fact <- event / (n - rank(time, ties.method = "min") + 1)
+            event - cumsum(fact[o])[rank(time, ties.method = "max")]
+        },
+        "HL" = {
+            r <- rank(time, ties.method = "max")
+            fact <- event / (n - r + 1)
+            event - cumsum(fact[o])[r]
+        },
+        "average-scores" = {
+            tmindiff <- min(diff(sort(time[!duplicated(time)])))
+            ## ties.method = "first" for events, "min" for censored obs.
+            jitter <- sort(runif(n, max = tmindiff / 2))[o]
+            time2 <- time - event * jitter
+            o <- order(time2)
+            r <- rank(time2, ties.method = "min")
+            fact <- event / (n - r + 1)
+            s <- cumsum(fact[o])[r] - event
+            ## average over events only
+            average_scores(s, time + (1 - event) * runif(n))
+        }
+    )
+    return(scores)
 }
 
 ### factor handling
@@ -204,11 +205,11 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
             stop(sQuote("block"), " is not a factor with ",
                  nrow(data), " elements")
 
-        ### need to check dimension of matrix returned by
-        ### user supplied functions
+        ## need to check dimension of matrix returned by
+        ## user supplied functions
         ret <- trafo(data, numeric_trafo, factor_trafo, surv_trafo)
 
-        ### apply trafo to each block separately
+        ## apply trafo to each block separately
         for (lev in levels(block)) {
             ret[block == lev, ] <- trafo(data[block == lev, ,drop = FALSE],
                 numeric_trafo, factor_trafo, ordered_trafo, surv_trafo)
@@ -224,7 +225,7 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
                  " not found in ", sQuote("var_trafo"))
     }
 
-    ### compute transformations for each variable
+    ## compute transformations for each variable
     tr <- vector(mode = "list", length = length(data))
     names(tr) <- names(data)
     for (nm in names(data)) {
@@ -260,9 +261,9 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
             stop("data class ", class(x), " is not supported")
     }
 
-    ### set up a matrix of transformations
-    ### when more than one factor is in play, factor names
-    ### _and_ colnames of the corresponding rows are combined by `.'
+    ## set up a matrix of transformations
+    ## when more than one factor is in play, factor names
+    ## _and_ colnames of the corresponding rows are combined by `.'
     RET <- c()
     assignvar <- c()
     cn <- c()
