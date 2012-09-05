@@ -121,6 +121,7 @@ fsplits <- function(nlevel) {
 ### in an unordered x
 fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
 
+    x <- factor(x) # drop unused levels
     sp <- fsplits(nlevels(x))
     lev <- levels(x)
     tr <- matrix(0, nrow = length(x), ncol = nrow(sp))

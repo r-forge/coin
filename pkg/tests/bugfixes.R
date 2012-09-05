@@ -323,3 +323,8 @@ stopifnot(isequal(all(GE(pss, psd)), TRUE))
 
 ### fmaxstat_trafo 'drop'ed its dimensions
 fmaxstat_trafo(gl(2, 2))
+
+### fmaxstat_trafo didn't drop unused levels
+a <- gl(4, 2)
+a[5:6] <- NA
+fmaxstat_trafo(a)

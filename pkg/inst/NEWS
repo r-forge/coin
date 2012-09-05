@@ -47,6 +47,9 @@
     o     the maximally selected statistics transformation for factors sometimes
           dropped its column names
 
+    o     the maximally selected statistics transformation for factors retained
+          unused levels
+
 
                 CHANGES in `coin' VERSION 1.0-22
 

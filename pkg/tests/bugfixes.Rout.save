@@ -543,6 +543,20 @@ alternative hypothesis: true mu is not equal to 0
 3           0
 4           0
 > 
+> ### fmaxstat_trafo didn't drop unused levels
+> a <- gl(4, 2)
+> a[5:6] <- NA
+> fmaxstat_trafo(a)
+  {1} vs. {2, 4} {1, 2} vs. {4} {1, 4} vs. {2}
+1              1              1              1
+2              1              1              1
+3              0              1              0
+4              0              1              0
+5              0              0              0
+6              0              0              0
+7              0              0              1
+8              0              0              1
+> 
 > proc.time()
    user  system elapsed 
-   3.99    0.35    4.78 
+   3.61    0.35    4.10 
