@@ -535,6 +535,14 @@ alternative hypothesis: true mu is not equal to 0
 > psd <- pvalue(it, "step-down")
 > stopifnot(isequal(all(GE(pss, psd)), TRUE))
 > 
+> ### fmaxstat_trafo 'drop'ed its dimensions
+> fmaxstat_trafo(gl(2, 2))
+  {1} vs. {2}
+1           1
+2           1
+3           0
+4           0
+> 
 > proc.time()
    user  system elapsed 
-   3.63    0.24    3.94 
+   3.99    0.35    4.78 

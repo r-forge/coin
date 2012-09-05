@@ -132,7 +132,7 @@ fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
     }
     rownames(tr) <- 1:length(x)
     colnames(tr) <- cn
-    tr <- tr[, colMeans(tr) >= minprob & colMeans(tr) <= maxprob]
+    tr <- tr[, colMeans(tr) >= minprob & colMeans(tr) <= maxprob, drop = FALSE]
     tr
 }
 

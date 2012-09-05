@@ -44,6 +44,9 @@
     o     the printed output from maximum-type tests did not include the
           alternative hypothesis
 
+    o     the maximally selected statistics transformation for factors sometimes
+          dropped its column names
+
 
                 CHANGES in `coin' VERSION 1.0-22
 

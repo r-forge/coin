@@ -320,3 +320,6 @@ it <- independence_test(y1 + y2 + y3 + y4 ~ x, data = df,
 pss <- pvalue(it, "single-step")
 psd <- pvalue(it, "step-down")
 stopifnot(isequal(all(GE(pss, psd)), TRUE))
+
+### fmaxstat_trafo 'drop'ed its dimensions
+fmaxstat_trafo(gl(2, 2))
