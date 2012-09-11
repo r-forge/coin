@@ -19,6 +19,7 @@ export(independence_test,
        symmetry_test,
        trafo,
        id_trafo,
+       rank_trafo,
        ansari_trafo,
        fligner_trafo,
        normal_trafo,
@@ -28,20 +29,20 @@ export(independence_test,
        fmaxstat_trafo,
        logrank_trafo,
        f_trafo, of_trafo, mcp_trafo,
-       asymptotic, exact, approximate)       
+       asymptotic, exact, approximate)
 
-exportClasses("IndependenceProblem", "IndependenceTest", 
+exportClasses("IndependenceProblem", "IndependenceTest",
               "IndependenceTestProblem","IndependenceTestStatistic",
               "IndependenceLinearStatistic",
               "ScalarIndependenceTestStatistic", "PValue", "NullDistribution",
               "SymmetryProblem", "ExpectCovarInfluence", "ExpectCovar",
               "QuadTypeIndependenceTest", "ScalarIndependenceTest",
-              "ScalarIndependenceTestConfint", "MaxTypeIndependenceTest", 
+              "ScalarIndependenceTestConfint", "MaxTypeIndependenceTest",
               "MaxTypeIndependenceTestStatistic",
               "QuadTypeIndependenceTestStatistic")
 
-exportMethods("initialize", "show", "pvalue", "statistic", 
-              "pperm", "dperm", "qperm", "support", "expectation", 
+exportMethods("initialize", "show", "pvalue", "statistic",
+              "pperm", "dperm", "qperm", "support", "expectation",
               "covariance", "variance", "ExactNullDistribution")
 
 S3method(independence_test, formula)

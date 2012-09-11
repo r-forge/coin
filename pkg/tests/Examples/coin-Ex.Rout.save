@@ -291,7 +291,7 @@ alternative hypothesis: true mu is greater than 0
 >   ### Wilcoxon-Mann-Whitney test, cf. Hollander & Wolfe (1999), page 111
 >   ### exact p-value and confidence interval for the difference in location
 >   ### (At term - 12-26 Weeks)
->   wt <- wilcox_test(pd ~ age, data = water_transfer, 
+>   wt <- wilcox_test(pd ~ age, data = water_transfer,
 +                     distribution = "exact", conf.int = TRUE)
 >   print(wt)
 
@@ -337,9 +337,9 @@ difference in location
 
 > 
 >   ### Confidence interval for difference (12-26 Weeks - At term)
->   wilcox_test(pd ~ age, data = water_transfer, 
-+               xtrafo = function(data) 
-+                   trafo(data, factor_trafo = function(x) 
+>   wilcox_test(pd ~ age, data = water_transfer,
++               xtrafo = function(data)
++                   trafo(data, factor_trafo = function(x)
 +                       as.numeric(x == levels(x)[2])),
 +               distribution = "exact", conf.int = TRUE)
 
@@ -366,7 +366,7 @@ alternative hypothesis: true mu is not equal to 0
 
 > 
 >   ### approximate p-value (with 99% confidence interval)
->   pvalue(oneway_test(pd ~ age, data = water_transfer, 
+>   pvalue(oneway_test(pd ~ age, data = water_transfer,
 +                      distribution = approximate(B = 9999)))
 [1] 0.1311131
 99 percent confidence interval:
@@ -377,7 +377,7 @@ alternative hypothesis: true mu is not equal to 0
 >   pvalue(pt)
 [1] 0.1318681
 > 
->   ### plot density and distribution of the standardized 
+>   ### plot density and distribution of the standardized
 >   ### test statistic
 >   layout(matrix(1:2, nrow = 2))
 >   s <- support(pt)
@@ -389,15 +389,15 @@ alternative hypothesis: true mu is not equal to 0
 > 
 >   ### Length of YOY Gizzard Shad from Kokosing Lake, Ohio,
 >   ### sampled in Summer 1984, Hollander & Wolfe (1999), Table 6.3, page 200
->   YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44, 
-+                                42, 60, 32, 42, 45, 58, 27, 51, 42, 52, 
-+                                38, 33, 26, 25, 28, 28, 26, 27, 27, 27, 
+>   YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,
++                                42, 60, 32, 42, 45, 58, 27, 51, 42, 52,
++                                38, 33, 26, 25, 28, 28, 26, 27, 27, 27,
 +                                31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
 +                     site = factor(c(rep("I", 10), rep("II", 10),
 +                                     rep("III", 10), rep("IV", 10))))
 > 
 >   ### Kruskal-Wallis test, approximate exact p-value
->   kw <- kruskal_test(length ~ site, data = YOY, 
+>   kw <- kruskal_test(length ~ site, data = YOY,
 +                      distribution = approximate(B = 9999))
 >   kw
 
@@ -413,10 +413,10 @@ chi-squared = 22.8524, p-value < 2.2e-16
 
 > 
 >   ### Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
->   ### Hollander & Wolfe (1999), page 244 
+>   ### Hollander & Wolfe (1999), page 244
 >   ### (where Steel-Dwass results are given)
 >   NDWD <- oneway_test(length ~ site, data = YOY,
-+       ytrafo = function(data) trafo(data, numeric_trafo = rank),
++       ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
 +       xtrafo = function(data) trafo(data, factor_trafo = function(x)
 +           model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))),
 +       teststat = "max", distribution = approximate(B = 90000))
@@ -694,14 +694,14 @@ alternative hypothesis: true mu is not equal to 1
 >   ### Platelet Counts of Newborn Infants
 >   ### Hollander & Wolfe (1999), Table 5.4, page 171
 >   platalet_counts <- data.frame(
-+       counts = c(120, 124, 215, 90, 67, 95, 190, 180, 135, 399, 
++       counts = c(120, 124, 215, 90, 67, 95, 190, 180, 135, 399,
 +                  12, 20, 112, 32, 60, 40),
 +       treatment = factor(c(rep("Prednisone", 10), rep("Control", 6))))
 > 
->   ### Lepage test, Hollander & Wolfe (1999), page 172 
+>   ### Lepage test, Hollander & Wolfe (1999), page 172
 >   lt <- independence_test(counts ~ treatment, data = platalet_counts,
-+       ytrafo = function(data) trafo(data, numeric_trafo = function(x)       
-+           cbind(rank(x), ansari_trafo(x))),
++       ytrafo = function(data) trafo(data, numeric_trafo = function(x)
++           cbind(rank_trafo(x), ansari_trafo(x))),
 +       teststat = "quad", distribution = approximate(B = 9999))
 > 
 >   lt
@@ -715,8 +715,8 @@ chi-squared = 9.3384, p-value = 0.0042
 >   ### where did the rejection come from? Use maximum statistic
 >   ### instead of a quadratic form
 >   ltmax <- independence_test(counts ~ treatment, data = platalet_counts,
-+       ytrafo = function(data) trafo(data, numeric_trafo = function(x) 
-+           matrix(c(rank(x), ansari_trafo(x)), ncol = 2,
++       ytrafo = function(data) trafo(data, numeric_trafo = function(x)
++           matrix(c(rank_trafo(x), ansari_trafo(x)), ncol = 2,
 +                  dimnames = list(1:length(x), c("Location", "Scale")))),
 +       teststat = "max")
 > 
@@ -887,7 +887,7 @@ alternative hypothesis: two.sided
 > 
 >   ### Hollander & Wolfe (1999), Table 7.1, page 274
 >   ### Comparison of three methods ("round out", "narrow angle", and
->   ###  "wide angle") for rounding first base. 
+>   ###  "wide angle") for rounding first base.
 >   RoundingTimes <- data.frame(
 +       times = c(5.40, 5.50, 5.55,
 +                 5.85, 5.70, 5.75,
@@ -926,8 +926,8 @@ chi-squared = 11.1429, df = 2, p-value = 0.003805
 
 > 
 >   ### parallel coordinates plot
->   matplot(t(matrix(RoundingTimes$times, ncol = 3, byrow = TRUE)), 
-+           type = "l", col = 1, lty = 1, axes = FALSE, ylab = "Time", 
+>   matplot(t(matrix(RoundingTimes$times, ncol = 3, byrow = TRUE)),
++           type = "l", col = 1, lty = 1, axes = FALSE, ylab = "Time",
 +           xlim = c(0.5, 3.5))
 >   axis(1, at = 1:3, labels = levels(RoundingTimes$methods))
 >   axis(2)
@@ -943,7 +943,7 @@ chi-squared = 11.1429, df = 2, p-value = 0.003805
 +                  model.matrix(~ x - 1) %*% t(contrMat(table(x), "Tukey"))
 +            ),
 +        ytrafo = function(data)
-+            trafo(data, numeric_trafo = rank, block = RoundingTimes$block)
++            trafo(data, numeric_trafo = rank_trafo, block = RoundingTimes$block)
 +        )
 > 
 >   ### a global test, again
@@ -985,7 +985,7 @@ chi-squared = 7.0533, df = 1, p-value = 0.007912
 [1] 0.003955894
 > 
 >   ### approximate null distribution via Monte-Carlo
->   pvalue(friedman_test(strength ~ potash | block, data = sc, 
+>   pvalue(friedman_test(strength ~ potash | block, data = sc,
 +                        distribution = approximate(B = 9999)))
 [1] 0.00470047
 99 percent confidence interval:
@@ -1014,9 +1014,9 @@ alternative hypothesis: true location shift is greater than 0
 
 > 
 >   ### with explicit group and block information
->   xydat <- data.frame(y = c(y, x), x = gl(2, length(x)), 
+>   xydat <- data.frame(y = c(y, x), x = gl(2, length(x)),
 +                       block = factor(rep(1:length(x), 2)))
->   wilcoxsign_test(y ~ x | block, data = xydat, 
+>   wilcoxsign_test(y ~ x | block, data = xydat,
 +                   alternative = "greater", distribution = exact())
 
 	Exact Wilcoxon-Signed-Rank Test
@@ -1038,9 +1038,9 @@ alternative hypothesis: true mu is greater than 0
 > 
 > ### Name: Transformations
 > ### Title: Functions for Data Transformations
-> ### Aliases: trafo id_trafo ansari_trafo fligner_trafo normal_trafo
-> ###   median_trafo consal_trafo maxstat_trafo fmaxstat_trafo logrank_trafo
-> ###   f_trafo of_trafo mcp_trafo
+> ### Aliases: trafo id_trafo rank_trafo ansari_trafo fligner_trafo
+> ###   normal_trafo median_trafo consal_trafo maxstat_trafo fmaxstat_trafo
+> ###   logrank_trafo f_trafo of_trafo mcp_trafo
 > ### Keywords: manip
 > 
 > ### ** Examples
@@ -1162,7 +1162,7 @@ attr(,"assign")
 10          1          1          1
 > 
 >   ### apply transformation blockwise (e.g. for Friedman test)
->   trafo(data.frame(y = 1:20), numeric_trafo = rank, block = gl(4, 5))
+>   trafo(data.frame(y = 1:20), numeric_trafo = rank_trafo, block = gl(4, 5))
        
  [1,] 1
  [2,] 2
@@ -2123,7 +2123,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  60.02 1.52 73.34 NA NA 
+Time elapsed:  61.46 1.26 64.92 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -13,15 +13,15 @@
 \usage{
 
 \method{ansari_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{ansari_test}{IndependenceProblem}(object, 
+\method{ansari_test}{IndependenceProblem}(object,
     alternative = c("two.sided", "less", "greater"),
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...)
 
 \method{fligner_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{fligner_test}{IndependenceProblem}(object, 
+\method{fligner_test}{IndependenceProblem}(object,
     ties.method = c("mid-ranks", "average-scores"),
-    distribution = c("asymptotic", "approximate"), 
+    distribution = c("asymptotic", "approximate"),
     ...)
 
 }
@@ -38,13 +38,13 @@
       integer valued weights for the observations.}
   \item{object}{an object of class \code{IndependenceProblem}.}
   \item{alternative}{a character, the alternative hypothesis must be
-    one of \code{"two.sided"} (default), \code{"greater"} or    
-    \code{"less"}.  You can specify just the initial letter.}   
+    one of \code{"two.sided"} (default), \code{"greater"} or
+    \code{"less"}.  You can specify just the initial letter.}
   \item{distribution}{a character, the null distribution of the test statistic
     can be computed \code{exact}ly or can be approximated by its
-    asymptotic distribution (\code{asymptotic})   
+    asymptotic distribution (\code{asymptotic})
     or via Monte-Carlo resampling (\code{approximate}).
-    Alternatively, the functions 
+    Alternatively, the functions
     \code{\link{exact}}, \code{\link{approximate}} or \code{\link{asymptotic}} can be
     used to specify how the exact conditional distribution of the test statistic
     should be calculated or approximated.}
@@ -66,15 +66,15 @@
   Wolfe (1999).
 
   The asymptotic null distribution is computed by default for both
-  procedures. Exact p-values may be computed for the Ansari-Bradley test 
-  can be approximated via Monte-Carlo for the Fligner-Killeen procedure. 
-  Exact p-values are computed either by the shift algorithm 
-  (Streitberg & Roehmel, 1986, 1987) or by the split-up algorithm 
+  procedures. Exact p-values may be computed for the Ansari-Bradley test
+  can be approximated via Monte-Carlo for the Fligner-Killeen procedure.
+  Exact p-values are computed either by the shift algorithm
+  (Streitberg & Roehmel, 1986, 1987) or by the split-up algorithm
   (van de Wiel, 2001).
 
   The Ansari-Bradley test can be used to test the
-  two-sided hypothesis \eqn{var(Y_1) / var(Y_2) = 1}, where \eqn{var(Y_i)} 
-  is the variance of the responses in the ith group. Confidence intervals 
+  two-sided hypothesis \eqn{var(Y_1) / var(Y_2) = 1}, where \eqn{var(Y_i)}
+  is the variance of the responses in the ith group. Confidence intervals
   for the ratio of scales are available for the
   Ansari-Bradley test and are computed according to Bauer (1972).
   In case \code{alternative = "less"}, the
@@ -90,14 +90,14 @@
   An object inheriting from class \code{\link{IndependenceTest-class}} with
   methods \code{\link{show}}, \code{\link{statistic}}, \code{\link{expectation}},
   \code{\link{covariance}} and \code{\link{pvalue}}. The null distribution
-  can be inspected by \code{\link{pperm}}, \code{\link{dperm}},  
+  can be inspected by \code{\link{pperm}}, \code{\link{dperm}},
   \code{\link{qperm}} and \code{\link{support}} methods. Confidence
   intervals can be extracted by \code{confint}.
 
 }
 \references{
 
-        Myles Hollander & Douglas A. Wolfe (1999).  
+        Myles Hollander & Douglas A. Wolfe (1999).
         \emph{Nonparametric Statistical Methods, 2nd Edition}.
         New York: John Wiley & Sons.
 
@@ -144,14 +144,14 @@
   ### Platelet Counts of Newborn Infants
   ### Hollander & Wolfe (1999), Table 5.4, page 171
   platalet_counts <- data.frame(
-      counts = c(120, 124, 215, 90, 67, 95, 190, 180, 135, 399, 
+      counts = c(120, 124, 215, 90, 67, 95, 190, 180, 135, 399,
                  12, 20, 112, 32, 60, 40),
       treatment = factor(c(rep("Prednisone", 10), rep("Control", 6))))
 
-  ### Lepage test, Hollander & Wolfe (1999), page 172 
+  ### Lepage test, Hollander & Wolfe (1999), page 172
   lt <- independence_test(counts ~ treatment, data = platalet_counts,
-      ytrafo = function(data) trafo(data, numeric_trafo = function(x)       
-          cbind(rank(x), ansari_trafo(x))),
+      ytrafo = function(data) trafo(data, numeric_trafo = function(x)
+          cbind(rank_trafo(x), ansari_trafo(x))),
       teststat = "quad", distribution = approximate(B = 9999))
 
   lt
@@ -159,8 +159,8 @@
   ### where did the rejection come from? Use maximum statistic
   ### instead of a quadratic form
   ltmax <- independence_test(counts ~ treatment, data = platalet_counts,
-      ytrafo = function(data) trafo(data, numeric_trafo = function(x) 
-          matrix(c(rank(x), ansari_trafo(x)), ncol = 2,
+      ytrafo = function(data) trafo(data, numeric_trafo = function(x)
+          matrix(c(rank_trafo(x), ansari_trafo(x)), ncol = 2,
                  dimnames = list(1:length(x), c("Location", "Scale")))),
       teststat = "max")
 

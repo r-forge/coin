@@ -1,6 +1,7 @@
 \name{Transformations}
 \alias{trafo}
 \alias{id_trafo}
+\alias{rank_trafo}
 \alias{ansari_trafo}
 \alias{fligner_trafo}
 \alias{normal_trafo}
@@ -18,9 +19,10 @@
 }
 \usage{
 trafo(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
-    ordered_trafo = of_trafo, surv_trafo = logrank_trafo, 
+    ordered_trafo = of_trafo, surv_trafo = logrank_trafo,
     var_trafo = NULL, block = NULL)
 id_trafo(x)
+rank_trafo(x, ties.method = c("mid-ranks", "random"))
 ansari_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 fligner_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 normal_trafo(x, ties.method = c("mid-ranks", "average-scores"))
@@ -35,18 +37,18 @@ mcp_trafo(...)
 }
 \arguments{
   \item{data}{an object of class \code{data.frame}.}
-  \item{numeric_trafo}{a function to by applied to \code{numeric} 
+  \item{numeric_trafo}{a function to by applied to \code{numeric}
     elements of \code{data} returning a matrix with \code{nrow(data)}
     rows and an arbitrary number of columns.}
   \item{factor_trafo}{a function to by applied to \code{factor}
     elements of \code{data} returning a matrix with \code{nrow(data)}
-    rows and an arbitrary number of columns (usually a dummy or contrast 
+    rows and an arbitrary number of columns (usually a dummy or contrast
     matrix).}
   \item{ordered_trafo}{a function to by applied to \code{ordered}
     elements of \code{data} returning a matrix with \code{nrow(data)}
     rows and an arbitrary number of columns (usually some scores).}
-  \item{surv_trafo}{a function to by applied to 
-    elements of class \code{Surv} of \code{data} returning a 
+  \item{surv_trafo}{a function to by applied to
+    elements of class \code{Surv} of \code{data} returning a
     matrix with \code{nrow(data)} rows and an arbitrary number of columns.}
   \item{var_trafo}{an optional named list of functions to be applied to the
                    corresponding variables in \code{data}.}
@@ -54,10 +56,12 @@ mcp_trafo(...)
     \code{trafo} is applied to each level of \code{block} separately.}
   \item{x}{an object of classes \code{numeric}, \code{ordered}, \code{factor} or
     \code{Surv}.}
-  \item{ties.method}{two methods are available to adjust scores for ties.
-    Either the score generating function is applied to \code{mid-ranks} 
-    or scores, based on random ranks, are averaged \code{average-scores}.
-    For ties handling in case of censored data, see \code{\link{surv_test}}.}
+  \item{ties.method}{method used to adjust the scores for ties. Either
+    the score generating function is applied to \code{"mid-ranks"} or
+    scores, based on random ranks, are averaged
+    \code{"average-scores"}. When using \code{rank_trafo}, ties can be
+    broken at \code{"random"}. For ties handling in case of censored
+    data, see \code{\link{surv_test}}.}
   \item{minprob}{a fraction between 0 and 0.5.}
   \item{maxprob}{a fraction between 0.5 and 1.}
   \item{\dots}{factor name and contrast matrix (as matrix or character)
@@ -75,12 +79,14 @@ mcp_trafo(...)
   \code{id_trafo} is the identity transformation and \code{f_trafo}
   computes dummy matrices for factors.
 
+  \code{rank_trafo} is the rank transformation.
+
   \code{ansari_trafo} and \code{fligner_trafo} compute Ansari-Bradley
   or Fligner scores for scale problems.
 
   \code{normal_trafo}, \code{median_trafo} and \code{consal_trafo}
   implement normal scores, median scores or Conover-Salburg scores
-  (see \code{\link{neuropathy}}) for location problems, 
+  (see \code{\link{neuropathy}}) for location problems,
   \code{logrank_trafo} returns logrank scores for censored data.
 
   A \code{trafo} function with modified default arguments is usually
@@ -94,7 +100,7 @@ mcp_trafo(...)
 }
 \value{
 
-  A named matrix with \code{nrow(data)} rows and 
+  A named matrix with \code{nrow(data)} rows and
   arbitrary number of columns. User-supplied transformations must
   return a numeric vector or matrix.
 
@@ -123,7 +129,7 @@ mcp_trafo(...)
   maxstat_trafo(rnorm(10))
 
   ### apply transformation blockwise (e.g. for Friedman test)
-  trafo(data.frame(y = 1:20), numeric_trafo = rank, block = gl(4, 5))
+  trafo(data.frame(y = 1:20), numeric_trafo = rank_trafo, block = gl(4, 5))
 
   ### multiple comparisons
   mcp_trafo(x = "Tukey")(data.frame(x = gl(3, 3)))

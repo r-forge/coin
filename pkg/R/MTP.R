@@ -254,8 +254,10 @@ mcp_trafo <- function(...) {
             attr(C, "type") <- "User-defined"
             class(C) <- c("contrMat", "matrix")
         }
-        ret <- trafo(data,
-                     factor_trafo = function(x) model.matrix(~ x - 1) %*% t(C))
+
+        ret <- trafo(data, factor_trafo = function(x)
+            model.matrix(~ x - 1, data = model.frame(~ x, na.action = na.pass))
+                %*% t(C))
         attr(ret, "contrast") <- C
         ret
     }

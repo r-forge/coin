@@ -1,8 +1,8 @@
 
-R version 2.14.2 (2012-02-29)
+R version 2.15.1 Patched (2012-08-06 r60178) -- "Roasted Marshmallows"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i386-pc-mingw32/i386 (32-bit)
+Platform: i386-w64-mingw32/i386 (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -43,7 +43,7 @@ Loading required package: multcomp
 > 
 > stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
 +                                    teststat = "quad",
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo))), ptwo))
 > 
 > ### approximated distribution
 > rtwo <- pvalue(kruskal_test(y ~ x, data = dat, distribution = "approx")) / ptwo
@@ -85,3 +85,6 @@ Error in median.default(X[[1L]], ...) : need numeric data
 Error in .local(.Object, ...) : 'block' is not a factor
 > 
 > 
+> proc.time()
+   user  system elapsed 
+   0.95    0.17    1.23 

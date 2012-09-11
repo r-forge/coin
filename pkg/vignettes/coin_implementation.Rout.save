@@ -30,7 +30,7 @@ Loading required package: class
 
 > data("rotarod", package = "coin")
 
-> independence_test(time ~ group, data = rotarod, ytrafo = rank, 
+> independence_test(time ~ group, data = rotarod, ytrafo = rank_trafo, 
 +     distribution = exact())
 
 	Exact General Independence Test
@@ -72,7 +72,7 @@ Slot & Class \\ \hline
 \end{tabular}
 \end{center}
 
-> itp <- new("IndependenceTestProblem", ip, ytrafo = rank)
+> itp <- new("IndependenceTestProblem", ip, ytrafo = rank_trafo)
 
 > toLatex(c2t("IndependenceLinearStatistic"))
 \begin{center}
@@ -240,7 +240,8 @@ Z = 1.4203, p-value = 0.9228
 alternative hypothesis: less 
 
 
-> mood_score <- function(y) (rank(y) - (nrow(y) + 1)/2)^2
+> mood_score <- function(y) (rank_trafo(y) - (sum(!is.na(y)) + 
++     1)/2)^2
 
 > ip <- new("IndependenceProblem", y = rotarod["time"], 
 +     x = rotarod["group"])

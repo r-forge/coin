@@ -19,7 +19,7 @@ stopifnot(isequal(pvalue(kruskal_test(y ~ x, data = dat)), ptwo))
 
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
                                    teststat = "quad",
-    ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
+    ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo))), ptwo))
 
 ### approximated distribution
 rtwo <- pvalue(kruskal_test(y ~ x, data = dat, distribution = "approx")) / ptwo

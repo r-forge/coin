@@ -25,20 +25,20 @@
 \method{oneway_test}{IndependenceProblem}(object, ...)
 
 \method{wilcox_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{wilcox_test}{IndependenceProblem}(object, 
+\method{wilcox_test}{IndependenceProblem}(object,
     conf.int = FALSE, conf.level = 0.95, ...)
 
 \method{normal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{normal_test}{IndependenceProblem}(object, 
+\method{normal_test}{IndependenceProblem}(object,
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...)
 
 \method{median_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{median_test}{IndependenceProblem}(object, 
+\method{median_test}{IndependenceProblem}(object,
     conf.int = FALSE, conf.level = 0.95, ...)
 
 \method{kruskal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{kruskal_test}{IndependenceProblem}(object, 
+\method{kruskal_test}{IndependenceProblem}(object,
     distribution = c("asymptotic", "approximate"), ...)
 
 }
@@ -58,7 +58,7 @@
     can be computed \code{exact}ly or can be approximated by its
     asymptotic distribution (\code{asymptotic})
     or via Monte-Carlo resampling (\code{approximate}).
-    Alternatively, the functions 
+    Alternatively, the functions
     \code{\link{exact}}, \code{\link{approximate}} or \code{\link{asymptotic}} can be
     used to specify how the exact conditional distribution of the test statistic
     should be calculated or approximated.}
@@ -75,29 +75,29 @@
 
   The null hypothesis of the equality of the distribution of \code{y} in
   the groups given by \code{x} is tested. In particular, the methods
-  documented here are designed to detect shift alternatives. For a general 
+  documented here are designed to detect shift alternatives. For a general
   description of the test procedures documented here we refer to Hollander &
   Wolfe (1999).
 
-  The test procedures apply a rank transformation to the response values 
+  The test procedures apply a rank transformation to the response values
   \code{y}, except of \code{oneway_test} which computes a test statistic
   using the untransformed response values.
 
   The asymptotic null distribution is computed by default for all
   procedures. Exact p-values may be computed for the two-sample problems and
-  can be approximated via Monte-Carlo resampling 
+  can be approximated via Monte-Carlo resampling
   for all procedures. Exact p-values
   are computed either by the shift algorithm (Streitberg & Roehmel, 1986,
   1987) or by the split-up algorithm (van de Wiel, 2001).
 
   The linear rank tests for two samples (\code{wilcox_test},
-  \code{normal_test} and \code{median_test}) can be used to test the 
+  \code{normal_test} and \code{median_test}) can be used to test the
   two-sided hypothesis \eqn{H_0: Y_1 - Y_2 = 0}, where \eqn{Y_i} is the median
-  of the responses in the ith group. Confidence intervals for the difference 
-  in location are available for the rank-based procedures and are computed 
+  of the responses in the ith group. Confidence intervals for the difference
+  in location are available for the rank-based procedures and are computed
   according to Bauer (1972). In case \code{alternative = "less"}, the
-  null hypothesis \eqn{H_0: Y_1 - Y_2 \ge 0} is tested and 
-  \code{alternative = "greater"} corresponds to a null hypothesis 
+  null hypothesis \eqn{H_0: Y_1 - Y_2 \ge 0} is tested and
+  \code{alternative = "greater"} corresponds to a null hypothesis
   \eqn{H_0: Y_1 - Y_2 \le 0}.
 
   In case \code{x} is an ordered factor, \code{kruskal_test} computes the
@@ -120,11 +120,11 @@
 \references{
 
         Myles Hollander & Douglas A. Wolfe (1999).
-        \emph{Nonparametric Statistical Methods, 2nd Edition}. 
+        \emph{Nonparametric Statistical Methods, 2nd Edition}.
         New York: John Wiley & Sons.
 
         Bernd Streitberg & Joachim Roehmel (1986).
-        Exact distributions for permutations and rank tests: 
+        Exact distributions for permutations and rank tests:
         An introduction to some recently published algorithms.
         \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
 
@@ -133,15 +133,15 @@
         im allgemeinen c-Stichprobenfall.
         \emph{EDV in Medizin und Biologie} \bold{18}(1), 12--19.
 
-        Mark A. van de Wiel (2001). The split-up algorithm: a fast 
+        Mark A. van de Wiel (2001). The split-up algorithm: a fast
         symbolic method for computing p-values of rank statistics.
         \emph{Computational Statistics} \bold{16}, 519--538.
 
-        David F. Bauer (1972). Constructing confidence sets using 
+        David F. Bauer (1972). Constructing confidence sets using
         rank statistics. \emph{Journal of the American Statistical Association}
         \bold{67}, 687--690.
 
-        Jaroslav Hajek, Zbynek Sidak & Pranab K. Sen (1999), 
+        Jaroslav Hajek, Zbynek Sidak & Pranab K. Sen (1999),
         \emph{Theory of Rank Tests}. San Diego, London: Academic Press.
 
 }
@@ -157,7 +157,7 @@
   ### Wilcoxon-Mann-Whitney test, cf. Hollander & Wolfe (1999), page 111
   ### exact p-value and confidence interval for the difference in location
   ### (At term - 12-26 Weeks)
-  wt <- wilcox_test(pd ~ age, data = water_transfer, 
+  wt <- wilcox_test(pd ~ age, data = water_transfer,
                     distribution = "exact", conf.int = TRUE)
   print(wt)
 
@@ -178,9 +178,9 @@
   confint(wt)
 
   ### Confidence interval for difference (12-26 Weeks - At term)
-  wilcox_test(pd ~ age, data = water_transfer, 
-              xtrafo = function(data) 
-                  trafo(data, factor_trafo = function(x) 
+  wilcox_test(pd ~ age, data = water_transfer,
+              xtrafo = function(data)
+                  trafo(data, factor_trafo = function(x)
                       as.numeric(x == levels(x)[2])),
               distribution = "exact", conf.int = TRUE)
 
@@ -188,13 +188,13 @@
   oneway_test(pd ~ age, data = water_transfer)
 
   ### approximate p-value (with 99\% confidence interval)
-  pvalue(oneway_test(pd ~ age, data = water_transfer, 
+  pvalue(oneway_test(pd ~ age, data = water_transfer,
                      distribution = approximate(B = 9999)))
   ### exact p-value
   pt <- oneway_test(pd ~ age, data = water_transfer, distribution = "exact")
   pvalue(pt)
 
-  ### plot density and distribution of the standardized 
+  ### plot density and distribution of the standardized
   ### test statistic
   layout(matrix(1:2, nrow = 2))
   s <- support(pt)
@@ -206,24 +206,24 @@
 
   ### Length of YOY Gizzard Shad from Kokosing Lake, Ohio,
   ### sampled in Summer 1984, Hollander & Wolfe (1999), Table 6.3, page 200
-  YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44, 
-                               42, 60, 32, 42, 45, 58, 27, 51, 42, 52, 
-                               38, 33, 26, 25, 28, 28, 26, 27, 27, 27, 
+  YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,
+                               42, 60, 32, 42, 45, 58, 27, 51, 42, 52,
+                               38, 33, 26, 25, 28, 28, 26, 27, 27, 27,
                                31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
                     site = factor(c(rep("I", 10), rep("II", 10),
                                     rep("III", 10), rep("IV", 10))))
 
   ### Kruskal-Wallis test, approximate exact p-value
-  kw <- kruskal_test(length ~ site, data = YOY, 
+  kw <- kruskal_test(length ~ site, data = YOY,
                      distribution = approximate(B = 9999))
   kw
   pvalue(kw)
 
   ### Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
-  ### Hollander & Wolfe (1999), page 244 
+  ### Hollander & Wolfe (1999), page 244
   ### (where Steel-Dwass results are given)
   NDWD <- oneway_test(length ~ site, data = YOY,
-      ytrafo = function(data) trafo(data, numeric_trafo = rank),
+      ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
       xtrafo = function(data) trafo(data, factor_trafo = function(x)
           model.matrix(~x - 1) \%*\% t(contrMat(table(x), "Tukey"))),
       teststat = "max", distribution = approximate(B = 90000))

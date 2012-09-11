@@ -2,24 +2,33 @@
 ### compute average scores, see Hajek, Sidak, Sen (page 131ff)
 average_scores <- function(s, x) {
     for (d in unique(x))
-        s[x == d] <- mean(s[x == d])
+        s[x == d] <- mean(s[x == d], na.rm = TRUE)
     return(s)
 }
 
 ### identity transformation
 id_trafo <- function(x) x
 
+### rank transformation
+rank_trafo <- function(x, ties.method = c("mid-ranks", "random")) {
+    ties.method <- match.arg(ties.method)
+    scores <- rank(x, na.last = "keep",
+                   ties.method = if (ties.method == "mid-ranks") "average"
+                                 else "random")
+    return(scores)
+}
+
 ### Ansari-Bradley
 ansari_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
     ties.method <- match.arg(ties.method)
     scores <- switch(ties.method,
         "mid-ranks" = {
-            r <- rank(x)
-            pmin(r, length(x) - r + 1)
+            r <- rank_trafo(x)
+            pmin(r, sum(!is.na(x)) - r + 1)
         },
         "average-scores" = {
-            r <- rank(x, ties.method = "random")
-            s <- pmin(r, length(x) - r + 1)
+            r <- rank_trafo(x, ties.method = "random")
+            s <- pmin(r, sum(!is.na(x)) - r + 1)
             average_scores(s, x)
         }
     )
@@ -31,11 +40,11 @@ fligner_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
     ties.method <- match.arg(ties.method)
     scores <- switch(ties.method,
         "mid-ranks" = {
-            qnorm((1 + rank(abs(x))/(length(x) + 1))/2)
+            qnorm((1 + rank_trafo(abs(x)) / (sum(!is.na(x)) + 1)) / 2)
         },
         "average-scores" = {
-            r <- rank(abs(x), ties.method = "random")
-            s <- qnorm((1 + r/(length(x) + 1))/2)
+            s <- qnorm((1 + rank_trafo(abs(x), ties.method = "random") /
+                          (sum(!is.na(x)) + 1)) / 2)
             average_scores(s, x)
         }
     )
@@ -47,11 +56,11 @@ normal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
     ties.method <- match.arg(ties.method)
     scores <- switch(ties.method,
         "mid-ranks" = {
-            qnorm(rank(x)/(length(x) + 1))
+            qnorm(rank_trafo(x) / (sum(!is.na(x)) + 1))
         },
         "average-scores" = {
-            r <- rank(x, ties.method = "random")
-            s <- qnorm(r/(length(x) + 1))
+            s <- qnorm(rank_trafo(x, ties.method = "random") /
+                         (sum(!is.na(x)) + 1))
             average_scores(s, x)
         }
     )
@@ -60,18 +69,18 @@ normal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
 
 ### Median Scores
 median_trafo <- function(x)
-    as.numeric(x <= median(x))
+    as.numeric(x <= median(x, na.rm = TRUE))
 
 ### Conover & Salsburg (1988)
 consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
     ties.method <- match.arg(ties.method)
     scores <- switch(ties.method,
         "mid-ranks" = {
-            (rank(x)/(length(x) + 1))^4
+            (rank_trafo(x) / (sum(!is.na(x)) + 1))^4
         },
         "average-scores" = {
-            r <- rank(x, ties.method = "random")
-            s <- (r/(length(x) + 1))^4
+            s <- (rank_trafo(x, ties.method = "random") /
+                    (sum(!is.na(x)) + 1))^4
             average_scores(s, x)
         }
     )
@@ -81,12 +90,12 @@ consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
 ### maximally selected (rank, chi^2, whatsoever) statistics
 ### ordered x
 maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
-    qx <- quantile(x, prob = c(minprob, maxprob), type = 1)
+    qx <- quantile(x, probs = c(minprob, maxprob), na.rm = TRUE, type = 1)
     if (diff(qx) < .Machine$double.eps)
         return(NULL)
     ux <- sort(unique(x))
-    ux <- ux[ux < max(x)]
-    if (mean(x <= qx[2]) <= maxprob) {
+    ux <- ux[ux < max(x, na.rm = TRUE)]
+    if (mean(x <= qx[2], na.rm = TRUE) <= maxprob) {
         cutpoints <- ux[ux >= qx[1] & ux <= qx[2]]
     } else {
         cutpoints <- ux[ux >= qx[1] & ux < qx[2]]
@@ -95,6 +104,7 @@ maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
                 PACKAGE = "coin")
     colnames(cm) <- paste("x <= ", round(cutpoints, 3), sep = "")
     rownames(cm) <- 1:nrow(cm)
+    cm[is.na(x)] <- NA
     cm
 }
 
@@ -104,9 +114,9 @@ fsplits <- function(nlevel) {
 
     mi <- 2^(nlevel - 1)
     index <- matrix(0, nrow = mi, ncol = nlevel)
-    index[,1] <- 1
+    index[, 1] <- 1
 
-    for (i in 0:(mi-1)) {
+    for (i in 0:(mi - 1)) {
         ii <- i
         for (l in 2:nlevel) {
             index[(i + 1), l] <- (ii %% 2)
@@ -130,9 +140,12 @@ fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
         cn[i] <- paste("{", paste(lev[sp[i, ]], collapse = ", "), "} vs. {",
                        paste(lev[!sp[i, ]], collapse = ", "), "}", sep = "")
     }
+    tr[is.na(x), ] <- NA
     rownames(tr) <- 1:length(x)
     colnames(tr) <- cn
-    tr <- tr[, colMeans(tr) >= minprob & colMeans(tr) <= maxprob, drop = FALSE]
+    tr <- tr[, colMeans(tr, na.rm = TRUE) >= minprob &
+               colMeans(tr, na.rm = TRUE) <= maxprob,
+             drop = FALSE]
     tr
 }
 
@@ -140,12 +153,15 @@ fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
 logrank_trafo <- function(x, ties.method = c("logrank", "HL", "average-scores"))
 {
     ties.method <- match.arg(ties.method)
-    time <- x[, 1]
-    event <- x[, 2]
+
+    cc <- complete.cases(x)
+    time <- x[cc, 1]
+    event <- x[cc, 2]
+
     n <- length(time)
     o <- order(time, event)
 
-    scores <- switch(ties.method,
+    s <- switch(ties.method,
         "logrank" = {
             fact <- event / (n - rank(time, ties.method = "min") + 1)
             event - cumsum(fact[o])[rank(time, ties.method = "max")]
@@ -168,6 +184,8 @@ logrank_trafo <- function(x, ties.method = c("logrank", "HL", "average-scores"))
             average_scores(s, time + (1 - event) * runif(n))
         }
     )
+    scores <- NA
+    scores[cc] <- s
     return(scores)
 }
 

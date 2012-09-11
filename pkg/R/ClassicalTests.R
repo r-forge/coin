@@ -21,7 +21,7 @@ wilcox_test.IndependenceProblem <- function(object,
     }
 
     RET <- independence_test(object, teststat = "scalar",
-        ytrafo = function(data) trafo(data, numeric_trafo = rank),
+        ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
         check = check, ...)
 
     RET@nullvalue <- 0
@@ -235,7 +235,7 @@ kruskal_test.IndependenceProblem <- function(object,
 
     RET <- independence_test(object,
         distribution = distribution, teststat = "quad",
-        ytrafo = function(data) trafo(data, numeric_trafo = rank),
+        ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
         check = check, ...)
 
     if (is_ordered(RET@statistic))
@@ -314,8 +314,8 @@ spearman_test.IndependenceProblem <- function(object,
     RET <- independence_test(object,
         teststat = "scalar",
         distribution = distribution,
-        xtrafo = function(data) trafo(data, numeric_trafo = rank),
-        ytrafo = function(data) trafo(data, numeric_trafo = rank),
+        xtrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
+        ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
         check = check, ...)
 
     RET@nullvalue <- 0
@@ -683,7 +683,7 @@ friedman_test.SymmetryProblem <- function(object,
     RET <- symmetry_test(object,
         distribution = distribution, teststat = "quad",
         ytrafo = function(data)
-            trafo(data, numeric_trafo = rank, block = object@block),
+            trafo(data, numeric_trafo = rank_trafo, block = object@block),
         ...)
 
     if (is_ordered(RET@statistic))

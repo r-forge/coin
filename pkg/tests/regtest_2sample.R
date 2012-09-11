@@ -27,15 +27,15 @@ stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater")
                   pgreater))
 
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-    ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
+    ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo))), ptwo))
 ### check direct supply of a function via ytrafo
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-    ytrafo = rank)), ptwo))
+    ytrafo = rank_trafo)), ptwo))
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-    ytrafo = function(data) trafo(data, numeric_trafo = rank), 
+    ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
     alternative = "less")), pless))
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-    ytrafo = function(data) trafo(data, numeric_trafo = rank), 
+    ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
     alternative = "greater")), pgreater))
 
 ### exact distribution
@@ -52,12 +52,12 @@ stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater",
                              distribution = "exact")), pgreater))
 
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
-    ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
+    ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo))), ptwo))
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
-    ytrafo = function(data) trafo(data, numeric_trafo = rank), 
+    ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
     alternative = "less")), pless))
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
-    ytrafo = function(data) trafo(data, numeric_trafo = rank), 
+    ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
     alternative = "greater")), pgreater))
 
 ### approximated distribution

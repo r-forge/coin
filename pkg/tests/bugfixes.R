@@ -113,7 +113,7 @@ YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,
                                   rep("III", 10), rep("IV", 10))))
 
 it <- independence_test(length ~ site, data = YOY,
-    ytrafo = function(data) trafo(data, numeric_trafo = rank),
+    ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
     teststat = "quad")
 expectation(it)
 covariance(it)

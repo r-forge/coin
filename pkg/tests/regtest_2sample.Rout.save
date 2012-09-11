@@ -1,8 +1,8 @@
 
-R version 2.14.2 (2012-02-29)
+R version 2.15.1 Patched (2012-08-06 r60178) -- "Roasted Marshmallows"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i386-pc-mingw32/i386 (32-bit)
+Platform: i386-w64-mingw32/i386 (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -51,15 +51,15 @@ Loading required package: multcomp
 +                   pgreater))
 > 
 > stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo))), ptwo))
 > ### check direct supply of a function via ytrafo
 > stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-+     ytrafo = rank)), ptwo))
++     ytrafo = rank_trafo)), ptwo))
 > stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
 +     alternative = "less")), pless))
 > stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
 +     alternative = "greater")), pgreater))
 > 
 > ### exact distribution
@@ -76,12 +76,12 @@ Loading required package: multcomp
 +                              distribution = "exact")), pgreater))
 > 
 > stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank))), ptwo))
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo))), ptwo))
 > stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
 +     alternative = "less")), pless))
 > stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
 +     alternative = "greater")), pgreater))
 > 
 > ### approximated distribution
@@ -335,3 +335,6 @@ Warning message:
 In wilcoxsign_test.IndependenceProblem(object = <S4 object of class "IndependenceProblem">,  :
   Handling of zeros defaults to 'Pratt' in newer versions of coin
 > 
+> proc.time()
+   user  system elapsed 
+   2.24    0.10    2.44 

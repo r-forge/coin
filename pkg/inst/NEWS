@@ -29,6 +29,10 @@
 
     o     unadjusted p-values can now be obtained (see ?pvalue)
 
+    o     all transformation functions are now passing through missing values
+
+    o     new function for rank transformations (see ?rank_trafo)
+
     BUG FIXES
 
     o     monotonicity of step-down adjusted p-values was not enforced when

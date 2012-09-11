@@ -14,13 +14,13 @@ Loading required package: multcomp
 Loading required package: Biobase
 Loading required package: BiocGenerics
 
-Attaching package: ‘BiocGenerics’
+Attaching package: 'BiocGenerics'
 
-The following object(s) are masked from ‘package:stats’:
+The following object(s) are masked from 'package:stats':
 
     xtabs
 
-The following object(s) are masked from ‘package:base’:
+The following object(s) are masked from 'package:base':
 
     Filter, Find, Map, Position, Reduce,
     anyDuplicated, cbind, colnames, duplicated, eval,
@@ -48,8 +48,8 @@ Welcome to Bioconductor
 +     33, 26, 25, 28, 28, 2 .... [TRUNCATED] 
 
 > it <- independence_test(length ~ site, data = YOY, 
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank), 
-+     teststat = "quadtype")
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
++     teststat = "quadty ..." ... [TRUNCATED] 
 
 > it
 
@@ -157,7 +157,7 @@ chi-squared = 6.1563, df = 1, p-value = 0.01309
 +     9.6, 8.8, 5.6, 3.6, 9, 7.3, 3.8, 4.3, 9.3, 8.7, 6.8, 3.8, 
 +     10, 7.5, 4.2, 2.8, 9.6,  .... [TRUNCATED] 
 
-> yt <- function(data) trafo(data, numeric_trafo = rank, 
+> yt <- function(data) trafo(data, numeric_trafo = rank_trafo, 
 +     block = egg_data$sitting)
 
 > independence_test(scores ~ product | sitting, data = egg_data, 
@@ -208,4 +208,4 @@ IV - III 0.99889989
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-  1.500   0.020   1.528 
+   2.48    0.12    2.77 

@@ -7,24 +7,24 @@
 \alias{wilcoxsign_test}
 \title{ Symmetry Tests }
 \description{
-    Testing the symmetry of a response for repeated measurements in a 
+    Testing the symmetry of a response for repeated measurements in a
     complete block design.
 }
 \usage{
 
 \method{friedman_test}{formula}(formula, data, subset = NULL, \dots)
-\method{friedman_test}{SymmetryProblem}(object, distribution = c("asymptotic", "approximate"), 
-              ...) 
+\method{friedman_test}{SymmetryProblem}(object, distribution = c("asymptotic", "approximate"),
+              ...)
 
 \method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
-\method{wilcoxsign_test}{IndependenceProblem}(object, zero.method = c("Pratt", "Wilcoxon"), 
+\method{wilcoxsign_test}{IndependenceProblem}(object, zero.method = c("Pratt", "Wilcoxon"),
               ties.method = NULL, ...)
 
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}
-    is a numeric variable giving the data values and 
-    \code{x} a factor with two (\code{wilcoxsign_test}) 
+    is a numeric variable giving the data values and
+    \code{x} a factor with two (\code{wilcoxsign_test})
     or more levels giving the corresponding groups. \code{block} is an
     optional factor (which is generated automatically when omitted).}
   \item{data}{an optional data frame containing the variables in the
@@ -33,23 +33,23 @@
     to be used.}
   \item{object}{an object inheriting from class \code{SymmetryProblem}.}
   \item{distribution}{a character, the null distribution of the test statistic
-    can be approximated by its asymptotic distribution (\code{asympt}) 
+    can be approximated by its asymptotic distribution (\code{asympt})
     or via Monte-Carlo resampling (\code{approx}).
-    Alternatively, the functions 
+    Alternatively, the functions
     \code{\link{approximate}} or \code{\link{asymptotic}} can be
     used to specify how the exact conditional distribution of the test statistic
     should be calculated or approximated. For the Wilcoxon signed rank test,
     \code{\link{exact}} computes the exact distribution by means of the Streitberg-Roehmel
     shift algorithm.}
   \item{zero.method}{a character specifying the way zeros,
-                     for example induced by tied repeated measurements, 
+                     for example induced by tied repeated measurements,
                      are handled, see below.}
   \item{ties.method}{no defunct, see below.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
 
-  The null hypothesis of symmetry of \code{y} across \code{x} is 
+  The null hypothesis of symmetry of \code{y} across \code{x} is
   tested. In case \code{x} is an ordered factor \code{friedman_test}
   performs the Page test, scores can be altered by the \code{scores}
   argument (see \code{\link{symmetry_test}}).
@@ -60,9 +60,9 @@
   measurement on the same observation. By default, following Pratt (1959),
   we rank the absolute differences (including zeros) first, then
   discard the ranks corresponding to zero differences, but keep the
-  other ranks as they are. Alternatively, zero differences are discarded 
-  first and then rank the remaining absolute differences (the 
-  original proposal by Wilcoxon, as explained in Hollander & Wolfe, 1999). 
+  other ranks as they are. Alternatively, zero differences are discarded
+  first and then rank the remaining absolute differences (the
+  original proposal by Wilcoxon, as explained in Hollander & Wolfe, 1999).
 
   The default \code{zero.method = "Pratt"} was introduced in
   \code{coin} 1.0-16. Earlier versions had \code{ties.method = "HollanderWolfe"}
@@ -76,19 +76,19 @@
 }
 \references{
 
-    Myles Hollander & Douglas A. Wolfe (1999). 
+    Myles Hollander & Douglas A. Wolfe (1999).
     \emph{Nonparametric Statistical Methods, 2nd Edition}.
     New York: John Wiley & Sons.
 
-    John W. Pratt (1959). Remarks on zeros and ties in the Wilcoxon 
+    John W. Pratt (1959). Remarks on zeros and ties in the Wilcoxon
     signed rank procedures. \emph{Journal of the American Statistical Association},
     \bold{54}(287), 655--667.
 
     Bernd Streitberg & Joachim Roehmel (1986).
-    Exact distributions for permutations and rank tests: 
+    Exact distributions for permutations and rank tests:
     An introduction to some recently published algorithms.
     \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
- 
+
     Bernd Streitberg & Joachim Roehmel (1987).
     Exakte Verteilungen fuer Rang- und Randomisierungstests
     im allgemeinen c-Stichprobenfall.
@@ -99,7 +99,7 @@
 
   ### Hollander & Wolfe (1999), Table 7.1, page 274
   ### Comparison of three methods ("round out", "narrow angle", and
-  ###  "wide angle") for rounding first base. 
+  ###  "wide angle") for rounding first base.
   RoundingTimes <- data.frame(
       times = c(5.40, 5.50, 5.55,
                 5.85, 5.70, 5.75,
@@ -130,8 +130,8 @@
   friedman_test(times ~ methods | block, data = RoundingTimes)
 
   ### parallel coordinates plot
-  matplot(t(matrix(RoundingTimes$times, ncol = 3, byrow = TRUE)), 
-          type = "l", col = 1, lty = 1, axes = FALSE, ylab = "Time", 
+  matplot(t(matrix(RoundingTimes$times, ncol = 3, byrow = TRUE)),
+          type = "l", col = 1, lty = 1, axes = FALSE, ylab = "Time",
           xlim = c(0.5, 3.5))
   axis(1, at = 1:3, labels = levels(RoundingTimes$methods))
   axis(2)
@@ -147,7 +147,7 @@
                  model.matrix(~ x - 1) \%*\% t(contrMat(table(x), "Tukey"))
            ),
        ytrafo = function(data)
-           trafo(data, numeric_trafo = rank, block = RoundingTimes$block)
+           trafo(data, numeric_trafo = rank_trafo, block = RoundingTimes$block)
        )
 
   ### a global test, again
@@ -172,7 +172,7 @@
   1 - pnorm(sqrt(statistic(ft)))
 
   ### approximate null distribution via Monte-Carlo
-  pvalue(friedman_test(strength ~ potash | block, data = sc, 
+  pvalue(friedman_test(strength ~ potash | block, data = sc,
                        distribution = approximate(B = 9999)))
 
   ### example from ?wilcox.test
@@ -182,9 +182,9 @@
   wilcox.test(x, y, paired = TRUE, alternative = "greater")
 
   ### with explicit group and block information
-  xydat <- data.frame(y = c(y, x), x = gl(2, length(x)), 
+  xydat <- data.frame(y = c(y, x), x = gl(2, length(x)),
                       block = factor(rep(1:length(x), 2)))
-  wilcoxsign_test(y ~ x | block, data = xydat, 
+  wilcoxsign_test(y ~ x | block, data = xydat,
                   alternative = "greater", distribution = exact())
 
 }
