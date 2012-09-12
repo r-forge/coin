@@ -227,44 +227,7 @@ marginal <- function(object, bonferroni, stepdown, ...) {
     ret
 }
 
-######################################
-### Westfall (1997) method in coin ###
-######################################
-### Basic code for npmcp() taken from pqfunctions.R in package
-### multcomp
-
-### cf. mcp(x = "Tukey") in multcomp
-mcp_trafo <- function(...) {
-
-    args <- list(...)
-    stopifnot(length(args) == 1)
-
-    ret <- function(data) {
-
-        x <- data[[names(args)]]
-        stopifnot(is.factor(x))
-        C <- args[[1]]
-        if (is.character(C)) {
-            C <- contrMat(table(x), C)
-        } else {
-            stopifnot(is.matrix(C))
-            stopifnot(ncol(C) == nlevels(x))
-            if (is.null(colnames(C)))
-                colnames(C) <- levels(x)
-            attr(C, "type") <- "User-defined"
-            class(C) <- c("contrMat", "matrix")
-        }
-
-        ret <- trafo(data, factor_trafo = function(x)
-            model.matrix(~ x - 1, data = model.frame(~ x, na.action = na.pass))
-                %*% t(C))
-        attr(ret, "contrast") <- C
-        ret
-    }
-    ret
-}
-
-### compute p-values under subset pivotality
+### compute p-values under subset pivotality (Westfall, 1997)
 npmcp <- function(object) {
 
     ## extract from object

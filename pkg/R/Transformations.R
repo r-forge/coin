@@ -307,3 +307,34 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
     }
     return(RET)
 }
+
+### multiple comparisons, cf. mcp(x = "Tukey") in multcomp
+mcp_trafo <- function(...) {
+
+    args <- list(...)
+    stopifnot(length(args) == 1)
+
+    ret <- function(data) {
+
+        x <- data[[names(args)]]
+        stopifnot(is.factor(x))
+        C <- args[[1]]
+        if (is.character(C)) {
+            C <- contrMat(table(x), C)
+        } else {
+            stopifnot(is.matrix(C))
+            stopifnot(ncol(C) == nlevels(x))
+            if (is.null(colnames(C)))
+                colnames(C) <- levels(x)
+            attr(C, "type") <- "User-defined"
+            class(C) <- c("contrMat", "matrix")
+        }
+
+        ret <- trafo(data, factor_trafo = function(x)
+            model.matrix(~ x - 1, data = model.frame(~ x, na.action = na.pass))
+                %*% t(C))
+        attr(ret, "contrast") <- C
+        ret
+    }
+    ret
+}
