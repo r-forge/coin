@@ -59,7 +59,7 @@ mcp_trafo(...)
   \item{ties.method}{method used to adjust the scores for ties. Either
     the score generating function is applied to \code{"mid-ranks"} or
     scores, based on random ranks, are averaged
-    \code{"average-scores"}. When using \code{rank_trafo}, ties can be
+    (\code{"average-scores"}). When using \code{rank_trafo}, ties can be
     broken at \code{"random"}. For ties handling in case of censored
     data, see \code{\link{surv_test}}.}
   \item{minprob}{a fraction between 0 and 0.5.}
@@ -96,6 +96,12 @@ mcp_trafo(...)
   Fine tuning (different transformations for different variables) is
   possible by supplying a named list of functions to the \code{var_trafo}
   argument.
+
+}
+\note{
+
+  In \pkg{coin} version 1.1-0 (and later), all transformation functions
+  are now passing through missing values (i.e., \code{NA}s).
 
 }
 \value{
