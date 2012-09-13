@@ -557,6 +557,16 @@ alternative hypothesis: true mu is not equal to 0
 7              0              0              1
 8              0              0              1
 > 
+> ### wrong p-value in the one-sided case
+> median_test(y1 ~ x, data = df, alternative = "less")
+
+	Asymptotic Median Test
+
+data:  y1 by x (I, II) 
+Z = 2.6458, p-value = 0.9959
+alternative hypothesis: true mu is less than 0 
+
+> 
 > proc.time()
    user  system elapsed 
-   3.79    0.26    4.21 
+   3.75    0.34    4.16 

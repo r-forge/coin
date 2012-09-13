@@ -81,9 +81,9 @@ Loading required package: multcomp
 [6]  1.067571e+00
 > 
 > median_trafo(x)
-[1]  1  1 NA  1  1 NA  0  0 NA
+[1]  0  0 NA  0  0 NA  1  1 NA
 > median_trafo(x[cc])
-[1] 1 1 1 1 0 0
+[1] 0 0 0 0 1 1
 > 
 > consal_trafo(x)
 [1] 0.0004164931 0.0066638900           NA 0.0625000000 0.0625000000
@@ -477,4 +477,4 @@ attr(,"contrast")
 > 
 > proc.time()
    user  system elapsed 
-   0.84    0.06    1.03 
+   0.76    0.14    0.98 

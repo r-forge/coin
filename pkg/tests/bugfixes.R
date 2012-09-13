@@ -328,3 +328,6 @@ fmaxstat_trafo(gl(2, 2))
 a <- gl(4, 2)
 a[5:6] <- NA
 fmaxstat_trafo(a)
+
+### wrong p-value in the one-sided case
+median_test(y1 ~ x, data = df, alternative = "less")

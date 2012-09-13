@@ -277,7 +277,7 @@ alternative hypothesis: true mu is greater than 0
 	Asymptotic Median Test
 
 data:  y by x (1, 2) 
-Z = 0.8015, p-value = 0.4228
+Z = -0.8015, p-value = 0.4228
 alternative hypothesis: true mu is not equal to 0 
 
 > median_test(y ~ x, dat = dat, alternative = "less")
@@ -285,7 +285,7 @@ alternative hypothesis: true mu is not equal to 0
 	Asymptotic Median Test
 
 data:  y by x (1, 2) 
-Z = 0.8015, p-value = 0.7886
+Z = -0.8015, p-value = 0.2114
 alternative hypothesis: true mu is less than 0 
 
 > median_test(y ~ x, dat = dat, alternative = "greater")
@@ -293,7 +293,7 @@ alternative hypothesis: true mu is less than 0
 	Asymptotic Median Test
 
 data:  y by x (1, 2) 
-Z = 0.8015, p-value = 0.2114
+Z = -0.8015, p-value = 0.7886
 alternative hypothesis: true mu is greater than 0 
 
 > 
@@ -337,4 +337,4 @@ In wilcoxsign_test.IndependenceProblem(object = <S4 object of class "Independenc
 > 
 > proc.time()
    user  system elapsed 
-   2.24    0.10    2.44 
+   2.10    0.10    2.38 

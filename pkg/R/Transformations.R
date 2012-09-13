@@ -69,7 +69,7 @@ normal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
 
 ### Median Scores
 median_trafo <- function(x)
-    as.numeric(x <= median(x, na.rm = TRUE))
+    as.numeric(x > median(x, na.rm = TRUE))
 
 ### Conover & Salsburg (1988)
 consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {

@@ -54,6 +54,14 @@
     o     the maximally selected statistics transformation for factors retained
           unused levels
 
+    o     the median test p-value computation used the wrong tail of the null
+          distribution in the one-sided case
+
+    OTHER CHANGES
+
+    o     the median transformation function is now an increasing function of the
+          data
+
 
                 CHANGES in `coin' VERSION 1.0-22
 
