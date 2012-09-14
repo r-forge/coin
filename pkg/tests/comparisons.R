@@ -14,7 +14,7 @@ presidents <- as.table(matrix(c(28, 7, 13, 27), nrow = 2,
 
 bta <- mh_test(presidents)
 
-# test statistic, page 306 
+# test statistic, page 306
 stopifnot(isequal(round(sqrt(statistic(bta)), 3), 1.342))
 
 # two-sided asymptotic p-value, page 306
@@ -34,10 +34,10 @@ endometrial_cancer <- as.table(matrix(c(6, 9, 9, 12,
                           dimnames = list(Cases = c(0, 0.2, 0.5125, 0.7),
                                           Controls = c(0, 0.2, 0.5125, 0.7))))
 
-bta <- mh_test(endometrial_cancer, 
+bta <- mh_test(endometrial_cancer,
                    scores = list(response = c(0, 0.2, 0.5125, 0.7)))
 
-# test statistic, page 311 
+# test statistic, page 311
 stopifnot(isequal(round(sqrt(statistic(bta)), 3), 3.735))
 
 # two-sided asymptotic p-value, page 311
@@ -52,7 +52,7 @@ pathologists <- as.table(matrix(c(22,  5,  0,  0, 0,
     dimnames = list(Pathologist1 = paste("Level", 1:5, sep = "-"),
                     Pathologist2 = paste("Level", 1:5, sep = "-"))))
 
-bta <- mh_test(pathologists, 
+bta <- mh_test(pathologists,
                    scores = list(response = 1:5))
 
 # test statistic, page 313
@@ -62,7 +62,7 @@ stopifnot(isequal(round(sqrt(statistic(bta)), 3), 1.152))
 stopifnot(isequal(round(pvalue(bta), 4), 0.2492))
 
 # exact p-value, page 313
-btMC <- mh_test(pathologists, scores = list(response = 1:5), 
+btMC <- mh_test(pathologists, scores = list(response = 1:5),
                     distribution = approximate(B = 10000))
 pci <- attr(pvalue(btMC), "conf.int")
 stopifnot(pci[1] < 0.3073 & pci[2] > 0.3073)
@@ -93,7 +93,7 @@ wtel <- wilcox_test(bp ~ group, data = bloodp, distribution = "exact",
 stopifnot(isequal(round(pvalue(wtel), 4), 0.0542))
 
 # two-sided approximated p-value
-wtMC <- wilcox_test(bp ~ group, data = bloodp, 
+wtMC <- wilcox_test(bp ~ group, data = bloodp,
                     distribution = approximate(B = 10000))
 pci <- attr(pvalue(wtMC), "conf.int")
 
@@ -112,7 +112,7 @@ nta <- normal_test(bp ~ group, data = bloodp, ties.method = "average")
 # test statistic, page 354
 stopifnot(isequal(round(statistic(nta), 3), 1.789))
 
-# two-sided asymptotic p-value, page 354 
+# two-sided asymptotic p-value, page 354
 stopifnot(isequal(round(pvalue(nta), 4), 0.0737))
 
 nte <- normal_test(bp ~ group, data = bloodp, distribution = "exact",
@@ -136,7 +136,7 @@ stopifnot(pci[1] < pvalue(nte) & pci[2] > pvalue(nte))
 
 # one-sided approximated p-value
 ntMC <- normal_test(bp ~ group, data = bloodp, alternative = "greater",
-                    distribution = approximate(B = 10000), 
+                    distribution = approximate(B = 10000),
                     ties.method = "average")
 pci <- attr(pvalue(ntMC), "conf.int")
 
@@ -162,7 +162,7 @@ ptel <- oneway_test(bp ~ group, data = bloodp, distribution = "exact",
 stopifnot(isequal(round(pvalue(ptel), 4), 0.0564))
 
 # two-sided approximated p-value
-ptMC <- oneway_test(bp ~ group, data = bloodp, 
+ptMC <- oneway_test(bp ~ group, data = bloodp,
                   distribution = approximate(B = 10000))
 pci <- attr(pvalue(ptMC), "conf.int")
 
@@ -187,28 +187,28 @@ stopifnot(isequal(round(statistic(wta), 3), -1.897))
 # two-sided asymptotic p-value, page 346
 stopifnot(isequal(round(pvalue(wta), 4), 0.0578))
 
-wte <- wilcox_test(Salary ~ Gender | Year, data = employment, 
+wte <- wilcox_test(Salary ~ Gender | Year, data = employment,
                    distribution = "exact")
 
 # two-sided exact p-value, page 346
 stopifnot(isequal(round(pvalue(wte), 4), 0.04))
 
-wtel <- wilcox_test(Salary ~ Gender | Year, data = employment, 
+wtel <- wilcox_test(Salary ~ Gender | Year, data = employment,
                     distribution = "exact", alternative = "less")
 
 # one-sided exact p-value, page 346
 stopifnot(isequal(round(pvalue(wtel), 4), 0.04))
 
 # two-sided approximated p-value
-wtMC <- wilcox_test(Salary ~ Gender | Year, data = employment, 
+wtMC <- wilcox_test(Salary ~ Gender | Year, data = employment,
                     distribution = approximate(B = 10000))
 pci <- attr(pvalue(wtMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(wte) & pci[2] > pvalue(wte))
 
 # one-sided approximated p-value
-wtMC <- wilcox_test(Salary ~ Gender | Year, data = employment, 
-                    alternative = "less", 
+wtMC <- wilcox_test(Salary ~ Gender | Year, data = employment,
+                    alternative = "less",
                     distribution = approximate(B = 10000))
 pci <- attr(pvalue(wtMC), "conf.int")
 
@@ -224,27 +224,27 @@ stopifnot(isequal(round(statistic(nta), 3), -1.802))
 stopifnot(isequal(round(pvalue(nta), 4), 0.0716))
 
 # blocks not yet implemented
-# nte <- normal_test(Salary ~ Gender | Year, data = employment, 
+# nte <- normal_test(Salary ~ Gender | Year, data = employment,
 #                   distribution = "exact")
 #
 # two-sided exact p-value, page 358
 # stopifnot(isequal(round(pvalue(nte), 4), 0.04))
 #
-# ntel <- normal_test(Salary ~ Gender | Year, data = employment, 
+# ntel <- normal_test(Salary ~ Gender | Year, data = employment,
 #                    distribution = "exact", alternative = "less")
 #
 # one-sided exact p-value, page 358
 # stopifnot(isequal(round(pvalue(ntel), 4), 0.04))
 
 # two-sided approximated p-value
-ntMC <- normal_test(Salary ~ Gender | Year, data = employment, 
+ntMC <- normal_test(Salary ~ Gender | Year, data = employment,
     ties.method = "average", distribution = approximate(B = 10000))
 pci <- attr(pvalue(ntMC), "conf.int")
 
 stopifnot(pci[1] < 0.04 & pci[2] > 0.04)
 
 # one-sided approximated p-value
-ntMC <- normal_test(Salary ~ Gender | Year, data = employment, 
+ntMC <- normal_test(Salary ~ Gender | Year, data = employment,
                     alternative = "less", distribution = approximate(B = 10000),
                     ties.method = "average")
 pci <- attr(pvalue(ntMC), "conf.int")
@@ -259,28 +259,28 @@ stopifnot(isequal(round(statistic(pta), 3), -1.873))
 # two-sided asymptotic p-value, page 396
 stopifnot(isequal(round(pvalue(pta), 4), 0.0610))
 
-pte <- oneway_test(Salary ~ Gender | Year, data = employment, 
+pte <- oneway_test(Salary ~ Gender | Year, data = employment,
                  distribution = "exact")
 
 # two-sided exact p-value, page 396
 stopifnot(isequal(round(pvalue(pte), 4), 0.04))
 
-ptel <- oneway_test(Salary ~ Gender | Year, data = employment, 
+ptel <- oneway_test(Salary ~ Gender | Year, data = employment,
                   distribution = "exact", alternative = "less")
 
 # one-sided exact p-value, page 396
 stopifnot(isequal(round(pvalue(ptel), 4), 0.04))
 
 # two-sided approximated p-value
-ptMC <- oneway_test(Salary ~ Gender | Year, data = employment, 
+ptMC <- oneway_test(Salary ~ Gender | Year, data = employment,
                   distribution = approximate(B = 10000))
 pci <- attr(pvalue(ptMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(pte) & pci[2] > pvalue(pte))
 
 # one-sided approximated p-value
-ptMC <- oneway_test(Salary ~ Gender | Year, data = employment, 
-                    alternative = "less", 
+ptMC <- oneway_test(Salary ~ Gender | Year, data = employment,
+                    alternative = "less",
                     distribution = approximate(B = 10000))
 pci <- attr(pvalue(ptMC), "conf.int")
 
@@ -288,12 +288,12 @@ stopifnot(pci[1] < pvalue(ptel) & pci[2] > pvalue(ptel))
 
 
 ### StatXact 6 manual, page 371
-machines <- data.frame(cereal = c(10.8, 11.1, 10.4, 10.1, 11.3, 
-                                  10.8, 10.5, 11.0, 10.9, 10.8, 
+machines <- data.frame(cereal = c(10.8, 11.1, 10.4, 10.1, 11.3,
+                                  10.8, 10.5, 11.0, 10.9, 10.8,
                                   10.7, 10.8),
                        machine = factor(rep(c("Present", "New"), c(5, 7))))
 
-ata <- ansari_test(cereal ~ machine, data = machines, 
+ata <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average")
 
 # test statistic, page 372
@@ -302,20 +302,20 @@ stopifnot(isequal(round(statistic(ata), 3), 1.998))
 # two-sided asymptotic p-value, page 372
 stopifnot(isequal(round(pvalue(ata), 4), 0.0457))
 
-ate <- ansari_test(cereal ~ machine, data = machines, 
+ate <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average", distribution = "exact")
 
 stopifnot(isequal(round(pvalue(ate), 4), 0.0581))
 
 # two-sided approximated p-value
-atMC <- ansari_test(cereal ~ machine, data = machines, 
+atMC <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average", distribution = approximate(B = 10000))
 
 pci <- attr(pvalue(atMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(ate) & pci[2] > pvalue(ate))
 
-atel <- ansari_test(cereal ~ machine, data = machines, 
+atel <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average",
     distribution = "exact", alternative = "less")
 
@@ -339,33 +339,33 @@ load("lungcancer.rda")
 lta <- surv_test(Surv(time, cens) ~ group, data = lungcancer, ties = "aver")
 
 # test statistic, page 415
-isequal(round(statistic(lta), 3), -2.949)
+isequal(round(statistic(lta), 3), 2.949) # no "-", StatXact 9, p. 215
 
 # two-sided asymptotic p-value, page 415
 isequal(round(pvalue(lta), 4), 0.0032)
 
-lte <- surv_test(Surv(time, cens) ~ group, data = lungcancer, 
+lte <- surv_test(Surv(time, cens) ~ group, data = lungcancer,
                     distribution = "exact")
 
 # two-sided exact p-value, page 415
 stopifnot(isequal(round(pvalue(lte), 4), 0.0010))
 
-ltel <- surv_test(Surv(time, cens) ~ group, data = lungcancer, 
+ltel <- surv_test(Surv(time, cens) ~ group, data = lungcancer,
                      distribution = "exact", alternative = "great")
 
 # one-sided exact p-value, page 415
 stopifnot(isequal(round(pvalue(ltel), 4), 0.0010))
 
 # two-sided approximated p-value
-ltMC <- surv_test(Surv(time, cens) ~ group, data = lungcancer, 
+ltMC <- surv_test(Surv(time, cens) ~ group, data = lungcancer,
                      distribution = approximate(B = 10000))
 pci <- attr(pvalue(ltMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(lte) & pci[2] > pvalue(lte))
 
 # one-sided approximated p-value
-ltMC <- surv_test(Surv(time, cens) ~ group, data = lungcancer, 
-                     alternative = "greater", 
+ltMC <- surv_test(Surv(time, cens) ~ group, data = lungcancer,
+                     alternative = "greater",
                      distribution = approximate(B = 10000))
 pci <- attr(pvalue(ltMC), "conf.int")
 
@@ -376,14 +376,14 @@ stopifnot(pci[1] < pvalue(ltel) & pci[2] > pvalue(ltel))
 srv <- data.frame(time = c(3, 5, 7, 8, 18, 12, 19, 20, 20, 33),
                   event = c(0, 0, 1, 1, 1, 1, 1, 1, 0, 0),
                   treatment = gl(2, 5),
-                  gender = factor(c("M", "M", "F", "F", "M", 
+                  gender = factor(c("M", "M", "F", "F", "M",
                                     "M", "M", "F", "F", "F")))
 
 # page 419
-surv_test(Surv(time, event) ~ treatment | gender, data = srv, 
+surv_test(Surv(time, event) ~ treatment | gender, data = srv,
           ties = "average")
 
-pvalue(surv_test(Surv(time, event) ~ treatment | gender, data = srv, 
+pvalue(surv_test(Surv(time, event) ~ treatment | gender, data = srv,
               ties = "average",
               distribution = approximate(B = 10000)))
 
@@ -393,8 +393,8 @@ hypnosis <- data.frame(skin = c(23, 58, 11, 24, 34,
                                23, 53, 10, 20, 40,
                                23, 54, 22, 21, 22),
     subject = factor(rep(c(1, 2, 3), rep(5, 3))),
-    treatment = factor(rep(1:5, 3), 
-        labels = c("Fear", "Happiness", "Depression", 
+    treatment = factor(rep(1:5, 3),
+        labels = c("Fear", "Happiness", "Depression",
                    "Calmness", "Agitation")))
 
 fta <- friedman_test(skin ~  treatment | subject, data = hypnosis)
@@ -423,11 +423,11 @@ analgesic_eff <- data.frame(response = factor(
       0, 0, 0,
       0, 0, 1,
       0, 1, 1,
-      1, 0, 1, 
+      1, 0, 1,
       0, 0, 1,
       0, 0, 0,
       0, 0, 1,
-      0, 1, 0, 
+      0, 1, 0,
       0, 0, 1), labels = c("success", "failure")),
     treatment = factor(rep(c("Placebo", "Aspirin", "NewDrug"), 12)),
     subject = factor(rep(1:12, rep(3, 12))))
@@ -438,7 +438,7 @@ bta <- mh_test(response ~  treatment | subject, data = analgesic_eff)
 stopifnot(isequal(round(pvalue(bta), 3), 0.02))
 
 # approximative p-value
-btMC <- mh_test(response ~  treatment | subject, 
+btMC <- mh_test(response ~  treatment | subject,
     data = analgesic_eff, distribution = approximate(B = 10000))
 
 pci <- attr(pvalue(btMC), "conf.int")
@@ -483,15 +483,15 @@ tox <- data.frame(response = c(0,  1,  8, 10,
                                5,  6,  7, 14, 14,
                                1,  1,  6,  7,  7, 7, 8, 8, 10,
                                7, 10, 11, 12, 13),
-                  drug = factor(paste("Drug", c(rep(1, 4), 
-                                                rep(2, 5), 
-                                                rep(3, 5), 
-                                                rep(4, 9), 
+                  drug = factor(paste("Drug", c(rep(1, 4),
+                                                rep(2, 5),
+                                                rep(3, 5),
+                                                rep(4, 9),
                                                 rep(5, 5)))))
 
 
 mta <- independence_test(response ~ drug, data = tox,
-                         ytrafo = function(data) 
+                         ytrafo = function(data)
                              trafo(data, numeric_trafo = median_trafo),
                          teststat = "quad")
 
@@ -506,7 +506,7 @@ stopifnot(isequal(round(statistic(mta), 3), 4.317))
 stopifnot(isequal(round(pvalue(mta), 4), 0.3648))
 
 mtMC <- independence_test(response ~ drug, data = tox,
-                          ytrafo = function(data) 
+                          ytrafo = function(data)
                               trafo(data, numeric_trafo = median_trafo),
                           teststat = "quad",
                           distribution = approximate(B = 10000))
@@ -543,7 +543,7 @@ brain <- data.frame(time = c(4,  5,  9, 12, 20, 25, 30,
                               1, 1, 1, 1, 1, 1, 1,
                               1, 1, 1, 1, 1, 1, 0, 0,
                               1, 1, 1, 1, 1, 1, 0,0),
-                    treatment = factor(paste("trt", 
+                    treatment = factor(paste("trt",
                                              c(rep(1, 7), rep(2, 7),
                                                rep(3, 8), rep(3, 8)))))
 
@@ -586,7 +586,7 @@ isequal(round(pvalue(lta), 4), 0.0762)
 
 
 ### StatXact 6 manual, ...
-a <- as.table(matrix(c(5, 5, 9, 1), nrow = 2, 
+a <- as.table(matrix(c(5, 5, 9, 1), nrow = 2,
     dimnames = list(response = c("Response", "No Response"),
                     drug = c("A", "B"))))
 
@@ -692,8 +692,8 @@ stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.739))
 # asymptotic p-value, page 812
 stopifnot(isequal(round(pvalue(lta), 3), 0.082))
 
-ltMC <- lbl_test(xtabs(number ~ dose + tumor + stratum, data = tumor), 
-                 scores = list(dose = c(0, 1, 5, 50)), 
+ltMC <- lbl_test(xtabs(number ~ dose + tumor + stratum, data = tumor),
+                 scores = list(dose = c(0, 1, 5, 50)),
                  distribution = approximate(B = 10000))
 
 pci <- attr(pvalue(ltMC), "conf.int")
@@ -701,8 +701,8 @@ stopifnot(pci[1] < 0.0769 & pci[2] > 0.0769)
 
 
 ### StatXact 6 manual, page 832
-endo <- as.table(matrix(c(6, 9, 9, 12, 2, 4, 2, 1, 3, 2, 3, 2, 1, 1, 1, 1), 
-    nrow = 4, dimnames = 
+endo <- as.table(matrix(c(6, 9, 9, 12, 2, 4, 2, 1, 3, 2, 3, 2, 1, 1, 1, 1),
+    nrow = 4, dimnames =
         list(Cases = c("0", "0.1-0.299", "0.3-0.625", ">0.625"),
              Controls = c("0", "0.1-0.299", "0.3-0.625", ">0.625"))))
 
@@ -777,7 +777,7 @@ stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.734))
 # asymptotical p-value, page 993
 stopifnot(isequal(round(pvalue(lta), 4), 0.0828))
 
-ltMC <- lbl_test(dr, scores = list(tox = c(1, 3, 9, 27)), 
+ltMC <- lbl_test(dr, scores = list(tox = c(1, 3, 9, 27)),
                  distribution = approximate(B = 10000))
 
 pci <- attr(pvalue(ltMC), "conf.int")
@@ -808,7 +808,7 @@ stopifnot(isequal(round(statistic(cta), 1), 10.2))
 stopifnot(isequal(round(pvalue(cta), 4), 0.3345))
 
 # only Job.Satisfaction ordered
-cta <- cmh_test(jobsatisfaction, 
+cta <- cmh_test(jobsatisfaction,
     scores = list(Job.Satisfaction = c(1, 3, 4, 5)))
 
 # teststatistic, page 1018, is _wrong_ (but StatXact itself
@@ -817,15 +817,15 @@ cta <- cmh_test(jobsatisfaction,
 # Agresti, 2002, Table 7.12, page 297
 stopifnot(isequal(round(statistic(cta), 4), 9.0342))
 
-# asymptotical p-value, page 1018, is _wrong_ (but StatXact itself    
-# computes the correct result) 
+# asymptotical p-value, page 1018, is _wrong_ (but StatXact itself
+# computes the correct result)
 # (isequal(round(pvalue(cta), 4), 0.02643))
 # Agresti, 2002, Table 7.12, page 297
 stopifnot(isequal(round(pvalue(cta), 4), 0.0288))
 
 
-lta <- lbl_test(jobsatisfaction, 
-    scores = list(Job.Satisfaction = c(1, 3, 4, 5), 
+lta <- lbl_test(jobsatisfaction,
+    scores = list(Job.Satisfaction = c(1, 3, 4, 5),
                   Income = c(3, 10, 20, 35)))
 
 # teststatistic, page 1020
@@ -834,8 +834,8 @@ stopifnot(isequal(round(sqrt(statistic(lta)), 3), 2.481))
 # asymptotical p-value, page 1020
 stopifnot(isequal(round(pvalue(lta), 5), 0.01309))
 
-lta <- cmh_test(jobsatisfaction, 
-    scores = list(Job.Satisfaction = c(1, 3, 4, 5), 
+lta <- cmh_test(jobsatisfaction,
+    scores = list(Job.Satisfaction = c(1, 3, 4, 5),
                   Income = c(3, 10, 20, 35)))
 
 # teststatistic, page 1020
@@ -856,10 +856,10 @@ stopifnot(isequal(round(pvalue(lta), 4), 0.1224))
 exdata <- data.frame(time = c(1, 1, 5, 6, 6, 6, 6, 2, 2, 2, 3, 4, 4, 5, 5),
                      event = rep(TRUE, 15),
                      group = factor(c(rep(0, 7), rep(1, 8))))
-p <- pvalue(surv_test(Surv(time, event) ~ group, data = exdata, 
+p <- pvalue(surv_test(Surv(time, event) ~ group, data = exdata,
           distribution = exact()))
 stopifnot(isequal(round(p, 4), 0.0505))
-p <- pvalue(surv_test(Surv(time, event) ~ group, data = exdata, 
+p <- pvalue(surv_test(Surv(time, event) ~ group, data = exdata,
           distribution = exact(), ties = "average"))
 stopifnot(isequal(round(p, 4), 0.0468))
 
@@ -867,8 +867,8 @@ stopifnot(isequal(round(p, 4), 0.0468))
 ### symmetry problem, page 288
 load("AIDS.rda")
 
-tmp <- data.frame(y = c(AIDS$post, AIDS$pre), 
-                  x = gl(2, nrow(AIDS)), 
+tmp <- data.frame(y = c(AIDS$post, AIDS$pre),
+                  x = gl(2, nrow(AIDS)),
                   block = factor(rep(1:nrow(AIDS), 2)))
 
 wsa <- wilcoxsign_test(pre ~ post, data = AIDS, distribution = "asymptotic",
@@ -920,4 +920,4 @@ stopifnot(isequal(round(pvalue(sa), 4), 0.0878))
 
 # exact p-value, page 300
 se <- symmetry_test(y ~ x | block, dist = "exact")
-stopifnot(isequal(round(pvalue(se), 4), 0.0021))   
+stopifnot(isequal(round(pvalue(se), 4), 0.0021))

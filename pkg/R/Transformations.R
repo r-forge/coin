@@ -164,12 +164,12 @@ logrank_trafo <- function(x, ties.method = c("logrank", "HL", "average-scores"))
     s <- switch(ties.method,
         "logrank" = {
             fact <- event / (n - rank(time, ties.method = "min") + 1)
-            event - cumsum(fact[o])[rank(time, ties.method = "max")]
+            cumsum(fact[o])[rank(time, ties.method = "max")] - event
         },
         "HL" = {
             r <- rank(time, ties.method = "max")
             fact <- event / (n - r + 1)
-            event - cumsum(fact[o])[r]
+            cumsum(fact[o])[r] - event
         },
         "average-scores" = {
             tmindiff <- min(diff(sort(time[!duplicated(time)])))

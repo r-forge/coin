@@ -143,10 +143,15 @@ Loading required package: multcomp
 > cc <- complete.cases(x)
 > 
 > logrank_trafo(Surv(x))
-[1]  0.8333333  0.6333333         NA  0.1333333  0.1333333         NA -0.3666667
-[8] -1.3666667         NA
+[1] -0.8333333 -0.6333333         NA -0.1333333 -0.1333333         NA  0.3666667
+[8]  1.3666667         NA
 > logrank_trafo(Surv(x[cc]))
-[1]  0.8333333  0.6333333  0.1333333  0.1333333 -0.3666667 -1.3666667
+[1] -0.8333333 -0.6333333 -0.1333333 -0.1333333  0.3666667  1.3666667
+> logrank_trafo(Surv(x), ties.method = "HL")
+[1] -0.83333333 -0.63333333          NA  0.03333333  0.03333333          NA
+[7]  0.53333333  1.53333333          NA
+> logrank_trafo(Surv(x[cc]), ties.method = "HL")
+[1] -0.83333333 -0.63333333  0.03333333  0.03333333  0.53333333  1.53333333
 > logrank_trafo(Surv(x), ties.method = "average-scores")
 [1] -0.8333333 -0.6333333         NA -0.2166667 -0.2166667         NA  0.4500000
 [8]  1.4500000         NA
@@ -158,10 +163,15 @@ Loading required package: multcomp
 > cc <- complete.cases(x, e)
 > 
 > logrank_trafo(Surv(x, e))
-[1]  0.0000000         NA  0.6666667  0.6666667 -0.3333333         NA  0.3333333
-[8] -0.1666667 -1.1666667
+[1]  0.0000000         NA -0.6666667 -0.6666667  0.3333333         NA -0.3333333
+[8]  0.1666667  1.1666667
 > logrank_trafo(Surv(x[cc], e[cc]))
-[1]  0.0000000  0.6666667  0.6666667 -0.3333333  0.3333333 -0.1666667 -1.1666667
+[1]  0.0000000 -0.6666667 -0.6666667  0.3333333 -0.3333333  0.1666667  1.1666667
+> logrank_trafo(Surv(x, e), ties.method = "HL")
+[1]  0.0000000         NA -0.5000000 -0.5000000  0.5000000         NA -0.1666667
+[8]  0.8333333  1.8333333
+> logrank_trafo(Surv(x[cc], e[cc]), ties.method = "HL")
+[1]  0.0000000 -0.5000000 -0.5000000  0.5000000 -0.1666667  0.8333333  1.8333333
 > logrank_trafo(Surv(x, e), ties.method = "average-scores")
 [1]  0.0000000         NA -0.7333333 -0.7333333  0.3666667         NA -0.3000000
 [8]  0.2000000  1.2000000
@@ -173,9 +183,14 @@ Loading required package: multcomp
 > cc <- complete.cases(x, e)
 > 
 > logrank_trafo(Surv(x, e))
-[1]  0.00    NA    NA  0.75 -0.25    NA  0.25 -0.75    NA
+[1]  0.00    NA    NA -0.75  0.25    NA -0.25  0.75    NA
 > logrank_trafo(Surv(x[cc], e[cc]))
-[1]  0.00  0.75 -0.25  0.25 -0.75
+[1]  0.00 -0.75  0.25 -0.25  0.75
+> logrank_trafo(Surv(x, e), ties.method = "HL")
+[1]  0.0000000         NA         NA -0.6666667  0.3333333         NA -0.1666667
+[8]  0.8333333         NA
+> logrank_trafo(Surv(x[cc], e[cc]), ties.method = "HL")
+[1]  0.0000000 -0.6666667  0.3333333 -0.1666667  0.8333333
 > logrank_trafo(Surv(x, e), ties.method = "average-scores")
 [1]  0.00    NA    NA -0.75  0.25    NA -0.25  0.75    NA
 > logrank_trafo(Surv(x[cc], e[cc]), ties.method = "average-scores")
@@ -477,4 +492,4 @@ attr(,"contrast")
 > 
 > proc.time()
    user  system elapsed 
-   0.76    0.14    0.98 
+   0.82    0.14    0.96 

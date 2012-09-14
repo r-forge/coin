@@ -53,6 +53,8 @@ cc <- complete.cases(x)
 
 logrank_trafo(Surv(x))
 logrank_trafo(Surv(x[cc]))
+logrank_trafo(Surv(x), ties.method = "HL")
+logrank_trafo(Surv(x[cc]), ties.method = "HL")
 logrank_trafo(Surv(x), ties.method = "average-scores")
 logrank_trafo(Surv(x[cc]), ties.method = "average-scores")
 
@@ -62,6 +64,8 @@ cc <- complete.cases(x, e)
 
 logrank_trafo(Surv(x, e))
 logrank_trafo(Surv(x[cc], e[cc]))
+logrank_trafo(Surv(x, e), ties.method = "HL")
+logrank_trafo(Surv(x[cc], e[cc]), ties.method = "HL")
 logrank_trafo(Surv(x, e), ties.method = "average-scores")
 logrank_trafo(Surv(x[cc], e[cc]), ties.method = "average-scores")
 
@@ -71,6 +75,8 @@ cc <- complete.cases(x, e)
 
 logrank_trafo(Surv(x, e))
 logrank_trafo(Surv(x[cc], e[cc]))
+logrank_trafo(Surv(x, e), ties.method = "HL")
+logrank_trafo(Surv(x[cc], e[cc]), ties.method = "HL")
 logrank_trafo(Surv(x, e), ties.method = "average-scores")
 logrank_trafo(Surv(x[cc], e[cc]), ties.method = "average-scores")
 

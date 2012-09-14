@@ -102,8 +102,9 @@ mcp_trafo(...)
 
   In \pkg{coin} version 1.1-0 (and later), all transformation functions
   are now passing through missing values (i.e., \code{NA}s).
-  Furthermore, \code{median_trafo} is now an increasing function of the
-  data (in conformity with most other transformations in \pkg{coin}).
+  Furthermore, \code{median_trafo} and \code{logrank_trafo} are now
+  increasing functions of the data (in conformity with most other
+  transformations in \pkg{coin}).
 
 }
 \value{
