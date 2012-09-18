@@ -68,8 +68,15 @@ normal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
 }
 
 ### Median Scores
-median_trafo <- function(x)
-    as.numeric(x > median(x, na.rm = TRUE))
+median_trafo <- function(x, mid.score = c("0", "0.5", "1")) {
+    ## "0.5" => symmetric median scores (Randles & Wolfe, 1979, pp. 264--266)
+    mid.score <- match.arg(mid.score)
+    md <- median(x, na.rm = TRUE)
+    scores <- as.numeric(x > md)
+    if (mid.score != "0")
+        scores[x == md] <- as.numeric(mid.score)
+    return(scores)
+}
 
 ### Conover & Salsburg (1988)
 consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {

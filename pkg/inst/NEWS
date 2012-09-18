@@ -33,6 +33,9 @@
 
     o     new function for rank transformations (see ?rank_trafo)
 
+    o     the median scores transformation now has a choice of three mid-score
+          alternatives (?see median_trafo)
+
     BUG FIXES
 
     o     monotonicity of step-down adjusted p-values was not enforced when

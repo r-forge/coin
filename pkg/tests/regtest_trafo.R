@@ -35,6 +35,10 @@ normal_trafo(x[cc], ties.method = "average-scores")
 
 median_trafo(x)
 median_trafo(x[cc])
+median_trafo(x, mid.score = "0.5")
+median_trafo(x[cc], mid.score = "0.5")
+median_trafo(x, mid.score = "1")
+median_trafo(x[cc], mid.score = "1")
 
 consal_trafo(x)
 consal_trafo(x[cc])
