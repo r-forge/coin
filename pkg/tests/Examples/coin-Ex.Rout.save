@@ -1708,7 +1708,7 @@ Z = -1.3191, p-value = 0.09589
 alternative hypothesis: true mu is less than 0 
 
 > 
->   wilcox_test(pain ~ group, data = neuropathy, alternative = "less", 
+>   wilcox_test(pain ~ group, data = neuropathy, alternative = "less",
 +               distribution = "exact")
 
 	Exact Wilcoxon Mann-Whitney Rank Sum Test
@@ -1718,10 +1718,10 @@ Z = -0.9817, p-value = 0.1654
 alternative hypothesis: true mu is less than 0 
 
 > 
->   oneway_test(pain ~ group, data = neuropathy, 
+>   oneway_test(pain ~ group, data = neuropathy, alternative = "less",
 +               distribution = approximate(B = 10000),
-+               alternative = "less", ytrafo = function(data) trafo(data,
-+                   numeric_trafo = consal_trafo))
++               ytrafo = function(data)
++                   trafo(data, numeric_trafo = consal_trafo))
 
 	Approximative 2-Sample Permutation Test
 
@@ -1729,6 +1729,17 @@ data:  pain by group (control, treat)
 Z = -1.8683, p-value = 0.0284
 alternative hypothesis: true mu is less than 0 
 
+> 
+>   ### maximum-type test for a range of 'a' values
+>   it <- independence_test(pain ~ group, data = neuropathy,
++                           alternative = "less",
++                           distribution = approximate(B = 10000),
++                           ytrafo = function(data)
++                               trafo(data, numeric_trafo = function(y)
++                                   consal_trafo(y, a = 2:7)))
+>   pvalue(it, method = "single-step")
+         a = 2  a = 3  a = 4  a = 5  a = 6  a = 7
+control 0.2334 0.1033 0.0653 0.0528 0.0491 0.0497
 > 
 > 
 > 
@@ -2118,7 +2129,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  60.05 1.29 62.33 NA NA 
+Time elapsed:  60.02 1.02 62.7 NA NA 
 > grDevices::dev.off()
 null device 
           1 

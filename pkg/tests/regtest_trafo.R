@@ -42,8 +42,12 @@ median_trafo(x[cc], mid.score = "1")
 
 consal_trafo(x)
 consal_trafo(x[cc])
+consal_trafo(x, a = c(2, 5))
+consal_trafo(x[cc], a = c(2, 5))
 consal_trafo(x, ties.method = "average-scores")
 consal_trafo(x[cc], ties.method = "average-scores")
+consal_trafo(x, ties.method = "average-scores", a = c(2, 5))
+consal_trafo(x[cc], ties.method = "average-scores", a = c(2, 5))
 
 maxstat_trafo(x)
 maxstat_trafo(x[cc])

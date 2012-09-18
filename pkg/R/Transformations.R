@@ -79,18 +79,23 @@ median_trafo <- function(x, mid.score = c("0", "0.5", "1")) {
 }
 
 ### Conover & Salsburg (1988)
-consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
+consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
+                         a = 5) {
     ties.method <- match.arg(ties.method)
-    scores <- switch(ties.method,
-        "mid-ranks" = {
-            (rank_trafo(x) / (sum(!is.na(x)) + 1))^4
-        },
-        "average-scores" = {
-            s <- (rank_trafo(x, ties.method = "random") /
-                    (sum(!is.na(x)) + 1))^4
-            average_scores(s, x)
-        }
-    )
+
+    f <- function(a) {
+        switch(ties.method,
+               "mid-ranks" = {
+                   (rank_trafo(x) / (sum(!is.na(x)) + 1))^(a - 1)},
+               "average-scores" = {
+                   s <- (rank_trafo(x, ties.method = "random") /
+                           (sum(!is.na(x)) + 1))^(a - 1)
+                   average_scores(s, x)}
+        )
+    }
+
+    scores <- if (length(a) == 1) f(a)
+              else vapply(setNames(a, paste("a =", a)), f, numeric(length(x)))
     return(scores)
 }
 

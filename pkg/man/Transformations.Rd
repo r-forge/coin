@@ -27,7 +27,7 @@ ansari_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 fligner_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 normal_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 median_trafo(x, mid.score = c("0", "0.5", "1"))
-consal_trafo(x, ties.method = c("mid-ranks", "average-scores"))
+consal_trafo(x, ties.method = c("mid-ranks", "average-scores"), a = 5)
 maxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 fmaxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 logrank_trafo(x, ties.method = c("logrank", "HL", "average-scores"))
@@ -63,11 +63,13 @@ mcp_trafo(...)
     broken at \code{"random"}. For ties handling in case of censored
     data, see \code{\link{surv_test}}.}
   \item{mid.score}{a character, the score assigned to observations
-    exactly equal to the median.  Must be one of \code{"0"},
+    exactly equal to the median.  Must be one of \code{"0"} (default),
     \code{"0.5"} or \code{"1"}; \code{"0.5"} leads to symmetric median
     scores ensuring that the resulting test statistic has a symmetric
     distribution, or at least approximately so, under the null
     hypothesis.}
+  \item{a}{a numeric vector, the value taken as the constant \eqn{a}
+    in the Conover-Salsburg scores.  Defaults to 5.}
   \item{minprob}{a fraction between 0 and 0.5.}
   \item{maxprob}{a fraction between 0.5 and 1.}
   \item{\dots}{factor name and contrast matrix (as matrix or character)
@@ -91,9 +93,9 @@ mcp_trafo(...)
   or Fligner scores for scale problems.
 
   \code{normal_trafo}, \code{median_trafo} and \code{consal_trafo}
-  implement normal scores, median scores or Conover-Salburg scores
-  (see \code{\link{neuropathy}}) for location problems,
-  \code{logrank_trafo} returns logrank scores for censored data.
+  implement normal scores, median scores or Conover-Salsburg scores (see
+  \code{\link{neuropathy}}) for location problems, \code{logrank_trafo}
+  returns logrank scores for censored data.
 
   A \code{trafo} function with modified default arguments is usually
   feeded into \code{\link{independence_test}} via the \code{xtrafo}

@@ -34,7 +34,10 @@
     o     new function for rank transformations (see ?rank_trafo)
 
     o     the median scores transformation now has a choice of three mid-score
-          alternatives (?see median_trafo)
+          alternatives (see ?median_trafo)
+
+    o     the Conover-Salsburg scores transformation now allows the 'a' constant
+          to be set (see ?consal_trafo and ?neuropathy)
 
     BUG FIXES
 
