@@ -377,14 +377,61 @@ alternative hypothesis: true mu is not equal to 0
 >   pvalue(pt)
 [1] 0.1318681
 > 
->   ### plot density and distribution of the standardized
->   ### test statistic
+>   ### plot density and distribution of the standardized test statistic
 >   layout(matrix(1:2, nrow = 2))
 >   s <- support(pt)
 >   d <- sapply(s, function(x) dperm(pt, x))
 >   p <- sapply(s, function(x) pperm(pt, x))
->   plot(s, d, type = "S", xlab = "Teststatistic", ylab = "Density")
->   plot(s, p, type = "S", xlab = "Teststatistic", ylab = "Cumm. Probability")
+>   plot(s, d, type = "S", xlab = "Test Statistic", ylab = "Density")
+>   plot(s, p, type = "S", xlab = "Test Statistic", ylab = "Cum. Probability")
+>   layout(1)
+> 
+> 
+>   ### Median test with different mid-scores
+>   ex <- data.frame(y = c(3, 4, 8, 9, 1, 2, 5, 6, 7),
++                    x = factor(rep(c("no", "yes"), c(4, 5))))
+> 
+>   boxplot(y ~ x, data = ex)
+> 
+>   (mt1 <- median_test(y ~ x, data = ex, distribution = "exact"))
+
+	Exact Median Test
+
+data:  y by x (no, yes) 
+Z = 0.2828, p-value = 1
+alternative hypothesis: true mu is not equal to 0 
+
+>   (mt2 <- median_test(y ~ x, data = ex, distribution = "exact",
++                       mid.score = "0.5"))
+
+	Exact Median Test
+
+data:  y by x (no, yes) 
+Z = 0, p-value = 1
+alternative hypothesis: true mu is not equal to 0 
+
+>   (mt3 <- median_test(y ~ x, data = ex, distribution = "exact",
++                       mid.score = "1")) # sign change!
+
+	Exact Median Test
+
+data:  y by x (no, yes) 
+Z = -0.2828, p-value = 1
+alternative hypothesis: true mu is not equal to 0 
+
+> 
+>   ### plot density and distribution of the standardized test statistics
+>   layout(matrix(1:3, nrow = 3))
+>   s1 <- support(mt1); d1 <- dperm(mt1, s1)
+>   plot(s1, d1, type = "h", main = "Mid-score: 0",
++        xlab = "Test Statistic", ylab = "Density")
+>   s2 <- support(mt2); d2 <- dperm(mt2, s2)
+>   plot(s2, d2, type = "h", main = "Mid-score: 0.5",
++        xlab = "Test Statistic", ylab = "Density")
+>   s3 <- support(mt3); d3 <- dperm(mt3, s3)
+>   plot(s3, d3, type = "h", main = "Mid-score: 1",
++        xlab = "Test Statistic", ylab = "Density")
+>   layout(1)
 > 
 > 
 >   ### Length of YOY Gizzard Shad from Kokosing Lake, Ohio,
@@ -2129,7 +2176,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  60.02 1.02 62.7 NA NA 
+Time elapsed:  60.64 1.32 63.32 NA NA 
 > grDevices::dev.off()
 null device 
           1 

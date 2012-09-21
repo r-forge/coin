@@ -65,9 +65,7 @@ mcp_trafo(...)
   \item{mid.score}{a character, the score assigned to observations
     exactly equal to the median.  Must be one of \code{"0"} (default),
     \code{"0.5"} or \code{"1"}; \code{"0.5"} leads to symmetric median
-    scores ensuring that the resulting test statistic has a symmetric
-    distribution, or at least approximately so, under the null
-    hypothesis.}
+    scores (see also \code{\link{median_test}}).}
   \item{a}{a numeric vector, the value taken as the constant \eqn{a}
     in the Conover-Salsburg scores.  Defaults to 5.}
   \item{minprob}{a fraction between 0 and 0.5.}

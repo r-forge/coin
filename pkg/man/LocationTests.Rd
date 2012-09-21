@@ -16,8 +16,8 @@
 \alias{kruskal_test}
 \title{ Independent Two- and K-Sample Location Tests }
 \description{
-    Testing the equality of the distributions of a numeric response in
-    two or more independent groups against shift alternatives.
+  Testing the equality of the distributions of a numeric response in two
+  or more independent groups against shift alternatives.
 }
 \usage{
 
@@ -35,7 +35,8 @@
 
 \method{median_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{median_test}{IndependenceProblem}(object,
-    conf.int = FALSE, conf.level = 0.95, ...)
+    conf.int = FALSE, conf.level = 0.95,
+    mid.score = c("0", "0.5", "1"), ...)
 
 \method{kruskal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{kruskal_test}{IndependenceProblem}(object,
@@ -54,14 +55,14 @@
   \item{weights}{an optional formula of the form \code{~ w} defining
       integer valued weights for the observations.}
   \item{object}{an object of class \code{IndependenceProblem}.}
-  \item{distribution}{a character, the null distribution of the test statistic
-    can be computed \code{exact}ly or can be approximated by its
-    asymptotic distribution (\code{asymptotic})
-    or via Monte-Carlo resampling (\code{approximate}).
-    Alternatively, the functions
-    \code{\link{exact}}, \code{\link{approximate}} or \code{\link{asymptotic}} can be
-    used to specify how the exact conditional distribution of the test statistic
-    should be calculated or approximated.}
+  \item{distribution}{a character, the null distribution of the test
+    statistic can be computed exactly (\code{"exact"}) or can be
+    approximated by its asymptotic distribution (\code{"asymptotic"}) or
+    via Monte-Carlo resampling (\code{"approximate"}). Alternatively,
+    the functions \code{\link{exact}}, \code{\link{approximate}} or
+    \code{\link{asymptotic}} can be used to specify how the exact
+    conditional distribution of the test statistic should be calculated
+    or approximated.}
   \item{ties.method}{a character, two methods are available to adjust scores for ties,
       either the score generating function is applied to \code{mid-ranks}
       or the scores computed based on random ranks are averaged for all tied
@@ -69,6 +70,9 @@
   \item{conf.int}{a logical indicating whether a confidence interval
     for the difference in location should be computed.}
   \item{conf.level}{confidence level of the interval.}
+  \item{mid.score}{a character, the score assigned to observations
+    exactly equal to the median.  Must be one of \code{"0"} (default),
+    \code{"0.5"} or \code{"1"} (see details).}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
@@ -92,19 +96,32 @@
 
   The linear rank tests for two samples (\code{wilcox_test},
   \code{normal_test} and \code{median_test}) can be used to test the
-  two-sided hypothesis \eqn{H_0: Y_1 - Y_2 = 0}, where \eqn{Y_i} is the median
-  of the responses in the ith group. Confidence intervals for the difference
-  in location are available for the rank-based procedures and are computed
-  according to Bauer (1972). In case \code{alternative = "less"}, the
-  null hypothesis \eqn{H_0: Y_1 - Y_2 \ge 0} is tested and
-  \code{alternative = "greater"} corresponds to a null hypothesis
-  \eqn{H_0: Y_1 - Y_2 \le 0}.
+  two-sided hypothesis \eqn{H_0: Y_1 - Y_2 = 0}, where \eqn{Y_i} is the
+  median of the responses in the \eqn{i}th sample.  Confidence intervals
+  for the difference in location are available for the rank-based
+  procedures and are computed according to Bauer (1972).  In case
+  \code{alternative = "less"}, the null hypothesis \eqn{H_0: Y_1 - Y_2
+  \ge 0} is tested and \code{alternative = "greater"} corresponds to a
+  null hypothesis \eqn{H_0: Y_1 - Y_2 \le 0}.
+
+  The median test offers a choice of mid-score, i.e., the score assigned
+  to observations exactly equal to the median, using \code{"mid-score"}.
+  The first alternative, \code{"0"}, implies that the linear test
+  statistic is simply the number of subjects in the 2nd sample with
+  observations greater than the median of the pooled sample.  The test
+  statistic in the last alternative, \code{"1"}, also includes the
+  number of subjects in the 2nd sample whose observations are equal to
+  the median of the pooled sample.  If \code{"0.5"} is selected, the
+  linear test statistic is the mean of the test statistics corresponding
+  to the first and last alternatives and has a symmetric distribution,
+  or at least approximately so, under the null hypothesis (see Hajek,
+  Sidak and Sen, 1999, p. 97--98).
 
   In case \code{x} is an ordered factor, \code{kruskal_test} computes the
   linear-by-linear association test for ordered alternatives.
 
   For the adjustment of scores for tied values see Hajek, Sidak and Sen
-  (1999), page 131ff.
+  (1999, p. 133--135).
 
 }
 \value{
@@ -119,30 +136,33 @@
 }
 \references{
 
-        Myles Hollander & Douglas A. Wolfe (1999).
-        \emph{Nonparametric Statistical Methods, 2nd Edition}.
-        New York: John Wiley & Sons.
+  Myles Hollander & Douglas A. Wolfe (1999).
+  \emph{Nonparametric Statistical Methods, 2nd Edition}.
+  New York: John Wiley & Sons.
 
-        Bernd Streitberg & Joachim Roehmel (1986).
-        Exact distributions for permutations and rank tests:
-        An introduction to some recently published algorithms.
-        \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
+  Bernd Streitberg & Joachim Roehmel (1986).
+  Exact distributions for permutations and rank tests: An introduction
+  to some recently published algorithms.
+  \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
 
-        Bernd Streitberg & Joachim Roehmel (1987).
-        Exakte Verteilungen fuer Rang- und Randomisierungstests
-        im allgemeinen c-Stichprobenfall.
-        \emph{EDV in Medizin und Biologie} \bold{18}(1), 12--19.
+  Bernd Streitberg & Joachim Roehmel (1987).
+  Exakte Verteilungen fuer Rang- und Randomisierungstests im allgemeinen
+  c-Stichprobenfall.
+  \emph{EDV in Medizin und Biologie} \bold{18}(1), 12--19.
 
-        Mark A. van de Wiel (2001). The split-up algorithm: a fast
-        symbolic method for computing p-values of rank statistics.
-        \emph{Computational Statistics} \bold{16}, 519--538.
+  Mark A. van de Wiel (2001).
+  The split-up algorithm: a fast symbolic method for computing p-values
+  of rank statistics.
+  \emph{Computational Statistics} \bold{16}, 519--538.
 
-        David F. Bauer (1972). Constructing confidence sets using
-        rank statistics. \emph{Journal of the American Statistical Association}
-        \bold{67}, 687--690.
+  David F. Bauer (1972).
+  Constructing confidence sets using rank statistics.
+  \emph{Journal of the American Statistical Association} \bold{67},
+  687--690.
 
-        Jaroslav Hajek, Zbynek Sidak & Pranab K. Sen (1999),
-        \emph{Theory of Rank Tests}. San Diego, London: Academic Press.
+  Jaroslav Hajek, Zbynek Sidak & Pranab K. Sen (1999),
+  \emph{Theory of Rank Tests}.
+  San Diego: Academic Press.
 
 }
 \examples{
@@ -194,14 +214,40 @@
   pt <- oneway_test(pd ~ age, data = water_transfer, distribution = "exact")
   pvalue(pt)
 
-  ### plot density and distribution of the standardized
-  ### test statistic
+  ### plot density and distribution of the standardized test statistic
   layout(matrix(1:2, nrow = 2))
   s <- support(pt)
   d <- sapply(s, function(x) dperm(pt, x))
   p <- sapply(s, function(x) pperm(pt, x))
-  plot(s, d, type = "S", xlab = "Teststatistic", ylab = "Density")
-  plot(s, p, type = "S", xlab = "Teststatistic", ylab = "Cumm. Probability")
+  plot(s, d, type = "S", xlab = "Test Statistic", ylab = "Density")
+  plot(s, p, type = "S", xlab = "Test Statistic", ylab = "Cum. Probability")
+  layout(1)
+
+
+  ### Median test with different mid-scores
+  ex <- data.frame(y = c(3, 4, 8, 9, 1, 2, 5, 6, 7),
+                   x = factor(rep(c("no", "yes"), c(4, 5))))
+
+  boxplot(y ~ x, data = ex)
+
+  (mt1 <- median_test(y ~ x, data = ex, distribution = "exact"))
+  (mt2 <- median_test(y ~ x, data = ex, distribution = "exact",
+                      mid.score = "0.5"))
+  (mt3 <- median_test(y ~ x, data = ex, distribution = "exact",
+                      mid.score = "1")) # sign change!
+
+  ### plot density and distribution of the standardized test statistics
+  layout(matrix(1:3, nrow = 3))
+  s1 <- support(mt1); d1 <- dperm(mt1, s1)
+  plot(s1, d1, type = "h", main = "Mid-score: 0",
+       xlab = "Test Statistic", ylab = "Density")
+  s2 <- support(mt2); d2 <- dperm(mt2, s2)
+  plot(s2, d2, type = "h", main = "Mid-score: 0.5",
+       xlab = "Test Statistic", ylab = "Density")
+  s3 <- support(mt3); d3 <- dperm(mt3, s3)
+  plot(s3, d3, type = "h", main = "Mid-score: 1",
+       xlab = "Test Statistic", ylab = "Density")
+  layout(1)
 
 
   ### Length of YOY Gizzard Shad from Kokosing Lake, Ohio,

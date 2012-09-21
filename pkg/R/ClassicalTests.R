@@ -90,7 +90,8 @@ median_test.formula <- function(formula, data = list(), subset = NULL,
        frame = parent.frame(), ...)}
 
 median_test.IndependenceProblem <- function(object,
-    conf.int = FALSE, conf.level = 0.95, ...) {
+    conf.int = FALSE, conf.level = 0.95,
+    mid.score = c("0", "0.5", "1"), ...) {
 
     check <- function(object) {
         if (!(is_2sample(object) && is_numeric_y(object)))
@@ -100,7 +101,8 @@ median_test.IndependenceProblem <- function(object,
     }
 
     RET <- independence_test(object, teststat = "scalar",
-        ytrafo = function(data) trafo(data, numeric_trafo = median_trafo),
+        ytrafo = function(data) trafo(data, numeric_trafo = function(y)
+             median_trafo(y, mid.score = mid.score)),
         check = check, ...)
 
     RET@nullvalue <- 0
