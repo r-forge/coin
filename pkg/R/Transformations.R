@@ -95,7 +95,7 @@ consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
     }
 
     scores <- if (length(a) == 1) f(a)
-              else vapply(setNames(a, paste("a =", a)), f, numeric(length(x)))
+              else vapply(setNames(a, paste("a =", a)), f, x)
     return(scores)
 }
 
@@ -114,8 +114,8 @@ maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
     }
     cm <- .Call("R_maxstattrafo", as.double(x), as.double(cutpoints),
                 PACKAGE = "coin")
-    colnames(cm) <- paste("x <= ", round(cutpoints, 3), sep = "")
-    rownames(cm) <- 1:nrow(cm)
+    dimnames(cm) <- list(1:nrow(cm),
+                         paste("x <= ", round(cutpoints, 3), sep = ""))
     cm[is.na(x)] <- NA
     cm
 }
@@ -153,8 +153,7 @@ fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
                        paste(lev[!sp[i, ]], collapse = ", "), "}", sep = "")
     }
     tr[is.na(x), ] <- NA
-    rownames(tr) <- 1:length(x)
-    colnames(tr) <- cn
+    dimnames(tr) <- list(1:length(x), cn)
     tr <- tr[, colMeans(tr, na.rm = TRUE) >= minprob &
                colMeans(tr, na.rm = TRUE) <= maxprob,
              drop = FALSE]
@@ -196,7 +195,7 @@ logrank_trafo <- function(x, ties.method = c("logrank", "HL", "average-scores"))
             average_scores(s, time + (1 - event) * runif(n))
         }
     )
-    scores <- NA
+    scores <- NA_real_
     scores[cc] <- s
     return(scores)
 }

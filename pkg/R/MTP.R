@@ -23,8 +23,7 @@ singlestep <- function(object, ...) {
 
     ret <- matrix(rep.int(ret, diff(c(0L, idx)))[order(o)], # remapping
                   nrow = nrow(ts), ncol = ncol(ts))
-    rownames(ret) <- rownames(ts)
-    colnames(ret) <- colnames(ts)
+    dimnames(ret) <- list(rownames(ts), colnames(ts))
     ret
 }
 
@@ -49,8 +48,7 @@ rsdmaxT <- function(pls, ts) {
         ret[i] <- max(ret[i], ret[i + 1]) # enforce monotonicity, page 67
 
     ret <- matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts))
-    rownames(ret) <- rownames(ts)
-    colnames(ret) <- colnames(ts)
+    dimnames(ret) <- list(rownames(ts), colnames(ts))
     ret
 }
 
@@ -98,8 +96,7 @@ asdmaxT <- function(object) {
     }
 
     ret <- matrix(1 - ret[order(o)], nrow = nrow(ts), ncol = ncol(ts))
-    rownames(ret) <- rownames(ts)
-    colnames(ret) <- colnames(ts)
+    dimnames(ret) <- list(rownames(ts), colnames(ts))
     ret
 }
 
@@ -222,8 +219,7 @@ marginal <- function(object, bonferroni, stepdown, ...) {
         ret <- matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts))
     }
 
-    rownames(ret) <- rownames(ts)
-    colnames(ret) <- colnames(ts)
+    dimnames(ret) <- list(rownames(ts), colnames(ts))
     ret
 }
 
@@ -281,7 +277,7 @@ npmcp <- function(object) {
         p[i] <- max(p[i-1], p[i]) # forces pvalue monotonicity
 
     ret <- matrix(p[rank(tstat)])
-    attr(ret, "dimnames") <- attr(tstat, "dimnames")
+    dimnames(ret) <- dimnames(tstat)
     return(ret)
 }
 
@@ -315,8 +311,7 @@ unadjusted <- function(object, ...) {
         ## unadjusted p-values
         ret <- matrix(rowMeans(GE(pls, as.vector(ts))),
                       nrow = nrow(ts), ncol = ncol(ts))
-        rownames(ret) <- rownames(ts)
-        colnames(ret) <- colnames(ts)
+        dimnames(ret) <- list(rownames(ts), colnames(ts))
     }
 
     ret
@@ -374,8 +369,7 @@ dbonf <- function(object, ...) {
         }
     }
     ret <- matrix(1 - pmin(adjp, 1), nrow = nrow(ts), ncol = ncol(ts))
-    rownames(ret) <- rownames(ts)
-    colnames(ret) <- colnames(ts)
+    dimnames(ret) <- list(rownames(ts), colnames(ts))
     ret
 }
 ### </DEPRECATED>
