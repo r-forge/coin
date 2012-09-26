@@ -486,6 +486,42 @@ IV - II  0.0004888889
 IV - III 0.9999333333
 > 
 > 
+>   ### Jonckheere-Terpstra test for ordered groups
+>   control <- c(40, 35, 38, 43, 44, 41)
+>   rough <- c(38, 40, 47, 44, 40, 42)
+>   accurate <- c(48, 40, 45, 43, 46, 44)
+> 
+>   pieces <- list(control, rough, accurate)
+>   n <- c(6, 6, 6)
+>   grp <- as.ordered(factor(rep(1:length(n), n)))
+> 
+>   (y <- unlist(pieces))
+ [1] 40 35 38 43 44 41 38 40 47 44 40 42 48 40 45 43 46 44
+>   k <- length(pieces)
+>   (x <- as.ordered(factor(rep(1:k, n))))
+ [1] 1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3
+Levels: 1 < 2 < 3
+> 
+>   ### look at K. The second line just sums up.
+>   ff <- function(x) {
++       K <- contrMat(table(x), "Tukey")[, x]
++       as.vector(rep(1, nrow(K)) %*% K)
++   }
+> 
+>   it <- independence_test(y ~ x,
++       ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
++       xtrafo = function(data) trafo(data, ordered_trafo = ff),
++       alternative = "greater")
+>   it
+
+	Asymptotic General Independence Test
+
+data:  y by x (1 < 2 < 3) 
+Z = 2.0447, p-value = 0.02044
+alternative hypothesis: greater 
+
+> 
+> 
 > 
 > 
 > cleanEx()
@@ -2176,7 +2212,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  60.64 1.32 63.32 NA NA 
+Time elapsed:  59.37 1.94 63.1 NA NA 
 > grDevices::dev.off()
 null device 
           1 

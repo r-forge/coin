@@ -280,6 +280,7 @@
   ### sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
   print(pvalue(NDWD, method = "single-step"))
 
+
   ### Jonckheere-Terpstra test for ordered groups
   control <- c(40, 35, 38, 43, 44, 41)
   rough <- c(38, 40, 47, 44, 40, 42)
@@ -287,22 +288,22 @@
 
   pieces <- list(control, rough, accurate)
   n <- c(6, 6, 6)
-  grp <- as.ordered(factor(rep(1:length(n),n)))
+  grp <- as.ordered(factor(rep(1:length(n), n)))
 
   (y <- unlist(pieces))
   k <- length(pieces)
-  (x <- as.ordered(factor(rep(1:k,n))))
+  (x <- as.ordered(factor(rep(1:k, n))))
 
   ### look at K. The second line just sums up.
   ff <- function(x) {
-      K <- contrMat(table(x), "Tukey")[,x]
-      as.vector(rep(1, nrow(K)) \%*\%K)
+      K <- contrMat(table(x), "Tukey")[, x]
+      as.vector(rep(1, nrow(K)) \%*\% K)
   }
 
-  it <- independence_test(y ~ x, ytrafo = rank,
-                  xtrafo = function(data) trafo(data, ordered_trafo = ff),
-                  alternative="greater",
-                  distribution="asymptotic")
+  it <- independence_test(y ~ x,
+      ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
+      xtrafo = function(data) trafo(data, ordered_trafo = ff),
+      alternative = "greater")
   it
 
 }
