@@ -1514,39 +1514,19 @@ attr(,"conf.level")
 > ### ** Examples
 > 
 > 
->   layout(matrix(1:2, ncol = 2))
-> 
 >   ### Grade III glioma
 >   g3 <- subset(glioma, histology == "Grade3")
 > 
 >   ### Plot Kaplan-Meier curves
->   plot(survfit(Surv(time, event) ~ group, data = g3), 
-+        main = "Grade III Glioma", lty = c(2,1), 
-+        legend.text = c("Control", "Treated"),
-+        legend.bty = 1, ylab = "Probability", 
-+        xlab = "Survival Time in Month")
-Warning in plot.window(...) :
-  "legend.text" is not a graphical parameter
-Warning in plot.window(...) : "legend.bty" is not a graphical parameter
-Warning in plot.xy(xy, type, ...) :
-  "legend.text" is not a graphical parameter
-Warning in plot.xy(xy, type, ...) :
-  "legend.bty" is not a graphical parameter
-Warning in axis(side = side, at = at, labels = labels, ...) :
-  "legend.text" is not a graphical parameter
-Warning in axis(side = side, at = at, labels = labels, ...) :
-  "legend.bty" is not a graphical parameter
-Warning in axis(side = side, at = at, labels = labels, ...) :
-  "legend.text" is not a graphical parameter
-Warning in axis(side = side, at = at, labels = labels, ...) :
-  "legend.bty" is not a graphical parameter
-Warning in box(...) : "legend.text" is not a graphical parameter
-Warning in box(...) : "legend.bty" is not a graphical parameter
-Warning in title(...) : "legend.text" is not a graphical parameter
-Warning in title(...) : "legend.bty" is not a graphical parameter
+>   layout(matrix(1:2, ncol = 2))
+>   plot(survfit(Surv(time, event) ~ group, data = g3),
++        main = "Grade III Glioma", lty = 2:1,
++        ylab = "Probability", xlab = "Survival Time in Month",
++        xlim = c(-2, 72))
+>   legend("bottomleft", lty = 2:1, c("Control", "Treated"), bty = "n")
 > 
 >   ### logrank test
->   surv_test(Surv(time, event) ~ group, data = g3, 
+>   surv_test(Surv(time, event) ~ group, data = g3,
 +                distribution = "exact")
 
 	Exact Logrank Test
@@ -1560,42 +1540,15 @@ alternative hypothesis: two.sided
 >   gbm <- subset(glioma, histology == "GBM")
 > 
 >   ### Plot Kaplan-Meier curves
->   plot(survfit(Surv(time, event) ~ group, data = gbm), 
-+        main = "Grade IV Glioma", lty = c(2,1), 
-+        legend.text = c("Control", "Treated"),
-+        legend.bty = 1, legend.pos = 1, ylab = "Probability", 
-+        xlab = "Survival Time in Month")
-Warning in plot.window(...) :
-  "legend.text" is not a graphical parameter
-Warning in plot.window(...) : "legend.bty" is not a graphical parameter
-Warning in plot.window(...) : "legend.pos" is not a graphical parameter
-Warning in plot.xy(xy, type, ...) :
-  "legend.text" is not a graphical parameter
-Warning in plot.xy(xy, type, ...) :
-  "legend.bty" is not a graphical parameter
-Warning in plot.xy(xy, type, ...) :
-  "legend.pos" is not a graphical parameter
-Warning in axis(side = side, at = at, labels = labels, ...) :
-  "legend.text" is not a graphical parameter
-Warning in axis(side = side, at = at, labels = labels, ...) :
-  "legend.bty" is not a graphical parameter
-Warning in axis(side = side, at = at, labels = labels, ...) :
-  "legend.pos" is not a graphical parameter
-Warning in axis(side = side, at = at, labels = labels, ...) :
-  "legend.text" is not a graphical parameter
-Warning in axis(side = side, at = at, labels = labels, ...) :
-  "legend.bty" is not a graphical parameter
-Warning in axis(side = side, at = at, labels = labels, ...) :
-  "legend.pos" is not a graphical parameter
-Warning in box(...) : "legend.text" is not a graphical parameter
-Warning in box(...) : "legend.bty" is not a graphical parameter
-Warning in box(...) : "legend.pos" is not a graphical parameter
-Warning in title(...) : "legend.text" is not a graphical parameter
-Warning in title(...) : "legend.bty" is not a graphical parameter
-Warning in title(...) : "legend.pos" is not a graphical parameter
->    
+>   plot(survfit(Surv(time, event) ~ group, data = gbm),
++        main = "Grade IV Glioma", lty = 2:1,
++        ylab = "Probability", xlab = "Survival Time in Month",
++        xlim = c(-2, 72))
+>   legend("topright", lty = 2:1, c("Control", "Treated"), bty = "n")
+>   layout(1)
+> 
 >   ### logrank test
->   surv_test(Surv(time, event) ~ group, data = gbm, 
+>   surv_test(Surv(time, event) ~ group, data = gbm,
 +             distribution = "exact")
 
 	Exact Logrank Test
@@ -2212,7 +2165,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  59.37 1.94 63.1 NA NA 
+Time elapsed:  61.76 2.2 65 NA NA 
 > grDevices::dev.off()
 null device 
           1 

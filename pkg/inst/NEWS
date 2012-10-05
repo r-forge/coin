@@ -69,6 +69,8 @@
     o     the median and logrank transformations are now increasing functions of
           the data
 
+    o     documentation updates
+
 
                 CHANGES in `coin' VERSION 1.0-22
 
