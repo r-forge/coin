@@ -194,8 +194,8 @@ surv_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    scalar <- (is.ordered(object@x[[1]]) || nlevels(object@x[[1]]) == 2)
-
+    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) ||
+              nlevels(object@x[[1]]) == 2
     RET <- independence_test(object,
         teststat = if(scalar) "scalar" else "quad",
         check = check, ytrafo = ytrafo, ...)

@@ -577,6 +577,25 @@ Z = 2.3373, p-value = 0.01942
 alternative hypothesis: true mu is not equal to 1 
 
 > 
+> ### failed to recognize 'x' as ordered if only scores were specified
+> surv_test(Surv(time, event) ~ group, data = photocar,
++           scores = list(group = c(2, 4, 6))) # failed
+
+	Asymptotic Linear-by-Linear Association (Tarone-Ware) Test
+
+data:  Surv(time, event) by group (A < B < C) 
+Z = -5.43, p-value = 5.636e-08
+alternative hypothesis: true mu is not equal to 1 
+
+> surv_test(Surv(time, event) ~ ordered(group), data = photocar) # worked
+
+	Asymptotic Linear-by-Linear Association (Tarone-Ware) Test
+
+data:  Surv(time, event) by ordered(group) (A < B < C) 
+Z = -5.43, p-value = 5.636e-08
+alternative hypothesis: true mu is not equal to 1 
+
+> 
 > proc.time()
    user  system elapsed 
-   3.75    0.34    4.18 
+   3.82    0.32    4.38 

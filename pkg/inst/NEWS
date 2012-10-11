@@ -40,6 +40,9 @@
     o     the Conover-Salsburg scores transformation now allows the 'a' constant
           to be set (see ?consal_trafo and ?neuropathy)
 
+    o     the logrank test now allows the alternative hypothesis to be specified
+          when the explanatory variable is an ordered factor
+
     BUG FIXES
 
     o     monotonicity of step-down adjusted p-values was not enforced when
@@ -52,7 +55,7 @@
           null distribution contained values equal to the observed test
           statistics
 
-    o     the printed output from maximum-type tests did not include the
+    o     the printed output for maximum-type tests did not include the
           alternative hypothesis
 
     o     the maximally selected statistics transformation for factors sometimes
@@ -64,8 +67,8 @@
     o     the median test p-value computation used the wrong tail of the null
           distribution in the one-sided case
 
-    o     the printed output from surv_test did not include the null parameter
-          when the test statistic was a scalar
+    o     the printed output for the logrank test did not include the null
+          parameter when the test statistic was a scalar
 
     OTHER CHANGES
 
@@ -74,9 +77,8 @@
 
     o     documentation updates
 
-    o     the test statistic in surv_test is now a scalar if the explanatory
-          variable is an ordered factor and hence the alternative hypothesis can
-          be specified
+    o     the test statistic in the logrank test is now a scalar if the
+          explanatory variable is an ordered factor
 
 
                 CHANGES in `coin' VERSION 1.0-22
