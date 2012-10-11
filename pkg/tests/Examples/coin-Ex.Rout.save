@@ -868,7 +868,7 @@ alternative hypothesis: true mu is not equal to 0
 >   ### asymptotic tests for carcinoma data
 >   surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)
 
-	Asymptotic Logrank Test
+	Asymptotic 2-Sample Logrank Test
 
 data:  Surv(time, event) by stadium (II, IIA) 
 Z = 2.3373, p-value = 0.01942
@@ -900,7 +900,7 @@ group=1 8        8     5.16      1.56      3.76
 >   ### p = 0.0505
 >   surv_test(Surv(time) ~ group, data = exdata, distribution = "exact")
 
-	Exact Logrank Test
+	Exact 2-Sample Logrank Test
 
 data:  Surv(time) by group (0, 1) 
 Z = 1.9201, p-value = 0.05051
@@ -910,7 +910,7 @@ alternative hypothesis: true mu is not equal to 1
 >   surv_test(Surv(time) ~ group, data = exdata, distribution = "exact",
 +             ties.method = "average-scores")
 
-	Exact Logrank Test
+	Exact 2-Sample Logrank Test
 
 data:  Surv(time) by group (0, 1) 
 Z = 1.9865, p-value = 0.04678
@@ -937,7 +937,7 @@ alternative hypothesis: true mu is not equal to 1
 >   surv_test(Surv(time, event) ~ group, data = lungcancer,
 +             distribution = "exact", ties.method = "average-scores")
 
-	Exact Logrank Test
+	Exact 2-Sample Logrank Test
 
 data:  Surv(time, event) by group (newdrug, control) 
 Z = 2.9492, p-value = 0.000999
@@ -1529,7 +1529,7 @@ attr(,"conf.level")
 >   surv_test(Surv(time, event) ~ group, data = g3,
 +                distribution = "exact")
 
-	Exact Logrank Test
+	Exact 2-Sample Logrank Test
 
 data:  Surv(time, event) by group (Control, RIT) 
 Z = -2.1711, p-value = 0.02877
@@ -1551,7 +1551,7 @@ alternative hypothesis: true mu is not equal to 1
 >   surv_test(Surv(time, event) ~ group, data = gbm,
 +             distribution = "exact")
 
-	Exact Logrank Test
+	Exact 2-Sample Logrank Test
 
 data:  Surv(time, event) by group (Control, RIT) 
 Z = -3.2215, p-value = 0.0001588
@@ -1562,7 +1562,7 @@ alternative hypothesis: true mu is not equal to 1
 >   surv_test(Surv(time, event) ~ group | histology, data = glioma,
 +             distribution = approximate(B = 10000))
 
-	Approximative Logrank Test
+	Approximative 2-Sample Logrank Test
 
 data:  Surv(time, event) by
 	 group (Control, RIT) 
@@ -2165,7 +2165,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  63.32 2.44 74.35 NA NA 
+Time elapsed:  63.63 2.57 71.46 NA NA 
 > grDevices::dev.off()
 null device 
           1 

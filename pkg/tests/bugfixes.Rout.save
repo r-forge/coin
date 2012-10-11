@@ -570,7 +570,7 @@ alternative hypothesis: true mu is less than 0
 > ### nullvalue never got printed
 > surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)
 
-	Asymptotic Logrank Test
+	Asymptotic 2-Sample Logrank Test
 
 data:  Surv(time, event) by stadium (II, IIA) 
 Z = 2.3373, p-value = 0.01942
@@ -585,7 +585,7 @@ alternative hypothesis: true mu is not equal to 1
 
 data:  Surv(time, event) by group (A < B < C) 
 Z = -5.43, p-value = 5.636e-08
-alternative hypothesis: true mu is not equal to 1 
+alternative hypothesis: two.sided 
 
 > surv_test(Surv(time, event) ~ ordered(group), data = photocar) # worked
 
@@ -593,9 +593,9 @@ alternative hypothesis: true mu is not equal to 1
 
 data:  Surv(time, event) by ordered(group) (A < B < C) 
 Z = -5.43, p-value = 5.636e-08
-alternative hypothesis: true mu is not equal to 1 
+alternative hypothesis: two.sided 
 
 > 
 > proc.time()
    user  system elapsed 
-   3.82    0.32    4.38 
+   3.80    0.42    4.33 

@@ -413,7 +413,7 @@ Loading required package: multcomp
 > surv_test(Surv(time, event) ~ treatment | gender, data = srv,
 +           ties = "average")
 
-	Asymptotic Logrank Test
+	Asymptotic 2-Sample Logrank Test
 
 data:  Surv(time, event) by treatment (1, 2) 
 	 stratified by gender 
@@ -989,4 +989,4 @@ alternative hypothesis: true mu is not equal to 1
 > 
 > proc.time()
    user  system elapsed 
-   5.31    0.20    5.72 
+   5.42    0.09    5.67 

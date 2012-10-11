@@ -43,6 +43,9 @@
     o     the logrank test now allows the alternative hypothesis to be specified
           when the explanatory variable is an ordered factor
 
+    o     the printed output for the logrank test now reports whether a 2- or K-
+          sample test has been carried out
+
     BUG FIXES
 
     o     monotonicity of step-down adjusted p-values was not enforced when
@@ -68,7 +71,7 @@
           distribution in the one-sided case
 
     o     the printed output for the logrank test did not include the null
-          parameter when the test statistic was a scalar
+          parameter in the 2-sample case
 
     OTHER CHANGES
 

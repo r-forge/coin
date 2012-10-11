@@ -194,19 +194,20 @@ surv_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) ||
-              nlevels(object@x[[1]]) == 2
+    twosamp <- nlevels(object@x[[1]]) == 2
+
+    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) || twosamp
     RET <- independence_test(object,
         teststat = if(scalar) "scalar" else "quad",
         check = check, ytrafo = ytrafo, ...)
 
-    if (is_scalar(RET@statistic))
-        RET@nullvalue <- 1 # Lehmann alternatives S_1(t) = [S_2(t)]^theta
-
     if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association (Tarone-Ware) Test"
-    else
-        RET@method <- "Logrank Test"
+    else if (twosamp) {
+        RET@method <- "2-Sample Logrank Test"
+        RET@nullvalue <- 1 # Lehmann alternatives S_1(t) = [S_2(t)]^theta
+    } else
+        RET@method <- "K-Sample Logrank Test"
     return(RET)
 }
 
