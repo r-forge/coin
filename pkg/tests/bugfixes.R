@@ -331,3 +331,6 @@ fmaxstat_trafo(a)
 
 ### wrong p-value in the one-sided case
 median_test(y1 ~ x, data = df, alternative = "less")
+
+### nullvalue never got printed
+surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)

@@ -567,6 +567,16 @@ Z = 2.6458, p-value = 0.9959
 alternative hypothesis: true mu is less than 0 
 
 > 
+> ### nullvalue never got printed
+> surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)
+
+	Asymptotic Logrank Test
+
+data:  Surv(time, event) by stadium (II, IIA) 
+Z = 2.3373, p-value = 0.01942
+alternative hypothesis: true mu is not equal to 1 
+
+> 
 > proc.time()
    user  system elapsed 
-   3.75    0.34    4.16 
+   3.75    0.34    4.18 

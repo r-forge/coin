@@ -64,12 +64,19 @@
     o     the median test p-value computation used the wrong tail of the null
           distribution in the one-sided case
 
+    o     the printed output from surv_test did not include the null parameter
+          when the test statistic was a scalar
+
     OTHER CHANGES
 
     o     the median and logrank transformations are now increasing functions of
           the data
 
     o     documentation updates
+
+    o     the test statistic in surv_test is now a scalar if the explanatory
+          variable is an ordered factor and hence the alternative hypothesis can
+          be specified
 
 
                 CHANGES in `coin' VERSION 1.0-22

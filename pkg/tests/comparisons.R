@@ -547,7 +547,8 @@ brain <- data.frame(time = c(4,  5,  9, 12, 20, 25, 30,
                                              c(rep(1, 7), rep(2, 7),
                                                rep(3, 8), rep(3, 8)))))
 
-lta <- surv_test(Surv(time, event) ~ treatment, data = brain)
+lta <- surv_test(Surv(time, event) ~ treatment, data = brain,
+                 ties.method = "average-scores")
 
 # test statistic, page 516
 isequal(round(statistic(lta), 3), 5.012)
@@ -576,7 +577,8 @@ stopifnot(isequal(round(pvalue(pta), 4), 0.007))
 
 brain$treatment <- ordered(brain$treatment)
 
-lta <- surv_test(Surv(time, event) ~ treatment, data = brain)
+lta <- surv_test(Surv(time, event) ~ treatment, data = brain,
+                 ties.method = "average-scores")
 
 # test statistic, page 536
 isequal(round(statistic(lta), 3), 1.773)

@@ -418,7 +418,7 @@ Loading required package: multcomp
 data:  Surv(time, event) by treatment (1, 2) 
 	 stratified by gender 
 Z = -1.5446, p-value = 0.1224
-alternative hypothesis: two.sided 
+alternative hypothesis: true mu is not equal to 1 
 
 > 
 > pvalue(surv_test(Surv(time, event) ~ treatment | gender, data = srv,
@@ -593,17 +593,18 @@ alternative hypothesis: two.sided
 +                                              c(rep(1, 7), rep(2, 7),
 +                                                rep(3, 8), rep(3, 8)))))
 > 
-> lta <- surv_test(Surv(time, event) ~ treatment, data = brain)
+> lta <- surv_test(Surv(time, event) ~ treatment, data = brain,
++                  ties.method = "average-scores")
 > 
 > # test statistic, page 516
 > isequal(round(statistic(lta), 3), 5.012)
-[1] 4.242
+[1] 4.298
 [1] 5.012
 [1] FALSE
 > 
 > # asymptotic p-value, page 516
 > isequal(round(pvalue(lta), 4), 0.1709)
-[1] 0.1199
+[1] 0.1166
 [1] 0.1709
 [1] FALSE
 > 
@@ -628,17 +629,18 @@ alternative hypothesis: two.sided
 > 
 > brain$treatment <- ordered(brain$treatment)
 > 
-> lta <- surv_test(Surv(time, event) ~ treatment, data = brain)
+> lta <- surv_test(Surv(time, event) ~ treatment, data = brain,
++                  ties.method = "average-scores")
 > 
 > # test statistic, page 536
 > isequal(round(statistic(lta), 3), 1.773)
-[1] 2.071
+[1] 1.445
 [1] 1.773
 [1] FALSE
 > 
 > # asymptotic p-value, page 536
 > isequal(round(pvalue(lta), 4), 0.0762)
-[1] 0.1502
+[1] 0.1485
 [1] 0.0762
 [1] FALSE
 > 
@@ -777,9 +779,9 @@ alternative hypothesis: two.sided
 +                     distribution = approximate(B = 90000))
 > 
 > print(pvalue(btMC))
-[1] 0.0001111111
+[1] 8.888889e-05
 99 percent confidence interval:
- 4.130035e-05 2.377386e-04 
+ 2.856851e-05 2.064126e-04 
 
 > pci <- attr(pvalue(ltMC), "conf.int")
 > (pci[1] < 0.000112 & pci[2] > 0.000112)
@@ -987,4 +989,4 @@ alternative hypothesis: two.sided
 > 
 > proc.time()
    user  system elapsed 
-   5.27    0.15    5.61 
+   5.31    0.20    5.72 

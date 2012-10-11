@@ -194,15 +194,14 @@ surv_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    scalar <- FALSE
-    if (is.factor(object@x[[1]])) scalar <- nlevels(object@x[[1]]) == 2
+    scalar <- (is.ordered(object@x[[1]]) || nlevels(object@x[[1]]) == 2)
 
     RET <- independence_test(object,
-        teststat = ifelse(scalar, "scalar", "quad"),
+        teststat = if(scalar) "scalar" else "quad",
         check = check, ytrafo = ytrafo, ...)
 
-    if (extends(class(RET@statistic), "ScalarIndependenceTest"))
-        RET@nullvalue <- 0
+    if (is_scalar(RET@statistic))
+        RET@nullvalue <- 1 # Lehmann alternatives S_1(t) = [S_2(t)]^theta
 
     if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association (Tarone-Ware) Test"
