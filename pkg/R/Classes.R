@@ -10,8 +10,8 @@ setClass(Class = "IndependenceProblem",
 	weights = "numeric"
     ),
     validity = function(object) {
-        dims <- ((nrow(object@x) == nrow(object@y)) && 
-                 (nrow(object@x) == length(object@block))) 
+        dims <- ((nrow(object@x) == nrow(object@y)) &&
+                 (nrow(object@x) == length(object@block)))
         dims <- dims && (length(object@block) == length(object@weights))
         Wint <- max(abs(object@weights - floor(object@weights))) < eps()
         block <- all(table(object@block) > 1)
@@ -21,7 +21,7 @@ setClass(Class = "IndependenceProblem",
 )
 
 
-### Class for transformed data, the `x' variables are transformed 
+### Class for transformed data, the `x' variables are transformed
 ### to a (n x p) matrix `xtrans' and the `y' variables to `ytrans' (n x q).
 ### `scores' is a matrix of scores
 setClass(Class = "IndependenceTestProblem",
@@ -32,8 +32,8 @@ setClass(Class = "IndependenceTestProblem",
         ytrafo     = "function"
     ),
     contains = "IndependenceProblem",
-    validity = function(object) 
-        (storage.mode(object@xtrans) == "double" && 
+    validity = function(object)
+        (storage.mode(object@xtrans) == "double" &&
          storage.mode(object@ytrans) == "double")
 )
 
@@ -53,7 +53,7 @@ setClass(Class = "Variance",
 
 setClassUnion("VarCovar", c("CovarianceMatrix", "Variance"))
 
-### Linear statistic, expectation and covariance according to 
+### Linear statistic, expectation and covariance according to
 ### Strasser & Weber (1999)
 setClass(Class = "IndependenceLinearStatistic",
     representation = representation(
@@ -80,7 +80,7 @@ setClass(Class = "ScalarIndependenceTestStatistic",
         alternative   = "character"
     ),
     contains = "IndependenceTestStatistic",
-    validity = function(object) 
+    validity = function(object)
         object@alternative %in% c("two.sided", "less", "greater")
 )
 
@@ -143,11 +143,13 @@ setClass(Class = "IndependenceTest",
 ### the "fitted" test for scalar linear statistics
 setClass(Class = "ScalarIndependenceTest",
     representation = representation(
+        parameter    = "character",
         nullvalue    = "numeric"
     ),
+    prototype = list(parameter = "mu"),
     contains = "IndependenceTest",
     validity = function(object)
-        extends(class(object@statistic), 
+        extends(class(object@statistic),
                 "ScalarIndependenceTestStatistic")
 )
 
@@ -164,7 +166,7 @@ setClass(Class = "ScalarIndependenceTestConfint",
 setClass(Class = "MaxTypeIndependenceTest",
     contains = "IndependenceTest",
     validity = function(object)
-        extends(class(object@statistic), 
+        extends(class(object@statistic),
                 "MaxTypeIndependenceTestStatistic")
 )
 
@@ -172,7 +174,7 @@ setClass(Class = "MaxTypeIndependenceTest",
 setClass(Class = "QuadTypeIndependenceTest",
     contains = "IndependenceTest",
     validity = function(object)
-        extends(class(object@statistic), 
+        extends(class(object@statistic),
                 "QuadTypeIndependenceTestStatistic")
 )
 
@@ -183,7 +185,7 @@ setClass(Class = "SymmetryProblem",
         if (ncol(object@x) != 1 || !is.factor(object@x[[1]]))
             stop(sQuote("x"), " slot does not contain a single factor")
         if (!is_completeblock(object))
-            stop(sQuote("object"), 
+            stop(sQuote("object"),
                  " is not a an unreplicated complete block design")
         TRUE
     }

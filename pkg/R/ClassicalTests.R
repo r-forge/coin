@@ -155,6 +155,7 @@ ansari_test.IndependenceProblem <- function(object,
             ansari_trafo(x, ties.method = ties.method)),
         check = check, ...)
 
+    RET@parameter <- "ratio of scales"
     RET@nullvalue <- 1
     RET@method <- "Ansari-Bradley Test"
 
@@ -205,6 +206,7 @@ surv_test.IndependenceProblem <- function(object,
         RET@method <- "Linear-by-Linear Association (Tarone-Ware) Test"
     else if (twosamp) {
         RET@method <- "2-Sample Logrank Test"
+        RET@parameter <- "theta"
         RET@nullvalue <- 1 # Lehmann alternatives S_1(t) = [S_2(t)]^theta
     } else
         RET@method <- "K-Sample Logrank Test"
@@ -320,6 +322,7 @@ spearman_test.IndependenceProblem <- function(object,
         ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
         check = check, ...)
 
+    RET@parameter <- "rho"
     RET@nullvalue <- 0
     RET@method <- "Spearman Correlation Test"
     return(RET)

@@ -46,6 +46,8 @@
     o     the printed output for the logrank test now reports whether a 2- or K-
           sample test has been carried out
 
+    o     objects of class "ScalarIndependenceTest" now has a 'parameter' slot
+
     BUG FIXES
 
     o     monotonicity of step-down adjusted p-values was not enforced when
@@ -70,7 +72,7 @@
     o     the median test p-value computation used the wrong tail of the null
           distribution in the one-sided case
 
-    o     the printed output for the logrank test did not include the null
+    o     the printed output for the logrank test did not report the tested
           parameter in the 2-sample case
 
     OTHER CHANGES
@@ -82,6 +84,9 @@
 
     o     the test statistic in the logrank test is now a scalar if the
           explanatory variable is an ordered factor
+
+    o     in the printed output for Ansari-Bradley and Spearman tests the tested
+          parameter has been renamed to 'ratio of scales' and 'rho' respectively
 
 
                 CHANGES in `coin' VERSION 1.0-22

@@ -418,7 +418,7 @@ Loading required package: multcomp
 data:  Surv(time, event) by treatment (1, 2) 
 	 stratified by gender 
 Z = -1.5446, p-value = 0.1224
-alternative hypothesis: true mu is not equal to 1 
+alternative hypothesis: true theta is not equal to 1 
 
 > 
 > pvalue(surv_test(Surv(time, event) ~ treatment | gender, data = srv,
@@ -989,4 +989,4 @@ alternative hypothesis: true mu is not equal to 1
 > 
 > proc.time()
    user  system elapsed 
-   5.42    0.09    5.67 
+   5.55    0.24    6.05 

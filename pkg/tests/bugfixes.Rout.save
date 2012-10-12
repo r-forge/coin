@@ -574,7 +574,7 @@ alternative hypothesis: true mu is less than 0
 
 data:  Surv(time, event) by stadium (II, IIA) 
 Z = 2.3373, p-value = 0.01942
-alternative hypothesis: true mu is not equal to 1 
+alternative hypothesis: true theta is not equal to 1 
 
 > 
 > ### failed to recognize 'x' as ordered if only scores were specified
@@ -598,4 +598,4 @@ alternative hypothesis: two.sided
 > 
 > proc.time()
    user  system elapsed 
-   3.80    0.42    4.33 
+   4.05    0.24    4.58 

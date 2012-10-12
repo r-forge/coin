@@ -125,8 +125,10 @@ setMethod(f = "show", signature = "ScalarIndependenceTest",
                     alternative = x@statistic@alternative,
                     data.name = dataname,
                     method = paste(distname, x@method))
-        if (length(x@nullvalue > 0))
-            RET$null.value = c(mu = x@nullvalue)
+        if (length(x@nullvalue > 0)) {
+            RET$null.value = x@nullvalue
+            names(RET$null.value) <- x@parameter
+        }
         if (length(x@estimates) > 0)
             RET <- c(RET, x@estimates)
         class(RET) <- "htest"
