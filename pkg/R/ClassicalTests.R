@@ -90,8 +90,8 @@ median_test.formula <- function(formula, data = list(), subset = NULL,
        frame = parent.frame(), ...)}
 
 median_test.IndependenceProblem <- function(object,
-    conf.int = FALSE, conf.level = 0.95,
-    mid.score = c("0", "0.5", "1"), ...) {
+    mid.score = c("0", "0.5", "1"), 
+    conf.int = FALSE, conf.level = 0.95, ...) {
 
     check <- function(object) {
         if (!(is_2sample(object) && is_numeric_y(object)))

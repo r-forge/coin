@@ -35,8 +35,8 @@
 
 \method{median_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{median_test}{IndependenceProblem}(object,
-    conf.int = FALSE, conf.level = 0.95,
-    mid.score = c("0", "0.5", "1"), ...)
+    mid.score = c("0", "0.5", "1"),
+    conf.int = FALSE, conf.level = 0.95, ...)
 
 \method{kruskal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{kruskal_test}{IndependenceProblem}(object,
