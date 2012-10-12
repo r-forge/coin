@@ -339,3 +339,9 @@ surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)
 surv_test(Surv(time, event) ~ group, data = photocar,
           scores = list(group = c(2, 4, 6))) # failed
 surv_test(Surv(time, event) ~ ordered(group), data = photocar) # worked
+
+### wrong nullvalue direction in one-sided cases
+surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
+          alternative = "less")
+surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
+          alternative = "greater")

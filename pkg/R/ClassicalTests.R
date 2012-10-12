@@ -206,8 +206,13 @@ surv_test.IndependenceProblem <- function(object,
         RET@method <- "Linear-by-Linear Association (Tarone-Ware) Test"
     else if (twosamp) {
         RET@method <- "2-Sample Logrank Test"
+        ## Lehmann alternatives: S_1(t) = [S_2(t)]^theta
         RET@parameter <- "theta"
-        RET@nullvalue <- 1 # Lehmann alternatives S_1(t) = [S_2(t)]^theta
+        RET@nullvalue <- 1 # theta = 1 => Proportional hazards
+        if (RET@statistic@alternative == "less")
+            RET@statistic@alternative <- "greater"
+        else if (RET@statistic@alternative  == "greater")
+            RET@statistic@alternative  <- "less"
     } else
         RET@method <- "K-Sample Logrank Test"
     return(RET)

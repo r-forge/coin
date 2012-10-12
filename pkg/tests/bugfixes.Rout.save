@@ -596,6 +596,26 @@ Z = -5.43, p-value = 5.636e-08
 alternative hypothesis: two.sided 
 
 > 
+> ### wrong nullvalue direction in one-sided cases
+> surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
++           alternative = "less")
+
+	Asymptotic 2-Sample Logrank Test
+
+data:  Surv(time, event) by stadium (II, IIA) 
+Z = 2.3373, p-value = 0.9903
+alternative hypothesis: true theta is greater than 1 
+
+> surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
++           alternative = "greater")
+
+	Asymptotic 2-Sample Logrank Test
+
+data:  Surv(time, event) by stadium (II, IIA) 
+Z = 2.3373, p-value = 0.009712
+alternative hypothesis: true theta is less than 1 
+
+> 
 > proc.time()
    user  system elapsed 
-   4.05    0.24    4.58 
+   3.94    0.37    4.83 
