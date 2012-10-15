@@ -560,7 +560,7 @@ alternative hypothesis: true mu is not equal to 0
 > ### wrong p-value in the one-sided case
 > median_test(y1 ~ x, data = df, alternative = "less")
 
-	Asymptotic Median Test
+	Asymptotic 2-Sample Median Test
 
 data:  y1 by x (I, II) 
 Z = 2.6458, p-value = 0.9959
@@ -577,45 +577,6 @@ Z = 2.3373, p-value = 0.01942
 alternative hypothesis: true theta is not equal to 1 
 
 > 
-> ### failed to recognize 'x' as ordered if only scores were specified
-> surv_test(Surv(time, event) ~ group, data = photocar,
-+           scores = list(group = c(2, 4, 6))) # failed
-
-	Asymptotic Linear-by-Linear Association (Tarone-Ware) Test
-
-data:  Surv(time, event) by group (A < B < C) 
-Z = -5.43, p-value = 5.636e-08
-alternative hypothesis: two.sided 
-
-> surv_test(Surv(time, event) ~ ordered(group), data = photocar) # worked
-
-	Asymptotic Linear-by-Linear Association (Tarone-Ware) Test
-
-data:  Surv(time, event) by ordered(group) (A < B < C) 
-Z = -5.43, p-value = 5.636e-08
-alternative hypothesis: two.sided 
-
-> 
-> ### wrong nullvalue direction in one-sided cases
-> surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
-+           alternative = "less")
-
-	Asymptotic 2-Sample Logrank Test
-
-data:  Surv(time, event) by stadium (II, IIA) 
-Z = 2.3373, p-value = 0.9903
-alternative hypothesis: true theta is greater than 1 
-
-> surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
-+           alternative = "greater")
-
-	Asymptotic 2-Sample Logrank Test
-
-data:  Surv(time, event) by stadium (II, IIA) 
-Z = 2.3373, p-value = 0.009712
-alternative hypothesis: true theta is less than 1 
-
-> 
 > proc.time()
    user  system elapsed 
-   3.94    0.37    4.83 
+   3.77    0.26    4.19 

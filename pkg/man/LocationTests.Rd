@@ -2,19 +2,21 @@
 \alias{oneway_test}
 \alias{oneway_test.formula}
 \alias{oneway_test.IndependenceProblem}
+\alias{wilcox_test}
 \alias{wilcox_test.formula}
 \alias{wilcox_test.IndependenceProblem}
-\alias{wilcox_test}
-\alias{normal_test.formula}
-\alias{normal_test.IndependenceProblem}
-\alias{normal_test}
-\alias{median_test.formula}
-\alias{median_test.IndependenceProblem}
-\alias{median_test}
+\alias{kruskal_test}
 \alias{kruskal_test.formula}
 \alias{kruskal_test.IndependenceProblem}
-\alias{kruskal_test}
+\alias{normal_test}
+\alias{normal_test.formula}
+\alias{normal_test.IndependenceProblem}
+\alias{median_test}
+\alias{median_test.formula}
+\alias{median_test.IndependenceProblem}
+
 \title{ Independent Two- and K-Sample Location Tests }
+
 \description{
   Testing the equality of the distributions of a numeric response in two
   or more independent groups against shift alternatives.
@@ -22,39 +24,42 @@
 \usage{
 
 \method{oneway_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{oneway_test}{IndependenceProblem}(object, ...)
+\method{oneway_test}{IndependenceProblem}(object, \dots)
 
 \method{wilcox_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{wilcox_test}{IndependenceProblem}(object,
-    conf.int = FALSE, conf.level = 0.95, ...)
+    conf.int = FALSE, conf.level = 0.95, \dots)
+
+\method{kruskal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{kruskal_test}{IndependenceProblem}(object,
+    distribution = c("asymptotic", "approximate"), \dots)
 
 \method{normal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{normal_test}{IndependenceProblem}(object,
     ties.method = c("mid-ranks", "average-scores"),
-    conf.int = FALSE, conf.level = 0.95, ...)
+    conf.int = FALSE, conf.level = 0.95, \dots)
 
 \method{median_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{median_test}{IndependenceProblem}(object,
     mid.score = c("0", "0.5", "1"),
-    conf.int = FALSE, conf.level = 0.95, ...)
-
-\method{kruskal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{kruskal_test}{IndependenceProblem}(object,
-    distribution = c("asymptotic", "approximate"), ...)
+    conf.int = FALSE, conf.level = 0.95, \dots)
 
 }
 \arguments{
-  \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}
-    is a numeric variable giving the data values and \code{x} a factor
-    with two or more levels giving the corresponding groups. \code{block} is an
-    optional factor for stratification.}
+  \item{formula}{a formula of the form \code{y ~ x | block} where
+    \code{y} is a numeric variable giving the data values and \code{x} a
+    factor with two or more levels giving the corresponding
+    groups. \code{block} is an optional factor for stratification.}
   \item{data}{an optional data frame containing the variables in the
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
   \item{weights}{an optional formula of the form \code{~ w} defining
-      integer valued weights for the observations.}
+    integer valued weights for the observations.}
   \item{object}{an object of class \code{IndependenceProblem}.}
+  \item{conf.int}{a logical indicating whether a confidence interval for
+    the difference in location should be computed.}
+  \item{conf.level}{confidence level of the interval.}
   \item{distribution}{a character, the null distribution of the test
     statistic can be computed exactly (\code{"exact"}) or can be
     approximated by its asymptotic distribution (\code{"asymptotic"}) or
@@ -63,65 +68,63 @@
     \code{\link{asymptotic}} can be used to specify how the exact
     conditional distribution of the test statistic should be calculated
     or approximated.}
-  \item{ties.method}{a character, two methods are available to adjust scores for ties,
-      either the score generating function is applied to \code{mid-ranks}
-      or the scores computed based on random ranks are averaged for all tied
-      values (\code{average-scores}).}
-  \item{conf.int}{a logical indicating whether a confidence interval
-    for the difference in location should be computed.}
-  \item{conf.level}{confidence level of the interval.}
+  \item{ties.method}{a character, two methods are available to adjust
+    scores for ties: either the score generating function is applied to
+    \code{"mid-ranks"} or the scores computed based on random ranks are
+    averaged for all tied values (\code{"average-scores"}).}
   \item{mid.score}{a character, the score assigned to observations
     exactly equal to the median.  Must be one of \code{"0"} (default),
-    \code{"0.5"} or \code{"1"} (see details).}
+    \code{"0.5"} or \code{"1"} (see \sQuote{Details}).}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
 
   The null hypothesis of the equality of the distribution of \code{y} in
   the groups given by \code{x} is tested. In particular, the methods
-  documented here are designed to detect shift alternatives. For a general
-  description of the test procedures documented here we refer to Hollander &
-  Wolfe (1999).
+  documented here are designed to detect shift alternatives. For a
+  general description of the test procedures documented here we refer to
+  Hollander & Wolfe (1999).
 
-  The test procedures apply a rank transformation to the response values
-  \code{y}, except of \code{oneway_test} which computes a test statistic
-  using the untransformed response values.
+  The test procedures apply a rank-based transformation, i.e., either
+  the rank transformation itself or a function of the ranks, to the
+  response values \code{y}, except \code{oneway_test} which computes its
+  test statistic using the untransformed response values.
 
   The asymptotic null distribution is computed by default for all
-  procedures. Exact p-values may be computed for the two-sample problems and
-  can be approximated via Monte-Carlo resampling
-  for all procedures. Exact p-values
-  are computed either by the shift algorithm (Streitberg & Roehmel, 1986,
-  1987) or by the split-up algorithm (van de Wiel, 2001).
+  procedures.  Exact \eqn{p}-values may be computed for the two-sample
+  problems and can be approximated via Monte Carlo resampling for all
+  procedures.  The exact \eqn{p}-values are computed either by the shift
+  algorithm (Streitberg & Roehmel, 1986, 1987) or by the split-up
+  algorithm (van de Wiel, 2001).
 
-  The linear rank tests for two samples (\code{wilcox_test},
-  \code{normal_test} and \code{median_test}) can be used to test the
-  two-sided hypothesis \eqn{H_0: Y_1 - Y_2 = 0}, where \eqn{Y_i} is the
-  median of the responses in the \eqn{i}th sample.  Confidence intervals
-  for the difference in location are available for the rank-based
-  procedures and are computed according to Bauer (1972).  In case
-  \code{alternative = "less"}, the null hypothesis \eqn{H_0: Y_1 - Y_2
-  \ge 0} is tested and \code{alternative = "greater"} corresponds to a
-  null hypothesis \eqn{H_0: Y_1 - Y_2 \le 0}.
+  In the two-sample case the linear rank tests \code{wilcox_test},
+  \code{normal_test} and \code{median_test} can be used to test the
+  two-sided hypothesis \eqn{H_0: \mu = 0}, where \eqn{\mu = Y_1 - Y_2}
+  and \eqn{Y_i} is the median of the responses in the \eqn{i}th sample.
+  Confidence intervals for the difference in location are available for
+  these rank-based procedures and are computed according to Bauer
+  (1972).  In case \code{alternative = "less"}, the null hypothesis
+  \eqn{H_0: \mu \ge 0} is tested and \code{alternative = "greater"}
+  corresponds to the null hypothesis \eqn{H_0: \mu \le 0}.
 
   The median test offers a choice of mid-score, i.e., the score assigned
   to observations exactly equal to the median, using \code{"mid-score"}.
-  The first alternative, \code{"0"}, implies that the linear test
+  In the two-sample case \code{"0"} implies that the linear test
   statistic is simply the number of subjects in the 2nd sample with
-  observations greater than the median of the pooled sample.  The test
-  statistic in the last alternative, \code{"1"}, also includes the
-  number of subjects in the 2nd sample whose observations are equal to
+  observations greater than the median of the pooled sample.  The linear
+  test statistic for the last alternative \code{"1"} is the number of
+  subjects in the 2nd sample whose observations are greater or equal to
   the median of the pooled sample.  If \code{"0.5"} is selected, the
   linear test statistic is the mean of the test statistics corresponding
   to the first and last alternatives and has a symmetric distribution,
   or at least approximately so, under the null hypothesis (see Hajek,
-  Sidak and Sen, 1999, p. 97--98).
+  Sidak and Sen, 1999, pp. 97--98).
 
-  In case \code{x} is an ordered factor, \code{kruskal_test} computes the
-  linear-by-linear association test for ordered alternatives.
+  In case \code{x} is an ordered factor, the linear-by-linear
+  association test for ordered alternatives is computed.
 
   For the adjustment of scores for tied values see Hajek, Sidak and Sen
-  (1999, p. 133--135).
+  (1999, pp. 133--135).
 
 }
 \value{
@@ -137,7 +140,7 @@
 \references{
 
   Myles Hollander & Douglas A. Wolfe (1999).
-  \emph{Nonparametric Statistical Methods, 2nd Edition}.
+  \emph{Nonparametric Statistical Methods}, 2nd Edition.
   New York: John Wiley & Sons.
 
   Bernd Streitberg & Joachim Roehmel (1986).
@@ -161,7 +164,7 @@
   687--690.
 
   Jaroslav Hajek, Zbynek Sidak & Pranab K. Sen (1999),
-  \emph{Theory of Rank Tests}.
+  \emph{Theory of Rank Tests}, 2nd Edition.
   San Diego: Academic Press.
 
 }

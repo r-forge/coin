@@ -48,6 +48,11 @@
 
     o     objects of class "ScalarIndependenceTest" now has a 'parameter' slot
 
+    o     the normal quantile test and the median test can now also handle
+          K-sample problems and allows the alternative hypothesis to be
+          specified when the explanatory variable is an ordered factor (see
+          ?normal_test and ?median_test)
+
     BUG FIXES
 
     o     monotonicity of step-down adjusted p-values was not enforced when
@@ -75,6 +80,10 @@
     o     the printed output for the logrank test did not report the tested
           parameter in the 2-sample case
 
+    o     the printed output for the one-way test reported the parameter tested 
+          in the 2-sample case when the explanatory variable was an ordered
+          factor
+
     OTHER CHANGES
 
     o     the median and logrank transformations are now increasing functions of
@@ -82,11 +91,16 @@
 
     o     documentation updates
 
-    o     the test statistic in the logrank test is now a scalar if the
-          explanatory variable is an ordered factor
+    o     the test statistic in the Kruskal-Wallis test and the logrank test is
+          now a scalar if the explanatory variable is an ordered factor
 
-    o     in the printed output for Ansari-Bradley and Spearman tests the tested
-          parameter has been renamed to 'ratio of scales' and 'rho' respectively
+    o     in the printed output for the Ansari-Bradley test and the Spearman test
+          the tested parameter has been renamed to 'ratio of scales' and 'rho'
+          respectively
+
+    o     the printed output for the one-way test now reports that a 
+          linear-by-linear association test is carried out when the explanatory
+          variable is an ordered factor
 
 
                 CHANGES in `coin' VERSION 1.0-22

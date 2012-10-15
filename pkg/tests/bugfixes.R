@@ -334,14 +334,3 @@ median_test(y1 ~ x, data = df, alternative = "less")
 
 ### nullvalue never got printed
 surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)
-
-### failed to recognize 'x' as ordered if only scores were specified
-surv_test(Surv(time, event) ~ group, data = photocar,
-          scores = list(group = c(2, 4, 6))) # failed
-surv_test(Surv(time, event) ~ ordered(group), data = photocar) # worked
-
-### wrong nullvalue direction in one-sided cases
-surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
-          alternative = "less")
-surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
-          alternative = "greater")

@@ -35,53 +35,54 @@ Loading required package: multcomp
 > dat <- data.frame(x = gl(2, 50), y = rnorm(100), block = gl(5, 20))[sample(1:100,
 + 75),]
 > 
+> 
 > ### Wilcoxon Mann-Whitney Rank Sum Test
 > 
 > ### asymptotic distribution
 > ptwo <- wilcox.test(y ~ x, data = dat, correct = FALSE, exact = FALSE)$p.value
-> pless <- wilcox.test(y ~ x, data = dat, alternative = "less", 
+> pless <- wilcox.test(y ~ x, data = dat, alternative = "less",
 +                      correct = FALSE, exact = FALSE)$p.value
-> pgreater <- wilcox.test(y ~ x, data = dat, alternative = "greater", 
+> pgreater <- wilcox.test(y ~ x, data = dat, alternative = "greater",
 +                         correct = FALSE, exact = FALSE)$p.value
 > 
 > stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat)), ptwo))
 > stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "less")),
 +                   pless))
-> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater")), 
+> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater")),
 +                   pgreater))
 > 
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt",
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo))), ptwo))
 > ### check direct supply of a function via ytrafo
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt",
 +     ytrafo = rank_trafo)), ptwo))
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt",
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
 +     alternative = "less")), pless))
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt",
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
 +     alternative = "greater")), pgreater))
 > 
 > ### exact distribution
 > ptwo <- wilcox.test(y ~ x, data = dat, exact = TRUE)$p.value
 > pless <- wilcox.test(y ~ x, data = dat, alternative = "less", exact = TRUE)$p.value
-> pgreater <- wilcox.test(y ~ x, data = dat, alternative = "greater", 
+> pgreater <- wilcox.test(y ~ x, data = dat, alternative = "greater",
 +                         exact = TRUE)$p.value
 > 
-> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, distribution = "exact")), 
+> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, distribution = "exact")),
 +                   ptwo))
-> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "less", 
+> stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "less",
 +                              distribution = "exact")), pless))
 > stopifnot(isequal(pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater",
 +                              distribution = "exact")), pgreater))
 > 
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact",
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo))), ptwo))
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact",
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
 +     alternative = "less")), pless))
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact",
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
 +     alternative = "greater")), pgreater))
 > 
 > ### approximated distribution
@@ -90,7 +91,7 @@ Loading required package: multcomp
 +                    distribution = "approx")) / pless
 > rgreater <- pvalue(wilcox_test(y ~ x, data = dat, alternative = "greater",
 +                    distribution = "approx")) / pgreater
-> stopifnot(all(c(rtwo, rless, rgreater) > 0.9 & 
+> stopifnot(all(c(rtwo, rless, rgreater) > 0.9 &
 +               c(rtwo, rless, rgreater) < 1.1))
 > 
 > ### <FIXME> add block examples </FIXME>
@@ -105,93 +106,94 @@ Loading required package: multcomp
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact"))
 [1] 0.1847028
 > 
-> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "asympt", 
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "asympt",
 +                    alternative = "less"))
          1 
 0.08974461 
-> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx", 
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx",
 +                    alternative = "less"))
 [1] 0.099
 99 percent confidence interval:
  0.07613518 0.12577658 
 
-> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact", 
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact",
 +                    alternative = "less"))
 [1] 0.09335664
 > 
-> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "asympt", 
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "asympt",
 +                    alternative = "greater"))
         1 
 0.9102554 
-> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx", 
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx",
 +                    alternative = "greater"))
 [1] 0.917
 99 percent confidence interval:
  0.8919859 0.9379376 
 
-> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact", 
+> pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact",
 +                    alternative = "greater"))
 [1] 0.9098776
 > 
 > ### sanity checks
 > try(wilcox_test(x ~ y, data = dat))
 Error in check(itp) : 
-  'object' does not represent a two sample problem (maybe the grouping variable is not a factor?)
+  'object' does not represent a two-sample problem (maybe the grouping variable is not a factor?)
 > try(wilcox_test(x ~ y | y, data = dat))
 Error in .local(.Object, ...) : 'block' is not a factor
 > 
-> ### Ansari-Bradley Test 
+> 
+> ### Ansari-Bradley Test
 > 
 > ### asymptotic distribution
 > ptwo <- ansari.test(y ~ x, data = dat, correct = FALSE, exact = FALSE)$p.value
-> pless <- ansari.test(y ~ x, data = dat, alternative = "less", 
+> pless <- ansari.test(y ~ x, data = dat, alternative = "less",
 +                      correct = FALSE, exact = FALSE)$p.value
-> pgreater <- ansari.test(y ~ x, data = dat, alternative = "greater", 
+> pgreater <- ansari.test(y ~ x, data = dat, alternative = "greater",
 +                         correct = FALSE, exact = FALSE)$p.value
 > 
 > stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat)), ptwo))
 > stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "less")),
 +                   pless))
-> stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "greater")), 
+> stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "greater")),
 +                   pgreater))
 > 
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt",
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt",
++     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo),
 +     alternative = "greater")), pless))
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt",
++     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo),
 +     alternative = "less")), pgreater))
 > 
 > ### exact distribution
 > ptwo <- ansari.test(y ~ x, data = dat, exact = TRUE)$p.value
 > pless <- ansari.test(y ~ x, data = dat, alternative = "less", exact = TRUE)$p.value
-> pgreater <- ansari.test(y ~ x, data = dat, alternative = "greater", 
+> pgreater <- ansari.test(y ~ x, data = dat, alternative = "greater",
 +                         exact = TRUE)$p.value
 > 
 > ### <FIXME>: Definition of two-sided P-values! </FIXME>
-> (isequal(pvalue(ansari_test(y ~ x, data = dat, distribution = "exact")), 
+> (isequal(pvalue(ansari_test(y ~ x, data = dat, distribution = "exact")),
 +                   ptwo))
 [1] 0.2125862712
 [1] 0.213574129
 [1] FALSE
-> stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "less", 
+> stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "less",
 +                              distribution = "exact")), pless))
 > stopifnot(isequal(pvalue(ansari_test(y ~ x, data = dat, alternative = "greater",
 +                              distribution = "exact")), pgreater))
 > 
 > ### <FIXME>: Definition of two-sided P-values! </FIXME>
-> (isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
+> (isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact",
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
 [1] 0.2125862712
 [1] 0.213574129
 [1] FALSE
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact",
++     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo),
 +     alternative = "greater")), pless))
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact", 
-+     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo), 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "exact",
++     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo),
 +     alternative = "less")), pgreater))
 > 
 > ### approximated distribution
@@ -201,7 +203,7 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > rgreater <- pvalue(ansari_test(y ~ x, data = dat, alternative = "greater",
 +                    distribution = "approx")) / pgreater
 > ### <FIXME> ??? </FIXME>
-> (all(c(rtwo, rless, rgreater) > 0.9 & 
+> (all(c(rtwo, rless, rgreater) > 0.9 &
 +               c(rtwo, rless, rgreater) < 1.1))
 [1] TRUE
 > 
@@ -210,18 +212,12 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > ### sanity checks
 > try(ansari_test(x ~ y, data = dat))
 Error in check(itp) : 
-  'object' does not represent a two sample problem (maybe the grouping variable is not a factor?)
+  'object' does not represent a two-sample problem (maybe the grouping variable is not a factor?)
 > try(ansari_test(x ~ y | y, data = dat))
 Error in .local(.Object, ...) : 'block' is not a factor
 > 
-> ### the remaining three candidates
-> ### asymptotic distribution
-> ptwo <- wilcox.test(y ~ x, data = dat, correct = FALSE)$p.value
-> pless <- wilcox.test(y ~ x, data = dat, alternative = "less",
-+                      correct = FALSE)$p.value
-> pgreater <- wilcox.test(y ~ x, data = dat, alternative = "greater", 
-+                         correct = FALSE)$p.value
 > 
+> ### One-way Test
 > oneway_test(y ~ x, dat = dat)
 
 	Asymptotic 2-Sample Permutation Test
@@ -247,9 +243,11 @@ Z = -0.7774, p-value = 0.7815
 alternative hypothesis: true mu is greater than 0 
 
 > 
+> 
+> ### Normal Scores Test
 > normal_test(y ~ x, dat = dat)
 
-	Asymptotic Normal Quantile (van der Waerden) Test
+	Asymptotic 2-Sample Normal Quantile (van der Waerden) Test
 
 data:  y by x (1, 2) 
 Z = -0.8596, p-value = 0.39
@@ -257,7 +255,7 @@ alternative hypothesis: true mu is not equal to 0
 
 > normal_test(y ~ x, dat = dat, alternative = "less")
 
-	Asymptotic Normal Quantile (van der Waerden) Test
+	Asymptotic 2-Sample Normal Quantile (van der Waerden) Test
 
 data:  y by x (1, 2) 
 Z = -0.8596, p-value = 0.195
@@ -265,16 +263,18 @@ alternative hypothesis: true mu is less than 0
 
 > normal_test(y ~ x, dat = dat, alternative = "greater")
 
-	Asymptotic Normal Quantile (van der Waerden) Test
+	Asymptotic 2-Sample Normal Quantile (van der Waerden) Test
 
 data:  y by x (1, 2) 
 Z = -0.8596, p-value = 0.805
 alternative hypothesis: true mu is greater than 0 
 
 > 
+> 
+> ### Median Test
 > median_test(y ~ x, dat = dat)
 
-	Asymptotic Median Test
+	Asymptotic 2-Sample Median Test
 
 data:  y by x (1, 2) 
 Z = -0.8015, p-value = 0.4228
@@ -282,7 +282,7 @@ alternative hypothesis: true mu is not equal to 0
 
 > median_test(y ~ x, dat = dat, alternative = "less")
 
-	Asymptotic Median Test
+	Asymptotic 2-Sample Median Test
 
 data:  y by x (1, 2) 
 Z = -0.8015, p-value = 0.2114
@@ -290,26 +290,54 @@ alternative hypothesis: true mu is less than 0
 
 > median_test(y ~ x, dat = dat, alternative = "greater")
 
-	Asymptotic Median Test
+	Asymptotic 2-Sample Median Test
 
 data:  y by x (1, 2) 
 Z = -0.8015, p-value = 0.7886
 alternative hypothesis: true mu is greater than 0 
 
 > 
+> 
+> ### Logrank Test
+> surv_test(Surv(y) ~ x, dat = dat)
+
+	Asymptotic 2-Sample Logrank Test
+
+data:  Surv(y) by x (1, 2) 
+Z = -1.0738, p-value = 0.2829
+alternative hypothesis: true theta is not equal to 1 
+
+> surv_test(Surv(y) ~ x, dat = dat, alternative = "less")
+
+	Asymptotic 2-Sample Logrank Test
+
+data:  Surv(y) by x (1, 2) 
+Z = -1.0738, p-value = 0.1414
+alternative hypothesis: true theta is greater than 1 
+
+> surv_test(Surv(y) ~ x, dat = dat, alternative = "greater")
+
+	Asymptotic 2-Sample Logrank Test
+
+data:  Surv(y) by x (1, 2) 
+Z = -1.0738, p-value = 0.8586
+alternative hypothesis: true theta is less than 1 
+
+> 
+> 
 > ### confidence intervals, cf Bauer 1972
 > location <- data.frame(y = c(6, 20, 27, 38, 46, 51, 54, 57,
 +                              10, 12, 15, 21, 32, 40, 41, 45),
 +                        x = gl(2, 8))
 > 
-> ci <- confint(normal_test(y ~ x, data = location, 
+> ci <- confint(normal_test(y ~ x, data = location,
 +                           conf.int = TRUE, di = "ex"))
 > stopifnot(isequal(ci$conf.int, c(-6, 30)))
 > stopifnot(isequal(ci$estimate, 11))
 > 
-> wt <- wilcox.test(y ~ x, data = location, 
+> wt <- wilcox.test(y ~ x, data = location,
 +                   conf.int = TRUE)
-> ci <- confint(wilcox_test(y ~ x, data = location, 
+> ci <- confint(wilcox_test(y ~ x, data = location,
 +                           conf.int = TRUE, di = "ex"))
 > stopifnot(isequal(wt$confint, ci$confint))
 > stopifnot(isequal(wt$estimate, ci$estimate))
@@ -318,15 +346,16 @@ alternative hypothesis: true mu is greater than 0
 +                           -145, -140, -40, -30, 2, 27, 68, 290),
 +                     x = gl(2, 8))
 > 
-> ci <- confint(ansari_test(y ~ x, data = scale, conf.int = TRUE, 
+> ci <- confint(ansari_test(y ~ x, data = scale, conf.int = TRUE,
 +                           di = "ex", conf.level = 0.988))
 > stopifnot(isequal(ci$conf.int, c(10, 556) / c(68, 27)))
 > stopifnot(isequal(ci$estimate, mean(c(35/30, 370 / 290))))
 > 
+> 
 > ### ties handling
 > y1 <- c(14 , 18 , 2 , 4 , -5 , 14 , -3 , -1 , 1 , 6 , 3 , 3)
 > x1 <- c(8 , 26 , -7 , -1 , 2 , 9 , 0 , -4 , 13 , 3 , 3 , 4)
-> pvalue(wilcoxsign_test(y1~x1,alter="greater",dist=exact(), 
+> pvalue(wilcoxsign_test(y1~x1,alter="greater",dist=exact(),
 +                        zero.method = "Wilcoxon"))
 [1] 0.4741211
 > pvalue(wilcoxsign_test(y1~x1,alter="greater",dist=exact()))
@@ -337,4 +366,4 @@ In wilcoxsign_test.IndependenceProblem(object = <S4 object of class "Independenc
 > 
 > proc.time()
    user  system elapsed 
-   2.10    0.10    2.38 
+   2.37    0.10    2.74 

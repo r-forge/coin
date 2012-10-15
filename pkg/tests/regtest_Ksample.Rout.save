@@ -34,6 +34,7 @@ Loading required package: multcomp
 > ### generate data
 > dat <- data.frame(x = gl(4, 25), y = rnorm(100), block = gl(5, 20))[sample(1:100, 50),]
 > 
+> 
 > ### Kruskal-Wallis Test
 > 
 > ### asymptotic distribution
@@ -41,13 +42,13 @@ Loading required package: multcomp
 > 
 > stopifnot(isequal(pvalue(kruskal_test(y ~ x, data = dat)), ptwo))
 > 
-> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt",
 +                                    teststat = "quad",
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo))), ptwo))
 > 
 > ### approximated distribution
 > rtwo <- pvalue(kruskal_test(y ~ x, data = dat, distribution = "approx")) / ptwo
-> stopifnot(all(rtwo > 0.9 & 
+> stopifnot(all(rtwo > 0.9 &
 +               rtwo < 1.1))
 > 
 > ### <FIXME> add block examples </FIXME>
@@ -55,36 +56,293 @@ Loading required package: multcomp
 > ### sanity checks
 > try(kruskal_test(x ~ y, data = dat))
 Error in check(itp) : 
-  'object' does not represent a K sample problem (maybe the grouping variable is not a factor?)
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
 > try(kruskal_test(x ~ y | y, data = dat))
 Error in .local(.Object, ...) : 'block' is not a factor
 > 
-> ### Fligner Test 
+> 
+> ### Fligner Test
 > 
 > ### asymptotic distribution
-> ptwo <- fligner.test(y ~ x, data = dat)$p.value                       
+> ptwo <- fligner.test(y ~ x, data = dat)$p.value
 > 
 > stopifnot(isequal(pvalue(fligner_test(y ~ x, data = dat)), ptwo))
 > 
 > dat$yy <- dat$y - tapply(dat$y, dat$x, median)[dat$x]
-> stopifnot(isequal(pvalue(oneway_test(yy ~ x, data = dat, distribution = "asympt", 
+> stopifnot(isequal(pvalue(oneway_test(yy ~ x, data = dat, distribution = "asympt",
 +                                    teststat = "quad",
 +     ytrafo = function(data) trafo(data, numeric_trafo = fligner_trafo))), ptwo))
 > 
 > ### approximated distribution
 > rtwo <- pvalue(fligner_test(y ~ x, data = dat, distribution = "approx")) / ptwo
-> stopifnot(all(rtwo > 0.9 &                     
-+               rtwo < 1.1))                     
+> stopifnot(all(rtwo > 0.9 &
++               rtwo < 1.1))
 > 
 > ### <FIXME> add block examples </FIXME>
 > 
 > ### sanity checks
-> try(fligner_test(x ~ y, data = dat)) 
+> try(fligner_test(x ~ y, data = dat))
 Error in median.default(X[[1L]], ...) : need numeric data
 > try(fligner_test(x ~ y | y, data = dat))
 Error in .local(.Object, ...) : 'block' is not a factor
 > 
 > 
+> ### One-way Test
+> oneway_test(y ~ x, data = dat)
+
+	Asymptotic K-Sample Permutation Test
+
+data:  y by x (1, 2, 3, 4) 
+maxT = 1.6931, p-value = 0.2817
+alternative hypothesis: two.sided 
+
+> 
+> oneway_test(y ~ ordered(x), data = dat)
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = -0.1278, p-value = 0.8983
+alternative hypothesis: two.sided 
+
+> oneway_test(y ~ ordered(x), data = dat,
++             alternative = "less")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = -0.1278, p-value = 0.4492
+alternative hypothesis: less 
+
+> oneway_test(y ~ ordered(x), data = dat,
++             alternative = "greater")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = -0.1278, p-value = 0.5508
+alternative hypothesis: greater 
+
+> 
+> oneway_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = -0.1278, p-value = 0.8983
+alternative hypothesis: two.sided 
+
+> oneway_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++             alternative = "less")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = -0.1278, p-value = 0.4492
+alternative hypothesis: less 
+
+> oneway_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++             alternative = "greater")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = -0.1278, p-value = 0.5508
+alternative hypothesis: greater 
+
+> 
+> 
+> ### Normal Scores Test
+> normal_test(y ~ x, data = dat)
+
+	Asymptotic K-Sample Normal Quantile (van der Waerden) Test
+
+data:  y by x (1, 2, 3, 4) 
+chi-squared = 3.3466, df = 3, p-value = 0.3412
+
+> 
+> normal_test(y ~ ordered(x), data = dat)
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = -0.3135, p-value = 0.7539
+alternative hypothesis: two.sided 
+
+> normal_test(y ~ ordered(x), data = dat,
++             alternative = "less")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = -0.3135, p-value = 0.377
+alternative hypothesis: less 
+
+> normal_test(y ~ ordered(x), data = dat,
++             alternative = "greater")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = -0.3135, p-value = 0.623
+alternative hypothesis: greater 
+
+> 
+> normal_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = -0.3135, p-value = 0.7539
+alternative hypothesis: two.sided 
+
+> normal_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++             alternative = "less")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = -0.3135, p-value = 0.377
+alternative hypothesis: less 
+
+> normal_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++             alternative = "greater")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = -0.3135, p-value = 0.623
+alternative hypothesis: greater 
+
+> 
+> 
+> ### Median Test
+> median_test(y ~ x, data = dat)
+
+	Asymptotic K-Sample Median Test
+
+data:  y by x (1, 2, 3, 4) 
+chi-squared = 0.8594, df = 3, p-value = 0.8352
+
+> 
+> median_test(y ~ ordered(x), data = dat)
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = -0.659, p-value = 0.5099
+alternative hypothesis: two.sided 
+
+> median_test(y ~ ordered(x), data = dat,
++             alternative = "less")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = -0.659, p-value = 0.255
+alternative hypothesis: less 
+
+> median_test(y ~ ordered(x), data = dat,
++             alternative = "greater")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = -0.659, p-value = 0.745
+alternative hypothesis: greater 
+
+> 
+> median_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = -0.659, p-value = 0.5099
+alternative hypothesis: two.sided 
+
+> median_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++             alternative = "less")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = -0.659, p-value = 0.255
+alternative hypothesis: less 
+
+> median_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++             alternative = "greater")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = -0.659, p-value = 0.745
+alternative hypothesis: greater 
+
+> 
+> 
+> ### Logrank Test
+> surv_test(Surv(y) ~ x, data = dat)
+
+	Asymptotic K-Sample Logrank Test
+
+data:  Surv(y) by x (1, 2, 3, 4) 
+chi-squared = 2.3638, df = 3, p-value = 0.5004
+
+> 
+> surv_test(Surv(y) ~ ordered(x), data = dat)
+
+	Asymptotic Linear-by-Linear Association (Tarone-Ware) Test
+
+data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.7774
+alternative hypothesis: two.sided 
+
+> surv_test(Surv(y) ~ ordered(x), data = dat,
++           alternative = "less")
+
+	Asymptotic Linear-by-Linear Association (Tarone-Ware) Test
+
+data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.6113
+alternative hypothesis: less 
+
+> surv_test(Surv(y) ~ ordered(x), data = dat,
++           alternative = "greater")
+
+	Asymptotic Linear-by-Linear Association (Tarone-Ware) Test
+
+data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.3887
+alternative hypothesis: greater 
+
+> 
+> surv_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
+
+	Asymptotic Linear-by-Linear Association (Tarone-Ware) Test
+
+data:  Surv(y) by x (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.7774
+alternative hypothesis: two.sided 
+
+> surv_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++           alternative = "less")
+
+	Asymptotic Linear-by-Linear Association (Tarone-Ware) Test
+
+data:  Surv(y) by x (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.6113
+alternative hypothesis: less 
+
+> surv_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++           alternative = "greater")
+
+	Asymptotic Linear-by-Linear Association (Tarone-Ware) Test
+
+data:  Surv(y) by x (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.3887
+alternative hypothesis: greater 
+
+> 
 > proc.time()
    user  system elapsed 
-   0.95    0.17    1.23 
+   1.60    0.17    1.88 

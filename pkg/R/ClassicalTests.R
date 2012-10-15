@@ -1,5 +1,4 @@
 
-
 ### OK, OK, here is the most prominent one ...
 wilcox_test <- function(object, ...) UseMethod("wilcox_test")
 
@@ -15,8 +14,9 @@ wilcox_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!(is_2sample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a two sample problem",
-                                   " (maybe the grouping variable is not a factor?)")
+            stop(sQuote("object"),
+                 " does not represent a two-sample problem",
+                 " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
 
@@ -35,7 +35,7 @@ wilcox_test.IndependenceProblem <- function(object,
         RET@conf.level <- conf.level
     }
 
-   return(RET)
+    return(RET)
 }
 
 
@@ -53,29 +53,36 @@ normal_test.IndependenceProblem <- function(object,
     conf.int = FALSE, conf.level = 0.95, ...) {
 
     check <- function(object) {
-        if (!(is_2sample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a two sample problem",
-                                   " (maybe the grouping variable is not a factor?)")
-
+        if (!(is_Ksample(object) && is_numeric_y(object)))
+            stop(sQuote("object"),
+                 " does not represent a K-sample problem",
+                 " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
 
+    twosamp <- nlevels(object@x[[1]]) == 2
 
-    RET <- independence_test(object, teststat = "scalar",
-        ytrafo = function(data) trafo(data, numeric_trafo = function(x)
-            normal_trafo(x, ties.method = ties.method)),
+    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) || twosamp
+    RET <- independence_test(object, teststat = if(scalar) "scalar" else "quad",
+        ytrafo = function(data) trafo(data, numeric_trafo = function(y)
+            normal_trafo(y, ties.method = ties.method)),
         check = check, ...)
 
-    RET@nullvalue <- 0
-    RET@method <- "Normal Quantile (van der Waerden) Test"
+    if (is_ordered(RET@statistic))
+        RET@method <- "Linear-by-Linear Association Test"
+    else if (twosamp) {
+        RET@method <- "2-Sample Normal Quantile (van der Waerden) Test"
+        RET@nullvalue <- 0
+        if (conf.int) {
+            RET <- new("ScalarIndependenceTestConfint", RET)
+            RET@confint <- function(level)
+                confint_location(RET@statistic, RET@distribution,
+                                 level = level)
+            RET@conf.level <- conf.level
+        }
+    } else
+        RET@method <- "K-Sample Normal Quantile (van der Waerden) Test"
 
-    if (conf.int) {
-        RET <- new("ScalarIndependenceTestConfint", RET)
-        RET@confint <- function(level)
-            confint_location(RET@statistic, RET@distribution,
-                             level = level)
-        RET@conf.level <- conf.level
-    }
     return(RET)
 }
 
@@ -90,31 +97,40 @@ median_test.formula <- function(formula, data = list(), subset = NULL,
        frame = parent.frame(), ...)}
 
 median_test.IndependenceProblem <- function(object,
-    mid.score = c("0", "0.5", "1"), 
+    mid.score = c("0", "0.5", "1"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
     check <- function(object) {
-        if (!(is_2sample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a two sample problem",
-                                   " (maybe the grouping variable is not a factor?)")
+        if (!(is_Ksample(object) && is_numeric_y(object)))
+            stop(sQuote("object"),
+                 " does not represent a two-sample problem",
+                 " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
 
-    RET <- independence_test(object, teststat = "scalar",
+    twosamp <- nlevels(object@x[[1]]) == 2
+
+    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) || twosamp
+    RET <- independence_test(object, teststat = if(scalar) "scalar" else "quad",
         ytrafo = function(data) trafo(data, numeric_trafo = function(y)
              median_trafo(y, mid.score = mid.score)),
         check = check, ...)
 
-    RET@nullvalue <- 0
-    RET@method <- "Median Test"
+    if (is_ordered(RET@statistic))
+        RET@method <- "Linear-by-Linear Association Test"
+    else if (twosamp) {
+        RET@method <- "2-Sample Median Test"
+        RET@nullvalue <- 0
+        if (conf.int) {
+            RET <- new("ScalarIndependenceTestConfint", RET)
+            RET@confint <- function(level)
+                confint_location(RET@statistic, RET@distribution,
+                                 level = level)
+            RET@conf.level <- conf.level
+        }
+    } else
+        RET@method <- "K-Sample Median Test"
 
-    if (conf.int) {
-        RET <- new("ScalarIndependenceTestConfint", RET)
-        RET@confint <- function(level)
-            confint_location(RET@statistic, RET@distribution,
-                             level = level)
-        RET@conf.level <- conf.level
-    }
     return(RET)
 }
 
@@ -136,8 +152,9 @@ ansari_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!(is_2sample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a two sample problem",
-                                   " (maybe the grouping variable is not a factor?)")
+            stop(sQuote("object"),
+                 " does not represent a two-sample problem",
+                 " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
 
@@ -151,8 +168,8 @@ ansari_test.IndependenceProblem <- function(object,
 
     RET <- independence_test(object, teststat = "scalar",
         alternative = alternative,
-        ytrafo = function(data) trafo(data, numeric_trafo = function(x)
-            ansari_trafo(x, ties.method = ties.method)),
+        ytrafo = function(data) trafo(data, numeric_trafo = function(y)
+            ansari_trafo(y, ties.method = ties.method)),
         check = check, ...)
 
     RET@parameter <- "ratio of scales"
@@ -166,6 +183,7 @@ ansari_test.IndependenceProblem <- function(object,
                           level = level)
         RET@conf.level <- conf.level
     }
+
     return(RET)
 }
 
@@ -184,13 +202,10 @@ surv_test.IndependenceProblem <- function(object,
 
     ties.method <- match.arg(ties.method)
 
-    ytrafo <- function(data) trafo(data, surv_trafo = function(x)
-        logrank_trafo(x, ties.method = ties.method))
-
     check <- function(object) {
         if (!(is_Ksample(object) && is_censored_y(object)))
             stop(sQuote("object"),
-                 " does not represent a K sample problem with censored data",
+                 " does not represent a K-sample problem with censored data",
                  " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
@@ -198,9 +213,10 @@ surv_test.IndependenceProblem <- function(object,
     twosamp <- nlevels(object@x[[1]]) == 2
 
     scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) || twosamp
-    RET <- independence_test(object,
-        teststat = if(scalar) "scalar" else "quad",
-        check = check, ytrafo = ytrafo, ...)
+    RET <- independence_test(object, teststat = if(scalar) "scalar" else "quad",
+        ytrafo = function(data) trafo(data, surv_trafo = function(y)
+            logrank_trafo(y, ties.method = ties.method)),
+        check = check, ...)
 
     if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association (Tarone-Ware) Test"
@@ -215,6 +231,7 @@ surv_test.IndependenceProblem <- function(object,
             RET@statistic@alternative  <- "less"
     } else
         RET@method <- "K-Sample Logrank Test"
+
     return(RET)
 }
 
@@ -234,16 +251,18 @@ kruskal_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a K sample problem",
-                                   " (maybe the grouping variable is not a factor?)")
+            stop(sQuote("object"),
+                 " does not represent a K-sample problem",
+                 " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
 
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- independence_test(object,
-        distribution = distribution, teststat = "quad",
+    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores)
+    RET <- independence_test(object, teststat = if(scalar) "scalar" else "quad",
+        distribution = distribution,
         ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
         check = check, ...)
 
@@ -251,6 +270,7 @@ kruskal_test.IndependenceProblem <- function(object,
         RET@method <- "Linear-by-Linear Association Test"
     else
         RET@method <- "Kruskal-Wallis Test"
+
     return(RET)
 }
 
@@ -271,8 +291,9 @@ fligner_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a K sample problem",
-                                   " (maybe the grouping variable is not a factor?)")
+            stop(sQuote("object"),
+                 " does not represent a K-sample problem",
+                 " (maybe the grouping variable is not a factor?)")
 
         if (is_ordered(object))
             stop(colnames(object@x), " is an ordered factor")
@@ -286,13 +307,14 @@ fligner_test.IndependenceProblem <- function(object,
     object@y[[1]] <- object@y[[1]] -
         tapply(object@y[[1]], object@x[[1]], median)[object@x[[1]]]
 
-    RET <- independence_test(object,
-        distribution = distribution, teststat = "quad",
-        ytrafo = function(data) trafo(data, numeric_trafo = function(x)
-            fligner_trafo(x, ties.method = ties.method)),
+    RET <- independence_test(object, teststat = "quad",
+        distribution = distribution,
+        ytrafo = function(data) trafo(data, numeric_trafo = function(y)
+            fligner_trafo(y, ties.method = ties.method)),
         check = check, ...)
 
     RET@method <- "Fligner-Killeen Test"
+
     return(RET)
 }
 
@@ -320,8 +342,7 @@ spearman_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- independence_test(object,
-        teststat = "scalar",
+    RET <- independence_test(object, teststat = "scalar",
         distribution = distribution,
         xtrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
         ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
@@ -330,6 +351,7 @@ spearman_test.IndependenceProblem <- function(object,
     RET@parameter <- "rho"
     RET@nullvalue <- 0
     RET@method <- "Spearman Correlation Test"
+
     return(RET)
 }
 
@@ -360,21 +382,23 @@ cmh_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!is_contingency(object))
-            stop(sQuote("object"), " does not represent a contingency problem")
+            stop(sQuote("object"),
+                 " does not represent a contingency problem")
         return(TRUE)
     }
 
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- independence_test(object,
-        teststat = "quad", distribution = distribution, check = check,
-        ...)
+    RET <- independence_test(object, teststat = "quad",
+        distribution = distribution,
+        check = check, ...)
 
     if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
     else
         RET@method <- "Generalized Cochran-Mantel-Haenszel Test"
+
     return(RET)
 }
 
@@ -405,7 +429,8 @@ chisq_test.IndependenceProblem <- function(object,
 
     check <- function(object) {
         if (!is_contingency(object))
-            stop(sQuote("object"), " does not represent a contingency problem")
+            stop(sQuote("object"),
+                 " does not represent a contingency problem")
         if (nlevels(object@block) != 1)
             stop(sQuote("object"), " contains blocks: use ",
                  sQuote("cmh_test"), " instead")
@@ -459,6 +484,7 @@ chisq_test.IndependenceProblem <- function(object,
         RET@method <- "Linear-by-Linear Association Test"
     else
         RET@method <- "Pearson's Chi-Squared Test"
+
     return(RET)
 }
 
@@ -483,7 +509,6 @@ lbl_test.table <- function(object,
                    list(...)))
     return(RET)
 }
-
 
 lbl_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
@@ -518,6 +543,7 @@ lbl_test.IndependenceProblem <- function(object,
                check = check), list(...)))
 
     RET@method <- "Linear-by-Linear Association Test"
+
     return(RET)
 }
 
@@ -536,17 +562,25 @@ oneway_test.IndependenceProblem <- function(object, ...) {
 
     check <- function(object) {
         if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"), " does not represent a K sample problem",
-                                   " (maybe the grouping variable is not a factor?)")
+            stop(sQuote("object"),
+                 " does not represent a K-sample problem",
+                 " (maybe the grouping variable is not a factor?)")
         return(TRUE)
     }
 
-    RET <- independence_test(object, check = check, ...)
+    twosamp <- nlevels(object@x[[1]]) == 2
 
-    if (is_scalar(RET@statistic))
+    RET <- independence_test(object,
+        check = check, ...)
+
+    if (is_ordered(RET@statistic))
+        RET@method <- "Linear-by-Linear Association Test"
+    else if (twosamp) {
+        RET@method <- "2-Sample Permutation Test"
         RET@nullvalue <- 0
-    RET@method <- paste(ifelse(length(table(object@x[[1]])) == 2, "2-", "K-"),
-                        paste("Sample Permutation Test"), sep = "")
+    } else
+        RET@method <- "K-Sample Permutation Test"
+
     return(RET)
 }
 
@@ -580,7 +614,8 @@ contrast_test.IndependenceProblem <- function(object,
     xtrafo <- function(data) trafo(data) %*% cmatrix
 
     RET <- independence_test(object, teststat = "max",
-        distribution = distribution, xtrafo = xtrafo, ...)
+        distribution = distribution,
+        xtrafo = xtrafo, ...)
     RET@method <- "General Contrast Test"
 
     return(RET)
@@ -615,7 +650,8 @@ maxstat_test.IndependenceProblem <- function(object,
     xtrafo <- function(data) trafo(data, numeric_trafo = mm, factor_trafo = fmm)
 
     RET <- independence_test(object, teststat = teststat,
-        distribution = distribution, xtrafo = xtrafo, ...)
+        distribution = distribution,
+        xtrafo = xtrafo, ...)
 
     ### estimate cutpoint
     wm <- which.max(apply(abs(statistic(RET, "standardized")), 1, max))
@@ -628,7 +664,8 @@ maxstat_test.IndependenceProblem <- function(object,
         if (ORDERED[whichvar]) estimate <- lev[[whichvar]][estimate]
     }
     if (ncol(object@x) > 1) {
-        estimate <- list(covariable = colnames(RET@statistic@x)[whichvar], cutpoint = estimate)
+        estimate <- list(covariable = colnames(RET@statistic@x)[whichvar],
+                         cutpoint = estimate)
     } else {
         estimate <- list(cutpoint = estimate)
     }
@@ -649,7 +686,6 @@ symmetry_test.formula <- function(formula, data = list(), subset = NULL,
     sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
     RET <- do.call("symmetry_test", c(list(object = sp), list(...)))
     return(RET)
-
 }
 
 symmetry_test.SymmetryProblem <- function(object,
@@ -669,6 +705,7 @@ symmetry_test.table <- function(object, ...) {
     RET <- do.call("symmetry_test", c(list(object = sp), list(...)))
     return(RET)
 }
+
 
 ### Friedman-Test
 friedman_test <- function(object, ...) UseMethod("friedman_test")
@@ -690,8 +727,8 @@ friedman_test.SymmetryProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- symmetry_test(object,
-        distribution = distribution, teststat = "quad",
+    RET <- symmetry_test(object, teststat = "quad",
+        distribution = distribution,
         ytrafo = function(data)
             trafo(data, numeric_trafo = rank_trafo, block = object@block),
         ...)
@@ -700,8 +737,10 @@ friedman_test.SymmetryProblem <- function(object,
         RET@method <- "Page Test"
     else
         RET@method <- "Friedman Test"
+
     return(RET)
 }
+
 
 ### Marginal-Homogeneity-Test
 mh_test <- function(object, ...) UseMethod("mh_test")
@@ -749,6 +788,7 @@ mh_test.SymmetryProblem <- function(object,
         RET@method <- "Marginal-Homogeneity Test for Ordered Data"
     else
         RET@method <- "Marginal-Homogeneity Test"
+
     return(RET)
 }
 
@@ -822,5 +862,6 @@ wilcoxsign_test.IndependenceProblem <- function(object,
                             zero.method, ")", sep = "")
     }
     RET@nullvalue <- 0
+
     return(RET)
 }
