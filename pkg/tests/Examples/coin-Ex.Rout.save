@@ -275,7 +275,8 @@ alternative hypothesis: true mu is greater than 0
 > ###   wilcox_test.IndependenceProblem kruskal_test kruskal_test.formula
 > ###   kruskal_test.IndependenceProblem normal_test normal_test.formula
 > ###   normal_test.IndependenceProblem median_test median_test.formula
-> ###   median_test.IndependenceProblem
+> ###   median_test.IndependenceProblem savage_test savage_test.formula
+> ###   savage_test.IndependenceProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -1116,9 +1117,9 @@ alternative hypothesis: true mu is greater than 0
 > 
 > ### Name: Transformations
 > ### Title: Functions for Data Transformations
-> ### Aliases: trafo id_trafo rank_trafo ansari_trafo fligner_trafo
-> ###   normal_trafo median_trafo consal_trafo maxstat_trafo fmaxstat_trafo
-> ###   logrank_trafo f_trafo of_trafo mcp_trafo
+> ### Aliases: trafo id_trafo rank_trafo normal_trafo median_trafo
+> ###   savage_trafo consal_trafo ansari_trafo fligner_trafo logrank_trafo
+> ###   maxstat_trafo fmaxstat_trafo f_trafo of_trafo mcp_trafo
 > ### Keywords: manip
 > 
 > ### ** Examples
@@ -2165,7 +2166,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  63.9 1.4 68.62 NA NA 
+Time elapsed:  59.23 1.84 61.88 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -106,6 +106,22 @@ median_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
             alternative = "greater")
 
 
+### Savage Test
+savage_test(y ~ x, data = dat)
+
+savage_test(y ~ ordered(x), data = dat)
+savage_test(y ~ ordered(x), data = dat,
+            alternative = "less")
+savage_test(y ~ ordered(x), data = dat,
+            alternative = "greater")
+
+savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
+savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+            alternative = "less")
+savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+            alternative = "greater")
+
+
 ### Logrank Test
 surv_test(Surv(y) ~ x, data = dat)
 

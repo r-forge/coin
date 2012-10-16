@@ -135,6 +135,54 @@ median_test.IndependenceProblem <- function(object,
 }
 
 
+### Savage test
+savage_test <- function(object, ...) UseMethod("savage_test")
+
+savage_test.formula <- function(formula, data = list(), subset = NULL,
+    weights = NULL, ...) {
+
+    ft("savage_test", formula, data, subset, weights,
+       frame = parent.frame(), ...)}
+
+savage_test.IndependenceProblem <- function(object,
+    ties.method = c("mid-ranks", "average-scores"),
+    conf.int = FALSE, conf.level = 0.95, ...) {
+
+    check <- function(object) {
+        if (!(is_Ksample(object) && is_numeric_y(object)))
+            stop(sQuote("object"),
+                 " does not represent a K-sample problem",
+                 " (maybe the grouping variable is not a factor?)")
+        return(TRUE)
+    }
+
+    twosamp <- nlevels(object@x[[1]]) == 2
+
+    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) || twosamp
+    RET <- independence_test(object, teststat = if(scalar) "scalar" else "quad",
+        ytrafo = function(data) trafo(data, numeric_trafo = function(y)
+            savage_trafo(y, ties.method = ties.method)),
+        check = check, ...)
+
+    if (is_ordered(RET@statistic))
+        RET@method <- "Linear-by-Linear Association Test"
+    else if (twosamp) {
+        RET@method <- "2-Sample Savage Test"
+        RET@nullvalue <- 0
+        if (conf.int) {
+            RET <- new("ScalarIndependenceTestConfint", RET)
+            RET@confint <- function(level)
+                confint_location(RET@statistic, RET@distribution,
+                                 level = level)
+            RET@conf.level <- conf.level
+        }
+    } else
+        RET@method <- "K-Sample Savage Test"
+
+    return(RET)
+}
+
+
 ### Ansari-Bradley test
 ansari_test <- function(object, ...) UseMethod("ansari_test")
 

@@ -2,20 +2,21 @@
 \alias{trafo}
 \alias{id_trafo}
 \alias{rank_trafo}
-\alias{ansari_trafo}
-\alias{fligner_trafo}
 \alias{normal_trafo}
 \alias{median_trafo}
+\alias{savage_trafo}
 \alias{consal_trafo}
+\alias{ansari_trafo}
+\alias{fligner_trafo}
+\alias{logrank_trafo}
 \alias{maxstat_trafo}
 \alias{fmaxstat_trafo}
-\alias{logrank_trafo}
 \alias{f_trafo}
 \alias{of_trafo}
 \alias{mcp_trafo}
 \title{ Functions for Data Transformations }
 \description{
-  Rank-transformations for numerical data or dummy codings of factors.
+  Transformations for numerical data or dummy codings of factors.
 }
 \usage{
 trafo(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
@@ -23,56 +24,57 @@ trafo(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
     var_trafo = NULL, block = NULL)
 id_trafo(x)
 rank_trafo(x, ties.method = c("mid-ranks", "random"))
-ansari_trafo(x, ties.method = c("mid-ranks", "average-scores"))
-fligner_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 normal_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 median_trafo(x, mid.score = c("0", "0.5", "1"))
+savage_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 consal_trafo(x, ties.method = c("mid-ranks", "average-scores"), a = 5)
+ansari_trafo(x, ties.method = c("mid-ranks", "average-scores"))
+fligner_trafo(x, ties.method = c("mid-ranks", "average-scores"))
+logrank_trafo(x, ties.method = c("logrank", "HL", "average-scores"))
 maxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 fmaxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
-logrank_trafo(x, ties.method = c("logrank", "HL", "average-scores"))
 f_trafo(x)
 of_trafo(x)
 mcp_trafo(...)
 }
 \arguments{
   \item{data}{an object of class \code{data.frame}.}
-  \item{numeric_trafo}{a function to by applied to \code{numeric}
+  \item{numeric_trafo}{a function to be applied to \code{numeric}
     elements of \code{data} returning a matrix with \code{nrow(data)}
     rows and an arbitrary number of columns.}
-  \item{factor_trafo}{a function to by applied to \code{factor}
-    elements of \code{data} returning a matrix with \code{nrow(data)}
-    rows and an arbitrary number of columns (usually a dummy or contrast
-    matrix).}
-  \item{ordered_trafo}{a function to by applied to \code{ordered}
+  \item{factor_trafo}{a function to be applied to \code{factor} elements
+    of \code{data} returning a matrix with \code{nrow(data)} rows and an
+    arbitrary number of columns (usually a dummy or contrast matrix).}
+  \item{ordered_trafo}{a function to be applied to \code{ordered}
     elements of \code{data} returning a matrix with \code{nrow(data)}
     rows and an arbitrary number of columns (usually some scores).}
-  \item{surv_trafo}{a function to by applied to
-    elements of class \code{Surv} of \code{data} returning a
-    matrix with \code{nrow(data)} rows and an arbitrary number of columns.}
-  \item{var_trafo}{an optional named list of functions to be applied to the
-                   corresponding variables in \code{data}.}
-  \item{block}{an optional factor those levels are interpreted as blocks.
-    \code{trafo} is applied to each level of \code{block} separately.}
-  \item{x}{an object of classes \code{numeric}, \code{ordered}, \code{factor} or
-    \code{Surv}.}
-  \item{ties.method}{method used to adjust the scores for ties. Either
+  \item{surv_trafo}{a function to be applied to elements of class
+    \code{Surv} of \code{data} returning a matrix with \code{nrow(data)}
+    rows and an arbitrary number of columns.}
+  \item{var_trafo}{an optional named list of functions to be applied to
+    the corresponding variables in \code{data}.}
+  \item{block}{an optional factor those levels are interpreted as
+    blocks.  \code{trafo} is applied to each level of \code{block}
+    separately.}
+  \item{x}{an object of classes \code{numeric}, \code{ordered},
+    \code{factor} or \code{Surv}.}
+  \item{ties.method}{method used to adjust the scores for ties.  Either
     the score generating function is applied to \code{"mid-ranks"} or
     scores, based on random ranks, are averaged
-    (\code{"average-scores"}). When using \code{rank_trafo}, ties can be
-    broken at \code{"random"}. For ties handling in case of censored
+    (\code{"average-scores"}).  When using \code{rank_trafo}, ties can
+    be broken at \code{"random"}.  For ties handling in case of censored
     data, see \code{\link{surv_test}}.}
   \item{mid.score}{a character, the score assigned to observations
     exactly equal to the median.  Must be one of \code{"0"} (default),
     \code{"0.5"} or \code{"1"}; \code{"0.5"} leads to symmetric median
     scores (see also \code{\link{median_test}}).}
-  \item{a}{a numeric vector, the value taken as the constant \eqn{a}
-    in the Conover-Salsburg scores.  Defaults to 5.}
+  \item{a}{a numeric vector, the value taken as the constant \eqn{a} in
+    the Conover-Salsburg scores.  Defaults to 5.}
   \item{minprob}{a fraction between 0 and 0.5.}
   \item{maxprob}{a fraction between 0.5 and 1.}
   \item{\dots}{factor name and contrast matrix (as matrix or character)
-               in a tag = value format for multiple comparisons
-               for one single unordered factor, see \code{\link[multcomp]{mcp}}.}
+    in a tag = value format for multiple comparisons for one single
+    unordered factor, see \code{\link[multcomp]{mcp}}.}
 }
 \details{
 
@@ -87,17 +89,19 @@ mcp_trafo(...)
 
   \code{rank_trafo} is the rank transformation.
 
+  \code{normal_trafo}, \code{median_trafo},\code{savage_trafo} and
+  \code{consal_trafo} computes normal scores, median scores, Savage
+  scores and Conover-Salsburg scores (see \code{\link{neuropathy}}),
+  respectively, for location problems.
+
   \code{ansari_trafo} and \code{fligner_trafo} compute Ansari-Bradley
-  or Fligner scores for scale problems.
+  and Fligner scores, respectively, for scale problems.
 
-  \code{normal_trafo}, \code{median_trafo} and \code{consal_trafo}
-  implement normal scores, median scores or Conover-Salsburg scores (see
-  \code{\link{neuropathy}}) for location problems, \code{logrank_trafo}
-  returns logrank scores for censored data.
+  \code{logrank_trafo} computes logrank scores for censored data.
 
-  A \code{trafo} function with modified default arguments is usually
-  feeded into \code{\link{independence_test}} via the \code{xtrafo}
-  or \code{ytrafo} arguments.
+  A \code{trafo} function with modified default arguments is usually fed
+  into \code{\link{independence_test}} via the \code{xtrafo} or
+  \code{ytrafo} arguments.
 
   Fine tuning (different transformations for different variables) is
   possible by supplying a named list of functions to the \code{var_trafo}
@@ -110,14 +114,14 @@ mcp_trafo(...)
   are now passing through missing values (i.e., \code{NA}s).
   Furthermore, \code{median_trafo} and \code{logrank_trafo} are now
   increasing functions of the data (in conformity with most other
-  transformations in \pkg{coin}).
+  transformations in this package).
 
 }
 \value{
 
-  A named matrix with \code{nrow(data)} rows and
-  arbitrary number of columns. User-supplied transformations must
-  return a numeric vector or matrix.
+  A named matrix with \code{nrow(data)} rows and arbitrary number of
+  columns.  User-supplied transformations must return a numeric vector
+  or matrix.
 
 }
 \examples{

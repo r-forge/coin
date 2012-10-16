@@ -1,5 +1,5 @@
 
-R version 2.15.1 Patched (2012-08-06 r60178) -- "Roasted Marshmallows"
+R version 2.15.1 Patched (2012-10-07 r60893) -- "Roasted Marshmallows"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i386-w64-mingw32/i386 (32-bit)
@@ -298,6 +298,33 @@ alternative hypothesis: true mu is greater than 0
 
 > 
 > 
+> ### Savage Test
+> savage_test(y ~ x, dat = dat)
+
+	Asymptotic 2-Sample Savage Test
+
+data:  y by x (1, 2) 
+Z = -1.0738, p-value = 0.2829
+alternative hypothesis: true mu is not equal to 0 
+
+> savage_test(y ~ x, dat = dat, alternative = "less")
+
+	Asymptotic 2-Sample Savage Test
+
+data:  y by x (1, 2) 
+Z = -1.0738, p-value = 0.1414
+alternative hypothesis: true mu is less than 0 
+
+> savage_test(y ~ x, dat = dat, alternative = "greater")
+
+	Asymptotic 2-Sample Savage Test
+
+data:  y by x (1, 2) 
+Z = -1.0738, p-value = 0.8586
+alternative hypothesis: true mu is greater than 0 
+
+> 
+> 
 > ### Logrank Test
 > surv_test(Surv(y) ~ x, dat = dat)
 
@@ -366,4 +393,4 @@ In wilcoxsign_test.IndependenceProblem(object = <S4 object of class "Independenc
 > 
 > proc.time()
    user  system elapsed 
-   2.37    0.10    2.74 
+   2.24    0.12    2.41 

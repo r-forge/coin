@@ -1,5 +1,5 @@
 
-R version 2.15.1 Patched (2012-08-06 r60178) -- "Roasted Marshmallows"
+R version 2.15.1 Patched (2012-10-07 r60893) -- "Roasted Marshmallows"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i386-w64-mingw32/i386 (32-bit)
@@ -48,26 +48,6 @@ Loading required package: multcomp
 > rank_trafo(x[cc], ties.method = "random")
 [1] 1 2 3 4 5 6
 > 
-> ansari_trafo(x)
-[1] 1.0 2.0  NA 3.5 3.5  NA 2.0 1.0  NA
-> ansari_trafo(x[cc])
-[1] 1.0 2.0 3.5 3.5 2.0 1.0
-> ansari_trafo(x, ties.method = "average-scores")
-[1]  1  2 NA  3  3 NA  2  1 NA
-> ansari_trafo(x[cc], ties.method = "average-scores")
-[1] 1 2 3 3 2 1
-> 
-> fligner_trafo(x)
-[1] 0.1800124 0.3661064        NA 0.6744898 0.6744898        NA 1.0675705
-[8] 1.4652338        NA
-> fligner_trafo(x[cc])
-[1] 0.1800124 0.3661064 0.6744898 0.6744898 1.0675705 1.4652338
-> fligner_trafo(x, ties.method = "average-scores")
-[1] 0.1800124 0.3661064        NA 0.6787937 0.6787937        NA 1.0675705
-[8] 1.4652338        NA
-> fligner_trafo(x[cc], ties.method = "average-scores")
-[1] 0.1800124 0.3661064 0.6787937 0.6787937 1.0675705 1.4652338
-> 
 > normal_trafo(x)
 [1] -1.0675705 -0.5659488         NA  0.0000000  0.0000000         NA  0.5659488
 [8]  1.0675705         NA
@@ -92,6 +72,17 @@ Loading required package: multcomp
 [1]  0  0 NA  1  1 NA  1  1 NA
 > median_trafo(x[cc], mid.score = "1")
 [1] 0 0 1 1 1 1
+> 
+> savage_trafo(x)
+[1] -0.8333333 -0.6333333         NA -0.1333333 -0.1333333         NA  0.3666667
+[8]  1.3666667         NA
+> savage_trafo(x[cc])
+[1] -0.8333333 -0.6333333 -0.1333333 -0.1333333  0.3666667  1.3666667
+> savage_trafo(x, ties.method = "average-scores")
+[1] -0.8333333 -0.6333333         NA -0.2166667 -0.2166667         NA  0.4500000
+[8]  1.4500000         NA
+> savage_trafo(x[cc], ties.method = "average-scores")
+[1] -0.8333333 -0.6333333 -0.2166667 -0.2166667  0.4500000  1.4500000
 > 
 > consal_trafo(x)
 [1] 0.0004164931 0.0066638900           NA 0.0625000000 0.0625000000
@@ -143,6 +134,26 @@ Loading required package: multcomp
 [4,] 0.5000000 0.0701790920
 [5,] 0.7142857 0.2603082049
 [6,] 0.8571429 0.5397750937
+> 
+> ansari_trafo(x)
+[1] 1.0 2.0  NA 3.5 3.5  NA 2.0 1.0  NA
+> ansari_trafo(x[cc])
+[1] 1.0 2.0 3.5 3.5 2.0 1.0
+> ansari_trafo(x, ties.method = "average-scores")
+[1]  1  2 NA  3  3 NA  2  1 NA
+> ansari_trafo(x[cc], ties.method = "average-scores")
+[1] 1 2 3 3 2 1
+> 
+> fligner_trafo(x)
+[1] 0.1800124 0.3661064        NA 0.6744898 0.6744898        NA 1.0675705
+[8] 1.4652338        NA
+> fligner_trafo(x[cc])
+[1] 0.1800124 0.3661064 0.6744898 0.6744898 1.0675705 1.4652338
+> fligner_trafo(x, ties.method = "average-scores")
+[1] 0.1800124 0.3661064        NA 0.6787937 0.6787937        NA 1.0675705
+[8] 1.4652338        NA
+> fligner_trafo(x[cc], ties.method = "average-scores")
+[1] 0.1800124 0.3661064 0.6787937 0.6787937 1.0675705 1.4652338
 > 
 > maxstat_trafo(x)
   x <= 1 x <= 2 x <= 3 x <= 4
@@ -538,4 +549,4 @@ attr(,"contrast")
 > 
 > proc.time()
    user  system elapsed 
-   0.81    0.09    0.99 
+   0.74    0.14    0.95 

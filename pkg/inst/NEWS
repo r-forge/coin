@@ -53,6 +53,9 @@
           specified when the explanatory variable is an ordered factor (see
           ?normal_test and ?median_test)
 
+    o     the Savage test and its corresponding transformation function are now
+          available (see ?savage_test and ?savage_trafo)
+
     BUG FIXES
 
     o     monotonicity of step-down adjusted p-values was not enforced when
@@ -80,7 +83,7 @@
     o     the printed output for the logrank test did not report the tested
           parameter in the 2-sample case
 
-    o     the printed output for the one-way test reported the parameter tested 
+    o     the printed output for the one-way test reported the parameter tested
           in the 2-sample case when the explanatory variable was an ordered
           factor
 
@@ -98,7 +101,7 @@
           the tested parameter has been renamed to 'ratio of scales' and 'rho'
           respectively
 
-    o     the printed output for the one-way test now reports that a 
+    o     the printed output for the one-way test now reports that a
           linear-by-linear association test is carried out when the explanatory
           variable is an ordered factor
 

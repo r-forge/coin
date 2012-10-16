@@ -178,6 +178,12 @@ median_test(y ~ x, dat = dat, alternative = "less")
 median_test(y ~ x, dat = dat, alternative = "greater")
 
 
+### Savage Test
+savage_test(y ~ x, dat = dat)
+savage_test(y ~ x, dat = dat, alternative = "less")
+savage_test(y ~ x, dat = dat, alternative = "greater")
+
+
 ### Logrank Test
 surv_test(Surv(y) ~ x, dat = dat)
 surv_test(Surv(y) ~ x, dat = dat, alternative = "less")

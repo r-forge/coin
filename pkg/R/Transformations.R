@@ -78,6 +78,26 @@ median_trafo <- function(x, mid.score = c("0", "0.5", "1")) {
     return(scores)
 }
 
+### Savage scores
+savage_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
+    ties.method <- match.arg(ties.method)
+
+    r <- function(x, t) rank(x, na.last = "keep", ties.method = t)
+
+    scores <- switch(ties.method,
+        "mid-ranks" = {
+            s <- 1 / (sum(!is.na(x)) - r(x, "min") + 1)
+            cumsum(s[order(x)])[r(x, "max")] - 1
+        },
+        "average-scores" = {
+            o <- order(x)
+            s <- 1 / (sum(!is.na(x)) - r(x, "first") + 1)
+            average_scores(cumsum(s[o])[order(o)], x) - 1
+        }
+    )
+    return(scores)
+}
+
 ### Conover & Salsburg (1988)
 consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
                          a = 5) {

@@ -14,6 +14,9 @@
 \alias{median_test}
 \alias{median_test.formula}
 \alias{median_test.IndependenceProblem}
+\alias{savage_test}
+\alias{savage_test.formula}
+\alias{savage_test.IndependenceProblem}
 
 \title{ Independent Two- and K-Sample Location Tests }
 
@@ -43,6 +46,11 @@
 \method{median_test}{IndependenceProblem}(object,
     mid.score = c("0", "0.5", "1"),
     conf.int = FALSE, conf.level = 0.95, \dots)
+
+\method{savage_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{savage_test}{IndependenceProblem}(object,
+    ties.method = c("mid-ranks", "average-scores"),
+    conf.int = FALSE, conf.level = 0.95, ...)
 
 }
 \arguments{
@@ -98,14 +106,15 @@
   algorithm (van de Wiel, 2001).
 
   In the two-sample case the linear rank tests \code{wilcox_test},
-  \code{normal_test} and \code{median_test} can be used to test the
-  two-sided hypothesis \eqn{H_0: \mu = 0}, where \eqn{\mu = Y_1 - Y_2}
-  and \eqn{Y_i} is the median of the responses in the \eqn{i}th sample.
-  Confidence intervals for the difference in location are available for
-  these rank-based procedures and are computed according to Bauer
-  (1972).  In case \code{alternative = "less"}, the null hypothesis
-  \eqn{H_0: \mu \ge 0} is tested and \code{alternative = "greater"}
-  corresponds to the null hypothesis \eqn{H_0: \mu \le 0}.
+  \code{normal_test}, \code{median_test} and \code{savage_test} can be
+  used to test the two-sided hypothesis \eqn{H_0: \mu = 0}, where
+  \eqn{\mu = Y_1 - Y_2} and \eqn{Y_i} is the median of the responses in
+  the \eqn{i}th sample.  Confidence intervals for the difference in
+  location are available for these rank-based procedures and are
+  computed according to Bauer (1972).  In case
+  \code{alternative = "less"}, the null hypothesis \eqn{H_0: \mu \ge 0}
+  is tested and \code{alternative = "greater"} corresponds to the null
+  hypothesis \eqn{H_0: \mu \le 0}.
 
   The median test offers a choice of mid-score, i.e., the score assigned
   to observations exactly equal to the median, using \code{"mid-score"}.

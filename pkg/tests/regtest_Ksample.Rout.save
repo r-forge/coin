@@ -1,5 +1,5 @@
 
-R version 2.15.1 Patched (2012-08-06 r60178) -- "Roasted Marshmallows"
+R version 2.15.1 Patched (2012-10-07 r60893) -- "Roasted Marshmallows"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i386-w64-mingw32/i386 (32-bit)
@@ -280,6 +280,70 @@ alternative hypothesis: greater
 
 > 
 > 
+> ### Savage Test
+> savage_test(y ~ x, data = dat)
+
+	Asymptotic K-Sample Savage Test
+
+data:  y by x (1, 2, 3, 4) 
+chi-squared = 2.3638, df = 3, p-value = 0.5004
+
+> 
+> savage_test(y ~ ordered(x), data = dat)
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.7774
+alternative hypothesis: two.sided 
+
+> savage_test(y ~ ordered(x), data = dat,
++             alternative = "less")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.6113
+alternative hypothesis: less 
+
+> savage_test(y ~ ordered(x), data = dat,
++             alternative = "greater")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by ordered(x) (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.3887
+alternative hypothesis: greater 
+
+> 
+> savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.7774
+alternative hypothesis: two.sided 
+
+> savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++             alternative = "less")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.6113
+alternative hypothesis: less 
+
+> savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++             alternative = "greater")
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  y by x (1 < 2 < 3 < 4) 
+Z = 0.2827, p-value = 0.3887
+alternative hypothesis: greater 
+
+> 
+> 
 > ### Logrank Test
 > surv_test(Surv(y) ~ x, data = dat)
 
@@ -345,4 +409,4 @@ alternative hypothesis: greater
 > 
 > proc.time()
    user  system elapsed 
-   1.60    0.17    1.88 
+   1.62    0.12    1.79 
