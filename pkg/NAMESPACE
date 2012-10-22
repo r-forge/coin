@@ -13,7 +13,7 @@ export(independence_test,
        rank_trafo,
        normal_trafo, median_trafo, savage_trafo, consal_trafo,
        ansari_trafo, fligner_trafo,
-       logrank_trafo,
+       logrank_trafo, logrank_weight,
        maxstat_trafo, fmaxstat_trafo,
        f_trafo, of_trafo, mcp_trafo,
        asymptotic, exact, approximate)

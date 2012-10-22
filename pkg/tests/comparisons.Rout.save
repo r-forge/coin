@@ -424,9 +424,9 @@ alternative hypothesis: true theta is not equal to 1
 > pvalue(surv_test(Surv(time, event) ~ treatment | gender, data = srv,
 +               ties = "average",
 +               distribution = approximate(B = 10000)))
-[1] 0.1581
+[1] 0.1543
 99 percent confidence interval:
- 0.1488173 0.1677103 
+ 0.1451118 0.1638195 
 
 > 
 > 
@@ -555,9 +555,9 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > pci <- attr(pvalue(mtMC), "conf.int")
 > pvalue(mtMC)
-[1] 0.4278
+[1] 0.4282
 99 percent confidence interval:
- 0.4150428 0.4406263 
+ 0.4154411 0.4410276 
 
 > 
 > stopifnot(pci[1] < 0.4289 & pci[2] > 0.4289)
@@ -779,9 +779,9 @@ alternative hypothesis: true theta is not equal to 1
 +                     distribution = approximate(B = 90000))
 > 
 > print(pvalue(btMC))
-[1] 8.888889e-05
+[1] 0.0001222222
 99 percent confidence interval:
- 2.856851e-05 2.064126e-04 
+ 4.801661e-05 2.530863e-04 
 
 > pci <- attr(pvalue(ltMC), "conf.int")
 > (pci[1] < 0.000112 & pci[2] > 0.000112)
@@ -989,4 +989,4 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > proc.time()
    user  system elapsed 
-   5.55    0.24    6.05 
+   5.52    0.24    6.56 

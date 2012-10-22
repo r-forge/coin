@@ -340,7 +340,7 @@ alternative hypothesis: true theta is not equal to 1
 
 data:  Surv(y) by x (1, 2) 
 Z = -1.0738, p-value = 0.1414
-alternative hypothesis: true theta is greater than 1 
+alternative hypothesis: true theta is less than 1 
 
 > surv_test(Surv(y) ~ x, dat = dat, alternative = "greater")
 
@@ -348,7 +348,7 @@ alternative hypothesis: true theta is greater than 1
 
 data:  Surv(y) by x (1, 2) 
 Z = -1.0738, p-value = 0.8586
-alternative hypothesis: true theta is less than 1 
+alternative hypothesis: true theta is greater than 1 
 
 > 
 > 
@@ -393,4 +393,4 @@ In wilcoxsign_test.IndependenceProblem(object = <S4 object of class "Independenc
 > 
 > proc.time()
    user  system elapsed 
-   2.24    0.12    2.41 
+   2.34    0.14    2.59 

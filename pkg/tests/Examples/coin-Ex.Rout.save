@@ -202,6 +202,84 @@ chi-squared = 10.6381, df = 1, p-value = 0.001108
 > 
 > 
 > cleanEx()
+> nameEx("GTSG")
+> ### * GTSG
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: GTSG
+> ### Title: Gastrointestinal Tumor Study Group
+> ### Aliases: GTSG
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+>   ### plot Kaplan-Meier estimates
+>   plot(survfit(Surv(time / (365.25 / 12), event) ~ group, data = GTSG),
++        lty = 1:2,
++        ylab = "% Survival", xlab = "Survival Time in Months")
+>   legend("topright", lty = 1:2,
++          c("Chemotherapy+Radiation", "Chemotherapy"), bty = "n")
+> 
+>   ### logrank test
+>   surv_test(Surv(time, event) ~ group, data = GTSG)
+
+	Asymptotic 2-Sample Logrank Test
+
+data:  Surv(time, event) by
+	 group (Chemotherapy+Radiation, Chemotherapy) 
+Z = -1.1428, p-value = 0.2531
+alternative hypothesis: true theta is not equal to 1 
+
+> 
+>   ### Prentice test
+>   surv_test(Surv(time, event) ~ group, data = GTSG,
++             type = "Prentice")
+
+	Asymptotic 2-Sample Prentice Test
+
+data:  Surv(time, event) by
+	 group (Chemotherapy+Radiation, Chemotherapy) 
+Z = -2.1687, p-value = 0.03011
+alternative hypothesis: true theta is not equal to 1 
+
+> 
+>   ### testing against Weibull-type alternatives, see Moreau et al (1992)
+>   moreau_weight <- function(time, n.risk, n.event)
++       1 + log(-log(cumprod(n.risk / (n.risk + n.event))))
+> 
+>   independence_test(Surv(time, event) ~ group, data = GTSG,
++                     ytrafo = function(data)
++                         trafo(data, surv_trafo = function(y)
++                             logrank_trafo(y, weight = moreau_weight)))
+
+	Asymptotic General Independence Test
+
+data:  Surv(time, event) by
+	 group (Chemotherapy+Radiation, Chemotherapy) 
+Z = 2.4129, p-value = 0.01583
+alternative hypothesis: two.sided 
+
+> 
+>   ### testing against crossing-curve alternatives, see Shen & Le (2000)
+>   shen_trafo <- function(x)
++       ansari_trafo(logrank_trafo(x, type = "Prentice"))
+> 
+>   independence_test(Surv(time, event) ~ group, data = GTSG,
++                     ytrafo = function(data)
++                         trafo(data, surv_trafo = shen_trafo))
+
+	Asymptotic General Independence Test
+
+data:  Surv(time, event) by
+	 group (Chemotherapy+Radiation, Chemotherapy) 
+Z = -2.342, p-value = 0.01918
+alternative hypothesis: two.sided 
+
+> 
+> 
+> 
+> cleanEx()
 > nameEx("IndependenceTest")
 > ### * IndependenceTest
 > 
@@ -648,12 +726,13 @@ $cutpoint
 [1] 280
 
 > 
->   ### reproduce applications in Sections 7.2 and 7.3 
+>   ### reproduce applications in Sections 7.2 and 7.3
 >   ### of Hothorn & Lausen (2003) with limiting distribution
 > 
->   maxstat_test(Surv(time, event) ~  EF, data = hohnloser, 
-+       ytrafo = function(data) trafo(data, surv_trafo = function(x) 
-+          logrank_trafo(x, ties = "HL")))
+>   maxstat_test(Surv(time, event) ~  EF, data = hohnloser,
++                ytrafo = function(data)
++                    trafo(data, surv_trafo = function(y)
++                        logrank_trafo(y, ties.method = "Hothorn-Lausen")))
 
 	Asymptotic Maxstat Test
 
@@ -667,8 +746,9 @@ $cutpoint
 
 > 
 >   maxstat_test(Surv(RFS, event) ~  SPF, data = sphase,
-+       ytrafo = function(data) trafo(data, surv_trafo = function(x)
-+          logrank_trafo(x, ties = "HL")))
++                ytrafo = function(data)
++                    trafo(data, surv_trafo = function(y)
++                        logrank_trafo(y, ties.method = "Hothorn-Lausen")))
 
 	Asymptotic Maxstat Test
 
@@ -885,6 +965,7 @@ stadium=IIA 20       16     10.7      2.67      5.57
 
  Chisq= 5.6  on 1 degrees of freedom, p= 0.0183 
 > 
+> 
 >   ### example data given in Callaert (2003)
 >   exdata <- data.frame(time = c(1, 1, 5, 6, 6, 6, 6, 2, 2, 2, 3, 4, 4, 5, 5),
 +                        group = factor(c(rep(0, 7), rep(1, 8))))
@@ -918,6 +999,7 @@ Z = 1.9865, p-value = 0.04678
 alternative hypothesis: true theta is not equal to 1 
 
 > 
+> 
 >   ### lung cancer example from StatXact
 >   lungcancer <-
 +       data.frame(time = c(257, 476, 355, 1779, 355,
@@ -927,14 +1009,14 @@ alternative hypothesis: true theta is not equal to 1
 +                  group = factor(rep(1:2, c(5, 9)),
 +                                 labels = c("newdrug", "control")))
 > 
->   ### StatXact 6 manual, page 414
+>   ### StatXact 9 manual, page 214
 >   with(lungcancer,
 +        logrank_trafo(Surv(time, event), ties.method = "average-scores"))
  [1]  0.65870518  1.02537185  0.02537185  1.52537185  1.02537185 -0.57740593
  [7]  0.52537185 -0.46629482 -0.17462815 -0.80648518 -0.80648518 -0.80648518
 [13] -0.34129482 -0.80648518
 > 
->   ### StatXact 6 manual, page 415
+>   ### StatXact 9 manual, page 215
 >   surv_test(Surv(time, event) ~ group, data = lungcancer,
 +             distribution = "exact", ties.method = "average-scores")
 
@@ -944,6 +1026,41 @@ data:  Surv(time, event) by group (newdrug, control)
 Z = 2.9492, p-value = 0.000999
 alternative hypothesis: true theta is not equal to 1 
 
+> 
+>   ### StatXact 9 manual, page 222
+>   surv_test(Surv(time, event) ~ group, data = lungcancer,
++             distribution = "exact", ties.method = "average-scores",
++             type = "Prentice")
+
+	Exact 2-Sample Prentice Test
+
+data:  Surv(time, event) by group (newdrug, control) 
+Z = 2.7813, p-value = 0.002997
+alternative hypothesis: true theta is not equal to 1 
+
+> 
+> 
+>   ### versatile test (Lee, 1996) using a range of rho and gamma
+>   rho.gamma <- expand.grid(rho = seq(-2, 2, 1), gamma = seq(0, 2, 1))
+>   vt <- independence_test(Surv(time, event) ~ group, data = lungcancer,
++                           distribution = approximate(B = 10000),
++                           ytrafo = function(data)
++                               trafo(data, surv_trafo = function(y)
++                                   logrank_trafo(y, ties.method = "average-scores",
++                                                 type = "Fleming-Harrington",
++                                                 rho = rho.gamma[, 1],
++                                                 gamma = rho.gamma[, 2])))
+>   pvalue(vt, method = "step-down")
+        rho = -2, gamma = 0 rho = -1, gamma = 0 rho = 0, gamma = 0
+newdrug              0.0111              0.0038             0.0028
+        rho = 1, gamma = 0 rho = 2, gamma = 0 rho = -2, gamma = 1
+newdrug             0.0052             0.0111               0.038
+        rho = -1, gamma = 1 rho = 0, gamma = 1 rho = 1, gamma = 1
+newdrug              0.0125             0.0103             0.0028
+        rho = 2, gamma = 1 rho = -2, gamma = 2 rho = -1, gamma = 2
+newdrug             0.0028              0.0823              0.0467
+        rho = 0, gamma = 2 rho = 1, gamma = 2 rho = 2, gamma = 2
+newdrug             0.0191             0.0111             0.0063
 > 
 > 
 > 
@@ -1119,7 +1236,8 @@ alternative hypothesis: true mu is greater than 0
 > ### Title: Functions for Data Transformations
 > ### Aliases: trafo id_trafo rank_trafo normal_trafo median_trafo
 > ###   savage_trafo consal_trafo ansari_trafo fligner_trafo logrank_trafo
-> ###   maxstat_trafo fmaxstat_trafo f_trafo of_trafo mcp_trafo
+> ###   logrank_weight maxstat_trafo fmaxstat_trafo f_trafo of_trafo
+> ###   mcp_trafo
 > ### Keywords: manip
 > 
 > ### ** Examples
@@ -2051,9 +2169,10 @@ $cutpoint
 
 > 
 >   ### reproduce the test statistic reported in Hothorn & Lausen (2003)
->   maxstat_test(Surv(RFS, event) ~ SPF, data = sphase, 
-+       ytrafo = function(data) trafo(data, surv_trafo = function(x) 
-+           logrank_trafo(x, ties.method = "HL")))
+>   maxstat_test(Surv(RFS, event) ~ SPF, data = sphase,
++                ytrafo = function(data)
++                    trafo(data, surv_trafo = function(y)
++                        logrank_trafo(y, ties.method = "Hothorn-Lausen")))
 
 	Asymptotic Maxstat Test
 
@@ -2166,7 +2285,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  59.23 1.84 61.88 NA NA 
+Time elapsed:  63.77 1.82 96.41 NA NA 
 > grDevices::dev.off()
 null device 
           1 

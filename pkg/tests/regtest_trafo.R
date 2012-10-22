@@ -65,33 +65,33 @@ x <- c(1, 2, NA, 3, 3, NA, 4, 5, NA)
 cc <- complete.cases(x)
 
 logrank_trafo(Surv(x))
-logrank_trafo(Surv(x[cc]))
-logrank_trafo(Surv(x), ties.method = "HL")
-logrank_trafo(Surv(x[cc]), ties.method = "HL")
+logrank_trafo(Surv(x)[cc])
+logrank_trafo(Surv(x), ties.method = "Hothorn-Lausen")
+logrank_trafo(Surv(x)[cc], ties.method = "Hothorn-Lausen")
 logrank_trafo(Surv(x), ties.method = "average-scores")
-logrank_trafo(Surv(x[cc]), ties.method = "average-scores")
+logrank_trafo(Surv(x)[cc], ties.method = "average-scores")
 
 x <- c(1, 2, 3, 3, 3, 4, 4, 5, 5)
 e <- rep(c(0, NA, 1, 1), length.out = 9)
 cc <- complete.cases(x, e)
 
 logrank_trafo(Surv(x, e))
-logrank_trafo(Surv(x[cc], e[cc]))
-logrank_trafo(Surv(x, e), ties.method = "HL")
-logrank_trafo(Surv(x[cc], e[cc]), ties.method = "HL")
+logrank_trafo(Surv(x, e)[cc])
+logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen")
+logrank_trafo(Surv(x, e)[cc], ties.method = "Hothorn-Lausen")
 logrank_trafo(Surv(x, e), ties.method = "average-scores")
-logrank_trafo(Surv(x[cc], e[cc]), ties.method = "average-scores")
+logrank_trafo(Surv(x, e)[cc], ties.method = "average-scores")
 
 x <- c(1, 2, NA, 3, 3, NA, 4, 5, NA)
 e <- rep(c(0, NA, 1, 1), length.out = 9)
 cc <- complete.cases(x, e)
 
 logrank_trafo(Surv(x, e))
-logrank_trafo(Surv(x[cc], e[cc]))
-logrank_trafo(Surv(x, e), ties.method = "HL")
-logrank_trafo(Surv(x[cc], e[cc]), ties.method = "HL")
+logrank_trafo(Surv(x, e)[cc])
+logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen")
+logrank_trafo(Surv(x, e)[cc], ties.method = "Hothorn-Lausen")
 logrank_trafo(Surv(x, e), ties.method = "average-scores")
-logrank_trafo(Surv(x[cc], e[cc]), ties.method = "average-scores")
+logrank_trafo(Surv(x, e)[cc], ties.method = "average-scores")
 
 
 ### NA handling: factor
@@ -128,3 +128,61 @@ fmaxstat_trafo(x[cc], maxprob = 0.4)
 
 mcp_trafo(x = "Tukey")(data.frame(x))
 mcp_trafo(x = "Tukey")(data.frame(x = x[cc]))
+
+
+### Weighted logrank scores
+x <- c(1, 2, 3, 3, 3, 6, 6, 6, 9, 10)
+e <- c(1, 0, 1, 0, 1, 1, 0, 1, 0, 1)
+
+logrank_trafo(Surv(x, e))
+logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen")
+logrank_trafo(Surv(x, e), ties.method = "average-scores")
+
+logrank_trafo(Surv(x, e),
+              type = "Gehan-Breslow")
+logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
+              type = "Gehan-Breslow")
+logrank_trafo(Surv(x, e), ties.method = "average-scores",
+              type = "Gehan-Breslow")
+
+logrank_trafo(Surv(x, e),
+              type = "Tarone-Ware")
+logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
+              type = "Tarone-Ware")
+logrank_trafo(Surv(x, e), ties.method = "average-scores",
+              type = "Tarone-Ware")
+
+logrank_trafo(Surv(x, e),
+              type = "Prentice")
+logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
+              type = "Prentice")
+logrank_trafo(Surv(x, e), ties.method = "average-scores",
+              type = "Prentice")
+
+logrank_trafo(Surv(x, e),
+              type = "Prentice-Marek")
+logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
+              type = "Prentice-Marek")
+logrank_trafo(Surv(x, e), ties.method = "average-scores",
+              type = "Prentice-Marek")
+
+logrank_trafo(Surv(x, e),
+              type = "Andersen-Borgan-Gill-Keiding")
+logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
+              type = "Andersen-Borgan-Gill-Keiding")
+logrank_trafo(Surv(x, e), ties.method = "average-scores",
+              type = "Andersen-Borgan-Gill-Keiding")
+
+logrank_trafo(Surv(x, e),
+              type = "Fleming-Harrington")
+logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
+              type = "Fleming-Harrington")
+logrank_trafo(Surv(x, e), ties.method = "average-scores",
+              type = "Fleming-Harrington")
+
+logrank_trafo(Surv(x, e),
+              type = "Self")
+logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
+              type = "Self")
+logrank_trafo(Surv(x, e), ties.method = "average-scores",
+              type = "Self")

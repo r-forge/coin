@@ -236,7 +236,7 @@ ansari_test.IndependenceProblem <- function(object,
 }
 
 
-### Survival tests -> Logrank only, for the moment
+### Weighted logrank test
 surv_test <- function(object, ...) UseMethod("surv_test")
 
 surv_test.formula <- function(formula, data = list(), subset = NULL,
@@ -246,9 +246,13 @@ surv_test.formula <- function(formula, data = list(), subset = NULL,
        frame = parent.frame(), ...)}
 
 surv_test.IndependenceProblem <- function(object,
-    ties.method = c("logrank", "HL", "average-scores"), ...) {
+    ties.method = c("mid-ranks", "Hothorn-Lausen", "average-scores"),
+    type = c("logrank", "Gehan-Breslow", "Tarone-Ware", "Prentice",
+             "Prentice-Marek", "Andersen-Borgan-Gill-Keiding",
+             "Fleming-Harrington", "Self"),
+    rho = NULL, gamma = NULL, ...) {
 
-    ties.method <- match.arg(ties.method)
+    type <- match.arg(type)[1]
 
     check <- function(object) {
         if (!(is_Ksample(object) && is_censored_y(object)))
@@ -263,22 +267,21 @@ surv_test.IndependenceProblem <- function(object,
     scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) || twosamp
     RET <- independence_test(object, teststat = if(scalar) "scalar" else "quad",
         ytrafo = function(data) trafo(data, surv_trafo = function(y)
-            logrank_trafo(y, ties.method = ties.method)),
+            logrank_trafo(y, ties.method = ties.method, type = type,
+                          rho = rho, gamma = gamma)),
         check = check, ...)
 
     if (is_ordered(RET@statistic))
-        RET@method <- "Linear-by-Linear Association (Tarone-Ware) Test"
+        RET@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        RET@method <- "2-Sample Logrank Test"
-        ## Lehmann alternatives: S_1(t) = [S_2(t)]^theta
+        RET@method <- paste("2-Sample",
+                            if (type == "logrank") "Logrank" else type, "Test")
+        ## theta = lambda_2 / lambda_1
         RET@parameter <- "theta"
-        RET@nullvalue <- 1 # theta = 1 => Proportional hazards
-        if (RET@statistic@alternative == "less")
-            RET@statistic@alternative <- "greater"
-        else if (RET@statistic@alternative  == "greater")
-            RET@statistic@alternative  <- "less"
+        RET@nullvalue <- 1 # theta = 1 => Equal hazards
     } else
-        RET@method <- "K-Sample Logrank Test"
+        RET@method <- paste("K-Sample",
+                            if (type == "logrank") "Logrank" else type, "Test")
 
     return(RET)
 }

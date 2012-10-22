@@ -56,6 +56,15 @@
     o     the Savage test and its corresponding transformation function are now
           available (see ?savage_test and ?savage_trafo)
 
+    o     the weighted logrank test and its corresponding transformation function
+          are now available, including weights for generalized Wilcoxon tests
+          (Gehan-Breslow, Prentice, Prentice-Marek and Andersen-Borgan-Gill-
+          Keiding), the Tarone-Ware class of tests, the Fleming-Harrington
+          class of tests and the Self class of tests (see ?surv_test,
+          ?logrank_trafo and ?logrank_weight)
+
+    o     new data set GTSG has been added (see ?GTSG)
+
     BUG FIXES
 
     o     monotonicity of step-down adjusted p-values was not enforced when

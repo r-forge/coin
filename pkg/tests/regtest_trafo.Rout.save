@@ -202,17 +202,17 @@ Loading required package: multcomp
 > logrank_trafo(Surv(x))
 [1] -0.8333333 -0.6333333         NA -0.1333333 -0.1333333         NA  0.3666667
 [8]  1.3666667         NA
-> logrank_trafo(Surv(x[cc]))
+> logrank_trafo(Surv(x)[cc])
 [1] -0.8333333 -0.6333333 -0.1333333 -0.1333333  0.3666667  1.3666667
-> logrank_trafo(Surv(x), ties.method = "HL")
+> logrank_trafo(Surv(x), ties.method = "Hothorn-Lausen")
 [1] -0.83333333 -0.63333333          NA  0.03333333  0.03333333          NA
 [7]  0.53333333  1.53333333          NA
-> logrank_trafo(Surv(x[cc]), ties.method = "HL")
+> logrank_trafo(Surv(x)[cc], ties.method = "Hothorn-Lausen")
 [1] -0.83333333 -0.63333333  0.03333333  0.03333333  0.53333333  1.53333333
 > logrank_trafo(Surv(x), ties.method = "average-scores")
 [1] -0.8333333 -0.6333333         NA -0.2166667 -0.2166667         NA  0.4500000
 [8]  1.4500000         NA
-> logrank_trafo(Surv(x[cc]), ties.method = "average-scores")
+> logrank_trafo(Surv(x)[cc], ties.method = "average-scores")
 [1] -0.8333333 -0.6333333 -0.2166667 -0.2166667  0.4500000  1.4500000
 > 
 > x <- c(1, 2, 3, 3, 3, 4, 4, 5, 5)
@@ -222,17 +222,17 @@ Loading required package: multcomp
 > logrank_trafo(Surv(x, e))
 [1]  0.0000000         NA -0.6666667 -0.6666667  0.3333333         NA -0.3333333
 [8]  0.1666667  1.1666667
-> logrank_trafo(Surv(x[cc], e[cc]))
+> logrank_trafo(Surv(x, e)[cc])
 [1]  0.0000000 -0.6666667 -0.6666667  0.3333333 -0.3333333  0.1666667  1.1666667
-> logrank_trafo(Surv(x, e), ties.method = "HL")
+> logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen")
 [1]  0.0000000         NA -0.5000000 -0.5000000  0.5000000         NA -0.1666667
 [8]  0.8333333  1.8333333
-> logrank_trafo(Surv(x[cc], e[cc]), ties.method = "HL")
+> logrank_trafo(Surv(x, e)[cc], ties.method = "Hothorn-Lausen")
 [1]  0.0000000 -0.5000000 -0.5000000  0.5000000 -0.1666667  0.8333333  1.8333333
 > logrank_trafo(Surv(x, e), ties.method = "average-scores")
 [1]  0.0000000         NA -0.7333333 -0.7333333  0.3666667         NA -0.3000000
 [8]  0.2000000  1.2000000
-> logrank_trafo(Surv(x[cc], e[cc]), ties.method = "average-scores")
+> logrank_trafo(Surv(x, e)[cc], ties.method = "average-scores")
 [1]  0.0000000 -0.7333333 -0.7333333  0.3666667 -0.3000000  0.2000000  1.2000000
 > 
 > x <- c(1, 2, NA, 3, 3, NA, 4, 5, NA)
@@ -241,16 +241,16 @@ Loading required package: multcomp
 > 
 > logrank_trafo(Surv(x, e))
 [1]  0.00    NA    NA -0.75  0.25    NA -0.25  0.75    NA
-> logrank_trafo(Surv(x[cc], e[cc]))
+> logrank_trafo(Surv(x, e)[cc])
 [1]  0.00 -0.75  0.25 -0.25  0.75
-> logrank_trafo(Surv(x, e), ties.method = "HL")
+> logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen")
 [1]  0.0000000         NA         NA -0.6666667  0.3333333         NA -0.1666667
 [8]  0.8333333         NA
-> logrank_trafo(Surv(x[cc], e[cc]), ties.method = "HL")
+> logrank_trafo(Surv(x, e)[cc], ties.method = "Hothorn-Lausen")
 [1]  0.0000000 -0.6666667  0.3333333 -0.1666667  0.8333333
 > logrank_trafo(Surv(x, e), ties.method = "average-scores")
 [1]  0.00    NA    NA -0.75  0.25    NA -0.25  0.75    NA
-> logrank_trafo(Surv(x[cc], e[cc]), ties.method = "average-scores")
+> logrank_trafo(Surv(x, e)[cc], ties.method = "average-scores")
 [1]  0.00 -0.75  0.25 -0.25  0.75
 > 
 > 
@@ -547,6 +547,106 @@ attr(,"contrast")
 4 - 2  0 -1  0 1
 4 - 3  0  0 -1 1
 > 
+> 
+> ### Weighted logrank scores
+> x <- c(1, 2, 3, 3, 3, 6, 6, 6, 9, 10)
+> e <- c(1, 0, 1, 0, 1, 1, 0, 1, 0, 1)
+> 
+> logrank_trafo(Surv(x, e))
+ [1] -0.90  0.10 -0.65  0.35 -0.65 -0.25  0.75 -0.25  0.75  0.75
+> logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen")
+ [1] -0.9000000  0.1000000 -0.5666667  0.4333333 -0.5666667  0.1000000
+ [7]  1.1000000  0.1000000  1.1000000  1.1000000
+> logrank_trafo(Surv(x, e), ties.method = "average-scores")
+ [1] -0.9000000  0.1000000 -0.7035714  0.3678571 -0.7035714 -0.3071429
+ [7]  0.8178571 -0.3071429  0.8178571  0.8178571
+> 
+> logrank_trafo(Surv(x, e),
++               type = "Gehan-Breslow")
+ [1] -9  1 -5  3 -5  0  5  0  5  5
+> logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
++               type = "Gehan-Breslow")
+ [1] -9  1 -3  3 -3  2  5  2  5  5
+> logrank_trafo(Surv(x, e), ties.method = "average-scores",
++               type = "Gehan-Breslow")
+ [1] -9  1 -5  3 -5  0  5  0  5  5
+> 
+> logrank_trafo(Surv(x, e),
++               type = "Tarone-Ware")
+ [1] -2.8460499  0.3162278 -1.8050926  1.0233345 -1.8050926 -0.3183062
+ [7]  1.9177617 -0.3183062  1.9177617  1.9177617
+> logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
++               type = "Tarone-Ware")
+ [1] -2.8460499  0.3162278 -1.3167654  1.1327243 -1.3167654  0.5553741
+ [7]  2.2874249  0.5553741  2.2874249  2.2874249
+> logrank_trafo(Surv(x, e), ties.method = "average-scores",
++               type = "Tarone-Ware")
+ [1] -2.8460499  0.3162278 -1.8783258  1.0477456 -1.8783258 -0.3730748
+ [7]  1.9949592 -0.3730748  1.9949592  1.9949592
+> 
+> logrank_trafo(Surv(x, e),
++               type = "Prentice")
+ [1] -0.81818182  0.09090909 -0.45454545  0.27272727 -0.45454545 -0.03896104
+ [7]  0.48051948 -0.03896104  0.48051948  0.48051948
+> logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
++               type = "Prentice")
+ [1] -0.81818182  0.09090909 -0.36363636  0.31818182 -0.36363636  0.18181818
+ [7]  0.59090909  0.18181818  0.59090909  0.59090909
+> logrank_trafo(Surv(x, e), ties.method = "average-scores",
++               type = "Prentice")
+ [1] -0.81818182  0.09090909 -0.51515152  0.29292929 -0.51515152 -0.06060606
+ [7]  0.52861953 -0.06060606  0.52861953  0.52861953
+> 
+> logrank_trafo(Surv(x, e),
++               type = "Prentice-Marek")
+ [1] -0.81818182  0.09090909 -0.43939394  0.26767677 -0.43939394 -0.01515152
+ [7]  0.45622896 -0.01515152  0.45622896  0.45622896
+> logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
++               type = "Prentice-Marek")
+ [1] -0.81818182  0.09090909 -0.34199134  0.30735931 -0.34199134  0.19913420
+ [7]  0.52380952  0.19913420  0.52380952  0.52380952
+> logrank_trafo(Surv(x, e), ties.method = "average-scores",
++               type = "Prentice-Marek")
+ [1] -0.81818182  0.09090909 -0.51515152  0.29292929 -0.51515152 -0.06060606
+ [7]  0.52861953 -0.06060606  0.52861953  0.52861953
+> 
+> logrank_trafo(Surv(x, e),
++               type = "Andersen-Borgan-Gill-Keiding")
+ [1] -0.81818182  0.09090909 -0.51515152  0.29292929 -0.51515152 -0.06060606
+ [7]  0.52861953 -0.06060606  0.52861953  0.52861953
+> logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
++               type = "Andersen-Borgan-Gill-Keiding")
+ [1] -0.81818182  0.09090909 -0.42857143  0.35064935 -0.42857143  0.18831169
+ [7]  0.67532468  0.18831169  0.67532468  0.67532468
+> logrank_trafo(Surv(x, e), ties.method = "average-scores",
++               type = "Andersen-Borgan-Gill-Keiding")
+ [1] -0.81818182  0.09090909 -0.51515152  0.29292929 -0.51515152 -0.06060606
+ [7]  0.52861953 -0.06060606  0.52861953  0.52861953
+> 
+> logrank_trafo(Surv(x, e),
++               type = "Fleming-Harrington")
+ [1] -0.90  0.10 -0.65  0.35 -0.65 -0.25  0.75 -0.25  0.75  0.75
+> logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
++               type = "Fleming-Harrington")
+ [1] -0.9000000  0.1000000 -0.5666667  0.4333333 -0.5666667  0.1000000
+ [7]  1.1000000  0.1000000  1.1000000  1.1000000
+> logrank_trafo(Surv(x, e), ties.method = "average-scores",
++               type = "Fleming-Harrington")
+ [1] -0.9000000  0.1000000 -0.7035714  0.3678571 -0.7035714 -0.3071429
+ [7]  0.8178571 -0.3071429  0.8178571  0.8178571
+> 
+> logrank_trafo(Surv(x, e),
++               type = "Self")
+ [1] -0.90  0.10 -0.65  0.35 -0.65 -0.25  0.75 -0.25  0.75  0.75
+> logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
++               type = "Self")
+ [1] -0.9000000  0.1000000 -0.5666667  0.4333333 -0.5666667  0.1000000
+ [7]  1.1000000  0.1000000  1.1000000  1.1000000
+> logrank_trafo(Surv(x, e), ties.method = "average-scores",
++               type = "Self")
+ [1] -0.9000000  0.1000000 -0.7035714  0.3678571 -0.7035714 -0.3071429
+ [7]  0.8178571 -0.3071429  0.8178571  0.8178571
+> 
 > proc.time()
    user  system elapsed 
-   0.74    0.14    0.95 
+   0.84    0.10    1.07 

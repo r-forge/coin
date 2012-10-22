@@ -103,19 +103,19 @@ consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
                          a = 5) {
     ties.method <- match.arg(ties.method)
 
-    f <- function(a) {
+    cs <- function(a) {
         switch(ties.method,
-               "mid-ranks" = {
-                   (rank_trafo(x) / (sum(!is.na(x)) + 1))^(a - 1)},
-               "average-scores" = {
-                   s <- (rank_trafo(x, ties.method = "random") /
-                           (sum(!is.na(x)) + 1))^(a - 1)
-                   average_scores(s, x)}
+            "mid-ranks" = {
+                (rank_trafo(x) / (sum(!is.na(x)) + 1))^(a - 1)},
+            "average-scores" = {
+                 s <- (rank_trafo(x, ties.method = "random") /
+                         (sum(!is.na(x)) + 1))^(a - 1)
+                 average_scores(s, x)}
         )
     }
 
-    scores <- if (length(a) == 1) f(a)
-              else vapply(setNames(a, paste("a =", a)), f, x)
+    scores <- if (length(a) == 1) cs(a)
+              else vapply(setNames(a, paste("a =", a)), cs, x)
     return(scores)
 }
 
@@ -180,44 +180,144 @@ fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
     tr
 }
 
-### logrank scores; with three different methods of handling ties
-logrank_trafo <- function(x, ties.method = c("logrank", "HL", "average-scores"))
+### weighted logrank scores; with three different methods of handling ties
+logrank_trafo <-
+    function(x, ties.method = c("mid-ranks", "Hothorn-Lausen", "average-scores"),
+             weight = logrank_weight, ...)
 {
-    ties.method <- match.arg(ties.method)
+    ## backwards compatibility
+    ties.method <- match.arg(ties.method,
+                             choices = c("mid-ranks", "Hothorn-Lausen",
+                                         "average-scores", "logrank", "HL"),
+                             several.ok = TRUE)[1]
+    if (ties.method == "logrank") ties.method <- "mid-ranks"
+    else if (ties.method == "HL") ties.method <- "Hothorn-Lausen"
 
     cc <- complete.cases(x)
     time <- x[cc, 1]
     event <- x[cc, 2]
 
     n <- length(time)
-    o <- order(time, event)
 
-    s <- switch(ties.method,
-        "logrank" = {
-            fact <- event / (n - rank(time, ties.method = "min") + 1)
-            cumsum(fact[o])[rank(time, ties.method = "max")] - event
-        },
-        "HL" = {
-            r <- rank(time, ties.method = "max")
-            fact <- event / (n - r + 1)
-            cumsum(fact[o])[r] - event
-        },
-        "average-scores" = {
-            tmindiff <- min(diff(sort(time[!duplicated(time)])))
-            ## ties.method = "first" for events, "min" for censored obs.
-            jitter <- sort(runif(n, max = tmindiff / 2))[o]
-            time2 <- time - event * jitter
-            o <- order(time2)
-            r <- rank(time2, ties.method = "min")
-            fact <- event / (n - r + 1)
-            s <- cumsum(fact[o])[r] - event
+    if (ties.method == "average-scores") {
+        noise <- runif(n, max = min(diff(sort(unique(time)))) / 2)
+        time0 <- time
+        time <- time - event * noise # break tied events at random
+    }
+
+    r <- rank(time, ties.method = if (ties.method != "Hothorn-Lausen") "min"
+                                  else "max")
+    o <- order(time, event)
+    or <- r[o]
+    uor <- unique(or)
+
+    ## number at risk, number of ties and events at the ordered unique times
+    n_risk <- n - uor + 1L
+    n_ties <- if (ties.method != "Hothorn-Lausen") -diff(c(n_risk, 0))
+              else -diff(c(n - unique(rank(time, ties.method = "min")[o]) + 1L, 0))
+    n_event <- vapply(uor, function(i) sum(event[o][i == or]), 1)
+
+    ## index: expands ties and returns in original order
+    idx <- rep.int(seq_along(n_ties), n_ties)[r] # => uor[idx] == r
+
+    ## weights
+    w <- weight(sort(unique(time)), n_risk, n_event, ...)
+
+    ## weighted log-rank scores
+    nw <- NCOL(w)
+    if (nw == 1) {
+        s <- cumsum(w * n_event / n_risk)[idx] - event * w[idx]
+        if (ties.method == "average-scores")
             ## average over events only
-            average_scores(s, time + (1 - event) * runif(n))
-        }
-    )
-    scores <- NA_real_
-    scores[cc] <- s
+            s <- average_scores(s, time0 + (1 - event) * noise)
+        scores <- rep.int(NA_real_, length(cc))
+        scores[cc] <- s
+    } else {
+        s <- vapply(seq_len(nw),
+                    function(i) {
+                        s <- cumsum(w[, i] * n_event / n_risk)[idx] -
+                               event * w[idx, i]
+                        if (ties.method == "average-scores")
+                            ## average over events only
+                            average_scores(s, time0 + (1 - event) * noise)
+                        else s
+                    },
+                    time)
+        scores <- matrix(NA_real_, nrow = length(cc), ncol = nw,
+                         dimnames = list(NULL, colnames(w)))
+        scores[cc, ] <- s
+    }
     return(scores)
+}
+
+### some popular logrank weights
+logrank_weight <- function(time, n.risk, n.event,
+                           type = c("logrank", "Gehan-Breslow", "Tarone-Ware",
+                                    "Prentice", "Prentice-Marek",
+                                    "Andersen-Borgan-Gill-Keiding",
+                                    "Fleming-Harrington", "Self"),
+                           rho = NULL, gamma = NULL) {
+    type <- match.arg(type)
+
+    ## weight functions
+    w <- function(rho, gamma) {
+        switch(type,
+            "logrank" = { # Mantel (1966), Peto and Peto (1972), Cox (1972)
+                rep.int(1L, length(time))
+            },
+            "Gehan-Breslow" = { # Gehan (1965), Breslow (1970)
+                n.risk
+            },
+            "Tarone-Ware" = { # Tarone and Ware (1977)
+                n.risk^rho
+            },
+            "Prentice" = { # Prentice (1978), Letón and Zuluaga (2001)
+                cumprod(n.risk / (n.risk + n.event)) # S(t)
+            },
+            "Prentice-Marek" = { # Prentice and Marek (1979)
+                cumprod(1 - n.event / (n.risk + 1)) # S(t)
+            },
+            "Andersen-Borgan-Gill-Keiding" = { # Andersen et al (1982)
+                surv <- cumprod(1 - n.event / (n.risk + 1)) # S(t)
+                c(1, surv[-length(surv)]) * n.risk / (n.risk + 1) # S(t-), pred.
+            },
+            "Fleming-Harrington" = { # Fleming and Harrington (1991)
+                surv <- cumprod(1 - n.event / n.risk) # S(t), Kaplan-Meier
+                surv <- c(1, surv[-length(surv)]) # S(t-)
+                surv^rho * (1 - surv)^gamma
+            },
+            "Self" = { # Self (1991)
+                ## NOTE: this allows for arbitrary follow-up times
+                v <- (time - diff(c(0, time)) / 2) / max(time[n.event > 0])
+                v^rho * (1 - v)^gamma
+            }
+        )
+    }
+
+    ## set defaults and eliminate 'rho' and 'gamma' when redundant
+    if (type == "Tarone-Ware") {
+        if (is.null(rho)) rho <- 0.5
+        gamma <- NULL
+    } else if (type %in% c("Fleming-Harrington", "Self")) {
+        if (is.null(rho)) rho <- 0
+        if (is.null(gamma)) gamma <- 0
+    } else rho <- gamma <- NULL
+
+    ## find rho-gamma combinations, recycle if necessary, and re-assign
+    rho_gamma <- suppressWarnings(cbind(rho, gamma)) # no warning on recycling
+    if (!is.null(rho)) rho <- rho_gamma[, 1]
+    if (!is.null(gamma)) gamma <- rho_gamma[, 2]
+
+    ## weights
+    wgt <- if (length(rho) < 2 && length(gamma) < 2) w(rho, gamma)
+           else setColnames(vapply(seq_len(nrow(rho_gamma)),
+                                   function(i) w(rho[i], gamma[i]),
+                                   time),
+                            ## compute names
+                            paste("rho = ", rho,
+                                  if (!is.null(gamma)) ", gamma = ", gamma,
+                                  sep = ""))
+    return(wgt)
 }
 
 ### factor handling

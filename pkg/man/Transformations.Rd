@@ -9,6 +9,7 @@
 \alias{ansari_trafo}
 \alias{fligner_trafo}
 \alias{logrank_trafo}
+\alias{logrank_weight}
 \alias{maxstat_trafo}
 \alias{fmaxstat_trafo}
 \alias{f_trafo}
@@ -30,12 +31,18 @@ savage_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 consal_trafo(x, ties.method = c("mid-ranks", "average-scores"), a = 5)
 ansari_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 fligner_trafo(x, ties.method = c("mid-ranks", "average-scores"))
-logrank_trafo(x, ties.method = c("logrank", "HL", "average-scores"))
+logrank_trafo(x, ties.method = c("mid-ranks", "Hothorn-Lausen", "average-scores"),
+              weight = logrank_weight, \dots)
+logrank_weight(time, n.risk, n.event,
+               type = c("logrank", "Gehan-Breslow", "Tarone-Ware", "Prentice",
+                        "Prentice-Marek", "Andersen-Borgan-Gill-Keiding",
+                        "Fleming-Harrington", "Self"),
+               rho = NULL, gamma = NULL)
 maxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 fmaxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 f_trafo(x)
 of_trafo(x)
-mcp_trafo(...)
+mcp_trafo(\dots)
 }
 \arguments{
   \item{data}{an object of class \code{data.frame}.}
@@ -62,19 +69,41 @@ mcp_trafo(...)
     the score generating function is applied to \code{"mid-ranks"} or
     scores, based on random ranks, are averaged
     (\code{"average-scores"}).  When using \code{rank_trafo}, ties can
-    be broken at \code{"random"}.  For ties handling in case of censored
-    data, see \code{\link{surv_test}}.}
+    be broken at \code{"random"}.  For ties handling in the case of
+    censored data, see \code{\link{surv_test}}.}
   \item{mid.score}{a character, the score assigned to observations
     exactly equal to the median.  Must be one of \code{"0"} (default),
     \code{"0.5"} or \code{"1"}; \code{"0.5"} leads to symmetric median
     scores (see also \code{\link{median_test}}).}
   \item{a}{a numeric vector, the value taken as the constant \eqn{a} in
     the Conover-Salsburg scores.  Defaults to 5.}
+  \item{weight}{a function whose three first arguments must correspond
+    to \code{time}, \code{n.risk}, and \code{n.event} given below;
+    defaults to \code{logrank_weight}.}
+  \item{time}{a numeric vector, the ordered distinct time points.}
+  \item{n.risk}{a numeric vector, the number of subject at risk at each
+    time point specified in \code{time}.}
+  \item{n.event}{a numeric vector, the number of events at each time
+    point specified in \code{time}.}
+  \item{type}{a character, one of \code{"logrank"} (default),
+    \code{"Gehan-Breslow"}, \code{"Tarone-Ware"}, \code{"Prentice"},
+    \code{"Prentice-Marek"}, \code{"Andersen-Borgan-Gill-Keiding"},
+    \code{"Fleming-Harrington"} or \code{"Self"} (see
+    \code{\link{surv_test}} for details).}
+  \item{rho}{a numeric vector, the \eqn{\rho} constant when \code{type} is
+    \code{"Tarone-Ware"}, \code{"Fleming-Harrington"} or \code{"Self"}.
+    Defaults to 0.5 in the first case and 0 in the other cases.}
+  \item{gamma}{a numeric vector, the \eqn{\gamma} constant when \code{type} is
+    \code{"Fleming-Harrington"} or \code{"Self"}.  Defaults to 0.}
   \item{minprob}{a fraction between 0 and 0.5.}
   \item{maxprob}{a fraction between 0.5 and 1.}
-  \item{\dots}{factor name and contrast matrix (as matrix or character)
-    in a tag = value format for multiple comparisons for one single
-    unordered factor, see \code{\link[multcomp]{mcp}}.}
+  \item{\dots}{
+    \code{logrank_trafo}: further arguments to be passed to
+    \code{weight}.
+    % do not remove!
+    \code{mcp_trafo}: factor name and contrast matrix (as matrix or
+    character) in a \samp{tag = value} format for multiple comparisons
+    for one single unordered factor, see \code{\link[multcomp]{mcp}}.}
 }
 \details{
 
@@ -97,7 +126,9 @@ mcp_trafo(...)
   \code{ansari_trafo} and \code{fligner_trafo} compute Ansari-Bradley
   and Fligner scores, respectively, for scale problems.
 
-  \code{logrank_trafo} computes logrank scores for censored data.
+  \code{logrank_trafo} computes weighted logrank scores for censored
+  data, allowing for user-defined weight functions through the
+  \code{weight} argument (see \code{\link{GTSG}} for an example).
 
   A \code{trafo} function with modified default arguments is usually fed
   into \code{\link{independence_test}} via the \code{xtrafo} or
