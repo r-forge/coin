@@ -315,7 +315,7 @@ is_integer <- function(x, fact = c(1, 2, 10, 100, 1000))
     vapply(fact, function(f) max(abs(round(x * f) - (x * f))) < eps(), NA)
 
 is_censored <- function(object) {
-    ncol(object@y) == 1 && class(object@y[[1]]) == "Surv"
+    ncol(object@y) == 1 && is.Surv(object@y[[1]])
 }
 
 isequal <- function(a, b) {
