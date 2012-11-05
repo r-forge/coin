@@ -40,8 +40,9 @@
     o     the Conover-Salsburg scores transformation now allows the 'a' constant
           to be set (see ?consal_trafo and ?neuropathy)
 
-    o     the logrank test now allows the alternative hypothesis to be specified
-          when the explanatory variable is an ordered factor
+    o     the Kruskal-Wallis test and the logrank test now allows the alternative
+          hypothesis to be specified when the explanatory variable is an ordered
+          factor
 
     o     the printed output for the logrank test now reports whether a 2- or K-
           sample test has been carried out
@@ -103,8 +104,8 @@
 
     o     documentation updates
 
-    o     the test statistic in the Kruskal-Wallis test and the logrank test is
-          now a scalar if the explanatory variable is an ordered factor
+    o     the Kruskal-Wallis test and the logrank test now uses a scalar test
+          statistic in case the explanatory variable is an ordered factor
 
     o     in the printed output for the Ansari-Bradley test and the Spearman test
           the tested parameter has been renamed to 'ratio of scales' and 'rho'
