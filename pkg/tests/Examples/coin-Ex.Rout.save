@@ -72,9 +72,9 @@ $cutpoint
 > ### Name: ContingencyTests
 > ### Title: Independence in Three-Way Contingency Tables
 > ### Aliases: chisq_test chisq_test.formula chisq_test.table
-> ###   chisq_test.IndependenceProblem cmh_test.formula cmh_test.table
-> ###   cmh_test.IndependenceProblem cmh_test lbl_test.formula lbl_test.table
-> ###   lbl_test.IndependenceProblem lbl_test
+> ###   chisq_test.IndependenceProblem cmh_test cmh_test.formula
+> ###   cmh_test.table cmh_test.IndependenceProblem lbl_test lbl_test.formula
+> ###   lbl_test.table lbl_test.IndependenceProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -85,7 +85,7 @@ $cutpoint
 > ## End Don't show
 > 
 >   ### for females only
->   chisq_test(as.table(jobsatisfaction[,,"Female"]), 
+>   chisq_test(as.table(jobsatisfaction[,,"Female"]),
 +       distribution = approximate(B = 9999))
 
 	Approximative Pearson's Chi-Squared Test
@@ -142,14 +142,15 @@ data:  Job.Satisfaction (ordered) by
 chi-squared = 6.1563, p-value = 0.0123
 
 > 
+> 
 >   ### Smoking and HDL cholesterin status
 >   ### (from Jeong, Jhun and Kim, 2005, CSDA 48, 623-631, Table 2)
 >   smokingHDL <- as.table(
-+       matrix(c(15,  8, 11,  5, 
-+                 3,  4,  6,  1, 
-+                 6,  7, 15, 11, 
++       matrix(c(15,  8, 11,  5,
++                 3,  4,  6,  1,
++                 6,  7, 15, 11,
 +                 1,  2,  3,  5), ncol = 4,
-+              dimnames = list(smoking = c("none", "< 5", "< 10", ">=10"), 
++              dimnames = list(smoking = c("none", "< 5", "< 10", ">=10"),
 +                              HDL = c("normal", "low", "borderline", "abnormal"))
 +   ))
 >   ### use interval mid-points as scores for smoking
@@ -161,9 +162,10 @@ data:  HDL (ordered) by smoking (none < < 5 < < 10 < >=10)
 chi-squared = 9.8557, df = 1, p-value = 0.001693
 
 > 
+> 
 >   ### Cochran-Armitage trend test for proportions
 >   ### Lung tumors in female mice exposed to 1,2-dichloroethane
->   ### Encyclopedia of Biostatistics (Armitage & Colton, 1998), 
+>   ### Encyclopedia of Biostatistics (Armitage & Colton, 1998),
 >   ### Chapter Trend Test for Counts and Proportions, page 4578, Table 2
 >   lungtumor <- data.frame(dose = rep(c(0, 1, 2), c(40, 50, 48)),
 +                           tumor = c(rep(c(0, 1), c(38, 2)),
@@ -176,7 +178,7 @@ chi-squared = 9.8557, df = 1, p-value = 0.001693
   1 43  7
   2 33 15
 > 
->   ### Cochran-Armitage test (permutation equivalent to correlation 
+>   ### Cochran-Armitage test (permutation equivalent to correlation
 >   ### between dose and tumor), cf. Table 2 for results
 >   independence_test(tumor ~ dose, data = lungtumor, teststat = "quad")
 
@@ -2285,7 +2287,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  63.77 1.82 96.41 NA NA 
+Time elapsed:  60.11 1.92 77.62 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -417,14 +417,10 @@ cmh_test.formula <- function(formula, data = list(), subset = NULL,
        frame = parent.frame(), ...)
 }
 
-cmh_test.table <- function(object,
-    distribution = c("asymptotic", "approximate"), ...) {
+cmh_test.table <- function(object, ...) {
 
-    distribution <- check_distribution_arg(distribution,
-        values = c("asymptotic", "approximate"))
     ip <- table2IndependenceProblem(object)
-    RET <- do.call("cmh_test", c(list(object = ip, distribution = distribution),
-                   list(...)))
+    RET <- do.call("cmh_test", c(list(object = ip), list(...)))
     return(RET)
 }
 
@@ -464,14 +460,10 @@ chisq_test.formula <- function(formula, data = list(), subset = NULL,
        frame = parent.frame(), ...)
 }
 
-chisq_test.table <- function(object,
-    distribution = c("asymptotic", "approximate"), ...) {
+chisq_test.table <- function(object, ...) {
 
-    distribution <- check_distribution_arg(distribution,
-        values = c("asymptotic", "approximate"))
     ip <- table2IndependenceProblem(object)
-    RET <- do.call("chisq_test", c(list(object = ip, distribution = distribution),
-                   list(...)))
+    RET <- do.call("chisq_test", c(list(object = ip), list(...)))
     return(RET)
 }
 
@@ -550,14 +542,10 @@ lbl_test.formula <- function(formula, data = list(), subset = NULL,
        frame = parent.frame(), ...)
 }
 
-lbl_test.table <- function(object,
-    distribution = c("asymptotic", "approximate"), ...) {
+lbl_test.table <- function(object, ...) {
 
-    distribution <- check_distribution_arg(distribution,
-        values = c("asymptotic", "approximate"))
     ip <- table2IndependenceProblem(object)
-    RET <- do.call("lbl_test", c(list(object = ip, distribution = distribution),
-                   list(...)))
+    RET <- do.call("lbl_test", c(list(object = ip), list(...)))
     return(RET)
 }
 
