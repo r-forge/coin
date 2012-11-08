@@ -804,18 +804,15 @@ mh_test.SymmetryProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    addargs <- list(...)
-    scores <- addargs$scores
-    if (!is.null(addargs$scores)) {
-        if (length(scores) > 1)
+    args <- setup_args(teststat = "quad", distribution = distribution)
+
+    if (!is.null(args$scores)) {
+        if (length(args$scores) > 1)
             stop("length of ", sQuote("scores"), " must be equal one")
-        names(scores) <- "response"
-        addargs$scores <- NULL
+        names(args$scores) <- "response"
     }
 
-    RET <- do.call("symmetry_test",
-        c(list(object = object, distribution = distribution,
-               teststat = "quad", scores = scores), addargs))
+    RET <- do.call("symmetry_test", c(list(object = object), args))
 
     if (is_ordered(RET@statistic))
         RET@method <- "Marginal-Homogeneity Test for Ordered Data"

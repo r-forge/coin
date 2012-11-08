@@ -587,6 +587,18 @@ data:  Job.Satisfaction by
 chi-squared = 3.0171, df = 3, p-value = 0.389
 
 > 
+> ### partial matching of the scores argument didn't work
+> tab <- as.table(matrix(c(1, 2, 3, 1, 2, 3, 1, 2, 3), ncol = 3))
+> mh_test(tab, sco = list(response = 1:3))
+
+	Asymptotic Marginal-Homogeneity Test for Ordered Data
+
+data:  response (ordered) by
+	 groups (Var1, Var2) 
+	 stratified by block 
+chi-squared = 1.5, df = 1, p-value = 0.2207
+
+> 
 > proc.time()
    user  system elapsed 
-   3.83    0.26    4.22 
+   3.71    0.29    4.19 

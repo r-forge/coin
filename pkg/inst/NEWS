@@ -97,8 +97,8 @@
           in the 2-sample case when the explanatory variable was an ordered
           factor
 
-    o     partial matching of the Pearson chi-squared test's 'scores' argument
-          didn't work
+    o     partial matching of the 'scores' argument didn't work for Pearson's
+          chi-squared test and the marginal homogeneity test
 
     OTHER CHANGES
 
