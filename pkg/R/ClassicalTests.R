@@ -46,7 +46,8 @@ normal_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
     ft("normal_test", formula, data, subset, weights,
-       frame = parent.frame(), ...)}
+       frame = parent.frame(), ...)
+}
 
 normal_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
@@ -94,7 +95,8 @@ median_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
     ft("median_test", formula, data, subset, weights,
-       frame = parent.frame(), ...)}
+       frame = parent.frame(), ...)
+}
 
 median_test.IndependenceProblem <- function(object,
     mid.score = c("0", "0.5", "1"),
@@ -142,7 +144,8 @@ savage_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
     ft("savage_test", formula, data, subset, weights,
-       frame = parent.frame(), ...)}
+       frame = parent.frame(), ...)
+}
 
 savage_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
@@ -243,7 +246,8 @@ surv_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
     ft("surv_test", formula, data, subset, weights,
-       frame = parent.frame(), ...)}
+       frame = parent.frame(), ...)
+}
 
 surv_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "Hothorn-Lausen", "average-scores"),
@@ -496,9 +500,9 @@ chisq_test.IndependenceProblem <- function(object,
         }
     }
 
-    scores <- list(...)$scores
+    args <- setup_args()
     ### convert factors to ordered and attach scores if requested
-    object <- setscores(object, scores)
+    object <- setscores(object, args$scores)
 
     ### transform data if requested and setup a test problem
     itp <- new("IndependenceTestProblem", object)

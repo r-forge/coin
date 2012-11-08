@@ -334,3 +334,6 @@ median_test(y1 ~ x, data = df, alternative = "less")
 
 ### nullvalue never got printed
 surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)
+
+### partial matching of the scores argument didn't work
+chisq_test(as.table(jobsatisfaction[, , "Female"]), sco = list(Income = 1:4))

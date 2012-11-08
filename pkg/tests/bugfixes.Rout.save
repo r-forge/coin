@@ -1,5 +1,5 @@
 
-R version 2.15.1 Patched (2012-08-06 r60178) -- "Roasted Marshmallows"
+R version 2.15.2 Patched (2012-11-06 r61087) -- "Trick or Treat"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i386-w64-mingw32/i386 (32-bit)
@@ -577,6 +577,16 @@ Z = 2.3373, p-value = 0.01942
 alternative hypothesis: true theta is not equal to 1 
 
 > 
+> ### partial matching of the scores argument didn't work
+> chisq_test(as.table(jobsatisfaction[, , "Female"]), sco = list(Income = 1:4))
+
+	Asymptotic Linear-by-Linear Association Test
+
+data:  Job.Satisfaction by
+	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
+chi-squared = 3.0171, df = 3, p-value = 0.389
+
+> 
 > proc.time()
    user  system elapsed 
-   3.77    0.26    4.19 
+   3.83    0.26    4.22 

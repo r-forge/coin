@@ -340,6 +340,22 @@ check_distribution_arg <- function(distribution,
     distribution
 }
 
+setup_args <- function(...) {
+    cl <- match.call(independence_test.IndependenceProblem,
+                     call = sys.call(sys.parent()), expand.dots = FALSE)
+    ## find default arguments and values
+    args <- formals(independence_test.IndependenceProblem)
+    args$object <- args$... <- NULL
+    nm <- names(args)
+    ## replace default values with user-specified values
+    for (i in nm[nm %in% names(cl)])
+        args[[i]] <- eval(cl[[i]])
+    ## override default and user-specified values
+    for (i in nm[nm %in% names(list(...))])
+        args[[i]] <- list(...)[[i]]
+    args
+}
+
 statnames <- function(object) {
     nc <- ncol(object@ytrans)
     nr <- ncol(object@xtrans)
