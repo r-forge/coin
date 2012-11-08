@@ -532,6 +532,8 @@ chisq_test.IndependenceProblem <- function(object,
     else
         RET@method <- "Pearson's Chi-Squared Test"
 
+    RET@call <- match.call()
+    
     return(RET)
 }
 
