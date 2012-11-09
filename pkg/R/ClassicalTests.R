@@ -62,12 +62,16 @@ normal_test.IndependenceProblem <- function(object,
     }
 
     twosamp <- nlevels(object@x[[1]]) == 2
+    args <- setup_args(ytrafo = function(data)
+                           trafo(data, numeric_trafo = function(y)
+                               normal_trafo(y, ties.method = ties.method)),
+                       check = check)
+    args$teststat <-
+        if (is.ordered(object@x[[1]]) || !is.null(args$scores) || twosamp)
+            "scalar"
+        else "quad"
 
-    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) || twosamp
-    RET <- independence_test(object, teststat = if(scalar) "scalar" else "quad",
-        ytrafo = function(data) trafo(data, numeric_trafo = function(y)
-            normal_trafo(y, ties.method = ties.method)),
-        check = check, ...)
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
@@ -111,12 +115,16 @@ median_test.IndependenceProblem <- function(object,
     }
 
     twosamp <- nlevels(object@x[[1]]) == 2
+    args <- setup_args(ytrafo = function(data)
+                           trafo(data, numeric_trafo = function(y)
+                               median_trafo(y, mid.score = mid.score)),
+                       check = check)
+    args$teststat <-
+        if (is.ordered(object@x[[1]]) || !is.null(args$scores) || twosamp)
+            "scalar"
+        else "quad"
 
-    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) || twosamp
-    RET <- independence_test(object, teststat = if(scalar) "scalar" else "quad",
-        ytrafo = function(data) trafo(data, numeric_trafo = function(y)
-             median_trafo(y, mid.score = mid.score)),
-        check = check, ...)
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
@@ -160,12 +168,16 @@ savage_test.IndependenceProblem <- function(object,
     }
 
     twosamp <- nlevels(object@x[[1]]) == 2
+    args <- setup_args(ytrafo = function(data)
+                           trafo(data, numeric_trafo = function(y)
+                               savage_trafo(y, ties.method = ties.method)),
+                       check = check)
+    args$teststat <-
+        if (is.ordered(object@x[[1]]) || !is.null(args$scores) || twosamp)
+            "scalar"
+        else "quad"
 
-    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) || twosamp
-    RET <- independence_test(object, teststat = if(scalar) "scalar" else "quad",
-        ytrafo = function(data) trafo(data, numeric_trafo = function(y)
-            savage_trafo(y, ties.method = ties.method)),
-        check = check, ...)
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
@@ -267,13 +279,18 @@ surv_test.IndependenceProblem <- function(object,
     }
 
     twosamp <- nlevels(object@x[[1]]) == 2
+    args <- setup_args(ytrafo = function(data)
+                           trafo(data, surv_trafo = function(y)
+                               logrank_trafo(y, ties.method = ties.method,
+                                             type = type, rho = rho,
+                                             gamma = gamma)),
+                       check = check)
+    args$teststat <-
+        if (is.ordered(object@x[[1]]) || !is.null(args$scores) || twosamp)
+            "scalar"
+        else "quad"
 
-    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores) || twosamp
-    RET <- independence_test(object, teststat = if(scalar) "scalar" else "quad",
-        ytrafo = function(data) trafo(data, surv_trafo = function(y)
-            logrank_trafo(y, ties.method = ties.method, type = type,
-                          rho = rho, gamma = gamma)),
-        check = check, ...)
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
@@ -315,11 +332,16 @@ kruskal_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    scalar <- is.ordered(object@x[[1]]) || !is.null(list(...)$scores)
-    RET <- independence_test(object, teststat = if(scalar) "scalar" else "quad",
-        distribution = distribution,
-        ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
-        check = check, ...)
+    args <- setup_args(distribution = distribution,
+                       ytrafo = function(data)
+                           trafo(data, numeric_trafo = rank_trafo),
+                       check = check)
+    args$teststat <-
+        if (is.ordered(object@x[[1]]) || !is.null(args$scores))
+            "scalar"
+        else "quad"
+
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
@@ -521,7 +543,7 @@ chisq_test.IndependenceProblem <- function(object,
         RET@method <- "Pearson's Chi-Squared Test"
 
     RET@call <- match.call()
-    
+
     return(RET)
 }
 
