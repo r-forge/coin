@@ -820,8 +820,8 @@ $cutpoint
 > ### Name: ScaleTests
 > ### Title: Independent Two- and K-Sample Scale Tests
 > ### Aliases: ansari_test ansari_test.formula
-> ###   ansari_test.IndependenceProblem fligner_test.formula
-> ###   fligner_test.IndependenceProblem fligner_test
+> ###   ansari_test.IndependenceProblem fligner_test fligner_test.formula
+> ###   fligner_test.IndependenceProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -869,7 +869,6 @@ alternative hypothesis: true ratio of scales is not equal to 1
 +       ytrafo = function(data) trafo(data, numeric_trafo = function(x)
 +           cbind(rank_trafo(x), ansari_trafo(x))),
 +       teststat = "quad", distribution = approximate(B = 9999))
-> 
 >   lt
 
 	Approximative General Independence Test
@@ -2287,7 +2286,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  60.11 1.92 77.62 NA NA 
+Time elapsed:  59.83 1.35 63.33 NA NA 
 > grDevices::dev.off()
 null device 
           1 

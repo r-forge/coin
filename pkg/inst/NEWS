@@ -118,6 +118,9 @@
           linear-by-linear association test is carried out when the explanatory
           variable is an ordered factor
 
+    o     the Ansari-Bradley test no longer features the 'alternative' argument
+          (but still allows the alternative hypothesis to be specified)
+
 
                 CHANGES in `coin' VERSION 1.0-22
 

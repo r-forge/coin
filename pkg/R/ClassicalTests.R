@@ -20,9 +20,12 @@ wilcox_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    RET <- independence_test(object, teststat = "scalar",
-        ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
-        check = check, ...)
+    args <- setup_args(teststat = "scalar",
+                       ytrafo = function(data)
+                           trafo(data, numeric_trafo = rank_trafo),
+                       check = check)
+
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     RET@nullvalue <- 0
     RET@method <- "Wilcoxon Mann-Whitney Rank Sum Test"
@@ -209,7 +212,6 @@ ansari_test.formula <- function(formula, data = list(), subset = NULL,
 }
 
 ansari_test.IndependenceProblem <- function(object,
-    alternative = c("two.sided", "less", "greater"),
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
@@ -221,19 +223,19 @@ ansari_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    alternative <- match.arg(alternative)
-    if (alternative == "less") {
-        alternative <- "greater"
-    } else {
-        if (alternative == "greater")
-            alternative <- "less"
-    }
+    args <- setup_args(teststat = "scalar",
+                       ytrafo = function(data)
+                           trafo(data, numeric_trafo = function(y)
+                               ansari_trafo(y, ties.method = ties.method)),
+                       check = check)
+    args$alternative <- match.arg(args$alternative,
+                                  c("two.sided", "less", "greater"))
+    if (args$alternative == "less")
+        args$alternative <- "greater"
+    else if (args$alternative == "greater")
+        args$alternative <- "less"
 
-    RET <- independence_test(object, teststat = "scalar",
-        alternative = alternative,
-        ytrafo = function(data) trafo(data, numeric_trafo = function(y)
-            ansari_trafo(y, ties.method = ties.method)),
-        check = check, ...)
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     RET@parameter <- "ratio of scales"
     RET@nullvalue <- 1
@@ -380,15 +382,18 @@ fligner_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    ### eliminate location differences (see `stats/R/fligner.test')
+    args <- setup_args(teststat = "quad",
+                       distribution = distribution,
+                       ytrafo = function(data)
+                           trafo(data, numeric_trafo = function(y)
+                               fligner_trafo(y, ties.method = ties.method)),
+                       check = check)
+
+    ## eliminate location differences (see 'stats/R/fligner.test')
     object@y[[1]] <- object@y[[1]] -
         tapply(object@y[[1]], object@x[[1]], median)[object@x[[1]]]
 
-    RET <- independence_test(object, teststat = "quad",
-        distribution = distribution,
-        ytrafo = function(data) trafo(data, numeric_trafo = function(y)
-            fligner_trafo(y, ties.method = ties.method)),
-        check = check, ...)
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     RET@method <- "Fligner-Killeen Test"
 
@@ -419,11 +424,15 @@ spearman_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- independence_test(object, teststat = "scalar",
-        distribution = distribution,
-        xtrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
-        ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
-        check = check, ...)
+    args <- setup_args(teststat = "scalar",
+                       distribution = distribution,
+                       xtrafo = function(data)
+                           trafo(data, numeric_trafo = rank_trafo),
+                       ytrafo = function(data)
+                           trafo(data, numeric_trafo = rank_trafo),
+                       check = check)
+
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     RET@parameter <- "rho"
     RET@nullvalue <- 0
@@ -463,9 +472,11 @@ cmh_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- independence_test(object, teststat = "quad",
-        distribution = distribution,
-        check = check, ...)
+    args <- setup_args(teststat = "quad",
+                       distribution = distribution,
+                       check = check)
+
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
@@ -511,10 +522,10 @@ chisq_test.IndependenceProblem <- function(object,
         values = c("asymptotic", "approximate"))
 
     args <- setup_args()
-    ### convert factors to ordered and attach scores if requested
+    ## convert factors to ordered and attach scores if requested
     object <- setscores(object, args$scores)
 
-    ### transform data if requested and setup a test problem
+    ## transform data if requested and setup a test problem
     itp <- new("IndependenceTestProblem", object)
 
     if (!check(itp))
@@ -524,9 +535,9 @@ chisq_test.IndependenceProblem <- function(object,
 
     ts <- new("QuadTypeIndependenceTestStatistic", its)
 
-    ### use the classical chisq statistic based on Pearson
-    ### residuals (O - E)^2 / E
-    ### see Th. 3.1 and its proof in Strasser & Weber (1999).
+    ## use the classical chisq statistic based on Pearson
+    ## residuals (O - E)^2 / E
+    ## see Th. 3.1 and its proof in Strasser & Weber (1999).
 
     ts@teststatistic <- ts@teststatistic * n / (n - 1)
     ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
@@ -575,7 +586,7 @@ lbl_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    ### convert factors to ordered
+    ## convert factors to ordered
     object@x[] <- lapply(object@x,
         function(x) if (is.factor(x) && nlevels(x) > 2) {
                         return(ordered(x))
@@ -592,10 +603,11 @@ lbl_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- do.call("independence_test",
-        c(list(object = object, teststat = "quad",
-               distribution = distribution,
-               check = check), list(...)))
+    args <- setup_args(teststat = "quad",
+                       distribution = distribution,
+                       check = check)
+
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     RET@method <- "Linear-by-Linear Association Test"
 
@@ -624,9 +636,9 @@ oneway_test.IndependenceProblem <- function(object, ...) {
     }
 
     twosamp <- nlevels(object@x[[1]]) == 2
+    args <- setup_args(check = check)
 
-    RET <- independence_test(object,
-        check = check, ...)
+    RET <- do.call("independence_test", c(list(object = object), args))
 
     if (is_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
@@ -666,11 +678,13 @@ contrast_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    xtrafo <- function(data) trafo(data) %*% cmatrix
+    args <- setup_args(teststat = "max",
+                       distribution = distribution,
+                       xtrafo = function(data)
+                           trafo(data) %*% cmatrix)
 
-    RET <- independence_test(object, teststat = "max",
-        distribution = distribution,
-        xtrafo = xtrafo, ...)
+    RET <- do.call("independence_test", c(list(object = object), args))
+
     RET@method <- "General Contrast Test"
 
     return(RET)
@@ -704,11 +718,13 @@ maxstat_test.IndependenceProblem <- function(object,
     fmm <- function(x) fmaxstat_trafo(x, minprob = minprob, maxprob = maxprob)
     xtrafo <- function(data) trafo(data, numeric_trafo = mm, factor_trafo = fmm)
 
-    RET <- independence_test(object, teststat = teststat,
-        distribution = distribution,
-        xtrafo = xtrafo, ...)
+    args <- setup_args(teststat = teststat,
+                       distribution = distribution,
+                       xtrafo = xtrafo)
 
-    ### estimate cutpoint
+    RET <- do.call("independence_test", c(list(object = object), args))
+
+    ## estimate cutpoint
     wm <- which.max(apply(abs(statistic(RET, "standardized")), 1, max))
     whichvar <- attr(RET@statistic@xtrans, "assign")[wm]
     maxcontr <- RET@statistic@xtrans[,wm]
@@ -782,11 +798,13 @@ friedman_test.SymmetryProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    RET <- symmetry_test(object, teststat = "quad",
-        distribution = distribution,
-        ytrafo = function(data)
-            trafo(data, numeric_trafo = rank_trafo, block = object@block),
-        ...)
+    args <- setup_args(teststat = "quad",
+                       distribution = distribution,
+                       ytrafo = function(data)
+                           trafo(data, numeric_trafo = rank_trafo,
+                                 block = object@block))
+
+    RET <- do.call("symmetry_test", c(list(object = object), args))
 
     if (is_ordered(RET@statistic))
         RET@method <- "Page Test"
@@ -826,7 +844,8 @@ mh_test.SymmetryProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    args <- setup_args(teststat = "quad", distribution = distribution)
+    args <- setup_args(teststat = "quad",
+                       distribution = distribution)
 
     if (!is.null(args$scores)) {
         if (length(args$scores) > 1)
@@ -903,7 +922,9 @@ wilcoxsign_test.IndependenceProblem <- function(object,
     ip <- new("IndependenceProblem", x = data.frame(x = xx),
               y = data.frame(y = yy), block = block)
 
-    RET <- independence_test(ip, teststat = "scalar", ...)
+    args <- setup_args(teststat = "scalar")
+
+    RET <- do.call("independence_test", c(list(object = ip), args))
 
     RET@method <- "Wilcoxon-Signed-Rank Test"
     if (any(abs(odiffs) < .Machine$double.eps)) {
