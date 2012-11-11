@@ -2,97 +2,112 @@
 \alias{friedman_test}
 \alias{friedman_test.formula}
 \alias{friedman_test.SymmetryProblem}
+\alias{wilcoxsign_test}
 \alias{wilcoxsign_test.formula}
 \alias{wilcoxsign_test.IndependenceProblem}
-\alias{wilcoxsign_test}
+
 \title{ Symmetry Tests }
+
 \description{
-    Testing the symmetry of a response for repeated measurements in a
-    complete block design.
+  Testing the symmetry of a response for repeated measurements in a
+  complete block design.
 }
 \usage{
 
 \method{friedman_test}{formula}(formula, data, subset = NULL, \dots)
-\method{friedman_test}{SymmetryProblem}(object, distribution = c("asymptotic", "approximate"),
-              ...)
+\method{friedman_test}{SymmetryProblem}(object,
+    distribution = c("asymptotic", "approximate"), \dots)
 
 \method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
-\method{wilcoxsign_test}{IndependenceProblem}(object, zero.method = c("Pratt", "Wilcoxon"),
-              ties.method = NULL, ...)
+\method{wilcoxsign_test}{IndependenceProblem}(object,
+    zero.method = c("Pratt", "Wilcoxon"), ties.method = NULL, \dots)
 
 }
 \arguments{
-  \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}
-    is a numeric variable giving the data values and
-    \code{x} a factor with two (\code{wilcoxsign_test})
-    or more levels giving the corresponding groups. \code{block} is an
-    optional factor (which is generated automatically when omitted).}
+  \item{formula}{a formula of the form \code{y ~ x | block} where
+    \code{y} is a numeric variable giving the data values and \code{x} a
+    factor with two (\code{wilcoxsign_test}) or more levels giving the
+    corresponding groups.  \code{block} is an optional factor (which is
+    generated automatically when omitted).}
   \item{data}{an optional data frame containing the variables in the
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
-  \item{object}{an object inheriting from class \code{SymmetryProblem}.}
-  \item{distribution}{a character, the null distribution of the test statistic
-    can be approximated by its asymptotic distribution (\code{asympt})
-    or via Monte-Carlo resampling (\code{approx}).
-    Alternatively, the functions
-    \code{\link{approximate}} or \code{\link{asymptotic}} can be
-    used to specify how the exact conditional distribution of the test statistic
-    should be calculated or approximated. For the Wilcoxon signed rank test,
-    \code{\link{exact}} computes the exact distribution by means of the Streitberg-Roehmel
-    shift algorithm.}
-  \item{zero.method}{a character specifying the way zeros,
-                     for example induced by tied repeated measurements,
-                     are handled, see below.}
-  \item{ties.method}{no defunct, see below.}
+  \item{object}{an object inheriting from class
+    \code{"SymmetryProblem"}.}
+  \item{distribution}{a character, the null distribution of the test
+    statistic can be approximated by its asymptotic distribution
+    (\code{"asymptotic"}, default) or via Monte Carlo resampling
+    (\code{"approximate"}).  Alternatively, the functions
+    \code{\link{approximate}} or \code{\link{asymptotic}} can be used to
+    specify how the exact conditional distribution of the test statistic
+    should be calculated or approximated.  For the Wilcoxon signed-rank
+    test, \code{\link{exact}} computes the exact distribution by means
+    of the Streitberg-Roehmel shift algorithm.}
+  \item{zero.method}{a character specifying the way zeros, e.g., induced
+    by tied repeated measurements, are handled (see \sQuote{Details}).}
+  \item{ties.method}{now defunct (see \sQuote{Note}).}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
 
   The null hypothesis of symmetry of \code{y} across \code{x} is
-  tested. In case \code{x} is an ordered factor \code{friedman_test}
-  performs the Page test, scores can be altered by the \code{scores}
-  argument (see \code{\link{symmetry_test}}).
+  tested.
 
-  For \code{wilcoxsign_test}, formulae of the form
-  \code{y ~ x | block} and \code{y ~ x} are allowed. The latter is interpreted
-  in the sense that \code{y} is the first and \code{x} the second
-  measurement on the same observation. By default, following Pratt (1959),
-  we rank the absolute differences (including zeros) first, then
-  discard the ranks corresponding to zero differences, but keep the
-  other ranks as they are. Alternatively, zero differences are discarded
-  first and then rank the remaining absolute differences (the
-  original proposal by Wilcoxon, as explained in Hollander & Wolfe, 1999).
+  When \code{x} is an ordered factor \code{friedman_test} performs the
+  Page test.  In this case the test statistic is a scalar and the
+  alternative hypothesis can be specified using the \code{alternative}
+  argument.  The default scores, \code{1:nlevels(x)}, can be altered
+  using the \code{scores} argument (see \code{\link{symmetry_test}}).
 
-  The default \code{zero.method = "Pratt"} was introduced in
-  \code{coin} 1.0-16. Earlier versions had \code{ties.method = "HollanderWolfe"}
-  which is now equivalent to \code{zero.method = "Wilcoxon"}.
+  For \code{wilcoxsign_test}, formulae of the form \code{y ~ x | block}
+  and \code{y ~ x} are allowed.  The latter is interpreted in the sense
+  that \code{y} is the first and \code{x} the second measurement on the
+  same observation.  The default method of handling zeros
+  (\code{zero.method = "Pratt"}) due to Pratt (1959) first rank
+  transforms the absolute differences (including zeros) and then
+  discards the ranks corresponding to the zero differences.  The
+  original proposal by Wilcoxon (\code{zero.method = "Wilcoxon"}), as
+  explained in Hollander & Wolfe (1999), first discards the zero
+  differences and then rank transforms the remaining absolute
+  differences.
+
+}
+\note{
+
+  Starting with \pkg{coin} version 1.0-16, the \code{ties.method}
+  argument has been replaced by \code{zero.method}.  The current default
+  is \code{zero.method = "Pratt"} whereas earlier versions had
+  \code{ties.method = "HollanderWolfe"} which is now equivalent to
+  \code{zero.method = "Wilcoxon"}.
+
 }
 \value{
 
-  An object inheriting from class \code{IndependenceTest} with
-  methods \code{show}, \code{pvalue} and \code{statistic}.
+  An object inheriting from class \code{IndependenceTest} with methods
+  \code{show}, \code{pvalue} and \code{statistic}.
 
 }
 \references{
 
-    Myles Hollander & Douglas A. Wolfe (1999).
-    \emph{Nonparametric Statistical Methods, 2nd Edition}.
-    New York: John Wiley & Sons.
+  Myles Hollander & Douglas A. Wolfe (1999).
+  \emph{Nonparametric Statistical Methods}, 2nd Edition.
+  New York: John Wiley & Sons.
 
-    John W. Pratt (1959). Remarks on zeros and ties in the Wilcoxon
-    signed rank procedures. \emph{Journal of the American Statistical Association},
-    \bold{54}(287), 655--667.
+  John W. Pratt (1959).
+  Remarks on zeros and ties in the Wilcoxon signed rank procedures.
+  \emph{Journal of the American Statistical Association} \bold{54}(287),
+  655--667.
 
-    Bernd Streitberg & Joachim Roehmel (1986).
-    Exact distributions for permutations and rank tests:
-    An introduction to some recently published algorithms.
-    \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
+  Bernd Streitberg & Joachim Roehmel (1986).
+  Exact distributions for permutations and rank tests: An introduction
+  to some recently published algorithms.
+  \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
 
-    Bernd Streitberg & Joachim Roehmel (1987).
-    Exakte Verteilungen fuer Rang- und Randomisierungstests
-    im allgemeinen c-Stichprobenfall.
-    \emph{EDV in Medizin und Biologie} \bold{18}(1), 12--19.
+  Bernd Streitberg & Joachim Roehmel (1987).
+  Exakte Verteilungen fuer Rang- und Randomisierungstests im allgemeinen
+  c-Stichprobenfall.
+  \emph{EDV in Medizin und Biologie} \bold{18}(1), 12--19.
 
 }
 \examples{
@@ -157,23 +172,26 @@
   ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
   print(pvalue(rtt, method = "single-step"))
 
+
   ### Strength Index of Cotton, Hollander & Wolfe (1999), Table 7.5, page 286
   sc <- data.frame(block = factor(c(rep(1, 5), rep(2, 5), rep(3, 5))),
-                   potash = ordered(rep(c(144, 108, 72, 54, 36), 3)),
+                   potash = ordered(rep(c(144, 108, 72, 54, 36), 3),
+                                    levels = c(144, 108, 72, 54, 36)),
                    strength = c(7.46, 7.17, 7.76, 8.14, 7.63,
                                 7.68, 7.57, 7.73, 8.15, 8.00,
                                 7.21, 7.80, 7.74, 7.87, 7.93))
 
   ### Page test for ordered alternatives
-  ft <- friedman_test(strength ~ potash | block, data = sc)
-  ft
+  friedman_test(strength ~ potash | block, data = sc)
 
   ### one-sided p-value
-  1 - pnorm(sqrt(statistic(ft)))
+  pvalue(friedman_test(strength ~ potash | block, data = sc,
+                       alternative = "greater"))
 
   ### approximate null distribution via Monte-Carlo
   pvalue(friedman_test(strength ~ potash | block, data = sc,
                        distribution = approximate(B = 9999)))
+
 
   ### example from ?wilcox.test
   x <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)

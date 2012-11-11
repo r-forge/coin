@@ -341,3 +341,7 @@ chisq_test(as.table(jobsatisfaction[, , "Female"]), sco = list(Income = 1:4))
 ### partial matching of the scores argument didn't work
 tab <- as.table(matrix(c(1, 2, 3, 1, 2, 3, 1, 2, 3), ncol = 3))
 mh_test(tab, sco = list(response = 1:3))
+
+### erroneously claimed to be linear-by-linear tests
+chisq_test(as.table(jobsatisfaction[, , "Female"]), scores = list(Income = 1:4))
+cmh_test(as.table(jobsatisfaction[, , "Female"]), scores = list(Income = 1:4))

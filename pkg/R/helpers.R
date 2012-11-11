@@ -170,7 +170,7 @@ setscores <- function(x, scores) {
 
     missing <- varnames[!varnames %in% c(colnames(x@x), colnames(x@y))]
     if (length(missing) > 0)
-        stop("Variable(s)", paste(missing, sep = ", "),
+        stop("Variable(s) ", paste(missing, sep = ", "),
              " not found in ", sQuote("x"))
 
 
@@ -236,7 +236,7 @@ table2df_sym <- function(x) {
         stop("table ", sQuote("x"), " does not represent a symmetry problem")
     n <- nrow(x)
     p <- ncol(x)
-    y <- data.frame(groups = factor(rep(colnames(x), rep(n, p))),
+    y <- data.frame(conditions = factor(rep(colnames(x), rep(n, p))),
                     response = factor(unlist(x), labels = lx))
     rownames(y) <- 1:(n*p)
     y
@@ -293,10 +293,25 @@ is_contingency <- function(object) {
 }
 
 is_ordered <- function(object) {
-    x <- object@x
-    y <- object@y
     (is_Ksample(object) || is_contingency(object)) &&
-    (is.ordered(x[[1]]) || is.ordered(y[[1]]))
+        (is.ordered(object@x[[1]]) || is.ordered(object@y[[1]]))
+}
+
+is_singly_ordered <- function(object) {
+    x <- object@x[[1]]
+    y <- object@y[[1]]
+    (is_Ksample(object) || is_contingency(object)) &&
+        ((is.ordered(x) && (is.numeric(y) || (!is.ordered(y) && nlevels(y) > 2))) ||
+         (is.ordered(y) && (is.numeric(x) || (!is.ordered(x) && nlevels(x) > 2))))
+}
+
+is_doubly_ordered <- function(object) {
+    x <- object@x[[1]]
+    y <- object@y[[1]]
+    (is_Ksample(object) || is_contingency(object)) &&
+        ((is.ordered(x) && is.ordered(y)) ||
+         ((is.ordered(x) && nlevels(y) == 2) ||
+          (is.ordered(y) && nlevels(x) == 2)))
 }
 
 is_completeblock <- function(object) {

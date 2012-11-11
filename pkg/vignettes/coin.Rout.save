@@ -139,7 +139,8 @@ chi-squared = 10.2001, df = 9, p-value = 0.3345
 data:  Job.Satisfaction (ordered) by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
 	 stratified by Gender 
-chi-squared = 6.6235, df = 1, p-value = 0.01006
+Z = 2.5736, p-value = 0.01006
+alternative hypothesis: two.sided 
 
 
 > lbl_test(jobsatisfaction, scores = list(Job.Satisfaction = c(1, 
@@ -150,7 +151,8 @@ chi-squared = 6.6235, df = 1, p-value = 0.01006
 data:  Job.Satisfaction (ordered) by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
 	 stratified by Gender 
-chi-squared = 6.1563, df = 1, p-value = 0.01309
+Z = 2.4812, p-value = 0.01309
+alternative hypothesis: two.sided 
 
 
 > egg_data <- data.frame(scores = c(9.7, 8.7, 5.4, 5, 
@@ -208,4 +210,4 @@ IV - III 0.99889989
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.48    0.12    2.77 
+   2.43    0.14    2.71 

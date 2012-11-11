@@ -79,11 +79,9 @@ $cutpoint
 > 
 > ### ** Examples
 > 
-> 
 > ## Don't show: 
->     set.seed(290875)
+>   set.seed(290875)
 > ## End Don't show
-> 
 >   ### for females only
 >   chisq_test(as.table(jobsatisfaction[,,"Female"]),
 +       distribution = approximate(B = 9999))
@@ -114,7 +112,8 @@ chi-squared = 10.2001, df = 9, p-value = 0.3345
 data:  Job.Satisfaction (ordered) by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
 	 stratified by Gender 
-chi-squared = 6.6235, df = 1, p-value = 0.01006
+Z = 2.5736, p-value = 0.01006
+alternative hypothesis: two.sided 
 
 > 
 >   ### both Income and Job.Satisfaction ordered, alternative scores
@@ -126,12 +125,13 @@ chi-squared = 6.6235, df = 1, p-value = 0.01006
 data:  Job.Satisfaction (ordered) by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
 	 stratified by Gender 
-chi-squared = 6.1563, df = 1, p-value = 0.01309
+Z = 2.4812, p-value = 0.01309
+alternative hypothesis: two.sided 
 
 > 
 >   ### the same, null distribution approximated
 >   cmh_test(jobsatisfaction, scores = list(Job.Satisfaction = c(1, 3, 4, 5),
-+                                         Income = c(3, 10, 20, 35)),
++                                           Income = c(3, 10, 20, 35)),
 +            distribution = approximate(B = 10000))
 
 	Approximative Linear-by-Linear Association Test
@@ -139,7 +139,8 @@ chi-squared = 6.1563, df = 1, p-value = 0.01309
 data:  Job.Satisfaction (ordered) by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
 	 stratified by Gender 
-chi-squared = 6.1563, p-value = 0.0123
+Z = 2.4812, p-value = 0.0123
+alternative hypothesis: two.sided 
 
 > 
 > 
@@ -159,7 +160,8 @@ chi-squared = 6.1563, p-value = 0.0123
 	Asymptotic Linear-by-Linear Association Test
 
 data:  HDL (ordered) by smoking (none < < 5 < < 10 < >=10) 
-chi-squared = 9.8557, df = 1, p-value = 0.001693
+Z = 3.1394, p-value = 0.001693
+alternative hypothesis: two.sided 
 
 > 
 > 
@@ -189,7 +191,7 @@ chi-squared = 10.6381, df = 1, p-value = 0.001108
 
 > 
 >   ### linear-by-linear association test with scores 0, 1, 2
->   ### is identical with Cochran-Armitage test
+>   ### is identical to Cochran-Armitage test
 >   lungtumor$dose <- ordered(lungtumor$dose)
 >   independence_test(tumor ~ dose, data = lungtumor, teststat = "quad",
 +                     scores = list(dose = c(0, 1, 2)))
@@ -613,20 +615,19 @@ alternative hypothesis: greater
 > 
 > ### Name: MarginalHomogeneityTest
 > ### Title: Marginal Homogeneity Test
-> ### Aliases: mh_test mh_test.table mh_test.formula mh_test.SymmetryProblem
+> ### Aliases: mh_test mh_test.formula mh_test.table mh_test.SymmetryProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
 > 
 > 
 >   ### Opinions on Pre- and Extramarital Sex, Agresti (2002), page 421
->   opinions <- c("always wrong", "almost always wrong", 
+>   opinions <- c("always wrong", "almost always wrong",
 +                 "wrong only sometimes", "not wrong at all")
-> 
->   PreExSex <- as.table(matrix(c(144, 33, 84, 126, 
-+                                   2,  4, 14,  29, 
-+                                   0,  2,  6,  25, 
-+                                   0,  0,  1,  5), nrow = 4, 
+>   PreExSex <- as.table(matrix(c(144, 33, 84, 126,
++                                   2,  4, 14,  29,
++                                   0,  2,  6,  25,
++                                   0,  0,  1,  5), nrow = 4,
 +                               dimnames = list(PremaritalSex = opinions,
 +                                               ExtramaritalSex = opinions)))
 > 
@@ -636,7 +637,7 @@ alternative hypothesis: greater
 	Asymptotic Marginal-Homogeneity Test
 
 data:  response by
-	 groups (ExtramaritalSex, PremaritalSex) 
+	 conditions (ExtramaritalSex, PremaritalSex) 
 	 stratified by block 
 chi-squared = 271.9222, df = 3, p-value < 2.2e-16
 
@@ -647,28 +648,77 @@ chi-squared = 271.9222, df = 3, p-value < 2.2e-16
 	Asymptotic Marginal-Homogeneity Test for Ordered Data
 
 data:  response (ordered) by
-	 groups (ExtramaritalSex, PremaritalSex) 
+	 conditions (ExtramaritalSex, PremaritalSex) 
 	 stratified by block 
-chi-squared = 270.7402, df = 1, p-value < 2.2e-16
+Z = -16.4542, p-value < 2.2e-16
+alternative hypothesis: two.sided 
 
+> ## Don't show: ## Not run: 
+> ##D   ### example taken from
+> ##D   ### http://www.john-uebersax.com/stat/mcnemar.htm#stuart
+> ##D   rating <- c("low", "moderate", "high")
+> ##D   x <- as.table(matrix(c(20, 10,  5,
+> ##D                          3, 30, 15,
+> ##D                          0,  5, 40),
+> ##D                        ncol = 3, byrow = TRUE,
+> ##D                        dimnames = list(Rater1 = rating, Rater2 = rating)))
+> ##D   ### test statistic W_0 = 13.76
+> ##D   mh_test(x)
+> ## End(Not run)## End Don't show
 > 
->   ### example taken from 
->   ### http://ourworld.compuserve.com/homepages/jsuebersax/mcnemar.htm
->   rating <- c("low", "moderate", "high")
->   x <- as.table(matrix(c(20, 10,  5,
-+                          3, 30, 15,
-+                          0,  5, 40), 
-+                        ncol = 3, byrow = TRUE,
-+                        dimnames = list(Rater1 = rating, Rater2 = rating)))
->   ### test statistic W_0 = 13.76
->   mh_test(x)
+>   ### Vote intention example from Madansky (1963, p. 107--108)
+>   intention <- c("Republican","Democratic","Uncertain")
+>   vote <- as.table(array(c(120, 1,  8, 2,   2,  1, 2, 1,  7,
++                              6, 2,  1, 1, 103,  5, 1, 4,  8,
++                             20, 3, 31, 1,   6, 30, 2, 1, 81),
++                          dim = c(3, 3, 3),
++                          dimnames = list(July = intention,
++                                          August = intention,
++                                          June = intention)))
+>   ### test statistic Q = 70.77
+>   mh_test(vote)
 
 	Asymptotic Marginal-Homogeneity Test
 
 data:  response by
-	 groups (Rater1, Rater2) 
+	 conditions (August, July, June) 
 	 stratified by block 
-chi-squared = 13.7647, df = 2, p-value = 0.001026
+chi-squared = 70.763, df = 4, p-value = 1.565e-14
+
+> 
+> 
+>   ### Cross-over study
+>   ### http://www.nesug.org/proceedings/nesug00/st/st9005.pdf
+>   relief <- c("none", "moderate", "complete")
+>   dysmenorrhea <- as.table(array(c(6, 2, 1,  4, 3, 0,  5, 2, 2,
++                                    3, 1, 0, 13, 3, 0, 10, 1, 0,
++                                    1, 2, 1,  8, 1, 1, 14, 2, 0),
++                                  dim = c(3, 3, 3),
++                                  dimnames =  list("Placebo" = relief,
++                                                   "High dose" = relief,
++                                                   "Low dose" = relief)))
+> 
+>   ### Ordered response, Q = 53.76
+>   mh_test(dysmenorrhea, scores = list(response = 1:3))
+
+	Asymptotic Marginal-Homogeneity Test for Ordered Data
+
+data:  response (ordered) by
+	 conditions (High.dose, Low.dose, Placebo) 
+	 stratified by block 
+chi-squared = 53.7617, df = 2, p-value = 2.117e-12
+
+> 
+>   ### Both response and measurement conditions ordered, Q = 47.29
+>   mh_test(dysmenorrhea, scores = list(response = 1:3, conditions = 3:1))
+
+	Asymptotic Marginal-Homogeneity Test for Ordered Data
+
+data:  response (ordered) by
+	 conditions (High.dose < Low.dose < Placebo) 
+	 stratified by block 
+Z = 6.8764, p-value = 6.138e-12
+alternative hypothesis: two.sided 
 
 > 
 > 
@@ -1075,8 +1125,8 @@ newdrug             0.0191             0.0111             0.0063
 > ### Name: SymmetryTests
 > ### Title: Symmetry Tests
 > ### Aliases: friedman_test friedman_test.formula
-> ###   friedman_test.SymmetryProblem wilcoxsign_test.formula
-> ###   wilcoxsign_test.IndependenceProblem wilcoxsign_test
+> ###   friedman_test.SymmetryProblem wilcoxsign_test wilcoxsign_test.formula
+> ###   wilcoxsign_test.IndependenceProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -1158,28 +1208,32 @@ Round Out - Narrow Angle  0.623934656
 Wide Angle - Narrow Angle 0.053791966
 Wide Angle - Round Out    0.003358314
 > 
+> 
 >   ### Strength Index of Cotton, Hollander & Wolfe (1999), Table 7.5, page 286
 >   sc <- data.frame(block = factor(c(rep(1, 5), rep(2, 5), rep(3, 5))),
-+                    potash = ordered(rep(c(144, 108, 72, 54, 36), 3)),
++                    potash = ordered(rep(c(144, 108, 72, 54, 36), 3),
++                                     levels = c(144, 108, 72, 54, 36)),
 +                    strength = c(7.46, 7.17, 7.76, 8.14, 7.63,
 +                                 7.68, 7.57, 7.73, 8.15, 8.00,
 +                                 7.21, 7.80, 7.74, 7.87, 7.93))
 > 
 >   ### Page test for ordered alternatives
->   ft <- friedman_test(strength ~ potash | block, data = sc)
->   ft
+>   friedman_test(strength ~ potash | block, data = sc)
 
 	Asymptotic Page Test
 
 data:  strength by
-	 potash (36 < 54 < 72 < 108 < 144) 
+	 potash (144 < 108 < 72 < 54 < 36) 
 	 stratified by block 
-chi-squared = 7.0533, df = 1, p-value = 0.007912
+Z = 2.6558, p-value = 0.007912
+alternative hypothesis: two.sided 
 
 > 
 >   ### one-sided p-value
->   1 - pnorm(sqrt(statistic(ft)))
-[1] 0.003955894
+>   pvalue(friedman_test(strength ~ potash | block, data = sc,
++                        alternative = "greater"))
+            
+0.003955894 
 > 
 >   ### approximate null distribution via Monte-Carlo
 >   pvalue(friedman_test(strength ~ potash | block, data = sc,
@@ -1188,6 +1242,7 @@ chi-squared = 7.0533, df = 1, p-value = 0.007912
 99 percent confidence interval:
  0.003124471 0.006765311 
 
+> 
 > 
 >   ### example from ?wilcox.test
 >   x <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
@@ -2286,7 +2341,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  59.83 1.35 63.33 NA NA 
+Time elapsed:  61.18 1.12 65.55 NA NA 
 > grDevices::dev.off()
 null device 
           1 

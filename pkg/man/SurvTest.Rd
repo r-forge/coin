@@ -177,11 +177,14 @@
   Again, \eqn{\rho} and \eqn{\gamma} are constants and \eqn{\rho = 0}
   and \eqn{\gamma = 0} leads to the standard logrank test.
 
-  In case \code{x} is an ordered factor, \code{surv_test} computes the
-  linear-by-linear association test for ordered alternatives.  This
-  procedure was first suggested by Tarone (1975) for the standard,
-  unweighted, logrank test and later extended to general weights by
-  Tarone & Ware (1977).
+  When \code{x} is an ordered factor, the linear-by-linear association
+  test for ordered alternatives is computed.  In this case the test
+  statistic is a scalar and the alternative hypothesis can be specified
+  using the \code{alternative} argument.  The default scores,
+  \code{1:nlevels(x)}, can be altered using the \code{scores} argument
+  (see \code{\link{independence_test}}).  This procedure was first
+  suggested by Tarone (1975) for the standard, unweighted, logrank test
+  and later extended to general weights by Tarone & Ware (1977).
 
 }
 \note{
@@ -192,7 +195,7 @@
   test.
 
   In versions of \pkg{coin} prior to 1.1-0, \code{logrank_trafo} was a
-  decreasing function of the data when \code{ties.method} was other than 
+  decreasing function of the data when \code{ties.method} was other than
   \code{"average-scores"}.  It is now \emph{always} an increasing
   function, implying that the test statistic have the same sign
   irrespective of the ties handling method.  (Consequently, the sign of

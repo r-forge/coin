@@ -65,18 +65,19 @@ normal_test.IndependenceProblem <- function(object,
     }
 
     twosamp <- nlevels(object@x[[1]]) == 2
+
     args <- setup_args(ytrafo = function(data)
                            trafo(data, numeric_trafo = function(y)
                                normal_trafo(y, ties.method = ties.method)),
                        check = check)
-    args$teststat <-
-        if (is.ordered(object@x[[1]]) || !is.null(args$scores) || twosamp)
-            "scalar"
-        else "quad"
+    object <- setscores(object, args$scores)
+    args$scores <- NULL
+    args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
+                     else "quad"
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_ordered(RET@statistic))
+    if (is_singly_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
         RET@method <- "2-Sample Normal Quantile (van der Waerden) Test"
@@ -118,18 +119,19 @@ median_test.IndependenceProblem <- function(object,
     }
 
     twosamp <- nlevels(object@x[[1]]) == 2
+
     args <- setup_args(ytrafo = function(data)
                            trafo(data, numeric_trafo = function(y)
                                median_trafo(y, mid.score = mid.score)),
                        check = check)
-    args$teststat <-
-        if (is.ordered(object@x[[1]]) || !is.null(args$scores) || twosamp)
-            "scalar"
-        else "quad"
+    object <- setscores(object, args$scores)
+    args$scores <- NULL
+    args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
+                     else "quad"
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_ordered(RET@statistic))
+    if (is_singly_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
         RET@method <- "2-Sample Median Test"
@@ -171,18 +173,19 @@ savage_test.IndependenceProblem <- function(object,
     }
 
     twosamp <- nlevels(object@x[[1]]) == 2
+
     args <- setup_args(ytrafo = function(data)
                            trafo(data, numeric_trafo = function(y)
                                savage_trafo(y, ties.method = ties.method)),
                        check = check)
-    args$teststat <-
-        if (is.ordered(object@x[[1]]) || !is.null(args$scores) || twosamp)
-            "scalar"
-        else "quad"
+    object <- setscores(object, args$scores)
+    args$scores <- NULL
+    args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
+                     else "quad"
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_ordered(RET@statistic))
+    if (is_singly_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
         RET@method <- "2-Sample Savage Test"
@@ -281,20 +284,21 @@ surv_test.IndependenceProblem <- function(object,
     }
 
     twosamp <- nlevels(object@x[[1]]) == 2
+
     args <- setup_args(ytrafo = function(data)
                            trafo(data, surv_trafo = function(y)
                                logrank_trafo(y, ties.method = ties.method,
                                              type = type, rho = rho,
                                              gamma = gamma)),
                        check = check)
-    args$teststat <-
-        if (is.ordered(object@x[[1]]) || !is.null(args$scores) || twosamp)
-            "scalar"
-        else "quad"
+    object <- setscores(object, args$scores)
+    args$scores <- NULL
+    args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
+                     else "quad"
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_ordered(RET@statistic))
+    if (is_singly_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
         RET@method <- paste("2-Sample",
@@ -338,14 +342,14 @@ kruskal_test.IndependenceProblem <- function(object,
                        ytrafo = function(data)
                            trafo(data, numeric_trafo = rank_trafo),
                        check = check)
-    args$teststat <-
-        if (is.ordered(object@x[[1]]) || !is.null(args$scores))
-            "scalar"
-        else "quad"
+    object <- setscores(object, args$scores)
+    args$scores <- NULL
+    args$teststat <- if (is.ordered(object@x[[1]])) "scalar"
+                     else "quad"
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_ordered(RET@statistic))
+    if (is_singly_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
     else
         RET@method <- "Kruskal-Wallis Test"
@@ -354,7 +358,7 @@ kruskal_test.IndependenceProblem <- function(object,
 }
 
 
-### Fligner test
+### Fligner-Killeen test
 fligner_test <- function(object, ...) UseMethod("fligner_test")
 
 fligner_test.formula <- function(formula, data = list(), subset = NULL,
@@ -374,7 +378,7 @@ fligner_test.IndependenceProblem <- function(object,
                  " does not represent a K-sample problem",
                  " (maybe the grouping variable is not a factor?)")
 
-        if (is_ordered(object))
+        if (is_singly_ordered(object))
             stop(colnames(object@x), " is an ordered factor")
         return(TRUE)
     }
@@ -472,13 +476,20 @@ cmh_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    args <- setup_args(teststat = "quad",
-                       distribution = distribution,
+    args <- setup_args(distribution = distribution,
                        check = check)
+    object <- setscores(object, args$scores)
+    args$scores <- NULL
+    args$teststat <-
+        if ((is.ordered(object@x[[1]]) && is.ordered(object@y[[1]])) ||
+                ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||
+                 (is.ordered(object@y[[1]]) && nlevels(object@x[[1]]) == 2)))
+            "scalar"
+        else "quad"
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_ordered(RET@statistic))
+    if (is_doubly_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
     else
         RET@method <- "Generalized Cochran-Mantel-Haenszel Test"
@@ -487,7 +498,7 @@ cmh_test.IndependenceProblem <- function(object,
 }
 
 
-### Pearsons Chi-Squared Test
+### Pearson's Chi-Squared Test
 chisq_test <- function(object, ...) UseMethod("chisq_test")
 
 chisq_test.formula <- function(formula, data = list(), subset = NULL,
@@ -522,8 +533,16 @@ chisq_test.IndependenceProblem <- function(object,
         values = c("asymptotic", "approximate"))
 
     args <- setup_args()
-    ## convert factors to ordered and attach scores if requested
     object <- setscores(object, args$scores)
+    args$scores <- NULL
+    args$teststat <-
+        if ((is.ordered(object@x[[1]]) && is.ordered(object@y[[1]])) ||
+                ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||
+                 (is.ordered(object@y[[1]]) && nlevels(object@x[[1]]) == 2)))
+            "scalar"
+        else "quad"
+    args$alternative <- match.arg(args$alternative,
+                                  c("two.sided", "less", "greater"))
 
     ## transform data if requested and setup a test problem
     itp <- new("IndependenceTestProblem", object)
@@ -533,23 +552,34 @@ chisq_test.IndependenceProblem <- function(object,
 
     its <- new("IndependenceTestStatistic", itp, varonly = FALSE)
 
-    ts <- new("QuadTypeIndependenceTestStatistic", its)
+    ts <- if (args$teststat == "scalar")
+              new("ScalarIndependenceTestStatistic", its, args$alternative)
+          else {
+              if (args$alternative != "two.sided")
+                  warning(sQuote("alternative"),
+                          " is ignored for quad type test statistics")
+              new("QuadTypeIndependenceTestStatistic", its)
+          }
 
     ## use the classical chisq statistic based on Pearson
     ## residuals (O - E)^2 / E
     ## see Th. 3.1 and its proof in Strasser & Weber (1999).
-
     ts@teststatistic <- ts@teststatistic * n / (n - 1)
     ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
-    ts@covarianceplus <- MPinv(covariance(ts))$MPinv
 
-    nd <- distribution(ts)
+    RET <- if (args$teststat == "scalar") {
+               d <- distribution(ts)
+               new("ScalarIndependenceTest", statistic = ts, distribution = d)
+           } else {
+               ts@covarianceplus <- MPinv(covariance(ts))$MPinv
+               d <- distribution(ts)
+               new("QuadTypeIndependenceTest", statistic = ts, distribution = d)
+           }
 
-    RET <- new("QuadTypeIndependenceTest", statistic = ts,
-        distribution = nd)
-
-    if (is_ordered(RET@statistic))
+    if (is_doubly_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
+    else if (is_singly_ordered(RET@statistic))
+        RET@method <- "Generalized Pearson's Chi-Squared Test"
     else
         RET@method <- "Pearson's Chi-Squared Test"
 
@@ -580,7 +610,7 @@ lbl_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
     check <- function(object) {
-        if (!is_ordered(object))
+        if (!is_doubly_ordered(object))
             stop(sQuote("object"),
                  " does not represent a problem with ordered data")
         return(TRUE)
@@ -603,7 +633,7 @@ lbl_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    args <- setup_args(teststat = "quad",
+    args <- setup_args(teststat = "scalar",
                        distribution = distribution,
                        check = check)
 
@@ -636,11 +666,12 @@ oneway_test.IndependenceProblem <- function(object, ...) {
     }
 
     twosamp <- nlevels(object@x[[1]]) == 2
+
     args <- setup_args(check = check)
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_ordered(RET@statistic))
+    if (is_singly_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
         RET@method <- "2-Sample Permutation Test"
@@ -798,15 +829,18 @@ friedman_test.SymmetryProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    args <- setup_args(teststat = "quad",
-                       distribution = distribution,
+    args <- setup_args(distribution = distribution,
                        ytrafo = function(data)
                            trafo(data, numeric_trafo = rank_trafo,
                                  block = object@block))
+    object <- setscores(object, args$scores)
+    args$scores <- NULL
+    args$teststat <- if (is.ordered(object@x[[1]])) "scalar"
+                     else "quad"
 
     RET <- do.call("symmetry_test", c(list(object = object), args))
 
-    if (is_ordered(RET@statistic))
+    if (is_singly_ordered(RET@statistic))
         RET@method <- "Page Test"
     else
         RET@method <- "Friedman Test"
@@ -815,7 +849,7 @@ friedman_test.SymmetryProblem <- function(object,
 }
 
 
-### Marginal-Homogeneity-Test
+### Marginal Homogeneity Test
 mh_test <- function(object, ...) UseMethod("mh_test")
 
 mh_test.formula <- function(formula, data = list(), subset = NULL, ...)
@@ -828,7 +862,7 @@ mh_test.formula <- function(formula, data = list(), subset = NULL, ...)
 
 mh_test.table <- function(object, ...) {
     df <- table2df_sym(object)
-    sp <- new("SymmetryProblem", x = df["groups"], y = df["response"])
+    sp <- new("SymmetryProblem", x = df["conditions"], y = df["response"])
     RET <- do.call("mh_test", c(list(object = sp), list(...)))
     return(RET)
 }
@@ -844,14 +878,15 @@ mh_test.SymmetryProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    args <- setup_args(teststat = "quad",
-                       distribution = distribution)
-
-    if (!is.null(args$scores)) {
-        if (length(args$scores) > 1)
-            stop("length of ", sQuote("scores"), " must be equal one")
-        names(args$scores) <- "response"
-    }
+    args <- setup_args(distribution = distribution)
+    object <- setscores(object, args$scores)
+    args$scores <- NULL
+    args$teststat <-
+        if ((is.ordered(object@x[[1]]) && is.ordered(object@y[[1]])) ||
+                ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||
+                 (is.ordered(object@y[[1]]) && nlevels(object@x[[1]]) == 2)))
+            "scalar"
+        else "quad"
 
     RET <- do.call("symmetry_test", c(list(object = object), args))
 

@@ -38,7 +38,7 @@ bta <- mh_test(endometrial_cancer,
                    scores = list(response = c(0, 0.2, 0.5125, 0.7)))
 
 # test statistic, page 311
-stopifnot(isequal(round(sqrt(statistic(bta)), 3), 3.735))
+stopifnot(isequal(round(statistic(bta), 3), 3.735))
 
 # two-sided asymptotic p-value, page 311
 stopifnot(isequal(round(pvalue(bta), 4), 0.0002))
@@ -56,7 +56,7 @@ bta <- mh_test(pathologists,
                    scores = list(response = 1:5))
 
 # test statistic, page 313
-stopifnot(isequal(round(sqrt(statistic(bta)), 3), 1.152))
+stopifnot(isequal(round(statistic(bta), 3), 1.152))
 
 # two-sided asymptotic p-value, page 313
 stopifnot(isequal(round(pvalue(bta), 4), 0.2492))
@@ -449,13 +449,14 @@ stopifnot(pci[1] < 0.026 & pci[2] > 0.026)
 cotton <- data.frame(strength = c(7.46, 7.17, 7.76, 8.14, 7.63,
                                   7.68, 7.57, 7.73, 8.15, 8.00,
                                   7.21, 7.80, 7.74, 7.87, 7.93),
-                     potash = ordered(rep(c(144, 108, 72, 54, 36), 3)),
+                     potash = ordered(rep(c(144, 108, 72, 54, 36), 3),
+                                      levels = c(144, 108, 72, 54, 36)),
                      block = factor(rep(1:3, rep(5, 3))))
 
 fta <- friedman_test(strength ~ potash | block, data = cotton)
 
 # test statistic, page 467
-stopifnot(isequal(round(sqrt(statistic(fta)), 3), 2.656))
+stopifnot(isequal(round(statistic(fta), 3), 2.656))
 
 # asymptotical p-value, page 467
 stopifnot(isequal(round(pvalue(fta), 4), 0.0079))
@@ -622,7 +623,7 @@ csom <- as.table(matrix(c(17066, 48, 14464, 38, 788, 5, 126, 1, 37, 1), nrow = 2
 lta <- lbl_test(csom, scores = list(Alcohol = 0:4))
 
 # test statistic, page 796
-stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.352))
+stopifnot(isequal(round(statistic(lta), 3), -1.352))
 
 # asymptotic p-value, page 796
 stopifnot(isequal(round(pvalue(lta), 4), 0.1764))
@@ -637,7 +638,7 @@ stopifnot(pci[1] < 0.179 & pci[2] > 0.179)
 lta <- lbl_test(csom, scores = list(Alcohol = c(0, 0.5, 1.5, 4, 7)))
 
 # test statistic, page 807
-stopifnot(isequal(round(sqrt(statistic(lta)), 3), 2.563))
+stopifnot(isequal(round(statistic(lta), 3), -2.563))
 
 # asymptotic p-value, page 807
 stopifnot(isequal(round(pvalue(lta), 4), 0.0104))
@@ -648,17 +649,17 @@ stopifnot(isequal(round(pvalue(lbl_test(csom,
 
 
 ### StatXact manual 6, page 797
-load("oral_contraceptives.rda")
+load("LANCET.rda")
 
-lta <- lbl_test(oral_contraceptives)
+lta <- lbl_test(lancet)
 
 # test statistic, page 799
-stopifnot(isequal(round(sqrt(statistic(lta)), 3), 4.335))
+stopifnot(isequal(round(statistic(lta), 3), 4.335))
 
 # asymptotic p-value, page 799
 stopifnot(isequal(round(pvalue(lta), 4), 0))
 
-ltMC <- lbl_test(oral_contraceptives, distribution = approximate(B = 10000))
+ltMC <- lbl_test(lancet, distribution = approximate(B = 10000))
 
 pci <- attr(pvalue(ltMC), "conf.int")
 stopifnot(pci[1] < 0.0000045 & pci[2] > 0.0000045)
@@ -671,7 +672,8 @@ tumor <- data.frame(number = c( 0,  0,  0,  1,
                                11,  9, 13, 14,
                                 1,  1,  1,  2,
                                29, 26, 28, 20),
-                    tumor = factor(rep(c(rep("Present", 4), rep("Absent", 4)), 3)),
+                    tumor = factor(rep(c(rep("Present", 4), rep("Absent", 4)), 3),
+                                   levels = c("Present", "Absent")),
                     dose = ordered(rep(paste(c(0, 1, 5, 50), "units"), 6),
                                    levels = paste(c(0, 1, 5, 50), "units")),
                     stratum = factor(rep(paste("Stratum", 3:5), rep(8, 3))))
@@ -680,7 +682,7 @@ lta <- lbl_test(tumor ~ dose | stratum, data = tumor, weights = ~ number,
     scores = list(dose = c(0, 1, 5, 50)))
 
 # test statistic, page 812
-stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.739))
+stopifnot(isequal(round(statistic(lta), 3), 1.739))
 
 # asymptotic p-value, page 812
 stopifnot(isequal(round(pvalue(lta), 3), 0.082))
@@ -689,7 +691,7 @@ lta <- lbl_test(xtabs(number ~ dose + tumor + stratum, data = tumor),
                 scores = list(dose = c(0, 1, 5, 50)))
 
 # test statistic, page 812
-stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.739))
+stopifnot(isequal(round(statistic(lta), 3), 1.739))
 
 # asymptotic p-value, page 812
 stopifnot(isequal(round(pvalue(lta), 3), 0.082))
@@ -708,22 +710,21 @@ endo <- as.table(matrix(c(6, 9, 9, 12, 2, 4, 2, 1, 3, 2, 3, 2, 1, 1, 1, 1),
         list(Cases = c("0", "0.1-0.299", "0.3-0.625", ">0.625"),
              Controls = c("0", "0.1-0.299", "0.3-0.625", ">0.625"))))
 
-bta <- mh_test(endo, scores = list(response = c(0, 0.2, 0.512, 0.7)))
+bta <- mh_test(endo, scores = list(response = c(0, 0.2, 0.5125, 0.7)))
 
 # test statistic, page 837
-stopifnot(isequal(round(sqrt(statistic(bta)), 3), 3.735))
+stopifnot(isequal(round(statistic(bta), 3), 3.735))
 
 # asymptotic p-value, page 837
-stopifnot(isequal(round(pvalue(bta), 6), 0.000188))
+stopifnot(isequal(round(pvalue(bta), 4), 0.0002))
 
-# <CHECK>
-btMC <- mh_test(endo, scores = list(response = c(0, 0.2, 0.512, 0.7)),
-                    distribution = approximate(B = 90000))
+btMC <- mh_test(endo, scores = list(response = c(0, 0.2, 0.5125, 0.7)),
+                    distribution = approximate(B = 10000))
 
 print(pvalue(btMC))
-pci <- attr(pvalue(ltMC), "conf.int")
-(pci[1] < 0.000112 & pci[2] > 0.000112)
-# </CHECK>
+pci <- attr(pvalue(btMC), "conf.int")
+(pci[1] < 0.0001 & pci[2] > 0.0001)
+
 
 ### StatXact 6 manual, page 944
 oral_lesions <- as.table(matrix(c(0, 8, 0, 0, 0, 0, 0, 1, 1,
@@ -760,7 +761,7 @@ dr <- as.table(matrix(c(100, 18, 50, 50, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1), nr
 lta <- lbl_test(dr, scores = list(dose = (1:4)*100, tox = 1:4))
 
 # teststatistic, page 993
-stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.807))
+stopifnot(isequal(round(statistic(lta), 3), 1.807))
 
 # asymptotical p-value, page 993
 stopifnot(isequal(round(pvalue(lta), 4), 0.0708))
@@ -774,7 +775,7 @@ stopifnot(pci[1] < 0.0792 & pci[2] > 0.0792)
 lta <- lbl_test(dr, scores = list(tox = c(1, 3, 9, 27)))
 
 # teststatistic, page 993
-stopifnot(isequal(round(sqrt(statistic(lta)), 3), 1.734))
+stopifnot(isequal(round(statistic(lta), 3), 1.734))
 
 # asymptotical p-value, page 993
 stopifnot(isequal(round(pvalue(lta), 4), 0.0828))
@@ -831,7 +832,7 @@ lta <- lbl_test(jobsatisfaction,
                   Income = c(3, 10, 20, 35)))
 
 # teststatistic, page 1020
-stopifnot(isequal(round(sqrt(statistic(lta)), 3), 2.481))
+stopifnot(isequal(round(statistic(lta), 3), 2.481))
 
 # asymptotical p-value, page 1020
 stopifnot(isequal(round(pvalue(lta), 5), 0.01309))
@@ -841,7 +842,7 @@ lta <- cmh_test(jobsatisfaction,
                   Income = c(3, 10, 20, 35)))
 
 # teststatistic, page 1020
-stopifnot(isequal(round(sqrt(statistic(lta)), 3), 2.481))
+stopifnot(isequal(round(statistic(lta), 3), 2.481))
 
 # asymptotical p-value, page 1020
 stopifnot(isequal(round(pvalue(lta), 5), 0.01309))

@@ -580,7 +580,7 @@ alternative hypothesis: true theta is not equal to 1
 > ### partial matching of the scores argument didn't work
 > chisq_test(as.table(jobsatisfaction[, , "Female"]), sco = list(Income = 1:4))
 
-	Asymptotic Linear-by-Linear Association Test
+	Asymptotic Generalized Pearson's Chi-Squared Test
 
 data:  Job.Satisfaction by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
@@ -594,11 +594,30 @@ chi-squared = 3.0171, df = 3, p-value = 0.389
 	Asymptotic Marginal-Homogeneity Test for Ordered Data
 
 data:  response (ordered) by
-	 groups (Var1, Var2) 
+	 conditions (Var1, Var2) 
 	 stratified by block 
-chi-squared = 1.5, df = 1, p-value = 0.2207
+Z = 1.2247, p-value = 0.2207
+alternative hypothesis: two.sided 
+
+> 
+> ### erroneously claimed to be linear-by-linear tests
+> chisq_test(as.table(jobsatisfaction[, , "Female"]), scores = list(Income = 1:4))
+
+	Asymptotic Generalized Pearson's Chi-Squared Test
+
+data:  Job.Satisfaction by
+	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
+chi-squared = 3.0171, df = 3, p-value = 0.389
+
+> cmh_test(as.table(jobsatisfaction[, , "Female"]), scores = list(Income = 1:4))
+
+	Asymptotic Generalized Cochran-Mantel-Haenszel Test
+
+data:  Job.Satisfaction by
+	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
+chi-squared = 2.97, df = 3, p-value = 0.3963
 
 > 
 > proc.time()
    user  system elapsed 
-   3.71    0.29    4.19 
+   3.93    0.24    4.30 

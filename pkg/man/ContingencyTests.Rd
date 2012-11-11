@@ -13,6 +13,7 @@
 \alias{lbl_test.IndependenceProblem}
 
 \title{ Independence in Three-Way Contingency Tables }
+
 \description{
   Testing the independence of two possibly ordered factors, optionally
   stratified by a third factor.
@@ -49,7 +50,7 @@
     \code{"IndependenceProblem"} or an object of class \code{"table"}.}
   \item{distribution}{a character, the null distribution of the test
     statistic can be approximated by its asymptotic distribution
-    (\code{"asymptotic"}) or via Monte-Carlo resampling
+    (\code{"asymptotic"}, default) or via Monte-Carlo resampling
     (\code{"approximate"}).  Alternatively, the functions
     \code{\link{approximate}} or \code{\link{asymptotic}} can be used to
     specify how the exact conditional distribution of the test statistic
@@ -59,24 +60,23 @@
 \details{
 
   The null hypothesis of the independence of \code{y} and \code{x} is
-  tested, \code{block} defines an optional factor for stratification.
+  tested, and \code{block} defines an optional factor for
+  stratification.
+
   \code{chisq_test} implements Pearson's chi-squared test,
   \code{cmh_test} the generalized Cochran-Mantel-Haenzsel test and
   \code{lbl_test} the linear-by-linear association test for ordered
   data.
 
-  In case either \code{x} or \code{y} are ordered factors, the
-  corresponding linear-by-linear association test is performed by all
-  the procedures.  \code{lbl_test} coerces factors to class
-  \code{ordered} under any circumstances.  The default scores are
-  \code{1:nlevels(x)} and \code{1:nlevels(y)}, respectively.  The
-  default scores can be changed via the \code{scores} argument (see
-  \code{\link{independence_test}}), for example
-  \code{scores = list(y = 1:3, x = c(1, 4, 6))} first triggers a
-  coercion to class \code{ordered} of both variables and attaches the
-  list element as scores to the corresponding factors. The length of a
-  score vector needs to be equal the number of levels of the factor of
-  interest. 
+  When both \code{x} and \code{y} are ordered factors, or can be
+  regarded as such, the corresponding linear-by-linear association test
+  is performed by all procedures.  (\code{lbl_test} coerces factors to
+  class \code{"ordered"} under any circumstances.)  In this case the
+  test statistic is a scalar and the alternative hypothesis can be
+  specified using the \code{alternative} argument.  The default scores,
+  \code{1:nlevels(x)} and \code{1:nlevels(y)} respectively, can be
+  altered using the \code{scores} argument (see
+  \code{\link{independence_test}}).
 
   The authoritative source for details on the documented test procedures
   is Agresti (2002).
@@ -85,8 +85,8 @@
 \value{
 
   An object inheriting from class \code{\link{IndependenceTest-class}} with
-  methods \code{\link{show}}, \code{\link{statistic}}, \code{\link{expectation}}, 
-  \code{\link{covariance}} and \code{\link{pvalue}}. The null distribution 
+  methods \code{\link{show}}, \code{\link{statistic}}, \code{\link{expectation}},
+  \code{\link{covariance}} and \code{\link{pvalue}}. The null distribution
   can be inspected by \code{\link{pperm}}, \code{\link{dperm}},
   \code{\link{qperm}} and \code{\link{support}} methods.
 
@@ -99,11 +99,9 @@
 
 }
 \examples{
-
 \dontshow{
-    set.seed(290875)
+  set.seed(290875)
 }
-
   ### for females only
   chisq_test(as.table(jobsatisfaction[,,"Female"]),
       distribution = approximate(B = 9999))
@@ -120,7 +118,7 @@
 
   ### the same, null distribution approximated
   cmh_test(jobsatisfaction, scores = list(Job.Satisfaction = c(1, 3, 4, 5),
-                                        Income = c(3, 10, 20, 35)),
+                                          Income = c(3, 10, 20, 35)),
            distribution = approximate(B = 10000))
 
 
@@ -153,7 +151,7 @@
   independence_test(tumor ~ dose, data = lungtumor, teststat = "quad")
 
   ### linear-by-linear association test with scores 0, 1, 2
-  ### is identical with Cochran-Armitage test
+  ### is identical to Cochran-Armitage test
   lungtumor$dose <- ordered(lungtumor$dose)
   independence_test(tumor ~ dose, data = lungtumor, teststat = "quad",
                     scores = list(dose = c(0, 1, 2)))

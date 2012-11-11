@@ -129,8 +129,12 @@
   or at least approximately so, under the null hypothesis (see Hajek,
   Sidak and Sen, 1999, pp. 97--98).
 
-  In case \code{x} is an ordered factor, the linear-by-linear
-  association test for ordered alternatives is computed.
+  When \code{x} is an ordered factor, the linear-by-linear association
+  test for ordered alternatives is computed.  In this case the test
+  statistic is a scalar and the alternative hypothesis can be specified
+  using the \code{alternative} argument.  The default scores,
+  \code{1:nlevels(x)}, can be altered using the \code{scores} argument
+  (see \code{\link{independence_test}}).
 
   For the adjustment of scores for tied values see Hajek, Sidak and Sen
   (1999, pp. 133--135).
