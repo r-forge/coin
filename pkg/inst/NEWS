@@ -78,6 +78,9 @@
           ordered measurement conditions and allows the alternative hypothesis
           to be specified in the doubly ordered case (see ?mh_test)
 
+    o     the Fisher-Yates correlation test (based on van der Waerden scores) is
+          now available (see ?fisyat_test)
+
     BUG FIXES
 
     o     monotonicity of step-down adjusted p-values was not enforced when

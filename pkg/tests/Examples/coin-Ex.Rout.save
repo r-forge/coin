@@ -206,6 +206,43 @@ chi-squared = 10.6381, df = 1, p-value = 0.001108
 > 
 > 
 > cleanEx()
+> nameEx("CorrelationTests")
+> ### * CorrelationTests
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: CorrelationTests
+> ### Title: Correlation Tests
+> ### Aliases: spearman_test spearman_test.formula
+> ###   spearman_test.IndependenceProblem fisyat_test fisyat_test.formula
+> ###   fisyat_test.IndependenceProblem
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> 
+>   spearman_test(CONT ~ INTG, data = USJudgeRatings)
+
+	Asymptotic Spearman Correlation Test
+
+data:  CONT by INTG 
+Z = -1.1437, p-value = 0.2527
+alternative hypothesis: true rho is not equal to 0 
+
+> 
+>   fisyat_test(CONT ~ INTG, data = USJudgeRatings)
+
+	Asymptotic Fisher-Yates Correlation Test
+
+data:  CONT by INTG 
+Z = -0.8248, p-value = 0.4095
+alternative hypothesis: true rho is not equal to 0 
+
+> 
+> 
+> 
+> 
+> cleanEx()
 > nameEx("GTSG")
 > ### * GTSG
 > 
@@ -952,33 +989,6 @@ Control 0.0067991 0.3827331
                  Control:Location Control:Scale
 Control:Location               85             0
 Control:Scale                   0            21
-> 
-> 
-> 
-> 
-> cleanEx()
-> nameEx("SpearmanTest")
-> ### * SpearmanTest
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: SpearmanTest
-> ### Title: Spearman's Test on Independence
-> ### Aliases: spearman_test spearman_test.formula
-> ###   spearman_test.IndependenceProblem
-> ### Keywords: htest
-> 
-> ### ** Examples
-> 
-> 
->   spearman_test(CONT ~ INTG, data = USJudgeRatings)
-
-	Asymptotic Spearman Correlation Test
-
-data:  CONT by INTG 
-Z = -1.1437, p-value = 0.2527
-alternative hypothesis: true rho is not equal to 0 
-
 > 
 > 
 > 
@@ -2341,7 +2351,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  61.18 1.12 65.55 NA NA 
+Time elapsed:  60.91 1.64 64.37 NA NA 
 > grDevices::dev.off()
 null device 
           1 

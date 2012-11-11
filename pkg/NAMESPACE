@@ -5,7 +5,7 @@ export(independence_test,
        ansari_test, fligner_test,
        surv_test,
        friedman_test, wilcoxsign_test,
-       spearman_test,
+       spearman_test, fisyat_test,
        maxstat_test,
        chisq_test, cmh_test, lbl_test, mh_test,
        trafo,
@@ -69,6 +69,8 @@ S3method(wilcoxsign_test, IndependenceProblem)
 
 S3method(spearman_test, formula)
 S3method(spearman_test, IndependenceProblem)
+S3method(fisyat_test, formula)
+S3method(fisyat_test, IndependenceProblem)
 
 S3method(maxstat_test, formula)
 S3method(maxstat_test, IndependenceProblem)

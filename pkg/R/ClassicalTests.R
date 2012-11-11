@@ -446,6 +446,50 @@ spearman_test.IndependenceProblem <- function(object,
 }
 
 
+### Fisher-Yates correlation test (based on van der Waerden scores)
+fisyat_test <- function(object, ...) UseMethod("fisyat_test")
+
+fisyat_test.formula <- function(formula, data = list(), subset = NULL,
+    weights = NULL, ...) {
+
+    ft("fisyat_test", formula, data, subset, weights,
+       frame = parent.frame(), ...)
+}
+
+fisyat_test.IndependenceProblem <- function(object,
+    distribution = c("asymptotic", "approximate"),
+    ties.method = c("mid-ranks", "average-scores"), ...) {
+
+    check <- function(object) {
+        if (!is_corr(object))
+            stop(sQuote("object"),
+                 " does not represent a univariate correlation problem")
+        return(TRUE)
+    }
+
+    distribution <- check_distribution_arg(distribution,
+        values = c("asymptotic", "approximate"))
+
+    args <- setup_args(teststat = "scalar",
+                       distribution = distribution,
+                       xtrafo = function(data)
+                           trafo(data, numeric_trafo = function(x)
+                               normal_trafo(x, ties.method = ties.method)),
+                       ytrafo = function(data)
+                           trafo(data, numeric_trafo = function(y)
+                               normal_trafo(y, ties.method = ties.method)),
+                       check = check)
+
+    RET <- do.call("independence_test", c(list(object = object), args))
+
+    RET@parameter <- "rho"
+    RET@nullvalue <- 0
+    RET@method <- "Fisher-Yates Correlation Test"
+
+    return(RET)
+}
+
+
 ### Generalized Cochran-Mantel-Haenzel Test
 cmh_test <- function(object, ...) UseMethod("cmh_test")
 
