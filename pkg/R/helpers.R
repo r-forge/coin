@@ -415,7 +415,8 @@ chkone <- function(w)
 ranktests <- function()
     c("wilcox_test", "kruskal_test", "normal_test", "median_test",
       "savage_test", "ansari_test", "fligner_test", "surv_test",
-      "friedman_test", "wilcoxsign_test", "spearman_test", "fisyat_test")
+      "friedman_test", "wilcoxsign_test", "spearman_test", "fisyat_test",
+      "quadrant_test")
 
 setColnames <- function (object, nm) {
     colnames(object) <- nm

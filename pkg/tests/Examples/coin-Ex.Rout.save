@@ -215,7 +215,8 @@ chi-squared = 10.6381, df = 1, p-value = 0.001108
 > ### Title: Correlation Tests
 > ### Aliases: spearman_test spearman_test.formula
 > ###   spearman_test.IndependenceProblem fisyat_test fisyat_test.formula
-> ###   fisyat_test.IndependenceProblem
+> ###   fisyat_test.IndependenceProblem quadrant_test quadrant_test.formula
+> ###   quadrant_test.IndependenceProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -236,6 +237,15 @@ alternative hypothesis: true rho is not equal to 0
 
 data:  CONT by INTG 
 Z = -0.8248, p-value = 0.4095
+alternative hypothesis: true rho is not equal to 0 
+
+> 
+>   quadrant_test(CONT ~ INTG, data = USJudgeRatings)
+
+	Asymptotic Quadrant Test
+
+data:  CONT by INTG 
+Z = -1.0944, p-value = 0.2738
 alternative hypothesis: true rho is not equal to 0 
 
 > 
@@ -2351,7 +2361,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  60.91 1.64 64.37 NA NA 
+Time elapsed:  60.8 2.24 64.82 NA NA 
 > grDevices::dev.off()
 null device 
           1 

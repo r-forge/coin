@@ -61,6 +61,15 @@ Loading required package: multcomp
 > pvalue(fisyat_test( ~ x + y, data = dat))
 [1] 0.9155477
 > 
+> pvalue(quadrant_test(y ~ x, data = dat))
+[1] 0.6906339
+> pvalue(quadrant_test(x ~ y, data = dat))
+[1] 0.6906339
+> pvalue(quadrant_test( ~ y + x, data = dat))
+[1] 0.6906339
+> pvalue(quadrant_test( ~ x + y, data = dat))
+[1] 0.6906339
+> 
 > ### with blocks
 > pvalue(spearman_test(y ~ x | block, data = dat))
 [1] 0.8901013
@@ -80,6 +89,15 @@ Loading required package: multcomp
 > pvalue(fisyat_test( ~ x + y | block, data = dat))
 [1] 0.9061762
 > 
+> pvalue(quadrant_test(y ~ x | block, data = dat))
+[1] 0.7489036
+> pvalue(quadrant_test(x ~ y | block, data = dat))
+[1] 0.7489036
+> pvalue(quadrant_test( ~ y + x | block, data = dat))
+[1] 0.7489036
+> pvalue(quadrant_test( ~ x + y | block, data = dat))
+[1] 0.7489036
+> 
 > ### sanity checks, those should be errors
 > dat <- data.frame(x = gl(2, 50), y = rnorm(100), block = rnorm(100))
 > 
@@ -95,6 +113,12 @@ Error in check(itp) :
 > try(fisyat_test(y ~ x | block, data = dat))
 Error in .local(.Object, ...) : 'block' is not a factor
 > 
+> try(quadrant_test(y ~ x, data = dat))
+Error in check(itp) : 
+  'object' does not represent a univariate correlation problem
+> try(quadrant_test(y ~ x | block, data = dat))
+Error in .local(.Object, ...) : 'block' is not a factor
+> 
 > proc.time()
    user  system elapsed 
-   1.13    0.12    1.34 
+   1.35    0.06    1.52 

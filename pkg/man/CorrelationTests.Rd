@@ -5,6 +5,9 @@
 \alias{fisyat_test}
 \alias{fisyat_test.formula}
 \alias{fisyat_test.IndependenceProblem}
+\alias{quadrant_test}
+\alias{quadrant_test.formula}
+\alias{quadrant_test.IndependenceProblem}
 
 \title{ Correlation Tests }
 
@@ -12,13 +15,21 @@
   Testing the independence of two numeric variables.
 }
 \usage{
+
 \method{spearman_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{spearman_test}{IndependenceProblem}(object,
     distribution = c("asymptotic", "approximate"), \dots)
+
 \method{fisyat_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{fisyat_test}{IndependenceProblem}(object,
     distribution = c("asymptotic", "approximate"),
     ties.method = c("mid-ranks", "average-scores"), \dots)
+
+\method{quadrant_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{quadrant_test}{IndependenceProblem}(object,
+    distribution = c("asymptotic", "approximate"),
+    mid.score = c("0", "0.5", "1"), \dots)
+
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where \code{y}
@@ -42,6 +53,9 @@
     scores for ties, either the score generating function is applied to
     \code{"mid-ranks"} (default) or the scores computed based on random
     ranks are averaged for all tied values (\code{"average-scores"}).}
+  \item{mid.score}{a character, the score assigned to observations
+    exactly equal to the median.  Must be one of \code{"0"} (default),
+    \code{"0.5"} or \code{"1"}.} 
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
@@ -77,6 +91,8 @@
   spearman_test(CONT ~ INTG, data = USJudgeRatings)
 
   fisyat_test(CONT ~ INTG, data = USJudgeRatings)
+
+  quadrant_test(CONT ~ INTG, data = USJudgeRatings)
 
 }
 \keyword{htest}
