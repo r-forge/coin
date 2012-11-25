@@ -119,11 +119,15 @@
 
     o     the printed output for the Pearson chi-squared test and the
           generalized Cochran-Mantel-Haenszel test claimed that a
-          linear-by-linear association test had been carried out even in the
+          "Linear-by-Linear Association Test" had been carried out even in the
           singly ordered case, i.e., when either the response variable or the
           explanatory variable is an ordered factor or can be regarded as such;
           these are now reported as "Generalized Pearson's Chi-squared Test" and
           "Generalized Cochran-Mantel-Haenszel Test" respectively
+
+    o     the printed output for the general symmetry test claimed that a
+          "General Independence Test" had been carried out; it is now reported
+          as "General Symmetry Test".
 
     OTHER CHANGES
 
@@ -141,7 +145,7 @@
           respectively
 
     o     the printed output for the one-way test now reports that a
-          linear-by-linear association test is carried out when the explanatory
+          "Linear-by-Linear Association Test" is carried out when the explanatory
           variable is an ordered factor
 
     o     the Ansari-Bradley test no longer features the 'alternative' argument
@@ -151,6 +155,10 @@
           test, the linear-by-linear association test and the marginal
           homogeneity test now uses a scalar test statistic in the doubly
           ordered case
+
+    o     when the general symmetry test or the marginal homogeneity test is
+          applied to a table, the variable indicating the measurement conditions
+          has been renamed to "conditions" (from "groups")
 
 
                 CHANGES in `coin' VERSION 1.0-22

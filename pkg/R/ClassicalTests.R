@@ -377,7 +377,6 @@ fligner_test.IndependenceProblem <- function(object,
             stop(sQuote("object"),
                  " does not represent a K-sample problem",
                  " (maybe the grouping variable is not a factor?)")
-
         if (is_singly_ordered(object))
             stop(colnames(object@x), " is an ordered factor")
         return(TRUE)
@@ -881,6 +880,13 @@ symmetry_test.formula <- function(formula, data = list(), subset = NULL,
     return(RET)
 }
 
+symmetry_test.table <- function(object, ...) {
+    df <- table2df_sym(object)
+    sp <- new("SymmetryProblem", x = df["conditions"], y = df["response"])
+    RET <- do.call("symmetry_test", c(list(object = sp), list(...)))
+    return(RET)
+}
+
 symmetry_test.SymmetryProblem <- function(object,
     teststat = c("max", "quad", "scalar"),
     distribution = c("asymptotic", "approximate"),
@@ -888,14 +894,9 @@ symmetry_test.SymmetryProblem <- function(object,
     xtrafo = trafo, ytrafo = trafo, scores = NULL,
     check = NULL, ...) {
     class(object) <- "IndependenceProblem"
-    independence_test(object, teststat, distribution, alternative, xtrafo,
-                      ytrafo, scores, check, ...)
-}
-
-symmetry_test.table <- function(object, ...) {
-    df <- table2df_sym(object)
-    sp <- new("SymmetryProblem", x = df["groups"], y = df["response"])
-    RET <- do.call("symmetry_test", c(list(object = sp), list(...)))
+    RET <- independence_test(object, teststat, distribution, alternative, xtrafo,
+                             ytrafo, scores, check, ...)
+    RET@method <- "General Symmetry Test"
     return(RET)
 }
 
