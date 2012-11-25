@@ -31,6 +31,11 @@ pvalue(quadrant_test(x ~ y, data = dat))
 pvalue(quadrant_test( ~ y + x, data = dat))
 pvalue(quadrant_test( ~ x + y, data = dat))
 
+pvalue(koziol_test(y ~ x, data = dat))
+pvalue(koziol_test(x ~ y, data = dat))
+pvalue(koziol_test( ~ y + x, data = dat))
+pvalue(koziol_test( ~ x + y, data = dat))
+
 ### with blocks
 pvalue(spearman_test(y ~ x | block, data = dat))
 pvalue(spearman_test(x ~ y | block, data = dat))
@@ -47,6 +52,11 @@ pvalue(quadrant_test(x ~ y | block, data = dat))
 pvalue(quadrant_test( ~ y + x | block, data = dat))
 pvalue(quadrant_test( ~ x + y | block, data = dat))
 
+pvalue(koziol_test(y ~ x | block, data = dat))
+pvalue(koziol_test(x ~ y | block, data = dat))
+pvalue(koziol_test( ~ y + x | block, data = dat))
+pvalue(koziol_test( ~ x + y | block, data = dat))
+
 ### sanity checks, those should be errors
 dat <- data.frame(x = gl(2, 50), y = rnorm(100), block = rnorm(100))
 
@@ -58,3 +68,6 @@ try(fisyat_test(y ~ x | block, data = dat))
 
 try(quadrant_test(y ~ x, data = dat))
 try(quadrant_test(y ~ x | block, data = dat))
+
+try(koziol_test(y ~ x, data = dat))
+try(koziol_test(y ~ x | block, data = dat))

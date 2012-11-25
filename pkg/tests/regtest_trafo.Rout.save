@@ -1,5 +1,5 @@
 
-R version 2.15.1 Patched (2012-10-07 r60893) -- "Roasted Marshmallows"
+R version 2.15.2 Patched (2012-11-06 r61087) -- "Trick or Treat"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i386-w64-mingw32/i386 (32-bit)
@@ -134,6 +134,29 @@ Loading required package: multcomp
 [4,] 0.5000000 0.0701790920
 [5,] 0.7142857 0.2603082049
 [6,] 0.8571429 0.5397750937
+> 
+> koziol_trafo(x)
+[1]  1.274162e+00  8.817477e-01            NA  8.659275e-17  8.659275e-17
+[6]            NA -8.817477e-01 -1.274162e+00            NA
+> koziol_trafo(x[cc])
+[1]  1.274162e+00  8.817477e-01  8.659275e-17  8.659275e-17 -8.817477e-01
+[6] -1.274162e+00
+> koziol_trafo(x, j = 2)
+[1]  0.8817477 -0.3146921         NA -1.4142136 -1.4142136         NA -0.3146921
+[8]  0.8817477         NA
+> koziol_trafo(x[cc], j = 2)
+[1]  0.8817477 -0.3146921 -1.4142136 -1.4142136 -0.3146921  0.8817477
+> koziol_trafo(x, ties.method = "average-scores")
+[1]  1.274162e+00  8.817477e-01            NA  5.551115e-17  5.551115e-17
+[6]            NA -8.817477e-01 -1.274162e+00            NA
+> koziol_trafo(x[cc], ties.method = "average-scores")
+[1]  1.274162e+00  8.817477e-01  5.551115e-17  5.551115e-17 -8.817477e-01
+[6] -1.274162e+00
+> koziol_trafo(x, ties.method = "average-scores", j = 2)
+[1]  0.8817477 -0.3146921         NA -1.2741624 -1.2741624         NA -0.3146921
+[8]  0.8817477         NA
+> koziol_trafo(x[cc], ties.method = "average-scores", j = 2)
+[1]  0.8817477 -0.3146921 -1.2741624 -1.2741624 -0.3146921  0.8817477
 > 
 > ansari_trafo(x)
 [1] 1.0 2.0  NA 3.5 3.5  NA 2.0 1.0  NA
@@ -649,4 +672,4 @@ attr(,"contrast")
 > 
 > proc.time()
    user  system elapsed 
-   0.84    0.10    1.07 
+   0.84    0.07    1.01 

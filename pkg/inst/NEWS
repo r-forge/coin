@@ -83,6 +83,9 @@
 
     o     the quadrant test is now available (see ?quadrant_test)
 
+    o     the Koziol-Nemec test and its corresponding transformation function are
+          now available (see ?koziol_test and ?koziol_trafo)
+
     BUG FIXES
 
     o     monotonicity of step-down adjusted p-values was not enforced when

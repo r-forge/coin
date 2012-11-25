@@ -8,6 +8,11 @@
 \alias{quadrant_test}
 \alias{quadrant_test.formula}
 \alias{quadrant_test.IndependenceProblem}
+\alias{koziol_test}
+\alias{koziol_test.formula}
+\alias{koziol_test.IndependenceProblem}
+
+\encoding{UTF-8}
 
 \title{ Correlation Tests }
 
@@ -29,6 +34,11 @@
 \method{quadrant_test}{IndependenceProblem}(object,
     distribution = c("asymptotic", "approximate"),
     mid.score = c("0", "0.5", "1"), \dots)
+
+\method{koziol_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{koziol_test}{IndependenceProblem}(object,
+    distribution = c("asymptotic", "approximate"),
+    ties.method = c("mid-ranks", "average-scores"), \dots)
 
 }
 \arguments{
@@ -55,7 +65,7 @@
     ranks are averaged for all tied values (\code{"average-scores"}).}
   \item{mid.score}{a character, the score assigned to observations
     exactly equal to the median.  Must be one of \code{"0"} (default),
-    \code{"0.5"} or \code{"1"}.} 
+    \code{"0.5"} or \code{"1"}.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
@@ -63,8 +73,13 @@
   The null hypothesis of the independence of \code{y} and \code{x}
   is tested.
 
-  For a general description of the test procedures documented here we
-  refer to Hajek, Sidak and Sen (1999, Section 4.6).
+  The test procedures documented here perform the Spearman correlation
+  test (\code{spearman_test}), the Fisher-Yates correlation test using
+  van der Waerden scores (\code{fisyat_test}), the quadrant test
+  (\code{quadrant_test}), and the Koziol-Nemec test
+  (\code{koziol_test}).  For a general description of these tests we
+  refer to Hajek, Sidak and Sen (1999, Section 4.6).  The Koziol-Nemec
+  test was suggested by Koziol & Nemec (1979).
 
   For the adjustment of scores for tied values see Hajek, Sidak and Sen
   (1999, p. 133--135).
@@ -85,6 +100,11 @@
   \emph{Theory of Rank Tests}, 2nd Edition.
   San Diego: Academic Press.
 
+  James A. Koziol & Amanda F. Nemec (1979).
+  On a \enc{Cramér}{Cramer}-von Mises type statistic for testing
+  bivariate independence.
+  \emph{The Canadian Journal of Statistics} \bold{7}(1), 43--52.
+
 }
 \examples{
 
@@ -93,6 +113,8 @@
   fisyat_test(CONT ~ INTG, data = USJudgeRatings)
 
   quadrant_test(CONT ~ INTG, data = USJudgeRatings)
+
+  koziol_test(CONT ~ INTG, data = USJudgeRatings)
 
 }
 \keyword{htest}

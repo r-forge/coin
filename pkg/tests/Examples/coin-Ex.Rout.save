@@ -216,7 +216,8 @@ chi-squared = 10.6381, df = 1, p-value = 0.001108
 > ### Aliases: spearman_test spearman_test.formula
 > ###   spearman_test.IndependenceProblem fisyat_test fisyat_test.formula
 > ###   fisyat_test.IndependenceProblem quadrant_test quadrant_test.formula
-> ###   quadrant_test.IndependenceProblem
+> ###   quadrant_test.IndependenceProblem koziol_test koziol_test.formula
+> ###   koziol_test.IndependenceProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -246,6 +247,15 @@ alternative hypothesis: true rho is not equal to 0
 
 data:  CONT by INTG 
 Z = -1.0944, p-value = 0.2738
+alternative hypothesis: true rho is not equal to 0 
+
+> 
+>   koziol_test(CONT ~ INTG, data = USJudgeRatings)
+
+	Asymptotic Koziol-Nemec Test
+
+data:  CONT by INTG 
+Z = -1.292, p-value = 0.1964
 alternative hypothesis: true rho is not equal to 0 
 
 > 
@@ -1311,9 +1321,9 @@ alternative hypothesis: true mu is greater than 0
 > ### Name: Transformations
 > ### Title: Functions for Data Transformations
 > ### Aliases: trafo id_trafo rank_trafo normal_trafo median_trafo
-> ###   savage_trafo consal_trafo ansari_trafo fligner_trafo logrank_trafo
-> ###   logrank_weight maxstat_trafo fmaxstat_trafo f_trafo of_trafo
-> ###   mcp_trafo
+> ###   savage_trafo consal_trafo koziol_trafo ansari_trafo fligner_trafo
+> ###   logrank_trafo logrank_weight maxstat_trafo fmaxstat_trafo f_trafo
+> ###   of_trafo mcp_trafo
 > ### Keywords: manip
 > 
 > ### ** Examples
@@ -2361,7 +2371,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  60.8 2.24 64.82 NA NA 
+Time elapsed:  59 1.36 62.67 NA NA 
 > grDevices::dev.off()
 null device 
           1 

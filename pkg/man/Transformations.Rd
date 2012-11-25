@@ -6,6 +6,7 @@
 \alias{median_trafo}
 \alias{savage_trafo}
 \alias{consal_trafo}
+\alias{koziol_trafo}
 \alias{ansari_trafo}
 \alias{fligner_trafo}
 \alias{logrank_trafo}
@@ -15,7 +16,9 @@
 \alias{f_trafo}
 \alias{of_trafo}
 \alias{mcp_trafo}
+
 \title{ Functions for Data Transformations }
+
 \description{
   Transformations for numerical data or dummy codings of factors.
 }
@@ -29,6 +32,7 @@ normal_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 median_trafo(x, mid.score = c("0", "0.5", "1"))
 savage_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 consal_trafo(x, ties.method = c("mid-ranks", "average-scores"), a = 5)
+koziol_trafo(x, ties.method = c("mid-ranks", "average-scores"), j = 1)
 ansari_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 fligner_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 logrank_trafo(x, ties.method = c("mid-ranks", "Hothorn-Lausen", "average-scores"),
@@ -77,6 +81,8 @@ mcp_trafo(\dots)
     scores (see also \code{\link{median_test}}).}
   \item{a}{a numeric vector, the value taken as the constant \eqn{a} in
     the Conover-Salsburg scores.  Defaults to 5.}
+  \item{j}{a numeric, the value taken as the constant \eqn{j} in the
+    Koziol-Nemec scores.  Defaults to 1.}
   \item{weight}{a function whose three first arguments must correspond
     to \code{time}, \code{n.risk}, and \code{n.event} given below;
     defaults to \code{logrank_weight}.}
@@ -118,10 +124,11 @@ mcp_trafo(\dots)
 
   \code{rank_trafo} is the rank transformation.
 
-  \code{normal_trafo}, \code{median_trafo},\code{savage_trafo} and
-  \code{consal_trafo} computes normal scores, median scores, Savage
-  scores and Conover-Salsburg scores (see \code{\link{neuropathy}}),
-  respectively, for location problems.
+  \code{normal_trafo}, \code{median_trafo},\code{savage_trafo},
+  \code{consal_trafo} and \code{koziol_trafo} computes normal scores,
+  median scores, Savage scores, Conover-Salsburg scores (see
+  \code{\link{neuropathy}}) and Koziol-Nemec scores, respectively, for
+  location problems.
 
   \code{ansari_trafo} and \code{fligner_trafo} compute Ansari-Bradley
   and Fligner scores, respectively, for scale problems.

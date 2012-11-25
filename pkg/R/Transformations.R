@@ -119,6 +119,23 @@ consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
     return(scores)
 }
 
+## Koziol-Nemec (1979, p. 46, eq. 2.6)
+koziol_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
+                         j = 1) {
+    ties.method <- match.arg(ties.method)
+    scores <- switch(ties.method,
+        "mid-ranks" = {
+            sqrt(2) * cos(j * pi * rank_trafo(x) / (sum(!is.na(x)) + 1))
+        },
+        "average-scores" = {
+            s <- sqrt(2) * cos(j * pi * rank_trafo(x, ties.method = "random") /
+                                 (sum(!is.na(x)) + 1))
+            average_scores(s, x)
+        }
+    )
+    return(scores)
+}
+
 ### maximally selected (rank, chi^2, whatsoever) statistics
 ### ordered x
 maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
