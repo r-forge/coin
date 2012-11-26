@@ -1,5 +1,5 @@
 
-R version 2.15.1 Patched (2012-10-07 r60893) -- "Roasted Marshmallows"
+R version 2.15.2 Patched (2012-11-06 r61087) -- "Trick or Treat"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i386-w64-mingw32/i386 (32-bit)
@@ -212,7 +212,7 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > ### sanity checks
 > try(ansari_test(x ~ y, data = dat))
 Error in check(itp) : 
-  'object' does not represent a two-sample problem (maybe the grouping variable is not a factor?)
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
 > try(ansari_test(x ~ y | y, data = dat))
 Error in .local(.Object, ...) : 'block' is not a factor
 > 
@@ -325,6 +325,33 @@ alternative hypothesis: true mu is greater than 0
 
 > 
 > 
+> ### Fligner-Killeen Test
+> fligner_test(y ~ x, dat = dat)
+
+	Asymptotic 2-Sample Fligner-Killeen Test
+
+data:  y by x (1, 2) 
+Z = -0.9485, p-value = 0.3429
+alternative hypothesis: true ratio of scales is not equal to 1 
+
+> fligner_test(y ~ x, dat = dat, alternative = "less")
+
+	Asymptotic 2-Sample Fligner-Killeen Test
+
+data:  y by x (1, 2) 
+Z = -0.9485, p-value = 0.1714
+alternative hypothesis: true ratio of scales is less than 1 
+
+> fligner_test(y ~ x, dat = dat, alternative = "greater")
+
+	Asymptotic 2-Sample Fligner-Killeen Test
+
+data:  y by x (1, 2) 
+Z = -0.9485, p-value = 0.8286
+alternative hypothesis: true ratio of scales is greater than 1 
+
+> 
+> 
 > ### Logrank Test
 > surv_test(Surv(y) ~ x, dat = dat)
 
@@ -393,4 +420,4 @@ In wilcoxsign_test.IndependenceProblem(object = <S4 object of class "Independenc
 > 
 > proc.time()
    user  system elapsed 
-   2.34    0.14    2.59 
+   2.32    0.15    2.57 

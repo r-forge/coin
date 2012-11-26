@@ -219,18 +219,22 @@ ansari_test.IndependenceProblem <- function(object,
     conf.int = FALSE, conf.level = 0.95, ...) {
 
     check <- function(object) {
-        if (!(is_2sample(object) && is_numeric_y(object)))
+        if (!(is_Ksample(object) && is_numeric_y(object)))
             stop(sQuote("object"),
-                 " does not represent a two-sample problem",
+                 " does not represent a K-sample problem",
                  " (maybe the grouping variable is not a factor?)")
+        if (is_singly_ordered(object))
+            stop(colnames(object@x), " is an ordered factor")
         return(TRUE)
     }
 
-    args <- setup_args(teststat = "scalar",
-                       ytrafo = function(data)
+    twosamp <- nlevels(object@x[[1]]) == 2
+
+    args <- setup_args(ytrafo = function(data)
                            trafo(data, numeric_trafo = function(y)
                                ansari_trafo(y, ties.method = ties.method)),
                        check = check)
+    args$teststat <- if (twosamp) "scalar" else "quad"
     args$alternative <- match.arg(args$alternative,
                                   c("two.sided", "less", "greater"))
     if (args$alternative == "less")
@@ -240,17 +244,20 @@ ansari_test.IndependenceProblem <- function(object,
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
-    RET@parameter <- "ratio of scales"
-    RET@nullvalue <- 1
-    RET@method <- "Ansari-Bradley Test"
+    if (twosamp) {
+        RET@method <- "2-Sample Ansari-Bradley Test"
+        RET@parameter <- "ratio of scales"
+        RET@nullvalue <- 1
+        if (conf.int) {
+            RET <- new("ScalarIndependenceTestConfint", RET)
+            RET@confint <- function(level)
+                confint_scale(RET@statistic, RET@distribution,
+                                 level = level)
+            RET@conf.level <- conf.level
+        }
+    } else
+        RET@method <- "K-Sample Ansari-Bradley Test"
 
-    if (conf.int) {
-        RET <- new("ScalarIndependenceTestConfint", RET)
-        RET@confint <- function(level)
-            confint_scale(RET@statistic, RET@distribution,
-                          level = level)
-        RET@conf.level <- conf.level
-    }
 
     return(RET)
 }
@@ -370,7 +377,7 @@ fligner_test.formula <- function(formula, data = list(), subset = NULL,
 
 fligner_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
-    distribution = c("asymptotic", "approximate"), ...) {
+    conf.int = FALSE, conf.level = 0.95, ...) {
 
     check <- function(object) {
         if (!(is_Ksample(object) && is_numeric_y(object)))
@@ -382,15 +389,13 @@ fligner_test.IndependenceProblem <- function(object,
         return(TRUE)
     }
 
-    distribution <- check_distribution_arg(distribution,
-        values = c("asymptotic", "approximate"))
+    twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(teststat = "quad",
-                       distribution = distribution,
-                       ytrafo = function(data)
+    args <- setup_args(ytrafo = function(data)
                            trafo(data, numeric_trafo = function(y)
                                fligner_trafo(y, ties.method = ties.method)),
                        check = check)
+    args$teststat <- if (twosamp) "scalar" else "quad"
 
     ## eliminate location differences (see 'stats/R/fligner.test')
     object@y[[1]] <- object@y[[1]] -
@@ -398,7 +403,20 @@ fligner_test.IndependenceProblem <- function(object,
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
-    RET@method <- "Fligner-Killeen Test"
+    if (twosamp) {
+        RET@method <- "2-Sample Fligner-Killeen Test"
+        RET@parameter <- "ratio of scales"
+        RET@nullvalue <- 1
+        if (conf.int) {
+            RET <- new("ScalarIndependenceTestConfint", RET)
+            RET@confint <- function(level)
+                confint_scale(RET@statistic, RET@distribution,
+                                 level = level)
+            RET@conf.level <- conf.level
+        }
+    } else
+        RET@method <- "K-Sample Fligner-Killeen Test"
+
 
     return(RET)
 }

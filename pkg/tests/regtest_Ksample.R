@@ -122,6 +122,22 @@ savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
             alternative = "greater")
 
 
+### Ansari-Bradley Test
+ansari_test(y ~ x, data = dat)
+
+try(ansari_test(y ~ ordered(x), data = dat))
+try(ansari_test(y ~ ordered(x), data = dat,
+                alternative = "less"))
+try(ansari_test(y ~ ordered(x), data = dat,
+                alternative = "greater"))
+
+try(ansari_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8))))
+try(ansari_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+                alternative = "less"))
+try(ansari_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+                alternative = "greater"))
+
+
 ### Logrank Test
 surv_test(Surv(y) ~ x, data = dat)
 

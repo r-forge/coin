@@ -184,6 +184,12 @@ savage_test(y ~ x, dat = dat, alternative = "less")
 savage_test(y ~ x, dat = dat, alternative = "greater")
 
 
+### Fligner-Killeen Test
+fligner_test(y ~ x, dat = dat)
+fligner_test(y ~ x, dat = dat, alternative = "less")
+fligner_test(y ~ x, dat = dat, alternative = "greater")
+
+
 ### Logrank Test
 surv_test(Surv(y) ~ x, dat = dat)
 surv_test(Surv(y) ~ x, dat = dat, alternative = "less")

@@ -1,5 +1,5 @@
 
-R version 2.15.1 Patched (2012-10-07 r60893) -- "Roasted Marshmallows"
+R version 2.15.2 Patched (2012-11-06 r61087) -- "Trick or Treat"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i386-w64-mingw32/i386 (32-bit)
@@ -344,6 +344,34 @@ alternative hypothesis: greater
 
 > 
 > 
+> ### Ansari-Bradley Test
+> ansari_test(y ~ x, data = dat)
+
+	Asymptotic K-Sample Ansari-Bradley Test
+
+data:  y by x (1, 2, 3, 4) 
+chi-squared = 6.9382, df = 3, p-value = 0.07389
+
+> 
+> try(ansari_test(y ~ ordered(x), data = dat))
+Error in check(itp) : ordered(x) is an ordered factor
+> try(ansari_test(y ~ ordered(x), data = dat,
++                 alternative = "less"))
+Error in check(itp) : ordered(x) is an ordered factor
+> try(ansari_test(y ~ ordered(x), data = dat,
++                 alternative = "greater"))
+Error in check(itp) : ordered(x) is an ordered factor
+> 
+> try(ansari_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8))))
+Error in check(itp) : x is an ordered factor
+> try(ansari_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++                 alternative = "less"))
+Error in check(itp) : x is an ordered factor
+> try(ansari_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++                 alternative = "greater"))
+Error in check(itp) : x is an ordered factor
+> 
+> 
 > ### Logrank Test
 > surv_test(Surv(y) ~ x, data = dat)
 
@@ -409,4 +437,4 @@ alternative hypothesis: greater
 > 
 > proc.time()
    user  system elapsed 
-   1.74    0.12    1.96 
+   1.79    0.10    1.96 

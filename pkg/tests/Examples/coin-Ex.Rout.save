@@ -946,7 +946,7 @@ $cutpoint
 >   ### Ansari-Bradley test, asymptotical p-value
 >   ansari_test(serum ~ method, data = sid)
 
-	Asymptotic Ansari-Bradley Test
+	Asymptotic 2-Sample Ansari-Bradley Test
 
 data:  serum by method (Ramsay, Jung-Parekh) 
 Z = -1.3363, p-value = 0.1815
@@ -956,7 +956,7 @@ alternative hypothesis: true ratio of scales is not equal to 1
 >   ### exact p-value
 >   ansari_test(serum ~ method, data = sid, distribution = "exact")
 
-	Exact Ansari-Bradley Test
+	Exact 2-Sample Ansari-Bradley Test
 
 data:  serum by method (Ramsay, Jung-Parekh) 
 Z = -1.3363, p-value = 0.1881
@@ -2087,7 +2087,7 @@ C             0.000            0.0000  0.999
 >   at <- ansari_test(y ~ x, data = df, distribution = "exact")
 >   at
 
-	Exact Ansari-Bradley Test
+	Exact 2-Sample Ansari-Bradley Test
 
 data:  y by x (1, 2) 
 Z = 0.4553, p-value = 0.7102
@@ -2371,7 +2371,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  59 1.36 62.67 NA NA 
+Time elapsed:  58.76 1.59 62.95 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -22,7 +22,7 @@
 \method{fligner_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{fligner_test}{IndependenceProblem}(object,
     ties.method = c("mid-ranks", "average-scores"),
-    distribution = c("asymptotic", "approximate"), \dots)
+    conf.int = FALSE, conf.level = 0.95, \dots)
 
 }
 \arguments{
@@ -39,47 +39,44 @@
   \item{object}{an object of class \code{"IndependenceProblem"}.}
   \item{ties.method}{a character, two methods are available to adjust
     scores for ties, either the score generating function is applied to
-    \code{"mid-ranks"} or the scores computed based on random ranks are
-    averaged for all tied values (\code{"average-scores"}).}
+    \code{"mid-ranks"} (default) or the scores computed based on random
+    ranks are averaged for all tied values (\code{"average-scores"}).}
   \item{conf.int}{a logical indicating whether a confidence interval for
     the ratio of scales should be computed.}
   \item{conf.level}{confidence level of the interval.}
-  \item{distribution}{a character, the null distribution of the test
-    statistic can be computed \code{"exact"}ly or can be approximated by
-    its asymptotic distribution (\code{"asymptotic"}) or via Monte-Carlo
-    resampling (\code{"approximate"}).  Alternatively, the functions
-    \code{\link{exact}}, \code{\link{approximate}} or
-    \code{\link{asymptotic}} can be used to specify how the exact
-    conditional distribution of the test statistic should be calculated
-    or approximated.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
 
   The null hypothesis of the equality of the distribution of \code{y} in
   the groups given by \code{x} is tested.  In particular, the methods
-  documented here are designed to detect scale alternatives.  For a
-  general description of the test procedures documented here we refer to
-  Hollander & Wolfe (1999).
+  documented here are designed to detect scale alternatives.
 
-  The asymptotic null distribution is computed by default for both
-  procedures.  Exact p-values may be computed for the Ansari-Bradley
-  test and can be approximated via Monte Carlo for the Fligner-Killeen
-  procedure.  Exact p-values are computed either by the shift algorithm
-  (Streitberg & Roehmel, 1986, 1987) or by the split-up algorithm (van
-  de Wiel, 2001).
+  The test procedures documented here perform the Ansari-Bradley test
+  (\code{ansari_test}) and the Fligner-Killeen test
+  (\code{fligner_test}).  For a general description of these tests we
+  refer to Hollander & Wolfe (1999).  The Fligner-Killeen test
+  implemented here uses median centering in each of the samples as
+  suggested by Conover, Johnson & Johnson (1981).
 
-  The Ansari-Bradley test can be used to test the two-sided hypothesis
-  \eqn{var(Y_1) / var(Y_2) = 1}, where \eqn{var(Y_i)} is the variance of
-  the responses in the ith group.  Confidence intervals for the ratio of
-  scales are available for the Ansari-Bradley test and are computed
+  The asymptotic null distribution is computed by default for all
+  procedures.  Exact \eqn{p}-values may be computed for the two-sample
+  problems and can be approximated via Monte Carlo resampling for all
+  procedures.  The exact \eqn{p}-values are computed either by the shift
+  algorithm (Streitberg & Roehmel, 1986, 1987) or by the split-up
+  algorithm (van de Wiel, 2001).
+
+  In the two-sample case the two-sided hypothesis \eqn{var(Y_1) /
+    var(Y_2) = 1} is tested, where \eqn{var(Y_i)} is the variance of the
+  responses in the \eqn{i}th sample.  Confidence intervals for the ratio
+  of scales are available for these tests and are computed
   according to Bauer (1972).  In case \code{alternative = "less"}, the
   null hypothesis \eqn{var(Y_1) / var(Y_2) \ge 1} is tested and
-  \code{alternative = "greater"} corresponds to \eqn{var(Y_1) / var(Y_2)
-    \le 1}.
+  \code{alternative = "greater"} corresponds to \eqn{var(Y_1) /
+    var(Y_2) \le 1}.
 
   For the adjustment of scores for tied values see Hajek, Sidak and Sen
-  (1999), page 131ff.
+  (1999, pp. 133--135).
 
 }
 \value{
@@ -97,6 +94,11 @@
   Myles Hollander & Douglas A. Wolfe (1999).
   \emph{Nonparametric Statistical Methods}, 2nd Edition.
   New York: John Wiley & Sons.
+
+  William J. Conover, Mark E. Johnson & Myrle M. Johnson (1981).
+  A comparative study of tests for homogeneity of variances, with
+  applications to the outer continental shelf bidding data.
+  \emph{Technometrics} \bold{23}, 351--361.
 
   Bernd Streitberg & Joachim Roehmel (1986).
   Exact distributions for permutations and rank tests: An introduction
