@@ -349,7 +349,7 @@ alternative hypothesis: two.sided
 > ### Name: IndependenceTest
 > ### Title: General Independence Tests
 > ### Aliases: independence_test independence_test.formula
-> ###   independence_test.IndependenceProblem independence_test.table
+> ###   independence_test.table independence_test.IndependenceProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -359,7 +359,7 @@ alternative hypothesis: two.sided
 >   independence_test(asat ~ group, data = asat,
 + 
 +     ### exact null distribution
-+     distribution = "exact", 
++     distribution = "exact",
 + 
 +     ### one-sided test
 +     alternative = "greater",
@@ -380,7 +380,7 @@ alternative hypothesis: greater
 
 > 
 >   ### same as
->   normal_test(asat ~ group, data = asat, distribution = "exact", 
+>   normal_test(asat ~ group, data = asat, distribution = "exact",
 +               alternative = "greater")
 
 	Exact 2-Sample Normal Quantile (van der Waerden) Test
@@ -393,7 +393,7 @@ alternative hypothesis: true mu is greater than 0
 > 
 >   ### if you are interested in the internals:
 >   ## Not run: 
-> ##D       browseURL(system.file("documentation", "html", "index.html", 
+> ##D       browseURL(system.file("documentation", "html", "index.html",
 > ##D                             package = "coin"))
 > ##D   
 > ## End(Not run)
@@ -2371,7 +2371,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  58.76 1.59 62.95 NA NA 
+Time elapsed:  59.7 1.53 65.68 NA NA 
 > grDevices::dev.off()
 null device 
           1 

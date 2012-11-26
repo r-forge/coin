@@ -102,6 +102,31 @@ copyslots <- function(source, target) {
     return(target)
 }
 
+ft <- function(test, formula, data = list(), subset = NULL,
+    weights = NULL, ...) {
+
+    d <- formula2data(formula, data, subset, weights = weights, ...)
+    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
+              weights = d$w)
+    args <- list(...)
+    args$frame <- NULL
+
+    ### warn users of weighted rank tests
+    w <- d$w
+    if (is.null(w)) w <- 1L
+    if (test %in% ranktests & (max(abs(w - 1)) > .Machine$double.eps))
+        warning("Rank transformation doesn't take weights into account")
+
+    RET <- do.call(test, c(list(object = ip), args))
+    return(RET)
+}
+
+ranktests <-
+    c("wilcox_test", "kruskal_test", "normal_test", "median_test",
+      "savage_test", "ansari_test", "fligner_test", "surv_test",
+      "friedman_test", "wilcoxsign_test", "spearman_test", "fisyat_test",
+      "quadrant_test", "koziol_test")
+
 formula2data <- function(formula, data, subset, weights = NULL, ...) {
 
     other <- list()
@@ -411,12 +436,6 @@ get_ytrans <- function(object) object@statistic@ytrans
 
 chkone <- function(w)
     !(max(abs(w - 1.0)) < eps())
-
-ranktests <- function()
-    c("wilcox_test", "kruskal_test", "normal_test", "median_test",
-      "savage_test", "ansari_test", "fligner_test", "surv_test",
-      "friedman_test", "wilcoxsign_test", "spearman_test", "fisyat_test",
-      "quadrant_test", "koziol_test")
 
 setColnames <- function (object, nm) {
     colnames(object) <- nm
