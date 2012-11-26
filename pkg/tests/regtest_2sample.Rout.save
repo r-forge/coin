@@ -99,9 +99,9 @@ Loading required package: multcomp
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "asympt"))
 [1] 0.1794892
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx"))
-[1] 0.197
+[1] 0.1956
 99 percent confidence interval:
- 0.1656172 0.2313194 
+ 0.1854798 0.2060117 
 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact"))
 [1] 0.1847028
@@ -112,9 +112,9 @@ Loading required package: multcomp
 0.08974461 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx",
 +                    alternative = "less"))
-[1] 0.099
+[1] 0.0885
 99 percent confidence interval:
- 0.07613518 0.12577658 
+ 0.08133160 0.09606348 
 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact",
 +                    alternative = "less"))
@@ -126,9 +126,9 @@ Loading required package: multcomp
 0.9102554 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx",
 +                    alternative = "greater"))
-[1] 0.917
+[1] 0.9158
 99 percent confidence interval:
- 0.8919859 0.9379376 
+ 0.9083975 0.9228033 
 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact",
 +                    alternative = "greater"))
@@ -420,4 +420,4 @@ In wilcoxsign_test.IndependenceProblem(object = <S4 object of class "Independenc
 > 
 > proc.time()
    user  system elapsed 
-   2.32    0.15    2.57 
+   2.71    0.10    2.87 

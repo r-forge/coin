@@ -7,7 +7,7 @@ asymptotic <- function(maxpts = 25000, abseps = 0.001, releps = 0) {
     RET
 }
 
-approximate <- function(B = 1000) {
+approximate <- function(B = 10000) {
     RET <- function(object)
         ApproxNullDistribution(object, B = B)
     RET

@@ -150,7 +150,7 @@ MCfun <- function(x, y, w, b, B) {
 
 setMethod(f = "ApproxNullDistribution",
           signature = "ScalarIndependenceTestStatistic",
-          definition = function(object, B = 1000, ...) {
+          definition = function(object, B = 10000, ...) {
 
               pls <- plsraw <- MCfun(object@xtrans,
                   object@ytrans, object@weights, as.integer(object@block), as.integer(B))
@@ -195,7 +195,7 @@ setMethod(f = "ApproxNullDistribution",
 
 setMethod(f = "ApproxNullDistribution",
           signature = "MaxTypeIndependenceTestStatistic",
-          definition = function(object, B = 1000, ...) {
+          definition = function(object, B = 10000, ...) {
 
               pls <- plsraw <- MCfun(object@xtrans,
                   object@ytrans, object@weights, as.integer(object@block), as.integer(B))
@@ -270,7 +270,7 @@ setMethod(f = "ApproxNullDistribution",
 
 setMethod(f = "ApproxNullDistribution",
           signature = "QuadTypeIndependenceTestStatistic",
-          definition = function(object, B = 1000, ...) {
+          definition = function(object, B = 10000, ...) {
 
               pls <- plsraw <- MCfun(object@xtrans,
                   object@ytrans, object@weights, as.integer(object@block), as.integer(B))

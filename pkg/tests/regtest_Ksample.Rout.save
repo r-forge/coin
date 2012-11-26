@@ -93,7 +93,7 @@ Error in .local(.Object, ...) : 'block' is not a factor
 	Asymptotic K-Sample Permutation Test
 
 data:  y by x (1, 2, 3, 4) 
-maxT = 1.6931, p-value = 0.2817
+maxT = 1.6931, p-value = 0.2814
 alternative hypothesis: two.sided 
 
 > 
@@ -437,4 +437,4 @@ alternative hypothesis: greater
 > 
 > proc.time()
    user  system elapsed 
-   1.79    0.10    1.96 
+   1.85    0.14    2.02 
