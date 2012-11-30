@@ -138,6 +138,9 @@
           "General Independence Test" had been carried out; it is now reported
           as "General Symmetry Test".
 
+    o     transformation functions involving ordered factors or survival data
+          sometimes failed when performed within blocks
+
     OTHER CHANGES
 
     o     the median and logrank transformations are now increasing functions of

@@ -373,7 +373,7 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
 
         ## need to check dimension of matrix returned by
         ## user supplied functions
-        ret <- trafo(data, numeric_trafo, factor_trafo, surv_trafo)
+        ret <- trafo(data, numeric_trafo, factor_trafo, ordered_trafo, surv_trafo)
 
         ## apply trafo to each block separately
         for (lev in levels(block)) {

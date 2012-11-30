@@ -345,3 +345,9 @@ mh_test(tab, sco = list(response = 1:3))
 ### erroneously claimed to be linear-by-linear tests
 chisq_test(as.table(jobsatisfaction[, , "Female"]), scores = list(Income = 1:4))
 cmh_test(as.table(jobsatisfaction[, , "Female"]), scores = list(Income = 1:4))
+
+### multivariate trafos with blocks failed for ordered factors and survival data
+z <- gl(2, 10)
+trafo(data.frame(gl(4, 5, ordered = TRUE)),
+      ordered_trafo = function(x) cbind(c(1, 2, 3, 4)[x], c(1, 2, 3, 5)[x]),
+      block = z)
