@@ -470,7 +470,7 @@ specification of the transformations $g$ and $h$ via
 \Rcmd{xtrafo} and \Rcmd{ytrafo}, respectively, as well as setting \Rcmd{teststat}
 to \Rcmd{"max"} or \Rcmd{"quad"} (for $c_\text{max}$ or $c_\text{quad}$, respectively)
 and the \Rcmd{distribution} to be used. Thus, for computing the Kruskal-Wallis test
-\Rcmd{ytrafo} has to be set to the function \Rcmd{rank_trafo} for computing ranks, in \Rcmd{xtrafo}
+\Rcmd{ytrafo} has to be set to the function \Rcmd{rank\_trafo} for computing ranks, in \Rcmd{xtrafo}
 dummy codings have to be used (the default for categorical variables), \Rcmd{teststat}
 is the \Rcmd{"quad"} type statistic $c_\text{quad}$ and the default asymptotic
 \Rcmd{distribution} is applied:
