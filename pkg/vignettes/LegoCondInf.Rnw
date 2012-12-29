@@ -532,9 +532,9 @@ atab <- xtabs(~ smoking + + disease + gender, data = alzheimer)
 
 \cite{SalibHillier1997}
 report results of a case-control study on Alzheimer's disease
-and smoking behavior of $\Sexpr{disease["Alzheimer's"]}$ female
+and smoking behavior of $\Sexpr{disease["Alzheimer"]}$ female
 and male Alzheimer patients and
-$\Sexpr{disease[names(disease) != "Alzheimer's"]}$ controls.
+$\Sexpr{sum(disease[names(disease) != "Alzheimer"])}$ controls.
 The data shown in Table~\ref{alzheimertab} have been
 re-constructed from Table~4 in \cite{SalibHillier1997} and are depicted in
 Figure~\ref{alz-plot}.
