@@ -1,8 +1,8 @@
 
-R version 2.14.2 (2012-02-29)
-Copyright (C) 2012 The R Foundation for Statistical Computing
+R version 2.15.3 (2013-03-01) -- "Security Blanket"
+Copyright (C) 2013 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i386-pc-mingw32/i386 (32-bit)
+Platform: i686-pc-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -21,7 +21,6 @@ Type 'q()' to quit R.
 > pkgname <- "coin"
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
-> options(pager = "console")
 > library('coin')
 Loading required package: survival
 Loading required package: splines
@@ -447,7 +446,7 @@ IV - III 0.9998777778
 > 
 > cleanEx()
 
-detaching 'package:multcomp'
+detaching ‘package:multcomp’
 
 > nameEx("MarginalHomogeneityTest")
 > ### * MarginalHomogeneityTest
@@ -1034,7 +1033,7 @@ alternative hypothesis: true mu is greater than 0
 > 
 > cleanEx()
 
-detaching 'package:multcomp'
+detaching ‘package:multcomp’
 
 > nameEx("Transformations")
 > ### * Transformations
@@ -2034,7 +2033,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  52.11 0.81 54.22 NA NA 
+Time elapsed:  18.913 0.624 19.568 0 0 
 > grDevices::dev.off()
 null device 
           1 
