@@ -116,21 +116,21 @@ pvalue(mt)
 pperm(mt, 1)
 qperm(mt, 0.9)
 dperm(mt, qperm(mt, 0.9))
-support(mt)
+#support(mt)
 
 mt <- maxstat_test(y ~ x, distribution = approximate(), alternative = "greater")
 pvalue(mt)
 pperm(mt, 1)
 qperm(mt, 0.9)
 dperm(mt, qperm(mt, 0.9))
-support(mt)
+#support(mt)
 
 mt <- maxstat_test(y ~ x, distribution = approximate(), alternative = "less")
 pvalue(mt)
 pperm(mt, 1)
 qperm(mt, 0.9)
 dperm(mt, qperm(mt, 0.9))
-support(mt)
+#support(mt)
 
 ### unadjusted
 

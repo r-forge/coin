@@ -1,8 +1,8 @@
 
-R version 2.14.2 (2012-02-29)
+R version 2.15.2 (2012-10-26) -- "Trick or Treat"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i386-pc-mingw32/i386 (32-bit)
+Platform: i686-redhat-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -95,7 +95,7 @@ Loading required package: multcomp
 	Asymptotic Maxstat Test
 
 data:  w by x 
-maxT = 2.3738, p-value = 0.1836
+maxT = 2.3738, p-value = 0.184
 alternative hypothesis: two.sided 
 sample estimates:
 $cutpoint
@@ -148,7 +148,7 @@ $cutpoint
 	Asymptotic Maxstat Test
 
 data:  w by x, y, z 
-maxT = 2.3738, p-value = 0.286
+maxT = 2.3738, p-value = 0.2879
 alternative hypothesis: two.sided 
 sample estimates:
 $covariable
@@ -182,3 +182,6 @@ $cutpoint
 > 
 > ### see `comparison.R' for more regression tests
 > 
+> proc.time()
+   user  system elapsed 
+ 13.585   0.144  13.718 
