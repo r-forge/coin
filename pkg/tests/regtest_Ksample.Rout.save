@@ -1,7 +1,6 @@
 
-R version 2.15.2 Patched (2012-11-06 r61087) -- "Trick or Treat"
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
+R version 3.0.0 (2013-04-03) -- "Masked Marvel"
+Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: i386-w64-mingw32/i386 (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -32,7 +31,7 @@ Loading required package: multcomp
 > isequal <- coin:::isequal
 > 
 > ### generate data
-> dat <- data.frame(x = gl(4, 25), y = rnorm(100), block = gl(5, 20))[sample(1:100, 50),]
+> dat <- data.frame(x = gl(4, 25), y = rnorm(100), block = gl(5, 20))[sample(1:100, 50), ]
 > 
 > 
 > ### Kruskal-Wallis Test
@@ -92,63 +91,63 @@ Error in .local(.Object, ...) : 'block' is not a factor
 
 	Asymptotic K-Sample Permutation Test
 
-data:  y by x (1, 2, 3, 4) 
+data:  y by x (1, 2, 3, 4)
 maxT = 1.6931, p-value = 0.2814
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 > oneway_test(y ~ ordered(x), data = dat)
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = -0.1278, p-value = 0.8983
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > oneway_test(y ~ ordered(x), data = dat,
 +             alternative = "less")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = -0.1278, p-value = 0.4492
-alternative hypothesis: less 
+alternative hypothesis: less
 
 > oneway_test(y ~ ordered(x), data = dat,
 +             alternative = "greater")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = -0.1278, p-value = 0.5508
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 > 
 > oneway_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = -0.1278, p-value = 0.8983
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > oneway_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
 +             alternative = "less")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = -0.1278, p-value = 0.4492
-alternative hypothesis: less 
+alternative hypothesis: less
 
 > oneway_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
 +             alternative = "greater")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = -0.1278, p-value = 0.5508
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 > 
 > 
@@ -157,7 +156,7 @@ alternative hypothesis: greater
 
 	Asymptotic K-Sample Normal Quantile (van der Waerden) Test
 
-data:  y by x (1, 2, 3, 4) 
+data:  y by x (1, 2, 3, 4)
 chi-squared = 3.3466, df = 3, p-value = 0.3412
 
 > 
@@ -165,54 +164,54 @@ chi-squared = 3.3466, df = 3, p-value = 0.3412
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = -0.3135, p-value = 0.7539
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > normal_test(y ~ ordered(x), data = dat,
 +             alternative = "less")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = -0.3135, p-value = 0.377
-alternative hypothesis: less 
+alternative hypothesis: less
 
 > normal_test(y ~ ordered(x), data = dat,
 +             alternative = "greater")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = -0.3135, p-value = 0.623
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 > 
 > normal_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = -0.3135, p-value = 0.7539
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > normal_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
 +             alternative = "less")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = -0.3135, p-value = 0.377
-alternative hypothesis: less 
+alternative hypothesis: less
 
 > normal_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
 +             alternative = "greater")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = -0.3135, p-value = 0.623
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 > 
 > 
@@ -221,7 +220,7 @@ alternative hypothesis: greater
 
 	Asymptotic K-Sample Median Test
 
-data:  y by x (1, 2, 3, 4) 
+data:  y by x (1, 2, 3, 4)
 chi-squared = 0.8594, df = 3, p-value = 0.8352
 
 > 
@@ -229,54 +228,54 @@ chi-squared = 0.8594, df = 3, p-value = 0.8352
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = -0.659, p-value = 0.5099
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > median_test(y ~ ordered(x), data = dat,
 +             alternative = "less")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = -0.659, p-value = 0.255
-alternative hypothesis: less 
+alternative hypothesis: less
 
 > median_test(y ~ ordered(x), data = dat,
 +             alternative = "greater")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = -0.659, p-value = 0.745
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 > 
 > median_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = -0.659, p-value = 0.5099
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > median_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
 +             alternative = "less")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = -0.659, p-value = 0.255
-alternative hypothesis: less 
+alternative hypothesis: less
 
 > median_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
 +             alternative = "greater")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = -0.659, p-value = 0.745
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 > 
 > 
@@ -285,7 +284,7 @@ alternative hypothesis: greater
 
 	Asymptotic K-Sample Savage Test
 
-data:  y by x (1, 2, 3, 4) 
+data:  y by x (1, 2, 3, 4)
 chi-squared = 2.3638, df = 3, p-value = 0.5004
 
 > 
@@ -293,54 +292,54 @@ chi-squared = 2.3638, df = 3, p-value = 0.5004
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.7774
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > savage_test(y ~ ordered(x), data = dat,
 +             alternative = "less")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.6113
-alternative hypothesis: less 
+alternative hypothesis: less
 
 > savage_test(y ~ ordered(x), data = dat,
 +             alternative = "greater")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by ordered(x) (1 < 2 < 3 < 4) 
+data:  y by ordered(x) (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.3887
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 > 
 > savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.7774
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
 +             alternative = "less")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.6113
-alternative hypothesis: less 
+alternative hypothesis: less
 
 > savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
 +             alternative = "greater")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  y by x (1 < 2 < 3 < 4) 
+data:  y by x (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.3887
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 > 
 > 
@@ -349,7 +348,7 @@ alternative hypothesis: greater
 
 	Asymptotic K-Sample Ansari-Bradley Test
 
-data:  y by x (1, 2, 3, 4) 
+data:  y by x (1, 2, 3, 4)
 chi-squared = 6.9382, df = 3, p-value = 0.07389
 
 > 
@@ -377,7 +376,7 @@ Error in check(itp) : x is an ordered factor
 
 	Asymptotic K-Sample Logrank Test
 
-data:  Surv(y) by x (1, 2, 3, 4) 
+data:  Surv(y) by x (1, 2, 3, 4)
 chi-squared = 2.3638, df = 3, p-value = 0.5004
 
 > 
@@ -385,56 +384,140 @@ chi-squared = 2.3638, df = 3, p-value = 0.5004
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4) 
+data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.7774
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > surv_test(Surv(y) ~ ordered(x), data = dat,
 +           alternative = "less")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4) 
+data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.6113
-alternative hypothesis: less 
+alternative hypothesis: less
 
 > surv_test(Surv(y) ~ ordered(x), data = dat,
 +           alternative = "greater")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4) 
+data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.3887
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 > 
 > surv_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  Surv(y) by x (1 < 2 < 3 < 4) 
+data:  Surv(y) by x (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.7774
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > surv_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
 +           alternative = "less")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  Surv(y) by x (1 < 2 < 3 < 4) 
+data:  Surv(y) by x (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.6113
-alternative hypothesis: less 
+alternative hypothesis: less
 
 > surv_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
 +           alternative = "greater")
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  Surv(y) by x (1 < 2 < 3 < 4) 
+data:  Surv(y) by x (1 < 2 < 3 < 4)
 Z = 0.2827, p-value = 0.3887
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
+> 
+> 
+> ### Weighted logrank tests
+> 
+> ### Lee & Wang (2003, p. 130, Table 5.11)
+> leukemia <- data.frame(
++     time = c( 4,   5,   9,  10,  12,  13, 10,
++              23,  28,  28,  28,  29,
++              31,  32,  37,  41,  41,
++              57,  62,  74, 100, 139,
++              20, 258, 269,
++               8,  10,  10,  12,  14,
++              20,  48,  70,  75,  99, 103,
++             162, 169, 195, 220,
++             161, 199, 217,
++             245,
++               8,  10,  11,  23,  25,  25,
++              28,  28,  31,  31,  40,
++              48,  89, 124, 143,
++              12, 159, 190, 196,
++             197, 205, 219),
++     event = c(1, 1, 1, 1, 1, 1, 1,
++               1, 1, 1, 1, 1,
++               1, 1, 1, 1, 1,
++               1, 1, 1, 1, 1,
++               0, 0, 0,
++               1, 1, 1, 1, 1,
++               1, 1, 1, 1, 1, 1,
++               1, 1, 1, 1,
++               0, 0, 0,
++               0,
++               1, 1, 1, 1, 1, 1,
++               1, 1, 1, 1, 1,
++               1, 1, 1, 1,
++               0, 0, 0, 0,
++               0, 0, 0),
++     group = factor(rep(1:3, c(25, 19, 22)), labels = as.roman(1:3)))
+> 
+> ### Leton and Zuluaga (2002, p. 25, Table 6)
+> 
+> ### Gehan, X^2_SG
+> st <- surv_test(Surv(time, event) ~ group, data = leukemia,
++                 type = "Gehan")
+> stopifnot(all(-statistic(st, "linear") == c(273, -170, -103)))
+> isequal(round(statistic(st), 3), 3.612)
+[1] TRUE
+> isequal(round(pvalue(st), 4), 0.1643)
+[1] TRUE
+> 
+> ### Peto-Peto, X^2_SPP
+> st <- surv_test(Surv(time, event) ~ group, data = leukemia,
++                 type = "Fleming-Harrington", rho = 1)
+> stopifnot(all(round(-statistic(st, "linear"), 3) == c(4.171, -2.582, -1.589)))
+> isequal(round(statistic(st), 3), 3.527)
+[1] TRUE
+> isequal(round(pvalue(st), 4), 0.1715)
+[1] TRUE
+> 
+> ### X^2_S1
+> st <- surv_test(Surv(time, event) ~ group, data = leukemia,
++                 type = "Prentice")
+> stopifnot(all(round(-statistic(st, "linear"), 3) == c(4.100, -2.503, -1.597)))
+> isequal(round(statistic(st), 3), 3.639)
+[1] TRUE
+> isequal(round(pvalue(st), 4), 0.1621)
+[1] TRUE
+> 
+> ### LR Altshuler, X^2_SLRA
+> st <- surv_test(Surv(time, event) ~ group, data = leukemia)
+> stopifnot(all(round(-statistic(st, "linear"), 3) == c(6.635, -3.693, -2.942)))
+> isequal(round(statistic(st), 3), 3.814)
+[1] TRUE
+> isequal(round(pvalue(st), 4), 0.1485)
+[1] TRUE
+> 
+> ### X^2_S2
+> st <- surv_test(Surv(time, event) ~ group, data = leukemia,
++                 type = "Tarone-Ware")
+> stopifnot(all(c(round(-statistic(st, "linear")[1:2], 2), round(-statistic(st, "linear")[3], 3)) == c(42.78, -26.42, -16.361)))
+> isequal(round(statistic(st), 3), 4.104)
+[1] TRUE
+> isequal(round(pvalue(st), 4), 0.1285)
+[1] TRUE
+> 
 > 
 > proc.time()
    user  system elapsed 
-   1.85    0.14    2.02 
+   2.91    0.23    3.26 

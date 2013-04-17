@@ -1,12 +1,14 @@
 
-R version 2.14.2 (2012-02-29)
+R version 2.15.2 (2012-10-26) -- "Trick or Treat"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
-Platform: i386-pc-mingw32/i386 (32-bit)
+Platform: i686-redhat-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -19,7 +21,6 @@ Type 'q()' to quit R.
 > pkgname <- "coin"
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
-> options(pager = "console")
 > library('coin')
 Loading required package: survival
 Loading required package: splines
@@ -1127,10 +1128,11 @@ alternative hypothesis: true theta is not equal to 1
 +                           distribution = approximate(B = 10000),
 +                           ytrafo = function(data)
 +                               trafo(data, surv_trafo = function(y)
-+                                   logrank_trafo(y, ties.method = "average-scores",
++                                   logrank_trafo(y,
++                                                 ties.method = "average-scores",
 +                                                 type = "Fleming-Harrington",
-+                                                 rho = rho.gamma[, 1],
-+                                                 gamma = rho.gamma[, 2])))
++                                                 rho = rho.gamma["rho"],
++                                                 gamma = rho.gamma["gamma"])))
 >   pvalue(vt, method = "step-down")
         rho = -2, gamma = 0 rho = -1, gamma = 0 rho = 0, gamma = 0
 newdrug              0.0111              0.0038             0.0028
@@ -2371,7 +2373,7 @@ $cutpoint
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  59.7 1.53 65.68 NA NA 
+Time elapsed:  292.725 1.942 296.32 0 0 
 > grDevices::dev.off()
 null device 
           1 

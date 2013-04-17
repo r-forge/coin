@@ -8,8 +8,7 @@ library(coin)
 isequal <- coin:::isequal
 
 ### generate data
-dat <- data.frame(x = gl(2, 50), y = rnorm(100), block = gl(5, 20))[sample(1:100,
-75),]
+dat <- data.frame(x = gl(2, 50), y = rnorm(100), block = gl(5, 20))[sample(1:100, 75), ]
 
 
 ### Wilcoxon Mann-Whitney Rank Sum Test
@@ -229,3 +228,57 @@ x1 <- c(8 , 26 , -7 , -1 , 2 , 9 , 0 , -4 , 13 , 3 , 3 , 4)
 pvalue(wilcoxsign_test(y1~x1,alter="greater",dist=exact(),
                        zero.method = "Wilcoxon"))
 pvalue(wilcoxsign_test(y1~x1,alter="greater",dist=exact()))
+
+
+### Weighted logrank tests
+
+### Collett (2003, p. 9, Table 1.3)
+prostatic <- data.frame(
+    time = c(13, 52,  6, 40, 10,  7, 66, 10, 10, 14,
+             16 , 4, 65,  5, 11, 10, 15,  5, 76, 56,
+             88, 24, 51,  4, 40,  8, 18,  5, 16, 50,
+             40,  1, 36,  5, 10, 91, 18,  1, 18,  6,
+              1, 23, 15, 18, 12, 12, 17,  3),
+    event = c(1, 0, 1, 1, 1, 0, 1, 0, 1, 1,
+              1, 1, 1, 1, 0, 1, 0, 1, 0, 0,
+              1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
+              1, 1, 1, 1, 1, 1, 0, 1, 0, 1,
+              1, 1, 1, 1, 0, 1, 1, 0),
+    Hb = c(14.6, 12.0, 11.4, 10.2, 13.2,  9.9, 12.8, 14.0,  7.5, 10.6,
+           11.2, 10.1,  6.6,  9.7,  8.8,  9.6, 13.0, 10.4, 14.0, 12.5,
+           14.0, 12.4, 10.1,  6.5, 12.8,  8.2, 14.4, 10.2, 10.0,  7.7,
+            5.0,  9.4, 11.0,  9.0, 14.0, 11.0, 10.8,  5.1, 13.0,  5.1,
+           11.3, 14.6,  8.8,  7.5,  4.9,  5.5,  7.5, 10.2))
+prostatic <- within(prostatic,
+                    group <- factor(Hb > 11.0, labels = as.roman(1:2)))
+
+### Leton and Zuluaga (2005, p. 384, Table 9)
+
+### Gehan
+st <- surv_test(Surv(time, event) ~ group, data = prostatic,
+                type = "Gehan")
+isequal(round(statistic(st)^2, 4), 3.8400)
+isequal(round(pvalue(st), 4), 0.0500)
+
+### Peto-Peto
+st <- surv_test(Surv(time, event) ~ group, data = prostatic,
+                type = "Fleming-Harrington", rho = 1)
+isequal(round(statistic(st)^2, 4), 4.0657)
+isequal(round(pvalue(st), 4), 0.0438)
+
+### Prentice
+st <- surv_test(Surv(time, event) ~ group, data = prostatic,
+                type = "Prentice")
+isequal(round(statistic(st)^2, 4), 4.1229)
+isequal(round(pvalue(st), 4), 0.0423)
+
+### LR Altshuler
+st <- surv_test(Surv(time, event) ~ group, data = prostatic)
+isequal(round(statistic(st)^2, 4), 4.4343)
+isequal(round(pvalue(st), 4), 0.0352)
+
+### Tarone-Ware
+st <- surv_test(Surv(time, event) ~ group, data = prostatic,
+                type = "Tarone-Ware")
+isequal(round(statistic(st)^2, 4), 4.3443)
+isequal(round(pvalue(st), 4), 0.0371)

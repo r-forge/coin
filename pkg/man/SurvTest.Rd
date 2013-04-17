@@ -346,10 +346,11 @@
                           distribution = approximate(B = 10000),
                           ytrafo = function(data)
                               trafo(data, surv_trafo = function(y)
-                                  logrank_trafo(y, ties.method = "average-scores",
+                                  logrank_trafo(y,
+                                                ties.method = "average-scores",
                                                 type = "Fleming-Harrington",
-                                                rho = rho.gamma[, 1],
-                                                gamma = rho.gamma[, 2])))
+                                                rho = rho.gamma["rho"],
+                                                gamma = rho.gamma["gamma"])))
   pvalue(vt, method = "step-down")
 
 }
