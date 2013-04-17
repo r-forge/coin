@@ -159,6 +159,9 @@
 
       \item transformation functions involving ordered factors or
       survival data sometimes failed when performed within blocks
+
+      \item the general symmetry test inadvertently allowed the
+      \code{distribution} argument to be set to \code{"exact"}
     }
   }
   \subsection{Other changes}{

@@ -741,12 +741,6 @@ stopifnot(isequal(round(statistic(cta), 1), 22.1))
 # asymptotic p-value, page 947
 stopifnot(isequal(round(pvalue(cta), 2), 0.14))
 
-ctMC <- chisq_test(oral_lesions, distribution = approximate(B = 10000))
-
-pci <- attr(pvalue(ctMC), "conf.int")
-stopifnot(pci[1] < 0.0269 & pci[2] > 0.0269)
-
-
 # approximate p-value, page 947
 ctMC <- cmh_test(oral_lesions, distribution = approximate(B = 10000))
 
@@ -915,12 +909,13 @@ y <- as.vector(t(cbind(abs(diff) * (diff > 0), abs(diff) * (diff <= 0))))
 block <- gl(length(diff), 2)
 x <- factor(rep(c("pos", "neg"), length(diff)))
 
-sa <- symmetry_test(y ~ x | block)
+sta <- symmetry_test(y ~ x | block)
 
 # asymptotic p-value, page 300
-stopifnot(isequal(round(statistic(sa), 3), -1.707))
-stopifnot(isequal(round(pvalue(sa), 4), 0.0878))
+stopifnot(isequal(round(statistic(sta), 3), -1.707))
+stopifnot(isequal(round(pvalue(sta), 4), 0.0878))
 
-# exact p-value, page 300
-se <- symmetry_test(y ~ x | block, dist = "exact")
-stopifnot(isequal(round(pvalue(se), 4), 0.0021))
+# approximate p-value, page 300
+stMC <- symmetry_test(y ~ x | block, distribution = approximate(B = 10000))
+pci <- attr(pvalue(stMC), "conf.int")
+stopifnot(pci[1] < 0.0021 & pci[2] > 0.0021)

@@ -1,7 +1,6 @@
 
-R version 2.15.1 Patched (2012-10-07 r60893) -- "Roasted Marshmallows"
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
+R version 3.0.0 (2013-04-03) -- "Masked Marvel"
+Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: i386-w64-mingw32/i386 (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -416,9 +415,9 @@ Loading required package: multcomp
 	Asymptotic 2-Sample Logrank Test
 
 data:  Surv(time, event) by treatment (1, 2) 
-	 stratified by gender 
+	 stratified by gender
 Z = -1.5446, p-value = 0.1224
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 > 
 > pvalue(surv_test(Surv(time, event) ~ treatment | gender, data = srv,
@@ -731,7 +730,7 @@ alternative hypothesis: true theta is not equal to 1
 +                                 1,  1,  1,  2,
 +                                29, 26, 28, 20),
 +                     tumor = factor(rep(c(rep("Present", 4), rep("Absent", 4)), 3),
-+                                    levels = c("Present", "Absent")), 
++                                    levels = c("Present", "Absent")),
 +                     dose = ordered(rep(paste(c(0, 1, 5, 50), "units"), 6),
 +                                    levels = paste(c(0, 1, 5, 50), "units")),
 +                     stratum = factor(rep(paste("Stratum", 3:5), rep(8, 3))))
@@ -803,12 +802,6 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > # asymptotic p-value, page 947
 > stopifnot(isequal(round(pvalue(cta), 2), 0.14))
-> 
-> ctMC <- chisq_test(oral_lesions, distribution = approximate(B = 10000))
-> 
-> pci <- attr(pvalue(ctMC), "conf.int")
-> stopifnot(pci[1] < 0.0269 & pci[2] > 0.0269)
-> 
 > 
 > # approximate p-value, page 947
 > ctMC <- cmh_test(oral_lesions, distribution = approximate(B = 10000))
@@ -978,16 +971,17 @@ alternative hypothesis: true theta is not equal to 1
 > block <- gl(length(diff), 2)
 > x <- factor(rep(c("pos", "neg"), length(diff)))
 > 
-> sa <- symmetry_test(y ~ x | block)
+> sta <- symmetry_test(y ~ x | block)
 > 
 > # asymptotic p-value, page 300
-> stopifnot(isequal(round(statistic(sa), 3), -1.707))
-> stopifnot(isequal(round(pvalue(sa), 4), 0.0878))
+> stopifnot(isequal(round(statistic(sta), 3), -1.707))
+> stopifnot(isequal(round(pvalue(sta), 4), 0.0878))
 > 
-> # exact p-value, page 300
-> se <- symmetry_test(y ~ x | block, dist = "exact")
-> stopifnot(isequal(round(pvalue(se), 4), 0.0021))
+> # approximate p-value, page 300
+> stMC <- symmetry_test(y ~ x | block, distribution = approximate(B = 10000))
+> pci <- attr(pvalue(stMC), "conf.int")
+> stopifnot(pci[1] < 0.0021 & pci[2] > 0.0021)
 > 
 > proc.time()
    user  system elapsed 
-   4.47    0.24    4.85 
+   3.94    0.17    4.39 

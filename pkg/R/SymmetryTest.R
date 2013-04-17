@@ -23,6 +23,8 @@ symmetry_test.SymmetryProblem <- function(object,
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL,
     check = NULL, ...) {
+    distribution <- check_distribution_arg(distribution,
+        values = c("asymptotic", "approximate"))
     class(object) <- "IndependenceProblem"
     RET <- independence_test(object, teststat, distribution, alternative,
                              xtrafo, ytrafo, scores, check, ...)

@@ -1,7 +1,6 @@
 
-R version 2.15.3 (2013-03-01) -- "Security Blanket"
+R version 3.0.0 (2013-04-03) -- "Masked Marvel"
 Copyright (C) 2013 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
 Platform: i386-w64-mingw32/i386 (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -36,17 +35,17 @@ Loading required package: multcomp
 
 	Asymptotic General Independence Test
 
-data:  I(x1/x2) by x3 (1, 2) 
+data:  I(x1/x2) by x3 (1, 2)
 Z = -0.4491, p-value = 0.6534
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > independence_test(I(x1 < 0) ~ x3, data = df)
 
 	Asymptotic General Independence Test
 
-data:  I(x1 < 0) by x3 (1, 2) 
+data:  I(x1 < 0) by x3 (1, 2)
 Z = 0.7966, p-value = 0.4257
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 > ### expectation was wrong when varonly = TRUE in case both
@@ -148,17 +147,17 @@ alternative hypothesis: two.sided
 
 	Asymptotic General Independence Test
 
-data:  y by x 
+data:  y by x
 Z = -1, p-value = 0.3173
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > independence_test(y ~ x, data = mydf, subset = c(1, 2))
 
 	Asymptotic General Independence Test
 
-data:  y by x 
+data:  y by x
 Z = -1, p-value = 0.3173
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > try(independence_test(y ~ x, data = mydf, subset = 1))
 Error in validObject(.Object) : 
@@ -215,9 +214,9 @@ IV  -339.6795 -339.6795 -339.6795 1019.0385
 
 	Asymptotic General Independence Test
 
-data:  y by x 
+data:  y by x
 Z = 3, p-value = 0.0027
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > x <- 1
 > y <- 1
@@ -225,9 +224,9 @@ alternative hypothesis: two.sided
 
 	Asymptotic General Independence Test
 
-data:  y by x 
+data:  y by x
 Z = 3, p-value = 0.0027
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 > ### factors with only one level
@@ -302,9 +301,9 @@ X3      10
 	Exact Wilcoxon-Signed-Rank Test
 
 data:  y by x (neg, pos) 
-	 stratified by block 
+	 stratified by block
 Z = 2.0732, p-value = 0.01953
-alternative hypothesis: true mu is greater than 0 
+alternative hypothesis: true mu is greater than 0
 
 > 
 > ### inconsistencies with confidence intervals
@@ -319,11 +318,11 @@ alternative hypothesis: true mu is greater than 0
 
 	Asymptotic Wilcoxon Mann-Whitney Rank Sum Test
 
-data:  Route.Time by Route (A, B) 
+data:  Route.Time by Route (A, B)
 Z = -3.0245, p-value = 0.002491
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 95 percent confidence interval:
- -3.6999810 -0.4999788 
+ -3.6999810 -0.4999788
 sample estimates:
 difference in location 
             -0.9000475 
@@ -332,11 +331,11 @@ difference in location
 
 	Asymptotic Wilcoxon Mann-Whitney Rank Sum Test
 
-data:  Route.Time by Route2 (B, A) 
+data:  Route.Time by Route2 (B, A)
 Z = 3.0245, p-value = 0.002491
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 95 percent confidence interval:
- 0.4999788 3.6999810 
+ 0.4999788 3.6999810
 sample estimates:
 difference in location 
              0.9000352 
@@ -345,11 +344,11 @@ difference in location
 
 	Exact Wilcoxon Mann-Whitney Rank Sum Test
 
-data:  Route.Time by Route (A, B) 
+data:  Route.Time by Route (A, B)
 Z = -3.0245, p-value = 0.001374
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 95 percent confidence interval:
- -3.7 -0.5 
+ -3.7 -0.5
 sample estimates:
 difference in location 
                   -0.9 
@@ -358,11 +357,11 @@ difference in location
 
 	Exact Wilcoxon Mann-Whitney Rank Sum Test
 
-data:  Route.Time by Route2 (B, A) 
+data:  Route.Time by Route2 (B, A)
 Z = 3.0245, p-value = 0.001374
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 95 percent confidence interval:
- 0.5 3.7 
+ 0.5 3.7
 sample estimates:
 difference in location 
                    0.9 
@@ -377,18 +376,18 @@ $V1
 
 	Asymptotic Wilcoxon Mann-Whitney Rank Sum Test
 
-data:  var by group (1, 2) 
+data:  var by group (1, 2)
 Z = -0.3929, p-value = 0.6944
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 
 
 $V2
 
 	Asymptotic Wilcoxon Mann-Whitney Rank Sum Test
 
-data:  var by group (1, 2) 
+data:  var by group (1, 2)
 Z = 0.7997, p-value = 0.4239
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 
 
 > 
@@ -471,9 +470,9 @@ Error in factor_trafo(x) :
 
 	Asymptotic Wilcoxon Mann-Whitney Rank Sum Test
 
-data:  u by z (1, 2) 
+data:  u by z (1, 2)
 Z = -1, p-value = 0.3173
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 
 > 
 > x <- c(NA, 1, 2, 8)
@@ -483,9 +482,9 @@ alternative hypothesis: true mu is not equal to 0
 	Asymptotic Wilcoxon-Signed-Rank Test
 
 data:  y by x (neg, pos) 
-	 stratified by block 
+	 stratified by block
 Z = 0.4472, p-value = 0.6547
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 
 > 
 > ### no observations left after removing NAs
@@ -502,9 +501,9 @@ Error in .local(.Object, ...) : 'x' and 'y' do not contain data
 	Asymptotic Wilcoxon-Signed-Rank Test
 
 data:  y by x (neg, pos) 
-	 stratified by block 
+	 stratified by block
 Z = 1.633, p-value = 0.1025
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 
 > 
 > ### monotonicity wasn't enforced for "step-down"
@@ -562,9 +561,9 @@ alternative hypothesis: true mu is not equal to 0
 
 	Asymptotic 2-Sample Median Test
 
-data:  y1 by x (I, II) 
+data:  y1 by x (I, II)
 Z = 2.6458, p-value = 0.9959
-alternative hypothesis: true mu is less than 0 
+alternative hypothesis: true mu is less than 0
 
 > 
 > ### nullvalue never got printed
@@ -572,9 +571,9 @@ alternative hypothesis: true mu is less than 0
 
 	Asymptotic 2-Sample Logrank Test
 
-data:  Surv(time, event) by stadium (II, IIA) 
+data:  Surv(time, event) by stadium (II, IIA)
 Z = 2.3373, p-value = 0.01942
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 > 
 > ### partial matching of the scores argument didn't work
@@ -583,7 +582,7 @@ alternative hypothesis: true theta is not equal to 1
 	Asymptotic Generalized Pearson's Chi-Squared Test
 
 data:  Job.Satisfaction by
-	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
+	 Income (<5000 < 5000-15000 < 15000-25000 < >25000)
 chi-squared = 3.0171, df = 3, p-value = 0.389
 
 > 
@@ -595,9 +594,9 @@ chi-squared = 3.0171, df = 3, p-value = 0.389
 
 data:  response (ordered) by
 	 conditions (Var1, Var2) 
-	 stratified by block 
+	 stratified by block
 Z = 1.2247, p-value = 0.2207
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 > ### erroneously claimed to be linear-by-linear tests
@@ -606,7 +605,7 @@ alternative hypothesis: two.sided
 	Asymptotic Generalized Pearson's Chi-Squared Test
 
 data:  Job.Satisfaction by
-	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
+	 Income (<5000 < 5000-15000 < 15000-25000 < >25000)
 chi-squared = 3.0171, df = 3, p-value = 0.389
 
 > cmh_test(as.table(jobsatisfaction[, , "Female"]), scores = list(Income = 1:4))
@@ -614,7 +613,7 @@ chi-squared = 3.0171, df = 3, p-value = 0.389
 	Asymptotic Generalized Cochran-Mantel-Haenszel Test
 
 data:  Job.Satisfaction by
-	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
+	 Income (<5000 < 5000-15000 < 15000-25000 < >25000)
 chi-squared = 2.97, df = 3, p-value = 0.3963
 
 > 
@@ -647,6 +646,12 @@ chi-squared = 2.97, df = 3, p-value = 0.3963
 attr(,"assign")
 [1] 1 1
 > 
+> ### symmetry_test still allowed 'distribution = "exact"'
+> tab <- as.table(matrix(c(20, 2, 12, 16), nrow = 2))
+> try(symmetry_test(tab, distribution = "exact"))
+Error in match.arg(distribution[1], values) : 
+  'arg' should be one of "asymptotic", "approximate"
+> 
 > proc.time()
    user  system elapsed 
-   4.02    0.42    4.54 
+   5.47    0.42    6.55 
