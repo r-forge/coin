@@ -374,8 +374,7 @@ check_distribution_arg <- function(distribution,
     values = c("asymptotic", "approximate", "exact")) {
     if (is.character(distribution)) {
         distribution <- match.arg(distribution[1], values)
-        distribution <- eval(parse(text =
-                                   paste(distribution, "()", sep = "")))
+        distribution <- eval(parse(text = paste0(distribution, "()")))
     }
     distribution
 }
@@ -405,14 +404,14 @@ statnames <- function(object) {
         if (nr == 1) {
             dn[[1]] <- ""
         } else {
-            dn[[1]] <- paste("X", 1:nr, sep = "")
+            dn[[1]] <- paste0("X", 1:nr)
         }
     }
     if (is.null(dn[[2]])) {
         if (nc == 1) {
             dn[[2]] <- ""
         } else {
-            dn[[2]] <- paste("Y", 1:nc, sep = "")
+            dn[[2]] <- paste0("Y", 1:nc)
         }
     }
     list(dimnames = dn,
@@ -441,3 +440,5 @@ setColnames <- function (object, nm) {
     colnames(object) <- nm
     object
 }
+
+if(getRversion() < "2.15") paste0 <- function(...) paste(..., sep = "")

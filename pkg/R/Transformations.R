@@ -151,8 +151,7 @@ maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
     }
     cm <- .Call("R_maxstattrafo", as.double(x), as.double(cutpoints),
                 PACKAGE = "coin")
-    dimnames(cm) <- list(1:nrow(cm),
-                         paste("x <= ", round(cutpoints, 3), sep = ""))
+    dimnames(cm) <- list(1:nrow(cm), paste0("x <= ", round(cutpoints, 3)))
     cm[is.na(x)] <- NA
     cm
 }
@@ -186,8 +185,8 @@ fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
     cn <- vector(mode = "character", length = nrow(sp))
     for (i in 1:nrow(sp)) {
         tr[ ,i] <- x %in% lev[sp[i, ]]
-        cn[i] <- paste("{", paste(lev[sp[i, ]], collapse = ", "), "} vs. {",
-                       paste(lev[!sp[i, ]], collapse = ", "), "}", sep = "")
+        cn[i] <- paste0("{", paste0(lev[sp[i, ]], collapse = ", "), "} vs. {",
+                        paste0(lev[!sp[i, ]], collapse = ", "), "}")
     }
     tr[is.na(x), ] <- NA
     dimnames(tr) <- list(1:length(x), cn)
@@ -329,9 +328,8 @@ logrank_weight <- function(time, n.risk, n.event,
                                    function(i) w(rho[i], gamma[i]),
                                    time),
                             ## compute names
-                            paste("rho = ", rho,
-                                  if (!is.null(gamma)) ", gamma = ", gamma,
-                                  sep = ""))
+                            paste0("rho = ", rho,
+                                   if (!is.null(gamma)) ", gamma = ", gamma))
     return(wgt)
 }
 
@@ -439,15 +437,13 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
         if (is.null(colnames(tr[[i]]))) {
             cn <- c(cn, rep("", ncol(tr[[i]])))
         } else {
-            cn <- c(cn, paste(ifelse(length(tr) > 1, ".", ""),
-                              colnames(tr[[i]]), sep = ""))
+            cn <- c(cn, paste0(ifelse(length(tr) > 1, ".", ""), colnames(tr[[i]])))
         }
         assignvar <- c(assignvar, rep(i, ncol(tr[[i]])))
     }
     attr(RET, "assign") <- assignvar
     if (length(tr) > 1) {
-        colnames(RET) <- paste(rep(names(tr), tabulate(assignvar)),
-                               cn, sep = "")
+        colnames(RET) <- paste0(rep(names(tr), tabulate(assignvar)), cn)
     } else {
         colnames(RET) <- cn
     }

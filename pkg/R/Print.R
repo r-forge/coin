@@ -5,25 +5,25 @@ varnames <- function(object) {
     y <- object@y
 
     yordered <- vapply(y, is.ordered, NA)
-    ynames <- paste(colnames(y), ifelse(yordered, " (ordered)", ""), sep = "",
-                    collapse = ", ")
+    ynames <- paste0(colnames(y), ifelse(yordered, " (ordered)", ""),
+                     collapse = ", ")
 
     if (length(x) == 1) {
         if (is.ordered(x[[1]])) {
-            xnames <- paste(colnames(x), " (", paste(levels(x[[1]]), collapse = " < "),
-                            ")", sep = "")
+            xnames <- paste0(colnames(x), " (",
+                             paste0(levels(x[[1]]), collapse = " < "), ")")
         } else {
             if (is.factor(x[[1]])) {
-                xnames <- paste(colnames(x), " (",
-                                paste(levels(x[[1]]), collapse = ", "), ")", sep = "")
+                xnames <- paste0(colnames(x), " (",
+                                 paste0(levels(x[[1]]), collapse = ", "), ")")
             } else {
                 xnames <- colnames(x)
             }
         }
     } else {
         xordered <- vapply(x, is.ordered, NA)
-        xnames <- paste(colnames(x), ifelse(xordered, "(ordered)", ""),
-                        sep = "", collapse = ", ")
+        xnames <- paste0(colnames(x), ifelse(xordered, "(ordered)", ""),
+                         collapse = ", ")
     }
 
     if (nlevels(object@block) > 1) {
@@ -33,9 +33,9 @@ varnames <- function(object) {
     }
 
     if (nchar(xnames) > options("width")$width/2) {
-        strg <- paste(ynames, "by\n\t", xnames, collapse = "")
+        strg <- paste0(ynames, "by\n\t", xnames, collapse = "")
     } else {
-        strg <- paste(ynames, "by", xnames, collapse = "")
+        strg <- paste0(ynames, "by", xnames, collapse = "")
     }
 
     return(strg)

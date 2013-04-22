@@ -856,7 +856,7 @@ contrast_test.IndependenceProblem <- function(object,
              nlevels(object@x), " rows")
 
     if (is.null(colnames(cmatrix)))
-        colnames(cmatrix) <- paste("C", 1:ncol(cmatrix), sep = "")
+        colnames(cmatrix) <- paste0("C", 1:ncol(cmatrix))
 
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
@@ -1087,8 +1087,7 @@ wilcoxsign_test.IndependenceProblem <- function(object,
         if (is.null(match.call()$zero.method))
             warning("Handling of zeros defaults to ", sQuote("Pratt"),
                     " in newer versions of coin")
-        RET@method <- paste(RET@method, " (zeros handled a la ",
-                            zero.method, ")", sep = "")
+        RET@method <- paste0(RET@method, " (zeros handled a la ", zero.method, ")")
     }
     RET@nullvalue <- 0
 
