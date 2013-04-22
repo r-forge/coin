@@ -230,9 +230,9 @@ logrank_trafo <-
 
     ## number at risk, number of ties and events at the ordered unique times
     n_risk <- n - uor + 1L
-    n_ties <- if (ties.method != "Hothorn-Lausen") -diff(c(n_risk, 0))
-              else -diff(c(n - unique(rank(time, ties.method = "min")[o]) + 1L, 0))
-    n_event <- vapply(uor, function(i) sum(event[o][i == or]), 1)
+    n_ties <- if (ties.method != "Hothorn-Lausen") -diff(c(n_risk, 0L))
+              else -diff(c(n - unique(rank(time, ties.method = "min")[o]) + 1L, 0L))
+    n_event <- vapply(uor, function(i) sum(event[o][i == or]), NA_real_)
 
     ## index: expands ties and returns in original order
     idx <- rep.int(seq_along(n_ties), n_ties)[r] # => uor[idx] == r
@@ -242,27 +242,25 @@ logrank_trafo <-
 
     ## weighted log-rank scores
     nw <- NCOL(w)
-    if (nw == 1) {
-        s <- cumsum(w * n_event / n_risk)[idx] - event * w[idx]
-        if (ties.method == "average-scores")
-            ## average over events only
-            s <- average_scores(s, time0 + (1 - event) * noise)
+    if (nw == 1L) {
         scores <- rep.int(NA_real_, length(cc))
-        scores[cc] <- s
+        scores[cc] <-
+            if (ties.method != "average-scores")
+                cumsum(w * n_event / n_risk)[idx] - event * w[idx]
+            else # average over events only
+                average_scores(cumsum(w * n_event / n_risk)[idx] - event * w[idx],
+                               time0 + (1 - event) * noise)
     } else {
-        s <- vapply(seq_len(nw),
-                    function(i) {
-                        s <- cumsum(w[, i] * n_event / n_risk)[idx] -
-                               event * w[idx, i]
-                        if (ties.method == "average-scores")
-                            ## average over events only
-                            average_scores(s, time0 + (1 - event) * noise)
-                        else s
-                    },
-                    time)
         scores <- matrix(NA_real_, nrow = length(cc), ncol = nw,
                          dimnames = list(NULL, colnames(w)))
-        scores[cc, ] <- s
+        scores[cc, ] <-
+            vapply(seq_len(nw), function(i) {
+                if (ties.method != "average-scores")
+                    cumsum(w[, i] * n_event / n_risk)[idx] - event * w[idx, i]
+                else # average over events only
+                    average_scores(cumsum(w[, i] * n_event / n_risk)[idx] - event * w[idx, i],
+                                   time0 + (1 - event) * noise)
+            }, time)
     }
     return(scores)
 }
