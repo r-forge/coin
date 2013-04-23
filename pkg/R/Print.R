@@ -66,7 +66,7 @@ setMethod(f = "show", signature = "QuadTypeIndependenceTest",
             RET$parameter <- dist@parameters[[1]]
             names(RET$parameter) <- "df"
         }
-        if (length(x@estimates) > 0)
+        if (length(x@estimates))
             RET <- c(RET, x@estimates)
         class(RET) <- "htest"
         print(RET)
@@ -95,7 +95,7 @@ setMethod(f = "show", signature = "MaxTypeIndependenceTest",
                     alternative = x@statistic@alternative,
                     data.name = dataname,
                     method = paste(distname, x@method))
-        if (length(x@estimates) > 0)
+        if (length(x@estimates))
             RET <- c(RET, x@estimates)
         class(RET) <- "htest"
         print(RET)
@@ -125,11 +125,11 @@ setMethod(f = "show", signature = "ScalarIndependenceTest",
                     alternative = x@statistic@alternative,
                     data.name = dataname,
                     method = paste(distname, x@method))
-        if (length(x@nullvalue > 0)) {
+        if (length(x@nullvalue)) {
             RET$null.value = x@nullvalue
             names(RET$null.value) <- x@parameter
         }
-        if (length(x@estimates) > 0)
+        if (length(x@estimates))
             RET <- c(RET, x@estimates)
         class(RET) <- "htest"
         print(RET)
@@ -189,8 +189,10 @@ setMethod(f = "show", signature = "ScalarIndependenceTestConfint",
                     data.name = dataname,
                     conf.int = ci$conf.int,
                     estimate = ci$estimate)
-        if (length(x@nullvalue))
-            RET$null.value = c(mu = x@nullvalue)
+        if (length(x@nullvalue)) {
+            RET$null.value = x@nullvalue
+            names(RET$null.value) <- x@parameter
+        }
         if (length(x@estimates))
             RET <- c(RET, x@estimates)
         class(RET) <- "htest"

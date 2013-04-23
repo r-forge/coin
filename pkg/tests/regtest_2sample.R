@@ -200,26 +200,37 @@ location <- data.frame(y = c(6, 20, 27, 38, 46, 51, 54, 57,
                              10, 12, 15, 21, 32, 40, 41, 45),
                        x = gl(2, 8))
 
-ci <- confint(normal_test(y ~ x, data = location,
-                          conf.int = TRUE, di = "ex"))
+wt <- wilcox_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
+wt
+ci <- confint(wt)
+wt0 <- wilcox.test(y ~ x, data = location, conf.int = TRUE)
+stopifnot(isequal(wt0$confint, ci$confint))
+stopifnot(isequal(wt0$estimate, ci$estimate))
+
+nt <- normal_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
+nt
+ci <- confint(nt)
 stopifnot(isequal(ci$conf.int, c(-6, 30)))
 stopifnot(isequal(ci$estimate, 11))
 
-wt <- wilcox.test(y ~ x, data = location,
-                  conf.int = TRUE)
-ci <- confint(wilcox_test(y ~ x, data = location,
-                          conf.int = TRUE, di = "ex"))
-stopifnot(isequal(wt$confint, ci$confint))
-stopifnot(isequal(wt$estimate, ci$estimate))
+median_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
+
+savage_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
+
 
 scale <- data.frame(y = c(-101, -35, -13, 10, 130, 236, 370, 556,
                           -145, -140, -40, -30, 2, 27, 68, 290),
                     x = gl(2, 8))
 
-ci <- confint(ansari_test(y ~ x, data = scale, conf.int = TRUE,
-                          di = "ex", conf.level = 0.988))
+at <- ansari_test(y ~ x, data = scale, di = "ex",
+                  conf.int = TRUE, conf.level = 0.988)
+at
+ci <- confint(at)
 stopifnot(isequal(ci$conf.int, c(10, 556) / c(68, 27)))
 stopifnot(isequal(ci$estimate, mean(c(35/30, 370 / 290))))
+
+fligner_test(y ~ x, data = scale, di = "ex",
+                  conf.int = TRUE, conf.level = 0.988)
 
 
 ### ties handling
