@@ -33,9 +33,9 @@ varnames <- function(object) {
     }
 
     if (nchar(xnames) > options("width")$width/2) {
-        strg <- paste0(ynames, "by\n\t", xnames, collapse = "")
+        strg <- paste(ynames, "by\n\t", xnames, collapse = "")
     } else {
-        strg <- paste0(ynames, "by", xnames, collapse = "")
+        strg <- paste(ynames, "by", xnames, collapse = "")
     }
 
     return(strg)
