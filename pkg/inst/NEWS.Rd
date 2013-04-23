@@ -54,7 +54,7 @@
       the explanatory variable is an ordered factor (see
       \code{?kruskal_test}, \code{?surv_test} and \code{?friedman_test})
 
-      \item the printed output for the logrank test now reports whether
+      \item the printed output of the logrank test now reports whether
       a 2- or \eqn{K}-sample test has been carried out
 
       \item objects of class \code{"ScalarIndependenceTest"} now has a
@@ -122,7 +122,7 @@
       the support of the null distribution contained values equal to
       the observed test statistics
 
-      \item the printed output for maximum-type tests did not include
+      \item the printed output of maximum-type tests did not include
       the alternative hypothesis
 
       \item the maximally selected statistics transformation for
@@ -134,17 +134,17 @@
       \item the median test \eqn{p}-value computation used the
       wrong tail of the null distribution in the one-sided case
 
-      \item the printed output for the logrank test did not report the
+      \item the printed output of the logrank test did not report the
       tested parameter in the 2-sample case
 
-      \item the printed output for the one-way test reported the
+      \item the printed output of the one-way test reported the
       parameter tested in the 2-sample case when the explanatory
       variable was an ordered factor
 
       \item partial matching of the \code{scores} argument didn't work
       for Pearson's chi-squared test and the marginal homogeneity test
 
-      \item the printed output for the Pearson chi-squared test and the
+      \item the printed output of the Pearson chi-squared test and the
       generalized Cochran-Mantel-Haenszel test claimed that a
       \samp{"Linear-by-Linear Association Test"} had been carried out
       even in the singly ordered case, i.e., when either the response
@@ -153,7 +153,7 @@
       \samp{"Generalized Pearson's Chi-squared Test"} and
       \samp{"Generalized Cochran-Mantel-Haenszel Test"} respectively
 
-      \item the printed output for the general symmetry test claimed
+      \item the printed output of the general symmetry test claimed
       that a \samp{"General Independence Test"} had been carried out; it
       is now reported as \samp{"General Symmetry Test"}
 
@@ -175,11 +175,11 @@
       test now use a scalar test statistic in case the explanatory
       variable is an ordered factor
 
-      \item in the printed output for the Ansari-Bradley test and the
+      \item in the printed output of the Ansari-Bradley test and the
       Spearman test the tested parameter has been renamed to
       \samp{ratio of scales} and \samp{rho} respectively
 
-      \item the printed output for the one-way test now reports that a
+      \item the printed output of the one-way test now reports that a
       \samp{"Linear-by-Linear Association Test"} is carried out when the
       explanatory variable is an ordered factor
 
@@ -204,6 +204,10 @@
       \item the default number of Monte Carlo replicates used to
       approximate the exact conditional distribution has been increased
       to 10000 (see \code{?approximate})
+
+      \item small changes in the printed output of the
+      Wilcoxon-Mann-Whitney test, the marginal homogeneity test and the
+      Wilcoxon signed-rank test
     }
   }
 }

@@ -28,7 +28,7 @@ wilcox_test.IndependenceProblem <- function(object,
     RET <- do.call("independence_test", c(list(object = object), args))
 
     RET@nullvalue <- 0
-    RET@method <- "Wilcoxon Mann-Whitney Rank Sum Test"
+    RET@method <- "Wilcoxon-Mann-Whitney Test"
 
     if (conf.int) {
         RET <- new("ScalarIndependenceTestConfint", RET)
@@ -258,12 +258,11 @@ ansari_test.IndependenceProblem <- function(object,
     } else
         RET@method <- "K-Sample Ansari-Bradley Test"
 
-
     return(RET)
 }
 
 
-### Weighted logrank test
+### weighted logrank test
 surv_test <- function(object, ...) UseMethod("surv_test")
 
 surv_test.formula <- function(formula, data = list(), subset = NULL,
@@ -417,7 +416,6 @@ fligner_test.IndependenceProblem <- function(object,
     } else
         RET@method <- "K-Sample Fligner-Killeen Test"
 
-
     return(RET)
 }
 
@@ -507,7 +505,7 @@ fisyat_test.IndependenceProblem <- function(object,
 }
 
 
-## Quadrant test (Hajek, Sidak & Sen, pp. 124--125)
+## quadrant test (Hajek, Sidak & Sen, pp. 124--125)
 quadrant_test <- function(object, ...) UseMethod("quadrant_test")
 
 quadrant_test.formula <- function(formula, data = list(), subset = NULL,
@@ -598,7 +596,7 @@ koziol_test.IndependenceProblem <- function(object,
 }
 
 
-### Generalized Cochran-Mantel-Haenzel Test
+### generalized Cochran-Mantel-Haenzel test
 cmh_test <- function(object, ...) UseMethod("cmh_test")
 
 cmh_test.formula <- function(formula, data = list(), subset = NULL,
@@ -650,7 +648,7 @@ cmh_test.IndependenceProblem <- function(object,
 }
 
 
-### Pearson's Chi-Squared Test
+### Pearson's chi-squared test
 chisq_test <- function(object, ...) UseMethod("chisq_test")
 
 chisq_test.formula <- function(formula, data = list(), subset = NULL,
@@ -741,7 +739,7 @@ chisq_test.IndependenceProblem <- function(object,
 }
 
 
-### Linear-by-Linear Association Test
+### linear-by-linear association test
 lbl_test <- function(object, ...) UseMethod("lbl_test")
 
 lbl_test.formula <- function(formula, data = list(), subset = NULL,
@@ -835,7 +833,7 @@ oneway_test.IndependenceProblem <- function(object, ...) {
 }
 
 
-### Contrast test
+### contrast test
 contrast_test <- function(object, ...) UseMethod("contrast_test")
 
 contrast_test.formula <- function(formula, data = list(), subset = NULL,
@@ -874,7 +872,7 @@ contrast_test.IndependenceProblem <- function(object,
 }
 
 
-### Maxstat test
+### maxstat test
 maxstat_test <- function(object, ...) UseMethod("maxstat_test")
 
 maxstat_test.formula <- function(formula, data = list(), subset = NULL,
@@ -930,7 +928,7 @@ maxstat_test.IndependenceProblem <- function(object,
 }
 
 
-### Friedman-Test
+### Friedman Test
 friedman_test <- function(object, ...) UseMethod("friedman_test")
 
 friedman_test.formula <- function(formula, data = list(), subset = NULL, ...)
@@ -970,7 +968,7 @@ friedman_test.SymmetryProblem <- function(object,
 }
 
 
-### Marginal Homogeneity Test
+### marginal homogeneity test
 mh_test <- function(object, ...) UseMethod("mh_test")
 
 mh_test.formula <- function(formula, data = list(), subset = NULL, ...)
@@ -1012,15 +1010,15 @@ mh_test.SymmetryProblem <- function(object,
     RET <- do.call("symmetry_test", c(list(object = object), args))
 
     if (is_ordered(RET@statistic))
-        RET@method <- "Marginal-Homogeneity Test for Ordered Data"
+        RET@method <- "Marginal Homogeneity Test for Ordered Data"
     else
-        RET@method <- "Marginal-Homogeneity Test"
+        RET@method <- "Marginal Homogeneity Test"
 
     return(RET)
 }
 
 
-### Wilcoxon-Signed-Rank Test
+### Wilcoxon signed-rank test
 wilcoxsign_test <- function(object, ...) UseMethod("wilcoxsign_test")
 
 wilcoxsign_test.formula <- function(formula, data = list(),
@@ -1082,7 +1080,7 @@ wilcoxsign_test.IndependenceProblem <- function(object,
 
     RET <- do.call("independence_test", c(list(object = ip), args))
 
-    RET@method <- "Wilcoxon-Signed-Rank Test"
+    RET@method <- "Wilcoxon Signed-Rank Test"
     if (any(abs(odiffs) < .Machine$double.eps)) {
         if (is.null(match.call()$zero.method))
             warning("Handling of zeros defaults to ", sQuote("Pratt"),

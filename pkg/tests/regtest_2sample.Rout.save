@@ -385,7 +385,7 @@ alternative hypothesis: true theta is greater than 1
 > wt <- wilcox_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
 > wt
 
-	Exact Wilcoxon Mann-Whitney Rank Sum Test
+	Exact Wilcoxon-Mann-Whitney Test
 
 data:  y by x (1, 2)
 Z = 1.2603, p-value = 0.2345
@@ -565,4 +565,4 @@ In wilcoxsign_test.IndependenceProblem(object = <S4 object of class "Independenc
 > 
 > proc.time()
    user  system elapsed 
-   4.33    0.15    4.55 
+   4.39    0.14    4.68 
