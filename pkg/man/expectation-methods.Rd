@@ -50,16 +50,13 @@ variance(object, ...)
   ct <- cmh_test(y ~ x, data = df)
  
   ### the linear statistic, i.e, the contingency table
-  l <- statistic(ct, type = "linear")
-  l
+  (l <- statistic(ct, type = "linear"))
 
   ### expectation
-  El <- expectation(ct)
-  El
+  (El <- expectation(ct))
 
   ### covariance
-  Vl <- covariance(ct)
-  Vl
+  (Vl <- covariance(ct))
 
   ### the standardized contingency table (hard way)
   (l - El) / sqrt(variance(ct))
