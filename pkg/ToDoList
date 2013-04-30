@@ -1,4 +1,6 @@
 
+o       author first names not abbreviated in references
+
 o       formula interface to wilcoxsign_test is brain damaged
         y ~ 1 must be OK
         
@@ -47,6 +49,8 @@ o	check storage.mode of all vars going into C code (MC)
 
 o	add wilcoxon-gehan scores, check logrank scores!
 
+        [done]
+
 o	check if trend tests for clustered data are part of the framework
 
 o	maximally selected McNemar statistics -> Betensky, Biometrics, 2000
@@ -75,6 +79,8 @@ o	Kurt: trafo as family of transformations (see glm(..., family,...)
 o	should we have `distribution = "none"'?
 
 o       some trafos need to take weights into account -> ranks?
+
+        [done; well, at least we give a warning]
 
 o       permutation p-value = 0 means pval < 1 / B, not < 1e-16 (as
         format.pval reports)
