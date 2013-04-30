@@ -31,8 +31,11 @@ assess if there was shifts in the CWD respiration in response to the shift
 in the seasons.
 }
 \source{
-L. M. Rowland, C. Stahl, D. Bonal, P. W. Meir, M. Williams (2012).
-Seasonal variability in respiration from coarse dead wood in a tropical forest.
+
+Cl\'{e}ment Stahl and Beno\^{i}t Burban and Jean-Yves Goret
+and Damien Bonal (2011). Seasonal Variations in Stem {CO$_2$} Efflux in the
+Neotropical Rainforest of French Guiana.
+\emph{Annals of Forest Science}, \bold{68}(4), 771--782.
 }
 \examples{
 
