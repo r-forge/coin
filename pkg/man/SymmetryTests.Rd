@@ -157,10 +157,7 @@
   ### all pairwise comparisons
   rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
        teststat = "max",
-       xtrafo = function(data)
-           trafo(data, factor_trafo = function(x)
-                 model.matrix(~ x - 1) \%*\% t(contrMat(table(x), "Tukey"))
-           ),
+       xtrafo = mcp_trafo(methods = "Tukey"),
        ytrafo = function(data)
            trafo(data, numeric_trafo = rank_trafo, block = RoundingTimes$block)
        )
