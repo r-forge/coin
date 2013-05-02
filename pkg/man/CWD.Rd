@@ -23,19 +23,49 @@ Carbon flux on six pieces of wood.
 }
 \details{
 
-Aninfra red gas analyser and a clear chamber sealed to the wood surface were
-used to measure the flux of carbon out of the wood. 
-Measurements were repeated on CWD samples 13 times from July to November
-2011, during the transition into and out of the dry season.  The aim was to
-assess if there was shifts in the CWD respiration in response to the shift
-in the seasons.
+Coarse woody debris (CWD, dead wood greater 10 cm diameter) is a large stock
+of carbon in tropical forests, yet the flux of carbon out of this pool, via
+respiration, is poorly resolved (Chambers et al., 2001).
+The heterotrophic process involved in CWD respiration should respond to
+reductions in moisture availability, which occurs during dry season
+(Chambers et al., 2001).  CWD respiration measurements
+were taken in a tropical forest in west French Guiana, which experiences
+extreme contrasts in wet and dry season
+(Bonal et al., 2008).  An infrared gas analyzer and a clear
+chamber sealed to the wood surface were used to measure the flux of carbon
+out of the wood (Stahl et al., 2001).
+Measurements were repeated on six pieces of wood 13 times from July to November
+2011, during the transition into and out of the dry season.  The aim is to
+assess if there were shifts in the CWD respiration of any of the pieces
+in response to the transition into (early August) and
+out of (late October) the dry season. 
+
+
 }
-\source{
+\references{
+
+Jeffrey Q. Chambers, Joshua P. Schimel, Antonio D. Nobre (2001).
+Respiration from Coarse Wood Litter in Central Amazon Forests,
+\emph{Biogeochemistry},\bold{52}(2), 115--131.
+
+Damien Bonal, Alexandre Bosc, St\'{e}phane Ponton,
+Jean-Yves Goret, Beno\^{i}t Burban, Patrick Gross,
+Jean-Marc Bonnefond, Jan Elbers, Bernard Longdoz, 
+Daniel Epron, Jean-Marc Guehl, Andr\'{e} Granier (2008).
+Impact of Severe Dry Season on Net Ecosystem Exchange
+in the Neotropical Rainforest of French Guiana.
+\emph{Global Change Biology}, \bold{14}(8), 1917--1933.
 
 Cl\'{e}ment Stahl and Beno\^{i}t Burban and Jean-Yves Goret
 and Damien Bonal (2011). Seasonal Variations in Stem {CO$_2$} Efflux in the
 Neotropical Rainforest of French Guiana.
 \emph{Annals of Forest Science}, \bold{68}(4), 771--782.
+
+}
+
+\source{
+The coarse woody debris respiration data were kindly provided by Lucy Rowland (School of
+GeoSciences, University of Edinburgh).
 }
 \examples{
 
