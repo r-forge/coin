@@ -1,7 +1,6 @@
 
-R version 2.15.2 (2012-10-26) -- "Trick or Treat"
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
+R version 3.0.0 (2013-04-03) -- "Masked Marvel"
+Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: i686-redhat-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -29,7 +28,7 @@ Loading required package: modeltools
 Loading required package: stats4
 Loading required package: multcomp
 > 
-> assign(".oldSearch", search(), pos = 'CheckExEnv')
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > cleanEx()
 > nameEx("CWD")
 > ### * CWD
@@ -52,9 +51,9 @@ Loading required package: multcomp
 
 	Approximative Maxstat Test
 
-data:  sample2, sample3, sample4, sample6, sample7, sample8 by trend 
+data:  sample2, sample3, sample4, sample6, sample7, sample8 by trend
 maxT = 3.0793, p-value = 0.0082
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
 [1] 71
@@ -90,7 +89,7 @@ $cutpoint
 	Approximative Pearson's Chi-Squared Test
 
 data:  Job.Satisfaction by
-	 Income (<5000, 5000-15000, 15000-25000, >25000) 
+	 Income (<5000, 5000-15000, 15000-25000, >25000)
 chi-squared = 6.8203, p-value = 0.6891
 
 > 
@@ -101,7 +100,7 @@ chi-squared = 6.8203, p-value = 0.6891
 
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000) 
-	 stratified by Gender 
+	 stratified by Gender
 chi-squared = 10.2001, df = 9, p-value = 0.3345
 
 > 
@@ -112,9 +111,9 @@ chi-squared = 10.2001, df = 9, p-value = 0.3345
 
 data:  Job.Satisfaction (ordered) by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
-	 stratified by Gender 
+	 stratified by Gender
 Z = 2.5736, p-value = 0.01006
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 >   ### both Income and Job.Satisfaction ordered, alternative scores
@@ -125,9 +124,9 @@ alternative hypothesis: two.sided
 
 data:  Job.Satisfaction (ordered) by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
-	 stratified by Gender 
+	 stratified by Gender
 Z = 2.4812, p-value = 0.01309
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 >   ### the same, null distribution approximated
@@ -139,9 +138,9 @@ alternative hypothesis: two.sided
 
 data:  Job.Satisfaction (ordered) by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
-	 stratified by Gender 
+	 stratified by Gender
 Z = 2.4812, p-value = 0.0123
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 > 
@@ -160,9 +159,9 @@ alternative hypothesis: two.sided
 
 	Asymptotic Linear-by-Linear Association Test
 
-data:  HDL (ordered) by smoking (none < < 5 < < 10 < >=10) 
+data:  HDL (ordered) by smoking (none < < 5 < < 10 < >=10)
 Z = 3.1394, p-value = 0.001693
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 > 
@@ -187,7 +186,7 @@ alternative hypothesis: two.sided
 
 	Asymptotic General Independence Test
 
-data:  tumor by dose 
+data:  tumor by dose
 chi-squared = 10.6381, df = 1, p-value = 0.001108
 
 > 
@@ -199,7 +198,7 @@ chi-squared = 10.6381, df = 1, p-value = 0.001108
 
 	Asymptotic General Independence Test
 
-data:  tumor by dose (0 < 1 < 2) 
+data:  tumor by dose (0 < 1 < 2)
 chi-squared = 10.6381, df = 1, p-value = 0.001108
 
 > 
@@ -228,36 +227,36 @@ chi-squared = 10.6381, df = 1, p-value = 0.001108
 
 	Asymptotic Spearman Correlation Test
 
-data:  CONT by INTG 
+data:  CONT by INTG
 Z = -1.1437, p-value = 0.2527
-alternative hypothesis: true rho is not equal to 0 
+alternative hypothesis: true rho is not equal to 0
 
 > 
 >   fisyat_test(CONT ~ INTG, data = USJudgeRatings)
 
 	Asymptotic Fisher-Yates Correlation Test
 
-data:  CONT by INTG 
+data:  CONT by INTG
 Z = -0.8248, p-value = 0.4095
-alternative hypothesis: true rho is not equal to 0 
+alternative hypothesis: true rho is not equal to 0
 
 > 
 >   quadrant_test(CONT ~ INTG, data = USJudgeRatings)
 
 	Asymptotic Quadrant Test
 
-data:  CONT by INTG 
+data:  CONT by INTG
 Z = -1.0944, p-value = 0.2738
-alternative hypothesis: true rho is not equal to 0 
+alternative hypothesis: true rho is not equal to 0
 
 > 
 >   koziol_test(CONT ~ INTG, data = USJudgeRatings)
 
 	Asymptotic Koziol-Nemec Test
 
-data:  CONT by INTG 
+data:  CONT by INTG
 Z = -1.292, p-value = 0.1964
-alternative hypothesis: true rho is not equal to 0 
+alternative hypothesis: true rho is not equal to 0
 
 > 
 > 
@@ -289,9 +288,9 @@ alternative hypothesis: true rho is not equal to 0
 	Asymptotic 2-Sample Logrank Test
 
 data:  Surv(time, event) by
-	 group (Chemotherapy+Radiation, Chemotherapy) 
+	 group (Chemotherapy+Radiation, Chemotherapy)
 Z = -1.1428, p-value = 0.2531
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 > 
 >   ### Prentice test
@@ -301,9 +300,9 @@ alternative hypothesis: true theta is not equal to 1
 	Asymptotic 2-Sample Prentice Test
 
 data:  Surv(time, event) by
-	 group (Chemotherapy+Radiation, Chemotherapy) 
+	 group (Chemotherapy+Radiation, Chemotherapy)
 Z = -2.1687, p-value = 0.03011
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 > 
 >   ### testing against Weibull-type alternatives, see Moreau et al (1992)
@@ -318,9 +317,9 @@ alternative hypothesis: true theta is not equal to 1
 	Asymptotic General Independence Test
 
 data:  Surv(time, event) by
-	 group (Chemotherapy+Radiation, Chemotherapy) 
+	 group (Chemotherapy+Radiation, Chemotherapy)
 Z = 2.4129, p-value = 0.01583
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 >   ### testing against crossing-curve alternatives, see Shen & Le (2000)
@@ -334,9 +333,9 @@ alternative hypothesis: two.sided
 	Asymptotic General Independence Test
 
 data:  Surv(time, event) by
-	 group (Chemotherapy+Radiation, Chemotherapy) 
+	 group (Chemotherapy+Radiation, Chemotherapy)
 Z = -2.342, p-value = 0.01918
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 > 
@@ -375,9 +374,9 @@ alternative hypothesis: two.sided
 
 	Exact General Independence Test
 
-data:  asat by group (Compound, Control) 
+data:  asat by group (Compound, Control)
 Z = 1.4269, p-value = 0.07809
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 > 
 >   ### same as
@@ -386,9 +385,9 @@ alternative hypothesis: greater
 
 	Exact 2-Sample Normal Quantile (van der Waerden) Test
 
-data:  asat by group (Compound, Control) 
+data:  asat by group (Compound, Control)
 Z = 1.4269, p-value = 0.07809
-alternative hypothesis: true mu is greater than 0 
+alternative hypothesis: true mu is greater than 0
 
 > 
 > 
@@ -438,11 +437,11 @@ alternative hypothesis: true mu is greater than 0
 
 	Exact Wilcoxon-Mann-Whitney Test
 
-data:  pd by age (12-26 Weeks, At term) 
+data:  pd by age (12-26 Weeks, At term)
 Z = -1.2247, p-value = 0.2544
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 95 percent confidence interval:
- -0.76  0.15 
+ -0.76  0.15
 sample estimates:
 difference in location 
                 -0.305 
@@ -486,11 +485,11 @@ difference in location
 
 	Exact Wilcoxon-Mann-Whitney Test
 
-data:  pd by age (12-26 Weeks, At term) 
+data:  pd by age (12-26 Weeks, At term)
 Z = 1.2247, p-value = 0.2544
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 95 percent confidence interval:
- -0.15  0.76 
+ -0.15  0.76
 sample estimates:
 difference in location 
                  0.305 
@@ -501,9 +500,9 @@ difference in location
 
 	Asymptotic 2-Sample Permutation Test
 
-data:  pd by age (12-26 Weeks, At term) 
+data:  pd by age (12-26 Weeks, At term)
 Z = -1.5225, p-value = 0.1279
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 
 > 
 >   ### approximate p-value (with 99% confidence interval)
@@ -538,27 +537,27 @@ alternative hypothesis: true mu is not equal to 0
 
 	Exact 2-Sample Median Test
 
-data:  y by x (no, yes) 
+data:  y by x (no, yes)
 Z = 0.2828, p-value = 1
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 
 >   (mt2 <- median_test(y ~ x, data = ex, distribution = "exact",
 +                       mid.score = "0.5"))
 
 	Exact 2-Sample Median Test
 
-data:  y by x (no, yes) 
+data:  y by x (no, yes)
 Z = 0, p-value = 1
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 
 >   (mt3 <- median_test(y ~ x, data = ex, distribution = "exact",
 +                       mid.score = "1")) # sign change!
 
 	Exact 2-Sample Median Test
 
-data:  y by x (no, yes) 
+data:  y by x (no, yes)
 Z = -0.2828, p-value = 1
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 
 > 
 >   ### plot density and distribution of the standardized test statistics
@@ -591,7 +590,7 @@ alternative hypothesis: true mu is not equal to 0
 
 	Approximative Kruskal-Wallis Test
 
-data:  length by site (I, II, III, IV) 
+data:  length by site (I, II, III, IV)
 chi-squared = 22.8524, p-value < 2.2e-16
 
 >   pvalue(kw)
@@ -657,9 +656,9 @@ Levels: 1 < 2 < 3
 
 	Asymptotic General Independence Test
 
-data:  y by x (1 < 2 < 3) 
+data:  y by x (1 < 2 < 3)
 Z = 2.0447, p-value = 0.02044
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 > 
 > 
@@ -696,7 +695,7 @@ alternative hypothesis: greater
 
 data:  response by
 	 conditions (ExtramaritalSex, PremaritalSex) 
-	 stratified by block 
+	 stratified by block
 chi-squared = 271.9222, df = 3, p-value < 2.2e-16
 
 > 
@@ -707,9 +706,9 @@ chi-squared = 271.9222, df = 3, p-value < 2.2e-16
 
 data:  response (ordered) by
 	 conditions (ExtramaritalSex, PremaritalSex) 
-	 stratified by block 
+	 stratified by block
 Z = -16.4542, p-value < 2.2e-16
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > ## Don't show: ## Not run: 
 > ##D   ### example taken from
@@ -740,7 +739,7 @@ alternative hypothesis: two.sided
 
 data:  response by
 	 conditions (August, July, June) 
-	 stratified by block 
+	 stratified by block
 chi-squared = 70.763, df = 4, p-value = 1.565e-14
 
 > 
@@ -763,7 +762,7 @@ chi-squared = 70.763, df = 4, p-value = 1.565e-14
 
 data:  response (ordered) by
 	 conditions (High.dose, Low.dose, Placebo) 
-	 stratified by block 
+	 stratified by block
 chi-squared = 53.7617, df = 2, p-value = 2.117e-12
 
 > 
@@ -774,9 +773,9 @@ chi-squared = 53.7617, df = 2, p-value = 2.117e-12
 
 data:  response (ordered) by
 	 conditions (High.dose < Low.dose < Placebo) 
-	 stratified by block 
+	 stratified by block
 Z = 6.8764, p-value = 6.138e-12
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 > 
@@ -802,9 +801,9 @@ alternative hypothesis: two.sided
 
 	Asymptotic Maxstat Test
 
-data:  counts by coverstorey 
+data:  counts by coverstorey
 maxT = 4.3139, p-value = 0.0001256
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
 [1] 40
@@ -818,9 +817,9 @@ $cutpoint
 	Asymptotic Maxstat Test
 
 data:  counts by
-	 age, coverstorey, coverregen, meanregen, coniferous, deadtree, cbpiles, ivytree, fdist 
+	 age, coverstorey, coverregen, meanregen, coniferous, deadtree, cbpiles, ivytree, fdist
 maxT = 4.5486, p-value = 0.0002415
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $covariable
 [1] "fdist"
@@ -846,9 +845,9 @@ $cutpoint
 
 	Asymptotic Maxstat Test
 
-data:  Surv(time, event) by EF 
+data:  Surv(time, event) by EF
 maxT = 3.5691, p-value = 0.004194
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
 [1] 39
@@ -862,9 +861,9 @@ $cutpoint
 
 	Asymptotic Maxstat Test
 
-data:  Surv(RFS, event) by SPF 
+data:  Surv(RFS, event) by SPF
 maxT = 2.4033, p-value = 0.1554
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
 [1] 107
@@ -949,9 +948,9 @@ $cutpoint
 
 	Asymptotic 2-Sample Ansari-Bradley Test
 
-data:  serum by method (Ramsay, Jung-Parekh) 
+data:  serum by method (Ramsay, Jung-Parekh)
 Z = -1.3363, p-value = 0.1815
-alternative hypothesis: true ratio of scales is not equal to 1 
+alternative hypothesis: true ratio of scales is not equal to 1
 
 > 
 >   ### exact p-value
@@ -959,9 +958,9 @@ alternative hypothesis: true ratio of scales is not equal to 1
 
 	Exact 2-Sample Ansari-Bradley Test
 
-data:  serum by method (Ramsay, Jung-Parekh) 
+data:  serum by method (Ramsay, Jung-Parekh)
 Z = -1.3363, p-value = 0.1881
-alternative hypothesis: true ratio of scales is not equal to 1 
+alternative hypothesis: true ratio of scales is not equal to 1
 
 > 
 > 
@@ -981,7 +980,7 @@ alternative hypothesis: true ratio of scales is not equal to 1
 
 	Approximative General Independence Test
 
-data:  counts by treatment (Control, Prednisone) 
+data:  counts by treatment (Control, Prednisone)
 chi-squared = 9.3384, p-value = 0.0042
 
 > 
@@ -1033,9 +1032,9 @@ Control:Scale                   0            21
 
 	Asymptotic 2-Sample Logrank Test
 
-data:  Surv(time, event) by stadium (II, IIA) 
+data:  Surv(time, event) by stadium (II, IIA)
 Z = 2.3373, p-value = 0.01942
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 >   survdiff(Surv(time, event) ~ stadium, data = ocarcinoma)
 Call:
@@ -1066,9 +1065,9 @@ group=1 8        8     5.16      1.56      3.76
 
 	Exact 2-Sample Logrank Test
 
-data:  Surv(time) by group (0, 1) 
+data:  Surv(time) by group (0, 1)
 Z = 1.9201, p-value = 0.05051
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 >   ### p = 0.0468
 >   surv_test(Surv(time) ~ group, data = exdata, distribution = "exact",
@@ -1076,9 +1075,9 @@ alternative hypothesis: true theta is not equal to 1
 
 	Exact 2-Sample Logrank Test
 
-data:  Surv(time) by group (0, 1) 
+data:  Surv(time) by group (0, 1)
 Z = 1.9865, p-value = 0.04678
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 > 
 > 
@@ -1104,9 +1103,9 @@ alternative hypothesis: true theta is not equal to 1
 
 	Exact 2-Sample Logrank Test
 
-data:  Surv(time, event) by group (newdrug, control) 
+data:  Surv(time, event) by group (newdrug, control)
 Z = 2.9492, p-value = 0.000999
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 > 
 >   ### StatXact 9 manual, page 222
@@ -1116,9 +1115,9 @@ alternative hypothesis: true theta is not equal to 1
 
 	Exact 2-Sample Prentice Test
 
-data:  Surv(time, event) by group (newdrug, control) 
+data:  Surv(time, event) by group (newdrug, control)
 Z = 2.7813, p-value = 0.002997
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 > 
 > 
@@ -1200,7 +1199,7 @@ newdrug             0.0191             0.0111             0.0063
 
 data:  times by
 	 methods (Narrow Angle, Round Out, Wide Angle) 
-	 stratified by block 
+	 stratified by block
 chi-squared = 11.1429, df = 2, p-value = 0.003805
 
 > 
@@ -1255,9 +1254,9 @@ Wide Angle - Round Out    0.003358314
 
 data:  strength by
 	 potash (144 < 108 < 72 < 54 < 36) 
-	 stratified by block 
+	 stratified by block
 Z = 2.6558, p-value = 0.007912
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 >   ### one-sided p-value
@@ -1283,17 +1282,17 @@ alternative hypothesis: two.sided
 	Exact Wilcoxon Signed-Rank Test
 
 data:  y by x (neg, pos) 
-	 stratified by block 
+	 stratified by block
 Z = 2.0732, p-value = 0.01953
-alternative hypothesis: true mu is greater than 0 
+alternative hypothesis: true mu is greater than 0
 
 >   wilcox.test(x, y, paired = TRUE, alternative = "greater")
 
 	Wilcoxon signed rank test
 
-data:  x and y 
+data:  x and y
 V = 40, p-value = 0.01953
-alternative hypothesis: true location shift is greater than 0 
+alternative hypothesis: true location shift is greater than 0
 
 > 
 >   ### with explicit group and block information
@@ -1305,9 +1304,9 @@ alternative hypothesis: true location shift is greater than 0
 	Exact Wilcoxon Signed-Rank Test
 
 data:  y by x (neg, pos) 
-	 stratified by block 
+	 stratified by block
 Z = 2.0732, p-value = 0.01953
-alternative hypothesis: true mu is greater than 0 
+alternative hypothesis: true mu is greater than 0
 
 > 
 > 
@@ -1516,7 +1515,7 @@ attr(,"contrast")
 
 	Asymptotic Kruskal-Wallis Test
 
-data:  elevel by alength (short, intermediate, long) 
+data:  elevel by alength (short, intermediate, long)
 chi-squared = 8.8302, df = 2, p-value = 0.01209
 
 > 
@@ -1551,7 +1550,7 @@ chi-squared = 8.8302, df = 2, p-value = 0.01209
 
 data:  disease by
 	 smoking (None, <10, 10-20, >20) 
-	 stratified by gender 
+	 stratified by gender
 chi-squared = 23.3163, df = 6, p-value = 0.0006972
 
 > 
@@ -1734,9 +1733,9 @@ attr(,"conf.level")
 
 	Exact 2-Sample Logrank Test
 
-data:  Surv(time, event) by group (Control, RIT) 
+data:  Surv(time, event) by group (Control, RIT)
 Z = -2.1711, p-value = 0.02877
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 > 
 >   ### Grade IV glioma
@@ -1756,9 +1755,9 @@ alternative hypothesis: true theta is not equal to 1
 
 	Exact 2-Sample Logrank Test
 
-data:  Surv(time, event) by group (Control, RIT) 
+data:  Surv(time, event) by group (Control, RIT)
 Z = -3.2215, p-value = 0.0001588
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 > 
 >   ### stratified logrank test
@@ -1769,9 +1768,9 @@ alternative hypothesis: true theta is not equal to 1
 
 data:  Surv(time, event) by
 	 group (Control, RIT) 
-	 stratified by histology 
+	 stratified by histology
 Z = -3.6704, p-value < 2.2e-16
-alternative hypothesis: true theta is not equal to 1 
+alternative hypothesis: true theta is not equal to 1
 
 > 
 > 
@@ -1796,9 +1795,9 @@ alternative hypothesis: true theta is not equal to 1
 
 	Asymptotic Maxstat Test
 
-data:  Surv(time, event) by EF 
+data:  Surv(time, event) by EF
 maxT = 3.5647, p-value = 0.004554
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
 [1] 39
@@ -1829,7 +1828,7 @@ $cutpoint
 
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000) 
-	 stratified by Gender 
+	 stratified by Gender
 chi-squared = 10.2001, df = 9, p-value = 0.3345
 
 > 
@@ -1893,9 +1892,9 @@ control 3097.954
 
 	Exact General Independence Test
 
-data:  mercury, abnormal, ccells by group (control, exposed) 
+data:  mercury, abnormal, ccells by group (control, exposed)
 Z = -4.2581, p-value = 4.486e-06
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 > 
 >   ### multivariate analysis
@@ -1942,9 +1941,9 @@ control 0.006651091 0.0111254 0.0152947
 
 	Exact 2-Sample Permutation Test
 
-data:  pain by group (control, treat) 
+data:  pain by group (control, treat)
 Z = -1.3191, p-value = 0.09589
-alternative hypothesis: true mu is less than 0 
+alternative hypothesis: true mu is less than 0
 
 > 
 >   wilcox_test(pain ~ group, data = neuropathy, alternative = "less",
@@ -1952,9 +1951,9 @@ alternative hypothesis: true mu is less than 0
 
 	Exact Wilcoxon-Mann-Whitney Test
 
-data:  pain by group (control, treat) 
+data:  pain by group (control, treat)
 Z = -0.9817, p-value = 0.1654
-alternative hypothesis: true mu is less than 0 
+alternative hypothesis: true mu is less than 0
 
 > 
 >   oneway_test(pain ~ group, data = neuropathy, alternative = "less",
@@ -1964,9 +1963,9 @@ alternative hypothesis: true mu is less than 0
 
 	Approximative 2-Sample Permutation Test
 
-data:  pain by group (control, treat) 
+data:  pain by group (control, treat)
 Z = -1.8683, p-value = 0.0284
-alternative hypothesis: true mu is less than 0 
+alternative hypothesis: true mu is less than 0
 
 > 
 >   ### maximum-type test for a range of 'a' values
@@ -2087,9 +2086,9 @@ C             0.000            0.0000  0.999
 
 	Exact 2-Sample Ansari-Bradley Test
 
-data:  y by x (1, 2) 
+data:  y by x (1, 2)
 Z = 0.4553, p-value = 0.7102
-alternative hypothesis: true ratio of scales is not equal to 1 
+alternative hypothesis: true ratio of scales is not equal to 1
 
 >   pvalue(at)
 [1] 0.710234
@@ -2106,9 +2105,9 @@ alternative hypothesis: true ratio of scales is not equal to 1
 
 	Approximative General Independence Test
 
-data:  y1, y2 by x (1, 2) 
+data:  y1, y2 by x (1, 2)
 maxT = 2.6084, p-value = 0.011
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 >   ### global p-value
 >   pvalue(it)
@@ -2161,9 +2160,9 @@ alternative hypothesis: two.sided
 
 	Approximative General Independence Test
 
-data:  length by site (I, II, III, IV) 
+data:  length by site (I, II, III, IV)
 maxT = 3.953, p-value = 2e-04
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 >   pvalue(it, method = "npmcp")
                
@@ -2199,27 +2198,27 @@ IV - III 0.7160
 
 	Exact Wilcoxon-Mann-Whitney Test
 
-data:  time by group (control, treatment) 
+data:  time by group (control, treatment)
 Z = 2.4389, p-value = 0.01863
-alternative hypothesis: true mu is greater than 0 
+alternative hypothesis: true mu is greater than 0
 
 >   ### two-sided exact (0.0373)
 >   wilcox_test(time ~ group, data = rotarod, distribution = "exact")
 
 	Exact Wilcoxon-Mann-Whitney Test
 
-data:  time by group (control, treatment) 
+data:  time by group (control, treatment)
 Z = 2.4389, p-value = 0.03727
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 
 >   ### two-sided asymptotical (0.0147)
 >   wilcox_test(time ~ group, data = rotarod)
 
 	Asymptotic Wilcoxon-Mann-Whitney Test
 
-data:  time by group (control, treatment) 
+data:  time by group (control, treatment)
 Z = 2.4389, p-value = 0.01473
-alternative hypothesis: true mu is not equal to 0 
+alternative hypothesis: true mu is not equal to 0
 
 > 
 > 
@@ -2243,9 +2242,9 @@ alternative hypothesis: true mu is not equal to 0
 
 	Asymptotic Maxstat Test
 
-data:  Surv(RFS, event) by SPF 
+data:  Surv(RFS, event) by SPF
 maxT = 2.3966, p-value = 0.1591
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
 [1] 107
@@ -2260,9 +2259,9 @@ $cutpoint
 
 	Asymptotic Maxstat Test
 
-data:  Surv(RFS, event) by SPF 
+data:  Surv(RFS, event) by SPF
 maxT = 2.4033, p-value = 0.1567
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
 [1] 107
@@ -2351,9 +2350,9 @@ $cutpoint
 	Asymptotic Maxstat Test
 
 data:  counts by
-	 age, coverstorey, coverregen, meanregen, coniferous, deadtree, cbpiles, ivytree 
+	 age, coverstorey, coverregen, meanregen, coniferous, deadtree, cbpiles, ivytree
 maxT = 4.3139, p-value = 0.0006695
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $covariable
 [1] "coverstorey"
@@ -2368,8 +2367,8 @@ $cutpoint
 > 
 > ### * <FOOTER>
 > ###
-> cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  292.528 2.03 296.152 0 0 
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  353.289 2.791 361.23 0 0 
 > grDevices::dev.off()
 null device 
           1 

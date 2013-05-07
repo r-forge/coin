@@ -1,8 +1,7 @@
 
-R version 2.15.2 Patched (2012-11-06 r61087) -- "Trick or Treat"
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
-Platform: i386-w64-mingw32/i386 (32-bit)
+R version 3.0.0 (2013-04-03) -- "Masked Marvel"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: i686-redhat-linux-gnu (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -136,10 +135,10 @@ Loading required package: multcomp
 [6,] 0.8571429 0.5397750937
 > 
 > koziol_trafo(x)
-[1]  1.274162e+00  8.817477e-01            NA  8.659275e-17  8.659275e-17
+[1]  1.274162e+00  8.817477e-01            NA  8.659561e-17  8.659561e-17
 [6]            NA -8.817477e-01 -1.274162e+00            NA
 > koziol_trafo(x[cc])
-[1]  1.274162e+00  8.817477e-01  8.659275e-17  8.659275e-17 -8.817477e-01
+[1]  1.274162e+00  8.817477e-01  8.659561e-17  8.659561e-17 -8.817477e-01
 [6] -1.274162e+00
 > koziol_trafo(x, j = 2)
 [1]  0.8817477 -0.3146921         NA -1.4142136 -1.4142136         NA -0.3146921
@@ -672,4 +671,4 @@ attr(,"contrast")
 > 
 > proc.time()
    user  system elapsed 
-   0.84    0.07    1.01 
+  3.562   0.199   3.726 
