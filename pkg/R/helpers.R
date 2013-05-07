@@ -392,7 +392,7 @@ setup_args <- function(...) {
     ## override default and user-specified values
     for (i in nm[nm %in% names(list(...))])
         args[[i]] <- list(...)[[i]]
-    lapply(args, eval)
+    lapply(args, eval.parent)
 }
 
 statnames <- function(object) {
