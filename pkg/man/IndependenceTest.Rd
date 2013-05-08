@@ -20,7 +20,7 @@
     distribution = c("asymptotic", "approximate", "exact"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL,
-    check = NULL, \dots)
+    check = NULL, paired = FALSE, \dots)
 }
 \arguments{
   \item{formula}{a formula of the form
@@ -69,6 +69,10 @@
   \item{check}{a function to be applied to objects of class
     \code{"IndependenceTest"} in order to check for specific properties
     of the data.}
+  \item{paired}{a logical indicating if for the scalar two-sample case
+                the statistic is the sum of the absolute values of the 
+                positive differences between two groups (only applied
+                to the Wilcoxon signed rank test).}
   \item{\dots}{further arguments to be passed to or from
     methods. Currently, none of the additional arguments is passed to
     any function.}
