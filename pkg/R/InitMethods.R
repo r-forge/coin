@@ -176,7 +176,7 @@ setMethod(f = "initialize",
 setMethod(f = "initialize",
     signature = "ScalarIndependenceTestStatistic",
     definition = function(.Object, its,
-        alternative = c("two.sided", "less", "greater")) {
+        alternative = c("two.sided", "less", "greater"), paired = FALSE) {
 
         if (!extends(class(its), "IndependenceTestStatistic"))
             stop("Argument ", sQuote("its"), " is not of class ",
@@ -184,6 +184,7 @@ setMethod(f = "initialize",
 
         .Object <- copyslots(its, .Object)
         .Object@alternative <- match.arg(alternative)
+        .Object@paired <- paired
 
         standstat <- (its@linearstatistic - expectation(its)) /
                      sqrt(variance(its))

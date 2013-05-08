@@ -77,7 +77,8 @@ setClass(Class = "IndependenceTestStatistic",
 ### teststatistic = standardizedlinearstatistic
 setClass(Class = "ScalarIndependenceTestStatistic",
     representation = representation(
-        alternative   = "character"
+        alternative   = "character",
+        paired        = "logical"
     ),
     contains = "IndependenceTestStatistic",
     validity = function(object)

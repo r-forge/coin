@@ -24,7 +24,8 @@ independence_test.IndependenceProblem <- function(object,
     teststat = c("max", "quad", "scalar"),
     distribution = c("asymptotic", "approximate", "exact"),
     alternative = c("two.sided", "less", "greater"),
-    xtrafo = trafo, ytrafo = trafo, scores = NULL, check = NULL, ...) {
+    xtrafo = trafo, ytrafo = trafo, scores = NULL, check = NULL, paired = FALSE, 
+    ...) {
 
     addargs <- list(...)
     if (length(addargs) > 0)
@@ -82,7 +83,7 @@ independence_test.IndependenceProblem <- function(object,
     RET <- switch(teststat,
         "scalar" = {
             ts <- new("ScalarIndependenceTestStatistic", its,
-                      alternative = alternative)
+                      alternative = alternative, paired = isTRUE(paired))
             nd <- distribution(ts)
             new("ScalarIndependenceTest", statistic = ts, distribution = nd)
         },

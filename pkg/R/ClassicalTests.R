@@ -1025,12 +1025,12 @@ wilcoxsign_test.formula <- function(formula, data = list(),
                                     subset = NULL, ...)
 {
     d <- formula2data(formula, data, subset, frame = parent.frame(), ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl)
+    ip <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
     RET <- do.call("wilcoxsign_test", c(list(object = ip), list(...)))
     return(RET)
 }
 
-wilcoxsign_test.IndependenceProblem <- function(object,
+wilcoxsign_test.SymmetryProblem <- function(object,
     zero.method = c("Pratt", "Wilcoxon"), ties.method = NULL, ...) {
 
     y <- object@y[[1]]
@@ -1077,6 +1077,7 @@ wilcoxsign_test.IndependenceProblem <- function(object,
               y = data.frame(y = yy), block = block)
 
     args <- setup_args(teststat = "scalar")
+    args$paired <- TRUE
 
     RET <- do.call("independence_test", c(list(object = ip), args))
 

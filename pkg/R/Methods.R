@@ -120,6 +120,11 @@ setMethod(f = "ExactNullDistribution",
                                 ...) {
 
               algorithm <- match.arg(algorithm)
+              if (object@paired) {
+                  if (algorithm == "shift")
+                      return(SR_shift_1sample(object, ...))
+                  stop("split-up algorithm not implemented for the one-sample case")
+              }
               if (is_2sample(object)) {
                   if (algorithm == "shift")
                       return(SR_shift_2sample(object, ...))
@@ -127,7 +132,6 @@ setMethod(f = "ExactNullDistribution",
                       return(vdW_split_up_2sample(object))
               }
               stop(sQuote("object"), " is not a two sample problem")
-
           }
 )
 
