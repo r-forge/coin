@@ -927,6 +927,7 @@ maxstat_test.IndependenceProblem <- function(object,
     return(RET)
 }
 
+### and now symmetry tests
 
 ### Friedman Test
 friedman_test <- function(object, ...) UseMethod("friedman_test")
@@ -1025,6 +1026,10 @@ wilcoxsign_test.formula <- function(formula, data = list(),
                                     subset = NULL, ...)
 {
     d <- formula2data(formula, data, subset, frame = parent.frame(), ...)
+    if (is.null(d$bl))
+        d <- list(y = data.frame(c(d$x[[1]], d$y[[1]])), 
+                  x = data.frame(gl(2, length(d$x[[1]]))),
+                  block = factor(rep(1:length(d$x[[1]]), 2)))
     ip <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
     RET <- do.call("wilcoxsign_test", c(list(object = ip), list(...)))
     return(RET)
@@ -1049,14 +1054,12 @@ wilcoxsign_test.SymmetryProblem <- function(object,
     if (is.factor(x)) {
         if (nlevels(x) != 2)
             stop(sQuote("x"), " is not a factor at two levels")
-        if (!is_completeblock(object))
-            stop("Not an unreplicated complete block design")
         diffs <- odiffs <- tapply(1:length(y), block, function(b)
             y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]]
         )
+    } else {
+        stop(sQuote("x"), " is not a factor")
     }
-    if (is.numeric(x))
-        diffs <- odiffs <- x - y
 
     if (Wilcoxon)
         diffs <- diffs[abs(diffs) > 0]
