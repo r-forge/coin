@@ -65,7 +65,7 @@ S3method(surv_test, IndependenceProblem)
 S3method(friedman_test, formula)
 S3method(friedman_test, SymmetryProblem)
 S3method(wilcoxsign_test, formula)
-S3method(wilcoxsign_test, IndependenceProblem)
+S3method(wilcoxsign_test, SymmetryProblem)
 
 S3method(spearman_test, formula)
 S3method(spearman_test, IndependenceProblem)
