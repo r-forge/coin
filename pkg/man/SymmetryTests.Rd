@@ -4,7 +4,7 @@
 \alias{friedman_test.SymmetryProblem}
 \alias{wilcoxsign_test}
 \alias{wilcoxsign_test.formula}
-\alias{wilcoxsign_test.IndependenceProblem}
+\alias{wilcoxsign_test.SymmetryProblem}
 
 \title{ Symmetry Tests }
 
@@ -19,7 +19,7 @@
     distribution = c("asymptotic", "approximate"), \dots)
 
 \method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
-\method{wilcoxsign_test}{IndependenceProblem}(object,
+\method{wilcoxsign_test}{SymmetryProblem}(object,
     zero.method = c("Pratt", "Wilcoxon"), ties.method = NULL, \dots)
 
 }
