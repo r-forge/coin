@@ -148,7 +148,7 @@
   matplot(t(matrix(RoundingTimes$times, ncol = 3, byrow = TRUE)),
           type = "l", col = 1, lty = 1, axes = FALSE, ylab = "Time",
           xlim = c(0.5, 3.5))
-  axis(1, at = 1:3, labels = levels(RoundingTimes$methods))
+  axis(1, at = 1:3, labels = c("Round Out", "Narrow Angle", "Wide Angle"))
   axis(2)
 
   ### where do the differences come from?

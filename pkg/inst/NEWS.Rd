@@ -111,6 +111,10 @@
   }
   \subsection{Bug fixes}{
     \itemize{
+
+      \item The x-axis labels for the Rounding times data plot in
+            \code{?Symmetry_Tests} was wrong.
+
       \item monotonicity of step-down adjusted \eqn{p}-values was not
       enforced when using the approximate (Monte Carlo) null
       distribution
