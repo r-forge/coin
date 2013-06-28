@@ -391,6 +391,40 @@ alternative hypothesis: true mu is greater than 0
 
 > 
 > 
+>   ### permutation test for paired observations
+>   x <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+>   y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+>   xy <- stack(list(x = x, y = y))
+>   xy$block <- factor(rep(seq_along(x), 2))
+>   independence_test(values ~ ind | block, data = xy,
++                     distribution = "exact", alternative = "greater")
+
+	Exact General Independence Test
+
+data:  values by ind (x, y) 
+	 stratified by block
+Z = 2.1948, p-value = 0.01367
+alternative hypothesis: greater
+
+> 
+>   ### alternatively: transform data and set 'paired = TRUE'
+>   diff <- x - y
+>   yy <- as.vector(rbind(abs(diff) * (diff >= 0), abs(diff) * (diff < 0)))
+>   xx <- factor(rep(c("pos", "neg"), length(diff)), levels = c("pos", "neg"))
+>   bb <- gl(length(diff), 2)
+>   independence_test(yy ~ xx | bb,
++                     distribution = "exact", alternative = "greater",
++                     paired = TRUE)
+
+	Exact General Independence Test
+
+data:  yy by xx (pos, neg) 
+	 stratified by bb
+Z = 2.1948, p-value = 0.01367
+alternative hypothesis: greater
+
+> 
+> 
 >   ### if you are interested in the internals:
 >   ## Not run: 
 > ##D       browseURL(system.file("documentation", "html", "index.html",
@@ -1207,7 +1241,7 @@ chi-squared = 11.1429, df = 2, p-value = 0.003805
 >   matplot(t(matrix(RoundingTimes$times, ncol = 3, byrow = TRUE)),
 +           type = "l", col = 1, lty = 1, axes = FALSE, ylab = "Time",
 +           xlim = c(0.5, 3.5))
->   axis(1, at = 1:3, labels = levels(RoundingTimes$methods))
+>   axis(1, at = 1:3, labels = c("Round Out", "Narrow Angle", "Wide Angle"))
 >   axis(2)
 > 
 >   ### where do the differences come from?
@@ -2369,7 +2403,7 @@ $cutpoint
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  293.559 1.729 296.741 0 0 
+Time elapsed:  293.38 1.651 296.396 0 0 
 > grDevices::dev.off()
 null device 
           1 
