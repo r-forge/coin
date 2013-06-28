@@ -1,13 +1,11 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
+R version 3.0.1 Patched (2013-06-25 r63044) -- "Good Sport"
 Copyright (C) 2013 The R Foundation for Statistical Computing
-Platform: i686-redhat-linux-gnu (32-bit)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
-
-  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -20,6 +18,7 @@ Type 'q()' to quit R.
 > pkgname <- "coin"
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
+> options(pager = "console")
 > library('coin')
 Loading required package: survival
 Loading required package: splines
@@ -838,7 +837,7 @@ alternative hypothesis: two.sided
 	Asymptotic Maxstat Test
 
 data:  counts by coverstorey
-maxT = 4.3139, p-value = 0.0001256
+maxT = 4.3139, p-value = 0.0001796
 alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
@@ -882,7 +881,7 @@ $cutpoint
 	Asymptotic Maxstat Test
 
 data:  Surv(time, event) by EF
-maxT = 3.5691, p-value = 0.004194
+maxT = 3.5691, p-value = 0.004179
 alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
@@ -898,7 +897,7 @@ $cutpoint
 	Asymptotic Maxstat Test
 
 data:  Surv(RFS, event) by SPF
-maxT = 2.4033, p-value = 0.1554
+maxT = 2.4033, p-value = 0.1565
 alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
@@ -1939,20 +1938,20 @@ alternative hypothesis: two.sided
 > 
 >   ### global p-value
 >   pvalue(mvtest)
-[1] 0.007050271
+[1] 0.007140628
 99 percent confidence interval:
- 0.006381220 0.007719323 
+ 0.006371664 0.007909593 
 
 > 
 >   ### single-step adjusted univariate p-value
 >   pvalue(mvtest, method = "single-step")
-           mercury   abnormal     ccells
-control 0.00719172 0.01726738 0.03836982
+            mercury   abnormal     ccells
+control 0.007991569 0.01726738 0.03830126
 > 
 >   ### step-down adjusted univariate p-value
 >   pvalue(mvtest, method = "step-down")
             mercury  abnormal    ccells
-control 0.006651091 0.0111254 0.0152947
+control 0.007187993 0.0111254 0.0152947
 > 
 > 
 > 
@@ -2279,7 +2278,7 @@ alternative hypothesis: true mu is not equal to 0
 	Asymptotic Maxstat Test
 
 data:  Surv(RFS, event) by SPF
-maxT = 2.3966, p-value = 0.1591
+maxT = 2.3966, p-value = 0.1588
 alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
@@ -2296,7 +2295,7 @@ $cutpoint
 	Asymptotic Maxstat Test
 
 data:  Surv(RFS, event) by SPF
-maxT = 2.4033, p-value = 0.1567
+maxT = 2.4033, p-value = 0.1562
 alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
@@ -2387,7 +2386,7 @@ $cutpoint
 
 data:  counts by
 	 age, coverstorey, coverregen, meanregen, coniferous, deadtree, cbpiles, ivytree
-maxT = 4.3139, p-value = 0.0006695
+maxT = 4.3139, p-value = 0.0006596
 alternative hypothesis: two.sided
 sample estimates:
 $covariable
@@ -2405,7 +2404,7 @@ $cutpoint
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  292.958 1.768 296.401 0 0 
+Time elapsed:  39.19 0.25 39.86 NA NA 
 > grDevices::dev.off()
 null device 
           1 

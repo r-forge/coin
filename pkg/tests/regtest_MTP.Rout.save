@@ -1,8 +1,7 @@
 
-R version 2.15.3 (2013-03-01) -- "Security Blanket"
+R version 3.0.1 Patched (2013-06-25 r63044) -- "Good Sport"
 Copyright (C) 2013 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
-Platform: i386-w64-mingw32/i386 (32-bit)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -20,7 +19,7 @@ Type 'q()' to quit R.
 > ### Regression tests for multiple adjustments
 > 
 > set.seed(290875)
-> library(coin)
+> library("coin")
 Loading required package: survival
 Loading required package: splines
 Loading required package: mvtnorm
@@ -184,7 +183,7 @@ Control 0.05503  1 0.14164  1
 > qperm(mt, 0.9)
 [1] 2.414349
 > dperm(mt, qperm(mt, 0.9))
-[1] 0.0051
+[1] 0.0052
 > #support(mt)
 > 
 > mt <- maxstat_test(y ~ x, distribution = approximate(), alternative = "greater")
@@ -424,4 +423,4 @@ IV  vs I 0.01587280
 > 
 > proc.time()
    user  system elapsed 
-   6.87    0.57    7.53 
+   4.44    0.29    4.85 

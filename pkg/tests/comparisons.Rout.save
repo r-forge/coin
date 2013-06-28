@@ -1,7 +1,7 @@
 
-R version 3.0.0 (2013-04-03) -- "Masked Marvel"
+R version 3.0.1 Patched (2013-06-25 r63044) -- "Good Sport"
 Copyright (C) 2013 The R Foundation for Statistical Computing
-Platform: i386-w64-mingw32/i386 (32-bit)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 > ### compare output for examples from StatXact 6 manual with
 > ### StatXact 6 output as given in the manual
 > 
-> library(coin)
+> library("coin")
 Loading required package: survival
 Loading required package: splines
 Loading required package: mvtnorm
@@ -984,4 +984,4 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > proc.time()
    user  system elapsed 
-   3.94    0.17    4.39 
+   3.94    0.10    4.35 

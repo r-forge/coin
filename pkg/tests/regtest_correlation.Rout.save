@@ -1,8 +1,7 @@
 
-R version 2.15.2 Patched (2012-11-06 r61087) -- "Trick or Treat"
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
-Platform: i386-w64-mingw32/i386 (32-bit)
+R version 3.0.1 Patched (2013-06-25 r63044) -- "Good Sport"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -22,7 +21,7 @@ Type 'q()' to quit R.
 > ### `x' and `y' (possibly blocked)
 > 
 > set.seed(290875)
-> library(coin)
+> library("coin")
 Loading required package: survival
 Loading required package: splines
 Loading required package: mvtnorm
@@ -145,4 +144,4 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > 
 > proc.time()
    user  system elapsed 
-   1.54    0.07    1.70 
+   1.38    0.04    1.62 

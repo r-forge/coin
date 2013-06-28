@@ -1,8 +1,7 @@
 
-R version 2.15.2 (2012-10-26) -- "Trick or Treat"
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
-Platform: i686-redhat-linux-gnu (32-bit)
+R version 3.0.1 Patched (2013-06-25 r63044) -- "Good Sport"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -22,7 +21,7 @@ Type 'q()' to quit R.
 > ### `y' and a factor factor `x' (possibly blocked)
 > 
 > set.seed(290875)
-> library(coin)
+> library("coin")
 Loading required package: survival
 Loading required package: splines
 Loading required package: mvtnorm
@@ -34,7 +33,7 @@ Loading required package: multcomp
 > thisversion <- paste(R.version$major, R.version$minor, sep = ".")
 > 
 > ### generate data: 2 x 2 x K
-> dat <- data.frame(x = gl(2, 50), y = gl(2, 50)[sample(1:100)], 
+> dat <- data.frame(x = gl(2, 50), y = gl(2, 50)[sample(1:100)],
 +                   block = gl(10, 10)[sample(1:100)])[sample(1:100, 75),]
 > 
 > ### Pearsons Chisq Test, asymptotic distribution
@@ -44,7 +43,7 @@ Loading required package: multcomp
 > stopifnot(isequal(pvalue(chisq_test(table(dat$y, dat$x))), ptwo))
 > 
 > ### Cochran-Mantel-Haenzel Test, asymptotic distribution
-> ptwo <- drop(mantelhaen.test(table(dat$x, dat$y, dat$block), 
+> ptwo <- drop(mantelhaen.test(table(dat$x, dat$y, dat$block),
 +                              correct = FALSE)$p.value)
 > 
 > stopifnot(isequal(pvalue(cmh_test(y ~ x | block, data = dat)), ptwo))
@@ -52,12 +51,12 @@ Loading required package: multcomp
 > 
 > 
 > ### generate data: r x c x K
-> dat <- data.frame(x = gl(4, 25), y = gl(4, 25)[sample(1:100)], 
+> dat <- data.frame(x = gl(4, 25), y = gl(4, 25)[sample(1:100)],
 +                   block = gl(2, 50)[sample(1:100)])
 > 
 > ### Cochran-Mantel-Haenzel Test, asymptotic distribution
 > ### _is wrong_ in R < 2.1.0!!!
-> ptwo <- drop(mantelhaen.test(table(dat$y, dat$x, dat$block), 
+> ptwo <- drop(mantelhaen.test(table(dat$y, dat$x, dat$block),
 +                              correct = FALSE)$p.value)
 > 
 > if (compareVersion(thisversion, "2.1.0") >= 0) {
@@ -66,7 +65,7 @@ Loading required package: multcomp
 + }
 > 
 > ### generate data: r x c x K
-> dat <- data.frame(x = gl(4, 25), y = gl(5, 20)[sample(1:100)], 
+> dat <- data.frame(x = gl(4, 25), y = gl(5, 20)[sample(1:100)],
 +                   block = gl(2, 50)[sample(1:100)])
 > 
 > ### Cochran-Mantel-Haenzel Test, asymptotic distribution
@@ -94,9 +93,9 @@ Loading required package: multcomp
 
 	Asymptotic Maxstat Test
 
-data:  w by x 
+data:  w by x
 maxT = 2.3738, p-value = 0.184
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
 [1] 0.9060508
@@ -111,9 +110,9 @@ $cutpoint
 
 	Asymptotic Maxstat Test
 
-data:  w by y (1, 2, 3, 4) 
+data:  w by y (1, 2, 3, 4)
 maxT = 0.7294, p-value = 0.8905
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
 [1] "1" "2" "3"
@@ -121,7 +120,7 @@ $cutpoint
 
 > est <- mt@estimates$estimate$cutpoint
 > xx <- dat$y %in% est
-> stopifnot(isequal(statistic(mt), 
+> stopifnot(isequal(statistic(mt),
 +                   abs(statistic(independence_test(w ~ xx, data = dat)))))
 > 
 > mt <- maxstat_test(w ~ z, data = dat)
@@ -129,9 +128,9 @@ $cutpoint
 
 	Asymptotic Maxstat Test
 
-data:  w by z 
+data:  w by z
 maxT = 0.5222, p-value = 0.9125
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
 [1] "1"
@@ -139,7 +138,7 @@ $cutpoint
 
 > est <- mt@estimates$estimate$cutpoint
 > xx <- dat$z <= est
-> stopifnot(isequal(statistic(mt), 
+> stopifnot(isequal(statistic(mt),
 +                   abs(statistic(independence_test(w ~ xx, data = dat)))))
 > 
 > mt <- maxstat_test(w ~ x + y + z, data = dat)
@@ -147,9 +146,9 @@ $cutpoint
 
 	Asymptotic Maxstat Test
 
-data:  w by x, y, z 
-maxT = 2.3738, p-value = 0.2879
-alternative hypothesis: two.sided 
+data:  w by x, y, z
+maxT = 2.3738, p-value = 0.286
+alternative hypothesis: two.sided
 sample estimates:
 $covariable
 [1] "x"
@@ -165,13 +164,13 @@ $cutpoint
 + } else {
 +     xx <- xsel <= est[2]
 + }
-> stopifnot(isequal(statistic(mt), 
+> stopifnot(isequal(statistic(mt),
 +                   abs(statistic(independence_test(w ~ xx, data = dat)))))
 > 
 > ### marginal homogeneity
 > rating <- c("low", "moderate", "high")
 > x <- as.table(matrix(c(20, 10,  5,
-+                        3, 30, 15, 
++                        3, 30, 15,
 +                        0,  5, 40),
 +                      ncol = 3, byrow = TRUE,
 +                      dimnames = list(Rater1 = rating, Rater2 = rating)))
@@ -184,4 +183,4 @@ $cutpoint
 > 
 > proc.time()
    user  system elapsed 
- 13.585   0.144  13.718 
+   2.79    0.09    3.04 
