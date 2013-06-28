@@ -702,29 +702,25 @@ chisq_test.IndependenceProblem <- function(object,
 
     its <- new("IndependenceTestStatistic", itp, varonly = FALSE)
 
-    ts <- if (args$teststat == "scalar")
-              new("ScalarIndependenceTestStatistic", its, args$alternative)
-          else {
-              if (args$alternative != "two.sided")
-                  warning(sQuote("alternative"),
-                          " is ignored for quad type test statistics")
-              new("QuadTypeIndependenceTestStatistic", its)
-          }
-
     ## use the classical chisq statistic based on Pearson
     ## residuals (O - E)^2 / E
     ## see Th. 3.1 and its proof in Strasser & Weber (1999).
-    ts@teststatistic <- ts@teststatistic * n / (n - 1)
-    ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
-
-    RET <- if (args$teststat == "scalar") {
-               d <- distribution(ts)
-               new("ScalarIndependenceTest", statistic = ts, distribution = d)
-           } else {
-               ts@covarianceplus <- MPinv(covariance(ts))$MPinv
-               d <- distribution(ts)
-               new("QuadTypeIndependenceTest", statistic = ts, distribution = d)
-           }
+    RET <-
+        if (args$teststat == "scalar") {
+            ts <- new("ScalarIndependenceTestStatistic", its, args$alternative)
+            ts@teststatistic <- ts@teststatistic * sqrt(n / (n - 1))
+            ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
+            new("ScalarIndependenceTest", statistic = ts, distribution = distribution(ts))
+        } else {
+            if (args$alternative != "two.sided")
+                warning(sQuote("alternative"),
+                        " is ignored for quad type test statistics")
+            ts <- new("QuadTypeIndependenceTestStatistic", its)
+            ts@teststatistic <- ts@teststatistic * n / (n - 1)
+            ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
+            ts@covarianceplus <- MPinv(covariance(ts))$MPinv
+            new("QuadTypeIndependenceTest", statistic = ts, distribution = distribution(ts))
+        }
 
     if (is_doubly_ordered(RET@statistic))
         RET@method <- "Linear-by-Linear Association Test"
