@@ -1,7 +1,7 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
+R version 3.0.1 Patched (2013-06-25 r63044) -- "Good Sport"
 Copyright (C) 2013 The R Foundation for Statistical Computing
-Platform: i386-w64-mingw32/i386 (32-bit)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -22,10 +22,6 @@ Type 'q()' to quit R.
 > library("coin")
 Loading required package: survival
 Loading required package: splines
-Loading required package: mvtnorm
-Loading required package: modeltools
-Loading required package: stats4
-Loading required package: multcomp
 > isequal <- coin:::isequal
 > GE <- coin:::GE
 > 
@@ -61,6 +57,8 @@ alternative hypothesis: two.sided
 +              model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))))
 +     isequal(expectation(a), expectation(b))
 + }
+Loading required package: multcomp
+Loading required package: mvtnorm
 [1] TRUE
 > 
 > 
@@ -663,6 +661,10 @@ Error in match.arg(distribution[1], values) :
 > stopifnot(isequal(statistic(it), -statistic(wt)))
 > stopifnot(isequal(pvalue(it), pvalue(wt)))
 > 
+> ### chisq_test standardized test statistic was wrong
+> ct <- chisq_test(as.table(matrix(1:4, ncol = 2)))
+> stopifnot(isequal(statistic(ct), statistic(ct, "standardized")^2))
+> 
 > proc.time()
    user  system elapsed 
-   3.10    0.20    3.43 
+   3.26    0.07    3.49 

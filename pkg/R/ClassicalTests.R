@@ -709,6 +709,7 @@ chisq_test.IndependenceProblem <- function(object,
         if (args$teststat == "scalar") {
             ts <- new("ScalarIndependenceTestStatistic", its, args$alternative)
             ts@teststatistic <- ts@teststatistic * sqrt(n / (n - 1))
+            ts@standardizedlinearstatistic <- ts@standardizedlinearstatistic * sqrt(n / (n - 1))
             ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
             new("ScalarIndependenceTest", statistic = ts, distribution = distribution(ts))
         } else {
@@ -717,6 +718,7 @@ chisq_test.IndependenceProblem <- function(object,
                         " is ignored for quad type test statistics")
             ts <- new("QuadTypeIndependenceTestStatistic", its)
             ts@teststatistic <- ts@teststatistic * n / (n - 1)
+            ts@standardizedlinearstatistic <- ts@standardizedlinearstatistic * sqrt(n / (n - 1))
             ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
             ts@covarianceplus <- MPinv(covariance(ts))$MPinv
             new("QuadTypeIndependenceTest", statistic = ts, distribution = distribution(ts))

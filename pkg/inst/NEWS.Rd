@@ -175,6 +175,10 @@
 
       \item the exact \eqn{p}-values for stratified tests were wrong
       when each block contained precisely two observations
+
+      \item the standardized test statistic for the Pearson chi-squared
+      test was off by a factor \eqn{\sqrt{n / (n - 1)}}{sqrt(n / (n -
+        1))}
     }
   }
   \subsection{Other changes}{

@@ -365,3 +365,7 @@ wt <- wilcoxsign_test(y ~ x | id, distribution = "exact") # OK! p = 6.104e-5
 
 stopifnot(isequal(statistic(it), -statistic(wt)))
 stopifnot(isequal(pvalue(it), pvalue(wt)))
+
+### chisq_test standardized test statistic was wrong
+ct <- chisq_test(as.table(matrix(1:4, ncol = 2)))
+stopifnot(isequal(statistic(ct), statistic(ct, "standardized")^2))
