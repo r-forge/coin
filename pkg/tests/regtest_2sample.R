@@ -293,3 +293,13 @@ st <- surv_test(Surv(time, event) ~ group, data = prostatic,
                 type = "Tarone-Ware")
 isequal(round(statistic(st)^2, 4), 4.3443)
 isequal(round(pvalue(st), 4), 0.0371)
+
+
+### Paired tests
+
+### sanity check
+set.seed(123)
+x <- factor(rep(1:2, 15))
+y <- as.integer(round((rnorm(30) + as.numeric(x)) * 1000))
+id <- gl(15, 2)
+try(independence_test(y ~ x | id, distribution = "exact", paired = TRUE))

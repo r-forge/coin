@@ -6,8 +6,8 @@ SR_shift_2sample <- function(object, fact = NULL) {
         stop("Argument ", sQuote("object"), " is not of class ",
              sQuote("ScalarIndependenceTestStatistic"))
 
-    if (!is_2sample(object)) 
-        stop(sQuote("object"), 
+    if (!is_2sample(object))
+        stop(sQuote("object"),
              " does not represent an independent two-sample problem")
 
     if (!(max(abs(object@weights - 1.0)) < eps()))
@@ -50,12 +50,12 @@ SR_shift_2sample <- function(object, fact = NULL) {
     }
     RET@d <- function(x) Prob[T == x]
     RET@pvalue <- function(q) {
-        switch(object@alternative, 
+        switch(object@alternative,
             "less"      = sum(Prob[LE(T, q)]),
             "greater"   = sum(Prob[GE(T, q)]),
             "two.sided" = {
                 if (q == 0) return(1)
-                return(sum(Prob[LE(T, ifelse(q >  0, -q,  q))]) + 
+                return(sum(Prob[LE(T, ifelse(q >  0, -q,  q))]) +
                        sum(Prob[GE(T, ifelse(q >= 0,  q, -q))]))
             }
         )
@@ -72,8 +72,8 @@ SR_shift_1sample <- function(object, fact = NULL) {
         stop("Argument ", sQuote("object"), " is not of class ",
              sQuote("ScalarIndependenceTestStatistic"))
 
-    if (!is_2sample(object)) 
-        stop(sQuote("object"), 
+    if (!is_2sample(object))
+        stop(sQuote("object"),
              " does not represent an independent two-sample problem")
 
     if (!(max(abs(object@weights - 1.0)) < eps()))
@@ -82,6 +82,8 @@ SR_shift_1sample <- function(object, fact = NULL) {
     RET <- new("ExactNullDistribution")
 
     scores <- object@ytrans[, 1]
+    if (any(scores < 0))
+        stop("cannot compute exact distribution with negative scores")
     ### search for equivalent integer scores with sum(scores) minimal
     if (is.null(fact)) {
         fact <- c(1, 2, 10, 100, 1000)
@@ -113,12 +115,12 @@ SR_shift_1sample <- function(object, fact = NULL) {
     }
     RET@d <- function(x) Prob[T == x]
     RET@pvalue <- function(q) {
-        switch(object@alternative, 
+        switch(object@alternative,
             "less"      = sum(Prob[LE(T, q)]),
             "greater"   = sum(Prob[GE(T, q)]),
             "two.sided" = {
                 if (q == 0) return(1)
-                return(sum(Prob[LE(T, ifelse(q >  0, -q,  q))]) + 
+                return(sum(Prob[LE(T, ifelse(q >  0, -q,  q))]) +
                        sum(Prob[GE(T, ifelse(q >= 0,  q, -q))]))
             }
         )
@@ -150,12 +152,12 @@ cSR_shift_2sample <- function(scores, m, fact = NULL) {
     scores <- scores - add
     m_b <- sum(sort(scores)[(n + 1 - m):n])
 
-    Prob <- .Call("R_cpermdist2", 
-                  score_a = as.integer(ones),  
+    Prob <- .Call("R_cpermdist2",
+                  score_a = as.integer(ones),
                   score_b = as.integer(scores),
-                  m_a = as.integer(m),  
+                  m_a = as.integer(m),
                   m_b = as.integer(m_b),
-                  retProb = as.logical(TRUE), 
+                  retProb = as.logical(TRUE),
                   PACKAGE = "coin")
 
     T <- which(Prob != 0)
@@ -179,7 +181,7 @@ vdW_split_up_2sample <- function(object) {
     ### 2 groups as `x' variable
     groups <- ncol(object@xtrans) == 1 && all(object@xtrans[,1] %in% c(0, 1))
     if (!groups) stop("cannot deal with two-sample problems")
- 
+
     RET <- new("ExactNullDistribution")
 
     scores <- object@ytrans[,1]
@@ -196,7 +198,7 @@ vdW_split_up_2sample <- function(object) {
     RET@q <- function(p) {
         f <- function(x) RET@p(x) - p
         if (p <= 0.5)
-            rr <- uniroot(f, interval = c(-10, 1), 
+            rr <- uniroot(f, interval = c(-10, 1),
                     tol = sqrt(.Machine$double.eps))
         else
             rr <- uniroot(f, interval = c(-1, 10),
@@ -218,7 +220,7 @@ vdW_split_up_2sample <- function(object) {
     RET@d <- function(x) NA
 
     RET@pvalue <- function(q) {
-        switch(object@alternative, 
+        switch(object@alternative,
             "less"      = RET@p(q),
             "greater"   = 1 - RET@p(q - 10 * tol),
             "two.sided" = {
