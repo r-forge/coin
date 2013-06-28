@@ -1,3 +1,8 @@
+importFrom("modeltools", ModelEnvFormula, has, na.omit)
+importFrom("mvtnorm", dmvnorm, pmvnorm, qmvnorm)
+importFrom("multcomp", contrMat)
+importFrom("survival", is.Surv)
+
 export(independence_test,
        symmetry_test,
        oneway_test,

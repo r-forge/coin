@@ -22,10 +22,6 @@ Type 'q()' to quit R.
 > library('coin')
 Loading required package: survival
 Loading required package: splines
-Loading required package: mvtnorm
-Loading required package: modeltools
-Loading required package: stats4
-Loading required package: multcomp
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > cleanEx()
@@ -662,32 +658,33 @@ IV - III 0.9999333333
 > 
 > 
 >   ### Jonckheere-Terpstra test for ordered groups
->   control <- c(40, 35, 38, 43, 44, 41)
->   rough <- c(38, 40, 47, 44, 40, 42)
->   accurate <- c(48, 40, 45, 43, 46, 44)
-> 
->   pieces <- list(control, rough, accurate)
->   n <- c(6, 6, 6)
->   grp <- as.ordered(factor(rep(1:length(n), n)))
-> 
->   (y <- unlist(pieces))
- [1] 40 35 38 43 44 41 38 40 47 44 40 42 48 40 45 43 46 44
->   k <- length(pieces)
->   (x <- as.ordered(factor(rep(1:k, n))))
- [1] 1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3
-Levels: 1 < 2 < 3
-> 
->   ### look at K. The second line just sums up.
->   ff <- function(x) {
-+       K <- contrMat(table(x), "Tukey")[, x]
-+       as.vector(rep(1, nrow(K)) %*% K)
+>   if (require("multcomp")) {
++       control <- c(40, 35, 38, 43, 44, 41)
++       rough <- c(38, 40, 47, 44, 40, 42)
++       accurate <- c(48, 40, 45, 43, 46, 44)
++ 
++       pieces <- list(control, rough, accurate)
++       n <- c(6, 6, 6)
++       grp <- as.ordered(factor(rep(1:length(n), n)))
++ 
++       (y <- unlist(pieces))
++       k <- length(pieces)
++       (x <- as.ordered(factor(rep(1:k, n))))
++ 
++       ## look at K. The second line just sums up.
++       ff <- function(x) {
++           K <- contrMat(table(x), "Tukey")[, x]
++           as.vector(rep(1, nrow(K)) %*% K)
++       }
++ 
++       it <- independence_test(y ~ x,
++           ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
++           xtrafo = function(data) trafo(data, ordered_trafo = ff),
++           alternative = "greater")
++       it
 +   }
-> 
->   it <- independence_test(y ~ x,
-+       ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
-+       xtrafo = function(data) trafo(data, ordered_trafo = ff),
-+       alternative = "greater")
->   it
+Loading required package: multcomp
+Loading required package: mvtnorm
 
 	Asymptotic General Independence Test
 
@@ -700,6 +697,9 @@ alternative hypothesis: greater
 > 
 > 
 > cleanEx()
+
+detaching 'package:multcomp', 'package:mvtnorm'
+
 > nameEx("MarginalHomogeneityTest")
 > ### * MarginalHomogeneityTest
 > 
@@ -2404,7 +2404,7 @@ $cutpoint
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  39.19 0.25 39.86 NA NA 
+Time elapsed:  39.14 0.34 40.01 NA NA 
 > grDevices::dev.off()
 null device 
           1 
