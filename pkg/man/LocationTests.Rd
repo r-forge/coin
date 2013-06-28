@@ -182,7 +182,7 @@
 
 }
 \examples{
-
+  \dontshow{options(useFancyQuotes = FALSE)}
   ### Tritiated Water Diffusion Across Human Chorioamnion
   ### Hollander & Wolfe (1999), Table 4.1, page 110
   water_transfer <- data.frame(

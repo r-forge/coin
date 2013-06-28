@@ -454,7 +454,9 @@ alternative hypothesis: greater
 > 
 > ### ** Examples
 > 
-> 
+>   ## Don't show: 
+> options(useFancyQuotes = FALSE)
+> ## End Don't show
 >   ### Tritiated Water Diffusion Across Human Chorioamnion
 >   ### Hollander & Wolfe (1999), Table 4.1, page 110
 >   water_transfer <- data.frame(
@@ -650,7 +652,7 @@ chi-squared = 22.8524, p-value < 2.2e-16
 >   ### sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
 >   print(pvalue(NDWD, method = "single-step"))
 Warning in .local(object, ...) :
-  multiple comparisons might be incorrect due to subset pivotality; use ‘method = “npmcp”’
+  multiple comparisons might be incorrect due to subset pivotality; use 'method = "npmcp"'
                      
 II - I   0.9493555556
 III - I  0.0092111111
@@ -1266,7 +1268,7 @@ chi-squared = 11.1429, df = 2, p-value = 0.003805
 >   ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
 >   print(pvalue(rtt, method = "single-step"))
 Warning in .local(object, ...) :
-  multiple comparisons might be incorrect due to subset pivotality; use ‘method = “npmcp”’
+  multiple comparisons might be incorrect due to subset pivotality; use 'method = "npmcp"'
                                      
 Round Out - Narrow Angle  0.623934656
 Wide Angle - Narrow Angle 0.053791966
@@ -2403,7 +2405,7 @@ $cutpoint
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  293.38 1.651 296.396 0 0 
+Time elapsed:  292.958 1.768 296.401 0 0 
 > grDevices::dev.off()
 null device 
           1 
