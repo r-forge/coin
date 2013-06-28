@@ -2,7 +2,7 @@
 ### Regression tests for the transformation functions
 
 set.seed(290875)
-library(coin)
+library("coin")
 isequal <- coin:::isequal
 
 

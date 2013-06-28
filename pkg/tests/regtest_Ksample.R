@@ -4,7 +4,7 @@
 ### `y' and a factor `x' (possibly blocked)
 
 set.seed(290875)
-library(coin)
+library("coin")
 isequal <- coin:::isequal
 
 ### generate data
@@ -225,4 +225,3 @@ st <- surv_test(Surv(time, event) ~ group, data = leukemia,
 stopifnot(all(c(round(-statistic(st, "linear")[1:2], 2), round(-statistic(st, "linear")[3], 3)) == c(42.78, -26.42, -16.361)))
 isequal(round(statistic(st), 3), 4.104)
 isequal(round(pvalue(st), 4), 0.1285)
-

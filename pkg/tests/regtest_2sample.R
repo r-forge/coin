@@ -4,7 +4,7 @@
 ### `y' and a binary factor `x' (possibly blocked)
 
 set.seed(290875)
-library(coin)
+library("coin")
 isequal <- coin:::isequal
 
 ### generate data

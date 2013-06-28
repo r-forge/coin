@@ -2,7 +2,7 @@
 ### Regression tests for multiple adjustments
 
 set.seed(290875)
-library(coin)
+library("coin")
 isequal <- coin:::isequal
 
 ### example from Westfall & Wolfinger (1997), Table 4

@@ -4,7 +4,7 @@
 ### `x' and `y' (possibly blocked)
 
 set.seed(290875)
-library(coin)
+library("coin")
 isequal <- coin:::isequal
 
 ### generate data
