@@ -1022,38 +1022,36 @@ mh_test.SymmetryProblem <- function(object,
 ### Wilcoxon signed-rank test
 wilcoxsign_test <- function(object, ...) UseMethod("wilcoxsign_test")
 
-wilcoxsign_test.formula <- function(formula, data = list(),
-                                    subset = NULL, ...)
+wilcoxsign_test.formula <- function(formula, data = list(), subset = NULL, ...)
 {
     d <- formula2data(formula, data, subset, frame = parent.frame(), ...)
     if (is.null(d$bl))
-        d <- list(y = data.frame(c(d$x[[1]], d$y[[1]])), 
+        d <- list(y = data.frame(c(d$x[[1]], d$y[[1]])),
                   x = data.frame(gl(2, length(d$x[[1]]))),
                   block = factor(rep(1:length(d$x[[1]]), 2)))
-    ip <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
-    RET <- do.call("wilcoxsign_test", c(list(object = ip), list(...)))
+    sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
+    RET <- do.call("wilcoxsign_test", c(list(object = sp), list(...)))
     return(RET)
 }
 
 wilcoxsign_test.SymmetryProblem <- function(object,
     zero.method = c("Pratt", "Wilcoxon"), ties.method = NULL, ...) {
 
+    zero.method <- match.arg(zero.method)
+
     y <- object@y[[1]]
     x <- object@x[[1]]
     block <- object@block
-    zero.method <- match.arg(zero.method)
-    Wilcoxon <- (zero.method == "Wilcoxon")
 
     if (!is.null(ties.method))
-        stop("Argument ", sQuote("ties.method"),
-             " was replaced by ", sQuote("zero.method"),
-             " and is no longer available")
+        stop("Argument ", sQuote("ties.method"), " was replaced by ",
+             sQuote("zero.method"), " and is no longer available")
 
     if (!is.numeric(y))
         stop(sQuote("y"), " is not a numeric variable")
     if (is.factor(x)) {
         if (nlevels(x) != 2)
-            stop(sQuote("x"), " is not a factor at two levels")
+            stop(sQuote("x"), " is not a factor with two levels")
         diffs <- odiffs <- tapply(1:length(y), block, function(b)
             y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]]
         )
@@ -1061,7 +1059,7 @@ wilcoxsign_test.SymmetryProblem <- function(object,
         stop(sQuote("x"), " is not a factor")
     }
 
-    if (Wilcoxon)
+    if (zero.method == "Wilcoxon")
         diffs <- diffs[abs(diffs) > 0]
 
     if (all(abs(diffs) < .Machine$double.eps))
@@ -1072,15 +1070,14 @@ wilcoxsign_test.SymmetryProblem <- function(object,
     pos <- pos[abs(diffs) > 0]
     neg <- neg[abs(diffs) > 0]
 
-    yy <- drop(as.vector(t(cbind(pos, neg))))
+    yy <- as.vector(rbind(pos, neg))
     xx <- factor(rep(c("pos", "neg"), sum(abs(diffs) > 0)))
     block <- gl(sum(abs(diffs) > 0), 2)
 
     ip <- new("IndependenceProblem", x = data.frame(x = xx),
               y = data.frame(y = yy), block = block)
 
-    args <- setup_args(teststat = "scalar")
-    args$paired <- TRUE
+    args <- setup_args(teststat = "scalar", paired = TRUE)
 
     RET <- do.call("independence_test", c(list(object = ip), args))
 
