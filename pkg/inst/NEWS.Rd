@@ -107,14 +107,20 @@
 
       \item the Fligner-Killeen test can now also handle 2-sample
       problems (see \code{?fligner_test})
+
+      \item objects of class \code{"ScalarIndependenceTestStatistic"}
+      now has a \code{paired} slot
+
+      \item \code{independence_test()} has gained a new argument
+      \code{paired} that is used to indicate if paired data have been
+      transformed in such a way that the resulting linear
+      (unstandardized) test statistic is the sum of the absolute values
+      of the positive differences between the paired observations (see
+      \code{?independence_test})
     }
   }
   \subsection{Bug fixes}{
     \itemize{
-
-      \item The x-axis labels for the Rounding times data plot in
-            \code{?Symmetry_Tests} was wrong.
-
       \item monotonicity of step-down adjusted \eqn{p}-values was not
       enforced when using the approximate (Monte Carlo) null
       distribution
@@ -166,6 +172,9 @@
 
       \item the general symmetry test inadvertently allowed the
       \code{distribution} argument to be set to \code{"exact"}
+
+      \item the exact \eqn{p}-values for stratified tests were wrong
+      when each block contained precisely two observations
     }
   }
   \subsection{Other changes}{
@@ -212,6 +221,9 @@
       \item small changes in the printed output of the
       Wilcoxon-Mann-Whitney test, the marginal homogeneity test and the
       Wilcoxon signed-rank test
+
+      \item \code{wilcoxsign_test.IndependenceProblem()} has been
+      replaced by \code{wilcoxsign_test.SymmetryProblem()}
     }
   }
 }

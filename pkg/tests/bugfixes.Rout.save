@@ -1,5 +1,5 @@
 
-R version 3.0.0 (2013-04-03) -- "Masked Marvel"
+R version 3.0.1 (2013-05-16) -- "Good Sport"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: i386-w64-mingw32/i386 (32-bit)
 
@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 > ### Regression tests for fixed bugs
 > 
 > set.seed(290875)
-> library(coin)
+> library("coin")
 Loading required package: survival
 Loading required package: splines
 Loading required package: mvtnorm
@@ -50,7 +50,7 @@ alternative hypothesis: two.sided
 > 
 > ### expectation was wrong when varonly = TRUE in case both
 > ### xtrafo and ytrafo were multivariate
-> if (require(multcomp)) {
+> if (require("multcomp")) {
 +     df <- data.frame(x = runif(30), y = runif(30), z = gl(3, 10))
 +     a <- independence_test(x + y ~ z, data = df,
 +          distribution = approximate(B = 19999),
@@ -491,7 +491,8 @@ alternative hypothesis: true mu is not equal to 0
 > x <- c(NA, NA)
 > y <- c(1, 1)
 > try(wilcoxsign_test(x ~ y))
-Error in .local(.Object, ...) : 'x' and 'y' do not contain data
+Error in tapply(1:length(y), block, function(b) y[b][x[b] == levels(x)[1]] -  : 
+  arguments must have same length
 > 
 > ### problem in coin 1.0-12 fixed
 > x <- c(1, 2, 3)
@@ -652,6 +653,16 @@ attr(,"assign")
 Error in match.arg(distribution[1], values) : 
   'arg' should be one of "asymptotic", "approximate"
 > 
+> ### wrong exact p-values for stratified tests when all blocks have length two
+> y <- 1:30
+> x <- factor(rep(1:2, 15))
+> id <- gl(15, 2)
+> it <- independence_test(y ~ x | id, distribution = "exact") # Wrong
+> wt <- wilcoxsign_test(y ~ x | id, distribution = "exact") # OK! p = 6.104e-5
+> 
+> stopifnot(isequal(statistic(it), -statistic(wt)))
+> stopifnot(isequal(pvalue(it), pvalue(wt)))
+> 
 > proc.time()
    user  system elapsed 
-   5.25    0.43    5.94 
+   3.10    0.20    3.43 

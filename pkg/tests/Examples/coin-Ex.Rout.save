@@ -1,5 +1,5 @@
 
-R version 3.0.0 (2013-04-03) -- "Masked Marvel"
+R version 3.0.1 (2013-05-16) -- "Good Sport"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: i686-redhat-linux-gnu (32-bit)
 
@@ -1157,7 +1157,7 @@ newdrug             0.0191             0.0111             0.0063
 > ### Title: Symmetry Tests
 > ### Aliases: friedman_test friedman_test.formula
 > ###   friedman_test.SymmetryProblem wilcoxsign_test wilcoxsign_test.formula
-> ###   wilcoxsign_test.IndependenceProblem
+> ###   wilcoxsign_test.SymmetryProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -2367,8 +2367,9 @@ $cutpoint
 > 
 > ### * <FOOTER>
 > ###
+> options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  353.289 2.791 361.23 0 0 
+Time elapsed:  293.559 1.729 296.741 0 0 
 > grDevices::dev.off()
 null device 
           1 

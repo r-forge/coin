@@ -2,7 +2,7 @@
 ### Regression tests for fixed bugs
 
 set.seed(290875)
-library(coin)
+library("coin")
 isequal <- coin:::isequal
 GE <- coin:::GE
 
@@ -13,7 +13,7 @@ independence_test(I(x1 < 0) ~ x3, data = df)
 
 ### expectation was wrong when varonly = TRUE in case both
 ### xtrafo and ytrafo were multivariate
-if (require(multcomp)) {
+if (require("multcomp")) {
     df <- data.frame(x = runif(30), y = runif(30), z = gl(3, 10))
     a <- independence_test(x + y ~ z, data = df,
          distribution = approximate(B = 19999),
@@ -356,24 +356,12 @@ trafo(data.frame(gl(4, 5, ordered = TRUE)),
 tab <- as.table(matrix(c(20, 2, 12, 16), nrow = 2))
 try(symmetry_test(tab, distribution = "exact"))
 
-### paired shift algorithm
-set.seed(123)
+### wrong exact p-values for stratified tests when all blocks have length two
+y <- 1:30
 x <- factor(rep(1:2, 15))
 id <- gl(15, 2)
-y <- rnorm(30) + as.numeric(x)
-yi <- as.integer(round(y * 1000))
+it <- independence_test(y ~ x | id, distribution = "exact") # Wrong
+wt <- wilcoxsign_test(y ~ x | id, distribution = "exact") # OK! p = 6.104e-5
 
-pvalue(wilcoxsign_test(y ~ x | id))                   # OK!
-pvalue(wilcoxsign_test(y ~ x | id, distr = "approx")) # OK!
-pvalue(wilcoxsign_test(y ~ x | id, distr = "exact"))  # OK!
-
-pvalue(wilcox_test(y ~ x | id))                   # OK!
-pvalue(wilcox_test(y ~ x | id, distr = "approx")) # OK!
-pvalue(wilcox_test(y ~ x | id, distr = "exact"))  # OK!
-
-oneway_test(yi ~ x | id)
-oneway_test(yi ~ x | id, distr = "approx")
-oneway_test(yi ~ x | id, distr = "exact") 
-
-symmetry_test(yi ~ x | id)
-symmetry_test(yi ~ x | id, distr = "approx")
+stopifnot(isequal(statistic(it), -statistic(wt)))
+stopifnot(isequal(pvalue(it), pvalue(wt)))

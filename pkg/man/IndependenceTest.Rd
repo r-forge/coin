@@ -69,10 +69,10 @@
   \item{check}{a function to be applied to objects of class
     \code{"IndependenceTest"} in order to check for specific properties
     of the data.}
-  \item{paired}{a logical indicating if for the scalar two-sample case
-                the statistic is the sum of the absolute values of the 
-                positive differences between two groups (only applied
-                to the Wilcoxon signed rank test).}
+  \item{paired}{a logical, indicating that paired data have been
+    transformed in such a way that the resulting linear (unstandardized)
+    test statistic is the sum of the absolute values of the positive
+    differences between the paired observations.}
   \item{\dots}{further arguments to be passed to or from
     methods. Currently, none of the additional arguments is passed to
     any function.}
