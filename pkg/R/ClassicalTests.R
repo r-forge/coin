@@ -1024,7 +1024,7 @@ wilcoxsign_test.formula <- function(formula, data = list(), subset = NULL, ...)
 {
     d <- formula2data(formula, data, subset, frame = parent.frame(), ...)
     if (is.null(d$bl))
-        d <- list(y = data.frame(c(d$x[[1]], d$y[[1]])),
+        d <- list(y = data.frame(c(d$y[[1]], d$x[[1]])),
                   x = data.frame(gl(2, length(d$x[[1]]))),
                   block = factor(rep(1:length(d$x[[1]]), 2)))
     sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
@@ -1076,7 +1076,7 @@ wilcoxsign_test.SymmetryProblem <- function(object,
     n <- length(pos)
 
     y <- as.vector(rbind(pos, neg))
-    x <- factor(rep(c("pos", "neg"), n))
+    x <- factor(rep(0:1, n), labels = c("pos", "neg"))
     block <- gl(n, 2)
 
     ip <- new("IndependenceProblem", x = data.frame(x = x),

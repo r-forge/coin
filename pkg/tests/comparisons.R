@@ -868,7 +868,7 @@ tmp <- data.frame(y = c(AIDS$post, AIDS$pre),
                   x = gl(2, nrow(AIDS)),
                   block = factor(rep(1:nrow(AIDS), 2)))
 
-wsa <- wilcoxsign_test(pre ~ post, data = AIDS, distribution = "asymptotic",
+wsa <- wilcoxsign_test(post ~ pre, data = AIDS, distribution = "asymptotic",
                        zero.method = "Wilcoxon")
 wsa2 <- wilcoxsign_test(y ~ x | block, data = tmp, distribution = "asymptotic",
                         zero.method = "Wilcoxon")
@@ -876,27 +876,27 @@ wsa2 <- wilcoxsign_test(y ~ x | block, data = tmp, distribution = "asymptotic",
 stopifnot(all.equal(statistic(wsa), statistic(wsa2)))
 
 # asymptotic p-value, page 290
-stopifnot(isequal(round(statistic(wsa), 3), 2.896))
+stopifnot(isequal(round(statistic(wsa), 3), -2.896))
 
 # asymptotic p-value, page 290
 stopifnot(isequal(round(pvalue(wsa), 4), 0.0038))
 
-wsa <- wilcoxsign_test(pre ~ post, data = AIDS, distribution = "asymptotic", alternative = "greater",
+wsa <- wilcoxsign_test(post ~ pre, data = AIDS, distribution = "asymptotic", alternative = "less",
                        zero.method = "Wilcoxon")
 
 # asymptotic p-value, page 290
-stopifnot(isequal(round(statistic(wsa), 3), 2.896))
+stopifnot(isequal(round(statistic(wsa), 3), -2.896))
 
 # asymptotic p-value, page 290
 stopifnot(isequal(round(pvalue(wsa), 4), 0.0019))
 
-wse <- wilcoxsign_test(pre ~ post, data = AIDS, distribution = "exact",
+wse <- wilcoxsign_test(post ~ pre, data = AIDS, distribution = "exact",
                        zero.method = "Wilcoxon")
 
 # exact p-value, page 290
 stopifnot(isequal(round(pvalue(wse), 4), 0.0021))
 
-wsa <- wilcoxsign_test(pre ~ post, data = AIDS, distribution = "exact", alternative = "greater",
+wsa <- wilcoxsign_test(post ~ pre, data = AIDS, distribution = "exact", alternative = "less",
                        zero.method = "Wilcoxon")
 
 # exact one-sided p-value, page 290

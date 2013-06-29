@@ -191,16 +191,18 @@
 
 
   ### example from ?wilcox.test
-  x <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
-  y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
-  wilcoxsign_test(x ~ y, alternative = "greater", distribution = exact())
-  wilcox.test(x, y, paired = TRUE, alternative = "greater")
+  y1 <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+  y2 <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+  wilcox.test(y1, y2, paired = TRUE, alternative = "greater")
+  (wt <- wilcoxsign_test(y1 ~ y2, alternative = "greater",
+                         distribution = "exact"))
+  statistic(wt, "linear") # same as wilcox.test
 
   ### with explicit group and block information
-  xydat <- data.frame(y = c(y, x), x = gl(2, length(x)),
-                      block = factor(rep(1:length(x), 2)))
-  wilcoxsign_test(y ~ x | block, data = xydat,
-                  alternative = "greater", distribution = exact())
+  dta <- data.frame(y = c(y1, y2), x = gl(2, length(y1)),
+                    block = factor(rep(1:length(y1), 2)))
+  wilcoxsign_test(y ~ x | block, data = dta,
+                  alternative = "greater", distribution = "exact")
 
 }
 \keyword{htest}

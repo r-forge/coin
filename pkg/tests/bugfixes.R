@@ -362,10 +362,27 @@ x <- factor(rep(1:2, 15))
 id <- gl(15, 2)
 it <- independence_test(y ~ x | id, distribution = "exact") # Wrong
 wt <- wilcoxsign_test(y ~ x | id, distribution = "exact") # OK! p = 6.104e-5
-
-stopifnot(isequal(statistic(it), -statistic(wt)))
 stopifnot(isequal(pvalue(it), pvalue(wt)))
 
 ### chisq_test standardized test statistic was wrong
 ct <- chisq_test(as.table(matrix(1:4, ncol = 2)))
 stopifnot(isequal(statistic(ct), statistic(ct, "standardized")^2))
+
+### standardized signed-rank statistic had wrong sign
+y1 <- seq(1, 30, 2)
+y2 <- seq(2, 30, 2)
+dta <- stack(list(y1 = y1, y2 = y2))
+dta$block <- factor(rep(seq_along(y1), 2))
+
+wt0 <- wilcox.test(y1, y2, paired = TRUE, exact = FALSE, correct = FALSE,
+                   alternative = "greater")
+wt1 <- wilcoxsign_test(y1 ~ y2, alternative = "greater")
+wt2 <- wilcoxsign_test(values ~ ind | block, data = dta,
+                       alternative = "greater")
+it <- independence_test(values ~ ind | block, data = dta,
+                        alternative = "less")
+
+stopifnot(isequal(wt0$statistic, statistic(wt1, "linear"))) # Was OK
+stopifnot(isequal(wt0$statistic, statistic(wt2, "linear")))
+stopifnot(isequal(statistic(wt1), statistic(wt2)))
+stopifnot(isequal(statistic(it), statistic(wt2)))

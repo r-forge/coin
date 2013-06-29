@@ -176,9 +176,14 @@
       \item the exact \eqn{p}-values for stratified tests were wrong
       when each block contained precisely two observations
 
-      \item the standardized test statistic for the Pearson chi-squared
+      \item the standardized test statistic of the Pearson chi-squared
       test was off by a factor \eqn{\sqrt{n / (n - 1)}}{sqrt(n / (n -
         1))}
+
+      \item the standardized test statistic of the Wilcoxon signed-rank
+      test sometimes had the wrong sign, due to being based on the sum
+      of the absolute values of the negative, instead of the positive,
+      differences between the paired measurements
     }
   }
   \subsection{Other changes}{
