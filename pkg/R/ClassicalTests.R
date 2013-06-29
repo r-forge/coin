@@ -1057,23 +1057,30 @@ wilcoxsign_test.SymmetryProblem <- function(object,
         stop(sQuote("x"), " is not a factor")
     }
 
-    if (zero.method == "Wilcoxon")
-        diffs <- diffs[abs(diffs) > 0]
-
-    if (all(abs(diffs) < .Machine$double.eps))
+    abs_diffs <- abs(diffs)
+    if (all(abs_diffs < .Machine$double.eps))
         stop("all pairwise differences equal zero")
 
-    pos <- rank(abs(diffs)) * (diffs > 0)
-    neg <- rank(abs(diffs)) * (diffs < 0)
-    pos <- pos[abs(diffs) > 0]
-    neg <- neg[abs(diffs) > 0]
+    pos_abs_diffs <- abs_diffs > 0
+    if (zero.method == "Pratt") {
+        rank_abs_diffs <- rank(abs_diffs)
+        pos <- (rank_abs_diffs * (diffs > 0))[pos_abs_diffs]
+        neg <- (rank_abs_diffs * (diffs < 0))[pos_abs_diffs]
+    } else {
+        diffs <- diffs[pos_abs_diffs]
+        abs_diffs <- abs_diffs[pos_abs_diffs]
+        rank_abs_diffs <- rank(abs_diffs)
+        pos <- rank_abs_diffs * (diffs > 0)
+        neg <- rank_abs_diffs * (diffs < 0)
+    }
+    n <- length(pos)
 
-    yy <- as.vector(rbind(pos, neg))
-    xx <- factor(rep(c("pos", "neg"), sum(abs(diffs) > 0)))
-    block <- gl(sum(abs(diffs) > 0), 2)
+    y <- as.vector(rbind(pos, neg))
+    x <- factor(rep(c("pos", "neg"), n))
+    block <- gl(n, 2)
 
-    ip <- new("IndependenceProblem", x = data.frame(x = xx),
-              y = data.frame(y = yy), block = block)
+    ip <- new("IndependenceProblem", x = data.frame(x = x),
+              y = data.frame(y = y), block = block)
 
     args <- setup_args(teststat = "scalar", paired = TRUE)
 
