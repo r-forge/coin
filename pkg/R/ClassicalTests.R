@@ -1050,7 +1050,7 @@ wilcoxsign_test.SymmetryProblem <- function(object,
     if (is.factor(x)) {
         if (nlevels(x) != 2)
             stop(sQuote("x"), " is not a factor with two levels")
-        diffs <- odiffs <- tapply(1:length(y), block, function(b)
+        diffs <- tapply(1:length(y), block, function(b)
             y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]]
         )
     } else {
@@ -1090,6 +1090,64 @@ wilcoxsign_test.SymmetryProblem <- function(object,
         RET@method <- "Wilcoxon-Pratt Signed-Rank Test"
     else
         RET@method <- "Wilcoxon Signed-Rank Test"
+    RET@nullvalue <- 0
+
+    return(RET)
+}
+
+
+### Sign test
+sign_test <- function(object, ...) UseMethod("sign_test")
+
+sign_test.formula <- function(formula, data = list(), subset = NULL, ...)
+{
+    d <- formula2data(formula, data, subset, frame = parent.frame(), ...)
+    if (is.null(d$bl))
+        d <- list(y = data.frame(c(d$y[[1]], d$x[[1]])),
+                  x = data.frame(gl(2, length(d$x[[1]]))),
+                  block = factor(rep(1:length(d$x[[1]]), 2)))
+    sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
+    RET <- do.call("sign_test", c(list(object = sp), list(...)))
+    return(RET)
+}
+
+sign_test.SymmetryProblem <- function(object, ...) {
+
+    y <- object@y[[1]]
+    x <- object@x[[1]]
+    block <- object@block
+
+    if (!is.numeric(y))
+        stop(sQuote("y"), " is not a numeric variable")
+    if (is.factor(x)) {
+        if (nlevels(x) != 2)
+            stop(sQuote("x"), " is not a factor with two levels")
+        diffs <- tapply(1:length(y), block, function(b)
+            y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]]
+        )
+    } else {
+        stop(sQuote("x"), " is not a factor")
+    }
+
+    abs_diffs <- abs(diffs)
+    if (all(abs_diffs < .Machine$double.eps))
+        stop("all pairwise differences equal zero")
+
+    diffs <- diffs[abs_diffs > 0]
+    n <- length(diffs)
+
+    y <- as.vector(rbind(as.numeric(diffs > 0), as.numeric(diffs < 0)))
+    x <- factor(rep(0:1, n), labels = c("pos", "neg"))
+    block <- gl(n, 2)
+
+    ip <- new("IndependenceProblem", x = data.frame(x = x),
+              y = data.frame(y = y), block = block)
+
+    args <- setup_args(teststat = "scalar", paired = TRUE)
+
+    RET <- do.call("independence_test", c(list(object = ip), args))
+
+    RET@method <- "Sign Test"
     RET@nullvalue <- 0
 
     return(RET)

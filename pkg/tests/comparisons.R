@@ -919,3 +919,32 @@ stopifnot(isequal(round(pvalue(sta), 4), 0.0878))
 stMC <- symmetry_test(y ~ x | block, distribution = approximate(B = 10000))
 pci <- attr(pvalue(stMC), "conf.int")
 stopifnot(pci[1] < 0.0021 & pci[2] > 0.0021)
+
+
+### sign test
+sa <- sign_test(post ~ pre, data = AIDS)
+sa2 <- sign_test(y ~ x | block, data = tmp)
+
+stopifnot(all.equal(statistic(sa), statistic(sa2)))
+
+# asymptotic p-value, page 107 SX9 manual
+stopifnot(isequal(round(statistic(sa), 3), -3))
+
+# asymptotic p-value, page 107 SX9 manual
+stopifnot(isequal(round(pvalue(sa), 4), 0.0027))
+
+sa <- sign_test(post ~ pre, data = AIDS, alternative = "less")
+
+# asymptotic p-value, page 107 SX9 manual
+stopifnot(isequal(round(pvalue(sa), 4), 0.0013))
+
+se <- sign_test(post ~ pre, data = AIDS, distribution = "exact")
+
+# exact p-value, page 107 SX9 manual
+stopifnot(isequal(round(pvalue(se), 4), 0.0042))
+
+sa <- sign_test(post ~ pre, data = AIDS, distribution = "exact",
+                alternative = "less")
+
+# exact one-sided p-value, page 107 SX9 manual
+stopifnot(isequal(round(pvalue(sa), 4), 0.0021))

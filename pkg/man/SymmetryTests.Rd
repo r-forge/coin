@@ -5,6 +5,9 @@
 \alias{wilcoxsign_test}
 \alias{wilcoxsign_test.formula}
 \alias{wilcoxsign_test.SymmetryProblem}
+\alias{sign_test}
+\alias{sign_test.formula}
+\alias{sign_test.SymmetryProblem}
 
 \title{ Symmetry Tests }
 
@@ -22,13 +25,16 @@
 \method{wilcoxsign_test}{SymmetryProblem}(object,
     zero.method = c("Pratt", "Wilcoxon"), \dots)
 
+\method{sign_test}{formula}(formula, data, subset = NULL, \dots)
+\method{sign_test}{SymmetryProblem}(object, \dots)
+
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where
-    \code{y} is a numeric variable giving the data values and \code{x} a
-    factor with two (\code{wilcoxsign_test}) or more levels giving the
-    corresponding groups.  \code{block} is an optional factor (which is
-    generated automatically when omitted).}
+    \code{y} is a numeric variable giving the data values and \code{x}
+    is a factor with two (\code{wilcoxsign_test} and \code{sign_test})
+    or more levels giving the corresponding groups.  \code{block} is an
+    optional factor (which is generated automatically when omitted).}
   \item{data}{an optional data frame containing the variables in the
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
@@ -39,11 +45,12 @@
     statistic can be approximated by its asymptotic distribution
     (\code{"asymptotic"}, default) or via Monte Carlo resampling
     (\code{"approximate"}).  Alternatively, the functions
-    \code{\link{approximate}} or \code{\link{asymptotic}} can be used to
+    \code{\link{asymptotic}} or \code{\link{approximate}} can be used to
     specify how the exact conditional distribution of the test statistic
-    should be calculated or approximated.  For the Wilcoxon signed-rank
-    test, \code{\link{exact}} computes the exact distribution by means
-    of the Streitberg-Roehmel shift algorithm.}
+    should be approximated.  For the Wilcoxon signed-rank test and the
+    sign test, \code{"exact"} or use of the function \code{\link{exact}}
+    computes the exact distribution by means of the Streitberg-Roehmel
+    shift algorithm.}
   \item{zero.method}{a character specifying the way zeros, e.g., induced
     by tied repeated measurements, are handled (see \sQuote{Details}).}
   \item{\dots}{further arguments to be passed to or from methods.}
@@ -59,10 +66,11 @@
   argument.  The default scores, \code{1:nlevels(x)}, can be altered
   using the \code{scores} argument (see \code{\link{symmetry_test}}).
 
-  For \code{wilcoxsign_test}, formulae of the form \code{y ~ x | block}
-  and \code{y ~ x} are allowed.  The latter is interpreted in the sense
-  that \code{y} is the first and \code{x} the second measurement on the
-  same observation.  The default method of handling zeros
+  For \code{wilcoxsign_test} and \code{sign_test}, formulae of the form
+  \code{y ~ x | block} and \code{y ~ x} are allowed.  The latter is
+  interpreted in the sense that \code{y} is the first and \code{x} the
+  second measurement on the same observation.  For
+  \code{wilcoxsign_test}, the default method of handling zeros
   (\code{zero.method = "Pratt"}) due to Pratt (1959) first rank
   transforms the absolute differences (including zeros) and then
   discards the ranks corresponding to the zero differences.  The
@@ -192,16 +200,24 @@
   ### example from ?wilcox.test
   y1 <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
   y2 <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+
   wilcox.test(y1, y2, paired = TRUE, alternative = "greater")
   (wt <- wilcoxsign_test(y1 ~ y2, alternative = "greater",
                          distribution = "exact"))
   statistic(wt, "linear") # same as wilcox.test
 
+  sign_test(y1 ~ y2, alternative = "greater",
+            distribution = "exact")
+
   ### with explicit group and block information
   dta <- data.frame(y = c(y1, y2), x = gl(2, length(y1)),
                     block = factor(rep(seq_along(y1), 2)))
+
   wilcoxsign_test(y ~ x | block, data = dta,
                   alternative = "greater", distribution = "exact")
+
+  sign_test(y ~ x | block, data = dta,
+            alternative = "greater", distribution = "exact")
 
 }
 \keyword{htest}

@@ -117,6 +117,9 @@
       (unstandardized) test statistic is the sum of the absolute values
       of the positive differences between the paired observations (see
       \code{?independence_test})
+
+      \item the sign test for paired data is now available (see
+      \code{?sign_test})
     }
   }
   \subsection{Bug fixes}{
