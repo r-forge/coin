@@ -199,7 +199,7 @@
 
   ### with explicit group and block information
   dta <- data.frame(y = c(y1, y2), x = gl(2, length(y1)),
-                    block = factor(rep(1:length(y1), 2)))
+                    block = factor(rep(seq_along(y1), 2)))
   wilcoxsign_test(y ~ x | block, data = dta,
                   alternative = "greater", distribution = "exact")
 

@@ -156,19 +156,19 @@
 
 
   ### permutation test for paired observations
-  x <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
-  y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
-  xy <- stack(list(x = x, y = y))
-  xy$block <- factor(rep(seq_along(x), 2))
-  independence_test(values ~ ind | block, data = xy,
+  y1 <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+  y2 <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+  dta <- data.frame(y = c(y1, y2), x = gl(2, length(y1)),
+                    block = factor(rep(seq_along(y1), 2)))
+  independence_test(y ~ x | block, data = dta,
                     distribution = "exact", alternative = "greater")
 
   ### alternatively: transform data and set 'paired = TRUE'
-  diff <- x - y
-  yy <- as.vector(rbind(abs(diff) * (diff >= 0), abs(diff) * (diff < 0)))
-  xx <- factor(rep(c("pos", "neg"), length(diff)), levels = c("pos", "neg"))
-  bb <- gl(length(diff), 2)
-  independence_test(yy ~ xx | bb,
+  diff <- y1 - y2
+  y <- as.vector(rbind(abs(diff) * (diff >= 0), abs(diff) * (diff < 0)))
+  x <- factor(rep(0:1, length(diff)), labels = c("pos", "neg"))
+  block <- gl(length(diff), 2)
+  independence_test(y ~ x | block,
                     distribution = "exact", alternative = "greater",
                     paired = TRUE)
 
