@@ -27,8 +27,8 @@ wilcox_test.IndependenceProblem <- function(object,
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
-    RET@nullvalue <- 0
     RET@method <- "Wilcoxon-Mann-Whitney Test"
+    RET@nullvalue <- 0
 
     if (conf.int) {
         RET <- new("ScalarIndependenceTestConfint", RET)
@@ -453,9 +453,9 @@ spearman_test.IndependenceProblem <- function(object,
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
+    RET@method <- "Spearman Correlation Test"
     RET@parameter <- "rho"
     RET@nullvalue <- 0
-    RET@method <- "Spearman Correlation Test"
 
     return(RET)
 }
@@ -497,9 +497,9 @@ fisyat_test.IndependenceProblem <- function(object,
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
+    RET@method <- "Fisher-Yates Correlation Test"
     RET@parameter <- "rho"
     RET@nullvalue <- 0
-    RET@method <- "Fisher-Yates Correlation Test"
 
     return(RET)
 }
@@ -544,9 +544,9 @@ quadrant_test.IndependenceProblem <- function(object,
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
+    RET@method <- "Quadrant Test"
     RET@parameter <- "rho"
     RET@nullvalue <- 0
-    RET@method <- "Quadrant Test"
 
     return(RET)
 }
@@ -588,9 +588,9 @@ koziol_test.IndependenceProblem <- function(object,
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
+    RET@method <- "Koziol-Nemec Test"
     RET@parameter <- "rho"
     RET@nullvalue <- 0
-    RET@method <- "Koziol-Nemec Test"
 
     return(RET)
 }
@@ -709,19 +709,23 @@ chisq_test.IndependenceProblem <- function(object,
         if (args$teststat == "scalar") {
             ts <- new("ScalarIndependenceTestStatistic", its, args$alternative)
             ts@teststatistic <- ts@teststatistic * sqrt(n / (n - 1))
-            ts@standardizedlinearstatistic <- ts@standardizedlinearstatistic * sqrt(n / (n - 1))
+            ts@standardizedlinearstatistic <-
+                ts@standardizedlinearstatistic * sqrt(n / (n - 1))
             ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
-            new("ScalarIndependenceTest", statistic = ts, distribution = distribution(ts))
+            new("ScalarIndependenceTest", statistic = ts,
+                distribution = distribution(ts))
         } else {
             if (args$alternative != "two.sided")
                 warning(sQuote("alternative"),
                         " is ignored for quad type test statistics")
             ts <- new("QuadTypeIndependenceTestStatistic", its)
             ts@teststatistic <- ts@teststatistic * n / (n - 1)
-            ts@standardizedlinearstatistic <- ts@standardizedlinearstatistic * sqrt(n / (n - 1))
+            ts@standardizedlinearstatistic <-
+                ts@standardizedlinearstatistic * sqrt(n / (n - 1))
             ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
             ts@covarianceplus <- MPinv(covariance(ts))$MPinv
-            new("QuadTypeIndependenceTest", statistic = ts, distribution = distribution(ts))
+            new("QuadTypeIndependenceTest", statistic = ts,
+                distribution = distribution(ts))
         }
 
     if (is_doubly_ordered(RET@statistic))
