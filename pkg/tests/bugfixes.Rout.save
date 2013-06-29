@@ -296,7 +296,7 @@ X3      10
 > wilcoxsign_test(x ~ y, alternative = "greater",
 +                 distribution = exact())
 
-	Exact Wilcoxon Signed-Rank Test
+	Exact Wilcoxon-Pratt Signed-Rank Test
 
 data:  y by x (pos, neg) 
 	 stratified by block
@@ -477,7 +477,7 @@ alternative hypothesis: true mu is not equal to 0
 > y <- c(2, 4, NA, 3)
 > wilcoxsign_test(x ~ y)
 
-	Asymptotic Wilcoxon Signed-Rank Test
+	Asymptotic Wilcoxon-Pratt Signed-Rank Test
 
 data:  y by x (pos, neg) 
 	 stratified by block
@@ -497,7 +497,7 @@ Error in tapply(1:length(y), block, function(b) y[b][x[b] == levels(x)[1]] -  :
 > y <- c(0, 1, 0)
 > wilcoxsign_test(x ~ y)
 
-	Asymptotic Wilcoxon Signed-Rank Test
+	Asymptotic Wilcoxon-Pratt Signed-Rank Test
 
 data:  y by x (pos, neg) 
 	 stratified by block
@@ -684,4 +684,4 @@ Error in match.arg(distribution[1], values) :
 > 
 > proc.time()
    user  system elapsed 
-   3.27    0.18    3.61 
+   3.44    0.15    3.66 

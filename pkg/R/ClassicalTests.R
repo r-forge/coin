@@ -1033,17 +1033,13 @@ wilcoxsign_test.formula <- function(formula, data = list(), subset = NULL, ...)
 }
 
 wilcoxsign_test.SymmetryProblem <- function(object,
-    zero.method = c("Pratt", "Wilcoxon"), ties.method = NULL, ...) {
+    zero.method = c("Pratt", "Wilcoxon"), ...) {
 
     zero.method <- match.arg(zero.method)
 
     y <- object@y[[1]]
     x <- object@x[[1]]
     block <- object@block
-
-    if (!is.null(ties.method))
-        stop("Argument ", sQuote("ties.method"), " was replaced by ",
-             sQuote("zero.method"), " and is no longer available")
 
     if (!is.numeric(y))
         stop(sQuote("y"), " is not a numeric variable")
@@ -1086,13 +1082,10 @@ wilcoxsign_test.SymmetryProblem <- function(object,
 
     RET <- do.call("independence_test", c(list(object = ip), args))
 
-    RET@method <- "Wilcoxon Signed-Rank Test"
-    if (any(abs(odiffs) < .Machine$double.eps)) {
-        if (is.null(match.call()$zero.method))
-            warning("Handling of zeros defaults to ", sQuote("Pratt"),
-                    " in newer versions of coin")
-        RET@method <- paste0(RET@method, " (zeros handled a la ", zero.method, ")")
-    }
+    if (zero.method == "Pratt")
+        RET@method <- "Wilcoxon-Pratt Signed-Rank Test"
+    else
+        RET@method <- "Wilcoxon Signed-Rank Test"
     RET@nullvalue <- 0
 
     return(RET)

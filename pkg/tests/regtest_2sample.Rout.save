@@ -24,10 +24,6 @@ Type 'q()' to quit R.
 > library("coin")
 Loading required package: survival
 Loading required package: splines
-Loading required package: mvtnorm
-Loading required package: modeltools
-Loading required package: stats4
-Loading required package: multcomp
 > isequal <- coin:::isequal
 > 
 > ### generate data
@@ -495,9 +491,6 @@ ratio of scales
 [1] 0.4741211
 > pvalue(wilcoxsign_test(y1~x1,alter="greater",dist=exact()))
 [1] 0.4609375
-Warning message:
-In wilcoxsign_test.SymmetryProblem(object = <S4 object of class "SymmetryProblem">,  :
-  Handling of zeros defaults to 'Pratt' in newer versions of coin
 > 
 > 
 > ### Weighted logrank tests
@@ -577,4 +570,4 @@ Error in SR_shift_1sample(object, ...) :
 > 
 > proc.time()
    user  system elapsed 
-   2.85    0.20    3.15 
+   2.88    0.06    3.10 

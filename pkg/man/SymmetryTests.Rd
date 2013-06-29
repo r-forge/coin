@@ -20,7 +20,7 @@
 
 \method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
 \method{wilcoxsign_test}{SymmetryProblem}(object,
-    zero.method = c("Pratt", "Wilcoxon"), ties.method = NULL, \dots)
+    zero.method = c("Pratt", "Wilcoxon"), \dots)
 
 }
 \arguments{
@@ -46,7 +46,6 @@
     of the Streitberg-Roehmel shift algorithm.}
   \item{zero.method}{a character specifying the way zeros, e.g., induced
     by tied repeated measurements, are handled (see \sQuote{Details}).}
-  \item{ties.method}{now defunct (see \sQuote{Note}).}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
@@ -75,10 +74,10 @@
 }
 \note{
 
-  Starting with \pkg{coin} version 1.0-16, the \code{ties.method}
-  argument has been replaced by \code{zero.method}.  The current default
-  is \code{zero.method = "Pratt"} whereas earlier versions had
-  \code{ties.method = "HollanderWolfe"} which is now equivalent to
+  Starting with \pkg{coin} version 1.0-16, the \code{zero.method}
+  argument replaced the \code{ties.method} argument.  The current
+  default is \code{zero.method = "Pratt"} whereas the earlier versions
+  had \code{ties.method = "HollanderWolfe"} which is now equivalent to
   \code{zero.method = "Wilcoxon"}.
 
 }

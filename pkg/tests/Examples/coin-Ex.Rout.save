@@ -1323,7 +1323,7 @@ alternative hypothesis: true location shift is greater than 0
 >   (wt <- wilcoxsign_test(y1 ~ y2, alternative = "greater",
 +                          distribution = "exact"))
 
-	Exact Wilcoxon Signed-Rank Test
+	Exact Wilcoxon-Pratt Signed-Rank Test
 
 data:  y by x (pos, neg) 
 	 stratified by block
@@ -1340,7 +1340,7 @@ pos 40
 >   wilcoxsign_test(y ~ x | block, data = dta,
 +                   alternative = "greater", distribution = "exact")
 
-	Exact Wilcoxon Signed-Rank Test
+	Exact Wilcoxon-Pratt Signed-Rank Test
 
 data:  y by x (pos, neg) 
 	 stratified by block
@@ -2408,7 +2408,7 @@ $cutpoint
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  37.87 0.33 38.7 NA NA 
+Time elapsed:  38.92 0.32 39.87 NA NA 
 > grDevices::dev.off()
 null device 
           1 
