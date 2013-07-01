@@ -187,6 +187,8 @@
       sometimes had the wrong sign, due to being based on the sum of the
       absolute values of the negative, instead of the positive,
       differences between the paired measurements
+
+      \item scores for ordered factors weren't checked for monotonicity
     }
   }
   \subsection{Other changes}{

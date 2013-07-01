@@ -1,5 +1,3 @@
-
-
 asymptotic <- function(maxpts = 25000, abseps = 0.001, releps = 0) {
     RET <- function(object)
         AsymptNullDistribution(object, maxpts = maxpts,
@@ -143,9 +141,7 @@ formula2data <- function(formula, data, subset, weights = NULL, ...) {
 
         ### x are _all_ expression levels, always
         x <- as.data.frame(t(Biobase::exprs(data)))
-
     } else {
-
         dat <- ModelEnvFormula(formula = formula,
                                data = data,
                                subset = subset, other = other,
@@ -188,37 +184,33 @@ setscores <- function(x, scores) {
 
     if (is.null(scores)) return(x)
 
-    if (!is.list(scores) || is.null(names(scores)))
-       stop(sQuote("scores"), " is not a named list")
-
     varnames <- names(scores)
+    if (!is.list(scores) || is.null(varnames))
+       stop(sQuote("scores"), " is not a named list")
 
     missing <- varnames[!varnames %in% c(colnames(x@x), colnames(x@y))]
     if (length(missing) > 0)
         stop("Variable(s) ", paste(missing, sep = ", "),
              " not found in ", sQuote("x"))
 
-
     for (var in varnames) {
         if (!is.null(x@x[[var]])) {
-
             if (!is.factor(x@x[[var]]))
-                stop(var, " is not a factor")
-
+                stop(sQuote(var), " is not a factor")
             if (nlevels(x@x[[var]]) != length(scores[[var]]))
-                stop("scores for variable ", var, " don't match")
-
+                stop("scores for variable ", sQuote(var), " don't match")
+            if (!is_monotone(scores[[var]]))
+                stop("scores for variable ", sQuote(var), " aren't monotone")
             x@x[[var]] <- ordered(x@x[[var]], levels = levels(x@x[[var]]))
             attr(x@x[[var]], "scores") <- scores[[var]]
         }
         if (!is.null(x@y[[var]])) {
-
             if (!is.factor(x@y[[var]]))
-                stop(var, " is not a factor")
-
+                stop(sQuote(var), " is not a factor")
             if (nlevels(x@y[[var]]) != length(scores[[var]]))
-                stop("scores for variable ", var, " don't match")
-
+                stop("scores for variable ", sQuote(var), " don't match")
+            if (!is_monotone(scores[[var]]))
+                stop("scores for variable ", sQuote(var), " aren't monotone")
             x@y[[var]] <- ordered(x@y[[var]], levels = levels(x@y[[var]]))
             attr(x@y[[var]], "scores") <- scores[[var]]
         }
@@ -293,13 +285,11 @@ is_Ksample <- function(object) {
     return(groups && values)
 }
 
-is_numeric_y <- function(object) {
+is_numeric_y <- function(object)
     is.numeric(object@y[[1]])
-}
 
-is_censored_y <- function(object) {
+is_censored_y <- function(object)
     ncol(object@y) == 1 && is.Surv(object@y[[1]])
-}
 
 is_corr <- function(object) {
     (is.numeric(object@x[[1]]) && is.numeric(object@y[[1]])) &&
@@ -317,10 +307,9 @@ is_contingency <- function(object) {
     return((groups && values)) ### && trans)
 }
 
-is_ordered <- function(object) {
+is_ordered <- function(object)
     (is_Ksample(object) || is_contingency(object)) &&
         (is.ordered(object@x[[1]]) || is.ordered(object@y[[1]]))
-}
 
 is_singly_ordered <- function(object) {
     x <- object@x[[1]]
@@ -339,20 +328,20 @@ is_doubly_ordered <- function(object) {
           (is.ordered(y) && nlevels(x) == 2)))
 }
 
-is_completeblock <- function(object) {
+is_completeblock <- function(object)
     all(table(object@x[[1]], object@block) == 1)
-}
 
-is_scalar <- function(object) {
+is_scalar <- function(object)
     ncol(object@xtrans) == 1 && ncol(object@ytrans) == 1
-}
 
-is_ordered_x <- function(object) {
+is_ordered_x <- function(object)
     all(vapply(object@x, function(x) is.numeric(x) || is.ordered(x), NA))
-}
 
 is_integer <- function(x, fact = c(1, 2, 10, 100, 1000))
     vapply(fact, function(f) max(abs(round(x * f) - (x * f))) < eps(), NA)
+
+is_monotone <- function (x)
+    all(x == cummax(x)) || all(x == cummin(x))
 
 isequal <- function(a, b) {
     attributes(a) <- NULL

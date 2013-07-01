@@ -386,3 +386,9 @@ stopifnot(isequal(wt0$statistic, statistic(wt1, "linear"))) # Was OK
 stopifnot(isequal(wt0$statistic, statistic(wt2, "linear")))
 stopifnot(isequal(statistic(wt1), statistic(wt2)))
 stopifnot(isequal(statistic(it), statistic(wt2)))
+
+### scores weren't checked for monotonicity
+y <- 1:6
+x <- gl(3, 2)
+try(independence_test(y ~ x, scores = list(x = c(1, 2, 1))))
+try(independence_test(x ~ y, scores = list(x = c(1, 2, 1))))
