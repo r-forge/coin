@@ -70,8 +70,8 @@
     \code{"IndependenceTest"} in order to check for specific properties
     of the data.}
   \item{paired}{a logical, indicating that paired data have been
-    transformed in such a way that the resulting linear (unstandardized)
-    test statistic is the sum of the absolute values of the positive
+    transformed in such a way that the resulting unstandardized linear
+    statistic is the sum of the absolute values of the positive
     differences between the paired observations.}
   \item{\dots}{further arguments to be passed to or from
     methods. Currently, none of the additional arguments is passed to

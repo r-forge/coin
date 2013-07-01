@@ -113,9 +113,9 @@
 
       \item \code{independence_test()} has gained a new argument
       \code{paired} that is used to indicate if paired data have been
-      transformed in such a way that the resulting linear
-      (unstandardized) test statistic is the sum of the absolute values
-      of the positive differences between the paired observations (see
+      transformed in such a way that the resulting unstandardized linear
+      statistic is the sum of the absolute values of the positive
+      differences between the paired observations (see
       \code{?independence_test})
 
       \item the sign test for paired data is now available (see
@@ -179,13 +179,13 @@
       \item the exact \eqn{p}-values for stratified tests were wrong
       when each block contained precisely two observations
 
-      \item the standardized test statistic of the Pearson chi-squared
+      \item the standardized linear statistic of the Pearson chi-squared
       test was off by a factor \eqn{\sqrt{n / (n - 1)}}{sqrt(n / (n -
         1))}
 
-      \item the standardized test statistic of the Wilcoxon signed-rank
-      test sometimes had the wrong sign, due to being based on the sum
-      of the absolute values of the negative, instead of the positive,
+      \item the test statistic of the Wilcoxon signed-rank test
+      sometimes had the wrong sign, due to being based on the sum of the
+      absolute values of the negative, instead of the positive,
       differences between the paired measurements
     }
   }
