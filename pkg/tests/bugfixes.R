@@ -392,3 +392,18 @@ y <- 1:6
 x <- gl(3, 2)
 try(independence_test(y ~ x, scores = list(x = c(1, 2, 1))))
 try(independence_test(x ~ y, scores = list(x = c(1, 2, 1))))
+
+### maxstat_test didn't handle scores properly
+mt0 <- maxstat_test(counts ~ age, data = treepipit)
+
+fage <- factor(treepipit$age) # -> wrong estimates
+mt1 <- maxstat_test(counts ~ fage, data = treepipit,
+                    scores = list(fage = 1:4))
+stopifnot(isequal(mt0@estimates$estimate$cutpoint,
+                  as.numeric(mt1@estimates$estimate$cutpoint)))
+
+oage <- ordered(treepipit$age) # -> error: oage is not a factor
+mt2 <- maxstat_test(counts ~ oage, data = treepipit,
+                    scores = list(oage = 1:4))
+stopifnot(isequal(mt0@estimates$estimate$cutpoint,
+                  as.numeric(mt2@estimates$estimate$cutpoint)))

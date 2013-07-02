@@ -189,6 +189,9 @@
       differences between the paired measurements
 
       \item scores for ordered factors weren't checked for monotonicity
+
+      \item maximally selected statistics didn't handle the
+      \code{scores} argument properly
     }
   }
   \subsection{Other changes}{

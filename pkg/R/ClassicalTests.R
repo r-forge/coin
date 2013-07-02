@@ -893,17 +893,24 @@ maxstat_test.IndependenceProblem <- function(object,
         values = c("asymptotic", "approximate"))
     teststat <- match.arg(teststat)
 
-    ORDERED <- vapply(object@x, is.ordered, NA)
-    lev <- lapply(object@x, levels)
-    for (i in which(ORDERED)) class(object@x[[i]]) <- "numeric"
-
-    mm <- function(x) maxstat_trafo(x, minprob = minprob, maxprob = maxprob)
-    fmm <- function(x) fmaxstat_trafo(x, minprob = minprob, maxprob = maxprob)
-    xtrafo <- function(data) trafo(data, numeric_trafo = mm, factor_trafo = fmm)
+    xtrafo <- function(data)
+        trafo(data,
+              numeric_trafo = function(x)
+                  maxstat_trafo(x, minprob = minprob, maxprob = maxprob),
+              factor_trafo = function(x)
+                  fmaxstat_trafo(x, minprob = minprob, maxprob = maxprob))
 
     args <- setup_args(teststat = teststat,
                        distribution = distribution,
                        xtrafo = xtrafo)
+
+    ## convert factors to ordered and attach scores if requested
+    object <- setscores(object, args$scores)
+    args$scores <- NULL
+
+    ORDERED <- vapply(object@x, is.ordered, NA)
+    lev <- lapply(object@x, levels)
+    for (i in which(ORDERED)) class(object@x[[i]]) <- "numeric"
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
