@@ -905,7 +905,9 @@ maxstat_test.IndependenceProblem <- function(object,
               numeric_trafo = function(x)
                   maxstat_trafo(x, minprob = minprob, maxprob = maxprob),
               factor_trafo = function(x)
-                  fmaxstat_trafo(x, minprob = minprob, maxprob = maxprob))
+                  fmaxstat_trafo(x, minprob = minprob, maxprob = maxprob),
+              ordered_trafo = function(x)
+                  ofmaxstat_trafo(x, minprob = minprob, maxprob = maxprob))
 
     args <- setup_args(teststat = teststat,
                        distribution = distribution,
@@ -914,10 +916,6 @@ maxstat_test.IndependenceProblem <- function(object,
     ## convert factors to ordered and attach scores if requested
     object <- setscores(object, args$scores)
     args$scores <- NULL
-
-    ORDERED <- vapply(object@x, is.ordered, NA)
-    lev <- lapply(object@x, levels)
-    for (i in which(ORDERED)) class(object@x[[i]]) <- "numeric"
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
@@ -929,7 +927,6 @@ maxstat_test.IndependenceProblem <- function(object,
         estimate <- levels(RET@statistic@x[[whichvar]][maxcontr > 0][, drop = TRUE])
     } else {
         estimate <- max(RET@statistic@x[[whichvar]][maxcontr > 0])
-        if (ORDERED[whichvar]) estimate <- lev[[whichvar]][estimate]
     }
     if (ncol(object@x) > 1) {
         estimate <- list(covariable = colnames(RET@statistic@x)[whichvar],

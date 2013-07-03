@@ -124,7 +124,7 @@ $cutpoint
 
 	Asymptotic Generalized Maximally Selected Statistics
 
-data:  w by z
+data:  w by z (1 < 2 < 3 < 4)
 maxT = 0.5222, p-value = 0.9125
 alternative hypothesis: two.sided
 sample estimates:
@@ -142,7 +142,7 @@ $cutpoint
 
 	Asymptotic Generalized Maximally Selected Statistics
 
-data:  w by x, y, z
+data:  w by x, y, z(ordered)
 maxT = 2.3738, p-value = 0.286
 alternative hypothesis: two.sided
 sample estimates:
@@ -179,4 +179,4 @@ $cutpoint
 > 
 > proc.time()
    user  system elapsed 
-   2.68    0.04    2.85 
+   2.71    0.09    2.90 

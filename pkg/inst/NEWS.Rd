@@ -123,6 +123,9 @@
 
       \item maximally selected statistics can now be computed for
       objects of class \code{"table"}
+
+      \item new function for maximally selected statistics
+      transformation of ordered factors (see \code{?ofmaxstat_trafo})
     }
   }
   \subsection{Bug fixes}{

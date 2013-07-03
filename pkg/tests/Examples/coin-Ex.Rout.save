@@ -915,13 +915,14 @@ $cutpoint
 
 	Asymptotic Generalized Maximally Selected Statistics
 
-data:  Job.Satisfaction (ordered) by Income 
+data:  Job.Satisfaction (ordered) by
+	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
 	 stratified by Gender
 maxT = 2.9983, p-value = 0.007662
 alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
-[1] "5000-15000"
+[1] "<5000"      "5000-15000"
 
 
 > 
@@ -1405,8 +1406,8 @@ alternative hypothesis: true mu is greater than 0
 > ### Title: Functions for Data Transformations
 > ### Aliases: trafo id_trafo rank_trafo normal_trafo median_trafo
 > ###   savage_trafo consal_trafo koziol_trafo ansari_trafo fligner_trafo
-> ###   logrank_trafo logrank_weight maxstat_trafo fmaxstat_trafo f_trafo
-> ###   of_trafo mcp_trafo
+> ###   logrank_trafo logrank_weight maxstat_trafo fmaxstat_trafo
+> ###   ofmaxstat_trafo f_trafo of_trafo mcp_trafo
 > ### Keywords: manip
 > 
 > ### ** Examples
@@ -2452,7 +2453,7 @@ $cutpoint
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  38.05 0.34 38.63 NA NA 
+Time elapsed:  37.51 0.32 38.32 NA NA 
 > grDevices::dev.off()
 null device 
           1 

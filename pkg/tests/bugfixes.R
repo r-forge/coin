@@ -400,10 +400,10 @@ fage <- factor(treepipit$age) # -> wrong estimates
 mt1 <- maxstat_test(counts ~ fage, data = treepipit,
                     scores = list(fage = 1:4))
 stopifnot(isequal(mt0@estimates$estimate$cutpoint,
-                  as.numeric(mt1@estimates$estimate$cutpoint)))
+                  max(as.numeric(mt1@estimates$estimate$cutpoint))))
 
 oage <- ordered(treepipit$age) # -> error: oage is not a factor
 mt2 <- maxstat_test(counts ~ oage, data = treepipit,
                     scores = list(oage = 1:4))
 stopifnot(isequal(mt0@estimates$estimate$cutpoint,
-                  as.numeric(mt2@estimates$estimate$cutpoint)))
+                  max(as.numeric(mt2@estimates$estimate$cutpoint))))

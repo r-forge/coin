@@ -13,6 +13,7 @@
 \alias{logrank_weight}
 \alias{maxstat_trafo}
 \alias{fmaxstat_trafo}
+\alias{ofmaxstat_trafo}
 \alias{f_trafo}
 \alias{of_trafo}
 \alias{mcp_trafo}
@@ -44,6 +45,7 @@ logrank_weight(time, n.risk, n.event,
                rho = NULL, gamma = NULL)
 maxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 fmaxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
+ofmaxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 f_trafo(x)
 of_trafo(x)
 mcp_trafo(\dots)

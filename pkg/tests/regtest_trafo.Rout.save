@@ -22,10 +22,6 @@ Type 'q()' to quit R.
 > library("coin")
 Loading required package: survival
 Loading required package: splines
-Loading required package: mvtnorm
-Loading required package: modeltools
-Loading required package: stats4
-Loading required package: multcomp
 > isequal <- coin:::isequal
 > 
 > 
@@ -368,7 +364,7 @@ attr(,"contrasts")$x
 4                 0                 0                 1
 5                 0                 0                 1
 6                 1                 1                 1
-> fmaxstat_trafo(x, maxprob = 0.4)
+> fmaxstat_trafo(x, maxprob = 1/3)
   {1} vs. {2, 3, 4}
 1                 1
 2                 1
@@ -379,7 +375,7 @@ attr(,"contrasts")$x
 7                 0
 8                NA
 9                 0
-> fmaxstat_trafo(x[cc], maxprob = 0.4)
+> fmaxstat_trafo(x[cc], maxprob = 1/3)
   {1} vs. {2, 3, 4}
 1                 1
 2                 1
@@ -387,6 +383,30 @@ attr(,"contrasts")$x
 4                 0
 5                 0
 6                 0
+> 
+> ofmaxstat_trafo(x)
+  {1} vs. {2, 3, 4} {1, 2} vs. {3, 4} {1, 2, 3} vs. {4}
+1                 1                 1                 1
+2                 1                 1                 1
+3                NA                NA                NA
+4                 0                 1                 1
+5                NA                NA                NA
+6                 0                 0                 1
+7                 0                 0                 1
+8                NA                NA                NA
+9                 0                 0                 0
+> ofmaxstat_trafo(x[cc])
+  {1} vs. {2, 3, 4} {1, 2} vs. {3, 4} {1, 2, 3} vs. {4}
+1                 1                 1                 1
+2                 1                 1                 1
+3                 0                 1                 1
+4                 0                 0                 1
+5                 0                 0                 1
+6                 0                 0                 0
+> ofmaxstat_trafo(x, maxprob = 1/3)
+NULL
+> ofmaxstat_trafo(x[cc], maxprob = 1/3)
+NULL
 > 
 > mcp_trafo(x = "Tukey")(data.frame(x))
   2 - 1 3 - 1 4 - 1 3 - 2 4 - 2 4 - 3
@@ -505,7 +525,7 @@ attr(,"contrasts")$x
 3              0              1              0
 4              0              0              1
 5              0              0              1
-> fmaxstat_trafo(x, maxprob = 0.4)
+> fmaxstat_trafo(x, maxprob = 1/2)
   {1} vs. {2, 3}
 1              1
 2              1
@@ -516,7 +536,44 @@ attr(,"contrasts")$x
 7              0
 8             NA
 9             NA
-> fmaxstat_trafo(x[cc], maxprob = 0.4)
+> fmaxstat_trafo(x[cc], maxprob = 1/2)
+  {1} vs. {2, 3}
+1              1
+2              1
+3              0
+4              0
+5              0
+> 
+> ofmaxstat_trafo(x)
+  {1} vs. {2, 3} {1, 2} vs. {3}
+1              1              1
+2              1              1
+3             NA             NA
+4              0              1
+5             NA             NA
+6              0              0
+7              0              0
+8             NA             NA
+9             NA             NA
+> ofmaxstat_trafo(x[cc])
+  {1} vs. {2, 3} {1, 2} vs. {3}
+1              1              1
+2              1              1
+3              0              1
+4              0              0
+5              0              0
+> ofmaxstat_trafo(x, maxprob = 1/2)
+  {1} vs. {2, 3}
+1              1
+2              1
+3             NA
+4              0
+5             NA
+6              0
+7              0
+8             NA
+9             NA
+> ofmaxstat_trafo(x[cc], maxprob = 1/2)
   {1} vs. {2, 3}
 1              1
 2              1
@@ -671,4 +728,4 @@ attr(,"contrast")
 > 
 > proc.time()
    user  system elapsed 
-   0.73    0.12    0.90 
+   0.67    0.07    0.84 

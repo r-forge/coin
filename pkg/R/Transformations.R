@@ -156,6 +156,38 @@ maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
     cm
 }
 
+ofmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
+    x <- ordered(x) # drop unused levels
+    lx <- levels(x)
+    x <- as.numeric(x)
+
+    qx <- quantile(x, probs = c(minprob, maxprob), na.rm = TRUE, type = 1)
+    if (diff(qx) < .Machine$double.eps)
+        return(NULL)
+    ux <- sort(unique(x))
+    ux <- ux[ux < max(x, na.rm = TRUE)]
+    if (mean(x <= qx[2], na.rm = TRUE) <= maxprob) {
+        cutpoints <- ux[ux >= qx[1] & ux <= qx[2]]
+    } else {
+        cutpoints <- ux[ux >= qx[1] & ux < qx[2]]
+    }
+
+    cm <- .Call("R_maxstattrafo", as.double(x), as.double(cutpoints),
+                PACKAGE = "coin")
+
+    n <- ncol(cm)
+    cn <- vector(mode = "character", length = n)
+    for (i in 1:n) {
+        idx <- 1:cutpoints[i]
+        cn[i] <- paste0("{", paste0(lx[idx], collapse = ", "), "} vs. {",
+                        paste0(lx[-idx], collapse = ", "), "}")
+    }
+
+    dimnames(cm) <- list(1:nrow(cm), cn)
+    cm[is.na(x)] <- NA
+    cm
+}
+
 ### compute index matrix of all 2^(nlevel - 1) possible splits
 ### code translated from package `tree'
 fsplits <- function(nlevel) {

@@ -115,8 +115,13 @@ of_trafo(x[cc])
 
 fmaxstat_trafo(x)
 fmaxstat_trafo(x[cc])
-fmaxstat_trafo(x, maxprob = 0.4)
-fmaxstat_trafo(x[cc], maxprob = 0.4)
+fmaxstat_trafo(x, maxprob = 1/3)
+fmaxstat_trafo(x[cc], maxprob = 1/3)
+
+ofmaxstat_trafo(x)
+ofmaxstat_trafo(x[cc])
+ofmaxstat_trafo(x, maxprob = 1/3)
+ofmaxstat_trafo(x[cc], maxprob = 1/3)
 
 mcp_trafo(x = "Tukey")(data.frame(x))
 mcp_trafo(x = "Tukey")(data.frame(x = x[cc]))
@@ -132,8 +137,13 @@ of_trafo(x[cc])
 
 fmaxstat_trafo(x)
 fmaxstat_trafo(x[cc])
-fmaxstat_trafo(x, maxprob = 0.4)
-fmaxstat_trafo(x[cc], maxprob = 0.4)
+fmaxstat_trafo(x, maxprob = 1/2)
+fmaxstat_trafo(x[cc], maxprob = 1/2)
+
+ofmaxstat_trafo(x)
+ofmaxstat_trafo(x[cc])
+ofmaxstat_trafo(x, maxprob = 1/2)
+ofmaxstat_trafo(x[cc], maxprob = 1/2)
 
 mcp_trafo(x = "Tukey")(data.frame(x))
 mcp_trafo(x = "Tukey")(data.frame(x = x[cc]))
