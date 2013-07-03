@@ -938,7 +938,7 @@ maxstat_test.IndependenceProblem <- function(object,
         estimate <- list(cutpoint = estimate)
     }
     RET@estimates <- list(estimate = estimate)
-    RET@method <- "Maxstat Test"
+    RET@method <- "Generalized Maximally Selected Statistics"
 
     return(RET)
 }

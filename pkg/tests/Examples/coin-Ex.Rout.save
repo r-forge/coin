@@ -44,7 +44,7 @@ Loading required package: splines
 +                sample6 + sample7 + sample8 ~ trend, data = CWD,
 +                distribution = approximate(1e5))
 
-	Approximative Maxstat Test
+	Approximative Generalized Maximally Selected Statistics
 
 data:  sample2, sample3, sample4, sample6, sample7, sample8 by trend
 maxT = 3.0793, p-value = 0.0082
@@ -834,7 +834,7 @@ alternative hypothesis: two.sided
 >   ### analysis of the tree pipit data in Mueller and Hothorn (2004)
 >   maxstat_test(counts ~ coverstorey, data = treepipit)
 
-	Asymptotic Maxstat Test
+	Asymptotic Generalized Maximally Selected Statistics
 
 data:  counts by coverstorey
 maxT = 4.3139, p-value = 0.0001796
@@ -865,7 +865,7 @@ $estimate$cutpoint
 +                    trafo(data, surv_trafo = function(y)
 +                        logrank_trafo(y, ties.method = "Hothorn-Lausen")))
 
-	Asymptotic Maxstat Test
+	Asymptotic Generalized Maximally Selected Statistics
 
 data:  Surv(time, event) by EF
 maxT = 3.5691, p-value = 0.004286
@@ -881,7 +881,7 @@ $cutpoint
 +                    trafo(data, surv_trafo = function(y)
 +                        logrank_trafo(y, ties.method = "Hothorn-Lausen")))
 
-	Asymptotic Maxstat Test
+	Asymptotic Generalized Maximally Selected Statistics
 
 data:  Surv(RFS, event) by SPF
 maxT = 2.4033, p-value = 0.1555
@@ -896,7 +896,7 @@ $cutpoint
 >   ### analysis of the jobsatisfaction data
 >   maxstat_test(jobsatisfaction)
 
-	Asymptotic Maxstat Test
+	Asymptotic Generalized Maximally Selected Statistics
 
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000) 
@@ -913,7 +913,7 @@ $cutpoint
 >   maxstat_test(jobsatisfaction, scores = list(Job.Satisfaction = 1:4,
 +                                               Income = 1:4))
 
-	Asymptotic Maxstat Test
+	Asymptotic Generalized Maximally Selected Statistics
 
 data:  Job.Satisfaction (ordered) by Income 
 	 stratified by Gender
@@ -1876,7 +1876,7 @@ alternative hypothesis: true theta is not equal to 1
 > 
 >   maxstat_test(Surv(time, event) ~ EF, data = hohnloser)
 
-	Asymptotic Maxstat Test
+	Asymptotic Generalized Maximally Selected Statistics
 
 data:  Surv(time, event) by EF
 maxT = 3.5647, p-value = 0.004554
@@ -2323,7 +2323,7 @@ alternative hypothesis: true mu is not equal to 0
 > 
 >   maxstat_test(Surv(RFS, event) ~ SPF, data = sphase)
 
-	Asymptotic Maxstat Test
+	Asymptotic Generalized Maximally Selected Statistics
 
 data:  Surv(RFS, event) by SPF
 maxT = 2.3966, p-value = 0.1588
@@ -2340,7 +2340,7 @@ $cutpoint
 +                    trafo(data, surv_trafo = function(y)
 +                        logrank_trafo(y, ties.method = "Hothorn-Lausen")))
 
-	Asymptotic Maxstat Test
+	Asymptotic Generalized Maximally Selected Statistics
 
 data:  Surv(RFS, event) by SPF
 maxT = 2.4033, p-value = 0.1562
@@ -2430,7 +2430,7 @@ $cutpoint
 +                         coniferous + deadtree + cbpiles + ivytree,
 +                data = treepipit)
 
-	Asymptotic Maxstat Test
+	Asymptotic Generalized Maximally Selected Statistics
 
 data:  counts by
 	 age, coverstorey, coverregen, meanregen, coniferous, deadtree, cbpiles, ivytree
@@ -2452,7 +2452,7 @@ $cutpoint
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  37.28 0.21 37.98 NA NA 
+Time elapsed:  38.05 0.34 38.63 NA NA 
 > grDevices::dev.off()
 null device 
           1 

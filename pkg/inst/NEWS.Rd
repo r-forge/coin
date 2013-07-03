@@ -239,8 +239,9 @@
       to 10000 (see \code{?approximate})
 
       \item small changes in the printed output of the
-      Wilcoxon-Mann-Whitney test, the marginal homogeneity test and the
-      Wilcoxon signed-rank test
+      Wilcoxon-Mann-Whitney test, the marginal homogeneity test, the
+      Wilcoxon signed-rank test, and generalized maximally selected
+      statistics
 
       \item \code{wilcoxsign_test.IndependenceProblem()} has been
       replaced by \code{wilcoxsign_test.SymmetryProblem()}
