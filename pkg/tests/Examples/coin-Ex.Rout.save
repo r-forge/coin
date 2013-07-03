@@ -824,7 +824,7 @@ alternative hypothesis: two.sided
 > 
 > ### Name: MaxstatTest
 > ### Title: Maximally Selected Statistics
-> ### Aliases: maxstat_test maxstat_test.formula
+> ### Aliases: maxstat_test maxstat_test.formula maxstat_test.table
 > ###   maxstat_test.IndependenceProblem
 > ### Keywords: htest
 > 
@@ -847,32 +847,19 @@ $cutpoint
 > 
 >   ### and for all possible covariates (simultaneously)
 >   mt <- maxstat_test(counts ~ ., data = treepipit)
->   show(mt)$estimate
-
-	Asymptotic Maxstat Test
-
-data:  counts by
-	 age, coverstorey, coverregen, meanregen, coniferous, deadtree, cbpiles, ivytree, fdist
-maxT = 4.5486, p-value = 0.0002415
-alternative hypothesis: two.sided
-sample estimates:
-$covariable
+>   mt@estimates
+$estimate
+$estimate$covariable
 [1] "fdist"
 
-$cutpoint
+$estimate$cutpoint
 [1] 280
 
 
-$covariable
-[1] "fdist"
-
-$cutpoint
-[1] 280
-
+> 
 > 
 >   ### reproduce applications in Sections 7.2 and 7.3
 >   ### of Hothorn & Lausen (2003) with limiting distribution
-> 
 >   maxstat_test(Surv(time, event) ~  EF, data = hohnloser,
 +                ytrafo = function(data)
 +                    trafo(data, surv_trafo = function(y)
@@ -881,7 +868,7 @@ $cutpoint
 	Asymptotic Maxstat Test
 
 data:  Surv(time, event) by EF
-maxT = 3.5691, p-value = 0.004179
+maxT = 3.5691, p-value = 0.004286
 alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
@@ -897,7 +884,7 @@ $cutpoint
 	Asymptotic Maxstat Test
 
 data:  Surv(RFS, event) by SPF
-maxT = 2.4033, p-value = 0.1565
+maxT = 2.4033, p-value = 0.1555
 alternative hypothesis: two.sided
 sample estimates:
 $cutpoint
@@ -905,6 +892,38 @@ $cutpoint
 
 
 > 
+> 
+>   ### analysis of the jobsatisfaction data
+>   maxstat_test(jobsatisfaction)
+
+	Asymptotic Maxstat Test
+
+data:  Job.Satisfaction by
+	 Income (<5000, 5000-15000, 15000-25000, >25000) 
+	 stratified by Gender
+maxT = 2.3349, p-value = 0.2993
+alternative hypothesis: two.sided
+sample estimates:
+$cutpoint
+[1] "<5000"      "5000-15000"
+
+
+> 
+>   ### and treating both Income and Job.Satisfaction as ordered factors
+>   maxstat_test(jobsatisfaction, scores = list(Job.Satisfaction = 1:4,
++                                               Income = 1:4))
+
+	Asymptotic Maxstat Test
+
+data:  Job.Satisfaction (ordered) by Income 
+	 stratified by Gender
+maxT = 2.9983, p-value = 0.007662
+alternative hypothesis: two.sided
+sample estimates:
+$cutpoint
+[1] "5000-15000"
+
+
 > 
 > 
 > 
@@ -2433,7 +2452,7 @@ $cutpoint
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  37.44 0.16 37.91 NA NA 
+Time elapsed:  37.28 0.21 37.98 NA NA 
 > grDevices::dev.off()
 null device 
           1 

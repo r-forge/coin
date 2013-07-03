@@ -1,47 +1,51 @@
 \name{MaxstatTest}
 \alias{maxstat_test}
 \alias{maxstat_test.formula}
+\alias{maxstat_test.table}
 \alias{maxstat_test.IndependenceProblem}
+
 \title{ Maximally Selected Statistics }
+
 \description{
-  Testing the independence of a set of ordered or numeric covariates and
-  a response of arbitrary measurement scale against cutpoint
-  alternatives.
+  Testing the independence of a set of nominal, ordered and numeric
+  covariates and a response on arbitrary measurement scale against
+  cutpoint alternatives.
 }
 \usage{
 \method{maxstat_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{maxstat_test}{table}(object, \dots)
 \method{maxstat_test}{IndependenceProblem}(object,
-    distribution = c("asymptotic", "approximate"),
     teststat = c("max", "quad"),
-    minprob = 0.1, maxprob = 1 - minprob, ...)
+    distribution = c("asymptotic", "approximate"),
+    minprob = 0.1, maxprob = 1 - minprob, \dots)
 }
 \arguments{
-  \item{formula}{a formula of the form \code{y ~ x1 + ... + xp | block} where \code{y}
-    and covariates \code{x1} to \code{xp} can be variables measured at arbitrary scales;
-    \code{block} is an optional factor for stratification.}
+  \item{formula}{a formula of the form \code{y ~ x1 + ... + xp | block}
+    where \code{y} and covariates \code{x1} to \code{xp} can be
+    variables measured on arbitrary scales; \code{block} is an optional
+    factor for stratification.}
   \item{data}{an optional data frame containing the variables in the
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
   \item{weights}{an optional formula of the form \code{~ w} defining
     integer valued weights for the observations.}
-  \item{object}{an object inheriting from class \code{IndependenceProblem}.}
-  \item{distribution}{a character, the null distribution of the test statistic
-    can be approximated by its asymptotic distribution (\code{asymptotic})
-    or via Monte-Carlo resampling (\code{approximate}).
-    Alternatively, the functions
-    \code{\link{approximate}} or \code{\link{asymptotic}} can be
-    used to specify how the exact conditional distribution of the test statistic
+  \item{object}{an object inheriting from class
+    \code{"IndependenceProblem"} or an object of class \code{"table"}.}
+  \item{teststat}{a character, the type of test statistic to be applied:
+    a maximum type statistic (\code{"max"}, default) or a quadratic form
+    (\code{"quad"}).}
+  \item{distribution}{a character, the null distribution of the test
+    statistic can be approximated by its asymptotic distribution
+    (\code{"asymptotic"}, default) or via Monte Carlo resampling
+    (\code{"approximate"}).  Alternatively, the functions
+    \code{\link{asymptotic}} or \code{\link{approximate}} can be used to
+    specify how the exact conditional distribution of the test statistic
     should be calculated or approximated.}
-  \item{teststat}{a character, the type of test statistic to be applied: a
-    maximum type statistic (\code{max}) or a quadratic form
-    (\code{quad}).}
-  \item{minprob}{a fraction between 0 and 0.5;
-    consider only cutpoints greater than
-    the \code{minprob} * 100 \% quantile of \code{x}.}
-  \item{maxprob}{a fraction between 0.5 and 1;
-    consider only cutpoints smaller than
-    the \code{maxprob} * 100 \% quantile of \code{x}.}
+  \item{minprob}{a fraction between 0 and 0.5; consider only cutpoints
+    greater than the \code{minprob * 100} \% quantile of \code{x}.}
+  \item{maxprob}{a fraction between 0.5 and 1; consider only cutpoints
+    smaller than the \code{maxprob * 100} \% quantile of \code{x}.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
@@ -101,11 +105,11 @@
 
   ### and for all possible covariates (simultaneously)
   mt <- maxstat_test(counts ~ ., data = treepipit)
-  show(mt)$estimate
+  mt@estimates
+
 
   ### reproduce applications in Sections 7.2 and 7.3
   ### of Hothorn & Lausen (2003) with limiting distribution
-
   maxstat_test(Surv(time, event) ~  EF, data = hohnloser,
                ytrafo = function(data)
                    trafo(data, surv_trafo = function(y)
@@ -116,5 +120,12 @@
                    trafo(data, surv_trafo = function(y)
                        logrank_trafo(y, ties.method = "Hothorn-Lausen")))
 
+
+  ### analysis of the jobsatisfaction data
+  maxstat_test(jobsatisfaction)
+
+  ### and treating both Income and Job.Satisfaction as ordered factors
+  maxstat_test(jobsatisfaction, scores = list(Job.Satisfaction = 1:4,
+                                              Income = 1:4))
 }
 \keyword{htest}

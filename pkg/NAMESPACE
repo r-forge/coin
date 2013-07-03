@@ -84,6 +84,7 @@ S3method(koziol_test, formula)
 S3method(koziol_test, IndependenceProblem)
 
 S3method(maxstat_test, formula)
+S3method(maxstat_test, table)
 S3method(maxstat_test, IndependenceProblem)
 
 S3method(chisq_test, formula)

@@ -884,14 +884,21 @@ maxstat_test.formula <- function(formula, data = list(), subset = NULL,
        frame = parent.frame(), ...)
 }
 
+maxstat_test.table <- function(object, ...) {
+
+    ip <- table2IndependenceProblem(object)
+    RET <- do.call("maxstat_test", c(list(object = ip), list(...)))
+    return(RET)
+}
+
 maxstat_test.IndependenceProblem <- function(object,
-    distribution = c("asymptotic", "approximate"),
     teststat = c("max", "quad"),
+    distribution = c("asymptotic", "approximate"),
     minprob = 0.1, maxprob = 1 - minprob, ...) {
 
+    teststat <- match.arg(teststat)
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
-    teststat <- match.arg(teststat)
 
     xtrafo <- function(data)
         trafo(data,

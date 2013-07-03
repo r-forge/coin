@@ -120,6 +120,9 @@
 
       \item the sign test for paired data is now available (see
       \code{?sign_test})
+
+      \item maximally selected statistics can now be computed for
+      objects of class \code{"table"}
     }
   }
   \subsection{Bug fixes}{
