@@ -225,3 +225,9 @@ print.MCp <- function(x, ...) {
     class(ci) <- "ci"
     print(ci)
 }
+
+print.cutpoint <- function(x, ...) {
+    cat(paste0("  ", dQuote("best"), " cutpoint: ", x$label, "\n"))
+    if (!is.null(x$covariable))
+        cat(paste0("       covariable: ", x$covariable, "\n"))
+}

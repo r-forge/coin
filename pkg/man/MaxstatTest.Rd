@@ -99,13 +99,13 @@
 
 }
 \examples{
-
+  \dontshow{options(useFancyQuotes = FALSE)}
   ### analysis of the tree pipit data in Mueller and Hothorn (2004)
   maxstat_test(counts ~ coverstorey, data = treepipit)
 
   ### and for all possible covariates (simultaneously)
   mt <- maxstat_test(counts ~ ., data = treepipit)
-  mt@estimates
+  mt@estimates$estimate
 
 
   ### reproduce applications in Sections 7.2 and 7.3

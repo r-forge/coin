@@ -174,16 +174,13 @@ ofmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
 
     cm <- .Call("R_maxstattrafo", as.double(x), as.double(cutpoints),
                 PACKAGE = "coin")
-
-    n <- ncol(cm)
-    cn <- vector(mode = "character", length = n)
-    for (i in 1:n) {
-        idx <- 1:cutpoints[i]
-        cn[i] <- paste0("{", paste0(lx[idx], collapse = ", "), "} vs. {",
-                        paste0(lx[-idx], collapse = ", "), "}")
-    }
-
-    dimnames(cm) <- list(1:nrow(cm), cn)
+    dimnames(cm) <- list(seq_len(nrow(cm)),
+                         lapply(seq_len(ncol(cm)), function(i) {
+                             idx <- seq_len(i)
+                             paste0("{", paste0(lx[idx], collapse = ", "),
+                                    "} vs. {",
+                                    paste0(lx[-idx], collapse = ", "), "}")
+                         }))
     cm[is.na(x)] <- NA
     cm
 }

@@ -50,9 +50,7 @@ data:  sample2, sample3, sample4, sample6, sample7, sample8 by trend
 maxT = 3.0793, p-value = 0.0082
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] 71
-
+  "best" cutpoint: <= 71
 
 > 
 > 
@@ -830,7 +828,9 @@ alternative hypothesis: two.sided
 > 
 > ### ** Examples
 > 
-> 
+>   ## Don't show: 
+> options(useFancyQuotes = FALSE)
+> ## End Don't show
 >   ### analysis of the tree pipit data in Mueller and Hothorn (2004)
 >   maxstat_test(counts ~ coverstorey, data = treepipit)
 
@@ -840,22 +840,14 @@ data:  counts by coverstorey
 maxT = 4.3139, p-value = 0.0001796
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] 40
-
+  "best" cutpoint: <= 40
 
 > 
 >   ### and for all possible covariates (simultaneously)
 >   mt <- maxstat_test(counts ~ ., data = treepipit)
->   mt@estimates
-$estimate
-$estimate$covariable
-[1] "fdist"
-
-$estimate$cutpoint
-[1] 280
-
-
+>   mt@estimates$estimate
+  "best" cutpoint: <= 280
+       covariable: fdist
 > 
 > 
 >   ### reproduce applications in Sections 7.2 and 7.3
@@ -871,9 +863,7 @@ data:  Surv(time, event) by EF
 maxT = 3.5691, p-value = 0.004286
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] 39
-
+  "best" cutpoint: <= 39
 
 > 
 >   maxstat_test(Surv(RFS, event) ~  SPF, data = sphase,
@@ -887,9 +877,7 @@ data:  Surv(RFS, event) by SPF
 maxT = 2.4033, p-value = 0.1555
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] 107
-
+  "best" cutpoint: <= 107
 
 > 
 > 
@@ -904,9 +892,7 @@ data:  Job.Satisfaction by
 maxT = 2.3349, p-value = 0.2993
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] "<5000"      "5000-15000"
-
+  "best" cutpoint: {<5000, 5000-15000} vs. {15000-25000, >25000}
 
 > 
 >   ### and treating both Income and Job.Satisfaction as ordered factors
@@ -921,9 +907,7 @@ data:  Job.Satisfaction (ordered) by
 maxT = 2.9983, p-value = 0.007662
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] "<5000"      "5000-15000"
-
+  "best" cutpoint: {<5000, 5000-15000} vs. {15000-25000, >25000}
 
 > 
 > 
@@ -1883,9 +1867,7 @@ data:  Surv(time, event) by EF
 maxT = 3.5647, p-value = 0.004554
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] 39
-
+  "best" cutpoint: <= 39
 
 > 
 > 
@@ -2330,9 +2312,7 @@ data:  Surv(RFS, event) by SPF
 maxT = 2.3966, p-value = 0.1588
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] 107
-
+  "best" cutpoint: <= 107
 
 > 
 >   ### reproduce the test statistic reported in Hothorn & Lausen (2003)
@@ -2347,9 +2327,7 @@ data:  Surv(RFS, event) by SPF
 maxT = 2.4033, p-value = 0.1562
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] 107
-
+  "best" cutpoint: <= 107
 
 > 
 > 
@@ -2438,12 +2416,8 @@ data:  counts by
 maxT = 4.3139, p-value = 0.0006596
 alternative hypothesis: two.sided
 sample estimates:
-$covariable
-[1] "coverstorey"
-
-$cutpoint
-[1] 40
-
+  "best" cutpoint: <= 40
+       covariable: coverstorey
 
 > 
 > 
@@ -2453,7 +2427,7 @@ $cutpoint
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  37.51 0.32 38.32 NA NA 
+Time elapsed:  40.65 0.37 41.45 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -93,9 +93,7 @@ data:  w by x
 maxT = 2.3738, p-value = 0.184
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] 0.9060508
-
+  "best" cutpoint: <= 0.9060508
 
 > est <- mt@estimates$estimate$cutpoint
 > stopifnot(isequal(statistic(mt),
@@ -110,9 +108,7 @@ data:  w by y (1, 2, 3, 4)
 maxT = 0.7294, p-value = 0.8905
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] "1" "2" "3"
-
+  "best" cutpoint: {1, 2, 3} vs. {4}
 
 > est <- mt@estimates$estimate$cutpoint
 > xx <- dat$y %in% est
@@ -128,9 +124,7 @@ data:  w by z (1 < 2 < 3 < 4)
 maxT = 0.5222, p-value = 0.9125
 alternative hypothesis: two.sided
 sample estimates:
-$cutpoint
-[1] "1"
-
+  "best" cutpoint: {1} vs. {2, 3, 4}
 
 > est <- mt@estimates$estimate$cutpoint
 > xx <- dat$z <= est
@@ -146,12 +140,8 @@ data:  w by x, y, z(ordered)
 maxT = 2.3738, p-value = 0.286
 alternative hypothesis: two.sided
 sample estimates:
-$covariable
-[1] "x"
-
-$cutpoint
-[1] 0.9060508
-
+  "best" cutpoint: <= 0.9060508
+       covariable: x
 
 > est <- mt@estimates$estimate
 > xsel <- dat[[est[[1]]]]
@@ -179,4 +169,4 @@ $cutpoint
 > 
 > proc.time()
    user  system elapsed 
-   2.71    0.09    2.90 
+   2.69    0.09    2.88 

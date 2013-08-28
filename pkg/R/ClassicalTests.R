@@ -919,23 +919,28 @@ maxstat_test.IndependenceProblem <- function(object,
 
     RET <- do.call("independence_test", c(list(object = object), args))
 
+    RET@method <- "Generalized Maximally Selected Statistics"
+
     ## estimate cutpoint
     wm <- which.max(apply(abs(statistic(RET, "standardized")), 1, max))
     whichvar <- attr(RET@statistic@xtrans, "assign")[wm]
-    maxcontr <- RET@statistic@xtrans[,wm]
+    maxcontr <- RET@statistic@xtrans[, wm]
     if (is.factor(RET@statistic@x[[whichvar]])) {
-        estimate <- levels(RET@statistic@x[[whichvar]][maxcontr > 0][, drop = TRUE])
+        cp <- levels(RET@statistic@x[[whichvar]][maxcontr > 0][, drop = TRUE])
+        cp0 <- levels(RET@statistic@x[[whichvar]][maxcontr == 0][, drop = TRUE])
+        lab <- paste0("{", paste0(cp, collapse = ", "), "} vs. {",
+                      paste0(cp0, collapse = ", "), "}")
     } else {
-        estimate <- max(RET@statistic@x[[whichvar]][maxcontr > 0])
+        cp <- max(RET@statistic@x[[whichvar]][maxcontr > 0])
+        lab <- paste0("<= ", format(cp, digits = getOption("digits")))
     }
-    if (ncol(object@x) > 1) {
+    if (ncol(object@x) > 1)
         estimate <- list(covariable = colnames(RET@statistic@x)[whichvar],
-                         cutpoint = estimate)
-    } else {
-        estimate <- list(cutpoint = estimate)
-    }
+                         cutpoint = cp, label = lab)
+    else
+        estimate <- list(cutpoint = cp, label = lab)
+    class(estimate) <- c("list", "cutpoint")
     RET@estimates <- list(estimate = estimate)
-    RET@method <- "Generalized Maximally Selected Statistics"
 
     return(RET)
 }
