@@ -8,33 +8,33 @@ inference procedures, commonly known as \emph{permutation tests},
 theoretically derived by Strasser & Weber (1999). The conditional
 expectation and covariance for a broad class of multivariate linear
 statistics as well as the corresponding multivariate limiting distribution
-was derived by Strasser & Weber (1999). These results are 
-utilized to construct tests for independence between two sets of variables. 
+was derived by Strasser & Weber (1999). These results are
+utilized to construct tests for independence between two sets of variables.
 
 Beside a general implementation of the abstract framework the package offers
 a rather huge set of convenience functions implementing well known classical
-as well as less prominent classical and non-classical test procedures 
+as well as less prominent classical and non-classical test procedures
 in a conditional inference framework. Examples are linear rank statistics for
 the two- and K-sample location and scale problem against ordered and
 unordered alternatives including post-hoc tests for arbitrary contrasts,
 tests of independence for contingency tables, two- and K-sample tests for
-censored data, tests for independence of two continuous variables as well as 
-tests for marginal homogeneity and symmetry. Conditional counterparts of 
+censored data, tests for independence of two continuous variables as well as
+tests for marginal homogeneity and symmetry. Conditional counterparts of
 most of the classical procedures
 given in famous text books like Hollander & Wolfe (1999) or Agresti (2002)
 can be implemented as part of the general framework without much effort.
-Approximations of the exact null distribution via the limiting distribution and 
-conditional Monte-Carlo procedures are available for every test while the 
-exact null distribution is currently available for two-sample problems only. 
+Approximations of the exact null distribution via the limiting distribution and
+conditional Monte-Carlo procedures are available for every test while the
+exact null distribution is currently available for two-sample problems only.
 
 }
 \author{
 
     This package is written by \cr
-    Torsten Hothorn <Torsten.Hothorn@R-project.org>, \cr 
+    Torsten Hothorn <Torsten.Hothorn@R-project.org>, \cr
     Kurt Hornik <Kurt.Hornik@R-project.org>, \cr
     Mark van de Wiel <m.a.v.d.wiel@TUE.nl>, \cr
-    Henric Winell <henric.winell@icm.uu.se> and \cr
+    Henric Winell <henric.winell@ki.se> and \cr
     Achim Zeileis <Achim.Zeileis@R-project.org>.
 
 }
@@ -42,7 +42,7 @@ exact null distribution is currently available for two-sample problems only.
 
     Helmut Strasser & Christian Weber (1999).
     On the asymptotic theory of permutation statistics,
-    \emph{Mathematical Methods of Statistics} \bold{8}, 220--250.  
+    \emph{Mathematical Methods of Statistics} \bold{8}, 220--250.
 
     Myles Hollander & Douglas A. Wolfe (1999).
     \emph{Nonparametric Statistical Methods, 2nd Edition}.
