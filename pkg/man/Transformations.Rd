@@ -47,7 +47,7 @@ maxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 fmaxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 ofmaxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 f_trafo(x)
-of_trafo(x)
+of_trafo(x, scores = NULL)
 mcp_trafo(\dots)
 }
 \arguments{
@@ -105,6 +105,8 @@ mcp_trafo(\dots)
     \code{"Fleming-Harrington"} or \code{"Self"}.  Defaults to 0.}
   \item{minprob}{a fraction between 0 and 0.5.}
   \item{maxprob}{a fraction between 0.5 and 1.}
+  \item{scores}{a numeric vector, the scores corresponding to each level
+    of an ordered factor.  Defaults to \code{1:nlevels(x)}.}
   \item{\dots}{
     \code{logrank_trafo}: further arguments to be passed to
     \code{weight}.

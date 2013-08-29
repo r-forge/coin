@@ -377,9 +377,16 @@ f_trafo <- function(x) {
 }
 
 ### ordered factors
-of_trafo <- function(x) {
-    scores <- attr(x, "scores")
-    if (is.null(scores)) scores <- 1:nlevels(x)
+of_trafo <- function(x, scores = NULL) {
+    s <- attr(x, "scores")
+    scores <- if (!is.null(s))
+                  s
+              else if (is.null(scores))
+                  seq_len(nlevels(x))
+              else if (length(scores) == nlevels(x))
+                  scores
+              else
+                  stop(sQuote("scores"), " does not match the number of levels")
     return(matrix(scores[x], ncol = 1))
 }
 

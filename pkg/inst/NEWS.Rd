@@ -126,6 +126,10 @@
 
       \item new function for maximally selected statistics
       transformation of ordered factors (see \code{?ofmaxstat_trafo})
+
+      \item the transformation function for ordered factors has gained a
+      new argument \code{scores} that provides an alternative way of
+      attaching scores to ordinal variables (see \code{?of_trafo})
     }
   }
   \subsection{Bug fixes}{

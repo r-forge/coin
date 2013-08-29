@@ -112,6 +112,8 @@ f_trafo(x[cc])
 
 of_trafo(x)
 of_trafo(x[cc])
+of_trafo(x, scores = 5:8)
+of_trafo(x[cc], scores = 5:8)
 
 fmaxstat_trafo(x)
 fmaxstat_trafo(x[cc])
@@ -134,6 +136,8 @@ f_trafo(x[cc])
 
 of_trafo(x)
 of_trafo(x[cc])
+of_trafo(x, scores = 5:8)
+of_trafo(x[cc], scores = 5:8)
 
 fmaxstat_trafo(x)
 fmaxstat_trafo(x[cc])
