@@ -1,11 +1,13 @@
 
-R version 3.0.1 Patched (2013-06-25 r63044) -- "Good Sport"
+R Under development (unstable) (2013-08-28 r63747) -- "Unsuffered Consequences"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -656,33 +658,32 @@ IV - III 0.9999333333
 > 
 > 
 >   ### Jonckheere-Terpstra test for ordered groups
->   if (require("multcomp")) {
-+       control <- c(40, 35, 38, 43, 44, 41)
-+       rough <- c(38, 40, 47, 44, 40, 42)
-+       accurate <- c(48, 40, 45, 43, 46, 44)
-+ 
-+       pieces <- list(control, rough, accurate)
-+       n <- c(6, 6, 6)
-+       grp <- as.ordered(factor(rep(1:length(n), n)))
-+ 
-+       (y <- unlist(pieces))
-+       k <- length(pieces)
-+       (x <- as.ordered(factor(rep(1:k, n))))
-+ 
-+       ## look at K. The second line just sums up.
-+       ff <- function(x) {
-+           K <- contrMat(table(x), "Tukey")[, x]
-+           as.vector(rep(1, nrow(K)) %*% K)
-+       }
-+ 
-+       it <- independence_test(y ~ x,
-+           ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
-+           xtrafo = function(data) trafo(data, ordered_trafo = ff),
-+           alternative = "greater")
-+       it
+>   control <- c(40, 35, 38, 43, 44, 41)
+>   rough <- c(38, 40, 47, 44, 40, 42)
+>   accurate <- c(48, 40, 45, 43, 46, 44)
+> 
+>   pieces <- list(control, rough, accurate)
+>   n <- c(6, 6, 6)
+>   grp <- as.ordered(factor(rep(1:length(n), n)))
+> 
+>   (y <- unlist(pieces))
+ [1] 40 35 38 43 44 41 38 40 47 44 40 42 48 40 45 43 46 44
+>   k <- length(pieces)
+>   (x <- as.ordered(factor(rep(1:k, n))))
+ [1] 1 1 1 1 1 1 2 2 2 2 2 2 3 3 3 3 3 3
+Levels: 1 < 2 < 3
+> 
+>   ## look at K. The second line just sums up.
+>   ff <- function(x) {
++       K <- multcomp::contrMat(table(x), "Tukey")[, x]
++       as.vector(rep(1, nrow(K)) %*% K)
 +   }
-Loading required package: multcomp
-Loading required package: mvtnorm
+> 
+>   it <- independence_test(y ~ x,
++       ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
++       xtrafo = function(data) trafo(data, ordered_trafo = ff),
++       alternative = "greater")
+>   it
 
 	Asymptotic General Independence Test
 
@@ -693,11 +694,7 @@ alternative hypothesis: greater
 > 
 > 
 > 
-> 
 > cleanEx()
-
-detaching 'package:multcomp', 'package:mvtnorm'
-
 > nameEx("MarginalHomogeneityTest")
 > ### * MarginalHomogeneityTest
 > 
@@ -2427,7 +2424,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  40.65 0.37 41.45 NA NA 
+Time elapsed:  38.76 0.21 39.25 NA NA 
 > grDevices::dev.off()
 null device 
           1 

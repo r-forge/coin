@@ -296,31 +296,28 @@
 
 
   ### Jonckheere-Terpstra test for ordered groups
-  if (require("multcomp")) {
-      control <- c(40, 35, 38, 43, 44, 41)
-      rough <- c(38, 40, 47, 44, 40, 42)
-      accurate <- c(48, 40, 45, 43, 46, 44)
+  control <- c(40, 35, 38, 43, 44, 41)
+  rough <- c(38, 40, 47, 44, 40, 42)
+  accurate <- c(48, 40, 45, 43, 46, 44)
 
-      pieces <- list(control, rough, accurate)
-      n <- c(6, 6, 6)
-      grp <- as.ordered(factor(rep(1:length(n), n)))
+  pieces <- list(control, rough, accurate)
+  n <- c(6, 6, 6)
+  grp <- as.ordered(factor(rep(1:length(n), n)))
 
-      (y <- unlist(pieces))
-      k <- length(pieces)
-      (x <- as.ordered(factor(rep(1:k, n))))
+  (y <- unlist(pieces))
+  k <- length(pieces)
+  (x <- as.ordered(factor(rep(1:k, n))))
 
-      ## look at K. The second line just sums up.
-      ff <- function(x) {
-          K <- contrMat(table(x), "Tukey")[, x]
-          as.vector(rep(1, nrow(K)) \%*\% K)
-      }
-
-      it <- independence_test(y ~ x,
-          ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
-          xtrafo = function(data) trafo(data, ordered_trafo = ff),
-          alternative = "greater")
-      it
+  ## look at K. The second line just sums up.
+  ff <- function(x) {
+      K <- multcomp::contrMat(table(x), "Tukey")[, x]
+      as.vector(rep(1, nrow(K)) \%*\% K)
   }
 
+  it <- independence_test(y ~ x,
+      ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
+      xtrafo = function(data) trafo(data, ordered_trafo = ff),
+      alternative = "greater")
+  it
 }
 \keyword{htest}

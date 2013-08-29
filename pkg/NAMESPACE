@@ -1,7 +1,10 @@
+useDynLib(coin)
+
+import("methods")
+importFrom("survival", is.Surv)
 importFrom("modeltools", ModelEnvFormula, has, na.omit)
 importFrom("mvtnorm", dmvnorm, pmvnorm, qmvnorm)
 importFrom("multcomp", contrMat)
-importFrom("survival", is.Surv)
 
 export(independence_test,
        symmetry_test,
@@ -105,5 +108,3 @@ S3method(confint, ScalarIndependenceTestConfint)
 S3method(print, ci)
 S3method(print, MCp)
 S3method(print, cutpoint)
-
-useDynLib(coin)

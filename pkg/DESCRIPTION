@@ -12,8 +12,8 @@ Description: Conditional inference procedures for the general independence
   problem including two-sample, K-sample (non-parametric ANOVA), correlation,
   censored, ordered and multivariate problems.
 Depends: R (>= 2.11.0), methods, survival
-Imports: modeltools (>= 0.2-9), mvtnorm (>= 0.8-0), multcomp, survival
-Suggests: xtable, e1071, vcd, multcomp
+Imports: modeltools (>= 0.2-9), mvtnorm (>= 0.8-0), multcomp
+Suggests: xtable, e1071, vcd
 Enhances: Biobase
 LazyData: yes
 License: GPL-2
