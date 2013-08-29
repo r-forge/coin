@@ -7,7 +7,7 @@ isequal <- coin:::isequal
 
 
 ### NA handling: continuous
-x <- c(1, 2, NA, 3, 3, NA, 4, 5, NA)
+x <- c(1L, 2L, NA, 3L, 3L, NA, 4L, 5L, NA)
 cc <- complete.cases(x)
 
 id_trafo(x)

@@ -26,7 +26,7 @@ Loading required package: splines
 > 
 > 
 > ### NA handling: continuous
-> x <- c(1, 2, NA, 3, 3, NA, 4, 5, NA)
+> x <- c(1L, 2L, NA, 3L, 3L, NA, 4L, 5L, NA)
 > cc <- complete.cases(x)
 > 
 > id_trafo(x)
@@ -765,4 +765,4 @@ attr(,"contrast")
 > 
 > proc.time()
    user  system elapsed 
-   0.57    0.07    0.71 
+   0.62    0.04    0.74 

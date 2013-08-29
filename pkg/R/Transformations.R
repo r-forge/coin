@@ -115,7 +115,7 @@ consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
     }
 
     scores <- if (length(a) == 1) cs(a)
-              else vapply(setNames(a, paste("a =", a)), cs, x)
+              else vapply(setNames(a, paste("a =", a)), cs, as.double(x))
     return(scores)
 }
 
