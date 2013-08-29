@@ -65,8 +65,8 @@ fligner_trafo(x[cc], ties.method = "average-scores")
 
 maxstat_trafo(x)
 maxstat_trafo(x[cc])
-maxstat_trafo(x, maxprob = 0.3)
-maxstat_trafo(x[cc], maxprob = 0.3)
+maxstat_trafo(x, minprob = 0.3, maxprob = 0.51)
+maxstat_trafo(x[cc], minprob = 0.3, maxprob = 0.51)
 
 
 ### NA handling: survival
@@ -104,7 +104,7 @@ logrank_trafo(Surv(x, e)[cc], ties.method = "average-scores")
 
 
 ### NA handling: factor
-x <- factor(c(1, 1, NA, 2, NA, 3, 3, NA, 4))
+x <- factor(c(1, 1, NA, 2, NA, 3, 3, NA, 4), labels = as.roman(1:4))
 cc <- complete.cases(x)
 
 f_trafo(x)
@@ -117,13 +117,13 @@ of_trafo(x[cc], scores = 5:8)
 
 fmaxstat_trafo(x)
 fmaxstat_trafo(x[cc])
-fmaxstat_trafo(x, maxprob = 1/3)
-fmaxstat_trafo(x[cc], maxprob = 1/3)
+fmaxstat_trafo(x, minprob = 0.49)
+fmaxstat_trafo(x[cc], minprob = 0.49)
 
 ofmaxstat_trafo(x)
 ofmaxstat_trafo(x[cc])
-ofmaxstat_trafo(x, maxprob = 1/3)
-ofmaxstat_trafo(x[cc], maxprob = 1/3)
+ofmaxstat_trafo(x, minprob = 0.49)
+ofmaxstat_trafo(x[cc], minprob = 0.49)
 
 mcp_trafo(x = "Tukey")(data.frame(x))
 mcp_trafo(x = "Tukey")(data.frame(x = x[cc]))
@@ -141,13 +141,13 @@ of_trafo(x[cc], scores = 5:8)
 
 fmaxstat_trafo(x)
 fmaxstat_trafo(x[cc])
-fmaxstat_trafo(x, maxprob = 1/2)
-fmaxstat_trafo(x[cc], maxprob = 1/2)
+fmaxstat_trafo(x, minprob = 0.4, maxprob = 0.51)
+fmaxstat_trafo(x[cc], minprob = 0.4, maxprob = 0.51)
 
 ofmaxstat_trafo(x)
 ofmaxstat_trafo(x[cc])
-ofmaxstat_trafo(x, maxprob = 1/2)
-ofmaxstat_trafo(x[cc], maxprob = 1/2)
+ofmaxstat_trafo(x, minprob = 0.4, maxprob = 0.51)
+ofmaxstat_trafo(x[cc], minprob = 0.4, maxprob = 0.51)
 
 mcp_trafo(x = "Tukey")(data.frame(x))
 mcp_trafo(x = "Tukey")(data.frame(x = x[cc]))
