@@ -1,5 +1,5 @@
 
-R version 3.0.1 Patched (2013-06-25 r63044) -- "Good Sport"
+R Under development (unstable) (2013-08-14 r63578) -- "Unsuffered Consequences"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -24,6 +24,8 @@ Loading required package: survival
 Loading required package: splines
 > set.seed(290875)
 > isequal <- coin:::isequal
+> options(useFancyQuotes = FALSE)
+> 
 > ### marginal homogenity
 > 
 > ### StatXact 6 manual, page 315
@@ -1009,4 +1011,4 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > proc.time()
    user  system elapsed 
-   3.69    0.10    4.24 
+   2.77    0.06    2.98 

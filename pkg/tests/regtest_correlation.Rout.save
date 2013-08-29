@@ -1,5 +1,5 @@
 
-R version 3.0.1 Patched (2013-06-25 r63044) -- "Good Sport"
+R Under development (unstable) (2013-08-14 r63578) -- "Unsuffered Consequences"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -24,11 +24,8 @@ Type 'q()' to quit R.
 > library("coin")
 Loading required package: survival
 Loading required package: splines
-Loading required package: mvtnorm
-Loading required package: modeltools
-Loading required package: stats4
-Loading required package: multcomp
 > isequal <- coin:::isequal
+> options(useFancyQuotes = FALSE)
 > 
 > ### generate data
 > dat <- data.frame(x = rnorm(100), y = rnorm(100), block = gl(10, 10))
@@ -144,4 +141,4 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > 
 > proc.time()
    user  system elapsed 
-   1.38    0.04    1.62 
+   0.99    0.06    1.13 

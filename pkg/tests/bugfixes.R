@@ -5,6 +5,7 @@ set.seed(290875)
 library("coin")
 isequal <- coin:::isequal
 GE <- coin:::GE
+options(useFancyQuotes = FALSE)
 
 ### I() returns objects of class AsIs which caused an error in `trafo'
 df <- data.frame(x1 = rnorm(100), x2 = rnorm(100), x3 = gl(2, 50))

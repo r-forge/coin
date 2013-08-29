@@ -5,6 +5,8 @@
 library("coin")
 set.seed(290875)
 isequal <- coin:::isequal
+options(useFancyQuotes = FALSE)
+
 ### marginal homogenity
 
 ### StatXact 6 manual, page 315

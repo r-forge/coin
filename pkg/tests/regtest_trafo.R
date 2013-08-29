@@ -4,6 +4,7 @@
 set.seed(290875)
 library("coin")
 isequal <- coin:::isequal
+options(useFancyQuotes = FALSE)
 
 
 ### NA handling: continuous

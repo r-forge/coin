@@ -1,5 +1,5 @@
 
-R version 3.0.1 Patched (2013-06-25 r63044) -- "Good Sport"
+R Under development (unstable) (2013-08-14 r63578) -- "Unsuffered Consequences"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -25,6 +25,7 @@ Type 'q()' to quit R.
 Loading required package: survival
 Loading required package: splines
 > isequal <- coin:::isequal
+> options(useFancyQuotes = FALSE)
 > 
 > thisversion <- paste(R.version$major, R.version$minor, sep = ".")
 > 
@@ -169,4 +170,4 @@ sample estimates:
 > 
 > proc.time()
    user  system elapsed 
-   2.69    0.09    2.88 
+   2.48    0.09    2.62 

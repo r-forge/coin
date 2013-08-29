@@ -23,6 +23,7 @@ Type 'q()' to quit R.
 Loading required package: survival
 Loading required package: splines
 > isequal <- coin:::isequal
+> options(useFancyQuotes = FALSE)
 > 
 > 
 > ### NA handling: continuous
@@ -797,4 +798,4 @@ IV - III  0  0  -1  1
 > 
 > proc.time()
    user  system elapsed 
-   0.57    0.10    0.71 
+   0.62    0.06    0.71 

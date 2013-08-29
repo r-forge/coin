@@ -6,6 +6,7 @@
 set.seed(290875)
 library("coin")
 isequal <- coin:::isequal
+options(useFancyQuotes = FALSE)
 
 thisversion <- paste(R.version$major, R.version$minor, sep = ".")
 
