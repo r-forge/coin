@@ -270,7 +270,8 @@ setMethod(f = "initialize",
             bl <- rep.int(0, nrow(x))
             for (l in lindx)
                 bl[l] <- 1:nbl
-            .Object@block <- factor(unlist(bl))
+            .Object@block <- factor(unlist(bl, recursive = FALSE,
+                                           use.names = FALSE))
         } else {
             .Object@block <- block
         }

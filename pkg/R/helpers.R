@@ -254,7 +254,9 @@ table2df_sym <- function(x) {
     n <- nrow(x)
     p <- ncol(x)
     y <- data.frame(conditions = factor(rep.int(colnames(x), rep.int(n, p))),
-                    response = factor(unlist(x), labels = lx))
+                    response = factor(unlist(x, recursive = FALSE,
+                                             use.names = FALSE),
+                                      labels = lx))
     rownames(y) <- 1:(n*p)
     y
 }
