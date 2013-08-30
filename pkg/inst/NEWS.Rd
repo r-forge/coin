@@ -255,6 +255,11 @@
     }
   }
 }
+\section{Changes in version 1.0-23}{
+  \itemize{
+    \item fix \file{DESCRIPTION} and \file{NAMESPACE} issues
+  }
+}
 \section{Changes in version 1.0-22}{
   \itemize{
     \item documentation updates
