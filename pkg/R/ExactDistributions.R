@@ -15,7 +15,7 @@ SR_shift_2sample <- function(object, fact = NULL) {
 
     RET <- new("ExactNullDistribution")
 
-    ### in case we can't map the scores into integers, use another algorithm
+    ## in case we can't map the scores into integers, use another algorithm
     if (!any(is_integer(object@ytrans[,1])))
         return(vdW_split_up_2sample(object))
 
@@ -25,7 +25,7 @@ SR_shift_2sample <- function(object, fact = NULL) {
 
         thisblock <- (object@block == lev)
 
-        ### compute distribution of scores in this block
+        ## compute distribution of scores in this block
         scores <- object@ytrans[thisblock, 1]
         m <- sum(object@xtrans[thisblock, 1] == 1)
 
@@ -35,7 +35,7 @@ SR_shift_2sample <- function(object, fact = NULL) {
         if (m < length(scores))
             dens <- cSR_shift_2sample(scores, m, fact = fact)
 
-        ### update distribution of statistic over all blocks
+        ## update distribution of statistic over all blocks
         T <- as.vector(outer(dens$T, T, "+"))
         Prob <- drop(kronecker(Prob, dens$Prob))
     }
@@ -84,7 +84,7 @@ SR_shift_1sample <- function(object, fact = NULL) {
     scores <- object@ytrans[, 1]
     if (any(scores < 0))
         stop("cannot compute exact distribution with negative scores")
-    ### search for equivalent integer scores with sum(scores) minimal
+    ## search for equivalent integer scores with sum(scores) minimal
     if (is.null(fact)) {
         fact <- c(1, 2, 10, 100, 1000)
         f <- is_integer(scores, fact = fact)
@@ -92,17 +92,18 @@ SR_shift_1sample <- function(object, fact = NULL) {
             stop("cannot compute exact distribution with real valued scores")
         fact <- min(fact[f])
     }
-    ###  table(object$block, scores == 0) checken
-    sc <- round(scores * fact)
-    sc <- unlist(tapply(sc, object@block, function(x) {
-        if (any(x != 0)) return(x[x != 0])
-        return(0)
-    }))
-    storage.mode(sc) <- "integer"
-    Prob <- .Call("R_cpermdist1", sc, PACKAGE = "coin")
+    ##  table(object@block, scores == 0) checken
+    scores <- vapply(unique(object@block), function(i) {
+        s <- round(scores * fact)[object@block == i]
+        s <- if (any(s != 0)) s[s != 0] else 0
+    }, NA_real_)
+    if (length(scores) > 1 && !all(scores > 0)) # remove zeros
+        scores <- scores[scores != 0]
+    storage.mode(scores) <- "integer"
+    Prob <- .Call("R_cpermdist1", scores, PACKAGE = "coin")
     T <- which(Prob != 0)
     Prob <- Prob[T]
-    ### 0 is possible
+    ## 0 is possible
     T <- (T - 1) / fact
 
     T <- (T - expectation(object)) / sqrt(variance(object))
@@ -138,7 +139,7 @@ cSR_shift_2sample <- function(scores, m, fact = NULL) {
     n <- length(scores)
     ones <- rep.int(1, n)
 
-    ### search for equivalent integer scores with sum(scores) minimal
+    ## search for equivalent integer scores with sum(scores) minimal
     if (is.null(fact)) {
         fact <- c(1, 2, 10, 100, 1000)
         f <- is_integer(scores, fact = fact)
@@ -169,7 +170,7 @@ cSR_shift_2sample <- function(scores, m, fact = NULL) {
 ### van de Wiel split-up algorithm for independent two samples
 vdW_split_up_2sample <- function(object) {
 
-    ### <FIXME> on.exit(ex <- .C("FreeW", PACKAGE = "coin")) </FIXME>
+    ## <FIXME> on.exit(ex <- .C("FreeW", PACKAGE = "coin")) </FIXME>
 
     if (!extends(class(object), "ScalarIndependenceTestStatistic"))
         stop("Argument ", sQuote("object"), " is not of class ",
@@ -178,7 +179,7 @@ vdW_split_up_2sample <- function(object) {
     if (nlevels(object@block) != 1)
         stop("cannot compute exact p-values with blocks")
 
-    ### 2 groups as `x' variable
+    ## 2 groups as `x' variable
     groups <- ncol(object@xtrans) == 1 && all(object@xtrans[,1] %in% c(0, 1))
     if (!groups) stop("cannot deal with two-sample problems")
 
@@ -203,9 +204,9 @@ vdW_split_up_2sample <- function(object) {
         else
             rr <- uniroot(f, interval = c(-1, 10),
                     tol = sqrt(.Machine$double.eps))
-        ### make sure quantile leads to pdf >= p
+        ## make sure quantile leads to pdf >= p
         if (rr$f.root < 0) rr$root <- rr$root + sqrt(.Machine$double.eps)
-        ### pdf is constant here
+        ## pdf is constant here
         if (rr$estim.prec > sqrt(.Machine$double.eps))  {
             r1 <- rr$root
             d <- min(diff(sort(scores[!duplicated(scores)]))) / sqrt(variance(object))
