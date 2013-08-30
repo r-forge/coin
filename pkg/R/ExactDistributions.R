@@ -136,7 +136,7 @@ cSR_shift_2sample <- function(scores, m, fact = NULL) {
     if (m < 1 || m == length(scores))
         stop("not a two sample problem")
     n <- length(scores)
-    ones <- rep(1, n)
+    ones <- rep.int(1, n)
 
     ### search for equivalent integer scores with sum(scores) minimal
     if (is.null(fact)) {

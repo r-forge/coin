@@ -68,12 +68,12 @@ asdmaxT <- function(object) {
                pq <- length(ts)
                o <- order(ts, decreasing = TRUE) # largest ts first
                upper <- ts[o]
-               lower <- rep(-Inf, pq)},
+               lower <- rep.int(-Inf, pq)},
            "less" = {
                ts <- statistic(object, "standardized")
                pq <- length(ts)
                o <- order(ts) # smallest ts first
-               upper <- rep(Inf, pq)
+               upper <- rep.int(Inf, pq)
                lower <- ts[o]})
 
     ## correlation matrix
@@ -82,7 +82,7 @@ asdmaxT <- function(object) {
     ## step-down based on multivariate normality
     ret <- numeric(pq)
     ret[1] <- pmv(lower = lower[1], upper = upper[1],
-                  mean = rep(0, pq), corr = corr)
+                  mean = rep.int(0, pq), corr = corr)
     if (pq > 1) {
         oo <- o
         for (i in 2:pq) {
@@ -91,7 +91,7 @@ asdmaxT <- function(object) {
             oo <- oo[-1]
             ret[i] <- min(ret[i - 1],
                           pmv(lower = lower[i], upper = upper[i],
-                              mean = rep(0, length(oo)), corr = corr))
+                              mean = rep.int(0, length(oo)), corr = corr))
         }
     }
 
@@ -200,7 +200,7 @@ marginal <- function(object, bonferroni, stepdown, ...) {
         }
 
         ## discrete adjustment
-        ret <- rep(1 - bonferroni, length(ts)) # zeros (ones) for Bonferroni (Sidak)
+        ret <- rep.int(1 - bonferroni, length(ts)) # zeros (ones) for Bonferroni (Sidak)
         for (i in 1:length(pu)) {
             qq <- if (stepdown) i else 1 # 'i' => successively smaller subsets
             for (q in qq:length(p)) {
@@ -360,7 +360,7 @@ dbonf <- function(object, ...) {
     }
 
     ## Sidak adjustment (Westfall and Wolfinger, 1997)
-    adjp <- rep(1, length(ts))
+    adjp <- rep.int(1, length(ts))
     for (i in 1:length(pvals)) {
         for (q in 1:length(p)) {
             x <- p[[q]][p[[q]] <= pvals[i]]

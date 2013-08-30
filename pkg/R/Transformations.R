@@ -471,15 +471,15 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
                  " are not of length / nrow", nrow(data))
         RET <- cbind(RET, tr[[i]])
         if (is.null(colnames(tr[[i]]))) {
-            cn <- c(cn, rep("", ncol(tr[[i]])))
+            cn <- c(cn, rep.int("", ncol(tr[[i]])))
         } else {
             cn <- c(cn, paste0(ifelse(length(tr) > 1, ".", ""), colnames(tr[[i]])))
         }
-        assignvar <- c(assignvar, rep(i, ncol(tr[[i]])))
+        assignvar <- c(assignvar, rep.int(i, ncol(tr[[i]])))
     }
     attr(RET, "assign") <- assignvar
     if (length(tr) > 1) {
-        colnames(RET) <- paste0(rep(names(tr), tabulate(assignvar)), cn)
+        colnames(RET) <- paste0(rep.int(names(tr), tabulate(assignvar)), cn)
     } else {
         colnames(RET) <- cn
     }

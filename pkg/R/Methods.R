@@ -46,13 +46,13 @@ setMethod(f = "AsymptNullDistribution",
               RET@p <- function(q) {
                   p <- switch(object@alternative,
                       "less"      = pmv(lower = q, upper = Inf,
-                                        mean = rep(0, pq),
+                                        mean = rep.int(0, pq),
                                         corr = corr, ...),
                       "greater"   = pmv(lower = -Inf, upper = q,
-                                        mean = rep(0, pq),
+                                        mean = rep.int(0, pq),
                                         corr = corr, ...),
                       "two.sided" = pmv(lower = -abs(q), upper = abs(q),
-                                        mean = rep(0, pq),
+                                        mean = rep.int(0, pq),
                                         corr = corr, ...)
                   )
                   error <- attr(p, "error")
@@ -65,10 +65,10 @@ setMethod(f = "AsymptNullDistribution",
               }
               RET@q <- function(p) {
                   if (length(corr) > 1)
-                      q <- qmvnorm(p, mean = rep(0, pq),
+                      q <- qmvnorm(p, mean = rep.int(0, pq),
                               corr = corr, tail = "both.tails", ...)$quantile
                   else
-                      q <- qmvnorm(p, mean = rep(0, pq),
+                      q <- qmvnorm(p, mean = rep.int(0, pq),
                               sigma = 1, tail = "both.tails", ...)$quantile
 
                   attributes(q) <- NULL
@@ -143,7 +143,7 @@ MCfun <- function(x, y, w, b, B) {
 
     ### expand observations for non-unit weights
     if (chkone(w)) {
-        indx <- rep(1:length(w), w)
+        indx <- rep.int(1:length(w), w)
         x <- x[indx,,drop = FALSE]
         y <- y[indx,,drop = FALSE]
         b <- b[indx]

@@ -34,7 +34,7 @@ ExpectCovarInfluence <- function(y, weights) {
 }
 
 expectvaronly <- function(x, y, weights) {
-    indx <- rep(1:nrow(x), weights)
+    indx <- rep.int(1:nrow(x), weights)
     x <- x[indx,,drop = FALSE]
     y <- y[indx,,drop = FALSE]
     n <- nrow(x)
@@ -241,7 +241,7 @@ table2df <- function(x) {
         stop(sQuote("x"), " is not of class ", sQuote("table"))
     x <- as.data.frame(x)
     freq <- x[["Freq"]]
-    x <- x[rep(1:nrow(x), freq), ,drop = FALSE]
+    x <- x[rep.int(1:nrow(x), freq), ,drop = FALSE]
     rownames(x) <- 1:nrow(x)
     return(x[,colnames(x) != "Freq"])
 }
@@ -253,7 +253,7 @@ table2df_sym <- function(x) {
         stop("table ", sQuote("x"), " does not represent a symmetry problem")
     n <- nrow(x)
     p <- ncol(x)
-    y <- data.frame(conditions = factor(rep(colnames(x), rep(n, p))),
+    y <- data.frame(conditions = factor(rep.int(colnames(x), rep.int(n, p))),
                     response = factor(unlist(x), labels = lx))
     rownames(y) <- 1:(n*p)
     y
@@ -400,8 +400,8 @@ statnames <- function(object) {
         }
     }
     list(dimnames = dn,
-         names = paste(rep((dn[[1]]), nc),
-                       rep((dn[[2]]), rep(nr, nc)),
+         names = paste(rep.int((dn[[1]]), nc),
+                       rep.int((dn[[2]]), rep.int(nr, nc)),
                        sep = ifelse(dn[[1]] == "" || dn[[2]] == "", "", ":")))
 }
 

@@ -1046,7 +1046,7 @@ wilcoxsign_test.formula <- function(formula, data = list(), subset = NULL, ...)
     if (is.null(d$bl))
         d <- list(y = data.frame(c(d$y[[1]], d$x[[1]])),
                   x = data.frame(gl(2, length(d$x[[1]]))),
-                  block = factor(rep(1:length(d$x[[1]]), 2)))
+                  block = factor(rep.int(1:length(d$x[[1]]), 2)))
     sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
     RET <- do.call("wilcoxsign_test", c(list(object = sp), list(...)))
     return(RET)
@@ -1092,7 +1092,7 @@ wilcoxsign_test.SymmetryProblem <- function(object,
     n <- length(pos)
 
     y <- as.vector(rbind(pos, neg))
-    x <- factor(rep(0:1, n), labels = c("pos", "neg"))
+    x <- factor(rep.int(0:1, n), labels = c("pos", "neg"))
     block <- gl(n, 2)
 
     ip <- new("IndependenceProblem", x = data.frame(x = x),
@@ -1121,7 +1121,7 @@ sign_test.formula <- function(formula, data = list(), subset = NULL, ...)
     if (is.null(d$bl))
         d <- list(y = data.frame(c(d$y[[1]], d$x[[1]])),
                   x = data.frame(gl(2, length(d$x[[1]]))),
-                  block = factor(rep(1:length(d$x[[1]]), 2)))
+                  block = factor(rep.int(1:length(d$x[[1]]), 2)))
     sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
     RET <- do.call("sign_test", c(list(object = sp), list(...)))
     return(RET)
@@ -1153,7 +1153,7 @@ sign_test.SymmetryProblem <- function(object, ...) {
     n <- length(diffs)
 
     y <- as.vector(rbind(as.numeric(diffs > 0), as.numeric(diffs < 0)))
-    x <- factor(rep(0:1, n), labels = c("pos", "neg"))
+    x <- factor(rep.int(0:1, n), labels = c("pos", "neg"))
     block <- gl(n, 2)
 
     ip <- new("IndependenceProblem", x = data.frame(x = x),

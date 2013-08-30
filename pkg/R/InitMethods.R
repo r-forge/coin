@@ -28,7 +28,7 @@ setMethod(f = "initialize",
                  " do not contain data")
         if (length(x) == 0) {
             dn <- dimnames(x)
-            x <- data.frame(x = rep(1, nrow(x)))
+            x <- data.frame(x = rep.int(1, nrow(x)))
             dimnames(x) <- dn
         }
         if (any(is.na(x)))
@@ -44,7 +44,7 @@ setMethod(f = "initialize",
         .Object@x <- x
         .Object@y <- y
         if (is.null(block)) {
-            .Object@block <- factor(rep(0, nrow(x)))
+            .Object@block <- factor(rep.int(0, nrow(x)))
         } else {
             if (any(table(block) < 2))
                 stop(sQuote("block"),
@@ -52,7 +52,7 @@ setMethod(f = "initialize",
             .Object@block <- block
         }
         if (is.null(weights)) {
-            .Object@weights <- rep(1.0, nrow(x))
+            .Object@weights <- rep.int(1.0, nrow(x))
         } else {
             .Object@weights <- as.double(weights)
         }
@@ -267,7 +267,7 @@ setMethod(f = "initialize",
         if (is.null(block)) {
             nbl <- nrow(x)/nlevels(x[[1]])
             lindx  <- tapply(1:nrow(x), x[[1]], function(x) x)
-            bl <- rep(0, nrow(x))
+            bl <- rep.int(0, nrow(x))
             for (l in lindx)
                 bl[l] <- 1:nbl
             .Object@block <- factor(unlist(bl))
@@ -275,7 +275,7 @@ setMethod(f = "initialize",
             .Object@block <- block
         }
         if (is.null(weights)) {
-            .Object@weights <- rep(1.0, nrow(x))
+            .Object@weights <- rep.int(1.0, nrow(x))
         } else {
             .Object@weights <- as.double(weights)
         }
