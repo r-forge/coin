@@ -115,6 +115,7 @@
                    trafo(data, surv_trafo = function(y)
                        logrank_trafo(y, ties.method = "Hothorn-Lausen")))
 
+  data("sphase", package = "TH.data")
   maxstat_test(Surv(RFS, event) ~  SPF, data = sphase,
                ytrafo = function(data)
                    trafo(data, surv_trafo = function(y)
