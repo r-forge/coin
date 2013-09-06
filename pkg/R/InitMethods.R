@@ -262,24 +262,21 @@ setMethod(f = "initialize",
             stop(sQuote("y"), " contains missing values")
         if (!is.null(block) && any(is.na(y)))
             stop(sQuote("block"), " contains missing values")
+
         .Object@x <- x
         .Object@y <- y
-        if (is.null(block)) {
-            nbl <- nrow(x)/nlevels(x[[1]])
-            lindx  <- tapply(1:nrow(x), x[[1]], function(x) x)
-            bl <- rep.int(0, nrow(x))
-            for (l in lindx)
-                bl[l] <- 1:nbl
-            .Object@block <- factor(unlist(bl, recursive = FALSE,
-                                           use.names = FALSE))
-        } else {
+
+        if (is.null(block))
+            .Object@block <- factor(rep.int(seq_len(nrow(x) / nlevels(x[[1]])),
+                                            nlevels(x[[1]])))
+        else
             .Object@block <- block
-        }
-        if (is.null(weights)) {
+
+        if (is.null(weights))
             .Object@weights <- rep.int(1.0, nrow(x))
-        } else {
+        else
             .Object@weights <- as.double(weights)
-        }
+
         .Object
     }
 )
