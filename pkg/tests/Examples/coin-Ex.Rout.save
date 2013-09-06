@@ -863,6 +863,7 @@ sample estimates:
   "best" cutpoint: <= 39
 
 > 
+>   data("sphase", package = "TH.data")
 >   maxstat_test(Surv(RFS, event) ~  SPF, data = sphase,
 +                ytrafo = function(data)
 +                    trafo(data, surv_trafo = function(y)
@@ -2288,49 +2289,6 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > 
 > cleanEx()
-> nameEx("sphase")
-> ### * sphase
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: sphase
-> ### Title: S-phase Fraction of Tumor Cells
-> ### Aliases: sphase
-> ### Keywords: datasets
-> 
-> ### ** Examples
-> 
-> 
->   maxstat_test(Surv(RFS, event) ~ SPF, data = sphase)
-
-	Asymptotic Generalized Maximally Selected Statistics
-
-data:  Surv(RFS, event) by SPF
-maxT = 2.3966, p-value = 0.1588
-alternative hypothesis: two.sided
-sample estimates:
-  "best" cutpoint: <= 107
-
-> 
->   ### reproduce the test statistic reported in Hothorn & Lausen (2003)
->   maxstat_test(Surv(RFS, event) ~ SPF, data = sphase,
-+                ytrafo = function(data)
-+                    trafo(data, surv_trafo = function(y)
-+                        logrank_trafo(y, ties.method = "Hothorn-Lausen")))
-
-	Asymptotic Generalized Maximally Selected Statistics
-
-data:  Surv(RFS, event) by SPF
-maxT = 2.4033, p-value = 0.1562
-alternative hypothesis: two.sided
-sample estimates:
-  "best" cutpoint: <= 107
-
-> 
-> 
-> 
-> 
-> cleanEx()
 > nameEx("statistic-methods")
 > ### * statistic-methods
 > 
@@ -2424,7 +2382,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  38.76 0.21 39.25 NA NA 
+Time elapsed:  36.9 0.3 37.28 NA NA 
 > grDevices::dev.off()
 null device 
           1 
