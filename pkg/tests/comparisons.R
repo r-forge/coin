@@ -293,13 +293,14 @@ stopifnot(pci[1] < pvalue(ptel) & pci[2] > pvalue(ptel))
 machines <- data.frame(cereal = c(10.8, 11.1, 10.4, 10.1, 11.3,
                                   10.8, 10.5, 11.0, 10.9, 10.8,
                                   10.7, 10.8),
-                       machine = factor(rep(c("Present", "New"), c(5, 7))))
+                       machine = factor(rep(1:2, c(5, 7)),
+                                        labels = c("Present", "New")))
 
 ata <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average")
 
 # test statistic, page 372
-stopifnot(isequal(round(statistic(ata), 3), 1.998))
+stopifnot(isequal(round(statistic(ata), 3), -1.998))
 
 # two-sided asymptotic p-value, page 372
 stopifnot(isequal(round(pvalue(ata), 4), 0.0457))
@@ -307,30 +308,40 @@ stopifnot(isequal(round(pvalue(ata), 4), 0.0457))
 ate <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average", distribution = "exact")
 
+# two-sided exact p-value, page 372
 stopifnot(isequal(round(pvalue(ate), 4), 0.0581))
 
-# two-sided approximated p-value
 atMC <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average", distribution = approximate(B = 10000))
-
 pci <- attr(pvalue(atMC), "conf.int")
 
+# two-sided approximated p-value, page 372
 stopifnot(pci[1] < pvalue(ate) & pci[2] > pvalue(ate))
 
-atel <- ansari_test(cereal ~ machine, data = machines,
-    ties.method = "average",
-    distribution = "exact", alternative = "less")
+# Note: StatXact has '.LE.' here since *small* test statistics furnish evidence
+#       for the alternative that sample 1 is *more* variable than sample 2, but
+#       'coin' relieves the user from thinking about that detail
+
+atag <- ansari_test(cereal ~ machine, data = machines,
+    ties.method = "average", alternative = "greater")
+
+# one-sided asymptotic p-value, page 372
+stopifnot(isequal(round(pvalue(atag), 4), 0.0228))
+
+ateg <- ansari_test(cereal ~ machine, data = machines,
+    ties.method = "average", alternative = "greater",
+    distribution = "exact")
 
 # one-sided exact p-value, page 372
-stopifnot(isequal(round(pvalue(atel), 4), 0.0253))
+stopifnot(isequal(round(pvalue(ateg), 4), 0.0253))
 
-# one-sided approximated p-value
 atMC <- ansari_test(cereal ~ machine, data = machines,
-    ties.method = "average",
-    distribution = approximate(B = 10000), alternative = "less")
+    ties.method = "average", alternative = "greater",
+    distribution = approximate(B = 10000))
 pci <- attr(pvalue(atMC), "conf.int")
-pvalue(atMC)
-stopifnot(pci[1] < pvalue(atel) & pci[2] > pvalue(atel))
+
+# one-sided approximated p-value, page 372
+stopifnot(pci[1] < pvalue(ateg) & pci[2] > pvalue(ateg))
 
 ### StatXact 6 manual, 413
 load("lungcancer.rda")

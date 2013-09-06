@@ -79,6 +79,14 @@
   (1999, pp. 133--135).
 
 }
+
+\note{
+  In the two-sample case, a \emph{large} value of the Ansari-Bradley statistic
+  indicates that sample 1 is \emph{less} variable than sample 2, whereas a
+  \emph{large} value of the Fligner-Killeen statistic indicates that sample 1
+  is \emph{more} variable than sample 2.
+}
+
 \value{
 
   An object inheriting from class \code{\link{IndependenceTest-class}} with

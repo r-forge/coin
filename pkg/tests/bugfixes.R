@@ -408,3 +408,10 @@ mt2 <- maxstat_test(counts ~ oage, data = treepipit,
                     scores = list(oage = 1:4))
 stopifnot(isequal(mt0@estimates$estimate$cutpoint,
                   max(as.numeric(mt2@estimates$estimate$cutpoint))))
+
+### one-sided Ansari-Bradley test reported the wrong direction
+y <- c(rnorm(10, sd = 1),  rnorm(10, sd = 5)) # sigma_1 < sigma_2 ==>> "less"
+x <- gl(2, 10)
+alt <- "less"
+at <- ansari_test(y ~ x, alternative = alt)
+stopifnot(isequal(at@statistic@alternative, alt))

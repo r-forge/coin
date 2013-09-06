@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2013-08-14 r63578) -- "Unsuffered Consequences"
+R Under development (unstable) (2013-08-28 r63747) -- "Unsuffered Consequences"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -708,6 +708,13 @@ Error in setscores(object, scores) :
 > stopifnot(isequal(mt0@estimates$estimate$cutpoint,
 +                   max(as.numeric(mt2@estimates$estimate$cutpoint))))
 > 
+> ### one-sided Ansari-Bradley test reported the wrong direction
+> y <- c(rnorm(10, sd = 1),  rnorm(10, sd = 5)) # sigma_1 < sigma_2 ==>> "less"
+> x <- gl(2, 10)
+> alt <- "less"
+> at <- ansari_test(y ~ x, alternative = alt)
+> stopifnot(isequal(at@statistic@alternative, alt))
+> 
 > proc.time()
    user  system elapsed 
-   2.62    0.15    2.93 
+   2.66    0.10    2.90 

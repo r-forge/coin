@@ -202,6 +202,11 @@
 
       \item maximally selected statistics didn't handle the
       \code{scores} argument properly
+
+      \item the printed output of the one-sided Ansari-Bradley test
+      reported the opposite direction of the specififed alternative (but
+      performed the test in the specified direction and thus reported
+      the correct \eqn{p}-value)
     }
   }
   \subsection{Other changes}{

@@ -29,11 +29,11 @@ ansari_test.IndependenceProblem <- function(object,
                                ansari_trafo(y, ties.method = ties.method)),
                        check = check)
     args$teststat <- if (twosamp) "scalar" else "quad"
-    args$alternative <- match.arg(args$alternative,
-                                  c("two.sided", "less", "greater"))
-    if (args$alternative == "less")
+    alternative <- match.arg(args$alternative,
+                             c("two.sided", "less", "greater"))
+    if (alternative == "less")
         args$alternative <- "greater"
-    else if (args$alternative == "greater")
+    else if (alternative == "greater")
         args$alternative <- "less"
 
     RET <- do.call("independence_test", c(list(object = object), args))
@@ -42,6 +42,7 @@ ansari_test.IndependenceProblem <- function(object,
         RET@method <- "2-Sample Ansari-Bradley Test"
         RET@parameter <- "ratio of scales"
         RET@nullvalue <- 1
+        RET@statistic@alternative <- alternative
         if (conf.int) {
             RET <- new("ScalarIndependenceTestConfint", RET)
             RET@confint <- function(level)
