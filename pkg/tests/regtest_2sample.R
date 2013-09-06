@@ -184,6 +184,24 @@ savage_test(y ~ x, dat = dat, alternative = "less")
 savage_test(y ~ x, dat = dat, alternative = "greater")
 
 
+### Taha Test
+taha_test(y ~ x, dat = dat)
+taha_test(y ~ x, dat = dat, alternative = "less")
+taha_test(y ~ x, dat = dat, alternative = "greater")
+
+
+### Klotz Test
+klotz_test(y ~ x, dat = dat)
+klotz_test(y ~ x, dat = dat, alternative = "less")
+klotz_test(y ~ x, dat = dat, alternative = "greater")
+
+
+### Mood Test
+mood_test(y ~ x, dat = dat)
+mood_test(y ~ x, dat = dat, alternative = "less")
+mood_test(y ~ x, dat = dat, alternative = "greater")
+
+
 ### Fligner-Killeen Test
 fligner_test(y ~ x, dat = dat)
 fligner_test(y ~ x, dat = dat, alternative = "less")

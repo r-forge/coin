@@ -123,6 +123,54 @@ savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
             alternative = "greater")
 
 
+### Taha Test
+taha_test(y ~ x, data = dat)
+
+try(taha_test(y ~ ordered(x), data = dat))
+try(taha_test(y ~ ordered(x), data = dat,
+              alternative = "less"))
+try(taha_test(y ~ ordered(x), data = dat,
+              alternative = "greater"))
+
+try(taha_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8))))
+try(taha_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+              alternative = "less"))
+try(taha_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+              alternative = "greater"))
+
+
+### Klotz Test
+klotz_test(y ~ x, data = dat)
+
+try(klotz_test(y ~ ordered(x), data = dat))
+try(klotz_test(y ~ ordered(x), data = dat,
+               alternative = "less"))
+try(klotz_test(y ~ ordered(x), data = dat,
+               alternative = "greater"))
+
+try(klotz_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8))))
+try(klotz_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+               alternative = "less"))
+try(klotz_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+               alternative = "greater"))
+
+
+### Mood Test
+mood_test(y ~ x, data = dat)
+
+try(mood_test(y ~ ordered(x), data = dat))
+try(mood_test(y ~ ordered(x), data = dat,
+              alternative = "less"))
+try(mood_test(y ~ ordered(x), data = dat,
+              alternative = "greater"))
+
+try(mood_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8))))
+try(mood_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+              alternative = "less"))
+try(mood_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+              alternative = "greater"))
+
+
 ### Ansari-Bradley Test
 ansari_test(y ~ x, data = dat)
 

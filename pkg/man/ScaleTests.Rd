@@ -1,4 +1,13 @@
 \name{ScaleTests}
+\alias{taha_test}
+\alias{taha_test.formula}
+\alias{taha_test.IndependenceProblem}
+\alias{klotz_test}
+\alias{klotz_test.formula}
+\alias{klotz_test.IndependenceProblem}
+\alias{mood_test}
+\alias{mood_test.formula}
+\alias{mood_test.IndependenceProblem}
 \alias{ansari_test}
 \alias{ansari_test.formula}
 \alias{ansari_test.IndependenceProblem}
@@ -13,6 +22,20 @@
   or more independent groups against scale alternatives.
 }
 \usage{
+
+\method{taha_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{taha_test}{IndependenceProblem}(object,
+    conf.int = FALSE, conf.level = 0.95, \dots)
+
+\method{klotz_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{klotz_test}{IndependenceProblem}(object,
+    ties.method = c("mid-ranks", "average-scores"),
+    conf.int = FALSE, conf.level = 0.95, \dots)
+
+\method{mood_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{mood_test}{IndependenceProblem}(object,
+    ties.method = c("mid-ranks", "average-scores"),
+    conf.int = FALSE, conf.level = 0.95, \dots)
 
 \method{ansari_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{ansari_test}{IndependenceProblem}(object,
@@ -37,13 +60,13 @@
   \item{weights}{an optional formula of the form \code{~ w} defining
     integer valued weights for the observations.}
   \item{object}{an object of class \code{"IndependenceProblem"}.}
+  \item{conf.int}{a logical indicating whether a confidence interval for
+    the ratio of scales should be computed.}
+  \item{conf.level}{confidence level of the interval.}
   \item{ties.method}{a character, two methods are available to adjust
     scores for ties, either the score generating function is applied to
     \code{"mid-ranks"} (default) or the scores computed based on random
     ranks are averaged for all tied values (\code{"average-scores"}).}
-  \item{conf.int}{a logical indicating whether a confidence interval for
-    the ratio of scales should be computed.}
-  \item{conf.level}{confidence level of the interval.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
@@ -52,12 +75,13 @@
   the groups given by \code{x} is tested.  In particular, the methods
   documented here are designed to detect scale alternatives.
 
-  The test procedures documented here perform the Ansari-Bradley test
-  (\code{ansari_test}) and the Fligner-Killeen test
-  (\code{fligner_test}).  For a general description of these tests we
-  refer to Hollander & Wolfe (1999).  The Fligner-Killeen test
-  implemented here uses median centering in each of the samples as
-  suggested by Conover, Johnson & Johnson (1981).
+  The test procedures documented here perform the Taha test
+  (\code{taha_test}), the Klotz test (\code{klotz_test}), the Mood test
+  (\code{mood_test}), the Ansari-Bradley test (\code{ansari_test}), and
+  the Fligner-Killeen test (\code{fligner_test}).  For a general
+  description of these tests we refer to Hollander & Wolfe (1999).  The
+  Fligner-Killeen test implemented here uses median centering in each of
+  the samples as suggested by Conover, Johnson & Johnson (1981).
 
   The asymptotic null distribution is computed by default for all
   procedures.  Exact \eqn{p}-values may be computed for the two-sample
@@ -82,9 +106,10 @@
 
 \note{
   In the two-sample case, a \emph{large} value of the Ansari-Bradley statistic
-  indicates that sample 1 is \emph{less} variable than sample 2, whereas a
-  \emph{large} value of the Fligner-Killeen statistic indicates that sample 1
-  is \emph{more} variable than sample 2.
+  indicates that sample 1 is \emph{less} variable than sample 2, whereas
+  \emph{large} values of the statistics due to Taha, Klotz, Mood and
+  Fligner-Killeen indicate that sample 1 is \emph{more} variable than
+  sample 2.
 }
 
 \value{

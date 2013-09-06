@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2013-08-14 r63578) -- "Unsuffered Consequences"
+R Under development (unstable) (2013-08-28 r63747) -- "Unsuffered Consequences"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -153,6 +153,26 @@ Loading required package: splines
 [8]  0.8817477         NA
 > koziol_trafo(x[cc], ties.method = "average-scores", j = 2)
 [1]  0.8817477 -0.3146921 -1.2741624 -1.2741624 -0.3146921  0.8817477
+> 
+> klotz_trafo(x)
+[1] 1.1397068 0.3202981        NA 0.0000000 0.0000000        NA 0.3202981
+[8] 1.1397068        NA
+> klotz_trafo(x[cc])
+[1] 1.1397068 0.3202981 0.0000000 0.0000000 0.3202981 1.1397068
+> klotz_trafo(x, ties.method = "average-scores")
+[1] 1.13970682 0.32029807         NA 0.03240445 0.03240445         NA 0.32029807
+[8] 1.13970682         NA
+> klotz_trafo(x[cc], ties.method = "average-scores")
+[1] 1.13970682 0.32029807 0.03240445 0.03240445 0.32029807 1.13970682
+> 
+> mood_trafo(x)
+[1] 6.25 2.25   NA 0.00 0.00   NA 2.25 6.25   NA
+> mood_trafo(x[cc])
+[1] 6.25 2.25 0.00 0.00 2.25 6.25
+> mood_trafo(x, ties.method = "average-scores")
+[1] 6.25 2.25   NA 0.25 0.25   NA 2.25 6.25   NA
+> mood_trafo(x[cc], ties.method = "average-scores")
+[1] 6.25 2.25 0.25 0.25 2.25 6.25
 > 
 > ansari_trafo(x)
 [1] 1.0 2.0  NA 3.5 3.5  NA 2.0 1.0  NA
@@ -798,4 +818,4 @@ IV - III  0  0  -1  1
 > 
 > proc.time()
    user  system elapsed 
-   0.62    0.06    0.71 
+   0.56    0.06    0.70 

@@ -7,6 +7,8 @@
 \alias{savage_trafo}
 \alias{consal_trafo}
 \alias{koziol_trafo}
+\alias{klotz_trafo}
+\alias{mood_trafo}
 \alias{ansari_trafo}
 \alias{fligner_trafo}
 \alias{logrank_trafo}
@@ -34,6 +36,8 @@ median_trafo(x, mid.score = c("0", "0.5", "1"))
 savage_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 consal_trafo(x, ties.method = c("mid-ranks", "average-scores"), a = 5)
 koziol_trafo(x, ties.method = c("mid-ranks", "average-scores"), j = 1)
+klotz_trafo(x, ties.method = c("mid-ranks", "average-scores"))
+mood_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 ansari_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 fligner_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 logrank_trafo(x, ties.method = c("mid-ranks", "Hothorn-Lausen", "average-scores"),
@@ -128,14 +132,15 @@ mcp_trafo(\dots)
 
   \code{rank_trafo} is the rank transformation.
 
-  \code{normal_trafo}, \code{median_trafo},\code{savage_trafo},
+  \code{normal_trafo}, \code{median_trafo}, \code{savage_trafo},
   \code{consal_trafo} and \code{koziol_trafo} computes normal scores,
   median scores, Savage scores, Conover-Salsburg scores (see
   \code{\link{neuropathy}}) and Koziol-Nemec scores, respectively, for
   location problems.
 
-  \code{ansari_trafo} and \code{fligner_trafo} compute Ansari-Bradley
-  and Fligner scores, respectively, for scale problems.
+  \code{klotz_trafo}, \code{mood_trafo}, \code{ansari_trafo} and
+  \code{fligner_trafo} compute Klotz scores, Mood scores, Ansari-Bradley
+  scores and Fligner-Killeen scores, respectively, for scale problems.
 
   \code{logrank_trafo} computes weighted logrank scores for censored
   data, allowing for user-defined weight functions through the

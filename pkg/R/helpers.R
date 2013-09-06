@@ -121,9 +121,9 @@ ft <- function(test, formula, data = list(), subset = NULL,
 
 ranktests <-
     c("wilcox_test", "kruskal_test", "normal_test", "median_test",
-      "savage_test", "ansari_test", "fligner_test", "surv_test",
-      "friedman_test", "wilcoxsign_test", "spearman_test", "fisyat_test",
-      "quadrant_test", "koziol_test")
+      "savage_test", "taha_test", "klotz_test", "mood_test", "ansari_test",
+      "fligner_test", "surv_test", "friedman_test", "wilcoxsign_test",
+      "spearman_test", "fisyat_test", "quadrant_test", "koziol_test")
 
 formula2data <- function(formula, data, subset, weights = NULL, ...) {
 

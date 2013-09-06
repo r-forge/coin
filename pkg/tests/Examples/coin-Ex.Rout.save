@@ -963,9 +963,11 @@ sample estimates:
 > 
 > ### Name: ScaleTests
 > ### Title: Independent Two- and K-Sample Scale Tests
-> ### Aliases: ansari_test ansari_test.formula
-> ###   ansari_test.IndependenceProblem fligner_test fligner_test.formula
-> ###   fligner_test.IndependenceProblem
+> ### Aliases: taha_test taha_test.formula taha_test.IndependenceProblem
+> ###   klotz_test klotz_test.formula klotz_test.IndependenceProblem
+> ###   mood_test mood_test.formula mood_test.IndependenceProblem ansari_test
+> ###   ansari_test.formula ansari_test.IndependenceProblem fligner_test
+> ###   fligner_test.formula fligner_test.IndependenceProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -1387,9 +1389,9 @@ alternative hypothesis: true mu is greater than 0
 > ### Name: Transformations
 > ### Title: Functions for Data Transformations
 > ### Aliases: trafo id_trafo rank_trafo normal_trafo median_trafo
-> ###   savage_trafo consal_trafo koziol_trafo ansari_trafo fligner_trafo
-> ###   logrank_trafo logrank_weight maxstat_trafo fmaxstat_trafo
-> ###   ofmaxstat_trafo f_trafo of_trafo mcp_trafo
+> ###   savage_trafo consal_trafo koziol_trafo klotz_trafo mood_trafo
+> ###   ansari_trafo fligner_trafo logrank_trafo logrank_weight maxstat_trafo
+> ###   fmaxstat_trafo ofmaxstat_trafo f_trafo of_trafo mcp_trafo
 > ### Keywords: manip
 > 
 > ### ** Examples
@@ -2382,7 +2384,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  36.9 0.3 37.28 NA NA 
+Time elapsed:  36.86 0.3 37.34 NA NA 
 > grDevices::dev.off()
 null device 
           1 

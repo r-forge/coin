@@ -289,7 +289,7 @@ pci <- attr(pvalue(ptMC), "conf.int")
 stopifnot(pci[1] < pvalue(ptel) & pci[2] > pvalue(ptel))
 
 
-### StatXact 6 manual, page 371
+### StatXact 9 manual, page 182
 machines <- data.frame(cereal = c(10.8, 11.1, 10.4, 10.1, 11.3,
                                   10.8, 10.5, 11.0, 10.9, 10.8,
                                   10.7, 10.8),
@@ -299,23 +299,23 @@ machines <- data.frame(cereal = c(10.8, 11.1, 10.4, 10.1, 11.3,
 ata <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average")
 
-# test statistic, page 372
-stopifnot(isequal(round(statistic(ata), 3), -1.998))
+# test statistic, page 182
+stopifnot(isequal(round(statistic(ata), 4), -1.9983))
 
-# two-sided asymptotic p-value, page 372
+# two-sided asymptotic p-value, page 182
 stopifnot(isequal(round(pvalue(ata), 4), 0.0457))
 
 ate <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average", distribution = "exact")
 
-# two-sided exact p-value, page 372
+# two-sided exact p-value, page 182
 stopifnot(isequal(round(pvalue(ate), 4), 0.0581))
 
 atMC <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average", distribution = approximate(B = 10000))
 pci <- attr(pvalue(atMC), "conf.int")
 
-# two-sided approximated p-value, page 372
+# two-sided approximated p-value, page 182
 stopifnot(pci[1] < pvalue(ate) & pci[2] > pvalue(ate))
 
 # Note: StatXact has '.LE.' here since *small* test statistics furnish evidence
@@ -325,14 +325,14 @@ stopifnot(pci[1] < pvalue(ate) & pci[2] > pvalue(ate))
 atag <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average", alternative = "greater")
 
-# one-sided asymptotic p-value, page 372
+# one-sided asymptotic p-value, page 182
 stopifnot(isequal(round(pvalue(atag), 4), 0.0228))
 
 ateg <- ansari_test(cereal ~ machine, data = machines,
     ties.method = "average", alternative = "greater",
     distribution = "exact")
 
-# one-sided exact p-value, page 372
+# one-sided exact p-value, page 182
 stopifnot(isequal(round(pvalue(ateg), 4), 0.0253))
 
 atMC <- ansari_test(cereal ~ machine, data = machines,
@@ -340,8 +340,101 @@ atMC <- ansari_test(cereal ~ machine, data = machines,
     distribution = approximate(B = 10000))
 pci <- attr(pvalue(atMC), "conf.int")
 
-# one-sided approximated p-value, page 372
+# one-sided approximated p-value, page 182
 stopifnot(pci[1] < pvalue(ateg) & pci[2] > pvalue(ateg))
+
+
+### StatXact 9 manual, page 186
+
+kta <- klotz_test(cereal ~ machine, data = machines,
+    ties.method = "average")
+
+# test statistic, page 186
+stopifnot(isequal(round(statistic(kta), 4), 2.3082))
+
+# two-sided asymptotic p-value, page 186
+stopifnot(isequal(round(pvalue(kta), 4), 0.0210))
+
+kte <- klotz_test(cereal ~ machine, data = machines,
+    ties.method = "average", distribution = "exact")
+
+# two-sided exact p-value, page 186
+stopifnot(isequal(round(pvalue(kte), 4), 0.0101))
+
+ktMC <- klotz_test(cereal ~ machine, data = machines,
+    ties.method = "average", distribution = approximate(B = 10000))
+pci <- attr(pvalue(ktMC), "conf.int")
+
+# two-sided approximated p-value, page 186
+stopifnot(pci[1] < pvalue(kte) & pci[2] > pvalue(kte))
+
+ktag <- klotz_test(cereal ~ machine, data = machines,
+    ties.method = "average", alternative = "greater")
+
+# one-sided asymptotic p-value, page 186
+stopifnot(isequal(round(pvalue(ktag), 4), 0.0105))
+
+kteg <- klotz_test(cereal ~ machine, data = machines,
+    ties.method = "average", alternative = "greater",
+    distribution = "exact")
+
+# one-sided exact p-value, page 186
+stopifnot(isequal(round(pvalue(kteg), 4), 0.0101))
+
+ktMC <- klotz_test(cereal ~ machine, data = machines,
+    ties.method = "average", alternative = "greater",
+    distribution = approximate(B = 10000))
+pci <- attr(pvalue(ktMC), "conf.int")
+
+# one-sided approximated p-value, page 186
+stopifnot(pci[1] < pvalue(kteg) & pci[2] > pvalue(kteg))
+
+
+### StatXact 9 manual, page 190
+
+mta <- mood_test(cereal ~ machine, data = machines,
+    ties.method = "average")
+
+# test statistic, page 190
+stopifnot(isequal(round(statistic(mta), 4), 2.2715))
+
+# two-sided asymptotic p-value, page 190
+stopifnot(isequal(round(pvalue(mta), 4), 0.0231))
+
+mte <- mood_test(cereal ~ machine, data = machines,
+    ties.method = "average", distribution = "exact")
+
+# two-sided exact p-value, page 190
+stopifnot(isequal(round(pvalue(mte), 4), 0.0202))
+
+mtMC <- mood_test(cereal ~ machine, data = machines,
+    ties.method = "average", distribution = approximate(B = 10000))
+pci <- attr(pvalue(mtMC), "conf.int")
+
+# two-sided approximated p-value, page 190
+stopifnot(pci[1] < pvalue(mte) & pci[2] > pvalue(mte))
+
+mtag <- mood_test(cereal ~ machine, data = machines,
+    ties.method = "average", alternative = "greater")
+
+# one-sided asymptotic p-value, page 190
+stopifnot(isequal(round(pvalue(mtag), 4), 0.0116))
+
+mteg <- mood_test(cereal ~ machine, data = machines,
+    ties.method = "average", alternative = "greater",
+    distribution = "exact")
+
+# one-sided exact p-value, page 190
+stopifnot(isequal(round(pvalue(mteg), 4), 0.0126))
+
+mtMC <- mood_test(cereal ~ machine, data = machines,
+    ties.method = "average", alternative = "greater",
+    distribution = approximate(B = 10000))
+pci <- attr(pvalue(mtMC), "conf.int")
+
+# one-sided approximated p-value, page 190
+stopifnot(pci[1] < pvalue(mteg) & pci[2] > pvalue(mteg))
+
 
 ### StatXact 6 manual, 413
 load("lungcancer.rda")

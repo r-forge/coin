@@ -18,6 +18,38 @@ rank_trafo <- function(x, ties.method = c("mid-ranks", "random")) {
     return(scores)
 }
 
+## Klotz (1962)
+klotz_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
+    ties.method <- match.arg(ties.method)
+    scores <- switch(ties.method,
+        "mid-ranks" = {
+            qnorm(rank_trafo(x) / (sum(!is.na(x)) + 1))^2
+        },
+        "average-scores" = {
+            r <- rank_trafo(x, ties.method = "random")
+            s <- qnorm(r / (sum(!is.na(x)) + 1))^2
+            average_scores(s, x)
+        }
+    )
+    return(scores)
+}
+
+## Mood
+mood_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
+    ties.method <- match.arg(ties.method)
+    scores <- switch(ties.method,
+        "mid-ranks" = {
+            (rank_trafo(x) - (sum(!is.na(x)) + 1) / 2)^2
+        },
+        "average-scores" = {
+            r <- rank_trafo(x, ties.method = "random")
+            s <- (r - (sum(!is.na(x)) + 1) / 2)^2
+            average_scores(s, x)
+        }
+    )
+    return(scores)
+}
+
 ### Ansari-Bradley
 ansari_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
     ties.method <- match.arg(ties.method)

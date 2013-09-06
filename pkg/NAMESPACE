@@ -10,7 +10,7 @@ export(independence_test,
        symmetry_test,
        oneway_test,
        wilcox_test, kruskal_test, normal_test, median_test, savage_test,
-       ansari_test, fligner_test,
+       taha_test, klotz_test, mood_test, ansari_test, fligner_test,
        surv_test,
        friedman_test, wilcoxsign_test, sign_test,
        spearman_test, fisyat_test, quadrant_test, koziol_test,
@@ -20,7 +20,7 @@ export(independence_test,
        id_trafo,
        rank_trafo,
        normal_trafo, median_trafo, savage_trafo, consal_trafo, koziol_trafo,
-       ansari_trafo, fligner_trafo,
+       klotz_trafo, mood_trafo, ansari_trafo, fligner_trafo,
        logrank_trafo, logrank_weight,
        maxstat_trafo, fmaxstat_trafo, ofmaxstat_trafo,
        f_trafo, of_trafo, mcp_trafo,
@@ -62,6 +62,12 @@ S3method(median_test, IndependenceProblem)
 S3method(savage_test, formula)
 S3method(savage_test, IndependenceProblem)
 
+S3method(taha_test, formula)
+S3method(taha_test, IndependenceProblem)
+S3method(klotz_test, formula)
+S3method(klotz_test, IndependenceProblem)
+S3method(mood_test, formula)
+S3method(mood_test, IndependenceProblem)
 S3method(ansari_test, formula)
 S3method(ansari_test, IndependenceProblem)
 S3method(fligner_test, formula)

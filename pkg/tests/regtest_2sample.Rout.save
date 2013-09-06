@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2013-08-14 r63578) -- "Unsuffered Consequences"
+R Under development (unstable) (2013-08-28 r63747) -- "Unsuffered Consequences"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -320,6 +320,87 @@ alternative hypothesis: true mu is greater than 0
 
 > 
 > 
+> ### Taha Test
+> taha_test(y ~ x, dat = dat)
+
+	Asymptotic 2-Sample Taha Test
+
+data:  y by x (1, 2)
+Z = -1.0835, p-value = 0.2786
+alternative hypothesis: true ratio of scales is not equal to 1
+
+> taha_test(y ~ x, dat = dat, alternative = "less")
+
+	Asymptotic 2-Sample Taha Test
+
+data:  y by x (1, 2)
+Z = -1.0835, p-value = 0.1393
+alternative hypothesis: true ratio of scales is less than 1
+
+> taha_test(y ~ x, dat = dat, alternative = "greater")
+
+	Asymptotic 2-Sample Taha Test
+
+data:  y by x (1, 2)
+Z = -1.0835, p-value = 0.8607
+alternative hypothesis: true ratio of scales is greater than 1
+
+> 
+> 
+> ### Klotz Test
+> klotz_test(y ~ x, dat = dat)
+
+	Asymptotic 2-Sample Klotz Test
+
+data:  y by x (1, 2)
+Z = -0.8354, p-value = 0.4035
+alternative hypothesis: true ratio of scales is not equal to 1
+
+> klotz_test(y ~ x, dat = dat, alternative = "less")
+
+	Asymptotic 2-Sample Klotz Test
+
+data:  y by x (1, 2)
+Z = -0.8354, p-value = 0.2017
+alternative hypothesis: true ratio of scales is less than 1
+
+> klotz_test(y ~ x, dat = dat, alternative = "greater")
+
+	Asymptotic 2-Sample Klotz Test
+
+data:  y by x (1, 2)
+Z = -0.8354, p-value = 0.7983
+alternative hypothesis: true ratio of scales is greater than 1
+
+> 
+> 
+> ### Mood Test
+> mood_test(y ~ x, dat = dat)
+
+	Asymptotic 2-Sample Mood Test
+
+data:  y by x (1, 2)
+Z = -1.1859, p-value = 0.2357
+alternative hypothesis: true ratio of scales is not equal to 1
+
+> mood_test(y ~ x, dat = dat, alternative = "less")
+
+	Asymptotic 2-Sample Mood Test
+
+data:  y by x (1, 2)
+Z = -1.1859, p-value = 0.1178
+alternative hypothesis: true ratio of scales is less than 1
+
+> mood_test(y ~ x, dat = dat, alternative = "greater")
+
+	Asymptotic 2-Sample Mood Test
+
+data:  y by x (1, 2)
+Z = -1.1859, p-value = 0.8822
+alternative hypothesis: true ratio of scales is greater than 1
+
+> 
+> 
 > ### Fligner-Killeen Test
 > fligner_test(y ~ x, dat = dat)
 
@@ -571,4 +652,4 @@ Error in SR_shift_1sample(object, ...) :
 > 
 > proc.time()
    user  system elapsed 
-   1.99    0.09    2.15 
+   2.02    0.10    2.24 

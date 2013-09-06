@@ -130,6 +130,14 @@
       \item the transformation function for ordered factors has gained a
       new argument \code{scores} that provides an alternative way of
       attaching scores to ordinal variables (see \code{?of_trafo})
+
+      \item the Taha test is now available (see \code{?taha_test})
+
+      \item the Klotz test and its corresponding transformation function
+      are now available (see \code{?klotz_test} and \code{?klotz_trafo})
+
+      \item the Mood test and its corresponding transformation function
+      are now available (see \code{?mood_test} and \code{?mood_trafo})
     }
   }
   \subsection{Bug fixes}{

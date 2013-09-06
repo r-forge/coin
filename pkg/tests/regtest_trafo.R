@@ -54,6 +54,16 @@ koziol_trafo(x[cc], ties.method = "average-scores")
 koziol_trafo(x, ties.method = "average-scores", j = 2)
 koziol_trafo(x[cc], ties.method = "average-scores", j = 2)
 
+klotz_trafo(x)
+klotz_trafo(x[cc])
+klotz_trafo(x, ties.method = "average-scores")
+klotz_trafo(x[cc], ties.method = "average-scores")
+
+mood_trafo(x)
+mood_trafo(x[cc])
+mood_trafo(x, ties.method = "average-scores")
+mood_trafo(x[cc], ties.method = "average-scores")
+
 ansari_trafo(x)
 ansari_trafo(x[cc])
 ansari_trafo(x, ties.method = "average-scores")

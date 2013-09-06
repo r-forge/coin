@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2013-08-14 r63578) -- "Unsuffered Consequences"
+R Under development (unstable) (2013-08-28 r63747) -- "Unsuffered Consequences"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -340,6 +340,90 @@ alternative hypothesis: greater
 
 > 
 > 
+> ### Taha Test
+> taha_test(y ~ x, data = dat)
+
+	Asymptotic K-Sample Taha Test
+
+data:  y by x (1, 2, 3, 4)
+chi-squared = 2.8264, df = 3, p-value = 0.4192
+
+> 
+> try(taha_test(y ~ ordered(x), data = dat))
+Error in check(itp) : ordered(x) is an ordered factor
+> try(taha_test(y ~ ordered(x), data = dat,
++               alternative = "less"))
+Error in check(itp) : ordered(x) is an ordered factor
+> try(taha_test(y ~ ordered(x), data = dat,
++               alternative = "greater"))
+Error in check(itp) : ordered(x) is an ordered factor
+> 
+> try(taha_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8))))
+Error in check(itp) : x is an ordered factor
+> try(taha_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++               alternative = "less"))
+Error in check(itp) : x is an ordered factor
+> try(taha_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++               alternative = "greater"))
+Error in check(itp) : x is an ordered factor
+> 
+> 
+> ### Klotz Test
+> klotz_test(y ~ x, data = dat)
+
+	Asymptotic K-Sample Klotz Test
+
+data:  y by x (1, 2, 3, 4)
+chi-squared = 7.0047, df = 3, p-value = 0.07175
+
+> 
+> try(klotz_test(y ~ ordered(x), data = dat))
+Error in check(itp) : ordered(x) is an ordered factor
+> try(klotz_test(y ~ ordered(x), data = dat,
++                alternative = "less"))
+Error in check(itp) : ordered(x) is an ordered factor
+> try(klotz_test(y ~ ordered(x), data = dat,
++                alternative = "greater"))
+Error in check(itp) : ordered(x) is an ordered factor
+> 
+> try(klotz_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8))))
+Error in check(itp) : x is an ordered factor
+> try(klotz_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++                alternative = "less"))
+Error in check(itp) : x is an ordered factor
+> try(klotz_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++                alternative = "greater"))
+Error in check(itp) : x is an ordered factor
+> 
+> 
+> ### Mood Test
+> mood_test(y ~ x, data = dat)
+
+	Asymptotic K-Sample Mood Test
+
+data:  y by x (1, 2, 3, 4)
+chi-squared = 7.3257, df = 3, p-value = 0.06221
+
+> 
+> try(mood_test(y ~ ordered(x), data = dat))
+Error in check(itp) : ordered(x) is an ordered factor
+> try(mood_test(y ~ ordered(x), data = dat,
++               alternative = "less"))
+Error in check(itp) : ordered(x) is an ordered factor
+> try(mood_test(y ~ ordered(x), data = dat,
++               alternative = "greater"))
+Error in check(itp) : ordered(x) is an ordered factor
+> 
+> try(mood_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8))))
+Error in check(itp) : x is an ordered factor
+> try(mood_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++               alternative = "less"))
+Error in check(itp) : x is an ordered factor
+> try(mood_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
++               alternative = "greater"))
+Error in check(itp) : x is an ordered factor
+> 
+> 
 > ### Ansari-Bradley Test
 > ansari_test(y ~ x, data = dat)
 
@@ -516,4 +600,4 @@ alternative hypothesis: greater
 > 
 > proc.time()
    user  system elapsed 
-   1.24    0.12    1.45 
+   1.40    0.12    2.38 
