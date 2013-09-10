@@ -102,6 +102,7 @@ normal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
 ### Median Scores
 median_trafo <- function(x, mid.score = c("0", "0.5", "1")) {
     ## "0.5" => symmetric median scores (Randles & Wolfe, 1979, pp. 264--266)
+    x <- as.numeric(x)
     mid.score <- match.arg(mid.score)
     md <- median(x, na.rm = TRUE)
     scores <- as.numeric(x > md)
