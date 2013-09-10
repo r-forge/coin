@@ -74,7 +74,7 @@ exact null distribution is currently available for two-sample problems only.
         untar(tgz, exdir = tmpdir)
         wd <- setwd(file.path(tmpdir, "coin"))
         ### run doxygen (assuming it is there)
-        system("doxygen doxygen.cfg")
+        system("doxygen inst/doxygen.cfg")
         setwd(wd)
         ### have fun
         browseURL(file.path(tmpdir, "coin", "inst",
