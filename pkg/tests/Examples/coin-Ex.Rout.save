@@ -1678,7 +1678,7 @@ attr(,"conf.level")
 > ##D         untar(tgz, exdir = tmpdir)
 > ##D         wd <- setwd(file.path(tmpdir, "coin"))
 > ##D         ### run doxygen (assuming it is there)
-> ##D         system("doxygen doxygen.cfg")
+> ##D         system("doxygen inst/doxygen.cfg")
 > ##D         setwd(wd)
 > ##D         ### have fun
 > ##D         browseURL(file.path(tmpdir, "coin", "inst",
@@ -2384,7 +2384,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  36.86 0.3 37.34 NA NA 
+Time elapsed:  37.51 0.25 37.98 NA NA 
 > grDevices::dev.off()
 null device 
           1 
