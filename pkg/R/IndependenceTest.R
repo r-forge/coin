@@ -41,12 +41,12 @@ independence_test.IndependenceProblem <- function(object,
     object <- setscores(object, scores)
 
     ## transform data if requested and setup a test problem
-    itp <- new("IndependenceTestProblem", object, xtrafo = xtrafo,
-               ytrafo = ytrafo, ...)
+    object <- new("IndependenceTestProblem", object, xtrafo = xtrafo,
+                  ytrafo = ytrafo, ...)
 
     if (!is.null(check)) {
         if (is.function(check)) {
-            if (!check(itp))
+            if (!check(object))
                 stop(sQuote("check"), " failed")
         } else {
             stop(sQuote("check"), " is not a function")
@@ -54,7 +54,7 @@ independence_test.IndependenceProblem <- function(object,
     }
 
     ## check type of test statistic and alternative
-    scalar <- is_scalar(itp)
+    scalar <- is_scalar(object)
 
     if (!scalar) {
         if (teststat == "scalar") {
@@ -71,28 +71,27 @@ independence_test.IndependenceProblem <- function(object,
 
     ## compute linear statistic, conditional expectation and
     ## conditional covariance
-    its <- new("IndependenceTestStatistic", itp, varonly = TRUE)
-###        varonly = class(distribution) == "approximate" && teststat == "max")
+    object <- new("IndependenceTestStatistic", object, varonly = TRUE)
+###         varonly = class(distribution) == "approximate" && teststat == "max")
 
     ## compute test statistic and corresponding null distribution
     RET <- switch(teststat,
         "scalar" = {
-            ts <- new("ScalarIndependenceTestStatistic", its,
-                      alternative = alternative, paired = isTRUE(paired))
-            nd <- distribution(ts)
-            new("ScalarIndependenceTest", statistic = ts, distribution = nd)
+            object <- new("ScalarIndependenceTestStatistic", object,
+                          alternative = alternative, paired = isTRUE(paired))
+            new("ScalarIndependenceTest", statistic = object,
+                distribution = distribution(object))
         },
         "max" = {
-            ts <- new("MaxTypeIndependenceTestStatistic", its,
-                      alternative = alternative)
-            nd <- distribution(ts)
-            new("MaxTypeIndependenceTest", statistic = ts, distribution = nd)
+            object <- new("MaxTypeIndependenceTestStatistic", object,
+                          alternative = alternative)
+            new("MaxTypeIndependenceTest", statistic = object,
+                distribution = distribution(object))
         },
         "quad" = {
-            ts <- new("QuadTypeIndependenceTestStatistic", its)
-            nd <- distribution(ts)
-            new("QuadTypeIndependenceTest", statistic = ts,
-                distribution = nd)
+            object <- new("QuadTypeIndependenceTestStatistic", object)
+            new("QuadTypeIndependenceTest", statistic = object,
+                distribution = distribution(object))
         })
 
     RET@call <- match.call()

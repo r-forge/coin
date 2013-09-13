@@ -75,10 +75,7 @@ setMethod(f = "initialize",
 
         .Object <- copyslots(ip, .Object)
 
-        x <- ip@x
-        y <- ip@y
-
-        tr <- check_trafo(xtrafo(x), ytrafo(y))
+        tr <- check_trafo(xtrafo(ip@x), ytrafo(ip@y))
         .Object@xtrans <- tr$xtrafo
         .Object@ytrans <- tr$ytrafo
         .Object@xtrafo <- xtrafo
@@ -100,12 +97,8 @@ setMethod(f = "initialize",
 
         .Object <- copyslots(itp, .Object)
 
-        xtrans <- itp@xtrans
-        ytrans <- itp@ytrans
-        weights <- itp@weights
-
-       .Object@linearstatistic <- drop(LinearStatistic(xtrans,
-                                       ytrans, weights))
+        .Object@linearstatistic <-
+            drop(LinearStatistic(itp@xtrans, itp@ytrans, itp@weights))
 
         ### <REMINDER>
         ### for teststat = "max" and distribution = "approx"
@@ -114,8 +107,9 @@ setMethod(f = "initialize",
 
         ### possibly stratified by block
         if (nlevels(itp@block) == 1) {
-            expcov <- ExpectCovarLinearStatistic(xtrans, ytrans, weights,
-                                                 varonly = varonly)
+            expcov <-
+                ExpectCovarLinearStatistic(itp@xtrans, itp@ytrans, itp@weights,
+                                           varonly = varonly)
             exp <- expcov@expectation
             cov <- expcov@covariance
         } else {
@@ -123,9 +117,9 @@ setMethod(f = "initialize",
             cov <- 0
             for (lev in levels(itp@block)) {
                 indx <- (itp@block == lev)
-                ec <- ExpectCovarLinearStatistic(xtrans[indx,,drop = FALSE],
-                                                 ytrans[indx,,drop = FALSE],
-                                                 weights[indx],
+                ec <- ExpectCovarLinearStatistic(itp@xtrans[indx,,drop = FALSE],
+                                                 itp@ytrans[indx,,drop = FALSE],
+                                                 itp@weights[indx],
                                                  varonly = varonly)
                 exp <- exp + ec@expectation
                 cov <- cov + ec@covariance
@@ -163,11 +157,8 @@ setMethod(f = "initialize",
     signature = "IndependenceTestStatistic",
     definition = function(.Object, itp, varonly = FALSE) {
 
-        its <- new("IndependenceLinearStatistic", itp, varonly = varonly)
-
-        .Object <- copyslots(its, .Object)
-
-        .Object
+        copyslots(new("IndependenceLinearStatistic", itp, varonly = varonly),
+                  .Object)
     }
 )
 
@@ -232,17 +223,15 @@ setMethod(f = "initialize",
 
         .Object <- copyslots(its, .Object)
 
-        covm <- covariance(its)
-        mp <- MPinv(covm, ...)
+        mp <- MPinv(covariance(its), ...)
         .Object@covarianceplus <- mp$MPinv
         .Object@df <- mp$rank
 
         stand <- (its@linearstatistic - expectation(its))
         .Object@teststatistic <-
             drop(stand %*% .Object@covarianceplus %*% stand)
-        standstat <- (its@linearstatistic - expectation(its)) /
-                      sqrt(variance(its))
-        .Object@standardizedlinearstatistic <- standstat
+        .Object@standardizedlinearstatistic <-
+            (its@linearstatistic - expectation(its)) / sqrt(variance(its))
 
         .Object
     }

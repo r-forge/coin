@@ -267,12 +267,14 @@
       replaced by \code{wilcoxsign_test.SymmetryProblem()}
 
       \item the Wilcoxon signed-rank test no longer features the defunct
-      \code{ties.method} argument 
-      
+      \code{ties.method} argument
+
       \item the \code{teststat} argument no longer allows the use of
       maximum-type statistics and quadratic forms to be specified using
       \code{"maxtype"} and \code{"quadtype"} respectively (see
       \code{?independence_test})
+
+      \item the memory consumption during computations has been reduced
     }
   }
 }
