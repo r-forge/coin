@@ -4,10 +4,6 @@
 > library("coin")
 Loading required package: survival
 Loading required package: splines
-Loading required package: mvtnorm
-Loading required package: modeltools
-Loading required package: stats4
-Loading required package: multcomp
 
 > library("e1071")
 Loading required package: class
@@ -35,9 +31,9 @@ Loading required package: class
 
 	Exact General Independence Test
 
-data:  time by group (control, treatment) 
+data:  time by group (control, treatment)
 Z = 2.4389, p-value = 0.03727
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 
 > toLatex(c2t("IndependenceProblem"))
@@ -125,6 +121,7 @@ Slot & Class \\ \hline
  & \\
 Slot & Class \\ \hline 
 \code{alternative} & \Rclass{character} \\
+\code{paired} & \Rclass{logical} \\
 \hline
 \end{tabular}
 \end{center}
@@ -216,7 +213,7 @@ Slot & Class \\ \hline
 
 	Exact General Independence Test
 
-data:  time by group (control, treatment) 
+data:  time by group (control, treatment)
 c = 2.4389, p-value = 0.03727
 
 
@@ -235,9 +232,9 @@ c = 2.4389, p-value = 0.03727
 
 	General Independence Test
 
-data:  y by x 
+data:  y by x
 Z = 1.4203, p-value = 0.9228
-alternative hypothesis: less 
+alternative hypothesis: less
 
 
 > mood_score <- function(y) (rank_trafo(y) - (sum(!is.na(y)) + 
@@ -258,9 +255,9 @@ alternative hypothesis: less
 
 	Exact General Independence Test
 
-data:  time by group (control, treatment) 
+data:  time by group (control, treatment)
 Z = -2.3208, p-value = 0.03727
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 
 > independence_test(time ~ group, data = rotarod, ytrafo = mood_score, 
@@ -268,9 +265,9 @@ alternative hypothesis: two.sided
 
 	Exact General Independence Test
 
-data:  time by group (control, treatment) 
+data:  time by group (control, treatment)
 Z = -2.3208, p-value = 0.03727
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 
 > data("jobsatisfaction", package = "coin")
@@ -293,9 +290,7 @@ Male   <5000                               1      1      2       1
        >25000                              0      1      9       6
 
 > library("vcd")
-Loading required package: MASS
 Loading required package: grid
-Loading required package: colorspace
 
 > cotabplot(js, split_vertical = TRUE, spacing = spacing_highlighting, 
 +     gp = gpar(fill = rev(gray.colors(4))), labeling_args = list(rot_labels = .... [TRUNCATED] 
@@ -308,7 +303,7 @@ Loading required package: colorspace
 
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000) 
-	 stratified by Gender 
+	 stratified by Gender
 chi-squared = 10.2001, df = 9, p-value = 0.3345
 
 
@@ -349,16 +344,19 @@ Income        VeryDiss LitSat ModSat VerySat
 
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000) 
-	 stratified by Gender 
-maxT = 1.6258, p-value = 0.7214
-alternative hypothesis: two.sided 
+	 stratified by Gender
+maxT = 1.6258, p-value = 0.7215
+alternative hypothesis: two.sided
 
 
 > pvalue(independence_test(js, teststat = "max"), method = "single-step")
              VeryDiss    LitSat    ModSat   VerySat
-<5000       0.9009811 0.9987771 0.9999998 0.9888131
-5000-15000  0.9992718 0.9948673 0.9998852 0.7214316
-15000-25000 0.9659953 0.8034795 0.9999999 0.8267981
+<5000       0.9010270 0.9987771 0.9999998 0.9888131
+5000-15000  0.9992718 0.9948673 0.9998852 0.7215403
+15000-25000 0.9659953 0.8034534 0.9999999 0.8267981
 >25000      0.9761900 1.0000000 0.9996381 0.9394962
 
  *** Run successfully completed ***
+> proc.time()
+   user  system elapsed 
+   3.22    0.35    4.14 

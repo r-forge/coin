@@ -2,10 +2,6 @@
 > library("coin")
 Loading required package: survival
 Loading required package: splines
-Loading required package: mvtnorm
-Loading required package: modeltools
-Loading required package: stats4
-Loading required package: multcomp
 
 > set.seed(290875)
 
@@ -196,9 +192,9 @@ Genotype In situ Control
 
 	Asymptotic General Independence Test
 
-data:  Group by Genotype (AA, AG, GG) 
+data:  Group by Genotype (AA, AG, GG)
 maxT = 2.1879, p-value = 0.03042
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 
 > drop(pvalue(it, method = "single-step"))
@@ -217,9 +213,9 @@ alternative hypothesis: greater
 
 	Asymptotic General Independence Test
 
-data:  Group by Genotype (AA, AG, GG) 
+data:  Group by Genotype (AA, AG, GG)
 maxT = 2.1879, p-value = 0.03151
-alternative hypothesis: greater 
+alternative hypothesis: greater
 
 
 > drop(pvalue(itZ, method = "single-step"))
@@ -255,3 +251,6 @@ alternative hypothesis: greater
 0.37677208 0.38425498 0.39171216 
 
  *** Run successfully completed ***
+> proc.time()
+   user  system elapsed 
+  18.51    0.29   19.18 
