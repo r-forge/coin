@@ -265,6 +265,9 @@
 
       \item \code{wilcoxsign_test.IndependenceProblem()} has been
       replaced by \code{wilcoxsign_test.SymmetryProblem()}
+
+      \item the Wilcoxon signed-rank test no longer features the
+      defunct \code{ties.method} argument
     }
   }
 }

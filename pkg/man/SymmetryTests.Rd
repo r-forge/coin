@@ -83,10 +83,10 @@
 \note{
 
   Starting with \pkg{coin} version 1.0-16, the \code{zero.method}
-  argument replaced the \code{ties.method} argument.  The current
-  default is \code{zero.method = "Pratt"} whereas the earlier versions
-  had \code{ties.method = "HollanderWolfe"} which is now equivalent to
-  \code{zero.method = "Wilcoxon"}.
+  argument replaced the (now removed) \code{ties.method} argument.  The
+  current default is \code{zero.method = "Pratt"} whereas the earlier
+  versions had \code{ties.method = "HollanderWolfe"} which is now
+  equivalent to \code{zero.method = "Wilcoxon"}.
 
 }
 \value{
