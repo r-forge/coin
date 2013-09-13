@@ -24,7 +24,7 @@ independence_test.IndependenceProblem <- function(object,
     teststat = c("max", "quad", "scalar"),
     distribution = c("asymptotic", "approximate", "exact"),
     alternative = c("two.sided", "less", "greater"),
-    xtrafo = trafo, ytrafo = trafo, scores = NULL, check = NULL, paired = FALSE, 
+    xtrafo = trafo, ytrafo = trafo, scores = NULL, check = NULL, paired = FALSE,
     ...) {
 
     addargs <- list(...)
@@ -33,11 +33,6 @@ independence_test.IndependenceProblem <- function(object,
                 paste0(names(addargs), collapse = ", "),
                 " will be ignored")
 
-    ## just for backward compatibility
-    teststat <- match.arg(teststat, choices = c("maxtype", "quadtype", "scalar"),
-                          several.ok = TRUE)
-    if (teststat[1] == "maxtype") teststat <- "max"
-    if (teststat[1] == "quadtype") teststat <- "quad"
     teststat <- match.arg(teststat)
     alternative <- match.arg(alternative)
     distribution <- check_distribution_arg(distribution)

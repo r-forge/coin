@@ -5,29 +5,34 @@
 Loading required package: coin
 Loading required package: survival
 Loading required package: splines
-Loading required package: mvtnorm
-Loading required package: modeltools
-Loading required package: stats4
-Loading required package: multcomp
 
 > require("Biobase")
 Loading required package: Biobase
 Loading required package: BiocGenerics
+Loading required package: parallel
 
 Attaching package: 'BiocGenerics'
 
-The following object(s) are masked from 'package:stats':
+The following objects are masked from 'package:parallel':
+
+    clusterApply, clusterApplyLB, clusterCall,
+    clusterEvalQ, clusterExport, clusterMap,
+    parApply, parCapply, parLapply, parLapplyLB,
+    parRapply, parSapply, parSapplyLB
+
+The following object is masked from 'package:stats':
 
     xtabs
 
-The following object(s) are masked from 'package:base':
+The following objects are masked from 'package:base':
 
     Filter, Find, Map, Position, Reduce,
-    anyDuplicated, cbind, colnames, duplicated, eval,
-    get, intersect, lapply, mapply, mget, order,
-    paste, pmax, pmax.int, pmin, pmin.int, rbind,
-    rep.int, rownames, sapply, setdiff, table,
-    tapply, union, unique
+    anyDuplicated, append, as.data.frame, as.vector,
+    cbind, colnames, duplicated, eval, get,
+    intersect, lapply, mapply, match, mget, order,
+    paste, pmax, pmax.int, pmin, pmin.int, rank,
+    rbind, rep.int, rownames, sapply, setdiff, sort,
+    table, tapply, union, unique, unlist
 
 Welcome to Bioconductor
 
@@ -38,6 +43,8 @@ Welcome to Bioconductor
 
 
 > require("multcomp")
+Loading required package: multcomp
+Loading required package: mvtnorm
 
 > set.seed(290875)
 
@@ -49,13 +56,13 @@ Welcome to Bioconductor
 
 > it <- independence_test(length ~ site, data = YOY, 
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
-+     teststat = "quadty ..." ... [TRUNCATED] 
++     teststat = "quad")
 
 > it
 
 	Asymptotic General Independence Test
 
-data:  length by site (I, II, III, IV) 
+data:  length by site (I, II, III, IV)
 chi-squared = 22.8524, df = 3, p-value = 4.335e-05
 
 
@@ -96,7 +103,7 @@ IV  -2.788013
 
 	Approximative Kruskal-Wallis Test
 
-data:  length by site (I, II, III, IV) 
+data:  length by site (I, II, III, IV)
 chi-squared = 22.8524, p-value < 2.2e-16
 
 
@@ -116,7 +123,7 @@ chi-squared = 22.8524, p-value < 2.2e-16
 
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000) 
-	 stratified by Gender 
+	 stratified by Gender
 chi-squared = 10.2001, df = 9, p-value = 0.3345
 
 
@@ -138,9 +145,9 @@ chi-squared = 10.2001, df = 9, p-value = 0.3345
 
 data:  Job.Satisfaction (ordered) by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
-	 stratified by Gender 
+	 stratified by Gender
 Z = 2.5736, p-value = 0.01006
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 
 > lbl_test(jobsatisfaction, scores = list(Job.Satisfaction = c(1, 
@@ -150,9 +157,9 @@ alternative hypothesis: two.sided
 
 data:  Job.Satisfaction (ordered) by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
-	 stratified by Gender 
+	 stratified by Gender
 Z = 2.4812, p-value = 0.01309
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 
 > egg_data <- data.frame(scores = c(9.7, 8.7, 5.4, 5, 
@@ -163,18 +170,18 @@ alternative hypothesis: two.sided
 +     block = egg_data$sitting)
 
 > independence_test(scores ~ product | sitting, data = egg_data, 
-+     teststat = "quadtype", ytrafo = yt)
++     teststat = "quad", ytrafo = yt)
 
 	Asymptotic General Independence Test
 
 data:  scores by
 	 product (1, 2, 3, 4, 5, 6, 7, 8, 9, 10) 
-	 stratified by sitting 
+	 stratified by sitting
 chi-squared = 39.12, df = 9, p-value = 1.096e-05
 
 
 > pvalue(independence_test(scores ~ product | sitting, 
-+     data = egg_data, teststat = "quadtype", ytrafo = yt, distribution = approximate(B = 1999 .... [TRUNCATED] 
++     data = egg_data, teststat = "quad", ytrafo = yt, distribution = approximate(B = 19999)))
 [1] 0
 99 percent confidence interval:
  0.000000000 0.000264894 
@@ -187,9 +194,9 @@ chi-squared = 39.12, df = 9, p-value = 1.096e-05
 
 data:  scores by
 	 product (1 < 2 < 3 < 4 < 5 < 6 < 7 < 8 < 9 < 10) 
-	 stratified by sitting 
+	 stratified by sitting
 Z = -6.2166, p-value = 5.081e-10
-alternative hypothesis: two.sided 
+alternative hypothesis: two.sided
 
 
 > if (require("multcomp")) {
@@ -210,4 +217,4 @@ IV - III 0.99889989
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.43    0.14    2.71 
+   1.46    0.21    1.82 

@@ -282,7 +282,7 @@ YOY <- data.frame(
 
 it <- independence_test(length ~ site, data = YOY,
     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
-    teststat = "quadtype")
+    teststat = "quad")
 it
 @
 The linear statistic $\T$ is the sum of the ranks in each group and
@@ -307,7 +307,7 @@ is
 statistic(it, "standardized")
 @
 Since a quadratic form of the test statistic was requested via
-\texttt{teststat = "quadtype"}, the test statistic is
+\texttt{teststat = "quad"}, the test statistic is
 <<YOY-c, echo = TRUE>>=
 statistic(it)
 @
@@ -404,13 +404,13 @@ egg_data <- data.frame(
 yt <- function(data) trafo(data, numeric_trafo = rank_trafo,
                            block = egg_data$sitting)
 independence_test(scores ~ product | sitting,
-                  data = egg_data, teststat = "quadtype",
+                  data = egg_data, teststat = "quad",
                   ytrafo = yt)
 @
 and the Monte-Carlo $p$-value can be computed via
 <<eggs-Durbin-approx, echo = TRUE>>=
 pvalue(independence_test(scores ~ product | sitting,
-    data = egg_data, teststat = "quadtype", ytrafo = yt,
+    data = egg_data, teststat = "quad", ytrafo = yt,
     distribution = approximate(B = 19999)))
 @
 If we assume that the products are ordered, the Page test is appropriate and

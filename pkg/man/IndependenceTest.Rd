@@ -103,6 +103,12 @@
   de Wiel & Zeileis (2006).
 
 }
+\note{
+  Starting with \pkg{coin} version 1.1-0, maximum-type statistics and
+  quadratic forms can no longer be specified using \code{teststat =
+    "maxtype"} and \code{teststat = "quadtype"} respectively (as was
+  used in versions prior to 0.4-5).
+}
 \value{
 
   An object inheriting from class \code{\link{IndependenceTest-class}}
