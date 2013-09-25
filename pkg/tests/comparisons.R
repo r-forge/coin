@@ -436,6 +436,50 @@ pci <- attr(pvalue(mtMC), "conf.int")
 stopifnot(pci[1] < pvalue(mteg) & pci[2] > pvalue(mteg))
 
 
+### StatXact 9 manual, page 195
+load("FAILURE.rda")
+
+cta <- conover_test(ftime ~ tyretype, data = failure)
+
+# test statistic, page 195
+stopifnot(isequal(round(statistic(cta), 4), -1.5274))
+
+# two-sided asymptotic p-value, page 195
+stopifnot(isequal(round(pvalue(cta), 4), 0.1267))
+
+cte <- conover_test(ftime ~ tyretype, data = failure,
+    distribution = "exact")
+
+# two-sided exact p-value, page 195
+stopifnot(isequal(round(pvalue(cte), 4), 0.1300))
+
+ctMC <- conover_test(ftime ~ tyretype, data = failure,
+    distribution = approximate(B = 10000))
+pci <- attr(pvalue(ctMC), "conf.int")
+
+# two-sided approximated p-value, page 195
+stopifnot(pci[1] < pvalue(cte) & pci[2] > pvalue(cte))
+
+ctag <- conover_test(ftime ~ tyretype, data = failure,
+    alternative = "less")
+
+# one-sided asymptotic p-value, page 195
+stopifnot(isequal(round(pvalue(ctag), 4), 0.0633))
+
+cteg <- conover_test(ftime ~ tyretype, data = failure,
+    alternative = "less", distribution = "exact")
+
+# one-sided exact p-value, page 195
+stopifnot(isequal(round(pvalue(cteg), 4), 0.0634))
+
+ctMC <- conover_test(ftime ~ tyretype, data = failure,
+    alternative = "less", distribution = approximate(B = 10000))
+pci <- attr(pvalue(ctMC), "conf.int")
+
+# one-sided approximated p-value, page 195
+stopifnot(pci[1] < pvalue(cteg) & pci[2] > pvalue(cteg))
+
+
 ### StatXact 6 manual, 413
 load("lungcancer.rda")
 

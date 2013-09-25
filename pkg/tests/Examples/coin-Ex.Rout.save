@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2013-08-28 r63747) -- "Unsuffered Consequences"
+R Under development (unstable) (2013-09-11 r63910) -- "Unsuffered Consequences"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -967,7 +967,8 @@ sample estimates:
 > ###   klotz_test klotz_test.formula klotz_test.IndependenceProblem
 > ###   mood_test mood_test.formula mood_test.IndependenceProblem ansari_test
 > ###   ansari_test.formula ansari_test.IndependenceProblem fligner_test
-> ###   fligner_test.formula fligner_test.IndependenceProblem
+> ###   fligner_test.formula fligner_test.IndependenceProblem conover_test
+> ###   conover_test.formula conover_test.IndependenceProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -2384,7 +2385,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  37.51 0.25 37.98 NA NA 
+Time elapsed:  37.34 0.28 38.01 NA NA 
 > grDevices::dev.off()
 null device 
           1 

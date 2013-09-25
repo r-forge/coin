@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2013-08-28 r63747) -- "Unsuffered Consequences"
+R Under development (unstable) (2013-09-11 r63910) -- "Unsuffered Consequences"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -455,6 +455,50 @@ Loading required package: splines
 > stopifnot(pci[1] < pvalue(mteg) & pci[2] > pvalue(mteg))
 > 
 > 
+> ### StatXact 9 manual, page 195
+> load("FAILURE.rda")
+> 
+> cta <- conover_test(ftime ~ tyretype, data = failure)
+> 
+> # test statistic, page 195
+> stopifnot(isequal(round(statistic(cta), 4), -1.5274))
+> 
+> # two-sided asymptotic p-value, page 195
+> stopifnot(isequal(round(pvalue(cta), 4), 0.1267))
+> 
+> cte <- conover_test(ftime ~ tyretype, data = failure,
++     distribution = "exact")
+> 
+> # two-sided exact p-value, page 195
+> stopifnot(isequal(round(pvalue(cte), 4), 0.1300))
+> 
+> ctMC <- conover_test(ftime ~ tyretype, data = failure,
++     distribution = approximate(B = 10000))
+> pci <- attr(pvalue(ctMC), "conf.int")
+> 
+> # two-sided approximated p-value, page 195
+> stopifnot(pci[1] < pvalue(cte) & pci[2] > pvalue(cte))
+> 
+> ctag <- conover_test(ftime ~ tyretype, data = failure,
++     alternative = "less")
+> 
+> # one-sided asymptotic p-value, page 195
+> stopifnot(isequal(round(pvalue(ctag), 4), 0.0633))
+> 
+> cteg <- conover_test(ftime ~ tyretype, data = failure,
++     alternative = "less", distribution = "exact")
+> 
+> # one-sided exact p-value, page 195
+> stopifnot(isequal(round(pvalue(cteg), 4), 0.0634))
+> 
+> ctMC <- conover_test(ftime ~ tyretype, data = failure,
++     alternative = "less", distribution = approximate(B = 10000))
+> pci <- attr(pvalue(ctMC), "conf.int")
+> 
+> # one-sided approximated p-value, page 195
+> stopifnot(pci[1] < pvalue(cteg) & pci[2] > pvalue(cteg))
+> 
+> 
 > ### StatXact 6 manual, 413
 > load("lungcancer.rda")
 > 
@@ -521,9 +565,9 @@ alternative hypothesis: true theta is not equal to 1
 > pvalue(surv_test(Surv(time, event) ~ treatment | gender, data = srv,
 +               ties = "average",
 +               distribution = approximate(B = 10000)))
-[1] 0.1637
+[1] 0.1582
 99 percent confidence interval:
- 0.1542815 0.1734407 
+ 0.1489148 0.1678126 
 
 > 
 > 
@@ -653,9 +697,9 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > pci <- attr(pvalue(mtMC), "conf.int")
 > pvalue(mtMC)
-[1] 0.4256
+[1] 0.4336
 99 percent confidence interval:
- 0.4128522 0.4384189 
+ 0.4208191 0.4464444 
 
 > 
 > stopifnot(pci[1] < 0.4289 & pci[2] > 0.4289)
@@ -877,9 +921,9 @@ alternative hypothesis: true theta is not equal to 1
 +                     distribution = approximate(B = 10000))
 > 
 > print(pvalue(btMC))
-[1] 1e-04
+[1] 0
 99 percent confidence interval:
- 5.012541e-07 7.427741e-04 
+ 0.0000000000 0.0005296914 
 
 > pci <- attr(pvalue(btMC), "conf.int")
 > (pci[1] < 0.0001 & pci[2] > 0.0001)
@@ -1111,4 +1155,4 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > proc.time()
    user  system elapsed 
-   2.87    0.12    3.15 
+   3.12    0.18    3.41 

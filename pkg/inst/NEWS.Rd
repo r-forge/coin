@@ -138,6 +138,9 @@
 
       \item the Mood test and its corresponding transformation function
       are now available (see \code{?mood_test} and \code{?mood_trafo})
+
+      \item the Conover-Iman test is now available (see
+      \code{?conover_test})
     }
   }
   \subsection{Bug fixes}{

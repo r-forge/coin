@@ -266,3 +266,58 @@ fligner_test.IndependenceProblem <- function(object,
 
     return(RET)
 }
+
+
+### Conover-Iman (1978) test
+conover_test <- function(object, ...) UseMethod("conover_test")
+
+conover_test.formula <- function(formula, data = list(), subset = NULL,
+    weights = NULL, ...) {
+
+    ft("conover_test", formula, data, subset, weights,
+       frame = parent.frame(), ...)
+}
+
+conover_test.IndependenceProblem <- function(object,
+    conf.int = FALSE, conf.level = 0.95, ...) {
+
+    check <- function(object) {
+        if (!(is_Ksample(object) && is_numeric_y(object)))
+            stop(sQuote("object"),
+                 " does not represent a K-sample problem",
+                 " (maybe the grouping variable is not a factor?)")
+        if (is_singly_ordered(object))
+            stop(colnames(object@x), " is an ordered factor")
+        return(TRUE)
+    }
+
+    twosamp <- nlevels(object@x[[1]]) == 2
+
+    args <- setup_args(ytrafo = function(data)
+                           trafo(data, numeric_trafo = function(y)
+                               rank_trafo(abs(y))^2),
+                       check = check)
+    args$teststat <- if (twosamp) "scalar" else "quad"
+
+    ## eliminate location differences
+    object@y[[1]] <- object@y[[1]] -
+        tapply(object@y[[1]], object@x[[1]], mean)[object@x[[1]]]
+
+    RET <- do.call("independence_test", c(list(object = object), args))
+
+    if (twosamp) {
+        RET@method <- "2-Sample Conover-Iman Test"
+        RET@parameter <- "ratio of scales"
+        RET@nullvalue <- 1
+        if (conf.int) {
+            RET <- new("ScalarIndependenceTestConfint", RET)
+            RET@confint <- function(level)
+                confint_scale(RET@statistic, RET@distribution,
+                                 level = level)
+            RET@conf.level <- conf.level
+        }
+    } else
+        RET@method <- "K-Sample Conover-Iman Test"
+
+    return(RET)
+}

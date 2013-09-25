@@ -14,6 +14,9 @@
 \alias{fligner_test}
 \alias{fligner_test.formula}
 \alias{fligner_test.IndependenceProblem}
+\alias{conover_test}
+\alias{conover_test.formula}
+\alias{conover_test.IndependenceProblem}
 
 \title{ Independent Two- and K-Sample Scale Tests }
 
@@ -47,6 +50,10 @@
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, \dots)
 
+\method{conover_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{conover_test}{IndependenceProblem}(object,
+    conf.int = FALSE, conf.level = 0.95, \dots)
+
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where
@@ -77,11 +84,14 @@
 
   The test procedures documented here perform the Taha test
   (\code{taha_test}), the Klotz test (\code{klotz_test}), the Mood test
-  (\code{mood_test}), the Ansari-Bradley test (\code{ansari_test}), and
-  the Fligner-Killeen test (\code{fligner_test}).  For a general
-  description of these tests we refer to Hollander & Wolfe (1999).  The
-  Fligner-Killeen test implemented here uses median centering in each of
-  the samples as suggested by Conover, Johnson & Johnson (1981).
+  (\code{mood_test}), the Ansari-Bradley test (\code{ansari_test}), the
+  Fligner-Killeen test (\code{fligner_test}), and the Conover-Iman test
+  (\code{conover_test}).  For a general description of these tests we
+  refer to Hollander & Wolfe (1999).  The Fligner-Killeen test
+  implemented here uses median centering in each of the samples, as
+  suggested by Conover, Johnson & Johnson (1981), whereas the
+  Conover-Iman test, following Conover and Iman (1978), uses mean
+  centering in each of the samples.
 
   The asymptotic null distribution is computed by default for all
   procedures.  Exact \eqn{p}-values may be computed for the two-sample
@@ -132,6 +142,10 @@
   A comparative study of tests for homogeneity of variances, with
   applications to the outer continental shelf bidding data.
   \emph{Technometrics} \bold{23}, 351--361.
+
+  Conover, W. J. and Iman, R. L.  (1978).  Some Exact Tables for the
+  Squared Ranks Test.  \emph{Communications in Statistics -- Simulation
+    and Computation} \bold{7}(5), 491--513.
 
   Bernd Streitberg & Joachim Roehmel (1986).
   Exact distributions for permutations and rank tests: An introduction

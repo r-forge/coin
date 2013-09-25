@@ -35,7 +35,7 @@ try(kruskal_test(x ~ y, data = dat))
 try(kruskal_test(x ~ y | y, data = dat))
 
 
-### Fligner Test
+### Fligner-Killeen Test
 
 ### asymptotic distribution
 ptwo <- fligner.test(y ~ x, data = dat)$p.value
@@ -185,6 +185,22 @@ try(ansari_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
                 alternative = "less"))
 try(ansari_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
                 alternative = "greater"))
+
+
+### Conover-Iman Test
+conover_test(y ~ x, data = dat)
+
+try(conover_test(y ~ ordered(x), data = dat))
+try(conover_test(y ~ ordered(x), data = dat,
+                 alternative = "less"))
+try(conover_test(y ~ ordered(x), data = dat,
+                 alternative = "greater"))
+
+try(conover_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8))))
+try(conover_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+                 alternative = "less"))
+try(conover_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+                 alternative = "greater"))
 
 
 ### Logrank Test

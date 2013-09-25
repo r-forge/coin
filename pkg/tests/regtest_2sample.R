@@ -208,6 +208,12 @@ fligner_test(y ~ x, dat = dat, alternative = "less")
 fligner_test(y ~ x, dat = dat, alternative = "greater")
 
 
+### Conover-Iman Test
+conover_test(y ~ x, dat = dat)
+conover_test(y ~ x, dat = dat, alternative = "less")
+conover_test(y ~ x, dat = dat, alternative = "greater")
+
+
 ### Logrank Test
 surv_test(Surv(y) ~ x, dat = dat)
 surv_test(Surv(y) ~ x, dat = dat, alternative = "less")
@@ -215,10 +221,13 @@ surv_test(Surv(y) ~ x, dat = dat, alternative = "greater")
 
 
 ### confidence intervals, cf Bauer 1972
+
+### Location Tests
 location <- data.frame(y = c(6, 20, 27, 38, 46, 51, 54, 57,
                              10, 12, 15, 21, 32, 40, 41, 45),
                        x = gl(2, 8))
 
+### Wilcoxon Rank-Sum Test
 wt <- wilcox_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
 wt
 ci <- confint(wt)
@@ -226,21 +235,26 @@ wt0 <- wilcox.test(y ~ x, data = location, conf.int = TRUE)
 stopifnot(isequal(wt0$confint, ci$confint))
 stopifnot(isequal(wt0$estimate, ci$estimate))
 
+### Normal Scores Test
 nt <- normal_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
 nt
 ci <- confint(nt)
 stopifnot(isequal(ci$conf.int, c(-6, 30)))
 stopifnot(isequal(ci$estimate, 11))
 
+### Median Test
 median_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
 
+### Savage Test
 savage_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
 
 
+### Scale Tests
 scale <- data.frame(y = c(-101, -35, -13, 10, 130, 236, 370, 556,
                           -145, -140, -40, -30, 2, 27, 68, 290),
                     x = gl(2, 8))
 
+### Ansari-Bradley Test
 at <- ansari_test(y ~ x, data = scale, di = "ex",
                   conf.int = TRUE, conf.level = 0.988)
 at
@@ -248,8 +262,25 @@ ci <- confint(at)
 stopifnot(isequal(ci$conf.int, c(10, 556) / c(68, 27)))
 stopifnot(isequal(ci$estimate, mean(c(35/30, 370 / 290))))
 
+### Taha Test
+taha_test(y ~ x, data = scale, di = "ex",
+          conf.int = TRUE, conf.level = 0.54)
+
+### Klotz Test
+klotz_test(y ~ x, data = scale, di = "ex",
+           conf.int = TRUE, conf.level = 0.988)
+
+### Mood Test
+mood_test(y ~ x, data = scale, di = "ex",
+          conf.int = TRUE, conf.level = 0.988)
+
+### Fligner-Killeen Test
 fligner_test(y ~ x, data = scale, di = "ex",
                   conf.int = TRUE, conf.level = 0.988)
+
+### Conover-Iman Test
+conover_test(y ~ x, data = scale, di = "ex",
+             conf.int = TRUE, conf.level = 0.988)
 
 
 ### ties handling
