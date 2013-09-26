@@ -69,7 +69,7 @@ exact null distribution is currently available for two-sample problems only.
 
         ### download src package into temp dir
         tmpdir <- tempdir()
-        tgz <- download.packages("coin", destdir = tmpdir)[2]
+        tgz <- download.packages("coin", destdir = tmpdir, type = "source")[2]
         ### extract
         untar(tgz, exdir = tmpdir)
         wd <- setwd(file.path(tmpdir, "coin"))
