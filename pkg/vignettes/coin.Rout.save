@@ -28,12 +28,12 @@ The following objects are masked from 'package:base':
 
     Filter, Find, Map, Position, Reduce,
     anyDuplicated, append, as.data.frame, as.vector,
-    cbind, colnames, duplicated, eval, evalq, get,
-    intersect, is.unsorted, lapply, mapply, match,
-    mget, order, paste, pmax, pmax.int, pmin,
-    pmin.int, rank, rbind, rep.int, rownames, sapply,
-    setdiff, sort, table, tapply, union, unique,
-    unlist
+    cbind, colnames, do.call, duplicated, eval,
+    evalq, get, intersect, is.unsorted, lapply,
+    mapply, match, mget, order, paste, pmax,
+    pmax.int, pmin, pmin.int, rank, rbind, rep.int,
+    rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unlist
 
 Welcome to Bioconductor
 
@@ -219,4 +219,4 @@ IV - III 0.99889989
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   1.59    0.24    2.09 
+   1.65    0.26    2.06 
