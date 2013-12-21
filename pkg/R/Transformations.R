@@ -542,8 +542,7 @@ mcp_trafo <- function(...) {
         }
 
         ret <- trafo(data, factor_trafo = function(x)
-            model.matrix(~ x - 1, data = model.frame(~ x, na.action = na.pass))
-                %*% t(C))
+            tcrossprod(model.matrix(~ x - 1, data = model.frame(~ x, na.action = na.pass)), C))
         attr(ret, "contrast") <- C
         ret
     }

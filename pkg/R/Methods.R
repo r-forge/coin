@@ -282,7 +282,7 @@ setMethod(f = "ApproxNullDistribution",
               dcov <- object@covarianceplus
               expect <- expectation(object)
               a <- pls - expect
-              pls <- rowSums((t(a) %*% dcov) * t(a))
+              pls <- rowSums(crossprod(a, dcov) * t(a))
               pls <- sort(pls)
 
               RET <- new("ApproxNullDistribution")

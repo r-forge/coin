@@ -202,8 +202,8 @@ alternative hypothesis: two.sided
 
 
 > if (require("multcomp")) {
-+     xt <- function(data) trafo(data, factor_trafo = function(x) model.matrix(~x - 
-+         1) %*% t(contrMat(table(x) .... [TRUNCATED] 
++     xt <- function(data) trafo(data, factor_trafo = function(x) tcrossprod(model.matrix(~x - 
++         1), contrMat(ta .... [TRUNCATED] 
 [1] 0.00010001
 99 percent confidence interval:
  5.013042e-07 7.428484e-04 
@@ -219,4 +219,4 @@ IV - III 0.99889989
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   1.65    0.26    2.06 
+   1.62    0.17    2.04 
