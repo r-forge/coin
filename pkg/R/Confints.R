@@ -50,7 +50,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
 
         ### computes the statistic under the alternative `d'
         fse <- function(d)
-            sum(object@ytrafo(data.frame(c(foo(x,d),y)))[seq(along = x)])
+            sum(object@ytrafo(data.frame(c(foo(x,d),y)))[seq_along(x)])
 
         ### we need to compute the statistics just to the right of
         ### each step
@@ -139,7 +139,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
         ### is a confidence limit for the median.
 
         fsa <- function(d, zq) {
-           STAT <- sum(object@ytrafo(data.frame(c(foo(x,d),y)))[seq(along = x)])
+           STAT <- sum(object@ytrafo(data.frame(c(foo(x,d),y)))[seq_along(x)])
            (STAT - expectation(object)) / sqrt(variance(object)) - zq
         }
 
@@ -242,7 +242,7 @@ confint_scale <- function(object, nulldistr, level = 0.95,
 
         ### computes the statistic under the alternative `d'
         fse <- function(d)
-            sum(object@ytrafo(data.frame(c(foo(x,d),y)))[seq(along = x)])
+            sum(object@ytrafo(data.frame(c(foo(x,d),y)))[seq_along(x)])
 
         ### we need to compute the statistics just to the right of
         ### each step
@@ -329,7 +329,7 @@ confint_scale <- function(object, nulldistr, level = 0.95,
         ### is a confidence limit for the median.
 
         fsa <- function(d, zq) {
-           STAT <- sum(object@ytrafo(data.frame(c(foo(x,d),y)))[seq(along = x)])
+           STAT <- sum(object@ytrafo(data.frame(c(foo(x,d),y)))[seq_along(x)])
            (STAT - expectation(object)) / sqrt(variance(object)) - zq
         }
 
