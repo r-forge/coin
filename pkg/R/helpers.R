@@ -242,9 +242,9 @@ table2df <- function(x) {
         stop(sQuote("x"), " is not of class ", sQuote("table"))
     x <- as.data.frame(x)
     freq <- x[["Freq"]]
-    x <- x[rep.int(1:nrow(x), freq), ,drop = FALSE]
+    x <- x[rep.int(1:nrow(x), freq), , drop = FALSE]
     rownames(x) <- 1:nrow(x)
-    return(x[,colnames(x) != "Freq"])
+    return(x[, colnames(x) != "Freq"])
 }
 
 table2df_sym <- function(x) {
@@ -252,14 +252,11 @@ table2df_sym <- function(x) {
     lx <- levels(x[[1]])
     if (!all(vapply(x, function(x) all(levels(x) == lx), NA)))
         stop("table ", sQuote("x"), " does not represent a symmetry problem")
-    n <- nrow(x)
-    p <- ncol(x)
-    y <- data.frame(conditions = factor(rep.int(colnames(x), rep.int(n, p))),
-                    response = factor(unlist(x, recursive = FALSE,
-                                             use.names = FALSE),
-                                      labels = lx))
-    rownames(y) <- 1:(n*p)
-    y
+    data.frame(conditions = factor(rep.int(colnames(x),
+                                           rep.int(nrow(x), ncol(x)))),
+               response = factor(unlist(x, recursive = FALSE,
+                                        use.names = FALSE),
+                                 labels = lx))
 }
 
 table2IndependenceProblem <- function(object) {
