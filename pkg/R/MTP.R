@@ -21,10 +21,8 @@ singlestep <- function(object, ...) {
     ret <- vapply(ots[idx], # unique ts
                   object@distribution@pvalue, NA_real_, ...)
 
-    ret <- matrix(rep.int(ret, diff(c(0L, idx)))[order(o)], # remapping
-                  nrow = nrow(ts), ncol = ncol(ts))
-    dimnames(ret) <- list(rownames(ts), colnames(ts))
-    ret
+    matrix(rep.int(ret, diff(c(0L, idx)))[order(o)], # remapping
+           nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
 }
 
 ### algorithm 2.8 (Free Step-Down Resampling Method) in
@@ -34,22 +32,21 @@ rsdmaxT <- function(pls, ts) {
 
     ## reorder simulations using (increasing) test statistics
     o <- order(ts) # smallest ts first
-    q <- pls[, o, drop = FALSE]
+    pls <- pls[, o, drop = FALSE]
 
     ## algorithm 2.8 (Free Step-Down Resampling Method) in
     ## Westfall & Young (1993), page 66 _using standardized
     ## statistics instead of p-values_!
-    if (ncol(q) > 1) {
-        for (j in 2:ncol(q))
-            q[, j] <- pmax(q[, j], q[, j - 1])
+    if (ncol(pls) > 1) {
+        for (j in 2:ncol(pls))
+            pls[, j] <- pmax(pls[, j], pls[, j - 1])
     }
-    ret <- rowMeans(GE(t(q), ts[o]))
+    ret <- rowMeans(GE(t(pls), ts[o]))
     for (i in (length(ret) - 1):1)
         ret[i] <- max(ret[i], ret[i + 1]) # enforce monotonicity, page 67
 
-    ret <- matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts))
-    dimnames(ret) <- list(rownames(ts), colnames(ts))
-    ret
+    matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts),
+           dimnames = dimnames(ts))
 }
 
 ### step-down using the asymptotic distribution
@@ -95,9 +92,8 @@ asdmaxT <- function(object) {
         }
     }
 
-    ret <- matrix(1 - ret[order(o)], nrow = nrow(ts), ncol = ncol(ts))
-    dimnames(ret) <- list(rownames(ts), colnames(ts))
-    ret
+    matrix(1 - ret[order(o)], nrow = nrow(ts), ncol = ncol(ts),
+           dimnames = dimnames(ts))
 }
 
 ### stepdown maxT multiple testing procedure
@@ -108,7 +104,7 @@ stepdown <- function(object, ...) {
              sQuote("MaxTypeIndependenceTest"))
 
     if (extends(class(object@distribution), "AsymptNullDistribution"))
-        ret <- asdmaxT(object)
+        asdmaxT(object)
     else {
         ## raw simulation results, scores have been handled already
         pls <- support(object, raw = TRUE)
@@ -127,10 +123,8 @@ stepdown <- function(object, ...) {
                    pls <- -t((pls - expect) / dcov)
                    ts <- -(statistic(object, "standardized"))})
 
-        ret <- rsdmaxT(pls, ts)
+        rsdmaxT(pls, ts)
     }
-
-    ret
 }
 
 ### Adjusted marginal p-values taking discreteness into account in the
@@ -165,7 +159,8 @@ marginal <- function(object, bonferroni, stepdown, ...) {
             else # Sidak-Holm
                 cummax(1 - (1 - ret[o])^(n - seq_len(n) + 1L))[order(o)]
         }
-        ret <- matrix(ret, nrow = nrow(ts), ncol = ncol(ts))
+
+        matrix(ret, nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
     } else {
         ## raw simulation results, scores have been handled already
         pls <- support(object, raw = TRUE)
@@ -211,16 +206,13 @@ marginal <- function(object, bonferroni, stepdown, ...) {
                 }
             }
         }
-        if (!bonferroni)
-            ret <- 1 - ret
-        ret <- pmin(ret, 1)
+        ret <- if (!bonferroni) pmin(1 - ret, 1) else pmin(ret, 1)
         for (i in 2:length(ret))
             ret[i] <- max(ret[i - 1], ret[i]) # enforce monotonicity
-        ret <- matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts))
-    }
 
-    dimnames(ret) <- list(rownames(ts), colnames(ts))
-    ret
+        matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts),
+               dimnames = dimnames(ts))
+    }
 }
 
 ### compute p-values under subset pivotality (Westfall, 1997)
@@ -276,9 +268,7 @@ npmcp <- function(object) {
     for (i in 2:length(p))
         p[i] <- max(p[i-1], p[i]) # forces pvalue monotonicity
 
-    ret <- matrix(p[rank(tstat)])
-    dimnames(ret) <- dimnames(tstat)
-    return(ret)
+    matrix(p[rank(tstat)], dimnames = dimnames(tstat))
 }
 
 ### unadjusted p-values
@@ -290,6 +280,8 @@ unadjusted <- function(object, ...) {
                       "two.sided" = 2 * pmin(pnorm(ts), 1 - pnorm(ts)),
                       "greater"   = 1 - pnorm(ts),
                       "less"      = pnorm(ts))
+
+        matrix(ret, nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
     } else {
         ## raw simulation results, scores have been handled already
         pls <- support(object, raw = TRUE)
@@ -309,12 +301,9 @@ unadjusted <- function(object, ...) {
                    ts <- -(statistic(object, "standardized"))})
 
         ## unadjusted p-values
-        ret <- matrix(rowMeans(GE(pls, as.vector(ts))),
-                      nrow = nrow(ts), ncol = ncol(ts))
-        dimnames(ret) <- list(rownames(ts), colnames(ts))
+        matrix(rowMeans(GE(pls, as.vector(ts))),
+               nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
     }
-
-    ret
 }
 
 ### <DEPRECATED>
@@ -368,8 +357,8 @@ dbonf <- function(object, ...) {
                 adjp[i] <- adjp[i] * (1 - max(x))
         }
     }
-    ret <- matrix(1 - pmin(adjp, 1), nrow = nrow(ts), ncol = ncol(ts))
-    dimnames(ret) <- list(rownames(ts), colnames(ts))
-    ret
+
+    matrix(1 - pmin(adjp, 1), nrow = nrow(ts), ncol = ncol(ts),
+           dimnames = dimnames(ts))
 }
 ### </DEPRECATED>
