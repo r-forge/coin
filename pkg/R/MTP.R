@@ -39,7 +39,7 @@ rsdmaxT <- function(pls, ts) {
     ## statistics instead of p-values_!
     if (ncol(pls) > 1) {
         for (j in 2:ncol(pls))
-            pls[, j] <- pmax(pls[, j], pls[, j - 1])
+            pls[, j] <- pmax.int(pls[, j], pls[, j - 1])
     }
     ret <- rowMeans(GE(t(pls), ts[o]))
     for (i in (length(ret) - 1):1)
@@ -143,19 +143,19 @@ marginal <- function(object, bonferroni, stepdown, ...) {
         ## unadjusted p-values
         ts <- statistic(object, "standardized")
         ret <- switch(object@statistic@alternative,
-                      "two.sided" = 2 * pmin(pnorm(ts), 1 - pnorm(ts)),
+                      "two.sided" = 2 * pmin.int(pnorm(ts), 1 - pnorm(ts)),
                       "greater"   = 1 - pnorm(ts),
                       "less"      = pnorm(ts))
 
         ## adjustment
         ret <- if (!stepdown) {
-            if (bonferroni) pmin(1, length(ret) * ret) # Bonferroni
+            if (bonferroni) pmin.int(1, length(ret) * ret) # Bonferroni
             else 1 - (1 - ret)^length(ret) # Sidak
         } else {
             n <- length(ret)
             o <- order(ret)
             if (bonferroni) # Bonferroni-Holm
-                pmin(1, cummax((n - seq_len(n) + 1L) * ret[o])[order(o)])
+                pmin.int(1, cummax((n - seq_len(n) + 1L) * ret[o])[order(o)])
             else # Sidak-Holm
                 cummax(1 - (1 - ret[o])^(n - seq_len(n) + 1L))[order(o)]
         }
@@ -206,7 +206,7 @@ marginal <- function(object, bonferroni, stepdown, ...) {
                 }
             }
         }
-        ret <- if (!bonferroni) pmin(1 - ret, 1) else pmin(ret, 1)
+        ret <- if (!bonferroni) pmin.int(1 - ret, 1) else pmin.int(ret, 1)
         for (i in 2:length(ret))
             ret[i] <- max(ret[i - 1], ret[i]) # enforce monotonicity
 
@@ -277,7 +277,7 @@ unadjusted <- function(object, ...) {
     if (extends(class(object@distribution), "AsymptNullDistribution")) {
         ts <- statistic(object, "standardized")
         ret <- switch(object@statistic@alternative,
-                      "two.sided" = 2 * pmin(pnorm(ts), 1 - pnorm(ts)),
+                      "two.sided" = 2 * pmin.int(pnorm(ts), 1 - pnorm(ts)),
                       "greater"   = 1 - pnorm(ts),
                       "less"      = pnorm(ts))
 
@@ -358,7 +358,7 @@ dbonf <- function(object, ...) {
         }
     }
 
-    matrix(1 - pmin(adjp, 1), nrow = nrow(ts), ncol = ncol(ts),
+    matrix(1 - pmin.int(adjp, 1), nrow = nrow(ts), ncol = ncol(ts),
            dimnames = dimnames(ts))
 }
 ### </DEPRECATED>

@@ -56,11 +56,11 @@ ansari_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
     scores <- switch(ties.method,
         "mid-ranks" = {
             r <- rank_trafo(x)
-            pmin(r, sum(!is.na(x)) - r + 1)
+            pmin.int(r, sum(!is.na(x)) - r + 1)
         },
         "average-scores" = {
             r <- rank_trafo(x, ties.method = "random")
-            s <- pmin(r, sum(!is.na(x)) - r + 1)
+            s <- pmin.int(r, sum(!is.na(x)) - r + 1)
             average_scores(s, x)
         }
     )
