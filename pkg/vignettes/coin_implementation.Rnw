@@ -1,7 +1,6 @@
 \documentclass[nojss]{jss}
 
 %% packages
-\usepackage{thumbpdf}
 \usepackage{amsfonts,amstext,amsmath}
 
 %% need no \usepackage{Sweave.sty}
