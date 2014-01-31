@@ -96,12 +96,11 @@ wilcoxsign_test.SymmetryProblem <- function(object,
     }
     n <- length(pos)
 
-    y <- as.vector(rbind(pos, neg))
-    x <- factor(rep.int(0:1, n), labels = c("pos", "neg"))
-    block <- gl(n, 2)
-
-    ip <- new("IndependenceProblem", x = data.frame(x = x),
-              y = data.frame(y = y), block = block)
+    ip <- new("IndependenceProblem",
+              x = data.frame(x = factor(rep.int(0:1, n),
+                                        labels = c("pos", "neg"))),
+              y = data.frame(y = as.vector(rbind(pos, neg))),
+              block = gl(n, 2))
 
     args <- setup_args(teststat = "scalar", paired = TRUE)
 
@@ -157,12 +156,12 @@ sign_test.SymmetryProblem <- function(object, ...) {
     diffs <- diffs[abs_diffs > 0]
     n <- length(diffs)
 
-    y <- as.vector(rbind(as.numeric(diffs > 0), as.numeric(diffs < 0)))
-    x <- factor(rep.int(0:1, n), labels = c("pos", "neg"))
-    block <- gl(n, 2)
-
-    ip <- new("IndependenceProblem", x = data.frame(x = x),
-              y = data.frame(y = y), block = block)
+    ip <- new("IndependenceProblem",
+              x = data.frame(x = factor(rep.int(0:1, n),
+                                        labels = c("pos", "neg"))),
+              y = data.frame(y = as.vector(rbind(as.numeric(diffs > 0),
+                                                 as.numeric(diffs < 0)))),
+              block = gl(n, 2))
 
     args <- setup_args(teststat = "scalar", paired = TRUE)
 
