@@ -266,6 +266,9 @@ setMethod(f = "initialize",
         else
             .Object@weights <- as.double(weights)
 
+        if (!validObject(.Object))
+            stop("not a valid object of class ",
+                 sQuote("SymmetryProblem"))
         .Object
     }
 )

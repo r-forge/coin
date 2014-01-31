@@ -21,11 +21,11 @@
     check = NULL, \dots)
 }
 \arguments{
-  \item{formula}{a formula of the form
-    \code{y1 + ... + yp ~ x1 + ... + xq | block} where the variables on
-    the left and right hand side may be measured on arbitrary scales and
-    \code{block} is an optional factor (which is generated automatically
-    when omitted).}
+  \item{formula}{a formula of the form \code{y1 + ... + yq ~ x | block} where
+  \code{y1} to \code{yq} may be measured on arbitrary scales, \code{x} is a
+  factor with two or more levels giving the corresponding groups and
+  \code{block} is an optional factor (which is generated automatically when
+  omitted).}
   \item{data}{an optional data frame containing the variables in the
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations

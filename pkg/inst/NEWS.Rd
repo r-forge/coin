@@ -218,6 +218,9 @@
       reported the opposite direction of the specififed alternative (but
       performed the test in the specified direction and thus reported
       the correct \eqn{p}-value)
+
+      \item objects of class \code{"SymmetryProblem"} were not checked
+      for validity
     }
   }
   \subsection{Other changes}{

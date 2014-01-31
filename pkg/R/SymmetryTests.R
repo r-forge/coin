@@ -12,8 +12,13 @@ friedman_test.formula <- function(formula, data = list(), subset = NULL, ...)
 friedman_test.SymmetryProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
-    if (!is_completeblock(object))
-        stop("Not an unreplicated complete block design")
+    check <- function(object) {
+        if (!(is_Ksample(object) && is_numeric_y(object)))
+            stop(sQuote("object"),
+                 " does not represent a K-sample problem",
+                 " (maybe the grouping variable is not a factor?)")
+        return(TRUE)
+    }
 
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
@@ -21,7 +26,8 @@ friedman_test.SymmetryProblem <- function(object,
     args <- setup_args(distribution = distribution,
                        ytrafo = function(data)
                            trafo(data, numeric_trafo = rank_trafo,
-                                 block = object@block))
+                                 block = object@block),
+                       check = check)
     object <- setscores(object, args$scores)
     args$scores <- NULL
     args$teststat <- if (is.ordered(object@x[[1]])) "scalar"

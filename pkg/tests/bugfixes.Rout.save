@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2013-08-28 r63747) -- "Unsuffered Consequences"
+R Under development (unstable) (2013-12-20 r64498) -- "Unsuffered Consequences"
 Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -60,6 +60,7 @@ alternative hypothesis: two.sided
 + }
 Loading required package: multcomp
 Loading required package: mvtnorm
+Loading required package: TH.data
 [1] TRUE
 > 
 > 
@@ -490,8 +491,11 @@ alternative hypothesis: true mu is not equal to 0
 > x <- c(NA, NA)
 > y <- c(1, 1)
 > try(wilcoxsign_test(x ~ y))
-Error in tapply(1:length(y), block, function(b) y[b][x[b] == levels(x)[1]] -  : 
-  arguments must have same length
+Error in validObject(.Object) : 
+  invalid class "SymmetryProblem" object: FALSE
+In addition: Warning message:
+In max(abs(object@weights - floor(object@weights))) :
+  no non-missing arguments to max; returning -Inf
 > 
 > ### problem in coin 1.0-12 fixed
 > x <- c(1, 2, 3)
@@ -715,6 +719,20 @@ Error in setscores(object, scores) :
 > at <- ansari_test(y ~ x, alternative = alt)
 > stopifnot(isequal(at@statistic@alternative, alt))
 > 
+> ### objects of class "SymmetryProblem" didn't check validity
+> dta <- data.frame(y = rnorm(20), y2 = rnorm(20),
++                   x = factor(rep(1:4, 5)), x2 = gl(2, 10),
++                   b = gl(5, 4))
+> try(friedman_test(y + y2 ~ x | b, data = dta))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(friedman_test(y ~ x + x2 | b, data = dta))
+Error in validityMethod(object) : 
+  'x' slot does not contain a single factor
+> try(friedman_test(y ~ x2 | b, data = dta)) # was ok
+Error in validityMethod(object) : 
+  'object' is not a an unreplicated complete block design
+> 
 > proc.time()
    user  system elapsed 
-   2.66    0.10    2.90 
+   2.85    0.12    3.08 
