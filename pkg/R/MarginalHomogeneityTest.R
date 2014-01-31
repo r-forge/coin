@@ -1,15 +1,14 @@
 ### marginal homogeneity test
 mh_test <- function(object, ...) UseMethod("mh_test")
 
-mh_test.formula <- function(formula, data = list(), subset = NULL, ...)
-{
-    d <- formula2data(formula, data, subset, frame = parent.frame(), ...)
-    sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
-    RET <- do.call("mh_test", c(list(object = sp), list(...)))
-    return(RET)
+mh_test.formula <- function(formula, data = list(), subset = NULL, ...) {
+
+    ft("mh_test", "SymmetryProblem", formula, data, subset,
+       frame = parent.frame(), ...)
 }
 
 mh_test.table <- function(object, ...) {
+
     df <- table2df_sym(object)
     sp <- new("SymmetryProblem", x = df["conditions"], y = df["response"])
     RET <- do.call("mh_test", c(list(object = sp), list(...)))

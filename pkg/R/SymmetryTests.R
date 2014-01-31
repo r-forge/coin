@@ -1,12 +1,10 @@
 ### Friedman Test
 friedman_test <- function(object, ...) UseMethod("friedman_test")
 
-friedman_test.formula <- function(formula, data = list(), subset = NULL, ...)
-{
-    d <- formula2data(formula, data, subset, frame = parent.frame(), ...)
-    sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
-    RET <- do.call("friedman_test", c(list(object = sp), list(...)))
-    return(RET)
+friedman_test.formula <- function(formula, data = list(), subset = NULL, ...) {
+
+    ft("friedman_test", "SymmetryProblem", formula, data, subset,
+       frame = parent.frame(), ...)
 }
 
 friedman_test.SymmetryProblem <- function(object,

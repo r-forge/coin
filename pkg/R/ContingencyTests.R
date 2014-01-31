@@ -4,7 +4,7 @@ chisq_test <- function(object, ...) UseMethod("chisq_test")
 chisq_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("chisq_test", formula, data, subset, weights,
+    ft("chisq_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -97,7 +97,7 @@ cmh_test <- function(object, ...) UseMethod("cmh_test")
 cmh_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("cmh_test", formula, data, subset, weights,
+    ft("cmh_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -149,7 +149,7 @@ lbl_test <- function(object, ...) UseMethod("lbl_test")
 lbl_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("lbl_test", formula, data, subset, weights,
+    ft("lbl_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 

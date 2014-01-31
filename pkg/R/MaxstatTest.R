@@ -4,7 +4,7 @@ maxstat_test <- function(object, ...) UseMethod("maxstat_test")
 maxstat_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("maxstat_test", formula, data, subset, weights,
+    ft("maxstat_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 

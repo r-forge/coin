@@ -4,7 +4,7 @@ oneway_test <- function(object, ...) UseMethod("oneway_test")
 oneway_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("oneway_test", formula, data, subset, weights,
+    ft("oneway_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -42,7 +42,7 @@ wilcox_test <- function(object, ...) UseMethod("wilcox_test")
 wilcox_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("wilcox_test", formula, data, subset, weights,
+    ft("wilcox_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -85,7 +85,7 @@ kruskal_test <- function(object, ...) UseMethod("kruskal_test")
 kruskal_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("kruskal_test", formula, data, subset, weights,
+    ft("kruskal_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -129,7 +129,7 @@ normal_test <- function(object, ...) UseMethod("normal_test")
 normal_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("normal_test", formula, data, subset, weights,
+    ft("normal_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -183,7 +183,7 @@ median_test <- function(object, ...) UseMethod("median_test")
 median_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("median_test", formula, data, subset, weights,
+    ft("median_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -237,7 +237,7 @@ savage_test <- function(object, ...) UseMethod("savage_test")
 savage_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("savage_test", formula, data, subset, weights,
+    ft("savage_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 

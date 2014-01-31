@@ -4,7 +4,7 @@ spearman_test <- function(object, ...) UseMethod("spearman_test")
 spearman_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("spearman_test", formula, data, subset, weights,
+    ft("spearman_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -45,7 +45,7 @@ fisyat_test <- function(object, ...) UseMethod("fisyat_test")
 fisyat_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("fisyat_test", formula, data, subset, weights,
+    ft("fisyat_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -89,7 +89,7 @@ quadrant_test <- function(object, ...) UseMethod("quadrant_test")
 quadrant_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("quadrant_test", formula, data, subset, weights,
+    ft("quadrant_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -136,7 +136,7 @@ koziol_test <- function(object, ...) UseMethod("koziol_test")
 koziol_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("koziol_test", formula, data, subset, weights,
+    ft("koziol_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 

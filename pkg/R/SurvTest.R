@@ -4,7 +4,7 @@ surv_test <- function(object, ...) UseMethod("surv_test")
 surv_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("surv_test", formula, data, subset, weights,
+    ft("surv_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 

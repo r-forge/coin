@@ -4,7 +4,7 @@ independence_test <- function(object, ...) UseMethod("independence_test")
 independence_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("independence_test", formula, data, subset, weights,
+    ft("independence_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 

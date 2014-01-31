@@ -4,7 +4,7 @@ taha_test <- function(object, ...) UseMethod("taha_test")
 taha_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("taha_test", formula, data, subset, weights,
+    ft("taha_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -55,7 +55,7 @@ klotz_test <- function(object, ...) UseMethod("klotz_test")
 klotz_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("klotz_test", formula, data, subset, weights,
+    ft("klotz_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -107,7 +107,7 @@ mood_test <- function(object, ...) UseMethod("mood_test")
 mood_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("mood_test", formula, data, subset, weights,
+    ft("mood_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -159,7 +159,7 @@ ansari_test <- function(object, ...) UseMethod("ansari_test")
 ansari_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("ansari_test", formula, data, subset, weights,
+    ft("ansari_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -218,7 +218,7 @@ fligner_test <- function(object, ...) UseMethod("fligner_test")
 fligner_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("fligner_test", formula, data, subset, weights,
+    ft("fligner_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -274,7 +274,7 @@ conover_test <- function(object, ...) UseMethod("conover_test")
 conover_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("conover_test", formula, data, subset, weights,
+    ft("conover_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 

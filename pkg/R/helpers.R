@@ -100,12 +100,11 @@ copyslots <- function(source, target) {
     return(target)
 }
 
-ft <- function(test, formula, data = list(), subset = NULL,
+ft <- function(test, class, formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
     d <- formula2data(formula, data, subset, weights = weights, ...)
-    ip <- new("IndependenceProblem", x = d$x, y = d$y, block = d$bl,
-              weights = d$w)
+    p <- new(class, x = d$x, y = d$y, block = d$bl, weights = d$w)
     args <- list(...)
     args$frame <- NULL
 
@@ -115,7 +114,7 @@ ft <- function(test, formula, data = list(), subset = NULL,
     if (test %in% ranktests & (max(abs(w - 1)) > .Machine$double.eps))
         warning("Rank transformation doesn't take weights into account")
 
-    RET <- do.call(test, c(list(object = ip), args))
+    RET <- do.call(test, c(list(object = p), args))
     return(RET)
 }
 

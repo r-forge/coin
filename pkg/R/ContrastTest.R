@@ -4,7 +4,7 @@ contrast_test <- function(object, ...) UseMethod("contrast_test")
 contrast_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("contrast_test", formula, data, subset, weights,
+    ft("contrast_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
