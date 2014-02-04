@@ -45,7 +45,7 @@ chisq_test.IndependenceProblem <- function(object,
                                   c("two.sided", "less", "greater"))
 
     ## transform data if requested and setup a test problem
-    object <- new("IndependenceTestProblem", object)
+    object <- new("IndependenceTestProblem", object, args$xtrafo, args$ytrafo)
 
     if (!check(object))
         stop(sQuote("check"), " failed")

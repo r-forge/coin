@@ -223,6 +223,9 @@
       for validity
 
       \item the Friedman test did not warn when weights were supplied
+
+      \item the Pearson chi-squared test ignored user-specified
+      transformations
     }
   }
   \subsection{Other changes}{

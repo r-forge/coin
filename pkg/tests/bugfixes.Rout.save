@@ -747,6 +747,51 @@ Warning message:
 In ft("friedman_test", "SymmetryProblem", formula, data, subset,  :
   Rank transformation doesn't take weights into account
 > 
+> ### chisq_test ignored xtrafo and ytrafo
+> chisq_test(as.table(jobsatisfaction[,,"Female"]),
++            xtrafo = function(data)
++                trafo(data, factor_trafo = function(x)
++                    of_trafo(x, scores=1:4)))
+
+	Asymptotic Pearson's Chi-Squared Test
+
+data:  Job.Satisfaction by
+	 Income (<5000, 5000-15000, 15000-25000, >25000)
+chi-squared = 3.0171, df = 3, p-value = 0.389
+
+Warning message:
+In of_trafo(x, scores = 1:4) : 'x' is not an ordered factor
+> chisq_test(as.table(jobsatisfaction[,,"Female"]),
++            ytrafo = function(data)
++                trafo(data, factor_trafo = function(y)
++                    of_trafo(y, scores=1:4)))
+
+	Asymptotic Pearson's Chi-Squared Test
+
+data:  Job.Satisfaction by
+	 Income (<5000, 5000-15000, 15000-25000, >25000)
+chi-squared = 4.2297, df = 3, p-value = 0.2377
+
+Warning message:
+In of_trafo(y, scores = 1:4) : 'y' is not an ordered factor
+> chisq_test(as.table(jobsatisfaction[,,"Female"]),
++            xtrafo = function(data)
++                trafo(data, factor_trafo = function(x)
++                    of_trafo(x, scores=1:4)),
++            ytrafo = function(data)
++                trafo(data, factor_trafo = function(y)
++                    of_trafo(y, scores=1:4)))
+
+	Asymptotic Pearson's Chi-Squared Test
+
+data:  Job.Satisfaction by
+	 Income (<5000, 5000-15000, 15000-25000, >25000)
+chi-squared = 1.8684, df = 1, p-value = 0.1717
+
+Warning messages:
+1: In of_trafo(x, scores = 1:4) : 'x' is not an ordered factor
+2: In of_trafo(y, scores = 1:4) : 'y' is not an ordered factor
+> 
 > proc.time()
    user  system elapsed 
-   2.83    0.18    3.10 
+   3.13    0.24    3.49 
