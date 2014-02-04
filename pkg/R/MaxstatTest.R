@@ -10,9 +10,9 @@ maxstat_test.formula <- function(formula, data = list(), subset = NULL,
 
 maxstat_test.table <- function(object, ...) {
 
-    ip <- table2IndependenceProblem(object)
-    RET <- do.call("maxstat_test", c(list(object = ip), list(...)))
-    return(RET)
+    object <- table2IndependenceProblem(object)
+    object <- do.call("maxstat_test", c(list(object = object), list(...)))
+    return(object)
 }
 
 maxstat_test.IndependenceProblem <- function(object,
@@ -41,30 +41,30 @@ maxstat_test.IndependenceProblem <- function(object,
     object <- setscores(object, args$scores)
     args$scores <- NULL
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    RET@method <- "Generalized Maximally Selected Statistics"
+    object@method <- "Generalized Maximally Selected Statistics"
 
     ## estimate cutpoint
-    wm <- which.max(apply(abs(statistic(RET, "standardized")), 1, max))
-    whichvar <- attr(RET@statistic@xtrans, "assign")[wm]
-    maxcontr <- RET@statistic@xtrans[, wm]
-    if (is.factor(RET@statistic@x[[whichvar]])) {
-        cp <- levels(RET@statistic@x[[whichvar]][maxcontr > 0][, drop = TRUE])
-        cp0 <- levels(RET@statistic@x[[whichvar]][maxcontr == 0][, drop = TRUE])
+    wm <- which.max(apply(abs(statistic(object, "standardized")), 1, max))
+    whichvar <- attr(object@statistic@xtrans, "assign")[wm]
+    maxcontr <- object@statistic@xtrans[, wm]
+    if (is.factor(object@statistic@x[[whichvar]])) {
+        cp <- levels(object@statistic@x[[whichvar]][maxcontr > 0][, drop = TRUE])
+        cp0 <- levels(object@statistic@x[[whichvar]][maxcontr == 0][, drop = TRUE])
         lab <- paste0("{", paste0(cp, collapse = ", "), "} vs. {",
                       paste0(cp0, collapse = ", "), "}")
     } else {
-        cp <- max(RET@statistic@x[[whichvar]][maxcontr > 0])
+        cp <- max(object@statistic@x[[whichvar]][maxcontr > 0])
         lab <- paste0("<= ", format(cp, digits = getOption("digits")))
     }
-    if (ncol(object@x) > 1)
-        estimate <- list(covariable = colnames(RET@statistic@x)[whichvar],
+    if (ncol(object@statistic@x) > 1)
+        estimate <- list(covariable = colnames(object@statistic@x)[whichvar],
                          cutpoint = cp, label = lab)
     else
         estimate <- list(cutpoint = cp, label = lab)
     class(estimate) <- c("list", "cutpoint")
-    RET@estimates <- list(estimate = estimate)
+    object@estimates <- list(estimate = estimate)
 
-    return(RET)
+    return(object)
 }

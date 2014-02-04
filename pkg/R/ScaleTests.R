@@ -29,23 +29,23 @@ taha_test.IndependenceProblem <- function(object,
                        check = check)
     args$teststat <- if (twosamp) "scalar" else "quad"
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        RET@method <- "2-Sample Taha Test"
-        RET@parameter <- "ratio of scales"
-        RET@nullvalue <- 1
+        object@method <- "2-Sample Taha Test"
+        object@parameter <- "ratio of scales"
+        object@nullvalue <- 1
         if (conf.int) {
-            RET <- new("ScalarIndependenceTestConfint", RET)
-            RET@confint <- function(level)
-                confint_scale(RET@statistic, RET@distribution,
+            object <- new("ScalarIndependenceTestConfint", object)
+            object@confint <- function(level)
+                confint_scale(object@statistic, object@distribution,
                                  level = level)
-            RET@conf.level <- conf.level
+            object@conf.level <- conf.level
         }
     } else
-        RET@method <- "K-Sample Taha Test"
+        object@method <- "K-Sample Taha Test"
 
-    return(RET)
+    return(object)
 }
 
 
@@ -81,23 +81,23 @@ klotz_test.IndependenceProblem <- function(object,
                        check = check)
     args$teststat <- if (twosamp) "scalar" else "quad"
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        RET@method <- "2-Sample Klotz Test"
-        RET@parameter <- "ratio of scales"
-        RET@nullvalue <- 1
+        object@method <- "2-Sample Klotz Test"
+        object@parameter <- "ratio of scales"
+        object@nullvalue <- 1
         if (conf.int) {
-            RET <- new("ScalarIndependenceTestConfint", RET)
-            RET@confint <- function(level)
-                confint_scale(RET@statistic, RET@distribution,
+            object <- new("ScalarIndependenceTestConfint", object)
+            object@confint <- function(level)
+                confint_scale(object@statistic, object@distribution,
                                  level = level)
-            RET@conf.level <- conf.level
+            object@conf.level <- conf.level
         }
     } else
-        RET@method <- "K-Sample Klotz Test"
+        object@method <- "K-Sample Klotz Test"
 
-    return(RET)
+    return(object)
 }
 
 
@@ -133,23 +133,23 @@ mood_test.IndependenceProblem <- function(object,
                        check = check)
     args$teststat <- if (twosamp) "scalar" else "quad"
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        RET@method <- "2-Sample Mood Test"
-        RET@parameter <- "ratio of scales"
-        RET@nullvalue <- 1
+        object@method <- "2-Sample Mood Test"
+        object@parameter <- "ratio of scales"
+        object@nullvalue <- 1
         if (conf.int) {
-            RET <- new("ScalarIndependenceTestConfint", RET)
-            RET@confint <- function(level)
-                confint_scale(RET@statistic, RET@distribution,
+            object <- new("ScalarIndependenceTestConfint", object)
+            object@confint <- function(level)
+                confint_scale(object@statistic, object@distribution,
                                  level = level)
-            RET@conf.level <- conf.level
+            object@conf.level <- conf.level
         }
     } else
-        RET@method <- "K-Sample Mood Test"
+        object@method <- "K-Sample Mood Test"
 
-    return(RET)
+    return(object)
 }
 
 
@@ -191,24 +191,24 @@ ansari_test.IndependenceProblem <- function(object,
     else if (alternative == "greater")
         args$alternative <- "less"
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        RET@method <- "2-Sample Ansari-Bradley Test"
-        RET@parameter <- "ratio of scales"
-        RET@nullvalue <- 1
-        RET@statistic@alternative <- alternative
+        object@method <- "2-Sample Ansari-Bradley Test"
+        object@parameter <- "ratio of scales"
+        object@nullvalue <- 1
+        object@statistic@alternative <- alternative
         if (conf.int) {
-            RET <- new("ScalarIndependenceTestConfint", RET)
-            RET@confint <- function(level)
-                confint_scale(RET@statistic, RET@distribution,
+            object <- new("ScalarIndependenceTestConfint", object)
+            object@confint <- function(level)
+                confint_scale(object@statistic, object@distribution,
                                  level = level)
-            RET@conf.level <- conf.level
+            object@conf.level <- conf.level
         }
     } else
-        RET@method <- "K-Sample Ansari-Bradley Test"
+        object@method <- "K-Sample Ansari-Bradley Test"
 
-    return(RET)
+    return(object)
 }
 
 
@@ -248,23 +248,23 @@ fligner_test.IndependenceProblem <- function(object,
     object@y[[1]] <- object@y[[1]] -
         tapply(object@y[[1]], object@x[[1]], median)[object@x[[1]]]
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        RET@method <- "2-Sample Fligner-Killeen Test"
-        RET@parameter <- "ratio of scales"
-        RET@nullvalue <- 1
+        object@method <- "2-Sample Fligner-Killeen Test"
+        object@parameter <- "ratio of scales"
+        object@nullvalue <- 1
         if (conf.int) {
-            RET <- new("ScalarIndependenceTestConfint", RET)
-            RET@confint <- function(level)
-                confint_scale(RET@statistic, RET@distribution,
+            object <- new("ScalarIndependenceTestConfint", object)
+            object@confint <- function(level)
+                confint_scale(object@statistic, object@distribution,
                                  level = level)
-            RET@conf.level <- conf.level
+            object@conf.level <- conf.level
         }
     } else
-        RET@method <- "K-Sample Fligner-Killeen Test"
+        object@method <- "K-Sample Fligner-Killeen Test"
 
-    return(RET)
+    return(object)
 }
 
 
@@ -303,21 +303,21 @@ conover_test.IndependenceProblem <- function(object,
     object@y[[1]] <- object@y[[1]] -
         tapply(object@y[[1]], object@x[[1]], mean)[object@x[[1]]]
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        RET@method <- "2-Sample Conover-Iman Test"
-        RET@parameter <- "ratio of scales"
-        RET@nullvalue <- 1
+        object@method <- "2-Sample Conover-Iman Test"
+        object@parameter <- "ratio of scales"
+        object@nullvalue <- 1
         if (conf.int) {
-            RET <- new("ScalarIndependenceTestConfint", RET)
-            RET@confint <- function(level)
-                confint_scale(RET@statistic, RET@distribution,
+            object <- new("ScalarIndependenceTestConfint", object)
+            object@confint <- function(level)
+                confint_scale(object@statistic, object@distribution,
                                  level = level)
-            RET@conf.level <- conf.level
+            object@conf.level <- conf.level
         }
     } else
-        RET@method <- "K-Sample Conover-Iman Test"
+        object@method <- "K-Sample Conover-Iman Test"
 
-    return(RET)
+    return(object)
 }

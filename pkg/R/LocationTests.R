@@ -22,17 +22,17 @@ oneway_test.IndependenceProblem <- function(object, ...) {
 
     args <- setup_args(check = check)
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(RET@statistic))
-        RET@method <- "Linear-by-Linear Association Test"
+    if (is_singly_ordered(object@statistic))
+        object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        RET@method <- "2-Sample Permutation Test"
-        RET@nullvalue <- 0
+        object@method <- "2-Sample Permutation Test"
+        object@nullvalue <- 0
     } else
-        RET@method <- "K-Sample Permutation Test"
+        object@method <- "K-Sample Permutation Test"
 
-    return(RET)
+    return(object)
 }
 
 
@@ -62,20 +62,20 @@ wilcox_test.IndependenceProblem <- function(object,
                            trafo(data, numeric_trafo = rank_trafo),
                        check = check)
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    RET@method <- "Wilcoxon-Mann-Whitney Test"
-    RET@nullvalue <- 0
+    object@method <- "Wilcoxon-Mann-Whitney Test"
+    object@nullvalue <- 0
 
     if (conf.int) {
-        RET <- new("ScalarIndependenceTestConfint", RET)
-        RET@confint <- function(level)
-            confint_location(RET@statistic, RET@distribution,
+        object <- new("ScalarIndependenceTestConfint", object)
+        object@confint <- function(level)
+            confint_location(object@statistic, object@distribution,
                              level = level)
-        RET@conf.level <- conf.level
+        object@conf.level <- conf.level
     }
 
-    return(RET)
+    return(object)
 }
 
 
@@ -112,14 +112,14 @@ kruskal_test.IndependenceProblem <- function(object,
     args$teststat <- if (is.ordered(object@x[[1]])) "scalar"
                      else "quad"
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(RET@statistic))
-        RET@method <- "Linear-by-Linear Association Test"
+    if (is_singly_ordered(object@statistic))
+        object@method <- "Linear-by-Linear Association Test"
     else
-        RET@method <- "Kruskal-Wallis Test"
+        object@method <- "Kruskal-Wallis Test"
 
-    return(RET)
+    return(object)
 }
 
 
@@ -156,24 +156,24 @@ normal_test.IndependenceProblem <- function(object,
     args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
                      else "quad"
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(RET@statistic))
-        RET@method <- "Linear-by-Linear Association Test"
+    if (is_singly_ordered(object@statistic))
+        object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        RET@method <- "2-Sample Normal Quantile (van der Waerden) Test"
-        RET@nullvalue <- 0
+        object@method <- "2-Sample Normal Quantile (van der Waerden) Test"
+        object@nullvalue <- 0
         if (conf.int) {
-            RET <- new("ScalarIndependenceTestConfint", RET)
-            RET@confint <- function(level)
-                confint_location(RET@statistic, RET@distribution,
+            object <- new("ScalarIndependenceTestConfint", object)
+            object@confint <- function(level)
+                confint_location(object@statistic, object@distribution,
                                  level = level)
-            RET@conf.level <- conf.level
+            object@conf.level <- conf.level
         }
     } else
-        RET@method <- "K-Sample Normal Quantile (van der Waerden) Test"
+        object@method <- "K-Sample Normal Quantile (van der Waerden) Test"
 
-    return(RET)
+    return(object)
 }
 
 
@@ -210,24 +210,24 @@ median_test.IndependenceProblem <- function(object,
     args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
                      else "quad"
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(RET@statistic))
-        RET@method <- "Linear-by-Linear Association Test"
+    if (is_singly_ordered(object@statistic))
+        object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        RET@method <- "2-Sample Median Test"
-        RET@nullvalue <- 0
+        object@method <- "2-Sample Median Test"
+        object@nullvalue <- 0
         if (conf.int) {
-            RET <- new("ScalarIndependenceTestConfint", RET)
-            RET@confint <- function(level)
-                confint_location(RET@statistic, RET@distribution,
+            object <- new("ScalarIndependenceTestConfint", object)
+            object@confint <- function(level)
+                confint_location(object@statistic, object@distribution,
                                  level = level)
-            RET@conf.level <- conf.level
+            object@conf.level <- conf.level
         }
     } else
-        RET@method <- "K-Sample Median Test"
+        object@method <- "K-Sample Median Test"
 
-    return(RET)
+    return(object)
 }
 
 
@@ -264,22 +264,22 @@ savage_test.IndependenceProblem <- function(object,
     args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
                      else "quad"
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(RET@statistic))
-        RET@method <- "Linear-by-Linear Association Test"
+    if (is_singly_ordered(object@statistic))
+        object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        RET@method <- "2-Sample Savage Test"
-        RET@nullvalue <- 0
+        object@method <- "2-Sample Savage Test"
+        object@nullvalue <- 0
         if (conf.int) {
-            RET <- new("ScalarIndependenceTestConfint", RET)
-            RET@confint <- function(level)
-                confint_location(RET@statistic, RET@distribution,
+            object <- new("ScalarIndependenceTestConfint", object)
+            object@confint <- function(level)
+                confint_location(object@statistic, object@distribution,
                                  level = level)
-            RET@conf.level <- conf.level
+            object@conf.level <- conf.level
         }
     } else
-        RET@method <- "K-Sample Savage Test"
+        object@method <- "K-Sample Savage Test"
 
-    return(RET)
+    return(object)
 }

@@ -29,9 +29,9 @@ contrast_test.IndependenceProblem <- function(object,
                        xtrafo = function(data)
                            trafo(data) %*% cmatrix)
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    RET@method <- "General Contrast Test"
+    object@method <- "General Contrast Test"
 
-    return(RET)
+    return(object)
 }

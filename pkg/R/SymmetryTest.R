@@ -9,10 +9,11 @@ symmetry_test.formula <- function(formula, data = list(), subset = NULL, ...) {
 
 symmetry_test.table <- function(object, ...) {
 
-    df <- table2df_sym(object)
-    sp <- new("SymmetryProblem", x = df["conditions"], y = df["response"])
-    RET <- do.call("symmetry_test", c(list(object = sp), list(...)))
-    return(RET)
+    object <- table2df_sym(object)
+    object <- new("SymmetryProblem", x = object["conditions"],
+                  y = object["response"])
+    object <- do.call("symmetry_test", c(list(object = object), list(...)))
+    return(object)
 }
 
 symmetry_test.SymmetryProblem <- function(object,
@@ -25,8 +26,8 @@ symmetry_test.SymmetryProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
     class(object) <- "IndependenceProblem"
-    RET <- independence_test(object, teststat, distribution, alternative,
-                             xtrafo, ytrafo, scores, check, ...)
-    RET@method <- "General Symmetry Test"
-    return(RET)
+    object <- independence_test(object, teststat, distribution, alternative,
+                                xtrafo, ytrafo, scores, check, ...)
+    object@method <- "General Symmetry Test"
+    return(object)
 }

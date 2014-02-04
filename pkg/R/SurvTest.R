@@ -38,19 +38,19 @@ surv_test.IndependenceProblem <- function(object,
     args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
                      else "quad"
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(RET@statistic))
-        RET@method <- "Linear-by-Linear Association Test"
+    if (is_singly_ordered(object@statistic))
+        object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        RET@method <- paste("2-Sample",
+        object@method <- paste("2-Sample",
                             if (type == "logrank") "Logrank" else type, "Test")
         ## theta = lambda_2 / lambda_1
-        RET@parameter <- "theta"
-        RET@nullvalue <- 1 # theta = 1 => Equal hazards
+        object@parameter <- "theta"
+        object@nullvalue <- 1 # theta = 1 => Equal hazards
     } else
-        RET@method <- paste("K-Sample",
+        object@method <- paste("K-Sample",
                             if (type == "logrank") "Logrank" else type, "Test")
 
-    return(RET)
+    return(object)
 }

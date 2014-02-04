@@ -13,11 +13,11 @@ independence_test.table <- function(object,
 
     distribution <- check_distribution_arg(distribution,
                                            c("asymptotic", "approximate"))
-    ip <- table2IndependenceProblem(object)
-    RET <- do.call("independence_test",
-                   c(list(object = ip, distribution = distribution),
-                   list(...)))
-    return(RET)
+    object <- table2IndependenceProblem(object)
+    object <- do.call("independence_test",
+                      c(list(object = object, distribution = distribution),
+                        list(...)))
+    return(object)
 }
 
 independence_test.IndependenceProblem <- function(object,
@@ -75,7 +75,7 @@ independence_test.IndependenceProblem <- function(object,
 ###         varonly = class(distribution) == "approximate" && teststat == "max")
 
     ## compute test statistic and corresponding null distribution
-    RET <- switch(teststat,
+    object <- switch(teststat,
         "scalar" = {
             object <- new("ScalarIndependenceTestStatistic", object,
                           alternative = alternative, paired = isTRUE(paired))
@@ -94,7 +94,7 @@ independence_test.IndependenceProblem <- function(object,
                 distribution = distribution(object))
         })
 
-    RET@call <- match.call()
+    object@call <- match.call()
     ## return object inheriting from class `IndependenceTest'
-    return(RET)
+    return(object)
 }

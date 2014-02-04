@@ -29,13 +29,13 @@ spearman_test.IndependenceProblem <- function(object,
                            trafo(data, numeric_trafo = rank_trafo),
                        check = check)
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    RET@method <- "Spearman Correlation Test"
-    RET@parameter <- "rho"
-    RET@nullvalue <- 0
+    object@method <- "Spearman Correlation Test"
+    object@parameter <- "rho"
+    object@nullvalue <- 0
 
-    return(RET)
+    return(object)
 }
 
 
@@ -73,13 +73,13 @@ fisyat_test.IndependenceProblem <- function(object,
                                normal_trafo(y, ties.method = ties.method)),
                        check = check)
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    RET@method <- "Fisher-Yates Correlation Test"
-    RET@parameter <- "rho"
-    RET@nullvalue <- 0
+    object@method <- "Fisher-Yates Correlation Test"
+    object@parameter <- "rho"
+    object@nullvalue <- 0
 
-    return(RET)
+    return(object)
 }
 
 
@@ -120,13 +120,13 @@ quadrant_test.IndependenceProblem <- function(object,
                                median_trafo(y, mid.score = mid.score)),
                        check = check)
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    RET@method <- "Quadrant Test"
-    RET@parameter <- "rho"
-    RET@nullvalue <- 0
+    object@method <- "Quadrant Test"
+    object@parameter <- "rho"
+    object@nullvalue <- 0
 
-    return(RET)
+    return(object)
 }
 
 
@@ -164,11 +164,11 @@ koziol_test.IndependenceProblem <- function(object,
                                koziol_trafo(y, ties.method = ties.method)),
                        check = check)
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    RET@method <- "Koziol-Nemec Test"
-    RET@parameter <- "rho"
-    RET@nullvalue <- 0
+    object@method <- "Koziol-Nemec Test"
+    object@parameter <- "rho"
+    object@nullvalue <- 0
 
-    return(RET)
+    return(object)
 }

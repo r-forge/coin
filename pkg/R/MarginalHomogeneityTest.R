@@ -9,10 +9,11 @@ mh_test.formula <- function(formula, data = list(), subset = NULL, ...) {
 
 mh_test.table <- function(object, ...) {
 
-    df <- table2df_sym(object)
-    sp <- new("SymmetryProblem", x = df["conditions"], y = df["response"])
-    RET <- do.call("mh_test", c(list(object = sp), list(...)))
-    return(RET)
+    object <- table2df_sym(object)
+    object <- new("SymmetryProblem", x = object["conditions"],
+                  y = object["response"])
+    object <- do.call("mh_test", c(list(object = object), list(...)))
+    return(object)
 }
 
 mh_test.SymmetryProblem <- function(object,
@@ -36,12 +37,12 @@ mh_test.SymmetryProblem <- function(object,
             "scalar"
         else "quad"
 
-    RET <- do.call("symmetry_test", c(list(object = object), args))
+    object <- do.call("symmetry_test", c(list(object = object), args))
 
-    if (is_ordered(RET@statistic))
-        RET@method <- "Marginal Homogeneity Test for Ordered Data"
+    if (is_ordered(object@statistic))
+        object@method <- "Marginal Homogeneity Test for Ordered Data"
     else
-        RET@method <- "Marginal Homogeneity Test"
+        object@method <- "Marginal Homogeneity Test"
 
-    return(RET)
+    return(object)
 }

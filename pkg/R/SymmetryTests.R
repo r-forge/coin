@@ -31,14 +31,14 @@ friedman_test.SymmetryProblem <- function(object,
     args$teststat <- if (is.ordered(object@x[[1]])) "scalar"
                      else "quad"
 
-    RET <- do.call("symmetry_test", c(list(object = object), args))
+    object <- do.call("symmetry_test", c(list(object = object), args))
 
-    if (is_singly_ordered(RET@statistic))
-        RET@method <- "Page Test"
+    if (is_singly_ordered(object@statistic))
+        object@method <- "Page Test"
     else
-        RET@method <- "Friedman Test"
+        object@method <- "Friedman Test"
 
-    return(RET)
+    return(object)
 }
 
 
@@ -47,14 +47,15 @@ wilcoxsign_test <- function(object, ...) UseMethod("wilcoxsign_test")
 
 wilcoxsign_test.formula <- function(formula, data = list(), subset = NULL, ...)
 {
-    d <- formula2data(formula, data, subset, frame = parent.frame(), ...)
-    if (is.null(d$bl))
-        d <- list(y = data.frame(c(d$y[[1]], d$x[[1]])),
-                  x = data.frame(gl(2, length(d$x[[1]]))),
-                  block = factor(rep.int(1:length(d$x[[1]]), 2)))
-    sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
-    RET <- do.call("wilcoxsign_test", c(list(object = sp), list(...)))
-    return(RET)
+    object <- formula2data(formula, data, subset, frame = parent.frame(), ...)
+    if (is.null(object$bl))
+        object <- list(y = data.frame(c(object$y[[1]], object$x[[1]])),
+                       x = data.frame(gl(2, length(object$x[[1]]))),
+                       block = factor(rep.int(1:length(object$x[[1]]), 2)))
+    object <- new("SymmetryProblem", x = object$x, y = object$y,
+                  block = object$bl)
+    object <- do.call("wilcoxsign_test", c(list(object = object), list(...)))
+    return(object)
 }
 
 wilcoxsign_test.SymmetryProblem <- function(object,
@@ -64,19 +65,16 @@ wilcoxsign_test.SymmetryProblem <- function(object,
 
     y <- object@y[[1]]
     x <- object@x[[1]]
-    block <- object@block
 
     if (!is.numeric(y))
         stop(sQuote("y"), " is not a numeric variable")
     if (is.factor(x)) {
         if (nlevels(x) != 2)
             stop(sQuote("x"), " is not a factor with two levels")
-        diffs <- tapply(1:length(y), block, function(b)
-            y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]]
-        )
-    } else {
+        diffs <- tapply(1:length(y), object@block, function(b)
+            y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]])
+    } else
         stop(sQuote("x"), " is not a factor")
-    }
 
     abs_diffs <- abs(diffs)
     if (all(abs_diffs < .Machine$double.eps))
@@ -96,23 +94,23 @@ wilcoxsign_test.SymmetryProblem <- function(object,
     }
     n <- length(pos)
 
-    ip <- new("IndependenceProblem",
-              x = data.frame(x = factor(rep.int(0:1, n),
-                                        labels = c("pos", "neg"))),
-              y = data.frame(y = as.vector(rbind(pos, neg))),
-              block = gl(n, 2))
+    object <- new("IndependenceProblem",
+                  x = data.frame(x = factor(rep.int(0:1, n),
+                                            labels = c("pos", "neg"))),
+                  y = data.frame(y = as.vector(rbind(pos, neg))),
+                  block = gl(n, 2))
 
     args <- setup_args(teststat = "scalar", paired = TRUE)
 
-    RET <- do.call("independence_test", c(list(object = ip), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
     if (zero.method == "Pratt")
-        RET@method <- "Wilcoxon-Pratt Signed-Rank Test"
+        object@method <- "Wilcoxon-Pratt Signed-Rank Test"
     else
-        RET@method <- "Wilcoxon Signed-Rank Test"
-    RET@nullvalue <- 0
+        object@method <- "Wilcoxon Signed-Rank Test"
+    object@nullvalue <- 0
 
-    return(RET)
+    return(object)
 }
 
 
@@ -121,33 +119,31 @@ sign_test <- function(object, ...) UseMethod("sign_test")
 
 sign_test.formula <- function(formula, data = list(), subset = NULL, ...)
 {
-    d <- formula2data(formula, data, subset, frame = parent.frame(), ...)
-    if (is.null(d$bl))
-        d <- list(y = data.frame(c(d$y[[1]], d$x[[1]])),
-                  x = data.frame(gl(2, length(d$x[[1]]))),
-                  block = factor(rep.int(1:length(d$x[[1]]), 2)))
-    sp <- new("SymmetryProblem", x = d$x, y = d$y, block = d$bl)
-    RET <- do.call("sign_test", c(list(object = sp), list(...)))
-    return(RET)
+    object <- formula2data(formula, data, subset, frame = parent.frame(), ...)
+    if (is.null(object$bl))
+        object <- list(y = data.frame(c(object$y[[1]], object$x[[1]])),
+                       x = data.frame(gl(2, length(object$x[[1]]))),
+                       block = factor(rep.int(1:length(object$x[[1]]), 2)))
+    object <- new("SymmetryProblem", x = object$x, y = object$y,
+                  block = object$bl)
+    object <- do.call("sign_test", c(list(object = object), list(...)))
+    return(object)
 }
 
 sign_test.SymmetryProblem <- function(object, ...) {
 
     y <- object@y[[1]]
     x <- object@x[[1]]
-    block <- object@block
 
     if (!is.numeric(y))
         stop(sQuote("y"), " is not a numeric variable")
     if (is.factor(x)) {
         if (nlevels(x) != 2)
             stop(sQuote("x"), " is not a factor with two levels")
-        diffs <- tapply(1:length(y), block, function(b)
-            y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]]
-        )
-    } else {
+        diffs <- tapply(1:length(y), object@block, function(b)
+            y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]])
+    } else
         stop(sQuote("x"), " is not a factor")
-    }
 
     abs_diffs <- abs(diffs)
     if (all(abs_diffs < .Machine$double.eps))
@@ -156,19 +152,19 @@ sign_test.SymmetryProblem <- function(object, ...) {
     diffs <- diffs[abs_diffs > 0]
     n <- length(diffs)
 
-    ip <- new("IndependenceProblem",
-              x = data.frame(x = factor(rep.int(0:1, n),
-                                        labels = c("pos", "neg"))),
-              y = data.frame(y = as.vector(rbind(as.numeric(diffs > 0),
-                                                 as.numeric(diffs < 0)))),
-              block = gl(n, 2))
+    object <- new("IndependenceProblem",
+                  x = data.frame(x = factor(rep.int(0:1, n),
+                                            labels = c("pos", "neg"))),
+                  y = data.frame(y = as.vector(rbind(as.numeric(diffs > 0),
+                                                     as.numeric(diffs < 0)))),
+                  block = gl(n, 2))
 
     args <- setup_args(teststat = "scalar", paired = TRUE)
 
-    RET <- do.call("independence_test", c(list(object = ip), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    RET@method <- "Sign Test"
-    RET@nullvalue <- 0
+    object@method <- "Sign Test"
+    object@nullvalue <- 0
 
-    return(RET)
+    return(object)
 }

@@ -10,9 +10,9 @@ chisq_test.formula <- function(formula, data = list(), subset = NULL,
 
 chisq_test.table <- function(object, ...) {
 
-    ip <- table2IndependenceProblem(object)
-    RET <- do.call("chisq_test", c(list(object = ip), list(...)))
-    return(RET)
+    object <- table2IndependenceProblem(object)
+    object <- do.call("chisq_test", c(list(object = object), list(...)))
+    return(object)
 }
 
 chisq_test.IndependenceProblem <- function(object,
@@ -45,49 +45,52 @@ chisq_test.IndependenceProblem <- function(object,
                                   c("two.sided", "less", "greater"))
 
     ## transform data if requested and setup a test problem
-    itp <- new("IndependenceTestProblem", object)
+    object <- new("IndependenceTestProblem", object)
 
-    if (!check(itp))
+    if (!check(object))
         stop(sQuote("check"), " failed")
 
-    its <- new("IndependenceTestStatistic", itp, varonly = FALSE)
+    object <- new("IndependenceTestStatistic", object, varonly = FALSE)
 
     ## use the classical chisq statistic based on Pearson
     ## residuals (O - E)^2 / E
     ## see Th. 3.1 and its proof in Strasser & Weber (1999).
-    RET <-
+    object <-
         if (args$teststat == "scalar") {
-            ts <- new("ScalarIndependenceTestStatistic", its, args$alternative)
-            ts@teststatistic <- ts@teststatistic * sqrt(n / (n - 1))
-            ts@standardizedlinearstatistic <-
-                ts@standardizedlinearstatistic * sqrt(n / (n - 1))
-            ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
-            new("ScalarIndependenceTest", statistic = ts,
-                distribution = distribution(ts))
+            object <-
+                new("ScalarIndependenceTestStatistic", object, args$alternative)
+            object@teststatistic <- object@teststatistic * sqrt(n / (n - 1))
+            object@standardizedlinearstatistic <-
+                object@standardizedlinearstatistic * sqrt(n / (n - 1))
+            object@covariance <-
+                new("CovarianceMatrix", covariance(object) * (n - 1) / n)
+            new("ScalarIndependenceTest", statistic = object,
+                distribution = distribution(object))
         } else {
             if (args$alternative != "two.sided")
                 warning(sQuote("alternative"),
                         " is ignored for quad type test statistics")
-            ts <- new("QuadTypeIndependenceTestStatistic", its)
-            ts@teststatistic <- ts@teststatistic * n / (n - 1)
-            ts@standardizedlinearstatistic <-
-                ts@standardizedlinearstatistic * sqrt(n / (n - 1))
-            ts@covariance <- new("CovarianceMatrix", covariance(ts) * (n - 1) / n)
-            ts@covarianceplus <- MPinv(covariance(ts))$MPinv
-            new("QuadTypeIndependenceTest", statistic = ts,
-                distribution = distribution(ts))
+            object <- new("QuadTypeIndependenceTestStatistic", object)
+            object@teststatistic <- object@teststatistic * n / (n - 1)
+            object@standardizedlinearstatistic <-
+                object@standardizedlinearstatistic * sqrt(n / (n - 1))
+            object@covariance <-
+                new("CovarianceMatrix", covariance(object) * (n - 1) / n)
+            object@covarianceplus <- MPinv(covariance(object))$MPinv
+            new("QuadTypeIndependenceTest", statistic = object,
+                distribution = distribution(object))
         }
 
-    if (is_doubly_ordered(RET@statistic))
-        RET@method <- "Linear-by-Linear Association Test"
-    else if (is_singly_ordered(RET@statistic))
-        RET@method <- "Generalized Pearson's Chi-Squared Test"
+    if (is_doubly_ordered(object@statistic))
+        object@method <- "Linear-by-Linear Association Test"
+    else if (is_singly_ordered(object@statistic))
+        object@method <- "Generalized Pearson's Chi-Squared Test"
     else
-        RET@method <- "Pearson's Chi-Squared Test"
+        object@method <- "Pearson's Chi-Squared Test"
 
-    RET@call <- match.call()
+    object@call <- match.call()
 
-    return(RET)
+    return(object)
 }
 
 
@@ -103,9 +106,9 @@ cmh_test.formula <- function(formula, data = list(), subset = NULL,
 
 cmh_test.table <- function(object, ...) {
 
-    ip <- table2IndependenceProblem(object)
-    RET <- do.call("cmh_test", c(list(object = ip), list(...)))
-    return(RET)
+    object <- table2IndependenceProblem(object)
+    object <- do.call("cmh_test", c(list(object = object), list(...)))
+    return(object)
 }
 
 cmh_test.IndependenceProblem <- function(object,
@@ -132,14 +135,14 @@ cmh_test.IndependenceProblem <- function(object,
             "scalar"
         else "quad"
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_doubly_ordered(RET@statistic))
-        RET@method <- "Linear-by-Linear Association Test"
+    if (is_doubly_ordered(object@statistic))
+        object@method <- "Linear-by-Linear Association Test"
     else
-        RET@method <- "Generalized Cochran-Mantel-Haenszel Test"
+        object@method <- "Generalized Cochran-Mantel-Haenszel Test"
 
-    return(RET)
+    return(object)
 }
 
 
@@ -155,9 +158,9 @@ lbl_test.formula <- function(formula, data = list(), subset = NULL,
 
 lbl_test.table <- function(object, ...) {
 
-    ip <- table2IndependenceProblem(object)
-    RET <- do.call("lbl_test", c(list(object = ip), list(...)))
-    return(RET)
+    object <- table2IndependenceProblem(object)
+    object <- do.call("lbl_test", c(list(object = object), list(...)))
+    return(object)
 }
 
 lbl_test.IndependenceProblem <- function(object,
@@ -171,18 +174,10 @@ lbl_test.IndependenceProblem <- function(object,
     }
 
     ## convert factors to ordered
-    object@x[] <- lapply(object@x,
-        function(x) if (is.factor(x) && nlevels(x) > 2) {
-                        return(ordered(x))
-                    } else {
-                        return(x)
-                    })
-    object@y[] <- lapply(object@y,
-        function(x) if (is.factor(x) && nlevels(x) > 2) {
-                        return(ordered(x))
-                    } else {
-                        return(x)
-                    })
+    object@x[] <- lapply(object@x, function(x)
+        if (is.factor(x) && nlevels(x) > 2) return(ordered(x)) else return(x))
+    object@y[] <- lapply(object@y, function(x)
+        if (is.factor(x) && nlevels(x) > 2) return(ordered(x)) else return(x))
 
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
@@ -191,9 +186,9 @@ lbl_test.IndependenceProblem <- function(object,
                        distribution = distribution,
                        check = check)
 
-    RET <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("independence_test", c(list(object = object), args))
 
-    RET@method <- "Linear-by-Linear Association Test"
+    object@method <- "Linear-by-Linear Association Test"
 
-    return(RET)
+    return(object)
 }
