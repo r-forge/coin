@@ -221,6 +221,8 @@
 
       \item objects of class \code{"SymmetryProblem"} were not checked
       for validity
+
+      \item the Friedman test did not warn when weights were supplied
     }
   }
   \subsection{Other changes}{

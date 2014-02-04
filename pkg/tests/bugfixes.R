@@ -419,7 +419,11 @@ stopifnot(isequal(at@statistic@alternative, alt))
 ### objects of class "SymmetryProblem" didn't check validity
 dta <- data.frame(y = rnorm(20), y2 = rnorm(20),
                   x = factor(rep(1:4, 5)), x2 = gl(2, 10),
-                  b = gl(5, 4))
+                  b = gl(5, 4),
+                  w = rep(2, 20))
 try(friedman_test(y + y2 ~ x | b, data = dta))
 try(friedman_test(y ~ x + x2 | b, data = dta))
 try(friedman_test(y ~ x2 | b, data = dta)) # was ok
+
+### friedman_test didn't warn on weights
+friedman_test(y ~ x | b, data = dta,  weights = ~ w)

@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2013-12-20 r64498) -- "Unsuffered Consequences"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R Under development (unstable) (2014-02-02 r64916) -- "Unsuffered Consequences"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -722,7 +722,8 @@ Error in setscores(object, scores) :
 > ### objects of class "SymmetryProblem" didn't check validity
 > dta <- data.frame(y = rnorm(20), y2 = rnorm(20),
 +                   x = factor(rep(1:4, 5)), x2 = gl(2, 10),
-+                   b = gl(5, 4))
++                   b = gl(5, 4),
++                   w = rep(2, 20))
 > try(friedman_test(y + y2 ~ x | b, data = dta))
 Error in check(object) : 
   'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
@@ -733,6 +734,19 @@ Error in validityMethod(object) :
 Error in validityMethod(object) : 
   'object' is not a an unreplicated complete block design
 > 
+> ### friedman_test didn't warn on weights
+> friedman_test(y ~ x | b, data = dta,  weights = ~ w)
+
+	Asymptotic Friedman Test
+
+data:  y by x (1, 2, 3, 4) 
+	 stratified by b
+chi-squared = 4.76, df = 3, p-value = 0.1902
+
+Warning message:
+In ft("friedman_test", "SymmetryProblem", formula, data, subset,  :
+  Rank transformation doesn't take weights into account
+> 
 > proc.time()
    user  system elapsed 
-   2.85    0.12    3.08 
+   2.83    0.18    3.10 
