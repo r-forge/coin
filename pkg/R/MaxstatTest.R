@@ -38,8 +38,10 @@ maxstat_test.IndependenceProblem <- function(object,
                        xtrafo = xtrafo)
 
     ## convert factors to ordered and attach scores if requested
-    object <- setscores(object, args$scores)
-    args$scores <- NULL
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
 
     object <- do.call("independence_test", c(list(object = object), args))
 

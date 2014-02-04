@@ -33,8 +33,10 @@ chisq_test.IndependenceProblem <- function(object,
         values = c("asymptotic", "approximate"))
 
     args <- setup_args()
-    object <- setscores(object, args$scores)
-    args$scores <- NULL
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
     args$teststat <-
         if ((is.ordered(object@x[[1]]) && is.ordered(object@y[[1]])) ||
                 ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||
@@ -126,8 +128,10 @@ cmh_test.IndependenceProblem <- function(object,
 
     args <- setup_args(distribution = distribution,
                        check = check)
-    object <- setscores(object, args$scores)
-    args$scores <- NULL
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
     args$teststat <-
         if ((is.ordered(object@x[[1]]) && is.ordered(object@y[[1]])) ||
                 ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||

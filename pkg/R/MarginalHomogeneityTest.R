@@ -28,8 +28,10 @@ mh_test.SymmetryProblem <- function(object,
         values = c("asymptotic", "approximate"))
 
     args <- setup_args(distribution = distribution)
-    object <- setscores(object, args$scores)
-    args$scores <- NULL
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
     args$teststat <-
         if ((is.ordered(object@x[[1]]) && is.ordered(object@y[[1]])) ||
                 ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||

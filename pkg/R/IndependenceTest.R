@@ -38,7 +38,8 @@ independence_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution)
 
     ## convert factors to ordered and attach scores if requested
-    object <- setscores(object, scores)
+    if (!is.null(scores))
+        object <- setscores(object, scores)
 
     ## transform data if requested and setup a test problem
     object <- new("IndependenceTestProblem", object, xtrafo = xtrafo,

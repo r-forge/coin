@@ -26,8 +26,10 @@ friedman_test.SymmetryProblem <- function(object,
                            trafo(data, numeric_trafo = rank_trafo,
                                  block = object@block),
                        check = check)
-    object <- setscores(object, args$scores)
-    args$scores <- NULL
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
     args$teststat <- if (is.ordered(object@x[[1]])) "scalar"
                      else "quad"
 

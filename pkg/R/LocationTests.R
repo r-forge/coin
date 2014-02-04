@@ -107,8 +107,10 @@ kruskal_test.IndependenceProblem <- function(object,
                        ytrafo = function(data)
                            trafo(data, numeric_trafo = rank_trafo),
                        check = check)
-    object <- setscores(object, args$scores)
-    args$scores <- NULL
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
     args$teststat <- if (is.ordered(object@x[[1]])) "scalar"
                      else "quad"
 
@@ -151,8 +153,10 @@ normal_test.IndependenceProblem <- function(object,
                            trafo(data, numeric_trafo = function(y)
                                normal_trafo(y, ties.method = ties.method)),
                        check = check)
-    object <- setscores(object, args$scores)
-    args$scores <- NULL
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
     args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
                      else "quad"
 
@@ -205,8 +209,10 @@ median_test.IndependenceProblem <- function(object,
                            trafo(data, numeric_trafo = function(y)
                                median_trafo(y, mid.score = mid.score)),
                        check = check)
-    object <- setscores(object, args$scores)
-    args$scores <- NULL
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
     args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
                      else "quad"
 
@@ -259,8 +265,10 @@ savage_test.IndependenceProblem <- function(object,
                            trafo(data, numeric_trafo = function(y)
                                savage_trafo(y, ties.method = ties.method)),
                        check = check)
-    object <- setscores(object, args$scores)
-    args$scores <- NULL
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
     args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
                      else "quad"
 

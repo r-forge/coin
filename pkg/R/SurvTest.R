@@ -33,8 +33,10 @@ surv_test.IndependenceProblem <- function(object,
                                              type = type, rho = rho,
                                              gamma = gamma)),
                        check = check)
-    object <- setscores(object, args$scores)
-    args$scores <- NULL
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
     args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
                      else "quad"
 
