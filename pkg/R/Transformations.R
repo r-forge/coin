@@ -411,6 +411,8 @@ f_trafo <- function(x) {
 
 ### ordered factors
 of_trafo <- function(x, scores = NULL) {
+    if (!is.ordered(x))
+        warning(sQuote(deparse(substitute(x))), " is not an ordered factor")
     s <- attr(x, "scores")
     scores <- if (!is.null(s))
                   s

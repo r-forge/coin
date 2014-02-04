@@ -116,6 +116,7 @@ logrank_trafo(Surv(x, e)[cc], ties.method = "average-scores")
 
 ### NA handling: factor
 x <- factor(c(1, 1, NA, 2, NA, 3, 3, NA, 4), labels = as.roman(1:4))
+ox <- ordered(x)
 cc <- complete.cases(x)
 
 f_trafo(x)
@@ -125,6 +126,11 @@ of_trafo(x)
 of_trafo(x[cc])
 of_trafo(x, scores = 5:8)
 of_trafo(x[cc], scores = 5:8)
+
+of_trafo(ox)
+of_trafo(ox[cc])
+of_trafo(ox, scores = 5:8)
+of_trafo(ox[cc], scores = 5:8)
 
 fmaxstat_trafo(x)
 fmaxstat_trafo(x[cc])
@@ -140,6 +146,7 @@ mcp_trafo(x = "Tukey")(data.frame(x))
 mcp_trafo(x = "Tukey")(data.frame(x = x[cc]))
 
 x[9] <- NA
+ox[9] <- NA
 cc <- complete.cases(x)
 
 f_trafo(x)
@@ -149,6 +156,11 @@ of_trafo(x)
 of_trafo(x[cc])
 of_trafo(x, scores = 5:8)
 of_trafo(x[cc], scores = 5:8)
+
+of_trafo(ox)
+of_trafo(ox[cc])
+of_trafo(ox, scores = 5:8)
+of_trafo(ox[cc], scores = 5:8)
 
 fmaxstat_trafo(x)
 fmaxstat_trafo(x[cc])
