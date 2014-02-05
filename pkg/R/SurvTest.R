@@ -17,14 +17,6 @@ surv_test.IndependenceProblem <- function(object,
 
     type <- match.arg(type)[1]
 
-    check <- function(object) {
-        if (!(is_Ksample(object) && is_censored_y(object)))
-            stop(sQuote("object"),
-                 " does not represent a K-sample problem with censored data",
-                 " (maybe the grouping variable is not a factor?)")
-        return(TRUE)
-    }
-
     twosamp <- nlevels(object@x[[1]]) == 2
 
     args <- setup_args(ytrafo = function(data)
@@ -32,17 +24,27 @@ surv_test.IndependenceProblem <- function(object,
                                logrank_trafo(y, ties.method = ties.method,
                                              type = type, rho = rho,
                                              gamma = gamma)),
-                       check = check)
+                       check = function(object) {
+                           if (!(is_Ksample(object) && is_censored_y(object)))
+                               stop(sQuote("object"),
+                                    " does not represent a K-sample problem",
+                                    " with censored data",
+                                    " (maybe the grouping variable is not a",
+                                    " factor?)")
+                           return(TRUE)
+                       })
+    ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
         args$scores <- NULL
     }
-    args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
+    ## set test statistic to scalar for linear-by-linear tests
+    args$teststat <- if (is_ordered_x(object) || twosamp) "scalar"
                      else "quad"
 
     object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(object@statistic))
+    if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
         object@method <- paste("2-Sample",

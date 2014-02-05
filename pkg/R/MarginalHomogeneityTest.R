@@ -19,19 +19,20 @@ mh_test.table <- function(object, ...) {
 mh_test.SymmetryProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
-    if (!is_completeblock(object))
-        stop("Not an unreplicated complete block design")
-    if (ncol(object@y) != 1 || !is.factor(object@y[[1]]))
-        stop("Response variable is not a factor")
-
-    distribution <- check_distribution_arg(distribution,
-        values = c("asymptotic", "approximate"))
-
-    args <- setup_args(distribution = distribution)
+    args <- setup_args(distribution = check_distribution_arg(distribution,
+                           match.arg(distribution)),
+                       check = function(object) {
+                           if (!is_contingency(object))
+                               stop(sQuote("object"),
+                                    " does not represent a contingency problem")
+                           return(TRUE)
+                       })
+    ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
         args$scores <- NULL
     }
+    ## set test statistic to scalar for linear-by-linear tests
     args$teststat <-
         if ((is.ordered(object@x[[1]]) && is.ordered(object@y[[1]])) ||
                 ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||

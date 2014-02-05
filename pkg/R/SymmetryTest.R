@@ -23,11 +23,13 @@ symmetry_test.SymmetryProblem <- function(object,
     xtrafo = trafo, ytrafo = trafo, scores = NULL,
     check = NULL, ...) {
 
-    distribution <- check_distribution_arg(distribution,
-        values = c("asymptotic", "approximate"))
+    args <- setup_args(distribution = check_distribution_arg(distribution,
+                           match.arg(distribution)))
+
     class(object) <- "IndependenceProblem"
-    object <- independence_test(object, teststat, distribution, alternative,
-                                xtrafo, ytrafo, scores, check, ...)
+    object <- do.call("independence_test", c(list(object = object), args))
+
     object@method <- "General Symmetry Test"
+
     return(object)
 }

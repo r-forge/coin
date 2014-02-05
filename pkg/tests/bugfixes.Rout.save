@@ -653,7 +653,7 @@ attr(,"assign")
 > ### symmetry_test still allowed 'distribution = "exact"'
 > tab <- as.table(matrix(c(20, 2, 12, 16), nrow = 2))
 > try(symmetry_test(tab, distribution = "exact"))
-Error in match.arg(distribution[1], values) : 
+Error in match.arg(distribution) : 
   'arg' should be one of "asymptotic", "approximate"
 > 
 > ### wrong exact p-values for stratified tests when all blocks have length two
@@ -794,4 +794,4 @@ Warning messages:
 > 
 > proc.time()
    user  system elapsed 
-   3.13    0.24    3.49 
+   2.85    0.14    3.10 

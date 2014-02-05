@@ -10,32 +10,31 @@ friedman_test.formula <- function(formula, data = list(), subset = NULL, ...) {
 friedman_test.SymmetryProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
-    check <- function(object) {
-        if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"),
-                 " does not represent a K-sample problem",
-                 " (maybe the grouping variable is not a factor?)")
-        return(TRUE)
-    }
-
-    distribution <- check_distribution_arg(distribution,
-        values = c("asymptotic", "approximate"))
-
-    args <- setup_args(distribution = distribution,
+    args <- setup_args(distribution = check_distribution_arg(distribution,
+                           match.arg(distribution)),
                        ytrafo = function(data)
                            trafo(data, numeric_trafo = rank_trafo,
                                  block = object@block),
-                       check = check)
+                       check = function(object) {
+                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                               stop(sQuote("object"),
+                                    " does not represent a K-sample problem",
+                                    " (maybe the grouping variable is not a",
+                                    " factor?)")
+                           return(TRUE)
+                       })
+    ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
         args$scores <- NULL
     }
-    args$teststat <- if (is.ordered(object@x[[1]])) "scalar"
+    ## set test statistic to scalar for linear-by-linear tests
+    args$teststat <- if (is_ordered_x(object)) "scalar"
                      else "quad"
 
     object <- do.call("symmetry_test", c(list(object = object), args))
 
-    if (is_singly_ordered(object@statistic))
+    if (is_ordered_x(object@statistic))
         object@method <- "Page Test"
     else
         object@method <- "Friedman Test"

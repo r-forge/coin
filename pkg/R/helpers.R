@@ -130,7 +130,7 @@ formula2data <- function(formula, data, subset, weights = NULL, ...) {
     other <- list()
     if (!is.null(weights)) other = list(weights = weights)
 
-    ### in case `data' is an ExpressionSet object
+    ## in case `data' is an ExpressionSet object
     if (extends(class(data), "ExpressionSet")) {
         dat <- ModelEnvFormula(formula = formula,
                                data = Biobase::pData(Biobase::phenoData(data)),
@@ -139,7 +139,7 @@ formula2data <- function(formula, data, subset, weights = NULL, ...) {
                                na.action = na.omit,
                                ...)
 
-        ### x are _all_ expression levels, always
+        ## x are _all_ expression levels, always
         x <- as.data.frame(t(Biobase::exprs(data)))
     } else {
         dat <- ModelEnvFormula(formula = formula,
@@ -149,14 +149,14 @@ formula2data <- function(formula, data, subset, weights = NULL, ...) {
                                designMatrix = FALSE, responseMatrix = FALSE,
                                ...)
 
-        ### rhs of formula
+        ## rhs of formula
         if (has(dat, "input"))
             x <- dat@get("input")
         else
             stop("missing right hand side of formula")
     }
 
-    ### ~ x + y is allowed
+    ## ~ x + y is allowed
     if (has(dat, "response"))
         y <- dat@get("response")
     else {
@@ -167,7 +167,7 @@ formula2data <- function(formula, data, subset, weights = NULL, ...) {
         stop("missing left hand side of formula")
     }
 
-    ### y ~ x | block or ~ y + x | block
+    ## y ~ x | block or ~ y + x | block
     if (has(dat, "blocks")) {
         block <- dat@get("blocks")
         attr(block[[1]], "blockname") <- colnames(block)
@@ -279,7 +279,7 @@ is_2sample <- function(object) {
 
 is_Ksample <- function(object) {
     groups <- (ncol(object@x) == 1 && is.factor(object@x[[1]]))
-#    values <- (ncol(object@y) == 1 && ncol(object@ytrans) == 1)
+###    values <- (ncol(object@y) == 1 && ncol(object@ytrans) == 1)
     values <- ncol(object@ytrans) == 1
     return(groups && values)
 }
@@ -290,21 +290,28 @@ is_numeric_y <- function(object)
 is_censored_y <- function(object)
     ncol(object@y) == 1 && is.Surv(object@y[[1]])
 
-is_corr <- function(object) {
-    (is.numeric(object@x[[1]]) && is.numeric(object@y[[1]])) &&
-     (ncol(object@xtrans) == 1 && ncol(object@ytrans) == 1)
-}
+is_ordered_x <- function(object)
+###    all(vapply(object@x, function(x) is.numeric(x) || is.ordered(x), NA))
+    ncol(object@x) == 1 && is.ordered(object@x[[1]])
 
-is_contingency <- function(object) {
-    x <- object@x
-    groups <- (ncol(x) == 1 && is.factor(x[[1]]))
-    y <- object@y
-    values <- (ncol(y) == 1 && is.factor(y[[1]]))
-    ### trans <- all(rowSums(object@xtrans) %in% c(0,1)) &&
-    ###          all(rowSums(object@ytrans) %in% c(0, 1))
-    ### hm, two ordinal variables are a contingency problem as well (???)
-    return((groups && values)) ### && trans)
-}
+is_corr <- function(object)
+    (is.numeric(object@x[[1]]) && is.numeric(object@y[[1]])) &&
+        (ncol(object@xtrans) == 1 && ncol(object@ytrans) == 1)
+
+## is_contingency <- function(object) {
+##     x <- object@x
+##     groups <- (ncol(x) == 1 && is.factor(x[[1]]))
+##     y <- object@y
+##     values <- (ncol(y) == 1 && is.factor(y[[1]]))
+##     ### trans <- all(rowSums(object@xtrans) %in% c(0,1)) &&
+##     ###          all(rowSums(object@ytrans) %in% c(0, 1))
+##     ### hm, two ordinal variables are a contingency problem as well (???)
+##     return((groups && values)) ### && trans)
+## }
+
+is_contingency <- function(object)
+    (ncol(object@x) == 1 && is.factor(object@x[[1]])) &&
+        (ncol(object@y) == 1 && is.factor(object@y[[1]]))
 
 is_ordered <- function(object)
     (is_Ksample(object) || is_contingency(object)) &&
@@ -332,9 +339,6 @@ is_completeblock <- function(object)
 
 is_scalar <- function(object)
     ncol(object@xtrans) == 1 && ncol(object@ytrans) == 1
-
-is_ordered_x <- function(object)
-    all(vapply(object@x, function(x) is.numeric(x) || is.ordered(x), NA))
 
 is_integer <- function(x, fact = c(1, 2, 10, 100, 1000))
     vapply(fact, function(f) max(abs(round(x * f) - (x * f))) < eps(), NA)

@@ -10,21 +10,20 @@ oneway_test.formula <- function(formula, data = list(), subset = NULL,
 
 oneway_test.IndependenceProblem <- function(object, ...) {
 
-    check <- function(object) {
-        if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"),
-                 " does not represent a K-sample problem",
-                 " (maybe the grouping variable is not a factor?)")
-        return(TRUE)
-    }
-
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(check = check)
+    args <- setup_args(check = function(object) {
+                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                               stop(sQuote("object"),
+                                    " does not represent a K-sample problem",
+                                    " (maybe the grouping variable is not a",
+                                    " factor?)")
+                           return(TRUE)
+                       })
 
     object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(object@statistic))
+    if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
         object@method <- "2-Sample Permutation Test"
@@ -49,18 +48,17 @@ wilcox_test.formula <- function(formula, data = list(), subset = NULL,
 wilcox_test.IndependenceProblem <- function(object,
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    check <- function(object) {
-        if (!(is_2sample(object) && is_numeric_y(object)))
-            stop(sQuote("object"),
-                 " does not represent a two-sample problem",
-                 " (maybe the grouping variable is not a factor?)")
-        return(TRUE)
-    }
-
     args <- setup_args(teststat = "scalar",
                        ytrafo = function(data)
                            trafo(data, numeric_trafo = rank_trafo),
-                       check = check)
+                       check = function(object) {
+                           if (!(is_2sample(object) && is_numeric_y(object)))
+                               stop(sQuote("object"),
+                                    " does not represent a two-sample problem",
+                                    " (maybe the grouping variable is not a",
+                                    " factor?)")
+                           return(TRUE)
+                       })
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -92,31 +90,30 @@ kruskal_test.formula <- function(formula, data = list(), subset = NULL,
 kruskal_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
-    check <- function(object) {
-        if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"),
-                 " does not represent a K-sample problem",
-                 " (maybe the grouping variable is not a factor?)")
-        return(TRUE)
-    }
-
-    distribution <- check_distribution_arg(distribution,
-        values = c("asymptotic", "approximate"))
-
-    args <- setup_args(distribution = distribution,
+    args <- setup_args(distribution = check_distribution_arg(distribution,
+                           match.arg(distribution)),
                        ytrafo = function(data)
                            trafo(data, numeric_trafo = rank_trafo),
-                       check = check)
+                       check = function(object) {
+                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                               stop(sQuote("object"),
+                                    " does not represent a K-sample problem",
+                                    " (maybe the grouping variable is not a",
+                                    " factor?)")
+                           return(TRUE)
+                       })
+    ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
         args$scores <- NULL
     }
-    args$teststat <- if (is.ordered(object@x[[1]])) "scalar"
+    ## set test statistic to scalar for linear-by-linear tests
+    args$teststat <- if (is_ordered_x(object)) "scalar"
                      else "quad"
 
     object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(object@statistic))
+    if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else
         object@method <- "Kruskal-Wallis Test"
@@ -139,30 +136,31 @@ normal_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    check <- function(object) {
-        if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"),
-                 " does not represent a K-sample problem",
-                 " (maybe the grouping variable is not a factor?)")
-        return(TRUE)
-    }
-
     twosamp <- nlevels(object@x[[1]]) == 2
 
     args <- setup_args(ytrafo = function(data)
                            trafo(data, numeric_trafo = function(y)
                                normal_trafo(y, ties.method = ties.method)),
-                       check = check)
+                       check = function(object) {
+                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                               stop(sQuote("object"),
+                                    " does not represent a K-sample problem",
+                                    " (maybe the grouping variable is not a",
+                                    " factor?)")
+                           return(TRUE)
+                       })
+    ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
         args$scores <- NULL
     }
-    args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
+    ## set test statistic to scalar for linear-by-linear and two-sample tests
+    args$teststat <- if (is_ordered_x(object) || twosamp) "scalar"
                      else "quad"
 
     object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(object@statistic))
+    if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
         object@method <- "2-Sample Normal Quantile (van der Waerden) Test"
@@ -195,30 +193,31 @@ median_test.IndependenceProblem <- function(object,
     mid.score = c("0", "0.5", "1"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    check <- function(object) {
-        if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"),
-                 " does not represent a two-sample problem",
-                 " (maybe the grouping variable is not a factor?)")
-        return(TRUE)
-    }
-
     twosamp <- nlevels(object@x[[1]]) == 2
 
     args <- setup_args(ytrafo = function(data)
                            trafo(data, numeric_trafo = function(y)
                                median_trafo(y, mid.score = mid.score)),
-                       check = check)
+                       check = function(object) {
+                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                               stop(sQuote("object"),
+                                    " does not represent a K-sample problem",
+                                    " (maybe the grouping variable is not a",
+                                    " factor?)")
+                           return(TRUE)
+                       })
+    ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
         args$scores <- NULL
     }
-    args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
+    ## set test statistic to scalar for linear-by-linear and two-sample tests
+    args$teststat <- if (is_ordered_x(object) || twosamp) "scalar"
                      else "quad"
 
     object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(object@statistic))
+    if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
         object@method <- "2-Sample Median Test"
@@ -251,30 +250,31 @@ savage_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    check <- function(object) {
-        if (!(is_Ksample(object) && is_numeric_y(object)))
-            stop(sQuote("object"),
-                 " does not represent a K-sample problem",
-                 " (maybe the grouping variable is not a factor?)")
-        return(TRUE)
-    }
-
     twosamp <- nlevels(object@x[[1]]) == 2
 
     args <- setup_args(ytrafo = function(data)
                            trafo(data, numeric_trafo = function(y)
                                savage_trafo(y, ties.method = ties.method)),
-                       check = check)
+                       check = function(object) {
+                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                               stop(sQuote("object"),
+                                    " does not represent a K-sample problem",
+                                    " (maybe the grouping variable is not a",
+                                    " factor?)")
+                           return(TRUE)
+                       })
+    ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
         args$scores <- NULL
     }
-    args$teststat <- if (is.ordered(object@x[[1]]) || twosamp) "scalar"
+    ## set test statistic to scalar for linear-by-linear and two-sample tests
+    args$teststat <- if (is_ordered_x(object) || twosamp) "scalar"
                      else "quad"
 
     object <- do.call("independence_test", c(list(object = object), args))
 
-    if (is_singly_ordered(object@statistic))
+    if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
         object@method <- "2-Sample Savage Test"

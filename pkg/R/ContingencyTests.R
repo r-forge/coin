@@ -29,20 +29,21 @@ chisq_test.IndependenceProblem <- function(object,
     }
     n <- sum(object@weights)
 
-    distribution <- check_distribution_arg(distribution,
-        values = c("asymptotic", "approximate"))
-
-    args <- setup_args()
+    args <- setup_args(distribution = check_distribution_arg(distribution,
+                           match.arg(distribution)))
+    ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
         args$scores <- NULL
     }
+    ## set test statistic to scalar for linear-by-linear tests
     args$teststat <-
         if ((is.ordered(object@x[[1]]) && is.ordered(object@y[[1]])) ||
                 ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||
                  (is.ordered(object@y[[1]]) && nlevels(object@x[[1]]) == 2)))
             "scalar"
         else "quad"
+    ## alternative is needed later
     args$alternative <- match.arg(args$alternative,
                                   c("two.sided", "less", "greater"))
 
@@ -67,7 +68,7 @@ chisq_test.IndependenceProblem <- function(object,
             object@covariance <-
                 new("CovarianceMatrix", covariance(object) * (n - 1) / n)
             new("ScalarIndependenceTest", statistic = object,
-                distribution = distribution(object))
+                distribution = args$distribution(object))
         } else {
             if (args$alternative != "two.sided")
                 warning(sQuote("alternative"),
@@ -80,7 +81,7 @@ chisq_test.IndependenceProblem <- function(object,
                 new("CovarianceMatrix", covariance(object) * (n - 1) / n)
             object@covarianceplus <- MPinv(covariance(object))$MPinv
             new("QuadTypeIndependenceTest", statistic = object,
-                distribution = distribution(object))
+                distribution = args$distribution(object))
         }
 
     if (is_doubly_ordered(object@statistic))
@@ -116,22 +117,20 @@ cmh_test.table <- function(object, ...) {
 cmh_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
-    check <- function(object) {
-        if (!is_contingency(object))
-            stop(sQuote("object"),
-                 " does not represent a contingency problem")
-        return(TRUE)
-    }
-
-    distribution <- check_distribution_arg(distribution,
-        values = c("asymptotic", "approximate"))
-
-    args <- setup_args(distribution = distribution,
-                       check = check)
+    args <- setup_args(distribution = check_distribution_arg(distribution,
+                           match.arg(distribution)),
+                       check = function(object) {
+                           if (!is_contingency(object))
+                               stop(sQuote("object"),
+                                    " does not represent a contingency problem")
+                           return(TRUE)
+                       })
+    ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
         args$scores <- NULL
     }
+    ## set test statistic to scalar for linear-by-linear tests
     args$teststat <-
         if ((is.ordered(object@x[[1]]) && is.ordered(object@y[[1]])) ||
                 ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||
@@ -170,25 +169,22 @@ lbl_test.table <- function(object, ...) {
 lbl_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate"), ...) {
 
-    check <- function(object) {
-        if (!is_doubly_ordered(object))
-            stop(sQuote("object"),
-                 " does not represent a problem with ordered data")
-        return(TRUE)
-    }
-
     ## convert factors to ordered
     object@x[] <- lapply(object@x, function(x)
-        if (is.factor(x) && nlevels(x) > 2) return(ordered(x)) else return(x))
-    object@y[] <- lapply(object@y, function(x)
-        if (is.factor(x) && nlevels(x) > 2) return(ordered(x)) else return(x))
-
-    distribution <- check_distribution_arg(distribution,
-        values = c("asymptotic", "approximate"))
+        if (is.factor(x) && nlevels(x) > 2) ordered(x) else x)
+    object@y[] <- lapply(object@y, function(y)
+        if (is.factor(y) && nlevels(y) > 2) ordered(y) else y)
 
     args <- setup_args(teststat = "scalar",
-                       distribution = distribution,
-                       check = check)
+                       distribution = check_distribution_arg(distribution,
+                           match.arg(distribution)),
+                       check = function(object) {
+                           if (!is_doubly_ordered(object))
+                               stop(sQuote("object"),
+                                    " does not represent a problem with",
+                                    " ordered data")
+                           return(TRUE)
+                       })
 
     object <- do.call("independence_test", c(list(object = object), args))
 
