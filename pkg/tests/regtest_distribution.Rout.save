@@ -1,0 +1,229 @@
+
+R Under development (unstable) (2014-02-02 r64916) -- "Unsuffered Consequences"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ### Regression tests for the distribution functions
+> 
+> set.seed(290875)
+> library("coin")
+Loading required package: survival
+Loading required package: splines
+> isequal <- coin:::isequal
+> options(useFancyQuotes = FALSE)
+> 
+> 
+> ### generate independent two-sample data
+> dta <- data.frame(y = rnorm(20), x = gl(2, 10), b = factor(rep(1:4, 5)))
+> dta$y5 <- round(dta$y, 5)
+> dta$y3 <- round(dta$y, 3)
+> 
+> ### generate paired two-sample data
+> dta2 <- data.frame(y = as.vector(rbind(abs(dta$y) * (dta$y >= 0),
++                                        abs(dta$y) * (dta$y < 0))),
++                    x = factor(rep(0:1, length(dta$y)),
++                               labels = c("pos", "neg")),
++                    b = gl(length(dta$y), 2))
+> dta2$y5 <- round(dta2$y, 5)
+> dta2$y3 <- round(dta2$y, 3)
+> 
+> 
+> ### check 'algorithm = "auto"'
+> 
+> ### scores that can't be mapped into integers
+> 
+> ### two-sample with block
+> try(independence_test(y ~ x | b, data = dta,
++                       distribution = exact(algo = "auto")))
+Error in vdW_split_up_2sample(object) : 
+  cannot compute exact p-values with blocks
+> 
+> try(independence_test(y ~ x | b, data = dta,
++                       distribution = exact(algo = "shift")))
+Error in .local(object, ...) : 
+  cannot compute exact distribution with real-valued scores
+> 
+> try(independence_test(y ~ x | b, data = dta,
++                       distribution = exact(algo = "split-up")))
+Error in vdW_split_up_2sample(object) : 
+  cannot compute exact p-values with blocks
+> 
+> ### two-sample without block
+> it <- independence_test(y ~ x, data = dta,
++                         distribution = exact(algo = "auto"))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via van de Wiel split-up algorithm)"
+> pvalue(it)
+[1] 0.9417069
+> 
+> try(independence_test(y ~ x, data = dta,
++                       distribution = exact(algo = "shift")))
+Error in .local(object, ...) : 
+  cannot compute exact distribution with real-valued scores
+> 
+> it <- independence_test(y ~ x, data = dta,
++                         distribution = exact(algo = "split-up"))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via van de Wiel split-up algorithm)"
+> pvalue(it)
+[1] 0.9417069
+> 
+> ### paired two-sample
+> try(independence_test(y ~ x | b, data = dta2, paired = TRUE,
++                       distribution = exact(algo = "auto")))
+Error in .local(object, ...) : 
+  cannot compute exact distribution with real-valued scores
+> 
+> try(independence_test(y ~ x | b, data = dta2, paired = TRUE,
++                       distribution = exact(algo = "shift")))
+Error in .local(object, ...) : 
+  cannot compute exact distribution with real-valued scores
+> 
+> try(independence_test(y ~ x | b, data = dta2, paired = TRUE,
++                       distribution = exact(algo = "split-up")))
+Error in .local(object, ...) : 
+  split-up algorithm not implemented for paired samples
+> 
+> ### mapped into integers using 'fact'
+> 
+> ### two-sample with block
+> it <- independence_test(y5 ~ x | b, data = dta,
++                         distribution = exact(algo = "auto", fact = 1e5))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.9247
+> 
+> it <- independence_test(y5 ~ x | b, data = dta,
++                         distribution = exact(algo = "shift", fact= 1e5))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.9247
+> 
+> try(independence_test(y5 ~ x | b, data = dta,
++                         distribution = exact(algo = "split-up")))
+Error in vdW_split_up_2sample(object) : 
+  cannot compute exact p-values with blocks
+> 
+> ### two-sample without block
+> it <- independence_test(y5 ~ x, data = dta,
++                         distribution = exact(algo = "auto", fact = 1e5))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.9417177
+> 
+> it <- independence_test(y5 ~ x, data = dta,
++                         distribution = exact(algo = "shift", fact= 1e5))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.9417177
+> 
+> it <- independence_test(y5 ~ x, data = dta,
++                         distribution = exact(algo = "split-up"))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via van de Wiel split-up algorithm)"
+> pvalue(it)
+[1] 0.9417177
+> 
+> ### paired two-sample
+> it <- independence_test(y5 ~ x | b, data = dta2, paired = TRUE,
++                         distribution = exact(algo = "auto", fact = 1e5))
+> it@distribution@name
+[1] "exact paired two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.8828659
+> 
+> it <- independence_test(y5 ~ x | b, data = dta2, paired = TRUE,
++                         distribution = exact(algo = "shift", fact = 1e5))
+> it@distribution@name
+[1] "exact paired two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.8828659
+> 
+> try(independence_test(y5 ~ x | b, data = dta2, paired = TRUE,
++                       distribution = exact(algo = "split-up")))
+Error in .local(object, ...) : 
+  split-up algorithm not implemented for paired samples
+> 
+> ### automatically mapped into integers
+> 
+> ### two-sample with block
+> it <- independence_test(y3 ~ x | b, data = dta,
++                         distribution = exact(algo = "auto"))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.9249
+> 
+> it <- independence_test(y3 ~ x | b, data = dta,
++                         distribution = exact(algo = "shift"))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.9249
+> 
+> try(independence_test(y3 ~ x | b, data = dta,
++                       distribution = exact(algo = "split-up")))
+Error in vdW_split_up_2sample(object) : 
+  cannot compute exact p-values with blocks
+> 
+> ### two-sample without block
+> it <- independence_test(y3 ~ x, data = dta,
++                         distribution = exact(algo = "auto"))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.9419451
+> 
+> it <- independence_test(y3 ~ x, data = dta,
++                         distribution = exact(algo = "shift"))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.9419451
+> 
+> it <- independence_test(y3 ~ x, data = dta,
++                         distribution = exact(algo = "split-up"))
+> it@distribution@name
+[1] "exact independent two-sample distribution (via van de Wiel split-up algorithm)"
+> pvalue(it)
+[1] 0.9419451
+> 
+> ### paired two-sample
+> it <- independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
++                         distribution = exact(algo = "auto"))
+> it@distribution@name
+[1] "exact paired two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.8830051
+> 
+> it <- independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
++                         distribution = exact(algo = "shift"))
+> it@distribution@name
+[1] "exact paired two-sample distribution (via Streitberg-Roehmel algorithm)"
+> pvalue(it)
+[1] 0.8830051
+> 
+> try(independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
++                       distribution = exact(algo = "split-up")))
+Error in .local(object, ...) : 
+  split-up algorithm not implemented for paired samples
+> 
+> proc.time()
+   user  system elapsed 
+   3.29    0.29    3.58 

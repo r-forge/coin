@@ -11,7 +11,7 @@ approximate <- function(B = 10000) {
     RET
 }
 
-exact <- function(algorithm = c("shift", "split-up"), fact = NULL) {
+exact <- function(algorithm = c("auto", "shift", "split-up"), fact = NULL) {
     algorithm <- match.arg(algorithm)
     RET <- function(object)
         ExactNullDistribution(object, algorithm = algorithm, fact = fact)
@@ -340,8 +340,14 @@ is_completeblock <- function(object)
 is_scalar <- function(object)
     ncol(object@xtrans) == 1 && ncol(object@ytrans) == 1
 
-is_integer <- function(x, fact = c(1, 2, 10, 100, 1000))
-    vapply(fact, function(f) max(abs(round(x * f) - (x * f))) < eps(), NA)
+is_integer <- function(x, fact = NULL) {
+    if (is.null(fact))
+        fact <- c(1, 2, 10, 100, 1000)
+    f <- vapply(fact, function(f) max(abs(round(x * f) - (x * f))) < eps(), NA)
+    if (RET <- any(f))
+        attr(RET, "fact") <- min(fact[f])
+    RET
+}
 
 is_monotone <- function (x)
     all(x == cummax(x)) || all(x == cummin(x))
@@ -421,8 +427,8 @@ get_weights <- function(object) object@statistic@weights
 get_xtrans <- function(object) object@statistic@xtrans
 get_ytrans <- function(object) object@statistic@ytrans
 
-chkone <- function(w)
-    !(max(abs(w - 1.0)) < eps())
+is_unity <- function(x)
+    max(abs(x - 1.0)) < eps()
 
 setColnames <- function (object, nm) {
     colnames(object) <- nm

@@ -1,6 +1,5 @@
-
 ### Streitberg-Roehmel algorithm for independent two samples
-SR_shift_2sample <- function(object, fact = NULL) {
+SR_shift_2sample <- function(object, fact) {
 
     if (!extends(class(object), "ScalarIndependenceTestStatistic"))
         stop("Argument ", sQuote("object"), " is not of class ",
@@ -10,14 +9,10 @@ SR_shift_2sample <- function(object, fact = NULL) {
         stop(sQuote("object"),
              " does not represent an independent two-sample problem")
 
-    if (!(max(abs(object@weights - 1.0)) < eps()))
+    if (!is_unity(object@weights))
         stop("cannot compute exact distribution with non-unity weights")
 
     RET <- new("ExactNullDistribution")
-
-    ## in case we can't map the scores into integers, use another algorithm
-    if (!any(is_integer(object@ytrans[,1])))
-        return(vdW_split_up_2sample(object))
 
     T <- 0
     Prob <- 1
@@ -26,10 +21,10 @@ SR_shift_2sample <- function(object, fact = NULL) {
         thisblock <- (object@block == lev)
 
         ## compute distribution of scores in this block
-        scores <- object@ytrans[thisblock, 1]
-        m <- sum(object@xtrans[thisblock, 1] == 1)
+        scores <- object@ytrans[thisblock, 1L]
+        m <- sum(object@xtrans[thisblock, 1L] == 1L)
 
-        if (m == 0) next;
+        if (m == 0L) next;
         if (m == length(scores))
             dens <- list(T = sum(scores), Prob = 1)
         if (m < length(scores))
@@ -45,8 +40,8 @@ SR_shift_2sample <- function(object, fact = NULL) {
     RET@p <- function(q) sum(Prob[LE(T, q)])
     RET@q <- function(p) {
         indx <- which(cumsum(Prob) < p)
-        if (length(indx) == 0) indx <- 0
-        T[max(indx) + 1]
+        if (length(indx) == 0L) indx <- 0L
+        T[max(indx) + 1L]
     }
     RET@d <- function(x) Prob[T == x]
     RET@pvalue <- function(q) {
@@ -61,12 +56,41 @@ SR_shift_2sample <- function(object, fact = NULL) {
         )
     }
     RET@support <- function() T
-    RET@name <- "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+    RET@name <- paste0("exact independent two-sample distribution",
+                       " (via Streitberg-Roehmel algorithm)")
     return(RET)
 }
 
+cSR_shift_2sample <- function(scores, m, fact) {
+
+    if (m < 1L || m == length(scores))
+        stop("not a two sample problem")
+    n <- length(scores)
+    ones <- rep.int(1L, n)
+
+    ## integer scores with sum(scores) minimal
+    scores <- scores * fact
+    add <- min(scores - 1)
+    scores <- scores - add
+    m_b <- sum(sort(scores)[(n + 1L - m):n])
+
+    Prob <- .Call("R_cpermdist2",
+                  score_a = as.integer(ones),
+                  score_b = as.integer(scores),
+                  m_a = as.integer(m),
+                  m_b = as.integer(m_b),
+                  retProb = as.logical(TRUE),
+                  PACKAGE = "coin")
+
+    T <- which(Prob != 0)
+    Prob <- Prob[T]
+    T <- (T + add * m) / fact
+    return(list(T = T, Prob = Prob))
+}
+
+
 ### Streitberg-Roehmel algorithm for paired samples
-SR_shift_1sample <- function(object, fact = NULL) {
+SR_shift_1sample <- function(object, fact) {
 
     if (!extends(class(object), "ScalarIndependenceTestStatistic"))
         stop("Argument ", sQuote("object"), " is not of class ",
@@ -76,28 +100,21 @@ SR_shift_1sample <- function(object, fact = NULL) {
         stop(sQuote("object"),
              " does not represent an independent two-sample problem")
 
-    if (!(max(abs(object@weights - 1.0)) < eps()))
+    if (!is_unity(object@weights))
         stop("cannot compute exact distribution with non-unity weights")
 
     RET <- new("ExactNullDistribution")
 
-    scores <- object@ytrans[, 1]
+    scores <- object@ytrans[, 1L]
     if (any(scores < 0))
         stop("cannot compute exact distribution with negative scores")
-    ## search for equivalent integer scores with sum(scores) minimal
-    if (is.null(fact)) {
-        fact <- c(1, 2, 10, 100, 1000)
-        f <- is_integer(scores, fact = fact)
-        if (!any(f))
-            stop("cannot compute exact distribution with real valued scores")
-        fact <- min(fact[f])
-    }
+
     ##  table(object@block, scores == 0) checken
     scores <- vapply(unique(object@block), function(i) {
         s <- round(scores * fact)[object@block == i]
         s <- if (any(s != 0)) s[s != 0] else 0
     }, NA_real_)
-    if (length(scores) > 1 && !all(scores > 0)) # remove zeros
+    if (length(scores) > 1L && !all(scores > 0)) # remove zeros
         scores <- scores[scores != 0]
     storage.mode(scores) <- "integer"
     Prob <- .Call("R_cpermdist1", scores, PACKAGE = "coin")
@@ -111,8 +128,8 @@ SR_shift_1sample <- function(object, fact = NULL) {
     RET@p <- function(q) sum(Prob[LE(T, q)])
     RET@q <- function(p) {
         indx <- which(cumsum(Prob) < p)
-        if (length(indx) == 0) indx <- 0
-        T[max(indx) + 1]
+        if (length(indx) == 0L) indx <- 0L
+        T[max(indx) + 1L]
     }
     RET@d <- function(x) Prob[T == x]
     RET@pvalue <- function(q) {
@@ -127,45 +144,11 @@ SR_shift_1sample <- function(object, fact = NULL) {
         )
     }
     RET@support <- function() T
-    RET@name <- "exact paired two-sample distribution (via Streitberg-Roehmel algorithm)"
+    RET@name <- paste0("exact paired two-sample distribution",
+                       " (via Streitberg-Roehmel algorithm)")
     return(RET)
 }
 
-
-cSR_shift_2sample <- function(scores, m, fact = NULL) {
-
-    if (m < 1 || m == length(scores))
-        stop("not a two sample problem")
-    n <- length(scores)
-    ones <- rep.int(1, n)
-
-    ## search for equivalent integer scores with sum(scores) minimal
-    if (is.null(fact)) {
-        fact <- c(1, 2, 10, 100, 1000)
-        f <- is_integer(scores, fact = fact)
-        if (!any(f))
-            stop("cannot compute exact distribution with real valued scores")
-        fact <- min(fact[f])
-    }
-
-    scores <- scores * fact
-    add <- min(scores - 1)
-    scores <- scores - add
-    m_b <- sum(sort(scores)[(n + 1 - m):n])
-
-    Prob <- .Call("R_cpermdist2",
-                  score_a = as.integer(ones),
-                  score_b = as.integer(scores),
-                  m_a = as.integer(m),
-                  m_b = as.integer(m_b),
-                  retProb = as.logical(TRUE),
-                  PACKAGE = "coin")
-
-    T <- which(Prob != 0)
-    Prob <- Prob[T]
-    T <- (T + add*m)/fact
-    return(list(T = T, Prob = Prob))
-}
 
 ### van de Wiel split-up algorithm for independent two samples
 vdW_split_up_2sample <- function(object) {
@@ -176,16 +159,19 @@ vdW_split_up_2sample <- function(object) {
         stop("Argument ", sQuote("object"), " is not of class ",
              sQuote("ScalarIndependenceTestStatistic"))
 
-    if (nlevels(object@block) != 1)
-        stop("cannot compute exact p-values with blocks")
+    if (!is_2sample(object))
+        stop(sQuote("object"),
+             " does not represent an independent two-sample problem")
 
-    ## 2 groups as `x' variable
-    groups <- ncol(object@xtrans) == 1 && all(object@xtrans[,1] %in% c(0, 1))
-    if (!groups) stop("cannot deal with two-sample problems")
+    if (!is_unity(object@weights))
+        stop("cannot compute exact distribution with non-unity weights")
+
+    if (nlevels(object@block) != 1L)
+        stop("cannot compute exact p-values with blocks")
 
     RET <- new("ExactNullDistribution")
 
-    scores <- object@ytrans[,1]
+    scores <- object@ytrans[, 1L]
     storage.mode(scores) <- "double"
     m <- sum(object@xtrans)
     storage.mode(m) <- "integer"
@@ -234,6 +220,7 @@ vdW_split_up_2sample <- function(object) {
         )
     }
     RET@support <- function(p = 1e-5) NA
-    RET@name <- "exact independent two-sample distribution (via van de Wiel split-up algorithm)"
+    RET@name <- paste0("exact independent two-sample distribution",
+                       " (via van de Wiel split-up algorithm)")
     return(RET)
 }

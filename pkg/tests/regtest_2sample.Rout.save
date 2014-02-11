@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2013-09-23 r63973) -- "Unsuffered Consequences"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R Under development (unstable) (2014-02-02 r64916) -- "Unsuffered Consequences"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -747,9 +747,9 @@ ratio of scales
 > y <- as.integer(round((rnorm(30) + as.numeric(x)) * 1000))
 > id <- gl(15, 2)
 > try(independence_test(y ~ x | id, distribution = "exact", paired = TRUE))
-Error in SR_shift_1sample(object, ...) : 
+Error in SR_shift_1sample(object, fact = attr(mapped, "fact")) : 
   cannot compute exact distribution with negative scores
 > 
 > proc.time()
    user  system elapsed 
-   1.66    0.09    1.80 
+   2.23    0.07    2.37 

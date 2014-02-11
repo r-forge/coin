@@ -1,9 +1,8 @@
-
 ### generic method for asymptotic null distributions
 setGeneric("AsymptNullDistribution", function(object, ...)
     standardGeneric("AsymptNullDistribution"))
 
-### method for max-type test statistics
+### method for scalar test statistics
 setMethod(f = "AsymptNullDistribution",
           signature = "ScalarIndependenceTestStatistic",
           definition = function(object, ...) {
@@ -27,13 +26,11 @@ setMethod(f = "AsymptNullDistribution",
 
 ### just a wrapper
 pmv <- function(lower, upper, mean, corr, ...) {
-    if (length(corr) > 1) {
+    if (length(corr) > 1)
         pmvnorm(lower = lower, upper = upper, mean = mean, corr = corr, ...)
-    } else {
+    else
         pmvnorm(lower = lower, upper = upper, mean = mean, sigma = 1, ...)
-    }
 }
-
 
 ### method for max-type test statistics
 setMethod(f = "AsymptNullDistribution",
@@ -66,11 +63,10 @@ setMethod(f = "AsymptNullDistribution",
               RET@q <- function(p) {
                   if (length(corr) > 1)
                       q <- qmvnorm(p, mean = rep.int(0, pq),
-                              corr = corr, tail = "both.tails", ...)$quantile
+                                   corr = corr, tail = "both.tails", ...)$quantile
                   else
                       q <- qmvnorm(p, mean = rep.int(0, pq),
-                              sigma = 1, tail = "both.tails", ...)$quantile
-
+                                   sigma = 1, tail = "both.tails", ...)$quantile
                   attributes(q) <- NULL
                   q
               }
@@ -110,48 +106,62 @@ setMethod(f = "AsymptNullDistribution",
           }
 )
 
+
 ### generic method for exact null distributions
 setGeneric("ExactNullDistribution", function(object, ...)
     standardGeneric("ExactNullDistribution"))
 
+### method for scalar test statistics
 setMethod(f = "ExactNullDistribution",
           signature = "ScalarIndependenceTestStatistic",
-          definition = function(object, algorithm = c("shift", "split-up"),
+          definition = function(object, algorithm = c("auto", "shift", "split-up"),
                                 ...) {
 
               algorithm <- match.arg(algorithm)
+
               if (object@paired) {
-                  if (algorithm == "shift")
-                      return(SR_shift_1sample(object, ...))
-                  stop("split-up algorithm not implemented for the one-sample case")
-              }
-              if (is_2sample(object)) {
-                  if (algorithm == "shift")
-                      return(SR_shift_2sample(object, ...))
                   if (algorithm == "split-up")
-                      return(vdW_split_up_2sample(object))
-              }
-              stop(sQuote("object"), " is not a two sample problem")
+                      stop("split-up algorithm not implemented for paired samples")
+                  mapped <- is_integer(object@ytrans[, 1], ...)
+                  if (mapped)
+                      SR_shift_1sample(object, fact = attr(mapped, "fact"))
+                  else
+                      stop("cannot compute exact distribution with real-valued scores")
+              } else if (is_2sample(object)) {
+                  if (algorithm == "split-up")
+                      vdW_split_up_2sample(object)
+                  else {
+                      mapped <- is_integer(object@ytrans[, 1], ...)
+                      if (mapped)
+                          SR_shift_2sample(object, fact = attr(mapped, "fact"))
+                      else if (algorithm == "auto")
+                          vdW_split_up_2sample(object)
+                      else
+                          stop("cannot compute exact distribution with real-valued scores")
+                  }
+              } else
+                  stop(sQuote("object"), " is not a two sample problem")
           }
 )
+
 
 ### generic method for approximate null distributions
 setGeneric("ApproxNullDistribution", function(object, ...)
     standardGeneric("ApproxNullDistribution"))
 
 MCfun <- function(x, y, w, b, B) {
-
     ### expand observations for non-unit weights
-    if (chkone(w)) {
-        indx <- rep.int(1:length(w), w)
-        x <- x[indx,,drop = FALSE]
-        y <- y[indx,,drop = FALSE]
+    if (!is_unity(w)) {
+        indx <- rep.int(seq_along(w), w)
+        x <- x[indx, , drop = FALSE]
+        y <- y[indx, , drop = FALSE]
         b <- b[indx]
     }
     .Call("R_MonteCarloIndependenceTest", x, y, as.integer(b), as.integer(B),
           PACKAGE = "coin")
 }
 
+### method for scalar test statistics
 setMethod(f = "ApproxNullDistribution",
           signature = "ScalarIndependenceTestStatistic",
           definition = function(object, B = 10000, ...) {
@@ -197,6 +207,7 @@ setMethod(f = "ApproxNullDistribution",
           }
 )
 
+### method for max-type test statistics
 setMethod(f = "ApproxNullDistribution",
           signature = "MaxTypeIndependenceTestStatistic",
           definition = function(object, B = 10000, ...) {
@@ -267,11 +278,12 @@ setMethod(f = "ApproxNullDistribution",
                   pls <- pmaxmin()
                   sort(unique(drop(pls)))
               }
-              RET@name = "MonteCarlo distribution"
+              RET@name = "Monte Carlo distribution"
               return(RET)
           }
 )
 
+### method for quad-type test statistics
 setMethod(f = "ApproxNullDistribution",
           signature = "QuadTypeIndependenceTestStatistic",
           definition = function(object, B = 10000, ...) {
@@ -312,10 +324,11 @@ setMethod(f = "ApproxNullDistribution",
                   if (raw) return(plsraw)
                   sort(unique(drop(pls)))
               }
-              RET@name = "MonteCarlo distribution"
+              RET@name = "Monte Carlo distribution"
               return(RET)
           }
 )
+
 
 confint.ScalarIndependenceTestConfint <- function(object, parm, level = 0.95,
     ...) {
