@@ -164,15 +164,15 @@
 
       \item the printed output of the Pearson chi-squared test and the
       generalized Cochran-Mantel-Haenszel test claimed that a
-      \samp{"Linear-by-Linear Association Test"} had been carried out even in
-      the singly ordered case, i.e., when either the response variable or the
+      \samp{Linear-by-Linear Association Test} had been carried out even in the
+      singly ordered case, i.e., when either the response variable or the
       explanatory variable is an ordered factor or can be regarded as such;
-      these are now reported as \samp{"Generalized Pearson's Chi-squared Test"}
-      and \samp{"Generalized Cochran-Mantel-Haenszel Test"} respectively
+      these are now reported as \samp{Generalized Pearson's Chi-squared Test}
+      and \samp{Generalized Cochran-Mantel-Haenszel Test} respectively
 
       \item the printed output of the general symmetry test claimed that a
-      \samp{"General Independence Test"} had been carried out; it is now
-      reported as \samp{"General Symmetry Test"}
+      \samp{General Independence Test} had been carried out; it is now reported
+      as \samp{General Symmetry Test}
 
       \item transformation functions involving ordered factors or survival data
       sometimes failed when performed within blocks
@@ -224,7 +224,7 @@
       \samp{rho} respectively
 
       \item the printed output of the one-way test now reports that a
-      \samp{"Linear-by-Linear Association Test"} is carried out when the
+      \samp{Linear-by-Linear Association Test} is carried out when the
       explanatory variable is an ordered factor
 
       \item the Ansari-Bradley test no longer features the \code{alternative}
@@ -237,7 +237,7 @@
 
       \item when the general symmetry test or the marginal homogeneity test is
       applied to a table, the variable indicating the measurement conditions has
-      been renamed to \samp{"conditions"} (from \samp{"groups"})
+      been renamed to \samp{conditions} (from \samp{groups})
 
       \item the Fligner-Killeen test no longer features the \code{distribution}
       argument (but still allows the type of null distribution to be specified)
@@ -262,6 +262,14 @@
       \code{?independence_test})
 
       \item the memory consumption during computations has been reduced
+
+      \item the shift algorithm (\code{exact(algorithm = "shift")}) no longer
+      switches to the split-up algorithm when the scores cannot be mapped into
+      integers, but fails with an error message
+
+      \item \code{exact()} has \code{algorithm = "auto"} as its new default,
+      preserving the behavior of \code{algorithm = "shift"} in previous versions
+      of the package
     }
   }
 }
@@ -411,7 +419,7 @@
     1.0-0
 
     \item set default for \code{<IndependenceTest>@method} to
-    \samp{"General Independence Test"}
+    \samp{General Independence Test}
 
     \item \code{covariance()} always returns a covariance matrix
 
@@ -619,7 +627,7 @@
     \item internal reimplementation of score handling for ordered factors
 
     \item handling of multiple ordered factors / ordered factors in multivariate
-    sitations implemented
+    situations implemented
 
     \item \code{f_trafo()} returns a design matrix with \code{NA} rows in case
     missing values were present
@@ -830,4 +838,3 @@
     \item \code{delay} is deprecated in \R 2.1.0
   }
 }
-
