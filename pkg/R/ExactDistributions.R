@@ -9,20 +9,29 @@ SR_shift_2sample <- function(object, fact) {
         stop(sQuote("object"),
              " does not represent an independent two-sample problem")
 
-    if (!is_unity(object@weights))
-        stop("cannot compute exact distribution with non-unity weights")
+    ytrans <- object@ytrans[, 1L]
+    xtrans <- object@xtrans[, 1L]
+    block <- object@block
+
+    ## expand observations if weights are non-unity
+    if (!is_unity(object@weights)) {
+        idx <- rep.int(seq_along(object@weights), object@weights)
+        ytrans <- ytrans[idx]
+        xtrans <- xtrans[idx]
+        block <- block[idx]
+    }
 
     RET <- new("ExactNullDistribution")
 
     T <- 0
     Prob <- 1
-    for (lev in levels(object@block)) {
+    for (lev in levels(block)) {
 
-        thisblock <- (object@block == lev)
+        thisblock <- (block == lev)
 
         ## compute distribution of scores in this block
-        scores <- object@ytrans[thisblock, 1L]
-        m <- sum(object@xtrans[thisblock, 1L] == 1L)
+        scores <- ytrans[thisblock]
+        m <- sum(xtrans[thisblock] == 1L)
 
         if (m == 0L) next;
         if (m == length(scores))
@@ -100,14 +109,19 @@ SR_shift_1sample <- function(object, fact) {
         stop(sQuote("object"),
              " does not represent an independent two-sample problem")
 
-    if (!is_unity(object@weights))
-        stop("cannot compute exact distribution with non-unity weights")
-
-    RET <- new("ExactNullDistribution")
-
     scores <- object@ytrans[, 1L]
     if (any(scores < 0))
         stop("cannot compute exact distribution with negative scores")
+    block <- object@block
+
+    ## expand observations if weights are non-unity
+    if (!is_unity(object@weights)) {
+        idx <- rep.int(seq_along(object@weights), object@weights)
+        scores <- scores[idx]
+        block <- block[idx]
+    }
+
+    RET <- new("ExactNullDistribution")
 
     ##  table(object@block, scores == 0) checken
     scores <- vapply(unique(object@block), function(i) {
@@ -163,17 +177,23 @@ vdW_split_up_2sample <- function(object) {
         stop(sQuote("object"),
              " does not represent an independent two-sample problem")
 
-    if (!is_unity(object@weights))
-        stop("cannot compute exact distribution with non-unity weights")
-
     if (nlevels(object@block) != 1L)
         stop("cannot compute exact p-values with blocks")
 
+    scores <- object@ytrans[, 1L]
+    xtrans <- object@xtrans[, 1L]
+
+    ## expand observations if weights are non-unity
+    if (!is_unity(object@weights)) {
+        idx <- rep.int(seq_along(object@weights), object@weights)
+        scores <- scores[idx]
+        xtrans <- xtrans[idx]
+    }
+
     RET <- new("ExactNullDistribution")
 
-    scores <- object@ytrans[, 1L]
     storage.mode(scores) <- "double"
-    m <- sum(object@xtrans)
+    m <- sum(xtrans)
     storage.mode(m) <- "integer"
     tol <- sqrt(.Machine$double.eps)
 
@@ -181,7 +201,6 @@ vdW_split_up_2sample <- function(object) {
         obs <- q * sqrt(variance(object)) + expectation(object)
         .Call("R_split_up_2sample", scores, m, obs, tol, PACKAGE = "coin")
     }
-
     RET@q <- function(p) {
         f <- function(x) RET@p(x) - p
         if (p <= 0.5)
@@ -205,7 +224,6 @@ vdW_split_up_2sample <- function(object) {
         rr$root
     }
     RET@d <- function(x) NA
-
     RET@pvalue <- function(q) {
         switch(object@alternative,
             "less"      = RET@p(q),

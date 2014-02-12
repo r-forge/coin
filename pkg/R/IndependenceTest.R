@@ -8,15 +8,10 @@ independence_test.formula <- function(formula, data = list(), subset = NULL,
        frame = parent.frame(), ...)
 }
 
-independence_test.table <- function(object,
-    distribution = c("asymptotic", "approximate"), ...) {
+independence_test.table <- function(object, ...) {
 
-    distribution <- check_distribution_arg(distribution,
-                                           c("asymptotic", "approximate"))
     object <- table2IndependenceProblem(object)
-    object <- do.call("independence_test",
-                      c(list(object = object, distribution = distribution),
-                        list(...)))
+    object <- do.call("independence_test", c(list(object = object), list(...)))
     return(object)
 }
 

@@ -7,7 +7,8 @@ options(useFancyQuotes = FALSE)
 
 
 ### generate independent two-sample data
-dta <- data.frame(y = rnorm(20), x = gl(2, 10), b = factor(rep(1:4, 5)))
+dta <- data.frame(y = rnorm(20), x = gl(2, 10), b = factor(rep(1:4, 5)),
+                  w = rep_len(1:3, 20))
 dta$y5 <- round(dta$y, 5)
 dta$y3 <- round(dta$y, 3)
 
@@ -150,3 +151,37 @@ pvalue(it)
 
 try(independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
                       distribution = exact(algo = "split-up")))
+
+
+### check exact tests with weights
+itw1 <- independence_test(y3 ~ x, data = dta, weights = ~ w,
+                          distribution = exact(algorithm = "shift"))
+itw2 <- independence_test(y3 ~ x, data = dta, weights = ~ w,
+                          distribution = exact(algorithm = "split-up"))
+y3w <- with(dta, rep(y3, w))
+xw <- with(dta, rep(x, w))
+it1 <- independence_test(y3w ~ xw, distribution = exact(algorithm = "shift"))
+it2 <- independence_test(y3w ~ xw, distribution = exact(algorithm = "split-up"))
+isequal(pvalue(itw1), pvalue(it1))
+isequal(pvalue(itw1), pvalue(it2))
+isequal(pvalue(itw2), pvalue(it1))
+isequal(pvalue(itw2), pvalue(it2))
+
+Convictions <-
+    matrix(c(2, 10, 15, 3), nrow = 2,
+           dimnames = list(c("Dizygotic", "Monozygotic"),
+                           c("Convicted", "Not convicted")))
+itw1 <- independence_test(as.table(Convictions), alternative = "less",
+                          distribution = exact(algorithm = "shift"))
+itw2 <- independence_test(as.table(Convictions), alternative = "less",
+                          distribution = exact(algorithm = "split-up"))
+it1 <- independence_test(Var2 ~ Var1, alternative = "less",
+                         data = coin:::table2df(as.table(Convictions)),
+                         distribution = exact(algorithm = "shift"))
+it2 <- independence_test(Var2 ~ Var1, alternative = "less",
+                         data = coin:::table2df(as.table(Convictions)),
+                         distribution = exact(algorithm = "split-up"))
+isequal(pvalue(itw1), pvalue(it1))
+isequal(pvalue(itw1), pvalue(it2))
+isequal(pvalue(itw2), pvalue(it1))
+isequal(pvalue(itw2), pvalue(it2))

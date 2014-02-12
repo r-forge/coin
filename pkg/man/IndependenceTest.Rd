@@ -13,8 +13,7 @@
 }
 \usage{
 \method{independence_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{independence_test}{table}(object,
-    distribution = c("asymptotic", "approximate"), \dots)
+\method{independence_test}{table}(object, \dots)
 \method{independence_test}{IndependenceProblem}(object,
     teststat = c("max", "quad", "scalar"),
     distribution = c("asymptotic", "approximate", "exact"),

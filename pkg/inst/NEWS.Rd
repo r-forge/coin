@@ -127,6 +127,11 @@
       available (see \code{?mood_test} and \code{?mood_trafo})
 
       \item the Conover-Iman test is now available (see \code{?conover_test})
+
+      \item the exact distribution can now be obtained for tests specified with
+      case weights, implying that exact \eqn{p}-values can be computed for
+      \eqn{2 \times 2} tables or \eqn{2 \times K} tables with \eqn{K} ordered
+      categories (see \code{?independence_test})
     }
   }
   \subsection{Bug fixes}{
