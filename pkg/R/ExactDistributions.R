@@ -58,9 +58,11 @@ SR_shift_2sample <- function(object, fact) {
             "less"      = sum(Prob[LE(T, q)]),
             "greater"   = sum(Prob[GE(T, q)]),
             "two.sided" = {
-                if (q == 0) return(1)
-                return(sum(Prob[LE(T, ifelse(q >  0, -q,  q))]) +
-                       sum(Prob[GE(T, ifelse(q >= 0,  q, -q))]))
+                if (q == 0)
+                    1
+                else
+                    sum(Prob[LE(T, ifelse(q >  0, -q,  q))]) +
+                      sum(Prob[GE(T, ifelse(q >= 0,  q, -q))])
             }
         )
     }
@@ -151,9 +153,11 @@ SR_shift_1sample <- function(object, fact) {
             "less"      = sum(Prob[LE(T, q)]),
             "greater"   = sum(Prob[GE(T, q)]),
             "two.sided" = {
-                if (q == 0) return(1)
-                return(sum(Prob[LE(T, ifelse(q >  0, -q,  q))]) +
-                       sum(Prob[GE(T, ifelse(q >= 0,  q, -q))]))
+                if (q == 0)
+                    1
+                else
+                    sum(Prob[LE(T, ifelse(q >  0, -q,  q))]) +
+                      sum(Prob[GE(T, ifelse(q >= 0,  q, -q))])
             }
         )
     }
@@ -203,21 +207,24 @@ vdW_split_up_2sample <- function(object) {
     }
     RET@q <- function(p) {
         f <- function(x) RET@p(x) - p
-        if (p <= 0.5)
-            rr <- uniroot(f, interval = c(-10, 1),
-                    tol = sqrt(.Machine$double.eps))
-        else
-            rr <- uniroot(f, interval = c(-1, 10),
-                    tol = sqrt(.Machine$double.eps))
+        rr <- if (p <= 0.5)
+                  uniroot(f, interval = c(-10, 1),
+                          tol = sqrt(.Machine$double.eps))
+              else
+                  uniroot(f, interval = c(-1, 10),
+                          tol = sqrt(.Machine$double.eps))
         ## make sure quantile leads to pdf >= p
-        if (rr$f.root < 0) rr$root <- rr$root + sqrt(.Machine$double.eps)
+        if (rr$f.root < 0)
+            rr$root <- rr$root + sqrt(.Machine$double.eps)
         ## pdf is constant here
-        if (rr$estim.prec > sqrt(.Machine$double.eps))  {
+        if (rr$estim.prec > sqrt(.Machine$double.eps)) {
             r1 <- rr$root
             d <- min(diff(sort(scores[!duplicated(scores)]))) / sqrt(variance(object))
             while (d > sqrt(.Machine$double.eps)) {
-                if (f(r1 - d) >= 0) r1 <- r1 - d
-                else d <- d / 2
+                if (f(r1 - d) >= 0)
+                    r1 <- r1 - d
+                else
+                    d <- d / 2
             }
             rr$root <- r1
         }
@@ -229,11 +236,12 @@ vdW_split_up_2sample <- function(object) {
             "less"      = RET@p(q),
             "greater"   = 1 - RET@p(q - 10 * tol),
             "two.sided" = {
-                if (q == 0) return(1)
-                if (q > 0)
-                    return(RET@p(-q) + (1 - RET@p(q - 10 * tol)))
+                if (q == 0)
+                    1
+                else if (q > 0)
+                    RET@p(-q) + (1 - RET@p(q - 10 * tol))
                 else
-                    return(RET@p(q) + (1 - RET@p(- q - 10 * tol)))
+                    RET@p(q) + (1 - RET@p(- q - 10 * tol))
             }
         )
     }
