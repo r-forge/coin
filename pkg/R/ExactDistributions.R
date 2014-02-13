@@ -128,10 +128,8 @@ SR_shift_1sample <- function(object, fact) {
     ##  table(object@block, scores == 0) checken
     scores <- vapply(unique(object@block), function(i) {
         s <- round(scores * fact)[object@block == i]
-        s <- if (any(s != 0)) s[s != 0] else 0
+        s[s != 0] # remove zeros
     }, NA_real_)
-    if (length(scores) > 1L && !all(scores > 0)) # remove zeros
-        scores <- scores[scores != 0]
     storage.mode(scores) <- "integer"
     Prob <- .Call("R_cpermdist1", scores, PACKAGE = "coin")
     T <- which(Prob != 0)
