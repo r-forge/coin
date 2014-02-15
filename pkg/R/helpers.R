@@ -284,7 +284,7 @@ is_Ksample <- function(object) {
 }
 
 is_numeric_y <- function(object)
-    is.numeric(object@y[[1]])
+    ncol(object@y) == 1 && is.numeric(object@y[[1]])
 
 is_censored_y <- function(object)
     ncol(object@y) == 1 && is.Surv(object@y[[1]])
