@@ -341,7 +341,7 @@ is_scalar <- function(object)
 
 is_integer <- function(x, fact = NULL) {
     if (is.null(fact))
-        fact <- c(1, 2, 10, 100, 1000)
+        fact <- c(1, 2, 10, 100, 1000, 10000, 100000)
     f <- vapply(fact, function(f) max(abs(round(x * f) - (x * f))) < eps(), NA)
     if (RET <- any(f))
         attr(RET, "fact") <- min(fact[f])
