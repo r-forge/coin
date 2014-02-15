@@ -43,13 +43,13 @@ expectvaronly <- function(x, y, weights) {
 
     rSx <- colSums(x)
     rSx2 <- colSums(x^2)
-    ### in case rSx _and_ Ey are _both_ vectors
+    ## in case rSx _and_ Ey are _both_ vectors
     E <- .Call("R_kronecker", Ey, rSx, PACKAGE = "coin")
-          ### as.vector(kronecker(Ey, rSx))
+### as.vector(kronecker(Ey, rSx))
     V <- n / (n - 1) * .Call("R_kronecker", Vy, rSx2, PACKAGE = "coin")
-                        ### kronecker(Vy, rSx2)
+### kronecker(Vy, rSx2)
     V <- V - 1 / (n - 1) * .Call("R_kronecker", Vy, rSx^2, PACKAGE = "coin")
-                        ### kronecker(Vy, rSx^2)
+### kronecker(Vy, rSx^2)
     list(E = drop(E), V = matrix(V, nrow = 1))
 }
 
@@ -103,19 +103,18 @@ copyslots <- function(source, target) {
 ft <- function(test, class, formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    d <- formula2data(formula, data, subset, weights = weights, ...)
-    p <- new(class, x = d$x, y = d$y, block = d$bl, weights = d$w)
+    object <- formula2data(formula, data, subset, weights = weights, ...)
+    object <- new(class, x = object$x, y = object$y, block = object$bl,
+                  weights = object$w)
     args <- list(...)
     args$frame <- NULL
 
-    ### warn users of weighted rank tests
-    w <- d$w
-    if (is.null(w)) w <- 1L
-    if (test %in% ranktests & (max(abs(w - 1)) > .Machine$double.eps))
+    ## warn users of weighted rank tests
+    if (test %in% ranktests && !is.null(object@weights) &&
+        !is_unity(object@weights))
         warning("Rank transformation doesn't take weights into account")
 
-    RET <- do.call(test, c(list(object = p), args))
-    return(RET)
+    do.call(test, c(list(object = object), args))
 }
 
 ranktests <-
@@ -164,7 +163,7 @@ formula2data <- function(formula, data, subset, weights = NULL, ...) {
             y <- x[2]
             x <- x[1]
         } else
-        stop("missing left hand side of formula")
+            stop("missing left hand side of formula")
     }
 
     ## y ~ x | block or ~ y + x | block
