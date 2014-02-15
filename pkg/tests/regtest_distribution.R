@@ -8,7 +8,7 @@ options(useFancyQuotes = FALSE)
 
 ### generate independent two-sample data
 dta <- data.frame(y = rnorm(20), x = gl(2, 10), b = factor(rep(1:4, 5)),
-                  w = rep_len(1:3, 20))
+                  w = rep(1:3, length = 20))
 dta$y5 <- round(dta$y, 5)
 dta$y3 <- round(dta$y, 3)
 
