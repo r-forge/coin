@@ -44,11 +44,11 @@ expectvaronly <- function(x, y, weights) {
     rSx <- colSums(x)
     rSx2 <- colSums(x^2)
     ### in case rSx _and_ Ey are _both_ vectors
-    E <- .Call("R_kronecker", Ey, rSx, package = "coin")
+    E <- .Call("R_kronecker", Ey, rSx, PACKAGE = "coin")
           ### as.vector(kronecker(Ey, rSx))
-    V <- n / (n - 1) * .Call("R_kronecker", Vy, rSx2, package = "coin")
+    V <- n / (n - 1) * .Call("R_kronecker", Vy, rSx2, PACKAGE = "coin")
                         ### kronecker(Vy, rSx2)
-    V <- V - 1 / (n - 1) * .Call("R_kronecker", Vy, rSx^2, package = "coin")
+    V <- V - 1 / (n - 1) * .Call("R_kronecker", Vy, rSx^2, PACKAGE = "coin")
                         ### kronecker(Vy, rSx^2)
     list(E = drop(E), V = matrix(V, nrow = 1))
 }
