@@ -21,8 +21,6 @@ SR_shift_2sample <- function(object, fact) {
         block <- block[idx]
     }
 
-    RET <- new("ExactNullDistribution")
-
     T <- 0
     Prob <- 1
     for (lev in levels(block)) {
@@ -46,30 +44,31 @@ SR_shift_2sample <- function(object, fact) {
 
     T <- (T - expectation(object)) / sqrt(variance(object))
 
-    RET@p <- function(q) sum(Prob[LE(T, q)])
-    RET@q <- function(p) {
-        indx <- which(cumsum(Prob) < p)
-        if (length(indx) == 0L) indx <- 0L
-        T[max(indx) + 1L]
-    }
-    RET@d <- function(x) Prob[T == x]
-    RET@pvalue <- function(q) {
-        switch(object@alternative,
-            "less"      = sum(Prob[LE(T, q)]),
-            "greater"   = sum(Prob[GE(T, q)]),
-            "two.sided" = {
-                if (q == 0)
-                    1
-                else
-                    sum(Prob[LE(T, ifelse(q >  0, -q,  q))]) +
-                      sum(Prob[GE(T, ifelse(q >= 0,  q, -q))])
-            }
-        )
-    }
-    RET@support <- function() T
-    RET@name <- paste0("exact independent two-sample distribution",
-                       " (via Streitberg-Roehmel algorithm)")
-    return(RET)
+    new("ExactNullDistribution",
+        p = function(q) sum(Prob[LE(T, q)]),
+        q = function(p) {
+            indx <- which(cumsum(Prob) < p)
+            if (length(indx) == 0L)
+                indx <- 0L
+            T[max(indx) + 1L]
+        },
+        d = function(x) Prob[T == x],
+        pvalue = function(q) {
+            switch(object@alternative,
+                "less"      = sum(Prob[LE(T, q)]),
+                "greater"   = sum(Prob[GE(T, q)]),
+                "two.sided" = {
+                    if (q == 0)
+                        1
+                    else
+                        sum(Prob[LE(T, ifelse(q > 0, -q, q))]) +
+                          sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
+                }
+            )
+        },
+        support = function() T,
+        name = paste0("exact independent two-sample distribution",
+                      " (via Streitberg-Roehmel algorithm)"))
 }
 
 cSR_shift_2sample <- function(scores, m, fact) {
@@ -86,17 +85,13 @@ cSR_shift_2sample <- function(scores, m, fact) {
     m_b <- sum(sort(scores)[(n + 1L - m):n])
 
     Prob <- .Call("R_cpermdist2",
-                  score_a = as.integer(ones),
-                  score_b = as.integer(scores),
-                  m_a = as.integer(m),
-                  m_b = as.integer(m_b),
+                  score_a = as.integer(ones), score_b = as.integer(scores),
+                  m_a = as.integer(m), m_b = as.integer(m_b),
                   retProb = as.logical(TRUE),
                   PACKAGE = "coin")
-
     T <- which(Prob != 0)
-    Prob <- Prob[T]
-    T <- (T + add * m) / fact
-    return(list(T = T, Prob = Prob))
+
+    list(T = (T + add * m) / fact, Prob = Prob[T])
 }
 
 
@@ -123,8 +118,6 @@ SR_shift_1sample <- function(object, fact) {
         block <- block[idx]
     }
 
-    RET <- new("ExactNullDistribution")
-
     ##  table(object@block, scores == 0) checken
     scores <- vapply(unique(object@block), function(i) {
         s <- round(scores * fact)[object@block == i]
@@ -139,30 +132,31 @@ SR_shift_1sample <- function(object, fact) {
 
     T <- (T - expectation(object)) / sqrt(variance(object))
 
-    RET@p <- function(q) sum(Prob[LE(T, q)])
-    RET@q <- function(p) {
-        indx <- which(cumsum(Prob) < p)
-        if (length(indx) == 0L) indx <- 0L
-        T[max(indx) + 1L]
-    }
-    RET@d <- function(x) Prob[T == x]
-    RET@pvalue <- function(q) {
-        switch(object@alternative,
-            "less"      = sum(Prob[LE(T, q)]),
-            "greater"   = sum(Prob[GE(T, q)]),
-            "two.sided" = {
-                if (q == 0)
-                    1
-                else
-                    sum(Prob[LE(T, ifelse(q >  0, -q,  q))]) +
-                      sum(Prob[GE(T, ifelse(q >= 0,  q, -q))])
-            }
-        )
-    }
-    RET@support <- function() T
-    RET@name <- paste0("exact paired two-sample distribution",
-                       " (via Streitberg-Roehmel algorithm)")
-    return(RET)
+    new("ExactNullDistribution",
+        p = function(q) sum(Prob[LE(T, q)]),
+        q = function(p) {
+            indx <- which(cumsum(Prob) < p)
+            if (length(indx) == 0L)
+                indx <- 0L
+            T[max(indx) + 1L]
+        },
+        d = function(x) Prob[T == x],
+        pvalue = function(q) {
+            switch(object@alternative,
+                "less"      = sum(Prob[LE(T, q)]),
+                "greater"   = sum(Prob[GE(T, q)]),
+                "two.sided" = {
+                    if (q == 0)
+                        1
+                    else
+                        sum(Prob[LE(T, ifelse(q > 0, -q, q))]) +
+                          sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
+                }
+            )
+        },
+        support = function() T,
+        name = paste0("exact paired two-sample distribution",
+                      " (via Streitberg-Roehmel algorithm)"))
 }
 
 
@@ -192,58 +186,58 @@ vdW_split_up_2sample <- function(object) {
         xtrans <- xtrans[idx]
     }
 
-    RET <- new("ExactNullDistribution")
-
     storage.mode(scores) <- "double"
     m <- sum(xtrans)
     storage.mode(m) <- "integer"
     tol <- eps()
 
-    RET@p <- function(q) {
-        obs <- q * sqrt(variance(object)) + expectation(object)
-        .Call("R_split_up_2sample", scores, m, obs, tol, PACKAGE = "coin")
+    CumProb <- function(q) {
+        T <- q * sqrt(variance(object)) + expectation(object)
+        .Call("R_split_up_2sample", scores, m, T, tol, PACKAGE = "coin")
     }
-    RET@q <- function(p) {
-        f <- function(x) RET@p(x) - p
-        rr <- if (p <= 0.5)
-                  uniroot(f, interval = c(-10, 1), tol = tol)
-              else
-                  uniroot(f, interval = c(-1, 10), tol = tol)
-        ## make sure quantile leads to pdf >= p
-        if (rr$f.root < 0)
-            rr$root <- rr$root + tol
-        ## pdf is constant here
-        if (rr$estim.prec > tol) {
-            r1 <- rr$root
-            d <- min(diff(sort(scores[!duplicated(scores)]))) /
-                   sqrt(variance(object))
-            while (d > tol) {
-                if (f(r1 - d) >= 0)
-                    r1 <- r1 - d
-                else
-                    d <- d / 2
+
+    new("ExactNullDistribution",
+        p = CumProb,
+        q = function(p) {
+            f <- function(x) CumProb(x) - p
+            rr <- if (p <= 0.5)
+                      uniroot(f, interval = c(-10, 1), tol = tol)
+                  else
+                      uniroot(f, interval = c(-1, 10), tol = tol)
+            ## make sure quantile leads to pdf >= p
+            if (rr$f.root < 0)
+                rr$root <- rr$root + tol
+            ## pdf is constant here
+            if (rr$estim.prec > tol) {
+                r1 <- rr$root
+                d <- min(diff(sort(scores[!duplicated(scores)]))) /
+                       sqrt(variance(object))
+                while (d > tol) {
+                    if (f(r1 - d) >= 0)
+                        r1 <- r1 - d
+                    else
+                        d <- d / 2
+                }
+                rr$root <- r1
             }
-            rr$root <- r1
-        }
-        rr$root
-    }
-    RET@d <- function(x) NA
-    RET@pvalue <- function(q) {
-        switch(object@alternative,
-            "less"      = RET@p(q),
-            "greater"   = 1 - RET@p(q - 10 * tol),
-            "two.sided" = {
-                if (q == 0)
-                    1
-                else if (q > 0)
-                    RET@p(-q) + (1 - RET@p(q - 10 * tol))
-                else
-                    RET@p(q) + (1 - RET@p(- q - 10 * tol))
-            }
-        )
-    }
-    RET@support <- function(p = 1e-5) NA
-    RET@name <- paste0("exact independent two-sample distribution",
-                       " (via van de Wiel split-up algorithm)")
-    return(RET)
+            rr$root
+        },
+        d = function(x) NA,
+        pvalue = function(q) {
+            switch(object@alternative,
+                "less"      = CumProb(q),
+                "greater"   = 1 - CumProb(q - 10 * tol),
+                "two.sided" = {
+                    if (q == 0)
+                        1
+                    else if (q > 0)
+                        CumProb(-q) + (1 - CumProb(q - 10 * tol))
+                    else
+                        CumProb(q) + (1 - CumProb(-q - 10 * tol))
+                }
+            )
+        },
+        support = function(p = 1e-5) NA,
+        name = paste0("exact independent two-sample distribution",
+                      " (via van de Wiel split-up algorithm)"))
 }
