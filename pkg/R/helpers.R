@@ -1,42 +1,37 @@
 asymptotic <- function(maxpts = 25000, abseps = 0.001, releps = 0) {
-    RET <- function(object)
+    function(object)
         AsymptNullDistribution(object, maxpts = maxpts,
                                abseps = abseps, releps = releps)
-    RET
 }
 
 approximate <- function(B = 10000) {
-    RET <- function(object)
+    function(object)
         ApproxNullDistribution(object, B = B)
-    RET
 }
 
 exact <- function(algorithm = c("auto", "shift", "split-up"), fact = NULL) {
     algorithm <- match.arg(algorithm)
-    RET <- function(object)
+    function(object)
         ExactNullDistribution(object, algorithm = algorithm, fact = fact)
-    RET
 }
 
 LinearStatistic <- function(x, y, weights) {
     storage.mode(x) <- "double"
     storage.mode(y) <- "double"
     storage.mode(weights) <- "double"
-    .Call("R_LinearStatistic", x, y, weights,
-          PACKAGE = "coin")
+    .Call("R_LinearStatistic", x, y, weights, PACKAGE = "coin")
 }
 
 ExpectCovarInfluence <- function(y, weights) {
     storage.mode(y) <- "double"
     storage.mode(weights) <- "double"
-    .Call("R_ExpectCovarInfluence", y, weights,
-          PACKAGE = "coin")
+    .Call("R_ExpectCovarInfluence", y, weights, PACKAGE = "coin")
 }
 
 expectvaronly <- function(x, y, weights) {
-    indx <- rep.int(1:nrow(x), weights)
-    x <- x[indx,,drop = FALSE]
-    y <- y[indx,,drop = FALSE]
+    indx <- rep.int(seq_len(nrow(x)), weights)
+    x <- x[indx, , drop = FALSE]
+    y <- y[indx, , drop = FALSE]
     n <- nrow(x)
     Ey <- colMeans(y)
     Vy <- rowMeans((t(y) - Ey)^2)
@@ -45,21 +40,15 @@ expectvaronly <- function(x, y, weights) {
     rSx2 <- colSums(x^2)
     ## in case rSx _and_ Ey are _both_ vectors
     E <- .Call("R_kronecker", Ey, rSx, PACKAGE = "coin")
-### as.vector(kronecker(Ey, rSx))
     V <- n / (n - 1) * .Call("R_kronecker", Vy, rSx2, PACKAGE = "coin")
-### kronecker(Vy, rSx2)
     V <- V - 1 / (n - 1) * .Call("R_kronecker", Vy, rSx^2, PACKAGE = "coin")
-### kronecker(Vy, rSx^2)
-    list(E = drop(E), V = matrix(V, nrow = 1))
+    list(E = drop(E), V = matrix(V, nrow = 1L))
 }
 
 ExpectCovarLinearStatistic <- function(x, y, weights, varonly = FALSE) {
     if (varonly) {
         ev <- expectvaronly(x, y, weights)
-        RET <- new("ExpectCovar")
-        RET@expectation <- ev$E
-        RET@covariance <- ev$V
-        return(RET)
+        new("ExpectCovar", expectation = ev$E, covariance = ev$V)
     } else {
         storage.mode(x) <- "double"
         storage.mode(y) <- "double"
@@ -71,23 +60,24 @@ ExpectCovarLinearStatistic <- function(x, y, weights, varonly = FALSE) {
 }
 
 ### copied from package MASS
-MPinv <- function (X, tol = sqrt(.Machine$double.eps))
+MPinv <- function (X, tol = eps())
 {
-    if (length(dim(X)) > 2 || !(is.numeric(X) || is.complex(X)))
+    if (length(dim(X)) > 2L || !(is.numeric(X) || is.complex(X)))
         stop("X must be a numeric or complex matrix")
     if (!is.matrix(X))
         X <- as.matrix(X)
     Xsvd <- svd(X)
     if (is.complex(X))
         Xsvd$u <- Conj(Xsvd$u)
-    Positive <- Xsvd$d > max(tol * Xsvd$d[1], 0)
-    if (all(Positive))
-        RET <- Xsvd$v %*% (1/Xsvd$d * t(Xsvd$u))
-    else if (!any(Positive))
-        RET <- array(0, dim(X)[2:1])
-    else RET <- Xsvd$v[, Positive, drop = FALSE] %*% ((1/Xsvd$d[Positive]) *
-        t(Xsvd$u[, Positive, drop = FALSE]))
-    return(list(MPinv = RET, rank = sum(Positive)))
+    Positive <- Xsvd$d > max(tol * Xsvd$d[1L], 0)
+    RET <- if (all(Positive))
+               Xsvd$v %*% (1 / Xsvd$d * t(Xsvd$u))
+           else if (!any(Positive))
+               array(0, dim(X)[2L:1L])
+           else
+               Xsvd$v[, Positive, drop = FALSE] %*%
+                 ((1 / Xsvd$d[Positive]) * t(Xsvd$u[, Positive, drop = FALSE]))
+    list(MPinv = RET, rank = sum(Positive))
 }
 
 copyslots <- function(source, target) {
@@ -159,9 +149,9 @@ formula2data <- function(formula, data, subset, weights = NULL, ...) {
     if (has(dat, "response"))
         y <- dat@get("response")
     else {
-        if (ncol(x) == 2) {
-            y <- x[2]
-            x <- x[1]
+        if (ncol(x) == 2L) {
+            y <- x[2L]
+            x <- x[1L]
         } else
             stop("missing left hand side of formula")
     }
@@ -169,12 +159,13 @@ formula2data <- function(formula, data, subset, weights = NULL, ...) {
     ## y ~ x | block or ~ y + x | block
     if (has(dat, "blocks")) {
         block <- dat@get("blocks")
-        attr(block[[1]], "blockname") <- colnames(block)
+        attr(block[[1L]], "blockname") <- colnames(block)
     } else
         block <- NULL
 
-    RET <- list(x = x, y = y, block = block, bl = block[[1]], w = NULL)
-    if (!is.null(weights)) RET$w <- dat@get("weights")[[1]]
+    RET <- list(x = x, y = y, block = block, bl = block[[1L]], w = NULL)
+    if (!is.null(weights))
+        RET$w <- dat@get("weights")[[1L]]
 
     return(RET)
 }
@@ -188,7 +179,7 @@ setscores <- function(x, scores) {
        stop(sQuote("scores"), " is not a named list")
 
     missing <- varnames[!varnames %in% c(colnames(x@x), colnames(x@y))]
-    if (length(missing) > 0)
+    if (length(missing) > 0L)
         stop("Variable(s) ", paste(missing, sep = ", "),
              " not found in ", sQuote("x"))
 
@@ -228,8 +219,8 @@ check_trafo <- function(tx, ty) {
     if (NROW(tx) != NROW(ty))
         stop("Dimensions of returns of ", sQuote("xtrafo"), " and ",
              sQuote("ytrafo"), " don't match")
-    if (!is.matrix(tx)) tx <- matrix(tx, ncol = 1)
-    if (!is.matrix(ty)) ty <- matrix(ty, ncol = 1)
+    if (!is.matrix(tx)) tx <- matrix(tx, ncol = 1L)
+    if (!is.matrix(ty)) ty <- matrix(ty, ncol = 1L)
     storage.mode(tx) <- "double"
     storage.mode(ty) <- "double"
     list(xtrafo = tx, ytrafo = ty)
@@ -240,14 +231,14 @@ table2df <- function(x) {
         stop(sQuote("x"), " is not of class ", sQuote("table"))
     x <- as.data.frame(x)
     freq <- x[["Freq"]]
-    x <- x[rep.int(1:nrow(x), freq), , drop = FALSE]
-    rownames(x) <- 1:nrow(x)
+    x <- x[rep.int(seq_len(nrow(x)), freq), , drop = FALSE]
+    rownames(x) <- seq_len(nrow(x))
     return(x[, colnames(x) != "Freq"])
 }
 
 table2df_sym <- function(x) {
     x <- table2df(x)
-    lx <- levels(x[[1]])
+    lx <- levels(x[[1L]])
     if (!all(vapply(x, function(x) all(levels(x) == lx), NA)))
         stop("table ", sQuote("x"), " does not represent a symmetry problem")
     data.frame(conditions = factor(rep.int(colnames(x),
@@ -260,84 +251,84 @@ table2df_sym <- function(x) {
 table2IndependenceProblem <- function(object) {
 
     df <- as.data.frame(object)
-    if (ncol(df) == 3)
-        ip <- new("IndependenceProblem", x = df[1], y = df[2],
+    if (ncol(df) == 3L)
+        ip <- new("IndependenceProblem", x = df[1L], y = df[2L],
                   block = NULL, weights = df[["Freq"]])
-    if (ncol(df) == 4) {
-        attr(df[[3]], "blockname") <- colnames(df)[3]
-        ip <- new("IndependenceProblem", x = df[1], y = df[2],
+    if (ncol(df) == 4L) {
+        attr(df[[3L]], "blockname") <- colnames(df)[3L]
+        ip <- new("IndependenceProblem", x = df[1L], y = df[2L],
                   block = df[[3]], weights = df[["Freq"]])
     }
     ip
 }
 
 is_2sample <- function(object) {
-    groups <- nlevels(object@x[[1]]) == 2 && ncol(object@xtrans) == 1
+    groups <- nlevels(object@x[[1L]]) == 2L && ncol(object@xtrans) == 1L
     return(is_Ksample(object) && groups)
 }
 
 is_Ksample <- function(object) {
-    groups <- (ncol(object@x) == 1 && is.factor(object@x[[1]]))
-###    values <- (ncol(object@y) == 1 && ncol(object@ytrans) == 1)
-    values <- ncol(object@ytrans) == 1
+    groups <- (ncol(object@x) == 1L && is.factor(object@x[[1L]]))
+###    values <- (ncol(object@y) == 1L && ncol(object@ytrans) == 1L)
+    values <- ncol(object@ytrans) == 1L
     return(groups && values)
 }
 
 is_numeric_y <- function(object)
-    ncol(object@y) == 1 && is.numeric(object@y[[1]])
+    ncol(object@y) == 1L && is.numeric(object@y[[1L]])
 
 is_censored_y <- function(object)
-    ncol(object@y) == 1 && is.Surv(object@y[[1]])
+    ncol(object@y) == 1L && is.Surv(object@y[[1L]])
 
 is_ordered_x <- function(object)
 ###    all(vapply(object@x, function(x) is.numeric(x) || is.ordered(x), NA))
-    ncol(object@x) == 1 && is.ordered(object@x[[1]])
+    ncol(object@x) == 1L && is.ordered(object@x[[1L]])
 
 is_corr <- function(object)
-    (is.numeric(object@x[[1]]) && is.numeric(object@y[[1]])) &&
-        (ncol(object@xtrans) == 1 && ncol(object@ytrans) == 1)
+    (is.numeric(object@x[[1L]]) && is.numeric(object@y[[1L]])) &&
+        (ncol(object@xtrans) == 1L && ncol(object@ytrans) == 1L)
 
 ## is_contingency <- function(object) {
 ##     x <- object@x
-##     groups <- (ncol(x) == 1 && is.factor(x[[1]]))
+##     groups <- (ncol(x) == 1L && is.factor(x[[1L]]))
 ##     y <- object@y
-##     values <- (ncol(y) == 1 && is.factor(y[[1]]))
-##     ### trans <- all(rowSums(object@xtrans) %in% c(0,1)) &&
+##     values <- (ncol(y) == 1L && is.factor(y[[1L]]))
+##     ### trans <- all(rowSums(object@xtrans) %in% c(0, 1)) &&
 ##     ###          all(rowSums(object@ytrans) %in% c(0, 1))
 ##     ### hm, two ordinal variables are a contingency problem as well (???)
 ##     return((groups && values)) ### && trans)
 ## }
 
 is_contingency <- function(object)
-    (ncol(object@x) == 1 && is.factor(object@x[[1]])) &&
-        (ncol(object@y) == 1 && is.factor(object@y[[1]]))
+    (ncol(object@x) == 1L && is.factor(object@x[[1L]])) &&
+        (ncol(object@y) == 1L && is.factor(object@y[[1L]]))
 
 is_ordered <- function(object)
     (is_Ksample(object) || is_contingency(object)) &&
-        (is.ordered(object@x[[1]]) || is.ordered(object@y[[1]]))
+        (is.ordered(object@x[[1L]]) || is.ordered(object@y[[1L]]))
 
 is_singly_ordered <- function(object) {
-    x <- object@x[[1]]
-    y <- object@y[[1]]
+    x <- object@x[[1L]]
+    y <- object@y[[1L]]
     (is_Ksample(object) || is_contingency(object)) &&
-        ((is.ordered(x) && (is.numeric(y) || (!is.ordered(y) && nlevels(y) > 2))) ||
-         (is.ordered(y) && (is.numeric(x) || (!is.ordered(x) && nlevels(x) > 2))))
+        ((is.ordered(x) && (is.numeric(y) || (!is.ordered(y) && nlevels(y) > 2L))) ||
+         (is.ordered(y) && (is.numeric(x) || (!is.ordered(x) && nlevels(x) > 2L))))
 }
 
 is_doubly_ordered <- function(object) {
-    x <- object@x[[1]]
-    y <- object@y[[1]]
+    x <- object@x[[1L]]
+    y <- object@y[[1L]]
     (is_Ksample(object) || is_contingency(object)) &&
         ((is.ordered(x) && is.ordered(y)) ||
-         ((is.ordered(x) && nlevels(y) == 2) ||
-          (is.ordered(y) && nlevels(x) == 2)))
+         ((is.ordered(x) && nlevels(y) == 2L) ||
+          (is.ordered(y) && nlevels(x) == 2L)))
 }
 
 is_completeblock <- function(object)
-    all(table(object@x[[1]], object@block) == 1)
+    all(table(object@x[[1L]], object@block) == 1L)
 
 is_scalar <- function(object)
-    ncol(object@xtrans) == 1 && ncol(object@ytrans) == 1
+    ncol(object@xtrans) == 1L && ncol(object@ytrans) == 1L
 
 is_integer <- function(x, fact = NULL) {
     if (is.null(fact))
@@ -393,24 +384,24 @@ statnames <- function(object) {
     nr <- ncol(object@xtrans)
     dn <- list(colnames(object@xtrans),
                colnames(object@ytrans))
-    if (is.null(dn[[1]])) {
-        if (nr == 1) {
-            dn[[1]] <- ""
+    if (is.null(dn[[1L]])) {
+        if (nr == 1L) {
+            dn[[1L]] <- ""
         } else {
-            dn[[1]] <- paste0("X", 1:nr)
+            dn[[1L]] <- paste0("X", seq_len(nr))
         }
     }
-    if (is.null(dn[[2]])) {
-        if (nc == 1) {
-            dn[[2]] <- ""
+    if (is.null(dn[[2L]])) {
+        if (nc == 1L) {
+            dn[[2L]] <- ""
         } else {
-            dn[[2]] <- paste0("Y", 1:nc)
+            dn[[2L]] <- paste0("Y", seq_len(nc))
         }
     }
     list(dimnames = dn,
-         names = paste(rep.int((dn[[1]]), nc),
-                       rep.int((dn[[2]]), rep.int(nr, nc)),
-                       sep = ifelse(dn[[1]] == "" || dn[[2]] == "", "", ":")))
+         names = paste(rep.int((dn[[1L]]), nc),
+                       rep.int((dn[[2L]]), rep.int(nr, nc)),
+                       sep = ifelse(dn[[1L]] == "" || dn[[2L]] == "", "", ":")))
 }
 
 eps <- function() sqrt(.Machine$double.eps)
