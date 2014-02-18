@@ -96,8 +96,8 @@
       \item the Fligner-Killeen test can now also handle 2-sample problems (see
       \code{?fligner_test})
 
-      \item objects of class \code{"ScalarIndependenceTestStatistic"} now has a
-      \code{paired} slot
+      \item objects of class \code{"ScalarIndependenceTestStatistic"} or
+      \code{"QuadTypeIndependenceTestStatistic"} now has a \code{paired} slot
 
       \item \code{independence_test()} has gained a new argument \code{paired}
       that is used to indicate if paired data have been transformed in such a
@@ -132,6 +132,10 @@
       case weights, implying that exact \eqn{p}-values can be computed for
       \eqn{2 \times 2} tables or \eqn{2 \times K} tables with \eqn{K} ordered
       categories (see \code{?independence_test})
+
+      \item the exact distribution of test statistics based on quadratic
+      forms can now be obtained in the two-sample case (see
+      \code{?independence_test})
     }
   }
   \subsection{Bug fixes}{

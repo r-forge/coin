@@ -154,6 +154,7 @@ Slot & Class \\ \hline
 Slot & Class \\ \hline 
 \code{covarianceplus} & \Rclass{matrix} \\
 \code{df} & \Rclass{numeric} \\
+\code{paired} & \Rclass{logical} \\
 \hline
 \end{tabular}
 \end{center}
@@ -359,4 +360,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   3.22    0.35    4.14 
+   3.10    0.18    3.60 

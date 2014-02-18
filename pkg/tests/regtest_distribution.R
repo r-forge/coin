@@ -248,3 +248,33 @@ round(qp_it3_SR <- qperm(it3_SR, seq(0, 1, 0.01)), 7)
 stopifnot(isequal(pp_it2_SR, pp_it3_SR))                     # failed in < 1.1-0
 stopifnot(isequal(qp_it2_SR, qp_it3_SR))                     # failed in < 1.1-0
 stopifnot(isequal(pvalue(it2_SR), pvalue(it3_SR)))
+
+
+### exact test based on quadratic forms
+
+### shift with block
+itq1 <- independence_test(y ~ x | b, data = dta1,
+                          distribution = exact(algorithm = "shift"),
+                          teststat = "quad")
+its1 <- independence_test(y ~ x | b, data = dta1,
+                          distribution = exact(algorithm = "shift"),
+                          teststat = "scalar")
+stopifnot(isequal(statistic(itq1), statistic(its1)^2))
+stopifnot(isequal(pvalue(itq1), pvalue(its1)))
+stopifnot(isequal(support(itq1), support(its1)[support(its1) >= 0]^2))
+
+### paired shift with block
+its2 <- independence_test(y ~ x | b, data = dta2,
+                          distribution = exact(algorithm = "shift"),
+                          paired = TRUE, teststat = "scalar")
+itq2 <- independence_test(y ~ x | b, data = dta2,
+                          distribution = exact(algorithm = "shift"),
+                          paired = TRUE, teststat = "quad")
+stopifnot(isequal(statistic(itq2), statistic(its2)^2))
+stopifnot(isequal(pvalue(itq2), pvalue(its2)))
+stopifnot(isequal(support(itq2), support(its2)[support(its2) >= 0]^2))
+
+### should be equal
+stopifnot(isequal(statistic(itq1), statistic(itq2)))
+stopifnot(isequal(pvalue(itq1), pvalue(itq2)))
+stopifnot(isequal(support(itq1), support(itq2)))

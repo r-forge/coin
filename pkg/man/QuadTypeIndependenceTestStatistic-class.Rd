@@ -12,6 +12,7 @@ Objects can be created by calls of the form \code{new("QuadTypeIndependenceTestS
 	 \describe{
     \item{\code{covarianceplus}:}{Object of class \code{"matrix"}}
     \item{\code{df}:}{Object of class \code{"numeric"}}
+    \item{\code{paired}:}{Object of class \code{"logical"}}
     \item{\code{teststatistic}:}{Object of class \code{"numeric"}}
     \item{\code{standardizedlinearstatistic}:}{Object of class \code{"numeric"}}
     \item{\code{linearstatistic}:}{Object of class \code{"numeric"}}

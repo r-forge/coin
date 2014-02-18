@@ -1,9 +1,15 @@
 ### Streitberg-Roehmel algorithm for independent two samples
 SR_shift_2sample <- function(object, fact) {
 
-    if (!extends(class(object), "ScalarIndependenceTestStatistic"))
-        stop("Argument ", sQuote("object"), " is not of class ",
-             sQuote("ScalarIndependenceTestStatistic"))
+    teststat <-
+        if (extends(class(object), "ScalarIndependenceTestStatistic"))
+            "scalar"
+        else if (extends(class(object), "QuadTypeIndependenceTestStatistic"))
+            "quad"
+        else
+            stop("Argument ", sQuote("object"), " is not of class ",
+                 sQuote("ScalarIndependenceTestStatistic"), " or ",
+                 sQuote("QuadTypeIndependenceTestStatistic"))
 
     if (!is_2sample(object))
         stop(sQuote("object"),
@@ -42,10 +48,13 @@ SR_shift_2sample <- function(object, fact) {
         Prob <- drop(kronecker(Prob, dens$Prob))
     }
 
-    T <- (T - expectation(object)) / sqrt(variance(object))
+    if (teststat == "scalar")
+        T <- (T - expectation(object)) / sqrt(variance(object))
+    else
+        T <- (T - expectation(object))^2 / variance(object)
 
-    ## T may not be distinct and ordered if blocks are present
-    if (nlevels(block) > 1L) {
+    ## make sure T is distinct and ordered
+    if (nlevels(block) > 1L || teststat == "quad") {
         n <- length(T)
         o <- order(T)
         T <- T[o]
@@ -69,21 +78,27 @@ SR_shift_2sample <- function(object, fact) {
         },
         d = function(x) Prob[T == x],
         pvalue = function(q) {
-            switch(object@alternative,
-                "less"      = sum(Prob[LE(T, q)]),
-                "greater"   = sum(Prob[GE(T, q)]),
-                "two.sided" = {
-                    if (q == 0)
-                        1
-                    else
-                        sum(Prob[LE(T, ifelse(q > 0, -q, q))]) +
-                          sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
-                }
-            )
+            if (teststat == "scalar")
+                switch(object@alternative,
+                    "less"      = sum(Prob[LE(T, q)]),
+                    "greater"   = sum(Prob[GE(T, q)]),
+                    "two.sided" = {
+                        if (q == 0)
+                            1L
+                        else
+                            sum(Prob[LE(T, ifelse(q > 0, -q, q))]) +
+                              sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
+                    })
+            else {
+                if (q == 0)
+                    1L
+                else
+                    sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
+            }
         },
         support = function() T,
-        name = paste0("exact independent two-sample distribution",
-                      " (via Streitberg-Roehmel algorithm)"))
+        name = paste0("Exact Distribution for Independent Two-Sample Tests",
+                      " (Streitberg-Roehmel Shift Algorithm)"))
 }
 
 cSR_shift_2sample <- function(scores, m, fact) {
@@ -113,9 +128,15 @@ cSR_shift_2sample <- function(scores, m, fact) {
 ### Streitberg-Roehmel algorithm for paired samples
 SR_shift_1sample <- function(object, fact) {
 
-    if (!extends(class(object), "ScalarIndependenceTestStatistic"))
-        stop("Argument ", sQuote("object"), " is not of class ",
-             sQuote("ScalarIndependenceTestStatistic"))
+    teststat <-
+        if (extends(class(object), "ScalarIndependenceTestStatistic"))
+            "scalar"
+        else if (extends(class(object), "QuadTypeIndependenceTestStatistic"))
+            "quad"
+        else
+            stop("Argument ", sQuote("object"), " is not of class ",
+                 sQuote("ScalarIndependenceTestStatistic"), " or ",
+                 sQuote("QuadTypeIndependenceTestStatistic"))
 
     if (!is_2sample(object))
         stop(sQuote("object"),
@@ -145,7 +166,22 @@ SR_shift_1sample <- function(object, fact) {
     ## 0 is possible
     T <- (T - 1) / fact
 
-    T <- (T - expectation(object)) / sqrt(variance(object))
+    if (teststat == "scalar")
+        T <- (T - expectation(object)) / sqrt(variance(object))
+    else
+        T <- (T - expectation(object))^2 / variance(object)
+
+    ## make sure T is distinct and ordered
+    if (teststat == "quad") {
+        n <- length(T)
+        o <- order(T)
+        T <- T[o]
+        idx <- c(which(T[-1L] - T[-n] > eps()), n)
+        T <- T[idx]
+        Prob <-
+            vapply(split(Prob[o], rep.int(seq_along(idx), diff(c(0L, idx)))),
+                   sum, NA_real_, USE.NAMES = FALSE)
+    }
 
     new("ExactNullDistribution",
         p = function(q) sum(Prob[LE(T, q)]),
@@ -160,21 +196,27 @@ SR_shift_1sample <- function(object, fact) {
         },
         d = function(x) Prob[T == x],
         pvalue = function(q) {
-            switch(object@alternative,
-                "less"      = sum(Prob[LE(T, q)]),
-                "greater"   = sum(Prob[GE(T, q)]),
-                "two.sided" = {
-                    if (q == 0)
-                        1
-                    else
-                        sum(Prob[LE(T, ifelse(q > 0, -q, q))]) +
-                          sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
-                }
-            )
+            if (teststat == "scalar")
+                switch(object@alternative,
+                    "less"      = sum(Prob[LE(T, q)]),
+                    "greater"   = sum(Prob[GE(T, q)]),
+                    "two.sided" = {
+                        if (q == 0)
+                            1L
+                        else
+                            sum(Prob[LE(T, ifelse(q > 0, -q, q))]) +
+                              sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
+                    })
+            else {
+                if (q == 0)
+                    1L
+                else
+                    sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
+            }
         },
         support = function() T,
-        name = paste0("exact paired two-sample distribution",
-                      " (via Streitberg-Roehmel algorithm)"))
+        name = paste0("Exact Distribution for Dependent Two-Sample Tests",
+                      " (Streitberg-Roehmel Shift Algorithm)"))
 }
 
 
@@ -209,15 +251,15 @@ vdW_split_up_2sample <- function(object) {
     storage.mode(m) <- "integer"
     tol <- eps()
 
-    CumProb <- function(q) {
+    pvdw <- function(q) {
         T <- q * sqrt(variance(object)) + expectation(object)
         .Call("R_split_up_2sample", scores, m, T, tol, PACKAGE = "coin")
     }
 
     new("ExactNullDistribution",
-        p = CumProb,
+        p = pvdw,
         q = function(p) {
-            f <- function(x) CumProb(x) - p
+            f <- function(x) pvdw(x) - p
             rr <- if (p <= 0.5)
                       uniroot(f, interval = c(-10, 1), tol = tol)
                   else
@@ -243,19 +285,19 @@ vdW_split_up_2sample <- function(object) {
         d = function(x) NA,
         pvalue = function(q) {
             switch(object@alternative,
-                "less"      = CumProb(q),
-                "greater"   = 1 - CumProb(q - 10 * tol),
+                "less"      = pvdw(q),
+                "greater"   = 1 - pvdw(q - 10 * tol),
                 "two.sided" = {
                     if (q == 0)
-                        1
+                        1L
                     else if (q > 0)
-                        CumProb(-q) + (1 - CumProb(q - 10 * tol))
+                        pvdw(-q) + (1 - pvdw(q - 10 * tol))
                     else
-                        CumProb(q) + (1 - CumProb(-q - 10 * tol))
+                        pvdw(q) + (1 - pvdw(-q - 10 * tol))
                 }
             )
         },
         support = function(p = 1e-5) NA,
-        name = paste0("exact independent two-sample distribution",
-                      " (via van de Wiel split-up algorithm)"))
+        name = paste0("Exact Distribution for Independent Two-Sample Tests",
+                      " (van de Wiel Split-Up Algorithm)"))
 }

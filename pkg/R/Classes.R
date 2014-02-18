@@ -1,5 +1,3 @@
-
-
 ### Class for raw data: a set of `x' variables and a set of `y' variables,
 ### possibly blocked and with weights
 setClass(Class = "IndependenceProblem",
@@ -14,12 +12,11 @@ setClass(Class = "IndependenceProblem",
                  (nrow(object@x) == length(object@block)))
         dims <- dims && (length(object@block) == length(object@weights))
         Wint <- max(abs(object@weights - floor(object@weights))) < eps()
-        block <- all(table(object@block) > 1)
+        block <- all(table(object@block) > 1L)
         NAs <- all(complete.cases(object@x) & complete.cases(object@y))
-        return((dims && block) && (NAs && Wint))
+        (dims && block) && (NAs && Wint)
     }
 )
-
 
 ### Class for transformed data, the `x' variables are transformed
 ### to a (n x p) matrix `xtrans' and the `y' variables to `ytrans' (n x q).
@@ -57,9 +54,9 @@ setClassUnion("VarCovar", c("CovarianceMatrix", "Variance"))
 ### Strasser & Weber (1999)
 setClass(Class = "IndependenceLinearStatistic",
     representation = representation(
-        linearstatistic             = "numeric",
-        expectation                 = "numeric",
-        covariance                  = "VarCovar"
+        linearstatistic = "numeric",
+        expectation     = "numeric",
+        covariance      = "VarCovar"
     ),
     contains = "IndependenceTestProblem",
 )
@@ -69,7 +66,6 @@ setClass(Class = "IndependenceTestStatistic",
     representation = representation(
         teststatistic               = "numeric",
         standardizedlinearstatistic = "numeric"
-
     ),
     contains = "IndependenceLinearStatistic",
 )
@@ -77,8 +73,8 @@ setClass(Class = "IndependenceTestStatistic",
 ### teststatistic = standardizedlinearstatistic
 setClass(Class = "ScalarIndependenceTestStatistic",
     representation = representation(
-        alternative   = "character",
-        paired        = "logical"
+        alternative = "character",
+        paired      = "logical"
     ),
     contains = "IndependenceTestStatistic",
     validity = function(object)
@@ -88,7 +84,7 @@ setClass(Class = "ScalarIndependenceTestStatistic",
 ### teststatistic = max(abs(standardizedlinearstatistic))
 setClass(Class = "MaxTypeIndependenceTestStatistic",
     representation = representation(
-        alternative                 = "character"
+        alternative = "character"
     ),
     contains = "IndependenceTestStatistic",
     validity = function(object)
@@ -98,8 +94,9 @@ setClass(Class = "MaxTypeIndependenceTestStatistic",
 ### teststatistic = quadform(linearstatistic)
 setClass(Class = "QuadTypeIndependenceTestStatistic",
     representation = representation(
-        covarianceplus              = "matrix",
-        df                          = "numeric"
+        covarianceplus = "matrix",
+        df             = "numeric",
+        paired         = "logical"
     ),
     contains = "IndependenceTestStatistic"
 )
@@ -144,8 +141,8 @@ setClass(Class = "IndependenceTest",
 ### the "fitted" test for scalar linear statistics
 setClass(Class = "ScalarIndependenceTest",
     representation = representation(
-        parameter    = "character",
-        nullvalue    = "numeric"
+        parameter = "character",
+        nullvalue = "numeric"
     ),
     prototype = list(parameter = "mu"),
     contains = "IndependenceTest",
@@ -183,7 +180,7 @@ setClass(Class = "QuadTypeIndependenceTest",
 setClass(Class = "SymmetryProblem",
     contains = "IndependenceProblem",
     validity = function(object) {
-        if (ncol(object@x) != 1 || !is.factor(object@x[[1]]))
+        if (ncol(object@x) != 1L || !is.factor(object@x[[1L]]))
             stop(sQuote("x"), " slot does not contain a single factor")
         if (!is_completeblock(object))
             stop(sQuote("object"),

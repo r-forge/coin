@@ -23,7 +23,7 @@ independence_test.IndependenceProblem <- function(object,
     ...) {
 
     addargs <- list(...)
-    if (length(addargs) > 0)
+    if (length(addargs) > 0L)
         warning("additional arguments ",
                 paste0(names(addargs), collapse = ", "),
                 " will be ignored")
@@ -71,26 +71,25 @@ independence_test.IndependenceProblem <- function(object,
 ###         varonly = class(distribution) == "approximate" && teststat == "max")
 
     ## compute test statistic and corresponding null distribution
-    object <- switch(teststat,
+    ## return object inheriting from class `IndependenceTest'
+    switch(teststat,
         "scalar" = {
             object <- new("ScalarIndependenceTestStatistic", object,
                           alternative = alternative, paired = isTRUE(paired))
             new("ScalarIndependenceTest", statistic = object,
-                distribution = distribution(object))
+                distribution = distribution(object), call = match.call())
         },
         "max" = {
             object <- new("MaxTypeIndependenceTestStatistic", object,
                           alternative = alternative)
             new("MaxTypeIndependenceTest", statistic = object,
-                distribution = distribution(object))
+                distribution = distribution(object), call = match.call())
         },
         "quad" = {
-            object <- new("QuadTypeIndependenceTestStatistic", object)
+            object <- new("QuadTypeIndependenceTestStatistic", object,
+                          paired = isTRUE(paired))
             new("QuadTypeIndependenceTest", statistic = object,
-                distribution = distribution(object))
-        })
-
-    object@call <- match.call()
-    ## return object inheriting from class `IndependenceTest'
-    return(object)
+                distribution = distribution(object), call = match.call())
+        }
+    )
 }

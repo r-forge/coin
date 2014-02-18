@@ -747,9 +747,9 @@ ratio of scales
 > y <- as.integer(round((rnorm(30) + as.numeric(x)) * 1000))
 > id <- gl(15, 2)
 > try(independence_test(y ~ x | id, distribution = "exact", paired = TRUE))
-Error in SR_shift_1sample(object, fact = attr(mapped, "fact")) : 
+Error in SR_shift_1sample(object, fact = attr(int, "fact")) : 
   cannot compute exact distribution with negative scores
 > 
 > proc.time()
    user  system elapsed 
-   2.23    0.07    2.37 
+   2.32    0.12    2.51 

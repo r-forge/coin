@@ -65,7 +65,7 @@ Error in vdW_split_up_2sample(object) :
 > it <- independence_test(y ~ x, data = dta,
 +                         distribution = exact(algo = "auto"))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via van de Wiel split-up algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (van de Wiel Split-Up Algorithm)"
 > pvalue(it)
 [1] 0.9417069
 > 
@@ -77,7 +77,7 @@ Error in .local(object, ...) :
 > it <- independence_test(y ~ x, data = dta,
 +                         distribution = exact(algo = "split-up"))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via van de Wiel split-up algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (van de Wiel Split-Up Algorithm)"
 > pvalue(it)
 [1] 0.9417069
 > 
@@ -103,14 +103,14 @@ Error in .local(object, ...) :
 > it <- independence_test(y5 ~ x | b, data = dta,
 +                         distribution = exact(algo = "auto", fact = 1e5))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.9247
 > 
 > it <- independence_test(y5 ~ x | b, data = dta,
 +                         distribution = exact(algo = "shift", fact = 1e5))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.9247
 > 
@@ -123,21 +123,21 @@ Error in vdW_split_up_2sample(object) :
 > it <- independence_test(y5 ~ x, data = dta,
 +                         distribution = exact(algo = "auto", fact = 1e5))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.9417177
 > 
 > it <- independence_test(y5 ~ x, data = dta,
 +                         distribution = exact(algo = "shift", fact = 1e5))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.9417177
 > 
 > it <- independence_test(y5 ~ x, data = dta,
 +                         distribution = exact(algo = "split-up"))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via van de Wiel split-up algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (van de Wiel Split-Up Algorithm)"
 > pvalue(it)
 [1] 0.9417177
 > 
@@ -145,14 +145,14 @@ Error in vdW_split_up_2sample(object) :
 > it <- independence_test(y5 ~ x | b, data = dta2, paired = TRUE,
 +                         distribution = exact(algo = "auto", fact = 1e5))
 > it@distribution@name
-[1] "exact paired two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.8828659
 > 
 > it <- independence_test(y5 ~ x | b, data = dta2, paired = TRUE,
 +                         distribution = exact(algo = "shift", fact = 1e5))
 > it@distribution@name
-[1] "exact paired two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.8828659
 > 
@@ -167,14 +167,14 @@ Error in .local(object, ...) :
 > it <- independence_test(y3 ~ x | b, data = dta,
 +                         distribution = exact(algo = "auto"))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.9249
 > 
 > it <- independence_test(y3 ~ x | b, data = dta,
 +                         distribution = exact(algo = "shift"))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.9249
 > 
@@ -187,21 +187,21 @@ Error in vdW_split_up_2sample(object) :
 > it <- independence_test(y3 ~ x, data = dta,
 +                         distribution = exact(algo = "auto"))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.9419451
 > 
 > it <- independence_test(y3 ~ x, data = dta,
 +                         distribution = exact(algo = "shift"))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.9419451
 > 
 > it <- independence_test(y3 ~ x, data = dta,
 +                         distribution = exact(algo = "split-up"))
 > it@distribution@name
-[1] "exact independent two-sample distribution (via van de Wiel split-up algorithm)"
+[1] "Exact Distribution for Independent Two-Sample Tests (van de Wiel Split-Up Algorithm)"
 > pvalue(it)
 [1] 0.9419451
 > 
@@ -209,14 +209,14 @@ Error in vdW_split_up_2sample(object) :
 > it <- independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
 +                         distribution = exact(algo = "auto"))
 > it@distribution@name
-[1] "exact paired two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.8830051
 > 
 > it <- independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
 +                         distribution = exact(algo = "shift"))
 > it@distribution@name
-[1] "exact paired two-sample distribution (via Streitberg-Roehmel algorithm)"
+[1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
 [1] 0.8830051
 > 
@@ -2407,6 +2407,36 @@ Error in .local(object, ...) :
 > stopifnot(isequal(qp_it2_SR, qp_it3_SR))                     # failed in < 1.1-0
 > stopifnot(isequal(pvalue(it2_SR), pvalue(it3_SR)))
 > 
+> 
+> ### exact test based on quadratic forms
+> 
+> ### shift with block
+> itq1 <- independence_test(y ~ x | b, data = dta1,
++                           distribution = exact(algorithm = "shift"),
++                           teststat = "quad")
+> its1 <- independence_test(y ~ x | b, data = dta1,
++                           distribution = exact(algorithm = "shift"),
++                           teststat = "scalar")
+> stopifnot(isequal(statistic(itq1), statistic(its1)^2))
+> stopifnot(isequal(pvalue(itq1), pvalue(its1)))
+> stopifnot(isequal(support(itq1), support(its1)[support(its1) >= 0]^2))
+> 
+> ### paired shift with block
+> its2 <- independence_test(y ~ x | b, data = dta2,
++                           distribution = exact(algorithm = "shift"),
++                           paired = TRUE, teststat = "scalar")
+> itq2 <- independence_test(y ~ x | b, data = dta2,
++                           distribution = exact(algorithm = "shift"),
++                           paired = TRUE, teststat = "quad")
+> stopifnot(isequal(statistic(itq2), statistic(its2)^2))
+> stopifnot(isequal(pvalue(itq2), pvalue(its2)))
+> stopifnot(isequal(support(itq2), support(its2)[support(its2) >= 0]^2))
+> 
+> ### should be equal
+> stopifnot(isequal(statistic(itq1), statistic(itq2)))
+> stopifnot(isequal(pvalue(itq1), pvalue(itq2)))
+> stopifnot(isequal(support(itq1), support(itq2)))
+> 
 > proc.time()
    user  system elapsed 
-   6.39    0.53    7.05 
+   6.58    0.45    7.03 

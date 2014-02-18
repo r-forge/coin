@@ -1,4 +1,3 @@
-
 ### new("CovarianceMatrix", ...)
 setMethod(f = "initialize",
     signature = "CovarianceMatrix",
@@ -23,12 +22,12 @@ setMethod(f = "initialize",
     signature = "IndependenceProblem",
     definition = function(.Object, x, y, block = NULL, weights = NULL) {
 
-        if (NROW(x) == 0 && NROW(y) == 0)
+        if (NROW(x) == 0L && NROW(y) == 0L)
             stop(sQuote("x"), " and ", sQuote("y"),
                  " do not contain data")
-        if (length(x) == 0) {
+        if (length(x) == 0L) {
             dn <- dimnames(x)
-            x <- data.frame(x = rep.int(1, nrow(x)))
+            x <- data.frame(x = rep.int(1L, nrow(x)))
             dimnames(x) <- dn
         }
         if (any(is.na(x)))
@@ -41,24 +40,25 @@ setMethod(f = "initialize",
             stop(sQuote("block"), " contains missing values")
         if (!is.null(weights) && any(is.na(weights)))
             stop(sQuote("weights"), " contains missing values")
+
         .Object@x <- x
         .Object@y <- y
-        if (is.null(block)) {
-            .Object@block <- factor(rep.int(0, nrow(x)))
-        } else {
-            if (any(table(block) < 2))
-                stop(sQuote("block"),
-                     " contains levels with less than two observations")
-            .Object@block <- block
-        }
-        if (is.null(weights)) {
-            .Object@weights <- rep.int(1.0, nrow(x))
-        } else {
-            .Object@weights <- as.double(weights)
-        }
+        .Object@block <- if (is.null(block))
+                             factor(rep.int(0L, nrow(x)))
+                         else {
+                             if (any(table(block) < 2L))
+                                 stop(sQuote("block"), " contains levels with",
+                                      " less than two observations")
+                             block
+                         }
+        .Object@weights <- if (is.null(weights))
+                               rep.int(1.0, nrow(x))
+                           else
+                               as.double(weights)
+
         if (!validObject(.Object))
-            stop("not a valid object of class ",
-                 sQuote("IndependenceProblem"))
+            stop("not a valid object of class ", sQuote("IndependenceProblem"))
+
         .Object
     }
 )
@@ -71,10 +71,9 @@ setMethod(f = "initialize",
 
         if (!extends(class(ip), "IndependenceProblem"))
             stop("Argument ", sQuote("ip"), " is not of class ",
-                  sQuote("IndependenceProblem"))
+                 sQuote("IndependenceProblem"))
 
         .Object <- copyslots(ip, .Object)
-
         tr <- check_trafo(xtrafo(ip@x), ytrafo(ip@y))
         .Object@xtrans <- tr$xtrafo
         .Object@ytrans <- tr$ytrafo
@@ -96,17 +95,13 @@ setMethod(f = "initialize",
                   sQuote("IndependenceTestProblem"))
 
         .Object <- copyslots(itp, .Object)
-
         .Object@linearstatistic <-
             drop(LinearStatistic(itp@xtrans, itp@ytrans, itp@weights))
-
         ### <REMINDER>
         ### for teststat = "max" and distribution = "approx"
-        ### we don't need to covariance matrix but the variances only
+        ### we don't need the covariance matrix but the variances only
         ### </REMINDER>
-
-        ### possibly stratified by block
-        if (nlevels(itp@block) == 1) {
+        if (nlevels(itp@block) == 1L) {
             expcov <-
                 ExpectCovarLinearStatistic(itp@xtrans, itp@ytrans, itp@weights,
                                            varonly = varonly)
@@ -125,27 +120,24 @@ setMethod(f = "initialize",
                 cov <- cov + ec@covariance
             }
         }
-
         .Object@expectation <- drop(exp)
-        if (varonly) {
-            .Object@covariance <- new("Variance", drop(cov))
-        } else {
-            .Object@covariance <- new("CovarianceMatrix", cov)
-        }
+        .Object@covariance <- if (varonly)
+                                  new("Variance", drop(cov))
+                              else
+                                  new("CovarianceMatrix", cov)
 
         ### pretty names
         nm <- statnames(itp)$names
         names(.Object@expectation) <- nm
 
-        if (extends(class(.Object@covariance), "CovarianceMatrix")) {
-                dimnames(.Object@covariance@covariance) <- list(nm, nm)
-        }
+        if (extends(class(.Object@covariance), "CovarianceMatrix"))
+            dimnames(.Object@covariance@covariance) <- list(nm, nm)
         if (extends(class(.Object@covariance), "Variance"))
-                names(.Object@covariance@variance) <- nm
-
+            names(.Object@covariance@variance) <- nm
         if (any(variance(.Object) < eps()))
             warning("The conditional covariance matrix has ",
                     "zero diagonal elements")
+
         .Object
     }
 )
@@ -176,11 +168,10 @@ setMethod(f = "initialize",
         .Object <- copyslots(its, .Object)
         .Object@alternative <- match.arg(alternative)
         .Object@paired <- paired
-
         standstat <- (its@linearstatistic - expectation(its)) /
-                     sqrt(variance(its))
-        .Object@teststatistic <- drop(standstat)
-        .Object@standardizedlinearstatistic <- drop(standstat)
+                       sqrt(variance(its))
+        .Object@teststatistic <- .Object@standardizedlinearstatistic <-
+            drop(standstat)
 
         .Object
     }
@@ -197,15 +188,14 @@ setMethod(f = "initialize",
                   sQuote("IndependenceTestStatistic"))
 
         .Object <- copyslots(its, .Object)
-
         .Object@alternative <- match.arg(alternative)
         standstat <- (its@linearstatistic - expectation(its)) /
-                      sqrt(variance(its))
-        .Object@teststatistic <- switch(alternative,
-            "less" = drop(min(standstat)),
-            "greater" = drop(max(standstat)),
-            "two.sided" = drop(max(abs(standstat)))
-         )
+                       sqrt(variance(its))
+        .Object@teststatistic <-
+            switch(alternative,
+                "less" = drop(min(standstat)),
+                "greater" = drop(max(standstat)),
+                "two.sided" = drop(max(abs(standstat))))
         .Object@standardizedlinearstatistic <- standstat
 
         .Object
@@ -215,23 +205,21 @@ setMethod(f = "initialize",
 ### new("QuadTypeIndependenceTestStatistic", ...)
 setMethod(f = "initialize",
     signature = "QuadTypeIndependenceTestStatistic",
-    definition = function(.Object, its, ...) {
+    definition = function(.Object, its, paired = FALSE, ...) {
 
         if (!extends(class(its), "IndependenceTestStatistic"))
             stop("Argument ", sQuote("its"), " is not of class ",
                   sQuote("IndependenceTestStatistic"))
 
         .Object <- copyslots(its, .Object)
-
         mp <- MPinv(covariance(its), ...)
         .Object@covarianceplus <- mp$MPinv
         .Object@df <- mp$rank
-
+        .Object@paired <- paired
         stand <- (its@linearstatistic - expectation(its))
         .Object@teststatistic <-
             drop(stand %*% .Object@covarianceplus %*% stand)
-        .Object@standardizedlinearstatistic <-
-            (its@linearstatistic - expectation(its)) / sqrt(variance(its))
+        .Object@standardizedlinearstatistic <- stand / sqrt(variance(its))
 
         .Object
     }
@@ -245,7 +233,7 @@ setMethod(f = "initialize",
 
         if (any(is.na(x)))
             stop(sQuote("x"), " contains missing values")
-        if (!is.factor(x[[1]]) || length(unique(table(x[[1]]))) != 1)
+        if (!is.factor(x[[1L]]) || length(unique(table(x[[1L]]))) != 1L)
             stop(sQuote("x"), " is not a balanced factor")
         if (any(is.na(y)))
             stop(sQuote("y"), " contains missing values")
@@ -254,21 +242,20 @@ setMethod(f = "initialize",
 
         .Object@x <- x
         .Object@y <- y
-
-        if (is.null(block))
-            .Object@block <- factor(rep.int(seq_len(nrow(x) / nlevels(x[[1]])),
-                                            nlevels(x[[1]])))
-        else
-            .Object@block <- block
-
-        if (is.null(weights))
-            .Object@weights <- rep.int(1.0, nrow(x))
-        else
-            .Object@weights <- as.double(weights)
+        .Object@block <- if (is.null(block))
+                             factor(rep.int(seq_len(nrow(x) / nlevels(x[[1L]])),
+                                            nlevels(x[[1L]])))
+                         else
+                             block
+        .Object@weights <- if (is.null(weights))
+                               rep.int(1.0, nrow(x))
+                           else
+                               as.double(weights)
 
         if (!validObject(.Object))
             stop("not a valid object of class ",
                  sQuote("SymmetryProblem"))
+
         .Object
     }
 )
