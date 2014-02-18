@@ -456,3 +456,13 @@ it <- independence_test(y ~ x | b, data = dta,
                         alternative = "greater")
 stopifnot(is.numeric(dperm(it, support(it))))
 ### see 'regtest_distribution.R' for more extensive checks
+
+### qperm with p = 1 could be NA for *exact* tests using the shift algorithm
+TeaTasting <-
+    matrix(c(3, 1, 1, 3),
+           nrow = 2,
+           dimnames = list(Guess = c("Milk", "Tea"),
+                           Truth = c("Milk", "Tea")))
+it <- independence_test(as.table(TeaTasting),
+                        distribution = exact(algorithm = "shift"))
+stopifnot(!is.na(qperm(it, p = 1)))

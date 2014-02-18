@@ -59,10 +59,13 @@ SR_shift_2sample <- function(object, fact) {
     new("ExactNullDistribution",
         p = function(q) sum(Prob[LE(T, q)]),
         q = function(p) {
-            indx <- which(cumsum(Prob) < p)
-            if (length(indx) == 0L)
-                indx <- 0L
-            T[max(indx) + 1L]
+            idx <- which(cumsum(Prob) < p)
+            if (length(idx) == 0L)
+                T[1L]
+            else if (length(idx) == length(Prob))
+                T[max(idx)]
+            else
+                T[max(idx) + 1L]
         },
         d = function(x) Prob[T == x],
         pvalue = function(q) {
@@ -147,10 +150,13 @@ SR_shift_1sample <- function(object, fact) {
     new("ExactNullDistribution",
         p = function(q) sum(Prob[LE(T, q)]),
         q = function(p) {
-            indx <- which(cumsum(Prob) < p)
-            if (length(indx) == 0L)
-                indx <- 0L
-            T[max(indx) + 1L]
+            idx <- which(cumsum(Prob) < p)
+            if (length(idx) == 0L)
+                T[1L]
+            else if (length(idx) == length(Prob))
+                T[max(idx)]
+            else
+                T[max(idx) + 1L]
         },
         d = function(x) Prob[T == x],
         pvalue = function(q) {

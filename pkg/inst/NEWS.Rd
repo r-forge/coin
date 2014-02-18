@@ -212,9 +212,13 @@
 
       \item the Pearson chi-squared test ignored user-specified transformations
 
-      \item the support of \emph{exact} permutation distributions for stratified
-      tests was not guaranteed to be distinct and ordered, which in turn caused
-      failure when trying to obtain, e.g., the density function
+      \item the support of exact permutation distributions for stratified tests
+      was not guaranteed to be distinct and ordered, which in turn caused
+      failure when trying to obtain values from the density and quantile
+      functions
+
+      \item the quantile function of exact permutation distributions sometimes
+      reported \code{NA} when the 100 \% quantile was requested
     }
   }
   \subsection{Other changes}{
