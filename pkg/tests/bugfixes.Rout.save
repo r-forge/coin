@@ -15,7 +15,6 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> 
 > ### Regression tests for fixed bugs
 > 
 > set.seed(290875)
@@ -748,10 +747,10 @@ In ft("friedman_test", "SymmetryProblem", formula, data, subset,  :
   Rank transformation doesn't take weights into account
 > 
 > ### chisq_test ignored xtrafo and ytrafo
-> chisq_test(as.table(jobsatisfaction[,,"Female"]),
+> chisq_test(as.table(jobsatisfaction[, , "Female"]),
 +            xtrafo = function(data)
 +                trafo(data, factor_trafo = function(x)
-+                    of_trafo(x, scores=1:4)))
++                    of_trafo(x, scores = 1:4)))
 
 	Asymptotic Pearson's Chi-Squared Test
 
@@ -761,10 +760,10 @@ chi-squared = 3.0171, df = 3, p-value = 0.389
 
 Warning message:
 In of_trafo(x, scores = 1:4) : 'x' is not an ordered factor
-> chisq_test(as.table(jobsatisfaction[,,"Female"]),
+> chisq_test(as.table(jobsatisfaction[, , "Female"]),
 +            ytrafo = function(data)
 +                trafo(data, factor_trafo = function(y)
-+                    of_trafo(y, scores=1:4)))
++                    of_trafo(y, scores = 1:4)))
 
 	Asymptotic Pearson's Chi-Squared Test
 
@@ -774,13 +773,13 @@ chi-squared = 4.2297, df = 3, p-value = 0.2377
 
 Warning message:
 In of_trafo(y, scores = 1:4) : 'y' is not an ordered factor
-> chisq_test(as.table(jobsatisfaction[,,"Female"]),
+> chisq_test(as.table(jobsatisfaction[, , "Female"]),
 +            xtrafo = function(data)
 +                trafo(data, factor_trafo = function(x)
-+                    of_trafo(x, scores=1:4)),
++                    of_trafo(x, scores = 1:4)),
 +            ytrafo = function(data)
 +                trafo(data, factor_trafo = function(y)
-+                    of_trafo(y, scores=1:4)))
++                    of_trafo(y, scores = 1:4)))
 
 	Asymptotic Pearson's Chi-Squared Test
 
@@ -792,6 +791,19 @@ Warning messages:
 1: In of_trafo(x, scores = 1:4) : 'x' is not an ordered factor
 2: In of_trafo(y, scores = 1:4) : 'y' is not an ordered factor
 > 
+> ### dperm could fail for *exact* tests with blocks
+> ### (this was due to the support values not being ordered and distinct)
+> dta <- data.frame(
++     y = c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30,
++           0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29),
++     x = gl(2, 9),
++     b = factor(rep(seq_len(9), 2)))
+> it <- independence_test(y ~ x | b, data = dta,
++                         distribution = exact(algorithm = "shift"),
++                         alternative = "greater")
+> stopifnot(is.numeric(dperm(it, support(it))))
+> ### see 'regtest_distribution.R' for more extensive checks
+> 
 > proc.time()
    user  system elapsed 
-   2.85    0.14    3.10 
+   2.79    0.23    3.10 

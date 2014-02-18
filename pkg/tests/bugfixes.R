@@ -1,4 +1,3 @@
-
 ### Regression tests for fixed bugs
 
 set.seed(290875)
@@ -429,18 +428,31 @@ try(friedman_test(y ~ x2 | b, data = dta)) # was ok
 friedman_test(y ~ x | b, data = dta,  weights = ~ w)
 
 ### chisq_test ignored xtrafo and ytrafo
-chisq_test(as.table(jobsatisfaction[,,"Female"]),
+chisq_test(as.table(jobsatisfaction[, , "Female"]),
            xtrafo = function(data)
                trafo(data, factor_trafo = function(x)
-                   of_trafo(x, scores=1:4)))
-chisq_test(as.table(jobsatisfaction[,,"Female"]),
+                   of_trafo(x, scores = 1:4)))
+chisq_test(as.table(jobsatisfaction[, , "Female"]),
            ytrafo = function(data)
                trafo(data, factor_trafo = function(y)
-                   of_trafo(y, scores=1:4)))
-chisq_test(as.table(jobsatisfaction[,,"Female"]),
+                   of_trafo(y, scores = 1:4)))
+chisq_test(as.table(jobsatisfaction[, , "Female"]),
            xtrafo = function(data)
                trafo(data, factor_trafo = function(x)
-                   of_trafo(x, scores=1:4)),
+                   of_trafo(x, scores = 1:4)),
            ytrafo = function(data)
                trafo(data, factor_trafo = function(y)
-                   of_trafo(y, scores=1:4)))
+                   of_trafo(y, scores = 1:4)))
+
+### dperm could fail for *exact* tests with blocks
+### (this was due to the support values not being ordered and distinct)
+dta <- data.frame(
+    y = c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30,
+          0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29),
+    x = gl(2, 9),
+    b = factor(rep(seq_len(9), 2)))
+it <- independence_test(y ~ x | b, data = dta,
+                        distribution = exact(algorithm = "shift"),
+                        alternative = "greater")
+stopifnot(is.numeric(dperm(it, support(it))))
+### see 'regtest_distribution.R' for more extensive checks

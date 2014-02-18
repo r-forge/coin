@@ -211,6 +211,10 @@
       \item the Friedman test did not warn when weights were supplied
 
       \item the Pearson chi-squared test ignored user-specified transformations
+
+      \item the support of \emph{exact} permutation distributions for stratified
+      tests was not guaranteed to be distinct and ordered, which in turn caused
+      failure when trying to obtain, e.g., the density function
     }
   }
   \subsection{Other changes}{

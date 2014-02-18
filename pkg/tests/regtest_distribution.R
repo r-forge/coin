@@ -69,7 +69,7 @@ it@distribution@name
 pvalue(it)
 
 it <- independence_test(y5 ~ x | b, data = dta,
-                        distribution = exact(algo = "shift", fact= 1e5))
+                        distribution = exact(algo = "shift", fact = 1e5))
 it@distribution@name
 pvalue(it)
 
@@ -83,7 +83,7 @@ it@distribution@name
 pvalue(it)
 
 it <- independence_test(y5 ~ x, data = dta,
-                        distribution = exact(algo = "shift", fact= 1e5))
+                        distribution = exact(algo = "shift", fact = 1e5))
 it@distribution@name
 pvalue(it)
 
@@ -226,17 +226,11 @@ stopifnot(isequal(pvalue(it1_SR), pvalue(it1_vdW)))
 it2_SR <- independence_test(y ~ x | b, data = dta1,
                             distribution = exact(algorithm = "shift"))
 supp_it2_SR <- support(it2_SR)
-### <FIXME>
-#stopifnot(!is.unsorted(supp_it2_SR))
-!is.unsorted(supp_it2_SR)
-#stopifnot(all(supp_it2_SR == unique(supp_it2_SR)))
-all(supp_it2_SR == unique(supp_it2_SR))
-### </FIXME>
+stopifnot(!is.unsorted(supp_it2_SR))                         # failed in < 1.1-0
+stopifnot(all(supp_it2_SR == unique(supp_it2_SR)))           # failed in < 1.1-0
+
 round(pp_it2_SR <- pperm(it2_SR, supp_it2_SR), 7)
-### <FIXME>
-#round(dp_it2_SR <- dperm(it2_SR, supp_it2_SR), 7)
-try(round(dp_it2_SR <- dperm(it2_SR, supp_it2_SR), 7))
-### </FIXME>
+round(dp_it2_SR <- dperm(it2_SR, supp_it2_SR), 7)            # failed in < 1.1-0
 round(qp_it2_SR <- qperm(it2_SR, seq(0, 1, 0.01)), 7)
 
 ### paired shift with block
@@ -251,10 +245,6 @@ round(dp_it3_SR <- dperm(it3_SR, supp_it3_SR), 7)
 round(qp_it3_SR <- qperm(it3_SR, seq(0, 1, 0.01)), 7)
 
 ### should be equal
-### <FIXME>
-#stopifnot(isequal(pp_it2_SR, pp_it3_SR))
-isequal(pp_it2_SR, pp_it3_SR)
-#stopifnot(isequal(qp_it2_SR, qp_it3_SR))
-isequal(qp_it2_SR, qp_it3_SR)
-### </FIXME>
+stopifnot(isequal(pp_it2_SR, pp_it3_SR))                     # failed in < 1.1-0
+stopifnot(isequal(qp_it2_SR, qp_it3_SR))                     # failed in < 1.1-0
 stopifnot(isequal(pvalue(it2_SR), pvalue(it3_SR)))

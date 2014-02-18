@@ -44,6 +44,18 @@ SR_shift_2sample <- function(object, fact) {
 
     T <- (T - expectation(object)) / sqrt(variance(object))
 
+    ## T may not be distinct and ordered if blocks are present
+    if (nlevels(block) > 1L) {
+        n <- length(T)
+        o <- order(T)
+        T <- T[o]
+        idx <- c(which(T[-1L] - T[-n] > eps()), n)
+        T <- T[idx]
+        Prob <-
+            vapply(split(Prob[o], rep.int(seq_along(idx), diff(c(0L, idx)))),
+                   sum, NA_real_, USE.NAMES = FALSE)
+    }
+
     new("ExactNullDistribution",
         p = function(q) sum(Prob[LE(T, q)]),
         q = function(p) {
