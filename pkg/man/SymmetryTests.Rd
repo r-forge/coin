@@ -18,8 +18,7 @@
 \usage{
 
 \method{friedman_test}{formula}(formula, data, subset = NULL, \dots)
-\method{friedman_test}{SymmetryProblem}(object,
-    distribution = c("asymptotic", "approximate"), \dots)
+\method{friedman_test}{SymmetryProblem}(object, \dots)
 
 \method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
 \method{wilcoxsign_test}{SymmetryProblem}(object,
@@ -41,16 +40,6 @@
     to be used.}
   \item{object}{an object inheriting from class
     \code{"SymmetryProblem"}.}
-  \item{distribution}{a character, the null distribution of the test
-    statistic can be approximated by its asymptotic distribution
-    (\code{"asymptotic"}, default) or via Monte Carlo resampling
-    (\code{"approximate"}).  Alternatively, the functions
-    \code{\link{asymptotic}} or \code{\link{approximate}} can be used to
-    specify how the exact conditional distribution of the test statistic
-    should be approximated.  For the Wilcoxon signed-rank test and the
-    sign test, \code{"exact"} or use of the function \code{\link{exact}}
-    computes the exact distribution by means of the Streitberg-Roehmel
-    shift algorithm.}
   \item{zero.method}{a character specifying the way zeros, e.g., induced
     by tied repeated measurements, are handled (see \sQuote{Details}).}
   \item{\dots}{further arguments to be passed to or from methods.}
@@ -219,5 +208,9 @@
   sign_test(y ~ x | block, data = dta,
             alternative = "greater", distribution = "exact")
 
+  ### the Friedman test is equivalent to the sign test in the two-sample case
+  friedman_test(y ~ x | block, data = dta, distribution = "exact")
+
+  sign_test(y ~ x | block, data = dta, distribution = "exact")
 }
 \keyword{htest}

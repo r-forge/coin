@@ -15,8 +15,7 @@ chisq_test.table <- function(object, ...) {
     return(object)
 }
 
-chisq_test.IndependenceProblem <- function(object,
-    distribution = c("asymptotic", "approximate"), ...) {
+chisq_test.IndependenceProblem <- function(object, ...) {
 
     check <- function(object) {
         if (!is_contingency(object))
@@ -29,8 +28,7 @@ chisq_test.IndependenceProblem <- function(object,
     }
     n <- sum(object@weights)
 
-    args <- setup_args(distribution = check_distribution_arg(distribution,
-                           match.arg(distribution)))
+    args <- setup_args()
     ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
@@ -43,6 +41,8 @@ chisq_test.IndependenceProblem <- function(object,
                  (is.ordered(object@y[[1]]) && nlevels(object@x[[1]]) == 2)))
             "scalar"
         else "quad"
+    ## distribution must be checked
+    args$distribution <- check_distribution_arg(args$distribution)
     ## alternative is needed later
     args$alternative <- match.arg(args$alternative,
                                   c("two.sided", "less", "greater"))
@@ -114,12 +114,9 @@ cmh_test.table <- function(object, ...) {
     return(object)
 }
 
-cmh_test.IndependenceProblem <- function(object,
-    distribution = c("asymptotic", "approximate"), ...) {
+cmh_test.IndependenceProblem <- function(object, ...) {
 
-    args <- setup_args(distribution = check_distribution_arg(distribution,
-                           match.arg(distribution)),
-                       check = function(object) {
+    args <- setup_args(check = function(object) {
                            if (!is_contingency(object))
                                stop(sQuote("object"),
                                     " does not represent a contingency problem")

@@ -87,12 +87,9 @@ kruskal_test.formula <- function(formula, data = list(), subset = NULL,
        frame = parent.frame(), ...)
 }
 
-kruskal_test.IndependenceProblem <- function(object,
-    distribution = c("asymptotic", "approximate"), ...) {
+kruskal_test.IndependenceProblem <- function(object, ...) {
 
-    args <- setup_args(distribution = check_distribution_arg(distribution,
-                           match.arg(distribution)),
-                       ytrafo = function(data)
+    args <- setup_args(ytrafo = function(data)
                            trafo(data, numeric_trafo = rank_trafo),
                        check = function(object) {
                            if (!(is_Ksample(object) && is_numeric_y(object)))

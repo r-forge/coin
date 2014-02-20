@@ -135,7 +135,7 @@
 
       \item the exact distribution of test statistics based on quadratic
       forms can now be obtained in the two-sample case (see
-      \code{?independence_test})
+      \code{?independence_test} and \code{?symmetry_test})
     }
   }
   \subsection{Bug fixes}{
@@ -186,9 +186,6 @@
       \item transformation functions involving ordered factors or survival data
       sometimes failed when performed within blocks
 
-      \item the general symmetry test inadvertently allowed the
-      \code{distribution} argument to be set to \code{"exact"}
-
       \item the exact \eqn{p}-values for stratified tests were wrong when each
       block contained precisely two observations
 
@@ -206,7 +203,7 @@
       scores for ordinal variables
 
       \item the printed output of the one-sided Ansari-Bradley test reported the
-      opposite direction of the specififed alternative (but performed the test
+      opposite direction of the specified alternative (but performed the test
       in the specified direction and thus reported the correct \eqn{p}-value)
 
       \item objects of class \code{"SymmetryProblem"} were not checked for
@@ -256,8 +253,11 @@
       applied to a table, the variable indicating the measurement conditions has
       been renamed to \samp{conditions} (from \samp{groups})
 
-      \item the Fligner-Killeen test no longer features the \code{distribution}
-      argument (but still allows the type of null distribution to be specified)
+      \item the Pearson chi-squared test, the generalized
+      Cochran-Mantel-Haenszel test, the Kruskal-Wallis test, the Friedman test,
+      the Fligner-Killeen test and the marginal homogeneity test no longer
+      features the \code{distribution} argument (but still allows the type of
+      null distribution to be specified)
 
       \item the default number of Monte Carlo replicates used to approximate the
       exact conditional distribution has been increased to 10000 (see

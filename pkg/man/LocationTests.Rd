@@ -34,8 +34,7 @@
     conf.int = FALSE, conf.level = 0.95, \dots)
 
 \method{kruskal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{kruskal_test}{IndependenceProblem}(object,
-    distribution = c("asymptotic", "approximate"), \dots)
+\method{kruskal_test}{IndependenceProblem}(object, \dots)
 
 \method{normal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{normal_test}{IndependenceProblem}(object,
@@ -68,14 +67,6 @@
   \item{conf.int}{a logical indicating whether a confidence interval for
     the difference in location should be computed.}
   \item{conf.level}{confidence level of the interval.}
-  \item{distribution}{a character, the null distribution of the test
-    statistic can be computed exactly (\code{"exact"}) or can be
-    approximated by its asymptotic distribution (\code{"asymptotic"}) or
-    via Monte-Carlo resampling (\code{"approximate"}). Alternatively,
-    the functions \code{\link{exact}}, \code{\link{approximate}} or
-    \code{\link{asymptotic}} can be used to specify how the exact
-    conditional distribution of the test statistic should be calculated
-    or approximated.}
   \item{ties.method}{a character, two methods are available to adjust
     scores for ties: either the score generating function is applied to
     \code{"mid-ranks"} or the scores computed based on random ranks are
@@ -210,8 +201,12 @@
   ### and the exact two-sided p-value
   pvalue(wt)
 
-  ##d and, finally, the confidence interval
+  ### and, finally, the confidence interval
   confint(wt)
+
+  ### for two samples, Kruskal-Wallis' test is equivalent to the W-M-W test
+  kruskal_test(pd ~ age, data = water_transfer,
+               distribution = "exact")
 
   ### Confidence interval for difference (12-26 Weeks - At term)
   wilcox_test(pd ~ age, data = water_transfer,

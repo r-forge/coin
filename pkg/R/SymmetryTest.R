@@ -18,7 +18,7 @@ symmetry_test.table <- function(object, ...) {
 
 symmetry_test.SymmetryProblem <- function(object,
     teststat = c("max", "quad", "scalar"),
-    distribution = c("asymptotic", "approximate"),
+    distribution = c("asymptotic", "approximate", "exact"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL,
     check = NULL, ...) {

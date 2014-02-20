@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2013-12-17 r64473) -- "Unsuffered Consequences"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R Under development (unstable) (2014-02-02 r64916) -- "Unsuffered Consequences"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -77,7 +77,27 @@ sample estimates:
 > ## Don't show: 
 >   set.seed(290875)
 > ## End Don't show
->   ### for females only
+>   ### Laryngeal cancer
+>   ### Agresti (2002, p. 107, Tab. 3.13)
+>   cancer <- matrix(c(21, 2,
++                      15, 3),
++                    nrow = 2,
++                    dimnames = list(Treatment = c("Surgery", "Radiation"),
++                                    Cancer = c("Controlled","Not Controlled")))
+> 
+>   ## Exact Pearson chi-squared test
+>   ## (Equivalent to Fishers's exact test, see Agresti, 2002, p. 93)
+>   ## Agresti (2002, p. 108, Tab 3.14)
+>   chisq_test(as.table(cancer), distribution = "exact")
+
+	Exact Pearson's Chi-Squared Test
+
+data:  Cancer by Treatment (Surgery, Radiation)
+chi-squared = 0.5992, p-value = 0.6384
+
+> 
+> 
+>   ### jobsatisfaction, for females only
 >   chisq_test(as.table(jobsatisfaction[,,"Female"]),
 +       distribution = approximate(B = 9999))
 
@@ -498,13 +518,23 @@ difference in location
 >   pvalue(wt)
 [1] 0.2544123
 > 
->   ##d and, finally, the confidence interval
+>   ### and, finally, the confidence interval
 >   confint(wt)
 95 percent confidence interval:
  -0.76  0.15 
 sample estimates:
 difference in location 
                 -0.305 
+
+> 
+>   ### for two samples, Kruskal-Wallis' test is equivalent to the W-M-W test
+>   kruskal_test(pd ~ age, data = water_transfer,
++                distribution = "exact")
+
+	Exact Kruskal-Wallis Test
+
+data:  pd by age (12-26 Weeks, At term)
+chi-squared = 1.5, p-value = 0.2544
 
 > 
 >   ### Confidence interval for difference (12-26 Weeks - At term)
@@ -706,6 +736,38 @@ alternative hypothesis: greater
 > ### Keywords: htest
 > 
 > ### ** Examples
+> 
+>   ### Performance of prime minister
+>   ### Agresti (2002, p. 409)
+>   rating  <- c("Approve", "Disprove")
+>   performance <- matrix(c(794, 150,
++                            86, 570),
++                         nrow = 2, byrow = TRUE,
++                         dimnames = list(First = rating,
++                                         Second = rating))
+> 
+>   ### Asymptotic McNemar Test
+>   diag(performance) <- 0 # speed-up: only off-diagonal elements contribute
+>   mh_test(as.table(performance))
+
+	Asymptotic Marginal Homogeneity Test
+
+data:  response by
+	 conditions (First, Second) 
+	 stratified by block
+chi-squared = 17.3559, df = 1, p-value = 3.099e-05
+
+> 
+>   ### Exact McNemar Test
+>   mh_test(as.table(performance), distribution = "exact")
+
+	Exact Marginal Homogeneity Test
+
+data:  response by
+	 conditions (First, Second) 
+	 stratified by block
+chi-squared = 17.3559, p-value = 3.716e-05
+
 > 
 > 
 >   ### Opinions on Pre- and Extramarital Sex, Agresti (2002), page 421
@@ -1378,6 +1440,25 @@ Z = 1.6667, p-value = 0.08984
 alternative hypothesis: true mu is greater than 0
 
 > 
+>   ### the Friedman test is equivalent to the sign test in the two-sample case
+>   friedman_test(y ~ x | block, data = dta, distribution = "exact")
+
+	Exact Friedman Test
+
+data:  y by x (1, 2) 
+	 stratified by block
+chi-squared = 2.7778, p-value = 0.1797
+
+> 
+>   sign_test(y ~ x | block, data = dta, distribution = "exact")
+
+	Exact Sign Test
+
+data:  y by x (pos, neg) 
+	 stratified by block
+Z = 1.6667, p-value = 0.1797
+alternative hypothesis: true mu is not equal to 0
+
 > 
 > 
 > 
@@ -2385,7 +2466,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  38.37 0.27 39.39 NA NA 
+Time elapsed:  36.97 0.28 37.37 NA NA 
 > grDevices::dev.off()
 null device 
           1 

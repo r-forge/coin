@@ -12,8 +12,7 @@
 \usage{
 \method{mh_test}{formula}(formula, data, subset = NULL, \dots)
 \method{mh_test}{table}(object, \dots)
-\method{mh_test}{SymmetryProblem}(object,
-    distribution = c("asymptotic", "approximate"), \dots)
+\method{mh_test}{SymmetryProblem}(object, \dots)
 }
 \arguments{
   \item{formula}{a formula of the form \code{y ~ x | block} where
@@ -28,13 +27,6 @@
   \item{object}{an object inheriting from class \code{"SymmetryProblem"}
     or an object of class \code{"table"} with identical \code{dimnames}
     attributes.}
-  \item{distribution}{a character, the null distribution of the test
-    statistic can be approximated by its asymptotic distribution
-    (\code{"asymptotic"}, default) or via Monte Carlo resampling
-    (\code{"approximate"}).  Alternatively, the functions
-    \code{\link{approximate}} or \code{\link{asymptotic}} can be used to
-    specify how the exact conditional distribution of the test statistic
-    should be calculated or approximated.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
@@ -129,6 +121,22 @@
 
 }
 \examples{
+  ### Performance of prime minister
+  ### Agresti (2002, p. 409)
+  rating  <- c("Approve", "Disprove")
+  performance <- matrix(c(794, 150,
+                           86, 570),
+                        nrow = 2, byrow = TRUE,
+                        dimnames = list(First = rating,
+                                        Second = rating))
+
+  ### Asymptotic McNemar Test
+  diag(performance) <- 0 # speed-up: only off-diagonal elements contribute
+  mh_test(as.table(performance))
+
+  ### Exact McNemar Test
+  mh_test(as.table(performance), distribution = "exact")
+
 
   ### Opinions on Pre- and Extramarital Sex, Agresti (2002), page 421
   opinions <- c("always wrong", "almost always wrong",

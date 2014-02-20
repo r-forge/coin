@@ -649,12 +649,6 @@ chi-squared = 2.97, df = 3, p-value = 0.3963
 attr(,"assign")
 [1] 1 1
 > 
-> ### symmetry_test still allowed 'distribution = "exact"'
-> tab <- as.table(matrix(c(20, 2, 12, 16), nrow = 2))
-> try(symmetry_test(tab, distribution = "exact"))
-Error in match.arg(distribution) : 
-  'arg' should be one of "asymptotic", "approximate"
-> 
 > ### wrong exact p-values for stratified tests when all blocks have length two
 > y <- 1:30
 > x <- factor(rep(1:2, 15))
@@ -816,4 +810,4 @@ Warning messages:
 > 
 > proc.time()
    user  system elapsed 
-   2.74    0.20    3.04 
+   2.90    0.17    3.13 

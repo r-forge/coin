@@ -352,10 +352,6 @@ trafo(data.frame(gl(4, 5, ordered = TRUE)),
       ordered_trafo = function(x) cbind(c(1, 2, 3, 4)[x], c(1, 2, 3, 5)[x]),
       block = z)
 
-### symmetry_test still allowed 'distribution = "exact"'
-tab <- as.table(matrix(c(20, 2, 12, 16), nrow = 2))
-try(symmetry_test(tab, distribution = "exact"))
-
 ### wrong exact p-values for stratified tests when all blocks have length two
 y <- 1:30
 x <- factor(rep(1:2, 15))

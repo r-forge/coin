@@ -7,12 +7,9 @@ friedman_test.formula <- function(formula, data = list(), subset = NULL, ...) {
        frame = parent.frame(), ...)
 }
 
-friedman_test.SymmetryProblem <- function(object,
-    distribution = c("asymptotic", "approximate"), ...) {
+friedman_test.SymmetryProblem <- function(object, ...) {
 
-    args <- setup_args(distribution = check_distribution_arg(distribution,
-                           match.arg(distribution)),
-                       ytrafo = function(data)
+    args <- setup_args(ytrafo = function(data)
                            trafo(data, numeric_trafo = rank_trafo,
                                  block = object@block),
                        check = function(object) {

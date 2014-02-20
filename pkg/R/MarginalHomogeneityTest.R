@@ -16,12 +16,9 @@ mh_test.table <- function(object, ...) {
     return(object)
 }
 
-mh_test.SymmetryProblem <- function(object,
-    distribution = c("asymptotic", "approximate"), ...) {
+mh_test.SymmetryProblem <- function(object, ...) {
 
-    args <- setup_args(distribution = check_distribution_arg(distribution,
-                           match.arg(distribution)),
-                       check = function(object) {
+    args <- setup_args(check = function(object) {
                            if (!is_contingency(object))
                                stop(sQuote("object"),
                                     " does not represent a contingency problem")

@@ -22,13 +22,11 @@
 
 \method{chisq_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{chisq_test}{table}(object, \dots)
-\method{chisq_test}{IndependenceProblem}(object,
-    distribution = c("asymptotic", "approximate"), \dots)
+\method{chisq_test}{IndependenceProblem}(object, \dots)
 
 \method{cmh_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{cmh_test}{table}(object, \dots)
-\method{cmh_test}{IndependenceProblem}(object,
-    distribution = c("asymptotic", "approximate"), \dots)
+\method{cmh_test}{IndependenceProblem}(object, \dots)
 
 \method{lbl_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{lbl_test}{table}(object, \dots)
@@ -102,7 +100,21 @@
 \dontshow{
   set.seed(290875)
 }
-  ### for females only
+  ### Laryngeal cancer
+  ### Agresti (2002, p. 107, Tab. 3.13)
+  cancer <- matrix(c(21, 2,
+                     15, 3),
+                   nrow = 2,
+                   dimnames = list(Treatment = c("Surgery", "Radiation"),
+                                   Cancer = c("Controlled","Not Controlled")))
+
+  ## Exact Pearson chi-squared test
+  ## (Equivalent to Fishers's exact test, see Agresti, 2002, p. 93)
+  ## Agresti (2002, p. 108, Tab 3.14)
+  chisq_test(as.table(cancer), distribution = "exact")
+
+
+  ### jobsatisfaction, for females only
   chisq_test(as.table(jobsatisfaction[,,"Female"]),
       distribution = approximate(B = 9999))
 
