@@ -1,3 +1,48 @@
+### Quade Test
+quade_test <- function(object, ...) UseMethod("quade_test")
+
+quade_test.formula <- function(formula, data = list(), subset = NULL, ...) {
+
+    ft("quade_test", "SymmetryProblem", formula, data, subset,
+       frame = parent.frame(), ...)
+}
+
+quade_test.SymmetryProblem <- function(object, ...) {
+
+    args <- setup_args(check = function(object) {
+                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                               stop(sQuote("object"),
+                                    " does not represent a K-sample problem",
+                                    " (maybe the grouping variable is not a",
+                                    " factor?)")
+                           return(TRUE)
+                       })
+    ## convert factors to ordered and attach scores if requested
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
+    ## set test statistic to scalar for linear-by-linear tests
+    args$teststat <- if (is_ordered_x(object)) "scalar"
+                     else "quad"
+
+    y <- split(object@y[[1]], object@block)
+    R <- lapply(y, function(y) rank(y) - (length(y) + 1) / 2)
+    Q <- rank(vapply(y, function(y) max(y) - min(y), NA_real_, USE.NAMES = FALSE))
+    object@y[[1]] <- unsplit(lapply(seq_along(Q), function(i) Q[i] * R[[i]]),
+                             object@block)
+
+    object <- do.call("symmetry_test", c(list(object = object), args))
+
+    if (is_ordered_x(object@statistic))
+        object@method <- "Linear-by-Linear Association Test"
+    else
+        object@method <- "Quade Test"
+
+    return(object)
+}
+
+
 ### Friedman Test
 friedman_test <- function(object, ...) UseMethod("friedman_test")
 

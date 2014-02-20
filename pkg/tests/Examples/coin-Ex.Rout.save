@@ -1257,13 +1257,65 @@ newdrug             0.0191             0.0111             0.0063
 > 
 > ### Name: SymmetryTests
 > ### Title: Symmetry Tests
-> ### Aliases: friedman_test friedman_test.formula
-> ###   friedman_test.SymmetryProblem wilcoxsign_test wilcoxsign_test.formula
+> ### Aliases: quade_test quade_test.formula quade_test.SymmetryProblem
+> ###   friedman_test friedman_test.formula friedman_test.SymmetryProblem
+> ###   wilcoxsign_test wilcoxsign_test.formula
 > ###   wilcoxsign_test.SymmetryProblem sign_test sign_test.formula
 > ###   sign_test.SymmetryProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
+> 
+>   ### Data from Quade (1979, p. 683)
+>   dta <- data.frame(
++       y = c(52, 45, 38,
++             63, 79, 50,
++             45, 57, 39,
++             53, 51, 43,
++             47, 50, 56,
++             62, 72, 49,
++             49, 52, 40),
++        x = factor(rep(LETTERS[1:3], 7)),
++        b = factor(rep(1:7, each = 3)))
+> 
+>   ### Approximate (Monte Carlo) Friedman test
+>   friedman_test(y ~ x | b, data = dta,
++                 distribution = approximate(B = 10000))
+
+	Approximative Friedman Test
+
+data:  y by x (A, B, C) 
+	 stratified by b
+chi-squared = 6, p-value = 0.0521
+
+> 
+>   ### Approximate (Monte Carlo) Quade test
+>   ### Quade (1979, p.683), W = 8.157
+>   (qt <- quade_test(y ~ x | b, data = dta,
++                     distribution = approximate(B = 10000)))
+
+	Approximative Quade Test
+
+data:  y by x (A, B, C) 
+	 stratified by b
+chi-squared = 8.1571, p-value = 0.0059
+
+> 
+>   ### Comparison with R's quade.test() function
+>   quade.test(y ~ x | b, data = dta)
+
+	Quade test
+
+data:  y and x and b
+Quade F = 8.3765, num df = 2, denom df = 12, p-value = 0.005284
+
+> 
+>   ### quade.test() uses an F-statistic
+>   b <- nlevels(qt@statistic@block)
+>   A <- sum(qt@statistic@y^2)
+>   B <- sum(statistic(qt, "linear")^2) / b
+>   (b - 1) * B / (A - B) # F = 8.3765
+[1] 8.376528
 > 
 > 
 >   ### Hollander & Wolfe (1999), Table 7.1, page 274
@@ -1326,9 +1378,9 @@ chi-squared = 11.1429, df = 2, p-value = 0.003805
 > 
 >   ### a global test, again
 >   print(pvalue(rtt))
-[1] 0.003455915
+[1] 0.003466348
 99 percent confidence interval:
- 0.003205721 0.003706108 
+ 0.003169085 0.003763611 
 
 > 
 >   ### simultaneous P-values for all pair comparisons
@@ -1337,9 +1389,9 @@ chi-squared = 11.1429, df = 2, p-value = 0.003805
 Warning in .local(object, ...) :
   multiple comparisons might be incorrect due to subset pivotality; use 'method = "npmcp"'
                                      
-Round Out - Narrow Angle  0.623934656
-Wide Angle - Narrow Angle 0.053791966
-Wide Angle - Round Out    0.003358314
+Round Out - Narrow Angle  0.623914237
+Wide Angle - Narrow Angle 0.053979240
+Wide Angle - Round Out    0.003389065
 > 
 > 
 >   ### Strength Index of Cotton, Hollander & Wolfe (1999), Table 7.5, page 286
@@ -1371,9 +1423,9 @@ alternative hypothesis: two.sided
 >   ### approximate null distribution via Monte-Carlo
 >   pvalue(friedman_test(strength ~ potash | block, data = sc,
 +                        distribution = approximate(B = 9999)))
-[1] 0.00470047
+[1] 0.00480048
 99 percent confidence interval:
- 0.003124471 0.006765311 
+ 0.003205889 0.006883641 
 
 > 
 > 
@@ -1440,7 +1492,27 @@ Z = 1.6667, p-value = 0.08984
 alternative hypothesis: true mu is greater than 0
 
 > 
->   ### the Friedman test is equivalent to the sign test in the two-sample case
+>   ### for two samples, the Quade test is equivalent to the signed-rank test
+>   quade_test(y ~ x | block, data = dta, distribution = "exact")
+
+	Exact Quade Test
+
+data:  y by x (1, 2) 
+	 stratified by block
+chi-squared = 4.2982, p-value = 0.03906
+
+> 
+>   wilcoxsign_test(y ~ x | block, data = dta, distribution = "exact")
+
+	Exact Wilcoxon-Pratt Signed-Rank Test
+
+data:  y by x (pos, neg) 
+	 stratified by block
+Z = 2.0732, p-value = 0.03906
+alternative hypothesis: true mu is not equal to 0
+
+> 
+>   ### for two samples, the Friedman test is equivalent to the sign test
 >   friedman_test(y ~ x | block, data = dta, distribution = "exact")
 
 	Exact Friedman Test
@@ -2466,7 +2538,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  36.97 0.28 37.37 NA NA 
+Time elapsed:  37.08 0.26 37.67 NA NA 
 > grDevices::dev.off()
 null device 
           1 

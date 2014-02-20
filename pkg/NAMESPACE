@@ -12,7 +12,7 @@ export(independence_test,
        wilcox_test, kruskal_test, normal_test, median_test, savage_test,
        taha_test, klotz_test, mood_test, ansari_test, fligner_test, conover_test,
        surv_test,
-       friedman_test, wilcoxsign_test, sign_test,
+       quade_test, friedman_test, wilcoxsign_test, sign_test,
        spearman_test, fisyat_test, quadrant_test, koziol_test,
        maxstat_test,
        chisq_test, cmh_test, lbl_test, mh_test,
@@ -78,6 +78,8 @@ S3method(conover_test, IndependenceProblem)
 S3method(surv_test, formula)
 S3method(surv_test, IndependenceProblem)
 
+S3method(quade_test, formula)
+S3method(quade_test, SymmetryProblem)
 S3method(friedman_test, formula)
 S3method(friedman_test, SymmetryProblem)
 S3method(wilcoxsign_test, formula)

@@ -1,4 +1,7 @@
 \name{SymmetryTests}
+\alias{quade_test}
+\alias{quade_test.formula}
+\alias{quade_test.SymmetryProblem}
 \alias{friedman_test}
 \alias{friedman_test.formula}
 \alias{friedman_test.SymmetryProblem}
@@ -16,6 +19,8 @@
   complete block design.
 }
 \usage{
+\method{quade_test}{formula}(formula, data, subset = NULL, \dots)
+\method{quade_test}{SymmetryProblem}(object, \dots)
 
 \method{friedman_test}{formula}(formula, data, subset = NULL, \dots)
 \method{friedman_test}{SymmetryProblem}(object, \dots)
@@ -85,6 +90,9 @@
 
 }
 \references{
+  Quade, D.  (1979).  Using weighted rankings in the analysis of complete blocks
+  with additive block effects.  \emph{Journal of the American Statistical
+    Association} \bold{74}(367), 680--683.
 
   Myles Hollander & Douglas A. Wolfe (1999).
   \emph{Nonparametric Statistical Methods}, 2nd Edition.
@@ -107,6 +115,36 @@
 
 }
 \examples{
+  ### Data from Quade (1979, p. 683)
+  dta <- data.frame(
+      y = c(52, 45, 38,
+            63, 79, 50,
+            45, 57, 39,
+            53, 51, 43,
+            47, 50, 56,
+            62, 72, 49,
+            49, 52, 40),
+       x = factor(rep(LETTERS[1:3], 7)),
+       b = factor(rep(1:7, each = 3)))
+
+  ### Approximate (Monte Carlo) Friedman test
+  friedman_test(y ~ x | b, data = dta,
+                distribution = approximate(B = 10000))
+
+  ### Approximate (Monte Carlo) Quade test
+  ### Quade (1979, p.683), W = 8.157
+  (qt <- quade_test(y ~ x | b, data = dta,
+                    distribution = approximate(B = 10000)))
+
+  ### Comparison with R's quade.test() function
+  quade.test(y ~ x | b, data = dta)
+
+  ### quade.test() uses an F-statistic
+  b <- nlevels(qt@statistic@block)
+  A <- sum(qt@statistic@y^2)
+  B <- sum(statistic(qt, "linear")^2) / b
+  (b - 1) * B / (A - B) # F = 8.3765
+
 
   ### Hollander & Wolfe (1999), Table 7.1, page 274
   ### Comparison of three methods ("round out", "narrow angle", and
@@ -208,7 +246,12 @@
   sign_test(y ~ x | block, data = dta,
             alternative = "greater", distribution = "exact")
 
-  ### the Friedman test is equivalent to the sign test in the two-sample case
+  ### for two samples, the Quade test is equivalent to the signed-rank test
+  quade_test(y ~ x | block, data = dta, distribution = "exact")
+
+  wilcoxsign_test(y ~ x | block, data = dta, distribution = "exact")
+
+  ### for two samples, the Friedman test is equivalent to the sign test
   friedman_test(y ~ x | block, data = dta, distribution = "exact")
 
   sign_test(y ~ x | block, data = dta, distribution = "exact")

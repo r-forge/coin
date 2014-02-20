@@ -136,6 +136,8 @@
       \item the exact distribution of test statistics based on quadratic
       forms can now be obtained in the two-sample case (see
       \code{?independence_test} and \code{?symmetry_test})
+
+      \item the Quade test is now available (see \code{?quade_test})
     }
   }
   \subsection{Bug fixes}{
