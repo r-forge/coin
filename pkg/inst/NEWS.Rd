@@ -287,6 +287,9 @@
       \item \code{exact()} has \code{algorithm = "auto"} as its new default,
       preserving the behavior of \code{algorithm = "shift"} in previous versions
       of the package
+
+      \item the exact distribution of stratified test statistics is now obtained
+      more efficiently, and especially so for large numbers of strata
     }
   }
 }

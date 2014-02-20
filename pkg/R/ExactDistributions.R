@@ -1,4 +1,4 @@
-### Streitberg-Roehmel algorithm for independent two samples
+### Streitberg-Roehmel algorithm for two independent samples
 SR_shift_2sample <- function(object, fact) {
 
     teststat <-
@@ -27,42 +27,76 @@ SR_shift_2sample <- function(object, fact) {
         block <- block[idx]
     }
 
-    T <- 0
-    Prob <- 1
-    for (lev in levels(block)) {
+    lev <- levels(block)
+    nb <- nlevels(block)
 
-        thisblock <- (block == lev)
+    ## first block
+    firstblock <- (block == lev[1L])
+    scores <- ytrans[firstblock]
+    m <- sum(xtrans[firstblock] == 1L)
 
-        ## compute distribution of scores in this block
-        scores <- ytrans[thisblock]
-        m <- sum(xtrans[thisblock] == 1L)
+    ## compute T and density
+    if (m == 0L)
+        next
+    else if (m == length(scores))
+        dens <- list(T = sum(scores), Prob = 1)
+    else if (m < length(scores))
+        dens <- cSR_shift_2sample(scores, m, fact = fact)
+    else
+        stop("cannot compute exact distribution")
 
-        if (m == 0L) next;
-        if (m == length(scores))
-            dens <- list(T = sum(scores), Prob = 1)
-        if (m < length(scores))
-            dens <- cSR_shift_2sample(scores, m, fact = fact)
+    T <- dens$T
+    Prob <- dens$Prob
 
-        ## update distribution of statistic over all blocks
-        T <- as.vector(outer(dens$T, T, "+"))
-        Prob <- drop(kronecker(Prob, dens$Prob))
+    ## remaining blocks
+    if (nb > 1) {
+        for (i in seq_len(nb)[-1L]) {
+            thisblock <- (block == lev[i])
+            scores <- ytrans[thisblock]
+            m <- sum(xtrans[thisblock] == 1L)
+
+            ## compute T and density
+            if (m == 0L)
+                next
+            else if (m == length(scores))
+                dens <- list(T = sum(scores), Prob = 1)
+            else if (m < length(scores))
+                dens <- cSR_shift_2sample(scores, m, fact = fact)
+            else
+                stop("cannot compute exact distribution")
+
+            ## update T
+            T <- .Call("R_outersum", dens$T, T, PACKAGE = "coin")
+
+            ## make sure T is ordered and distinct
+            n <- length(T)
+            o <- order(T)
+            T <- T[o]
+            idx <- c(which(T[-1L] - T[-n] > eps()), n)
+            T <- T[idx]
+
+            ### update density
+            Prob <- .Call("R_kronecker", dens$Prob, Prob, PACKAGE = "coin")
+            Prob <- vapply(split(Prob[o],
+                                 rep.int(seq_along(idx), diff(c(0L, idx)))),
+                           sum, NA_real_, USE.NAMES = FALSE)
+        }
     }
 
     if (teststat == "scalar")
         T <- (T - expectation(object)) / sqrt(variance(object))
-    else
+    else {
         T <- (T - expectation(object))^2 / variance(object)
-
-    ## make sure T is distinct and ordered
-    if (nlevels(block) > 1L || teststat == "quad") {
+        ## make sure T is ordered and distinct
         n <- length(T)
         o <- order(T)
         T <- T[o]
         idx <- c(which(T[-1L] - T[-n] > eps()), n)
         T <- T[idx]
-        Prob <-
-            vapply(split(Prob[o], rep.int(seq_along(idx), diff(c(0L, idx)))),
-                   sum, NA_real_, USE.NAMES = FALSE)
+        ## compute density
+        Prob <- vapply(split(Prob[o],
+                             rep.int(seq_along(idx), diff(c(0L, idx)))),
+                       sum, NA_real_, USE.NAMES = FALSE)
     }
 
     new("ExactNullDistribution",
@@ -125,7 +159,7 @@ cSR_shift_2sample <- function(scores, m, fact) {
 }
 
 
-### Streitberg-Roehmel algorithm for paired samples
+### Streitberg-Roehmel algorithm for two paired samples
 SR_shift_1sample <- function(object, fact) {
 
     teststat <-
@@ -168,19 +202,18 @@ SR_shift_1sample <- function(object, fact) {
 
     if (teststat == "scalar")
         T <- (T - expectation(object)) / sqrt(variance(object))
-    else
+    else {
         T <- (T - expectation(object))^2 / variance(object)
-
-    ## make sure T is distinct and ordered
-    if (teststat == "quad") {
+        ## make sure T is ordered and distinct
         n <- length(T)
         o <- order(T)
         T <- T[o]
         idx <- c(which(T[-1L] - T[-n] > eps()), n)
         T <- T[idx]
-        Prob <-
-            vapply(split(Prob[o], rep.int(seq_along(idx), diff(c(0L, idx)))),
-                   sum, NA_real_, USE.NAMES = FALSE)
+        ## compute density
+        Prob <- vapply(split(Prob[o],
+                             rep.int(seq_along(idx), diff(c(0L, idx)))),
+                       sum, NA_real_, USE.NAMES = FALSE)
     }
 
     new("ExactNullDistribution",
@@ -220,7 +253,7 @@ SR_shift_1sample <- function(object, fact) {
 }
 
 
-### van de Wiel split-up algorithm for independent two samples
+### van de Wiel split-up algorithm for two independent samples
 vdW_split_up_2sample <- function(object) {
 
     ## <FIXME> on.exit(ex <- .C("FreeW", PACKAGE = "coin")) </FIXME>
