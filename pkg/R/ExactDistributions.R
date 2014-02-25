@@ -120,14 +120,14 @@ SR_shift_2sample <- function(object, fact) {
                         if (q == 0)
                             1L
                         else
-                            sum(Prob[LE(T, ifelse(q > 0, -q, q))]) +
-                              sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
+                            sum(Prob[LE(T, if (q > 0) -q else q)]) +
+                              sum(Prob[GE(T, if (q < 0) -q else q)])
                     })
             else {
                 if (q == 0)
                     1L
                 else
-                    sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
+                    sum(Prob[GE(T, if (q < 0) -q else q)])
             }
         },
         support = function() T,
@@ -237,14 +237,14 @@ SR_shift_1sample <- function(object, fact) {
                         if (q == 0)
                             1L
                         else
-                            sum(Prob[LE(T, ifelse(q > 0, -q, q))]) +
-                              sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
+                            sum(Prob[LE(T, if (q > 0) -q else q)]) +
+                              sum(Prob[GE(T, if (q < 0) -q else q)])
                     })
             else {
                 if (q == 0)
                     1L
                 else
-                    sum(Prob[GE(T, ifelse(q >= 0, q, -q))])
+                    sum(Prob[GE(T, if (q < 0) -q else q)])
             }
         },
         support = function() T,
