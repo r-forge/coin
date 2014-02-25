@@ -278,3 +278,9 @@ stopifnot(isequal(support(itq2), support(its2)[support(its2) >= 0]^2))
 stopifnot(isequal(statistic(itq1), statistic(itq2)))
 stopifnot(isequal(pvalue(itq1), pvalue(itq2)))
 stopifnot(isequal(support(itq1), support(itq2)))
+
+### dperm gave an error here (fixed in r869)
+tab <- as.table(matrix(c(3, 0, 0, 3), ncol = 2))
+itq <- independence_test(tab, distribution = exact(algorithm = "shift"),
+                         teststat = "quad")
+stopifnot(is.numeric(dperm(itq, statistic(itq))))

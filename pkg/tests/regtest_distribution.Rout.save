@@ -2437,6 +2437,12 @@ Error in .local(object, ...) :
 > stopifnot(isequal(pvalue(itq1), pvalue(itq2)))
 > stopifnot(isequal(support(itq1), support(itq2)))
 > 
+> ### dperm gave an error here (fixed in r869)
+> tab <- as.table(matrix(c(3, 0, 0, 3), ncol = 2))
+> itq <- independence_test(tab, distribution = exact(algorithm = "shift"),
++                          teststat = "quad")
+> stopifnot(is.numeric(dperm(itq, statistic(itq))))
+> 
 > proc.time()
    user  system elapsed 
-   6.58    0.45    7.03 
+   6.47    0.42    7.08 
