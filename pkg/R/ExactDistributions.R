@@ -110,7 +110,13 @@ SR_shift_2sample <- function(object, fact) {
             else
                 T[max(idx) + 1L]
         },
-        d = function(x) Prob[EQ(T, x)],
+        d = function(x) {
+            incl <- EQ(T, x)
+            if (any(incl))
+                Prob[incl]
+            else
+                0
+        },
         pvalue = function(q) {
             if (teststat == "scalar")
                 switch(object@alternative,
@@ -227,7 +233,13 @@ SR_shift_1sample <- function(object, fact) {
             else
                 T[max(idx) + 1L]
         },
-        d = function(x) Prob[EQ(T, x)],
+        d = function(x) {
+            incl <- EQ(T, x)
+            if (any(incl))
+                Prob[incl]
+            else
+                0
+        },
         pvalue = function(q) {
             if (teststat == "scalar")
                 switch(object@alternative,

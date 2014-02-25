@@ -462,3 +462,7 @@ TeaTasting <-
 it <- independence_test(as.table(TeaTasting),
                         distribution = exact(algorithm = "shift"))
 stopifnot(!is.na(qperm(it, p = 1)))
+
+### dperm returned a zero-length vector for values not included in the support
+dp_it <- dperm(it, 1.5)
+stopifnot(length(dp_it > 0) && dp_it == 0)

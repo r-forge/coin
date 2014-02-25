@@ -808,6 +808,10 @@ Warning messages:
 +                         distribution = exact(algorithm = "shift"))
 > stopifnot(!is.na(qperm(it, p = 1)))
 > 
+> ### dperm returned a zero-length vector for values not included in the support
+> dp_it <- dperm(it, 1.5)
+> stopifnot(length(dp_it > 0) && dp_it == 0)
+> 
 > proc.time()
    user  system elapsed 
-   2.90    0.17    3.13 
+   2.88    0.17    3.13 
