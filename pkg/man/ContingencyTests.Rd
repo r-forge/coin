@@ -76,6 +76,10 @@
   altered using the \code{scores} argument (see
   \code{\link{independence_test}}).
 
+  Note that the exact versions of Pearson's chi-squared test and the generalized
+  Cochran-Mantel-Haenzsel test often, but not necessarily, result in the same
+  \eqn{p}-value as Fisher's exact test (Davis, 1986).
+
   The authoritative source for details on the documented test procedures
   is Agresti (2002).
 
@@ -90,33 +94,41 @@
 
 }
 \references{
-
-  Alan Agresti (2002).
-  \emph{Categorical Data Analysis}, 2nd Edition.
+  Agresti, A.  (2002).  \emph{Categorical Data Analysis}, 2nd Edition.
   Hoboken, New Jersey: John Wiley & Sons.
 
+  Davis, L. J.  (1986).  Exact tests for \eqn{2 \times 2} contingency tables.
+  \emph{The American Statistician} \bold{40}(2), 139--141.
 }
 \examples{
-\dontshow{
-  set.seed(290875)
-}
+  ### Example from Davis (1986, p. 140)
+  davis <- matrix(c(3,  6,
+                    2, 19),
+                  nrow = 2, byrow = TRUE)
+
+  ### Exact Pearson chi-squared test
+  ### (Disagrees with Fisher's exact test, see Davis, 1986)
+  chisq_test(as.table(davis), distribution = "exact")
+  fisher.test(davis)
+
+
   ### Laryngeal cancer
   ### Agresti (2002, p. 107, Tab. 3.13)
   cancer <- matrix(c(21, 2,
                      15, 3),
-                   nrow = 2,
+                   nrow = 2, byrow = TRUE,
                    dimnames = list(Treatment = c("Surgery", "Radiation"),
                                    Cancer = c("Controlled","Not Controlled")))
 
-  ## Exact Pearson chi-squared test
-  ## (Equivalent to Fishers's exact test, see Agresti, 2002, p. 93)
-  ## Agresti (2002, p. 108, Tab 3.14)
+  ### Exact Pearson chi-squared test
+  ### (Agrees with Fishers's exact test, see Agresti, 2002, p. 108, Tab 3.14)
   chisq_test(as.table(cancer), distribution = "exact")
+  fisher.test(cancer)
 
 
   ### jobsatisfaction, for females only
-  chisq_test(as.table(jobsatisfaction[,,"Female"]),
-      distribution = approximate(B = 9999))
+  chisq_test(as.table(jobsatisfaction[, , "Female"]),
+      distribution = approximate(B = 10000))
 
   ### both Income and Job.Satisfaction unordered
   cmh_test(jobsatisfaction)
