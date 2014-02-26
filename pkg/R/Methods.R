@@ -217,9 +217,7 @@ setMethod(f = "ApproxNullDistribution",
                                 "less"      = mean(LE(pls, q)),
                                 "greater"   = mean(GE(pls, q)),
                                 "two.sided" = mean(GE(abs(pls), abs(q))))
-                  attr(pvalue, "conf.int") <-
-                      binom.test(round(pvalue * B), B, conf.level = 0.99)$conf.int
-###                      confint_binom(round(pvalue * B), B)
+                  attr(pvalue, "conf.int") <- confint_binom(round(pvalue * B), B)
                   class(pvalue) <- "MCp"
                   pvalue
               }
@@ -227,9 +225,7 @@ setMethod(f = "ApproxNullDistribution",
               new("ApproxNullDistribution",
                   p = function(q) {
                       p <- mean(LE(pls, q))
-                      attr(p, "conf.int") <-
-                          binom.test(round(p * B), B, conf.level = 0.99)$conf.int
-###                          confint_binom(round(p * B), B)
+                      attr(p, "conf.int") <- confint_binom(round(p * B), B)
                       class(p) <- "MCp"
                       p
                   },
@@ -274,8 +270,8 @@ setMethod(f = "ApproxNullDistribution",
 
               pmaxmin <- function() {
                   pls <- switch(object@alternative,
-                      "less" = do.call("pmin.int", as.data.frame(t(pls))),
-                      "greater" = do.call("pmax.int", as.data.frame(t(pls))),
+                      "less"      = do.call("pmin.int", as.data.frame(t(pls))),
+                      "greater"   = do.call("pmax.int", as.data.frame(t(pls))),
                       "two.sided" = do.call("pmax.int", as.data.frame(t(abs(pls)))))
                   sort(pls)
               }
@@ -286,12 +282,10 @@ setMethod(f = "ApproxNullDistribution",
               }
               pvalue <- function(q) {
                   pvalue <- switch(object@alternative,
-                                "less" = mean(colSums(LE(pls, q)) > 0),
-                                "greater" = mean(colSums(GE(pls, q)) > 0),
+                                "less"      = mean(colSums(LE(pls, q)) > 0),
+                                "greater"   = mean(colSums(GE(pls, q)) > 0),
                                 "two.sided" = mean(colSums(GE(abs(pls), q)) > 0))
-                  attr(pvalue, "conf.int") <-
-                      binom.test(round(pvalue * B), B, conf.level = 0.99)$conf.int
-###                      confint_binom(round(pvalue * B), B)
+                  attr(pvalue, "conf.int") <- confint_binom(round(pvalue * B), B)
                   class(pvalue) <- "MCp"
                   pvalue
               }
@@ -299,12 +293,10 @@ setMethod(f = "ApproxNullDistribution",
               new("ApproxNullDistribution",
                   p = function(q) {
                       p <- switch(object@alternative,
-                               "less" = mean(colSums(GE(pls, q)) == nrow(pls)),
-                               "greater" = mean(colSums(LE(pls, q)) == nrow(pls)),
+                               "less"      = mean(colSums(GE(pls, q)) == nrow(pls)),
+                               "greater"   = mean(colSums(LE(pls, q)) == nrow(pls)),
                                "two.sided" = mean(colSums(LE(abs(pls), q)) == nrow(pls)))
-                      attr(p, "conf.int") <-
-                          binom.test(round(p * B), B, conf.level = 0.99)$conf.int
-###                          confint_binom(round(p * B), B)
+                      attr(p, "conf.int") <- confint_binom(round(p * B), B)
                       class(p) <- "MCp"
                       p
                   },
@@ -344,8 +336,7 @@ setMethod(f = "ApproxNullDistribution",
               pvalue <- function(q) {
                   pvalue <- mean(GE(pls, q))
                   attr(pvalue, "conf.int") <-
-                      binom.test(round(pvalue * B), B, conf.level = 0.99)$conf.int
-###                      confint_binom(round(pvalue * B), B)
+                      confint_binom(round(pvalue * B), B)
                   class(pvalue) <- "MCp"
                   pvalue
               }
@@ -353,9 +344,7 @@ setMethod(f = "ApproxNullDistribution",
               new("ApproxNullDistribution",
                   p = function(q) {
                       p <- mean(LE(pls, q))
-                      attr(p, "conf.int") <-
-                          binom.test(round(p * B), B, conf.level = 0.99)$conf.int
-###                          confint_binom(round(p * B), B)
+                      attr(p, "conf.int") <- confint_binom(round(p * B), B)
                       class(p) <- "MCp"
                       p
                   },

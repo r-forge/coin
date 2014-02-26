@@ -393,6 +393,7 @@ confint_scale <- function(object, nulldistr, level = 0.95,
     list(conf.int = cint, estimate = ESTIMATE)
 }
 
+
 simconfint_location <- function(object, level = 0.95,
     approx = FALSE, ...) {
 
@@ -447,4 +448,21 @@ simconfint_location <- function(object, level = 0.95,
     rownames(RET) <- colnames(object@statistic@xtrans)
     attr(RET, "conf.level") <- level
     RET
+}
+
+
+### Exact Clopper-Pearson CI for a binomial parameter
+confint_binom <- function(x, n, conf.level = 0.99) {
+    alpha <- (1 - conf.level) / 2
+    lower <- if (x == 0)
+                 0
+             else
+                 qbeta(alpha, x, n - x + 1)
+    upper <- if (x == n)
+                 1
+             else
+                 qbeta(1 - alpha, x + 1, n - x)
+    ci <- c(lower, upper)
+    attr(ci, "conf.level") <- conf.level
+    ci
 }
