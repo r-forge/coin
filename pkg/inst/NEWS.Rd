@@ -226,6 +226,10 @@
       \item the density function of exact permutation distributions returned a
       zero-length vector for values not included in the support; the probability
       of such values are now reported as \samp{0}
+
+      \item the density function of approximate (Monte Carlo) permutation
+      distributions returned non-zero probabilities for values not included in
+      the support
     }
   }
   \subsection{Other changes}{

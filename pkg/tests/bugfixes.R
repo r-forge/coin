@@ -463,6 +463,18 @@ it <- independence_test(as.table(TeaTasting),
                         distribution = exact(algorithm = "shift"))
 stopifnot(!is.na(qperm(it, p = 1)))
 
-### dperm returned a zero-length vector for values not included in the support
+### dperm for *exact* tests returned a zero-length vector for values not
+### included in the support
 dp_it <- dperm(it, 1.5)
 stopifnot(length(dp_it > 0) && dp_it == 0)
+
+### dperm for *approximate* tests returned non-zero probabilities for values not
+### included in the support
+exfoliative <- matrix(c( 0, 16,
+                        15, 57),
+                      nrow = 2, byrow = TRUE)
+set.seed(290875)
+it <- independence_test(as.table(exfoliative),
+                        distribution = approximate(B = 10000),
+                        teststat = "scalar")
+stopifnot(isequal(round(dperm(it, -statistic(it)), 4), 0.0000)) # 0.0747

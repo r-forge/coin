@@ -212,7 +212,7 @@ setMethod(f = "ApproxNullDistribution",
                   },
                   d = function(x) {
                       tmp <- abs(pls - x)
-                      mean(tmp == tmp[which.min(tmp)])
+                      mean(tmp == tmp[which.min(tmp)] & tmp < eps())
                   },
                   pvalue = function(q) {
                       p <- switch(object@alternative,
@@ -282,7 +282,7 @@ setMethod(f = "ApproxNullDistribution",
                   },
                   d = function(x) {
                       tmp <- abs(pmaxmin() - x)
-                      mean(tmp == tmp[which.min(tmp)])
+                      mean(tmp == tmp[which.min(tmp)] & tmp < eps())
                   },
                   pvalue = function(q) {
                       p <- switch(object@alternative,
@@ -331,7 +331,7 @@ setMethod(f = "ApproxNullDistribution",
                   },
                   d = function(x) {
                       tmp <- abs(pls - x)
-                      mean(tmp == tmp[which.min(tmp)])
+                      mean(tmp == tmp[which.min(tmp)] & tmp < eps())
                   },
                   pvalue = function(q) {
                       p <- mean(GE(pls, q))
