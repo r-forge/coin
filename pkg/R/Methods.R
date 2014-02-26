@@ -7,16 +7,20 @@ setMethod(f = "AsymptNullDistribution",
           signature = "ScalarIndependenceTestStatistic",
           definition = function(object, ...) {
 
+              p <- function(q) pnorm(q)
+              q <- function(p) qnorm(p)
+              pvalue <- function(q)
+                  switch(object@alternative,
+                      "less"      = p(q),
+                      "greater"   = 1 - p(q),
+                      "two.sided" = 2 * min(p(q), 1 - p(q)))
+
               new("AsymptNullDistribution",
-                  p = function(q) pnorm(q),
-                  q = function(p) qnorm(p),
+                  p = p,
+                  q = q,
                   d = function(x) dnorm(x),
-                  pvalue = function(q)
-                      switch(object@alternative,
-                          "less"      = pnorm(q),
-                          "greater"   = 1 - pnorm(q),
-                          "two.sided" = 2 * min(pnorm(q), 1 - pnorm(q))),
-                  support = function(p = 1e-5) c(qnorm(p), qnorm(1 - p)),
+                  pvalue = pvalue,
+                  support = function(p = 1e-5) c(q(p), q(1 - p)),
                   name = "Univariate Normal Distribution")
           }
 )
@@ -36,7 +40,7 @@ setMethod(f = "AsymptNullDistribution",
 
               corr <- cov2cor(covariance(object))
               pq <- length(expectation(object))
-              pmvn <- function(q) {
+              p <- function(q) {
                   p <- switch(object@alternative,
                            "less"      = pmv(lower = q, upper = Inf,
                                              mean = rep.int(0L, pq),
@@ -55,7 +59,7 @@ setMethod(f = "AsymptNullDistribution",
                   class(p) <- "MCp"
                   p
               }
-              qmvn <- function(p) {
+              q <- function(p) {
                   if (length(corr) > 1L)
                       q <- qmvnorm(p, mean = rep.int(0L, pq), corr = corr,
                                    tail = "both.tails", ...)$quantile
@@ -65,19 +69,20 @@ setMethod(f = "AsymptNullDistribution",
                   attributes(q) <- NULL
                   q
               }
+              pvalue <- function(q) {
+                  pvalue <- 1 - p(q)
+                  attr(pvalue, "conf.int") <- 1 - attr(pvalue, "conf.int")[2L:1L]
+                  attr(attr(pvalue, "conf.int"), "conf.level") <- 0.99
+                  class(pvalue) <- "MCp"
+                  pvalue
+              }
 
               new("AsymptNullDistribution",
-                  p = pmvn,
-                  q = qmvn,
+                  p = p,
+                  q = q,
                   d = function(x) dmvnorm(x),
-                  pvalue = function(q) {
-                      p <- 1 - pmvn(q)
-                      attr(p, "conf.int") <- 1 - attr(p, "conf.int")[2L:1L]
-                      attr(attr(p, "conf.int"), "conf.level") <- 0.99
-                      class(p) <- "MCp"
-                      p
-                  },
-                  support = function(p = 1e-5) c(qmvn(p), qmvn(1 - p)),
+                  pvalue = pvalue,
+                  support = function(p = 1e-5) c(q(p), q(1 - p)),
                   name = "Multivariate Normal Distribution",
                   parameters = list(corr = corr))
           }
@@ -88,12 +93,16 @@ setMethod(f = "AsymptNullDistribution",
           signature = "QuadTypeIndependenceTestStatistic",
           definition = function(object, ...) {
 
+              p <- function(q) pchisq(q, df = object@df)
+              q <- function(p) qchisq(p, df = object@df)
+              pvalue <- function(q) 1 - p(q)
+
               new("AsymptNullDistribution",
-                  p = function(q) pchisq(q, df = object@df),
-                  q = function(p) qchisq(p, df = object@df),
+                  p = p,
+                  q = q,
                   d = function(d) dchisq(d, df = object@df),
-                  pvalue = function(q) 1 - pchisq(q, df = object@df),
-                  support = function(p = 1e-5) c(0, qchisq(1 - p, df = object@df)),
+                  pvalue = pvalue,
+                  support = function(p = 1e-5) c(0, q(1 - p)),
                   name = "Chi-Squared Distribution",
                   parameters = list(df = object@df))
           }
@@ -199,31 +208,36 @@ setMethod(f = "ApproxNullDistribution",
               ### <FIXME> can transform p, q, x instead of those </FIXME>
               pls <- sort((pls - expectation(object)) / sqrt(variance(object)))
 
+              d <- function(x) {
+                  tmp <- abs(pls - x)
+                  mean(tmp == tmp[which.min(tmp)] & tmp < eps())
+              }
+              pvalue <- function(q) {
+                  pvalue <- switch(object@alternative,
+                                "less"      = mean(LE(pls, q)),
+                                "greater"   = mean(GE(pls, q)),
+                                "two.sided" = mean(GE(abs(pls), abs(q))))
+                  attr(pvalue, "conf.int") <-
+                      binom.test(round(pvalue * B), B, conf.level = 0.99)$conf.int
+###                      confint_binom(round(pvalue * B), B)
+                  class(pvalue) <- "MCp"
+                  pvalue
+              }
+
               new("ApproxNullDistribution",
                   p = function(q) {
                       p <- mean(LE(pls, q))
                       attr(p, "conf.int") <-
                           binom.test(round(p * B), B, conf.level = 0.99)$conf.int
+###                          confint_binom(round(p * B), B)
                       class(p) <- "MCp"
                       p
                   },
                   q = function(p) {
                       quantile(pls, probs = p, names = FALSE, type = 1L)
                   },
-                  d = function(x) {
-                      tmp <- abs(pls - x)
-                      mean(tmp == tmp[which.min(tmp)] & tmp < eps())
-                  },
-                  pvalue = function(q) {
-                      p <- switch(object@alternative,
-                               "less"      = mean(LE(pls, q)),
-                               "greater"   = mean(GE(pls, q)),
-                               "two.sided" = mean(GE(abs(pls), abs(q))))
-                      attr(p, "conf.int") <-
-                          binom.test(round(p * B), B, conf.level = 0.99)$conf.int
-                      class(p) <- "MCp"
-                      p
-                  },
+                  d = d,
+                  pvalue = pvalue,
                   support = function(raw = FALSE) {
                       if (raw)
                           plsraw
@@ -266,6 +280,22 @@ setMethod(f = "ApproxNullDistribution",
                   sort(pls)
               }
 
+              d <- function(x) {
+                  tmp <- abs(pmaxmin() - x)
+                  mean(tmp == tmp[which.min(tmp)] & tmp < eps())
+              }
+              pvalue <- function(q) {
+                  pvalue <- switch(object@alternative,
+                                "less" = mean(colSums(LE(pls, q)) > 0),
+                                "greater" = mean(colSums(GE(pls, q)) > 0),
+                                "two.sided" = mean(colSums(GE(abs(pls), q)) > 0))
+                  attr(pvalue, "conf.int") <-
+                      binom.test(round(pvalue * B), B, conf.level = 0.99)$conf.int
+###                      confint_binom(round(pvalue * B), B)
+                  class(pvalue) <- "MCp"
+                  pvalue
+              }
+
               new("ApproxNullDistribution",
                   p = function(q) {
                       p <- switch(object@alternative,
@@ -274,26 +304,15 @@ setMethod(f = "ApproxNullDistribution",
                                "two.sided" = mean(colSums(LE(abs(pls), q)) == nrow(pls)))
                       attr(p, "conf.int") <-
                           binom.test(round(p * B), B, conf.level = 0.99)$conf.int
+###                          confint_binom(round(p * B), B)
                       class(p) <- "MCp"
                       p
                   },
                   q = function(p) {
                       quantile(pmaxmin(), probs = p, names = FALSE, type = 1L)
                   },
-                  d = function(x) {
-                      tmp <- abs(pmaxmin() - x)
-                      mean(tmp == tmp[which.min(tmp)] & tmp < eps())
-                  },
-                  pvalue = function(q) {
-                      p <- switch(object@alternative,
-                               "less" = mean(colSums(LE(pls, q)) > 0),
-                               "greater" = mean(colSums(GE(pls, q)) > 0),
-                               "two.sided" = mean(colSums(GE(abs(pls), q)) > 0))
-                      attr(p, "conf.int") <-
-                          binom.test(round(p * B), B, conf.level = 0.99)$conf.int
-                      class(p) <- "MCp"
-                      p
-                  },
+                  d = d,
+                  pvalue = pvalue,
                   support = function(raw = FALSE) {
                       if (raw)
                           plsraw
@@ -318,28 +337,33 @@ setMethod(f = "ApproxNullDistribution",
               a <- pls - expect
               pls <- sort(rowSums(crossprod(a, dcov) * t(a)))
 
+              d <- function(x) {
+                  tmp <- abs(pls - x)
+                  mean(tmp == tmp[which.min(tmp)] & tmp < eps())
+              }
+              pvalue <- function(q) {
+                  pvalue <- mean(GE(pls, q))
+                  attr(pvalue, "conf.int") <-
+                      binom.test(round(pvalue * B), B, conf.level = 0.99)$conf.int
+###                      confint_binom(round(pvalue * B), B)
+                  class(pvalue) <- "MCp"
+                  pvalue
+              }
+
               new("ApproxNullDistribution",
                   p = function(q) {
                       p <- mean(LE(pls, q))
                       attr(p, "conf.int") <-
                           binom.test(round(p * B), B, conf.level = 0.99)$conf.int
+###                          confint_binom(round(p * B), B)
                       class(p) <- "MCp"
                       p
                   },
                   q = function(p) {
                       quantile(pls, probs = p, names = FALSE, type = 1L)
                   },
-                  d = function(x) {
-                      tmp <- abs(pls - x)
-                      mean(tmp == tmp[which.min(tmp)] & tmp < eps())
-                  },
-                  pvalue = function(q) {
-                      p <- mean(GE(pls, q))
-                      attr(p, "conf.int") <-
-                          binom.test(round(p * B), B, conf.level = 0.99)$conf.int
-                      class(p) <- "MCp"
-                      p
-                  },
+                  d = d,
+                  pvalue = pvalue,
                   support = function(raw = FALSE) {
                       if (raw)
                           plsraw
