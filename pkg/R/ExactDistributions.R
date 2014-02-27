@@ -99,6 +99,33 @@ SR_shift_2sample <- function(object, fact) {
                        sum, NA_real_, USE.NAMES = FALSE)
     }
 
+    d <- function(x) {
+        incl <- EQ(T, x)
+        if (any(incl))
+            Prob[incl]
+        else
+            0
+    }
+    pvalue <- function(q) {
+        if (teststat == "scalar")
+            switch(object@alternative,
+                "less"      = sum(Prob[LE(T, q)]),
+                "greater"   = sum(Prob[GE(T, q)]),
+                "two.sided" = {
+                    if (q == 0)
+                        1L
+                    else
+                        sum(Prob[LE(T, if (q > 0) -q else q)]) +
+                          sum(Prob[GE(T, if (q < 0) -q else q)])
+                })
+        else {
+            if (q == 0)
+                1L
+            else
+                sum(Prob[GE(T, if (q < 0) -q else q)])
+        }
+    }
+
     new("ExactNullDistribution",
         p = function(q) sum(Prob[LE(T, q)]),
         q = function(p) {
@@ -110,32 +137,8 @@ SR_shift_2sample <- function(object, fact) {
             else
                 T[max(idx) + 1L]
         },
-        d = function(x) {
-            incl <- EQ(T, x)
-            if (any(incl))
-                Prob[incl]
-            else
-                0
-        },
-        pvalue = function(q) {
-            if (teststat == "scalar")
-                switch(object@alternative,
-                    "less"      = sum(Prob[LE(T, q)]),
-                    "greater"   = sum(Prob[GE(T, q)]),
-                    "two.sided" = {
-                        if (q == 0)
-                            1L
-                        else
-                            sum(Prob[LE(T, if (q > 0) -q else q)]) +
-                              sum(Prob[GE(T, if (q < 0) -q else q)])
-                    })
-            else {
-                if (q == 0)
-                    1L
-                else
-                    sum(Prob[GE(T, if (q < 0) -q else q)])
-            }
-        },
+        d = d,
+        pvalue = pvalue,
         support = function() T,
         name = paste0("Exact Distribution for Independent Two-Sample Tests",
                       " (Streitberg-Roehmel Shift Algorithm)"))
@@ -222,6 +225,33 @@ SR_shift_1sample <- function(object, fact) {
                        sum, NA_real_, USE.NAMES = FALSE)
     }
 
+    d <- function(x) {
+        incl <- EQ(T, x)
+        if (any(incl))
+            Prob[incl]
+        else
+            0
+    }
+    pvalue <- function(q) {
+        if (teststat == "scalar")
+            switch(object@alternative,
+                "less"      = sum(Prob[LE(T, q)]),
+                "greater"   = sum(Prob[GE(T, q)]),
+                "two.sided" = {
+                    if (q == 0)
+                        1L
+                    else
+                        sum(Prob[LE(T, if (q > 0) -q else q)]) +
+                          sum(Prob[GE(T, if (q < 0) -q else q)])
+                })
+        else {
+            if (q == 0)
+                1L
+            else
+                sum(Prob[GE(T, if (q < 0) -q else q)])
+        }
+    }
+
     new("ExactNullDistribution",
         p = function(q) sum(Prob[LE(T, q)]),
         q = function(p) {
@@ -233,32 +263,8 @@ SR_shift_1sample <- function(object, fact) {
             else
                 T[max(idx) + 1L]
         },
-        d = function(x) {
-            incl <- EQ(T, x)
-            if (any(incl))
-                Prob[incl]
-            else
-                0
-        },
-        pvalue = function(q) {
-            if (teststat == "scalar")
-                switch(object@alternative,
-                    "less"      = sum(Prob[LE(T, q)]),
-                    "greater"   = sum(Prob[GE(T, q)]),
-                    "two.sided" = {
-                        if (q == 0)
-                            1L
-                        else
-                            sum(Prob[LE(T, if (q > 0) -q else q)]) +
-                              sum(Prob[GE(T, if (q < 0) -q else q)])
-                    })
-            else {
-                if (q == 0)
-                    1L
-                else
-                    sum(Prob[GE(T, if (q < 0) -q else q)])
-            }
-        },
+        d = d,
+        pvalue = pvalue,
         support = function() T,
         name = paste0("Exact Distribution for Dependent Two-Sample Tests",
                       " (Streitberg-Roehmel Shift Algorithm)"))
@@ -296,15 +302,15 @@ vdW_split_up_2sample <- function(object) {
     storage.mode(m) <- "integer"
     tol <- eps()
 
-    pvdw <- function(q) {
+    p <- function(q) {
         T <- q * sqrt(variance(object)) + expectation(object)
         .Call("R_split_up_2sample", scores, m, T, tol, PACKAGE = "coin")
     }
 
     new("ExactNullDistribution",
-        p = pvdw,
+        p = p,
         q = function(p) {
-            f <- function(x) pvdw(x) - p
+            f <- function(x) p(x) - p
             rr <- if (p <= 0.5)
                       uniroot(f, interval = c(-10, 1), tol = tol)
                   else
@@ -330,15 +336,15 @@ vdW_split_up_2sample <- function(object) {
         d = function(x) NA,
         pvalue = function(q) {
             switch(object@alternative,
-                "less"      = pvdw(q),
-                "greater"   = 1 - pvdw(q - 10 * tol),
+                "less"      = p(q),
+                "greater"   = 1 - p(q - 10 * tol),
                 "two.sided" = {
                     if (q == 0)
                         1L
                     else if (q > 0)
-                        pvdw(-q) + (1 - pvdw(q - 10 * tol))
+                        p(-q) + (1 - p(q - 10 * tol))
                     else
-                        pvdw(q) + (1 - pvdw(-q - 10 * tol))
+                        p(q) + (1 - p(-q - 10 * tol))
                 }
             )
         },
