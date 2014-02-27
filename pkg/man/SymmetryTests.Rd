@@ -232,9 +232,11 @@
   (wt <- wilcoxsign_test(y1 ~ y2, alternative = "greater",
                          distribution = "exact"))
   statistic(wt, "linear") # same as wilcox.test
+  midpvalue(wt) # mid-p-value
 
-  sign_test(y1 ~ y2, alternative = "greater",
-            distribution = "exact")
+  (st <- sign_test(y1 ~ y2, alternative = "greater",
+                   distribution = "exact"))
+  midpvalue(st) # mid-p-value
 
   ### with explicit group and block information
   dta <- data.frame(y = c(y1, y2), x = gl(2, length(y1)),

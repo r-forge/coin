@@ -36,7 +36,7 @@ exportClasses("IndependenceProblem", "IndependenceTest",
               "MaxTypeIndependenceTestStatistic",
               "QuadTypeIndependenceTestStatistic")
 
-exportMethods("initialize", "show", "pvalue", "statistic",
+exportMethods("initialize", "show", "pvalue", "midpvalue", "statistic",
               "pperm", "dperm", "qperm", "support", "expectation",
               "covariance", "variance", "ExactNullDistribution")
 

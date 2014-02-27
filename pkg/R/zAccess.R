@@ -1,5 +1,4 @@
-
-### generic method for extracting pvalues from objects
+### generic method for extracting p-values from objects
 setGeneric("pvalue", function(object, ...)
     standardGeneric("pvalue"))
 
@@ -74,6 +73,25 @@ setMethod(f = "pvalue",
                      else unadjusted(object, ...)
 
               return(RET)
+          }
+)
+
+
+### generic method for extracting mid-p-values from objects
+setGeneric("midpvalue", function(object, ...)
+    standardGeneric("midpvalue"))
+
+setMethod(f = "midpvalue",
+          signature = "NullDistribution",
+          definition = function(object, q, ...) {
+              object@midpvalue(q)
+          }
+)
+
+setMethod(f = "midpvalue",
+          signature = "IndependenceTest",
+          definition = function(object, q, ...) {
+              midpvalue(object@distribution, object@statistic@teststatistic)
           }
 )
 

@@ -79,15 +79,37 @@ sample estimates:
 +                     2, 19),
 +                   nrow = 2, byrow = TRUE)
 > 
->   ### Exact Pearson chi-squared test
->   ### (Disagrees with Fisher's exact test, see Davis, 1986)
->   chisq_test(as.table(davis), distribution = "exact")
+>   ### Asymptotic Pearson chi-squared test
+>   (ct <- chisq_test(as.table(davis)))
 
-	Exact Pearson's Chi-Squared Test
+	Asymptotic Pearson's Chi-Squared Test
 
 data:  Var2 by Var1 (A, B)
-chi-squared = 2.5714, p-value = 0.286
+chi-squared = 2.5714, df = 1, p-value = 0.1088
 
+>   midpvalue(ct) # mid-p-value (identical to standard p-value)
+[1] 0.1088094
+> 
+>   ### Approximate (Monte Carlo) Pearson chi-squared test
+>   ct <- chisq_test(as.table(davis), distribution = approximate(B = 10000))
+>   pvalue(ct)    # standard p-value
+[1] 0.2849
+99 percent confidence interval:
+ 0.2733285 0.2966774 
+
+>   midpvalue(ct) # mid-p-value
+[1] 0.151
+99 percent confidence interval:
+ 0.1419433 0.1603887 
+
+> 
+>   ### Exact Pearson chi-squared test
+>   ### (Disagrees with Fisher's exact test, see Davis, 1986)
+>   ct <- chisq_test(as.table(davis), distribution = "exact")
+>   pvalue(ct)    # standard p-value
+[1] 0.2860301
+>   midpvalue(ct) # mid-p-value
+[1] 0.1527409
 >   fisher.test(davis)
 
 	Fisher's Exact Test for Count Data
@@ -113,13 +135,15 @@ odds ratio
 > 
 >   ### Exact Pearson chi-squared test
 >   ### (Agrees with Fishers's exact test, see Agresti, 2002, p. 108, Tab 3.14)
->   chisq_test(as.table(cancer), distribution = "exact")
+>   (ct <- chisq_test(as.table(cancer), distribution = "exact"))
 
 	Exact Pearson's Chi-Squared Test
 
 data:  Cancer by Treatment (Surgery, Radiation)
 chi-squared = 0.5992, p-value = 0.6384
 
+>   midpvalue(ct) # mid-p-value
+[1] 0.5006832
 >   fisher.test(cancer)
 
 	Fisher's Exact Test for Count Data
@@ -143,7 +167,7 @@ odds ratio
 
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000)
-chi-squared = 6.8203, p-value = 0.6847
+chi-squared = 6.8203, p-value = 0.6834
 
 > 
 >   ### both Income and Job.Satisfaction unordered
@@ -192,7 +216,7 @@ alternative hypothesis: two.sided
 data:  Job.Satisfaction (ordered) by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
 	 stratified by Gender
-Z = 2.4812, p-value = 0.0121
+Z = 2.4812, p-value = 0.015
 alternative hypothesis: two.sided
 
 > 
@@ -1492,9 +1516,11 @@ alternative hypothesis: true mu is greater than 0
 >   statistic(wt, "linear") # same as wilcox.test
       
 pos 40
+>   midpvalue(wt) # mid-p-value
+[1] 0.01660156
 > 
->   sign_test(y1 ~ y2, alternative = "greater",
-+             distribution = "exact")
+>   (st <- sign_test(y1 ~ y2, alternative = "greater",
++                    distribution = "exact"))
 
 	Exact Sign Test
 
@@ -1503,6 +1529,8 @@ data:  y by x (pos, neg)
 Z = 1.6667, p-value = 0.08984
 alternative hypothesis: true mu is greater than 0
 
+>   midpvalue(st) # mid-p-value
+[1] 0.0546875
 > 
 >   ### with explicit group and block information
 >   dta <- data.frame(y = c(y1, y2), x = gl(2, length(y1)),
@@ -2325,11 +2353,11 @@ C             0.000            0.0000  0.999
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: pvalue-methods
-> ### Title: Extract p-Values
+> ### Title: Extract p- and mid-p-Values
 > ### Aliases: pvalue pvalue-methods pvalue,NullDistribution-method
-> ###   pvalue,IndependenceTest-method pvalue,ScalarIndependenceTest-method
-> ###   pvalue,MaxTypeIndependenceTest-method
-> ###   pvalue,QuadTypeIndependenceTest-method
+> ###   pvalue,IndependenceTest-method pvalue,MaxTypeIndependenceTest-method
+> ###   midpvalue midpvalue-methods midpvalue,NullDistribution-method
+> ###   midpvalue,IndependenceTest-method
 > ### Keywords: methods htest
 > 
 > ### ** Examples
@@ -2339,8 +2367,7 @@ C             0.000            0.0000  0.999
 >   df <- data.frame(y = rnorm(20), x = gl(2, 10))
 > 
 >   ### Ansari-Bradley test
->   at <- ansari_test(y ~ x, data = df, distribution = "exact")
->   at
+>   (at <- ansari_test(y ~ x, data = df, distribution = "exact"))
 
 	Exact 2-Sample Ansari-Bradley Test
 
@@ -2348,8 +2375,11 @@ data:  y by x (1, 2)
 Z = 0.4553, p-value = 0.7102
 alternative hypothesis: true ratio of scales is not equal to 1
 
->   pvalue(at)
+>   pvalue(at)    # standard p-value
 [1] 0.710234
+>   midpvalue(at) # mid-p-value
+[1] 0.6564821
+> 
 > 
 >   ### bivariate 2-sample problem
 >   df <- data.frame(y1 = rnorm(20) + rep(0:1, each = 10),
@@ -2576,7 +2606,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  38 0.28 38.5 NA NA 
+Time elapsed:  38.39 0.24 38.85 NA NA 
 > grDevices::dev.off()
 null device 
           1 

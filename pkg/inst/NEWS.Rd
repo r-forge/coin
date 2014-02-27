@@ -138,6 +138,10 @@
       \code{?independence_test} and \code{?symmetry_test})
 
       \item the Quade test is now available (see \code{?quade_test})
+
+      \item the mid-\eqn{p}-value can now be computed and is accompanied by a 99
+      \% mid-\eqn{p} confidence interval when resampling has been used to obtain
+      the null distribution (see \code{?midpvalue})
     }
   }
   \subsection{Bug fixes}{

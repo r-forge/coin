@@ -100,9 +100,9 @@ SR_shift_2sample <- function(object, fact) {
     }
 
     d <- function(x) {
-        incl <- EQ(T, x)
-        if (any(incl))
-            Prob[incl]
+        eq <- EQ(T, x)
+        if (any(eq))
+            Prob[eq]
         else
             0
     }
@@ -115,15 +115,22 @@ SR_shift_2sample <- function(object, fact) {
                     if (q == 0)
                         1L
                     else
-                        sum(Prob[LE(T, if (q > 0) -q else q)]) +
-                          sum(Prob[GE(T, if (q < 0) -q else q)])
+                        sum(Prob[LE(T, if (q < 0) q else -q)]) +
+                          sum(Prob[GE(T, if (q > 0) q else -q)])
                 })
         else {
             if (q == 0)
                 1L
             else
-                sum(Prob[GE(T, if (q < 0) -q else q)])
+                sum(Prob[GE(T, q)])
         }
+    }
+    midpvalue <- function(q) {
+        pp <- if (teststat == "scalar" && object@alternative == "two.sided")
+                  d(-q) + d(q) # both tails
+              else
+                  d(q)
+        pvalue(q) - 0.5 * pp
     }
 
     new("ExactNullDistribution",
@@ -139,6 +146,7 @@ SR_shift_2sample <- function(object, fact) {
         },
         d = d,
         pvalue = pvalue,
+        midpvalue = midpvalue,
         support = function() T,
         name = paste0("Exact Distribution for Independent Two-Sample Tests",
                       " (Streitberg-Roehmel Shift Algorithm)"))
@@ -226,9 +234,9 @@ SR_shift_1sample <- function(object, fact) {
     }
 
     d <- function(x) {
-        incl <- EQ(T, x)
-        if (any(incl))
-            Prob[incl]
+        eq <- EQ(T, x)
+        if (any(eq))
+            Prob[eq]
         else
             0
     }
@@ -241,15 +249,22 @@ SR_shift_1sample <- function(object, fact) {
                     if (q == 0)
                         1L
                     else
-                        sum(Prob[LE(T, if (q > 0) -q else q)]) +
-                          sum(Prob[GE(T, if (q < 0) -q else q)])
+                        sum(Prob[LE(T, if (q < 0) q else -q)]) +
+                          sum(Prob[GE(T, if (q > 0) q else -q)])
                 })
         else {
             if (q == 0)
                 1L
             else
-                sum(Prob[GE(T, if (q < 0) -q else q)])
+                sum(Prob[GE(T, q)])
         }
+    }
+    midpvalue <- function(q) {
+        pp <- if (teststat == "scalar" && object@alternative == "two.sided")
+                  d(-q) + d(q) # both tails
+              else
+                  d(q)
+        pvalue(q) - 0.5 * pp
     }
 
     new("ExactNullDistribution",
@@ -265,6 +280,7 @@ SR_shift_1sample <- function(object, fact) {
         },
         d = d,
         pvalue = pvalue,
+        midpvalue = midpvalue,
         support = function() T,
         name = paste0("Exact Distribution for Dependent Two-Sample Tests",
                       " (Streitberg-Roehmel Shift Algorithm)"))
@@ -348,6 +364,7 @@ vdW_split_up_2sample <- function(object) {
                 }
             )
         },
+        midpvalue = function(q) NA,
         support = function(p = 1e-5) NA,
         name = paste0("Exact Distribution for Independent Two-Sample Tests",
                       " (van de Wiel Split-Up Algorithm)"))

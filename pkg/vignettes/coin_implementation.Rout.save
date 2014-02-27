@@ -166,6 +166,7 @@ Slot & Class \\ \hline
  & \\
 Slot & Class \\ \hline 
 \code{pvalue} & \Rclass{function} \\
+\code{midpvalue} & \Rclass{function} \\
 \code{p} & \Rclass{function} \\
 \code{name} & \Rclass{character} \\
 \hline
@@ -360,4 +361,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   3.10    0.18    3.60 
+   2.91    0.17    3.19 

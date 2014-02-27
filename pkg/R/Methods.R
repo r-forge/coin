@@ -20,6 +20,7 @@ setMethod(f = "AsymptNullDistribution",
                   q = q,
                   d = function(x) dnorm(x),
                   pvalue = pvalue,
+                  midpvalue = pvalue,
                   support = function(p = 1e-5) c(q(p), q(1 - p)),
                   name = "Univariate Normal Distribution")
           }
@@ -82,6 +83,7 @@ setMethod(f = "AsymptNullDistribution",
                   q = q,
                   d = function(x) dmvnorm(x),
                   pvalue = pvalue,
+                  midpvalue = pvalue,
                   support = function(p = 1e-5) c(q(p), q(1 - p)),
                   name = "Multivariate Normal Distribution",
                   parameters = list(corr = corr))
@@ -102,6 +104,7 @@ setMethod(f = "AsymptNullDistribution",
                   q = q,
                   d = function(d) dchisq(d, df = object@df),
                   pvalue = pvalue,
+                  midpvalue = pvalue,
                   support = function(p = 1e-5) c(0, q(1 - p)),
                   name = "Chi-Squared Distribution",
                   parameters = list(df = object@df))
@@ -213,13 +216,17 @@ setMethod(f = "ApproxNullDistribution",
                   mean(tmp == tmp[which.min(tmp)] & tmp < eps())
               }
               pvalue <- function(q) {
-                  pvalue <- switch(object@alternative,
-                                "less"      = mean(LE(pls, q)),
-                                "greater"   = mean(GE(pls, q)),
-                                "two.sided" = mean(GE(abs(pls), abs(q))))
-                  attr(pvalue, "conf.int") <- confint_binom(round(pvalue * B), B)
-                  class(pvalue) <- "MCp"
-                  pvalue
+                  switch(object@alternative,
+                      "less"      = mean(LE(pls, q)),
+                      "greater"   = mean(GE(pls, q)),
+                      "two.sided" = mean(GE(abs(pls), abs(q))))
+              }
+              midpvalue <- function(q) {
+                  pp <- if (object@alternative == "two.sided")
+                            d(-q) + d(q) # both tails
+                        else
+                            d(q)
+                  pvalue(q) - 0.5 * pp
               }
 
               new("ApproxNullDistribution",
@@ -233,7 +240,18 @@ setMethod(f = "ApproxNullDistribution",
                       quantile(pls, probs = p, names = FALSE, type = 1L)
                   },
                   d = d,
-                  pvalue = pvalue,
+                  pvalue = function(q) {
+                      pvalue <- pvalue(q)
+                      attr(pvalue, "conf.int") <- confint_binom(round(pvalue * B), B)
+                      class(pvalue) <- "MCp"
+                      pvalue
+                  },
+                  midpvalue = function(q) {
+                      midpvalue <- midpvalue(q)
+                      attr(midpvalue, "conf.int") <- confint_midp(round(midpvalue * B), B)
+                      class(midpvalue) <- "MCp"
+                      midpvalue
+                  },
                   support = function(raw = FALSE) {
                       if (raw)
                           plsraw
@@ -281,13 +299,17 @@ setMethod(f = "ApproxNullDistribution",
                   mean(tmp == tmp[which.min(tmp)] & tmp < eps())
               }
               pvalue <- function(q) {
-                  pvalue <- switch(object@alternative,
-                                "less"      = mean(colSums(LE(pls, q)) > 0),
-                                "greater"   = mean(colSums(GE(pls, q)) > 0),
-                                "two.sided" = mean(colSums(GE(abs(pls), q)) > 0))
-                  attr(pvalue, "conf.int") <- confint_binom(round(pvalue * B), B)
-                  class(pvalue) <- "MCp"
-                  pvalue
+                  switch(object@alternative,
+                      "less"      = mean(colSums(LE(pls, q)) > 0),
+                      "greater"   = mean(colSums(GE(pls, q)) > 0),
+                      "two.sided" = mean(colSums(GE(abs(pls), q)) > 0))
+              }
+              midpvalue <- function(q) {
+                  pp <- if (object@alternative == "two.sided")
+                            d(-q) + d(q) # both tails
+                        else
+                            d(q)
+                  pvalue(q) - 0.5 * pp
               }
 
               new("ApproxNullDistribution",
@@ -304,7 +326,18 @@ setMethod(f = "ApproxNullDistribution",
                       quantile(pmaxmin(), probs = p, names = FALSE, type = 1L)
                   },
                   d = d,
-                  pvalue = pvalue,
+                  pvalue = function(q) {
+                      pvalue <- pvalue(q)
+                      attr(pvalue, "conf.int") <- confint_binom(round(pvalue * B), B)
+                      class(pvalue) <- "MCp"
+                      pvalue
+                  },
+                  midpvalue = function(q) {
+                      midpvalue <- midpvalue(q)
+                      attr(midpvalue, "conf.int") <- confint_midp(round(midpvalue * B), B)
+                      class(midpvalue) <- "MCp"
+                      midpvalue
+                  },
                   support = function(raw = FALSE) {
                       if (raw)
                           plsraw
@@ -333,13 +366,8 @@ setMethod(f = "ApproxNullDistribution",
                   tmp <- abs(pls - x)
                   mean(tmp == tmp[which.min(tmp)] & tmp < eps())
               }
-              pvalue <- function(q) {
-                  pvalue <- mean(GE(pls, q))
-                  attr(pvalue, "conf.int") <-
-                      confint_binom(round(pvalue * B), B)
-                  class(pvalue) <- "MCp"
-                  pvalue
-              }
+              pvalue <- function(q) mean(GE(pls, q))
+              midpvalue <- function(q) pvalue(q) - 0.5 * d(q)
 
               new("ApproxNullDistribution",
                   p = function(q) {
@@ -352,7 +380,18 @@ setMethod(f = "ApproxNullDistribution",
                       quantile(pls, probs = p, names = FALSE, type = 1L)
                   },
                   d = d,
-                  pvalue = pvalue,
+                  pvalue = function(q) {
+                      pvalue <- pvalue(q)
+                      attr(pvalue, "conf.int") <- confint_binom(round(pvalue * B), B)
+                      class(pvalue) <- "MCp"
+                      pvalue
+                  },
+                  midpvalue = function(q) {
+                      midpvalue <- midpvalue(q)
+                      attr(midpvalue, "conf.int") <- confint_midp(round(midpvalue * B), B)
+                      class(midpvalue) <- "MCp"
+                      midpvalue
+                  },
                   support = function(raw = FALSE) {
                       if (raw)
                           plsraw

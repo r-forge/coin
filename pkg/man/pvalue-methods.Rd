@@ -4,26 +4,29 @@
 \alias{pvalue-methods}
 \alias{pvalue,NullDistribution-method}
 \alias{pvalue,IndependenceTest-method}
-\alias{pvalue,ScalarIndependenceTest-method}
 \alias{pvalue,MaxTypeIndependenceTest-method}
-\alias{pvalue,QuadTypeIndependenceTest-method}
-\title{ Extract \eqn{p}-Values }
+\alias{midpvalue}
+\alias{midpvalue-methods}
+\alias{midpvalue,NullDistribution-method}
+\alias{midpvalue,IndependenceTest-method}
+\title{ Extract \eqn{p}- and mid-\eqn{p}-Values }
 
 \encoding{UTF-8}
 
 \description{
 
-  Extracts the \eqn{p}-value from objects representing null
+  Extracts the \eqn{p}-value or mid-\eqn{p}-value from objects representing null
   distributions of independence tests.
 
 }
 \usage{
 pvalue(object, \dots)
+midpvalue(object, \dots)
 }
 \arguments{
   \item{object}{an object inheriting from class
     \code{\link{IndependenceTest-class}}.}
-  \item{\dots}{additional arguments:
+  \item{\dots}{additional arguments for \code{pvalue}:
 
     \code{method}: a character string, the method used for the
     \eqn{p}-value computation. Must be one of \code{"global"} (default),
@@ -41,8 +44,8 @@ pvalue(object, \dots)
 }
 \section{Methods}{
   \describe{
-    \item{pvalue}{extracts the \eqn{p}-value from the specified
-      object.}
+    \item{pvalue}{extracts the \eqn{p}-value from \code{object}.}
+    \item{midpvalue}{extracts the mid-\eqn{p}-value from \code{object}.}
   }
 }
 \details{
@@ -145,9 +148,10 @@ pvalue(object, \dots)
   df <- data.frame(y = rnorm(20), x = gl(2, 10))
 
   ### Ansari-Bradley test
-  at <- ansari_test(y ~ x, data = df, distribution = "exact")
-  at
-  pvalue(at)
+  (at <- ansari_test(y ~ x, data = df, distribution = "exact"))
+  pvalue(at)    # standard p-value
+  midpvalue(at) # mid-p-value
+
 
   ### bivariate 2-sample problem
   df <- data.frame(y1 = rnorm(20) + rep(0:1, each = 10),

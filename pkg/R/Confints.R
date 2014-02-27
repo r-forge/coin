@@ -466,3 +466,23 @@ confint_binom <- function(x, n, conf.level = 0.99) {
     attr(ci, "conf.level") <- conf.level
     ci
 }
+
+
+### Mid-p CI for a binomial parameter (see Berry and Armitage, 1995)
+confint_midp <- function(x, n, conf.level = 0.99) {
+    alpha <- 1 - conf.level
+    if (x > 0 & x < n) {
+        f <- function(a, p)
+            ## 0.5 * dbinom(...) + pbinom(..., lower.tail = FALSE)
+            mean(pbinom(c(x, x - 1), n, a, lower.tail = TRUE)) - p
+        UR <- function(p)
+            uniroot(f, c(0, 1), p, tol = .Machine$double.eps)$root
+        ci <- c(UR(1 - alpha / 2), UR(alpha / 2))
+    } else if (x == 0) {
+        ci <- c(0, 1 - alpha^(1 / n))
+    } else if (x == n) {
+        ci <- c(alpha^(1 / n), 1)
+    }
+    attr(ci, "conf.level") <- conf.level
+    ci
+}
