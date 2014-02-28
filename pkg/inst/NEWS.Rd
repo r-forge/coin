@@ -234,6 +234,10 @@
       \item the density function of approximate (Monte Carlo) permutation
       distributions returned non-zero probabilities for values not included in
       the support
+
+      \item the two-sample case was not recognised if the grouping variable had
+      unused factor levels, causing, e.g., problems if trying to use the
+      \code{subset} argument of the \code{formula} methods
     }
   }
   \subsection{Other changes}{

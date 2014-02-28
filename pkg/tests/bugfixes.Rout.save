@@ -824,6 +824,19 @@ Warning messages:
 +                         teststat = "scalar")
 > stopifnot(isequal(round(dperm(it, -statistic(it)), 4), 0.0000)) # 0.0747
 > 
+> ### 'is_2sample' didn't drop unused levels, causing trouble with, e.g., subset
+> dta <- data.frame(y = rnorm(15), x = gl(3, 5), b = factor(rep(1:5, 3)))
+> subs <- dta$x %in% 1:2
+> wilcox_test(y ~ x | b, data = dta, subset = subs)
+
+	Asymptotic Wilcoxon-Mann-Whitney Test
+
+data:  y by x (1, 2) 
+	 stratified by b
+Z = -0.4663, p-value = 0.641
+alternative hypothesis: true mu is not equal to 0
+
+> 
 > proc.time()
    user  system elapsed 
-   3.33    0.17    3.60 
+   3.08    0.21    3.37 

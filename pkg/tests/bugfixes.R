@@ -478,3 +478,8 @@ it <- independence_test(as.table(exfoliative),
                         distribution = approximate(B = 10000),
                         teststat = "scalar")
 stopifnot(isequal(round(dperm(it, -statistic(it)), 4), 0.0000)) # 0.0747
+
+### 'is_2sample' didn't drop unused levels, causing trouble with, e.g., subset
+dta <- data.frame(y = rnorm(15), x = gl(3, 5), b = factor(rep(1:5, 3)))
+subs <- dta$x %in% 1:2
+wilcox_test(y ~ x | b, data = dta, subset = subs)

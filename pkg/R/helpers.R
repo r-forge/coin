@@ -263,7 +263,8 @@ table2IndependenceProblem <- function(object) {
 }
 
 is_2sample <- function(object) {
-    groups <- nlevels(object@x[[1L]]) == 2L && ncol(object@xtrans) == 1L
+    groups <- nlevels(droplevels(object@x[[1L]])) == 2L &&
+                  ncol(object@xtrans) == 1L
     return(is_Ksample(object) && groups)
 }
 

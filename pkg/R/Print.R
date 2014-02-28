@@ -1,4 +1,3 @@
-
 varnames <- function(object) {
 
     x <- object@x
@@ -10,12 +9,18 @@ varnames <- function(object) {
 
     if (length(x) == 1) {
         if (is.ordered(x[[1]])) {
-            xnames <- paste0(colnames(x), " (",
-                             paste0(levels(x[[1]]), collapse = " < "), ")")
+            xnames <- paste0(colnames(x),
+                             " (",
+                             paste0(levels(droplevels(x[[1]])),
+                                    collapse = " < "),
+                             ")")
         } else {
             if (is.factor(x[[1]])) {
-                xnames <- paste0(colnames(x), " (",
-                                 paste0(levels(x[[1]]), collapse = ", "), ")")
+                xnames <- paste0(colnames(x),
+                                 " (",
+                                 paste0(levels(droplevels(x[[1]])),
+                                        collapse = ", "),
+                                 ")")
             } else {
                 xnames <- colnames(x)
             }
