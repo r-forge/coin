@@ -483,3 +483,7 @@ stopifnot(isequal(round(dperm(it, -statistic(it)), 4), 0.0000)) # 0.0747
 dta <- data.frame(y = rnorm(15), x = gl(3, 5), b = factor(rep(1:5, 3)))
 subs <- dta$x %in% 1:2
 wilcox_test(y ~ x | b, data = dta, subset = subs)
+
+### problem with subsetting stratification variable
+subs <- dta$x %in% 1:2 & dta$b %in% 1:4
+wilcox_test(y ~ x | b, data = dta, subset = subs)

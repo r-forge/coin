@@ -46,6 +46,10 @@ setMethod(f = "initialize",
         .Object@block <- if (is.null(block))
                              factor(rep.int(0L, nrow(x)))
                          else {
+                             blockname <- attr(block, "blockname", exact = TRUE)
+                             block <- block[drop = TRUE]
+                             if (!is.null(blockname))
+                                 attr(block, "blockname") <- blockname
                              if (any(table(block) < 2L))
                                  stop(sQuote("block"), " contains levels with",
                                       " less than two observations")
@@ -253,8 +257,7 @@ setMethod(f = "initialize",
                                as.double(weights)
 
         if (!validObject(.Object))
-            stop("not a valid object of class ",
-                 sQuote("SymmetryProblem"))
+            stop("not a valid object of class ", sQuote("SymmetryProblem"))
 
         .Object
     }
