@@ -252,14 +252,14 @@ table2IndependenceProblem <- function(object) {
 
     df <- as.data.frame(object)
     if (ncol(df) == 3L)
-        ip <- new("IndependenceProblem", x = df[1L], y = df[2L],
-                  block = NULL, weights = df[["Freq"]])
-    if (ncol(df) == 4L) {
+        new("IndependenceProblem",
+            x = df[1L], y = df[2L], block = NULL, weights = df[["Freq"]])
+    else if (ncol(df) == 4L) {
         attr(df[[3L]], "blockname") <- colnames(df)[3L]
-        ip <- new("IndependenceProblem", x = df[1L], y = df[2L],
-                  block = df[[3]], weights = df[["Freq"]])
-    }
-    ip
+        new("IndependenceProblem",
+            x = df[1L], y = df[2L], block = df[[3L]], weights = df[["Freq"]])
+    } else
+        stop(sQuote("object"), " is not a two- or three-way contingency table")
 }
 
 is_2sample <- function(object) {
