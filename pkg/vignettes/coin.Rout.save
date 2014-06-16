@@ -86,7 +86,7 @@ II  -339.6795 1019.0385 -339.6795 -339.6795
 III -339.6795 -339.6795 1019.0385 -339.6795
 IV  -339.6795 -339.6795 -339.6795 1019.0385
 
-> statistic(it, "standardized")
+> statistic(it, type = "standardized")
              
 I    2.286797
 II   3.195250
@@ -129,7 +129,7 @@ data:  Job.Satisfaction by
 chi-squared = 10.2001, df = 9, p-value = 0.3345
 
 
-> statistic(it, "standardized")
+> statistic(it, type = "standardized")
             Very Dissatisfied A Little Satisfied
 <5000               1.3112789         0.69201053
 5000-15000          0.6481783         0.83462550
@@ -219,4 +219,4 @@ IV - III 0.99889989
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   1.62    0.17    2.04 
+   1.74    0.09    2.07 

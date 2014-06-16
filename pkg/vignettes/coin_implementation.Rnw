@@ -436,7 +436,7 @@ ils <- new("IndependenceLinearStatistic", itp)
 Using methods for suitable generic functions (see Table~\ref{tab:generics}),
 the linear statistic for the rotating rats can be extracted via
 <<Ex-IndependenceLinearStatistic-statistic, echo = TRUE>>=
-statistic(ils, "linear")
+statistic(ils, type = "linear")
 @
 This is simply the sum of the average ranks in the control group, i.e., $180 = 12 \cdot 15$
 because all 12 observations have the maximal average rank 15. Additionally, the associated
@@ -509,7 +509,7 @@ to the construction of a suitable object via
 <<Ex-ScalarIndependenceTestStatistic, echo = TRUE>>=
 sits <- new("ScalarIndependenceTestStatistic", its,
   alternative = "two.sided")
-statistic(sits, "standardized")
+statistic(sits, type = "standardized")
 @
 which yields the standardized Wilcoxon-Mann-Whitney statistic reported
 in the introductory example.
@@ -958,7 +958,7 @@ However, ordering of the factors is not exploited by the Cochran-Mantel-Haenszel
 As some positive correlation of the two factors would seem natural, it is worth
 having a closer look at the data and the test result. The underlying linear statistic is
 <<jobsatisfaction-T, echo = TRUE>>=
-statistic(it, "linear")
+statistic(it, type = "linear")
 @
 This is exactly the original contingency table
 aggregated over the block factor \code{Gender}:
@@ -968,7 +968,7 @@ margin.table(js, 1:2)
 Therefore, the standardized linear statistic can be interpreted similarly
 to Pearson residuals for the independence hypothesis:
 <<jobsatisfaction-stat, echo = TRUE>>=
-statistic(it, "standardized")
+statistic(it, type = "standardized")
 @
 The positive diagonal and (mostly) negative off-diagonal elements convey
 that higher income categories seem to be associated with higher job

@@ -857,8 +857,8 @@ g <- function(x) {
     cbind(dominant = dom[x], additive = add[x], recessive = rec[x])
 }
 it <- independence_test(me, xtrafo = g, alternative = "greater")
-CA <- statistic(it, "linear")
-CAstand <- statistic(it, "stand")
+CA <- statistic(it, type = "linear")
+CAstand <- statistic(it, type = "standardized")
 pasympt <- pvalue(it, method = "single-step")
 itp <- independence_test(me, xtrafo = g,
     distribution = approximate(B = 49999),
@@ -1063,8 +1063,8 @@ data on the association of KIR6.2 gene polymorphism with type II diabetes
 
 <<bagos-coin, echo = FALSE>>=
 bit <- independence_test(Group ~ Locus | Study, data = diabetes, xtrafo = g, alternative = "greater")
-bCA <- statistic(bit, "linear")
-bCAstand <- statistic(bit, "stand")
+bCA <- statistic(bit, type = "linear")
+bCAstand <- statistic(bit, type = "standardized")
 bpasympt <- pvalue(bit, method = "single-step")
 bitp <- independence_test(Group ~ Locus | Study, data = diabetes, xtrafo = g,
     distribution = approximate(B = 49999),
@@ -1334,7 +1334,7 @@ assocASsim <- function(n = sims, ngroup = ntotal,
         padj[i,] <- pvalue(it, method = "single-step")
 
         ### raw p-value
-        praw[i,] <-  pnorm(statistic(it, "standardized"))
+        praw[i,] <-  pnorm(statistic(it, type = "standardized"))
     }
     list(padj = padj, praw = praw)
 }

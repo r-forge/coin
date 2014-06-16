@@ -46,9 +46,9 @@ Total  &  24 & 99 & 123  \\
 
 > it <- independence_test(me, xtrafo = g, alternative = "greater")
 
-> CA <- statistic(it, "linear")
+> CA <- statistic(it, type = "linear")
 
-> CAstand <- statistic(it, "stand")
+> CAstand <- statistic(it, type = "standardized")
 
 > pasympt <- pvalue(it, method = "single-step")
 
@@ -135,9 +135,9 @@ recessive  &  0.7241&0.9819 \\
 > bit <- independence_test(Group ~ Locus | Study, data = diabetes, 
 +     xtrafo = g, alternative = "greater")
 
-> bCA <- statistic(bit, "linear")
+> bCA <- statistic(bit, type = "linear")
 
-> bCAstand <- statistic(bit, "stand")
+> bCAstand <- statistic(bit, type = "standardized")
 
 > bpasympt <- pvalue(bit, method = "single-step")
 
@@ -253,4 +253,4 @@ alternative hypothesis: greater
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-  18.51    0.29   19.18 
+  16.33    0.14   16.77 

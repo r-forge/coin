@@ -641,7 +641,7 @@ it_alzmax
 where the underlying standardized contingency table highlights the cells with
 deviations from independence
 <<alzheimer-maxstat, echo = TRUE>>=
-statistic(it_alzmax, "standardized")
+statistic(it_alzmax, type = "standardized")
 @
 This leads to the impression that heavy smokers suffer less frequently
 from Alzheimer's disease but more frequently from other dementias
@@ -650,7 +650,7 @@ However, interpreting the standardized contingency table requires
 knowledge about the distribution of the standardized statistics. An
 approximation of the joint distribution of all elements of the standardized
 contingency table can be obtained from the
-$\Sexpr{length(statistic(it_alzmax, "standardized"))}$-dimensional
+$\Sexpr{length(statistic(it_alzmax, type = "standardized"))}$-dimensional
 multivariate limiting normal distribution of the linear statistic $\T$. Most
 useful is an approximation of the $95\%$ quantile of the permutation
 null distribution which is available from

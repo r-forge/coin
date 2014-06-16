@@ -178,7 +178,7 @@ maxT = 4.9504, p-value = 6.781e-06
 alternative hypothesis: two.sided
 
 
-> statistic(it_alzmax, "standardized")
+> statistic(it_alzmax, type = "standardized")
        Alzheimer Other dementias Other diagnoses
 None   2.5900465       -2.340275      -0.1522407
 <10    2.9713093       -2.056864      -0.8446233
@@ -311,4 +311,4 @@ C           0.00000           0.00000 0.99859
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   3.19    0.15    4.63 
+   2.77    0.18    3.33 

@@ -6,7 +6,6 @@ Loading required package: survival
 Loading required package: splines
 
 > library("e1071")
-Loading required package: class
 
 > set.seed(290875)
 
@@ -86,7 +85,7 @@ Slot & Class \\ \hline
 
 > ils <- new("IndependenceLinearStatistic", itp)
 
-> statistic(ils, "linear")
+> statistic(ils, type = "linear")
            
 control 180
 
@@ -129,7 +128,7 @@ Slot & Class \\ \hline
 > sits <- new("ScalarIndependenceTestStatistic", its, 
 +     alternative = "two.sided")
 
-> statistic(sits, "standardized")
+> statistic(sits, type = "standardized")
                 
 control 2.438909
 
@@ -309,7 +308,7 @@ data:  Job.Satisfaction by
 chi-squared = 10.2001, df = 9, p-value = 0.3345
 
 
-> statistic(it, "linear")
+> statistic(it, type = "linear")
             VeryDiss LitSat ModSat VerySat
 <5000              2      4     13       3
 5000-15000         2      6     22       4
@@ -324,7 +323,7 @@ Income        VeryDiss LitSat ModSat VerySat
   15000-25000        0      1     15       8
   >25000             0      3     13       8
 
-> statistic(it, "standardized")
+> statistic(it, type = "standardized")
               VeryDiss      LitSat     ModSat    VerySat
 <5000        1.3112789  0.69201053 -0.2478705 -0.9293458
 5000-15000   0.6481783  0.83462550  0.5175755 -1.6257547
@@ -361,4 +360,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.91    0.17    3.19 
+   2.83    0.17    3.26 

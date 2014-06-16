@@ -290,7 +290,7 @@ can be extracted via
 <<YOY-T, echo = TRUE>>=
 statistic(it, "linear")
 @
-Note that \texttt{statistic(..., "linear")} currently returns the linear
+Note that \texttt{statistic(..., type = "linear")} currently returns the linear
 statistic in matrix form, i.e.
 \begin{eqnarray*}
 \sum_{i = 1}^n w_i g(\X_i) h(\Y_i, (\Y_1, \dots, \Y_n))^\top \in \R^{p
@@ -304,7 +304,7 @@ covariance(it)
 and the standardized linear statistic $(\T - \mu)\text{diag}(\Sigma)^{-1/2}$
 is
 <<YOY-S, echo = TRUE>>=
-statistic(it, "standardized")
+statistic(it, type = "standardized")
 @
 Since a quadratic form of the test statistic was requested via
 \texttt{teststat = "quad"}, the test statistic is
@@ -350,7 +350,7 @@ The standardized contingency table allowing for an inspection of the
 deviation from the null hypothesis of independence of income and
 jobsatisfaction (stratified by gender) is
 <<jobsatisfaction-s, echo = TRUE>>=
-statistic(it, "standardized")
+statistic(it, type = "standardized")
 @
 
 \paragraph{Ordered Alternatives.}
