@@ -752,7 +752,7 @@ supply a function that can compute a \Rclass{PValue} object from an
 For the most important special cases, suitable function
 \emph{generators} are provided in \pkg{coin}. For example, the function
 \code{approximate(B = 1000)} returns a Monte Carlo function that draws
-\code{B} (default: 1000) random permutations.  Similarly, \code{exact()}
+\code{B} (default: \Sexpr{formals(approximate)$B}) random permutations.  Similarly, \code{exact()}
 and \code{approximate()} return functions computing the exact or
 asymptotic null distributions, respectively. Again, computational
 details in the computation of the null distribution can be controlled
