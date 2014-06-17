@@ -34,17 +34,19 @@
   The null hypothesis of marginal homogeneity for matched pairs or
   matched sets is tested.
 
-  This procedure is known as the McNemar test (McNemar, 1947) when both
-  \code{x} and \code{y} are binary factors.  When \code{x} is a binary
-  factor and \code{y} is a factor with an arbitrary number of levels,
-  the procedure is known as the Stuart(-Maxwell) test (Stuart, 1955;
-  Maxwell, 1970); see also Bhapkar (1966) for a more powerful Wald-type
-  test.  (As noted by Ireland, Ku & Kullback (1969), Bhapkar's statistic
-  is given by \eqn{Q / (1 - Q / n)}, where \eqn{Q} is Stuart's statistic
-  and \eqn{n} is the sample size).  If both \code{x} and \code{y} are
-  factors with an arbitrary number of levels, the procedure is known as
-  the Madansky test of interchangeability (Madansky, 1963), which
-  implies marginal homogeneity.
+  This procedure is known as the McNemar test (McNemar, 1947) if both
+  \code{y} and \code{x} are binary factors.  If \code{y} is a binary
+  factor and \code{x} is a factor with an arbitrary number of levels,
+  the procedure is known as the Cochran Q test (Cochran, 1950).  If
+  \code{y} is a factor with an arbitrary number of levels and \code{x}
+  is a binary factor, the procedure is known as the Stuart(-Maxwell)
+  test (Stuart, 1955; Maxwell, 1970); see also Bhapkar (1966) for a more
+  powerful Wald-type test.  (As noted by Ireland, Ku & Kullback (1969),
+  Bhapkar's statistic is given by \eqn{Q / (1 - Q / n)}, where \eqn{Q}
+  is Stuart's statistic and \eqn{n} is the sample size).  If both
+  \code{y} and \code{x} are factors with an arbitrary number of levels,
+  the procedure is known as the Madansky test of interchangeability
+  (Madansky, 1963), which implies marginal homogeneity.
 
   When both \code{x} and \code{y} are ordered factors, or can be
   regarded as such, the linear-by-linear association test for ordered
@@ -78,6 +80,9 @@
   Note on the sampling error of the difference between correlated
   proportions or percentages.
   \emph{Psychometrika} \bold{12}(2), 153--157.
+
+  Cochran, W. G.  (1950).  The comparison of percentages in matched
+  samples.  \emph{Biometrika} \bold{37}(3/4), 256--266.
 
   Alan Stuart (1955).
   A test for homogeneity of the marginal distributions in a two-way
