@@ -51,9 +51,6 @@
       \item the printed output of the logrank test now reports whether a 2- or
       \eqn{K}-sample test has been carried out
 
-      \item objects of class \code{"ScalarIndependenceTest"} now has a
-      \code{parameter} slot
-
       \item the normal quantile test and the median test can now also handle
       \eqn{K}-sample problems and allow the alternative hypothesis to be
       specified when the explanatory variable is an ordered factor (see
@@ -95,9 +92,6 @@
 
       \item the Fligner-Killeen test can now also handle 2-sample problems (see
       \code{?fligner_test})
-
-      \item objects of class \code{"ScalarIndependenceTestStatistic"} or
-      \code{"QuadTypeIndependenceTestStatistic"} now has a \code{paired} slot
 
       \item \code{independence_test()} has gained a new argument \code{paired}
       that is used to indicate if paired data have been transformed in such a
@@ -255,6 +249,9 @@
       use a scalar test statistic in case the explanatory variable is an ordered
       factor
 
+      \item objects of class \code{"ScalarIndependenceTest"} now has a
+      \code{parameter} slot
+
       \item in the printed output of the Ansari-Bradley test and the Spearman
       test the tested parameter has been renamed to \samp{ratio of scales} and
       \samp{rho} respectively
@@ -288,6 +285,9 @@
       \item small changes in the printed output of the Wilcoxon-Mann-Whitney
       test, the marginal homogeneity test, the Wilcoxon signed-rank test, and
       generalized maximally selected statistics
+
+      \item objects of class \code{"ScalarIndependenceTestStatistic"} or
+      \code{"QuadTypeIndependenceTestStatistic"} now has a \code{paired} slot
 
       \item \code{wilcoxsign_test.IndependenceProblem()} has been replaced by
       \code{wilcoxsign_test.SymmetryProblem()}
