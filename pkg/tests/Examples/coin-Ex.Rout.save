@@ -1,13 +1,11 @@
 
-R Under development (unstable) (2014-02-02 r64916) -- "Unsuffered Consequences"
+R Under development (unstable) (2014-06-13 r65942) -- "Unsuffered Consequences"
 Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
-
-  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -1166,14 +1164,19 @@ Control 0.0067991 0.6189816
          Location     Scale
 Control 0.0067991 0.3827331
 > 
->   ### Funny: We could have used simple Bonferroni or Bonferroni-Holm
->   ### procedures, respectively, since the correlation between the
->   ### Wilcoxon and Ansari-Bradley test statistics is zero
->   covariance(ltmax)
+>   ### The same results are obtained from simple Sidak or Sidak-Holm procedures,
+>   ### respectively, since the correlation between the Wilcoxon and
+>   ### Ansari-Bradley test statistics is zero
+>   cov2cor(covariance(ltmax))
                  Control:Location Control:Scale
-Control:Location               85             0
-Control:Scale                   0            21
-> 
+Control:Location                1             0
+Control:Scale                   0             1
+>   pvalue(ltmax, method = "single-step", distribution = "marginal", type = "Sidak")
+         Location     Scale
+Control 0.0067991 0.6189816
+>   pvalue(ltmax, method = "step-down", distribution = "marginal", type = "Sidak")
+         Location     Scale
+Control 0.0067991 0.3827331
 > 
 > 
 > 
@@ -2606,7 +2609,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  38.39 0.24 38.85 NA NA 
+Time elapsed:  40.24 0.35 41.28 NA NA 
 > grDevices::dev.off()
 null device 
           1 

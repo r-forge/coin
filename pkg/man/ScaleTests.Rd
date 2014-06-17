@@ -218,10 +218,11 @@
   ### step-down is slightly more powerful
   pvalue(ltmax, method = "step-down")
 
-  ### Funny: We could have used simple Bonferroni or Bonferroni-Holm
-  ### procedures, respectively, since the correlation between the
-  ### Wilcoxon and Ansari-Bradley test statistics is zero
-  covariance(ltmax)
-
+  ### The same results are obtained from simple Sidak or Sidak-Holm procedures,
+  ### respectively, since the correlation between the Wilcoxon and
+  ### Ansari-Bradley test statistics is zero
+  cov2cor(covariance(ltmax))
+  pvalue(ltmax, method = "single-step", distribution = "marginal", type = "Sidak")
+  pvalue(ltmax, method = "step-down", distribution = "marginal", type = "Sidak")
 }
 \keyword{htest}
