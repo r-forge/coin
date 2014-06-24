@@ -116,7 +116,7 @@ for the computation of linear statistics, expectation and covariance and the
 test statistic as well as
 their null distribution. The exact null distribution can
 be approximated either by the asymptotic distribution or via conditional
-Monte-Carlo for all test procedures, the exact null distribution is
+Monte Carlo for all test procedures, the exact null distribution is
 available for special cases. Moreover, all test procedures allow for the
 specification of blocks for stratification.
 
@@ -234,7 +234,7 @@ linear statistic, the exact distribution of the test statistic is trackable.
 For two-sample problems, the shift-algorithm by \cite{axact-dist:1986}
 and \cite{exakte-ver:1987} and the split-up algorithm by
 \cite{vdWiel2001} are implemented as part of the package.
-Conditional Monte-Carlo procedures can be used to approximate the exact
+Conditional Monte Carlo procedures can be used to approximate the exact
 distribution. \cite{strasserweber1999} proved (Theorem 2.3) that the
 conditional distribution of linear statistics $\T$ with conditional
 expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
@@ -243,7 +243,7 @@ distribution with parameters $\mu$ and $\Sigma$ as $n, \ws \rightarrow
 the
 form $c_\text{max}$ is normal and
 can be computed directly in the univariate case ($pq = 1$)
-or approximated by means of quasi-randomized Monte-Carlo
+or approximated by means of quasi-randomized Monte Carlo
 procedures in the multivariate setting \citep{numerical-:1992}. For
 quadratic forms
 $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
@@ -320,7 +320,7 @@ pvalue(it)
 Life is much simpler with convenience functions very similar to those
 available in package \pkg{stats} for a long time. The exact
 null distribution of the Kruskal-Wallis test can be approximated by $9999$
-Monte-Carlo replications via
+Monte Carlo replications via
 <<YOY-KW, echo = TRUE>>=
 kw <- kruskal_test(length ~ site, data = YOY,
                    distribution = approximate(B = 9999))
@@ -407,7 +407,7 @@ independence_test(scores ~ product | sitting,
                   data = egg_data, teststat = "quad",
                   ytrafo = yt)
 @
-and the Monte-Carlo $p$-value can be computed via
+and the Monte Carlo $p$-value can be computed via
 <<eggs-Durbin-approx, echo = TRUE>>=
 pvalue(independence_test(scores ~ product | sitting,
     data = egg_data, teststat = "quad", ytrafo = yt,

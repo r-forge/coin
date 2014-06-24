@@ -24,7 +24,7 @@ most of the classical procedures
 given in famous text books like Hollander & Wolfe (1999) or Agresti (2002)
 can be implemented as part of the general framework without much effort.
 Approximations of the exact null distribution via the limiting distribution and
-conditional Monte-Carlo procedures are available for every test while the
+conditional Monte Carlo procedures are available for every test while the
 exact null distribution is currently available for two-sample problems only.
 
 }

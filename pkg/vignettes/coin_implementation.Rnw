@@ -553,7 +553,7 @@ For 2-sample problems, the shift algorithm by \cite{axact-dist:1986,exakte-ver:1
 and the split-up algorithm by
 \cite{vdWiel2001} are implemented as part of the package.
 
-Conditional Monte-Carlo procedures can always be used to approximate the exact
+Conditional Monte Carlo procedures can always be used to approximate the exact
 distribution. In this case, within each block, a sufficiently large number of
 random samples from all admissible permutations of the observations is drawn. The
 test statistic is computed for the permuted $\X$ values and the
@@ -603,14 +603,14 @@ Class & Description \\
 \Rclass{ExactNullDistribution} & Exact conditional null distribution (e.g.,
   computed via the shift algorithm). \\
 \Rclass{ApproxNullDistribution} & Approximation of the exact conditional
-  distribution using conditional Monte-Carlo procedures. \\
+  distribution using conditional Monte Carlo procedures. \\
 \Rclass{AsymptNullDistribution} & Asymptotic conditional
   distribution (via multivariate normal or $\chi^2$ distribution). \\
 \hline
 Method & Description \\
 \hline
 \code{pvalue(object)} & Computation of the $p$~value (plus a confidence interval if
-  Monte-Carlo procedures have been used) based on an observed test statistic $c$ and its
+  Monte Carlo procedures have been used) based on an observed test statistic $c$ and its
   conditional null distribution. \\
 \code{pperm(object, q)} & Evaluation of the cumulative distribution function for quantile $q$.\\
 \code{dperm(object, x)} & Evaluation of the probability density function at $x$. \\
@@ -637,7 +637,7 @@ qperm(end, 0.95)
 
 For maximum-type statistics $c_\text{max}$, single-step and step-down
 multiplicity adjusted $p$~values based on the limiting distribution and
-conditional Monte-Carlo methods \citep[see][]{WestfallYoung1993} are
+conditional Monte Carlo methods \citep[see][]{WestfallYoung1993} are
 available as well.
 
 
@@ -1023,7 +1023,7 @@ permuted data), the conditional expectation~$\mu$
 and conditional covariance matrix~$\Sigma$, is coded in \proglang{C}.
 The shift and split-up algorithms \citep{axact-dist:1986,exakte-ver:1987,vdWiel2001}
 for computing the exact null distribution in 2-sample problems with univariate response
-as well as conditional Monte-Carlo procedures for approximating the
+as well as conditional Monte Carlo procedures for approximating the
 exact conditional null distribution are implemented in \proglang{C} as well.
 (In addition,
 some helper functions, e.g., the Kronecker product etc., are coded in \proglang{C}.)

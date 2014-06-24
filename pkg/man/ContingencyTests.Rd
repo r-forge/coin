@@ -48,7 +48,7 @@
     \code{"IndependenceProblem"} or an object of class \code{"table"}.}
   \item{distribution}{a character, the null distribution of the test
     statistic can be approximated by its asymptotic distribution
-    (\code{"asymptotic"}, default) or via Monte-Carlo resampling
+    (\code{"asymptotic"}, default) or via Monte Carlo resampling
     (\code{"approximate"}).  Alternatively, the functions
     \code{\link{approximate}} or \code{\link{asymptotic}} can be used to
     specify how the exact conditional distribution of the test statistic

@@ -219,7 +219,7 @@
   pvalue(friedman_test(strength ~ potash | block, data = sc,
                        alternative = "greater"))
 
-  ### approximate null distribution via Monte-Carlo
+  ### approximate null distribution via Monte Carlo
   pvalue(friedman_test(strength ~ potash | block, data = sc,
                        distribution = approximate(B = 9999)))
 

@@ -107,7 +107,7 @@ if (FALSE) {
     #a[order(a$index),]
 }
 
-### Monte-Carlo distribution
+### Monte Carlo distribution
 
 y <- rnorm(20)
 x <- runif(20)

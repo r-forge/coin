@@ -27,8 +27,8 @@
   The primary endpoint of this small pilot study is survival.
   Since the survival times are tied, the usual asymptotic log-rank test
   may be inadequate in this setup.  Therefore, a permutation test (via
-  Monte-Carlo sampling) was conducted in the original paper.  The data
-  are taken from Tables 1 and 2 of Grana \emph{et al.} (2002). 
+  Monte Carlo sampling) was conducted in the original paper.  The data
+  are taken from Tables 1 and 2 of Grana \emph{et al.} (2002).
 }
 \source{
 

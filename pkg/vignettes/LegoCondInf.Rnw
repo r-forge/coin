@@ -760,7 +760,7 @@ pvalue(it_ph, method = "single-step")
 round(pvalue(it_ph, method = "single-step"), 5)
 @
 %%Of course, the goodness of the asymptotic procedure can be checked against
-%%the Monte-Carlo approximation which is computed by
+%%the Monte Carlo approximation which is computed by
 %%<<photocar-MC, echo = TRUE>>=
 %%it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
 %%                  data = photocar, distribution = approximate(50000))

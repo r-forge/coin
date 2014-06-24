@@ -1485,7 +1485,7 @@ alternative hypothesis: two.sided
             
 0.003955894 
 > 
->   ### approximate null distribution via Monte-Carlo
+>   ### approximate null distribution via Monte Carlo
 >   pvalue(friedman_test(strength ~ potash | block, data = sc,
 +                        distribution = approximate(B = 9999)))
 [1] 0.00480048
@@ -2609,7 +2609,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  40.24 0.35 41.28 NA NA 
+Time elapsed:  40.45 0.34 42.06 NA NA 
 > grDevices::dev.off()
 null device 
           1 

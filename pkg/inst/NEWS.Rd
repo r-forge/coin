@@ -720,7 +720,7 @@
     \item export \code{independence_test.table()}
 
     \item add \code{conf.level} attribute for \code{MCp} objects when
-    quasi-randomized Monte-Carlo procedures (from \pkg{mvtnorm}) have been used
+    quasi-randomized Monte Carlo procedures (from \pkg{mvtnorm}) have been used
 
     \item add new \code{var_trafo} argument to \code{trafo()}
 
@@ -839,7 +839,7 @@
     \item the \code{distribution} argument now takes the return values of
     functions \code{exact()}, \code{approximate()} or \code{asymptotic()} as
     well.  Those functions can be used to specify parameters, such as the number
-    of Monte-Carlo replications via
+    of Monte Carlo replications via
     \code{..., distribution = approximate(B = 9999), ...}
 
     \item \code{show()} returns objects (of class \code{"htest"}, for example)

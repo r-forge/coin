@@ -597,7 +597,7 @@ conditional independence tests introduced by
 \citet{StrasserWeber1999}. The merits of doing so are
 i) the conditional reference distribution for the MAX test can be easily
 approximated either by evaluating a three-dimensional normal distribution
-or by conditional Monte-Carlo experiments,
+or by conditional Monte Carlo experiments,
 ii) tests for stratified designs, designs with more than two
 groups and two or more loci can be defined in a rather
 straightforward way, iii) the most likely underlying
@@ -815,7 +815,7 @@ correlation between the optimal tests for the models considered is less than $.7
 maximum-type statistics is that information about the likely genetic model underlying the data
 is available using multiplicity-adjusted $p$-values.
 Note that, under any circumstances, the exact conditional distribution
-can be approximated by conditional Monte-Carlo methods, which is especially
+can be approximated by conditional Monte Carlo methods, which is especially
 attractive for small sample sizes $N$ when we can not expect asymptotics
 to work well.
 
@@ -936,7 +936,7 @@ an additive or intermediate model cannot be ruled out based on these data.
 
 We might want to check whether the asymptotic approximation work well enough
 in this situation. The exact conditional
-$p$-value is approximated by a conditional Monte-Carlo procedure
+$p$-value is approximated by a conditional Monte Carlo procedure
 with $49999$ random permutations of the data and the corresponding
 step-down multiplicity-adjusted $p$-values \citep{WestfallYoung1993}
 are given as $p_\text{step-down}$ in Table~\ref{melres}. The small

@@ -318,7 +318,7 @@ dbonf <- function(object, ...) {
           extends(class(object@distribution), "ApproxNullDistribution")))
         stop(sQuote("object"), " is not of class ",
              sQuote("MaxTypeIndependenceTest"),
-             " or distribution was not approximated via Monte-Carlo")
+             " or distribution was not approximated via Monte Carlo")
 
     alternative <- object@statistic@alternative
 
