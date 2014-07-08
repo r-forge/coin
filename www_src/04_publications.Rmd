@@ -1,0 +1,26 @@
+---
+layout: page
+title: Publications
+permalink: /publications/
+---
+
+Scholary papers describing the methodology
+========================================================
+
+```{r setup, include = FALSE, cache = FALSE}
+library("RefManageR")
+bib <- ReadBib("TH.bib", check = FALSE)
+BibOptions(check.entries = FALSE, style = "html", cite.style = "authoryear",
+           bib.style = "numeric")
+```
+The coin package implements permutation tests that fit into the very general framework
+of linear statistics described by `r Citet(bib, "StrasserWeber1999")`.
+An introduction to the topic is given by `r Citet(bib, "Hothorn:2006:AmStat")`.
+The design and implementation of the package is discussed in
+`r Citet(bib, "Hothorn+Hornik+VanDeWiel:2008")`.
+
+**References**
+
+```{r results = "asis", echo = FALSE}
+PrintBibliography(bib, .opts = list(check.entries = FALSE, sorting = "ynt"))
+```

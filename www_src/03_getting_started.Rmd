@@ -1,0 +1,32 @@
+---
+layout: page
+title: Getting Started
+permalink: /getting_started/
+---
+
+Your first regression tree
+========================================================
+
+First, install and fire-up R on your computer. Within R, one needs to
+install the coin package by typing
+
+```{r eval=FALSE}
+install.packages("coin")
+```
+
+and hitting the ENTER key. Once the package is installed, you can
+load it using
+
+```{r results: hide}
+library("coin")
+```
+
+Now all coin functions are ready to be used, for example the independence_test()
+function for testing independence of two variables, for example the relationship
+between income and job satisfaction in women:
+
+```{r}
+### for females only
+x <- as.table(jobsatisfaction[,,"Female"])
+independence_test(x)
+```
