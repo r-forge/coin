@@ -1,0 +1,34 @@
+- name: Torsten Hothorn
+  given: Torsten
+  family: Hothorn
+  role:
+  - aut
+  - cre
+  email: Torsten.Hothorn_@_R-project.org
+  url: http://user.math.uzh.ch/hothorn/
+  image: /img/torsten_hothorn.jpg
+  comment: ~
+- name: Kurt Hornik
+  given: Kurt
+  family: Hornik
+  role: aut
+  email: ~
+  comment: ~
+  url: http://www.wu.ac.at/statmath/faculty_staff/faculty/khornik
+  image: /img/kurt_hornik.jpg
+- name: Mark A. van de Wiel
+  given: Mark A.
+  family: van de Wiel
+  role: aut
+  email: ~
+  comment: ~
+  url: http://www.few.vu.nl/~mavdwiel/
+  image: /img/mark_van_de_wiel.jpg
+- name: Achim Zeileis
+  given: Achim
+  family: Zeileis
+  role: aut
+  email: ~
+  comment: ~
+  url: http://eeecon.uibk.ac.at/~zeileis/
+  image: /img/achim_zeileis.jpg
