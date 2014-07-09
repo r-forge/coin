@@ -1,0 +1,41 @@
+1
+2
+0
+0
+3
+ 
+<h1>Your first regression tree</h1>
+
+<p>First, install and fire-up R on your computer. Within R, one needs to
+install the coin package by typing</p>
+
+<pre><code class="r">install.packages(&quot;coin&quot;)
+</code></pre>
+
+<p>and hitting the ENTER key. Once the package is installed, you can
+load it using</p>
+
+<pre><code class="r">library(&quot;coin&quot;)
+</code></pre>
+
+<pre><code>## Loading required package: survival
+## Loading required package: splines
+</code></pre>
+
+<p>Now all coin functions are ready to be used, for example the independence_test()
+function for testing independence of two variables, for example the relationship
+between income and job satisfaction in women:</p>
+
+<pre><code class="r">### for females only
+x &lt;- as.table(jobsatisfaction[, , &quot;Female&quot;])
+independence_test(x)
+</code></pre>
+
+<pre><code>## 
+##  Asymptotic General Independence Test
+## 
+## data:  Job.Satisfaction by
+##   Income (&lt;5000, 5000-15000, 15000-25000, &gt;25000)
+## maxT = 1.825, p-value = 0.5723
+</code></pre>
+
