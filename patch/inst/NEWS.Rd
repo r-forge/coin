@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.0-23}{
+\section{Changes in version 1.0-23 (2013-09-03)}{
   \itemize{
     \item fix \file{DESCRIPTION} and \file{NAMESPACE} issues
   }
