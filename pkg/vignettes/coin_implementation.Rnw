@@ -204,7 +204,7 @@ and a reference distribution. Thus, one can work with objects representing
 the theoretical entities nearly in the same way as one would work
 with mathematical symbols. Generic functions for obtaining
 statistics, conditional expectation and covariance matrices as well as
-$p$~value, distribution, density and quantile functions for the reference
+$p$-value, distribution, density and quantile functions for the reference
 distribution help to extract information from these objects.
 The infrastructure is conveniently interfaced in the function \code{independence_test()},
 thus providing the computational counterpart of the theoretical framework of
@@ -214,7 +214,7 @@ Here, we start out with an illustrative application of \code{independence_test()
 to a small 2-sample problem (see Table~\ref{rotarod}) and then continue to
 introduce the underlying computational building blocks using the same data set.
 The data was used previously by \cite{Bergmann:2000} as a challenging example
-in a comparison of test statistics and $p$~values of the Wilcoxon-Mann-Whitney
+in a comparison of test statistics and $p$-values of the Wilcoxon-Mann-Whitney
 rank sum test as reported by eleven statistical packages.
 More specifically, $n = 24$ rats received a fixed oral dose of a centrally
 acting muscle relaxant as active treatment or a saline solvent as control. The animals were
@@ -226,10 +226,10 @@ if the response is independent of the group assignment. The data are particularl
 challenging because of the many ties in the (censored) response ($\Sexpr{sum(rotarod$time == 300)}$
 observations take the maximal value $300$) and the quasi-complete separation (smaller values of time
 are only observed in the treatment group). Conceptually, this makes computation of the
-two-sided exact $p$~value for any 2-sample contrast very simple:
+two-sided exact $p$-value for any 2-sample contrast very simple:
 $p = 2 \cdot {19 \choose 12} / {24 \choose 12} =
 \Sexpr{round(2 * choose(19, 12) / choose(24, 12), digits = 5)}$. However,
-in software, this often makes computations of the exact $p$~value more difficult
+in software, this often makes computations of the exact $p$-value more difficult
 because several simple algorithms fail.
 
 \begin{table}[t]
@@ -257,10 +257,10 @@ independence_test(time ~ group, data = rotarod,
 @
 Here, the conditional Wilcoxon-Mann-Whitney test was performed
 via a rank transformation of the response, employing the exact distribution for
-obtaining the $p$~value (yielding the correct result outlined above).
+obtaining the $p$-value (yielding the correct result outlined above).
 Users of \proglang{R} can easily interpret this output since
 it is represented in the same format as classical tests in the basic
-\pkg{stats} package. Based on the $p$~value derived from
+\pkg{stats} package. Based on the $p$-value derived from
 the exact conditional distribution of the test statistic \code{Z},
 the independence of group assignment and time on the cylinder can be rejected.
 
@@ -271,7 +271,7 @@ transformations, deviations from independence are captured by a
 (possibly multivariate) linear statistic, standardized by conditional
 expectation and variance, and aggregated to a final test
 statistic. Subsequently, the requested reference distribution is
-computed, from which a $p$~value is derived, and everything is wrapped
+computed, from which a $p$-value is derived, and everything is wrapped
 into an object that can be conveniently printed or queried for more
 detailed information. After briefly reviewing the underlying theory from
 \cite{StrasserWeber1999} in Section~\ref{sec:theory}, we introduce
@@ -546,7 +546,7 @@ quadratic forms cannot be applied to one-sided hypotheses.
 \subsection{Representation of conditional null distributions} \label{sec:distr}
 
 The conditional distribution (or an approximation thereof)
-and thus the $p$~value corresponding to the statistic $c(\mathbf{t}, \mu, \Sigma)$ can be
+and thus the $p$-value corresponding to the statistic $c(\mathbf{t}, \mu, \Sigma)$ can be
 computed in several different ways. For some special forms of the
 linear statistic, the exact distribution of the test statistic is tractable.
 For 2-sample problems, the shift algorithm by \cite{axact-dist:1986,exakte-ver:1987}
@@ -558,7 +558,7 @@ distribution. In this case, within each block, a sufficiently large number of
 random samples from all admissible permutations of the observations is drawn. The
 test statistic is computed for the permuted $\X$ values and the
 distribution of these test statistics is an approximation to the
-conditional reference distribution. When $p$~values are computed,
+conditional reference distribution. When $p$-values are computed,
 confidence intervals are available from the binomial distribution.
 
 \citet[Theorem 2.3]{StrasserWeber1999} showed that the
@@ -566,7 +566,7 @@ conditional distribution of linear statistics $\T$ with conditional
 expectation $\mu$ and covariance $\Sigma$ tends to a multivariate normal
 distribution with parameters $\mu$ and $\Sigma$ as $\sum_{i = 1}^n I(b_i = j)w_i \rightarrow \infty$ for all $j = 1, \dots, k$.
 Thus, the asymptotic conditional distribution of the standardized linear statistic $\z$
-is normal and therefore, $p$~values for scalar or maximum-type univariate statistics
+is normal and therefore, $p$-values for scalar or maximum-type univariate statistics
 can be computed directly in the univariate case ($pq = 1$)
 or approximated by numerical algorithms
 \citep{numerical-:1992} as implemented
@@ -576,7 +576,7 @@ $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
 given by the rank of $\Sigma$ \citep[see][Chapter 29]{johnsonkotz1970},
 asymptotic probabilities can be computed straightforwardly.
 
-A null distribution is represented by either a distribution (and $p$~value) function
+A null distribution is represented by either a distribution (and $p$-value) function
 only
 <<PValue, results = tex>>=
 toLatex(c2t("PValue"))
@@ -609,7 +609,7 @@ Class & Description \\
 \hline
 Method & Description \\
 \hline
-\code{pvalue(object)} & Computation of the $p$~value (plus a confidence interval if
+\code{pvalue(object)} & Computation of the $p$-value (plus a confidence interval if
   Monte Carlo procedures have been used) based on an observed test statistic $c$ and its
   conditional null distribution. \\
 \code{pperm(object, q)} & Evaluation of the cumulative distribution function for quantile $q$.\\
@@ -626,7 +626,7 @@ an interval containing $99.999\%$ of the probability mass.
 
 
 
-Using these tools, the exact $p$~value for the independence test on the rotating rats
+Using these tools, the exact $p$-value for the independence test on the rotating rats
 along with the complete exact reference distribution (allowing
 for the computation of quantiles, for example) can be derived via
 <<Ex-NullDistribution-pvalue, echo = TRUE>>=
@@ -636,7 +636,7 @@ qperm(end, 0.95)
 @
 
 For maximum-type statistics $c_\text{max}$, single-step and step-down
-multiplicity adjusted $p$~values based on the limiting distribution and
+multiplicity adjusted $p$-values based on the limiting distribution and
 conditional Monte Carlo methods \citep[see][]{WestfallYoung1993} are
 available as well.
 
@@ -764,7 +764,7 @@ provided in the form of a function taking an object inheriting from
 \Rclass{IndependenceTestStatistic} and returning an object inheriting from
 class \Rclass{PValue}.
 
-As an example, consider the computation of the exact $p$~value
+As an example, consider the computation of the exact $p$-value
 for testing independence of two continuous random variables. The identity
 transformation is used for both $g$ and $h$, thus a conditional version of
 the test for zero Pearson correlation is constructed. We use a tiny artificial
@@ -792,7 +792,7 @@ illustration; it hard-codes the alternative (less) and assumes that the
 transformed variables are univariate.
 
 This function can then be passed to \code{independence_test()} for
-computing the distribution function and $p$~value:
+computing the distribution function and $p$-value:
 <<Ex-distribution, echo = TRUE>>=
 independence_test(y ~ x, data = correxample, alternative = "less",
   distribution = sexact)
@@ -998,16 +998,16 @@ independence_test(js, teststat = "max")
 @
 with its conditional asymptotic null distribution being
 available immediately (due to the joint multivariate normal distribution
-for the contingency table $\T$). Single-step adjusted $p$~values for each
+for the contingency table $\T$). Single-step adjusted $p$-values for each
 cell of the contingency table corresponding to this maximum test
 can be computed via
 <<jobsatisfaction-minp, echo = TRUE>>=
 pvalue(independence_test(js, teststat = "max"), method = "single-step")
 @
-These $p$~values can be interpreted in a way similar to
+These $p$-values can be interpreted in a way similar to
 standardized contingency tables. The discrepancy between the
-global adjusted $p$~value shown above and the minimum single-step
-adjusted $p$~value is due to simulation variance.
+global adjusted $p$-value shown above and the minimum single-step
+adjusted $p$-value is due to simulation variance.
 For more practical examples, including
 applications with numeric variables, we refer to \cite{Hothorn:2006:AmStat}.
 
@@ -1044,9 +1044,9 @@ unit testing.
 The test procedures implemented in \pkg{coin} are continuously
 checked against results obtained by the corresponding implementations in
 \pkg{stats} (where available). In addition, the test statistics
-and exact, approximate and asymptotic $p$~values for data examples
+and exact, approximate and asymptotic $p$-values for data examples
 given in the \pkg{StatXact}~6 user manual \citep{StatXact6} are compared
-with the results reported there. Step-down multiple adjusted $p$~values
+with the results reported there. Step-down multiple adjusted $p$-values
 have been checked against results reported by \code{mt.maxT()} from
 package \pkg{multtest} \citep{PKG:multtest}. For details on the test
 procedures we refer to the \proglang{R} transcript files in directory
