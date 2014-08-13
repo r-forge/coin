@@ -1,26 +1,24 @@
 ### new("CovarianceMatrix", ...)
-setMethod(f = "initialize",
+setMethod("initialize",
     signature = "CovarianceMatrix",
-    definition = function(.Object, x) {
-        .Object@covariance <- x
-        .Object
+    definition = function(.Object, covariance, ...) {
+        callNextMethod(.Object, covariance = covariance, ...)
     }
 )
 
 ### new("Variance", ...)
-setMethod(f = "initialize",
+setMethod("initialize",
     signature = "Variance",
-    definition = function(.Object, x) {
-        .Object@variance <- x
-        .Object
+    definition = function(.Object, variance, ...) {
+        callNextMethod(.Object, variance = variance, ...)
     }
 )
 
 ### new("IndependenceProblem", ...)
 ### initialized data
-setMethod(f = "initialize",
+setMethod("initialize",
     signature = "IndependenceProblem",
-    definition = function(.Object, x, y, block = NULL, weights = NULL) {
+    definition = function(.Object, x, y, block = NULL, weights = NULL, ...) {
 
         if (NROW(x) == 0L && NROW(y) == 0L)
             stop(sQuote("x"), " and ", sQuote("y"),
@@ -69,7 +67,7 @@ setMethod(f = "initialize",
 
 ### new("IndependenceTestProblem", ...)
 ### set up test problem, i.e., transformations of the data
-setMethod(f = "initialize",
+setMethod("initialize",
     signature = "IndependenceTestProblem",
     definition = function(.Object, ip, xtrafo = trafo, ytrafo = trafo, ...) {
 
@@ -90,9 +88,9 @@ setMethod(f = "initialize",
 
 ### new("IndependenceLinearStatistic", ...)
 ### compute test statistics and their expectation / covariance matrix
-setMethod(f = "initialize",
+setMethod("initialize",
     signature = "IndependenceLinearStatistic",
-    definition = function(.Object, itp, varonly = FALSE) {
+    definition = function(.Object, itp, varonly = FALSE, ...) {
 
         if (!extends(class(itp), "IndependenceTestProblem"))
             stop("Argument ", sQuote("itp"), " is not of class ",
@@ -149,9 +147,9 @@ setMethod(f = "initialize",
 
 ### new("IndependenceTestStatistic", ...)
 ### compute test statistics and their expectation / covariance matrix
-setMethod(f = "initialize",
+setMethod("initialize",
     signature = "IndependenceTestStatistic",
-    definition = function(.Object, itp, varonly = FALSE) {
+    definition = function(.Object, itp, varonly = FALSE, ...) {
 
         copyslots(new("IndependenceLinearStatistic", itp, varonly = varonly),
                   .Object)
@@ -160,10 +158,10 @@ setMethod(f = "initialize",
 
 ### new("ScalarIndependenceTestStatistic", ...)
 ### the basis of well known univariate tests
-setMethod(f = "initialize",
+setMethod("initialize",
     signature = "ScalarIndependenceTestStatistic",
     definition = function(.Object, its,
-        alternative = c("two.sided", "less", "greater"), paired = FALSE) {
+        alternative = c("two.sided", "less", "greater"), paired = FALSE, ...) {
 
         if (!extends(class(its), "IndependenceTestStatistic"))
             stop("Argument ", sQuote("its"), " is not of class ",
@@ -182,10 +180,10 @@ setMethod(f = "initialize",
 )
 
 ### new("MaxTypeIndependenceTestStatistic", ...)
-setMethod(f = "initialize",
+setMethod("initialize",
     signature = "MaxTypeIndependenceTestStatistic",
     definition = function(.Object, its,
-        alternative = c("two.sided", "less", "greater")) {
+        alternative = c("two.sided", "less", "greater"), ...) {
 
         if (!extends(class(its), "IndependenceTestStatistic"))
             stop("Argument ", sQuote("its"), " is not of class ",
@@ -207,7 +205,7 @@ setMethod(f = "initialize",
 )
 
 ### new("QuadTypeIndependenceTestStatistic", ...)
-setMethod(f = "initialize",
+setMethod("initialize",
     signature = "QuadTypeIndependenceTestStatistic",
     definition = function(.Object, its, paired = FALSE, ...) {
 
@@ -231,9 +229,9 @@ setMethod(f = "initialize",
 
 ### new("SymmetryProblem", ...)
 ### initialized data
-setMethod(f = "initialize",
+setMethod("initialize",
     signature = "SymmetryProblem",
-    definition = function(.Object, x, y, block = NULL, weights = NULL) {
+    definition = function(.Object, x, y, block = NULL, weights = NULL, ...) {
 
         if (any(is.na(x)))
             stop(sQuote("x"), " contains missing values")

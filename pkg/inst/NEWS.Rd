@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.1-0 (2014-07-09}{
+\section{Changes in version 1.1-0 (2014-08-13}{
   \subsection{New features}{
     \itemize{
       \item single-step adjusted \eqn{p}-values based on the joint distribution
@@ -243,7 +243,7 @@
       \item the median and logrank transformations are now increasing functions
       of the data
 
-      \item documentation updates
+      \item the package manual has been completely revised (WORK IN PROGRESS)
 
       \item the Kruskal-Wallis test, the logrank test and the Friedman test now
       use a scalar test statistic in case the explanatory variable is an ordered
@@ -279,8 +279,7 @@
       null distribution to be specified)
 
       \item the default number of Monte Carlo replicates used to approximate the
-      exact conditional distribution has been increased to 10000 (see
-      \code{?approximate})
+      exact conditional distribution has been increased to 10000
 
       \item small changes in the printed output of the Wilcoxon-Mann-Whitney
       test, the marginal homogeneity test, the Wilcoxon signed-rank test, and
@@ -297,8 +296,7 @@
 
       \item the \code{teststat} argument no longer allows the use of
       maximum-type statistics and quadratic forms to be specified using
-      \code{"maxtype"} and \code{"quadtype"} respectively (see
-      \code{?independence_test})
+      \code{"maxtype"} and \code{"quadtype"} respectively
 
       \item the memory consumption during computations has been reduced
 

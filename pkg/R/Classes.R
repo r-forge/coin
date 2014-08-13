@@ -1,6 +1,25 @@
+### Covariance matrix
+setClass("CovarianceMatrix",
+    representation = representation(
+        covariance = "matrix"
+    )
+)
+
+### Variance only
+setClass("Variance",
+    representation = representation(
+        variance = "numeric"
+    )
+)
+
+### Virtual class for covariance and variance
+setClassUnion("VarCovar",
+    members = c("CovarianceMatrix", "Variance")
+)
+
 ### Class for raw data: a set of `x' variables and a set of `y' variables,
 ### possibly blocked and with weights
-setClass(Class = "IndependenceProblem",
+setClass("IndependenceProblem",
     representation = representation(
         x       = "data.frame",
         y       = "data.frame",
@@ -21,88 +40,72 @@ setClass(Class = "IndependenceProblem",
 ### Class for transformed data, the `x' variables are transformed
 ### to a (n x p) matrix `xtrans' and the `y' variables to `ytrans' (n x q).
 ### `scores' is a matrix of scores
-setClass(Class = "IndependenceTestProblem",
+setClass("IndependenceTestProblem",
+    contains = "IndependenceProblem",
     representation = representation(
         xtrans     = "matrix",
         ytrans     = "matrix",
         xtrafo     = "function",
         ytrafo     = "function"
     ),
-    contains = "IndependenceProblem",
     validity = function(object)
         (storage.mode(object@xtrans) == "double" &&
          storage.mode(object@ytrans) == "double")
 )
 
-### Covariance matrix
-setClass(Class = "CovarianceMatrix",
-    representation = representation(
-        covariance = "matrix"
-    )
-)
-
-### Variances only
-setClass(Class = "Variance",
-    representation = representation(
-        variance = "numeric"
-    )
-)
-
-setClassUnion("VarCovar", c("CovarianceMatrix", "Variance"))
-
 ### Linear statistic, expectation and covariance according to
 ### Strasser & Weber (1999)
-setClass(Class = "IndependenceLinearStatistic",
+setClass("IndependenceLinearStatistic",
+    contains = "IndependenceTestProblem",
     representation = representation(
         linearstatistic = "numeric",
         expectation     = "numeric",
         covariance      = "VarCovar"
-    ),
-    contains = "IndependenceTestProblem",
+    )
 )
 
 ### Tests based on linear statistics
-setClass(Class = "IndependenceTestStatistic",
+setClass("IndependenceTestStatistic",
+    contains = "IndependenceLinearStatistic",
     representation = representation(
         teststatistic               = "numeric",
         standardizedlinearstatistic = "numeric"
-    ),
-    contains = "IndependenceLinearStatistic",
+    )
 )
 
 ### teststatistic = standardizedlinearstatistic
-setClass(Class = "ScalarIndependenceTestStatistic",
+setClass("ScalarIndependenceTestStatistic",
+    contains = "IndependenceTestStatistic",
     representation = representation(
         alternative = "character",
         paired      = "logical"
     ),
-    contains = "IndependenceTestStatistic",
     validity = function(object)
         object@alternative %in% c("two.sided", "less", "greater")
 )
 
 ### teststatistic = max(abs(standardizedlinearstatistic))
-setClass(Class = "MaxTypeIndependenceTestStatistic",
+setClass("MaxTypeIndependenceTestStatistic",
+    contains = "IndependenceTestStatistic",
     representation = representation(
         alternative = "character"
     ),
-    contains = "IndependenceTestStatistic",
     validity = function(object)
         object@alternative %in% c("two.sided", "less", "greater")
 )
 
 ### teststatistic = quadform(linearstatistic)
-setClass(Class = "QuadTypeIndependenceTestStatistic",
+setClass("QuadTypeIndependenceTestStatistic",
+    contains = "IndependenceTestStatistic",
     representation = representation(
         covarianceplus = "matrix",
         df             = "numeric",
         paired         = "logical"
-    ),
-    contains = "IndependenceTestStatistic"
+    )
 )
 
-### p values
-setClass(Class = "PValue",
+### p-values
+setClass("PValue",
     representation = representation(
         pvalue    = "function",
         midpvalue = "function",
@@ -112,25 +115,33 @@ setClass(Class = "PValue",
 )
 
 ### Null distribution
-setClass(Class = "NullDistribution",
+setClass("NullDistribution",
+    contains = "PValue",
     representation = representation(
         q          = "function",
         d          = "function",
         support    = "function",
         parameters = "list"
-    ),
-    contains = "PValue"
+    )
 )
 
-### There are essentially three types of computing null distributions:
-setClass(Class = "AsymptNullDistribution", contains = "NullDistribution")
-setClass(Class = "ApproxNullDistribution", contains = "NullDistribution")
-setClass(Class = "ExactNullDistribution", contains = "NullDistribution")
+### There are essentially three types of null distributions:
+setClass("AsymptNullDistribution",
+    contains = "NullDistribution"
+)
+
+setClass("ApproxNullDistribution",
+    contains = "NullDistribution"
+)
+
+setClass("ExactNullDistribution",
+    contains = "NullDistribution"
+)
 
 ### the "fitted" test including data and everything
-setClass(Class = "IndependenceTest",
+setClass("IndependenceTest",
     representation = representation(
-        distribution = "PValue", ### was: "NullDistribution",
+        distribution = "PValue", # was: "NullDistribution",
         statistic    = "IndependenceTestStatistic",
         estimates    = "list",
         method       = "character",
@@ -140,29 +151,29 @@ setClass(Class = "IndependenceTest",
 )
 
 ### the "fitted" test for scalar linear statistics
-setClass(Class = "ScalarIndependenceTest",
+setClass("ScalarIndependenceTest",
+    contains = "IndependenceTest",
     representation = representation(
         parameter = "character",
         nullvalue = "numeric"
     ),
     prototype = list(parameter = "mu"),
-    contains = "IndependenceTest",
     validity = function(object)
         extends(class(object@statistic),
                 "ScalarIndependenceTestStatistic")
 )
 
 ### possibly with confidence intervals
-setClass(Class = "ScalarIndependenceTestConfint",
+setClass("ScalarIndependenceTestConfint",
+    contains = "ScalarIndependenceTest",
     representation = representation(
         confint    = "function",
         conf.level = "numeric"
-    ),
-    contains = "ScalarIndependenceTest"
+    )
 )
 
 ### max type test statistics
-setClass(Class = "MaxTypeIndependenceTest",
+setClass("MaxTypeIndependenceTest",
     contains = "IndependenceTest",
     validity = function(object)
         extends(class(object@statistic),
@@ -170,7 +181,7 @@ setClass(Class = "MaxTypeIndependenceTest",
 )
 
 ### quad form test statistics
-setClass(Class = "QuadTypeIndependenceTest",
+setClass("QuadTypeIndependenceTest",
     contains = "IndependenceTest",
     validity = function(object)
         extends(class(object@statistic),
@@ -178,7 +189,7 @@ setClass(Class = "QuadTypeIndependenceTest",
 )
 
 ### SymmetryProblems
-setClass(Class = "SymmetryProblem",
+setClass("SymmetryProblem",
     contains = "IndependenceProblem",
     validity = function(object) {
         if (ncol(object@x) != 1L || !is.factor(object@x[[1L]]))

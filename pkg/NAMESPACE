@@ -24,21 +24,23 @@ export(independence_test,
        logrank_trafo, logrank_weight,
        maxstat_trafo, fmaxstat_trafo, ofmaxstat_trafo,
        f_trafo, of_trafo, mcp_trafo,
-       asymptotic, exact, approximate)
+       asymptotic, approximate, exact)
 
-exportClasses("IndependenceProblem", "IndependenceTest",
-              "IndependenceTestProblem","IndependenceTestStatistic",
-              "IndependenceLinearStatistic",
+exportClasses("CovarianceMatrix", "Variance", "VarCovar", "IndependenceProblem",
+              "IndependenceTestProblem", "IndependenceLinearStatistic",
+              "IndependenceTestStatistic", "MaxTypeIndependenceTestStatistic",
+              "QuadTypeIndependenceTestStatistic",
               "ScalarIndependenceTestStatistic", "PValue", "NullDistribution",
-              "SymmetryProblem", "ExpectCovarInfluence", "ExpectCovar",
+              "AsymptNullDistribution", "ApproxNullDistribution",
+              "ExactNullDistribution", "IndependenceTest", "MaxTypeIndependenceTest",
               "QuadTypeIndependenceTest", "ScalarIndependenceTest",
-              "ScalarIndependenceTestConfint", "MaxTypeIndependenceTest",
-              "MaxTypeIndependenceTestStatistic",
-              "QuadTypeIndependenceTestStatistic")
+              "ScalarIndependenceTestConfint", "SymmetryProblem", "ExpectCovar",
+              "ExpectCovarInfluence")
 
 exportMethods("initialize", "show", "pvalue", "midpvalue", "statistic",
               "pperm", "dperm", "qperm", "support", "expectation",
-              "covariance", "variance", "ExactNullDistribution")
+              "covariance", "variance", "AsymptNullDistribution",
+              "ApproxNullDistribution", "ExactNullDistribution")
 
 S3method(independence_test, formula)
 S3method(independence_test, table)

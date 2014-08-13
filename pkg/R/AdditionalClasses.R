@@ -1,6 +1,5 @@
-
 ### Conditional Expectation and Covariance
-setClass(Class = "ExpectCovar",
+setClass("ExpectCovar",
     representation = representation(
         expectation = "numeric",
         covariance  = "matrix",
@@ -10,10 +9,9 @@ setClass(Class = "ExpectCovar",
 
 ### Expectation and Covariance of the influence function
 ### (+ sum of weights)
-setClass(Class = "ExpectCovarInfluence",
+setClass("ExpectCovarInfluence",
+    contains = "ExpectCovar",
     representation = representation(
         sumweights = "numeric"
-    ),
-    contains = "ExpectCovar"
+    )
 )
-
