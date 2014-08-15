@@ -195,7 +195,7 @@
   lt <- independence_test(counts ~ treatment, data = platalet_counts,
       ytrafo = function(data) trafo(data, numeric_trafo = function(x)
           cbind(rank_trafo(x), ansari_trafo(x))),
-      teststat = "quad", distribution = approximate(B = 9999))
+      teststat = "quadratic", distribution = approximate(B = 9999))
   lt
 
   ### where did the rejection come from? Use maximum statistic
@@ -203,8 +203,7 @@
   ltmax <- independence_test(counts ~ treatment, data = platalet_counts,
       ytrafo = function(data) trafo(data, numeric_trafo = function(x)
           matrix(c(rank_trafo(x), ansari_trafo(x)), ncol = 2,
-                 dimnames = list(1:length(x), c("Location", "Scale")))),
-      teststat = "max")
+                 dimnames = list(1:length(x), c("Location", "Scale")))))
 
   ### single-step adjustment points to a difference in location
   pvalue(ltmax, method = "single-step")

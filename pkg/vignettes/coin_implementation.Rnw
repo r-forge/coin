@@ -700,7 +700,7 @@ The main workhorse behind it is the method for objects of class
 \Rclass{IndependenceProblem}:
 \begin{Sinput}
 independence_test(object,
-  teststat = c("max", "quad", "scalar"),
+  teststat = c("maximum", "quadratic", "scalar"),
   distribution = c("asymptotic", "approximate", "exact"),
   alternative = c("two.sided", "less", "greater"),
   xtrafo = trafo, ytrafo = trafo, scores = NULL,
@@ -885,29 +885,29 @@ Median &  \code{f_trafo()} & \code{median_trafo()} &
 Ansari-Bradley &  \code{f_trafo()} & \code{ansari_trafo()} &
 \code{"scalar"} \\
 Log rank & \code{f_trafo()} & \code{logrank_trafo()} &
-\code{"quad"} \\
+\code{"quadratic"} \\
 Kruskal-Wallis &  \code{f_trafo()} & \code{rank_trafo()} &
-\code{"quad"} \\
+\code{"quadratic"} \\
 Fligner & \code{f_trafo()} & \code{fligner_trafo()} &
-\code{"quad"} \\
+\code{"quadratic"} \\
 Spearman &  \code{rank_trafo()} & \code{rank_trafo()} &
 \code{"scalar"} \\
 Cochran-Mantel-Haenszel & \code{f_trafo()} & \code{f_trafo()} &
-\code{"quad"} \\
+\code{"quadratic"} \\
 Pearson's $\chi^2$ &  \code{f_trafo()} & \code{f_trafo()} &
-\code{"quad"} \\
+\code{"quadratic"} \\
 Cochran-Armitage / Linear &  scores & any & \code{"scalar"} \\
 Association &         &     &                 \\
 $K$-sample permutation test &  \code{f_trafo()} & any & any \\
-Maximally-selected statistics &  \code{maxstat_trafo()} & any & \code{"max"} \\
+Generalized maximally selected statistics &  \code{maxstat_trafo()} & any & \code{"maximum"} \\
 \multicolumn{4}{c}{} \\
 \multicolumn{4}{c}{Dependent samples} \\
 \multicolumn{4}{c}{} \\
 Friedman &  \code{f_trafo()} & \code{rank_trafo()} &
-\code{"quad"} \\
-Maxwell-Stuart &  \code{f_trafo()} & \code{f_trafo()} &
-\code{"quad"} \\
-Wilcoxon signed rank &  \code{f_trafo()} & \code{rank_trafo()} &
+\code{"quadratic"} \\
+Stuart-Maxwell &  \code{f_trafo()} & \code{f_trafo()} &
+\code{"quadratic"} \\
+Wilcoxon signed-rank &  \code{f_trafo()} & \code{rank_trafo()} &
 \code{"scalar"} \\ \hline
 \end{tabular}
 \caption{Representations of the conditional counterparts of
@@ -955,7 +955,7 @@ assessing the independence hypothesis of income and job satisfaction (stratified
 Traditionally, this test employs a $c_\text{quad}$ statistic derived from the contingency table
 and a $\chi^2$ approximation of the null distribution:
 <<jobsatisfaction-it, echo = TRUE>>=
-it <- independence_test(js, teststat = "quad",
+it <- independence_test(js, teststat = "quadratic",
   distribution = asymptotic())
 it
 @
@@ -1000,7 +1000,7 @@ this approach using the job satisfaction data again (even though a maximum-type 
 clearly not very powerful for the dependence pattern in this data set).
 The maximum-type test is set up  easily:
 <<jobsatisfaction-max, echo = TRUE>>=
-independence_test(js, teststat = "max")
+independence_test(js, teststat = "maximum")
 @
 with its conditional asymptotic null distribution being
 available immediately (due to the joint multivariate normal distribution
@@ -1008,7 +1008,8 @@ for the contingency table $\T$). Single-step adjusted $p$-values for each
 cell of the contingency table corresponding to this maximum test
 can be computed via
 <<jobsatisfaction-minp, echo = TRUE>>=
-pvalue(independence_test(js, teststat = "max"), method = "single-step")
+pvalue(independence_test(js, teststat = "maximum"),
+       method = "single-step")
 @
 These $p$-values can be interpreted in a way similar to
 standardized contingency tables. The discrepancy between the
@@ -1074,7 +1075,7 @@ package \citep{vcd}.
 \section*{Acknowledgments}
 
 We would like to thank Helmut Strasser for discussions on the theoretical framework.
-Henric Winell provided clarification and examples for the Maxwell-Stuart test and helped
+Henric Winell provided clarification and examples for the Stuart-Maxwell test and helped
 identifying bugs. The work of Torsten Hothorn was supported by Deutsche Forschungsgemeinschaft (DFG)
 under grant HO 3242/1-3.
 

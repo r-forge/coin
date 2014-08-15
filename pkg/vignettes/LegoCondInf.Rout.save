@@ -62,7 +62,7 @@ Kruskal-Wallis chi-squared = 8.8302, df = 2, p-value =
 
 
 > independence_test(elevel ~ alength, data = alpha, 
-+     ytrafo = rank_trafo, teststat = "quad")
++     ytrafo = rank_trafo, teststat = "quadratic")
 
 	Asymptotic General Independence Test
 
@@ -135,7 +135,7 @@ Other diagnoses  &  24 & 2 & 22 & 11 \\
 +     tol = .... [TRUNCATED] 
 
 > it_alz <- independence_test(disease ~ smoking | gender, 
-+     data = alzheimer, teststat = "quad")
++     data = alzheimer, teststat = "quadratic")
 
 > it_alz
 
@@ -159,15 +159,15 @@ None        126              79             104
 > males <- alzheimer$gender == "Male"
 
 > pvalue(independence_test(disease ~ smoking, data = alzheimer, 
-+     subset = females, teststat = "quad"))
++     subset = females, teststat = "quadratic"))
 [1] 0.09060652
 
 > pvalue(independence_test(disease ~ smoking, data = alzheimer, 
-+     subset = males, teststat = "quad"))
++     subset = males, teststat = "quadratic"))
 [1] 3.169418e-06
 
 > it_alzmax <- independence_test(disease ~ smoking, 
-+     data = alzheimer, subset = males, teststat = "max")
++     data = alzheimer, subset = males, teststat = "maximum")
 
 > it_alzmax
 
@@ -311,4 +311,4 @@ C           0.00000           0.00000 0.99859
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.77    0.18    3.33 
+   3.07    0.10    3.40 

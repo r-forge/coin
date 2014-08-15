@@ -15,7 +15,7 @@
 \method{independence_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{independence_test}{table}(object, \dots)
 \method{independence_test}{IndependenceProblem}(object,
-    teststat = c("max", "quad", "scalar"),
+    teststat = c("maximum", "quadratic", "scalar"),
     distribution = c("asymptotic", "approximate", "exact"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL,
@@ -41,8 +41,8 @@
     \code{"IndependenceProblem"} or an object of class \code{"table"}.}
   \item{teststat}{a character, the type of test statistic to be applied:
     either a standardized scalar test statistic (\code{"scalar"}), or a
-    maximum type statistic (\code{"max"}, default) or a quadratic form
-    (\code{"quad"}).}
+    maximum type statistic (\code{"maximum"}, default) or a quadratic form
+    (\code{"quadratic"}).}
   \item{distribution}{a character, the null distribution of the test
     statistic can be computed \code{"exact"}ly or can be approximated by
     its asymptotic distribution (\code{"asymptotic"}, default) or via

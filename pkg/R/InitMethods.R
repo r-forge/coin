@@ -100,7 +100,7 @@ setMethod("initialize",
         .Object@linearstatistic <-
             drop(LinearStatistic(itp@xtrans, itp@ytrans, itp@weights))
         ### <REMINDER>
-        ### for teststat = "max" and distribution = "approx"
+        ### for teststat = "maximum" and distribution = "approx"
         ### we don't need the covariance matrix but the variances only
         ### </REMINDER>
         if (nlevels(itp@block) == 1L) {

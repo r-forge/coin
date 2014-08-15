@@ -58,7 +58,7 @@ Loading required package: TH.data
 
 > it <- independence_test(length ~ site, data = YOY, 
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo), 
-+     teststat = "quad")
++     teststat = "quadra ..." ... [TRUNCATED] 
 
 > it
 
@@ -172,7 +172,7 @@ alternative hypothesis: two.sided
 +     block = egg_data$sitting)
 
 > independence_test(scores ~ product | sitting, data = egg_data, 
-+     teststat = "quad", ytrafo = yt)
++     teststat = "quadratic", ytrafo = yt)
 
 	Asymptotic General Independence Test
 
@@ -183,7 +183,7 @@ chi-squared = 39.12, df = 9, p-value = 1.096e-05
 
 
 > pvalue(independence_test(scores ~ product | sitting, 
-+     data = egg_data, teststat = "quad", ytrafo = yt, distribution = approximate(B = 19999)))
++     data = egg_data, teststat = "quadratic", ytrafo = yt, distribution = approximate(B = 199 .... [TRUNCATED] 
 [1] 0
 99 percent confidence interval:
  0.000000000 0.000264894 
@@ -219,4 +219,4 @@ IV - III 0.99889989
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   1.74    0.09    2.07 
+   1.88    0.24    2.30 

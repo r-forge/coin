@@ -468,14 +468,14 @@ test into the more general conditional inference framework implemented in the
 a formula and a data frame as its main arguments and additionally allows for the
 specification of the transformations $g$ and $h$ via
 \Rcmd{xtrafo} and \Rcmd{ytrafo}, respectively, as well as setting \Rcmd{teststat}
-to \Rcmd{"max"} or \Rcmd{"quad"} (for $c_\text{max}$ or $c_\text{quad}$, respectively)
+to \Rcmd{"maximum"} or \Rcmd{"quadratic"} (for $c_\text{max}$ or $c_\text{quad}$, respectively)
 and the \Rcmd{distribution} to be used. Thus, for computing the Kruskal-Wallis test
 \Rcmd{ytrafo} has to be set to the function \Rcmd{rank\_trafo} for computing ranks, in \Rcmd{xtrafo}
 dummy codings have to be used (the default for categorical variables), \Rcmd{teststat}
-is the \Rcmd{"quad"} type statistic $c_\text{quad}$ and the default asymptotic
+is the \Rcmd{"quadratic"} type statistic $c_\text{quad}$ and the default asymptotic
 \Rcmd{distribution} is applied:
 <<alpha-kruskal, echo = TRUE>>=
-independence_test(elevel ~ alength, data = alpha, ytrafo = rank_trafo, teststat = "quad")
+independence_test(elevel ~ alength, data = alpha, ytrafo = rank_trafo, teststat = "quadratic")
 @
 The output gives equivalent results as reported by \Rcmd{kruskal.test} above.
 So what is the advantage of using \Rcmd{independence\_test}?
@@ -505,7 +505,7 @@ This $p$-value emphasizes the impression from Figure~\ref{alpha-box}
 that the expression levels increase with increasing allele lengths.
 Note that due to usage of scalar transformations $g$ and
 $h$, the $c_\text{max}$- and $c_\text{quad}$-type test statistics are
-equivalent and hence \Rcmd{teststat} is not set (defaulting to \Rcmd{"max"}).
+equivalent and hence \Rcmd{teststat} is not set (defaulting to \Rcmd{"maximum"}).
 Furthermore, it should be pointed out that a test based on such a numerical
 transformation for ordinal variables is equivalent to
 linear-by-linear association tests \citep{Agresti2002} for which further
@@ -591,7 +591,7 @@ block factor, can be tested with a $c_\text{quad}$-type test statistic, i.e., th
 Cochran-Mantel-Haenszel test:
 <<alzheimer-mantelhaen, echo = TRUE>>=
 it_alz <- independence_test(disease ~ smoking | gender, data = alzheimer,
-                            teststat = "quad")
+                            teststat = "quadratic")
 it_alz
 @
 which suggests that there is a clear deviation from independence.
@@ -619,9 +619,9 @@ subjects separately
 females <- alzheimer$gender == "Female"
 males <- alzheimer$gender == "Male"
 pvalue(independence_test(disease ~ smoking, data = alzheimer,
-       subset = females, teststat = "quad"))
+       subset = females, teststat = "quadratic"))
 pvalue(independence_test(disease ~ smoking, data = alzheimer,
-       subset = males, teststat = "quad"))
+       subset = males, teststat = "quadratic"))
 @
 where it turns out that the association is due to the male patients only
 (see also Figure~\ref{alz-plot}) and we therefore focus on the male patients in
@@ -635,7 +635,7 @@ collapsed in such a quadratic form. Therefore, we choose the
 maximum of the standardized contingency table as $c_\text{max}$ test statistic via
 <<alzheimer-max, echo = TRUE>>=
 it_alzmax <- independence_test(disease ~ smoking, data = alzheimer,
-       subset = males, teststat = "max")
+       subset = males, teststat = "maximum")
 it_alzmax
 @
 where the underlying standardized contingency table highlights the cells with

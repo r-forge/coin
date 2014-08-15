@@ -16,7 +16,7 @@ independence_test.table <- function(object, ...) {
 }
 
 independence_test.IndependenceProblem <- function(object,
-    teststat = c("max", "quad", "scalar"),
+    teststat = c("maximum", "quadratic", "scalar"),
     distribution = c("asymptotic", "approximate", "exact"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL, check = NULL, paired = FALSE,
@@ -55,20 +55,20 @@ independence_test.IndependenceProblem <- function(object,
     if (!scalar) {
         if (teststat == "scalar") {
             warning("Length linear statistic > 1, using ",
-                    sQuote("max"), "-type test statistic")
-            teststat <- "max"
+                    sQuote("maximum"), "-type test statistic")
+            teststat <- "maximum"
         }
     } else {
-        if (teststat == "max") teststat <- "scalar"
+        if (teststat == "maximum") teststat <- "scalar"
     }
-    if (alternative != "two.sided" && teststat == "quad")
+    if (alternative != "two.sided" && teststat == "quadratic")
         warning(sQuote("alternative"), " is ignored for ",
-                teststat, " type test statistics")
+                teststat, " test statistics")
 
     ## compute linear statistic, conditional expectation and
     ## conditional covariance
     object <- new("IndependenceTestStatistic", object, varonly = TRUE)
-###         varonly = class(distribution) == "approximate" && teststat == "max")
+###         varonly = class(distribution) == "approximate" && teststat == "maximum")
 
     ## compute test statistic and corresponding null distribution
     ## return object inheriting from class `IndependenceTest'
@@ -79,13 +79,13 @@ independence_test.IndependenceProblem <- function(object,
             new("ScalarIndependenceTest", statistic = object,
                 distribution = distribution(object), call = match.call())
         },
-        "max" = {
+        "maximum" = {
             object <- new("MaxTypeIndependenceTestStatistic", object,
                           alternative = alternative)
             new("MaxTypeIndependenceTest", statistic = object,
                 distribution = distribution(object), call = match.call())
         },
-        "quad" = {
+        "quadratic" = {
             object <- new("QuadTypeIndependenceTestStatistic", object,
                           paired = isTRUE(paired))
             new("QuadTypeIndependenceTest", statistic = object,

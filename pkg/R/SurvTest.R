@@ -40,7 +40,7 @@ surv_test.IndependenceProblem <- function(object,
     }
     ## set test statistic to scalar for linear-by-linear tests
     args$teststat <- if (is_ordered_x(object) || twosamp) "scalar"
-                     else "quad"
+                     else "quadratic"
 
     object <- do.call("independence_test", c(list(object = object), args))
 

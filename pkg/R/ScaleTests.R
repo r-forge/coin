@@ -28,7 +28,7 @@ taha_test.IndependenceProblem <- function(object,
                            return(TRUE)
                        })
     ## set test statistic to scalar for two-sample test
-    args$teststat <- if (twosamp) "scalar" else "quad"
+    args$teststat <- if (twosamp) "scalar" else "quadratic"
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -81,7 +81,7 @@ klotz_test.IndependenceProblem <- function(object,
                            return(TRUE)
                        })
     ## set test statistic to scalar for two-sample test
-    args$teststat <- if (twosamp) "scalar" else "quad"
+    args$teststat <- if (twosamp) "scalar" else "quadratic"
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -134,7 +134,7 @@ mood_test.IndependenceProblem <- function(object,
                            return(TRUE)
                        })
     ## set test statistic to scalar for two-sample test
-    args$teststat <- if (twosamp) "scalar" else "quad"
+    args$teststat <- if (twosamp) "scalar" else "quadratic"
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -187,7 +187,7 @@ ansari_test.IndependenceProblem <- function(object,
                            return(TRUE)
                        })
     ## set test statistic to scalar for two-sample test
-    args$teststat <- if (twosamp) "scalar" else "quad"
+    args$teststat <- if (twosamp) "scalar" else "quadratic"
     ## swap alternative in one-sample case
     ## (a *large* test statistic implies that sample 1 is *less* variable)
     if (twosamp) {
@@ -251,7 +251,7 @@ fligner_test.IndependenceProblem <- function(object,
                            return(TRUE)
                        })
     ## set test statistic to scalar for two-sample test
-    args$teststat <- if (twosamp) "scalar" else "quad"
+    args$teststat <- if (twosamp) "scalar" else "quadratic"
 
     ## eliminate location differences (see 'stats/R/fligner.test')
     object@y[[1]] <- object@y[[1]] -
@@ -306,7 +306,7 @@ conover_test.IndependenceProblem <- function(object,
                            return(TRUE)
                        })
     ## set test statistic to scalar for two-sample test
-    args$teststat <- if (twosamp) "scalar" else "quad"
+    args$teststat <- if (twosamp) "scalar" else "quadratic"
 
     ## eliminate location differences
     object@y[[1]] <- object@y[[1]] -

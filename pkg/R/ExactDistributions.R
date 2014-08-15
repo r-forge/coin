@@ -5,7 +5,7 @@ SR_shift_2sample <- function(object, fact) {
         if (extends(class(object), "ScalarIndependenceTestStatistic"))
             "scalar"
         else if (extends(class(object), "QuadTypeIndependenceTestStatistic"))
-            "quad"
+            "quadratic"
         else
             stop("Argument ", sQuote("object"), " is not of class ",
                  sQuote("ScalarIndependenceTestStatistic"), " or ",
@@ -191,7 +191,7 @@ SR_shift_1sample <- function(object, fact) {
         if (extends(class(object), "ScalarIndependenceTestStatistic"))
             "scalar"
         else if (extends(class(object), "QuadTypeIndependenceTestStatistic"))
-            "quad"
+            "quadratic"
         else
             stop("Argument ", sQuote("object"), " is not of class ",
                  sQuote("ScalarIndependenceTestStatistic"), " or ",

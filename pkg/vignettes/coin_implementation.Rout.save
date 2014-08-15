@@ -297,7 +297,8 @@ Loading required package: grid
 > cotabplot(js, split_vertical = TRUE, spacing = spacing_highlighting, 
 +     gp = gpar(fill = rev(gray.colors(4))), labeling_args = list(rot_labels = .... [TRUNCATED] 
 
-> it <- independence_test(js, teststat = "quad", distribution = asymptotic())
+> it <- independence_test(js, teststat = "quadratic", 
++     distribution = asymptotic())
 
 > it
 
@@ -340,7 +341,7 @@ Income        VeryDiss LitSat ModSat VerySat
  0.009024885 0.014651019 
 
 
-> independence_test(js, teststat = "max")
+> independence_test(js, teststat = "maximum")
 
 	Asymptotic General Independence Test
 
@@ -351,7 +352,8 @@ maxT = 1.6258, p-value = 0.7215
 alternative hypothesis: two.sided
 
 
-> pvalue(independence_test(js, teststat = "max"), method = "single-step")
+> pvalue(independence_test(js, teststat = "maximum"), 
++     method = "single-step")
              VeryDiss    LitSat    ModSat   VerySat
 <5000       0.9010270 0.9987771 0.9999998 0.9888131
 5000-15000  0.9992718 0.9948673 0.9998852 0.7215403
@@ -361,4 +363,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.91    0.17    3.26 
+   2.79    0.15    3.10 

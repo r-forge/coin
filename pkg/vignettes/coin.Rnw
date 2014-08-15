@@ -92,9 +92,9 @@ following test procedures are available:
 \begin{center}
 \begin{tabular}{ll}
 \texttt{oneway\_test} & two- and $K$-sample permutation test \\
-\texttt{wilcox\_test} & Wilcoxon-Mann-Whitney rank sum test \\
+\texttt{wilcox\_test} & Wilcoxon-Mann-Whitney test \\
 \texttt{normal\_test} & van der Waerden normal quantile test \\
-\texttt{median\_test} & Median test \\
+\texttt{median\_test} & median test \\
 \texttt{kruskal\_test} & Kruskal-Wallis test \\
 \texttt{ansari\_test} & Ansari-Bradley test \\
 \texttt{fligner\_test} & Fligner-Killeen test \\
@@ -102,11 +102,11 @@ following test procedures are available:
 \texttt{cmh\_test} & Cochran-Mantel-Haenszel test \\
 \texttt{lbl\_test} & linear-by-linear association test \\
 \texttt{surv\_test} & two- and $K$-sample logrank test \\
-\texttt{maxstat\_test} & maximally selected statistics \\
+\texttt{maxstat\_test} & generalized maximally selected statistics \\
 \texttt{spearman\_test} & Spearman's test \\
 \texttt{friedman\_test} & Friedman test \\
-\texttt{wilcoxsign\_test} & Wilcoxon-Signed-Rank test \\
-\texttt{mh\_test} &  marginal homogeneity test (Maxwell-Stuart). \\
+\texttt{wilcoxsign\_test} & Wilcoxon signed-rank test \\
+\texttt{mh\_test} &  marginal homogeneity test (Stuart-Maxwell). \\
 \end{tabular}
 \end{center}
 
@@ -282,7 +282,7 @@ YOY <- data.frame(
 
 it <- independence_test(length ~ site, data = YOY,
     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
-    teststat = "quad")
+    teststat = "quadratic")
 it
 @
 The linear statistic $\T$ is the sum of the ranks in each group and
@@ -307,7 +307,7 @@ is
 statistic(it, type = "standardized")
 @
 Since a quadratic form of the test statistic was requested via
-\texttt{teststat = "quad"}, the test statistic is
+\texttt{teststat = "quadratic"}, the test statistic is
 <<YOY-c, echo = TRUE>>=
 statistic(it)
 @
@@ -404,13 +404,13 @@ egg_data <- data.frame(
 yt <- function(data) trafo(data, numeric_trafo = rank_trafo,
                            block = egg_data$sitting)
 independence_test(scores ~ product | sitting,
-                  data = egg_data, teststat = "quad",
+                  data = egg_data, teststat = "quadratic",
                   ytrafo = yt)
 @
 and the Monte Carlo $p$-value can be computed via
 <<eggs-Durbin-approx, echo = TRUE>>=
 pvalue(independence_test(scores ~ product | sitting,
-    data = egg_data, teststat = "quad", ytrafo = yt,
+    data = egg_data, teststat = "quadratic", ytrafo = yt,
     distribution = approximate(B = 19999)))
 @
 If we assume that the products are ordered, the Page test is appropriate and
@@ -433,7 +433,7 @@ if (require("multcomp")) {
     xt <- function(data) trafo(data, factor_trafo = function(x)
         tcrossprod(model.matrix(~x - 1), contrMat(table(x), "Tukey")))
     it <- independence_test(length ~ site, data = YOY, xtrafo = xt,
-        teststat = "max", distribution = approximate(B = 9999))
+        teststat = "maximum", distribution = approximate(B = 9999))
     print(pvalue(it))
     print(pvalue(it, method = "single-step"))
 }
@@ -492,7 +492,7 @@ the \proglang{R} transcript files in directory \texttt{coin/tests}.
 \section{Acknowledgements}
 
 We would like to thank Helmut Strasser for discussions on the theoretical framework.
-Henric Winell provided clarification and examples for the Maxwell-Stuart test.
+Henric Winell provided clarification and examples for the Stuart-Maxwell test.
 
 \bibliographystyle{jss}
 \bibliography{coin}

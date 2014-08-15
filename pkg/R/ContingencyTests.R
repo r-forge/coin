@@ -40,7 +40,7 @@ chisq_test.IndependenceProblem <- function(object, ...) {
                 ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||
                  (is.ordered(object@y[[1]]) && nlevels(object@x[[1]]) == 2)))
             "scalar"
-        else "quad"
+        else "quadratic"
     ## distribution must be checked
     args$distribution <- check_distribution_arg(args$distribution)
     ## alternative is needed later
@@ -72,7 +72,7 @@ chisq_test.IndependenceProblem <- function(object, ...) {
         } else {
             if (args$alternative != "two.sided")
                 warning(sQuote("alternative"),
-                        " is ignored for quad type test statistics")
+                        " is ignored for quadratic test statistics")
             object <- new("QuadTypeIndependenceTestStatistic", object)
             object@teststatistic <- object@teststatistic * n / (n - 1)
             object@standardizedlinearstatistic <-
@@ -133,7 +133,7 @@ cmh_test.IndependenceProblem <- function(object, ...) {
                 ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||
                  (is.ordered(object@y[[1]]) && nlevels(object@x[[1]]) == 2)))
             "scalar"
-        else "quad"
+        else "quadratic"
 
     object <- do.call("independence_test", c(list(object = object), args))
 

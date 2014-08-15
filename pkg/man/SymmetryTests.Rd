@@ -187,7 +187,6 @@
   ### Hollander & Wolfe (1999), page 295
   ### all pairwise comparisons
   rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
-       teststat = "max",
        xtrafo = mcp_trafo(methods = "Tukey"),
        ytrafo = function(data)
            trafo(data, numeric_trafo = rank_trafo, block = RoundingTimes$block)

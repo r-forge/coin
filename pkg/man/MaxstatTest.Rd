@@ -15,7 +15,7 @@
 \method{maxstat_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{maxstat_test}{table}(object, \dots)
 \method{maxstat_test}{IndependenceProblem}(object,
-    teststat = c("max", "quad"),
+    teststat = c("maximum", "quadratic"),
     distribution = c("asymptotic", "approximate"),
     minprob = 0.1, maxprob = 1 - minprob, \dots)
 }
@@ -33,8 +33,8 @@
   \item{object}{an object inheriting from class
     \code{"IndependenceProblem"} or an object of class \code{"table"}.}
   \item{teststat}{a character, the type of test statistic to be applied:
-    a maximum type statistic (\code{"max"}, default) or a quadratic form
-    (\code{"quad"}).}
+    a maximum type statistic (\code{"maximum"}, default) or a quadratic form
+    (\code{"quadratic"}).}
   \item{distribution}{a character, the null distribution of the test
     statistic can be approximated by its asymptotic distribution
     (\code{"asymptotic"}, default) or via Monte Carlo resampling

@@ -106,7 +106,7 @@ kruskal_test.IndependenceProblem <- function(object, ...) {
     }
     ## set test statistic to scalar for linear-by-linear tests
     args$teststat <- if (is_ordered_x(object)) "scalar"
-                     else "quad"
+                     else "quadratic"
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -153,7 +153,7 @@ normal_test.IndependenceProblem <- function(object,
     }
     ## set test statistic to scalar for linear-by-linear and two-sample tests
     args$teststat <- if (is_ordered_x(object) || twosamp) "scalar"
-                     else "quad"
+                     else "quadratic"
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -210,7 +210,7 @@ median_test.IndependenceProblem <- function(object,
     }
     ## set test statistic to scalar for linear-by-linear and two-sample tests
     args$teststat <- if (is_ordered_x(object) || twosamp) "scalar"
-                     else "quad"
+                     else "quadratic"
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -267,7 +267,7 @@ savage_test.IndependenceProblem <- function(object,
     }
     ## set test statistic to scalar for linear-by-linear and two-sample tests
     args$teststat <- if (is_ordered_x(object) || twosamp) "scalar"
-                     else "quad"
+                     else "quadratic"
 
     object <- do.call("independence_test", c(list(object = object), args))
 

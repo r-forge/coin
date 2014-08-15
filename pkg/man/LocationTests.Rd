@@ -275,7 +275,7 @@
   ### (where Steel-Dwass results are given)
   NDWD <- oneway_test(length ~ site, data = YOY,
       ytrafo = rank_trafo, xtrafo = mcp_trafo(site="Tukey"),
-      teststat = "max", distribution = approximate(B = 90000))
+      distribution = approximate(B = 90000))
 
   ### global p-value
   print(pvalue(NDWD))

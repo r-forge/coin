@@ -180,12 +180,12 @@
 
   ### Cochran-Armitage test (permutation equivalent to correlation
   ### between dose and tumor), cf. Table 2 for results
-  independence_test(tumor ~ dose, data = lungtumor, teststat = "quad")
+  independence_test(tumor ~ dose, data = lungtumor, teststat = "quadratic")
 
   ### linear-by-linear association test with scores 0, 1, 2
   ### is identical to Cochran-Armitage test
   lungtumor$dose <- ordered(lungtumor$dose)
-  independence_test(tumor ~ dose, data = lungtumor, teststat = "quad",
+  independence_test(tumor ~ dose, data = lungtumor, teststat = "quadratic",
                     scores = list(dose = c(0, 1, 2)))
 
 }

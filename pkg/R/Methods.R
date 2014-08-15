@@ -169,13 +169,13 @@ setMethod("ExactNullDistribution",
                       stop("cannot compute exact distribution with real-valued scores")
               } else if (is_2sample(object)) {
                   if (algorithm == "split-up")
-                      stop("split-up algorithm not implemented for quad-type tests")
+                      stop("split-up algorithm not implemented for quadratic tests")
                   else {
                       int <- is_integer(object@ytrans[, 1L], ...)
                       if (int)
                           SR_shift_2sample(object, fact = attr(int, "fact"))
                       else if (algorithm == "auto")
-                          stop("split-up algorithm not implemented for quad-type tests")
+                          stop("split-up algorithm not implemented for quadratic tests")
                       else
                           stop("cannot compute exact distribution with real-valued scores")
                   }

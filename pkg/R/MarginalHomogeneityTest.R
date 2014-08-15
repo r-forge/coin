@@ -35,7 +35,7 @@ mh_test.SymmetryProblem <- function(object, ...) {
                 ((is.ordered(object@x[[1]]) && nlevels(object@y[[1]]) == 2) ||
                  (is.ordered(object@y[[1]]) && nlevels(object@x[[1]]) == 2)))
             "scalar"
-        else "quad"
+        else "quadratic"
 
     object <- do.call("symmetry_test", c(list(object = object), args))
 

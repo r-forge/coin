@@ -16,7 +16,7 @@ maxstat_test.table <- function(object, ...) {
 }
 
 maxstat_test.IndependenceProblem <- function(object,
-    teststat = c("max", "quad"),
+    teststat = c("maximum", "quadratic"),
     distribution = c("asymptotic", "approximate"),
     minprob = 0.1, maxprob = 1 - minprob, ...) {
 

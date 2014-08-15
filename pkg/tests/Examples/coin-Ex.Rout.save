@@ -261,7 +261,7 @@ alternative hypothesis: two.sided
 > 
 >   ### Cochran-Armitage test (permutation equivalent to correlation
 >   ### between dose and tumor), cf. Table 2 for results
->   independence_test(tumor ~ dose, data = lungtumor, teststat = "quad")
+>   independence_test(tumor ~ dose, data = lungtumor, teststat = "quadratic")
 
 	Asymptotic General Independence Test
 
@@ -272,7 +272,7 @@ chi-squared = 10.6381, df = 1, p-value = 0.001108
 >   ### linear-by-linear association test with scores 0, 1, 2
 >   ### is identical to Cochran-Armitage test
 >   lungtumor$dose <- ordered(lungtumor$dose)
->   independence_test(tumor ~ dose, data = lungtumor, teststat = "quad",
+>   independence_test(tumor ~ dose, data = lungtumor, teststat = "quadratic",
 +                     scores = list(dose = c(0, 1, 2)))
 
 	Asymptotic General Independence Test
@@ -729,7 +729,7 @@ chi-squared = 22.8524, p-value < 2.2e-16
 >   ### (where Steel-Dwass results are given)
 >   NDWD <- oneway_test(length ~ site, data = YOY,
 +       ytrafo = rank_trafo, xtrafo = mcp_trafo(site="Tukey"),
-+       teststat = "max", distribution = approximate(B = 90000))
++       distribution = approximate(B = 90000))
 > 
 >   ### global p-value
 >   print(pvalue(NDWD))
@@ -1150,7 +1150,7 @@ alternative hypothesis: true ratio of scales is not equal to 1
 >   lt <- independence_test(counts ~ treatment, data = platalet_counts,
 +       ytrafo = function(data) trafo(data, numeric_trafo = function(x)
 +           cbind(rank_trafo(x), ansari_trafo(x))),
-+       teststat = "quad", distribution = approximate(B = 9999))
++       teststat = "quadratic", distribution = approximate(B = 9999))
 >   lt
 
 	Approximative General Independence Test
@@ -1164,8 +1164,7 @@ chi-squared = 9.3384, p-value = 0.0042
 >   ltmax <- independence_test(counts ~ treatment, data = platalet_counts,
 +       ytrafo = function(data) trafo(data, numeric_trafo = function(x)
 +           matrix(c(rank_trafo(x), ansari_trafo(x)), ncol = 2,
-+                  dimnames = list(1:length(x), c("Location", "Scale")))),
-+       teststat = "max")
++                  dimnames = list(1:length(x), c("Location", "Scale")))))
 > 
 >   ### single-step adjustment points to a difference in location
 >   pvalue(ltmax, method = "single-step")
@@ -1448,7 +1447,6 @@ chi-squared = 11.1429, df = 2, p-value = 0.003805
 >   ### Hollander & Wolfe (1999), page 295
 >   ### all pairwise comparisons
 >   rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
-+        teststat = "max",
 +        xtrafo = mcp_trafo(methods = "Tukey"),
 +        ytrafo = function(data)
 +            trafo(data, numeric_trafo = rank_trafo, block = RoundingTimes$block)
@@ -2631,7 +2629,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  38.06 0.44 38.79 NA NA 
+Time elapsed:  37.64 0.36 38.3 NA NA 
 > grDevices::dev.off()
 null device 
           1 

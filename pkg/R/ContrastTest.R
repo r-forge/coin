@@ -24,7 +24,7 @@ contrast_test.IndependenceProblem <- function(object,
     distribution <- check_distribution_arg(distribution,
         values = c("asymptotic", "approximate"))
 
-    args <- setup_args(teststat = "max",
+    args <- setup_args(teststat = "maximum",
                        distribution = distribution,
                        xtrafo = function(data)
                            trafo(data) %*% cmatrix)

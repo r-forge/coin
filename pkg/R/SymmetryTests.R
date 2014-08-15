@@ -24,7 +24,7 @@ quade_test.SymmetryProblem <- function(object, ...) {
     }
     ## set test statistic to scalar for linear-by-linear tests
     args$teststat <- if (is_ordered_x(object)) "scalar"
-                     else "quad"
+                     else "quadratic"
 
     y <- split(object@y[[1]], object@block)
     R <- lapply(y, function(y) rank(y) - (length(y) + 1) / 2)
@@ -72,7 +72,7 @@ friedman_test.SymmetryProblem <- function(object, ...) {
     }
     ## set test statistic to scalar for linear-by-linear tests
     args$teststat <- if (is_ordered_x(object)) "scalar"
-                     else "quad"
+                     else "quadratic"
 
     object <- do.call("symmetry_test", c(list(object = object), args))
 
