@@ -107,10 +107,11 @@ setClass("QuadTypeIndependenceTestStatistic",
 ### p-values
 setClass("PValue",
     representation = representation(
-        pvalue    = "function",
-        midpvalue = "function",
-        p         = "function",
-        name      = "character"
+        pvalue         = "function",
+        midpvalue      = "function",
+        pvalueinterval = "function",
+        p              = "function",
+        name           = "character"
     )
 )
 

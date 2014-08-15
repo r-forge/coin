@@ -37,8 +37,8 @@ exportClasses("CovarianceMatrix", "Variance", "VarCovar", "IndependenceProblem",
               "ScalarIndependenceTestConfint", "SymmetryProblem", "ExpectCovar",
               "ExpectCovarInfluence")
 
-exportMethods("initialize", "show", "pvalue", "midpvalue", "statistic",
-              "pperm", "dperm", "qperm", "support", "expectation",
+exportMethods("initialize", "show", "pvalue", "midpvalue", "pvalue_interval",
+              "statistic", "pperm", "dperm", "qperm", "support", "expectation",
               "covariance", "variance", "AsymptNullDistribution",
               "ApproxNullDistribution", "ExactNullDistribution")
 

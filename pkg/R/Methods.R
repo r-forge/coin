@@ -23,6 +23,7 @@ setMethod("AsymptNullDistribution",
             d = function(x) dnorm(x),
             pvalue = pvalue,
             midpvalue = function(q) NA,
+            pvalueinterval = function(q) NA,
             support = function(p = 1e-5) c(q(p), q(1 - p)),
             name = "Univariate Normal Distribution")
     }
@@ -85,6 +86,7 @@ setMethod("AsymptNullDistribution",
             d = function(x) dmvnorm(x),
             pvalue = pvalue,
             midpvalue = function(q) NA,
+            pvalueinterval = function(q) NA,
             support = function(p = 1e-5) c(q(p), q(1 - p)),
             name = "Multivariate Normal Distribution",
             parameters = list(corr = corr))
@@ -105,6 +107,7 @@ setMethod("AsymptNullDistribution",
             d = function(d) dchisq(d, df = object@df),
             pvalue = pvalue,
             midpvalue = function(q) NA,
+            pvalueinterval = function(q) NA,
             support = function(p = 1e-5) c(0, q(1 - p)),
             name = "Chi-Squared Distribution",
             parameters = list(df = object@df))
@@ -229,6 +232,13 @@ setMethod("ApproxNullDistribution",
                       d(q)
             pvalue(q) - 0.5 * pp
         }
+        pvalueinterval <- function(q) {
+            pp <- if (object@alternative == "two.sided")
+                      d(-q) + d(q) # both tails
+                  else
+                      d(q)
+            pvalue(q) - c(pp, 0)
+        }
 
         new("ApproxNullDistribution",
             p = function(q) {
@@ -253,6 +263,7 @@ setMethod("ApproxNullDistribution",
                 class(midpvalue) <- "MCp"
                 midpvalue
             },
+            pvalueinterval = pvalueinterval,
             support = function(raw = FALSE) {
                 if (raw)
                     plsraw
@@ -310,6 +321,13 @@ setMethod("ApproxNullDistribution",
                       d(q)
             pvalue(q) - 0.5 * pp
         }
+        pvalueinterval <- function(q) {
+            pp <- if (object@alternative == "two.sided")
+                      d(-q) + d(q) # both tails
+                  else
+                      d(q)
+            pvalue(q) - c(pp, 0)
+        }
 
         new("ApproxNullDistribution",
             p = function(q) {
@@ -337,6 +355,7 @@ setMethod("ApproxNullDistribution",
                 class(midpvalue) <- "MCp"
                 midpvalue
             },
+            pvalueinterval = pvalueinterval,
             support = function(raw = FALSE) {
                 if (raw)
                     plsraw
@@ -366,6 +385,7 @@ setMethod("ApproxNullDistribution",
         }
         pvalue <- function(q) mean(GE(pls, q))
         midpvalue <- function(q) pvalue(q) - 0.5 * d(q)
+        pvalueinterval <- function(q) pvalue(q) - c(d(q), 0)
 
         new("ApproxNullDistribution",
             p = function(q) {
@@ -390,6 +410,7 @@ setMethod("ApproxNullDistribution",
                 class(midpvalue) <- "MCp"
                 midpvalue
             },
+            pvalueinterval = pvalueinterval,
             support = function(raw = FALSE) {
                 if (raw)
                     plsraw

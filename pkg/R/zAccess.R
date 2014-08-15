@@ -100,6 +100,28 @@ setMethod("midpvalue",
 )
 
 
+### generic method for extracting p-value intervals from objects
+setGeneric("pvalue_interval",
+    function(object, ...) {
+        standardGeneric("pvalue_interval")
+    }
+)
+
+setMethod("pvalue_interval",
+    signature = "NullDistribution",
+    definition = function(object, q, ...) {
+        object@pvalueinterval(q)
+    }
+)
+
+setMethod("pvalue_interval",
+   signature = "IndependenceTest",
+   definition = function(object, ...) {
+       pvalue_interval(object@distribution, object@statistic@teststatistic)
+   }
+)
+
+
 ### generic method for the permutation distribution from objects
 setGeneric("dperm",
     function(object, x, ...) {

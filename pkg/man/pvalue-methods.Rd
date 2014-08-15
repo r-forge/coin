@@ -9,10 +9,16 @@
 \alias{midpvalue-methods}
 \alias{midpvalue,IndependenceTest-method}
 \alias{midpvalue,NullDistribution-method}
+\alias{pvalue_interval}
+\alias{pvalue_interval-methods}
+\alias{pvalue_interval,IndependenceTest-method}
+\alias{pvalue_interval,NullDistribution-method}
 \encoding{UTF-8}
-\title{Computing the \eqn{p}-Value and Mid-\eqn{p}-Value}
+\title{Computing the \eqn{p}-Value, Mid-\eqn{p}-Value and \eqn{p}-Value
+  Interval}
 \description{
-  Methods for computing the \eqn{p}-value and mid-\eqn{p}-value.
+  Methods for computing the \eqn{p}-value, mid-\eqn{p}-value and \eqn{p}-value
+  interval.
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
@@ -25,10 +31,14 @@
 
 \S4method{midpvalue}{IndependenceTest}(object, \dots)
 \S4method{midpvalue}{NullDistribution}(object, q, \dots)
+
+\S4method{pvalue_interval}{IndependenceTest}(object, \dots)
+\S4method{pvalue_interval}{NullDistribution}(object, q, \dots)
 }
 \arguments{
   \item{object}{
-    an object from which the \eqn{p}-value or mid-\eqn{p}-value can be computed.
+    an object from which the \eqn{p}-value, mid-\eqn{p}-value or \eqn{p}-value
+    interval can be computed.
   }
   \item{method}{
     a character, the method used for the \eqn{p}-value computation: either
@@ -40,25 +50,38 @@
     \eqn{p}-values: either \code{"joint"} (default) or \code{"marginal"}.
   }
   \item{type}{
-    a character, the type of adjustment when the marginal distributions are
-    used: either \code{"Bonferroni"} (default) or \code{"Sidak"}.
+    a character, the type of \eqn{p}-value adjustment when the marginal
+    distributions are used: either \code{"Bonferroni"} (default) or
+    \code{"Sidak"}.
   }
   \item{q}{
-    a numeric, the quantile for which the \eqn{p}-value or mid-\eqn{p}-value
-    is computed.
+    a numeric, the quantile for which the \eqn{p}-value, mid-\eqn{p}-value or
+    \eqn{p}-value interval is computed.
   }
   \item{\dots}{
     further arguments (currently ignored).
   }
 }
 \details{
-  The methods \code{pvalue} and \code{midpvalue} compute the \eqn{p}-value and
-  mid-\eqn{p}-value respectively.
+  The methods \code{pvalue}, \code{midpvalue} and \code{pvalue_interval} compute
+  the \eqn{p}-value, mid-\eqn{p}-value and \eqn{p}-value interval respectively.
 
   For \code{pvalue}, the global \eqn{p}-value (\code{method = "global"}) is
   returned by default and is given with an associated 99 \% confidence interval
   when resampling is used to determine the null distribution (which for
   maximum-type statistics may be true even in the asymptotic case).
+
+  The familywise error rate (FWER) is always controlled under the global null
+  hypothesis, i.e., in the \emph{weak} sense, implying that the smallest
+  adjusted \eqn{p}-value is valid without further assumptions.  Control of the
+  FWER under any partial configuration of the null hypotheses, i.e., in the
+  \emph{strong} sense, as is typically desired for multiple tests and
+  comparisons, requires that the \emph{subset pivotality} condition holds
+  (Westfall and Young, 1993, pp. 42--43; Bretz, Hothorn and Westfall, 2011,
+  pp. 136--137).  In addition, for methods based on the joint distribution of
+  the test statistics, failure of the \emph{joint exchangeability} assumption
+  (Westfall and Troendle, 2008; Bretz, Hothorn and Westfall, 2011, pp. 129--130)
+  may cause excess Type I errors.
 
   Assuming \emph{subset pivotality}, single-step or \emph{free} step-down
   adjusted \eqn{p}-values using max-\eqn{T} procedures are obtained by setting
@@ -96,24 +119,21 @@
   For \code{midpvalue}, the global mid-\eqn{p}-value is given with an associated
   99 \% mid-\eqn{p} confidence interval when resampling is used to determine the
   null distribution.
+
+  The \eqn{p}-value interval \eqn{(p_0, p_1]} obtained by \code{pvalue_interval}
+  was proposed by Berger (2000, 2001), where the upper endpoint \eqn{p_1} is the
+  conventional \eqn{p}-value and the mid-point, i.e., \eqn{p_{0.5}}, is the
+  mid-\eqn{p}-value.  The lower endpoint \eqn{p_0} is the smallest \eqn{p}-value
+  obtainable if no conservatism attributable to the discreteness of the null
+  distribution is present.  The length of the \eqn{p}-value interval is the null
+  probability of the observed outcome and provides a data-dependent measure of
+  conservatism that is completely independent of the significance level.
 }
 \value{
-  The \eqn{p}-value or mid-\eqn{p}-value computed from \code{object}.  A numeric
-  vector or matrix.
+  The \eqn{p}-value, mid-\eqn{p}-value or \eqn{p}-value interval computed from
+  \code{object}.  A numeric vector or matrix.
 }
 \note{
-  The familywise error rate (FWER) is always controlled under the global null
-  hypothesis, i.e., in the \emph{weak} sense, implying that the smallest
-  adjusted \eqn{p}-value is valid without further assumptions.  Control of the
-  FWER under any partial configuration of the null hypotheses, i.e., in the
-  \emph{strong} sense, as is typically desired for multiple tests and
-  comparisons, requires that the \emph{subset pivotality} condition holds
-  (Westfall and Young, 1993, pp. 42--43; Bretz, Hothorn and Westfall, 2011,
-  pp. 136--137).  In addition, for methods based on the joint distribution of
-  the test statistics, failure of the \emph{joint exchangeability} assumption
-  (Westfall and Troendle, 2008; Bretz, Hothorn and Westfall, 2011, pp. 129--130)
-  may cause excess Type I errors.
-
   In versions of \pkg{coin} prior to 1.1-0, a min-\eqn{P} procedure computing
   \enc{Šidák}{Sidak} single-step adjusted \eqn{p}-values accounting for
   discreteness was available when specifying \code{method = "discrete"}.
@@ -125,6 +145,12 @@
   Testing: Examples and Methods for \eqn{p}-Value Adjustment}.  New York: John
   Wiley & Sons.
 
+  Bretz, F., Hothorn, T. and Westfall, P.  (2011).  \emph{Multiple Comparisons
+    Using R}. Boca Raton: CRC Press.
+
+  Westfall, P. H. and Troendle, J. F.  (2008).  Multiple testing with minimal
+  assumptions.  \emph{Biometrical Journal} \bold{50}(5), 745--755.
+
   Westfall, P. H.  (1997).  Multiple testing of general contrasts using logical
   constraints and correlations.  \emph{Journal of the American Statistical
   Association} \bold{92}(437), 299--306.
@@ -132,11 +158,11 @@
   Westfall, P. H. and Wolfinger, R. D.  (1997).  Multiple tests with discrete
   distributions.  \emph{The American Statistician} \bold{51}(1), 3--8.
 
-  Westfall, P. H. and Troendle, J. F.  (2008).  Multiple testing with minimal
-  assumptions.  \emph{Biometrical Journal} \bold{50}(5), 745--755.
+  Berger, V. W.  (2000).  Pros and cons of permutation tests in clinical trials.
+  \emph{Statistics in Medicine} \bold{19}(10), 1319--1328.
 
-  Bretz, F., Hothorn, T. and Westfall, P.  (2011).  \emph{Multiple Comparisons
-    Using R}. Boca Raton: CRC Press.
+  Berger, V. W.  (2001).  The \eqn{p}-value interval as an inferential tool.
+  \emph{The Statistician} \bold{50}(1), 79--85.
 }
 \examples{
 ## Two-sample problem
@@ -148,8 +174,8 @@ dta <- data.frame(
 ## Ansari-Bradley test
 (at <- ansari_test(y ~ x, data = dta, distribution = "exact"))
 pvalue(at)
-midpvalue(at) # mid-p-value
-
+midpvalue(at)
+pvalue_interval(at)
 
 ## Bivariate two-sample problem
 dta2 <- data.frame(

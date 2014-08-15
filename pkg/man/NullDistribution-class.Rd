@@ -48,6 +48,10 @@
       Object of class \code{"function"}.  The mid-\eqn{p}-value function of the
       reference distribution.
     }
+    \item{\code{pvalueinterval}:}{
+      Object of class \code{"function"}.  The \eqn{p}-value interval function of
+      the reference distribution.
+    }
     \item{\code{p}:}{
       Object of class \code{"function"}.  The distribution function of the
       reference distribution.
@@ -99,6 +103,10 @@
     \item{pvalue}{
       \code{signature(object ="NullDistribution")}: See the documentation for
       \code{\link{pvalue}} for details.
+    }
+    \item{pvalue_interval}{
+      \code{signature(object ="NullDistribution")}: See the documentation for
+      \code{\link{pvalue_interval}} for details.
     }
     \item{qperm}{
       \code{signature(object = "NullDistribution")}: See the documentation for

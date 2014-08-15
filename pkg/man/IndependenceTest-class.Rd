@@ -125,6 +125,10 @@
       \code{signature(object = "IndependenceTest")}: See the documentation for
       \code{\link{pvalue}} for details.
     }
+    \item{pvalue_interval}{
+      \code{signature(object = "IndependenceTest")}: See the documentation for
+      \code{\link{pvalue_interval}} for details.
+    }
     \item{qperm}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
       \code{\link{qperm}} for details.

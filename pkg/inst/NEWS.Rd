@@ -136,6 +136,9 @@
       \item the mid-\eqn{p}-value can now be computed and is accompanied by a 99
       \% mid-\eqn{p} confidence interval when resampling has been used to obtain
       the null distribution (see \code{?midpvalue})
+
+      \item the \eqn{p}-value interval can now be computed (see
+      \code{?pvalue_interval})
     }
   }
   \subsection{Bug fixes}{

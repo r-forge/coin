@@ -615,6 +615,8 @@ Method & Description \\
 \code{midpvalue(object)} & Computation of the mid-$p$-value (plus a confidence interval if
   Monte Carlo procedures have been used) based on an observed test statistic $c$ and its
   conditional null distribution. \\
+\code{pvalue_interval(object)} & Computation of the $p$-value interval
+  based on an observed test statistic $c$ and its conditional null distribution. \\
 \code{pperm(object, q)} & Evaluation of the cumulative distribution function for quantile $q$.\\
 \code{dperm(object, x)} & Evaluation of the probability density function at $x$. \\
 \code{qperm(object, p)} & Evaluation of the quantile function for probability $p$.\\

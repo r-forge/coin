@@ -4,7 +4,7 @@
 \title{Class \code{"PValue"}}
 \description{
   Objects of class \code{"PValue"} represent the \eqn{p}- and mid-\eqn{p}-values
-  of the reference distribution.
+  and the \eqn{p}-value interval of the reference distribution.
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \section{Objects from the Class}{
@@ -21,6 +21,10 @@
     \item{\code{midpvalue}:}{
       Object of class \code{"function"}.  The mid-\eqn{p}-value function of the
       reference distribution.
+    }
+    \item{\code{pvalueinterval}:}{
+      Object of class \code{"function"}.  The \eqn{p}-value interval function of
+      the reference distribution.
     }
     \item{\code{p}:}{
       Object of class \code{"function"}.  The distribution function of the
