@@ -109,14 +109,7 @@
   used in versions prior to 0.4-5).
 }
 \value{
-
-  An object inheriting from class \code{\link{IndependenceTest-class}}
-  with methods \code{\link{show}}, \code{\link{statistic}},
-  \code{\link{expectation}}, \code{\link{covariance}} and
-  \code{\link{pvalue}}.  The null distribution can be inspected by
-  \code{\link{pperm}}, \code{\link{dperm}}, \code{\link{qperm}} and
-  \code{\link{support}} methods.
-
+  An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
 }
 \references{
 

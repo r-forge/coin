@@ -85,8 +85,6 @@ sample estimates:
 data:  Var2 by Var1 (A, B)
 chi-squared = 2.5714, df = 1, p-value = 0.1088
 
->   midpvalue(ct) # mid-p-value (identical to standard p-value)
-[1] 0.1088094
 > 
 >   ### Approximate (Monte Carlo) Pearson chi-squared test
 >   ct <- chisq_test(as.table(davis), distribution = approximate(B = 10000))
@@ -2619,7 +2617,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  37.74 0.2 38.85 NA NA 
+Time elapsed:  40.65 0.26 43.07 NA NA 
 > grDevices::dev.off()
 null device 
           1 

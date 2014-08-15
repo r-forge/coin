@@ -85,14 +85,8 @@
 
 }
 \value{
-
-  An object inheriting from class \code{\link{IndependenceTest-class}} with
-  methods \code{\link{show}}, \code{\link{statistic}}, \code{\link{expectation}},
-  \code{\link{covariance}} and \code{\link{pvalue}}. The null distribution
-  can be inspected by \code{\link{pperm}}, \code{\link{dperm}},
-  \code{\link{qperm}} and \code{\link{support}} methods.
-
-}
+  An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
+ }
 \references{
   Agresti, A.  (2002).  \emph{Categorical Data Analysis}, 2nd Edition.
   Hoboken, New Jersey: John Wiley & Sons.
@@ -108,7 +102,6 @@
 
   ### Asymptotic Pearson chi-squared test
   (ct <- chisq_test(as.table(davis)))
-  midpvalue(ct) # mid-p-value (identical to standard p-value)
 
   ### Approximate (Monte Carlo) Pearson chi-squared test
   ct <- chisq_test(as.table(davis), distribution = approximate(B = 10000))

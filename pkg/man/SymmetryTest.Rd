@@ -66,9 +66,6 @@
 
 }
 \value{
-
-  An object inheriting from class \code{"IndependenceTest"} with methods
-  \code{show}, \code{pvalue} and \code{statistic}.
-
+  An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
 }
 \keyword{htest}

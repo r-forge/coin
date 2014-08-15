@@ -132,14 +132,8 @@
 
 }
 \value{
-
-  An object inheriting from class \code{\link{IndependenceTest-class}} with
-  methods \code{\link{show}}, \code{\link{statistic}}, \code{\link{expectation}},
-  \code{\link{covariance}} and \code{\link{pvalue}}. The null distribution
-  can be inspected by \code{\link{pperm}}, \code{\link{dperm}},
-  \code{\link{qperm}} and \code{\link{support}} methods. Confidence
-  intervals can be extracted by \code{confint}.
-
+  An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
+  Confidence intervals can be extracted by \link[stats]{confint}.
 }
 \references{
 
