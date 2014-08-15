@@ -316,6 +316,8 @@
 
       \item the exact distribution of stratified test statistics is now obtained
       more efficiently, and especially so for large numbers of strata
+
+      \item the class \code{"IndependenceTestStatistic"} is now \emph{virtual}
     }
   }
 }

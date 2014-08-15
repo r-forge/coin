@@ -53,7 +53,7 @@ chisq_test.IndependenceProblem <- function(object, ...) {
     if (!check(object))
         stop(sQuote("check"), " failed")
 
-    object <- new("IndependenceTestStatistic", object, varonly = FALSE)
+    object <- new("IndependenceLinearStatistic", object, varonly = FALSE)
 
     ## use the classical chisq statistic based on Pearson
     ## residuals (O - E)^2 / E

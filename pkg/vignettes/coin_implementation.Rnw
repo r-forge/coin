@@ -473,17 +473,14 @@ Function & Description \\ \hline
 
 The specification of the inference procedure is completed by the definition
 of a univariate test statistic $c$
-which is represented by a virtual class \Rclass{IndependenceTestStatistic}
+which is represented by a \emph{virtual} class \Rclass{IndependenceTestStatistic}:
 <<IndependenceTestStatistic, results = tex>>=
 toLatex(c2t("IndependenceTestStatistic"))
 @
 The slot \code{standardizedlinearstatistic}
 contains $\z$, the (possibly multivariate) linear statistic standardized by its
 conditional expectation and variance (Equation~\ref{standstat}).
-Slot \code{teststatistic} is for storing univariate test statistics $c$?
-<<Ex-IndependenceTestStatistic, echo = TRUE>>=
-its <- new("IndependenceTestStatistic", ils)
-@
+Slot \code{teststatistic} is for storing univariate test statistics $c$.
 Methods for all generics listed in Table~\ref{tab:generics}
 are also available for objects of this class.
 
@@ -507,7 +504,7 @@ test against (\code{"two.sided"}, \code{"greater"} and \code{"less"}).
 Thus, the construction  of a scalar test statistic corresponds
 to the construction of a suitable object via
 <<Ex-ScalarIndependenceTestStatistic, echo = TRUE>>=
-sits <- new("ScalarIndependenceTestStatistic", its,
+sits <- new("ScalarIndependenceTestStatistic", ils,
   alternative = "two.sided")
 statistic(sits, type = "standardized")
 @
@@ -842,8 +839,8 @@ ip <- new("IndependenceProblem",
   y = rotarod["time"], x = rotarod["group"])
 itp <- new("IndependenceTestProblem", ip,
   ytrafo = mood_score)
-its <- new("IndependenceTestStatistic", itp)
-sits <- new("ScalarIndependenceTestStatistic", its,
+ils <- new("IndependenceLinearStatistic", itp)
+sits <- new("ScalarIndependenceTestStatistic", ils,
   alternative = "two.sided")
 new("ScalarIndependenceTest", statistic = sits,
   distribution = ExactNullDistribution(sits, algorithm = "split-up"))

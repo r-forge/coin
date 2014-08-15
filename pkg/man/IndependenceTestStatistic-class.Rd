@@ -4,7 +4,6 @@
 \alias{MaxTypeIndependenceTestStatistic-class}
 \alias{QuadTypeIndependenceTestStatistic-class}
 \alias{ScalarIndependenceTestStatistic-class}
-\alias{initialize,IndependenceTestStatistic-method}
 \alias{initialize,MaxTypeIndependenceTestStatistic-method}
 \alias{initialize,QuadTypeIndependenceTestStatistic-method}
 \alias{initialize,ScalarIndependenceTestStatistic-method}
@@ -19,27 +18,25 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \section{Objects from the Class}{
+  Class \code{"IndependenceTestStatistic"} is a \emph{virtual} class, so objects
+  cannot be created from it directly.
+
   Objects can be created by calls of the form
   \preformatted{
-    new("IndependenceTestStatistic", itp, varonly = FALSE, \dots),
+  new("MaxTypeIndependenceTestStatistic", object,
+      alternative = c("two.sided", "less", "greater"), \dots),
 
-    new("MaxTypeIndependenceTestStatistic", its,
-        alternative = c("two.sided", "less", "greater"), \dots),
-
-    new("QuadTypeIndependenceTestStatistic", its, paired = FALSE, \dots)}
+  new("QuadTypeIndependenceTestStatistic", object, paired = FALSE, \dots)}
   and
   \preformatted{
-    new("ScalarIndependenceTestStatistic", its,
-        alternative = c("two.sided", "less", "greater"), paired = FALSE, \dots)}
-  where \code{itp} is an object of class
-  \code{"\linkS4class{IndependenceTestProblem}"}, \code{varonly} is a logical
-  indicating that slot \code{covariance} (see \sQuote{Slots}) should only
-  contain the diagonal elements of the covariance matrix, \code{its} is an
-  object of class \code{"IndependenceTestStatistic"}, \code{alternative} is a
-  character specifying the direction of the alternative hypothesis and
-  \code{paired} is a logical indicating that paired data have been transformed
-  in such a way that the (unstandardized) linear statistic is the sum of the
-  absolute values of the positive differences between the paired observations.
+  new("ScalarIndependenceTestStatistic", object,
+      alternative = c("two.sided", "less", "greater"), paired = FALSE, \dots)}
+  where \code{object} is an object of class
+  \code{"IndependenceLinearStatistic"}, \code{alternative} is a character
+  specifying the direction of the alternative hypothesis and \code{paired} is a
+  logical indicating that paired data have been transformed in such a way that
+  the (unstandardized) linear statistic is the sum of the absolute values of the
+  positive differences between the paired observations.
 }
 \section{Slots}{
   For objects of classes \code{"IndependenceTestStatistic"},
@@ -175,10 +172,6 @@
     \item{ExactNullDistribution}{
       \code{signature(object = "ScalarIndependenceTestStatistic")}: See the
       documentation for \code{\link{ExactNullDistribution}} for details.
-    }
-    \item{initialize}{
-      \code{signature(.Object = "IndependenceTestStatistic")}: See the
-      documentation for \code{\link[methods:new]{initialize}} for details.
     }
     \item{initialize}{
       \code{signature(.Object = "MaxTypeIndependenceTestStatistic")}: See the

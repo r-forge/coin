@@ -12,8 +12,8 @@
 \section{Objects from the Class}{
   Objects can be created by calls of the form
   \preformatted{
-    new("IndependenceLinearStatistic", itp, varonly = FALSE, \dots)}
-  where \code{itp} is an object of class
+  new("IndependenceLinearStatistic", object, varonly = FALSE, \dots)}
+  where \code{object} is an object of class
   \code{"\linkS4class{IndependenceTestProblem}"}, \code{varonly} is a logical
   indicating that slot \code{covariance} (see \sQuote{Slots}) should only
   contain the diagonal elements of the covariance matrix.

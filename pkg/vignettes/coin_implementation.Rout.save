@@ -110,8 +110,6 @@ Slot & Class \\ \hline
 \end{tabular}
 \end{center}
 
-> its <- new("IndependenceTestStatistic", ils)
-
 > toLatex(c2t("ScalarIndependenceTestStatistic"))
 \begin{center}
 \begin{tabular}{ll}
@@ -125,7 +123,7 @@ Slot & Class \\ \hline
 \end{tabular}
 \end{center}
 
-> sits <- new("ScalarIndependenceTestStatistic", its, 
+> sits <- new("ScalarIndependenceTestStatistic", ils, 
 +     alternative = "two.sided")
 
 > statistic(sits, type = "standardized")
@@ -247,9 +245,9 @@ alternative hypothesis: less
 
 > itp <- new("IndependenceTestProblem", ip, ytrafo = mood_score)
 
-> its <- new("IndependenceTestStatistic", itp)
+> ils <- new("IndependenceLinearStatistic", itp)
 
-> sits <- new("ScalarIndependenceTestStatistic", its, 
+> sits <- new("ScalarIndependenceTestStatistic", ils, 
 +     alternative = "two.sided")
 
 > new("ScalarIndependenceTest", statistic = sits, distribution = ExactNullDistribution(sits, 
@@ -363,4 +361,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.79    0.15    3.10 
+   2.80    0.10    3.16 

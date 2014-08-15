@@ -11,8 +11,8 @@
 \section{Objects from the Class}{
   Objects can be created by calls of the form
   \preformatted{
-    new("IndependenceTestProblem", ip, xtrafo = trafo, ytrafo = trafo, \dots)}
-  where \code{ip} is an object of class
+  new("IndependenceTestProblem", object, xtrafo = trafo, ytrafo = trafo, \dots)}
+  where \code{object} is an object of class
   \code{"\linkS4class{IndependenceProblem}"}, \code{xtrafo} is the regression
   function \eqn{g(\mathbf{X})} and \code{ytrafo} is the influence function
   \eqn{h(\mathbf{Y})}.

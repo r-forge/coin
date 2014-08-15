@@ -67,7 +67,7 @@ independence_test.IndependenceProblem <- function(object,
 
     ## compute linear statistic, conditional expectation and
     ## conditional covariance
-    object <- new("IndependenceTestStatistic", object, varonly = TRUE)
+    object <- new("IndependenceLinearStatistic", object, varonly = TRUE)
 ###         varonly = class(distribution) == "approximate" && teststat == "maximum")
 
     ## compute test statistic and corresponding null distribution
