@@ -1049,9 +1049,10 @@ sample estimates:
 > ###   pperm-methods pperm,AsymptNullDistribution-method
 > ###   pperm,IndependenceTest-method pperm,NullDistribution-method qperm
 > ###   qperm-methods qperm,AsymptNullDistribution-method
-> ###   qperm,IndependenceTest-method qperm,NullDistribution-method support
-> ###   support-methods support,IndependenceTest-method
-> ###   support,NullDistribution-method
+> ###   qperm,IndependenceTest-method qperm,NullDistribution-method rperm
+> ###   rperm-methods rperm,IndependenceTest-method
+> ###   rperm,NullDistribution-method support support-methods
+> ###   support,IndependenceTest-method support,NullDistribution-method
 > ### Keywords: methods htest distribution
 > 
 > ### ** Examples
@@ -1082,6 +1083,10 @@ sample estimates:
 > pperm(at, statistic(at))
        1 
 0.698635 
+> 
+> ## Random number generation
+> rperm(at, 5)
+[1] 0.9105443 0.4552721 0.7587869 0.1517574 0.1517574
 > 
 > 
 > 
@@ -2626,7 +2631,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  39.45 0.36 40.22 NA NA 
+Time elapsed:  38.06 0.44 38.79 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -210,6 +210,25 @@ setMethod("qperm",
 
 
 ### generic method for the permutation distribution from objects
+setGeneric("rperm", function(object, n, ...)
+    standardGeneric("rperm"))
+
+setMethod("rperm",
+          signature = "NullDistribution",
+          definition = function(object, n, ...) {
+              qperm(object, runif(n))
+          }
+)
+
+setMethod("rperm",
+          signature = "IndependenceTest",
+          definition = function(object, n, ...) {
+              qperm(object, runif(n))
+          }
+)
+
+
+### generic method for the permutation distribution from objects
 setGeneric("support",
     function(object, ...) {
         standardGeneric("support")

@@ -116,6 +116,10 @@
       \code{signature(object = "AsymptNullDistribution")}: See the documentation
       for \code{\link{qperm}} for details.
     }
+    \item{rperm}{
+      \code{signature(object = "NullDistribution")}: See the documentation for
+      \code{\link{rperm}} for details.
+    }
     \item{support}{
       \code{signature(object = "NullDistribution")}: See the documentation for
       \code{\link{support}} for details.

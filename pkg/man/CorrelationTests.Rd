@@ -87,7 +87,7 @@
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
- }
+}
 \references{
 
   Jaroslav Hajek, Zbynek Sidak & Pranab K. Sen (1999).

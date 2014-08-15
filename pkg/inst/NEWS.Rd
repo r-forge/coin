@@ -139,6 +139,9 @@
 
       \item the \eqn{p}-value interval can now be computed (see
       \code{?pvalue_interval})
+
+      \item random numbers can now be generated from the permutation
+      distribution (see \code{?rperm})
     }
   }
   \subsection{Bug fixes}{

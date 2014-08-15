@@ -38,8 +38,8 @@ exportClasses("CovarianceMatrix", "Variance", "VarCovar", "IndependenceProblem",
               "ExpectCovarInfluence")
 
 exportMethods("initialize", "show", "pvalue", "midpvalue", "pvalue_interval",
-              "statistic", "pperm", "dperm", "qperm", "support", "expectation",
-              "covariance", "variance", "AsymptNullDistribution",
+              "statistic", "dperm", "pperm", "qperm", "rperm", "support",
+              "expectation", "covariance", "variance", "AsymptNullDistribution",
               "ApproxNullDistribution", "ExactNullDistribution")
 
 S3method(independence_test, formula)

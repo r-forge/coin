@@ -15,6 +15,10 @@
 \alias{qperm,AsymptNullDistribution-method}
 \alias{qperm,IndependenceTest-method}
 \alias{qperm,NullDistribution-method}
+\alias{rperm}
+\alias{rperm-methods}
+\alias{rperm,IndependenceTest-method}
+\alias{rperm,NullDistribution-method}
 \alias{support}
 \alias{support-methods}
 \alias{support,IndependenceTest-method}
@@ -22,7 +26,7 @@
 \title{The Permutation Distribution}
 \description{
   Methods for computing the density function, distribution function, quantile
-  function and support of the permutation distribution.
+  function, random numbers and support of the permutation distribution.
 }
 \usage{
 \S4method{dperm}{AsymptNullDistribution}(object, x, \dots)
@@ -37,13 +41,17 @@
 \S4method{qperm}{IndependenceTest}(object, p, \dots)
 \S4method{qperm}{NullDistribution}(object, p, \dots)
 
+\S4method{rperm}{IndependenceTest}(object, n, \dots)
+\S4method{rperm}{NullDistribution}(object, n, \dots)
+
 \S4method{support}{IndependenceTest}(object, \dots)
 \S4method{support}{NullDistribution}(object, \dots)
 }
 \arguments{
   \item{object}{
     an object from which the density function, distribution function, quantile
-    function or support of the permutation distribution can be computed.
+    function, random numbers or support of the permutation distribution can be
+    computed.
   }
   \item{x, q}{
     a numeric vector, the quantiles for which the density function or
@@ -53,18 +61,24 @@
     a numeric vector, the probabilities for which the quantile function is
     computed.
   }
+  \item{n}{
+    a numeric vector, the number of observations.  If \code{length(n) > 1}, the
+    length is taken to be the number required.
+  }
   \item{\dots}{
     further arguments to be passed to methods.
   }
 }
 \details{
-  The methods \code{dperm}, \code{pperm}, \code{qperm} and \code{support}
-  compute the density function, distribution function, quantile  function and
-  support, respectively, of the permutation distribution.
+  The methods \code{dperm}, \code{pperm}, \code{qperm}, \code{rperm} and
+  \code{support} compute the density function, distribution function, quantile
+  function, random numbers and support, respectively, of the permutation
+  distribution.
 }
 \value{
-  The density function, distribution function, quantile function or support of
-  the permutation distribution computed from \code{object}.  A numeric vector.
+  The density function, distribution function, quantile function, random numbers
+  or support of the permutation distribution computed from \code{object}.  A
+  numeric vector.
 }
 \examples{
 ## Two-sample problem
@@ -90,6 +104,9 @@ qperm(at, 0.95)
 
 ## One-sided p-value
 pperm(at, statistic(at))
+
+## Random number generation
+rperm(at, 5)
 }
 \keyword{methods}
 \keyword{htest}

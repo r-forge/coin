@@ -86,7 +86,7 @@
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
- }
+}
 \references{
   Agresti, A.  (2002).  \emph{Categorical Data Analysis}, 2nd Edition.
   Hoboken, New Jersey: John Wiley & Sons.

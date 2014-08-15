@@ -133,6 +133,10 @@
       \code{signature(object = "IndependenceTest")}: See the documentation for
       \code{\link{qperm}} for details.
     }
+    \item{rperm}{
+      \code{signature(object = "IndependenceTest")}: See the documentation for
+      \code{\link{rperm}} for details.
+    }
     \item{show}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
       \code{\link[methods]{show}} for details.
