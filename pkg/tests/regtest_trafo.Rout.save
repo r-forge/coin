@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2014-02-02 r64916) -- "Unsuffered Consequences"
+R Under development (unstable) (2014-08-17 r66413) -- "Unsuffered Consequences"
 Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -132,11 +132,10 @@ Loading required package: splines
 [6,] 0.8571429 0.5397750937
 > 
 > koziol_trafo(x)
-[1]  1.274162e+00  8.817477e-01            NA  8.659275e-17  8.659275e-17
-[6]            NA -8.817477e-01 -1.274162e+00            NA
+[1]  1.2741624  0.8817477         NA  0.0000000  0.0000000         NA -0.8817477
+[8] -1.2741624         NA
 > koziol_trafo(x[cc])
-[1]  1.274162e+00  8.817477e-01  8.659275e-17  8.659275e-17 -8.817477e-01
-[6] -1.274162e+00
+[1]  1.2741624  0.8817477  0.0000000  0.0000000 -0.8817477 -1.2741624
 > koziol_trafo(x, j = 2)
 [1]  0.8817477 -0.3146921         NA -1.4142136 -1.4142136         NA -0.3146921
 [8]  0.8817477         NA
@@ -912,4 +911,4 @@ IV - III  0  0  -1  1
 > 
 > proc.time()
    user  system elapsed 
-   0.74    0.03    0.79 
+   0.56    0.06    0.70 

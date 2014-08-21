@@ -158,11 +158,11 @@ koziol_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
     ties.method <- match.arg(ties.method)
     scores <- switch(ties.method,
         "mid-ranks" = {
-            sqrt(2) * cos(j * pi * rank_trafo(x) / (sum(!is.na(x)) + 1))
+            sqrt(2) * cospi(j * rank_trafo(x) / (sum(!is.na(x)) + 1))
         },
         "average-scores" = {
-            s <- sqrt(2) * cos(j * pi * rank_trafo(x, ties.method = "random") /
-                                 (sum(!is.na(x)) + 1))
+            s <- sqrt(2) * cospi(j * rank_trafo(x, ties.method = "random") /
+                                   (sum(!is.na(x)) + 1))
             average_scores(s, x)
         }
     )
