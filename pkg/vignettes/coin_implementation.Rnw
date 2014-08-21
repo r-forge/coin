@@ -623,8 +623,7 @@ Method & Description \\
 \caption{\label{tab:dists} Classes and methods for conditional null distributions.}
 \end{center}
 \end{table}
-The \code{support} function returns the support of a discrete distribution or
-an interval containing $99.999\%$ of the probability mass.
+The \code{support} function returns the support of a discrete distribution.
 
 
 

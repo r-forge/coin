@@ -80,6 +80,11 @@
   or support of the permutation distribution computed from \code{object}.  A
   numeric vector.
 }
+\note{
+  In versions of \pkg{coin} prior to 1.1-0, the support of an asymptotic
+  permutation distribution was given as an interval containing 99.999 \% of the
+  probability mass.  It is now reported as \code{NA}.
+}
 \examples{
 ## Two-sample problem
 dta <- data.frame(

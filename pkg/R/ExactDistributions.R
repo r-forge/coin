@@ -382,7 +382,7 @@ vdW_split_up_2sample <- function(object) {
         },
         midpvalue = function(q) NA,
         pvalueinterval = function(q) NA,
-        support = function(p = 1e-5) NA,
+        support = function() NA,
         name = paste0("Exact Distribution for Independent Two-Sample Tests",
                       " (van de Wiel Split-Up Algorithm)"))
 }

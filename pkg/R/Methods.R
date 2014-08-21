@@ -24,7 +24,7 @@ setMethod("AsymptNullDistribution",
             pvalue = pvalue,
             midpvalue = function(q) NA,
             pvalueinterval = function(q) NA,
-            support = function(p = 1e-5) c(q(p), q(1 - p)),
+            support = function() NA,
             name = "Univariate Normal Distribution")
     }
 )
@@ -87,7 +87,7 @@ setMethod("AsymptNullDistribution",
             pvalue = pvalue,
             midpvalue = function(q) NA,
             pvalueinterval = function(q) NA,
-            support = function(p = 1e-5) c(q(p), q(1 - p)),
+            support = function() NA,
             name = "Multivariate Normal Distribution",
             parameters = list(corr = corr))
     }
@@ -108,7 +108,7 @@ setMethod("AsymptNullDistribution",
             pvalue = pvalue,
             midpvalue = function(q) NA,
             pvalueinterval = function(q) NA,
-            support = function(p = 1e-5) c(0, q(1 - p)),
+            support = function() NA,
             name = "Chi-Squared Distribution",
             parameters = list(df = object@df))
     }

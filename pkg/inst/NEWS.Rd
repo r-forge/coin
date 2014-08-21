@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.1-0 (2014-08-13}{
+\section{Changes in version 1.1-0 (2014-XX-XX}{
   \subsection{New features}{
     \itemize{
       \item single-step adjusted \eqn{p}-values based on the joint distribution
@@ -318,6 +318,9 @@
       more efficiently, and especially so for large numbers of strata
 
       \item the class \code{"IndependenceTestStatistic"} is now \emph{virtual}
+
+      \item the support of an asymptotic null distribution is now reported as
+      \code{NA}.
     }
   }
 }

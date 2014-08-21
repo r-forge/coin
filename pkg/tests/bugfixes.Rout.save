@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2014-02-02 r64916) -- "Unsuffered Consequences"
+R Under development (unstable) (2014-08-17 r66413) -- "Unsuffered Consequences"
 Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -73,9 +73,9 @@ Loading required package: TH.data
 > ### support() failed in most cases
 > df <- data.frame(x = runif(20), y = runif(20), z = gl(2, 10))
 > support(independence_test(x ~ z, data = df))
-[1] -4.264891  4.264891
+[1] NA
 > support(independence_test(x ~ z, data = df, teststat = "quad"))
-[1]  0.00000 19.51142
+[1] NA
 > ite <- independence_test(I(round(x, 1)) ~ z, data = df, dist = exact())
 > ae <- support(ite)
 > de <- sapply(ae, function(x) dperm(ite, x))
@@ -851,4 +851,4 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-   3.08    0.26    3.44 
+   2.38    0.15    2.66 
