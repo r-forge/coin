@@ -484,9 +484,8 @@ Slot \code{teststatistic} is for storing univariate test statistics $c$.
 Methods for all generics listed in Table~\ref{tab:generics}
 are also available for objects of this class.
 
-The slot \code{teststatistic} has not yet been filled in the
-\Rclass{IndependenceTestStatistic} object. \pkg{coin} implements
-three sub-classes with associated univariate test statistics for this:
+\pkg{coin} implements three \Rclass{IndependenceTestStatistic} subclasses with
+associated univariate test statistics:
 scalar test statistics $c_\text{scalar}$, maximum-type statistics $c_\text{max}$ and quadratic
 forms $c_\text{quad}$.
 In case of univariate linear statistics $\t$, i.e., for $pq = 1$, a natural test statistic $c$
