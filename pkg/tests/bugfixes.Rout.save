@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2014-08-17 r66413) -- "Unsuffered Consequences"
+R Under development (unstable) (2014-08-19 r66437) -- "Unsuffered Consequences"
 Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -849,6 +849,13 @@ Z = -0.5252, p-value = 0.5994
 alternative hypothesis: true mu is not equal to 0
 
 > 
+> ### 'dperm' returned non-sense for max-type tests
+> y1 <- rnorm(10)
+> y2 <- rnorm(10)
+> x <- gl(2, 5)
+> it <- independence_test(y1 + y2 ~ x)
+> stopifnot(is.na(dperm(it, statistic(it))))
+> 
 > proc.time()
    user  system elapsed 
-   2.38    0.15    2.66 
+   2.97    0.17    3.43 

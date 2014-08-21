@@ -242,6 +242,10 @@
       \item stratified tests were not allowed if \code{block} had unused factor
       levels, causing, e.g., problems if trying to use the \code{subset}
       argument of the \code{formula} methods
+
+      \item the density function of asymptotic permutation distributions
+      returned non-sensical results for maximum-type test and are now reported
+      as \code{NA}
     }
   }
   \subsection{Other changes}{

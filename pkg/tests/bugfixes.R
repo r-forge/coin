@@ -487,3 +487,10 @@ wilcox_test(y ~ x | b, data = dta, subset = subs)
 ### problem with subsetting stratification variable
 subs <- dta$x %in% 1:2 & dta$b %in% 1:4
 wilcox_test(y ~ x | b, data = dta, subset = subs)
+
+### 'dperm' returned non-sense for max-type tests
+y1 <- rnorm(10)
+y2 <- rnorm(10)
+x <- gl(2, 5)
+it <- independence_test(y1 + y2 ~ x)
+stopifnot(is.na(dperm(it, statistic(it))))
