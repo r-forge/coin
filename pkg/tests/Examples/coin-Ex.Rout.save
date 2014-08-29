@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2014-06-13 r65942) -- "Unsuffered Consequences"
+R Under development (unstable) (2014-08-19 r66437) -- "Unsuffered Consequences"
 Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -338,6 +338,67 @@ Z = -1.292, p-value = 0.1964
 alternative hypothesis: true rho is not equal to 0
 
 > 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Distribution")
+> ### * Distribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Distribution
+> ### Title: Specification of the Reference Distribution
+> ### Aliases: asymptotic approximate exact
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> ## Approximate (Monte Carlo) Cochran-Mantel-Haenszel test
+> 
+> ## Serial operation
+> set.seed(123)
+> cmh_test(disease ~ smoking | gender, data = alzheimer,
++          distribution = approximate(B = 100000))
+
+	Approximative Generalized Cochran-Mantel-Haenszel Test
+
+data:  disease by
+	 smoking (None, <10, 10-20, >20) 
+	 stratified by gender
+chi-squared = 23.3163, p-value = 0.00052
+
+> 
+> ## Not run: 
+> ##D ## Multicore with 8 processes (not for MS Windows)
+> ##D set.seed(123, kind = "L'Ecuyer-CMRG")
+> ##D cmh_test(disease ~ smoking | gender, data = alzheimer,
+> ##D          distribution = approximate(B = 100000,
+> ##D                                     parallel = "multicore", ncpus = 8))
+> ##D 
+> ##D ## Automatic PSOCK cluster with 4 processes
+> ##D set.seed(123, kind = "L'Ecuyer-CMRG")
+> ##D cmh_test(disease ~ smoking | gender, data = alzheimer,
+> ##D          distribution = approximate(B = 100000,
+> ##D                                     parallel = "snow", ncpus = 4))
+> ##D 
+> ##D ## Registered FORK cluster with 12 processes (not for MS Windows)
+> ##D fork12 <- parallel::makeCluster(12, "FORK") # set-up cluster
+> ##D parallel::setDefaultCluster(fork12) # register default cluster
+> ##D set.seed(123, kind = "L'Ecuyer-CMRG")
+> ##D cmh_test(disease ~ smoking | gender, data = alzheimer,
+> ##D          distribution = approximate(B = 100000,
+> ##D                                     parallel = "snow"))
+> ##D parallel::stopCluster(fork12) # clean-up
+> ##D 
+> ##D ## User-specified PSOCK cluster with 8 processes
+> ##D psock8 <- parallel::makeCluster(8, "PSOCK") # set-up cluster
+> ##D set.seed(123, kind = "L'Ecuyer-CMRG")
+> ##D cmh_test(disease ~ smoking | gender, data = alzheimer,
+> ##D          distribution = approximate(B = 100000,
+> ##D                                     parallel = "snow", cl = psock8))
+> ##D parallel::stopCluster(psock8) # clean-up
+> ## End(Not run)
 > 
 > 
 > 
@@ -2629,7 +2690,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  37.64 0.36 38.3 NA NA 
+Time elapsed:  40.08 0.38 40.77 NA NA 
 > grDevices::dev.off()
 null device 
           1 

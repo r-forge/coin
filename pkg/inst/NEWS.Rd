@@ -142,6 +142,10 @@
 
       \item random numbers can now be generated from the permutation
       distribution (see \code{?rperm})
+
+      \item the approximate (Monte Carlo) null distribution can now be obtained
+      by parallel operation using package \pkg{parallel} (see
+      \code{?approximate})
     }
   }
   \subsection{Bug fixes}{
@@ -328,6 +332,9 @@
 
       \item the support of an asymptotic null distribution is now reported as
       \code{NA}.
+
+      \item objects of class \code{"ApproxNullDistribution"} now has a slot
+      \code{seed} containing the state of the random number generator
     }
   }
 }

@@ -181,25 +181,17 @@ setGeneric("ApproxNullDistribution",
     }
 )
 
-MCfun <- function(x, y, w, b, B) {
-    ## expand observations for non-unit weights
-    if (!is_unity(w)) {
-        indx <- rep.int(seq_along(w), w)
-        x <- x[indx, , drop = FALSE]
-        y <- y[indx, , drop = FALSE]
-        b <- b[indx]
-    }
-    .Call("R_MonteCarloIndependenceTest", x, y, as.integer(b), as.integer(B),
-          PACKAGE = "coin")
-}
-
 ### method for scalar test statistics
 setMethod("ApproxNullDistribution",
     signature = "ScalarIndependenceTestStatistic",
     definition = function(object, B = 10000, ...) {
+        if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
+            runif(1L)
+        seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+
         pls <- plsraw <-
-            MCfun(object@xtrans, object@ytrans, object@weights,
-                  as.integer(object@block), as.integer(B))
+            MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
+                       object@weights, as.integer(B), ...)
 
         ## <FIXME> can transform p, q, x instead of those </FIXME>
         pls <- sort((pls - expectation(object)) / sqrt(variance(object)))
@@ -230,6 +222,7 @@ setMethod("ApproxNullDistribution",
         }
 
         new("ApproxNullDistribution",
+            seed = seed,
             p = function(q) {
                 p <- mean(LE(pls, q))
                 attr(p, "conf.int") <- confint_binom(round(p * B), B)
@@ -267,14 +260,13 @@ setMethod("ApproxNullDistribution",
 setMethod("ApproxNullDistribution",
     signature = "MaxTypeIndependenceTestStatistic",
     definition = function(object, B = 10000, ...) {
-        pls <- plsraw <-
-            MCfun(object@xtrans, object@ytrans, object@weights,
-                  as.integer(object@block), as.integer(B))
+        if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
+            runif(1L)
+        seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        fun <- switch(object@alternative,
-                   "less"      = min,
-                   "greater"   = max,
-                   "two.sided" = function(x) max(abs(x)))
+        pls <- plsraw <-
+            MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
+                       object@weights, as.integer(B), ...)
 
         dcov <- sqrt(variance(object))
         expect <- expectation(object)
@@ -319,6 +311,7 @@ setMethod("ApproxNullDistribution",
         }
 
         new("ApproxNullDistribution",
+            seed = seed,
             p = function(q) {
                 p <- switch(object@alternative,
                          "less"      = mean(colSums(GE(pls, q)) == nrow(pls)),
@@ -359,9 +352,13 @@ setMethod("ApproxNullDistribution",
 setMethod("ApproxNullDistribution",
     signature = "QuadTypeIndependenceTestStatistic",
     definition = function(object, B = 10000, ...) {
+        if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
+            runif(1L)
+        seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+
         pls <- plsraw <-
-            MCfun(object@xtrans, object@ytrans, object@weights,
-                  as.integer(object@block), as.integer(B))
+            MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
+                       object@weights, as.integer(B), ...)
 
         dcov <- object@covarianceplus
         expect <- expectation(object)
@@ -377,6 +374,7 @@ setMethod("ApproxNullDistribution",
         pvalueinterval <- function(q) pvalue(q) - c(d(q), 0)
 
         new("ApproxNullDistribution",
+            seed = seed,
             p = function(q) {
                 p <- mean(LE(pls, q))
                 attr(p, "conf.int") <- confint_binom(round(p * B), B)

@@ -132,7 +132,10 @@ setClass("AsymptNullDistribution",
 )
 
 setClass("ApproxNullDistribution",
-    contains = "NullDistribution"
+    contains = "NullDistribution",
+    representation = representation(
+        seed = "integer"
+    )
 )
 
 setClass("ExactNullDistribution",

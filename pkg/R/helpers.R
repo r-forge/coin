@@ -1,12 +1,15 @@
 asymptotic <- function(maxpts = 25000, abseps = 0.001, releps = 0) {
     function(object)
-        AsymptNullDistribution(object, maxpts = maxpts,
-                               abseps = abseps, releps = releps)
+        AsymptNullDistribution(object, maxpts = maxpts, abseps = abseps,
+                               releps = releps)
 }
 
-approximate <- function(B = 10000) {
+approximate <- function(B = 10000, parallel = c("no", "multicore", "snow"),
+                        ncpus = 1, cl = NULL) {
+    parallel <- match.arg(parallel)
     function(object)
-        ApproxNullDistribution(object, B = B)
+        ApproxNullDistribution(object, B = B, parallel = parallel,
+                               ncpus = ncpus, cl = cl)
 }
 
 exact <- function(algorithm = c("auto", "shift", "split-up"), fact = NULL) {

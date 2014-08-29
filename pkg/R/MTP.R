@@ -248,6 +248,15 @@ npmcp <- function(object) {
     ## returns list consisting of lists (one for each rejection step of H0)
     ms <- multcomp:::maxsets(Corder)
 
+    ## make sure 'object' isn't serialized along with 'foo'
+    ## (otherwise parallel operation using snow clusters will be very slow)
+    rm(object)
+    ## alternatively we could pass all relevant objects to 'foo' and then
+    ## associate it with the global environment instead:
+    ## foo <- function(s, y, x, ytrafo, distribution, alternative) { ... }
+    ## environment(foo) <- .GlobalEnv
+    ## or simply define 'foo' out of 'npmcp'
+
     foo <- function(s) {
         Ctmp <- Corder[s, , drop = FALSE] # current allowed subset
         ## x levels in current subset

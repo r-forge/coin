@@ -24,6 +24,9 @@
     new("ExactNullDistribution", \dots).}
 }
 \section{Slots}{
+  For objects of classes \code{"NullDistribution"},
+  \code{"ApproxNullDistribution"}, \code{"AsymptNullDistribution"} or
+  \code{"ExactNullDistribution"}:
   \describe{
     \item{\code{q}:}{
       Object of class \code{"function"}.  The quantile function of the reference
@@ -59,6 +62,13 @@
     \item{\code{name}:}{
       Object of class \code{"character"}.  The name of the reference
       distribution.
+    }
+  }
+  Additionally, for objects of class \code{"ApproxNullDistribution"}:
+  \describe{
+    \item{\code{seed}:}{
+      Object of class \code{"integer"}.  The random number generator state
+      (i.e., the value of \code{.Random.seed}).
     }
   }
 }
