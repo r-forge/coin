@@ -59,6 +59,35 @@ ExpectCovarLinearStatistic <- function(x, y, weights, varonly = FALSE) {
     }
 }
 
+pmvn <- function(lower, upper, mean, corr, ..., conf.int = TRUE) {
+    p <- if (length(corr) > 1L)
+             pmvnorm(lower = lower, upper = upper, mean = mean,
+                     corr = corr, ...)
+         else
+             pmvnorm(lower = lower, upper = upper, mean = mean,
+                     sigma = 1L, ...)
+    if (conf.int) {
+        error <- attr(p, "error")
+        attributes(p) <- NULL
+        ci <- c(max(0, p - error), min(p + error, 1))
+        attr(ci, "conf.level") <- 0.99
+        attr(p, "conf.int") <- ci
+    } else
+        attributes(p) <- NULL
+    p
+}
+
+qmvn <- function(p, mean, corr, ...) {
+    q <- if (length(corr) > 1L)
+             qmvnorm(p = p, mean = mean, corr = corr,
+                     tail = "both.tails", ...)$quantile
+         else
+             qmvnorm(p = p, mean = mean, sigma = 1,
+                     tail = "both.tails", ...)$quantile
+    attributes(q) <- NULL
+    q
+}
+
 ### copied from package MASS
 MPinv <- function (X, tol = eps())
 {
