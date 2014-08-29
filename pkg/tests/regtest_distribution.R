@@ -284,3 +284,109 @@ tab <- as.table(matrix(c(3, 0, 0, 3), ncol = 2))
 itq <- independence_test(tab, distribution = exact(algorithm = "shift"),
                          teststat = "quad")
 stopifnot(is.numeric(dperm(itq, statistic(itq))))
+
+
+### check vectorization
+dta <- data.frame(y1 = sample(1:20), y2 = sample(1:20), x = gl(2, 10))
+
+### univariate, asymptotic and scalar
+it_uas <- independence_test(y1 ~ x,  data = dta,
+                            distribution = "asymptotic", teststat = "scalar")
+round(dp_uas <- dperm(it_uas, 0:1), 7)
+stopifnot(isequal(dp_uas, c(dperm(it_uas, 0), dperm(it_uas, 1))))
+round(pp_uas <- pperm(it_uas, 0:1), 7)
+stopifnot(isequal(pp_uas, c(pperm(it_uas, 0), pperm(it_uas, 1))))
+round(qp_uas <- qperm(it_uas, c(0.5, 0.75)), 7)
+stopifnot(isequal(qp_uas, c(qperm(it_uas, 0.5), qperm(it_uas, 0.75))))
+
+### univariate, asymptotic and quad
+it_uaq <- independence_test(y1 ~ x,  data = dta,
+                            distribution = "asymptotic", teststat = "quad")
+round(dp_uaq <- dperm(it_uaq, 0:1), 7)
+stopifnot(isequal(dp_uaq, c(dperm(it_uaq, 0), dperm(it_uaq, 1))))
+round(pp_uaq <- pperm(it_uaq, 0:1), 7)
+stopifnot(isequal(pp_uaq, c(pperm(it_uaq, 0), pperm(it_uaq, 1))))
+round(qp_uaq <- qperm(it_uaq, c(0.5, 0.75)), 7)
+stopifnot(isequal(qp_uaq, c(qperm(it_uaq, 0.5), qperm(it_uaq, 0.75))))
+
+### multivariate, asymptotic and max
+it_mam <- independence_test(y1 + y2 ~ x,  data = dta,
+                            distribution = "asymptotic", teststat = "max")
+round(dp_mam <- dperm(it_mam, 0:1), 7)
+#stopifnot(isequal(dp_mam, c(dperm(it_mam, 1), dperm(it_mam, 2))))
+### <FIXME>
+round(pp_mam <- pperm(it_mam, 0:1), 7)
+try(stopifnot(isequal(pp_mam, c(pperm(it_mam, 0), pperm(it_mam, 1)))))
+try(round(qp_mam <- qperm(it_mam, c(0.5, 0.75)), 7))
+try(stopifnot(isequal(qp_mam, c(qperm(it_mam, 0.5), qperm(it_mam, 0.75)))))
+### </FIXME>
+
+### multivariate, asymptotic and quad
+it_maq <- independence_test(y1 + y2 ~ x,  data = dta,
+                            distribution = "asymptotic", teststat = "quad")
+round(dp_maq <- dperm(it_maq, 0:1), 7)
+stopifnot(isequal(dp_maq, c(dperm(it_maq, 0), dperm(it_maq, 1))))
+round(pp_maq <- pperm(it_maq, 0:1), 7)
+stopifnot(isequal(pp_maq, c(pperm(it_maq, 0), pperm(it_maq, 1))))
+round(qp_maq <- qperm(it_maq, c(0.5, 0.75)), 7)
+stopifnot(isequal(qp_maq, c(qperm(it_maq, 0.5), qperm(it_maq, 0.75))))
+
+### univariate, approximate and scalar
+it_ums <- independence_test(y1 ~ x,  data = dta,
+                            distribution = "approximate", teststat = "scalar")
+round(dp_ums <- dperm(it_ums, 0:1), 7)
+stopifnot(isequal(dp_ums, c(dperm(it_ums, 0), dperm(it_ums, 1))))
+round(pp_ums <- pperm(it_ums, 0:1), 7)
+stopifnot(isequal(pp_ums, c(pperm(it_ums, 0), pperm(it_ums, 1))))
+round(qp_ums <- qperm(it_ums, c(0.5, 0.75)), 7)
+stopifnot(isequal(qp_ums, c(qperm(it_ums, 0.5), qperm(it_ums, 0.75))))
+
+### univariate, approximate and quad
+it_umq <- independence_test(y1 ~ x,  data = dta,
+                            distribution = "approximate", teststat = "quad")
+round(dp_umq <- dperm(it_umq, 0:1), 7)
+stopifnot(isequal(dp_umq, c(dperm(it_umq, 0), dperm(it_umq, 1))))
+round(pp_umq <- pperm(it_umq, 0:1), 7)
+stopifnot(isequal(pp_umq, c(pperm(it_umq, 0), pperm(it_umq, 1))))
+round(qp_umq <- qperm(it_umq, c(0.5, 0.75)), 7)
+stopifnot(isequal(qp_umq, c(qperm(it_umq, 0.5), qperm(it_umq, 0.75))))
+
+### multivariate, approximate and max
+it_mmm <- independence_test(y1 + y2 ~ x,  data = dta,
+                            distribution = "approximate", teststat = "max")
+round(dp_mmm <- dperm(it_mmm, c(0, 1)), 7)
+stopifnot(isequal(dp_mmm, c(dperm(it_mmm, 0), dperm(it_mmm, 1))))
+round(pp_mmm <- pperm(it_mmm, 0:1), 7)
+stopifnot(isequal(pp_mmm, c(pperm(it_mmm, 0), pperm(it_mmm, 1))))
+round(qp_mmm <- qperm(it_mmm, c(0.5, 0.75)), 7)
+stopifnot(isequal(qp_mmm, c(qperm(it_mmm, 0.5), qperm(it_mmm, 0.75))))
+
+### multivariate, approximate and quad
+it_mmq <- independence_test(y1 + y2 ~ x,  data = dta,
+                            distribution = "approximate", teststat = "quad")
+round(dp_mmq <- dperm(it_mmq, 0:1), 7)
+stopifnot(isequal(dp_mmq, c(dperm(it_mmq, 0), dperm(it_mmq, 1))))
+round(pp_mmq <- pperm(it_mmq, 0:1), 7)
+stopifnot(isequal(pp_mmq, c(pperm(it_mmq, 0), pperm(it_mmq, 1))))
+round(qp_mmq <- qperm(it_mmq, c(0.5, 0.75)), 7)
+stopifnot(isequal(qp_mmq, c(qperm(it_mmq, 0.5), qperm(it_mmq, 0.75))))
+
+### univariate, exact and scalar
+it_ues <- independence_test(y1 ~ x,  data = dta,
+                            distribution = "exact", teststat = "scalar")
+round(dp_ues <- dperm(it_ues, 0:1), 7)
+stopifnot(isequal(dp_ues, c(dperm(it_ues, 0), dperm(it_ues, 1))))
+round(pp_ues <- pperm(it_ues, 0:1), 7)
+stopifnot(isequal(pp_ues, c(pperm(it_ues, 0), pperm(it_ues, 1))))
+round(qp_ues <- qperm(it_ues, c(0.5, 0.75)), 7)
+stopifnot(isequal(qp_ues, c(qperm(it_ues, 0.5), qperm(it_ues, 0.75))))
+
+### univariate, exact and quad
+it_ueq <- independence_test(y1 ~ x,  data = dta,
+                            distribution = "exact", teststat = "quad")
+round(dp_ueq <- dperm(it_ueq, 0:1), 7)
+stopifnot(isequal(dp_ueq, c(dperm(it_ueq, 0), dperm(it_ueq, 1))))
+round(pp_ueq <- pperm(it_ueq, 0:1), 7)
+stopifnot(isequal(pp_ueq, c(pperm(it_ueq, 0), pperm(it_ueq, 1))))
+round(qp_ueq <- qperm(it_ueq, c(0.5, 0.75)), 7)
+stopifnot(isequal(qp_ueq, c(qperm(it_ueq, 0.5), qperm(it_ueq, 0.75))))
