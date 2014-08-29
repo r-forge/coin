@@ -1,4 +1,3 @@
-
 ### compute average scores, see Hajek, Sidak, Sen (page 131ff)
 average_scores <- function(s, x) {
     for (d in unique(x))
@@ -171,8 +170,9 @@ koziol_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
 
 ### maximally selected (rank, chi^2, whatsoever) statistics
 ### ordered x
-maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
-    qx <- quantile(x, probs = c(minprob, maxprob), na.rm = TRUE, type = 1)
+find_cutpoints <- function(x, minprob, maxprob, names) {
+    qx <- quantile(x, probs = c(minprob, maxprob), na.rm = TRUE, names = FALSE,
+                   type = 1)
     if (diff(qx) < .Machine$double.eps)
         return(NULL)
     ux <- sort(unique(x))
@@ -184,7 +184,13 @@ maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
     }
     cm <- .Call("R_maxstattrafo", as.double(x), as.double(cutpoints),
                 PACKAGE = "coin")
-    dimnames(cm) <- list(1:nrow(cm), paste0("x <= ", round(cutpoints, 3)))
+    if(names)
+        dimnames(cm) <- list(1:nrow(cm), paste0("x <= ", round(cutpoints, 3)))
+    cm
+}
+
+maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
+    cm <- find_cutpoints(x, minprob, maxprob, names = TRUE)
     cm[is.na(x)] <- NA
     cm
 }
@@ -193,20 +199,7 @@ ofmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
     x <- ordered(x) # drop unused levels
     lx <- levels(x)
     x <- as.numeric(x)
-
-    qx <- quantile(x, probs = c(minprob, maxprob), na.rm = TRUE, type = 1)
-    if (diff(qx) < .Machine$double.eps)
-        return(NULL)
-    ux <- sort(unique(x))
-    ux <- ux[ux < max(x, na.rm = TRUE)]
-    if (mean(x <= qx[2], na.rm = TRUE) <= maxprob) {
-        cutpoints <- ux[ux >= qx[1] & ux <= qx[2]]
-    } else {
-        cutpoints <- ux[ux >= qx[1] & ux < qx[2]]
-    }
-
-    cm <- .Call("R_maxstattrafo", as.double(x), as.double(cutpoints),
-                PACKAGE = "coin")
+    cm <- find_cutpoints(x, minprob, maxprob, names = FALSE)
     dimnames(cm) <- list(seq_len(nrow(cm)),
                          lapply(seq_len(ncol(cm)), function(i) {
                              idx <- seq_len(i)
