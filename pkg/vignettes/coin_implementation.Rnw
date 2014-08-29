@@ -552,7 +552,7 @@ and the split-up algorithm by
 Conditional Monte Carlo procedures can always be used to approximate the exact
 distribution. In this case, within each block, a sufficiently large number of
 random samples from all admissible permutations of the observations is drawn. The
-test statistic is computed for the permuted $\X$ values and the
+test statistic is computed for the permuted $\Y$ values and the
 distribution of these test statistics is an approximation to the
 conditional reference distribution. When $p$-values are computed,
 confidence intervals are available from the binomial distribution.
