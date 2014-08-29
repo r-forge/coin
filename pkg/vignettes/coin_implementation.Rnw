@@ -894,7 +894,7 @@ Pearson's $\chi^2$ &  \code{f_trafo()} & \code{f_trafo()} &
 Cochran-Armitage / Linear &  scores & any & \code{"scalar"} \\
 Association &         &     &                 \\
 $K$-sample permutation test &  \code{f_trafo()} & any & any \\
-Generalized maximally selected statistics &  \code{maxstat_trafo()} & any & \code{"maximum"} \\
+Maximally selected statistics &  \code{maxstat_trafo()} & any & \code{"maximum"} \\
 \multicolumn{4}{c}{} \\
 \multicolumn{4}{c}{Dependent samples} \\
 \multicolumn{4}{c}{} \\
