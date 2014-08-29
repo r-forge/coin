@@ -314,12 +314,10 @@ it_mam <- independence_test(y1 + y2 ~ x,  data = dta,
                             distribution = "asymptotic", teststat = "max")
 round(dp_mam <- dperm(it_mam, 0:1), 7)
 #stopifnot(isequal(dp_mam, c(dperm(it_mam, 1), dperm(it_mam, 2))))
-### <FIXME>
-round(pp_mam <- pperm(it_mam, 0:1), 7)
-try(stopifnot(isequal(pp_mam, c(pperm(it_mam, 0), pperm(it_mam, 1)))))
-try(round(qp_mam <- qperm(it_mam, c(0.5, 0.75)), 7))
-try(stopifnot(isequal(qp_mam, c(qperm(it_mam, 0.5), qperm(it_mam, 0.75)))))
-### </FIXME>
+round(pp_mam <- pperm(it_mam, 0:1), 7)                       # failed in < 1.1-0
+stopifnot(isequal(pp_mam, c(pperm(it_mam, 0), pperm(it_mam, 1))))
+round(qp_mam <- qperm(it_mam, c(0.5, 0.75)), 7)              # failed in < 1.1-0
+stopifnot(isequal(qp_mam, c(qperm(it_mam, 0.5), qperm(it_mam, 0.75))))
 
 ### multivariate, asymptotic and quad
 it_maq <- independence_test(y1 + y2 ~ x,  data = dta,

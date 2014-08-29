@@ -2479,22 +2479,12 @@ Error in .local(object, ...) :
 > round(dp_mam <- dperm(it_mam, 0:1), 7)
 [1] NA
 > #stopifnot(isequal(dp_mam, c(dperm(it_mam, 1), dperm(it_mam, 2))))
-> ### <FIXME>
-> round(pp_mam <- pperm(it_mam, 0:1), 7)
-[1] 0
-99 percent confidence interval:
- 0 0 
-
-> try(stopifnot(isequal(pp_mam, c(pperm(it_mam, 0), pperm(it_mam, 1)))))
-[1] 0
-[1] 0.0000000000 0.4664477255
-Error : isequal(pp_mam, c(pperm(it_mam, 0), pperm(it_mam, 1))) is not TRUE
-> try(round(qp_mam <- qperm(it_mam, c(0.5, 0.75)), 7))
-Error in qmvnorm(p, mean = rep.int(0L, pq), corr = corr, tail = "both.tails",  : 
-  'p' is not a double between zero and one
-> try(stopifnot(isequal(qp_mam, c(qperm(it_mam, 0.5), qperm(it_mam, 0.75)))))
-Error in attributes(a) <- NULL : object 'qp_mam' not found
-> ### </FIXME>
+> round(pp_mam <- pperm(it_mam, 0:1), 7)                       # failed in < 1.1-0
+[1] 0.0000000 0.4664477
+> stopifnot(isequal(pp_mam, c(pperm(it_mam, 0), pperm(it_mam, 1))))
+> round(qp_mam <- qperm(it_mam, c(0.5, 0.75)), 7)              # failed in < 1.1-0
+[1] 1.051209 1.498070
+> stopifnot(isequal(qp_mam, c(qperm(it_mam, 0.5), qperm(it_mam, 0.75))))
 > 
 > ### multivariate, asymptotic and quad
 > it_maq <- independence_test(y1 + y2 ~ x,  data = dta,
@@ -2589,4 +2579,4 @@ Error in attributes(a) <- NULL : object 'qp_mam' not found
 > 
 > proc.time()
    user  system elapsed 
-   9.00    0.51    9.76 
+   8.98    0.59    9.73 

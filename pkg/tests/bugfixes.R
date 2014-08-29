@@ -488,9 +488,15 @@ wilcox_test(y ~ x | b, data = dta, subset = subs)
 subs <- dta$x %in% 1:2 & dta$b %in% 1:4
 wilcox_test(y ~ x | b, data = dta, subset = subs)
 
-### 'dperm' returned non-sense for max-type tests
+### 'dperm' returned non-sense for asymptotic max-type tests
 y1 <- rnorm(10)
 y2 <- rnorm(10)
 x <- gl(2, 5)
 it <- independence_test(y1 + y2 ~ x)
 stopifnot(is.na(dperm(it, statistic(it))))
+
+### 'p-'/'qperm' for asymptotic max-type test had issues with vector arguments
+stopifnot(isequal(pperm(it, 1:3),
+                  c(pperm(it, 1), pperm(it, 2), pperm(it, 3))))
+stopifnot(isequal(qperm(it, c(0.9, 0.95, 0.99)),
+                  c(qperm(it, 0.9), qperm(it, 0.95), qperm(it, 0.99))))

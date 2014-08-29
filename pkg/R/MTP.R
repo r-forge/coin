@@ -78,8 +78,8 @@ asdmaxT <- function(object) {
 
     ## step-down based on multivariate normality
     ret <- numeric(pq)
-    ret[1] <- pmv(lower = lower[1], upper = upper[1],
-                  mean = rep.int(0, pq), corr = corr)
+    ret[1] <- pmvn(lower = lower[1], upper = upper[1],
+                   mean = rep.int(0, pq), corr = corr)
     if (pq > 1) {
         oo <- o
         for (i in 2:pq) {
@@ -87,8 +87,8 @@ asdmaxT <- function(object) {
             corr <- corr[-j, -j]
             oo <- oo[-1]
             ret[i] <- min(ret[i - 1],
-                          pmv(lower = lower[i], upper = upper[i],
-                              mean = rep.int(0, length(oo)), corr = corr))
+                          pmvn(lower = lower[i], upper = upper[i],
+                               mean = rep.int(0, length(oo)), corr = corr))
         }
     }
 

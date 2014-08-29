@@ -243,9 +243,12 @@
       levels, causing, e.g., problems if trying to use the \code{subset}
       argument of the \code{formula} methods
 
-      \item the density function of asymptotic permutation distributions
-      returned non-sensical results for maximum-type test and are now reported
-      as \code{NA}
+      \item the density function of asymptotic permutation distributions for
+      maximum-type tests returned non-sense; it now reports \code{NA}
+
+      \item the distribution and quantile functions of asymptotic permutation
+      distributions for maximum-type tests were not handling vector arguments
+      properly
     }
   }
   \subsection{Other changes}{

@@ -30,11 +30,33 @@ setMethod("AsymptNullDistribution",
 )
 
 ### just a wrapper
-pmv <- function(lower, upper, mean, corr, ...) {
-    if (length(corr) > 1L)
-        pmvnorm(lower = lower, upper = upper, mean = mean, corr = corr, ...)
-    else
-        pmvnorm(lower = lower, upper = upper, mean = mean, sigma = 1L, ...)
+pmvn <- function(lower, upper, mean, corr, ..., conf.int = TRUE) {
+    p <- if (length(corr) > 1L)
+             pmvnorm(lower = lower, upper = upper, mean = mean,
+                     corr = corr, ...)
+         else
+             pmvnorm(lower = lower, upper = upper, mean = mean,
+                     sigma = 1L, ...)
+    if (conf.int) {
+        error <- attr(p, "error")
+        attributes(p) <- NULL
+        ci <- c(max(0, p - error), min(p + error, 1))
+        attr(ci, "conf.level") <- 0.99
+        attr(p, "conf.int") <- ci
+    } else
+        attributes(p) <- NULL
+    p
+}
+
+qmvn <- function(p, mean, corr, ...) {
+    q <- if (length(corr) > 1L)
+             qmvnorm(p = p, mean = mean, corr = corr,
+                     tail = "both.tails", ...)$quantile
+         else
+             qmvnorm(p = p, mean = mean, sigma = 1,
+                     tail = "both.tails", ...)$quantile
+    attributes(q) <- NULL
+    q
 }
 
 ### method for max-type test statistics
@@ -43,39 +65,36 @@ setMethod("AsymptNullDistribution",
     definition = function(object, ...) {
         corr <- cov2cor(covariance(object))
         pq <- length(expectation(object))
-        p <- function(q) {
-            p <- switch(object@alternative,
-                     "less"      = pmv(lower = q, upper = Inf,
-                                       mean = rep.int(0L, pq),
-                                       corr = corr, ...),
-                     "greater"   = pmv(lower = -Inf, upper = q,
-                                       mean = rep.int(0L, pq),
-                                       corr = corr, ...),
-                     "two.sided" = pmv(lower = -abs(q), upper = abs(q),
-                                       mean = rep.int(0L, pq),
-                                       corr = corr, ...))
-            error <- attr(p, "error")
-            attr(p, "error") <- NULL
-            ci <- c(max(0, p - error), min(p + error, 1))
-            attr(ci, "conf.level") <- 0.99
-            attr(p, "conf.int") <- ci
-            class(p) <- "MCp"
-            p
+        p <- function(q, ..., conf.int = FALSE) {
+            p <- function(q, ..., conf.int = conf.int)
+                switch(object@alternative,
+                    "less"      = pmvn(lower = q, upper = Inf,
+                                       mean = rep.int(0, pq),
+                                       corr = corr, ..., conf.int = conf.int),
+                    "greater"   = pmvn(lower = -Inf, upper = q,
+                                       mean = rep.int(0, pq),
+                                       corr = corr, ..., conf.int = conf.int),
+                    "two.sided" = pmvn(lower = -abs(q), upper = abs(q),
+                                       mean = rep.int(0, pq),
+                                       corr = corr, ..., conf.int = conf.int))
+            if (length(q) > 1)
+                vapply(q, p, NA_real_, conf.int = conf.int)
+            else
+                p(q, conf.int = conf.int)
         }
-        q <- function(p) {
-            q <- if (length(corr) > 1L)
-                     qmvnorm(p, mean = rep.int(0L, pq), corr = corr,
-                             tail = "both.tails", ...)$quantile
-                 else
-                     qmvnorm(p, mean = rep.int(0L, pq), sigma = 1L,
-                             tail = "both.tails", ...)$quantile
-            attributes(q) <- NULL
-            q
+        q <- function(p, ...) {
+            q <- function(p, ...)
+                qmvn(p, mean = rep.int(0, pq), corr = corr, ...)
+            if (length(p) > 1)
+                vapply(p, q, NA_real_)
+            else
+                q(p)
         }
         pvalue <- function(q) {
-            pvalue <- 1 - p(q)
-            attr(pvalue, "conf.int") <- 1 - attr(pvalue, "conf.int")[2L:1L]
-            attr(attr(pvalue, "conf.int"), "conf.level") <- 0.99
+            pvalue <- 1 - p(q, conf.int = TRUE)
+            ci <- 1 - attr(pvalue, "conf.int")[2L:1L]
+            attr(ci, "conf.level") <- attr(attr(pvalue, "conf.int"), "conf.level")
+            attr(pvalue, "conf.int") <- ci
             class(pvalue) <- "MCp"
             pvalue
         }
