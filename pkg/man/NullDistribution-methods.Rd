@@ -39,7 +39,7 @@
   \item{B}{
     a positive integer, the number of Monte Carlo replicates used for
     the computation of the approximate reference distribution.  Defaults to
-    10000. 
+    \code{10000}.
   }
   \item{algorithm}{
     a character, the algorithm used for the computation of the exact reference

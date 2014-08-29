@@ -138,7 +138,7 @@ setMethod("ExactNullDistribution",
                         stop("cannot compute exact distribution with real-valued scores")
                 }
             } else
-                stop(sQuote("object"), " is not a two sample problem")
+                stop(sQuote("object"), " is not a two-sample problem")
         }
 )
 
@@ -147,30 +147,30 @@ setMethod("ExactNullDistribution",
     signature = "QuadTypeIndependenceTestStatistic",
     definition = function(object,
         algorithm = c("auto", "shift", "split-up"), ...) {
-              algorithm <- match.arg(algorithm)
-              if (object@paired) {
-                  if (algorithm == "split-up")
-                      stop("split-up algorithm not implemented for paired samples")
-                  int <- is_integer(object@ytrans[, 1L], ...)
-                  if (int)
-                      SR_shift_1sample(object, fact = attr(int, "fact"))
-                  else
-                      stop("cannot compute exact distribution with real-valued scores")
-              } else if (is_2sample(object)) {
-                  if (algorithm == "split-up")
-                      stop("split-up algorithm not implemented for quadratic tests")
-                  else {
-                      int <- is_integer(object@ytrans[, 1L], ...)
-                      if (int)
-                          SR_shift_2sample(object, fact = attr(int, "fact"))
-                      else if (algorithm == "auto")
-                          stop("split-up algorithm not implemented for quadratic tests")
-                      else
-                          stop("cannot compute exact distribution with real-valued scores")
-                  }
-              } else
-                  stop(sQuote("object"), " is not a two sample problem")
-          }
+            algorithm <- match.arg(algorithm)
+            if (object@paired) {
+                if (algorithm == "split-up")
+                    stop("split-up algorithm not implemented for paired samples")
+                int <- is_integer(object@ytrans[, 1L], ...)
+                if (int)
+                    SR_shift_1sample(object, fact = attr(int, "fact"))
+                else
+                    stop("cannot compute exact distribution with real-valued scores")
+            } else if (is_2sample(object)) {
+                if (algorithm == "split-up")
+                    stop("split-up algorithm not implemented for quadratic tests")
+                else {
+                    int <- is_integer(object@ytrans[, 1L], ...)
+                    if (int)
+                        SR_shift_2sample(object, fact = attr(int, "fact"))
+                    else if (algorithm == "auto")
+                        stop("split-up algorithm not implemented for quadratic tests")
+                    else
+                        stop("cannot compute exact distribution with real-valued scores")
+                }
+            } else
+                stop(sQuote("object"), " is not a two-sample problem")
+        }
 )
 
 
@@ -411,6 +411,7 @@ setMethod("ApproxNullDistribution",
 )
 
 
+### S3 method for extraction of confidence intervals
 confint.ScalarIndependenceTestConfint <-
     function(object, parm, level = 0.95, ...) {
         x <- if ("level" %in% names(match.call()))

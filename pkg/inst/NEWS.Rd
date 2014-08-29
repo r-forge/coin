@@ -315,7 +315,7 @@
 
       \item the shift algorithm (\code{exact(algorithm = "shift")}) no longer
       switches to the split-up algorithm when the scores cannot be mapped into
-      integers, but fails with an error message
+      integers; it now fails with an error message
 
       \item \code{exact()} has \code{algorithm = "auto"} as its new default,
       preserving the behavior of \code{algorithm = "shift"} in previous versions
