@@ -125,19 +125,12 @@ SR_shift_2sample <- function(object, fact) {
                 sum(Prob[GE(T, q)])
         }
     }
-    midpvalue <- function(q) {
+    pvalueinterval <- function(q, z = c(1, 0)) {
         pp <- if (teststat == "scalar" && object@alternative == "two.sided")
                   d(-q) + d(q) # both tails
               else
                   d(q)
-        pvalue(q) - 0.5 * pp
-    }
-    pvalueinterval <- function(q) {
-        pp <- if (teststat == "scalar" && object@alternative == "two.sided")
-                  d(-q) + d(q) # both tails
-              else
-                  d(q)
-        pvalue(q) - c(pp, 0)
+        pvalue(q) - z * pp
     }
 
     new("ExactNullDistribution",
@@ -153,8 +146,12 @@ SR_shift_2sample <- function(object, fact) {
         },
         d = d,
         pvalue = pvalue,
-        midpvalue = midpvalue,
-        pvalueinterval = pvalueinterval,
+        midpvalue = function(q) {
+            pvalueinterval(q, z = 0.5)
+        },
+        pvalueinterval = function(q) {
+            setNames(pvalueinterval(q), nm = c("p_0", "p_1"))
+        },
         support = function() T,
         name = paste0("Exact Distribution for Independent Two-Sample Tests",
                       " (Streitberg-Roehmel Shift Algorithm)"))
@@ -267,19 +264,12 @@ SR_shift_1sample <- function(object, fact) {
                 sum(Prob[GE(T, q)])
         }
     }
-    midpvalue <- function(q) {
+    pvalueinterval <- function(q, z = c(1, 0)) {
         pp <- if (teststat == "scalar" && object@alternative == "two.sided")
                   d(-q) + d(q) # both tails
               else
                   d(q)
-        pvalue(q) - 0.5 * pp
-    }
-    pvalueinterval <- function(q) {
-        pp <- if (teststat == "scalar" && object@alternative == "two.sided")
-                  d(-q) + d(q) # both tails
-              else
-                  d(q)
-        pvalue(q) - c(pp, 0)
+        pvalue(q) - z * pp
     }
 
     new("ExactNullDistribution",
@@ -295,8 +285,12 @@ SR_shift_1sample <- function(object, fact) {
         },
         d = d,
         pvalue = pvalue,
-        midpvalue = midpvalue,
-        pvalueinterval = pvalueinterval,
+        midpvalue = function(q) {
+            pvalueinterval(q, z = 0.5)
+        },
+        pvalueinterval = function(q) {
+            setNames(pvalueinterval(q), nm = c("p_0", "p_1"))
+        },
         support = function() T,
         name = paste0("Exact Distribution for Dependent Two-Sample Tests",
                       " (Streitberg-Roehmel Shift Algorithm)"))

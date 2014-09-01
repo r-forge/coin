@@ -206,19 +206,12 @@ setMethod("ApproxNullDistribution",
                 "greater"   = mean(GE(pls, q)),
                 "two.sided" = mean(GE(abs(pls), abs(q))))
         }
-        midpvalue <- function(q) {
+        pvalueinterval <- function(q, z = c(1, 0)) {
             pp <- if (object@alternative == "two.sided")
                       d(-q) + d(q) # both tails
                   else
                       d(q)
-            pvalue(q) - 0.5 * pp
-        }
-        pvalueinterval <- function(q) {
-            pp <- if (object@alternative == "two.sided")
-                      d(-q) + d(q) # both tails
-                  else
-                      d(q)
-            pvalue(q) - c(pp, 0)
+            pvalue(q) - z * pp
         }
 
         new("ApproxNullDistribution",
@@ -240,12 +233,14 @@ setMethod("ApproxNullDistribution",
                 pvalue
             },
             midpvalue = function(q) {
-                midpvalue <- midpvalue(q)
+                midpvalue <- pvalueinterval(q, z = 0.5)
                 attr(midpvalue, "conf.int") <- confint_midp(round(midpvalue * B), B)
                 class(midpvalue) <- "MCp"
                 midpvalue
             },
-            pvalueinterval = pvalueinterval,
+            pvalueinterval = function(q) {
+                setNames(pvalueinterval(q), nm = c("p_0", "p_1"))
+            },
             support = function(raw = FALSE) {
                 if (raw)
                     plsraw
@@ -295,19 +290,12 @@ setMethod("ApproxNullDistribution",
                 "greater"   = mean(colSums(GE(pls, q)) > 0),
                 "two.sided" = mean(colSums(GE(abs(pls), q)) > 0))
         }
-        midpvalue <- function(q) {
+        pvalueinterval <- function(q, z = c(1, 0)) {
             pp <- if (object@alternative == "two.sided")
                       d(-q) + d(q) # both tails
                   else
                       d(q)
-            pvalue(q) - 0.5 * pp
-        }
-        pvalueinterval <- function(q) {
-            pp <- if (object@alternative == "two.sided")
-                      d(-q) + d(q) # both tails
-                  else
-                      d(q)
-            pvalue(q) - c(pp, 0)
+            pvalue(q) - z * pp
         }
 
         new("ApproxNullDistribution",
@@ -332,12 +320,14 @@ setMethod("ApproxNullDistribution",
                 pvalue
             },
             midpvalue = function(q) {
-                midpvalue <- midpvalue(q)
+                midpvalue <- pvalueinterval(q, z = 0.5)
                 attr(midpvalue, "conf.int") <- confint_midp(round(midpvalue * B), B)
                 class(midpvalue) <- "MCp"
                 midpvalue
             },
-            pvalueinterval = pvalueinterval,
+            pvalueinterval = function(q) {
+                setNames(pvalueinterval(q), nm = c("p_0", "p_1"))
+            },
             support = function(raw = FALSE) {
                 if (raw)
                     plsraw
@@ -370,8 +360,7 @@ setMethod("ApproxNullDistribution",
             mean(tmp == tmp[which.min(tmp)] & tmp < eps())
         }
         pvalue <- function(q) mean(GE(pls, q))
-        midpvalue <- function(q) pvalue(q) - 0.5 * d(q)
-        pvalueinterval <- function(q) pvalue(q) - c(d(q), 0)
+        pvalueinterval <- function(q, z = c(1, 0)) pvalue(q) - z * d(q)
 
         new("ApproxNullDistribution",
             seed = seed,
@@ -392,12 +381,14 @@ setMethod("ApproxNullDistribution",
                 pvalue
             },
             midpvalue = function(q) {
-                midpvalue <- midpvalue(q)
+                midpvalue <- pvalueinterval(q, z = 0.5)
                 attr(midpvalue, "conf.int") <- confint_midp(round(midpvalue * B), B)
                 class(midpvalue) <- "MCp"
                 midpvalue
             },
-            pvalueinterval = pvalueinterval,
+            pvalueinterval = function(q) {
+                setNames(pvalueinterval(q), nm = c("p_0", "p_1"))
+            },
             support = function(raw = FALSE) {
                 if (raw)
                     plsraw
