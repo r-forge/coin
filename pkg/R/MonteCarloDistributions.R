@@ -22,7 +22,7 @@ MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
         montecarlo(B)
     else {
         ## load the 'parallel' namespace if necessary
-        if ("parallel" %in% loadedNamespaces()) {
+        if (!"parallel" %in% loadedNamespaces()) {
             ## loading 'parallel' changes RNG state if R_PARALLEL_PORT is unset
             if (Sys.getenv("R_PARALLEL_PORT") == "") {
                 ## make sure '.Random.seed' exists; almost unnecessary since it
