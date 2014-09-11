@@ -82,7 +82,8 @@ MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
             if (RNGkind()[1L] == "L'Ecuyer-CMRG")
                 ## distribute streams (using master process) for reproducibility
                 parallel::clusterSetRNGStream(cl)
-            if (as.integer(length(cl)) < 2L) # can't use 'ncpus' here!
+            ncpus <- as.integer(length(cl))
+            if (ncpus < 2L)
                 warning("parallel operation requires at least two processes")
 ###            Bp <- split_index(B, ncpus) # distribute workload evenly
 ###            RET <- parallel::clusterApply(cl, x = Bp, fun = montecarlo)
