@@ -217,10 +217,7 @@ setMethod("ApproxNullDistribution",
         new("ApproxNullDistribution",
             seed = seed,
             p = function(q) {
-                p <- mean(LE(pls, q))
-                attr(p, "conf.int") <- confint_binom(round(p * B), B)
-                class(p) <- "MCp"
-                p
+                mean(LE(pls, q))
             },
             q = function(p) {
                 quantile(pls, probs = p, names = FALSE, type = 1L)
@@ -301,13 +298,10 @@ setMethod("ApproxNullDistribution",
         new("ApproxNullDistribution",
             seed = seed,
             p = function(q) {
-                p <- switch(object@alternative,
-                         "less"      = mean(colSums(GE(pls, q)) == nrow(pls)),
-                         "greater"   = mean(colSums(LE(pls, q)) == nrow(pls)),
-                         "two.sided" = mean(colSums(LE(abs(pls), q)) == nrow(pls)))
-                attr(p, "conf.int") <- confint_binom(round(p * B), B)
-                class(p) <- "MCp"
-                p
+                switch(object@alternative,
+                    "less"      = mean(colSums(GE(pls, q)) == nrow(pls)),
+                    "greater"   = mean(colSums(LE(pls, q)) == nrow(pls)),
+                    "two.sided" = mean(colSums(LE(abs(pls), q)) == nrow(pls)))
             },
             q = function(p) {
                 quantile(pmaxmin(), probs = p, names = FALSE, type = 1L)
@@ -365,10 +359,7 @@ setMethod("ApproxNullDistribution",
         new("ApproxNullDistribution",
             seed = seed,
             p = function(q) {
-                p <- mean(LE(pls, q))
-                attr(p, "conf.int") <- confint_binom(round(p * B), B)
-                class(p) <- "MCp"
-                p
+                mean(LE(pls, q))
             },
             q = function(p) {
                 quantile(pls, probs = p, names = FALSE, type = 1L)
