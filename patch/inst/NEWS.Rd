@@ -1,6 +1,11 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
+\section{Changes in version 1.0-24 (2014-09-17)}{
+  \itemize{
+    \item as.integer(round(x)) is safer than as.integer(x) = trunc(x)
+  }
+}
 \section{Changes in version 1.0-23 (2013-09-03)}{
   \itemize{
     \item fix \file{DESCRIPTION} and \file{NAMESPACE} issues

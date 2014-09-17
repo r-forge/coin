@@ -1,6 +1,6 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R Under development (unstable) (2014-09-11 r66573) -- "Unsuffered Consequences"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -426,6 +426,7 @@ chi-squared = 22.8524, p-value < 2.2e-16
 +   }
 Loading required package: multcomp
 Loading required package: mvtnorm
+Loading required package: TH.data
 [1] 0.0004888889
 99 percent confidence interval:
  0.0003199269 0.0007126921 
@@ -443,7 +444,7 @@ IV - III 0.9998777778
 > 
 > cleanEx()
 
-detaching ‘package:multcomp’, ‘package:mvtnorm’
+detaching ‘package:multcomp’, ‘package:TH.data’, ‘package:mvtnorm’
 
 > nameEx("MarginalHomogeneityTest")
 > ### * MarginalHomogeneityTest
@@ -952,6 +953,7 @@ chi-squared = 11.1429, df = 2, p-value = 0.003805
 + }
 Loading required package: multcomp
 Loading required package: mvtnorm
+Loading required package: TH.data
 [1] 0.003455915
 99 percent confidence interval:
  0.003205721 0.003706108 
@@ -1032,7 +1034,7 @@ alternative hypothesis: true mu is greater than 0
 > 
 > cleanEx()
 
-detaching ‘package:multcomp’, ‘package:mvtnorm’
+detaching ‘package:multcomp’, ‘package:TH.data’, ‘package:mvtnorm’
 
 > nameEx("Transformations")
 > ### * Transformations
@@ -1989,7 +1991,7 @@ $cutpoint
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  14.428 0.352 14.797 0 0 
+Time elapsed:  12.808 0.308 13.131 0 0 
 > grDevices::dev.off()
 null device 
           1 
