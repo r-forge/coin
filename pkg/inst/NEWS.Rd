@@ -340,7 +340,8 @@
 }
 \section{Changes in version 1.0-24 (2014-09-17)}{
   \itemize{
-    \item as.integer(round(x)) is safer than as.integer(x) = trunc(x)
+    \item \code{as.integer(round(x))} is safer than \code{as.integer(x)} due to
+    truncation in the latter
   }
 }
 \section{Changes in version 1.0-23 (2013-09-03)}{

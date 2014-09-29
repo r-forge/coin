@@ -31,9 +31,9 @@ SR_shift_2sample <- function(object, fact) {
     nb <- nlevels(block)
 
     ## first block
-    firstblock <- (block == lev[1L])
-    scores <- ytrans[firstblock]
-    m <- sum(xtrans[firstblock] == 1L)
+    block_1 <- (block == lev[1L])
+    scores <- ytrans[block_1]
+    m <- sum(xtrans[block_1] == 1L)
 
     ## compute T and density
     if (m == 0L)
@@ -51,9 +51,9 @@ SR_shift_2sample <- function(object, fact) {
     ## remaining blocks
     if (nb > 1) {
         for (i in seq_len(nb)[-1L]) {
-            thisblock <- (block == lev[i])
-            scores <- ytrans[thisblock]
-            m <- sum(xtrans[thisblock] == 1L)
+            block_i <- (block == lev[i])
+            scores <- ytrans[block_i]
+            m <- sum(xtrans[block_i] == 1L)
 
             ## compute T and density
             if (m == 0L)
@@ -158,23 +158,21 @@ SR_shift_2sample <- function(object, fact) {
 }
 
 cSR_shift_2sample <- function(scores, m, fact) {
-
-    if (m < 1L || m == length(scores))
-        stop("not a two sample problem")
     n <- length(scores)
-    ones <- rep.int(1L, n)
+    if (m < 1L || m == n)
+        stop("not a two sample problem")
 
     ## integer scores with sum(scores) minimal
-    scores <- scores * fact
-    add <- min(scores - 1)
+    scores <- round(scores * fact)
+    storage.mode(scores) <- "integer"
+    add <- min(scores - 1L)
     scores <- scores - add
+    storage.mode(m) <- "integer"
     m_b <- sum(sort(scores)[(n + 1L - m):n])
 
     Prob <- .Call("R_cpermdist2",
-                  score_a = as.integer(round(ones)), score_b = as.integer(round(scores)),
-                  m_a = as.integer(m), m_b = as.integer(round(m_b)),
-                  retProb = as.logical(TRUE),
-                  PACKAGE = "coin")
+                  score_a = rep.int(1L, n), score_b = scores,
+                  m_a = m, m_b = m_b, retProb = TRUE, PACKAGE = "coin")
     T <- which(Prob != 0)
 
     list(T = (T + add * m) / fact, Prob = Prob[T])

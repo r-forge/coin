@@ -305,14 +305,12 @@ wilcoxsign_test(x ~ y)
 # as.integer(water_transfer$pd[11])
 # as.integer(round(water_transfer$pd[11]))
 
-p1 <-  pvalue(it1 <- independence_test(pd ~ age, data = water_transfer,
-                          alternative = "less",
-                          distribution = exact(algorithm = "shift")))
-
-p2 <- pvalue(it2 <- independence_test(pd ~ age, data = water_transfer,
-                          alternative = "less",
-                          distribution = exact(algorithm = "split")))
-
+p1 <- pvalue(independence_test(pd ~ age, data = water_transfer,
+                               alternative = "less",
+                               distribution = exact(algorithm = "shift")))
+p2 <- pvalue(independence_test(pd ~ age, data = water_transfer,
+                               alternative = "less",
+                               distribution = exact(algorithm = "split")))
 stopifnot(isequal(p1, p2))
 
 ### monotonicity wasn't enforced for "step-down"
