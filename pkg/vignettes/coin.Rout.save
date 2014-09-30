@@ -33,7 +33,7 @@ The following objects are masked from 'package:base':
     mapply, match, mget, order, paste, pmax,
     pmax.int, pmin, pmin.int, rank, rbind, rep.int,
     rownames, sapply, setdiff, sort, table, tapply,
-    union, unique, unlist
+    union, unique, unlist, unsplit
 
 Welcome to Bioconductor
 
@@ -219,4 +219,4 @@ IV - III 0.99889989
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   1.88    0.24    2.30 
+   1.62    0.09    1.88 
