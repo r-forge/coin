@@ -109,8 +109,8 @@ mcp_trafo(\dots)
     \code{"Fleming-Harrington"} or \code{"Self"}.  Defaults to 0.}
   \item{minprob}{a fraction between 0 and 0.5.}
   \item{maxprob}{a fraction between 0.5 and 1.}
-  \item{scores}{a numeric vector, the scores corresponding to each level
-    of an ordered factor.  Defaults to \code{1:nlevels(x)}.}
+  \item{scores}{a numeric vector or matrix, the scores corresponding to each
+    level of an ordered factor.  Defaults to \code{1:nlevels(x)}.}
   \item{\dots}{
     \code{logrank_trafo}: further arguments to be passed to
     \code{weight}.
@@ -172,33 +172,39 @@ mcp_trafo(\dots)
 
 }
 \examples{
+## dummy matrix, two-sample problem (only one column)
+f_trafo(gl(2, 3))
 
-  ### dummy matrices, 2-sample problem (only one column)
-  f_trafo(y <- gl(2, 5))
+## dummy matrix, K-sample problem (K columns)
+x <- gl(3, 2)
+f_trafo(x)
 
-  ### score matrices
-  of_trafo(y <- ordered(gl(3, 5)))
+## score matrix
+ox <- as.ordered(x)
+of_trafo(ox)
+of_trafo(ox, scores = c(1, 3:4))
+of_trafo(ox, scores = cbind(s1 = 1:3, s2 = c(1, 3:4)))
 
-  ### K-sample problem (K columns)
-  f_trafo(y <- gl(5, 2))
+## normal scores
+y <- runif(6)
+normal_trafo(y)
 
-  ### normal scores
-  normal_trafo(x <- rnorm(10))
+## and now together
+trafo(data.frame(x = x, ox = ox, y = y), numeric_trafo = normal_trafo)
 
-  ### and now together
-  trafo(data.frame(x = x, y = y), numeric_trafo = normal_trafo)
+## the same, more flexible when multiple variables are in play
+trafo(data.frame(x = x, ox = ox, y = y), var_trafo = list(y = normal_trafo))
 
-  ### the same, more flexible when multiple variables are in play
-  trafo(data.frame(x = x, y = y), var_trafo = list(x = normal_trafo))
+## maximally selected statistics
+maxstat_trafo(y)
+fmaxstat_trafo(x)
+ofmaxstat_trafo(ox)
 
-  ### maximally selected statistics
-  maxstat_trafo(rnorm(10))
+## apply transformation blockwise (e.g. for Friedman test)
+trafo(data.frame(y = 1:20), numeric_trafo = rank_trafo, block = gl(4, 5))
 
-  ### apply transformation blockwise (e.g. for Friedman test)
-  trafo(data.frame(y = 1:20), numeric_trafo = rank_trafo, block = gl(4, 5))
-
-  ### multiple comparisons
-  mcp_trafo(x = "Tukey")(data.frame(x = gl(3, 3)))
-
+## multiple comparisons
+dta <- data.frame(x)
+mcp_trafo(x = "Tukey")(dta)
 }
 \keyword{manip}

@@ -406,16 +406,18 @@ f_trafo <- function(x) {
 of_trafo <- function(x, scores = NULL) {
     if (!is.ordered(x))
         warning(sQuote(deparse(substitute(x))), " is not an ordered factor")
-    s <- attr(x, "scores")
-    scores <- if (!is.null(s))
-                  s
-              else if (is.null(scores))
-                  seq_len(nlevels(x))
-              else if (length(scores) == nlevels(x))
-                  scores
-              else
-                  stop(sQuote("scores"), " does not match the number of levels")
-    return(matrix(scores[x], ncol = 1))
+    if (is.null(scores)) {
+        s <- attr(x, "scores")
+        scores <- if (!is.null(s))
+                      s
+                  else
+                      seq_len(nlevels(x))
+    }
+    if (NROW(scores) == nlevels(x)) {
+        structure(as.matrix(scores)[x, , drop = FALSE],
+                  dimnames = list(seq_along(x), colnames(scores)))
+    } else
+        stop(sQuote("scores"), " does not match the number of levels")
 }
 
 ### transformation function
