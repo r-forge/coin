@@ -387,13 +387,19 @@ isequal <- function(a, b) {
     }
 }
 
+has_distribution <- function(args)
+    !(is.character(args$distribution) && args$distribution == "none")
+
 check_distribution_arg <- function(distribution,
-    values = c("asymptotic", "approximate", "exact")) {
+    values = c("asymptotic", "approximate", "exact", "none")) {
     if (is.character(distribution)) {
         distribution <- match.arg(distribution[1], values)
-        distribution <- eval(parse(text = paste0(distribution, "()")))
-    }
-    distribution
+        if (distribution == "none")
+            function(object) new("NullDistribution")
+        else
+            eval(parse(text = paste0(distribution, "()")))
+    } else
+        distribution
 }
 
 setup_args <- function(...) {

@@ -164,7 +164,7 @@ lbl_test.table <- function(object, ...) {
 }
 
 lbl_test.IndependenceProblem <- function(object,
-    distribution = c("asymptotic", "approximate"), ...) {
+    distribution = c("asymptotic", "approximate", "none"), ...) {
 
     ## convert factors to ordered
     object@x[] <- lapply(object@x, function(x)

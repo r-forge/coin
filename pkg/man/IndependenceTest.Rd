@@ -16,7 +16,7 @@
 \method{independence_test}{table}(object, \dots)
 \method{independence_test}{IndependenceProblem}(object,
     teststat = c("maximum", "quadratic", "scalar"),
-    distribution = c("asymptotic", "approximate", "exact"),
+    distribution = c("asymptotic", "approximate", "exact", "none"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL,
     check = NULL, paired = FALSE, \dots)
@@ -53,7 +53,8 @@
     or approximated.  It is also possible to specify a function with one
     argument (taking objects inheriting from
     \code{"IndependenceTestStatistic"}) which return an object of class
-    \code{"NullDistribution"}.}
+    \code{"NullDistribution"}.  Computation of the null distribution can
+    be suppressed by specifying \code{"none"}.}
   \item{alternative}{a character, the alternative hypothesis must be one
     of \code{"two.sided"} (default), \code{"greater"} or \code{"less"}.}
   \item{xtrafo}{a function of transformations (see \code{\link{trafo}})

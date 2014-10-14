@@ -23,21 +23,21 @@
 
 \method{spearman_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{spearman_test}{IndependenceProblem}(object,
-    distribution = c("asymptotic", "approximate"), \dots)
+    distribution = c("asymptotic", "approximate", "none"), \dots)
 
 \method{fisyat_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{fisyat_test}{IndependenceProblem}(object,
-    distribution = c("asymptotic", "approximate"),
+    distribution = c("asymptotic", "approximate", "none"),
     ties.method = c("mid-ranks", "average-scores"), \dots)
 
 \method{quadrant_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{quadrant_test}{IndependenceProblem}(object,
-    distribution = c("asymptotic", "approximate"),
+    distribution = c("asymptotic", "approximate", "none"),
     mid.score = c("0", "0.5", "1"), \dots)
 
 \method{koziol_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{koziol_test}{IndependenceProblem}(object,
-    distribution = c("asymptotic", "approximate"),
+    distribution = c("asymptotic", "approximate", "none"),
     ties.method = c("mid-ranks", "average-scores"), \dots)
 
 }
@@ -58,7 +58,8 @@
     (\code{"approximate"}).  Alternatively, the functions
     \code{\link{approximate}} or \code{\link{asymptotic}} can be used to
     specify how the exact conditional distribution of the test statistic
-    should be approximated.}
+    should be approximated.  Computation of the null distribution can
+    be suppressed by specifying \code{"none"}.}
   \item{ties.method}{a character, two methods are available to adjust
     scores for ties, either the score generating function is applied to
     \code{"mid-ranks"} (default) or the scores computed based on random

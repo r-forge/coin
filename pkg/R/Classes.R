@@ -112,6 +112,13 @@ setClass("PValue",
         pvalueinterval = "function",
         p              = "function",
         name           = "character"
+    ),
+    prototype = list(
+        pvalue         = function(q) NA,
+        midpvalue      = function(q) NA,
+        pvalueinterval = function(q) NA,
+        p              = function(q) NA,
+        name           = NA_character_
     )
 )
 
@@ -123,6 +130,12 @@ setClass("NullDistribution",
         d          = "function",
         support    = "function",
         parameters = "list"
+    ),
+    prototype = list(
+        q          = function(p) NA,
+        d          = function(x) NA,
+        support    = function() NA,
+        parameters = list()
     )
 )
 

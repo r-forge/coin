@@ -65,7 +65,7 @@ wilcox_test.IndependenceProblem <- function(object,
     object@method <- "Wilcoxon-Mann-Whitney Test"
     object@nullvalue <- 0
 
-    if (conf.int) {
+    if (conf.int && has_distribution(args)) {
         object <- new("ScalarIndependenceTestConfint", object)
         object@confint <- function(level)
             confint_location(object@statistic, object@distribution,
@@ -162,7 +162,7 @@ normal_test.IndependenceProblem <- function(object,
     else if (twosamp) {
         object@method <- "2-Sample Normal Quantile (van der Waerden) Test"
         object@nullvalue <- 0
-        if (conf.int) {
+        if (conf.int && has_distribution(args)) {
             object <- new("ScalarIndependenceTestConfint", object)
             object@confint <- function(level)
                 confint_location(object@statistic, object@distribution,
@@ -219,7 +219,7 @@ median_test.IndependenceProblem <- function(object,
     else if (twosamp) {
         object@method <- "2-Sample Median Test"
         object@nullvalue <- 0
-        if (conf.int) {
+        if (conf.int && has_distribution(args)) {
             object <- new("ScalarIndependenceTestConfint", object)
             object@confint <- function(level)
                 confint_location(object@statistic, object@distribution,
@@ -276,7 +276,7 @@ savage_test.IndependenceProblem <- function(object,
     else if (twosamp) {
         object@method <- "2-Sample Savage Test"
         object@nullvalue <- 0
-        if (conf.int) {
+        if (conf.int && has_distribution(args)) {
             object <- new("ScalarIndependenceTestConfint", object)
             object@confint <- function(level)
                 confint_location(object@statistic, object@distribution,

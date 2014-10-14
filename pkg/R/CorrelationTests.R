@@ -9,7 +9,7 @@ spearman_test.formula <- function(formula, data = list(), subset = NULL,
 }
 
 spearman_test.IndependenceProblem <- function(object,
-    distribution = c("asymptotic", "approximate"), ...) {
+    distribution = c("asymptotic", "approximate", "none"), ...) {
 
     args <- setup_args(teststat = "scalar",
                        distribution = check_distribution_arg(distribution,
@@ -47,7 +47,7 @@ fisyat_test.formula <- function(formula, data = list(), subset = NULL,
 }
 
 fisyat_test.IndependenceProblem <- function(object,
-    distribution = c("asymptotic", "approximate"),
+    distribution = c("asymptotic", "approximate", "none"),
     ties.method = c("mid-ranks", "average-scores"), ...) {
 
     args <- setup_args(teststat = "scalar",
@@ -88,7 +88,7 @@ quadrant_test.formula <- function(formula, data = list(), subset = NULL,
 }
 
 quadrant_test.IndependenceProblem <- function(object,
-    distribution = c("asymptotic", "approximate"),
+    distribution = c("asymptotic", "approximate", "none"),
     mid.score = c("0", "0.5", "1"), ...) {
     ## <FIXME> in principle is "exact" also possible, unless mid.score == "0.5",
     ## since the data is effectively reduced to a 2x2 table.  But...
@@ -132,7 +132,7 @@ koziol_test.formula <- function(formula, data = list(), subset = NULL,
 }
 
 koziol_test.IndependenceProblem <- function(object,
-    distribution = c("asymptotic", "approximate"),
+    distribution = c("asymptotic", "approximate", "none"),
     ties.method = c("mid-ranks", "average-scores"), ...) {
 
     args <- setup_args(teststat = "scalar",

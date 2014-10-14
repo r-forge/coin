@@ -15,7 +15,7 @@
 \method{symmetry_test}{table}(object, \dots)
 \method{symmetry_test}{SymmetryProblem}(object,
     teststat = c("maximum", "quadratic", "scalar"),
-    distribution = c("asymptotic", "approximate", "exact"),
+    distribution = c("asymptotic", "approximate", "exact", "none"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL,
     check = NULL, \dots)
@@ -37,12 +37,17 @@
     maximum type statistic (\code{"maximum"}, default) or a quadratic form
     (\code{"quadratic"}).}
   \item{distribution}{a character, the null distribution of the test
-    statistic can be approximated by its asymptotic distribution
-    (\code{"asymptotic"}, default) or via Monte Carlo resampling
-    (\code{"approximate"}).  Alternatively, the functions
-    \code{\link{approximate}} or \code{\link{asymptotic}} can be used to
-    specify how the exact conditional distribution of the test statistic
-    should be calculated or approximated.}
+    statistic can be computed \code{"exact"}ly or can be approximated by
+    its asymptotic distribution (\code{"asymptotic"}, default) or via
+    Monte Carlo resampling (\code{"approximate"}).  Alternatively, the
+    functions \code{\link{exact}}, \code{\link{approximate}} or
+    \code{\link{asymptotic}} can be used to specify how the exact
+    conditional distribution of the test statistic should be calculated
+    or approximated.  It is also possible to specify a function with one
+    argument (taking objects inheriting from
+    \code{"IndependenceTestStatistic"}) which return an object of class
+    \code{"NullDistribution"}.  Computation of the null distribution can
+    be suppressed by specifying \code{"none"}.}
   \item{alternative}{a character, the alternative hypothesis must be one
     of \code{"two.sided"} (default), \code{"greater"} or \code{"less"}.}
   \item{xtrafo}{a function of transformations (see \code{\link{trafo}})

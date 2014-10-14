@@ -17,7 +17,7 @@ independence_test.table <- function(object, ...) {
 
 independence_test.IndependenceProblem <- function(object,
     teststat = c("maximum", "quadratic", "scalar"),
-    distribution = c("asymptotic", "approximate", "exact"),
+    distribution = c("asymptotic", "approximate", "exact", "none"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL, check = NULL, paired = FALSE,
     ...) {

@@ -103,7 +103,7 @@
       \code{?sign_test})
 
       \item maximally selected statistics can now be computed for objects of
-      class \code{"table"}
+      class \code{"table"} (see \code{?maxstat_test})
 
       \item new function for maximally selected statistics transformation of
       ordered factors (see \code{?ofmaxstat_trafo})
@@ -146,6 +146,10 @@
       \item the approximate (Monte Carlo) null distribution can now be obtained
       by parallel operation using package \pkg{parallel} (see
       \code{?approximate})
+
+      \item evaluation of the null distribution can now be suppressed for all
+      test procedures by setting \code{distribution = "none"} (see
+      \code{?independence_test} and \code{?symmetry_test})
     }
   }
   \subsection{Bug fixes}{

@@ -17,7 +17,7 @@ maxstat_test.table <- function(object, ...) {
 
 maxstat_test.IndependenceProblem <- function(object,
     teststat = c("maximum", "quadratic"),
-    distribution = c("asymptotic", "approximate"),
+    distribution = c("asymptotic", "approximate", "none"),
     minprob = 0.1, maxprob = 1 - minprob, ...) {
 
     args <- setup_args(teststat = match.arg(teststat),

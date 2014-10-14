@@ -31,7 +31,7 @@
 \method{lbl_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{lbl_test}{table}(object, \dots)
 \method{lbl_test}{IndependenceProblem}(object,
-    distribution = c("asymptotic", "approximate"), \dots)
+    distribution = c("asymptotic", "approximate", "none"), \dots)
 
 }
 \arguments{
@@ -52,7 +52,8 @@
     (\code{"approximate"}).  Alternatively, the functions
     \code{\link{approximate}} or \code{\link{asymptotic}} can be used to
     specify how the exact conditional distribution of the test statistic
-    should be calculated or approximated.}
+    should be calculated or approximated.  Computation of the null
+    distribution can be suppressed by specifying \code{"none"}.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{

@@ -16,7 +16,7 @@
 \method{maxstat_test}{table}(object, \dots)
 \method{maxstat_test}{IndependenceProblem}(object,
     teststat = c("maximum", "quadratic"),
-    distribution = c("asymptotic", "approximate"),
+    distribution = c("asymptotic", "approximate", "none"),
     minprob = 0.1, maxprob = 1 - minprob, \dots)
 }
 \arguments{
@@ -41,7 +41,8 @@
     (\code{"approximate"}).  Alternatively, the functions
     \code{\link{asymptotic}} or \code{\link{approximate}} can be used to
     specify how the exact conditional distribution of the test statistic
-    should be calculated or approximated.}
+    should be calculated or approximated.  Computation of the null
+    distribution can be suppressed by specifying \code{"none"}.}
   \item{minprob}{a fraction between 0 and 0.5; consider only cutpoints
     greater than the \code{minprob * 100} \% quantile of \code{x}.}
   \item{maxprob}{a fraction between 0.5 and 1; consider only cutpoints
