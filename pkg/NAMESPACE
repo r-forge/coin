@@ -26,16 +26,17 @@ export(independence_test,
        f_trafo, of_trafo, mcp_trafo,
        asymptotic, approximate, exact)
 
-exportClasses("CovarianceMatrix", "Variance", "VarCovar", "IndependenceProblem",
+exportClasses("ExpectCovar", "ExpectCovarInfluence", "CovarianceMatrix",
+              "Variance", "VarCovar", "IndependenceProblem",
               "IndependenceTestProblem", "IndependenceLinearStatistic",
               "IndependenceTestStatistic", "MaxTypeIndependenceTestStatistic",
               "QuadTypeIndependenceTestStatistic",
               "ScalarIndependenceTestStatistic", "PValue", "NullDistribution",
               "AsymptNullDistribution", "ApproxNullDistribution",
-              "ExactNullDistribution", "IndependenceTest", "MaxTypeIndependenceTest",
-              "QuadTypeIndependenceTest", "ScalarIndependenceTest",
-              "ScalarIndependenceTestConfint", "SymmetryProblem", "ExpectCovar",
-              "ExpectCovarInfluence")
+              "ExactNullDistribution", "IndependenceTest",
+              "MaxTypeIndependenceTest", "QuadTypeIndependenceTest",
+              "ScalarIndependenceTest", "ScalarIndependenceTestConfint",
+              "SymmetryProblem")
 
 exportMethods("initialize", "show", "pvalue", "midpvalue", "pvalue_interval",
               "statistic", "dperm", "pperm", "qperm", "rperm", "support",
