@@ -11,14 +11,14 @@
   complete block design.
 }
 \usage{
-\method{symmetry_test}{formula}(formula, data, subset = NULL, \dots)
+\method{symmetry_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{symmetry_test}{table}(object, \dots)
 \method{symmetry_test}{SymmetryProblem}(object,
     teststat = c("maximum", "quadratic", "scalar"),
     distribution = c("asymptotic", "approximate", "exact", "none"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL,
-    check = NULL, \dots)
+    check = NULL, paired = FALSE, \dots)
 }
 \arguments{
   \item{formula}{a formula of the form \code{y1 + ... + yq ~ x | block} where
@@ -30,6 +30,8 @@
     model formula.}
   \item{subset}{an optional vector specifying a subset of observations
     to be used.}
+  \item{weights}{an optional formula of the form \code{~ w} defining
+    integer valued weights for the observations.}
   \item{object}{an object inheriting from class \code{"SymmetryProblem"}
     or an object of class \code{"table"}.}
   \item{teststat}{a character, the type of test statistic to be applied:
@@ -62,6 +64,10 @@
   \item{check}{a function to be applied to objects of class
     \code{"SymmetryTest"} in order to check for specific forms, see
     below.}
+  \item{paired}{a logical, indicating that paired data have been
+    transformed in such a way that the resulting unstandardized linear
+    statistic is the sum of the absolute values of the positive
+    differences between the paired observations.}
   \item{\dots}{further arguments to be passed to or from methods.}
 }
 \details{
@@ -72,5 +78,26 @@
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
+}
+\examples{
+## permutation test for paired observations
+y1 <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+y2 <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+dta <- data.frame(
+    y = c(y1, y2),
+    x = gl(2, length(y1)),
+    block = factor(rep(seq_along(y1), 2))
+)
+symmetry_test(y ~ x | block, data = dta,
+              distribution = "exact", alternative = "greater")
+
+## alternatively: transform data and set 'paired = TRUE'
+diff <- y1 - y2
+y <- as.vector(rbind(abs(diff) * (diff >= 0), abs(diff) * (diff < 0)))
+x <- factor(rep(0:1, length(diff)), labels = c("pos", "neg"))
+block <- gl(length(diff), 2)
+symmetry_test(y ~ x | block,
+              distribution = "exact", alternative = "greater",
+              paired = TRUE)
 }
 \keyword{htest}

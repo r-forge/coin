@@ -51,14 +51,14 @@ it@distribution@name
 pvalue(it)
 
 ### paired two-sample
-try(independence_test(y ~ x | b, data = dta2, paired = TRUE,
-                      distribution = exact(algo = "auto")))
+try(symmetry_test(y ~ x | b, data = dta2, paired = TRUE,
+                  distribution = exact(algo = "auto")))
 
-try(independence_test(y ~ x | b, data = dta2, paired = TRUE,
-                      distribution = exact(algo = "shift")))
+try(symmetry_test(y ~ x | b, data = dta2, paired = TRUE,
+                  distribution = exact(algo = "shift")))
 
-try(independence_test(y ~ x | b, data = dta2, paired = TRUE,
-                      distribution = exact(algo = "split-up")))
+try(symmetry_test(y ~ x | b, data = dta2, paired = TRUE,
+                  distribution = exact(algo = "split-up")))
 
 ### mapped into integers using 'fact'
 
@@ -93,18 +93,18 @@ it@distribution@name
 pvalue(it)
 
 ### paired two-sample
-it <- independence_test(y5 ~ x | b, data = dta2, paired = TRUE,
-                        distribution = exact(algo = "auto", fact = 1e5))
-it@distribution@name
-pvalue(it)
+st <- symmetry_test(y5 ~ x | b, data = dta2, paired = TRUE,
+                    distribution = exact(algo = "auto", fact = 1e5))
+st@distribution@name
+pvalue(st)
 
-it <- independence_test(y5 ~ x | b, data = dta2, paired = TRUE,
-                        distribution = exact(algo = "shift", fact = 1e5))
-it@distribution@name
-pvalue(it)
+st <- symmetry_test(y5 ~ x | b, data = dta2, paired = TRUE,
+                    distribution = exact(algo = "shift", fact = 1e5))
+st@distribution@name
+pvalue(st)
 
-try(independence_test(y5 ~ x | b, data = dta2, paired = TRUE,
-                      distribution = exact(algo = "split-up")))
+try(symmetry_test(y5 ~ x | b, data = dta2, paired = TRUE,
+                  distribution = exact(algo = "split-up")))
 
 ### automatically mapped into integers
 
@@ -139,18 +139,18 @@ it@distribution@name
 pvalue(it)
 
 ### paired two-sample
-it <- independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
-                        distribution = exact(algo = "auto"))
-it@distribution@name
-pvalue(it)
+st <- symmetry_test(y3 ~ x | b, data = dta2, paired = TRUE,
+                    distribution = exact(algo = "auto"))
+st@distribution@name
+pvalue(st)
 
-it <- independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
-                        distribution = exact(algo = "shift"))
-it@distribution@name
-pvalue(it)
+st <- symmetry_test(y3 ~ x | b, data = dta2, paired = TRUE,
+                    distribution = exact(algo = "shift"))
+st@distribution@name
+pvalue(st)
 
-try(independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
-                      distribution = exact(algo = "split-up")))
+try(symmetry_test(y3 ~ x | b, data = dta2, paired = TRUE,
+                  distribution = exact(algo = "split-up")))
 
 
 ### check exact tests with weights
@@ -234,20 +234,20 @@ round(dp_it2_SR <- dperm(it2_SR, supp_it2_SR), 7)            # failed in < 1.1-0
 round(qp_it2_SR <- qperm(it2_SR, seq(0, 1, 0.01)), 7)
 
 ### paired shift with block
-it3_SR <- independence_test(y ~ x | b, data = dta2,
-                            distribution = exact(algorithm = "shift"),
-                            paired = TRUE)
-supp_it3_SR <- support(it3_SR)
-stopifnot(!is.unsorted(supp_it3_SR))
-stopifnot(all(supp_it3_SR == unique(supp_it3_SR)))
-round(pp_it3_SR <- pperm(it3_SR, supp_it3_SR), 7)
-round(dp_it3_SR <- dperm(it3_SR, supp_it3_SR), 7)
-round(qp_it3_SR <- qperm(it3_SR, seq(0, 1, 0.01)), 7)
+st3_SR <- symmetry_test(y ~ x | b, data = dta2,
+                        distribution = exact(algorithm = "shift"),
+                        paired = TRUE)
+supp_st3_SR <- support(st3_SR)
+stopifnot(!is.unsorted(supp_st3_SR))
+stopifnot(all(supp_st3_SR == unique(supp_st3_SR)))
+round(pp_st3_SR <- pperm(st3_SR, supp_st3_SR), 7)
+round(dp_st3_SR <- dperm(st3_SR, supp_st3_SR), 7)
+round(qp_st3_SR <- qperm(st3_SR, seq(0, 1, 0.01)), 7)
 
 ### should be equal
-stopifnot(isequal(pp_it2_SR, pp_it3_SR))                     # failed in < 1.1-0
-stopifnot(isequal(qp_it2_SR, qp_it3_SR))                     # failed in < 1.1-0
-stopifnot(isequal(pvalue(it2_SR), pvalue(it3_SR)))
+stopifnot(isequal(pp_it2_SR, pp_st3_SR))                     # failed in < 1.1-0
+stopifnot(isequal(qp_it2_SR, qp_st3_SR))                     # failed in < 1.1-0
+stopifnot(isequal(pvalue(it2_SR), pvalue(st3_SR)))
 
 
 ### exact test based on quadratic forms
@@ -264,20 +264,20 @@ stopifnot(isequal(pvalue(itq1), pvalue(its1)))
 stopifnot(isequal(support(itq1), support(its1)[support(its1) >= 0]^2))
 
 ### paired shift with block
-its2 <- independence_test(y ~ x | b, data = dta2,
-                          distribution = exact(algorithm = "shift"),
-                          paired = TRUE, teststat = "scalar")
-itq2 <- independence_test(y ~ x | b, data = dta2,
-                          distribution = exact(algorithm = "shift"),
-                          paired = TRUE, teststat = "quad")
-stopifnot(isequal(statistic(itq2), statistic(its2)^2))
-stopifnot(isequal(pvalue(itq2), pvalue(its2)))
-stopifnot(isequal(support(itq2), support(its2)[support(its2) >= 0]^2))
+sts2 <- symmetry_test(y ~ x | b, data = dta2,
+                      distribution = exact(algorithm = "shift"),
+                      paired = TRUE, teststat = "scalar")
+stq2 <- symmetry_test(y ~ x | b, data = dta2,
+                      distribution = exact(algorithm = "shift"),
+                      paired = TRUE, teststat = "quad")
+stopifnot(isequal(statistic(stq2), statistic(sts2)^2))
+stopifnot(isequal(pvalue(stq2), pvalue(sts2)))
+stopifnot(isequal(support(stq2), support(sts2)[support(sts2) >= 0]^2))
 
 ### should be equal
-stopifnot(isequal(statistic(itq1), statistic(itq2)))
-stopifnot(isequal(pvalue(itq1), pvalue(itq2)))
-stopifnot(isequal(support(itq1), support(itq2)))
+stopifnot(isequal(statistic(itq1), statistic(stq2)))
+stopifnot(isequal(pvalue(itq1), pvalue(stq2)))
+stopifnot(isequal(support(itq1), support(stq2)))
 
 ### dperm gave an error here (fixed in r869)
 tab <- as.table(matrix(c(3, 0, 0, 3), ncol = 2))

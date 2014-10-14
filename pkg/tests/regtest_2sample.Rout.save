@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2014-02-02 r64916) -- "Unsuffered Consequences"
+R Under development (unstable) (2014-08-19 r66437) -- "Unsuffered Consequences"
 Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -746,10 +746,10 @@ ratio of scales
 > x <- factor(rep(1:2, 15))
 > y <- as.integer(round((rnorm(30) + as.numeric(x)) * 1000))
 > id <- gl(15, 2)
-> try(independence_test(y ~ x | id, distribution = "exact", paired = TRUE))
+> try(symmetry_test(y ~ x | id, distribution = "exact", paired = TRUE))
 Error in SR_shift_1sample(object, fact = attr(int, "fact")) : 
   cannot compute exact distribution with negative scores
 > 
 > proc.time()
    user  system elapsed 
-   2.32    0.12    2.51 
+   2.19    0.09    2.41 

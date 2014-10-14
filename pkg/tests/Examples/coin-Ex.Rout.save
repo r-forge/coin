@@ -497,23 +497,19 @@ alternative hypothesis: two.sided
 > 
 > ### ** Examples
 > 
-> 
->   ### independence of asat and group via normal scores test
->   independence_test(asat ~ group, data = asat,
-+ 
-+     ### exact null distribution
-+     distribution = "exact",
-+ 
-+     ### one-sided test
-+     alternative = "greater",
-+ 
-+     ### apply normal scores to asat$asat
-+     ytrafo = function(data) trafo(data, numeric_trafo = normal_trafo),
-+ 
-+     ### indicator matrix of 1st level of group
-+     xtrafo = function(data) trafo(data, factor_trafo = function(x)
-+         matrix(x == levels(x)[1], ncol = 1))
-+   )
+> ## independence of asat and group via normal scores test
+> independence_test(asat ~ group, data = asat,
++                   ## exact null distribution
++                   distribution = "exact",
++                   ## one-sided test
++                   alternative = "greater",
++                   ## apply normal scores to asat$asat
++                   ytrafo = function(data)
++                       trafo(data, numeric_trafo = normal_trafo),
++                   ## indicator matrix of 1st level of group
++                   xtrafo = function(data)
++                       trafo(data, factor_trafo = function(x)
++                           matrix(x == levels(x)[1], ncol = 1)))
 
 	Exact General Independence Test
 
@@ -522,9 +518,10 @@ Z = 1.4269, p-value = 0.07809
 alternative hypothesis: greater
 
 > 
->   ### same as
->   normal_test(asat ~ group, data = asat, distribution = "exact",
-+               alternative = "greater")
+> ## same as
+> normal_test(asat ~ group, data = asat,
++             distribution = "exact",
++             alternative = "greater")
 
 	Exact 2-Sample Normal Quantile (van der Waerden) Test
 
@@ -532,49 +529,6 @@ data:  asat by group (Compound, Control)
 Z = 1.4269, p-value = 0.07809
 alternative hypothesis: true mu is greater than 0
 
-> 
-> 
->   ### permutation test for paired observations
->   y1 <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
->   y2 <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
->   dta <- data.frame(y = c(y1, y2), x = gl(2, length(y1)),
-+                     block = factor(rep(seq_along(y1), 2)))
->   independence_test(y ~ x | block, data = dta,
-+                     distribution = "exact", alternative = "greater")
-
-	Exact General Independence Test
-
-data:  y by x (1, 2) 
-	 stratified by block
-Z = 2.1948, p-value = 0.01367
-alternative hypothesis: greater
-
-> 
->   ### alternatively: transform data and set 'paired = TRUE'
->   diff <- y1 - y2
->   y <- as.vector(rbind(abs(diff) * (diff >= 0), abs(diff) * (diff < 0)))
->   x <- factor(rep(0:1, length(diff)), labels = c("pos", "neg"))
->   block <- gl(length(diff), 2)
->   independence_test(y ~ x | block,
-+                     distribution = "exact", alternative = "greater",
-+                     paired = TRUE)
-
-	Exact General Independence Test
-
-data:  y by x (pos, neg) 
-	 stratified by block
-Z = 2.1948, p-value = 0.01367
-alternative hypothesis: greater
-
-> 
-> 
->   ### if you are interested in the internals:
->   ## Not run: 
-> ##D       browseURL(system.file("documentation", "html", "index.html",
-> ##D                             package = "coin"))
-> ##D   
-> ## End(Not run)
-> 
 > 
 > 
 > 
@@ -1387,6 +1341,58 @@ newdrug             0.0028              0.0823              0.0467
         rho = 0, gamma = 2 rho = 1, gamma = 2 rho = 2, gamma = 2
 newdrug             0.0191             0.0111             0.0063
 > 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("SymmetryTest")
+> ### * SymmetryTest
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: SymmetryTest
+> ### Title: General Symmetry Test
+> ### Aliases: symmetry_test symmetry_test.formula symmetry_test.table
+> ###   symmetry_test.SymmetryProblem
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> ## permutation test for paired observations
+> y1 <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+> y2 <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+> dta <- data.frame(
++     y = c(y1, y2),
++     x = gl(2, length(y1)),
++     block = factor(rep(seq_along(y1), 2))
++ )
+> symmetry_test(y ~ x | block, data = dta,
++               distribution = "exact", alternative = "greater")
+
+	Exact General Symmetry Test
+
+data:  y by x (1, 2) 
+	 stratified by block
+Z = 2.1948, p-value = 0.01367
+alternative hypothesis: greater
+
+> 
+> ## alternatively: transform data and set 'paired = TRUE'
+> diff <- y1 - y2
+> y <- as.vector(rbind(abs(diff) * (diff >= 0), abs(diff) * (diff < 0)))
+> x <- factor(rep(0:1, length(diff)), labels = c("pos", "neg"))
+> block <- gl(length(diff), 2)
+> symmetry_test(y ~ x | block,
++               distribution = "exact", alternative = "greater",
++               paired = TRUE)
+
+	Exact General Symmetry Test
+
+data:  y by x (pos, neg) 
+	 stratified by block
+Z = 2.1948, p-value = 0.01367
+alternative hypothesis: greater
+
 > 
 > 
 > 
@@ -2684,7 +2690,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  40.14 0.25 40.82 NA NA 
+Time elapsed:  37.99 0.23 38.48 NA NA 
 > grDevices::dev.off()
 null device 
           1 

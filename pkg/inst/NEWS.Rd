@@ -93,11 +93,11 @@
       \item the Fligner-Killeen test can now also handle 2-sample problems (see
       \code{?fligner_test})
 
-      \item \code{independence_test()} has gained a new argument \code{paired}
-      that is used to indicate if paired data have been transformed in such a
-      way that the resulting unstandardized linear statistic is the sum of the
+      \item \code{symmetry_test()} has gained a new argument \code{paired} that
+      is used to indicate if paired data have been transformed in such a way
+      that the resulting unstandardized linear statistic is the sum of the
       absolute values of the positive differences between the paired
-      observations (see \code{?independence_test})
+      observations (see \code{?symmetry_test})
 
       \item the sign test for paired data is now available (see
       \code{?sign_test})

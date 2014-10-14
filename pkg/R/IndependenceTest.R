@@ -19,7 +19,7 @@ independence_test.IndependenceProblem <- function(object,
     teststat = c("maximum", "quadratic", "scalar"),
     distribution = c("asymptotic", "approximate", "exact", "none"),
     alternative = c("two.sided", "less", "greater"),
-    xtrafo = trafo, ytrafo = trafo, scores = NULL, check = NULL, paired = FALSE,
+    xtrafo = trafo, ytrafo = trafo, scores = NULL, check = NULL,
     ...) {
 
     addargs <- list(...)
@@ -50,9 +50,7 @@ independence_test.IndependenceProblem <- function(object,
     }
 
     ## check type of test statistic and alternative
-    scalar <- is_scalar(object)
-
-    if (!scalar) {
+    if (!is_scalar(object)) {
         if (teststat == "scalar") {
             warning("Length linear statistic > 1, using ",
                     sQuote("maximum"), "-type test statistic")
@@ -75,7 +73,7 @@ independence_test.IndependenceProblem <- function(object,
     switch(teststat,
         "scalar" = {
             object <- new("ScalarIndependenceTestStatistic", object,
-                          alternative = alternative, paired = isTRUE(paired))
+                          alternative = alternative, paired = FALSE)
             new("ScalarIndependenceTest", statistic = object,
                 distribution = distribution(object), call = match.call())
         },
@@ -87,7 +85,7 @@ independence_test.IndependenceProblem <- function(object,
         },
         "quadratic" = {
             object <- new("QuadTypeIndependenceTestStatistic", object,
-                          paired = isTRUE(paired))
+                          paired = FALSE)
             new("QuadTypeIndependenceTest", statistic = object,
                 distribution = distribution(object), call = match.call())
         }

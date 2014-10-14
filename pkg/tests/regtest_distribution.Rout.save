@@ -82,18 +82,18 @@ Error in .local(object, ...) :
 [1] 0.9417069
 > 
 > ### paired two-sample
-> try(independence_test(y ~ x | b, data = dta2, paired = TRUE,
-+                       distribution = exact(algo = "auto")))
+> try(symmetry_test(y ~ x | b, data = dta2, paired = TRUE,
++                   distribution = exact(algo = "auto")))
 Error in .local(object, ...) : 
   cannot compute exact distribution with real-valued scores
 > 
-> try(independence_test(y ~ x | b, data = dta2, paired = TRUE,
-+                       distribution = exact(algo = "shift")))
+> try(symmetry_test(y ~ x | b, data = dta2, paired = TRUE,
++                   distribution = exact(algo = "shift")))
 Error in .local(object, ...) : 
   cannot compute exact distribution with real-valued scores
 > 
-> try(independence_test(y ~ x | b, data = dta2, paired = TRUE,
-+                       distribution = exact(algo = "split-up")))
+> try(symmetry_test(y ~ x | b, data = dta2, paired = TRUE,
++                   distribution = exact(algo = "split-up")))
 Error in .local(object, ...) : 
   split-up algorithm not implemented for paired samples
 > 
@@ -142,22 +142,22 @@ Error in vdW_split_up_2sample(object) :
 [1] 0.9417177
 > 
 > ### paired two-sample
-> it <- independence_test(y5 ~ x | b, data = dta2, paired = TRUE,
-+                         distribution = exact(algo = "auto", fact = 1e5))
-> it@distribution@name
+> st <- symmetry_test(y5 ~ x | b, data = dta2, paired = TRUE,
++                     distribution = exact(algo = "auto", fact = 1e5))
+> st@distribution@name
 [1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
-> pvalue(it)
+> pvalue(st)
 [1] 0.8828659
 > 
-> it <- independence_test(y5 ~ x | b, data = dta2, paired = TRUE,
-+                         distribution = exact(algo = "shift", fact = 1e5))
-> it@distribution@name
+> st <- symmetry_test(y5 ~ x | b, data = dta2, paired = TRUE,
++                     distribution = exact(algo = "shift", fact = 1e5))
+> st@distribution@name
 [1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
-> pvalue(it)
+> pvalue(st)
 [1] 0.8828659
 > 
-> try(independence_test(y5 ~ x | b, data = dta2, paired = TRUE,
-+                       distribution = exact(algo = "split-up")))
+> try(symmetry_test(y5 ~ x | b, data = dta2, paired = TRUE,
++                   distribution = exact(algo = "split-up")))
 Error in .local(object, ...) : 
   split-up algorithm not implemented for paired samples
 > 
@@ -206,22 +206,22 @@ Error in vdW_split_up_2sample(object) :
 [1] 0.9419451
 > 
 > ### paired two-sample
-> it <- independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
-+                         distribution = exact(algo = "auto"))
-> it@distribution@name
+> st <- symmetry_test(y3 ~ x | b, data = dta2, paired = TRUE,
++                     distribution = exact(algo = "auto"))
+> st@distribution@name
 [1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
-> pvalue(it)
+> pvalue(st)
 [1] 0.8830051
 > 
-> it <- independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
-+                         distribution = exact(algo = "shift"))
-> it@distribution@name
+> st <- symmetry_test(y3 ~ x | b, data = dta2, paired = TRUE,
++                     distribution = exact(algo = "shift"))
+> st@distribution@name
 [1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
-> pvalue(it)
+> pvalue(st)
 [1] 0.8830051
 > 
-> try(independence_test(y3 ~ x | b, data = dta2, paired = TRUE,
-+                       distribution = exact(algo = "split-up")))
+> try(symmetry_test(y3 ~ x | b, data = dta2, paired = TRUE,
++                   distribution = exact(algo = "split-up")))
 Error in .local(object, ...) : 
   split-up algorithm not implemented for paired samples
 > 
@@ -2247,13 +2247,13 @@ Error in .local(object, ...) :
  [97]  1.7510004  1.7995609  1.8978112  2.2738725  2.4511747
 > 
 > ### paired shift with block
-> it3_SR <- independence_test(y ~ x | b, data = dta2,
-+                             distribution = exact(algorithm = "shift"),
-+                             paired = TRUE)
-> supp_it3_SR <- support(it3_SR)
-> stopifnot(!is.unsorted(supp_it3_SR))
-> stopifnot(all(supp_it3_SR == unique(supp_it3_SR)))
-> round(pp_it3_SR <- pperm(it3_SR, supp_it3_SR), 7)
+> st3_SR <- symmetry_test(y ~ x | b, data = dta2,
++                         distribution = exact(algorithm = "shift"),
++                         paired = TRUE)
+> supp_st3_SR <- support(st3_SR)
+> stopifnot(!is.unsorted(supp_st3_SR))
+> stopifnot(all(supp_st3_SR == unique(supp_st3_SR)))
+> round(pp_st3_SR <- pperm(st3_SR, supp_st3_SR), 7)
   [1] 0.0019531 0.0039062 0.0058594 0.0078125 0.0097656 0.0117188 0.0136719
   [8] 0.0156250 0.0175781 0.0195312 0.0214844 0.0234375 0.0253906 0.0273438
  [15] 0.0292969 0.0312500 0.0332031 0.0351562 0.0371094 0.0390625 0.0410156
@@ -2318,7 +2318,7 @@ Error in .local(object, ...) :
 [428] 0.9609375 0.9628906 0.9648438 0.9667969 0.9687500 0.9707031 0.9726562
 [435] 0.9746094 0.9765625 0.9785156 0.9804688 0.9824219 0.9843750 0.9863281
 [442] 0.9882812 0.9902344 0.9921875 0.9941406 0.9960938 0.9980469 1.0000000
-> round(dp_it3_SR <- dperm(it3_SR, supp_it3_SR), 7)
+> round(dp_st3_SR <- dperm(st3_SR, supp_st3_SR), 7)
   [1] 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531
   [8] 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531
  [15] 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531
@@ -2383,7 +2383,7 @@ Error in .local(object, ...) :
 [428] 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531
 [435] 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531
 [442] 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531 0.0019531
-> round(qp_it3_SR <- qperm(it3_SR, seq(0, 1, 0.01)), 7)
+> round(qp_st3_SR <- qperm(st3_SR, seq(0, 1, 0.01)), 7)
   [1] -2.4511747 -2.2738725 -1.8978112 -1.7995609 -1.7510004 -1.6979227
   [7] -1.6414570 -1.5736982 -1.4122064 -1.2992751 -1.2744302 -1.2315163
  [13] -1.1987662 -1.1750506 -1.1332660 -1.1197142 -1.0880935 -1.0406623
@@ -2403,9 +2403,9 @@ Error in .local(object, ...) :
  [97]  1.7510004  1.7995609  1.8978112  2.2738725  2.4511747
 > 
 > ### should be equal
-> stopifnot(isequal(pp_it2_SR, pp_it3_SR))                     # failed in < 1.1-0
-> stopifnot(isequal(qp_it2_SR, qp_it3_SR))                     # failed in < 1.1-0
-> stopifnot(isequal(pvalue(it2_SR), pvalue(it3_SR)))
+> stopifnot(isequal(pp_it2_SR, pp_st3_SR))                     # failed in < 1.1-0
+> stopifnot(isequal(qp_it2_SR, qp_st3_SR))                     # failed in < 1.1-0
+> stopifnot(isequal(pvalue(it2_SR), pvalue(st3_SR)))
 > 
 > 
 > ### exact test based on quadratic forms
@@ -2422,20 +2422,20 @@ Error in .local(object, ...) :
 > stopifnot(isequal(support(itq1), support(its1)[support(its1) >= 0]^2))
 > 
 > ### paired shift with block
-> its2 <- independence_test(y ~ x | b, data = dta2,
-+                           distribution = exact(algorithm = "shift"),
-+                           paired = TRUE, teststat = "scalar")
-> itq2 <- independence_test(y ~ x | b, data = dta2,
-+                           distribution = exact(algorithm = "shift"),
-+                           paired = TRUE, teststat = "quad")
-> stopifnot(isequal(statistic(itq2), statistic(its2)^2))
-> stopifnot(isequal(pvalue(itq2), pvalue(its2)))
-> stopifnot(isequal(support(itq2), support(its2)[support(its2) >= 0]^2))
+> sts2 <- symmetry_test(y ~ x | b, data = dta2,
++                       distribution = exact(algorithm = "shift"),
++                       paired = TRUE, teststat = "scalar")
+> stq2 <- symmetry_test(y ~ x | b, data = dta2,
++                       distribution = exact(algorithm = "shift"),
++                       paired = TRUE, teststat = "quad")
+> stopifnot(isequal(statistic(stq2), statistic(sts2)^2))
+> stopifnot(isequal(pvalue(stq2), pvalue(sts2)))
+> stopifnot(isequal(support(stq2), support(sts2)[support(sts2) >= 0]^2))
 > 
 > ### should be equal
-> stopifnot(isequal(statistic(itq1), statistic(itq2)))
-> stopifnot(isequal(pvalue(itq1), pvalue(itq2)))
-> stopifnot(isequal(support(itq1), support(itq2)))
+> stopifnot(isequal(statistic(itq1), statistic(stq2)))
+> stopifnot(isequal(pvalue(itq1), pvalue(stq2)))
+> stopifnot(isequal(support(itq1), support(stq2)))
 > 
 > ### dperm gave an error here (fixed in r869)
 > tab <- as.table(matrix(c(3, 0, 0, 3), ncol = 2))
@@ -2579,4 +2579,4 @@ Error in .local(object, ...) :
 > 
 > proc.time()
    user  system elapsed 
-   8.98    0.59    9.73 
+   6.31    0.49    6.92 

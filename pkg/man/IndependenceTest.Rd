@@ -19,11 +19,11 @@
     distribution = c("asymptotic", "approximate", "exact", "none"),
     alternative = c("two.sided", "less", "greater"),
     xtrafo = trafo, ytrafo = trafo, scores = NULL,
-    check = NULL, paired = FALSE, \dots)
+    check = NULL, \dots)
 }
 \arguments{
   \item{formula}{a formula of the form
-    \code{y1 + ... + yp ~ x1 + ... + xq | block} where the variables on
+    \code{y1 + ... + yq ~ x1 + ... + xp | block} where the variables on
     the left and right hand side may be measured on arbitrary scales
     (including censored ones on the left hand side) and \code{block} is
     an optional factor for stratification.}
@@ -69,10 +69,6 @@
   \item{check}{a function to be applied to objects of class
     \code{"IndependenceTest"} in order to check for specific properties
     of the data.}
-  \item{paired}{a logical, indicating that paired data have been
-    transformed in such a way that the resulting unstandardized linear
-    statistic is the sum of the absolute values of the positive
-    differences between the paired observations.}
   \item{\dots}{further arguments to be passed to or from
     methods. Currently, none of the additional arguments is passed to
     any function.}
@@ -131,52 +127,23 @@
 
 }
 \examples{
+## independence of asat and group via normal scores test
+independence_test(asat ~ group, data = asat,
+                  ## exact null distribution
+                  distribution = "exact",
+                  ## one-sided test
+                  alternative = "greater",
+                  ## apply normal scores to asat$asat
+                  ytrafo = function(data)
+                      trafo(data, numeric_trafo = normal_trafo),
+                  ## indicator matrix of 1st level of group
+                  xtrafo = function(data)
+                      trafo(data, factor_trafo = function(x)
+                          matrix(x == levels(x)[1], ncol = 1)))
 
-  ### independence of asat and group via normal scores test
-  independence_test(asat ~ group, data = asat,
-
-    ### exact null distribution
-    distribution = "exact",
-
-    ### one-sided test
-    alternative = "greater",
-
-    ### apply normal scores to asat$asat
-    ytrafo = function(data) trafo(data, numeric_trafo = normal_trafo),
-
-    ### indicator matrix of 1st level of group
-    xtrafo = function(data) trafo(data, factor_trafo = function(x)
-        matrix(x == levels(x)[1], ncol = 1))
-  )
-
-  ### same as
-  normal_test(asat ~ group, data = asat, distribution = "exact",
-              alternative = "greater")
-
-
-  ### permutation test for paired observations
-  y1 <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
-  y2 <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
-  dta <- data.frame(y = c(y1, y2), x = gl(2, length(y1)),
-                    block = factor(rep(seq_along(y1), 2)))
-  independence_test(y ~ x | block, data = dta,
-                    distribution = "exact", alternative = "greater")
-
-  ### alternatively: transform data and set 'paired = TRUE'
-  diff <- y1 - y2
-  y <- as.vector(rbind(abs(diff) * (diff >= 0), abs(diff) * (diff < 0)))
-  x <- factor(rep(0:1, length(diff)), labels = c("pos", "neg"))
-  block <- gl(length(diff), 2)
-  independence_test(y ~ x | block,
-                    distribution = "exact", alternative = "greater",
-                    paired = TRUE)
-
-
-  ### if you are interested in the internals:
-  \dontrun{
-      browseURL(system.file("documentation", "html", "index.html",
-                            package = "coin"))
-  }
-
+## same as
+normal_test(asat ~ group, data = asat,
+            distribution = "exact",
+            alternative = "greater")
 }
 \keyword{htest}
