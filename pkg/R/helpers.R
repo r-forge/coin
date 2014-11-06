@@ -301,6 +301,10 @@ table2IndependenceProblem <- function(object) {
         stop(sQuote("object"), " is not a two- or three-way contingency table")
 }
 
+is_ytrafo <- function()
+    any(vapply(sys.calls(), function(i)
+            identical(as.character(i)[1], "ytrafo"), NA))
+
 is_2sample <- function(object) {
     groups <- nlevels(droplevels(object@x)[[1L]]) == 2L &&
                   ncol(object@xtrans) == 1L
