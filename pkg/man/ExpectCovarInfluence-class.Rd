@@ -1,6 +1,7 @@
 \name{ExpectCovarInfluence-class}
 \docType{class}
 \alias{ExpectCovarInfluence-class}
+\alias{initialize,ExpectCovarInfluence-method}
 \title{Class \code{"ExpectCovarInfluence"}}
 \description{
   Objects of class \code{"ExpectCovarInfluence"} represent the expectation and
@@ -34,7 +35,12 @@
   Class \code{"\linkS4class{ExpectCovar}"}, directly.
 }
 \section{Methods}{
-  No methods defined with class \code{"ExpectCovarInfluence"} in the signature.
+  \describe{
+    \item{initialize}{
+      \code{signature(.Object = "ExpectCovarInfluence")}: See the documentation
+      for \code{\link[methods:new]{initialize}} for details.
+    }
+  }
 }
 \section{Note}{
   Normally, this class is used internally only.

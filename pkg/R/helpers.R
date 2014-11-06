@@ -51,7 +51,14 @@ expectvaronly <- function(x, y, weights) {
 ExpectCovarLinearStatistic <- function(x, y, weights, varonly = FALSE) {
     if (varonly) {
         ev <- expectvaronly(x, y, weights)
-        new("ExpectCovar", expectation = ev$E, covariance = ev$V)
+### <FIXME> This conflicts with the "new" initialize methods that were brought
+###         over from 'party' in r927
+###         new("ExpectCovar", expectation = ev$E, covariance = ev$V)
+### </FIXME>
+        ec <- new("ExpectCovar")
+        ec@expectation <- ev$E
+        ec@covariance <- ev$V
+        ec
     } else {
         storage.mode(x) <- "double"
         storage.mode(y) <- "double"
