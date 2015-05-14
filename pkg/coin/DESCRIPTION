@@ -1,7 +1,7 @@
 Package: coin
-Title: Conditional Inference Procedures in a Permutation Test Framework
-Date: 2014-XX-XX
 Version: 1.1-0
+Date: 2015-XX-XX
+Title: Conditional Inference Procedures in a Permutation Test Framework
 Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
                     email = "Torsten.Hothorn@R-project.org"),
              person("Kurt", "Hornik", role = "aut"),
@@ -17,3 +17,4 @@ Suggests: parallel, xtable, e1071, vcd, TH.data
 Enhances: Biobase
 LazyData: yes
 License: GPL-2
+URL: http://coin.r-forge.r-project.org
