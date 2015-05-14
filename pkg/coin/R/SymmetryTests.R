@@ -137,7 +137,7 @@ wilcoxsign_test.SymmetryProblem <- function(object,
     }
     n <- length(pos)
 
-    object <- new("IndependenceProblem",
+    object <- new("SymmetryProblem",
                   x = data.frame(x = factor(rep.int(0:1, n),
                                             labels = c("pos", "neg"))),
                   y = data.frame(y = as.vector(rbind(pos, neg))),
@@ -145,7 +145,7 @@ wilcoxsign_test.SymmetryProblem <- function(object,
 
     args <- setup_args(teststat = "scalar", paired = TRUE)
 
-    object <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("symmetry_test", c(list(object = object), args))
 
     if (zero.method == "Pratt")
         object@method <- "Wilcoxon-Pratt Signed-Rank Test"
@@ -195,7 +195,7 @@ sign_test.SymmetryProblem <- function(object, ...) {
     diffs <- diffs[abs_diffs > 0]
     n <- length(diffs)
 
-    object <- new("IndependenceProblem",
+    object <- new("SymmetryProblem",
                   x = data.frame(x = factor(rep.int(0:1, n),
                                             labels = c("pos", "neg"))),
                   y = data.frame(y = as.vector(rbind(as.numeric(diffs > 0),
@@ -204,7 +204,7 @@ sign_test.SymmetryProblem <- function(object, ...) {
 
     args <- setup_args(teststat = "scalar", paired = TRUE)
 
-    object <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call("symmetry_test", c(list(object = object), args))
 
     object@method <- "Sign Test"
     object@nullvalue <- 0
