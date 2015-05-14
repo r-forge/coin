@@ -1,7 +1,6 @@
 
 > library("coin")
 Loading required package: survival
-Loading required package: splines
 
 > set.seed(290875)
 
@@ -253,4 +252,4 @@ alternative hypothesis: greater
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-  16.33    0.14   16.77 
+  16.53    0.04   16.69 

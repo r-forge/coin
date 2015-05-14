@@ -1,11 +1,13 @@
 
-R Under development (unstable) (2014-08-19 r66437) -- "Unsuffered Consequences"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R Under development (unstable) (2015-05-13 r68364) -- "Unsuffered Consequences"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -21,7 +23,6 @@ Type 'q()' to quit R.
 > options(pager = "console")
 > library('coin')
 Loading required package: survival
-Loading required package: splines
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > cleanEx()
@@ -142,7 +143,7 @@ odds ratio
 	Exact Pearson's Chi-Squared Test
 
 data:  Cancer by Treatment (Surgery, Radiation)
-chi-squared = 0.5992, p-value = 0.6384
+chi-squared = 0.59915, p-value = 0.6384
 
 >   midpvalue(ct)       # mid-p-value
 [1] 0.5006832
@@ -183,7 +184,7 @@ chi-squared = 6.8203, p-value = 0.6834
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000) 
 	 stratified by Gender
-chi-squared = 10.2001, df = 9, p-value = 0.3345
+chi-squared = 10.2, df = 9, p-value = 0.3345
 
 > 
 >   ### both Income and Job.Satisfaction ordered, default scores
@@ -269,7 +270,7 @@ alternative hypothesis: two.sided
 	Asymptotic General Independence Test
 
 data:  tumor by dose
-chi-squared = 10.6381, df = 1, p-value = 0.001108
+chi-squared = 10.638, df = 1, p-value = 0.001108
 
 > 
 >   ### linear-by-linear association test with scores 0, 1, 2
@@ -281,7 +282,7 @@ chi-squared = 10.6381, df = 1, p-value = 0.001108
 	Asymptotic General Independence Test
 
 data:  tumor by dose (0 < 1 < 2)
-chi-squared = 10.6381, df = 1, p-value = 0.001108
+chi-squared = 10.638, df = 1, p-value = 0.001108
 
 > 
 > 
@@ -319,7 +320,7 @@ alternative hypothesis: true rho is not equal to 0
 	Asymptotic Fisher-Yates Correlation Test
 
 data:  CONT by INTG
-Z = -0.8248, p-value = 0.4095
+Z = -0.82479, p-value = 0.4095
 alternative hypothesis: true rho is not equal to 0
 
 > 
@@ -369,7 +370,7 @@ alternative hypothesis: true rho is not equal to 0
 data:  disease by
 	 smoking (None, <10, 10-20, >20) 
 	 stratified by gender
-chi-squared = 23.3163, p-value = 0.00052
+chi-squared = 23.316, p-value = 0.00052
 
 > 
 > ## Not run: 
@@ -553,7 +554,7 @@ alternative hypothesis: true mu is greater than 0
 > 
 >   ## Don't show: 
 > options(useFancyQuotes = FALSE)
-> ## End Don't show
+> ## End(Don't show)
 >   ### Tritiated Water Diffusion Across Human Chorioamnion
 >   ### Hollander & Wolfe (1999), Table 4.1, page 110
 >   water_transfer <- data.frame(
@@ -681,7 +682,7 @@ alternative hypothesis: true mu is not equal to 0
 	Exact 2-Sample Median Test
 
 data:  y by x (no, yes)
-Z = 0.2828, p-value = 1
+Z = 0.28284, p-value = 1
 alternative hypothesis: true mu is not equal to 0
 
 >   (mt2 <- median_test(y ~ x, data = ex, distribution = "exact",
@@ -699,7 +700,7 @@ alternative hypothesis: true mu is not equal to 0
 	Exact 2-Sample Median Test
 
 data:  y by x (no, yes)
-Z = -0.2828, p-value = 1
+Z = -0.28284, p-value = 1
 alternative hypothesis: true mu is not equal to 0
 
 > 
@@ -734,7 +735,7 @@ alternative hypothesis: true mu is not equal to 0
 	Approximative Kruskal-Wallis Test
 
 data:  length by site (I, II, III, IV)
-chi-squared = 22.8524, p-value < 2.2e-16
+chi-squared = 22.852, p-value < 2.2e-16
 
 >   pvalue(kw)
 [1] 0
@@ -837,7 +838,7 @@ alternative hypothesis: greater
 data:  response by
 	 conditions (First, Second) 
 	 stratified by block
-chi-squared = 17.3559, df = 1, p-value = 3.099e-05
+chi-squared = 17.356, df = 1, p-value = 3.099e-05
 
 > 
 >   ### Exact McNemar Test
@@ -848,7 +849,7 @@ chi-squared = 17.3559, df = 1, p-value = 3.099e-05
 data:  response by
 	 conditions (First, Second) 
 	 stratified by block
-chi-squared = 17.3559, p-value = 3.716e-05
+chi-squared = 17.356, p-value = 3.716e-05
 
 > 
 > 
@@ -870,7 +871,7 @@ chi-squared = 17.3559, p-value = 3.716e-05
 data:  response by
 	 conditions (ExtramaritalSex, PremaritalSex) 
 	 stratified by block
-chi-squared = 271.9222, df = 3, p-value < 2.2e-16
+chi-squared = 271.92, df = 3, p-value < 2.2e-16
 
 > 
 >   ### and as ordinal
@@ -881,7 +882,7 @@ chi-squared = 271.9222, df = 3, p-value < 2.2e-16
 data:  response (ordered) by
 	 conditions (ExtramaritalSex, PremaritalSex) 
 	 stratified by block
-Z = -16.4542, p-value < 2.2e-16
+Z = -16.454, p-value < 2.2e-16
 alternative hypothesis: two.sided
 
 > ## Don't show: ## Not run: 
@@ -895,7 +896,7 @@ alternative hypothesis: two.sided
 > ##D                        dimnames = list(Rater1 = rating, Rater2 = rating)))
 > ##D   ### test statistic W_0 = 13.76
 > ##D   mh_test(x)
-> ## End(Not run)## End Don't show
+> ## End(Not run)## End(Don't show)
 > 
 >   ### Vote intention example from Madansky (1963, p. 107--108)
 >   intention <- c("Republican","Democratic","Uncertain")
@@ -937,7 +938,7 @@ chi-squared = 70.763, df = 4, p-value = 1.565e-14
 data:  response (ordered) by
 	 conditions (High.dose, Low.dose, Placebo) 
 	 stratified by block
-chi-squared = 53.7617, df = 2, p-value = 2.117e-12
+chi-squared = 53.762, df = 2, p-value = 2.117e-12
 
 > 
 >   ### Both response and measurement conditions ordered, Q = 47.29
@@ -971,7 +972,7 @@ alternative hypothesis: two.sided
 > 
 >   ## Don't show: 
 > options(useFancyQuotes = FALSE)
-> ## End Don't show
+> ## End(Don't show)
 >   ### analysis of the tree pipit data in Mueller and Hothorn (2004)
 >   maxstat_test(counts ~ coverstorey, data = treepipit)
 
@@ -1502,7 +1503,7 @@ Quade F = 8.3765, num df = 2, denom df = 12, p-value = 0.005284
 data:  times by
 	 methods (Narrow Angle, Round Out, Wide Angle) 
 	 stratified by block
-chi-squared = 11.1429, df = 2, p-value = 0.003805
+chi-squared = 11.143, df = 2, p-value = 0.003805
 
 > 
 >   ### parallel coordinates plot
@@ -1913,7 +1914,7 @@ chi-squared = 8.8302, df = 2, p-value = 0.01209
 data:  disease by
 	 smoking (None, <10, 10-20, >20) 
 	 stratified by gender
-chi-squared = 23.3163, df = 6, p-value = 0.0006972
+chi-squared = 23.316, df = 6, p-value = 0.0006972
 
 > 
 > 
@@ -2190,7 +2191,7 @@ sample estimates:
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000) 
 	 stratified by Gender
-chi-squared = 10.2001, df = 9, p-value = 0.3345
+chi-squared = 10.2, df = 9, p-value = 0.3345
 
 > 
 > 
@@ -2313,7 +2314,7 @@ alternative hypothesis: true mu is less than 0
 	Exact Wilcoxon-Mann-Whitney Test
 
 data:  pain by group (control, treat)
-Z = -0.9817, p-value = 0.1654
+Z = -0.98169, p-value = 0.1654
 alternative hypothesis: true mu is less than 0
 
 > 
@@ -2451,7 +2452,7 @@ C             0.000            0.0000  0.999
 	Exact 2-Sample Ansari-Bradley Test
 
 data:  y by x (1, 2)
-Z = 0.4553, p-value = 0.7102
+Z = 0.45527, p-value = 0.7102
 alternative hypothesis: true ratio of scales is not equal to 1
 
 > pvalue(at)
@@ -2690,7 +2691,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  37.99 0.23 38.48 NA NA 
+Time elapsed:  36.13 0.24 36.91 NA NA 
 > grDevices::dev.off()
 null device 
           1 

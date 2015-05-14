@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2014-06-13 r65942) -- "Unsuffered Consequences"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R Under development (unstable) (2015-05-13 r68364) -- "Unsuffered Consequences"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,7 +21,6 @@ Type 'q()' to quit R.
 > set.seed(290875)
 > library("coin")
 Loading required package: survival
-Loading required package: splines
 > isequal <- coin:::isequal
 > options(useFancyQuotes = FALSE)
 > 
@@ -420,4 +419,4 @@ IV  vs I 0.01587280
 > 
 > proc.time()
    user  system elapsed 
-   4.44    0.31    4.91 
+   3.66    0.24    3.99 

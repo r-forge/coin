@@ -4,7 +4,6 @@
 > require("coin")
 Loading required package: coin
 Loading required package: survival
-Loading required package: splines
 
 > require("Biobase")
 Loading required package: Biobase
@@ -65,7 +64,7 @@ Loading required package: TH.data
 	Asymptotic General Independence Test
 
 data:  length by site (I, II, III, IV)
-chi-squared = 22.8524, df = 3, p-value = 4.335e-05
+chi-squared = 22.852, df = 3, p-value = 4.335e-05
 
 
 > statistic(it, "linear")
@@ -106,7 +105,7 @@ IV  -2.788013
 	Approximative Kruskal-Wallis Test
 
 data:  length by site (I, II, III, IV)
-chi-squared = 22.8524, p-value < 2.2e-16
+chi-squared = 22.852, p-value < 2.2e-16
 
 
 > pvalue(kw)
@@ -126,7 +125,7 @@ chi-squared = 22.8524, p-value < 2.2e-16
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000) 
 	 stratified by Gender
-chi-squared = 10.2001, df = 9, p-value = 0.3345
+chi-squared = 10.2, df = 9, p-value = 0.3345
 
 
 > statistic(it, type = "standardized")
@@ -219,4 +218,4 @@ IV - III 0.99889989
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   1.62    0.09    1.88 
+   1.37    0.20    1.71 

@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2014-08-19 r66437) -- "Unsuffered Consequences"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R Under development (unstable) (2015-05-13 r68364) -- "Unsuffered Consequences"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -23,7 +23,6 @@ Type 'q()' to quit R.
 > set.seed(290875)
 > library("coin")
 Loading required package: survival
-Loading required package: splines
 > isequal <- coin:::isequal
 > options(useFancyQuotes = FALSE)
 > 
@@ -218,7 +217,7 @@ Error in .local(.Object, ...) : 'block' is not a factor
 	Asymptotic 2-Sample Permutation Test
 
 data:  y by x (1, 2)
-Z = -0.7774, p-value = 0.4369
+Z = -0.77735, p-value = 0.4369
 alternative hypothesis: true mu is not equal to 0
 
 > oneway_test(y ~ x, dat = dat, alternative = "less")
@@ -226,7 +225,7 @@ alternative hypothesis: true mu is not equal to 0
 	Asymptotic 2-Sample Permutation Test
 
 data:  y by x (1, 2)
-Z = -0.7774, p-value = 0.2185
+Z = -0.77735, p-value = 0.2185
 alternative hypothesis: true mu is less than 0
 
 > oneway_test(y ~ x, dat = dat, alternative = "greater")
@@ -234,7 +233,7 @@ alternative hypothesis: true mu is less than 0
 	Asymptotic 2-Sample Permutation Test
 
 data:  y by x (1, 2)
-Z = -0.7774, p-value = 0.7815
+Z = -0.77735, p-value = 0.7815
 alternative hypothesis: true mu is greater than 0
 
 > 
@@ -245,7 +244,7 @@ alternative hypothesis: true mu is greater than 0
 	Asymptotic 2-Sample Normal Quantile (van der Waerden) Test
 
 data:  y by x (1, 2)
-Z = -0.8596, p-value = 0.39
+Z = -0.85965, p-value = 0.39
 alternative hypothesis: true mu is not equal to 0
 
 > normal_test(y ~ x, dat = dat, alternative = "less")
@@ -253,7 +252,7 @@ alternative hypothesis: true mu is not equal to 0
 	Asymptotic 2-Sample Normal Quantile (van der Waerden) Test
 
 data:  y by x (1, 2)
-Z = -0.8596, p-value = 0.195
+Z = -0.85965, p-value = 0.195
 alternative hypothesis: true mu is less than 0
 
 > normal_test(y ~ x, dat = dat, alternative = "greater")
@@ -261,7 +260,7 @@ alternative hypothesis: true mu is less than 0
 	Asymptotic 2-Sample Normal Quantile (van der Waerden) Test
 
 data:  y by x (1, 2)
-Z = -0.8596, p-value = 0.805
+Z = -0.85965, p-value = 0.805
 alternative hypothesis: true mu is greater than 0
 
 > 
@@ -353,7 +352,7 @@ alternative hypothesis: true ratio of scales is greater than 1
 	Asymptotic 2-Sample Klotz Test
 
 data:  y by x (1, 2)
-Z = -0.8354, p-value = 0.4035
+Z = -0.83541, p-value = 0.4035
 alternative hypothesis: true ratio of scales is not equal to 1
 
 > klotz_test(y ~ x, dat = dat, alternative = "less")
@@ -361,7 +360,7 @@ alternative hypothesis: true ratio of scales is not equal to 1
 	Asymptotic 2-Sample Klotz Test
 
 data:  y by x (1, 2)
-Z = -0.8354, p-value = 0.2017
+Z = -0.83541, p-value = 0.2017
 alternative hypothesis: true ratio of scales is less than 1
 
 > klotz_test(y ~ x, dat = dat, alternative = "greater")
@@ -369,7 +368,7 @@ alternative hypothesis: true ratio of scales is less than 1
 	Asymptotic 2-Sample Klotz Test
 
 data:  y by x (1, 2)
-Z = -0.8354, p-value = 0.7983
+Z = -0.83541, p-value = 0.7983
 alternative hypothesis: true ratio of scales is greater than 1
 
 > 
@@ -407,7 +406,7 @@ alternative hypothesis: true ratio of scales is greater than 1
 	Asymptotic 2-Sample Fligner-Killeen Test
 
 data:  y by x (1, 2)
-Z = -0.9485, p-value = 0.3429
+Z = -0.94847, p-value = 0.3429
 alternative hypothesis: true ratio of scales is not equal to 1
 
 > fligner_test(y ~ x, dat = dat, alternative = "less")
@@ -415,7 +414,7 @@ alternative hypothesis: true ratio of scales is not equal to 1
 	Asymptotic 2-Sample Fligner-Killeen Test
 
 data:  y by x (1, 2)
-Z = -0.9485, p-value = 0.1714
+Z = -0.94847, p-value = 0.1714
 alternative hypothesis: true ratio of scales is less than 1
 
 > fligner_test(y ~ x, dat = dat, alternative = "greater")
@@ -423,7 +422,7 @@ alternative hypothesis: true ratio of scales is less than 1
 	Asymptotic 2-Sample Fligner-Killeen Test
 
 data:  y by x (1, 2)
-Z = -0.9485, p-value = 0.8286
+Z = -0.94847, p-value = 0.8286
 alternative hypothesis: true ratio of scales is greater than 1
 
 > 
@@ -434,7 +433,7 @@ alternative hypothesis: true ratio of scales is greater than 1
 	Asymptotic 2-Sample Conover-Iman Test
 
 data:  y by x (1, 2)
-Z = -0.8031, p-value = 0.4219
+Z = -0.80308, p-value = 0.4219
 alternative hypothesis: true ratio of scales is not equal to 1
 
 > conover_test(y ~ x, dat = dat, alternative = "less")
@@ -442,7 +441,7 @@ alternative hypothesis: true ratio of scales is not equal to 1
 	Asymptotic 2-Sample Conover-Iman Test
 
 data:  y by x (1, 2)
-Z = -0.8031, p-value = 0.211
+Z = -0.80308, p-value = 0.211
 alternative hypothesis: true ratio of scales is less than 1
 
 > conover_test(y ~ x, dat = dat, alternative = "greater")
@@ -450,7 +449,7 @@ alternative hypothesis: true ratio of scales is less than 1
 	Asymptotic 2-Sample Conover-Iman Test
 
 data:  y by x (1, 2)
-Z = -0.8031, p-value = 0.789
+Z = -0.80308, p-value = 0.789
 alternative hypothesis: true ratio of scales is greater than 1
 
 > 
@@ -534,7 +533,7 @@ difference in location
 	Exact 2-Sample Median Test
 
 data:  y by x (1, 2)
-Z = 0.9682, p-value = 0.6193
+Z = 0.96825, p-value = 0.6193
 alternative hypothesis: true mu is not equal to 0
 95 percent confidence interval:
  -21  42
@@ -572,7 +571,7 @@ difference in location
 	Exact 2-Sample Ansari-Bradley Test
 
 data:  y by x (1, 2)
-Z = -0.2113, p-value = 0.9173
+Z = -0.21129, p-value = 0.9173
 alternative hypothesis: true ratio of scales is not equal to 1
 98.8 percent confidence interval:
   0.1470588 20.5925926
@@ -607,7 +606,7 @@ ratio of scales
 	Exact 2-Sample Klotz Test
 
 data:  y by x (1, 2)
-Z = 0.0923, p-value = 0.9243
+Z = 0.092301, p-value = 0.9243
 alternative hypothesis: true ratio of scales is not equal to 1
 98.8 percent confidence interval:
   0.1470588 13.7037037
@@ -623,7 +622,7 @@ ratio of scales
 	Exact 2-Sample Mood Test
 
 data:  y by x (1, 2)
-Z = 0.1537, p-value = 0.9021
+Z = 0.15374, p-value = 0.9021
 alternative hypothesis: true ratio of scales is not equal to 1
 98.8 percent confidence interval:
   0.1470588 13.7037037
@@ -752,4 +751,4 @@ Error in SR_shift_1sample(object, fact = attr(int, "fact")) :
 > 
 > proc.time()
    user  system elapsed 
-   2.19    0.09    2.41 
+   1.88    0.10    2.01 

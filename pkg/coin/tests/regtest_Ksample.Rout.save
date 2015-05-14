@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2014-02-02 r64916) -- "Unsuffered Consequences"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R Under development (unstable) (2015-05-13 r68364) -- "Unsuffered Consequences"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -23,7 +23,6 @@ Type 'q()' to quit R.
 > set.seed(290875)
 > library("coin")
 Loading required package: survival
-Loading required package: splines
 > isequal <- coin:::isequal
 > options(useFancyQuotes = FALSE)
 > 
@@ -78,7 +77,7 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > 
 > ### sanity checks
 > try(fligner_test(x ~ y, data = dat))
-Error in median.default(X[[1L]], ...) : need numeric data
+Error in median.default(X[[i]], ...) : need numeric data
 > try(fligner_test(x ~ y | y, data = dat))
 Error in .local(.Object, ...) : 'block' is not a factor
 > 
@@ -218,7 +217,7 @@ alternative hypothesis: greater
 	Asymptotic K-Sample Median Test
 
 data:  y by x (1, 2, 3, 4)
-chi-squared = 0.8594, df = 3, p-value = 0.8352
+chi-squared = 0.85938, df = 3, p-value = 0.8352
 
 > 
 > median_test(y ~ ordered(x), data = dat)
@@ -226,7 +225,7 @@ chi-squared = 0.8594, df = 3, p-value = 0.8352
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by ordered(x) (1 < 2 < 3 < 4)
-Z = -0.659, p-value = 0.5099
+Z = -0.65897, p-value = 0.5099
 alternative hypothesis: two.sided
 
 > median_test(y ~ ordered(x), data = dat,
@@ -235,7 +234,7 @@ alternative hypothesis: two.sided
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by ordered(x) (1 < 2 < 3 < 4)
-Z = -0.659, p-value = 0.255
+Z = -0.65897, p-value = 0.255
 alternative hypothesis: less
 
 > median_test(y ~ ordered(x), data = dat,
@@ -244,7 +243,7 @@ alternative hypothesis: less
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by ordered(x) (1 < 2 < 3 < 4)
-Z = -0.659, p-value = 0.745
+Z = -0.65897, p-value = 0.745
 alternative hypothesis: greater
 
 > 
@@ -253,7 +252,7 @@ alternative hypothesis: greater
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by x (1 < 2 < 3 < 4)
-Z = -0.659, p-value = 0.5099
+Z = -0.65897, p-value = 0.5099
 alternative hypothesis: two.sided
 
 > median_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
@@ -262,7 +261,7 @@ alternative hypothesis: two.sided
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by x (1 < 2 < 3 < 4)
-Z = -0.659, p-value = 0.255
+Z = -0.65897, p-value = 0.255
 alternative hypothesis: less
 
 > median_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
@@ -271,7 +270,7 @@ alternative hypothesis: less
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by x (1 < 2 < 3 < 4)
-Z = -0.659, p-value = 0.745
+Z = -0.65897, p-value = 0.745
 alternative hypothesis: greater
 
 > 
@@ -290,7 +289,7 @@ chi-squared = 2.3638, df = 3, p-value = 0.5004
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by ordered(x) (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.7774
+Z = 0.28273, p-value = 0.7774
 alternative hypothesis: two.sided
 
 > savage_test(y ~ ordered(x), data = dat,
@@ -299,7 +298,7 @@ alternative hypothesis: two.sided
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by ordered(x) (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.6113
+Z = 0.28273, p-value = 0.6113
 alternative hypothesis: less
 
 > savage_test(y ~ ordered(x), data = dat,
@@ -308,7 +307,7 @@ alternative hypothesis: less
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by ordered(x) (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.3887
+Z = 0.28273, p-value = 0.3887
 alternative hypothesis: greater
 
 > 
@@ -317,7 +316,7 @@ alternative hypothesis: greater
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by x (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.7774
+Z = 0.28273, p-value = 0.7774
 alternative hypothesis: two.sided
 
 > savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
@@ -326,7 +325,7 @@ alternative hypothesis: two.sided
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by x (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.6113
+Z = 0.28273, p-value = 0.6113
 alternative hypothesis: less
 
 > savage_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
@@ -335,7 +334,7 @@ alternative hypothesis: less
 	Asymptotic Linear-by-Linear Association Test
 
 data:  y by x (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.3887
+Z = 0.28273, p-value = 0.3887
 alternative hypothesis: greater
 
 > 
@@ -494,7 +493,7 @@ chi-squared = 2.3638, df = 3, p-value = 0.5004
 	Asymptotic Linear-by-Linear Association Test
 
 data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.7774
+Z = 0.28273, p-value = 0.7774
 alternative hypothesis: two.sided
 
 > surv_test(Surv(y) ~ ordered(x), data = dat,
@@ -503,7 +502,7 @@ alternative hypothesis: two.sided
 	Asymptotic Linear-by-Linear Association Test
 
 data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.6113
+Z = 0.28273, p-value = 0.6113
 alternative hypothesis: less
 
 > surv_test(Surv(y) ~ ordered(x), data = dat,
@@ -512,7 +511,7 @@ alternative hypothesis: less
 	Asymptotic Linear-by-Linear Association Test
 
 data:  Surv(y) by ordered(x) (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.3887
+Z = 0.28273, p-value = 0.3887
 alternative hypothesis: greater
 
 > 
@@ -521,7 +520,7 @@ alternative hypothesis: greater
 	Asymptotic Linear-by-Linear Association Test
 
 data:  Surv(y) by x (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.7774
+Z = 0.28273, p-value = 0.7774
 alternative hypothesis: two.sided
 
 > surv_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
@@ -530,7 +529,7 @@ alternative hypothesis: two.sided
 	Asymptotic Linear-by-Linear Association Test
 
 data:  Surv(y) by x (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.6113
+Z = 0.28273, p-value = 0.6113
 alternative hypothesis: less
 
 > surv_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
@@ -539,7 +538,7 @@ alternative hypothesis: less
 	Asymptotic Linear-by-Linear Association Test
 
 data:  Surv(y) by x (1 < 2 < 3 < 4)
-Z = 0.2827, p-value = 0.3887
+Z = 0.28273, p-value = 0.3887
 alternative hypothesis: greater
 
 > 
@@ -628,4 +627,4 @@ alternative hypothesis: greater
 > 
 > proc.time()
    user  system elapsed 
-   1.56    0.07    1.73 
+   1.26    0.06    1.35 

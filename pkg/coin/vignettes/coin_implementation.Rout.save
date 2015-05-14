@@ -3,7 +3,6 @@
 
 > library("coin")
 Loading required package: survival
-Loading required package: splines
 
 > library("e1071")
 
@@ -305,7 +304,7 @@ Loading required package: grid
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000) 
 	 stratified by Gender
-chi-squared = 10.2001, df = 9, p-value = 0.3345
+chi-squared = 10.2, df = 9, p-value = 0.3345
 
 
 > statistic(it, type = "linear")
@@ -361,4 +360,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.80    0.10    3.16 
+   2.58    0.12    2.79 

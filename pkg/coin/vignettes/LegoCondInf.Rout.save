@@ -4,7 +4,6 @@
 > require("coin")
 Loading required package: coin
 Loading required package: survival
-Loading required package: splines
 
 > set.seed(290875)
 
@@ -144,7 +143,7 @@ Other diagnoses  &  24 & 2 & 22 & 11 \\
 data:  disease by
 	 smoking (None, <10, 10-20, >20) 
 	 stratified by gender
-chi-squared = 23.3163, df = 6, p-value = 0.0006972
+chi-squared = 23.316, df = 6, p-value = 0.0006972
 
 
 > statistic(it_alz, type = "linear")
@@ -311,4 +310,4 @@ C           0.00000           0.00000 0.99859
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   3.07    0.10    3.40 
+   2.49    0.14    2.76 
