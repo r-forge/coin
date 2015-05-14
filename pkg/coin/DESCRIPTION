@@ -16,5 +16,6 @@ Imports: modeltools (>= 0.2-9), mvtnorm (>= 0.8-0), multcomp
 Suggests: parallel, xtable, e1071, vcd, TH.data
 Enhances: Biobase
 LazyData: yes
+ByteCompile: yes
 License: GPL-2
 URL: http://coin.r-forge.r-project.org
