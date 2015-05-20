@@ -481,5 +481,7 @@ setColnames <- function (object, nm) {
 if(getRversion() < "2.15.0")
     paste0 <- function(...) paste(..., sep = "")
 
-if(getRversion() < "3.1.0")
+if(getRversion() < "3.1.0") {
     cospi <- function(x) cos(pi * x)
+    anyNA <- function(x) any(is.na(x))
+}

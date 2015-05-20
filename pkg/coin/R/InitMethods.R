@@ -53,15 +53,15 @@ setMethod("initialize",
             x <- data.frame(x = rep.int(1L, nrow(x)))
             dimnames(x) <- dn
         }
-        if (any(is.na(x)))
+        if (anyNA(x))
             stop(sQuote("x"), " contains missing values")
-        if (any(is.na(y)))
+        if (anyNA(y))
             stop(sQuote("y"), " contains missing values")
         if (!is.null(block) && !is.factor(block))
             stop(sQuote("block"), " is not a factor")
-        if (!is.null(block) && any(is.na(block)))
+        if (!is.null(block) && anyNA(block))
             stop(sQuote("block"), " contains missing values")
-        if (!is.null(weights) && any(is.na(weights)))
+        if (!is.null(weights) && anyNA(weights))
             stop(sQuote("weights"), " contains missing values")
 
         .Object@x <- x
@@ -246,13 +246,13 @@ setMethod("initialize",
     signature = "SymmetryProblem",
     definition = function(.Object, x, y, block = NULL, weights = NULL, ...) {
 
-        if (any(is.na(x)))
+        if (anyNA(x))
             stop(sQuote("x"), " contains missing values")
         if (!is.factor(x[[1L]]) || length(unique(table(x[[1L]]))) != 1L)
             stop(sQuote("x"), " is not a balanced factor")
-        if (any(is.na(y)))
+        if (anyNA(y))
             stop(sQuote("y"), " contains missing values")
-        if (!is.null(block) && any(is.na(y)))
+        if (!is.null(block) && anyNA(y))
             stop(sQuote("block"), " contains missing values")
 
         .Object@x <- x
