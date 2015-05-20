@@ -80,7 +80,7 @@ mcp_trafo(\dots)
     scores, based on random ranks, are averaged
     (\code{"average-scores"}).  When using \code{rank_trafo}, ties can
     be broken at \code{"random"}.  For ties handling in the case of
-    censored data, see \code{\link{surv_test}}.}
+    censored data, see \code{\link{logrank_test}}.}
   \item{mid.score}{a character, the score assigned to observations
     exactly equal to the median.  Must be one of \code{"0"} (default),
     \code{"0.5"} or \code{"1"}; \code{"0.5"} leads to symmetric median
@@ -101,7 +101,7 @@ mcp_trafo(\dots)
     \code{"Gehan-Breslow"}, \code{"Tarone-Ware"}, \code{"Prentice"},
     \code{"Prentice-Marek"}, \code{"Andersen-Borgan-Gill-Keiding"},
     \code{"Fleming-Harrington"} or \code{"Self"} (see
-    \code{\link{surv_test}} for details).}
+    \code{\link{logrank_test}} for details).}
   \item{rho}{a numeric vector, the \eqn{\rho} constant when \code{type} is
     \code{"Tarone-Ware"}, \code{"Fleming-Harrington"} or \code{"Self"}.
     Defaults to 0.5 in the first case and 0 in the other cases.}

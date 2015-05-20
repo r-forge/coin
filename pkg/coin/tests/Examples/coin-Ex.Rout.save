@@ -427,7 +427,7 @@ chi-squared = 23.316, p-value = 0.00052
 +          c("Chemotherapy+Radiation", "Chemotherapy"), bty = "n")
 > 
 >   ### logrank test
->   surv_test(Surv(time, event) ~ group, data = GTSG)
+>   logrank_test(Surv(time, event) ~ group, data = GTSG)
 
 	Asymptotic 2-Sample Logrank Test
 
@@ -438,8 +438,8 @@ alternative hypothesis: true theta is not equal to 1
 
 > 
 >   ### Prentice test
->   surv_test(Surv(time, event) ~ group, data = GTSG,
-+             type = "Prentice")
+>   logrank_test(Surv(time, event) ~ group, data = GTSG,
++                type = "Prentice")
 
 	Asymptotic 2-Sample Prentice Test
 
@@ -1219,14 +1219,15 @@ Control 0.0067991 0.3827331
 > 
 > ### Name: SurvTest
 > ### Title: Independent Two- and K-Sample Tests for Censored Data
-> ### Aliases: surv_test surv_test.formula surv_test.IndependenceProblem
+> ### Aliases: surv_test logrank_test logrank_test.formula
+> ###   logrank_test.IndependenceProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
 > 
 > 
 >   ### asymptotic tests for carcinoma data
->   surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)
+>   logrank_test(Surv(time, event) ~ stadium, data = ocarcinoma)
 
 	Asymptotic 2-Sample Logrank Test
 
@@ -1259,7 +1260,7 @@ group=1 8        8     5.16      1.56      3.76
 
  Chisq= 3.8  on 1 degrees of freedom, p= 0.0523 
 >   ### p = 0.0505
->   surv_test(Surv(time) ~ group, data = exdata, distribution = "exact")
+>   logrank_test(Surv(time) ~ group, data = exdata, distribution = "exact")
 
 	Exact 2-Sample Logrank Test
 
@@ -1268,8 +1269,8 @@ Z = 1.9201, p-value = 0.05051
 alternative hypothesis: true theta is not equal to 1
 
 >   ### p = 0.0468
->   surv_test(Surv(time) ~ group, data = exdata, distribution = "exact",
-+             ties.method = "average-scores")
+>   logrank_test(Surv(time) ~ group, data = exdata, distribution = "exact",
++                ties.method = "average-scores")
 
 	Exact 2-Sample Logrank Test
 
@@ -1296,7 +1297,7 @@ alternative hypothesis: true theta is not equal to 1
 [13] -0.34129482 -0.80648518
 > 
 >   ### StatXact 9 manual, page 215
->   surv_test(Surv(time, event) ~ group, data = lungcancer,
+>   logrank_test(Surv(time, event) ~ group, data = lungcancer,
 +             distribution = "exact", ties.method = "average-scores")
 
 	Exact 2-Sample Logrank Test
@@ -1307,9 +1308,9 @@ alternative hypothesis: true theta is not equal to 1
 
 > 
 >   ### StatXact 9 manual, page 222
->   surv_test(Surv(time, event) ~ group, data = lungcancer,
-+             distribution = "exact", ties.method = "average-scores",
-+             type = "Prentice")
+>   logrank_test(Surv(time, event) ~ group, data = lungcancer,
++                distribution = "exact", ties.method = "average-scores",
++                type = "Prentice")
 
 	Exact 2-Sample Prentice Test
 
@@ -2092,7 +2093,7 @@ attr(,"conf.level")
 >   legend("bottomleft", lty = 2:1, c("Control", "Treated"), bty = "n")
 > 
 >   ### logrank test
->   surv_test(Surv(time, event) ~ group, data = g3,
+>   logrank_test(Surv(time, event) ~ group, data = g3,
 +                distribution = "exact")
 
 	Exact 2-Sample Logrank Test
@@ -2114,8 +2115,8 @@ alternative hypothesis: true theta is not equal to 1
 >   layout(1)
 > 
 >   ### logrank test
->   surv_test(Surv(time, event) ~ group, data = gbm,
-+             distribution = "exact")
+>   logrank_test(Surv(time, event) ~ group, data = gbm,
++                distribution = "exact")
 
 	Exact 2-Sample Logrank Test
 
@@ -2125,8 +2126,8 @@ alternative hypothesis: true theta is not equal to 1
 
 > 
 >   ### stratified logrank test
->   surv_test(Surv(time, event) ~ group | histology, data = glioma,
-+             distribution = approximate(B = 10000))
+>   logrank_test(Surv(time, event) ~ group | histology, data = glioma,
++                distribution = approximate(B = 10000))
 
 	Approximative 2-Sample Logrank Test
 
@@ -2359,16 +2360,16 @@ control 0.2334 0.1033 0.0653 0.0528 0.0491 0.0497
 > 
 > 
 >   ### logrank test with exact two-sided p-value
->   lrt <- surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
-+                    distribution = "exact")
+>   lt <- logrank_test(Surv(time, event) ~ stadium, data = ocarcinoma,
++                      distribution = "exact")
 > 
 >   ### the test statistic
->   statistic(lrt)
+>   statistic(lt)
       II 
 2.337284 
 > 
 >   ### p-value
->   pvalue(lrt)
+>   pvalue(lt)
 [1] 0.01819758
 > 
 > 
@@ -2691,7 +2692,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  36.13 0.24 36.91 NA NA 
+Time elapsed:  37.11 0.27 37.61 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -1,7 +1,8 @@
 \name{SurvTest}
 \alias{surv_test}
-\alias{surv_test.formula}
-\alias{surv_test.IndependenceProblem}
+\alias{logrank_test}
+\alias{logrank_test.formula}
+\alias{logrank_test.IndependenceProblem}
 \title{ Independent Two- and K-Sample Tests for Censored Data }
 
 \encoding{UTF-8}
@@ -11,9 +12,9 @@
   independent groups.
 }
 \usage{
-\method{surv_test}{formula}(formula, data, subset = NULL,
+\method{logrank_test}{formula}(formula, data, subset = NULL,
     weights = NULL, \dots)
-\method{surv_test}{IndependenceProblem}(object,
+\method{logrank_test}{IndependenceProblem}(object,
     ties.method = c("mid-ranks", "Hothorn-Lausen", "average-scores"),
     type = c("logrank", "Gehan-Breslow", "Tarone-Ware", "Prentice",
              "Prentice-Marek", "Andersen-Borgan-Gill-Keiding",
@@ -189,24 +190,27 @@
 }
 \note{
 
-  The test statistic differs from the results of
-  \code{\link[survival]{survdiff}} since the conditional variance is not
-  identical to the variance estimate used by the classical logrank
-  test.
+  The test statistic differs from the one used by
+  \code{\link[survival]{survdiff}} (in the \pkg{survival} package), since the
+  conditional variance is not identical to the variance estimate used by the
+  classical logrank test.
 
-  In versions of \pkg{coin} prior to 1.1-0, \code{logrank_trafo} was a
-  decreasing function of the data when \code{ties.method} was other than
-  \code{"average-scores"}.  It is now \emph{always} an increasing
-  function, implying that the test statistic have the same sign
-  irrespective of the ties handling method.  (Consequently, the sign of
-  the test statistic will now be the opposite of what it was in earlier
-  versions unless \code{ties.method = "average-scores"}.)
+  Combining \code{\link{independence_test}} or \code{\link{symmetry_test}} with
+  \code{\link{logrank_trafo}} offers more flexibility than \code{logrank_test}
+  and allows for, among other things, maximum-type versatile test procedures
+  (e.g., Lee, 1996; see \sQuote{Examples}) and user-supplied logrank weights
+  (see \code{\link{GTSG}} for tests against Weibull-type or crossing-curve
+  alternatives).
 
-  Using \code{\link{independence_test}} and \code{\link{logrank_trafo}}
-  directly is more flexible than \code{surv_test} and allows for, among
-  other things, maximum-type versatile test procedures (e.g., Lee, 1996;
-  see \sQuote{Examples}) and user-supplied logrank weights (see
-  \code{\link{GTSG}}).
+  Starting with version 1.1-0, \code{logrank_test} replaces \code{surv_test},
+  \strong{which is now deprecated and will be removed in a future release.}
+  Furthermore, \code{logrank_trafo} is now an increasing function for all
+  choices of \code{ties.method}, implying that the test statistic has the same
+  sign irrespective of the ties handling method.  Consequently, the sign of the
+  test statistic will now be the opposite of what it was in earlier versions
+  unless \code{ties.method = "average-scores"}.  (In versions of \pkg{coin}
+  prior to 1.1-0, \code{logrank_trafo} was a decreasing function of the data
+  when \code{ties.method} was other than \code{"average-scores"}.)
 
 }
 \value{
@@ -295,7 +299,7 @@
 \examples{
 
   ### asymptotic tests for carcinoma data
-  surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)
+  logrank_test(Surv(time, event) ~ stadium, data = ocarcinoma)
   survdiff(Surv(time, event) ~ stadium, data = ocarcinoma)
 
 
@@ -305,10 +309,10 @@
   ### p = 0.0523
   survdiff(Surv(time) ~ group, data = exdata)
   ### p = 0.0505
-  surv_test(Surv(time) ~ group, data = exdata, distribution = "exact")
+  logrank_test(Surv(time) ~ group, data = exdata, distribution = "exact")
   ### p = 0.0468
-  surv_test(Surv(time) ~ group, data = exdata, distribution = "exact",
-            ties.method = "average-scores")
+  logrank_test(Surv(time) ~ group, data = exdata, distribution = "exact",
+               ties.method = "average-scores")
 
 
   ### lung cancer example from StatXact
@@ -325,13 +329,13 @@
        logrank_trafo(Surv(time, event), ties.method = "average-scores"))
 
   ### StatXact 9 manual, page 215
-  surv_test(Surv(time, event) ~ group, data = lungcancer,
-            distribution = "exact", ties.method = "average-scores")
+  logrank_test(Surv(time, event) ~ group, data = lungcancer,
+               distribution = "exact", ties.method = "average-scores")
 
   ### StatXact 9 manual, page 222
-  surv_test(Surv(time, event) ~ group, data = lungcancer,
-            distribution = "exact", ties.method = "average-scores",
-            type = "Prentice")
+  logrank_test(Surv(time, event) ~ group, data = lungcancer,
+               distribution = "exact", ties.method = "average-scores",
+               type = "Prentice")
 
 
   ### versatile test (Lee, 1996) using a range of rho and gamma

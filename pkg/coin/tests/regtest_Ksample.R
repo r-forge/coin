@@ -204,19 +204,19 @@ try(conover_test(y ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
 
 
 ### Logrank Test
-surv_test(Surv(y) ~ x, data = dat)
+logrank_test(Surv(y) ~ x, data = dat)
 
-surv_test(Surv(y) ~ ordered(x), data = dat)
-surv_test(Surv(y) ~ ordered(x), data = dat,
-          alternative = "less")
-surv_test(Surv(y) ~ ordered(x), data = dat,
-          alternative = "greater")
+logrank_test(Surv(y) ~ ordered(x), data = dat)
+logrank_test(Surv(y) ~ ordered(x), data = dat,
+             alternative = "less")
+logrank_test(Surv(y) ~ ordered(x), data = dat,
+             alternative = "greater")
 
-surv_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
-surv_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
-          alternative = "less")
-surv_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
-          alternative = "greater")
+logrank_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)))
+logrank_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+             alternative = "less")
+logrank_test(Surv(y) ~ x, data = dat, scores = list(x = c(2, 4, 6, 8)),
+             alternative = "greater")
 
 
 ### Weighted logrank tests
@@ -258,35 +258,36 @@ leukemia <- data.frame(
 ### Leton and Zuluaga (2002, p. 25, Table 6)
 
 ### Gehan, X^2_SG
-st <- surv_test(Surv(time, event) ~ group, data = leukemia,
-                type = "Gehan")
-stopifnot(all(-statistic(st, "linear") == c(273, -170, -103)))
-isequal(round(statistic(st), 3), 3.612)
-isequal(round(pvalue(st), 4), 0.1643)
+lt <- logrank_test(Surv(time, event) ~ group, data = leukemia,
+                   type = "Gehan")
+stopifnot(all(-statistic(lt, "linear") == c(273, -170, -103)))
+isequal(round(statistic(lt), 3), 3.612)
+isequal(round(pvalue(lt), 4), 0.1643)
 
 ### Peto-Peto, X^2_SPP
-st <- surv_test(Surv(time, event) ~ group, data = leukemia,
-                type = "Fleming-Harrington", rho = 1)
-stopifnot(all(round(-statistic(st, "linear"), 3) == c(4.171, -2.582, -1.589)))
-isequal(round(statistic(st), 3), 3.527)
-isequal(round(pvalue(st), 4), 0.1715)
+lt <- logrank_test(Surv(time, event) ~ group, data = leukemia,
+                   type = "Fleming-Harrington", rho = 1)
+stopifnot(all(round(-statistic(lt, "linear"), 3) == c(4.171, -2.582, -1.589)))
+isequal(round(statistic(lt), 3), 3.527)
+isequal(round(pvalue(lt), 4), 0.1715)
 
 ### X^2_S1
-st <- surv_test(Surv(time, event) ~ group, data = leukemia,
-                type = "Prentice")
-stopifnot(all(round(-statistic(st, "linear"), 3) == c(4.100, -2.503, -1.597)))
-isequal(round(statistic(st), 3), 3.639)
-isequal(round(pvalue(st), 4), 0.1621)
+lt <- logrank_test(Surv(time, event) ~ group, data = leukemia,
+                   type = "Prentice")
+stopifnot(all(round(-statistic(lt, "linear"), 3) == c(4.100, -2.503, -1.597)))
+isequal(round(statistic(lt), 3), 3.639)
+isequal(round(pvalue(lt), 4), 0.1621)
 
 ### LR Altshuler, X^2_SLRA
-st <- surv_test(Surv(time, event) ~ group, data = leukemia)
-stopifnot(all(round(-statistic(st, "linear"), 3) == c(6.635, -3.693, -2.942)))
-isequal(round(statistic(st), 3), 3.814)
-isequal(round(pvalue(st), 4), 0.1485)
+lt <- logrank_test(Surv(time, event) ~ group, data = leukemia)
+stopifnot(all(round(-statistic(lt, "linear"), 3) == c(6.635, -3.693, -2.942)))
+isequal(round(statistic(lt), 3), 3.814)
+isequal(round(pvalue(lt), 4), 0.1485)
 
 ### X^2_S2
-st <- surv_test(Surv(time, event) ~ group, data = leukemia,
-                type = "Tarone-Ware")
-stopifnot(all(c(round(-statistic(st, "linear")[1:2], 2), round(-statistic(st, "linear")[3], 3)) == c(42.78, -26.42, -16.361)))
-isequal(round(statistic(st), 3), 4.104)
-isequal(round(pvalue(st), 4), 0.1285)
+lt <- logrank_test(Surv(time, event) ~ group, data = leukemia,
+                   type = "Tarone-Ware")
+stopifnot(all(c(round(-statistic(lt, "linear")[1:2], 2),
+                round(-statistic(lt, "linear")[3], 3)) == c(42.78, -26.42, -16.361)))
+isequal(round(statistic(lt), 3), 4.104)
+isequal(round(pvalue(lt), 4), 0.1285)

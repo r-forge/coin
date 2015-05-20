@@ -1,14 +1,22 @@
-### weighted logrank test
-surv_test <- function(object, ...) UseMethod("surv_test")
+### <DEPRECATED>
+surv_test <- function(object, ...) {
+    .Deprecated(msg = paste(sQuote("surv_test"), "is deprecated.  Use",
+                            sQuote("logrank_test"), "instead.")) 
+    UseMethod("logrank_test")
+}
+### </DEPRECATED>
 
-surv_test.formula <- function(formula, data = list(), subset = NULL,
+### weighted logrank test
+logrank_test <- function(object, ...) UseMethod("logrank_test")
+
+logrank_test.formula <- function(formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
-    ft("surv_test", "IndependenceProblem", formula, data, subset, weights,
+    ft("logrank_test", "IndependenceProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
-surv_test.IndependenceProblem <- function(object,
+logrank_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "Hothorn-Lausen", "average-scores"),
     type = c("logrank", "Gehan-Breslow", "Tarone-Ware", "Prentice",
              "Prentice-Marek", "Andersen-Borgan-Gill-Keiding",

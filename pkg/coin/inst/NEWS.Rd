@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.1-0 (2014-XX-XX}{
+\section{Changes in version 1.1-0 (2015-XX-XX}{
   \subsection{New features}{
     \itemize{
       \item single-step adjusted \eqn{p}-values based on the joint distribution
@@ -45,8 +45,8 @@
 
       \item the Kruskal-Wallis test, the logrank test and the Friedman test now
       allow the alternative hypothesis to be specified when the explanatory
-      variable is an ordered factor (see \code{?kruskal_test}, \code{?surv_test}
-      and \code{?friedman_test})
+      variable is an ordered factor (see \code{?kruskal_test},
+      \code{?logrank_test} and \code{?friedman_test})
 
       \item the printed output of the logrank test now reports whether a 2- or
       \eqn{K}-sample test has been carried out
@@ -64,7 +64,7 @@
       tests (Gehan-Breslow, Prentice, Prentice-Marek and
       Andersen-Borgan-Gill-Keiding), the Tarone-Ware class of tests, the
       Fleming-Harrington class of tests and the Self class of tests (see
-      \code{?surv_test}, \code{?logrank_trafo} and \code{?logrank_weight})
+      \code{?logrank_test}, \code{?logrank_trafo} and \code{?logrank_weight})
 
       \item new data set \code{GTSG} has been added (see \code{?GTSG})
 
@@ -339,6 +339,9 @@
 
       \item objects of class \code{"ApproxNullDistribution"} now has a slot
       \code{seed} containing the state of the random number generator
+
+      \item \code{surv_test()} is now deprecated and replaced by
+      \code{logrank_test()}
     }
   }
 }

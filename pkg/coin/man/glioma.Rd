@@ -52,7 +52,7 @@
   legend("bottomleft", lty = 2:1, c("Control", "Treated"), bty = "n")
 
   ### logrank test
-  surv_test(Surv(time, event) ~ group, data = g3,
+  logrank_test(Surv(time, event) ~ group, data = g3,
                distribution = "exact")
 
   ### Grade IV glioma
@@ -67,12 +67,12 @@
   layout(1)
 
   ### logrank test
-  surv_test(Surv(time, event) ~ group, data = gbm,
-            distribution = "exact")
+  logrank_test(Surv(time, event) ~ group, data = gbm,
+               distribution = "exact")
 
   ### stratified logrank test
-  surv_test(Surv(time, event) ~ group | histology, data = glioma,
-            distribution = approximate(B = 10000))
+  logrank_test(Surv(time, event) ~ group | histology, data = glioma,
+               distribution = approximate(B = 10000))
 
 }
 \keyword{datasets}

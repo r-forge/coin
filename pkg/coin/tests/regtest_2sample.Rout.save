@@ -455,7 +455,7 @@ alternative hypothesis: true ratio of scales is greater than 1
 > 
 > 
 > ### Logrank Test
-> surv_test(Surv(y) ~ x, dat = dat)
+> logrank_test(Surv(y) ~ x, dat = dat)
 
 	Asymptotic 2-Sample Logrank Test
 
@@ -463,7 +463,7 @@ data:  Surv(y) by x (1, 2)
 Z = -1.0738, p-value = 0.2829
 alternative hypothesis: true theta is not equal to 1
 
-> surv_test(Surv(y) ~ x, dat = dat, alternative = "less")
+> logrank_test(Surv(y) ~ x, dat = dat, alternative = "less")
 
 	Asymptotic 2-Sample Logrank Test
 
@@ -471,7 +471,7 @@ data:  Surv(y) by x (1, 2)
 Z = -1.0738, p-value = 0.1414
 alternative hypothesis: true theta is less than 1
 
-> surv_test(Surv(y) ~ x, dat = dat, alternative = "greater")
+> logrank_test(Surv(y) ~ x, dat = dat, alternative = "greater")
 
 	Asymptotic 2-Sample Logrank Test
 
@@ -699,42 +699,42 @@ ratio of scales
 > ### Leton and Zuluaga (2005, p. 384, Table 9)
 > 
 > ### Gehan
-> st <- surv_test(Surv(time, event) ~ group, data = prostatic,
-+                 type = "Gehan")
-> isequal(round(statistic(st)^2, 4), 3.8400)
+> lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
++                    type = "Gehan")
+> isequal(round(statistic(lt)^2, 4), 3.8400)
 [1] TRUE
-> isequal(round(pvalue(st), 4), 0.0500)
+> isequal(round(pvalue(lt), 4), 0.0500)
 [1] TRUE
 > 
 > ### Peto-Peto
-> st <- surv_test(Surv(time, event) ~ group, data = prostatic,
-+                 type = "Fleming-Harrington", rho = 1)
-> isequal(round(statistic(st)^2, 4), 4.0657)
+> lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
++                    type = "Fleming-Harrington", rho = 1)
+> isequal(round(statistic(lt)^2, 4), 4.0657)
 [1] TRUE
-> isequal(round(pvalue(st), 4), 0.0438)
+> isequal(round(pvalue(lt), 4), 0.0438)
 [1] TRUE
 > 
 > ### Prentice
-> st <- surv_test(Surv(time, event) ~ group, data = prostatic,
-+                 type = "Prentice")
-> isequal(round(statistic(st)^2, 4), 4.1229)
+> lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
++                    type = "Prentice")
+> isequal(round(statistic(lt)^2, 4), 4.1229)
 [1] TRUE
-> isequal(round(pvalue(st), 4), 0.0423)
+> isequal(round(pvalue(lt), 4), 0.0423)
 [1] TRUE
 > 
 > ### LR Altshuler
-> st <- surv_test(Surv(time, event) ~ group, data = prostatic)
-> isequal(round(statistic(st)^2, 4), 4.4343)
+> lt <- logrank_test(Surv(time, event) ~ group, data = prostatic)
+> isequal(round(statistic(lt)^2, 4), 4.4343)
 [1] TRUE
-> isequal(round(pvalue(st), 4), 0.0352)
+> isequal(round(pvalue(lt), 4), 0.0352)
 [1] TRUE
 > 
 > ### Tarone-Ware
-> st <- surv_test(Surv(time, event) ~ group, data = prostatic,
-+                 type = "Tarone-Ware")
-> isequal(round(statistic(st)^2, 4), 4.3443)
+> lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
++                    type = "Tarone-Ware")
+> isequal(round(statistic(lt)^2, 4), 4.3443)
 [1] TRUE
-> isequal(round(pvalue(st), 4), 0.0371)
+> isequal(round(pvalue(lt), 4), 0.0371)
 [1] TRUE
 > 
 > 
@@ -751,4 +751,4 @@ Error in SR_shift_1sample(object, fact = attr(int, "fact")) :
 > 
 > proc.time()
    user  system elapsed 
-   1.88    0.10    2.01 
+   2.01    0.06    2.09 

@@ -486,7 +486,7 @@ load("lungcancer.rda")
 ### NOTE: StatXact uses another tie handling method, see Callaert (2003)
 ### and the examples below (at the end of this file)
 
-lta <- surv_test(Surv(time, cens) ~ group, data = lungcancer, ties = "aver")
+lta <- logrank_test(Surv(time, cens) ~ group, data = lungcancer, ties = "aver")
 
 # test statistic, page 415
 isequal(round(statistic(lta), 3), 2.949) # no "-", StatXact 9, p. 215
@@ -494,27 +494,27 @@ isequal(round(statistic(lta), 3), 2.949) # no "-", StatXact 9, p. 215
 # two-sided asymptotic p-value, page 415
 isequal(round(pvalue(lta), 4), 0.0032)
 
-lte <- surv_test(Surv(time, cens) ~ group, data = lungcancer,
+lte <- logrank_test(Surv(time, cens) ~ group, data = lungcancer,
                     distribution = "exact")
 
 # two-sided exact p-value, page 415
 stopifnot(isequal(round(pvalue(lte), 4), 0.0010))
 
-ltel <- surv_test(Surv(time, cens) ~ group, data = lungcancer,
+ltel <- logrank_test(Surv(time, cens) ~ group, data = lungcancer,
                      distribution = "exact", alternative = "great")
 
 # one-sided exact p-value, page 415
 stopifnot(isequal(round(pvalue(ltel), 4), 0.0010))
 
 # two-sided approximated p-value
-ltMC <- surv_test(Surv(time, cens) ~ group, data = lungcancer,
+ltMC <- logrank_test(Surv(time, cens) ~ group, data = lungcancer,
                      distribution = approximate(B = 10000))
 pci <- attr(pvalue(ltMC), "conf.int")
 
 stopifnot(pci[1] < pvalue(lte) & pci[2] > pvalue(lte))
 
 # one-sided approximated p-value
-ltMC <- surv_test(Surv(time, cens) ~ group, data = lungcancer,
+ltMC <- logrank_test(Surv(time, cens) ~ group, data = lungcancer,
                      alternative = "greater",
                      distribution = approximate(B = 10000))
 pci <- attr(pvalue(ltMC), "conf.int")
@@ -530,12 +530,12 @@ srv <- data.frame(time = c(3, 5, 7, 8, 18, 12, 19, 20, 20, 33),
                                     "M", "M", "F", "F", "F")))
 
 # page 419
-surv_test(Surv(time, event) ~ treatment | gender, data = srv,
-          ties = "average")
+logrank_test(Surv(time, event) ~ treatment | gender, data = srv,
+             ties = "average")
 
-pvalue(surv_test(Surv(time, event) ~ treatment | gender, data = srv,
-              ties = "average",
-              distribution = approximate(B = 10000)))
+pvalue(logrank_test(Surv(time, event) ~ treatment | gender, data = srv,
+                    ties = "average",
+                    distribution = approximate(B = 10000)))
 
 
 ### StatXact 6 manual, page 448
@@ -698,8 +698,8 @@ brain <- data.frame(time = c(4,  5,  9, 12, 20, 25, 30,
                                              c(rep(1, 7), rep(2, 7),
                                                rep(3, 8), rep(3, 8)))))
 
-lta <- surv_test(Surv(time, event) ~ treatment, data = brain,
-                 ties.method = "average-scores")
+lta <- logrank_test(Surv(time, event) ~ treatment, data = brain,
+                    ties.method = "average-scores")
 
 # test statistic, page 516
 isequal(round(statistic(lta), 3), 5.012)
@@ -728,8 +728,8 @@ stopifnot(isequal(round(pvalue(pta), 4), 0.007))
 
 brain$treatment <- ordered(brain$treatment)
 
-lta <- surv_test(Surv(time, event) ~ treatment, data = brain,
-                 ties.method = "average-scores")
+lta <- logrank_test(Surv(time, event) ~ treatment, data = brain,
+                    ties.method = "average-scores")
 
 # test statistic, page 536
 isequal(round(statistic(lta), 3), 1.773)
@@ -996,18 +996,18 @@ stopifnot(isequal(round(pvalue(lta), 5), 0.01309))
 
 # some additional checks (always add new tests at the end because of the RNG's)
 
-lta <- surv_test(Surv(time, event) ~ treatment | gender, data = srv)
+lta <- logrank_test(Surv(time, event) ~ treatment | gender, data = srv)
 stopifnot(isequal(round(pvalue(lta), 4), 0.1224))
 
 ### example from Callaert (2003), AmStat 57, 214-217
 exdata <- data.frame(time = c(1, 1, 5, 6, 6, 6, 6, 2, 2, 2, 3, 4, 4, 5, 5),
                      event = rep(TRUE, 15),
                      group = factor(c(rep(0, 7), rep(1, 8))))
-p <- pvalue(surv_test(Surv(time, event) ~ group, data = exdata,
-          distribution = exact()))
+p <- pvalue(logrank_test(Surv(time, event) ~ group, data = exdata,
+                         distribution = exact()))
 stopifnot(isequal(round(p, 4), 0.0505))
-p <- pvalue(surv_test(Surv(time, event) ~ group, data = exdata,
-          distribution = exact(), ties = "average"))
+p <- pvalue(logrank_test(Surv(time, event) ~ group, data = exdata,
+                         distribution = exact(), ties = "average"))
 stopifnot(isequal(round(p, 4), 0.0468))
 
 

@@ -215,9 +215,9 @@ conover_test(y ~ x, dat = dat, alternative = "greater")
 
 
 ### Logrank Test
-surv_test(Surv(y) ~ x, dat = dat)
-surv_test(Surv(y) ~ x, dat = dat, alternative = "less")
-surv_test(Surv(y) ~ x, dat = dat, alternative = "greater")
+logrank_test(Surv(y) ~ x, dat = dat)
+logrank_test(Surv(y) ~ x, dat = dat, alternative = "less")
+logrank_test(Surv(y) ~ x, dat = dat, alternative = "greater")
 
 
 ### confidence intervals, cf Bauer 1972
@@ -316,33 +316,33 @@ prostatic <- within(prostatic,
 ### Leton and Zuluaga (2005, p. 384, Table 9)
 
 ### Gehan
-st <- surv_test(Surv(time, event) ~ group, data = prostatic,
-                type = "Gehan")
-isequal(round(statistic(st)^2, 4), 3.8400)
-isequal(round(pvalue(st), 4), 0.0500)
+lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
+                   type = "Gehan")
+isequal(round(statistic(lt)^2, 4), 3.8400)
+isequal(round(pvalue(lt), 4), 0.0500)
 
 ### Peto-Peto
-st <- surv_test(Surv(time, event) ~ group, data = prostatic,
-                type = "Fleming-Harrington", rho = 1)
-isequal(round(statistic(st)^2, 4), 4.0657)
-isequal(round(pvalue(st), 4), 0.0438)
+lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
+                   type = "Fleming-Harrington", rho = 1)
+isequal(round(statistic(lt)^2, 4), 4.0657)
+isequal(round(pvalue(lt), 4), 0.0438)
 
 ### Prentice
-st <- surv_test(Surv(time, event) ~ group, data = prostatic,
-                type = "Prentice")
-isequal(round(statistic(st)^2, 4), 4.1229)
-isequal(round(pvalue(st), 4), 0.0423)
+lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
+                   type = "Prentice")
+isequal(round(statistic(lt)^2, 4), 4.1229)
+isequal(round(pvalue(lt), 4), 0.0423)
 
 ### LR Altshuler
-st <- surv_test(Surv(time, event) ~ group, data = prostatic)
-isequal(round(statistic(st)^2, 4), 4.4343)
-isequal(round(pvalue(st), 4), 0.0352)
+lt <- logrank_test(Surv(time, event) ~ group, data = prostatic)
+isequal(round(statistic(lt)^2, 4), 4.4343)
+isequal(round(pvalue(lt), 4), 0.0352)
 
 ### Tarone-Ware
-st <- surv_test(Surv(time, event) ~ group, data = prostatic,
-                type = "Tarone-Ware")
-isequal(round(statistic(st)^2, 4), 4.3443)
-isequal(round(pvalue(st), 4), 0.0371)
+lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
+                   type = "Tarone-Ware")
+isequal(round(statistic(lt)^2, 4), 4.3443)
+isequal(round(pvalue(lt), 4), 0.0371)
 
 
 ### Paired tests

@@ -589,7 +589,7 @@ alternative hypothesis: true mu is less than 0
 
 > 
 > ### nullvalue never got printed
-> surv_test(Surv(time, event) ~ stadium, data = ocarcinoma)
+> logrank_test(Surv(time, event) ~ stadium, data = ocarcinoma)
 
 	Asymptotic 2-Sample Logrank Test
 
@@ -883,4 +883,4 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-   2.62    0.15    2.84 
+   2.77    0.17    2.98 

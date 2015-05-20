@@ -61,11 +61,11 @@
          c("Chemotherapy+Radiation", "Chemotherapy"), bty = "n")
 
   ### logrank test
-  surv_test(Surv(time, event) ~ group, data = GTSG)
+  logrank_test(Surv(time, event) ~ group, data = GTSG)
 
   ### Prentice test
-  surv_test(Surv(time, event) ~ group, data = GTSG,
-            type = "Prentice")
+  logrank_test(Surv(time, event) ~ group, data = GTSG,
+               type = "Prentice")
 
   ### testing against Weibull-type alternatives, see Moreau et al (1992)
   moreau_weight <- function(time, n.risk, n.event)

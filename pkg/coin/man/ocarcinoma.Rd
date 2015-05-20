@@ -44,14 +44,14 @@ IIA.
 \examples{
 
   ### logrank test with exact two-sided p-value
-  lrt <- surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
-                   distribution = "exact")
+  lt <- logrank_test(Surv(time, event) ~ stadium, data = ocarcinoma,
+                     distribution = "exact")
 
   ### the test statistic
-  statistic(lrt)
+  statistic(lt)
 
   ### p-value
-  pvalue(lrt)
+  pvalue(lt)
 
 }
 \keyword{datasets}
