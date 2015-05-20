@@ -485,3 +485,6 @@ if(getRversion() < "3.1.0") {
     cospi <- function(x) cos(pi * x)
     anyNA <- function(x) any(is.na(x))
 }
+
+if(getRversion() < "3.2.0")
+    isNamespaceLoaded <- function(name) !is.null(.getNamespace(name))
