@@ -1,8 +1,8 @@
 split_index <- function(n, by) {
     if (n < by)
         by <- n
-    vapply(lapply(seq_len(by), function(i) seq.int(i, n, by)),
-           length, NA_integer_)
+    lengths(lapply(seq_len(by), function(i) seq.int(i, n, by)),
+            use.names = FALSE)
 }
 
 MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {

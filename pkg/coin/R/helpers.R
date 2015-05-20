@@ -486,5 +486,8 @@ if(getRversion() < "3.1.0") {
     anyNA <- function(x) any(is.na(x))
 }
 
-if(getRversion() < "3.2.0")
+if(getRversion() < "3.2.0") {
     isNamespaceLoaded <- function(name) !is.null(.getNamespace(name))
+    lengths <- function(x, use.names = TRUE)
+        vapply(x, length, NA_integer_, USE.NAMES = use.names)
+}
