@@ -248,8 +248,7 @@ SEXP R_ExpectCovarInfluence(SEXP y, SEXP weights) {
     *\param ans return value; an object of class `ExpectCovar'
 */
 
-void C_ExpectCovarLinearStatistic(const double* x, const int p,
-                                  const double* y, const int q,
+void C_ExpectCovarLinearStatistic(const double* x, const int p, const int q,
                                   const double* weights, const int n,
                                   const SEXP expcovinf, SEXP ans) {
 
@@ -364,7 +363,7 @@ SEXP R_ExpectCovarLinearStatistic(SEXP x, SEXP y, SEXP weights,
     SET_SLOT(ans, coin_covarianceSym,
              PROTECT(allocMatrix(REALSXP, pq, pq)));
 
-    C_ExpectCovarLinearStatistic(REAL(x), p, REAL(y), q,
+    C_ExpectCovarLinearStatistic(REAL(x), p, q,
         REAL(weights), n, expcovinf, ans);
 
     UNPROTECT(3);

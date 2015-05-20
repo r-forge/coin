@@ -103,7 +103,7 @@ void initW(int a, int b, celW **W) {
     }
 }
 
-void mult(celW *tem, int a, int b, int rank, double *rs) {
+void mult(celW *tem, int rank, double *rs) {
 
     /*
 
@@ -235,9 +235,9 @@ void fillcell(celW **W, int i1, int j1, int r, double *rs, double tol) {
     }
 
     if (i1 == j1) {       
-        mult(&temp2, i1 - 1, j1 - 1, r, rs); 
+        mult(&temp2, r, rs); 
     } else {           
-        mult(&temp2, i1 - 1, j1 - 1, r, rs);                        
+        mult(&temp2, r, rs);                        
         tijd = temp2.length;                                
         plus(W, &temp2, i1, j1, tol);                            
         mymergesort(temp2, tijd);                              
