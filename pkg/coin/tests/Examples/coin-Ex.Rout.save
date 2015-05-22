@@ -1298,7 +1298,7 @@ alternative hypothesis: true theta is not equal to 1
 > 
 >   ### StatXact 9 manual, page 215
 >   logrank_test(Surv(time, event) ~ group, data = lungcancer,
-+             distribution = "exact", ties.method = "average-scores")
++                distribution = "exact", ties.method = "average-scores")
 
 	Exact 2-Sample Logrank Test
 
@@ -1406,70 +1406,105 @@ alternative hypothesis: greater
 > 
 > ### Name: SymmetryTests
 > ### Title: Symmetry Tests
-> ### Aliases: quade_test quade_test.formula quade_test.SymmetryProblem
-> ###   friedman_test friedman_test.formula friedman_test.SymmetryProblem
+> ### Aliases: sign_test sign_test.formula sign_test.SymmetryProblem
 > ###   wilcoxsign_test wilcoxsign_test.formula
-> ###   wilcoxsign_test.SymmetryProblem sign_test sign_test.formula
-> ###   sign_test.SymmetryProblem
+> ###   wilcoxsign_test.SymmetryProblem friedman_test friedman_test.formula
+> ###   friedman_test.SymmetryProblem quade_test quade_test.formula
+> ###   quade_test.SymmetryProblem
 > ### Keywords: htest
 > 
 > ### ** Examples
 > 
->   ### Data from Quade (1979, p. 683)
->   dta <- data.frame(
-+       y = c(52, 45, 38,
-+             63, 79, 50,
-+             45, 57, 39,
-+             53, 51, 43,
-+             47, 50, 56,
-+             62, 72, 49,
-+             49, 52, 40),
-+        x = factor(rep(LETTERS[1:3], 7)),
-+        b = factor(rep(1:7, each = 3)))
+>   ### Example from ?wilcox.test
+>   y1 <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+>   y2 <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
 > 
->   ### Approximate (Monte Carlo) Friedman test
->   friedman_test(y ~ x | b, data = dta,
-+                 distribution = approximate(B = 10000))
+>   ### One-sided exact sign test
+>   (st <- sign_test(y1 ~ y2, distribution = "exact",
++                    alternative = "greater"))
 
-	Approximative Friedman Test
+	Exact Sign Test
 
-data:  y by x (A, B, C) 
-	 stratified by b
-chi-squared = 6, p-value = 0.0521
+data:  y by x (pos, neg) 
+	 stratified by block
+Z = 1.6667, p-value = 0.08984
+alternative hypothesis: true mu is greater than 0
+
+>   midpvalue(st) # mid-p-value
+[1] 0.0546875
+> 
+>   ### One-sided exact Wilcoxon signed-rank test
+>   wilcox.test(y1, y2, paired = TRUE, alternative = "greater")
+
+	Wilcoxon signed rank test
+
+data:  y1 and y2
+V = 40, p-value = 0.01953
+alternative hypothesis: true location shift is greater than 0
+
+>   (wt <- wilcoxsign_test(y1 ~ y2, distribution = "exact",
++                          alternative = "greater"))
+
+	Exact Wilcoxon-Pratt Signed-Rank Test
+
+data:  y by x (pos, neg) 
+	 stratified by block
+Z = 2.0732, p-value = 0.01953
+alternative hypothesis: true mu is greater than 0
+
+>   statistic(wt, type = "linear") # same as wilcox.test
+      
+pos 40
+>   midpvalue(wt) # mid-p-value
+[1] 0.01660156
+> 
+> 
+>   ### Data with explicit group and block information
+>   dta <- data.frame(y = c(y1, y2), x = gl(2, length(y1)),
++                     block = factor(rep(seq_along(y1), 2)))
+> 
+>   ### For two samples, the sign test is equivalent to the Friedman test...
+>   sign_test(y ~ x | block, data = dta, distribution = "exact")
+
+	Exact Sign Test
+
+data:  y by x (pos, neg) 
+	 stratified by block
+Z = 1.6667, p-value = 0.1797
+alternative hypothesis: true mu is not equal to 0
+
+>   friedman_test(y ~ x | block, data = dta, distribution = "exact")
+
+	Exact Friedman Test
+
+data:  y by x (1, 2) 
+	 stratified by block
+chi-squared = 2.7778, p-value = 0.1797
 
 > 
->   ### Approximate (Monte Carlo) Quade test
->   ### Quade (1979, p.683), W = 8.157
->   (qt <- quade_test(y ~ x | b, data = dta,
-+                     distribution = approximate(B = 10000)))
+>   ### ...and the signed-rank test is equivalent to the Quade test
+>   wilcoxsign_test(y ~ x | block, data = dta, distribution = "exact")
 
-	Approximative Quade Test
+	Exact Wilcoxon-Pratt Signed-Rank Test
 
-data:  y by x (A, B, C) 
-	 stratified by b
-chi-squared = 8.1571, p-value = 0.0059
+data:  y by x (pos, neg) 
+	 stratified by block
+Z = 2.0732, p-value = 0.03906
+alternative hypothesis: true mu is not equal to 0
 
-> 
->   ### Comparison with R's quade.test() function
->   quade.test(y ~ x | b, data = dta)
+>   quade_test(y ~ x | block, data = dta, distribution = "exact")
 
-	Quade test
+	Exact Quade Test
 
-data:  y and x and b
-Quade F = 8.3765, num df = 2, denom df = 12, p-value = 0.005284
+data:  y by x (1, 2) 
+	 stratified by block
+chi-squared = 4.2982, p-value = 0.03906
 
-> 
->   ### quade.test() uses an F-statistic
->   b <- nlevels(qt@statistic@block)
->   A <- sum(qt@statistic@y^2)
->   B <- sum(statistic(qt, "linear")^2) / b
->   (b - 1) * B / (A - B) # F = 8.3765
-[1] 8.376528
 > 
 > 
 >   ### Hollander & Wolfe (1999), Table 7.1, page 274
 >   ### Comparison of three methods ("round out", "narrow angle", and
->   ###  "wide angle") for rounding first base.
+>   ### "wide angle") for rounding first base.
 >   RoundingTimes <- data.frame(
 +       times = c(5.40, 5.50, 5.55,
 +                 5.85, 5.70, 5.75,
@@ -1494,9 +1529,10 @@ Quade F = 8.3765, num df = 2, denom df = 12, p-value = 0.005284
 +                 5.70, 5.65, 5.55,
 +                 6.30, 6.30, 6.25),
 +       methods = factor(rep(c("Round Out", "Narrow Angle", "Wide Angle"), 22)),
-+       block = factor(rep(1:22, rep(3, 22))))
++       block = factor(rep(1:22, rep(3, 22)))
++   )
 > 
->   ### classical global test
+>   ### Classical global test
 >   friedman_test(times ~ methods | block, data = RoundingTimes)
 
 	Asymptotic Friedman Test
@@ -1507,182 +1543,130 @@ data:  times by
 chi-squared = 11.143, df = 2, p-value = 0.003805
 
 > 
->   ### parallel coordinates plot
+>   ### Parallel coordinates plot
 >   matplot(t(matrix(RoundingTimes$times, ncol = 3, byrow = TRUE)),
 +           type = "l", col = 1, lty = 1, axes = FALSE, ylab = "Time",
 +           xlim = c(0.5, 3.5))
 >   axis(1, at = 1:3, labels = c("Round Out", "Narrow Angle", "Wide Angle"))
 >   axis(2)
 > 
->   ### where do the differences come from?
+>   ### Where do the differences come from?
 >   ### Wilcoxon-Nemenyi-McDonald-Thompson test
 >   ### Hollander & Wolfe (1999), page 295
->   ### all pairwise comparisons
->   rtt <- symmetry_test(times ~ methods | block, data = RoundingTimes,
-+        xtrafo = mcp_trafo(methods = "Tukey"),
-+        ytrafo = function(data)
-+            trafo(data, numeric_trafo = rank_trafo, block = RoundingTimes$block)
-+        )
-> 
->   ### a global test, again
->   print(pvalue(rtt))
-[1] 0.003466348
-99 percent confidence interval:
- 0.003169085 0.003763611 
+>   ### All pairwise comparisons
+>   (st <- symmetry_test(times ~ methods | block, data = RoundingTimes,
++                        ytrafo = function(data)
++                            trafo(data, numeric_trafo = rank_trafo,
++                                  block = RoundingTimes$block),
++                        xtrafo = mcp_trafo(methods = "Tukey")))
+
+	Asymptotic General Symmetry Test
+
+data:  times by
+	 methods (Narrow Angle, Round Out, Wide Angle) 
+	 stratified by block
+maxT = 3.2404, p-value = 0.003456
+alternative hypothesis: two.sided
 
 > 
->   ### simultaneous P-values for all pair comparisons
+>   ### Simultaneous test of all pairwise comparisons
 >   ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
->   print(pvalue(rtt, method = "single-step"))
+>   pvalue(st, method = "single-step")
 Warning in .local(object, ...) :
   multiple comparisons might be incorrect due to subset pivotality; use 'method = "npmcp"'
                                      
-Round Out - Narrow Angle  0.623914237
-Wide Angle - Narrow Angle 0.053979240
-Wide Angle - Round Out    0.003389065
+Round Out - Narrow Angle  0.623934656
+Wide Angle - Narrow Angle 0.053791966
+Wide Angle - Round Out    0.003358314
 > 
 > 
 >   ### Strength Index of Cotton, Hollander & Wolfe (1999), Table 7.5, page 286
->   sc <- data.frame(block = factor(c(rep(1, 5), rep(2, 5), rep(3, 5))),
-+                    potash = ordered(rep(c(144, 108, 72, 54, 36), 3),
-+                                     levels = c(144, 108, 72, 54, 36)),
-+                    strength = c(7.46, 7.17, 7.76, 8.14, 7.63,
-+                                 7.68, 7.57, 7.73, 8.15, 8.00,
-+                                 7.21, 7.80, 7.74, 7.87, 7.93))
+>   sc <- data.frame(
++       strength = c(7.46, 7.17, 7.76, 8.14, 7.63,
++                    7.68, 7.57, 7.73, 8.15, 8.00,
++                    7.21, 7.80, 7.74, 7.87, 7.93),
++       potash = ordered(rep(c(144, 108, 72, 54, 36), 3),
++                        levels = c(144, 108, 72, 54, 36)),
++       block = gl(3, 5)
++   )
 > 
->   ### Page test for ordered alternatives
->   friedman_test(strength ~ potash | block, data = sc)
+>   ### One-sided asymptotic Page test
+>   friedman_test(strength ~ potash | block, data = sc, alternative = "greater")
 
 	Asymptotic Page Test
 
 data:  strength by
 	 potash (144 < 108 < 72 < 54 < 36) 
 	 stratified by block
-Z = 2.6558, p-value = 0.007912
-alternative hypothesis: two.sided
+Z = 2.6558, p-value = 0.003956
+alternative hypothesis: greater
 
 > 
->   ### one-sided p-value
->   pvalue(friedman_test(strength ~ potash | block, data = sc,
-+                        alternative = "greater"))
-            
-0.003955894 
-> 
->   ### approximate null distribution via Monte Carlo
->   pvalue(friedman_test(strength ~ potash | block, data = sc,
-+                        distribution = approximate(B = 9999)))
-[1] 0.00480048
-99 percent confidence interval:
- 0.003205889 0.006883641 
+>   ## One-sided approximate (Monte Carlo) Page test
+>   friedman_test(strength ~ potash | block, data = sc, alternative = "greater",
++                 distribution = approximate(B = 10000))
 
-> 
-> 
->   ### example from ?wilcox.test
->   y1 <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
->   y2 <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
-> 
->   wilcox.test(y1, y2, paired = TRUE, alternative = "greater")
+	Approximative Page Test
 
-	Wilcoxon signed rank test
-
-data:  y1 and y2
-V = 40, p-value = 0.01953
-alternative hypothesis: true location shift is greater than 0
-
->   (wt <- wilcoxsign_test(y1 ~ y2, alternative = "greater",
-+                          distribution = "exact"))
-
-	Exact Wilcoxon-Pratt Signed-Rank Test
-
-data:  y by x (pos, neg) 
+data:  strength by
+	 potash (144 < 108 < 72 < 54 < 36) 
 	 stratified by block
-Z = 2.0732, p-value = 0.01953
-alternative hypothesis: true mu is greater than 0
-
->   statistic(wt, "linear") # same as wilcox.test
-      
-pos 40
->   midpvalue(wt) # mid-p-value
-[1] 0.01660156
-> 
->   (st <- sign_test(y1 ~ y2, alternative = "greater",
-+                    distribution = "exact"))
-
-	Exact Sign Test
-
-data:  y by x (pos, neg) 
-	 stratified by block
-Z = 1.6667, p-value = 0.08984
-alternative hypothesis: true mu is greater than 0
-
->   midpvalue(st) # mid-p-value
-[1] 0.0546875
-> 
->   ### with explicit group and block information
->   dta <- data.frame(y = c(y1, y2), x = gl(2, length(y1)),
-+                     block = factor(rep(seq_along(y1), 2)))
-> 
->   wilcoxsign_test(y ~ x | block, data = dta,
-+                   alternative = "greater", distribution = "exact")
-
-	Exact Wilcoxon-Pratt Signed-Rank Test
-
-data:  y by x (pos, neg) 
-	 stratified by block
-Z = 2.0732, p-value = 0.01953
-alternative hypothesis: true mu is greater than 0
+Z = 2.6558, p-value = 0.0027
+alternative hypothesis: greater
 
 > 
->   sign_test(y ~ x | block, data = dta,
-+             alternative = "greater", distribution = "exact")
+> 
+>   ### Data from Quade (1979, p. 683)
+>   dta <- data.frame(
++       y = c(52, 45, 38,
++             63, 79, 50,
++             45, 57, 39,
++             53, 51, 43,
++             47, 50, 56,
++             62, 72, 49,
++             49, 52, 40),
++        x = factor(rep(LETTERS[1:3], 7)),
++        b = factor(rep(1:7, each = 3))
++   )
+> 
+>   ### Approximate (Monte Carlo) Friedman test
+>   friedman_test(y ~ x | b, data = dta,
++                 distribution = approximate(B = 10000))
 
-	Exact Sign Test
+	Approximative Friedman Test
 
-data:  y by x (pos, neg) 
-	 stratified by block
-Z = 1.6667, p-value = 0.08984
-alternative hypothesis: true mu is greater than 0
+data:  y by x (A, B, C) 
+	 stratified by b
+chi-squared = 6, p-value = 0.0502
 
 > 
->   ### for two samples, the Quade test is equivalent to the signed-rank test
->   quade_test(y ~ x | block, data = dta, distribution = "exact")
+>   ### Approximate (Monte Carlo) Quade test
+>   ### Quade (1979, p.683), W = 8.157
+>   (qt <- quade_test(y ~ x | b, data = dta,
++                     distribution = approximate(B = 10000)))
 
-	Exact Quade Test
+	Approximative Quade Test
 
-data:  y by x (1, 2) 
-	 stratified by block
-chi-squared = 4.2982, p-value = 0.03906
-
-> 
->   wilcoxsign_test(y ~ x | block, data = dta, distribution = "exact")
-
-	Exact Wilcoxon-Pratt Signed-Rank Test
-
-data:  y by x (pos, neg) 
-	 stratified by block
-Z = 2.0732, p-value = 0.03906
-alternative hypothesis: true mu is not equal to 0
+data:  y by x (A, B, C) 
+	 stratified by b
+chi-squared = 8.1571, p-value = 0.006
 
 > 
->   ### for two samples, the Friedman test is equivalent to the sign test
->   friedman_test(y ~ x | block, data = dta, distribution = "exact")
+>   ### Comparison with R's quade.test() function
+>   quade.test(y ~ x | b, data = dta)
 
-	Exact Friedman Test
+	Quade test
 
-data:  y by x (1, 2) 
-	 stratified by block
-chi-squared = 2.7778, p-value = 0.1797
+data:  y and x and b
+Quade F = 8.3765, num df = 2, denom df = 12, p-value = 0.005284
 
 > 
->   sign_test(y ~ x | block, data = dta, distribution = "exact")
-
-	Exact Sign Test
-
-data:  y by x (pos, neg) 
-	 stratified by block
-Z = 1.6667, p-value = 0.1797
-alternative hypothesis: true mu is not equal to 0
-
+>   ### quade.test() uses an F-statistic
+>   b <- nlevels(qt@statistic@block)
+>   A <- sum(qt@statistic@y^2)
+>   B <- sum(statistic(qt, "linear")^2) / b
+>   (b - 1) * B / (A - B) # F = 8.3765
+[1] 8.376528
 > 
 > 
 > 
@@ -2692,7 +2676,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  37.11 0.27 37.61 NA NA 
+Time elapsed:  45.84 0.42 46.99 NA NA 
 > grDevices::dev.off()
 null device 
           1 
