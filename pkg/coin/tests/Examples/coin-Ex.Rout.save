@@ -2729,11 +2729,38 @@ sample estimates:
 > 
 > 
 > 
+> cleanEx()
+> nameEx("vision")
+> ### * vision
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: vision
+> ### Title: Unaided Distance Vision
+> ### Aliases: vision
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> ## Asymptotic Stuart(-Maxwell) test, Q = 11.96
+> diag(vision) <- 0 # speed-up
+> mh_test(vision)
+
+	Asymptotic Marginal Homogeneity Test
+
+data:  response by
+	 conditions (Left.Eye, Right.Eye) 
+	 stratified by block
+chi-squared = 11.957, df = 3, p-value = 0.007533
+
+> 
+> 
+> 
 > ### * <FOOTER>
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  37.94 0.22 38.27 NA NA 
+Time elapsed:  42.14 0.25 43.29 NA NA 
 > grDevices::dev.off()
 null device 
           1 

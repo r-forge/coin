@@ -153,6 +153,8 @@
 
       \item new data set \code{malformations} has been added (see
       \code{?malformations})
+
+      \item new data set \code{vision} has been added (see \code{?vision})
     }
   }
   \subsection{Bug fixes}{
