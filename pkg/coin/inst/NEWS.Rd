@@ -150,6 +150,9 @@
       \item evaluation of the null distribution can now be suppressed for all
       test procedures by setting \code{distribution = "none"} (see
       \code{?independence_test} and \code{?symmetry_test})
+
+      \item new data set \code{malformations} has been added (see
+      \code{?malformations})
     }
   }
   \subsection{Bug fixes}{

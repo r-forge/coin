@@ -2183,6 +2183,63 @@ chi-squared = 10.2, df = 9, p-value = 0.3345
 > 
 > 
 > cleanEx()
+> nameEx("malformations")
+> ### * malformations
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: malformations
+> ### Title: Maternal Drinking and Congenital Sex Organ Malformation
+> ### Aliases: malformations
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> ## Graubard and Korn (1987, Tab. 3)
+> 
+> ## One-sided approximate (Monte Carlo) Cochran-Armitage test
+> ## Midpoint scores, p < 0.05
+> midpoints <- c(0, 0.5, 1.5, 4.0, 7.0)
+> cmh_test(malformation ~ consumption, data = malformations,
++          distribution = approximate(B = 1000L), alternative = "greater",
++          scores = list(consumption = midpoints))
+
+	Approximative Linear-by-Linear Association Test
+
+data:  malformation by consumption (0 < <1 < 1-2 < 3-5 < >=6)
+Z = 2.5632, p-value = 0.017
+alternative hypothesis: greater
+
+> 
+> ## One-sided approximate (Monte Carlo) Cochran-Armitage test
+> ## Midrank scores, p > 0.05
+> midranks <- c(8557.5, 24375.5, 32013.0, 32473.0, 32555.5)
+> cmh_test(malformation ~ consumption, data = malformations,
++          distribution = approximate(B = 1000L), alternative = "greater",
++          scores = list(consumption = midranks))
+
+	Approximative Linear-by-Linear Association Test
+
+data:  malformation by consumption (0 < <1 < 1-2 < 3-5 < >=6)
+Z = 0.59207, p-value = 0.269
+alternative hypothesis: greater
+
+> 
+> ## One-sided approximate (Monte Carlo) Cochran-Armitage test
+> ## Equally spaced scores, p > 0.05
+> cmh_test(malformation ~ consumption, data = malformations,
++          distribution = approximate(B = 1000L), alternative = "greater")
+
+	Approximative Linear-by-Linear Association Test
+
+data:  malformation by consumption (0 < <1 < 1-2 < 3-5 < >=6)
+Z = 1.3519, p-value = 0.117
+alternative hypothesis: greater
+
+> 
+> 
+> 
+> cleanEx()
 > nameEx("mercuryfish")
 > ### * mercuryfish
 > 
@@ -2676,7 +2733,7 @@ sample estimates:
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  45.84 0.42 46.99 NA NA 
+Time elapsed:  37.94 0.22 38.27 NA NA 
 > grDevices::dev.off()
 null device 
           1 
