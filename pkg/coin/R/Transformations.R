@@ -340,7 +340,7 @@ logrank_weight <- function(time, n.risk, n.event,
             "Tarone-Ware" = { # Tarone and Ware (1977)
                 n.risk^rho
             },
-            "Prentice" = { # Prentice (1978), Letón and Zuluaga (2001)
+            "Prentice" = { # Prentice (1978), Leton and Zuluaga (2001)
                 cumprod(n.risk / (n.risk + n.event)) # S(t)
             },
             "Prentice-Marek" = { # Prentice and Marek (1979)
