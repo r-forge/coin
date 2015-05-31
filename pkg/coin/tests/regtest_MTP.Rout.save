@@ -374,49 +374,37 @@ Control 0.05503  1 0.14164  1
 2 0.7066831177 0.9865717243
 3 0.0006509015 0.9999999972
 > 
-> ### mcp
+> ## ### mcp
 > 
-> YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,
-+                              42, 60, 32, 42, 45, 58, 27, 51, 42, 52,
-+                              38, 33, 26, 25, 28, 28, 26, 27, 27, 27,
-+                              31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
-+                   site = factor(c(rep("I", 10), rep("II", 10),
-+                                   rep("III", 10), rep("IV", 10))))
+> ## YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,
+> ##                              42, 60, 32, 42, 45, 58, 27, 51, 42, 52,
+> ##                              38, 33, 26, 25, 28, 28, 26, 27, 27, 27,
+> ##                              31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
+> ##                   site = factor(c(rep("I", 10), rep("II", 10),
+> ##                                   rep("III", 10), rep("IV", 10))))
 > 
-> ### permutation based Dunnett
-> it <- independence_test(length ~ site, data = YOY,
-+                         xtrafo = mcp_trafo(site = "Dunnett"),
-+                         distribution = approximate(10000),
-+                         alternative = "two.sided")
-> pvalue(it, method = "npmcp")
-              
-II - I  0.1994
-III - I 0.0188
-IV - I  0.0144
+> ## ### permutation based Dunnett
+> ## it <- independence_test(length ~ site, data = YOY,
+> ##                         xtrafo = mcp_trafo(site = "Dunnett"),
+> ##                         distribution = approximate(10000),
+> ##                         alternative = "two.sided")
+> ## pvalue(it, method = "npmcp")
 > 
-> ### asymptotic Dunnett
-> it <- independence_test(length ~ site, data = YOY,
-+                         xtrafo = mcp_trafo(site = "Dunnett"),
-+                         alternative = "two.sided")
-> pvalue(it, method = "npmcp")
-                  
-II - I  0.18664240
-III - I 0.02105972
-IV - I  0.01584066
+> ## ### asymptotic Dunnett
+> ## it <- independence_test(length ~ site, data = YOY,
+> ##                         xtrafo = mcp_trafo(site = "Dunnett"),
+> ##                         alternative = "two.sided")
+> ## pvalue(it, method = "npmcp")
 > 
-> ### asymptotic Dunnett, user-defined w/o column names
-> cm <- rbind("II  vs I" = c(-1, 1, 0, 0),
-+             "III vs I" = c(-1, 0, 1, 0),
-+             "IV  vs I" = c(-1, 0, 0, 1))
-> it <- independence_test(length ~ site, data = YOY,
-+                         xtrafo = mcp_trafo(site = cm),
-+                         alternative = "two.sided")
-> pvalue(it, method = "npmcp")
-                   
-II  vs I 0.18664240
-III vs I 0.02105972
-IV  vs I 0.01587280
+> ## ### asymptotic Dunnett, user-defined w/o column names
+> ## cm <- rbind("II  vs I" = c(-1, 1, 0, 0),
+> ##             "III vs I" = c(-1, 0, 1, 0),
+> ##             "IV  vs I" = c(-1, 0, 0, 1))
+> ## it <- independence_test(length ~ site, data = YOY,
+> ##                         xtrafo = mcp_trafo(site = cm),
+> ##                         alternative = "two.sided")
+> ## pvalue(it, method = "npmcp")
 > 
 > proc.time()
    user  system elapsed 
-   3.66    0.24    3.99 
+   3.72    0.15    3.97 

@@ -26,10 +26,6 @@
       marginal distributions of the test statistics can now be obtained, using
       the Bonferroni or the \enc{Šidák}{Sidak} method (see \code{?pvalue})
 
-      \item adjusted \eqn{p}-values for multiple comparisons can now be obtained
-      using the Westfall (1997) algorithm (see \code{?mcp_trafo} and
-      \code{?pvalue})
-
       \item unadjusted \eqn{p}-values can now be obtained (see \code{?pvalue})
 
       \item all transformation functions are now passing through missing values

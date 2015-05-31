@@ -278,10 +278,10 @@
       distribution = approximate(B = 90000))
 
   ### global p-value
-  print(pvalue(NDWD))
+  pvalue(NDWD)
 
   ### sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
-  print(pvalue(NDWD, method = "single-step"))
+  pvalue(NDWD, method = "single-step") # subset pivotality is violated
 
 
   ### Jonckheere-Terpstra test for ordered groups

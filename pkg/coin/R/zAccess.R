@@ -22,13 +22,13 @@ setMethod("pvalue",
 setMethod("pvalue",
     signature = "MaxTypeIndependenceTest",
     definition = function(object,
-        method = c("global", "single-step", "step-down", "npmcp", "unadjusted"),
+        method = c("global", "single-step", "step-down", "unadjusted"),
 ###     combinations = c("free", "restricted"), # placeholder
         distribution = c("joint", "marginal"),
         type = c("Bonferroni", "Sidak"), ...) {
             method <- match.arg(method,
                           choices = c("global", "single-step", "step-down",
-                                      "npmcp", "unadjusted", "discrete"),
+                                      "unadjusted", "discrete"),
                           several.ok = TRUE)[1]
             if (method == "discrete")
                 warning(sQuote(paste("method =", dQuote(method))),
@@ -37,10 +37,9 @@ setMethod("pvalue",
             type <- match.arg(type)
 
             C <- attr(object@statistic@xtrans, "contrast")
-            if (!is.null(C) && !(method %in% c("global", "npmcp")))
-                warning(paste("multiple comparisons might be incorrect",
-                              "due to subset pivotality; use",
-                              sQuote(paste("method =", dQuote("npmcp")))))
+            if (!is.null(C) && method != "global")
+                warning(paste("p-values may be incorrect due to violation of",
+                              "the subset pivotality condition"))
 
             if (method == "global")
                 pvalue(object@distribution, object@statistic@teststatistic)
@@ -66,8 +65,7 @@ setMethod("pvalue",
                         marginal(object, bonferroni = FALSE,
                                  stepdown = TRUE, ...)
                 }
-            } else if (method == "npmcp")
-                npmcp(object, ...)
+            }
             ## <DEPRECATED>
             else if (method == "discrete")
                 dbonf(object, ...)

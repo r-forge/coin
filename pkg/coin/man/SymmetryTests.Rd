@@ -187,7 +187,7 @@
 
   ### Simultaneous test of all pairwise comparisons
   ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
-  pvalue(st, method = "single-step")
+  pvalue(st, method = "single-step") # subset pivotality is violated
 
 
   ### Strength Index of Cotton, Hollander & Wolfe (1999), Table 7.5, page 286

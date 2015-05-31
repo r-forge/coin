@@ -24,7 +24,7 @@
 \usage{
 \S4method{pvalue}{IndependenceTest}(object, \dots)
 \S4method{pvalue}{MaxTypeIndependenceTest}(object,
-       method = c("global", "single-step", "step-down", "npmcp", "unadjusted"),
+       method = c("global", "single-step", "step-down", "unadjusted"),
        distribution = c("joint", "marginal"),
        type = c("Bonferroni", "Sidak"), \dots)
 \S4method{pvalue}{NullDistribution}(object, q, \dots)
@@ -42,8 +42,8 @@
   }
   \item{method}{
     a character, the method used for the \eqn{p}-value computation: either
-    \code{"global"} (default), \code{"single-step"}, \code{"step-down"},
-    \code{"npmcp"} or \code{"unadjusted"}.
+    \code{"global"} (default), \code{"single-step"}, \code{"step-down"} or
+    \code{"unadjusted"}.
   }
   \item{distribution}{
     a character, the distribution used for the computation of adjusted
@@ -93,13 +93,6 @@
   adjustment can be specified through the \code{type} argument by setting it to
   \code{"Bonferroni"} or \code{"Sidak"} respectively.
 
-  For multiple comparisons of levels of a single factor (defined via
-  \code{\link{mcp_trafo}}), adjusted p-values, less affected by failure of the
-  \emph{subset pivotality} condition, can be computed using a joint
-  distribution-based \emph{restricted} step-down max-\eqn{T} procedure via
-  \code{method = "npmcp"}.  This feature is \strong{highly} experimental, and
-  may be subject to change.
-
   The \eqn{p}-value adjustment procedures based on the joint distribution of the
   test statistics fully utilizes distributional characteristics, such as
   discreteness and dependence structure, whereas procedures using the marginal
@@ -107,9 +100,8 @@
   distribution-based procedures are typically more powerful.  Details regarding
   the single-step and \emph{free} step-down procedures based on the joint
   distribution can be found in Westfall and Young (1993); in particular, this
-  implementation uses Equation 2.8 with Algorithm 2.5 and 2.8 respectively.  The
-  joint distribution \emph{restricted} step-down procedure is based on Westfall
-  (1997).  Westfall and Wolfinger (1997) provide details of the marginal
+  implementation uses Equation 2.8 with Algorithm 2.5 and 2.8 respectively.
+  Westfall and Wolfinger (1997) provide details of the marginal
   distributions-based single-step and \emph{free} step-down procedures.  The
   generalization of Westfall and Wolfinger (1997) to arbitrary test statistics,
   as implemented here, is given by Westfall and Troendle (2008).
@@ -150,10 +142,6 @@
 
   Westfall, P. H. and Troendle, J. F.  (2008).  Multiple testing with minimal
   assumptions.  \emph{Biometrical Journal} \bold{50}(5), 745--755.
-
-  Westfall, P. H.  (1997).  Multiple testing of general contrasts using logical
-  constraints and correlations.  \emph{Journal of the American Statistical
-  Association} \bold{92}(437), 299--306.
 
   Westfall, P. H. and Wolfinger, R. D.  (1997).  Multiple tests with discrete
   distributions.  \emph{The American Statistician} \bold{51}(1), 3--8.
@@ -215,11 +203,11 @@ yoy <- data.frame(
     site = gl(4, 10, labels = as.roman(1:4))
 )
 
-## Joint distribution (restricted) step-down p-values for multiple comparisons
+## Joint distribution (free) step-down p-values for multiple comparisons
 (ot <- oneway_test(length ~ site, data = yoy,
                    distribution = approximate(B = 10000),
                    xtrafo = mcp_trafo(site = "Tukey")))
-pvalue(ot, method = "npmcp")
+pvalue(ot, method = "step-down") # subset pivotality is violated
 }
 \keyword{methods}
 \keyword{htest}

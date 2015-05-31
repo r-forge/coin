@@ -751,16 +751,16 @@ chi-squared = 22.852, p-value < 2.2e-16
 +       distribution = approximate(B = 90000))
 > 
 >   ### global p-value
->   print(pvalue(NDWD))
+>   pvalue(NDWD)
 [1] 0.0004888889
 99 percent confidence interval:
  0.0003199269 0.0007126921 
 
 > 
 >   ### sites (I = II) != (III = IV) at alpha = 0.01 (page 244)
->   print(pvalue(NDWD, method = "single-step"))
+>   pvalue(NDWD, method = "single-step") # subset pivotality is violated
 Warning in .local(object, ...) :
-  multiple comparisons might be incorrect due to subset pivotality; use 'method = "npmcp"'
+  p-values may be incorrect due to violation of the subset pivotality condition
                      
 II - I   0.9493555556
 III - I  0.0092111111
@@ -1571,9 +1571,9 @@ alternative hypothesis: two.sided
 > 
 >   ### Simultaneous test of all pairwise comparisons
 >   ### Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, page 296)
->   pvalue(st, method = "single-step")
+>   pvalue(st, method = "single-step") # subset pivotality is violated
 Warning in .local(object, ...) :
-  multiple comparisons might be incorrect due to subset pivotality; use 'method = "npmcp"'
+  p-values may be incorrect due to violation of the subset pivotality condition
                                      
 Round Out - Narrow Angle  0.623934656
 Wide Angle - Narrow Angle 0.053791966
@@ -2568,7 +2568,7 @@ alternative hypothesis: two.sided
 +     site = gl(4, 10, labels = as.roman(1:4))
 + )
 > 
-> ## Joint distribution (restricted) step-down p-values for multiple comparisons
+> ## Joint distribution (free) step-down p-values for multiple comparisons
 > (ot <- oneway_test(length ~ site, data = yoy,
 +                    distribution = approximate(B = 10000),
 +                    xtrafo = mcp_trafo(site = "Tukey")))
@@ -2579,14 +2579,16 @@ data:  length by site (I, II, III, IV)
 maxT = 3.953, p-value = 1e-04
 alternative hypothesis: two.sided
 
-> pvalue(ot, method = "npmcp")
+> pvalue(ot, method = "step-down") # subset pivotality is violated
+Warning in .local(object, ...) :
+  p-values may be incorrect due to violation of the subset pivotality condition
                
-II - I   0.4304
-III - I  0.0006
-IV - I   0.0002
+II - I   0.4284
+III - I  0.0213
+IV - I   0.0148
 III - II 0.0002
-IV - II  0.0000
-IV - III 0.7161
+IV - II  0.0001
+IV - III 0.8817
 > 
 > 
 > 
@@ -2760,7 +2762,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  42.14 0.25 43.29 NA NA 
+Time elapsed:  41.68 0.2 42.09 NA NA 
 > grDevices::dev.off()
 null device 
           1 
