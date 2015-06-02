@@ -181,12 +181,6 @@ pvalue(it)
 pvalue(it, method = "single-step")
 ## Joint distribution (free) step-down p-values
 pvalue(it, method = "step-down")
-## Bonferroni single-step p-values
-pvalue(it, method = "single-step", distribution = "marginal")
-## Sidak single-step p-values
-pvalue(it, method = "single-step", distribution = "marginal", type = "Sidak")
-## Bonferroni (free) step-down p-values
-pvalue(it, method = "step-down", distribution = "marginal")
 ## Sidak (free) step-down p-values
 pvalue(it, method = "step-down", distribution = "marginal", type = "Sidak")
 ## Unadjusted p-values

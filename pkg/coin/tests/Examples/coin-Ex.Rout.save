@@ -2536,18 +2536,6 @@ alternative hypothesis: two.sided
 > pvalue(it, method = "step-down")
      y1    y2
 1 0.011 0.979
-> ## Bonferroni single-step p-values
-> pvalue(it, method = "single-step", distribution = "marginal")
-     y1 y2
-1 0.011  1
-> ## Sidak single-step p-values
-> pvalue(it, method = "single-step", distribution = "marginal", type = "Sidak")
-          y1       y2
-1 0.01096975 0.999559
-> ## Bonferroni (free) step-down p-values
-> pvalue(it, method = "step-down", distribution = "marginal")
-     y1    y2
-1 0.011 0.979
 > ## Sidak (free) step-down p-values
 > pvalue(it, method = "step-down", distribution = "marginal", type = "Sidak")
           y1    y2
@@ -2762,7 +2750,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  41.68 0.2 42.09 NA NA 
+Time elapsed:  19.78 0.17 20.33 NA NA 
 > grDevices::dev.off()
 null device 
           1 
