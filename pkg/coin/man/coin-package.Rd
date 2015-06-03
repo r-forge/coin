@@ -1,4 +1,6 @@
-\name{coin}
+\name{coin-package}
+\docType{package}
+\alias{coin-package}
 \alias{coin}
 \title{General Information on the coin Package}
 \description{
@@ -81,4 +83,4 @@ exact null distribution is currently available for two-sample problems only.
                             "documentation", "html", "index.html"))
     }
 }
-\keyword{misc}
+\keyword{package}

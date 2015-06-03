@@ -1934,15 +1934,15 @@ attr(,"conf.level")
 > 
 > 
 > cleanEx()
-> nameEx("coin")
-> ### * coin
+> nameEx("coin-package")
+> ### * coin-package
 > 
 > flush(stderr()); flush(stdout())
 > 
-> ### Name: coin
+> ### Name: coin-package
 > ### Title: General Information on the coin Package
-> ### Aliases: coin
-> ### Keywords: misc
+> ### Aliases: coin-package coin
+> ### Keywords: package
 > 
 > ### ** Examples
 > 
@@ -2750,7 +2750,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  19.78 0.17 20.33 NA NA 
+Time elapsed:  20.06 0.23 20.58 NA NA 
 > grDevices::dev.off()
 null device 
           1 
