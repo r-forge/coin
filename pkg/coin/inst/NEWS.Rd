@@ -307,7 +307,7 @@
       test, the marginal homogeneity test, the Wilcoxon signed-rank test, and
       generalized maximally selected statistics
 
-      \item objects of class \code{"ScalarIndependenceTestStatistic"} or
+      \item objects of classes \code{"ScalarIndependenceTestStatistic"} or
       \code{"QuadTypeIndependenceTestStatistic"} now has a \code{paired} slot
 
       \item \code{wilcoxsign_test.IndependenceProblem()} has been replaced by
@@ -338,8 +338,9 @@
       \item the support of an asymptotic null distribution is now reported as
       \code{NA}.
 
-      \item objects of class \code{"ApproxNullDistribution"} now has a slot
-      \code{seed} containing the state of the random number generator
+      \item objects of classes \code{"ApproxNullDistribution"} or
+      \code{"AsymptNullDistribution"} now has a slot \code{seed} containing the
+      state of the random number generator
 
       \item \code{surv_test()} is now deprecated and replaced by
       \code{logrank_test()}

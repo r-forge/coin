@@ -64,7 +64,8 @@
       distribution.
     }
   }
-  Additionally, for objects of class \code{"ApproxNullDistribution"}:
+  Additionally, for objects of classes \code{"ApproxNullDistribution"} or
+  \code{"AsymptNullDistribution"}:
   \describe{
     \item{\code{seed}:}{
       Object of class \code{"integer"}.  The random number generator state

@@ -159,7 +159,10 @@ setClass("NullDistribution",
 
 ### There are essentially three types of null distributions:
 setClass("AsymptNullDistribution",
-    contains = "NullDistribution"
+    contains = "NullDistribution",
+    representation = representation(
+        seed = "integer"
+    )
 )
 
 setClass("ApproxNullDistribution",

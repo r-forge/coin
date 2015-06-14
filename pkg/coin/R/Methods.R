@@ -18,6 +18,7 @@ setMethod("AsymptNullDistribution",
                 "two.sided" = 2 * min(p(q), 1 - p(q)))
 
         new("AsymptNullDistribution",
+            seed = NA_integer_,
             p = p,
             q = q,
             d = function(x) dnorm(x),
@@ -33,6 +34,9 @@ setMethod("AsymptNullDistribution",
 setMethod("AsymptNullDistribution",
     signature = "MaxTypeIndependenceTestStatistic",
     definition = function(object, ...) {
+        if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
+            runif(1L)
+        seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
         corr <- cov2cor(covariance(object))
         pq <- length(expectation(object))
         p <- function(q, ..., conf.int = FALSE) {
@@ -70,6 +74,7 @@ setMethod("AsymptNullDistribution",
         }
 
         new("AsymptNullDistribution",
+            seed = seed,
             p = p,
             q = q,
             d = function(x) NA,
@@ -91,6 +96,7 @@ setMethod("AsymptNullDistribution",
         pvalue <- function(q) 1 - p(q)
 
         new("AsymptNullDistribution",
+            seed = NA_integer_,
             p = p,
             q = q,
             d = function(d) dchisq(d, df = object@df),
