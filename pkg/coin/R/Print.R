@@ -1,55 +1,11 @@
-varnames <- function(object) {
-    x <- object@x
-    y <- object@y
-
-    yordered <- vapply(y, is.ordered, NA)
-    ynames <- paste0(colnames(y), ifelse(yordered, " (ordered)", ""),
-                     collapse = ", ")
-
-    if (length(x) == 1) {
-        if (is.ordered(x[[1]])) {
-            xnames <- paste0(colnames(x),
-                             " (",
-                             paste0(levels(droplevels(x[[1]])),
-                                    collapse = " < "),
-                             ")")
-        } else {
-            if (is.factor(x[[1]])) {
-                xnames <- paste0(colnames(x),
-                                 " (",
-                                 paste0(levels(droplevels(x[[1]])),
-                                        collapse = ", "),
-                                 ")")
-            } else {
-                xnames <- colnames(x)
-            }
-        }
-    } else {
-        xordered <- vapply(x, is.ordered, NA)
-        xnames <- paste0(colnames(x), ifelse(xordered, "(ordered)", ""),
-                         collapse = ", ")
-    }
-
-    if (nlevels(object@block) > 1) {
-        bn <- attr(object@block, "blockname")
-        if (is.null(bn)) bn <- "block"
-        xnames <- paste(xnames, paste("\n\t stratified by", bn))
-    }
-
-    if (nchar(xnames) > options("width")$width/2) {
-        strg <- paste(ynames, "by\n\t", xnames, collapse = "")
-    } else {
-        strg <- paste(ynames, "by", xnames, collapse = "")
-    }
-
-    return(strg)
-}
-
 setMethod("show",
-    signature = "QuadTypeIndependenceTest",
+    signature = "IndependenceTest",
     definition = function(object) {
         stat <- object@statistic@teststatistic
-        names(stat) <- "chi-squared"
+        names(stat) <- "c"
+
+        dataname <- varnames(object@statistic)
+
         dist <- object@distribution
         cld <- class(dist)
         attributes(cld) <- NULL
@@ -58,19 +14,10 @@ setMethod("show",
             "ApproxNullDistribution" = "Approximative",
             "ExactNullDistribution" = "Exact")
 
-        dataname <- varnames(object@statistic)
-
         RET <- list(statistic = stat,
-                    p.value = dist@pvalue(stat),
+                    p.value = object@distribution@pvalue(stat),
                     data.name = dataname,
                     method = paste(distname, object@method))
-        if (length(dist@parameters) == 1 &&
-                   names(dist@parameters) == "df") {
-            RET$parameter <- dist@parameters[[1]]
-            names(RET$parameter) <- "df"
-        }
-        if (length(object@estimates) > 0)
-            RET <- c(RET, object@estimates)
         class(RET) <- "htest"
         print(RET)
         invisible(RET)
@@ -97,6 +44,38 @@ setMethod("show",
                     alternative = object@statistic@alternative,
                     data.name = dataname,
                     method = paste(distname, object@method))
+        if (length(object@estimates) > 0)
+            RET <- c(RET, object@estimates)
+        class(RET) <- "htest"
+        print(RET)
+        invisible(RET)
+    }
+)
+
+setMethod("show",
+    signature = "QuadTypeIndependenceTest",
+    definition = function(object) {
+        stat <- object@statistic@teststatistic
+        names(stat) <- "chi-squared"
+        dist <- object@distribution
+        cld <- class(dist)
+        attributes(cld) <- NULL
+        distname <- switch(cld,
+            "AsymptNullDistribution" = "Asymptotic",
+            "ApproxNullDistribution" = "Approximative",
+            "ExactNullDistribution" = "Exact")
+
+        dataname <- varnames(object@statistic)
+
+        RET <- list(statistic = stat,
+                    p.value = dist@pvalue(stat),
+                    data.name = dataname,
+                    method = paste(distname, object@method))
+        if (length(dist@parameters) == 1 &&
+                   names(dist@parameters) == "df") {
+            RET$parameter <- dist@parameters[[1]]
+            names(RET$parameter) <- "df"
+        }
         if (length(object@estimates) > 0)
             RET <- c(RET, object@estimates)
         class(RET) <- "htest"
@@ -139,32 +118,6 @@ setMethod("show",
 )
 
 setMethod("show",
-    signature = "IndependenceTest",
-    definition = function(object) {
-        stat <- object@statistic@teststatistic
-        names(stat) <- "c"
-
-        dataname <- varnames(object@statistic)
-
-        dist <- object@distribution
-        cld <- class(dist)
-        attributes(cld) <- NULL
-        distname <- switch(cld,
-            "AsymptNullDistribution" = "Asymptotic",
-            "ApproxNullDistribution" = "Approximative",
-            "ExactNullDistribution" = "Exact")
-
-        RET <- list(statistic = stat,
-                    p.value = object@distribution@pvalue(stat),
-                    data.name = dataname,
-                    method = paste(distname, object@method))
-        class(RET) <- "htest"
-        print(RET)
-        invisible(RET)
-    }
-)
-
-setMethod("show",
     signature = "ScalarIndependenceTestConfint",
     definition = function(object) {
         stat <- object@statistic@teststatistic
@@ -184,8 +137,8 @@ setMethod("show",
         RET <- list(statistic = stat,
                     p.value = object@distribution@pvalue(stat),
                     alternative = object@statistic@alternative,
-                    method = paste(distname, object@method),
                     data.name = dataname,
+                    method = paste(distname, object@method),
                     conf.int = ci$conf.int,
                     estimate = ci$estimate)
         if (length(object@nullvalue) > 0) {

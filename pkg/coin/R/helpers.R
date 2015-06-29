@@ -454,6 +454,48 @@ statnames <- function(object) {
                        sep = ifelse(dn[[1L]] == "" || dn[[2L]] == "", "", ":")))
 }
 
+varnames <- function(object) {
+    yordered <- vapply(object@y, is.ordered, NA)
+    ynames <- paste0(colnames(object@y), ifelse(yordered, " (ordered)", ""),
+                     collapse = ", ")
+
+    if (length(object@x) == 1) {
+        if (is.ordered(object@x[[1]])) {
+            xnames <- paste0(
+                colnames(object@x), " (",
+                paste0(levels(droplevels(object@x[[1]])), collapse = " < "),
+                ")"
+            )
+        } else {
+            if (is.factor(object@x[[1]])) {
+                xnames <- paste0(
+                    colnames(object@x), " (",
+                    paste0(levels(droplevels(object@x[[1]])), collapse = ", "),
+                    ")"
+                )
+            } else {
+                xnames <- colnames(object@x)
+            }
+        }
+    } else {
+        xordered <- vapply(object@x, is.ordered, NA)
+        xnames <- paste0(colnames(object@x), ifelse(xordered, "(ordered)", ""),
+                         collapse = ", ")
+    }
+
+    if (nlevels(object@block) > 1) {
+        bn <- attr(object@block, "blockname")
+        if (is.null(bn))
+            bn <- "block"
+        xnames <- paste(xnames, paste("\n\t stratified by", bn))
+    }
+
+    if (nchar(xnames) > options("width")$width / 2)
+        paste(ynames, "by\n\t", xnames, collapse = "")
+    else
+        paste(ynames, "by", xnames, collapse = "")
+}
+
 eps <- function() sqrt(.Machine$double.eps)
 
 EQ <- function(x, y)
