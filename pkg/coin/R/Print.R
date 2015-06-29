@@ -1,23 +1,17 @@
 setMethod("show",
     signature = "IndependenceTest",
     definition = function(object) {
-        stat <- object@statistic@teststatistic
-        names(stat) <- "c"
-
-        dataname <- varnames(object@statistic)
-
-        dist <- object@distribution
-        cld <- class(dist)
-        attributes(cld) <- NULL
-        distname <- switch(cld,
+        distname <- switch(class(object@distribution),
             "AsymptNullDistribution" = "Asymptotic",
             "ApproxNullDistribution" = "Approximative",
             "ExactNullDistribution" = "Exact")
 
-        RET <- list(statistic = stat,
-                    p.value = object@distribution@pvalue(stat),
-                    data.name = dataname,
-                    method = paste(distname, object@method))
+        RET <- list(
+            statistic = setNames(object@statistic@teststatistic, nm = "c"),
+            p.value = object@distribution@pvalue(object@statistic@teststatistic),
+            data.name = varnames(object@statistic),
+            method = paste(distname, object@method)
+        )
         class(RET) <- "htest"
         print(RET)
         invisible(RET)
@@ -27,23 +21,18 @@ setMethod("show",
 setMethod("show",
     signature = "MaxTypeIndependenceTest",
     definition = function(object) {
-        stat <- object@statistic@teststatistic
-        names(stat) <- "maxT"
-        dist <- object@distribution
-        cld <- class(dist)
-        attributes(cld) <- NULL
-        distname <- switch(cld,
+        distname <- switch(class(object@distribution),
             "AsymptNullDistribution" = "Asymptotic",
             "ApproxNullDistribution" = "Approximative",
             "ExactNullDistribution" = "Exact")
 
-        dataname <- varnames(object@statistic)
-
-        RET <- list(statistic = stat,
-                    p.value = object@distribution@pvalue(stat),
-                    alternative = object@statistic@alternative,
-                    data.name = dataname,
-                    method = paste(distname, object@method))
+        RET <- list(
+            statistic = setNames(object@statistic@teststatistic, nm = "maxT"),
+            p.value = object@distribution@pvalue(object@statistic@teststatistic),
+            alternative = object@statistic@alternative,
+            data.name = varnames(object@statistic),
+            method = paste(distname, object@method)
+        )
         if (length(object@estimates) > 0)
             RET <- c(RET, object@estimates)
         class(RET) <- "htest"
@@ -55,27 +44,20 @@ setMethod("show",
 setMethod("show",
     signature = "QuadTypeIndependenceTest",
     definition = function(object) {
-        stat <- object@statistic@teststatistic
-        names(stat) <- "chi-squared"
-        dist <- object@distribution
-        cld <- class(dist)
-        attributes(cld) <- NULL
-        distname <- switch(cld,
+        distname <- switch(class(object@distribution),
             "AsymptNullDistribution" = "Asymptotic",
             "ApproxNullDistribution" = "Approximative",
             "ExactNullDistribution" = "Exact")
 
-        dataname <- varnames(object@statistic)
-
-        RET <- list(statistic = stat,
-                    p.value = dist@pvalue(stat),
-                    data.name = dataname,
-                    method = paste(distname, object@method))
-        if (length(dist@parameters) == 1 &&
-                   names(dist@parameters) == "df") {
-            RET$parameter <- dist@parameters[[1]]
-            names(RET$parameter) <- "df"
-        }
+        RET <- list(
+            statistic = setNames(object@statistic@teststatistic, nm = "chi-squared"),
+            p.value = object@distribution@pvalue(object@statistic@teststatistic),
+            data.name = varnames(object@statistic),
+            method = paste(distname, object@method)
+        )
+        if (length(object@distribution@parameters) == 1 &&
+              names(object@distribution@parameters) == "df")
+            RET$parameter <- setNames(object@distribution@parameters[[1]], nm = "df")
         if (length(object@estimates) > 0)
             RET <- c(RET, object@estimates)
         class(RET) <- "htest"
@@ -87,28 +69,20 @@ setMethod("show",
 setMethod("show",
     signature = "ScalarIndependenceTest",
     definition = function(object) {
-        stat <- object@statistic@teststatistic
-        names(stat) <- "Z"
-
-        dataname <- varnames(object@statistic)
-
-        dist <- object@distribution
-        cld <- class(dist)
-        attributes(cld) <- NULL
-        distname <- switch(cld,
+        distname <- switch(class(object@distribution),
             "AsymptNullDistribution" = "Asymptotic",
             "ApproxNullDistribution" = "Approximative",
             "ExactNullDistribution" = "Exact")
 
-        RET <- list(statistic = stat,
-                    p.value = object@distribution@pvalue(stat),
-                    alternative = object@statistic@alternative,
-                    data.name = dataname,
-                    method = paste(distname, object@method))
-        if (length(object@nullvalue) > 0) {
-            RET$null.value = object@nullvalue
-            names(RET$null.value) <- object@parameter
-        }
+        RET <- list(
+            statistic = setNames(object@statistic@teststatistic, nm = "Z"),
+            p.value = object@distribution@pvalue(object@statistic@teststatistic),
+            alternative = object@statistic@alternative,
+            data.name = varnames(object@statistic),
+            method = paste(distname, object@method)
+        )
+        if (length(object@nullvalue) > 0)
+            RET$null.value = setNames(object@nullvalue, nm = object@parameter)
         if (length(object@estimates) > 0)
             RET <- c(RET, object@estimates)
         class(RET) <- "htest"
@@ -120,31 +94,23 @@ setMethod("show",
 setMethod("show",
     signature = "ScalarIndependenceTestConfint",
     definition = function(object) {
-        stat <- object@statistic@teststatistic
-        names(stat) <- "Z"
-        dist <- object@distribution
-        cld <- class(dist)
-        attributes(cld) <- NULL
-        distname <- switch(cld,
+        distname <- switch(class(object@distribution),
             "AsymptNullDistribution" = "Asymptotic",
             "ApproxNullDistribution" = "Approximative",
             "ExactNullDistribution" = "Exact")
-
-        dataname <- varnames(object@statistic)
-
         ci <- confint(object, level = object@conf.level)
 
-        RET <- list(statistic = stat,
-                    p.value = object@distribution@pvalue(stat),
-                    alternative = object@statistic@alternative,
-                    data.name = dataname,
-                    method = paste(distname, object@method),
-                    conf.int = ci$conf.int,
-                    estimate = ci$estimate)
-        if (length(object@nullvalue) > 0) {
-            RET$null.value = object@nullvalue
-            names(RET$null.value) <- object@parameter
-        }
+        RET <- list(
+            statistic = setNames(object@statistic@teststatistic, nm = "Z"),
+            p.value = object@distribution@pvalue(object@statistic@teststatistic),
+            alternative = object@statistic@alternative,
+            data.name = varnames(object@statistic),
+            method = paste(distname, object@method),
+            conf.int = ci$conf.int,
+            estimate = ci$estimate
+        )
+        if (length(object@nullvalue) > 0)
+            RET$null.value = setNames(object@nullvalue, nm = object@parameter)
         if (length(object@estimates) > 0)
             RET <- c(RET, object@estimates)
         class(RET) <- "htest"
