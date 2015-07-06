@@ -313,3 +313,52 @@ p2 <- pvalue(it2 <- independence_test(pd ~ age, data = water_transfer,
                           distribution = exact(algorithm = "split")))
 
 stopifnot(isequal(p1, p2))
+
+### blockwise permutations were only correct for factors ordered wrt their levels
+## Ex. 1
+(y <- rep(1:4, 2))
+
+set.seed(36)
+.Call("R_blockperm", y) 
+
+## Ex. 2
+(y <- rep(1:4, each = 2))
+
+set.seed(36)
+.Call("R_blockperm", y) 
+
+## Ex. 3
+(y <- c(1:4, 4:1))
+
+set.seed(36)
+.Call("R_blockperm", y) 
+
+## Ex. 4
+y <- c(4L, 1L, 2L, 2L, 4L, 3L, 1L, 3L)
+
+set.seed(36)
+.Call("R_blockperm", y) 
+.Call("R_blockperm", sample(y)) 
+.Call("R_blockperm", sample(y)) 
+
+tst <- data.frame(
+    y = c(108, 56.5, 149, 173, 147, 147, 138, 167, 22.5, 151.5,
+          122.5, 167, 172, 147, 174, 156, 84, 132, 164.5, 128.5),
+    x = factor(c(2, 1, 2, 1, 1, 2, 2, 1, 1, 1,
+                 2, 2, 2, 2, 2, 1, 1, 2, 1, 1)),
+    b = factor(c(6L, 10L, 3L, 8L, 4L, 2L, 4L, 5L, 7L, 9L,
+                 1L, 7L, 9L, 8L, 10L, 2L, 6L, 5L, 3L, 1L))
+)
+
+set.seed(711109)
+independence_test(y ~ x | b, data = tst,
+                  distribution = approximate(B = 10000))
+independence_test(y ~ x | b, data = tst, distribution = "exact")
+independence_test(y ~ x | b, data = tst, distribution = "asym")
+
+tst2 <- tst[order(tst$b, tst$x), ]
+set.seed(711109)
+independence_test(y ~ x | b, data = tst2,
+                  distribution = approximate(B = 10000))
+independence_test(y ~ x | b, data = tst2, distribution = "exact")
+independence_test(y ~ x | b, data = tst2, distribution = "asym")

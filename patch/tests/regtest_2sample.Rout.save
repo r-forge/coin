@@ -1,6 +1,6 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R Under development (unstable) (2015-06-30 r68608) -- "Unsuffered Consequences"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -23,7 +23,6 @@ Type 'q()' to quit R.
 > set.seed(290875)
 > library(coin)
 Loading required package: survival
-Loading required package: splines
 > isequal <- coin:::isequal
 > 
 > ### generate data
@@ -220,7 +219,7 @@ Error in .local(.Object, ...) : 'block' is not a factor
 	Asymptotic 2-Sample Permutation Test
 
 data:  y by x (1, 2)
-Z = -0.7774, p-value = 0.4369
+Z = -0.77735, p-value = 0.4369
 alternative hypothesis: true mu is not equal to 0
 
 > oneway_test(y ~ x, dat = dat, alternative = "less")
@@ -228,7 +227,7 @@ alternative hypothesis: true mu is not equal to 0
 	Asymptotic 2-Sample Permutation Test
 
 data:  y by x (1, 2)
-Z = -0.7774, p-value = 0.2185
+Z = -0.77735, p-value = 0.2185
 alternative hypothesis: true mu is less than 0
 
 > oneway_test(y ~ x, dat = dat, alternative = "greater")
@@ -236,7 +235,7 @@ alternative hypothesis: true mu is less than 0
 	Asymptotic 2-Sample Permutation Test
 
 data:  y by x (1, 2)
-Z = -0.7774, p-value = 0.7815
+Z = -0.77735, p-value = 0.7815
 alternative hypothesis: true mu is greater than 0
 
 > 
@@ -245,7 +244,7 @@ alternative hypothesis: true mu is greater than 0
 	Asymptotic Normal Quantile (van der Waerden) Test
 
 data:  y by x (1, 2)
-Z = -0.8596, p-value = 0.39
+Z = -0.85965, p-value = 0.39
 alternative hypothesis: true mu is not equal to 0
 
 > normal_test(y ~ x, dat = dat, alternative = "less")
@@ -253,7 +252,7 @@ alternative hypothesis: true mu is not equal to 0
 	Asymptotic Normal Quantile (van der Waerden) Test
 
 data:  y by x (1, 2)
-Z = -0.8596, p-value = 0.195
+Z = -0.85965, p-value = 0.195
 alternative hypothesis: true mu is less than 0
 
 > normal_test(y ~ x, dat = dat, alternative = "greater")
@@ -261,7 +260,7 @@ alternative hypothesis: true mu is less than 0
 	Asymptotic Normal Quantile (van der Waerden) Test
 
 data:  y by x (1, 2)
-Z = -0.8596, p-value = 0.805
+Z = -0.85965, p-value = 0.805
 alternative hypothesis: true mu is greater than 0
 
 > 
@@ -330,4 +329,4 @@ In wilcoxsign_test.IndependenceProblem(object = <S4 object of class "Independenc
 > 
 > proc.time()
    user  system elapsed 
-  1.516   0.056   1.568 
+  0.788   0.031   0.813 

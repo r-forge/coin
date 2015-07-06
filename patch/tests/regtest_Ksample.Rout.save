@@ -1,6 +1,6 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R Under development (unstable) (2015-06-30 r68608) -- "Unsuffered Consequences"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -23,7 +23,6 @@ Type 'q()' to quit R.
 > set.seed(290875)
 > library(coin)
 Loading required package: survival
-Loading required package: splines
 > isequal <- coin:::isequal
 > 
 > ### generate data
@@ -74,11 +73,11 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > 
 > ### sanity checks
 > try(fligner_test(x ~ y, data = dat)) 
-Error in median.default(X[[1L]], ...) : need numeric data
+Error in median.default(X[[i]], ...) : need numeric data
 > try(fligner_test(x ~ y | y, data = dat))
 Error in .local(.Object, ...) : 'block' is not a factor
 > 
 > 
 > proc.time()
    user  system elapsed 
-  0.600   0.052   0.646 
+  0.393   0.026   0.413 

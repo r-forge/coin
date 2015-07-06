@@ -1,6 +1,6 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R Under development (unstable) (2015-06-30 r68608) -- "Unsuffered Consequences"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,7 +21,6 @@ Type 'q()' to quit R.
 > set.seed(290875)
 > library(coin)
 Loading required package: survival
-Loading required package: splines
 > isequal <- coin:::isequal
 > 
 > ### example from Westfall & Wolfinger (1997), Table 4
@@ -173,4 +172,4 @@ Control 0.05407491  1 0.1348184 0.9907555
 > 
 > proc.time()
    user  system elapsed 
-  2.076   0.040   2.113 
+  1.659   0.041   1.692 

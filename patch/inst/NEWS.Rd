@@ -1,6 +1,14 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
+\section{Changes in version 1.0-25 (2015-07-06)}{
+  \itemize{
+    \item import("stats")
+    \item Rout.save updates (due to new digits argument in htest)
+    \item approximate stratified tests a la \code{y ~ x | block} were only
+          correct when block were ordered wrt their levels.
+  }
+}
 \section{Changes in version 1.0-24 (2014-09-17)}{
   \itemize{
     \item as.integer(round(x)) is safer than as.integer(x) = trunc(x)

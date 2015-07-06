@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2014-09-11 r66573) -- "Unsuffered Consequences"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R Under development (unstable) (2015-06-30 r68608) -- "Unsuffered Consequences"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,7 +21,6 @@ Type 'q()' to quit R.
 > set.seed(290875)
 > library(coin)
 Loading required package: survival
-Loading required package: splines
 > isequal <- coin:::isequal
 > 
 > ### I() returns objects of class AsIs which caused an error in `trafo'
@@ -31,7 +30,7 @@ Loading required package: splines
 	Asymptotic General Independence Test
 
 data:  I(x1/x2) by x3 (1, 2)
-Z = -0.4491, p-value = 0.6534
+Z = -0.44907, p-value = 0.6534
 alternative hypothesis: two.sided
 
 > independence_test(I(x1 < 0) ~ x3, data = df)
@@ -39,7 +38,7 @@ alternative hypothesis: two.sided
 	Asymptotic General Independence Test
 
 data:  I(x1 < 0) by x3 (1, 2)
-Z = 0.7966, p-value = 0.4257
+Z = 0.79663, p-value = 0.4257
 alternative hypothesis: two.sided
 
 > 
@@ -375,7 +374,7 @@ $V1
 	Asymptotic Wilcoxon Mann-Whitney Rank Sum Test
 
 data:  var by group (1, 2)
-Z = -0.3929, p-value = 0.6944
+Z = -0.39295, p-value = 0.6944
 alternative hypothesis: true mu is not equal to 0
 
 
@@ -384,7 +383,7 @@ $V2
 	Asymptotic Wilcoxon Mann-Whitney Rank Sum Test
 
 data:  var by group (1, 2)
-Z = 0.7997, p-value = 0.4239
+Z = 0.79968, p-value = 0.4239
 alternative hypothesis: true mu is not equal to 0
 
 
@@ -481,7 +480,7 @@ alternative hypothesis: true mu is not equal to 0
 
 data:  y by x (neg, pos) 
 	 stratified by block
-Z = 0.4472, p-value = 0.6547
+Z = 0.44721, p-value = 0.6547
 alternative hypothesis: true mu is not equal to 0
 
 > 
@@ -528,4 +527,4 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-  1.564   0.092   1.657 
+  1.480   0.051   1.522 

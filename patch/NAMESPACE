@@ -2,6 +2,7 @@ useDynLib(coin)
 
 import("methods")
 importFrom("survival", is.Surv)
+import("stats")
 importFrom("modeltools", ModelEnvFormula, has, na.omit)
 importFrom("mvtnorm", dmvnorm, pmvnorm, qmvnorm)
 
