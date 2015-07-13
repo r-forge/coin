@@ -58,11 +58,13 @@ SEXP R_blocksetup (SEXP block) {
     int n, nlev, nlevels, i, j, *iblock, l;
     SEXP ans, dims, indices, dummies, pindices, lindex;
     
+    /* block _must_ be a factor! */
     n = LENGTH(block);
     iblock = INTEGER(block);
     nlevels = 1;
     for (i = 0; i < n; i++) {
-        if (iblock[i] > nlevels) nlevels++;
+        if (iblock[i] > nlevels) 
+            nlevels = iblock[i];
     }
     
     PROTECT(ans = allocVector(VECSXP, 4));

@@ -258,6 +258,9 @@
       \item the distribution and quantile functions of asymptotic permutation
       distributions for maximum-type tests were not handling vector arguments
       properly
+
+      \item approximate (Monte Carlo) \eqn{p}-values for stratified tests were
+      wrong when the data were not ordered with respect to the blocks
     }
   }
   \subsection{Other changes}{
