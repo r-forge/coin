@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2015-05-13 r68364) -- "Unsuffered Consequences"
+R Under development (unstable) (2015-07-12 r68650) -- "Unsuffered Consequences"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -881,6 +881,27 @@ alternative hypothesis: true mu is not equal to 0
 > stopifnot(isequal(qperm(it, c(0.9, 0.95, 0.99)),
 +                   c(qperm(it, 0.9), qperm(it, 0.95), qperm(it, 0.99))))
 > 
+> ### blockwise permutations were only correct for factors ordered wrt their levels
+> set.seed(36)
+> .Call("R_blockperm", rep(1:4, 2),                       # was OK
++       PACKAGE = "coin")
+[1] 4 5 6 7 0 1 2 3
+> 
+> set.seed(36)
+> .Call("R_blockperm", rep(1:4, each = 2),                # was OK
++       PACKAGE = "coin")
+[1] 1 0 3 2 5 4 7 6
+> 
+> set.seed(36)
+> .Call("R_blockperm", c(1:4, 4:1),                       # was OK
++       PACKAGE = "coin")
+[1] 7 6 5 4 3 2 1 0
+> 
+> set.seed(36)
+> .Call("R_blockperm", c(4L, 1L, 2L, 2L, 4L, 3L, 1L, 3L), # wrong
++       PACKAGE = "coin")
+[1] 4 6 3 2 0 7 1 5
+> 
 > proc.time()
    user  system elapsed 
-   2.77    0.17    2.98 
+   2.65    0.14    2.93 
