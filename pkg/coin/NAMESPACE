@@ -1,6 +1,6 @@
 useDynLib(coin)
 
-import("methods")
+importFrom("methods", callNextMethod, extends, getSlots, new, validObject)
 importFrom("survival", is.Surv)
 importFrom("stats", complete.cases, confint, cov2cor, dchisq, dnorm, median,
                     model.frame, model.matrix, na.pass, pbinom, pchisq, pnorm,
