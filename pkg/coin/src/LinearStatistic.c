@@ -240,7 +240,6 @@ SEXP R_ExpectCovarInfluence(SEXP y, SEXP weights) {
     Conditional expectation and covariance of the a linear statistic\n
     *\param x values of the transformation
     *\param p dimension of the transformation
-    *\param y values of the influence function
     *\param q dimension of the influence function
     *\param weights case weights
     *\param n number of observations
