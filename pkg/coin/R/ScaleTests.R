@@ -33,7 +33,7 @@ taha_test.IndependenceProblem <- function(object,
     object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        object@method <- "2-Sample Taha Test"
+        object@method <- "Two-Sample Taha Test"
         object@parameter <- "ratio of scales"
         object@nullvalue <- 1
         if (conf.int && has_distribution(args)) {
@@ -86,7 +86,7 @@ klotz_test.IndependenceProblem <- function(object,
     object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        object@method <- "2-Sample Klotz Test"
+        object@method <- "Two-Sample Klotz Test"
         object@parameter <- "ratio of scales"
         object@nullvalue <- 1
         if (conf.int && has_distribution(args)) {
@@ -139,7 +139,7 @@ mood_test.IndependenceProblem <- function(object,
     object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        object@method <- "2-Sample Mood Test"
+        object@method <- "Two-Sample Mood Test"
         object@parameter <- "ratio of scales"
         object@nullvalue <- 1
         if (conf.int && has_distribution(args)) {
@@ -202,7 +202,7 @@ ansari_test.IndependenceProblem <- function(object,
     object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        object@method <- "2-Sample Ansari-Bradley Test"
+        object@method <- "Two-Sample Ansari-Bradley Test"
         object@parameter <- "ratio of scales"
         object@nullvalue <- 1
         object@statistic@alternative <- alternative
@@ -260,7 +260,7 @@ fligner_test.IndependenceProblem <- function(object,
     object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        object@method <- "2-Sample Fligner-Killeen Test"
+        object@method <- "Two-Sample Fligner-Killeen Test"
         object@parameter <- "ratio of scales"
         object@nullvalue <- 1
         if (conf.int && has_distribution(args)) {
@@ -315,7 +315,7 @@ conover_test.IndependenceProblem <- function(object,
     object <- do.call("independence_test", c(list(object = object), args))
 
     if (twosamp) {
-        object@method <- "2-Sample Conover-Iman Test"
+        object@method <- "Two-Sample Conover-Iman Test"
         object@parameter <- "ratio of scales"
         object@nullvalue <- 1
         if (conf.int && has_distribution(args)) {

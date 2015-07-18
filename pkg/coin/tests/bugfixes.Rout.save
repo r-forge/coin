@@ -581,7 +581,7 @@ alternative hypothesis: true mu is not equal to 0
 > ### wrong p-value in the one-sided case
 > median_test(y1 ~ x, data = df, alternative = "less")
 
-	Asymptotic 2-Sample Median Test
+	Asymptotic Two-Sample Median Test
 
 data:  y1 by x (I, II)
 Z = 2.6458, p-value = 0.9959
@@ -591,7 +591,7 @@ alternative hypothesis: true mu is less than 0
 > ### nullvalue never got printed
 > logrank_test(Surv(time, event) ~ stadium, data = ocarcinoma)
 
-	Asymptotic 2-Sample Logrank Test
+	Asymptotic Two-Sample Logrank Test
 
 data:  Surv(time, event) by stadium (II, IIA)
 Z = 2.3373, p-value = 0.01942
@@ -904,4 +904,4 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-   2.65    0.14    2.93 
+   3.02    0.17    3.26 

@@ -26,7 +26,7 @@ oneway_test.IndependenceProblem <- function(object, ...) {
     if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        object@method <- "2-Sample Permutation Test"
+        object@method <- "Two-Sample Permutation Test"
         object@nullvalue <- 0
     } else
         object@method <- "K-Sample Permutation Test"
@@ -160,7 +160,7 @@ normal_test.IndependenceProblem <- function(object,
     if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        object@method <- "2-Sample Normal Quantile (van der Waerden) Test"
+        object@method <- "Two-Sample Normal Quantile (van der Waerden) Test"
         object@nullvalue <- 0
         if (conf.int && has_distribution(args)) {
             object <- new("ScalarIndependenceTestConfint", object)
@@ -217,7 +217,7 @@ median_test.IndependenceProblem <- function(object,
     if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        object@method <- "2-Sample Median Test"
+        object@method <- "Two-Sample Median Test"
         object@nullvalue <- 0
         if (conf.int && has_distribution(args)) {
             object <- new("ScalarIndependenceTestConfint", object)
@@ -274,7 +274,7 @@ savage_test.IndependenceProblem <- function(object,
     if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        object@method <- "2-Sample Savage Test"
+        object@method <- "Two-Sample Savage Test"
         object@nullvalue <- 0
         if (conf.int && has_distribution(args)) {
             object <- new("ScalarIndependenceTestConfint", object)

@@ -55,7 +55,7 @@ logrank_test.IndependenceProblem <- function(object,
     if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        object@method <- paste("2-Sample",
+        object@method <- paste("Two-Sample",
                             if (type == "logrank") "Logrank" else type, "Test")
         ## theta = lambda_2 / lambda_1
         object@parameter <- "theta"
