@@ -15,7 +15,7 @@
       \code{"<1"}, \code{"1-2"}, \code{"3-5"} and \code{">=6"}.
     }
     \item{\code{malformation}}{
-      congentital sex organ malformation, a factor with levels \code{"Present"}
+      congenital sex organ malformation, a factor with levels \code{"Present"}
       and \code{"Absent"}.
     }
   }
@@ -36,29 +36,29 @@
 }
 \references{
   Graubard, B. I. and Korn, E. L.  (1987).  Choice of column scores for testing
-  independence in ordered \eqn{2 \times K} contingency tables.
+  independence in ordered \eqn{2 \times K}{2 x K} contingency tables.
   \emph{Biometrics} \bold{43}(2), 471--476.
 }
 \examples{
 ## Graubard and Korn (1987, Tab. 3)
 
 ## One-sided approximate (Monte Carlo) Cochran-Armitage test
-## Midpoint scores, p < 0.05
+## Note: midpoint scores (p < 0.05)
 midpoints <- c(0, 0.5, 1.5, 4.0, 7.0)
-cmh_test(malformation ~ consumption, data = malformations,
-         distribution = approximate(B = 1000L), alternative = "greater",
-         scores = list(consumption = midpoints))
+chisq_test(malformation ~ consumption, data = malformations,
+           distribution = approximate(B = 1000), alternative = "greater",
+           scores = list(consumption = midpoints))
 
 ## One-sided approximate (Monte Carlo) Cochran-Armitage test
-## Midrank scores, p > 0.05
+## Note: midrank scores (p > 0.05)
 midranks <- c(8557.5, 24375.5, 32013.0, 32473.0, 32555.5)
-cmh_test(malformation ~ consumption, data = malformations,
-         distribution = approximate(B = 1000L), alternative = "greater",
-         scores = list(consumption = midranks))
+chisq_test(malformation ~ consumption, data = malformations,
+           distribution = approximate(B = 1000), alternative = "greater",
+           scores = list(consumption = midranks))
 
 ## One-sided approximate (Monte Carlo) Cochran-Armitage test
-## Equally spaced scores, p > 0.05
-cmh_test(malformation ~ consumption, data = malformations,
-         distribution = approximate(B = 1000L), alternative = "greater")
+## Note: equally spaced scores (p > 0.05)
+chisq_test(malformation ~ consumption, data = malformations,
+           distribution = approximate(B = 1000), alternative = "greater")
 }
 \keyword{datasets}

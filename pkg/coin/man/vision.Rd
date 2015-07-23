@@ -3,7 +3,7 @@
 \docType{data}
 \title{Unaided Distance Vision}
 \description{
-  Assessment of unaided distance vision for women.
+  Assessment of unaided distance vision of women in Britain.
 }
 \usage{vision}
 \format{
@@ -35,7 +35,7 @@
   two-way classification.  \emph{Biometrika} \bold{42}(3/4), 412--416.
 }
 \examples{
-## Asymptotic Stuart(-Maxwell) test, Q = 11.96
+## Asymptotic Stuart(-Maxwell) test (Q = 11.96)
 diag(vision) <- 0 # speed-up
 mh_test(vision)
 }

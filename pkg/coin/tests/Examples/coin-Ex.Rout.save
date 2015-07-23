@@ -32,28 +32,34 @@ Loading required package: survival
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: CWD
-> ### Title: Coarse Woody Debris Data
+> ### Title: Coarse Woody Debris
 > ### Aliases: CWD
 > ### Keywords: datasets
 > 
 > ### ** Examples
 > 
+> ## Zeileis and Hothorn (2013, pp. 942-944)
+> ## Approximate (Monte Carlo) maximally selected statistics
+> CWD[1:6] <- 100 * CWD[1:6] # scaling (to avoid harmless warning)
+> mt <- maxstat_test(sample2 + sample3 + sample4 +
++                    sample6 + sample7 + sample8 ~ trend, data = CWD,
++                    distribution = approximate(B = 100000))
 > 
->   data("CWD")
->   CWD[1:6] <- 100 * CWD[1:6] # scaling (to avoid warning)
->   maxstat_test(sample2 + sample3 + sample4 +
-+                sample6 + sample7 + sample8 ~ trend, data = CWD,
-+                distribution = approximate(1e5))
-
-	Approximative Generalized Maximally Selected Statistics
-
-data:  sample2, sample3, sample4, sample6, sample7, sample8 by trend
-maxT = 3.0793, p-value = 0.0082
-alternative hypothesis: two.sided
-sample estimates:
-  "best" cutpoint: <= 71
-
+> ## Absolute maximum of standardized statistics (t = 3.08)
+> statistic(mt)
+[1] 3.079268
 > 
+> ## 5 % critical value (t_0.05 = 2.86)
+> (c <- qperm(mt, 0.95))
+[1] 2.855509
+> 
+> ## Only 'sample8' exceeds the 5 % critical value
+> sts <- statistic(mt, "standardized")
+> idx <- which(sts > c, arr.ind = TRUE)
+> sts[unique(idx[, 1]), unique(idx[, 2]), drop = FALSE]
+         sample8
+x <= 62 2.931118
+x <= 71 3.079268
 > 
 > 
 > 
@@ -419,15 +425,14 @@ chi-squared = 23.316, p-value = 0.00052
 > 
 > ### ** Examples
 > 
->   ### plot Kaplan-Meier estimates
->   plot(survfit(Surv(time / (365.25 / 12), event) ~ group, data = GTSG),
-+        lty = 1:2,
-+        ylab = "% Survival", xlab = "Survival Time in Months")
->   legend("topright", lty = 1:2,
-+          c("Chemotherapy+Radiation", "Chemotherapy"), bty = "n")
+> ## Plot Kaplan-Meier estimates
+> plot(survfit(Surv(time / (365.25 / 12), event) ~ group, data = GTSG),
++      lty = 1:2, ylab = "% Survival", xlab = "Survival Time in Months")
+> legend("topright", lty = 1:2,
++        c("Chemotherapy+Radiation", "Chemotherapy"), bty = "n")
 > 
->   ### logrank test
->   logrank_test(Surv(time, event) ~ group, data = GTSG)
+> ## Asymptotic logrank test
+> logrank_test(Surv(time, event) ~ group, data = GTSG)
 
 	Asymptotic Two-Sample Logrank Test
 
@@ -437,9 +442,8 @@ Z = -1.1428, p-value = 0.2531
 alternative hypothesis: true theta is not equal to 1
 
 > 
->   ### Prentice test
->   logrank_test(Surv(time, event) ~ group, data = GTSG,
-+                type = "Prentice")
+> ## Asymptotic Prentice test
+> logrank_test(Surv(time, event) ~ group, data = GTSG, type = "Prentice")
 
 	Asymptotic Two-Sample Prentice Test
 
@@ -449,14 +453,14 @@ Z = -2.1687, p-value = 0.03011
 alternative hypothesis: true theta is not equal to 1
 
 > 
->   ### testing against Weibull-type alternatives, see Moreau et al (1992)
->   moreau_weight <- function(time, n.risk, n.event)
-+       1 + log(-log(cumprod(n.risk / (n.risk + n.event))))
+> ## Asymptotic test against Weibull-type alternatives (Moreau et al., 1992)
+> moreau_weight <- function(time, n.risk, n.event)
++     1 + log(-log(cumprod(n.risk / (n.risk + n.event))))
 > 
->   independence_test(Surv(time, event) ~ group, data = GTSG,
-+                     ytrafo = function(data)
-+                         trafo(data, surv_trafo = function(y)
-+                             logrank_trafo(y, weight = moreau_weight)))
+> independence_test(Surv(time, event) ~ group, data = GTSG,
++                   ytrafo = function(data)
++                       trafo(data, surv_trafo = function(y)
++                           logrank_trafo(y, weight = moreau_weight)))
 
 	Asymptotic General Independence Test
 
@@ -466,13 +470,13 @@ Z = 2.4129, p-value = 0.01583
 alternative hypothesis: two.sided
 
 > 
->   ### testing against crossing-curve alternatives, see Shen & Le (2000)
->   shen_trafo <- function(x)
-+       ansari_trafo(logrank_trafo(x, type = "Prentice"))
+> ## Asymptotic test against crossing-curve alternatives (Shen and Le, 2000)
+> shen_trafo <- function(x)
++     ansari_trafo(logrank_trafo(x, type = "Prentice"))
 > 
->   independence_test(Surv(time, event) ~ group, data = GTSG,
-+                     ytrafo = function(data)
-+                         trafo(data, surv_trafo = shen_trafo))
+> independence_test(Surv(time, event) ~ group, data = GTSG,
++                   ytrafo = function(data)
++                       trafo(data, surv_trafo = shen_trafo))
 
 	Asymptotic General Independence Test
 
@@ -1857,16 +1861,17 @@ attr(,"contrast")
 > 
 > ### ** Examples
 > 
+> ## Boxplots
+> boxplot(elevel ~ alength, data = alpha)
 > 
->   boxplot(elevel ~ alength, data = alpha)
->   kruskal_test(elevel ~ alength, data = alpha)
+> ## Asymptotic Kruskal-Wallis test
+> kruskal_test(elevel ~ alength, data = alpha)
 
 	Asymptotic Kruskal-Wallis Test
 
 data:  elevel by alength (short, intermediate, long)
 chi-squared = 8.8302, df = 2, p-value = 0.01209
 
-> 
 > 
 > 
 > 
@@ -1883,16 +1888,17 @@ chi-squared = 8.8302, df = 2, p-value = 0.01209
 > 
 > ### ** Examples
 > 
+> ## Spineplots
+> op <- par(no.readonly = TRUE) # save current settings
+> layout(matrix(1:2, ncol = 2))
+> spineplot(disease ~ smoking, data = alzheimer,
++           subset = gender == "Male", main = "Male")
+> spineplot(disease ~ smoking, data = alzheimer,
++           subset = gender == "Female", main = "Female")
+> par(op) # reset
 > 
->   ### spineplots
->   layout(matrix(1:2, ncol = 2))
->   spineplot(disease ~ smoking, data = alzheimer, subset = gender == "Male",
-+             main = "Male")
->   spineplot(disease ~ smoking, data = alzheimer, subset = gender == "Female",
-+             main = "Female")
-> 
->   ### Cochran-Mantel-Haenszel test
->   cmh_test(disease ~ smoking | gender, data = alzheimer)
+> ## Asymptotic Cochran-Mantel-Haenszel test
+> cmh_test(disease ~ smoking | gender, data = alzheimer)
 
 	Asymptotic Generalized Cochran-Mantel-Haenszel Test
 
@@ -1904,7 +1910,7 @@ chi-squared = 23.316, df = 6, p-value = 0.0006972
 > 
 > 
 > 
-> 
+> graphics::par(get("par.postscript", pos = 'CheckExEnv'))
 > cleanEx()
 > nameEx("asat")
 > ### * asat
@@ -1918,18 +1924,19 @@ chi-squared = 23.316, df = 6, p-value = 0.0006972
 > 
 > ### ** Examples
 > 
+> ## Proof-of-safety based on ratio of medians (Pflueger and Hothorn, 2002)
+> ## One-sided exact Wilcoxon-Mann-Whitney test
+> wt <- wilcox_test(I(log(asat)) ~ group, data = asat,
++                   distribution = "exact", alternative = "less",
++                   conf.int = TRUE)
 > 
->   ### proof-of-safety based on ratio of medians
->   pos <- wilcox_test(I(log(asat)) ~ group, data = asat, alternative = "less", 
-+                      conf.int = TRUE, distribution = "exact")
-> 
->   ### one-sided confidence set. Safety cannot be concluded since the effect of
->   ### the compound exceeds 20% of the control median
->   exp(confint(pos)$conf.int)
+> ## One-sided confidence set
+> ## Note: Safety cannot be concluded since the effect of the compound
+> ##       exceeds 20 % of the control median
+> exp(confint(wt)$conf.int)
 [1] 0.000000 1.337778
 attr(,"conf.level")
 [1] 0.95
-> 
 > 
 > 
 > 
@@ -2064,21 +2071,21 @@ attr(,"conf.level")
 > 
 > ### ** Examples
 > 
+> ## Grade III glioma
+> g3 <- subset(glioma, histology == "Grade3")
 > 
->   ### Grade III glioma
->   g3 <- subset(glioma, histology == "Grade3")
+> ## Plot Kaplan-Meier curves
+> op <- par(no.readonly = TRUE) # save current settings
+> layout(matrix(1:2, ncol = 2))
+> plot(survfit(Surv(time, event) ~ group, data = g3),
++      main = "Grade III Glioma", lty = 2:1,
++      ylab = "Probability", xlab = "Survival Time in Month",
++      xlim = c(-2, 72))
+> legend("bottomleft", lty = 2:1, c("Control", "Treated"), bty = "n")
 > 
->   ### Plot Kaplan-Meier curves
->   layout(matrix(1:2, ncol = 2))
->   plot(survfit(Surv(time, event) ~ group, data = g3),
-+        main = "Grade III Glioma", lty = 2:1,
-+        ylab = "Probability", xlab = "Survival Time in Month",
-+        xlim = c(-2, 72))
->   legend("bottomleft", lty = 2:1, c("Control", "Treated"), bty = "n")
-> 
->   ### logrank test
->   logrank_test(Surv(time, event) ~ group, data = g3,
-+                distribution = "exact")
+> ## Exact logrank test
+> logrank_test(Surv(time, event) ~ group, data = g3,
++              distribution = "exact")
 
 	Exact Two-Sample Logrank Test
 
@@ -2087,20 +2094,21 @@ Z = -2.1711, p-value = 0.02877
 alternative hypothesis: true theta is not equal to 1
 
 > 
->   ### Grade IV glioma
->   gbm <- subset(glioma, histology == "GBM")
 > 
->   ### Plot Kaplan-Meier curves
->   plot(survfit(Surv(time, event) ~ group, data = gbm),
-+        main = "Grade IV Glioma", lty = 2:1,
-+        ylab = "Probability", xlab = "Survival Time in Month",
-+        xlim = c(-2, 72))
->   legend("topright", lty = 2:1, c("Control", "Treated"), bty = "n")
->   layout(1)
+> ## Grade IV glioma
+> gbm <- subset(glioma, histology == "GBM")
 > 
->   ### logrank test
->   logrank_test(Surv(time, event) ~ group, data = gbm,
-+                distribution = "exact")
+> ## Plot Kaplan-Meier curves
+> plot(survfit(Surv(time, event) ~ group, data = gbm),
++      main = "Grade IV Glioma", lty = 2:1,
++      ylab = "Probability", xlab = "Survival Time in Month",
++      xlim = c(-2, 72))
+> legend("topright", lty = 2:1, c("Control", "Treated"), bty = "n")
+> par(op) # reset
+> 
+> ## Exact logrank test
+> logrank_test(Surv(time, event) ~ group, data = gbm,
++              distribution = "exact")
 
 	Exact Two-Sample Logrank Test
 
@@ -2109,9 +2117,10 @@ Z = -3.2215, p-value = 0.0001588
 alternative hypothesis: true theta is not equal to 1
 
 > 
->   ### stratified logrank test
->   logrank_test(Surv(time, event) ~ group | histology, data = glioma,
-+                distribution = approximate(B = 10000))
+> 
+> ## Stratified approximate (Monte Carlo) logrank test
+> logrank_test(Surv(time, event) ~ group | histology, data = glioma,
++              distribution = approximate(B = 10000))
 
 	Approximative Two-Sample Logrank Test
 
@@ -2124,7 +2133,7 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > 
 > 
-> 
+> graphics::par(get("par.postscript", pos = 'CheckExEnv'))
 > cleanEx()
 > nameEx("hohnloser")
 > ### * hohnloser
@@ -2132,15 +2141,15 @@ alternative hypothesis: true theta is not equal to 1
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: hohnloser
-> ### Title: Left ventricular ejection fraction of patients with malignant
-> ###   ventricular tachyarrhythmias.
+> ### Title: Left Ventricular Ejection Fraction in Patients with Malignant
+> ###   Ventricular Tachyarrhythmias
 > ### Aliases: hohnloser
 > ### Keywords: datasets
 > 
 > ### ** Examples
 > 
-> 
->   maxstat_test(Surv(time, event) ~ EF, data = hohnloser)
+> ## Asymptotic maximally selected logrank statistics
+> maxstat_test(Surv(time, event) ~ EF, data = hohnloser)
 
 	Asymptotic Generalized Maximally Selected Statistics
 
@@ -2150,7 +2159,6 @@ alternative hypothesis: two.sided
 sample estimates:
   "best" cutpoint: <= 39
 
-> 
 > 
 > 
 > 
@@ -2167,18 +2175,17 @@ sample estimates:
 > 
 > ### ** Examples
 > 
-> 
->   ### Generalized Cochran-Mantel-Haenzel test
->   cmh_test(jobsatisfaction)
+> ## Approximate (Monte Carlo) linear-by-linear association test
+> lbl_test(jobsatisfaction, distribution = approximate(B = 10000))
 
-	Asymptotic Generalized Cochran-Mantel-Haenszel Test
+	Approximative Linear-by-Linear Association Test
 
-data:  Job.Satisfaction by
-	 Income (<5000, 5000-15000, 15000-25000, >25000) 
+data:  Job.Satisfaction (ordered) by
+	 Income (<5000 < 5000-15000 < 15000-25000 < >25000) 
 	 stratified by Gender
-chi-squared = 10.2, df = 9, p-value = 0.3345
+Z = 2.5736, p-value = 0.0104
+alternative hypothesis: two.sided
 
-> 
 > 
 > 
 > 
@@ -2198,11 +2205,11 @@ chi-squared = 10.2, df = 9, p-value = 0.3345
 > ## Graubard and Korn (1987, Tab. 3)
 > 
 > ## One-sided approximate (Monte Carlo) Cochran-Armitage test
-> ## Midpoint scores, p < 0.05
+> ## Note: midpoint scores (p < 0.05)
 > midpoints <- c(0, 0.5, 1.5, 4.0, 7.0)
-> cmh_test(malformation ~ consumption, data = malformations,
-+          distribution = approximate(B = 1000L), alternative = "greater",
-+          scores = list(consumption = midpoints))
+> chisq_test(malformation ~ consumption, data = malformations,
++            distribution = approximate(B = 1000), alternative = "greater",
++            scores = list(consumption = midpoints))
 
 	Approximative Linear-by-Linear Association Test
 
@@ -2212,28 +2219,28 @@ alternative hypothesis: greater
 
 > 
 > ## One-sided approximate (Monte Carlo) Cochran-Armitage test
-> ## Midrank scores, p > 0.05
+> ## Note: midrank scores (p > 0.05)
 > midranks <- c(8557.5, 24375.5, 32013.0, 32473.0, 32555.5)
-> cmh_test(malformation ~ consumption, data = malformations,
-+          distribution = approximate(B = 1000L), alternative = "greater",
-+          scores = list(consumption = midranks))
+> chisq_test(malformation ~ consumption, data = malformations,
++            distribution = approximate(B = 1000), alternative = "greater",
++            scores = list(consumption = midranks))
 
 	Approximative Linear-by-Linear Association Test
 
 data:  malformation by consumption (0 < <1 < 1-2 < 3-5 < >=6)
-Z = 0.59207, p-value = 0.269
+Z = 0.59208, p-value = 0.269
 alternative hypothesis: greater
 
 > 
 > ## One-sided approximate (Monte Carlo) Cochran-Armitage test
-> ## Equally spaced scores, p > 0.05
-> cmh_test(malformation ~ consumption, data = malformations,
-+          distribution = approximate(B = 1000L), alternative = "greater")
+> ## Note: equally spaced scores (p > 0.05)
+> chisq_test(malformation ~ consumption, data = malformations,
++            distribution = approximate(B = 1000), alternative = "greater")
 
 	Approximative Linear-by-Linear Association Test
 
 data:  malformation by consumption (0 < <1 < 1-2 < 3-5 < >=6)
-Z = 1.3519, p-value = 0.117
+Z = 1.352, p-value = 0.117
 alternative hypothesis: greater
 
 > 
@@ -2246,53 +2253,53 @@ alternative hypothesis: greater
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: mercuryfish
-> ### Title: Chromosomal Effects of Mercury Contaminated Fish Consumption
+> ### Title: Chromosomal Effects of Mercury-Contaminated Fish Consumption
 > ### Aliases: mercuryfish
 > ### Keywords: datasets
 > 
 > ### ** Examples
 > 
+> ## Coherence criterion
+> coherence <- function(data) {
++     x <- as.matrix(data)
++     matrix(apply(x, 1, function(y)
++         sum(colSums(t(x) < y) == ncol(x)) -
++             sum(colSums(t(x) > y) == ncol(x))), ncol = 1)
++ }
 > 
->   ### coherence criterion
->   coherence <- function(data) {
-+       x <- as.matrix(data)
-+       matrix(apply(x, 1, function(y)
-+           sum(colSums(t(x) < y) == ncol(x)) - 
-+           sum(colSums(t(x) > y) == ncol(x))), ncol = 1)
-+   }
+> ## Asymptotic POSET test
+> poset <- independence_test(mercury + abnormal + ccells ~ group,
++                            data = mercuryfish, ytrafo = coherence)
 > 
->   ### POSET-test
->   poset <- independence_test(mercury + abnormal + ccells ~ group, data =
-+                              mercuryfish, ytrafo = coherence)
-> 
->   ### linear statistic (T in Rosenbaum's, 1994, notation)
->   statistic(poset, "linear")
+> ## Linear statistic (T in the notation of Rosenbaum, 1994)
+> statistic(poset, type = "linear")
             
 control -237
 > 
->   ### expectation
->   expectation(poset)
+> ## Expectation
+> expectation(poset)
 control 
       0 
 > 
->   ### variance (there is a typo in Rosenbaum, 1994, page 371, 
->   ### last paragraph Section 2)
->   covariance(poset)
+> ## Variance
+> ## Note: typo in Rosenbaum (1994, p. 371, Sec. 2, last paragraph)
+> covariance(poset)
          control
 control 3097.954
 > 
->   ### the standardized statistic
->   statistic(poset)
+> ## Standardized statistic
+> statistic(poset)
   control 
 -4.258051 
 > 
->   ### and asymptotic p-value
->   pvalue(poset)
+> ## P-value
+> pvalue(poset)
 [1] 2.062169e-05
 > 
->   ### exact p-value
->   independence_test(mercury + abnormal + ccells ~ group, data =
-+                     mercuryfish, ytrafo = coherence, distribution = "exact")
+> ## Exact POSET test
+> independence_test(mercury + abnormal + ccells ~ group,
++                   data = mercuryfish, ytrafo = coherence,
++                   distribution = "exact")
 
 	Exact General Independence Test
 
@@ -2301,27 +2308,26 @@ Z = -4.2581, p-value = 4.486e-06
 alternative hypothesis: two.sided
 
 > 
->   ### multivariate analysis
->   mvtest <- independence_test(mercury + abnormal + ccells ~ group, 
-+                               data = mercuryfish)
+> ## Asymptotic multivariate test
+> mvtest <- independence_test(mercury + abnormal + ccells ~ group,
++                             data = mercuryfish)
 > 
->   ### global p-value
->   pvalue(mvtest)
+> ## Global p-value
+> pvalue(mvtest)
 [1] 0.007140628
 99 percent confidence interval:
  0.006371664 0.007909593 
 
 > 
->   ### single-step adjusted univariate p-value
->   pvalue(mvtest, method = "single-step")
+> ## Single-step adjusted univariate p-values
+> pvalue(mvtest, method = "single-step")
             mercury   abnormal     ccells
 control 0.007991569 0.01726738 0.03830126
 > 
->   ### step-down adjusted univariate p-value
->   pvalue(mvtest, method = "step-down")
+> ## Step-down adjusted univariate p-values
+> pvalue(mvtest, method = "step-down")
             mercury  abnormal    ccells
 control 0.007187993 0.0111254 0.0152947
-> 
 > 
 > 
 > 
@@ -2338,10 +2344,12 @@ control 0.007187993 0.0111254 0.0152947
 > 
 > ### ** Examples
 > 
+> ## Conover and Salsburg (1988, Tab. 2)
 > 
->   ### compare with Table 2 of Conover & Salsburg (1988)
->   oneway_test(pain ~ group, data = neuropathy, alternative = "less",
-+               distribution = "exact")
+> ## One-sided exact Pitman test
+> oneway_test(pain ~ group, data = neuropathy,
++             alternative = "less",
++             distribution = "exact")
 
 	Exact Two-Sample Fisher-Pitman Permutation Test
 
@@ -2350,8 +2358,10 @@ Z = -1.3191, p-value = 0.09589
 alternative hypothesis: true mu is less than 0
 
 > 
->   wilcox_test(pain ~ group, data = neuropathy, alternative = "less",
-+               distribution = "exact")
+> ## One-sided exact Wilcoxon-Mann-Whitney test
+> wilcox_test(pain ~ group, data = neuropathy,
++             alternative = "less",
++             distribution = "exact")
 
 	Exact Wilcoxon-Mann-Whitney Test
 
@@ -2360,10 +2370,12 @@ Z = -0.98169, p-value = 0.1654
 alternative hypothesis: true mu is less than 0
 
 > 
->   oneway_test(pain ~ group, data = neuropathy, alternative = "less",
-+               distribution = approximate(B = 10000),
-+               ytrafo = function(data)
-+                   trafo(data, numeric_trafo = consal_trafo))
+> ## One-sided exact Conover-Salsburg test
+> oneway_test(pain ~ group, data = neuropathy,
++             alternative = "less",
++             distribution = approximate(B = 10000),
++             ytrafo = function(data)
++                 trafo(data, numeric_trafo = consal_trafo))
 
 	Approximative Two-Sample Fisher-Pitman Permutation Test
 
@@ -2372,17 +2384,16 @@ Z = -1.8683, p-value = 0.0284
 alternative hypothesis: true mu is less than 0
 
 > 
->   ### maximum-type test for a range of 'a' values
->   it <- independence_test(pain ~ group, data = neuropathy,
-+                           alternative = "less",
-+                           distribution = approximate(B = 10000),
-+                           ytrafo = function(data)
-+                               trafo(data, numeric_trafo = function(y)
-+                                   consal_trafo(y, a = 2:7)))
->   pvalue(it, method = "single-step")
+> ## One-sided exact maximum-type test for a range of 'a' values
+> it <- independence_test(pain ~ group, data = neuropathy,
++                         alternative = "less",
++                         distribution = approximate(B = 10000),
++                         ytrafo = function(data)
++                             trafo(data, numeric_trafo = function(y)
++                                 consal_trafo(y, a = 2:7)))
+> pvalue(it, method = "single-step")
          a = 2  a = 3  a = 4  a = 5  a = 6  a = 7
 control 0.2334 0.1033 0.0653 0.0528 0.0491 0.0497
-> 
 > 
 > 
 > 
@@ -2399,20 +2410,19 @@ control 0.2334 0.1033 0.0653 0.0528 0.0491 0.0497
 > 
 > ### ** Examples
 > 
+> ## Exact logrank test
+> lt <- surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
++                 distribution = "exact")
+Warning: 'surv_test' is deprecated.  Use 'logrank_test' instead.
 > 
->   ### logrank test with exact two-sided p-value
->   lt <- logrank_test(Surv(time, event) ~ stadium, data = ocarcinoma,
-+                      distribution = "exact")
-> 
->   ### the test statistic
->   statistic(lt)
+> ### Test statistic
+> statistic(lt)
       II 
 2.337284 
 > 
->   ### p-value
->   pvalue(lt)
+> ### P-value
+> pvalue(lt)
 [1] 0.01819758
-> 
 > 
 > 
 > 
@@ -2429,33 +2439,38 @@ control 0.2334 0.1033 0.0653 0.0528 0.0491 0.0497
 > 
 > ### ** Examples
 > 
+> op <- par(no.readonly = TRUE) # save current settings
+> layout(matrix(1:3, ncol = 3))
+> with(photocar, {
++     plot(survfit(Surv(time, event) ~ group),
++          lty =  1:3, xmax = 50, main = "Survival Time")
++     legend("bottomleft", lty = 1:3, levels(group), bty = "n")
++     plot(survfit(Surv(dmin, tumor) ~ group),
++          lty = 1:3, xmax = 50, main = "Time to First Tumor")
++     legend("bottomleft", lty = 1:3, levels(group), bty = "n")
++     boxplot(ntumor ~ group, main = "Number of Tumors")
++ })
+> par(op) # reset
 > 
->   layout(matrix(1:3, ncol = 3))
->   plot(survfit(Surv(time, event) ~ group, data = photocar), xmax = 50, 
-+        lty =  1:3, main = "Survival Time")
->   legend("bottomleft", lty = 1:3, levels(photocar$group), bty = "n")
->   plot(survfit(Surv(dmin, tumor) ~ group, data = photocar), xmax = 50, 
-+        lty = 1:3, main = "Time to First Tumor")
->   legend("bottomleft", lty = 1:3, levels(photocar$group), bty = "n")
->   boxplot(ntumor ~ group, data = photocar, main = "Number of Tumors")
+> ## Approximate multivariate (all three responses) test
+> it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
++                         data = photocar,
++                         distribution = approximate(B = 10000))
 > 
->   ### global test (all three responses)
->   fm <- Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group
->   it <- independence_test(fm, data = photocar, 
-+                           distribution = approximate(B = 10000))
->   pvalue(it)
+> ## Global p-value
+> pvalue(it)
 [1] 0
 99 percent confidence interval:
  0.0000000000 0.0005296914 
 
 > 
->   ### why was the global null hypothesis rejected?
->   statistic(it, "standardized")
+> ## Why was the global null hypothesis rejected?
+> statistic(it, type = "standardized")
   Surv(time, event) Surv(dmin, tumor)     ntumor
 A          2.327338          2.178704  0.2642120
 B          4.750336          4.106039  0.1509783
 C         -7.077674         -6.284743 -0.4151904
->   pvalue(it, "single-step")
+> pvalue(it, method = "single-step")
   Surv(time, event) Surv(dmin, tumor) ntumor
 A             0.129            0.1850  1.000
 B             0.000            0.0003  1.000
@@ -2463,7 +2478,7 @@ C             0.000            0.0000  0.999
 > 
 > 
 > 
-> 
+> graphics::par(get("par.postscript", pos = 'CheckExEnv'))
 > cleanEx()
 > nameEx("pvalue-methods")
 > ### * pvalue-methods
@@ -2587,18 +2602,15 @@ IV - III 0.8817
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: rotarod
-> ### Title: Rotating Rats Data
+> ### Title: Rotating Rats
 > ### Aliases: rotarod
 > ### Keywords: datasets
 > 
 > ### ** Examples
 > 
-> 
->   ### Wilcoxon-Mann-Whitney Rank Sum Test
-> 
->   ### one-sided exact (0.0186)
->   wilcox_test(time ~ group, data = rotarod, 
-+       alternative = "greater", distribution = "exact")
+> ## One-sided exact Wilcoxon-Mann-Whitney test (p = 0.0186)
+> wilcox_test(time ~ group, data = rotarod, distribution = "exact",
++             alternative = "greater")
 
 	Exact Wilcoxon-Mann-Whitney Test
 
@@ -2606,8 +2618,9 @@ data:  time by group (control, treatment)
 Z = 2.4389, p-value = 0.01863
 alternative hypothesis: true mu is greater than 0
 
->   ### two-sided exact (0.0373)
->   wilcox_test(time ~ group, data = rotarod, distribution = "exact")
+> 
+> ## Two-sided exact Wilcoxon-Mann-Whitney test (p = 0.0373)
+> wilcox_test(time ~ group, data = rotarod, distribution = "exact")
 
 	Exact Wilcoxon-Mann-Whitney Test
 
@@ -2615,8 +2628,9 @@ data:  time by group (control, treatment)
 Z = 2.4389, p-value = 0.03727
 alternative hypothesis: true mu is not equal to 0
 
->   ### two-sided asymptotical (0.0147)
->   wilcox_test(time ~ group, data = rotarod)
+> 
+> ## Two-sided asymptotic Wilcoxon-Mann-Whitney test (p = 0.0147)
+> wilcox_test(time ~ group, data = rotarod)
 
 	Asymptotic Wilcoxon-Mann-Whitney Test
 
@@ -2624,7 +2638,6 @@ data:  time by group (control, treatment)
 Z = 2.4389, p-value = 0.01473
 alternative hypothesis: true mu is not equal to 0
 
-> 
 > 
 > 
 > 
@@ -2694,16 +2707,16 @@ x   1 2 3 4
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: treepipit
-> ### Title: Tree Pipit (Anthus trivialis) Forest Data
+> ### Title: Tree Pipits in Franconian Oak Forests
 > ### Aliases: treepipit
 > ### Keywords: datasets
 > 
 > ### ** Examples
 > 
-> 
->   maxstat_test(counts ~ age + coverstorey + coverregen + meanregen +
-+                         coniferous + deadtree + cbpiles + ivytree,
-+                data = treepipit)
+> ## Asymptotic maximally selected statistics
+> maxstat_test(counts ~ age + coverstorey + coverregen + meanregen +
++                       coniferous + deadtree + cbpiles + ivytree,
++              data = treepipit)
 
 	Asymptotic Generalized Maximally Selected Statistics
 
@@ -2715,7 +2728,6 @@ sample estimates:
   "best" cutpoint: <= 40
        covariable: coverstorey
 
-> 
 > 
 > 
 > 
@@ -2732,7 +2744,7 @@ sample estimates:
 > 
 > ### ** Examples
 > 
-> ## Asymptotic Stuart(-Maxwell) test, Q = 11.96
+> ## Asymptotic Stuart(-Maxwell) test (Q = 11.96)
 > diag(vision) <- 0 # speed-up
 > mh_test(vision)
 
@@ -2750,7 +2762,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  21.06 0.28 21.56 NA NA 
+Time elapsed:  20.84 0.3 21.31 NA NA 
 > grDevices::dev.off()
 null device 
           1 
