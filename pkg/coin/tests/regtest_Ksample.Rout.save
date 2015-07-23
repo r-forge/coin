@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2015-05-13 r68364) -- "Unsuffered Consequences"
+R Under development (unstable) (2015-07-12 r68650) -- "Unsuffered Consequences"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -85,7 +85,7 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > ### One-way Test
 > oneway_test(y ~ x, data = dat)
 
-	Asymptotic K-Sample Permutation Test
+	Asymptotic K-Sample Fisher-Pitman Permutation Test
 
 data:  y by x (1, 2, 3, 4)
 maxT = 1.6931, p-value = 0.2814
@@ -150,7 +150,7 @@ alternative hypothesis: greater
 > ### Normal Scores Test
 > normal_test(y ~ x, data = dat)
 
-	Asymptotic K-Sample Normal Quantile (van der Waerden) Test
+	Asymptotic K-Sample van der Waerden (Normal Quantile) Test
 
 data:  y by x (1, 2, 3, 4)
 chi-squared = 3.3466, df = 3, p-value = 0.3412
@@ -214,7 +214,7 @@ alternative hypothesis: greater
 > ### Median Test
 > median_test(y ~ x, data = dat)
 
-	Asymptotic K-Sample Median Test
+	Asymptotic K-Sample Brown-Mood Median Test
 
 data:  y by x (1, 2, 3, 4)
 chi-squared = 0.85938, df = 3, p-value = 0.8352
@@ -628,4 +628,4 @@ alternative hypothesis: greater
 > 
 > proc.time()
    user  system elapsed 
-   1.43    0.04    1.56 
+   1.29    0.00    1.37 

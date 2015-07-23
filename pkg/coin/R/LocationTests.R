@@ -26,10 +26,10 @@ oneway_test.IndependenceProblem <- function(object, ...) {
     if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        object@method <- "Two-Sample Permutation Test"
+        object@method <- "Two-Sample Fisher-Pitman Permutation Test"
         object@nullvalue <- 0
     } else
-        object@method <- "K-Sample Permutation Test"
+        object@method <- "K-Sample Fisher-Pitman Permutation Test"
 
     return(object)
 }
@@ -160,7 +160,7 @@ normal_test.IndependenceProblem <- function(object,
     if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        object@method <- "Two-Sample Normal Quantile (van der Waerden) Test"
+        object@method <- "Two-Sample van der Waerden (Normal Quantile) Test"
         object@nullvalue <- 0
         if (conf.int && has_distribution(args)) {
             object <- new("ScalarIndependenceTestConfint", object)
@@ -170,7 +170,7 @@ normal_test.IndependenceProblem <- function(object,
             object@conf.level <- conf.level
         }
     } else
-        object@method <- "K-Sample Normal Quantile (van der Waerden) Test"
+        object@method <- "K-Sample van der Waerden (Normal Quantile) Test"
 
     return(object)
 }
@@ -217,7 +217,7 @@ median_test.IndependenceProblem <- function(object,
     if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (twosamp) {
-        object@method <- "Two-Sample Median Test"
+        object@method <- "Two-Sample Brown-Mood Median Test"
         object@nullvalue <- 0
         if (conf.int && has_distribution(args)) {
             object <- new("ScalarIndependenceTestConfint", object)
@@ -227,7 +227,7 @@ median_test.IndependenceProblem <- function(object,
             object@conf.level <- conf.level
         }
     } else
-        object@method <- "K-Sample Median Test"
+        object@method <- "K-Sample Brown-Mood Median Test"
 
     return(object)
 }

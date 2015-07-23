@@ -87,9 +87,9 @@ chisq_test.IndependenceProblem <- function(object, ...) {
     if (is_doubly_ordered(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
     else if (is_singly_ordered(object@statistic))
-        object@method <- "Generalized Pearson's Chi-Squared Test"
+        object@method <- "Generalized Pearson Chi-Squared Test"
     else
-        object@method <- "Pearson's Chi-Squared Test"
+        object@method <- "Pearson Chi-Squared Test"
 
     object@call <- match.call()
 

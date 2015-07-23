@@ -581,7 +581,7 @@ alternative hypothesis: true mu is not equal to 0
 > ### wrong p-value in the one-sided case
 > median_test(y1 ~ x, data = df, alternative = "less")
 
-	Asymptotic Two-Sample Median Test
+	Asymptotic Two-Sample Brown-Mood Median Test
 
 data:  y1 by x (I, II)
 Z = 2.6458, p-value = 0.9959
@@ -601,7 +601,7 @@ alternative hypothesis: true theta is not equal to 1
 > ### partial matching of the scores argument didn't work
 > chisq_test(as.table(jobsatisfaction[, , "Female"]), sco = list(Income = 1:4))
 
-	Asymptotic Generalized Pearson's Chi-Squared Test
+	Asymptotic Generalized Pearson Chi-Squared Test
 
 data:  Job.Satisfaction by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000)
@@ -624,7 +624,7 @@ alternative hypothesis: two.sided
 > ### erroneously claimed to be linear-by-linear tests
 > chisq_test(as.table(jobsatisfaction[, , "Female"]), scores = list(Income = 1:4))
 
-	Asymptotic Generalized Pearson's Chi-Squared Test
+	Asymptotic Generalized Pearson Chi-Squared Test
 
 data:  Job.Satisfaction by
 	 Income (<5000 < 5000-15000 < 15000-25000 < >25000)
@@ -765,7 +765,7 @@ In ft("friedman_test", "SymmetryProblem", formula, data, subset,  :
 +                trafo(data, factor_trafo = function(x)
 +                    of_trafo(x, scores = 1:4)))
 
-	Asymptotic Pearson's Chi-Squared Test
+	Asymptotic Pearson Chi-Squared Test
 
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000)
@@ -778,7 +778,7 @@ In of_trafo(x, scores = 1:4) : 'x' is not an ordered factor
 +                trafo(data, factor_trafo = function(y)
 +                    of_trafo(y, scores = 1:4)))
 
-	Asymptotic Pearson's Chi-Squared Test
+	Asymptotic Pearson Chi-Squared Test
 
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000)
@@ -794,7 +794,7 @@ In of_trafo(y, scores = 1:4) : 'y' is not an ordered factor
 +                trafo(data, factor_trafo = function(y)
 +                    of_trafo(y, scores = 1:4)))
 
-	Asymptotic Pearson's Chi-Squared Test
+	Asymptotic Pearson Chi-Squared Test
 
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000)
@@ -904,4 +904,4 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-   3.02    0.17    3.26 
+   2.79    0.24    3.12 

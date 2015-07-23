@@ -32,9 +32,9 @@
 
       \item new function for rank transformations (see \code{?rank_trafo})
 
-      \item the median test and its corresponding transformation function now
-      offer the choice of three different versions of the mid-score (see
-      \code{?median_test} and \code{?median_trafo})
+      \item the Brown-Mood median test and its corresponding transformation
+      function now offer the choice of three different versions of the mid-score
+      (see \code{?median_test} and \code{?median_trafo})
 
       \item the Conover-Salsburg transformation function now allows the \eqn{a}
       constant to be set (see \code{?consal_trafo} and \code{?neuropathy})
@@ -47,8 +47,8 @@
       \item the printed output of the logrank test now reports whether a 2- or
       \eqn{K}-sample test has been carried out
 
-      \item the normal quantile test and the median test can now also handle
-      \eqn{K}-sample problems and allow the alternative hypothesis to be
+      \item the van der Waerden test and the Brown-Mood median test can now also
+      handle \eqn{K}-sample problems and allow the alternative hypothesis to be
       specified when the explanatory variable is an ordered factor (see
       \code{?normal_test} and \code{?median_test})
 
@@ -174,8 +174,8 @@
       \item the maximally selected statistics transformation for factors
       retained unused levels
 
-      \item the median test \eqn{p}-value computation used the wrong tail of the
-      null distribution in the one-sided case
+      \item the Brown-Mood median test \eqn{p}-value computation used the wrong
+      tail of the null distribution in the one-sided case
 
       \item the printed output of the logrank test did not report the tested
       parameter in the 2-sample case
@@ -191,7 +191,7 @@
       \samp{Linear-by-Linear Association Test} had been carried out even in the
       singly ordered case, i.e., when either the response variable or the
       explanatory variable is an ordered factor or can be regarded as such;
-      these are now reported as \samp{Generalized Pearson's Chi-squared Test}
+      these are now reported as \samp{Generalized Pearson Chi-squared Test}
       and \samp{Generalized Cochran-Mantel-Haenszel Test} respectively
 
       \item the printed output of the general symmetry test claimed that a
@@ -306,9 +306,11 @@
       \item the default number of Monte Carlo replicates used to approximate the
       exact conditional distribution has been increased to 10000
 
-      \item small changes in the printed output of the Wilcoxon-Mann-Whitney
-      test, the marginal homogeneity test, the Wilcoxon signed-rank test, and
-      generalized maximally selected statistics
+      \item small changes in the printed output of the Pearson chi-squared test,
+      the Fisher-Pitman permutation test, the Wilcoxon-Mann-Whitney test, the
+      van der Waerden test, the Brown-Mood median test, the marginal homogeneity
+      test, the Wilcoxon signed-rank test, and generalized maximally selected
+      statistics
 
       \item objects of classes \code{"ScalarIndependenceTestStatistic"} or
       \code{"QuadTypeIndependenceTestStatistic"} now has a \code{paired} slot

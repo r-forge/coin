@@ -214,7 +214,7 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > ### One-way Test
 > oneway_test(y ~ x, dat = dat)
 
-	Asymptotic Two-Sample Permutation Test
+	Asymptotic Two-Sample Fisher-Pitman Permutation Test
 
 data:  y by x (1, 2)
 Z = -0.77735, p-value = 0.4369
@@ -222,7 +222,7 @@ alternative hypothesis: true mu is not equal to 0
 
 > oneway_test(y ~ x, dat = dat, alternative = "less")
 
-	Asymptotic Two-Sample Permutation Test
+	Asymptotic Two-Sample Fisher-Pitman Permutation Test
 
 data:  y by x (1, 2)
 Z = -0.77735, p-value = 0.2185
@@ -230,7 +230,7 @@ alternative hypothesis: true mu is less than 0
 
 > oneway_test(y ~ x, dat = dat, alternative = "greater")
 
-	Asymptotic Two-Sample Permutation Test
+	Asymptotic Two-Sample Fisher-Pitman Permutation Test
 
 data:  y by x (1, 2)
 Z = -0.77735, p-value = 0.7815
@@ -241,7 +241,7 @@ alternative hypothesis: true mu is greater than 0
 > ### Normal Scores Test
 > normal_test(y ~ x, dat = dat)
 
-	Asymptotic Two-Sample Normal Quantile (van der Waerden) Test
+	Asymptotic Two-Sample van der Waerden (Normal Quantile) Test
 
 data:  y by x (1, 2)
 Z = -0.85965, p-value = 0.39
@@ -249,7 +249,7 @@ alternative hypothesis: true mu is not equal to 0
 
 > normal_test(y ~ x, dat = dat, alternative = "less")
 
-	Asymptotic Two-Sample Normal Quantile (van der Waerden) Test
+	Asymptotic Two-Sample van der Waerden (Normal Quantile) Test
 
 data:  y by x (1, 2)
 Z = -0.85965, p-value = 0.195
@@ -257,7 +257,7 @@ alternative hypothesis: true mu is less than 0
 
 > normal_test(y ~ x, dat = dat, alternative = "greater")
 
-	Asymptotic Two-Sample Normal Quantile (van der Waerden) Test
+	Asymptotic Two-Sample van der Waerden (Normal Quantile) Test
 
 data:  y by x (1, 2)
 Z = -0.85965, p-value = 0.805
@@ -268,7 +268,7 @@ alternative hypothesis: true mu is greater than 0
 > ### Median Test
 > median_test(y ~ x, dat = dat)
 
-	Asymptotic Two-Sample Median Test
+	Asymptotic Two-Sample Brown-Mood Median Test
 
 data:  y by x (1, 2)
 Z = -0.8015, p-value = 0.4228
@@ -276,7 +276,7 @@ alternative hypothesis: true mu is not equal to 0
 
 > median_test(y ~ x, dat = dat, alternative = "less")
 
-	Asymptotic Two-Sample Median Test
+	Asymptotic Two-Sample Brown-Mood Median Test
 
 data:  y by x (1, 2)
 Z = -0.8015, p-value = 0.2114
@@ -284,7 +284,7 @@ alternative hypothesis: true mu is less than 0
 
 > median_test(y ~ x, dat = dat, alternative = "greater")
 
-	Asymptotic Two-Sample Median Test
+	Asymptotic Two-Sample Brown-Mood Median Test
 
 data:  y by x (1, 2)
 Z = -0.8015, p-value = 0.7886
@@ -512,7 +512,7 @@ difference in location
 > nt <- normal_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
 > nt
 
-	Exact Two-Sample Normal Quantile (van der Waerden) Test
+	Exact Two-Sample van der Waerden (Normal Quantile) Test
 
 data:  y by x (1, 2)
 Z = 1.2278, p-value = 0.2275
@@ -530,7 +530,7 @@ difference in location
 > ### Median Test
 > median_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
 
-	Exact Two-Sample Median Test
+	Exact Two-Sample Brown-Mood Median Test
 
 data:  y by x (1, 2)
 Z = 0.96825, p-value = 0.6193
@@ -751,4 +751,4 @@ Error in SR_shift_1sample(object, fact = attr(int, "fact")) :
 > 
 > proc.time()
    user  system elapsed 
-   2.02    0.10    2.13 
+   1.96    0.07    2.10 

@@ -81,7 +81,7 @@ sample estimates:
 >   ### Asymptotic Pearson chi-squared test
 >   (ct <- chisq_test(as.table(davis)))
 
-	Asymptotic Pearson's Chi-Squared Test
+	Asymptotic Pearson Chi-Squared Test
 
 data:  Var2 by Var1 (A, B)
 chi-squared = 2.5714, df = 1, p-value = 0.1088
@@ -140,7 +140,7 @@ odds ratio
 >   ### (Agrees with Fishers's exact test, see Agresti, 2002, p. 108, Tab 3.14)
 >   (ct <- chisq_test(as.table(cancer), distribution = "exact"))
 
-	Exact Pearson's Chi-Squared Test
+	Exact Pearson Chi-Squared Test
 
 data:  Cancer by Treatment (Surgery, Radiation)
 chi-squared = 0.59915, p-value = 0.6384
@@ -169,7 +169,7 @@ odds ratio
 >   chisq_test(as.table(jobsatisfaction[, , "Female"]),
 +       distribution = approximate(B = 10000))
 
-	Approximative Pearson's Chi-Squared Test
+	Approximative Pearson Chi-Squared Test
 
 data:  Job.Satisfaction by
 	 Income (<5000, 5000-15000, 15000-25000, >25000)
@@ -317,7 +317,7 @@ alternative hypothesis: true rho is not equal to 0
 > 
 >   fisyat_test(CONT ~ INTG, data = USJudgeRatings)
 
-	Asymptotic Fisher-Yates Correlation Test
+	Asymptotic Fisher-Yates (Normal Quantile) Correlation Test
 
 data:  CONT by INTG
 Z = -0.82479, p-value = 0.4095
@@ -524,7 +524,7 @@ alternative hypothesis: greater
 +             distribution = "exact",
 +             alternative = "greater")
 
-	Exact Two-Sample Normal Quantile (van der Waerden) Test
+	Exact Two-Sample van der Waerden (Normal Quantile) Test
 
 data:  asat by group (Compound, Control)
 Z = 1.4269, p-value = 0.07809
@@ -642,7 +642,7 @@ difference in location
 >   ### Permutation test, asymptotic p-value
 >   oneway_test(pd ~ age, data = water_transfer)
 
-	Asymptotic Two-Sample Permutation Test
+	Asymptotic Two-Sample Fisher-Pitman Permutation Test
 
 data:  pd by age (12-26 Weeks, At term)
 Z = -1.5225, p-value = 0.1279
@@ -679,7 +679,7 @@ alternative hypothesis: true mu is not equal to 0
 > 
 >   (mt1 <- median_test(y ~ x, data = ex, distribution = "exact"))
 
-	Exact Two-Sample Median Test
+	Exact Two-Sample Brown-Mood Median Test
 
 data:  y by x (no, yes)
 Z = 0.28284, p-value = 1
@@ -688,7 +688,7 @@ alternative hypothesis: true mu is not equal to 0
 >   (mt2 <- median_test(y ~ x, data = ex, distribution = "exact",
 +                       mid.score = "0.5"))
 
-	Exact Two-Sample Median Test
+	Exact Two-Sample Brown-Mood Median Test
 
 data:  y by x (no, yes)
 Z = 0, p-value = 1
@@ -697,7 +697,7 @@ alternative hypothesis: true mu is not equal to 0
 >   (mt3 <- median_test(y ~ x, data = ex, distribution = "exact",
 +                       mid.score = "1")) # sign change!
 
-	Exact Two-Sample Median Test
+	Exact Two-Sample Brown-Mood Median Test
 
 data:  y by x (no, yes)
 Z = -0.28284, p-value = 1
@@ -2343,7 +2343,7 @@ control 0.007187993 0.0111254 0.0152947
 >   oneway_test(pain ~ group, data = neuropathy, alternative = "less",
 +               distribution = "exact")
 
-	Exact Two-Sample Permutation Test
+	Exact Two-Sample Fisher-Pitman Permutation Test
 
 data:  pain by group (control, treat)
 Z = -1.3191, p-value = 0.09589
@@ -2365,7 +2365,7 @@ alternative hypothesis: true mu is less than 0
 +               ytrafo = function(data)
 +                   trafo(data, numeric_trafo = consal_trafo))
 
-	Approximative Two-Sample Permutation Test
+	Approximative Two-Sample Fisher-Pitman Permutation Test
 
 data:  pain by group (control, treat)
 Z = -1.8683, p-value = 0.0284
@@ -2561,7 +2561,7 @@ alternative hypothesis: two.sided
 +                    distribution = approximate(B = 10000),
 +                    xtrafo = mcp_trafo(site = "Tukey")))
 
-	Approximative K-Sample Permutation Test
+	Approximative K-Sample Fisher-Pitman Permutation Test
 
 data:  length by site (I, II, III, IV)
 maxT = 3.953, p-value = 1e-04
@@ -2750,7 +2750,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  23.88 0.17 24.6 NA NA 
+Time elapsed:  21.06 0.28 21.56 NA NA 
 > grDevices::dev.off()
 null device 
           1 

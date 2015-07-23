@@ -69,7 +69,7 @@ fisyat_test.IndependenceProblem <- function(object,
 
     object <- do.call("independence_test", c(list(object = object), args))
 
-    object@method <- "Fisher-Yates Correlation Test"
+    object@method <- "Fisher-Yates (Normal Quantile) Correlation Test"
     object@parameter <- "rho"
     object@nullvalue <- 0
 
