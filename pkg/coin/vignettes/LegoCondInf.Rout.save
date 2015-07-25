@@ -185,14 +185,14 @@ None   2.5900465       -2.340275      -0.1522407
 >20   -3.6678046        4.950373      -1.5303056
 
 > qperm(it_alzmax, 0.95)
-[1] 2.814918
+[1] 2.813991
 
 > pvalue(it_alzmax, method = "single-step")
-        Alzheimer Other dementias Other diagnoses
-None  0.092604789    1.706385e-01       0.9999984
-<10   0.031586601    3.068205e-01       0.9718926
-10-20 0.981656238    8.417836e-01       0.2752386
->20   0.002830656    7.503922e-06       0.6620071
+       Alzheimer Other dementias Other diagnoses
+None  0.09269080    1.707170e-01       0.9999984
+<10   0.03160184    3.072381e-01       0.9719564
+10-20 0.98165407    8.418199e-01       0.2751902
+>20   0.00271631    7.906569e-06       0.6622096
 
 > par(cex.lab = 1.3, cex.axis = 1.3)
 
@@ -223,7 +223,7 @@ None  0.092604789    1.706385e-01       0.9999984
 	Asymptotic General Independence Test
 
 data:  Surv(time, event), Surv(dmin, tumor), ntumor by group (A, B, C)
-maxT = 7.0777, p-value = 2.152e-11
+maxT = 7.0777, p-value = 6.259e-12
 alternative hypothesis: two.sided
 
 
@@ -241,8 +241,8 @@ C         -7.077674         -6.284743 -0.4151904
 
 > round(pvalue(it_ph, method = "single-step"), 5)
   Surv(time, event) Surv(dmin, tumor)  ntumor
-A           0.13608           0.18926 0.99989
-B           0.00002           0.00036 1.00000
+A           0.13567           0.18972 0.99989
+B           0.00002           0.00033 1.00000
 C           0.00000           0.00000 0.99859
 
 > par(cex.lab = 1.3, cex.axis = 1.3)
@@ -310,4 +310,4 @@ C           0.00000           0.00000 0.99859
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.49    0.14    2.76 
+   3.08    0.17    3.55 
