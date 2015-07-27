@@ -28,7 +28,7 @@
   maximally selected statistics.
 }
 \source{
-  Hohnloser, S. H., Raeder, E. A., Podrid, P. J. Graboys, T. B. and Lown, B.
+  Hohnloser, S. H., Raeder, E. A., Podrid, P. J., Graboys, T. B. and Lown, B.
   (1987).  Predictors of antiarrhythmic drug efficacy in patients with malignant
   ventricular tachyarrhythmias.  \emph{American Heart Journal} \bold{114}(1 Pt
   1), 1--7.

@@ -46,10 +46,10 @@
 lt <- surv_test(Surv(time, event) ~ stadium, data = ocarcinoma,
                 distribution = "exact")
 
-### Test statistic
+## Test statistic
 statistic(lt)
 
-### P-value
+## P-value
 pvalue(lt)
 }
 \keyword{datasets}

@@ -2580,12 +2580,12 @@ control 0.2377 0.0994 0.062 0.0511 0.0483 0.0492
 +                 distribution = "exact")
 Warning: 'surv_test' is deprecated.  Use 'logrank_test' instead.
 > 
-> ### Test statistic
+> ## Test statistic
 > statistic(lt)
       II 
 2.337284 
 > 
-> ### P-value
+> ## P-value
 > pvalue(lt)
 [1] 0.01819758
 > 
@@ -2936,7 +2936,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  15.21 0.19 15.54 NA NA 
+Time elapsed:  15.3 0.19 15.6 NA NA 
 > grDevices::dev.off()
 null device 
           1 
