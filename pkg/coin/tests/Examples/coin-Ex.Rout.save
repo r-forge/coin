@@ -837,12 +837,12 @@ alternative hypothesis: greater
 > 
 > graphics::par(get("par.postscript", pos = 'CheckExEnv'))
 > cleanEx()
-> nameEx("MarginalHomogeneityTest")
-> ### * MarginalHomogeneityTest
+> nameEx("MarginalHomogeneityTests")
+> ### * MarginalHomogeneityTests
 > 
 > flush(stderr()); flush(stdout())
 > 
-> ### Name: MarginalHomogeneityTest
+> ### Name: MarginalHomogeneityTests
 > ### Title: Marginal Homogeneity Tests
 > ### Aliases: mh_test mh_test.formula mh_test.table mh_test.SymmetryProblem
 > ### Keywords: htest
@@ -994,12 +994,12 @@ alternative hypothesis: two.sided
 > 
 > 
 > cleanEx()
-> nameEx("MaxstatTest")
-> ### * MaxstatTest
+> nameEx("MaximallySelectedStatisticsTests")
+> ### * MaximallySelectedStatisticsTests
 > 
 > flush(stderr()); flush(stdout())
 > 
-> ### Name: MaxstatTest
+> ### Name: MaximallySelectedStatisticsTests
 > ### Title: Generalized Maximally Selected Statistics
 > ### Aliases: maxstat_test maxstat_test.formula maxstat_test.table
 > ###   maxstat_test.IndependenceProblem
@@ -1309,12 +1309,12 @@ Control 0.00349714 0.4665
 > 
 > 
 > cleanEx()
-> nameEx("SurvTest")
-> ### * SurvTest
+> nameEx("SurvivalTests")
+> ### * SurvivalTests
 > 
 > flush(stderr()); flush(stdout())
 > 
-> ### Name: SurvTest
+> ### Name: SurvivalTests
 > ### Title: Two- and K-Sample Tests for Censored Data
 > ### Aliases: surv_test logrank_test logrank_test.formula
 > ###   logrank_test.IndependenceProblem
@@ -2936,7 +2936,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  15.3 0.19 15.6 NA NA 
+Time elapsed:  15.32 0.25 15.7 NA NA 
 > grDevices::dev.off()
 null device 
           1 

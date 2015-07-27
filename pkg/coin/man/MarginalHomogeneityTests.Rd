@@ -1,4 +1,4 @@
-\name{MarginalHomogeneityTest}
+\name{MarginalHomogeneityTests}
 \alias{mh_test}
 \alias{mh_test.formula}
 \alias{mh_test.table}

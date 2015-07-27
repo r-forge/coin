@@ -1,4 +1,4 @@
-\name{MaxstatTest}
+\name{MaximallySelectedStatisticsTests}
 \alias{maxstat_test}
 \alias{maxstat_test.formula}
 \alias{maxstat_test.table}

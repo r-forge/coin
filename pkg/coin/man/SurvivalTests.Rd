@@ -1,4 +1,4 @@
-\name{SurvTest}
+\name{SurvivalTests}
 \alias{surv_test}
 \alias{logrank_test}
 \alias{logrank_test.formula}
