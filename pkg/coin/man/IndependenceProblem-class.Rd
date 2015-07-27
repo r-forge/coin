@@ -9,9 +9,7 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \section{Objects from the Class}{
-  Objects can be created by calls of the form
-  \preformatted{
-    new("IndependenceProblem", x, y, block = NULL, weights = NULL, \dots)}
+  Objects can be created by calls of the form \preformatted{     new("IndependenceProblem", x, y, block = NULL, weights = NULL, \dots)}
   where \code{x} and \code{y} are data frames containing the variables
   \eqn{\mathbf{X}} and \eqn{\mathbf{Y}} respectively, \code{block} is an
   optional factor representing the block structure \eqn{b} and \code{weights} is

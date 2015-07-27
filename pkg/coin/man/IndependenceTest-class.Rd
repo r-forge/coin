@@ -20,18 +20,14 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \section{Objects from the Class}{
-  Objects can be created by calls of the form
-  \preformatted{
-    new("IndependenceTest", \dots),
+  Objects can be created by calls of the form \preformatted{    new("IndependenceTest", \dots),
 
     new("MaxTypeIndependenceTest", \dots),
 
     new("QuadTypeIndependenceTest", \dots),
 
     new("ScalarIndependenceTest", \dots)}
-  and
-  \preformatted{
-    new("ScalarIndependenceTestConfint", \dots).}
+  and \preformatted{    new("ScalarIndependenceTestConfint", \dots).}
 }
 \section{Slots}{
   For objects of classes \code{"IndependenceTest"},

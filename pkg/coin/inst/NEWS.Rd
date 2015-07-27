@@ -120,8 +120,8 @@
 
       \item the exact distribution can now be obtained for tests specified with
       case weights, implying that exact \eqn{p}-values can be computed for
-      \eqn{2 \times 2} tables or \eqn{2 \times K} tables with \eqn{K} ordered
-      categories (see \code{?independence_test})
+      \eqn{2 \times 2}{2 x 2} tables or \eqn{2 \times K}{2 x K} tables with
+      \eqn{K} ordered categories (see \code{?independence_test})
 
       \item the exact distribution of test statistics based on quadratic
       forms can now be obtained in the two-sample case (see
@@ -268,7 +268,7 @@
       \item the median and logrank transformations are now increasing functions
       of the data
 
-      \item the package manual has been completely revised (WORK IN PROGRESS)
+      \item the package manual has been completely revised
 
       \item the Kruskal-Wallis test, the logrank test and the Friedman test now
       use a scalar test statistic in case the explanatory variable is an ordered
@@ -776,8 +776,8 @@
 \section{Changes in version 0.3-6 (2005-11-17)}{
   \itemize{
     \item internal C function \code{R_MonteCarloIndependenceTest} returns a
-    \eqn{pq \times B)} matrix instead of a list with B elements (the linear
-    statistic for each random permutation of the data)
+    \eqn{pq \times B}{pq x B} matrix instead of a list with B elements (the
+    linear statistic for each random permutation of the data)
 
     \item various simplifications for the computations of adjusted
     \eqn{p}-values
@@ -888,7 +888,7 @@
 }
 \section{Changes in version 0.2-10 (2005-05-04)}{
   \itemize{
-    \item \samp{asymptotical} \eqn{\rightarrow} \samp{asymptotic} in
+    \item \samp{asymptotical} \eqn{\rightarrow}{->} \samp{asymptotic} in
     \code{print} methods
 
     \item \code{mercuryfish} example added

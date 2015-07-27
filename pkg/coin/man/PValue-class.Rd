@@ -3,14 +3,12 @@
 \alias{PValue-class}
 \title{Class \code{"PValue"}}
 \description{
-  Objects of class \code{"PValue"} represent the \eqn{p}- and mid-\eqn{p}-values
-  and the \eqn{p}-value interval of the reference distribution.
+  Objects of class \code{"PValue"} represent the \eqn{p}-value,
+  mid-\eqn{p}-value and \eqn{p}-value interval of the reference distribution.
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \section{Objects from the Class}{
-  Objects can be created by calls of the form
-  \preformatted{
-    new("PValue", \dots).}
+  Objects can be created by calls of the form \preformatted{     new("PValue", \dots).}
 }
 \section{Slots}{
   \describe{

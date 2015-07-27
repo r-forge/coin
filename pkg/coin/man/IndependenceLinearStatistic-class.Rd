@@ -10,9 +10,7 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \section{Objects from the Class}{
-  Objects can be created by calls of the form
-  \preformatted{
-  new("IndependenceLinearStatistic", object, varonly = FALSE, \dots)}
+  Objects can be created by calls of the form \preformatted{     new("IndependenceLinearStatistic", object, varonly = FALSE, \dots)}
   where \code{object} is an object of class
   \code{"\linkS4class{IndependenceTestProblem}"}, \code{varonly} is a logical
   indicating that slot \code{covariance} (see \sQuote{Slots}) should only

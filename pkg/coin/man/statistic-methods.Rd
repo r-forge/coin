@@ -5,9 +5,9 @@
 \alias{statistic,IndependenceLinearStatistic-method}
 \alias{statistic,IndependenceTest-method}
 \alias{statistic,IndependenceTestStatistic-method}
-\title{Computing the Test Statistic and Linear Statistic}
+\title{Extraction of the Test Statistic and Linear Statistic}
 \description{
-  Methods for computing the test statistic and linear statistic.
+  Methods for extraction of the test statistic and linear statistic.
 }
 \usage{
 \S4method{statistic}{IndependenceLinearStatistic}(object, type = c("test", "linear", "standardized"), \dots)
@@ -16,7 +16,7 @@
 }
 \arguments{
   \item{object}{
-    an object from which the test statistic or linear statistic can be computed.
+    an object from which the test statistic or linear statistic can be extracted.
   }
   \item{type}{
     a character, the type of statistic: either \code{"test"} (default) for the
@@ -28,7 +28,7 @@
   }
 }
 \details{
-  The method \code{statistic} computes the test statistic or the, possibly
+  The method \code{statistic} extracts the test statistic or the, possibly
   multivariate, linear statistic in its unstandardized or standardized form.
 
   The test statistic (\code{type = "test"}) is returned by default.  The
@@ -37,15 +37,16 @@
 }
 \value{
   The test statistic or the unstandardized or standardized linear statistic
-  computed from \code{object}.  A numeric vector or matrix.
+  extracted from \code{object}.  A numeric vector or matrix.
 }
 \examples{
+## Example data
 dta <- data.frame(
     y = gl(4, 5),
     x = gl(5, 4)
 )
 
-## Cochran-Mantel-Haenszel Test
+## Asymptotic Cochran-Mantel-Haenszel Test
 ct <- cmh_test(y ~ x, data = dta)
 
 ## Test statistic

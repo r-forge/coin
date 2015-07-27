@@ -15,11 +15,11 @@
 \alias{covariance,CovarianceMatrix-method}
 \alias{covariance,IndependenceLinearStatistic-method}
 \alias{covariance,IndependenceTest-method}
-\title{Computing the Expectation, Variance and Covariance of the Linear
+\title{Extraction of the Expectation, Variance and Covariance of the Linear
   Statistic}
 \description{
-  Methods for computing the expectation, variance and covariance of the linear
-  statistic.
+  Methods for extraction of the expectation, variance and covariance of the
+  linear statistic.
 }
 \usage{
 \S4method{expectation}{IndependenceLinearStatistic}(object, \dots)
@@ -37,28 +37,29 @@
 \arguments{
   \item{object}{
     an object from which the expectation, variance or covariance of the linear
-    statistic can be computed.
+    statistic can be extracted.
   }
   \item{\dots}{
     further arguments (currently ignored).
   }
 }
 \details{
-  The methods \code{expectation}, \code{variance} and \code{covariance} compute
+  The methods \code{expectation}, \code{variance} and \code{covariance} extract
   the expectation, variance and covariance, respectively, of the linear
   statistic.
 }
 \value{
-  The expectation, variance or covariance of the linear statistic computed from
+  The expectation, variance or covariance of the linear statistic extracted from
   \code{object}.  A numeric vector or matrix.
 }
 \examples{
+## Example data
 dta <- data.frame(
     y = gl(3, 2),
     x = sample(gl(3, 2))
 )
 
-## Cochran-Mantel-Haenszel Test
+## Asymptotic Cochran-Mantel-Haenszel Test
 ct <- cmh_test(y ~ x, data = dta)
 
 ## The linear statistic, i.e., the contingency table...

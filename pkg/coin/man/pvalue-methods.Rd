@@ -14,11 +14,11 @@
 \alias{pvalue_interval,IndependenceTest-method}
 \alias{pvalue_interval,NullDistribution-method}
 \encoding{UTF-8}
-\title{Computing the \eqn{p}-Value, Mid-\eqn{p}-Value and \eqn{p}-Value
+\title{Computation of the \eqn{p}-Value, Mid-\eqn{p}-Value and \eqn{p}-Value
   Interval}
 \description{
-  Methods for computing the \eqn{p}-value, mid-\eqn{p}-value and \eqn{p}-value
-  interval.
+  Methods for computation of the \eqn{p}-value, mid-\eqn{p}-value and
+  \eqn{p}-value interval.
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
@@ -68,8 +68,8 @@
 
   For \code{pvalue}, the global \eqn{p}-value (\code{method = "global"}) is
   returned by default and is given with an associated 99 \% confidence interval
-  when resampling is used to determine the null distribution (which for
-  maximum-type statistics may be true even in the asymptotic case).
+  when resampling is used to determine the null distribution (which for maximum
+  statistics may be true even in the asymptotic case).
 
   The familywise error rate (FWER) is always controlled under the global null
   hypothesis, i.e., in the \emph{weak} sense, implying that the smallest
@@ -114,12 +114,13 @@
 
   The \eqn{p}-value interval \eqn{(p_0, p_1]} obtained by \code{pvalue_interval}
   was proposed by Berger (2000, 2001), where the upper endpoint \eqn{p_1} is the
-  conventional \eqn{p}-value and the mid-point, i.e., \eqn{p_{0.5}}, is the
-  mid-\eqn{p}-value.  The lower endpoint \eqn{p_0} is the smallest \eqn{p}-value
-  obtainable if no conservatism attributable to the discreteness of the null
-  distribution is present.  The length of the \eqn{p}-value interval is the null
-  probability of the observed outcome and provides a data-dependent measure of
-  conservatism that is completely independent of the significance level.
+  conventional \eqn{p}-value and the mid-point, i.e., \eqn{p_{0.5}}{p_0.5}, is
+  the mid-\eqn{p}-value.  The lower endpoint \eqn{p_0} is the smallest
+  \eqn{p}-value obtainable if no conservatism attributable to the discreteness
+  of the null distribution is present.  The length of the \eqn{p}-value interval
+  is the null probability of the observed outcome and provides a data-dependent
+  measure of conservatism that is completely independent of the significance
+  level.
 }
 \value{
   The \eqn{p}-value, mid-\eqn{p}-value or \eqn{p}-value interval computed from
@@ -133,12 +134,14 @@
   the introduction of a more general max-\eqn{T} version of the same algorithm.
 }
 \references{
-  Westfall, P. H. and Young, S. S.  (1993).  \emph{Resampling-Based Multiple
-  Testing: Examples and Methods for \eqn{p}-Value Adjustment}.  New York: John
-  Wiley & Sons.
+  Berger, V. W.  (2000).  Pros and cons of permutation tests in clinical trials.
+  \emph{Statistics in Medicine} \bold{19}(10), 1319--1328.
+
+  Berger, V. W.  (2001).  The \eqn{p}-value interval as an inferential tool.
+  \emph{The Statistician} \bold{50}(1), 79--85.
 
   Bretz, F., Hothorn, T. and Westfall, P.  (2011).  \emph{Multiple Comparisons
-    Using R}. Boca Raton: CRC Press.
+    Using R}.  Boca Raton: CRC Press.
 
   Westfall, P. H. and Troendle, J. F.  (2008).  Multiple testing with minimal
   assumptions.  \emph{Biometrical Journal} \bold{50}(5), 745--755.
@@ -146,11 +149,9 @@
   Westfall, P. H. and Wolfinger, R. D.  (1997).  Multiple tests with discrete
   distributions.  \emph{The American Statistician} \bold{51}(1), 3--8.
 
-  Berger, V. W.  (2000).  Pros and cons of permutation tests in clinical trials.
-  \emph{Statistics in Medicine} \bold{19}(10), 1319--1328.
-
-  Berger, V. W.  (2001).  The \eqn{p}-value interval as an inferential tool.
-  \emph{The Statistician} \bold{50}(1), 79--85.
+  Westfall, P. H. and Young, S. S.  (1993).  \emph{Resampling-Based Multiple
+  Testing: Examples and Methods for \eqn{p}-Value Adjustment}.  New York: John
+  Wiley & Sons.
 }
 \examples{
 ## Two-sample problem
@@ -159,11 +160,12 @@ dta <- data.frame(
     x = gl(2, 10)
 )
 
-## Ansari-Bradley test
+## Exact Ansari-Bradley test
 (at <- ansari_test(y ~ x, data = dta, distribution = "exact"))
 pvalue(at)
 midpvalue(at)
 pvalue_interval(at)
+
 
 ## Bivariate two-sample problem
 dta2 <- data.frame(
@@ -172,23 +174,27 @@ dta2 <- data.frame(
     x = gl(2, 10)
 )
 
-## Bivariate Pitman test
+## Approximative (Monte Carlo) bivariate Fisher-Pitman test
 (it <- independence_test(y1 + y2 ~ x, data = dta2,
                          distribution = approximate(B = 10000)))
+
 ## Global p-value
 pvalue(it)
+
 ## Joint distribution single-step p-values
 pvalue(it, method = "single-step")
-## Joint distribution (free) step-down p-values
+
+## Joint distribution step-down p-values
 pvalue(it, method = "step-down")
-## Sidak (free) step-down p-values
+
+## Sidak step-down p-values
 pvalue(it, method = "step-down", distribution = "marginal", type = "Sidak")
+
 ## Unadjusted p-values
 pvalue(it, method = "unadjusted")
 
 
-## Length of YOY Gizzard Shad from Kokosing Lake, Ohio, sampled in Summer 1984
-## Hollander and Wolfe (1999, p. 200, Tab. 6.3)
+## Length of YOY Gizzard Shad (Hollander and Wolfe, 1999, p. 200, Tab. 6.3)
 yoy <- data.frame(
     length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,
                42, 60, 32, 42, 45, 58, 27, 51, 42, 52,
@@ -197,10 +203,13 @@ yoy <- data.frame(
     site = gl(4, 10, labels = as.roman(1:4))
 )
 
-## Joint distribution (free) step-down p-values for multiple comparisons
+## Approximative (Monte Carlo) Fisher-Pitman test with contrasts
+## Note: all pairwise comparisons
 (ot <- oneway_test(length ~ site, data = yoy,
                    distribution = approximate(B = 10000),
                    xtrafo = mcp_trafo(site = "Tukey")))
+
+## Joint distribution step-down p-values
 pvalue(ot, method = "step-down") # subset pivotality is violated
 }
 \keyword{methods}

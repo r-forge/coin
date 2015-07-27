@@ -23,10 +23,10 @@
 \alias{support-methods}
 \alias{support,IndependenceTest-method}
 \alias{support,NullDistribution-method}
-\title{The Permutation Distribution}
+\title{Computation of the Permutation Distribution}
 \description{
-  Methods for computing the density function, distribution function, quantile
-  function, random numbers and support of the permutation distribution.
+  Methods for computation of the density function, distribution function,
+  quantile function, random numbers and support of the permutation distribution.
 }
 \usage{
 \S4method{dperm}{AsymptNullDistribution}(object, x, \dots)
@@ -92,7 +92,7 @@ dta <- data.frame(
     x = gl(2, 10)
 )
 
-## Ansari-Bradley test
+## Exact Ansari-Bradley test
 at <- ansari_test(y ~ x, data = dta, distribution = "exact")
 
 ## Support of the exact distribution of the Ansari-Bradley statistic

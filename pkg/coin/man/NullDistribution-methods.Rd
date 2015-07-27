@@ -14,10 +14,10 @@
 \alias{ExactNullDistribution-methods}
 \alias{ExactNullDistribution,QuadTypeIndependenceTestStatistic-method}
 \alias{ExactNullDistribution,ScalarIndependenceTestStatistic-method}
-\title{Computing the Reference Distribution}
+\title{Computation of the Reference Distribution}
 \description{
-  Methods for computing the asymptotic, approximate (Monte Carlo) and exact
-  reference distribution.
+  Methods for computation of the asymptotic, approximative (Monte Carlo) and
+  exact reference distribution.
 }
 \usage{
 \S4method{AsymptNullDistribution}{MaxTypeIndependenceTestStatistic}(object, \dots)
@@ -33,12 +33,12 @@
 }
 \arguments{
   \item{object}{
-    an object from which the asymptotic, approximate (Monte Carlo) or exact
+    an object from which the asymptotic, approximative (Monte Carlo) or exact
     reference distribution can be computed.
   }
   \item{B}{
     a positive integer, the number of Monte Carlo replicates used for
-    the computation of the approximate reference distribution.  Defaults to
+    the computation of the approximative reference distribution.  Defaults to
     \code{10000}.
   }
   \item{algorithm}{
@@ -52,8 +52,8 @@
 }
 \details{
   The methods \code{AsymptNullDistribution}, \code{ApproxNullDistribution} and
-  \code{ExactNullDistribution} compute the asymptotic, approximate (Monte Carlo)
-  and exact reference distribution respectively.
+  \code{ExactNullDistribution} compute the asymptotic, approximative (Monte
+  Carlo) and exact reference distribution respectively.
 }
 \value{
   An object of class \code{"\linkS4class{AsymptNullDistribution}"},
