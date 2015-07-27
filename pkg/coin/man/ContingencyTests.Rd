@@ -121,7 +121,7 @@
   alternative tests.  \emph{International Statistical Review} \bold{46}(3),
   237--254.
 
-  Mantel, N.  (1963).  Chi-square tests with one degree of freedom, extensions
+  Mantel, N.  (1963).  Chi-square tests with one degree of freedom: extensions
   of the Mantel-Haenszel procedure.  \emph{Journal of the American Statistical
   Association} \bold{58}(303), 690--700.
 

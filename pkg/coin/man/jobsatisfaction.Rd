@@ -31,7 +31,7 @@
   Hoboken, New Jersey: John Wiley & Sons.
 }
 \examples{
-## Approximate (Monte Carlo) linear-by-linear association test
+## Approximative (Monte Carlo) linear-by-linear association test
 lbl_test(jobsatisfaction, distribution = approximate(B = 10000))
 }
 \keyword{datasets}

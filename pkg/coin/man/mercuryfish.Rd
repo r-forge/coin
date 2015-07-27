@@ -91,10 +91,10 @@ mvtest <- independence_test(mercury + abnormal + ccells ~ group,
 ## Global p-value
 pvalue(mvtest)
 
-## Single-step adjusted univariate p-values
+## Single-step adjusted p-values
 pvalue(mvtest, method = "single-step")
 
-## Step-down adjusted univariate p-values
+## Step-down adjusted p-values
 pvalue(mvtest, method = "step-down")
 }
 \keyword{datasets}

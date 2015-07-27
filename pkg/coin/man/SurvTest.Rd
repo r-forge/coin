@@ -63,13 +63,13 @@
   \item{rho}{
     a numeric, the \eqn{\rho} constant when \code{type} is \code{"Tarone-Ware"},
     \code{"Fleming-Harrington"} or \code{"Self"}; see \sQuote{Details}.
-    Defaults to \code{0.5} in the first case and \code{0} in the other two
-    cases.
+    Defaults to \code{NULL}, implying \code{0.5} for \code{type = "Tarone-Ware"}
+    and \code{0} otherwise.
   }
   \item{gamma}{
     a numeric, the \eqn{\gamma} constant when \code{type} is
     \code{"Fleming-Harrington"} or \code{"Self"}; see \sQuote{Details}.
-    Defaults to \code{0}.
+    Defaults to \code{NULL}, implying \code{0}.
   }
   \item{\dots}{
     further arguments to be passed to \code{\link{independence_test}}.
@@ -245,7 +245,7 @@
 }
 \note{
   The test statistic differs from the one used by
-  \code{\link[survival]{survdiff}} (in the \pkg{survival} package), since the
+  \code{\link[survival]{survdiff}} (in package \pkg{survival}), since the
   conditional variance is not identical to the variance estimate used by the
   classical logrank test.
 

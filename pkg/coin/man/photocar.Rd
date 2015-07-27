@@ -71,7 +71,7 @@ with(photocar, {
 })
 par(op) # reset
 
-## Approximate multivariate (all three responses) test
+## Approximative multivariate (all three responses) test
 it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
                         data = photocar,
                         distribution = approximate(B = 10000))

@@ -39,7 +39,7 @@ Loading required package: survival
 > ### ** Examples
 > 
 > ## Zeileis and Hothorn (2013, pp. 942-944)
-> ## Approximate (Monte Carlo) maximally selected statistics
+> ## Approximative (Monte Carlo) maximally selected statistics
 > CWD[1:6] <- 100 * CWD[1:6] # scaling (to avoid harmless warning)
 > mt <- maxstat_test(sample2 + sample3 + sample4 +
 +                    sample6 + sample7 + sample8 ~ trend, data = CWD,
@@ -2283,7 +2283,7 @@ alternative hypothesis: true theta is not equal to 1
 
 > 
 > 
-> ## Stratified approximate (Monte Carlo) logrank test
+> ## Stratified approximative (Monte Carlo) logrank test
 > logrank_test(Surv(time, event) ~ group | histology, data = glioma,
 +              distribution = approximate(B = 10000))
 
@@ -2340,7 +2340,7 @@ sample estimates:
 > 
 > ### ** Examples
 > 
-> ## Approximate (Monte Carlo) linear-by-linear association test
+> ## Approximative (Monte Carlo) linear-by-linear association test
 > lbl_test(jobsatisfaction, distribution = approximate(B = 10000))
 
 	Approximative Linear-by-Linear Association Test
@@ -2369,7 +2369,7 @@ alternative hypothesis: two.sided
 > 
 > ## Graubard and Korn (1987, Tab. 3)
 > 
-> ## One-sided approximate (Monte Carlo) Cochran-Armitage test
+> ## One-sided approximative (Monte Carlo) Cochran-Armitage test
 > ## Note: midpoint scores (p < 0.05)
 > midpoints <- c(0, 0.5, 1.5, 4.0, 7.0)
 > chisq_test(malformation ~ consumption, data = malformations,
@@ -2383,7 +2383,7 @@ Z = 2.5632, p-value = 0.017
 alternative hypothesis: greater
 
 > 
-> ## One-sided approximate (Monte Carlo) Cochran-Armitage test
+> ## One-sided approximative (Monte Carlo) Cochran-Armitage test
 > ## Note: midrank scores (p > 0.05)
 > midranks <- c(8557.5, 24375.5, 32013.0, 32473.0, 32555.5)
 > chisq_test(malformation ~ consumption, data = malformations,
@@ -2397,7 +2397,7 @@ Z = 0.59208, p-value = 0.269
 alternative hypothesis: greater
 
 > 
-> ## One-sided approximate (Monte Carlo) Cochran-Armitage test
+> ## One-sided approximative (Monte Carlo) Cochran-Armitage test
 > ## Note: equally spaced scores (p > 0.05)
 > chisq_test(malformation ~ consumption, data = malformations,
 +            distribution = approximate(B = 1000), alternative = "greater")
@@ -2484,12 +2484,12 @@ alternative hypothesis: two.sided
  0.006371664 0.007909593 
 
 > 
-> ## Single-step adjusted univariate p-values
+> ## Single-step adjusted p-values
 > pvalue(mvtest, method = "single-step")
             mercury   abnormal     ccells
 control 0.007991569 0.01726738 0.03830126
 > 
-> ## Step-down adjusted univariate p-values
+> ## Step-down adjusted p-values
 > pvalue(mvtest, method = "step-down")
             mercury  abnormal    ccells
 control 0.007187993 0.0111254 0.0152947
@@ -2511,31 +2511,31 @@ control 0.007187993 0.0111254 0.0152947
 > 
 > ## Conover and Salsburg (1988, Tab. 2)
 > 
-> ## One-sided exact Pitman test
+> ## One-sided approximative Fisher-Pitman test
 > oneway_test(pain ~ group, data = neuropathy,
 +             alternative = "less",
-+             distribution = "exact")
++             distribution = approximate(B = 10000))
 
-	Exact Two-Sample Fisher-Pitman Permutation Test
+	Approximative Two-Sample Fisher-Pitman Permutation Test
 
 data:  pain by group (control, treat)
-Z = -1.3191, p-value = 0.09589
+Z = -1.3191, p-value = 0.09
 alternative hypothesis: true mu is less than 0
 
 > 
-> ## One-sided exact Wilcoxon-Mann-Whitney test
+> ## One-sided approximative Wilcoxon-Mann-Whitney test
 > wilcox_test(pain ~ group, data = neuropathy,
 +             alternative = "less",
-+             distribution = "exact")
++             distribution = approximate(B = 10000))
 
-	Exact Wilcoxon-Mann-Whitney Test
+	Approximative Wilcoxon-Mann-Whitney Test
 
 data:  pain by group (control, treat)
-Z = -0.98169, p-value = 0.1654
+Z = -0.98169, p-value = 0.1661
 alternative hypothesis: true mu is less than 0
 
 > 
-> ## One-sided exact Conover-Salsburg test
+> ## One-sided approximative Conover-Salsburg test
 > oneway_test(pain ~ group, data = neuropathy,
 +             alternative = "less",
 +             distribution = approximate(B = 10000),
@@ -2545,11 +2545,11 @@ alternative hypothesis: true mu is less than 0
 	Approximative Two-Sample Fisher-Pitman Permutation Test
 
 data:  pain by group (control, treat)
-Z = -1.8683, p-value = 0.0284
+Z = -1.8683, p-value = 0.0334
 alternative hypothesis: true mu is less than 0
 
 > 
-> ## One-sided exact maximum-type test for a range of 'a' values
+> ## One-sided approximative maximum test for a range of 'a' values
 > it <- independence_test(pain ~ group, data = neuropathy,
 +                         alternative = "less",
 +                         distribution = approximate(B = 10000),
@@ -2557,8 +2557,8 @@ alternative hypothesis: true mu is less than 0
 +                             trafo(data, numeric_trafo = function(y)
 +                                 consal_trafo(y, a = 2:7)))
 > pvalue(it, method = "single-step")
-         a = 2  a = 3  a = 4  a = 5  a = 6  a = 7
-control 0.2334 0.1033 0.0653 0.0528 0.0491 0.0497
+         a = 2  a = 3 a = 4  a = 5  a = 6  a = 7
+control 0.2377 0.0994 0.062 0.0511 0.0483 0.0492
 > 
 > 
 > 
@@ -2617,7 +2617,7 @@ Warning: 'surv_test' is deprecated.  Use 'logrank_test' instead.
 + })
 > par(op) # reset
 > 
-> ## Approximate multivariate (all three responses) test
+> ## Approximative multivariate (all three responses) test
 > it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
 +                         data = photocar,
 +                         distribution = approximate(B = 10000))
@@ -2936,7 +2936,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  15.4 0.28 15.97 NA NA 
+Time elapsed:  15.21 0.19 15.54 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -27,11 +27,11 @@
   }
   \item{data}{
     an optional data frame containing the variables in the model formula.
-    Alternatively, an object of class \code{"\link[Biobase]{ExpressionSet}"} may
-    be specified.  In this case, all variables in \code{formula}, except
-    \code{.}, are first evaluated in the \code{pData} data frame.  The dot
-    (\code{.}) refers to the matrix of expression levels (i.e., the \code{exprs}
-    slot).
+    Alternatively, an object of class \code{"\link[Biobase]{ExpressionSet}"}
+    (see package \pkg{Biobase}) may be specified.  In this case, all variables
+    in \code{formula}, except \code{.}, are first evaluated in the \code{pData}
+    data frame.  The dot (\code{.}) refers to the matrix of expression levels
+    (i.e., the \code{exprs} slot).
   }
   \item{subset}{
     an optional vector specifying a subset of observations to be used.
@@ -154,7 +154,7 @@
   Johnson, W. D., Mercante, D. E. and May, W. L.  (1993).  A computer package
   for the multivariate nonparametric rank test in completely randomized
   experimental designs.  \emph{Computer Methods and Programs in Biomedicine}
-  \bold{40}(3), 217--225-
+  \bold{40}(3), 217--225.
 
   Puri, M. L. and Sen, P. K.  (1966).  On a class of multivariate multisample
   rank order tests.  \emph{Sankhya} A \bold{28}, 353--376.
