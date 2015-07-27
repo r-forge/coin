@@ -456,9 +456,9 @@ based upon which we can now set up a test statistic.
 \hline
 Function & Description \\ \hline
 \code{statistic(object, type)} & Extraction of the linear statistic $\t$ (\code{type = "linear"}),
-		     the standardized statistic $\z$ (\code{type = "standardized"})
-  		     or the final test statistic $c$ (\code{type = "test"}, only for
-		     objects inheriting from \Rclass{IndependenceTestStatistic}). \\
+                     the standardized statistic $\z$ (\code{type = "standardized"})
+                     or the final test statistic $c$ (\code{type = "test"}, only for
+                     objects inheriting from \Rclass{IndependenceTestStatistic}). \\
 \code{expectation(object)} & Extraction of the conditional expectation~$\mu$. \\
 \code{covariance(object)} & Extraction of the complete conditional covariance
   matrix~$\Sigma$. \\

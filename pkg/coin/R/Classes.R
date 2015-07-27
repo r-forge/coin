@@ -42,7 +42,7 @@ setClass("IndependenceProblem",
         x       = "data.frame",
         y       = "data.frame",
         block   = "factor",
-	weights = "numeric"
+        weights = "numeric"
     ),
     validity = function(object) {
         dims <- ((nrow(object@x) == nrow(object@y)) &&

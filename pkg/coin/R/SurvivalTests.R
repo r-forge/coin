@@ -1,7 +1,7 @@
 ### <DEPRECATED>
 surv_test <- function(object, ...) {
     .Deprecated(msg = paste(sQuote("surv_test"), "is deprecated.  Use",
-                            sQuote("logrank_test"), "instead.")) 
+                            sQuote("logrank_test"), "instead."))
     UseMethod("logrank_test")
 }
 ### </DEPRECATED>

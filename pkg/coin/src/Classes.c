@@ -1,6 +1,5 @@
-
 /**
-    S4 classes 
+    S4 classes
     *\file Classes.c
     *\author $Author$
     *\date $Date$
@@ -8,7 +7,7 @@
 
 #include "coin_common.h"
 
-SEXP 
+SEXP
     coin_expectationSym,
     coin_covarianceSym,
     coin_sumweightsSym;
