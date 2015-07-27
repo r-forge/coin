@@ -520,6 +520,9 @@ setColnames <- function (object, nm) {
     object
 }
 
+n_decimal_digits <- function(x)
+    nchar(sub("^[[:digit:]]*[.]", "", format(min(x), scientific = FALSE)))
+
 if(getRversion() < "2.15.0")
     paste0 <- function(...) paste(..., sep = "")
 
