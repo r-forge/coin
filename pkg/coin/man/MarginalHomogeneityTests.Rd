@@ -147,6 +147,27 @@ mh_test(as.table(performance))
 mh_test(as.table(performance), distribution = "exact")
 
 
+## Effectiveness of different media for the growth of diphtheria
+## Cochran (1950, Tab. 2)
+cases <- c(4, 2, 3, 1, 59)
+n <- sum(cases)
+cochran <- data.frame(
+    diphtheria = factor(
+        unlist(rep(list(c(1, 1, 1, 1),
+                        c(1, 1, 0, 1),
+                        c(0, 1, 1, 1),
+                        c(0, 1, 0, 1),
+                        c(0, 0, 0, 0)),
+                   cases))
+    ),
+    media = factor(rep(LETTERS[1:4], n)),
+    case =  factor(rep(seq_len(n), each = 4))
+)
+
+## Asymptotic Cochran Q test (Cochran, 1950, p. 260)
+mh_test(diphtheria ~ media | case, data = cochran) # Q = 8.05
+
+
 ## Opinions on Pre- and Extramarital Sex
 ## Agresti (2002, p. 421)
 opinions <- c("Always wrong", "Almost always wrong",
