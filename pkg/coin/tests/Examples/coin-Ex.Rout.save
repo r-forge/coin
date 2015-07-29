@@ -1913,7 +1913,7 @@ attr(,"contrasts")$x
 4    3
 5    4
 6    4
-> of_trafo(ox, scores = cbind(s1 = 1:3, s2 = c(1, 3:4)))
+> of_trafo(ox, scores = list(s1 = 1:3, s2 = c(1, 3:4)))
   s1 s2
 1  1  1
 2  1  1
@@ -2969,7 +2969,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  15.9 0.23 16.29 NA NA 
+Time elapsed:  14.89 0.37 15.28 NA NA 
 > grDevices::dev.off()
 null device 
           1 

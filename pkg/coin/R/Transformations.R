@@ -413,10 +413,13 @@ of_trafo <- function(x, scores = NULL) {
                   else
                       seq_len(nlevels(x))
     }
-    if (NROW(scores) == nlevels(x)) {
-        structure(as.matrix(scores)[x, , drop = FALSE],
-                  dimnames = list(seq_along(x), colnames(scores)))
-    } else
+    if (!is.list(scores))
+        scores <- list(scores)
+    if (all(lengths(scores) == nlevels(x)))
+        structure(vapply(scores, FUN = function(s) s[x], as.double(x),
+                         USE.NAMES = FALSE),
+                  dimnames = list(seq_along(x), names(scores)))
+    else
         stop(sQuote("scores"), " does not match the number of levels")
 }
 

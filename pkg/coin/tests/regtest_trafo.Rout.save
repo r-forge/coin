@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2015-05-13 r68364) -- "Unsuffered Consequences"
+R Under development (unstable) (2015-07-24 r68738) -- "Unsuffered Consequences"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -374,7 +374,7 @@ In of_trafo(x, scores = 5:8) : 'x' is not an ordered factor
 6    8
 Warning message:
 In of_trafo(x[cc], scores = 5:8) : 'x[cc]' is not an ordered factor
-> of_trafo(x, scores = cbind(s1 = 5:8, s2 = 9:12))
+> of_trafo(x, scores = list(s1 = 5:8, s2 = 9:12))
   s1 s2
 1  5  9
 2  5  9
@@ -386,9 +386,9 @@ In of_trafo(x[cc], scores = 5:8) : 'x[cc]' is not an ordered factor
 8 NA NA
 9  8 12
 Warning message:
-In of_trafo(x, scores = cbind(s1 = 5:8, s2 = 9:12)) :
+In of_trafo(x, scores = list(s1 = 5:8, s2 = 9:12)) :
   'x' is not an ordered factor
-> of_trafo(x[cc], scores = cbind(s1 = 5:8, s2 = 9:12))
+> of_trafo(x[cc], scores = list(s1 = 5:8, s2 = 9:12))
   s1 s2
 1  5  9
 2  5  9
@@ -397,7 +397,7 @@ In of_trafo(x, scores = cbind(s1 = 5:8, s2 = 9:12)) :
 5  7 11
 6  8 12
 Warning message:
-In of_trafo(x[cc], scores = cbind(s1 = 5:8, s2 = 9:12)) :
+In of_trafo(x[cc], scores = list(s1 = 5:8, s2 = 9:12)) :
   'x[cc]' is not an ordered factor
 > 
 > of_trafo(ox)
@@ -438,7 +438,7 @@ In of_trafo(x[cc], scores = cbind(s1 = 5:8, s2 = 9:12)) :
 4    7
 5    7
 6    8
-> of_trafo(ox, scores = cbind(s1 = 5:8, s2 = 9:12))
+> of_trafo(ox, scores = list(s1 = 5:8, s2 = 9:12))
   s1 s2
 1  5  9
 2  5  9
@@ -449,7 +449,7 @@ In of_trafo(x[cc], scores = cbind(s1 = 5:8, s2 = 9:12)) :
 7  7 11
 8 NA NA
 9  8 12
-> of_trafo(ox[cc], scores = cbind(s1 = 5:8, s2 = 9:12))
+> of_trafo(ox[cc], scores = list(s1 = 5:8, s2 = 9:12))
   s1 s2
 1  5  9
 2  5  9
@@ -695,7 +695,7 @@ In of_trafo(x, scores = 5:8) : 'x' is not an ordered factor
 5    7
 Warning message:
 In of_trafo(x[cc], scores = 5:8) : 'x[cc]' is not an ordered factor
-> of_trafo(x, scores = cbind(s1 = 5:8, s2 = 9:12))
+> of_trafo(x, scores = list(s1 = 5:8, s2 = 9:12))
   s1 s2
 1  5  9
 2  5  9
@@ -707,9 +707,9 @@ In of_trafo(x[cc], scores = 5:8) : 'x[cc]' is not an ordered factor
 8 NA NA
 9 NA NA
 Warning message:
-In of_trafo(x, scores = cbind(s1 = 5:8, s2 = 9:12)) :
+In of_trafo(x, scores = list(s1 = 5:8, s2 = 9:12)) :
   'x' is not an ordered factor
-> of_trafo(x[cc], scores = cbind(s1 = 5:8, s2 = 9:12))
+> of_trafo(x[cc], scores = list(s1 = 5:8, s2 = 9:12))
   s1 s2
 1  5  9
 2  5  9
@@ -717,7 +717,7 @@ In of_trafo(x, scores = cbind(s1 = 5:8, s2 = 9:12)) :
 4  7 11
 5  7 11
 Warning message:
-In of_trafo(x[cc], scores = cbind(s1 = 5:8, s2 = 9:12)) :
+In of_trafo(x[cc], scores = list(s1 = 5:8, s2 = 9:12)) :
   'x[cc]' is not an ordered factor
 > 
 > of_trafo(ox)
@@ -756,7 +756,7 @@ In of_trafo(x[cc], scores = cbind(s1 = 5:8, s2 = 9:12)) :
 3    6
 4    7
 5    7
-> of_trafo(ox, scores = cbind(s1 = 5:8, s2 = 9:12))
+> of_trafo(ox, scores = list(s1 = 5:8, s2 = 9:12))
   s1 s2
 1  5  9
 2  5  9
@@ -767,7 +767,7 @@ In of_trafo(x[cc], scores = cbind(s1 = 5:8, s2 = 9:12)) :
 7  7 11
 8 NA NA
 9 NA NA
-> of_trafo(ox[cc], scores = cbind(s1 = 5:8, s2 = 9:12))
+> of_trafo(ox[cc], scores = list(s1 = 5:8, s2 = 9:12))
   s1 s2
 1  5  9
 2  5  9
@@ -996,4 +996,4 @@ IV - III  0  0  -1  1
 > 
 > proc.time()
    user  system elapsed 
-   0.54    0.09    0.63 
+   0.60    0.06    0.71 

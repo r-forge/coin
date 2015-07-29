@@ -114,7 +114,7 @@ mcp_trafo(\dots)
     \code{\link{logrank_test}}.  Defaults to \code{NULL}, implying \code{0}.
   }
   \item{scores}{
-    a numeric vector or matrix, the scores corresponding to each level of an
+    a numeric vector or list, the scores corresponding to each level of an
     ordered factor.  Defaults to \code{NULL}, implying \code{1:nlevels(x)}.
   }
   \item{minprob}{
@@ -223,7 +223,7 @@ f_trafo(x)
 ox <- as.ordered(x)
 of_trafo(ox)
 of_trafo(ox, scores = c(1, 3:4))
-of_trafo(ox, scores = cbind(s1 = 1:3, s2 = c(1, 3:4)))
+of_trafo(ox, scores = list(s1 = 1:3, s2 = c(1, 3:4)))
 
 ## Normal scores
 y <- runif(6)
