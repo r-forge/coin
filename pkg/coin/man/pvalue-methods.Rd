@@ -109,7 +109,8 @@
 
   For \code{midpvalue}, the global mid-\eqn{p}-value is given with an associated
   99 \% mid-\eqn{p} confidence interval when resampling is used to determine the
-  null distribution.
+  null distribution.  The two-sided mid-\eqn{p}-value is computed according to
+  the minimum likelihood method (Hirji \emph{et al.}, 1991).
 
   The \eqn{p}-value interval \eqn{(p_0, p_1]} obtained by \code{pvalue_interval}
   was proposed by Berger (2000, 2001), where the upper endpoint \eqn{p_1} is the
@@ -142,6 +143,10 @@
   Bretz, F., Hothorn, T. and Westfall, P.  (2011).  \emph{Multiple Comparisons
     Using R}.  Boca Raton: CRC Press.
 
+  Hirji, K. F., Tan, S.-J. and Elashoff, R. M.  (1991).  A quasi-exact test for
+  comparing two binomial proportions.  \emph{Statistics in Medicine}
+  \bold{10}(7), 1137--1153.  
+  
   Westfall, P. H. and Troendle, J. F.  (2008).  Multiple testing with minimal
   assumptions.  \emph{Biometrical Journal} \bold{50}(5), 745--755.
 
