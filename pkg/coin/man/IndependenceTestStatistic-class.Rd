@@ -171,15 +171,18 @@
     }
     \item{initialize}{
       \code{signature(.Object = "MaxTypeIndependenceTestStatistic")}: See the
-      documentation for \code{\link[methods:new]{initialize}} for details.
+      documentation for \code{\link[methods:new]{initialize}} (in package
+      \pkg{methods}) for details.
     }
     \item{initialize}{
       \code{signature(.Object = "QuadTypeIndependenceTestStatistic")}: See the
-      documentation for \code{\link[methods:new]{initialize}} for details.
+      documentation for \code{\link[methods:new]{initialize}} (in package
+      \pkg{methods}) for details.
     }
     \item{initialize}{
       \code{signature(.Object = "ScalarIndependenceTestStatistic")}: See the
-      documentation for \code{\link[methods:new]{initialize}} for details.
+      documentation for \code{\link[methods:new]{initialize}} (in package
+      \pkg{methods}) for details.
     }
     \item{statistic}{
       \code{signature(object = "IndependenceTestStatistic")}: See the

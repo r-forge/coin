@@ -34,12 +34,13 @@
     (i.e., the \code{exprs} slot).
   }
   \item{subset}{
-    an optional vector specifying a subset of observations to be used.
+    an optional vector specifying a subset of observations to be used.  Defaults
+    to \code{NULL}.
   }
   \item{weights}{
     an optional formula of the form \code{~ w} defining integer valued case
     weights for each observation.  Defaults to \code{NULL}, implying equal
-    weights for all observations.
+    weight for all observations.
   }
   \item{object}{
     an object inheriting from classes \code{"table"} or
@@ -51,15 +52,15 @@
     or a standardized scalar test statistic (\code{"scalar"}).
   }
   \item{distribution}{
-    a character, the null distribution of the test statistic can be approximated
-    by its asymptotic distribution (\code{"asymptotic"}, default) or via Monte
-    Carlo resampling (\code{"approximate"}).  Alternatively, the functions
-    \code{\link{asymptotic}} or \code{\link{approximate}} can be used.  For
-    univariate two-sample problems, \code{"exact"} or use of the function
+    a character, the conditional null distribution of the test statistic can be
+    approximated by its asymptotic distribution (\code{"asymptotic"}, default)
+    or via Monte Carlo resampling (\code{"approximate"}).  Alternatively, the
+    functions \code{\link{asymptotic}} or \code{\link{approximate}} can be used.
+    For univariate two-sample problems, \code{"exact"} or use of the function
     \code{\link{exact}} computes the exact distribution.  Computation of the
     null distribution can be suppressed by specifying \code{"none"}.  It is also
     possible to specify a function with one argument (an object inheriting from
-    \code{"\linkS4class{IndependenceTestStatistic}"}) which return an object of
+    \code{"\linkS4class{IndependenceTestStatistic}"}) that returns an object of
     class \code{"\linkS4class{NullDistribution}"}.
   }
   \item{alternative}{
@@ -86,7 +87,7 @@
     properties of the data.  Defaults to \code{NULL}.
   }
   \item{\dots}{
-    further arguments to be passed to or from other methods.
+    further arguments to be passed to or from other methods (currently ignored).
   }
 }
 \details{
@@ -127,10 +128,12 @@
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
-  used by default.  Alternatively, the conditional distribution can be
-  approximated using Monte Carlo resampling or computed exactly for univariate
-  two-sample problems.  See \code{\link{asymptotic}}, \code{\link{approximate}}
-  and \code{\link{exact}} for details.
+  used by default (\code{distribution = "asymptotic"}).  Alternatively, the
+  distribution can be approximated via Monte Carlo resampling or computed
+  exactly for univariate two-sample problems by setting \code{distribution} to
+  \code{"approximate"} or \code{"exact"} respectively.  See
+  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
+  for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
@@ -147,7 +150,7 @@
   \bold{60}(3), 257--263.
 
   Hothorn, T., Hornik, K., van de Wiel, M. A. and Zeileis, A.  (2008).
-  Implementing a class of permutation tests: The coin package.  \emph{Journal of
+  Implementing a class of permutation tests: the coin package.  \emph{Journal of
     Statistical Software} \bold{28}(8), 1--23.
   \url{http://www.jstatsoft.org/v28/i08/}
 
@@ -157,7 +160,7 @@
   \bold{40}(3), 217--225.
 
   Puri, M. L. and Sen, P. K.  (1966).  On a class of multivariate multisample
-  rank order tests.  \emph{Sankhya} A \bold{28}, 353--376.
+  rank order tests.  \emph{Sankhya} A \bold{28}(4), 353--376.
 
   Puri, M. L. and Sen, P. K.  (1971).  \emph{Nonparametric Methods in
     Multivariate Analysis}.  New York: John Wiley & Sons.

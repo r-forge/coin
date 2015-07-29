@@ -54,11 +54,13 @@
     }
     \item{initialize}{
       \code{signature(.Object = "CovarianceMatrix")}: See the documentation for
-      \code{\link[methods:new]{initialize}} for details.
+      \code{\link[methods:new]{initialize}} (in package \pkg{methods}) for
+      details.
     }
     \item{initialize}{
       \code{signature(.Object = "Variance")}: See the documentation for
-      \code{\link[methods:new]{initialize}} for details.
+      \code{\link[methods:new]{initialize}} (in package \pkg{methods}) for
+      details.
     }
     \item{variance}{
       \code{signature(object = "CovarianceMatrix")}: See the documentation for

@@ -23,8 +23,7 @@
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
 \S4method{pvalue}{IndependenceTest}(object, \dots)
-\S4method{pvalue}{MaxTypeIndependenceTest}(object,
-       method = c("global", "single-step", "step-down", "unadjusted"),
+\S4method{pvalue}{MaxTypeIndependenceTest}(object, method = c("global", "single-step", "step-down", "unadjusted"),
        distribution = c("joint", "marginal"),
        type = c("Bonferroni", "Sidak"), \dots)
 \S4method{pvalue}{NullDistribution}(object, q, \dots)

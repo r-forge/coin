@@ -27,7 +27,8 @@
     an optional data frame containing the variables in the model formula.
   }
   \item{subset}{
-    an optional vector specifying a subset of observations to be used.
+    an optional vector specifying a subset of observations to be used.  Defaults
+    to \code{NULL}.
   }
   \item{object}{
     an object inheriting from classes \code{"table"} (with identical
@@ -73,10 +74,12 @@
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
-  used by default.  Alternatively, the conditional distribution can be
-  approximated using Monte Carlo resampling or computed exactly for univariate
-  two-sample problems.  See \code{\link{asymptotic}}, \code{\link{approximate}}
-  and \code{\link{exact}} for details.
+  used by default (\code{distribution = "asymptotic"}).  Alternatively, the
+  distribution can be approximated via Monte Carlo resampling or computed
+  exactly for univariate two-sample problems by setting \code{distribution} to
+  \code{"approximate"} or \code{"exact"} respectively.  See
+  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
+  for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.

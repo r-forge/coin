@@ -36,12 +36,12 @@
   }
 }
 \details{
-  Coarse woody debris (CWD, dead wood greater than 10 cm diameter) is a large
-  stock of carbon in tropical forests, yet the flux of carbon out of this pool,
-  via respiration, is poorly resolved (Chambers, Schimel and Nobre, 2001).  The
-  heterotrophic process involved in CWD respiration should respond to reductions
-  in moisture availability, which occurs during dry season (Chambers, Schimel
-  and Nobre, 2001).
+  Coarse woody debris (CWD, dead wood greater than 10 cm in diameter) is
+  a large stock of carbon in tropical forests, yet the flux of carbon
+  out of this pool, via respiration, is poorly resolved (Chambers,
+  Schimel and Nobre, 2001).  The heterotrophic process involved in CWD
+  respiration should respond to reductions in moisture availability,
+  which occurs during dry season (Chambers, Schimel and Nobre, 2001).
 
   CWD respiration measurements were taken in a tropical forest in west French
   Guiana, which experiences extreme contrasts in wet and dry season (Bonal

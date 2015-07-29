@@ -64,12 +64,13 @@
     an optional data frame containing the variables in the model formula.
   }
   \item{subset}{
-    an optional vector specifying a subset of observations to be used.
+    an optional vector specifying a subset of observations to be used.  Defaults
+    to \code{NULL}.
   }
   \item{weights}{
     an optional formula of the form \code{~ w} defining integer valued case
     weights for each observation.  Defaults to \code{NULL}, implying equal
-    weights for all observations.
+    weight for all observations.
   }
   \item{object}{
     an object inheriting from class \code{"\linkS4class{IndependenceProblem}"}.
@@ -101,11 +102,11 @@
 
   The null hypothesis of equality, or conditional equality given \code{block},
   of the distribution of \code{y} in the groups defined by \code{x} is tested
-  against scale alternatives.  In the two-sample case, the two-sided hypothesis
-  is \eqn{H_0\!: V(Y_1) / V(Y_2) = 1}{H_0: V(Y_1) / V(Y_2) = 1}, where
-  \eqn{V(Y_s)} is the variance of the responses in the \eqn{s}th sample.  In case
-  \code{alternative = "less"}, the null hypothesis is \eqn{H_0\!: V(Y_1) /
-    V(Y_2) \ge 1}{H_0: V(Y_1) / V(Y_2) >= 1}.  When
+  against scale alternatives.  In the two-sample case, the two-sided null
+  hypothesis is \eqn{H_0\!: V(Y_1) / V(Y_2) = 1}{H_0: V(Y_1) / V(Y_2) = 1},
+  where \eqn{V(Y_s)} is the variance of the responses in the \eqn{s}th sample.
+  In case \code{alternative = "less"}, the null hypothesis is \eqn{H_0\!: V(Y_1)
+    / V(Y_2) \ge 1}{H_0: V(Y_1) / V(Y_2) >= 1}.  When
   \code{alternative = "greater"}, the null hypothesis is \eqn{H_0\!: V(Y_1) /
     V(Y_2) \le 1}{H_0: V(Y_1) / V(Y_2) <= 1}.  Confidence intervals for the
   ratio of scales are available and computed according to Bauer (1972).
@@ -117,10 +118,12 @@
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
-  used by default.  Alternatively, the conditional distribution can be
-  approximated using Monte Carlo resampling or computed exactly for univariate
-  two-sample problems.  See \code{\link{asymptotic}}, \code{\link{approximate}}
-  and \code{\link{exact}} for details.
+  used by default (\code{distribution = "asymptotic"}).  Alternatively, the
+  distribution can be approximated via Monte Carlo resampling or computed
+  exactly for univariate two-sample problems by setting \code{distribution} to
+  \code{"approximate"} or \code{"exact"} respectively.  See
+  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
+  for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.

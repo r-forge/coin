@@ -45,7 +45,8 @@
     an optional data frame containing the variables in the model formula.
   }
   \item{subset}{
-    an optional vector specifying a subset of observations to be used.
+    an optional vector specifying a subset of observations to be used.  Defaults
+    to \code{NULL}.
   }
   \item{object}{
     an object inheriting from class \code{"\linkS4class{SymmetryProblem}"}.
@@ -90,10 +91,12 @@
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
-  used by default.  Alternatively, the conditional distribution can be
-  approximated using Monte Carlo resampling or computed exactly for univariate
-  two-sample problems.  See \code{\link{asymptotic}}, \code{\link{approximate}}
-  and \code{\link{exact}} for details.
+  used by default (\code{distribution = "asymptotic"}).  Alternatively, the
+  distribution can be approximated via Monte Carlo resampling or computed
+  exactly for univariate two-sample problems by setting \code{distribution} to
+  \code{"approximate"} or \code{"exact"} respectively.  See
+  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
+  for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
@@ -135,11 +138,13 @@ y2 <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
 midpvalue(st) # mid-p-value
 
 ## One-sided exact Wilcoxon signed-rank test
-wilcox.test(y1, y2, paired = TRUE, alternative = "greater")
 (wt <- wilcoxsign_test(y1 ~ y2, distribution = "exact",
                        alternative = "greater"))
-statistic(wt, type = "linear") # same as wilcox.test
+statistic(wt, type = "linear")
 midpvalue(wt) # mid-p-value
+
+## Comparison with R's wilcox.test() function
+wilcox.test(y1, y2, paired = TRUE, alternative = "greater")
 
 
 ## Data with explicit group and block information

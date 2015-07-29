@@ -143,15 +143,17 @@
     }
     \item{show}{
       \code{signature(object = "QuadTypeIndependenceTest")}: See the
-      documentation for \code{\link[methods]{show}} for details.
+      documentation for \code{\link[methods]{show}} (in package \pkg{methods})
+      for details.
     }
     \item{show}{
       \code{signature(object = "ScalarIndependenceTest")}: See the documentation
-      for \code{\link[methods]{show}} for details.
+      for \code{\link[methods]{show}} (in package \pkg{methods}) for details.
     }
     \item{show}{
       \code{signature(object = "ScalarIndependenceTestConfint")}: See the
-      documentation for \code{\link[methods]{show}} for details.
+      documentation for \code{\link[methods]{show}} (in package \pkg{methods})
+      for details.
     }
     \item{statistic}{
       \code{signature(object = "IndependenceTest")}: See the documentation for

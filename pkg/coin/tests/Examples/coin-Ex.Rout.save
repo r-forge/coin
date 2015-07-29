@@ -704,14 +704,16 @@ alternative hypothesis: true mu is not equal to 0
 > par(op) # reset
 > 
 > 
-> ## Exact Brown-Mood median test with different mid-scores
+> ## Example data
 > ex <- data.frame(
 +     y = c(3, 4, 8, 9, 1, 2, 5, 6, 7),
 +     x = factor(rep(c("no", "yes"), c(4, 5)))
 + )
 > 
+> ## Boxplots
 > boxplot(y ~ x, data = ex)
 > 
+> ## Exact Brown-Mood median test with different mid-scores
 > (mt1 <- median_test(y ~ x, data = ex, distribution = "exact"))
 
 	Exact Two-Sample Brown-Mood Median Test
@@ -1368,7 +1370,7 @@ alternative hypothesis: true theta is not equal to 1
 
 > 
 > 
-> ## Lung cancer data
+> ## Lung cancer data (StatXact 9 manual, p. 213, Tab. 7.19)
 > lungcancer <- data.frame(
 +     time = c(257, 476, 355, 1779, 355,
 +              191, 563, 242, 285, 16, 16, 16, 257, 16),
@@ -1507,7 +1509,8 @@ alternative hypothesis: greater
 +            -0.349, 1.471, 4.121,
 +             0.845, 1.480, 3.391),
 +     x = factor(rep(1:3, 10)),
-+     b = factor(rep(1:10, each = 3)))
++     b = factor(rep(1:10, each = 3))
++ )
 > 
 > ### Asymptotic multivariate Friedman test
 > ### Gerig (1969, p. 1599)
@@ -1579,14 +1582,6 @@ alternative hypothesis: true mu is greater than 0
 [1] 0.0546875
 > 
 > ## One-sided exact Wilcoxon signed-rank test
-> wilcox.test(y1, y2, paired = TRUE, alternative = "greater")
-
-	Wilcoxon signed rank test
-
-data:  y1 and y2
-V = 40, p-value = 0.01953
-alternative hypothesis: true location shift is greater than 0
-
 > (wt <- wilcoxsign_test(y1 ~ y2, distribution = "exact",
 +                        alternative = "greater"))
 
@@ -1597,11 +1592,21 @@ data:  y by x (pos, neg)
 Z = 2.0732, p-value = 0.01953
 alternative hypothesis: true mu is greater than 0
 
-> statistic(wt, type = "linear") # same as wilcox.test
+> statistic(wt, type = "linear")
       
 pos 40
 > midpvalue(wt) # mid-p-value
 [1] 0.01660156
+> 
+> ## Comparison with R's wilcox.test() function
+> wilcox.test(y1, y2, paired = TRUE, alternative = "greater")
+
+	Wilcoxon signed rank test
+
+data:  y1 and y2
+V = 40, p-value = 0.01953
+alternative hypothesis: true location shift is greater than 0
+
 > 
 > 
 > ## Data with explicit group and block information
@@ -2126,10 +2131,10 @@ attr(,"conf.level")
 > ##D ## Download source package into a temporary directory
 > ##D tmpdir <- tempdir()
 > ##D tgz <- download.packages("coin", destdir = tmpdir, type = "source")[2]
-> ##D ## Extract
+> ##D ## Extract contents
 > ##D untar(tgz, exdir = tmpdir)
-> ##D wd <- setwd(file.path(tmpdir, "coin"))
 > ##D ## Run doxygen (assuming it is installed)
+> ##D wd <- setwd(file.path(tmpdir, "coin"))
 > ##D system("doxygen inst/doxygen.cfg")
 > ##D setwd(wd)
 > ##D ## Have fun!
@@ -2239,7 +2244,7 @@ attr(,"conf.level")
 > ## Grade III glioma
 > g3 <- subset(glioma, histology == "Grade3")
 > 
-> ## Plot Kaplan-Meier curves
+> ## Plot Kaplan-Meier estimates
 > op <- par(no.readonly = TRUE) # save current settings
 > layout(matrix(1:2, ncol = 2))
 > plot(survfit(Surv(time, event) ~ group, data = g3),
@@ -2263,7 +2268,7 @@ alternative hypothesis: true theta is not equal to 1
 > ## Grade IV glioma
 > gbm <- subset(glioma, histology == "GBM")
 > 
-> ## Plot Kaplan-Meier curves
+> ## Plot Kaplan-Meier estimates
 > plot(survfit(Surv(time, event) ~ group, data = gbm),
 +      main = "Grade IV Glioma", lty = 2:1,
 +      ylab = "Probability", xlab = "Survival Time in Month",
@@ -2306,8 +2311,7 @@ alternative hypothesis: true theta is not equal to 1
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: hohnloser
-> ### Title: Left Ventricular Ejection Fraction in Patients with Malignant
-> ###   Ventricular Tachyarrhythmias
+> ### Title: Left Ventricular Ejection Fraction
 > ### Aliases: hohnloser
 > ### Keywords: datasets
 > 
@@ -2448,9 +2452,9 @@ control
 > 
 > ## Variance
 > ## Note: typo in Rosenbaum (1994, p. 371, Sec. 2, last paragraph)
-> covariance(poset)
-         control
-control 3097.954
+> variance(poset)
+ control 
+3097.954 
 > 
 > ## Standardized statistic
 > statistic(poset)
@@ -2604,6 +2608,7 @@ Warning: 'surv_test' is deprecated.  Use 'logrank_test' instead.
 > 
 > ### ** Examples
 > 
+> ## Plotting data
 > op <- par(no.readonly = TRUE) # save current settings
 > layout(matrix(1:3, ncol = 3))
 > with(photocar, {
@@ -2936,7 +2941,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  15.32 0.25 15.7 NA NA 
+Time elapsed:  16.13 0.2 16.47 NA NA 
 > grDevices::dev.off()
 null device 
           1 

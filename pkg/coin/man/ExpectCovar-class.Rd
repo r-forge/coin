@@ -33,7 +33,8 @@
   \describe{
     \item{initialize}{
       \code{signature(.Object = "ExpectCovar")}: See the documentation for
-      \code{\link[methods:new]{initialize}} for details.
+      \code{\link[methods:new]{initialize}} (in package \pkg{methods}) for
+      details.
     }
   }
 }

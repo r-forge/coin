@@ -58,6 +58,7 @@
   \bold{60}(3), 257--263.
 }
 \examples{
+## Plotting data
 op <- par(no.readonly = TRUE) # save current settings
 layout(matrix(1:3, ncol = 3))
 with(photocar, {

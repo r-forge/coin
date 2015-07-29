@@ -46,21 +46,22 @@
     an optional data frame containing the variables in the model formula.
   }
   \item{subset}{
-    an optional vector specifying a subset of observations to be used.
+    an optional vector specifying a subset of observations to be used.  Defaults
+    to \code{NULL}.
   }
   \item{weights}{
     an optional formula of the form \code{~ w} defining integer valued case
     weights for each observation.  Defaults to \code{NULL}, implying equal
-    weights for all observations.
+    weight for all observations.
   }
   \item{object}{
     an object inheriting from class \code{"\linkS4class{IndependenceProblem}"}.
   }
   \item{distribution}{
-    a character, the null distribution of the test statistic can be approximated
-    by its asymptotic distribution (\code{"asymptotic"}, default) or via Monte
-    Carlo resampling (\code{"approximate"}).  Alternatively, the functions
-    \code{\link{asymptotic}} or \code{\link{approximate}} can be used.
+    a character, the conditional null distribution of the test statistic can be
+    approximated by its asymptotic distribution (\code{"asymptotic"}, default)
+    or via Monte Carlo resampling (\code{"approximate"}).  Alternatively, the
+    functions \code{\link{asymptotic}} or \code{\link{approximate}} can be used.
     Computation of the null distribution can be suppressed by specifying
     \code{"none"}.
   }
@@ -93,8 +94,9 @@
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
-  used by default.  Alternatively, the conditional distribution can be
-  approximated using Monte Carlo resampling.  See \code{\link{asymptotic}} and
+  used by default (\code{distribution = "asymptotic"}).  Alternatively, the
+  distribution can be approximated via Monte Carlo resampling by setting
+  \code{distribution} to \code{"approximate"}.  See \code{\link{asymptotic}} and
   \code{\link{approximate}} for details.
 }
 \value{

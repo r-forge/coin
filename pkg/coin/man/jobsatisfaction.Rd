@@ -7,7 +7,7 @@
 }
 \usage{jobsatisfaction}
 \format{
-  A three-dimensional contingency table.
+  A contingency table with 104 observations on 3 variables.
   \describe{
     \item{\code{Income}}{
       a factor with levels \code{"<5000"}, \code{"5000-15000"},

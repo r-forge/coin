@@ -81,7 +81,8 @@
     }
     \item{initialize}{
       \code{signature(.Object = "IndependenceLinearStatistic")}: See the
-      documentation for \code{\link[methods:new]{initialize}} for details.
+      documentation for \code{\link[methods:new]{initialize}} (in package
+      \pkg{methods}) for details.
     }
     \item{statistic}{
       \code{signature(object = "IndependenceLinearStatistic")}: See the

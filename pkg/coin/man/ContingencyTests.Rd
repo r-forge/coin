@@ -41,22 +41,23 @@
     an optional data frame containing the variables in the model formula.
   }
   \item{subset}{
-    an optional vector specifying a subset of observations to be used.
+    an optional vector specifying a subset of observations to be used.  Defaults
+    to \code{NULL}.
   }
   \item{weights}{
     an optional formula of the form \code{~ w} defining integer valued case
     weights for each observation.  Defaults to \code{NULL}, implying equal
-    weights for all observations.
+    weight for all observations.
   }
   \item{object}{
     an object inheriting from classes \code{"table"} or
     \code{"\linkS4class{IndependenceProblem}"}.
   }
   \item{distribution}{
-    a character, the null distribution of the test statistic can be approximated
-    by its asymptotic distribution (\code{"asymptotic"}, default) or via Monte
-    Carlo resampling (\code{"approximate"}).  Alternatively, the functions
-    \code{\link{asymptotic}} or \code{\link{approximate}} can be used.
+    a character, the conditional null distribution of the test statistic can be
+    approximated by its asymptotic distribution (\code{"asymptotic"}, default)
+    or via Monte Carlo resampling (\code{"approximate"}).  Alternatively, the
+    functions \code{\link{asymptotic}} or \code{\link{approximate}} can be used.
     Computation of the null distribution can be suppressed by specifying
     \code{"none"}.
   }
@@ -90,10 +91,12 @@
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
-  used by default.  Alternatively, the conditional distribution can be
-  approximated using Monte Carlo resampling or computed exactly for univariate
-  two-sample problems.  See \code{\link{asymptotic}}, \code{\link{approximate}}
-  and \code{\link{exact}} for details.
+  used by default (\code{distribution = "asymptotic"}).  Alternatively, the
+  distribution can be approximated via Monte Carlo resampling or computed
+  exactly for univariate two-sample problems by setting \code{distribution} to
+  \code{"approximate"} or \code{"exact"} respectively.  See
+  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
+  for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
@@ -108,10 +111,10 @@
   Hoboken, New Jersey: John Wiley & Sons.
 
   Armitage, P.  (1955).  Tests for linear trends in proportions and frequencies.
-  Biometrics \bold{11}(3), 375--386.
+  \emph{Biometrics} \bold{11}(3), 375--386.
 
-  Cochran, W.G.  (1954). Some methods for strengthening the common chi-squared
-  tests.  Biometrics \bold{10}(4), 417--451.
+  Cochran, W.G.  (1954). Some methods for strengthening the common \eqn{\chi^2}
+  tests.  \emph{Biometrics} \bold{10}(4), 417--451.
 
   Davis, L. J.  (1986).  Exact tests for \eqn{2 \times 2}{2 x 2} contingency
   tables.  \emph{The American Statistician} \bold{40}(2), 139--141.
@@ -123,10 +126,10 @@
 
   Mantel, N.  (1963).  Chi-square tests with one degree of freedom: extensions
   of the Mantel-Haenszel procedure.  \emph{Journal of the American Statistical
-  Association} \bold{58}(303), 690--700.
+    Association} \bold{58}(303), 690--700.
 
   Yates, F.  (1948).  The analysis of contingency tables with groupings based on
-  quantitative characters.  Biometrika \bold{35}(1/2), 176--181.
+  quantitative characters.  \emph{Biometrika} \bold{35}(1/2), 176--181.
 }
 \examples{
 ## Example data

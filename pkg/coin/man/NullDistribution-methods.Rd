@@ -37,8 +37,8 @@
     reference distribution can be computed.
   }
   \item{B}{
-    a positive integer, the number of Monte Carlo replicates used for
-    the computation of the approximative reference distribution.  Defaults to
+    a positive integer, the number of Monte Carlo replicates used for the
+    computation of the approximative reference distribution.  Defaults to
     \code{10000}.
   }
   \item{algorithm}{

@@ -62,12 +62,13 @@
     an optional data frame containing the variables in the model formula.
   }
   \item{subset}{
-    an optional vector specifying a subset of observations to be used.
+    an optional vector specifying a subset of observations to be used.  Defaults
+    to \code{NULL}.
   }
   \item{weights}{
     an optional formula of the form \code{~ w} defining integer valued case
     weights for each observation.  Defaults to \code{NULL}, implying equal
-    weights for all observations.
+    weight for all observations.
   }
   \item{object}{
     an object inheriting from class \code{"\linkS4class{IndependenceProblem}"}.
@@ -104,9 +105,9 @@
 
   The null hypothesis of equality, or conditional equality given \code{block},
   of the distribution of \code{y} in the groups defined by \code{x} is tested
-  against shift alternatives.  In the two-sample case, the two-sided hypothesis
-  is \eqn{H_0\!: \mu = 0}{H_0: mu = 0}, where \eqn{\mu = Y_1 - Y_2} and
-  \eqn{Y_s} is the median of the responses in the \eqn{s}th sample.  In case
+  against shift alternatives.  In the two-sample case, the two-sided null
+  hypothesis is \eqn{H_0\!: \mu = 0}{H_0: mu = 0}, where \eqn{\mu = Y_1 - Y_2}
+  and \eqn{Y_s} is the median of the responses in the \eqn{s}th sample.  In case
   \code{alternative = "less"}, the null hypothesis is \eqn{H_0\!: \mu \ge
     0}{H_0: theta >= 0}.  When \code{alternative = "greater"}, the null
   hypothesis is \eqn{H_0\!: \mu \le 0}{H_0: theta <= 0}.  Confidence intervals
@@ -135,10 +136,12 @@
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
-  used by default.  Alternatively, the conditional distribution can be
-  approximated using Monte Carlo resampling or computed exactly for univariate
-  two-sample problems.  See \code{\link{asymptotic}}, \code{\link{approximate}}
-  and \code{\link{exact}} for details.
+  used by default (\code{distribution = "asymptotic"}).  Alternatively, the
+  distribution can be approximated via Monte Carlo resampling or computed
+  exactly for univariate two-sample problems by setting \code{distribution} to
+  \code{"approximate"} or \code{"exact"} respectively.  See
+  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
+  for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
@@ -206,14 +209,16 @@ plot(s, p, type = "S", xlab = "Test Statistic", ylab = "Cum. Probability")
 par(op) # reset
 
 
-## Exact Brown-Mood median test with different mid-scores
+## Example data
 ex <- data.frame(
     y = c(3, 4, 8, 9, 1, 2, 5, 6, 7),
     x = factor(rep(c("no", "yes"), c(4, 5)))
 )
 
+## Boxplots
 boxplot(y ~ x, data = ex)
 
+## Exact Brown-Mood median test with different mid-scores
 (mt1 <- median_test(y ~ x, data = ex, distribution = "exact"))
 (mt2 <- median_test(y ~ x, data = ex, distribution = "exact",
                     mid.score = "0.5"))

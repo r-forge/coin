@@ -21,8 +21,8 @@
   The rats were randomly assigned to receive a fixed oral dose of a centrally
   acting muscle relaxant (\code{"treatment"}) or a saline solvent
   (\code{"control"}).  The animals were placed on a rotating cylinder and the
-  endurance time of each rat, i.e., the length of time of each rat remained on
-  the cylinder, was measured up to a maximum of 300 seconds.
+  endurance time of each rat, i.e., the length of time each rat remained on the
+  cylinder, was measured up to a maximum of 300 seconds.
 
   This dataset is the basis of a comparison of 11 different software
   implementations of the Wilcoxon-Mann-Whitney test presented in Bergmann,

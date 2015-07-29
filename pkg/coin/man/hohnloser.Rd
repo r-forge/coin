@@ -1,8 +1,7 @@
 \name{hohnloser}
 \docType{data}
 \alias{hohnloser}
-\title{Left Ventricular Ejection Fraction in Patients with Malignant Ventricular
-  Tachyarrhythmias}
+\title{Left Ventricular Ejection Fraction}
 \description{
   Left ventricular ejection fraction in patients with malignant ventricular
   tachyarrhythmias including recurrence-free month and censoring.

@@ -49,7 +49,8 @@
   \describe{
     \item{initialize}{
       \code{signature(.Object = "IndependenceProblem")}: See the documentation
-      for \code{\link[methods:new]{initialize}} for details.
+      for \code{\link[methods:new]{initialize}} (in package \pkg{methods}) for
+      details.
     }
   }
 }

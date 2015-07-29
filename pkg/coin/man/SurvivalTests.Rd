@@ -38,12 +38,13 @@
     an optional data frame containing the variables in the model formula.
   }
   \item{subset}{
-    an optional vector specifying a subset of observations to be used.
+    an optional vector specifying a subset of observations to be used.  Defaults
+    to \code{NULL}.
   }
   \item{weights}{
     an optional formula of the form \code{~ w} defining integer valued case
     weights for each observation.  Defaults to \code{NULL}, implying equal
-    weights for all observations.
+    weight for all observations.
   }
   \item{object}{
     an object inheriting from class \code{"\linkS4class{IndependenceProblem}"}.
@@ -88,7 +89,7 @@
 
   The null hypothesis of equality, or conditional equality given \code{block},
   of the survival distribution of \code{y} in the groups defined by \code{x} is
-  tested.  In the two-sample case, the two-sided hypothesis is \eqn{H_0\!:
+  tested.  In the two-sample case, the two-sided null hypothesis is \eqn{H_0\!:
     \theta = 1}{H_0: theta = 1}, where \eqn{\theta = \lambda_2 / \lambda_1}
   and \eqn{\lambda_s} is the hazard rate in the \eqn{s}th sample.  In case
   \code{alternative = "less"}, the null hypothesis is \eqn{H_0\!: \theta \ge
@@ -103,8 +104,8 @@
   nominal factors to class \code{"ordered"}.  In this case, a linear-by-linear
   association test for ordered alternatives is computed and the alternative
   hypothesis can be specified using the \code{alternative} argument.  This type
-  of extension of the standard (unweighted) logrank test was given by Tarone
-  (1975) and later generalized to general weights by Tarone and Ware (1977).
+  of extension of the standard logrank test was given by Tarone (1975) and later
+  generalized to general weights by Tarone and Ware (1977).
 
   Let \eqn{(t_i, \delta_i)}, \eqn{i = 1, 2, \ldots, n}, represent a censored
   random sample of size \eqn{n}, where \eqn{t_i} is the observed survival time
@@ -125,15 +126,15 @@
   contrasted by Callaert (2003), whereas the second method is defined in Hothorn
   and Lausen (2003).  The mid-ranks method leads to
   \deqn{
-    r_k^\mathrm{MR} = \sum_{i = 1}^n I\!\left(t_i < t_{(k)}\right)
+    r_k = \sum_{i = 1}^n I\!\left(t_i < t_{(k)}\right)
   }{
-    rMR_k = sum(i = 1, \dots, n) I(t_i < t_(k))
+    r_k = sum(i = 1, \dots, n) I(t_i < t_(k))
   }
-  and the Hothorn-Lausen method uses
+  whereas the Hothorn-Lausen method uses
   \deqn{
-    r_k^\mathrm{HL} = \sum_{i = 1}^n I\!\left(t_i \le t_{(k)}\right) - 1.
+    r_k = \sum_{i = 1}^n I\!\left(t_i \le t_{(k)}\right) - 1.
   }{
-    rHL_k = sum(i = 1, \dots, n) I(t_i <= t_(k)) - 1.
+    r_k = sum(i = 1, \dots, n) I(t_i <= t_(k)) - 1.
   }
   The scores assigned to censored and uncensored observations at the \eqn{k}th
   event time are given by
@@ -170,18 +171,18 @@
 
   The \code{type} argument allows for a choice between some of the most
   well-known members of the family of weighted logrank tests, each corresponding
-  to a particular weight function.  The standard (unweighted) logrank test
-  (\code{"logrank"}, default) was suggested by Mantel (1966), Peto and Peto
-  (1972) and Cox (1972) and has \eqn{w_k = 1}.  The Gehan-Breslow test
-  (\code{"Gehan-Breslow"}) proposed by Gehan (1965) and later extended to
-  \eqn{K} samples by Breslow (1970) is a generalization of the Wilcoxon rank-sum
-  test, where \eqn{w_k = n_k}.  The Tarone-Ware class of tests
-  (\code{"Tarone-Ware"}) discussed by Tarone and Ware (1977) has \eqn{w_k =
-  n_k^\rho}, where \eqn{\rho} is a constant; \eqn{\rho = 0.5} (default) was
-  suggested by Tarone and Ware (1977), but note that \eqn{\rho = 0} and
-  \eqn{\rho = 1} lead to the the standard logrank test and Gehan-Breslow test
-  respectively.  The Prentice test (\code{"Prentice"}) is another generalization
-  of the Wilcoxon rank-sum test suggested by Prentice (1978), where
+  to a particular weight function.  The standard logrank test (\code{"logrank"},
+  default) was suggested by Mantel (1966), Peto and Peto (1972) and Cox (1972)
+  and has \eqn{w_k = 1}.  The Gehan-Breslow test (\code{"Gehan-Breslow"})
+  proposed by Gehan (1965) and later extended to \eqn{K} samples by Breslow
+  (1970) is a generalization of the Wilcoxon rank-sum test, where \eqn{w_k =
+    n_k}.  The Tarone-Ware class of tests (\code{"Tarone-Ware"}) discussed by
+  Tarone and Ware (1977) has \eqn{w_k = n_k^\rho}, where \eqn{\rho} is a
+  constant; \eqn{\rho = 0.5} (default) was  suggested by Tarone and Ware (1977),
+  but note that \eqn{\rho = 0} and \eqn{\rho = 1} lead to the the standard
+  logrank test and Gehan-Breslow test respectively.  The Prentice test
+  (\code{"Prentice"}) is another generalization of the Wilcoxon rank-sum test
+  suggested by Prentice (1978), where
   \deqn{
     w_k = \prod_{j = 1}^k \frac{n_j}{n_j + d_j}.
   }{
@@ -235,10 +236,12 @@
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
-  used by default.  Alternatively, the conditional distribution can be
-  approximated using Monte Carlo resampling or computed exactly for univariate
-  two-sample problems.  See \code{\link{asymptotic}}, \code{\link{approximate}}
-  and \code{\link{exact}} for details.
+  used by default (\code{distribution = "asymptotic"}).  Alternatively, the
+  distribution can be approximated via Monte Carlo resampling or computed
+  exactly for univariate two-sample problems by setting \code{distribution} to
+  \code{"approximate"} or \code{"exact"} respectively.  See
+  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
+  for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
@@ -246,8 +249,8 @@
 \note{
   The test statistic differs from the one used by
   \code{\link[survival]{survdiff}} (in package \pkg{survival}), since the
-  conditional variance is not identical to the variance estimate used by the
-  classical logrank test.
+  conditional variance used by \code{logrank_test} is not identical to the
+  variance estimate used by the classical logrank test.
 
   Combining \code{\link{independence_test}} or \code{\link{symmetry_test}} with
   \code{\link{logrank_trafo}} offers more flexibility than \code{logrank_test}
@@ -350,7 +353,7 @@ logrank_test(Surv(time) ~ group, data = callaert, distribution = "exact",
              ties.method = "average-scores")
 
 
-## Lung cancer data
+## Lung cancer data (StatXact 9 manual, p. 213, Tab. 7.19)
 lungcancer <- data.frame(
     time = c(257, 476, 355, 1779, 355,
              191, 563, 242, 285, 16, 16, 16, 257, 16),

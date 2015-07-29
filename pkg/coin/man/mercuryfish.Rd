@@ -31,11 +31,11 @@
   more than three years (\code{"exposed"}) are under study.
 
   Rosenbaum (1994) proposed a coherence criterion defining a partial ordering,
-  i.e., an observation is smaller than another when all response variables are
-  smaller, and a score reflecting the \dQuote{ranking} is attached to each
-  observation.  The corresponding partially ordered set (POSET) test can be used
-  to test if the distribution of the scores differ between the groups.
-  Alternatively, a multivariate test can be applied.
+  i.e., an observation is smaller than another when all responses are smaller,
+  and a score reflecting the \dQuote{ranking} is attached to each observation.
+  The corresponding partially ordered set (POSET) test can be used to test if
+  the distribution of the scores differ between the groups.  Alternatively, a
+  multivariate test can be applied.
 }
 \source{
   Skerfving, S., Hansson, K., Mangs, C., Lindsten, J. and Ryman, N.  (1974).
@@ -71,7 +71,7 @@ expectation(poset)
 
 ## Variance
 ## Note: typo in Rosenbaum (1994, p. 371, Sec. 2, last paragraph)
-covariance(poset)
+variance(poset)
 
 ## Standardized statistic
 statistic(poset)

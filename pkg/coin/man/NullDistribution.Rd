@@ -32,12 +32,13 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
     Defaults to \code{0}.
   }
   \item{B}{
-    an integer, the number of Monte Carlo replicates used for the computation of
-    the approximative reference distribution.  Defaults to \code{10000}.
+    a positive integer, the number of Monte Carlo replicates used for the
+    computation of the approximative reference distribution.  Defaults to
+    \code{10000}.
   }
   \item{parallel}{
-    a character, specifying the type of parallel operation: either \code{"no"}
-    (default), \code{"multicore"} or \code{"snow"}.
+    a character, the type of parallel operation: either \code{"no"} (default),
+    \code{"multicore"} or \code{"snow"}.
   }
   \item{ncpus}{
     an integer, the number of processes to be used in parallel operation.
@@ -49,9 +50,9 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
     to \code{NULL}.
   }
   \item{algorithm}{
-    a character, specifying the algorithm to be used for the computation of the
-    exact reference distribution: either \code{"auto"} (default), \code{"shift"}
-    or \code{"split-up"}.
+    a character, the algorithm used for the computation of the exact reference
+    distribution: either \code{"auto"} (default), \code{"shift"} or
+    \code{"split-up"}.
   }
   \item{fact}{
     an integer to multiply the response values with.  Defaults to \code{NULL}.
@@ -59,13 +60,14 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
 }
 \details{
   \code{asymptotic}, \code{approximate} and \code{exact} provide control of the
-  specification of the asymptotic, approximative and exact reference
-  distributions and are supplied to, e.g., \code{\link{independence_test}} via
-  its \code{distribution} argument.
+  specification of the asymptotic, approximative (Monte Carlo) and exact
+  reference distributions, and are supplied to, e.g.,
+  \code{\link{independence_test}} via its \code{distribution} argument.
 
   The asymptotic reference distribution is computed using randomised quasi-Monte
   Carlo methods (Genz and Bretz, 2009) and is applicable to arbitrary covariance
-  structures and dimensions up to 1000.  See package \pkg{mvtnorm} for details.
+  structures and dimensions up to 1000.  See package \pkg{mvtnorm} for details
+  on \code{maxpts}, \code{abseps} and \code{releps}.
 
   The approximative (Monte Carlo) reference distribution is always applicable.
   In this case, the distribution is obtained by a conditional Monte Carlo
@@ -106,19 +108,19 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
     t Probabilities}.  Heidelberg: Springer-Verlag.
 
   Hothorn, T., Hornik, K., van de Wiel, M. A. and Zeileis, A.  (2008).
-  Implementing a class of permutation tests: The coin package.  \emph{Journal of
+  Implementing a class of permutation tests: the coin package.  \emph{Journal of
     Statistical Software} \bold{28}(8), 1--23.
   \url{http://www.jstatsoft.org/v28/i08/}
 
   Streitberg, B. and \enc{Röhmel}{Roehmel}, J.  (1986).  Exact distributions
-  for permutations and rank tests: An introduction to some recently published
+  for permutations and rank tests: an introduction to some recently published
   algorithms.  \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
 
   Streitberg, B. and \enc{Röhmel}{Roehmel}, J.  (1987).  Exakte verteilungen
   \enc{für}{fuer} rang- und randomisierungstests im allgemeinen
   c-stichprobenfall.  \emph{EDV in Medizin und Biologie} \bold{18}(1), 12--19.
 
-  van de Wiel, M. A.  (2001).  The split-up algorithm: A fast symbolic method
+  van de Wiel, M. A.  (2001).  The split-up algorithm: a fast symbolic method
   for computing p-values of distribution-free statistics.  \emph{Computational
     Statistics} \bold{16}(4), 519--538.
 }

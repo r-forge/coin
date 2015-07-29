@@ -6,10 +6,10 @@
 \description{
   The \pkg{coin} package provides an implementation of a general framework for
   conditional inference procedures commonly known as \emph{permutation tests}.
-  The framework was theoretically derived by Strasser and Weber (1999) and is
-  based on a multivariate linear statistic and its conditional expectation,
-  covariance and limiting distribution.  These results are utilized to construct
-  tests of independence between two sets of variables.
+  The framework was developed by Strasser and Weber (1999) and is based on a
+  multivariate linear statistic and its conditional expectation, covariance and
+  limiting distribution.  These results are utilized to construct tests of
+  independence between two sets of variables.
 
   The package does not only provide a flexible implementation of the abstract
   framework, but also provides a large set of convenience functions implementing
@@ -23,7 +23,7 @@
   \eqn{K}-sample tests for censored data, tests of independence between two
   continuous variables as well as tests of marginal homogeneity and symmetry.
   Approximations of the exact null distribution via the limiting distribution or
-  conditional Monte Carlo resampling are available for every test procedure
+  conditional Monte Carlo resampling are available for every test procedure,
   while the exact null distribution is currently available for univariate
   two-sample problems only.
 
@@ -51,7 +51,7 @@
   \bold{60}(3), 257--263.
 
   Hothorn, T., Hornik, K., van de Wiel, M. A. and Zeileis, A.  (2008).
-  Implementing a class of permutation tests: The coin package.  \emph{Journal of
+  Implementing a class of permutation tests: the coin package.  \emph{Journal of
     Statistical Software} \bold{28}(8), 1--23.
   \url{http://www.jstatsoft.org/v28/i08/}
 
@@ -64,10 +64,10 @@
 ## Download source package into a temporary directory
 tmpdir <- tempdir()
 tgz <- download.packages("coin", destdir = tmpdir, type = "source")[2]
-## Extract
+## Extract contents
 untar(tgz, exdir = tmpdir)
-wd <- setwd(file.path(tmpdir, "coin"))
 ## Run doxygen (assuming it is installed)
+wd <- setwd(file.path(tmpdir, "coin"))
 system("doxygen inst/doxygen.cfg")
 setwd(wd)
 ## Have fun!

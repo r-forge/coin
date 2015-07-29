@@ -53,7 +53,7 @@
 ## Grade III glioma
 g3 <- subset(glioma, histology == "Grade3")
 
-## Plot Kaplan-Meier curves
+## Plot Kaplan-Meier estimates
 op <- par(no.readonly = TRUE) # save current settings
 layout(matrix(1:2, ncol = 2))
 plot(survfit(Surv(time, event) ~ group, data = g3),
@@ -70,7 +70,7 @@ logrank_test(Surv(time, event) ~ group, data = g3,
 ## Grade IV glioma
 gbm <- subset(glioma, histology == "GBM")
 
-## Plot Kaplan-Meier curves
+## Plot Kaplan-Meier estimates
 plot(survfit(Surv(time, event) ~ group, data = gbm),
      main = "Grade IV Glioma", lty = 2:1,
      ylab = "Probability", xlab = "Survival Time in Month",

@@ -60,12 +60,12 @@ mcp_trafo(\dots)
   }
   \item{ties.method}{
     a character, the method used to handle ties.  The score generating function
-    may be applied directly to the mid-ranks (\code{"mid-ranks"}, default) or,
-    in the case of \code{rank_trafo}, broken at random (\code{"random"}).
-    Alternatively, the average of the scores resulting from applying the score
-    generating function to randomly broken ties are used
-    (\code{"average-scores"}).  See \code{\link{logrank_test}} for a detailed
-    description of the methods used in \code{logrank_trafo}.
+    either uses the mid-ranks (\code{"mid-ranks"}, default) or, in the case of
+    \code{rank_trafo}, randomly broken ties (\code{"random"}).  Alternatively,
+    the average of the scores resulting from applying the score generating
+    function to randomly broken ties are used (\code{"average-scores"}).  See
+    \code{\link{logrank_test}} for a detailed description of the methods used in
+    \code{logrank_trafo}.
   }
   \item{mid.score}{
     a character, the score assigned to observations exactly equal to the median:
@@ -73,7 +73,7 @@ mcp_trafo(\dots)
     \code{\link{median_test}}.
   }
   \item{a}{
-    a numeric vector, the value(s) taken as the constant \eqn{a} in the
+    a numeric vector, the values taken as the constant \eqn{a} in the
     Conover-Salsburg scores.  Defaults to \code{5}.
   }
   \item{j}{
@@ -182,7 +182,7 @@ mcp_trafo(\dots)
   and Fligner-Killeen scores, respectively, for scale problems.
 
   \code{logrank_trafo} computes weighted logrank scores for censored data,
-  allowing for user-defined weight functions through the \code{weight} argument
+  allowing for a user-defined weight function through the \code{weight} argument
   (see \code{\link{GTSG}}).
 
   \code{f_trafo} computes dummy matrices for factors and \code{of_trafo} assigns
@@ -201,8 +201,9 @@ mcp_trafo(\dots)
   \code{mcp_trafo} computes contrast matrices for factors.
 }
 \value{
-  A named matrix with \code{nrow(data)} rows and an arbitrary number of columns.
-  User-supplied transformations must return a numeric vector or matrix.
+  A numeric vector or matrix with \code{nrow(x)} rows and an arbitrary number of
+  columns.  For \code{trafo}, a named matrix with \code{nrow(data)} rows and an
+  arbitrary number of columns.
 }
 \note{
   Starting with \pkg{coin} version 1.1-0, all transformation functions are now
