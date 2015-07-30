@@ -914,6 +914,23 @@ data:  diphtheria by media (A, B, C, D)
 chi-squared = 8.0526, df = 3, p-value = 0.04494
 
 > 
+> ## Approximative Cochran Q test
+> mt <- mh_test(diphtheria ~ media | case, data = cochran,
++               distribution = approximate(B = 10000))
+> pvalue(mt)          # standard p-value
+[1] 0.0536
+99 percent confidence interval:
+ 0.04796230 0.05966731 
+
+> midpvalue(mt)       # mid-p-value
+[1] 0.04475
+99 percent confidence interval:
+ 0.03968499 0.05034797 
+
+> pvalue_interval(mt) # p-value interval
+   p_0    p_1 
+0.0359 0.0536 
+> 
 > 
 > ## Opinions on Pre- and Extramarital Sex
 > ## Agresti (2002, p. 421)
@@ -2969,7 +2986,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  14.89 0.37 15.28 NA NA 
+Time elapsed:  14.89 0.28 15.52 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -167,6 +167,13 @@ cochran <- data.frame(
 ## Asymptotic Cochran Q test (Cochran, 1950, p. 260)
 mh_test(diphtheria ~ media | case, data = cochran) # Q = 8.05
 
+## Approximative Cochran Q test
+mt <- mh_test(diphtheria ~ media | case, data = cochran,
+              distribution = approximate(B = 10000))
+pvalue(mt)          # standard p-value
+midpvalue(mt)       # mid-p-value
+pvalue_interval(mt) # p-value interval
+
 
 ## Opinions on Pre- and Extramarital Sex
 ## Agresti (2002, p. 421)
