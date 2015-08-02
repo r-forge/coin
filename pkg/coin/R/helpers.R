@@ -306,7 +306,7 @@ is_ytrafo <- function()
             identical(as.character(i)[1], "ytrafo"), NA))
 
 is_2sample <- function(object) {
-    groups <- nlevels(droplevels(object@x)[[1L]]) == 2L &&
+    groups <- nlevels(object@x[[1L]]) == 2L &&
                   ncol(object@xtrans) == 1L
     return(is_Ksample(object) && groups)
 }
@@ -463,14 +463,14 @@ varnames <- function(object) {
         if (is.ordered(object@x[[1]])) {
             xnames <- paste0(
                 colnames(object@x), " (",
-                paste0(levels(droplevels(object@x[[1]])), collapse = " < "),
+                paste0(levels(object@x[[1]]), collapse = " < "),
                 ")"
             )
         } else {
             if (is.factor(object@x[[1]])) {
                 xnames <- paste0(
                     colnames(object@x), " (",
-                    paste0(levels(droplevels(object@x[[1]])), collapse = ", "),
+                    paste0(levels(object@x[[1]]), collapse = ", "),
                     ")"
                 )
             } else {

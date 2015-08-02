@@ -64,13 +64,13 @@ setMethod("initialize",
         if (!is.null(weights) && anyNA(weights))
             stop(sQuote("weights"), " contains missing values")
 
-        .Object@x <- x
-        .Object@y <- y
+        .Object@x <- droplevels(x)
+        .Object@y <- droplevels(y)
         .Object@block <- if (is.null(block))
                              factor(rep.int(0L, nrow(x)))
                          else {
                              blockname <- attr(block, "blockname", exact = TRUE)
-                             block <- block[drop = TRUE]
+                             block <- droplevels(block)
                              if (!is.null(blockname))
                                  attr(block, "blockname") <- blockname
                              if (any(table(block) < 2L))

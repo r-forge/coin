@@ -329,6 +329,9 @@
 
       \item The class \code{"IndependenceTestStatistic"} is now \emph{virtual}
 
+      \item Objects of class \code{"IndependenceProblem"} drop unused factor
+      levels
+
       \item Objects of classes \code{"ScalarIndependenceTestStatistic"} or
       \code{"QuadTypeIndependenceTestStatistic"} now has a \code{paired} slot
 
