@@ -133,12 +133,9 @@
       \item Random numbers can now be generated from the permutation
       distribution (see \code{?rperm})
 
-      \item New data set \code{GTSG} has been added (see \code{?GTSG})
-
-      \item New data set \code{malformations} has been added (see
-      \code{?malformations})
-
-      \item New data set \code{vision} has been added (see \code{?vision})
+      \item New data sets on gastric cancer, congenital sex organ
+      malformation and unaided distance vision have been added (see
+      \code{?GTSG}, \code{?malformations} and \code{?vision})
     }
   }
   \subsection{Bug fixes}{

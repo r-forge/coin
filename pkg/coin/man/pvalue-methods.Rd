@@ -145,8 +145,8 @@
 
   Hirji, K. F., Tan, S.-J. and Elashoff, R. M.  (1991).  A quasi-exact test for
   comparing two binomial proportions.  \emph{Statistics in Medicine}
-  \bold{10}(7), 1137--1153.  
-  
+  \bold{10}(7), 1137--1153.
+
   Westfall, P. H. and Troendle, J. F.  (2008).  Multiple testing with minimal
   assumptions.  \emph{Biometrical Journal} \bold{50}(5), 745--755.
 
