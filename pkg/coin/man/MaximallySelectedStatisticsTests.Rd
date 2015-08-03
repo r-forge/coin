@@ -99,11 +99,11 @@
   using the \code{scores} argument (see \code{\link{independence_test}}); this
   argument can also be used to coerce nominal factors to class \code{"ordered"}.
   If both, say, \code{y1} and \code{x1} are ordered factors, a linear-by-linear
-  association test for ordered cutpoint alternatives is computed and the
-  alternative hypothesis can be specified using the \code{alternative} argument.
-  The particular extension to the case of a univariable binary factor response
-  and a univariable ordered covariate was given by Betensky and Rabinowitz
-  (1999) and is known as maximally selected Cochran-Armitage statistics.
+  association test is computed and the direction of the alternative hypothesis
+  can be specified using the \code{alternative} argument.  The particular
+  extension to the case of a univariable binary factor response and a
+  univariable ordered covariate was given by Betensky and Rabinowitz (1999) and
+  is known as maximally selected Cochran-Armitage statistics.
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is

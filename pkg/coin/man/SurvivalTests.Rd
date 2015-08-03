@@ -102,9 +102,9 @@
   be altered using the \code{scores} argument (see
   \code{\link{independence_test}}); this argument can also be used to coerce
   nominal factors to class \code{"ordered"}.  In this case, a linear-by-linear
-  association test for ordered alternatives is computed and the alternative
-  hypothesis can be specified using the \code{alternative} argument.  This type
-  of extension of the standard logrank test was given by Tarone (1975) and later
+  association test is computed and the direction of the alternative hypothesis
+  can be specified using the \code{alternative} argument.  This type of
+  extension of the standard logrank test was given by Tarone (1975) and later
   generalized to general weights by Tarone and Ware (1977).
 
   Let \eqn{(t_i, \delta_i)}, \eqn{i = 1, 2, \ldots, n}, represent a censored

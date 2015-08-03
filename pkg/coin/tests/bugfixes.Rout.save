@@ -699,16 +699,6 @@ attr(,"assign")
 > stopifnot(isequal(statistic(wt1), statistic(wt2)))
 > stopifnot(isequal(statistic(it), statistic(wt2)))
 > 
-> ### scores weren't checked for monotonicity
-> y <- 1:6
-> x <- gl(3, 2)
-> try(independence_test(y ~ x, scores = list(x = c(1, 2, 1))))
-Error in setscores(object, scores) : 
-  scores for variable 'x' aren't monotone
-> try(independence_test(x ~ y, scores = list(x = c(1, 2, 1))))
-Error in setscores(object, scores) : 
-  scores for variable 'x' aren't monotone
-> 
 > ### maxstat_test didn't handle scores properly
 > mt0 <- maxstat_test(counts ~ age, data = treepipit)
 > 
@@ -989,4 +979,4 @@ Error in quade_test.SymmetryProblem(object = <S4 object of class structure("Symm
 > 
 > proc.time()
    user  system elapsed 
-   2.57    0.17    2.74 
+   2.57    0.20    2.80 

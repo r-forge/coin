@@ -80,14 +80,14 @@
   argument can also be used to coerce nominal factors to class \code{"ordered"}.
   (\code{lbl_test} coerces to class \code{"ordered"} under any circumstances.)
   If both \code{y} and \code{x} are ordered factors, a linear-by-linear
-  association test for ordered alternatives is computed and the alternative
-  hypothesis can be specified using the \code{alternative} argument.  For the
-  Pearson chi-squared test, this extension was given by Yates (1948) who also
-  discussed the situation when either the response or the covariate is an
-  ordered factor; see also Cochran (1954) and Armitage (1955) for the particular
-  case when \code{y} is a binary factor and \code{x} is ordered.  The
-  Mantel-Haenszel statistic was similarly extended by Mantel (1963) and Landis,
-  Heyman and Koch (1978).
+  association test is computed and the direction of the alternative hypothesis
+  can be specified using the \code{alternative} argument.  For the Pearson
+  chi-squared test, this extension was given by Yates (1948) who also discussed
+  the situation when either the response or the covariate is an ordered factor;
+  see also Cochran (1954) and Armitage (1955) for the particular case when
+  \code{y} is a binary factor and \code{x} is ordered.  The Mantel-Haenszel
+  statistic was similarly extended by Mantel (1963) and Landis, Heyman and Koch
+  (1978).
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is

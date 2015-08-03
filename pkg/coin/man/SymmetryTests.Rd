@@ -74,12 +74,11 @@
   measurement on the same subject.
 
   If \code{x} is an ordered factor, the default scores, \code{1:nlevels(x)}, can
-  be altered using the \code{scores} argument (see
-  \code{\link{symmetry_test}}); this argument can also be used to coerce
-  nominal factors to class \code{"ordered"}.  In this case, a
-  linear-by-linear association test for ordered alternatives is computed
-  and the alternative hypothesis can be specified using the
-  \code{alternative} argument.  This type of extension of the Friedman test
+  be altered using the \code{scores} argument (see \code{\link{symmetry_test}});
+  this argument can also be used to coerce nominal factors to class
+  \code{"ordered"}.  In this case, a linear-by-linear association test is
+  computed and the direction of the alternative hypothesis can be specified
+  using the \code{alternative} argument.  For the Friedman test, this extension
   was given by Page (1963) and is known as the Page test.
 
   For \code{wilcoxsign_test}, the default method of handling zeros

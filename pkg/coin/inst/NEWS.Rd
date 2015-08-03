@@ -167,9 +167,6 @@
       \item Maximally selected statistics did not handle user-specified scores
       for ordinal variables properly
 
-      \item Scores for ordered factors suppplied by the \code{scores} argument
-      were not checked for monotonicity
-
       \item Two-sample problems were not identified as such if the grouping
       variable had unused factor levels, causing problems if, e.g., trying to
       use the \code{subset} argument of \code{formula} methods

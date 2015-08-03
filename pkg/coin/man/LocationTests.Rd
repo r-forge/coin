@@ -118,8 +118,8 @@
   be altered using the \code{scores} argument (see
   \code{\link{independence_test}}); this argument can also be used to coerce
   nominal factors to class \code{"ordered"}.  In this case, a linear-by-linear
-  association test for ordered alternatives is computed and the alternative
-  hypothesis can be specified using the \code{alternative} argument.
+  association test is computed and the direction of the alternative hypothesis
+  can be specified using the \code{alternative} argument.
 
   The Brown-Mood median test offers a choice of mid-score, i.e., the score
   assigned to observations exactly equal to the median.  In the two-sample case,

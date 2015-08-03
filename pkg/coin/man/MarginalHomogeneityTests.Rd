@@ -66,9 +66,9 @@
   the \code{scores} argument (see \code{\link{symmetry_test}}); this argument
   can also be used to coerce nominal factors to class \code{"ordered"}.  If both
   \code{y} and \code{x} are ordered factors, a linear-by-linear association test
-  for ordered alternatives is computed and the alternative hypothesis can be
-  specified using the \code{alternative} argument.  This extension was given by
-  Birch (1965) who also discussed the situation when either the response or the
+  is computed and the direction of the alternative hypothesis can be specified
+  using the \code{alternative} argument.  This extension was given by Birch
+  (1965) who also discussed the situation when either the response or the
   measurement condition is an ordered factor; see also White, Landis and Cooper
   (1982).
 

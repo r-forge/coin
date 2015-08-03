@@ -124,8 +124,10 @@
   nominal factors to class \code{"ordered"}.  For example, when \code{y1} is an
   ordered factor with four levels and \code{x1} is a nominal factor with three
   levels, \code{scores = list(y1 = c(1, 3:5), x1 = c(1:2, 4))} supplies the
-  scores to be used.  The length of the score vector must be equal to the number
-  of factor levels.
+  scores to be used.  For ordered alternatives the scores must be monotonic, but
+  non-montonic scores are also allowed for testing against, e.g., umbrella
+  alternatives.  The length of the score vector must be equal to the number of
+  factor levels.
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
