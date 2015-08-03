@@ -737,8 +737,7 @@ Error in setscores(object, scores) :
 +                   b = gl(5, 4),
 +                   w = rep(2, 20))
 > try(friedman_test(y + y2 ~ x | b, data = dta))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'y''y2' is not a numeric variable
 > try(friedman_test(y ~ x + x2 | b, data = dta))
 Error in validityMethod(object) : 
   'x' slot does not contain a single factor
@@ -908,44 +907,33 @@ alternative hypothesis: true mu is not equal to 0
 > x <- gl(2, 5)
 > b <- factor(rep(1:5, 2))
 > try(oneway_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(wilcox_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a two-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(kruskal_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(normal_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(median_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(savage_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(kruskal_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(taha_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(klotz_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(mood_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(ansari_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(fligner_test(Surv(y1) ~ x))
-Error in tapply(object@y[[1]], object@x[[1]], median) : 
-  arguments must have same length
+Error in fligner_test.IndependenceProblem(object = <S4 object of class structure("IndependenceProblem", package = "coin")>) : 
+  'Surv(y1)' is not a numeric variable
 > try(conover_test(Surv(y1) ~ x))
-Error in tapply(object@y[[1]], object@x[[1]], mean) : 
-  arguments must have same length
+Error in conover_test.IndependenceProblem(object = <S4 object of class structure("IndependenceProblem", package = "coin")>) : 
+  'Surv(y1)' is not a numeric variable
 > try(sign_test(Surv(y1) ~ x | b))
 Error in sign_test.SymmetryProblem(object = <S4 object of class structure("SymmetryProblem", package = "coin")>) : 
   'y' is not a numeric variable
@@ -969,11 +957,11 @@ Error in wilcoxsign_test.formula(Surv(y1) ~ y2) :
 Error in wilcoxsign_test.formula(y1 ~ Surv(y2)) : 
   'x' is not a numeric variable
 > try(friedman_test(Surv(y1) ~ x))
-Error in check(object) : 
-  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+Error in check(object) : 'Surv(y1)' is not a numeric variable
 > try(quade_test(Surv(y1) ~ x))
-Error in unclass(x)[i, , drop = FALSE] : subscript out of bounds
+Error in quade_test.SymmetryProblem(object = <S4 object of class structure("SymmetryProblem", package = "coin")>) : 
+  'Surv(y1)' is not a numeric variable
 > 
 > proc.time()
    user  system elapsed 
-   2.44    0.20    2.63 
+   2.49    0.12    2.62 

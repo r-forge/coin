@@ -33,12 +33,13 @@ logrank_test.IndependenceProblem <- function(object,
                                              type = type, rho = rho,
                                              gamma = gamma)),
                        check = function(object) {
-                           if (!(is_Ksample(object) && is_censored_y(object)))
+                           if (!is_Ksample(object))
                                stop(sQuote("object"),
                                     " does not represent a K-sample problem",
-                                    " with censored data",
-                                    " (maybe the grouping variable is not a",
-                                    " factor?)")
+                                    " (maybe the grouping variable is not a factor?)")
+                           if (!is_censored_y(object))
+                               stop(sQuote(colnames(object@y)),
+                                    " is not a censored variable")
                            return(TRUE)
                        })
     ## convert factors to ordered and attach scores if requested

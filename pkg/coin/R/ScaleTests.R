@@ -17,11 +17,13 @@ taha_test.IndependenceProblem <- function(object,
                            trafo(data, numeric_trafo = function(y)
                                rank_trafo(y)^2),
                        check = function(object) {
-                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                           if (!is_Ksample(object))
                                stop(sQuote("object"),
                                     " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a",
-                                    " factor?)")
+                                    " (maybe the grouping variable is not a factor?)")
+                           if (!is_numeric_y(object))
+                               stop(sQuote(colnames(object@y)),
+                                    " is not a numeric variable")
                            if (is_ordered_x(object))
                                stop(sQuote(colnames(object@x)),
                                     " is an ordered factor")
@@ -70,11 +72,13 @@ klotz_test.IndependenceProblem <- function(object,
                            trafo(data, numeric_trafo = function(y)
                                klotz_trafo(y, ties.method = ties.method)),
                        check = function(object) {
-                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                           if (!is_Ksample(object))
                                stop(sQuote("object"),
                                     " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a",
-                                    " factor?)")
+                                    " (maybe the grouping variable is not a factor?)")
+                           if (!is_numeric_y(object))
+                               stop(sQuote(colnames(object@y)),
+                                    " is not a numeric variable")
                            if (is_ordered_x(object))
                                stop(sQuote(colnames(object@x)),
                                     " is an ordered factor")
@@ -123,11 +127,13 @@ mood_test.IndependenceProblem <- function(object,
                            trafo(data, numeric_trafo = function(y)
                                mood_trafo(y, ties.method = ties.method)),
                        check = function(object) {
-                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                           if (!is_Ksample(object))
                                stop(sQuote("object"),
                                     " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a",
-                                    " factor?)")
+                                    " (maybe the grouping variable is not a factor?)")
+                           if (!is_numeric_y(object))
+                               stop(sQuote(colnames(object@y)),
+                                    " is not a numeric variable")
                            if (is_ordered_x(object))
                                stop(sQuote(colnames(object@x)),
                                     " is an ordered factor")
@@ -176,11 +182,13 @@ ansari_test.IndependenceProblem <- function(object,
                            trafo(data, numeric_trafo = function(y)
                                ansari_trafo(y, ties.method = ties.method)),
                        check = function(object) {
-                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                           if (!is_Ksample(object))
                                stop(sQuote("object"),
                                     " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a",
-                                    " factor?)")
+                                    " (maybe the grouping variable is not a factor?)")
+                           if (!is_numeric_y(object))
+                               stop(sQuote(colnames(object@y)),
+                                    " is not a numeric variable")
                            if (is_ordered_x(object))
                                stop(sQuote(colnames(object@x)),
                                     " is an ordered factor")
@@ -240,11 +248,10 @@ fligner_test.IndependenceProblem <- function(object,
                            trafo(data, numeric_trafo = function(y)
                                fligner_trafo(y, ties.method = ties.method)),
                        check = function(object) {
-                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                           if (!is_Ksample(object))
                                stop(sQuote("object"),
                                     " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a",
-                                    " factor?)")
+                                    " (maybe the grouping variable is not a factor?)")
                            if (is_ordered_x(object))
                                stop(sQuote(colnames(object@x)),
                                     " is an ordered factor")
@@ -254,6 +261,8 @@ fligner_test.IndependenceProblem <- function(object,
     args$teststat <- if (twosamp) "scalar" else "quadratic"
 
     ## eliminate location differences (see 'stats/R/fligner.test')
+    if (!is_numeric_y(object))
+        stop(sQuote(colnames(object@y)), " is not a numeric variable")
     object@y[[1]] <- object@y[[1]] -
         tapply(object@y[[1]], object@x[[1]], median)[object@x[[1]]]
 
@@ -296,7 +305,7 @@ conover_test.IndependenceProblem <- function(object,
                            trafo(data, numeric_trafo = function(y)
                                rank_trafo(abs(y))^2),
                        check = function(object) {
-                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                           if (!is_Ksample(object))
                                stop(sQuote("object"),
                                     " does not represent a K-sample problem",
                                     " (maybe the grouping variable is not a factor?)")
@@ -309,6 +318,8 @@ conover_test.IndependenceProblem <- function(object,
     args$teststat <- if (twosamp) "scalar" else "quadratic"
 
     ## eliminate location differences
+    if (!is_numeric_y(object))
+        stop(sQuote(colnames(object@y)), " is not a numeric variable")
     object@y[[1]] <- object@y[[1]] -
         tapply(object@y[[1]], object@x[[1]], mean)[object@x[[1]]]
 

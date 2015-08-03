@@ -26,13 +26,13 @@ sign_test.SymmetryProblem <- function(object, ...) {
 
     if (!is_numeric_y(object))
         stop(sQuote("y"), " is not a numeric variable")
-    if (is.factor(x)) {
-        if (nlevels(x) != 2)
-            stop(sQuote("x"), " is not a factor with two levels")
+    if (is_2sample(object))
         diffs <- tapply(1:length(y), object@block, function(b)
             y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]])
-    } else
-        stop(sQuote("x"), " is not a factor")
+    else
+        stop(sQuote("object"),
+             " does not represent a paired two-sample problem",
+             " (maybe the grouping variable is not a factor?)")
 
     abs_diffs <- abs(diffs)
     if (all(abs_diffs < .Machine$double.eps))
@@ -90,13 +90,13 @@ wilcoxsign_test.SymmetryProblem <- function(object,
 
     if (!is_numeric_y(object))
         stop(sQuote("y"), " is not a numeric variable")
-    if (is.factor(x)) {
-        if (nlevels(x) != 2)
-            stop(sQuote("x"), " is not a factor with two levels")
+    if (is_2sample(object))
         diffs <- tapply(1:length(y), object@block, function(b)
             y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]])
-    } else
-        stop(sQuote("x"), " is not a factor")
+    else
+        stop(sQuote("object"),
+             " does not represent a paired two-sample problem",
+             " (maybe the grouping variable is not a factor?)")
 
     abs_diffs <- abs(diffs)
     if (all(abs_diffs < .Machine$double.eps))
@@ -151,11 +151,13 @@ friedman_test.SymmetryProblem <- function(object, ...) {
                            trafo(data, numeric_trafo = rank_trafo,
                                  block = object@block),
                        check = function(object) {
-                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                           if (!is_Ksample(object))
                                stop(sQuote("object"),
                                     " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a",
-                                    " factor?)")
+                                    " (maybe the grouping variable is not a factor?)")
+                           if (!is_numeric_y(object))
+                               stop(sQuote(colnames(object@y)),
+                                    " is not a numeric variable")
                            return(TRUE)
                        })
     ## convert factors to ordered and attach scores if requested
@@ -190,11 +192,10 @@ quade_test.formula <- function(formula, data = list(), subset = NULL, ...) {
 quade_test.SymmetryProblem <- function(object, ...) {
 
     args <- setup_args(check = function(object) {
-                           if (!(is_Ksample(object) && is_numeric_y(object)))
+                           if (!is_Ksample(object))
                                stop(sQuote("object"),
                                     " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a",
-                                    " factor?)")
+                                    " (maybe the grouping variable is not a factor?)")
                            return(TRUE)
                        })
     ## convert factors to ordered and attach scores if requested
@@ -206,6 +207,8 @@ quade_test.SymmetryProblem <- function(object, ...) {
     args$teststat <- if (is_ordered_x(object)) "scalar"
                      else "quadratic"
 
+    if (!is_numeric_y(object))
+        stop(sQuote(colnames(object@y)), " is not a numeric variable")
     y <- split(object@y[[1]], object@block)
     R <- lapply(y, function(y) rank(y) - (length(y) + 1) / 2)
     Q <- rank(vapply(y, function(y) max(y) - min(y), NA_real_, USE.NAMES = FALSE))
