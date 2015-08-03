@@ -10,7 +10,7 @@ oneway_test.formula <- function(formula, data = list(), subset = NULL,
 
 oneway_test.IndependenceProblem <- function(object, ...) {
 
-    twosamp <- nlevels(object@x[[1]]) == 2
+    twosamp <- is_2sample(object)
 
     args <- setup_args(
         check = function(object) {
@@ -142,7 +142,7 @@ normal_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    twosamp <- nlevels(object@x[[1]]) == 2
+    twosamp <- is_2sample(object)
 
     args <- setup_args(
         ytrafo = function(data)
@@ -202,7 +202,7 @@ median_test.IndependenceProblem <- function(object,
     mid.score = c("0", "0.5", "1"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    twosamp <- nlevels(object@x[[1]]) == 2
+    twosamp <- is_2sample(object)
 
     args <- setup_args(
         ytrafo = function(data)
@@ -262,7 +262,7 @@ savage_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    twosamp <- nlevels(object@x[[1]]) == 2
+    twosamp <- is_2sample(object)
 
     args <- setup_args(
         ytrafo = function(data)

@@ -25,7 +25,7 @@ logrank_test.IndependenceProblem <- function(object,
 
     type <- match.arg(type)[1]
 
-    twosamp <- nlevels(object@x[[1]]) == 2
+    twosamp <- is_2sample(object)
 
     args <- setup_args(
         ytrafo = function(data)

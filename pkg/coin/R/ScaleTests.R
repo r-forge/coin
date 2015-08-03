@@ -11,7 +11,7 @@ taha_test.formula <- function(formula, data = list(), subset = NULL,
 taha_test.IndependenceProblem <- function(object,
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    twosamp <- nlevels(object@x[[1]]) == 2
+    twosamp <- is_2sample(object)
 
     args <- setup_args(
         ytrafo = function(data)
@@ -66,7 +66,7 @@ klotz_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    twosamp <- nlevels(object@x[[1]]) == 2
+    twosamp <- is_2sample(object)
 
     args <- setup_args(
         ytrafo = function(data)
@@ -121,7 +121,7 @@ mood_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    twosamp <- nlevels(object@x[[1]]) == 2
+    twosamp <- is_2sample(object)
 
     args <- setup_args(
         ytrafo = function(data)
@@ -176,7 +176,7 @@ ansari_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    twosamp <- nlevels(object@x[[1]]) == 2
+    twosamp <- is_2sample(object)
 
     args <- setup_args(
         ytrafo = function(data)
@@ -242,7 +242,7 @@ fligner_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "average-scores"),
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    twosamp <- nlevels(object@x[[1]]) == 2
+    twosamp <- is_2sample(object)
 
     args <- setup_args(
         ytrafo = function(data)
@@ -300,7 +300,7 @@ conover_test.formula <- function(formula, data = list(), subset = NULL,
 conover_test.IndependenceProblem <- function(object,
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    twosamp <- nlevels(object@x[[1]]) == 2
+    twosamp <- is_2sample(object)
 
     args <- setup_args(
         ytrafo = function(data)
