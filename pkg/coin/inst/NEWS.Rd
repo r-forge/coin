@@ -148,6 +148,12 @@
       \item Partial matching of the \code{scores} argument did not work for
       Pearson's chi-squared test and the marginal homogeneity test
 
+      \item The Fisher-Pitman permutation test, the Wilcoxon-Mann-Whitney test,
+      the Kruskal-Wallis test, the van der Waerden test, the Brown-Mood median
+      test, the Ansari-Bradley test, the Fligner-Killeen test, the Wilcoxon
+      signed-rank test, the Friedman test and the Page test did not return an
+      error message when supplied with a censored response variable
+
       \item The Brown-Mood median test \eqn{p}-value computation used the wrong
       tail of the null distribution in the one-sided case
 
