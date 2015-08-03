@@ -13,22 +13,22 @@ taha_test.IndependenceProblem <- function(object,
 
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               rank_trafo(y)^2),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_numeric_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a numeric variable")
-                           if (is_ordered_x(object))
-                               stop(sQuote(colnames(object@x)),
-                                    " is an ordered factor")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                rank_trafo(y)^2),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            if (is_ordered_x(object))
+                stop(sQuote(colnames(object@x)), " is an ordered factor")
+            return(TRUE)
+        }
+    )
     ## set test statistic to scalar for two-sample test
     args$teststat <- if (twosamp) "scalar" else "quadratic"
 
@@ -68,22 +68,22 @@ klotz_test.IndependenceProblem <- function(object,
 
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               klotz_trafo(y, ties.method = ties.method)),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_numeric_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a numeric variable")
-                           if (is_ordered_x(object))
-                               stop(sQuote(colnames(object@x)),
-                                    " is an ordered factor")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                klotz_trafo(y, ties.method = ties.method)),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            if (is_ordered_x(object))
+                stop(sQuote(colnames(object@x)), " is an ordered factor")
+            return(TRUE)
+        }
+    )
     ## set test statistic to scalar for two-sample test
     args$teststat <- if (twosamp) "scalar" else "quadratic"
 
@@ -123,22 +123,22 @@ mood_test.IndependenceProblem <- function(object,
 
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               mood_trafo(y, ties.method = ties.method)),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_numeric_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a numeric variable")
-                           if (is_ordered_x(object))
-                               stop(sQuote(colnames(object@x)),
-                                    " is an ordered factor")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                mood_trafo(y, ties.method = ties.method)),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            if (is_ordered_x(object))
+                stop(sQuote(colnames(object@x)), " is an ordered factor")
+            return(TRUE)
+        }
+    )
     ## set test statistic to scalar for two-sample test
     args$teststat <- if (twosamp) "scalar" else "quadratic"
 
@@ -178,22 +178,22 @@ ansari_test.IndependenceProblem <- function(object,
 
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               ansari_trafo(y, ties.method = ties.method)),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_numeric_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a numeric variable")
-                           if (is_ordered_x(object))
-                               stop(sQuote(colnames(object@x)),
-                                    " is an ordered factor")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                ansari_trafo(y, ties.method = ties.method)),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            if (is_ordered_x(object))
+                stop(sQuote(colnames(object@x)), " is an ordered factor")
+            return(TRUE)
+        }
+    )
     ## set test statistic to scalar for two-sample test
     args$teststat <- if (twosamp) "scalar" else "quadratic"
     ## swap alternative in one-sample case
@@ -244,19 +244,20 @@ fligner_test.IndependenceProblem <- function(object,
 
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               fligner_trafo(y, ties.method = ties.method)),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (is_ordered_x(object))
-                               stop(sQuote(colnames(object@x)),
-                                    " is an ordered factor")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                fligner_trafo(y, ties.method = ties.method)),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (is_ordered_x(object))
+                stop(sQuote(colnames(object@x)), " is an ordered factor")
+            return(TRUE)
+        }
+    )
     ## set test statistic to scalar for two-sample test
     args$teststat <- if (twosamp) "scalar" else "quadratic"
 
@@ -301,19 +302,20 @@ conover_test.IndependenceProblem <- function(object,
 
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               rank_trafo(abs(y))^2),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (is_ordered_x(object))
-                               stop(sQuote(colnames(object@x)),
-                                    " is an ordered factor")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                rank_trafo(abs(y))^2),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (is_ordered_x(object))
+                stop(sQuote(colnames(object@x)), " is an ordered factor")
+            return(TRUE)
+        }
+    )
     ## set test statistic to scalar for two-sample test
     args$teststat <- if (twosamp) "scalar" else "quadratic"
 

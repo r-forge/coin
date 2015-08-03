@@ -18,12 +18,14 @@ mh_test.table <- function(object, ...) {
 
 mh_test.SymmetryProblem <- function(object, ...) {
 
-    args <- setup_args(check = function(object) {
-                           if (!is_contingency(object))
-                               stop(sQuote("object"),
-                                    " does not represent a contingency problem")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        check = function(object) {
+            if (!is_contingency(object))
+                stop(sQuote("object"),
+                     " does not represent a contingency problem")
+            return(TRUE)
+        }
+    )
     ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)

@@ -147,19 +147,20 @@ friedman_test.formula <- function(formula, data = list(), subset = NULL, ...) {
 
 friedman_test.SymmetryProblem <- function(object, ...) {
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, numeric_trafo = rank_trafo,
-                                 block = object@block),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_numeric_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a numeric variable")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = rank_trafo,
+                  block = object@block),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            return(TRUE)
+        }
+    )
     ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
@@ -191,13 +192,15 @@ quade_test.formula <- function(formula, data = list(), subset = NULL, ...) {
 
 quade_test.SymmetryProblem <- function(object, ...) {
 
-    args <- setup_args(check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            return(TRUE)
+        }
+    )
     ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)

@@ -11,20 +11,21 @@ spearman_test.formula <- function(formula, data = list(), subset = NULL,
 spearman_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate", "none"), ...) {
 
-    args <- setup_args(teststat = "scalar",
-                       distribution = check_distribution_arg(distribution,
-                           match.arg(distribution)),
-                       xtrafo = function(data)
-                           trafo(data, numeric_trafo = rank_trafo),
-                       ytrafo = function(data)
-                           trafo(data, numeric_trafo = rank_trafo),
-                       check = function(object) {
-                           if (!is_corr(object))
-                               stop(sQuote("object"),
-                                    " does not represent a univariate",
-                                    " correlation problem")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        teststat = "scalar",
+        distribution = check_distribution_arg(distribution,
+                                              match.arg(distribution)),
+        xtrafo = function(data)
+            trafo(data, numeric_trafo = rank_trafo),
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = rank_trafo),
+        check = function(object) {
+            if (!is_corr(object))
+                stop(sQuote("object"),
+                     " does not represent a univariate correlation problem")
+            return(TRUE)
+        }
+    )
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -50,22 +51,23 @@ fisyat_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate", "none"),
     ties.method = c("mid-ranks", "average-scores"), ...) {
 
-    args <- setup_args(teststat = "scalar",
-                       distribution = check_distribution_arg(distribution,
-                           match.arg(distribution)),
-                       xtrafo = function(data)
-                           trafo(data, numeric_trafo = function(x)
-                               normal_trafo(x, ties.method = ties.method)),
-                       ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               normal_trafo(y, ties.method = ties.method)),
-                       check = function(object) {
-                           if (!is_corr(object))
-                               stop(sQuote("object"),
-                                    " does not represent a univariate",
-                                    " correlation problem")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        teststat = "scalar",
+        distribution = check_distribution_arg(distribution,
+                                              match.arg(distribution)),
+        xtrafo = function(data)
+            trafo(data, numeric_trafo = function(x)
+                normal_trafo(x, ties.method = ties.method)),
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                normal_trafo(y, ties.method = ties.method)),
+        check = function(object) {
+            if (!is_corr(object))
+                stop(sQuote("object"),
+                     " does not represent a univariate correlation problem")
+            return(TRUE)
+        }
+    )
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -94,22 +96,23 @@ quadrant_test.IndependenceProblem <- function(object,
     ## since the data is effectively reduced to a 2x2 table.  But...
     ## </FIXME>
 
-    args <- setup_args(teststat = "scalar",
-                       distribution = check_distribution_arg(distribution,
-                           match.arg(distribution)),
-                       xtrafo = function(data)
-                           trafo(data, numeric_trafo = function(x)
-                               median_trafo(x, mid.score = mid.score)),
-                       ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               median_trafo(y, mid.score = mid.score)),
-                       check = function(object) {
-                           if (!is_corr(object))
-                               stop(sQuote("object"),
-                                    " does not represent a univariate",
-                                    " correlation problem")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        teststat = "scalar",
+        distribution = check_distribution_arg(distribution,
+                                              match.arg(distribution)),
+        xtrafo = function(data)
+            trafo(data, numeric_trafo = function(x)
+                median_trafo(x, mid.score = mid.score)),
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                median_trafo(y, mid.score = mid.score)),
+        check = function(object) {
+            if (!is_corr(object))
+                stop(sQuote("object"),
+                     " does not represent a univariate correlation problem")
+            return(TRUE)
+        }
+    )
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -135,22 +138,23 @@ koziol_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate", "none"),
     ties.method = c("mid-ranks", "average-scores"), ...) {
 
-    args <- setup_args(teststat = "scalar",
-                       distribution = check_distribution_arg(distribution,
-                           match.arg(distribution)),
-                       xtrafo = function(data)
-                           trafo(data, numeric_trafo = function(x)
-                               koziol_trafo(x, ties.method = ties.method)),
-                       ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               koziol_trafo(y, ties.method = ties.method)),
-                       check = function(object) {
-                           if (!is_corr(object))
-                               stop(sQuote("object"),
-                                    " does not represent a univariate",
-                                    " correlation problem")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        teststat = "scalar",
+        distribution = check_distribution_arg(distribution,
+                                              match.arg(distribution)),
+        xtrafo = function(data)
+            trafo(data, numeric_trafo = function(x)
+                koziol_trafo(x, ties.method = ties.method)),
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                koziol_trafo(y, ties.method = ties.method)),
+        check = function(object) {
+            if (!is_corr(object))
+                stop(sQuote("object"),
+                     " does not represent a univariate correlation problem")
+            return(TRUE)
+        }
+    )
 
     object <- do.call("independence_test", c(list(object = object), args))
 

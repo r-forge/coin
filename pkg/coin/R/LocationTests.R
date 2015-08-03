@@ -12,16 +12,17 @@ oneway_test.IndependenceProblem <- function(object, ...) {
 
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_numeric_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a numeric variable")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            return(TRUE)
+        }
+    )
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -50,19 +51,20 @@ wilcox_test.formula <- function(formula, data = list(), subset = NULL,
 wilcox_test.IndependenceProblem <- function(object,
     conf.int = FALSE, conf.level = 0.95, ...) {
 
-    args <- setup_args(teststat = "scalar",
-                       ytrafo = function(data)
-                           trafo(data, numeric_trafo = rank_trafo),
-                       check = function(object) {
-                           if (!is_2sample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a two-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_numeric_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a numeric variable")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        teststat = "scalar",
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = rank_trafo),
+        check = function(object) {
+            if (!is_2sample(object))
+                stop(sQuote("object"),
+                     " does not represent a two-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            return(TRUE)
+        }
+    )
 
     object <- do.call("independence_test", c(list(object = object), args))
 
@@ -93,18 +95,19 @@ kruskal_test.formula <- function(formula, data = list(), subset = NULL,
 
 kruskal_test.IndependenceProblem <- function(object, ...) {
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, numeric_trafo = rank_trafo),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_numeric_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a numeric variable")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = rank_trafo),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            return(TRUE)
+        }
+    )
     ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
@@ -141,19 +144,20 @@ normal_test.IndependenceProblem <- function(object,
 
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               normal_trafo(y, ties.method = ties.method)),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_numeric_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a numeric variable")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                normal_trafo(y, ties.method = ties.method)),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            return(TRUE)
+        }
+    )
     ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
@@ -200,19 +204,20 @@ median_test.IndependenceProblem <- function(object,
 
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               median_trafo(y, mid.score = mid.score)),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_numeric_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a numeric variable")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                median_trafo(y, mid.score = mid.score)),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            return(TRUE)
+        }
+    )
     ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
@@ -259,19 +264,20 @@ savage_test.IndependenceProblem <- function(object,
 
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, numeric_trafo = function(y)
-                               savage_trafo(y, ties.method = ties.method)),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_numeric_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a numeric variable")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, numeric_trafo = function(y)
+                savage_trafo(y, ties.method = ties.method)),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            return(TRUE)
+        }
+    )
     ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)

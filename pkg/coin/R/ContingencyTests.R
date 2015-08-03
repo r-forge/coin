@@ -116,12 +116,14 @@ cmh_test.table <- function(object, ...) {
 
 cmh_test.IndependenceProblem <- function(object, ...) {
 
-    args <- setup_args(check = function(object) {
-                           if (!is_contingency(object))
-                               stop(sQuote("object"),
-                                    " does not represent a contingency problem")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        check = function(object) {
+            if (!is_contingency(object))
+                stop(sQuote("object"),
+                     " does not represent a contingency problem")
+            return(TRUE)
+        }
+    )
     ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
@@ -172,16 +174,17 @@ lbl_test.IndependenceProblem <- function(object,
     object@y[] <- lapply(object@y, function(y)
         if (is.factor(y) && nlevels(y) > 2) ordered(y) else y)
 
-    args <- setup_args(teststat = "scalar",
-                       distribution = check_distribution_arg(distribution,
-                           match.arg(distribution)),
-                       check = function(object) {
-                           if (!is_doubly_ordered(object))
-                               stop(sQuote("object"),
-                                    " does not represent a problem with",
-                                    " ordered data")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        teststat = "scalar",
+        distribution = check_distribution_arg(distribution,
+                                              match.arg(distribution)),
+        check = function(object) {
+            if (!is_doubly_ordered(object))
+                stop(sQuote("object"),
+                     " does not represent a problem with ordered data")
+            return(TRUE)
+        }
+    )
 
     object <- do.call("independence_test", c(list(object = object), args))
 

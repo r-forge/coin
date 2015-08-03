@@ -20,20 +20,19 @@ maxstat_test.IndependenceProblem <- function(object,
     distribution = c("asymptotic", "approximate", "none"),
     minprob = 0.1, maxprob = 1 - minprob, ...) {
 
-    args <- setup_args(teststat = match.arg(teststat),
-                       distribution = check_distribution_arg(distribution,
-                           match.arg(distribution)),
-                       xtrafo = function(data)
-                           trafo(data,
-                                 numeric_trafo = function(x)
-                                     maxstat_trafo(x, minprob = minprob,
-                                                   maxprob = maxprob),
-                                 factor_trafo = function(x)
-                                     fmaxstat_trafo(x, minprob = minprob,
-                                                    maxprob = maxprob),
-                                 ordered_trafo = function(x)
-                                     ofmaxstat_trafo(x, minprob = minprob,
-                                                     maxprob = maxprob)))
+    args <- setup_args(
+        teststat = match.arg(teststat),
+        distribution = check_distribution_arg(distribution,
+                                              match.arg(distribution)),
+        xtrafo = function(data)
+            trafo(data,
+                  numeric_trafo = function(x)
+                      maxstat_trafo(x, minprob = minprob, maxprob = maxprob),
+                  factor_trafo = function(x)
+                      fmaxstat_trafo(x, minprob = minprob, maxprob = maxprob),
+                  ordered_trafo = function(x)
+                      ofmaxstat_trafo(x, minprob = minprob, maxprob = maxprob))
+    )
     ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)

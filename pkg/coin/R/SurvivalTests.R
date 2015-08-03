@@ -27,21 +27,23 @@ logrank_test.IndependenceProblem <- function(object,
 
     twosamp <- nlevels(object@x[[1]]) == 2
 
-    args <- setup_args(ytrafo = function(data)
-                           trafo(data, surv_trafo = function(y)
-                               logrank_trafo(y, ties.method = ties.method,
-                                             type = type, rho = rho,
-                                             gamma = gamma)),
-                       check = function(object) {
-                           if (!is_Ksample(object))
-                               stop(sQuote("object"),
-                                    " does not represent a K-sample problem",
-                                    " (maybe the grouping variable is not a factor?)")
-                           if (!is_censored_y(object))
-                               stop(sQuote(colnames(object@y)),
-                                    " is not a censored variable")
-                           return(TRUE)
-                       })
+    args <- setup_args(
+        ytrafo = function(data)
+            trafo(data, surv_trafo = function(y)
+                logrank_trafo(y, ties.method = ties.method,
+                              type = type, rho = rho,
+                              gamma = gamma)),
+        check = function(object) {
+            if (!is_Ksample(object))
+                stop(sQuote("object"),
+                     " does not represent a K-sample problem",
+                     " (maybe the grouping variable is not a factor?)")
+            if (!is_censored_y(object))
+                stop(sQuote(colnames(object@y)),
+                     " is not a censored variable")
+            return(TRUE)
+        }
+    )
     ## convert factors to ordered and attach scores if requested
     if (!is.null(args$scores)) {
         object <- setscores(object, args$scores)
