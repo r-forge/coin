@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2015-07-12 r68650) -- "Unsuffered Consequences"
+R Under development (unstable) (2015-07-24 r68738) -- "Unsuffered Consequences"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -902,6 +902,78 @@ alternative hypothesis: true mu is not equal to 0
 +       PACKAGE = "coin")
 [1] 4 6 3 2 0 7 1 5
 > 
+> ### could not distinguish censored and numeric responses
+> y1 <- rnorm(10)
+> y2 <- rnorm(10)
+> x <- gl(2, 5)
+> b <- factor(rep(1:5, 2))
+> try(oneway_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(wilcox_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a two-sample problem (maybe the grouping variable is not a factor?)
+> try(kruskal_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(normal_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(median_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(savage_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(kruskal_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(taha_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(klotz_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(mood_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(ansari_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(fligner_test(Surv(y1) ~ x))
+Error in tapply(object@y[[1]], object@x[[1]], median) : 
+  arguments must have same length
+> try(conover_test(Surv(y1) ~ x))
+Error in tapply(object@y[[1]], object@x[[1]], mean) : 
+  arguments must have same length
+> try(sign_test(Surv(y1) ~ x | b))
+Error in sign_test.SymmetryProblem(object = <S4 object of class structure("SymmetryProblem", package = "coin")>) : 
+  'y' is not a numeric variable
+> try(sign_test(Surv(y1) ~ Surv(y2)))
+Error in sign_test.formula(Surv(y1) ~ Surv(y2)) : 
+  'y' is not a numeric variable
+> try(sign_test(Surv(y1) ~ y2))
+Error in sign_test.formula(Surv(y1) ~ y2) : 'y' is not a numeric variable
+> try(sign_test(y1 ~ Surv(y2)))
+Error in sign_test.formula(y1 ~ Surv(y2)) : 'x' is not a numeric variable
+> try(wilcoxsign_test(Surv(y1) ~ x | b))
+Error in wilcoxsign_test.SymmetryProblem(object = <S4 object of class structure("SymmetryProblem", package = "coin")>) : 
+  'y' is not a numeric variable
+> try(wilcoxsign_test(Surv(y1) ~ Surv(y2)))
+Error in wilcoxsign_test.formula(Surv(y1) ~ Surv(y2)) : 
+  'y' is not a numeric variable
+> try(wilcoxsign_test(Surv(y1) ~ y2))
+Error in wilcoxsign_test.formula(Surv(y1) ~ y2) : 
+  'y' is not a numeric variable
+> try(wilcoxsign_test(y1 ~ Surv(y2)))
+Error in wilcoxsign_test.formula(y1 ~ Surv(y2)) : 
+  'x' is not a numeric variable
+> try(friedman_test(Surv(y1) ~ x))
+Error in check(object) : 
+  'object' does not represent a K-sample problem (maybe the grouping variable is not a factor?)
+> try(quade_test(Surv(y1) ~ x))
+Error in unclass(x)[i, , drop = FALSE] : subscript out of bounds
+> 
 > proc.time()
    user  system elapsed 
-   2.79    0.24    3.12 
+   2.44    0.20    2.63 

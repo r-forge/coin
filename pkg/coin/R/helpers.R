@@ -305,68 +305,74 @@ is_ytrafo <- function()
     any(vapply(sys.calls(), function(i)
             identical(as.character(i)[1], "ytrafo"), NA))
 
-is_2sample <- function(object) {
-    groups <- nlevels(object@x[[1L]]) == 2L &&
-                  ncol(object@xtrans) == 1L
-    return(is_Ksample(object) && groups)
-}
+is_factor_y <- function(object)
+    ncol(object@y) == 1L && is.factor(object@y[[1L]])
 
-is_Ksample <- function(object) {
-    groups <- (ncol(object@x) == 1L && is.factor(object@x[[1L]]))
-###    values <- (ncol(object@y) == 1L && ncol(object@ytrans) == 1L)
-    values <- ncol(object@ytrans) == 1L
-    return(groups && values)
-}
+is_factor_x <- function(object)
+    ncol(object@x) == 1L && is.factor(object@x[[1L]])
+
+is_ordered_y <- function(object)
+    ncol(object@y) == 1L && is.ordered(object@y[[1L]])
+
+is_ordered_x <- function(object)
+    ncol(object@x) == 1L && is.ordered(object@x[[1L]])
+
+is_unordered_y <- function(object)
+    ncol(object@y) == 1L && is.factor(object@y[[1L]]) && !is.ordered(object@y[[1L]])
+
+is_unordered_x <- function(object)
+    ncol(object@x) == 1L && is.factor(object@x[[1L]]) && !is.ordered(object@x[[1L]])
 
 is_numeric_y <- function(object)
-    ncol(object@y) == 1L && is.numeric(object@y[[1L]])
+    ncol(object@y) == 1L && is.numeric(object@y[[1L]]) && !is.Surv(object@y[[1L]])
+
+is_numeric_x <- function(object)
+    ncol(object@x) == 1L && is.numeric(object@x[[1L]]) && !is.Surv(object@x[[1L]])
 
 is_censored_y <- function(object)
     ncol(object@y) == 1L && is.Surv(object@y[[1L]])
 
-is_ordered_x <- function(object)
-###    all(vapply(object@x, function(x) is.numeric(x) || is.ordered(x), NA))
-    ncol(object@x) == 1L && is.ordered(object@x[[1L]])
+is_censored_x <- function(object)
+    ncol(object@x) == 1L && is.Surv(object@x[[1L]])
+
+is_2sample <- function(object)
+    ncol(object@x) == 1L && nlevels(object@x[[1L]]) == 2L
+
+is_Ksample <- is_factor_x
 
 is_corr <- function(object)
-    (is.numeric(object@x[[1L]]) && is.numeric(object@y[[1L]])) &&
-        (ncol(object@xtrans) == 1L && ncol(object@ytrans) == 1L)
-
-## is_contingency <- function(object) {
-##     x <- object@x
-##     groups <- (ncol(x) == 1L && is.factor(x[[1L]]))
-##     y <- object@y
-##     values <- (ncol(y) == 1L && is.factor(y[[1L]]))
-##     ### trans <- all(rowSums(object@xtrans) %in% c(0, 1)) &&
-##     ###          all(rowSums(object@ytrans) %in% c(0, 1))
-##     ### hm, two ordinal variables are a contingency problem as well (???)
-##     return((groups && values)) ### && trans)
-## }
+    (is_numeric_y(object) || is_censored_y(object)) &&
+        (is_numeric_x(object) || is_censored_x(object))
 
 is_contingency <- function(object)
-    (ncol(object@x) == 1L && is.factor(object@x[[1L]])) &&
-        (ncol(object@y) == 1L && is.factor(object@y[[1L]]))
+    is_factor_y(object) && is_factor_x(object)
 
-is_ordered <- function(object)
-    (is_Ksample(object) || is_contingency(object)) &&
-        (is.ordered(object@x[[1L]]) || is.ordered(object@y[[1L]]))
+is_contingency_2x2 <- function(object)
+    is_contingency(object) && nlevels(object@y[[1L]]) == 2L &&
+        nlevels(object@x[[1L]]) == 2L
 
 is_singly_ordered <- function(object) {
-    x <- object@x[[1L]]
-    y <- object@y[[1L]]
-    (is_Ksample(object) || is_contingency(object)) &&
-        ((is.ordered(x) && (is.numeric(y) || (!is.ordered(y) && nlevels(y) > 2L))) ||
-         (is.ordered(y) && (is.numeric(x) || (!is.ordered(x) && nlevels(x) > 2L))))
+    ## NOTE: unordered factors with exactly 2 levels are regarded as ordered
+    (is_ordered_y(object) &&
+     (is_numeric_x(object) || is_censored_x(object) ||
+      (is_unordered_x(object) && nlevels(object@x[[1L]]) > 2L))) ||
+    (is_ordered_x(object) &&
+     (is_numeric_y(object) || is_censored_y(object) ||
+      (is_unordered_y(object) && nlevels(object@y[[1L]]) > 2L)))
 }
 
 is_doubly_ordered <- function(object) {
-    x <- object@x[[1L]]
-    y <- object@y[[1L]]
-    (is_Ksample(object) || is_contingency(object)) &&
-        ((is.ordered(x) && is.ordered(y)) ||
-         ((is.ordered(x) && nlevels(y) == 2L) ||
-          (is.ordered(y) && nlevels(x) == 2L)))
+    ## NOTE: unordered factors with exactly 2 levels are regarded as ordered
+    (is_ordered_y(object) &&
+     (is_ordered_x(object) ||
+      (is_unordered_x(object) && nlevels(object@x[[1L]]) == 2L))) ||
+    (is_ordered_x(object) &&
+     (is_ordered_y(object) ||
+      (is_unordered_y(object) && nlevels(object@y[[1L]]) == 2L)))
 }
+
+is_ordered <- function(object)
+    is_singly_ordered(object) || is_doubly_ordered(object)
 
 is_completeblock <- function(object)
     all(table(object@x[[1L]], object@block) == 1L)
