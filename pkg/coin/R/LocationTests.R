@@ -23,6 +23,14 @@ oneway_test.IndependenceProblem <- function(object, ...) {
             return(TRUE)
         }
     )
+    ## convert factors to ordered and attach scores if requested
+    if (!is.null(args$scores)) {
+        object <- setscores(object, args$scores)
+        args$scores <- NULL
+    }
+    ## set test statistic to scalar for linear-by-linear and two-sample tests
+    args$teststat <- if (is_ordered_x(object) || twosamp) "scalar"
+                     else "quadratic"
 
     object <- do.call("independence_test", c(list(object = object), args))
 

@@ -147,6 +147,12 @@
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
   Confidence intervals can be extracted by \link[stats]{confint}.
 }
+\note{
+  Starting with version 1.1-0, \code{oneway_test} provides an automatic choice
+  of test statistic that cannot be overridden.  Please use
+  \code{\link{independence_test}} if more control is desired.
+}
+
 \references{
   Bauer, D. F.  (1972).  Constructing confidence sets using rank statistics.
   \emph{Journal of the American Statistical Association} \bold{67}(339),
@@ -257,17 +263,17 @@ kruskal_test(length ~ site, data = yoy,
 ## Approximative (Monte Carlo) Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
 ## Hollander and Wolfe (1999, p. 244)
 ## (where Steel-Dwass results are given)
-ot <- oneway_test(length ~ site, data = yoy,
-                  distribution = approximate(B = 50000),
-                  ytrafo = function(data)
-                      trafo(data, numeric_trafo = rank_trafo),
-                  xtrafo = mcp_trafo(site = "Tukey"))
+it <- independence_test(length ~ site, data = yoy,
+                        distribution = approximate(B = 50000),
+                        ytrafo = function(data)
+                            trafo(data, numeric_trafo = rank_trafo),
+                        xtrafo = mcp_trafo(site = "Tukey"))
 
 ## Global p-value
-pvalue(ot)
+pvalue(it)
 
 ## Sites (I = II) != (III = IV) at alpha = 0.01 (p. 244)
-pvalue(ot, method = "single-step") # subset pivotality is violated
+pvalue(it, method = "single-step") # subset pivotality is violated
 
 
 ## Asymptotic Jonckheere-Terpstra test for ordered groups

@@ -209,12 +209,12 @@ yoy <- data.frame(
 
 ## Approximative (Monte Carlo) Fisher-Pitman test with contrasts
 ## Note: all pairwise comparisons
-(ot <- oneway_test(length ~ site, data = yoy,
-                   distribution = approximate(B = 10000),
-                   xtrafo = mcp_trafo(site = "Tukey")))
+(it <- independence_test(length ~ site, data = yoy,
+                         distribution = approximate(B = 10000),
+                         xtrafo = mcp_trafo(site = "Tukey")))
 
 ## Joint distribution step-down p-values
-pvalue(ot, method = "step-down") # subset pivotality is violated
+pvalue(it, method = "step-down") # subset pivotality is violated
 }
 \keyword{methods}
 \keyword{htest}

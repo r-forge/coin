@@ -779,21 +779,21 @@ chi-squared = 22.852, p-value < 2.2e-16
 > ## Approximative (Monte Carlo) Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
 > ## Hollander and Wolfe (1999, p. 244)
 > ## (where Steel-Dwass results are given)
-> ot <- oneway_test(length ~ site, data = yoy,
-+                   distribution = approximate(B = 50000),
-+                   ytrafo = function(data)
-+                       trafo(data, numeric_trafo = rank_trafo),
-+                   xtrafo = mcp_trafo(site = "Tukey"))
+> it <- independence_test(length ~ site, data = yoy,
++                         distribution = approximate(B = 50000),
++                         ytrafo = function(data)
++                             trafo(data, numeric_trafo = rank_trafo),
++                         xtrafo = mcp_trafo(site = "Tukey"))
 > 
 > ## Global p-value
-> pvalue(ot)
+> pvalue(it)
 [1] 0.00068
 99 percent confidence interval:
  0.0004171853 0.0010419603 
 
 > 
 > ## Sites (I = II) != (III = IV) at alpha = 0.01 (p. 244)
-> pvalue(ot, method = "single-step") # subset pivotality is violated
+> pvalue(it, method = "single-step") # subset pivotality is violated
 Warning in .local(object, ...) :
   p-values may be incorrect due to violation of the subset pivotality condition
                 
@@ -2793,11 +2793,11 @@ alternative hypothesis: two.sided
 > 
 > ## Approximative (Monte Carlo) Fisher-Pitman test with contrasts
 > ## Note: all pairwise comparisons
-> (ot <- oneway_test(length ~ site, data = yoy,
-+                    distribution = approximate(B = 10000),
-+                    xtrafo = mcp_trafo(site = "Tukey")))
+> (it <- independence_test(length ~ site, data = yoy,
++                          distribution = approximate(B = 10000),
++                          xtrafo = mcp_trafo(site = "Tukey")))
 
-	Approximative K-Sample Fisher-Pitman Permutation Test
+	Approximative General Independence Test
 
 data:  length by site (I, II, III, IV)
 maxT = 3.953, p-value = 1e-04
@@ -2805,7 +2805,7 @@ alternative hypothesis: two.sided
 
 > 
 > ## Joint distribution step-down p-values
-> pvalue(ot, method = "step-down") # subset pivotality is violated
+> pvalue(it, method = "step-down") # subset pivotality is violated
 Warning in .local(object, ...) :
   p-values may be incorrect due to violation of the subset pivotality condition
                
@@ -2986,7 +2986,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  14.89 0.28 15.52 NA NA 
+Time elapsed:  15.68 0.23 15.97 NA NA 
 > grDevices::dev.off()
 null device 
           1 

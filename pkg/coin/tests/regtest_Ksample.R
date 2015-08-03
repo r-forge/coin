@@ -20,7 +20,6 @@ ptwo <- kruskal.test(y ~ x, data = dat)$p.value
 stopifnot(isequal(pvalue(kruskal_test(y ~ x, data = dat)), ptwo))
 
 stopifnot(isequal(pvalue(oneway_test(y ~ x, data = dat, distribution = "asympt",
-                                   teststat = "quad",
     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo))), ptwo))
 
 ### approximated distribution
@@ -44,7 +43,6 @@ stopifnot(isequal(pvalue(fligner_test(y ~ x, data = dat)), ptwo))
 
 dat$yy <- dat$y - tapply(dat$y, dat$x, median)[dat$x]
 stopifnot(isequal(pvalue(oneway_test(yy ~ x, data = dat, distribution = "asympt",
-                                   teststat = "quad",
     ytrafo = function(data) trafo(data, numeric_trafo = fligner_trafo))), ptwo))
 
 ### approximated distribution

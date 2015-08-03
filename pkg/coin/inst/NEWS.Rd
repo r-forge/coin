@@ -269,9 +269,12 @@
       the marginal homogeneity test now uses a scalar test statistic in the
       doubly ordered case
 
-      \item The Kruskal-Wallis test, the logrank test and the Friedman test now
-      use a scalar test statistic in case the explanatory variable is an ordered
-      factor
+      \item The Fisher-Pitman permutation test, the Kruskal-Wallis test, the
+      logrank test and the Friedman test now use a scalar test statistic in case
+      the explanatory variable is an ordered factor
+
+      \item The Fisher-Pitman permutation test no longer allows the test
+      statistic to be specified
 
       \item The Pearson chi-squared test, the generalized
       Cochran-Mantel-Haenszel test, the Kruskal-Wallis test, the Friedman test,
