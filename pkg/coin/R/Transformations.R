@@ -408,7 +408,9 @@ of_trafo <- function(x, scores = NULL) {
         warning(sQuote(deparse(substitute(x))), " is not an ordered factor")
     if (is.null(scores)) {
         s <- attr(x, "scores")
-        scores <- if (!is.null(s))
+        scores <- if (nlevels(x) == 2L)
+                      0:1               # must be 0:1 for exact p-values
+                  else if (!is.null(s))
                       s
                   else
                       seq_len(nlevels(x))

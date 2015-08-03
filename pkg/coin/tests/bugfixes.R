@@ -566,3 +566,28 @@ try(wilcoxsign_test(Surv(y1) ~ y2))
 try(wilcoxsign_test(y1 ~ Surv(y2)))
 try(friedman_test(Surv(y1) ~ x))
 try(quade_test(Surv(y1) ~ x))
+
+### exact two-sample tests with scores gave wrong p-value
+y <- 1:20
+x <- gl(2, 10)
+ox <- ordered(x)
+
+it1 <- independence_test(y ~ x,  distr = exact(algorithm = "shift")) # p = 1e-05
+it2 <- independence_test(y ~ x,  distr = exact(algorithm = "shift"), # was p = 1
+                         scores = list(x = 1:2))
+it3 <- independence_test(y ~ ox, distr = exact(algorithm = "shift")) # was p = 1
+it4 <- independence_test(y ~ ox, distr = exact(algorithm = "shift"), # was p = NA
+                         scores = list(ox = 3:4))
+stopifnot(identical(pvalue(it1), pvalue(it2)))
+stopifnot(identical(pvalue(it1), pvalue(it3)))
+stopifnot(identical(pvalue(it1), pvalue(it4)))
+
+it5 <- independence_test(y ~ x,  distr = exact(algorithm = "split")) # p = 1e-05
+it6 <- independence_test(y ~ x,  distr = exact(algorithm = "split"), # was p = NA
+                         scores = list(x = 1:2))
+it7 <- independence_test(y ~ ox, distr = exact(algorithm = "split")) # was p = NA
+it8 <- independence_test(y ~ ox, distr = exact(algorithm = "split"), # was p = NA
+                         scores = list(ox = 3:4))
+stopifnot(identical(pvalue(it5), pvalue(it6)))
+stopifnot(identical(pvalue(it5), pvalue(it7)))
+stopifnot(identical(pvalue(it5), pvalue(it8)))

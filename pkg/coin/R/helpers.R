@@ -231,6 +231,8 @@ setscores <- function(x, scores) {
             if (!is_monotone(scores[[var]]))
                 stop("scores for variable ", sQuote(var), " aren't monotone")
             x@x[[var]] <- ordered(x@x[[var]], levels = levels(x@x[[var]]))
+            if (nlevels(x@x[[var]]) == 2)
+                scores[[var]] <- 0:1      # must be 0:1 for exact p-values
             attr(x@x[[var]], "scores") <- scores[[var]]
         }
         if (!is.null(x@y[[var]])) {
@@ -241,6 +243,8 @@ setscores <- function(x, scores) {
             if (!is_monotone(scores[[var]]))
                 stop("scores for variable ", sQuote(var), " aren't monotone")
             x@y[[var]] <- ordered(x@y[[var]], levels = levels(x@y[[var]]))
+            if (nlevels(x@y[[var]]) == 2)
+                scores[[var]] <- 0:1      # must be 0:1 for exact p-values
             attr(x@y[[var]], "scores") <- scores[[var]]
         }
     }

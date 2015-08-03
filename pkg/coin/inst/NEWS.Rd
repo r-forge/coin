@@ -193,6 +193,9 @@
       \item Exact \eqn{p}-values for stratified tests were wrong when each block
       contained precisely two observations
 
+      \item Exact \eqn{p}-values for tests with an ordinal grouping variable
+      were wrong
+
       \item The smallest single-step and step-down adjusted \eqn{p}-values
       sometimes differed from the global \eqn{p}-value
 
