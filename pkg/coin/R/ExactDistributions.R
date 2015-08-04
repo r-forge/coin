@@ -37,7 +37,7 @@ SR_shift_2sample <- function(object, fact) {
 
     ## compute T and density
     if (m == 0L)
-        next
+        dens <- list(T = 0, Prob = 1)
     else if (m == length(scores))
         dens <- list(T = sum(scores), Prob = 1)
     else if (m < length(scores))
