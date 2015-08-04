@@ -465,7 +465,7 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
         x <- data[[nm]]
         if (nm %in% names(var_trafo)) {
             tr[[nm]] <- as.matrix(var_trafo[[nm]](x))
-            next()
+            next
         }
         if (class(x)[1] == "AsIs") {
             if (length(class(x)) == 1) {
@@ -476,19 +476,19 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
         }
         if (is.ordered(x)) {
             tr[[nm]] <- as.matrix(ordered_trafo(x))
-            next()
+            next
         }
         if (is.factor(x) || is.logical(x)) {
             tr[[nm]] <- as.matrix(factor_trafo(x))
-            next()
+            next
         }
-        if (inherits(x, "Surv")) {
+        if (is.Surv(x)) {
             tr[[nm]] <- as.matrix(surv_trafo(x))
-            next()
+            next
         }
         if (is.numeric(x)) {
             tr[[nm]] <- as.matrix(numeric_trafo(x))
-            next()
+            next
         }
         if (is.null(tr[[nm]]))
             stop("data class ", class(x), " is not supported")
