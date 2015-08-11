@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.1-0 (2015-XX-XX}{
+\section{Changes in version 1.1-0 (2015-XX-XX)}{
   \subsection{New features}{
     \itemize{
       \item The Fisher-Yates correlation test (based on van der Waerden scores)
@@ -41,8 +41,8 @@
       Cochran-Mantel-Haenszel test and the linear-by-linear association test now
       allow the alternative hypothesis to be specified in the doubly ordered
       case, i.e., when both the response variable and the explanatory variable
-      are ordered factors or can be regarded as such (see \code{?chisq_test},
-      \code{?cmh_test} and \code{?lbl_test})
+      are ordered factors (see \code{?chisq_test}, \code{?cmh_test} and
+      \code{?lbl_test})
 
       \item The Kruskal-Wallis test, the van der Waerden test, the Brown-Mood
       median test, the logrank test and the Friedman test now allow the
@@ -165,7 +165,7 @@
       \item The Friedman test did not warn when weights were supplied
 
       \item Maximally selected statistics did not handle user-specified scores
-      for ordinal variables properly
+      for ordinal variables correctly
 
       \item Two-sample problems were not identified as such if the grouping
       variable had unused factor levels, causing problems if, e.g., trying to
@@ -204,10 +204,10 @@
       when using the approximative (Monte Carlo) null distribution
 
       \item The density function of asymptotic permutation distributions for
-      maximum-type tests returned non-sense; it now reports \code{NA}
+      maximum-type tests returned nonsense; it now reports \code{NA}
 
       \item The density function of approximative (Monte Carlo) permutation
-      distributions returned non-zero probabilities for values not included in
+      distributions returned nonzero probabilities for values not included in
       the support
 
       \item The density function of exact permutation distributions returned a
@@ -216,7 +216,7 @@
 
       \item The distribution and quantile functions of asymptotic permutation
       distributions for maximum-type tests were not handling vector arguments
-      properly
+      correctly
 
       \item The quantile function of exact permutation distributions sometimes
       reported \code{NA} when the 100 \% quantile was requested
@@ -230,9 +230,9 @@
       generalized Cochran-Mantel-Haenszel test claimed that a
       \samp{Linear-by-Linear Association Test} had been carried out even in the
       singly ordered case, i.e., when either the response variable or the
-      explanatory variable is an ordered factor or can be regarded as such;
-      these are now reported as \samp{Generalized Pearson Chi-squared Test}
-      and \samp{Generalized Cochran-Mantel-Haenszel Test} respectively
+      explanatory variable is an ordered factor; these are now reported as
+      \samp{Generalized Pearson Chi-squared Test} and
+      \samp{Generalized Cochran-Mantel-Haenszel Test} respectively
 
       \item The printed output of the Fisher-Pitman permutation test reported
       the parameter tested in the two-sample case when the explanatory variable
@@ -263,7 +263,7 @@
     \itemize{
       \item The Pearson chi-squared test, the generalized
       Cochran-Mantel-Haenszel test, the linear-by-linear association test and
-      the marginal homogeneity test now uses a scalar test statistic in the
+      the marginal homogeneity test now use a scalar test statistic in the
       doubly ordered case
 
       \item The Fisher-Pitman permutation test, the Kruskal-Wallis test, the
@@ -276,7 +276,7 @@
       \item The Pearson chi-squared test, the generalized
       Cochran-Mantel-Haenszel test, the Kruskal-Wallis test, the Friedman test,
       the Fligner-Killeen test and the marginal homogeneity test no longer
-      features the \code{distribution} argument (but still allows the type of
+      features the \code{distribution} argument (but still allow the type of
       null distribution to be specified)
 
       \item The Ansari-Bradley test no longer features the \code{alternative}
@@ -336,19 +336,19 @@
       \item \code{wilcoxsign_test.IndependenceProblem()} has been replaced by
       \code{wilcoxsign_test.SymmetryProblem()}
 
-      \item The class \code{"IndependenceTestStatistic"} is now \emph{virtual}
+      \item The \code{"IndependenceTestStatistic"} class is now virtual
 
       \item Objects of class \code{"IndependenceProblem"} drop unused factor
       levels
 
       \item Objects of classes \code{"ScalarIndependenceTestStatistic"} or
-      \code{"QuadTypeIndependenceTestStatistic"} now has a \code{paired} slot
+      \code{"QuadTypeIndependenceTestStatistic"} now have a \code{paired} slot
 
       \item Objects of class \code{"ScalarIndependenceTest"} now has a
       \code{parameter} slot
 
       \item Objects of classes \code{"ApproxNullDistribution"} or
-      \code{"AsymptNullDistribution"} now has a slot \code{seed} containing the
+      \code{"AsymptNullDistribution"} now have a slot \code{seed} containing the
       state of the random number generator
 
       \item The package manual has been completely revised
