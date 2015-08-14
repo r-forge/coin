@@ -19,7 +19,6 @@ load it using</p>
 </code></pre>
 
 <pre><code>## Loading required package: survival
-## Loading required package: splines
 </code></pre>
 
 <p>Now all coin functions are ready to be used, for example the independence_test()
@@ -27,7 +26,7 @@ function for testing independence of two variables, for example the relationship
 between income and job satisfaction in women:</p>
 
 <pre><code class="r">### for females only
-x &lt;- as.table(jobsatisfaction[, , &quot;Female&quot;])
+x &lt;- as.table(jobsatisfaction[,,&quot;Female&quot;])
 independence_test(x)
 </code></pre>
 
@@ -36,6 +35,7 @@ independence_test(x)
 ## 
 ## data:  Job.Satisfaction by
 ##   Income (&lt;5000, 5000-15000, 15000-25000, &gt;25000)
-## maxT = 1.825, p-value = 0.5723
+## maxT = 1.8255, p-value = 0.5726
+## alternative hypothesis: two.sided
 </code></pre>
 

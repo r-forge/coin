@@ -24,14 +24,6 @@
   comment: ~
   url: http://www.few.vu.nl/~mavdwiel/
   image: /img/mark_van_de_wiel.jpg
-- name: Achim Zeileis
-  given: Achim
-  family: Zeileis
-  role: aut
-  email: ~
-  comment: ~
-  url: http://eeecon.uibk.ac.at/~zeileis/
-  image: /img/achim_zeileis.jpg
 - name: Henric Winell
   given: Henric
   family: Winell
@@ -40,3 +32,11 @@
   comment: ~
   url: http://ki.se/en/people/henwin
   image: /img/henric_winell.jpg
+- name: Achim Zeileis
+  given: Achim
+  family: Zeileis
+  role: aut
+  email: ~
+  comment: ~
+  url: http://eeecon.uibk.ac.at/~zeileis/
+  image: /img/achim_zeileis.jpg

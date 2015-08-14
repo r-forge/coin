@@ -354,6 +354,9 @@
       \item The package manual has been completely revised
 
       \item The memory consumption during computations has been reduced
+
+      \item Henric Winell, a long-term collaborator who donated almost all
+            changes in \pkg{coin} 1.1-0, is now listed as author. Welcome on board, Henric!
     }
   }
 }
