@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.1-0 (2015-XX-XX)}{
+\section{Changes in version 1.1-0 (2015-08-14)}{
   \subsection{New features}{
     \itemize{
       \item The Fisher-Yates correlation test (based on van der Waerden scores)

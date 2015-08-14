@@ -32,3 +32,11 @@
   comment: ~
   url: http://eeecon.uibk.ac.at/~zeileis/
   image: /img/achim_zeileis.jpg
+- name: Henric Winell
+  given: Henric
+  family: Winell
+  role: aut
+  email: ~
+  comment: ~
+  url: http://ki.se/en/people/henwin
+  image: /img/henric_winell.jpg
