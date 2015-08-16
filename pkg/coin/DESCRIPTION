@@ -1,6 +1,6 @@
 Package: coin
-Version: 1.1-0
-Date: 2015-08-14
+Version: 1.1-1
+Date: 2015-XX-XX
 Title: Conditional Inference Procedures in a Permutation Test Framework
 Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
                     email = "Torsten.Hothorn@R-project.org"),
