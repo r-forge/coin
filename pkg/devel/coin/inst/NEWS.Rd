@@ -1,6 +1,23 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
+\section{Changes in version 1.1-1 (2015-XX-XX)}{
+  \subsection{New features}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Other changes}{
+    \itemize{
+      \item
+    }
+  }
+}
 \section{Changes in version 1.1-0 (2015-08-14)}{
   \subsection{New features}{
     \itemize{
