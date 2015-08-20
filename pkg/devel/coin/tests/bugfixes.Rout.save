@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2015-07-24 r68738) -- "Unsuffered Consequences"
+R Under development (unstable) (2015-08-13 r69049) -- "Unsuffered Consequences"
 Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -434,20 +434,6 @@ sample estimates:
 difference in location 
                   2.59 
 
-> 
-> ### discrete (spotted by Henric Winell <henric.winell@sorch.se>)
-> set.seed(1)
-> x <- gl(3, 5)
-> y1 <- rnorm(15)
-> y2 <- rnorm(15)
-> it <- independence_test(y1 + y2 ~ x, distribution = approximate(B = 5))
-> pvalue(it, "discrete") # didn't work
-  y1       y2
-1  1 0.737856
-2  1 1.000000
-3  1 0.000000
-Warning message:
-In .local(object, ...) : 'method = "discrete"' is deprecated; see '?pvalue'
 > 
 > ### error messages
 > ### first group completely empty
@@ -979,4 +965,4 @@ Error in quade_test.SymmetryProblem(object = <S4 object of class structure("Symm
 > 
 > proc.time()
    user  system elapsed 
-   2.57    0.20    2.80 
+   2.55    0.18    2.88 

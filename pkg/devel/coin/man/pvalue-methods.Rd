@@ -126,13 +126,6 @@
   The \eqn{p}-value, mid-\eqn{p}-value or \eqn{p}-value interval computed from
   \code{object}.  A numeric vector or matrix.
 }
-\note{
-  In versions of \pkg{coin} prior to 1.1-0, a min-\eqn{P} procedure computing
-  \enc{Šidák}{Sidak} single-step adjusted \eqn{p}-values accounting for
-  discreteness was available when specifying \code{method = "discrete"}.
-  \strong{This is now deprecated and will be removed in a future release} due to
-  the introduction of a more general max-\eqn{T} version of the same algorithm.
-}
 \references{
   Berger, V. W.  (2000).  Pros and cons of permutation tests in clinical trials.
   \emph{Statistics in Medicine} \bold{19}(10), 1319--1328.

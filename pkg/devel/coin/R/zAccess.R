@@ -26,13 +26,7 @@ setMethod("pvalue",
 ###     combinations = c("free", "restricted"), # placeholder
         distribution = c("joint", "marginal"),
         type = c("Bonferroni", "Sidak"), ...) {
-            method <- match.arg(method,
-                          choices = c("global", "single-step", "step-down",
-                                      "unadjusted", "discrete"),
-                          several.ok = TRUE)[1]
-            if (method == "discrete")
-                warning(sQuote(paste("method =", dQuote(method))),
-                        " is deprecated; see ", sQuote("?pvalue"))
+            method <- match.arg(method)
             distribution <- match.arg(distribution)
             type <- match.arg(type)
 
@@ -66,10 +60,6 @@ setMethod("pvalue",
                                  stepdown = TRUE, ...)
                 }
             }
-            ## <DEPRECATED>
-            else if (method == "discrete")
-                dbonf(object, ...)
-            ## </DEPRECATED>
             else
                 unadjusted(object, ...)
         }

@@ -14,7 +14,8 @@
   }
   \subsection{Other changes}{
     \itemize{
-      \item
+      \item \code{method = "discrete"} in \code{pvalue()} is now defunct and has
+      been removed
     }
   }
 }
