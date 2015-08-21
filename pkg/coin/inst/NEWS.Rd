@@ -14,7 +14,7 @@
   }
   \subsection{Other changes}{
     \itemize{
-      \item
+      \item Documentation updates
     }
   }
 }
