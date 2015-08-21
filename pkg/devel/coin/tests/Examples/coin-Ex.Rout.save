@@ -1363,7 +1363,7 @@ Control 0.00349714 0.4665
 > 
 > ### Name: SurvivalTests
 > ### Title: Two- and K-Sample Tests for Censored Data
-> ### Aliases: surv_test logrank_test logrank_test.formula
+> ### Aliases: logrank_test logrank_test.formula
 > ###   logrank_test.IndependenceProblem
 > ### Keywords: htest survival
 > 
@@ -2985,7 +2985,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  15.51 0.27 15.93 NA NA 
+Time elapsed:  15.65 0.25 16.16 NA NA 
 > grDevices::dev.off()
 null device 
           1 
