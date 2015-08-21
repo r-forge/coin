@@ -16,6 +16,10 @@
     \itemize{
       \item \code{surv_test()} is now defunct and has been removed
 
+      \item The \code{ties.method} argument of \code{logrank_trafo()} no longer
+      allows using \code{"logrank"} and \code{"HL"} to specify mid-ranks and the
+      Hothorn-Lausen method respectively
+
       \item \code{method = "discrete"} in \code{pvalue()} is now defunct and has
       been removed
     }
