@@ -139,12 +139,6 @@
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
 }
-\note{
-  Starting with \pkg{coin} version 1.1-0, maximum statistics and quadratic forms
-  can no longer be specified using \code{teststat = "maxtype"} and
-  \code{teststat = "quadtype"} respectively (as was used in versions prior to
-  0.4-5).
-}
 \references{
   Gerig, T.  (1969).  A multivariate extension of Friedman's
   \eqn{\chi^2_r}{chi^2_r} test.  \emph{Journal of the American Statistical

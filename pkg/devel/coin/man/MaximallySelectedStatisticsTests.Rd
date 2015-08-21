@@ -115,12 +115,6 @@
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
 }
-\note{
-  Starting with \pkg{coin} version 1.1-0, maximum statistics and quadratic forms
-  can no longer be specified using \code{teststat = "maxtype"} and
-  \code{teststat = "quadtype"} respectively (as was used in versions prior to
-  0.4-5).
-}
 \references{
   Betensky, R. A. and Rabinowitz, D.  (1999).  Maximally selected
   \eqn{\chi^2}{chi^2} statistics for \eqn{k \times 2}{k x 2} tables.

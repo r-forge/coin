@@ -205,12 +205,6 @@ mcp_trafo(\dots)
   columns.  For \code{trafo}, a named matrix with \code{nrow(data)} rows and an
   arbitrary number of columns.
 }
-\note{
-  Starting with \pkg{coin} version 1.1-0, all transformation functions are now
-  passing through missing values (i.e., \code{\link[base]{NA}}s).  Furthermore,
-  \code{median_trafo} and \code{logrank_trafo} are now \emph{increasing}
-  functions (in conformity with most other transformations in this package).
-}
 \examples{
 ## Dummy matrix, two-sample problem (only one column)
 f_trafo(gl(2, 3))

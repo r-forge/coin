@@ -147,12 +147,6 @@
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
   Confidence intervals can be extracted by \link[stats]{confint}.
 }
-\note{
-  Starting with version 1.1-0, \code{oneway_test} provides an automatic choice
-  of test statistic that cannot be overridden.  Please use
-  \code{\link{independence_test}} if more control is desired.
-}
-
 \references{
   Bauer, D. F.  (1972).  Constructing confidence sets using rank statistics.
   \emph{Journal of the American Statistical Association} \bold{67}(339),

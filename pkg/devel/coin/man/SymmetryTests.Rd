@@ -100,13 +100,6 @@
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
 }
-\note{
-  Starting with \pkg{coin} version 1.0-16, the \code{zero.method} argument
-  replaced the (now removed) \code{ties.method} argument.  The current default
-  is \code{zero.method = "Pratt"} whereas earlier versions had
-  \code{ties.method = "HollanderWolfe"}, which is equivalent to
-  \code{zero.method = "Wilcoxon"}.
-}
 \references{
   Hollander, M. and Wolfe, D. A.  (1999).  \emph{Nonparametric Statistical
     Methods}, Second Edition.  New York: John Wiley & Sons.

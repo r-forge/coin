@@ -141,12 +141,6 @@
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
 }
-\note{
-  Starting with \pkg{coin} version 1.1-0, maximum statistics and quadratic forms
-  can no longer be specified using \code{teststat = "maxtype"} and
-  \code{teststat = "quadtype"} respectively (as was used in versions prior to
-  0.4-5).
-}
 \references{
   Hothorn, T., Hornik, K., van de Wiel, M. A. and Zeileis, A.  (2006).  A Lego
   system for conditional inference.  \emph{The American Statistician}

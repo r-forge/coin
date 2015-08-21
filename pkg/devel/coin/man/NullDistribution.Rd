@@ -96,13 +96,6 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
   selected by setting \code{algorithm} to either \code{"shift"} or
   \code{"split-up"} respectively.
 }
-\note{
-  Starting with coin version 1.1-0, the default for \code{algorithm} is
-  \code{"auto"}, having identical behaviour to \code{"shift"} in previous
-  versions.  In earlier versions of the package, \code{algorithm = "shift"}
-  silently switched to the split-up algorithm if non-integer scores were
-  detected, whereas the current version exists with a warning.
-}
 \references{
   Genz, A. and Bretz, F.  (2009).  \emph{Computation of Multivariate Normal and
     t Probabilities}.  Heidelberg: Springer-Verlag.
