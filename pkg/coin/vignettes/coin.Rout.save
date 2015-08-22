@@ -5,43 +5,6 @@
 Loading required package: coin
 Loading required package: survival
 
-> require("Biobase")
-Loading required package: Biobase
-Loading required package: BiocGenerics
-Loading required package: parallel
-
-Attaching package: 'BiocGenerics'
-
-The following objects are masked from 'package:parallel':
-
-    clusterApply, clusterApplyLB, clusterCall,
-    clusterEvalQ, clusterExport, clusterMap,
-    parApply, parCapply, parLapply, parLapplyLB,
-    parRapply, parSapply, parSapplyLB
-
-The following object is masked from 'package:stats':
-
-    xtabs
-
-The following objects are masked from 'package:base':
-
-    Filter, Find, Map, Position, Reduce,
-    anyDuplicated, append, as.data.frame, as.vector,
-    cbind, colnames, do.call, duplicated, eval,
-    evalq, get, intersect, is.unsorted, lapply,
-    mapply, match, mget, order, paste, pmax,
-    pmax.int, pmin, pmin.int, rank, rbind, rep.int,
-    rownames, sapply, setdiff, sort, table, tapply,
-    union, unique, unlist, unsplit
-
-Welcome to Bioconductor
-
-    Vignettes contain introductory material; view
-    with 'browseVignettes()'. To cite Bioconductor,
-    see 'citation("Biobase")', and for packages
-    'citation("pkgname")'.
-
-
 > require("multcomp")
 Loading required package: multcomp
 Loading required package: mvtnorm
@@ -218,4 +181,4 @@ IV - III 0.99889989
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   1.37    0.20    1.71 
+   1.01    0.23    2.26 

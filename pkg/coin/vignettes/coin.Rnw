@@ -60,7 +60,6 @@
 <<setup, echo = FALSE, results = hide>>=
 options(width = 60)
 require("coin")
-require("Biobase")
 require("multcomp")
 set.seed(290875)
 @
