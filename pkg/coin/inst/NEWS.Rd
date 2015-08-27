@@ -9,7 +9,8 @@
   }
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item Methods \code{initialize()} and \code{show()} were not
+      imported from package \pkg{methods}
     }
   }
   \subsection{Other changes}{
