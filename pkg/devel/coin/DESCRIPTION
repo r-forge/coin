@@ -14,7 +14,6 @@ Description: Conditional inference procedures for the general independence
 Depends: R (>= 3.2.0), methods, survival
 Imports: stats, modeltools (>= 0.2-9), mvtnorm (>= 1.0-3), multcomp
 Suggests: parallel, xtable, e1071, vcd, TH.data
-Enhances: Biobase
 LazyData: yes
 NeedsCompilation: yes
 ByteCompile: yes
