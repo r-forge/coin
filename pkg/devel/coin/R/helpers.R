@@ -395,7 +395,7 @@ has_distribution <- function(args)
 check_distribution_arg <- function(distribution,
     values = c("asymptotic", "approximate", "exact", "none")) {
     if (is.character(distribution)) {
-        distribution <- match.arg(distribution[1], values)
+        distribution <- match.arg(distribution, values)
         if (distribution == "none")
             function(object) new("NullDistribution")
         else
