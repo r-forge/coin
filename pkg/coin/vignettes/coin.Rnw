@@ -446,33 +446,6 @@ distribution of the test statistics under the complete null-hypothesis of no
 treatment effect of \texttt{site} is the basis of all adjustments instead of
 the corresponding partial null-hypothesis.
 
-Another important application are simultaneous tests for many response
-variables. This problem frequently occurs in microarray expression studies
-and we shall have a look at an artificial example: 100 variables (from a
-normal distribution) are to be tested in a one-way classification with $n =
-40$ observations. Only the first variable shows a difference and we are
-interested in both a global test and the adjusted $p$-values. Here, the
-example is formulated within the \pkg{Biobase} \citep{PKG:Biobase}
-framework (example currently not run because of dependencies problems):
-<<biobase-resampling, echo = TRUE, eval = FALSE>>=
-if (require("Biobase")) {
-
-   p <- 100
-   pd <- new("AnnotatedDataFrame",
-             data = data.frame(group = gl(2, 20)),
-             varMetadata = data.frame(labelDescription = "1/2"))
-   exprs <- matrix(rnorm(p * 40), nrow = p)
-   exprs[1, 1:20] <- exprs[1, 1:20] + 1.5
-   ex <- new("ExpressionSet", exprs = exprs, phenoData = pd)
-
-   it <- independence_test(group ~ ., data = ex,
-                           distribution = approximate(B = 1000))
-
-   print(pvalue(it))
-   print(which(pvalue(it, method = "step-down") < 0.05))
-
-}
-@
 
 \section{Quality Assurance}
 
