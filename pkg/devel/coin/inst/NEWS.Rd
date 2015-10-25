@@ -32,7 +32,7 @@
       imported from package \pkg{methods}
     }
   }
-  \subsection{Other changes}{
+  \subsection{User-visible changes}{
     \itemize{
       \item Documentation and vignette updates
     }
@@ -296,7 +296,7 @@
       validity
     }
   }
-  \subsection{Other changes}{
+  \subsection{User-visible changes}{
     \itemize{
       \item The Pearson chi-squared test, the generalized
       Cochran-Mantel-Haenszel test, the linear-by-linear association test and
