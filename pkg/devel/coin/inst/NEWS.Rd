@@ -12,7 +12,7 @@
       \item
     }
   }
-  \subsection{Other changes}{
+  \subsection{User-visible changes}{
     \itemize{
       \item \code{surv_test()} is now defunct and has been removed
 
@@ -25,12 +25,7 @@
     }
   }
 }
-\section{Changes in version 1.1-1 (2015-XX-XX)}{
-  \subsection{New features}{
-    \itemize{
-      \item
-    }
-  }
+\section{Changes in version 1.1-1 (2015-10-25)}{
   \subsection{Bug fixes}{
     \itemize{
       \item Methods \code{initialize()} and \code{show()} were not
@@ -398,7 +393,8 @@
       \item The memory consumption during computations has been reduced
 
       \item Henric Winell, a long-term collaborator who donated almost all
-            changes in \pkg{coin} 1.1-0, is now listed as author. Welcome on board, Henric!
+      changes in \pkg{coin} 1.1-0, is now listed as author.  Welcome on board,
+      Henric!
     }
   }
 }
