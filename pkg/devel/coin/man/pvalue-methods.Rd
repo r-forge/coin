@@ -126,6 +126,11 @@
   The \eqn{p}-value, mid-\eqn{p}-value or \eqn{p}-value interval computed from
   \code{object}.  A numeric vector or matrix.
 }
+\note{
+  The mid-\eqn{p}-value and \eqn{p}-value interval of asymptotic permutation
+  distributions for maximum-type tests or exact permutation distributions
+  obtained by the split-up algoritm is reported as \code{NA}.
+}
 \references{
   Berger, V. W.  (2000).  Pros and cons of permutation tests in clinical trials.
   \emph{Statistics in Medicine} \bold{19}(10), 1319--1328.
