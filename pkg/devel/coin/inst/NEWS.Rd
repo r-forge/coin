@@ -25,6 +25,18 @@
     }
   }
 }
+\section{Changes in version 1.1-2 (2015-XX-XX)}{
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{User-visible changes}{
+    \itemize{
+      \item
+    }
+  }
+}
 \section{Changes in version 1.1-1 (2015-10-25)}{
   \subsection{Bug fixes}{
     \itemize{
