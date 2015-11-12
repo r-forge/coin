@@ -5,6 +5,10 @@
   \subsection{Bug fixes}{
     \itemize{
       \item \code{of_trafo()} did not handle ordered factors of length one
+
+      \item Parallel operation (in \code{approximate()}) changed the random
+      number generator state upon first invocation unless package
+      \pkg{parallel}'s namespace had already been loaded 
     }
   }
   \subsection{User-visible changes}{
