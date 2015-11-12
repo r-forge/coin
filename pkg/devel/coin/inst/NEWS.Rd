@@ -28,7 +28,7 @@
 \section{Changes in version 1.1-2 (2015-XX-XX)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item \code{of_trafo()} did not handle ordered factors of length one
     }
   }
   \subsection{User-visible changes}{
