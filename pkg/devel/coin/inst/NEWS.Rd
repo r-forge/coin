@@ -25,7 +25,7 @@
     }
   }
 }
-\section{Changes in version 1.1-2 (2015-XX-XX)}{
+\section{Changes in version 1.1-2 (2015-11-13)}{
   \subsection{Bug fixes}{
     \itemize{
       \item \code{of_trafo()} did not handle ordered factors of length one
