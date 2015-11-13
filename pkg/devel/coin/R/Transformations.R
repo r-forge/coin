@@ -411,10 +411,7 @@ of_trafo <- function(x, scores = NULL) {
     if (!is.list(scores))
         scores <- list(scores)
     if (all(lengths(scores) == nlevels(x)))
-        matrix(vapply(scores, function(s) s[x], as.double(x),
-                      USE.NAMES = FALSE),
-               ncol = length(scores),
-               dimnames = list(seq_along(x), names(scores)))
+        setRownames(do.call("cbind", scores)[x, , drop = FALSE], seq_along(x))
     else
         stop(sQuote("scores"), " does not match the number of levels")
 }
