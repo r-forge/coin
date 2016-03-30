@@ -9,7 +9,7 @@
   }
   \subsection{User-visible changes}{
     \itemize{
-      \item Version 1.0-4 of the \pkg{mvtnorm} package is now required
+      \item Version 1.0-5 of the \pkg{mvtnorm} package is now required
     }
   }
 }

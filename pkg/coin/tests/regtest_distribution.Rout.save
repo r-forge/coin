@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2016-01-23 r69990) -- "Unsuffered Consequences"
+R Under development (unstable) (2016-02-11 r70149) -- "Unsuffered Consequences"
 Copyright (C) 2016 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -2484,7 +2484,7 @@ Error in .local(object, ...) :
 [1] 0.0000000 0.4664477
 > stopifnot(isequal(pp_mam, c(pperm(it_mam, 0), pperm(it_mam, 1))))
 > round(qp_mam <- qperm(it_mam, c(0.5, 0.75)), 7)              # failed in < 1.1-0
-[1] 1.051402 1.498221
+[1] 1.051375 1.498090
 > stopifnot(isequal(qp_mam, c(qperm(it_mam, 0.5), qperm(it_mam, 0.75))))
 > 
 > ### multivariate, asymptotic and quad
@@ -2580,4 +2580,4 @@ Error in .local(object, ...) :
 > 
 > proc.time()
    user  system elapsed 
-   6.38    0.51    6.98 
+   4.77    0.46    5.91 
