@@ -1,6 +1,6 @@
 Package: coin
 Version: 2.0-0
-Date: 2015-XX-XX
+Date: 2016-XX-XX
 Title: Conditional Inference Procedures in a Permutation Test Framework
 Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
                     email = "Torsten.Hothorn@R-project.org"),
@@ -13,7 +13,7 @@ Description: Conditional inference procedures for the general independence
   censored, ordered and multivariate problems.
 Depends: R (>= 3.2.0), methods, survival
 Imports: stats, modeltools (>= 0.2-9), mvtnorm (>= 1.0-4), multcomp
-Suggests: parallel, xtable, e1071, vcd, TH.data
+Suggests: parallel, xtable, e1071, vcd, TH.data (>= 1.0-7)
 LazyData: yes
 NeedsCompilation: yes
 ByteCompile: yes
