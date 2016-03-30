@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2015-10-20 r69547) -- "Unsuffered Consequences"
-Copyright (C) 2015 The R Foundation for Statistical Computing
+R Under development (unstable) (2016-03-28 r70390) -- "Unsuffered Consequences"
+Copyright (C) 2016 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -20,6 +20,7 @@ Type 'q()' to quit R.
 > pkgname <- "coin"
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
+> options(pager = "console")
 > library('coin')
 Loading required package: survival
 > 
@@ -794,7 +795,8 @@ chi-squared = 22.852, p-value < 2.2e-16
 > ## Sites (I = II) != (III = IV) at alpha = 0.01 (p. 244)
 > pvalue(it, method = "single-step") # subset pivotality is violated
 Warning in .local(object, ...) :
-  p-values may be incorrect due to violation of the subset pivotality condition
+  p-values may be incorrect due to violation
+  of the subset pivotality condition
                 
 II - I   0.94868
 III - I  0.00876
@@ -1770,7 +1772,8 @@ alternative hypothesis: two.sided
 > ## Wide Angle vs. Round Out differ (Hollander and Wolfe, 1999, p. 296)
 > pvalue(st, method = "single-step") # subset pivotality is violated
 Warning in .local(object, ...) :
-  p-values may be incorrect due to violation of the subset pivotality condition
+  p-values may be incorrect due to violation
+  of the subset pivotality condition
                                      
 Narrow Angle - Round Out  0.623934656
 Wide Angle - Round Out    0.003358314
@@ -2806,7 +2809,8 @@ alternative hypothesis: two.sided
 > ## Joint distribution step-down p-values
 > pvalue(it, method = "step-down") # subset pivotality is violated
 Warning in .local(object, ...) :
-  p-values may be incorrect due to violation of the subset pivotality condition
+  p-values may be incorrect due to violation
+  of the subset pivotality condition
                
 II - I   0.4284
 III - I  0.0213
@@ -2985,7 +2989,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  15.3 0.23 15.61 NA NA 
+Time elapsed:  15.58 0.36 16.03 NA NA 
 > grDevices::dev.off()
 null device 
           1 
