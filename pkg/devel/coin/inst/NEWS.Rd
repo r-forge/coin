@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 2.0-0 (2015-XX-XX)}{
+\section{Changes in version 2.0-0 (2016-XX-XX)}{
   \subsection{New features}{
     \itemize{
       \item
@@ -33,7 +33,7 @@
   }
   \subsection{User-visible changes}{
     \itemize{
-      \item Version 1.0-4 of the \pkg{mvtnorm} package is now required
+      \item Version 1.0-5 of the \pkg{mvtnorm} package is now required
     }
   }
 }
