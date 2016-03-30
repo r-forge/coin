@@ -4,19 +4,19 @@ set.seed(29)
 dyn.load("table.so")
 
 i2w_1 <- function(indx1, indx2)
-    .Call("R_int_table", indx1, nlevels(indx1) + 1L, 
+    .Call("R_2int_table", indx1, nlevels(indx1) + 1L, 
                          indx2, nlevels(indx2) + 1L)
 
 i2w_w <- function(indx1, indx2, weights)
-    .Call("R_int_w_table", indx1, nlevels(indx1) + 1L, 
+    .Call("R_2int_w_table", indx1, nlevels(indx1) + 1L, 
                            indx2, nlevels(indx2) + 1L, weights)
 
 i2w_s <- function(indx1, indx2, subset)
-    .Call("R_int_s_table", indx1, nlevels(indx1) + 1L, 
+    .Call("R_2int_s_table", indx1, nlevels(indx1) + 1L, 
                            indx2, nlevels(indx2) + 1L, subset - 1L)
 
 i2w_s_w <- function(indx1, indx2, subset, weights)
-    .Call("R_int_s_w_table", indx1, nlevels(indx1) + 1L, 
+    .Call("R_2int_s_w_table", indx1, nlevels(indx1) + 1L, 
                              indx2, nlevels(indx2) + 1L, subset - 1L, weights)
 
 i2w <- function(indx1, indx2, weights, subset, perm = FALSE) { 
@@ -68,4 +68,30 @@ o1 & o2 & o3 & o4
 Rprof("a")
 all(replicate(100, fun()))
 Rprof(NULL)
+
+n <- 100
+i1 <- factor(sample(1:7, size = n, replace = TRUE))
+i2 <- factor(sample(1:5, size = n, replace = TRUE))
+w <- as.integer(floor(runif(n, max = 7)))
+sum(w)
+s <- sample(1:n, size = n/10, replace = FALSE)
+
+(X <- i2w(i1, i2))
+.Call("R_d2s", X)
+
+X <- diag(4)
+storage.mode(X) <- "integer"
+.Call("R_d2s", X) 
+
+.Call("R_1int_table", i1, nlevels(i1) + 1L)
+table(i1)
+
+.Call("R_1int_w_table", i1, nlevels(i1) + 1L, w)
+table(rep(i1, w))
+
+.Call("R_1int_s_table", i1, nlevels(i1) + 1L, s - 1L)
+table(i1[s])
+
+.Call("R_1int_s_w_table", i1, nlevels(i1) + 1L, s - 1L, w)
+table(rep(i1[s], w[s]))
 
