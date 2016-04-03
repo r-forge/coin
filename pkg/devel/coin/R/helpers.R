@@ -133,8 +133,8 @@ ft <- function(test, class, formula, data = list(), subset = NULL,
     weights = NULL, ...) {
 
     object <- formula2data(formula, data, subset, weights = weights, ...)
-    object <- new(class, x = object$x, y = object$y, block = object$bl,
-                  weights = object$w)
+    object <- new(class, x = object$x, y = object$y, block = object$block,
+                  weights = object$weights)
     args <- list(...)
     args$frame <- NULL
 
@@ -190,8 +190,8 @@ formula2data <- function(formula, data, subset, weights = NULL, ...) {
     } else
         block <- NULL
 
-    list(x = x, y = y, block = block, bl = block[[1L]],
-         w = if (no_weights) NULL else dat@get("weights")[[1L]])
+    list(x = x, y = y, block = block[[1L]],
+         weights = if (no_weights) NULL else dat@get("weights")[[1L]])
 }
 
 setscores <- function(x, scores) {
@@ -200,7 +200,7 @@ setscores <- function(x, scores) {
 
     varnames <- names(scores)
     if (!is.list(scores) || is.null(varnames))
-       stop(sQuote("scores"), " is not a named list")
+        stop(sQuote("scores"), " is not a named list")
 
     missing <- varnames[!varnames %in% c(colnames(x@x), colnames(x@y))]
     if (length(missing) > 0L)
