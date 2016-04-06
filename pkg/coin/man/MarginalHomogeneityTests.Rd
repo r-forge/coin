@@ -138,13 +138,14 @@ performance <- matrix(
         "Second" = c("Approve", "Disprove")
     )
 )
+performance <- as.table(performance)
+diag(performance) <- 0 # speed-up: only off-diagonal elements contribute
 
 ## Asymptotic McNemar Test
-diag(performance) <- 0 # speed-up: only off-diagonal elements contribute
-mh_test(as.table(performance))
+mh_test(performance)
 
 ## Exact McNemar Test
-mh_test(as.table(performance), distribution = "exact")
+mh_test(performance, distribution = "exact")
 
 
 ## Effectiveness of different media for the growth of diphtheria
@@ -190,13 +191,14 @@ PreExSex <- matrix(
         "ExtraMaritalSex" = opinions
     )
 )
+PreExSex <- as.table(PreExSex)
 
 ## Asymptotic Stuart test
-mh_test(as.table(PreExSex))
+mh_test(PreExSex)
 
 ## Asymptotic Stuart-Birch test
 ## Note: response as ordinal
-mh_test(as.table(PreExSex), scores = list(response = 1:length(opinions)))
+mh_test(PreExSex, scores = list(response = 1:length(opinions)))
 
 
 ## Vote intention
@@ -212,9 +214,10 @@ vote <- array(
           "June" = c("Republican", "Democratic", "Uncertain")
     )
 )
+vote <- as.table(vote)
 
 ## Asymptotic Madansky test (Q = 70.77)
-mh_test(as.table(vote))
+mh_test(vote)
 
 
 ## Cross-over study
@@ -230,14 +233,15 @@ dysmenorrhea <- array(
          "Low dose" = c("None", "Moderate", "Complete")
     )
 )
+dysmenorrhea <- as.table(dysmenorrhea)
 
 ## Asymptotic Madansky-Birch test (Q = 53.76)
 ## Note: response as ordinal
-mh_test(as.table(dysmenorrhea), scores = list(response = 1:3))
+mh_test(dysmenorrhea, scores = list(response = 1:3))
 
 ## Asymptotic Madansky-Birch test (Q = 47.29)
 ## Note: response and measurement conditions as ordinal
-mh_test(as.table(dysmenorrhea), scores = list(response = 1:3,
-                                              conditions = 3:1))
+mh_test(dysmenorrhea, scores = list(response = 1:3,
+                                    conditions = 3:1))
 }
 \keyword{htest}
