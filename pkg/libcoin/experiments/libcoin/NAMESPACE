@@ -1,0 +1,2 @@
+
+useDynLib(libcoin, .registration = TRUE)
