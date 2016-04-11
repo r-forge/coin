@@ -1,4 +1,6 @@
 
+#include "libcoin.h"
+
 void C_abs_double (double *x, int n);
 double C_max_double (const double *x, const int n);
 int C_nlevels (SEXP x);

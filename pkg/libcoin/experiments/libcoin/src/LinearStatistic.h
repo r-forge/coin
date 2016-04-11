@@ -1,7 +1,7 @@
 
 void C_LinearStatistic(double *x, int N, int P, double *y, int Q, double *PQ_ans);
 void C_LinearStatistic_weights(double *x, int N, int P, double *y, int Q, 
-                               double *weights, double *PQ_ans) { 
+                               double *weights, double *PQ_ans);
 void C_LinearStatistic_subset(double *x, int N, int P, double *y, int Q, int *subset, 
                               int Nsubset, double *PQ_ans);
 void C_LinearStatistic_weights_subset(double *x, int N, int P, double *y, int Q, double *weights,
