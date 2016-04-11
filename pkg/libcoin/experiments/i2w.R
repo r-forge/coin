@@ -1,7 +1,7 @@
 
 set.seed(29)
 
-dyn.load("table.so")
+dyn.load("Tables.so")
 
 i2w_1 <- function(indx1, indx2)
     .Call("R_2int_table", indx1, nlevels(indx1) + 1L, 
@@ -77,6 +77,9 @@ sum(w)
 s <- sample(1:n, size = n/10, replace = FALSE)
 
 (X <- i2w(i1, i2))
+r2dtable(1, rowSums(X), colSums(X)) ### LinkingTo: stats (rcont2)
+
+
 .Call("R_d2s", X)
 
 X <- diag(4)
