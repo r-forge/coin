@@ -1,5 +1,5 @@
 
-#include "libcoin.h"
+#include "Sums.h"
 #include "helpers.h"
 
 void C_LinearStatistic(double *x, int N, int P, double *y, int Q, double *PQ_ans) {
