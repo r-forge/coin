@@ -2,192 +2,236 @@
 #include <R.h>
 #include <Rinternals.h>
 
-void C_sum(double *x, int n, double *ans) {
+/* sum(x) */
+
+void C_sum(double *x, int N, double *ans) {
 
     ans[0] = 0.0;
-    for (int i; i < n; i++) ans[0] += x[i];
+    for (int i; i < N; i++) ans[0] += x[i];
 }
 
-void C_sum_subset(double *x, int n, int *subset, int nsubset, double *ans) {
+/* sum(x[subset]) */
+
+void C_sum_subset(double *x, int N, int *subset, int Nsubset, double *ans) {
 
     ans[0] = 0.0;
-    for (int i; i < nsubset; i++) ans[0] += x[subset[i]];
+    for (int i; i < Nsubset; i++) ans[0] += x[subset[i]];
 }
 
-void C_colSums(double *x, int n, int p, double *ans) {
+/* colSums(x) */
 
-    for (int j = 0; j < p; j++)
-        ans[j] = 0.0;
+void C_colSums(double *x, int N, int P, double *ans) {
 
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < p; j++)
-            ans[j] += x[j * n + i];
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
+
+    for (int i = 0; i < N; i++) {
+        for (int p = 0; p < P; p++)
+            ans[p] += x[p * N + i];
     }
 }
 
-void C_colSums_weights(double *x, int n, int p, double *w, double *ans) {
+/* colSums(x * w) */
 
-    for (int j = 0; j < p; j++)
-        ans[j] = 0.0;
+void C_colSums_weights(double *x, int N, int P, double *weights, double *ans) {
 
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < p; j++)
-            ans[j] += w[i] * x[j * n + i];
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
+
+    for (int i = 0; i < N; i++) {
+        for (int p = 0; p < P; p++)
+            ans[p] += weights[i] * x[p * N + i];
     }
 }
 
-void C_colSums_subset(double *x, int n, int p, int *subset, int nsubset, double *ans) {
+/* colSums(x[subset,]) */
 
-    for (int j = 0; j < p; j++)
-        ans[j] = 0.0;
+void C_colSums_subset(double *x, int N, int P, int *subset, int Nsubset, double *ans) {
 
-    for (int i = 0; i < nsubset; i++) {
-        for (int j = 0; j < p; j++)
-            ans[j] += x[j * n + subset[i]];
-    }
-}
-void C_colSums_weights_subset(double *x, int n, int p, double *w, 
-                              int *subset, int nsubset, double *ans) {
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
 
-    for (int j = 0; j < p; j++)
-        ans[j] = 0.0;
-
-    for (int i = 0; i < nsubset; i++) {
-        for (int j = 0; j < p; j++)
-            ans[j] += w[subset[i]] * x[j * n + subset[i]];
+    for (int i = 0; i < Nsubset; i++) {
+        for (int p = 0; p < P; p++)
+            ans[p] += x[p * N + subset[i]];
     }
 }
 
-void C_KronSums(double *x, int n, int p, double *y, int q, double *ans) {
+/* colSums(x[subset,] * weights[subset]) */
 
-    int kp, kn;
+void C_colSums_weights_subset(double *x, int N, int P, double *weights, 
+                              int *subset, int Nsubset, double *ans) {
+
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
+
+    for (int i = 0; i < Nsubset; i++) {
+        for (int p = 0; p < P; p++)
+            ans[p] += weights[subset[i]] * x[p * N + subset[i]];
+    }
+}
+
+/* sum_i (t(x[i,]) %*% y[i,]) */
+
+void C_KronSums(double *x, int N, int P, double *y, int Q, double *ans) {
+
+    int qP, qN;
         
-    for (int k = 0; k < q; k++) {
-        kn = k * n;
-        kp = k * p;
-        for (int j = 0; j < p; j++) ans[kp + j] = 0.0;
-        for (int i = 0; i < n; i++) {
-             for (int j = 0; j < p; j++)
-                 ans[kp + j] +=  y[kn + i] * x[j*n + i];
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) ans[qP + p] = 0.0;
+        for (int i = 0; i < N; i++) {
+             for (int p = 0; p < P; p++)
+                 ans[qP + p] +=  y[qN + i] * x[p * N + i];
         }
     }
 }
 
+/* sum_i weights[i] * (t(x[i,]) %*% y[i,]) */
 
-void C_KronSums_weights(double *x, int n, int p, double *y, int q, double *w, double *ans) {
+void C_KronSums_weights(double *x, int N, int P, double *y, int Q, 
+                        double *weights, double *ans) {
 
-    int kp, kn;
+    int qP, qN;
     double tmp;
         
-    for (int k = 0; k < q; k++) {
-        kn = k * n;
-        kp = k * p;
-        for (int j = 0; j < p; j++) ans[kp + j] = 0.0;
-        for (int i = 0; i < n; i++) {
-             tmp = y[kn + i] * w[i];
-             for (int j = 0; j < p; j++)
-                 ans[kp + j] += x[j*n + i] * tmp;
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) ans[qP + p] = 0.0;
+        for (int i = 0; i < N; i++) {
+             tmp = y[qN + i] * weights[i];
+             for (int p = 0; p < P; p++)
+                 ans[qP + p] += x[p * N + i] * tmp;
         }
     }
 }
 
-void C_KronSums_subset(double *x, int n, int p, double *y, int q, 
-                       int *subset, int nsubset, double *ans) {
+void C_KronSums_subset(double *x, int N, int P, double *y, int Q, 
+                       int *subsetx, int *subsety, int Nsubset, double *ans) {
 
-    int kp, kn;
+    int qP, qN;
         
-    for (int k = 0; k < q; k++) {
-        kn = k * n;
-        kp = k * p;
-        for (int j = 0; j < p; j++) ans[kp + j] = 0.0;
-        for (int i = 0; i < nsubset; i++) {
-             for (int j = 0; j < p; j++)
-                 ans[kp + j] += y[kn + subset[i]] * x[j*n + subset[i]];
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) ans[qP + p] = 0.0;
+        for (int i = 0; i < Nsubset; i++) {
+             for (int p = 0; p < P; p++)
+                 ans[qP + p] += y[qN + subsety[i]] * x[p * N + subsetx[i]];
         }
     }
 }
 
-void C_KronSums_weights_subset(double *x, int n, int p, double *y, int q, double *w, 
-                               int *subset, int nsubset, double *ans) {
-    int kp, kn;
+void C_KronSums_weights_subset(double *x, int N, int P, double *y, int Q, 
+                               double *weights, int *subset, int Nsubset, 
+                               double *ans) {
+    int qP, qN;
     double tmp;
         
-    for (int k = 0; k < q; k++) {
-        kn = k * n;
-        kp = k * p;
-        for (int j = 0; j < p; j++) ans[kp + j] = 0.0;
-        for (int i = 0; i < nsubset; i++) {
-             tmp = y[kn + subset[i]] * w[subset[i]];
-             for (int j = 0; j < p; j++)
-                 ans[kp + j] += x[j*n + subset[i]] * tmp;
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) ans[qP + p] = 0.0;
+        for (int i = 0; i < Nsubset; i++) {
+             tmp = y[qN + subset[i]] * weights[subset[i]];
+             for (int p = 0; p < P; p++)
+                 ans[qP + p] += x[p * N + subset[i]] * tmp;
         }
     }
 }
 
-void C_KronSums_center(double *x, int n, int p, double *y, int q, 
+void C_KronSums_2dweights(double *x, int N, int P, double *y, int M, int Q, 
+                          double *weights, double *ans) {
+
+    int qPp, qM, pNi, iM;
+        
+    for (int p = 0; p < P * Q; p++) ans[p] = 0.0;
+        
+    for (int p = 0; p < P; p++) {
+        for (int q = 0; q < Q; q++) {
+            qPp = q * P + p;
+            qM = q * M;
+            for (int i = 0; i < N; i++) {
+                pNi = p * N + i;
+                iM = i * M;
+                for (int m = 0; m < M; m++)
+                      ans[qPp] += y[qM + m] * x[pNi] * weights[iM + m];
+            }
+        }
+    }
+}
+
+/* sum_i (t(x[i,] - centerx) %*% (y[i,] - centery)) */
+
+void C_KronSums_center(double *x, int N, int P, double *y, int Q, 
                        double *centerx, double *centery, double *ans) {
 
-    int kp, kn;
+    int qP, qN;
         
-    for (int k = 0; k < q; k++) {
-        kn = k * n;
-        kp = k * p;
-        for (int j = 0; j < p; j++) ans[kp + j] = 0.0;
-        for (int i = 0; i < n; i++) {
-             for (int j = 0; j < p; j++)
-                 ans[kp + j] +=  y[kn + i] * x[j*n + i];
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) ans[qP + p] = 0.0;
+        for (int i = 0; i < N; i++) {
+             for (int p = 0; p < P; p++)
+                 ans[qP + p] +=  y[qN + i] * x[p * N + i];
         }
     }
 }
 
-void C_KronSums_weights_center(double *x, int n, int p, double *y, int q, double *w, 
-                               double *centerx, double *centery, double *ans) {
+void C_KronSums_weights_center(double *x, int N, int P, double *y, int Q, 
+                               double *weights, double *centerx, 
+                               double *centery, double *ans) {
 
-    int kp, kn;
+    int qP, qN;
     double tmp;
         
-    for (int k = 0; k < q; k++) {
-        kn = k * n;
-        kp = k * p;
-        for (int j = 0; j < p; j++) ans[kp + j] = 0.0;
-        for (int i = 0; i < n; i++) {
-             tmp = y[kn + i] * w[i];
-             for (int j = 0; j < p; j++)
-                 ans[kp + j] += x[j*n + i] * tmp;
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) ans[qP + p] = 0.0;
+        for (int i = 0; i < N; i++) {
+             tmp = y[qN + i] * weights[i];
+             for (int p = 0; p < P; p++)
+                 ans[qP + p] += x[p * N + i] * tmp;
         }
     }
 }
 
-void C_KronSums_subset_center(double *x, int n, int p, double *y, int q, int *subset, 
-                              int nsubset, double *centerx, double *centery, double *ans) {
+void C_KronSums_subset_center(double *x, int N, int P, double *y, int Q, 
+                              int *subsetx, int *subsety, int Nsubset, 
+                              double *centerx, double *centery, double *ans) {
 
-    int kp, kn;
+    int qP, qN;
         
-    for (int k = 0; k < q; k++) {
-        kn = k * n;
-        kp = k * p;
-        for (int j = 0; j < p; j++) ans[kp + j] = 0.0;
-        for (int i = 0; i < nsubset; i++) {
-             for (int j = 0; j < p; j++)
-                 ans[kp + j] += y[kn + subset[i]] * x[j*n + subset[i]];
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) ans[qP + p] = 0.0;
+        for (int i = 0; i < Nsubset; i++) {
+             for (int p = 0; p < P; p++)
+                 ans[qP + p] += y[qN + subsety[i]] * x[p * N + subsetx[i]];
         }
     }
 }
 
-void C_KronSums_weights_subset_center(double *x, int n, int p, double *y, int q, double *w, 
-                                      int *subset, int nsubset, 
+void C_KronSums_weights_subset_center(double *x, int N, int P, double *y, 
+                                      int Q, double *weights, 
+                                      int *subset, int Nsubset, 
                                       double *centerx, double *centery, double *ans) {
-    int kp, kn;
+    int qP, qN;
     double tmp;
         
-    for (int k = 0; k < q; k++) {
-        kn = k * n;
-        kp = k * p;
-        for (int j = 0; j < p; j++) ans[kp + j] = 0.0;
-        for (int i = 0; i < nsubset; i++) {
-             tmp = y[kn + subset[i]] * w[subset[i]];
-             for (int j = 0; j < p; j++)
-                 ans[kp + j] += x[j*n + subset[i]] * tmp;
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) ans[qP + p] = 0.0;
+        for (int i = 0; i < Nsubset; i++) {
+             tmp = y[qN + subset[i]] * weights[subset[i]];
+             for (int p = 0; p < P; p++)
+                 ans[qP + p] += x[p * N + subset[i]] * tmp;
         }
     }
 }
