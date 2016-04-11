@@ -7,7 +7,7 @@ void C_LinearStatistic(double *x, int N, int P, double *y, int Q, double *PQ_ans
 }
      
 void C_LinearStatistic_weights(double *x, int N, int P, double *y, int Q, 
-                               double *weights, double *PQ_ans) {
+                               int *weights, double *PQ_ans) {
      C_KronSums_weights(x, N, P, y, Q, weights, PQ_ans);
 }
      
@@ -16,7 +16,7 @@ void C_LinearStatistic_subset(double *x, int N, int P, double *y, int Q, int *su
      C_KronSums_subset(x, N, P, y, Q, subset, subset, Nsubset, PQ_ans);
 }
 
-void C_LinearStatistic_weights_subset(double *x, int N, int P, double *y, int Q, double *weights,
+void C_LinearStatistic_weights_subset(double *x, int N, int P, double *y, int Q, int *weights,
                                       int *subset, int Nsubset, double *PQ_ans) {
      C_KronSums_weights_subset(x, N, P, y, Q, weights, subset, Nsubset, PQ_ans);
 }
@@ -26,12 +26,17 @@ void C_PermutedLinearStatistic(double *x, int N, int P, double *y, int Q, int *p
      C_KronSums_subset(x, N, P, y, Q, perm, original, Nperm, PQ_ans);
 }
 
+void C_LinearStatistic_2d(double *x, int N, int P, double *y, int M, int Q, 
+                          int *weights, double *PQ_ans) {
+    C_KronSums_2dweights(x, N, P, y, M, Q, weights, PQ_ans);
+}
+
 void C_ExpectationInfluence(double* y, int N, int Q, double *Q_ans) {
      C_colSums(y, N, Q, Q_ans);
      for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / N;
 }
 
-void C_ExpectationInfluence_weights(double* y, int N, int Q, double *weights, 
+void C_ExpectationInfluence_weights(double* y, int N, int Q, int *weights, 
                                     double sumweights, double *Q_ans) {
      C_colSums_weights(y, N, Q, weights, Q_ans);
      for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / sumweights;
@@ -43,7 +48,7 @@ void C_ExpectationInfluence_subset(double* y, int N, int Q, int *subset, int Nsu
      for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / Nsubset;
 }
 
-void C_ExpectationInfluence_weights_subset(double* y, int N, int Q, double *weights, 
+void C_ExpectationInfluence_weights_subset(double* y, int N, int Q, int *weights, 
                                            double sumweights, int *subset, int Nsubset, 
                                            double *Q_ans) {
      C_colSums_weights_subset(y, N, Q, weights, subset, Nsubset, Q_ans);
@@ -55,7 +60,7 @@ void C_CovarianceInfluence(double* y, int N, int Q, double *ExpInf, double *QQ_a
      for (int q = 0; q < Q * Q; q++) QQ_ans[q] = QQ_ans[q] / N;
 }
 
-void C_CovarianceInfluence_weights(double* y, int N, int Q, double *weights, 
+void C_CovarianceInfluence_weights(double* y, int N, int Q, int *weights, 
                                    double sumweights, double *ExpInf, double *QQ_ans) {
      C_KronSums_weights_center(y, N, Q, y, Q, weights, ExpInf, ExpInf, QQ_ans);
      for (int q = 0; q < Q * Q; q++) QQ_ans[q] = QQ_ans[q] / sumweights;
@@ -68,7 +73,7 @@ void C_CovarianceInfluence_subset(double* y, int N, int Q, int *subset, int Nsub
      for (int q = 0; q < Q * Q; q++) QQ_ans[q] = QQ_ans[q] / Nsubset;
 }
 
-void C_CovarianceInfluence_weights_subset(double* y, int N, int Q, double *weights, 
+void C_CovarianceInfluence_weights_subset(double* y, int N, int Q, int *weights, 
                                           double sumweights, int *subset, int Nsubset, 
                                           double *ExpInf, double *QQ_ans) {
      C_KronSums_weights_subset_center(y, N, Q, y, Q, weights, subset, Nsubset, 
@@ -81,7 +86,7 @@ void C_CovarianceX(double *x, int N, int P, double *PQ_ans) {
 }
      
 void C_CovarianceX_weights(double *x, int N, int P, 
-                            double *weights, double *PQ_ans) {
+                            int *weights, double *PQ_ans) {
      C_KronSums_weights(x, N, P, x, P, weights, PQ_ans);
 }     
      
@@ -90,7 +95,7 @@ void C_CovarianceX_subset(double *x, int N, int P, int *subset,
      C_KronSums_subset(x, N, P, x, P, subset, subset, Nsubset, PQ_ans);
 }
      
-void C_CovarianceX_weights_subset(double *x, int N, int P, double *weights,
+void C_CovarianceX_weights_subset(double *x, int N, int P, int *weights,
                                   int *subset, int Nsubset, double *PQ_ans) {
      C_KronSums_weights_subset(x, N, P, x, P, weights, subset, Nsubset, PQ_ans);
 }

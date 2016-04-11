@@ -33,7 +33,7 @@ void C_colSums(double *x, int N, int P, double *ans) {
 
 /* colSums(x * w) */
 
-void C_colSums_weights(double *x, int N, int P, double *weights, double *ans) {
+void C_colSums_weights(double *x, int N, int P, int *weights, double *ans) {
 
     for (int p = 0; p < P; p++)
         ans[p] = 0.0;
@@ -59,7 +59,7 @@ void C_colSums_subset(double *x, int N, int P, int *subset, int Nsubset, double 
 
 /* colSums(x[subset,] * weights[subset]) */
 
-void C_colSums_weights_subset(double *x, int N, int P, double *weights, 
+void C_colSums_weights_subset(double *x, int N, int P, int *weights, 
                               int *subset, int Nsubset, double *ans) {
 
     for (int p = 0; p < P; p++)
@@ -91,7 +91,7 @@ void C_KronSums(double *x, int N, int P, double *y, int Q, double *ans) {
 /* sum_i weights[i] * (t(x[i,]) %*% y[i,]) */
 
 void C_KronSums_weights(double *x, int N, int P, double *y, int Q, 
-                        double *weights, double *ans) {
+                        int *weights, double *ans) {
 
     int qP, qN;
     double tmp;
@@ -125,7 +125,7 @@ void C_KronSums_subset(double *x, int N, int P, double *y, int Q,
 }
 
 void C_KronSums_weights_subset(double *x, int N, int P, double *y, int Q, 
-                               double *weights, int *subset, int Nsubset, 
+                               int *weights, int *subset, int Nsubset, 
                                double *ans) {
     int qP, qN;
     double tmp;
@@ -143,7 +143,7 @@ void C_KronSums_weights_subset(double *x, int N, int P, double *y, int Q,
 }
 
 void C_KronSums_2dweights(double *x, int N, int P, double *y, int M, int Q, 
-                          double *weights, double *ans) {
+                          int *weights, double *ans) {
 
     int qPp, qM, pNi, iM;
         
@@ -182,7 +182,7 @@ void C_KronSums_center(double *x, int N, int P, double *y, int Q,
 }
 
 void C_KronSums_weights_center(double *x, int N, int P, double *y, int Q, 
-                               double *weights, double *centerx, 
+                               int *weights, double *centerx, 
                                double *centery, double *ans) {
 
     int qP, qN;
@@ -218,7 +218,7 @@ void C_KronSums_subset_center(double *x, int N, int P, double *y, int Q,
 }
 
 void C_KronSums_weights_subset_center(double *x, int N, int P, double *y, 
-                                      int Q, double *weights, 
+                                      int Q, int *weights, 
                                       int *subset, int Nsubset, 
                                       double *centerx, double *centery, double *ans) {
     int qP, qN;

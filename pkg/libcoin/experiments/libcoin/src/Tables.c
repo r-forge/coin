@@ -1,275 +1,89 @@
 
-#include <R.h>
-#include <Rinternals.h>
+#include "libcoin.h"
+#include "helpers.h"
 
-void C_2int_set_zero(int *ians, int inx, int iny) {
+void C_2dtable_set_zero(int Nx, int Ny, int *NxNy_ans) {
 
-    int j, k;
-    
-    for (j = 0; j < inx; j++) {
-         for (k = 0; k < iny; k++) {
-              ians[k * inx + j] = 0;
-         }
+    for (int j = 0; j < Nx; j++) {
+         for (int k = 0; k < Ny; k++)
+              NxNy_ans[k * Nx + j] = 0;
     }
 }
 
-void C_2int_table(int *ix, int inx, int *iy, int iny, int n, int *ians) {
+/* table(ix, iy) */
+void C_2dtable(int *ix, int Nx, int *iy, int Ny, int N, int *NxNy_ans) {
 
-    C_2int_set_zero(ians, inx, iny);
+    C_2dtable_set_zero(Nx, Ny, NxNy_ans);
     
-    for (int i = 0; i < n; i++)  
-        ians[ix[i] + iy[i] * inx]++;
+    for (int i = 0; i < N; i++)  
+        NxNy_ans[ix[i] + iy[i] * Nx]++;
 
 }
 
-SEXP R_2int_table(SEXP x, SEXP nx, SEXP y, SEXP ny) {
+/* table(ix[subset], iy[subset]) */
+void C_2dtable_subset(int *ix, int Nx, int *iy, int Ny, int *subset, 
+                      int Nsubset, int *NxNy_ans) {
 
-    SEXP ans;
-
-    PROTECT(ans = allocMatrix(INTSXP, INTEGER(nx)[0], INTEGER(ny)[0])); 
+    C_2dtable_set_zero(Nx, Ny, NxNy_ans);
     
-    C_2int_table(INTEGER(x), INTEGER(nx)[0], 
-                 INTEGER(y), INTEGER(ny)[0], 
-                 LENGTH(x), INTEGER(ans));
-    
-    UNPROTECT(1);
-    return(ans);
-}
-
-
-SEXP R_2int_s_table(SEXP x, SEXP nx, SEXP y, SEXP ny, SEXP subset) {
-
-    SEXP ans;
-    int n, inx, iny, i, *ians, *ix, *iy, *is;
-    
-    n = LENGTH(subset); 
-    inx = INTEGER(nx)[0];
-    iny = INTEGER(ny)[0];
-    
-    PROTECT(ans = allocMatrix(INTSXP, inx, iny)); 
-    ians = INTEGER(ans);
-    ix = INTEGER(x);
-    iy = INTEGER(y);
-    is = INTEGER(subset);
-    
-    C_2int_set_zero(ians, inx, iny);
-    
-    for (i = 0; i < n; i++)  
-        ians[ix[is[i]] + iy[is[i]] * inx]++;
-
-    UNPROTECT(1);
-    return(ans);
-}
-
-
-SEXP R_2int_w_table(SEXP x, SEXP nx, SEXP y, SEXP ny, SEXP weights) {
-
-    SEXP ans;
-    int n, inx, iny, i, *ians, *ix, *iy, *iw, idx;
-    
-    n = LENGTH(x); 
-    inx = INTEGER(nx)[0];
-    iny = INTEGER(ny)[0];
-    
-    PROTECT(ans = allocMatrix(INTSXP, inx, iny)); 
-    ians = INTEGER(ans);
-    ix = INTEGER(x);
-    iy = INTEGER(y);
-    iw = INTEGER(weights);
-    
-    C_2int_set_zero(ians, inx, iny);
-    
-    for (i = 0; i < n; i++) {
-        idx = ix[i] + iy[i] * inx;
-        ians[idx] = ians[idx] + iw[i];
-    }
-
-    UNPROTECT(1);
-    return(ans);
-}
-
-SEXP R_2int_s_w_table(SEXP x, SEXP nx, SEXP y, SEXP ny, SEXP subset, SEXP weights) {
-
-    SEXP ans;
-    int n, inx, iny, i, *ians, *ix, *iy, *is, *iw, idx;
-    
-    n = LENGTH(subset); 
-    inx = INTEGER(nx)[0];
-    iny = INTEGER(ny)[0];
-    
-    PROTECT(ans = allocMatrix(INTSXP, inx, iny)); 
-    ians = INTEGER(ans);
-    ix = INTEGER(x);
-    iy = INTEGER(y);
-    is = INTEGER(subset);
-    iw = INTEGER(weights);
-    
-    C_2int_set_zero(ians, inx, iny);
-   
-    for (i = 0; i < n; i++) {
-        idx = ix[is[i]] + iy[is[i]] * inx;
-        ians[idx] = ians[idx] + iw[is[i]];
-    }
-        
-    UNPROTECT(1);
-    return(ans);
-}
-
-
-void C_1int_set_zero(int *ians, int iny) {
-
-    int k;
-    
-     for (k = 0; k < iny; k++)
-          ians[k] = 0;
-}
-
-void C_1int_table(int *iy, int iny, int n, int *ians) {
-
-    C_1int_set_zero(ians, iny);
-    
-    for (int i = 0; i < n; i++)  
-        ians[iy[i]]++;
+    for (int i = 0; i < Nsubset; i++)  
+        NxNy_ans[ix[subset[i]] + iy[subset[i]] * Nx]++;
 
 }
 
-SEXP R_1int_table(SEXP y, SEXP ny) {
+/* xtabs(weights ~ ix + iy) */
+void C_2dtable_weights(int *ix, int Nx, int *iy, int Ny, int *weights,
+                       int N, int *NxNy_ans) {
 
-    SEXP ans;
-
-    PROTECT(ans = allocVector(INTSXP, INTEGER(ny)[0])); 
+    C_2dtable_set_zero(Nx, Ny, NxNy_ans);
     
-    C_1int_table(INTEGER(y), INTEGER(ny)[0], 
-                 LENGTH(y), INTEGER(ans));
-    
-    UNPROTECT(1);
-    return(ans);
+    for (int i = 0; i < N; i++)
+        NxNy_ans[ix[i] + iy[i] * Nx] += weights[i];
 }
 
+/* xtabs(weights ~ ix + iy, subset = subset) */
 
-SEXP R_1int_s_table(SEXP y, SEXP ny, SEXP subset) {
+void C_2dtable_weights_subset(int *ix, int Nx, int *iy, int Ny, int *weights,
+                              int *subset, int Nsubset, int *NxNy_ans) {
 
-    SEXP ans;
-    int n, iny, i, *ians, *iy, *is;
+    C_2dtable_set_zero(Nx, Ny, NxNy_ans);
     
-    n = LENGTH(subset); 
-    iny = INTEGER(ny)[0];
-    
-    PROTECT(ans = allocVector(INTSXP, iny)); 
-    ians = INTEGER(ans);
-    iy = INTEGER(y);
-    is = INTEGER(subset);
-    
-    C_1int_set_zero(ians, iny);
-    
-    for (i = 0; i < n; i++)  
-        ians[iy[is[i]]]++;
-
-    UNPROTECT(1);
-    return(ans);
+    for (int i = 0; i < Nsubset; i++)
+         NxNy_ans[ix[subset[i]] + iy[subset[i]] * Nx] += weights[subset[i]];
 }
 
-
-SEXP R_1int_w_table(SEXP y, SEXP ny, SEXP weights) {
-
-    SEXP ans;
-    int n, iny, i, *ians, *iy, *iw, idx;
-    
-    n = LENGTH(y); 
-    iny = INTEGER(ny)[0];
-    
-    PROTECT(ans = allocVector(INTSXP, iny)); 
-    ians = INTEGER(ans);
-    iy = INTEGER(y);
-    iw = INTEGER(weights);
-    
-    C_1int_set_zero(ians, iny);
-    
-    for (i = 0; i < n; i++) {
-        idx = iy[i];
-        ians[idx] = ians[idx] + iw[i];
-    }
-
-    UNPROTECT(1);
-    return(ans);
+void C_1dtable_set_zero(int Ny, int *Ny_ans) {
+    for (int i = 0; i < Ny; i++) Ny_ans[i] = 0;
 }
 
-SEXP R_1int_s_w_table(SEXP y, SEXP ny, SEXP subset, SEXP weights) {
+void C_1dtable(int *iy, int Ny, int N, int *Ny_ans) {
 
-    SEXP ans;
-    int n, iny, i, *ians, *iy, *is, *iw, idx;
-    
-    n = LENGTH(subset); 
-    iny = INTEGER(ny)[0];
-    
-    PROTECT(ans = allocVector(INTSXP, iny)); 
-    ians = INTEGER(ans);
-    iy = INTEGER(y);
-    is = INTEGER(subset);
-    iw = INTEGER(weights);
-    
-    C_1int_set_zero(ians, iny);
-   
-    for (i = 0; i < n; i++) {
-        idx = iy[is[i]];
-        ians[idx] = ians[idx] + iw[is[i]];
-    }
-        
-    UNPROTECT(1);
-    return(ans);
+    C_1dtable_set_zero(Ny, Ny_ans);
+    for (int i = 0; i < N; i++) Ny_ans[iy[i]]++;
 }
 
-int nrow(SEXP x) {
-    SEXP a;
+void C_1dtable_subset(int *iy, int Ny, int *subset, int Nsubset, int *Ny_ans) {
+
+    C_1dtable_set_zero(Ny, Ny_ans);
     
-    a = getAttrib(x, R_DimSymbol);
-    if (a == R_NilValue) {
-        return(LENGTH(x));
-    } else {
-        return(INTEGER(getAttrib(x, R_DimSymbol))[0]);
-    }
+    for (int i = 0; i < Nsubset; i++)  
+        Ny_ans[iy[subset[i]]]++;
 }
 
-int ncol(SEXP x) {
-    SEXP a;
+void C_1dtable_weights(int *iy, int Ny, int *weights, int N, int *Ny_ans) {
+
+    C_1dtable_set_zero(Ny, Ny_ans);
     
-    a = getAttrib(x, R_DimSymbol);
-    if (a == R_NilValue) {
-        return(LENGTH(x));
-    } else {
-        return(INTEGER(getAttrib(x, R_DimSymbol))[1]);
-    }
+    for (int i = 0; i < N; i++)  
+        Ny_ans[iy[i]] += weights[i];
 }
 
+void C_1dtable_weights_subset(int *iy, int Ny, int *weights, int *subset, 
+                              int Nsubset, int *Ny_ans) {
 
-SEXP R_d2s(SEXP x) {
-
-    SEXP ans;
-    int nr, nc, i, j, s, *ix, cnt, *ians;
+    C_1dtable_set_zero(Ny, Ny_ans);
     
-    nr = nrow(x);
-    nc = ncol(x);
-    ix = INTEGER(x),
-    
-    s = 0;
-    for (i = 0; i < nr * nc; i++)
-        if (ix[i] != 0) s++;
-        
-//    if (s / (nr + nc) > .5)
-    PROTECT(ans = allocMatrix(INTSXP, s, 3));
-    ians = INTEGER(ans);
-    
-    cnt = 0;
-    for (i = 0; i < nr; i++) {
-        for (j = 0; j < nc; j++) {
-            if (ix[i + j * nr] != 0) {
-                ians[cnt] = i;
-                ians[nrow(ans) + cnt] = j;
-                ians[2 * nrow(ans) + cnt] = ix[i + j * nr];
-                cnt++;
-            }
-       }
-     }
-     UNPROTECT(1);
-     return(ans);
+    for (int i = 0; i < Nsubset; i++)  
+          Ny_ans[iy[subset[i]]] += weights[subset[i]];
+          
 }
