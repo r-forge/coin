@@ -58,6 +58,6 @@ SEXP R_LinearStatistic_2d(SEXP x, SEXP y, SEXP fx, SEXP fy) {
     PROTECT(ans = allocMatrix(REALSXP, NCOL(y), NCOL(x)));
     C_LinearStatistic_2d(REAL(x), NROW(x), NCOL(x), REAL(y), NROW(y), NCOL(y), 
                          INTEGER(table), REAL(ans));
-    UNPROTECT(1);
+    UNPROTECT(2);
     return(ans);
 }
