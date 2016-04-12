@@ -66,23 +66,27 @@ LinStatExpCov <- function(X, Y, weights, subset, block) {
         "weights" = .Call("R_CovarianceX_weights", X, weights, PACKAGE = "libcoin"),
         "subset" = .Call("R_CovarianceX_subset", X, subset - 1L, PACKAGE = "libcoin"),
         "weights_subset" = .Call("R_CovarianceX_weights_subset", X, weights, subset - 1L, PACKAGE = "libcoin"))
-    ret$Expectation <- .Call("R_ExpectationLinearStatistic", ExpY, ExpX)
 
     if (!missing(block)) {
        lev <- levels(block) 
-       cov <- 0
+       Cov <- 0
+       Exp <- 0
        for (l in lev) {
            if (case == "vanilla")
-               cov <- cov + LinStatExpCov(X, Y, subset = which(block == l))$Covariance
+               tmp <- LinStatExpCov(X, Y, subset = which(block == l))
            if (case == "weights")
-               cov <- cov + LinStatExpCov(X, Y, weights = weights, subset = which(block == l))$Covariance
+               tmp <- LinStatExpCov(X, Y, weights = weights, subset = which(block == l))$Covariance
            if (case == "subset")
-               cov <- cov + LinStatExpCov(X, Y, subset = subset[which(block[subset] == l)])$Covariance
+               tmp <- LinStatExpCov(X, Y, subset = subset[which(block[subset] == l)])$Covariance
            if (case == "weights_subset")
-               cov <- cov + LinStatExpCov(X, Y, weights = weights, subset = subset[which(block[subset] == l)])$Covariance
+               tmp <- LinStatExpCov(X, Y, weights = weights, subset = subset[which(block[subset] == l)])$Covariance
+           Cov <- Cov + tmp$Covariance
+           Exp <- Exp + tmp$Expectation
        }
-       ret$Covariance <- cov
+       ret$Expecation <- Exp
+       ret$Covariance <- Cov
     } else {
+        ret$Expectation <- .Call("R_ExpectationLinearStatistic", ExpY, ExpX)
         ret$Covariance <- .Call("R_CovarianceLinearStatistic", CovY, ExpX, CovX, as.integer(sw))
     }
     ret
@@ -107,27 +111,18 @@ expectation(it)
 covariance(it)
 
 LinStatExpCov(X, Y, weights = w)
-
 it <- independence_test(Y ~ X, weights = ~ w)
 statistic(it, "linear")
 expectation(it)
 covariance(it)
 
 LinStatExpCov(X, Y, subset = s)
-
 it <- independence_test(Y ~ X, subset = s)
 statistic(it, "linear")
 expectation(it)
 covariance(it)
 
-it <- independence_test(Y[s,] ~ X[s,])
-statistic(it, "linear")
-expectation(it)
-covariance(it)
-
-
 LinStatExpCov(X, Y, weights = w, subset = s)
-
 it <- independence_test(Y ~ X, weights = ~w, subset = s)
 statistic(it, "linear")
 expectation(it)
@@ -139,24 +134,31 @@ statistic(it, "linear")
 expectation(it)
 covariance(it)
 
-LinStatExpCov(X, Y, weights = w, block = b)
+LinStatExpCov(X, Y)
+it <- independence_test(Y ~ X)
+statistic(it, "linear")
+expectation(it)
+covariance(it)
 
+
+if (FALSE) {
+
+LinStatExpCov(X, Y, weights = w, block = b)
 it <- independence_test(Y ~ X | b, weights = ~ w)
 statistic(it, "linear")
 expectation(it)
 covariance(it)
 
 LinStatExpCov(X, Y, subset = s, block = b)
-
-it <- independence_test(Y ~ X, subset = s)
+it <- independence_test(Y ~ X | b, subset = s)
 statistic(it, "linear")
 expectation(it)
 covariance(it)
 
 LinStatExpCov(X, Y, weights = w, subset = s, block = b)
-
 it <- independence_test(Y ~ X | b, weights = ~w, subset = s)
 statistic(it, "linear")
 expectation(it)
 covariance(it)
 
+}
