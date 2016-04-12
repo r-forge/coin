@@ -1,2 +1,4 @@
 
 useDynLib(libcoin, .registration = TRUE)
+
+export(LinStatExpCov)
