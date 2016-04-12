@@ -161,7 +161,7 @@ void C_KronSums_weights_subset(double *x, int N, int P, double *y, int Q,
 void C_KronSums_2dweights(double *x, int N, int P, double *y, int M, int Q, 
                           int *weights, double *ans) {
 
-    int qPp, qM, pNi, iM;
+    int qPp, qM, pNi;
         
     for (int p = 0; p < P * Q; p++) ans[p] = 0.0;
         
@@ -171,9 +171,8 @@ void C_KronSums_2dweights(double *x, int N, int P, double *y, int M, int Q,
             qM = q * M;
             for (int i = 0; i < N; i++) {
                 pNi = p * N + i;
-                iM = i * M;
                 for (int m = 0; m < M; m++)
-                      ans[qPp] += y[qM + m] * x[pNi] * weights[iM + m];
+                      ans[qPp] += y[qM + m] * x[pNi] * weights[m * N + i];
             }
         }
     }
