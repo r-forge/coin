@@ -4,6 +4,7 @@
 #include "LinearStatistic.h"
 #include "helpers.h"
 #include "Tables.h"
+#include "Sums.h"
 
 SEXP R_LinearStatistic(SEXP x, SEXP y) {
 
@@ -61,3 +62,111 @@ SEXP R_LinearStatistic_2d(SEXP x, SEXP y, SEXP fx, SEXP fy) {
     UNPROTECT(2);
     return(ans);
 }
+
+SEXP R_ExpectationInfluence(SEXP y) {
+
+    SEXP ans;
+    
+    PROTECT(ans = allocVector(REALSXP, NCOL(y)));
+    C_ExpectationInfluence(REAL(y), NROW(y), NCOL(y), REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+
+SEXP R_ExpectationInfluence_weights(SEXP y, SEXP weights) {
+
+    SEXP ans;
+    
+    PROTECT(ans = allocVector(REALSXP, NCOL(y)));
+    C_ExpectationInfluence_weights(REAL(y), NROW(y), NCOL(y), 
+                                   INTEGER(weights), 
+                                   C_sum(INTEGER(weights), LENGTH(weights)), 
+                                   REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+
+SEXP R_ExpectationInfluence_subset(SEXP y, SEXP subset) {
+
+    SEXP ans;
+    
+    PROTECT(ans = allocVector(REALSXP, NCOL(y)));
+    C_ExpectationInfluence_subset(REAL(y), NROW(y), NCOL(y), 
+                                  INTEGER(subset), LENGTH(subset), REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+
+SEXP R_ExpectationInfluence_weights_subset(SEXP y, SEXP weights, SEXP subset) {
+
+    SEXP ans;
+    
+    PROTECT(ans = allocVector(REALSXP, NCOL(y)));
+    C_ExpectationInfluence_weights_subset(REAL(y), NROW(y), NCOL(y), 
+                                          INTEGER(weights), 
+                                          C_sum_subset(INTEGER(weights), 
+                                                       LENGTH(weights), 
+                                                       INTEGER(subset), 
+                                                       LENGTH(subset)),
+                                          INTEGER(subset), LENGTH(subset), 
+                                          REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+
+SEXP R_CovarianceInfluence(SEXP y) {
+
+    SEXP ans, ExpInf;
+    
+    PROTECT(ExpInf = R_ExpectationInfluence(y));
+    PROTECT(ans = allocMatrix(REALSXP, NCOL(y), NCOL(y)));
+    C_CovarianceInfluence(REAL(y), NROW(y), NCOL(y), REAL(ExpInf), REAL(ans));
+    UNPROTECT(2);
+    return(ans);
+}
+
+SEXP R_CovarianceInfluence_weights(SEXP y, SEXP weights) {
+
+    SEXP ans, ExpInf;
+    
+    PROTECT(ExpInf = R_ExpectationInfluence_weights(y, weights));
+    PROTECT(ans = allocMatrix(REALSXP, NCOL(y), NCOL(y)));
+    C_CovarianceInfluence_weights(REAL(y), NROW(y), NCOL(y), 
+                                   INTEGER(weights), 
+                                   C_sum(INTEGER(weights), LENGTH(weights)), 
+                                   REAL(ExpInf), REAL(ans));
+    UNPROTECT(2);
+    return(ans);
+}
+
+SEXP R_CovarianceInfluence_subset(SEXP y, SEXP subset) {
+
+    SEXP ans, ExpInf;
+    
+    PROTECT(ExpInf = R_ExpectationInfluence_subset(y, subset));
+    PROTECT(ans = allocMatrix(REALSXP, NCOL(y), NCOL(y)));
+    C_CovarianceInfluence_subset(REAL(y), NROW(y), NCOL(y), 
+                                 INTEGER(subset), LENGTH(subset), 
+                                 REAL(ExpInf), REAL(ans));
+    UNPROTECT(2);
+    return(ans);
+}
+
+SEXP R_CovarianceInfluence_weights_subset(SEXP y, SEXP weights, SEXP subset) {
+
+    SEXP ans, ExpInf;
+    
+    PROTECT(ExpInf = R_ExpectationInfluence_weights_subset(y, weights, subset));
+    PROTECT(ans = allocMatrix(REALSXP, NCOL(y), NCOL(y)));
+    C_CovarianceInfluence_weights_subset(REAL(y), NROW(y), NCOL(y), 
+                                          INTEGER(weights), 
+                                          C_sum_subset(INTEGER(weights), 
+                                                       LENGTH(weights), 
+                                                       INTEGER(subset), 
+                                                       LENGTH(subset)),
+                                          INTEGER(subset), LENGTH(subset), 
+                                          REAL(ExpInf), REAL(ans));
+    UNPROTECT(2);
+    return(ans);
+}
+

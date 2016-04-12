@@ -1,6 +1,6 @@
 
-void C_sum(double *x, int N, double *ans);
-void C_sum_subset(double *x, int N, int *subset, int Nsubset, double *ans);
+int C_sum(int *x, int N);
+int C_sum_subset(int *x, int N, int *subset, int Nsubset);
 void C_colSums(double *x, int N, int P, double *ans);
 void C_colSums_weights(double *x, int N, int P, int *weights, double *ans);
 void C_colSums_subset(double *x, int N, int P, int *subset, int Nsubset, double *ans);
