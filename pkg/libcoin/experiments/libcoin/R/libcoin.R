@@ -91,3 +91,80 @@ LinStatExpCov <- function(X, Y, weights, subset, block) {
     }
     ret
 }
+
+
+LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block) {
+
+    stopifnot(length(ix) == length(iy))
+
+    stopifnot(is.integer(ix))
+    stopifnot(is.integer(iy))
+
+    stopifnot(all(complete.cases(X)))
+    stopifnot(all(complete.cases(Y)))
+
+    attr(ix, "levels") <- 1:max(ix)
+    attr(iy, "levels") <- 1:max(iy)
+
+    if (!missing(weights)) {
+        stopifnot(length(ix) == length(weights))
+        stopifnot(is.integer(weights))
+    }
+    if (!missing(subset)) {
+        stopifnot(all(subset <= length(ix)))
+        stopifnot(is.integer(subset))
+    }
+    if (!missing(block)) {
+        stopifnot(length(ix) == length(block))
+        stopifnot(is.factor(block))
+    }
+
+    ret <- list()
+    if (missing(weights) & missing(subset)) case <- "vanilla"
+    if (!missing(weights) & missing(subset)) case <- "weights"
+    if (missing(weights) & !missing(subset)) case <- "subset"
+    if (!missing(weights) & !missing(subset)) case <- "weights_subset"
+    ret$case <- case
+
+    tab_ixiy <- switch(case, 
+        "vanilla" = .Call("R_2dtable", ix, iy, PACKAGE = "libcoin"),
+        "weights" = .Call("R_2dtable_weights", ix, iy, weights, PACKAGE = "libcoin"),
+        "subset" = .Call("R_2dtable_subset", ix, iy, subset - 1L, PACKAGE = "libcoin"),
+        "weights_subset" = .Call("R_2dtable_weights_subset", ix, iy, weights, subset - 1L, PACKAGE = "libcoin"))
+    ret$tab <- tab_ixiy
+
+    ret$LinStat <- .Call("R_LinearStatistic_2d", X, Y, tab_ixiy, PACKAGE = "libcoin")
+
+    tab_iy <- as.integer(colSums(tab_ixiy))
+    tab_ix <- as.integer(rowSums(tab_ixiy))
+
+    ExpY <- .Call("R_ExpectationInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
+    ExpX <- .Call("R_ExpectationX_weights", X, tab_ix, PACKAGE = "libcoin")
+    CovY <- .Call("R_CovarianceInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
+    CovX <- .Call("R_CovarianceX_weights", X, tab_ix, PACKAGE = "libcoin")
+
+    if (!missing(block)) {
+       lev <- levels(block) 
+       Cov <- 0
+       Exp <- 0
+       for (l in lev) {
+           if (case == "vanilla")
+               tmp <- LinStatExpCov2d(X, Y, ix, iy, subset = which(block == l))
+           if (case == "weights")
+               tmp <- LinStatExpCov2d(X, Y, ix, iy,  weights = weights, subset = which(block == l))
+           if (case == "subset")
+               tmp <- LinStatExpCov2d(X, Y, ix, iy,  subset = subset[which(block[subset] == l)])
+           if (case == "weights_subset")
+               tmp <- LinStatExpCov2d(X, Y, ix, iy,  weights = weights, subset = subset[which(block[subset] == l)])
+           Cov <- Cov + tmp$Covariance
+           Exp <- Exp + tmp$Expectation
+       }
+       ret$Expectation <- Exp
+       ret$Covariance <- Cov
+    } else {
+        ret$Expectation <- .Call("R_ExpectationLinearStatistic", ExpY, ExpX)
+        ret$Covariance <- .Call("R_CovarianceLinearStatistic", CovY, ExpX, CovX, 
+                                as.integer(sum(tab_ixiy)))
+    }
+    ret
+}
