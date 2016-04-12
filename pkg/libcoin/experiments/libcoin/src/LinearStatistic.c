@@ -124,10 +124,8 @@ void C_ExpectationLinearStatistic(int P, int Q, double *ExpInf, double *ExpX,
                                   double *PQ_ans) {
 
     for (int p = 0; p < P; p++) {
-        for (int q = 0; q < Q; q++) {
+        for (int q = 0; q < Q; q++)
             PQ_ans[q * P + p] = ExpX[p] * ExpInf[q];
-            Rprintf("p %d q %d \n", p, q);
-        }
     }
 }          
 
