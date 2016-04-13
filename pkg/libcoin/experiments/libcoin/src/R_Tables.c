@@ -3,14 +3,19 @@
 #include "Tables.h"
 #include "helpers.h"
 
+void CR_2dtable(SEXP x, SEXP y, int *ans)
+{
+    C_2dtable(INTEGER(x), C_nlevels(x) + 1,
+              INTEGER(y), C_nlevels(y) + 1,
+              LENGTH(x), ans);
+}
+
 SEXP R_2dtable(SEXP x, SEXP y)
 {
     SEXP ans;
 
     PROTECT(ans = allocMatrix(INTSXP, C_nlevels(x) + 1, C_nlevels(y) + 1)); 
-    C_2dtable(INTEGER(x), C_nlevels(x) + 1,
-              INTEGER(y), C_nlevels(y) + 1,
-              LENGTH(x), INTEGER(ans));
+    CR_2dtable(x, y, INTEGER(ans));
     UNPROTECT(1);
     return(ans);
 }
