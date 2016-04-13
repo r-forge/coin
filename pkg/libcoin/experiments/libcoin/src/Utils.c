@@ -13,8 +13,9 @@
     *\param method
 */
 
-void CR_La_svd(int dim, char *jobu, char *jobv, double *x, double *s, double *u, double *v) {
-
+void CR_La_svd(int dim, char *jobu, char *jobv, double *x, 
+               double *s, double *u, double *v) 
+{
     int *xdims, n, p, lwork, info = 0;
     int *iwork;
     double *work, *xvals, tmp;
@@ -52,8 +53,8 @@ void CR_La_svd(int dim, char *jobu, char *jobv, double *x, double *s, double *u,
     *\param svdmem an object of class `svd_mem'
 */
 
-void CR_svd (SEXP x, SEXP s, SEXP u, SEXP v) {
-
+void CR_svd (SEXP x, SEXP s, SEXP u, SEXP v) 
+{
     int P;
     double *du, *dv, *ds;
 
@@ -82,8 +83,8 @@ void CR_svd (SEXP x, SEXP s, SEXP u, SEXP v) {
     *\param svdmem an object of class `svd_mem'
 */
 
-SEXP R_svd (SEXP x) {
-
+SEXP R_svd (SEXP x) 
+{
     int P;
     SEXP ans, s, u, v;
     
@@ -108,9 +109,10 @@ SEXP R_svd (SEXP x) {
     *\param ans return value; an object of class `ExpectCovarMPinv'
 */
 
-void C_MPinv (SEXP x, double tol, SEXP s, SEXP u, SEXP v, double *MPinv, double *rank) {
-
-    int i, j, P, k, *positive;
+void C_MPinv (SEXP x, double tol, SEXP s, SEXP u, SEXP v, double *MPinv, 
+              int *rank)
+{
+    int i, j, P, k;
     double *ds, *du, *dvt;
     
     CR_svd(x, s, u, v);
@@ -122,18 +124,13 @@ void C_MPinv (SEXP x, double tol, SEXP s, SEXP u, SEXP v, double *MPinv, double 
 
     if (tol * ds[0] > tol) tol = tol * ds[0];
 
-    positive = Calloc(P, int); 
-    
-    rank[0] = 0.0;
+    rank[0] = 0;
     for (i = 0; i < P; i++) {
-        if (ds[i] > tol) {
-            positive[i] = 1;
-            rank[0] += 1.0;
-        } 
+        if (ds[i] > tol) rank[0]++;
     }
     
     for (j = 0; j < P; j++) {
-        if (positive[j]) {
+        if (ds[j] > tol) {
             for (i = 0; i < P; i++)
                 du[j * P + i] *= (1 / ds[j]);
         }
@@ -143,15 +140,12 @@ void C_MPinv (SEXP x, double tol, SEXP s, SEXP u, SEXP v, double *MPinv, double 
         for (j = 0; j < P; j++) {
             MPinv[j * P + i] = 0.0;
             for (k = 0; k < P; k++) {
-                if (positive[k])
+                if (ds[k] > tol)
                     MPinv[j * P + i] += dvt[i * P + k] * du[P * k + j];
             }
         }
     }
-
-    Free(positive);
 }
-
 
 /**
     R-interface to C_MPinv 
@@ -186,9 +180,9 @@ SEXP R_MPinv (SEXP x, SEXP tol) {
 
     PROTECT(ans = allocVector(VECSXP, 2));
     SET_VECTOR_ELT(ans, 0, MP = allocMatrix(REALSXP, P, P));
-    SET_VECTOR_ELT(ans, 1, rank = allocVector(REALSXP, 1));
+    SET_VECTOR_ELT(ans, 1, rank = allocVector(INTSXP, 1));
 
-    C_MPinv(x, REAL(tol)[0], s, u, v, REAL(MP), REAL(rank));
+    C_MPinv(x, REAL(tol)[0], s, u, v, REAL(MP), INTEGER(rank));
     
     UNPROTECT(1);
     return(ans);
