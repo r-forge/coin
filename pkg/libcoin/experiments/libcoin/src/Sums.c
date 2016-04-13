@@ -1,6 +1,5 @@
 
-#include <R.h>
-#include <Rinternals.h>
+#include "libcoin.h"
 
 /* Variables
    x:           a double N x P matrix

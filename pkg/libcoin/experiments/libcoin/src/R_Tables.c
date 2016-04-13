@@ -3,8 +3,8 @@
 #include "Tables.h"
 #include "helpers.h"
 
-SEXP R_2dtable(SEXP x, SEXP y) {
-
+SEXP R_2dtable(SEXP x, SEXP y)
+{
     SEXP ans;
 
     PROTECT(ans = allocMatrix(INTSXP, C_nlevels(x) + 1, C_nlevels(y) + 1)); 
@@ -15,8 +15,8 @@ SEXP R_2dtable(SEXP x, SEXP y) {
     return(ans);
 }
 
-SEXP R_2dtable_subset(SEXP x, SEXP y, SEXP subset) {
-
+SEXP R_2dtable_subset(SEXP x, SEXP y, SEXP subset) 
+{
     SEXP ans;
     
     PROTECT(ans = allocMatrix(INTSXP, C_nlevels(x) + 1, C_nlevels(y) + 1)); 
@@ -26,8 +26,8 @@ SEXP R_2dtable_subset(SEXP x, SEXP y, SEXP subset) {
     return(ans);
 }
 
-SEXP R_2dtable_weights(SEXP x, SEXP y, SEXP weights) {
-
+SEXP R_2dtable_weights(SEXP x, SEXP y, SEXP weights) 
+{
     SEXP ans;
     
     PROTECT(ans = allocMatrix(INTSXP, C_nlevels(x) + 1, C_nlevels(y) + 1)); 
@@ -37,8 +37,8 @@ SEXP R_2dtable_weights(SEXP x, SEXP y, SEXP weights) {
     return(ans);
 }
 
-SEXP R_2dtable_weights_subset(SEXP x, SEXP y, SEXP weights, SEXP subset) {
-
+SEXP R_2dtable_weights_subset(SEXP x, SEXP y, SEXP weights, SEXP subset) 
+{
     SEXP ans;
     
     PROTECT(ans = allocMatrix(INTSXP, C_nlevels(x) + 1, C_nlevels(y) + 1)); 
@@ -48,8 +48,8 @@ SEXP R_2dtable_weights_subset(SEXP x, SEXP y, SEXP weights, SEXP subset) {
     return(ans);
 }
 
-SEXP R_1dtable(SEXP y) {
-
+SEXP R_1dtable(SEXP y) 
+{
     SEXP ans;
 
     PROTECT(ans = allocVector(INTSXP, C_nlevels(y) + 1)); 
@@ -58,9 +58,10 @@ SEXP R_1dtable(SEXP y) {
     return(ans);
 }
 
-SEXP R_1dtable_subset(SEXP y, SEXP subset) {
-
+SEXP R_1dtable_subset(SEXP y, SEXP subset) 
+{
     SEXP ans;
+
     PROTECT(ans = allocVector(INTSXP, C_nlevels(y) + 1)); 
     C_1dtable_subset(INTEGER(y), C_nlevels(y) + 1, INTEGER(subset), 
                      LENGTH(subset), INTEGER(ans));
@@ -68,9 +69,10 @@ SEXP R_1dtable_subset(SEXP y, SEXP subset) {
     return(ans);
 }
 
-SEXP R_1dtable_weights(SEXP y, SEXP weights) {
-
+SEXP R_1dtable_weights(SEXP y, SEXP weights) 
+{
     SEXP ans;
+
     PROTECT(ans = allocVector(INTSXP, C_nlevels(y) + 1)); 
     C_1dtable_subset(INTEGER(y), C_nlevels(y) + 1, INTEGER(weights), 
                      LENGTH(weights), INTEGER(ans));
@@ -78,9 +80,10 @@ SEXP R_1dtable_weights(SEXP y, SEXP weights) {
     return(ans);
 }
 
-SEXP R_1dtable_weights_subset(SEXP y, SEXP weights, SEXP subset) {
-
+SEXP R_1dtable_weights_subset(SEXP y, SEXP weights, SEXP subset) 
+{
     SEXP ans;
+
     PROTECT(ans = allocVector(INTSXP, C_nlevels(y) + 1)); 
     C_1dtable_weights_subset(INTEGER(y), C_nlevels(y) + 1, 
                              INTEGER(weights), INTEGER(subset), 
