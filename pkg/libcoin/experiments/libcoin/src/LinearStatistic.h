@@ -26,6 +26,14 @@ void C_CovarianceInfluence_subset(double* y, int N, int Q, int *subset, int Nsub
 void C_CovarianceInfluence_weights_subset(double* y, int N, int Q, int *weights, 
                                           int sumweights, int *subset, int Nsubset, 
                                           double *ExpInf, double *QQ_ans);
+void C_VarianceInfluence(double* y, int N, int Q, double *ExpInf, double *Q_ans);
+void C_VarianceInfluence_weights(double* y, int N, int Q, int *weights, 
+                                   int sumweights, double *ExpInf, double *Q_ans);
+void C_VarianceInfluence_subset(double* y, int N, int Q, int *subset, int Nsubset, 
+                                  double *ExpInf, double *Q_ans);
+void C_VarianceInfluence_weights_subset(double* y, int N, int Q, int *weights, 
+                                          int sumweights, int *subset, int Nsubset, 
+                                          double *ExpInf, double *Q_ans);
 void C_ExpectationX(double* x, int N, int P, double *P_ans);
 void C_ExpectationX_weights(double* x, int N, int P, int *weights, 
                                     int sumweights, double *P_ans);
@@ -41,8 +49,17 @@ void C_CovarianceX_subset(double *x, int N, int P, int *subset,
                           int Nsubset, double *PP_ans);
 void C_CovarianceX_weights_subset(double *x, int N, int P, int *weights,
                                   int *subset, int Nsubset, double *PP_ans);
+void C_VarianceX(double *x, int N, int P, double *P_ans);
+void C_VarianceX_weights(double *x, int N, int P, 
+                            int *weights, double *P_ans);
+void C_VarianceX_subset(double *x, int N, int P, int *subset, 
+                          int Nsubset, double *P_ans);
+void C_VarianceX_weights_subset(double *x, int N, int P, int *weights,
+                                  int *subset, int Nsubset, double *P_ans);
 void C_ExpectationLinearStatistic(int P, int Q, double *ExpInf, double *colSumsX, 
                                   double *PQ_ans);
 void C_CovarianceLinearStatistic(int P, int Q, double *CovInf, double *colSumsX, double *CovX, 
-                                 int sumweights, double *PQPQ_tmp, double *PQQ_tmp, 
-                                 double *PQPQ_ans);
+                                 int sumweights, double *PP_tmp, double *PQPQ_ans);
+void C_VarianceLinearStatistic(int P, int Q, double *VarInf, double *ExpX, double *VarX,
+                               int sumweights, double *P_tmp, double *PQ_ans);
+                               

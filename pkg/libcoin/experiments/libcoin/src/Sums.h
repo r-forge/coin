@@ -6,6 +6,16 @@ void C_colSums_weights(double *x, int N, int P, int *weights, double *ans);
 void C_colSums_subset(double *x, int N, int P, int *subset, int Nsubset, double *ans);
 void C_colSums_weights_subset(double *x, int N, int P, int *weights, 
                               int *subset, int Nsubset, double *ans);
+void C_colSums2(double *x, int N, int P, double *ans);
+void C_colSums2_weights(double *x, int N, int P, int *weights, double *ans);
+void C_colSums2_subset(double *x, int N, int P, int *subset, int Nsubset, double *ans);
+void C_colSums2_weights_subset(double *x, int N, int P, int *weights, 
+                              int *subset, int Nsubset, double *ans);
+void C_colSums2_center(double *x, int N, int P, double *center, double *ans);
+void C_colSums2_weights_center(double *x, int N, int P, int *weights, double *center, double *ans);
+void C_colSums2_subset_center(double *x, int N, int P, int *subset, int Nsubset, double *center, double *ans);
+void C_colSums2_weights_subset_center(double *x, int N, int P, int *weights, 
+                              int *subset, int Nsubset, double *center, double *ans);
 void C_KronSums(double *x, int N, int P, double *y, int Q, double *ans);
 void C_KronSums_weights(double *x, int N, int P, double *y, int Q, 
                         int *weights, double *ans);

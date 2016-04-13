@@ -85,6 +85,141 @@ void C_colSums_weights_subset(double *x, int N, int P, int *weights,
     }
 }
 
+/* colSums(x^2) */
+
+void C_colSums2(double *x, int N, int P, double *ans) {
+
+    int pN;
+
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
+
+    for (int p = 0; p < P; p++) {
+        pN = p * N;
+        for (int i = 0; i < N; i++)
+            ans[p] += x[pN + i] * x[pN + i];
+    }
+}
+
+/* colSums(x^2 * w) */
+
+void C_colSums2_weights(double *x, int N, int P, int *weights, double *ans) {
+
+    int pN;
+
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
+
+    for (int p = 0; p < P; p++) {
+        pN = p * N;
+        for (int i = 0; i < N; i++)
+            ans[p] += weights[i] * x[pN + i] * x[pN + i];
+    }
+}
+
+/* colSums(x[subset,]^2) */
+
+void C_colSums2_subset(double *x, int N, int P, int *subset, int Nsubset, double *ans) {
+
+    int pN;
+
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
+
+    for (int p = 0; p < P; p++) {
+        pN = p * N;
+        for (int i = 0; i < Nsubset; i++)
+            ans[p] += x[pN + subset[i]] * x[pN + subset[i]];
+    }
+}
+
+/* colSums(x[subset,]^2 * weights[subset]) */
+
+void C_colSums2_weights_subset(double *x, int N, int P, int *weights, 
+                              int *subset, int Nsubset, double *ans) {
+
+    int pN;
+
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
+
+    for (int p = 0; p < P; p++) {
+        pN = p * N;
+        for (int i = 0; i < Nsubset; i++)
+            ans[p] += weights[subset[i]] * x[pN + subset[i]] * x[pN + subset[i]];
+    }
+}
+
+
+/* colSums((x-center)^2) */
+
+void C_colSums2_center(double *x, int N, int P, double *center, double *ans) {
+
+    int pN;
+
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
+
+    for (int p = 0; p < P; p++) {
+        pN = p * N;
+        for (int i = 0; i < N; i++)
+            ans[p] += (x[pN + i] - center[p]) * (x[pN + i] - center[p]);
+    }
+}
+
+/* colSums((x-center)^2 * w) */
+
+void C_colSums2_weights_center(double *x, int N, int P, int *weights, double *center, double *ans) {
+
+    int pN;
+
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
+
+    for (int p = 0; p < P; p++) {
+        pN = p * N;
+        for (int i = 0; i < N; i++)
+            ans[p] += weights[i] * (x[pN + i] - center[p]) * 
+                                   (x[pN + i] - center[p]);
+    }
+}
+
+/* colSums((x[subset,] - center)^2) */
+
+void C_colSums2_subset_center(double *x, int N, int P, int *subset, int Nsubset, double *center, double *ans) {
+
+    int pN;
+
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
+
+    for (int p = 0; p < P; p++) {
+        pN = p * N;
+        for (int i = 0; i < Nsubset; i++)
+            ans[p] += (x[pN + subset[i]] - center[p]) * 
+                      (x[pN + subset[i]] - center[p]);
+    }
+}
+
+/* colSums((x[subset,]-center)^2 * weights[subset]) */
+
+void C_colSums2_weights_subset_center(double *x, int N, int P, int *weights, 
+                              int *subset, int Nsubset, double *center, double *ans) {
+
+    int pN;
+
+    for (int p = 0; p < P; p++)
+        ans[p] = 0.0;
+
+    for (int p = 0; p < P; p++) {
+        pN = p * N;
+        for (int i = 0; i < Nsubset; i++)
+            ans[p] += weights[subset[i]] * (x[pN + subset[i]] - center[p]) * 
+                                           (x[pN + subset[i]] - center[p]);
+    }
+}
+
+
 /* sum_i (t(x[i,]) %*% y[i,]) */
 
 void C_KronSums(double *x, int N, int P, double *y, int Q, double *ans) {

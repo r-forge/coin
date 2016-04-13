@@ -1,5 +1,5 @@
 
-LinStatExpCov <- function(X, Y, weights, subset, block) {
+LinStatExpCov <- function(X, Y, weights, subset, block, varonly = FALSE) {
 
     stopifnot(NROW(X) == NROW(Y))
     if (!missing(weights)) {
@@ -56,16 +56,29 @@ LinStatExpCov <- function(X, Y, weights, subset, block) {
         "weights" = .Call("R_ExpectationX_weights", X, weights, PACKAGE = "libcoin"),
         "subset" = .Call("R_ExpectationX_subset", X, subset - 1L, PACKAGE = "libcoin"),
         "weights_subset" = .Call("R_ExpectationX_weights_subset", X, weights, subset - 1L, PACKAGE = "libcoin"))
-    CovY <- switch(case, 
-        "vanilla" = .Call("R_CovarianceInfluence", Y, PACKAGE = "libcoin"),
-        "weights" = .Call("R_CovarianceInfluence_weights", Y, weights, PACKAGE = "libcoin"),
-        "subset" = .Call("R_CovarianceInfluence_subset", Y, subset - 1L, PACKAGE = "libcoin"),
-        "weights_subset" = .Call("R_CovarianceInfluence_weights_subset", Y, weights, subset - 1L, PACKAGE = "libcoin"))
-    CovX <- switch(case, 
-        "vanilla" = .Call("R_CovarianceX", X, PACKAGE = "libcoin"),
-        "weights" = .Call("R_CovarianceX_weights", X, weights, PACKAGE = "libcoin"),
-        "subset" = .Call("R_CovarianceX_subset", X, subset - 1L, PACKAGE = "libcoin"),
-        "weights_subset" = .Call("R_CovarianceX_weights_subset", X, weights, subset - 1L, PACKAGE = "libcoin"))
+    if (varonly) {
+        CovY <- switch(case, 
+            "vanilla" = .Call("R_VarianceInfluence", Y, PACKAGE = "libcoin"),
+            "weights" = .Call("R_VarianceInfluence_weights", Y, weights, PACKAGE = "libcoin"),
+            "subset" = .Call("R_VarianceInfluence_subset", Y, subset - 1L, PACKAGE = "libcoin"),
+            "weights_subset" = .Call("R_VarianceInfluence_weights_subset", Y, weights, subset - 1L, PACKAGE = "libcoin"))
+        CovX <- switch(case, 
+            "vanilla" = .Call("R_VarianceX", X, PACKAGE = "libcoin"),
+            "weights" = .Call("R_VarianceX_weights", X, weights, PACKAGE = "libcoin"),
+            "subset" = .Call("R_VarianceX_subset", X, subset - 1L, PACKAGE = "libcoin"),
+            "weights_subset" = .Call("R_VarianceX_weights_subset", X, weights, subset - 1L, PACKAGE = "libcoin"))
+    } else {
+        CovY <- switch(case, 
+            "vanilla" = .Call("R_CovarianceInfluence", Y, PACKAGE = "libcoin"),
+            "weights" = .Call("R_CovarianceInfluence_weights", Y, weights, PACKAGE = "libcoin"),
+            "subset" = .Call("R_CovarianceInfluence_subset", Y, subset - 1L, PACKAGE = "libcoin"),
+            "weights_subset" = .Call("R_CovarianceInfluence_weights_subset", Y, weights, subset - 1L, PACKAGE = "libcoin"))
+        CovX <- switch(case, 
+            "vanilla" = .Call("R_CovarianceX", X, PACKAGE = "libcoin"),
+            "weights" = .Call("R_CovarianceX_weights", X, weights, PACKAGE = "libcoin"),
+            "subset" = .Call("R_CovarianceX_subset", X, subset - 1L, PACKAGE = "libcoin"),
+            "weights_subset" = .Call("R_CovarianceX_weights_subset", X, weights, subset - 1L, PACKAGE = "libcoin"))
+    }
 
     if (!missing(block)) {
        lev <- levels(block) 
@@ -73,27 +86,36 @@ LinStatExpCov <- function(X, Y, weights, subset, block) {
        Exp <- 0
        for (l in lev) {
            if (case == "vanilla")
-               tmp <- LinStatExpCov(X, Y, subset = which(block == l))
+               tmp <- LinStatExpCov(X, Y, subset = which(block == l), varonly = varonly)
            if (case == "weights")
-               tmp <- LinStatExpCov(X, Y, weights = weights, subset = which(block == l))
+               tmp <- LinStatExpCov(X, Y, weights = weights, subset = which(block == l), varonly = varonly)
            if (case == "subset")
-               tmp <- LinStatExpCov(X, Y, subset = subset[which(block[subset] == l)])
+               tmp <- LinStatExpCov(X, Y, subset = subset[which(block[subset] == l)], varonly = varonly)
            if (case == "weights_subset")
-               tmp <- LinStatExpCov(X, Y, weights = weights, subset = subset[which(block[subset] == l)])
-           Cov <- Cov + tmp$Covariance
+               tmp <- LinStatExpCov(X, Y, weights = weights, subset = subset[which(block[subset] == l)], varonly = varonly)
+           if (varonly) {
+               Cov <- Cov + tmp$Variance
+           } else {
+               Cov <- Cov + tmp$Covariance
+           }
            Exp <- Exp + tmp$Expectation
        }
        ret$Expectation <- Exp
        ret$Covariance <- Cov
     } else {
         ret$Expectation <- .Call("R_ExpectationLinearStatistic", ExpY, ExpX)
-        ret$Covariance <- .Call("R_CovarianceLinearStatistic", CovY, ExpX, CovX, as.integer(sw))
+        if (!varonly) {
+            ret$Covariance <- .Call("R_CovarianceLinearStatistic", CovY, ExpX, CovX, as.integer(sw))
+        } else {
+            ret$Covariance <- .Call("R_VarianceLinearStatistic", CovY, ExpX, CovX, as.integer(sw))
+        }
     }
+    if (varonly) names(ret) <- gsub("Covariance", "Variance", names(ret))
     ret
 }
 
 
-LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block) {
+LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALSE) {
 
     stopifnot(length(ix) == length(iy))
 
@@ -140,8 +162,13 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block) {
 
     ExpY <- .Call("R_ExpectationInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
     ExpX <- .Call("R_ExpectationX_weights", X, tab_ix, PACKAGE = "libcoin")
-    CovY <- .Call("R_CovarianceInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
-    CovX <- .Call("R_CovarianceX_weights", X, tab_ix, PACKAGE = "libcoin")
+    if (varonly) {
+        CovY <- .Call("R_VarianceInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
+        CovX <- .Call("R_VarianceX_weights", X, tab_ix, PACKAGE = "libcoin")
+    } else {
+        CovY <- .Call("R_CovarianceInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
+        CovX <- .Call("R_CovarianceX_weights", X, tab_ix, PACKAGE = "libcoin")
+    }
 
     if (!missing(block)) {
        lev <- levels(block) 
@@ -149,22 +176,32 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block) {
        Exp <- 0
        for (l in lev) {
            if (case == "vanilla")
-               tmp <- LinStatExpCov2d(X, Y, ix, iy, subset = which(block == l))
+               tmp <- LinStatExpCov2d(X, Y, ix, iy, subset = which(block == l), varonly = varonly)
            if (case == "weights")
-               tmp <- LinStatExpCov2d(X, Y, ix, iy,  weights = weights, subset = which(block == l))
+               tmp <- LinStatExpCov2d(X, Y, ix, iy,  weights = weights, subset = which(block == l), varonly = varonly)
            if (case == "subset")
-               tmp <- LinStatExpCov2d(X, Y, ix, iy,  subset = subset[which(block[subset] == l)])
+               tmp <- LinStatExpCov2d(X, Y, ix, iy,  subset = subset[which(block[subset] == l)], varonly = varonly)
            if (case == "weights_subset")
-               tmp <- LinStatExpCov2d(X, Y, ix, iy,  weights = weights, subset = subset[which(block[subset] == l)])
-           Cov <- Cov + tmp$Covariance
+               tmp <- LinStatExpCov2d(X, Y, ix, iy,  weights = weights, subset = subset[which(block[subset] == l)], varonly = varonly)
+           if (varonly) {
+               Cov <- Cov + tmp$Variance
+           } else {
+               Cov <- Cov + tmp$Covariance
+           }
            Exp <- Exp + tmp$Expectation
        }
        ret$Expectation <- Exp
        ret$Covariance <- Cov
     } else {
         ret$Expectation <- .Call("R_ExpectationLinearStatistic", ExpY, ExpX)
-        ret$Covariance <- .Call("R_CovarianceLinearStatistic", CovY, ExpX, CovX, 
-                                as.integer(sum(tab_ixiy)))
+        if (!varonly) {
+            ret$Covariance <- .Call("R_CovarianceLinearStatistic", CovY, ExpX, CovX, 
+                                    as.integer(sum(tab_ixiy)))
+        } else {
+            ret$Covariance <- .Call("R_VarianceLinearStatistic", CovY, ExpX, CovX, 
+                                    as.integer(sum(tab_ixiy)))
+        }
     }
+    if (varonly) names(ret) <- gsub("Covariance", "Variance", names(ret))
     ret
 }
