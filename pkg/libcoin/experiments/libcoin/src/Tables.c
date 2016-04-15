@@ -52,6 +52,58 @@ void C_2dtable_weights_subset(int *ix, int Nx, int *iy, int Ny, int *weights,
          NxNy_ans[ix[subset[i]] + iy[subset[i]] * Nx] += weights[subset[i]];
 }
 
+/* table(ix, iy, block) */
+void C_2dtable_block(int *ix, int Nx, int *iy, int Ny, int *block, int Nlevels, 
+                     int N, int *NxNyNlevels_ans)
+{
+    int NxNy = Nx * Ny;
+
+    for (int i = 0; i < NxNy * Nlevels; i++) NxNyNlevels_ans[i] = 0;
+    
+    for (int i = 0; i < N; i++)  
+        NxNyNlevels_ans[(block[i] - 1) * NxNy + ix[i] + iy[i] * Nx]++;
+
+}
+
+/* table(ix[subset], iy[subset], block[subset]) */
+void C_2dtable_subset_block(int *ix, int Nx, int *iy, int Ny, int *subset, 
+                      int Nsubset,  int *block, int Nlevels, int *NxNyNlevels_ans) 
+{
+    int NxNy = Nx * Ny;
+
+    for (int i = 0; i < NxNy * Nlevels; i++) NxNyNlevels_ans[i] = 0;
+    
+    for (int i = 0; i < Nsubset; i++)  
+        NxNyNlevels_ans[(block[subset[i]] - 1) * NxNy + ix[subset[i]] + iy[subset[i]] * Nx]++;
+
+}
+
+/* xtabs(weights ~ ix + iy + block) */
+void C_2dtable_weights_block(int *ix, int Nx, int *iy, int Ny, int *weights,
+                              int *block, int Nlevels, int N, int *NxNyNlevels_ans) 
+{
+    int NxNy = Nx * Ny;
+
+    for (int i = 0; i < NxNy * Nlevels; i++) NxNyNlevels_ans[i] = 0;
+    
+    for (int i = 0; i < N; i++)
+        NxNyNlevels_ans[(block[i] - 1) * NxNy + ix[i] + iy[i] * Nx] += weights[i];
+}
+
+/* xtabs(weights ~ ix + iy + block, subset = subset) */
+void C_2dtable_weights_subset_block(int *ix, int Nx, int *iy, int Ny, int *weights,
+                                    int *subset, int Nsubset, int *block, int Nlevels, 
+                                    int *NxNyNlevels_ans) 
+{
+    int NxNy = Nx * Ny;
+
+    for (int i = 0; i < NxNy * Nlevels; i++) NxNyNlevels_ans[i] = 0;
+    
+    for (int i = 0; i < Nsubset; i++)
+         NxNyNlevels_ans[(block[subset[i]] - 1) * NxNy + 
+                         ix[subset[i]] + iy[subset[i]] * Nx] += weights[subset[i]];
+}
+
 /* table(ix) */
 void C_1dtable(int *ix, int Nx, int N, int *Nx_ans) 
 {

@@ -15,7 +15,6 @@ LinStatExpCov <- function(X, Y, weights, subset, block, varonly = FALSE) {
         stopifnot(is.factor(block))
     }
 
-
     ret <- list()
     if (missing(weights) & missing(subset)) case <- "vanilla"
     if (!missing(weights) & missing(subset)) case <- "weights"
@@ -146,62 +145,75 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALS
     if (!missing(weights) & missing(subset)) case <- "weights"
     if (missing(weights) & !missing(subset)) case <- "subset"
     if (!missing(weights) & !missing(subset)) case <- "weights_subset"
+
     ret$case <- case
-
-    tab_ixiy <- switch(case, 
-        "vanilla" = .Call("R_2dtable", ix, iy, PACKAGE = "libcoin"),
-        "weights" = .Call("R_2dtable_weights", ix, iy, weights, PACKAGE = "libcoin"),
-        "subset" = .Call("R_2dtable_subset", ix, iy, subset - 1L, PACKAGE = "libcoin"),
-        "weights_subset" = .Call("R_2dtable_weights_subset", ix, iy, weights, subset - 1L, PACKAGE = "libcoin"))
-    ret$tab <- tab_ixiy
-
-    ret$LinStat <- .Call("R_LinearStatistic_2d", X, Y, tab_ixiy, PACKAGE = "libcoin")
-
-    tab_iy <- as.integer(colSums(tab_ixiy))
-    tab_ix <- as.integer(rowSums(tab_ixiy))
-
-    ExpY <- .Call("R_ExpectationInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
-    ExpX <- .Call("R_ExpectationX_weights", X, tab_ix, PACKAGE = "libcoin")
-    if (varonly) {
-        CovY <- .Call("R_VarianceInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
-        CovX <- .Call("R_VarianceX_weights", X, tab_ix, PACKAGE = "libcoin")
+    if (missing(block)) {
+        tab_ixiy <- switch(case, "vanilla" = .Call("R_2dtable", ix, iy, PACKAGE = "libcoin"),
+                "weights" = .Call("R_2dtable_weights", ix, iy, weights, PACKAGE = "libcoin"),
+                "subset" = .Call("R_2dtable_subset", ix, iy, subset - 1L, PACKAGE = "libcoin"),
+                "weights_subset" = .Call("R_2dtable_weights_subset", ix, iy, weights, subset - 1L, PACKAGE = "libcoin"))
     } else {
-        CovY <- .Call("R_CovarianceInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
-        CovX <- .Call("R_CovarianceX_weights", X, tab_ix, PACKAGE = "libcoin")
+        tab_ixiy <- switch(case, "vanilla" = .Call("R_2dtable_block", ix, iy, block, PACKAGE = "libcoin"),
+                "weights" = .Call("R_2dtable_weights_block", ix, iy, weights, block, PACKAGE = "libcoin"),
+                "subset" = .Call("R_2dtable_subset_block", ix, iy, subset - 1L, block, PACKAGE = "libcoin"),
+                "weights_subset" = .Call("R_2dtable_weights_subset_block", ix, iy, weights, subset - 1L, block, PACKAGE = "libcoin"))
+        tab_ixiy <- array(tab_ixiy, dim = c(max(ix) + 1, max(iy) + 1, nlevels(block)))
     }
 
-    if (!missing(block)) {
-       lev <- levels(block) 
-       Cov <- 0
-       Exp <- 0
-       for (l in lev) {
-           if (case == "vanilla")
-               tmp <- LinStatExpCov2d(X, Y, ix, iy, subset = which(block == l), varonly = varonly)
-           if (case == "weights")
-               tmp <- LinStatExpCov2d(X, Y, ix, iy,  weights = weights, subset = which(block == l), varonly = varonly)
-           if (case == "subset")
-               tmp <- LinStatExpCov2d(X, Y, ix, iy,  subset = subset[which(block[subset] == l)], varonly = varonly)
-           if (case == "weights_subset")
-               tmp <- LinStatExpCov2d(X, Y, ix, iy,  weights = weights, subset = subset[which(block[subset] == l)], varonly = varonly)
-           if (varonly) {
-               Cov <- Cov + tmp$Variance
-           } else {
-               Cov <- Cov + tmp$Covariance
-           }
-           Exp <- Exp + tmp$Expectation
-       }
-       ret$Expectation <- Exp
-       ret$Covariance <- Cov
-    } else {
+    fun <- function(tab) {
+        ret <- list()
+        sw <- sum(tab)
+        ret$LinStat <- .Call("R_LinearStatistic_2d", X, Y, tab, PACKAGE = "libcoin")
+        tab_iy <- as.integer(colSums(tab))
+        tab_ix <- as.integer(rowSums(tab))
+        ExpY <- .Call("R_ExpectationInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
+        ExpX <- .Call("R_ExpectationX_weights", X, tab_ix, PACKAGE = "libcoin")
+        if (varonly) {
+            CovY <- .Call("R_VarianceInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
+            CovX <- .Call("R_VarianceX_weights", X, tab_ix, PACKAGE = "libcoin")
+        } else {
+            CovY <- .Call("R_CovarianceInfluence_weights", Y, tab_iy, PACKAGE = "libcoin")
+            CovX <- .Call("R_CovarianceX_weights", X, tab_ix, PACKAGE = "libcoin")
+        }
         ret$Expectation <- .Call("R_ExpectationLinearStatistic", ExpY, ExpX)
         if (!varonly) {
-            ret$Covariance <- .Call("R_CovarianceLinearStatistic", CovY, ExpX, CovX, 
-                                    as.integer(sum(tab_ixiy)))
+            ret$Covariance <- .Call("R_CovarianceLinearStatistic", CovY, ExpX, CovX, as.integer(sw))
         } else {
-            ret$Covariance <- .Call("R_VarianceLinearStatistic", CovY, ExpX, CovX, 
-                                    as.integer(sum(tab_ixiy)))
+            ret$Covariance <- .Call("R_VarianceLinearStatistic", CovY, ExpX, CovX, as.integer(sw))
         }
+        ret
+    }
+
+    if (missing(block)) {
+        ret <- fun(tab_ixiy)
+    } else {
+        tmp <- apply(tab_ixiy, 3, fun)
+        ret$LinStat <- do.call("+", lapply(tmp, function(o) o$LinStat))
+        ret$Expectation <- do.call("+", lapply(tmp, function(o) o$Expectation))
+        ret$Covariance <- do.call("+", lapply(tmp, function(o) o$Covariance))
     }
     if (varonly) names(ret) <- gsub("Covariance", "Variance", names(ret))
     ret
+}
+
+ChisqStat <- function(object, tol = sqrt(.Machine$double.eps)) {
+
+    stopifnot(!is.null(object$Covariance))
+    tmp <- .Call("R_MPinv", object$Covariance, tol)
+    object$MPinv <- tmp[[1]]
+    object$rank <- tmp[[2]]
+    object
+}
+
+ChisqTest <- function(object, log = FALSE) {
+
+    .Call("R_ChisqTest", object$LinStat, object$Expect, object$MPinv,
+          object$rank, log = log)
+}
+
+MaxtypeStat <- function(object, tol = sqrt(.Machine$double.eps), 
+                        alternative = c("two.sided", "less", "greater")) {
+
+    alternative <- match.arg(alternative)
+    object$alternative <- alternative
 }

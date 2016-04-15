@@ -1,6 +1,7 @@
 
 #include "libcoin.h"
 #include "Tables.h"
+#include "Sums.h"
 
 int C_nlevels (SEXP x) 
 {
@@ -116,7 +117,7 @@ void CR_PermuteBlockSetup(SEXP subset, SEXP block, SEXP table, SEXP orig)
     Free(subblock);
 }
 
-SEXP R_PermuteBlock(SEXP subset, SEXP block)
+SEXP R_PermuteBlock_subset(SEXP subset, SEXP block)
 {
     SEXP ans, orig, perm, table;
     int *tmp;
@@ -139,3 +140,107 @@ SEXP R_PermuteBlock(SEXP subset, SEXP block)
     UNPROTECT(1);
     return(ans);
 }
+
+SEXP R_PermuteBlock_weights(SEXP weights, SEXP block)
+{
+    SEXP ans, subset, orig, perm, table;
+    int *tmp, sw, itmp;
+    
+    sw <- C_sum(INTEGER(weights), LENGTH(weights));
+    
+    PROTECT(ans = allocVector(VECSXP, 4));
+    SET_VECTOR_ELT(ans, 0, orig = allocVector(INTSXP, sw));
+    SET_VECTOR_ELT(ans, 1, perm = allocVector(INTSXP, sw));
+    SET_VECTOR_ELT(ans, 2, table = allocVector(INTSXP, C_nlevels(block) + 1));
+    SET_VECTOR_ELT(ans, 3, subset = allocVector(INTSXP, sw));
+
+    /* subset = rep(1:length(weights), weights) */
+    itmp = 0;
+    for (int i = 0; i < LENGTH(weights); i++) {
+        for (int j = 0; j < INTEGER(weights)[i]; j++)
+            INTEGER(subset)[++itmp] = i;
+    }
+
+    GetRNGstate();
+    
+    CR_PermuteBlockSetup(subset, block, table, orig);
+    tmp = Calloc(LENGTH(subset), int);
+
+    C_doPermuteBlock(INTEGER(orig), LENGTH(subset), INTEGER(table), C_nlevels(block) + 1, 
+                     tmp, INTEGER(perm));
+
+    Free(tmp);
+                       
+    PutRNGstate();
+    UNPROTECT(1);
+    return(ans);
+}
+
+SEXP R_PermuteBlock_weights_subset(SEXP weights, SEXP subset, SEXP block)
+{
+    SEXP ans, subset2, orig, perm, table;
+    int *tmp, sw, itmp;
+    
+    sw <- C_sum_subset(INTEGER(weights), LENGTH(weights), INTEGER(subset), LENGTH(subset));
+    
+    PROTECT(ans = allocVector(VECSXP, 4));
+    SET_VECTOR_ELT(ans, 0, orig = allocVector(INTSXP, sw));
+    SET_VECTOR_ELT(ans, 1, perm = allocVector(INTSXP, sw));
+    SET_VECTOR_ELT(ans, 2, table = allocVector(INTSXP, C_nlevels(block) + 1));
+    SET_VECTOR_ELT(ans, 3, subset2 = allocVector(INTSXP, sw));
+
+    /* subset = rep(subset, weights[subset]) */
+    itmp = 0;
+    for (int i = 0; i < LENGTH(subset); i++) {
+        for (int j = 0; j < INTEGER(weights)[INTEGER(subset)[i]]; j++)
+            INTEGER(subset2)[++itmp] = INTEGER(subset)[i];
+    }
+
+    GetRNGstate();
+    
+    CR_PermuteBlockSetup(subset2, block, table, orig);
+    tmp = Calloc(LENGTH(subset2), int);
+
+    C_doPermuteBlock(INTEGER(orig), LENGTH(subset2), INTEGER(table), C_nlevels(block) + 1, 
+                     tmp, INTEGER(perm));
+
+    Free(tmp);
+                       
+    PutRNGstate();
+    UNPROTECT(1);
+    return(ans);
+}
+
+
+
+SEXP R_PermuteBlock(SEXP block)
+{
+    SEXP ans, subset, orig, perm, table;
+    int *tmp, sw, itmp;
+
+    sw = LENGTH(block);    
+    PROTECT(ans = allocVector(VECSXP, 4));
+    SET_VECTOR_ELT(ans, 0, orig = allocVector(INTSXP, sw));
+    SET_VECTOR_ELT(ans, 1, perm = allocVector(INTSXP, sw));
+    SET_VECTOR_ELT(ans, 2, table = allocVector(INTSXP, C_nlevels(block) + 1));
+    SET_VECTOR_ELT(ans, 3, subset = allocVector(INTSXP, sw));
+
+    /* subset = 1:length(block) */
+    for (int i = 0; i < sw; i++)
+        INTEGER(subset)[i] = i;
+
+    GetRNGstate();
+    
+    CR_PermuteBlockSetup(subset, block, table, orig);
+    tmp = Calloc(LENGTH(subset), int);
+
+    C_doPermuteBlock(INTEGER(orig), LENGTH(subset), INTEGER(table), C_nlevels(block) + 1, 
+                     tmp, INTEGER(perm));
+
+    Free(tmp);
+                       
+    PutRNGstate();
+    UNPROTECT(1);
+    return(ans);
+}
+

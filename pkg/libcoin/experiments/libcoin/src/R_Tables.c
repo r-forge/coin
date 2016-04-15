@@ -53,6 +53,54 @@ SEXP R_2dtable_weights_subset(SEXP x, SEXP y, SEXP weights, SEXP subset)
     return(ans);
 }
 
+
+SEXP R_2dtable_block(SEXP x, SEXP y, SEXP block)
+{
+    SEXP ans;
+
+    PROTECT(ans = allocVector(INTSXP, (C_nlevels(x) + 1) * (C_nlevels(y) + 1) * C_nlevels(block))); 
+    C_2dtable_block(INTEGER(x), C_nlevels(x) + 1, INTEGER(y), C_nlevels(y) + 1, 
+                    INTEGER(block), C_nlevels(block), LENGTH(x), INTEGER(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+
+
+SEXP R_2dtable_subset_block(SEXP x, SEXP y, SEXP subset, SEXP block) 
+{
+    SEXP ans;
+    
+    PROTECT(ans = allocVector(INTSXP, (C_nlevels(x) + 1) * (C_nlevels(y) + 1) * C_nlevels(block))); 
+    C_2dtable_subset_block(INTEGER(x), C_nlevels(x) + 1, INTEGER(y), C_nlevels(y) + 1, 
+                     INTEGER(subset), LENGTH(subset), INTEGER(block), C_nlevels(block), INTEGER(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+
+SEXP R_2dtable_weights_block(SEXP x, SEXP y, SEXP weights, SEXP block) 
+{
+    SEXP ans;
+    
+    PROTECT(ans = allocVector(INTSXP, (C_nlevels(x) + 1) * (C_nlevels(y) + 1) * C_nlevels(block))); 
+    C_2dtable_weights_block(INTEGER(x), C_nlevels(x) + 1, INTEGER(y), C_nlevels(y) + 1, 
+                      INTEGER(weights), INTEGER(block), C_nlevels(block), LENGTH(x), INTEGER(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+
+SEXP R_2dtable_weights_subset_block(SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block) 
+{
+    SEXP ans;
+    
+    PROTECT(ans = allocVector(INTSXP, (C_nlevels(x) + 1) * (C_nlevels(y) + 1) * C_nlevels(block))); 
+    C_2dtable_weights_subset_block(INTEGER(x), C_nlevels(x) + 1, INTEGER(y), C_nlevels(y) + 1, 
+                             INTEGER(weights), INTEGER(subset), LENGTH(subset), INTEGER(block), C_nlevels(block), 
+                             INTEGER(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+
+
 SEXP R_1dtable(SEXP y) 
 {
     SEXP ans;
