@@ -1,5 +1,6 @@
 
 #include "libcoin.h"
+#include "Tables.h"
 
 int C_nlevels (SEXP x) 
 {
@@ -53,3 +54,88 @@ void C_kronecker (const double *A, const int m, const int n,
         }
     }
 }  
+
+void C_Permute(int *x, int n, int *ans) 
+{
+    int k = n, j;
+    
+    for (int i = 0; i < k; i++) {
+        j = n * unif_rand();
+        ans[i] = x[j];
+        x[j] = x[--n];
+    }
+}
+
+void C_PermuteBlock(int *x, int *table, int Ntable, int *ans)
+{
+    int *px, *pans;
+    
+    px = x;
+    pans = ans;
+    
+    for (int j = 0; j < Ntable; j++) {
+        if (table[j] > 0) {
+            C_Permute(px, table[j], pans);
+            px += table[j];
+            pans += table[j];
+        }
+    }
+}
+
+void C_doPermuteBlock(int *subset, int Nsubset, int *table, int Nlevels, 
+                      int *Nsubset_tmp, int *perm) 
+{
+    for (int i = 0; i < Nsubset; i++) Nsubset_tmp[i] = subset[i];
+    C_PermuteBlock(Nsubset_tmp, table, Nlevels, perm);
+}
+
+void CR_PermuteBlockSetup(SEXP subset, SEXP block, SEXP table, SEXP orig)
+{
+
+    int Nsubset, Nlevels, *iblock, *isubset, *itable, *iorig, *itmp;
+    double *subblock;
+
+    Nsubset = LENGTH(subset);
+    Nlevels = C_nlevels(block) + 1;
+    C_1dtable_subset(INTEGER(block), Nlevels, INTEGER(subset), Nsubset, INTEGER(table));
+
+    iblock = INTEGER(block);
+    isubset = INTEGER(subset);
+    iorig = INTEGER(orig);
+
+    subblock = Calloc(Nsubset, double);
+    itmp = Calloc(Nsubset, int);
+    
+    for (int i = 0; i < Nsubset; i++) {
+        subblock[i] = (double) iblock[isubset[i]];
+        iorig[i] = isubset[i];
+    }
+
+    rsort_with_index(subblock, iorig, Nsubset); /* first element is double */
+
+    Free(subblock);
+}
+
+SEXP R_PermuteBlock(SEXP subset, SEXP block)
+{
+    SEXP ans, orig, perm, table;
+    int *tmp;
+    
+    PROTECT(ans = allocVector(VECSXP, 3));
+    SET_VECTOR_ELT(ans, 0, orig = allocVector(INTSXP, LENGTH(subset)));
+    SET_VECTOR_ELT(ans, 1, perm = allocVector(INTSXP, LENGTH(subset)));
+    SET_VECTOR_ELT(ans, 2, table = allocVector(INTSXP, C_nlevels(block) + 1));
+    GetRNGstate();
+    
+    CR_PermuteBlockSetup(subset, block, table, orig);
+    tmp = Calloc(LENGTH(subset), int);
+
+    C_doPermuteBlock(INTEGER(orig), LENGTH(subset), INTEGER(table), C_nlevels(block) + 1, 
+                     tmp, INTEGER(perm));
+
+    Free(tmp);
+                       
+    PutRNGstate();
+    UNPROTECT(1);
+    return(ans);
+}
