@@ -80,23 +80,6 @@ void C_kronecker_sym (const double *A, const int m,
     }
 }  
 
-SEXP R_kronecker_sym (SEXP A, SEXP B) {
-
-    SEXP ans;
-    int m, r;
-    
-    m = (int) (.5 + sqrt(.25 + 2 * LENGTH(A))) - 1;
-    r = (int) (.5 + sqrt(.25 + 2 * LENGTH(B))) - 1;
-    
-    PROTECT(ans = allocVector(REALSXP, m * r * (m * r + 1) / 2));
-    
-    C_kronecker_sym(REAL(A), m, REAL(B), r, REAL(ans));
-    
-    UNPROTECT(1);
-    return(ans);
-}
-    
-
 void C_Permute(int *x, int n, int *ans) 
 {
     int k = n, j;
