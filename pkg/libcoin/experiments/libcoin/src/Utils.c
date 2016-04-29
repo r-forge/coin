@@ -22,7 +22,7 @@ SEXP R_MPinv_sym (SEXP x, SEXP tol) {
                     &info);
                                             
     PROTECT(ans = allocVector(VECSXP, 2));
-    SET_VECTOR_ELT(ans, 0, MP = allocMatrix(REALSXP, n, n));
+    SET_VECTOR_ELT(ans, 0, MP = allocVector(REALSXP, n * (n + 1) / 2));
     SET_VECTOR_ELT(ans, 1, rank = allocVector(INTSXP, 1));
     dMP = REAL(MP);
     
@@ -32,16 +32,15 @@ SEXP R_MPinv_sym (SEXP x, SEXP tol) {
         valzero += (val[k] < dtol); 
     INTEGER(rank)[0] = n - valzero;
 
-    for (int i = 0; i < n * n; i++) dMP[i] = 0.0;
+    for (int i = 0; i < n * (n + 1) / 2; i++) dMP[i] = 0.0;
     
     for (int k = valzero; k < n; k++) {
         valinv = 1 / val[k];
         kn = k * n;
         for (int i = 0; i < n; i++) {
-            for (int j = i; j < n; j++) {
+            for (int j = 0; j <= i; j++) {
                 /* MP is symmetric */
-                dMP[j * n + i] += valinv * vec[kn + i] * vec[kn + j];
-                dMP[i * n + j] = dMP[j * n + i];
+                dMP[S(i, j, n)] += valinv * vec[kn + i] * vec[kn + j];
             }
         }
     }
