@@ -56,6 +56,47 @@ void C_kronecker (const double *A, const int m, const int n,
     }
 }  
 
+void C_kronecker_sym (const double *A, const int m, 
+                      const double *B, const int r, 
+                      double *ans)
+{
+    int i, j, k, l, mr, js, ir, s, n, tmp;
+    double y;
+
+    mr = m * r;
+    n = m;
+    s = r;
+    for (i = 0; i < m; i++) {
+        ir = i * r;
+        for (j = 0; j <= i; j++) {
+            js = j * s;
+            y = A[S(i, j, m)]; 
+            for (k = 0; k < r; k++) {
+                for (l = 0; l < (j < i ? s : k + 1); l++) {
+                    ans[S(ir + k, js + l, mr)] = y * B[S(k, l, r)]; 
+                }
+            }
+        }
+    }
+}  
+
+SEXP R_kronecker_sym (SEXP A, SEXP B) {
+
+    SEXP ans;
+    int m, r;
+    
+    m = (int) (.5 + sqrt(.25 + 2 * LENGTH(A))) - 1;
+    r = (int) (.5 + sqrt(.25 + 2 * LENGTH(B))) - 1;
+    
+    PROTECT(ans = allocVector(REALSXP, m * r * (m * r + 1) / 2));
+    
+    C_kronecker_sym(REAL(A), m, REAL(B), r, REAL(ans));
+    
+    UNPROTECT(1);
+    return(ans);
+}
+    
+
 void C_Permute(int *x, int n, int *ans) 
 {
     int k = n, j;

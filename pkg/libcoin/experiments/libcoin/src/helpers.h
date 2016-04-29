@@ -7,3 +7,6 @@ int NCOL (SEXP x);
 void C_kronecker (const double *A, const int m, const int n,
                   const double *B, const int r, const int s,
                   double *ans);
+void C_kronecker_sym (const double *A, const int m, 
+                  const double *B, const int r, 
+                  double *ans);

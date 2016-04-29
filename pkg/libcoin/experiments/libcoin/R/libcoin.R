@@ -199,7 +199,7 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALS
 ChisqStat <- function(object, tol = sqrt(.Machine$double.eps)) {
 
     stopifnot(!is.null(object$Covariance))
-    tmp <- .Call("R_MPinv", object$Covariance, tol)
+    tmp <- .Call("R_MPinv_sym", object$Covariance, tol)
     object$MPinv <- tmp[[1]]
     object$rank <- tmp[[2]]
     object

@@ -116,7 +116,7 @@ SEXP R_CovarianceInfluence(SEXP y)
     SEXP ans, ExpInf;
     
     PROTECT(ExpInf = R_ExpectationInfluence(y));
-    PROTECT(ans = allocMatrix(REALSXP, NCOL(y), NCOL(y)));
+    PROTECT(ans = allocVector(REALSXP, NCOL(y) * (NCOL(y) + 1) / 2));
     C_CovarianceInfluence(REAL(y), NROW(y), NCOL(y), REAL(ExpInf), REAL(ans));
     UNPROTECT(2);
     return(ans);
@@ -127,7 +127,7 @@ SEXP R_CovarianceInfluence_weights(SEXP y, SEXP weights)
     SEXP ans, ExpInf;
     
     PROTECT(ExpInf = R_ExpectationInfluence_weights(y, weights));
-    PROTECT(ans = allocMatrix(REALSXP, NCOL(y), NCOL(y)));
+    PROTECT(ans = allocVector(REALSXP, NCOL(y) * (NCOL(y) + 1) / 2));
     C_CovarianceInfluence_weights(REAL(y), NROW(y), NCOL(y), 
                                   INTEGER(weights), 
                                   C_sum(INTEGER(weights), LENGTH(weights)), 
@@ -141,7 +141,7 @@ SEXP R_CovarianceInfluence_subset(SEXP y, SEXP subset)
     SEXP ans, ExpInf;
     
     PROTECT(ExpInf = R_ExpectationInfluence_subset(y, subset));
-    PROTECT(ans = allocMatrix(REALSXP, NCOL(y), NCOL(y)));
+    PROTECT(ans = allocVector(REALSXP, NCOL(y) * (NCOL(y) + 1) / 2));
     C_CovarianceInfluence_subset(REAL(y), NROW(y), NCOL(y), 
                                  INTEGER(subset), LENGTH(subset), 
                                  REAL(ExpInf), REAL(ans));
@@ -154,7 +154,7 @@ SEXP R_CovarianceInfluence_weights_subset(SEXP y, SEXP weights, SEXP subset)
     SEXP ans, ExpInf;
     
     PROTECT(ExpInf = R_ExpectationInfluence_weights_subset(y, weights, subset));
-    PROTECT(ans = allocMatrix(REALSXP, NCOL(y), NCOL(y)));
+    PROTECT(ans = allocVector(REALSXP, NCOL(y) * (NCOL(y) + 1) / 2));
     C_CovarianceInfluence_weights_subset(REAL(y), NROW(y), NCOL(y), 
                                          INTEGER(weights), 
                                          C_sum_subset(INTEGER(weights), 
@@ -278,7 +278,7 @@ SEXP R_CovarianceX(SEXP x)
 {
     SEXP ans;
     
-    PROTECT(ans = allocMatrix(REALSXP, NCOL(x), NCOL(x)));
+    PROTECT(ans = allocVector(REALSXP, NCOL(x) * (NCOL(x) + 1) / 2));
     C_CovarianceX(REAL(x), NROW(x), NCOL(x), REAL(ans));
     UNPROTECT(1);
     return(ans);
@@ -288,7 +288,7 @@ SEXP R_CovarianceX_weights(SEXP x, SEXP weights)
 {
     SEXP ans;
     
-    PROTECT(ans = allocMatrix(REALSXP, NCOL(x), NCOL(x)));
+    PROTECT(ans = allocVector(REALSXP, NCOL(x) * (NCOL(x) + 1) / 2));
     C_CovarianceX_weights(REAL(x), NROW(x), NCOL(x), 
                           INTEGER(weights), REAL(ans));
     UNPROTECT(1);
@@ -299,7 +299,7 @@ SEXP R_CovarianceX_subset(SEXP x, SEXP subset)
 {
     SEXP ans;
     
-    PROTECT(ans = allocMatrix(REALSXP, NCOL(x), NCOL(x)));
+    PROTECT(ans = allocVector(REALSXP, NCOL(x) * (NCOL(x) + 1) / 2));
     C_CovarianceX_subset(REAL(x), NROW(x), NCOL(x), 
                                  INTEGER(subset), LENGTH(subset), 
                                  REAL(ans));
@@ -311,7 +311,7 @@ SEXP R_CovarianceX_weights_subset(SEXP x, SEXP weights, SEXP subset)
 {
     SEXP ans;
     
-    PROTECT(ans = allocMatrix(REALSXP, NCOL(x), NCOL(x)));
+    PROTECT(ans = allocVector(REALSXP, NCOL(x) * (NCOL(x) + 1) / 2));
     C_CovarianceX_weights_subset(REAL(x), NROW(x), NCOL(x), 
                                           INTEGER(weights), 
                                           INTEGER(subset), LENGTH(subset), 
@@ -386,10 +386,10 @@ SEXP R_CovarianceLinearStatistic(SEXP CovInf, SEXP ExpX, SEXP CovX,
     SEXP ans, PP_tmp;
     
     int P = LENGTH(ExpX);
-    int Q = NCOL(CovInf);
+    int Q = (int) (.5 + sqrt(.25 + 2 * LENGTH(CovInf))) - 1;
     int PQ = P * Q;
-    PROTECT(ans = allocMatrix(REALSXP, PQ, PQ));
-    PROTECT(PP_tmp = allocMatrix(REALSXP, P, P));
+    PROTECT(ans = allocVector(REALSXP, PQ * (PQ + 1) / 2));
+    PROTECT(PP_tmp = allocVector(REALSXP, P * (P + 1) / 2));
     C_CovarianceLinearStatistic(P, Q, REAL(CovInf), REAL(ExpX), REAL(CovX), 
                                 INTEGER(sumweights)[0], REAL(PP_tmp), REAL(ans));
     UNPROTECT(2);

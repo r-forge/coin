@@ -10,7 +10,7 @@ double C_quadform(int PQ, double *linstat, double *expect, double *MPinv)
         qPQ = q * PQ;
         tmp = 0.0;
         for (int p = 0; p < PQ; p++)
-            tmp += (linstat[p] - expect[p]) * MPinv[qPQ + p];
+            tmp += (linstat[p] - expect[p]) * MPinv[S(p, q, PQ)];
         ans += tmp * (linstat[q] - expect[q]);
     }
     return(ans);
@@ -29,8 +29,8 @@ double C_maxstat_Covariance(int PQ, double *linstat, double *expect, double *cov
     
     for (int p; p < PQ; p++) {
         tmp = 0.0;
-        if (covar[p*PQ + p] > tol)
-            tmp = (linstat[p] - expect[p]) / sqrt(covar[p*PQ + p]);
+        if (covar[S(p, p, PQ)] > tol)
+            tmp = (linstat[p] - expect[p]) / sqrt(covar[S(p, p, PQ)]);
         if (tmp > ans) ans = tmp;
     }
     return(ans);
@@ -57,8 +57,8 @@ double C_minstat_Covariance(int PQ, double *linstat, double *expect, double *cov
     
     for (int p; p < PQ; p++) {
         tmp = 0.0;
-        if (covar[p*PQ + p] > tol)
-            tmp = (linstat[p] - expect[p]) / sqrt(covar[p*PQ + p]);
+        if (covar[S(p, p, PQ)] > tol)
+            tmp = (linstat[p] - expect[p]) / sqrt(covar[S(p, p, PQ)]);
         if (tmp < ans) ans = tmp;
     }
     return(ans);
@@ -85,8 +85,8 @@ double C_maxabsstat_Covariance(int PQ, double *linstat, double *expect, double *
     
     for (int p; p < PQ; p++) {
         tmp = 0.0;
-        if (covar[p*PQ + p] > tol)
-            tmp = fabs((linstat[p] - expect[p]) / sqrt(covar[p*PQ + p]));
+        if (covar[S(p, p, PQ)] > tol)
+            tmp = fabs((linstat[p] - expect[p]) / sqrt(covar[S(p, p, PQ)]));
         if (tmp > ans) ans = tmp;
     }
     return(ans);
