@@ -36,11 +36,15 @@ int NCOL (SEXP x)
 */
 
 void C_kronecker (const double *A, const int m, const int n,
-                  const double *B, const int r, const int s,
+                  const double *B, const int r, const int s, int overwrite,
                   double *ans)
 {
     int i, j, k, l, mr, js, ir;
     double y;
+
+    if (overwrite) {
+        for (i = 0; i < m * r * n * s; i++) ans[i] = 0.0;
+    }
 
     mr = m * r;
     for (i = 0; i < m; i++) {
@@ -50,22 +54,27 @@ void C_kronecker (const double *A, const int m, const int n,
             y = A[j*m + i];
             for (k = 0; k < r; k++) {
                 for (l = 0; l < s; l++)
-                    ans[(js + l) * mr + ir + k] = y * B[l * r + k];
+                    ans[(js + l) * mr + ir + k] += y * B[l * r + k];
             }
         }
     }
 }  
 
 void C_kronecker_sym (const double *A, const int m, 
-                      const double *B, const int r, 
+                      const double *B, const int r, int overwrite,
                       double *ans)
 {
-    int i, j, k, l, mr, js, ir, s, n, tmp;
+    int i, j, k, l, mr, js, ir, s, n, tmp, mrns;
     double y;
 
     mr = m * r;
     n = m;
     s = r;
+
+    if (overwrite) {
+        for (i = 0; i < mr * (mr + 1) / 2; i++) ans[i] = 0.0;
+    }
+
     for (i = 0; i < m; i++) {
         ir = i * r;
         for (j = 0; j <= i; j++) {
@@ -73,7 +82,7 @@ void C_kronecker_sym (const double *A, const int m,
             y = A[S(i, j, m)]; 
             for (k = 0; k < r; k++) {
                 for (l = 0; l < (j < i ? s : k + 1); l++) {
-                    ans[S(ir + k, js + l, mr)] = y * B[S(k, l, r)]; 
+                    ans[S(ir + k, js + l, mr)] += y * B[S(k, l, r)]; 
                 }
             }
         }
