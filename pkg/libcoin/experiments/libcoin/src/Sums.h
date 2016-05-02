@@ -99,3 +99,14 @@ void C_KronSums_center_weights_subset(double *x, int N, int P, double *y,
                                       int Q, int *weights, int *subset, 
                                       int Nsubset, double *centerx, 
                                       double *centery, double *PQ_ans); 
+/* tapply(1:nrow(y), ix, function(i) colSums(y[i,])) */
+void C_tapplySum(double *y, int N, int Q, int *ix, int Nx, double *NxQ_ans);
+void C_tapplySum_weights(double *y, int N, int Q, int *ix, int Nx, 
+                         int *weights, double *NxQ_ans);
+void C_tapplySum_subset(double *y, int N, int Q, int *ix, int Nx, 
+                        int *subset, int Nsubset, double *NxQ_ans);
+void C_tapplySum_weights_subset(double *y, int N, int Q, int *ix, int Nx, 
+                                int *weights, int *subset, int Nsubset, 
+                                double *NxQ_ans);
+void C_tapplySum_2d(double *y, int M, int Q, int Nx, 
+                    int *weights, double *NxQ_ans);

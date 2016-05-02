@@ -391,7 +391,7 @@ SEXP R_CovarianceLinearStatistic(SEXP CovInf, SEXP ExpX, SEXP CovX,
     PROTECT(ans = allocVector(REALSXP, PQ * (PQ + 1) / 2));
     PROTECT(PP_tmp = allocVector(REALSXP, P * (P + 1) / 2));
     C_CovarianceLinearStatistic(P, Q, REAL(CovInf), REAL(ExpX), REAL(CovX), 
-                                INTEGER(sumweights)[0], REAL(PP_tmp), REAL(ans));
+                                INTEGER(sumweights)[0], REAL(PP_tmp), 0, REAL(ans));
     UNPROTECT(2);
     return(ans);
 }
@@ -405,7 +405,7 @@ SEXP R_VarianceLinearStatistic(SEXP VarInf, SEXP ExpX, SEXP VarX, SEXP sumweight
     PROTECT(ans = allocVector(REALSXP, P * Q));
     PROTECT(P_tmp = allocVector(REALSXP, P));
     C_VarianceLinearStatistic(P, Q, REAL(VarInf), REAL(ExpX), REAL(VarX), 
-                              INTEGER(sumweights)[0], REAL(P_tmp), REAL(ans));
+                              INTEGER(sumweights)[0], REAL(P_tmp), 0, REAL(ans));
     UNPROTECT(2);
     return(ans);
 }

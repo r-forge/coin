@@ -33,6 +33,17 @@ void C_PermutedLinearStatistic(double *x, int N, int P, double *y, int Q,
                                double *PQ_ans); 
 void C_LinearStatistic_2d(double *x, int N, int P, double *y, int M, int Q, 
                           int *weights, double *PQ_ans); 
+void C_LinearStatistic_maxstat(int *ix, int N, int P, double *y, int Q, 
+                               double *PQ_ans);
+void C_LinearStatistic_maxstat_weights(int *ix, int N, int P, double *y, int Q, 
+                               int *weights, double *PQ_ans);
+void C_LinearStatistic_maxstat_subset(int *ix, int N, int P, double *y, int Q, 
+                              int *subset, int Nsubset, double *PQ_ans) ;
+void C_LinearStatistic_maxstat_weights_subset(int *ix, int N, int P, double *y, int Q, 
+                                      int *weights, int *subset, int Nsubset, 
+                                      double *PQ_ans);
+void C_LinearStatistic_maxstat_2d(int N, int P, double *y, int M, int Q, 
+                                  int *weights, double *PQ_ans);
 void C_ExpectationInfluence(double* y, int N, int Q, double *Q_ans); 
 void C_ExpectationInfluence_weights(double* y, int N, int Q, int *weights, 
                                     int sumweights, double *Q_ans); 
@@ -86,8 +97,8 @@ void C_VarianceX_weights_subset(double *x, int N, int P, int *weights,
 void C_ExpectationLinearStatistic(int P, int Q, double *ExpInf, double *ExpX, 
                                   double *PQ_ans);
 void C_CovarianceLinearStatistic(int P, int Q, double *CovInf, double *ExpX, 
-                                 double *CovX, int sumweights, double *PP_tmp, 
+                                 double *CovX, int sumweights, double *PP_tmp, int add,
                                  double *PQPQ_ans); 
 void C_VarianceLinearStatistic(int P, int Q, double *VarInf, double *ExpX, 
-                               double *VarX, int sumweights, double *P_tmp, 
+                               double *VarX, int sumweights, double *P_tmp, int add,
                                double *PQ_ans); 

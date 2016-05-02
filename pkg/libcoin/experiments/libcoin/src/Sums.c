@@ -534,3 +534,92 @@ void C_KronSums_center_weights_subset(double *x, int N, int P, double *y,
         }
     }
 }
+
+/* tapply(1:nrow(y), ix, function(i) colSums(y[i,])) */
+void C_tapplySum(double *y, int N, int Q, int *ix, int Nx, double *NxQ_ans)
+{
+    int iN, qNx;
+   
+    for (int q = 0; q < Nx * Q; q++) NxQ_ans[q] = 0.0;
+   
+    for (int i = 0; i < N; i++) {
+        iN = i * N;
+        for (int q = 0; q < Q; q++) {
+            qNx = q * Nx;
+            for (int k = 0; k < Nx; k++)
+                NxQ_ans[qNx + k] += y[iN + q];
+        }
+    }
+}
+
+void C_tapplySum_weights(double *y, int N, int Q, int *ix, int Nx, 
+                         int *weights, double *NxQ_ans)
+{
+    int iN, qNx, wi;
+   
+    for (int q = 0; q < Nx * Q; q++) NxQ_ans[q] = 0.0;
+   
+    for (int i = 0; i < N; i++) {
+        iN = i * N;
+        wi = weights[i];
+        for (int q = 0; q < Q; q++) {
+            qNx = q * Nx;
+            for (int k = 0; k < Nx; k++)
+                NxQ_ans[qNx + ix[k]] += wi * y[iN + q];
+        }
+    }
+}
+
+void C_tapplySum_subset(double *y, int N, int Q, int *ix, int Nx, 
+                        int *subset, int Nsubset, double *NxQ_ans)
+{
+    int iN, qNx;
+   
+    for (int q = 0; q < Nx * Q; q++) NxQ_ans[q] = 0.0;
+   
+    for (int i = 0; i < Nsubset; i++) {
+        iN = subset[i] * N;
+        for (int q = 0; q < Q; q++) {
+            qNx = q * Nx;
+            for (int k = 0; k < Nx; k++)
+                NxQ_ans[qNx + ix[k]] += y[iN + q];
+        }
+    }
+}
+
+void C_tapplySum_weights_subset(double *y, int N, int Q, int *ix, int Nx, 
+                                int *weights, int *subset, int Nsubset, 
+                                double *NxQ_ans)
+{
+    int iN, qNx, wi;
+   
+    for (int q = 0; q < Nx * Q; q++) NxQ_ans[q] = 0.0;
+   
+    for (int i = 0; i < Nsubset; i++) {
+        iN = subset[i] * N;
+        wi = weights[subset[i]];
+        for (int q = 0; q < Q; q++) {
+            qNx = q * Nx;
+            for (int k = 0; k < Nx; k++)
+                NxQ_ans[qNx + ix[k]] += wi * y[iN + q];
+        }
+    }
+}
+
+void C_tapplySum_2d(double *y, int M, int Q, int Nx, 
+                    int *weights, double *NxQ_ans)
+{
+    int iM, qNx, wi;
+   
+    for (int q = 0; q < Nx * Q; q++) NxQ_ans[q] = 0.0;
+   
+    for (int i = 0; i < M; i++) {
+        wi = weights[i];
+        iM = i * M;
+        for (int q = 0; q < Q; q++) {
+            qNx = q * Nx;
+            for (int k = 0; k < Nx; k++)
+                NxQ_ans[qNx + k] += wi * y[iM + q];
+        }
+    }
+}

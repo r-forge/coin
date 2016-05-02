@@ -62,6 +62,37 @@ void C_LinearStatistic_2d(double *x, int N, int P, double *y, int M, int Q,
     C_KronSums_2dweights(x, N, P, y, M, Q, weights, PQ_ans);
 }
 
+void C_LinearStatistic_maxstat(int *ix, int N, int P, double *y, int Q, 
+                               double *PQ_ans) 
+{
+    C_tapplySum(y, N, Q, ix, P, PQ_ans);
+}
+
+void C_LinearStatistic_maxstat_weights(int *ix, int N, int P, double *y, int Q, 
+                               int *weights, double *PQ_ans)
+{                               
+    C_tapplySum_weights(y, N, Q, ix, P, weights, PQ_ans);
+}
+     
+void C_LinearStatistic_maxstat_subset(int *ix, int N, int P, double *y, int Q, 
+                              int *subset, int Nsubset, double *PQ_ans) 
+{
+    C_tapplySum_subset(y, N, Q, ix, P, subset, Nsubset, PQ_ans);
+}
+
+void C_LinearStatistic_maxstat_weights_subset(int *ix, int N, int P, double *y, int Q, 
+                                      int *weights, int *subset, int Nsubset, 
+                                      double *PQ_ans) 
+{
+    C_tapplySum_weights_subset(y, N, Q, ix, P, weights, subset, Nsubset, PQ_ans);
+}
+     
+void C_LinearStatistic_maxstat_2d(int N, int P, double *y, int M, int Q, 
+                                  int *weights, double *PQ_ans) 
+{
+    C_tapplySum_2d(y, M, Q, P, weights, PQ_ans);
+}
+
 void C_ExpectationInfluence(double* y, int N, int Q, double *Q_ans) 
 {
      C_colSums(y, N, Q, Q_ans);
@@ -234,7 +265,7 @@ void C_ExpectationLinearStatistic(int P, int Q, double *ExpInf, double *ExpX,
 }          
 
 void C_CovarianceLinearStatistic(int P, int Q, double *CovInf, double *ExpX, 
-                                 double *CovX, int sumweights, double *PP_sym_tmp, 
+                                 double *CovX, int sumweights, double *PP_sym_tmp, int add,
                                  double *PQPQ_sym_ans) 
 {
     double f1 = (double) sumweights / (sumweights - 1);
@@ -247,23 +278,23 @@ void C_CovarianceLinearStatistic(int P, int Q, double *CovInf, double *ExpX,
         C_KronSums_sym(ExpX, 1, P, PP_sym_tmp);
         for (int p = 0; p < P * (P + 1) / 2; p++)
             PP_sym_tmp[p] = f1 * CovX[p] - f2 * PP_sym_tmp[p];
-        C_kronecker_sym(CovInf, Q, PP_sym_tmp, P, PQPQ_sym_ans);
+        C_kronecker_sym(CovInf, Q, PP_sym_tmp, P, 1 - add, PQPQ_sym_ans);
     }
 }
 
 void C_VarianceLinearStatistic(int P, int Q, double *VarInf, double *ExpX, 
-                               double *VarX, int sumweights, double *P_tmp, 
+                               double *VarX, int sumweights, double *P_tmp, int add,
                                double *PQ_ans) 
 {
     if (P * Q == 1) {
         C_CovarianceLinearStatistic(P, Q, VarInf, ExpX, VarX, 
-                                    sumweights, P_tmp, PQ_ans);
+                                    sumweights, P_tmp, add, PQ_ans);
     } else {
 
         double f1 = (double) sumweights / (sumweights - 1);
         double f2 = 1.0 / (sumweights - 1);
         for (int p = 0; p < P; p++)
             P_tmp[p] = f1 * VarX[p] - f2 * ExpX[p] * ExpX[p];
-        C_kronecker(VarInf, 1, Q, P_tmp, 1, P, PQ_ans);
+        C_kronecker(VarInf, 1, Q, P_tmp, 1, P, 1 - add, PQ_ans);
     }
 }
