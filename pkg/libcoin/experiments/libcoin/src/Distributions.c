@@ -70,7 +70,7 @@ void C_setup_subset_weights_subset(int Nsubset, int *weights, int *subset, int *
     int itmp = 0;
     for (int i = 0; i < Nsubset; i++) {
         for (int j = 0; j < weights[subset[i]]; j++)
-            sw_ans[++itmp] = subset[i];
+            sw_ans[itmp++] = subset[i];
     }
 }
 
@@ -79,13 +79,16 @@ void C_order_wrt_block(int *subset, int Nsubset, int *block, int *table, int Nle
     int *cumtable, *subset_tmp;
     
     cumtable = Calloc(Nlevels, int);
+    for (int k = 0; k < Nlevels; k++) cumtable[k] = 0;
+
     subset_tmp = Calloc(Nsubset, int);
     Memcpy(subset_tmp, subset, Nsubset);
-    cumtable[0] = 0;
+
     /* table[0] are missings, ie block == 0 ! */
-    for (int k = 1; k < Nlevels; k++) cumtable[k] = cumtable[k - 1] + table[k - 1];
+    for (int k = 1; k < Nlevels; k++)
+        cumtable[k] = cumtable[k - 1] + table[k - 1];
     
     for (int i = 0; i < Nsubset; i++)
-        subset[cumtable[block[subset[i]]]++] = subset_tmp[i];
+        subset[cumtable[block[subset_tmp[i]]]++] = subset_tmp[i];
     Free(cumtable); Free(subset_tmp);
 } 

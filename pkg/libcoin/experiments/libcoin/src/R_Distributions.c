@@ -3,6 +3,7 @@
 #include "Tables.h"
 #include "Sums.h"
 #include "Distributions.h"
+#include "helpers.h"
 
 SEXP R_PermuteBlock(SEXP block)
 {
@@ -46,8 +47,11 @@ SEXP R_PermuteBlock_subset(SEXP subset, SEXP block)
     table = Calloc(C_nlevels(block) + 1, int);
     C_1dtable_subset(INTEGER(block), C_nlevels(block) + 1, INTEGER(subset), N, table);
 
+
     Memcpy(INTEGER(orig), INTEGER(subset), N);
     C_order_wrt_block(INTEGER(orig), N, INTEGER(block), table, C_nlevels(block) + 1);
+
+
     
     tmp = Calloc(N, int);
     GetRNGstate();
@@ -71,7 +75,8 @@ SEXP R_PermuteBlock_weights(SEXP weights, SEXP block)
     SET_VECTOR_ELT(ans, 1, perm = allocVector(INTSXP, N));
 
     table = Calloc(C_nlevels(block) + 1, int);
-    C_1dtable_weights(INTEGER(block), C_nlevels(block) + 1, INTEGER(weights), N, table);
+    C_1dtable_weights(INTEGER(block), C_nlevels(block) + 1, INTEGER(weights), 
+                      LENGTH(weights), table);
 
     C_setup_subset_weights(LENGTH(weights), INTEGER(weights), INTEGER(orig));
     C_order_wrt_block(INTEGER(orig), N, INTEGER(block), table, C_nlevels(block) + 1);
