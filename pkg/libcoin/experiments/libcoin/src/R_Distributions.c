@@ -2,7 +2,7 @@
 #include "libcoin.h"
 #include "Tables.h"
 #include "Sums.h"
-#include "Distributions.c"
+#include "Distributions.h"
 
 SEXP R_PermuteBlock(SEXP block)
 {
