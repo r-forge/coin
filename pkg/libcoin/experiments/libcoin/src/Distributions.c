@@ -2,6 +2,7 @@
 #include "libcoin.h"
 #include "Tables.h"
 #include "Sums.h"
+#include "helpers.h"
 
 double C_chisq_pvalue(double stat, int df, int give_log)
 {

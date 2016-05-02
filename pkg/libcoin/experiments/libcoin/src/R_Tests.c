@@ -2,7 +2,7 @@
 #include "libcoin.h"
 #include "Utils.h"
 #include "TestStatistics.h"
-#include "PValues.h"
+#include "Distributions.h"
 #include "R_Utils.h"
 
 SEXP R_ChisqTest(SEXP LinearStatistic, SEXP Expectation, SEXP MPinv, 
