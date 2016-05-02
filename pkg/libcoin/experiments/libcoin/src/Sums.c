@@ -19,7 +19,7 @@
 int C_sum(int *weights, int N)
 {
     int ans = 0;
-    for (int i; i < N; i++) ans += weights[i];
+    for (int i = 0; i < N; i++) ans += weights[i];
     return(ans);
 }
 
@@ -27,7 +27,7 @@ int C_sum(int *weights, int N)
 int C_sum_subset(int *weights, int N, int *subset, int Nsubset)
 {
     int ans = 0;
-    for (int i; i < Nsubset; i++) ans += weights[subset[i]];
+    for (int i = 0; i < Nsubset; i++) ans += weights[subset[i]];
     return(ans);
 }
 
