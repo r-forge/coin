@@ -86,3 +86,16 @@ void C_KronSums_sym_center_weights_subset(double *x, int N, int P,
                                       int *weights, int *subset, 
                                       int Nsubset, double *center,
                                       double *PP_sym_ans); 
+/* sum_i (t(x[i,] - centerx) %*% (y[i,] - centery)) */
+void C_KronSums_center(double *x, int N, int P, double *y, int Q, 
+                       double *centerx, double *centery, double *PQ_ans); 
+void C_KronSums_center_weights(double *x, int N, int P, double *y, int Q, 
+                               int *weights, double *centerx, 
+                               double *centery, double *PQ_ans); 
+void C_KronSums_center_subset(double *x, int N, int P, double *y, int Q, 
+                              int *subsetx, int *subsety, int Nsubset, 
+                              double *centerx, double *centery, double *PQ_ans); 
+void C_KronSums_center_weights_subset(double *x, int N, int P, double *y, 
+                                      int Q, int *weights, int *subset, 
+                                      int Nsubset, double *centerx, 
+                                      double *centery, double *PQ_ans); 

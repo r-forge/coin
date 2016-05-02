@@ -457,3 +457,80 @@ void C_KronSums_sym_center_weights_subset(double *x, int N, int P,
         }
     }
 }
+
+/* sum_i (t(x[i,] - centerx) %*% (y[i,] - centery)) */
+void C_KronSums_center(double *x, int N, int P, double *y, int Q, 
+                       double *centerx, double *centery, double *PQ_ans) 
+{
+    int qP, qN, pN;
+        
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) {
+            PQ_ans[qP + p] = 0.0;
+            pN = p * N;
+            for (int i = 0; i < N; i++)
+                 PQ_ans[qP + p] +=  (y[qN + i] - centery[q]) * 
+                                    (x[pN + i] - centerx[p]);
+        }
+    }
+}
+
+void C_KronSums_center_weights(double *x, int N, int P, double *y, int Q, 
+                               int *weights, double *centerx, 
+                               double *centery, double *PQ_ans) 
+{
+    int qP, qN;
+    double tmp;
+        
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) PQ_ans[qP + p] = 0.0;
+        for (int i = 0; i < N; i++) {
+             tmp = (y[qN + i] - centery[q]) * weights[i];
+             for (int p = 0; p < P; p++)
+                 PQ_ans[qP + p] += (x[p * N + i] - centerx[p]) * tmp;
+        }
+    }
+}
+
+void C_KronSums_center_subset(double *x, int N, int P, double *y, int Q, 
+                              int *subsetx, int *subsety, int Nsubset, 
+                              double *centerx, double *centery, double *PQ_ans) 
+{
+    int qP, qN, pN;
+        
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) {
+            PQ_ans[qP + p] = 0.0;
+            pN = p * N;
+            for (int i = 0; i < Nsubset; i++)
+                 PQ_ans[qP + p] += (y[qN + subsety[i]] - centery[q]) * 
+                                   (x[pN + subsetx[i]] - centerx[p]);
+        }
+    }
+}
+
+void C_KronSums_center_weights_subset(double *x, int N, int P, double *y, 
+                                      int Q, int *weights, int *subset, 
+                                      int Nsubset, double *centerx, 
+                                      double *centery, double *PQ_ans) 
+{
+    int qP, qN;
+    double tmp;
+        
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) PQ_ans[qP + p] = 0.0;
+        for (int i = 0; i < Nsubset; i++) {
+             tmp = (y[qN + subset[i]] - centery[q]) * weights[subset[i]];
+             for (int p = 0; p < P; p++)
+                 PQ_ans[qP + p] += (x[p * N + subset[i]] - centerx[p]) * tmp;
+        }
+    }
+}
