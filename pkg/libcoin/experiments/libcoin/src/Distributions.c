@@ -23,7 +23,7 @@ double C_chisq_pvalue(double stat, int df, int give_log)
 */
 
 double C_maxabsstat_pvalue(const double stat, const double *Covariance, 
-    const int n, int *maxpts, double *releps, double *abseps, double *tol) {
+    const int n, int maxpts, double releps, double abseps, double tol) {
 
     int nu = 0, inform, i, j, sub, nonzero, *infin, *index, rnd = 0;
     double ans, myerror, *lower, *upper, *delta, *corr, *sd;
@@ -48,7 +48,7 @@ double C_maxabsstat_pvalue(const double stat, const double *Covariance,
 
     nonzero = 0;
     for (i = 0; i < n; i++) {
-        if (Covariance[S(i, i, n)] > tol[0]) {
+        if (Covariance[S(i, i, n)] > tol) {
             index[nonzero] = i;
             nonzero++;
         }
@@ -86,7 +86,7 @@ double C_maxabsstat_pvalue(const double stat, const double *Covariance,
         
     /* call mvtnorm's mvtdst C function defined in mvtnorm/include/mvtnormAPI.h */
     mvtnorm_C_mvtdst(&nonzero, &nu, lower, upper, infin, corr, delta, 
-                     maxpts, abseps, releps, &myerror, &ans, &inform, &rnd);
+                     &maxpts, &abseps, &releps, &myerror, &ans, &inform, &rnd);
 
     /* inform == 0 means: everything is OK */
     switch (inform) {
