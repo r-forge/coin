@@ -8,4 +8,5 @@ Description: Basis infrastructure for linear test statistics and permutation
   inference in the Strasser-Weber framework.
 Depends: R (>= 2.14.0)
 Suggests: coin
+LinkingTo: mvtnorm
 License: GPL-2
