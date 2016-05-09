@@ -1,7 +1,11 @@
 
 LinStatExpCov2 <- function(X, Y, weights, subset, block, varonly = FALSE) {
     if (missing(weights)) weights <- integer(0)
-    if (missing(subset)) subset <- integer(0)
+    if (missing(subset)) {
+        subset <- integer(0)
+    } else {
+        subset <- subset - 1L
+    }
     if (missing(block)) block <- integer(0)
     
     ret <- .Call("R_ExpectationCovarianceStatistic", X, Y, weights, subset, block, as.integer(varonly), PACKAGE = "libcoin")
