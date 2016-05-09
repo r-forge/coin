@@ -1,4 +1,16 @@
 
+LinStatExpCov2 <- function(X, Y, weights, subset, block, varonly = FALSE) {
+    if (missing(weights)) weights <- integer(0)
+    if (missing(subset)) subset <- integer(0)
+    if (missing(block)) block <- integer(0)
+    
+    ret <- .Call("R_ExpectationCovarianceStatistic", X, Y, weights, subset, block, as.integer(varonly), PACKAGE = "libcoin")
+    names(ret) <- c("LinStat", "Expectation", "Covariance")
+    if (varonly)
+        names(ret)[names(ret) == "Covariance"] <- "Variance"
+    ret
+}
+
 LinStatExpCov <- function(X, Y, weights, subset, block, varonly = FALSE) {
 
     stopifnot(NROW(X) == NROW(Y))
