@@ -388,11 +388,17 @@ void C_VarianceLinearStatistic(int P, int Q, double *VarInf, double *ExpX,
 void C_ExpectationCovarianceLinearStatistic(double *x, int N, int P, int Q,
                                             int *weights, int *sumweights, 
                                             int *subset, int *Nsubset, int Nlevel, 
-                                            double *ExpInf, double *CovInf, double *PQ_ans,  
+                                            double *ExpInf, double *CovInf, 
+                                            double *work, double *PQ_ans,  
                                             double *PQPQ_sym_ans) 
 {
      int bQ, ns = 0, PQ = P * Q, sw = 0;
-     double ExpX[P], CovX[P * (P + 1) / 2], PPtmp[P * (P + 1) / 2];
+/*     double ExpX[P], CovX[P * (P + 1) / 2], PPtmp[P * (P + 1) / 2]; */
+     double *ExpX, *CovX, *PPtmp;
+
+     ExpX = work;
+     CovX = ExpX + P;
+     PPtmp = CovX + P * (P + 1) / 2;
 
      for (int b = 0; b < Nlevel; b++) {
          bQ = b * PQ * (PQ + 1) / 2;
@@ -428,10 +434,17 @@ void C_ExpectationCovarianceLinearStatistic(double *x, int N, int P, int Q,
 void C_ExpectationVarianceLinearStatistic(double *x, int N, int P, int Q,
                             int *weights, int *sumweights, 
                             int *subset, int *Nsubset, int Nlevel, 
-                            double *ExpInf, double *VarInf, double *PQ_ans_Exp, double *PQ_ans_Var) 
+                            double *ExpInf, double *VarInf, double *work, double *PQ_ans_Exp, double *PQ_ans_Var) 
 {
      int bQ, ns = 0, PQ = P * Q, sw = 0;
-     double ExpX[P], VarX[P], PPtmp[P];
+/*     double ExpX[P], VarX[P], PPtmp[P]; */
+
+     double *ExpX, *VarX, *PPtmp;
+
+     ExpX = work;
+     VarX = ExpX + P;
+     PPtmp = VarX + P;
+
 
      for (int b = 0; b < Nlevel; b++) {
          bQ = b * PQ;
