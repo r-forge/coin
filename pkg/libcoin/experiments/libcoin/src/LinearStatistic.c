@@ -420,7 +420,7 @@ void C_ExpectationCovarianceLinearStatistic(double *x, int N, int P, int Q,
              }
          }
          C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b, PQ_ans);
-         C_CovarianceLinearStatistic(P, Q, CovInf, ExpX, CovX, sw, PPtmp, b, PQPQ_sym_ans);
+         C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2, ExpX, CovX, sw, PPtmp, b, PQPQ_sym_ans);
          ns = ns + Nsubset[b];
      }
 }
@@ -459,7 +459,7 @@ void C_ExpectationVarianceLinearStatistic(double *x, int N, int P, int Q,
              }
          }
          C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b, PQ_ans_Exp);
-         C_VarianceLinearStatistic(P, Q, VarInf, ExpX, VarX, sw, PPtmp, b, PQ_ans_Var);
+         C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sw, PPtmp, b, PQ_ans_Var);
          ns = ns + Nsubset[b];
      }
 }

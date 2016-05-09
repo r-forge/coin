@@ -465,21 +465,14 @@ SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
     } else {
         Nlevel = C_nlevels(block);
         table = Calloc(Nlevel + 1, int);
-        if (LENGTH(weights) == 0 & LENGTH(subset) == 0)
-            C_1dtable(INTEGER(block), Nlevel + 1, N, table);
-        if (LENGTH(weights) > 0 & LENGTH(subset) == 0)
-            C_1dtable_weights(INTEGER(block), Nlevel + 1, INTEGER(weights), N, table);
-        if (LENGTH(weights) == 0 & LENGTH(subset) > 0)
-            C_1dtable_subset(INTEGER(block), Nlevel + 1, INTEGER(subset), LENGTH(subset), table);
-        if (LENGTH(weights) > 0 & LENGTH(subset) > 0)
-            C_1dtable_weights_subset(INTEGER(block), Nlevel + 1, INTEGER(weights), INTEGER(subset), 
-                                     LENGTH(subset), table);
 
         if (LENGTH(subset) == 0) {
+            C_1dtable(INTEGER(block), Nlevel + 1, N, table);
             subset_tmp = Calloc(N, int);
             C_setup_subset(N, subset_tmp);
             C_order_wrt_block(subset_tmp, N, INTEGER(block), table, Nlevel + 1);
         } else {
+            C_1dtable_subset(INTEGER(block), Nlevel + 1, INTEGER(subset), LENGTH(subset), table);
             subset_tmp = Calloc(LENGTH(subset), int);
             Memcpy(subset_tmp, INTEGER(subset), LENGTH(subset));
             C_order_wrt_block(subset_tmp, LENGTH(subset), INTEGER(block), table, Nlevel + 1);
@@ -491,7 +484,7 @@ SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
         } else {
             tmp = 0;
             for (int b = 0; b < Nlevel; b++) {
-                sumweights[b] = C_sum_subset(INTEGER(weights), LENGTH(weights), subset_tmp + tmp, tmp + table[b + 1]);
+                sumweights[b] = C_sum_subset(INTEGER(weights), LENGTH(weights), subset_tmp + tmp, table[b + 1]);
                 tmp = tmp + table[b + 1];
             }
         }
