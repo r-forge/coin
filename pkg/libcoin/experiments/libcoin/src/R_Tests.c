@@ -3,7 +3,6 @@
 #include "Utils.h"
 #include "TestStatistics.h"
 #include "Distributions.h"
-#include "R_Utils.h"
 
 SEXP R_ChisqTest(SEXP LinearStatistic, SEXP Expectation, SEXP MPinv, 
                  SEXP rank, SEXP give_log)

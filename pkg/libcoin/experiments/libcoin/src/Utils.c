@@ -4,10 +4,10 @@
 
 /* MP inv of symmetric matrix in lower triangular packed form */
 
-SEXP R_MPinv_sym (SEXP x, SEXP tol) {
+void C_MPinv_sym (SEXP x, SEXP tol, double *dMP, int *rank) {
 
-    SEXP ans, rank, MP;
-    double *val, *vec, *dMP, dtol, *rx, *work, valinv;
+    SEXP ans;
+    double *val, *vec, dtol, *rx, *work, valinv;
     int n, valzero = 0, info = 0, kn;
 
     n = (int) (.5 + sqrt(.25 + 2 * LENGTH(x))) - 1;
@@ -21,16 +21,11 @@ SEXP R_MPinv_sym (SEXP x, SEXP tol) {
     F77_CALL(dspev)("V", "L", &n, rx, val, vec, &n, work,
                     &info);
                                             
-    PROTECT(ans = allocVector(VECSXP, 2));
-    SET_VECTOR_ELT(ans, 0, MP = allocVector(REALSXP, n * (n + 1) / 2));
-    SET_VECTOR_ELT(ans, 1, rank = allocVector(INTSXP, 1));
-    dMP = REAL(MP);
-    
     dtol = val[n - 1] * REAL(tol)[0];
 
     for (int k = 0; k < n; k++)
         valzero += (val[k] < dtol); 
-    INTEGER(rank)[0] = n - valzero;
+    rank[0] = n - valzero;
 
     for (int i = 0; i < n * (n + 1) / 2; i++) dMP[i] = 0.0;
     
@@ -45,6 +40,4 @@ SEXP R_MPinv_sym (SEXP x, SEXP tol) {
         }
     }
     Free(rx); Free(work); Free(val); Free(vec);
-    UNPROTECT(1);
-    return(ans);
 }
