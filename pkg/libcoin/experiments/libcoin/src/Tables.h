@@ -36,3 +36,4 @@ void C_2dtable_weights_block(int *ix, int Nx, int *iy, int Ny, int *weights,int 
                        int N, int *NxNy_ans);
 void C_2dtable_weights_subset_block(int *ix, int Nx, int *iy, int Ny, int *weights,
                               int *subset, int Nsubset, int *block, int Nlevels, int *NxNy_ans);
+void C_2dtable_(SEXP ix, SEXP iy, SEXP weights, SEXP subset, SEXP block, int *ans);

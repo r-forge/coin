@@ -104,6 +104,43 @@ void C_2dtable_weights_subset_block(int *ix, int Nx, int *iy, int Ny, int *weigh
                          ix[subset[i]] + iy[subset[i]] * Nx] += weights[subset[i]];
 }
 
+void C_2dtable_(SEXP ix, SEXP iy, SEXP weights, SEXP subset, SEXP block, int *ans) 
+{
+    if (LENGTH(block) == 0) {
+        if ((LENGTH(weights) == 0) && (LENGTH(subset) == 0))
+            C_2dtable(INTEGER(ix), C_nlevels(ix) + 1, INTEGER(iy), C_nlevels(iy) + 1, 
+                      LENGTH(ix), ans);
+        if ((LENGTH(weights) > 0) && (LENGTH(subset) == 0))
+            C_2dtable_weights(INTEGER(ix), C_nlevels(ix) + 1, INTEGER(iy), C_nlevels(iy) + 1, 
+                              INTEGER(weights), LENGTH(weights), ans);
+        if ((LENGTH(weights) == 0) && (LENGTH(subset) > 0))
+            C_2dtable_subset(INTEGER(ix), C_nlevels(ix) + 1, INTEGER(iy), C_nlevels(iy) + 1, 
+                             INTEGER(subset), LENGTH(subset), ans);
+        if ((LENGTH(weights) > 0) && (LENGTH(subset) > 0))
+            C_2dtable_weights_subset(INTEGER(ix), C_nlevels(ix) + 1, INTEGER(iy), 
+                                     C_nlevels(iy) + 1, INTEGER(weights), INTEGER(subset), 
+                                     LENGTH(subset), ans);
+    } else {
+        if ((LENGTH(weights) == 0) && (LENGTH(subset) == 0))
+            C_2dtable_block(INTEGER(ix), C_nlevels(ix) + 1, INTEGER(iy), C_nlevels(iy) + 1, 
+                            INTEGER(block), C_nlevels(block), LENGTH(block), 
+                            ans);
+        if ((LENGTH(weights) > 0) && (LENGTH(subset) == 0))
+            C_2dtable_weights_block(INTEGER(ix), C_nlevels(ix) + 1, INTEGER(iy), 
+                                    C_nlevels(iy) + 1, INTEGER(weights),  
+                                    INTEGER(block), C_nlevels(block), LENGTH(weights), ans);
+        if ((LENGTH(weights) == 0) && (LENGTH(subset) > 0))
+            C_2dtable_subset_block(INTEGER(ix), C_nlevels(ix) + 1, INTEGER(iy), C_nlevels(iy) + 1, 
+                                   INTEGER(subset), LENGTH(subset),  INTEGER(block), C_nlevels(block), 
+                                   ans);
+        if ((LENGTH(weights) > 0) && (LENGTH(subset) > 0))
+            C_2dtable_weights_subset_block(INTEGER(ix), C_nlevels(ix) + 1, INTEGER(iy), 
+                                           C_nlevels(iy) + 1, INTEGER(weights), INTEGER(subset),
+                                           LENGTH(subset), INTEGER(block), C_nlevels(block), 
+                                           ans);
+    }
+}
+
 /* table(ix) */
 void C_1dtable(int *ix, int Nx, int N, int *Nx_ans) 
 {
