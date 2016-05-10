@@ -271,7 +271,7 @@ void C_KronSums_weights(double *x, int N, int P, double *y, int Q,
 void C_KronSums_subset(double *x, int N, int P, double *y, int Q, 
                        int *subsetx, int *subsety, int Nsubset, double *PQ_ans) 
 {
-    int qP, qN, pN;
+    int qP, qN, pN, qPp;
         
     for (int q = 0; q < Q; q++) {
         qN = q * N;
@@ -279,8 +279,9 @@ void C_KronSums_subset(double *x, int N, int P, double *y, int Q,
         for (int p = 0; p < P; p++) {
             PQ_ans[qP + p] = 0.0;
             pN = p * N;
+            qPp = qP + p;
             for (int i = 0; i < Nsubset; i++)
-                PQ_ans[qP + p] += y[qN + subsety[i]] * x[pN + subsetx[i]];
+                PQ_ans[qPp] += y[qN + subsety[i]] * x[pN + subsetx[i]];
         }
     }
 }
@@ -326,7 +327,7 @@ void C_KronSums_2dweights(double *x, int N, int P, double *y, int M, int Q,
 /* sum_i (t(x[i,]) %*% x[i,]) */
 void C_KronSums_sym (double *x, int N, int P, double *PP_sym_ans) 
 {
-    int pN, qP, qN;
+    int pN, qP, qN, SpqP;
     
     for (int q = 0; q < P; q++) {
         qN = q * N;
@@ -334,8 +335,9 @@ void C_KronSums_sym (double *x, int N, int P, double *PP_sym_ans)
         for (int p = 0; p <= q; p++) {
             PP_sym_ans[S(p, q, P)] = 0.0;
             pN = p * N;
+            SpqP = S(p, q, P);
             for (int i = 0; i < N; i++)
-                 PP_sym_ans[S(p, q, P)] +=  x[qN + i] * x[pN + i];
+                 PP_sym_ans[SpqP] +=  x[qN + i] * x[pN + i];
         }
     }
 }
@@ -361,7 +363,7 @@ void C_KronSums_sym_weights(double *x, int N, int P, int *weights, double *PP_sy
 void C_KronSums_sym_subset(double *x, int N, int P, 
                            int *subset, int Nsubset, double *PP_sym_ans) 
 {
-    int qP, qN, pN;
+    int qP, qN, pN, SpqP;
         
     for (int q = 0; q < P; q++) {
         qN = q * N;
@@ -369,8 +371,9 @@ void C_KronSums_sym_subset(double *x, int N, int P,
         for (int p = 0; p <= q; p++) {
             PP_sym_ans[S(p, q, P)] = 0.0;
             pN = p * N;
+            SpqP = S(p, q, P);
             for (int i = 0; i < Nsubset; i++)
-                PP_sym_ans[S(p, q, P)] += x[qN + subset[i]] * x[pN + subset[i]];
+                PP_sym_ans[SpqP] += x[qN + subset[i]] * x[pN + subset[i]];
         }
     }
 }
@@ -419,7 +422,7 @@ void C_KronSums_sym_2dweights(double *x, int N, int P,
 void C_KronSums_sym_center(double *x, int N, int P, 
                        double *center, double *PP_sym_ans) 
 {
-    int qP, qN, pN;
+    int qP, qN, pN, SpqP;
         
     for (int q = 0; q < P; q++) {
         qN = q * N;
@@ -427,8 +430,9 @@ void C_KronSums_sym_center(double *x, int N, int P,
         for (int p = 0; p <= q; p++) {
             PP_sym_ans[S(p, q, P)] = 0.0;
             pN = p * N;
+            SpqP = S(p, q, P);
             for (int i = 0; i < N; i++)
-                 PP_sym_ans[S(p, q, P)] +=  (x[qN + i] - center[q]) * (x[pN + i] - center[p]);
+                 PP_sym_ans[SpqP] += (x[qN + i] - center[q]) * (x[pN + i] - center[p]);
         }
     }
 }
@@ -456,7 +460,7 @@ void C_KronSums_sym_center_subset(double *x, int N, int P,
                               int *subset, int Nsubset, 
                               double *center, double *PP_sym_ans) 
 {
-    int qP, qN, pN;
+    int qP, qN, pN, SpqP;
 
     for (int q = 0; q < P; q++) {
         qN = q * N;
@@ -464,9 +468,10 @@ void C_KronSums_sym_center_subset(double *x, int N, int P,
         for (int p = 0; p <= q; p++) {
             PP_sym_ans[S(p, q, P)] = 0.0;
             pN = p * N;
+            SpqP = S(p, q, P);
             for (int i = 0; i < Nsubset; i++)
-                PP_sym_ans[S(p, q, P)] += (x[qN + subset[i]] - center[q]) *
-                                          (x[pN + subset[i]] - center[p]); 
+                PP_sym_ans[SpqP] += (x[qN + subset[i]] - center[q]) *
+                                    (x[pN + subset[i]] - center[p]); 
                                                    
         }
     }
@@ -496,7 +501,7 @@ void C_KronSums_sym_center_weights_subset(double *x, int N, int P,
 void C_KronSums_center(double *x, int N, int P, double *y, int Q, 
                        double *centerx, double *centery, double *PQ_ans) 
 {
-    int qP, qN, pN;
+    int qP, qN, pN, qPp;
         
     for (int q = 0; q < Q; q++) {
         qN = q * N;
@@ -504,9 +509,10 @@ void C_KronSums_center(double *x, int N, int P, double *y, int Q,
         for (int p = 0; p < P; p++) {
             PQ_ans[qP + p] = 0.0;
             pN = p * N;
+            qPp = qP + p;
             for (int i = 0; i < N; i++)
-                 PQ_ans[qP + p] +=  (y[qN + i] - centery[q]) * 
-                                    (x[pN + i] - centerx[p]);
+                 PQ_ans[qPp] += (y[qN + i] - centery[q]) * 
+                                (x[pN + i] - centerx[p]);
         }
     }
 }
@@ -534,7 +540,7 @@ void C_KronSums_center_subset(double *x, int N, int P, double *y, int Q,
                               int *subsetx, int *subsety, int Nsubset, 
                               double *centerx, double *centery, double *PQ_ans) 
 {
-    int qP, qN, pN;
+    int qP, qN, pN, qPp;
         
     for (int q = 0; q < Q; q++) {
         qN = q * N;
@@ -542,9 +548,10 @@ void C_KronSums_center_subset(double *x, int N, int P, double *y, int Q,
         for (int p = 0; p < P; p++) {
             PQ_ans[qP + p] = 0.0;
             pN = p * N;
+            qPp = qP + p;
             for (int i = 0; i < Nsubset; i++)
-                 PQ_ans[qP + p] += (y[qN + subsety[i]] - centery[q]) * 
-                                   (x[pN + subsetx[i]] - centerx[p]);
+                 PQ_ans[qPp] += (y[qN + subsety[i]] - centery[q]) * 
+                                (x[pN + subsetx[i]] - centerx[p]);
         }
     }
 }
