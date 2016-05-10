@@ -44,6 +44,40 @@ void C_colSums(double *x, int N, int P, double *P_ans)
     }
 }
 
+/* rowSums(x) */
+void C_rowSums(double *x, int N, int P, double *N_ans) 
+{
+    for (int i = 0; i < N; i++) {
+        N_ans[i] = 0.0;
+        for (int p = 0; p < P; p++)
+            N_ans[i] += x[p * N + i];
+    }
+}
+
+/* colSums(x) */
+void C_colSums_i(int *x, int N, int P, int *P_ans) 
+{
+    int pN;
+    
+    for (int p = 0; p < P; p++) {
+        P_ans[p] = 0.;
+        pN = p * N;
+        for (int i = 0; i < N; i++)
+            P_ans[p] += x[pN + i];
+    }
+}
+
+/* rowSums(x) */
+void C_rowSums_i(int *x, int N, int P, int *N_ans) 
+{
+    for (int i = 0; i < N; i++) {
+        N_ans[i] = 0;
+        for (int p = 0; p < P; p++)
+            N_ans[i] += x[p * N + i];
+    }
+}
+
+
 /* colSums(x * w) */
 void C_colSums_weights(double *x, int N, int P, int *weights, double *P_ans) 
 {

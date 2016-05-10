@@ -19,6 +19,13 @@ int C_sum(int *weights, int N);
 int C_sum_subset(int *weights, int N, int *subset, int Nsubset);
 /* colSums(x) */
 void C_colSums(double *x, int N, int P, double *P_ans);
+/* rowSums(x) */
+/* colSums(x) */
+void C_colSums_i(int *x, int N, int P, int *P_ans);
+/* rowSums(x) */
+void C_rowSums(double *x, int N, int P, double *N_ans);
+/* rowSums(x) */
+void C_rowSums_i(int *x, int N, int P, int *N_ans);
 /* colSums(x * w) */
 void C_colSums_weights(double *x, int N, int P, int *weights, double *P_ans);
 /* colSums(x[subsetx,]) */
