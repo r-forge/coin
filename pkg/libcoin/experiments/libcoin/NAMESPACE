@@ -1,4 +1,4 @@
 
 useDynLib(libcoin, .registration = TRUE)
 
-export(LinStatExpCov, LinStatExpCov2, LinStatExpCov2d, ChisqStat, ChisqTest)
+export(LinStatExpCov, LinStatExpCov2d, ChisqStat, ChisqTest)
