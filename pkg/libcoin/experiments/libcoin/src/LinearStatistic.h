@@ -37,17 +37,17 @@ void C_PermutedLinearStatistic(double *x, int N, int P, double *y, int Q,
                                double *PQ_ans); 
 void C_LinearStatistic_2d(double *x, int N, int P, double *y, int M, int Q, 
                           int *weights, double *PQ_ans); 
-void C_LinearStatistic_maxstat(int *ix, int N, int P, double *y, int Q, 
+void C_LinearStatisticXfactor(int *ix, int N, int P, double *y, int Q, 
                                double *PQ_ans);
-void C_LinearStatistic_maxstat_weights(int *ix, int N, int P, double *y, int Q, 
+void C_LinearStatisticXfactor_weights(int *ix, int N, int P, double *y, int Q, 
                                int *weights, double *PQ_ans);
-void C_LinearStatistic_maxstat_subset(int *ix, int N, int P, double *y, int Q, 
+void C_LinearStatisticXfactor_subset(int *ix, int N, int P, double *y, int Q, 
                               int *subset, int Nsubset, double *PQ_ans) ;
-void C_LinearStatistic_maxstat_weights_subset(int *ix, int N, int P, double *y, int Q, 
+void C_LinearStatisticXfactor_weights_subset(int *ix, int N, int P, double *y, int Q, 
                                       int *weights, int *subset, int Nsubset, 
                                       double *PQ_ans);
-void C_LinearStatistic_maxstat_2d(int N, int P, double *y, int M, int Q, 
-                                  int *weights, double *PQ_ans);
+void C_LinearStatisticXfactor_2d(int N, double *y, int M, int Q, 
+                                 int *weights, double *Nm1Q_ans);
 void C_ExpectationInfluence(double* y, int N, int Q, double *Q_ans); 
 void C_ExpectationInfluence_weights(double* y, int N, int Q, int *weights, 
                                     int sumweights, double *Q_ans); 

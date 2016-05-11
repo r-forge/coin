@@ -91,35 +91,35 @@ void C_LinearStatistic_2d(double *x, int N, int P, double *y, int M, int Q,
     C_KronSums_2dweights(x, N, P, y, M, Q, weights, PQ_ans);
 }
 
-void C_LinearStatistic_maxstat(int *ix, int N, int P, double *y, int Q, 
+void C_LinearStatisticXfactor(int *ix, int N, int P, double *y, int Q, 
                                double *PQ_ans) 
 {
     C_tapplySum(y, N, Q, ix, P, PQ_ans);
 }
 
-void C_LinearStatistic_maxstat_weights(int *ix, int N, int P, double *y, int Q, 
-                               int *weights, double *PQ_ans)
+void C_LinearStatisticXfactor_weights(int *ix, int N, int P, double *y, int Q, 
+                                      int *weights, double *PQ_ans)
 {                               
     C_tapplySum_weights(y, N, Q, ix, P, weights, PQ_ans);
 }
      
-void C_LinearStatistic_maxstat_subset(int *ix, int N, int P, double *y, int Q, 
+void C_LinearStatisticXfactor_subset(int *ix, int N, int P, double *y, int Q, 
                               int *subset, int Nsubset, double *PQ_ans) 
 {
     C_tapplySum_subset(y, N, Q, ix, P, subset, Nsubset, PQ_ans);
 }
 
-void C_LinearStatistic_maxstat_weights_subset(int *ix, int N, int P, double *y, int Q, 
+void C_LinearStatisticXfactor_weights_subset(int *ix, int N, int P, double *y, int Q, 
                                       int *weights, int *subset, int Nsubset, 
                                       double *PQ_ans) 
 {
     C_tapplySum_weights_subset(y, N, Q, ix, P, weights, subset, Nsubset, PQ_ans);
 }
      
-void C_LinearStatistic_maxstat_2d(int N, int P, double *y, int M, int Q, 
-                                  int *weights, double *PQ_ans) 
+void C_LinearStatisticXfactor_2d(int N, double *y, int M, int Q, 
+                                 int *weights, double *Nm1Q_ans) 
 {
-    C_tapplySum_2d(y, M, Q, P, weights, PQ_ans);
+    C_tapplySum_2d(y, M, Q, N, weights, Nm1Q_ans);
 }
 
 void C_ExpectationInfluence(double* y, int N, int Q, double *Q_ans) 
