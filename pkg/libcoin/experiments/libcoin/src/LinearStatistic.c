@@ -1,6 +1,7 @@
 
 #include "Sums.h"
 #include "helpers.h"
+#include "Tables.h"
 
 
 /* Variables
@@ -415,14 +416,19 @@ void C_VarianceLinearStatistic(int P, int Q, double *VarInf, double *ExpX,
     }
 }
 
-void C_ExpectationCovarianceLinearStatistic(double *x, int N, int P, int Q,
+void i2d(int *i, int P, double *d) {
+
+    for (int p = 0; p < P; p++) d[p] = (double) i[p + 1];
+}
+
+void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
                                             int *weights, int *sumweights, 
                                             int *subset, int *Nsubset, int Nlevel, 
                                             double *ExpInf, double *CovInf, 
                                             double *work, double *PQ_ans,  
                                             double *PQPQ_sym_ans) 
 {
-     int bQ, ns = 0, PQ = P * Q, sw = 0;
+     int bQ, ns = 0, PQ = P * Q, sw = 0, *tmp;
 /*     double ExpX[P], CovX[P * (P + 1) / 2], PPtmp[P * (P + 1) / 2]; */
      double *ExpX, *CovX, *PPtmp;
 
@@ -430,28 +436,60 @@ void C_ExpectationCovarianceLinearStatistic(double *x, int N, int P, int Q,
      CovX = ExpX + P;
      PPtmp = CovX + P * (P + 1) / 2;
 
+     if (isInteger(x)) tmp = Calloc(P + 1, int);
+
      for (int b = 0; b < Nlevel; b++) {
          bQ = b * PQ * (PQ + 1) / 2;
          if (Nsubset[b] == 0) {
              if (sumweights[b] == 0) {
-                 C_ExpectationX(x, N, P, ExpX);
-                 C_CovarianceX(x, N, P, CovX);
+                 if (isInteger(x)) {
+                     C_1dtable(INTEGER(x), P + 1, N, tmp);
+                     i2d(tmp, P, ExpX);
+                     for (int p = 0; p < P + (P + 1) / 2; p++) CovX[p] = 0;
+                     for (int p = 0; p < P; p++)
+                         CovX[S(p, p, P)] = ExpX[p];
+                 } else {
+                     C_ExpectationX(REAL(x), N, P, ExpX);
+                     C_CovarianceX(REAL(x), N, P, CovX);
+                 }
                  sw = N;
              } else {
-                 C_ExpectationX_weights(x, N, P, weights, ExpX);
-                 C_CovarianceX_weights(x, N, P, weights, CovX);
+                 if (isInteger(x)) {
+                     C_1dtable_weights(INTEGER(x), P + 1, weights, N, tmp);
+                     i2d(tmp, P, ExpX);
+                     for (int p = 0; p < P + (P + 1) / 2; p++) CovX[p] = 0;
+                     for (int p = 0; p < P; p++) CovX[S(p, p, P)] = ExpX[p];
+                 } else {
+                     C_ExpectationX_weights(REAL(x), N, P, weights, ExpX);
+                     C_CovarianceX_weights(REAL(x), N, P, weights, CovX);
+                 }
                  sw = sumweights[b];
              }
          } else {
              if (sumweights[b] == 0) {
-                 C_ExpectationX_subset(x, N, P, subset + ns, Nsubset[b], ExpX);
-                 C_CovarianceX_subset(x, N, P, subset + ns, Nsubset[b], CovX);
+                 if (isInteger(x)) {
+                     C_1dtable_subset(INTEGER(x), P + 1, subset + ns, Nsubset[b], tmp);
+                     i2d(tmp, P, ExpX);
+                     for (int p = 0; p < P + (P + 1) / 2; p++) CovX[p] = 0;
+                     for (int p = 0; p < P; p++) CovX[S(p, p, P)] = ExpX[p];
+                 } else {
+                     C_ExpectationX_subset(REAL(x), N, P, subset + ns, Nsubset[b], ExpX);
+                     C_CovarianceX_subset(REAL(x), N, P, subset + ns, Nsubset[b], CovX);
+                 }
                  sw = Nsubset[b];
              } else {
-                 C_ExpectationX_weights_subset(x, N, P, weights, 
-                     subset + ns, Nsubset[b], ExpX);
-                 C_CovarianceX_weights_subset(x, N, P, weights, 
-                         subset + ns, Nsubset[b], CovX);
+                 if (isInteger(x)) {
+                     C_1dtable_weights_subset(INTEGER(x), P + 1, weights,
+                                          subset + ns, Nsubset[b], tmp);
+                     i2d(tmp, P, ExpX);
+                     for (int p = 0; p < P + (P + 1) / 2; p++) CovX[p] = 0;
+                     for (int p = 0; p < P; p++) CovX[S(p, p, P)] = ExpX[p];
+                 } else {
+                     C_ExpectationX_weights_subset(REAL(x), N, P, weights, 
+                         subset + ns, Nsubset[b], ExpX);
+                     C_CovarianceX_weights_subset(REAL(x), N, P, weights, 
+                             subset + ns, Nsubset[b], CovX);
+                 }
                  sw = sumweights[b];
              }
          }
@@ -459,14 +497,15 @@ void C_ExpectationCovarianceLinearStatistic(double *x, int N, int P, int Q,
          C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2, ExpX, CovX, sw, PPtmp, b, PQPQ_sym_ans);
          ns = ns + Nsubset[b];
      }
+     if (isInteger(x)) Free(tmp);
 }
 
-void C_ExpectationVarianceLinearStatistic(double *x, int N, int P, int Q,
+void C_ExpectationVarianceLinearStatistic(SEXP x, int N, int P, int Q,
                             int *weights, int *sumweights, 
                             int *subset, int *Nsubset, int Nlevel, 
                             double *ExpInf, double *VarInf, double *work, double *PQ_ans_Exp, double *PQ_ans_Var) 
 {
-     int bQ, ns = 0, PQ = P * Q, sw = 0;
+     int bQ, ns = 0, PQ = P * Q, sw = 0, *tmp;
 /*     double ExpX[P], VarX[P], PPtmp[P]; */
 
      double *ExpX, *VarX, *PPtmp;
@@ -474,30 +513,56 @@ void C_ExpectationVarianceLinearStatistic(double *x, int N, int P, int Q,
      ExpX = work;
      VarX = ExpX + P;
      PPtmp = VarX + P;
-
+     
+     if (isInteger(x)) tmp = Calloc(P + 1, int);
 
      for (int b = 0; b < Nlevel; b++) {
          bQ = b * PQ;
          if (Nsubset[b] == 0) {
              if (sumweights[b] == 0) {
-                 C_ExpectationX(x, N, P, ExpX);
-                 C_VarianceX(x, N, P, VarX);
+                 if (isInteger(x)) {
+                     C_1dtable(INTEGER(x), P + 1, N, tmp);
+                     i2d(tmp, P, ExpX);
+                     VarX = ExpX;
+                 } else {
+                     C_ExpectationX(REAL(x), N, P, ExpX);
+                     C_VarianceX(REAL(x), N, P, VarX);
+                 }
                  sw = N;
              } else {
-                 C_ExpectationX_weights(x, N, P, weights, ExpX);
-                 C_VarianceX_weights(x, N, P, weights, VarX);
+                 if (isInteger(x)) {
+                     C_1dtable_weights(INTEGER(x), P + 1, weights, N, tmp);
+                     i2d(tmp, P, ExpX);
+                     VarX = ExpX;
+                 } else {
+                     C_ExpectationX_weights(REAL(x), N, P, weights, ExpX);
+                     C_VarianceX_weights(REAL(x), N, P, weights, VarX);
+                 }
                  sw = sumweights[b];
              }
          } else {
              if (sumweights[b] == 0) {
-                 C_ExpectationX_subset(x, N, P, subset + ns, Nsubset[b], ExpX);
-                 C_VarianceX_subset(x, N, P, subset + ns, Nsubset[b], VarX);
+                 if (isInteger(x)) {
+                     C_1dtable_subset(INTEGER(x), P + 1, subset + ns, Nsubset[b], tmp);
+                     i2d(tmp, P, ExpX);
+                     VarX = ExpX;
+                 } else {
+                     C_ExpectationX_subset(REAL(x), N, P, subset + ns, Nsubset[b], ExpX);
+                     C_VarianceX_subset(REAL(x), N, P, subset + ns, Nsubset[b], VarX);
+                 }
                  sw = Nsubset[b];
              } else {
-                 C_ExpectationX_weights_subset(x, N, P, weights, 
-                     subset + ns, Nsubset[b], ExpX);
-                 C_VarianceX_weights_subset(x, N, P, weights, 
-                         subset + ns, Nsubset[b], VarX);
+                 if (isInteger(x)) {
+                     C_1dtable_weights_subset(INTEGER(x), P + 1, weights,
+                                          subset + ns, Nsubset[b], tmp);
+                     i2d(tmp, P, ExpX);
+                     VarX = ExpX;
+                 } else {
+                     C_ExpectationX_weights_subset(REAL(x), N, P, weights, 
+                         subset + ns, Nsubset[b], ExpX);
+                     C_VarianceX_weights_subset(REAL(x), N, P, weights, 
+                             subset + ns, Nsubset[b], VarX);
+                 }
                  sw = sumweights[b];
              }
          }
@@ -505,4 +570,5 @@ void C_ExpectationVarianceLinearStatistic(double *x, int N, int P, int Q,
          C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sw, PPtmp, b, PQ_ans_Var);
          ns = ns + Nsubset[b];
      }
+     if (isInteger(x)) Free(tmp);
 }
