@@ -172,7 +172,7 @@ void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
     csum = Calloc((C_nlevels(iy) + 1), int);
     rsum = Calloc((C_nlevels(ix) + 1), int);
     
-    C_2dtable_(ix, iy, weights, subset, block, table);
+    RC_2dtable(ix, iy, weights, subset, block, table);
     
     for (int b = 0; b < Nlevel; b++) {
         if (b == 0) {
