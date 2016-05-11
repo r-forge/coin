@@ -1,5 +1,5 @@
 
-#include "libcoin.h"
+#include "libcoin_internal.h"
 
 double C_quadform(int PQ, double *linstat, double *expect, double *MPinv_sym)
 {

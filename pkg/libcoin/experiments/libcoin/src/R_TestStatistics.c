@@ -1,5 +1,5 @@
 
-#include "libcoin.h"
+#include "libcoin_internal.h"
 #include "TestStatistics.h"
 
 SEXP R_quadform(SEXP LinearStatistic, SEXP Expectation, SEXP MPinv)

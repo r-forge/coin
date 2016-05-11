@@ -1,5 +1,5 @@
 
-#include "libcoin.h"
+#include "libcoin_internal.h"
 #include "helpers.h"
 
 /* Variables:
@@ -10,6 +10,43 @@
   NxNy_ans:	integer matrix Nx x Ny 
   Nx_ans:	integer vector of length Nx
 */
+
+
+/* table(ix) */
+void C_1dtable(int *ix, int Nx, int N, int *Nx_ans) 
+{
+    for (int i = 0; i < Nx; i++) Nx_ans[i] = 0;
+
+    for (int i = 0; i < N; i++) Nx_ans[ix[i]]++;
+}
+
+/* table(ix[subset]) */
+void C_1dtable_subset(int *ix, int Nx, int *subset, int Nsubset, int *Nx_ans) 
+{
+    for (int i = 0; i < Nx; i++) Nx_ans[i] = 0;
+    
+    for (int i = 0; i < Nsubset; i++)  
+        Nx_ans[ix[subset[i]]]++;
+}
+
+/* xtabs(weights ~ ix) */
+void C_1dtable_weights(int *ix, int Nx, int *weights, int N, int *Nx_ans) 
+{
+    for (int i = 0; i < Nx; i++) Nx_ans[i] = 0;
+    
+    for (int i = 0; i < N; i++)  
+        Nx_ans[ix[i]] += weights[i];
+}
+
+/* xtabs(weights ~ ix, subset = subset) */
+void C_1dtable_weights_subset(int *ix, int Nx, int *weights, int *subset, 
+                              int Nsubset, int *Nx_ans) 
+{
+    for (int i = 0; i < Nx; i++) Nx_ans[i] = 0;
+    
+    for (int i = 0; i < Nsubset; i++)  
+          Nx_ans[ix[subset[i]]] += weights[subset[i]];
+}
 
 /* table(ix, iy) */
 void C_2dtable(int *ix, int Nx, int *iy, int Ny, int N, int *NxNy_ans)
@@ -139,40 +176,4 @@ void C_2dtable_(SEXP ix, SEXP iy, SEXP weights, SEXP subset, SEXP block, int *an
                                            LENGTH(subset), INTEGER(block), C_nlevels(block), 
                                            ans);
     }
-}
-
-/* table(ix) */
-void C_1dtable(int *ix, int Nx, int N, int *Nx_ans) 
-{
-    for (int i = 0; i < Nx; i++) Nx_ans[i] = 0;
-
-    for (int i = 0; i < N; i++) Nx_ans[ix[i]]++;
-}
-
-/* table(ix[subset]) */
-void C_1dtable_subset(int *ix, int Nx, int *subset, int Nsubset, int *Nx_ans) 
-{
-    for (int i = 0; i < Nx; i++) Nx_ans[i] = 0;
-    
-    for (int i = 0; i < Nsubset; i++)  
-        Nx_ans[ix[subset[i]]]++;
-}
-
-/* xtabs(weights ~ ix) */
-void C_1dtable_weights(int *ix, int Nx, int *weights, int N, int *Nx_ans) 
-{
-    for (int i = 0; i < Nx; i++) Nx_ans[i] = 0;
-    
-    for (int i = 0; i < N; i++)  
-        Nx_ans[ix[i]] += weights[i];
-}
-
-/* xtabs(weights ~ ix, subset = subset) */
-void C_1dtable_weights_subset(int *ix, int Nx, int *weights, int *subset, 
-                              int Nsubset, int *Nx_ans) 
-{
-    for (int i = 0; i < Nx; i++) Nx_ans[i] = 0;
-    
-    for (int i = 0; i < Nsubset; i++)  
-          Nx_ans[ix[subset[i]]] += weights[subset[i]];
 }

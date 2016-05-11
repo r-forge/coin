@@ -1,5 +1,5 @@
 
-#include "libcoin.h"
+#include "libcoin_internal.h"
 
 int C_nlevels (SEXP x);
 int NROW (SEXP x);

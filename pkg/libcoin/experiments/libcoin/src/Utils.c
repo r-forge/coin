@@ -1,5 +1,5 @@
 
-#include "libcoin.h"
+#include "libcoin_internal.h"
 #include "helpers.h"
 
 /* MP inv of symmetric matrix in lower triangular packed form */

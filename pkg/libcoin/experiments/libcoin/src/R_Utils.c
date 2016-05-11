@@ -1,5 +1,5 @@
 
-#include "libcoin.h"
+#include "libcoin_internal.h"
 #include "Utils.h"
 #include "helpers.h"
 

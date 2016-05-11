@@ -1,5 +1,5 @@
 
-#include "libcoin.h"
+#include "libcoin_internal.h"
 #include "Tables.h"
 #include "Sums.h"
 #include "Distributions.h"
