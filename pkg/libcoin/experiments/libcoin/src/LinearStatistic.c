@@ -77,7 +77,7 @@ void C_LinearStatistic_(double *x, int N, int P, double* y, int Q,
         }
     }
 }
-                                                                                   
+
 void C_PermutedLinearStatistic(double *x, int N, int P, double *y, int Q, 
                                int *perm, int *original, int Nperm, 
                                double *PQ_ans) 
@@ -121,6 +121,36 @@ void C_LinearStatisticXfactor_2d(int N, double *y, int M, int Q,
 {
     C_tapplySum_2d(y, M, Q, N, weights, Nm1Q_ans);
 }
+
+void C_LinearStatisticXfactor_(int *x, int N, int P, double* y, int Q, 
+                       int *weights, int *sumweights,
+                       int *subset, int *Nsubset, int Nlevel, 
+                       double *PQ_ans) 
+{
+
+    int sw = 0, ns = 0;
+    
+    for (int b = 0; b < Nlevel; b++) {
+        sw = sw + sumweights[b];
+        ns = ns + Nsubset[b];
+    }
+
+    if (ns == 0) {
+        if (sw == 0) {
+              C_LinearStatisticXfactor(x, N, P, y, Q, PQ_ans);
+        } else {
+              C_LinearStatisticXfactor_weights(x, N, P, y, Q, weights, PQ_ans);
+        }
+    } else {
+        if (sw == 0) {
+            C_LinearStatisticXfactor_subset(x, N, P, y, Q, subset, ns, PQ_ans);
+        } else {
+            C_LinearStatisticXfactor_weights_subset(x, N, P, y, Q, weights, 
+                     subset, ns, PQ_ans);
+        }
+    }
+}
+
 
 void C_ExpectationInfluence(double* y, int N, int Q, double *Q_ans) 
 {

@@ -29,6 +29,7 @@ void C_1dtable_weights(int *ix, int Nx, int *weights, int N, int *Nx_ans);
 void C_1dtable_weights_subset(int *ix, int Nx, int *weights, int *subset, 
                               int Nsubset, int *Nx_ans);
 
+void C_1dtable_(SEXP ix, SEXP weights, SEXP subset, SEXP block, int *ans);
 void C_2dtable_block(int *ix, int Nx, int *iy, int Ny, int *block, int Nlevels, int N, int *NxNyNlevels_ans);
 void C_2dtable_subset_block(int *ix, int Nx, int *iy, int Ny, int *subset, int Nsubset, int *block, int Nlevels,
                             int *NxNy_ans);

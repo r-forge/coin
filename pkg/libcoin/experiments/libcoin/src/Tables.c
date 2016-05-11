@@ -176,3 +176,77 @@ void C_1dtable_weights_subset(int *ix, int Nx, int *weights, int *subset,
     for (int i = 0; i < Nsubset; i++)  
           Nx_ans[ix[subset[i]]] += weights[subset[i]];
 }
+
+/* table(ix) */
+void C_1dtable_block(int *ix, int Nx, int N, int *block, int Nlevels, int *NxNlevels_ans) 
+{
+    for (int i = 0; i < Nx * Nlevels; i++) NxNlevels_ans[i] = 0;
+
+    for (int i = 0; i < N; i++) NxNlevels_ans[(block[i] - 1) * Nx + ix[i]]++;
+}
+
+/* table(ix[subset]) */
+void C_1dtable_subset_block(int *ix, int Nx, int *subset, int Nsubset, int *block, int Nlevels, 
+                      int *NxNlevels_ans) 
+{
+    for (int i = 0; i < Nx * Nlevels; i++) NxNlevels_ans[i] = 0;
+    
+    for (int i = 0; i < Nsubset; i++)  
+        NxNlevels_ans[(block[i] - 1) * Nx + ix[subset[i]]]++;
+}
+
+/* xtabs(weights ~ ix) */
+void C_1dtable_weights_block(int *ix, int Nx, int *weights, int N, int *block, int Nlevels, 
+                       int *NxNlevels_ans) 
+{
+    for (int i = 0; i < Nx * Nlevels; i++) NxNlevels_ans[i] = 0;
+    
+    for (int i = 0; i < N; i++)  
+        NxNlevels_ans[(block[i] - 1) * Nx + ix[i]] += weights[i];
+}
+
+/* xtabs(weights ~ ix, subset = subset) */
+void C_1dtable_weights_subset_block(int *ix, int Nx, int *weights, int *subset, 
+                              int Nsubset, int *block, int Nlevels, int *NxNlevels_ans) 
+{
+    for (int i = 0; i < Nx * Nlevels; i++) NxNlevels_ans[i] = 0;
+    
+    for (int i = 0; i < Nsubset; i++)  
+          NxNlevels_ans[(block[i] - 1) * Nx + ix[subset[i]]] += weights[subset[i]];
+}
+
+
+void C_1dtable_(SEXP ix, SEXP weights, SEXP subset, SEXP block, int *ans) 
+{
+    if (LENGTH(block) == 0) {
+        if ((LENGTH(weights) == 0) && (LENGTH(subset) == 0))
+            C_1dtable(INTEGER(ix), C_nlevels(ix) + 1, LENGTH(ix), ans);
+        if ((LENGTH(weights) > 0) && (LENGTH(subset) == 0))
+            C_1dtable_weights(INTEGER(ix), C_nlevels(ix) + 1,  
+                              INTEGER(weights), LENGTH(weights), ans);
+        if ((LENGTH(weights) == 0) && (LENGTH(subset) > 0))
+            C_1dtable_subset(INTEGER(ix), C_nlevels(ix) + 1,  
+                             INTEGER(subset), LENGTH(subset), ans);
+        if ((LENGTH(weights) > 0) && (LENGTH(subset) > 0))
+            C_1dtable_weights_subset(INTEGER(ix), C_nlevels(ix) + 1, 
+                                     INTEGER(weights), INTEGER(subset), 
+                                     LENGTH(subset), ans);
+    } else {
+        if ((LENGTH(weights) == 0) && (LENGTH(subset) == 0))
+            C_1dtable_block(INTEGER(ix), C_nlevels(ix) + 1, LENGTH(ix),
+                            INTEGER(block), C_nlevels(block), ans);
+        if ((LENGTH(weights) > 0) && (LENGTH(subset) == 0))
+            C_1dtable_weights_block(INTEGER(ix), C_nlevels(ix) + 1, INTEGER(weights),  
+                                    LENGTH(weights), INTEGER(block), C_nlevels(block), ans);
+        if ((LENGTH(weights) == 0) && (LENGTH(subset) > 0))
+            C_1dtable_subset_block(INTEGER(ix), C_nlevels(ix) + 1, 
+                                   INTEGER(subset), LENGTH(subset),  
+                                   INTEGER(block), C_nlevels(block), 
+                                   ans);
+        if ((LENGTH(weights) > 0) && (LENGTH(subset) > 0))
+            C_1dtable_weights_subset_block(INTEGER(ix), C_nlevels(ix) + 1, 
+                                           INTEGER(weights), INTEGER(subset),
+                                           LENGTH(subset), INTEGER(block), C_nlevels(block), 
+                                           ans);
+    }
+}

@@ -46,6 +46,10 @@ void C_LinearStatisticXfactor_subset(int *ix, int N, int P, double *y, int Q,
 void C_LinearStatisticXfactor_weights_subset(int *ix, int N, int P, double *y, int Q, 
                                       int *weights, int *subset, int Nsubset, 
                                       double *PQ_ans);
+void C_LinearStatisticXfactor_(int *ix, int N, int P, double* y, int Q, 
+                       int *weights, int *sumweights,
+                       int *subset, int *Nsubset, int Nlevel, 
+                       double *PQ_ans);
 void C_LinearStatisticXfactor_2d(int N, double *y, int M, int Q, 
                                  int *weights, double *Nm1Q_ans);
 void C_ExpectationInfluence(double* y, int N, int Q, double *Q_ans); 

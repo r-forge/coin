@@ -105,6 +105,7 @@ void RC_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset
     }
 }        
 
+
 SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset, 
                                       SEXP block, SEXP varonly)
 
