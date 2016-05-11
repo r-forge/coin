@@ -10,3 +10,13 @@
 
 void RC_2dtable(SEXP ix, SEXP iy, SEXP weights, SEXP subset, SEXP block, 
                 int *LxLyLb_ans); 
+
+/* table(ix) */
+void C_1dtable(int *ix, int Lx, int N, int *Lx_ans);
+/* table(ix[subset]) */
+void C_1dtable_subset(int *ix, int Lx, int *subset, int Nsubset, int *Lx_ans);
+/* xtabs(weights ~ ix) */
+void C_1dtable_weights(int *ix, int Lx, int *weights, int N, int *Lx_ans);
+/* xtabs(weights ~ ix, subset = subset) */
+void C_1dtable_weights_subset(int *ix, int Lx, int *weights, int *subset, 
+                              int Nsubset, int *Lx_ans);
