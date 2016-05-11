@@ -6,11 +6,10 @@
 #include "Tables.h"
 #include "Distributions.h"
 
-SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset, 
-                                      SEXP block, SEXP varonly)
+void RC_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset, 
+                                       SEXP block, SEXP varonly, double *L, double *E, double *V)
 
 {
-    SEXP ans, L, E, V; 
     int N, P, Q, Nlevel, *sumweights, *table, *subset_tmp, tmp;
     double *ExpInf, *CovInf, *work;
     
@@ -18,15 +17,6 @@ SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
     P = NCOL(x);
     Q = NCOL(y);
     
-    PROTECT(ans = allocVector(VECSXP, 3));
-    SET_VECTOR_ELT(ans, 0, L = allocVector(REALSXP, P * Q));
-    SET_VECTOR_ELT(ans, 1, E = allocVector(REALSXP, P * Q));
-    if (INTEGER(varonly)[0]) {
-        SET_VECTOR_ELT(ans, 2, V = allocVector(REALSXP, P * Q));
-    } else  {
-        SET_VECTOR_ELT(ans, 2, V = allocVector(REALSXP, P * Q * (P * Q + 1) / 2));
-    }
-
     if (LENGTH(block) == 0) {
         table = Calloc(1, int);
         table[0] = LENGTH(subset);
@@ -50,17 +40,17 @@ SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
             work = Calloc(P + 2 * P * (P + 1) / 2, double);
         }
         C_LinearStatistic_(REAL(x), N, P, REAL(y), Q, INTEGER(weights), sumweights, 
-                          INTEGER(subset), table, 1, REAL(L));
+                          INTEGER(subset), table, 1, L);
         if (INTEGER(varonly)[0]) {
             C_ExpectationCovarianceInfluence(REAL(y), N, Q, INTEGER(weights),
                 sumweights, INTEGER(subset), table, 1, 1, ExpInf, CovInf);
             C_ExpectationVarianceLinearStatistic(REAL(x), N, P, Q, INTEGER(weights),
-                sumweights, INTEGER(subset), table, 1, ExpInf, CovInf, work, REAL(E), REAL(V)); 
+                sumweights, INTEGER(subset), table, 1, ExpInf, CovInf, work, E, V); 
         } else {
             C_ExpectationCovarianceInfluence(REAL(y), N, Q, INTEGER(weights),
                 sumweights, INTEGER(subset), table, 1, 0, ExpInf, CovInf);
             C_ExpectationCovarianceLinearStatistic(REAL(x), N, P, Q, INTEGER(weights),
-                sumweights, INTEGER(subset), table, 1, ExpInf, CovInf, work, REAL(E), REAL(V)); 
+                sumweights, INTEGER(subset), table, 1, ExpInf, CovInf, work, E, V); 
         }
         Free(table); Free(sumweights); Free(table); Free(ExpInf); Free(CovInf); Free(work);
     } else {
@@ -98,41 +88,33 @@ SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
             work = Calloc(P + 2 * P * (P + 1) / 2, double);
         }
         C_LinearStatistic_(REAL(x), N, P, REAL(y), Q, INTEGER(weights), sumweights,
-                           subset_tmp, table + 1, Nlevel, REAL(L));
+                           subset_tmp, table + 1, Nlevel, L);
         if (INTEGER(varonly)[0]) {
             C_ExpectationCovarianceInfluence(REAL(y), N, Q, INTEGER(weights),
                 sumweights, subset_tmp, table + 1, Nlevel, 1, ExpInf, CovInf);
             C_ExpectationVarianceLinearStatistic(REAL(x), N, P, Q, INTEGER(weights),
-                sumweights, subset_tmp, table + 1, Nlevel, ExpInf, CovInf, work, REAL(E), REAL(V)); 
+                sumweights, subset_tmp, table + 1, Nlevel, ExpInf, CovInf, work, E, V); 
         } else {
             C_ExpectationCovarianceInfluence(REAL(y), N, Q, INTEGER(weights),
                 sumweights, subset_tmp, table + 1, Nlevel, 0, ExpInf, CovInf);
             C_ExpectationCovarianceLinearStatistic(REAL(x), N, P, Q, INTEGER(weights),
-                sumweights, subset_tmp, table + 1, Nlevel, ExpInf, CovInf, work, REAL(E), REAL(V)); 
+                sumweights, subset_tmp, table + 1, Nlevel, ExpInf, CovInf, work, E, V); 
         }
         Free(subset_tmp); Free(table); Free(sumweights); Free(table); Free(ExpInf); Free(CovInf);
         Free(work);
     }
-    UNPROTECT(1);
-    return(ans);
 }        
 
-SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy, 
-                                         SEXP weights, SEXP subset, SEXP block, 
-                                         SEXP varonly)
+SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset, 
+                                      SEXP block, SEXP varonly)
 
 {
     SEXP ans, L, E, V; 
-    int N, P, Q, Nlevel, *table, *btab, *csum, *rsum, *table2d, sw;
-    double *ExpInf, *CovInf, *ExpX, *CovX, *work;
+    int P, Q;
     
-    N = LENGTH(ix);
     P = NCOL(x);
     Q = NCOL(y);
-    Nlevel = 1;
-    if (LENGTH(block) > 0)
-        Nlevel = C_nlevels(block);
-
+    
     PROTECT(ans = allocVector(VECSXP, 3));
     SET_VECTOR_ELT(ans, 0, L = allocVector(REALSXP, P * Q));
     SET_VECTOR_ELT(ans, 1, E = allocVector(REALSXP, P * Q));
@@ -142,6 +124,29 @@ SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
         SET_VECTOR_ELT(ans, 2, V = allocVector(REALSXP, P * Q * (P * Q + 1) / 2));
     }
 
+    RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, varonly,
+                                      REAL(L), REAL(E), REAL(V));
+    UNPROTECT(1);
+    return(ans);
+}
+
+
+
+void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
+                                          SEXP weights, SEXP subset, SEXP block,
+                                          SEXP varonly, double *L, double *E, double *V)
+{
+
+    int N, P, Q, Nlevel, *table, *btab, *csum, *rsum, *table2d, sw;
+    double *ExpInf, *CovInf, *ExpX, *CovX, *work;
+
+    N = LENGTH(ix);
+    P = NCOL(x);
+    Q = NCOL(y);
+    Nlevel = 1;
+    if (LENGTH(block) > 0)
+        Nlevel = C_nlevels(block);
+                                                                                   
     table = Calloc((C_nlevels(ix) + 1) * (C_nlevels(iy) + 1) * Nlevel, int);
     table2d = Calloc((C_nlevels(ix) + 1) * (C_nlevels(iy) + 1), int);
     csum = Calloc((C_nlevels(iy) + 1), int);
@@ -162,7 +167,7 @@ SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
         }
     }
 
-    C_LinearStatistic_2d(REAL(x), NROW(x), P, REAL(y), NROW(y), Q, table2d, REAL(L));
+    C_LinearStatistic_2d(REAL(x), NROW(x), P, REAL(y), NROW(y), Q, table2d, L);
 
     ExpInf = Calloc(Q, double);
     ExpX = Calloc(P, double);
@@ -187,26 +192,44 @@ SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
 
         C_ExpectationInfluence_weights(REAL(y), NROW(y), Q, csum, sw, ExpInf);
         C_ExpectationX_weights(REAL(x), NROW(x), P, rsum, ExpX);
-        C_ExpectationLinearStatistic(P, Q, ExpInf, ExpX, b, REAL(E));
+        C_ExpectationLinearStatistic(P, Q, ExpInf, ExpX, b, E);
         if (INTEGER(varonly)[0]) {
             C_VarianceInfluence_weights(REAL(y), NROW(y), Q, csum, sw, ExpInf, CovInf);
             C_VarianceX_weights(REAL(x), NROW(x), P, rsum, CovX);
-            C_VarianceLinearStatistic(P, Q, CovInf, ExpX, CovX, sw, work, b, REAL(V));
+            C_VarianceLinearStatistic(P, Q, CovInf, ExpX, CovX, sw, work, b, V);
         } else {
             C_CovarianceInfluence_weights(REAL(y), NROW(y), Q, csum, sw, ExpInf, CovInf);
             C_CovarianceX_weights(REAL(x), NROW(x), P, rsum, CovX);
-            C_CovarianceLinearStatistic(P, Q, CovInf, ExpX, CovX, sw, work, b, REAL(V));
+            C_CovarianceLinearStatistic(P, Q, CovInf, ExpX, CovX, sw, work, b, V);
         }
     }
-    Free(table); 
-    Free(table2d); 
-    Free(csum); 
-    Free(rsum); 
-    Free(ExpInf); 
-    Free(ExpX);
-    Free(CovInf); 
-    Free(CovX); 
-    Free(work);
+    Free(table); Free(table2d); Free(csum); Free(rsum); Free(ExpInf); Free(ExpX);
+    Free(CovInf); Free(CovX); Free(work);
+}        
+
+
+SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy, 
+                                         SEXP weights, SEXP subset, SEXP block, 
+                                         SEXP varonly)
+{
+    SEXP ans, L, E, V; 
+    int P, Q;
+    
+    P = NCOL(x);
+    Q = NCOL(y);
+
+    PROTECT(ans = allocVector(VECSXP, 3));
+    SET_VECTOR_ELT(ans, 0, L = allocVector(REALSXP, P * Q));
+    SET_VECTOR_ELT(ans, 1, E = allocVector(REALSXP, P * Q));
+    if (INTEGER(varonly)[0]) {
+        SET_VECTOR_ELT(ans, 2, V = allocVector(REALSXP, P * Q));
+    } else  {
+        SET_VECTOR_ELT(ans, 2, V = allocVector(REALSXP, P * Q * (P * Q + 1) / 2));
+    }
+
+    RC_ExpectationCovarianceStatistic_2d(x, ix, y, iy, weights, subset, block, varonly,
+                                         REAL(L), REAL(E), REAL(V));
     UNPROTECT(1);
     return(ans);
-}        
+}
+
