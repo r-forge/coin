@@ -64,10 +64,16 @@ void C_PermutedLinearStatistic(double *x, int N, int P, double *y, int Q,
      C_KronSums_subset(x, N, P, y, Q, perm, original, Nperm, PQ_ans);
 }
 
-void C_LinearStatistic_2d(double *x, int N, int P, double *y, int M, int Q, 
-                          int *weights, double *PQ_ans) 
+void C_LinearStatistic_2d(SEXP x, int N, int P, double *y, int M, int Q, 
+                          int *weights2d, double *PQ_ans) 
 {
-    C_KronSums_2dweights(x, N, P, y, M, Q, weights, PQ_ans);
+    if (isInteger(x)) {
+        C_tapplySum_2d(y, M, Q, P + 1, weights2d, PQ_ans);
+/*                       double *y, int Ly, int Q, int Lx, 
+                       int *weights2d, double *Lx1Q_ans) */
+    } else {
+        C_KronSums_2dweights(REAL(x), N, P, y, M, Q, weights2d, PQ_ans);
+    }
 }
 
 void C_LinearStatisticXfactor_(int *ix, int N, int P, double *y, int Q, 
@@ -96,12 +102,6 @@ void C_LinearStatisticXfactor_weights_subset(int *ix, int N, int P, double *y,
                                PQ_ans);
 }
      
-void C_LinearStatisticXfactor_2d(int N, double *y, int M, int Q, 
-                                 int *weights, double *Nm1Q_ans) 
-{
-    C_tapplySum_2d(y, M, Q, N, weights, Nm1Q_ans);
-}
-
 void C_LinearStatisticXfactor(int *x, int N, int P, double* y, int Q, 
                               int *weights, int *sumweights,
                               int *subset, int *Nsubset, int Lb, 
@@ -482,7 +482,7 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
                      for (int i = 0; i < N; i++) work[ix[i]]++; 
                      /* CovX = diag(ExpX) */
                      for (int p = 0; p < P; p++)
-                         CovX[S(p, p, P)] = work[p];
+                         CovX[S(p, p, P)] = ExpX[p];
                  } else {
                      C_ExpectationX_(REAL(x), N, P, ExpX);
                      C_CovarianceX_(REAL(x), N, P, CovX);
@@ -494,7 +494,7 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
                      for (int i = 0; i < N; i++) 
                          work[ix[i]] += (double) weights[ix[i]];
                      for (int p = 0; p < P; p++)
-                         CovX[S(p, p, P)] = work[p];
+                         CovX[S(p, p, P)] = ExpX[p];
                  } else {
                      C_ExpectationX_weights(REAL(x), N, P, weights, ExpX);
                      C_CovarianceX_weights(REAL(x), N, P, weights, CovX);
@@ -509,7 +509,7 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
                  for (int i = 0; i < Nsubset[b]; i++) 
                      work[ix[subtmp[i]]]++; 
                  for (int p = 0; p < P; p++)
-                      CovX[S(p, p, P)] = work[p];
+                      CovX[S(p, p, P)] = ExpX[p];
                  } else {
                      C_ExpectationX_subset(REAL(x), N, P, subset + ns, 
                                            Nsubset[b], ExpX);
@@ -524,7 +524,7 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
                      for (int i = 0; i < Nsubset[b]; i++) 
                          work[ix[subtmp[i]]] += (double) weights[subtmp[i]]; 
                      for (int p = 0; p < P; p++)
-                          CovX[S(p, p, P)] = work[p];
+                          CovX[S(p, p, P)] = ExpX[p];
                  } else {
                      C_ExpectationX_weights_subset(REAL(x), N, P, weights, 
                                                    subset + ns, Nsubset[b], 
