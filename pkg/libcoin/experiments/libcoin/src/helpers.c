@@ -3,12 +3,12 @@
 #include "Tables.h"
 #include "Sums.h"
 
-int C_nlevels (SEXP x) 
+int NLEVELS(SEXP x) 
 {
    return(LENGTH(getAttrib(x, R_LevelsSymbol)));
 }
 
-int NROW (SEXP x) 
+int NROW(SEXP x) 
 {
     SEXP a;
     a = getAttrib(x, R_DimSymbol);
@@ -16,7 +16,7 @@ int NROW (SEXP x)
     return(INTEGER(a)[0]);
 }
     
-int NCOL (SEXP x) 
+int NCOL(SEXP x) 
 {
     SEXP a;
     a = getAttrib(x, R_DimSymbol);
@@ -35,9 +35,9 @@ int NCOL (SEXP x)
     *\param ans return value; a pointer to a REALSXP-vector of length (mr x ns)
 */
 
-void C_kronecker (const double *A, const int m, const int n,
-                  const double *B, const int r, const int s, int overwrite,
-                  double *ans)
+void C_kronecker(const double *A, const int m, const int n,
+                 const double *B, const int r, const int s, int overwrite,
+                 double *ans)
 {
     int i, j, k, l, mr, js, ir;
     double y;
@@ -60,9 +60,9 @@ void C_kronecker (const double *A, const int m, const int n,
     }
 }  
 
-void C_kronecker_sym (const double *A, const int m, 
-                      const double *B, const int r, int overwrite,
-                      double *ans)
+void C_kronecker_sym(const double *A, const int m, 
+                     const double *B, const int r, int overwrite,
+                     double *ans)
 {
     int i, j, k, l, mr, js, ir, s, n, tmp, mrns;
     double y;
