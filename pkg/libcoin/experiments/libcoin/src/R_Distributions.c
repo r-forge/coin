@@ -3,7 +3,7 @@
 #include "Tables.h"
 #include "Sums.h"
 #include "Distributions.h"
-#include "helpers.h"
+#include "Utils.h"
 
 SEXP R_PermuteBlock(SEXP block)
 {

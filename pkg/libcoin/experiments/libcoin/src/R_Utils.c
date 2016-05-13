@@ -1,7 +1,6 @@
 
 #include "libcoin_internal.h"
 #include "Utils.h"
-#include "helpers.h"
 
 SEXP R_MPinv_sym (SEXP x, SEXP tol) {
 

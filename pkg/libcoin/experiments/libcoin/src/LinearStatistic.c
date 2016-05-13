@@ -1,6 +1,7 @@
 
+#include "libcoin_internal.h"
 #include "Sums.h"
-#include "helpers.h"
+#include "Utils.h"
 #include "Tables.h"
 
 

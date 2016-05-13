@@ -1,6 +1,6 @@
 
 #include "libcoin_internal.h"
-#include "helpers.h"
+#include "Utils.h"
 
 /* Variables:
   ix:		integer vector of length N with elements 0...(Lx - 1)

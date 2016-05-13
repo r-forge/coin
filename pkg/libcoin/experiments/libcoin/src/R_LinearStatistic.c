@@ -1,7 +1,7 @@
 
 #include "libcoin_internal.h"
 #include "LinearStatistic.h"
-#include "helpers.h"
+#include "Utils.h"
 #include "Sums.h"
 #include "Tables.h"
 #include "Distributions.h"
