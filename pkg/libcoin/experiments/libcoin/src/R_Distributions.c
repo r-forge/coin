@@ -16,15 +16,15 @@ SEXP R_PermuteBlock(SEXP block)
     SET_VECTOR_ELT(ans, 0, orig = allocVector(INTSXP, N));
     SET_VECTOR_ELT(ans, 1, perm = allocVector(INTSXP, N));
 
-    table = Calloc(C_nlevels(block) + 1, int);
-    C_1dtable(INTEGER(block), C_nlevels(block) + 1, LENGTH(block), table);
+    table = Calloc(NLEVELS(block) + 1, int);
+    C_1dtable_(INTEGER(block), NLEVELS(block) + 1, LENGTH(block), table);
 
     C_setup_subset(N, INTEGER(orig));
-    C_order_wrt_block(INTEGER(orig), N, INTEGER(block), table, C_nlevels(block) + 1);
+    C_order_wrt_block(INTEGER(orig), N, INTEGER(block), table, NLEVELS(block) + 1);
     
     tmp = Calloc(N, int);
     GetRNGstate();
-    C_doPermuteBlock(INTEGER(orig), N, table, C_nlevels(block) + 1, 
+    C_doPermuteBlock(INTEGER(orig), N, table, NLEVELS(block) + 1, 
                      tmp, INTEGER(perm));
     PutRNGstate();
 
@@ -44,18 +44,18 @@ SEXP R_PermuteBlock_subset(SEXP subset, SEXP block)
     SET_VECTOR_ELT(ans, 0, orig = allocVector(INTSXP, N));
     SET_VECTOR_ELT(ans, 1, perm = allocVector(INTSXP, N));
 
-    table = Calloc(C_nlevels(block) + 1, int);
-    C_1dtable_subset(INTEGER(block), C_nlevels(block) + 1, INTEGER(subset), N, table);
+    table = Calloc(NLEVELS(block) + 1, int);
+    C_1dtable_subset(INTEGER(block), NLEVELS(block) + 1, INTEGER(subset), N, table);
 
 
     Memcpy(INTEGER(orig), INTEGER(subset), N);
-    C_order_wrt_block(INTEGER(orig), N, INTEGER(block), table, C_nlevels(block) + 1);
+    C_order_wrt_block(INTEGER(orig), N, INTEGER(block), table, NLEVELS(block) + 1);
 
 
     
     tmp = Calloc(N, int);
     GetRNGstate();
-    C_doPermuteBlock(INTEGER(orig), N, table, C_nlevels(block) + 1, 
+    C_doPermuteBlock(INTEGER(orig), N, table, NLEVELS(block) + 1, 
                      tmp, INTEGER(perm));
     PutRNGstate();
     Free(tmp); Free(table);
@@ -68,22 +68,22 @@ SEXP R_PermuteBlock_weights(SEXP weights, SEXP block)
     SEXP ans, orig, perm;
     int N, *table, *tmp;
     
-    N = C_sum(INTEGER(weights), LENGTH(weights));
+    N = C_sum_(INTEGER(weights), LENGTH(weights));
 
     PROTECT(ans = allocVector(VECSXP, 2));
     SET_VECTOR_ELT(ans, 0, orig = allocVector(INTSXP, N));
     SET_VECTOR_ELT(ans, 1, perm = allocVector(INTSXP, N));
 
-    table = Calloc(C_nlevels(block) + 1, int);
-    C_1dtable_weights(INTEGER(block), C_nlevels(block) + 1, INTEGER(weights), 
+    table = Calloc(NLEVELS(block) + 1, int);
+    C_1dtable_weights(INTEGER(block), NLEVELS(block) + 1, INTEGER(weights), 
                       LENGTH(weights), table);
 
     C_setup_subset_weights(LENGTH(weights), INTEGER(weights), INTEGER(orig));
-    C_order_wrt_block(INTEGER(orig), N, INTEGER(block), table, C_nlevels(block) + 1);
+    C_order_wrt_block(INTEGER(orig), N, INTEGER(block), table, NLEVELS(block) + 1);
     
     tmp = Calloc(N, int);
     GetRNGstate();
-    C_doPermuteBlock(INTEGER(orig), N, table, C_nlevels(block) + 1, 
+    C_doPermuteBlock(INTEGER(orig), N, table, NLEVELS(block) + 1, 
                      tmp, INTEGER(perm));
                        
     PutRNGstate();
@@ -103,17 +103,17 @@ SEXP R_PermuteBlock_weights_subset(SEXP weights, SEXP subset, SEXP block)
     SET_VECTOR_ELT(ans, 0, orig = allocVector(INTSXP, N));
     SET_VECTOR_ELT(ans, 1, perm = allocVector(INTSXP, N));
 
-    table = Calloc(C_nlevels(block) + 1, int);
-    C_1dtable_weights_subset(INTEGER(block), C_nlevels(block) + 1, 
+    table = Calloc(NLEVELS(block) + 1, int);
+    C_1dtable_weights_subset(INTEGER(block), NLEVELS(block) + 1, 
                              INTEGER(weights), INTEGER(subset), 
                              LENGTH(subset), table);
 
     C_setup_subset_weights_subset(LENGTH(subset), INTEGER(weights), INTEGER(subset), INTEGER(orig));
-    C_order_wrt_block(INTEGER(orig), N, INTEGER(block), table, C_nlevels(block) + 1);
+    C_order_wrt_block(INTEGER(orig), N, INTEGER(block), table, NLEVELS(block) + 1);
     
     tmp = Calloc(N, int);
     GetRNGstate();
-    C_doPermuteBlock(INTEGER(orig), N, table, C_nlevels(block) + 1, 
+    C_doPermuteBlock(INTEGER(orig), N, table, NLEVELS(block) + 1, 
                      tmp, INTEGER(perm));
     PutRNGstate();
 
@@ -172,7 +172,7 @@ SEXP R_Permute_weights(SEXP weights)
     SEXP ans, orig, perm;
     int N, *tmp;
     
-    N = C_sum(INTEGER(weights), LENGTH(weights));
+    N = C_sum_(INTEGER(weights), LENGTH(weights));
 
     PROTECT(ans = allocVector(VECSXP, 2));
     SET_VECTOR_ELT(ans, 0, orig = allocVector(INTSXP, N));
