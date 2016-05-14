@@ -669,12 +669,12 @@ void C_tapplySum_2d(double *y, int Ly, int Q, int Lx,
                     int *weights2d, double *Lx1Q_ans)
 {
     for (int q = 0; q < (Lx - 1) * Q; q++) Lx1Q_ans[q] = 0.0;
-   
+
     for (int j = 1; j < Ly; j++) { /* j = 0 means NA */
         for (int i = 1; i < Lx; i++) { /* i = 0 means NA */
-            for (int q = 0; q < Q; q++) 
+            for (int q = 0; q < Q; q++)
                 Lx1Q_ans[q * (Lx - 1) + (i - 1)] += 
-                    weights2d[q * Ly + i] * y[q * Ly + j];
+                    weights2d[j * Lx + i] * y[q * Ly + j];
         }
     }
 }

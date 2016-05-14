@@ -241,7 +241,11 @@ SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
     SEXP ans, L, E, V; 
     int P, Q, PQ;
     
-    P = NCOL(x);
+    if (LENGTH(x) == 0) {
+        P = NLEVELS(ix);
+    } else {
+        P = NCOL(x);
+    }
     Q = NCOL(y);
     PQ = P * Q;
 

@@ -69,8 +69,6 @@ void C_LinearStatistic_2d(SEXP x, int N, int P, double *y, int M, int Q,
 {
     if (isInteger(x)) {
         C_tapplySum_2d(y, M, Q, P + 1, weights2d, PQ_ans);
-/*                       double *y, int Ly, int Q, int Lx, 
-                       int *weights2d, double *Lx1Q_ans) */
     } else {
         C_KronSums_2dweights(REAL(x), N, P, y, M, Q, weights2d, PQ_ans);
     }

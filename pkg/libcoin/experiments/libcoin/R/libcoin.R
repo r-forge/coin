@@ -46,6 +46,7 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALS
     attr(ix, "levels") <- 1:max(ix)
     attr(iy, "levels") <- 1:max(iy)
 
+    if (missing(X)) X <- numeric(0)
     stopifnot(all(complete.cases(X)))
     stopifnot(all(complete.cases(Y)))
     stopifnot(nrow(X) == max(attr(ix, "levels")) + 1)
