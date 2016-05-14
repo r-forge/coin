@@ -462,15 +462,13 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
      int bQ, ns = 0, PQ = P * Q, sw = 0, *ix, *subtmp;
      double *ExpX, *CovX, *PPtmp;
 
-
-     for (int i = 0; i < P + 2 * P * (P + 1) / 2 + 1; i++) work[i] = 0.0;
-
      /* work[0] counts NAs in ix (ix[i] == 0)  */
      ExpX = work + 1;
      CovX = ExpX + P;
      PPtmp = CovX + P * (P + 1) / 2;
 
      for (int b = 0; b < Lb; b++) {
+         for (int i = 0; i < P + 2 * P * (P + 1) / 2 + 1; i++) work[i] = 0.0;
          bQ = b * PQ * (PQ + 1) / 2;
          if (Nsubset[b] == 0) {
              if (sumweights[b] == 0) {
@@ -489,8 +487,8 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
              } else {
                  if (isInteger(x)) {
                      ix = INTEGER(x);
-                     for (int i = 0; i < N; i++) 
-                         work[ix[i]] += (double) weights[ix[i]];
+                     for (int i = 0; i < N; i++)
+                         work[ix[i]] += (double) weights[i];
                      for (int p = 0; p < P; p++)
                          CovX[S(p, p, P)] = ExpX[p];
                  } else {
@@ -502,12 +500,12 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
          } else {
              if (sumweights[b] == 0) {
                  if (isInteger(x)) {
-                 ix = INTEGER(x);
-                 subtmp = subset + ns;
-                 for (int i = 0; i < Nsubset[b]; i++) 
-                     work[ix[subtmp[i]]]++; 
-                 for (int p = 0; p < P; p++)
-                      CovX[S(p, p, P)] = ExpX[p];
+                     ix = INTEGER(x);
+                     subtmp = subset + ns;
+                     for (int i = 0; i < Nsubset[b]; i++) 
+                         work[ix[subtmp[i]]]++; 
+                     for (int p = 0; p < P; p++)
+                          CovX[S(p, p, P)] = ExpX[p];
                  } else {
                      C_ExpectationX_subset(REAL(x), N, P, subset + ns, 
                                            Nsubset[b], ExpX);
@@ -551,14 +549,13 @@ void C_ExpectationVarianceLinearStatistic(SEXP x, int N, int P, int Q,
      int bQ, ns = 0, PQ = P * Q, sw = 0, *ix, *subtmp;
      double *ExpX, *VarX, *PPtmp;
 
-     for (int i = 0; i < 3 * P + 1; i++) work[i] = 0.0;
-
      /* work[0] counts NAs in ix (ix[i] = 0)*/
      ExpX = work + 1;
      VarX = ExpX + P;
      PPtmp = VarX + P;
      
      for (int b = 0; b < Lb; b++) {
+         for (int i = 0; i < 3 * P + 1; i++) work[i] = 0.0;
          bQ = b * PQ;
          if (Nsubset[b] == 0) {
              if (sumweights[b] == 0) {
@@ -576,7 +573,7 @@ void C_ExpectationVarianceLinearStatistic(SEXP x, int N, int P, int Q,
                  if (isInteger(x)) {
                      ix = INTEGER(x);
                      for (int i = 0; i < N; i++) 
-                         work[ix[i]] += (double) weights[ix[i]]; 
+                         work[ix[i]] += (double) weights[i]; 
                      VarX = ExpX;
                  } else {
                      C_ExpectationX_weights(REAL(x), N, P, weights, ExpX);
