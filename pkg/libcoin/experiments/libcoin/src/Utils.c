@@ -92,16 +92,14 @@ void C_kronecker_sym(const double *A, const int m,
 
 /* MP inv of symmetric matrix in lower triangular packed form */
 
-void C_MPinv_sym (SEXP x, SEXP tol, double *dMP, int *rank) {
+void C_MPinv_sym (double *x, int n, double tol, double *dMP, int *rank) {
 
     SEXP ans;
     double *val, *vec, dtol, *rx, *work, valinv;
-    int n, valzero = 0, info = 0, kn;
+    int valzero = 0, info = 0, kn;
 
-    n = (int) (.5 + sqrt(.25 + 2 * LENGTH(x))) - 1;
-    
-    rx = Calloc(LENGTH(x), double);
-    Memcpy(rx, REAL(x), LENGTH(x));
+    rx = Calloc(n * (n + 1) / 2, double);
+    Memcpy(rx, x, n * (n + 1) / 2);
     work = Calloc(3 * n, double);
     val = Calloc(n, double);
     vec = Calloc(n * n, double);
@@ -109,7 +107,7 @@ void C_MPinv_sym (SEXP x, SEXP tol, double *dMP, int *rank) {
     F77_CALL(dspev)("V", "L", &n, rx, val, vec, &n, work,
                     &info);
                                             
-    dtol = val[n - 1] * REAL(tol)[0];
+    dtol = val[n - 1] * tol;
 
     for (int k = 0; k < n; k++)
         valzero += (val[k] < dtol); 

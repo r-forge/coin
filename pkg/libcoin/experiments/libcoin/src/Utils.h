@@ -1,5 +1,5 @@
 
-void C_MPinv_sym (SEXP x, SEXP tol, double *dMP, int *rank);
+void C_MPinv_sym (double *x, int n, double tol, double *dMP, int *rank);
 int NLEVELS(SEXP x);
 int NROW(SEXP x);
 int NCOL(SEXP x);

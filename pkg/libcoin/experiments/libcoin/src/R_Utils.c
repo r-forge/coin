@@ -13,7 +13,7 @@ SEXP R_MPinv_sym (SEXP x, SEXP tol) {
     SET_VECTOR_ELT(ans, 0, MP = allocVector(REALSXP, n * (n + 1) / 2));
     SET_VECTOR_ELT(ans, 1, rank = allocVector(INTSXP, 1));
             
-    C_MPinv_sym(x, tol, REAL(MP), INTEGER(rank));
+    C_MPinv_sym(REAL(x), n, REAL(tol)[0], REAL(MP), INTEGER(rank));
     
     UNPROTECT(1);
     return(ans);
