@@ -36,7 +36,7 @@ SEXP R_ordered(SEXP x, SEXP y, SEXP weights,
     SEXP LEV, ans, wmax, maxstat;
     double *contrasts;
     int P, Q;
-    
+
     PROTECT(LEV = R_ExpectationCovarianceStatistic(x, y, weights, subset,  block, varonly));
     PROTECT(ans = allocVector(VECSXP, 2));
     SET_VECTOR_ELT(ans, 0, wmax = allocVector(INTSXP, 1));
