@@ -135,11 +135,11 @@ SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
 
 void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
                                           SEXP weights, SEXP subset, SEXP block,
-                                          SEXP varonly, double *L, double *E, 
+                                          SEXP varonly, int *table, double *L, double *E, 
                                           double *V)
 {
 
-    int N, P, Q, Nlevel, *table, *btab, *csum, *rsum, *table2d, sw, *iix;
+    int N, P, Q, Nlevel, *btab, *csum, *rsum, *table2d, sw, *iix;
     double *ExpInf, *CovInf, *ExpX, *CovX, *work;
 
     N = LENGTH(ix);
@@ -154,12 +154,9 @@ void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
     if (LENGTH(block) > 0)
         Nlevel = NLEVELS(block);
 
-    table = Calloc((NLEVELS(ix) + 1) * (NLEVELS(iy) + 1) * Nlevel, int);
     table2d = Calloc((NLEVELS(ix) + 1) * (NLEVELS(iy) + 1), int);
     csum = Calloc((NLEVELS(iy) + 1), int);
     rsum = Calloc((NLEVELS(ix) + 1), int);
-    
-    RC_2dtable(ix, iy, weights, subset, block, table);
     
     for (int i = 0; i < (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1); i++)
         table2d[i] = 0;
@@ -229,7 +226,7 @@ void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
             C_CovarianceLinearStatistic(P, Q, CovInf, ExpX, CovX, sw, work, b, V);
         }
     }
-    Free(table); Free(table2d); Free(csum); Free(rsum); Free(ExpInf); Free(ExpX);
+    Free(table2d); Free(csum); Free(rsum); Free(ExpInf); Free(ExpX);
     Free(CovInf); Free(CovX); Free(work);
 }        
 
@@ -238,8 +235,8 @@ SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
                                          SEXP weights, SEXP subset, SEXP block, 
                                          SEXP varonly)
 {
-    SEXP ans, L, E, V; 
-    int P, Q, PQ;
+    SEXP ans, T, L, E, V; 
+    int P, Q, PQ, Nlevel;
     
     if (LENGTH(x) == 0) {
         P = NLEVELS(ix);
@@ -248,8 +245,11 @@ SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
     }
     Q = NCOL(y);
     PQ = P * Q;
+    Nlevel = 1;
+    if (LENGTH(block) > 0)
+        Nlevel = NLEVELS(block);
 
-    PROTECT(ans = allocVector(VECSXP, 3));
+    PROTECT(ans = allocVector(VECSXP, 4));
     SET_VECTOR_ELT(ans, 0, L = allocVector(REALSXP, PQ));
     SET_VECTOR_ELT(ans, 1, E = allocVector(REALSXP, PQ));
     if (INTEGER(varonly)[0]) {
@@ -257,9 +257,97 @@ SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
     } else  {
         SET_VECTOR_ELT(ans, 2, V = allocVector(REALSXP, PQ * (PQ + 1) / 2));
     }
+    SET_VECTOR_ELT(ans, 3, T = allocVector(INTSXP, 
+                                           (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1) * Nlevel));
 
+    RC_2dtable(ix, iy, weights, subset, block, INTEGER(T));
     RC_ExpectationCovarianceStatistic_2d(x, ix, y, iy, weights, subset, block, 
-                                         varonly, REAL(L), REAL(E), REAL(V));
+                                         varonly, INTEGER(T), REAL(L), REAL(E), REAL(V));
     UNPROTECT(1);
     return(ans);
 }
+
+SEXP R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy, 
+                                  SEXP block, SEXP B) {
+
+    SEXP ans;
+    int N, P, Q, PQ, Nlevel, *csum, *rsum, *ntotal, *table, *jwork, *rtable, *rtable2, maxn = 0, Lx, Ly;
+    double *fact, *linstat, *blinstat;
+    
+    N = LENGTH(ix);
+    if (LENGTH(x) == 0) {
+        P = NLEVELS(ix);
+    } else {
+        P = NCOL(x);
+    }
+    Q = NCOL(y);
+    PQ = P * Q;
+    Lx = NLEVELS(ix);
+    Ly = NLEVELS(iy);
+    Nlevel = 1;
+    if (LENGTH(block) > 0)
+        Nlevel = NLEVELS(block);
+    table = INTEGER(VECTOR_ELT(LEV, 3));
+
+    PROTECT(ans = allocMatrix(REALSXP, PQ, INTEGER(B)[0]));
+    
+    csum = Calloc((NLEVELS(iy) + 1) * Nlevel, int);
+    rsum = Calloc((NLEVELS(ix) + 1) * Nlevel, int);
+    ntotal = Calloc(Nlevel, int);
+    rtable = Calloc((NLEVELS(ix) + 1) * (NLEVELS(iy) + 1), int);
+    rtable2 = Calloc(NLEVELS(ix) * NLEVELS(iy) , int);
+    linstat = Calloc(PQ, double);
+    jwork = Calloc((NLEVELS(iy) + 1), int);
+
+    for (int b = 0; b < Nlevel; b++) {
+        C_colSums_i(table + (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1) * b, 
+                    NLEVELS(ix) + 1, NLEVELS(iy) + 1, csum + (NLEVELS(iy) + 1) * b); 
+        csum[(NLEVELS(iy) + 1) * b] = 0; /* NA */   
+        C_rowSums_i(table + (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1) * b, 
+                    NLEVELS(ix) + 1, NLEVELS(iy) + 1, rsum + (NLEVELS(ix) + 1) * b);
+        rsum[(NLEVELS(ix) + 1) * b] = 0; /* NA */
+        ntotal[b] = 0;
+        for (int i = 1; i < (NLEVELS(ix) + 1); i++) 
+            ntotal[b] += rsum[(NLEVELS(ix) + 1) * b + i];
+        if (ntotal[b] > maxn) maxn = ntotal[b];
+    }
+    
+    fact = Calloc(maxn + 1, double);    
+    /* Calculate log-factorials.  fact[i] = lgamma(i+1) */
+    fact[0] = fact[1] = 0.;
+    for(int j = 2; j <= maxn; j++)
+        fact[j] = fact[j - 1] + log(j);
+
+    GetRNGstate(); 
+
+    for (int i = 0; i < INTEGER(B)[0]; i++) {
+        blinstat = REAL(ans) + PQ * i;
+        for (int p = 0; p < PQ; p++) {
+            blinstat[p] = 0;
+            linstat[p] = 0;
+        }
+        for (int p = 0; p < (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1); p++)
+            rtable[p] = 0;
+            
+        for (int b = 0; b < Nlevel; b++) {
+            
+            rcont2(&Lx, &Ly, rsum + (NLEVELS(ix) + 1) * b + 1, 
+                   csum + (NLEVELS(iy) + 1) * b + 1, ntotal + b, fact, jwork, rtable2);
+
+            for (int j1 = 1; j1 <= NLEVELS(ix); j1++) {
+                for (int j2 = 1; j2 <= NLEVELS(iy); j2++) 
+                    rtable[j2 * (NLEVELS(ix) + 1) + j1] = rtable2[(j2 - 1) * NLEVELS(ix) + (j1 - 1)];
+            }
+            C_LinearStatistic_2d(x, NLEVELS(ix) + 1, P, REAL(y), NROW(y), Q, rtable, linstat);
+            for (int p = 0; p < PQ; p++)
+                blinstat[p] += linstat[p];
+        }
+    }
+    
+    PutRNGstate();
+    
+    Free(csum); Free(rsum); Free(ntotal); Free(rtable); Free(rtable2); Free(linstat); Free(jwork); Free(fact);
+    UNPROTECT(1);
+    return(ans);
+}
+                  
