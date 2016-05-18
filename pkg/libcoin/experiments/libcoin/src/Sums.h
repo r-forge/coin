@@ -133,10 +133,10 @@ void C_tapplySum_(double *y, int N, int Q, int *ix, int Lx, double *LxQ_ans);
 /* tapply(1:nrow(y), ix, function(i) colSums(weights[i] * y[i,])) */
 void C_tapplySum_weights(double *y, int N, int Q, int *ix, int Lx, 
                          int *weights, double *LxQ_ans);
-/* tapply((1:nrow(y))[subset], ix[subset], 
+/* tapply((1:nrow(y))[subsety], ix[subsetx], 
           function(i) colSums(y[i,])) */
 void C_tapplySum_subset(double *y, int N, int Q, int *ix, int Lx, 
-                        int *subset, int Nsubset, double *LxQ_ans);
+                        int *subsetx, int *subsety, int Nsubset, double *LxQ_ans);
 /* tapply((1:nrow(y))[subset], ix[subset], 
           function(i) colSums(weights[i] * y[i,])) */
 void C_tapplySum_weights_subset(double *y, int N, int Q, int *ix, int Lx, 

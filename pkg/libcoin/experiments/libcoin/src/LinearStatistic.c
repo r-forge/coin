@@ -57,9 +57,9 @@ void C_LinearStatistic_weights_subset(double *x, int N, int P, double *y, int Q,
 }
 
 
-void C_PermutedLinearStatistic(double *x, int N, int P, double *y, int Q, 
-                               int *perm, int *original, int Nperm, 
-                               double *PQ_ans) 
+void C_PermutedLinearStatistic_(double *x, int N, int P, double *y, int Q, 
+                                int *perm, int *original, int Nperm, 
+                                double *PQ_ans) 
 {
      C_KronSums_subset(x, N, P, y, Q, perm, original, Nperm, PQ_ans);
 }
@@ -89,7 +89,7 @@ void C_LinearStatisticXfactor_weights(int *ix, int N, int P, double *y, int Q,
 void C_LinearStatisticXfactor_subset(int *ix, int N, int P, double *y, int Q, 
                               int *subset, int Nsubset, double *PQ_ans) 
 {
-    C_tapplySum_subset(y, N, Q, ix, P, subset, Nsubset, PQ_ans);
+    C_tapplySum_subset(y, N, Q, ix, P, subset, subset, Nsubset, PQ_ans);
 }
 
 void C_LinearStatisticXfactor_weights_subset(int *ix, int N, int P, double *y, 
@@ -99,7 +99,14 @@ void C_LinearStatisticXfactor_weights_subset(int *ix, int N, int P, double *y,
     C_tapplySum_weights_subset(y, N, Q, ix, P, weights, subset, Nsubset, 
                                PQ_ans);
 }
-     
+
+void C_PermutedLinearStatisticXfactor_(int *ix, int N, int P, double *y, int Q, 
+                                       int *perm, int *original, int Nperm, 
+                                       double *PQ_ans) 
+{
+    C_tapplySum_subset(y, N, Q, ix, P, perm, original, Nperm, PQ_ans);
+}
+
 void C_LinearStatisticXfactor(int *x, int N, int P, double* y, int Q, 
                               int *weights, int *sumweights,
                               int *subset, int *Nsubset, int Lb, 
@@ -151,11 +158,13 @@ void C_LinearStatistic(SEXP x, int N, int P, double* y, int Q,
             if (sw == 0) {
                   C_LinearStatistic_(REAL(x), N, P, y, Q, PQ_ans);
             } else {
-                  C_LinearStatistic_weights(REAL(x), N, P, y, Q, weights, PQ_ans);
+                  C_LinearStatistic_weights(REAL(x), N, P, y, Q, weights, 
+                                            PQ_ans);
         }
         } else {
             if (sw == 0) {
-                C_LinearStatistic_subset(REAL(x), N, P, y, Q, subset, ns, PQ_ans);
+                C_LinearStatistic_subset(REAL(x), N, P, y, Q, subset, ns, 
+                                         PQ_ans);
             } else {
                 C_LinearStatistic_weights_subset(REAL(x), N, P, y, Q, weights, 
                                                  subset, ns, PQ_ans);
@@ -164,6 +173,19 @@ void C_LinearStatistic(SEXP x, int N, int P, double* y, int Q,
     }
 }
 
+void C_PermutedLinearStatistic(SEXP x, int N, int P, double* y, int Q, 
+                               int *perm, int *original, int Nperm, 
+                               double *PQ_ans) 
+{
+
+    if (isInteger(x)) {
+            C_PermutedLinearStatisticXfactor_(INTEGER(x), N, P, y, Q, 
+                                              perm, original, Nperm, PQ_ans);
+    } else {
+            C_PermutedLinearStatistic_(REAL(x), N, P, y, Q, 
+                                       perm, original, Nperm, PQ_ans);
+    }
+}
 
 void C_ExpectationInfluence_(double* y, int N, int Q, double *Q_ans) 
 {
