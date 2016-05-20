@@ -15,9 +15,9 @@
 
 #define LinearStatistic_SLOT	0
 #define Expectation_SLOT	1
-#define Covariance_SLOT	2
-#define Variance_SLOT	2
-#define varonly_SLOT	3
-#define dim_SLOT	4
-#define Table_SLOT	5
-
+#define Covariance_SLOT		2
+#define Variance_SLOT		2
+#define ExpectationX_SLOT  	3
+#define varonly_SLOT		4
+#define dim_SLOT		5
+#define Table_SLOT		6

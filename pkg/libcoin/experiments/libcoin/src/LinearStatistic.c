@@ -476,7 +476,7 @@ void C_VarianceLinearStatistic(int P, int Q, double *VarInf, double *ExpX,
 
 void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
                                             int *weights, int *sumweights, 
-                                            int *subset, int *Nsubset, int Lb, 
+                                            int *subset, int *Nsubset, int Lb, double *ExpXtotal,
                                             double *ExpInf, double *CovInf, 
                                             double *work, double *PQ_ans,  
                                             double *PQPQ_sym_ans) 
@@ -488,6 +488,8 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
      ExpX = work + 1;
      CovX = ExpX + P;
      PPtmp = CovX + P * (P + 1) / 2;
+
+     for (int p = 0; p < P; p++) ExpXtotal[p] = 0.0;
 
      for (int b = 0; b < Lb; b++) {
          for (int i = 0; i < P + 2 * P * (P + 1) / 2 + 1; i++) work[i] = 0.0;
@@ -554,6 +556,8 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
                  sw = sumweights[b];
              }
          }
+         for (int p = 0; p < P; p++) ExpXtotal[p] += ExpX[p];
+
          C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b, PQ_ans);
          C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2, 
                                      ExpX, CovX, sw, PPtmp, b, PQPQ_sym_ans);
@@ -563,7 +567,7 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
 
 void C_ExpectationVarianceLinearStatistic(SEXP x, int N, int P, int Q, 
                                           int *weights, int *sumweights, 
-                                          int *subset, int *Nsubset, int Lb, 
+                                          int *subset, int *Nsubset, int Lb, double *ExpXtotal,
                                           double *ExpInf, double *VarInf, 
                                           double *work, double *PQ_ans_Exp, 
                                           double *PQ_ans_Var) 
@@ -575,6 +579,8 @@ void C_ExpectationVarianceLinearStatistic(SEXP x, int N, int P, int Q,
      ExpX = work + 1;
      VarX = ExpX + P;
      PPtmp = VarX + P;
+
+     for (int p = 0; p < P; p++) ExpXtotal[p] = 0.0;
      
      for (int b = 0; b < Lb; b++) {
          for (int i = 0; i < 3 * P + 1; i++) work[i] = 0.0;
@@ -636,6 +642,9 @@ void C_ExpectationVarianceLinearStatistic(SEXP x, int N, int P, int Q,
                  sw = sumweights[b];
              }
          }
+
+         for (int p = 0; p < P; p++) ExpXtotal[p] += ExpX[p];
+
          C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b, 
                                       PQ_ans_Exp);
          C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, 

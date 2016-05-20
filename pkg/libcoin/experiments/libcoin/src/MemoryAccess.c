@@ -40,6 +40,12 @@ double* C_get_Variance(SEXP LECV)
     REAL(VECTOR_ELT(LECV, Variance_SLOT));
 }
 
+double* C_get_ExpectationX(SEXP LECV)
+{
+    REAL(VECTOR_ELT(LECV, ExpectationX_SLOT));
+}
+
+
 int* C_get_Table(SEXP LECV)
 {
     if (LENGTH(LECV) <= Table_SLOT)
@@ -108,6 +114,11 @@ SEXP R_init_LECV(SEXP P, SEXP Q, SEXP varonly)
                        mkChar("Covariance"));
         INTEGER(vo)[0] = 0;
     }
+
+    SET_VECTOR_ELT(ans, ExpectationX_SLOT, 
+                   allocVector(REALSXP, p));
+    SET_STRING_ELT(names, ExpectationX_SLOT,
+                   mkChar("ExpectationX"));
 
     SET_VECTOR_ELT(ans, dim_SLOT, 
                    d = allocVector(INTSXP, 2));
@@ -193,6 +204,11 @@ SEXP R_init_LECV_2d(SEXP P, SEXP Q, SEXP varonly, SEXP Lx, SEXP Ly, SEXP Lb)
         INTEGER(vo)[0] = 0;
     }
 
+    SET_VECTOR_ELT(ans, ExpectationX_SLOT, 
+                   allocVector(REALSXP, p));
+    SET_STRING_ELT(names, ExpectationX_SLOT,
+                   mkChar("ExpectationX"));
+                                          
     SET_VECTOR_ELT(ans, dim_SLOT, 
                    d = allocVector(INTSXP, 2));
     SET_STRING_ELT(names, dim_SLOT, 

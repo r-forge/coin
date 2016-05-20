@@ -24,12 +24,12 @@ void C_ExpectationCovarianceInfluence(double* y, int N, int Q,
                                       double *NlevelQ_ans, double *NlevelQQ_sym_ans);
 void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
                                             int *weights, int *sumweights,
-                                            int *subset, int *Nsubset, int Nlevel,
+                                            int *subset, int *Nsubset, int Nlevel, double *ExpXtotal,
                                             double *ExpInf, double *CovInf, double *work, double *PQ_ans,
                                             double *PQPQ_sym_ans);
 void C_ExpectationVarianceLinearStatistic(SEXP x, int N, int P, int Q,
                                           int *weights, int *sumweights,
-                                          int *subset, int *Nsubset, int Nlevel,
+                                          int *subset, int *Nsubset, int Nlevel, double *ExpXtotal,
                                           double *ExpInf, double *VarInf, double *work, double *PQ_ans_Exp, 
                                           double *PQ_ans_Var);
                                           
