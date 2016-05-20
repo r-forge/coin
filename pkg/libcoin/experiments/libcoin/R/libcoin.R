@@ -89,15 +89,11 @@ ChisqStat <- function(object, tol = sqrt(.Machine$double.eps)) {
     object
 }
 
-ChisqTest <- function(object, log = FALSE) {
-
-    .Call("R_ChisqTest", object$LinearStatistic, object$Expect, object$MPinv,
-          object$rank, log = log)
+ChisqTest <- function(object, tol = sqrt(.Machine$double.eps), log = FALSE) {
+    .Call("R_ChisqTest", object, sqrt(.Machine$double.eps), as.integer(log))
 }
 
-MaxtypeStat <- function(object, tol = sqrt(.Machine$double.eps), 
-                        alternative = c("two.sided", "less", "greater")) {
-
-    alternative <- match.arg(alternative)
-    object$alternative <- alternative
+MaxabsstatTest <- function(object, tol = sqrt(.Machine$double.eps), log = FALSE) {
+    .Call("R_MaxabsstatTest", object, sqrt(.Machine$double.eps), as.integer(log), 
+          10000L, .0001, .0001)
 }
