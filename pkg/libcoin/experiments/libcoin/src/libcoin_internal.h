@@ -12,3 +12,12 @@
 
 /* S[i, j] for n x n symmetric matrix in lower packed storage allowing for i < j */
 #define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)
+
+#define LinearStatistic_SLOT	0
+#define Expectation_SLOT	1
+#define Covariance_SLOT	2
+#define Variance_SLOT	2
+#define varonly_SLOT	3
+#define dim_SLOT	4
+#define Table_SLOT	5
+

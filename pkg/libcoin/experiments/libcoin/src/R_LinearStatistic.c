@@ -5,32 +5,32 @@
 #include "Sums.h"
 #include "Tables.h"
 #include "Distributions.h"
+#include "MemoryAccess.h"
 
 void RC_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, 
-                                       SEXP subset, SEXP block, SEXP varonly, 
-                                       double *L, double *E, double *V)
-
+                                       SEXP subset, SEXP block, 
+                                       SEXP ans)
 {
-    int N, P, Q, Nlevel, *sumweights, *table, *subset_tmp, tmp;
-    double *ExpInf, *CovInf, *work;
-    
+    int N, P, Q, Nlevel, *sumweights, *table, *subset_tmp, tmp, chk;
+    double *ExpInf, *CovInf, *work, *L, *E, *V;
+
+    P = C_get_P(ans);
+    Q = C_get_Q(ans);
+    L = C_get_LinearStatistic(ans);
+    E = C_get_Expectation(ans);
+
     N = NROW(x);
-    if (isInteger(x)) {
-        P = NLEVELS(x);
-    } else {
-        P = NCOL(x);
-    }
-    Q = NCOL(y);
-    
     Nlevel = 1;
     if (LENGTH(block) > 0)
         Nlevel = NLEVELS(block);
 
     ExpInf = Calloc(Nlevel * Q, double);
-    if (INTEGER(varonly)[0]) {
+    if (C_get_varonly(ans)) {
+        V = C_get_Variance(ans);
        CovInf = Calloc(Nlevel * Q, double);
        work = Calloc(3 * P + 1, double);
     } else {
+        V = C_get_Covariance(ans);
         CovInf = Calloc(Nlevel * Q * (Q + 1) / 2, double);
         work = Calloc(P + 2 * P * (P + 1) / 2 + 1, double);
     }
@@ -81,7 +81,7 @@ void RC_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights,
     C_LinearStatistic(x, N, P, REAL(y), Q, INTEGER(weights), 
                       sumweights, subset_tmp, table + 1, Nlevel, L);
 
-    if (INTEGER(varonly)[0]) {
+    if (C_get_varonly(ans)) {
         C_ExpectationCovarianceInfluence(REAL(y), N, Q, INTEGER(weights),
             sumweights, subset_tmp, table + 1, Nlevel, 1, ExpInf, CovInf);
         C_ExpectationVarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
@@ -105,77 +105,71 @@ SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
                                       SEXP block, SEXP varonly)
 
 {
-    SEXP ans, L, E, V; 
-    int P, Q, PQ;
+    SEXP ans, P, Q; 
     
-    if (isInteger(x)) {
-        P = NLEVELS(x);
-    } else {
-        P = NCOL(x);
-    }
-    Q = NCOL(y);
-    PQ = P * Q;
-    
-    PROTECT(ans = allocVector(VECSXP, 3));
-    SET_VECTOR_ELT(ans, 0, L = allocVector(REALSXP, PQ));
-    SET_VECTOR_ELT(ans, 1, E = allocVector(REALSXP, PQ));
-    if (INTEGER(varonly)[0]) {
-        SET_VECTOR_ELT(ans, 2, V = allocVector(REALSXP, PQ));
-    } else  {
-        SET_VECTOR_ELT(ans, 2, V = allocVector(REALSXP, PQ * (PQ + 1) / 2));
-    }
+    PROTECT(P = ScalarInteger(0));
+    PROTECT(Q = ScalarInteger(0));
 
-    RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, varonly,
-                                      REAL(L), REAL(E), REAL(V));
-    UNPROTECT(1);
+    if (isInteger(x)) {
+        INTEGER(P)[0] = NLEVELS(x);
+    } else {
+        INTEGER(P)[0] = NCOL(x);
+    }
+    INTEGER(Q)[0] = NCOL(y);
+    
+    PROTECT(ans = R_init_LECV(P, Q, varonly));
+
+    RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
+
+    UNPROTECT(3);
     return(ans);
 }
 
 
 
 void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
-                                          SEXP weights, SEXP subset, SEXP block,
-                                          SEXP varonly, int *table, double *L, double *E, 
-                                          double *V)
+                                          SEXP weights, SEXP subset, SEXP block, 
+                                          SEXP ans)
 {
 
-    int N, P, Q, Nlevel, *btab, *csum, *rsum, *table2d, sw, *iix;
-    double *ExpInf, *CovInf, *ExpX, *CovX, *work;
+    int N, P, Q, Lxp1, Lyp1, Lb, *btab, *csum, *rsum, *table, *table2d, sw, *iix;
+    double *L, *E, *V, *ExpInf, *CovInf, *ExpX, *CovX, *work;
 
     N = LENGTH(ix);
-    if (LENGTH(x) == 0) {
-        P = NLEVELS(ix);
-    } else {
-        P = NCOL(x);
-    }
-    Q = NCOL(y);
+    P = C_get_P(ans);
+    Q = C_get_Q(ans);
 
-    Nlevel = 1;
-    if (LENGTH(block) > 0)
-        Nlevel = NLEVELS(block);
+    L = C_get_LinearStatistic(ans);
+    E = C_get_Expectation(ans);
+    table = C_get_Table(ans);
 
-    table2d = Calloc((NLEVELS(ix) + 1) * (NLEVELS(iy) + 1), int);
-    csum = Calloc((NLEVELS(iy) + 1), int);
-    rsum = Calloc((NLEVELS(ix) + 1), int);
+    Lxp1 = C_get_dimTable(ans)[0];
+    Lyp1 = C_get_dimTable(ans)[1];
+    Lb = C_get_dimTable(ans)[2];
+
+    table2d = Calloc(Lxp1 * Lyp1, int);
+    csum = Calloc(Lyp1, int);
+    rsum = Calloc(Lxp1, int);
     
-    for (int i = 0; i < (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1); i++)
+    for (int i = 0; i < Lxp1 * Lyp1; i++)
         table2d[i] = 0;
-    for (int b = 0; b < Nlevel; b++) {
-        for (int i = 0; i < (NLEVELS(ix) + 1); i++) {
-            for (int j = 0; j < (NLEVELS(iy) + 1); j++)
-                table2d[j * (NLEVELS(ix) + 1) + i] += 
-                    table[b * (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1) + 
-                          j * (NLEVELS(ix) + 1) + i];
+    for (int b = 0; b < Lb; b++) {
+        for (int i = 0; i < Lxp1; i++) {
+            for (int j = 0; j < Lyp1; j++)
+                table2d[j * Lxp1 + i] += table[b * Lxp1 * Lyp1 + j * Lxp1 + i];
         }
     }
 
+
     ExpInf = Calloc(Q, double);
     ExpX = Calloc(P, double);
-    if (INTEGER(varonly)[0]) {
+    if (C_get_varonly(ans)) {
+        V = C_get_Variance(ans);
         CovInf = Calloc(Q, double);
         CovX = Calloc(P, double);
         work = Calloc(P, double);
     } else {
+        V = C_get_Covariance(ans);
         CovInf = Calloc(Q * (Q + 1) / 2, double);
         CovX = Calloc(P * (P + 1) / 2, double);
         work = Calloc(P * (P + 1) / 2, double);
@@ -189,14 +183,14 @@ void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
                              table2d, L);
     }
 
-    for (int b = 0; b < Nlevel; b++) {
-        btab = table + (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1) * b;
-        C_colSums_i(btab, (NLEVELS(ix) + 1), (NLEVELS(iy) + 1), csum); 
+    for (int b = 0; b < Lb; b++) {
+        btab = table + Lxp1 * Lyp1 * b;
+        C_colSums_i(btab, Lxp1, Lyp1, csum); 
         csum[0] = 0; /* NA */   
-        C_rowSums_i(btab, (NLEVELS(ix) + 1), (NLEVELS(iy) + 1), rsum);    
+        C_rowSums_i(btab, Lxp1, Lyp1, rsum);    
         rsum[0] = 0; /* NA */
         sw = 0;
-        for (int i = 1; i < (NLEVELS(ix) + 1); i++) sw += rsum[i];
+        for (int i = 1; i < Lxp1; i++) sw += rsum[i];
         C_ExpectationInfluence_weights(REAL(y), NROW(y), Q, csum, sw, ExpInf);
         if (LENGTH(x) == 0) {
             for (int p = 0; p < P; p++)
@@ -205,7 +199,7 @@ void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
             C_ExpectationX_weights(REAL(x), NROW(x), P, rsum, ExpX);
         }
         C_ExpectationLinearStatistic(P, Q, ExpInf, ExpX, b, E);
-        if (INTEGER(varonly)[0]) {
+        if (C_get_varonly(ans)) {
             C_VarianceInfluence_weights(REAL(y), NROW(y), Q, csum, sw, ExpInf, 
                                         CovInf);
             if (LENGTH(x) == 0) {
@@ -235,35 +229,35 @@ SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
                                          SEXP weights, SEXP subset, SEXP block, 
                                          SEXP varonly)
 {
-    SEXP ans, T, L, E, V; 
-    int P, Q, PQ, Nlevel;
+    SEXP ans, P, Q, Lx, Ly, Lb;
+
+    PROTECT(P = ScalarInteger(0));
+    PROTECT(Q = ScalarInteger(0));
+    PROTECT(Lx = ScalarInteger(0));
+    PROTECT(Ly = ScalarInteger(0));
+    PROTECT(Lb = ScalarInteger(0));
     
     if (LENGTH(x) == 0) {
-        P = NLEVELS(ix);
+        INTEGER(P)[0] = NLEVELS(ix);
     } else {
-        P = NCOL(x);
+        INTEGER(P)[0] = NCOL(x);
     }
-    Q = NCOL(y);
-    PQ = P * Q;
-    Nlevel = 1;
+    INTEGER(Q)[0] = NCOL(y);
+
+    INTEGER(Lb)[0] = 1;
     if (LENGTH(block) > 0)
-        Nlevel = NLEVELS(block);
+        INTEGER(Lb)[0] = NLEVELS(block);
+        
+    INTEGER(Lx)[0] = NLEVELS(ix);
+    INTEGER(Ly)[0] = NLEVELS(iy);
 
-    PROTECT(ans = allocVector(VECSXP, 4));
-    SET_VECTOR_ELT(ans, 0, L = allocVector(REALSXP, PQ));
-    SET_VECTOR_ELT(ans, 1, E = allocVector(REALSXP, PQ));
-    if (INTEGER(varonly)[0]) {
-        SET_VECTOR_ELT(ans, 2, V = allocVector(REALSXP, PQ));
-    } else  {
-        SET_VECTOR_ELT(ans, 2, V = allocVector(REALSXP, PQ * (PQ + 1) / 2));
-    }
-    SET_VECTOR_ELT(ans, 3, T = allocVector(INTSXP, 
-                                           (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1) * Nlevel));
+    PROTECT(ans = R_init_LECV_2d(P, Q, varonly, Lx, Ly, Lb));
 
-    RC_2dtable(ix, iy, weights, subset, block, INTEGER(T));
-    RC_ExpectationCovarianceStatistic_2d(x, ix, y, iy, weights, subset, block, 
-                                         varonly, INTEGER(T), REAL(L), REAL(E), REAL(V));
-    UNPROTECT(1);
+    RC_2dtable(ix, iy, weights, subset, block, C_get_Table(ans));
+    RC_ExpectationCovarianceStatistic_2d(x, ix, y, iy, weights, 
+                                         subset, block, ans);
+
+    UNPROTECT(6);
     return(ans);
 }
 
@@ -271,44 +265,41 @@ SEXP R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy,
                                   SEXP block, SEXP B) {
 
     SEXP ans;
-    int N, P, Q, PQ, Nlevel, *csum, *rsum, *ntotal, *table, *jwork, *rtable, *rtable2, maxn = 0, Lx, Ly;
+    int N, P, Q, PQ, Lb, Lx, Ly, *csum, *rsum, *ntotal, *table, *jwork, *rtable, *rtable2, maxn = 0, Lxp1, Lyp1;
     double *fact, *linstat, *blinstat;
     
     N = LENGTH(ix);
-    if (LENGTH(x) == 0) {
-        P = NLEVELS(ix);
-    } else {
-        P = NCOL(x);
-    }
-    Q = NCOL(y);
+    P = C_get_P(LEV);
+    Q = C_get_Q(LEV);
     PQ = P * Q;
-    Lx = NLEVELS(ix);
-    Ly = NLEVELS(iy);
-    Nlevel = 1;
-    if (LENGTH(block) > 0)
-        Nlevel = NLEVELS(block);
-    table = INTEGER(VECTOR_ELT(LEV, 3));
+    Lxp1 = C_get_dimTable(LEV)[0];
+    Lyp1 = C_get_dimTable(LEV)[1];
+    Lx = Lxp1 - 1;
+    Ly = Lyp1 - 1;
+    Lb = C_get_dimTable(LEV)[2];
+
+    table = C_get_Table(LEV);
 
     PROTECT(ans = allocMatrix(REALSXP, PQ, INTEGER(B)[0]));
     
-    csum = Calloc((NLEVELS(iy) + 1) * Nlevel, int);
-    rsum = Calloc((NLEVELS(ix) + 1) * Nlevel, int);
-    ntotal = Calloc(Nlevel, int);
-    rtable = Calloc((NLEVELS(ix) + 1) * (NLEVELS(iy) + 1), int);
+    csum = Calloc(Lyp1 * Lb, int);
+    rsum = Calloc(Lxp1 * Lb, int);
+    ntotal = Calloc(Lb, int);
+    rtable = Calloc(Lxp1 * Lyp1, int);
     rtable2 = Calloc(NLEVELS(ix) * NLEVELS(iy) , int);
     linstat = Calloc(PQ, double);
-    jwork = Calloc((NLEVELS(iy) + 1), int);
+    jwork = Calloc(Lyp1, int);
 
-    for (int b = 0; b < Nlevel; b++) {
-        C_colSums_i(table + (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1) * b, 
-                    NLEVELS(ix) + 1, NLEVELS(iy) + 1, csum + (NLEVELS(iy) + 1) * b); 
-        csum[(NLEVELS(iy) + 1) * b] = 0; /* NA */   
-        C_rowSums_i(table + (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1) * b, 
-                    NLEVELS(ix) + 1, NLEVELS(iy) + 1, rsum + (NLEVELS(ix) + 1) * b);
-        rsum[(NLEVELS(ix) + 1) * b] = 0; /* NA */
+    for (int b = 0; b < Lb; b++) {
+        C_colSums_i(table + Lxp1 * Lyp1 * b, 
+                    NLEVELS(ix) + 1, NLEVELS(iy) + 1, csum + Lyp1 * b); 
+        csum[Lyp1 * b] = 0; /* NA */   
+        C_rowSums_i(table + Lxp1 * Lyp1 * b, 
+                    Lxp1, Lyp1, rsum + Lxp1 * b);
+        rsum[Lxp1 * b] = 0; /* NA */
         ntotal[b] = 0;
-        for (int i = 1; i < (NLEVELS(ix) + 1); i++) 
-            ntotal[b] += rsum[(NLEVELS(ix) + 1) * b + i];
+        for (int i = 1; i < Lxp1; i++) 
+            ntotal[b] += rsum[Lxp1 * b + i];
         if (ntotal[b] > maxn) maxn = ntotal[b];
     }
     
@@ -326,19 +317,19 @@ SEXP R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy,
             blinstat[p] = 0;
             linstat[p] = 0;
         }
-        for (int p = 0; p < (NLEVELS(ix) + 1) * (NLEVELS(iy) + 1); p++)
+        for (int p = 0; p < Lxp1 * Lyp1; p++)
             rtable[p] = 0;
             
-        for (int b = 0; b < Nlevel; b++) {
+        for (int b = 0; b < Lb; b++) {
             
-            rcont2(&Lx, &Ly, rsum + (NLEVELS(ix) + 1) * b + 1, 
-                   csum + (NLEVELS(iy) + 1) * b + 1, ntotal + b, fact, jwork, rtable2);
+            rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1, 
+                   csum + Lyp1 * b + 1, ntotal + b, fact, jwork, rtable2);
 
             for (int j1 = 1; j1 <= NLEVELS(ix); j1++) {
                 for (int j2 = 1; j2 <= NLEVELS(iy); j2++) 
-                    rtable[j2 * (NLEVELS(ix) + 1) + j1] = rtable2[(j2 - 1) * NLEVELS(ix) + (j1 - 1)];
+                    rtable[j2 * Lxp1 + j1] = rtable2[(j2 - 1) * NLEVELS(ix) + (j1 - 1)];
             }
-            C_LinearStatistic_2d(x, NLEVELS(ix) + 1, P, REAL(y), NROW(y), Q, rtable, linstat);
+            C_LinearStatistic_2d(x, Lxp1, P, REAL(y), NROW(y), Q, rtable, linstat);
             for (int p = 0; p < PQ; p++)
                 blinstat[p] += linstat[p];
         }
