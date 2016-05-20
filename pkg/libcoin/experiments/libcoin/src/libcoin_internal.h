@@ -21,3 +21,5 @@
 #define varonly_SLOT		4
 #define dim_SLOT		5
 #define Table_SLOT		6
+
+SEXP R_MPinv_sym (SEXP x, SEXP tol);

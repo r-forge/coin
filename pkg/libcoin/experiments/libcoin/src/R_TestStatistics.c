@@ -115,7 +115,7 @@ SEXP R_unorderedmaxsel(SEXP LECV, SEXP teststat, SEXP tol, SEXP minbucket)
 
     P = C_get_P(LECV);
     if (P >= 31)
-        error("cannot search for unordered splits in >= 31 levels")
+        error("cannot search for unordered splits in >= 31 levels");
     Q = C_get_Q(LECV);
     mb = INTEGER(minbucket)[0];
     ExpX = C_get_ExpectationX(LECV);

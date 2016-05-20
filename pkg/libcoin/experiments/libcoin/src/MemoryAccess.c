@@ -28,14 +28,16 @@ double* C_get_Expectation(SEXP LECV)
 
 double* C_get_Covariance(SEXP LECV)
 {
-    if (C_get_varonly(LECV))
+    int PQ = C_get_P(LECV) * C_get_Q(LECV);
+    if (C_get_varonly(LECV) && PQ > 1)
         error("Cannot extract covariance from variance only object");
     REAL(VECTOR_ELT(LECV, Covariance_SLOT));
 }
 
 double* C_get_Variance(SEXP LECV)
 {
-    if (!C_get_varonly(LECV))
+    int PQ = C_get_P(LECV) * C_get_Q(LECV);
+    if (!C_get_varonly(LECV) && PQ > 1)
         error("Cannot extract variance from covariance object");
     REAL(VECTOR_ELT(LECV, Variance_SLOT));
 }
@@ -44,7 +46,6 @@ double* C_get_ExpectationX(SEXP LECV)
 {
     REAL(VECTOR_ELT(LECV, ExpectationX_SLOT));
 }
-
 
 int* C_get_Table(SEXP LECV)
 {
