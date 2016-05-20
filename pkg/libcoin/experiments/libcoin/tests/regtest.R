@@ -27,14 +27,10 @@ cmp <- function(t1, t2) {
 }
 
 t1 <-LinStatExpCov(X, Y)
-ChisqTest(t1)
-MaxabsstatTest(t1)
 t1v <-LinStatExpCov(X, Y, varonly = TRUE)
 t2 <- independence_test(Y ~ X)
 cmp(t1, t2)
 cmp(t1v, t2)
-
-if (FALSE) {
 
 t1 <-LinStatExpCov(X, Y, weights = w)
 t1v <-LinStatExpCov(X, Y, weights = w, varonly = TRUE)
@@ -337,4 +333,3 @@ t1f <-LinStatExpCov2d(numeric(0), Y, ix, iy, weights = w, subset = s, block = b)
 t1vf <-LinStatExpCov2d(numeric(0), Y, ix, iy, weights = w, subset = s, block = b, varonly = TRUE)
 all.equal(t1, t1f)
 all.equal(t1v, t1vf)
-}
