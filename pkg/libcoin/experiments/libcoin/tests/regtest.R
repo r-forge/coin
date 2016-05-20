@@ -21,7 +21,7 @@ cmp <- function(t1, t2) {
         var2 <- covariance(t2)
         var2 <- var2[!upper.tri(var2)]
     }
-    c(max(abs(t1$LinStat - statistic(t2, "linear"))),
+    c(max(abs(t1$LinearStatistic - statistic(t2, "linear"))),
       max(abs(t1$Expectation - expectation(t2))),
       max(abs(var1 - var2)))
 }
@@ -154,7 +154,7 @@ cmp <- function(t1, t2) {
         var2 <- covariance(t2)
         var2 <- var2[!upper.tri(var2)]
     }
-    c(max(abs(t1$LinStat - statistic(t2, "linear"))),
+    c(max(abs(t1$LinearStatistic - statistic(t2, "linear"))),
       max(abs(t1$Expectation - expectation(t2))),
       max(abs(var1 - var2)))
 }

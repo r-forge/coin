@@ -32,9 +32,9 @@ LinStatExpCov <- function(X, Y, weights, subset, block, varonly = FALSE) {
     
     ret <- .Call("R_ExpectationCovarianceStatistic", X, Y, weights, subset, 
                  block, as.integer(varonly), PACKAGE = "libcoin")
-    names(ret) <- c("LinStat", "Expectation", "Covariance")
-    if (varonly)
-        names(ret)[names(ret) == "Covariance"] <- "Variance"
+#    names(ret) <- c("LinStat", "Expectation", "Covariance")
+#    if (varonly)
+#        names(ret)[names(ret) == "Covariance"] <- "Variance"
     ret
 }
 
@@ -74,7 +74,7 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALS
 
     ret <- .Call("R_ExpectationCovarianceStatistic_2d", X, ix, Y, iy, 
         weights, subset, block, as.integer(varonly), PACKAGE = "libcoin")
-    names(ret) <- c("LinStat", "Expectation", "Covariance")
+    names(ret) <- c("LinearStatistic", "Expectation", "Covariance")
     if (varonly)
         names(ret)[names(ret) == "Covariance"] <- "Variance"
     ret
@@ -91,7 +91,7 @@ ChisqStat <- function(object, tol = sqrt(.Machine$double.eps)) {
 
 ChisqTest <- function(object, log = FALSE) {
 
-    .Call("R_ChisqTest", object$LinStat, object$Expect, object$MPinv,
+    .Call("R_ChisqTest", object$LinearStatistic, object$Expect, object$MPinv,
           object$rank, log = log)
 }
 
