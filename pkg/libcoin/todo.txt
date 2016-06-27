@@ -1,6 +1,2 @@
 
-remove R_Distributions.c
-
-remove R_TestStatistics.c
-
-implement less / greater in maxstat
+  o implement less / greater in maxstat
