@@ -1,2 +1,7 @@
 
 useDynLib(libcoin, .registration = TRUE)
+
+importFrom("stats", "complete.cases")
+
+export(LinStatExpCov, LinStatExpCov2d, ChisqStat, ChisqTest, MaxabsstatTest,
+       MaxstatTest)
