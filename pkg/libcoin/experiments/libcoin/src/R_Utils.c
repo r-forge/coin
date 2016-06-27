@@ -18,5 +18,4 @@ SEXP R_MPinv_sym (SEXP x, SEXP tol) {
     UNPROTECT(1);
     return(ans);
 }
-
     

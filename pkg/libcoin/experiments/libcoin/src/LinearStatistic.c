@@ -288,7 +288,7 @@ void C_VarianceInfluence_weights_subset(double* y, int N, int Q, int *weights,
      for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / sumweights;
 }
 
-void C_ExpectationCovarianceInfluence(double* y, int N, int Q, 
+void C_ExpectationCoVarianceInfluence(double* y, int N, int Q, 
                                       int *weights, int *sumweights, 
                                       int *subset, int *Nsubset, int Lb, 
                                       int varonly, double *LbQ_ans, 

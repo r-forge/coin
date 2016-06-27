@@ -1,5 +1,5 @@
 
-R version 3.2.4 (2016-03-10) -- "Very Secure Dishes"
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
 Copyright (C) 2016 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -39,9 +39,15 @@ Loading required package: survival
 +         var2 <- covariance(t2)
 +         var2 <- var2[!upper.tri(var2)]
 +     }
-+     c(max(abs(t1$LinStat - statistic(t2, "linear"))),
++     c(max(abs(t1$LinearStatistic - statistic(t2, "linear"))),
 +       max(abs(t1$Expectation - expectation(t2))),
 +       max(abs(var1 - var2)))
++ }
+> 
+> cmp2 <- function(t1, t2) {
++     nm <- c("LinearStatistic", "Expectation",
++         ifelse(t1$varonly == 1, "Variance", "Covariance"))
++     all.equal(t1[nm], t2[nm])
 + }
 > 
 > t1 <-LinStatExpCov(X, Y)
@@ -204,7 +210,7 @@ Loading required package: survival
 +         var2 <- covariance(t2)
 +         var2 <- var2[!upper.tri(var2)]
 +     }
-+     c(max(abs(t1$LinStat - statistic(t2, "linear"))),
++     c(max(abs(t1$LinearStatistic - statistic(t2, "linear"))),
 +       max(abs(t1$Expectation - expectation(t2))),
 +       max(abs(var1 - var2)))
 + }
@@ -218,9 +224,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 7.105427e-15
 > t1f <-LinStatExpCov(fx, Y)
 > t1vf <-LinStatExpCov(fx, Y, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <-LinStatExpCov(X, Y, weights = w)
@@ -232,9 +238,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 1.421085e-14
 > t1f <-LinStatExpCov(fx, Y, weights = w)
 > t1vf <-LinStatExpCov(fx, Y, weights = w, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <- LinStatExpCov(X, Y, subset = s)
@@ -246,9 +252,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 3.552714e-15
 > t1f <-LinStatExpCov(fx, Y, subset = s)
 > t1vf <-LinStatExpCov(fx, Y, subset = s, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <- LinStatExpCov(X, Y, weights = w, subset = s)
@@ -260,9 +266,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 1.065814e-14
 > t1f <-LinStatExpCov(fx, Y, weights = w, subset = s)
 > t1vf <-LinStatExpCov(fx, Y, weights = w, subset = s, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <- LinStatExpCov(X, Y, block = b)
@@ -274,9 +280,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 7.105427e-15
 > t1f <-LinStatExpCov(fx, Y, block = b)
 > t1vf <-LinStatExpCov(fx, Y, block = b, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > 
@@ -289,9 +295,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 1.421085e-14
 > t1f <-LinStatExpCov(fx, Y, weights = w, block = b)
 > t1vf <-LinStatExpCov(fx, Y, weights = w, block = b, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <- LinStatExpCov(X, Y, subset = s, block = b)
@@ -303,9 +309,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 3.552714e-15
 > t1f <-LinStatExpCov(fx, Y, subset = s, block = b)
 > t1vf <-LinStatExpCov(fx, Y, subset = s, block = b, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <- LinStatExpCov(X, Y, weights = w, subset = s, block = b)
@@ -317,9 +323,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 7.105427e-15
 > t1f <-LinStatExpCov(fx, Y, weights = w, subset = s, block = b)
 > t1vf <-LinStatExpCov(fx, Y, weights = w, subset = s, block = b, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > n1 <- 5
@@ -344,9 +350,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 1.659828e-11
 > t1f <-LinStatExpCov2d(numeric(0), Y, ix, iy)
 > t1vf <-LinStatExpCov2d(numeric(0), Y, ix, iy, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <- LinStatExpCov2d(X, Y, ix, iy, weights = w)
@@ -358,9 +364,9 @@ Loading required package: survival
 [1] 0.00000e+00 0.00000e+00 9.80549e-12
 > t1f <-LinStatExpCov2d(numeric(0), Y, ix, iy, weights = w)
 > t1vf <-LinStatExpCov2d(numeric(0), Y, ix, iy, weights = w, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <- LinStatExpCov2d(X, Y, ix, iy, subset = s)
@@ -372,9 +378,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 5.044853e-12
 > t1f <-LinStatExpCov2d(numeric(0), Y, ix, iy, subset = s)
 > t1vf <-LinStatExpCov2d(numeric(0), Y, ix, iy, subset = s, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > 
@@ -387,9 +393,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 2.941647e-12
 > t1f <-LinStatExpCov2d(numeric(0), Y, ix, iy, weights = w, subset = s)
 > t1vf <-LinStatExpCov2d(numeric(0), Y, ix, iy, weights = w, subset = s, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <- LinStatExpCov2d(X, Y, ix, iy, block = b)
@@ -401,9 +407,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 6.764367e-12
 > t1f <-LinStatExpCov2d(numeric(0), Y, ix, iy, block = b)
 > t1vf <-LinStatExpCov2d(numeric(0), Y, ix, iy, block = b, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <- LinStatExpCov2d(X, Y, ix, iy, weights = w, block = b)
@@ -415,9 +421,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 3.240075e-12
 > t1f <-LinStatExpCov2d(numeric(0), Y, ix, iy, weights = w, block = b)
 > t1vf <-LinStatExpCov2d(numeric(0), Y, ix, iy, weights = w, block = b, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <- LinStatExpCov2d(X, Y, ix, iy, subset = s, block = b)
@@ -429,9 +435,9 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 1.506351e-12
 > t1f <-LinStatExpCov2d(numeric(0), Y, ix, iy, subset = s, block = b)
 > t1vf <-LinStatExpCov2d(numeric(0), Y, ix, iy, subset = s, block = b, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > t1 <- LinStatExpCov2d(X, Y, ix, iy, weights = w, subset = s, block = b)
@@ -443,11 +449,11 @@ Loading required package: survival
 [1] 0.000000e+00 0.000000e+00 1.136868e-12
 > t1f <-LinStatExpCov2d(numeric(0), Y, ix, iy, weights = w, subset = s, block = b)
 > t1vf <-LinStatExpCov2d(numeric(0), Y, ix, iy, weights = w, subset = s, block = b, varonly = TRUE)
-> all.equal(t1, t1f)
+> cmp2(t1, t1f)
 [1] TRUE
-> all.equal(t1v, t1vf)
+> cmp2(t1v, t1vf)
 [1] TRUE
 > 
 > proc.time()
    user  system elapsed 
-  3.728   0.040   3.763 
+  4.424   0.128   4.544 

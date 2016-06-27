@@ -11,29 +11,26 @@ void RC_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights,
                                        SEXP subset, SEXP block, 
                                        SEXP ans)
 {
-    int N, P, Q, Nlevel, *sumweights, *table, *subset_tmp, tmp, chk;
+    int N, P, Q, Lb, *sumweights, *table, *subset_tmp, tmp, chk;
     double *ExpInf, *CovInf, *work;
 
     P = C_get_P(ans);
     Q = C_get_Q(ans);
 
+
+Rprintf("P %d Q %d\n", P, Q);
     N = NROW(x);
-    Nlevel = 1;
+    Lb = 1;
     if (LENGTH(block) > 0)
-        Nlevel = NLEVELS(block);
+        Lb = NLEVELS(block);
 
-    ExpInf = Calloc(Nlevel * Q, double);
-    if (C_get_varonly(ans)) {
-       CovInf = Calloc(Nlevel * Q, double);
-       work = Calloc(3 * P + 1, double);
-    } else {
-        CovInf = Calloc(Nlevel * Q * (Q + 1) / 2, double);
-        work = Calloc(P + 2 * P * (P + 1) / 2 + 1, double);
-    }
-    table = Calloc(Nlevel + 1, int);
-    sumweights = Calloc(Nlevel, int);
+    ExpInf = C_get_ExpectationInfluence(ans);
+    CovInf = C_get_CovarianceInfluence(ans);
+    work = C_get_Work(ans);
+    table = C_get_TableBlock(ans);
+    sumweights = C_get_Sumweights(ans);
 
-    if (Nlevel == 1) {
+    if (Lb == 1) {
         table[0] = 0;
         table[1] = LENGTH(subset);
         if (LENGTH(weights) == 0) {
@@ -49,24 +46,24 @@ void RC_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights,
         subset_tmp = INTEGER(subset);
     } else {
         if (LENGTH(subset) == 0) {
-            C_1dtable_(INTEGER(block), Nlevel + 1, N, table);
+            C_1dtable_(INTEGER(block), Lb + 1, N, table);
             subset_tmp = Calloc(N, int);
             C_setup_subset(N, subset_tmp);
-            C_order_wrt_block(subset_tmp, N, INTEGER(block), table, Nlevel + 1);
+            C_order_wrt_block(subset_tmp, N, INTEGER(block), table, Lb + 1);
         } else {
-            C_1dtable_subset(INTEGER(block), Nlevel + 1, INTEGER(subset), 
+            C_1dtable_subset(INTEGER(block), Lb + 1, INTEGER(subset), 
                              LENGTH(subset), table);
             subset_tmp = Calloc(LENGTH(subset), int);
             Memcpy(subset_tmp, INTEGER(subset), LENGTH(subset));
             C_order_wrt_block(subset_tmp, LENGTH(subset), INTEGER(block), 
-                              table, Nlevel + 1);
+                              table, Lb + 1);
         }
 
         if (LENGTH(weights) == 0) {        
-            for (int b = 0; b < Nlevel; b++) sumweights[b] = 0;
+            for (int b = 0; b < Lb; b++) sumweights[b] = 0;
         } else {
             tmp = 0;
-            for (int b = 0; b < Nlevel; b++) {
+            for (int b = 0; b < Lb; b++) {
                 sumweights[b] = C_sum_subset(INTEGER(weights), LENGTH(weights), 
                                              subset_tmp + tmp, table[b + 1]);
                 tmp = tmp + table[b + 1];
@@ -75,25 +72,22 @@ void RC_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights,
     }
 
     C_LinearStatistic(x, N, P, REAL(y), Q, INTEGER(weights), 
-                      sumweights, subset_tmp, table + 1, Nlevel, C_get_LinearStatistic(ans));
+                      sumweights, subset_tmp, table + 1, Lb, C_get_LinearStatistic(ans));
 
     if (C_get_varonly(ans)) {
-        C_ExpectationCovarianceInfluence(REAL(y), N, Q, INTEGER(weights),
-            sumweights, subset_tmp, table + 1, Nlevel, 1, ExpInf, CovInf);
+        C_ExpectationCoVarianceInfluence(REAL(y), N, Q, INTEGER(weights),
+            sumweights, subset_tmp, table + 1, Lb, 1, ExpInf, CovInf);
         C_ExpectationVarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
-            sumweights, subset_tmp, table + 1, Nlevel, C_get_ExpectationX(ans), ExpInf, CovInf, 
+            sumweights, subset_tmp, table + 1, Lb, C_get_ExpectationX(ans), ExpInf, CovInf, 
             work, C_get_Expectation(ans), C_get_Variance(ans)); 
     } else {
-        C_ExpectationCovarianceInfluence(REAL(y), N, Q, INTEGER(weights),
-            sumweights, subset_tmp, table + 1, Nlevel, 0, ExpInf, CovInf);
+        C_ExpectationCoVarianceInfluence(REAL(y), N, Q, INTEGER(weights),
+            sumweights, subset_tmp, table + 1, Lb, 0, ExpInf, CovInf);
         C_ExpectationCovarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
-            sumweights, subset_tmp, table + 1, Nlevel, C_get_ExpectationX(ans), ExpInf, CovInf, work, 
+            sumweights, subset_tmp, table + 1, Lb, C_get_ExpectationX(ans), ExpInf, CovInf, work, 
             C_get_Expectation(ans), C_get_Covariance(ans)); 
     }
-    if (Nlevel > 1) Free(subset_tmp); 
-    
-    Free(table); Free(sumweights); Free(ExpInf); 
-    Free(CovInf); Free(work);
+    if (Lb > 1) Free(subset_tmp); 
 }        
 
 
@@ -101,10 +95,11 @@ SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
                                       SEXP block, SEXP varonly)
 
 {
-    SEXP ans, P, Q; 
+    SEXP ans, P, Q, Lb; 
     
     PROTECT(P = ScalarInteger(0));
     PROTECT(Q = ScalarInteger(0));
+    PROTECT(Lb = ScalarInteger(0));
 
     if (isInteger(x)) {
         INTEGER(P)[0] = NLEVELS(x);
@@ -112,16 +107,137 @@ SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
         INTEGER(P)[0] = NCOL(x);
     }
     INTEGER(Q)[0] = NCOL(y);
-    
-    PROTECT(ans = R_init_LECV(P, Q, varonly));
+
+    INTEGER(Lb)[0] = 1;
+    if (LENGTH(block) > 0)
+        INTEGER(Lb)[0] = NLEVELS(block);
+
+    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb));
 
     RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
 
-    UNPROTECT(3);
+    UNPROTECT(4);
     return(ans);
 }
 
+SEXP R_PermutedLinearStatistic(SEXP LEV, SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP B) 
+{
 
+    SEXP ans;
+    double *linstat;
+    int *orig, *perm, *tmp;
+    int P, Q, PQ, Lb, N, *table;
+    
+    P = C_get_P(LEV);
+    Q = C_get_Q(LEV);
+    PQ = P * Q;
+    Lb = 1;
+    if (LENGTH(block) > 0) 
+        Lb = NLEVELS(block);
+
+    PROTECT(ans = allocMatrix(REALSXP, PQ, INTEGER(B)[0]));
+
+    GetRNGstate();
+
+    if (Lb == 1) {
+        if (LENGTH(weights) == 0) {
+            if (LENGTH(subset) == 0) {
+                N = NROW(x);
+                orig = Calloc(N, int);    
+                perm = Calloc(N, int);    
+                C_setup_subset(N, orig);
+            } else {
+                N = LENGTH(subset);
+                orig = Calloc(N, int);    
+                perm = Calloc(N, int);    
+                Memcpy(orig, INTEGER(subset), N);
+            }
+        } else {
+            if (LENGTH(subset) == 0) {
+                N = C_sum_(INTEGER(weights), LENGTH(weights));
+                orig = Calloc(N, int);    
+                perm = Calloc(N, int);    
+                C_setup_subset_weights(LENGTH(weights), INTEGER(weights), orig);
+            } else {
+                N = C_sum_subset(INTEGER(weights), LENGTH(weights), 
+                                 INTEGER(subset), LENGTH(subset));
+                orig = Calloc(N, int);    
+                perm = Calloc(N, int);    
+                C_setup_subset_weights_subset(LENGTH(subset), INTEGER(weights), 
+                                              INTEGER(subset), orig);
+            }
+        }
+        tmp = Calloc(N, int);
+        for (int i = 0; i < INTEGER(B)[0]; i++) {
+            linstat = REAL(ans) + PQ * i;
+            for (int p = 0; p < PQ; p++)
+                linstat[p] = 0;
+            C_doPermute(orig, N, tmp, perm);
+            if (isInteger(x)) {
+                C_PermutedLinearStatisticXfactor_(INTEGER(x), NROW(x), P, REAL(y), Q, perm, orig, N, linstat);
+            } else {
+                C_PermutedLinearStatistic_(REAL(x), NROW(x), P, REAL(y), Q, 
+                                       perm, orig, N, linstat);
+            }
+        }
+    } else {
+        table = Calloc(Lb + 1, int);
+        if (LENGTH(weights) == 0) {
+            if (LENGTH(subset) == 0) {
+                N = LENGTH(block);
+                orig = Calloc(N, int);    
+                perm = Calloc(N, int);    
+                C_1dtable_(INTEGER(block), Lb + 1, LENGTH(block), table);
+                C_setup_subset(N, orig);
+                C_order_wrt_block(orig, N, INTEGER(block), table, Lb + 1);
+            } else {
+                N = LENGTH(subset);
+                orig = Calloc(N, int);    
+                perm = Calloc(N, int);    
+                C_1dtable_subset(INTEGER(block), Lb + 1, INTEGER(subset), N, 
+                                 table);
+                Memcpy(orig, INTEGER(subset), N);
+                C_order_wrt_block(orig, N, INTEGER(block), table, Lb + 1);
+            }
+        } else {
+            if (LENGTH(subset) == 0) {
+                N = C_sum_(INTEGER(weights), LENGTH(weights));
+                orig = Calloc(N, int);    
+                perm = Calloc(N, int);    
+                C_1dtable_weights(INTEGER(block), Lb + 1, INTEGER(weights),
+                                  LENGTH(weights), table);
+                C_setup_subset_weights(LENGTH(weights), INTEGER(weights), 
+                                       orig);
+                C_order_wrt_block(orig, N, INTEGER(block), table, Lb + 1);
+            } else {
+                N = C_sum_subset(INTEGER(weights), LENGTH(weights), 
+                                 INTEGER(subset), LENGTH(subset));
+                orig = Calloc(N, int);    
+                perm = Calloc(N, int);    
+                C_1dtable_weights_subset(INTEGER(block), Lb + 1,
+                                         INTEGER(weights), INTEGER(subset), 
+                                         LENGTH(subset), table);
+                C_setup_subset_weights_subset(LENGTH(subset), INTEGER(weights), 
+                                              INTEGER(subset), orig);
+                C_order_wrt_block(orig, N, INTEGER(block), table, Lb + 1);
+            }
+        }
+        tmp = Calloc(N, int);
+        for (int i = 0; i < INTEGER(B)[0]; i++) {
+            linstat = REAL(ans) + PQ * i;
+            for (int p = 0; p < PQ; p++)
+                linstat[p] = 0;
+            C_doPermuteBlock(orig, N, table, Lb + 1, tmp, perm);
+            C_PermutedLinearStatistic_(REAL(x), NROW(x), P, REAL(y), Q,
+                                       perm, orig, N, linstat);
+        }
+        Free(table);
+    }
+    PutRNGstate();
+    Free(tmp); Free(perm); Free(orig);
+    UNPROTECT(1);
+    return(ans);
+}
 
 void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
                                           SEXP weights, SEXP subset, SEXP block, 
@@ -155,15 +271,14 @@ void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
         }
     }
 
-    ExpInf = Calloc(Q, double);
+    ExpInf = C_get_ExpectationInfluence(ans);
+    CovInf = C_get_CovarianceInfluence(ans);
+    work = C_get_Work(ans);
+    
     if (C_get_varonly(ans)) {
-        CovInf = Calloc(Q, double);
-        CovX = Calloc(P, double);
-        work = Calloc(P, double);
+        CovX = work + P;
     } else {
-        CovInf = Calloc(Q * (Q + 1) / 2, double);
-        CovX = Calloc(P * (P + 1) / 2, double);
-        work = Calloc(P * (P + 1) / 2, double);
+        CovX = work + P * (P + 1) / 2;
     }
 
     if (LENGTH(x) == 0) {
@@ -213,10 +328,8 @@ void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
                                         C_get_Covariance(ans));
         }
     }
-    Free(table2d); Free(csum); Free(rsum); Free(ExpInf);
-    Free(CovInf); Free(CovX); Free(work);
+    Free(table2d); Free(csum); Free(rsum); 
 }        
-
 
 SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy, 
                                          SEXP weights, SEXP subset, SEXP block, 
@@ -259,7 +372,7 @@ SEXP R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy,
 
     SEXP ans;
     int N, P, Q, PQ, Lb, Lx, Ly, *csum, *rsum, *ntotal, *table, *jwork, *rtable, *rtable2, maxn = 0, Lxp1, Lyp1;
-    double *fact, *linstat, *blinstat;
+    double *fact, *linstat, *blinstat, *dans;
     
     N = LENGTH(ix);
     P = C_get_P(LEV);
@@ -303,28 +416,30 @@ SEXP R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy,
         fact[j] = fact[j - 1] + log(j);
 
     GetRNGstate(); 
-
+    
+    dans = REAL(ans);
     for (int i = 0; i < INTEGER(B)[0]; i++) {
-        blinstat = REAL(ans) + PQ * i;
+    
+        blinstat = dans + PQ * i;
         for (int p = 0; p < PQ; p++) {
-            blinstat[p] = 0;
-            linstat[p] = 0;
+            blinstat[p] = 0.0;
+            linstat[p] = 0.0;
         }
         for (int p = 0; p < Lxp1 * Lyp1; p++)
             rtable[p] = 0;
             
         for (int b = 0; b < Lb; b++) {
-            
             rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1, 
-                   csum + Lyp1 * b + 1, ntotal + b, fact, jwork, rtable2);
-
-            for (int j1 = 1; j1 <= NLEVELS(ix); j1++) {
-                for (int j2 = 1; j2 <= NLEVELS(iy); j2++) 
-                    rtable[j2 * Lxp1 + j1] = rtable2[(j2 - 1) * NLEVELS(ix) + (j1 - 1)];
-            }
-            C_LinearStatistic_2d(x, Lxp1, P, REAL(y), NROW(y), Q, rtable, linstat);
-            for (int p = 0; p < PQ; p++)
-                blinstat[p] += linstat[p];
+                   csum + Lyp1 *b + 1, ntotal + b, fact, jwork, rtable2);
+                  
+        for (int j1 = 1; j1 <= NLEVELS(ix); j1++) {
+            for (int j2 = 1; j2 <= NLEVELS(iy); j2++)
+                rtable[j2 * Lxp1 + j1] = rtable2[(j2 - 1) * NLEVELS(ix) + (j1 - 1)];
+        }
+        C_LinearStatistic_2d(x, Lxp1, P, REAL(y), NROW(y), Q, rtable, linstat);
+        
+        for (int p = 0; p < PQ; p++)
+            blinstat[p] += linstat[p];
         }
     }
     
