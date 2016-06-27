@@ -17,8 +17,6 @@ void RC_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights,
     P = C_get_P(ans);
     Q = C_get_Q(ans);
 
-
-Rprintf("P %d Q %d\n", P, Q);
     N = NROW(x);
     Lb = 1;
     if (LENGTH(block) > 0)
