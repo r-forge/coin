@@ -11,7 +11,7 @@ void RC_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights,
                                        SEXP subset, SEXP block, 
                                        SEXP ans)
 {
-    int N, P, Q, Lb, *sumweights, *table, *subset_tmp, tmp, chk;
+    int N, P, Q, Lb, *sumweights, *table, *subset_tmp, tmp;
     double *ExpInf, *CovInf, *work;
 
     P = C_get_P(ans);
@@ -242,7 +242,7 @@ void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
                                           SEXP ans)
 {
 
-    int N, P, Q, Lxp1, Lyp1, Lb, *btab, *csum, *rsum, *table, *table2d, sw, *iix;
+    int N, P, Q, Lxp1, Lyp1, Lb, *btab, *csum, *rsum, *table, *table2d, sw;
     double *ExpInf, *CovInf, *ExpX, *CovX, *work;
 
     N = LENGTH(ix);

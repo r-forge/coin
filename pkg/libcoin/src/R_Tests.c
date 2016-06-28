@@ -8,7 +8,7 @@
 
 SEXP R_ChisqTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP give_log) 
 {
-    SEXP ans, MPrank, stat, pval;
+    SEXP ans, stat, pval;
     double *MPinv, *pv, st, *ls, *ex;
     int rank, P, Q, PQ, B;
     
@@ -107,7 +107,7 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
                            SEXP minbucket, SEXP give_log)
 {
     SEXP ans, index, stat, pval;
-    double *contrasts, *V, *ExpX, xtab, total, tmp, *pv, *ls, st;
+    double *contrasts, *V, *ExpX, xtab, tmp, *pv, *ls, st;
     int P, Q, PQ, B, mb, nc = 0, start = 0, stop = 0, itmp;
 
     P = C_get_P(LEV);
@@ -219,7 +219,7 @@ SEXP R_MaxstatTest_unordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
 {
     SEXP ans, stat, index, pval;
     double *contrasts, *V, *ExpX, xtab, total, *indl, *ls, *pv, tmp, st;
-    int P, Q, PQ, B, mb, nc = 0, start = 0, stop = 0, wmax;
+    int P, Q, PQ, B, mb, nc = 0, wmax;
 
     P = C_get_P(LEV);
     if (P >= 31)
@@ -324,4 +324,3 @@ SEXP R_MaxstatTest_unordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
     UNPROTECT(1);
     return(ans);
 }                                      
-

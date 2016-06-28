@@ -64,7 +64,7 @@ void C_kronecker_sym(const double *A, const int m,
                      const double *B, const int r, int overwrite,
                      double *ans)
 {
-    int i, j, k, l, mr, js, ir, s, n, tmp, mrns;
+    int i, j, k, l, mr, js, ir, s, n;
     double y;
 
     mr = m * r;
@@ -94,7 +94,6 @@ void C_kronecker_sym(const double *A, const int m,
 
 void C_MPinv_sym (double *x, int n, double tol, double *dMP, int *rank) {
 
-    SEXP ans;
     double *val, *vec, dtol, *rx, *work, valinv;
     int valzero = 0, info = 0, kn;
 
