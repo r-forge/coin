@@ -18,12 +18,12 @@ int C_get_varonly(SEXP LECV)
 
 double* C_get_LinearStatistic(SEXP LECV)
 {
-    REAL(VECTOR_ELT(LECV, LinearStatistic_SLOT));
+    return(REAL(VECTOR_ELT(LECV, LinearStatistic_SLOT)));
 }
 
 double* C_get_Expectation(SEXP LECV)
 {
-    REAL(VECTOR_ELT(LECV, Expectation_SLOT));
+    return(REAL(VECTOR_ELT(LECV, Expectation_SLOT)));
 }
 
 double* C_get_Covariance(SEXP LECV)
@@ -31,7 +31,7 @@ double* C_get_Covariance(SEXP LECV)
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     if (C_get_varonly(LECV) && PQ > 1)
         error("Cannot extract covariance from variance only object");
-    REAL(VECTOR_ELT(LECV, Covariance_SLOT));
+    return(REAL(VECTOR_ELT(LECV, Covariance_SLOT)));
 }
 
 double* C_get_MPinv(SEXP LECV)
@@ -39,7 +39,7 @@ double* C_get_MPinv(SEXP LECV)
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     if (C_get_varonly(LECV) && PQ > 1)
         error("Cannot extract MPinv from variance only object");
-    REAL(VECTOR_ELT(LECV, MPinv_SLOT));
+    return(REAL(VECTOR_ELT(LECV, MPinv_SLOT)));
 }
 
 double* C_get_Variance(SEXP LECV)
@@ -47,50 +47,51 @@ double* C_get_Variance(SEXP LECV)
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     if (!C_get_varonly(LECV) && PQ > 1)
         error("Cannot extract variance from covariance object");
-    REAL(VECTOR_ELT(LECV, Variance_SLOT));
+    return(REAL(VECTOR_ELT(LECV, Variance_SLOT)));
 }
 
 double* C_get_ExpectationX(SEXP LECV)
 {
-    REAL(VECTOR_ELT(LECV, ExpectationX_SLOT));
+    return(REAL(VECTOR_ELT(LECV, ExpectationX_SLOT)));
 }
 
 double* C_get_ExpectationInfluence(SEXP LECV)
 {
-    REAL(VECTOR_ELT(LECV, ExpectationInfluence_SLOT));
+    return(REAL(VECTOR_ELT(LECV, ExpectationInfluence_SLOT)));
 }
 
 double* C_get_CovarianceInfluence(SEXP LECV)
 {
-    REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT));
+    return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));
 }
 
 double* C_get_Work(SEXP LECV)
 {
-    REAL(VECTOR_ELT(LECV, Work_SLOT));
+    return(REAL(VECTOR_ELT(LECV, Work_SLOT)));
 }
 
 int* C_get_TableBlock(SEXP LECV)
 {
-    INTEGER(VECTOR_ELT(LECV, TableBlock_SLOT));
+    return(INTEGER(VECTOR_ELT(LECV, TableBlock_SLOT)));
 }
 
 int* C_get_Sumweights(SEXP LECV)
 {
-    INTEGER(VECTOR_ELT(LECV, Sumweights_SLOT));
+    return(INTEGER(VECTOR_ELT(LECV, Sumweights_SLOT)));
 }
 
 int* C_get_Table(SEXP LECV)
 {
     if (LENGTH(LECV) <= Table_SLOT)
         error("Cannot extract table from object");
-    INTEGER(VECTOR_ELT(LECV, Table_SLOT));
+    return(INTEGER(VECTOR_ELT(LECV, Table_SLOT)));
 }
 
 int* C_get_dimTable (SEXP LECV) {
     if (LENGTH(LECV) <= Table_SLOT)
         error("Cannot extract table from object");              
-    INTEGER(getAttrib(VECTOR_ELT(LECV, Table_SLOT), R_DimSymbol));
+    return(INTEGER(getAttrib(VECTOR_ELT(LECV, Table_SLOT), 
+                             R_DimSymbol)));
 }
 
 SEXP R_init_LECV(SEXP P, SEXP Q, SEXP varonly, SEXP Lb)
