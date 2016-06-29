@@ -13,13 +13,13 @@ SEXP libcoin_R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP
 }
                               
 SEXP libcoin_R_PermutedLinearStatistic(SEXP LEV, SEXP x, SEXP y, SEXP weights,
-                               SEXP subset, SEXP block, SEXP B) {
+                               SEXP subset, SEXP block, SEXP B, SEXP standardise, SEXP tol) {
 
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_PermutedLinearStatistic");
-    return fun(LEV, x, y, weights, subset, block, B);
+    return fun(LEV, x, y, weights, subset, block, B, standardise, tol);
 }
                               
 SEXP libcoin_R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
@@ -34,12 +34,11 @@ SEXP libcoin_R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP i
 }
                               
 SEXP libcoin_R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy,
-                                          SEXP block, SEXP B) {
+                                          SEXP block, SEXP B, SEXP standardise, SEXP tol) {
 
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP SEXP))
             R_GetCCallable("libcoin", "R_PermutedLinearStatistic_2d");
-    return fun(LEV, x, ix, y, iy, block, B);
+    return fun(LEV, x, ix, y, iy, block, B, standardise, tol);
 }
-                              

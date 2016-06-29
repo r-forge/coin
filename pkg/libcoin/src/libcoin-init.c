@@ -4,9 +4,9 @@
 
 static const R_CallMethodDef callMethods[] = {
     {"R_ExpectationCovarianceStatistic", (DL_FUNC) &R_ExpectationCovarianceStatistic, 6},
-    {"R_PermutedLinearStatistic", (DL_FUNC) &R_PermutedLinearStatistic, 7},
+    {"R_PermutedLinearStatistic", (DL_FUNC) &R_PermutedLinearStatistic, 9},
     {"R_ExpectationCovarianceStatistic_2d", (DL_FUNC) &R_ExpectationCovarianceStatistic_2d, 8},
-    {"R_PermutedLinearStatistic_2d", (DL_FUNC) &R_PermutedLinearStatistic_2d, 7},
+    {"R_PermutedLinearStatistic_2d", (DL_FUNC) &R_PermutedLinearStatistic_2d, 9},
     {NULL, NULL, 0}
 };
         

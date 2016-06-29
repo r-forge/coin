@@ -1,5 +1,7 @@
 
-LinStatExpCov <- function(X, Y, weights, subset, block, varonly = FALSE, B = 0L) {
+LinStatExpCov <- function(X, Y, weights, subset, block, 
+                          varonly = FALSE, B = 0L, standardise = FALSE, 
+                          tol = sqrt(.Machine$double.eps)) {
 
     stopifnot(NROW(X) == NROW(Y))
 
@@ -35,11 +37,13 @@ LinStatExpCov <- function(X, Y, weights, subset, block, varonly = FALSE, B = 0L)
     ret$sim <- double(0);
     if (B > 0)
         ret$sim <- .Call("R_PermutedLinearStatistic", ret, X, Y, weights, subset, 
-                         block, as.integer(B), PACKAGE = "libcoin")
+                         block, as.integer(B), as.integer(standardise), as.double(tol),
+                         PACKAGE = "libcoin")
     ret
 }
 
-LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALSE, B = 0) {
+LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALSE, B = 0,
+                            standardise = FALSE, tol = sqrt(.Machine$double.eps)) {
 
     stopifnot(length(ix) == length(iy))
     stopifnot(is.integer(ix))
@@ -78,7 +82,8 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALS
     ret$sim <- double(0);
     if (B > 0)
         ret$sim <- .Call("R_PermutedLinearStatistic_2d", ret, X, ix, Y, iy, 
-                         block, as.integer(B), PACKAGE = "libcoin")
+                         block, as.integer(B), as.integer(standardise), as.double(tol),
+                         PACKAGE = "libcoin")
     ret
 }
 

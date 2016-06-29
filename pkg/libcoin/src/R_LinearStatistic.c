@@ -1,6 +1,7 @@
 
 #include "libcoin_internal.h"
 #include "LinearStatistic.h"
+#include "TestStatistics.h"
 #include "Utils.h"
 #include "Sums.h"
 #include "Tables.h"
@@ -118,7 +119,9 @@ SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
     return(ans);
 }
 
-SEXP R_PermutedLinearStatistic(SEXP LEV, SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP B) 
+SEXP R_PermutedLinearStatistic(SEXP LEV, SEXP x, SEXP y, SEXP weights, 
+                               SEXP subset, SEXP block, SEXP B, SEXP standardise,
+                               SEXP tol) 
 {
 
     SEXP ans;
@@ -233,6 +236,19 @@ SEXP R_PermutedLinearStatistic(SEXP LEV, SEXP x, SEXP y, SEXP weights, SEXP subs
     }
     PutRNGstate();
     Free(tmp); Free(perm); Free(orig);
+    
+    if (INTEGER(standardise)[0]) {
+        if (C_get_varonly(LEV)) {
+            for (int i = 0; i < INTEGER(B)[0]; i++)
+                C_maxabsstat_Variance(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                                      C_get_Variance(LEV), REAL(tol)[0]);
+        } else {
+            for (int i = 0; i < INTEGER(B)[0]; i++)
+                C_maxabsstat_Covariance(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                                        C_get_Covariance(LEV), REAL(tol)[0]);
+        }
+    }
+    
     UNPROTECT(1);
     return(ans);
 }
@@ -366,7 +382,8 @@ SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
 }
 
 SEXP R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy, 
-                                  SEXP block, SEXP B) {
+                                  SEXP block, SEXP B, SEXP standardise,
+                                  SEXP tol) {
 
     SEXP ans;
     int N, P, Q, PQ, Lb, Lx, Ly, *csum, *rsum, *ntotal, *table, *jwork, *rtable, *rtable2, maxn = 0, Lxp1, Lyp1;
@@ -442,9 +459,20 @@ SEXP R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy,
     }
     
     PutRNGstate();
+
+    if (INTEGER(standardise)[0]) {
+        if (C_get_varonly(LEV)) {
+            for (int i = 0; i < INTEGER(B)[0]; i++)
+                C_maxabsstat_Variance(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                                      C_get_Variance(LEV), REAL(tol)[0]);
+        } else {
+            for (int i = 0; i < INTEGER(B)[0]; i++)
+                C_maxabsstat_Covariance(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                                        C_get_Covariance(LEV), REAL(tol)[0]);
+        }
+    }
     
     Free(csum); Free(rsum); Free(ntotal); Free(rtable); Free(rtable2); Free(linstat); Free(jwork); Free(fact);
     UNPROTECT(1);
     return(ans);
 }
-                  
