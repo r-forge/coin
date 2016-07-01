@@ -28,7 +28,12 @@ LinStatExpCov <- function(X, Y, weights, subset, block,
     ms <- !(complete.cases(X) & complete.cases(Y))
     if (any(ms)) {
         OK <- FALSE
-        if (length(subset) > 0) OK <- !any(which(ms) %in% subset)
+        if (length(subset) > 0) { 
+            OK <- !any(which(ms) %in% subset)
+        } else {
+            subset <- 1:NROW(X)[-which(ms)]
+            OK <- TRUE
+        }
         stopifnot(OK)
     }
     
