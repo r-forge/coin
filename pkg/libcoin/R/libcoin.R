@@ -5,20 +5,21 @@ LinStatExpCov <- function(X, Y, weights, subset, block,
 
     stopifnot(NROW(X) == NROW(Y))
 
-    if (!missing(weights)) {
+    if (!missing(weights) && length(weights) > 0) {
         stopifnot(NROW(X) == length(weights))
         stopifnot(is.integer(weights))
     } else {
         weights <- integer(0)
     }
-    if (!missing(subset)) {
+    if (!missing(subset) && length(subset) > 0) {
         stopifnot(all(subset %in% 1:NROW(X)))
         stopifnot(is.integer(subset))
+        if (min(subset) == 0) stop("subset has start 1 index")
         subset <- subset - 1L
     } else {
         subset <- integer(0)
     }
-    if (!missing(block)) {
+    if (!missing(block) && length(block) > 0) {
         stopifnot(NROW(X) == length(block))
         stopifnot(is.factor(block))
     } else {
@@ -31,7 +32,7 @@ LinStatExpCov <- function(X, Y, weights, subset, block,
         if (length(subset) > 0) { 
             OK <- !any(which(ms) %in% subset)
         } else {
-            subset <- 1:NROW(X)[-which(ms)]
+            subset <- (0:(NROW(X) - 1))[-which(ms)]
             OK <- TRUE
         }
         stopifnot(OK)
@@ -62,20 +63,21 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALS
     stopifnot(nrow(X) == max(attr(ix, "levels")) + 1)
     stopifnot(nrow(Y) == max(attr(iy, "levels")) + 1)
 
-    if (!missing(weights)) {
+    if (!missing(weights) && length(weights) > 0) {
         stopifnot(length(ix) == length(weights))
         stopifnot(is.integer(weights))
     } else {
         weights <- integer(0)
     }
-    if (!missing(subset)) {
+    if (!missing(subset) && length(subset) > 0) {
         stopifnot(all(subset %in% 1:length(ix)))
         stopifnot(is.integer(subset))
+        if (min(subset) == 0) stop("subset has start 1 index")
         subset <- subset - 1L
     } else {
         subset <- integer(0)
     }
-    if (!missing(block)) {
+    if (!missing(block) && length(block) > 0) {
         stopifnot(length(ix) == length(block))
         stopifnot(is.factor(block))
     } else {
@@ -101,24 +103,31 @@ ChisqStat <- function(object, tol = sqrt(.Machine$double.eps)) {
     object
 }
 
-ChisqTest <- function(object, tol = sqrt(.Machine$double.eps), log = FALSE) {
-    .Call("R_ChisqTest", object, object$sim, sqrt(.Machine$double.eps), as.integer(log))
-}
-
-MaxabsstatTest <- function(object, tol = sqrt(.Machine$double.eps), log = FALSE) {
-    .Call("R_MaxabsstatTest", object, object$sim, sqrt(.Machine$double.eps), as.integer(log), 
-          10000L, .0001, .0001)
-}
-
-MaxstatTest <- function(object, tol = sqrt(.Machine$double.eps), minbucket = 10L, 
-                        log = FALSE, ordered = TRUE, type = c("maxabs", "quadform")) {
+Test <- function(object, tol = sqrt(.Machine$double.eps), log = FALSE,
+                 type = c("maxstat", "quadform"), xtrafo = c("id", "maxstat"),
+                 minbucket = 10L, ordered = TRUE) {
     type <- match.arg(type)
-    type <- as.integer(which(c("maxabs", "quadform") == type))
-    if (ordered) 
-        return(.Call("R_MaxstatTest_ordered", object, object$sim, type, tol, 
-                     as.integer(minbucket), as.integer(log), PACKAGE = "libcoin"))
-    return(.Call("R_MaxstatTest_unordered", object, object$sim, type, tol, 
-                 as.integer(minbucket), as.integer(log), PACKAGE = "libcoin"))
+    xtrafo <- match.arg(xtrafo)
+    if (xtrafo == "id") {
+        if (type == "quadform") {
+            ret <- .Call("R_ChisqTest", object, object$sim, sqrt(.Machine$double.eps), as.integer(log))
+        } else {
+            ret <- .Call("R_MaxabsstatTest", object, object$sim, sqrt(.Machine$double.eps), as.integer(log),
+              10000L, .0001, .0001)
+        }
+    } else {
+        type <- as.integer(which(c("maxstat", "quadform") == type))
+        if (ordered) {
+            ret <- .Call("R_MaxstatTest_ordered", object, object$sim, type, tol, 
+                        as.integer(minbucket), as.integer(log), PACKAGE = "libcoin")
+        } else {
+            ret <- .Call("R_MaxstatTest_unordered", object, object$sim, type, tol, 
+                     as.integer(minbucket), as.integer(log), PACKAGE = "libcoin")
+        }
+    }
+    if (length(ret) == 2)
+        names(ret) <- c("statistic", "pvalue")
+    if (length(ret) == 3)
+        names(ret) <- c("statistic", "pvalue", "index")
+    ret
 }
-
-
