@@ -1,5 +1,5 @@
 
-double C_chisq_pvalue(double stat, int df, int give_log);
+double C_chisq_pvalue(double stat, int df, int lower, int give_log);
 double C_maxabsstat_pvalue(const double stat, const double *Covariance,
     const int n, int maxpts, double releps, double abseps, double tol);
 void C_Permute(int *x, int n, int *ans);

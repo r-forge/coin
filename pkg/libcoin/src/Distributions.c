@@ -5,9 +5,9 @@
 #include "Utils.h"
 #include <mvtnormAPI.h>
 
-double C_chisq_pvalue(double stat, int df, int give_log)
+double C_chisq_pvalue(double stat, int df, int lower, int give_log)
 {
-    return(pchisq(stat, df, 0, give_log));
+    return(pchisq(stat, (double) df, lower, give_log));
 }
 
 /**

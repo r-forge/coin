@@ -28,14 +28,11 @@ LinStatExpCov <- function(X, Y, weights, subset, block,
 
     ms <- !(complete.cases(X) & complete.cases(Y))
     if (any(ms)) {
-        OK <- FALSE
-        if (length(subset) > 0) { 
-            OK <- !any(which(ms) %in% subset)
+        if (length(subset) > 0) {
+            subset <- subset[!(subset %in% which(ms))] 
         } else {
             subset <- (0:(NROW(X) - 1))[-which(ms)]
-            OK <- TRUE
         }
-        stopifnot(OK)
     }
     
     ret <- .Call("R_ExpectationCovarianceStatistic", X, Y, weights, subset, 
@@ -103,26 +100,27 @@ ChisqStat <- function(object, tol = sqrt(.Machine$double.eps)) {
     object
 }
 
-Test <- function(object, tol = sqrt(.Machine$double.eps), log = FALSE,
+Test <- function(object, tol = sqrt(.Machine$double.eps), lower = FALSE, log = FALSE,
                  type = c("maxstat", "quadform"), xtrafo = c("id", "maxstat"),
                  minbucket = 10L, ordered = TRUE) {
     type <- match.arg(type)
     xtrafo <- match.arg(xtrafo)
     if (xtrafo == "id") {
         if (type == "quadform") {
-            ret <- .Call("R_ChisqTest", object, object$sim, sqrt(.Machine$double.eps), as.integer(log))
+            ret <- .Call("R_ChisqTest", object, object$sim, sqrt(.Machine$double.eps), 
+                         as.integer(lower), as.integer(log))
         } else {
-            ret <- .Call("R_MaxabsstatTest", object, object$sim, sqrt(.Machine$double.eps), as.integer(log),
-              10000L, .0001, .0001)
+            ret <- .Call("R_MaxabsstatTest", object, object$sim, sqrt(.Machine$double.eps), as.integer(lower), 
+                         as.integer(log), 10000L, .0001, .0001)
         }
     } else {
         type <- as.integer(which(c("maxstat", "quadform") == type))
         if (ordered) {
             ret <- .Call("R_MaxstatTest_ordered", object, object$sim, type, tol, 
-                        as.integer(minbucket), as.integer(log), PACKAGE = "libcoin")
+                        as.integer(minbucket), as.integer(lower), as.integer(log), PACKAGE = "libcoin")
         } else {
             ret <- .Call("R_MaxstatTest_unordered", object, object$sim, type, tol, 
-                     as.integer(minbucket), as.integer(log), PACKAGE = "libcoin")
+                     as.integer(minbucket), as.integer(lower), as.integer(log), PACKAGE = "libcoin")
         }
     }
     if (length(ret) == 2)

@@ -6,7 +6,7 @@
 #include "MemoryAccess.h"
 #include "Contrasts.h"
 
-SEXP R_ChisqTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP give_log) 
+SEXP R_ChisqTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP lower, SEXP give_log) 
 {
     SEXP ans, stat, pval;
     double *MPinv, *pv, st, *ls, *ex;
@@ -29,8 +29,8 @@ SEXP R_ChisqTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP give_log)
     REAL(stat)[0] = C_quadform(PQ, C_get_LinearStatistic(LEV),
                                C_get_Expectation(LEV), MPinv);
     if (LENGTH(linstat) == 0) {
-        REAL(pval)[0] = C_chisq_pvalue(REAL(stat)[0], rank,
-                                   INTEGER(give_log)[0]);
+        REAL(pval)[0] = C_chisq_pvalue(REAL(stat)[0], rank, INTEGER(lower)[0],
+                                       INTEGER(give_log)[0]);
     } else {
         B = NCOL(linstat);
         ls = REAL(linstat);
@@ -43,9 +43,17 @@ SEXP R_ChisqTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP give_log)
                 pv[0] = pv[0] + 1.0;
         }
         if (INTEGER(give_log)[0]) {
-            pv[0] = log(pv[0]) - log(B);
+            if (INTEGER(lower)[0]) {
+                pv[0] = log1p(- pv[0] / B);
+            } else {
+                pv[0] = log(pv[0]) - log(B);
+            }
         } else {
-            pv[0] = pv[0] / B;
+            if (INTEGER(lower)[0]) {
+                pv[0] = 1 - pv[0] / B;
+            } else {
+                pv[0] = pv[0] / B;
+            }
         }
     }
 
@@ -53,7 +61,8 @@ SEXP R_ChisqTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP give_log)
     return(ans);
 }
 
-SEXP R_MaxabsstatTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP give_log, SEXP maxpts, SEXP releps, SEXP abseps)
+SEXP R_MaxabsstatTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP lower, 
+                      SEXP give_log, SEXP maxpts, SEXP releps, SEXP abseps)
 {
     SEXP ans, stat, pval;
     double st, *ex, *cv, *ls, tl, *pv;
@@ -79,7 +88,16 @@ SEXP R_MaxabsstatTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP give_log, SEXP maxp
                                             PQ,
                                             INTEGER(maxpts)[0], REAL(releps)[0], 
                                             REAL(abseps)[0], REAL(tol)[0]);
-        if (INTEGER(give_log)[0]) REAL(pval)[0] = log(REAL(pval)[0]);
+        if (INTEGER(give_log)[0]) {
+            if (INTEGER(lower)[0]) {
+                REAL(pval)[0] = log1p(- REAL(pval)[0]);
+            } else {
+                REAL(pval)[0] = log(REAL(pval)[0]);
+            }
+        } else {
+            if (INTEGER(lower)[0])
+                REAL(pval)[0] = 1 - REAL(pval)[0];
+        }
     } else {
         B = NCOL(linstat);
         pv = REAL(pval);
@@ -94,9 +112,17 @@ SEXP R_MaxabsstatTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP give_log, SEXP maxp
                 pv[0] = pv[0] + 1.0;
         }
         if (INTEGER(give_log)[0]) {
-            pv[0] = log(pv[0]) - log(B);
+            if (INTEGER(lower)[0]) {
+                pv[0] = log1p(- pv[0] / B);
+            } else {
+                pv[0] = log(pv[0]) - log(B);
+            }
         } else {
-            pv[0] = pv[0] / B;
+            if (INTEGER(lower)[0]) {
+                pv[0] = 1 - pv[0] / B;
+            } else {
+                pv[0] = pv[0] / B;
+            }
         }
     }
     UNPROTECT(1);
@@ -104,7 +130,7 @@ SEXP R_MaxabsstatTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP give_log, SEXP maxp
 }
 
 SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol, 
-                           SEXP minbucket, SEXP give_log)
+                           SEXP minbucket, SEXP lower, SEXP give_log)
 {
     SEXP ans, index, stat, pval;
     double *contrasts, *V, *ExpX, xtab, tmp, *pv, *ls, st;
@@ -204,9 +230,17 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
             if (tmp > st) pv[0] = pv[0] + 1.0;
         }
         if (INTEGER(give_log)[0]) {
-            pv[0] = log(pv[0]) - log(B);
+            if (INTEGER(lower)[0]) {
+                pv[0] = log1p(- pv[0] / B);
+            } else {
+                pv[0] = log(pv[0]) - log(B);
+            }
         } else {
-            pv[0] = pv[0] / B;
+            if (INTEGER(lower)[0]) {
+                pv[0] = 1 - pv[0] / B;
+            } else {
+                pv[0] = pv[0] / B;
+            }
         }
     }
     Free(contrasts);
@@ -215,7 +249,7 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
 }                                      
 
 SEXP R_MaxstatTest_unordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol, 
-                             SEXP minbucket, SEXP give_log)
+                             SEXP minbucket, SEXP lower, SEXP give_log)
 {
     SEXP ans, stat, index, pval;
     double *contrasts, *V, *ExpX, xtab, total, *indl, *ls, *pv, tmp, st;
@@ -315,9 +349,17 @@ SEXP R_MaxstatTest_unordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
             if (tmp > st) pv[0] = pv[0] + 1.0;
         }
         if (INTEGER(give_log)[0]) {
-            pv[0] = log(pv[0]) - log(B);
+            if (INTEGER(lower)[0]) {
+                pv[0] = log1p(- pv[0] / B);
+            } else {
+                pv[0] = log(pv[0]) - log(B);
+            }
         } else {
-            pv[0] = pv[0] / B;
+            if (INTEGER(lower)[0]) {
+                pv[0] = 1 - pv[0] / B;
+            } else {
+                pv[0] = pv[0] / B;
+            }
         }
     }
     Free(contrasts);
