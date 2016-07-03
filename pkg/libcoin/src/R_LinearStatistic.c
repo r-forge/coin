@@ -258,10 +258,9 @@ void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
                                           SEXP ans)
 {
 
-    int N, P, Q, Lxp1, Lyp1, Lb, *btab, *csum, *rsum, *table, *table2d, sw;
+    int P, Q, Lxp1, Lyp1, Lb, *btab, *csum, *rsum, *table, *table2d, sw;
     double *ExpInf, *CovInf, *ExpX, *CovX, *work;
 
-    N = LENGTH(ix);
     P = C_get_P(ans);
     Q = C_get_Q(ans);
 
@@ -386,10 +385,9 @@ SEXP R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy,
                                   SEXP tol) {
 
     SEXP ans;
-    int N, P, Q, PQ, Lb, Lx, Ly, *csum, *rsum, *ntotal, *table, *jwork, *rtable, *rtable2, maxn = 0, Lxp1, Lyp1;
+    int P, Q, PQ, Lb, Lx, Ly, *csum, *rsum, *ntotal, *table, *jwork, *rtable, *rtable2, maxn = 0, Lxp1, Lyp1;
     double *fact, *linstat, *blinstat, *dans;
     
-    N = LENGTH(ix);
     P = C_get_P(LEV);
     Q = C_get_Q(LEV);
     PQ = P * Q;

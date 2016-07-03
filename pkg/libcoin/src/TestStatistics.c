@@ -3,11 +3,9 @@
 
 double C_quadform(int PQ, double *linstat, double *expect, double *MPinv_sym)
 {
-    int qPQ;
     double ans = 0.0, tmp = 0.0;
     
     for (int q = 0; q < PQ; q++) {
-        qPQ = q * PQ;
         tmp = 0.0;
         for (int p = 0; p < PQ; p++)
             tmp += (linstat[p] - expect[p]) * MPinv_sym[S(p, q, PQ)];

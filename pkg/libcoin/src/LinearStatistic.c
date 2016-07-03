@@ -481,7 +481,7 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
                                             double *work, double *PQ_ans,  
                                             double *PQPQ_sym_ans) 
 {
-     int bQ, ns = 0, PQ = P * Q, sw = 0, *ix, *subtmp;
+     int ns = 0, sw = 0, *ix, *subtmp;
      double *ExpX, *CovX, *PPtmp;
 
      /* work[0] counts NAs in ix (ix[i] == 0)  */
@@ -493,7 +493,6 @@ void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
 
      for (int b = 0; b < Lb; b++) {
          for (int i = 0; i < P + 2 * P * (P + 1) / 2 + 1; i++) work[i] = 0.0;
-         bQ = b * PQ * (PQ + 1) / 2;
          if (Nsubset[b] == 0) {
              if (sumweights[b] == 0) {
                  if (isInteger(x)) {
@@ -572,7 +571,7 @@ void C_ExpectationVarianceLinearStatistic(SEXP x, int N, int P, int Q,
                                           double *work, double *PQ_ans_Exp, 
                                           double *PQ_ans_Var) 
 {
-     int bQ, ns = 0, PQ = P * Q, sw = 0, *ix, *subtmp;
+     int ns = 0, sw = 0, *ix, *subtmp;
      double *ExpX, *VarX, *PPtmp;
 
      /* work[0] counts NAs in ix (ix[i] = 0)*/
@@ -584,7 +583,6 @@ void C_ExpectationVarianceLinearStatistic(SEXP x, int N, int P, int Q,
      
      for (int b = 0; b < Lb; b++) {
          for (int i = 0; i < 3 * P + 1; i++) work[i] = 0.0;
-         bQ = b * PQ;
          if (Nsubset[b] == 0) {
              if (sumweights[b] == 0) {
                  if (isInteger(x)) {

@@ -64,11 +64,10 @@ void C_kronecker_sym(const double *A, const int m,
                      const double *B, const int r, int overwrite,
                      double *ans)
 {
-    int i, j, k, l, mr, js, ir, s, n;
+    int i, j, k, l, mr, js, ir, s;
     double y;
 
     mr = m * r;
-    n = m;
     s = r;
 
     if (overwrite) {
