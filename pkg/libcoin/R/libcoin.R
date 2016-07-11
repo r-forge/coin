@@ -1,8 +1,8 @@
 
 LinStatExpCov <- function(X, Y, weights, subset, block, 
                           varonly = FALSE, B = 0L, standardise = FALSE, 
-                          tol = sqrt(.Machine$double.eps)) {
-
+                          tol = sqrt(.Machine$double.eps)) 
+{
     stopifnot(NROW(X) == NROW(Y))
 
     if (!missing(weights) && length(weights) > 0) {
@@ -46,8 +46,8 @@ LinStatExpCov <- function(X, Y, weights, subset, block,
 }
 
 LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALSE, B = 0,
-                            standardise = FALSE, tol = sqrt(.Machine$double.eps)) {
-
+                            standardise = FALSE, tol = sqrt(.Machine$double.eps)) 
+{
     stopifnot(length(ix) == length(iy))
     stopifnot(is.integer(ix))
     stopifnot(is.integer(iy))
@@ -91,18 +91,11 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALS
     ret
 }
 
-ChisqStat <- function(object, tol = sqrt(.Machine$double.eps)) {
-
-    stopifnot(!is.null(object$Covariance))
-    tmp <- .Call("R_MPinv_sym", object$Covariance, tol)
-    object$MPinv <- tmp[[1]]
-    object$rank <- tmp[[2]]
-    object
-}
-
+### <FIXME> add alternative argument for type = "maxstat" </FIXME>
 Test <- function(object, tol = sqrt(.Machine$double.eps), lower = FALSE, log = FALSE,
                  type = c("maxstat", "quadform"), xtrafo = c("id", "maxstat"),
-                 minbucket = 10L, ordered = TRUE) {
+                 minbucket = 10L, ordered = TRUE) 
+{
     type <- match.arg(type)
     xtrafo <- match.arg(xtrafo)
     if (xtrafo == "id") {
@@ -124,8 +117,8 @@ Test <- function(object, tol = sqrt(.Machine$double.eps), lower = FALSE, log = F
         }
     }
     if (length(ret) == 2)
-        names(ret) <- c("statistic", "pvalue")
+        names(ret) <- c("statistic", "p.value")
     if (length(ret) == 3)
-        names(ret) <- c("statistic", "pvalue", "index")
+        names(ret) <- c("statistic", "p.value", "index")
     ret
 }
