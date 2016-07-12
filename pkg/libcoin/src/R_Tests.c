@@ -133,75 +133,41 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
                            SEXP minbucket, SEXP lower, SEXP give_log)
 {
     SEXP ans, index, stat, pval;
-    double *contrasts, *V, *ExpX, xtab, tmp, *pv, *ls, st;
-    int P, Q, PQ, B, mb, nc = 0, start = 0, stop = 0, itmp;
+    double tmp, *pv, *ls, st;
+    int P, Q, PQ, B, mb, itmp;
 
     P = C_get_P(LEV);
     Q = C_get_Q(LEV);
     PQ = P * Q;
     mb = INTEGER(minbucket)[0];
-    ExpX = C_get_ExpectationX(LEV);
+
+    if (C_get_varonly(LEV))
+        error("cannot maximally selected statistics form from variance only");
 
     PROTECT(ans = allocVector(VECSXP, 3));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
     SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, 1));
 
-    xtab = 0.0;
-    for (int p = 0; p < P; p++) {
-        xtab += ExpX[p];
-        if (xtab > mb) {
-            start = p;
-            break;
-        }
-    }
-    xtab = 0.0;
-    for (int p = (P - 1); p >= 0; p--) {
-        xtab += ExpX[p];
-        if (xtab > mb) {
-            stop = p;
-            break;
-        }
-    }
-    if (start >= stop)
-        error("cannot find admissible split");
-    nc = stop - start;
-
-    contrasts = Calloc(P * nc, double);
-    
-    for (int p = 0; p < P * nc; p++) contrasts[p] = 0.0;
-
-    for (int p = start; p < stop; p++) {
-        for (int pp = 0; pp <= p; pp++)
-            contrasts[pp + (p - start) * P] = 1.0;
-    }
-
     if (INTEGER(teststat)[0] == 1) {                            
-        if (C_get_varonly(LEV)) {
-            V = C_get_Variance(LEV);
-        } else {
-            V = C_get_Covariance(LEV);
-        }
-        C_contrasts_marginal_maxabsstat(C_get_LinearStatistic(LEV),
-                                        C_get_Expectation(LEV), 
-                                        V,
-                                        contrasts, P, Q, 
-                                        nc,
-                                        REAL(tol)[0], 
-                                        INTEGER(index), REAL(stat));
+        C_ordered_maxabsstat_X(C_get_LinearStatistic(LEV),
+                               C_get_Expectation(LEV), 
+                               C_get_Covariance(LEV),
+                               P, Q, 
+                               C_get_ExpectationX(LEV),
+                               mb,
+                               REAL(tol)[0], 
+                               INTEGER(index), REAL(stat));
     } else {
-        if (C_get_varonly(LEV))
-            error("cannot compute quadratic form from variance only");
-        C_contrasts_marginal_quadform(C_get_LinearStatistic(LEV),
-                                      C_get_Expectation(LEV), 
-                                      C_get_Covariance(LEV),
-                                      contrasts, P, Q, 
-                                      nc,
-                                      REAL(tol)[0], 
-                                      INTEGER(index), REAL(stat));
+        C_ordered_quadform_X(C_get_LinearStatistic(LEV),
+                             C_get_Expectation(LEV),
+                             C_get_Covariance(LEV),
+                             P, Q,
+                             C_get_ExpectationX(LEV),
+                             mb,
+                             REAL(tol)[0],
+                             INTEGER(index), REAL(stat));
     }
-
-    INTEGER(index)[0] += start;
 
     if (LENGTH(linstat) > 0) {
         st = REAL(stat)[0];
@@ -211,21 +177,23 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
 
         for (int i = 0; i < B; i++) {
             if (INTEGER(teststat)[0] == 1) {                            
-                C_contrasts_marginal_maxabsstat(ls + PQ * i,
-                                                C_get_Expectation(LEV), 
-                                                V,
-                                                contrasts, P, Q, 
-                                                nc,
-                                                REAL(tol)[0], 
-                                                &itmp, &tmp);
+                C_ordered_maxabsstat_X(ls + PQ * i,
+                                       C_get_Expectation(LEV),
+                                       C_get_Covariance(LEV),
+                                       P, Q,
+                                       C_get_ExpectationX(LEV),
+                                       mb,
+                                       REAL(tol)[0],
+                                       &itmp, &tmp);
             } else {
-                C_contrasts_marginal_quadform(ls + PQ * i,
-                                              C_get_Expectation(LEV), 
-                                              C_get_Covariance(LEV),
-                                              contrasts, P, Q, 
-                                              nc,
-                                              REAL(tol)[0], 
-                                              &itmp, &tmp);
+                C_ordered_quadform_X(ls + PQ * i,
+                                     C_get_Expectation(LEV),
+                                     C_get_Covariance(LEV),
+                                     P, Q,
+                                     C_get_ExpectationX(LEV),
+                                     mb,
+                                     REAL(tol)[0],
+                                     &itmp, &tmp);
             }
             if (tmp > st) pv[0] = pv[0] + 1.0;
         }
@@ -243,7 +211,6 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
             }
         }
     }
-    Free(contrasts);
     UNPROTECT(1);
     return(ans);
 }                                      
