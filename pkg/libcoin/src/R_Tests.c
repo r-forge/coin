@@ -219,64 +219,86 @@ SEXP R_MaxstatTest_unordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
                              SEXP minbucket, SEXP lower, SEXP give_log)
 {
     SEXP ans, stat, index, pval;
-    double *contrasts, *V, *ExpX, xtab, total, *indl, *ls, *pv, tmp, st;
-    int P, Q, PQ, B, mb, nc = 0, wmax;
+    double *contrasts, *ExpX, sumleft, totalsum, *indl, *ls, *pv, tmp, st;
+    int P, Pnonzero, Q, PQ, B, mb, nc = 0, wmax, *levels;;
+
+
+    if (C_get_varonly(LEV))
+        error("cannot compute maximally selected statistics from variance only");
 
     P = C_get_P(LEV);
-    if (P >= 31)
+    ExpX = C_get_ExpectationX(LEV);
+    sumleft = 0.0;
+    totalsum = 0.0;
+    Pnonzero = 0;
+    for (int p = 0; p < P; p++)  {
+        totalsum += ExpX[p];
+        if (ExpX[p] > 0) Pnonzero++;
+    }
+
+    levels = Calloc(Pnonzero, int);
+    nc = 0;
+    for (int p = 0; p < P; p++) {
+        if (ExpX[p] > 0) {
+            levels[nc] = p;
+            nc++;
+        }
+    }
+    
+    if (Pnonzero >= 31)
         error("cannot search for unordered splits in >= 31 levels");
     Q = C_get_Q(LEV);
     PQ = P * Q;
     mb = INTEGER(minbucket)[0];
-    ExpX = C_get_ExpectationX(LEV);
 
     PROTECT(ans = allocVector(VECSXP, 3));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
     SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, P));
 
-    total = 0.0;
-    for (int p = 0; p < P; p++) total += ExpX[p];
+    for (int p = 0; p < P; p++) {
+        if (ExpX[p] == 0.0) INTEGER(index)[p] = NA_INTEGER;
+    }
               
     /* number of possible binary splits */
     int mi = 1;  
-    for (int l = 1; l < P; l++) mi *= 2;
+    for (int l = 1; l < Pnonzero; l++) mi *= 2;
     contrasts = Calloc(mi * P, double);
+    for (int j = 0; j < mi * P; j++) contrasts[j] = 0.0;
+
+    indl = Calloc(Pnonzero, double);
+    for (int p = 0; p < Pnonzero; p++) indl[p] = 0.0;
 
     nc = 0;
     for (int j = 1; j < mi; j++) { /* go though all splits */
-        indl = contrasts + P * nc;
          
          /* indl determines if level p is left or right */
          int jj = j;
-         for (int l = 1; l < P; l++) {
+         for (int l = 1; l < Pnonzero; l++) {
              indl[l] = (jj%2);
              jj /= 2;
          }
                 
-         xtab = 0.0;
-         for (int p = 0; p < P; p++)
-             xtab += indl[p] * ExpX[p];
-         if (xtab > mb && (total - xtab) > mb)
+         sumleft = 0.0;
+         for (int p = 0; p < Pnonzero; p++)
+             sumleft += indl[p] * ExpX[levels[p]];
+
+         if (sumleft > mb && (totalsum - sumleft) > mb) {
+             for (int p = 0; p < Pnonzero; p++)
+                 contrasts[P * nc + levels[p]] = indl[p];
              nc++;
+         }
     }
 
     if (INTEGER(teststat)[0] == 1) {                            
-        if (C_get_varonly(LEV)) {
-            V = C_get_Variance(LEV);
-        } else {
-            V = C_get_Covariance(LEV);
-        }
         C_contrasts_marginal_maxabsstat(C_get_LinearStatistic(LEV),
                                         C_get_Expectation(LEV), 
-                                        V,
+                                        C_get_Covariance(LEV),
                                         contrasts, P, Q, 
                                         nc,
                                         REAL(tol)[0], 
                                         &wmax, REAL(stat));
     } else {
-        if (C_get_varonly(LEV))
-            error("cannot compute quadratic form from variance only");
         C_contrasts_marginal_quadform(C_get_LinearStatistic(LEV),
                                       C_get_Expectation(LEV), 
                                       C_get_Covariance(LEV),
@@ -299,7 +321,7 @@ SEXP R_MaxstatTest_unordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
             if (INTEGER(teststat)[0] == 1) {                            
                 C_contrasts_marginal_maxabsstat(ls + PQ * i,
                                                 C_get_Expectation(LEV), 
-                                                V,
+                                                C_get_Covariance(LEV),
                                                 contrasts, P, Q, 
                                                 nc,
                                                 REAL(tol)[0], 
@@ -329,7 +351,7 @@ SEXP R_MaxstatTest_unordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
             }
         }
     }
-    Free(contrasts);
+    Free(contrasts); Free(indl); Free(levels);
     UNPROTECT(1);
     return(ans);
 }                                      
