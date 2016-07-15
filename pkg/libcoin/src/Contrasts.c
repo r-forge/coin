@@ -39,10 +39,6 @@ void C_contrasts_marginal_maxabsstat(double *linstat, double *expect, double *co
 
         tmp = C_maxabsstat_Variance(Q, mlinstat, mexpect, mvar, tol);
 
-for (int p = 0; p < P; p++) {
-    Rprintf(" %f ", contrasts[p + i * P]);
-}
-Rprintf("stat: %f \n", tmp);
         if (tmp > maxstat[0]) {
             wmax[0] = i;
             maxstat[0] = tmp;
