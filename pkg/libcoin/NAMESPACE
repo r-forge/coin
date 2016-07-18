@@ -3,4 +3,4 @@ useDynLib(libcoin, .registration = TRUE)
 
 importFrom("stats", "complete.cases")
 
-export(LinStatExpCov, LinStatExpCov2d, Test)
+export(LinStatExpCov, LinStatExpCov2d, Test, lc)
