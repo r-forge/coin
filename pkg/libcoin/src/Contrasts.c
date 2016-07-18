@@ -13,7 +13,7 @@ void C_contrasts_marginal_maxabsstat(double *linstat, double *expect, double *co
     mexpect = Calloc(Q, double);
     mvar = Calloc(Q, double);
     mtmp = Calloc(P, double);
-    wmax[0] = 0;
+    wmax[0] = -1;
     maxstat[0] = 0.0;
     
     for (int i = 0; i < Ncontrasts; i++) {
@@ -59,7 +59,7 @@ void C_contrasts_marginal_quadform(double *linstat, double *expect, double *cova
     mcovar = Calloc(Q * (Q + 1) / 2, double);
     MPinv = Calloc(Q * (Q + 1) / 2, double);
     mtmp = Calloc(P, double);
-    wmax[0] = 0;
+    wmax[0] = -1;
     maxstat[0] = 0.0;
     
     for (int i = 0; i < Ncontrasts; i++) {
@@ -118,7 +118,7 @@ void C_ordered_maxabsstat_X
     mlinstat = Calloc(Q, double);
     mexpect = Calloc(Q, double);
     mvar = Calloc(Q, double);
-    wmax[0] = 0;
+    wmax[0] = -1;
     maxstat[0] = 0.0;
 
     for (int q = 0; q < Q; q++) {
@@ -159,8 +159,6 @@ void C_ordered_maxabsstat_X
             }
         }
     }
-    if (count == 0)
-        error("cannot find admissible split");
     Free(mlinstat); Free(mexpect); Free(mvar);    
 }
 
@@ -185,7 +183,7 @@ void C_ordered_quadform_X
     mexpect = Calloc(Q, double);
     mcovar = Calloc(Q * (Q + 1) / 2, double);
     MPinv = Calloc(Q * (Q + 1) / 2, double);
-    wmax[0] = 0;
+    wmax[0] = -1;
     maxstat[0] = 0.0;
 
     for (int q = 0; q < Q; q++) {
@@ -230,7 +228,5 @@ void C_ordered_quadform_X
             }
         }
     }
-    if (count == 0)
-        error("cannot find admissible split");
     Free(mlinstat); Free(mexpect); Free(mcovar); Free(MPinv);   
 }

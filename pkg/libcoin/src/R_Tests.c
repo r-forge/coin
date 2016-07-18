@@ -82,7 +82,7 @@ SEXP R_MaxabsstatTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP lower,
     REAL(stat)[0] =  C_maxabsstat_Covariance(PQ, C_get_LinearStatistic(LEV), 
                                              C_get_Expectation(LEV), 
                                              C_get_Covariance(LEV), REAL(tol)[0]);
-   
+
     if (LENGTH(linstat) == 0) {
         REAL(pval)[0] = C_maxabsstat_pvalue(REAL(stat)[0], C_get_Covariance(LEV),
                                             PQ,
@@ -142,7 +142,7 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
     mb = INTEGER(minbucket)[0];
 
     if (C_get_varonly(LEV))
-        error("cannot maximally selected statistics form from variance only");
+        error("cannot maximally selected statistics from variance only");
 
     PROTECT(ans = allocVector(VECSXP, 3));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
@@ -167,6 +167,17 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
                              mb,
                              REAL(tol)[0],
                              INTEGER(index), REAL(stat));
+    }
+
+    /* no admissible split found */
+    if (INTEGER(index)[0] < 0) {
+        REAL(stat)[0] = 0.0;
+        REAL(pval)[0] = 1.0;
+        INTEGER(index)[0] = NA_INTEGER;
+        UNPROTECT(1);
+        return(ans);
+    } else {
+        INTEGER(index)[0]++; /* R indexing */
     }
 
     if (LENGTH(linstat) > 0) {
@@ -306,6 +317,15 @@ SEXP R_MaxstatTest_unordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
                                       nc,
                                       REAL(tol)[0], 
                                       &wmax, REAL(stat));
+    }
+    
+    /* no admissible split found */
+    if (wmax < 0) {
+        REAL(stat)[0] = 0.0;
+        REAL(pval)[0] = 1.0;
+        /* INDEX == NA anyhow */
+        UNPROTECT(1);
+        return(ans);
     }
     
     for (int p = 0; p < P; p++)
