@@ -100,11 +100,11 @@ Test <- function(object, tol = sqrt(.Machine$double.eps), lower = FALSE, log = F
     xtrafo <- match.arg(xtrafo)
     if (xtrafo == "id") {
         if (type == "quadform") {
-            ret <- .Call("R_ChisqTest", object, object$sim, sqrt(.Machine$double.eps), 
-                         as.integer(lower), as.integer(log))
+            ret <- .Call("R_ChisqTest", object, object$sim, tol, 
+                         as.integer(lower), as.integer(log), PACKAGE = "libcoin")
         } else {
-            ret <- .Call("R_MaxabsstatTest", object, object$sim, sqrt(.Machine$double.eps), as.integer(lower), 
-                         as.integer(log), 10000L, .0001, .0001)
+            ret <- .Call("R_MaxabsstatTest", object, object$sim, tol, as.integer(lower), 
+                         as.integer(log), 10000L, .0001, .0001, PACKAGE = "libcoin")
         }
     } else {
         type <- as.integer(which(c("maxstat", "quadform") == type))
