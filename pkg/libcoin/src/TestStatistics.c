@@ -67,7 +67,7 @@ double C_minstat_Variance(int PQ, double *linstat, double *expect, double *var, 
 
     double ans = 0.0, tmp = 0.0;
     
-    for (int p; p < PQ; p++) {
+    for (int p = 0; p < PQ; p++) {
         tmp = 0.0;
         if (var[p] > tol)
             tmp = (linstat[p] - expect[p]) / sqrt(var[p]);
@@ -81,7 +81,7 @@ double C_maxabsstat_Covariance(int PQ, double *linstat, double *expect, double *
 
     double ans = 0.0, tmp = 0.0;
     
-    for (int p; p < PQ; p++) {
+    for (int p = 0; p < PQ; p++) {
         tmp = 0.0;
         if (covar_sym[S(p, p, PQ)] > tol)
             tmp = fabs((linstat[p] - expect[p]) / sqrt(covar_sym[S(p, p, PQ)]));
@@ -95,7 +95,7 @@ double C_maxabsstat_Variance(int PQ, double *linstat, double *expect, double *va
 
     double ans = 0.0, tmp = 0.0;
     
-    for (int p; p < PQ; p++) {
+    for (int p = 0; p < PQ; p++) {
         tmp = 0.0;
         if (var[p] > tol)
             tmp = fabs((linstat[p] - expect[p]) / sqrt(var[p]));
