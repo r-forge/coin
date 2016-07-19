@@ -111,23 +111,6 @@ void C_KronSums_sym_center_weights_subset(double *x, int N, int P,
                                           int *weights, int *subset, 
                                           int Nsubset, double *centerx,
                                           double *PP_sym_ans); 
-/* sum_i (t(x[i,] - centerx) %*% (y[i,] - centery)) */
-void C_KronSums_center_(double *x, int N, int P, double *y, int Q, 
-                       double *centerx, double *centery, double *PQ_ans); 
-/* sum_i weights[i] * (t(x[i,] - centerx) %*% (y[i,] - centery)) */
-void C_KronSums_center_weights(double *x, int N, int P, double *y, int Q, 
-                               int *weights, double *centerx, 
-                               double *centery, double *PQ_ans); 
-/* sum_i (t(x[subsetx[i],] - centerx) %*% (y[subsety[i],] - centery)) */
-void C_KronSums_center_subset(double *x, int N, int P, double *y, int Q, 
-                              int *subsetx, int *subsety, int Nsubset, 
-                              double *centerx, double *centery, double *PQ_ans); 
-/* sum_i weights[subset[i]] (t(x[subset[i],] - centerx) %*% 
-                            (y[subset[i],] - centery)) */
-void C_KronSums_center_weights_subset(double *x, int N, int P, double *y, 
-                                      int Q, int *weights, int *subset, 
-                                      int Nsubset, double *centerx, 
-                                      double *centery, double *PQ_ans); 
 /* tapply(1:nrow(y), ix, function(i) colSums(y[i,])) */
 void C_tapplySum_(double *y, int N, int Q, int *ix, int Lx, double *LxQ_ans);
 /* tapply(1:nrow(y), ix, function(i) colSums(weights[i] * y[i,])) */
