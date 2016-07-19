@@ -12,6 +12,8 @@
 
 /* S[i, j] for n x n symmetric matrix in lower packed storage allowing for i < j */
 #define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)
+#define LE(x, y, tol)  ((x) < (y)) || (fabs((x) - (y)) < (tol))
+#define GE(x, y, tol)  ((x) > (y)) || (fabs((x) - (y)) < (tol))
 
 #define LinearStatistic_SLOT		0	
 #define Expectation_SLOT		1
