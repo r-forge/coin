@@ -92,18 +92,22 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALS
 }
 
 ### <FIXME> add alternative argument for type = "maxstat" </FIXME>
+### lower = FALSE => p-value; lower = TRUE => 1 - p-value
 Test <- function(object, tol = sqrt(.Machine$double.eps), lower = FALSE, log = FALSE,
                  type = c("maxstat", "quadform"), xtrafo = c("id", "maxstat"),
+                 alternative = c("two.sided", "less", "greater"),
                  minbucket = 10L, ordered = TRUE) 
 {
     type <- match.arg(type)
     xtrafo <- match.arg(xtrafo)
+    alternative <- match.arg(alternative)
+    alt <- which(c("two.sided", "less", "greater") == alternative)
     if (xtrafo == "id") {
         if (type == "quadform") {
             ret <- .Call("R_ChisqTest", object, object$sim, tol, 
                          as.integer(lower), as.integer(log), PACKAGE = "libcoin")
         } else {
-            ret <- .Call("R_MaxabsstatTest", object, object$sim, tol, as.integer(lower), 
+            ret <- .Call("R_MaxtypeTest", object, object$sim, tol, as.integer(alt), as.integer(lower), 
                          as.integer(log), 10000L, .0001, .0001, PACKAGE = "libcoin")
         }
     } else {
