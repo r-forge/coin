@@ -238,14 +238,14 @@ SEXP R_PermutedLinearStatistic(SEXP LEV, SEXP x, SEXP y, SEXP weights,
     Free(tmp); Free(perm); Free(orig);
     
     if (INTEGER(standardise)[0]) {
-        if (C_get_varonly(LEV)) {
-            for (int i = 0; i < INTEGER(B)[0]; i++)
-                C_maxabsstat_Variance(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
-                                      C_get_Variance(LEV), REAL(tol)[0]);
-        } else {
-            for (int i = 0; i < INTEGER(B)[0]; i++)
-                C_maxabsstat_Covariance(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
-                                        C_get_Covariance(LEV), REAL(tol)[0]);
+        for (int i = 0; i < INTEGER(B)[0]; i++) {
+            if (C_get_varonly(LEV)) {
+                C_standardise(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                              C_get_Variance(LEV), 1, REAL(tol)[0]);
+            } else {
+                C_standardise(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                              C_get_Covariance(LEV), 0, REAL(tol)[0]);
+            }
         }
     }
     
@@ -459,14 +459,14 @@ SEXP R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy,
     PutRNGstate();
 
     if (INTEGER(standardise)[0]) {
-        if (C_get_varonly(LEV)) {
-            for (int i = 0; i < INTEGER(B)[0]; i++)
-                C_maxabsstat_Variance(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
-                                      C_get_Variance(LEV), REAL(tol)[0]);
-        } else {
-            for (int i = 0; i < INTEGER(B)[0]; i++)
-                C_maxabsstat_Covariance(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
-                                        C_get_Covariance(LEV), REAL(tol)[0]);
+        for (int i = 0; i < INTEGER(B)[0]; i++) {
+            if (C_get_varonly(LEV)) {
+                C_standardise(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                              C_get_Variance(LEV), 1, REAL(tol)[0]);
+            } else {
+                C_standardise(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                              C_get_Covariance(LEV), 0, REAL(tol)[0]);
+            }
         }
     }
     
