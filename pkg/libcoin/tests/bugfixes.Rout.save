@@ -1,0 +1,1091 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ### Regression tests for fixed bugs
+> 
+> set.seed(290875)
+> library("coin")
+Loading required package: survival
+> library("libcoin")
+> isequal <- coin:::isequal
+> GE <- coin:::GE
+> options(useFancyQuotes = FALSE)
+> 
+> ### I() returns objects of class AsIs which caused an error in `trafo'
+> df <- data.frame(x1 = rnorm(100), x2 = rnorm(100), x3 = gl(2, 50))
+> lc("independence_test",I(x1 / x2) ~ x3, data = df)
+[1] TRUE
+
+	Asymptotic General Independence Test
+
+data:  I(x1/x2) by x3 (1, 2)
+Z = -0.44907, p-value = 0.6534
+alternative hypothesis: two.sided
+
+> lc("independence_test",I(x1 < 0) ~ x3, data = df)
+[1] TRUE
+
+	Asymptotic General Independence Test
+
+data:  I(x1 < 0) by x3 (1, 2)
+Z = 0.79663, p-value = 0.4257
+alternative hypothesis: two.sided
+
+> 
+> ### expectation was wrong when varonly = TRUE in case both
+> ### xtrafo and ytrafo were multivariate
+> if (require("multcomp")) {
++     df <- data.frame(x = runif(30), y = runif(30), z = gl(3, 10))
++     a <- lc("independence_test",x + y ~ z, data = df,
++          distribution = approximate(B = 19999),
++          xtrafo = function(data) trafo(data, factor_trafo = function(x)
++              model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))))
++     b <- lc("independence_test",x + y ~ z, data = df,
++          xtrafo = function(data) trafo(data, factor_trafo = function(x)
++              model.matrix(~x - 1) %*% t(contrMat(table(x), "Tukey"))))
++     isequal(expectation(a), expectation(b))
++ }
+Loading required package: multcomp
+Loading required package: mvtnorm
+Loading required package: TH.data
+Loading required package: MASS
+
+Attaching package: 'TH.data'
+
+The following object is masked from 'package:MASS':
+
+    geyser
+
+[1] "Component \"p.value\": Mean absolute difference: 0.003493875"
+[1] "Component \"p.value\": Mean absolute difference: 4.418356e-05"
+[1] TRUE
+Warning message:
+In Test(lev, xtrafo = "id", type = teststat, alternative = alternative) :
+  cmvnorm: completion with ERROR > EPS
+> 
+> 
+> ### `statistic' for linear and standardized statistics was wrong in case of
+> ### scores
+> data("jobsatisfaction")
+> stopifnot(unique(dim(statistic(lc("lbl_test",jobsatisfaction), "linear"))) == 1)
+[1] TRUE
+> stopifnot(unique(dim(statistic(lc("lbl_test",jobsatisfaction), "standardized"))) == 1)
+[1] TRUE
+> 
+> 
+> ### support() failed in most cases
+> df <- data.frame(x = runif(20), y = runif(20), z = gl(2, 10))
+> support(lc("independence_test",x ~ z, data = df))
+[1] TRUE
+[1] NA
+> support(lc("independence_test",x ~ z, data = df, teststat = "quad"))
+[1] TRUE
+[1] NA
+> ite <- lc("independence_test",I(round(x, 1)) ~ z, data = df, dist = exact())
+[1] "Component \"p.value\": Mean absolute difference: 0.001219678"
+> ae <- support(ite)
+> de <- sapply(ae, function(x) dperm(ite, x))
+> sum(de)
+[1] 1
+> ita <- lc("independence_test",I(round(x, 1)) ~ z, data = df,
++                          dist = approximate(B = 100000))
+[1] "Component \"p.value\": Mean absolute difference: 0.00019"
+> aa <- support(ita)
+> da <- sapply(aa, function(x) dperm(ita, x))
+> sum(da)
+[1] 1
+> mean(round(ae, 10) %in% round(aa, 10))
+[1] 0.9807692
+> 
+> plot(aa, da, type = "s", lty = 1)
+> lines(ae, de, type = "s", lty = 2)
+> itas <- lc("independence_test",I(round(x, 1)) ~ z, data = df)
+[1] TRUE
+> lines(ae[-1], diff(sapply(ae, function(x) pperm(itas, x))), lty = 3)
+> legend("topleft", lty = 1:3, legend = c("approx", "exact", "asympt"), bty = "n")
+> 
+> ### check correct handling of multiple censoring indicators (in modeltools)
+> ### was never wrong, just in case...
+> data("photocar", package = "coin")
+> i1 <- lc("independence_test",Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
++                   data = photocar)
+[1] TRUE
+> i2 <- lc("independence_test",Surv(time, event) ~ group, data = photocar)
+[1] TRUE
+> i3 <- lc("independence_test",Surv(dmin, tumor) ~ group, data = photocar)
+[1] TRUE
+> 
+> stopifnot(max(abs(statistic(i1, "standardized")[,1] -
++                   statistic(i2, "stand"))) < sqrt(.Machine$double.eps))
+> stopifnot(max(abs(statistic(i1, "standardized")[,2] -
++                   statistic(i3, "stand"))) < sqrt(.Machine$double.eps))
+> 
+> ### check new var_trafo argument
+> x <- rnorm(20)
+> y <- gl(2, 10)
+> a <- trafo(data.frame(x = x, y = y), numeric_trafo = normal_trafo)
+> b <- trafo(data.frame(x = x, y = y), var_trafo = list(x = normal_trafo))
+> stopifnot(isequal(a, b))
+> 
+> ### check for multiple ordered factors
+> mydf <- data.frame(x = ordered(gl(4, 5)), y = ordered(gl(5, 4)),
++                    z = rnorm(20))
+> it1 <- lc("independence_test",x + y ~ z , data = mydf)
+[1] TRUE
+> stopifnot(isequal(drop(statistic(it1, "linear")),
++           c(statistic(lc("independence_test",x ~ z , data = mydf), "linear"),
++             statistic(lc("independence_test",y ~ z , data = mydf), "linear"))))
+[1] TRUE
+[1] TRUE
+> it1 <- lc("independence_test",x + z ~ y , data = mydf)
+[1] TRUE
+> stopifnot(isequal(drop(statistic(it1, "linear")),
++           c(statistic(lc("independence_test",x ~ y , data = mydf), "linear"),
++             statistic(lc("independence_test",z ~ y , data = mydf), "linear"))))
+[1] TRUE
+[1] TRUE
+> it1 <- lc("independence_test",z ~ x + y , data = mydf)
+[1] TRUE
+> stopifnot(isequal(drop(statistic(it1, "linear")),
++           c(statistic(lc("independence_test",z ~ x , data = mydf), "linear"),
++             statistic(lc("independence_test",z ~ y , data = mydf), "linear"))))
+[1] TRUE
+[1] TRUE
+> 
+> ### NA's and weights
+> mydf <- data.frame(x = 1:10, y = gl(2, 5), w = rep(2, 10))
+> s <- statistic(lc("independence_test",x ~ y, data = mydf, weights = ~ w), "linear")
+[1] TRUE
+> stopifnot(s == 30)
+> mydf$x[1] <- NA
+> s <- statistic(lc("independence_test",x ~ y, data = mydf, weights = ~ w), "linear")
+[1] TRUE
+> stopifnot(s == 28)
+> 
+> ### two observations only
+> mydf <- data.frame(x = 1:10, y = factor(rep(c(1, 2), 5)))
+> lc("independence_test",y ~ x, data = mydf, subset = c(1, 6))
+[1] TRUE
+
+	Asymptotic General Independence Test
+
+data:  y by x
+Z = -1, p-value = 0.3173
+alternative hypothesis: two.sided
+
+> lc("independence_test",y ~ x, data = mydf, subset = c(1, 2))
+[1] TRUE
+
+	Asymptotic General Independence Test
+
+data:  y by x
+Z = -1, p-value = 0.3173
+alternative hypothesis: two.sided
+
+> try(lc("independence_test",y ~ x, data = mydf, subset = 1))
+Error in validObject(.Object) : 
+  invalid class "IndependenceProblem" object: FALSE
+> 
+> ### names of expectation and covariance
+> YOY <- data.frame(length = c(46, 28, 46, 37, 32, 41, 42, 45, 38, 44,
++                              42, 60, 32, 42, 45, 58, 27, 51, 42, 52,
++                              38, 33, 26, 25, 28, 28, 26, 27, 27, 27,
++                              31, 30, 27, 29, 30, 25, 25, 24, 27, 30),
++                   site = factor(c(rep("I", 10), rep("II", 10),
++                                   rep("III", 10), rep("IV", 10))))
+> 
+> it <- lc("independence_test",length ~ site, data = YOY,
++     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
++     teststat = "quad")
+[1] TRUE
+> expectation(it)
+  I  II III  IV 
+205 205 205 205 
+> covariance(it)
+            I        II       III        IV
+I   1019.0385 -339.6795 -339.6795 -339.6795
+II  -339.6795 1019.0385 -339.6795 -339.6795
+III -339.6795 -339.6795 1019.0385 -339.6795
+IV  -339.6795 -339.6795 -339.6795 1019.0385
+> 
+> mydf <- data.frame(x = rnorm(10), y = rnorm(10), z = gl(2, 5))
+> it <- lc("independence_test",x + y ~ z, data = mydf)
+[1] TRUE
+> statistic(it, "linear")
+          x        y
+1 -2.560224 3.103859
+> expectation(it)
+       1:x        1:y 
+-0.1853737  1.1352884 
+> covariance(it)
+           1:x        1:y
+1:x  3.4873402 -0.9083013
+1:y -0.9083013  2.2489431
+> 
+> ### maxstat_trafo
+> n <- seq(from = 5, to = 100, by = 1)
+> for (i in n) {
++    x <- round(rnorm(i) * 10, 1)
++    xm <- maxstat_trafo(x)
++    stopifnot(min(c(mean(xm[,1]), 1 - mean(xm[,ncol(xm)])) - 0.1) >
++              -sqrt(.Machine$double.eps))
++ }
+> 
+> ### formula evaluation in `parent.frame()', spotted by Z
+> foo <- function(x, y) lc("independence_test",y ~ x, data = data.frame(x = x, y = y))
+> a <- 1:10
+> b <- 1:10
+> foo(a, b)
+[1] TRUE
+
+	Asymptotic General Independence Test
+
+data:  y by x
+Z = 3, p-value = 0.0027
+alternative hypothesis: two.sided
+
+> x <- 1
+> y <- 1
+> foo(a, b)
+[1] TRUE
+
+	Asymptotic General Independence Test
+
+data:  y by x
+Z = 3, p-value = 0.0027
+alternative hypothesis: two.sided
+
+> 
+> ### factors with only one level
+> dat <- data.frame(y = rnorm(100), x1 = runif(100), x2 = factor(rep(0, 100)))
+> try(lc("independence_test",y ~ x1  + x2, data = dat))
+Error in factor_trafo(x) : 
+  Can't deal with factors containing only one level
+> 
+> ### user specified g: names, MC
+> me <- as.table(matrix(c( 6,  8, 10,
++                32, 47, 20), byrow = TRUE, nrow = 2,
++     dimnames = list(group = c("In situ", "Control"),
++                     genotype = c("AA", "AG", "GG"))))
+> medf <- as.data.frame(me)
+> 
+> add <- c(0, 1, 2)
+> dom <- c(0, 1, 1)
+> rez <- c(0, 0, 1)
+> g <- function(x) {
++     x <- unlist(x)
++     cbind(add[x], dom[x], rez[x])
++ }
+> it <- lc("independence_test",group ~ genotype,
++     data = medf, weights = ~ Freq, xtrafo = g)
+[1] "Component \"p.value\": Mean absolute difference: 9.213816e-05"
+> statistic(it, "linear")
+   In situ
+X1      28
+X2      18
+X3      10
+> 
+> it <- lc("independence_test",group ~ genotype,
++     data = medf, weights = ~ Freq, xtrafo = g,
++     distribution = approximate(B = 49999))
+[1] "Component \"p.value\": Mean absolute difference: 0.001938647"
+> pvalue(it)
+[1] 0.06766135
+99 percent confidence interval:
+ 0.06479932 0.07060603 
+
+> 
+> stopifnot(all.equal(statistic(lc("independence_test",t(me), xtrafo = g), "linear"),
++                     statistic(it, "linear")))
+[1] "Component \"p.value\": Mean absolute difference: 9.213816e-05"
+> 
+> ### alternative trafo for ordered variables didn't work
+> ### spotted by Ludwig Hothorn <hothorn@biostat.uni-hannover.de>
+> tmp <- data.frame(x = ordered(sample(1:3, 20, replace = TRUE)), y = rnorm(20))
+> it1 <- lc("independence_test",y ~ x, data = tmp, scores = list(x = c(1, 1, 2)))
+[1] TRUE
+> g <- function(x) c(1, 1, 2)[unlist(x)]
+> it2 <- lc("independence_test",y ~ x, data = tmp, xtrafo = g)
+[1] TRUE
+> it3 <- lc("independence_test",y ~ x, data = tmp,
++     xtrafo = function(data) trafo(data, ordered_trafo = g))
+[1] TRUE
+> stopifnot(all.equal(statistic(it1), statistic(it2)))
+> stopifnot(all.equal(statistic(it1), statistic(it3)))
+> 
+> ### precision problems in SR algorithm, >= <= issue
+> ### spotted by "Fay, Michael (NIH/NIAID) [E]" <mfay@niaid.nih.gov>
+> x <- c(1,2,3.1,4,5,6)
+> g <- factor(c(0,0,0,1,1,1))
+> it <- lc("independence_test",x ~ g, distribution = exact())
+[1] "Component \"p.value\": Mean absolute difference: 8e-04"
+> stopifnot(pvalue(it) == 0.1)
+> itMC <- lc("independence_test",x ~ g, distribution = approximate(99999))
+[1] "Component \"p.value\": Mean absolute difference: 0.0006389984"
+> ci <- attr(pvalue(itMC), "conf.int")
+> stopifnot(ci[1] < pvalue(it) && ci[2] > pvalue(it))
+> 
+> ### any() not applied to logicals
+> ### spotted by R-2.7.0 and Kaspar Daniel Hansen
+> x <- c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+> y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+> ### must not give a warning
+> lc("wilcoxsign_test",x ~ y, alternative = "greater",
++                 distribution = exact())
+[1] "Component \"p.value\": Mean absolute difference: 0.00073125"
+
+	Exact Wilcoxon-Pratt Signed-Rank Test
+
+data:  y by x (pos, neg) 
+	 stratified by block
+Z = 2.0732, p-value = 0.01953
+alternative hypothesis: true mu is greater than 0
+
+> 
+> ### inconsistencies with confidence intervals
+> ### spotted by Fritz Scholz <fscholz@u.washington.edu>
+> Route = structure(c(1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 2L, 2L,
++ 2L, 2L, 2L), .Label = c("A", "B"), class = "factor")
+> Route.Time = c(5.8, 5.8, 5.9, 6, 6, 6, 6.3, 6.3, 6.4, 6.5, 6.5, 6.5,
++ 6.8, 7.1, 7.3, 10.2)
+> Route2 <- factor(as.character(Route), levels = c("B", "A"))
+> 
+> lc("wilcox_test",Route.Time~Route,conf.int=TRUE)
+[1] TRUE
+
+	Asymptotic Wilcoxon-Mann-Whitney Test
+
+data:  Route.Time by Route (A, B)
+Z = -3.0245, p-value = 0.002491
+alternative hypothesis: true mu is not equal to 0
+95 percent confidence interval:
+ -3.6999810 -0.4999788
+sample estimates:
+difference in location 
+            -0.9000475 
+
+> lc("wilcox_test",Route.Time~Route2,conf.int=TRUE)
+[1] TRUE
+
+	Asymptotic Wilcoxon-Mann-Whitney Test
+
+data:  Route.Time by Route2 (B, A)
+Z = 3.0245, p-value = 0.002491
+alternative hypothesis: true mu is not equal to 0
+95 percent confidence interval:
+ 0.4999788 3.6999810
+sample estimates:
+difference in location 
+             0.9000352 
+
+> lc("wilcox_test",Route.Time~Route,conf.int=TRUE, distr = exact())
+[1] "Component \"p.value\": Mean absolute difference: 2.637363e-05"
+
+	Exact Wilcoxon-Mann-Whitney Test
+
+data:  Route.Time by Route (A, B)
+Z = -3.0245, p-value = 0.001374
+alternative hypothesis: true mu is not equal to 0
+95 percent confidence interval:
+ -3.7 -0.5
+sample estimates:
+difference in location 
+                  -0.9 
+
+> lc("wilcox_test",Route.Time~Route2,conf.int=TRUE, distr = exact())
+[1] "Component \"p.value\": Mean absolute difference: 2.637363e-05"
+
+	Exact Wilcoxon-Mann-Whitney Test
+
+data:  Route.Time by Route2 (B, A)
+Z = 3.0245, p-value = 0.001374
+alternative hypothesis: true mu is not equal to 0
+95 percent confidence interval:
+ 0.5 3.7
+sample estimates:
+difference in location 
+                   0.9 
+
+> 
+> ### evaluate all formulae in xxx_tests parent.frame
+> ### spotted by Matthieu Dubois <matthdub@gmail.com>
+> y <- as.data.frame(matrix(rnorm(200), ncol=2))
+> group <- gl(2, 50)
+> lapply(y, function(var) lc("wilcox_test",var ~ group, data = data.frame(var = var, group = group)))
+[1] TRUE
+[1] TRUE
+$V1
+
+	Asymptotic Wilcoxon-Mann-Whitney Test
+
+data:  var by group (1, 2)
+Z = -0.08962, p-value = 0.9286
+alternative hypothesis: true mu is not equal to 0
+
+
+$V2
+
+	Asymptotic Wilcoxon-Mann-Whitney Test
+
+data:  var by group (1, 2)
+Z = -0.36537, p-value = 0.7148
+alternative hypothesis: true mu is not equal to 0
+
+
+> 
+> ### make sure a parallel design with
+> ### n = 2 isn't confused with a block design
+> ### spotted by Fritz Scholz <fscholz@u.washington.edu>
+> dat <- data.frame(y = c(1, 2), g = gl(2, 1))
+> wt <- lc("wilcox_test",y ~ g, data = dat, distribution = exact())
+[1] TRUE
+> s <- support(wt)
+> stopifnot(all(dperm(wt, s) == c(0.5, 0.5)))
+> 
+> ### dpqperm
+> wte <- lc("wilcox_test",Route.Time ~ Route, distribution = exact())
+[1] "Component \"p.value\": Mean absolute difference: 2.637363e-05"
+> wta <- lc("wilcox_test",Route.Time ~ Route, distribution = approximate())
+[1] "Component \"p.value\": Mean absolute difference: 4e-04"
+> de <- dperm(wte, support(wte))
+> pe <- pperm(wte, support(wte))
+> stopifnot(max(abs(cumsum(de) - pe)) < sqrt(.Machine$double.eps))
+> da <- dperm(wta, support(wta))
+> pa <- pperm(wta, support(wta))
+> stopifnot(max(abs(cumsum(da) - pa)) < sqrt(.Machine$double.eps))
+> qperm(wte, seq(from = 0.1, to = 0.9, by = 0.1))
+[1] -1.3125012 -0.8559791 -0.5135874 -0.2853264  0.0000000  0.2853264  0.5706527
+[8]  0.8559791  1.2554359
+> qperm(wta, seq(from = 0.1, to = 0.9, by = 0.1))
+[1] -1.3125012 -0.9130443 -0.5135874 -0.2282611  0.0000000  0.2853264  0.5706527
+[8]  0.8559791  1.3125012
+> 
+> ### split-up and confint (spotted by Fritz Scholz <fscholz@u.washington.edu>)
+> iseed <- 25
+> n <- m <- 4
+> conf.level <- 0.98
+> alternative <- "greater"
+> set.seed(iseed)
+> x <- round(rnorm(m), 2)
+> y <- round(rnorm(n, 2), 2)
+> score.factor <- factor(c(rep("Y",n),rep("X",m)),
++                        levels = c("Y","X"))
+> dat.fr <- data.frame(scores=c(y,x), fac = score.factor)
+> it <- lc("normal_test",scores ~ fac, data = dat.fr,
++     conf.int = TRUE, conf.level = conf.level,
++     alternative = alternative, dist = exact())
+[1] "Component \"p.value\": Mean absolute difference: 0.0007142857"
+> confint(it)
+98 percent confidence interval:
+ 0.71  Inf 
+sample estimates:
+difference in location 
+                  2.59 
+
+> 
+> ### discrete (spotted by Henric Winell <henric.winell@sorch.se>)
+> set.seed(1)
+> x <- gl(3, 5)
+> y1 <- rnorm(15)
+> y2 <- rnorm(15)
+> it <- lc("independence_test",y1 + y2 ~ x, distribution = approximate(B = 5))
+[1] "Component \"p.value\": Mean absolute difference: 0.4725"
+> pvalue(it, "discrete") # didn't work
+        y1       y2
+1 0.999936 0.737856
+2 1.000000 1.000000
+3 0.999936 0.000000
+Warning message:
+In .local(object, ...) : 'method = "discrete"' is deprecated; see '?pvalue'
+> 
+> ### error messages
+> ### first group completely empty
+> x <- c(NA, NA, NA)
+> y <- c(2,4, 3)
+> z <- factor(c(1,1,1,2,2,2))
+> u <- c(x,y)
+> try(lc("wilcox_test",u ~ z))
+Error in factor_trafo(x) : 
+  Can't deal with factors containing only one level
+> 
+> ### missing values
+> x <- c(NA, NA, 1)
+> y <- c(2,  NA, NA)
+> z <- factor(c(1,1,1,2,2,2))
+> u <- c(x,y)
+> lc("wilcox_test",u ~ z)
+[1] TRUE
+
+	Asymptotic Wilcoxon-Mann-Whitney Test
+
+data:  u by z (1, 2)
+Z = -1, p-value = 0.3173
+alternative hypothesis: true mu is not equal to 0
+
+> 
+> x <- c(NA, 1, 2, 8)
+> y <- c(2, 4, NA, 3)
+> lc("wilcoxsign_test",x ~ y)
+[1] TRUE
+
+	Asymptotic Wilcoxon-Pratt Signed-Rank Test
+
+data:  y by x (pos, neg) 
+	 stratified by block
+Z = 0.44721, p-value = 0.6547
+alternative hypothesis: true mu is not equal to 0
+
+> 
+> ### no observations left after removing NAs
+> x <- c(NA, NA)
+> y <- c(1, 1)
+> try(lc("wilcoxsign_test",x ~ y))
+Error in validObject(.Object) : 
+  invalid class "SymmetryProblem" object: FALSE
+In addition: Warning message:
+In max(abs(object@weights - floor(object@weights))) :
+  no non-missing arguments to max; returning -Inf
+> 
+> ### problem in coin 1.0-12 fixed
+> x <- c(1, 2, 3)
+> y <- c(0, 1, 0)
+> lc("wilcoxsign_test",x ~ y)
+[1] TRUE
+
+	Asymptotic Wilcoxon-Pratt Signed-Rank Test
+
+data:  y by x (pos, neg) 
+	 stratified by block
+Z = 1.633, p-value = 0.1025
+alternative hypothesis: true mu is not equal to 0
+
+> 
+> ### as.integer(round(x)) is safer than as.integer(x)
+>  water_transfer <- data.frame(
++      pd = c(0.80, 0.83, 1.89, 1.04, 1.45, 1.38, 1.91,
++             1.64, 0.73, 1.46, 1.15, 0.88, 0.90, 0.74, 1.21) * 100 - 72,
++      age = factor(c(rep("At term", 10),
++                     rep("12-26 Weeks", 5))))
+> 
+> ### check this out
+> # water_transfer$pd[11]
+> # as.integer(water_transfer$pd[11])
+> # as.integer(round(water_transfer$pd[11]))
+> 
+> p1 <- pvalue(lc("independence_test",pd ~ age, data = water_transfer,
++                                alternative = "less",
++                                distribution = exact(algorithm = "shift")))
+[1] "Component \"p.value\": Mean absolute difference: 0.003096936"
+> p2 <- pvalue(lc("independence_test",pd ~ age, data = water_transfer,
++                                alternative = "less",
++                                distribution = exact(algorithm = "split")))
+[1] "Component \"p.value\": Mean absolute difference: 0.003096936"
+> stopifnot(isequal(p1, p2))
+> 
+> ### monotonicity wasn't enforced for "step-down"
+> set.seed(290875)
+> 
+> gr <- gl(2, 50)
+> x1 <- rnorm(100) + (as.numeric(gr) - 1) * 0.5
+> x2 <- rnorm(100) - (as.numeric(gr) - 1) * 0.5
+> 
+> it <- lc("independence_test",x1 + x2 ~ gr, distribution = approximate(B = 1000))
+[1] "Component \"p.value\": Mean absolute difference: 7e-04"
+> 
+> psd <- pvalue(it, "step-down") # wasn't monotone
+> stopifnot(psd[1] == psd[2])
+> 
+> ### single-step p-values were too small
+> df <- data.frame(y1 = c(6, 7, 8, 5, 4, 3, 1, 2),
++                  y2 = c(1, 2, 5, 4, 7, 3, 8, 6),
++                  y3 = c(5, 7, 8, 6, 2, 3, 1, 4),
++                  y4 = c(4, 8, 7, 3, 6, 5, 1, 2),
++                  x = gl(2, 4, labels = c("I", "II")))
+> 
+> set.seed(711109)
+> it <- lc("independence_test",y1 + y2 + y3 + y4 ~ x, data = df,
++                         alternative = "greater",
++                         distribution = approximate(B = 20))
+[1] "Component \"p.value\": Mean absolute difference: 0.0045"
+> 
+> pss <- pvalue(it, "single-step")
+> psd <- pvalue(it, "step-down")
+> stopifnot(isequal(all(GE(pss, psd)), TRUE))
+> 
+> ### fmaxstat_trafo 'drop'ed its dimensions
+> fmaxstat_trafo(gl(2, 2))
+  {1} vs. {2}
+1           1
+2           1
+3           0
+4           0
+> 
+> ### fmaxstat_trafo didn't drop unused levels
+> a <- gl(4, 2)
+> a[5:6] <- NA
+> fmaxstat_trafo(a)
+  {1} vs. {2, 4} {1, 2} vs. {4} {1, 4} vs. {2}
+1              1              1              1
+2              1              1              1
+3              0              1              0
+4              0              1              0
+5             NA             NA             NA
+6             NA             NA             NA
+7              0              0              1
+8              0              0              1
+> 
+> ### wrong p-value in the one-sided case
+> lc("median_test",y1 ~ x, data = df, alternative = "less")
+[1] TRUE
+
+	Asymptotic Two-Sample Brown-Mood Median Test
+
+data:  y1 by x (I, II)
+Z = 2.6458, p-value = 0.9959
+alternative hypothesis: true mu is less than 0
+
+> 
+> ### nullvalue never got printed
+> lc("logrank_test",Surv(time, event) ~ stadium, data = ocarcinoma)
+[1] TRUE
+
+	Asymptotic Two-Sample Logrank Test
+
+data:  Surv(time, event) by stadium (II, IIA)
+Z = 2.3373, p-value = 0.01942
+alternative hypothesis: true theta is not equal to 1
+
+> 
+> ### partial matching of the scores argument didn't work
+> lc("chisq_test",as.table(jobsatisfaction[, , "Female"]), sco = list(Income = 1:4))
+[1] TRUE
+
+	Asymptotic Generalized Pearson Chi-Squared Test
+
+data:  Job.Satisfaction by
+	 Income (<5000 < 5000-15000 < 15000-25000 < >25000)
+chi-squared = 3.0171, df = 3, p-value = 0.389
+
+> 
+> ### partial matching of the scores argument didn't work
+> tab <- as.table(matrix(c(1, 2, 3, 1, 2, 3, 1, 2, 3), ncol = 3))
+> lc("mh_test",tab, sco = list(response = 1:3))
+[1] TRUE
+
+	Asymptotic Marginal Homogeneity Test for Ordered Data
+
+data:  response (ordered) by
+	 conditions (Var1, Var2) 
+	 stratified by block
+Z = 1.2247, p-value = 0.2207
+alternative hypothesis: two.sided
+
+> 
+> ### erroneously claimed to be linear-by-linear tests
+> lc("chisq_test",as.table(jobsatisfaction[, , "Female"]), scores = list(Income = 1:4))
+[1] TRUE
+
+	Asymptotic Generalized Pearson Chi-Squared Test
+
+data:  Job.Satisfaction by
+	 Income (<5000 < 5000-15000 < 15000-25000 < >25000)
+chi-squared = 3.0171, df = 3, p-value = 0.389
+
+> lc("cmh_test",as.table(jobsatisfaction[, , "Female"]), scores = list(Income = 1:4))
+[1] TRUE
+
+	Asymptotic Generalized Cochran-Mantel-Haenszel Test
+
+data:  Job.Satisfaction by
+	 Income (<5000 < 5000-15000 < 15000-25000 < >25000)
+chi-squared = 2.97, df = 3, p-value = 0.3963
+
+> 
+> ### multivariate trafos with blocks failed for ordered factors and survival data
+> z <- gl(2, 10)
+> trafo(data.frame(gl(4, 5, ordered = TRUE)),
++       ordered_trafo = function(x) cbind(c(1, 2, 3, 4)[x], c(1, 2, 3, 5)[x]),
++       block = z)
+         
+ [1,] 1 1
+ [2,] 1 1
+ [3,] 1 1
+ [4,] 1 1
+ [5,] 1 1
+ [6,] 2 2
+ [7,] 2 2
+ [8,] 2 2
+ [9,] 2 2
+[10,] 2 2
+[11,] 3 3
+[12,] 3 3
+[13,] 3 3
+[14,] 3 3
+[15,] 3 3
+[16,] 4 5
+[17,] 4 5
+[18,] 4 5
+[19,] 4 5
+[20,] 4 5
+attr(,"assign")
+[1] 1 1
+> 
+> ### wrong exact p-values for stratified tests when all blocks have length two
+> y <- 1:30
+> x <- factor(rep(1:2, 15))
+> id <- gl(15, 2)
+> it <- lc("independence_test",y ~ x | id, distribution = "exact") # Wrong
+[1] "Component \"p.value\": Mean absolute difference: 0.0002389648"
+> wt <- lc("wilcoxsign_test",y ~ x | id, distribution = "exact") # OK! p = 6.104e-5
+[1] "Component \"p.value\": Mean absolute difference: 0.0002389648"
+> stopifnot(isequal(pvalue(it), pvalue(wt)))
+> 
+> ### chisq_test standardized test statistic was wrong
+> ct <- lc("chisq_test",as.table(matrix(1:4, ncol = 2)))
+[1] TRUE
+> stopifnot(isequal(statistic(ct), statistic(ct, "standardized")^2))
+> 
+> ### standardized signed-rank statistic had wrong sign
+> y1 <- seq(1, 30, 2)
+> y2 <- seq(2, 30, 2)
+> dta <- stack(list(y1 = y1, y2 = y2))
+> dta$block <- factor(rep(seq_along(y1), 2))
+> 
+> wt0 <- wilcox.test(y1, y2, paired = TRUE, exact = FALSE, correct = FALSE,
++                    alternative = "greater")
+> wt1 <- lc("wilcoxsign_test",y1 ~ y2, alternative = "greater")
+[1] TRUE
+> wt2 <- lc("wilcoxsign_test",values ~ ind | block, data = dta,
++                        alternative = "greater")
+[1] TRUE
+> it <- lc("independence_test",values ~ ind | block, data = dta,
++                         alternative = "less")
+[1] TRUE
+> 
+> stopifnot(isequal(wt0$statistic, statistic(wt1, "linear"))) # Was OK
+> stopifnot(isequal(wt0$statistic, statistic(wt2, "linear")))
+> stopifnot(isequal(statistic(wt1), statistic(wt2)))
+> stopifnot(isequal(statistic(it), statistic(wt2)))
+> 
+> ### maxstat_test didn't handle scores properly
+> mt0 <- lc("maxstat_test",counts ~ age, data = treepipit)
+[1] "Component \"p.value\": Mean absolute difference: 1.707995e-06"
+> 
+> fage <- factor(treepipit$age) # -> wrong estimates
+> mt1 <- lc("maxstat_test",counts ~ fage, data = treepipit,
++                     scores = list(fage = 1:4))
+[1] "Component \"p.value\": Mean absolute difference: 1.707995e-06"
+> stopifnot(isequal(mt0@estimates$estimate$cutpoint,
++                   max(as.numeric(mt1@estimates$estimate$cutpoint))))
+> 
+> oage <- ordered(treepipit$age) # -> error: oage is not a factor
+> mt2 <- lc("maxstat_test",counts ~ oage, data = treepipit,
++                     scores = list(oage = 1:4))
+[1] "Component \"p.value\": Mean absolute difference: 1.707995e-06"
+> stopifnot(isequal(mt0@estimates$estimate$cutpoint,
++                   max(as.numeric(mt2@estimates$estimate$cutpoint))))
+> 
+> ### one-sided Ansari-Bradley test reported the wrong direction
+> y <- c(rnorm(10, sd = 1),  rnorm(10, sd = 5)) # sigma_1 < sigma_2 ==>> "less"
+> x <- gl(2, 10)
+> alt <- "less"
+> at <- lc("ansari_test",y ~ x, alternative = alt)
+[1] "Component \"p.value\": Mean absolute difference: 0.9936979"
+> stopifnot(isequal(at@statistic@alternative, alt))
+> 
+> ### objects of class "SymmetryProblem" didn't check validity
+> dta <- data.frame(y = rnorm(20), y2 = rnorm(20),
++                   x = factor(rep(1:4, 5)), x2 = gl(2, 10),
++                   b = gl(5, 4),
++                   w = rep(2, 20))
+> try(lc("friedman_test",y + y2 ~ x | b, data = dta))
+Error in check(object) : 'y''y2' is not a numeric variable
+> try(lc("friedman_test",y ~ x + x2 | b, data = dta))
+Error in validityMethod(object) : 
+  'x' slot does not contain a single factor
+> try(lc("friedman_test",y ~ x2 | b, data = dta)) # was ok
+Error in validityMethod(object) : 
+  'object' is not a an unreplicated complete block design
+> 
+> ### friedman_test didn't warn on weights
+> lc("friedman_test",y ~ x | b, data = dta,  weights = ~ w)
+[1] TRUE
+
+	Asymptotic Friedman Test
+
+data:  y by x (1, 2, 3, 4) 
+	 stratified by b
+chi-squared = 12.6, df = 3, p-value = 0.005587
+
+Warning message:
+In ft("friedman_test", "SymmetryProblem", formula, data, subset,  :
+  Rank transformation doesn't take weights into account
+> 
+> ### chisq_test ignored xtrafo and ytrafo
+> lc("chisq_test",as.table(jobsatisfaction[, , "Female"]),
++            xtrafo = function(data)
++                trafo(data, factor_trafo = function(x)
++                    of_trafo(x, scores = 1:4)))
+[1] TRUE
+
+	Asymptotic Pearson Chi-Squared Test
+
+data:  Job.Satisfaction by
+	 Income (<5000, 5000-15000, 15000-25000, >25000)
+chi-squared = 3.0171, df = 3, p-value = 0.389
+
+Warning message:
+In of_trafo(x, scores = 1:4) : 'x' is not an ordered factor
+> lc("chisq_test",as.table(jobsatisfaction[, , "Female"]),
++            ytrafo = function(data)
++                trafo(data, factor_trafo = function(y)
++                    of_trafo(y, scores = 1:4)))
+[1] TRUE
+
+	Asymptotic Pearson Chi-Squared Test
+
+data:  Job.Satisfaction by
+	 Income (<5000, 5000-15000, 15000-25000, >25000)
+chi-squared = 4.2297, df = 3, p-value = 0.2377
+
+Warning message:
+In of_trafo(y, scores = 1:4) : 'y' is not an ordered factor
+> lc("chisq_test",as.table(jobsatisfaction[, , "Female"]),
++            xtrafo = function(data)
++                trafo(data, factor_trafo = function(x)
++                    of_trafo(x, scores = 1:4)),
++            ytrafo = function(data)
++                trafo(data, factor_trafo = function(y)
++                    of_trafo(y, scores = 1:4)))
+[1] TRUE
+
+	Asymptotic Pearson Chi-Squared Test
+
+data:  Job.Satisfaction by
+	 Income (<5000, 5000-15000, 15000-25000, >25000)
+chi-squared = 1.8684, df = 1, p-value = 0.1717
+
+Warning messages:
+1: In of_trafo(x, scores = 1:4) : 'x' is not an ordered factor
+2: In of_trafo(y, scores = 1:4) : 'y' is not an ordered factor
+> 
+> ### dperm could fail for *exact* tests with blocks
+> ### (this was due to the support values not being ordered and distinct)
+> dta <- data.frame(
++     y = c(1.83,  0.50,  1.62,  2.48, 1.68, 1.88, 1.55, 3.06, 1.30,
++           0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29),
++     x = gl(2, 9),
++     b = factor(rep(seq_len(9), 2)))
+> it <- lc("independence_test",y ~ x | b, data = dta,
++                         distribution = exact(algorithm = "shift"),
++                         alternative = "greater")
+[1] "Component \"p.value\": Mean absolute difference: 0.000371875"
+> stopifnot(is.numeric(dperm(it, support(it))))
+> ### see 'regtest_distribution.R' for more extensive checks
+> 
+> ### qperm with p = 1 could be NA for *exact* tests using the shift algorithm
+> TeaTasting <-
++     matrix(c(3, 1, 1, 3),
++            nrow = 2,
++            dimnames = list(Guess = c("Milk", "Tea"),
++                            Truth = c("Milk", "Tea")))
+> it <- lc("independence_test",as.table(TeaTasting),
++                         distribution = exact(algorithm = "shift"))
+[1] "Component \"p.value\": Mean absolute difference: 0.003685714"
+> stopifnot(!is.na(qperm(it, p = 1)))
+> 
+> ### dperm for *exact* tests returned a zero-length vector for values not
+> ### included in the support
+> dp_it <- dperm(it, 1.5)
+> stopifnot(length(dp_it > 0) && dp_it == 0)
+> 
+> ### dperm for *approximate* tests returned non-zero probabilities for values not
+> ### included in the support
+> exfoliative <- matrix(c( 0, 16,
++                         15, 57),
++                       nrow = 2, byrow = TRUE)
+> set.seed(290875)
+> it <- lc("independence_test",as.table(exfoliative),
++                         distribution = approximate(B = 10000),
++                         teststat = "scalar")
+[1] "Component \"p.value\": Mean absolute difference: 0.0024"
+> stopifnot(isequal(round(dperm(it, -statistic(it)), 4), 0.0000)) # 0.0747
+> 
+> ### 'is_2sample' didn't drop unused levels, causing trouble with, e.g., subset
+> dta <- data.frame(y = rnorm(15), x = gl(3, 5), b = factor(rep(1:5, 3)))
+> subs <- dta$x %in% 1:2
+> lc("wilcox_test",y ~ x | b, data = dta, subset = subs)
+[1] TRUE
+
+	Asymptotic Wilcoxon-Mann-Whitney Test
+
+data:  y by x (1, 2) 
+	 stratified by b
+Z = 0.28735, p-value = 0.7738
+alternative hypothesis: true mu is not equal to 0
+
+> 
+> ### problem with subsetting stratification variable
+> subs <- dta$x %in% 1:2 & dta$b %in% 1:4
+> lc("wilcox_test",y ~ x | b, data = dta, subset = subs)
+[1] TRUE
+
+	Asymptotic Wilcoxon-Mann-Whitney Test
+
+data:  y by x (1, 2) 
+	 stratified by b
+Z = -0.29488, p-value = 0.7681
+alternative hypothesis: true mu is not equal to 0
+
+> 
+> ### 'dperm' returned non-sense for asymptotic max-type tests
+> y1 <- rnorm(10)
+> y2 <- rnorm(10)
+> x <- gl(2, 5)
+> it <- lc("independence_test",y1 + y2 ~ x)
+[1] TRUE
+> stopifnot(is.na(dperm(it, statistic(it))))
+> 
+> ### 'p-'/'qperm' for asymptotic max-type test had issues with vector arguments
+> stopifnot(isequal(pperm(it, 1:3),
++                   c(pperm(it, 1), pperm(it, 2), pperm(it, 3))))
+> stopifnot(isequal(qperm(it, c(0.9, 0.95, 0.99)),
++                   c(qperm(it, 0.9), qperm(it, 0.95), qperm(it, 0.99))))
+> 
+> ### blockwise permutations were only correct for factors ordered wrt their levels
+> set.seed(36)
+> .Call("R_blockperm", rep(1:4, 2),                       # was OK
++       PACKAGE = "coin")
+[1] 4 5 6 7 0 1 2 3
+> 
+> set.seed(36)
+> .Call("R_blockperm", rep(1:4, each = 2),                # was OK
++       PACKAGE = "coin")
+[1] 1 0 3 2 5 4 7 6
+> 
+> set.seed(36)
+> .Call("R_blockperm", c(1:4, 4:1),                       # was OK
++       PACKAGE = "coin")
+[1] 7 6 5 4 3 2 1 0
+> 
+> set.seed(36)
+> .Call("R_blockperm", c(4L, 1L, 2L, 2L, 4L, 3L, 1L, 3L), # wrong
++       PACKAGE = "coin")
+[1] 4 6 3 2 0 7 1 5
+> 
+> ### could not distinguish censored and numeric responses
+> y1 <- rnorm(10)
+> y2 <- rnorm(10)
+> x <- gl(2, 5)
+> b <- factor(rep(1:5, 2))
+> try(lc("oneway_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("wilcox_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("kruskal_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("normal_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("median_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("savage_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("kruskal_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("taha_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("klotz_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("mood_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("ansari_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("fligner_test",Surv(y1) ~ x))
+Error in fligner_test.IndependenceProblem(object = <S4 object of class structure("IndependenceProblem", package = "coin")>) : 
+  'Surv(y1)' is not a numeric variable
+> try(lc("conover_test",Surv(y1) ~ x))
+Error in conover_test.IndependenceProblem(object = <S4 object of class structure("IndependenceProblem", package = "coin")>) : 
+  'Surv(y1)' is not a numeric variable
+> try(lc("sign_test",Surv(y1) ~ x | b))
+Error in sign_test.SymmetryProblem(object = <S4 object of class structure("SymmetryProblem", package = "coin")>) : 
+  'y' is not a numeric variable
+> try(lc("sign_test",Surv(y1) ~ Surv(y2)))
+Error in sign_test.formula(Surv(y1) ~ Surv(y2)) : 
+  'y' is not a numeric variable
+> try(lc("sign_test",Surv(y1) ~ y2))
+Error in sign_test.formula(Surv(y1) ~ y2) : 'y' is not a numeric variable
+> try(lc("sign_test",y1 ~ Surv(y2)))
+Error in sign_test.formula(y1 ~ Surv(y2)) : 'x' is not a numeric variable
+> try(lc("wilcoxsign_test",Surv(y1) ~ x | b))
+Error in wilcoxsign_test.SymmetryProblem(object = <S4 object of class structure("SymmetryProblem", package = "coin")>) : 
+  'y' is not a numeric variable
+> try(lc("wilcoxsign_test",Surv(y1) ~ Surv(y2)))
+Error in wilcoxsign_test.formula(Surv(y1) ~ Surv(y2)) : 
+  'y' is not a numeric variable
+> try(lc("wilcoxsign_test",Surv(y1) ~ y2))
+Error in wilcoxsign_test.formula(Surv(y1) ~ y2) : 
+  'y' is not a numeric variable
+> try(lc("wilcoxsign_test",y1 ~ Surv(y2)))
+Error in wilcoxsign_test.formula(y1 ~ Surv(y2)) : 
+  'x' is not a numeric variable
+> try(lc("friedman_test",Surv(y1) ~ x))
+Error in check(object) : 'Surv(y1)' is not a numeric variable
+> try(lc("quade_test",Surv(y1) ~ x))
+Error in quade_test.SymmetryProblem(object = <S4 object of class structure("SymmetryProblem", package = "coin")>) : 
+  'Surv(y1)' is not a numeric variable
+> 
+> ### exact two-sample tests with scores gave wrong p-value
+> y <- 1:20
+> x <- gl(2, 10)
+> ox <- ordered(x)
+> 
+> it1 <- lc("independence_test",y ~ x,  distr = exact(algorithm = "shift")) # p = 1e-05
+[1] "Component \"p.value\": Mean absolute difference: 1.082509e-05"
+> it2 <- lc("independence_test",y ~ x,  distr = exact(algorithm = "shift"), # was p = 1
++                          scores = list(x = 1:2))
+[1] "Component \"p.value\": Mean absolute difference: 1.082509e-05"
+> it3 <- lc("independence_test",y ~ ox, distr = exact(algorithm = "shift")) # was p = 1
+[1] "Component \"p.value\": Mean absolute difference: 1.082509e-05"
+> it4 <- lc("independence_test",y ~ ox, distr = exact(algorithm = "shift"), # was p = NA
++                          scores = list(ox = 3:4))
+[1] "Component \"p.value\": Mean absolute difference: 1.082509e-05"
+> stopifnot(identical(pvalue(it1), pvalue(it2)))
+> stopifnot(identical(pvalue(it1), pvalue(it3)))
+> stopifnot(identical(pvalue(it1), pvalue(it4)))
+> 
+> it5 <- lc("independence_test",y ~ x,  distr = exact(algorithm = "split")) # p = 1e-05
+[1] "Component \"p.value\": Mean absolute difference: 1.082509e-05"
+> it6 <- lc("independence_test",y ~ x,  distr = exact(algorithm = "split"), # was p = NA
++                          scores = list(x = 1:2))
+[1] "Component \"p.value\": Mean absolute difference: 1.082509e-05"
+> it7 <- lc("independence_test",y ~ ox, distr = exact(algorithm = "split")) # was p = NA
+[1] "Component \"p.value\": Mean absolute difference: 1.082509e-05"
+> it8 <- lc("independence_test",y ~ ox, distr = exact(algorithm = "split"), # was p = NA
++                          scores = list(ox = 3:4))
+[1] "Component \"p.value\": Mean absolute difference: 1.082509e-05"
+> stopifnot(identical(pvalue(it5), pvalue(it6)))
+> stopifnot(identical(pvalue(it5), pvalue(it7)))
+> stopifnot(identical(pvalue(it5), pvalue(it8)))
+> 
+> ### 'of_trafo' threw an error for 'x' of length one
+> of_trafo(gl(3, 1, ordered = TRUE)[1])
+  [,1]
+1    1
+> 
+> proc.time()
+   user  system elapsed 
+  3.164   0.068   3.227 
