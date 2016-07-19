@@ -3,9 +3,9 @@
 #include "Utils.h"
 #include "TestStatistics.h"
 
-void C_contrasts_marginal_maxabsstat(double *linstat, double *expect, double *covar,
-                                     double *contrasts, int P, int Q, int Ncontrasts,
-                                     double tol, int *wmax, double *maxstat) {
+void C_contrasts_marginal_maxabsstand(double *linstat, double *expect, double *covar,
+                                      double *contrasts, int P, int Q, int Ncontrasts,
+                                      double tol, int *wmax, double *maxstat) {
                          
     double *mlinstat, *mexpect, *mvar, *mtmp, tmp;
     
@@ -37,8 +37,8 @@ void C_contrasts_marginal_maxabsstat(double *linstat, double *expect, double *co
                 mvar[q] += contrasts[p + i * P] * mtmp[p];
         }
 
-        tmp = C_maxabsstat_Variance(Q, mlinstat, mexpect, mvar, tol);
-
+        tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, ALTERNATIVE_twosided);
+        
         if (tmp > maxstat[0]) {
             wmax[0] = i;
             maxstat[0] = tmp;
@@ -98,7 +98,7 @@ void C_contrasts_marginal_quadform(double *linstat, double *expect, double *cova
     Free(MPinv);
 }
 
-void C_ordered_maxabsstat_X
+void C_ordered_maxabsstand_Xfactor
 (
     double *linstat, 
     double *expect, 
@@ -151,7 +151,7 @@ void C_ordered_maxabsstat_X
 
             count++;
 
-            tmp = C_maxabsstat_Variance(Q, mlinstat, mexpect, mvar, tol);
+            tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, ALTERNATIVE_twosided);
             
             if (tmp > maxstat[0]) {
                 wmax[0] = p;
@@ -162,7 +162,7 @@ void C_ordered_maxabsstat_X
     Free(mlinstat); Free(mexpect); Free(mvar);    
 }
 
-void C_ordered_quadform_X
+void C_ordered_quadform_Xfactor
 (
     double *linstat, 
     double *expect, 

@@ -61,12 +61,12 @@ SEXP R_ChisqTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP lower, SEXP give_log)
     return(ans);
 }
 
-SEXP R_MaxabsstatTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP lower, 
-                      SEXP give_log, SEXP maxpts, SEXP releps, SEXP abseps)
+SEXP R_MaxtypeTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP alternative, SEXP lower, 
+                   SEXP give_log, SEXP maxpts, SEXP releps, SEXP abseps)
 {
     SEXP ans, stat, pval;
     double st, *ex, *cv, *ls, tl, *pv;
-    int P, Q, PQ, B;
+    int P, Q, PQ, B, vo, alt;
 
     P = C_get_P(LEV);
     Q = C_get_Q(LEV);
@@ -79,25 +79,24 @@ SEXP R_MaxabsstatTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP lower,
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
 
-    REAL(stat)[0] =  C_maxabsstat_Covariance(PQ, C_get_LinearStatistic(LEV), 
-                                             C_get_Expectation(LEV), 
-                                             C_get_Covariance(LEV), REAL(tol)[0]);
+    REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LEV), 
+                                   C_get_Expectation(LEV), 
+                                   C_get_Covariance(LEV), 
+                                   C_get_varonly(LEV),
+                                   REAL(tol)[0],
+                                   INTEGER(alternative)[0]);
 
     if (LENGTH(linstat) == 0) {
-        REAL(pval)[0] = C_maxabsstat_pvalue(REAL(stat)[0], C_get_Covariance(LEV),
-                                            PQ,
-                                            INTEGER(maxpts)[0], REAL(releps)[0], 
-                                            REAL(abseps)[0], REAL(tol)[0]);
-        if (INTEGER(give_log)[0]) {
-            if (INTEGER(lower)[0]) {
-                REAL(pval)[0] = log1p(- REAL(pval)[0]);
-            } else {
-                REAL(pval)[0] = log(REAL(pval)[0]);
-            }
-        } else {
-            if (INTEGER(lower)[0])
-                REAL(pval)[0] = 1 - REAL(pval)[0];
+        if (C_get_varonly(LEV) && PQ > 1) {
+            REAL(pval)[0] = NA_REAL;
+            UNPROTECT(1);
+            return(ans);
         }
+        REAL(pval)[0] = C_maxtype_pvalue(REAL(stat)[0], C_get_Covariance(LEV),
+                                         PQ, INTEGER(alternative)[0], INTEGER(lower)[0],
+                                         INTEGER(give_log)[0],
+                                         INTEGER(maxpts)[0], REAL(releps)[0], 
+                                         REAL(abseps)[0], REAL(tol)[0]);
     } else {
         B = NCOL(linstat);
         pv = REAL(pval);
@@ -105,11 +104,18 @@ SEXP R_MaxabsstatTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP lower,
         ls = REAL(linstat);
         ex = C_get_Expectation(LEV);
         cv = C_get_Covariance(LEV);
+        vo = C_get_varonly(LEV);
+        alt = INTEGER(alternative)[0];
         tl = REAL(tol)[0];
         REAL(pval)[0] = 0.0;
         for (int i = 0; i < B; i++) {
-            if (C_maxabsstat_Covariance(PQ, ls + PQ * i, ex, cv, tl) > st)
-                pv[0] = pv[0] + 1.0;
+            if (alt == ALTERNATIVE_less) {
+                if (LE(C_maxtype(PQ, ls + PQ * i, ex, cv, vo, tl, alt), st, tl))
+                    pv[0] = pv[0] + 1.0;
+            } else {
+                if (GE(C_maxtype(PQ, ls + PQ * i, ex, cv, vo, tl, alt), st, tl))
+                    pv[0] = pv[0] + 1.0;
+            }
         }
         if (INTEGER(give_log)[0]) {
             if (INTEGER(lower)[0]) {
@@ -150,7 +156,7 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
     SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, 1));
 
     if (INTEGER(teststat)[0] == 1) {                            
-        C_ordered_maxabsstat_X(C_get_LinearStatistic(LEV),
+        C_ordered_maxabsstand_Xfactor(C_get_LinearStatistic(LEV),
                                C_get_Expectation(LEV), 
                                C_get_Covariance(LEV),
                                P, Q, 
@@ -159,7 +165,7 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
                                REAL(tol)[0], 
                                INTEGER(index), REAL(stat));
     } else {
-        C_ordered_quadform_X(C_get_LinearStatistic(LEV),
+        C_ordered_quadform_Xfactor(C_get_LinearStatistic(LEV),
                              C_get_Expectation(LEV),
                              C_get_Covariance(LEV),
                              P, Q,
@@ -188,7 +194,7 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
 
         for (int i = 0; i < B; i++) {
             if (INTEGER(teststat)[0] == 1) {                            
-                C_ordered_maxabsstat_X(ls + PQ * i,
+                C_ordered_maxabsstand_Xfactor(ls + PQ * i,
                                        C_get_Expectation(LEV),
                                        C_get_Covariance(LEV),
                                        P, Q,
@@ -197,7 +203,7 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
                                        REAL(tol)[0],
                                        &itmp, &tmp);
             } else {
-                C_ordered_quadform_X(ls + PQ * i,
+                C_ordered_quadform_Xfactor(ls + PQ * i,
                                      C_get_Expectation(LEV),
                                      C_get_Covariance(LEV),
                                      P, Q,
@@ -302,7 +308,7 @@ SEXP R_MaxstatTest_unordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
     }
 
     if (INTEGER(teststat)[0] == 1) {                            
-        C_contrasts_marginal_maxabsstat(C_get_LinearStatistic(LEV),
+        C_contrasts_marginal_maxabsstand(C_get_LinearStatistic(LEV),
                                         C_get_Expectation(LEV), 
                                         C_get_Covariance(LEV),
                                         contrasts, P, Q, 
@@ -339,7 +345,7 @@ SEXP R_MaxstatTest_unordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
 
         for (int i = 0; i < B; i++) {
             if (INTEGER(teststat)[0] == 1) {                            
-                C_contrasts_marginal_maxabsstat(ls + PQ * i,
+                C_contrasts_marginal_maxabsstand(ls + PQ * i,
                                                 C_get_Expectation(LEV), 
                                                 C_get_Covariance(LEV),
                                                 contrasts, P, Q, 
