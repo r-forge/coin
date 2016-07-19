@@ -174,12 +174,7 @@ SEXP R_PermutedLinearStatistic(SEXP LEV, SEXP x, SEXP y, SEXP weights,
             for (int p = 0; p < PQ; p++)
                 linstat[p] = 0;
             C_doPermute(orig, N, tmp, perm);
-            if (isInteger(x)) {
-                C_PermutedLinearStatisticXfactor_(INTEGER(x), NROW(x), P, REAL(y), Q, perm, orig, N, linstat);
-            } else {
-                C_PermutedLinearStatistic_(REAL(x), NROW(x), P, REAL(y), Q, 
-                                       perm, orig, N, linstat);
-            }
+            C_PermutedLinearStatistic(x, NROW(x), P, REAL(y), Q, perm, orig, N, linstat);
         }
     } else {
         table = Calloc(Lb + 1, int);
@@ -229,8 +224,8 @@ SEXP R_PermutedLinearStatistic(SEXP LEV, SEXP x, SEXP y, SEXP weights,
             for (int p = 0; p < PQ; p++)
                 linstat[p] = 0;
             C_doPermuteBlock(orig, N, table, Lb + 1, tmp, perm);
-            C_PermutedLinearStatistic_(REAL(x), NROW(x), P, REAL(y), Q,
-                                       perm, orig, N, linstat);
+            C_PermutedLinearStatistic(x, NROW(x), P, REAL(y), Q,
+                                      perm, orig, N, linstat);
         }
         Free(table);
     }
