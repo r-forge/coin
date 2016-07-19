@@ -87,7 +87,7 @@ double C_maxabsstand_Variance(int PQ, double *linstat, double *expect, double *v
 
 double C_quadform(int PQ, double *linstat, double *expect, double *MPinv_sym)
 {
-    double ans = R_NegInf, tmp = 0.0;
+    double ans = 0.0, tmp = 0.0;
     
     for (int q = 0; q < PQ; q++) {
         tmp = 0.0;
