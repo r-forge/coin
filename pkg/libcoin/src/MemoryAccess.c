@@ -62,7 +62,16 @@ double* C_get_ExpectationInfluence(SEXP LECV)
 
 double* C_get_CovarianceInfluence(SEXP LECV)
 {
+    if (C_get_varonly(LECV) && C_get_Q(LECV) > 1)
+        error("Cannot extract covariance from variance object");
     return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));
+}
+
+double* C_get_VarianceInfluence(SEXP LECV)
+{
+    if (!C_get_varonly(LECV) && C_get_Q(LECV) > 1)
+        error("Cannot extract variance from covariance object");
+    return(REAL(VECTOR_ELT(LECV, VarianceInfluence_SLOT)));
 }
 
 double* C_get_Work(SEXP LECV)

@@ -10,6 +10,7 @@ double* C_get_Variance(SEXP LECV);
 double* C_get_ExpectationX(SEXP LECV);
 double* C_get_ExpectationInfluence(SEXP LECV);
 double* C_get_CovarianceInfluence(SEXP LECV);
+double* C_get_VarianceInfluence(SEXP LECV);
 double* C_get_Work(SEXP LECV);
 int* C_get_TableBlock(SEXP LECV);
 int* C_get_Sumweights(SEXP LECV);
