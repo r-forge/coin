@@ -79,7 +79,7 @@ stopifnot(isequal(statistic(mt),
 mt <- maxstat_test(w ~ z, data = dat)
 mt
 est <- mt@estimates$estimate$cutpoint
-xx <- dat$z <= est
+xx <- dat$z %in% est
 stopifnot(isequal(statistic(mt),
                   abs(statistic(independence_test(w ~ xx, data = dat)))))
 
