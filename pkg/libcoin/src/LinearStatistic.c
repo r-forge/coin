@@ -445,10 +445,17 @@ void C_CovarianceLinearStatistic(int P, int Q, double *CovInf, double *ExpX,
 {
     double f1 = (double) sumweights / (sumweights - 1);
     double f2 = 1.0 / (sumweights - 1);
-        
+    double tmp;
+
+    if (add > 1) add = 1;
     if (P * Q == 1) {
-        PQPQ_sym_ans[0] = f1 * CovInf[0] * CovX[0];
-        PQPQ_sym_ans[0] -= f2 * CovInf[0] * ExpX[0] * ExpX[0];
+        tmp = f1 * CovInf[0] * CovX[0];
+        tmp -= f2 * CovInf[0] * ExpX[0] * ExpX[0];
+        if (add) {
+            PQPQ_sym_ans[0] += tmp;
+        } else {
+            PQPQ_sym_ans[0] = tmp;
+        }
     } else {
         C_KronSums_sym_(ExpX, 1, P, PP_sym_tmp);
         for (int p = 0; p < P * (P + 1) / 2; p++)
@@ -461,9 +468,10 @@ void C_VarianceLinearStatistic(int P, int Q, double *VarInf, double *ExpX,
                                double *VarX, int sumweights, double *P_tmp, 
                                int add, double *PQ_ans) 
 {
+    if (add > 1) add = 1;
     if (P * Q == 1) {
         C_CovarianceLinearStatistic(P, Q, VarInf, ExpX, VarX, 
-                                    sumweights, P_tmp, add, PQ_ans);
+                                    sumweights, P_tmp, 1 - add, PQ_ans);
     } else {
 
         double f1 = (double) sumweights / (sumweights - 1);
