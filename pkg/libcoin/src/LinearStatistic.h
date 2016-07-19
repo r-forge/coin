@@ -3,12 +3,9 @@ void C_LinearStatistic(SEXP x, int N, int P, double* y, int Q,
                        int *weights, int *sumweights, 
                        int *subset, int *Nsubset, int Nlevel, 
                        double *PQ_ans);
-void C_PermutedLinearStatistic_(double *x, int N, int P, double *y, int Q,
-                                int *perm, int *original, int Nperm, 
-                                double *PQ_ans);
-void C_PermutedLinearStatisticXfactor_(int *ix, int N, int P, double *y, int Q,
-                                       int *perm, int *original, int Nperm,
-                                       double *PQ_ans);
+void C_PermutedLinearStatistic(SEXP x, int N, int P, double* y, int Q,
+                               int *perm, int *original, int Nperm,
+                               double *PQ_ans);
 void C_LinearStatistic_2d(SEXP x, int N, int P, double *y, int M, int Q, 
                           int *weights, double *PQ_ans); 
 void C_LinearStatisticXfactor_2d(int N, double *y, int M, int Q, 
