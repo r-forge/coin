@@ -5,11 +5,40 @@
 #include "Utils.h"
 #include <mvtnormAPI.h>
 
+/* lower = 1 means p-value, lower = 0 means 1 - p-value */
 double C_chisq_pvalue(double stat, int df, int lower, int give_log)
 {
     return(pchisq(stat, (double) df, lower, give_log));
 }
 
+double C_norm_pvalue(double stat, int alternative, int lower, int give_log)
+{
+    double ret;
+    
+    if (alternative == ALTERNATIVE_less) {
+        return(pnorm(stat, 0.0, 1.0, 1 - lower, give_log));
+    } else if (alternative == ALTERNATIVE_greater) {
+        return(pnorm(stat, 0.0, 1.0, lower, give_log));
+    } else if (alternative == ALTERNATIVE_twosided) {
+        if (lower) {
+            ret = pnorm(fabs(stat)*-1.0, 0.0, 1.0, 1, 0);
+            if (give_log) {
+                return(log1p(- 2 * ret));
+            } else {
+                return(1 - 2 * ret);
+            }
+        } else {
+            ret = pnorm(fabs(stat)*-1.0, 0.0, 1.0, 1, give_log);                  
+            if (give_log) {
+                return(ret + log(2));
+            } else {
+                return(2 * ret);
+            }
+        }
+    }           
+    return(NA_REAL);
+}
+    
 /**
     Conditional asymptotic P-value of a maxabs-type test statistic\n
     Basically the functionality from package `mvtnorm' \n
@@ -22,15 +51,16 @@ double C_chisq_pvalue(double stat, int df, int lower, int give_log)
     *\param tol tolerance
 */
 
-double C_maxabsstat_pvalue(const double stat, const double *Covariance, 
-    const int n, int maxpts, double releps, double abseps, double tol) {
+double C_maxtype_pvalue(const double stat, const double *Covariance, 
+    const int n, int alternative, int lower, int give_log, 
+    int maxpts, double releps, double abseps, double tol) {
 
     int nu = 0, inform, i, j, sub, nonzero, *infin, *index, rnd = 0;
-    double ans, myerror, *lower, *upper, *delta, *corr, *sd;
+    double ans, myerror, *lowerbnd, *upperbnd, *delta, *corr, *sd;
 
     /* univariate problem */
     if (n == 1) 
-        return(2*pnorm(fabs(stat)*-1.0, 0.0, 1.0, 1, 0)); /* return P-value */
+        return(C_norm_pvalue(stat, alternative, lower, give_log));
     
     if (n == 2)  
          corr = Calloc(1, double);
@@ -38,8 +68,8 @@ double C_maxabsstat_pvalue(const double stat, const double *Covariance,
          corr = Calloc(n + ((n - 2) * (n - 1))/2, double);
     
     sd = Calloc(n, double);
-    lower = Calloc(n, double);
-    upper = Calloc(n, double);
+    lowerbnd = Calloc(n, double);
+    upperbnd = Calloc(n, double);
     infin = Calloc(n, int);
     delta = Calloc(n, double);
     index = Calloc(n, int);
@@ -66,10 +96,20 @@ double C_maxabsstat_pvalue(const double stat, const double *Covariance,
         /* standard deviations */
         sd[i] = sqrt(Covariance[S(i, i, n)]);
                 
-        /* always look at the two-sided problem */           
-        lower[iz] = fabs(stat) * -1.0;
-        upper[iz] = fabs(stat);
-        infin[iz] = 2;
+        if (alternative == ALTERNATIVE_less) {
+            lowerbnd[iz] = stat;
+            upperbnd[iz] = R_PosInf;
+            infin[iz] = 1;
+        } else if (alternative == ALTERNATIVE_greater) {
+            lowerbnd[iz] = R_NegInf;
+            upperbnd[iz] = stat;
+            infin[iz] = 0;
+        } else if (alternative == ALTERNATIVE_twosided) {
+            lowerbnd[iz] = fabs(stat) * -1.0;
+            upperbnd[iz] = fabs(stat);
+            infin[iz] = 2;
+        }
+
         delta[iz] = 0.0;
         
         /* set up vector of correlations, i.e., the upper 
@@ -85,7 +125,7 @@ double C_maxabsstat_pvalue(const double stat, const double *Covariance,
     }
         
     /* call mvtnorm's mvtdst C function defined in mvtnorm/include/mvtnormAPI.h */
-    mvtnorm_C_mvtdst(&nonzero, &nu, lower, upper, infin, corr, delta, 
+    mvtnorm_C_mvtdst(&nonzero, &nu, lowerbnd, upperbnd, infin, corr, delta, 
                      &maxpts, &abseps, &releps, &myerror, &ans, &inform, &rnd);
 
     /* inform == 0 means: everything is OK */
@@ -101,9 +141,19 @@ double C_maxabsstat_pvalue(const double stat, const double *Covariance,
         default: warning("cmvnorm: unknown problem in MVTDST");
                 ans = 0.0;
     }
-    Free(corr); Free(sd); Free(lower); Free(upper); 
-    Free(infin); Free(delta); 
-    return(1 - ans);  /* return P-value */
+    Free(corr); Free(sd); Free(lowerbnd); Free(upperbnd); 
+    Free(infin); Free(delta);
+    
+    /* ans = 1 - p-value */
+    if (lower) {
+        if (give_log)
+            return(log(ans)); /* log(1 - p-value) */
+        return(ans); /* 1 - p-value */
+    } else {
+        if (give_log)
+            return(log1p(ans)); /* log(p-value) */
+        return(1 - ans); /* p-value */
+    }
 }
 
 
