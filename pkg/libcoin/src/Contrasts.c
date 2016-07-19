@@ -2,6 +2,7 @@
 #include "libcoin_internal.h"
 #include "Utils.h"
 #include "TestStatistics.h"
+#include "LinearStatistic.h"
 
 void C_contrasts_marginal_maxabsstand(double *linstat, double *expect, double *covar,
                                       double *contrasts, int P, int Q, int Ncontrasts,
@@ -98,6 +99,21 @@ void C_contrasts_marginal_quadform(double *linstat, double *expect, double *cova
     Free(MPinv);
 }
 
+void C_contrasts_marginal(double *linstat, double *expect, double *covar,
+                          double *contrasts, int P, int Q, int teststat, int Ncontrasts,
+                          double tol, int *wmax, double *maxstat) 
+{
+    if (teststat == TESTSTAT_maxtype) {
+        C_contrasts_marginal_maxabsstand(linstat, expect, covar,
+                                         contrasts, P, Q, Ncontrasts,
+                                         tol, wmax, maxstat);
+    } else {
+        C_contrasts_marginal_quadform(linstat, expect, covar,
+                                      contrasts, P, Q, Ncontrasts,
+                                      tol, wmax, maxstat);
+    }
+}
+
 void C_ordered_maxabsstand_Xfactor
 (
     double *linstat, 
@@ -113,7 +129,6 @@ void C_ordered_maxabsstand_Xfactor
 ) {
 
     double *mlinstat, *mexpect, *mvar, tmp, sumleft, sumright;
-    int count = 0;
     
     mlinstat = Calloc(Q, double);
     mexpect = Calloc(Q, double);
@@ -149,8 +164,6 @@ void C_ordered_maxabsstand_Xfactor
             (sumright >= minbucket) && 
             (ExpX[p] > 0)) {
 
-            count++;
-
             tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, ALTERNATIVE_twosided);
             
             if (tmp > maxstat[0]) {
@@ -177,7 +190,7 @@ void C_ordered_quadform_Xfactor
 ) {
 
     double *mlinstat, *mexpect, *mcovar, *MPinv, tmp, sumleft, sumright;
-    int count = 0, rank;
+    int rank;
     
     mlinstat = Calloc(Q, double);
     mexpect = Calloc(Q, double);
@@ -217,8 +230,6 @@ void C_ordered_quadform_Xfactor
             (sumright >= minbucket) && 
             (ExpX[p] > 0)) {
         
-            count++;
-
             C_MPinv_sym(mcovar, Q, tol, MPinv, &rank);
             tmp = C_quadform(Q, mlinstat, mexpect, MPinv);
 
@@ -230,3 +241,75 @@ void C_ordered_quadform_Xfactor
     }
     Free(mlinstat); Free(mexpect); Free(mcovar); Free(MPinv);   
 }
+
+
+void C_ordered_Xfactor(double *linstat, double *expect, double *covar, int P, 
+                       int Q, double *ExpX, int minbucket, double tol, int teststat,
+                       int *wmax, double *maxstat)
+{
+    if (teststat == TESTSTAT_maxtype) {
+        C_ordered_maxabsstand_Xfactor(linstat, expect, covar, P, Q, ExpX, minbucket, tol,
+                                      wmax, maxstat);
+    } else {
+        C_ordered_quadform_Xfactor(linstat, expect, covar, P, Q, ExpX, minbucket, tol,
+                                      wmax, maxstat);
+    }
+}
+
+void C_ordered_Xfactor_varonly(double *linstat, double *expect, double *varinf, int P,
+                               int Q, double *ExpX, int minbucket, double tol, int teststat,
+                               int *wmax, double *maxstat) 
+{
+
+    double *mlinstat, *mexpect, *mvar, tmp, sumleft, sumright, Ptmp;
+    int sw;
+
+    /* quadform needs covinf not varinf for Q > 1*/
+    if (teststat != TESTSTAT_maxtype)
+        error("only maxtype implemented");
+    
+    mlinstat = Calloc(Q, double);
+    mexpect = Calloc(Q, double);
+    mvar = Calloc(Q, double);
+    wmax[0] = -1;
+    maxstat[0] = 0.0;
+
+    for (int q = 0; q < Q; q++) {
+        mlinstat[q] = 0.0;
+        mexpect[q] = 0.0;
+        mvar[q] = 0.0;
+    }
+    
+    sumleft = 0.0;                        
+    sumright = 0.0;
+    for (int p = 0; p < P; p++) 
+        sumright += ExpX[p];
+    sw = sumright;
+                 
+    for (int p = 0; p < P; p++) {
+        sumleft += ExpX[p];
+        sumright -= ExpX[p];
+
+        for (int q = 0; q < Q; q++) {
+            mlinstat[q] += linstat[q * P + p];
+            mexpect[q] += expect[q * P + p];
+            /* does not work with blocks! */
+            C_VarianceLinearStatistic(1, Q, varinf, &sumleft, &sumleft,
+                                      sw, &Ptmp, 0, mvar);
+        }
+
+        if ((sumleft >= minbucket) && 
+            (sumright >= minbucket) && 
+            (ExpX[p] > 0)) {
+
+            tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, ALTERNATIVE_twosided);
+            
+            if (tmp > maxstat[0]) {
+                wmax[0] = p;
+                maxstat[0] = tmp;
+            }
+        }
+    }
+    Free(mlinstat); Free(mexpect); Free(mvar);    
+}
+                
