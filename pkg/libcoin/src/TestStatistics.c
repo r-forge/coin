@@ -4,7 +4,7 @@
 double C_maxstand_Covariance(int PQ, double *linstat, double *expect, double *covar_sym, double tol)
 {
 
-    double ans = 0.0, tmp = 0.0;
+    double ans = R_NegInf, tmp = 0.0;
     
     for (int p = 0; p < PQ; p++) {
         tmp = 0.0;
@@ -18,7 +18,7 @@ double C_maxstand_Covariance(int PQ, double *linstat, double *expect, double *co
 double C_maxstand_Variance(int PQ, double *linstat, double *expect, double *var, double tol)
 {
 
-    double ans = 0.0, tmp = 0.0;
+    double ans = R_NegInf, tmp = 0.0;
     
     for (int p = 0; p < PQ; p++) {
         tmp = 0.0;
@@ -32,7 +32,7 @@ double C_maxstand_Variance(int PQ, double *linstat, double *expect, double *var,
 double C_minstand_Covariance(int PQ, double *linstat, double *expect, double *covar_sym, double tol)
 {
 
-    double ans = 0.0, tmp = 0.0;
+    double ans = R_PosInf, tmp = 0.0;
     
     for (int p = 0; p < PQ; p++) {
         tmp = 0.0;
@@ -46,7 +46,7 @@ double C_minstand_Covariance(int PQ, double *linstat, double *expect, double *co
 double C_minstand_Variance(int PQ, double *linstat, double *expect, double *var, double tol)
 {
 
-    double ans = 0.0, tmp = 0.0;
+    double ans = R_PosInf, tmp = 0.0;
     
     for (int p = 0; p < PQ; p++) {
         tmp = 0.0;
@@ -60,7 +60,7 @@ double C_minstand_Variance(int PQ, double *linstat, double *expect, double *var,
 double C_maxabsstand_Covariance(int PQ, double *linstat, double *expect, double *covar_sym, double tol)
 {
 
-    double ans = 0.0, tmp = 0.0;
+    double ans = R_NegInf, tmp = 0.0;
     
     for (int p = 0; p < PQ; p++) {
         tmp = 0.0;
@@ -74,7 +74,7 @@ double C_maxabsstand_Covariance(int PQ, double *linstat, double *expect, double 
 double C_maxabsstand_Variance(int PQ, double *linstat, double *expect, double *var, double tol)
 {
 
-    double ans = 0.0, tmp = 0.0;
+    double ans = R_NegInf, tmp = 0.0;
     
     for (int p = 0; p < PQ; p++) {
         tmp = 0.0;
@@ -87,7 +87,7 @@ double C_maxabsstand_Variance(int PQ, double *linstat, double *expect, double *v
 
 double C_quadform(int PQ, double *linstat, double *expect, double *MPinv_sym)
 {
-    double ans = 0.0, tmp = 0.0;
+    double ans = R_NegInf, tmp = 0.0;
     
     for (int q = 0; q < PQ; q++) {
         tmp = 0.0;
