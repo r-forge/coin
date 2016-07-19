@@ -10,6 +10,9 @@
 #define ALTERNATIVE_less                   2    
 #define ALTERNATIVE_greater                3    
 
+#define TESTSTAT_maxtype		1
+#define TESTSTAT_quadform		2
+
 /* S[i, j] for n x n symmetric matrix in lower packed storage allowing for i < j */
 #define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)
 #define LE(x, y, tol)  ((x) < (y)) || (fabs((x) - (y)) < (tol))
@@ -25,9 +28,8 @@
 #define dim_SLOT			6
 #define ExpectationInfluence_SLOT	7
 #define CovarianceInfluence_SLOT	8
+#define VarianceInfluence_SLOT		8
 #define Work_SLOT			9
 #define TableBlock_SLOT			10
 #define Sumweights_SLOT			11
 #define Table_SLOT			12
-
-SEXP R_MPinv_sym (SEXP x, SEXP tol);
