@@ -15,16 +15,29 @@
 
 
 /* table(ix) */
-void C_1dtable_(int *ix, int Lx, int N, int *Lx_ans) 
-{
+void C_1dtable_
+(
+    int *ix, 
+    int Lx, 
+    int N, 
+    int *Lx_ans
+) {
+
     for (int i = 0; i < Lx; i++) Lx_ans[i] = 0;
 
     for (int i = 0; i < N; i++) Lx_ans[ix[i]]++;
 }
 
 /* table(ix[subset]) */
-void C_1dtable_subset(int *ix, int Lx, int *subset, int Nsubset, int *Lx_ans) 
-{
+void C_1dtable_subset
+(
+    int *ix, 
+    int Lx, 
+    int *subset,
+    int Nsubset, 
+    int *Lx_ans
+) {
+
     for (int i = 0; i < Lx; i++) Lx_ans[i] = 0;
     
     for (int i = 0; i < Nsubset; i++)  
@@ -32,8 +45,15 @@ void C_1dtable_subset(int *ix, int Lx, int *subset, int Nsubset, int *Lx_ans)
 }
 
 /* xtabs(weights ~ ix) */
-void C_1dtable_weights(int *ix, int Lx, int *weights, int N, int *Lx_ans) 
-{
+void C_1dtable_weights
+(
+    int *ix, 
+    int Lx, 
+    int *weights, 
+    int N, 
+    int *Lx_ans
+) {
+
     for (int i = 0; i < Lx; i++) Lx_ans[i] = 0;
     
     for (int i = 0; i < N; i++)  
@@ -41,9 +61,16 @@ void C_1dtable_weights(int *ix, int Lx, int *weights, int N, int *Lx_ans)
 }
 
 /* xtabs(weights ~ ix, subset = subset) */
-void C_1dtable_weights_subset(int *ix, int Lx, int *weights, int *subset, 
-                              int Nsubset, int *Lx_ans) 
-{
+void C_1dtable_weights_subset
+(
+    int *ix, 
+    int Lx, 
+    int *weights, 
+    int *subset, 
+    int Nsubset,
+    int *Lx_ans
+) {
+
     for (int i = 0; i < Lx; i++) Lx_ans[i] = 0;
     
     for (int i = 0; i < Nsubset; i++)  
@@ -51,8 +78,16 @@ void C_1dtable_weights_subset(int *ix, int Lx, int *weights, int *subset,
 }
 
 /* table(ix, iy) */
-void C_2dtable_(int *ix, int Lx, int *iy, int Ly, int N, int *LxLy_ans)
-{
+void C_2dtable_
+(
+    int *ix, 
+    int Lx, 
+    int *iy, 
+    int Ly, 
+    int N, 
+    int *LxLy_ans
+) {
+
     for (int i = 0; i < Lx * Ly; i++) LxLy_ans[i] = 0;
     
     for (int i = 0; i < N; i++)  
@@ -61,9 +96,17 @@ void C_2dtable_(int *ix, int Lx, int *iy, int Ly, int N, int *LxLy_ans)
 }
 
 /* table(ix[subset], iy[subset]) */
-void C_2dtable_subset(int *ix, int Lx, int *iy, int Ly, int *subset, 
-                      int Nsubset, int *LxLy_ans) 
-{
+void C_2dtable_subset
+(
+    int *ix, 
+    int Lx, 
+    int *iy, 
+    int Ly, 
+    int *subset, 
+    int Nsubset, 
+    int *LxLy_ans
+) {
+
     for (int i = 0; i < Lx * Ly; i++) LxLy_ans[i] = 0;
     
     for (int i = 0; i < Nsubset; i++)  
@@ -72,9 +115,17 @@ void C_2dtable_subset(int *ix, int Lx, int *iy, int Ly, int *subset,
 }
 
 /* xtabs(weights ~ ix + iy) */
-void C_2dtable_weights(int *ix, int Lx, int *iy, int Ly, int *weights,
-                       int N, int *LxLy_ans) 
-{
+void C_2dtable_weights
+(
+    int *ix, 
+    int Lx, 
+    int *iy, 
+    int Ly, 
+    int *weights,
+    int N, 
+    int *LxLy_ans
+) {
+
     for (int i = 0; i < Lx * Ly; i++) LxLy_ans[i] = 0;
     
     for (int i = 0; i < N; i++)
@@ -82,9 +133,18 @@ void C_2dtable_weights(int *ix, int Lx, int *iy, int Ly, int *weights,
 }
 
 /* xtabs(weights ~ ix + iy, subset = subset) */
-void C_2dtable_weights_subset(int *ix, int Lx, int *iy, int Ly, int *weights,
-                              int *subset, int Nsubset, int *LxLy_ans) 
-{
+void C_2dtable_weights_subset
+(
+    int *ix, 
+    int Lx, 
+    int *iy, 
+    int Ly, 
+    int *weights,
+    int *subset, 
+    int Nsubset, 
+    int *LxLy_ans
+) {
+
     for (int i = 0; i < Lx * Ly; i++) LxLy_ans[i] = 0;
     
     for (int i = 0; i < Nsubset; i++)
@@ -92,9 +152,18 @@ void C_2dtable_weights_subset(int *ix, int Lx, int *iy, int Ly, int *weights,
 }
 
 /* table(ix, iy, block) w/o NAs in block, ie block > 0 */
-void C_2dtable_block(int *ix, int Lx, int *iy, int Ly, int *block, int Lb, 
-                     int N, int *LxLyLb_ans)
-{
+void C_2dtable_block
+(
+    int *ix, 
+    int Lx, 
+    int *iy, 
+    int Ly, 
+    int *block, 
+    int Lb, 
+    int N, 
+    int *LxLyLb_ans
+) {
+
     int LxLy = Lx * Ly;
 
     for (int i = 0; i < LxLy * Lb; i++) LxLyLb_ans[i] = 0;
@@ -105,9 +174,19 @@ void C_2dtable_block(int *ix, int Lx, int *iy, int Ly, int *block, int Lb,
 }
 
 /* table(ix[subset], iy[subset], block[subset]) w/o NAs in block, ie block > 0 */
-void C_2dtable_subset_block(int *ix, int Lx, int *iy, int Ly, int *subset, 
-                            int Nsubset, int *block, int Lb, int *LxLyLb_ans) 
-{
+void C_2dtable_subset_block
+(
+    int *ix, 
+    int Lx,
+    int *iy, 
+    int Ly, 
+    int *subset, 
+    int Nsubset, 
+    int *block, 
+    int Lb, 
+    int *LxLyLb_ans
+) {
+
     int LxLy = Lx * Ly;
 
     for (int i = 0; i < LxLy * Lb; i++) LxLyLb_ans[i] = 0;
@@ -119,9 +198,19 @@ void C_2dtable_subset_block(int *ix, int Lx, int *iy, int Ly, int *subset,
 }
 
 /* xtabs(weights ~ ix + iy + block) w/o NAs in block, ie block > 0 */
-void C_2dtable_weights_block(int *ix, int Lx, int *iy, int Ly, int *weights,
-                             int *block, int Lb, int N, int *LxLyLb_ans) 
-{
+void C_2dtable_weights_block
+(
+    int *ix, 
+    int Lx, 
+    int *iy, 
+    int Ly, 
+    int *weights,
+    int *block, 
+    int Lb, 
+    int N, 
+    int *LxLyLb_ans
+) {
+
     int LxLy = Lx * Ly;
 
     for (int i = 0; i < LxLy * Lb; i++) LxLyLb_ans[i] = 0;
@@ -131,10 +220,20 @@ void C_2dtable_weights_block(int *ix, int Lx, int *iy, int Ly, int *weights,
 }
 
 /* xtabs(weights ~ ix + iy + block, subset = subset) w/o NAs in block, ie block > 0 */
-void C_2dtable_weights_subset_block(int *ix, int Lx, int *iy, int Ly, 
-                                    int *weights, int *subset, int Nsubset, 
-                                    int *block, int Lb, int *LxLyLb_ans) 
-{
+void C_2dtable_weights_subset_block
+(
+    int *ix, 
+    int Lx, 
+    int *iy, 
+    int Ly, 
+    int *weights, 
+    int *subset, 
+    int Nsubset, 
+    int *block, 
+    int Lb, 
+    int *LxLyLb_ans
+) {
+
     int LxLy = Lx * Ly;
 
     for (int i = 0; i < LxLy * Lb; i++) LxLyLb_ans[i] = 0;
@@ -144,9 +243,16 @@ void C_2dtable_weights_subset_block(int *ix, int Lx, int *iy, int Ly,
                     ix[subset[i]] + iy[subset[i]] * Lx] += weights[subset[i]];
 }
 
-void RC_2dtable(SEXP ix, SEXP iy, SEXP weights, SEXP subset, SEXP block, 
-                int *LxLyLb_ans) 
-{
+void RC_2dtable
+(
+    SEXP ix, 
+    SEXP iy, 
+    SEXP weights, 
+    SEXP subset, 
+    SEXP block, 
+    int *LxLyLb_ans
+) {
+
     if (LENGTH(block) == 0) {
         if ((LENGTH(weights) == 0) && (LENGTH(subset) == 0))
             C_2dtable_(INTEGER(ix), NLEVELS(ix) + 1, 
