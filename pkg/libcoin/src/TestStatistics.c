@@ -1,26 +1,7 @@
 
 #include "libcoin_internal.h"
 
-double C_quadform(int PQ, double *linstat, double *expect, double *MPinv_sym)
-{
-    double ans = 0.0, tmp = 0.0;
-    
-    for (int q = 0; q < PQ; q++) {
-        tmp = 0.0;
-        for (int p = 0; p < PQ; p++)
-            tmp += (linstat[p] - expect[p]) * MPinv_sym[S(p, q, PQ)];
-        ans += tmp * (linstat[q] - expect[q]);
-    }
-    return(ans);
-}
-
-double CR_quadform(SEXP LinearStatistic, SEXP Expectation, SEXP MPinv_sym)
-{
-    return(C_quadform(LENGTH(LinearStatistic), REAL(LinearStatistic), 
-                      REAL(Expectation), REAL(MPinv_sym)));
-}
-
-double C_maxstat_Covariance(int PQ, double *linstat, double *expect, double *covar_sym, double tol)
+double C_maxstand_Covariance(int PQ, double *linstat, double *expect, double *covar_sym, double tol)
 {
 
     double ans = 0.0, tmp = 0.0;
@@ -34,7 +15,7 @@ double C_maxstat_Covariance(int PQ, double *linstat, double *expect, double *cov
     return(ans);
 }
 
-double C_maxstat_Variance(int PQ, double *linstat, double *expect, double *var, double tol)
+double C_maxstand_Variance(int PQ, double *linstat, double *expect, double *var, double tol)
 {
 
     double ans = 0.0, tmp = 0.0;
@@ -48,7 +29,7 @@ double C_maxstat_Variance(int PQ, double *linstat, double *expect, double *var, 
     return(ans);
 }
 
-double C_minstat_Covariance(int PQ, double *linstat, double *expect, double *covar_sym, double tol)
+double C_minstand_Covariance(int PQ, double *linstat, double *expect, double *covar_sym, double tol)
 {
 
     double ans = 0.0, tmp = 0.0;
@@ -62,7 +43,7 @@ double C_minstat_Covariance(int PQ, double *linstat, double *expect, double *cov
     return(ans);
 }
 
-double C_minstat_Variance(int PQ, double *linstat, double *expect, double *var, double tol)
+double C_minstand_Variance(int PQ, double *linstat, double *expect, double *var, double tol)
 {
 
     double ans = 0.0, tmp = 0.0;
@@ -76,7 +57,7 @@ double C_minstat_Variance(int PQ, double *linstat, double *expect, double *var, 
     return(ans);
 }
 
-double C_maxabsstat_Covariance(int PQ, double *linstat, double *expect, double *covar_sym, double tol)
+double C_maxabsstand_Covariance(int PQ, double *linstat, double *expect, double *covar_sym, double tol)
 {
 
     double ans = 0.0, tmp = 0.0;
@@ -90,7 +71,7 @@ double C_maxabsstat_Covariance(int PQ, double *linstat, double *expect, double *
     return(ans);
 }
 
-double C_maxabsstat_Variance(int PQ, double *linstat, double *expect, double *var, double tol)
+double C_maxabsstand_Variance(int PQ, double *linstat, double *expect, double *var, double tol)
 {
 
     double ans = 0.0, tmp = 0.0;
@@ -104,29 +85,59 @@ double C_maxabsstat_Variance(int PQ, double *linstat, double *expect, double *va
     return(ans);
 }
 
-double CR_maxstat(SEXP LinearStatistic, SEXP Expectation, SEXP CoVariance, SEXP tol)
+double C_quadform(int PQ, double *linstat, double *expect, double *MPinv_sym)
 {
-    if (LENGTH(CoVariance) > LENGTH(LinearStatistic))
-        return(C_maxstat_Covariance(LENGTH(LinearStatistic), REAL(LinearStatistic), 
-                                    REAL(Expectation), REAL(CoVariance), REAL(tol)[0]));
-    return(C_maxstat_Variance(LENGTH(LinearStatistic), REAL(LinearStatistic), 
-                              REAL(Expectation), REAL(CoVariance), REAL(tol)[0]));
+    double ans = 0.0, tmp = 0.0;
+    
+    for (int q = 0; q < PQ; q++) {
+        tmp = 0.0;
+        for (int p = 0; p < PQ; p++)
+            tmp += (linstat[p] - expect[p]) * MPinv_sym[S(p, q, PQ)];
+        ans += tmp * (linstat[q] - expect[q]);
+    }
+    return(ans);
 }
 
-double CR_minstat(SEXP LinearStatistic, SEXP Expectation, SEXP CoVariance, SEXP tol)
+double C_maxtype(int PQ, double *linstat, double *expect, double *covar, int varonly, 
+                 double tol, int alternative) 
 {
-    if (LENGTH(CoVariance) > LENGTH(LinearStatistic))
-        return(C_minstat_Covariance(LENGTH(LinearStatistic), REAL(LinearStatistic), 
-                                    REAL(Expectation), REAL(CoVariance), REAL(tol)[0]));
-    return(C_minstat_Variance(LENGTH(LinearStatistic), REAL(LinearStatistic), 
-                              REAL(Expectation), REAL(CoVariance), REAL(tol)[0]));
+    double ret;
+    
+    if (varonly) {
+        if (alternative ==  ALTERNATIVE_twosided) {
+            ret = C_maxabsstand_Variance(PQ, linstat, expect, covar, tol);
+        } else if (alternative == ALTERNATIVE_less) {
+            ret = C_minstand_Variance(PQ, linstat, expect, covar, tol);
+        } else if (alternative == ALTERNATIVE_greater) {
+            ret = C_maxstand_Variance(PQ, linstat, expect, covar, tol);
+        } 
+    } else {
+        if (alternative ==  ALTERNATIVE_twosided) {
+            ret = C_maxabsstand_Covariance(PQ, linstat, expect, covar, tol);
+        } else if (alternative == ALTERNATIVE_less) {
+            ret = C_minstand_Covariance(PQ, linstat, expect, covar, tol);
+        } else if (alternative == ALTERNATIVE_greater) {
+            ret = C_maxstand_Covariance(PQ, linstat, expect, covar, tol);
+        } 
+    }
+    return(ret);
 }
 
-double CR_maxabsstat(SEXP LinearStatistic, SEXP Expectation, SEXP CoVariance, SEXP tol)
+void C_standardise(int PQ, double *linstat, double *expect, double *covar, int varonly,
+                   double tol)
 {
-    if (LENGTH(CoVariance) > LENGTH(LinearStatistic))
-        return(C_maxabsstat_Covariance(LENGTH(LinearStatistic), REAL(LinearStatistic), 
-                                       REAL(Expectation), REAL(CoVariance), REAL(tol)[0]));
-    return(C_maxabsstat_Variance(LENGTH(LinearStatistic), REAL(LinearStatistic), 
-                                 REAL(Expectation), REAL(CoVariance), REAL(tol)[0]));
+    double var;
+    
+    for (int p = 0; p < PQ; p++) {
+        if (varonly) {
+            var = covar[p];
+        } else {
+            var = covar[S(p, p, PQ)];
+        }
+        if (var > tol) {
+            linstat[p] = (linstat[p] - expect[p]) / sqrt(var);
+        } else {
+            linstat[p] = NAN;
+        }
+    }
 }
