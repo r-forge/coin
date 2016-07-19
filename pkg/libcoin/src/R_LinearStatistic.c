@@ -8,10 +8,16 @@
 #include "Distributions.h"
 #include "MemoryAccess.h"
 
-void RC_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, 
-                                       SEXP subset, SEXP block, 
-                                       SEXP ans)
-{
+void RC_ExpectationCovarianceStatistic
+(
+    SEXP x,
+    SEXP y, 
+    SEXP weights, 
+    SEXP subset, 
+    SEXP block, 
+    SEXP ans
+) {
+
     int N, P, Q, Lb, *sumweights, *table, *subset_tmp, tmp;
     double *ExpInf, *work;
 
@@ -90,10 +96,16 @@ void RC_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights,
 }        
 
 
-SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset, 
-                                      SEXP block, SEXP varonly)
+SEXP R_ExpectationCovarianceStatistic
+(
+    SEXP x, 
+    SEXP y, 
+    SEXP weights, 
+    SEXP subset, 
+    SEXP block, 
+    SEXP varonly
+) {
 
-{
     SEXP ans, P, Q, Lb; 
     
     PROTECT(P = ScalarInteger(0));
@@ -119,10 +131,18 @@ SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
     return(ans);
 }
 
-SEXP R_PermutedLinearStatistic(SEXP LEV, SEXP x, SEXP y, SEXP weights, 
-                               SEXP subset, SEXP block, SEXP B, SEXP standardise,
-                               SEXP tol) 
-{
+SEXP R_PermutedLinearStatistic
+(
+    SEXP LEV, 
+    SEXP x, 
+    SEXP y, 
+    SEXP weights, 
+    SEXP subset, 
+    SEXP block, 
+    SEXP B, 
+    SEXP standardise,
+    SEXP tol
+) {
 
     SEXP ans;
     double *linstat;
@@ -248,10 +268,17 @@ SEXP R_PermutedLinearStatistic(SEXP LEV, SEXP x, SEXP y, SEXP weights,
     return(ans);
 }
 
-void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
-                                          SEXP weights, SEXP subset, SEXP block, 
-                                          SEXP ans)
-{
+void RC_ExpectationCovarianceStatistic_2d
+(
+    SEXP x, 
+    SEXP ix, 
+    SEXP y, 
+    SEXP iy,
+    SEXP weights, 
+    SEXP subset, 
+    SEXP block, 
+    SEXP ans
+) {
 
     int P, Q, Lxp1, Lyp1, Lb, *btab, *csum, *rsum, *table, *table2d, sw;
     double *ExpInf, *ExpX, *CovX, *work;
@@ -340,10 +367,18 @@ void RC_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
     Free(table2d); Free(csum); Free(rsum); 
 }        
 
-SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy, 
-                                         SEXP weights, SEXP subset, SEXP block, 
-                                         SEXP varonly)
-{
+SEXP R_ExpectationCovarianceStatistic_2d
+(
+    SEXP x, 
+    SEXP ix, 
+    SEXP y, 
+    SEXP iy, 
+    SEXP weights, 
+    SEXP subset,
+    SEXP block, 
+    SEXP varonly
+) {
+
     SEXP ans, P, Q, Lx, Ly, Lb;
 
     PROTECT(P = ScalarInteger(0));
@@ -376,9 +411,18 @@ SEXP R_ExpectationCovarianceStatistic_2d(SEXP x, SEXP ix, SEXP y, SEXP iy,
     return(ans);
 }
 
-SEXP R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy, 
-                                  SEXP block, SEXP B, SEXP standardise,
-                                  SEXP tol) {
+SEXP R_PermutedLinearStatistic_2d
+(
+    SEXP LEV, 
+    SEXP x, 
+    SEXP ix, 
+    SEXP y, 
+    SEXP iy, 
+    SEXP block, 
+    SEXP B, 
+    SEXP standardise,
+    SEXP tol
+) {
 
     SEXP ans;
     int P, Q, PQ, Lb, Lx, Ly, *csum, *rsum, *ntotal, *table, *jwork, *rtable, *rtable2, maxn = 0, Lxp1, Lyp1;
@@ -466,7 +510,8 @@ SEXP R_PermutedLinearStatistic_2d(SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy,
         }
     }
     
-    Free(csum); Free(rsum); Free(ntotal); Free(rtable); Free(rtable2); Free(linstat); Free(jwork); Free(fact);
+    Free(csum); Free(rsum); Free(ntotal); Free(rtable); Free(rtable2); Free(linstat); 
+    Free(jwork); Free(fact);
     UNPROTECT(1);
     return(ans);
 }

@@ -4,11 +4,22 @@
 #include "TestStatistics.h"
 #include "LinearStatistic.h"
 
-void C_contrasts_marginal_maxabsstand(double *linstat, double *expect, double *covar,
-                                      double *contrasts, int P, int Q, int Ncontrasts,
-                                      double tol, int *wmax, double *maxstat) {
+void C_contrasts_marginal_maxabsstand
+(
+    double *linstat, 
+    double *expect, 
+    double *covar,
+    double *contrasts, 
+    int P, 
+    int Q, 
+    int Ncontrasts,
+    double tol, 
+    int *wmax, 
+    double *maxstat
+) {
                          
     double *mlinstat, *mexpect, *mvar, *mtmp, tmp;
+    int PQ = P * Q, qPp;
     
     mlinstat = Calloc(Q, double);
     mexpect = Calloc(Q, double);
@@ -25,20 +36,21 @@ void C_contrasts_marginal_maxabsstand(double *linstat, double *expect, double *c
             mvar[q] = 0.0;
 
             for (int p = 0; p < P; p++) {
-                mlinstat[q] += contrasts[p + i * P] * linstat[q * P + p];
-                mexpect[q] += contrasts[p + i * P] * expect[q * P + p];
-            }
-            /* only variances needed */
-            for (int p = 0; p < P; p++) {
+                qPp = q * P + p;
+                mlinstat[q] += contrasts[p + i * P] * linstat[qPp];
+                mexpect[q] += contrasts[p + i * P] * expect[qPp];
+                /* only variances needed */
                 mtmp[p] = 0.0;
                 for (int pp = 0; pp < P; pp++)
-                    mtmp[p] += contrasts[pp + i * P] * covar[S(pp + q * P, p + P * q, P * Q)];
+                    mtmp[p] += contrasts[pp + i * P] * 
+                               covar[S(pp + q * P, qPp, PQ)];
             }
             for (int p = 0; p < P; p++)
                 mvar[q] += contrasts[p + i * P] * mtmp[p];
         }
 
-        tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, ALTERNATIVE_twosided);
+        tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, 
+                        ALTERNATIVE_twosided);
         
         if (tmp > maxstat[0]) {
             wmax[0] = i;
@@ -48,9 +60,19 @@ void C_contrasts_marginal_maxabsstand(double *linstat, double *expect, double *c
     Free(mlinstat); Free(mexpect); Free(mvar); Free(mtmp);
 }
 
-void C_contrasts_marginal_quadform(double *linstat, double *expect, double *covar,
-                                   double *contrasts, int P, int Q, int Ncontrasts,
-                                   double tol, int *wmax, double *maxstat) {
+void C_contrasts_marginal_quadform
+(
+    double *linstat, 
+    double *expect, 
+    double *covar,
+    double *contrasts, 
+    int P, 
+    int Q, 
+    int Ncontrasts,
+    double tol, 
+    int *wmax, 
+    double *maxstat
+) {
                          
     double *mlinstat, *mexpect, *mcovar, *mtmp, tmp, *MPinv;
     int rank, qq;
@@ -80,7 +102,8 @@ void C_contrasts_marginal_quadform(double *linstat, double *expect, double *cova
                 for (int p = 0; p < P; p++) {
                     mtmp[p] = 0.0;
                     for (int pp = 0; pp < P; pp++)
-                        mtmp[p] += contrasts[pp + i * P] * covar[S(pp + q * P, p + P * qq, P * Q)];
+                        mtmp[p] += contrasts[pp + i * P] * 
+                                   covar[S(pp + q * P, p + P * qq, P * Q)];
                 }
                 for (int p = 0; p < P; p++)
                     mcovar[S(q, qq, Q)] += contrasts[p + i * P] * mtmp[p];
@@ -99,10 +122,21 @@ void C_contrasts_marginal_quadform(double *linstat, double *expect, double *cova
     Free(MPinv);
 }
 
-void C_contrasts_marginal(double *linstat, double *expect, double *covar,
-                          double *contrasts, int P, int Q, int teststat, int Ncontrasts,
-                          double tol, int *wmax, double *maxstat) 
-{
+void C_contrasts_marginal
+(
+    double *linstat, 
+    double *expect, 
+    double *covar,
+    double *contrasts, 
+    int P, 
+    int Q, 
+    int teststat, 
+    int Ncontrasts,
+    double tol, 
+    int *wmax, 
+    double *maxstat
+) {
+
     if (teststat == TESTSTAT_maxtype) {
         C_contrasts_marginal_maxabsstand(linstat, expect, covar,
                                          contrasts, P, Q, Ncontrasts,
@@ -164,7 +198,8 @@ void C_ordered_maxabsstand_Xfactor
             (sumright >= minbucket) && 
             (ExpX[p] > 0)) {
 
-            tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, ALTERNATIVE_twosided);
+            tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, 
+                            ALTERNATIVE_twosided);
             
             if (tmp > maxstat[0]) {
                 wmax[0] = p;
@@ -221,8 +256,10 @@ void C_ordered_quadform_Xfactor
             mexpect[q] += expect[q * P + p];
             for (int qq = 0; qq <= q; qq++) {
                 for (int pp = 0; pp < p; pp++)
-                    mcovar[S(q, qq, Q)] += 2 * covar[S(pp + q * P, p + P * qq, P * Q)];
-                mcovar[S(q, qq, Q)] += covar[S(p + q * P, p + P * qq, P * Q)];
+                    mcovar[S(q, qq, Q)] += 
+                        2 * covar[S(pp + q * P, p + P * qq, P * Q)];
+                mcovar[S(q, qq, Q)] += 
+                    covar[S(p + q * P, p + P * qq, P * Q)];
             }
         }
                  
@@ -243,23 +280,44 @@ void C_ordered_quadform_Xfactor
 }
 
 
-void C_ordered_Xfactor(double *linstat, double *expect, double *covar, int P, 
-                       int Q, double *ExpX, int minbucket, double tol, int teststat,
-                       int *wmax, double *maxstat)
-{
+void C_ordered_Xfactor
+(
+    double *linstat, 
+    double *expect, 
+    double *covar, 
+    int P, 
+    int Q, 
+    double *ExpX, 
+    int minbucket, 
+    double tol, 
+    int teststat,
+    int *wmax, 
+    double *maxstat
+) {
+
     if (teststat == TESTSTAT_maxtype) {
-        C_ordered_maxabsstand_Xfactor(linstat, expect, covar, P, Q, ExpX, minbucket, tol,
-                                      wmax, maxstat);
+        C_ordered_maxabsstand_Xfactor(linstat, expect, covar, P, Q, ExpX, 
+                                      minbucket, tol, wmax, maxstat);
     } else {
-        C_ordered_quadform_Xfactor(linstat, expect, covar, P, Q, ExpX, minbucket, tol,
-                                      wmax, maxstat);
+        C_ordered_quadform_Xfactor(linstat, expect, covar, P, Q, ExpX, 
+                                   minbucket, tol, wmax, maxstat);
     }
 }
 
-void C_ordered_Xfactor_varonly(double *linstat, double *expect, double *varinf, int P,
-                               int Q, double *ExpX, int minbucket, double tol, int teststat,
-                               int *wmax, double *maxstat) 
-{
+void C_ordered_Xfactor_varonly
+(
+    double *linstat, 
+    double *expect, 
+    double *varinf, 
+    int P,
+    int Q, 
+    double *ExpX, 
+    int minbucket, 
+    double tol, 
+    int teststat,
+    int *wmax, 
+    double *maxstat
+) {
 
     double *mlinstat, *mexpect, *mvar, tmp, sumleft, sumright, Ptmp;
     int sw;
@@ -302,7 +360,8 @@ void C_ordered_Xfactor_varonly(double *linstat, double *expect, double *varinf, 
             (sumright >= minbucket) && 
             (ExpX[p] > 0)) {
 
-            tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, ALTERNATIVE_twosided);
+            tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, 
+                            ALTERNATIVE_twosided);
             
             if (tmp > maxstat[0]) {
                 wmax[0] = p;
@@ -312,4 +371,3 @@ void C_ordered_Xfactor_varonly(double *linstat, double *expect, double *varinf, 
     }
     Free(mlinstat); Free(mexpect); Free(mvar);    
 }
-                

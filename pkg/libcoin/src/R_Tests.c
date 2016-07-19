@@ -6,8 +6,15 @@
 #include "MemoryAccess.h"
 #include "Contrasts.h"
 
-SEXP R_ChisqTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP lower, SEXP give_log) 
-{
+SEXP R_ChisqTest
+(
+    SEXP LEV,
+    SEXP linstat, 
+    SEXP tol, 
+    SEXP lower, 
+    SEXP give_log
+) {
+
     SEXP ans, stat, pval;
     double *MPinv, *pv, st, *ls, *ex;
     int rank, P, Q, PQ, B;
@@ -61,9 +68,19 @@ SEXP R_ChisqTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP lower, SEXP give_log)
     return(ans);
 }
 
-SEXP R_MaxtypeTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP alternative, SEXP lower, 
-                   SEXP give_log, SEXP maxpts, SEXP releps, SEXP abseps)
-{
+SEXP R_MaxtypeTest
+(
+    SEXP LEV, 
+    SEXP linstat, 
+    SEXP tol, 
+    SEXP alternative, 
+    SEXP lower, 
+    SEXP give_log, 
+    SEXP maxpts, 
+    SEXP releps, 
+    SEXP abseps
+) {
+
     SEXP ans, stat, pval;
     double st, *ex, *cv, *ls, tl, *pv;
     int P, Q, PQ, B, vo, alt;
@@ -135,9 +152,17 @@ SEXP R_MaxtypeTest(SEXP LEV, SEXP linstat, SEXP tol, SEXP alternative, SEXP lowe
     return(ans);
 }
 
-SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol, 
-                           SEXP minbucket, SEXP lower, SEXP give_log)
-{
+SEXP R_MaxstatTest_ordered
+(
+    SEXP LEV, 
+    SEXP linstat, 
+    SEXP teststat, 
+    SEXP tol, 
+    SEXP minbucket, 
+    SEXP lower, 
+    SEXP give_log
+) {
+
     SEXP ans, index, stat, pval;
     double tmp, *pv, *ls, st;
     int P, Q, PQ, B, mb, itmp;
@@ -235,9 +260,17 @@ SEXP R_MaxstatTest_ordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol,
     return(ans);
 }                                      
 
-SEXP R_MaxstatTest_unordered(SEXP LEV, SEXP linstat, SEXP teststat, SEXP tol, 
-                             SEXP minbucket, SEXP lower, SEXP give_log)
-{
+SEXP R_MaxstatTest_unordered
+(
+    SEXP LEV, 
+    SEXP linstat, 
+    SEXP teststat, 
+    SEXP tol, 
+    SEXP minbucket, 
+    SEXP lower, 
+    SEXP give_log
+) {
+
     SEXP ans, stat, index, pval;
     double *contrasts, *ExpX, sumleft, totalsum, *indl, *ls, *pv, tmp, st;
     int P, Pnonzero, Q, PQ, B, mb, nc = 0, wmax, *levels;;

@@ -3,21 +3,30 @@
 #include "Tables.h"
 #include "Sums.h"
 
-int NLEVELS(SEXP x) 
-{
+int NLEVELS
+(
+    SEXP x
+) {
+
    return(LENGTH(getAttrib(x, R_LevelsSymbol)));
 }
 
-int NROW(SEXP x) 
-{
+int NROW
+(
+    SEXP x
+) {
+
     SEXP a;
     a = getAttrib(x, R_DimSymbol);
     if (a == R_NilValue) return(LENGTH(x));
     return(INTEGER(a)[0]);
 }
     
-int NCOL(SEXP x) 
-{
+int NCOL
+(
+    SEXP x
+) {
+
     SEXP a;
     a = getAttrib(x, R_DimSymbol);
     if (a == R_NilValue) return(1);
@@ -35,10 +44,18 @@ int NCOL(SEXP x)
     *\param ans return value; a pointer to a REALSXP-vector of length (mr x ns)
 */
 
-void C_kronecker(const double *A, const int m, const int n,
-                 const double *B, const int r, const int s, int overwrite,
-                 double *ans)
-{
+void C_kronecker
+(
+    const double *A, 
+    const int m, 
+    const int n,
+    const double *B, 
+    const int r, 
+    const int s, 
+    int overwrite,
+    double *ans
+) {
+
     int i, j, k, l, mr, js, ir;
     double y;
 
@@ -60,10 +77,16 @@ void C_kronecker(const double *A, const int m, const int n,
     }
 }  
 
-void C_kronecker_sym(const double *A, const int m, 
-                     const double *B, const int r, int overwrite,
-                     double *ans)
-{
+void C_kronecker_sym
+(
+    const double *A, 
+    const int m, 
+    const double *B, 
+    const int r, 
+    int overwrite,
+    double *ans
+) {
+
     int i, j, k, l, mr, js, ir, s;
     double y;
 
@@ -91,7 +114,14 @@ void C_kronecker_sym(const double *A, const int m,
 
 /* MP inv of symmetric matrix in lower triangular packed form */
 
-void C_MPinv_sym (double *x, int n, double tol, double *dMP, int *rank) {
+void C_MPinv_sym 
+(
+    double *x, 
+    int n, 
+    double tol, 
+    double *dMP, 
+    int *rank
+) {
 
     double *val, *vec, dtol, *rx, *work, valinv;
     int valzero = 0, info = 0, kn;
@@ -136,11 +166,18 @@ void C_MPinv_sym (double *x, int n, double tol, double *dMP, int *rank) {
     }
 }
 
-void
-rcont2(int *nrow, int *ncol,
-       int *nrowt, int *ncolt, int *ntotal,
-       double *fact, int *jwork, int *matrix)
-{
+void rcont2
+(
+    int *nrow, 
+    int *ncol,
+    int *nrowt, 
+    int *ncolt, 
+    int *ntotal,
+    double *fact, 
+    int *jwork, 
+    int *matrix
+) {
+
     int j, l, m, ia, ib, ic, jc, id, ie, ii, nll, nlm, nr_1, nc_1;
     double x, y, dummy, sumprb;
     Rboolean lsm, lsp;

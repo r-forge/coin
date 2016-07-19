@@ -1,110 +1,168 @@
 
 #include "libcoin_internal.h"
 
-int C_get_P(SEXP LECV) 
-{
+int C_get_P
+(
+    SEXP LECV
+) {
+
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[0]);
 }
 
-int C_get_Q(SEXP LECV) 
-{
+int C_get_Q
+(
+    SEXP LECV
+) {
+
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[1]);
 }
 
-int C_get_varonly(SEXP LECV)
-{
+int C_get_varonly
+(
+    SEXP LECV
+) {
+
     return(INTEGER(VECTOR_ELT(LECV, varonly_SLOT))[0]);
 }
 
-double* C_get_LinearStatistic(SEXP LECV)
-{
+double* C_get_LinearStatistic
+(
+    SEXP LECV
+) {
+
     return(REAL(VECTOR_ELT(LECV, LinearStatistic_SLOT)));
 }
 
-double* C_get_Expectation(SEXP LECV)
-{
+double* C_get_Expectation
+(
+    SEXP LECV
+) {
+
     return(REAL(VECTOR_ELT(LECV, Expectation_SLOT)));
 }
 
-double* C_get_Covariance(SEXP LECV)
-{
+double* C_get_Covariance
+(
+    SEXP LECV
+) {
+
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     if (C_get_varonly(LECV) && PQ > 1)
         error("Cannot extract covariance from variance only object");
     return(REAL(VECTOR_ELT(LECV, Covariance_SLOT)));
 }
 
-double* C_get_MPinv(SEXP LECV)
-{
+double* C_get_MPinv
+(
+    SEXP LECV
+) {
+
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     if (C_get_varonly(LECV) && PQ > 1)
         error("Cannot extract MPinv from variance only object");
     return(REAL(VECTOR_ELT(LECV, MPinv_SLOT)));
 }
 
-double* C_get_Variance(SEXP LECV)
-{
+double* C_get_Variance
+(
+    SEXP LECV
+) {
+
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     if (!C_get_varonly(LECV) && PQ > 1)
         error("Cannot extract variance from covariance object");
     return(REAL(VECTOR_ELT(LECV, Variance_SLOT)));
 }
 
-double* C_get_ExpectationX(SEXP LECV)
-{
+double* C_get_ExpectationX
+(
+    SEXP LECV
+) {
+
     return(REAL(VECTOR_ELT(LECV, ExpectationX_SLOT)));
 }
 
-double* C_get_ExpectationInfluence(SEXP LECV)
-{
+double* C_get_ExpectationInfluence
+(
+    SEXP LECV
+) {
+
     return(REAL(VECTOR_ELT(LECV, ExpectationInfluence_SLOT)));
 }
 
-double* C_get_CovarianceInfluence(SEXP LECV)
-{
+double* C_get_CovarianceInfluence
+(
+    SEXP LECV
+) {
+
     if (C_get_varonly(LECV) && C_get_Q(LECV) > 1)
         error("Cannot extract covariance from variance object");
     return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));
 }
 
-double* C_get_VarianceInfluence(SEXP LECV)
-{
+double* C_get_VarianceInfluence
+(
+    SEXP LECV
+) {
+
     if (!C_get_varonly(LECV) && C_get_Q(LECV) > 1)
         error("Cannot extract variance from covariance object");
     return(REAL(VECTOR_ELT(LECV, VarianceInfluence_SLOT)));
 }
 
-double* C_get_Work(SEXP LECV)
-{
+double* C_get_Work
+(
+    SEXP LECV
+) {
+
     return(REAL(VECTOR_ELT(LECV, Work_SLOT)));
 }
 
-int* C_get_TableBlock(SEXP LECV)
-{
+int* C_get_TableBlock
+(
+    SEXP LECV
+) {
+
     return(INTEGER(VECTOR_ELT(LECV, TableBlock_SLOT)));
 }
 
-int* C_get_Sumweights(SEXP LECV)
-{
+int* C_get_Sumweights
+(
+    SEXP LECV
+) {
+
     return(INTEGER(VECTOR_ELT(LECV, Sumweights_SLOT)));
 }
 
-int* C_get_Table(SEXP LECV)
-{
+int* C_get_Table
+(
+    SEXP LECV
+) {
+
     if (LENGTH(LECV) <= Table_SLOT)
         error("Cannot extract table from object");
     return(INTEGER(VECTOR_ELT(LECV, Table_SLOT)));
 }
 
-int* C_get_dimTable (SEXP LECV) {
+int* C_get_dimTable 
+(
+    SEXP LECV
+) {
+
     if (LENGTH(LECV) <= Table_SLOT)
         error("Cannot extract table from object");              
     return(INTEGER(getAttrib(VECTOR_ELT(LECV, Table_SLOT), 
                              R_DimSymbol)));
 }
 
-SEXP R_init_LECV(SEXP P, SEXP Q, SEXP varonly, SEXP Lb)
-{
+SEXP R_init_LECV
+(
+    SEXP P, 
+    SEXP Q, 
+    SEXP varonly, 
+    SEXP Lb
+) {
+
     SEXP ans, vo, d, names;
     int p, q, pq, lb;
     
@@ -224,8 +282,16 @@ SEXP R_init_LECV(SEXP P, SEXP Q, SEXP varonly, SEXP Lb)
     return(ans);
 }
 
-SEXP R_init_LECV_2d(SEXP P, SEXP Q, SEXP varonly, SEXP Lx, SEXP Ly, SEXP Lb) 
-{
+SEXP R_init_LECV_2d
+(
+    SEXP P, 
+    SEXP Q, 
+    SEXP varonly, 
+    SEXP Lx, 
+    SEXP Ly, 
+    SEXP Lb
+) {
+
     SEXP ans, vo, d, names, tab, tabdim;
     int p, q, pq, lb;
     
@@ -365,4 +431,3 @@ SEXP R_init_LECV_2d(SEXP P, SEXP Q, SEXP varonly, SEXP Lx, SEXP Ly, SEXP Lb)
     UNPROTECT(3);
     return(ans);
 }
-

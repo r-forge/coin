@@ -6,13 +6,25 @@
 #include <mvtnormAPI.h>
 
 /* lower = 1 means p-value, lower = 0 means 1 - p-value */
-double C_chisq_pvalue(double stat, int df, int lower, int give_log)
-{
+double C_chisq_pvalue
+(
+    double stat, 
+    int df, 
+    int lower, 
+    int give_log
+) {
+
     return(pchisq(stat, (double) df, lower, give_log));
 }
 
-double C_norm_pvalue(double stat, int alternative, int lower, int give_log)
-{
+double C_norm_pvalue
+(
+    double stat, 
+    int alternative, 
+    int lower, 
+    int give_log
+) {
+
     double ret;
     
     if (alternative == ALTERNATIVE_less) {
@@ -51,9 +63,19 @@ double C_norm_pvalue(double stat, int alternative, int lower, int give_log)
     *\param tol tolerance
 */
 
-double C_maxtype_pvalue(const double stat, const double *Covariance, 
-    const int n, int alternative, int lower, int give_log, 
-    int maxpts, double releps, double abseps, double tol) {
+double C_maxtype_pvalue
+(
+    const double stat, 
+    const double *Covariance, 
+    const int n, 
+    int alternative, 
+    int lower, 
+    int give_log, 
+    int maxpts, 
+    double releps, 
+    double abseps, 
+    double tol
+) {
 
     int nu = 0, inform, i, j, sub, nonzero, *infin, *index, rnd = 0;
     double ans, myerror, *lowerbnd, *upperbnd, *delta, *corr, *sd;
@@ -157,8 +179,13 @@ double C_maxtype_pvalue(const double stat, const double *Covariance,
 }
 
 
-void C_Permute(int *x, int n, int *ans) 
-{
+void C_Permute
+(
+    int *x, 
+    int n, 
+    int *ans
+) {
+
     int k = n, j;
     
     for (int i = 0; i < k; i++) {
@@ -168,8 +195,14 @@ void C_Permute(int *x, int n, int *ans)
     }
 }
 
-void C_PermuteBlock(int *x, int *table, int Ntable, int *ans)
-{
+void C_PermuteBlock
+(
+    int *x, 
+    int *table, 
+    int Ntable, 
+    int *ans
+) {
+
     int *px, *pans;
     
     px = x;
@@ -184,26 +217,48 @@ void C_PermuteBlock(int *x, int *table, int Ntable, int *ans)
     }
 }
 
-void C_doPermuteBlock(int *subset, int Nsubset, int *table, int Nlevels, 
-                      int *Nsubset_tmp, int *perm) 
-{
+void C_doPermuteBlock
+(
+    int *subset, 
+    int Nsubset, 
+    int *table, 
+    int Nlevels, 
+    int *Nsubset_tmp, 
+    int *perm
+) {
+
     Memcpy(Nsubset_tmp, subset, Nsubset);
     C_PermuteBlock(Nsubset_tmp, table, Nlevels, perm);
 }
 
-void C_doPermute(int *subset, int Nsubset, int *Nsubset_tmp, int *perm) 
-{
+void C_doPermute
+(
+    int *subset, 
+    int Nsubset, 
+    int *Nsubset_tmp, 
+    int *perm
+) {
+
     Memcpy(Nsubset_tmp, subset, Nsubset);
     C_Permute(Nsubset_tmp, Nsubset, perm);
 }
 
-void C_setup_subset(int N, int *N_ans)
-{
+void C_setup_subset
+(
+    int N, 
+    int *N_ans
+) {
+
     for (int i = 0; i < N; i++) N_ans[i] = i;
 }
 
-void C_setup_subset_weights(int N, int *weights, int *sw_ans)
-{
+void C_setup_subset_weights
+(
+    int N, 
+    int *weights, 
+    int *sw_ans
+) {
+
     int itmp = 0;
     /* subset = rep(1:length(weights), weights) */
     for (int i = 0; i < N; i++) {
@@ -212,8 +267,14 @@ void C_setup_subset_weights(int N, int *weights, int *sw_ans)
     }
 }
 
-void C_setup_subset_weights_subset(int Nsubset, int *weights, int *subset, int *sw_ans)
-{
+void C_setup_subset_weights_subset
+(
+    int Nsubset, 
+    int *weights, 
+    int *subset, 
+    int *sw_ans
+) {
+
     /* subset = rep(subset, weights[subset]) */
     int itmp = 0;
     for (int i = 0; i < Nsubset; i++) {
@@ -222,8 +283,15 @@ void C_setup_subset_weights_subset(int Nsubset, int *weights, int *subset, int *
     }
 }
 
-void C_order_wrt_block(int *subset, int Nsubset, int *block, int *table, int Nlevels)
-{
+void C_order_wrt_block
+(
+    int *subset, 
+    int Nsubset, 
+    int *block, 
+    int *table, 
+    int Nlevels
+) {
+
     int *cumtable, *subset_tmp;
     
     cumtable = Calloc(Nlevels, int);
