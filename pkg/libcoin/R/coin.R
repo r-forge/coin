@@ -28,6 +28,21 @@ lc <- function(FUN, ...) {
                          subset = s,
                          weights = w, 
                          block = blk, B = B)
+    ix <- iy <- 1:nrow(object@statistic@xtrans)
+    if (max(ix) < 500) {
+       attr(ix, "levels") <- attr(iy, "levels") <- 1:max(ix)
+        lev2d <- LinStatExpCov2d(rbind(0, object@statistic@xtrans),
+                         rbind(0, object@statistic@ytrans),
+                         ix, iy,
+                         subset = s,
+                         weights = w,
+                         block = blk, B = 0L)
+        slt <- c("LinearStatistic", "Expectation", "Covariance")
+        stopifnot(all.equal(lev[slt], lev2d[slt]))
+    }
+
+    n <- sum(w)
+    if (FUN == "chisq_test") lev$Covariance <- lev$Covariance * (n - 1) / n
     teststat <- "max"
     alternative <- "two.sided"
     if (inherits(object@statistic, "QuadTypeIndependenceTestStatistic")) {

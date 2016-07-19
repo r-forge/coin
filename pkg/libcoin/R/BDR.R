@@ -1,8 +1,12 @@
 
-df2BDR <- function(object, max = 10) {
+df2BDR <- function(object, max = 10, ignore = NULL) {
 
     ret <- vector(mode = "list", length = ncol(object))
-    names(ret) <- colnames(object)
+    names(ret) <- cn <- colnames(object)
+    if (!is.null(ignore)) {
+        if (is.integer(ignore)) cn <- cn[-ignore]
+        if (is.character(ignore)) cn <- cn[cn != ignore]
+    }
 
     for (v in colnames(object)) {
         x <- object[[v]]
