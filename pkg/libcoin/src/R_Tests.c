@@ -182,10 +182,12 @@ SEXP R_MaxSelectTest
                               REAL(pval), INTEGER(lower)[0], 
                               INTEGER(give_log)[0]);
         }
+        if (REAL(stat)[0] > 0)
+            INTEGER(index)[0]++; /* R style indexing */
     } else {
         SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, P));
         if (C_get_Lb(LEV) == 1) {
-            C_ordered_Xfactor(C_get_LinearStatistic(LEV),
+            C_unordered_Xfactor(C_get_LinearStatistic(LEV),
                               C_get_Expectation(LEV),
                               C_get_VarianceInfluence(LEV),
                               C_get_CovarianceInfluence(LEV),
@@ -200,7 +202,7 @@ SEXP R_MaxSelectTest
                               REAL(pval), INTEGER(lower)[0], 
                               INTEGER(give_log)[0]);
         } else {
-            C_ordered_Xfactor_block(C_get_LinearStatistic(LEV),
+            C_unordered_Xfactor_block(C_get_LinearStatistic(LEV),
                               C_get_Expectation(LEV),
                               C_get_Covariance(LEV),
                               P, Q, 
