@@ -96,7 +96,7 @@ void C_ordered_Xfactor_block
                                 ALTERNATIVE_twosided);
             } else {
                 C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
-                tmp = C_quadform(Q, mlinstat, mexpect, mcovar);
+                tmp = C_quadform(Q, mlinstat, mexpect, mMPinv);
             }
 
             if (tmp > maxstat[0]) {
@@ -109,7 +109,7 @@ void C_ordered_Xfactor_block
                     tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
                                     ALTERNATIVE_twosided);
                 } else {
-                    tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mcovar);
+                    tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mMPinv);
                 }
                 if (tmp > bmaxstat[b])
                     bmaxstat[b] = tmp;
@@ -222,8 +222,9 @@ void C_ordered_Xfactor
                                 ALTERNATIVE_twosided);
             } else {
                 C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
-                tmp = C_quadform(Q, mlinstat, mexpect, mcovar);
+                tmp = C_quadform(Q, mlinstat, mexpect, mMPinv);
             }
+
 
             if (tmp > maxstat[0]) {
                 wmax[0] = p;
@@ -235,19 +236,19 @@ void C_ordered_Xfactor
                     tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
                                     ALTERNATIVE_twosided);
                 } else {
-                    tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mcovar);
+                    tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mMPinv);
                 }
                 if (tmp > bmaxstat[b])
                     bmaxstat[b] = tmp;
             }
         }
-        if (B > 0) {
-            greater = 0;
-            for (int b = 0; b < B; b++) {
-                if (bmaxstat[b] > maxstat[0]) greater++;
-            }
-            pval[0] = C_perm_pvalue(greater, B, lower, give_log);
+    }
+    if (B > 0) {
+        greater = 0;
+        for (int b = 0; b < B; b++) {
+            if (bmaxstat[b] > maxstat[0]) greater++;
         }
+        pval[0] = C_perm_pvalue(greater, B, lower, give_log);
     }
     Free(mlinstat); Free(mexpect); 
     if (B > 0) {
@@ -354,7 +355,7 @@ void C_unordered_Xfactor_block
                     mlinstat[q] += contrast[p] * linstat[qPp];
                     mexpect[q] += contrast[p] * expect[qPp];
                     for (int b = 0; b < B; b++)   
-                        mblinstat[q + b * Q] += contrast[p] * blinstat[q * P + p + b * PQ];
+                        mblinstat[q + b * Q] += contrast[p] * blinstat[qPp + b * PQ];
                     mtmp[p] = 0.0;
                     for (int pp = 0; pp < P; pp++)
                         mtmp[p] += contrast[pp] * 
@@ -369,11 +370,15 @@ void C_unordered_Xfactor_block
                 mexpect[q] = 0.0;
                 for (int qq = 0; qq <= q; qq++)
                     mcovar[S(q, qq, Q)] = 0.0;
+                for (int b = 0; b < B; b++)
+                     mblinstat[q + b * Q] = 0.0;
 
                 for (int p = 0; p < P; p++) {
                     qPp = q * P + p;
                     mlinstat[q] += contrast[p] * linstat[qPp];
                     mexpect[q] += contrast[p] * expect[qPp];
+                    for (int b = 0; b < B; b++)   
+                        mblinstat[q + b * Q] += contrast[p] * blinstat[qPp + b * PQ];
                 }
                 for (int qq = 0; qq <= q; qq++) {
                     for (int p = 0; p < P; p++) {
@@ -396,7 +401,7 @@ void C_unordered_Xfactor_block
                                 ALTERNATIVE_twosided);
             } else {
                 C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
-                tmp = C_quadform(Q, mlinstat, mexpect, mcovar);
+                tmp = C_quadform(Q, mlinstat, mexpect, mMPinv);
             }
 
             if (tmp > maxstat[0]) {
@@ -410,19 +415,20 @@ void C_unordered_Xfactor_block
                     tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
                                     ALTERNATIVE_twosided);
                 } else {
-                    tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mcovar);
+                    tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mMPinv);
                 }
                 if (tmp > bmaxstat[b])
                     bmaxstat[b] = tmp;
             }
         }
-        if (B > 0) {
-            greater = 0;
-            for (int b = 0; b < B; b++) {
-                if (bmaxstat[b] > maxstat[0]) greater++;
-            }
-            pval[0] = C_perm_pvalue(greater, B, lower, give_log);
+    }
+     
+    if (B > 0) {
+        greater = 0;
+        for (int b = 0; b < B; b++) {
+            if (bmaxstat[b] > maxstat[0]) greater++;
         }
+        pval[0] = C_perm_pvalue(greater, B, lower, give_log);
     }
     Free(mlinstat); Free(mexpect); Free(levels); Free(contrast); Free(indl); Free(mtmp);
     if (B > 0) {
@@ -553,7 +559,7 @@ void C_unordered_Xfactor
                                 ALTERNATIVE_twosided);
             } else {
                 C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
-                tmp = C_quadform(Q, mlinstat, mexpect, mcovar);
+                tmp = C_quadform(Q, mlinstat, mexpect, mMPinv);
             }
 
             if (tmp > maxstat[0]) {
@@ -567,7 +573,7 @@ void C_unordered_Xfactor
                     tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
                                     ALTERNATIVE_twosided);
                 } else {
-                    tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mcovar);
+                    tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mMPinv);
                 }
                 if (tmp > bmaxstat[b])
                     bmaxstat[b] = tmp;
