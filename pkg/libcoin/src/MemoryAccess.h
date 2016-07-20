@@ -1,6 +1,7 @@
 
 int C_get_P(SEXP LECV); 
 int C_get_Q(SEXP LECV);
+int C_get_Lb(SEXP LECV);
 int C_get_varonly(SEXP LECV);
 double* C_get_LinearStatistic(SEXP LECV);
 double* C_get_Expectation(SEXP LECV);

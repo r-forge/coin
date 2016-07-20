@@ -17,6 +17,15 @@ int C_get_Q
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[1]);
 }
 
+int C_get_Lb
+(
+    SEXP LECV
+) {
+
+    return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));
+}
+
+
 int C_get_varonly
 (
     SEXP LECV
@@ -60,6 +69,12 @@ double* C_get_MPinv
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     if (C_get_varonly(LECV) && PQ > 1)
         error("Cannot extract MPinv from variance only object");
+    /* allocate memory on as needed basis */
+    if (isNull(VECTOR_ELT(LECV, MPinv_SLOT))) {
+        SET_VECTOR_ELT(LECV, MPinv_SLOT, 
+                       allocVector(REALSXP, 
+                                   PQ * (PQ + 1) / 2));
+    }
     return(REAL(VECTOR_ELT(LECV, MPinv_SLOT)));
 }
 
@@ -69,8 +84,18 @@ double* C_get_Variance
 ) {
 
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
-    if (!C_get_varonly(LECV) && PQ > 1)
-        error("Cannot extract variance from covariance object");
+    double *var, *covar;
+    
+    if (isNull(VECTOR_ELT(LECV, Variance_SLOT))) {
+        SET_VECTOR_ELT(LECV, Variance_SLOT,
+                       allocVector(REALSXP, PQ));
+        if (!isNull(VECTOR_ELT(LECV, Covariance_SLOT))) {
+            covar = REAL(VECTOR_ELT(LECV, Covariance_SLOT));
+            var = REAL(VECTOR_ELT(LECV, Variance_SLOT));
+            for (int p = 0; p < PQ; p++)
+                var[p] = covar[S(p, p, PQ)];
+        }
+    }
     return(REAL(VECTOR_ELT(LECV, Variance_SLOT)));
 }
 
@@ -95,8 +120,6 @@ double* C_get_CovarianceInfluence
     SEXP LECV
 ) {
 
-    if (C_get_varonly(LECV) && C_get_Q(LECV) > 1)
-        error("Cannot extract covariance from variance object");
     return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));
 }
 
@@ -105,8 +128,6 @@ double* C_get_VarianceInfluence
     SEXP LECV
 ) {
 
-    if (!C_get_varonly(LECV) && C_get_Q(LECV) > 1)
-        error("Cannot extract variance from covariance object");
     return(REAL(VECTOR_ELT(LECV, VarianceInfluence_SLOT)));
 }
 
@@ -210,44 +231,30 @@ SEXP R_init_LECV
                    vo = allocVector(INTSXP, 1));
     SET_STRING_ELT(names, varonly_SLOT, 
                    mkChar("varonly"));
+
+    INTEGER(vo)[0] = INTEGER(varonly)[0];
     if (INTEGER(varonly)[0]) {
         SET_VECTOR_ELT(ans, Variance_SLOT, 
                        allocVector(REALSXP, pq));
-        SET_STRING_ELT(names, Variance_SLOT, 
-                       mkChar("Variance"));
-        INTEGER(vo)[0] = 1;
-        
-        SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                       allocVector(REALSXP, lb * q));
-        SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
-                       mkChar("VarianceInfluence"));
         SET_VECTOR_ELT(ans, Work_SLOT,
                        allocVector(REALSXP, 3 * p + 1));
-        SET_STRING_ELT(names, Work_SLOT, 
-                       mkChar("Work"));
     } else  {
         SET_VECTOR_ELT(ans, Covariance_SLOT, 
                        allocVector(REALSXP, 
                                    pq * (pq + 1) / 2));
-        SET_STRING_ELT(names, Covariance_SLOT, 
-                       mkChar("Covariance"));
-        INTEGER(vo)[0] = 0;
-        SET_VECTOR_ELT(ans, MPinv_SLOT, 
-                       allocVector(REALSXP, 
-                                   pq * (pq + 1) / 2));
-        SET_STRING_ELT(names, MPinv_SLOT, 
-                       mkChar("MPinv"));
-
-        SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                       allocVector(REALSXP, lb * q * (q + 1)));
-        SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
-                       mkChar("CovarianceInfluence"));
         SET_VECTOR_ELT(ans, Work_SLOT,
                        allocVector(REALSXP, 
                            p + 2 * p * (p + 1) / 2 + 1));
-        SET_STRING_ELT(names, Work_SLOT, 
-                       mkChar("Work"));
     }
+
+    SET_STRING_ELT(names, Variance_SLOT, 
+                   mkChar("Variance"));
+    SET_STRING_ELT(names, Covariance_SLOT, 
+                   mkChar("Covariance"));
+    SET_STRING_ELT(names, MPinv_SLOT, 
+                   mkChar("MPinv"));
+    SET_STRING_ELT(names, Work_SLOT, 
+                   mkChar("Work"));
 
     SET_VECTOR_ELT(ans, ExpectationX_SLOT, 
                    allocVector(REALSXP, p));
@@ -265,6 +272,16 @@ SEXP R_init_LECV
                    allocVector(REALSXP, lb * q));
     SET_STRING_ELT(names, ExpectationInfluence_SLOT, 
                    mkChar("ExpectationInfluence"));
+
+    /* should always _both_ be there */
+    SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
+                   allocVector(REALSXP, lb * q));
+    SET_STRING_ELT(names, VarianceInfluence_SLOT, 
+                   mkChar("VarianceInfluence"));
+    SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
+                   allocVector(REALSXP, lb * q * (q + 1)));
+    SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
+                   mkChar("CovarianceInfluence"));
                    
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
                    allocVector(INTSXP, lb + 1));
@@ -347,44 +364,30 @@ SEXP R_init_LECV_2d
                    vo = allocVector(INTSXP, 1));
     SET_STRING_ELT(names, varonly_SLOT, 
                    mkChar("varonly"));
+
+    INTEGER(vo)[0] = INTEGER(varonly)[0];
     if (INTEGER(varonly)[0]) {
         SET_VECTOR_ELT(ans, Variance_SLOT, 
                        allocVector(REALSXP, pq));
-        SET_STRING_ELT(names, Variance_SLOT, 
-                       mkChar("Variance"));
-        INTEGER(vo)[0] = 1;
-
-        SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                       allocVector(REALSXP, lb * q));
-        SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
-                       mkChar("VarianceInfluence"));
         SET_VECTOR_ELT(ans, Work_SLOT,
                        allocVector(REALSXP, 2 * p));
-        SET_STRING_ELT(names, Work_SLOT, 
-                       mkChar("Work"));
     } else  {
         SET_VECTOR_ELT(ans, Covariance_SLOT, 
                        allocVector(REALSXP, 
                                    pq * (pq + 1) / 2));
-        SET_STRING_ELT(names, Covariance_SLOT, 
-                       mkChar("Covariance"));
-        INTEGER(vo)[0] = 0;
-        SET_VECTOR_ELT(ans, MPinv_SLOT, 
-                       allocVector(REALSXP, 
-                                   pq * (pq + 1) / 2));
-        SET_STRING_ELT(names, MPinv_SLOT, 
-                       mkChar("MPinv"));
-
-        SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                       allocVector(REALSXP, lb * q * (q + 1)));
-        SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
-                       mkChar("CovarianceInfluence"));
         SET_VECTOR_ELT(ans, Work_SLOT,
                        allocVector(REALSXP, 
                            2 * p * (p + 1) / 2 + 1));
-        SET_STRING_ELT(names, Work_SLOT, 
-                       mkChar("Work"));
     }
+
+    SET_STRING_ELT(names, Variance_SLOT, 
+                   mkChar("Variance"));
+    SET_STRING_ELT(names, Covariance_SLOT, 
+                   mkChar("Covariance"));
+    SET_STRING_ELT(names, MPinv_SLOT, 
+                   mkChar("MPinv"));
+    SET_STRING_ELT(names, Work_SLOT, 
+                   mkChar("Work"));
 
     SET_VECTOR_ELT(ans, ExpectationX_SLOT, 
                    allocVector(REALSXP, p));
@@ -402,6 +405,16 @@ SEXP R_init_LECV_2d
                    allocVector(REALSXP, lb * q));
     SET_STRING_ELT(names, ExpectationInfluence_SLOT, 
                    mkChar("ExpectationInfluence"));
+
+    /* should always _both_ be there */
+    SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
+                   allocVector(REALSXP, lb * q));
+    SET_STRING_ELT(names, VarianceInfluence_SLOT, 
+                   mkChar("VarianceInfluence"));
+    SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
+                   allocVector(REALSXP, lb * q * (q + 1)));
+    SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
+                   mkChar("CovarianceInfluence"));
                    
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
                    allocVector(INTSXP, lb + 1));
