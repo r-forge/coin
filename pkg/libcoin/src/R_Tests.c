@@ -4,7 +4,7 @@
 #include "TestStatistics.h"
 #include "Distributions.h"
 #include "MemoryAccess.h"
-#include "Contrasts.h"
+#include "MaxSelect.h"
 
 SEXP R_ChisqTest
 (
