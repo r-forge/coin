@@ -17,11 +17,13 @@ lc <- function(FUN, ...) {
     object <- do.call(FUN, list(...))
     blk <- object@statistic@block
     if (nlevels(blk) == 1) blk <- integer(0)
-    B <- 10000L
+    B <- 1000L
     d <- object@distribution
     if (inherits(d, "AsymptNullDistribution")) B <- 0L
     w  <- as.integer(object@statistic@weights)
-    s <- which(w > 0)
+    s <- integer(0)
+    if (any(w <= 0))
+        s <- which(w > 0)
     set.seed(29)
     lev <- LinStatExpCov(object@statistic@xtrans, 
                          object@statistic@ytrans, 
@@ -36,7 +38,7 @@ lc <- function(FUN, ...) {
                          ix, iy,
                          subset = s,
                          weights = w,
-                         block = blk, B = 0L)
+                         block = blk, B = ifelse(max(ix) < 50, B, 0L))
         slt <- c("LinearStatistic", "Expectation", "Covariance")
         stopifnot(all.equal(lev[slt], lev2d[slt]))
     }
