@@ -21,7 +21,7 @@ void C_VarianceLinearStatistic(int P, int Q, double *VarInf, double *ExpX,
 void C_ExpectationCoVarianceInfluence(double* y, int N, int Q,    
                                       int *weights, int *sumweights,
                                       int *subset, int *Nsubset, int Nlevel, int varonly,
-                                      double *NlevelQ_ans, double *NlevelQQ_sym_ans);
+                                      double *LbQ_ans, double *LbQ_var_ans, double *LbQQ_sym_ans);
 void C_ExpectationCovarianceLinearStatistic(SEXP x, int N, int P, int Q,
                                             int *weights, int *sumweights,
                                             int *subset, int *Nsubset, int Nlevel, double *ExpXtotal,

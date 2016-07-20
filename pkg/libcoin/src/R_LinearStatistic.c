@@ -78,15 +78,15 @@ void RC_ExpectationCovarianceStatistic
     C_LinearStatistic(x, N, P, REAL(y), Q, INTEGER(weights), 
                       sumweights, subset_tmp, table + 1, Lb, C_get_LinearStatistic(ans));
 
+    C_ExpectationCoVarianceInfluence(REAL(y), N, Q, INTEGER(weights),
+                                     sumweights, subset_tmp, table + 1, Lb, 1, ExpInf, 
+                                     C_get_VarianceInfluence(ans), C_get_CovarianceInfluence(ans));
+
     if (C_get_varonly(ans)) {
-        C_ExpectationCoVarianceInfluence(REAL(y), N, Q, INTEGER(weights),
-            sumweights, subset_tmp, table + 1, Lb, 1, ExpInf, C_get_VarianceInfluence(ans));
         C_ExpectationVarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
             sumweights, subset_tmp, table + 1, Lb, C_get_ExpectationX(ans), ExpInf, C_get_VarianceInfluence(ans), 
             work, C_get_Expectation(ans), C_get_Variance(ans)); 
     } else {
-        C_ExpectationCoVarianceInfluence(REAL(y), N, Q, INTEGER(weights),
-            sumweights, subset_tmp, table + 1, Lb, 0, ExpInf, C_get_CovarianceInfluence(ans));
         C_ExpectationCovarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
             sumweights, subset_tmp, table + 1, Lb, C_get_ExpectationX(ans), ExpInf, 
             C_get_CovarianceInfluence(ans), work, 
@@ -339,9 +339,12 @@ void RC_ExpectationCovarianceStatistic_2d
             C_ExpectationX_weights(REAL(x), NROW(x), P, rsum, ExpX);
         }
         C_ExpectationLinearStatistic(P, Q, ExpInf, ExpX, b, C_get_Expectation(ans));
+        /* compute both for the time being */
+        C_VarianceInfluence_weights(REAL(y), NROW(y), Q, csum, sw, ExpInf, 
+                                    C_get_VarianceInfluence(ans));
+        C_CovarianceInfluence_weights(REAL(y), NROW(y), Q, csum, sw, ExpInf, 
+                                      C_get_CovarianceInfluence(ans));
         if (C_get_varonly(ans)) {
-            C_VarianceInfluence_weights(REAL(y), NROW(y), Q, csum, sw, ExpInf, 
-                                        C_get_VarianceInfluence(ans));
             if (LENGTH(x) == 0) {
                 for (int p = 0; p < P; p++) CovX[p] = ExpX[p];
             } else {
@@ -351,8 +354,6 @@ void RC_ExpectationCovarianceStatistic_2d
                                       ExpX, CovX, sw, work, b, 
                                       C_get_Variance(ans));
         } else {
-            C_CovarianceInfluence_weights(REAL(y), NROW(y), Q, csum, sw, ExpInf, 
-                                          C_get_CovarianceInfluence(ans));
             if (LENGTH(x) == 0) {
                 for (int p = 0; p < P * (P + 1) / 2; p++) CovX[p] = 0.0;
                 for (int p = 0; p < P; p++) CovX[S(p, p, P)] = ExpX[p];

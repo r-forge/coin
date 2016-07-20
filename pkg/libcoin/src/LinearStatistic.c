@@ -531,6 +531,7 @@ void C_ExpectationCoVarianceInfluence
     int Lb, 
     int varonly, 
     double *LbQ_ans, 
+    double *LbQ_var_ans,
     double *LbQQ_sym_ans
 ) {
 
@@ -539,63 +540,55 @@ void C_ExpectationCoVarianceInfluence
 
      for (int b = 0; b < Lb; b++) {
          ExpInf = LbQ_ans + b * Q;
-         VarInf = LbQQ_sym_ans + b * Q;
+         VarInf = LbQ_var_ans + b * Q;
          CovInf = LbQQ_sym_ans + b * Q * (Q + 1) / 2;
          if (Nsubset[b] == 0) {
              if (sumweights[b] == 0) {
                  C_ExpectationInfluence_(y, N, Q, 
                                          ExpInf);
-                 if (varonly) {
-                     C_VarianceInfluence_(y, N, Q, ExpInf, 
-                                          VarInf);
-                 } else {
-                     C_CovarianceInfluence_(y, N, Q, ExpInf, 
-                                            CovInf);
-                 }
+                 /* compute both for the time being (for later reuse) */
+                 C_VarianceInfluence_(y, N, Q, ExpInf, 
+                                      VarInf);
+                 C_CovarianceInfluence_(y, N, Q, ExpInf, 
+                                        CovInf);
              } else {
                  C_ExpectationInfluence_weights(y, N, Q, weights, sumweights[b], 
                                                 ExpInf);
-                 if (varonly) {
-                     C_VarianceInfluence_weights(y, N, Q, weights, 
-                                                 sumweights[b], ExpInf, 
-                                                 VarInf);
-                 } else {
-                     C_CovarianceInfluence_weights(y, N, Q, weights, 
-                                                   sumweights[b], ExpInf, 
-                                                   CovInf);
-                 }
+                 /* compute both for the time being (for later reuse) */
+                 C_VarianceInfluence_weights(y, N, Q, weights, 
+                                             sumweights[b], ExpInf, 
+                                             VarInf);
+                 C_CovarianceInfluence_weights(y, N, Q, weights, 
+                                               sumweights[b], ExpInf, 
+                                               CovInf);
              }
          } else {
              if (sumweights[b] == 0) {
                  C_ExpectationInfluence_subset(y, N, Q, subset + ns, Nsubset[b], 
                                                ExpInf);
-                 if (varonly) {
-                     C_VarianceInfluence_subset(y, N, Q, subset + ns, 
-                                                Nsubset[b], ExpInf, 
-                                                VarInf);
-                 } else {
-                     C_CovarianceInfluence_subset(y, N, Q, subset + ns, 
-                                                  Nsubset[b], ExpInf, 
-                                                  CovInf);
-                 }
+                 /* compute both for the time being (for later reuse) */
+                 C_VarianceInfluence_subset(y, N, Q, subset + ns, 
+                                            Nsubset[b], ExpInf, 
+                                            VarInf);
+                 C_CovarianceInfluence_subset(y, N, Q, subset + ns, 
+                                              Nsubset[b], ExpInf, 
+                                              CovInf);
              } else {
                  C_ExpectationInfluence_weights_subset(y, N, Q, weights, 
                                                        sumweights[b], subset + ns, 
                                                        Nsubset[b], 
                                                        ExpInf);
-                 if (varonly) {
-                     C_VarianceInfluence_weights_subset(y, N, Q, weights, 
-                                                        sumweights[b], subset + ns, 
-                                                        Nsubset[b], ExpInf, 
-                                                        VarInf);
-                 } else {
-                     C_CovarianceInfluence_weights_subset(y, N, Q, weights, 
-                                                          sumweights[b], 
-                                                          subset + ns, 
-                                                          Nsubset[b], 
-                                                          ExpInf, 
-                                                          CovInf);
-                 }
+                 /* compute both for the time being (for later reuse) */
+                 C_VarianceInfluence_weights_subset(y, N, Q, weights, 
+                                                    sumweights[b], subset + ns, 
+                                                    Nsubset[b], ExpInf, 
+                                                    VarInf);
+                 C_CovarianceInfluence_weights_subset(y, N, Q, weights, 
+                                                      sumweights[b], 
+                                                      subset + ns, 
+                                                      Nsubset[b], 
+                                                      ExpInf, 
+                                                      CovInf);
              }
              ns = ns + Nsubset[b];
          }
