@@ -16,8 +16,8 @@ SEXP R_ChisqTest
 ) {
 
     SEXP ans, stat, pval;
-    double *MPinv, *pv, st, *ls, *ex;
-    int rank, P, Q, PQ, B;
+    double *MPinv, *ls, st, *ex;
+    int rank, P, Q, PQ, B, greater = 0;
     
     P = C_get_P(LEV);
     Q = C_get_Q(LEV);
@@ -41,27 +41,14 @@ SEXP R_ChisqTest
     } else {
         B = NCOL(linstat);
         ls = REAL(linstat);
-        pv = REAL(pval);
         st = REAL(stat)[0];
         ex = C_get_Expectation(LEV);
-        pv[0] = 0.0;
+        greater = 0;
         for (int i = 0; i < B; i++) {
             if (GE(C_quadform(PQ, ls + PQ * i, ex, MPinv), st, REAL(tol)[0]))
-                pv[0] = pv[0] + 1.0;
+                greater++;
         }
-        if (INTEGER(give_log)[0]) {
-            if (INTEGER(lower)[0]) {
-                pv[0] = log1p(- pv[0] / B);
-            } else {
-                pv[0] = log(pv[0]) - log(B);
-            }
-        } else {
-            if (INTEGER(lower)[0]) {
-                pv[0] = 1 - pv[0] / B;
-            } else {
-                pv[0] = pv[0] / B;
-            }
-        }
+        REAL(pval)[0] = C_perm_pvalue(greater, B, INTEGER(lower)[0], INTEGER(give_log)[0]);
     }
 
     UNPROTECT(1);
@@ -82,8 +69,8 @@ SEXP R_MaxtypeTest
 ) {
 
     SEXP ans, stat, pval;
-    double st, *ex, *cv, *ls, tl, *pv;
-    int P, Q, PQ, B, vo, alt;
+    double st, *ex, *cv, *ls, tl;
+    int P, Q, PQ, B, vo, alt, greater;
 
     P = C_get_P(LEV);
     Q = C_get_Q(LEV);
@@ -116,7 +103,6 @@ SEXP R_MaxtypeTest
                                          REAL(abseps)[0], REAL(tol)[0]);
     } else {
         B = NCOL(linstat);
-        pv = REAL(pval);
         st = REAL(stat)[0];
         ls = REAL(linstat);
         ex = C_get_Expectation(LEV);
@@ -124,37 +110,26 @@ SEXP R_MaxtypeTest
         vo = C_get_varonly(LEV);
         alt = INTEGER(alternative)[0];
         tl = REAL(tol)[0];
-        REAL(pval)[0] = 0.0;
+        greater = 0;
         for (int i = 0; i < B; i++) {
             if (alt == ALTERNATIVE_less) {
                 if (LE(C_maxtype(PQ, ls + PQ * i, ex, cv, vo, tl, alt), st, tl))
-                    pv[0] = pv[0] + 1.0;
+                    greater++;
             } else {
                 if (GE(C_maxtype(PQ, ls + PQ * i, ex, cv, vo, tl, alt), st, tl))
-                    pv[0] = pv[0] + 1.0;
+                    greater++;
             }
         }
-        if (INTEGER(give_log)[0]) {
-            if (INTEGER(lower)[0]) {
-                pv[0] = log1p(- pv[0] / B);
-            } else {
-                pv[0] = log(pv[0]) - log(B);
-            }
-        } else {
-            if (INTEGER(lower)[0]) {
-                pv[0] = 1 - pv[0] / B;
-            } else {
-                pv[0] = pv[0] / B;
-            }
-        }
+        REAL(pval)[0] = C_perm_pvalue(greater, B, INTEGER(lower)[0], INTEGER(give_log)[0]);
     }
     UNPROTECT(1);
     return(ans);
 }
 
-SEXP R_MaxstatTest_ordered
+SEXP R_MaxSelectTest
 (
     SEXP LEV, 
+    SEXP ordered,
     SEXP linstat, 
     SEXP teststat, 
     SEXP tol, 
@@ -164,236 +139,83 @@ SEXP R_MaxstatTest_ordered
 ) {
 
     SEXP ans, index, stat, pval;
-    double tmp, *pv, *ls, st;
-    int P, Q, PQ, B, mb, itmp;
+    int P, Q, B, mb;
 
     P = C_get_P(LEV);
     Q = C_get_Q(LEV);
-    PQ = P * Q;
+    B = NCOL(linstat);
     mb = INTEGER(minbucket)[0];
 
     PROTECT(ans = allocVector(VECSXP, 3));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
-    SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, 1));
 
-    if (C_get_varonly(LEV)) {
-        if (LENGTH(VECTOR_ELT(LEV, TableBlock_SLOT)) > 2)
-            error("maxstat varonly does not work with blocks");
-        C_ordered_Xfactor_varonly(C_get_LinearStatistic(LEV),
-                                  C_get_Expectation(LEV),
-                                  C_get_VarianceInfluence(LEV),
-                                  P, Q, 
-                                  C_get_ExpectationX(LEV),
-                                  mb,
-                                  REAL(tol)[0], 
-                                  INTEGER(teststat)[0],
-                                  INTEGER(index), REAL(stat));
-    } else {
-        C_ordered_Xfactor(C_get_LinearStatistic(LEV),
-                          C_get_Expectation(LEV), 
-                          C_get_Covariance(LEV),
-                          P, Q, 
-                          C_get_ExpectationX(LEV),
-                          mb,
-                          REAL(tol)[0], 
-                          INTEGER(teststat)[0],
-                          INTEGER(index), REAL(stat));
-    }
-
-    /* no admissible split found */
-    if (INTEGER(index)[0] < 0) {
-        REAL(stat)[0] = 0.0;
-        REAL(pval)[0] = 1.0;
-        INTEGER(index)[0] = NA_INTEGER;
-        UNPROTECT(1);
-        return(ans);
-    } else {
-        INTEGER(index)[0]++; /* R indexing */
-    }
-
-    if (LENGTH(linstat) > 0) {
-        st = REAL(stat)[0];
-        pv = REAL(pval);
-        ls = REAL(linstat);
-        B = NCOL(linstat);
-
-        for (int i = 0; i < B; i++) {
-            if (C_get_varonly(LEV)) {
-                C_ordered_Xfactor_varonly(ls + PQ * i,
-                                  C_get_Expectation(LEV),
-                                  C_get_VarianceInfluence(LEV),
-                                  P, Q, 
-                                  C_get_ExpectationX(LEV),
-                                  mb,
-                                  REAL(tol)[0], 
-                                  INTEGER(teststat)[0],
-                                  &itmp, &tmp);
-            } else {
-                C_ordered_Xfactor(ls + PQ * i,
-                          C_get_Expectation(LEV), 
-                          C_get_Covariance(LEV),
-                          P, Q, 
-                          C_get_ExpectationX(LEV),
-                          mb,
-                          REAL(tol)[0], 
-                          INTEGER(teststat)[0],
-                          &itmp, &tmp);
-            }
-            if (GE(tmp, st, REAL(tol)[0])) pv[0] = pv[0] + 1.0;
-        }
-        if (INTEGER(give_log)[0]) {
-            if (INTEGER(lower)[0]) {
-                pv[0] = log1p(- pv[0] / B);
-            } else {
-                pv[0] = log(pv[0]) - log(B);
-            }
+    if (INTEGER(ordered)[0]) {
+        SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, 1));
+        if (C_get_Lb(LEV) == 1) {
+            C_ordered_Xfactor(C_get_LinearStatistic(LEV),
+                              C_get_Expectation(LEV),
+                              C_get_VarianceInfluence(LEV),
+                              C_get_CovarianceInfluence(LEV),
+                              P, Q, 
+                              C_get_ExpectationX(LEV),
+                              B,
+                              REAL(linstat),
+                              mb,
+                              REAL(tol)[0], 
+                              INTEGER(teststat)[0],
+                              INTEGER(index), REAL(stat),
+                              REAL(pval), INTEGER(lower)[0], 
+                              INTEGER(give_log)[0]);
         } else {
-            if (INTEGER(lower)[0]) {
-                pv[0] = 1 - pv[0] / B;
-            } else {
-                pv[0] = pv[0] / B;
-            }
+            C_ordered_Xfactor_block(C_get_LinearStatistic(LEV),
+                              C_get_Expectation(LEV),
+                              C_get_Covariance(LEV),
+                              P, Q, 
+                              C_get_ExpectationX(LEV),
+                              B,
+                              REAL(linstat),
+                              mb,
+                              REAL(tol)[0], 
+                              INTEGER(teststat)[0],
+                              INTEGER(index), REAL(stat),
+                              REAL(pval), INTEGER(lower)[0], 
+                              INTEGER(give_log)[0]);
         }
-    }
-    UNPROTECT(1);
-    return(ans);
-}                                      
-
-SEXP R_MaxstatTest_unordered
-(
-    SEXP LEV, 
-    SEXP linstat, 
-    SEXP teststat, 
-    SEXP tol, 
-    SEXP minbucket, 
-    SEXP lower, 
-    SEXP give_log
-) {
-
-    SEXP ans, stat, index, pval;
-    double *contrasts, *ExpX, sumleft, totalsum, *indl, *ls, *pv, tmp, st;
-    int P, Pnonzero, Q, PQ, B, mb, nc = 0, wmax, *levels;;
-
-
-    if (C_get_varonly(LEV))
-        error("cannot compute maximally selected statistics from variance only");
-
-    P = C_get_P(LEV);
-    ExpX = C_get_ExpectationX(LEV);
-    sumleft = 0.0;
-    totalsum = 0.0;
-    Pnonzero = 0;
-    for (int p = 0; p < P; p++)  {
-        totalsum += ExpX[p];
-        if (ExpX[p] > 0) Pnonzero++;
-    }
-
-    levels = Calloc(Pnonzero, int);
-    nc = 0;
-    for (int p = 0; p < P; p++) {
-        if (ExpX[p] > 0) {
-            levels[nc] = p;
-            nc++;
-        }
-    }
-    
-    if (Pnonzero >= 31)
-        error("cannot search for unordered splits in >= 31 levels");
-    Q = C_get_Q(LEV);
-    PQ = P * Q;
-    mb = INTEGER(minbucket)[0];
-
-    PROTECT(ans = allocVector(VECSXP, 3));
-    SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
-    SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
-    SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, P));
-
-    for (int p = 0; p < P; p++) {
-        if (ExpX[p] == 0.0) INTEGER(index)[p] = NA_INTEGER;
-    }
-              
-    /* number of possible binary splits */
-    int mi = 1;  
-    for (int l = 1; l < Pnonzero; l++) mi *= 2;
-    contrasts = Calloc(mi * P, double);
-    for (int j = 0; j < mi * P; j++) contrasts[j] = 0.0;
-
-    indl = Calloc(Pnonzero, double);
-    for (int p = 0; p < Pnonzero; p++) indl[p] = 0.0;
-
-    nc = 0;
-    for (int j = 1; j < mi; j++) { /* go though all splits */
-         
-         /* indl determines if level p is left or right */
-         int jj = j;
-         for (int l = 1; l < Pnonzero; l++) {
-             indl[l] = (jj%2);
-             jj /= 2;
-         }
-                
-         sumleft = 0.0;
-         for (int p = 0; p < Pnonzero; p++)
-             sumleft += indl[p] * ExpX[levels[p]];
-
-         if (sumleft > mb && (totalsum - sumleft) > mb) {
-             for (int p = 0; p < Pnonzero; p++)
-                 contrasts[P * nc + levels[p]] = indl[p];
-             nc++;
-         }
-    }
-
-    C_contrasts_marginal(C_get_LinearStatistic(LEV),
-                         C_get_Expectation(LEV), 
-                         C_get_Covariance(LEV),
-                         contrasts, P, Q, INTEGER(teststat)[0],
-                         nc,
-                         REAL(tol)[0], 
-                         &wmax, REAL(stat));
-    
-    /* no admissible split found */
-    if (wmax < 0) {
-        REAL(stat)[0] = 0.0;
-        REAL(pval)[0] = 1.0;
-        /* INDEX == NA anyhow */
-        UNPROTECT(1);
-        return(ans);
-    }
-    
-    for (int p = 0; p < P; p++)
-        INTEGER(index)[p] = (int) contrasts[p + wmax * P] + 1;
-
-    if (LENGTH(linstat) > 0) {
-        st = REAL(stat)[0];
-        pv = REAL(pval);
-        ls = REAL(linstat);
-        B = NCOL(linstat);
-
-        for (int i = 0; i < B; i++) {
-            C_contrasts_marginal(ls + PQ * i,
-                                 C_get_Expectation(LEV), 
-                                 C_get_Covariance(LEV),
-                                 contrasts, P, Q, INTEGER(teststat)[0],
-                                 nc,
-                                 REAL(tol)[0], 
-                                 &wmax, &tmp);
-            if (GE(tmp, st, REAL(tol)[0])) pv[0] = pv[0] + 1.0;
-        }
-        if (INTEGER(give_log)[0]) {
-            if (INTEGER(lower)[0]) {
-                pv[0] = log1p(- pv[0] / B);
-            } else {
-                pv[0] = log(pv[0]) - log(B);
-            }
+    } else {
+        SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, P));
+        if (C_get_Lb(LEV) == 1) {
+            C_ordered_Xfactor(C_get_LinearStatistic(LEV),
+                              C_get_Expectation(LEV),
+                              C_get_VarianceInfluence(LEV),
+                              C_get_CovarianceInfluence(LEV),
+                              P, Q, 
+                              C_get_ExpectationX(LEV),
+                              B,
+                              REAL(linstat),
+                              mb,
+                              REAL(tol)[0], 
+                              INTEGER(teststat)[0],
+                              INTEGER(index), REAL(stat),
+                              REAL(pval), INTEGER(lower)[0], 
+                              INTEGER(give_log)[0]);
         } else {
-            if (INTEGER(lower)[0]) {
-                pv[0] = 1 - pv[0] / B;
-            } else {
-                pv[0] = pv[0] / B;
-            }
+            C_ordered_Xfactor_block(C_get_LinearStatistic(LEV),
+                              C_get_Expectation(LEV),
+                              C_get_Covariance(LEV),
+                              P, Q, 
+                              C_get_ExpectationX(LEV),
+                              B,
+                              REAL(linstat),
+                              mb,
+                              REAL(tol)[0], 
+                              INTEGER(teststat)[0],
+                              INTEGER(index), REAL(stat),
+                              REAL(pval), INTEGER(lower)[0], 
+                              INTEGER(give_log)[0]);
         }
     }
-    Free(contrasts); Free(indl); Free(levels);
+
     UNPROTECT(1);
     return(ans);
 }                                      

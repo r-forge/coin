@@ -17,6 +17,33 @@ double C_chisq_pvalue
     return(pchisq(stat, (double) df, lower, give_log));
 }
 
+double C_perm_pvalue
+(
+    int greater, 
+    int B, 
+    int lower, 
+    int give_log
+) {
+
+    double ret;
+    
+    if (give_log) {
+         if (lower) {
+             ret = log1p(- (double) greater / B);
+         } else {
+             ret = log(greater) - log(B);
+         }
+    } else {
+        if (lower) {
+            ret = 1.0 - (double) greater / B;
+        } else {
+            ret = (double) greater / B;
+        }
+    }
+    return(ret);
+}
+
+
 double C_norm_pvalue
 (
     double stat, 

@@ -112,13 +112,8 @@ Test <- function(object, tol = sqrt(.Machine$double.eps), lower = FALSE, log = F
         }
     } else {
         type <- as.integer(which(c("maxstat", "quadform") == type))
-        if (ordered) {
-            ret <- .Call("R_MaxstatTest_ordered", object, object$sim, type, tol, 
-                        as.integer(minbucket), as.integer(lower), as.integer(log), PACKAGE = "libcoin")
-        } else {
-            ret <- .Call("R_MaxstatTest_unordered", object, object$sim, type, tol, 
+        ret <- .Call("R_MaxSelectTest", object, as.integer(ordered), object$sim, type, tol, 
                      as.integer(minbucket), as.integer(lower), as.integer(log), PACKAGE = "libcoin")
-        }
     }
     if (length(ret) == 2)
         names(ret) <- c("statistic", "p.value")

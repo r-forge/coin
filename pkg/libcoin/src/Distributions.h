@@ -1,5 +1,6 @@
 
 double C_chisq_pvalue(double stat, int df, int lower, int give_log);
+double C_perm_pvalue(int greater, int B, int lower, int give_log);
 double C_maxtype_pvalue(const double stat, const double *Covariance,
     const int n, int alternative, int lower, int give_log,
         int maxpts, double releps, double abseps, double tol);
