@@ -188,7 +188,7 @@ void C_ordered_Xfactor
     sumright = 0.0;
     for (int p = 0; p < P; p++) 
         sumright += ExpX[p];
-    sw = sumright;
+    sw = (int) sumright;
                  
     for (int p = 0; p < P; p++) {
         sumleft += ExpX[p];
