@@ -829,7 +829,7 @@ void C_VarianceLinearStatistic
     if (add > 1) add = 1;
     if (P * Q == 1) {
         C_CovarianceLinearStatistic(P, Q, VarInf, ExpX, VarX, 
-                                    sumweights, P_tmp, 1 - add, 
+                                    sumweights, P_tmp, add, 
                                     PQ_ans);
     } else {
 
