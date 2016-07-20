@@ -42,6 +42,7 @@ void C_ordered_Xfactor_block
         bmaxstat = Calloc(B, double);
     }
        
+    maxstat[0] = 0.0;
     wmax[0] = NA_INTEGER;
 
     for (int q = 0; q < Q; q++) {
@@ -84,6 +85,7 @@ void C_ordered_Xfactor_block
                 }
             }
         }
+
 
         if ((sumleft >= minbucket) && 
             (sumright >= minbucket) && 
@@ -170,6 +172,7 @@ void C_ordered_Xfactor
         bmaxstat = Calloc(B, double);
     }
        
+    maxstat[0] = 0.0;
     wmax[0] = NA_INTEGER;
 
     for (int q = 0; q < Q; q++) {
@@ -295,9 +298,11 @@ void C_unordered_Xfactor_block
         bmaxstat = Calloc(B, double);
     }
 
+    maxstat[0] = 0.0;
     for (int p = 0; p < P; p++) wmax[p] = NA_INTEGER;       
 
     contrast = Calloc(P, int);
+    Pnonzero = 0;
     for (int p = 0; p < P; p++) {
         if (ExpX[p] > 0) Pnonzero++;
     }
@@ -468,6 +473,7 @@ void C_unordered_Xfactor
         bmaxstat = Calloc(B, double);
     }
 
+    maxstat[0] = 0.0;
     for (int p = 0; p < P; p++) wmax[p] = NA_INTEGER;
 
     contrast = Calloc(P, int);
