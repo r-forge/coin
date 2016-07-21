@@ -1,11 +1,11 @@
 
 .testcoin <- function(it) {
-    ret <- list(statistic = c(statistic(it)), p.value = c(pvalue(it)),
+    ret <- list(TestStatistic = c(statistic(it)), p.value = c(pvalue(it)),
                 LinearStatistic = c(statistic(it, "linear")),
                 Expectation = c(expectation(it)),
                 Covariance = c(covariance(it)[!upper.tri(covariance(it))]))
     names(ret$Expectation) <- NULL
-    names(ret$statistic) <- NULL
+    names(ret$TestStatistic) <- NULL
     names(ret$p.value) <- NULL
     ret
 }
@@ -57,7 +57,7 @@ lc <- function(FUN, ...) {
     tst$LinearStatistic <- lev$LinearStatistic
     if (length(tst$LinearStatistic) == 1 && 
         alternative == "two.sided" && teststat != "quad") {
-        tst$statistic <- (lev$LinearStatistic - lev$Expectation) / sqrt(lev$Covariance)
+        tst$TestStatistic <- (lev$LinearStatistic - lev$Expectation) / sqrt(lev$Covariance)
     }
     tst$Expectation <- lev$Expectation
     tst$Covariance <- lev$Covariance  
