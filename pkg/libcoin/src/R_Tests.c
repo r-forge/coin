@@ -15,7 +15,7 @@ SEXP R_ChisqTest
     SEXP give_log
 ) {
 
-    SEXP ans, stat, pval;
+    SEXP ans, stat, pval, names;
     double *MPinv, *ls, st, *ex;
     int rank, P, Q, PQ, B, greater = 0;
     
@@ -30,8 +30,12 @@ SEXP R_ChisqTest
     C_MPinv_sym(C_get_Covariance(LEV), PQ, REAL(tol)[0], MPinv, &rank);
         
     PROTECT(ans = allocVector(VECSXP, 2));
+    PROTECT(names = allocVector(STRSXP, 2));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
+    SET_STRING_ELT(names, 0, mkChar("TestStatistic"));      
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
+    SET_STRING_ELT(names, 1, mkChar("p.value"));      
+    namesgets(ans, names);
     
     REAL(stat)[0] = C_quadform(PQ, C_get_LinearStatistic(LEV),
                                C_get_Expectation(LEV), MPinv);
@@ -68,7 +72,7 @@ SEXP R_MaxtypeTest
     SEXP abseps
 ) {
 
-    SEXP ans, stat, pval;
+    SEXP ans, stat, pval, names;
     double st, *ex, *cv, *ls, tl;
     int P, Q, PQ, B, vo, alt, greater;
 
@@ -80,8 +84,12 @@ SEXP R_MaxtypeTest
             error("cannot compute adjusted p-value based on variances only");
     
     PROTECT(ans = allocVector(VECSXP, 2));
+    PROTECT(names = allocVector(STRSXP, 2));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
+    SET_STRING_ELT(names, 0, mkChar("TestStatistic"));      
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
+    SET_STRING_ELT(names, 1, mkChar("p.value"));      
+    namesgets(ans, names);
 
     REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LEV), 
                                    C_get_Expectation(LEV), 
@@ -138,7 +146,7 @@ SEXP R_MaxSelectTest
     SEXP give_log
 ) {
 
-    SEXP ans, index, stat, pval;
+    SEXP ans, index, stat, pval, names;
     int P, Q, B, mb;
 
     P = C_get_P(LEV);
@@ -147,8 +155,11 @@ SEXP R_MaxSelectTest
     mb = INTEGER(minbucket)[0];
 
     PROTECT(ans = allocVector(VECSXP, 3));
+    PROTECT(names = allocVector(STRSXP, 3));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
+    SET_STRING_ELT(names, 0, mkChar("TestStatistic"));      
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
+    SET_STRING_ELT(names, 1, mkChar("p.value"));      
 
     if (INTEGER(ordered)[0]) {
         SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, 1));
@@ -217,6 +228,9 @@ SEXP R_MaxSelectTest
                               INTEGER(give_log)[0]);
         }
     }
+
+    SET_STRING_ELT(names, 2, mkChar("index"));      
+    namesgets(ans, names);
 
     UNPROTECT(1);
     return(ans);
