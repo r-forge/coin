@@ -5,6 +5,11 @@
 {
     stopifnot(NROW(X) == NROW(Y))
 
+    if (is.integer(X)) {
+        if (is.null(attr(X, "levels")))
+            attr(X, "levels") <- 1:max(X)
+    }
+
     if (!missing(weights) && length(weights) > 0) {
         stopifnot(NROW(X) == length(weights))
         stopifnot(is.integer(weights))
@@ -54,14 +59,16 @@
     stopifnot(length(ix) == length(iy))
     stopifnot(is.integer(ix))
     stopifnot(is.integer(iy))
-    attr(ix, "levels") <- 1:max(ix)
-    attr(iy, "levels") <- 1:max(iy)
+    if (is.null(attr(ix, "levels")))
+        attr(ix, "levels") <- 1:max(ix)
+    if (is.null(attr(iy, "levels")))
+        attr(iy, "levels") <- 1:max(iy)
 
     if (missing(X)) X <- numeric(0)
     stopifnot(all(complete.cases(X)))
     stopifnot(all(complete.cases(Y)))
-    stopifnot(nrow(X) == max(attr(ix, "levels")) + 1)
-    stopifnot(nrow(Y) == max(attr(iy, "levels")) + 1)
+    stopifnot(nrow(X) == length(attr(ix, "levels")) + 1)
+    stopifnot(nrow(Y) == length(attr(iy, "levels")) + 1)
 
     if (!missing(weights) && length(weights) > 0) {
         stopifnot(length(ix) == length(weights))
@@ -140,12 +147,14 @@ doTest <- function(object, type = c("maxstat", "quadform"),
             ret <- .Call("R_MaxtypeTest", object, object$sim, object$tol, 
                          as.integer(alt), as.integer(lower), 
                          as.integer(log), as.integer(pargs$maxpts), 
-                         as.double(pargs$abseps), as.double(pargs$releps), PACKAGE = "libcoin")
+                         as.double(pargs$abseps), as.double(pargs$releps), 
+                         PACKAGE = "libcoin")
         }
     } else {
         type <- as.integer(which(c("maxstat", "quadform") == type))
-        ret <- .Call("R_MaxSelectTest", object, as.integer(ordered), object$sim, type, object$tol, 
-                     as.integer(minbucket), as.integer(lower), as.integer(log), PACKAGE = "libcoin")
+        ret <- .Call("R_MaxSelectTest", object, as.integer(ordered), 
+                     object$sim, type, object$tol, as.integer(minbucket), 
+                     as.integer(lower), as.integer(log), PACKAGE = "libcoin")
     }
     if (length(ret) == 2)
         names(ret) <- c("statistic", "p.value")

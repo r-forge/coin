@@ -1,34 +1,42 @@
 
-df2BDR <- function(object, max = 10, ignore = NULL) {
+BDR <- function(object, nmax = 20, ignore = NULL) {
 
+    stopifnot(is.data.frame(object))
     ret <- vector(mode = "list", length = ncol(object))
     names(ret) <- cn <- colnames(object)
+
     if (!is.null(ignore)) {
         if (is.integer(ignore)) cn <- cn[-ignore]
         if (is.character(ignore)) cn <- cn[cn != ignore]
     }
 
-    for (v in colnames(object)) {
+    for (v in cn) {
         x <- object[[v]]
-        if (!is.factor(x)) {
-            q <- unique(quantile(x, prob = 1:max / (max + 1)))
-            ind <- cut(x, breaks = c(-Inf, q, Inf))
-            ret[[v]] <- list(ind = unclass(ind),
-                             val = rbind(NA, cbind(c(-Inf, q), c(q, Inf))))
+        if (is.logical(x)) {
+            ix <- x + 1L
+            levels(ix) <- ux <- c(FALSE, TRUE)
+            X <- rbind(0, diag(2))
+        } else if (is.numeric(x)) {
+            ux <- sort(unique(x))
+            if (length(ux) > nmax)
+               ux <- unique(quantile(x, prob = 1:(nmax - 1) / nmax ))
+            ix <- match(x, ux)
+            levels(ix) <- ux
+            X <- rbind(0, matrix(ux, ncol = 1L))
+        } else if (is.factor(x) && !is.ordered(x)) {
+            ix <- unclass(x)
+            X <- rbind(0, diag(nlevels(x)))
+        } else if (is.ordered(x)) {
+            ix <- unclass(x)
+            X <- rbind(0, matrix(1:nlevels(x), ncol = 1L)) ### scores?
         } else {
-            ret[[v]] <- list(ind = unclass(x),
-                             val = factor(c(NA, levels(x)), ordered = is.ordered(x)))
+            stop("cannot handle class", class(x))
         }
-        ret[[v]]$ind[is.na(x)] <- 0
-        attributes(ret[[v]]$ind) <- NULL
+        ix[is.na(ix)] <- 0L
+        storage.mode(X) <- "double"
+        attr(ix, "X") <- X
+        ret[[v]] <- ix
     }
+    class(ret) <- "BDR"
     ret
 }
-
-IRIS <- iris[sample(1:nrow(iris), 1000000, replace = TRUE),]
-
-IRIS2 <- df2BDR(IRIS, 20)
-
-object.size(IRIS)
-object.size(IRIS2)
-
