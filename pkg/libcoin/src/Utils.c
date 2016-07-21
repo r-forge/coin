@@ -8,7 +8,12 @@ int NLEVELS
     SEXP x
 ) {
 
-   return(LENGTH(getAttrib(x, R_LevelsSymbol)));
+   SEXP a;
+   
+    a = getAttrib(x, R_LevelsSymbol);
+    if (a == R_NilValue) 
+        error("no levels attribute found");
+   return(LENGTH(a));
 }
 
 int NROW
