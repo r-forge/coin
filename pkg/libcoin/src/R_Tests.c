@@ -55,7 +55,7 @@ SEXP R_ChisqTest
         REAL(pval)[0] = C_perm_pvalue(greater, B, INTEGER(lower)[0], INTEGER(give_log)[0]);
     }
 
-    UNPROTECT(1);
+    UNPROTECT(2);
     return(ans);
 }
 
@@ -130,7 +130,7 @@ SEXP R_MaxtypeTest
         }
         REAL(pval)[0] = C_perm_pvalue(greater, B, INTEGER(lower)[0], INTEGER(give_log)[0]);
     }
-    UNPROTECT(1);
+    UNPROTECT(2);
     return(ans);
 }
 
@@ -232,6 +232,6 @@ SEXP R_MaxSelectTest
     SET_STRING_ELT(names, 2, mkChar("index"));      
     namesgets(ans, names);
 
-    UNPROTECT(1);
+    UNPROTECT(2);
     return(ans);
 }                                      
