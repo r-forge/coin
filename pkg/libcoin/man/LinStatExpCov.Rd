@@ -65,9 +65,9 @@ LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights, subset, block,
 \examples{
 
  wilcox.test(Ozone ~ Month, data = airquality,
-             subset = Month %in% c(5, 8))
+             subset = Month \%in\% c(5, 8))
 
- aq <- subset(airquality, Month %in% c(5, 8))
+ aq <- subset(airquality, Month \%in\% c(5, 8))
  X <- as.double(aq$Month == 5)
  Y <- as.double(rank(aq$Ozone))
 
