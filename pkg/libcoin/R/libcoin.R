@@ -47,14 +47,16 @@
     ret$sim <- double(0)
     ret$tol <- tol
     if (B > 0)
-        ret$sim <- .Call("R_PermutedLinearStatistic", ret, X, Y, weights, subset, 
-                         block, as.integer(B), as.integer(standardise), as.double(tol),
-                         PACKAGE = "libcoin")
+        ret$sim <- .Call("R_PermutedLinearStatistic", ret, X, Y, weights, 
+                         subset, block, as.integer(B), as.integer(standardise), 
+                         as.double(tol), PACKAGE = "libcoin")
     ret
 }
 
-.LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALSE, B = 0,
-                             standardise = FALSE, tol = sqrt(.Machine$double.eps)) 
+.LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, 
+                             varonly = FALSE, B = 0,
+                             standardise = FALSE, 
+                             tol = sqrt(.Machine$double.eps)) 
 {
     stopifnot(length(ix) == length(iy))
     stopifnot(is.integer(ix))
@@ -99,18 +101,20 @@
     ret$tol <- tol
     if (B > 0)
         ret$sim <- .Call("R_PermutedLinearStatistic_2d", ret, X, ix, Y, iy, 
-                         block, as.integer(B), as.integer(standardise), as.double(tol),
-                         PACKAGE = "libcoin")
+                         block, as.integer(B), as.integer(standardise), 
+                         as.double(tol), PACKAGE = "libcoin")
     ret
 }
 
 LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights, subset, block, 
                           varonly = FALSE, B = 0, standardise = FALSE, 
-                          tol = sqrt(.Machine$double.eps)) {
+                          tol = sqrt(.Machine$double.eps)) 
+{
 
     if (is.null(ix) & is.null(iy))
-        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights, subset = subset,
-                                block = block, varonly = varonly, B = B, 
+        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights, 
+                                subset = subset, block = block, 
+                                varonly = varonly, B = B, 
                                 standardise = standardise, tol = tol))
 
     if (!is.null(ix) & !is.null(iy))
@@ -120,8 +124,9 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights, subset, block,
                                 standardise = standardise, tol = tol))
 
     if (missing(X) & !is.null(ix))
-        return(.LinStatExpCov1d(X = ix, Y = Y, weights = weights, subset = subset,
-                                block = block, varonly = varonly, B = B, 
+        return(.LinStatExpCov1d(X = ix, Y = Y, weights = weights, 
+                                subset = subset, block = block, 
+                                varonly = varonly, B = B, 
                                 standardise = standardise, tol = tol))
 
     stop("incorrect call to LinStatExpCov")
@@ -135,6 +140,7 @@ doTest <- function(object, type = c("maxstat", "quadform"),
                    lower = FALSE, log = FALSE,
                    minbucket = 10L, ordered = TRUE, pargs = GenzBretz()) 
 {
+
     type <- match.arg(type)
     alternative <- match.arg(alternative)
     if (type == "quadform") stopifnot(alternative == "two.sided")
@@ -142,7 +148,8 @@ doTest <- function(object, type = c("maxstat", "quadform"),
     if (!object$Xfactor) {
         if (type == "quadform") {
             ret <- .Call("R_ChisqTest", object, object$sim, object$tol, 
-                         as.integer(lower), as.integer(log), PACKAGE = "libcoin")
+                         as.integer(lower), as.integer(log), 
+                         PACKAGE = "libcoin")
         } else {
             ret <- .Call("R_MaxtypeTest", object, object$sim, object$tol, 
                          as.integer(alt), as.integer(lower), 
@@ -156,9 +163,5 @@ doTest <- function(object, type = c("maxstat", "quadform"),
                      object$sim, type, object$tol, as.integer(minbucket), 
                      as.integer(lower), as.integer(log), PACKAGE = "libcoin")
     }
-    if (length(ret) == 2)
-        names(ret) <- c("statistic", "p.value")
-    if (length(ret) == 3)
-        names(ret) <- c("statistic", "p.value", "index")
     ret
 }
