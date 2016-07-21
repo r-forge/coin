@@ -3,14 +3,16 @@ source(file.path(R.home("share"), "R", "examples-header.R"))
 options(warn = 1)
 library('coin')
 library("libcoin")
-source("check_vs_coin.R")
 
 base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
-cleanEx()
+
 nameEx("CWD")
 ### * CWD
 
 flush(stderr()); flush(stdout())
+
+source("check_vs_coin.R")
+
 
 ### Name: CWD
 ### Title: Coarse Woody Debris
@@ -39,7 +41,7 @@ sts[unique(idx[, 1]), unique(idx[, 2]), drop = FALSE]
 
 
 
-cleanEx()
+
 nameEx("ContingencyTests")
 ### * ContingencyTests
 
@@ -209,7 +211,7 @@ statistic(lt)^2 # M^2 = 6.1563
 
 
 
-cleanEx()
+
 nameEx("CorrelationTests")
 ### * CorrelationTests
 
@@ -240,7 +242,7 @@ lc("koziol_test",CONT ~ INTG, data = USJudgeRatings)
 
 
 
-cleanEx()
+
 nameEx("GTSG")
 ### * GTSG
 
@@ -284,7 +286,7 @@ lc("independence_test",Surv(time, event) ~ group, data = GTSG,
 
 
 
-cleanEx()
+
 nameEx("IndependenceTest")
 ### * IndependenceTest
 
@@ -357,7 +359,7 @@ lc("independence_test",cerebellum + brainstem + cortex +
 
 
 
-cleanEx()
+
 nameEx("LocationTests")
 ### * LocationTests
 
@@ -515,7 +517,7 @@ lc("independence_test",values ~ ind, data = pieces,
 
 
 graphics::par(get("par.postscript", pos = 'CheckExEnv'))
-cleanEx()
+
 nameEx("MarginalHomogeneityTests")
 ### * MarginalHomogeneityTests
 
@@ -647,7 +649,7 @@ lc("mh_test",dysmenorrhea, scores = list(response = 1:3,
 
 
 
-cleanEx()
+
 nameEx("MaximallySelectedStatisticsTests")
 ### * MaximallySelectedStatisticsTests
 
@@ -703,7 +705,7 @@ lc("maxstat_test",jobsatisfaction,
 
 
 
-cleanEx()
+
 nameEx("NullDistribution")
 ### * NullDistribution
 
@@ -756,7 +758,7 @@ lc("cmh_test",disease ~ smoking | gender, data = alzheimer,
 
 
 
-cleanEx()
+
 nameEx("PermutationDistribution-methods")
 ### * PermutationDistribution-methods
 
@@ -806,7 +808,7 @@ rperm(at, 5)
 
 
 
-cleanEx()
+
 nameEx("ScaleTests")
 ### * ScaleTests
 
@@ -878,7 +880,7 @@ pvalue(ltm, method = "step-down", distribution = "marginal", type = "Sidak")
 
 
 
-cleanEx()
+
 nameEx("SurvivalTests")
 ### * SurvivalTests
 
@@ -952,7 +954,7 @@ pvalue(it, method = "step-down")
 
 
 
-cleanEx()
+
 nameEx("SymmetryTest")
 ### * SymmetryTest
 
@@ -1033,7 +1035,7 @@ pvalue(st, method = "step-down")
 
 
 
-cleanEx()
+
 nameEx("SymmetryTests")
 ### * SymmetryTests
 
@@ -1192,7 +1194,7 @@ B <- sum(statistic(qt, "linear")^2) / b
 
 
 
-cleanEx()
+
 nameEx("Transformations")
 ### * Transformations
 
@@ -1251,7 +1253,7 @@ mcp_trafo(x = K)(dta)
 
 
 
-cleanEx()
+
 nameEx("alpha")
 ### * alpha
 
@@ -1272,7 +1274,7 @@ lc("kruskal_test",elevel ~ alength, data = alpha)
 
 
 
-cleanEx()
+
 nameEx("alzheimer")
 ### * alzheimer
 
@@ -1300,7 +1302,7 @@ lc("cmh_test",disease ~ smoking | gender, data = alzheimer)
 
 
 graphics::par(get("par.postscript", pos = 'CheckExEnv'))
-cleanEx()
+
 nameEx("asat")
 ### * asat
 
@@ -1326,7 +1328,7 @@ exp(confint(wt)$conf.int)
 
 
 
-cleanEx()
+
 nameEx("coin-package")
 ### * coin-package
 
@@ -1357,7 +1359,7 @@ flush(stderr()); flush(stdout())
 
 
 
-cleanEx()
+
 nameEx("expectation-methods")
 ### * expectation-methods
 
@@ -1405,7 +1407,7 @@ statistic(ct, type = "standardized")
 
 
 
-cleanEx()
+
 nameEx("glioma")
 ### * glioma
 
@@ -1458,7 +1460,7 @@ lc("logrank_test",Surv(time, event) ~ group | histology, data = glioma,
 
 
 graphics::par(get("par.postscript", pos = 'CheckExEnv'))
-cleanEx()
+
 nameEx("hohnloser")
 ### * hohnloser
 
@@ -1476,7 +1478,7 @@ lc("maxstat_test",Surv(time, event) ~ EF, data = hohnloser)
 
 
 
-cleanEx()
+
 nameEx("jobsatisfaction")
 ### * jobsatisfaction
 
@@ -1494,7 +1496,7 @@ lc("lbl_test",jobsatisfaction, distribution = approximate(B = 10000))
 
 
 
-cleanEx()
+
 nameEx("malformations")
 ### * malformations
 
@@ -1530,7 +1532,7 @@ lc("chisq_test",malformation ~ consumption, data = malformations,
 
 
 
-cleanEx()
+
 nameEx("mercuryfish")
 ### * mercuryfish
 
@@ -1591,7 +1593,7 @@ pvalue(mvtest, method = "step-down")
 
 
 
-cleanEx()
+
 nameEx("neuropathy")
 ### * neuropathy
 
@@ -1634,7 +1636,7 @@ pvalue(it, method = "single-step")
 
 
 
-cleanEx()
+
 nameEx("ocarcinoma")
 ### * ocarcinoma
 
@@ -1659,7 +1661,7 @@ pvalue(lt)
 
 
 
-cleanEx()
+
 nameEx("photocar")
 ### * photocar
 
@@ -1701,7 +1703,7 @@ pvalue(it, method = "single-step")
 
 
 graphics::par(get("par.postscript", pos = 'CheckExEnv'))
-cleanEx()
+
 nameEx("pvalue-methods")
 ### * pvalue-methods
 
@@ -1779,7 +1781,7 @@ pvalue(it, method = "step-down") # subset pivotality is violated
 
 
 
-cleanEx()
+
 nameEx("rotarod")
 ### * rotarod
 
@@ -1804,7 +1806,7 @@ lc("wilcox_test",time ~ group, data = rotarod)
 
 
 
-cleanEx()
+
 nameEx("statistic-methods")
 ### * statistic-methods
 
@@ -1844,7 +1846,7 @@ statistic(ct, type = "standardized")
 
 
 
-cleanEx()
+
 nameEx("treepipit")
 ### * treepipit
 
@@ -1864,7 +1866,7 @@ lc("maxstat_test",counts ~ age + coverstorey + coverregen + meanregen +
 
 
 
-cleanEx()
+
 nameEx("vision")
 ### * vision
 
