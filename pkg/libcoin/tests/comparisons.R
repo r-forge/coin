@@ -4,6 +4,7 @@
 
 library("coin")
 library("libcoin")
+source("check_vs_coin.R")
 
 set.seed(290875)
 isequal <- coin:::isequal

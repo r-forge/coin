@@ -3,6 +3,7 @@ source(file.path(R.home("share"), "R", "examples-header.R"))
 options(warn = 1)
 library('coin')
 library("libcoin")
+source("check_vs_coin.R")
 
 base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 cleanEx()

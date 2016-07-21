@@ -1,7 +1,7 @@
 
-LinStatExpCov <- function(X, Y, weights, subset, block, 
-                          varonly = FALSE, B = 0L, standardise = FALSE, 
-                          tol = sqrt(.Machine$double.eps)) 
+.LinStatExpCov1d <- function(X, Y, weights, subset, block, 
+                             varonly = FALSE, B = 0L, standardise = FALSE, 
+                             tol = sqrt(.Machine$double.eps)) 
 {
     stopifnot(NROW(X) == NROW(Y))
 
@@ -47,8 +47,8 @@ LinStatExpCov <- function(X, Y, weights, subset, block,
     ret
 }
 
-LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALSE, B = 0,
-                            standardise = FALSE, tol = sqrt(.Machine$double.eps)) 
+.LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALSE, B = 0,
+                             standardise = FALSE, tol = sqrt(.Machine$double.eps)) 
 {
     stopifnot(length(ix) == length(iy))
     stopifnot(is.integer(ix))
@@ -95,15 +95,40 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALS
     ret
 }
 
+LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights, subset, block, 
+                          varonly = FALSE, B = 0, standardise = FALSE, 
+                          tol = sqrt(.Machine$double.eps)) {
+
+    if (is.null(ix) & is.null(iy))
+        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights, subset = subset,
+                                block = block, varonly = varonly, B = B, 
+                                standardise = standardise, tol = tol))
+
+    if (!is.null(ix) & !is.null(iy))
+        return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy, 
+                                weights = weights, subset = subset,
+                                block = block, varonly = varonly, B = B, 
+                                standardise = standardise, tol = tol))
+
+    if (missing(X) & !is.null(ix))
+        return(.LinStatExpCov1d(X = ix, Y = Y, weights = weights, subset = subset,
+                                block = block, varonly = varonly, B = B, 
+                                standardise = standardise, tol = tol))
+
+    stop("incorrect call to LinStatExpCov")
+}
+
+
 ### <FIXME> add alternative argument for type = "maxstat" </FIXME>
 ### lower = FALSE => p-value; lower = TRUE => 1 - p-value
-Test <- function(object, tol = sqrt(.Machine$double.eps), lower = FALSE, log = FALSE,
-                 type = c("maxstat", "quadform"), 
-                 alternative = c("two.sided", "less", "greater"),
-                 minbucket = 10L, ordered = TRUE) 
+doTest <- function(object, type = c("maxstat", "quadform"), 
+                   alternative = c("two.sided", "less", "greater"),
+                   tol = sqrt(.Machine$double.eps), lower = FALSE, log = FALSE,
+                   minbucket = 10L, ordered = TRUE) 
 {
     type <- match.arg(type)
     alternative <- match.arg(alternative)
+    if (type == "quadform") stopifnot(alternative == "two.sided")
     alt <- which(c("two.sided", "less", "greater") == alternative)
     if (!object$Xfactor) {
         if (type == "quadform") {

@@ -25,17 +25,17 @@ lc <- function(FUN, ...) {
     if (any(w <= 0))
         s <- which(w > 0)
     set.seed(29)
-    lev <- LinStatExpCov(object@statistic@xtrans, 
-                         object@statistic@ytrans, 
+    lev <- LinStatExpCov(X = object@statistic@xtrans, 
+                         Y = object@statistic@ytrans, 
                          subset = s,
                          weights = w, 
                          block = blk, B = B)
     ix <- iy <- 1:nrow(object@statistic@xtrans)
     if (max(ix) < 500) {
        attr(ix, "levels") <- attr(iy, "levels") <- 1:max(ix)
-        lev2d <- LinStatExpCov2d(rbind(0, object@statistic@xtrans),
-                         rbind(0, object@statistic@ytrans),
-                         ix, iy,
+        lev2d <- LinStatExpCov(X = rbind(0, object@statistic@xtrans),
+                         Y = rbind(0, object@statistic@ytrans),
+                         ix = ix, iy = iy,
                          subset = s,
                          weights = w,
                          block = blk, B = ifelse(max(ix) < 50, B, 0L))
@@ -53,7 +53,7 @@ lc <- function(FUN, ...) {
         alternative <- object@statistic@alternative
     }
         
-    tst <- Test(lev, type = teststat, alternative = alternative)
+    tst <- doTest(lev, type = teststat, alternative = alternative)
     tst$LinearStatistic <- lev$LinearStatistic
     if (length(tst$LinearStatistic) == 1 && 
         alternative == "two.sided" && teststat != "quad") {

@@ -14,45 +14,45 @@ ix <- unclass(cut(x, breaks = c(-Inf, ux[-length(ux)] + diff(ux) / 2, Inf)))
 
 (mt <- maxstat_test(y ~ x , distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, y, B = 1000)
-(tst <- Test(lev, type = "max"))
+(tst <- doTest(lev, type = "max"))
 ux[tst$index]
-(tst <- Test(lev, type = "quad"))
+(tst <- doTest(lev, type = "quad"))
 ux[tst$index]
 lev <- LinStatExpCov(ix, y, B = 1000, varonly = TRUE)
-(tst <- Test(lev, type = "max"))
+(tst <- doTest(lev, type = "max"))
 ux[tst$index]
-(tst <- Test(lev, type = "quad"))
+(tst <- doTest(lev, type = "quad"))
 ux[tst$index]
 
 (mt <- maxstat_test(y ~ x | blk, distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, y, block = blk, B = 1000)
-(tst <- Test(lev, type = "max"))
+(tst <- doTest(lev, type = "max"))
 ux[tst$index]
-(tst <- Test(lev, type = "quad"))
+(tst <- doTest(lev, type = "quad"))
 ux[tst$index]
 lev <- LinStatExpCov(ix, y, block = blk, B = 1000, varonly = TRUE)
-try(tst <- Test(lev, type = "max"))
+try(tst <- doTest(lev, type = "max"))
 
 (mt <- maxstat_test(y + y2 ~ x , distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, cbind(y, y2), B = 1000)
-(tst <- Test(lev, type = "max"))
+(tst <- doTest(lev, type = "max"))
 ux[tst$index]
-(tst <- Test(lev, type = "quad"))
+(tst <- doTest(lev, type = "quad"))
 ux[tst$index]
 lev <- LinStatExpCov(ix, cbind(y, y2), B = 1000, varonly = TRUE)
-(tst <- Test(lev, type = "max"))
+(tst <- doTest(lev, type = "max"))
 ux[tst$index]
-(tst <- Test(lev, type = "quad"))
+(tst <- doTest(lev, type = "quad"))
 ux[tst$index]
 
 (mt <- maxstat_test(y + y2 ~ x | blk, distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, cbind(y, y2), block = blk, B = 1000)
-(tst <- Test(lev, type = "max"))
+(tst <- doTest(lev, type = "max"))
 ux[tst$index]
-(tst <- Test(lev, type = "quad"))
+(tst <- doTest(lev, type = "quad"))
 ux[tst$index]
 lev <- LinStatExpCov(ix, cbind(y, y2), block = blk, B = 1000, varonly = TRUE)
-try(tst <- Test(lev, type = "max"))
+try(tst <- doTest(lev, type = "max"))
 
 x <- sample(gl(5, n))
 y <- rnorm(length(x), mean = x %in% levels(x)[c(1, 3, 5)], sd = 4.5)
@@ -62,34 +62,34 @@ blk <- gl(5, n)
 
 (mt <- maxstat_test(y ~ x , distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, y, B = 1000)
-(tst <- Test(lev, type = "max", ordered = FALSE))
-(tst <- Test(lev, type = "quad", ordered = FALSE))
+(tst <- doTest(lev, type = "max", ordered = FALSE))
+(tst <- doTest(lev, type = "quad", ordered = FALSE))
 lev <- LinStatExpCov(ix, y, B = 1000, varonly = TRUE)
-(tst <- Test(lev, type = "max", ordered = FALSE))
-(tst <- Test(lev, type = "quad", ordered = FALSE))
+(tst <- doTest(lev, type = "max", ordered = FALSE))
+(tst <- doTest(lev, type = "quad", ordered = FALSE))
 
 (mt <- maxstat_test(y ~ x | blk, distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, y, block = blk, B = 1000)
-(tst <- Test(lev, type = "max", ordered = FALSE))
-(tst <- Test(lev, type = "quad", ordered = FALSE))
+(tst <- doTest(lev, type = "max", ordered = FALSE))
+(tst <- doTest(lev, type = "quad", ordered = FALSE))
 lev <- LinStatExpCov(ix, y, block = blk, B = 1000, varonly = TRUE)
-try(tst <- Test(lev, type = "max", ordered = FALSE))
+try(tst <- doTest(lev, type = "max", ordered = FALSE))
 
 (mt <- maxstat_test(y + y2 ~ x , distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, cbind(y, y2), B = 1000)
-(tst <- Test(lev, type = "max", ordered = FALSE))
-(tst <- Test(lev, type = "quad", ordered = FALSE))
+(tst <- doTest(lev, type = "max", ordered = FALSE))
+(tst <- doTest(lev, type = "quad", ordered = FALSE))
 lev <- LinStatExpCov(ix, cbind(y, y2), B = 1000, varonly = TRUE)
-(tst <- Test(lev, type = "max", ordered = FALSE))
-(tst <- Test(lev, type = "quad", ordered = FALSE))
+(tst <- doTest(lev, type = "max", ordered = FALSE))
+(tst <- doTest(lev, type = "quad", ordered = FALSE))
 
 (mt <- maxstat_test(y + y2 ~ x | blk, distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, cbind(y, y2), block = blk, B = 50)
-(tst <- Test(lev, type = "max", ordered = FALSE))
-(tst <- Test(lev, type = "quad", ordered = FALSE))
+(tst <- doTest(lev, type = "max", ordered = FALSE))
+(tst <- doTest(lev, type = "quad", ordered = FALSE))
 
 xx <- factor(x == levels(x)[tst$index == 1])
 (it <- independence_test(y + y2 ~ xx | blk, teststat = "quad"))
 
 lev <- LinStatExpCov(ix, cbind(y, y2), block = blk, B = 1000, varonly = TRUE)
-try(tst <- Test(lev, type = "max", ordered = FALSE))
+try(tst <- doTest(lev, type = "max", ordered = FALSE))

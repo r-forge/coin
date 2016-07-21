@@ -1,2 +1,2 @@
 
-  o implement less / greater in maxstat
+  o check if VarInf and CovInf can be recycled
