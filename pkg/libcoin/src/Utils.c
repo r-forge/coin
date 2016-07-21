@@ -52,7 +52,7 @@ void C_kronecker
     const double *B, 
     const int r, 
     const int s, 
-    int overwrite,
+    const int overwrite,
     double *ans
 ) {
 
@@ -83,7 +83,7 @@ void C_kronecker_sym
     const int m, 
     const double *B, 
     const int r, 
-    int overwrite,
+    const int overwrite,
     double *ans
 ) {
 
@@ -116,9 +116,9 @@ void C_kronecker_sym
 
 void C_MPinv_sym 
 (
-    double *x, 
-    int n, 
-    double tol, 
+    const double *x, 
+    const int n, 
+    const double tol, 
     double *dMP, 
     int *rank
 ) {

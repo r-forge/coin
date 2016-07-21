@@ -17,9 +17,9 @@
 /* table(ix) */
 void C_1dtable_
 (
-    int *ix, 
-    int Lx, 
-    int N, 
+    const int *ix, 
+    const int Lx, 
+    const int N, 
     int *Lx_ans
 ) {
 
@@ -31,10 +31,10 @@ void C_1dtable_
 /* table(ix[subset]) */
 void C_1dtable_subset
 (
-    int *ix, 
-    int Lx, 
-    int *subset,
-    int Nsubset, 
+    const int *ix, 
+    const int Lx, 
+    const int *subset,
+    const int Nsubset, 
     int *Lx_ans
 ) {
 
@@ -47,10 +47,10 @@ void C_1dtable_subset
 /* xtabs(weights ~ ix) */
 void C_1dtable_weights
 (
-    int *ix, 
-    int Lx, 
-    int *weights, 
-    int N, 
+    const int *ix, 
+    const int Lx, 
+    const int *weights, 
+    const int N, 
     int *Lx_ans
 ) {
 
@@ -63,11 +63,11 @@ void C_1dtable_weights
 /* xtabs(weights ~ ix, subset = subset) */
 void C_1dtable_weights_subset
 (
-    int *ix, 
-    int Lx, 
-    int *weights, 
-    int *subset, 
-    int Nsubset,
+    const int *ix, 
+    const int Lx, 
+    const int *weights, 
+    const int *subset, 
+    const int Nsubset,
     int *Lx_ans
 ) {
 
@@ -80,11 +80,11 @@ void C_1dtable_weights_subset
 /* table(ix, iy) */
 void C_2dtable_
 (
-    int *ix, 
-    int Lx, 
-    int *iy, 
-    int Ly, 
-    int N, 
+    const int *ix, 
+    const int Lx, 
+    const int *iy, 
+    const int Ly, 
+    const int N, 
     int *LxLy_ans
 ) {
 
@@ -98,12 +98,12 @@ void C_2dtable_
 /* table(ix[subset], iy[subset]) */
 void C_2dtable_subset
 (
-    int *ix, 
-    int Lx, 
-    int *iy, 
-    int Ly, 
-    int *subset, 
-    int Nsubset, 
+    const int *ix, 
+    const int Lx, 
+    const int *iy, 
+    const int Ly, 
+    const int *subset, 
+    const int Nsubset, 
     int *LxLy_ans
 ) {
 
@@ -117,12 +117,12 @@ void C_2dtable_subset
 /* xtabs(weights ~ ix + iy) */
 void C_2dtable_weights
 (
-    int *ix, 
-    int Lx, 
-    int *iy, 
-    int Ly, 
-    int *weights,
-    int N, 
+    const int *ix, 
+    const int Lx, 
+    const int *iy, 
+    const int Ly, 
+    const int *weights,
+    const int N, 
     int *LxLy_ans
 ) {
 
@@ -135,13 +135,13 @@ void C_2dtable_weights
 /* xtabs(weights ~ ix + iy, subset = subset) */
 void C_2dtable_weights_subset
 (
-    int *ix, 
-    int Lx, 
-    int *iy, 
-    int Ly, 
-    int *weights,
-    int *subset, 
-    int Nsubset, 
+    const int *ix, 
+    const int Lx, 
+    const int *iy, 
+    const int Ly, 
+    const int *weights,
+    const int *subset, 
+    const int Nsubset, 
     int *LxLy_ans
 ) {
 
@@ -154,13 +154,13 @@ void C_2dtable_weights_subset
 /* table(ix, iy, block) w/o NAs in block, ie block > 0 */
 void C_2dtable_block
 (
-    int *ix, 
-    int Lx, 
-    int *iy, 
-    int Ly, 
-    int *block, 
-    int Lb, 
-    int N, 
+    const int *ix, 
+    const int Lx, 
+    const int *iy, 
+    const int Ly, 
+    const int *block, 
+    const int Lb, 
+    const int N, 
     int *LxLyLb_ans
 ) {
 
@@ -176,14 +176,14 @@ void C_2dtable_block
 /* table(ix[subset], iy[subset], block[subset]) w/o NAs in block, ie block > 0 */
 void C_2dtable_subset_block
 (
-    int *ix, 
-    int Lx,
-    int *iy, 
-    int Ly, 
-    int *subset, 
-    int Nsubset, 
-    int *block, 
-    int Lb, 
+    const int *ix, 
+    const int Lx,
+    const int *iy, 
+    const int Ly, 
+    const int *subset, 
+    const int Nsubset, 
+    const int *block, 
+    const int Lb, 
     int *LxLyLb_ans
 ) {
 
@@ -200,14 +200,14 @@ void C_2dtable_subset_block
 /* xtabs(weights ~ ix + iy + block) w/o NAs in block, ie block > 0 */
 void C_2dtable_weights_block
 (
-    int *ix, 
-    int Lx, 
-    int *iy, 
-    int Ly, 
-    int *weights,
-    int *block, 
-    int Lb, 
-    int N, 
+    const int *ix, 
+    const int Lx, 
+    const int *iy, 
+    const int Ly, 
+    const int *weights,
+    const int *block, 
+    const int Lb, 
+    const int N, 
     int *LxLyLb_ans
 ) {
 
@@ -222,15 +222,15 @@ void C_2dtable_weights_block
 /* xtabs(weights ~ ix + iy + block, subset = subset) w/o NAs in block, ie block > 0 */
 void C_2dtable_weights_subset_block
 (
-    int *ix, 
-    int Lx, 
-    int *iy, 
-    int Ly, 
-    int *weights, 
-    int *subset, 
-    int Nsubset, 
-    int *block, 
-    int Lb, 
+    const int *ix, 
+    const int Lx, 
+    const int *iy, 
+    const int Ly, 
+    const int *weights, 
+    const int *subset, 
+    const int Nsubset, 
+    const int *block, 
+    const int Lb, 
     int *LxLyLb_ans
 ) {
 
@@ -245,11 +245,11 @@ void C_2dtable_weights_subset_block
 
 void RC_2dtable
 (
-    SEXP ix, 
-    SEXP iy, 
-    SEXP weights, 
-    SEXP subset, 
-    SEXP block, 
+    const SEXP ix, 
+    const SEXP iy, 
+    const SEXP weights, 
+    const SEXP subset, 
+    const SEXP block, 
     int *LxLyLb_ans
 ) {
 

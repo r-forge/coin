@@ -8,10 +8,10 @@
 /* lower = 1 means p-value, lower = 0 means 1 - p-value */
 double C_chisq_pvalue
 (
-    double stat, 
-    int df, 
-    int lower, 
-    int give_log
+    const double stat, 
+    const int df, 
+    const int lower, 
+    const int give_log
 ) {
 
     return(pchisq(stat, (double) df, lower, give_log));
@@ -19,10 +19,10 @@ double C_chisq_pvalue
 
 double C_perm_pvalue
 (
-    int greater, 
-    int B, 
-    int lower, 
-    int give_log
+    const int greater, 
+    const int B, 
+    const int lower, 
+    const int give_log
 ) {
 
     double ret;
@@ -46,10 +46,10 @@ double C_perm_pvalue
 
 double C_norm_pvalue
 (
-    double stat, 
-    int alternative, 
-    int lower, 
-    int give_log
+    const double stat, 
+    const int alternative, 
+    const int lower, 
+    const int give_log
 ) {
 
     double ret;
@@ -95,10 +95,10 @@ double C_maxtype_pvalue
     const double stat, 
     const double *Covariance, 
     const int n, 
-    int alternative, 
-    int lower, 
-    int give_log, 
-    int maxpts, 
+    const int alternative, 
+    const int lower, 
+    const int give_log, 
+    int maxpts, /* const? */
     double releps, 
     double abseps, 
     double tol
@@ -209,11 +209,11 @@ double C_maxtype_pvalue
 void C_Permute
 (
     int *x, 
-    int n, 
+    const int N, 
     int *ans
 ) {
 
-    int k = n, j;
+    int k = N, n = N, j;
     
     for (int i = 0; i < k; i++) {
         j = n * unif_rand();
@@ -225,8 +225,8 @@ void C_Permute
 void C_PermuteBlock
 (
     int *x, 
-    int *table, 
-    int Ntable, 
+    const int *table, 
+    const int Ntable, 
     int *ans
 ) {
 
@@ -246,10 +246,10 @@ void C_PermuteBlock
 
 void C_doPermuteBlock
 (
-    int *subset, 
-    int Nsubset, 
-    int *table, 
-    int Nlevels, 
+    const int *subset, 
+    const int Nsubset, 
+    const int *table, 
+    const int Nlevels, 
     int *Nsubset_tmp, 
     int *perm
 ) {
@@ -260,8 +260,8 @@ void C_doPermuteBlock
 
 void C_doPermute
 (
-    int *subset, 
-    int Nsubset, 
+    const int *subset, 
+    const int Nsubset, 
     int *Nsubset_tmp, 
     int *perm
 ) {
@@ -272,7 +272,7 @@ void C_doPermute
 
 void C_setup_subset
 (
-    int N, 
+    const int N, 
     int *N_ans
 ) {
 
@@ -281,8 +281,8 @@ void C_setup_subset
 
 void C_setup_subset_weights
 (
-    int N, 
-    int *weights, 
+    const int N, 
+    const int *weights, 
     int *sw_ans
 ) {
 
@@ -296,9 +296,9 @@ void C_setup_subset_weights
 
 void C_setup_subset_weights_subset
 (
-    int Nsubset, 
-    int *weights, 
-    int *subset, 
+    const int Nsubset, 
+    const int *weights, 
+    const int *subset, 
     int *sw_ans
 ) {
 
@@ -313,10 +313,10 @@ void C_setup_subset_weights_subset
 void C_order_wrt_block
 (
     int *subset, 
-    int Nsubset, 
-    int *block, 
-    int *table, 
-    int Nlevels
+    const int Nsubset, 
+    const int *block, 
+    const int *table, 
+    const int Nlevels
 ) {
 
     int *cumtable, *subset_tmp;

@@ -3,11 +3,11 @@
 
 double C_maxstand_Covariance
 (
-    int PQ, 
-    double *linstat, 
-    double *expect, 
-    double *covar_sym, 
-    double tol
+    const int PQ, 
+    const double *linstat, 
+    const double *expect, 
+    const double *covar_sym, 
+    const double tol
 ) {
 
     double ans = R_NegInf, tmp = 0.0;
@@ -23,11 +23,11 @@ double C_maxstand_Covariance
 
 double C_maxstand_Variance
 (
-    int PQ, 
-    double *linstat, 
-    double *expect, 
-    double *var, 
-    double tol
+    const int PQ, 
+    const double *linstat, 
+    const double *expect, 
+    const double *var, 
+    const double tol
 ) {
 
     double ans = R_NegInf, tmp = 0.0;
@@ -43,11 +43,11 @@ double C_maxstand_Variance
 
 double C_minstand_Covariance
 (
-    int PQ, 
-    double *linstat, 
-    double *expect, 
-    double *covar_sym, 
-    double tol
+    const int PQ, 
+    const double *linstat, 
+    const double *expect, 
+    const double *covar_sym, 
+    const double tol
 ) {
 
     double ans = R_PosInf, tmp = 0.0;
@@ -63,11 +63,11 @@ double C_minstand_Covariance
 
 double C_minstand_Variance
 (
-    int PQ, 
-    double *linstat, 
-    double *expect, 
-    double *var, 
-    double tol
+    const int PQ, 
+    const double *linstat, 
+    const double *expect, 
+    const double *var, 
+    const double tol
 ) {
 
     double ans = R_PosInf, tmp = 0.0;
@@ -83,11 +83,11 @@ double C_minstand_Variance
 
 double C_maxabsstand_Covariance
 (
-    int PQ, 
-    double *linstat, 
-    double *expect, 
-    double *covar_sym, 
-    double tol
+    const int PQ, 
+    const double *linstat, 
+    const double *expect, 
+    const double *covar_sym, 
+    const double tol
 ) {
 
     double ans = R_NegInf, tmp = 0.0;
@@ -104,11 +104,11 @@ double C_maxabsstand_Covariance
 
 double C_maxabsstand_Variance
 (
-    int PQ, 
-    double *linstat, 
-    double *expect, 
-    double *var, 
-    double tol
+    const int PQ, 
+    const double *linstat, 
+    const double *expect, 
+    const double *var, 
+    const double tol
 ) {
 
     double ans = R_NegInf, tmp = 0.0;
@@ -124,10 +124,10 @@ double C_maxabsstand_Variance
 
 double C_quadform
 (
-    int PQ, 
-    double *linstat, 
-    double *expect, 
-    double *MPinv_sym
+    const int PQ, 
+    const double *linstat, 
+    const double *expect, 
+    const double *MPinv_sym
 ) {
 
     double ans = 0.0, tmp = 0.0;
@@ -143,13 +143,13 @@ double C_quadform
 
 double C_maxtype
 (
-    int PQ, 
-    double *linstat, 
-    double *expect, 
-    double *covar,
-    int varonly, 
-    double tol, 
-    int alternative
+    const int PQ, 
+    const double *linstat, 
+    const double *expect, 
+    const double *covar,
+    const int varonly, 
+    const double tol, 
+    const int alternative
 ) {
 
     double ret;
@@ -176,12 +176,12 @@ double C_maxtype
 
 void C_standardise
 (
-    int PQ, 
-    double *linstat, 
-    double *expect, 
-    double *covar, 
-    int varonly,
-    double tol
+    const int PQ, 
+    double *linstat, 		/* in place standardisation */
+    const double *expect, 
+    const double *covar, 
+    const int varonly,
+    const double tol
 ) {
 
     double var;

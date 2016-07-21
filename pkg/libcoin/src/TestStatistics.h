@@ -1,7 +1,29 @@
 
-double C_quadform(int PQ, double *linstat, double *expect, double *MPinv);
-double C_maxtype(int PQ, double *linstat, double *expect, double *covar, int varonly,
-                 double tol, int alternative);
-void C_standardise(int PQ, double *linstat, double *expect, double *covar, int varonly,
-                   double tol);
-                   
+extern double C_quadform
+(
+    const int PQ, 
+    const double *linstat, 
+    const double *expect, 
+    const double *MPinv
+);
+
+extern double C_maxtype
+(
+    const int PQ, 
+    const double *linstat, 
+    const double *expect, 
+    const double *covar, 
+    const int varonly,
+    const double tol, 
+    const int alternative
+);
+
+extern void C_standardise
+(
+    const int PQ, 
+    const double *linstat, 
+    const double *expect, 
+    const double *covar, 
+    const int varonly,
+    const double tol
+);

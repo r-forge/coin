@@ -33,11 +33,11 @@
 
 void C_LinearStatistic_
 (
-    double *x, 
-    int N, 
-    int P, 
-    double *y, 
-    int Q, 
+    const double *x, 
+    const int N, 
+    const int P, 
+    const double *y, 
+    const int Q, 
     double *PQ_ans
 ) {
 
@@ -47,12 +47,12 @@ void C_LinearStatistic_
 
 void C_LinearStatistic_weights
 (
-    double *x, 
-    int N, 
-    int P, 
-    double *y, 
-    int Q, 
-    int *weights, 
+    const double *x, 
+    const int N, 
+    const int P, 
+    const double *y, 
+    const int Q, 
+    const int *weights, 
     double *PQ_ans
 ) {                               
 
@@ -62,13 +62,13 @@ void C_LinearStatistic_weights
      
 void C_LinearStatistic_subset
 (
-    double *x, 
-    int N, 
-    int P, 
-    double *y, 
-    int Q, 
-    int *subset,
-    int Nsubset, 
+    const double *x, 
+    const int N, 
+    const int P, 
+    const double *y, 
+    const int Q, 
+    const int *subset,
+    const int Nsubset, 
     double *PQ_ans
 ) {
 
@@ -78,14 +78,14 @@ void C_LinearStatistic_subset
 
 void C_LinearStatistic_weights_subset
 (
-    double *x, 
-    int N, 
-    int P, 
-    double *y, 
-    int Q, 
-    int *weights, 
-    int *subset, 
-    int Nsubset, 
+    const double *x, 
+    const int N, 
+    const int P, 
+    const double *y, 
+    const int Q, 
+    const int *weights, 
+    const int *subset, 
+    const int Nsubset, 
     double *PQ_ans
 ) {
 
@@ -96,14 +96,14 @@ void C_LinearStatistic_weights_subset
 
 void C_PermutedLinearStatistic_
 (
-    double *x, 
-    int N, 
-    int P, 
-    double *y, 
-    int Q, 
-    int *perm, 
-    int *original, 
-    int Nperm, 
+    const double *x, 
+    const int N, 
+    const int P, 
+    const double *y, 
+    const int Q, 
+    const int *perm, 
+    const int *original, 
+    const int Nperm, 
     double *PQ_ans
 ) {
 
@@ -111,15 +111,15 @@ void C_PermutedLinearStatistic_
                        PQ_ans);
 }
 
-void C_LinearStatistic_2d
+void RC_LinearStatistic_2d
 (
-    SEXP x, 
-    int N, 
-    int P, 
-    double *y, 
-    int M, 
-    int Q, 
-    int *weights2d, 
+    const SEXP x, 
+    const int N, 
+    const int P, 
+    const double *y, 
+    const int M, 
+    const int Q, 
+    const int *weights2d, 
     double *PQ_ans
 ) {
 
@@ -134,11 +134,11 @@ void C_LinearStatistic_2d
 
 void C_LinearStatisticXfactor_
 (
-    int *ix, 
-    int N, 
-    int P, 
-    double *y, 
-    int Q, 
+    const int *ix, 
+    const int N, 
+    const int P, 
+    const double *y, 
+    const int Q, 
     double *PQ_ans
 ) {
 
@@ -148,12 +148,12 @@ void C_LinearStatisticXfactor_
 
 void C_LinearStatisticXfactor_weights
 (
-    int *ix, 
-    int N, 
-    int P, 
-    double *y, 
-    int Q, 
-    int *weights, 
+    const int *ix, 
+    const int N, 
+    const int P, 
+    const double *y, 
+    const int Q, 
+    const int *weights, 
     double *PQ_ans
 ) {                               
 
@@ -163,13 +163,13 @@ void C_LinearStatisticXfactor_weights
      
 void C_LinearStatisticXfactor_subset
 (
-    int *ix, 
-    int N, 
-    int P, 
-    double *y, 
-    int Q, 
-    int *subset, 
-    int Nsubset, 
+    const int *ix, 
+    const int N, 
+    const int P, 
+    const double *y, 
+    const int Q, 
+    const int *subset, 
+    const int Nsubset, 
     double *PQ_ans
 ) {
 
@@ -179,14 +179,14 @@ void C_LinearStatisticXfactor_subset
 
 void C_LinearStatisticXfactor_weights_subset
 (
-    int *ix, 
-    int N, 
-    int P, 
-    double *y, 
-    int Q, 
-    int *weights, 
-    int *subset, 
-    int Nsubset, 
+    const int *ix, 
+    const int N, 
+    const int P, 
+    const double *y, 
+    const int Q, 
+    const int *weights, 
+    const int *subset, 
+    const int Nsubset, 
     double *PQ_ans
 ) {
 
@@ -196,14 +196,14 @@ void C_LinearStatisticXfactor_weights_subset
 
 void C_PermutedLinearStatisticXfactor_
 (
-    int *ix, 
-    int N, 
-    int P, 
-    double *y, 
-    int Q, 
-    int *perm, 
-    int *original, 
-    int Nperm, 
+    const int *ix, 
+    const int N, 
+    const int P, 
+    const double *y, 
+    const int Q, 
+    const int *perm, 
+    const int *original, 
+    const int Nperm, 
     double *PQ_ans
 ) {
 
@@ -213,16 +213,16 @@ void C_PermutedLinearStatisticXfactor_
 
 void C_LinearStatisticXfactor
 (
-    int *x, 
-    int N, 
-    int P, 
-    double* y, 
-    int Q, 
-    int *weights, 
-    int *sumweights,
-    int *subset, 
-    int *Nsubset, 
-    int Lb, 
+    const int *x, 
+    const int N, 
+    const int P, 
+    const double* y, 
+    const int Q, 
+    const int *weights, 
+    const int *sumweights,
+    const int *subset, 
+    const int *Nsubset, 
+    const int Lb, 
     double *PQ_ans
 ) {
 
@@ -253,18 +253,18 @@ void C_LinearStatisticXfactor
     }
 }
 
-void C_LinearStatistic
+void RC_LinearStatistic
 (
-    SEXP x, 
-    int N, 
-    int P, 
-    double* y, 
-    int Q, 
-    int *weights,
-    int *sumweights,
-    int *subset, 
-    int *Nsubset,
-    int Lb, 
+    const SEXP x, 
+    const int N, 
+    const int P, 
+    const double* y, 
+    const int Q, 
+    const int *weights,
+    const int *sumweights,
+    const int *subset, 
+    const int *Nsubset,
+    const int Lb, 
     double *PQ_ans
 ) {
 
@@ -300,16 +300,16 @@ void C_LinearStatistic
     }
 }
 
-void C_PermutedLinearStatistic
+void RC_PermutedLinearStatistic
 (
-    SEXP x, 
-    int N, 
-    int P, 
-    double* y, 
-    int Q, 
-    int *perm, 
-    int *original, 
-    int Nperm, 
+    const SEXP x, 
+    const int N, 
+    const int P, 
+    const double* y, 
+    const int Q, 
+    const int *perm, 
+    const int *original, 
+    const int Nperm, 
     double *PQ_ans
 ) {
 
@@ -326,9 +326,9 @@ void C_PermutedLinearStatistic
 
 void C_ExpectationInfluence_
 (
-    double* y, 
-    int N, 
-    int Q, 
+    const double* y, 
+    const int N, 
+    const int Q, 
     double *Q_ans
 ) {
 
@@ -339,11 +339,11 @@ void C_ExpectationInfluence_
 
 void C_ExpectationInfluence_weights
 (
-    double* y, 
-    int N, 
-    int Q, 
-    int *weights, 
-    int sumweights, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const int *weights, 
+    const int sumweights, 
     double *Q_ans
 ) {
 
@@ -354,11 +354,11 @@ void C_ExpectationInfluence_weights
 
 void C_ExpectationInfluence_subset
 (
-    double* y, 
-    int N, 
-    int Q, 
-    int *subset, 
-    int Nsubset, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const int *subset, 
+    const int Nsubset, 
     double *Q_ans
 ) {
 
@@ -369,13 +369,13 @@ void C_ExpectationInfluence_subset
 
 void C_ExpectationInfluence_weights_subset
 (
-    double* y, 
-    int N, 
-    int Q, 
-    int *weights, 
-    int sumweights, 
-    int *subset, 
-    int Nsubset, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const int *weights, 
+    const int sumweights, 
+    const int *subset, 
+    const int Nsubset, 
     double *Q_ans
 ) {
 
@@ -387,10 +387,10 @@ void C_ExpectationInfluence_weights_subset
      
 void C_CovarianceInfluence_
 (
-    double* y, 
-    int N, 
-    int Q, 
-    double *ExpInf, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const double *ExpInf, 
     double *QQ_sym_ans
 ) {
 
@@ -402,12 +402,12 @@ void C_CovarianceInfluence_
 
 void C_CovarianceInfluence_weights
 (
-    double* y, 
-    int N, 
-    int Q, 
-    int *weights, 
-    int sumweights, 
-    double *ExpInf, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const int *weights, 
+    const int sumweights, 
+    const double *ExpInf, 
     double *QQ_sym_ans
 ) {
 
@@ -419,12 +419,12 @@ void C_CovarianceInfluence_weights
 
 void C_CovarianceInfluence_subset
 (
-    double* y, 
-    int N, 
-    int Q, 
-    int *subset, 
-    int Nsubset, 
-    double *ExpInf, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const int *subset, 
+    const int Nsubset, 
+    const double *ExpInf, 
     double *QQ_sym_ans
 ) {
 
@@ -436,14 +436,14 @@ void C_CovarianceInfluence_subset
 
 void C_CovarianceInfluence_weights_subset
 (
-    double* y, 
-    int N, 
-    int Q, 
-    int *weights, 
-    int sumweights, 
-    int *subset, 
-    int Nsubset, 
-    double *ExpInf, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const int *weights, 
+    const int sumweights, 
+    const int *subset, 
+    const int Nsubset, 
+    const double *ExpInf, 
     double *QQ_sym_ans
 ) {
 
@@ -456,10 +456,10 @@ void C_CovarianceInfluence_weights_subset
 
 void C_VarianceInfluence_
 (
-    double* y, 
-    int N, 
-    int Q, 
-    double *ExpInf, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const double *ExpInf, 
     double *Q_ans
 ) {
 
@@ -470,12 +470,12 @@ void C_VarianceInfluence_
 
 void C_VarianceInfluence_weights
 (
-    double* y, 
-    int N, 
-    int Q, 
-    int *weights, 
-    int sumweights, 
-    double *ExpInf, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const int *weights, 
+    const int sumweights, 
+    const double *ExpInf, 
     double *Q_ans
 ) {
 
@@ -486,12 +486,12 @@ void C_VarianceInfluence_weights
 
 void C_VarianceInfluence_subset
 (
-    double* y, 
-    int N, 
-    int Q, 
-    int *subset, 
-    int Nsubset, 
-    double *ExpInf, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const int *subset, 
+    const int Nsubset, 
+    const double *ExpInf, 
     double *Q_ans
 ) {
 
@@ -502,14 +502,14 @@ void C_VarianceInfluence_subset
 
 void C_VarianceInfluence_weights_subset
 (
-    double* y, 
-    int N, 
-    int Q, 
-    int *weights, 
-    int sumweights, 
-    int *subset, 
-    int Nsubset, 
-    double *ExpInf, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const int *weights, 
+    const int sumweights, 
+    const int *subset, 
+    const int Nsubset, 
+    const double *ExpInf, 
     double *Q_ans
 ) {
 
@@ -521,15 +521,15 @@ void C_VarianceInfluence_weights_subset
 
 void C_ExpectationCoVarianceInfluence
 (
-    double* y, 
-    int N, 
-    int Q, 
-    int *weights,
-    int *sumweights, 
-    int *subset,
-    int *Nsubset,
-    int Lb, 
-    int varonly, 
+    const double* y, 
+    const int N, 
+    const int Q, 
+    const int *weights,
+    const int *sumweights, 
+    const int *subset,
+    const int *Nsubset,
+    const int Lb, 
+    const int varonly, 
     double *LbQ_ans, 
     double *LbQ_var_ans,
     double *LbQQ_sym_ans
@@ -598,9 +598,9 @@ void C_ExpectationCoVarianceInfluence
 
 void C_ExpectationX_
 (
-    double* x, 
-    int N, 
-    int P, 
+    const double* x, 
+    const int N, 
+    const int P, 
     double *P_ans
 ) {
 
@@ -610,10 +610,10 @@ void C_ExpectationX_
 
 void C_ExpectationX_weights
 (
-    double* x, 
-    int N, 
-    int P, 
-    int *weights, 
+    const double* x, 
+    const int N, 
+    const int P, 
+    const int *weights, 
     double *P_ans
 ) {
 
@@ -623,11 +623,11 @@ void C_ExpectationX_weights
 
 void C_ExpectationX_subset
 (
-    double* x, 
-    int N, 
-    int P, 
-    int *subset, 
-    int Nsubset, 
+    const double* x, 
+    const int N, 
+    const int P, 
+    const int *subset, 
+    const int Nsubset, 
     double *P_ans
 ) {
 
@@ -637,12 +637,12 @@ void C_ExpectationX_subset
 
 void C_ExpectationX_weights_subset
 (
-    double* x, 
-    int N, 
-    int P, 
-    int *weights, 
-    int *subset, 
-    int Nsubset, 
+    const double* x, 
+    const int N, 
+    const int P, 
+    const int *weights, 
+    const int *subset, 
+    const int Nsubset, 
     double *P_ans
 ) {
 
@@ -652,9 +652,9 @@ void C_ExpectationX_weights_subset
 
 void C_CovarianceX_
 (
-    double *x, 
-    int N, 
-    int P, 
+    const double *x, 
+    const int N, 
+    const int P, 
     double *PP_sym_ans
 ) {
 
@@ -664,10 +664,10 @@ void C_CovarianceX_
      
 void C_CovarianceX_weights
 (
-    double *x, 
-    int N, 
-    int P, 
-    int *weights, 
+    const double *x, 
+    const int N, 
+    const int P, 
+    const int *weights, 
     double *PP_sym_ans
 ) {
 
@@ -677,11 +677,11 @@ void C_CovarianceX_weights
      
 void C_CovarianceX_subset
 (
-    double *x, 
-    int N, 
-    int P, 
-    int *subset, 
-    int Nsubset, 
+    const double *x, 
+    const int N, 
+    const int P, 
+    const int *subset, 
+    const int Nsubset, 
     double *PP_sym_ans
 ) {
 
@@ -691,12 +691,12 @@ void C_CovarianceX_subset
      
 void C_CovarianceX_weights_subset
 (
-    double *x, 
-    int N, 
-    int P, 
-    int *weights,
-    int *subset, 
-    int Nsubset, 
+    const double *x, 
+    const int N, 
+    const int P, 
+    const int *weights,
+    const int *subset, 
+    const int Nsubset, 
     double *PP_sym_ans
 ) {
 
@@ -706,9 +706,9 @@ void C_CovarianceX_weights_subset
 
 void C_VarianceX_
 (
-    double *x, 
-    int N, 
-    int P, 
+    const double *x, 
+    const int N, 
+    const int P, 
     double *P_ans
 ) {
 
@@ -718,10 +718,10 @@ void C_VarianceX_
      
 void C_VarianceX_weights
 (
-    double *x, 
-    int N, 
-    int P, 
-    int *weights,
+    const double *x, 
+    const int N, 
+    const int P, 
+    const int *weights,
     double *P_ans
 ) {
 
@@ -731,11 +731,11 @@ void C_VarianceX_weights
      
 void C_VarianceX_subset
 (
-    double *x, 
-    int N, 
-    int P, 
-    int *subset, 
-    int Nsubset, 
+    const double *x, 
+    const int N, 
+    const int P, 
+    const int *subset, 
+    const int Nsubset, 
     double *P_ans
 ) {
 
@@ -745,12 +745,12 @@ void C_VarianceX_subset
      
 void C_VarianceX_weights_subset
 (
-    double *x, 
-    int N, 
-    int P, 
-    int *weights,
-    int *subset, 
-    int Nsubset, 
+    const double *x, 
+    const int N, 
+    const int P, 
+    const int *weights,
+    const int *subset, 
+    const int Nsubset, 
     double *P_ans
 ) {
 
@@ -760,11 +760,11 @@ void C_VarianceX_weights_subset
 
 void C_ExpectationLinearStatistic
 (
-    int P, 
-    int Q, 
-    double *ExpInf, 
-    double *ExpX, 
-    int add, 
+    const int P, 
+    const int Q, 
+    const double *ExpInf, 
+    const double *ExpX, 
+    const int add, 
     double *PQ_ans
 ) {
 
@@ -779,14 +779,14 @@ void C_ExpectationLinearStatistic
 
 void C_CovarianceLinearStatistic
 (
-    int P, 
-    int Q, 
-    double *CovInf, 
-    double *ExpX, 
-    double *CovX, 
-    int sumweights, 
-    double *PP_sym_tmp, 
-    int add,
+    const int P, 
+    const int Q, 
+    const double *CovInf, 
+    const double *ExpX, 
+    const double *CovX, 
+    const int sumweights, 
+    double *PP_sym_tmp, 	/* work vector */
+    const int add,
     double *PQPQ_sym_ans
 ) {
 
@@ -794,7 +794,6 @@ void C_CovarianceLinearStatistic
     double f2 = 1.0 / (sumweights - 1);
     double tmp;
 
-    if (add > 1) add = 1;
     if (P * Q == 1) {
         tmp = f1 * CovInf[0] * CovX[0];
         tmp -= f2 * CovInf[0] * ExpX[0] * ExpX[0];
@@ -808,28 +807,27 @@ void C_CovarianceLinearStatistic
                         PP_sym_tmp);
         for (int p = 0; p < P * (P + 1) / 2; p++)
             PP_sym_tmp[p] = f1 * CovX[p] - f2 * PP_sym_tmp[p];
-        C_kronecker_sym(CovInf, Q, PP_sym_tmp, P, 1 - add, 
+        C_kronecker_sym(CovInf, Q, PP_sym_tmp, P, 1 - (add >= 1), 
                         PQPQ_sym_ans);
     }
 }
 
 void C_VarianceLinearStatistic
 (
-    int P, 
-    int Q, 
-    double *VarInf, 
-    double *ExpX, 
-    double *VarX, 
-    int sumweights, 
-    double *P_tmp, 
-    int add, 
+    const int P, 
+    const int Q, 
+    const double *VarInf, 
+    const double *ExpX, 
+    const double *VarX, 
+    const int sumweights, 
+    double *P_tmp, 		/* work array */
+    const int add, 
     double *PQ_ans
 ) {
 
-    if (add > 1) add = 1;
     if (P * Q == 1) {
         C_CovarianceLinearStatistic(P, Q, VarInf, ExpX, VarX, 
-                                    sumweights, P_tmp, add, 
+                                    sumweights, P_tmp, (add >= 1), 
                                     PQ_ans);
     } else {
 
@@ -837,31 +835,32 @@ void C_VarianceLinearStatistic
         double f2 = 1.0 / (sumweights - 1);
         for (int p = 0; p < P; p++)
             P_tmp[p] = f1 * VarX[p] - f2 * ExpX[p] * ExpX[p];
-        C_kronecker(VarInf, 1, Q, P_tmp, 1, P, 1 - add, 
+        C_kronecker(VarInf, 1, Q, P_tmp, 1, P, 1 - (add >= 1), 
                     PQ_ans);
     }
 }
 
-void C_ExpectationCovarianceLinearStatistic
+void RC_ExpectationCovarianceLinearStatistic
 (
-    SEXP x,
-    int N, 
-    int P, 
-    int Q,
-    int *weights, 
-    int *sumweights, 
-    int *subset, 
-    int *Nsubset, 
-    int Lb, 
-    double *ExpXtotal,
-    double *ExpInf, 
-    double *CovInf, 
-    double *work, 
-    double *PQ_ans,  
-    double *PQPQ_sym_ans
+    const SEXP x,
+    const int N, 
+    const int P, 
+    const int Q,
+    const int *weights, 
+    const int *sumweights, 
+    const int *subset, 
+    const int *Nsubset, 
+    const int Lb, 
+    double *ExpXtotal,		/* E(g(X)) */
+    const double *ExpInf, 
+    const double *CovInf, 
+    double *work, 		/* work vector */
+    double *PQ_ans,  		/* expectation */
+    double *PQPQ_sym_ans	/* covariance */
 ) {
 
-     int ns = 0, sw = 0, *ix, *subtmp;
+     int ns = 0, sw = 0, *ix;
+     const int *subtmp;
      double *ExpX, *CovX, *PPtmp;
 
      /* work[0] counts NAs in ix (ix[i] == 0)  */
@@ -953,26 +952,27 @@ void C_ExpectationCovarianceLinearStatistic
      }
 }
 
-void C_ExpectationVarianceLinearStatistic
+void RC_ExpectationVarianceLinearStatistic
 (
-    SEXP x,
-    int N, 
-    int P, 
-    int Q, 
-    int *weights, 
-    int *sumweights, 
-    int *subset, 
-    int *Nsubset, 
-    int Lb, 
-    double *ExpXtotal,
-    double *ExpInf, 
-    double *VarInf, 
-    double *work, 
-    double *PQ_ans_Exp, 
-    double *PQ_ans_Var
+    const SEXP x,
+    const int N, 
+    const int P, 
+    const int Q, 
+    const int *weights, 
+    const int *sumweights, 
+    const int *subset, 
+    const int *Nsubset, 
+    const int Lb, 
+    double *ExpXtotal,		/* E(g(X)) */
+    const double *ExpInf, 
+    const double *VarInf, 
+    double *work, 		/* work vector */
+    double *PQ_ans_Exp, 	/* expectation */
+    double *PQ_ans_Var		/* variance */
 ) {
 
-     int ns = 0, sw = 0, *ix, *subtmp;
+     int ns = 0, sw = 0, *ix;
+     const int *subtmp;
      double *ExpX, *VarX, *PPtmp;
 
      /* work[0] counts NAs in ix (ix[i] = 0)*/

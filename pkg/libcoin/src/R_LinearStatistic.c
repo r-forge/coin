@@ -10,11 +10,11 @@
 
 void RC_ExpectationCovarianceStatistic
 (
-    SEXP x,
-    SEXP y, 
-    SEXP weights, 
-    SEXP subset, 
-    SEXP block, 
+    const SEXP x,
+    const SEXP y, 
+    const SEXP weights, 
+    const SEXP subset, 
+    const SEXP block, 
     SEXP ans
 ) {
 
@@ -75,7 +75,7 @@ void RC_ExpectationCovarianceStatistic
         }
     }
 
-    C_LinearStatistic(x, N, P, REAL(y), Q, INTEGER(weights), 
+    RC_LinearStatistic(x, N, P, REAL(y), Q, INTEGER(weights), 
                       sumweights, subset_tmp, table + 1, Lb, C_get_LinearStatistic(ans));
 
     C_ExpectationCoVarianceInfluence(REAL(y), N, Q, INTEGER(weights),
@@ -83,11 +83,11 @@ void RC_ExpectationCovarianceStatistic
                                      C_get_VarianceInfluence(ans), C_get_CovarianceInfluence(ans));
 
     if (C_get_varonly(ans)) {
-        C_ExpectationVarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
+        RC_ExpectationVarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
             sumweights, subset_tmp, table + 1, Lb, C_get_ExpectationX(ans), ExpInf, C_get_VarianceInfluence(ans), 
             work, C_get_Expectation(ans), C_get_Variance(ans)); 
     } else {
-        C_ExpectationCovarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
+        RC_ExpectationCovarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
             sumweights, subset_tmp, table + 1, Lb, C_get_ExpectationX(ans), ExpInf, 
             C_get_CovarianceInfluence(ans), work, 
             C_get_Expectation(ans), C_get_Covariance(ans)); 
@@ -98,12 +98,12 @@ void RC_ExpectationCovarianceStatistic
 
 SEXP R_ExpectationCovarianceStatistic
 (
-    SEXP x, 
-    SEXP y, 
-    SEXP weights, 
-    SEXP subset, 
-    SEXP block, 
-    SEXP varonly
+    const SEXP x, 
+    const SEXP y, 
+    const SEXP weights, 
+    const SEXP subset, 
+    const SEXP block, 
+    const SEXP varonly
 ) {
 
     SEXP ans, P, Q, Lb; 
@@ -133,15 +133,15 @@ SEXP R_ExpectationCovarianceStatistic
 
 SEXP R_PermutedLinearStatistic
 (
-    SEXP LEV, 
-    SEXP x, 
-    SEXP y, 
-    SEXP weights, 
-    SEXP subset, 
-    SEXP block, 
-    SEXP B, 
-    SEXP standardise,
-    SEXP tol
+    const SEXP LEV, 
+    const SEXP x, 
+    const SEXP y, 
+    const SEXP weights, 
+    const SEXP subset, 
+    const SEXP block, 
+    const SEXP B, 
+    const SEXP standardise,
+    const SEXP tol
 ) {
 
     SEXP ans;
@@ -194,7 +194,7 @@ SEXP R_PermutedLinearStatistic
             for (int p = 0; p < PQ; p++)
                 linstat[p] = 0;
             C_doPermute(orig, N, tmp, perm);
-            C_PermutedLinearStatistic(x, NROW(x), P, REAL(y), Q, perm, orig, N, linstat);
+            RC_PermutedLinearStatistic(x, NROW(x), P, REAL(y), Q, perm, orig, N, linstat);
         }
     } else {
         table = Calloc(Lb + 1, int);
@@ -244,7 +244,7 @@ SEXP R_PermutedLinearStatistic
             for (int p = 0; p < PQ; p++)
                 linstat[p] = 0;
             C_doPermuteBlock(orig, N, table, Lb + 1, tmp, perm);
-            C_PermutedLinearStatistic(x, NROW(x), P, REAL(y), Q,
+            RC_PermutedLinearStatistic(x, NROW(x), P, REAL(y), Q,
                                       perm, orig, N, linstat);
         }
         Free(table);
@@ -270,13 +270,13 @@ SEXP R_PermutedLinearStatistic
 
 void RC_ExpectationCovarianceStatistic_2d
 (
-    SEXP x, 
-    SEXP ix, 
-    SEXP y, 
-    SEXP iy,
-    SEXP weights, 
-    SEXP subset, 
-    SEXP block, 
+    const SEXP x, 
+    const SEXP ix, 
+    const SEXP y, 
+    const SEXP iy,
+    const SEXP weights, 
+    const SEXP subset, 
+    const SEXP block, 
     SEXP ans
 ) {
 
@@ -316,11 +316,11 @@ void RC_ExpectationCovarianceStatistic_2d
     }
 
     if (LENGTH(x) == 0) {
-        C_LinearStatistic_2d(ix, LENGTH(ix), P, REAL(y), NROW(y), Q, 
-                             table2d, C_get_LinearStatistic(ans));
+        RC_LinearStatistic_2d(ix, LENGTH(ix), P, REAL(y), NROW(y), Q, 
+                              table2d, C_get_LinearStatistic(ans));
     } else {
-        C_LinearStatistic_2d(x, NROW(x), P, REAL(y), NROW(y), Q, 
-                             table2d, C_get_LinearStatistic(ans));
+        RC_LinearStatistic_2d(x, NROW(x), P, REAL(y), NROW(y), Q, 
+                              table2d, C_get_LinearStatistic(ans));
     }
 
     for (int b = 0; b < Lb; b++) {
@@ -370,14 +370,14 @@ void RC_ExpectationCovarianceStatistic_2d
 
 SEXP R_ExpectationCovarianceStatistic_2d
 (
-    SEXP x, 
-    SEXP ix, 
-    SEXP y, 
-    SEXP iy, 
-    SEXP weights, 
-    SEXP subset,
-    SEXP block, 
-    SEXP varonly
+    const SEXP x, 
+    const SEXP ix, 
+    const SEXP y, 
+    const SEXP iy, 
+    const SEXP weights, 
+    const SEXP subset,
+    const SEXP block, 
+    const SEXP varonly
 ) {
 
     SEXP ans, P, Q, Lx, Ly, Lb;
@@ -414,15 +414,15 @@ SEXP R_ExpectationCovarianceStatistic_2d
 
 SEXP R_PermutedLinearStatistic_2d
 (
-    SEXP LEV, 
-    SEXP x, 
-    SEXP ix, 
-    SEXP y, 
-    SEXP iy, 
-    SEXP block, 
-    SEXP B, 
-    SEXP standardise,
-    SEXP tol
+    const SEXP LEV, 
+    const SEXP x, 
+    const SEXP ix, 
+    const SEXP y, 
+    const SEXP iy, 
+    const SEXP block, 
+    const SEXP B, 
+    const SEXP standardise,
+    const SEXP tol
 ) {
 
     SEXP ans;
@@ -490,7 +490,7 @@ SEXP R_PermutedLinearStatistic_2d
             for (int j2 = 1; j2 <= NLEVELS(iy); j2++)
                 rtable[j2 * Lxp1 + j1] = rtable2[(j2 - 1) * NLEVELS(ix) + (j1 - 1)];
         }
-        C_LinearStatistic_2d(x, Lxp1, P, REAL(y), NROW(y), Q, rtable, linstat);
+        RC_LinearStatistic_2d(x, Lxp1, P, REAL(y), NROW(y), Q, rtable, linstat);
         
         for (int p = 0; p < PQ; p++)
             blinstat[p] += linstat[p];

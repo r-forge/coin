@@ -8,15 +8,51 @@
   LxLyLb_ans:	return value, integer array Lx x Ly x Lb 
 */
 
-void RC_2dtable(SEXP ix, SEXP iy, SEXP weights, SEXP subset, SEXP block, 
-                int *LxLyLb_ans); 
+extern void RC_2dtable
+(
+    const SEXP ix, 
+    const SEXP iy, 
+    const SEXP weights, 
+    const SEXP subset, 
+    const SEXP block, 
+    int *LxLyLb_ans
+); 
 
 /* table(ix) */
-void C_1dtable_(int *ix, int Lx, int N, int *Lx_ans);
+extern void C_1dtable_
+(
+    const int *ix, 
+    const int Lx, 
+    const int N, 
+    int *Lx_ans);
+    
 /* table(ix[subset]) */
-void C_1dtable_subset(int *ix, int Lx, int *subset, int Nsubset, int *Lx_ans);
+extern void C_1dtable_subset
+(
+    const int *ix, 
+    const int Lx, 
+    const int *subset, 
+    const int Nsubset, 
+    int *Lx_ans
+);
+
 /* xtabs(weights ~ ix) */
-void C_1dtable_weights(int *ix, int Lx, int *weights, int N, int *Lx_ans);
+extern void C_1dtable_weights
+(
+    const int *ix, 
+    const int Lx, 
+    const int *weights, 
+    const int N, 
+    int *Lx_ans
+);
+
 /* xtabs(weights ~ ix, subset = subset) */
-void C_1dtable_weights_subset(int *ix, int Lx, int *weights, int *subset, 
-                              int Nsubset, int *Lx_ans);
+extern void C_1dtable_weights_subset
+(
+    const int *ix, 
+    const int Lx, 
+    const int *weights, 
+    const int *subset, 
+    const int Nsubset, 
+    int *Lx_ans
+);

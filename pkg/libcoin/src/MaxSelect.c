@@ -7,22 +7,22 @@
 
 void C_ordered_Xfactor_block
 (
-    double *linstat, 
-    double *expect, 
-    double *covar,
-    int P,
-    int Q, 
-    double *ExpX, 
-    int B,
-    double* blinstat,
-    int minbucket, 
-    double tol, 
-    int teststat,
+    const double *linstat, 
+    const double *expect, 
+    const double *covar,
+    const int P,
+    const int Q, 
+    const double *ExpX, 
+    const int B,
+    const double* blinstat,
+    const int minbucket, 
+    const double tol, 
+    const int teststat,
     int *wmax, 
     double *maxstat,
     double *pval,
-    int lower,
-    int give_log
+    const int lower,
+    const int give_log
 ) {
 
     double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat, 
@@ -136,23 +136,23 @@ void C_ordered_Xfactor_block
 
 void C_ordered_Xfactor
 (
-    double *linstat, 
-    double *expect, 
-    double *varinf,
-    double *covinf,
-    int P,
-    int Q, 
-    double *ExpX, 
-    int B,
-    double *blinstat,
-    int minbucket, 
-    double tol, 
-    int teststat,
+    const double *linstat, 
+    const double *expect, 
+    const double *varinf,
+    const double *covinf,
+    const int P,
+    const int Q, 
+    const double *ExpX, 
+    const int B,
+    const double *blinstat,
+    const int minbucket, 
+    const double tol, 
+    const int teststat,
     int *wmax, 
     double *maxstat,
     double *pval,
-    int lower,
-    int give_log
+    const int lower,
+    const int give_log
 ) {
 
     double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat, 
@@ -263,22 +263,22 @@ void C_ordered_Xfactor
 
 void C_unordered_Xfactor_block
 (
-    double *linstat, 
-    double *expect, 
-    double *covar,
-    int P,
-    int Q, 
-    double *ExpX, 
-    int B,
-    double* blinstat,
-    int minbucket, 
-    double tol, 
-    int teststat,
+    const double *linstat, 
+    const double *expect, 
+    const double *covar,
+    const int P,
+    const int Q, 
+    const double *ExpX, 
+    const int B,
+    const double* blinstat,
+    const int minbucket, 
+    const double tol, 
+    const int teststat,
     int *wmax, 
     double *maxstat,
     double *pval,
-    int lower,
-    int give_log
+    const int lower,
+    const int give_log
 ) {
 
     double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat, 
@@ -443,23 +443,23 @@ void C_unordered_Xfactor_block
 
 void C_unordered_Xfactor
 (
-    double *linstat, 
-    double *expect, 
-    double *varinf,
-    double *covinf,
-    int P,
-    int Q, 
-    double *ExpX, 
-    int B,
-    double *blinstat,
-    int minbucket, 
-    double tol, 
-    int teststat,
+    const double *linstat, 
+    const double *expect, 
+    const double *varinf,
+    const double *covinf,
+    const int P,
+    const int Q, 
+    const double *ExpX, 
+    const int B,
+    const double *blinstat,
+    const int minbucket, 
+    const double tol, 
+    const int teststat,
     int *wmax, 
     double *maxstat,
     double *pval,
-    int lower,
-    int give_log
+    const int lower,
+    const int give_log
 ) {
 
     double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat, 
