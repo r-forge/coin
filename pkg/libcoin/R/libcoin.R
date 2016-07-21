@@ -37,6 +37,8 @@ LinStatExpCov <- function(X, Y, weights, subset, block,
     
     ret <- .Call("R_ExpectationCovarianceStatistic", X, Y, weights, subset, 
                  block, as.integer(varonly), PACKAGE = "libcoin")
+    ret$varonly <- as.logical(ret$varonly)
+    ret$Xfactor <- as.logical(ret$Xfactor)
     ret$sim <- double(0);
     if (B > 0)
         ret$sim <- .Call("R_PermutedLinearStatistic", ret, X, Y, weights, subset, 
@@ -83,6 +85,8 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALS
 
     ret <- .Call("R_ExpectationCovarianceStatistic_2d", X, ix, Y, iy, 
         weights, subset, block, as.integer(varonly), PACKAGE = "libcoin")
+    ret$varonly <- as.logical(ret$varonly)
+    ret$Xfactor <- as.logical(ret$Xfactor)
     ret$sim <- double(0);
     if (B > 0)
         ret$sim <- .Call("R_PermutedLinearStatistic_2d", ret, X, ix, Y, iy, 
@@ -94,15 +98,14 @@ LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, varonly = FALS
 ### <FIXME> add alternative argument for type = "maxstat" </FIXME>
 ### lower = FALSE => p-value; lower = TRUE => 1 - p-value
 Test <- function(object, tol = sqrt(.Machine$double.eps), lower = FALSE, log = FALSE,
-                 type = c("maxstat", "quadform"), xtrafo = c("id", "maxstat"),
+                 type = c("maxstat", "quadform"), 
                  alternative = c("two.sided", "less", "greater"),
                  minbucket = 10L, ordered = TRUE) 
 {
     type <- match.arg(type)
-    xtrafo <- match.arg(xtrafo)
     alternative <- match.arg(alternative)
     alt <- which(c("two.sided", "less", "greater") == alternative)
-    if (xtrafo == "id") {
+    if (!object$Xfactor) {
         if (type == "quadform") {
             ret <- .Call("R_ChisqTest", object, object$sim, tol, 
                          as.integer(lower), as.integer(log), PACKAGE = "libcoin")

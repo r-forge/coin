@@ -106,16 +106,19 @@ SEXP R_ExpectationCovarianceStatistic
     const SEXP varonly
 ) {
 
-    SEXP ans, P, Q, Lb; 
+    SEXP ans, P, Q, Lb, Xfactor; 
     
     PROTECT(P = ScalarInteger(0));
     PROTECT(Q = ScalarInteger(0));
     PROTECT(Lb = ScalarInteger(0));
+    PROTECT(Xfactor = ScalarInteger(0));
 
     if (isInteger(x)) {
         INTEGER(P)[0] = NLEVELS(x);
+        INTEGER(Xfactor)[0] = 1;
     } else {
         INTEGER(P)[0] = NCOL(x);
+        INTEGER(Xfactor)[0] = 0;
     }
     INTEGER(Q)[0] = NCOL(y);
 
@@ -123,11 +126,11 @@ SEXP R_ExpectationCovarianceStatistic
     if (LENGTH(block) > 0)
         INTEGER(Lb)[0] = NLEVELS(block);
 
-    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb));
+    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb, Xfactor));
 
     RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
 
-    UNPROTECT(4);
+    UNPROTECT(5);
     return(ans);
 }
 
@@ -380,18 +383,21 @@ SEXP R_ExpectationCovarianceStatistic_2d
     const SEXP varonly
 ) {
 
-    SEXP ans, P, Q, Lx, Ly, Lb;
+    SEXP ans, P, Q, Lx, Ly, Lb, Xfactor;
 
     PROTECT(P = ScalarInteger(0));
     PROTECT(Q = ScalarInteger(0));
     PROTECT(Lx = ScalarInteger(0));
     PROTECT(Ly = ScalarInteger(0));
     PROTECT(Lb = ScalarInteger(0));
+    PROTECT(Xfactor = ScalarInteger(0));
     
     if (LENGTH(x) == 0) {
         INTEGER(P)[0] = NLEVELS(ix);
+        INTEGER(Xfactor)[0] = 1;
     } else {
         INTEGER(P)[0] = NCOL(x);
+        INTEGER(Xfactor)[0] = 0;
     }
     INTEGER(Q)[0] = NCOL(y);
 
@@ -402,13 +408,13 @@ SEXP R_ExpectationCovarianceStatistic_2d
     INTEGER(Lx)[0] = NLEVELS(ix);
     INTEGER(Ly)[0] = NLEVELS(iy);
 
-    PROTECT(ans = R_init_LECV_2d(P, Q, varonly, Lx, Ly, Lb));
+    PROTECT(ans = R_init_LECV_2d(P, Q, varonly, Lx, Ly, Lb, Xfactor));
 
     RC_2dtable(ix, iy, weights, subset, block, C_get_Table(ans));
     RC_ExpectationCovarianceStatistic_2d(x, ix, y, iy, weights, 
                                          subset, block, ans);
 
-    UNPROTECT(6);
+    UNPROTECT(7);
     return(ans);
 }
 

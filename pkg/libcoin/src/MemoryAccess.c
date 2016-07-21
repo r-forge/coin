@@ -25,13 +25,20 @@ int C_get_Lb
     return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));
 }
 
-
 int C_get_varonly
 (
     SEXP LECV
 ) {
 
     return(INTEGER(VECTOR_ELT(LECV, varonly_SLOT))[0]);
+}
+
+int C_get_Xfactor
+(
+    SEXP LECV
+) {
+
+    return(INTEGER(VECTOR_ELT(LECV, Xfactor_SLOT))[0]);
 }
 
 double* C_get_LinearStatistic
@@ -181,7 +188,8 @@ SEXP R_init_LECV
     SEXP P, 
     SEXP Q, 
     SEXP varonly, 
-    SEXP Lb
+    SEXP Lb,
+    SEXP Xfactor
 ) {
 
     SEXP ans, vo, d, names;
@@ -283,6 +291,12 @@ SEXP R_init_LECV
     SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
                    mkChar("CovarianceInfluence"));
                    
+    SET_VECTOR_ELT(ans, Xfactor_SLOT,
+                   allocVector(INTSXP, 1));
+    SET_STRING_ELT(names, Xfactor_SLOT, 
+                   mkChar("Xfactor"));
+    INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = INTEGER(Xfactor)[0];
+
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
                    allocVector(INTSXP, lb + 1));
     SET_STRING_ELT(names, TableBlock_SLOT, 
@@ -306,7 +320,8 @@ SEXP R_init_LECV_2d
     SEXP varonly, 
     SEXP Lx, 
     SEXP Ly, 
-    SEXP Lb
+    SEXP Lb,
+    SEXP Xfactor
 ) {
 
     SEXP ans, vo, d, names, tab, tabdim;
@@ -415,6 +430,12 @@ SEXP R_init_LECV_2d
                    allocVector(REALSXP, lb * q * (q + 1)));
     SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
                    mkChar("CovarianceInfluence"));
+
+    SET_VECTOR_ELT(ans, Xfactor_SLOT,
+                   allocVector(INTSXP, 1));
+    SET_STRING_ELT(names, Xfactor_SLOT, 
+                   mkChar("Xfactor"));
+    INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = INTEGER(Xfactor)[0];
                    
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
                    allocVector(INTSXP, lb + 1));

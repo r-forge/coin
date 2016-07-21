@@ -53,7 +53,7 @@ lc <- function(FUN, ...) {
         alternative <- object@statistic@alternative
     }
         
-    tst <- Test(lev, xtrafo = "id", type = teststat, alternative = alternative)
+    tst <- Test(lev, type = teststat, alternative = alternative)
     tst$LinearStatistic <- lev$LinearStatistic
     if (length(tst$LinearStatistic) == 1 && 
         alternative == "two.sided" && teststat != "quad") {

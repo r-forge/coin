@@ -29,7 +29,8 @@
 #define ExpectationInfluence_SLOT	8
 #define CovarianceInfluence_SLOT	9
 #define VarianceInfluence_SLOT		10
-#define Work_SLOT			11
-#define TableBlock_SLOT			12
-#define Sumweights_SLOT			13
-#define Table_SLOT			14
+#define Xfactor_SLOT			11
+#define Work_SLOT			12
+#define TableBlock_SLOT			13
+#define Sumweights_SLOT			14
+#define Table_SLOT			15
