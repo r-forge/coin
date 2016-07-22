@@ -1,2 +1,4 @@
 
   o check if VarInf and CovInf can be recycled
+
+  o switch off p-value computation entirely
