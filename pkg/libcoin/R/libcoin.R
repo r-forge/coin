@@ -66,11 +66,16 @@
     if (is.null(attr(iy, "levels")))
         attr(iy, "levels") <- 1:max(iy)
 
-    if (missing(X)) X <- numeric(0)
-    stopifnot(all(complete.cases(X)))
+    if (!missing(X)) {
+        stopifnot(min(ix) >= 0 && nrow(X) == (max(ix) + 1))
+        stopifnot(all(complete.cases(X)))
+        stopifnot(nrow(X) == (length(attr(ix, "levels")) + 1))
+    } else  {
+        X <- numeric(0)
+    }
     stopifnot(all(complete.cases(Y)))
-    stopifnot(nrow(X) == length(attr(ix, "levels")) + 1)
-    stopifnot(nrow(Y) == length(attr(iy, "levels")) + 1)
+    stopifnot(nrow(Y) == (length(attr(iy, "levels")) + 1))
+    stopifnot(min(iy) >= 0 && nrow(Y) == (max(iy) + 1))
 
     if (!missing(weights) && length(weights) > 0) {
         stopifnot(length(ix) == length(weights))
