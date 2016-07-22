@@ -66,7 +66,7 @@
     if (is.null(attr(iy, "levels")))
         attr(iy, "levels") <- 1:max(iy)
 
-    if (!missing(X)) {
+    if (!missing(X) && length(X) > 0) {
         stopifnot(min(ix) >= 0 && nrow(X) == (max(ix) + 1))
         stopifnot(all(complete.cases(X)))
         stopifnot(nrow(X) == (length(attr(ix, "levels")) + 1))
