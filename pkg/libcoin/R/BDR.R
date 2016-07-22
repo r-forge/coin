@@ -18,9 +18,12 @@ BDR <- function(object, nmax = 20, ignore = NULL) {
             X <- rbind(0, diag(2))
         } else if (is.numeric(x)) {
             ux <- sort(unique(x))
-            if (length(ux) > nmax)
-               ux <- unique(quantile(x, prob = 1:(nmax - 1) / nmax ))
-            ix <- match(x, ux)
+            if (length(ux) <= nmax) {
+                ix <- match(x, ux)
+            } else {
+                ux <- unique(quantile(x, prob = 1:(nmax - 1) / nmax ))
+                ix <- unclass(cut(x, breaks = c(-Inf, ux, Inf)))
+            }
             levels(ix) <- ux
             X <- rbind(0, matrix(ux, ncol = 1L))
         } else if (is.factor(x) && !is.ordered(x)) {
