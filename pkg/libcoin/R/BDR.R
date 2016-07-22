@@ -21,8 +21,8 @@ BDR <- function(object, nmax = 20, ignore = NULL) {
             if (length(ux) <= nmax) {
                 ix <- match(x, ux)
             } else {
-                ux <- unique(quantile(x, prob = 1:(nmax - 1) / nmax ))
-                ix <- unclass(cut(x, breaks = c(-Inf, ux, Inf)))
+                ux <- unique(quantile(x, prob = 1:nmax / nmax, na.rm = TRUE))
+                ix <- unclass(cut(x, breaks = c(-Inf, ux)))
             }
             levels(ix) <- ux
             X <- rbind(0, matrix(ux, ncol = 1L))
