@@ -395,7 +395,7 @@ SEXP R_init_LECV_2d
                                    pq * (pq + 1) / 2));
         SET_VECTOR_ELT(ans, Work_SLOT,
                        allocVector(REALSXP, 
-                           p + 2 * p * (p + 1) / 2 + 1));
+                           2 * p * (p + 1) / 2));
     }
 
     SET_STRING_ELT(names, Variance_SLOT, 
