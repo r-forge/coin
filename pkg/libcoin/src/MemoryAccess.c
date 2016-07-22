@@ -151,6 +151,8 @@ int* C_get_TableBlock
     SEXP LECV
 ) {
 
+    if (VECTOR_ELT(LECV, TableBlock_SLOT) == R_NilValue)
+        error("object does not contain table block slot");
     return(INTEGER(VECTOR_ELT(LECV, TableBlock_SLOT)));
 }
 
@@ -158,7 +160,8 @@ int* C_get_Sumweights
 (
     SEXP LECV
 ) {
-
+    if (VECTOR_ELT(LECV, Sumweights_SLOT) == R_NilValue)
+        error("object does not contain sumweights slot");
     return(INTEGER(VECTOR_ELT(LECV, Sumweights_SLOT)));
 }
 
@@ -287,7 +290,7 @@ SEXP R_init_LECV
     SET_STRING_ELT(names, VarianceInfluence_SLOT, 
                    mkChar("VarianceInfluence"));
     SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                   allocVector(REALSXP, lb * q * (q + 1)));
+                   allocVector(REALSXP, lb * q * (q + 1) / 2));
     SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
                    mkChar("CovarianceInfluence"));
                    
@@ -392,7 +395,7 @@ SEXP R_init_LECV_2d
                                    pq * (pq + 1) / 2));
         SET_VECTOR_ELT(ans, Work_SLOT,
                        allocVector(REALSXP, 
-                           2 * p * (p + 1) / 2 + 1));
+                           p + 2 * p * (p + 1) / 2 + 1));
     }
 
     SET_STRING_ELT(names, Variance_SLOT, 
@@ -427,7 +430,7 @@ SEXP R_init_LECV_2d
     SET_STRING_ELT(names, VarianceInfluence_SLOT, 
                    mkChar("VarianceInfluence"));
     SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                   allocVector(REALSXP, lb * q * (q + 1)));
+                   allocVector(REALSXP, lb * q * (q + 1) / 2));
     SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
                    mkChar("CovarianceInfluence"));
 
@@ -437,6 +440,7 @@ SEXP R_init_LECV_2d
                    mkChar("Xfactor"));
     INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = INTEGER(Xfactor)[0];
                    
+    /* 
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
                    allocVector(INTSXP, lb + 1));
     SET_STRING_ELT(names, TableBlock_SLOT, 
@@ -446,6 +450,7 @@ SEXP R_init_LECV_2d
                    allocVector(INTSXP, lb));
     SET_STRING_ELT(names, Sumweights_SLOT, 
                    mkChar("Sumweights"));
+    */
 
     PROTECT(tabdim = allocVector(INTSXP, 3));                   
     INTEGER(tabdim)[0] = INTEGER(Lx)[0] + 1;
