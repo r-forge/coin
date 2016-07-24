@@ -31,8 +31,11 @@ BDR <- function(object, nmax = 20, ignore = NULL) {
             X <- rbind(0, diag(nlevels(x)))
         } else if (is.ordered(x)) {
             ix <- unclass(x)
-            X <- rbind(0, matrix(1:nlevels(x), ncol = 1L)) ### scores?
+            sc <- attr(x, "scores")
+            if (is.null(sc)) sc <- 1:nlevels(x)
+            X <- rbind(0, matrix(sc, ncol = 1L))
         } else {
+            ### dispatch here
             stop("cannot handle class", class(x))
         }
         ix[is.na(ix)] <- 0L
