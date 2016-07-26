@@ -34,7 +34,7 @@
     ms <- !(complete.cases(X) & complete.cases(Y))
     if (any(ms)) {
         if (length(subset) > 0) {
-            subset <- subset[!(subset %in% which(ms))] 
+            subset <- subset[!(subset %in% (which(ms) - 1L))] 
         } else {
             subset <- (0:(NROW(X) - 1))[-which(ms)]
         }
