@@ -150,7 +150,7 @@ doTest <- function(object, type = c("maxstat", "quadform"),
     alternative <- match.arg(alternative)
     if (type == "quadform") stopifnot(alternative == "two.sided")
     alt <- which(c("two.sided", "less", "greater") == alternative)
-    if (!pvalue & !is.null(object$sim)) object$sim <- NULL
+    if (!pvalue & !is.null(object$sim)) object$sim <- double(0)
 
     if (!object$Xfactor) {
         if (type == "quadform") {

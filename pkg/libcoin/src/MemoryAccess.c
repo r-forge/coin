@@ -1,6 +1,7 @@
 
 #include "libcoin_internal.h"
 
+
 int C_get_P
 (
     SEXP LECV
@@ -17,13 +18,6 @@ int C_get_Q
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[1]);
 }
 
-int C_get_Lb
-(
-    SEXP LECV
-) {
-
-    return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));
-}
 
 int C_get_varonly
 (
@@ -185,6 +179,19 @@ int* C_get_dimTable
     return(INTEGER(getAttrib(VECTOR_ELT(LECV, Table_SLOT), 
                              R_DimSymbol)));
 }
+
+
+int C_get_Lb
+(
+    SEXP LECV
+) {
+
+    if (VECTOR_ELT(LECV, TableBlock_SLOT) != R_NilValue)
+        return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));
+    return(C_get_dimTable(LECV)[2]);
+}
+
+
 
 SEXP R_init_LECV
 (
