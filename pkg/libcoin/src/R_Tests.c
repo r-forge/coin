@@ -177,8 +177,6 @@ SEXP R_MaxSelectTest
     SET_STRING_ELT(names, 1, mkChar("p.value"));      
     REAL(pval)[0] = NA_REAL;
 
-Rprintf("Lb: %d \n", C_get_Lb(LEV));
-    
     if (INTEGER(ordered)[0]) {
         SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, 1));
         if (C_get_Lb(LEV) == 1) {
