@@ -11,6 +11,7 @@ SEXP R_ChisqTest
     SEXP LEV,
     SEXP linstat, 
     SEXP tol, 
+    SEXP pvalue,
     SEXP lower, 
     SEXP give_log
 ) {
@@ -36,9 +37,16 @@ SEXP R_ChisqTest
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
     SET_STRING_ELT(names, 1, mkChar("p.value"));      
     namesgets(ans, names);
+    REAL(pval)[0] = NA_REAL;
     
     REAL(stat)[0] = C_quadform(PQ, C_get_LinearStatistic(LEV),
                                C_get_Expectation(LEV), MPinv);
+
+    if (INTEGER(pvalue)[0] == 0) {
+        UNPROTECT(2);
+        return(ans);
+    }
+
     if (LENGTH(linstat) == 0) {
         REAL(pval)[0] = C_chisq_pvalue(REAL(stat)[0], rank, INTEGER(lower)[0],
                                        INTEGER(give_log)[0]);
@@ -65,6 +73,7 @@ SEXP R_MaxtypeTest
     SEXP linstat, 
     SEXP tol, 
     SEXP alternative, 
+    SEXP pvalue,
     SEXP lower, 
     SEXP give_log, 
     SEXP maxpts, 
@@ -90,6 +99,7 @@ SEXP R_MaxtypeTest
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
     SET_STRING_ELT(names, 1, mkChar("p.value"));      
     namesgets(ans, names);
+    REAL(pval)[0] = NA_REAL;
 
     REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LEV), 
                                    C_get_Expectation(LEV), 
@@ -97,6 +107,11 @@ SEXP R_MaxtypeTest
                                    C_get_varonly(LEV),
                                    REAL(tol)[0],
                                    INTEGER(alternative)[0]);
+
+    if (INTEGER(pvalue)[0] == 0) {
+        UNPROTECT(2);
+        return(ans);
+    }
 
     if (LENGTH(linstat) == 0) {
         if (C_get_varonly(LEV) && PQ > 1) {
@@ -160,7 +175,8 @@ SEXP R_MaxSelectTest
     SET_STRING_ELT(names, 0, mkChar("TestStatistic"));      
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
     SET_STRING_ELT(names, 1, mkChar("p.value"));      
-
+    REAL(pval)[0] = NA_REAL;
+    
     if (INTEGER(ordered)[0]) {
         SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, 1));
         if (C_get_Lb(LEV) == 1) {

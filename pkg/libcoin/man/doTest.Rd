@@ -9,7 +9,7 @@
 \usage{
 doTest(object, type = c("maxstat", "quadform"), 
        alternative = c("two.sided", "less", "greater"), 
-       lower = FALSE, log = FALSE, 
+       pvalue = TRUE, lower = FALSE, log = FALSE, 
        minbucket = 10L, ordered = TRUE, pargs = GenzBretz())
 }
 \arguments{
@@ -18,6 +18,8 @@ doTest(object, type = c("maxstat", "quadform"),
   \item{type}{use maximum-type or quadratic form as test statistic.
 }
   \item{alternative}{alternative for maximum-type statistics.
+}
+  \item{pvalue}{a logical indicating if a p-value shall be computed.
 }
   \item{lower}{a logical indicating if a p-value (\code{lower} is \code{FALSE})
                or 1 - p-value (\code{lower} is \code{TRUE}) shall be returned.

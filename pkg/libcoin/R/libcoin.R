@@ -142,7 +142,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights, subset, block,
 ### lower = FALSE => p-value; lower = TRUE => 1 - p-value
 doTest <- function(object, type = c("maxstat", "quadform"), 
                    alternative = c("two.sided", "less", "greater"),
-                   lower = FALSE, log = FALSE,
+                   pvalue = TRUE, lower = FALSE, log = FALSE,
                    minbucket = 10L, ordered = TRUE, pargs = GenzBretz()) 
 {
 
@@ -150,14 +150,16 @@ doTest <- function(object, type = c("maxstat", "quadform"),
     alternative <- match.arg(alternative)
     if (type == "quadform") stopifnot(alternative == "two.sided")
     alt <- which(c("two.sided", "less", "greater") == alternative)
+    if (!pvalue & !is.null(object$sim)) object$sim <- NULL
+
     if (!object$Xfactor) {
         if (type == "quadform") {
             ret <- .Call("R_ChisqTest", object, object$sim, object$tol, 
-                         as.integer(lower), as.integer(log), 
+                         as.integer(pvalue), as.integer(lower), as.integer(log), 
                          PACKAGE = "libcoin")
         } else {
             ret <- .Call("R_MaxtypeTest", object, object$sim, object$tol, 
-                         as.integer(alt), as.integer(lower), 
+                         as.integer(alt), as.integer(pvalue), as.integer(lower), 
                          as.integer(log), as.integer(pargs$maxpts), 
                          as.double(pargs$abseps), as.double(pargs$releps), 
                          PACKAGE = "libcoin")
