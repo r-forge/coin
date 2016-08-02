@@ -138,23 +138,34 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights, subset, block,
 
 ### <FIXME> add alternative argument for type = "maxstat" </FIXME>
 ### lower = FALSE => p-value; lower = TRUE => 1 - p-value
-doTest <- function(object, type = c("maxstat", "quadform"), 
+doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"), 
                    alternative = c("two.sided", "less", "greater"),
                    pvalue = TRUE, lower = FALSE, log = FALSE,
                    minbucket = 10L, ordered = TRUE, pargs = GenzBretz()) 
 {
 
-    type <- match.arg(type)
-    alternative <- match.arg(alternative)
-    if (type == "quadform") stopifnot(alternative == "two.sided")
+    ### avoid match.arg for performance reasons
+    teststat <- teststat[1]
+    stopifnot(teststat %in% c("maximum", "quadratic", "scalar"))
+    alternative <- alternative[1]
+    stopifnot(alternative %in% c("two.sided", "less", "greater"))
+
+    if (teststat == "quadratic") stopifnot(alternative == "two.sided")
+
+    test <- which(c("maximum", "quadratic", "scalar") == teststat)
+    if (test == 3) {
+        stopifnot(length(object$LinearStatistic) == 1)
+        test <- 1L ### scalar is maximum internally
+    }
     alt <- which(c("two.sided", "less", "greater") == alternative)
+
     if (!pvalue & (NCOL(object$PermutedLinearStatistic) > 0)) {
         object$PermutedLinearStatistic <- matrix(nrow = 0, ncol = 0)
         storage.mode(object$PermutedLinearStatistic) <- "double"
     }
 
     if (!object$Xfactor) {
-        if (type == "quadform") {
+        if (teststat == "quadratic") {
             ret <- .Call("R_ChisqTest", object, object$tol, 
                          as.integer(pvalue), as.integer(lower), as.integer(log), 
                          PACKAGE = "libcoin")
@@ -164,11 +175,15 @@ doTest <- function(object, type = c("maxstat", "quadform"),
                          as.integer(log), as.integer(pargs$maxpts), 
                          as.double(pargs$abseps), as.double(pargs$releps), 
                          PACKAGE = "libcoin")
+            if (teststat == "scalar") {
+                var <- ifelse(object$varonly, object$Variance, object$Covariance)
+                ret$TestStatistic <- object$LinearStatistic - object$Expectation
+                ret$TestStatistic <- ifelse(var > object$tol, ret$TestStatistic / sqrt(var), NaN)
+            }
         }
     } else {
-        type <- as.integer(which(c("maxstat", "quadform") == type))
         ret <- .Call("R_MaxSelectTest", object, as.integer(ordered), 
-                     type, object$tol, as.integer(minbucket), 
+                     as.integer(test), object$tol, as.integer(minbucket), 
                      as.integer(lower), as.integer(log), PACKAGE = "libcoin")
     }
     ret

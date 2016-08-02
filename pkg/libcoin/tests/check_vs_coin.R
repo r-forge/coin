@@ -45,20 +45,18 @@ lc <- function(FUN, ...) {
 
     n <- sum(w)
     if (FUN == "chisq_test") lev$Covariance <- lev$Covariance * (n - 1) / n
-    teststat <- "max"
+    teststat <- "maximum"
     alternative <- "two.sided"
     if (inherits(object@statistic, "QuadTypeIndependenceTestStatistic")) {
-        teststat <- "quad"
+        teststat <- "quadratic"
     } else {
+        if (inherits(object@statistic, "ScalarIndependenceTestStatistic"))
+            teststat <- "scalar"
         alternative <- object@statistic@alternative
     }
         
-    tst <- doTest(lev, type = teststat, alternative = alternative)
+    tst <- doTest(lev, teststat = teststat, alternative = alternative)
     tst$LinearStatistic <- lev$LinearStatistic
-    if (length(tst$LinearStatistic) == 1 && 
-        alternative == "two.sided" && teststat != "quad") {
-        tst$TestStatistic <- (lev$LinearStatistic - lev$Expectation) / sqrt(lev$Covariance)
-    }
     tst$Expectation <- lev$Expectation
     tst$Covariance <- lev$Covariance  
     print(all.equal(tst, .testcoin(object), scale = 1))

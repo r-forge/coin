@@ -7,7 +7,7 @@
   Perform permutation test for a linear statistic
 }
 \usage{
-doTest(object, type = c("maxstat", "quadform"), 
+doTest(object, teststat = c("maximum", "quadratic", "scalar"), 
        alternative = c("two.sided", "less", "greater"), 
        pvalue = TRUE, lower = FALSE, log = FALSE, 
        minbucket = 10L, ordered = TRUE, pargs = GenzBretz())
@@ -15,9 +15,9 @@ doTest(object, type = c("maxstat", "quadform"),
 \arguments{
   \item{object}{an object returned by \code{\link{LinStatExpCov}}.
 }
-  \item{type}{use maximum-type or quadratic form as test statistic.
+  \item{teststat}{type of test statistic to use.
 }
-  \item{alternative}{alternative for maximum-type statistics.
+  \item{alternative}{alternative for scalar or maximum-type statistics.
 }
   \item{pvalue}{a logical indicating if a p-value shall be computed.
 }

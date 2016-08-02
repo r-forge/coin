@@ -31,7 +31,7 @@ void C_ordered_Xfactor_block
 
     mlinstat = Calloc(Q, double);
     mexpect = Calloc(Q, double);
-    if (teststat == TESTSTAT_maxtype) {
+    if (teststat == TESTSTAT_maximum) {
        mvar = Calloc(Q, double);
     } else {
        mcovar = Calloc(Q * (Q + 1) / 2, double);
@@ -48,11 +48,11 @@ void C_ordered_Xfactor_block
     for (int q = 0; q < Q; q++) {
         mlinstat[q] = 0.0;
         mexpect[q] = 0.0;
-        if (teststat == TESTSTAT_maxtype)
+        if (teststat == TESTSTAT_maximum)
             mvar[q] = 0.0;
         for (int b = 0; b < B; b++) mblinstat[q + b * Q] = 0.0;
     }
-    if (teststat == TESTSTAT_quadform) {
+    if (teststat == TESTSTAT_quadratic) {
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
             mcovar[q] = 0.0;
     }
@@ -71,7 +71,7 @@ void C_ordered_Xfactor_block
             for (int b = 0; b < B; b++)
                 mblinstat[q + b * Q] += blinstat[q * P + p + b * PQ];
             mexpect[q] += expect[q * P + p];
-            if (teststat == TESTSTAT_maxtype) {
+            if (teststat == TESTSTAT_maximum) {
                 for (int pp = 0; pp < p; pp++)
                     mvar[q] += 2 * covar[S(pp + q * P, p + P * q, P * Q)];
                 mvar[q] += covar[S(p + q * P, p + P * q, P * Q)];
@@ -91,7 +91,7 @@ void C_ordered_Xfactor_block
             (sumright >= minbucket) && 
             (ExpX[p] > 0)) {
 
-            if (teststat == TESTSTAT_maxtype) {
+            if (teststat == TESTSTAT_maximum) {
                 tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, 
                                 ALTERNATIVE_twosided);
             } else {
@@ -105,7 +105,7 @@ void C_ordered_Xfactor_block
             }
 
             for (int b = 0; b < B; b++) {
-                if (teststat == TESTSTAT_maxtype) {
+                if (teststat == TESTSTAT_maximum) {
                     tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
                                     ALTERNATIVE_twosided);
                 } else {
@@ -127,7 +127,7 @@ void C_ordered_Xfactor_block
     if (B > 0) {
         Free(mblinstat); Free(bmaxstat);
     }
-    if (teststat == TESTSTAT_maxtype) {
+    if (teststat == TESTSTAT_maximum) {
         Free(mvar);
     } else {
         Free(mcovar); Free(mMPinv);
@@ -161,7 +161,7 @@ void C_ordered_Xfactor
 
     mlinstat = Calloc(Q, double);
     mexpect = Calloc(Q, double);
-    if (teststat == TESTSTAT_maxtype) {
+    if (teststat == TESTSTAT_maximum) {
        mvar = Calloc(Q, double);
     } else {
        mcovar = Calloc(Q * (Q + 1) / 2, double);
@@ -178,11 +178,11 @@ void C_ordered_Xfactor
     for (int q = 0; q < Q; q++) {
         mlinstat[q] = 0.0;
         mexpect[q] = 0.0;
-        if (teststat == TESTSTAT_maxtype)
+        if (teststat == TESTSTAT_maximum)
             mvar[q] = 0.0;
         for (int b = 0; b < B; b++) mblinstat[q + b * Q] = 0.0;
     }
-    if (teststat == TESTSTAT_quadform) {
+    if (teststat == TESTSTAT_quadratic) {
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
             mcovar[q] = 0.0;
     }
@@ -209,7 +209,7 @@ void C_ordered_Xfactor
             (ExpX[p] > 0)) {
 
             /* does not work with blocks! */
-            if (teststat == TESTSTAT_maxtype) {
+            if (teststat == TESTSTAT_maximum) {
                 C_VarianceLinearStatistic(1, Q, varinf, &sumleft, &sumleft,
                                           sw, &Ptmp, 0, mvar);
             } else {
@@ -217,7 +217,7 @@ void C_ordered_Xfactor
                                             sw, &Ptmp, 0, mcovar);
             }
 
-            if (teststat == TESTSTAT_maxtype) {
+            if (teststat == TESTSTAT_maximum) {
                 tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, 
                                 ALTERNATIVE_twosided);
             } else {
@@ -232,7 +232,7 @@ void C_ordered_Xfactor
             }
 
             for (int b = 0; b < B; b++) {
-                if (teststat == TESTSTAT_maxtype) {
+                if (teststat == TESTSTAT_maximum) {
                     tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
                                     ALTERNATIVE_twosided);
                 } else {
@@ -254,7 +254,7 @@ void C_ordered_Xfactor
     if (B > 0) {
         Free(mblinstat); Free(bmaxstat);
     }
-    if (teststat == TESTSTAT_maxtype) {
+    if (teststat == TESTSTAT_maximum) {
         Free(mvar);
     } else {
         Free(mcovar); Free(mMPinv);
@@ -288,7 +288,7 @@ void C_unordered_Xfactor_block
     mlinstat = Calloc(Q, double);
     mexpect = Calloc(Q, double);
     mtmp = Calloc(P, double);
-    if (teststat == TESTSTAT_maxtype) {
+    if (teststat == TESTSTAT_maximum) {
        mvar = Calloc(Q, double);
     } else {
        mcovar = Calloc(Q * (Q + 1) / 2, double);
@@ -342,7 +342,7 @@ void C_unordered_Xfactor_block
             contrast[levels[p]] = indl[p];
         }
                                                                                                                         
-        if (teststat == TESTSTAT_maxtype) {
+        if (teststat == TESTSTAT_maximum) {
             for (int q = 0; q < Q; q++) {
                 mlinstat[q] = 0.0;
                 mexpect[q] = 0.0;
@@ -396,7 +396,7 @@ void C_unordered_Xfactor_block
         if ((sumleft >= minbucket) && 
             (sumright >= minbucket)) {
 
-            if (teststat == TESTSTAT_maxtype) {
+            if (teststat == TESTSTAT_maximum) {
                 tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, 
                                 ALTERNATIVE_twosided);
             } else {
@@ -411,7 +411,7 @@ void C_unordered_Xfactor_block
             }
 
             for (int b = 0; b < B; b++) {
-                if (teststat == TESTSTAT_maxtype) {
+                if (teststat == TESTSTAT_maximum) {
                     tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
                                     ALTERNATIVE_twosided);
                 } else {
@@ -434,7 +434,7 @@ void C_unordered_Xfactor_block
     if (B > 0) {
         Free(mblinstat); Free(bmaxstat);
     }
-    if (teststat == TESTSTAT_maxtype) {
+    if (teststat == TESTSTAT_maximum) {
         Free(mvar);
     } else {
         Free(mcovar); Free(mMPinv);
@@ -468,7 +468,7 @@ void C_unordered_Xfactor
 
     mlinstat = Calloc(Q, double);
     mexpect = Calloc(Q, double);
-    if (teststat == TESTSTAT_maxtype) {
+    if (teststat == TESTSTAT_maximum) {
        mvar = Calloc(Q, double);
     } else {
        mcovar = Calloc(Q * (Q + 1) / 2, double);
@@ -546,7 +546,7 @@ void C_unordered_Xfactor
             }
 
             /* does not work with blocks! */
-            if (teststat == TESTSTAT_maxtype) {
+            if (teststat == TESTSTAT_maximum) {
                 C_VarianceLinearStatistic(1, Q, varinf, &sumleft, &sumleft,
                                           sw, &Ptmp, 0, mvar);
             } else {
@@ -554,7 +554,7 @@ void C_unordered_Xfactor
                                             sw, &Ptmp, 0, mcovar);
             }
 
-            if (teststat == TESTSTAT_maxtype) {
+            if (teststat == TESTSTAT_maximum) {
                 tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, 
                                 ALTERNATIVE_twosided);
             } else {
@@ -569,7 +569,7 @@ void C_unordered_Xfactor
             }
 
             for (int b = 0; b < B; b++) {
-                if (teststat == TESTSTAT_maxtype) {
+                if (teststat == TESTSTAT_maximum) {
                     tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
                                     ALTERNATIVE_twosided);
                 } else {
@@ -591,7 +591,7 @@ void C_unordered_Xfactor
     if (B > 0) {
         Free(mblinstat); Free(bmaxstat);
     }
-    if (teststat == TESTSTAT_maxtype) {
+    if (teststat == TESTSTAT_maximum) {
         Free(mvar);
     } else {
         Free(mcovar); Free(mMPinv);

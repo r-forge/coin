@@ -10,8 +10,8 @@
 #define ALTERNATIVE_less                   2    
 #define ALTERNATIVE_greater                3    
 
-#define TESTSTAT_maxtype		1
-#define TESTSTAT_quadform		2
+#define TESTSTAT_maximum		1
+#define TESTSTAT_quadratic		2
 
 /* S[i, j] for n x n symmetric matrix in lower packed storage allowing for i < j */
 #define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)

@@ -100,11 +100,11 @@ SEXP R_MaxtypeTest
     REAL(pval)[0] = NA_REAL;
 
     REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LEV), 
-                                   C_get_Expectation(LEV), 
-                                   C_get_Covariance(LEV), 
-                                   C_get_varonly(LEV),
-                                   REAL(tol)[0],
-                                   INTEGER(alternative)[0]);
+                               C_get_Expectation(LEV), 
+                               C_get_Covariance(LEV), 
+                               C_get_varonly(LEV),
+                               REAL(tol)[0],
+                               INTEGER(alternative)[0]);
 
     if (INTEGER(pvalue)[0] == 0) {
         UNPROTECT(2);
@@ -143,6 +143,7 @@ SEXP R_MaxtypeTest
         }
         REAL(pval)[0] = C_perm_pvalue(greater, B, INTEGER(lower)[0], INTEGER(give_log)[0]);
     }
+
     UNPROTECT(2);
     return(ans);
 }
