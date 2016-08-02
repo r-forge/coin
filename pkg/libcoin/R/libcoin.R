@@ -41,14 +41,13 @@
     }
     
     ret <- .Call("R_ExpectationCovarianceStatistic", X, Y, weights, subset, 
-                 block, as.integer(varonly), PACKAGE = "libcoin")
+                 block, as.integer(varonly), as.double(tol), PACKAGE = "libcoin")
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
-    ret$tol <- tol
     if (B > 0)
         ret$PermutedLinearStatistic <- .Call("R_PermutedLinearStatistic", ret, X, Y, weights, 
                          subset, block, as.integer(B), as.integer(standardise), 
-                         as.double(tol), PACKAGE = "libcoin")
+                         PACKAGE = "libcoin")
     ret
 }
 
@@ -98,14 +97,14 @@
     }
 
     ret <- .Call("R_ExpectationCovarianceStatistic_2d", X, ix, Y, iy, 
-        weights, subset, block, as.integer(varonly), PACKAGE = "libcoin")
+        weights, subset, block, as.integer(varonly), as.double(tol), 
+        PACKAGE = "libcoin")
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
-    ret$tol <- tol
     if (B > 0)
         ret$PermutedLinearStatistic <- .Call("R_PermutedLinearStatistic_2d", ret, X, ix, Y, iy, 
                          block, as.integer(B), as.integer(standardise), 
-                         as.double(tol), PACKAGE = "libcoin")
+                         PACKAGE = "libcoin")
     ret
 }
 
@@ -166,11 +165,11 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
 
     if (!object$Xfactor) {
         if (teststat == "quadratic") {
-            ret <- .Call("R_ChisqTest", object, object$tol, 
+            ret <- .Call("R_ChisqTest", object, 
                          as.integer(pvalue), as.integer(lower), as.integer(log), 
                          PACKAGE = "libcoin")
         } else {
-            ret <- .Call("R_MaxtypeTest", object, object$tol, 
+            ret <- .Call("R_MaxtypeTest", object,  
                          as.integer(alt), as.integer(pvalue), as.integer(lower), 
                          as.integer(log), as.integer(pargs$maxpts), 
                          as.double(pargs$abseps), as.double(pargs$releps), 
@@ -183,7 +182,7 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
         }
     } else {
         ret <- .Call("R_MaxSelectTest", object, as.integer(ordered), 
-                     as.integer(test), object$tol, as.integer(minbucket), 
+                     as.integer(test), as.integer(minbucket), 
                      as.integer(lower), as.integer(log), PACKAGE = "libcoin")
     }
     ret

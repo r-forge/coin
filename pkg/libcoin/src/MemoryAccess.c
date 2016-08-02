@@ -207,16 +207,25 @@ double* C_get_PermutedLinearStatistic
     return(REAL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));
 }
 
+double C_get_tol
+(
+    SEXP LECV
+) {
+
+    return(REAL(VECTOR_ELT(LECV, tol_SLOT))[0]);
+}
+
 SEXP R_init_LECV
 (
     SEXP P, 
     SEXP Q, 
     SEXP varonly, 
     SEXP Lb,
-    SEXP Xfactor
+    SEXP Xfactor,
+    SEXP tol
 ) {
 
-    SEXP ans, vo, d, names;
+    SEXP ans, vo, d, names, tolerance;
     int p, q, pq, lb;
     
     if (!isInteger(P) || LENGTH(P) != 1)
@@ -238,6 +247,11 @@ SEXP R_init_LECV
         error("varonly is not a scalar integer");
     if (INTEGER(varonly)[0] < 0 || INTEGER(varonly)[0] > 1)
             error("varonly is not 0 or 1");
+
+    if (!isReal(tol) || LENGTH(tol) != 1)
+        error("tol is not a scalar double");
+    if (REAL(tol)[0] <= DBL_MIN)
+            error("tol is not positive");
 
     p = INTEGER(P)[0];
     q = INTEGER(Q)[0];
@@ -331,6 +345,12 @@ SEXP R_init_LECV
     SET_STRING_ELT(names, PermutedLinearStatistic_SLOT, 
                    mkChar("PermutedLinearStatistic"));
 
+    SET_VECTOR_ELT(ans, tol_SLOT,
+                   tolerance = allocVector(REALSXP, 1));
+    SET_STRING_ELT(names, tol_SLOT, 
+                   mkChar("tol"));
+    REAL(tolerance)[0] = REAL(tol)[0];
+
     SET_STRING_ELT(names, Table_SLOT, 
                    mkChar("Table"));
     
@@ -347,7 +367,8 @@ SEXP R_init_LECV_1d
     SEXP Q, 
     SEXP varonly, 
     SEXP Lb,
-    SEXP Xfactor
+    SEXP Xfactor,
+    SEXP tol
 ) {
 
     SEXP ans;
@@ -356,7 +377,7 @@ SEXP R_init_LECV_1d
     p = INTEGER(P)[0];
     lb = INTEGER(Lb)[0];
 
-    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb, Xfactor));
+    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb, Xfactor, tol));
 
     if (INTEGER(varonly)[0]) {
         SET_VECTOR_ELT(ans, Work_SLOT,
@@ -385,7 +406,8 @@ SEXP R_init_LECV_2d
     SEXP Lx, 
     SEXP Ly, 
     SEXP Lb,
-    SEXP Xfactor
+    SEXP Xfactor,
+    SEXP tol
 ) {
 
     SEXP ans, tabdim, tab;
@@ -404,7 +426,7 @@ SEXP R_init_LECV_2d
     p = INTEGER(P)[0];
     lb = INTEGER(Lb)[0];
 
-    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb, Xfactor));
+    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb, Xfactor, tol));
 
     if (INTEGER(varonly)[0]) {
         SET_VECTOR_ELT(ans, Work_SLOT,

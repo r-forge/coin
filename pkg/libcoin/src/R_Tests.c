@@ -9,7 +9,6 @@
 SEXP R_ChisqTest
 (
     SEXP LEV,
-    SEXP tol, 
     SEXP pvalue,
     SEXP lower, 
     SEXP give_log
@@ -27,7 +26,7 @@ SEXP R_ChisqTest
         error("cannot compute quadratic form based on variances only");
 
     MPinv = C_get_MPinv(LEV);
-    C_MPinv_sym(C_get_Covariance(LEV), PQ, REAL(tol)[0], MPinv, &rank);
+    C_MPinv_sym(C_get_Covariance(LEV), PQ, C_get_tol(LEV), MPinv, &rank);
         
     PROTECT(ans = allocVector(VECSXP, 2));
     PROTECT(names = allocVector(STRSXP, 2));
@@ -56,7 +55,7 @@ SEXP R_ChisqTest
         ex = C_get_Expectation(LEV);
         greater = 0;
         for (int i = 0; i < B; i++) {
-            if (GE(C_quadform(PQ, ls + PQ * i, ex, MPinv), st, REAL(tol)[0]))
+            if (GE(C_quadform(PQ, ls + PQ * i, ex, MPinv), st, C_get_tol(LEV)))
                 greater++;
         }
         REAL(pval)[0] = C_perm_pvalue(greater, B, INTEGER(lower)[0], INTEGER(give_log)[0]);
@@ -69,7 +68,6 @@ SEXP R_ChisqTest
 SEXP R_MaxtypeTest
 (
     SEXP LEV, 
-    SEXP tol, 
     SEXP alternative, 
     SEXP pvalue,
     SEXP lower, 
@@ -103,7 +101,7 @@ SEXP R_MaxtypeTest
                                C_get_Expectation(LEV), 
                                C_get_Covariance(LEV), 
                                C_get_varonly(LEV),
-                               REAL(tol)[0],
+                               C_get_tol(LEV),
                                INTEGER(alternative)[0]);
 
     if (INTEGER(pvalue)[0] == 0) {
@@ -121,7 +119,7 @@ SEXP R_MaxtypeTest
                                          PQ, INTEGER(alternative)[0], INTEGER(lower)[0],
                                          INTEGER(give_log)[0],
                                          INTEGER(maxpts)[0], REAL(releps)[0], 
-                                         REAL(abseps)[0], REAL(tol)[0]);
+                                         REAL(abseps)[0], C_get_tol(LEV));
     } else {
         B = C_get_B(LEV);
         ls = C_get_PermutedLinearStatistic(LEV);
@@ -130,7 +128,7 @@ SEXP R_MaxtypeTest
         vo = C_get_varonly(LEV);
         alt = INTEGER(alternative)[0];
         st = REAL(stat)[0];
-        tl = REAL(tol)[0];
+        tl = C_get_tol(LEV);
         greater = 0;
         for (int i = 0; i < B; i++) {
             if (alt == ALTERNATIVE_less) {
@@ -153,7 +151,6 @@ SEXP R_MaxSelectTest
     SEXP LEV, 
     SEXP ordered,
     SEXP teststat, 
-    SEXP tol, 
     SEXP minbucket, 
     SEXP lower, 
     SEXP give_log
@@ -186,7 +183,7 @@ SEXP R_MaxSelectTest
                               C_get_B(LEV),
                               C_get_PermutedLinearStatistic(LEV),
                               mb,
-                              REAL(tol)[0], 
+                              C_get_tol(LEV),
                               INTEGER(teststat)[0],
                               INTEGER(index), REAL(stat),
                               REAL(pval), INTEGER(lower)[0], 
@@ -200,7 +197,7 @@ SEXP R_MaxSelectTest
                               C_get_B(LEV),
                               C_get_PermutedLinearStatistic(LEV),
                               mb,
-                              REAL(tol)[0], 
+                              C_get_tol(LEV),
                               INTEGER(teststat)[0],
                               INTEGER(index), REAL(stat),
                               REAL(pval), INTEGER(lower)[0], 
@@ -220,7 +217,7 @@ SEXP R_MaxSelectTest
                               C_get_B(LEV),
                               C_get_PermutedLinearStatistic(LEV),
                               mb,
-                              REAL(tol)[0], 
+                              C_get_tol(LEV),
                               INTEGER(teststat)[0],
                               INTEGER(index), REAL(stat),
                               REAL(pval), INTEGER(lower)[0], 
@@ -234,7 +231,7 @@ SEXP R_MaxSelectTest
                               C_get_B(LEV),
                               C_get_PermutedLinearStatistic(LEV),
                               mb,
-                              REAL(tol)[0], 
+                              C_get_tol(LEV),
                               INTEGER(teststat)[0],
                               INTEGER(index), REAL(stat),
                               REAL(pval), INTEGER(lower)[0], 
