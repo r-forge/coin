@@ -108,6 +108,15 @@ SEXP R_ExpectationCovarianceStatistic
 ) {
 
     SEXP ans, P, Q, Lb, Xfactor; 
+    R_xlen_t n;
+
+    /* check for long vectors (not supported at the moment) */
+    n = xlength(y);
+    if (n > INT_MAX)
+        error("libcoin does not support long vectors");
+    n = xlength(subset);
+    if (n > INT_MAX)
+        error("libcoin does not support long vectors");
     
     PROTECT(P = ScalarInteger(0));
     PROTECT(Q = ScalarInteger(0));
@@ -286,6 +295,7 @@ void RC_ExpectationCovarianceStatistic_2d
     int P, Q, Lxp1, Lyp1, Lb, *btab, *csum, *rsum, *table, *table2d, sw;
     double *ExpInf, *ExpX, *CovX, *work;
 
+
     P = C_get_P(ans);
     Q = C_get_Q(ans);
 
@@ -385,6 +395,15 @@ SEXP R_ExpectationCovarianceStatistic_2d
 ) {
 
     SEXP ans, P, Q, Lx, Ly, Lb, Xfactor;
+    R_xlen_t n;
+
+    /* check for long vectors (not supported at the moment) */
+    n = xlength(ix);
+    if (n > INT_MAX)
+        error("libcoin does not support long vectors");
+    n = xlength(subset);
+    if (n > INT_MAX)
+        error("libcoin does not support long vectors");
 
     PROTECT(P = ScalarInteger(0));
     PROTECT(Q = ScalarInteger(0));
