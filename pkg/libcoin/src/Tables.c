@@ -156,7 +156,7 @@ void C_2dtable_weights_subset
     /* <FIXME> protection against integer overflow? */    
     for (int i = 0; i < Nsubset; i++)
          LxLy_ans[ix[subset[i]] + iy[subset[i]] * Lx] += weights[subset[i]];
-    /* </FIXME>
+    /* </FIXME> */
 }
 
 /* table(ix, iy, block) w/o NAs in block, ie block > 0 */
