@@ -13,6 +13,7 @@
     if (!missing(weights) && length(weights) > 0) {
         stopifnot(NROW(X) == length(weights))
         stopifnot(is.integer(weights))
+        stopifnot(all(weights >= 0))
     } else {
         weights <- integer(0)
     }
@@ -78,6 +79,7 @@
     if (!missing(weights) && length(weights) > 0) {
         stopifnot(length(ix) == length(weights))
         stopifnot(is.integer(weights))
+        stopifnot(all(weights >= 0))
     } else {
         weights <- integer(0)
     }
