@@ -21,6 +21,11 @@ void RC_ExpectationCovarianceStatistic
     int N, P, Q, Lb, *sumweights, *table, *subset_tmp, tmp;
     double *ExpInf, *work;
 
+    /* note: x being an integer (Xfactor) with some 0 elements is not
+             handled correctly (as sumweights doesnt't take this information
+             into account; use subset to exclude these missings (as done
+             in libcoin::LinStatExpCov) */
+
     P = C_get_P(ans);
     Q = C_get_Q(ans);
 
