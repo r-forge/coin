@@ -174,7 +174,7 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
             ret <- .Call("R_MaxtypeTest", object,  
                          as.integer(alt), as.integer(pvalue), as.integer(lower), 
                          as.integer(log), as.integer(pargs$maxpts), 
-                         as.double(pargs$abseps), as.double(pargs$releps), 
+                         as.double(pargs$releps), as.double(pargs$abseps), 
                          PACKAGE = "libcoin")
             if (teststat == "scalar") {
                 var <- ifelse(object$varonly, object$Variance, object$Covariance)
