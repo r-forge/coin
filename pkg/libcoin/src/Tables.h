@@ -24,7 +24,8 @@ extern void C_1dtable_
     const int *ix, 
     const int Lx, 
     const int N, 
-    int *Lx_ans);
+    int *Lx_ans
+);
     
 /* table(ix[subset]) */
 extern void C_1dtable_subset
