@@ -44,10 +44,9 @@
                  block, as.integer(varonly), PACKAGE = "libcoin")
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
-    ret$sim <- double(0)
     ret$tol <- tol
     if (B > 0)
-        ret$sim <- .Call("R_PermutedLinearStatistic", ret, X, Y, weights, 
+        ret$PermutedLinearStatistic <- .Call("R_PermutedLinearStatistic", ret, X, Y, weights, 
                          subset, block, as.integer(B), as.integer(standardise), 
                          as.double(tol), PACKAGE = "libcoin")
     ret
@@ -102,10 +101,9 @@
         weights, subset, block, as.integer(varonly), PACKAGE = "libcoin")
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
-    ret$sim <- double(0)
     ret$tol <- tol
     if (B > 0)
-        ret$sim <- .Call("R_PermutedLinearStatistic_2d", ret, X, ix, Y, iy, 
+        ret$PermutedLinearStatistic <- .Call("R_PermutedLinearStatistic_2d", ret, X, ix, Y, iy, 
                          block, as.integer(B), as.integer(standardise), 
                          as.double(tol), PACKAGE = "libcoin")
     ret
@@ -150,15 +148,18 @@ doTest <- function(object, type = c("maxstat", "quadform"),
     alternative <- match.arg(alternative)
     if (type == "quadform") stopifnot(alternative == "two.sided")
     alt <- which(c("two.sided", "less", "greater") == alternative)
-    if (!pvalue & !is.null(object$sim)) object$sim <- double(0)
+    if (!pvalue & (NCOL(object$PermutedLinearStatistic) > 0)) {
+        object$PermutedLinearStatistic <- matrix(nrow = 0, ncol = 0)
+        storage.mode(object$PermutedLinearStatistic) <- "double"
+    }
 
     if (!object$Xfactor) {
         if (type == "quadform") {
-            ret <- .Call("R_ChisqTest", object, object$sim, object$tol, 
+            ret <- .Call("R_ChisqTest", object, object$tol, 
                          as.integer(pvalue), as.integer(lower), as.integer(log), 
                          PACKAGE = "libcoin")
         } else {
-            ret <- .Call("R_MaxtypeTest", object, object$sim, object$tol, 
+            ret <- .Call("R_MaxtypeTest", object, object$tol, 
                          as.integer(alt), as.integer(pvalue), as.integer(lower), 
                          as.integer(log), as.integer(pargs$maxpts), 
                          as.double(pargs$abseps), as.double(pargs$releps), 
@@ -167,7 +168,7 @@ doTest <- function(object, type = c("maxstat", "quadform"),
     } else {
         type <- as.integer(which(c("maxstat", "quadform") == type))
         ret <- .Call("R_MaxSelectTest", object, as.integer(ordered), 
-                     object$sim, type, object$tol, as.integer(minbucket), 
+                     type, object$tol, as.integer(minbucket), 
                      as.integer(lower), as.integer(log), PACKAGE = "libcoin")
     }
     ret

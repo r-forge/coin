@@ -9,7 +9,6 @@
 SEXP R_ChisqTest
 (
     SEXP LEV,
-    SEXP linstat, 
     SEXP tol, 
     SEXP pvalue,
     SEXP lower, 
@@ -47,12 +46,12 @@ SEXP R_ChisqTest
         return(ans);
     }
 
-    if (LENGTH(linstat) == 0) {
+    if (C_get_B(LEV) == 0) {
         REAL(pval)[0] = C_chisq_pvalue(REAL(stat)[0], rank, INTEGER(lower)[0],
                                        INTEGER(give_log)[0]);
     } else {
-        B = NCOL(linstat);
-        ls = REAL(linstat);
+        B = C_get_B(LEV);
+        ls = C_get_PermutedLinearStatistic(LEV);
         st = REAL(stat)[0];
         ex = C_get_Expectation(LEV);
         greater = 0;
@@ -70,7 +69,6 @@ SEXP R_ChisqTest
 SEXP R_MaxtypeTest
 (
     SEXP LEV, 
-    SEXP linstat, 
     SEXP tol, 
     SEXP alternative, 
     SEXP pvalue,
@@ -113,7 +111,7 @@ SEXP R_MaxtypeTest
         return(ans);
     }
 
-    if (LENGTH(linstat) == 0) {
+    if (C_get_B(LEV) == 0) {
         if (C_get_varonly(LEV) && PQ > 1) {
             REAL(pval)[0] = NA_REAL;
             UNPROTECT(1);
@@ -125,13 +123,13 @@ SEXP R_MaxtypeTest
                                          INTEGER(maxpts)[0], REAL(releps)[0], 
                                          REAL(abseps)[0], REAL(tol)[0]);
     } else {
-        B = NCOL(linstat);
-        st = REAL(stat)[0];
-        ls = REAL(linstat);
+        B = C_get_B(LEV);
+        ls = C_get_PermutedLinearStatistic(LEV);
         ex = C_get_Expectation(LEV);
         cv = C_get_Covariance(LEV);
         vo = C_get_varonly(LEV);
         alt = INTEGER(alternative)[0];
+        st = REAL(stat)[0];
         tl = REAL(tol)[0];
         greater = 0;
         for (int i = 0; i < B; i++) {
@@ -153,7 +151,6 @@ SEXP R_MaxSelectTest
 (
     SEXP LEV, 
     SEXP ordered,
-    SEXP linstat, 
     SEXP teststat, 
     SEXP tol, 
     SEXP minbucket, 
@@ -162,11 +159,10 @@ SEXP R_MaxSelectTest
 ) {
 
     SEXP ans, index, stat, pval, names;
-    int P, Q, B, mb;
+    int P, Q, mb;
 
     P = C_get_P(LEV);
     Q = C_get_Q(LEV);
-    B = NCOL(linstat);
     mb = INTEGER(minbucket)[0];
 
     PROTECT(ans = allocVector(VECSXP, 3));
@@ -186,8 +182,8 @@ SEXP R_MaxSelectTest
                               C_get_CovarianceInfluence(LEV),
                               P, Q, 
                               C_get_ExpectationX(LEV),
-                              B,
-                              REAL(linstat),
+                              C_get_B(LEV),
+                              C_get_PermutedLinearStatistic(LEV),
                               mb,
                               REAL(tol)[0], 
                               INTEGER(teststat)[0],
@@ -200,8 +196,8 @@ SEXP R_MaxSelectTest
                               C_get_Covariance(LEV),
                               P, Q, 
                               C_get_ExpectationX(LEV),
-                              B,
-                              REAL(linstat),
+                              C_get_B(LEV),
+                              C_get_PermutedLinearStatistic(LEV),
                               mb,
                               REAL(tol)[0], 
                               INTEGER(teststat)[0],
@@ -220,8 +216,8 @@ SEXP R_MaxSelectTest
                               C_get_CovarianceInfluence(LEV),
                               P, Q, 
                               C_get_ExpectationX(LEV),
-                              B,
-                              REAL(linstat),
+                              C_get_B(LEV),
+                              C_get_PermutedLinearStatistic(LEV),
                               mb,
                               REAL(tol)[0], 
                               INTEGER(teststat)[0],
@@ -234,8 +230,8 @@ SEXP R_MaxSelectTest
                               C_get_Covariance(LEV),
                               P, Q, 
                               C_get_ExpectationX(LEV),
-                              B,
-                              REAL(linstat),
+                              C_get_B(LEV),
+                              C_get_PermutedLinearStatistic(LEV),
                               mb,
                               REAL(tol)[0], 
                               INTEGER(teststat)[0],

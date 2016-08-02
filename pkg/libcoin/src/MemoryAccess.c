@@ -1,6 +1,6 @@
 
 #include "libcoin_internal.h"
-
+#include "Utils.h"
 
 int C_get_P
 (
@@ -191,7 +191,21 @@ int C_get_Lb
     return(C_get_dimTable(LECV)[2]);
 }
 
+int C_get_B
+(
+    SEXP LECV
+) {
 
+    return(NCOL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));
+}
+    
+double* C_get_PermutedLinearStatistic
+(
+    SEXP LECV
+) {
+
+    return(REAL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));
+}
 
 SEXP R_init_LECV
 (
@@ -232,146 +246,6 @@ SEXP R_init_LECV
 
     /* Table_SLOT is always last and only used in 2d case 
        ie omitted here */
-    PROTECT(ans = allocVector(VECSXP, Table_SLOT));
-    PROTECT(names = allocVector(STRSXP, Table_SLOT)); 
-
-    SET_VECTOR_ELT(ans, LinearStatistic_SLOT, 
-                   allocVector(REALSXP, pq));
-    SET_STRING_ELT(names, LinearStatistic_SLOT, 
-                   mkChar("LinearStatistic"));
-
-    SET_VECTOR_ELT(ans, Expectation_SLOT, 
-                   allocVector(REALSXP, pq));
-    SET_STRING_ELT(names, Expectation_SLOT, 
-                   mkChar("Expectation"));
-                   
-    SET_VECTOR_ELT(ans, varonly_SLOT, 
-                   vo = allocVector(INTSXP, 1));
-    SET_STRING_ELT(names, varonly_SLOT, 
-                   mkChar("varonly"));
-
-    INTEGER(vo)[0] = INTEGER(varonly)[0];
-    if (INTEGER(varonly)[0]) {
-        SET_VECTOR_ELT(ans, Variance_SLOT, 
-                       allocVector(REALSXP, pq));
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP, 3 * p + 1));
-    } else  {
-        SET_VECTOR_ELT(ans, Covariance_SLOT, 
-                       allocVector(REALSXP, 
-                                   pq * (pq + 1) / 2));
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP, 
-                           p + 2 * p * (p + 1) / 2 + 1));
-    }
-
-    SET_STRING_ELT(names, Variance_SLOT, 
-                   mkChar("Variance"));
-    SET_STRING_ELT(names, Covariance_SLOT, 
-                   mkChar("Covariance"));
-    SET_STRING_ELT(names, MPinv_SLOT, 
-                   mkChar("MPinv"));
-    SET_STRING_ELT(names, Work_SLOT, 
-                   mkChar("Work"));
-
-    SET_VECTOR_ELT(ans, ExpectationX_SLOT, 
-                   allocVector(REALSXP, p));
-    SET_STRING_ELT(names, ExpectationX_SLOT,
-                   mkChar("ExpectationX"));
-
-    SET_VECTOR_ELT(ans, dim_SLOT, 
-                   d = allocVector(INTSXP, 2));
-    SET_STRING_ELT(names, dim_SLOT, 
-                   mkChar("dimension"));
-    INTEGER(d)[0] = p;
-    INTEGER(d)[1] = q;
-    
-    SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
-                   allocVector(REALSXP, lb * q));
-    SET_STRING_ELT(names, ExpectationInfluence_SLOT, 
-                   mkChar("ExpectationInfluence"));
-
-    /* should always _both_ be there */
-    SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
-                   allocVector(REALSXP, lb * q));
-    SET_STRING_ELT(names, VarianceInfluence_SLOT, 
-                   mkChar("VarianceInfluence"));
-    SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                   allocVector(REALSXP, lb * q * (q + 1) / 2));
-    SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
-                   mkChar("CovarianceInfluence"));
-                   
-    SET_VECTOR_ELT(ans, Xfactor_SLOT,
-                   allocVector(INTSXP, 1));
-    SET_STRING_ELT(names, Xfactor_SLOT, 
-                   mkChar("Xfactor"));
-    INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = INTEGER(Xfactor)[0];
-
-    SET_VECTOR_ELT(ans, TableBlock_SLOT,
-                   allocVector(INTSXP, lb + 1));
-    SET_STRING_ELT(names, TableBlock_SLOT, 
-                   mkChar("TableBlock"));
-
-    SET_VECTOR_ELT(ans, Sumweights_SLOT,
-                   allocVector(INTSXP, lb));
-    SET_STRING_ELT(names, Sumweights_SLOT, 
-                   mkChar("Sumweights"));
-    
-    namesgets(ans, names);
-    
-    UNPROTECT(2);
-    return(ans);
-}
-
-SEXP R_init_LECV_2d
-(
-    SEXP P, 
-    SEXP Q, 
-    SEXP varonly, 
-    SEXP Lx, 
-    SEXP Ly, 
-    SEXP Lb,
-    SEXP Xfactor
-) {
-
-    SEXP ans, vo, d, names, tab, tabdim;
-    int p, q, pq, lb;
-    
-    if (!isInteger(P) || LENGTH(P) != 1)
-        error("P is not a scalar integer");
-    if (INTEGER(P)[0] <= 0)
-        error("P is not positive");
-
-    if (!isInteger(Q) || LENGTH(Q) != 1)
-        error("Q is not a scalar integer");
-    if (INTEGER(Q)[0] <= 0)
-        error("Q is not positive");
-
-    if (!isInteger(varonly) || LENGTH(varonly) != 1)
-        error("varonly is not a scalar integer");
-    if (INTEGER(varonly)[0] < 0 || INTEGER(varonly)[0] > 1)
-            error("varonly is not 0 or 1");
-
-    if (!isInteger(Lx) || LENGTH(Lx) != 1)
-        error("Lx is not a scalar integer");
-    if (INTEGER(Lx)[0] <= 0)
-        error("Lx is not positive");
-
-    if (!isInteger(Ly) || LENGTH(Ly) != 1)
-        error("Ly is not a scalar integer");
-    if (INTEGER(Ly)[0] <= 0)
-        error("Ly is not positive");
-
-    if (!isInteger(Lb) || LENGTH(Lb) != 1)
-        error("Lb is not a scalar integer");
-    if (INTEGER(Lb)[0] <= 0)
-        error("Lb is not positive");
-
-    p = INTEGER(P)[0];
-    q = INTEGER(Q)[0];
-    lb = INTEGER(Lb)[0];
-    pq = p * q;
-
     PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));
     PROTECT(names = allocVector(STRSXP, Table_SLOT + 1)); 
 
@@ -394,15 +268,10 @@ SEXP R_init_LECV_2d
     if (INTEGER(varonly)[0]) {
         SET_VECTOR_ELT(ans, Variance_SLOT, 
                        allocVector(REALSXP, pq));
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP, 2 * p));
     } else  {
         SET_VECTOR_ELT(ans, Covariance_SLOT, 
                        allocVector(REALSXP, 
                                    pq * (pq + 1) / 2));
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP, 
-                           2 * p * (p + 1) / 2));
     }
 
     SET_STRING_ELT(names, Variance_SLOT, 
@@ -418,7 +287,7 @@ SEXP R_init_LECV_2d
                    allocVector(REALSXP, p));
     SET_STRING_ELT(names, ExpectationX_SLOT,
                    mkChar("ExpectationX"));
-                                          
+
     SET_VECTOR_ELT(ans, dim_SLOT, 
                    d = allocVector(INTSXP, 2));
     SET_STRING_ELT(names, dim_SLOT, 
@@ -440,14 +309,13 @@ SEXP R_init_LECV_2d
                    allocVector(REALSXP, lb * q * (q + 1) / 2));
     SET_STRING_ELT(names, CovarianceInfluence_SLOT, 
                    mkChar("CovarianceInfluence"));
-
+                   
     SET_VECTOR_ELT(ans, Xfactor_SLOT,
                    allocVector(INTSXP, 1));
     SET_STRING_ELT(names, Xfactor_SLOT, 
                    mkChar("Xfactor"));
     INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = INTEGER(Xfactor)[0];
-                   
-    /* 
+
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
                    allocVector(INTSXP, lb + 1));
     SET_STRING_ELT(names, TableBlock_SLOT, 
@@ -457,7 +325,95 @@ SEXP R_init_LECV_2d
                    allocVector(INTSXP, lb));
     SET_STRING_ELT(names, Sumweights_SLOT, 
                    mkChar("Sumweights"));
-    */
+
+    SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
+                   allocMatrix(REALSXP, 0, 0));
+    SET_STRING_ELT(names, PermutedLinearStatistic_SLOT, 
+                   mkChar("PermutedLinearStatistic"));
+
+    SET_STRING_ELT(names, Table_SLOT, 
+                   mkChar("Table"));
+    
+    namesgets(ans, names);
+    
+    UNPROTECT(2);
+    return(ans);
+}
+
+    
+SEXP R_init_LECV_1d
+(
+    SEXP P, 
+    SEXP Q, 
+    SEXP varonly, 
+    SEXP Lb,
+    SEXP Xfactor
+) {
+
+    SEXP ans;
+    int p, lb;
+    
+    p = INTEGER(P)[0];
+    lb = INTEGER(Lb)[0];
+
+    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb, Xfactor));
+
+    if (INTEGER(varonly)[0]) {
+        SET_VECTOR_ELT(ans, Work_SLOT,
+                       allocVector(REALSXP, 3 * p + 1));
+    } else  {
+        SET_VECTOR_ELT(ans, Work_SLOT,
+                       allocVector(REALSXP, 
+                           p + 2 * p * (p + 1) / 2 + 1));
+    }
+
+    SET_VECTOR_ELT(ans, TableBlock_SLOT,
+                   allocVector(INTSXP, lb + 1));
+
+    SET_VECTOR_ELT(ans, Sumweights_SLOT,
+                   allocVector(INTSXP, lb));
+
+    UNPROTECT(1);
+    return(ans);
+}
+
+SEXP R_init_LECV_2d
+(
+    SEXP P, 
+    SEXP Q, 
+    SEXP varonly, 
+    SEXP Lx, 
+    SEXP Ly, 
+    SEXP Lb,
+    SEXP Xfactor
+) {
+
+    SEXP ans, tabdim, tab;
+    int p, lb;
+    
+    if (!isInteger(Lx) || LENGTH(Lx) != 1)
+        error("Lx is not a scalar integer");
+    if (INTEGER(Lx)[0] <= 0)
+        error("Lx is not positive");
+
+    if (!isInteger(Ly) || LENGTH(Ly) != 1)
+        error("Ly is not a scalar integer");
+    if (INTEGER(Ly)[0] <= 0)
+        error("Ly is not positive");
+
+    p = INTEGER(P)[0];
+    lb = INTEGER(Lb)[0];
+
+    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb, Xfactor));
+
+    if (INTEGER(varonly)[0]) {
+        SET_VECTOR_ELT(ans, Work_SLOT,
+                       allocVector(REALSXP, 2 * p));
+    } else  {
+        SET_VECTOR_ELT(ans, Work_SLOT,
+                       allocVector(REALSXP, 
+                           2 * p * (p + 1) / 2));
+    }
 
     PROTECT(tabdim = allocVector(INTSXP, 3));                   
     INTEGER(tabdim)[0] = INTEGER(Lx)[0] + 1;
@@ -469,11 +425,7 @@ SEXP R_init_LECV_2d
                        INTEGER(tabdim)[1] *
                        INTEGER(tabdim)[2]));
     dimgets(tab, tabdim);
-    SET_STRING_ELT(names, Table_SLOT, 
-                   mkChar("Table"));
-
-    namesgets(ans, names);
     
-    UNPROTECT(3);
+    UNPROTECT(2);
     return(ans);
 }

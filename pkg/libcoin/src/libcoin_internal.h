@@ -31,6 +31,7 @@
 #define VarianceInfluence_SLOT		10
 #define Xfactor_SLOT			11
 #define Work_SLOT			12
-#define TableBlock_SLOT			13
-#define Sumweights_SLOT			14
-#define Table_SLOT			15
+#define PermutedLinearStatistic_SLOT	13
+#define TableBlock_SLOT			14
+#define Sumweights_SLOT			15
+#define Table_SLOT			16

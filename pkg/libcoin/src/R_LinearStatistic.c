@@ -126,7 +126,7 @@ SEXP R_ExpectationCovarianceStatistic
     if (LENGTH(block) > 0)
         INTEGER(Lb)[0] = NLEVELS(block);
 
-    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb, Xfactor));
+    PROTECT(ans = R_init_LECV_1d(P, Q, varonly, Lb, Xfactor));
 
     RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
 

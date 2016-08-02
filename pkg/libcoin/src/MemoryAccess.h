@@ -18,5 +18,7 @@ extern int* C_get_TableBlock(SEXP LECV);
 extern int* C_get_Sumweights(SEXP LECV);
 extern int* C_get_Table(SEXP LECV);
 extern int* C_get_dimTable (SEXP LECV);
-extern SEXP R_init_LECV(SEXP P, SEXP Q, SEXP varonly, SEXP Lb, SEXP Xfactor);
+extern int C_get_B (SEXP LECV);
+extern double* C_get_PermutedLinearStatistic (SEXP LECV);
+extern SEXP R_init_LECV_1d(SEXP P, SEXP Q, SEXP varonly, SEXP Lb, SEXP Xfactor);
 extern SEXP R_init_LECV_2d(SEXP P, SEXP Q, SEXP varonly, SEXP Lx, SEXP Ly, SEXP Lb, SEXP Xfactor);
