@@ -27,20 +27,27 @@
                                                    
 
 /* sum(weights) */
-int C_sum_
+int C_sum_weights
 (
     const int *weights, 
     const int N
 ) {
 
-    int ans = 0;
+    long int ans = 0;
+    int ret;
 
     for (int i = 0; i < N; i++) ans += weights[i];
-    return(ans);
+
+    /* integer overflow can only happen here */    
+    if (ans > INT_MAX) 
+        error("sum of weights is larger than INT_MAX");
+    ret = (int) ans;
+    
+    return(ret);
 }
 
 /* sum(weights[subset]) */
-int C_sum_subset
+int C_sum_weights_subset
 (
     const int *weights, 
     const int N, 
@@ -48,10 +55,17 @@ int C_sum_subset
     const int Nsubset
 ) {
 
-    int ans = 0;
+    long int ans = 0;
+    int ret;
 
     for (int i = 0; i < Nsubset; i++) ans += weights[subset[i]];
-    return(ans);
+    
+    /* integer overflow can only happen here */    
+    if (ans > INT_MAX) 
+        error("sum of weights is larger than INT_MAX");
+    ret = (int) ans;
+    
+    return(ret);
 }
 
 /* colSums(x) */

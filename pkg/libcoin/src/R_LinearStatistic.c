@@ -41,9 +41,9 @@ void RC_ExpectationCovarianceStatistic
             sumweights[0] = 0;
         } else {
             if (LENGTH(subset) == 0) {
-                sumweights[0] = C_sum_(INTEGER(weights), LENGTH(weights));
+                sumweights[0] = C_sum_weights(INTEGER(weights), LENGTH(weights));
             } else {
-                sumweights[0] = C_sum_subset(INTEGER(weights), LENGTH(weights), 
+                sumweights[0] = C_sum_weights_subset(INTEGER(weights), LENGTH(weights), 
                                              INTEGER(subset), LENGTH(subset));
             }
         }
@@ -68,7 +68,7 @@ void RC_ExpectationCovarianceStatistic
         } else {
             tmp = 0;
             for (int b = 0; b < Lb; b++) {
-                sumweights[b] = C_sum_subset(INTEGER(weights), LENGTH(weights), 
+                sumweights[b] = C_sum_weights_subset(INTEGER(weights), LENGTH(weights), 
                                              subset_tmp + tmp, table[b + 1]);
                 tmp = tmp + table[b + 1];
             }
@@ -187,12 +187,12 @@ SEXP R_PermutedLinearStatistic
             }
         } else {
             if (LENGTH(subset) == 0) {
-                N = C_sum_(INTEGER(weights), LENGTH(weights));
+                N = C_sum_weights(INTEGER(weights), LENGTH(weights));
                 orig = Calloc(N, int);    
                 perm = Calloc(N, int);    
                 C_setup_subset_weights(LENGTH(weights), INTEGER(weights), orig);
             } else {
-                N = C_sum_subset(INTEGER(weights), LENGTH(weights), 
+                N = C_sum_weights_subset(INTEGER(weights), LENGTH(weights), 
                                  INTEGER(subset), LENGTH(subset));
                 orig = Calloc(N, int);    
                 perm = Calloc(N, int);    
@@ -229,7 +229,7 @@ SEXP R_PermutedLinearStatistic
             }
         } else {
             if (LENGTH(subset) == 0) {
-                N = C_sum_(INTEGER(weights), LENGTH(weights));
+                N = C_sum_weights(INTEGER(weights), LENGTH(weights));
                 orig = Calloc(N, int);    
                 perm = Calloc(N, int);    
                 C_1dtable_weights(INTEGER(block), Lb + 1, INTEGER(weights),
@@ -238,7 +238,7 @@ SEXP R_PermutedLinearStatistic
                                        orig);
                 C_order_wrt_block(orig, N, INTEGER(block), table, Lb + 1);
             } else {
-                N = C_sum_subset(INTEGER(weights), LENGTH(weights), 
+                N = C_sum_weights_subset(INTEGER(weights), LENGTH(weights), 
                                  INTEGER(subset), LENGTH(subset));
                 orig = Calloc(N, int);    
                 perm = Calloc(N, int);    

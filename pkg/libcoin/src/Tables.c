@@ -56,8 +56,10 @@ void C_1dtable_weights
 
     for (int i = 0; i < Lx; i++) Lx_ans[i] = 0;
     
+    /* <FIXME> protection against integer overflow? */    
     for (int i = 0; i < N; i++)  
         Lx_ans[ix[i]] += weights[i];
+    /* </FIXME> */
 }
 
 /* xtabs(weights ~ ix, subset = subset) */
@@ -72,9 +74,11 @@ void C_1dtable_weights_subset
 ) {
 
     for (int i = 0; i < Lx; i++) Lx_ans[i] = 0;
-    
+
+    /* <FIXME> protection against integer overflow? */    
     for (int i = 0; i < Nsubset; i++)  
           Lx_ans[ix[subset[i]]] += weights[subset[i]];
+    /* </FIXME> */
 }
 
 /* table(ix, iy) */
@@ -128,8 +132,10 @@ void C_2dtable_weights
 
     for (int i = 0; i < Lx * Ly; i++) LxLy_ans[i] = 0;
     
+    /* <FIXME> protection against integer overflow? */    
     for (int i = 0; i < N; i++)
         LxLy_ans[ix[i] + iy[i] * Lx] += weights[i];
+    /* </FIXME> */
 }
 
 /* xtabs(weights ~ ix + iy, subset = subset) */
@@ -147,8 +153,10 @@ void C_2dtable_weights_subset
 
     for (int i = 0; i < Lx * Ly; i++) LxLy_ans[i] = 0;
     
+    /* <FIXME> protection against integer overflow? */    
     for (int i = 0; i < Nsubset; i++)
          LxLy_ans[ix[subset[i]] + iy[subset[i]] * Lx] += weights[subset[i]];
+    /* </FIXME>
 }
 
 /* table(ix, iy, block) w/o NAs in block, ie block > 0 */
@@ -215,8 +223,10 @@ void C_2dtable_weights_block
 
     for (int i = 0; i < LxLy * Lb; i++) LxLyLb_ans[i] = 0;
     
+    /* <FIXME> protection against integer overflow? */    
     for (int i = 0; i < N; i++)
         LxLyLb_ans[(block[i] - 1) * LxLy + ix[i] + iy[i] * Lx] += weights[i];
+    /* </FIXME> */
 }
 
 /* xtabs(weights ~ ix + iy + block, subset = subset) w/o NAs in block, ie block > 0 */
@@ -237,10 +247,12 @@ void C_2dtable_weights_subset_block
     int LxLy = Lx * Ly;
 
     for (int i = 0; i < LxLy * Lb; i++) LxLyLb_ans[i] = 0;
-    
+
+    /* <FIXME> protection against integer overflow? */    
     for (int i = 0; i < Nsubset; i++)
          LxLyLb_ans[(block[subset[i]] - 1) * LxLy + 
                     ix[subset[i]] + iy[subset[i]] * Lx] += weights[subset[i]];
+    /* </FIXME> */
 }
 
 void RC_2dtable

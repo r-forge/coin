@@ -1,13 +1,13 @@
 
 /* sum(weights) */
-int C_sum_
+int C_sum_weights
 (
     const int *weights, 
     const int N
 );
 
 /* sum(weights[subset]) */
-int C_sum_subset
+int C_sum_weights_subset
 (
     const int *weights, 
     const int N, 
