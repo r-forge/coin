@@ -3,7 +3,8 @@
                              varonly = FALSE, B = 0L, standardise = FALSE, 
                              tol = sqrt(.Machine$double.eps)) 
 {
-    stopifnot(NROW(X) == NROW(Y))
+    if (NROW(X) != NROW(Y))
+        stop("dimensions of X and Y don't match")
 
     if (is.integer(X)) {
         if (is.null(attr(X, "levels")))
@@ -11,23 +12,29 @@
     }
 
     if (!missing(weights) && length(weights) > 0) {
-        stopifnot(NROW(X) == length(weights))
-        stopifnot(is.integer(weights))
-        stopifnot(all(weights >= 0))
+        if (!((NROW(X) == length(weights)) && 
+              is.integer(weights) &&
+              all(weights >= 0)))
+            stop("incorrect weights")
     } else {
         weights <- integer(0)
     }
+
     if (!missing(subset) && length(subset) > 0) {
-        stopifnot(all(subset %in% 1:NROW(X)))
-        stopifnot(is.integer(subset))
+        if (!((max(subset) <= NROW(X)) &&
+              (min(subset) >= 1L) && 
+              is.integer(subset)))
+            stop("incorrect subset")
         if (min(subset) == 0) stop("subset has start 1 index")
         subset <- subset - 1L
     } else {
         subset <- integer(0)
     }
+
     if (!missing(block) && length(block) > 0) {
-        stopifnot(NROW(X) == length(block))
-        stopifnot(is.factor(block))
+        if (!((NROW(X) == length(block)) &&
+              is.factor(block)))
+            stop("incorrect block")
     } else {
         block <- integer(0)
     }
@@ -57,43 +64,53 @@
                              standardise = FALSE, 
                              tol = sqrt(.Machine$double.eps)) 
 {
-    stopifnot(length(ix) == length(iy))
-    stopifnot(is.integer(ix))
-    stopifnot(is.integer(iy))
+    if (!((length(ix) == length(iy)) &&
+          is.integer(ix) && is.integer(iy)))
+        stop("incorrect ix and/or iy")
+
     if (is.null(attr(ix, "levels")))
         attr(ix, "levels") <- 1:max(ix)
     if (is.null(attr(iy, "levels")))
         attr(iy, "levels") <- 1:max(iy)
 
     if (!missing(X) && length(X) > 0) {
-        stopifnot(min(ix) >= 0 && nrow(X) == (max(ix) + 1))
-        stopifnot(all(complete.cases(X)))
-        stopifnot(nrow(X) == (length(attr(ix, "levels")) + 1))
+        if (!((min(ix) >= 0 && nrow(X) == (max(ix) + 1)) &&
+              all(complete.cases(X)) &&
+              (nrow(X) == (length(attr(ix, "levels")) + 1))))
+            stop("incorrect X")
     } else  {
         X <- numeric(0)
     }
-    stopifnot(all(complete.cases(Y)))
-    stopifnot(nrow(Y) == (length(attr(iy, "levels")) + 1))
-    stopifnot(min(iy) >= 0 && nrow(Y) == (max(iy) + 1))
+
+    if (!(all(complete.cases(Y))) &&
+          (nrow(Y) == (length(attr(iy, "levels")) + 1)) &&
+          (min(iy) >= 0 && nrow(Y) == (max(iy) + 1)))
+        stop("incorrect Y")
 
     if (!missing(weights) && length(weights) > 0) {
-        stopifnot(length(ix) == length(weights))
-        stopifnot(is.integer(weights))
-        stopifnot(all(weights >= 0))
+        if (!((length(ix) == length(weights)) && 
+              is.integer(weights) &&
+              all(weights >= 0)))
+            stop("incorrect weights")
     } else {
         weights <- integer(0)
     }
+
     if (!missing(subset) && length(subset) > 0) {
-        stopifnot(all(subset %in% 1:length(ix)))
-        stopifnot(is.integer(subset))
+        if (!((max(subset) <= length(ix)) && 
+              (min(subset) >= 1L) &&
+              is.integer(subset)))
+            stop("incorrect subset")
         if (min(subset) == 0) stop("subset has start 1 index")
         subset <- subset - 1L
     } else {
         subset <- integer(0)
     }
+
     if (!missing(block) && length(block) > 0) {
-        stopifnot(length(ix) == length(block))
-        stopifnot(is.factor(block))
+        if (!((length(ix) == length(block)) &&
+              is.factor(block)))
+            stop("incorrect block")
     } else {
         block <- integer(0)
     }
@@ -147,15 +164,21 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
 
     ### avoid match.arg for performance reasons
     teststat <- teststat[1]
-    stopifnot(teststat %in% c("maximum", "quadratic", "scalar"))
+    if (!any(teststat == c("maximum", "quadratic", "scalar")))
+        stop("incorrect teststat")
     alternative <- alternative[1]
-    stopifnot(alternative %in% c("two.sided", "less", "greater"))
+    if (!any(alternative == c("two.sided", "less", "greater")))
+        stop("incorrect alternative")
 
-    if (teststat == "quadratic") stopifnot(alternative == "two.sided")
+    if (teststat == "quadratic") {
+        if (alternative != "two.sided")
+            stop("incorrect alternative")
+    }
 
     test <- which(c("maximum", "quadratic", "scalar") == teststat)
     if (test == 3) {
-        stopifnot(length(object$LinearStatistic) == 1)
+        if (length(object$LinearStatistic) != 1)
+            stop("scalar test statistic not applicable")
         test <- 1L ### scalar is maximum internally
     }
     alt <- which(c("two.sided", "less", "greater") == alternative)
