@@ -13,7 +13,7 @@ int NLEVELS
     a = getAttrib(x, R_LevelsSymbol);
     if (a == R_NilValue) 
         error("no levels attribute found");
-   return(LENGTH(a));
+   return(NROW(a));
 }
 
 int NROW
