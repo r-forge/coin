@@ -20,5 +20,6 @@ iris2 <- BDR(iris, nmax = 5, total = TRUE)
 
 all.equal(as.data.frame(iris1), as.data.frame(iris1))
 
-
+(w <- weights(iris2))
+sum(w)
 

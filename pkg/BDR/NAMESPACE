@@ -1,5 +1,5 @@
 
-importFrom("stats", "quantile")
+importFrom("stats", "quantile", "weights")
 
 export("BDR")
 
@@ -8,3 +8,4 @@ S3method("as.data.frame", "BDRtotal")
 S3method("BDR", "data.frame")
 S3method("BDR", "Surv")
 S3method("is.numeric", "Surv")
+S3method("weights", "BDRtotal")

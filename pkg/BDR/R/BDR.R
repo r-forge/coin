@@ -13,12 +13,13 @@ BDR.Surv <- function(object, nmax = 20, ...) {
     lev <- as.matrix(attr(x, "levels"))
     atr <- attributes(object)
     atr$dim <- dim(lev)
+    atr$dimnames <- dimnames(lev)
     attributes(lev) <- atr
     attr(x, "levels") <- lev
     x
 }
 
-BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, ...) {
+BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, weights = NULL, ...) {
 
     if (total) {
         bdr <- BDR(object, nmax = nmax, ignore = ignore, total = FALSE) 
@@ -38,7 +39,13 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, ...)
             if (!is.null(dim(object[[j]])))
                 lDF[[j]] <- attr(bdr[[j]], "levels")[lDF[[j]],,drop = FALSE]
         }
-        sDF <- lDF[table(ret) > 0,,drop = FALSE]
+        if (!is.null(weights)) {
+            tab <- xtabs(weights ~ ret)
+        } else {
+            tab <- table(ret)
+        }
+        sDF <- lDF[tab > 0,,drop = FALSE]
+        sDF[["(weights)"]] <- tab[tab > 0]
         rownames(sDF) <- NULL
         ret <- unclass(ret[, drop = TRUE])
         attr(ret, "levels") <- sDF
@@ -71,30 +78,21 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, ...)
                                   right = TRUE, labels = FALSE)
             }
             levels(ix) <- ux
-            X <- rbind(0, matrix(ux, ncol = 1L))
         } else if (is.factor(x) && !is.ordered(x)) {
             ix <- unclass(x)
             attr(ix, "levels") <- factor(levels(x), levels = levels(x), 
                                          labels = levels(x))
-            X <- rbind(0, diag(nlevels(x)))
         } else if (is.ordered(x)) {
             ix <- unclass(x)
             attr(ix, "levels") <- ordered(levels(x), 
                                           levels = levels(x), 
                                           labels = levels(x))
-            sc <- attr(x, "scores")
-            if (is.null(sc)) sc <- 1:nlevels(x)
-            X <- rbind(0, matrix(sc, ncol = 1L))
         } else if (is.data.frame(x)) {
             ix <- BDR(x, nmax = nmax, ignore = ignore, total = TRUE)
-            X <- NA
         } else {
             ix <- BDR(x, nmax = nmax, ...)
-            X <- NA
         }
         ix[is.na(ix)] <- 0L
-        storage.mode(X) <- "double"
-        attr(ix, "X") <- X
         ret[[v]] <- ix
     }
     class(ret) <- "BDR"
@@ -124,4 +122,7 @@ as.data.frame.BDRtotal <- function(x, ...) {
     x[x < 1] <- NA
     return(lev[x, , drop = FALSE])
 }
+
+weights.BDRtotal <- function(object, ...)
+    attr(object, "levels")[["(weights)"]]
 
