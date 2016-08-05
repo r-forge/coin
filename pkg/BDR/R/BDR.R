@@ -24,28 +24,30 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, weig
     if (total) {
         bdr <- BDR(object, nmax = nmax, ignore = ignore, total = FALSE) 
         ret <- do.call("interaction", bdr)
-        lDF <- do.call("expand.grid", 
-            lapply(bdr, function(x) {
-                ret <- attr(x, "levels")
-                if (!is.null(dim(ret)))
-                    ret <- 1:NROW(ret)
-                if (any(x < 1)) {
-                    ret <- ret[c(1, 1:length(ret))]
-                    ret[1] <- NA
-                }
-                ret
-            }))
-        for (j in 1:NCOL(object)) {
-            if (!is.null(dim(object[[j]])))
-                lDF[[j]] <- attr(bdr[[j]], "levels")[lDF[[j]],,drop = FALSE]
-        }
         if (!is.null(weights)) {
             tab <- xtabs(weights ~ ret)
         } else {
             tab <- table(ret)
         }
-        sDF <- lDF[tab > 0,,drop = FALSE]
-        sDF[["(weights)"]] <- tab[tab > 0]
+        tab0 <- which(tab > 0)
+
+        sDF <- vector(mode = "list", length = length(bdr))
+        len <- sapply(bdr, function(x) NROW(attr(x, "levels")))
+        ### do.call("expand.grid", bdr), essentially
+        for (j in 1:length(len)) {
+            ix <- 1:len[j]
+            if (j > 1)
+                ix <- rep(ix, each = prod(len[1:(j - 1)]))
+            idx <- rep(ix, length.out = prod(len))[tab0]
+            lev <- attr(bdr[[j]], "levels")
+            idx[idx < 1] <- NA
+            if (is.null(dim(lev)))
+                sDF[[j]] <- lev[idx, drop = FALSE]
+            else
+                sDF[[j]] <- lev[idx,,drop = FALSE]
+        }
+        sDF <- as.data.frame(sDF)
+        sDF[["(weights)"]] <- tab[tab0]
         rownames(sDF) <- NULL
         ret <- unclass(ret[, drop = TRUE])
         attr(ret, "levels") <- sDF
