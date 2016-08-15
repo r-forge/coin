@@ -71,6 +71,7 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, weig
             X <- rbind(0, diag(2))
         } else if (is.numeric(x)) {
             ux <- sort(unique(x))
+            ### <FIXME> use findInterval instead of cut ?
             if (length(ux) <= nmax) {
                 ix <- cut.default(x, breaks = c(-Inf, ux, Inf), 
                                   right = TRUE, labels = FALSE)
@@ -79,6 +80,7 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, weig
                 ix <- cut.default(x, breaks = c(-Inf, ux, Inf), 
                                   right = TRUE, labels = FALSE)
             }
+            ### </FIXME>
             levels(ix) <- ux
         } else if (is.factor(x) && !is.ordered(x)) {
             ix <- unclass(x)
