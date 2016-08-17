@@ -53,6 +53,13 @@ lc <- function(FUN, ...) {
         if (inherits(object@statistic, "ScalarIndependenceTestStatistic"))
             teststat <- "scalar"
         alternative <- object@statistic@alternative
+        if (FUN == "ansari_test" && alternative != "two.sided") {
+            if (alternative == "greater") {
+                alternative <- "less"
+            } else {
+                alternative <- "greater"
+            }
+        }
     }
         
     tst <- doTest(lev, teststat = teststat, alternative = alternative)
