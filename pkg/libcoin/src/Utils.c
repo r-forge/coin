@@ -3,19 +3,6 @@
 #include "Tables.h"
 #include "Sums.h"
 
-int NLEVELS
-(
-    SEXP x
-) {
-
-   SEXP a;
-   
-    a = getAttrib(x, R_LevelsSymbol);
-    if (a == R_NilValue) 
-        error("no levels attribute found");
-   return(NROW(a));
-}
-
 int NROW
 (
     SEXP x
@@ -36,6 +23,19 @@ int NCOL
     a = getAttrib(x, R_DimSymbol);
     if (a == R_NilValue) return(1);
     return(INTEGER(a)[1]);
+}
+
+int NLEVELS
+(
+    SEXP x
+) {
+
+   SEXP a;
+   
+    a = getAttrib(x, R_LevelsSymbol);
+    if (a == R_NilValue) 
+        error("no levels attribute found");
+   return(NROW(a));
 }
 
 /**
