@@ -10,7 +10,7 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
 
     if (total) {
         bdr <- BDR(object, nmax = nmax, ignore = ignore, 
-                   total = FALSE) 
+                   total = FALSE, as.interval = as.interval) 
         bdr2 <- lapply(bdr, function(x)
             factor(x, levels = 0:nlevels(x)))
         ret <- do.call("interaction", bdr2)
@@ -69,17 +69,20 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
             ix <- enum(x)
         } else if (is.numeric(x)) {
             ux <- sort(unique(x))
+            xmin <- ux[1]
+            xmax <- ux[length(ux)] 
             if (length(ux) > nmax)
                 ux <- unique(quantile(x, prob = 1:(nmax - 1L) / nmax, 
                                       na.rm = TRUE))
-            ix <- interval(x, breaks = c(-Inf, ux, Inf))
+            ix <- interval(x, breaks = c(xmin - min(diff(ux)), ux, xmax))
             if (all(as.interval != v)) {
-                nux <- ux[c(1, 1:length(ux))] + c(0, diff(ux) / 2, 0)
+                nux <- c(xmin, ux) + diff(c(xmin, ux, xmax)) / 2
                 attr(ix, "levels") <- as.double(nux)
                 class(ix) <- c("enum", "integer")
              }
         } else if (is.data.frame(x)) {
-            ix <- BDR(x, nmax = nmax, ignore = ignore, total = TRUE)
+            ix <- BDR(x, nmax = nmax, ignore = ignore, total = TRUE,
+                      as.interval = as.interval)
         } else {
             ix <- BDR(x, nmax = nmax, ...) ### nothing as of now
         }
