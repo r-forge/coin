@@ -1,29 +1,19 @@
 
-is.numeric.Surv <- function(x, ...)
-    return(FALSE)
-
 BDR <- function(object, nmax = 20, ...)
     UseMethod("BDR")
 
 BDR.default <- function(object, nmax = 20, ...)
     stop("cannot handle objects of class", " ", sQuote(class(object)))
 
-BDR.Surv <- function(object, nmax = 20, ...) {
-    x <- BDR(as.data.frame(unclass(object)), nmax = nmax, total = TRUE)
-    lev <- as.matrix(attr(x, "levels"))
-    atr <- attributes(object)
-    atr$dim <- dim(lev)
-    atr$dimnames <- dimnames(lev)
-    attributes(lev) <- atr
-    attr(x, "levels") <- lev
-    x
-}
-
-BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, weights = NULL, ...) {
+BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, 
+                           weights = NULL, as.interval = "", ...) {
 
     if (total) {
-        bdr <- BDR(object, nmax = nmax, ignore = ignore, total = FALSE) 
-        ret <- do.call("interaction", bdr)
+        bdr <- BDR(object, nmax = nmax, ignore = ignore, 
+                   total = FALSE) 
+        bdr2 <- lapply(bdr, function(x)
+            factor(x, levels = 0:nlevels(x)))
+        ret <- do.call("interaction", bdr2)
         if (!is.null(weights)) {
             tab <- xtabs(weights ~ ret)
         } else {
@@ -32,21 +22,26 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, weig
         tab0 <- which(tab > 0)
 
         sDF <- vector(mode = "list", length = length(bdr))
-        len <- sapply(bdr, function(x) NROW(attr(x, "levels")))
+        len <- sapply(bdr2, nlevels)
         ### do.call("expand.grid", bdr), essentially
         for (j in 1:length(len)) {
             ix <- 1:len[j]
             if (j > 1)
                 ix <- rep(ix, each = prod(len[1:(j - 1)]))
             idx <- rep(ix, length.out = prod(len))[tab0]
-            lev <- attr(bdr[[j]], "levels")
-            idx[idx < 1] <- NA
-            if (is.null(dim(lev)))
+            if (inherits(bdr[[j]], "interval")) {
+                sDF[[j]] <- (0:nlevels(bdr[[j]]))[idx]
+                attr(sDF[[j]], "levels") <- attr(bdr[[j]], "levels")
+                class(sDF[[j]]) <- class(bdr[[j]])
+            } else {
+                lev <- attr(bdr[[j]], "levels")
+                lev <- lev[c(1, 1:length(lev))]
+                lev[1] <- NA
                 sDF[[j]] <- lev[idx, drop = FALSE]
-            else
-                sDF[[j]] <- lev[idx,,drop = FALSE]
+            }
         }
         sDF <- as.data.frame(sDF)
+        colnames(sDF) <- names(bdr)
         sDF[["(weights)"]] <- tab[tab0]
         rownames(sDF) <- NULL
         ret <- unclass(ret[, drop = TRUE])
@@ -63,58 +58,45 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, weig
         if (is.character(ignore)) cn <- cn[cn != ignore]
     }
 
+    if (as.interval != "") {
+        if (!is.character(as.interval))
+            stop(sQuote("as.interval"), " ", "is not a character")
+    }
+
     for (v in cn) {
         x <- object[[v]]
-        if (is.logical(x)) {
-            ix <- x + 1L
-            levels(ix) <- ux <- c(FALSE, TRUE)
-            X <- rbind(0, diag(2))
+        if (is.logical(x) || is.factor(x) || is.integer(x)) {
+            ix <- enum(x)
         } else if (is.numeric(x)) {
             ux <- sort(unique(x))
-            ### <FIXME> use findInterval instead of cut ?
-            if (length(ux) <= nmax) {
-                ix <- cut.default(x, breaks = c(-Inf, ux, Inf), 
-                                  right = TRUE, labels = FALSE)
-            } else {
-                ux <- unique(quantile(x, prob = 1:nmax / nmax, na.rm = TRUE))
-                ix <- cut.default(x, breaks = c(-Inf, ux, Inf), 
-                                  right = TRUE, labels = FALSE)
-            }
-            ### </FIXME>
-            levels(ix) <- ux
-        } else if (is.factor(x) && !is.ordered(x)) {
-            ix <- unclass(x)
-            attr(ix, "levels") <- factor(levels(x), levels = levels(x), 
-                                         labels = levels(x))
-        } else if (is.ordered(x)) {
-            ix <- unclass(x)
-            attr(ix, "levels") <- ordered(levels(x), 
-                                          levels = levels(x), 
-                                          labels = levels(x))
+            if (length(ux) > nmax)
+                ux <- unique(quantile(x, prob = 1:(nmax - 1L) / nmax, 
+                                      na.rm = TRUE))
+            ix <- interval(x, breaks = c(-Inf, ux, Inf))
+            if (all(as.interval != v)) {
+                nux <- ux[c(1, 1:length(ux))] + c(0, diff(ux) / 2, 0)
+                attr(ix, "levels") <- as.double(nux)
+                class(ix) <- c("enum", "integer")
+             }
         } else if (is.data.frame(x)) {
             ix <- BDR(x, nmax = nmax, ignore = ignore, total = TRUE)
         } else {
-            ix <- BDR(x, nmax = nmax, ...)
+            ix <- BDR(x, nmax = nmax, ...) ### nothing as of now
         }
-        ix[is.na(ix)] <- 0L
         ret[[v]] <- ix
     }
     class(ret) <- "BDR"
     ret
 }
 
+### only useful for checks
 as.data.frame.BDR <- function(x, ...) {
     ret <- lapply(x, function(x) {
+        if (inherits(x, "interval")) return(x)
         lev <- attr(x, "levels")
-        d <- dim(lev)
-        if (is.null(d) || inherits(lev, "Surv")) {
-            lev <- lev[c(1, 1:NROW(lev))]
-            lev[1] <- NA
-            return(lev[x + 1])
-        }
-        if (length(d) > 2) stop("cannot handle arrays")
-        x[x < 1] <- NA
-        return(lev[x, ,drop = FALSE])
+        lev <- lev[c(1, 1:length(lev))]
+        lev[1] <- NA
+        return(lev[x + 1])
     })
     class(ret) <- "data.frame"
     attr(ret, "row.names") <- 1:NROW(ret[[1]])
@@ -123,10 +105,23 @@ as.data.frame.BDR <- function(x, ...) {
 
 as.data.frame.BDRtotal <- function(x, ...) {
     lev <- attr(x, "levels")
-    x[x < 1] <- NA
-    return(lev[x, , drop = FALSE])
+    ### x >= 1, always
+    return(lev[x, colnames(lev) != "(weights)", drop = FALSE])
 }
 
 weights.BDRtotal <- function(object, ...)
     attr(object, "levels")[["(weights)"]]
 
+### does not make sense
+# is.numeric.Surv <- function(x, ...)
+#    return(FALSE)
+# BDR.Surv <- function(object, nmax = 20, ...) {
+#     x <- BDR(as.data.frame(unclass(object)), nmax = nmax, total = TRUE)
+#     lev <- as.matrix(attr(x, "levels"))
+#     atr <- attributes(object)
+#     atr$dim <- dim(lev)
+#     atr$dimnames <- dimnames(lev)
+#     attributes(lev) <- atr
+#     attr(x, "levels") <- lev
+#     x
+# }
