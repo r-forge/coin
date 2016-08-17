@@ -7,8 +7,6 @@ R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
 
-  Natural language support but running in an English locale
-
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
 'citation()' on how to cite R or R packages in publications.
@@ -17,21 +15,13 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-[Previously saved workspace restored]
-
 > ### Regression tests for mid-p confidence intervals and mid-p-values
 > 
 > set.seed(290875)
 > library("coin")
 Loading required package: survival
-
-Attaching package: ‘survival’
-
-The following object is masked _by_ ‘.GlobalEnv’:
-
-    leukemia
-
 > library("libcoin")
+> source("check_vs_coin.R")
 > 
 > isequal <- coin:::isequal
 > options(useFancyQuotes = FALSE)
@@ -85,21 +75,21 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ### Results from Hwang and Yang (2001, p. 810)
 > ct_e <- lc("chisq_test",as.table(tea),
 +                    distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.4583143"
+[1] "Component \"p.value\": Mean absolute difference: 0.01228571"
 > stopifnot(isequal(round(pvalue(ct_e), 3), 0.486))
 > stopifnot(isequal(round(midpvalue(ct_e), 3), 0.257))
 > 
 > it_e_s <- lc("independence_test",as.table(tea),
 +                             distribution = "exact",
 +                             teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.003685714"
+[1] "Component \"p.value\": Mean absolute difference: 0.01228571"
 > stopifnot(isequal(pvalue(it_e_s), pvalue(ct_e)))
 > stopifnot(isequal(midpvalue(it_e_s), midpvalue(ct_e)))
 > 
 > it_e_q <- lc("independence_test",as.table(tea),
 +                             distribution = "exact",
 +                             teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.4583143"
+[1] "Component \"p.value\": Mean absolute difference: 0.01228571"
 > stopifnot(isequal(pvalue(it_e_q), pvalue(ct_e)))
 > stopifnot(isequal(midpvalue(it_e_q), midpvalue(ct_e)))
 > 
@@ -107,7 +97,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 +                                distribution = "exact",
 +                                teststat = "scalar",
 +                                alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0002428571"
+[1] "Component \"p.value\": Mean absolute difference: 0.005857143"
 > stopifnot(isequal(round(pvalue(it_e_s_gr), 3), 0.243))
 > stopifnot(isequal(round(midpvalue(it_e_s_gr), 4), 0.1286))
 >                                  # p = 0.1285 according to Hwang and Yang (2001)
@@ -116,7 +106,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > set.seed(290875)
 > ct_m <- lc("chisq_test",as.table(tea),
 +                    distribution = "approximate")
-[1] "Component \"p.value\": Mean absolute difference: 0.4667"
+[1] "Component \"p.value\": Mean absolute difference: 0.0039"
 > (p <- pvalue(ct_m))
 [1] 0.4941
 99 percent confidence interval:
@@ -136,7 +126,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it_m_s <- lc("independence_test",as.table(tea),
 +                             distribution = approximate(B = 10000),
 +                             teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.0047"
+[1] "Component \"p.value\": Mean absolute difference: 0.0039"
 > stopifnot(isequal(pvalue(it_m_s), pvalue(ct_m)))
 > stopifnot(isequal(midpvalue(it_m_s), midpvalue(ct_m)))
 > 
@@ -144,7 +134,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it_m_q <- lc("independence_test",as.table(tea),
 +                             distribution = approximate(B = 10000),
 +                             teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.4667"
+[1] "Component \"p.value\": Mean absolute difference: 0.0039"
 > stopifnot(isequal(pvalue(it_m_q), pvalue(ct_m)))
 > stopifnot(isequal(midpvalue(it_m_q), midpvalue(ct_m)))
 > 
@@ -153,7 +143,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 +                                distribution = approximate(B = 10000),
 +                                teststat = "scalar",
 +                                alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0058"
+[1] "Component \"p.value\": Mean absolute difference: 0.0119"
 > (p <- pvalue(it_m_s_gr))
 [1] 0.2489
 99 percent confidence interval:
@@ -178,21 +168,21 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ### Results from Lydersen and Laake (2003, p. 3863, Tab. II)
 > ct_e <- lc("chisq_test",as.table(davis),
 +                    distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.2668301"
+[1] "Component \"p.value\": Mean absolute difference: 0.007969938"
 > stopifnot(isequal(round(pvalue(ct_e), 4), 0.2860))
 > stopifnot(isequal(round(midpvalue(ct_e), 4), 0.1527))
 > 
 > it_e_s <- lc("independence_test",as.table(davis),
 +                             distribution = "exact",
 +                             teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.0009300619"
+[1] "Component \"p.value\": Mean absolute difference: 0.007969938"
 > stopifnot(isequal(pvalue(it_e_s), pvalue(ct_e)))
 > stopifnot(isequal(midpvalue(it_e_s), midpvalue(ct_e)))
 > 
 > it_e_q <- lc("independence_test",as.table(davis),
 +                             distribution = "exact",
 +                             teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.2668301"
+[1] "Component \"p.value\": Mean absolute difference: 0.007969938"
 > stopifnot(isequal(pvalue(it_e_q), pvalue(ct_e)))
 > stopifnot(isequal(midpvalue(it_e_q), midpvalue(ct_e)))
 > 
@@ -200,7 +190,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > set.seed(290875)
 > ct_m <- lc("chisq_test",as.table(davis),
 +                    distribution = "approximate")
-[1] "Component \"p.value\": Mean absolute difference: 0.265"
+[1] "Component \"p.value\": Mean absolute difference: 0.0098"
 > (p <- pvalue(ct_m))
 [1] 0.2842
 99 percent confidence interval:
@@ -220,7 +210,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it_m_s <- lc("independence_test",as.table(davis),
 +                             distribution = approximate(B = 10000),
 +                             teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 9e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0098"
 > stopifnot(isequal(pvalue(it_m_s), pvalue(ct_m)))
 > stopifnot(isequal(midpvalue(it_m_s), midpvalue(ct_m)))
 > 
@@ -228,7 +218,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it_m_q <- lc("independence_test",as.table(davis),
 +                             distribution = approximate(B = 10000),
 +                             teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.265"
+[1] "Component \"p.value\": Mean absolute difference: 0.0098"
 > stopifnot(isequal(pvalue(it_m_q), pvalue(ct_m)))
 > stopifnot(isequal(midpvalue(it_m_q), midpvalue(ct_m)))
 > 
@@ -241,21 +231,21 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ### Results from Lydersen, Fagerland and Laake (2009, pp. 1171--1172)
 > ct_e <- lc("chisq_test",as.table(cardiac),
 +                    distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.05060013"
+[1] "Component \"p.value\": Mean absolute difference: 0.01159987"
 > stopifnot(isequal(round(pvalue(ct_e), 4), 0.0544))
 > stopifnot(isequal(round(midpvalue(ct_e), 4), 0.0297))
 > 
 > it_e_s <- lc("independence_test",as.table(cardiac),
 +                             distribution = "exact",
 +                             teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.0002998695"
+[1] "Component \"p.value\": Mean absolute difference: 0.01159987"
 > stopifnot(isequal(pvalue(it_e_s), pvalue(ct_e)))
 > stopifnot(isequal(midpvalue(it_e_s), midpvalue(ct_e)))
 > 
 > it_e_q <- lc("independence_test",as.table(cardiac),
 +                             distribution = "exact",
 +                             teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.05060013"
+[1] "Component \"p.value\": Mean absolute difference: 0.01159987"
 > stopifnot(isequal(pvalue(it_e_q), pvalue(ct_e)))
 > stopifnot(isequal(midpvalue(it_e_q), midpvalue(ct_e)))
 > 
@@ -263,7 +253,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > set.seed(290875)
 > ct_m <- lc("chisq_test",as.table(cardiac),
 +                    distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0487"
+[1] "Component \"p.value\": Mean absolute difference: 0.0135"
 > (p <- pvalue(ct_m))
 [1] 0.0525
 99 percent confidence interval:
@@ -283,7 +273,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it_m_s <- lc("independence_test",as.table(cardiac),
 +                             distribution = approximate(B = 10000),
 +                             teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.0022"
+[1] "Component \"p.value\": Mean absolute difference: 0.0135"
 > stopifnot(isequal(pvalue(it_m_s), pvalue(ct_m)))
 > stopifnot(isequal(midpvalue(it_m_s), midpvalue(ct_m)))
 > 
@@ -291,7 +281,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it_m_q <- lc("independence_test",as.table(cardiac),
 +                             distribution = approximate(B = 10000),
 +                             teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.0487"
+[1] "Component \"p.value\": Mean absolute difference: 0.0135"
 > stopifnot(isequal(pvalue(it_m_q), pvalue(ct_m)))
 > stopifnot(isequal(midpvalue(it_m_q), midpvalue(ct_m)))
 > 
@@ -304,21 +294,21 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ### Results from Lydersen, Fagerland and Laake (2009, p. 1173)
 > ct_e <- lc("chisq_test",as.table(exfoliative),
 +                    distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.03396666"
+[1] "Component \"p.value\": Mean absolute difference: 0.003866665"
 > stopifnot(isequal(round(pvalue(ct_e), 4), 0.0629))
 > stopifnot(isequal(round(midpvalue(ct_e), 4), 0.0447))
 > 
 > it_e_s <- lc("independence_test",as.table(exfoliative),
 +                             distribution = "exact",
 +                             teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.0006333354"
+[1] "Component \"p.value\": Mean absolute difference: 0.003866665"
 > stopifnot(isequal(pvalue(it_e_s), pvalue(ct_e)))
 > stopifnot(isequal(midpvalue(it_e_s), midpvalue(ct_e)))
 > 
 > it_e_q <- lc("independence_test",as.table(exfoliative),
 +                             distribution = "exact",
 +                             teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.03396666"
+[1] "Component \"p.value\": Mean absolute difference: 0.003866665"
 > stopifnot(isequal(pvalue(it_e_q), pvalue(ct_e)))
 > stopifnot(isequal(midpvalue(it_e_q), midpvalue(ct_e)))
 > 
@@ -326,7 +316,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > set.seed(290875)
 > ct_m <- lc("chisq_test",as.table(exfoliative),
 +                    distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0322"
+[1] "Component \"p.value\": Mean absolute difference: 0.0021"
 > (p <- pvalue(ct_m))
 [1] 0.0611
 99 percent confidence interval:
@@ -346,7 +336,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it_m_s <- lc("independence_test",as.table(exfoliative),
 +                             distribution = approximate(B = 10000),
 +                             teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.0024"
+[1] "Component \"p.value\": Mean absolute difference: 0.0021"
 > stopifnot(isequal(pvalue(it_m_s), pvalue(ct_m)))
 > stopifnot(isequal(midpvalue(it_m_s), midpvalue(ct_m)))
 > 
@@ -354,7 +344,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it_m_q <- lc("independence_test",as.table(exfoliative),
 +                             distribution = approximate(B = 10000),
 +                             teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.0322"
+[1] "Component \"p.value\": Mean absolute difference: 0.0021"
 > stopifnot(isequal(pvalue(it_m_q), pvalue(ct_m)))
 > stopifnot(isequal(midpvalue(it_m_q), midpvalue(ct_m)))
 > 
@@ -367,21 +357,21 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ### Results from Fagerland, Lydersen and Laake (2013, p. 7, Tab. 6)
 > mt_e <- lc("mh_test",as.table(ahr),
 +                 distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.0632125"
+[1] "Component \"p.value\": Mean absolute difference: 0.0103125"
 > stopifnot(isequal(round(pvalue(mt_e), 4), 0.0703))
 > stopifnot(isequal(round(midpvalue(mt_e), 4), 0.0391))
 > 
 > st_e_s <- lc("symmetry_test",as.table(ahr),
 +                         distribution = "exact",
 +                         teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 1.25e-05"
+[1] "Component \"p.value\": Mean absolute difference: 0.0103125"
 > stopifnot(isequal(pvalue(st_e_s), pvalue(mt_e)))
 > stopifnot(isequal(midpvalue(st_e_s), midpvalue(mt_e)))
 > 
 > st_e_q <- lc("symmetry_test",as.table(ahr),
 +                         distribution = "exact",
 +                         teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.0632125"
+[1] "Component \"p.value\": Mean absolute difference: 0.0103125"
 > stopifnot(isequal(pvalue(st_e_q), pvalue(mt_e)))
 > stopifnot(isequal(midpvalue(st_e_q), midpvalue(mt_e)))
 > 
@@ -389,7 +379,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > set.seed(290875)
 > mt_m <- lc("mh_test",as.table(ahr),
 +                 distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0632"
+[1] "Component \"p.value\": Mean absolute difference: 0.0103"
 > (p <- pvalue(mt_m))
 [1] 0.0703
 99 percent confidence interval:
@@ -409,7 +399,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > st_m_s <- lc("symmetry_test",as.table(ahr),
 +                         distribution = approximate(B = 10000),
 +                         teststat = "scalar")
-[1] TRUE
+[1] "Component \"p.value\": Mean absolute difference: 0.0103"
 > stopifnot(isequal(pvalue(st_m_s), pvalue(mt_m)))
 > stopifnot(isequal(midpvalue(st_m_s), midpvalue(mt_m)))
 > 
@@ -417,7 +407,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > st_m_q <- lc("symmetry_test",as.table(ahr),
 +                         distribution = approximate(B = 10000),
 +                         teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.0632"
+[1] "Component \"p.value\": Mean absolute difference: 0.0103"
 > stopifnot(isequal(pvalue(st_m_q), pvalue(mt_m)))
 > stopifnot(isequal(midpvalue(st_m_q), midpvalue(mt_m)))
 > 
@@ -430,21 +420,21 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ### Results from Fagerland, Lydersen and Laake (2013, p. 7, Tab. 6)
 > mt_e <- lc("mh_test",as.table(therapy),
 +                 distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.03597879"
+[1] "Component \"p.value\": Mean absolute difference: 0.00647879"
 > stopifnot(isequal(round(pvalue(mt_e), 4), 0.0525))
 > stopifnot(isequal(round(midpvalue(mt_e), 4), 0.0347))
 > 
 > st_e_s <- lc("symmetry_test",as.table(therapy),
 +                         distribution = "exact",
 +                         teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.00172121"
+[1] "Component \"p.value\": Mean absolute difference: 0.00647879"
 > stopifnot(isequal(pvalue(st_e_s), pvalue(mt_e)))
 > stopifnot(isequal(midpvalue(st_e_s), midpvalue(mt_e)))
 > 
 > st_e_q <- lc("symmetry_test",as.table(therapy),
 +                         distribution = "exact",
 +                         teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.03597879"
+[1] "Component \"p.value\": Mean absolute difference: 0.00647879"
 > stopifnot(isequal(pvalue(st_e_q), pvalue(mt_e)))
 > stopifnot(isequal(midpvalue(st_e_q), midpvalue(mt_e)))
 > 
@@ -452,7 +442,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > set.seed(290875)
 > mt_m <- lc("mh_test",as.table(therapy),
 +                 distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0377"
+[1] "Component \"p.value\": Mean absolute difference: 0.0082"
 > (p <- pvalue(mt_m))
 [1] 0.0542
 99 percent confidence interval:
@@ -472,7 +462,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > st_m_s <- lc("symmetry_test",as.table(therapy),
 +                         distribution = approximate(B = 10000),
 +                         teststat = "scalar")
-[1] TRUE
+[1] "Component \"p.value\": Mean absolute difference: 0.0082"
 > stopifnot(isequal(pvalue(st_m_s), pvalue(mt_m)))
 > stopifnot(isequal(midpvalue(st_m_s), midpvalue(mt_m)))
 > 
@@ -480,7 +470,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > st_m_q <- lc("symmetry_test",as.table(therapy),
 +                         distribution = approximate(B = 10000),
 +                         teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.0377"
+[1] "Component \"p.value\": Mean absolute difference: 0.0082"
 > stopifnot(isequal(pvalue(st_m_q), pvalue(mt_m)))
 > stopifnot(isequal(midpvalue(st_m_q), midpvalue(mt_m)))
 > 
@@ -634,35 +624,35 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it50_e <- lc("independence_test",as.table(barnard50),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.000331746"
+[1] "Component \"p.value\": Mean absolute difference: 0.000968254"
 > stopifnot(isequal(round(pvalue(it50_e), 4), 0.0040))
 > stopifnot(isequal(round(midpvalue(it50_e), 4), 0.0020))
 > 
 > it51_e <- lc("independence_test",as.table(barnard51),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.001190476"
+[1] "Component \"p.value\": Mean absolute difference: 0.003809524"
 > stopifnot(isequal(round(pvalue(it51_e), 4), 0.0238))
 > stopifnot(isequal(round(midpvalue(it51_e), 4), 0.0119))
 > 
 > it52_e <- lc("independence_test",as.table(barnard52),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.004166667"
+[1] "Component \"p.value\": Mean absolute difference: 0.001333333"
 > stopifnot(isequal(round(pvalue(it52_e), 4), 0.0833))
 > stopifnot(isequal(round(midpvalue(it52_e), 4), 0.0417))
 > 
 > it53_e <- lc("independence_test",as.table(barnard53),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.005977778"
+[1] "Component \"p.value\": Mean absolute difference: 0.0007777778"
 > stopifnot(isequal(round(pvalue(it53_e), 4), 0.2222))
 > stopifnot(isequal(round(midpvalue(it53_e), 4), 0.1111))
 > 
 > it54_e <- lc("independence_test",as.table(barnard54),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 3e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.008"
 > stopifnot(isequal(round(pvalue(it54_e), 4), 0.5000))
 > stopifnot(isequal(round(midpvalue(it54_e), 4), 0.2500))
 > 
@@ -675,35 +665,35 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it40_e <- lc("independence_test",as.table(barnard40),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 9.047619e-05"
+[1] "Component \"p.value\": Mean absolute difference: 0.002809524"
 > stopifnot(isequal(round(pvalue(it40_e), 4), 0.0238))
 > stopifnot(isequal(round(midpvalue(it40_e), 4), 0.0119))
 > 
 > it41_e <- lc("independence_test",as.table(barnard41),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.002625397"
+[1] "Component \"p.value\": Mean absolute difference: 0.0111746"
 > stopifnot(isequal(round(pvalue(it41_e), 4), 0.1032))
 > stopifnot(isequal(round(midpvalue(it41_e), 4), 0.0536))
 > 
 > it42_e <- lc("independence_test",as.table(barnard42),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.007595238"
+[1] "Component \"p.value\": Mean absolute difference: 0.008095238"
 > stopifnot(isequal(round(pvalue(it42_e), 4), 0.2619))
 > stopifnot(isequal(round(midpvalue(it42_e), 4), 0.1429))
 > 
 > it43_e <- lc("independence_test",as.table(barnard43),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0067"
+[1] "Component \"p.value\": Mean absolute difference: 0.005"
 > stopifnot(isequal(round(pvalue(it43_e), 4), 0.5000))
 > stopifnot(isequal(round(midpvalue(it43_e), 4), 0.2917))
 > 
 > it44_e <- lc("independence_test",as.table(barnard44),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.004022222"
+[1] "Component \"p.value\": Mean absolute difference: 0.004777778"
 > stopifnot(isequal(round(pvalue(it44_e), 4), 0.7778))
 > stopifnot(isequal(round(midpvalue(it44_e), 4), 0.5000))
 > 
@@ -717,35 +707,35 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it30_e <- lc("independence_test",as.table(barnard30),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.001766667"
+[1] "Component \"p.value\": Mean absolute difference: 0.003333333"
 > stopifnot(isequal(round(pvalue(it30_e), 4), 0.0833))
 > stopifnot(isequal(round(midpvalue(it30_e), 4), 0.0417))
 > 
 > it31_e <- lc("independence_test",as.table(barnard31),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.007795238"
+[1] "Component \"p.value\": Mean absolute difference: 0.008095238"
 > stopifnot(isequal(round(pvalue(it31_e), 4), 0.2619))
 > stopifnot(isequal(round(midpvalue(it31_e), 4), 0.1429))
 > 
 > it32_e <- lc("independence_test",as.table(barnard32),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0028"
+[1] "Component \"p.value\": Mean absolute difference: 0.007"
 > stopifnot(isequal(round(pvalue(it32_e), 4), 0.5000))
 > stopifnot(isequal(round(midpvalue(it32_e), 4), 0.3016))
 > 
 > it33_e <- lc("independence_test",as.table(barnard33),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.003995238"
+[1] "Component \"p.value\": Mean absolute difference: 0.01209524"
 > stopifnot(isequal(round(pvalue(it33_e), 4), 0.7381))
 > stopifnot(isequal(round(midpvalue(it33_e), 4), 0.5000))
 > 
 > it34_e <- lc("independence_test",as.table(barnard34),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0004666667"
+[1] "Component \"p.value\": Mean absolute difference: 0.01266667"
 > stopifnot(isequal(round(pvalue(it34_e), 4), 0.9167))
 > stopifnot(isequal(round(midpvalue(it34_e), 4), 0.7083))
 > 
@@ -759,35 +749,35 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it20_e <- lc("independence_test",as.table(barnard20),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0006777778"
+[1] "Component \"p.value\": Mean absolute difference: 0.01022222"
 > stopifnot(isequal(round(pvalue(it20_e), 4), 0.2222))
 > stopifnot(isequal(round(midpvalue(it20_e), 4), 0.1111))
 > 
 > it21_e <- lc("independence_test",as.table(barnard21),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0083"
+[1] "Component \"p.value\": Mean absolute difference: 0.003"
 > stopifnot(isequal(round(pvalue(it21_e), 4), 0.5000))
 > stopifnot(isequal(round(midpvalue(it21_e), 4), 0.2917))
 > 
 > it22_e <- lc("independence_test",as.table(barnard22),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.008104762"
+[1] "Component \"p.value\": Mean absolute difference: 0.01090476"
 > stopifnot(isequal(round(pvalue(it22_e), 4), 0.7381))
 > stopifnot(isequal(round(midpvalue(it22_e), 4), 0.5000))
 > 
 > it23_e <- lc("independence_test",as.table(barnard23),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.002125397"
+[1] "Component \"p.value\": Mean absolute difference: 0.0138254"
 > stopifnot(isequal(round(pvalue(it23_e), 4), 0.8968))
 > stopifnot(isequal(round(midpvalue(it23_e), 4), 0.6984))
 > 
 > it24_e <- lc("independence_test",as.table(barnard24),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.001190476"
+[1] "Component \"p.value\": Mean absolute difference: 0.0001904762"
 > stopifnot(isequal(round(pvalue(it24_e), 4), 0.9762))
 > stopifnot(isequal(round(midpvalue(it24_e), 4), 0.8571))
 > 
@@ -801,35 +791,35 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > it10_e <- lc("independence_test",as.table(barnard10),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0036"
+[1] "Component \"p.value\": Mean absolute difference: 0.004"
 > stopifnot(isequal(round(pvalue(it10_e), 4), 0.5000))
 > stopifnot(isequal(round(midpvalue(it10_e), 4), 0.2500))
 > 
 > it11_e <- lc("independence_test",as.table(barnard11),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0002222222"
+[1] "Component \"p.value\": Mean absolute difference: 0.0007777778"
 > stopifnot(isequal(round(pvalue(it11_e), 4), 0.7778))
 > stopifnot(isequal(round(midpvalue(it11_e), 4), 0.5000))
 > 
 > it12_e <- lc("independence_test",as.table(barnard12),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.001866667"
+[1] "Component \"p.value\": Mean absolute difference: 0.0003333333"
 > stopifnot(isequal(round(pvalue(it12_e), 4), 0.9167))
 > stopifnot(isequal(round(midpvalue(it12_e), 4), 0.7083))
 > 
 > it13_e <- lc("independence_test",as.table(barnard13),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0006095238"
+[1] "Component \"p.value\": Mean absolute difference: 0.008190476"
 > stopifnot(isequal(round(pvalue(it13_e), 4), 0.9762))
 > stopifnot(isequal(round(midpvalue(it13_e), 4), 0.8571))
 > 
 > it14_e <- lc("independence_test",as.table(barnard14),
 +                             distribution = "exact",
 +                             alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.000531746"
+[1] "Component \"p.value\": Mean absolute difference: 0.003031746"
 > stopifnot(isequal(round(pvalue(it14_e), 4), 0.9960))
 > stopifnot(isequal(round(midpvalue(it14_e), 4), 0.9464))
 > 
@@ -883,4 +873,4 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > proc.time()
    user  system elapsed 
- 10.888   0.240  28.083 
+ 18.588   0.080  18.654 

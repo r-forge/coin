@@ -1,14 +1,14 @@
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 2016-08-02
-Version: 0.4-0
+Date: 2016-08-17
+Version: 0.5-0
 Authors@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@R-project.org")
 Description: Basis infrastructure for linear test statistics and permutation
   inference in the Strasser-Weber framework. This package must not be used
   by end-users.
 Depends: R (>= 3.3.0)
-Suggests: coin
+Suggests: coin, multcomp, TH.data
 Imports: stats, mvtnorm
 LinkingTo: mvtnorm
 License: GPL-2

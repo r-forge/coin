@@ -7,8 +7,6 @@ R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
 
-  Natural language support but running in an English locale
-
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
 'citation()' on how to cite R or R packages in publications.
@@ -17,21 +15,13 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-[Previously saved workspace restored]
-
 > ### Regression tests for helper functions
 > 
 > set.seed(290875)
 > library("coin")
 Loading required package: survival
-
-Attaching package: ‘survival’
-
-The following object is masked _by_ ‘.GlobalEnv’:
-
-    leukemia
-
 > library("libcoin")
+> source("check_vs_coin.R")
 > 
 > isequal <- coin:::isequal
 > options(useFancyQuotes = FALSE)
@@ -269,7 +259,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > ### Censored vs. unordered 4-level factor
 > it <- lc("independence_test",c1 ~ f4)
-[1] "Component \"p.value\": Mean absolute difference: 2.076828e-05"
+[1] TRUE
 > stopifnot(identical(is_factor_y(it@statistic),        FALSE))
 > stopifnot(identical(is_factor_x(it@statistic),        TRUE))
 > stopifnot(identical(is_ordered_y(it@statistic),       FALSE))
@@ -489,7 +479,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > ### Unordered 4-level factor vs. censored
 > it <- lc("independence_test",f4 ~ c1)
-[1] "Component \"p.value\": Mean absolute difference: 2.076828e-05"
+[1] TRUE
 > stopifnot(identical(is_factor_y(it@statistic),        TRUE))
 > stopifnot(identical(is_factor_x(it@statistic),        FALSE))
 > stopifnot(identical(is_ordered_y(it@statistic),       FALSE))
@@ -577,7 +567,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > ### Unordered 4-level factor vs. ordered 4-level factor
 > it <- lc("independence_test",f4 ~ o4)
-[1] "Component \"p.value\": Mean absolute difference: 0.0001290465"
+[1] TRUE
 > stopifnot(identical(is_factor_y(it@statistic),        TRUE))
 > stopifnot(identical(is_factor_x(it@statistic),        TRUE))
 > stopifnot(identical(is_ordered_y(it@statistic),       FALSE))
@@ -797,7 +787,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > ### Ordered 4-level factor vs. unordered 4-level factor
 > it <- lc("independence_test",o4 ~ f4)
-[1] "Component \"p.value\": Mean absolute difference: 0.0001290465"
+[1] TRUE
 > stopifnot(identical(is_factor_y(it@statistic),        TRUE))
 > stopifnot(identical(is_factor_x(it@statistic),        TRUE))
 > stopifnot(identical(is_ordered_y(it@statistic),       TRUE))
@@ -863,4 +853,4 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > proc.time()
    user  system elapsed 
-  4.060   0.144  12.809 
+  1.488   0.072   1.556 

@@ -154,8 +154,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights, subset, block,
 }
 
 
-### <FIXME> add alternative argument for type = "maxstat" </FIXME>
-### lower = FALSE => p-value; lower = TRUE => 1 - p-value
+### note: lower = FALSE => p-value; lower = TRUE => 1 - p-value
 doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"), 
                    alternative = c("two.sided", "less", "greater"),
                    pvalue = TRUE, lower = FALSE, log = FALSE,

@@ -21,6 +21,7 @@ Type 'q()' to quit R.
 > library("coin")
 Loading required package: survival
 > library("libcoin")
+> source("check_vs_coin.R")
 > isequal <- coin:::isequal
 > GE <- coin:::GE
 > options(useFancyQuotes = FALSE)
@@ -70,12 +71,9 @@ The following object is masked from 'package:MASS':
 
     geyser
 
-[1] "Component \"p.value\": Mean absolute difference: 0.003493875"
-[1] "Component \"p.value\": Mean absolute difference: 4.418356e-05"
+[1] "Component \"p.value\": Mean absolute difference: 0.007506125"
 [1] TRUE
-Warning message:
-In Test(lev, xtrafo = "id", type = teststat, alternative = alternative) :
-  cmvnorm: completion with ERROR > EPS
+[1] TRUE
 > 
 > 
 > ### `statistic' for linear and standardized statistics was wrong in case of
@@ -96,14 +94,14 @@ In Test(lev, xtrafo = "id", type = teststat, alternative = alternative) :
 [1] TRUE
 [1] NA
 > ite <- lc("independence_test",I(round(x, 1)) ~ z, data = df, dist = exact())
-[1] "Component \"p.value\": Mean absolute difference: 0.001219678"
+[1] "Component \"p.value\": Mean absolute difference: 0.01208032"
 > ae <- support(ite)
 > de <- sapply(ae, function(x) dperm(ite, x))
 > sum(de)
 [1] 1
 > ita <- lc("independence_test",I(round(x, 1)) ~ z, data = df,
 +                          dist = approximate(B = 100000))
-[1] "Component \"p.value\": Mean absolute difference: 0.00019"
+[1] "Component \"p.value\": Mean absolute difference: 0.01349"
 > aa <- support(ita)
 > da <- sapply(aa, function(x) dperm(ita, x))
 > sum(da)
@@ -292,7 +290,7 @@ Error in factor_trafo(x) :
 + }
 > it <- lc("independence_test",group ~ genotype,
 +     data = medf, weights = ~ Freq, xtrafo = g)
-[1] "Component \"p.value\": Mean absolute difference: 9.213816e-05"
+[1] TRUE
 > statistic(it, "linear")
    In situ
 X1      28
@@ -302,7 +300,7 @@ X3      10
 > it <- lc("independence_test",group ~ genotype,
 +     data = medf, weights = ~ Freq, xtrafo = g,
 +     distribution = approximate(B = 49999))
-[1] "Component \"p.value\": Mean absolute difference: 0.001938647"
+[1] "Component \"p.value\": Mean absolute difference: 0.002661353"
 > pvalue(it)
 [1] 0.06766135
 99 percent confidence interval:
@@ -311,7 +309,7 @@ X3      10
 > 
 > stopifnot(all.equal(statistic(lc("independence_test",t(me), xtrafo = g), "linear"),
 +                     statistic(it, "linear")))
-[1] "Component \"p.value\": Mean absolute difference: 9.213816e-05"
+[1] TRUE
 > 
 > ### alternative trafo for ordered variables didn't work
 > ### spotted by Ludwig Hothorn <hothorn@biostat.uni-hannover.de>
@@ -332,10 +330,10 @@ X3      10
 > x <- c(1,2,3.1,4,5,6)
 > g <- factor(c(0,0,0,1,1,1))
 > it <- lc("independence_test",x ~ g, distribution = exact())
-[1] "Component \"p.value\": Mean absolute difference: 8e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.002"
 > stopifnot(pvalue(it) == 0.1)
 > itMC <- lc("independence_test",x ~ g, distribution = approximate(99999))
-[1] "Component \"p.value\": Mean absolute difference: 0.0006389984"
+[1] "Component \"p.value\": Mean absolute difference: 0.002161002"
 > ci <- attr(pvalue(itMC), "conf.int")
 > stopifnot(ci[1] < pvalue(it) && ci[2] > pvalue(it))
 > 
@@ -346,7 +344,7 @@ X3      10
 > ### must not give a warning
 > lc("wilcoxsign_test",x ~ y, alternative = "greater",
 +                 distribution = exact())
-[1] "Component \"p.value\": Mean absolute difference: 0.00073125"
+[1] "Component \"p.value\": Mean absolute difference: 0.00353125"
 
 	Exact Wilcoxon-Pratt Signed-Rank Test
 
@@ -393,7 +391,7 @@ difference in location
              0.9000352 
 
 > lc("wilcox_test",Route.Time~Route,conf.int=TRUE, distr = exact())
-[1] "Component \"p.value\": Mean absolute difference: 2.637363e-05"
+[1] "Component \"p.value\": Mean absolute difference: 0.0003736264"
 
 	Exact Wilcoxon-Mann-Whitney Test
 
@@ -407,7 +405,7 @@ difference in location
                   -0.9 
 
 > lc("wilcox_test",Route.Time~Route2,conf.int=TRUE, distr = exact())
-[1] "Component \"p.value\": Mean absolute difference: 2.637363e-05"
+[1] "Component \"p.value\": Mean absolute difference: 0.0003736264"
 
 	Exact Wilcoxon-Mann-Whitney Test
 
@@ -433,7 +431,7 @@ $V1
 	Asymptotic Wilcoxon-Mann-Whitney Test
 
 data:  var by group (1, 2)
-Z = -0.08962, p-value = 0.9286
+Z = 0.020681, p-value = 0.9835
 alternative hypothesis: true mu is not equal to 0
 
 
@@ -442,7 +440,7 @@ $V2
 	Asymptotic Wilcoxon-Mann-Whitney Test
 
 data:  var by group (1, 2)
-Z = -0.36537, p-value = 0.7148
+Z = 0.65491, p-value = 0.5125
 alternative hypothesis: true mu is not equal to 0
 
 
@@ -458,9 +456,9 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > ### dpqperm
 > wte <- lc("wilcox_test",Route.Time ~ Route, distribution = exact())
-[1] "Component \"p.value\": Mean absolute difference: 2.637363e-05"
+[1] "Component \"p.value\": Mean absolute difference: 0.0003736264"
 > wta <- lc("wilcox_test",Route.Time ~ Route, distribution = approximate())
-[1] "Component \"p.value\": Mean absolute difference: 4e-04"
+[1] TRUE
 > de <- dperm(wte, support(wte))
 > pe <- pperm(wte, support(wte))
 > stopifnot(max(abs(cumsum(de) - pe)) < sqrt(.Machine$double.eps))
@@ -488,7 +486,7 @@ alternative hypothesis: true mu is not equal to 0
 > it <- lc("normal_test",scores ~ fac, data = dat.fr,
 +     conf.int = TRUE, conf.level = conf.level,
 +     alternative = alternative, dist = exact())
-[1] "Component \"p.value\": Mean absolute difference: 0.0007142857"
+[1] "Component \"p.value\": Mean absolute difference: 0.002285714"
 > confint(it)
 98 percent confidence interval:
  0.71  Inf 
@@ -503,7 +501,7 @@ difference in location
 > y1 <- rnorm(15)
 > y2 <- rnorm(15)
 > it <- lc("independence_test",y1 + y2 ~ x, distribution = approximate(B = 5))
-[1] "Component \"p.value\": Mean absolute difference: 0.4725"
+[1] "Component \"p.value\": Mean absolute difference: 0.459"
 > pvalue(it, "discrete") # didn't work
         y1       y2
 1 0.999936 0.737856
@@ -589,11 +587,11 @@ alternative hypothesis: true mu is not equal to 0
 > p1 <- pvalue(lc("independence_test",pd ~ age, data = water_transfer,
 +                                alternative = "less",
 +                                distribution = exact(algorithm = "shift")))
-[1] "Component \"p.value\": Mean absolute difference: 0.003096936"
+[1] "Component \"p.value\": Mean absolute difference: 0.01039694"
 > p2 <- pvalue(lc("independence_test",pd ~ age, data = water_transfer,
 +                                alternative = "less",
 +                                distribution = exact(algorithm = "split")))
-[1] "Component \"p.value\": Mean absolute difference: 0.003096936"
+[1] "Component \"p.value\": Mean absolute difference: 0.01039694"
 > stopifnot(isequal(p1, p2))
 > 
 > ### monotonicity wasn't enforced for "step-down"
@@ -604,7 +602,7 @@ alternative hypothesis: true mu is not equal to 0
 > x2 <- rnorm(100) - (as.numeric(gr) - 1) * 0.5
 > 
 > it <- lc("independence_test",x1 + x2 ~ gr, distribution = approximate(B = 1000))
-[1] "Component \"p.value\": Mean absolute difference: 7e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.002"
 > 
 > psd <- pvalue(it, "step-down") # wasn't monotone
 > stopifnot(psd[1] == psd[2])
@@ -620,7 +618,7 @@ alternative hypothesis: true mu is not equal to 0
 > it <- lc("independence_test",y1 + y2 + y3 + y4 ~ x, data = df,
 +                         alternative = "greater",
 +                         distribution = approximate(B = 20))
-[1] "Component \"p.value\": Mean absolute difference: 0.0045"
+[1] "Component \"p.value\": Mean absolute difference: 0.001"
 > 
 > pss <- pvalue(it, "single-step")
 > psd <- pvalue(it, "step-down")
@@ -749,9 +747,9 @@ attr(,"assign")
 > x <- factor(rep(1:2, 15))
 > id <- gl(15, 2)
 > it <- lc("independence_test",y ~ x | id, distribution = "exact") # Wrong
-[1] "Component \"p.value\": Mean absolute difference: 0.0002389648"
+[1] "Component \"p.value\": Mean absolute difference: 6.103516e-05"
 > wt <- lc("wilcoxsign_test",y ~ x | id, distribution = "exact") # OK! p = 6.104e-5
-[1] "Component \"p.value\": Mean absolute difference: 0.0002389648"
+[1] "Component \"p.value\": Mean absolute difference: 6.103516e-05"
 > stopifnot(isequal(pvalue(it), pvalue(wt)))
 > 
 > ### chisq_test standardized test statistic was wrong
@@ -783,19 +781,19 @@ attr(,"assign")
 > 
 > ### maxstat_test didn't handle scores properly
 > mt0 <- lc("maxstat_test",counts ~ age, data = treepipit)
-[1] "Component \"p.value\": Mean absolute difference: 1.707995e-06"
+[1] TRUE
 > 
 > fage <- factor(treepipit$age) # -> wrong estimates
 > mt1 <- lc("maxstat_test",counts ~ fage, data = treepipit,
 +                     scores = list(fage = 1:4))
-[1] "Component \"p.value\": Mean absolute difference: 1.707995e-06"
+[1] TRUE
 > stopifnot(isequal(mt0@estimates$estimate$cutpoint,
 +                   max(as.numeric(mt1@estimates$estimate$cutpoint))))
 > 
 > oage <- ordered(treepipit$age) # -> error: oage is not a factor
 > mt2 <- lc("maxstat_test",counts ~ oage, data = treepipit,
 +                     scores = list(oage = 1:4))
-[1] "Component \"p.value\": Mean absolute difference: 1.707995e-06"
+[1] TRUE
 > stopifnot(isequal(mt0@estimates$estimate$cutpoint,
 +                   max(as.numeric(mt2@estimates$estimate$cutpoint))))
 > 
@@ -804,7 +802,7 @@ attr(,"assign")
 > x <- gl(2, 10)
 > alt <- "less"
 > at <- lc("ansari_test",y ~ x, alternative = alt)
-[1] "Component \"p.value\": Mean absolute difference: 0.9936979"
+[1] TRUE
 > stopifnot(isequal(at@statistic@alternative, alt))
 > 
 > ### objects of class "SymmetryProblem" didn't check validity
@@ -893,7 +891,7 @@ Warning messages:
 > it <- lc("independence_test",y ~ x | b, data = dta,
 +                         distribution = exact(algorithm = "shift"),
 +                         alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.000371875"
+[1] "Component \"p.value\": Mean absolute difference: 0.002671875"
 > stopifnot(is.numeric(dperm(it, support(it))))
 > ### see 'regtest_distribution.R' for more extensive checks
 > 
@@ -905,7 +903,7 @@ Warning messages:
 +                            Truth = c("Milk", "Tea")))
 > it <- lc("independence_test",as.table(TeaTasting),
 +                         distribution = exact(algorithm = "shift"))
-[1] "Component \"p.value\": Mean absolute difference: 0.003685714"
+[1] "Component \"p.value\": Mean absolute difference: 0.01228571"
 > stopifnot(!is.na(qperm(it, p = 1)))
 > 
 > ### dperm for *exact* tests returned a zero-length vector for values not
@@ -922,7 +920,7 @@ Warning messages:
 > it <- lc("independence_test",as.table(exfoliative),
 +                         distribution = approximate(B = 10000),
 +                         teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.0024"
+[1] "Component \"p.value\": Mean absolute difference: 0.0021"
 > stopifnot(isequal(round(dperm(it, -statistic(it)), 4), 0.0000)) # 0.0747
 > 
 > ### 'is_2sample' didn't drop unused levels, causing trouble with, e.g., subset
@@ -935,7 +933,7 @@ Warning messages:
 
 data:  y by x (1, 2) 
 	 stratified by b
-Z = 0.28735, p-value = 0.7738
+Z = 1.9868, p-value = 0.04694
 alternative hypothesis: true mu is not equal to 0
 
 > 
@@ -948,7 +946,7 @@ alternative hypothesis: true mu is not equal to 0
 
 data:  y by x (1, 2) 
 	 stratified by b
-Z = -0.29488, p-value = 0.7681
+Z = 2, p-value = 0.0455
 alternative hypothesis: true mu is not equal to 0
 
 > 
@@ -1088,4 +1086,4 @@ Error in quade_test.SymmetryProblem(object = <S4 object of class structure("Symm
 > 
 > proc.time()
    user  system elapsed 
-  3.164   0.068   3.227 
+ 10.020   0.100  10.111 

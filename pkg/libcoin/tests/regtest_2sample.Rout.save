@@ -7,8 +7,6 @@ R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
 
-  Natural language support but running in an English locale
-
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
 'citation()' on how to cite R or R packages in publications.
@@ -16,8 +14,6 @@ Type 'contributors()' for more information and
 Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
-
-[Previously saved workspace restored]
 
 > 
 > ### Regression tests for the 2 sample problem, i.e.,
@@ -27,14 +23,8 @@ Type 'q()' to quit R.
 > set.seed(290875)
 > library("coin")
 Loading required package: survival
-
-Attaching package: ‘survival’
-
-The following object is masked _by_ ‘.GlobalEnv’:
-
-    leukemia
-
 > library("libcoin")
+> source("check_vs_coin.R")
 > 
 > isequal <- coin:::isequal
 > options(useFancyQuotes = FALSE)
@@ -85,35 +75,35 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > stopifnot(isequal(pvalue(lc("wilcox_test",y ~ x, data = dat, distribution = "exact")),
 +                   ptwo))
-[1] "Component \"p.value\": Mean absolute difference: 0.002057394"
+[1] "Component \"p.value\": Mean absolute difference: 0.01075739"
 > stopifnot(isequal(pvalue(lc("wilcox_test",y ~ x, data = dat, alternative = "less",
 +                              distribution = "exact")), pless))
-[1] "Component \"p.value\": Mean absolute difference: 0.003178697"
+[1] "Component \"p.value\": Mean absolute difference: 0.006878697"
 > stopifnot(isequal(pvalue(lc("wilcox_test",y ~ x, data = dat, alternative = "greater",
 +                              distribution = "exact")), pgreater))
-[1] "Component \"p.value\": Mean absolute difference: 0.003344964"
+[1] "Component \"p.value\": Mean absolute difference: 0.007844964"
 > 
 > stopifnot(isequal(pvalue(lc("oneway_test",y ~ x, data = dat, distribution = "exact",
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo))), ptwo))
-[1] "Component \"p.value\": Mean absolute difference: 0.002057394"
+[1] "Component \"p.value\": Mean absolute difference: 0.01075739"
 > stopifnot(isequal(pvalue(lc("oneway_test",y ~ x, data = dat, distribution = "exact",
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
 +     alternative = "less")), pless))
-[1] "Component \"p.value\": Mean absolute difference: 0.003178697"
+[1] "Component \"p.value\": Mean absolute difference: 0.006878697"
 > stopifnot(isequal(pvalue(lc("oneway_test",y ~ x, data = dat, distribution = "exact",
 +     ytrafo = function(data) trafo(data, numeric_trafo = rank_trafo),
 +     alternative = "greater")), pgreater))
-[1] "Component \"p.value\": Mean absolute difference: 0.003344964"
+[1] "Component \"p.value\": Mean absolute difference: 0.007844964"
 > 
 > ### approximated distribution
 > rtwo <- pvalue(lc("wilcox_test",y ~ x, data = dat, distribution = "approx")) / ptwo
-[1] "Component \"p.value\": Mean absolute difference: 0.0048"
+[1] "Component \"p.value\": Mean absolute difference: 0.0135"
 > rless <- pvalue(lc("wilcox_test",y ~ x, data = dat, alternative = "less",
 +                    distribution = "approx")) / pless
-[1] "Component \"p.value\": Mean absolute difference: 0.0071"
+[1] "Component \"p.value\": Mean absolute difference: 0.0108"
 > rgreater <- pvalue(lc("wilcox_test",y ~ x, data = dat, alternative = "greater",
 +                    distribution = "approx")) / pgreater
-[1] "Component \"p.value\": Mean absolute difference: 0.0073"
+[1] "Component \"p.value\": Mean absolute difference: 0.0118"
 > stopifnot(all(c(rtwo, rless, rgreater) > 0.9 &
 +               c(rtwo, rless, rgreater) < 1.1))
 > 
@@ -123,13 +113,13 @@ The following object is masked _by_ ‘.GlobalEnv’:
 [1] TRUE
 [1] 0.1794892
 > pvalue(lc("wilcox_test",y ~ x | block, data = dat, distribution = "approx"))
-[1] "Component \"p.value\": Mean absolute difference: 0.0108"
+[1] "Component \"p.value\": Mean absolute difference: 0.009"
 [1] 0.192
 99 percent confidence interval:
  0.1819533 0.2023416 
 
 > pvalue(lc("wilcox_test",y ~ x | block, data = dat, distribution = "exact"))
-[1] "Component \"p.value\": Mean absolute difference: 0.003502797"
+[1] "Component \"p.value\": Mean absolute difference: 0.001702797"
 [1] 0.1847028
 > 
 > pvalue(lc("wilcox_test",y ~ x | block, data = dat, distribution = "asympt",
@@ -139,14 +129,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 0.08974461 
 > pvalue(lc("wilcox_test",y ~ x | block, data = dat, distribution = "approx",
 +                    alternative = "less"))
-[1] "Component \"p.value\": Mean absolute difference: 0.001"
+[1] "Component \"p.value\": Mean absolute difference: 9e-04"
 [1] 0.0949
 99 percent confidence interval:
  0.08749533 0.10269348 
 
 > pvalue(lc("wilcox_test",y ~ x | block, data = dat, distribution = "exact",
 +                    alternative = "less"))
-[1] "Component \"p.value\": Mean absolute difference: 0.0005433566"
+[1] "Component \"p.value\": Mean absolute difference: 0.0006433566"
 [1] 0.09335664
 > 
 > pvalue(lc("wilcox_test",y ~ x | block, data = dat, distribution = "asympt",
@@ -156,14 +146,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 0.9102554 
 > pvalue(lc("wilcox_test",y ~ x | block, data = dat, distribution = "approx",
 +                    alternative = "greater"))
-[1] "Component \"p.value\": Mean absolute difference: 2e-04"
+[1] "Component \"p.value\": Mean absolute difference: 3e-04"
 [1] 0.9083
 99 percent confidence interval:
  0.9006201 0.9155879 
 
 > pvalue(lc("wilcox_test",y ~ x | block, data = dat, distribution = "exact",
 +                    alternative = "greater"))
-[1] "Component \"p.value\": Mean absolute difference: 0.001377622"
+[1] "Component \"p.value\": Mean absolute difference: 0.001877622"
 [1] 0.9098776
 > 
 > ### sanity checks
@@ -187,10 +177,10 @@ Error in .local(.Object, ...) : 'block' is not a factor
 [1] TRUE
 > stopifnot(isequal(pvalue(lc("ansari_test",y ~ x, data = dat, alternative = "less")),
 +                   pless))
-[1] "Component \"p.value\": Mean absolute difference: 0.7916252"
+[1] TRUE
 > stopifnot(isequal(pvalue(lc("ansari_test",y ~ x, data = dat, alternative = "greater")),
 +                   pgreater))
-[1] "Component \"p.value\": Mean absolute difference: 0.7916252"
+[1] TRUE
 > 
 > stopifnot(isequal(pvalue(lc("oneway_test",y ~ x, data = dat, distribution = "asympt",
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
@@ -213,42 +203,42 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > ### <FIXME>: Definition of two-sided P-values! </FIXME>
 > (isequal(pvalue(lc("ansari_test",y ~ x, data = dat, distribution = "exact")),
 +                   ptwo))
-[1] "Component \"p.value\": Mean absolute difference: 0.001386271"
+[1] "Component \"p.value\": Mean absolute difference: 0.006586271"
 [1] 0.2125862712
 [1] 0.213574129
 [1] FALSE
 > stopifnot(isequal(pvalue(lc("ansari_test",y ~ x, data = dat, alternative = "less",
 +                              distribution = "exact")), pless))
-[1] "Component \"p.value\": Mean absolute difference: 0.7904129"
+[1] "Component \"p.value\": Mean absolute difference: 0.005212936"
 > stopifnot(isequal(pvalue(lc("ansari_test",y ~ x, data = dat, alternative = "greater",
 +                              distribution = "exact")), pgreater))
-[1] "Component \"p.value\": Mean absolute difference: 0.7896752"
+[1] "Component \"p.value\": Mean absolute difference: 0.004075194"
 > 
 > ### <FIXME>: Definition of two-sided P-values! </FIXME>
 > (isequal(pvalue(lc("oneway_test",y ~ x, data = dat, distribution = "exact",
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo))), ptwo))
-[1] "Component \"p.value\": Mean absolute difference: 0.001386271"
+[1] "Component \"p.value\": Mean absolute difference: 0.006586271"
 [1] 0.2125862712
 [1] 0.213574129
 [1] FALSE
 > stopifnot(isequal(pvalue(lc("oneway_test",y ~ x, data = dat, distribution = "exact",
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo),
 +     alternative = "greater")), pless))
-[1] "Component \"p.value\": Mean absolute difference: 0.0006129355"
+[1] "Component \"p.value\": Mean absolute difference: 0.005212936"
 > stopifnot(isequal(pvalue(lc("oneway_test",y ~ x, data = dat, distribution = "exact",
 +     ytrafo = function(data) trafo(data, numeric_trafo = ansari_trafo),
 +     alternative = "less")), pgreater))
-[1] "Component \"p.value\": Mean absolute difference: 0.0001248055"
+[1] "Component \"p.value\": Mean absolute difference: 0.004075194"
 > 
 > ### approximated distribution
 > rtwo <- pvalue(lc("ansari_test",y ~ x, data = dat, distribution = "approx")) / ptwo
-[1] "Component \"p.value\": Mean absolute difference: 0.0073"
+[1] "Component \"p.value\": Mean absolute difference: 0.0125"
 > rless <- pvalue(lc("ansari_test",y ~ x, data = dat, alternative = "less",
 +                    distribution = "approx")) / pless
-[1] "Component \"p.value\": Mean absolute difference: 0.7892"
+[1] "Component \"p.value\": Mean absolute difference: 0.004"
 > rgreater <- pvalue(lc("ansari_test",y ~ x, data = dat, alternative = "greater",
 +                    distribution = "approx")) / pgreater
-[1] "Component \"p.value\": Mean absolute difference: 0.789"
+[1] "Component \"p.value\": Mean absolute difference: 0.0034"
 > ### <FIXME> ??? </FIXME>
 > (all(c(rtwo, rless, rgreater) > 0.9 &
 +               c(rtwo, rless, rgreater) < 1.1))
@@ -573,7 +563,7 @@ alternative hypothesis: true theta is greater than 1
 > 
 > ### Wilcoxon Rank-Sum Test
 > wt <- lc("wilcox_test",y ~ x, data = location, conf.int = TRUE, di = "ex")
-[1] "Component \"p.value\": Mean absolute difference: 0.002298834"
+[1] "Component \"p.value\": Mean absolute difference: 0.01849883"
 > wt
 
 	Exact Wilcoxon-Mann-Whitney Test
@@ -594,7 +584,7 @@ difference in location
 > 
 > ### Normal Scores Test
 > nt <- lc("normal_test",y ~ x, data = location, conf.int = TRUE, di = "ex")
-[1] "Component \"p.value\": Mean absolute difference: 0.0008058275"
+[1] "Component \"p.value\": Mean absolute difference: 0.01750583"
 > nt
 
 	Exact Two-Sample van der Waerden (Normal Quantile) Test
@@ -614,7 +604,7 @@ difference in location
 > 
 > ### Median Test
 > lc("median_test",y ~ x, data = location, conf.int = TRUE, di = "ex")
-[1] "Component \"p.value\": Mean absolute difference: 0.003430381"
+[1] "Component \"p.value\": Mean absolute difference: 0.02126962"
 
 	Exact Two-Sample Brown-Mood Median Test
 
@@ -630,7 +620,7 @@ difference in location
 > 
 > ### Savage Test
 > lc("savage_test",y ~ x, data = location, conf.int = TRUE, di = "ex")
-[1] "Component \"p.value\": Mean absolute difference: 0.004390909"
+[1] "Component \"p.value\": Mean absolute difference: 0.01509091"
 
 	Exact Two-Sample Savage Test
 
@@ -653,7 +643,7 @@ difference in location
 > ### Ansari-Bradley Test
 > at <- lc("ansari_test",y ~ x, data = scale, di = "ex",
 +                   conf.int = TRUE, conf.level = 0.988)
-[1] "Component \"p.value\": Mean absolute difference: 0.002772883"
+[1] "Component \"p.value\": Mean absolute difference: 0.0006728827"
 > at
 
 	Exact Two-Sample Ansari-Bradley Test
@@ -674,7 +664,7 @@ ratio of scales
 > ### Taha Test
 > lc("taha_test",y ~ x, data = scale, di = "ex",
 +           conf.int = TRUE, conf.level = 0.54)
-[1] "Component \"p.value\": Mean absolute difference: 0.003295416"
+[1] "Component \"p.value\": Mean absolute difference: 0.03269542"
 
 	Exact Two-Sample Taha Test
 
@@ -691,7 +681,7 @@ ratio of scales
 > ### Klotz Test
 > lc("klotz_test",y ~ x, data = scale, di = "ex",
 +            conf.int = TRUE, conf.level = 0.988)
-[1] "Component \"p.value\": Mean absolute difference: 0.003979876"
+[1] "Component \"p.value\": Mean absolute difference: 0.007679876"
 
 	Exact Two-Sample Klotz Test
 
@@ -708,7 +698,7 @@ ratio of scales
 > ### Mood Test
 > lc("mood_test",y ~ x, data = scale, di = "ex",
 +           conf.int = TRUE, conf.level = 0.988)
-[1] "Component \"p.value\": Mean absolute difference: 0.001702098"
+[1] "Component \"p.value\": Mean absolute difference: 0.001902098"
 
 	Exact Two-Sample Mood Test
 
@@ -725,7 +715,7 @@ ratio of scales
 > ### Fligner-Killeen Test
 > lc("fligner_test",y ~ x, data = scale, di = "ex",
 +                   conf.int = TRUE, conf.level = 0.988)
-[1] "Component \"p.value\": Mean absolute difference: 0.001767754"
+[1] "Component \"p.value\": Mean absolute difference: 0.01046775"
 
 	Exact Two-Sample Fligner-Killeen Test
 
@@ -742,7 +732,7 @@ ratio of scales
 > ### Conover-Iman Test
 > lc("conover_test",y ~ x, data = scale, di = "ex",
 +              conf.int = TRUE, conf.level = 0.988)
-[1] "Component \"p.value\": Mean absolute difference: 0.00528073"
+[1] "Component \"p.value\": Mean absolute difference: 0.01738073"
 
 	Exact Two-Sample Conover-Iman Test
 
@@ -762,10 +752,10 @@ ratio of scales
 > x1 <- c(8 , 26 , -7 , -1 , 2 , 9 , 0 , -4 , 13 , 3 , 3 , 4)
 > pvalue(lc("wilcoxsign_test",y1~x1,alter="greater",dist=exact(),
 +                        zero.method = "Wilcoxon"))
-[1] "Component \"p.value\": Mean absolute difference: 0.005178906"
+[1] "Component \"p.value\": Mean absolute difference: 0.004121094"
 [1] 0.4741211
 > pvalue(lc("wilcoxsign_test",y1~x1,alter="greater",dist=exact()))
-[1] "Component \"p.value\": Mean absolute difference: 0.0048625"
+[1] "Component \"p.value\": Mean absolute difference: 0.0039375"
 [1] 0.4609375
 > 
 > 
@@ -851,4 +841,4 @@ Error in SR_shift_1sample(object, fact = attr(int, "fact")) :
 > 
 > proc.time()
    user  system elapsed 
-  6.412   0.164  21.080 
+  5.232   0.084   5.308 

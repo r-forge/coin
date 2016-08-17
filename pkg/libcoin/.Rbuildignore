@@ -1,4 +1,4 @@
 todo.txt
-inst/
+^inst
 src/libcoin.h
 src/libcoin-init.c

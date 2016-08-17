@@ -7,8 +7,6 @@ R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
 
-  Natural language support but running in an English locale
-
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
 'citation()' on how to cite R or R packages in publications.
@@ -16,8 +14,6 @@ Type 'contributors()' for more information and
 Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
-
-[Previously saved workspace restored]
 
 > 
 > ### Regression tests for the K sample problem, i.e.,
@@ -27,14 +23,8 @@ Type 'q()' to quit R.
 > set.seed(290875)
 > library("coin")
 Loading required package: survival
-
-Attaching package: ‘survival’
-
-The following object is masked _by_ ‘.GlobalEnv’:
-
-    leukemia
-
 > library("libcoin")
+> source("check_vs_coin.R")
 > 
 > isequal <- coin:::isequal
 > options(useFancyQuotes = FALSE)
@@ -57,7 +47,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > ### approximated distribution
 > rtwo <- pvalue(lc("kruskal_test",y ~ x, data = dat, distribution = "approx")) / ptwo
-[1] "Component \"p.value\": Mean absolute difference: 0.0029"
+[1] "Component \"p.value\": Mean absolute difference: 0.0046"
 > stopifnot(all(rtwo > 0.9 &
 +               rtwo < 1.1))
 > 
@@ -86,7 +76,7 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > 
 > ### approximated distribution
 > rtwo <- pvalue(lc("fligner_test",y ~ x, data = dat, distribution = "approx")) / ptwo
-[1] "Component \"p.value\": Mean absolute difference: 2e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0078"
 > stopifnot(all(rtwo > 0.9 &
 +               rtwo < 1.1))
 > 
@@ -690,4 +680,4 @@ alternative hypothesis: greater
 > 
 > proc.time()
    user  system elapsed 
-  4.584   0.152  14.242 
+  1.580   0.060   1.637 

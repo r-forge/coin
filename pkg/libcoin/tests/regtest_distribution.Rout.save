@@ -7,8 +7,6 @@ R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
 
-  Natural language support but running in an English locale
-
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
 'citation()' on how to cite R or R packages in publications.
@@ -17,21 +15,13 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-[Previously saved workspace restored]
-
 > ### Regression tests for the distribution functions
 > 
 > set.seed(290875)
 > library("coin")
 Loading required package: survival
-
-Attaching package: ‘survival’
-
-The following object is masked _by_ ‘.GlobalEnv’:
-
-    leukemia
-
 > library("libcoin")
+> source("check_vs_coin.R")
 > 
 > isequal <- coin:::isequal
 > options(useFancyQuotes = FALSE)
@@ -76,7 +66,7 @@ Error in vdW_split_up_2sample(object) :
 > ### two-sample without block
 > it <- lc("independence_test",y ~ x, data = dta,
 +                         distribution = exact(algo = "auto"))
-[1] "Component \"p.value\": Mean absolute difference: 0.0034931"
+[1] "Component \"p.value\": Mean absolute difference: 0.0092931"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (van de Wiel Split-Up Algorithm)"
 > pvalue(it)
@@ -89,7 +79,7 @@ Error in .local(object, ...) :
 > 
 > it <- lc("independence_test",y ~ x, data = dta,
 +                         distribution = exact(algo = "split-up"))
-[1] "Component \"p.value\": Mean absolute difference: 0.0034931"
+[1] "Component \"p.value\": Mean absolute difference: 0.0092931"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (van de Wiel Split-Up Algorithm)"
 > pvalue(it)
@@ -116,7 +106,7 @@ Error in .local(object, ...) :
 > ### two-sample with block
 > it <- lc("independence_test",y5 ~ x | b, data = dta,
 +                         distribution = exact(algo = "auto", fact = 1e5))
-[1] "Component \"p.value\": Mean absolute difference: 1e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0107"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
@@ -124,7 +114,7 @@ Error in .local(object, ...) :
 > 
 > it <- lc("independence_test",y5 ~ x | b, data = dta,
 +                         distribution = exact(algo = "shift", fact = 1e5))
-[1] "Component \"p.value\": Mean absolute difference: 1e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0107"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
@@ -138,7 +128,7 @@ Error in vdW_split_up_2sample(object) :
 > ### two-sample without block
 > it <- lc("independence_test",y5 ~ x, data = dta,
 +                         distribution = exact(algo = "auto", fact = 1e5))
-[1] "Component \"p.value\": Mean absolute difference: 0.003482275"
+[1] "Component \"p.value\": Mean absolute difference: 0.009282275"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
@@ -146,7 +136,7 @@ Error in vdW_split_up_2sample(object) :
 > 
 > it <- lc("independence_test",y5 ~ x, data = dta,
 +                         distribution = exact(algo = "shift", fact = 1e5))
-[1] "Component \"p.value\": Mean absolute difference: 0.003482275"
+[1] "Component \"p.value\": Mean absolute difference: 0.009282275"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
@@ -154,7 +144,7 @@ Error in vdW_split_up_2sample(object) :
 > 
 > it <- lc("independence_test",y5 ~ x, data = dta,
 +                         distribution = exact(algo = "split-up"))
-[1] "Component \"p.value\": Mean absolute difference: 0.003482275"
+[1] "Component \"p.value\": Mean absolute difference: 0.009282275"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (van de Wiel Split-Up Algorithm)"
 > pvalue(it)
@@ -163,7 +153,7 @@ Error in vdW_split_up_2sample(object) :
 > ### paired two-sample
 > st <- lc("symmetry_test",y5 ~ x | b, data = dta2, paired = TRUE,
 +                     distribution = exact(algo = "auto", fact = 1e5))
-[1] "Component \"p.value\": Mean absolute difference: 0.004465906"
+[1] "Component \"p.value\": Mean absolute difference: 0.001865906"
 > st@distribution@name
 [1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(st)
@@ -171,7 +161,7 @@ Error in vdW_split_up_2sample(object) :
 > 
 > st <- lc("symmetry_test",y5 ~ x | b, data = dta2, paired = TRUE,
 +                     distribution = exact(algo = "shift", fact = 1e5))
-[1] "Component \"p.value\": Mean absolute difference: 0.004465906"
+[1] "Component \"p.value\": Mean absolute difference: 0.001865906"
 > st@distribution@name
 [1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(st)
@@ -187,7 +177,7 @@ Error in .local(object, ...) :
 > ### two-sample with block
 > it <- lc("independence_test",y3 ~ x | b, data = dta,
 +                         distribution = exact(algo = "auto"))
-[1] "Component \"p.value\": Mean absolute difference: 2e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0109"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
@@ -195,7 +185,7 @@ Error in .local(object, ...) :
 > 
 > it <- lc("independence_test",y3 ~ x | b, data = dta,
 +                         distribution = exact(algo = "shift"))
-[1] "Component \"p.value\": Mean absolute difference: 2e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0109"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
@@ -209,7 +199,7 @@ Error in vdW_split_up_2sample(object) :
 > ### two-sample without block
 > it <- lc("independence_test",y3 ~ x, data = dta,
 +                         distribution = exact(algo = "auto"))
-[1] "Component \"p.value\": Mean absolute difference: 0.003354948"
+[1] "Component \"p.value\": Mean absolute difference: 0.01005495"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
@@ -217,7 +207,7 @@ Error in vdW_split_up_2sample(object) :
 > 
 > it <- lc("independence_test",y3 ~ x, data = dta,
 +                         distribution = exact(algo = "shift"))
-[1] "Component \"p.value\": Mean absolute difference: 0.003354948"
+[1] "Component \"p.value\": Mean absolute difference: 0.01005495"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(it)
@@ -225,7 +215,7 @@ Error in vdW_split_up_2sample(object) :
 > 
 > it <- lc("independence_test",y3 ~ x, data = dta,
 +                         distribution = exact(algo = "split-up"))
-[1] "Component \"p.value\": Mean absolute difference: 0.003354948"
+[1] "Component \"p.value\": Mean absolute difference: 0.01005495"
 > it@distribution@name
 [1] "Exact Distribution for Independent Two-Sample Tests (van de Wiel Split-Up Algorithm)"
 > pvalue(it)
@@ -234,7 +224,7 @@ Error in vdW_split_up_2sample(object) :
 > ### paired two-sample
 > st <- lc("symmetry_test",y3 ~ x | b, data = dta2, paired = TRUE,
 +                     distribution = exact(algo = "auto"))
-[1] "Component \"p.value\": Mean absolute difference: 0.004505142"
+[1] "Component \"p.value\": Mean absolute difference: 0.002005142"
 > st@distribution@name
 [1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(st)
@@ -242,7 +232,7 @@ Error in vdW_split_up_2sample(object) :
 > 
 > st <- lc("symmetry_test",y3 ~ x | b, data = dta2, paired = TRUE,
 +                     distribution = exact(algo = "shift"))
-[1] "Component \"p.value\": Mean absolute difference: 0.004505142"
+[1] "Component \"p.value\": Mean absolute difference: 0.002005142"
 > st@distribution@name
 [1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > pvalue(st)
@@ -257,16 +247,16 @@ Error in .local(object, ...) :
 > ### check exact tests with weights
 > itw1 <- lc("independence_test",y3 ~ x, data = dta, weights = ~ w,
 +                           distribution = exact(algorithm = "shift"))
-[1] "Component \"p.value\": Mean absolute difference: 0.000109591"
+[1] "Component \"p.value\": Mean absolute difference: 0.003209591"
 > itw2 <- lc("independence_test",y3 ~ x, data = dta, weights = ~ w,
 +                           distribution = exact(algorithm = "split-up"))
-[1] "Component \"p.value\": Mean absolute difference: 0.000109591"
+[1] "Component \"p.value\": Mean absolute difference: 0.003209591"
 > y3w <- with(dta, rep(y3, w))
 > xw <- with(dta, rep(x, w))
 > it1 <- lc("independence_test",y3w ~ xw, distribution = exact(algorithm = "shift"))
-[1] "Component \"p.value\": Mean absolute difference: 0.000109591"
+[1] "Component \"p.value\": Mean absolute difference: 0.003209591"
 > it2 <- lc("independence_test",y3w ~ xw, distribution = exact(algorithm = "split-up"))
-[1] "Component \"p.value\": Mean absolute difference: 0.000109591"
+[1] "Component \"p.value\": Mean absolute difference: 0.003209591"
 > stopifnot(isequal(pvalue(itw1), pvalue(it1)))
 > stopifnot(isequal(pvalue(itw1), pvalue(it2)))
 > stopifnot(isequal(pvalue(itw2), pvalue(it1)))
@@ -278,18 +268,18 @@ Error in .local(object, ...) :
 +                            c("Convicted", "Not convicted")))
 > itw1 <- lc("independence_test",as.table(Convictions), alternative = "less",
 +                           distribution = exact(algorithm = "shift"))
-[1] "Component \"p.value\": Mean absolute difference: 6.518094e-05"
+[1] "Component \"p.value\": Mean absolute difference: 0.0004651809"
 > itw2 <- lc("independence_test",as.table(Convictions), alternative = "less",
 +                           distribution = exact(algorithm = "split-up"))
-[1] "Component \"p.value\": Mean absolute difference: 6.518094e-05"
+[1] "Component \"p.value\": Mean absolute difference: 0.0004651809"
 > it1 <- lc("independence_test",Var2 ~ Var1, alternative = "less",
 +                          data = coin:::table2df(as.table(Convictions)),
 +                          distribution = exact(algorithm = "shift"))
-[1] "Component \"p.value\": Mean absolute difference: 6.518094e-05"
+[1] "Component \"p.value\": Mean absolute difference: 0.0004651809"
 > it2 <- lc("independence_test",Var2 ~ Var1, alternative = "less",
 +                          data = coin:::table2df(as.table(Convictions)),
 +                          distribution = exact(algorithm = "split-up"))
-[1] "Component \"p.value\": Mean absolute difference: 6.518094e-05"
+[1] "Component \"p.value\": Mean absolute difference: 0.0004651809"
 > stopifnot(isequal(pvalue(itw1), pvalue(it1)))
 > stopifnot(isequal(pvalue(itw1), pvalue(it2)))
 > stopifnot(isequal(pvalue(itw2), pvalue(it1)))
@@ -313,7 +303,7 @@ Error in .local(object, ...) :
 > ### shift without block
 > it1_SR <- lc("independence_test",y ~ x, data = dta1,
 +                             distribution = exact(algorithm = "shift"))
-[1] "Component \"p.value\": Mean absolute difference: 0.008695681"
+[1] "Component \"p.value\": Mean absolute difference: 0.001495681"
 > supp_it1_SR <- support(it1_SR)
 > stopifnot(!is.unsorted(supp_it1_SR))
 > stopifnot(all(supp_it1_SR == unique(supp_it1_SR)))
@@ -1515,7 +1505,7 @@ Error in .local(object, ...) :
 > ### split-up without block
 > it1_vdW <- lc("independence_test",y ~ x, data = dta1,
 +                              distribution = exact(algorithm = "split-up"))
-[1] "Component \"p.value\": Mean absolute difference: 0.008695681"
+[1] "Component \"p.value\": Mean absolute difference: 0.001495681"
 > round(pp_it1_vdW <- pperm(it1_vdW, supp_it1_SR), 7)
    [1] 0.0000206 0.0000411 0.0000823 0.0001028 0.0001440 0.0001645 0.0002057
    [8] 0.0002468 0.0002674 0.0003085 0.0003497 0.0004114 0.0004731 0.0005142
@@ -2133,7 +2123,7 @@ Error in .local(object, ...) :
 > ### shift with block
 > it2_SR <- lc("independence_test",y ~ x | b, data = dta1,
 +                             distribution = exact(algorithm = "shift"))
-[1] "Component \"p.value\": Mean absolute difference: 0.00034375"
+[1] "Component \"p.value\": Mean absolute difference: 0.00734375"
 > supp_it2_SR <- support(it2_SR)
 > stopifnot(!is.unsorted(supp_it2_SR))                         # failed in < 1.1-0
 > stopifnot(all(supp_it2_SR == unique(supp_it2_SR)))           # failed in < 1.1-0
@@ -2291,7 +2281,7 @@ Error in .local(object, ...) :
 > st3_SR <- lc("symmetry_test",y ~ x | b, data = dta2,
 +                         distribution = exact(algorithm = "shift"),
 +                         paired = TRUE)
-[1] "Component \"p.value\": Mean absolute difference: 0.00034375"
+[1] "Component \"p.value\": Mean absolute difference: 0.00734375"
 > supp_st3_SR <- support(st3_SR)
 > stopifnot(!is.unsorted(supp_st3_SR))
 > stopifnot(all(supp_st3_SR == unique(supp_st3_SR)))
@@ -2456,11 +2446,11 @@ Error in .local(object, ...) :
 > itq1 <- lc("independence_test",y ~ x | b, data = dta1,
 +                           distribution = exact(algorithm = "shift"),
 +                           teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.00514375"
+[1] "Component \"p.value\": Mean absolute difference: 0.00734375"
 > its1 <- lc("independence_test",y ~ x | b, data = dta1,
 +                           distribution = exact(algorithm = "shift"),
 +                           teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.00034375"
+[1] "Component \"p.value\": Mean absolute difference: 0.00734375"
 > stopifnot(isequal(statistic(itq1), statistic(its1)^2))
 > stopifnot(isequal(pvalue(itq1), pvalue(its1)))
 > stopifnot(isequal(support(itq1), support(its1)[support(its1) >= 0]^2))
@@ -2469,11 +2459,11 @@ Error in .local(object, ...) :
 > sts2 <- lc("symmetry_test",y ~ x | b, data = dta2,
 +                       distribution = exact(algorithm = "shift"),
 +                       paired = TRUE, teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.00034375"
+[1] "Component \"p.value\": Mean absolute difference: 0.00734375"
 > stq2 <- lc("symmetry_test",y ~ x | b, data = dta2,
 +                       distribution = exact(algorithm = "shift"),
 +                       paired = TRUE, teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.00244375"
+[1] "Component \"p.value\": Mean absolute difference: 0.00734375"
 > stopifnot(isequal(statistic(stq2), statistic(sts2)^2))
 > stopifnot(isequal(pvalue(stq2), pvalue(sts2)))
 > stopifnot(isequal(support(stq2), support(sts2)[support(sts2) >= 0]^2))
@@ -2487,7 +2477,7 @@ Error in .local(object, ...) :
 > tab <- as.table(matrix(c(3, 0, 0, 3), ncol = 2))
 > itq <- lc("independence_test",tab, distribution = exact(algorithm = "shift"),
 +                          teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.1"
+[1] "Component \"p.value\": Mean absolute difference: 0.002"
 > stopifnot(is.numeric(dperm(itq, statistic(itq))))
 > 
 > 
@@ -2530,10 +2520,10 @@ Error in .local(object, ...) :
 [1] NA
 > #stopifnot(isequal(dp_mam, c(dperm(it_mam, 1), dperm(it_mam, 2))))
 > round(pp_mam <- pperm(it_mam, 0:1), 7)                       # failed in < 1.1-0
-[1] 0.0000000 0.4668103
+[1] 0.0000000 0.4670858
 > stopifnot(isequal(pp_mam, c(pperm(it_mam, 0), pperm(it_mam, 1))))
 > round(qp_mam <- qperm(it_mam, c(0.5, 0.75)), 7)              # failed in < 1.1-0
-[1] 1.050821 1.497571
+[1] 1.050401 1.497178
 > stopifnot(isequal(qp_mam, c(qperm(it_mam, 0.5), qperm(it_mam, 0.75))))
 > 
 > ### multivariate, asymptotic and quad
@@ -2553,12 +2543,12 @@ Error in .local(object, ...) :
 > ### univariate, approximate and scalar
 > it_ums <- lc("independence_test",y1 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.0095"
+[1] "Component \"p.value\": Mean absolute difference: 0.0218"
 > round(dp_ums <- dperm(it_ums, 0:1), 7)
-[1] 0.0267 0.0000
+[1] 0.0285 0.0000
 > stopifnot(isequal(dp_ums, c(dperm(it_ums, 0), dperm(it_ums, 1))))
 > round(pp_ums <- pperm(it_ums, 0:1), 7)
-[1] 0.5050 0.8419
+[1] 0.5088 0.8402
 > stopifnot(isequal(pp_ums, c(pperm(it_ums, 0), pperm(it_ums, 1))))
 > round(qp_ums <- qperm(it_ums, c(0.5, 0.75)), 7)
 [1] 0.0000000 0.6803361
@@ -2567,49 +2557,49 @@ Error in .local(object, ...) :
 > ### univariate, approximate and quad
 > it_umq <- lc("independence_test",y1 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.0712"
+[1] "Component \"p.value\": Mean absolute difference: 0.0218"
 > round(dp_umq <- dperm(it_umq, 0:1), 7)
-[1] 0.0267 0.0000
+[1] 0.0285 0.0000
 > stopifnot(isequal(dp_umq, c(dperm(it_umq, 0), dperm(it_umq, 1))))
 > round(pp_umq <- pperm(it_umq, 0:1), 7)
-[1] 0.0267 0.6886
+[1] 0.0285 0.6804
 > stopifnot(isequal(pp_umq, c(pperm(it_umq, 0), pperm(it_umq, 1))))
 > round(qp_umq <- qperm(it_umq, c(0.5, 0.75)), 7)
-[1] 0.4628571 1.2857143
+[1] 0.4628571 1.4628571
 > stopifnot(isequal(qp_umq, c(qperm(it_umq, 0.5), qperm(it_umq, 0.75))))
 > 
 > ### multivariate, approximate and max
 > it_mmm <- lc("independence_test",y1 + y2 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "max")
-[1] "Component \"p.value\": Mean absolute difference: 0.003"
+[1] "Component \"p.value\": Mean absolute difference: 0.0029"
 > round(dp_mmm <- dperm(it_mmm, c(0, 1)), 7)
-[1] 9e-04 0e+00
+[1] 0.0011 0.0000
 > stopifnot(isequal(dp_mmm, c(dperm(it_mmm, 0), dperm(it_mmm, 1))))
 > round(pp_mmm <- pperm(it_mmm, 0:1), 7)
-[1] 0.0009 0.4545
+[1] 0.0011 0.4513
 > stopifnot(isequal(pp_mmm, c(pperm(it_mmm, 0), pperm(it_mmm, 1))))
 > round(qp_mmm <- qperm(it_mmm, c(0.5, 0.75)), 7)
-[1] 1.058301 1.511858
+[1] 1.133893 1.511858
 > stopifnot(isequal(qp_mmm, c(qperm(it_mmm, 0.5), qperm(it_mmm, 0.75))))
 > 
 > ### multivariate, approximate and quad
 > it_mmq <- lc("independence_test",y1 + y2 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.0042"
+[1] "Component \"p.value\": Mean absolute difference: 8e-04"
 > round(dp_mmq <- dperm(it_mmq, 0:1), 7)
-[1] 9e-04 0e+00
+[1] 0.0011 0.0000
 > stopifnot(isequal(dp_mmq, c(dperm(it_mmq, 0), dperm(it_mmq, 1))))
 > round(pp_mmq <- pperm(it_mmq, 0:1), 7)
-[1] 0.0009 0.3696
+[1] 0.0011 0.3697
 > stopifnot(isequal(pp_mmq, c(pperm(it_mmq, 0), pperm(it_mmq, 1))))
 > round(qp_mmq <- qperm(it_mmq, c(0.5, 0.75)), 7)
-[1] 1.498783 2.908442
+[1] 1.499123 2.877637
 > stopifnot(isequal(qp_mmq, c(qperm(it_mmq, 0.5), qperm(it_mmq, 0.75))))
 > 
 > ### univariate, exact and scalar
 > it_ues <- lc("independence_test",y1 ~ x,  data = dta,
 +                             distribution = "exact", teststat = "scalar")
-[1] "Component \"p.value\": Mean absolute difference: 0.007928305"
+[1] "Component \"p.value\": Mean absolute difference: 0.02478947"
 > round(dp_ues <- dperm(it_ues, 0:1), 7)
 [1] 0.0294875 0.0000000
 > stopifnot(isequal(dp_ues, c(dperm(it_ues, 0), dperm(it_ues, 1))))
@@ -2623,7 +2613,7 @@ Error in .local(object, ...) :
 > ### univariate, exact and quad
 > it_ueq <- lc("independence_test",y1 ~ x,  data = dta,
 +                             distribution = "exact", teststat = "quad")
-[1] "Component \"p.value\": Mean absolute difference: 0.06962831"
+[1] "Component \"p.value\": Mean absolute difference: 0.02478947"
 > round(dp_ueq <- dperm(it_ueq, 0:1), 7)
 [1] 0.0294875 0.0000000
 > stopifnot(isequal(dp_ueq, c(dperm(it_ueq, 0), dperm(it_ueq, 1))))
@@ -2636,4 +2626,4 @@ Error in .local(object, ...) :
 > 
 > proc.time()
    user  system elapsed 
- 11.688   0.544  28.907 
+ 27.864   0.328  28.174 

@@ -23,6 +23,7 @@ Type 'q()' to quit R.
 > library("coin")
 Loading required package: survival
 > library("libcoin")
+> source("check_vs_coin.R")
 > 
 > isequal <- coin:::isequal
 > options(useFancyQuotes = FALSE)
@@ -96,7 +97,7 @@ Loading required package: survival
 > mt <- lc("maxstat_test",w ~ x, data = dat)
 [1] TRUE
 Warning message:
-In Test(lev, xtrafo = "id", type = teststat, alternative = alternative) :
+In doTest(lev, teststat = teststat, alternative = alternative) :
   cmvnorm: completion with ERROR > EPS
 > mt
 
@@ -115,9 +116,6 @@ sample estimates:
 > 
 > mt <- lc("maxstat_test",w ~ y, data = dat)
 [1] TRUE
-Warning message:
-In Test(lev, xtrafo = "id", type = teststat, alternative = alternative) :
-  cmvnorm: completion with ERROR > EPS
 > mt
 
 	Asymptotic Generalized Maximally Selected Statistics
@@ -155,7 +153,7 @@ sample estimates:
 > mt <- lc("maxstat_test",w ~ x + y + z, data = dat)
 [1] TRUE
 Warning message:
-In Test(lev, xtrafo = "id", type = teststat, alternative = alternative) :
+In doTest(lev, teststat = teststat, alternative = alternative) :
   cmvnorm: completion with ERROR > EPS
 > mt
 
@@ -194,4 +192,4 @@ sample estimates:
 > 
 > proc.time()
    user  system elapsed 
-  4.428   0.032   4.455 
+  4.872   0.028   4.893 

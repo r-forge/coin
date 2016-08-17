@@ -7,8 +7,6 @@ R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
 
-  Natural language support but running in an English locale
-
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
 'citation()' on how to cite R or R packages in publications.
@@ -17,22 +15,14 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-[Previously saved workspace restored]
-
 > 
 > ### compare output for examples from StatXact 6 manual with
 > ### StatXact 6 output as given in the manual
 > 
 > library("coin")
 Loading required package: survival
-
-Attaching package: ‘survival’
-
-The following object is masked _by_ ‘.GlobalEnv’:
-
-    leukemia
-
 > library("libcoin")
+> source("check_vs_coin.R")
 > 
 > set.seed(290875)
 > isequal <- coin:::isequal
@@ -56,7 +46,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > # exact p-value, page 306
 > btMC <- lc("mh_test",presidents, distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.1515"
+[1] "Component \"p.value\": Mean absolute difference: 4e-04"
 > pci <- attr(pvalue(btMC), "conf.int")
 > stopifnot(pci[1] < 0.2632 & pci[2] > 0.2632)
 > 
@@ -101,7 +91,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > # exact p-value, page 313
 > btMC <- lc("mh_test",pathologists, scores = list(response = 1:5),
 +                     distribution = approximate(B = 10000))
-[1] TRUE
+[1] "Component \"p.value\": Mean absolute difference: 0.0139"
 > pci <- attr(pvalue(btMC), "conf.int")
 > stopifnot(pci[1] < 0.3073 & pci[2] > 0.3073)
 > 
@@ -128,7 +118,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > wtel <- lc("wilcox_test",bp ~ group, data = bloodp, distribution = "exact",
 +                      alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.001887546"
+[1] "Component \"p.value\": Mean absolute difference: 0.006212454"
 > 
 > # one-sided exact p-value, page 342
 > stopifnot(isequal(round(pvalue(wtel), 4), 0.0542))
@@ -144,7 +134,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > # one-sided approximated p-value
 > wtMC <- lc("wilcox_test",bp ~ group, data = bloodp, alternative = "greater",
 +                     distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0032"
+[1] "Component \"p.value\": Mean absolute difference: 0.0049"
 > pci <- attr(pvalue(wtMC), "conf.int")
 > 
 > stopifnot(pci[1] < pvalue(wtel) & pci[2] > pvalue(wtel))
@@ -161,14 +151,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > nte <- lc("normal_test",bp ~ group, data = bloodp, distribution = "exact",
 +     ties.method = "average")
-[1] "Component \"p.value\": Mean absolute difference: 0.0003465201"
+[1] "Component \"p.value\": Mean absolute difference: 0.00114652"
 > 
 > # two-sided exact p-value, page 354
 > stopifnot(isequal(round(pvalue(nte), 4), 0.0799))
 > 
 > ntel <- lc("normal_test",bp ~ group, data = bloodp, distribution = "exact",
 +     ties.method = "average", alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0004461538"
+[1] "Component \"p.value\": Mean absolute difference: 0.003153846"
 > 
 > # one-sided exact p-value, page 354
 > stopifnot(isequal(round(pvalue(ntel), 4), 0.0462))
@@ -185,7 +175,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ntMC <- lc("normal_test",bp ~ group, data = bloodp, alternative = "greater",
 +                     distribution = approximate(B = 10000),
 +                     ties.method = "average")
-[1] "Component \"p.value\": Mean absolute difference: 7e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0029"
 > pci <- attr(pvalue(ntMC), "conf.int")
 > 
 > stopifnot(pci[1] < pvalue(ntel) & pci[2] > pvalue(ntel))
@@ -200,14 +190,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > stopifnot(isequal(round(pvalue(pta), 4), 0.1070))
 > 
 > pte <- lc("oneway_test",bp ~ group, data = bloodp, distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.001029304"
+[1] "Component \"p.value\": Mean absolute difference: 2.930403e-05"
 > 
 > # two-sided exact p-value, page 394
 > stopifnot(isequal(round(pvalue(pte), 4), 0.1040))
 > 
 > ptel <- lc("oneway_test",bp ~ group, data = bloodp, distribution = "exact",
 +                   alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.0004102564"
+[1] "Component \"p.value\": Mean absolute difference: 0.007410256"
 > 
 > # one-sided exact p-value, page 394
 > stopifnot(isequal(round(pvalue(ptel), 4), 0.0564))
@@ -215,7 +205,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > # two-sided approximated p-value
 > ptMC <- lc("oneway_test",bp ~ group, data = bloodp,
 +                   distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0015"
+[1] "Component \"p.value\": Mean absolute difference: 5e-04"
 > pci <- attr(pvalue(ptMC), "conf.int")
 > 
 > stopifnot(pci[1] < pvalue(pte) & pci[2] > pvalue(pte))
@@ -223,7 +213,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > # one-sided approximated p-value
 > ptMC <- lc("oneway_test",bp ~ group, data = bloodp, alternative = "greater",
 +                   distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 8e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0062"
 > pci <- attr(pvalue(ptMC), "conf.int")
 > 
 > stopifnot(pci[1] < pvalue(ptel) & pci[2] > pvalue(ptel))
@@ -243,14 +233,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > wte <- lc("wilcox_test",Salary ~ Gender | Year, data = employment,
 +                    distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 9e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.002"
 > 
 > # two-sided exact p-value, page 346
 > stopifnot(isequal(round(pvalue(wte), 4), 0.04))
 > 
 > wtel <- lc("wilcox_test",Salary ~ Gender | Year, data = employment,
 +                     distribution = "exact", alternative = "less")
-[1] "Component \"p.value\": Mean absolute difference: 9e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.002"
 > 
 > # one-sided exact p-value, page 346
 > stopifnot(isequal(round(pvalue(wtel), 4), 0.04))
@@ -258,7 +248,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > # two-sided approximated p-value
 > wtMC <- lc("wilcox_test",Salary ~ Gender | Year, data = employment,
 +                     distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 3e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0014"
 > pci <- attr(pvalue(wtMC), "conf.int")
 > 
 > stopifnot(pci[1] < pvalue(wte) & pci[2] > pvalue(wte))
@@ -267,7 +257,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > wtMC <- lc("wilcox_test",Salary ~ Gender | Year, data = employment,
 +                     alternative = "less",
 +                     distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 3e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0014"
 > pci <- attr(pvalue(wtMC), "conf.int")
 > 
 > stopifnot(pci[1] < pvalue(wtel) & pci[2] > pvalue(wtel))
@@ -298,7 +288,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > # two-sided approximated p-value
 > ntMC <- lc("normal_test",Salary ~ Gender | Year, data = employment,
 +     ties.method = "average", distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 3e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0014"
 > pci <- attr(pvalue(ntMC), "conf.int")
 > 
 > stopifnot(pci[1] < 0.04 & pci[2] > 0.04)
@@ -307,7 +297,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ntMC <- lc("normal_test",Salary ~ Gender | Year, data = employment,
 +                     alternative = "less", distribution = approximate(B = 10000),
 +                     ties.method = "average")
-[1] "Component \"p.value\": Mean absolute difference: 3e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0014"
 > pci <- attr(pvalue(ntMC), "conf.int")
 > 
 > stopifnot(pci[1] < 0.04 & pci[2] > 0.04)
@@ -323,14 +313,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > pte <- lc("oneway_test",Salary ~ Gender | Year, data = employment,
 +                  distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 9e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.002"
 > 
 > # two-sided exact p-value, page 396
 > stopifnot(isequal(round(pvalue(pte), 4), 0.04))
 > 
 > ptel <- lc("oneway_test",Salary ~ Gender | Year, data = employment,
 +                   distribution = "exact", alternative = "less")
-[1] "Component \"p.value\": Mean absolute difference: 9e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.002"
 > 
 > # one-sided exact p-value, page 396
 > stopifnot(isequal(round(pvalue(ptel), 4), 0.04))
@@ -338,7 +328,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > # two-sided approximated p-value
 > ptMC <- lc("oneway_test",Salary ~ Gender | Year, data = employment,
 +                   distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 3e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0014"
 > pci <- attr(pvalue(ptMC), "conf.int")
 > 
 > stopifnot(pci[1] < pvalue(pte) & pci[2] > pvalue(pte))
@@ -347,7 +337,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ptMC <- lc("oneway_test",Salary ~ Gender | Year, data = employment,
 +                     alternative = "less",
 +                     distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 3e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0014"
 > pci <- attr(pvalue(ptMC), "conf.int")
 > 
 > stopifnot(pci[1] < pvalue(ptel) & pci[2] > pvalue(ptel))
@@ -372,14 +362,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > ate <- lc("ansari_test",cereal ~ machine, data = machines,
 +     ties.method = "average", distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.001280808"
+[1] "Component \"p.value\": Mean absolute difference: 0.001080808"
 > 
 > # two-sided exact p-value, page 182
 > stopifnot(isequal(round(pvalue(ate), 4), 0.0581))
 > 
 > atMC <- lc("ansari_test",cereal ~ machine, data = machines,
 +     ties.method = "average", distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0018"
+[1] "Component \"p.value\": Mean absolute difference: 0.0016"
 > pci <- attr(pvalue(atMC), "conf.int")
 > 
 > # two-sided approximated p-value, page 182
@@ -391,7 +381,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > atag <- lc("ansari_test",cereal ~ machine, data = machines,
 +     ties.method = "average", alternative = "greater")
-[1] "Component \"p.value\": Mean absolute difference: 0.9543179"
+[1] TRUE
 > 
 > # one-sided asymptotic p-value, page 182
 > stopifnot(isequal(round(pvalue(atag), 4), 0.0228))
@@ -399,7 +389,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ateg <- lc("ansari_test",cereal ~ machine, data = machines,
 +     ties.method = "average", alternative = "greater",
 +     distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.9525475"
+[1] "Component \"p.value\": Mean absolute difference: 0.002252525"
 > 
 > # one-sided exact p-value, page 182
 > stopifnot(isequal(round(pvalue(ateg), 4), 0.0253))
@@ -407,7 +397,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > atMC <- lc("ansari_test",cereal ~ machine, data = machines,
 +     ties.method = "average", alternative = "greater",
 +     distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.9523"
+[1] "Component \"p.value\": Mean absolute difference: 0.0025"
 > pci <- attr(pvalue(atMC), "conf.int")
 > 
 > # one-sided approximated p-value, page 182
@@ -428,14 +418,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > kte <- lc("klotz_test",cereal ~ machine, data = machines,
 +     ties.method = "average", distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.0008010101"
+[1] "Component \"p.value\": Mean absolute difference: 0.00410101"
 > 
 > # two-sided exact p-value, page 186
 > stopifnot(isequal(round(pvalue(kte), 4), 0.0101))
 > 
 > ktMC <- lc("klotz_test",cereal ~ machine, data = machines,
 +     ties.method = "average", distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0016"
+[1] "Component \"p.value\": Mean absolute difference: 0.0049"
 > pci <- attr(pvalue(ktMC), "conf.int")
 > 
 > # two-sided approximated p-value, page 186
@@ -451,7 +441,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > kteg <- lc("klotz_test",cereal ~ machine, data = machines,
 +     ties.method = "average", alternative = "greater",
 +     distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.0008010101"
+[1] "Component \"p.value\": Mean absolute difference: 0.00410101"
 > 
 > # one-sided exact p-value, page 186
 > stopifnot(isequal(round(pvalue(kteg), 4), 0.0101))
@@ -459,7 +449,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ktMC <- lc("klotz_test",cereal ~ machine, data = machines,
 +     ties.method = "average", alternative = "greater",
 +     distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0016"
+[1] "Component \"p.value\": Mean absolute difference: 0.0049"
 > pci <- attr(pvalue(ktMC), "conf.int")
 > 
 > # one-sided approximated p-value, page 186
@@ -480,14 +470,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > mte <- lc("mood_test",cereal ~ machine, data = machines,
 +     ties.method = "average", distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.0004020202"
+[1] "Component \"p.value\": Mean absolute difference: 0.00279798"
 > 
 > # two-sided exact p-value, page 190
 > stopifnot(isequal(round(pvalue(mte), 4), 0.0202))
 > 
 > mtMC <- lc("mood_test",cereal ~ machine, data = machines,
 +     ties.method = "average", distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0024"
+[1] "Component \"p.value\": Mean absolute difference: 8e-04"
 > pci <- attr(pvalue(mtMC), "conf.int")
 > 
 > # two-sided approximated p-value, page 190
@@ -503,7 +493,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > mteg <- lc("mood_test",cereal ~ machine, data = machines,
 +     ties.method = "average", alternative = "greater",
 +     distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.0008262626"
+[1] "Component \"p.value\": Mean absolute difference: 0.002626263"
 > 
 > # one-sided exact p-value, page 190
 > stopifnot(isequal(round(pvalue(mteg), 4), 0.0126))
@@ -511,7 +501,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > mtMC <- lc("mood_test",cereal ~ machine, data = machines,
 +     ties.method = "average", alternative = "greater",
 +     distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0019"
+[1] "Component \"p.value\": Mean absolute difference: 0.0037"
 > pci <- attr(pvalue(mtMC), "conf.int")
 > 
 > # one-sided approximated p-value, page 190
@@ -532,14 +522,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > cte <- lc("conover_test",ftime ~ tyretype, data = failure,
 +     distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.002432547"
+[1] "Component \"p.value\": Mean absolute difference: 0.003032547"
 > 
 > # two-sided exact p-value, page 195
 > stopifnot(isequal(round(pvalue(cte), 4), 0.1300))
 > 
 > ctMC <- lc("conover_test",ftime ~ tyretype, data = failure,
 +     distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0055"
+[1] "Component \"p.value\": Mean absolute difference: 0.0061"
 > pci <- attr(pvalue(ctMC), "conf.int")
 > 
 > # two-sided approximated p-value, page 195
@@ -554,14 +544,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > cteg <- lc("conover_test",ftime ~ tyretype, data = failure,
 +     alternative = "less", distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.005835707"
+[1] "Component \"p.value\": Mean absolute difference: 0.008635707"
 > 
 > # one-sided exact p-value, page 195
 > stopifnot(isequal(round(pvalue(cteg), 4), 0.0634))
 > 
 > ctMC <- lc("conover_test",ftime ~ tyretype, data = failure,
 +     alternative = "less", distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0062"
+[1] "Component \"p.value\": Mean absolute difference: 0.009"
 > pci <- attr(pvalue(ctMC), "conf.int")
 > 
 > # one-sided approximated p-value, page 195
@@ -587,14 +577,14 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > 
 > lte <- lc("logrank_test",Surv(time, cens) ~ group, data = lungcancer,
 +                     distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.000299001"
+[1] "Component \"p.value\": Mean absolute difference: 9.99001e-07"
 > 
 > # two-sided exact p-value, page 415
 > stopifnot(isequal(round(pvalue(lte), 4), 0.0010))
 > 
 > ltel <- lc("logrank_test",Surv(time, cens) ~ group, data = lungcancer,
 +                      distribution = "exact", alternative = "great")
-[1] "Component \"p.value\": Mean absolute difference: 0.000299001"
+[1] "Component \"p.value\": Mean absolute difference: 9.99001e-07"
 > 
 > # one-sided exact p-value, page 415
 > stopifnot(isequal(round(pvalue(ltel), 4), 0.0010))
@@ -602,7 +592,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > # two-sided approximated p-value
 > ltMC <- lc("logrank_test",Surv(time, cens) ~ group, data = lungcancer,
 +                      distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 4e-04"
+[1] "Component \"p.value\": Mean absolute difference: 1e-04"
 > pci <- attr(pvalue(ltMC), "conf.int")
 > 
 > stopifnot(pci[1] < pvalue(lte) & pci[2] > pvalue(lte))
@@ -611,7 +601,7 @@ The following object is masked _by_ ‘.GlobalEnv’:
 > ltMC <- lc("logrank_test",Surv(time, cens) ~ group, data = lungcancer,
 +                      alternative = "greater",
 +                      distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 4e-04"
+[1] "Component \"p.value\": Mean absolute difference: 1e-04"
 > pci <- attr(pvalue(ltMC), "conf.int")
 > 
 > stopifnot(pci[1] < pvalue(ltel) & pci[2] > pvalue(ltel))
@@ -640,7 +630,7 @@ alternative hypothesis: true theta is not equal to 1
 > pvalue(lc("logrank_test",Surv(time, event) ~ treatment | gender, data = srv,
 +                     ties = "average",
 +                     distribution = approximate(B = 10000)))
-[1] "Component \"p.value\": Mean absolute difference: 7e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0042"
 [1] 0.1542
 99 percent confidence interval:
  0.1450143 0.1637170 
@@ -669,7 +659,7 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > ftMC <- lc("friedman_test",skin ~  treatment | subject, data = hypnosis,
 +                       distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0054"
+[1] "Component \"p.value\": Mean absolute difference: 0.0064"
 > pci <- attr(pvalue(ftMC), "conf.int")
 > 
 > stopifnot(pci[1] < 0.0268 & pci[2] > 0.0268)
@@ -702,7 +692,7 @@ alternative hypothesis: true theta is not equal to 1
 > # approximative p-value
 > btMC <- lc("mh_test",response ~  treatment | subject,
 +     data = analgesic_eff, distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0126"
+[1] "Component \"p.value\": Mean absolute difference: 0.0022"
 > 
 > pci <- attr(pvalue(btMC), "conf.int")
 > stopifnot(pci[1] < 0.026 & pci[2] > 0.026)
@@ -728,7 +718,7 @@ alternative hypothesis: true theta is not equal to 1
 > # approximate p-value
 > ftMC <- lc("friedman_test",strength ~ potash | block, data = cotton,
 +                       distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 7e-04"
+[1] "Component \"p.value\": Mean absolute difference: 0.0017"
 > 
 > pci <- attr(pvalue(ftMC), "conf.int")
 > stopifnot(pci[1] < 0.005 & pci[2] > 0.005)
@@ -738,7 +728,7 @@ alternative hypothesis: true theta is not equal to 1
 > # approximate p-value
 > ftMC <- lc("friedman_test",strength ~ potash | block, data = cotton,
 +                       distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0104"
+[1] "Component \"p.value\": Mean absolute difference: 0.0013"
 > 
 > pci <- attr(pvalue(ftMC), "conf.int")
 > stopifnot(pci[1] < 0.0376 & pci[2] > 0.0376)
@@ -779,7 +769,7 @@ alternative hypothesis: true theta is not equal to 1
 +                               trafo(data, numeric_trafo = median_trafo),
 +                           teststat = "quad",
 +                           distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0287"
+[1] "Component \"p.value\": Mean absolute difference: 0.0156"
 > 
 > pci <- attr(pvalue(mtMC), "conf.int")
 > pvalue(mtMC)
@@ -896,13 +886,13 @@ alternative hypothesis: true theta is not equal to 1
 > stopifnot(isequal(round(pvalue(cta), 3), 0.051))
 > 
 > ctMC <- lc("chisq_test",a, distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.1289"
+[1] "Component \"p.value\": Mean absolute difference: 0.0114"
 > pci <- attr(pvalue(ctMC), "conf.int")
 > 
 > stopifnot(pci[1] < 0.1409 & pci[2] > 0.1409)
 > 
 > ctMC <- lc("cmh_test",a, distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.1289"
+[1] "Component \"p.value\": Mean absolute difference: 0.0114"
 > pci <- attr(pvalue(ctMC), "conf.int")
 > 
 > stopifnot(pci[1] < 0.1409 & pci[2] > 0.1409)
@@ -926,7 +916,7 @@ alternative hypothesis: true theta is not equal to 1
 [1] TRUE
 > 
 > ltMC <- lc("lbl_test",csom, distribution = approximate(B = 100))
-[1] "Component \"p.value\": Mean absolute difference: 0.0505"
+[1] "Component \"p.value\": Mean absolute difference: 0.066"
 > 
 > pci <- attr(pvalue(ltMC), "conf.int")
 > stopifnot(pci[1] < 0.179 & pci[2] > 0.179)
@@ -1001,7 +991,7 @@ alternative hypothesis: true theta is not equal to 1
 > ltMC <- lc("lbl_test",xtabs(number ~ dose + tumor + stratum, data = tumor),
 +                  scores = list(dose = c(0, 1, 5, 50)),
 +                  distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0053"
+[1] "Component \"p.value\": Mean absolute difference: 0.0035"
 > 
 > pci <- attr(pvalue(ltMC), "conf.int")
 > stopifnot(pci[1] < 0.0769 & pci[2] > 0.0769)
@@ -1024,7 +1014,7 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > btMC <- lc("mh_test",endo, scores = list(response = c(0, 0.2, 0.5125, 0.7)),
 +                     distribution = approximate(B = 10000))
-[1] TRUE
+[1] "Component \"p.value\": Mean absolute difference: 1e-04"
 > 
 > print(pvalue(btMC))
 [1] 1e-04
@@ -1054,7 +1044,7 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > # approximate p-value, page 947
 > ctMC <- lc("cmh_test",oral_lesions, distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0015"
+[1] "Component \"p.value\": Mean absolute difference: 0.0102"
 > 
 > pci <- attr(pvalue(ctMC), "conf.int")
 > stopifnot(pci[1] < 0.0269 & pci[2] > 0.0269)
@@ -1074,7 +1064,7 @@ alternative hypothesis: true theta is not equal to 1
 > stopifnot(isequal(round(pvalue(lta), 4), 0.0708))
 > 
 > ltMC <- lc("lbl_test",dr, distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 9e-04"
+[1] "Component \"p.value\": Mean absolute difference: 8e-04"
 > pci <- attr(pvalue(ltMC), "conf.int")
 > 
 > stopifnot(pci[1] < 0.0792 & pci[2] > 0.0792)
@@ -1091,7 +1081,7 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > ltMC <- lc("lbl_test",dr, scores = list(tox = c(1, 3, 9, 27)),
 +                  distribution = approximate(B = 10000))
-[1] "Component \"p.value\": Mean absolute difference: 0.0051"
+[1] "Component \"p.value\": Mean absolute difference: 0.0037"
 > 
 > pci <- attr(pvalue(ltMC), "conf.int")
 > stopifnot(pci[1] < 0.078 & pci[2] > 0.078)
@@ -1177,11 +1167,11 @@ alternative hypothesis: true theta is not equal to 1
 +                      group = factor(c(rep(0, 7), rep(1, 8))))
 > p <- pvalue(lc("logrank_test",Surv(time, event) ~ group, data = exdata,
 +                          distribution = exact()))
-[1] "Component \"p.value\": Mean absolute difference: 0.001894949"
+[1] "Component \"p.value\": Mean absolute difference: 0.0005050505"
 > stopifnot(isequal(round(p, 4), 0.0505))
 > p <- pvalue(lc("logrank_test",Surv(time, event) ~ group, data = exdata,
 +                          distribution = exact(), ties = "average"))
-[1] "Component \"p.value\": Mean absolute difference: 0.001624553"
+[1] "Component \"p.value\": Mean absolute difference: 0.0002245532"
 > stopifnot(isequal(round(p, 4), 0.0468))
 > 
 > 
@@ -1219,14 +1209,14 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > wse <- lc("wilcoxsign_test",post ~ pre, data = AIDS, distribution = "exact",
 +                        zero.method = "Wilcoxon")
-[1] "Component \"p.value\": Mean absolute difference: 0.0007362305"
+[1] "Component \"p.value\": Mean absolute difference: 0.00113623"
 > 
 > # exact p-value, page 290
 > stopifnot(isequal(round(pvalue(wse), 4), 0.0021))
 > 
 > wsa <- lc("wilcoxsign_test",post ~ pre, data = AIDS, distribution = "exact", alternative = "less",
 +                        zero.method = "Wilcoxon")
-[1] "Component \"p.value\": Mean absolute difference: 0.0006681152"
+[1] "Component \"p.value\": Mean absolute difference: 0.001068115"
 > 
 > # exact one-sided p-value, page 290
 > stopifnot(isequal(round(pvalue(wsa), 4), 0.0011))
@@ -1247,7 +1237,7 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > # approximate p-value, page 300
 > stMC <- lc("symmetry_test",y ~ x | block, distribution = approximate(B = 10000))
-[1] TRUE
+[1] "Component \"p.value\": Mean absolute difference: 6e-04"
 > pci <- attr(pvalue(stMC), "conf.int")
 > stopifnot(pci[1] < 0.0021 & pci[2] > 0.0021)
 > 
@@ -1273,18 +1263,18 @@ alternative hypothesis: true theta is not equal to 1
 > stopifnot(isequal(round(pvalue(sa), 4), 0.0013))
 > 
 > se <- lc("sign_test",post ~ pre, data = AIDS, distribution = "exact")
-[1] "Component \"p.value\": Mean absolute difference: 0.0001809082"
+[1] "Component \"p.value\": Mean absolute difference: 0.001180908"
 > 
 > # exact p-value, page 107 SX9 manual
 > stopifnot(isequal(round(pvalue(se), 4), 0.0042))
 > 
 > sa <- lc("sign_test",post ~ pre, data = AIDS, distribution = "exact",
 +                 alternative = "less")
-[1] "Component \"p.value\": Mean absolute difference: 9.04541e-05"
+[1] "Component \"p.value\": Mean absolute difference: 0.001090454"
 > 
 > # exact one-sided p-value, page 107 SX9 manual
 > stopifnot(isequal(round(pvalue(sa), 4), 0.0021))
 > 
 > proc.time()
    user  system elapsed 
- 18.432   0.168  35.193 
+ 32.192   0.068  32.239 
