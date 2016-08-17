@@ -30,7 +30,7 @@ interval.numeric <- function(x, breaks = 50, ...) {
     if (anyDuplicated(breaks)) 
         stop("'breaks' are not unique")
 
-    ret <- findInterval(x, vec = breaks)
+    ret <- cut.default(x, breaks = breaks, labels = FALSE)
     ret[is.na(x)] <- 0
     attr(ret, "levels") <- breaks
     class(ret) <- c("interval", "integer")
