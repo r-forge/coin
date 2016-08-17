@@ -1,6 +1,7 @@
 
 library("BDR")
 data("iris")
+set.seed(29)
 
 iris[3, "Sepal.Width"] <- NA
 
