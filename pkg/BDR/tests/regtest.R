@@ -1,6 +1,5 @@
 
 library("BDR")
-library("survival")
 data("iris")
 
 iris[3, "Sepal.Width"] <- NA
