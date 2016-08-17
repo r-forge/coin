@@ -42,7 +42,7 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
         }
         sDF <- as.data.frame(sDF)
         colnames(sDF) <- names(bdr)
-        sDF[["(weights)"]] <- tab[tab0]
+        sDF[["(weights)"]] <- as.numeric(tab[tab0])
         rownames(sDF) <- NULL
         ret <- unclass(ret[, drop = TRUE])
         attr(ret, "levels") <- sDF
