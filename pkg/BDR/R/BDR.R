@@ -74,9 +74,15 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
             if (length(ux) > nmax)
                 ux <- unique(quantile(x, prob = 1:(nmax - 1L) / nmax, 
                                       na.rm = TRUE))
-            ix <- interval(x, breaks = c(xmin - min(diff(ux)), ux, xmax))
+            ux <- ux[ux < xmax]
+            tol <- sqrt(.Machine$double.eps)
+            ix <- interval(x, breaks = c(xmin - tol, ux, xmax))
             if (all(as.interval != v)) {
+                ### <FIXME> this minimises distances to original
+                ### measurements but leads to incorrect cutpoints
+                ### (where c(xmin, ux) would be OK)
                 nux <- c(xmin, ux) + diff(c(xmin, ux, xmax)) / 2
+                ### </FIXME>
                 attr(ix, "levels") <- as.double(nux)
                 class(ix) <- c("enum", "integer")
              }
