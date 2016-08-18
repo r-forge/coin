@@ -40,6 +40,10 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
                 sDF[[j]] <- lev[idx, drop = FALSE]
             }
         }
+        ### note: sDF contains missings and 
+        ### ret is always > 0 (is, no missings)
+        ### this is different from enum/integer types
+        ### should we handle this here?
         sDF <- as.data.frame(sDF)
         colnames(sDF) <- names(bdr)
         sDF[["(weights)"]] <- as.numeric(tab[tab0])
