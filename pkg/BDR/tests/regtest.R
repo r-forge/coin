@@ -8,15 +8,21 @@ iris[3, "Sepal.Width"] <- NA
 iris1 <- BDR(iris, nmax = 5, as.interval = "Sepal.Width")
 
 iris2 <- BDR(iris, nmax = 5, total = TRUE, as.interval = "Sepal.Width")
+iris2cc <- BDR(iris, nmax = 5, total = TRUE, as.interval = "Sepal.Width", complete.cases.only = TRUE)
 
-all.equal(x1 <- as.data.frame(iris1), x2 <- as.data.frame(iris2))
+x1 <- as.data.frame(iris1)
 
 table(x1$Species, iris$Species)
 
 tapply(iris$Sepal.Width, x1$Sepal.Width, range)
 levels(x1$Sepal.Width)
 
+as.data.frame(iris2)
 (w <- weights(iris2))
+sum(w)
+
+as.data.frame(iris2cc)
+(w <- weights(iris2cc))
 sum(w)
 
 x <- runif(100)
