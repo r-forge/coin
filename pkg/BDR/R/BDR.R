@@ -52,7 +52,8 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
         ret <- unclass(ret[, drop = TRUE])
 
         if (complete.cases.only) {
-            cc <- complete.cases(sDF)
+            cc <- rowSums(sapply(sDF[colnames(sDF) != "(weights)"], 
+                                 function(x) unclass(x) == 0)) == 0
             if (any(!cc)) {
                 sDF <- sDF[cc,,drop = FALSE]
                 ret[!cc] <- 0L
@@ -90,7 +91,7 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
                 ux <- unique(quantile(x, prob = 1:(nmax - 1L) / nmax, 
                                       na.rm = TRUE))
             ux <- ux[ux < xmax]
-            tol <- sqrt(.Machine$double.eps)
+            tol <- min(diff(ux)) ### sqrt(.Machine$double.eps)
             ix <- interval(x, breaks = c(xmin - tol, ux, xmax))
             if (all(as.interval != v)) {
                 ### <FIXME> this minimises distances to original
@@ -128,11 +129,8 @@ as.data.frame.BDR <- function(x, ...) {
     ret
 }
 
-as.data.frame.BDRtotal <- function(x, ...) {
-    lev <- attr(x, "levels")
-    ### x >= 1, always
-    return(lev[x, colnames(lev) != "(weights)", drop = FALSE])
-}
+as.data.frame.BDRtotal <- function(x, ...) 
+    attr(x, "levels")
 
 weights.BDRtotal <- function(object, ...)
     attr(object, "levels")[["(weights)"]]
