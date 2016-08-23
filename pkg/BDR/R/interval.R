@@ -31,7 +31,7 @@ interval.numeric <- function(x, breaks = 50, ...) {
         stop("'breaks' are not unique")
 
     ret <- cut.default(x, breaks = breaks, labels = FALSE)
-    ret[is.na(x)] <- 0
+    ret[is.na(x)] <- 0L
     attr(ret, "levels") <- breaks
     class(ret) <- c("interval", "integer")
     ret
