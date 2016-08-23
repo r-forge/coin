@@ -85,7 +85,7 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
                 ### <FIXME> this minimises distances to original
                 ### measurements but leads to incorrect cutpoints
                 ### (where c(ux, xmax) would be OK)
-                nux <- c(xmin, ux) + diff(c(xmin, ux, xmax)) / 2
+                # nux <- c(xmin, ux) + diff(c(xmin, ux, xmax)) / 2
                 nux <- c(ux, xmax)
                 ### </FIXME>
                 attr(ix, "levels") <- as.double(nux)
