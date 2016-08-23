@@ -6,7 +6,8 @@ BDR.default <- function(object, nmax = 20, ...)
     stop("cannot handle objects of class", " ", sQuote(class(object)))
 
 BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, 
-                           weights = NULL, as.interval = "", ...) {
+                           weights = NULL, as.interval = "", 
+                           complete.cases.only = FALSE, ...) {
 
     if (total) {
         bdr <- BDR(object, nmax = nmax, ignore = ignore, 
@@ -49,6 +50,16 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
         sDF[["(weights)"]] <- as.numeric(tab[tab0])
         rownames(sDF) <- NULL
         ret <- unclass(ret[, drop = TRUE])
+
+        if (complete.cases.only) {
+            cc <- complete.cases(sDF)
+            if (any(!cc)) {
+                sDF <- sDF[cc,,drop = FALSE]
+                ret[!cc] <- 0L
+                ret <- unclass(factor(ret)) - 1L
+            }
+        }  
+
         attr(ret, "levels") <- sDF
         class(ret) <- "BDRtotal"
         return(ret)

@@ -20,12 +20,13 @@
         weights <- integer(0)
     }
 
+    rs <- range(subset)
     if (!missing(subset) && length(subset) > 0) {
-        if (!((max(subset) <= NROW(X)) &&
-              (min(subset) >= 1L) && 
+        if (!((rs[2] <= NROW(X)) &&
+              (rs[1] >= 1L) && 
               is.integer(subset)))
             stop("incorrect subset")
-        if (min(subset) == 0) stop("subset has start 1 index")
+        if (rs[1] == 0) stop("subset has start 1 index")
         subset <- subset - 1L
     } else {
         subset <- integer(0)
@@ -74,7 +75,7 @@
         attr(iy, "levels") <- 1:max(iy)
 
     if (!missing(X) && length(X) > 0) {
-        if (!((min(ix) >= 0 && nrow(X) == (max(ix) + 1)) &&
+        if (!((min(ix) >= 0 && nrow(X) == (length(attr(ix, "levels")) + 1)) &&
               all(complete.cases(X)) &&
               (nrow(X) == (length(attr(ix, "levels")) + 1))))
             stop("incorrect X")
@@ -84,7 +85,7 @@
 
     if (!(all(complete.cases(Y))) &&
           (nrow(Y) == (length(attr(iy, "levels")) + 1)) &&
-          (min(iy) >= 0 && nrow(Y) == (max(iy) + 1)))
+          (min(iy) >= 0L && nrow(Y) == (length(attr(iy, "levels")) + 1)))
         stop("incorrect Y")
 
     if (!missing(weights) && length(weights) > 0) {
@@ -96,12 +97,13 @@
         weights <- integer(0)
     }
 
+    rs <- range(subset)
     if (!missing(subset) && length(subset) > 0) {
-        if (!((max(subset) <= length(ix)) && 
-              (min(subset) >= 1L) &&
+        if (!((rs[2] <= length(ix)) && 
+              (rs[1] >= 1L) &&
               is.integer(subset)))
             stop("incorrect subset")
-        if (min(subset) == 0) stop("subset has start 1 index")
+        if (rs[1] == 0) stop("subset has start 1 index")
         subset <- subset - 1L
     } else {
         subset <- integer(0)
