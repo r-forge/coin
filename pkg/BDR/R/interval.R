@@ -90,3 +90,6 @@ print.interval <- function(x, quote = FALSE, max.levels = NULL,
     class(ret) <- class(x)
     ret
 }
+
+format.interval <- function(x, ...)
+    c("<NA>", levels(x))[x + 1L]
