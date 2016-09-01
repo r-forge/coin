@@ -1,5 +1,5 @@
 
-.LinStatExpCov1d <- function(X, Y, weights, subset, block, 
+.LinStatExpCov1d <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0), 
                              varonly = FALSE, B = 0L, standardise = FALSE, 
                              tol = sqrt(.Machine$double.eps)) 
 {
@@ -11,33 +11,27 @@
             attr(X, "levels") <- 1:max(X)
     }
 
-    if (!missing(weights) && length(weights) > 0) {
+    if (length(weights) > 0) {
         if (!((NROW(X) == length(weights)) && 
               is.integer(weights) &&
               all(weights >= 0)))
             stop("incorrect weights")
-    } else {
-        weights <- integer(0)
     }
 
-    rs <- range(subset)
-    if (!missing(subset) && length(subset) > 0) {
+    if (length(subset) > 0) {
+        rs <- range(subset)
         if (!((rs[2] <= NROW(X)) &&
               (rs[1] >= 1L) && 
               is.integer(subset)))
             stop("incorrect subset")
         if (rs[1] == 0) stop("subset has start 1 index")
         subset <- subset - 1L
-    } else {
-        subset <- integer(0)
     }
 
-    if (!missing(block) && length(block) > 0) {
+    if (length(block) > 0) {
         if (!((NROW(X) == length(block)) &&
               is.factor(block)))
             stop("incorrect block")
-    } else {
-        block <- integer(0)
     }
 
     ms <- !(complete.cases(X) & complete.cases(Y))
@@ -60,8 +54,8 @@
     ret
 }
 
-.LinStatExpCov2d <- function(X, Y, ix, iy, weights, subset, block, 
-                             varonly = FALSE, B = 0,
+.LinStatExpCov2d <- function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0), 
+                             block = integer(0), varonly = FALSE, B = 0,
                              standardise = FALSE, 
                              tol = sqrt(.Machine$double.eps)) 
 {
@@ -74,47 +68,39 @@
     if (is.null(attr(iy, "levels")))
         attr(iy, "levels") <- 1:max(iy)
 
-    if (!missing(X) && length(X) > 0) {
+    if (length(X) > 0) {
         if (!((min(ix) >= 0 && nrow(X) == (length(attr(ix, "levels")) + 1)) &&
               all(complete.cases(X)) &&
               (nrow(X) == (length(attr(ix, "levels")) + 1))))
             stop("incorrect X")
-    } else  {
-        X <- numeric(0)
-    }
+    } 
 
     if (!(all(complete.cases(Y))) &&
           (nrow(Y) == (length(attr(iy, "levels")) + 1)) &&
           (min(iy) >= 0L && nrow(Y) == (length(attr(iy, "levels")) + 1)))
         stop("incorrect Y")
 
-    if (!missing(weights) && length(weights) > 0) {
+    if (length(weights) > 0) {
         if (!((length(ix) == length(weights)) && 
               is.integer(weights) &&
               all(weights >= 0)))
             stop("incorrect weights")
-    } else {
-        weights <- integer(0)
-    }
+    } 
 
-    rs <- range(subset)
-    if (!missing(subset) && length(subset) > 0) {
+    if (length(subset) > 0) {
+        rs <- range(subset)
         if (!((rs[2] <= length(ix)) && 
               (rs[1] >= 1L) &&
               is.integer(subset)))
             stop("incorrect subset")
         if (rs[1] == 0) stop("subset has start 1 index")
         subset <- subset - 1L
-    } else {
-        subset <- integer(0)
-    }
+    } 
 
     if (!missing(block) && length(block) > 0) {
         if (!((length(ix) == length(block)) &&
               is.factor(block)))
             stop("incorrect block")
-    } else {
-        block <- integer(0)
     }
 
     ret <- .Call("R_ExpectationCovarianceStatistic_2d", X, ix, Y, iy, 
@@ -129,7 +115,8 @@
     ret
 }
 
-LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights, subset, block, 
+LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0), 
+                          subset = integer(0), block = integer(0), 
                           varonly = FALSE, B = 0, standardise = FALSE, 
                           tol = sqrt(.Machine$double.eps)) 
 {
