@@ -6,17 +6,12 @@ split_index <- function(n, by) {
 }
 
 MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
-    ## expand observations for non-unit weights
-    if (!is_unity(weights)) {
-        idx <- rep.int(seq_along(weights), weights)
-        x <- x[idx, , drop = FALSE]
-        y <- y[idx, , drop = FALSE]
-        block <- block[idx]
-    }
 
+    ### <FIXME> use standardize = TRUE if appropriate?
     montecarlo <- function(B)
-        .Call("R_MonteCarloIndependenceTest",
-              x, y, as.integer(block), as.integer(B), PACKAGE = "coin")
+        LinStatExpCov(X = x, Y = y, weights = as.integer(weights), block = factor(block),
+                      B = B)$PermutedLinearStatistic
+    ### </FIXME>
 
     if (parallel == "no")
         montecarlo(B)

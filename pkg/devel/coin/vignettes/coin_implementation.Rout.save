@@ -333,9 +333,9 @@ Income        VeryDiss LitSat ModSat VerySat
 +     scores = list(Job.Satisfaction = 1:4, Income = 1:4))
 
 > pvalue(it)
-[1] 0.0116
+[1] 0.0115
 99 percent confidence interval:
- 0.009024885 0.014651019 
+ 0.008936705 0.014539344 
 
 
 > independence_test(js, teststat = "maximum")
@@ -360,4 +360,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.58    0.12    2.79 
+  2.408   0.060   2.466 

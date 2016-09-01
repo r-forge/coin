@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2016-02-11 r70149) -- "Unsuffered Consequences"
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
 Copyright (C) 2016 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -2504,10 +2504,10 @@ Error in .local(object, ...) :
 > it_ums <- independence_test(y1 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "scalar")
 > round(dp_ums <- dperm(it_ums, 0:1), 7)
-[1] 0.0268 0.0000
+[1] 0.0314 0.0000
 > stopifnot(isequal(dp_ums, c(dperm(it_ums, 0), dperm(it_ums, 1))))
 > round(pp_ums <- pperm(it_ums, 0:1), 7)
-[1] 0.5145 0.8431
+[1] 0.5125 0.8405
 > stopifnot(isequal(pp_ums, c(pperm(it_ums, 0), pperm(it_ums, 1))))
 > round(qp_ums <- qperm(it_ums, c(0.5, 0.75)), 7)
 [1] 0.0000000 0.6803361
@@ -2517,23 +2517,23 @@ Error in .local(object, ...) :
 > it_umq <- independence_test(y1 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "quad")
 > round(dp_umq <- dperm(it_umq, 0:1), 7)
-[1] 0.0279 0.0000
+[1] 0.032 0.000
 > stopifnot(isequal(dp_umq, c(dperm(it_umq, 0), dperm(it_umq, 1))))
 > round(pp_umq <- pperm(it_umq, 0:1), 7)
-[1] 0.0279 0.6827
+[1] 0.0320 0.6854
 > stopifnot(isequal(pp_umq, c(pperm(it_umq, 0), pperm(it_umq, 1))))
 > round(qp_umq <- qperm(it_umq, c(0.5, 0.75)), 7)
-[1] 0.4628571 1.4628571
+[1] 0.4628571 1.2857143
 > stopifnot(isequal(qp_umq, c(qperm(it_umq, 0.5), qperm(it_umq, 0.75))))
 > 
 > ### multivariate, approximate and max
 > it_mmm <- independence_test(y1 + y2 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "max")
 > round(dp_mmm <- dperm(it_mmm, c(0, 1)), 7)
-[1] 0.001 0.000
+[1] 8e-04 0e+00
 > stopifnot(isequal(dp_mmm, c(dperm(it_mmm, 0), dperm(it_mmm, 1))))
 > round(pp_mmm <- pperm(it_mmm, 0:1), 7)
-[1] 0.0010 0.4615
+[1] 0.0008 0.4672
 > stopifnot(isequal(pp_mmm, c(pperm(it_mmm, 0), pperm(it_mmm, 1))))
 > round(qp_mmm <- qperm(it_mmm, c(0.5, 0.75)), 7)
 [1] 1.058301 1.511858
@@ -2543,13 +2543,13 @@ Error in .local(object, ...) :
 > it_mmq <- independence_test(y1 + y2 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "quad")
 > round(dp_mmq <- dperm(it_mmq, 0:1), 7)
-[1] 9e-04 0e+00
+[1] 8e-04 0e+00
 > stopifnot(isequal(dp_mmq, c(dperm(it_mmq, 0), dperm(it_mmq, 1))))
 > round(pp_mmq <- pperm(it_mmq, 0:1), 7)
-[1] 0.0009 0.3778
+[1] 0.0008 0.3821
 > stopifnot(isequal(pp_mmq, c(pperm(it_mmq, 0), pperm(it_mmq, 1))))
 > round(qp_mmq <- qperm(it_mmq, c(0.5, 0.75)), 7)
-[1] 1.467650 2.842752
+[1] 1.437346 2.826536
 > stopifnot(isequal(qp_mmq, c(qperm(it_mmq, 0.5), qperm(it_mmq, 0.75))))
 > 
 > ### univariate, exact and scalar
@@ -2580,4 +2580,4 @@ Error in .local(object, ...) :
 > 
 > proc.time()
    user  system elapsed 
-   7.30    0.63    7.98 
+  8.892   0.284   9.171 

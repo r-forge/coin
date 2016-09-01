@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2016-03-28 r70390) -- "Unsuffered Consequences"
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
 Copyright (C) 2016 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -267,9 +267,9 @@ X3      10
 +     data = medf, weights = ~ Freq, xtrafo = g,
 +     distribution = approximate(B = 49999))
 > pvalue(it)
-[1] 0.06848137
+[1] 0.06790136
 99 percent confidence interval:
- 0.06560306 0.07144217 
+ 0.06503455 0.07085077 
 
 > 
 > stopifnot(all.equal(statistic(independence_test(t(me), xtrafo = g), "linear"),
@@ -418,8 +418,8 @@ alternative hypothesis: true mu is not equal to 0
 [1] -1.3125012 -0.8559791 -0.5135874 -0.2853264  0.0000000  0.2853264  0.5706527
 [8]  0.8559791  1.2554359
 > qperm(wta, seq(from = 0.1, to = 0.9, by = 0.1))
-[1] -1.3125012 -0.8559791 -0.5135874 -0.2282611  0.0000000  0.2853264  0.5135874
-[8]  0.8559791  1.3125012
+[1] -1.3125012 -0.9130443 -0.5706527 -0.2853264  0.0000000  0.2282611  0.5135874
+[8]  0.8559791  1.2554359
 > 
 > ### split-up and confint (spotted by Fritz Scholz <fscholz@u.washington.edu>)
 > iseed <- 25
@@ -437,7 +437,7 @@ alternative hypothesis: true mu is not equal to 0
 +     alternative = alternative, dist = exact())
 > confint(it)
 98 percent confidence interval:
- 0.71  Inf 
+ 0.18  Inf 
 sample estimates:
 difference in location 
                   2.59 
@@ -864,26 +864,24 @@ alternative hypothesis: true mu is not equal to 0
 > stopifnot(isequal(qperm(it, c(0.9, 0.95, 0.99)),
 +                   c(qperm(it, 0.9), qperm(it, 0.95), qperm(it, 0.99))))
 > 
-> ### blockwise permutations were only correct for factors ordered wrt their levels
-> set.seed(36)
-> .Call("R_blockperm", rep(1:4, 2),                       # was OK
+> if (FALSE) {
++ ### blockwise permutations were only correct for factors ordered wrt their levels
++ set.seed(36)
++ .Call("R_blockperm", rep(1:4, 2),                       # was OK
 +       PACKAGE = "coin")
-[1] 4 5 6 7 0 1 2 3
-> 
-> set.seed(36)
-> .Call("R_blockperm", rep(1:4, each = 2),                # was OK
++ 
++ set.seed(36)
++ .Call("R_blockperm", rep(1:4, each = 2),                # was OK
 +       PACKAGE = "coin")
-[1] 1 0 3 2 5 4 7 6
-> 
-> set.seed(36)
-> .Call("R_blockperm", c(1:4, 4:1),                       # was OK
++ 
++ set.seed(36)
++ .Call("R_blockperm", c(1:4, 4:1),                       # was OK
 +       PACKAGE = "coin")
-[1] 7 6 5 4 3 2 1 0
-> 
-> set.seed(36)
-> .Call("R_blockperm", c(4L, 1L, 2L, 2L, 4L, 3L, 1L, 3L), # wrong
++ 
++ set.seed(36)
++ .Call("R_blockperm", c(4L, 1L, 2L, 2L, 4L, 3L, 1L, 3L), # wrong
 +       PACKAGE = "coin")
-[1] 4 6 3 2 0 7 1 5
++ }
 > 
 > ### could not distinguish censored and numeric responses
 > y1 <- rnorm(10)
@@ -978,4 +976,4 @@ Error in quade_test.SymmetryProblem(object = <S4 object of class structure("Symm
 > 
 > proc.time()
    user  system elapsed 
-   3.36    0.39    4.08 
+  3.120   0.056   3.179 

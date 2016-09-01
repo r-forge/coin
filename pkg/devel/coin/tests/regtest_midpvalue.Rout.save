@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2015-05-13 r68364) -- "Unsuffered Consequences"
-Copyright (C) 2015 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -100,16 +100,16 @@ Loading required package: survival
 > ct_m <- chisq_test(as.table(tea),
 +                    distribution = "approximate")
 > (p <- pvalue(ct_m))
-[1] 0.4835
+[1] 0.4851
 99 percent confidence interval:
- 0.4705882 0.4964275 
+ 0.4721862 0.4980281 
 
 > pci <- attr(p, "conf.int")
 > stopifnot(pci[1] < 0.486 & pci[2] > 0.486)
 > (mp <- midpvalue(ct_m))
-[1] 0.25755
+[1] 0.258
 99 percent confidence interval:
- 0.2463534 0.2688772 
+ 0.2468460 0.2693841 
 
 > mpci <- attr(mp, "conf.int")
 > stopifnot(mpci[1] < 0.257 & mpci[2] > 0.257)
@@ -134,16 +134,16 @@ Loading required package: survival
 +                                teststat = "scalar",
 +                                alternative = "greater")
 > (p <- pvalue(it_m_s_gr))
-[1] 0.2419
+[1] 0.2424
 99 percent confidence interval:
- 0.2309447 0.2531023 
+ 0.2314367 0.2536099 
 
 > pci <- attr(p, "conf.int")
 > stopifnot(pci[1] < 0.243 & pci[2] > 0.243)
 > (mp <- midpvalue(it_m_s_gr))
-[1] 0.1288
+[1] 0.12885
 99 percent confidence interval:
- 0.1203477 0.1376053 
+ 0.1204448 0.1377081 
 
 > mpci <- attr(mp, "conf.int")
 > stopifnot(mpci[1] < 0.1286 & mpci[2] > 0.1286)
@@ -177,16 +177,16 @@ Loading required package: survival
 > ct_m <- chisq_test(as.table(davis),
 +                    distribution = "approximate")
 > (p <- pvalue(ct_m))
-[1] 0.2847
+[1] 0.2812
 99 percent confidence interval:
- 0.273131 0.296475 
+ 0.2696761 0.2929332 
 
 > pci <- attr(p, "conf.int")
 > stopifnot(pci[1] < 0.2860 & pci[2] > 0.2860)
 > (mp <- midpvalue(ct_m))
-[1] 0.15175
+[1] 0.14995
 99 percent confidence interval:
- 0.1427229 0.1612083 
+ 0.1409689 0.1593640 
 
 > mpci <- attr(mp, "conf.int")
 > stopifnot(mpci[1] < 0.1527 & mpci[2] > 0.1527)
@@ -234,16 +234,16 @@ Loading required package: survival
 > ct_m <- chisq_test(as.table(cardiac),
 +                    distribution = approximate(B = 10000))
 > (p <- pvalue(ct_m))
-[1] 0.0557
+[1] 0.0542
 99 percent confidence interval:
- 0.04995533 0.06187217 
+ 0.04853149 0.06029752 
 
 > pci <- attr(p, "conf.int")
 > stopifnot(pci[1] < 0.0544 & pci[2] > 0.0544)
 > (mp <- midpvalue(ct_m))
-[1] 0.0302
+[1] 0.02925
 99 percent confidence interval:
- 0.02601100 0.03483585 
+ 0.02508273 0.03376508 
 
 > mpci <- attr(mp, "conf.int")
 > stopifnot(mpci[1] < 0.0297 & mpci[2] > 0.0297)
@@ -291,16 +291,16 @@ Loading required package: survival
 > ct_m <- chisq_test(as.table(exfoliative),
 +                    distribution = approximate(B = 10000))
 > (p <- pvalue(ct_m))
-[1] 0.0643
+[1] 0.0661
 99 percent confidence interval:
- 0.05814061 0.07087830 
+ 0.05985811 0.07275901 
 
 > pci <- attr(p, "conf.int")
 > stopifnot(pci[1] < 0.0629 & pci[2] > 0.0629)
 > (mp <- midpvalue(ct_m))
-[1] 0.0444
+[1] 0.0472
 99 percent confidence interval:
- 0.03930789 0.04992546 
+ 0.04195001 0.05288067 
 
 > mpci <- attr(mp, "conf.int")
 > stopifnot(mpci[1] < 0.0447 & mpci[2] > 0.0447)
@@ -798,4 +798,4 @@ Loading required package: survival
 > 
 > proc.time()
    user  system elapsed 
-   2.16    0.06    2.19 
+  1.720   0.048   1.765 

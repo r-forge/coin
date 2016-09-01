@@ -76,7 +76,7 @@ SR_shift_2sample <- function(object, fact) {
             T <- T[idx]
 
             ### update density
-            Prob <- .Call("R_kronecker", dens$Prob, Prob, PACKAGE = "coin")
+            Prob <- call_libcoin("R_kronecker", dens$Prob, Prob)
             Prob <- vapply(split(Prob[o],
                                  rep.int(seq_along(idx), diff(c(0L, idx)))),
                            sum, NA_real_, USE.NAMES = FALSE)

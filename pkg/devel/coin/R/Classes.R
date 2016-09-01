@@ -1,3 +1,7 @@
+
+### "ExpectCovar" and "ExpectCovarInfluence" are no 
+### longer needed but currently imported by party
+
 ### Conditional Expectation and Covariance
 setClass("ExpectCovar",
     representation = representation(
@@ -42,7 +46,7 @@ setClass("IndependenceProblem",
         x       = "data.frame",
         y       = "data.frame",
         block   = "factor",
-        weights = "numeric"
+        weights = "numeric" ### <FIXME> this should be integer </FIXME>
     ),
     validity = function(object) {
         dims <- ((nrow(object@x) == nrow(object@y)) &&
