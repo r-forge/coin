@@ -35,7 +35,7 @@ Loading required package: survival
 	Approximative Generalized Maximally Selected Statistics
 
 data:  y by x
-maxT = 1.7163, p-value = 0.54
+maxT = 1.7163, p-value = 0.542
 alternative hypothesis: two.sided
 sample estimates:
   "best" cutpoint: <= 0.53
@@ -97,7 +97,7 @@ $index
 
 data:  y by x 
 	 stratified by blk
-maxT = 1.4647, p-value = 0.727
+maxT = 1.4647, p-value = 0.742
 alternative hypothesis: two.sided
 sample estimates:
   "best" cutpoint: <= 0.53
@@ -137,7 +137,7 @@ Error in doTest(lev, teststat = "maximum") :
 	Approximative Generalized Maximally Selected Statistics
 
 data:  y, y2 by x
-maxT = 1.7163, p-value = 0.8
+maxT = 1.7163, p-value = 0.773
 alternative hypothesis: two.sided
 sample estimates:
   "best" cutpoint: <= 0.53
@@ -199,7 +199,7 @@ $index
 
 data:  y, y2 by x 
 	 stratified by blk
-maxT = 1.4647, p-value = 0.942
+maxT = 1.4647, p-value = 0.936
 alternative hypothesis: two.sided
 sample estimates:
   "best" cutpoint: <= 0.53
@@ -299,7 +299,7 @@ $index
 
 data:  y by x (1, 2, 3, 4, 5) 
 	 stratified by blk
-maxT = 2.0087, p-value = 0.291
+maxT = 2.0087, p-value = 0.318
 alternative hypothesis: two.sided
 sample estimates:
   "best" cutpoint: {1, 2, 4} vs. {3, 5}
@@ -335,7 +335,7 @@ Error in doTest(lev, teststat = "maximum", ordered = FALSE) :
 	Approximative Generalized Maximally Selected Statistics
 
 data:  y, y2 by x (1, 2, 3, 4, 5)
-maxT = 2.0077, p-value = 0.505
+maxT = 2.0077, p-value = 0.502
 alternative hypothesis: two.sided
 sample estimates:
   "best" cutpoint: {1, 2, 4} vs. {3, 5}
@@ -389,7 +389,7 @@ $index
 
 data:  y, y2 by x (1, 2, 3, 4, 5) 
 	 stratified by blk
-maxT = 2.0087, p-value = 0.496
+maxT = 2.0087, p-value = 0.506
 alternative hypothesis: two.sided
 sample estimates:
   "best" cutpoint: {1, 2, 4} vs. {3, 5}
@@ -433,4 +433,4 @@ Error in doTest(lev, teststat = "maximum", ordered = FALSE) :
 > 
 > proc.time()
    user  system elapsed 
-  1.472   0.068   1.534 
+  1.532   0.044   1.574 

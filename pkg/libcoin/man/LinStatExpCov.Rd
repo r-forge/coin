@@ -5,10 +5,11 @@
 }
 \description{
   Strasser-Weber type linear statistics and their expectation
-  and covariance under the independence hypothesis.
+  and covariance under the independence hypothesis
 }
 \usage{
-LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights, subset, block, 
+LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0), 
+              subset = integer(0), block = integer(0), 
               varonly = FALSE, B = 0, standardise = FALSE, 
               tol = sqrt(.Machine$double.eps))
 }
