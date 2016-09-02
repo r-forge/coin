@@ -178,6 +178,7 @@ x <- matrix(runif(N * P), nrow = N)
 y <- matrix(runif(N * Q), nrow = N)
 weights <- sample(0:3, size = N, replace = TRUE)
 subset <- sample(1:N, size = N, replace = TRUE)
+centerx <- as.double(runif(P))
 P_ans <- as.double(numeric(P))
 @@
 
@@ -424,6 +425,8 @@ const int *Nsubset,
 const int *Nsubset,
 @}
 
+\subsubsection{Simple columns sums}
+
 @d Function prototypes
 @{
 external void C_colSums_(@<Input xNP@>, double *P_ans);
@@ -580,6 +583,286 @@ P_ans <- .C("RC_colSums_weights_subset", x = as.double(x),
                            Nsubset = as.integer(length(subset)),
                            P_ans = as.double(P_ans))$P_ans
 stopifnot(all.equal(P_ans, colSums(x[subset,] * weights[subset])))
+@@
+
+
+\subsubsection{Squared columns sums}
+
+@d Function prototypes
+@{
+external void C_colSums2_(@<Input xNP@>, double *P_ans);
+external void C_colSums2_weights(@<Input xNP weights@>, double *P_ans);
+external void C_colSums2_subset(@<Input xNP subset@>, double *P_ans);
+external void C_colSums2_weights_subset(@<Input xNP weights subset@>, double *P_ans);
+@}
+
+the $P$ vector of column sums $\sum_{i = 0}^{N - 1} X^2_{ip}, p = 0, \dots, P - 1$
+is computed by \verb|C_colSums_| and written to a $P$ vector pointed to by
+\verb|P_ans|
+
+@d Column sums
+@{
+/* colSums(x^2) */
+void C_colSums2_
+(
+  @<Input xNP@>
+  double *P_ans  /* Return P_ans */
+) {
+  @<Column Sum of @'pow(x[pN + i], 2)@' with @'N@'@>
+}
+void RC_colSums2_ 
+(
+  @<R Input xNP@>
+  double *P_ans  /* Return P_ans */
+) {
+  C_colSums2_(x, N[0], P[0], P_ans);
+}
+@| C_colSums2_
+@}
+
+<<>>=
+P_ans <- .C("RC_colSums2_", x = as.double(x),
+                           N = as.integer(N),
+                           P = as.integer(P),
+                           P_ans = as.double(P_ans))$P_ans
+stopifnot(all.equal(P_ans, colSums(x^2)))
+@@
+
+@d Column sums
+@{
+/* colSums(x^2 * weights) */
+void C_colSums2_weights
+(
+  @<Input xNP weights@>
+  double *P_ans
+){
+  @<Column Sum of @'weights[i] * pow(x[pN + i], 2)@' with @'N@'@>
+}
+void RC_colSums2_weights
+(
+  @<R Input xNP weights@>
+  double *P_ans
+){
+  C_colSums2_weights(x, N[0], P[0], weights, P_ans);
+}
+@| C_colSums2_weights
+@}
+
+<<>>=
+P_ans <- .C("RC_colSums2_weights", x = as.double(x),
+                           N = as.integer(N),
+                           P = as.integer(P),
+                           weights = as.integer(weights),
+                           P_ans = as.double(P_ans))$P_ans
+stopifnot(all.equal(P_ans, colSums(x^2 * weights)))
+@@
+
+@d Column sums
+@{
+/* colSums(x[subsetx,]^2) */
+void C_colSums2_subset
+(
+  @<Input xNP subset@>
+  double *P_ans
+){
+  @<Column Sum of @'pow(x[pN + subsetx[i]], 2)@' with @'Nsubset@'@>
+}
+void RC_colSums2_subset
+(
+  @<R Input xNP subset@>
+  double *P_ans
+){
+  C_colSums2_subset(x, N[0], P[0], subsetx, Nsubset[0], P_ans);
+}
+@| C_colSums2_subset
+@}
+
+<<>>=
+P_ans <- .C("RC_colSums2_subset", x = as.double(x),
+                           N = as.integer(N),
+                           P = as.integer(P),
+                           subset = as.integer(subset - 1L),
+                           Nsubset = as.integer(length(subset)),
+                           P_ans = as.double(P_ans))$P_ans
+stopifnot(all.equal(P_ans, colSums(x[subset,]^2)))
+@@
+
+
+@d Column sums
+@{
+/* colSums(x[subsetx,]^2 * weights[subsetx]) */
+void C_colSums2_weights_subset
+(
+  @<Input xNP weights subset@>
+  double *P_ans
+){
+  @<Column Sum of @'weights[subsetx[i]] * pow(x[pN + subsetx[i]], 2)@' with @'Nsubset@'@>
+}
+void RC_colSums2_weights_subset
+(
+  @<R Input xNP weights subset@>
+  double *P_ans
+){
+  C_colSums2_weights_subset(x, N[0], P[0], weights, subsetx, Nsubset[0], P_ans);
+}
+@| C_colSums2_weights_subset
+@}
+
+<<>>=
+P_ans <- .C("RC_colSums2_weights_subset", x = as.double(x),
+                           N = as.integer(N),
+                           P = as.integer(P),
+                           weights = as.integer(weights),
+                           subset = as.integer(subset - 1L),
+                           Nsubset = as.integer(length(subset)),
+                           P_ans = as.double(P_ans))$P_ans
+stopifnot(all.equal(P_ans, colSums(x[subset,]^2 * weights[subset])))
+@@
+
+
+\subsubsection{Squared centered columns sums}
+
+@d Function prototypes
+@{
+external void C_colSums2_center(@<Input xNP@>, const double *centerx, double *P_ans);
+external void C_colSums2_center_weights(@<Input xNP weights@>, const double *centerx, double *P_ans);
+external void C_colSums2_center_subset(@<Input xNP subset@>, const double *centerx, double *P_ans);
+external void C_colSums2_center_weights_subset(@<Input xNP weights subset@>, const double *centerx, double *P_ans);
+@}
+
+the $P$ vector of column sums $\sum_{i = 0}^{N - 1} X^2_{ip}, p = 0, \dots, P - 1$
+is computed by \verb|C_colSums_| and written to a $P$ vector pointed to by
+\verb|P_ans|
+
+@d Column sums
+@{
+/* colSums(x^2) */
+void C_colSums2_center
+(
+  @<Input xNP@>
+  const double *centerx,
+  double *P_ans  /* Return P_ans */
+) {
+  @<Column Sum of @'pow(x[pN + i] - centerx[p], 2)@' with @'N@'@>
+}
+void RC_colSums2_center 
+(
+  @<R Input xNP@>
+  const double *centerx,
+  double *P_ans  /* Return P_ans */
+) {
+  C_colSums2_center(x, N[0], P[0], centerx, P_ans);
+}
+@| C_colSums2_center
+@}
+
+<<>>=
+P_ans <- .C("RC_colSums2_center", x = as.double(x),
+                           N = as.integer(N),
+                           P = as.integer(P),
+                           centerx = as.double(centerx),
+                           P_ans = as.double(P_ans))$P_ans
+stopifnot(all.equal(P_ans, colSums(t((t(x) - centerx))^2)))
+@@
+
+@d Column sums
+@{
+/* colSums(x^2 * weights) */
+void C_colSums2_center_weights
+(
+  @<Input xNP weights@>
+  const double *centerx,
+  double *P_ans
+){
+  @<Column Sum of @'weights[i] * pow(x[pN + i] - centerx[p], 2)@' with @'N@'@>
+}
+void RC_colSums2_center_weights
+(
+  @<R Input xNP weights@>
+  const double *centerx,
+  double *P_ans
+){
+  C_colSums2_center_weights(x, N[0], P[0], weights, centerx, P_ans);
+}
+@| C_colSums2_center_weights
+@}
+
+<<>>=
+P_ans <- .C("RC_colSums2_center_weights", x = as.double(x),
+                           N = as.integer(N),
+                           P = as.integer(P),
+                           weights = as.integer(weights),
+                           centerx = as.double(centerx),
+                           P_ans = as.double(P_ans))$P_ans
+stopifnot(all.equal(P_ans, colSums(t((t(x) - centerx))^2 * weights)))
+@@
+
+@d Column sums
+@{
+/* colSums(x[subsetx,]^2) */
+void C_colSums2_center_subset
+(
+  @<Input xNP subset@>
+  const double *centerx,
+  double *P_ans
+){
+  @<Column Sum of @'pow(x[pN + subsetx[i]] - centerx[p], 2)@' with @'Nsubset@'@>
+}
+void RC_colSums2_center_subset
+(
+  @<R Input xNP subset@>
+  const double *centerx,
+  double *P_ans
+){
+  C_colSums2_center_subset(x, N[0], P[0], subsetx, Nsubset[0], centerx, P_ans);
+}
+@| C_colSums2_center_subset
+@}
+
+<<>>=
+P_ans <- .C("RC_colSums2_center_subset", x = as.double(x),
+                           N = as.integer(N),
+                           P = as.integer(P),
+                           subset = as.integer(subset - 1L),
+                           Nsubset = as.integer(length(subset)),
+                           centerx = as.double(centerx),
+                           P_ans = as.double(P_ans))$P_ans
+stopifnot(all.equal(P_ans, colSums(t((t(x[subset,]) - centerx))^2)))
+@@
+
+
+@d Column sums
+@{
+/* colSums(x[subsetx,]^2 * weights[subsetx]) */
+void C_colSums2_center_weights_subset
+(
+  @<Input xNP weights subset@>
+  const double *centerx,
+  double *P_ans
+){
+  @<Column Sum of @'weights[subsetx[i]] * pow(x[pN + subsetx[i]] - centerx[p], 2)@' with @'Nsubset@'@>
+}
+void RC_colSums2_center_weights_subset
+(
+  @<R Input xNP weights subset@>
+  const double *centerx,
+  double *P_ans
+){
+  C_colSums2_center_weights_subset(x, N[0], P[0], weights, subsetx, Nsubset[0], centerx, P_ans);
+}
+@| C_colSums2_center_weights_subset
+@}
+
+<<>>=
+P_ans <- .C("RC_colSums2_center_weights_subset", x = as.double(x),
+                           N = as.integer(N),
+                           P = as.integer(P),
+                           weights = as.integer(weights),
+                           subset = as.integer(subset - 1L),
+                           Nsubset = as.integer(length(subset)),
+                           centerx = as.double(centerx),
+                           P_ans = as.double(P_ans))$P_ans
+stopifnot(all.equal(P_ans, colSums(t((t(x[subset,]) - centerx))^2 * weights[subset])))
 @@
 
 
