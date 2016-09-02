@@ -168,6 +168,7 @@ The \proglang{R} interfaces are used to implement
 regression tests to be called from within \proglang{R}
 
 <<regression-test>>=
+### replace with library("libcoin")
 dyn.load("Sums.so")
 set.seed(29)
 N <- 20L
