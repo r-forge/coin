@@ -670,7 +670,7 @@ ctabs(x, y, weights = w, subset = s, block = b)
 \section{Example}
 
 <<ex>>=
-library("libcoin")
+summary(1)
 @@
 
 @S
