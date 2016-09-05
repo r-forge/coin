@@ -46,6 +46,53 @@ urlcolor={linkcolor}%
 \newcommand{\pkg}[1]{\textbf{#1}}
 \newcommand{\proglang}[1]{\textsf{#1}}
 
+\newcommand{\R}{\mathbb{R} }
+\newcommand{\Prob}{\mathbb{P} }
+\newcommand{\N}{\mathbb{N} }
+\newcommand{\C}{\mathbb{C} }
+\newcommand{\V}{\mathbb{V}} %% cal{\mbox{\textnormal{Var}}} }
+\newcommand{\E}{\mathbb{E}} %%mathcal{\mbox{\textnormal{E}}} }
+\newcommand{\Var}{\mathbb{V}} %%mathcal{\mbox{\textnormal{Var}}} }
+\newcommand{\argmin}{\operatorname{argmin}\displaylimits}
+\newcommand{\argmax}{\operatorname{argmax}\displaylimits}
+\newcommand{\LS}{\mathcal{L}_n}
+\newcommand{\TS}{\mathcal{T}_n}
+\newcommand{\LSc}{\mathcal{L}_{\text{comb},n}}
+\newcommand{\LSbc}{\mathcal{L}^*_{\text{comb},n}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\yn}{y_{\text{new}}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\sX}{\mathcal{X}}
+\newcommand{\sY}{\mathcal{Y}}
+\newcommand{\T}{\mathbf{T}}
+\newcommand{\x}{\mathbf{x}}
+\renewcommand{\a}{\mathbf{a}}
+\newcommand{\xn}{\mathbf{x}_{\text{new}}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\ws}{\mathbf{w}_\cdot}
+\renewcommand{\t}{\mathbf{t}}
+\newcommand{\M}{\mathbf{M}}
+\renewcommand{\vec}{\text{vec}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\K}{\mathbf{K}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\D}{\mathbf{D}}
+\newcommand{\I}{\mathbf{I}}
+\newcommand{\bS}{\mathbf{S}}
+\newcommand{\cellx}{\pi_n[\x]}
+\newcommand{\partn}{\pi_n(\mathcal{L}_n)}
+\newcommand{\err}{\text{Err}}
+\newcommand{\ea}{\widehat{\text{Err}}^{(a)}}
+\newcommand{\ecv}{\widehat{\text{Err}}^{(cv1)}}
+\newcommand{\ecvten}{\widehat{\text{Err}}^{(cv10)}}
+\newcommand{\eone}{\widehat{\text{Err}}^{(1)}}
+\newcommand{\eplus}{\widehat{\text{Err}}^{(.632+)}}
+\newcommand{\eoob}{\widehat{\text{Err}}^{(oob)}}
+
 
 \author{Torsten Hothorn \\ Universit\"at Z\"urich}
 
@@ -60,7 +107,117 @@ urlcolor={linkcolor}%
 \chapter{Introduction}
 \pagenumbering{arabic}
 
-\verb|code|
+In the following we assume that we are provided with $n$ observations
+\begin{eqnarray*}
+(\Y_i, \X_i, w_i, b_i), \quad i = 1, \dots, N.
+\end{eqnarray*}
+The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
+$\mathcal{X}$ may
+be measured at arbitrary scales and may be multivariate as well. In addition
+to those measurements, case weights $w_i \in \N$ and a factor $b_i \in \{1, \dots, B\}$ 
+coding for $B$ independent blocks may 
+be available. 
+We are interested in testing the null hypothesis of independence of $\Y$ and
+$\X$
+\begin{eqnarray*}
+H_0: D(\Y \mid \X) = D(\Y)
+\end{eqnarray*}
+against arbitrary alternatives. \cite{strasserweber1999} suggest to derive  
+scalar test statistics for testing $H_0$ from multivariate linear statistics
+of a specific linear form. Let $A \subseteq \{1, \dots, N\}$ denote some subset of the
+observation numbers and consider the linear statistic
+\begin{eqnarray} \label{linstat}
+\T(A) = \vec\left(\sum_{i \in A} w_i g(\X_i) h(\Y_i, \{\Y_i \mid i \in A\})^\top\right)
+\in \R^{pq}.  
+\end{eqnarray}
+Here, $g: \mathcal{X} \rightarrow \R^{p}$ is a transformation of
+$\X$ known as the \emph{regression function} and $h: \mathcal{Y} \times 
+\mathcal{Y}^n \rightarrow \R^q$ is a transformation of $\Y$ known as the
+\emph{influence function}, where the latter may depend on $\Y_i$ for $i \in A$
+in a permutation symmetric way.  We will give specific examples on how to choose
+$g$ and $h$ later on.
+
+With $\x_i = g(\X_i)$ and $\y_i = h(\Y_i, \{\Y_i, i \in A\})$ we write
+\begin{eqnarray} \label{linstat}
+\T(A) = \vec\left(\sum_{i \in A} w_i \x_i \y_i^\top\right)
+\in \R^{pq}.  
+\end{eqnarray}
+The \pkg{libcoin} package doesn't handle neither $g$ nor $h$, this is the job
+of \pkg{coin} and we therefore continue with $\x_i$ and $\y_i$.
+
+The distribution of $\T$  depends on the joint
+distribution of $\Y$ and $\X$, which is unknown under almost all practical  
+circumstances. At least under the null hypothesis one can dispose of this
+dependency by fixing $\X_i, i \in A$ and conditioning on all possible
+permutations $S(A)$ of the responses $\Y_i, i \in A$.
+This principle leads to test procedures known
+as \textit{permutation tests}.
+The conditional expectation $\mu(A) \in \R^{pq}$ and covariance
+$\Sigma(A) \in \R^{pq \times pq}$
+of $\T$ under $H_0$ given
+all permutations $\sigma \in S(A)$ of the responses are derived by
+\cite{strasserweber1999}:
+\begin{eqnarray}
+\mu(A) & = & \E(\T(A) \mid S(A)) = \vec \left( \left( \sum_{i \in A} w_i \x_i \right) \E(h \mid S(A))^\top
+\right), \nonumber \\
+\Sigma(A) & = & \V(\T(A) \mid S(A)) \nonumber \\
+& = &
+    \frac{\ws}{\ws(A) - 1}  \V(h \mid S(A)) \otimes
+        \left(\sum_{i \in A} w_i  \x_i \otimes w_i \x_i^\top \right)
+\label{expectcovar}
+\\
+& - & \frac{1}{\ws(A) - 1}  \V(h \mid S(A))  \otimes \left(
+        \sum_{i \in A} w_i \x_i \right)
+\otimes \left( \sum_{i \in A} w_i \x_i\right)^\top
+\nonumber
+\end{eqnarray}
+where $\ws(A) = \sum_{i \in A} w_i$ denotes the sum of the case weights,
+and $\otimes$ is the Kronecker product. The conditional expectation of the
+influence function is
+\begin{eqnarray*}
+\E(h \mid S(A)) = \ws(A)^{-1} \sum_{i \in A} w_i \y_i \in
+\R^q
+\end{eqnarray*}
+with corresponding $q \times q$ covariance matrix
+\begin{eqnarray*}
+\V(h \mid S(A)) = \ws(A)^{-1} \sum_{i \in A} w_i \left(\y_i - \E(h \mid S(A)) \right) \left(\y_i  - \E(h \mid S(A))\right)^\top.
+\end{eqnarray*}
+
+With $A_b = \{i \mid b_i = b\}$ we get $\T = \sum_{b = 1}^B T(A_b)$, 
+$\mu = \sum_{b = 1}^B \mu(A_b)$ and $\Sigma = \sum_{b = 1}^B \Sigma(A_b)$.
+
+Having the conditional expectation and covariance at hand we are able to
+standardize a linear statistic $\T \in \R^{pq}$ of the form
+(\ref{linstat}). Univariate test statistics~$c$ mapping an observed linear
+statistic $\mathbf{t} \in
+\R^{pq}$ into the real line can be of arbitrary form.  An obvious choice is
+the maximum of the absolute values of the standardized linear statistic
+\begin{eqnarray*}
+c_\text{max}(\mathbf{t}, \mu, \Sigma)  = \max \left| \frac{\mathbf{t} -
+\mu}{\text{diag}(\Sigma)^{1/2}} \right|
+\end{eqnarray*}  
+utilizing the conditional expectation $\mu$ and covariance matrix 
+$\Sigma$. The application of a quadratic form $c_\text{quad}(\mathbf{t}, \mu,
+\Sigma)  =
+(\mathbf{t} - \mu) \Sigma^+ (\mathbf{t} - \mu)^\top$ is one alternative, although
+computationally more expensive because the Moore-Penrose
+inverse $\Sigma^+$ of $\Sigma$ is involved.
+
+The definition of one- and two-sided $p$-values used for the computations in
+the \pkg{coin} package is
+\begin{eqnarray*}
+P(c(\T, \mu, \Sigma) &\le& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(less)} \\
+P(c(\T, \mu, \Sigma) &\ge& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(greater)}\\
+P(|c(\T, \mu, \Sigma)| &\le& |c(\mathbf{t}, \mu, \Sigma)|) \quad \text{(two-sided).}
+\end{eqnarray*}
+Note that for quadratic forms only two-sided $p$-values are available
+and that in the one-sided case maximum type test statistics are replaced by
+\begin{eqnarray*}
+\min \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
+    \quad \text{(less) and }
+\max \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
+    \quad \text{(greater).}
+\end{eqnarray*}
 
 \chapter{C Code}
 
