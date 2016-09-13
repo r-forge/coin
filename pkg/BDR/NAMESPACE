@@ -1,14 +1,14 @@
 
 importFrom("stats", "quantile", "weights", "xtabs")
 
-export("BDR", "interval", "enum")
+export("inum", "interval", "enum")
 
-S3method("as.data.frame", "BDR")
-S3method("as.data.frame", "BDRtotal")
-S3method("BDR", "data.frame")
-## S3method("BDR", "Surv")
+S3method("as.data.frame", "inum")
+S3method("as.data.frame", "inumtotal")
+S3method("inum", "data.frame")
+## S3method("inum", "Surv")
 ## S3method("is.numeric", "Surv")
-S3method("weights", "BDRtotal")
+S3method("weights", "inumtotal")
 S3method("print", "interval")
 S3method("levels", "interval")
 S3method("nlevels", "interval")

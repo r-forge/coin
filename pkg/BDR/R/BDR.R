@@ -1,16 +1,16 @@
 
-BDR <- function(object, nmax = 20, ...)
-    UseMethod("BDR")
+inum <- function(object, nmax = 20, ...)
+    UseMethod("inum")
 
-BDR.default <- function(object, nmax = 20, ...)
+inum.default <- function(object, nmax = 20, ...)
     stop("cannot handle objects of class", " ", sQuote(class(object)))
 
-BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, 
+inum.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, 
                            weights = NULL, as.interval = "", 
                            complete.cases.only = FALSE, ...) {
 
     if (total) {
-        bdr <- BDR(object, nmax = nmax, ignore = ignore, 
+        bdr <- inum(object, nmax = nmax, ignore = ignore, 
                    total = FALSE, as.interval = as.interval) 
         bdr2 <- lapply(bdr, function(x)
             factor(x, levels = 0:nlevels(x)))
@@ -54,6 +54,7 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
         if (complete.cases.only) {
             cc <- rowSums(sapply(sDF[colnames(sDF) != "(weights)"], 
                                  function(x) unclass(x) == 0)) == 0
+            cc[is.na(cc)] <- TRUE
             if (any(!cc)) {
                 sDF <- sDF[cc,,drop = FALSE]
                 ret[!cc] <- 0L
@@ -62,7 +63,7 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
         }  
 
         attr(ret, "levels") <- sDF
-        class(ret) <- "BDRtotal"
+        class(ret) <- "inumtotal"
         return(ret)
     }
 
@@ -104,19 +105,19 @@ BDR.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
                 class(ix) <- c("enum", "integer")
              }
         } else if (is.data.frame(x)) {
-            ix <- BDR(x, nmax = nmax, ignore = ignore, total = TRUE,
+            ix <- inum(x, nmax = nmax, ignore = ignore, total = TRUE,
                       as.interval = as.interval)
         } else {
-            ix <- BDR(x, nmax = nmax, ...) ### nothing as of now
+            ix <- inum(x, nmax = nmax, ...) ### nothing as of now
         }
         ret[[v]] <- ix
     }
-    class(ret) <- "BDR"
+    class(ret) <- "inum"
     ret
 }
 
 ### only useful for checks
-as.data.frame.BDR <- function(x, ...) {
+as.data.frame.inum <- function(x, ...) {
     ret <- lapply(x, function(x) {
         if (inherits(x, "interval")) return(x)
         lev <- attr(x, "levels")
@@ -129,17 +130,17 @@ as.data.frame.BDR <- function(x, ...) {
     ret
 }
 
-as.data.frame.BDRtotal <- function(x, ...) 
+as.data.frame.inumtotal <- function(x, ...) 
     attr(x, "levels")
 
-weights.BDRtotal <- function(object, ...)
+weights.inumtotal <- function(object, ...)
     attr(object, "levels")[["(weights)"]]
 
 ### does not make sense
 # is.numeric.Surv <- function(x, ...)
 #    return(FALSE)
-# BDR.Surv <- function(object, nmax = 20, ...) {
-#     x <- BDR(as.data.frame(unclass(object)), nmax = nmax, total = TRUE)
+# inum.Surv <- function(object, nmax = 20, ...) {
+#     x <- inum(as.data.frame(unclass(object)), nmax = nmax, total = TRUE)
 #     lev <- as.matrix(attr(x, "levels"))
 #     atr <- attributes(object)
 #     atr$dim <- dim(lev)
