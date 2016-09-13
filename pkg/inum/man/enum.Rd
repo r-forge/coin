@@ -1,14 +1,14 @@
 \name{enum}
 \alias{enum}
 \title{
-  Enumeration-type representation of vectors
+  Enumeration-type Representation of Vectors
 }
 \description{
   Elements of a vector are stored as a set of levels and 
-  an integer for enumeration.
+  an integer representing the enumeration.
 }
 \usage{
-enum(x)
+  enum(x)
 }
 \arguments{
   \item{x}{
@@ -29,9 +29,21 @@ An object of class \code{enum}. A value of \code{0} encodes \code{NA}.
 \code{\link{factor}}
 }
 \examples{
-enum(gl(2, 2))
-enum(rep(c(TRUE, FALSE), 2))
-enum(rep(1:5, 2))
-enum(rep(1:5 + .5, 2))
+
+(ex <- enum(x <- gl(2, 2)))
+all.equal(levels(ex)[ex], x)
+
+(ex <- enum(x <- rep(c(TRUE, FALSE), 2)))
+all.equal(levels(ex)[ex], x)
+
+(ex <- enum(x <- rep(1:5, 2)))
+all.equal(levels(ex)[ex], x)
+
+(ex <- enum(x <- rep(1:5 + .5, 2)))
+all.equal(levels(ex)[ex], x)
+
+(ex <- enum(x <- c(NA, rep(1:5 + .5, 2))))
+all.equal(c(NA, levels(ex))[unclass(ex) + 1L], x)
+
 }
 \keyword{data}

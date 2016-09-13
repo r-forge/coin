@@ -2,7 +2,7 @@
 \alias{interval}
 \alias{interval.numeric}
 \title{
-Cut Numeric Vectors in Intervals.
+Cut Numeric Vectors into Intervals
 }
 \description{
 \code{interval} divides \code{x} into intervals and,
@@ -36,6 +36,19 @@ An object of class \code{interval}. A value of \code{0} encodes \code{NA}.
 \code{\link{cut}}
 }
 \examples{
-interval(0:100/100, breaks = 5)
+
+(ix <- interval(x <- 0:100/100, breaks = 0:10/10))
+(cx <- cut(x, breaks = 0:10/10))
+
+attr(ix, "levels")
+levels(ix)
+levels(cx)
+
+diag(table(ix, cx))
+
+(ix <- interval(x <- c(NA, 0:100/100), breaks = 0:10/10))
+ix[is.na(x)]
+unclass(ix)[is.na(x)]
+
 }
 \keyword{data}

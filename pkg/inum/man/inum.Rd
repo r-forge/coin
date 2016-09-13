@@ -2,7 +2,7 @@
 \alias{inum}
 \alias{inum.data.frame}
 \title{
-Interval Enumeration for Data Frames
+Coerse Variables in Data Frames to \code{enum} or \code{interval}
 }
 \description{
 Represents elements of a data frame as \code{enum} or \code{interval}.
@@ -10,8 +10,8 @@ Represents elements of a data frame as \code{enum} or \code{interval}.
 \usage{
 inum(object, nmax = 20, ...)
 \method{inum}{data.frame}(object, nmax = 20, ignore = NULL, 
-    total = FALSE, weights = NULL, as.interval = "",
-    complete.cases.only = FALSE, ...)
+     total = FALSE, weights = NULL, as.interval = "",
+     complete.cases.only = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
