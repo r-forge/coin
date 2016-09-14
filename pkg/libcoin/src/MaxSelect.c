@@ -406,7 +406,7 @@ void C_unordered_Xfactor_block
 
             if (tmp > maxstat[0]) {
                 for (int p = 0; p < Pnonzero; p++)
-                    wmax[levels[p]] = contrast[p];
+                    wmax[levels[p]] = contrast[levels[p]];
                 maxstat[0] = tmp;
             }
 
@@ -509,7 +509,7 @@ void C_unordered_Xfactor
     for (int l = 1; l < Pnonzero; l++) mi *= 2;
     indl = Calloc(Pnonzero, int);
     for (int p = 0; p < Pnonzero; p++) indl[p] = 0;
-       
+
     for (int j = 1; j < mi; j++) { /* go though all splits */
     
         /* indl determines if level p is left or right */
@@ -561,10 +561,10 @@ void C_unordered_Xfactor
                 C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
                 tmp = C_quadform(Q, mlinstat, mexpect, mMPinv);
             }
-
+            
             if (tmp > maxstat[0]) {
                 for (int p = 0; p < Pnonzero; p++)
-                    wmax[levels[p]] = contrast[p];
+                    wmax[levels[p]] = contrast[levels[p]];
                 maxstat[0] = tmp;
             }
 
