@@ -124,23 +124,23 @@ H_0: D(\Y \mid \X) = D(\Y)
 \end{eqnarray*}
 against arbitrary alternatives. \cite{strasserweber1999} suggest to derive  
 scalar test statistics for testing $H_0$ from multivariate linear statistics
-of a specific linear form. Let $A \subseteq \{1, \dots, N\}$ denote some subset of the
+of a specific linear form. Let $\A \subseteq \{1, \dots, N\}$ denote some subset of the
 observation numbers and consider the linear statistic
 \begin{eqnarray} \label{linstat}
-\T(A) = \vec\left(\sum_{i \in A} w_i g(\X_i) h(\Y_i, \{\Y_i \mid i \in A\})^\top\right)
+\T(A) = \vec\left(\sum_{i \in \A} w_i g(\X_i) h(\Y_i, \{\Y_i \mid i \in \A\})^\top\right)
 \in \R^{pq}.  
 \end{eqnarray}
-Here, $g: \mathcal{X} \rightarrow \R^{p}$ is a transformation of
+Here, $g: \mathcal{X} \rightarrow \R^P$ is a transformation of
 $\X$ known as the \emph{regression function} and $h: \mathcal{Y} \times 
-\mathcal{Y}^n \rightarrow \R^q$ is a transformation of $\Y$ known as the
-\emph{influence function}, where the latter may depend on $\Y_i$ for $i \in A$
+\mathcal{Y}^n \rightarrow \R^Q$ is a transformation of $\Y$ known as the
+\emph{influence function}, where the latter may depend on $\Y_i$ for $i \in \A$
 in a permutation symmetric way.  We will give specific examples on how to choose
 $g$ and $h$ later on.
 
-With $\x_i = g(\X_i)$ and $\y_i = h(\Y_i, \{\Y_i, i \in A\})$ we write
+With $\x_i = g(\X_i) \in \R^P$ and $\y_i = h(\Y_i, \{\Y_i, i \in \A\}) \in \R^Q$ we write
 \begin{eqnarray} \label{linstat}
-\T(A) = \vec\left(\sum_{i \in A} w_i \x_i \y_i^\top\right)
-\in \R^{pq}.  
+\T(A) = \vec\left(\sum_{i \in \A} w_i \x_i \y_i^\top\right)
+\in \R^{PQ}.  
 \end{eqnarray}
 The \pkg{libcoin} package doesn't handle neither $g$ nor $h$, this is the job
 of \pkg{coin} and we therefore continue with $\x_i$ and $\y_i$.
@@ -148,49 +148,49 @@ of \pkg{coin} and we therefore continue with $\x_i$ and $\y_i$.
 The distribution of $\T$  depends on the joint
 distribution of $\Y$ and $\X$, which is unknown under almost all practical  
 circumstances. At least under the null hypothesis one can dispose of this
-dependency by fixing $\X_i, i \in A$ and conditioning on all possible
-permutations $S(A)$ of the responses $\Y_i, i \in A$.
+dependency by fixing $\X_i, i \in \A$ and conditioning on all possible
+permutations $S(A)$ of the responses $\Y_i, i \in \A$.
 This principle leads to test procedures known
 as \textit{permutation tests}.
-The conditional expectation $\mu(A) \in \R^{pq}$ and covariance
-$\Sigma(A) \in \R^{pq \times pq}$
+The conditional expectation $\mu(A) \in \R^{PQ}$ and covariance
+$\Sigma(A) \in \R^{PQ \times PQ}$
 of $\T$ under $H_0$ given
 all permutations $\sigma \in S(A)$ of the responses are derived by
 \cite{strasserweber1999}:
 \begin{eqnarray}
-\mu(A) & = & \E(\T(A) \mid S(A)) = \vec \left( \left( \sum_{i \in A} w_i \x_i \right) \E(h \mid S(A))^\top
+\mu(A) & = & \E(\T(A) \mid S(A)) = \vec \left( \left( \sum_{i \in \A} w_i \x_i \right) \E(h \mid S(A))^\top
 \right), \nonumber \\
 \Sigma(A) & = & \V(\T(A) \mid S(A)) \nonumber \\
 & = &
     \frac{\ws}{\ws(A) - 1}  \V(h \mid S(A)) \otimes
-        \left(\sum_{i \in A} w_i  \x_i \otimes w_i \x_i^\top \right)
+        \left(\sum_{i \in \A} w_i  \x_i \otimes w_i \x_i^\top \right)
 \label{expectcovar}
 \\
 & - & \frac{1}{\ws(A) - 1}  \V(h \mid S(A))  \otimes \left(
-        \sum_{i \in A} w_i \x_i \right)
-\otimes \left( \sum_{i \in A} w_i \x_i\right)^\top
+        \sum_{i \in \A} w_i \x_i \right)
+\otimes \left( \sum_{i \in \A} w_i \x_i\right)^\top
 \nonumber
 \end{eqnarray}
-where $\ws(A) = \sum_{i \in A} w_i$ denotes the sum of the case weights,
+where $\ws(A) = \sum_{i \in \A} w_i$ denotes the sum of the case weights,
 and $\otimes$ is the Kronecker product. The conditional expectation of the
 influence function is
 \begin{eqnarray*}
-\E(h \mid S(A)) = \ws(A)^{-1} \sum_{i \in A} w_i \y_i \in
-\R^q
+\E(h \mid S(A)) = \ws(A)^{-1} \sum_{i \in \A} w_i \y_i \in
+\R^Q
 \end{eqnarray*}
-with corresponding $q \times q$ covariance matrix
+with corresponding $Q \times Q$ covariance matrix
 \begin{eqnarray*}
-\V(h \mid S(A)) = \ws(A)^{-1} \sum_{i \in A} w_i \left(\y_i - \E(h \mid S(A)) \right) \left(\y_i  - \E(h \mid S(A))\right)^\top.
+\V(h \mid S(A)) = \ws(A)^{-1} \sum_{i \in \A} w_i \left(\y_i - \E(h \mid S(A)) \right) \left(\y_i  - \E(h \mid S(A))\right)^\top.
 \end{eqnarray*}
 
 With $A_b = \{i \mid b_i = b\}$ we get $\T = \sum_{b = 1}^B T(A_b)$, 
 $\mu = \sum_{b = 1}^B \mu(A_b)$ and $\Sigma = \sum_{b = 1}^B \Sigma(A_b)$.
 
 Having the conditional expectation and covariance at hand we are able to
-standardize a linear statistic $\T \in \R^{pq}$ of the form
+standardize a linear statistic $\T \in \R^{PQ}$ of the form
 (\ref{linstat}). Univariate test statistics~$c$ mapping an observed linear
 statistic $\mathbf{t} \in
-\R^{pq}$ into the real line can be of arbitrary form.  An obvious choice is
+\R^{PQ}$ into the real line can be of arbitrary form.  An obvious choice is
 the maximum of the absolute values of the standardized linear statistic
 \begin{eqnarray*}
 c_\text{max}(\mathbf{t}, \mu, \Sigma)  = \max \left| \frac{\mathbf{t} -
@@ -204,7 +204,7 @@ computationally more expensive because the Moore-Penrose
 inverse $\Sigma^+$ of $\Sigma$ is involved.
 
 The definition of one- and two-sided $p$-values used for the computations in
-the \pkg{coin} package is
+the \pkg{libcoin} package is
 \begin{eqnarray*}
 P(c(\T, \mu, \Sigma) &\le& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(less)} \\
 P(c(\T, \mu, \Sigma) &\ge& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(greater)}\\
@@ -297,6 +297,131 @@ VarianceInfluence_SLOT Xfactor_SLOT Work_SLOT tol_SLOT
 PermutedLinearStatistic_SLOT TableBlock_SLOT Sumweights_SLOT
 Table_SLOT
 @}
+
+\section{Linear Statistics, Expectation and Covariances}
+
+@s
+
+We first define interfaces to three of the main functions for
+computing linear statistics, expectations and covariances.
+
+@o R_LinearStatistic.c -cc
+@{
+#include "libcoin_internal.h"
+#include "LinearStatistic.h"
+#include "TestStatistics.h"
+#include "Utils.h"
+#include "Sums.h"
+#include "Tables.h"
+#include "Distributions.h"
+#include "MemoryAccess.h"
+@<R interface linear statistic, expectation and covariance@>
+@<R interface linear statistic, expectation and covariance, binned observations@>
+@<R interface permuted linear statistics@>
+@}   
+
+The \proglang{R} interface consists of a double matrix \verb|x| where 
+$\x = (\x_1^\top, \dots, \x_N^\top) \in \R^{NP}$ and 
+a double matrix \verb|x| where $\y = (\y_1^\top, \dots, \y_N^\top) \in \R^{NQ}$
+@d Variables R interface x y
+@{
+const SEXP x, 
+const SEXP y, 
+@}
+The argument \verb|x| can also be an integer $N$-vector. In this case,
+\verb|x| is interpreted as the dummy matrix defined by this vector and
+the flag \verb|Xfactor| gets the value one.
+The integer vector \verb|x| needs a \verb|levels| attributed of length $P$
+and zeros in \verb|x| are treated as missing values.
+
+Furthermore, we have an an $N$-vector of integer \verb|weights| ($\w = (w_1, \dots, w_N)$),
+a \verb|subset| $\A$ of observation numbers $0, \dots, N - 1$ (in \proglang(C)
+index!) and an integer $N$-vector of block numbers $\b = (b_1, \dots, b_N), b_i \in 1, \dots, B$
+(in \proglang{R} index!).
+\verb|block| needs to carry a \verb|levels| attributed of length $B$ (ie, should be
+a \verb|factor| in \proglang{R}). The cases $w_i = 1 \forall i$, $\A = \{0, \dots, N - 1\}$
+and $b_i = 1 \forall i$ are implemented by \verb|weights|, \verb|subset| and \verb|block|
+being integer vectors of length zero.
+@d Variables R interface weights subset block
+@{
+const SEXP weights,
+const SEXP subset, 
+const SEXP block,  
+@}
+Two technical arguments include a logical \verb|varonly| and a double tolerance
+\verb|tol| (variances smaller than \verb|tol| will be considered zero). 
+@d Variables R interface varonly tol
+@{
+const SEXP varonly,
+const SEXP tol
+@}
+
+
+
+From these \proglang{R} objects, we extract the dimensions $N$, $P$, 
+$Q$ and $B$ (called \verb|Lb| here), check if any of these objects is a long vector 
+(not supported at the moment). 
+
+@d Dimensions variables R interface
+@{
+SEXP P, Q, Lb, Xfactor;
+R_xlen_t n;
+
+/* check for long vectors (not supported at the moment) */
+n = xlength(y);
+if (n > INT_MAX)
+    error("libcoin does not support long vectors");
+n = xlength(subset);
+if (n > INT_MAX)
+    error("libcoin does not support long vectors");
+
+PROTECT(P = ScalarInteger(0));
+PROTECT(Q = ScalarInteger(0));
+PROTECT(Lb = ScalarInteger(0));
+PROTECT(Xfactor = ScalarInteger(0));
+
+if (isInteger(x)) {
+    INTEGER(P)[0] = NLEVELS(x);
+    INTEGER(Xfactor)[0] = 1;
+} else {
+    INTEGER(P)[0] = NCOL(x);
+    INTEGER(Xfactor)[0] = 0;
+}
+INTEGER(Q)[0] = NCOL(y);
+
+INTEGER(Lb)[0] = 1;
+if (LENGTH(block) > 0)
+    INTEGER(Lb)[0] = NLEVELS(block);
+@}
+
+Finally, we allocate memory using \verb|R_init_LECV_1d| and call the main working horse
+\verb|RC_ExpectationCovarianceStatistic|.
+
+@d R interface linear statistic, expectation and covariance
+@{   
+SEXP R_ExpectationCovarianceStatistic
+(
+    @<Variables R interface x y@>
+    @<Variables R interface weights subset block@>
+    @<Variables R interface varonly tol@>
+) {
+
+    SEXP ans;
+
+    @<Dimensions variables R interface@>
+
+    PROTECT(ans = R_init_LECV_1d(P, Q, varonly, Lb, Xfactor, tol));
+
+    RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
+
+    UNPROTECT(5); 
+    return(ans);
+}
+@| R_ExpectationCovarianceStatistic
+@}
+
+
+@S
 
 \section{Sums}
 
