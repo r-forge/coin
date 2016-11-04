@@ -207,6 +207,7 @@ SEXP R_PermutedLinearStatistic
         }
         tmp = Calloc(N, int);
         for (int i = 0; i < INTEGER(B)[0]; i++) {
+            if (i % 256 == 0) R_CheckUserInterrupt();
             linstat = REAL(ans) + PQ * i;
             for (int p = 0; p < PQ; p++)
                 linstat[p] = 0;
@@ -257,6 +258,7 @@ SEXP R_PermutedLinearStatistic
         }
         tmp = Calloc(N, int);
         for (int i = 0; i < INTEGER(B)[0]; i++) {
+            if (i % 256 == 0) R_CheckUserInterrupt();
             linstat = REAL(ans) + PQ * i;
             for (int p = 0; p < PQ; p++)
                 linstat[p] = 0;
