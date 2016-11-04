@@ -21,9 +21,11 @@ cmp <- function(t1, t2) {
         var2 <- covariance(t2)
         var2 <- var2[!upper.tri(var2)]
     }
-    c(max(abs(t1$LinearStatistic - statistic(t2, "linear"))),
-      max(abs(t1$Expectation - expectation(t2))),
-      max(abs(var1 - var2)))
+    all.equal(
+        list(t1$LinearStatistic, t1$Expectation, var1),
+        list(t2@statistic@linearstatistic, t2@statistic@expectation, var2),
+        check.attributes = FALSE
+    )
 }
 
 cmp2 <- function(t1, t2) {
@@ -150,20 +152,6 @@ Y <- matrix(runif(q * n), nc = q)
 w <- as.integer(floor(runif(n, max = 4)))
 s <- sample(1:n, floor(n/2), replace = TRUE)
 b <- sample(gl(2, 2, length = n))
-
-cmp <- function(t1, t2) {
-    if (is.null(t1$Covariance)) {
-        var1 <- t1$Variance
-        var2 <- diag(covariance(t2))
-    } else {
-        var1 <- t1$Covariance
-        var2 <- covariance(t2)
-        var2 <- var2[!upper.tri(var2)]
-    }
-    c(max(abs(t1$LinearStatistic - statistic(t2, "linear"))),
-      max(abs(t1$Expectation - expectation(t2))),
-      max(abs(var1 - var2)))
-}
 
 t1 <-LinStatExpCov(X, Y)
 t1v <-LinStatExpCov(X, Y, varonly = TRUE)
