@@ -7,9 +7,9 @@
   Perform permutation test for a linear statistic
 }
 \usage{
-doTest(object, teststat = c("maximum", "quadratic", "scalar"), 
-       alternative = c("two.sided", "less", "greater"), 
-       pvalue = TRUE, lower = FALSE, log = FALSE, 
+doTest(object, teststat = c("maximum", "quadratic", "scalar"),
+       alternative = c("two.sided", "less", "greater"),
+       pvalue = TRUE, lower = FALSE, log = FALSE,
        minbucket = 10L, ordered = TRUE, pargs = GenzBretz())
 }
 \arguments{
@@ -29,14 +29,14 @@ doTest(object, teststat = c("maximum", "quadratic", "scalar"),
   \item{minbucket}{minimum weight in either of two groups for maximally selected
                    statistics.
 }
-  \item{ordered}{a logical, if \code{TRUE} maximally selected statistics 
+  \item{ordered}{a logical, if \code{TRUE} maximally selected statistics
                  assume that the cutpoints are ordered.
 }
   \item{pargs}{arguments as in \code{\link[mvtnorm]{GenzBretz}}.
 }
 }
 \details{
-  Computes a test statistic, a corresponding p-value and, optionally, cutpoints for 
+  Computes a test statistic, a corresponding p-value and, optionally, cutpoints for
   maximally selected statistics.
 }
 \value{

@@ -1,5 +1,5 @@
 
-extern int C_get_P(SEXP LECV); 
+extern int C_get_P(SEXP LECV);
 extern int C_get_Q(SEXP LECV);
 extern int C_get_Lb(SEXP LECV);
 extern int C_get_varonly(SEXP LECV);

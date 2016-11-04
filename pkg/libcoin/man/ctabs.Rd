@@ -1,13 +1,13 @@
 \name{ctabs}
 \alias{ctabs}
 \title{
-    Cross Tabulation 
+    Cross Tabulation
 }
 \description{
     Efficient weighted cross tabulation of two factors and a block
 }
 \usage{
-ctabs(ix, iy = integer(0), weights = integer(0), 
+ctabs(ix, iy = integer(0), weights = integer(0),
       subset = integer(0), block = integer(0))
 }
 \arguments{
@@ -26,7 +26,7 @@ ctabs(ix, iy = integer(0), weights = integer(0),
   A faster version of \code{xtabs(weights ~ ix + iy + block, subset)}.
 }
 \value{
-  If \code{block} is present, a three-way table. Otherwise, 
+  If \code{block} is present, a three-way table. Otherwise,
   a one- or two-dimensional table.
 }
 \examples{

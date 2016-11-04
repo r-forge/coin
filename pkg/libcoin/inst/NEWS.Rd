@@ -6,7 +6,7 @@
   \itemize{
     \item{Give meaningful defaults and avoid calling \code{missing()} in
           \code{LinStatExpCov()}.}
-    \item{Add \cmd{call_libcoin()}. This is a dirty by-pass and must not 
+    \item{Add \cmd{call_libcoin()}. This is a dirty by-pass and must not
           be used under any circumstances.}
   }
 }

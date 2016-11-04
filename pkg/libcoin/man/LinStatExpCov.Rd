@@ -8,9 +8,9 @@
   and covariance under the independence hypothesis
 }
 \usage{
-LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0), 
-              subset = integer(0), block = integer(0), 
-              varonly = FALSE, B = 0, standardise = FALSE, 
+LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0),
+              subset = integer(0), block = integer(0),
+              varonly = FALSE, B = 0, standardise = FALSE,
               tol = sqrt(.Machine$double.eps))
 }
 \arguments{

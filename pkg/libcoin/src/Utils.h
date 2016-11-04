@@ -16,43 +16,43 @@ extern int NCOL
 
 extern void C_kronecker
 (
-    const double *A, 
-    const int m, 
+    const double *A,
+    const int m,
     const int n,
-    const double *B, 
-    const int r, 
-    const int s, 
+    const double *B,
+    const int r,
+    const int s,
     const int overwrite,
     double *ans
 );
 
 extern void C_kronecker_sym
 (
-    const double *A, 
-    const int m, 
-    const double *B, 
-    const int r, 
+    const double *A,
+    const int m,
+    const double *B,
+    const int r,
     const int overwrite,
     double *ans
 );
 
-extern void C_MPinv_sym 
+extern void C_MPinv_sym
 (
-    const double *x, 
-    const int n, 
-    const double tol, 
-    double *dMP, 
+    const double *x,
+    const int n,
+    const double tol,
+    double *dMP,
     int *rank
 );
 
 extern void rcont2
 (
-    int *nrow, 
+    int *nrow,
     int *ncol,
-    int *nrowt, 
-    int *ncolt, 
+    int *nrowt,
+    int *ncolt,
     int *ntotal,
-    double *fact, 
-    int *jwork, 
+    double *fact,
+    int *jwork,
     int *matrix
 );

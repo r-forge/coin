@@ -10,14 +10,14 @@ SEXP R_ChisqTest
 (
     SEXP LEV,
     SEXP pvalue,
-    SEXP lower, 
+    SEXP lower,
     SEXP give_log
 ) {
 
     SEXP ans, stat, pval, names;
     double *MPinv, *ls, st, *ex;
     int rank, P, Q, PQ, B, greater = 0;
-    
+
     P = C_get_P(LEV);
     Q = C_get_Q(LEV);
     PQ = P * Q;
@@ -27,16 +27,16 @@ SEXP R_ChisqTest
 
     MPinv = C_get_MPinv(LEV);
     C_MPinv_sym(C_get_Covariance(LEV), PQ, C_get_tol(LEV), MPinv, &rank);
-        
+
     PROTECT(ans = allocVector(VECSXP, 2));
     PROTECT(names = allocVector(STRSXP, 2));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
-    SET_STRING_ELT(names, 0, mkChar("TestStatistic"));      
+    SET_STRING_ELT(names, 0, mkChar("TestStatistic"));
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
-    SET_STRING_ELT(names, 1, mkChar("p.value"));      
+    SET_STRING_ELT(names, 1, mkChar("p.value"));
     namesgets(ans, names);
     REAL(pval)[0] = NA_REAL;
-    
+
     REAL(stat)[0] = C_quadform(PQ, C_get_LinearStatistic(LEV),
                                C_get_Expectation(LEV), MPinv);
 
@@ -67,13 +67,13 @@ SEXP R_ChisqTest
 
 SEXP R_MaxtypeTest
 (
-    SEXP LEV, 
-    SEXP alternative, 
+    SEXP LEV,
+    SEXP alternative,
     SEXP pvalue,
-    SEXP lower, 
-    SEXP give_log, 
-    SEXP maxpts, 
-    SEXP releps, 
+    SEXP lower,
+    SEXP give_log,
+    SEXP maxpts,
+    SEXP releps,
     SEXP abseps
 ) {
 
@@ -84,22 +84,22 @@ SEXP R_MaxtypeTest
     P = C_get_P(LEV);
     Q = C_get_Q(LEV);
     PQ = P * Q;
-            
+
     if (C_get_varonly(LEV) && PQ > 1)
             error("cannot compute adjusted p-value based on variances only");
-    
+
     PROTECT(ans = allocVector(VECSXP, 2));
     PROTECT(names = allocVector(STRSXP, 2));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
-    SET_STRING_ELT(names, 0, mkChar("TestStatistic"));      
+    SET_STRING_ELT(names, 0, mkChar("TestStatistic"));
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
-    SET_STRING_ELT(names, 1, mkChar("p.value"));      
+    SET_STRING_ELT(names, 1, mkChar("p.value"));
     namesgets(ans, names);
     REAL(pval)[0] = NA_REAL;
 
-    REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LEV), 
-                               C_get_Expectation(LEV), 
-                               C_get_Covariance(LEV), 
+    REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LEV),
+                               C_get_Expectation(LEV),
+                               C_get_Covariance(LEV),
                                C_get_varonly(LEV),
                                C_get_tol(LEV),
                                INTEGER(alternative)[0]);
@@ -118,7 +118,7 @@ SEXP R_MaxtypeTest
         REAL(pval)[0] = C_maxtype_pvalue(REAL(stat)[0], C_get_Covariance(LEV),
                                          PQ, INTEGER(alternative)[0], INTEGER(lower)[0],
                                          INTEGER(give_log)[0],
-                                         INTEGER(maxpts)[0], REAL(releps)[0], 
+                                         INTEGER(maxpts)[0], REAL(releps)[0],
                                          REAL(abseps)[0], C_get_tol(LEV));
     } else {
         B = C_get_B(LEV);
@@ -148,11 +148,11 @@ SEXP R_MaxtypeTest
 
 SEXP R_MaxSelectTest
 (
-    SEXP LEV, 
+    SEXP LEV,
     SEXP ordered,
-    SEXP teststat, 
-    SEXP minbucket, 
-    SEXP lower, 
+    SEXP teststat,
+    SEXP minbucket,
+    SEXP lower,
     SEXP give_log
 ) {
 
@@ -166,9 +166,9 @@ SEXP R_MaxSelectTest
     PROTECT(ans = allocVector(VECSXP, 3));
     PROTECT(names = allocVector(STRSXP, 3));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
-    SET_STRING_ELT(names, 0, mkChar("TestStatistic"));      
+    SET_STRING_ELT(names, 0, mkChar("TestStatistic"));
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
-    SET_STRING_ELT(names, 1, mkChar("p.value"));      
+    SET_STRING_ELT(names, 1, mkChar("p.value"));
     REAL(pval)[0] = NA_REAL;
 
     if (INTEGER(ordered)[0]) {
@@ -178,7 +178,7 @@ SEXP R_MaxSelectTest
                               C_get_Expectation(LEV),
                               C_get_VarianceInfluence(LEV),
                               C_get_CovarianceInfluence(LEV),
-                              P, Q, 
+                              P, Q,
                               C_get_ExpectationX(LEV),
                               C_get_B(LEV),
                               C_get_PermutedLinearStatistic(LEV),
@@ -186,13 +186,13 @@ SEXP R_MaxSelectTest
                               C_get_tol(LEV),
                               INTEGER(teststat)[0],
                               INTEGER(index), REAL(stat),
-                              REAL(pval), INTEGER(lower)[0], 
+                              REAL(pval), INTEGER(lower)[0],
                               INTEGER(give_log)[0]);
         } else {
             C_ordered_Xfactor_block(C_get_LinearStatistic(LEV),
                               C_get_Expectation(LEV),
                               C_get_Covariance(LEV),
-                              P, Q, 
+                              P, Q,
                               C_get_ExpectationX(LEV),
                               C_get_B(LEV),
                               C_get_PermutedLinearStatistic(LEV),
@@ -200,7 +200,7 @@ SEXP R_MaxSelectTest
                               C_get_tol(LEV),
                               INTEGER(teststat)[0],
                               INTEGER(index), REAL(stat),
-                              REAL(pval), INTEGER(lower)[0], 
+                              REAL(pval), INTEGER(lower)[0],
                               INTEGER(give_log)[0]);
         }
         if (REAL(stat)[0] > 0)
@@ -212,7 +212,7 @@ SEXP R_MaxSelectTest
                               C_get_Expectation(LEV),
                               C_get_VarianceInfluence(LEV),
                               C_get_CovarianceInfluence(LEV),
-                              P, Q, 
+                              P, Q,
                               C_get_ExpectationX(LEV),
                               C_get_B(LEV),
                               C_get_PermutedLinearStatistic(LEV),
@@ -220,13 +220,13 @@ SEXP R_MaxSelectTest
                               C_get_tol(LEV),
                               INTEGER(teststat)[0],
                               INTEGER(index), REAL(stat),
-                              REAL(pval), INTEGER(lower)[0], 
+                              REAL(pval), INTEGER(lower)[0],
                               INTEGER(give_log)[0]);
         } else {
             C_unordered_Xfactor_block(C_get_LinearStatistic(LEV),
                               C_get_Expectation(LEV),
                               C_get_Covariance(LEV),
-                              P, Q, 
+                              P, Q,
                               C_get_ExpectationX(LEV),
                               C_get_B(LEV),
                               C_get_PermutedLinearStatistic(LEV),
@@ -234,14 +234,14 @@ SEXP R_MaxSelectTest
                               C_get_tol(LEV),
                               INTEGER(teststat)[0],
                               INTEGER(index), REAL(stat),
-                              REAL(pval), INTEGER(lower)[0], 
+                              REAL(pval), INTEGER(lower)[0],
                               INTEGER(give_log)[0]);
         }
     }
 
-    SET_STRING_ELT(names, 2, mkChar("index"));      
+    SET_STRING_ELT(names, 2, mkChar("index"));
     namesgets(ans, names);
 
     UNPROTECT(2);
     return(ans);
-}                                      
+}

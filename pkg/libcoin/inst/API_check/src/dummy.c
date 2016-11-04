@@ -7,9 +7,9 @@
 
 #include <libcoin.h>
 
-SEXP myR_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset, 
+SEXP myR_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
                                         SEXP block, SEXP varonly) {
-                                      
-   return(libcoin_R_ExpectationCovarianceStatistic(x, y, weights, subset, 
+
+   return(libcoin_R_ExpectationCovarianceStatistic(x, y, weights, subset,
                                            block, varonly));
-}                                                                            
+}

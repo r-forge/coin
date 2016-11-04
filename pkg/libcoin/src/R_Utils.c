@@ -10,7 +10,7 @@
 
 SEXP R_kronecker
 (
-    SEXP A, 
+    SEXP A,
     SEXP B
 ) {
 

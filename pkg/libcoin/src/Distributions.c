@@ -8,9 +8,9 @@
 /* lower = 1 means p-value, lower = 0 means 1 - p-value */
 double C_chisq_pvalue
 (
-    const double stat, 
-    const int df, 
-    const int lower, 
+    const double stat,
+    const int df,
+    const int lower,
     const int give_log
 ) {
 
@@ -19,14 +19,14 @@ double C_chisq_pvalue
 
 double C_perm_pvalue
 (
-    const int greater, 
-    const int B, 
-    const int lower, 
+    const int greater,
+    const int B,
+    const int lower,
     const int give_log
 ) {
 
     double ret;
-    
+
     if (give_log) {
          if (lower) {
              ret = log1p(- (double) greater / B);
@@ -46,14 +46,14 @@ double C_perm_pvalue
 
 double C_norm_pvalue
 (
-    const double stat, 
-    const int alternative, 
-    const int lower, 
+    const double stat,
+    const int alternative,
+    const int lower,
     const int give_log
 ) {
 
     double ret;
-    
+
     if (alternative == ALTERNATIVE_less) {
         return(pnorm(stat, 0.0, 1.0, 1 - lower, give_log));
     } else if (alternative == ALTERNATIVE_greater) {
@@ -67,17 +67,17 @@ double C_norm_pvalue
                 return(1 - 2 * ret);
             }
         } else {
-            ret = pnorm(fabs(stat)*-1.0, 0.0, 1.0, 1, give_log);                  
+            ret = pnorm(fabs(stat)*-1.0, 0.0, 1.0, 1, give_log);
             if (give_log) {
                 return(ret + log(2));
             } else {
                 return(2 * ret);
             }
         }
-    }           
+    }
     return(NA_REAL);
 }
-    
+
 /**
     Conditional asymptotic P-value of a maxabs-type test statistic\n
     Basically the functionality from package `mvtnorm' \n
@@ -92,15 +92,15 @@ double C_norm_pvalue
 
 double C_maxtype_pvalue
 (
-    const double stat, 
-    const double *Covariance, 
-    const int n, 
-    const int alternative, 
-    const int lower, 
-    const int give_log, 
+    const double stat,
+    const double *Covariance,
+    const int n,
+    const int alternative,
+    const int lower,
+    const int give_log,
     int maxpts, /* const? */
-    double releps, 
-    double abseps, 
+    double releps,
+    double abseps,
     double tol
 ) {
 
@@ -108,14 +108,14 @@ double C_maxtype_pvalue
     double ans, myerror, *lowerbnd, *upperbnd, *delta, *corr, *sd;
 
     /* univariate problem */
-    if (n == 1) 
+    if (n == 1)
         return(C_norm_pvalue(stat, alternative, lower, give_log));
-    
-    if (n == 2)  
+
+    if (n == 2)
          corr = Calloc(1, double);
-    else 
+    else
          corr = Calloc(n + ((n - 2) * (n - 1))/2, double);
-    
+
     sd = Calloc(n, double);
     lowerbnd = Calloc(n, double);
     upperbnd = Calloc(n, double);
@@ -123,7 +123,7 @@ double C_maxtype_pvalue
     delta = Calloc(n, double);
     index = Calloc(n, int);
 
-    /* determine elements with non-zero variance */ 
+    /* determine elements with non-zero variance */
 
     nonzero = 0;
     for (i = 0; i < n; i++) {
@@ -133,8 +133,8 @@ double C_maxtype_pvalue
         }
     }
 
-    /* mvtdst assumes the unique elements of the triangular 
-       covariance matrix to be passes as argument CORREL 
+    /* mvtdst assumes the unique elements of the triangular
+       covariance matrix to be passes as argument CORREL
     */
 
     for (int iz = 0; iz < nonzero; iz++) {
@@ -144,7 +144,7 @@ double C_maxtype_pvalue
 
         /* standard deviations */
         sd[i] = sqrt(Covariance[S(i, i, n)]);
-                
+
         if (alternative == ALTERNATIVE_less) {
             lowerbnd[iz] = stat;
             upperbnd[iz] = R_PosInf;
@@ -160,39 +160,39 @@ double C_maxtype_pvalue
         }
 
         delta[iz] = 0.0;
-        
-        /* set up vector of correlations, i.e., the upper 
+
+        /* set up vector of correlations, i.e., the upper
            triangular part of the covariance matrix) */
         for (int jz = 0; jz < iz; jz++) {
-            j = index[jz]; 
+            j = index[jz];
             sub = (int) (jz + 1) + (double) ((iz - 1) * iz) / 2 - 1;
-            if (sd[i] == 0.0 || sd[j] == 0.0) 
-                corr[sub] = 0.0; 
-            else 
+            if (sd[i] == 0.0 || sd[j] == 0.0)
+                corr[sub] = 0.0;
+            else
                 corr[sub] = Covariance[S(i, j, n)] / (sd[i] * sd[j]);
         }
     }
-        
+
     /* call mvtnorm's mvtdst C function defined in mvtnorm/include/mvtnormAPI.h */
-    mvtnorm_C_mvtdst(&nonzero, &nu, lowerbnd, upperbnd, infin, corr, delta, 
+    mvtnorm_C_mvtdst(&nonzero, &nu, lowerbnd, upperbnd, infin, corr, delta,
                      &maxpts, &abseps, &releps, &myerror, &ans, &inform, &rnd);
 
     /* inform == 0 means: everything is OK */
     switch (inform) {
         case 0: break;
         case 1: warning("cmvnorm: completion with ERROR > EPS"); break;
-        case 2: warning("cmvnorm: N > 1000 or N < 1"); 
-                ans = 0.0; 
+        case 2: warning("cmvnorm: N > 1000 or N < 1");
+                ans = 0.0;
                 break;
-        case 3: warning("cmvnorm: correlation matrix not positive semi-definite"); 
-                ans = 0.0; 
+        case 3: warning("cmvnorm: correlation matrix not positive semi-definite");
+                ans = 0.0;
                 break;
         default: warning("cmvnorm: unknown problem in MVTDST");
                 ans = 0.0;
     }
-    Free(corr); Free(sd); Free(lowerbnd); Free(upperbnd); 
+    Free(corr); Free(sd); Free(lowerbnd); Free(upperbnd);
     Free(infin); Free(delta);
-    
+
     /* ans = 1 - p-value */
     if (lower) {
         if (give_log)
@@ -208,13 +208,13 @@ double C_maxtype_pvalue
 
 void C_Permute
 (
-    int *x, 
-    const int N, 
+    int *x,
+    const int N,
     int *ans
 ) {
 
     int k = N, n = N, j;
-    
+
     for (int i = 0; i < k; i++) {
         j = n * unif_rand();
         ans[i] = x[j];
@@ -224,17 +224,17 @@ void C_Permute
 
 void C_PermuteBlock
 (
-    int *x, 
-    const int *table, 
-    const int Ntable, 
+    int *x,
+    const int *table,
+    const int Ntable,
     int *ans
 ) {
 
     int *px, *pans;
-    
+
     px = x;
     pans = ans;
-    
+
     for (int j = 0; j < Ntable; j++) {
         if (table[j] > 0) {
             C_Permute(px, table[j], pans);
@@ -246,11 +246,11 @@ void C_PermuteBlock
 
 void C_doPermuteBlock
 (
-    const int *subset, 
-    const int Nsubset, 
-    const int *table, 
-    const int Nlevels, 
-    int *Nsubset_tmp, 
+    const int *subset,
+    const int Nsubset,
+    const int *table,
+    const int Nlevels,
+    int *Nsubset_tmp,
     int *perm
 ) {
 
@@ -260,9 +260,9 @@ void C_doPermuteBlock
 
 void C_doPermute
 (
-    const int *subset, 
-    const int Nsubset, 
-    int *Nsubset_tmp, 
+    const int *subset,
+    const int Nsubset,
+    int *Nsubset_tmp,
     int *perm
 ) {
 
@@ -272,7 +272,7 @@ void C_doPermute
 
 void C_setup_subset
 (
-    const int N, 
+    const int N,
     int *N_ans
 ) {
 
@@ -281,8 +281,8 @@ void C_setup_subset
 
 void C_setup_subset_weights
 (
-    const int N, 
-    const int *weights, 
+    const int N,
+    const int *weights,
     int *sw_ans
 ) {
 
@@ -296,9 +296,9 @@ void C_setup_subset_weights
 
 void C_setup_subset_weights_subset
 (
-    const int Nsubset, 
-    const int *weights, 
-    const int *subset, 
+    const int Nsubset,
+    const int *weights,
+    const int *subset,
     int *sw_ans
 ) {
 
@@ -312,15 +312,15 @@ void C_setup_subset_weights_subset
 
 void C_order_wrt_block
 (
-    int *subset, 
-    const int Nsubset, 
-    const int *block, 
-    const int *table, 
+    int *subset,
+    const int Nsubset,
+    const int *block,
+    const int *table,
     const int Nlevels
 ) {
 
     int *cumtable, *subset_tmp;
-    
+
     cumtable = Calloc(Nlevels, int);
     for (int k = 0; k < Nlevels; k++) cumtable[k] = 0;
 
@@ -330,8 +330,8 @@ void C_order_wrt_block
     /* table[0] are missings, ie block == 0 ! */
     for (int k = 1; k < Nlevels; k++)
         cumtable[k] = cumtable[k - 1] + table[k - 1];
-    
+
     for (int i = 0; i < Nsubset; i++)
         subset[cumtable[block[subset_tmp[i]]]++] = subset_tmp[i];
     Free(cumtable); Free(subset_tmp);
-} 
+}

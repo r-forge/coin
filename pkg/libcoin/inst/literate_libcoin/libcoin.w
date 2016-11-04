@@ -114,24 +114,24 @@ In the following we assume that we are provided with $n$ observations
 The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
 $\mathcal{X}$ may
 be measured at arbitrary scales and may be multivariate as well. In addition
-to those measurements, case weights $w_i \in \N$ and a factor $b_i \in \{1, \dots, B\}$ 
-coding for $B$ independent blocks may 
-be available. 
+to those measurements, case weights $w_i \in \N$ and a factor $b_i \in \{1, \dots, B\}$
+coding for $B$ independent blocks may
+be available.
 We are interested in testing the null hypothesis of independence of $\Y$ and
 $\X$
 \begin{eqnarray*}
 H_0: D(\Y \mid \X) = D(\Y)
 \end{eqnarray*}
-against arbitrary alternatives. \cite{strasserweber1999} suggest to derive  
+against arbitrary alternatives. \cite{strasserweber1999} suggest to derive
 scalar test statistics for testing $H_0$ from multivariate linear statistics
 of a specific linear form. Let $\A \subseteq \{1, \dots, N\}$ denote some subset of the
 observation numbers and consider the linear statistic
 \begin{eqnarray} \label{linstat}
 \T(A) = \vec\left(\sum_{i \in \A} w_i g(\X_i) h(\Y_i, \{\Y_i \mid i \in \A\})^\top\right)
-\in \R^{pq}.  
+\in \R^{pq}.
 \end{eqnarray}
 Here, $g: \mathcal{X} \rightarrow \R^P$ is a transformation of
-$\X$ known as the \emph{regression function} and $h: \mathcal{Y} \times 
+$\X$ known as the \emph{regression function} and $h: \mathcal{Y} \times
 \mathcal{Y}^n \rightarrow \R^Q$ is a transformation of $\Y$ known as the
 \emph{influence function}, where the latter may depend on $\Y_i$ for $i \in \A$
 in a permutation symmetric way.  We will give specific examples on how to choose
@@ -140,13 +140,13 @@ $g$ and $h$ later on.
 With $\x_i = g(\X_i) \in \R^P$ and $\y_i = h(\Y_i, \{\Y_i, i \in \A\}) \in \R^Q$ we write
 \begin{eqnarray} \label{linstat}
 \T(A) = \vec\left(\sum_{i \in \A} w_i \x_i \y_i^\top\right)
-\in \R^{PQ}.  
+\in \R^{PQ}.
 \end{eqnarray}
 The \pkg{libcoin} package doesn't handle neither $g$ nor $h$, this is the job
 of \pkg{coin} and we therefore continue with $\x_i$ and $\y_i$.
 
 The distribution of $\T$  depends on the joint
-distribution of $\Y$ and $\X$, which is unknown under almost all practical  
+distribution of $\Y$ and $\X$, which is unknown under almost all practical
 circumstances. At least under the null hypothesis one can dispose of this
 dependency by fixing $\X_i, i \in \A$ and conditioning on all possible
 permutations $S(A)$ of the responses $\Y_i, i \in \A$.
@@ -183,7 +183,7 @@ with corresponding $Q \times Q$ covariance matrix
 \V(h \mid S(A)) = \ws(A)^{-1} \sum_{i \in \A} w_i \left(\y_i - \E(h \mid S(A)) \right) \left(\y_i  - \E(h \mid S(A))\right)^\top.
 \end{eqnarray*}
 
-With $A_b = \{i \mid b_i = b\}$ we get $\T = \sum_{b = 1}^B T(A_b)$, 
+With $A_b = \{i \mid b_i = b\}$ we get $\T = \sum_{b = 1}^B T(A_b)$,
 $\mu = \sum_{b = 1}^B \mu(A_b)$ and $\Sigma = \sum_{b = 1}^B \Sigma(A_b)$.
 
 Having the conditional expectation and covariance at hand we are able to
@@ -195,8 +195,8 @@ the maximum of the absolute values of the standardized linear statistic
 \begin{eqnarray*}
 c_\text{max}(\mathbf{t}, \mu, \Sigma)  = \max \left| \frac{\mathbf{t} -
 \mu}{\text{diag}(\Sigma)^{1/2}} \right|
-\end{eqnarray*}  
-utilizing the conditional expectation $\mu$ and covariance matrix 
+\end{eqnarray*}
+utilizing the conditional expectation $\mu$ and covariance matrix
 $\Sigma$. The application of a quadratic form $c_\text{quad}(\mathbf{t}, \mu,
 \Sigma)  =
 (\mathbf{t} - \mu) \Sigma^+ (\mathbf{t} - \mu)^\top$ is one alternative, although
@@ -246,12 +246,12 @@ We include the relevant header files from R.
 
 \verb|S[i, j, n]| computes the index of element $(i, j)$ of
 some $n \times n$ symmetric matrix stored in lower packaged
-form, allowing for $i < j$. \verb|LE| and \verb|GE| 
+form, allowing for $i < j$. \verb|LE| and \verb|GE|
 implement $\le$ and $\ge$ with given tolerance \verb|tol|.
 
 @d Define macros
 @{
-/* S[i, j] for n x n symmetric matrix in lower packed 
+/* S[i, j] for n x n symmetric matrix in lower packed
    storage allowing for i < j */
 #define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)
 #define LE(x, y, tol)  ((x) < (y)) || (fabs((x) - (y)) < (tol))
@@ -266,8 +266,8 @@ implement $\le$ and $\ge$ with given tolerance \verb|tol|.
 #define ALTERNATIVE_greater             3
 #define TESTSTAT_maximum                1
 #define TESTSTAT_quadratic              2
-@| ALTERNATIVE_twosided ALTERNATIVE_less ALTERNATIVE_greater          
-TESTSTAT_maximum TESTSTAT_quadratic 
+@| ALTERNATIVE_twosided ALTERNATIVE_less ALTERNATIVE_greater
+TESTSTAT_maximum TESTSTAT_quadratic
 @}
 
 @d Define output constants
@@ -291,9 +291,9 @@ TESTSTAT_maximum TESTSTAT_quadratic
 #define Sumweights_SLOT                 16
 #define Table_SLOT                      17
 @| LinearStatistic_SLOT Expectation_SLOT
-Covariance_SLOT Variance_SLOT MPinv_SLOT ExpectationX_SLOT 
-varonly_SLOT dim_SLOT ExpectationInfluence_SLOT CovarianceInfluence_SLOT 
-VarianceInfluence_SLOT Xfactor_SLOT Work_SLOT tol_SLOT 
+Covariance_SLOT Variance_SLOT MPinv_SLOT ExpectationX_SLOT
+varonly_SLOT dim_SLOT ExpectationInfluence_SLOT CovarianceInfluence_SLOT
+VarianceInfluence_SLOT Xfactor_SLOT Work_SLOT tol_SLOT
 PermutedLinearStatistic_SLOT TableBlock_SLOT Sumweights_SLOT
 Table_SLOT
 @}
@@ -318,15 +318,15 @@ computing linear statistics, expectations and covariances.
 @<R interface linear statistic, expectation and covariance@>
 @<R interface linear statistic, expectation and covariance, binned observations@>
 @<R interface permuted linear statistics@>
-@}   
+@}
 
-The \proglang{R} interface consists of a double matrix \verb|x| where 
-$\x = (\x_1^\top, \dots, \x_N^\top) \in \R^{NP}$ and 
+The \proglang{R} interface consists of a double matrix \verb|x| where
+$\x = (\x_1^\top, \dots, \x_N^\top) \in \R^{NP}$ and
 a double matrix \verb|x| where $\y = (\y_1^\top, \dots, \y_N^\top) \in \R^{NQ}$
 @d Variables R interface x y
 @{
-const SEXP x, 
-const SEXP y, 
+const SEXP x,
+const SEXP y,
 @}
 The argument \verb|x| can also be an integer $N$-vector. In this case,
 \verb|x| is interpreted as the dummy matrix defined by this vector and
@@ -345,11 +345,11 @@ being integer vectors of length zero.
 @d Variables R interface weights subset block
 @{
 const SEXP weights,
-const SEXP subset, 
-const SEXP block,  
+const SEXP subset,
+const SEXP block,
 @}
 Two technical arguments include a logical \verb|varonly| and a double tolerance
-\verb|tol| (variances smaller than \verb|tol| will be considered zero). 
+\verb|tol| (variances smaller than \verb|tol| will be considered zero).
 @d Variables R interface varonly tol
 @{
 const SEXP varonly,
@@ -358,9 +358,9 @@ const SEXP tol
 
 
 
-From these \proglang{R} objects, we extract the dimensions $N$, $P$, 
-$Q$ and $B$ (called \verb|Lb| here), check if any of these objects is a long vector 
-(not supported at the moment). 
+From these \proglang{R} objects, we extract the dimensions $N$, $P$,
+$Q$ and $B$ (called \verb|Lb| here), check if any of these objects is a long vector
+(not supported at the moment).
 
 @d Dimensions variables R interface
 @{
@@ -398,7 +398,7 @@ Finally, we allocate memory using \verb|R_init_LECV_1d| and call the main workin
 \verb|RC_ExpectationCovarianceStatistic|.
 
 @d R interface linear statistic, expectation and covariance
-@{   
+@{
 SEXP R_ExpectationCovarianceStatistic
 (
     @<Variables R interface x y@>
@@ -414,7 +414,7 @@ SEXP R_ExpectationCovarianceStatistic
 
     RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
 
-    UNPROTECT(5); 
+    UNPROTECT(5);
     return(ans);
 }
 @| R_ExpectationCovarianceStatistic
@@ -446,7 +446,7 @@ functions to be used outside \verb|Sums.c|
 @<Function prototypes@>
 @}
 
-The \proglang{R} interfaces are used to implement 
+The \proglang{R} interfaces are used to implement
 regression tests to be called from within \proglang{R}
 
 <<regression-test>>=
@@ -490,19 +490,19 @@ we compute the sum of certain elements of $w$ by the scrap
 @}
 
 Because the sum can be larger than \verb|INT_MAX|, the sum is
-stored as a \verb|long int| first and a cast to \verb|int| performed 
+stored as a \verb|long int| first and a cast to \verb|int| performed
 if this is possible, otherwise an error is reported.
 
 @d Check Integer Overlow and Return
 @{
 /* integer overflow can only happen here */
-if (ans > INT_MAX) 
+if (ans > INT_MAX)
   error("sum of weights is larger than INT_MAX");
 int ret = (int) ans;
 return(ret);
 @}
 
-We compute the total sum $\sum_{i = 0}^{N - 1} w_i$ 
+We compute the total sum $\sum_{i = 0}^{N - 1} w_i$
 
 @d Sums of weights
 @{
@@ -535,9 +535,9 @@ ans <- .C("RC_sum_weights", weights = as.integer(weights),
 stopifnot(all.equal(ans, sum(weights)))
 @@
 
-and the sum over a subset $\sum_{i \in S} w_i$ 
-where the subset $S$ is represented by an integer vector 
-\verb|subsetx| of length \verb|Nsubset| 
+and the sum over a subset $\sum_{i \in S} w_i$
+where the subset $S$ is represented by an integer vector
+\verb|subsetx| of length \verb|Nsubset|
 
 @d Input subsetx
 @{
@@ -574,7 +574,7 @@ void RC_sum_weights_subset
 and regression test
 
 <<>>=
-ans <- .C("RC_sum_weights_subset", 
+ans <- .C("RC_sum_weights_subset",
           weights = as.integer(weights),
           N = as.integer(N),
           subset = as.integer(subset - 1L),
@@ -585,15 +585,15 @@ stopifnot(all.equal(ans, sum(weights[subset])))
 
 \subsection{Row sums}
 
-For a double matrix $X \sim (N, P)$ 
-@d Input xNP 
+For a double matrix $X \sim (N, P)$
+@d Input xNP
 @{
 const double *x,
 const int N,
 const int P,
 @}
 
-@d R Input xNP 
+@d R Input xNP
 @{
 const double *x,
 const int *N,
@@ -603,13 +603,13 @@ const int *P,
 @d Function prototypes
 @{
 external void C_rowSums_(@<Input xNP@>, double *N_ans);
-external void C_rowSums_i(const int *x, const int N,  
+external void C_rowSums_i(const int *x, const int N,
                           const int P, int *N_ans);
 @}
 
-The $N$ vector \verb|N_ans| of row sums 
+The $N$ vector \verb|N_ans| of row sums
 $\sum_{p = 0}^{P - 1} X_{ip}, i = 0, \dots, N - 1$ for a double
-matrix $X \sim (N, P)$ is computed by  
+matrix $X \sim (N, P)$ is computed by
 
 @d Row sum scrap
 @{
@@ -666,7 +666,7 @@ void C_rowSums_i
 \subsection{Column sums}
 
 
-@d Input xNP weights 
+@d Input xNP weights
 @{
 @<Input xNP@>
 @<Input weights@>,
@@ -679,7 +679,7 @@ void C_rowSums_i
 const int Nsubset,
 @}
 
-@d Input xNP weights subset 
+@d Input xNP weights subset
 @{
 @<Input xNP weights@>
 @<Input subsetx@>
@@ -687,7 +687,7 @@ const int Nsubset,
 @}
 
 
-@d R Input xNP weights 
+@d R Input xNP weights
 @{
 @<R Input xNP@>
 @<Input weights@>,
@@ -700,7 +700,7 @@ const int Nsubset,
 const int *Nsubset,
 @}
 
-@d R Input xNP weights subset 
+@d R Input xNP weights subset
 @{
 @<R Input xNP weights@>
 @<Input subsetx@>
@@ -712,7 +712,7 @@ const int *Nsubset,
 @d Function prototypes
 @{
 external void C_colSums_(@<Input xNP@>, double *P_ans);
-external void C_colSums_i(const int *x, const int N,  
+external void C_colSums_i(const int *x, const int N,
                           const int P, int *P_ans);
 external void C_colSums_weights(@<Input xNP weights@>, double *P_ans);
 external void C_colSums_subset(@<Input xNP subset@>, double *P_ans);
@@ -743,7 +743,7 @@ void C_colSums_
 ) {
   @<Column Sum of @'x[pN + i]@' with @'N@'@>
 }
-void RC_colSums_ 
+void RC_colSums_
 (
   @<R Input xNP@>
   double *P_ans  /* Return P_ans */
@@ -761,7 +761,7 @@ P_ans <- .C("RC_colSums_", x = as.double(x),
 stopifnot(all.equal(P_ans, colSums(x)))
 @@
 
-A version for an integer matrix $X$ 
+A version for an integer matrix $X$
 
 @d Column sums
 @{
@@ -892,7 +892,7 @@ void C_colSums2_
 ) {
   @<Column Sum of @'pow(x[pN + i], 2)@' with @'N@'@>
 }
-void RC_colSums2_ 
+void RC_colSums2_
 (
   @<R Input xNP@>
   double *P_ans  /* Return P_ans */
@@ -1027,7 +1027,7 @@ void C_colSums2_center
 ) {
   @<Column Sum of @'pow(x[pN + i] - centerx[p], 2)@' with @'N@'@>
 }
-void RC_colSums2_center 
+void RC_colSums2_center
 (
   @<R Input xNP@>
   const double *centerx,

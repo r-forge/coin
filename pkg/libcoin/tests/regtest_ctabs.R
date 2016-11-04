@@ -35,4 +35,3 @@ ctabs(x, y, weights = w)
 ctabs(x, y, weights = w, subset = s)
 ctabs(x, y, weights = w, block = b)
 ctabs(x, y, weights = w, subset = s, block = b)
-

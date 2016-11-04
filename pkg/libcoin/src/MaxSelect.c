@@ -7,25 +7,25 @@
 
 void C_ordered_Xfactor_block
 (
-    const double *linstat, 
-    const double *expect, 
+    const double *linstat,
+    const double *expect,
     const double *covar,
     const int P,
-    const int Q, 
-    const double *ExpX, 
+    const int Q,
+    const double *ExpX,
     const int B,
     const double* blinstat,
-    const int minbucket, 
-    const double tol, 
+    const int minbucket,
+    const double tol,
     const int teststat,
-    int *wmax, 
+    int *wmax,
     double *maxstat,
     double *pval,
     const int lower,
     const int give_log
 ) {
 
-    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat, 
+    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat,
            tmp, sumleft, sumright;
     int rank, PQ = P * Q, greater;
 
@@ -41,7 +41,7 @@ void C_ordered_Xfactor_block
         mblinstat = Calloc(Q * B, double);
         bmaxstat = Calloc(B, double);
     }
-       
+
     maxstat[0] = 0.0;
     wmax[0] = NA_INTEGER;
 
@@ -56,12 +56,12 @@ void C_ordered_Xfactor_block
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
             mcovar[q] = 0.0;
     }
-    
-    sumleft = 0.0;                        
+
+    sumleft = 0.0;
     sumright = 0.0;
-    for (int p = 0; p < P; p++) 
+    for (int p = 0; p < P; p++)
         sumright += ExpX[p];
-                 
+
     for (int p = 0; p < P; p++) {
         sumleft += ExpX[p];
         sumright -= ExpX[p];
@@ -78,21 +78,21 @@ void C_ordered_Xfactor_block
             } else {
                 for (int qq = 0; qq <= q; qq++) {
                     for (int pp = 0; pp < p; pp++)
-                        mcovar[S(q, qq, Q)] += 
+                        mcovar[S(q, qq, Q)] +=
                             2 * covar[S(pp + q * P, p + P * qq, P * Q)];
-                    mcovar[S(q, qq, Q)] += 
+                    mcovar[S(q, qq, Q)] +=
                         covar[S(p + q * P, p + P * qq, P * Q)];
                 }
             }
         }
 
 
-        if ((sumleft >= minbucket) && 
-            (sumright >= minbucket) && 
+        if ((sumleft >= minbucket) &&
+            (sumright >= minbucket) &&
             (ExpX[p] > 0)) {
 
             if (teststat == TESTSTAT_maximum) {
-                tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, 
+                tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol,
                                 ALTERNATIVE_twosided);
             } else {
                 C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
@@ -106,7 +106,7 @@ void C_ordered_Xfactor_block
 
             for (int b = 0; b < B; b++) {
                 if (teststat == TESTSTAT_maximum) {
-                    tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
+                    tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol,
                                     ALTERNATIVE_twosided);
                 } else {
                     tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mMPinv);
@@ -123,7 +123,7 @@ void C_ordered_Xfactor_block
             pval[0] = C_perm_pvalue(greater, B, lower, give_log);
         }
     }
-    Free(mlinstat); Free(mexpect); 
+    Free(mlinstat); Free(mexpect);
     if (B > 0) {
         Free(mblinstat); Free(bmaxstat);
     }
@@ -136,26 +136,26 @@ void C_ordered_Xfactor_block
 
 void C_ordered_Xfactor
 (
-    const double *linstat, 
-    const double *expect, 
+    const double *linstat,
+    const double *expect,
     const double *varinf,
     const double *covinf,
     const int P,
-    const int Q, 
-    const double *ExpX, 
+    const int Q,
+    const double *ExpX,
     const int B,
     const double *blinstat,
-    const int minbucket, 
-    const double tol, 
+    const int minbucket,
+    const double tol,
     const int teststat,
-    int *wmax, 
+    int *wmax,
     double *maxstat,
     double *pval,
     const int lower,
     const int give_log
 ) {
 
-    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat, 
+    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat,
            tmp, sumleft, sumright, Ptmp;
     int sw, rank, PQ = P * Q, greater;
 
@@ -171,7 +171,7 @@ void C_ordered_Xfactor
         mblinstat = Calloc(Q * B, double);
         bmaxstat = Calloc(B, double);
     }
-       
+
     maxstat[0] = 0.0;
     wmax[0] = NA_INTEGER;
 
@@ -186,13 +186,13 @@ void C_ordered_Xfactor
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
             mcovar[q] = 0.0;
     }
-    
-    sumleft = 0.0;                        
+
+    sumleft = 0.0;
     sumright = 0.0;
-    for (int p = 0; p < P; p++) 
+    for (int p = 0; p < P; p++)
         sumright += ExpX[p];
     sw = (int) sumright;
-                 
+
     for (int p = 0; p < P; p++) {
         sumleft += ExpX[p];
         sumright -= ExpX[p];
@@ -204,8 +204,8 @@ void C_ordered_Xfactor
             mexpect[q] += expect[q * P + p];
         }
 
-        if ((sumleft >= minbucket) && 
-            (sumright >= minbucket) && 
+        if ((sumleft >= minbucket) &&
+            (sumright >= minbucket) &&
             (ExpX[p] > 0)) {
 
             /* does not work with blocks! */
@@ -218,7 +218,7 @@ void C_ordered_Xfactor
             }
 
             if (teststat == TESTSTAT_maximum) {
-                tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, 
+                tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol,
                                 ALTERNATIVE_twosided);
             } else {
                 C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
@@ -233,7 +233,7 @@ void C_ordered_Xfactor
 
             for (int b = 0; b < B; b++) {
                 if (teststat == TESTSTAT_maximum) {
-                    tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
+                    tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol,
                                     ALTERNATIVE_twosided);
                 } else {
                     tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mMPinv);
@@ -250,7 +250,7 @@ void C_ordered_Xfactor
         }
         pval[0] = C_perm_pvalue(greater, B, lower, give_log);
     }
-    Free(mlinstat); Free(mexpect); 
+    Free(mlinstat); Free(mexpect);
     if (B > 0) {
         Free(mblinstat); Free(bmaxstat);
     }
@@ -263,25 +263,25 @@ void C_ordered_Xfactor
 
 void C_unordered_Xfactor_block
 (
-    const double *linstat, 
-    const double *expect, 
+    const double *linstat,
+    const double *expect,
     const double *covar,
     const int P,
-    const int Q, 
-    const double *ExpX, 
+    const int Q,
+    const double *ExpX,
     const int B,
     const double* blinstat,
-    const int minbucket, 
-    const double tol, 
+    const int minbucket,
+    const double tol,
     const int teststat,
-    int *wmax, 
+    int *wmax,
     double *maxstat,
     double *pval,
     const int lower,
     const int give_log
 ) {
 
-    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat, 
+    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat,
            tmp, sumleft, sumright, *mtmp;
     int rank, PQ = P * Q, qPp, greater, nc, *levels, Pnonzero, *indl, *contrast;
 
@@ -300,7 +300,7 @@ void C_unordered_Xfactor_block
     }
 
     maxstat[0] = 0.0;
-    for (int p = 0; p < P; p++) wmax[p] = NA_INTEGER;       
+    for (int p = 0; p < P; p++) wmax[p] = NA_INTEGER;
 
     contrast = Calloc(P, int);
     Pnonzero = 0;
@@ -315,17 +315,17 @@ void C_unordered_Xfactor_block
             nc++;
         }
     }
-    
+
     if (Pnonzero >= 31)
         error("cannot search for unordered splits in >= 31 levels");
 
-    int mi = 1;  
+    int mi = 1;
     for (int l = 1; l < Pnonzero; l++) mi *= 2;
     indl = Calloc(Pnonzero, int);
     for (int p = 0; p < Pnonzero; p++) indl[p] = 0;
-       
+
     for (int j = 1; j < mi; j++) { /* go though all splits */
-    
+
         /* indl determines if level p is left or right */
         int jj = j;
         for (int l = 1; l < Pnonzero; l++) {
@@ -341,24 +341,24 @@ void C_unordered_Xfactor_block
             sumright += (1 - indl[p]) * ExpX[levels[p]];
             contrast[levels[p]] = indl[p];
         }
-                                                                                                                        
+
         if (teststat == TESTSTAT_maximum) {
             for (int q = 0; q < Q; q++) {
                 mlinstat[q] = 0.0;
                 mexpect[q] = 0.0;
                 mvar[q] = 0.0;
-                for (int b = 0; b < B; b++)   
+                for (int b = 0; b < B; b++)
                     mblinstat[q + b * Q] = 0.0;
-                
+
                 for (int p = 0; p < P; p++) {
                     qPp = q * P + p;
                     mlinstat[q] += contrast[p] * linstat[qPp];
                     mexpect[q] += contrast[p] * expect[qPp];
-                    for (int b = 0; b < B; b++)   
+                    for (int b = 0; b < B; b++)
                         mblinstat[q + b * Q] += contrast[p] * blinstat[qPp + b * PQ];
                     mtmp[p] = 0.0;
                     for (int pp = 0; pp < P; pp++)
-                        mtmp[p] += contrast[pp] * 
+                        mtmp[p] += contrast[pp] *
                                    covar[S(pp + q * P, qPp, PQ)];
                 }
                 for (int p = 0; p < P; p++)
@@ -377,14 +377,14 @@ void C_unordered_Xfactor_block
                     qPp = q * P + p;
                     mlinstat[q] += contrast[p] * linstat[qPp];
                     mexpect[q] += contrast[p] * expect[qPp];
-                    for (int b = 0; b < B; b++)   
+                    for (int b = 0; b < B; b++)
                         mblinstat[q + b * Q] += contrast[p] * blinstat[qPp + b * PQ];
                 }
                 for (int qq = 0; qq <= q; qq++) {
                     for (int p = 0; p < P; p++) {
                         mtmp[p] = 0.0;
                         for (int pp = 0; pp < P; pp++)
-                            mtmp[p] += contrast[pp] * 
+                            mtmp[p] += contrast[pp] *
                                        covar[S(pp + q * P, p + P * qq, P * Q)];
                     }
                     for (int p = 0; p < P; p++)
@@ -393,11 +393,11 @@ void C_unordered_Xfactor_block
             }
         }
 
-        if ((sumleft >= minbucket) && 
+        if ((sumleft >= minbucket) &&
             (sumright >= minbucket)) {
 
             if (teststat == TESTSTAT_maximum) {
-                tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, 
+                tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol,
                                 ALTERNATIVE_twosided);
             } else {
                 C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
@@ -412,7 +412,7 @@ void C_unordered_Xfactor_block
 
             for (int b = 0; b < B; b++) {
                 if (teststat == TESTSTAT_maximum) {
-                    tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
+                    tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol,
                                     ALTERNATIVE_twosided);
                 } else {
                     tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mMPinv);
@@ -422,7 +422,7 @@ void C_unordered_Xfactor_block
             }
         }
     }
-     
+
     if (B > 0) {
         greater = 0;
         for (int b = 0; b < B; b++) {
@@ -443,26 +443,26 @@ void C_unordered_Xfactor_block
 
 void C_unordered_Xfactor
 (
-    const double *linstat, 
-    const double *expect, 
+    const double *linstat,
+    const double *expect,
     const double *varinf,
     const double *covinf,
     const int P,
-    const int Q, 
-    const double *ExpX, 
+    const int Q,
+    const double *ExpX,
     const int B,
     const double *blinstat,
-    const int minbucket, 
-    const double tol, 
+    const int minbucket,
+    const double tol,
     const int teststat,
-    int *wmax, 
+    int *wmax,
     double *maxstat,
     double *pval,
     const int lower,
     const int give_log
 ) {
 
-    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat, 
+    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat,
            tmp, sumleft, sumright, Ptmp;
     int sw, rank, PQ = P * Q, qPp, greater, *levels, *indl, *contrast;
 
@@ -497,7 +497,7 @@ void C_unordered_Xfactor
             nc++;
         }
     }
-    
+
     if (Pnonzero >= 31)
         error("cannot search for unordered splits in >= 31 levels");
 
@@ -505,13 +505,13 @@ void C_unordered_Xfactor
         if (ExpX[p] == 0.0) wmax[p] = NA_INTEGER;
     }
 
-    int mi = 1;  
+    int mi = 1;
     for (int l = 1; l < Pnonzero; l++) mi *= 2;
     indl = Calloc(Pnonzero, int);
     for (int p = 0; p < Pnonzero; p++) indl[p] = 0;
 
     for (int j = 1; j < mi; j++) { /* go though all splits */
-    
+
         /* indl determines if level p is left or right */
         int jj = j;
         for (int l = 1; l < Pnonzero; l++) {
@@ -527,19 +527,19 @@ void C_unordered_Xfactor
             contrast[levels[p]] = indl[p];
         }
 
-        if ((sumleft >= minbucket) && 
+        if ((sumleft >= minbucket) &&
             (sumright >= minbucket)) {
 
             for (int q = 0; q < Q; q++) {
                 mlinstat[q] = 0.0;
                 mexpect[q] = 0.0;
-                for (int b = 0; b < B; b++)   
+                for (int b = 0; b < B; b++)
                     mblinstat[q + b * Q] = 0.0;
                 for (int p = 0; p < P; p++) {
                     qPp = q * P + p;
                     mlinstat[q] += contrast[p] * linstat[qPp];
                     mexpect[q] += contrast[p] * expect[qPp];
-                    for (int b = 0; b < B; b++)   
+                    for (int b = 0; b < B; b++)
                         mblinstat[q + b * Q] += contrast[p] * blinstat[q * P + p + b * PQ];
 
                 }
@@ -555,13 +555,13 @@ void C_unordered_Xfactor
             }
 
             if (teststat == TESTSTAT_maximum) {
-                tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol, 
+                tmp = C_maxtype(Q, mlinstat, mexpect, mvar, 1, tol,
                                 ALTERNATIVE_twosided);
             } else {
                 C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
                 tmp = C_quadform(Q, mlinstat, mexpect, mMPinv);
             }
-            
+
             if (tmp > maxstat[0]) {
                 for (int p = 0; p < Pnonzero; p++)
                     wmax[levels[p]] = contrast[levels[p]];
@@ -570,7 +570,7 @@ void C_unordered_Xfactor
 
             for (int b = 0; b < B; b++) {
                 if (teststat == TESTSTAT_maximum) {
-                    tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol, 
+                    tmp = C_maxtype(Q, mblinstat + b * Q, mexpect, mvar, 1, tol,
                                     ALTERNATIVE_twosided);
                 } else {
                     tmp = C_quadform(Q, mblinstat + b * Q, mexpect, mMPinv);
