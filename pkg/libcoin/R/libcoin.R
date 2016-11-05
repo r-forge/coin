@@ -171,10 +171,8 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     }
     alt <- which(c("two.sided", "less", "greater") == alternative)
 
-    if (!pvalue & (NCOL(object$PermutedLinearStatistic) > 0)) {
-        object$PermutedLinearStatistic <- matrix(nrow = 0, ncol = 0)
-        storage.mode(object$PermutedLinearStatistic) <- "double"
-    }
+    if (!pvalue & (NCOL(object$PermutedLinearStatistic) > 0))
+        object$PermutedLinearStatistic <- matrix(NA_real_, nrow = 0, ncol = 0)
 
     if (!object$Xfactor) {
         if (teststat == "quadratic") {
