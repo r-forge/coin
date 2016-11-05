@@ -1,4 +1,6 @@
 todo.txt
-^inst
+inst/API_check
+inst/include
+inst/literate_libcoin
 src/libcoin.h
 src/libcoin-init.c
