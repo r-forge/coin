@@ -188,9 +188,10 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
                          as.double(pargs$releps), as.double(pargs$abseps),
                          PACKAGE = "libcoin")
             if (teststat == "scalar") {
-                var <- ifelse(object$varonly, object$Variance, object$Covariance)
+                var <- if (object$varonly) object$Variance else object$Covariance
                 ret$TestStatistic <- object$LinearStatistic - object$Expectation
-                ret$TestStatistic <- ifelse(var > object$tol, ret$TestStatistic / sqrt(var), NaN)
+                ret$TestStatistic <-
+                    if (var > object$tol) ret$TestStatistic / sqrt(var) else NaN
             }
         }
     } else {

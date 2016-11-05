@@ -30,7 +30,7 @@ cmp <- function(t1, t2) {
 
 cmp2 <- function(t1, t2) {
     nm <- c("LinearStatistic", "Expectation",
-        ifelse(t1$varonly == 1, "Variance", "Covariance"))
+            if(t1$varonly == 1) "Variance" else "Covariance")
     all.equal(t1[nm], t2[nm])
 }
 
