@@ -2,6 +2,13 @@
 \name{NEWS}
 \title{NEWS file for the libcoin package}
 
+\section{Changes in Version 0.6-1 (2016-11-05)}{
+  \itemize{
+    \item{Allow for interruption in Monte Carlo tests.}
+    \item{Minor efficiency tweaks.}
+  }
+}
+
 \section{Changes in Version 0.6-0 (2016-09-01)}{
   \itemize{
     \item{Give meaningful defaults and avoid calling \code{missing()} in
