@@ -4,7 +4,8 @@
 \section{Changes in version 1.1-3 (2016-XX-XX)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item Precision issues in confidence intervals for location and
+      scale problems
     }
   }
   \subsection{User-visible changes}{
