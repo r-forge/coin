@@ -4,16 +4,15 @@
 \section{Changes in version 2.0-0 (2016-XX-XX)}{
   \subsection{New features}{
     \itemize{
-      \item Linear statistics, their expectation and covariances as well
-            as permuted linear statistics are now computed by package
-            \pkg{libcoin}. Asymptotic and exact p-values are not affected
-            by this change, approximate p-values will differ within random
-            variation.
+      \item Linear statistics, their expectation and covariances as well as
+      permuted linear statistics are now computed by package \pkg{libcoin};
+      asymptotic and exact \eqn{p}-values are not affected by this change, but
+      approximate \eqn{p}-values will differ within random variation
     }
   }
   \subsection{Bug fixes}{
     \itemize{
-      \item Replace \code{<=} with \code{LE} for confidence interval computations.
+      \item
     }
   }
   \subsection{User-visible changes}{
@@ -32,7 +31,8 @@
 \section{Changes in version 1.1-3 (2016-XX-XX)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item Precision issues in confidence intervals for location and scale
+      problems
     }
   }
   \subsection{User-visible changes}{
