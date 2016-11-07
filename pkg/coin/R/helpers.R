@@ -265,8 +265,9 @@ table2df_sym <- function(x) {
     lx <- levels(x[[1L]])
     if (!all(vapply(x, function(x) all(levels(x) == lx), NA)))
         stop("table ", sQuote("x"), " does not represent a symmetry problem")
-    data.frame(conditions = factor(rep.int(colnames(x),
-                                           rep.int(nrow(x), ncol(x)))),
+    data.frame(conditions = factor(rep.int(seq_len(ncol(x)),
+                                           rep.int(nrow(x), ncol(x))),
+                                   labels = colnames(x)),
                response = factor(unlist(x, recursive = FALSE,
                                         use.names = FALSE),
                                  labels = lx))

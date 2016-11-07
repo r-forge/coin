@@ -4,8 +4,12 @@
 \section{Changes in version 1.1-3 (2016-XX-XX)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item Precision issues in confidence intervals for location and
-      scale problems
+      \item Precision issues in confidence intervals for location and scale
+      problems
+
+      \item When the general symmetry and marginal homogeneity tests were
+      applied to an object of class \code{"table"}, the levels of the
+      measurement conditions were not preserved (but reordered alphabetically)
     }
   }
   \subsection{User-visible changes}{
