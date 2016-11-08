@@ -97,9 +97,16 @@ SEXP R_MaxtypeTest
     namesgets(ans, names);
     REAL(pval)[0] = NA_REAL;
 
+    if (C_get_varonly(LEV)) {
+        cv = C_get_Variance(LEV);
+    Rprintf("varonly var %f\n", cv[0]);
+    } else {
+        cv = C_get_Covariance(LEV);
+    }
+
     REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LEV),
                                C_get_Expectation(LEV),
-                               C_get_Covariance(LEV),
+                               cv, /* C_get_Covariance(LEV), */
                                C_get_varonly(LEV),
                                C_get_tol(LEV),
                                INTEGER(alternative)[0]);
@@ -115,7 +122,7 @@ SEXP R_MaxtypeTest
             UNPROTECT(1);
             return(ans);
         }
-        REAL(pval)[0] = C_maxtype_pvalue(REAL(stat)[0], C_get_Covariance(LEV),
+        REAL(pval)[0] = C_maxtype_pvalue(REAL(stat)[0], cv, /*C_get_Covariance(LEV), */
                                          PQ, INTEGER(alternative)[0], INTEGER(lower)[0],
                                          INTEGER(give_log)[0],
                                          INTEGER(maxpts)[0], REAL(releps)[0],
@@ -124,7 +131,7 @@ SEXP R_MaxtypeTest
         B = C_get_B(LEV);
         ls = C_get_PermutedLinearStatistic(LEV);
         ex = C_get_Expectation(LEV);
-        cv = C_get_Covariance(LEV);
+/*        cv = C_get_Covariance(LEV); */
         vo = C_get_varonly(LEV);
         alt = INTEGER(alternative)[0];
         st = REAL(stat)[0];

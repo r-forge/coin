@@ -6,6 +6,7 @@
   \itemize{
     \item{Allow for interruption in Monte Carlo tests.}
     \item{Minor efficiency tweaks.}
+    \item{Fix bug wrt maximum type statistics and variances only, spotted by Henric Winell.}
   }
 }
 

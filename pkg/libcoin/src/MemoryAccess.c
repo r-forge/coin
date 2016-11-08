@@ -51,34 +51,6 @@ double* C_get_Expectation
     return(REAL(VECTOR_ELT(LECV, Expectation_SLOT)));
 }
 
-double* C_get_Covariance
-(
-    SEXP LECV
-) {
-
-    int PQ = C_get_P(LECV) * C_get_Q(LECV);
-    if (C_get_varonly(LECV) && PQ > 1)
-        error("Cannot extract covariance from variance only object");
-    return(REAL(VECTOR_ELT(LECV, Covariance_SLOT)));
-}
-
-double* C_get_MPinv
-(
-    SEXP LECV
-) {
-
-    int PQ = C_get_P(LECV) * C_get_Q(LECV);
-    if (C_get_varonly(LECV) && PQ > 1)
-        error("Cannot extract MPinv from variance only object");
-    /* allocate memory on as needed basis */
-    if (isNull(VECTOR_ELT(LECV, MPinv_SLOT))) {
-        SET_VECTOR_ELT(LECV, MPinv_SLOT,
-                       allocVector(REALSXP,
-                                   PQ * (PQ + 1) / 2));
-    }
-    return(REAL(VECTOR_ELT(LECV, MPinv_SLOT)));
-}
-
 double* C_get_Variance
 (
     SEXP LECV
@@ -99,6 +71,37 @@ double* C_get_Variance
     }
     return(REAL(VECTOR_ELT(LECV, Variance_SLOT)));
 }
+
+double* C_get_Covariance
+(
+    SEXP LECV
+) {
+
+    int PQ = C_get_P(LECV) * C_get_Q(LECV);
+    if (C_get_varonly(LECV) && PQ > 1)
+        error("Cannot extract covariance from variance only object");
+    if (C_get_varonly(LECV) && PQ == 1)
+        return(C_get_Variance(LECV));
+    return(REAL(VECTOR_ELT(LECV, Covariance_SLOT)));
+}
+
+double* C_get_MPinv
+(
+    SEXP LECV
+) {
+
+    int PQ = C_get_P(LECV) * C_get_Q(LECV);
+    if (C_get_varonly(LECV) && PQ > 1)
+        error("Cannot extract MPinv from variance only object");
+    /* allocate memory on as needed basis */
+    if (isNull(VECTOR_ELT(LECV, MPinv_SLOT))) {
+        SET_VECTOR_ELT(LECV, MPinv_SLOT,
+                       allocVector(REALSXP,
+                                   PQ * (PQ + 1) / 2));
+    }
+    return(REAL(VECTOR_ELT(LECV, MPinv_SLOT)));
+}
+
 
 double* C_get_ExpectationX
 (
