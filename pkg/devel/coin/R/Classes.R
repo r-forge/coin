@@ -4,7 +4,7 @@
 
 ### Conditional Expectation and Covariance
 setClass("ExpectCovar",
-    representation = representation(
+    slots = c(
         expectation = "numeric",
         covariance  = "matrix",
         dimension   = "integer"
@@ -15,21 +15,21 @@ setClass("ExpectCovar",
 ### (+ sum of weights)
 setClass("ExpectCovarInfluence",
     contains = "ExpectCovar",
-    representation = representation(
+    slots = c(
         sumweights = "numeric"
     )
 )
 
 ### Covariance matrix
 setClass("CovarianceMatrix",
-    representation = representation(
+    slots = c(
         covariance = "matrix"
     )
 )
 
 ### Variance only
 setClass("Variance",
-    representation = representation(
+    slots = c(
         variance = "numeric"
     )
 )
@@ -42,7 +42,7 @@ setClassUnion("VarCovar",
 ### Class for raw data: a set of `x' variables and a set of `y' variables,
 ### possibly blocked and with weights
 setClass("IndependenceProblem",
-    representation = representation(
+    slots = c(
         x       = "data.frame",
         y       = "data.frame",
         block   = "factor",
@@ -64,7 +64,7 @@ setClass("IndependenceProblem",
 ### `scores' is a matrix of scores
 setClass("IndependenceTestProblem",
     contains = "IndependenceProblem",
-    representation = representation(
+    slots = c(
         xtrans     = "matrix",
         ytrans     = "matrix",
         xtrafo     = "function",
@@ -79,7 +79,7 @@ setClass("IndependenceTestProblem",
 ### Strasser & Weber (1999)
 setClass("IndependenceLinearStatistic",
     contains = "IndependenceTestProblem",
-    representation = representation(
+    slots = c(
         linearstatistic = "numeric",
         expectation     = "numeric",
         covariance      = "VarCovar"
@@ -89,7 +89,7 @@ setClass("IndependenceLinearStatistic",
 ### Tests based on linear statistics
 setClass("IndependenceTestStatistic",
     contains = c("IndependenceLinearStatistic", "VIRTUAL"),
-    representation = representation(
+    slots = c(
         teststatistic               = "numeric",
         standardizedlinearstatistic = "numeric"
     )
@@ -98,7 +98,7 @@ setClass("IndependenceTestStatistic",
 ### teststatistic = standardizedlinearstatistic
 setClass("ScalarIndependenceTestStatistic",
     contains = "IndependenceTestStatistic",
-    representation = representation(
+    slots = c(
         alternative = "character",
         paired      = "logical"
     ),
@@ -109,7 +109,7 @@ setClass("ScalarIndependenceTestStatistic",
 ### teststatistic = max(abs(standardizedlinearstatistic))
 setClass("MaxTypeIndependenceTestStatistic",
     contains = "IndependenceTestStatistic",
-    representation = representation(
+    slots = c(
         alternative = "character"
     ),
     validity = function(object)
@@ -119,7 +119,7 @@ setClass("MaxTypeIndependenceTestStatistic",
 ### teststatistic = quadform(linearstatistic)
 setClass("QuadTypeIndependenceTestStatistic",
     contains = "IndependenceTestStatistic",
-    representation = representation(
+    slots = c(
         covarianceplus = "matrix",
         df             = "numeric",
         paired         = "logical"
@@ -128,7 +128,7 @@ setClass("QuadTypeIndependenceTestStatistic",
 
 ### p-values
 setClass("PValue",
-    representation = representation(
+    slots = c(
         pvalue         = "function",
         midpvalue      = "function",
         pvalueinterval = "function",
@@ -147,7 +147,7 @@ setClass("PValue",
 ### Null distribution
 setClass("NullDistribution",
     contains = "PValue",
-    representation = representation(
+    slots = c(
         q          = "function",
         d          = "function",
         support    = "function",
@@ -164,14 +164,14 @@ setClass("NullDistribution",
 ### There are essentially three types of null distributions:
 setClass("AsymptNullDistribution",
     contains = "NullDistribution",
-    representation = representation(
+    slots = c(
         seed = "integer"
     )
 )
 
 setClass("ApproxNullDistribution",
     contains = "NullDistribution",
-    representation = representation(
+    slots = c(
         seed = "integer"
     )
 )
@@ -182,7 +182,7 @@ setClass("ExactNullDistribution",
 
 ### the "fitted" test including data and everything
 setClass("IndependenceTest",
-    representation = representation(
+    slots = c(
         distribution = "PValue", # was: "NullDistribution",
         statistic    = "IndependenceTestStatistic",
         estimates    = "list",
@@ -195,7 +195,7 @@ setClass("IndependenceTest",
 ### the "fitted" test for scalar linear statistics
 setClass("ScalarIndependenceTest",
     contains = "IndependenceTest",
-    representation = representation(
+    slots = c(
         parameter = "character",
         nullvalue = "numeric"
     ),
@@ -208,7 +208,7 @@ setClass("ScalarIndependenceTest",
 ### possibly with confidence intervals
 setClass("ScalarIndependenceTestConfint",
     contains = "ScalarIndependenceTest",
-    representation = representation(
+    slots = c(
         confint    = "function",
         conf.level = "numeric"
     )
