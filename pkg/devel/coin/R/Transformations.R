@@ -400,17 +400,21 @@ f_trafo <- function(x) {
 of_trafo <- function(x, scores = NULL) {
     if (!is.ordered(x))
         warning(sQuote(deparse(substitute(x))), " is not an ordered factor")
+    nl <- nlevels(x)
     if (is.null(scores)) {
-        scores <- if (nlevels(x) == 2L)
-                      0:1               # must be 0:1 for exact p-values
-                  else if (!is.null(s <- attr(x, "scores")))
+        scores <- if (!is.null(s <- attr(x, "scores")))
                       s
                   else
-                      seq_len(nlevels(x))
+                      seq_len(nl)
+    }
+    ## two-sample case: scores must be normalized for exact p-values
+    if (nl == 2L) {
+        mn <- min(scores)
+        scores <- (scores - mn) / (max(scores) - mn)
     }
     if (!is.list(scores))
         scores <- list(scores)
-    if (all(lengths(scores) == nlevels(x)))
+    if (all(lengths(scores) == nl))
         setRownames(do.call("cbind", scores)[x, , drop = FALSE], seq_along(x))
     else
         stop(sQuote("scores"), " does not match the number of levels")

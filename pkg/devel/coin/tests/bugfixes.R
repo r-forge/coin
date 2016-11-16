@@ -582,3 +582,17 @@ stopifnot(identical(pvalue(it5), pvalue(it8)))
 
 ### 'of_trafo' threw an error for 'x' of length one
 of_trafo(gl(3, 1, ordered = TRUE)[1])
+
+### 'setscores' assigned 0:1 for decreasing scores in 2-level cases
+it1 <- independence_test(y ~ x,  scores = list(x = 1:2)) # was OK
+it2 <- independence_test(y ~ x,  scores = list(x = 2:1)) # wrong sign
+stopifnot(identical(statistic(it1), -statistic(it2)))
+
+### 'of_trafo' didn't return normalized scores in 2-level cases using 'scores'
+x <- gl(2, 1, ordered = TRUE)
+stopifnot(identical(of_trafo(x),                            # was OK
+                    matrix(c(0, 1), dimnames = list(1:2))))
+stopifnot(identical(of_trafo(x, scores = 1:2),              # was 1:2
+                    matrix(c(0, 1), dimnames = list(1:2))))
+stopifnot(identical(of_trafo(x, scores = 2:1),              # was 2:1
+                    matrix(c(1, 0), dimnames = list(1:2))))
