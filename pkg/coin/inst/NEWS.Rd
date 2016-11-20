@@ -338,15 +338,9 @@
       \item The Ansari-Bradley test no longer features the \code{alternative}
       argument (but still allows the alternative hypothesis to be specified)
 
-      \item The Wilcoxon signed-rank test no longer features the defunct
-      \code{ties.method} argument
-
       \item When the general symmetry test or the marginal homogeneity test is
       applied to a table, the variable indicating the measurement conditions has
       been renamed to \samp{conditions} (from \samp{groups})
-
-      \item \code{surv_test()} is now deprecated and has been replaced by
-      \code{logrank_test()}
 
       \item The \code{teststat} argument no longer allows the use of
       maximum-type statistics and quadratic forms to be specified using
@@ -414,6 +408,15 @@
       \item Henric Winell, a long-term collaborator who donated almost all
       changes in \pkg{coin} 1.1-0, is now listed as author.  Welcome on board,
       Henric!
+    }
+  }
+  \subsection{Deprecated and defunct}{
+    \itemize{
+      \item \code{surv_test()} is now deprecated and has been replaced by
+      \code{logrank_test()}
+
+      \item The Wilcoxon signed-rank test no longer features the defunct
+      \code{ties.method} argument
     }
   }
 }
