@@ -148,9 +148,9 @@
   Confidence intervals can be extracted by \link[stats]{confint}.
 }
 \note{
-  Starting with version 1.1-0, \code{oneway_test} provides an automatic choice
-  of test statistic that cannot be overridden.  Please use
-  \code{\link{independence_test}} if more control is desired.
+  Starting with version 1.1-0, \code{oneway_test} no longer allows the test
+  statistic to be specified; a quadratic form is now used in the \eqn{K}-sample
+  case.  Please use \code{\link{independence_test}} if more control is desired.
 }
 
 \references{

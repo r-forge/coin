@@ -326,7 +326,8 @@
       the explanatory variable is an ordered factor
 
       \item The Fisher-Pitman permutation test no longer allows the test
-      statistic to be specified
+      statistic to be specified; a quadratic form is now used in the
+      \eqn{K}-sample case
 
       \item The Pearson chi-squared test, the generalized
       Cochran-Mantel-Haenszel test, the Kruskal-Wallis test, the Friedman test,
