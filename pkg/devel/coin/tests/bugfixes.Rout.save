@@ -24,24 +24,21 @@ Loading required package: survival
 > GE <- coin:::GE
 > options(useFancyQuotes = FALSE)
 > 
-> ### I() returns objects of class "AsIs" which caused an error in 'trafo'
-> df <- data.frame(x1 = rnorm(100), x2 = rnorm(100), x3 = gl(2, 50))
-> independence_test(I(x1 / x2) ~ x3, data = df)
-
-	Asymptotic General Independence Test
-
-data:  I(x1/x2) by x3 (1, 2)
-Z = -0.44907, p-value = 0.6534
-alternative hypothesis: two.sided
-
-> independence_test(I(x1 < 0) ~ x3, data = df)
-
-	Asymptotic General Independence Test
-
-data:  I(x1 < 0) by x3 (1, 2)
-Z = 0.79663, p-value = 0.4257
-alternative hypothesis: two.sided
-
+> ### I() returns objects of class "AsIs" causing errors in 'trafo'
+> df <- data.frame(x1 = rnorm(100), x2 = rnorm(100), x3 = gl(2, 50),
++                  x4 = I(letters[1:20]))
+> df <- within(df, {
++     x5 <- x1 / x2
++     x6 <- x1 < 0
++ })
+> it1 <- independence_test(I(x1 / x2) ~ x3, data = df)
+> it2 <- independence_test(x5 ~ x3, data = df)
+> stopifnot(identical(statistic(it1), statistic(it2))) # was OK
+> it3 <- independence_test(I(x1 < 0) ~ x3, data = df)
+> it4 <- independence_test(x6 ~ x3, data = df)
+> stopifnot(identical(statistic(it3), statistic(it4))) # wrong sign
+> try(independence_test(x4 ~ x3, data = df))           # coercion to numeric
+Error in ytrafo(object@y) : data class "character" is not supported
 > 
 > ### expectation was wrong when varonly = TRUE in case both
 > ### xtrafo and ytrafo were multivariate
@@ -990,4 +987,4 @@ Error in quade_test.SymmetryProblem(object = <S4 object of class structure("Symm
 > 
 > proc.time()
    user  system elapsed 
-   2.43    0.15    2.57 
+   2.00    0.12    2.14 

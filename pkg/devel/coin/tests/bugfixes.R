@@ -6,10 +6,20 @@ isequal <- coin:::isequal
 GE <- coin:::GE
 options(useFancyQuotes = FALSE)
 
-### I() returns objects of class "AsIs" which caused an error in 'trafo'
-df <- data.frame(x1 = rnorm(100), x2 = rnorm(100), x3 = gl(2, 50))
-independence_test(I(x1 / x2) ~ x3, data = df)
-independence_test(I(x1 < 0) ~ x3, data = df)
+### I() returns objects of class "AsIs" causing errors in 'trafo'
+df <- data.frame(x1 = rnorm(100), x2 = rnorm(100), x3 = gl(2, 50),
+                 x4 = I(letters[1:20]))
+df <- within(df, {
+    x5 <- x1 / x2
+    x6 <- x1 < 0
+})
+it1 <- independence_test(I(x1 / x2) ~ x3, data = df)
+it2 <- independence_test(x5 ~ x3, data = df)
+stopifnot(identical(statistic(it1), statistic(it2))) # was OK
+it3 <- independence_test(I(x1 < 0) ~ x3, data = df)
+it4 <- independence_test(x6 ~ x3, data = df)
+stopifnot(identical(statistic(it3), statistic(it4))) # wrong sign
+try(independence_test(x4 ~ x3, data = df))           # coercion to numeric
 
 ### expectation was wrong when varonly = TRUE in case both
 ### xtrafo and ytrafo were multivariate

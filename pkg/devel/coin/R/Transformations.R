@@ -462,13 +462,6 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
             tr[[nm]] <- as.matrix(var_trafo[[nm]](x))
             next
         }
-        if (class(x)[1] == "AsIs") {
-            if (length(class(x)) == 1) {
-                x <- as.numeric(x)
-            } else {
-                class(x) <- class(x)[-1]
-            }
-        }
         if (is.ordered(x)) {
             tr[[nm]] <- as.matrix(ordered_trafo(x))
             next
@@ -485,21 +478,25 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
             tr[[nm]] <- as.matrix(numeric_trafo(x))
             next
         }
-        if (is.null(tr[[nm]]))
-            stop("data class ", class(x), " is not supported")
+        if (is.null(tr[[nm]])) {
+            if (idx <- inherits(x, "AsIs", TRUE))
+                oldClass(x) <- oldClass(x)[-idx]
+            stop("data class ", paste(dQuote(class(x)), collapse = ", "),
+                 " is not supported")
+        }
     }
 
     ## set up a matrix of transformations
     ## when more than one factor is in play, factor names
     ## _and_ colnames of the corresponding rows are combined by '.'
-    RET <- c()
+    ret <- c()
     assignvar <- c()
     cn <- c()
     for (i in 1:length(tr)) {
         if (nrow(tr[[i]]) != nrow(data))
             stop("Transformation of variable ", names(tr)[i],
                  " are not of length / nrow", nrow(data))
-        RET <- cbind(RET, tr[[i]])
+        ret <- cbind(ret, tr[[i]])
         if (is.null(colnames(tr[[i]]))) {
             cn <- c(cn, rep.int("", ncol(tr[[i]])))
         } else {
@@ -507,13 +504,13 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
         }
         assignvar <- c(assignvar, rep.int(i, ncol(tr[[i]])))
     }
-    attr(RET, "assign") <- assignvar
+    attr(ret, "assign") <- assignvar
     if (length(tr) > 1) {
-        colnames(RET) <- paste0(rep.int(names(tr), tabulate(assignvar)), cn)
+        colnames(ret) <- paste0(rep.int(names(tr), tabulate(assignvar)), cn)
     } else {
-        colnames(RET) <- cn
+        colnames(ret) <- cn
     }
-    return(RET)
+    return(ret)
 }
 
 ### multiple comparisons, cf. mcp(x = "Tukey") in multcomp
