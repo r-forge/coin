@@ -1,5 +1,5 @@
 /**
-    Some additional functionality for package `coin'
+    Some additional functionality for package 'coin'
     *\file Helpers.c
     *\author $Author$
     *\date $Date$
@@ -77,7 +77,7 @@ SEXP R_blocksetup (SEXP block) {
 
     for (l = 1; l <= nlevels; l++) {
 
-        /* number of elements in block `l' */
+        /* number of elements in block 'l' */
         nlev = 0;
         for (i = 0; i < n; i++) {
             if (iblock[i] == l) nlev++;
@@ -104,7 +104,7 @@ SEXP R_blocksetup (SEXP block) {
 
 /**
     Block permutation
-    *\param blocksetup as computed by `R_blocksetup'
+    *\param blocksetup as computed by 'R_blocksetup'
     *\param ans integer vector
 */
 
@@ -121,7 +121,7 @@ void C_blockperm (SEXP blocksetup, int *ans) {
 
     for (l = 1; l <= nlevels; l++) {
 
-        /* number of elements in block `l' */
+        /* number of elements in block 'l' */
         index = VECTOR_ELT(indices, l - 1);
         dummy = VECTOR_ELT(dummies, l - 1);
         pindex = VECTOR_ELT(pindices, l - 1);

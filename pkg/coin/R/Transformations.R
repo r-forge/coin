@@ -212,7 +212,7 @@ ofmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
 }
 
 ### compute index matrix of all 2^(nlevel - 1) possible splits
-### code translated from package `tree'
+### code translated from package 'tree'
 fsplits <- function(nlevel) {
 
     mi <- 2^(nlevel - 1)
@@ -497,7 +497,7 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
 
     ## set up a matrix of transformations
     ## when more than one factor is in play, factor names
-    ## _and_ colnames of the corresponding rows are combined by `.'
+    ## _and_ colnames of the corresponding rows are combined by '.'
     RET <- c()
     assignvar <- c()
     cn <- c()

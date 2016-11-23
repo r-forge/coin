@@ -198,7 +198,7 @@ SEXP R_cpermdist1(SEXP scores) {
 
     /*
       compute the permutation distribution of the sum of the
-      absolute values of the positive elements of `scores'
+      absolute values of the positive elements of 'scores'
     */
 
     int n;      /* number of observations */
