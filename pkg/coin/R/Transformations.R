@@ -434,6 +434,8 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
     if (!(is.data.frame(data) || is.list(data)))
         stop(sQuote("data"), " is not a data.frame or list")
 
+### <FIXME> This two-pass procedure for 'block' is *very* expensive
+###         for large datasets
     if (!is.null(block)) {
         if (!is.factor(block) || length(block) != nrow(data))
             stop(sQuote("block"), " is not a factor with ",
@@ -450,6 +452,7 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
         }
         return(ret)
     }
+### </FIXME>
 
     if (!is.null(var_trafo)) {
         if (!is.list(var_trafo)) stop(sQuote("var_trafo"), " is not a list")
@@ -495,6 +498,8 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
     ## set up a matrix of transformations
     ## when more than one factor is in play, factor names
     ## _and_ colnames of the corresponding rows are combined by '.'
+### <FIXME> Yet another *very* expensive operation for large datasets, due to
+###         building up the 'ret' object dynamically
     ret <- c()
     assignvar <- c()
     cn <- c()
@@ -510,6 +515,7 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
         }
         assignvar <- c(assignvar, rep.int(i, ncol(tr[[i]])))
     }
+### </FIXME>
     attr(ret, "assign") <- assignvar
     if (length(tr) > 1) {
         colnames(ret) <- paste0(rep.int(names(tr), tabulate(assignvar)), cn)
