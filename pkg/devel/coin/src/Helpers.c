@@ -1,5 +1,5 @@
 /**
-    Some additional functionality for package `coin'
+    Some additional functionality for package 'coin'
     *\file Helpers.c
     *\author $Author$
     *\date $Date$

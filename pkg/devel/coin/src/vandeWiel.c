@@ -379,10 +379,10 @@ SEXP R_split_up_2sample(SEXP scores, SEXP m, SEXP obs, SEXP tol) {
 
     R interface to the split-up algorithm.
 
-    `scores' is a REAL vector giving the scores of the total sample
-    and `m' is a scalar integer with the sample size of one group.
-    `obs' is the scalar observed test statistic, namely the
-    sum of the `m' scores measured in one group.
+    'scores' is a REAL vector giving the scores of the total sample
+    and 'm' is a scalar integer with the sample size of one group.
+    'obs' is the scalar observed test statistic, namely the
+    sum of the 'm' scores measured in one group.
 
     */
 

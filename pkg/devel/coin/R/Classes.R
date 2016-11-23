@@ -1,5 +1,5 @@
 
-### "ExpectCovar" and "ExpectCovarInfluence" are no 
+### "ExpectCovar" and "ExpectCovarInfluence" are no
 ### longer needed but currently imported by party
 
 ### Conditional Expectation and Covariance
@@ -39,7 +39,7 @@ setClassUnion("VarCovar",
     members = c("CovarianceMatrix", "Variance")
 )
 
-### Class for raw data: a set of `x' variables and a set of `y' variables,
+### Class for raw data: a set of 'x' variables and a set of 'y' variables,
 ### possibly blocked and with weights
 setClass("IndependenceProblem",
     slots = c(
@@ -59,9 +59,9 @@ setClass("IndependenceProblem",
     }
 )
 
-### Class for transformed data, the `x' variables are transformed
-### to a (n x p) matrix `xtrans' and the `y' variables to `ytrans' (n x q).
-### `scores' is a matrix of scores
+### Class for transformed data, the 'x' variables are transformed
+### to a (n x p) matrix 'xtrans' and the 'y' variables to 'ytrans' (n x q).
+### 'scores' is a matrix of scores
 setClass("IndependenceTestProblem",
     contains = "IndependenceProblem",
     slots = c(

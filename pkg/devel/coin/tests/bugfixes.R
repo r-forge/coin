@@ -6,7 +6,7 @@ isequal <- coin:::isequal
 GE <- coin:::GE
 options(useFancyQuotes = FALSE)
 
-### I() returns objects of class AsIs which caused an error in `trafo'
+### I() returns objects of class "AsIs" which caused an error in 'trafo'
 df <- data.frame(x1 = rnorm(100), x2 = rnorm(100), x3 = gl(2, 50))
 independence_test(I(x1 / x2) ~ x3, data = df)
 independence_test(I(x1 < 0) ~ x3, data = df)
@@ -26,7 +26,7 @@ if (require("multcomp")) {
 }
 
 
-### `statistic' for linear and standardized statistics was wrong in case of
+### 'statistic' for linear and standardized statistics was wrong in case of
 ### scores
 data("jobsatisfaction")
 stopifnot(unique(dim(statistic(lbl_test(jobsatisfaction), "linear"))) == 1)
@@ -133,7 +133,7 @@ for (i in n) {
              -sqrt(.Machine$double.eps))
 }
 
-### formula evaluation in `parent.frame()', spotted by Z
+### formula evaluation in 'parent.frame()', spotted by Z
 foo <- function(x, y) independence_test(y ~ x)
 a <- 1:10
 b <- 1:10
