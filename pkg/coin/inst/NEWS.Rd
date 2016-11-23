@@ -4,12 +4,17 @@
 \section{Changes in version 1.1-3 (2016-XX-XX)}{
   \subsection{Bug fixes}{
     \itemize{
+      \item Objects of class \code{"AsIs"} were handled incorrectly in some
+      cases, leading to, e.g., misleading error messages or test statistics
+      having the wrong sign.
+
       \item Supplying decreasing scores for ordered factors with two levels
       using the test functions' \code{scores} argument resulted in increasing
       normalized scores, leading to test statistics having the wrong sign.
 
       \item The transformation function for ordered factors did not return
-      normalized scores in the two-level case when \code{scores} was used.
+      normalized scores in the two-level case when argument \code{scores} was
+      used.
 
       \item Precision issues in confidence intervals for location and scale
       problems.
