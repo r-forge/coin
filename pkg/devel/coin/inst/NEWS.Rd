@@ -31,7 +31,7 @@
     }
   }
 }
-\section{Changes in version 1.1-3 (2016-XX-XX)}{
+\section{Changes in version 1.1-3 (2016-11-24)}{
   \subsection{Bug fixes}{
     \itemize{
       \item Objects of class \code{"AsIs"} were handled incorrectly in some
