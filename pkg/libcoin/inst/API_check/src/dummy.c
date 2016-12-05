@@ -5,7 +5,7 @@
 
 #include <R_ext/Rdynload.h>  /* required by R */
 
-#include <libcoin.h>
+#include <libcoinAPI.h>
 
 SEXP myR_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
                                         SEXP block, SEXP varonly) {
