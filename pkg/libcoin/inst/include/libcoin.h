@@ -1,1 +1,0 @@
-../../src/libcoin.h
