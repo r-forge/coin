@@ -1,6 +1,7 @@
 
 #include "libcoin.h"
 #include <R_ext/Rdynload.h>
+#include <R_ext/Visibility.h>
 
 #define CALLDEF(name, n) {#name, (DL_FUNC) &name, n}
 
@@ -17,7 +18,7 @@ static const R_CallMethodDef callMethods[] = {
     {NULL, NULL, 0}
 };
 
-void R_init_libcoin
+void attribute_visible R_init_libcoin
 (
     DllInfo *dll
 ) {
