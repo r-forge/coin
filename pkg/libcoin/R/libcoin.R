@@ -43,14 +43,14 @@
         }
     }
 
-    ret <- .Call("R_ExpectationCovarianceStatistic", X, Y, weights, subset,
-                 block, as.integer(varonly), as.double(tol), PACKAGE = "libcoin")
+    ret <- .Call(R_ExpectationCovarianceStatistic, X, Y, weights, subset,
+                 block, as.integer(varonly), as.double(tol))
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
     if (B > 0)
-        ret$PermutedLinearStatistic <- .Call("R_PermutedLinearStatistic", ret, X, Y, weights,
-                         subset, block, as.integer(B), as.integer(standardise),
-                         PACKAGE = "libcoin")
+        ret$PermutedLinearStatistic <-
+            .Call(R_PermutedLinearStatistic, ret, X, Y, weights, subset,
+                  block, as.integer(B), as.integer(standardise))
     ret
 }
 
@@ -103,15 +103,14 @@
             stop("incorrect block")
     }
 
-    ret <- .Call("R_ExpectationCovarianceStatistic_2d", X, ix, Y, iy,
-        weights, subset, block, as.integer(varonly), as.double(tol),
-        PACKAGE = "libcoin")
+    ret <- .Call(R_ExpectationCovarianceStatistic_2d, X, ix, Y, iy,
+                 weights, subset, block, as.integer(varonly), as.double(tol))
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
     if (B > 0)
-        ret$PermutedLinearStatistic <- .Call("R_PermutedLinearStatistic_2d", ret, X, ix, Y, iy,
-                         block, as.integer(B), as.integer(standardise),
-                         PACKAGE = "libcoin")
+        ret$PermutedLinearStatistic <-
+            .Call(R_PermutedLinearStatistic_2d, ret, X, ix, Y, iy,
+                  block, as.integer(B), as.integer(standardise))
     ret
 }
 
@@ -176,15 +175,13 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
 
     if (!object$Xfactor) {
         if (teststat == "quadratic") {
-            ret <- .Call("R_ChisqTest", object,
-                         as.integer(pvalue), as.integer(lower), as.integer(log),
-                         PACKAGE = "libcoin")
+            ret <- .Call(R_ChisqTest, object,
+                         as.integer(pvalue), as.integer(lower), as.integer(log))
         } else {
-            ret <- .Call("R_MaxtypeTest", object,
+            ret <- .Call(R_MaxtypeTest, object,
                          as.integer(alt), as.integer(pvalue), as.integer(lower),
                          as.integer(log), as.integer(pargs$maxpts),
-                         as.double(pargs$releps), as.double(pargs$abseps),
-                         PACKAGE = "libcoin")
+                         as.double(pargs$releps), as.double(pargs$abseps))
             if (teststat == "scalar") {
                 var <- if (object$varonly) object$Variance else object$Covariance
                 ret$TestStatistic <- object$LinearStatistic - object$Expectation
@@ -193,9 +190,9 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
             }
         }
     } else {
-        ret <- .Call("R_MaxSelectTest", object, as.integer(ordered),
+        ret <- .Call(R_MaxSelectTest, object, as.integer(ordered),
                      as.integer(test), as.integer(minbucket),
-                     as.integer(lower), as.integer(log), PACKAGE = "libcoin")
+                     as.integer(lower), as.integer(log))
     }
     ret
 }

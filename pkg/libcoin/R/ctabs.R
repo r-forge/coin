@@ -13,8 +13,8 @@ ctabs <- function(ix, iy = integer(0), weights = integer(0),
 
     if (length(subset) > 0) subset <- subset - 1L
 
-    ret <- .Call("R_tables", ix, iy, weights, subset, block,
-                 PACKAGE = "libcoin")
+    ret <- .Call(R_tables, ix, iy, weights, subset, block)
+
     if (length(block) > 0) {
         if (length(iy) == 0)
             ret <- ret[,,-1, drop = FALSE]

@@ -1,6 +1,7 @@
 
 #include "libcoin_internal.h"
 
+/* R_LinearStatistic.c */
 extern SEXP R_ExpectationCovarianceStatistic
 (
     const SEXP x,
@@ -8,7 +9,8 @@ extern SEXP R_ExpectationCovarianceStatistic
     const SEXP weights,
     const SEXP subset,
     const SEXP block,
-    const SEXP varonly
+    const SEXP varonly,
+    const SEXP tol
 );
 
 extern SEXP R_PermutedLinearStatistic
@@ -19,7 +21,8 @@ extern SEXP R_PermutedLinearStatistic
     const SEXP weights,
     const SEXP subset,
     const SEXP block,
-    const SEXP B
+    const SEXP B,
+    const SEXP standardise
 );
 
 extern SEXP R_ExpectationCovarianceStatistic_2d
@@ -31,7 +34,8 @@ extern SEXP R_ExpectationCovarianceStatistic_2d
     const SEXP weights,
     const SEXP subset,
     const SEXP block,
-    const SEXP varonly
+    const SEXP varonly,
+    const SEXP tol
 );
 
 extern SEXP R_PermutedLinearStatistic_2d
@@ -42,5 +46,57 @@ extern SEXP R_PermutedLinearStatistic_2d
     const SEXP y,
     const SEXP iy,
     const SEXP block,
-    const SEXP B
+    const SEXP B,
+    const SEXP standardise
+);
+
+
+/* R_Tables.c */
+extern SEXP R_tables
+(
+    SEXP ix,
+    SEXP iy,
+    SEXP weights,
+    SEXP subset,
+    SEXP block
+);
+
+
+/* R_Tests.c */
+extern SEXP R_ChisqTest
+(
+    SEXP LEV,
+    SEXP pvalue,
+    SEXP lower,
+    SEXP give_log
+);
+
+extern SEXP R_MaxtypeTest
+(
+    SEXP LEV,
+    SEXP alternative,
+    SEXP pvalue,
+    SEXP lower,
+    SEXP give_log,
+    SEXP maxpts,
+    SEXP releps,
+    SEXP abseps
+);
+
+extern SEXP R_MaxSelectTest
+(
+    SEXP LEV,
+    SEXP ordered,
+    SEXP teststat,
+    SEXP minbucket,
+    SEXP lower,
+    SEXP give_log
+);
+
+
+/* R_Utils.c */
+extern SEXP R_kronecker
+(
+    SEXP A,
+    SEXP B
 );
