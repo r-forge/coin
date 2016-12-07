@@ -6,7 +6,7 @@
 #include "MemoryAccess.h"
 #include "MaxSelect.h"
 
-SEXP R_ChisqTest
+SEXP R_QuadraticTest
 (
     SEXP LEV,
     SEXP pvalue,
@@ -65,7 +65,7 @@ SEXP R_ChisqTest
     return(ans);
 }
 
-SEXP R_MaxtypeTest
+SEXP R_MaximumTest
 (
     SEXP LEV,
     SEXP alternative,
@@ -153,7 +153,7 @@ SEXP R_MaxtypeTest
     return(ans);
 }
 
-SEXP R_MaxSelectTest
+SEXP R_MaximallySelectedTest
 (
     SEXP LEV,
     SEXP ordered,

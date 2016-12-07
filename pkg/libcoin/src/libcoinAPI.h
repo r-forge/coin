@@ -61,18 +61,18 @@ extern SEXP libcoin_R_tables(
     return fun(ix, iy, weights, subset, block);
 }
 
-extern SEXP libcoin_R_ChisqTest(
+extern SEXP libcoin_R_QuadraticTest(
     SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log
 ) {
 
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_ChisqTest");
+            R_GetCCallable("libcoin", "R_QuadraticTest");
     return fun(LEV, pvalue, lower, give_log);
 }
 
-extern SEXP libcoin_R_MaxtypeTest(
+extern SEXP libcoin_R_MaximumTest(
     SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
     SEXP maxpts, SEXP releps, SEXP abseps
 ) {
@@ -80,19 +80,19 @@ extern SEXP libcoin_R_MaxtypeTest(
   static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_MaxtypeTest");
+            R_GetCCallable("libcoin", "R_MaximumTest");
     return fun(LEV, alternative, pvalue, lower, give_log, maxpts, releps,
                abseps);
 }
 
-extern SEXP libcoin_R_MaxSelectTest(
+extern SEXP libcoin_R_MaximallySelectedTest(
     SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
 ) {
 
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_MaxSelectTest");
+            R_GetCCallable("libcoin", "R_MaximallySelectedTest");
     return fun(LEV, ordered, teststat, minbucket, lower, give_log);
 }
 

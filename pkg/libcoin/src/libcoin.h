@@ -63,7 +63,7 @@ extern SEXP R_tables
 
 
 /* R_Tests.c */
-extern SEXP R_ChisqTest
+extern SEXP R_QuadraticTest
 (
     SEXP LEV,
     SEXP pvalue,
@@ -71,7 +71,7 @@ extern SEXP R_ChisqTest
     SEXP give_log
 );
 
-extern SEXP R_MaxtypeTest
+extern SEXP R_MaximumTest
 (
     SEXP LEV,
     SEXP alternative,
@@ -83,7 +83,7 @@ extern SEXP R_MaxtypeTest
     SEXP abseps
 );
 
-extern SEXP R_MaxSelectTest
+extern SEXP R_MaximallySelectedTest
 (
     SEXP LEV,
     SEXP ordered,

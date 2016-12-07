@@ -175,10 +175,10 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
 
     if (!object$Xfactor) {
         if (teststat == "quadratic") {
-            ret <- .Call(R_ChisqTest, object,
+            ret <- .Call(R_QuadraticTest, object,
                          as.integer(pvalue), as.integer(lower), as.integer(log))
         } else {
-            ret <- .Call(R_MaxtypeTest, object,
+            ret <- .Call(R_MaximumTest, object,
                          as.integer(alt), as.integer(pvalue), as.integer(lower),
                          as.integer(log), as.integer(pargs$maxpts),
                          as.double(pargs$releps), as.double(pargs$abseps))
@@ -190,7 +190,7 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
             }
         }
     } else {
-        ret <- .Call(R_MaxSelectTest, object, as.integer(ordered),
+        ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered),
                      as.integer(test), as.integer(minbucket),
                      as.integer(lower), as.integer(log))
     }
