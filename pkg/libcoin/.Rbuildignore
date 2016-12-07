@@ -1,5 +1,2 @@
 todo.txt
-inst/API_check
-inst/include
 inst/literate_libcoin
-src/libcoinAPI.h
