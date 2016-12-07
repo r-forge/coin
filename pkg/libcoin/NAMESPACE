@@ -1,7 +1,7 @@
 
 useDynLib(libcoin, .registration = TRUE)
 
-importFrom("stats", "complete.cases")
-importFrom("mvtnorm", "GenzBretz")
+importFrom("stats", complete.cases)
+importFrom("mvtnorm", GenzBretz)
 
-export(LinStatExpCov, doTest, ctabs, call_libcoin)
+export(LinStatExpCov, doTest, ctabs)
