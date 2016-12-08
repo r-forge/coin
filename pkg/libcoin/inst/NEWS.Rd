@@ -1,33 +1,9 @@
 
 \name{NEWS}
-\title{NEWS file for the libcoin package}
+\title{NEWS file for the \pkg{libcoin} package}
 
-\section{Changes in Version 0.6-1 (2016-11-05)}{
+\section{Changes in Version 0.9-0 (2016-12-07)}{
   \itemize{
-    \item{Allow for interruption in Monte Carlo tests.}
-    \item{Minor efficiency tweaks.}
-    \item{Fix bug wrt maximum type statistics and variances only, spotted by Henric Winell.}
-  }
-}
-
-\section{Changes in Version 0.6-0 (2016-09-01)}{
-  \itemize{
-    \item{Give meaningful defaults and avoid calling \code{missing()} in
-      \code{LinStatExpCov()}.}
-    \item{Add \code{call_libcoin()}. This is a dirty by-pass and must not be
-      used under any circumstances.}
-  }
-}
-
-\section{Changes in Version 0.5-1 (2016-08-23)}{
-  \itemize{
-    \item{Export \code{ctabs()} function for efficient cross-tabulation.}
-  }
-}
-
-\section{Changes in Version 0.5-0 (2016-08-17)}{
-  \itemize{
-    \item{\pkg{libcoin} passes \code{R CMD check} and reproduces all \pkg{coin}
-      results.}
+    \item{ \pkg{libcoin} published on CRAN.}
   }
 }
