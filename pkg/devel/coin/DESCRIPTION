@@ -14,6 +14,7 @@ Description: Conditional inference procedures for the general independence
 Depends: R (>= 3.2.0), methods, survival
 Imports: libcoin (>= 0.9-0), stats, modeltools (>= 0.2-9), mvtnorm (>= 1.0-5), multcomp
 Suggests: parallel, xtable, e1071, vcd, TH.data (>= 1.0-7)
+LinkingTo: libcoin
 LazyData: yes
 NeedsCompilation: yes
 ByteCompile: yes
