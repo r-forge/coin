@@ -1,4 +1,3 @@
-
 ### "ExpectCovar" and "ExpectCovarInfluence" are no
 ### longer needed but currently imported by party
 
@@ -65,10 +64,10 @@ setClass("IndependenceProblem",
 setClass("IndependenceTestProblem",
     contains = "IndependenceProblem",
     slots = c(
-        xtrans     = "matrix",
-        ytrans     = "matrix",
-        xtrafo     = "function",
-        ytrafo     = "function"
+        xtrans = "matrix",
+        ytrans = "matrix",
+        xtrafo = "function",
+        ytrafo = "function"
     ),
     validity = function(object)
         (storage.mode(object@xtrans) == "double" &&
