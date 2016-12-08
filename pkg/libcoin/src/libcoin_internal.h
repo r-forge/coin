@@ -36,3 +36,5 @@
 #define TableBlock_SLOT                 15
 #define Sumweights_SLOT                 16
 #define Table_SLOT                      17
+
+/* #define USE_RCONT2_FROM_R		1 */

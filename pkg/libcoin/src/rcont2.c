@@ -1,9 +1,14 @@
 
 #include "libcoin_internal.h"
 
-/* this needs to be importet from stats */
-
-void rcont2
+#ifdef USE_RCONT2_FROM_R
+/* This R _header_ file containts the function defintion for S_rcont2, a wrapper
+   for rcont2 in stats/src. We need to compile this for libcoin. Looks like this   
+   mechanism was invented for lme4 < 1.0-0 */ 
+#include <R_ext/stats_stubs.h>
+#else
+/* The above export is not there yet, so just copy rcont2 */
+void S_rcont2
 (
     int *nrow,
     int *ncol,
@@ -123,3 +128,4 @@ L160:
 
     return;
 }
+#endif

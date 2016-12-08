@@ -7,7 +7,7 @@
 #include "Tables.h"
 #include "Distributions.h"
 #include "MemoryAccess.h"
-#include "rcont2.h" /* temporarily only */
+#include "rcont2.h"
 
 void RC_ExpectationCovarianceStatistic
 (
@@ -516,8 +516,8 @@ SEXP R_PermutedLinearStatistic_2d
             rtable[p] = 0;
 
         for (int b = 0; b < Lb; b++) {
-            rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,
-                   csum + Lyp1 *b + 1, ntotal + b, fact, jwork, rtable2);
+            S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,
+                     csum + Lyp1 *b + 1, ntotal + b, fact, jwork, rtable2);
 
         for (int j1 = 1; j1 <= NLEVELS(ix); j1++) {
             for (int j2 = 1; j2 <= NLEVELS(iy); j2++)
