@@ -1,7 +1,7 @@
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 2016-11-05
-Version: 0.6-1
+Date: 2016-12-07
+Version: 0.9-0
 Authors@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@R-project.org")
 Description: Basis infrastructure for linear test statistics and permutation
@@ -10,7 +10,6 @@ Description: Basis infrastructure for linear test statistics and permutation
   ready to be used by anyone.
 Depends: R (>= 3.3.0)
 Imports: stats, mvtnorm
-Suggests: coin (>= 2.0-0)
 LinkingTo: mvtnorm
 NeedsCompilation: yes
 License: GPL-2
