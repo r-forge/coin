@@ -182,8 +182,7 @@ find_cutpoints <- function(x, minprob, maxprob, names) {
     } else {
         cutpoints <- ux[ux >= qx[1] & ux < qx[2]]
     }
-    cm <- .Call("R_maxstattrafo", as.double(x), as.double(cutpoints),
-                PACKAGE = "coin")
+    cm <- .Call(R_maxstattrafo, as.double(x), as.double(cutpoints))
     if(names)
         dimnames(cm) <- list(1:nrow(cm), paste0("x <= ", round(cutpoints, 3)))
     cm
