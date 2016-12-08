@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2016-11-01 r71616) -- "Unsuffered Consequences"
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
 Copyright (C) 2016 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -20,7 +20,6 @@ Type 'q()' to quit R.
 > pkgname <- "coin"
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
-> options(pager = "console")
 > library('coin')
 Loading required package: survival
 > 
@@ -2998,7 +2997,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  10.21 0.15 13.33 NA NA 
+Time elapsed:  20.18 0.164 20.346 0 0 
 > grDevices::dev.off()
 null device 
           1 
