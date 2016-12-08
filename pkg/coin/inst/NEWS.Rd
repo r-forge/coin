@@ -1,6 +1,14 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
+\section{Changes in version 1.1-4 (2016-12-07)}{
+  \subsection{New features}{
+    \itemize{
+      \item Package \pkg{libcoin} is a reimplementation of the \pkg{coin} machinery (but not of its user interface).
+            For testing purposes, some checks comparing the output of both packages have been added.
+    }
+  }
+}
 \section{Changes in version 1.1-3 (2016-11-24)}{
   \subsection{Bug fixes}{
     \itemize{
