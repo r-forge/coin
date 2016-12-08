@@ -927,7 +927,7 @@ void RC_ExpectationCovarianceLinearStatistic
                      subtmp = subset + ns;
                      for (int i = 0; i < Nsubset[b]; i++)
                          work[ix[subtmp[i]]] += (double) weights[subtmp[i]];
-                         for (int p = 0; p < P; p++)
+                     for (int p = 0; p < P; p++)
                           CovX[S(p, p, P)] = ExpX[p];
                  } else {
                      C_ExpectationX_weights_subset(REAL(x), N, P, weights,
