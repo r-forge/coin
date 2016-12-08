@@ -10,7 +10,7 @@ importFrom("modeltools", ModelEnvFormula)
 importMethodsFrom("modeltools", has, na.omit)
 importFrom("mvtnorm", pmvnorm, qmvnorm)
 importFrom("multcomp", contrMat)
-importFrom("libcoin", "LinStatExpCov", "call_libcoin")
+importFrom("libcoin", "LinStatExpCov")
 
 export(independence_test,
        symmetry_test,
