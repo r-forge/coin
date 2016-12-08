@@ -37,4 +37,5 @@
 #define Sumweights_SLOT                 16
 #define Table_SLOT                      17
 
+/* uncomment once base R was updated */
 /* #define USE_RCONT2_FROM_R		1 */
