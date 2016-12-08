@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Version 0.4-6</title>
+    <title>Version 1.1-3</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
-    <link rel="canonical" href="http://coin.r-forge.r-project.org/2006/04/24/0.4-6/">
+    <link rel="canonical" href="http://coin.r-forge.r-project.org/2016/11/24/1.1-3/">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="http://coin.r-forge.r-project.org/css/main.css">
@@ -62,15 +62,34 @@ hljs.initHighlightingOnLoad();
       <div class="post">
 
   <header class="post-header">
-    <h1>Version 0.4-6</h1>
-    <p class="meta">Apr 24, 2006</p>
+    <h1>Version 1.1-3</h1>
+    <p class="meta">Nov 24, 2016</p>
   </header>
 
   <article class="post-content">
-  <ul>
-<li> Updated ‘LegoCondInf’ vignette. </li>
-<li> Printed names of test statistics are now chi-squared, maxT, or Z
- instead of T. </li>
+  <h2>Bug fixes</h2>
+<ul>
+<li> Objects of class "AsIs" were handled incorrectly in some cases,
+ leading to, e.g., misleading error messages or test statistics
+ having the wrong sign. </li>
+<li> Supplying decreasing scores for ordered factors with two levels
+ using the test functions' scores argument resulted in increasing
+ normalized scores, leading to test statistics having the wrong
+ sign. </li>
+<li> The transformation function for ordered factors did not return
+ normalized scores in the two-level case when argument scores was
+ used. </li>
+<li> Precision issues in confidence intervals for location and scale
+ problems. </li>
+<li> When the general symmetry and marginal homogeneity tests were
+ applied to an object of class "table", the levels of the
+ measurement conditions were not preserved (but reordered
+ alphabetically). </li>
+</ul>
+<h2>User-visible changes</h2>
+<ul>
+<li> Version 1.0-5 of the mvtnorm package is now required. </li>
+<li> Documentation updates. </li>
 </ul>
 
   </article>
