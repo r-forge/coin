@@ -257,10 +257,6 @@
   (e.g., Lee, 1996; see \sQuote{Examples}) and user-supplied logrank weights
   (see \code{\link{GTSG}} for tests against Weibull-type or crossing-curve
   alternatives).
-
-  Starting with version 2.0-0, mid-ranks and the Hothorn-Lausen method can no
-  longer be specified with \code{ties.method = "logrank"} and
-  \code{ties-method = "HL"} respectively.
 }
 \references{
   Andersen, P. K., Borgan, \enc{Ø}{O}., Gill, R. and Keiding, N.  (1982).
