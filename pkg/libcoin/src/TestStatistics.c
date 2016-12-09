@@ -152,7 +152,7 @@ double C_maxtype
     const int alternative
 ) {
 
-    double ret;
+    double ret = 0.0;
 
     if (varonly) {
         if (alternative ==  ALTERNATIVE_twosided) {

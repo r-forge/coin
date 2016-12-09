@@ -33,13 +33,21 @@ void C_ordered_Xfactor_block
     mexpect = Calloc(Q, double);
     if (teststat == TESTSTAT_maximum) {
        mvar = Calloc(Q, double);
+       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+       mcovar = Calloc(1, double);
+       mMPinv = Calloc(1, double);
     } else {
        mcovar = Calloc(Q * (Q + 1) / 2, double);
        mMPinv = Calloc(Q * (Q + 1) / 2, double);
+       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+       mvar = Calloc(1, double);
     }
     if (B > 0) {
         mblinstat = Calloc(Q * B, double);
         bmaxstat = Calloc(B, double);
+    } else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+        mblinstat = Calloc(1, double);
+        bmaxstat = Calloc(1, double);
     }
 
     maxstat[0] = 0.0;
@@ -123,15 +131,8 @@ void C_ordered_Xfactor_block
             pval[0] = C_perm_pvalue(greater, B, lower, give_log);
         }
     }
-    Free(mlinstat); Free(mexpect);
-    if (B > 0) {
-        Free(mblinstat); Free(bmaxstat);
-    }
-    if (teststat == TESTSTAT_maximum) {
-        Free(mvar);
-    } else {
-        Free(mcovar); Free(mMPinv);
-    }
+    Free(mlinstat); Free(mexpect); Free(mblinstat); Free(bmaxstat);
+    Free(mvar); Free(mcovar); Free(mMPinv);
 }
 
 void C_ordered_Xfactor
@@ -163,13 +164,21 @@ void C_ordered_Xfactor
     mexpect = Calloc(Q, double);
     if (teststat == TESTSTAT_maximum) {
        mvar = Calloc(Q, double);
+       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+       mcovar = Calloc(1, double);
+       mMPinv = Calloc(1, double);
     } else {
        mcovar = Calloc(Q * (Q + 1) / 2, double);
        mMPinv = Calloc(Q * (Q + 1) / 2, double);
+       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+       mvar = Calloc(1, double);
     }
     if (B > 0) {
         mblinstat = Calloc(Q * B, double);
         bmaxstat = Calloc(B, double);
+    } else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+        mblinstat = Calloc(1, double);
+        bmaxstat = Calloc(1, double);
     }
 
     maxstat[0] = 0.0;
@@ -250,15 +259,8 @@ void C_ordered_Xfactor
         }
         pval[0] = C_perm_pvalue(greater, B, lower, give_log);
     }
-    Free(mlinstat); Free(mexpect);
-    if (B > 0) {
-        Free(mblinstat); Free(bmaxstat);
-    }
-    if (teststat == TESTSTAT_maximum) {
-        Free(mvar);
-    } else {
-        Free(mcovar); Free(mMPinv);
-    }
+    Free(mlinstat); Free(mexpect);Free(mblinstat); Free(bmaxstat);
+    Free(mvar); Free(mcovar); Free(mMPinv);
 }
 
 void C_unordered_Xfactor_block
@@ -290,13 +292,21 @@ void C_unordered_Xfactor_block
     mtmp = Calloc(P, double);
     if (teststat == TESTSTAT_maximum) {
        mvar = Calloc(Q, double);
+       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+       mcovar = Calloc(1, double);
+       mMPinv = Calloc(1, double);
     } else {
        mcovar = Calloc(Q * (Q + 1) / 2, double);
        mMPinv = Calloc(Q * (Q + 1) / 2, double);
+       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+       mvar = Calloc(1, double);
     }
     if (B > 0) {
         mblinstat = Calloc(Q * B, double);
         bmaxstat = Calloc(B, double);
+    } else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+        mblinstat = Calloc(1, double);
+        bmaxstat = Calloc(1, double);
     }
 
     maxstat[0] = 0.0;
@@ -431,14 +441,7 @@ void C_unordered_Xfactor_block
         pval[0] = C_perm_pvalue(greater, B, lower, give_log);
     }
     Free(mlinstat); Free(mexpect); Free(levels); Free(contrast); Free(indl); Free(mtmp);
-    if (B > 0) {
-        Free(mblinstat); Free(bmaxstat);
-    }
-    if (teststat == TESTSTAT_maximum) {
-        Free(mvar);
-    } else {
-        Free(mcovar); Free(mMPinv);
-    }
+    Free(mblinstat); Free(bmaxstat); Free(mvar); Free(mcovar); Free(mMPinv);
 }
 
 void C_unordered_Xfactor
@@ -470,13 +473,21 @@ void C_unordered_Xfactor
     mexpect = Calloc(Q, double);
     if (teststat == TESTSTAT_maximum) {
        mvar = Calloc(Q, double);
+       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+       mcovar = Calloc(1, double);
+       mMPinv = Calloc(1, double);
     } else {
        mcovar = Calloc(Q * (Q + 1) / 2, double);
        mMPinv = Calloc(Q * (Q + 1) / 2, double);
+       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+       mvar = Calloc(1, double);
     }
     if (B > 0) {
         mblinstat = Calloc(Q * B, double);
         bmaxstat = Calloc(B, double);
+    } else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+        mblinstat = Calloc(1, double);
+        bmaxstat = Calloc(1, double);
     }
 
     maxstat[0] = 0.0;
@@ -588,12 +599,5 @@ void C_unordered_Xfactor
         }
     }
     Free(mlinstat); Free(mexpect); Free(levels); Free(contrast); Free(indl);
-    if (B > 0) {
-        Free(mblinstat); Free(bmaxstat);
-    }
-    if (teststat == TESTSTAT_maximum) {
-        Free(mvar);
-    } else {
-        Free(mcovar); Free(mMPinv);
-    }
+    Free(mblinstat); Free(bmaxstat); Free(mvar);Free(mcovar); Free(mMPinv);
 }
