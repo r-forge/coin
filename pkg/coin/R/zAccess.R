@@ -31,8 +31,8 @@ setMethod("pvalue",
                                       "unadjusted", "discrete"),
                           several.ok = TRUE)[1]
             if (method == "discrete")
-                warning(sQuote(paste("method =", dQuote(method))),
-                        " is deprecated; see ", sQuote("?pvalue"))
+                stop(sQuote(paste("method =", dQuote(method))),
+                        " is defunct; see ", sQuote("?pvalue"))
             distribution <- match.arg(distribution)
             type <- match.arg(type)
 
@@ -67,10 +67,6 @@ setMethod("pvalue",
                                  stepdown = TRUE, ...)
                 }
             }
-            ## <DEPRECATED>
-            else if (method == "discrete")
-                dbonf(object, ...)
-            ## </DEPRECATED>
             else
                 unadjusted(object, ...)
         }

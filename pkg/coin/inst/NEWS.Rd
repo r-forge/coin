@@ -22,6 +22,9 @@
   \subsection{Deprecated and defunct}{
     \itemize{
       \item \code{surv_test()} is now defunct and has been removed.
+
+      \item \code{method = "discrete"} in \code{pvalue()} is now defunct and has
+      been removed.
     }
   }
 }
