@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 2.0-0 (2016-XX-XX)}{
+\section{Changes in version 2.0-0 (20YY-MM-DD)}{
   \subsection{New features}{
     \itemize{
       \item Linear statistics, their expectation and covariances as well as
@@ -28,6 +28,28 @@
 
       \item \code{method = "discrete"} in \code{pvalue()} is now defunct and has
       been removed.
+    }
+  }
+}
+\section{Changes in version 1.2-0 (20YY-MM-DD)}{
+  \subsection{New features}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{User-visible changes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Deprecated and defunct}{
+    \itemize{
+      \item
     }
   }
 }
