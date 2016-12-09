@@ -256,13 +256,7 @@ logrank_trafo <-
     function(x, ties.method = c("mid-ranks", "Hothorn-Lausen", "average-scores"),
              weight = logrank_weight, ...)
 {
-    ## backwards compatibility
-    ties.method <- match.arg(ties.method,
-                             choices = c("mid-ranks", "Hothorn-Lausen",
-                                         "average-scores", "logrank", "HL"),
-                             several.ok = TRUE)[1]
-    if (ties.method == "logrank") ties.method <- "mid-ranks"
-    else if (ties.method == "HL") ties.method <- "Hothorn-Lausen"
+    ties.method <- match.arg(ties.method)
 
     cc <- complete.cases(x)
     time <- x[cc, 1]

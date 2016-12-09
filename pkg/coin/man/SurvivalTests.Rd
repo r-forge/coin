@@ -268,6 +268,10 @@
   unless \code{ties.method = "average-scores"}.  (In versions of \pkg{coin}
   prior to 1.1-0, \code{logrank_trafo} was a decreasing function when
   \code{ties.method} was other than \code{"average-scores"}.)
+
+  Starting with version 1.2-0, mid-ranks and the Hothorn-Lausen method can no
+  longer be specified with \code{ties.method = "logrank"} and
+  \code{ties-method = "HL"} respectively.
 }
 \references{
   Andersen, P. K., Borgan, \enc{Ø}{O}., Gill, R. and Keiding, N.  (1982).

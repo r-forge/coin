@@ -14,7 +14,9 @@
   }
   \subsection{User-visible changes}{
     \itemize{
-      \item
+      \item The \code{ties.method} argument of \code{logrank_trafo()} no longer
+      allows using \code{"logrank"} and \code{"HL"} to specify mid-ranks and the
+      Hothorn-Lausen method respectively.
     }
   }
   \subsection{Deprecated and defunct}{
