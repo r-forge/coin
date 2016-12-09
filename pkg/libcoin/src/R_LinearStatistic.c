@@ -42,9 +42,11 @@ void RC_ExpectationCovarianceStatistic
 
     if (Lb == 1) {
         table[0] = 0;
-        table[1] = LENGTH(subset);
+        table[1] = -1; /* means: no subset given */
+        if (LENGTH(subset) > 0)
+            table[1] = LENGTH(subset);
         if (LENGTH(weights) == 0) {
-            sumweights[0] = 0;
+            sumweights[0] = -1; /* means: no weights given */
         } else {
             if (LENGTH(subset) == 0) {
                 sumweights[0] = C_sum_weights(INTEGER(weights), LENGTH(weights));
@@ -70,7 +72,7 @@ void RC_ExpectationCovarianceStatistic
         }
 
         if (LENGTH(weights) == 0) {
-            for (int b = 0; b < Lb; b++) sumweights[b] = 0;
+            for (int b = 0; b < Lb; b++) sumweights[b] = -1; /* means: no weights given */
         } else {
             tmp = 0;
             for (int b = 0; b < Lb; b++) {

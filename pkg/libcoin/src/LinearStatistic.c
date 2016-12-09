@@ -232,8 +232,8 @@ void C_LinearStatisticXfactor
         ns = ns + Nsubset[b];
     }
 
-    if (ns == 0) {
-        if (sw == 0) {
+    if (ns < 0) {  /* means: no subset given */
+        if (sw < 0) {  /* means: no weights given */
               C_LinearStatisticXfactor_(x, N, P, y, Q,
                                         PQ_ans);
         } else {
@@ -241,7 +241,7 @@ void C_LinearStatisticXfactor
                                                PQ_ans);
         }
     } else {
-        if (sw == 0) {
+        if (sw < 0) {
             C_LinearStatisticXfactor_subset(x, N, P, y, Q, subset, ns,
                                             PQ_ans);
         } else {
@@ -279,15 +279,15 @@ void RC_LinearStatistic
             ns = ns + Nsubset[b];
         }
 
-        if (ns == 0) {
-            if (sw == 0) {
+        if (ns < 0) {  /* means: no subset given */
+            if (sw < 0) {  /* means: no weights given */
                   C_LinearStatistic_(REAL(x), N, P, y, Q, PQ_ans);
             } else {
                   C_LinearStatistic_weights(REAL(x), N, P, y, Q, weights,
                                             PQ_ans);
         }
         } else {
-            if (sw == 0) {
+            if (sw < 0) {
                 C_LinearStatistic_subset(REAL(x), N, P, y, Q, subset, ns,
                                          PQ_ans);
             } else {
@@ -348,7 +348,9 @@ void C_ExpectationInfluence_weights
 
      C_colSums_weights(y, N, Q, weights,
                        Q_ans);
-     for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / sumweights;
+     if (sumweights > 0) {
+         for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / sumweights;
+     }
 }
 
 void C_ExpectationInfluence_subset
@@ -380,7 +382,9 @@ void C_ExpectationInfluence_weights_subset
 
      C_colSums_weights_subset(y, N, Q, weights, subset, Nsubset,
                               Q_ans);
-     for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / sumweights;
+     if (sumweights > 0) {
+         for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / sumweights;
+     }
 }
 
 
@@ -412,8 +416,10 @@ void C_CovarianceInfluence_weights
 
      C_KronSums_sym_center_weights(y, N, Q, weights, ExpInf,
                                    QQ_sym_ans);
-     for (int q = 0; q < Q * (Q + 1) / 2; q++)
-         QQ_sym_ans[q] = QQ_sym_ans[q] / sumweights;
+     if (sumweights > 0) {
+         for (int q = 0; q < Q * (Q + 1) / 2; q++)
+             QQ_sym_ans[q] = QQ_sym_ans[q] / sumweights;
+     }
 }
 
 void C_CovarianceInfluence_subset
@@ -449,8 +455,10 @@ void C_CovarianceInfluence_weights_subset
      C_KronSums_sym_center_weights_subset(y, N, Q, weights, subset, Nsubset,
                                           ExpInf,
                                           QQ_sym_ans);
-     for (int q = 0; q < Q * (Q + 1) / 2; q++)
-         QQ_sym_ans[q] = QQ_sym_ans[q] / sumweights;
+     if (sumweights > 0) {                                          
+         for (int q = 0; q < Q * (Q + 1) / 2; q++)
+             QQ_sym_ans[q] = QQ_sym_ans[q] / sumweights;
+     }
 }
 
 void C_VarianceInfluence_
@@ -480,7 +488,9 @@ void C_VarianceInfluence_weights
 
      C_colSums2_center_weights(y, N, Q, weights, ExpInf,
                                Q_ans);
-     for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / sumweights;
+     if (sumweights > 0) {                               
+         for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / sumweights;
+     }
 }
 
 void C_VarianceInfluence_subset
@@ -515,7 +525,9 @@ void C_VarianceInfluence_weights_subset
      C_colSums2_center_weights_subset(y, N, Q, weights, subset, Nsubset,
                                       ExpInf,
                                       Q_ans);
-     for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / sumweights;
+     if (sumweights > 0) {                                      
+         for (int q = 0; q < Q; q++) Q_ans[q] = Q_ans[q] / sumweights;
+     }
 }
 
 void C_ExpectationCoVarianceInfluence
@@ -541,8 +553,8 @@ void C_ExpectationCoVarianceInfluence
          ExpInf = LbQ_ans + b * Q;
          VarInf = LbQ_var_ans + b * Q;
          CovInf = LbQQ_sym_ans + b * Q * (Q + 1) / 2;
-         if (Nsubset[b] == 0) {
-             if (sumweights[b] == 0) {
+         if (Nsubset[b] < 0) {  /* means: no subset given */
+             if (sumweights[b] < 0) {  /* means: no weights given */
                  C_ExpectationInfluence_(y, N, Q,
                                          ExpInf);
                  /* compute both for the time being (for later reuse) */
@@ -562,7 +574,7 @@ void C_ExpectationCoVarianceInfluence
                                                CovInf);
              }
          } else {
-             if (sumweights[b] == 0) {
+             if (sumweights[b] < 0) {
                  C_ExpectationInfluence_subset(y, N, Q, subset + ns, Nsubset[b],
                                                ExpInf);
                  /* compute both for the time being (for later reuse) */
@@ -872,8 +884,8 @@ void RC_ExpectationCovarianceLinearStatistic
      for (int b = 0; b < Lb; b++) {
          for (int i = 0; i < P + 2 * P * (P + 1) / 2 + 1; i++)
              work[i] = 0.0;
-         if (Nsubset[b] == 0) {
-             if (sumweights[b] == 0) {
+         if (Nsubset[b] < 0) {  /* means: no subset given */
+             if (sumweights[b] < 0) {  /* means: no weights given */
                  if (isInteger(x)) {
                      ix = INTEGER(x);
                      /* work[0] counts NAs */
@@ -904,7 +916,7 @@ void RC_ExpectationCovarianceLinearStatistic
                  sw = sumweights[b];
              }
          } else {
-             if (sumweights[b] == 0) {
+             if (sumweights[b] < 0) {
                  if (isInteger(x)) {
                      ix = INTEGER(x);
                      subtmp = subset + ns;
@@ -983,8 +995,8 @@ void RC_ExpectationVarianceLinearStatistic
 
      for (int b = 0; b < Lb; b++) {
          for (int i = 0; i < 3 * P + 1; i++) work[i] = 0.0;
-         if (Nsubset[b] == 0) {
-             if (sumweights[b] == 0) {
+         if (Nsubset[b] < 0) {  /* means: no subset given */
+             if (sumweights[b] < 0) {  /* means: no weights given */
                  if (isInteger(x)) {
                      ix = INTEGER(x);
                      /* work[0] counts NAs */
@@ -1012,7 +1024,7 @@ void RC_ExpectationVarianceLinearStatistic
                  sw = sumweights[b];
              }
          } else {
-             if (sumweights[b] == 0) {
+             if (sumweights[b] < 0) {
                  if (isInteger(x)) {
                      ix = INTEGER(x);
                      subtmp = subset + ns;
