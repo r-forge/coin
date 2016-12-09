@@ -21,7 +21,7 @@
   }
   \subsection{Deprecated and defunct}{
     \itemize{
-      \item
+      \item \code{surv_test()} is now defunct and has been removed.
     }
   }
 }

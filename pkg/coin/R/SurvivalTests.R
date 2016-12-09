@@ -1,10 +1,9 @@
-### <DEPRECATED>
+### <DEFUNCT>
 surv_test <- function(object, ...) {
-    .Deprecated(msg = paste(sQuote("surv_test"), "is deprecated.  Use",
-                            sQuote("logrank_test"), "instead."))
-    UseMethod("logrank_test")
+    .Defunct(msg = paste(sQuote("surv_test"), "is defunct.  Use",
+                         sQuote("logrank_test"), "instead."))
 }
-### </DEPRECATED>
+### </DEFUNCT>
 
 ### weighted logrank test
 logrank_test <- function(object, ...) UseMethod("logrank_test")
