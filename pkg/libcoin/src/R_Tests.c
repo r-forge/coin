@@ -99,7 +99,6 @@ SEXP R_MaximumTest
 
     if (C_get_varonly(LEV)) {
         cv = C_get_Variance(LEV);
-    Rprintf("varonly var %f\n", cv[0]);
     } else {
         cv = C_get_Covariance(LEV);
     }
