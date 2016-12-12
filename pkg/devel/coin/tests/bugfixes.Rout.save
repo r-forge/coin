@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2016-11-01 r71616) -- "Unsuffered Consequences"
+R Under development (unstable) (2016-12-05 r71733) -- "Unsuffered Consequences"
 Copyright (C) 2016 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -985,6 +985,11 @@ Error in quade_test.SymmetryProblem(object = <S4 object of class structure("Symm
 > stopifnot(identical(of_trafo(x, scores = 2:1),              # was 2:1
 +                     matrix(c(1, 0), dimnames = list(1:2))))
 > 
+> ### 'logrank_trafo' didn't make sure input was right-censored
+> y <- Surv(1:5, event = c(1, 0, 1, 0, 1), type = "left")
+> try(logrank_trafo(y))
+Error in logrank_trafo(y) : 'y' does not represent right-censored data
+> 
 > proc.time()
    user  system elapsed 
-   2.00    0.12    2.14 
+   2.89    0.18    3.09 

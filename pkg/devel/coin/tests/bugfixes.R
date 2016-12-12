@@ -606,3 +606,7 @@ stopifnot(identical(of_trafo(x, scores = 1:2),              # was 1:2
                     matrix(c(0, 1), dimnames = list(1:2))))
 stopifnot(identical(of_trafo(x, scores = 2:1),              # was 2:1
                     matrix(c(1, 0), dimnames = list(1:2))))
+
+### 'logrank_trafo' didn't make sure input was right-censored
+y <- Surv(1:5, event = c(1, 0, 1, 0, 1), type = "left")
+try(logrank_trafo(y))

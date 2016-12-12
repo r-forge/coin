@@ -35,6 +35,9 @@
   \subsection{Bug fixes}{
     \itemize{
       \item Precision issue in the symmetric median scores transformation.
+
+      \item The weighted logrank transformation returned nonsense scores when
+      supplied non-right-censored input; it now results in an error.
     }
   }
   \subsection{User-visible changes}{

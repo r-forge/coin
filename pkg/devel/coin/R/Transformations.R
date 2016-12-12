@@ -248,6 +248,10 @@ logrank_trafo <-
 {
     ties.method <- match.arg(ties.method)
 
+    if (!(is.Surv(x) && isTRUE(attr(x, "type") == "right")))
+        stop(sQuote(deparse(substitute(x))),
+             " does not represent right-censored data")
+
     cc <- complete.cases(x)
     time <- x[cc, 1]
     event <- x[cc, 2]
