@@ -40,7 +40,7 @@ logrank_test.IndependenceProblem <- function(object,
             if (!is_censored_y(object))
                 stop(sQuote(colnames(object@y)),
                      " is not a censored variable")
-            return(TRUE)
+            TRUE
         }
     )
     ## convert factors to ordered and attach scores if requested
@@ -66,5 +66,5 @@ logrank_test.IndependenceProblem <- function(object,
         object@method <- paste("K-Sample",
                             if (type == "logrank") "Logrank" else type, "Test")
 
-    return(object)
+    object
 }

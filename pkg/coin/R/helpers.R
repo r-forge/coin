@@ -126,7 +126,7 @@ copyslots <- function(source, target) {
         stop("no common slots to copy to")
     for (s in slots)
         eval(parse(text = paste("target@", s, " <- source@", s)))
-    return(target)
+    target
 }
 
 ft <- function(test, class, formula, data = list(), subset = NULL,
@@ -226,7 +226,7 @@ setscores <- function(x, scores) {
         }
     }
     ## </FIXME>
-    return(x)
+    x
 }
 
 ### user-supplied trafo functions may return a vector or matrices
@@ -254,7 +254,7 @@ table2df <- function(x) {
     freq <- x[["Freq"]]
     x <- x[rep.int(seq_len(nrow(x)), freq), , drop = FALSE]
     rownames(x) <- seq_len(nrow(x))
-    return(x[, colnames(x) != "Freq"])
+    x[, colnames(x) != "Freq"]
 }
 
 table2df_sym <- function(x) {
@@ -381,10 +381,9 @@ isequal <- function(a, b) {
     if (!isTRUE(all.equal(a, b))) {
         print(a, digits = 10)
         print(b, digits = 10)
-        return(FALSE)
-    } else {
-        return(TRUE)
-    }
+        FALSE
+    } else
+        TRUE
 }
 
 has_distribution <- function(args)
