@@ -100,7 +100,7 @@ median_trafo <- function(x, mid.score = c("0", "0.5", "1")) {
     md <- median(x, na.rm = TRUE)
     scores <- as.numeric(x > md)
     if (mid.score != "0")
-        scores[x == md] <- as.numeric(mid.score)
+        scores[EQ(x, md)] <- as.numeric(mid.score)
     scores
 }
 
