@@ -9,7 +9,7 @@
   }
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item Precision issue in the symmetric median scores transformation.
     }
   }
   \subsection{User-visible changes}{
