@@ -181,7 +181,7 @@ diffusion <- data.frame(
 
 ## Extract observed Wilcoxon statistic
 ## Note: this is the sum of the ranks for age = "12-26 Weeks"
-statistic(wt, "linear")
+statistic(wt, type = "linear")
 
 ## Expectation, variance, two-sided pvalue and confidence interval
 expectation(wt)
