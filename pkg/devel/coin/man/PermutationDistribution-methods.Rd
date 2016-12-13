@@ -103,19 +103,19 @@ at <- ansari_test(y ~ x, data = dta, distribution = "exact")
 supp <- support(at)
 
 ## Density of the exact distribution of the Ansari-Bradley statistic
-dens <- dperm(at, supp)
+dens <- dperm(at, x = supp)
 
 ## Plotting the density
 plot(supp, dens, type = "s")
 
 ## 95 \% quantile
-qperm(at, 0.95)
+qperm(at, p = 0.95)
 
 ## One-sided p-value
-pperm(at, statistic(at))
+pperm(at, q = statistic(at))
 
 ## Random number generation
-rperm(at, 5)
+rperm(at, n = 5)
 }
 \keyword{methods}
 \keyword{htest}

@@ -1,7 +1,7 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
+R Under development (unstable) (2016-12-05 r71733) -- "Unsuffered Consequences"
 Copyright (C) 2016 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -20,6 +20,7 @@ Type 'q()' to quit R.
 > pkgname <- "coin"
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
+> options(pager = "console")
 > library('coin')
 Loading required package: survival
 > 
@@ -53,7 +54,7 @@ Loading required package: survival
 [1] 2.855509
 > 
 > ## Only 'sample8' exceeds the 5 % critical value
-> sts <- statistic(mt, "standardized")
+> sts <- statistic(mt, type = "standardized")
 > idx <- which(sts > c, arr.ind = TRUE)
 > sts[unique(idx[, 1]), unique(idx[, 2]), drop = FALSE]
          sample8
@@ -643,7 +644,7 @@ difference in location
 > 
 > ## Extract observed Wilcoxon statistic
 > ## Note: this is the sum of the ranks for age = "12-26 Weeks"
-> statistic(wt, "linear")
+> statistic(wt, type = "linear")
               
 12-26 Weeks 30
 > 
@@ -1252,22 +1253,22 @@ chi-squared = 23.316, p-value = 0.00082
 > supp <- support(at)
 > 
 > ## Density of the exact distribution of the Ansari-Bradley statistic
-> dens <- dperm(at, supp)
+> dens <- dperm(at, x = supp)
 > 
 > ## Plotting the density
 > plot(supp, dens, type = "s")
 > 
 > ## 95 % quantile
-> qperm(at, 0.95)
+> qperm(at, p = 0.95)
 [1] 1.669331
 > 
 > ## One-sided p-value
-> pperm(at, statistic(at))
+> pperm(at, q = statistic(at))
        1 
 0.698635 
 > 
 > ## Random number generation
-> rperm(at, 5)
+> rperm(at, n = 5)
 [1] 0.9105443 0.4552721 0.7587869 0.1517574 0.1517574
 > 
 > 
@@ -1874,7 +1875,7 @@ Quade F = 8.3765, num df = 2, denom df = 12, p-value = 0.005284
 > ## quade.test() uses an F-statistic
 > b <- nlevels(qt@statistic@block)
 > A <- sum(qt@statistic@y^2)
-> B <- sum(statistic(qt, "linear")^2) / b
+> B <- sum(statistic(qt, type = "linear")^2) / b
 > (b - 1) * B / (A - B) # F = 8.3765
 [1] 8.376528
 > 
@@ -2997,7 +2998,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  20.18 0.164 20.346 0 0 
+Time elapsed:  20.95 0.39 21.5 NA NA 
 > grDevices::dev.off()
 null device 
           1 
