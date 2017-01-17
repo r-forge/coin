@@ -812,7 +812,7 @@ trafo(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
 \end{Sinput}
 The identity transformation is used for numeric variables (\code{id_trafo()}),
 factors are transformed to indicator variables (\code{f_trafo()}),
-and censored variables are transformed to log rank scores (\code{logrank_trafo()}).
+and censored variables are transformed to logrank scores (\code{logrank_trafo()}).
 In \code{f_trafo()} a set of $k$ indicator functions is used for a factor
 with $k$ levels, unless $k = 2$ for which a univariate indicator function
 is employed. A named list containing different transformations to be applied
@@ -880,7 +880,7 @@ Median &  \code{f_trafo()} & \code{median_trafo()} &
 \code{"scalar"} \\
 Ansari-Bradley &  \code{f_trafo()} & \code{ansari_trafo()} &
 \code{"scalar"} \\
-Log rank & \code{f_trafo()} & \code{logrank_trafo()} &
+Logrank & \code{f_trafo()} & \code{logrank_trafo()} &
 \code{"quadratic"} \\
 Kruskal-Wallis &  \code{f_trafo()} & \code{rank_trafo()} &
 \code{"quadratic"} \\
