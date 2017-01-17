@@ -106,17 +106,17 @@
   extension of the standard logrank test was given by Tarone (1975) and later
   generalized to general weights by Tarone and Ware (1977).
 
-  Let \eqn{(t_i, \delta_i)}, \eqn{i = 1, 2, \ldots, n}, represent a censored
-  random sample of size \eqn{n}, where \eqn{t_i} is the observed survival time
-  and \eqn{\delta_i} is the status indicator (\eqn{\delta_i} is 0 for censored
-  observations and 1 otherwise).  To allow for ties in the data, let
-  \eqn{t_{(1)} < t_{(2)} < \cdots < t_{(m)}}{t_(1) < t_(2) < \dots < t_(m)}
-  represent the \eqn{m}, \eqn{m \le n}, ordered distinct event times.  At time
-  \eqn{t_{(k)}}{t_(k)}, \eqn{k = 1, 2, \ldots, m}, the number of events and the
-  number of subjects at risk are given by \eqn{d_k = \sum_{i = 1}^n I\!\left(t_i
-    = t_{(k)}\,|\, \delta_i = 1\right)}{d_k = sum(i = 1, \dots, n) I(t_i = t_(k)
-    | delta_i = 1)} and \eqn{n_k = n - r_k}, respectively, where \eqn{r_k}
-  depends on the ties handling method.
+  Let \eqn{(t_i, \delta_i)}, \eqn{i = 1, 2, \ldots, n}, represent a
+  right-censored random sample of size \eqn{n}, where \eqn{t_i} is the observed
+  survival time and \eqn{\delta_i} is the status indicator (\eqn{\delta_i} is 0
+  for right-censored observations and 1 otherwise).  To allow for ties in the
+  data, let \eqn{t_{(1)} < t_{(2)} < \cdots < t_{(m)}}{t_(1) < t_(2) < \dots <
+    t_(m)} represent the \eqn{m}, \eqn{m \le n}, ordered distinct event times.
+  At time \eqn{t_{(k)}}{t_(k)}, \eqn{k = 1, 2, \ldots, m}, the number of events
+  and the number of subjects at risk are given by \eqn{d_k = \sum_{i = 1}^n
+    I\!\left(t_i = t_{(k)}\,|\, \delta_i = 1\right)}{d_k = sum(i = 1, \dots, n)
+    I(t_i = t_(k) | delta_i = 1)} and \eqn{n_k = n - r_k}, respectively, where
+  \eqn{r_k} depends on the ties handling method.
 
   Three different methods of handling ties are available using
   \code{ties.method}: mid-ranks (\code{"mid-ranks"}, default), the
@@ -135,8 +135,8 @@
   }{
     r_k = sum(i = 1, \dots, n) I(t_i <= t_(k)) - 1.
   }
-  The scores assigned to censored and uncensored observations at the \eqn{k}th
-  event time are given by
+  The scores assigned to right-censored and uncensored observations at the
+  \eqn{k}th event time are given by
   \deqn{
     C_k = \sum_{j = 1}^k w_j \frac{d_j}{n_j}
     \quad \mbox{and} \quad
