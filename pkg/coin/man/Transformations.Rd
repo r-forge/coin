@@ -181,7 +181,7 @@ mcp_trafo(\dots)
   \code{fligner_trafo} compute Klotz scores, Mood scores, Ansari-Bradley scores
   and Fligner-Killeen scores, respectively, for scale problems.
 
-  \code{logrank_trafo} computes weighted logrank scores for censored data,
+  \code{logrank_trafo} computes weighted logrank scores for right-censored data,
   allowing for a user-defined weight function through the \code{weight} argument
   (see \code{\link{GTSG}}).
 

@@ -223,7 +223,7 @@ measured, up to a maximum of $300$ seconds. The rats were randomly assigned to t
 and treatment groups, thus a re-randomization test as implemented
 in \code{independence_test()} is the appropriate way to investigate
 if the response is independent of the group assignment. The data are particularly
-challenging because of the many ties in the (censored) response ($\Sexpr{sum(rotarod$time == 300)}$
+challenging because of the many ties in the (right-censored) response ($\Sexpr{sum(rotarod$time == 300)}$
 observations take the maximal value $300$) and the quasi-complete separation (smaller values of time
 are only observed in the treatment group). Conceptually, this makes computation of the
 two-sided exact $p$-value for any 2-sample contrast very simple:
