@@ -46,6 +46,8 @@
       \item The \code{ties.method} argument of \code{logrank_trafo()} no longer
       allows using \code{"logrank"} and \code{"HL"} to specify mid-ranks and the
       Hothorn-Lausen method respectively.
+
+      \item Documentation updates.
     }
   }
   \subsection{Deprecated and defunct}{

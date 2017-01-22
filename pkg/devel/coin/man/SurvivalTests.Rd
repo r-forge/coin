@@ -255,10 +255,13 @@
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
 }
 \note{
-  The test statistic differs from the one used by
-  \code{\link[survival]{survdiff}} (in package \pkg{survival}), since the
-  conditional variance used by \code{logrank_test} is not identical to the
-  variance estimate used by the classical logrank test.
+  Peto and Peto (1972) proposed the test statistic implemented in
+  \code{logrank_test} and named it the \emph{logrank test}.  However, the
+  Mantel-Cox test (Mantel, 1966; Cox, 1972), as implemented in
+  \code{\link[survival]{survdiff}} (in package \pkg{survival}), is also known as
+  the logrank test.  These tests are similar, but differ in the choice of
+  probability model: the (Peto-Peto) logrank test uses the permutational
+  variance, whereas the Mantel-Cox test is based on the hypergeometric variance.
 
   Combining \code{\link{independence_test}} or \code{\link{symmetry_test}} with
   \code{\link{logrank_trafo}} offers more flexibility than \code{logrank_test}
@@ -345,7 +348,7 @@ callaert <- data.frame(
 with(callaert,
      logrank_trafo(Surv(time)))
 
-## Classical asymptotic logrank test (p = 0.0523)
+## Asymptotic Mantel-Cox test (p = 0.0523)
 survdiff(Surv(time) ~ group, data = callaert)
 
 ## Exact logrank test using mid-ranks (p = 0.0505)
