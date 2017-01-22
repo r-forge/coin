@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2016-11-01 r71616) -- "Unsuffered Consequences"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R Under development (unstable) (2017-01-15 r71979) -- "Unsuffered Consequences"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -982,6 +982,18 @@ IV - III  0  0  -1  1
  [7]  0.8178571 -0.3071429  0.8178571  0.8178571
 > 
 > logrank_trafo(Surv(x, e),
++               type = "Gaugler-Kim-Liao")
+ [1] -0.90  0.10 -0.65  0.35 -0.65 -0.25  0.75 -0.25  0.75  0.75
+> logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
++               type = "Gaugler-Kim-Liao")
+ [1] -0.9000000  0.1000000 -0.5666667  0.4333333 -0.5666667  0.1000000
+ [7]  1.1000000  0.1000000  1.1000000  1.1000000
+> logrank_trafo(Surv(x, e), ties.method = "average-scores",
++               type = "Gaugler-Kim-Liao")
+ [1] -0.9000000  0.1000000 -0.7035714  0.3678571 -0.7035714 -0.3071429
+ [7]  0.8178571 -0.3071429  0.8178571  0.8178571
+> 
+> logrank_trafo(Surv(x, e),
 +               type = "Self")
  [1] -0.90  0.10 -0.65  0.35 -0.65 -0.25  0.75 -0.25  0.75  0.75
 > logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
@@ -995,4 +1007,4 @@ IV - III  0  0  -1  1
 > 
 > proc.time()
    user  system elapsed 
-   0.90    0.06    0.95 
+   0.96    0.06    1.03 

@@ -19,7 +19,7 @@ logrank_test.IndependenceProblem <- function(object,
     ties.method = c("mid-ranks", "Hothorn-Lausen", "average-scores"),
     type = c("logrank", "Gehan-Breslow", "Tarone-Ware", "Prentice",
              "Prentice-Marek", "Andersen-Borgan-Gill-Keiding",
-             "Fleming-Harrington", "Self"),
+             "Fleming-Harrington", "Gaugler-Kim-Liao", "Self"),
     rho = NULL, gamma = NULL, ...) {
 
     type <- match.arg(type)[1]

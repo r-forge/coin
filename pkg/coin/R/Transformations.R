@@ -283,7 +283,7 @@ logrank_trafo <-
     ## weights
     w <- weight(sort(unique(time)), n_risk, n_event, ...)
 
-    ## weighted log-rank scores
+    ## weighted logrank scores
     nw <- NCOL(w)
     if (nw == 1L) {
         scores <- rep.int(NA_real_, length(cc))
@@ -309,12 +309,13 @@ logrank_trafo <-
 }
 
 ### some popular logrank weights
-logrank_weight <- function(time, n.risk, n.event,
-                           type = c("logrank", "Gehan-Breslow", "Tarone-Ware",
-                                    "Prentice", "Prentice-Marek",
-                                    "Andersen-Borgan-Gill-Keiding",
-                                    "Fleming-Harrington", "Self"),
-                           rho = NULL, gamma = NULL) {
+logrank_weight <-
+    function(time, n.risk, n.event,
+             type = c("logrank", "Gehan-Breslow", "Tarone-Ware", "Prentice",
+                      "Prentice-Marek", "Andersen-Borgan-Gill-Keiding",
+                      "Fleming-Harrington", "Gaugler-Kim-Liao", "Self"),
+             rho = NULL, gamma = NULL)
+{
     type <- match.arg(type)
 
     ## weight functions
@@ -344,6 +345,10 @@ logrank_weight <- function(time, n.risk, n.event,
                 surv <- c(1, surv[-length(surv)]) # S(t-)
                 surv^rho * (1 - surv)^gamma
             },
+            "Gaugler-Kim-Liao" = { # Gaugler et al (2007)
+                surv <- cumprod(1 - n.event / (n.risk + 1)) # S(t)
+                surv^rho * (1 - surv)^gamma
+            },
             "Self" = { # Self (1991)
                 ## NOTE: this allows for arbitrary follow-up times
                 v <- (time - diff(c(0, time)) / 2) / max(time[n.event > 0])
@@ -356,7 +361,7 @@ logrank_weight <- function(time, n.risk, n.event,
     if (type == "Tarone-Ware") {
         if (is.null(rho)) rho <- 0.5
         gamma <- NULL
-    } else if (type %in% c("Fleming-Harrington", "Self")) {
+    } else if (type %in% c("Fleming-Harrington", "Gaugler-Kim-Liao", "Self")) {
         if (is.null(rho)) rho <- 0
         if (is.null(gamma)) gamma <- 0
     } else rho <- gamma <- NULL

@@ -4,7 +4,8 @@
 \section{Changes in version 1.2-0 (20YY-MM-DD)}{
   \subsection{New features}{
     \itemize{
-      \item
+      \item The Gaugler-Kim-Liao class of tests for right-censored data is now
+      available (see \code{?logrank_test} and \code{?logrank_weight}).
     }
   }
   \subsection{Bug fixes}{
