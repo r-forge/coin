@@ -234,6 +234,13 @@ logrank_trafo(Surv(x, e), ties.method = "average-scores",
               type = "Fleming-Harrington")
 
 logrank_trafo(Surv(x, e),
+              type = "Gaugler-Kim-Liao")
+logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
+              type = "Gaugler-Kim-Liao")
+logrank_trafo(Surv(x, e), ties.method = "average-scores",
+              type = "Gaugler-Kim-Liao")
+
+logrank_trafo(Surv(x, e),
               type = "Self")
 logrank_trafo(Surv(x, e), ties.method = "Hothorn-Lausen",
               type = "Self")

@@ -9,6 +9,7 @@
 \concept{Prentice-Marek test}
 \concept{Andersen-Borgan-Gill-Keiding test}
 \concept{Fleming-Harrington test}
+\concept{Gaugler-Kim-Liao test}
 \concept{Self test}
 \encoding{UTF-8}
 \title{Two- and \eqn{K}-Sample Tests for Censored Data}
@@ -23,7 +24,7 @@
                                      "average-scores"),
              type = c("logrank", "Gehan-Breslow", "Tarone-Ware", "Prentice",
                       "Prentice-Marek", "Andersen-Borgan-Gill-Keiding",
-                      "Fleming-Harrington", "Self"),
+                      "Fleming-Harrington", "Gaugler-Kim-Liao", "Self"),
              rho = NULL, gamma = NULL, \dots)
 }
 \arguments{
@@ -58,18 +59,19 @@
     a character, the type of test: either \code{"logrank"} (default),
     \code{"Gehan-Breslow"}, \code{"Tarone-Ware"}, \code{"Prentice"},
     \code{"Prentice-Marek"}, \code{"Andersen-Borgan-Gill-Keiding"},
-    \code{"Fleming-Harrington"} or \code{"Self"}; see \sQuote{Details}.
+    \code{"Fleming-Harrington"}, \code{"Gaugler-Kim-Liao"} or \code{"Self"}; see
+    \sQuote{Details}.
   }
   \item{rho}{
     a numeric, the \eqn{\rho} constant when \code{type} is \code{"Tarone-Ware"},
-    \code{"Fleming-Harrington"} or \code{"Self"}; see \sQuote{Details}.
-    Defaults to \code{NULL}, implying \code{0.5} for \code{type = "Tarone-Ware"}
-    and \code{0} otherwise.
+    \code{"Fleming-Harrington"}, \code{"Gaugler-Kim-Liao"} or \code{"Self"}; see
+    \sQuote{Details}.  Defaults to \code{NULL}, implying \code{0.5} for
+    \code{type = "Tarone-Ware"} and \code{0} otherwise.
   }
   \item{gamma}{
     a numeric, the \eqn{\gamma} constant when \code{type} is
-    \code{"Fleming-Harrington"} or \code{"Self"}; see \sQuote{Details}.
-    Defaults to \code{NULL}, implying \code{0}.
+    \code{"Fleming-Harrington"}, \code{"Gaugler-Kim-Liao"} or \code{"Self"}; see
+    \sQuote{Details}.  Defaults to \code{NULL}, implying \code{0}.
   }
   \item{\dots}{
     further arguments to be passed to \code{\link{independence_test}}.
@@ -177,11 +179,11 @@
   (1970) is a generalization of the Wilcoxon rank-sum test, where \eqn{w_k =
     n_k}.  The Tarone-Ware class of tests (\code{"Tarone-Ware"}) discussed by
   Tarone and Ware (1977) has \eqn{w_k = n_k^\rho}, where \eqn{\rho} is a
-  constant; \eqn{\rho = 0.5} (default) was  suggested by Tarone and Ware (1977),
+  constant; \eqn{\rho = 0.5} (default) was suggested by Tarone and Ware (1977),
   but note that \eqn{\rho = 0} and \eqn{\rho = 1} lead to the the standard
   logrank test and Gehan-Breslow test respectively.  The Prentice test
   (\code{"Prentice"}) is another generalization of the Wilcoxon rank-sum test
-  suggested by Prentice (1978), where
+  proposed by Prentice (1978), where
   \deqn{
     w_k = \prod_{j = 1}^k \frac{n_j}{n_j + d_j}.
   }{
@@ -191,24 +193,24 @@
   generalization of the Wilcoxon rank-sum test discussed by Prentice and Marek
   (1979), with
   \deqn{
-    w_k = \prod_{j = 1}^k \frac{n_j + 1 - d_j}{n_j + 1}.
+    w_k = \tilde{S}_k = \prod_{j = 1}^k \frac{n_j + 1 - d_j}{n_j + 1}.
   }{
-    w_k = prod(j = 1, \dots, k) (n_j + 1 - d_j) / (n_j + 1).
+    w_k = Stilde_k = prod(j = 1, \dots, k) (n_j + 1 - d_j) / (n_j + 1).
   }
   The Andersen-Borgan-Gill-Keiding test (\code{"Andersen-Borgan-Gill-Keiding"})
-  proposed by Andersen \emph{et al.} (1982) is a modified version of the
+  suggested by Andersen \emph{et al.} (1982) is a modified version of the
   Prentice-Marek test using
   \deqn{
     w_k = \frac{n_k}{n_k + 1}
             \prod_{j = 0}^{k - 1} \frac{n_j + 1 - d_j}{n_j + 1}
   }{
-    w_k = (n_k / (n_k + 1)) prod(j = 0, \dots, k - 1) (n_j + 1 - d_j) / (n_j+1)
+    w_k = (n_k / (n_k + 1)) prod(j = 0, \dots, k - 1) (n_j + 1 - d_j) / (n_j + 1)
   }
   where \eqn{n_0 \equiv n}{n_0 := n} and \eqn{d_0 \equiv 0}{d_0 := 0}.  The
-  Fleming-Harrington class
-  of tests (\code{"Fleming-Harrington"}) suggested by Fleming and Harrington
-  (1991) uses \eqn{w_k = \hat{S}_k^\rho (1 - \hat{S}_k)^\gamma}{w_k = Shat_k^rho
-    * (1 - Shat_k)^gamma}, where \eqn{\rho} and \eqn{\gamma} are constants and
+  Fleming-Harrington class of tests (\code{"Fleming-Harrington"}) proposed by
+  Fleming and Harrington (1991) uses \eqn{w_k = \hat{S}_k^\rho (1 -
+    \hat{S}_k)^\gamma}{w_k = Shat_k^rho * (1 - Shat_k)^gamma}, where \eqn{\rho}
+  and \eqn{\gamma} are constants and
   \deqn{
     \hat{S}_k = \prod_{j = 0}^{k - 1} \frac{n_j - d_j}{n_j},
     \quad
@@ -218,8 +220,15 @@
   }
   is the \emph{left-continuous} Kaplan-Meier estimator of the survival function;
   \eqn{\rho = 0} and \eqn{\gamma = 0} lead to the standard logrank test.  The
-  Self class of tests (\code{"Self"}) proposed by Self (1991) has \eqn{w_k =
-    v_k^\rho (1 - v_k)^\gamma}{w_k = v_k^rho * (1 - v_k)^gamma}, where
+  Gaugler-Kim-Liao class of tests (\code{"Gaugler-Kim-Liao"}) discussed by
+  Gaugler \emph{et al.} (2007) is a modified version of the Fleming-Harrington
+  class of tests, replacing \eqn{\hat{S}_k}{Shat_k} with
+  \eqn{\tilde{S}_k}{Stilde_k} so that \eqn{w_k = \tilde{S}_k^\rho (1 -
+    \tilde{S}_k)^\gamma}{w_k = Stilde_k^rho * (1 - Stilde_k)^gamma}, where
+  \eqn{\rho} and \eqn{\gamma} are constants; \eqn{\rho = 0} and \eqn{\gamma = 0}
+  lead to the standard logrank test.  The Self class of tests (\code{"Self"})
+  suggested by Self (1991) has \eqn{w_k = v_k^\rho (1 - v_k)^\gamma}{w_k =
+    v_k^rho * (1 - v_k)^gamma}, where
   \deqn{
     v_k = \frac{1}{2} \frac{t_{(k-1)} + t_{(k)}}{t_{(m)}},
     \quad
@@ -277,6 +286,11 @@
 
   Fleming, T. R. and Harrington, D. P.  (1991).  \emph{Counting Processes and
     Survival Analysis}.  New York: John Wiley & Sons.
+
+  Gaugler, T., Kim, D. and Liao, S.  (2007).  Comparing two survival time
+  distributions: An investigation of several weight functions for the weighted
+  logrank statistic.  \emph{Communications in Statistics -- Simulation and
+    Computation} \bold{36}(2), 423--435.
 
   Gehan, E. A.  (1965).  A generalized Wilcoxon test for comparing arbitrarily
   single-censored samples.  \emph{Biometrika} \bold{52}(1--2), 203--223.
