@@ -5,12 +5,15 @@
 \section{Changes in Version 0.9-1 (20YY-MM-DD)}{
   \itemize{
     \item Calling \pkg{libcoin}'s C routines (using \code{.Call()}) now requires
-    the entry points to be specified as \R objects, i.e., the use of character
-    strings is no longer allowed.
+          the entry points to be specified as \R objects, i.e., the use of character
+          strings is no longer allowed.
+    \item Stop when all observations are missing.
   }
 }
+
 \section{Changes in Version 0.9-0 (2016-12-09)}{
   \itemize{
     \item \pkg{libcoin} published on CRAN.
   }
 }
+
