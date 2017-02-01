@@ -92,7 +92,7 @@ inum.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
                 ux <- unique(quantile(x, prob = 1:(nmax - 1L) / nmax, 
                                       na.rm = TRUE))
             ux <- ux[ux < xmax]
-            tol <- min(diff(ux)) ### sqrt(.Machine$double.eps)
+            tol <- min(diff(sort(ux))) ### sqrt(.Machine$double.eps)
             ix <- interval(x, breaks = c(xmin - tol, ux, xmax))
             if (all(as.interval != v)) {
                 ### <FIXME> this minimises distances to original
