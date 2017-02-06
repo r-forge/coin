@@ -354,8 +354,6 @@ void RC_ExpectationCovarianceStatistic_2d
         rsum[0] = 0; /* NA */
         sw = 0;
         for (int i = 1; i < Lxp1; i++) sw += rsum[i];
-
-Rprintf("sw %d\n", sw);
         C_ExpectationInfluence_weights(REAL(y), NROW(y), Q, csum, sw, ExpInf);
         if (LENGTH(x) == 0) {
             for (int p = 0; p < P; p++)
