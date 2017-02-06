@@ -619,7 +619,6 @@ NULL
 > levels(iy) <- levels(y)
 > 
 > lev2 <- LinStatExpCov(X = X, Y = Y, ix = ix, iy = iy)
-sw 100
 > t2 <- doTest(lev2, teststat = "quadratic")
 > stopifnot(all.equal(t1, t2))
 > 
