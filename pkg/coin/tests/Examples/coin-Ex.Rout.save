@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2016-12-05 r71733) -- "Unsuffered Consequences"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R Under development (unstable) (2017-02-08 r72142) -- "Unsuffered Consequences"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -1393,7 +1393,7 @@ Control 0.00349714 0.4665
  [7]  1.1148962 -0.6358974 -0.6358974 -0.6358974 -0.5358974 -0.3136752
 [13] -0.3136752  0.1148962  0.1148962
 > 
-> ## Classical asymptotic logrank test (p = 0.0523)
+> ## Asymptotic Mantel-Cox test (p = 0.0523)
 > survdiff(Surv(time) ~ group, data = callaert)
 Call:
 survdiff(formula = Surv(time) ~ group, data = callaert)
@@ -2998,7 +2998,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  28.61 0.56 29.69 NA NA 
+Time elapsed:  10.39 0.24 10.67 NA NA 
 > grDevices::dev.off()
 null device 
           1 
