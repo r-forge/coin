@@ -209,17 +209,17 @@ setGeneric("rperm", function(object, n, ...)
     standardGeneric("rperm"))
 
 setMethod("rperm",
-          signature = "NullDistribution",
-          definition = function(object, n, ...) {
-              qperm(object, runif(n))
-          }
+    signature = "NullDistribution",
+    definition = function(object, n, ...) {
+        qperm(object, runif(n))
+    }
 )
 
 setMethod("rperm",
-          signature = "IndependenceTest",
-          definition = function(object, n, ...) {
-              qperm(object, runif(n))
-          }
+    signature = "IndependenceTest",
+    definition = function(object, n, ...) {
+        qperm(object, runif(n))
+    }
 )
 
 
