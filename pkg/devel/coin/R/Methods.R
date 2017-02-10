@@ -196,14 +196,14 @@ setMethod("ApproxNullDistribution",
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         ### <FIXME> pls can be computed by LinStatExpCov(..., standardize = TRUE)
-        pls <- plsraw <-
+        plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
                        object@weights, as.integer(B), ...)
         ### </FIXME>
 
         ## <FIXME> can transform p, q, x instead of those </FIXME>
         ## <FIXME> variance can be 0; libcoin handles this </FIXME>
-        pls <- sort((pls - expectation(object)) / sqrt(variance(object)))
+        pls <- sort((plsraw - expectation(object)) / sqrt(variance(object)))
 
         d <- function(x) {
             tmp <- abs(pls - x)
@@ -266,15 +266,13 @@ setMethod("ApproxNullDistribution",
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         ### <FIXME> pls can be computed by LinStatExpCov(..., standardize = TRUE)
-        pls <- plsraw <-
+        plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
                        object@weights, as.integer(B), ...)
         ### </FIXME>
 
         ## <FIXME> variance can be 0; libcoin handles this </FIXME>
-        dcov <- sqrt(variance(object))
-        expect <- expectation(object)
-        pls <- (pls - expect) / dcov
+        pls <- (plsraw - expectation(object)) / sqrt(variance(object))
 
         ## <FIXME>
         ## pls is a rather large object (potentially)
@@ -353,16 +351,14 @@ setMethod("ApproxNullDistribution",
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         ### <FIXME> pls can be computed by LinStatExpCov(..., standardize = TRUE)
-        pls <- plsraw <-
+        plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
                        object@weights, as.integer(B), ...)
         ### </FIXME>
 
         ## <FIXME> variance can be 0; libcoin handles this </FIXME>
-        dcov <- object@covarianceplus
-        expect <- expectation(object)
-        a <- pls - expect
-        pls <- sort(rowSums(crossprod(a, dcov) * t(a)))
+        a <- plsraw - expectation(object)
+        pls <- sort(rowSums(crossprod(a, object@covarianceplus) * t(a)))
 
         d <- function(x) {
             tmp <- abs(pls - x)
