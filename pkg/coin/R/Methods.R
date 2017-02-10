@@ -195,12 +195,12 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        pls <- plsraw <-
+        plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
                        object@weights, as.integer(B), ...)
 
         ## <FIXME> can transform p, q, x instead of those </FIXME>
-        pls <- sort((pls - expectation(object)) / sqrt(variance(object)))
+        pls <- sort((plsraw - expectation(object)) / sqrt(variance(object)))
 
         d <- function(x) {
             tmp <- abs(pls - x)
@@ -262,13 +262,11 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        pls <- plsraw <-
+        plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
                        object@weights, as.integer(B), ...)
 
-        dcov <- sqrt(variance(object))
-        expect <- expectation(object)
-        pls <- (pls - expect) / dcov
+        pls <- (plsraw - expectation(object)) / sqrt(variance(object))
 
         ## <FIXME>
         ## pls is a rather large object (potentially)
@@ -346,14 +344,12 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        pls <- plsraw <-
+        plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
                        object@weights, as.integer(B), ...)
 
-        dcov <- object@covarianceplus
-        expect <- expectation(object)
-        a <- pls - expect
-        pls <- sort(rowSums(crossprod(a, dcov) * t(a)))
+        a <- plsraw - expectation(object)
+        pls <- sort(rowSums(crossprod(a, object@covarianceplus) * t(a)))
 
         d <- function(x) {
             tmp <- abs(pls - x)
