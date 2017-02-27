@@ -73,3 +73,6 @@ print.enum <- function(x, quote = FALSE, max.levels = NULL,
     }
     return(invisible(x))
 }
+
+is.na.enum <- function(x)
+    unclass(x) == 0L

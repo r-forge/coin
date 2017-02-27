@@ -53,7 +53,7 @@ inum.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
 
         if (complete.cases.only) {
             cc <- rowSums(sapply(sDF[colnames(sDF) != "(weights)"], 
-                                 function(x) unclass(x) == 0)) == 0
+                                 function(x) is.na(x))) == 0
             cc[is.na(cc)] <- TRUE
             if (any(!cc)) {
                 sDF <- sDF[cc,,drop = FALSE]

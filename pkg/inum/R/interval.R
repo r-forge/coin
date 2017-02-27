@@ -93,3 +93,6 @@ print.interval <- function(x, quote = FALSE, max.levels = NULL,
 
 format.interval <- function(x, ...)
     c("<NA>", levels(x))[x + 1L]
+
+is.na.interval <- function(x)
+    unclass(x) == 0L
