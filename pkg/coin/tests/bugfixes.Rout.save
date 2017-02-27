@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2016-12-05 r71733) -- "Unsuffered Consequences"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R Under development (unstable) (2017-02-20 r72223) -- "Unsuffered Consequences"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -863,23 +863,19 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > ### blockwise permutations were only correct for factors ordered wrt their levels
 > set.seed(36)
-> .Call("R_blockperm", rep(1:4, 2),                       # was OK
-+       PACKAGE = "coin")
+> .Call(coin:::R_blockperm, rep(1:4, 2))                       # was OK
 [1] 4 5 6 7 0 1 2 3
 > 
 > set.seed(36)
-> .Call("R_blockperm", rep(1:4, each = 2),                # was OK
-+       PACKAGE = "coin")
+> .Call(coin:::R_blockperm, rep(1:4, each = 2))                # was OK
 [1] 1 0 3 2 5 4 7 6
 > 
 > set.seed(36)
-> .Call("R_blockperm", c(1:4, 4:1),                       # was OK
-+       PACKAGE = "coin")
+> .Call(coin:::R_blockperm, c(1:4, 4:1))                       # was OK
 [1] 7 6 5 4 3 2 1 0
 > 
 > set.seed(36)
-> .Call("R_blockperm", c(4L, 1L, 2L, 2L, 4L, 3L, 1L, 3L), # wrong
-+       PACKAGE = "coin")
+> .Call(coin:::R_blockperm, c(4L, 1L, 2L, 2L, 4L, 3L, 1L, 3L)) # wrong
 [1] 4 6 3 2 0 7 1 5
 > 
 > ### could not distinguish censored and numeric responses
@@ -994,4 +990,4 @@ Error in logrank_trafo(y) : 'y' does not represent right-censored data
 > 
 > proc.time()
    user  system elapsed 
-   4.56    0.26    4.84 
+   2.57    0.14    2.73 

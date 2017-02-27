@@ -519,20 +519,16 @@ stopifnot(isequal(qperm(it, c(0.9, 0.95, 0.99)),
 
 ### blockwise permutations were only correct for factors ordered wrt their levels
 set.seed(36)
-.Call("R_blockperm", rep(1:4, 2),                       # was OK
-      PACKAGE = "coin")
+.Call(coin:::R_blockperm, rep(1:4, 2))                       # was OK
 
 set.seed(36)
-.Call("R_blockperm", rep(1:4, each = 2),                # was OK
-      PACKAGE = "coin")
+.Call(coin:::R_blockperm, rep(1:4, each = 2))                # was OK
 
 set.seed(36)
-.Call("R_blockperm", c(1:4, 4:1),                       # was OK
-      PACKAGE = "coin")
+.Call(coin:::R_blockperm, c(1:4, 4:1))                       # was OK
 
 set.seed(36)
-.Call("R_blockperm", c(4L, 1L, 2L, 2L, 4L, 3L, 1L, 3L), # wrong
-      PACKAGE = "coin")
+.Call(coin:::R_blockperm, c(4L, 1L, 2L, 2L, 4L, 3L, 1L, 3L)) # wrong
 
 ### could not distinguish censored and numeric responses
 y1 <- rnorm(10)

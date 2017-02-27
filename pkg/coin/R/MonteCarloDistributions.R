@@ -15,8 +15,8 @@ MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
     }
 
     montecarlo <- function(B)
-        .Call("R_MonteCarloIndependenceTest",
-              x, y, as.integer(block), as.integer(B), PACKAGE = "coin")
+        .Call(R_MonteCarloIndependenceTest,
+              x, y, as.integer(block), as.integer(B))
 
     if (parallel == "no")
         montecarlo(B)

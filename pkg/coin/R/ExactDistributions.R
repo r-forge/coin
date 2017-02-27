@@ -66,7 +66,7 @@ SR_shift_2sample <- function(object, fact) {
                 stop("cannot compute exact distribution")
 
             ## update T
-            T <- .Call("R_outersum", dens$T, T, PACKAGE = "coin")
+            T <- .Call(R_outersum, dens$T, T)
 
             ## make sure T is ordered and distinct
             n <- length(T)
@@ -76,7 +76,7 @@ SR_shift_2sample <- function(object, fact) {
             T <- T[idx]
 
             ### update density
-            Prob <- .Call("R_kronecker", dens$Prob, Prob, PACKAGE = "coin")
+            Prob <- .Call(R_kronecker, dens$Prob, Prob)
             Prob <- vapply(split(Prob[o],
                                  rep.int(seq_along(idx), diff(c(0L, idx)))),
                            sum, NA_real_, USE.NAMES = FALSE)
@@ -170,9 +170,9 @@ cSR_shift_2sample <- function(scores, m, fact) {
     storage.mode(m) <- "integer"
     m_b <- sum(sort(scores)[(n + 1L - m):n])
 
-    Prob <- .Call("R_cpermdist2",
+    Prob <- .Call(R_cpermdist2,
                   score_a = rep.int(1L, n), score_b = scores,
-                  m_a = m, m_b = m_b, retProb = TRUE, PACKAGE = "coin")
+                  m_a = m, m_b = m_b, retProb = TRUE)
     T <- which(Prob != 0)
 
     list(T = (T + add * m) / fact, Prob = Prob[T])
@@ -214,7 +214,7 @@ SR_shift_1sample <- function(object, fact) {
         s[s != 0] # remove zeros
     }, NA_real_)
     storage.mode(scores) <- "integer"
-    Prob <- .Call("R_cpermdist1", scores, PACKAGE = "coin")
+    Prob <- .Call(R_cpermdist1, scores)
     T <- which(Prob != 0)
     Prob <- Prob[T]
     ## 0 is possible
@@ -328,7 +328,7 @@ vdW_split_up_2sample <- function(object) {
 
     p <- function(q) {
         T <- q * sqrt(variance(object)) + expectation(object)
-        .Call("R_split_up_2sample", scores, m, T, tol, PACKAGE = "coin")
+        .Call(R_split_up_2sample, scores, m, T, tol)
     }
 
     new("ExactNullDistribution",

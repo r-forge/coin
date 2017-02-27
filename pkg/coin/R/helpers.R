@@ -22,13 +22,13 @@ LinearStatistic <- function(x, y, weights) {
     storage.mode(x) <- "double"
     storage.mode(y) <- "double"
     storage.mode(weights) <- "double"
-    .Call("R_LinearStatistic", x, y, weights, PACKAGE = "coin")
+    .Call(R_LinearStatistic, x, y, weights)
 }
 
 ExpectCovarInfluence <- function(y, weights) {
     storage.mode(y) <- "double"
     storage.mode(weights) <- "double"
-    .Call("R_ExpectCovarInfluence", y, weights, PACKAGE = "coin")
+    .Call(R_ExpectCovarInfluence, y, weights)
 }
 
 expectvaronly <- function(x, y, weights) {
@@ -42,9 +42,9 @@ expectvaronly <- function(x, y, weights) {
     rSx <- colSums(x)
     rSx2 <- colSums(x^2)
     ## in case rSx _and_ Ey are _both_ vectors
-    E <- .Call("R_kronecker", Ey, rSx, PACKAGE = "coin")
-    V <- n / (n - 1) * .Call("R_kronecker", Vy, rSx2, PACKAGE = "coin")
-    V <- V - 1 / (n - 1) * .Call("R_kronecker", Vy, rSx^2, PACKAGE = "coin")
+    E <- .Call(R_kronecker, Ey, rSx)
+    V <- n / (n - 1) * .Call(R_kronecker, Vy, rSx2)
+    V <- V - 1 / (n - 1) * .Call(R_kronecker, Vy, rSx^2)
     list(E = drop(E), V = matrix(V, nrow = 1L))
 }
 
@@ -64,8 +64,7 @@ ExpectCovarLinearStatistic <- function(x, y, weights, varonly = FALSE) {
         storage.mode(y) <- "double"
         storage.mode(weights) <- "double"
         expcovinf <- ExpectCovarInfluence(y, weights)
-        .Call("R_ExpectCovarLinearStatistic", x, y, weights, expcovinf,
-               PACKAGE = "coin")
+        .Call(R_ExpectCovarLinearStatistic, x, y, weights, expcovinf)
     }
 }
 
