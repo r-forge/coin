@@ -50,3 +50,6 @@ ix
   
 table(ix)
 
+is.na(enum(c(NA, 1:3)))
+is.na(interval(c(NA, runif(100))))
+
