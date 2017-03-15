@@ -7,11 +7,11 @@ split_index <- function(n, by) {
 
 MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
 
-    ### <FIXME> use standardize = TRUE if appropriate?
+    ## <FIXME> use standardize = TRUE if appropriate?
     montecarlo <- function(B)
         LinStatExpCov(X = x, Y = y, weights = as.integer(weights), block = factor(block),
                       B = B)$PermutedLinearStatistic
-    ### </FIXME>
+    ## </FIXME>
 
     if (parallel == "no")
         montecarlo(B)
@@ -53,13 +53,9 @@ MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
                      " is not available for MS Windows")
             if (as.integer(ncpus) < 2L)
                 warning("parallel operation requires at least two processes")
-###            Bp <- split_index(B, ncpus) # distribute workload evenly
-###            RET <- parallel::mclapply(Bp, FUN = montecarlo, mc.cores = ncpus,
-###                                      mc.allow.recursive = FALSE)
             do.call("cbind",
                     parallel::mclapply(split_index(B, ncpus),
-                                       FUN = montecarlo, mc.cores = ncpus,
-                                       mc.allow.recursive = FALSE))
+                                       FUN = montecarlo, mc.cores = ncpus))
         } else {
             if (is.null(cl)) {
                 ## has a default cluster been registered?
@@ -80,12 +76,9 @@ MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
             ncpus <- as.integer(length(cl))
             if (ncpus < 2L)
                 warning("parallel operation requires at least two processes")
-###            Bp <- split_index(B, ncpus) # distribute workload evenly
-###            RET <- parallel::clusterApply(cl, x = Bp, fun = montecarlo)
             do.call("cbind",
                     parallel::clusterApply(cl, x = split_index(B, ncpus),
                                            fun = montecarlo))
         }
-###        do.call("cbind", RET)
     }
 }
