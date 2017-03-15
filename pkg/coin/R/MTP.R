@@ -4,13 +4,13 @@ singlestep <- function(object, ...) {
     ## reorder test statistics to ensure consistency with "global"/"step-down"
     switch(object@statistic@alternative,
            "two.sided" = {
-               ts <- abs(statistic(object, "standardized"))
+               ts <- abs(statistic(object, type = "standardized"))
                o <- order(ts, decreasing = TRUE)}, # abs. largest ts first
            "greater" = {
-               ts <- statistic(object, "standardized")
+               ts <- statistic(object, type = "standardized")
                o <- order(ts, decreasing = TRUE)}, # largest ts first
            "less" = {
-               ts <- statistic(object, "standardized")
+               ts <- statistic(object, type = "standardized")
                o <- order(ts) # smallest ts first
            })
 
@@ -55,19 +55,19 @@ asdmaxT <- function(object) {
     ## reorder upper and/or lower limits using test statistics
     switch(object@statistic@alternative,
            "two.sided" = {
-               ts <- abs(statistic(object, "standardized"))
+               ts <- abs(statistic(object, type = "standardized"))
                pq <- length(ts)
                o <- order(ts, decreasing = TRUE) # abs. largest ts first
                upper <- ts[o]
                lower <- -upper},
            "greater" = {
-               ts <- statistic(object, "standardized")
+               ts <- statistic(object, type = "standardized")
                pq <- length(ts)
                o <- order(ts, decreasing = TRUE) # largest ts first
                upper <- ts[o]
                lower <- rep.int(-Inf, pq)},
            "less" = {
-               ts <- statistic(object, "standardized")
+               ts <- statistic(object, type = "standardized")
                pq <- length(ts)
                o <- order(ts) # smallest ts first
                upper <- rep.int(Inf, pq)
@@ -115,13 +115,13 @@ stepdown <- function(object, ...) {
         switch(object@statistic@alternative,
                "two.sided" = {
                    pls <- abs(t((pls - expect) / dcov))
-                   ts <- abs(statistic(object, "standardized"))},
+                   ts <- abs(statistic(object, type = "standardized"))},
                "greater" = {
                    pls <- t((pls - expect) / dcov)
-                   ts <- statistic(object, "standardized")},
+                   ts <- statistic(object, type = "standardized")},
                "less" = {
                    pls <- -t((pls - expect) / dcov)
-                   ts <- -(statistic(object, "standardized"))})
+                   ts <- -(statistic(object, type = "standardized"))})
 
         rsdmaxT(pls, ts)
     }
@@ -141,7 +141,7 @@ marginal <- function(object, bonferroni, stepdown, ...) {
 
     if (extends(class(object@distribution), "AsymptNullDistribution")) {
         ## unadjusted p-values
-        ts <- statistic(object, "standardized")
+        ts <- statistic(object, type = "standardized")
         ret <- switch(object@statistic@alternative,
                       "two.sided" = 2 * pmin.int(pnorm(ts), 1 - pnorm(ts)),
                       "greater"   = 1 - pnorm(ts),
@@ -171,13 +171,13 @@ marginal <- function(object, bonferroni, stepdown, ...) {
         switch(object@statistic@alternative,
                "two.sided" = {
                    pls <- abs(t((pls - expect) / dcov))
-                   ts <- abs(statistic(object, "standardized"))},
+                   ts <- abs(statistic(object, type = "standardized"))},
                "greater" = {
                    pls <- t((pls - expect) / dcov)
-                   ts <- statistic(object, "standardized")},
+                   ts <- statistic(object, type = "standardized")},
                "less" = {
                    pls <- -t((pls - expect) / dcov)
-                   ts <- -(statistic(object, "standardized"))})
+                   ts <- -(statistic(object, type = "standardized"))})
 
         ## reorder simulations using the (decreasing) test statistics
         o <- order(ts, decreasing = TRUE) # largest ts first
@@ -281,7 +281,7 @@ npmcp <- function(object) {
 unadjusted <- function(object, ...) {
 
     if (extends(class(object@distribution), "AsymptNullDistribution")) {
-        ts <- statistic(object, "standardized")
+        ts <- statistic(object, type = "standardized")
         ret <- switch(object@statistic@alternative,
                       "two.sided" = 2 * pmin.int(pnorm(ts), 1 - pnorm(ts)),
                       "greater"   = 1 - pnorm(ts),
@@ -298,13 +298,13 @@ unadjusted <- function(object, ...) {
         switch(object@statistic@alternative,
                "two.sided" = {
                    pls <- abs((pls - expect) / dcov)
-                   ts <- abs(statistic(object, "standardized"))},
+                   ts <- abs(statistic(object, type = "standardized"))},
                "greater" = {
                    pls <- (pls - expect) / dcov
-                   ts <- statistic(object, "standardized")},
+                   ts <- statistic(object, type = "standardized")},
                "less" = {
                    pls <- -(pls - expect) / dcov
-                   ts <- -(statistic(object, "standardized"))})
+                   ts <- -(statistic(object, type = "standardized"))})
 
         ## unadjusted p-values
         matrix(rowMeans(GE(pls, as.vector(ts))),
