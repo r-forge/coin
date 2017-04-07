@@ -141,12 +141,12 @@ SEXP R_blockperm (SEXP block) {
 
     SEXP blocksetup, ans;
 
-    blocksetup = R_blocksetup(block);
+    PROTECT(blocksetup = R_blocksetup(block));
     PROTECT(ans = allocVector(INTSXP, LENGTH(block)));
     GetRNGstate();
     C_blockperm(blocksetup, INTEGER(ans));
     PutRNGstate();
-    UNPROTECT(1);
+    UNPROTECT(2);
     return(ans);
 }
 
