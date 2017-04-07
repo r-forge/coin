@@ -180,9 +180,7 @@ find_cutpoints <- function(x, minprob, maxprob, names) {
 }
 
 maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
-    cm <- find_cutpoints(x, minprob, maxprob, names = TRUE)
-    cm[is.na(x)] <- NA
-    cm
+    find_cutpoints(x, minprob, maxprob, names = TRUE)
 }
 
 ofmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
@@ -197,7 +195,6 @@ ofmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
                                     "} vs. {",
                                     paste0(lx[-idx], collapse = ", "), "}")
                          }))
-    cm[is.na(x)] <- NA
     cm
 }
 

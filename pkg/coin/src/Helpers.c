@@ -222,7 +222,9 @@ SEXP R_maxstattrafo(SEXP x, SEXP cutpoints) {
         jn = j * n;
         cj = dcutpoints[j];
         for (i = 0; i < n; i++) {
-            if (dx[i] > cj) {
+            if (ISNAN(dx[i])) {
+                dans[jn + i] = dx[i];
+            } else if (dx[i] > cj) {
                 dans[jn + i] = 0.0;
             } else {
                 dans[jn + i] = 1.0;
