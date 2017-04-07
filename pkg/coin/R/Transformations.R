@@ -24,8 +24,8 @@ klotz_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
             qnorm(rank_trafo(x) / (sum(!is.na(x)) + 1))^2
         },
         "average-scores" = {
-            r <- rank_trafo(x, ties.method = "random")
-            s <- qnorm(r / (sum(!is.na(x)) + 1))^2
+            s <- qnorm(rank_trafo(x, ties.method = "random") /
+                         (sum(!is.na(x)) + 1))^2
             average_scores(s, x)
         }
     )
@@ -39,8 +39,8 @@ mood_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
             (rank_trafo(x) - (sum(!is.na(x)) + 1) / 2)^2
         },
         "average-scores" = {
-            r <- rank_trafo(x, ties.method = "random")
-            s <- (r - (sum(!is.na(x)) + 1) / 2)^2
+            s <- (rank_trafo(x, ties.method = "random") -
+                    (sum(!is.na(x)) + 1) / 2)^2
             average_scores(s, x)
         }
     )
