@@ -166,22 +166,21 @@ find_cutpoints <- function(x, minprob, maxprob, names) {
                    type = 1)
     if (diff(qx) < .Machine$double.eps)
         return(NULL)
-    ux <- sort(unique(x))
-    ux <- ux[ux < max(x, na.rm = TRUE)]
+    cp <- sort(unique(x))
+    cp <- cp[-length(cp)]
     if (mean(x <= qx[2], na.rm = TRUE) <= maxprob) {
-        cutpoints <- ux[ux >= qx[1] & ux <= qx[2]]
+        cp <- cp[cp >= qx[1] & cp <= qx[2]]
     } else {
-        cutpoints <- ux[ux >= qx[1] & ux < qx[2]]
+        cp <- cp[cp >= qx[1] & cp < qx[2]]
     }
-    cm <- .Call(R_maxstattrafo, as.double(x), as.double(cutpoints))
+    cm <- .Call(R_maxstattrafo, as.double(x), as.double(cp))
     if(names)
-        dimnames(cm) <- list(1:nrow(cm), paste0("x <= ", round(cutpoints, 3)))
+        dimnames(cm) <- list(1:nrow(cm), paste0("x <= ", round(cp, 3)))
     cm
 }
 
-maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
+maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob)
     find_cutpoints(x, minprob, maxprob, names = TRUE)
-}
 
 ofmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
     x <- ordered(x) # drop unused levels
