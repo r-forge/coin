@@ -14,6 +14,9 @@
 
       \item The weighted logrank transformation returned nonsense scores when
       supplied non-right-censored input; it now results in an error.
+
+      \item The maximally selected statistics transformation for ordered factors
+      sometimes returned the wrong labels.
     }
   }
   \subsection{User-visible changes}{

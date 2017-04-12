@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2017-02-20 r72223) -- "Unsuffered Consequences"
+R Under development (unstable) (2017-04-04 r72482) -- "Unsuffered Consequences"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -988,6 +988,17 @@ Error in quade_test.SymmetryProblem(object = <S4 object of class structure("Symm
 > try(logrank_trafo(y))
 Error in logrank_trafo(y) : 'y' does not represent right-censored data
 > 
+> ### 'ofmaxstat_trafo' had the labeling wrong
+> of <- ordered(c(1, 1, 2, 3, 3, 4))
+> ofmaxstat_trafo(of, minprob = 0.34) # was {1} vs. {2, 3, 4}
+  {1, 2} vs. {3, 4}
+1                 1
+2                 1
+3                 1
+4                 0
+5                 0
+6                 0
+> 
 > proc.time()
    user  system elapsed 
-   2.57    0.14    2.73 
+   2.75    0.14    2.89 
