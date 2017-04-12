@@ -610,3 +610,7 @@ stopifnot(identical(of_trafo(x, scores = 2:1),              # was 2:1
 ### 'logrank_trafo' didn't make sure input was right-censored
 y <- Surv(1:5, event = c(1, 0, 1, 0, 1), type = "left")
 try(logrank_trafo(y))
+
+### 'ofmaxstat_trafo' had the labeling wrong
+of <- ordered(c(1, 1, 2, 3, 3, 4))
+ofmaxstat_trafo(of, minprob = 0.34) # was {1} vs. {2, 3, 4}

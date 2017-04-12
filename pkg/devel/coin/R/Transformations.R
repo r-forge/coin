@@ -160,40 +160,41 @@ koziol_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
 }
 
 ### maximally selected (rank, chi^2, whatsoever) statistics
-### ordered x
-find_cutpoints <- function(x, minprob, maxprob, names) {
+### numeric/ordered factor
+maxstat_trafo <- ofmaxstat_trafo <-
+    function(x, minprob = 0.1, maxprob = 1 - minprob)
+{
+    ORDERED <- is.ordered(x)
+    if (ORDERED) {
+        x0 <- factor(x) # drop unused levels
+        lev <- levels(x0)
+        x <- as.numeric(x0)
+    }
     qx <- quantile(x, probs = c(minprob, maxprob), na.rm = TRUE, names = FALSE,
                    type = 1)
     if (diff(qx) < .Machine$double.eps)
         return(NULL)
     cp <- sort(unique(x))
     cp <- cp[-length(cp)]
-    if (mean(x <= qx[2], na.rm = TRUE) <= maxprob) {
-        cp <- cp[cp >= qx[1] & cp <= qx[2]]
-    } else {
-        cp <- cp[cp >= qx[1] & cp < qx[2]]
-    }
+    cp <- if (mean(x <= qx[2], na.rm = TRUE) <= maxprob)
+              cp[cp >= qx[1] & cp <= qx[2]]
+          else
+              cp[cp >= qx[1] & cp < qx[2]]
     cm <- .Call(R_maxstattrafo, as.double(x), as.double(cp))
-    if(names)
-        dimnames(cm) <- list(1:nrow(cm), paste0("x <= ", round(cp, 3)))
-    cm
-}
-
-maxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob)
-    find_cutpoints(x, minprob, maxprob, names = TRUE)
-
-ofmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
-    x <- ordered(x) # drop unused levels
-    lx <- levels(x)
-    x <- as.numeric(x)
-    cm <- find_cutpoints(x, minprob, maxprob, names = FALSE)
-    dimnames(cm) <- list(seq_len(nrow(cm)),
-                         lapply(seq_len(ncol(cm)), function(i) {
-                             idx <- seq_len(i)
-                             paste0("{", paste0(lx[idx], collapse = ", "),
-                                    "} vs. {",
-                                    paste0(lx[-idx], collapse = ", "), "}")
-                         }))
+    dimnames(cm) <- list(
+        seq_along(x),
+        if (ORDERED) {
+            lapply(seq_along(cp), function(i) {
+                idx <- lev %in% x0[as.logical(cm[, i])]
+                paste0("{",
+                       paste0(lev[idx], collapse = ", "),
+                       "} vs. {",
+                       paste0(lev[!idx], collapse = ", "),
+                       "}")
+            })
+        } else
+            paste0("x <= ", round(cp, 3))
+    )
     cm
 }
 
