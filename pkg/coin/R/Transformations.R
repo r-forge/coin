@@ -439,8 +439,9 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
 
         ## apply trafo to each block separately
         for (lev in levels(block)) {
-            ret[block == lev, ] <- trafo(data[block == lev, ,drop = FALSE],
-                numeric_trafo, factor_trafo, ordered_trafo, surv_trafo)
+            ret[block == lev, ] <-
+                trafo(data[block == lev, , drop = FALSE],
+                      numeric_trafo, factor_trafo, ordered_trafo, surv_trafo)
         }
         return(ret)
     }
@@ -459,27 +460,17 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
     names(tr) <- names(data)
     for (nm in names(data)) {
         x <- data[[nm]]
-        if (nm %in% names(var_trafo)) {
+        if (nm %in% names(var_trafo))
             tr[[nm]] <- as.matrix(var_trafo[[nm]](x))
-            next
-        }
-        if (is.ordered(x)) {
+        else if (is.ordered(x))
             tr[[nm]] <- as.matrix(ordered_trafo(x))
-            next
-        }
-        if (is.factor(x) || is.logical(x)) {
+        else if (is.factor(x) || is.logical(x))
             tr[[nm]] <- as.matrix(factor_trafo(x))
-            next
-        }
-        if (is.Surv(x)) {
+        else if (is.Surv(x))
             tr[[nm]] <- as.matrix(surv_trafo(x))
-            next
-        }
-        if (is.numeric(x)) {
+        else if (is.numeric(x))
             tr[[nm]] <- as.matrix(numeric_trafo(x))
-            next
-        }
-        if (is.null(tr[[nm]])) {
+        else {
             if (idx <- inherits(x, "AsIs", TRUE))
                 oldClass(x) <- oldClass(x)[-idx]
             stop("data class ", paste(dQuote(class(x)), collapse = ", "),
