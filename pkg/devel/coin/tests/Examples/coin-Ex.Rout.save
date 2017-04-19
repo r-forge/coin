@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2017-02-08 r72142) -- "Unsuffered Consequences"
+R Under development (unstable) (2017-04-18 r72542) -- "Unsuffered Consequences"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -702,8 +702,8 @@ alternative hypothesis: true mu is not equal to 0
 > op <- par(no.readonly = TRUE) # save current settings
 > layout(matrix(1:2, nrow = 2))
 > s <- support(ot)
-> d <- sapply(s, function(x) dperm(ot, x))
-> p <- sapply(s, function(x) pperm(ot, x))
+> d <- dperm(ot, s)
+> p <- pperm(ot, s)
 > plot(s, d, type = "S", xlab = "Test Statistic", ylab = "Density")
 > plot(s, p, type = "S", xlab = "Test Statistic", ylab = "Cum. Probability")
 > par(op) # reset
@@ -2998,7 +2998,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.21 0.17 9.42 NA NA 
+Time elapsed:  9.71 0.27 10 NA NA 
 > grDevices::dev.off()
 null device 
           1 
