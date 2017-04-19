@@ -200,42 +200,46 @@ maxstat_trafo <- ofmaxstat_trafo <-
 
 ### compute index matrix of all 2^(nlevel - 1) possible splits
 ### code translated from package 'tree'
-fsplits <- function(nlevel) {
-
-    mi <- 2^(nlevel - 1)
-    index <- matrix(0, nrow = mi, ncol = nlevel)
-    index[, 1] <- 1
-
-    for (i in 0:(mi - 1)) {
-        ii <- i
-        for (l in 2:nlevel) {
-            index[(i + 1), l] <- (ii %% 2)
-            ii <- ii %/% 2
+fsplits <-
+    function(nlevel)
+{
+    mi <- 2.0^(nlevel - 1L) - 1.0
+    index <- matrix(0L, nrow = mi, ncol = nlevel)
+    index[, 1L] <- 1L
+    for (i in seq_len(mi)) {
+        ii <- i - 1L
+        for (j in seq_len(nlevel)[-1L]) {
+            index[i, j] <- ii %% 2L
+            ii <- ii %/% 2L
         }
     }
     storage.mode(index) <- "logical"
-    index[-nrow(index),, drop = FALSE]
+    index
 }
 
 ### set up transformation g(x) for all possible binary splits in an unordered x
-fmaxstat_trafo <- function(x, minprob = 0.1, maxprob = 1 - minprob) {
-
+fmaxstat_trafo <-
+    function(x, minprob = 0.1, maxprob = 1 - minprob)
+{
     x <- factor(x) # drop unused levels
-    sp <- fsplits(nlevels(x))
     lev <- levels(x)
-    tr <- matrix(0, nrow = length(x), ncol = nrow(sp))
-    cn <- vector(mode = "character", length = nrow(sp))
-    for (i in 1:nrow(sp)) {
-        tr[ ,i] <- x %in% lev[sp[i, ]]
-        cn[i] <- paste0("{", paste0(lev[sp[i, ]], collapse = ", "), "} vs. {",
-                        paste0(lev[!sp[i, ]], collapse = ", "), "}")
+    cp <- fsplits(length(lev))
+    n_cp <- nrow(cp)
+    cm <- matrix(0.0, nrow = length(x), ncol = n_cp)
+    nm <- vector(mode = "character", length = n_cp)
+    for (i in seq_len(n_cp)) {
+        idx <- cp[i, ]
+        cm[, i] <- x %in% lev[idx]
+        nm[i] <- paste0("{",
+                        paste0(lev[idx], collapse = ", "),
+                        "} vs. {",
+                        paste0(lev[!idx], collapse = ", "),
+                        "}")
     }
-    tr[is.na(x), ] <- NA
-    dimnames(tr) <- list(1:length(x), cn)
-    tr <- tr[, colMeans(tr, na.rm = TRUE) >= minprob &
-               colMeans(tr, na.rm = TRUE) <= maxprob,
-             drop = FALSE]
-    tr
+    cm[is.na(x), ] <- NA
+    dimnames(cm) <- list(seq_along(x), nm)
+    mn <- colMeans(cm, na.rm = TRUE)
+    cm[, GE(mn, minprob) & LE(mn, maxprob), drop = FALSE]
 }
 
 ### weighted logrank scores; with three different methods of handling ties
