@@ -811,37 +811,6 @@ IV - II  0.00052
 IV - III 0.99998
 > 
 > 
-> ## Asymptotic Jonckheere-Terpstra test for ordered groups
-> pieces <- data.frame(
-+     control = c(40, 35, 38, 43, 44, 41),
-+     rough = c(38, 40, 47, 44, 40, 42),
-+     accurate = c(48, 40, 45, 43, 46, 44)
-+ )
-> pieces <- stack(pieces)
-> pieces$ind <- ordered(pieces$ind,
-+                       levels = c("control", "rough", "accurate"))
-> 
-> ## Look at K: the second line just sums up.
-> ff <- function(x) {
-+     K <- multcomp::contrMat(table(x), "Tukey")[, x]
-+     as.vector(rep(1, nrow(K)) %*% K)
-+ }
-> 
-> independence_test(values ~ ind, data = pieces,
-+                   alternative = "greater",
-+                   ytrafo = function(data)
-+                       trafo(data, numeric_trafo = rank_trafo),
-+                   xtrafo = function(data)
-+                       trafo(data, ordered_trafo = ff))
-
-	Asymptotic General Independence Test
-
-data:  values by ind (control < rough < accurate)
-Z = 2.0447, p-value = 0.02044
-alternative hypothesis: greater
-
-> 
-> 
 > 
 > graphics::par(get("par.postscript", pos = 'CheckExEnv'))
 > cleanEx()
@@ -2998,7 +2967,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.71 0.27 10 NA NA 
+Time elapsed:  9.69 0.28 10.06 NA NA 
 > grDevices::dev.off()
 null device 
           1 

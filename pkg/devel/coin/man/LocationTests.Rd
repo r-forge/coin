@@ -268,29 +268,36 @@ pvalue(it)
 
 ## Sites (I = II) != (III = IV) at alpha = 0.01 (p. 244)
 pvalue(it, method = "single-step") # subset pivotality is violated
-
-
-## Asymptotic Jonckheere-Terpstra test for ordered groups
-pieces <- data.frame(
-    control = c(40, 35, 38, 43, 44, 41),
-    rough = c(38, 40, 47, 44, 40, 42),
-    accurate = c(48, 40, 45, 43, 46, 44)
-)
-pieces <- stack(pieces)
-pieces$ind <- ordered(pieces$ind,
-                      levels = c("control", "rough", "accurate"))
-
-## Look at K: the second line just sums up.
-ff <- function(x) {
-    K <- multcomp::contrMat(table(x), "Tukey")[, x]
-    as.vector(rep(1, nrow(K)) \%*\% K)
-}
-
-independence_test(values ~ ind, data = pieces,
-                  alternative = "greater",
-                  ytrafo = function(data)
-                      trafo(data, numeric_trafo = rank_trafo),
-                  xtrafo = function(data)
-                      trafo(data, ordered_trafo = ff))
 }
 \keyword{htest}
+
+
+%% NOTE:
+%% The Jonckhere-Terpstra linear statistic is formulated as the sum of the
+%% Mann-Whitney U's for each pairwise comparison, i.e., the outcome is ranked
+%% separately for each comparison.  The example below uses the joint ranking and
+%% then performs the pairwise comparisons and is *not* equivalent to the J-T
+%% test.
+%%
+%% ## Asymptotic Jonckheere-Terpstra test for ordered groups
+%% pieces <- data.frame(
+%%     control = c(40, 35, 38, 43, 44, 41),
+%%     rough = c(38, 40, 47, 44, 40, 42),
+%%     accurate = c(48, 40, 45, 43, 46, 44)
+%% )
+%% pieces <- stack(pieces)
+%% pieces$ind <- ordered(pieces$ind,
+%%                       levels = c("control", "rough", "accurate"))
+%%
+%% ## Look at K: the second line just sums up.
+%% ff <- function(x) {
+%%     K <- multcomp::contrMat(table(x), "Tukey")[, x]
+%%     as.vector(rep(1, nrow(K)) \%*\% K)
+%% }
+%%
+%% independence_test(values ~ ind, data = pieces,
+%%                   alternative = "greater",
+%%                   ytrafo = function(data)
+%%                       trafo(data, numeric_trafo = rank_trafo),
+%%                   xtrafo = function(data)
+%%                       trafo(data, ordered_trafo = ff))
