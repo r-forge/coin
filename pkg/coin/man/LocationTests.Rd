@@ -208,8 +208,8 @@ pvalue(ot <- oneway_test(pd ~ age, data = diffusion,
 op <- par(no.readonly = TRUE) # save current settings
 layout(matrix(1:2, nrow = 2))
 s <- support(ot)
-d <- sapply(s, function(x) dperm(ot, x))
-p <- sapply(s, function(x) pperm(ot, x))
+d <- dperm(ot, s)
+p <- pperm(ot, s)
 plot(s, d, type = "S", xlab = "Test Statistic", ylab = "Density")
 plot(s, p, type = "S", xlab = "Test Statistic", ylab = "Cum. Probability")
 par(op) # reset
