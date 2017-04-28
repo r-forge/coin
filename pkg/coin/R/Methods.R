@@ -15,7 +15,8 @@ setMethod("AsymptNullDistribution",
             switch(object@alternative,
                 "less"      = p(q),
                 "greater"   = 1 - p(q),
-                "two.sided" = 2 * min(p(q), 1 - p(q)))
+                "two.sided" = 2 * min(p(q), 1 - p(q))
+            )
 
         new("AsymptNullDistribution",
             seed = NA_integer_,
@@ -50,7 +51,8 @@ setMethod("AsymptNullDistribution",
                                        corr = corr, ..., conf.int = conf.int),
                     "two.sided" = pmvn(lower = -abs(q), upper = abs(q),
                                        mean = rep.int(0, pq),
-                                       corr = corr, ..., conf.int = conf.int))
+                                       corr = corr, ..., conf.int = conf.int)
+                )
             if (length(q) > 1)
                 vapply(q, p, NA_real_, conf.int = conf.int)
             else
@@ -208,9 +210,10 @@ setMethod("ApproxNullDistribution",
         }
         pvalue <- function(q) {
             switch(object@alternative,
-                "less"      = mean(LE(pls, q)),
-                "greater"   = mean(GE(pls, q)),
-                "two.sided" = mean(GE(abs(pls), abs(q))))
+                "less"      = mean(pls %LE% q),
+                "greater"   = mean(pls %GE% q),
+                "two.sided" = mean(abs(pls) %GE% abs(q))
+            )
         }
         pvalueinterval <- function(q, z = c(1, 0)) {
             pp <- if (object@alternative == "two.sided")
@@ -223,7 +226,7 @@ setMethod("ApproxNullDistribution",
         new("ApproxNullDistribution",
             seed = seed,
             p = function(q) {
-                mean(LE(pls, q))
+                mean(pls %LE% q)
             },
             q = function(p) {
                 quantile(pls, probs = p, names = FALSE, type = 1L)
@@ -277,7 +280,8 @@ setMethod("ApproxNullDistribution",
             pls <- switch(object@alternative,
                        "less"      = do.call("pmin.int", as.data.frame(t(pls))),
                        "greater"   = do.call("pmax.int", as.data.frame(t(pls))),
-                       "two.sided" = do.call("pmax.int", as.data.frame(t(abs(pls)))))
+                       "two.sided" = do.call("pmax.int", as.data.frame(t(abs(pls))))
+                   )
             sort(pls)
         }
 
@@ -287,9 +291,10 @@ setMethod("ApproxNullDistribution",
         }
         pvalue <- function(q) {
             switch(object@alternative,
-                "less"      = mean(colSums(LE(pls, q)) > 0),
-                "greater"   = mean(colSums(GE(pls, q)) > 0),
-                "two.sided" = mean(colSums(GE(abs(pls), q)) > 0))
+                "less"      = mean(colSums(pls %LE% q) > 0),
+                "greater"   = mean(colSums(pls %GE% q) > 0),
+                "two.sided" = mean(colSums(abs(pls) %GE% q) > 0)
+            )
         }
         pvalueinterval <- function(q, z = c(1, 0)) {
             pp <- if (object@alternative == "two.sided")
@@ -303,9 +308,10 @@ setMethod("ApproxNullDistribution",
             seed = seed,
             p = function(q) {
                 switch(object@alternative,
-                    "less"      = mean(colSums(GE(pls, q)) == nrow(pls)),
-                    "greater"   = mean(colSums(LE(pls, q)) == nrow(pls)),
-                    "two.sided" = mean(colSums(LE(abs(pls), q)) == nrow(pls)))
+                    "less"      = mean(colSums(pls %GE% q) == nrow(pls)),
+                    "greater"   = mean(colSums(pls %LE% q) == nrow(pls)),
+                    "two.sided" = mean(colSums(abs(pls) %LE% q) == nrow(pls))
+                )
             },
             q = function(p) {
                 quantile(pmaxmin(), probs = p, names = FALSE, type = 1L)
@@ -355,13 +361,13 @@ setMethod("ApproxNullDistribution",
             tmp <- abs(pls - x)
             mean(tmp == tmp[which.min(tmp)] & tmp < eps())
         }
-        pvalue <- function(q) mean(GE(pls, q))
+        pvalue <- function(q) mean(pls %GE% q)
         pvalueinterval <- function(q, z = c(1, 0)) pvalue(q) - z * d(q)
 
         new("ApproxNullDistribution",
             seed = seed,
             p = function(q) {
-                mean(LE(pls, q))
+                mean(pls %LE% q)
             },
             q = function(p) {
                 quantile(pls, probs = p, names = FALSE, type = 1L)

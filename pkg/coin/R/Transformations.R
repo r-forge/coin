@@ -100,7 +100,7 @@ median_trafo <- function(x, mid.score = c("0", "0.5", "1")) {
     md <- median(x, na.rm = TRUE)
     scores <- as.numeric(x > md)
     if (mid.score != "0")
-        scores[EQ(x, md)] <- as.numeric(mid.score)
+        scores[x %EQ% md] <- as.numeric(mid.score)
     scores
 }
 
@@ -239,7 +239,7 @@ fmaxstat_trafo <-
     cm[is.na(x), ] <- NA
     dimnames(cm) <- list(seq_along(x), nm)
     mn <- colMeans(cm, na.rm = TRUE)
-    cm[, GE(mn, minprob) & LE(mn, maxprob), drop = FALSE]
+    cm[, (mn %GE% minprob) & (mn %LE% maxprob), drop = FALSE]
 }
 
 ### weighted logrank scores; with three different methods of handling ties

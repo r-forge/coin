@@ -485,13 +485,13 @@ varnames <- function(object) {
 
 eps <- function() sqrt(.Machine$double.eps)
 
-EQ <- function(x, y)
+`%EQ%` <- function(x, y)
     abs(x - y) < eps()
 
-GE <- function(x, y)
+`%GE%` <- function(x, y)
     x > y | abs(x - y) < eps()
 
-LE <- function(x, y)
+`%LE%` <- function(x, y)
     x < y | abs(x - y) < eps()
 
 ### don't use! never!

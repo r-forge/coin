@@ -41,7 +41,7 @@ rsdmaxT <- function(pls, ts) {
         for (j in 2:ncol(pls))
             pls[, j] <- pmax.int(pls[, j], pls[, j - 1])
     }
-    ret <- rowMeans(GE(t(pls), ts[o]))
+    ret <- rowMeans(t(pls) %GE% ts[o])
     for (i in (length(ret) - 1):1)
         ret[i] <- max(ret[i], ret[i + 1]) # enforce monotonicity, page 67
 
@@ -184,10 +184,10 @@ marginal <- function(object, bonferroni, stepdown, ...) {
         pls <- pls[, o, drop = FALSE]
 
         ## unadjusted p-values
-        pu <- rowMeans(GE(t(pls), ts[o]))
+        pu <- rowMeans(t(pls) %GE% ts[o])
 
         ## permutation distribution
-        foo <- function(x, t) mean(GE(x, t))
+        foo <- function(x, t) mean(x %GE% t)
         p <- vector(mode = "list", length = ncol(pls))
         for (i in 1:ncol(pls)) {
             ux <- unique(pls[, i])
@@ -307,7 +307,7 @@ unadjusted <- function(object, ...) {
                    ts <- -(statistic(object, type = "standardized"))})
 
         ## unadjusted p-values
-        matrix(rowMeans(GE(pls, as.vector(ts))),
+        matrix(rowMeans(pls %GE% as.vector(ts)),
                nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
     }
 }
