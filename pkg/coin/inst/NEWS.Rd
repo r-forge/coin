@@ -456,6 +456,8 @@
       \item \code{surv_test()} is now deprecated and has been replaced by
       \code{logrank_test()}.
 
+      \item \code{method = "discrete"} in \code{pvalue()} is now deprecated.
+
       \item The Wilcoxon signed-rank test no longer features the defunct
       \code{ties.method} argument.
     }
