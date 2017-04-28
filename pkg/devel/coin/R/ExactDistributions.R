@@ -1,6 +1,5 @@
 ### Streitberg-Roehmel algorithm for two independent samples
 SR_shift_2sample <- function(object, fact) {
-
     teststat <-
         if (extends(class(object), "ScalarIndependenceTestStatistic"))
             "scalar"
@@ -100,7 +99,7 @@ SR_shift_2sample <- function(object, fact) {
     }
 
     d <- function(x) {
-        eq <- EQ(T, x)
+        eq <- T %EQ% x
         if (any(eq))
             Prob[eq]
         else
@@ -109,20 +108,20 @@ SR_shift_2sample <- function(object, fact) {
     pvalue <- function(q) {
         if (teststat == "scalar")
             switch(object@alternative,
-                "less"      = sum(Prob[LE(T, q)]),
-                "greater"   = sum(Prob[GE(T, q)]),
+                "less"      = sum(Prob[T %LE% q]),
+                "greater"   = sum(Prob[T %GE% q]),
                 "two.sided" = {
                     if (q == 0)
                         1L
                     else
-                        sum(Prob[LE(T, if (q < 0) q else -q)]) +
-                          sum(Prob[GE(T, if (q > 0) q else -q)])
+                        sum(Prob[T %LE% if (q < 0) q else -q]) +
+                          sum(Prob[T %GE% if (q > 0) q else -q])
                 })
         else {
             if (q == 0)
                 1L
             else
-                sum(Prob[GE(T, q)])
+                sum(Prob[T %GE% q])
         }
     }
     pvalueinterval <- function(q, z = c(1, 0)) {
@@ -134,7 +133,7 @@ SR_shift_2sample <- function(object, fact) {
     }
 
     new("ExactNullDistribution",
-        p = function(q) sum(Prob[LE(T, q)]),
+        p = function(q) sum(Prob[T %LE% q]),
         q = function(p) {
             idx <- which(cumsum(Prob) < p)
             if (length(idx) == 0L)
@@ -181,7 +180,6 @@ cSR_shift_2sample <- function(scores, m, fact) {
 
 ### Streitberg-Roehmel algorithm for two paired samples
 SR_shift_1sample <- function(object, fact) {
-
     teststat <-
         if (extends(class(object), "ScalarIndependenceTestStatistic"))
             "scalar"
@@ -237,7 +235,7 @@ SR_shift_1sample <- function(object, fact) {
     }
 
     d <- function(x) {
-        eq <- EQ(T, x)
+        eq <- T %EQ% x
         if (any(eq))
             Prob[eq]
         else
@@ -246,20 +244,20 @@ SR_shift_1sample <- function(object, fact) {
     pvalue <- function(q) {
         if (teststat == "scalar")
             switch(object@alternative,
-                "less"      = sum(Prob[LE(T, q)]),
-                "greater"   = sum(Prob[GE(T, q)]),
+                "less"      = sum(Prob[T %LE% q]),
+                "greater"   = sum(Prob[T %GE% q]),
                 "two.sided" = {
                     if (q == 0)
                         1L
                     else
-                        sum(Prob[LE(T, if (q < 0) q else -q)]) +
-                          sum(Prob[GE(T, if (q > 0) q else -q)])
+                        sum(Prob[T %LE% if (q < 0) q else -q]) +
+                          sum(Prob[T %GE% if (q > 0) q else -q])
                 })
         else {
             if (q == 0)
                 1L
             else
-                sum(Prob[GE(T, q)])
+                sum(Prob[T %GE% q])
         }
     }
     pvalueinterval <- function(q, z = c(1, 0)) {
@@ -271,7 +269,7 @@ SR_shift_1sample <- function(object, fact) {
     }
 
     new("ExactNullDistribution",
-        p = function(q) sum(Prob[LE(T, q)]),
+        p = function(q) sum(Prob[T %LE% q]),
         q = function(p) {
             idx <- which(cumsum(Prob) < p)
             if (length(idx) == 0L)
@@ -297,7 +295,6 @@ SR_shift_1sample <- function(object, fact) {
 
 ### van de Wiel split-up algorithm for two independent samples
 vdW_split_up_2sample <- function(object) {
-
     ## <FIXME> on.exit(ex <- .C("FreeW", PACKAGE = "coin")) </FIXME>
 
     if (!extends(class(object), "ScalarIndependenceTestStatistic"))
