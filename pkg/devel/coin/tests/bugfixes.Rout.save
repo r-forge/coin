@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2017-04-18 r72542) -- "Unsuffered Consequences"
+R Under development (unstable) (2017-05-16 r72684) -- "Unsuffered Consequences"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -76,21 +76,21 @@ The following object is masked from 'package:MASS':
 > 
 > ### support() failed in most cases
 > df <- data.frame(x = runif(20), y = runif(20), z = gl(2, 10))
-> support(independence_test(x ~ z, data = df))
-[1] NA
-> support(independence_test(x ~ z, data = df, teststat = "quad"))
-[1] NA
+> stopifnot(is.na(support(independence_test(x ~ z, data = df))))
+> stopifnot(is.na(support(independence_test(x ~ z, data = df, teststat = "quad"))))
 > ite <- independence_test(I(round(x, 1)) ~ z, data = df, dist = exact())
 > ae <- support(ite)
-> de <- sapply(ae, function(x) dperm(ite, x))
-> sum(de)
-[1] 1
+> de <- dperm(ite, ae)
+> stopifnot(identical(sum(de), 1))
+> pe <- pperm(ite, ae)
+> stopifnot(identical(cumsum(de), pe))
 > ita <- independence_test(I(round(x, 1)) ~ z, data = df,
 +                          dist = approximate(B = 100000))
 > aa <- support(ita)
-> da <- sapply(aa, function(x) dperm(ita, x))
-> sum(da)
-[1] 1
+> da <- dperm(ita, aa)
+> stopifnot(identical(sum(da), 1))
+> pa <- pperm(ita, aa)
+> stopifnot(isequal(cumsum(da), pa))
 > mean(round(ae, 10) %in% round(aa, 10))
 [1] 1
 > 
@@ -407,10 +407,10 @@ alternative hypothesis: true mu is not equal to 0
 > wta <- wilcox_test(Route.Time ~ Route, distribution = approximate())
 > de <- dperm(wte, support(wte))
 > pe <- pperm(wte, support(wte))
-> stopifnot(max(abs(cumsum(de) - pe)) < sqrt(.Machine$double.eps))
+> stopifnot(identical(cumsum(de), pe))
 > da <- dperm(wta, support(wta))
 > pa <- pperm(wta, support(wta))
-> stopifnot(max(abs(cumsum(da) - pa)) < sqrt(.Machine$double.eps))
+> stopifnot(isequal(cumsum(da), pa))
 > qperm(wte, seq(from = 0.1, to = 0.9, by = 0.1))
 [1] -1.3125012 -0.8559791 -0.5135874 -0.2853264  0.0000000  0.2853264  0.5706527
 [8]  0.8559791  1.2554359
@@ -1003,4 +1003,4 @@ Error in logrank_trafo(y) : 'y' does not represent right-censored data
 > 
 > proc.time()
    user  system elapsed 
-   2.60    0.10    2.73 
+   2.53    0.06    2.60 
