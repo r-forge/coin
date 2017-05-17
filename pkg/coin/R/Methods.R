@@ -205,8 +205,7 @@ setMethod("ApproxNullDistribution",
         pls <- sort((plsraw - expectation(object)) / sqrt(variance(object)))
 
         d <- function(x) {
-            tmp <- abs(pls - x)
-            mean(tmp == tmp[which.min(tmp)] & tmp < eps())
+            mean(pls %EQ% x)
         }
         pvalue <- function(q) {
             switch(object@alternative,
@@ -251,7 +250,7 @@ setMethod("ApproxNullDistribution",
                 if (raw)
                     plsraw
                 else
-                    sort(unique(drop(pls)))
+                    pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # keep unique
             },
             name = "Monte Carlo Distribution")
     }
@@ -286,8 +285,7 @@ setMethod("ApproxNullDistribution",
         }
 
         d <- function(x) {
-            tmp <- abs(pmaxmin() - x)
-            mean(tmp == tmp[which.min(tmp)] & tmp < eps())
+            mean(pmaxmin() %EQ% x)
         }
         pvalue <- function(q) {
             switch(object@alternative,
@@ -335,8 +333,10 @@ setMethod("ApproxNullDistribution",
             support = function(raw = FALSE) {
                 if (raw)
                     plsraw
-                else
-                    sort(unique(drop(pmaxmin())))
+                else {
+                    tmp <- pmaxmin()
+                    tmp[c(tmp[-1L] %NE% tmp[-length(tmp)], TRUE)] # keep unique
+                }
             },
             name = "Monte Carlo Distribution")
     }
@@ -354,12 +354,11 @@ setMethod("ApproxNullDistribution",
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
                        object@weights, as.integer(B), ...)
 
-        a <- plsraw - expectation(object)
-        pls <- sort(rowSums(crossprod(a, object@covarianceplus) * t(a)))
+        pls <- plsraw - expectation(object)
+        pls <- sort(rowSums(crossprod(pls, object@covarianceplus) * t(pls)))
 
         d <- function(x) {
-            tmp <- abs(pls - x)
-            mean(tmp == tmp[which.min(tmp)] & tmp < eps())
+            mean(pls %EQ% x)
         }
         pvalue <- function(q) mean(pls %GE% q)
         pvalueinterval <- function(q, z = c(1, 0)) pvalue(q) - z * d(q)
@@ -392,7 +391,7 @@ setMethod("ApproxNullDistribution",
                 if (raw)
                     plsraw
                 else
-                    sort(unique(drop(pls)))
+                    pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # keep unique
             },
             name = "Monte Carlo Distribution")
     }

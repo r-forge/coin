@@ -488,6 +488,9 @@ eps <- function() sqrt(.Machine$double.eps)
 `%EQ%` <- function(x, y)
     abs(x - y) < eps()
 
+`%NE%` <- function(x, y)
+    abs(x - y) > eps()
+
 `%GE%` <- function(x, y)
     x > y | abs(x - y) < eps()
 
