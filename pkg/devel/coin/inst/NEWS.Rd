@@ -35,7 +35,14 @@
   }
   \subsection{Bug fixes}{
     \itemize{
-      \item Precision issue in the symmetric median scores transformation.
+      \item Precision problem in the density function of approximative (Monte
+      Carlo) null distributions.  This also impacts mid-\eqn{p}-values and
+      \eqn{p}-value intervals.
+
+      \item Precision problem in the support of approximative (Monte Carlo) null
+      distributions.
+
+      \item Precision problem in the symmetric median scores transformation.
 
       \item The weighted logrank transformation returned nonsense scores when
       supplied non-right-censored input; it now results in an error.
