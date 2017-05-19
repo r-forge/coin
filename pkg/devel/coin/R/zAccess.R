@@ -63,7 +63,7 @@ setMethod("pvalue",
             }
             else
                 unadjusted(object, ...)
-        }
+    }
 )
 
 
@@ -82,10 +82,10 @@ setMethod("midpvalue",
 )
 
 setMethod("midpvalue",
-   signature = "IndependenceTest",
-   definition = function(object, ...) {
-       midpvalue(object@distribution, object@statistic@teststatistic)
-   }
+    signature = "IndependenceTest",
+    definition = function(object, ...) {
+        midpvalue(object@distribution, object@statistic@teststatistic)
+    }
 )
 
 
@@ -104,10 +104,10 @@ setMethod("pvalue_interval",
 )
 
 setMethod("pvalue_interval",
-   signature = "IndependenceTest",
-   definition = function(object, ...) {
-       pvalue_interval(object@distribution, object@statistic@teststatistic)
-   }
+    signature = "IndependenceTest",
+    definition = function(object, ...) {
+        pvalue_interval(object@distribution, object@statistic@teststatistic)
+    }
 )
 
 
@@ -199,8 +199,11 @@ setMethod("qperm",
 
 
 ### generic method for the permutation distribution from objects
-setGeneric("rperm", function(object, n, ...)
-    standardGeneric("rperm"))
+setGeneric("rperm",
+    function(object, n, ...) {
+        standardGeneric("rperm")
+    }
+)
 
 setMethod("rperm",
     signature = "NullDistribution",
@@ -212,7 +215,7 @@ setMethod("rperm",
 setMethod("rperm",
     signature = "IndependenceTest",
     definition = function(object, n, ...) {
-        qperm(object, runif(n))
+        rperm(object@distribution, n)
     }
 )
 
@@ -242,7 +245,7 @@ setMethod("support",
 ### generic method for extracting statistics from objects
 setGeneric("statistic",
     function(object, ...) {
-            standardGeneric("statistic")
+        standardGeneric("statistic")
     }
 )
 
@@ -263,7 +266,7 @@ setMethod("statistic",
                 "standardized" = matrix(object@standardizedlinearstatistic,
                                         nrow = nr, ncol = nc, dimnames = dn)
             )
-        }
+    }
 )
 
 setMethod("statistic",
@@ -281,7 +284,7 @@ setMethod("statistic",
                 "standardized" = matrix(object@standardizedlinearstatistic,
                                         nrow = nr, ncol = nc, dimnames = dn)
             )
-        }
+    }
 )
 
 setMethod("statistic",

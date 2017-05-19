@@ -10,7 +10,6 @@ setMethod("AsymptNullDistribution",
     signature = "ScalarIndependenceTestStatistic",
     definition = function(object, ...) {
         p <- function(q) pnorm(q)
-        q <- function(p) qnorm(p)
         pvalue <- function(q)
             switch(object@alternative,
                 "less"      = p(q),
@@ -21,7 +20,7 @@ setMethod("AsymptNullDistribution",
         new("AsymptNullDistribution",
             seed = NA_integer_,
             p = p,
-            q = q,
+            q = function(p) qnorm(p),
             d = function(x) dnorm(x),
             pvalue = pvalue,
             midpvalue = function(q) NA,
@@ -40,6 +39,7 @@ setMethod("AsymptNullDistribution",
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
         corr <- cov2cor(covariance(object))
         pq <- length(expectation(object))
+
         p <- function(q, ..., conf.int = FALSE) {
             p <- function(q, ..., conf.int = conf.int)
                 switch(object@alternative,
@@ -58,14 +58,6 @@ setMethod("AsymptNullDistribution",
             else
                 p(q, conf.int = conf.int)
         }
-        q <- function(p, ...) {
-            q <- function(p, ...)
-                qmvn(p, mean = rep.int(0, pq), corr = corr, ...)
-            if (length(p) > 1)
-                vapply(p, q, NA_real_)
-            else
-                q(p)
-        }
         pvalue <- function(q) {
             pvalue <- 1 - p(q, conf.int = TRUE)
             ci <- 1 - attr(pvalue, "conf.int")[2L:1L]
@@ -78,7 +70,14 @@ setMethod("AsymptNullDistribution",
         new("AsymptNullDistribution",
             seed = seed,
             p = p,
-            q = q,
+            q = function(p, ...) {
+                q <- function(p, ...)
+                    qmvn(p, mean = rep.int(0, pq), corr = corr, ...)
+                if (length(p) > 1)
+                    vapply(p, q, NA_real_)
+                else
+                    q(p)
+            },
             d = function(x) NA,
             pvalue = pvalue,
             midpvalue = function(q) NA,
@@ -94,13 +93,12 @@ setMethod("AsymptNullDistribution",
     signature = "QuadTypeIndependenceTestStatistic",
     definition = function(object, ...) {
         p <- function(q) pchisq(q, df = object@df)
-        q <- function(p) qchisq(p, df = object@df)
         pvalue <- function(q) 1 - p(q)
 
         new("AsymptNullDistribution",
             seed = NA_integer_,
             p = p,
-            q = q,
+            q = function(p) qchisq(p, df = object@df),
             d = function(d) dchisq(d, df = object@df),
             pvalue = pvalue,
             midpvalue = function(q) NA,
