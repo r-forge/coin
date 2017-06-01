@@ -1196,15 +1196,14 @@ chi-squared = 23.316, p-value = 0.00052
 > 
 > ### Name: PermutationDistribution-methods
 > ### Title: Computation of the Permutation Distribution
-> ### Aliases: dperm dperm-methods dperm,AsymptNullDistribution-method
-> ###   dperm,IndependenceTest-method dperm,NullDistribution-method pperm
-> ###   pperm-methods pperm,AsymptNullDistribution-method
+> ### Aliases: dperm dperm-methods dperm,IndependenceTest-method
+> ###   dperm,NullDistribution-method pperm pperm-methods
 > ###   pperm,IndependenceTest-method pperm,NullDistribution-method qperm
-> ###   qperm-methods qperm,AsymptNullDistribution-method
-> ###   qperm,IndependenceTest-method qperm,NullDistribution-method rperm
-> ###   rperm-methods rperm,IndependenceTest-method
-> ###   rperm,NullDistribution-method support support-methods
-> ###   support,IndependenceTest-method support,NullDistribution-method
+> ###   qperm-methods qperm,IndependenceTest-method
+> ###   qperm,NullDistribution-method rperm rperm-methods
+> ###   rperm,IndependenceTest-method rperm,NullDistribution-method support
+> ###   support-methods support,IndependenceTest-method
+> ###   support,NullDistribution-method
 > ### Keywords: methods htest distribution
 > 
 > ### ** Examples
@@ -2967,7 +2966,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  10.75 0.27 11.04 NA NA 
+Time elapsed:  10.63 0.14 10.8 NA NA 
 > grDevices::dev.off()
 null device 
           1 

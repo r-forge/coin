@@ -6,6 +6,9 @@
     \itemize{
       \item The Gaugler-Kim-Liao class of tests for right-censored data is now
       available (see \code{?logrank_test} and \code{?logrank_weight}).
+
+      \item The \code{pvalue()}, \code{midpvalue()} and \code{pvalue_interval()}
+      methods for objects of class \code{"NullDistribution"} are now vectorized.
     }
   }
   \subsection{Bug fixes}{
@@ -41,6 +44,10 @@
 
       \item \code{method = "discrete"} in \code{pvalue()} is now defunct and has
       been removed.
+
+      \item The \code{dperm()}, \code{pperm()} and \code{qperm()} methods for
+      objects of class \code{"AsymptNullDistribution"} are no longer needed and
+      have been removed.
     }
   }
 }

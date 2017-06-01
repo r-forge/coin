@@ -68,7 +68,7 @@ ExpectCovarLinearStatistic <- function(x, y, weights, varonly = FALSE) {
     }
 }
 
-pmvn <- function(lower, upper, mean, corr, ..., conf.int = TRUE) {
+pmvn <- function(lower, upper, mean, corr, conf.int, ...) {
     p <- if (length(corr) > 1L)
              pmvnorm(lower = lower, upper = upper, mean = mean,
                      corr = corr, ...)

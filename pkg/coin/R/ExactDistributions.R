@@ -71,7 +71,7 @@ SR_shift_2sample <- function(object, fact) {
             n <- length(T)
             o <- order(T)
             T <- T[o]
-            idx <- c(which(T[-1L] - T[-n] > eps()), n)
+            idx <- c(which(T[-1L] %NE% T[-n]), n)
             T <- T[idx]
 
             ### update density
@@ -90,7 +90,7 @@ SR_shift_2sample <- function(object, fact) {
         n <- length(T)
         o <- order(T)
         T <- T[o]
-        idx <- c(which(T[-1L] - T[-n] > eps()), n)
+        idx <- c(which(T[-1L] %NE% T[-n]), n)
         T <- T[idx]
         ## compute density
         Prob <- vapply(split(Prob[o],
@@ -98,6 +98,18 @@ SR_shift_2sample <- function(object, fact) {
                        sum, NA_real_, USE.NAMES = FALSE)
     }
 
+    p <- function(q) {
+        sum(Prob[T %LE% q])
+    }
+    q <- function(p) {
+        idx <- which(cumsum(Prob) < p)
+        if (length(idx) == 0L)
+            T[1L]
+        else if (length(idx) == length(Prob))
+            T[max(idx)]
+        else
+            T[max(idx) + 1L]
+    }
     d <- function(x) {
         eq <- T %EQ% x
         if (any(eq))
@@ -116,7 +128,8 @@ SR_shift_2sample <- function(object, fact) {
                     else
                         sum(Prob[T %LE% if (q < 0) q else -q]) +
                           sum(Prob[T %GE% if (q > 0) q else -q])
-                })
+                }
+            )
         else {
             if (q == 0)
                 1L
@@ -124,32 +137,42 @@ SR_shift_2sample <- function(object, fact) {
                 sum(Prob[T %GE% q])
         }
     }
-    pvalueinterval <- function(q, z = c(1, 0)) {
-        pp <- if (teststat == "scalar" && object@alternative == "two.sided")
-                  d(-q) + d(q) # both tails
-              else
-                  d(q)
-        pvalue(q) - z * pp
+    midpvalue <- function(q, z) {
+        pvalue(q) - z *
+          if (teststat == "scalar" && object@alternative == "two.sided")
+              d(-q) + d(q) # both tails
+          else
+              d(q)
     }
 
     new("ExactNullDistribution",
-        p = function(q) sum(Prob[T %LE% q]),
-        q = function(p) {
-            idx <- which(cumsum(Prob) < p)
-            if (length(idx) == 0L)
-                T[1L]
-            else if (length(idx) == length(Prob))
-                T[max(idx)]
-            else
-                T[max(idx) + 1L]
+        p = function(q) {
+            vapply(q, p, NA_real_)
         },
-        d = d,
-        pvalue = pvalue,
+        q = function(p) {
+            vapply(p, q, NA_real_)
+        },
+        d = function(x) {
+            vapply(x, d, NA_real_)
+        },
+        pvalue = function(q) {
+            if (length(q) < 2L)
+                pvalue(q)
+            else
+                vapply(q, pvalue, NA_real_)
+        },
         midpvalue = function(q) {
-            pvalueinterval(q, z = 0.5)
+            if (length(q) < 2L)
+                midpvalue(q, z = 0.5)
+            else
+                vapply(q, midpvalue, NA_real_, z = 0.5)
         },
         pvalueinterval = function(q) {
-            setNames(pvalueinterval(q), nm = c("p_0", "p_1"))
+            if (length(q) < 2L)
+                midpvalue(q, z = c("p_0" = 1, "p_1" = 0))
+            else
+                vapply(q, midpvalue, c(NA_real_, NA_real_),
+                       z = c("p_0" = 1, "p_1" = 0))
         },
         support = function() T,
         name = paste0("Exact Distribution for Independent Two-Sample Tests",
@@ -226,7 +249,7 @@ SR_shift_1sample <- function(object, fact) {
         n <- length(T)
         o <- order(T)
         T <- T[o]
-        idx <- c(which(T[-1L] - T[-n] > eps()), n)
+        idx <- c(which(T[-1L] %NE% T[-n]), n)
         T <- T[idx]
         ## compute density
         Prob <- vapply(split(Prob[o],
@@ -234,6 +257,18 @@ SR_shift_1sample <- function(object, fact) {
                        sum, NA_real_, USE.NAMES = FALSE)
     }
 
+    p <- function(q) {
+        sum(Prob[T %LE% q])
+    }
+    q <- function(p) {
+        idx <- which(cumsum(Prob) < p)
+        if (length(idx) == 0L)
+            T[1L]
+        else if (length(idx) == length(Prob))
+            T[max(idx)]
+        else
+            T[max(idx) + 1L]
+    }
     d <- function(x) {
         eq <- T %EQ% x
         if (any(eq))
@@ -252,7 +287,8 @@ SR_shift_1sample <- function(object, fact) {
                     else
                         sum(Prob[T %LE% if (q < 0) q else -q]) +
                           sum(Prob[T %GE% if (q > 0) q else -q])
-                })
+                }
+            )
         else {
             if (q == 0)
                 1L
@@ -260,32 +296,42 @@ SR_shift_1sample <- function(object, fact) {
                 sum(Prob[T %GE% q])
         }
     }
-    pvalueinterval <- function(q, z = c(1, 0)) {
-        pp <- if (teststat == "scalar" && object@alternative == "two.sided")
-                  d(-q) + d(q) # both tails
-              else
-                  d(q)
-        pvalue(q) - z * pp
+    midpvalue <- function(q, z) {
+        pvalue(q) - z *
+          if (teststat == "scalar" && object@alternative == "two.sided")
+              d(-q) + d(q) # both tails
+          else
+              d(q)
     }
 
     new("ExactNullDistribution",
-        p = function(q) sum(Prob[T %LE% q]),
-        q = function(p) {
-            idx <- which(cumsum(Prob) < p)
-            if (length(idx) == 0L)
-                T[1L]
-            else if (length(idx) == length(Prob))
-                T[max(idx)]
-            else
-                T[max(idx) + 1L]
+        p = function(q) {
+            vapply(q, p, NA_real_)
         },
-        d = d,
-        pvalue = pvalue,
+        q = function(p) {
+            vapply(p, q, NA_real_)
+        },
+        d = function(x) {
+            vapply(x, d, NA_real_)
+        },
+        pvalue = function(q) {
+            if (length(q) < 2L)
+                pvalue(q)
+            else
+                vapply(q, pvalue, NA_real_)
+        },
         midpvalue = function(q) {
-            pvalueinterval(q, z = 0.5)
+            if (length(q) < 2L)
+                midpvalue(q, z = 0.5)
+            else
+                vapply(q, midpvalue, NA_real_, z = 0.5)
         },
         pvalueinterval = function(q) {
-            setNames(pvalueinterval(q), nm = c("p_0", "p_1"))
+            if (length(q) < 2L)
+                midpvalue(q, z = c("p_0" = 1, "p_1" = 0))
+            else
+                vapply(q, midpvalue, c(NA_real_, NA_real_),
+                       z = c("p_0" = 1, "p_1" = 0))
         },
         support = function() T,
         name = paste0("Exact Distribution for Dependent Two-Sample Tests",
@@ -327,47 +373,58 @@ vdW_split_up_2sample <- function(object) {
         T <- q * sqrt(variance(object)) + expectation(object)
         .Call(R_split_up_2sample, scores, m, T, tol)
     }
+    q <- function(p) {
+        f <- function(x) p(x) - p
+        rr <- if (p <= 0.5)
+                  uniroot(f, interval = c(-10, 1), tol = tol)
+              else
+                  uniroot(f, interval = c(-1, 10), tol = tol)
+        ## make sure quantile leads to pdf >= p
+        if (rr$f.root < 0)
+            rr$root <- rr$root + tol
+        ## pdf is constant here
+        if (rr$estim.prec > tol) {
+            r1 <- rr$root
+            d <- min(diff(sort(scores[!duplicated(scores)]))) /
+                   sqrt(variance(object))
+            while (d > tol) {
+                if (f(r1 - d) >= 0)
+                    r1 <- r1 - d
+                else
+                    d <- d / 2
+            }
+            rr$root <- r1
+        }
+        rr$root
+    }
+    pvalue <- function(q) {
+        switch(object@alternative,
+            "less"      = p(q),
+            "greater"   = 1 - p(q - 10 * tol),
+            "two.sided" = {
+                if (q == 0)
+                    1L
+                else if (q > 0)
+                    p(-q) + (1 - p(q - 10 * tol))
+                else
+                    p(q) + (1 - p(-q - 10 * tol))
+            }
+        )
+    }
 
     new("ExactNullDistribution",
-        p = p,
+        p = function(q) {
+            vapply(q, p, NA_real_)
+        },
         q = function(p) {
-            f <- function(x) p(x) - p
-            rr <- if (p <= 0.5)
-                      uniroot(f, interval = c(-10, 1), tol = tol)
-                  else
-                      uniroot(f, interval = c(-1, 10), tol = tol)
-            ## make sure quantile leads to pdf >= p
-            if (rr$f.root < 0)
-                rr$root <- rr$root + tol
-            ## pdf is constant here
-            if (rr$estim.prec > tol) {
-                r1 <- rr$root
-                d <- min(diff(sort(scores[!duplicated(scores)]))) /
-                       sqrt(variance(object))
-                while (d > tol) {
-                    if (f(r1 - d) >= 0)
-                        r1 <- r1 - d
-                    else
-                        d <- d / 2
-                }
-                rr$root <- r1
-            }
-            rr$root
+            vapply(p, q, NA_real_)
         },
         d = function(x) NA,
         pvalue = function(q) {
-            switch(object@alternative,
-                "less"      = p(q),
-                "greater"   = 1 - p(q - 10 * tol),
-                "two.sided" = {
-                    if (q == 0)
-                        1L
-                    else if (q > 0)
-                        p(-q) + (1 - p(q - 10 * tol))
-                    else
-                        p(q) + (1 - p(-q - 10 * tol))
-                }
-            )
+            if (length(q) < 2L)
+                pvalue(q)
+            else
+                vapply(q, pvalue, NA_real_)
         },
         midpvalue = function(q) NA,
         pvalueinterval = function(q) NA,
