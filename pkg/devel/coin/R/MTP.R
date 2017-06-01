@@ -17,9 +17,8 @@ singlestep <- function(object, ...) {
     ## iterate over unique test statistics only and remap
     pq <- length(ts)
     ots <- ts[o]
-    idx <- c(which(ots[-1L] != ots[-pq]), pq)
-    ret <- vapply(ots[idx], # unique ts
-                  object@distribution@pvalue, NA_real_, ...)
+    idx <- c(which(ots[-1L] %NE% ots[-pq]), pq) # unique ts
+    ret <- object@distribution@pvalue(ots[idx], ...)
 
     matrix(rep.int(ret, diff(c(0L, idx)))[order(o)], # remapping
            nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
@@ -79,7 +78,8 @@ asdmaxT <- function(object) {
     ## step-down based on multivariate normality
     ret <- numeric(pq)
     ret[1] <- pmvn(lower = lower[1], upper = upper[1],
-                   mean = rep.int(0, pq), corr = corr)
+                   mean = rep.int(0, pq), corr = corr,
+                   conf.int = FALSE)
     if (pq > 1) {
         oo <- o
         for (i in 2:pq) {
@@ -88,7 +88,8 @@ asdmaxT <- function(object) {
             oo <- oo[-1]
             ret[i] <- min(ret[i - 1],
                           pmvn(lower = lower[i], upper = upper[i],
-                               mean = rep.int(0, length(oo)), corr = corr))
+                               mean = rep.int(0, length(oo)), corr = corr,
+                               conf.int = FALSE))
         }
     }
 

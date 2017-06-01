@@ -121,13 +121,6 @@ setGeneric("dperm",
 setMethod("dperm",
     signature = "NullDistribution",
     definition = function(object, x, ...) {
-        vapply(x, object@d, NA_real_)
-    }
-)
-
-setMethod("dperm",
-    signature = "AsymptNullDistribution",
-    definition = function(object, x, ...) {
         object@d(x)
     }
 )
@@ -149,13 +142,6 @@ setGeneric("pperm",
 
 setMethod("pperm",
     signature = "NullDistribution",
-    definition = function(object, q, ...) {
-        vapply(q, object@p, NA_real_)
-    }
-)
-
-setMethod("pperm",
-    signature = "AsymptNullDistribution",
     definition = function(object, q, ...) {
         object@p(q)
     }
@@ -179,13 +165,6 @@ setGeneric("qperm",
 setMethod("qperm",
     signature = "NullDistribution",
     definition = function(object, p, ...) {
-        vapply(p, object@q, NA_real_)
-    }
-)
-
-setMethod("qperm",
-    signature = "AsymptNullDistribution",
-    definition = function(object, p, ...) {
         object@q(p)
     }
 )
@@ -208,7 +187,7 @@ setGeneric("rperm",
 setMethod("rperm",
     signature = "NullDistribution",
     definition = function(object, n, ...) {
-        qperm(object, runif(n))
+        object@q(runif(n))
     }
 )
 

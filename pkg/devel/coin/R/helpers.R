@@ -18,7 +18,7 @@ exact <- function(algorithm = c("auto", "shift", "split-up"), fact = NULL) {
         ExactNullDistribution(object, algorithm = algorithm, fact = fact)
 }
 
-pmvn <- function(lower, upper, mean, corr, ..., conf.int = TRUE) {
+pmvn <- function(lower, upper, mean, corr, conf.int, ...) {
     p <- if (length(corr) > 1L)
              pmvnorm(lower = lower, upper = upper, mean = mean,
                      corr = corr, ...)

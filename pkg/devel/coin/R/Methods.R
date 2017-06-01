@@ -10,19 +10,22 @@ setMethod("AsymptNullDistribution",
     signature = "ScalarIndependenceTestStatistic",
     definition = function(object, ...) {
         p <- function(q) pnorm(q)
-        pvalue <- function(q)
+        q <- function(p) qnorm(p)
+        d <- function(x) dnorm(x)
+        pvalue <- function(q) {
             switch(object@alternative,
                 "less"      = p(q),
                 "greater"   = 1 - p(q),
-                "two.sided" = 2 * min(p(q), 1 - p(q))
+                "two.sided" = 2 * pmin.int(p(q), 1 - p(q))
             )
+        }
 
         new("AsymptNullDistribution",
             seed = NA_integer_,
-            p = p,
-            q = function(p) qnorm(p),
-            d = function(x) dnorm(x),
-            pvalue = pvalue,
+            p = p,                           # implicitly vectorized
+            q = q,                           # implicitly vectorized
+            d = d,                           # implicitly vectorized
+            pvalue = pvalue,                 # implicitly vectorized
             midpvalue = function(q) NA,
             pvalueinterval = function(q) NA,
             support = function() NA,
@@ -40,46 +43,49 @@ setMethod("AsymptNullDistribution",
         corr <- cov2cor(covariance(object))
         pq <- length(expectation(object))
 
-        p <- function(q, ..., conf.int = FALSE) {
-            p <- function(q, ..., conf.int = conf.int)
-                switch(object@alternative,
-                    "less"      = pmvn(lower = q, upper = Inf,
-                                       mean = rep.int(0, pq),
-                                       corr = corr, ..., conf.int = conf.int),
-                    "greater"   = pmvn(lower = -Inf, upper = q,
-                                       mean = rep.int(0, pq),
-                                       corr = corr, ..., conf.int = conf.int),
-                    "two.sided" = pmvn(lower = -abs(q), upper = abs(q),
-                                       mean = rep.int(0, pq),
-                                       corr = corr, ..., conf.int = conf.int)
-                )
-            if (length(q) > 1)
-                vapply(q, p, NA_real_, conf.int = conf.int)
-            else
-                p(q, conf.int = conf.int)
+        p <- function(q, conf.int, ...) {
+            switch(object@alternative,
+                "less"      = pmvn(lower = q, upper = Inf,
+                                   mean = rep.int(0, pq),
+                                   corr = corr, conf.int = conf.int, ...),
+                "greater"   = pmvn(lower = -Inf, upper = q,
+                                   mean = rep.int(0, pq),
+                                   corr = corr, conf.int = conf.int, ...),
+                "two.sided" = pmvn(lower = -abs(q), upper = abs(q),
+                                   mean = rep.int(0, pq),
+                                   corr = corr, conf.int = conf.int, ...)
+            )
         }
-        pvalue <- function(q) {
-            pvalue <- 1 - p(q, conf.int = TRUE)
-            ci <- 1 - attr(pvalue, "conf.int")[2L:1L]
-            attr(ci, "conf.level") <- attr(attr(pvalue, "conf.int"), "conf.level")
-            attr(pvalue, "conf.int") <- ci
-            class(pvalue) <- "MCp"
-            pvalue
+        q <- function(p, ...) {
+            qmvn(p, mean = rep.int(0, pq), corr = corr, ...)
+        }
+        pvalue <- function(q, conf.int, ...) {
+            RET <- 1 - p(q, conf.int, ...)
+            if (conf.int) {
+                ci <- 1 - attr(RET, "conf.int")[2L:1L]
+                attr(ci, "conf.level") <-
+                    attr(attr(RET, "conf.int"), "conf.level")
+                attr(RET, "conf.int") <- ci
+                class(RET) <- "MCp"
+            }
+            RET
         }
 
         new("AsymptNullDistribution",
             seed = seed,
-            p = p,
+            p = function(q, ...) {
+                vapply(q, p, NA_real_, conf.int = FALSE, ...)
+            },
             q = function(p, ...) {
-                q <- function(p, ...)
-                    qmvn(p, mean = rep.int(0, pq), corr = corr, ...)
-                if (length(p) > 1)
-                    vapply(p, q, NA_real_)
-                else
-                    q(p)
+                vapply(p, q, NA_real_, ...)
             },
             d = function(x) NA,
-            pvalue = pvalue,
+            pvalue = function(q, ...) {
+                if (length(q) < 2L)
+                    pvalue(q, conf.int = TRUE, ...)
+                else
+                    vapply(q, pvalue, NA_real_, conf.int = FALSE, ...)
+            },
             midpvalue = function(q) NA,
             pvalueinterval = function(q) NA,
             support = function() NA,
@@ -93,14 +99,16 @@ setMethod("AsymptNullDistribution",
     signature = "QuadTypeIndependenceTestStatistic",
     definition = function(object, ...) {
         p <- function(q) pchisq(q, df = object@df)
+        q <- function(p) qchisq(p, df = object@df)
+        d <- function(d) dchisq(d, df = object@df)
         pvalue <- function(q) 1 - p(q)
 
         new("AsymptNullDistribution",
             seed = NA_integer_,
-            p = p,
-            q = function(p) qchisq(p, df = object@df),
-            d = function(d) dchisq(d, df = object@df),
-            pvalue = pvalue,
+            p = p,                           # implicitly vectorized
+            q = q,                           # implicitly vectorized
+            d = d,                           # implicitly vectorized
+            pvalue = pvalue,                 # implicitly vectorized
             midpvalue = function(q) NA,
             pvalueinterval = function(q) NA,
             support = function() NA,
@@ -205,47 +213,67 @@ setMethod("ApproxNullDistribution",
         ## <FIXME> variance can be 0; libcoin handles this </FIXME>
         pls <- sort((plsraw - expectation(object)) / sqrt(variance(object)))
 
+        p <- function(q) {
+            mean(pls %LE% q)
+        }
+        q <- function(p) {
+            quantile(pls, probs = p, names = FALSE, type = 1L)
+        }
         d <- function(x) {
             mean(pls %EQ% x)
         }
-        pvalue <- function(q) {
-            switch(object@alternative,
-                "less"      = mean(pls %LE% q),
-                "greater"   = mean(pls %GE% q),
-                "two.sided" = mean(abs(pls) %GE% abs(q))
-            )
+        pvalue <- function(q, conf.int) {
+            RET <- switch(object@alternative,
+                       "less"      = mean(pls %LE% q),
+                       "greater"   = mean(pls %GE% q),
+                       "two.sided" = mean(abs(pls) %GE% abs(q))
+                   )
+            if (conf.int) {
+                attr(RET, "conf.int") <- confint_binom(round(RET * B), B)
+                class(RET) <- "MCp"
+            }
+            RET
         }
-        pvalueinterval <- function(q, z = c(1, 0)) {
-            pp <- if (object@alternative == "two.sided")
-                      d(-q) + d(q) # both tails
-                  else
-                      d(q)
-            pvalue(q) - z * pp
+        midpvalue <- function(q, conf.int, z) {
+            RET <- pvalue(q, conf.int = FALSE) - z *
+                     if (object@alternative == "two.sided")
+                         d(-q) + d(q) # both tails
+                     else
+                         d(q)
+            if (conf.int) {
+                attr(RET, "conf.int") <- confint_midp(round(RET * B), B)
+                class(RET) <- "MCp"
+            }
+            RET
         }
 
         new("ApproxNullDistribution",
             seed = seed,
             p = function(q) {
-                mean(pls %LE% q)
+                vapply(q, p, NA_real_)
             },
-            q = function(p) {
-                quantile(pls, probs = p, names = FALSE, type = 1L)
+            q = q,                           # implicitly vectorized
+            d = function(x) {
+                vapply(x, d, NA_real_)
             },
-            d = d,
             pvalue = function(q) {
-                pvalue <- pvalue(q)
-                attr(pvalue, "conf.int") <- confint_binom(round(pvalue * B), B)
-                class(pvalue) <- "MCp"
-                pvalue
+                if (length(q) < 2L)
+                    pvalue(q, conf.int = TRUE)
+                else
+                    vapply(q, pvalue, NA_real_, conf.int = FALSE)
             },
             midpvalue = function(q) {
-                midpvalue <- pvalueinterval(q, z = 0.5)
-                attr(midpvalue, "conf.int") <- confint_midp(round(midpvalue * B), B)
-                class(midpvalue) <- "MCp"
-                midpvalue
+                if (length(q) < 2L)
+                    midpvalue(q, conf.int = TRUE, z = 0.5)
+                else
+                    vapply(q, midpvalue, NA_real_, conf.int = FALSE, z = 0.5)
             },
             pvalueinterval = function(q) {
-                setNames(pvalueinterval(q), nm = c("p_0", "p_1"))
+                if (length(q) < 2L)
+                    midpvalue(q, conf.int = FALSE, z = c("p_0" = 1, "p_1" = 0))
+                else
+                    vapply(q, midpvalue, c(NA_real_, NA_real_), conf.int = FALSE,
+                           z = c("p_0" = 1, "p_1" = 0))
             },
             support = function(raw = FALSE) {
                 if (raw)
@@ -288,51 +316,71 @@ setMethod("ApproxNullDistribution",
             sort(pls)
         }
 
+        p <- function(q) {
+            switch(object@alternative,
+                "less"      = mean(colSums(pls %GE% q) == nrow(pls)),
+                "greater"   = mean(colSums(pls %LE% q) == nrow(pls)),
+                "two.sided" = mean(colSums(abs(pls) %LE% q) == nrow(pls))
+            )
+        }
+        q <- function(p) {
+            quantile(pmaxmin(), probs = p, names = FALSE, type = 1L)
+        }
         d <- function(x) {
             mean(pmaxmin() %EQ% x)
         }
-        pvalue <- function(q) {
-            switch(object@alternative,
-                "less"      = mean(colSums(pls %LE% q) > 0),
-                "greater"   = mean(colSums(pls %GE% q) > 0),
-                "two.sided" = mean(colSums(abs(pls) %GE% q) > 0)
-            )
+        pvalue <- function(q, conf.int) {
+            RET <- switch(object@alternative,
+                       "less"      = mean(colSums(pls %LE% q) > 0),
+                       "greater"   = mean(colSums(pls %GE% q) > 0),
+                       "two.sided" = mean(colSums(abs(pls) %GE% q) > 0)
+                   )
+            if (conf.int) {
+                attr(RET, "conf.int") <- confint_binom(round(RET * B), B)
+                class(RET) <- "MCp"
+            }
+            RET
         }
-        pvalueinterval <- function(q, z = c(1, 0)) {
-            pp <- if (object@alternative == "two.sided")
-                      d(-q) + d(q) # both tails
-                  else
-                      d(q)
-            pvalue(q) - z * pp
+        midpvalue <- function(q, conf.int, z) {
+            RET <- pvalue(q, conf.int = FALSE) - z *
+                     if (object@alternative == "two.sided")
+                         d(-q) + d(q) # both tails
+                     else
+                         d(q)
+            if (conf.int) {
+                attr(RET, "conf.int") <- confint_midp(round(RET * B), B)
+                class(RET) <- "MCp"
+            }
+            RET
         }
 
         new("ApproxNullDistribution",
             seed = seed,
             p = function(q) {
-                switch(object@alternative,
-                    "less"      = mean(colSums(pls %GE% q) == nrow(pls)),
-                    "greater"   = mean(colSums(pls %LE% q) == nrow(pls)),
-                    "two.sided" = mean(colSums(abs(pls) %LE% q) == nrow(pls))
-                )
+                vapply(q, p, NA_real_)
             },
-            q = function(p) {
-                quantile(pmaxmin(), probs = p, names = FALSE, type = 1L)
+            q = q,                           # implicitly vectorized
+            d = function(x) {
+                vapply(x, d, NA_real_)
             },
-            d = d,
             pvalue = function(q) {
-                pvalue <- pvalue(q)
-                attr(pvalue, "conf.int") <- confint_binom(round(pvalue * B), B)
-                class(pvalue) <- "MCp"
-                pvalue
+                if (length(q) < 2L)
+                    pvalue(q, conf.int = TRUE)
+                else
+                    vapply(q, pvalue, NA_real_, conf.int = FALSE)
             },
             midpvalue = function(q) {
-                midpvalue <- pvalueinterval(q, z = 0.5)
-                attr(midpvalue, "conf.int") <- confint_midp(round(midpvalue * B), B)
-                class(midpvalue) <- "MCp"
-                midpvalue
+                if (length(q) < 2L)
+                    midpvalue(q, conf.int = TRUE, z = 0.5)
+                else
+                    vapply(q, midpvalue, NA_real_, conf.int = FALSE, z = 0.5)
             },
             pvalueinterval = function(q) {
-                setNames(pvalueinterval(q), nm = c("p_0", "p_1"))
+                if (length(q) < 2L)
+                    midpvalue(q, conf.int = FALSE, z = c("p_0" = 1, "p_1" = 0))
+                else
+                    vapply(q, midpvalue, c(NA_real_, NA_real_), conf.int = FALSE,
+                           z = c("p_0" = 1, "p_1" = 0))
             },
             support = function(raw = FALSE) {
                 if (raw)
@@ -364,35 +412,59 @@ setMethod("ApproxNullDistribution",
         pls <- plsraw - expectation(object)
         pls <- sort(rowSums(crossprod(pls, object@covarianceplus) * t(pls)))
 
+        p <- function(q) {
+            mean(pls %LE% q)
+        }
+        q <- function(p) {
+            quantile(pls, probs = p, names = FALSE, type = 1L)
+        }
         d <- function(x) {
             mean(pls %EQ% x)
         }
-        pvalue <- function(q) mean(pls %GE% q)
-        pvalueinterval <- function(q, z = c(1, 0)) pvalue(q) - z * d(q)
+        pvalue <- function(q, conf.int) {
+            RET <- mean(pls %GE% q)
+            if (conf.int) {
+                attr(RET, "conf.int") <- confint_binom(round(RET * B), B)
+                class(RET) <- "MCp"
+            }
+            RET
+        }
+        midpvalue <- function(q, conf.int, z) {
+            RET <- pvalue(q, conf.int = FALSE) - z * d(q)
+            if (conf.int) {
+                attr(RET, "conf.int") <- confint_midp(round(RET * B), B)
+                class(RET) <- "MCp"
+            }
+            RET
+        }
 
         new("ApproxNullDistribution",
             seed = seed,
             p = function(q) {
-                mean(pls %LE% q)
+                vapply(q, p, NA_real_)
             },
-            q = function(p) {
-                quantile(pls, probs = p, names = FALSE, type = 1L)
+            q = q,                           # implicitly vectorized
+            d = function(x) {
+                vapply(x, d, NA_real_)
             },
-            d = d,
             pvalue = function(q) {
-                pvalue <- pvalue(q)
-                attr(pvalue, "conf.int") <- confint_binom(round(pvalue * B), B)
-                class(pvalue) <- "MCp"
-                pvalue
+                if (length(q) < 2L)
+                    pvalue(q, conf.int = TRUE)
+                else
+                    vapply(q, pvalue, NA_real_, conf.int = FALSE)
             },
             midpvalue = function(q) {
-                midpvalue <- pvalueinterval(q, z = 0.5)
-                attr(midpvalue, "conf.int") <- confint_midp(round(midpvalue * B), B)
-                class(midpvalue) <- "MCp"
-                midpvalue
+                if (length(q) < 2L)
+                    midpvalue(q, conf.int = TRUE, z = 0.5)
+                else
+                    vapply(q, midpvalue, NA_real_, conf.int = FALSE, z = 0.5)
             },
             pvalueinterval = function(q) {
-                setNames(pvalueinterval(q), nm = c("p_0", "p_1"))
+                if (length(q) < 2L)
+                    midpvalue(q, conf.int = FALSE, z = c("p_0" = 1, "p_1" = 0))
+                else
+                    vapply(q, midpvalue, c(NA_real_, NA_real_), conf.int = FALSE,
+                           z = c("p_0" = 1, "p_1" = 0))
             },
             support = function(raw = FALSE) {
                 if (raw)
