@@ -251,7 +251,8 @@ logrank_trafo <-
 
     if (!(is.Surv(x) && isTRUE(attr(x, "type") == "right")))
         stop(sQuote(deparse(substitute(x))),
-             " does not represent right-censored data")
+             " is not an object of class ", dQuote("Surv"),
+             " representing right-censored data")
 
     cc <- complete.cases(x)
     time <- x[cc, 1]
