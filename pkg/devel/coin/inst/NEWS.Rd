@@ -26,7 +26,7 @@
     }
   }
 }
-\section{Changes in version 1.2-0 (20YY-MM-DD)}{
+\section{Changes in version 1.2-0 (2017-06-20)}{
   \subsection{New features}{
     \itemize{
       \item The Gaugler-Kim-Liao class of tests for right-censored data is now
