@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Version 1.0-11</title>
+    <title>Version 1.2-0</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
-    <link rel="canonical" href="http://coin.r-forge.r-project.org/2010/04/13/1.0-11/">
+    <link rel="canonical" href="http://coin.r-forge.r-project.org/2017/06/20/1.2-0/">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="http://coin.r-forge.r-project.org/css/main.css">
@@ -62,13 +62,45 @@ hljs.initHighlightingOnLoad();
       <div class="post">
 
   <header class="post-header">
-    <h1>Version 1.0-11</h1>
-    <p class="meta">Apr 13, 2010</p>
+    <h1>Version 1.2-0</h1>
+    <p class="meta">Jun 20, 2017</p>
   </header>
 
   <article class="post-content">
-  <ul>
-<li> Bugfix in discrete MTP adjustment. </li>
+  <h2>New features</h2>
+<ul>
+<li> The Gaugler-Kim-Liao class of tests for right-censored data is now
+ available (see ?logrank_test and ?logrank_weight). </li>
+<li> The pvalue(), midpvalue() and pvalue_interval() methods for objects
+ of class "NullDistribution" are now vectorized. </li>
+</ul>
+<h2>Bug fixes</h2>
+<ul>
+<li> Precision problem in the density function of approximative (Monte
+ Carlo) null distributions.  This also impacts mid-p-values and
+ p-value intervals. </li>
+<li> Precision problem in the support of approximative (Monte Carlo) null
+ distributions. </li>
+<li> Precision problem in the symmetric median scores transformation. </li>
+<li> The weighted logrank transformation returned nonsense scores when
+ supplied non-right-censored input; it now results in an error. </li>
+<li> The maximally selected statistics transformation for ordered factors
+ sometimes returned the wrong labels. </li>
+</ul>
+<h2>User-visible changes</h2>
+<ul>
+<li> The ties.method argument of logrank_trafo() no longer allows using
+ "logrank" and "HL" to specify mid-ranks and the Hothorn-Lausen
+ method respectively. </li>
+<li> Documentation updates. </li>
+</ul>
+<h2>Deprecated and defunct</h2>
+<ul>
+<li> surv_test() is now defunct and has been removed. </li>
+<li> method = "discrete" in pvalue() is now defunct and has been removed. </li>
+<li> The dperm(), pperm() and qperm() methods for objects of class
+ "AsymptNullDistribution" are no longer needed and have been
+ removed. </li>
 </ul>
 
   </article>
