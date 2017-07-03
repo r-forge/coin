@@ -26,6 +26,18 @@
     }
   }
 }
+\section{Changes in version 1.2-1 (20YY-MM-DD)}{
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{User-visible changes}{
+    \itemize{
+      \item
+    }
+  }
+}
 \section{Changes in version 1.2-0 (2017-06-20)}{
   \subsection{New features}{
     \itemize{
