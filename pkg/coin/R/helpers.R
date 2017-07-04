@@ -497,6 +497,12 @@ eps <- function() sqrt(.Machine$double.eps)
 `%LE%` <- function(x, y)
     x < y | abs(x - y) < eps()
 
+`%GT%` <- function(x, y)
+    (x - y) >= eps()
+
+`%LT%` <- function(x, y)
+    (y - x) >= eps()
+
 ### don't use! never!
 get_weights <- function(object) object@statistic@weights
 get_xtrans <- function(object) object@statistic@xtrans

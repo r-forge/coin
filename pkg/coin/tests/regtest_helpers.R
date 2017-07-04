@@ -802,6 +802,8 @@ stopifnot( isTRUE(is_ordered(it@statistic)))
 `%NE%` <- coin:::`%NE%`
 `%GE%` <- coin:::`%GE%`
 `%LE%` <- coin:::`%LE%`
+`%GT%` <- coin:::`%GT%`
+`%LT%` <- coin:::`%LT%`
 
 v <- 1 + sqrt(.Machine$double.eps) # v >  1 --> v >= 1
 w <- 1 +      .Machine$double.eps  # w == 1 --> w >= 1, w <= 1
@@ -832,3 +834,15 @@ stopifnot( isTRUE(w %LE% x))
 stopifnot( isTRUE(x %LE% x))
 stopifnot( isTRUE(y %LE% x))
 stopifnot( isTRUE(z %LE% x))
+
+stopifnot( isTRUE(v %GT% x))
+stopifnot(isFALSE(w %GT% x))
+stopifnot(isFALSE(x %GT% x))
+stopifnot(isFALSE(y %GT% x))
+stopifnot(isFALSE(z %GT% x))
+
+stopifnot(isFALSE(v %LT% x))
+stopifnot(isFALSE(w %LT% x))
+stopifnot(isFALSE(x %LT% x))
+stopifnot(isFALSE(y %LT% x))
+stopifnot( isTRUE(z %LT% x))
