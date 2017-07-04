@@ -155,7 +155,7 @@ void C_MPinv_sym
             valzero += (val[k] < dtol);
         rank[0] = n - valzero;
 
-        for (int i = 0; i < n * (n + 1) / 2; i++) dMP[i] = 0.0;
+        for (int k = 0; k < n * (n + 1) / 2; k++) dMP[k] = 0.0;
 
         for (int k = valzero; k < n; k++) {
             valinv = 1 / val[k];

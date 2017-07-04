@@ -137,35 +137,35 @@ double C_maxtype_pvalue
        covariance matrix to be passes as argument CORREL
     */
 
-    for (int iz = 0; iz < nonzero; iz++) {
+    for (int nz = 0; nz < nonzero; nz++) {
 
         /* handle elements with non-zero variance only */
-        i = index[iz];
+        i = index[nz];
 
         /* standard deviations */
         sd[i] = sqrt(Covariance[S(i, i, n)]);
 
         if (alternative == ALTERNATIVE_less) {
-            lowerbnd[iz] = stat;
-            upperbnd[iz] = R_PosInf;
-            infin[iz] = 1;
+            lowerbnd[nz] = stat;
+            upperbnd[nz] = R_PosInf;
+            infin[nz] = 1;
         } else if (alternative == ALTERNATIVE_greater) {
-            lowerbnd[iz] = R_NegInf;
-            upperbnd[iz] = stat;
-            infin[iz] = 0;
+            lowerbnd[nz] = R_NegInf;
+            upperbnd[nz] = stat;
+            infin[nz] = 0;
         } else if (alternative == ALTERNATIVE_twosided) {
-            lowerbnd[iz] = fabs(stat) * -1.0;
-            upperbnd[iz] = fabs(stat);
-            infin[iz] = 2;
+            lowerbnd[nz] = fabs(stat) * -1.0;
+            upperbnd[nz] = fabs(stat);
+            infin[nz] = 2;
         }
 
-        delta[iz] = 0.0;
+        delta[nz] = 0.0;
 
         /* set up vector of correlations, i.e., the upper
            triangular part of the covariance matrix) */
-        for (int jz = 0; jz < iz; jz++) {
+        for (int jz = 0; jz < nz; jz++) {
             j = index[jz];
-            sub = (int) (jz + 1) + (double) ((iz - 1) * iz) / 2 - 1;
+            sub = (int) (jz + 1) + (double) ((nz - 1) * nz) / 2 - 1;
             if (sd[i] == 0.0 || sd[j] == 0.0)
                 corr[sub] = 0.0;
             else
@@ -213,9 +213,9 @@ void C_Permute
     int *ans
 ) {
 
-    int k = N, n = N, j;
+    int n = N, j;
 
-    for (int i = 0; i < k; i++) {
+    for (int i = 0; i < N; i++) {
         j = n * unif_rand();
         ans[i] = x[j];
         x[j] = x[--n];

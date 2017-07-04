@@ -209,9 +209,9 @@ SEXP R_PermutedLinearStatistic
             }
         }
         tmp = Calloc(N, int);
-        for (int i = 0; i < INTEGER(B)[0]; i++) {
-            if (i % 256 == 0) R_CheckUserInterrupt();
-            linstat = REAL(ans) + PQ * i;
+        for (int b = 0; b < INTEGER(B)[0]; b++) {
+            if (b % 256 == 0) R_CheckUserInterrupt();
+            linstat = REAL(ans) + PQ * b;
             for (int p = 0; p < PQ; p++)
                 linstat[p] = 0;
             C_doPermute(orig, N, tmp, perm);
@@ -260,9 +260,9 @@ SEXP R_PermutedLinearStatistic
             }
         }
         tmp = Calloc(N, int);
-        for (int i = 0; i < INTEGER(B)[0]; i++) {
-            if (i % 256 == 0) R_CheckUserInterrupt();
-            linstat = REAL(ans) + PQ * i;
+        for (int b = 0; b < INTEGER(B)[0]; b++) {
+            if (b % 256 == 0) R_CheckUserInterrupt();
+            linstat = REAL(ans) + PQ * b;
             for (int p = 0; p < PQ; p++)
                 linstat[p] = 0;
             C_doPermuteBlock(orig, N, table, Lb + 1, tmp, perm);
@@ -275,12 +275,12 @@ SEXP R_PermutedLinearStatistic
     Free(tmp); Free(perm); Free(orig);
 
     if (INTEGER(standardise)[0]) {
-        for (int i = 0; i < INTEGER(B)[0]; i++) {
+        for (int b = 0; b < INTEGER(B)[0]; b++) {
             if (C_get_varonly(LEV)) {
-                C_standardise(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LEV),
                               C_get_Variance(LEV), 1, C_get_tol(LEV));
             } else {
-                C_standardise(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LEV),
                               C_get_Covariance(LEV), 0, C_get_tol(LEV));
             }
         }
@@ -507,9 +507,9 @@ SEXP R_PermutedLinearStatistic_2d
     GetRNGstate();
 
     dans = REAL(ans);
-    for (int i = 0; i < INTEGER(B)[0]; i++) {
+    for (int b = 0; b < INTEGER(B)[0]; b++) {
 
-        blinstat = dans + PQ * i;
+        blinstat = dans + PQ * b;
         for (int p = 0; p < PQ; p++) {
             blinstat[p] = 0.0;
             linstat[p] = 0.0;
@@ -517,9 +517,9 @@ SEXP R_PermutedLinearStatistic_2d
         for (int p = 0; p < Lxp1 * Lyp1; p++)
             rtable[p] = 0;
 
-        for (int b = 0; b < Lb; b++) {
-            S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,
-                     csum + Lyp1 *b + 1, ntotal + b, fact, jwork, rtable2);
+        for (int b1 = 0; b1 < Lb; b1++) {
+            S_rcont2(&Lx, &Ly, rsum + Lxp1 * b1 + 1,
+                     csum + Lyp1 *b1 + 1, ntotal + b1, fact, jwork, rtable2);
 
         for (int j1 = 1; j1 <= NLEVELS(ix); j1++) {
             for (int j2 = 1; j2 <= NLEVELS(iy); j2++)
@@ -535,12 +535,12 @@ SEXP R_PermutedLinearStatistic_2d
     PutRNGstate();
 
     if (INTEGER(standardise)[0]) {
-        for (int i = 0; i < INTEGER(B)[0]; i++) {
+        for (int b = 0; b < INTEGER(B)[0]; b++) {
             if (C_get_varonly(LEV)) {
-                C_standardise(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LEV),
                               C_get_Variance(LEV), 1, C_get_tol(LEV));
             } else {
-                C_standardise(PQ, REAL(ans) + PQ * i, C_get_Expectation(LEV),
+                C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LEV),
                               C_get_Covariance(LEV), 0, C_get_tol(LEV));
             }
         }

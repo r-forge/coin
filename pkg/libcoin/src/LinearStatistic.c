@@ -882,8 +882,8 @@ void RC_ExpectationCovarianceLinearStatistic
      for (int p = 0; p < P; p++) ExpXtotal[p] = 0.0;
 
      for (int b = 0; b < Lb; b++) {
-         for (int i = 0; i < P + 2 * P * (P + 1) / 2 + 1; i++)
-             work[i] = 0.0;
+         for (int j = 0; j < P + 2 * P * (P + 1) / 2 + 1; j++)
+             work[j] = 0.0;
          if (Nsubset[b] < 0) {  /* means: no subset given */
              if (sumweights[b] < 0) {  /* means: no weights given */
                  if (isInteger(x)) {
@@ -994,7 +994,7 @@ void RC_ExpectationVarianceLinearStatistic
      for (int p = 0; p < P; p++) ExpXtotal[p] = 0.0;
 
      for (int b = 0; b < Lb; b++) {
-         for (int i = 0; i < 3 * P + 1; i++) work[i] = 0.0;
+         for (int j = 0; j < 3 * P + 1; j++) work[j] = 0.0;
          if (Nsubset[b] < 0) {  /* means: no subset given */
              if (sumweights[b] < 0) {  /* means: no weights given */
                  if (isInteger(x)) {

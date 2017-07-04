@@ -54,8 +54,8 @@ SEXP R_QuadraticTest
         st = REAL(stat)[0];
         ex = C_get_Expectation(LEV);
         greater = 0;
-        for (int i = 0; i < B; i++) {
-            if (GE(C_quadform(PQ, ls + PQ * i, ex, MPinv), st, C_get_tol(LEV)))
+        for (int b = 0; b < B; b++) {
+            if (GE(C_quadform(PQ, ls + PQ * b, ex, MPinv), st, C_get_tol(LEV)))
                 greater++;
         }
         REAL(pval)[0] = C_perm_pvalue(greater, B, INTEGER(lower)[0], INTEGER(give_log)[0]);
@@ -136,12 +136,12 @@ SEXP R_MaximumTest
         st = REAL(stat)[0];
         tl = C_get_tol(LEV);
         greater = 0;
-        for (int i = 0; i < B; i++) {
+        for (int b = 0; b < B; b++) {
             if (alt == ALTERNATIVE_less) {
-                if (LE(C_maxtype(PQ, ls + PQ * i, ex, cv, vo, tl, alt), st, tl))
+                if (LE(C_maxtype(PQ, ls + PQ * b, ex, cv, vo, tl, alt), st, tl))
                     greater++;
             } else {
-                if (GE(C_maxtype(PQ, ls + PQ * i, ex, cv, vo, tl, alt), st, tl))
+                if (GE(C_maxtype(PQ, ls + PQ * b, ex, cv, vo, tl, alt), st, tl))
                     greater++;
             }
         }
