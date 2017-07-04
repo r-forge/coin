@@ -792,3 +792,43 @@ stopifnot(isFALSE(is_contingency_2x2(it@statistic)))
 stopifnot(isFALSE(is_singly_ordered(it@statistic)))
 stopifnot( isTRUE(is_doubly_ordered(it@statistic)))
 stopifnot( isTRUE(is_ordered(it@statistic)))
+
+
+###
+### Test comparison functions
+###
+
+`%EQ%` <- coin:::`%EQ%`
+`%NE%` <- coin:::`%NE%`
+`%GE%` <- coin:::`%GE%`
+`%LE%` <- coin:::`%LE%`
+
+v <- 1 + sqrt(.Machine$double.eps) # v >  1 --> v >= 1
+w <- 1 +      .Machine$double.eps  # w == 1 --> w >= 1, w <= 1
+x <- 1                             # x == 1 --> x >= 1, x <= 1
+y <- 1 -      .Machine$double.eps  # y == 1 --> y >= 1, y <= 1
+z <- 1 - sqrt(.Machine$double.eps) # z <  1 -->         z <= 1
+
+stopifnot(isFALSE(v %EQ% x))
+stopifnot( isTRUE(w %EQ% x))
+stopifnot( isTRUE(x %EQ% x))
+stopifnot( isTRUE(y %EQ% x))
+stopifnot(isFALSE(z %EQ% x))
+
+stopifnot( isTRUE(v %NE% x))
+stopifnot(isFALSE(w %NE% x))
+stopifnot(isFALSE(x %NE% x))
+stopifnot(isFALSE(y %NE% x))
+stopifnot( isTRUE(z %NE% x))
+
+stopifnot( isTRUE(v %GE% x))
+stopifnot( isTRUE(w %GE% x))
+stopifnot( isTRUE(x %GE% x))
+stopifnot( isTRUE(y %GE% x))
+stopifnot(isFALSE(z %GE% x))
+
+stopifnot(isFALSE(v %LE% x))
+stopifnot( isTRUE(w %LE% x))
+stopifnot( isTRUE(x %LE% x))
+stopifnot( isTRUE(y %LE% x))
+stopifnot( isTRUE(z %LE% x))
