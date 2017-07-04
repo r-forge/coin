@@ -518,16 +518,19 @@ setColnames <- function (object, nm) {
 n_decimal_digits <- function(x)
     nchar(sub("^[[:digit:]]*[.]", "", format(min(x), scientific = FALSE)))
 
-if(getRversion() < "2.15.0")
+if (getRversion() < "2.15.0")
     paste0 <- function(...) paste(..., sep = "")
 
-if(getRversion() < "3.1.0") {
+if (getRversion() < "3.1.0") {
     cospi <- function(x) cos(pi * x)
     anyNA <- function(x) any(is.na(x))
 }
 
-if(getRversion() < "3.2.0") {
+if (getRversion() < "3.2.0") {
     isNamespaceLoaded <- function(name) !is.null(.getNamespace(name))
     lengths <- function(x, use.names = TRUE)
         vapply(x, length, NA_integer_, USE.NAMES = use.names)
 }
+
+if (getRversion() < "3.5.0")
+    isFALSE <- function(x) identical(FALSE, x)
