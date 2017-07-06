@@ -473,6 +473,3 @@ setColnames <- function (object, nm) {
 
 n_decimal_digits <- function(x)
     nchar(sub("^[[:digit:]]*[.]", "", format(min(x), scientific = FALSE)))
-
-if (getRversion() < "3.5.0")
-    isFALSE <- function(x) identical(FALSE, x)
