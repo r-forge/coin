@@ -537,6 +537,3 @@ if (getRversion() < "3.2.0") {
     lengths <- function(x, use.names = TRUE)
         vapply(x, length, NA_integer_, USE.NAMES = use.names)
 }
-
-if (getRversion() < "3.5.0")
-    isFALSE <- function(x) identical(FALSE, x)
