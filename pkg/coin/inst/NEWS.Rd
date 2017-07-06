@@ -4,7 +4,8 @@
 \section{Changes in version 1.2-1 (20YY-MM-DD)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item
+     \item Precision problem in the quantile function of exact distributions
+     computed by the shift algorithm.
     }
   }
   \subsection{User-visible changes}{
@@ -113,8 +114,8 @@
 \section{Changes in version 1.1-1 (2015-10-25)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item Methods \code{initialize()} and \code{show()} were not
-      imported from package \pkg{methods}.
+      \item Methods \code{initialize()} and \code{show()} were not imported from
+      package \pkg{methods}.
     }
   }
   \subsection{User-visible changes}{
