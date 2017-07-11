@@ -447,9 +447,9 @@ void C_KronSums_subset
         qN = q * N;
         qP = q * P;
         for (int p = 0; p < P; p++) {
-            PQ_ans[qP + p] = 0.0;
-            pN = p * N;
             qPp = qP + p;
+            PQ_ans[qPp] = 0.0;
+            pN = p * N;
             for (int i = 0; i < Nsubset; i++)
                 PQ_ans[qPp] += y[qN + subsety[i]] * x[pN + subsetx[i]];
         }

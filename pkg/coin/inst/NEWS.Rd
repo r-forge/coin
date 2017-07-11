@@ -17,6 +17,8 @@
 \section{Changes in version 1.2-0 (2017-06-20)}{
   \subsection{New features}{
     \itemize{
+      \item Low-level computations have been generalised and moved to package \pkg{libcoin}.
+
       \item The Gaugler-Kim-Liao class of tests for right-censored data is now
       available (see \code{?logrank_test} and \code{?logrank_weight}).
 

@@ -37,3 +37,6 @@
 #define TableBlock_SLOT                 15
 #define Sumweights_SLOT                 16
 #define Table_SLOT                      17
+
+#define LONG_INTEGER			1
+typedef R_xlen_t xint;
