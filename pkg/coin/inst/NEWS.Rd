@@ -1,16 +1,11 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.2-1 (20YY-MM-DD)}{
+\section{Changes in version 1.2-1 (2017-07-16)}{
   \subsection{Bug fixes}{
     \itemize{
-     \item Precision problem in the quantile function of exact distributions
-     computed by the shift algorithm.
-    }
-  }
-  \subsection{User-visible changes}{
-    \itemize{
-      \item
+      \item Precision problem in the quantile function of exact null
+      distributions computed by the shift algorithm.
     }
   }
 }
