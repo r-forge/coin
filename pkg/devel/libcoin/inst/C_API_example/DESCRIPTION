@@ -1,0 +1,11 @@
+Package: libcoinEx
+Version: 1.0-0
+Date: 2016-12-07
+Title: A 'libcoin' C API Usage Example
+Authors@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
+                  email = "Torsten.Hothorn@R-project.org")
+Description: Example use of the 'libcoin' C API.
+Depends: R (>= 3.3.0)
+Imports: libcoin (>= 0.9-0)
+LinkingTo: libcoin
+License: GPL-2
