@@ -1,7 +1,7 @@
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 2017-07-02
-Version: 0.9-3
+Date: 2017-09-24
+Version: 1.0-0
 Authors@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@R-project.org")
 Description: Basic infrastructure for linear test statistics and permutation
