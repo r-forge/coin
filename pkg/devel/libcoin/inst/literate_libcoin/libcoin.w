@@ -241,10 +241,239 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 @<Function prototypes@>
 @}
 
+@d Function prototypes
+@{
+
+int NCOL
+(
+    SEXP x
+) {
+
+    SEXP a;
+    a = getAttrib(x, R_DimSymbol);
+    if (a == R_NilValue) return(1);
+    return(INTEGER(a)[1]);
+}
+@<C\_KronSums\_dweights\_dsubset@>
+@<C\_KronSums\_iweights\_dsubset@>
+@<C\_KronSums\_iweights\_isubset@>
+@<C\_KronSums\_dweights\_isubset@>
+@<RC\_KronSums@>
+@<R\_KronSums@>
+@<C\_colSums\_dweights\_dsubset@>
+@<C\_colSums\_iweights\_dsubset@>
+@<C\_colSums\_iweights\_isubset@>
+@<C\_colSums\_dweights\_isubset@>
+@<RC\_colSums@>
+@<R\_colSums@>
+@<C\_Sums\_dweights\_dsubset@>
+@<C\_Sums\_iweights\_dsubset@>
+@<C\_Sums\_iweights\_isubset@>
+@<C\_Sums\_dweights\_isubset@>
+@<RC\_Sums@>
+@<R\_Sums@>
+@}
+
+
 The \proglang{R} interfaces are used to implement
 regression tests to be called from within \proglang{R}
 
-<<regression-test>>=
+
+\subsection{Sums}
+
+<<regression-test-Sums>>=
+### replace with library("libcoin")
+dyn.load("Sums.so")
+set.seed(29)
+N <- 20L
+P <- 3L
+x <- matrix(runif(N * P), nrow = N)
+weights <- sample(0:5, size = N, replace = TRUE)
+subset <- sort(sample(1:N, floor(N/2)))
+
+a0 <- sum(weights[subset])
+
+a1 <- .Call("R_Sums", x, weights, subset - 1L)
+
+a2 <- .Call("R_Sums", x, as.double(weights), as.double(subset - 1L))
+
+max(a0 - a1)
+max(a1 - a2)
+@@
+
+
+
+@d C integer subset Input
+@{
+    int *subset,
+    const R_xlen_t offset,
+    const R_xlen_t Nsubset
+@}
+
+@d C real subset Input
+@{
+    double *subset,
+    const R_xlen_t offset,
+    const R_xlen_t Nsubset
+@}
+
+
+@d Sums Body
+@{
+    R_xlen_t diff;
+    double ans = 0.0;
+
+    s = subset;
+    w = weights;
+    if (Nsubset > 0) {
+        diff = (R_xlen_t) s[offset];
+    } else {
+        diff = 0;
+    }
+    for (R_xlen_t i = offset; i < (Nsubset == 0 ? N : Nsubset) - 1; i++) {
+        w = w + diff;
+        ans += w[0];
+        if (Nsubset > 0) {
+            diff = (R_xlen_t) s[1] - s[0];
+            s++;
+        } else {
+            diff = 1;
+        }
+    }
+    w = w + diff;
+    ans += w[0];
+@}
+
+@d Sums Inputs
+@{
+    int N,
+@}
+
+@d C\_Sums\_dweights\_dsubset
+@{
+double C_Sums_dweights_dsubset
+(
+    @<Sums Inputs@>
+    double *weights,
+    @<C real subset Input@>
+) {
+
+    double *s, *w; 
+
+  @<Sums Body@>
+}
+@}
+
+@d C\_Sums\_iweights\_dsubset
+@{
+double C_Sums_iweights_dsubset
+(
+    @<Sums Inputs@>
+    int *weights,
+    @<C real subset Input@>
+) {
+
+    double *s;
+    int *w; 
+
+  @<Sums Body@>
+}
+@}
+
+@d C\_Sums\_iweights\_isubset
+@{
+double C_Sums_iweights_isubset
+(
+    @<Sums Inputs@>
+    int *weights,
+    @<C integer subset Input@>
+) {
+
+    int *s, *w;
+
+  @<Sums Body@>
+}
+@}
+
+@d C\_Sums\_dweights\_isubset
+@{
+double C_Sums_dweights_isubset
+(
+    @<Sums Inputs@>
+    double *weights,
+    @<C integer subset Input@>
+) {
+
+    int *s; 
+    double *w;
+
+  @<Sums Body@>
+}
+@}
+
+@d RC\_Sums
+@{
+
+double RC_Sums
+(
+    R_xlen_t N,
+    SEXP weights,
+    SEXP subset,
+    R_xlen_t offset,
+    R_xlen_t Nsubset
+) {
+    
+    if (XLENGTH(weights) == 0) {
+        if (XLENGTH(subset) == 0) {
+            return((double) N);
+        } else {
+            return((double) Nsubset - offset);
+        }
+    } 
+    if (TYPEOF(weights) == INTSXP) {
+        if (TYPEOF(subset) == INTSXP) {
+            return(C_Sums_iweights_isubset(N, INTEGER(weights), INTEGER(subset), offset, Nsubset));
+        } else {
+            return(C_Sums_iweights_dsubset(N, INTEGER(weights), REAL(subset), offset, Nsubset));
+        }
+    } else {
+        if (TYPEOF(subset) == INTSXP) {
+            return(C_Sums_dweights_isubset(N, REAL(weights), INTEGER(subset), offset, Nsubset));
+        } else {
+            return(C_Sums_dweights_dsubset(N, REAL(weights), REAL(subset), offset, Nsubset));
+        }
+    }
+}
+
+@}
+
+@d R\_Sums
+@{
+SEXP R_Sums
+(
+    SEXP x,
+    SEXP weights,
+    SEXP subset
+) {
+
+    SEXP ans;
+    int P;
+    R_xlen_t N, Nsubset;
+
+    P = NCOL(x);
+    N = XLENGTH(x) / P;
+    Nsubset = XLENGTH(subset);
+    
+    PROTECT(ans = allocVector(REALSXP, 1));
+    REAL(ans)[0] = RC_Sums(N, weights, subset, 0, Nsubset);
+    UNPROTECT(1);
+    return(ans);
+}
+@}
+
+\subsection{Kronecker Sums}
+
+<<regression-test-KronSum>>=
 ### replace with library("libcoin")
 dyn.load("Sums.so")
 set.seed(29)
@@ -268,7 +497,6 @@ max(a0 - a1)
 max(a1 - a2)
 @@
 
-\subsection{Kronecker Sums}
 
 @d KronSums Body
 @{
@@ -320,41 +548,24 @@ max(a1 - a2)
     }
 @}
 
-@d Function prototypes
-@{
 
-int NCOL
-(
-    SEXP x
-) {
-
-    SEXP a;
-    a = getAttrib(x, R_DimSymbol);
-    if (a == R_NilValue) return(1);
-    return(INTEGER(a)[1]);
-}
-@<C\_KronSums\_dweights\_dsubset@>
-@<C\_KronSums\_iweights\_dsubset@>
-@<C\_KronSums\_iweights\_isubset@>
-@<C\_KronSums\_dweights\_isubset@>
-@<RC\_KronSums@>
-@<R\_KronSums@>
-@<C\_colSums\_dweights\_dsubset@>
-@<C\_colSums\_iweights\_dsubset@>
-@<C\_colSums\_iweights\_isubset@>
-@<C\_colSums\_dweights\_isubset@>
-@<RC\_colSums@>
-@<R\_colSums@>
-@}
-
-
-@d KronSums Inputs
+@d C x Input
 @{
     double *x,
     const R_xlen_t N,
     const int P,
+@}
+
+@d C y Input
+@{
     double *y,
     const int Q,
+@}
+
+@d KronSums Inputs
+@{
+    @<C x Input@>
+    @<C y Input@>
     const int SYMMETRIC,
     double *centerx,
     double *centery,
@@ -375,9 +586,7 @@ void C_KronSums_dweights_dsubset
     @<KronSums Inputs@>
     double *weights,
     const int HAS_WEIGHTS,
-    double *subset,
-    const R_xlen_t offset,
-    const R_xlen_t Nsubset,
+    @<C real subset Input@>,
     @<KronSums Answer@>
 ) {
 
@@ -394,9 +603,7 @@ void C_KronSums_iweights_dsubset
     @<KronSums Inputs@>
     int *weights,
     const int HAS_WEIGHTS,
-    double *subset,
-    const R_xlen_t offset,
-    const R_xlen_t Nsubset,
+    @<C real subset Input@>,
     @<KronSums Answer@>
 ) {
 
@@ -414,9 +621,7 @@ void C_KronSums_iweights_isubset
     @<KronSums Inputs@>
     int *weights,
     const int HAS_WEIGHTS,
-    int *subset,
-    const R_xlen_t offset,
-    const R_xlen_t Nsubset,
+    @<C integer subset Input@>,
     @<KronSums Answer@>
 ) {
 
@@ -433,9 +638,7 @@ void C_KronSums_dweights_isubset
     @<KronSums Inputs@>
     double *weights,
     const int HAS_WEIGHTS,
-    int *subset,
-    const R_xlen_t offset,
-    const R_xlen_t Nsubset,
+    @<C integer subset Input@>,
     @<KronSums Answer@>
 ) {
 
@@ -511,6 +714,7 @@ SEXP R_KronSums
 }
 @}
 
+
 \subsection{Column Sums}
 
 <<regression-test-colSums>>=
@@ -570,9 +774,7 @@ max(a1 - a2)
 
 @d colSums Inputs
 @{
-    double *x,
-    const R_xlen_t N,
-    const int P,
+    @<C x Input@>
     const int power,
     double *centerx,
     const int CENTER,
@@ -590,9 +792,7 @@ void C_colSums_dweights_dsubset
     @<colSums Inputs@>
     double *weights,
     const int HAS_WEIGHTS,
-    double *subset,
-    const R_xlen_t offset,
-    const R_xlen_t Nsubset,
+    @<C real subset Input@>,
     @<colSums Answer@>
 ) {
 
@@ -609,9 +809,7 @@ void C_colSums_iweights_dsubset
     @<colSums Inputs@>
     int *weights,
     const int HAS_WEIGHTS,
-    double *subset,
-    const R_xlen_t offset,
-    const R_xlen_t Nsubset,
+    @<C real subset Input@>,
     @<colSums Answer@>
 ) {
 
@@ -629,9 +827,7 @@ void C_colSums_iweights_isubset
     @<colSums Inputs@>
     int *weights,
     const int HAS_WEIGHTS,
-    int *subset,
-    const R_xlen_t offset,
-    const R_xlen_t Nsubset,
+    @<C integer subset Input@>,
     @<colSums Answer@>
 ) {
 
@@ -648,9 +844,7 @@ void C_colSums_dweights_isubset
     @<colSums Inputs@>
     double *weights,
     const int HAS_WEIGHTS,
-    int *subset,
-    const R_xlen_t offset,
-    const R_xlen_t Nsubset,
+    @<C integer subset Input@>,
     @<colSums Answer@>
 ) {
 
