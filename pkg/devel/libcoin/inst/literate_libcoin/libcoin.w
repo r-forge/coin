@@ -272,6 +272,16 @@ int NCOL
 @<C\_Sums\_dweights\_isubset@>
 @<RC\_Sums@>
 @<R\_Sums@>
+@<C\_KronSums\_Permutation\_isubset@>
+@<C\_KronSums\_Permutation\_dsubset@>
+@<RC\_KronSums\_Permutation@>
+@<R\_KronSums\_Permutation@>
+@<C\_TableSums\_dweights\_dsubset@>
+@<C\_TableSums\_iweights\_dsubset@>
+@<C\_TableSums\_iweights\_isubset@>
+@<C\_TableSums\_dweights\_isubset@>
+@<RC\_TableSums@>
+@<R\_TableSums@>
 @}
 
 
@@ -290,6 +300,7 @@ P <- 3L
 x <- matrix(runif(N * P), nrow = N)
 weights <- sample(0:5, size = N, replace = TRUE)
 subset <- sort(sample(1:N, floor(N/2)))
+subsety <- sort(sample(1:N, floor(N/2)))
 
 a0 <- sum(weights[subset])
 
@@ -342,6 +353,7 @@ max(a1 - a2)
     }
     w = w + diff;
     ans += w[0];
+    return(ans);
 @}
 
 @d Sums Inputs
@@ -714,6 +726,127 @@ SEXP R_KronSums
 }
 @}
 
+<<regression-test-KronSums-Permutation>>=
+
+<<regression-Permutation>>=
+a0 <- colSums(x[subset,r1] * y[subsety, r2])
+a1 <- .Call("R_KronSums_Permutation", x, y, subset - 1L, subsety -1L)
+max(a0 - a1)
+@@
+
+@d KronSums Permutation Body
+@{
+    R_xlen_t diff;
+    double *xx;
+
+    for (int q = 0; q < Q; q++) {
+        for (int p = 0; p < P; p++) {
+            PQ_ans[0] = 0.0;
+            xx = x + N * p;
+            sx = subset;
+            sy = subsety;
+            diff = (R_xlen_t) sx[offset];
+            for (R_xlen_t i = offset; i < Nsubset - 1; i++) {
+                xx = xx + diff;
+                PQ_ans[0] += xx[0] * y[ (R_xlen_t) sy[0] + q * N];
+                diff = (R_xlen_t) sx[1] - sx[0];
+                sx++;
+                sy++;
+            }
+            xx = xx + diff;
+            PQ_ans[0] += xx[0] * y[ (R_xlen_t) sy[0] + q *N];
+        }
+        PQ_ans++;
+    }
+@}
+
+
+@d C\_KronSums\_Permutation\_dsubset
+@{
+void C_KronSums_Permutation_dsubset
+(
+    @<C x Input@>
+    @<C y Input@>
+    @<C real subset Input@>,
+    double *subsety,
+    @<KronSums Answer@>
+) {
+
+    double *sx, *sy;
+
+  @<KronSums Permutation Body@>
+}
+@}
+
+@d C\_KronSums\_Permutation\_isubset
+@{
+void C_KronSums_Permutation_isubset
+(
+    @<C x Input@>
+    @<C y Input@>
+    @<C integer subset Input@>,
+    int *subsety,
+    @<KronSums Answer@>
+) {
+
+    int *sx, *sy;
+
+  @<KronSums Permutation Body@>
+}
+@}
+
+@d RC\_KronSums\_Permutation
+@{
+
+void RC_KronSums_Permutation
+(
+    @<C x Input@>
+    @<C y Input@>
+    SEXP subset,
+    R_xlen_t offset,
+    R_xlen_t Nsubset,
+    SEXP subsety,
+    @<KronSums Answer@>
+) {
+
+    if (TYPEOF(subset) == INTSXP) {
+        C_KronSums_Permutation_isubset(x, N, P, y, Q, 
+                                       INTEGER(subset), offset, Nsubset, INTEGER(subsety), PQ_ans);
+        } else {
+        C_KronSums_Permutation_dsubset(x, N, P, y, Q, 
+                                       REAL(subset), offset, Nsubset, REAL(subsety), PQ_ans);
+    }
+}
+
+@}
+
+@d R\_KronSums\_Permutation
+@{
+SEXP R_KronSums_Permutation
+(
+    SEXP x,
+    SEXP y,
+    SEXP subset,
+    SEXP subsety
+) {
+
+    SEXP ans;
+    int P, Q;
+    R_xlen_t N, Nsubset;
+    double *center;
+
+    P = NCOL(x);
+    Q = NCOL(y);
+    N = XLENGTH(x) / P;
+    Nsubset = XLENGTH(subset);
+    
+    PROTECT(ans = allocVector(REALSXP, P * Q));
+    RC_KronSums_Permutation(REAL(x), N, P, REAL(y), Q, subset, 0, Nsubset, subsety, REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+@}
+
 
 \subsection{Column Sums}
 
@@ -918,6 +1051,235 @@ SEXP R_colSums
 }
 @}
 
+\subsection{Table Sums}
+
+<<regression-test-TableSum>>=
+### replace with library("libcoin")
+dyn.load("Sums.so")
+set.seed(29)
+N <- 20L
+P <- 3L
+Q <- 2L
+x <- sample(1:P, size = N, replace = TRUE)
+y <- sample(1:Q, size = N, replace = TRUE)
+weights <- sample(0:5, size = N, replace = TRUE)
+subset <- sort(sample(1:N, floor(N/2)))
+
+a0 <- xtabs(weights ~ x + y, data = data.frame(x = x, y = y, weights =
+weights)[subset,])
+
+a1 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, weights, subset - 1L)
+a1 <- matrix(a1, nrow = P + 1, ncol = Q + 1)[-1,-1]
+
+a2 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, as.double(weights), as.double(subset - 1L))
+a2 <- matrix(a2, nrow = P + 1, ncol = Q + 1)[-1,-1]
+
+max(a0 - a1)
+max(a1 - a2)
+@@
+
+
+@d TableSums Body
+@{
+    R_xlen_t diff;
+    int *xx, *yy;
+
+    for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
+
+    yy = y;
+    xx = x;
+    s = subset;
+    w = weights;
+    if (Nsubset > 0) {
+        diff = (R_xlen_t) s[offset];
+    } else {
+        diff = 0;
+    }
+    for (R_xlen_t i = offset; i < (Nsubset == 0 ? N : Nsubset) - 1; i++) {
+        xx = xx + diff;
+        yy = yy + diff;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
+        } else {
+            PQ_ans[yy[0] * P + xx[0]]++;
+        }
+        if (Nsubset > 0) {
+            diff = (R_xlen_t) s[1] - s[0];
+            s++;
+        } else {
+            diff = 1;
+        }
+    }
+    xx = xx + diff;
+    yy = yy + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        PQ_ans[yy[0] * P + xx[0]] += w[0];
+    } else {
+        PQ_ans[yy[0] * P + xx[0]]++;
+    }
+@}
+
+
+@d C integer x Input
+@{
+    int *x,
+    const R_xlen_t N,
+    const int P,
+@}
+
+@d C integer y Input
+@{
+    int *y,
+    const int Q,
+@}
+
+@d TableSums Inputs
+@{
+    @<C integer x Input@>
+    @<C integer y Input@>
+@}
+
+@d TableSums Answer
+@{
+    double *PQ_ans
+@}
+
+@d C\_TableSums\_dweights\_dsubset
+@{
+void C_TableSums_dweights_dsubset
+(
+    @<TableSums Inputs@>
+    double *weights,
+    const int HAS_WEIGHTS,
+    @<C real subset Input@>,
+    @<TableSums Answer@>
+) {
+
+    double *s, *w; 
+
+  @<TableSums Body@>
+}
+@}
+
+@d C\_TableSums\_iweights\_dsubset
+@{
+void C_TableSums_iweights_dsubset
+(
+    @<TableSums Inputs@>
+    int *weights,
+    const int HAS_WEIGHTS,
+    @<C real subset Input@>,
+    @<TableSums Answer@>
+) {
+
+    double *s;
+    int *w; 
+
+  @<TableSums Body@>
+}
+@}
+
+@d C\_TableSums\_iweights\_isubset
+@{
+void C_TableSums_iweights_isubset
+(
+    @<TableSums Inputs@>
+    int *weights,
+    const int HAS_WEIGHTS,
+    @<C integer subset Input@>,
+    @<TableSums Answer@>
+) {
+
+    int *s, *w;
+
+  @<TableSums Body@>
+}
+@}
+
+@d C\_TableSums\_dweights\_isubset
+@{
+void C_TableSums_dweights_isubset
+(
+    @<TableSums Inputs@>
+    double *weights,
+    const int HAS_WEIGHTS,
+    @<C integer subset Input@>,
+    @<TableSums Answer@>
+) {
+
+    int *s; 
+    double *w;
+
+  @<TableSums Body@>
+}
+@}
+
+@d RC\_TableSums
+@{
+
+void RC_TableSums
+(
+    @<TableSums Inputs@>
+    SEXP weights,
+    SEXP subset,
+    R_xlen_t offset,
+    R_xlen_t Nsubset,
+    @<TableSums Answer@>
+) {
+
+    if (TYPEOF(weights) == INTSXP) {
+        if (TYPEOF(subset) == INTSXP) {
+            C_TableSums_iweights_isubset(x, N, P, y, Q, 
+                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+                                        offset, Nsubset, PQ_ans);
+        } else {
+            C_TableSums_iweights_dsubset(x, N, P, y, Q, 
+                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        offset, Nsubset, PQ_ans);
+        }
+    } else {
+        if (TYPEOF(subset) == INTSXP) {
+            C_TableSums_dweights_isubset(x, N, P, y, Q, 
+                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+                                        offset, Nsubset, PQ_ans);
+        } else {
+            C_TableSums_dweights_dsubset(x, N, P, y, Q, 
+                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        offset, Nsubset, PQ_ans);
+        }
+    }
+}
+
+@}
+
+@d R\_TableSums
+@{
+SEXP R_TableSums
+(
+    SEXP x,
+    SEXP P,
+    SEXP y,
+    SEXP Q,
+    SEXP weights,
+    SEXP subset
+) {
+
+    SEXP ans;
+    R_xlen_t N, Nsubset;
+    double *center;
+
+    N = XLENGTH(x);
+    Nsubset = XLENGTH(subset);
+    
+    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * INTEGER(Q)[0]));
+    RC_TableSums(INTEGER(x), N, INTEGER(P)[0], INTEGER(y), INTEGER(Q)[0], 
+                 weights, subset, 0, Nsubset, REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+@}
 
 
 \section{R Code}
