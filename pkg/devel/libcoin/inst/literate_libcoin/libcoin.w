@@ -229,6 +229,23 @@ and that in the one-sided case maximum type test statistics are replaced by
 
 @s
 
+The corresponding header file contains definitions of
+functions to be used outside \verb|Sums.c|
+
+@o Sums.h -cc
+@{
+@<Function Prototypes@>
+@}
+
+@d Function Prototypes
+@{
+@<RC\_Sums Prototype@>;
+@<RC\_KronSums Prototype@>;
+@<RC\_KronSums\_Permutation Prototype@>;
+@<RC\_colSums Prototype@>;
+@<RC\_TableSums Prototype@>;
+@}
+
 The \proglang{C} file \verb|Sums.c| defines the \proglang{C}
 functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 
@@ -238,10 +255,10 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 #include <Rinternals.h>
 #include <Rmath.h>
 #include <Rdefines.h>
-@<Function prototypes@>
+@<Function Definitions@>
 @}
 
-@d Function prototypes
+@d Function Definitions
 @{
 
 int NCOL
@@ -284,35 +301,76 @@ int NCOL
 @<R\_TableSums@>
 @}
 
-
 The \proglang{R} interfaces are used to implement
 regression tests to be called from within \proglang{R}
 
+@d R N Input
+@{
+    SEXP N,
+@}
 
-\subsection{Sums}
+@d C integer N Input
+@{
+    R_xlen_t N,
+@}
 
-<<regression-test-Sums>>=
-### replace with library("libcoin")
-dyn.load("Sums.so")
-set.seed(29)
-N <- 20L
-P <- 3L
-x <- matrix(runif(N * P), nrow = N)
-weights <- sample(0:5, size = N, replace = TRUE)
-subset <- sort(sample(1:N, floor(N/2)))
-subsety <- sort(sample(1:N, floor(N/2)))
+@d R x Input
+@{
+    SEXP x,
+@}
 
-a0 <- sum(weights[subset])
+@d C integer x Input
+@{
+    int *x,
+    @<C integer N Input@>
+    int P,
+@}
 
-a1 <- .Call("R_Sums", x, weights, subset - 1L)
+@d C real x Input
+@{
+    double *x,
+    @<C integer N Input@>
+    int P,
+@}
 
-a2 <- .Call("R_Sums", x, as.double(weights), as.double(subset - 1L))
+@d R y Input
+@{
+    SEXP y,
+@}
 
-max(a0 - a1)
-max(a1 - a2)
-@@
+@d C integer y Input
+@{
+    int *y,
+    int Q,
+@}
 
+@d C real y Input
+@{
+    double *y,
+    int Q,
+@}
 
+@d R weights Input
+@{
+    SEXP weights,
+@}
+
+@d C integer weights Input
+@{
+    int *weights,
+    int HAS_WEIGHTS,
+@}
+
+@d C real weights Input
+@{
+    double *weights,
+    int HAS_WEIGHTS,
+@}
+
+@d R subset Input
+@{
+    SEXP subset
+@}
 
 @d C integer subset Input
 @{
@@ -329,112 +387,95 @@ max(a1 - a2)
 @}
 
 
-@d Sums Body
+@d init subset loop
 @{
-    R_xlen_t diff;
-    double ans = 0.0;
-
+    R_xlen_t diff = 0;
     s = subset;
     w = weights;
-    if (Nsubset > 0) {
+    if (Nsubset > 0)
         diff = (R_xlen_t) s[offset];
+@}
+
+@d start subset loop
+@{
+    for (R_xlen_t i = offset; i < (Nsubset == 0 ? N : Nsubset) - 1; i++) 
+@}
+
+@d continue subset loop
+@{
+    if (Nsubset > 0) {
+        diff = (R_xlen_t) s[1] - s[0];
+        s++;
     } else {
-        diff = 0;
+        diff = 1;
     }
-    for (R_xlen_t i = offset; i < (Nsubset == 0 ? N : Nsubset) - 1; i++) {
-        w = w + diff;
-        ans += w[0];
-        if (Nsubset > 0) {
-            diff = (R_xlen_t) s[1] - s[0];
-            s++;
-        } else {
-            diff = 1;
-        }
-    }
-    w = w + diff;
-    ans += w[0];
+@}
+
+<<Sums-setup>>=
+### replace with library("libcoin")
+dyn.load("Sums.so")
+set.seed(29)
+N <- 20L
+P <- 3L
+Q <- 4L
+x <- matrix(runif(N * P), nrow = N)
+y <- matrix(runif(N * Q), nrow = N)
+weights <- sample(0:5, size = N, replace = TRUE)
+subset <- sort(sample(1:N, floor(N * 1.5), replace = TRUE))
+subsety <- sample(1:N, floor(N * 1.5), replace = TRUE)
+@@
+
+
+\subsection{Sums}
+
+<<Sums>>=
+a0 <- sum(weights[subset])
+a1 <- .Call("R_Sums", N, weights, subset - 1L)
+a2 <- .Call("R_Sums", N, as.double(weights), as.double(subset - 1L))
+a3 <- .Call("R_Sums", N, weights, as.double(subset - 1L))
+a4 <- .Call("R_Sums", N, as.double(weights), subset - 1L)
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+@@
+
+@d R\_Sums
+@{
+SEXP R_Sums
+(
+    @<R N Input@>
+    @<R weights Input@>
+    @<R subset Input@>
+) 
+{
+    SEXP ans;
+    R_xlen_t Nsubset;
+
+    Nsubset = XLENGTH(subset);
+    
+    PROTECT(ans = allocVector(REALSXP, 1));
+    REAL(ans)[0] = RC_Sums(INTEGER(N)[0], weights, subset, 0, Nsubset);
+    UNPROTECT(1);
+
     return(ans);
-@}
-
-@d Sums Inputs
-@{
-    int N,
-@}
-
-@d C\_Sums\_dweights\_dsubset
-@{
-double C_Sums_dweights_dsubset
-(
-    @<Sums Inputs@>
-    double *weights,
-    @<C real subset Input@>
-) {
-
-    double *s, *w; 
-
-  @<Sums Body@>
 }
 @}
 
-@d C\_Sums\_iweights\_dsubset
+@d RC\_Sums Prototype
 @{
-double C_Sums_iweights_dsubset
+double RC_Sums
 (
-    @<Sums Inputs@>
-    int *weights,
-    @<C real subset Input@>
-) {
-
-    double *s;
-    int *w; 
-
-  @<Sums Body@>
-}
-@}
-
-@d C\_Sums\_iweights\_isubset
-@{
-double C_Sums_iweights_isubset
-(
-    @<Sums Inputs@>
-    int *weights,
-    @<C integer subset Input@>
-) {
-
-    int *s, *w;
-
-  @<Sums Body@>
-}
-@}
-
-@d C\_Sums\_dweights\_isubset
-@{
-double C_Sums_dweights_isubset
-(
-    @<Sums Inputs@>
-    double *weights,
-    @<C integer subset Input@>
-) {
-
-    int *s; 
-    double *w;
-
-  @<Sums Body@>
-}
+    @<C integer N Input@>
+    @<R weights Input@>
+    @<R subset Input@>,
+    R_xlen_t offset,
+    R_xlen_t Nsubset
+) 
 @}
 
 @d RC\_Sums
 @{
-
-double RC_Sums
-(
-    R_xlen_t N,
-    SEXP weights,
-    SEXP subset,
-    R_xlen_t offset,
-    R_xlen_t Nsubset
-) {
-    
+@<RC\_Sums Prototype@>
+{
     if (XLENGTH(weights) == 0) {
         if (XLENGTH(subset) == 0) {
             return((double) N);
@@ -444,236 +485,175 @@ double RC_Sums
     } 
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
-            return(C_Sums_iweights_isubset(N, INTEGER(weights), INTEGER(subset), offset, Nsubset));
+            return(C_Sums_iweights_isubset(N, INTEGER(weights), XLENGTH(weights),
+                                           INTEGER(subset), offset, Nsubset));
         } else {
-            return(C_Sums_iweights_dsubset(N, INTEGER(weights), REAL(subset), offset, Nsubset));
+            return(C_Sums_iweights_dsubset(N, INTEGER(weights), XLENGTH(weights), 
+                                           REAL(subset), offset, Nsubset));
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
-            return(C_Sums_dweights_isubset(N, REAL(weights), INTEGER(subset), offset, Nsubset));
+            return(C_Sums_dweights_isubset(N, REAL(weights), XLENGTH(weights),
+                                           INTEGER(subset), offset, Nsubset));
         } else {
-            return(C_Sums_dweights_dsubset(N, REAL(weights), REAL(subset), offset, Nsubset));
+            return(C_Sums_dweights_dsubset(N, REAL(weights), XLENGTH(weights),
+                                           REAL(subset), offset, Nsubset));
         }
     }
 }
-
+@|RC_Sums
 @}
 
-@d R\_Sums
-@{
-SEXP R_Sums
-(
-    SEXP x,
-    SEXP weights,
-    SEXP subset
-) {
 
+@d C\_Sums\_dweights\_dsubset
+@{
+double C_Sums_dweights_dsubset
+(
+    @<C integer N Input@>
+    @<C real weights Input@>
+    @<C real subset Input@>
+) 
+{
+    double *s, *w; 
+    @<Sums Body@>
+}
+@|C_Sums_dweights_dsubset
+@}
+
+@d C\_Sums\_iweights\_dsubset
+@{
+double C_Sums_iweights_dsubset
+(
+    @<C integer N Input@>
+    @<C integer weights Input@>
+    @<C real subset Input@>
+) 
+{
+    double *s;
+    int *w; 
+    @<Sums Body@>
+}
+@|C_Sums_iweights_dsubset
+@}
+
+@d C\_Sums\_iweights\_isubset
+@{
+double C_Sums_iweights_isubset
+(
+    @<C integer N Input@>
+    @<C integer weights Input@>
+    @<C integer subset Input@>
+) 
+{
+    int *s, *w;
+    @<Sums Body@>
+}
+@|C_Sums_iweights_isubset
+@}
+
+@d C\_Sums\_dweights\_isubset
+@{
+double C_Sums_dweights_isubset
+(
+    @<C integer N Input@>
+    @<C real weights Input@>
+    @<C integer subset Input@>
+) 
+{
+    int *s; 
+    double *w;
+    @<Sums Body@>
+}
+@|C_Sums_dweights_isubset
+@}
+
+
+@d Sums Body
+@{
+
+    double ans = 0.0;
+
+    if (Nsubset > 0) {
+        if (!HAS_WEIGHTS) return((double) Nsubset - offset);
+    } else {
+        if (!HAS_WEIGHTS) return((double) N);
+    }
+
+    @<init subset loop@>    
+
+    @<start subset loop@>    
+    {
+        w = w + diff;
+        ans += w[0];
+        @<continue subset loop@>    
+    }
+    w = w + diff;
+    ans += w[0];
+    return(ans);
+@}
+
+
+\subsection{Kronecker Sums}
+
+<<KronSums>>=
+r1 <- rep(1:ncol(x), ncol(y))
+r2 <- rep(1:ncol(y), each = ncol(x))
+
+a0 <- colSums(x[subset,r1] * y[subset,r2] * weights[subset])
+a1 <- .Call("R_KronSums", x, y, weights, subset - 1L)
+a2 <- .Call("R_KronSums", x, y, as.double(weights), as.double(subset - 1L))
+a3 <- .Call("R_KronSums", x, y, weights, as.double(subset - 1L))
+a4 <- .Call("R_KronSums", x, y, as.double(weights), subset - 1L)
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+@@
+
+@d R\_KronSums
+@{
+SEXP R_KronSums
+(
+    @<R x Input@>
+    @<R y Input@>
+    @<R weights Input@>
+    @<R subset Input@>
+) 
+{
     SEXP ans;
-    int P;
+    int P, Q;
     R_xlen_t N, Nsubset;
+    double *center;
 
     P = NCOL(x);
+    Q = NCOL(y);
     N = XLENGTH(x) / P;
     Nsubset = XLENGTH(subset);
     
-    PROTECT(ans = allocVector(REALSXP, 1));
-    REAL(ans)[0] = RC_Sums(N, weights, subset, 0, Nsubset);
+    PROTECT(ans = allocVector(REALSXP, P * Q));
+    RC_KronSums(REAL(x), N, P, REAL(y), Q, 0, center, center, 0, weights, subset, 0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
 @}
 
-\subsection{Kronecker Sums}
 
-<<regression-test-KronSum>>=
-### replace with library("libcoin")
-dyn.load("Sums.so")
-set.seed(29)
-N <- 20L
-P <- 3L
-Q <- 2L
-x <- matrix(runif(N * P), nrow = N)
-y <- matrix(runif(N * Q), nrow = N)
-weights <- sample(0:5, size = N, replace = TRUE)
-subset <- sort(sample(1:N, floor(N/2)))
-r1 <- rep(1:ncol(x), ncol(y))
-r2 <- rep(1:ncol(y), each = ncol(x))
-
-a0 <- colSums(x[subset,r1] * y[subset,r2] * weights[subset])
-
-a1 <- .Call("R_KronSums", x, y, weights, subset - 1L)
-
-a2 <- .Call("R_KronSums", x, y, as.double(weights), as.double(subset - 1L))
-
-max(a0 - a1)
-max(a1 - a2)
-@@
-
-
-@d KronSums Body
+@d RC\_KronSums Prototype
 @{
-    R_xlen_t diff;
-    double *xx, *yy, cx = 0.0, cy = 0.0;
-
-    for (int q = 0; q < Q; q++) {
-        for (int p = 0; p < (SYMMETRIC ? q + 1 : P); p++) {
-            PQ_ans[0] = 0.0;
-            yy = y + N * q;
-            xx = x + N * p;
-            if (CENTER) {
-                cx = centerx[p];
-                cy = centery[q];
-            }
-            s = subset;
-            w = weights;
-            if (Nsubset > 0) {
-                diff = (R_xlen_t) s[offset];
-            } else {
-                diff = 0;
-            }
-            for (R_xlen_t i = offset; i < (Nsubset == 0 ? N : Nsubset) - 1; i++) {
-                xx = xx + diff;
-                yy = yy + diff;
-                if (HAS_WEIGHTS) {
-                    w = w + diff;
-                    PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy) * w[0];
-                } else {
-                    PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy);
-                }
-                if (Nsubset > 0) {
-                    diff = (R_xlen_t) s[1] - s[0];
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            }
-            xx = xx + diff;
-            yy = yy + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy) * w[0];
-            } else {
-                PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy);
-            }
-            PQ_ans++;
-        }
-    }
-@}
-
-
-@d C x Input
-@{
-    double *x,
-    const R_xlen_t N,
-    const int P,
-@}
-
-@d C y Input
-@{
-    double *y,
-    const int Q,
-@}
-
-@d KronSums Inputs
-@{
-    @<C x Input@>
-    @<C y Input@>
-    const int SYMMETRIC,
-    double *centerx,
-    double *centery,
-    const int CENTER,
-@}
-
-@d KronSums Answer
-@{
-    double *PQ_ans
-@}
-
-
-
-@d C\_KronSums\_dweights\_dsubset
-@{
-void C_KronSums_dweights_dsubset
+void RC_KronSums
 (
-    @<KronSums Inputs@>
-    double *weights,
-    const int HAS_WEIGHTS,
-    @<C real subset Input@>,
-    @<KronSums Answer@>
-) {
-
-    double *s, *w; 
-
-  @<KronSums Body@>
-}
-@}
-
-@d C\_KronSums\_iweights\_dsubset
-@{
-void C_KronSums_iweights_dsubset
-(
-    @<KronSums Inputs@>
-    int *weights,
-    const int HAS_WEIGHTS,
-    @<C real subset Input@>,
-    @<KronSums Answer@>
-) {
-
-    double *s;
-    int *w; 
-
-  @<KronSums Body@>
-}
-@}
-
-@d C\_KronSums\_iweights\_isubset
-@{
-void C_KronSums_iweights_isubset
-(
-    @<KronSums Inputs@>
-    int *weights,
-    const int HAS_WEIGHTS,
-    @<C integer subset Input@>,
-    @<KronSums Answer@>
-) {
-
-    int *s, *w;
-
-  @<KronSums Body@>
-}
-@}
-
-@d C\_KronSums\_dweights\_isubset
-@{
-void C_KronSums_dweights_isubset
-(
-    @<KronSums Inputs@>
-    double *weights,
-    const int HAS_WEIGHTS,
-    @<C integer subset Input@>,
-    @<KronSums Answer@>
-) {
-
-    int *s; 
-    double *w;
-
-  @<KronSums Body@>
-}
+    @<C KronSums Input@>
+    @<R weights Input@>
+    @<R subset Input@>,
+    R_xlen_t offset,
+    R_xlen_t Nsubset,
+    @<C KronSums Answer@>
+) 
 @}
 
 @d RC\_KronSums
 @{
-
-void RC_KronSums
-(
-    @<KronSums Inputs@>
-    SEXP weights,
-    SEXP subset,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
-    @<KronSums Answer@>
-) {
-
+@<RC\_KronSums Prototype@>
+{
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
             C_KronSums_iweights_isubset(x, N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
@@ -696,17 +676,148 @@ void RC_KronSums
         }
     }
 }
-
+@|RC_KronSums
 @}
 
-@d R\_KronSums
+
+
+@d C KronSums Input
 @{
-SEXP R_KronSums
+    @<C real x Input@>
+    @<C real y Input@>
+    const int SYMMETRIC,
+    double *centerx,
+    double *centery,
+    const int CENTER,
+@}
+
+@d C KronSums Answer
+@{
+    double *PQ_ans
+@}
+
+@d C\_KronSums\_dweights\_dsubset
+@{
+void C_KronSums_dweights_dsubset
 (
-    SEXP x,
-    SEXP y,
-    SEXP weights,
-    SEXP subset
+    @<C KronSums Input@>
+    @<C real weights Input@>
+    @<C real subset Input@>,
+    @<C KronSums Answer@>
+)
+{
+    double *s, *w; 
+    @<KronSums Body@>
+}
+@|C_KronSums_dweights_dsubset
+@}
+
+@d C\_KronSums\_iweights\_dsubset
+@{
+void C_KronSums_iweights_dsubset
+(
+    @<C KronSums Input@>
+    @<C integer weights Input@>    
+    @<C real subset Input@>,
+    @<C KronSums Answer@>
+) 
+{
+    double *s;
+    int *w; 
+    @<KronSums Body@>
+}
+@|C_KronSums_iweights_dsubset
+@}
+
+@d C\_KronSums\_iweights\_isubset
+@{
+void C_KronSums_iweights_isubset
+(
+    @<C KronSums Input@>
+    @<C integer weights Input@>    
+    @<C integer subset Input@>,
+    @<C KronSums Answer@>
+) 
+{
+    int *s, *w;
+    @<KronSums Body@>
+}
+@|C_KronSums_iweights_isubset
+@}
+
+@d C\_KronSums\_dweights\_isubset
+@{
+void C_KronSums_dweights_isubset
+(
+    @<C KronSums Input@>
+    @<C real weights Input@>    
+    @<C integer subset Input@>,
+    @<C KronSums Answer@>
+) {
+    int *s; 
+    double *w;
+    @<KronSums Body@>
+}
+@|C_KronSums_dweights_isubset
+@}
+
+@d KronSums Body
+@{
+    double *xx, *yy, cx = 0.0, cy = 0.0;
+
+    for (int q = 0; q < Q; q++) {
+        for (int p = 0; p < (SYMMETRIC ? q + 1 : P); p++) {
+            PQ_ans[0] = 0.0;
+            yy = y + N * q;
+            xx = x + N * p;
+            if (CENTER) {
+                cx = centerx[p];
+                cy = centery[q];
+            }
+            @<init subset loop@>
+            @<start subset loop@>
+            {
+                xx = xx + diff;
+                yy = yy + diff;
+                if (HAS_WEIGHTS) {
+                    w = w + diff;
+                    PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy) * w[0];
+                } else {
+                    PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy);
+                }
+                @<continue subset loop@>
+            }
+            xx = xx + diff;
+            yy = yy + diff;
+            if (HAS_WEIGHTS) {
+                w = w + diff;
+                PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy) * w[0];
+            } else {
+                PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy);
+            }
+            PQ_ans++;
+        }
+    }
+@}
+
+\subsection{Permuted Kronecker Sums}
+
+<<KronSums-Permutation>>=
+a0 <- colSums(x[subset,r1] * y[subsety, r2])
+a1 <- .Call("R_KronSums_Permutation", x, y, subset - 1L, subsety -1L)
+a1 <- .Call("R_KronSums_Permutation", x, y, as.double(subset - 1L), as.double(subsety -1L))
+stopifnot(all.equal(a0, a1))
+@@
+
+
+@d R\_KronSums\_Permutation
+@{
+SEXP R_KronSums_Permutation
+(
+    @<R x Input@>
+    @<R y Input@>
+    @<R subset Input@>,
+    SEXP subsety
 ) {
 
     SEXP ans;
@@ -720,19 +831,77 @@ SEXP R_KronSums
     Nsubset = XLENGTH(subset);
     
     PROTECT(ans = allocVector(REALSXP, P * Q));
-    RC_KronSums(REAL(x), N, P, REAL(y), Q, 0, center, center, 0, weights, subset, 0, Nsubset, REAL(ans));
+    RC_KronSums_Permutation(REAL(x), N, P, REAL(y), Q, subset, 0, Nsubset, 
+                            subsety, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
 @}
 
-<<regression-test-KronSums-Permutation>>=
+@d RC\_KronSums\_Permutation Prototype
+@{
+void RC_KronSums_Permutation
+(
+    @<C real x Input@>
+    @<C real y Input@>
+    @<R subset Input@>,
+    R_xlen_t offset,
+    R_xlen_t Nsubset,
+    SEXP subsety,
+    @<C KronSums Answer@>
+) 
+@}
 
-<<regression-Permutation>>=
-a0 <- colSums(x[subset,r1] * y[subsety, r2])
-a1 <- .Call("R_KronSums_Permutation", x, y, subset - 1L, subsety -1L)
-max(a0 - a1)
-@@
+@d RC\_KronSums\_Permutation
+@{
+@<RC\_KronSums\_Permutation Prototype@>
+{
+    if (TYPEOF(subset) == INTSXP) {
+        C_KronSums_Permutation_isubset(x, N, P, y, Q, 
+                                       INTEGER(subset), offset, Nsubset, 
+                                       INTEGER(subsety), PQ_ans);
+        } else {
+        C_KronSums_Permutation_dsubset(x, N, P, y, Q, 
+                                       REAL(subset), offset, Nsubset, 
+                                       REAL(subsety), PQ_ans);
+    }
+}
+@|RC_KronSums_Permutation
+@}
+
+@d C\_KronSums\_Permutation\_dsubset
+@{
+void C_KronSums_Permutation_dsubset
+(
+    @<C real x Input@>
+    @<C real y Input@>
+    @<C real subset Input@>,
+    double *subsety,
+    @<C KronSums Answer@>
+) 
+{
+    double *sx, *sy;
+    @<KronSums Permutation Body@>
+}
+@|C_KronSums_Permutation_dsubset
+@}
+
+@d C\_KronSums\_Permutation\_isubset
+@{
+void C_KronSums_Permutation_isubset
+(
+    @<C real x Input@>
+    @<C real y Input@>
+    @<C integer subset Input@>,
+    int *subsety,
+    @<C KronSums Answer@>
+) 
+{
+    int *sx, *sy;
+    @<KronSums Permutation Body@>
+}
+@|C_KronSums_Permutation_isubset
+@}
 
 @d KronSums Permutation Body
 @{
@@ -754,253 +923,69 @@ max(a0 - a1)
                 sy++;
             }
             xx = xx + diff;
-            PQ_ans[0] += xx[0] * y[ (R_xlen_t) sy[0] + q *N];
+            PQ_ans[0] += xx[0] * y[ (R_xlen_t) sy[0] + q * N];
+            PQ_ans++;
         }
-        PQ_ans++;
     }
-@}
-
-
-@d C\_KronSums\_Permutation\_dsubset
-@{
-void C_KronSums_Permutation_dsubset
-(
-    @<C x Input@>
-    @<C y Input@>
-    @<C real subset Input@>,
-    double *subsety,
-    @<KronSums Answer@>
-) {
-
-    double *sx, *sy;
-
-  @<KronSums Permutation Body@>
-}
-@}
-
-@d C\_KronSums\_Permutation\_isubset
-@{
-void C_KronSums_Permutation_isubset
-(
-    @<C x Input@>
-    @<C y Input@>
-    @<C integer subset Input@>,
-    int *subsety,
-    @<KronSums Answer@>
-) {
-
-    int *sx, *sy;
-
-  @<KronSums Permutation Body@>
-}
-@}
-
-@d RC\_KronSums\_Permutation
-@{
-
-void RC_KronSums_Permutation
-(
-    @<C x Input@>
-    @<C y Input@>
-    SEXP subset,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
-    SEXP subsety,
-    @<KronSums Answer@>
-) {
-
-    if (TYPEOF(subset) == INTSXP) {
-        C_KronSums_Permutation_isubset(x, N, P, y, Q, 
-                                       INTEGER(subset), offset, Nsubset, INTEGER(subsety), PQ_ans);
-        } else {
-        C_KronSums_Permutation_dsubset(x, N, P, y, Q, 
-                                       REAL(subset), offset, Nsubset, REAL(subsety), PQ_ans);
-    }
-}
-
-@}
-
-@d R\_KronSums\_Permutation
-@{
-SEXP R_KronSums_Permutation
-(
-    SEXP x,
-    SEXP y,
-    SEXP subset,
-    SEXP subsety
-) {
-
-    SEXP ans;
-    int P, Q;
-    R_xlen_t N, Nsubset;
-    double *center;
-
-    P = NCOL(x);
-    Q = NCOL(y);
-    N = XLENGTH(x) / P;
-    Nsubset = XLENGTH(subset);
-    
-    PROTECT(ans = allocVector(REALSXP, P * Q));
-    RC_KronSums_Permutation(REAL(x), N, P, REAL(y), Q, subset, 0, Nsubset, subsety, REAL(ans));
-    UNPROTECT(1);
-    return(ans);
-}
 @}
 
 
 \subsection{Column Sums}
 
-<<regression-test-colSums>>=
-a0 <- colSums(x[subset,r1] * weights[subset])
+<<colSums>>=
+a0 <- colSums(x[subset,] * weights[subset])
 a1 <- .Call("R_colSums", x, weights, subset - 1L)
-
 a2 <- .Call("R_colSums", x, as.double(weights), as.double(subset - 1L))
+a3 <- .Call("R_colSums", x, weights, as.double(subset - 1L))
+a4 <- .Call("R_colSums", x, as.double(weights), subset - 1L)
 
-max(a0 - a1)
-max(a1 - a2)
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
 @@
 
-
-@d colSums Body
+@d R\_colSums
 @{
-    R_xlen_t diff;
-    double *xx, cx = 0.0;
-
-    for (int p = 0; p < P; p++) {
-        P_ans[0] = 0.0;
-        xx = x + N * p;
-        if (CENTER) {
-            cx = centerx[p];
-        }
-        s = subset;
-        w = weights;
-        if (Nsubset > 0) {
-            diff = (R_xlen_t) s[offset];
-        } else {
-            diff = 0;
-        }
-        for (R_xlen_t i = offset; i < (Nsubset == 0 ? N : Nsubset) - 1; i++) {
-            xx = xx + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                P_ans[0] += pow(xx[0] - cx, power) * w[0];
-            } else {
-                P_ans[0] += pow(xx[0] - cx, power);
-            }
-            if (Nsubset > 0) {
-                diff = (R_xlen_t) s[1] - s[0];
-                s++;
-            } else {
-                diff = 1;
-            }
-        }
-        xx = xx + diff;
-        if (HAS_WEIGHTS) {
-            w = w + diff;
-            P_ans[0] += pow(xx[0] - cx, power) * w[0];
-        } else {
-            P_ans[0] += pow(xx[0] - cx, power);
-        }
-        P_ans++;
-    }
-@}
-
-@d colSums Inputs
-@{
-    @<C x Input@>
-    const int power,
-    double *centerx,
-    const int CENTER,
-@}
-
-@d colSums Answer
-@{
-    double *P_ans
-@}
-
-@d C\_colSums\_dweights\_dsubset
-@{
-void C_colSums_dweights_dsubset
+SEXP R_colSums
 (
-    @<colSums Inputs@>
-    double *weights,
-    const int HAS_WEIGHTS,
-    @<C real subset Input@>,
-    @<colSums Answer@>
+    @<R x Input@>
+    @<R weights Input@>
+    @<R subset Input@>
 ) {
 
-    double *s, *w; 
+    SEXP ans;
+    int P;
+    R_xlen_t N, Nsubset;
+    double *center;
 
-  @<colSums Body@>
+    P = NCOL(x);
+    N = XLENGTH(x) / P;
+    Nsubset = XLENGTH(subset);
+    
+    PROTECT(ans = allocVector(REALSXP, P));
+    RC_colSums(REAL(x), N, P, 1, center, 0, weights, subset, 0, 
+               Nsubset, REAL(ans));
+    UNPROTECT(1);
+    return(ans);
 }
 @}
 
-@d C\_colSums\_iweights\_dsubset
+@d RC\_colSums Prototype
 @{
-void C_colSums_iweights_dsubset
+void RC_colSums
 (
-    @<colSums Inputs@>
-    int *weights,
-    const int HAS_WEIGHTS,
-    @<C real subset Input@>,
-    @<colSums Answer@>
-) {
-
-    double *s;
-    int *w; 
-
-  @<colSums Body@>
-}
-@}
-
-@d C\_colSums\_iweights\_isubset
-@{
-void C_colSums_iweights_isubset
-(
-    @<colSums Inputs@>
-    int *weights,
-    const int HAS_WEIGHTS,
-    @<C integer subset Input@>,
-    @<colSums Answer@>
-) {
-
-    int *s, *w;
-
-  @<colSums Body@>
-}
-@}
-
-@d C\_colSums\_dweights\_isubset
-@{
-void C_colSums_dweights_isubset
-(
-    @<colSums Inputs@>
-    double *weights,
-    const int HAS_WEIGHTS,
-    @<C integer subset Input@>,
-    @<colSums Answer@>
-) {
-
-    int *s; 
-    double *w;
-
-  @<colSums Body@>
-}
+    @<C colSums Input@>
+    @<R weights Input@>
+    @<R subset Input@>,
+    R_xlen_t offset,
+    R_xlen_t Nsubset,
+    @<C colSums Answer@>
+) 
 @}
 
 @d RC\_colSums
 @{
-
-void RC_colSums
-(
-    @<colSums Inputs@>
-    SEXP weights,
-    SEXP subset,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
-    @<colSums Answer@>
-) {
-
+@<RC\_colSums Prototype@>
+{
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
             C_colSums_iweights_isubset(x, N, P, power, centerx, CENTER,
@@ -1023,212 +1008,193 @@ void RC_colSums
         }
     }
 }
-
+@|RC_colSums
 @}
 
-@d R\_colSums
+@d C colSums Input
 @{
-SEXP R_colSums
+    @<C real x Input@>
+    const int power,
+    double *centerx,
+    const int CENTER,
+@}
+
+@d C colSums Answer
+@{
+    double *P_ans
+@}
+
+@d C\_colSums\_dweights\_dsubset
+@{
+void C_colSums_dweights_dsubset
 (
-    SEXP x,
-    SEXP weights,
-    SEXP subset
-) {
-
-    SEXP ans;
-    int P;
-    R_xlen_t N, Nsubset;
-    double *center;
-
-    P = NCOL(x);
-    N = XLENGTH(x) / P;
-    Nsubset = XLENGTH(subset);
-    
-    PROTECT(ans = allocVector(REALSXP, P));
-    RC_colSums(REAL(x), N, P, 1, center, 0, weights, subset, 0, Nsubset, REAL(ans));
-    UNPROTECT(1);
-    return(ans);
+    @<C colSums Input@>
+    @<C real weights Input@>    
+    @<C real subset Input@>,
+    @<C colSums Answer@>
+) 
+{
+    double *s, *w; 
+    @<colSums Body@>
 }
+@|C_colSums_dweights_dsubset
+@}
+
+@d C\_colSums\_iweights\_dsubset
+@{
+void C_colSums_iweights_dsubset
+(
+    @<C colSums Input@>
+    @<C integer weights Input@>    
+    @<C real subset Input@>,
+    @<C colSums Answer@>
+) 
+{
+    double *s;
+    int *w; 
+    @<colSums Body@>
+}
+@|C_colSums_iweights_dsubset
+@}
+
+@d C\_colSums\_iweights\_isubset
+@{
+void C_colSums_iweights_isubset
+(
+    @<C colSums Input@>
+    @<C integer weights Input@>    
+    @<C integer subset Input@>,
+    @<C colSums Answer@>
+) 
+{
+    int *s, *w;
+    @<colSums Body@>
+}
+@|C_colSums_iweights_isubset
+@}
+
+@d C\_colSums\_dweights\_isubset
+@{
+void C_colSums_dweights_isubset
+(
+    @<C colSums Input@>
+    @<C real weights Input@>    
+    @<C integer subset Input@>,
+    @<C colSums Answer@>
+) 
+{
+    int *s; 
+    double *w;
+    @<colSums Body@>
+}
+@|C_colSums_dweights_isubset
+@}
+
+@d colSums Body
+@{
+    double *xx, cx = 0.0;
+
+    for (int p = 0; p < P; p++) {
+        P_ans[0] = 0.0;
+        xx = x + N * p;
+        if (CENTER) {
+            cx = centerx[p];
+        }
+        @<init subset loop@>
+        @<start subset loop@>
+        {
+            xx = xx + diff;
+            if (HAS_WEIGHTS) {
+                w = w + diff;
+                P_ans[0] += pow(xx[0] - cx, power) * w[0];
+            } else {
+                P_ans[0] += pow(xx[0] - cx, power);
+            }
+            @<continue subset loop@>
+        }
+        xx = xx + diff;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            P_ans[0] += pow(xx[0] - cx, power) * w[0];
+        } else {
+            P_ans[0] += pow(xx[0] - cx, power);
+        }
+        P_ans++;
+    }
 @}
 
 \subsection{Table Sums}
 
 <<regression-test-TableSum>>=
-### replace with library("libcoin")
-dyn.load("Sums.so")
-set.seed(29)
-N <- 20L
-P <- 3L
-Q <- 2L
 x <- sample(1:P, size = N, replace = TRUE)
 y <- sample(1:Q, size = N, replace = TRUE)
-weights <- sample(0:5, size = N, replace = TRUE)
-subset <- sort(sample(1:N, floor(N/2)))
+d <- data.frame(x = x, y = y, weights = weights)
 
-a0 <- xtabs(weights ~ x + y, data = data.frame(x = x, y = y, weights =
-weights)[subset,])
+a0 <- c(xtabs(weights ~ x + y, data = d, subset = subset))
+a1 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, 
+            weights, subset - 1L)
+a1 <- c(matrix(a1, nrow = P + 1, ncol = Q + 1)[-1,-1])
+a2 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, 
+            as.double(weights), as.double(subset - 1L))
+a2 <- c(matrix(a2, nrow = P + 1, ncol = Q + 1)[-1,-1])
+a3 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, 
+            weights, as.double(subset - 1L))
+a3 <- c(matrix(a3, nrow = P + 1, ncol = Q + 1)[-1,-1])
+a4 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, 
+            as.double(weights), subset - 1L)
+a4 <- c(matrix(a4, nrow = P + 1, ncol = Q + 1)[-1,-1])
 
-a1 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, weights, subset - 1L)
-a1 <- matrix(a1, nrow = P + 1, ncol = Q + 1)[-1,-1]
-
-a2 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, as.double(weights), as.double(subset - 1L))
-a2 <- matrix(a2, nrow = P + 1, ncol = Q + 1)[-1,-1]
-
-max(a0 - a1)
-max(a1 - a2)
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
 @@
 
 
-@d TableSums Body
+
+@d R\_TableSums
 @{
-    R_xlen_t diff;
-    int *xx, *yy;
-
-    for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
-
-    yy = y;
-    xx = x;
-    s = subset;
-    w = weights;
-    if (Nsubset > 0) {
-        diff = (R_xlen_t) s[offset];
-    } else {
-        diff = 0;
-    }
-    for (R_xlen_t i = offset; i < (Nsubset == 0 ? N : Nsubset) - 1; i++) {
-        xx = xx + diff;
-        yy = yy + diff;
-        if (HAS_WEIGHTS) {
-            w = w + diff;
-            PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
-        } else {
-            PQ_ans[yy[0] * P + xx[0]]++;
-        }
-        if (Nsubset > 0) {
-            diff = (R_xlen_t) s[1] - s[0];
-            s++;
-        } else {
-            diff = 1;
-        }
-    }
-    xx = xx + diff;
-    yy = yy + diff;
-    if (HAS_WEIGHTS) {
-        w = w + diff;
-        PQ_ans[yy[0] * P + xx[0]] += w[0];
-    } else {
-        PQ_ans[yy[0] * P + xx[0]]++;
-    }
-@}
-
-
-@d C integer x Input
-@{
-    int *x,
-    const R_xlen_t N,
-    const int P,
-@}
-
-@d C integer y Input
-@{
-    int *y,
-    const int Q,
-@}
-
-@d TableSums Inputs
-@{
-    @<C integer x Input@>
-    @<C integer y Input@>
-@}
-
-@d TableSums Answer
-@{
-    double *PQ_ans
-@}
-
-@d C\_TableSums\_dweights\_dsubset
-@{
-void C_TableSums_dweights_dsubset
+SEXP R_TableSums
 (
-    @<TableSums Inputs@>
-    double *weights,
-    const int HAS_WEIGHTS,
-    @<C real subset Input@>,
-    @<TableSums Answer@>
+    @<R x Input@>
+    SEXP P,
+    @<R y Input@>
+    SEXP Q,
+    @<R weights Input@>
+    @<R subset Input@>
 ) {
 
-    double *s, *w; 
+    SEXP ans;
+    R_xlen_t N, Nsubset;
+    double *center;
 
-  @<TableSums Body@>
+    N = XLENGTH(x);
+    Nsubset = XLENGTH(subset);
+    
+    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * INTEGER(Q)[0]));
+    RC_TableSums(INTEGER(x), N, INTEGER(P)[0], INTEGER(y), INTEGER(Q)[0], 
+                 weights, subset, 0, Nsubset, REAL(ans));
+    UNPROTECT(1);
+    return(ans);
 }
 @}
 
-@d C\_TableSums\_iweights\_dsubset
+
+@d RC\_TableSums Prototype
 @{
-void C_TableSums_iweights_dsubset
+void RC_TableSums
 (
-    @<TableSums Inputs@>
-    int *weights,
-    const int HAS_WEIGHTS,
-    @<C real subset Input@>,
-    @<TableSums Answer@>
-) {
-
-    double *s;
-    int *w; 
-
-  @<TableSums Body@>
-}
-@}
-
-@d C\_TableSums\_iweights\_isubset
-@{
-void C_TableSums_iweights_isubset
-(
-    @<TableSums Inputs@>
-    int *weights,
-    const int HAS_WEIGHTS,
-    @<C integer subset Input@>,
-    @<TableSums Answer@>
-) {
-
-    int *s, *w;
-
-  @<TableSums Body@>
-}
-@}
-
-@d C\_TableSums\_dweights\_isubset
-@{
-void C_TableSums_dweights_isubset
-(
-    @<TableSums Inputs@>
-    double *weights,
-    const int HAS_WEIGHTS,
-    @<C integer subset Input@>,
-    @<TableSums Answer@>
-) {
-
-    int *s; 
-    double *w;
-
-  @<TableSums Body@>
-}
+    @<C TableSums Input@>
+    @<R weights Input@>
+    @<R subset Input@>,
+    R_xlen_t offset,
+    R_xlen_t Nsubset,
+    @<C TableSums Answer@>
+) 
 @}
 
 @d RC\_TableSums
 @{
-
-void RC_TableSums
-(
-    @<TableSums Inputs@>
-    SEXP weights,
-    SEXP subset,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
-    @<TableSums Answer@>
-) {
-
+@<RC\_TableSums Prototype@>
+{
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
             C_TableSums_iweights_isubset(x, N, P, y, Q, 
@@ -1251,36 +1217,116 @@ void RC_TableSums
         }
     }
 }
-
+@|RC_TableSums
 @}
 
-@d R\_TableSums
+@d C TableSums Input
 @{
-SEXP R_TableSums
-(
-    SEXP x,
-    SEXP P,
-    SEXP y,
-    SEXP Q,
-    SEXP weights,
-    SEXP subset
-) {
-
-    SEXP ans;
-    R_xlen_t N, Nsubset;
-    double *center;
-
-    N = XLENGTH(x);
-    Nsubset = XLENGTH(subset);
-    
-    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * INTEGER(Q)[0]));
-    RC_TableSums(INTEGER(x), N, INTEGER(P)[0], INTEGER(y), INTEGER(Q)[0], 
-                 weights, subset, 0, Nsubset, REAL(ans));
-    UNPROTECT(1);
-    return(ans);
-}
+    @<C integer x Input@>
+    @<C integer y Input@>
 @}
 
+@d C TableSums Answer
+@{
+    double *PQ_ans
+@}
+
+@d C\_TableSums\_dweights\_dsubset
+@{
+void C_TableSums_dweights_dsubset
+(
+    @<C TableSums Input@>
+    @<C real weights Input@>
+    @<C real subset Input@>,
+    @<C TableSums Answer@>
+)
+{
+    double *s, *w; 
+    @<TableSums Body@>
+}
+@|C_TableSums_dweights_dsubset
+@}
+
+@d C\_TableSums\_iweights\_dsubset
+@{
+void C_TableSums_iweights_dsubset
+(
+    @<C TableSums Input@>
+    @<C integer weights Input@>
+    @<C real subset Input@>,
+    @<C TableSums Answer@>
+)
+{
+    double *s;
+    int *w; 
+    @<TableSums Body@>
+}
+@|C_TableSums_iweights_dsubset
+@}
+
+@d C\_TableSums\_iweights\_isubset
+@{
+void C_TableSums_iweights_isubset
+(
+    @<C TableSums Input@>
+    @<C integer weights Input@>    
+    @<C integer subset Input@>,
+    @<C TableSums Answer@>
+)
+{
+    int *s, *w;
+    @<TableSums Body@>
+}
+@|C_TableSums_iweights_isubset
+@}
+
+@d C\_TableSums\_dweights\_isubset
+@{
+void C_TableSums_dweights_isubset
+(
+    @<C TableSums Input@>
+    @<C real weights Input@>
+    @<C integer subset Input@>,
+    @<C TableSums Answer@>
+)
+{
+    int *s; 
+    double *w;
+    @<TableSums Body@>
+}
+@|C_TableSums_dweights_isubset
+@}
+
+@d TableSums Body
+@{
+    int *xx, *yy;
+
+    for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
+
+    yy = y;
+    xx = x;
+    @<init subset loop@>
+    @<start subset loop@>
+    {
+        xx = xx + diff;
+        yy = yy + diff;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
+        } else {
+            PQ_ans[yy[0] * P + xx[0]]++;
+        }
+        @<continue subset loop@>
+    }
+    xx = xx + diff;
+    yy = yy + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        PQ_ans[yy[0] * P + xx[0]] += w[0];
+    } else {
+        PQ_ans[yy[0] * P + xx[0]]++;
+    }
+@}
 
 \section{R Code}
 
