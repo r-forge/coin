@@ -275,6 +275,10 @@ int NCOL
 @<C\_KronSums\_iweights\_dsubset@>
 @<C\_KronSums\_iweights\_isubset@>
 @<C\_KronSums\_dweights\_isubset@>
+@<C\_XfactorKronSums\_dweights\_dsubset@>
+@<C\_XfactorKronSums\_iweights\_dsubset@>
+@<C\_XfactorKronSums\_iweights\_isubset@>
+@<C\_XfactorKronSums\_dweights\_isubset@>
 @<RC\_KronSums@>
 @<R\_KronSums@>
 @<C\_colSums\_dweights\_dsubset@>
@@ -420,6 +424,8 @@ P <- 3L
 Q <- 4L
 x <- matrix(runif(N * P), nrow = N)
 y <- matrix(runif(N * Q), nrow = N)
+ix <- sample(1:P, size = N, replace = TRUE)
+iy <- sample(1:Q, size = N, replace = TRUE)
 weights <- sample(0:5, size = N, replace = TRUE)
 subset <- sort(sample(1:N, floor(N * 1.5), replace = TRUE))
 subsety <- sample(1:N, floor(N * 1.5), replace = TRUE)
@@ -600,10 +606,10 @@ r1 <- rep(1:ncol(x), ncol(y))
 r2 <- rep(1:ncol(y), each = ncol(x))
 
 a0 <- colSums(x[subset,r1] * y[subset,r2] * weights[subset])
-a1 <- .Call("R_KronSums", x, y, weights, subset - 1L)
-a2 <- .Call("R_KronSums", x, y, as.double(weights), as.double(subset - 1L))
-a3 <- .Call("R_KronSums", x, y, weights, as.double(subset - 1L))
-a4 <- .Call("R_KronSums", x, y, as.double(weights), subset - 1L)
+a1 <- .Call("R_KronSums", x, P, y, weights, subset - 1L)
+a2 <- .Call("R_KronSums", x, P, y, as.double(weights), as.double(subset - 1L))
+a3 <- .Call("R_KronSums", x, P, y, weights, as.double(subset - 1L))
+a4 <- .Call("R_KronSums", x, P, y, as.double(weights), subset - 1L)
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
@@ -614,34 +620,33 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 SEXP R_KronSums
 (
     @<R x Input@>
+    SEXP P,
     @<R y Input@>
     @<R weights Input@>
     @<R subset Input@>
 ) 
 {
     SEXP ans;
-    int P, Q;
+    int Q;
     R_xlen_t N, Nsubset;
     double *center;
 
-    P = NCOL(x);
     Q = NCOL(y);
-    N = XLENGTH(x) / P;
+    N = XLENGTH(y) / Q;
     Nsubset = XLENGTH(subset);
-    
-    PROTECT(ans = allocVector(REALSXP, P * Q));
-    RC_KronSums(REAL(x), N, P, REAL(y), Q, 0, center, center, 0, weights, subset, 0, Nsubset, REAL(ans));
+
+    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
+    RC_KronSums(x, N, INTEGER(P)[0], REAL(y), Q, 0, center, center, 0, weights, subset, 0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
 @}
 
-
 @d RC\_KronSums Prototype
 @{
 void RC_KronSums
 (
-    @<C KronSums Input@>
+    @<RC KronSums Input@>
     @<R weights Input@>
     @<R subset Input@>,
     R_xlen_t offset,
@@ -654,32 +659,68 @@ void RC_KronSums
 @{
 @<RC\_KronSums Prototype@>
 {
+    if (TYPEOF(x) == INTSXP) {
+        if (SYMMETRIC) error("not implemented");
+        if (CENTER) error("not implemented");
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
-            C_KronSums_iweights_isubset(x, N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+            C_XfactorKronSums_iweights_isubset(INTEGER(x), N, P, y, Q, 
                                         INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
                                         offset, Nsubset, PQ_ans);
         } else {
-            C_KronSums_iweights_dsubset(x, N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+            C_XfactorKronSums_iweights_dsubset(INTEGER(x), N, P, y, Q, 
                                         INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
                                         offset, Nsubset, PQ_ans);
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
-            C_KronSums_dweights_isubset(x, N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+            C_XfactorKronSums_dweights_isubset(INTEGER(x), N, P, y, Q, 
                                         REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
                                         offset, Nsubset, PQ_ans);
         } else {
-            C_KronSums_dweights_dsubset(x, N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+            C_XfactorKronSums_dweights_dsubset(INTEGER(x), N, P, y, Q, 
                                         REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
                                         offset, Nsubset, PQ_ans);
         }
+    }
+    } else {
+    if (TYPEOF(weights) == INTSXP) {
+        if (TYPEOF(subset) == INTSXP) {
+            C_KronSums_iweights_isubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+                                        offset, Nsubset, PQ_ans);
+        } else {
+            C_KronSums_iweights_dsubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        offset, Nsubset, PQ_ans);
+        }
+    } else {
+        if (TYPEOF(subset) == INTSXP) {
+            C_KronSums_dweights_isubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+                                        offset, Nsubset, PQ_ans);
+        } else {
+            C_KronSums_dweights_dsubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        offset, Nsubset, PQ_ans);
+        }
+    }
     }
 }
 @|RC_KronSums
 @}
 
-
+@d RC KronSums Input
+@{
+    @<R x Input@>
+    R_xlen_t N,
+    int P,
+    @<C real y Input@>
+    const int SYMMETRIC,
+    double *centerx,
+    double *centery,
+    const int CENTER,
+@}
 
 @d C KronSums Input
 @{
@@ -799,6 +840,133 @@ void C_KronSums_dweights_isubset
         }
     }
 @}
+
+\subsection{Xfactor Kronecker Sums}
+
+<<XfactorKronSums>>=
+
+a0 <- as.vector(colSums(model.matrix(~ as.factor(ix) - 1)[subset,r1] * 
+                        y[subset,r2] * weights[subset]))
+a1 <- .Call("R_KronSums", ix, P, y, weights, subset - 1L)
+a2 <- .Call("R_KronSums", ix, P, y, as.double(weights), as.double(subset - 1L))
+a3 <- .Call("R_KronSums", ix, P, y, weights, as.double(subset - 1L))
+a4 <- .Call("R_KronSums", ix, P, y, as.double(weights), subset - 1L)
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+@@
+
+@d C XfactorKronSums Input
+@{
+    @<C integer x Input@>
+    @<C real y Input@>
+@}
+
+@d C\_XfactorKronSums\_dweights\_dsubset
+@{
+void C_XfactorKronSums_dweights_dsubset
+(
+    @<C XfactorKronSums Input@>
+    @<C real weights Input@>
+    @<C real subset Input@>,
+    @<C KronSums Answer@>
+)
+{
+    double *s, *w; 
+    @<XfactorKronSums Body@>
+}
+@|C_XfactorKronSums_dweights_dsubset
+@}
+
+@d C\_XfactorKronSums\_iweights\_dsubset
+@{
+void C_XfactorKronSums_iweights_dsubset
+(
+    @<C XfactorKronSums Input@>
+    @<C integer weights Input@>    
+    @<C real subset Input@>,
+    @<C KronSums Answer@>
+) 
+{
+    double *s;
+    int *w; 
+    @<XfactorKronSums Body@>
+}
+@|C_XfactorKronSums_iweights_dsubset
+@}
+
+@d C\_XfactorKronSums\_iweights\_isubset
+@{
+void C_XfactorKronSums_iweights_isubset
+(
+    @<C XfactorKronSums Input@>
+    @<C integer weights Input@>    
+    @<C integer subset Input@>,
+    @<C KronSums Answer@>
+) 
+{
+    int *s, *w;
+    @<XfactorKronSums Body@>
+}
+@|C_XfactorKronSums_iweights_isubset
+@}
+
+@d C\_XfactorKronSums\_dweights\_isubset
+@{
+void C_XfactorKronSums_dweights_isubset
+(
+    @<C XfactorKronSums Input@>
+    @<C real weights Input@>    
+    @<C integer subset Input@>,
+    @<C KronSums Answer@>
+) {
+    int *s; 
+    double *w;
+    @<XfactorKronSums Body@>
+}
+@|C_XfactorKronSums_dweights_isubset
+@}
+
+@d XfactorKronSums Body
+@{
+    int *xx, ixi;
+    double *yy;
+ 
+    for (int p = 0; p < P * Q; p++) PQ_ans[p] = 0.0;
+
+    for (int q = 0; q < Q; q++) {
+        yy = y + N * q;
+        xx = x;
+        @<init subset loop@>
+        @<start subset loop@>
+        {
+            xx = xx + diff;
+            yy = yy + diff;
+            ixi = xx[0] - 1;
+            if (HAS_WEIGHTS) {
+                w = w + diff;
+                if (ixi >= 0)
+                    PQ_ans[ixi + q * P] += yy[0] * w[0];
+            } else {
+                if (ixi >= 0)
+                    PQ_ans[ixi + q * P] += yy[0];
+            }
+            @<continue subset loop@>
+        }
+        xx = xx + diff;
+        yy = yy + diff;
+        ixi = xx[0] - 1;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            if (ixi >= 0)
+                PQ_ans[ixi + q * P] += yy[0] * w[0];
+        } else {
+            if (ixi >= 0)
+                PQ_ans[ixi + q * P] += yy[0];
+        }
+    }
+@}
+
 
 \subsection{Permuted Kronecker Sums}
 
@@ -1126,21 +1294,18 @@ void C_colSums_dweights_isubset
 \subsection{Table Sums}
 
 <<regression-test-TableSum>>=
-x <- sample(1:P, size = N, replace = TRUE)
-y <- sample(1:Q, size = N, replace = TRUE)
-d <- data.frame(x = x, y = y, weights = weights)
 
-a0 <- c(xtabs(weights ~ x + y, data = d, subset = subset))
-a1 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, 
+a0 <- c(xtabs(weights ~ ix + iy, subset = subset))
+a1 <- .Call("R_TableSums", ix, P + 1L, iy, Q + 1L, 
             weights, subset - 1L)
 a1 <- c(matrix(a1, nrow = P + 1, ncol = Q + 1)[-1,-1])
-a2 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, 
+a2 <- .Call("R_TableSums", ix, P + 1L, iy, Q + 1L, 
             as.double(weights), as.double(subset - 1L))
 a2 <- c(matrix(a2, nrow = P + 1, ncol = Q + 1)[-1,-1])
-a3 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, 
+a3 <- .Call("R_TableSums", ix, P + 1L, iy, Q + 1L, 
             weights, as.double(subset - 1L))
 a3 <- c(matrix(a3, nrow = P + 1, ncol = Q + 1)[-1,-1])
-a4 <- .Call("R_TableSums", x, P + 1L, y, Q + 1L, 
+a4 <- .Call("R_TableSums", ix, P + 1L, iy, Q + 1L, 
             as.double(weights), subset - 1L)
 a4 <- c(matrix(a4, nrow = P + 1, ncol = Q + 1)[-1,-1])
 
