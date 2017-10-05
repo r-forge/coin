@@ -243,7 +243,9 @@ functions to be used outside \verb|Sums.c|
 @<RC\_KronSums Prototype@>;
 @<RC\_KronSums\_Permutation Prototype@>;
 @<RC\_colSums Prototype@>;
-@<RC\_TableSums Prototype@>;
+@<RC\_OneTableSums Prototype@>;
+@<RC\_TwoTableSums Prototype@>;
+@<RC\_ThreeTableSums Prototype@>;
 @}
 
 The \proglang{C} file \verb|Sums.c| defines the \proglang{C}
@@ -297,12 +299,24 @@ int NCOL
 @<C\_KronSums\_Permutation\_dsubset@>
 @<RC\_KronSums\_Permutation@>
 @<R\_KronSums\_Permutation@>
-@<C\_TableSums\_dweights\_dsubset@>
-@<C\_TableSums\_iweights\_dsubset@>
-@<C\_TableSums\_iweights\_isubset@>
-@<C\_TableSums\_dweights\_isubset@>
-@<RC\_TableSums@>
-@<R\_TableSums@>
+@<C\_OneTableSums\_dweights\_dsubset@>
+@<C\_OneTableSums\_iweights\_dsubset@>
+@<C\_OneTableSums\_iweights\_isubset@>
+@<C\_OneTableSums\_dweights\_isubset@>
+@<RC\_OneTableSums@>
+@<R\_OneTableSums@>
+@<C\_TwoTableSums\_dweights\_dsubset@>
+@<C\_TwoTableSums\_iweights\_dsubset@>
+@<C\_TwoTableSums\_iweights\_isubset@>
+@<C\_TwoTableSums\_dweights\_isubset@>
+@<RC\_TwoTableSums@>
+@<R\_TwoTableSums@>
+@<C\_ThreeTableSums\_dweights\_dsubset@>
+@<C\_ThreeTableSums\_iweights\_dsubset@>
+@<C\_ThreeTableSums\_iweights\_isubset@>
+@<C\_ThreeTableSums\_dweights\_isubset@>
+@<RC\_ThreeTableSums@>
+@<R\_ThreeTableSums@>
 @}
 
 The \proglang{R} interfaces are used to implement
@@ -390,6 +404,17 @@ regression tests to be called from within \proglang{R}
     const R_xlen_t Nsubset
 @}
 
+@d R block Input
+@{
+    SEXP block,
+@}
+
+@d C integer block Input
+@{
+    int *block,
+    int L,
+@}
+
 
 @d init subset loop
 @{
@@ -422,11 +447,13 @@ set.seed(29)
 N <- 20L
 P <- 3L
 Q <- 4L
+L <- 5L
 x <- matrix(runif(N * P), nrow = N)
 y <- matrix(runif(N * Q), nrow = N)
 ix <- sample(1:P, size = N, replace = TRUE)
 iy <- sample(1:Q, size = N, replace = TRUE)
 weights <- sample(0:5, size = N, replace = TRUE)
+block <- gl(L, ceiling(N / L))[1:N]
 subset <- sort(sample(1:N, floor(N * 1.5), replace = TRUE))
 subsety <- sample(1:N, floor(N * 1.5), replace = TRUE)
 @@
@@ -1291,21 +1318,212 @@ void C_colSums_dweights_isubset
     }
 @}
 
-\subsection{Table Sums}
+\subsection{OneTable Sums}
 
-<<regression-test-TableSum>>=
+<<OneTableSum>>=
+
+a0 <- as.vector(xtabs(weights ~ ix, subset = subset))
+a1 <- .Call("R_OneTableSums", ix, P + 1L, weights, subset - 1L)[-1]
+a2 <- .Call("R_OneTableSums", ix, P + 1L, 
+            as.double(weights), as.double(subset - 1L))[-1]
+a3 <- .Call("R_OneTableSums", ix, P + 1L, 
+            weights, as.double(subset - 1L))[-1]
+a4 <- .Call("R_OneTableSums", ix, P + 1L, 
+            as.double(weights), subset - 1L)[-1]
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+@@
+
+
+
+@d R\_OneTableSums
+@{
+SEXP R_OneTableSums
+(
+    @<R x Input@>
+    SEXP P,
+    @<R weights Input@>
+    @<R subset Input@>
+) {
+
+    SEXP ans;
+    R_xlen_t N, Nsubset;
+    double *center;
+
+    N = XLENGTH(x);
+    Nsubset = XLENGTH(subset);
+    
+    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0]));
+    RC_OneTableSums(INTEGER(x), N, INTEGER(P)[0],  
+                 weights, subset, 0, Nsubset, REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+@}
+
+
+@d RC\_OneTableSums Prototype
+@{
+void RC_OneTableSums
+(
+    @<C OneTableSums Input@>
+    @<R weights Input@>
+    @<R subset Input@>,
+    R_xlen_t offset,
+    R_xlen_t Nsubset,
+    @<C OneTableSums Answer@>
+) 
+@}
+
+@d RC\_OneTableSums
+@{
+@<RC\_OneTableSums Prototype@>
+{
+    if (TYPEOF(weights) == INTSXP) {
+        if (TYPEOF(subset) == INTSXP) {
+            C_OneTableSums_iweights_isubset(x, N, P, 
+                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+                                        offset, Nsubset, P_ans);
+        } else {
+            C_OneTableSums_iweights_dsubset(x, N, P, 
+                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        offset, Nsubset, P_ans);
+        }
+    } else {
+        if (TYPEOF(subset) == INTSXP) {
+            C_OneTableSums_dweights_isubset(x, N, P, 
+                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+                                        offset, Nsubset, P_ans);
+        } else {
+            C_OneTableSums_dweights_dsubset(x, N, P, 
+                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        offset, Nsubset, P_ans);
+        }
+    }
+}
+@|RC_OneTableSums
+@}
+
+@d C OneTableSums Input
+@{
+    @<C integer x Input@>
+@}
+
+@d C OneTableSums Answer
+@{
+    double *P_ans
+@}
+
+@d C\_OneTableSums\_dweights\_dsubset
+@{
+void C_OneTableSums_dweights_dsubset
+(
+    @<C OneTableSums Input@>
+    @<C real weights Input@>
+    @<C real subset Input@>,
+    @<C OneTableSums Answer@>
+)
+{
+    double *s, *w; 
+    @<OneTableSums Body@>
+}
+@|C_OneTableSums_dweights_dsubset
+@}
+
+@d C\_OneTableSums\_iweights\_dsubset
+@{
+void C_OneTableSums_iweights_dsubset
+(
+    @<C OneTableSums Input@>
+    @<C integer weights Input@>
+    @<C real subset Input@>,
+    @<C OneTableSums Answer@>
+)
+{
+    double *s;
+    int *w; 
+    @<OneTableSums Body@>
+}
+@|C_OneTableSums_iweights_dsubset
+@}
+
+@d C\_OneTableSums\_iweights\_isubset
+@{
+void C_OneTableSums_iweights_isubset
+(
+    @<C OneTableSums Input@>
+    @<C integer weights Input@>    
+    @<C integer subset Input@>,
+    @<C OneTableSums Answer@>
+)
+{
+    int *s, *w;
+    @<OneTableSums Body@>
+}
+@|C_OneTableSums_iweights_isubset
+@}
+
+@d C\_OneTableSums\_dweights\_isubset
+@{
+void C_OneTableSums_dweights_isubset
+(
+    @<C OneTableSums Input@>
+    @<C real weights Input@>
+    @<C integer subset Input@>,
+    @<C OneTableSums Answer@>
+)
+{
+    int *s; 
+    double *w;
+    @<OneTableSums Body@>
+}
+@|C_OneTableSums_dweights_isubset
+@}
+
+@d OneTableSums Body
+@{
+    int *xx;
+
+    for (int p = 0; p < P; p++) P_ans[p] = 0.0;
+
+    xx = x;
+    @<init subset loop@>
+    @<start subset loop@>
+    {
+        xx = xx + diff;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            P_ans[xx[0]] += (double) w[0];
+        } else {
+            P_ans[xx[0]]++;
+        }
+        @<continue subset loop@>
+    }
+    xx = xx + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        P_ans[xx[0]] += w[0];
+    } else {
+        P_ans[xx[0]]++;
+    }
+@}
+
+\subsection{TwoTable Sums}
+
+<<TwoTableSum>>=
 
 a0 <- c(xtabs(weights ~ ix + iy, subset = subset))
-a1 <- .Call("R_TableSums", ix, P + 1L, iy, Q + 1L, 
+a1 <- .Call("R_TwoTableSums", ix, P + 1L, iy, Q + 1L, 
             weights, subset - 1L)
 a1 <- c(matrix(a1, nrow = P + 1, ncol = Q + 1)[-1,-1])
-a2 <- .Call("R_TableSums", ix, P + 1L, iy, Q + 1L, 
+a2 <- .Call("R_TwoTableSums", ix, P + 1L, iy, Q + 1L, 
             as.double(weights), as.double(subset - 1L))
 a2 <- c(matrix(a2, nrow = P + 1, ncol = Q + 1)[-1,-1])
-a3 <- .Call("R_TableSums", ix, P + 1L, iy, Q + 1L, 
+a3 <- .Call("R_TwoTableSums", ix, P + 1L, iy, Q + 1L, 
             weights, as.double(subset - 1L))
 a3 <- c(matrix(a3, nrow = P + 1, ncol = Q + 1)[-1,-1])
-a4 <- .Call("R_TableSums", ix, P + 1L, iy, Q + 1L, 
+a4 <- .Call("R_TwoTableSums", ix, P + 1L, iy, Q + 1L, 
             as.double(weights), subset - 1L)
 a4 <- c(matrix(a4, nrow = P + 1, ncol = Q + 1)[-1,-1])
 
@@ -1315,9 +1533,9 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 
-@d R\_TableSums
+@d R\_TwoTableSums
 @{
-SEXP R_TableSums
+SEXP R_TwoTableSums
 (
     @<R x Input@>
     SEXP P,
@@ -1335,7 +1553,7 @@ SEXP R_TableSums
     Nsubset = XLENGTH(subset);
     
     PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * INTEGER(Q)[0]));
-    RC_TableSums(INTEGER(x), N, INTEGER(P)[0], INTEGER(y), INTEGER(Q)[0], 
+    RC_TwoTableSums(INTEGER(x), N, INTEGER(P)[0], INTEGER(y), INTEGER(Q)[0], 
                  weights, subset, 0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
@@ -1343,126 +1561,126 @@ SEXP R_TableSums
 @}
 
 
-@d RC\_TableSums Prototype
+@d RC\_TwoTableSums Prototype
 @{
-void RC_TableSums
+void RC_TwoTableSums
 (
-    @<C TableSums Input@>
+    @<C TwoTableSums Input@>
     @<R weights Input@>
     @<R subset Input@>,
     R_xlen_t offset,
     R_xlen_t Nsubset,
-    @<C TableSums Answer@>
+    @<C TwoTableSums Answer@>
 ) 
 @}
 
-@d RC\_TableSums
+@d RC\_TwoTableSums
 @{
-@<RC\_TableSums Prototype@>
+@<RC\_TwoTableSums Prototype@>
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
-            C_TableSums_iweights_isubset(x, N, P, y, Q, 
+            C_TwoTableSums_iweights_isubset(x, N, P, y, Q, 
                                         INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
                                         offset, Nsubset, PQ_ans);
         } else {
-            C_TableSums_iweights_dsubset(x, N, P, y, Q, 
+            C_TwoTableSums_iweights_dsubset(x, N, P, y, Q, 
                                         INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
                                         offset, Nsubset, PQ_ans);
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
-            C_TableSums_dweights_isubset(x, N, P, y, Q, 
+            C_TwoTableSums_dweights_isubset(x, N, P, y, Q, 
                                         REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
                                         offset, Nsubset, PQ_ans);
         } else {
-            C_TableSums_dweights_dsubset(x, N, P, y, Q, 
+            C_TwoTableSums_dweights_dsubset(x, N, P, y, Q, 
                                         REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
                                         offset, Nsubset, PQ_ans);
         }
     }
 }
-@|RC_TableSums
+@|RC_TwoTableSums
 @}
 
-@d C TableSums Input
+@d C TwoTableSums Input
 @{
     @<C integer x Input@>
     @<C integer y Input@>
 @}
 
-@d C TableSums Answer
+@d C TwoTableSums Answer
 @{
     double *PQ_ans
 @}
 
-@d C\_TableSums\_dweights\_dsubset
+@d C\_TwoTableSums\_dweights\_dsubset
 @{
-void C_TableSums_dweights_dsubset
+void C_TwoTableSums_dweights_dsubset
 (
-    @<C TableSums Input@>
+    @<C TwoTableSums Input@>
     @<C real weights Input@>
     @<C real subset Input@>,
-    @<C TableSums Answer@>
+    @<C TwoTableSums Answer@>
 )
 {
     double *s, *w; 
-    @<TableSums Body@>
+    @<TwoTableSums Body@>
 }
-@|C_TableSums_dweights_dsubset
+@|C_TwoTableSums_dweights_dsubset
 @}
 
-@d C\_TableSums\_iweights\_dsubset
+@d C\_TwoTableSums\_iweights\_dsubset
 @{
-void C_TableSums_iweights_dsubset
+void C_TwoTableSums_iweights_dsubset
 (
-    @<C TableSums Input@>
+    @<C TwoTableSums Input@>
     @<C integer weights Input@>
     @<C real subset Input@>,
-    @<C TableSums Answer@>
+    @<C TwoTableSums Answer@>
 )
 {
     double *s;
     int *w; 
-    @<TableSums Body@>
+    @<TwoTableSums Body@>
 }
-@|C_TableSums_iweights_dsubset
+@|C_TwoTableSums_iweights_dsubset
 @}
 
-@d C\_TableSums\_iweights\_isubset
+@d C\_TwoTableSums\_iweights\_isubset
 @{
-void C_TableSums_iweights_isubset
+void C_TwoTableSums_iweights_isubset
 (
-    @<C TableSums Input@>
+    @<C TwoTableSums Input@>
     @<C integer weights Input@>    
     @<C integer subset Input@>,
-    @<C TableSums Answer@>
+    @<C TwoTableSums Answer@>
 )
 {
     int *s, *w;
-    @<TableSums Body@>
+    @<TwoTableSums Body@>
 }
-@|C_TableSums_iweights_isubset
+@|C_TwoTableSums_iweights_isubset
 @}
 
-@d C\_TableSums\_dweights\_isubset
+@d C\_TwoTableSums\_dweights\_isubset
 @{
-void C_TableSums_dweights_isubset
+void C_TwoTableSums_dweights_isubset
 (
-    @<C TableSums Input@>
+    @<C TwoTableSums Input@>
     @<C real weights Input@>
     @<C integer subset Input@>,
-    @<C TableSums Answer@>
+    @<C TwoTableSums Answer@>
 )
 {
     int *s; 
     double *w;
-    @<TableSums Body@>
+    @<TwoTableSums Body@>
 }
-@|C_TableSums_dweights_isubset
+@|C_TwoTableSums_dweights_isubset
 @}
 
-@d TableSums Body
+@d TwoTableSums Body
 @{
     int *xx, *yy;
 
@@ -1492,6 +1710,220 @@ void C_TableSums_dweights_isubset
         PQ_ans[yy[0] * P + xx[0]]++;
     }
 @}
+
+\subsection{ThreeTable Sums}
+
+<<ThreeTableSum>>=
+
+a0 <- c(xtabs(weights ~ ix + iy + block, subset = subset))
+a1 <- .Call("R_ThreeTableSums", ix, P + 1L, iy, Q + 1L, 
+            block, L, weights, subset - 1L)
+a1 <- c(array(a1, dim = c(P + 1, Q + 1, L))[-1,-1,])
+a2 <- .Call("R_ThreeTableSums", ix, P + 1L, iy, Q + 1L, 
+            block, L,
+            as.double(weights), as.double(subset - 1L))
+a2 <- c(array(a2, dim = c(P + 1, Q + 1, L))[-1,-1,])
+a3 <- .Call("R_ThreeTableSums", ix, P + 1L, iy, Q + 1L, 
+            block, L,
+            weights, as.double(subset - 1L))
+a3 <- c(array(a3, dim = c(P + 1, Q + 1, L))[-1,-1,])
+a4 <- .Call("R_ThreeTableSums", ix, P + 1L, iy, Q + 1L, 
+            block, L,
+            as.double(weights), subset - 1L)
+a4 <- c(array(a4, dim = c(P + 1, Q + 1, L))[-1,-1,])
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+@@
+
+
+
+@d R\_ThreeTableSums
+@{
+SEXP R_ThreeTableSums
+(
+    @<R x Input@>
+    SEXP P,
+    @<R y Input@>
+    SEXP Q,
+    @<R block Input@>
+    SEXP L,
+    @<R weights Input@>
+    @<R subset Input@>
+) {
+
+    SEXP ans;
+    R_xlen_t N, Nsubset;
+    double *center;
+
+    N = XLENGTH(x);
+    Nsubset = XLENGTH(subset);
+    
+    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * INTEGER(Q)[0] * INTEGER(L)[0]));
+    RC_ThreeTableSums(INTEGER(x), N, INTEGER(P)[0], INTEGER(y), INTEGER(Q)[0], 
+                      INTEGER(block), INTEGER(L)[0],
+                      weights, subset, 0, Nsubset, REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+@}
+
+
+@d RC\_ThreeTableSums Prototype
+@{
+void RC_ThreeTableSums
+(
+    @<C ThreeTableSums Input@>
+    @<R weights Input@>
+    @<R subset Input@>,
+    R_xlen_t offset,
+    R_xlen_t Nsubset,
+    @<C ThreeTableSums Answer@>
+) 
+@}
+
+@d RC\_ThreeTableSums
+@{
+@<RC\_ThreeTableSums Prototype@>
+{
+    if (TYPEOF(weights) == INTSXP) {
+        if (TYPEOF(subset) == INTSXP) {
+            C_ThreeTableSums_iweights_isubset(x, N, P, y, Q, block, L, 
+                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+                                        offset, Nsubset, PQL_ans);
+        } else {
+            C_ThreeTableSums_iweights_dsubset(x, N, P, y, Q, block, L,
+                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        offset, Nsubset, PQL_ans);
+        }
+    } else {
+        if (TYPEOF(subset) == INTSXP) {
+            C_ThreeTableSums_dweights_isubset(x, N, P, y, Q, block, L,
+                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+                                        offset, Nsubset, PQL_ans);
+        } else {
+            C_ThreeTableSums_dweights_dsubset(x, N, P, y, Q, block, L,
+                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        offset, Nsubset, PQL_ans);
+        }
+    }
+}
+@|RC_ThreeTableSums
+@}
+
+@d C ThreeTableSums Input
+@{
+    @<C integer x Input@>
+    @<C integer y Input@>
+    @<C integer block Input@>
+@}
+
+@d C ThreeTableSums Answer
+@{
+    double *PQL_ans
+@}
+
+@d C\_ThreeTableSums\_dweights\_dsubset
+@{
+void C_ThreeTableSums_dweights_dsubset
+(
+    @<C ThreeTableSums Input@>
+    @<C real weights Input@>
+    @<C real subset Input@>,
+    @<C ThreeTableSums Answer@>
+)
+{
+    double *s, *w; 
+    @<ThreeTableSums Body@>
+}
+@|C_ThreeTableSums_dweights_dsubset
+@}
+
+@d C\_ThreeTableSums\_iweights\_dsubset
+@{
+void C_ThreeTableSums_iweights_dsubset
+(
+    @<C ThreeTableSums Input@>
+    @<C integer weights Input@>
+    @<C real subset Input@>,
+    @<C ThreeTableSums Answer@>
+)
+{
+    double *s;
+    int *w; 
+    @<ThreeTableSums Body@>
+}
+@|C_ThreeTableSums_iweights_dsubset
+@}
+
+@d C\_ThreeTableSums\_iweights\_isubset
+@{
+void C_ThreeTableSums_iweights_isubset
+(
+    @<C ThreeTableSums Input@>
+    @<C integer weights Input@>    
+    @<C integer subset Input@>,
+    @<C ThreeTableSums Answer@>
+)
+{
+    int *s, *w;
+    @<ThreeTableSums Body@>
+}
+@|C_ThreeTableSums_iweights_isubset
+@}
+
+@d C\_ThreeTableSums\_dweights\_isubset
+@{
+void C_ThreeTableSums_dweights_isubset
+(
+    @<C ThreeTableSums Input@>
+    @<C real weights Input@>
+    @<C integer subset Input@>,
+    @<C ThreeTableSums Answer@>
+)
+{
+    int *s; 
+    double *w;
+    @<ThreeTableSums Body@>
+}
+@|C_ThreeTableSums_dweights_isubset
+@}
+
+@d ThreeTableSums Body
+@{
+    int *xx, *yy, *bb, PQ = P * Q;
+
+    for (int p = 0; p < PQ * L; p++) PQL_ans[p] = 0.0;
+
+    yy = y;
+    xx = x;
+    bb = block;
+    @<init subset loop@>
+    @<start subset loop@>
+    {
+        xx = xx + diff;
+        yy = yy + diff;
+        bb = bb + diff;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];
+        } else {
+            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
+        }
+        @<continue subset loop@>
+    }
+    xx = xx + diff;
+    yy = yy + diff;
+    bb = bb + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];
+    } else {
+        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
+    }
+@}
+
+
 
 \section{R Code}
 
