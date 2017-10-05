@@ -297,6 +297,8 @@ int NCOL
 @<R\_Sums@>
 @<C\_KronSums\_Permutation\_isubset@>
 @<C\_KronSums\_Permutation\_dsubset@>
+@<C\_XfactorKronSums\_Permutation\_isubset@>
+@<C\_XfactorKronSums\_Permutation\_dsubset@>
 @<RC\_KronSums\_Permutation@>
 @<R\_KronSums\_Permutation@>
 @<C\_OneTableSums\_dweights\_dsubset@>
@@ -999,9 +1001,9 @@ void C_XfactorKronSums_dweights_isubset
 
 <<KronSums-Permutation>>=
 a0 <- colSums(x[subset,r1] * y[subsety, r2])
-a1 <- .Call("R_KronSums_Permutation", x, y, subset - 1L, subsety -1L)
-a1 <- .Call("R_KronSums_Permutation", x, y, as.double(subset - 1L), as.double(subsety -1L))
-stopifnot(all.equal(a0, a1))
+a1 <- .Call("R_KronSums_Permutation", x, P, y, subset - 1L, subsety -1L)
+a2 <- .Call("R_KronSums_Permutation", x, P, y, as.double(subset - 1L), as.double(subsety -1L))
+stopifnot(all.equal(a0, a1) && all.equal(a0, a1))
 @@
 
 
@@ -1010,23 +1012,23 @@ stopifnot(all.equal(a0, a1))
 SEXP R_KronSums_Permutation
 (
     @<R x Input@>
+    SEXP P,
     @<R y Input@>
     @<R subset Input@>,
     SEXP subsety
 ) {
 
     SEXP ans;
-    int P, Q;
+    int Q;
     R_xlen_t N, Nsubset;
     double *center;
 
-    P = NCOL(x);
     Q = NCOL(y);
-    N = XLENGTH(x) / P;
+    N = XLENGTH(y) / Q;
     Nsubset = XLENGTH(subset);
     
-    PROTECT(ans = allocVector(REALSXP, P * Q));
-    RC_KronSums_Permutation(REAL(x), N, P, REAL(y), Q, subset, 0, Nsubset, 
+    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
+    RC_KronSums_Permutation(x, N, INTEGER(P)[0], REAL(y), Q, subset, 0, Nsubset, 
                             subsety, REAL(ans));
     UNPROTECT(1);
     return(ans);
@@ -1037,7 +1039,9 @@ SEXP R_KronSums_Permutation
 @{
 void RC_KronSums_Permutation
 (
-    @<C real x Input@>
+    @<R x Input@>
+    R_xlen_t N,
+    int P,
     @<C real y Input@>
     @<R subset Input@>,
     R_xlen_t offset,
@@ -1051,14 +1055,26 @@ void RC_KronSums_Permutation
 @{
 @<RC\_KronSums\_Permutation Prototype@>
 {
+    if (TYPEOF(x) == INTSXP) {
     if (TYPEOF(subset) == INTSXP) {
-        C_KronSums_Permutation_isubset(x, N, P, y, Q, 
+        C_XfactorKronSums_Permutation_isubset(INTEGER(x), N, P, y, Q, 
                                        INTEGER(subset), offset, Nsubset, 
                                        INTEGER(subsety), PQ_ans);
         } else {
-        C_KronSums_Permutation_dsubset(x, N, P, y, Q, 
+        C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q, 
                                        REAL(subset), offset, Nsubset, 
                                        REAL(subsety), PQ_ans);
+    }
+    } else {
+    if (TYPEOF(subset) == INTSXP) {
+        C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q, 
+                                       INTEGER(subset), offset, Nsubset, 
+                                       INTEGER(subsety), PQ_ans);
+        } else {
+        C_KronSums_Permutation_dsubset(REAL(x), N, P, y, Q, 
+                                       REAL(subset), offset, Nsubset, 
+                                       REAL(subsety), PQ_ans);
+    }
     }
 }
 @|RC_KronSums_Permutation
@@ -1123,6 +1139,76 @@ void C_KronSums_Permutation_isubset
         }
     }
 @}
+
+\subsection{Xfactor Permuted Kronecker Sums}
+
+<<XfactorKronSums-Permutation>>=
+a0 <- as.vector(colSums(model.matrix(~ as.factor(ix) - 1)[subset,r1] * y[subsety,
+r2]))
+a1 <- .Call("R_KronSums_Permutation", ix, P, y, subset - 1L, subsety -1L)
+a1 <- .Call("R_KronSums_Permutation", ix, P, y, as.double(subset - 1L), as.double(subsety -1L))
+stopifnot(all.equal(a0, a1))
+@@
+
+
+@d C\_XfactorKronSums\_Permutation\_dsubset
+@{
+void C_XfactorKronSums_Permutation_dsubset
+(
+    @<C integer x Input@>
+    @<C real y Input@>
+    @<C real subset Input@>,
+    double *subsety,
+    @<C KronSums Answer@>
+) 
+{
+    double *sx, *sy;
+    @<XfactorKronSums Permutation Body@>
+}
+@|C_XfactorKronSums_Permutation_dsubset
+@}
+
+@d C\_XfactorKronSums\_Permutation\_isubset
+@{
+void C_XfactorKronSums_Permutation_isubset
+(
+    @<C integer x Input@>
+    @<C real y Input@>
+    @<C integer subset Input@>,
+    int *subsety,
+    @<C KronSums Answer@>
+) 
+{
+    int *sx, *sy;
+    @<XfactorKronSums Permutation Body@>
+}
+@|C_XfactorKronSums_Permutation_isubset
+@}
+
+@d XfactorKronSums Permutation Body
+@{
+    R_xlen_t diff;
+    int *xx;
+
+    for (int p = 0; p < P * Q; p++) PQ_ans[p] = 0.0;
+
+    for (int q = 0; q < Q; q++) {
+        xx = x;
+        sx = subset;
+        sy = subsety;
+        diff = (R_xlen_t) sx[offset];
+        for (R_xlen_t i = offset; i < Nsubset - 1; i++) {
+            xx = xx + diff;
+            PQ_ans[(xx[0] - 1) + q * P] += y[ (R_xlen_t) sy[0] + q * N];
+            diff = (R_xlen_t) sx[1] - sx[0];
+            sx++;
+            sy++;
+        }
+        xx = xx + diff;
+        PQ_ans[(xx[0] - 1) + q * P] += y[ (R_xlen_t) sy[0] + q * N];
+    }
+@}
+
 
 
 \subsection{Column Sums}
