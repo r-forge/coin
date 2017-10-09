@@ -1,7 +1,70 @@
 
 #include "libcoin_internal.h"
-#include "Tables.h"
-#include "Sums.h"
+
+R_xlen_t C_get_indx
+(
+    R_xlen_t N,
+    SEXP subset,
+    R_xlen_t i
+) {
+
+    R_xlen_t ans;
+
+    if (XLENGTH(subset) == 0)
+        return(i);
+        
+    switch(TYPEOF(subset)) {
+        case REALSXP:
+            if(!R_FINITE(REAL(subset)[i])) return(-1);
+            else ans = (R_xlen_t) (REAL(subset)[i] - 1);
+            break;
+        default:
+            ans = INTEGER(subset)[i];
+            if (ans != NA_INTEGER) {
+                ans--;
+            } else {
+                return(-1); }
+    }
+    
+    if (ans < 0 || ans >= N)
+        error("Incorrect subset");
+        
+    return(ans);
+}
+
+double C_get_weight
+(
+    SEXP weights,
+    R_xlen_t i
+) {
+
+    int ians = 1;
+    double ans = 1.0;
+
+    if (XLENGTH(weights) == 0)
+        return(ans);
+        
+    switch(TYPEOF(weights)) {
+        case REALSXP:
+            if(!R_FINITE(REAL(weights)[i])) 
+                error("Infinite or missing weight");
+            else ans = REAL(weights)[i];
+            break;
+        default:
+            ians = INTEGER(weights)[i];
+            if (ians != NA_INTEGER) {
+                ans = (double) ians;
+            } else {
+                error("Infinite or missing weight");
+            }
+    }
+    
+    if (ans < 0)
+        error("Negative weight");
+        
+    return(ans);
+}
+    
 
 int NROW
 (

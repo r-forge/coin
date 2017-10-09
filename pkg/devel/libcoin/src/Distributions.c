@@ -1,7 +1,5 @@
 
 #include "libcoin_internal.h"
-#include "Tables.h"
-#include "Sums.h"
 #include "Utils.h"
 #include <mvtnormAPI.h>
 

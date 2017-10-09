@@ -1,4 +1,17 @@
 
+extern R_xlen_t C_get_indx
+(
+    R_xlen_t N,
+    SEXP subset,
+    R_xlen_t i
+);
+
+double C_get_weight
+(
+    SEXP weights,
+    R_xlen_t i
+);
+
 extern int NLEVELS
 (
     SEXP x
