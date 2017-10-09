@@ -246,6 +246,9 @@ functions to be used outside \verb|Sums.c|
 @<RC\_OneTableSums Prototype@>;
 @<RC\_TwoTableSums Prototype@>;
 @<RC\_ThreeTableSums Prototype@>;
+@<RC\_LinearStatistic Prototype@>;
+@<RC\_ExpectationInfluence Prototype@>;
+@<RC\_CovarianceInfluence Prototype@>;
 @}
 
 The \proglang{C} file \verb|Sums.c| defines the \proglang{C}
@@ -319,6 +322,12 @@ int NCOL
 @<C\_ThreeTableSums\_dweights\_isubset@>
 @<RC\_ThreeTableSums@>
 @<R\_ThreeTableSums@>
+@<R\_LinearStatistic@>
+@<RC\_LinearStatistic@>
+@<R\_ExpectationInfluence@>
+@<RC\_ExpectationInfluence@>
+@<R\_CovarianceInfluence@>
+@<RC\_CovarianceInfluence@>
 @}
 
 The \proglang{R} interfaces are used to implement
@@ -458,8 +467,282 @@ weights <- sample(0:5, size = N, replace = TRUE)
 block <- gl(L, ceiling(N / L))[1:N]
 subset <- sort(sample(1:N, floor(N * 1.5), replace = TRUE))
 subsety <- sample(1:N, floor(N * 1.5), replace = TRUE)
+r1 <- rep(1:ncol(x), ncol(y))
+r2 <- rep(1:ncol(y), each = ncol(x))
 @@
 
+\subsection{Linear Statistics}
+
+<<LinearStatistics>>=
+a0 <- colSums(x[subset,r1] * y[subset,r2] * weights[subset])
+a1 <- .Call("R_LinearStatistic", x, P, y, weights, subset - 1L, integer(0))
+a2 <- .Call("R_LinearStatistic", x, P, y, as.double(weights), as.double(subset - 1L), integer(0))
+a3 <- .Call("R_LinearStatistic", x, P, y, weights, as.double(subset - 1L), integer(0))
+a4 <- .Call("R_LinearStatistic", x, P, y, as.double(weights), subset - 1L, integer(0))
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+
+
+a0 <- as.vector(colSums(model.matrix(~ as.factor(ix) - 1)[subset,r1] * 
+                        y[subset,r2] * weights[subset]))
+a1 <- .Call("R_LinearStatistic", ix, P, y, weights, subset - 1L, integer(0))
+a2 <- .Call("R_LinearStatistic", ix, P, y, as.double(weights), as.double(subset - 1L), integer(0))
+a3 <- .Call("R_LinearStatistic", ix, P, y, weights, as.double(subset - 1L), integer(0))
+a4 <- .Call("R_LinearStatistic", ix, P, y, as.double(weights), subset - 1L, integer(0))
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+
+a0 <- colSums(x[subset,r1] * y[subsety, r2])
+a1 <- .Call("R_LinearStatistic", x, P, y, integer(0), subset - 1L, subsety -1L)
+a2 <- .Call("R_LinearStatistic", x, P, y, integer(0), as.double(subset - 1L), as.double(subsety -1L))
+stopifnot(all.equal(a0, a1) && all.equal(a0, a1))
+
+a0 <- as.vector(colSums(model.matrix(~ as.factor(ix) - 1)[subset,r1] * y[subsety, r2]))
+a1 <- .Call("R_LinearStatistic", ix, P, y, integer(0), subset - 1L, subsety -1L)
+a1 <- .Call("R_LinearStatistic", ix, P, y, integer(0), as.double(subset - 1L), as.double(subsety -1L))
+stopifnot(all.equal(a0, a1))
+
+@@
+
+@d R\_LinearStatistic
+@{
+SEXP R_LinearStatistic
+(
+    @<R x Input@>
+    SEXP P,
+    @<R y Input@>
+    @<R weights Input@>
+    @<R subset Input@>,
+    SEXP subsety
+) 
+{
+    SEXP ans;
+    int Q;
+    R_xlen_t N, Nsubset;
+
+    Q = NCOL(y);
+    N = XLENGTH(y) / Q;
+    Nsubset = XLENGTH(subset);
+
+    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
+    RC_LinearStatistic(x, N, INTEGER(P)[0], REAL(y), Q, 
+                       weights, subset, 0, Nsubset, subsety, REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+@}
+
+@d RC\_LinearStatistic Prototype
+@{
+void RC_LinearStatistic
+(
+    @<R x Input@>
+    R_xlen_t N,
+    int P,
+    @<C real y Input@>
+    @<R weights Input@>
+    @<R subset Input@>,
+    R_xlen_t offset,
+    R_xlen_t Nsubset,
+    SEXP subsety,
+    @<C KronSums Answer@>
+) 
+@}
+
+@d RC\_LinearStatistic
+@{
+@<RC\_LinearStatistic Prototype@>
+{
+    double *center;
+
+    if (XLENGTH(subsety) == 0) {
+        RC_KronSums(x, N, P, y, Q, 0, center, center, 0, weights, 
+                    subset, 0, Nsubset, PQ_ans);
+    } else {
+        if (XLENGTH(weights) > 0) 
+            error("weights given for permutation");
+        if (XLENGTH(subset) != XLENGTH(subsety))
+            error("incorrect subsets");
+        RC_KronSums_Permutation(x, N, P, y, Q, subset, 0, Nsubset, 
+                                subsety, PQ_ans);
+    }
+}
+@|RC_LinearStatistic
+@}
+
+\subsection{Expectation and Covariance Influence}
+
+<<ExpectationCovarianceInfluence>>=
+sw <- sum(weights[subset])
+expecty <- a0 <- colSums(y[subset, ] * weights[subset]) / sw
+a1 <- .Call("R_ExpectationInfluence", y, weights, subset - 1L);
+a2 <- .Call("R_ExpectationInfluence", y, as.double(weights), as.double(subset - 1L));
+a3 <- .Call("R_ExpectationInfluence", y, weights, as.double(subset - 1L));
+a4 <- .Call("R_ExpectationInfluence", y, as.double(weights), subset - 1L);
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+@@
+
+@d R\_ExpectationInfluence
+@{
+SEXP R_ExpectationInfluence
+(
+    @<R y Input@>
+    @<R weights Input@>
+    @<R subset Input@>
+) 
+{
+    SEXP ans;
+    int Q;
+    R_xlen_t N, Nsubset;
+    double sw;
+
+    Q = NCOL(y);
+    N = XLENGTH(y) / Q;
+    Nsubset = XLENGTH(subset);
+
+    sw = RC_Sums(N, weights, subset, 0, Nsubset);
+
+    PROTECT(ans = allocVector(REALSXP, Q));
+    RC_ExpectationInfluence(N, REAL(y), Q, weights, subset, 0, Nsubset, sw, REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+@}
+
+@d RC\_ExpectationInfluence Prototype
+@{
+void RC_ExpectationInfluence
+(
+    @<C integer N Input@>
+    @<C real y Input@>
+    @<R weights Input@>
+    @<R subset Input@>,
+    R_xlen_t offset,
+    R_xlen_t Nsubset,
+    double sumweights,
+    @<C colSums Answer@>
+) 
+@}
+
+@d RC\_ExpectationInfluence
+@{
+@<RC\_ExpectationInfluence Prototype@>
+{
+    double *center;
+
+    RC_colSums(y, N, Q, 1, center, 0, weights, 
+               subset, 0, Nsubset, P_ans);
+    for (int q = 0; q < Q; q++) 
+        P_ans[q] = P_ans[q] / sumweights;
+}
+@|RC_ExpectationInfluence
+@}
+
+<<CovarianceInfluence>>=
+sw <- sum(weights[subset])
+yc <- t(t(y) - expecty)
+r1y <- rep(1:ncol(y), ncol(y))
+r2y <- rep(1:ncol(y), each = ncol(y))
+a0 <- colSums(yc[subset, r1y] * yc[subset, r2y] * weights[subset]) / sw
+a0 <- matrix(a0, ncol = ncol(y))
+vary <- diag(a0)
+a0 <- a0[upper.tri(a0, diag = TRUE)]
+a1 <- .Call("R_CovarianceInfluence", y, weights, subset - 1L, 0L);
+a2 <- .Call("R_CovarianceInfluence", y, as.double(weights), as.double(subset - 1L), 0L);
+a3 <- .Call("R_CovarianceInfluence", y, weights, as.double(subset - 1L), 0L);
+a4 <- .Call("R_CovarianceInfluence", y, as.double(weights), subset - 1L, 0L);
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+
+a1 <- .Call("R_CovarianceInfluence", y, weights, subset - 1L, 1L);
+a2 <- .Call("R_CovarianceInfluence", y, as.double(weights), as.double(subset - 1L), 1L);
+a3 <- .Call("R_CovarianceInfluence", y, weights, as.double(subset - 1L), 1L);
+a4 <- .Call("R_CovarianceInfluence", y, as.double(weights), subset - 1L, 1L);
+
+a0 <- vary
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+
+@@
+
+@d R\_CovarianceInfluence
+@{
+SEXP R_CovarianceInfluence
+(
+    @<R y Input@>
+    @<R weights Input@>
+    @<R subset Input@>,
+    SEXP varonly
+) 
+{
+    SEXP ans;
+    SEXP ExpInf;
+    int Q;
+    R_xlen_t N, Nsubset;
+    double sw;
+
+    Q = NCOL(y);
+    N = XLENGTH(y) / Q;
+    Nsubset = XLENGTH(subset);
+
+    PROTECT(ExpInf = R_ExpectationInfluence(y, weights, subset));
+
+    sw = RC_Sums(N, weights, subset, 0, Nsubset);
+
+    if (INTEGER(varonly)[0]) {
+        PROTECT(ans = allocVector(REALSXP, Q));
+    } else {
+        PROTECT(ans = allocVector(REALSXP, Q * (Q + 1) / 2));
+    }
+    RC_CovarianceInfluence(N, y, Q, weights, subset, 0, Nsubset, REAL(ExpInf), sw, 
+                           INTEGER(varonly)[0], REAL(ans));
+    UNPROTECT(2);
+    return(ans);
+}
+@}
+
+@d RC\_CovarianceInfluence Prototype
+@{
+void RC_CovarianceInfluence
+(
+    @<C integer N Input@>
+    @<R y Input@>
+    int Q,
+    @<R weights Input@>
+    @<R subset Input@>,
+    R_xlen_t offset,
+    R_xlen_t Nsubset,
+    double *ExpInf,
+    double sumweights,
+    int VARONLY,
+    @<C KronSums Answer@>
+) 
+@}
+
+@d RC\_CovarianceInfluence
+@{
+@<RC\_CovarianceInfluence Prototype@>
+{
+    if (VARONLY) {
+        RC_colSums(REAL(y), N, Q, 2, ExpInf, 1, weights, 
+                   subset, 0, Nsubset, PQ_ans);
+        for (int q = 0; q < Q; q++) 
+            PQ_ans[q] = PQ_ans[q] / sumweights;
+    } else {
+        RC_KronSums(y, N, Q, REAL(y), Q, 1, ExpInf, ExpInf, 1, weights, 
+                    subset, 0, Nsubset, PQ_ans);
+        for (int q = 0; q < Q * (Q + 1) / 2; q++) 
+            PQ_ans[q] = PQ_ans[q] / sumweights;
+    }
+}
+@|RC_CovarianceInfluence
+@}
 
 \subsection{Sums}
 
