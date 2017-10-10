@@ -1,4 +1,9 @@
 
+### int64:
+# nrow(X), nrow(Y) > INT_MAX
+# weights = integer or double
+# subset = integer or double
+
 .LinStatExpCov1d <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
                              varonly = FALSE, B = 0L, standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))

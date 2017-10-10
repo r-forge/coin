@@ -263,6 +263,11 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 #include <Rmath.h>
 #include <Rdefines.h>
 #define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)
+#define DoSymmetric 1
+#define DoCenter 1
+#define Power1 1
+#define Power2 2
+#define Offset0 0
 @<Function Definitions@>
 @}
 
@@ -325,16 +330,16 @@ int NCOL
 @<C\_ThreeTableSums\_dweights\_isubset@>
 @<RC\_ThreeTableSums@>
 @<R\_ThreeTableSums@>
-@<R\_LinearStatistic@>
 @<RC\_LinearStatistic@>
-@<R\_ExpectationInfluence@>
+@<R\_LinearStatistic@>
 @<RC\_ExpectationInfluence@>
-@<R\_CovarianceInfluence@>
+@<R\_ExpectationInfluence@>
 @<RC\_CovarianceInfluence@>
-@<R\_ExpectationX@>
+@<R\_CovarianceInfluence@>
 @<RC\_ExpectationX@>
-@<R\_CovarianceX@>
+@<R\_ExpectationX@>
 @<RC\_CovarianceX@>
+@<R\_CovarianceX@>
 @}
 
 The \proglang{R} interfaces are used to implement
@@ -535,7 +540,7 @@ SEXP R_LinearStatistic
 
     PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
     RC_LinearStatistic(x, N, INTEGER(P)[0], REAL(y), Q, 
-                       weights, subset, 0, Nsubset, subsety, REAL(ans));
+                       weights, subset, Offset0, Nsubset, subsety, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
@@ -562,17 +567,17 @@ void RC_LinearStatistic
 @{
 @<RC\_LinearStatistic Prototype@>
 {
-    double *center;
+    double center;
 
     if (XLENGTH(subsety) == 0) {
-        RC_KronSums(x, N, P, y, Q, 0, center, center, 0, weights, 
-                    subset, 0, Nsubset, PQ_ans);
+        RC_KronSums(x, N, P, y, Q, !DoSymmetric, &center, &center, !DoCenter, weights, 
+                    subset, Offset0, Nsubset, PQ_ans);
     } else {
         if (XLENGTH(weights) > 0) 
             error("weights given for permutation");
         if (XLENGTH(subset) != XLENGTH(subsety))
             error("incorrect subsets");
-        RC_KronSums_Permutation(x, N, P, y, Q, subset, 0, Nsubset, 
+        RC_KronSums_Permutation(x, N, P, y, Q, subset, Offset0, Nsubset, 
                                 subsety, PQ_ans);
     }
 }
@@ -611,10 +616,10 @@ SEXP R_ExpectationInfluence
     N = XLENGTH(y) / Q;
     Nsubset = XLENGTH(subset);
 
-    sw = RC_Sums(N, weights, subset, 0, Nsubset);
+    sw = RC_Sums(N, weights, subset, Offset0, Nsubset);
 
     PROTECT(ans = allocVector(REALSXP, Q));
-    RC_ExpectationInfluence(N, REAL(y), Q, weights, subset, 0, Nsubset, sw, REAL(ans));
+    RC_ExpectationInfluence(N, REAL(y), Q, weights, subset, Offset0, Nsubset, sw, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
@@ -639,10 +644,10 @@ void RC_ExpectationInfluence
 @{
 @<RC\_ExpectationInfluence Prototype@>
 {
-    double *center;
+    double center;
 
-    RC_colSums(y, N, Q, 1, center, 0, weights, 
-               subset, 0, Nsubset, P_ans);
+    RC_colSums(y, N, Q, DoSymmetric, &center, !DoCenter, weights, 
+               subset, Offset0, Nsubset, P_ans);
     for (int q = 0; q < Q; q++) 
         P_ans[q] = P_ans[q] / sumweights;
 }
@@ -700,14 +705,14 @@ SEXP R_CovarianceInfluence
 
     PROTECT(ExpInf = R_ExpectationInfluence(y, weights, subset));
 
-    sw = RC_Sums(N, weights, subset, 0, Nsubset);
+    sw = RC_Sums(N, weights, subset, Offset0, Nsubset);
 
     if (INTEGER(varonly)[0]) {
         PROTECT(ans = allocVector(REALSXP, Q));
     } else {
         PROTECT(ans = allocVector(REALSXP, Q * (Q + 1) / 2));
     }
-    RC_CovarianceInfluence(N, y, Q, weights, subset, 0, Nsubset, REAL(ExpInf), sw, 
+    RC_CovarianceInfluence(N, y, Q, weights, subset, Offset0, Nsubset, REAL(ExpInf), sw, 
                            INTEGER(varonly)[0], REAL(ans));
     UNPROTECT(2);
     return(ans);
@@ -737,12 +742,12 @@ void RC_CovarianceInfluence
 @<RC\_CovarianceInfluence Prototype@>
 {
     if (VARONLY) {
-        RC_colSums(REAL(y), N, Q, 2, ExpInf, 1, weights, 
+        RC_colSums(REAL(y), N, Q, Power2, ExpInf, DoCenter, weights, 
                    subset, offset, Nsubset, PQ_ans);
         for (int q = 0; q < Q; q++) 
             PQ_ans[q] = PQ_ans[q] / sumweights;
     } else {
-        RC_KronSums(y, N, Q, REAL(y), Q, 1, ExpInf, ExpInf, 1, weights, 
+        RC_KronSums(y, N, Q, REAL(y), Q, DoSymmetric, ExpInf, ExpInf, DoCenter, weights, 
                     subset, offset, Nsubset, PQ_ans);
         for (int q = 0; q < Q * (Q + 1) / 2; q++) 
             PQ_ans[q] = PQ_ans[q] / sumweights;
@@ -828,7 +833,7 @@ SEXP R_ExpectationX
     Nsubset = XLENGTH(subset);
 
     PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0]));
-    RC_ExpectationX(x, N, INTEGER(P)[0], weights, subset, 0, Nsubset, REAL(ans));
+    RC_ExpectationX(x, N, INTEGER(P)[0], weights, subset, Offset0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
@@ -853,11 +858,12 @@ void RC_ExpectationX
 @{
 @<RC\_ExpectationX Prototype@>
 {
-    double *center;
+    double center;
+
     if (TYPEOF(x) == INTSXP) {
         RC_OneTableSums(INTEGER(x), N, P, weights, subset, offset, Nsubset, P_ans);
     } else {
-        RC_colSums(REAL(x), N, P, 1, center, 0, weights, subset, offset, Nsubset, P_ans);
+        RC_colSums(REAL(x), N, P, DoSymmetric, &center, !DoCenter, weights, subset, offset, Nsubset, P_ans);
     }
 }
 @|RC_ExpectationX
@@ -888,7 +894,7 @@ SEXP R_CovarianceX
     } else {
         PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * (INTEGER(P)[0] + 1) / 2));
     }
-    RC_CovarianceX(x, N, INTEGER(P)[0], weights, subset, 0, Nsubset, REAL(ExpX), 
+    RC_CovarianceX(x, N, INTEGER(P)[0], weights, subset, Offset0, Nsubset, REAL(ExpX), 
                    INTEGER(varonly)[0], REAL(ans));
     UNPROTECT(2);
     return(ans);
@@ -916,7 +922,7 @@ void RC_CovarianceX
 @{
 @<RC\_CovarianceX Prototype@>
 {
-    double *center;
+    double center;
 
     if (TYPEOF(x) == INTSXP) {
         if (VARONLY) {
@@ -927,10 +933,10 @@ void RC_CovarianceX
         }
     } else {
         if (VARONLY) {
-            RC_colSums(REAL(x), N, P, 2, center, 0, weights, 
+            RC_colSums(REAL(x), N, P, Power2, &center, !DoCenter, weights, 
                        subset, offset, Nsubset, PQ_ans);
         } else {
-            RC_KronSums(x, N, P, REAL(x), P, 1, center, center, 0, weights, 
+            RC_KronSums(x, N, P, REAL(x), P, DoSymmetric, &center, &center, !DoCenter, weights, 
                         subset, offset, Nsubset, PQ_ans);
         }
     }
@@ -966,7 +972,7 @@ SEXP R_Sums
     Nsubset = XLENGTH(subset);
     
     PROTECT(ans = allocVector(REALSXP, 1));
-    REAL(ans)[0] = RC_Sums(INTEGER(N)[0], weights, subset, 0, Nsubset);
+    REAL(ans)[0] = RC_Sums(INTEGER(N)[0], weights, subset, Offset0, Nsubset);
     UNPROTECT(1);
 
     return(ans);
@@ -1136,14 +1142,15 @@ SEXP R_KronSums
     SEXP ans;
     int Q;
     R_xlen_t N, Nsubset;
-    double *center;
+    double center;
 
     Q = NCOL(y);
     N = XLENGTH(y) / Q;
     Nsubset = XLENGTH(subset);
 
     PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
-    RC_KronSums(x, N, INTEGER(P)[0], REAL(y), Q, 0, center, center, 0, weights, subset, 0, Nsubset, REAL(ans));
+    RC_KronSums(x, N, INTEGER(P)[0], REAL(y), Q, !DoSymmetric, &center, &center, 
+                !DoCenter, weights, subset, Offset0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
@@ -1499,14 +1506,13 @@ SEXP R_KronSums_Permutation
     SEXP ans;
     int Q;
     R_xlen_t N, Nsubset;
-    double *center;
 
     Q = NCOL(y);
     N = XLENGTH(y) / Q;
     Nsubset = XLENGTH(subset);
     
     PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
-    RC_KronSums_Permutation(x, N, INTEGER(P)[0], REAL(y), Q, subset, 0, Nsubset, 
+    RC_KronSums_Permutation(x, N, INTEGER(P)[0], REAL(y), Q, subset, Offset0, Nsubset, 
                             subsety, REAL(ans));
     UNPROTECT(1);
     return(ans);
@@ -1714,14 +1720,14 @@ SEXP R_colSums
     SEXP ans;
     int P;
     R_xlen_t N, Nsubset;
-    double *center;
+    double center;
 
     P = NCOL(x);
     N = XLENGTH(x) / P;
     Nsubset = XLENGTH(subset);
     
     PROTECT(ans = allocVector(REALSXP, P));
-    RC_colSums(REAL(x), N, P, 1, center, 0, weights, subset, 0, 
+    RC_colSums(REAL(x), N, P, DoSymmetric, &center, !DoCenter, weights, subset, Offset0, 
                Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
@@ -1916,14 +1922,13 @@ SEXP R_OneTableSums
 
     SEXP ans;
     R_xlen_t N, Nsubset;
-    double *center;
 
     N = XLENGTH(x);
     Nsubset = XLENGTH(subset);
     
     PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0]));
     RC_OneTableSums(INTEGER(x), N, INTEGER(P)[0],  
-                 weights, subset, 0, Nsubset, REAL(ans));
+                 weights, subset, Offset0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
@@ -2114,14 +2119,13 @@ SEXP R_TwoTableSums
 
     SEXP ans;
     R_xlen_t N, Nsubset;
-    double *center;
 
     N = XLENGTH(x);
     Nsubset = XLENGTH(subset);
     
     PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * INTEGER(Q)[0]));
     RC_TwoTableSums(INTEGER(x), N, INTEGER(P)[0], INTEGER(y), INTEGER(Q)[0], 
-                 weights, subset, 0, Nsubset, REAL(ans));
+                 weights, subset, Offset0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
@@ -2321,7 +2325,6 @@ SEXP R_ThreeTableSums
 
     SEXP ans;
     R_xlen_t N, Nsubset;
-    double *center;
 
     N = XLENGTH(x);
     Nsubset = XLENGTH(subset);
@@ -2329,7 +2332,7 @@ SEXP R_ThreeTableSums
     PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * INTEGER(Q)[0] * INTEGER(L)[0]));
     RC_ThreeTableSums(INTEGER(x), N, INTEGER(P)[0], INTEGER(y), INTEGER(Q)[0], 
                       INTEGER(block), INTEGER(L)[0],
-                      weights, subset, 0, Nsubset, REAL(ans));
+                      weights, subset, Offset0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
