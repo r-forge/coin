@@ -528,7 +528,7 @@ L <- 5L
 x <- matrix(runif(N * P), nrow = N)
 y <- matrix(runif(N * Q), nrow = N)
 ix <- sample(1:P, size = N, replace = TRUE)
-iX <- model.matrix(~ as.factor(ix) - 1)
+iX <- diag(P)[ix,] ### model.matrix
 iy <- sample(1:Q, size = N, replace = TRUE)
 weights <- sample(0:5, size = N, replace = TRUE)
 block <- sample(gl(L, ceiling(N / L))[1:N])
