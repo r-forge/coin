@@ -571,7 +571,7 @@ void RC_ExpectationCovarianceStatistic
     R_xlen_t N;
     int P, Q, Lb;
     double *sumweights, *table, tmp;
-    double *ExpInf, *work;
+    double *ExpInf, *VarInf, *CovInf, *work;
     SEXP nullvec, subset_block;
 
     /* note: x being an integer (Xfactor) with some 0 elements is not
@@ -594,6 +594,8 @@ void RC_ExpectationCovarianceStatistic
                        C_get_LinearStatistic(ans));
 
     ExpInf = C_get_ExpectationInfluence(ans);
+    VarInf = C_get_VarianceInfluence(ans);
+    CovInf = C_get_CovarianceInfluence(ans);
     work = C_get_Work(ans);
     table = C_get_TableBlock(ans);
     sumweights = C_get_Sumweights(ans);
@@ -610,8 +612,18 @@ void RC_ExpectationCovarianceStatistic
     PROTECT(subset_block = RC_order_subset_wrt_block(N, subset, block, 
                            VECTOR_ELT(ans, TableBlock_SLOT)));
 
-    for (int b = 0; b < Lb; b++)
+    for (int b = 0; b < Lb; b++) {
         sumweights[b] = RC_Sums(N, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1]);
+        RC_ExpectationInfluence(N, REAL(y), Q, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
+                                sumweights[b], ExpInf + b * Q);
+
+Rprintf("a1 ");
+        RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
+                               ExpInf + b * Q, sumweights[b], 1, VarInf + b * Q);
+Rprintf("a2 ");
+        RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
+                               ExpInf + b * Q, sumweights[b], 0, CovInf + b * Q + (Q + 1) / 2);
+    }
 
 /*
     C_ExpectationCoVarianceInfluence(REAL(y), N, Q, INTEGER(weights),
