@@ -372,7 +372,7 @@ regression tests to be called from within \proglang{R}
 
 @d C integer N Input
 @{
-    R_xlen_t N,
+    R_xlen_t N
 @}
 
 @d C integer P Input
@@ -388,14 +388,14 @@ regression tests to be called from within \proglang{R}
 @d C integer x Input
 @{
     int *x,
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<C integer P Input@>
 @}
 
 @d C real x Input
 @{
     double *x,
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<C integer P Input@>
 @}
 
@@ -448,10 +448,15 @@ regression tests to be called from within \proglang{R}
     SEXP subset
 @}
 
+@d C integer Nsubset Input
+@{
+    R_xlen_t Nsubset
+@}
+
 @d C subset range Input
 @{
     R_xlen_t offset,
-    R_xlen_t Nsubset
+    @<C integer Nsubset Input@>
 @}
 
 @d C integer subset Input
@@ -653,7 +658,7 @@ void RC_ExpectationCovarianceStatistic
     SEXP ans
 ) {
 
-    R_xlen_t N;
+    @<C integer N Input@>;
     int P, Q, Lb;
     double *sumweights, *table;
     double *ExpInf, *VarInf, *CovInf, *ExpX, *VarX, *CovX, *work;
@@ -818,7 +823,8 @@ SEXP R_LinearStatistic
 {
     SEXP ans;
     int Q;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
 
     Q = NCOL(y);
     N = XLENGTH(y) / Q;
@@ -837,7 +843,7 @@ SEXP R_LinearStatistic
 void RC_LinearStatistic
 (
     @<R x Input@>
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<C integer P Input@>
     @<C real y Input@>
     @<R weights Input@>
@@ -894,7 +900,8 @@ SEXP R_ExpectationInfluence
 {
     SEXP ans;
     int Q;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
     double sw;
 
     Q = NCOL(y);
@@ -914,7 +921,7 @@ SEXP R_ExpectationInfluence
 @{
 void RC_ExpectationInfluence
 (
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<R y Input@>
     int Q,
     @<R weights Input@>
@@ -981,7 +988,8 @@ SEXP R_CovarianceInfluence
     SEXP ans;
     SEXP ExpInf;
     int Q;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
     double sw;
 
     Q = NCOL(y);
@@ -1008,7 +1016,7 @@ SEXP R_CovarianceInfluence
 @{
 void RC_CovarianceInfluence
 (
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<R y Input@>
     @<C integer Q Input@>
     @<R weights Input@>
@@ -1111,7 +1119,8 @@ SEXP R_ExpectationX
 ) 
 {
     SEXP ans;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
 
     N = XLENGTH(x) / INTEGER(P)[0];
     Nsubset = XLENGTH(subset);
@@ -1128,7 +1137,7 @@ SEXP R_ExpectationX
 void RC_ExpectationX
 (
     @<R x Input@>
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<C integer P Input@>
     @<R weights Input@>
     @<R subset Input@>,
@@ -1165,7 +1174,8 @@ SEXP R_CovarianceX
 {
     SEXP ans;
     SEXP ExpX;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
 
     N = XLENGTH(x) / INTEGER(P)[0];
     Nsubset = XLENGTH(subset);
@@ -1189,7 +1199,7 @@ SEXP R_CovarianceX
 void RC_CovarianceX
 (
     @<R x Input@>
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<C integer P Input@>
     @<R weights Input@>
     @<R subset Input@>,
@@ -1249,7 +1259,7 @@ SEXP R_Sums
 ) 
 {
     SEXP ans;
-    R_xlen_t Nsubset;
+    @<C integer Nsubset Input@>;
 
     Nsubset = XLENGTH(subset);
     
@@ -1265,7 +1275,7 @@ SEXP R_Sums
 @{
 double RC_Sums
 (
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<R weights Input@>
     @<R subset Input@>,
     @<C subset range Input@>
@@ -1309,7 +1319,7 @@ double RC_Sums
 @{
 double C_Sums_dweights_dsubset
 (
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<C real weights Input@>
     @<C real subset Input@>
 ) 
@@ -1324,7 +1334,7 @@ double C_Sums_dweights_dsubset
 @{
 double C_Sums_iweights_dsubset
 (
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<C integer weights Input@>
     @<C real subset Input@>
 ) 
@@ -1340,7 +1350,7 @@ double C_Sums_iweights_dsubset
 @{
 double C_Sums_iweights_isubset
 (
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<C integer weights Input@>
     @<C integer subset Input@>
 ) 
@@ -1355,7 +1365,7 @@ double C_Sums_iweights_isubset
 @{
 double C_Sums_dweights_isubset
 (
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<C real weights Input@>
     @<C integer subset Input@>
 ) 
@@ -1421,7 +1431,9 @@ SEXP R_KronSums
 {
     SEXP ans;
     int Q;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
+
     double center;
 
     Q = NCOL(y);
@@ -1506,7 +1518,7 @@ void RC_KronSums
 @d RC KronSums Input
 @{
     @<R x Input@>
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<C integer P Input@>
     @<C real y Input@>
     const int SYMMETRIC,
@@ -1784,7 +1796,8 @@ SEXP R_KronSums_Permutation
 
     SEXP ans;
     int Q;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
 
     Q = NCOL(y);
     N = XLENGTH(y) / Q;
@@ -1803,7 +1816,7 @@ SEXP R_KronSums_Permutation
 void RC_KronSums_Permutation
 (
     @<R x Input@>
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<C integer P Input@>
     @<C real y Input@>
     @<R subset Input@>,
@@ -1997,7 +2010,8 @@ SEXP R_colSums
 
     SEXP ans;
     int P;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
     double center;
 
     P = NCOL(x);
@@ -2195,7 +2209,8 @@ SEXP R_OneTableSums
 ) {
 
     SEXP ans;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
 
     N = XLENGTH(x);
     Nsubset = XLENGTH(subset);
@@ -2391,7 +2406,8 @@ SEXP R_TwoTableSums
 ) {
 
     SEXP ans;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
 
     N = XLENGTH(x);
     Nsubset = XLENGTH(subset);
@@ -2596,7 +2612,8 @@ SEXP R_ThreeTableSums
 ) {
 
     SEXP ans;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
 
     N = XLENGTH(x);
     Nsubset = XLENGTH(subset);
@@ -2791,8 +2808,10 @@ SEXP R_order_subset_wrt_block
 )
 {
 
-    R_xlen_t N = XLENGTH(y) / NCOL(y);
+    @<C integer N Input@>;
     SEXP blockTable, ans;
+
+    N = XLENGTH(y) / NCOL(y);
 
     if (XLENGTH(weights) > 0)
         error("cannot deal with weights here");
@@ -2817,7 +2836,7 @@ SEXP R_order_subset_wrt_block
 @{
 SEXP RC_order_subset_wrt_block
 (
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<R subset Input@>,
     @<R block Input@>
     @<R blockTable Input@>
@@ -2857,7 +2876,7 @@ SEXP RC_order_subset_wrt_block
 @{
 void C_setup_subset
 (
-    @<C integer N Input@>
+    @<C integer N Input@>,
     SEXP ans
 )
 {
@@ -2875,7 +2894,7 @@ void C_setup_subset
 @{
 void C_setup_subset_block
 (
-    @<C integer N Input@>
+    @<C integer N Input@>,
     @<R block Input@>
     @<R blockTable Input@>,
     SEXP ans
