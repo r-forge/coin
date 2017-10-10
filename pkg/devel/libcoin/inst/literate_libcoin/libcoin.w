@@ -535,8 +535,8 @@ r2 <- rep(1:ncol(y), each = ncol(x))
 \section{User Interface}
 
 <<together>>=
-colSums(x[subset,r1] * y[subset,r2] * weights[subset])
-.Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, block, 0L, 0.00001)
+LECV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
+              integer(0), 0L, 0.00001)
 @@
 
 @d User Interface
@@ -731,7 +731,8 @@ a3 <- .Call("R_LinearStatistic", x, P, y, weights, as.double(subset - 1L), integ
 a4 <- .Call("R_LinearStatistic", x, P, y, as.double(weights), subset - 1L, integer(0))
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+          all.equal(a0, a3) && all.equal(a0, a4) &&
+          all.equal(a0, LECV$LinearStatistic))
 
 
 a0 <- as.vector(colSums(iX[subset,r1] * y[subset,r2] * weights[subset]))
@@ -952,7 +953,8 @@ a3 <- .Call("R_ExpectationInfluence", y, weights, as.double(subset - 1L));
 a4 <- .Call("R_ExpectationInfluence", y, as.double(weights), subset - 1L);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+          all.equal(a0, a3) && all.equal(a0, a4))# &&
+#          all.equal(a0, LECV$ExpectationInfluence))
 @@
 
 @d R\_ExpectationInfluence
@@ -1027,7 +1029,8 @@ a3 <- .Call("R_CovarianceInfluence", y, weights, as.double(subset - 1L), 0L);
 a4 <- .Call("R_CovarianceInfluence", y, as.double(weights), subset - 1L, 0L);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+          all.equal(a0, a3) && all.equal(a0, a4) &&
+          all.equal(a0, LECV$CovarianceInfluence))
 
 a1 <- .Call("R_CovarianceInfluence", y, weights, subset - 1L, 1L);
 a2 <- .Call("R_CovarianceInfluence", y, as.double(weights), as.double(subset - 1L), 1L);
@@ -1125,7 +1128,8 @@ a3 <- .Call("R_ExpectationX", x, P, weights, as.double(subset - 1L));
 a4 <- .Call("R_ExpectationX", x, P, as.double(weights), subset - 1L);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+          all.equal(a0, a3) && all.equal(a0, a4))# &&
+#          all.equal(a0, LECV$ExpectationX))
 
 expectx <- a0 <- colSums(x[subset, ]^2 * weights[subset]) 
 a1 <- .Call("R_CovarianceX", x, P, weights, subset - 1L, 1L);
