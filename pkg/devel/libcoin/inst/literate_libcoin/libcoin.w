@@ -375,6 +375,11 @@ regression tests to be called from within \proglang{R}
     R_xlen_t N,
 @}
 
+@d C integer P Input
+@{
+    int P,
+@}
+
 @d R x Input
 @{
     SEXP x,
@@ -384,14 +389,14 @@ regression tests to be called from within \proglang{R}
 @{
     int *x,
     @<C integer N Input@>
-    int P,
+    @<C integer P Input@>
 @}
 
 @d C real x Input
 @{
     double *x,
     @<C integer N Input@>
-    int P,
+    @<C integer P Input@>
 @}
 
 @d R y Input
@@ -399,16 +404,21 @@ regression tests to be called from within \proglang{R}
     SEXP y,
 @}
 
+@d C integer Q Input
+@{
+    int Q,
+@}
+
 @d C integer y Input
 @{
     int *y,
-    int Q,
+    @<C integer Q Input@>
 @}
 
 @d C real y Input
 @{
     double *y,
-    int Q,
+    @<C integer Q Input@>
 @}
 
 @d R weights Input
@@ -428,23 +438,32 @@ regression tests to be called from within \proglang{R}
     int HAS_WEIGHTS,
 @}
 
+@d C sumweights Input
+@{
+    double sumweights
+@}
+
 @d R subset Input
 @{
     SEXP subset
 @}
 
+@d C subset range Input
+@{
+    R_xlen_t offset,
+    R_xlen_t Nsubset
+@}
+
 @d C integer subset Input
 @{
     int *subset,
-    const R_xlen_t offset,
-    const R_xlen_t Nsubset
+    @<C subset range Input@>
 @}
 
 @d C real subset Input
 @{
     double *subset,
-    const R_xlen_t offset,
-    const R_xlen_t Nsubset
+    @<C subset range Input@>
 @}
 
 @d R block Input
@@ -513,12 +532,202 @@ r2 <- rep(1:ncol(y), each = ncol(x))
 
 <<together>>=
 colSums(x[subset,r1] * y[subset,r2] * weights[subset])
-table(block)
 .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, block, 0L, 0.00001)
 @@
 
 @d R\_ExpectationCovarianceStatistic 
 @{
+
+/* sum_i (t(x[i,]) %*% x[i,]) */
+void C_KronSums_sym_
+(
+    @<C integer x Input@>
+    double *PP_sym_ans
+) {
+
+    int pN, qN, SpqP;
+
+    for (int q = 0; q < P; q++) {
+        qN = q * N;
+        for (int p = 0; p <= q; p++) {
+            PP_sym_ans[S(p, q, P)] = 0.0;
+            pN = p * N;
+            SpqP = S(p, q, P);
+            for (int i = 0; i < N; i++)
+                 PP_sym_ans[SpqP] +=  x[qN + i] * x[pN + i];
+        }
+    }
+}
+
+
+void C_ExpectationLinearStatistic
+(
+    @<C integer P Input@>
+    @<C integer Q Input@>
+    const double *ExpInf,
+    const double *ExpX,
+    const int add,
+    double *PQ_ans
+) {
+
+    if (!add)
+        for (int p = 0; p < P * Q; p++) PQ_ans[p] = 0.0;
+
+    for (int p = 0; p < P; p++) {
+        for (int q = 0; q < Q; q++)
+            PQ_ans[q * P + p] += ExpX[p] * ExpInf[q];
+    }
+}
+
+void C_CovarianceLinearStatistic
+(
+    @<C integer P Input@>
+    @<C integer Q Input@>
+    const double *CovInf,
+    const double *ExpX,
+    const double *CovX,
+    @<C sumweights Input@>,
+    double *PP_sym_tmp,         /* work vector */
+    const int add,
+    double *PQPQ_sym_ans
+) {
+
+    double f1 = sumweights / (sumweights - 1);
+    double f2 = 1.0 / (sumweights - 1);
+    double tmp;
+
+    if (P * Q == 1) {
+        tmp = f1 * CovInf[0] * CovX[0];
+        tmp -= f2 * CovInf[0] * ExpX[0] * ExpX[0];
+        if (add) {
+            PQPQ_sym_ans[0] += tmp;
+        } else {
+            PQPQ_sym_ans[0] = tmp;
+        }
+    } else {
+        C_KronSums_sym_(ExpX, 1, P,
+                        PP_sym_tmp);
+        for (int p = 0; p < P * (P + 1) / 2; p++)
+            PP_sym_tmp[p] = f1 * CovX[p] - f2 * PP_sym_tmp[p];
+        C_kronecker_sym(CovInf, Q, PP_sym_tmp, P, 1 - (add >= 1),
+                        PQPQ_sym_ans);
+    }
+}
+
+void C_VarianceLinearStatistic
+(
+    @<C integer P Input@>
+    @<C integer Q Input@>
+    const double *VarInf,
+    const double *ExpX,
+    const double *VarX,
+    @<C sumweights Input@>,    
+    double *P_tmp,              /* work array */
+    const int add,
+    double *PQ_ans
+) {
+
+    if (P * Q == 1) {
+        C_CovarianceLinearStatistic(P, Q, VarInf, ExpX, VarX,
+                                    sumweights, P_tmp, (add >= 1),
+                                    PQ_ans);
+    } else {
+
+        double f1 = sumweights / (sumweights - 1);
+        double f2 = 1.0 / (sumweights - 1);
+        for (int p = 0; p < P; p++)
+            P_tmp[p] = f1 * VarX[p] - f2 * ExpX[p] * ExpX[p];
+        C_kronecker(VarInf, 1, Q, P_tmp, 1, P, 1 - (add >= 1),
+                    PQ_ans);
+    }
+}
+
+
+void RC_ExpectationCovarianceStatistic
+(
+    const SEXP x,
+    const SEXP y,
+    const SEXP weights,
+    const SEXP subset,
+    const SEXP block,
+    SEXP ans
+) {
+
+    R_xlen_t N;
+    int P, Q, Lb;
+    double *sumweights, *table;
+    double *ExpInf, *VarInf, *CovInf, *ExpX, *VarX, *CovX, *work;
+    SEXP nullvec, subset_block;
+
+    /* note: x being an integer (Xfactor) with some 0 elements is not
+             handled correctly (as sumweights doesnt't take this information
+             into account; use subset to exclude these missings (as done
+             in libcoin::LinStatExpCov) */
+
+    P = C_get_P(ans);
+    Q = C_get_Q(ans);
+
+    N = NROW(x);
+    Lb = 1;
+    if (LENGTH(block) > 0)
+        Lb = NLEVELS(block);
+
+    PROTECT(nullvec = allocVector(INTSXP, 0));
+
+    RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset, 
+                       Offset0, XLENGTH(subset), nullvec,
+                       C_get_LinearStatistic(ans));
+
+    ExpInf = C_get_ExpectationInfluence(ans);
+    VarInf = C_get_VarianceInfluence(ans);
+    CovInf = C_get_CovarianceInfluence(ans);
+    ExpX = Calloc(P, double);
+    VarX = Calloc(P, double);
+    CovX = Calloc(P * (P + 1) / 2, double);
+    work = C_get_Work(ans);
+    table = C_get_TableBlock(ans);
+    sumweights = C_get_Sumweights(ans);
+
+    if (Lb == 1) {
+        table[0] = 0.0;
+        table[1] = RC_Sums(N, nullvec, subset, Offset0, XLENGTH(subset));
+    } else {
+        RC_OneTableSums(INTEGER(block), N, Lb + 1, nullvec, subset, Offset0, XLENGTH(subset), table);
+    }
+
+    PROTECT(subset_block = RC_order_subset_wrt_block(N, subset, block, 
+                           VECTOR_ELT(ans, TableBlock_SLOT)));
+
+    for (int b = 0; b < Lb; b++) {
+        sumweights[b] = RC_Sums(N, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1]);
+        RC_ExpectationInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
+                                sumweights[b], ExpInf + b * Q);
+        RC_ExpectationX(x, N, P, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
+                        ExpX);
+        C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b,
+                                     C_get_Expectation(ans));
+        if (C_get_varonly(ans)) {
+            RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
+                                   ExpInf + b * Q, sumweights[b], 1, VarInf + b * Q);
+            RC_CovarianceX(x, N, P, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
+                           ExpX, 1L, VarX);
+            C_VarianceLinearStatistic(P, Q, VarInf + b * Q,
+                                      ExpX, VarX, sumweights[b], work, b,
+                                      C_get_Variance(ans));
+        } else {
+            RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
+                                   ExpInf + b * Q, sumweights[b], 0, CovInf + b * Q + (Q + 1) / 2);
+            RC_CovarianceX(x, N, P, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
+                           ExpX, 0L, CovX);
+            C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
+                                        ExpX, CovX, sumweights[b], work, b,
+                                        C_get_Covariance(ans));
+        }
+    }
+
+    UNPROTECT(2);
+}
+
 SEXP R_ExpectationCovarianceStatistic
 (
     const SEXP x,
@@ -557,94 +766,6 @@ SEXP R_ExpectationCovarianceStatistic
     UNPROTECT(5);
     return(ans);
 }
-
-void RC_ExpectationCovarianceStatistic
-(
-    const SEXP x,
-    const SEXP y,
-    const SEXP weights,
-    const SEXP subset,
-    const SEXP block,
-    SEXP ans
-) {
-
-    R_xlen_t N;
-    int P, Q, Lb;
-    double *sumweights, *table, tmp;
-    double *ExpInf, *VarInf, *CovInf, *work;
-    SEXP nullvec, subset_block;
-
-    /* note: x being an integer (Xfactor) with some 0 elements is not
-             handled correctly (as sumweights doesnt't take this information
-             into account; use subset to exclude these missings (as done
-             in libcoin::LinStatExpCov) */
-
-    P = C_get_P(ans);
-    Q = C_get_Q(ans);
-
-    N = NROW(x);
-    Lb = 1;
-    if (LENGTH(block) > 0)
-        Lb = NLEVELS(block);
-
-    PROTECT(nullvec = allocVector(INTSXP, 0));
-
-    RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset, 
-                       Offset0, XLENGTH(subset), nullvec,
-                       C_get_LinearStatistic(ans));
-
-    ExpInf = C_get_ExpectationInfluence(ans);
-    VarInf = C_get_VarianceInfluence(ans);
-    CovInf = C_get_CovarianceInfluence(ans);
-    work = C_get_Work(ans);
-    table = C_get_TableBlock(ans);
-    sumweights = C_get_Sumweights(ans);
-
-    if (Lb == 1) {
-        table[0] = 0.0;
-        table[1] = RC_Sums(N, nullvec, subset, Offset0, XLENGTH(subset));
-
-    } else {
-        RC_OneTableSums(INTEGER(block), N, Lb + 1, nullvec, subset, Offset0, XLENGTH(subset), table);
-
-    }
-
-    PROTECT(subset_block = RC_order_subset_wrt_block(N, subset, block, 
-                           VECTOR_ELT(ans, TableBlock_SLOT)));
-
-    for (int b = 0; b < Lb; b++) {
-        sumweights[b] = RC_Sums(N, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1]);
-        RC_ExpectationInfluence(N, REAL(y), Q, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
-                                sumweights[b], ExpInf + b * Q);
-
-Rprintf("a1 ");
-        RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
-                               ExpInf + b * Q, sumweights[b], 1, VarInf + b * Q);
-Rprintf("a2 ");
-        RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1], 
-                               ExpInf + b * Q, sumweights[b], 0, CovInf + b * Q + (Q + 1) / 2);
-    }
-
-/*
-    C_ExpectationCoVarianceInfluence(REAL(y), N, Q, INTEGER(weights),
-                                     sumweights, subset_tmp, table + 1, Lb, 1, ExpInf,
-                                     C_get_VarianceInfluence(ans), C_get_CovarianceInfluence(ans));
-
-    if (C_get_varonly(ans)) {
-        RC_ExpectationVarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
-            sumweights, subset_tmp, table + 1, Lb, C_get_ExpectationX(ans), ExpInf, C_get_VarianceInfluence(ans),
-            work, C_get_Expectation(ans), C_get_Variance(ans));
-    } else {
-        RC_ExpectationCovarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
-            sumweights, subset_tmp, table + 1, Lb, C_get_ExpectationX(ans), ExpInf,
-            C_get_CovarianceInfluence(ans), work,
-            C_get_Expectation(ans), C_get_Covariance(ans));
-    }
-    if (Lb > 1) Free(subset_tmp);
-*/
-    UNPROTECT(2);
-}
-
 
 
 @}
@@ -716,13 +837,12 @@ SEXP R_LinearStatistic
 void RC_LinearStatistic
 (
     @<R x Input@>
-    R_xlen_t N,
-    int P,
+    @<C integer N Input@>
+    @<C integer P Input@>
     @<C real y Input@>
     @<R weights Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
+    @<C subset range Input@>,
     SEXP subsety,
     @<C KronSums Answer@>
 ) 
@@ -784,7 +904,7 @@ SEXP R_ExpectationInfluence
     sw = RC_Sums(N, weights, subset, Offset0, Nsubset);
 
     PROTECT(ans = allocVector(REALSXP, Q));
-    RC_ExpectationInfluence(N, REAL(y), Q, weights, subset, Offset0, Nsubset, sw, REAL(ans));
+    RC_ExpectationInfluence(N, y, Q, weights, subset, Offset0, Nsubset, sw, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
@@ -795,12 +915,12 @@ SEXP R_ExpectationInfluence
 void RC_ExpectationInfluence
 (
     @<C integer N Input@>
-    @<C real y Input@>
+    @<R y Input@>
+    int Q,
     @<R weights Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
-    double sumweights,
+    @<C subset range Input@>,
+    @<C sumweights Input@>,    
     @<C colSums Answer@>
 ) 
 @}
@@ -811,7 +931,7 @@ void RC_ExpectationInfluence
 {
     double center;
 
-    RC_colSums(y, N, Q, DoSymmetric, &center, !DoCenter, weights, 
+    RC_colSums(REAL(y), N, Q, DoSymmetric, &center, !DoCenter, weights, 
                subset, Offset0, Nsubset, P_ans);
     for (int q = 0; q < Q; q++) 
         P_ans[q] = P_ans[q] / sumweights;
@@ -890,13 +1010,12 @@ void RC_CovarianceInfluence
 (
     @<C integer N Input@>
     @<R y Input@>
-    int Q,
+    @<C integer Q Input@>
     @<R weights Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
+    @<C subset range Input@>,
     double *ExpInf,
-    double sumweights,
+    @<C sumweights Input@>,
     int VARONLY,
     @<C KronSums Answer@>
 ) 
@@ -1009,12 +1128,11 @@ SEXP R_ExpectationX
 void RC_ExpectationX
 (
     @<R x Input@>
-    R_xlen_t N,
-    int P,
+    @<C integer N Input@>
+    @<C integer P Input@>
     @<R weights Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
+    @<C subset range Input@>,
     @<C OneTableSums Answer@>
 ) 
 @}
@@ -1071,12 +1189,11 @@ SEXP R_CovarianceX
 void RC_CovarianceX
 (
     @<R x Input@>
-    R_xlen_t N,
-    int P,
+    @<C integer N Input@>
+    @<C integer P Input@>
     @<R weights Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
+    @<C subset range Input@>,
     double *ExpX,
     int VARONLY,
     @<C KronSums Answer@>
@@ -1151,8 +1268,7 @@ double RC_Sums
     @<C integer N Input@>
     @<R weights Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset
+    @<C subset range Input@>
 ) 
 @}
 
@@ -1327,8 +1443,7 @@ void RC_KronSums
     @<RC KronSums Input@>
     @<R weights Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
+    @<C subset range Input@>,
     @<C KronSums Answer@>
 ) 
 @}
@@ -1391,8 +1506,8 @@ void RC_KronSums
 @d RC KronSums Input
 @{
     @<R x Input@>
-    R_xlen_t N,
-    int P,
+    @<C integer N Input@>
+    @<C integer P Input@>
     @<C real y Input@>
     const int SYMMETRIC,
     double *centerx,
@@ -1688,12 +1803,11 @@ SEXP R_KronSums_Permutation
 void RC_KronSums_Permutation
 (
     @<R x Input@>
-    R_xlen_t N,
-    int P,
+    @<C integer N Input@>
+    @<C integer P Input@>
     @<C real y Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
+    @<C subset range Input@>,
     SEXP subsety,
     @<C KronSums Answer@>
 ) 
@@ -1905,8 +2019,7 @@ void RC_colSums
     @<C colSums Input@>
     @<R weights Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
+    @<C subset range Input@>,
     @<C colSums Answer@>
 ) 
 @}
@@ -2103,8 +2216,7 @@ void RC_OneTableSums
     @<C OneTableSums Input@>
     @<R weights Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
+    @<C subset range Input@>,
     @<C OneTableSums Answer@>
 ) 
 @}
@@ -2300,8 +2412,7 @@ void RC_TwoTableSums
     @<C TwoTableSums Input@>
     @<R weights Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
+    @<C subset range Input@>,
     @<C TwoTableSums Answer@>
 ) 
 @}
@@ -2507,8 +2618,7 @@ void RC_ThreeTableSums
     @<C ThreeTableSums Input@>
     @<R weights Input@>
     @<R subset Input@>,
-    R_xlen_t offset,
-    R_xlen_t Nsubset,
+    @<C subset range Input@>,
     @<C ThreeTableSums Answer@>
 ) 
 @}
