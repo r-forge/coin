@@ -251,6 +251,7 @@ functions to be used outside \verb|Sums.c|
 @<RC\_CovarianceInfluence Prototype@>;
 @<RC\_ExpectationX Prototype@>;
 @<RC\_CovarianceX Prototype@>;
+@<RC\_order\_subset\_wrt\_block Prototype@>;
 @}
 
 The \proglang{C} file \verb|Sums.c| defines the \proglang{C}
@@ -340,6 +341,11 @@ int NCOL
 @<R\_ExpectationX@>
 @<RC\_CovarianceX@>
 @<R\_CovarianceX@>
+@<C\_setup\_subset@>
+@<C\_setup\_subset\_block@>
+@<C\_order\_subset\_wrt\_block@>
+@<RC\_order\_subset\_wrt\_block@>;
+@<R\_order\_subset\_wrt\_block@>;
 @}
 
 The \proglang{R} interfaces are used to implement
@@ -432,6 +438,11 @@ regression tests to be called from within \proglang{R}
     SEXP block,
 @}
 
+@d R blockTable Input
+@{
+    SEXP blockTable
+@}
+
 @d C integer block Input
 @{
     int *block,
@@ -477,7 +488,7 @@ ix <- sample(1:P, size = N, replace = TRUE)
 iX <- model.matrix(~ as.factor(ix) - 1)
 iy <- sample(1:Q, size = N, replace = TRUE)
 weights <- sample(0:5, size = N, replace = TRUE)
-block <- gl(L, ceiling(N / L))[1:N]
+block <- sample(gl(L, ceiling(N / L))[1:N])
 subset <- sort(sample(1:N, floor(N * 1.5), replace = TRUE))
 subsety <- sample(1:N, floor(N * 1.5), replace = TRUE)
 r1 <- rep(1:ncol(x), ncol(y))
@@ -1753,7 +1764,6 @@ void RC_colSums
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
-Rprintf("hier");
             C_colSums_iweights_isubset(x, N, P, power, centerx, CENTER,
                                         INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
                                         offset, Nsubset, P_ans);
@@ -1861,7 +1871,6 @@ void C_colSums_dweights_isubset
     double *xx, cx = 0.0;
 
     for (int p = 0; p < P; p++) {
-Rprintf("p %d N %d NS %d", p, N, Nsubset);
         P_ans[0] = 0.0;
         xx = x + N * p;
         if (CENTER) {
@@ -1886,7 +1895,6 @@ Rprintf("p %d N %d NS %d", p, N, Nsubset);
         } else {
             P_ans[0] += pow(xx[0] - cx, power);
         }
-Rprintf("ans %f\n", P_ans[0]);
         P_ans++;
     }
 @}
@@ -2493,6 +2501,176 @@ void C_ThreeTableSums_dweights_isubset
     }
 @}
 
+\subsection{Helpers}
+
+<<Helpers>>=
+a0 <- as.vector(do.call("c", tapply(subset, block[subset], function(s) s - 1)))
+a1 <- .Call("R_order_subset_wrt_block", y, subset - 1L, integer(0), block, L + 1L);
+stopifnot(all.equal(a0, a1))
+a2 <- .Call("R_order_subset_wrt_block", y, subset - 1L, integer(0), integer(0), 2L);
+stopifnot(all.equal(subset - 1L, a2))
+a0 <- as.vector(do.call("c", tapply(1:N, block, function(s) s - 1)))
+a3 <- .Call("R_order_subset_wrt_block", y, integer(0), integer(0), block, L + 1L);
+stopifnot(all.equal(a0, a3))
+a4 <- .Call("R_order_subset_wrt_block", y, integer(0), integer(0), integer(0), 2L);
+stopifnot(all.equal(0:(N - 1), a4))
+@@
+
+@d R\_order\_subset\_wrt\_block
+@{
+SEXP R_order_subset_wrt_block
+(
+    @<R y Input@>
+    @<R subset Input@>,
+    @<R weights Input@>
+    @<R block Input@>
+    SEXP Nlevels
+)
+{
+
+    R_xlen_t N = XLENGTH(y) / NCOL(y);
+    SEXP blockTable, ans;
+
+    if (XLENGTH(weights) > 0)
+        error("cannot deal with weights here");
+
+    if (INTEGER(Nlevels)[0] > 2) {
+        PROTECT(blockTable = R_OneTableSums(block, Nlevels, weights, subset));
+    } else {
+        PROTECT(blockTable = allocVector(REALSXP, 2));
+        REAL(blockTable)[0] = 0.0;
+        REAL(blockTable)[1] = RC_Sums(N, weights, subset, Offset0, XLENGTH(subset));
+    }
+    
+    PROTECT(ans = RC_order_subset_wrt_block(N, subset, block, blockTable));
+
+    UNPROTECT(2);
+    return(ans);
+}
+@}
+
+
+@d RC\_order\_subset\_wrt\_block Prototype
+@{
+SEXP RC_order_subset_wrt_block
+(
+    @<C integer N Input@>
+    @<R subset Input@>,
+    @<R block Input@>
+    @<R blockTable Input@>
+)
+@}
+
+@d RC\_order\_subset\_wrt\_block
+@{
+@<RC\_order\_subset\_wrt\_block Prototype@>
+{
+    SEXP ans;
+    int NOBLOCK = (XLENGTH(block) == 0 || XLENGTH(blockTable) == 2);
+
+    if (XLENGTH(subset) > 0) {
+        if (NOBLOCK) {
+            return(subset);
+        } else {
+            PROTECT(ans = allocVector(TYPEOF(subset), XLENGTH(subset)));
+            C_order_subset_wrt_block(subset, block, blockTable, ans);
+            UNPROTECT(1);
+            return(ans);
+        }
+    } else {
+        PROTECT(ans = allocVector(TYPEOF(subset), N));
+        if (NOBLOCK) {
+            C_setup_subset(N, ans);
+        } else {
+            C_setup_subset_block(N, block, blockTable, ans);
+        }
+        UNPROTECT(1);
+        return(ans);
+    }
+}
+@}
+
+@d C\_setup\_subset
+@{
+void C_setup_subset
+(
+    @<C integer N Input@>
+    SEXP ans
+)
+{
+    for (R_xlen_t i = 0; i < N; i++) {
+        if (TYPEOF(ans) == INTSXP) {
+            INTEGER(ans)[i] = i;
+        } else {
+            REAL(ans)[i] = (double) i;
+        }
+    }
+}
+@}
+
+@d C\_setup\_subset\_block
+@{
+void C_setup_subset_block
+(
+    @<C integer N Input@>
+    @<R block Input@>
+    @<R blockTable Input@>,
+    SEXP ans
+)
+{
+    double *cumtable;
+    int Nlevels = LENGTH(blockTable);
+
+    cumtable = Calloc(Nlevels, double);
+    for (int k = 0; k < Nlevels; k++) cumtable[k] = 0.0;
+
+    /* table[0] are missings, ie block == 0 ! */
+    for (int k = 1; k < Nlevels; k++)
+        cumtable[k] = cumtable[k - 1] + REAL(blockTable)[k - 1];
+
+    for (R_xlen_t i = 0; i < N; i++) {
+        if (TYPEOF(ans) == INTSXP) {
+            INTEGER(ans)[(int) cumtable[INTEGER(block)[i]]++] = i;
+        } else {
+            REAL(ans)[(R_xlen_t) cumtable[INTEGER(block)[i]]++] = (double) i;
+        }
+    }
+
+    Free(cumtable);
+}
+@}
+
+@d C\_order\_subset\_wrt\_block
+@{
+void C_order_subset_wrt_block
+(
+    @<R subset Input@>,
+    @<R block Input@>
+    @<R blockTable Input@>,
+    SEXP ans
+)
+{
+    double *cumtable;    
+    int Nlevels = LENGTH(blockTable);
+
+    cumtable = Calloc(Nlevels, double);
+    for (int k = 0; k < Nlevels; k++) cumtable[k] = 0.0;
+
+    /* table[0] are missings, ie block == 0 ! */
+    for (int k = 1; k < Nlevels; k++)
+        cumtable[k] = cumtable[k - 1] + REAL(blockTable)[k - 1];
+
+    if (TYPEOF(subset) == INTSXP) {
+        for (R_xlen_t i = 0; i < XLENGTH(subset); i++)
+            INTEGER(ans)[(int) cumtable[INTEGER(block)[INTEGER(subset)[i]]]++] = INTEGER(subset)[i];
+    } else {
+        for (R_xlen_t i = 0; i < XLENGTH(subset); i++)
+            REAL(ans)[(R_xlen_t) cumtable[INTEGER(block)[(R_xlen_t) REAL(subset)[i]]]++] = REAL(subset)[i];
+    }
+
+    Free(cumtable); 
+}
+@}
 
 
 \section{R Code}
