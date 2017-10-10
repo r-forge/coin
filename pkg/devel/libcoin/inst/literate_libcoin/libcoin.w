@@ -377,7 +377,7 @@ regression tests to be called from within \proglang{R}
 
 @d C integer P Input
 @{
-    int P,
+    int P
 @}
 
 @d R x Input
@@ -389,14 +389,14 @@ regression tests to be called from within \proglang{R}
 @{
     int *x,
     @<C integer N Input@>,
-    @<C integer P Input@>
+    @<C integer P Input@>,
 @}
 
 @d C real x Input
 @{
     double *x,
     @<C integer N Input@>,
-    @<C integer P Input@>
+    @<C integer P Input@>,
 @}
 
 @d R y Input
@@ -406,19 +406,19 @@ regression tests to be called from within \proglang{R}
 
 @d C integer Q Input
 @{
-    int Q,
+    int Q
 @}
 
 @d C integer y Input
 @{
     int *y,
-    @<C integer Q Input@>
+    @<C integer Q Input@>,
 @}
 
 @d C real y Input
 @{
     double *y,
-    @<C integer Q Input@>
+    @<C integer Q Input@>,
 @}
 
 @d R weights Input
@@ -481,10 +481,15 @@ regression tests to be called from within \proglang{R}
     SEXP blockTable
 @}
 
+@d C integer Lb Input
+@{
+    int Lb
+@}
+
 @d C integer block Input
 @{
     int *block,
-    int L,
+    @<C integer Lb Input@>,
 @}
 
 
@@ -567,8 +572,8 @@ void C_KronSums_sym_
 
 void C_ExpectationLinearStatistic
 (
-    @<C integer P Input@>
-    @<C integer Q Input@>
+    @<C integer P Input@>,
+    @<C integer Q Input@>,
     const double *ExpInf,
     const double *ExpX,
     const int add,
@@ -586,8 +591,8 @@ void C_ExpectationLinearStatistic
 
 void C_CovarianceLinearStatistic
 (
-    @<C integer P Input@>
-    @<C integer Q Input@>
+    @<C integer P Input@>,
+    @<C integer Q Input@>,
     const double *CovInf,
     const double *ExpX,
     const double *CovX,
@@ -621,8 +626,8 @@ void C_CovarianceLinearStatistic
 
 void C_VarianceLinearStatistic
 (
-    @<C integer P Input@>
-    @<C integer Q Input@>
+    @<C integer P Input@>,
+    @<C integer Q Input@>,
     const double *VarInf,
     const double *ExpX,
     const double *VarX,
@@ -659,7 +664,9 @@ void RC_ExpectationCovarianceStatistic
 ) {
 
     @<C integer N Input@>;
-    int P, Q, Lb;
+    @<C integer P Input@>;
+    @<C integer Q Input@>;
+    @<C integer Lb Input@>;
     double *sumweights, *table;
     double *ExpInf, *VarInf, *CovInf, *ExpX, *VarX, *CovX, *work;
     SEXP nullvec, subset_block;
@@ -822,7 +829,7 @@ SEXP R_LinearStatistic
 ) 
 {
     SEXP ans;
-    int Q;
+    @<C integer Q Input@>;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
 
@@ -844,7 +851,7 @@ void RC_LinearStatistic
 (
     @<R x Input@>
     @<C integer N Input@>,
-    @<C integer P Input@>
+    @<C integer P Input@>,
     @<C real y Input@>
     @<R weights Input@>
     @<R subset Input@>,
@@ -899,7 +906,7 @@ SEXP R_ExpectationInfluence
 ) 
 {
     SEXP ans;
-    int Q;
+    @<C integer Q Input@>;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
     double sw;
@@ -923,7 +930,7 @@ void RC_ExpectationInfluence
 (
     @<C integer N Input@>,
     @<R y Input@>
-    int Q,
+    @<C integer Q Input@>,
     @<R weights Input@>
     @<R subset Input@>,
     @<C subset range Input@>,
@@ -987,7 +994,7 @@ SEXP R_CovarianceInfluence
 {
     SEXP ans;
     SEXP ExpInf;
-    int Q;
+    @<C integer Q Input@>;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
     double sw;
@@ -1018,7 +1025,7 @@ void RC_CovarianceInfluence
 (
     @<C integer N Input@>,
     @<R y Input@>
-    @<C integer Q Input@>
+    @<C integer Q Input@>,
     @<R weights Input@>
     @<R subset Input@>,
     @<C subset range Input@>,
@@ -1138,7 +1145,7 @@ void RC_ExpectationX
 (
     @<R x Input@>
     @<C integer N Input@>,
-    @<C integer P Input@>
+    @<C integer P Input@>,
     @<R weights Input@>
     @<R subset Input@>,
     @<C subset range Input@>,
@@ -1200,7 +1207,7 @@ void RC_CovarianceX
 (
     @<R x Input@>
     @<C integer N Input@>,
-    @<C integer P Input@>
+    @<C integer P Input@>,
     @<R weights Input@>
     @<R subset Input@>,
     @<C subset range Input@>,
@@ -1430,7 +1437,7 @@ SEXP R_KronSums
 ) 
 {
     SEXP ans;
-    int Q;
+    @<C integer Q Input@>;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
 
@@ -1519,7 +1526,7 @@ void RC_KronSums
 @{
     @<R x Input@>
     @<C integer N Input@>,
-    @<C integer P Input@>
+    @<C integer P Input@>,
     @<C real y Input@>
     const int SYMMETRIC,
     double *centerx,
@@ -1795,7 +1802,7 @@ SEXP R_KronSums_Permutation
 ) {
 
     SEXP ans;
-    int Q;
+    @<C integer Q Input@>;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
 
@@ -1817,7 +1824,7 @@ void RC_KronSums_Permutation
 (
     @<R x Input@>
     @<C integer N Input@>,
-    @<C integer P Input@>
+    @<C integer P Input@>,
     @<C real y Input@>
     @<R subset Input@>,
     @<C subset range Input@>,
@@ -2646,21 +2653,21 @@ void RC_ThreeTableSums
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
-            C_ThreeTableSums_iweights_isubset(x, N, P, y, Q, block, L, 
+            C_ThreeTableSums_iweights_isubset(x, N, P, y, Q, block, Lb, 
                                         INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
                                         offset, Nsubset, PQL_ans);
         } else {
-            C_ThreeTableSums_iweights_dsubset(x, N, P, y, Q, block, L,
+            C_ThreeTableSums_iweights_dsubset(x, N, P, y, Q, block, Lb,
                                         INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
                                         offset, Nsubset, PQL_ans);
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
-            C_ThreeTableSums_dweights_isubset(x, N, P, y, Q, block, L,
+            C_ThreeTableSums_dweights_isubset(x, N, P, y, Q, block, Lb,
                                         REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
                                         offset, Nsubset, PQL_ans);
         } else {
-            C_ThreeTableSums_dweights_dsubset(x, N, P, y, Q, block, L,
+            C_ThreeTableSums_dweights_dsubset(x, N, P, y, Q, block, Lb,
                                         REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
                                         offset, Nsubset, PQL_ans);
         }
@@ -2751,7 +2758,7 @@ void C_ThreeTableSums_dweights_isubset
 @{
     int *xx, *yy, *bb, PQ = P * Q;
 
-    for (int p = 0; p < PQ * L; p++) PQL_ans[p] = 0.0;
+    for (int p = 0; p < PQ * Lb; p++) PQL_ans[p] = 0.0;
 
     yy = y;
     xx = x;
