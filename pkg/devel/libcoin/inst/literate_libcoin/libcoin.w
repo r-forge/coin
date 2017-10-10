@@ -264,6 +264,28 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 #include <Rmath.h>
 #include <Rdefines.h>
 #define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)
+#define LE(x, y, tol)  ((x) < (y)) || (fabs((x) - (y)) < (tol))
+#define GE(x, y, tol)  ((x) > (y)) || (fabs((x) - (y)) < (tol))
+
+#define LinearStatistic_SLOT            0
+#define Expectation_SLOT                1
+#define Covariance_SLOT                 2
+#define Variance_SLOT                   3
+#define MPinv_SLOT                      4
+#define ExpectationX_SLOT               5
+#define varonly_SLOT                    6
+#define dim_SLOT                        7
+#define ExpectationInfluence_SLOT       8
+#define CovarianceInfluence_SLOT        9
+#define VarianceInfluence_SLOT          10
+#define Xfactor_SLOT                    11
+#define Work_SLOT                       12
+#define tol_SLOT                        13
+#define PermutedLinearStatistic_SLOT    14
+#define TableBlock_SLOT                 15
+#define Sumweights_SLOT                 16
+#define Table_SLOT                      17
+
 #define DoSymmetric 1
 #define DoCenter 1
 #define Power1 1
@@ -274,17 +296,8 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 
 @d Function Definitions
 @{
-
-int NCOL
-(
-    SEXP x
-) {
-
-    SEXP a;
-    a = getAttrib(x, R_DimSymbol);
-    if (a == R_NilValue) return(1);
-    return(INTEGER(a)[1]);
-}
+@<misc@>
+@<Memory@>
 @<C\_KronSums\_dweights\_dsubset@>
 @<C\_KronSums\_iweights\_dsubset@>
 @<C\_KronSums\_iweights\_isubset@>
@@ -346,6 +359,7 @@ int NCOL
 @<C\_order\_subset\_wrt\_block@>
 @<RC\_order\_subset\_wrt\_block@>;
 @<R\_order\_subset\_wrt\_block@>;
+@<R\_ExpectationCovarianceStatistic@>;
 @}
 
 The \proglang{R} interfaces are used to implement
@@ -494,6 +508,134 @@ subsety <- sample(1:N, floor(N * 1.5), replace = TRUE)
 r1 <- rep(1:ncol(x), ncol(y))
 r2 <- rep(1:ncol(y), each = ncol(x))
 @@
+
+\subsection{Together}
+
+<<together>>=
+colSums(x[subset,r1] * y[subset,r2] * weights[subset])
+table(block)
+.Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, block, 0L, 0.00001)
+@@
+
+@d R\_ExpectationCovarianceStatistic 
+@{
+SEXP R_ExpectationCovarianceStatistic
+(
+    const SEXP x,
+    const SEXP y,
+    const SEXP weights,
+    const SEXP subset,
+    const SEXP block,
+    const SEXP varonly,
+    const SEXP tol
+) {
+
+    SEXP ans, P, Q, Lb, Xfactor;
+
+    PROTECT(P = ScalarInteger(0));
+    PROTECT(Q = ScalarInteger(0));
+    PROTECT(Lb = ScalarInteger(0));
+    PROTECT(Xfactor = ScalarInteger(0));
+
+    if (isInteger(x)) {
+        INTEGER(P)[0] = NLEVELS(x);
+        INTEGER(Xfactor)[0] = 1;
+    } else {
+        INTEGER(P)[0] = NCOL(x);
+        INTEGER(Xfactor)[0] = 0;
+    }
+    INTEGER(Q)[0] = NCOL(y);
+
+    INTEGER(Lb)[0] = 1;
+    if (LENGTH(block) > 0)
+        INTEGER(Lb)[0] = NLEVELS(block);
+
+    PROTECT(ans = R_init_LECV_1d(P, Q, varonly, Lb, Xfactor, tol));
+
+    RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
+
+    UNPROTECT(5);
+    return(ans);
+}
+
+void RC_ExpectationCovarianceStatistic
+(
+    const SEXP x,
+    const SEXP y,
+    const SEXP weights,
+    const SEXP subset,
+    const SEXP block,
+    SEXP ans
+) {
+
+    R_xlen_t N;
+    int P, Q, Lb;
+    double *sumweights, *table, tmp;
+    double *ExpInf, *work;
+    SEXP nullvec, subset_block;
+
+    /* note: x being an integer (Xfactor) with some 0 elements is not
+             handled correctly (as sumweights doesnt't take this information
+             into account; use subset to exclude these missings (as done
+             in libcoin::LinStatExpCov) */
+
+    P = C_get_P(ans);
+    Q = C_get_Q(ans);
+
+    N = NROW(x);
+    Lb = 1;
+    if (LENGTH(block) > 0)
+        Lb = NLEVELS(block);
+
+    PROTECT(nullvec = allocVector(INTSXP, 0));
+
+    RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset, 
+                       Offset0, XLENGTH(subset), nullvec,
+                       C_get_LinearStatistic(ans));
+
+    ExpInf = C_get_ExpectationInfluence(ans);
+    work = C_get_Work(ans);
+    table = C_get_TableBlock(ans);
+    sumweights = C_get_Sumweights(ans);
+
+    if (Lb == 1) {
+        table[0] = 0.0;
+        table[1] = RC_Sums(N, nullvec, subset, Offset0, XLENGTH(subset));
+
+    } else {
+        RC_OneTableSums(INTEGER(block), N, Lb + 1, nullvec, subset, Offset0, XLENGTH(subset), table);
+
+    }
+
+    PROTECT(subset_block = RC_order_subset_wrt_block(N, subset, block, 
+                           VECTOR_ELT(ans, TableBlock_SLOT)));
+
+    for (int b = 0; b < Lb; b++)
+        sumweights[b] = RC_Sums(N, weights, subset_block, (R_xlen_t) table[b], (R_xlen_t) table[b + 1]);
+
+/*
+    C_ExpectationCoVarianceInfluence(REAL(y), N, Q, INTEGER(weights),
+                                     sumweights, subset_tmp, table + 1, Lb, 1, ExpInf,
+                                     C_get_VarianceInfluence(ans), C_get_CovarianceInfluence(ans));
+
+    if (C_get_varonly(ans)) {
+        RC_ExpectationVarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
+            sumweights, subset_tmp, table + 1, Lb, C_get_ExpectationX(ans), ExpInf, C_get_VarianceInfluence(ans),
+            work, C_get_Expectation(ans), C_get_Variance(ans));
+    } else {
+        RC_ExpectationCovarianceLinearStatistic(x, N, P, Q, INTEGER(weights),
+            sumweights, subset_tmp, table + 1, Lb, C_get_ExpectationX(ans), ExpInf,
+            C_get_CovarianceInfluence(ans), work,
+            C_get_Expectation(ans), C_get_Covariance(ans));
+    }
+    if (Lb > 1) Free(subset_tmp);
+*/
+    UNPROTECT(2);
+}
+
+
+
+@}
 
 \subsection{Linear Statistics}
 
@@ -1110,7 +1252,6 @@ double C_Sums_dweights_isubset
     }
 
     @<init subset loop@>    
-
     @<start subset loop@>    
     {
         w = w + diff;
@@ -2561,7 +2702,7 @@ SEXP RC_order_subset_wrt_block
 )
 @}
 
-@d RC\_order\_subset\_wrt\_block
+[A@d RC\_order\_subset\_wrt\_block
 @{
 @<RC\_order\_subset\_wrt\_block Prototype@>
 {
@@ -2672,6 +2813,582 @@ void C_order_subset_wrt_block
 }
 @}
 
+@d misc
+@{
+int NROW
+(
+    SEXP x
+) {
+
+    SEXP a;
+    a = getAttrib(x, R_DimSymbol);
+    if (a == R_NilValue) return(XLENGTH(x));
+    if (TYPEOF(a) == REALSXP)
+        return(REAL(a)[0]);
+    return(INTEGER(a)[0]);
+}
+
+int NCOL
+(
+    SEXP x
+) {
+
+    SEXP a;
+    a = getAttrib(x, R_DimSymbol);
+    if (a == R_NilValue) return(1);
+    if (TYPEOF(a) == REALSXP)
+        return(REAL(a)[1]);
+    return(INTEGER(a)[1]);
+}
+
+int NLEVELS
+(
+    SEXP x
+) {
+
+   SEXP a;
+
+    a = getAttrib(x, R_LevelsSymbol);
+    if (a == R_NilValue)
+        error("no levels attribute found");
+   return(NROW(a));
+}
+
+/**
+    Computes the Kronecker product of two matrices\n
+    *\param A matrix
+    *\param m nrow(A)
+    *\param n ncol(A)
+    *\param B matrix
+    *\param r nrow(B)
+    *\param s ncol(B)
+    *\param ans return value; a pointer to a REALSXP-vector of length (mr x ns)
+*/
+
+void C_kronecker
+(
+    const double *A,
+    const int m,
+    const int n,
+    const double *B,
+    const int r,
+    const int s,
+    const int overwrite,
+    double *ans
+) {
+
+    int i, j, k, l, mr, js, ir;
+    double y;
+
+    if (overwrite) {
+        for (i = 0; i < m * r * n * s; i++) ans[i] = 0.0;
+    }
+
+    mr = m * r;
+    for (i = 0; i < m; i++) {
+        ir = i * r;
+        for (j = 0; j < n; j++) {
+            js = j * s;
+            y = A[j*m + i];
+            for (k = 0; k < r; k++) {
+                for (l = 0; l < s; l++)
+                    ans[(js + l) * mr + ir + k] += y * B[l * r + k];
+            }
+        }
+    }
+}
+
+void C_kronecker_sym
+(
+    const double *A,
+    const int m,
+    const double *B,
+    const int r,
+    const int overwrite,
+    double *ans
+) {
+
+    int i, j, k, l, mr, js, ir, s;
+    double y;
+
+    mr = m * r;
+    s = r;
+
+    if (overwrite) {
+        for (i = 0; i < mr * (mr + 1) / 2; i++) ans[i] = 0.0;
+    }
+
+    for (i = 0; i < m; i++) {
+        ir = i * r;
+        for (j = 0; j <= i; j++) {
+            js = j * s;
+            y = A[S(i, j, m)];
+            for (k = 0; k < r; k++) {
+                for (l = 0; l < (j < i ? s : k + 1); l++) {
+                    ans[S(ir + k, js + l, mr)] += y * B[S(k, l, r)];
+                }
+            }
+        }
+    }
+}
+@}
+
+\subsection{Memory}
+
+@d Memory
+@{
+int C_get_P
+(
+    SEXP LECV
+) {
+
+    return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[0]);
+}
+
+int C_get_Q
+(
+    SEXP LECV
+) {
+
+    return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[1]);
+}
+
+int C_get_varonly
+(
+    SEXP LECV
+) {
+
+    return(INTEGER(VECTOR_ELT(LECV, varonly_SLOT))[0]);
+}
+
+int C_get_Xfactor
+(
+    SEXP LECV
+) {
+
+    return(INTEGER(VECTOR_ELT(LECV, Xfactor_SLOT))[0]);
+}
+
+double* C_get_LinearStatistic
+(
+    SEXP LECV
+) {
+
+    return(REAL(VECTOR_ELT(LECV, LinearStatistic_SLOT)));
+}
+
+double* C_get_Expectation
+(
+    SEXP LECV
+) {
+
+    return(REAL(VECTOR_ELT(LECV, Expectation_SLOT)));
+}
+
+double* C_get_Variance
+(
+    SEXP LECV
+) {
+
+    int PQ = C_get_P(LECV) * C_get_Q(LECV);
+    double *var, *covar;
+
+    if (isNull(VECTOR_ELT(LECV, Variance_SLOT))) {
+        SET_VECTOR_ELT(LECV, Variance_SLOT,
+                       allocVector(REALSXP, PQ));
+        if (!isNull(VECTOR_ELT(LECV, Covariance_SLOT))) {
+            covar = REAL(VECTOR_ELT(LECV, Covariance_SLOT));
+            var = REAL(VECTOR_ELT(LECV, Variance_SLOT));
+            for (int p = 0; p < PQ; p++)
+                var[p] = covar[S(p, p, PQ)];
+        }
+    }
+    return(REAL(VECTOR_ELT(LECV, Variance_SLOT)));
+}
+
+double* C_get_Covariance
+(
+    SEXP LECV
+) {
+
+    int PQ = C_get_P(LECV) * C_get_Q(LECV);
+    if (C_get_varonly(LECV) && PQ > 1)
+        error("Cannot extract covariance from variance only object");
+    if (C_get_varonly(LECV) && PQ == 1)
+        return(C_get_Variance(LECV));
+    return(REAL(VECTOR_ELT(LECV, Covariance_SLOT)));
+}
+
+double* C_get_MPinv
+(
+    SEXP LECV
+) {
+
+    int PQ = C_get_P(LECV) * C_get_Q(LECV);
+    if (C_get_varonly(LECV) && PQ > 1)
+        error("Cannot extract MPinv from variance only object");
+    /* allocate memory on as needed basis */
+    if (isNull(VECTOR_ELT(LECV, MPinv_SLOT))) {
+        SET_VECTOR_ELT(LECV, MPinv_SLOT,
+                       allocVector(REALSXP,
+                                   PQ * (PQ + 1) / 2));
+    }
+    return(REAL(VECTOR_ELT(LECV, MPinv_SLOT)));
+}
+
+
+double* C_get_ExpectationX
+(
+    SEXP LECV
+) {
+
+    return(REAL(VECTOR_ELT(LECV, ExpectationX_SLOT)));
+}
+
+double* C_get_ExpectationInfluence
+(
+    SEXP LECV
+) {
+
+    return(REAL(VECTOR_ELT(LECV, ExpectationInfluence_SLOT)));
+}
+
+double* C_get_CovarianceInfluence
+(
+    SEXP LECV
+) {
+
+    return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));
+}
+
+double* C_get_VarianceInfluence
+(
+    SEXP LECV
+) {
+
+    return(REAL(VECTOR_ELT(LECV, VarianceInfluence_SLOT)));
+}
+
+double* C_get_Work
+(
+    SEXP LECV
+) {
+
+    return(REAL(VECTOR_ELT(LECV, Work_SLOT)));
+}
+
+double* C_get_TableBlock
+(
+    SEXP LECV
+) {
+
+    if (VECTOR_ELT(LECV, TableBlock_SLOT) == R_NilValue)
+        error("object does not contain table block slot");
+    return(REAL(VECTOR_ELT(LECV, TableBlock_SLOT)));
+}
+
+double* C_get_Sumweights
+(
+    SEXP LECV
+) {
+    if (VECTOR_ELT(LECV, Sumweights_SLOT) == R_NilValue)
+        error("object does not contain sumweights slot");
+    return(REAL(VECTOR_ELT(LECV, Sumweights_SLOT)));
+}
+
+int* C_get_Table
+(
+    SEXP LECV
+) {
+
+    if (LENGTH(LECV) <= Table_SLOT)
+        error("Cannot extract table from object");
+    return(INTEGER(VECTOR_ELT(LECV, Table_SLOT)));
+}
+
+int* C_get_dimTable
+(
+    SEXP LECV
+) {
+
+    if (LENGTH(LECV) <= Table_SLOT)
+        error("Cannot extract table from object");
+    return(INTEGER(getAttrib(VECTOR_ELT(LECV, Table_SLOT),
+                             R_DimSymbol)));
+}
+
+
+int C_get_Lb
+(
+    SEXP LECV
+) {
+
+    if (VECTOR_ELT(LECV, TableBlock_SLOT) != R_NilValue)
+        return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));
+    return(C_get_dimTable(LECV)[2]);
+}
+
+int C_get_B
+(
+    SEXP LECV
+) {
+
+    return(NCOL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));
+}
+
+double* C_get_PermutedLinearStatistic
+(
+    SEXP LECV
+) {
+
+    return(REAL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));
+}
+
+double C_get_tol
+(
+    SEXP LECV
+) {
+
+    return(REAL(VECTOR_ELT(LECV, tol_SLOT))[0]);
+}
+
+SEXP R_init_LECV
+(
+    SEXP P,
+    SEXP Q,
+    SEXP varonly,
+    SEXP Lb,
+    SEXP Xfactor,
+    SEXP tol
+) {
+
+    SEXP ans, vo, d, names, tolerance;
+    int p, q, pq, lb;
+
+    if (!isInteger(P) || LENGTH(P) != 1)
+        error("P is not a scalar integer");
+    if (INTEGER(P)[0] <= 0)
+        error("P is not positive");
+
+    if (!isInteger(Q) || LENGTH(Q) != 1)
+        error("Q is not a scalar integer");
+    if (INTEGER(Q)[0] <= 0)
+        error("Q is not positive");
+
+    if (!isInteger(Lb) || LENGTH(Lb) != 1)
+        error("Lb is not a scalar integer");
+    if (INTEGER(Lb)[0] <= 0)
+        error("Lb is not positive");
+
+    if (!isInteger(varonly) || LENGTH(varonly) != 1)
+        error("varonly is not a scalar integer");
+    if (INTEGER(varonly)[0] < 0 || INTEGER(varonly)[0] > 1)
+            error("varonly is not 0 or 1");
+
+    if (!isReal(tol) || LENGTH(tol) != 1)
+        error("tol is not a scalar double");
+    if (REAL(tol)[0] <= DBL_MIN)
+            error("tol is not positive");
+
+    p = INTEGER(P)[0];
+    q = INTEGER(Q)[0];
+    lb = INTEGER(Lb)[0];
+    pq = p * q;
+
+    /* Table_SLOT is always last and only used in 2d case
+       ie omitted here */
+    PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));
+    PROTECT(names = allocVector(STRSXP, Table_SLOT + 1));
+
+    SET_VECTOR_ELT(ans, LinearStatistic_SLOT,
+                   allocVector(REALSXP, pq));
+    SET_STRING_ELT(names, LinearStatistic_SLOT,
+                   mkChar("LinearStatistic"));
+
+    SET_VECTOR_ELT(ans, Expectation_SLOT,
+                   allocVector(REALSXP, pq));
+    SET_STRING_ELT(names, Expectation_SLOT,
+                   mkChar("Expectation"));
+
+    SET_VECTOR_ELT(ans, varonly_SLOT,
+                   vo = allocVector(INTSXP, 1));
+    SET_STRING_ELT(names, varonly_SLOT,
+                   mkChar("varonly"));
+
+    INTEGER(vo)[0] = INTEGER(varonly)[0];
+    if (INTEGER(varonly)[0]) {
+        SET_VECTOR_ELT(ans, Variance_SLOT,
+                       allocVector(REALSXP, pq));
+    } else  {
+        SET_VECTOR_ELT(ans, Covariance_SLOT,
+                       allocVector(REALSXP,
+                                   pq * (pq + 1) / 2));
+    }
+
+    SET_STRING_ELT(names, Variance_SLOT,
+                   mkChar("Variance"));
+    SET_STRING_ELT(names, Covariance_SLOT,
+                   mkChar("Covariance"));
+    SET_STRING_ELT(names, MPinv_SLOT,
+                   mkChar("MPinv"));
+    SET_STRING_ELT(names, Work_SLOT,
+                   mkChar("Work"));
+
+    SET_VECTOR_ELT(ans, ExpectationX_SLOT,
+                   allocVector(REALSXP, p));
+    SET_STRING_ELT(names, ExpectationX_SLOT,
+                   mkChar("ExpectationX"));
+
+    SET_VECTOR_ELT(ans, dim_SLOT,
+                   d = allocVector(INTSXP, 2));
+    SET_STRING_ELT(names, dim_SLOT,
+                   mkChar("dimension"));
+    INTEGER(d)[0] = p;
+    INTEGER(d)[1] = q;
+
+    SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
+                   allocVector(REALSXP, lb * q));
+    SET_STRING_ELT(names, ExpectationInfluence_SLOT,
+                   mkChar("ExpectationInfluence"));
+
+    /* should always _both_ be there */
+    SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
+                   allocVector(REALSXP, lb * q));
+    SET_STRING_ELT(names, VarianceInfluence_SLOT,
+                   mkChar("VarianceInfluence"));
+    SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
+                   allocVector(REALSXP, lb * q * (q + 1) / 2));
+    SET_STRING_ELT(names, CovarianceInfluence_SLOT,
+                   mkChar("CovarianceInfluence"));
+
+    SET_VECTOR_ELT(ans, Xfactor_SLOT,
+                   allocVector(INTSXP, 1));
+    SET_STRING_ELT(names, Xfactor_SLOT,
+                   mkChar("Xfactor"));
+    INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = INTEGER(Xfactor)[0];
+
+    SET_VECTOR_ELT(ans, TableBlock_SLOT,
+                   allocVector(REALSXP, lb + 1));
+    SET_STRING_ELT(names, TableBlock_SLOT,
+                   mkChar("TableBlock"));
+
+    SET_VECTOR_ELT(ans, Sumweights_SLOT,
+                   allocVector(REALSXP, lb));
+    SET_STRING_ELT(names, Sumweights_SLOT,
+                   mkChar("Sumweights"));
+
+    SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
+                   allocMatrix(REALSXP, 0, 0));
+    SET_STRING_ELT(names, PermutedLinearStatistic_SLOT,
+                   mkChar("PermutedLinearStatistic"));
+
+    SET_VECTOR_ELT(ans, tol_SLOT,
+                   tolerance = allocVector(REALSXP, 1));
+    SET_STRING_ELT(names, tol_SLOT,
+                   mkChar("tol"));
+    REAL(tolerance)[0] = REAL(tol)[0];
+
+    SET_STRING_ELT(names, Table_SLOT,
+                   mkChar("Table"));
+
+    namesgets(ans, names);
+
+    UNPROTECT(2);
+    return(ans);
+}
+
+
+SEXP R_init_LECV_1d
+(
+    SEXP P,
+    SEXP Q,
+    SEXP varonly,
+    SEXP Lb,
+    SEXP Xfactor,
+    SEXP tol
+) {
+
+    SEXP ans;
+    int p, lb;
+
+    p = INTEGER(P)[0];
+    lb = INTEGER(Lb)[0];
+
+    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb, Xfactor, tol));
+
+    if (INTEGER(varonly)[0]) {
+        SET_VECTOR_ELT(ans, Work_SLOT,
+                       allocVector(REALSXP, 3 * p + 1));
+    } else  {
+        SET_VECTOR_ELT(ans, Work_SLOT,
+                       allocVector(REALSXP,
+                           p + 2 * p * (p + 1) / 2 + 1));
+    }
+
+    SET_VECTOR_ELT(ans, TableBlock_SLOT,
+                   allocVector(REALSXP, lb + 1));
+
+    SET_VECTOR_ELT(ans, Sumweights_SLOT,
+                   allocVector(REALSXP, lb));
+
+    UNPROTECT(1);
+    return(ans);
+}
+
+SEXP R_init_LECV_2d
+(
+    SEXP P,
+    SEXP Q,
+    SEXP varonly,
+    SEXP Lx,
+    SEXP Ly,
+    SEXP Lb,
+    SEXP Xfactor,
+    SEXP tol
+) {
+
+    SEXP ans, tabdim, tab;
+    int p, lb;
+
+    if (!isInteger(Lx) || LENGTH(Lx) != 1)
+        error("Lx is not a scalar integer");
+    if (INTEGER(Lx)[0] <= 0)
+        error("Lx is not positive");
+
+    if (!isInteger(Ly) || LENGTH(Ly) != 1)
+        error("Ly is not a scalar integer");
+    if (INTEGER(Ly)[0] <= 0)
+        error("Ly is not positive");
+
+    p = INTEGER(P)[0];
+    lb = INTEGER(Lb)[0];
+
+    PROTECT(ans = R_init_LECV(P, Q, varonly, Lb, Xfactor, tol));
+
+    if (INTEGER(varonly)[0]) {
+        SET_VECTOR_ELT(ans, Work_SLOT,
+                       allocVector(REALSXP, 2 * p));
+    } else  {
+        SET_VECTOR_ELT(ans, Work_SLOT,
+                       allocVector(REALSXP,
+                           2 * p * (p + 1) / 2));
+    }
+
+    PROTECT(tabdim = allocVector(INTSXP, 3));
+    INTEGER(tabdim)[0] = INTEGER(Lx)[0] + 1;
+    INTEGER(tabdim)[1] = INTEGER(Ly)[0] + 1;
+    INTEGER(tabdim)[2] = lb;
+    SET_VECTOR_ELT(ans, Table_SLOT,
+                   tab = allocVector(REALSXP,
+                       INTEGER(tabdim)[0] *
+                       INTEGER(tabdim)[1] *
+                       INTEGER(tabdim)[2]));
+    dimgets(tab, tabdim);
+
+    UNPROTECT(2);
+    return(ans);
+}
+@}
 
 \section{R Code}
 
