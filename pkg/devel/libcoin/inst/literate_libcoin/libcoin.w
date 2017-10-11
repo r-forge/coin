@@ -666,10 +666,14 @@ SEXP ans
 
     @<Setup Memory and Subsets in Blocks@>
 
+    /* start with subset[0] */
+    R_xlen_t offset = (R_xlen_t) table[0];
+
     for (int b = 0; b < Lb; b++) {
+
         /* compute sum of weights in block b of subset */
         sumweights[b] = RC_Sums(N, weights, subset_block, 
-                                (R_xlen_t) table[b], (R_xlen_t) table[b + 1]);
+                                offset, (R_xlen_t) table[b + 1]);
 
         @<Compute Expectation Linear Statistic@>
 
@@ -678,6 +682,9 @@ SEXP ans
         } else {
             @<Compute Covariance Linear Statistic@>
         }
+
+        /* next iteration starts with subset[table[b + 1]] */
+        offset += (R_xlen_t) table[b + 1];
     }
 
     Free(VarX); Free(CovX);
@@ -721,15 +728,17 @@ if (Lb == 1) {
     RC_OneTableSums(INTEGER(block), N, Lb + 1, nullvec, subset, Offset0, 
                     XLENGTH(subset), table);
 }
+if (table[0] > 0)
+    error("No missing values allowed in block");
 PROTECT(subset_block = RC_order_subset_wrt_block(N, subset, block, 
                                                  VECTOR_ELT(ans, TableBlock_SLOT)));
 @}
 
 @d Compute Expectation Linear Statistic
 @{
-RC_ExpectationInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], 
+RC_ExpectationInfluence(N, y, Q, weights, subset_block, offset, 
                         (R_xlen_t) table[b + 1], sumweights[b], ExpInf + b * Q);
-RC_ExpectationX(x, N, P, weights, subset_block, (R_xlen_t) table[b], 
+RC_ExpectationX(x, N, P, weights, subset_block, offset, 
                 (R_xlen_t) table[b + 1], ExpX);
 C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b,
                              C_get_Expectation(ans));
@@ -737,10 +746,10 @@ C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b,
 
 @d Compute Variance Linear Statistic
 @{
-RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], 
+RC_CovarianceInfluence(N, y, Q, weights, subset_block, offset, 
                        (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b], 
                        DoVarOnly, VarInf + b * Q);
-RC_CovarianceX(x, N, P, weights, subset_block, (R_xlen_t) table[b], 
+RC_CovarianceX(x, N, P, weights, subset_block, offset, 
                (R_xlen_t) table[b + 1], ExpX, DoVarOnly, VarX);
 C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sumweights[b], 
                           b, C_get_Variance(ans));
@@ -1048,7 +1057,7 @@ void RC_ExpectationInfluence
 {
     double center;
 
-    RC_colSums(REAL(y), N, Q, DoSymmetric, &center, !DoCenter, weights, 
+    RC_colSums(REAL(y), N, Q, Power1, &center, !DoCenter, weights, 
                subset, Offset0, Nsubset, P_ans);
     for (int q = 0; q < Q; q++) 
         P_ans[q] = P_ans[q] / sumweights;
@@ -1269,7 +1278,7 @@ void RC_ExpectationX
     if (TYPEOF(x) == INTSXP) {
         RC_OneTableSums(INTEGER(x), N, P, weights, subset, offset, Nsubset, P_ans);
     } else {
-        RC_colSums(REAL(x), N, P, DoSymmetric, &center, !DoCenter, weights, subset, offset, Nsubset, P_ans);
+        RC_colSums(REAL(x), N, P, Power1, &center, !DoCenter, weights, subset, offset, Nsubset, P_ans);
     }
 }
 @|RC_ExpectationX
@@ -1359,10 +1368,10 @@ initialisation of the loop over all observations
 @d init subset loop
 @{
     R_xlen_t diff = 0;
-    s = subset;
+    s = subset + offset;
     w = weights;
     if (Nsubset > 0)
-        diff = (R_xlen_t) s[offset];
+        diff = (R_xlen_t) s[0];
 @}
 
 and loop over $i = 1, \dots, N$ when no subset was specified or
@@ -1371,7 +1380,7 @@ allowing for number of observations larger than \verb|INT_MAX|
 
 @d start subset loop
 @{
-    for (R_xlen_t i = offset; i < (Nsubset == 0 ? N : Nsubset) - 1; i++) 
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++) 
 @}
 
 After computions in the loop, we compute the next element
@@ -1560,6 +1569,7 @@ double C_Sums_dweights_isubset
     }
     w = w + diff;
     ans += w[0];
+
     return(ans);
 @}
 
@@ -2224,7 +2234,7 @@ SEXP R_colSums
     Nsubset = XLENGTH(subset);
     
     PROTECT(ans = allocVector(REALSXP, P));
-    RC_colSums(REAL(x), N, P, DoSymmetric, &center, !DoCenter, weights, subset, Offset0, 
+    RC_colSums(REAL(x), N, P, Power1, &center, !DoCenter, weights, subset, Offset0, 
                Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
