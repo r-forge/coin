@@ -4,6 +4,8 @@
 %% packages
 \usepackage{amsfonts,amstext,amsmath,amssymb,amsthm}
 
+\usepackage[utf8]{inputenc}
+
 \newif\ifshowcode
 \showcodetrue
 
