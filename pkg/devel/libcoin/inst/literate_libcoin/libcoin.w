@@ -538,12 +538,20 @@ r2 <- rep(1:ncol(y), each = ncol(x))
 
 <<together>>=
 library("libcoin")
-(LECV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
-               integer(0), 0L, 0.00001))
+LECV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
+               integer(0), 0L, 0.00001)
 lcv <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset)
 all.equal(LECV, lcv)
 LECV$CovarianceInfluence
 lcv$CovarianceInfluence
+
+attr(ix, "levels") <- 1:P
+iLECV <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, subset - 1L, 
+               integer(0), 0L, 0.00001)
+ilcv <- LinStatExpCov(X = ix, Y = y, weights = weights, subset = subset)
+all.equal(iLECV, ilcv)
+iLECV$CovarianceInfluence
+ilcv$CovarianceInfluence
 
 sw <- sum(weights[subset])
 expecty <- colSums(y[subset, ] * weights[subset]) / sw
@@ -552,8 +560,6 @@ r1y <- rep(1:ncol(y), ncol(y))
 r2y <- rep(1:ncol(y), each = ncol(y))
 matrix(colSums(yc[subset, r1y] * yc[subset, r2y] * weights[subset]) / sw,
        ncol = Q)
-
-
 
 V <- matrix(0, nrow = P * Q, ncol = P * Q)
 V[lower.tri(V, diag = TRUE)] <- LECV$Covariance
@@ -1206,18 +1212,18 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 a0 <- as.vector(colSums(iX[subset, ] * weights[subset]))
 a0
-a1 <- .Call("R_ExpectationX", ix, P + 1L, weights, subset - 1L)[-1];
-a2 <- .Call("R_ExpectationX", ix, P + 1L, as.double(weights), as.double(subset - 1L))[-1];
-a3 <- .Call("R_ExpectationX", ix, P + 1L, weights, as.double(subset - 1L))[-1];
-a4 <- .Call("R_ExpectationX", ix, P + 1L, as.double(weights), subset - 1L)[-1];
+a1 <- .Call("R_ExpectationX", ix, P, weights, subset - 1L);
+a2 <- .Call("R_ExpectationX", ix, P, as.double(weights), as.double(subset - 1L));
+a3 <- .Call("R_ExpectationX", ix, P, weights, as.double(subset - 1L));
+a4 <- .Call("R_ExpectationX", ix, P, as.double(weights), subset - 1L);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
 
-a1 <- .Call("R_CovarianceX", ix, P + 1L, weights, subset - 1L, 1L)[-1];
-a2 <- .Call("R_CovarianceX", ix, P + 1L, as.double(weights), as.double(subset - 1L), 1L)[-1];
-a3 <- .Call("R_CovarianceX", ix, P + 1L, weights, as.double(subset - 1L), 1L)[-1];
-a4 <- .Call("R_CovarianceX", ix, P + 1L, as.double(weights), subset - 1L, 1L)[-1];
+a1 <- .Call("R_CovarianceX", ix, P, weights, subset - 1L, 1L);
+a2 <- .Call("R_CovarianceX", ix, P, as.double(weights), as.double(subset - 1L), 1L);
+a3 <- .Call("R_CovarianceX", ix, P, weights, as.double(subset - 1L), 1L);
+a4 <- .Call("R_CovarianceX", ix, P, as.double(weights), subset - 1L, 1L);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
@@ -1230,11 +1236,11 @@ vary <- diag(a0)
 a0 <- a0[upper.tri(a0, diag = TRUE)]
 
 a0
-a1 <- .Call("R_CovarianceX", ix, P + 1L, weights, subset - 1L, 0L)[-1];
+a1 <- .Call("R_CovarianceX", ix, P, weights, subset - 1L, 0L);
 a1
-a2 <- .Call("R_CovarianceX", ix, P + 1L, as.double(weights), as.double(subset - 1L), 0L)[-1];
-a3 <- .Call("R_CovarianceX", ix, P + 1L, weights, as.double(subset - 1L), 0L)[-1];
-a4 <- .Call("R_CovarianceX", ix, P + 1L, as.double(weights), subset - 1L, 0L)[-1];
+a2 <- .Call("R_CovarianceX", ix, P, as.double(weights), as.double(subset - 1L), 0L);
+a3 <- .Call("R_CovarianceX", ix, P, weights, as.double(subset - 1L), 0L);
+a4 <- .Call("R_CovarianceX", ix, P, as.double(weights), subset - 1L, 0L);
 
 #stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 #          all.equal(a0, a3) && all.equal(a0, a4))
@@ -1288,7 +1294,10 @@ void RC_ExpectationX
     double center;
 
     if (TYPEOF(x) == INTSXP) {
-        RC_OneTableSums(INTEGER(x), N, P, weights, subset, offset, Nsubset, P_ans);
+        double* Pp1tmp = Calloc(P + 1, double);
+        RC_OneTableSums(INTEGER(x), N, P + 1, weights, subset, offset, Nsubset, Pp1tmp);
+        for (int p = 0; p < P; p++) P_ans[p] = Pp1tmp[p + 1];
+        Free(Pp1tmp);
     } else {
         RC_colSums(REAL(x), N, P, Power1, &center, !DoCenter, weights, subset, offset, Nsubset, P_ans);
     }
