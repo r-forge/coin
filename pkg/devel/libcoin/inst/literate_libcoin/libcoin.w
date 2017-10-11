@@ -570,32 +570,16 @@ stopifnot(all.equal(LECV$LinearStatistic, LEV$LinearStatistic) &&
           all.equal(LSvar, LEV$Variance))
 
 library("libcoin")
-(LECVb <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
-               block, 0L, 0.00001))
-colSums(x[subset[block[subset] == 1],] * weights[subset[block[subset] == 1]])
-subset[block[subset] == 1] - 1
+LECVb <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
+               block, 0L, 0.00001)
 lcvb <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, block = block)
 all.equal(LECVb, lcvb)
 
-b1 <- .Call("R_ExpectationCovarianceStatistic", x, y, weights,
-subset[block[subset] == 1] - 1L, 
-            integer(0), 0L, 0.00001)
-b1$Expectation
-b2 <- .Call("R_ExpectationCovarianceStatistic", x, y, weights,
-subset[block[subset] == 2] - 1L, 
-            integer(0), 0L, 0.00001)
-b2$Expectation
-b1$Expectation + b2$Expectation - lcvb$Expectation
-b1$Expectation + b2$Expectation - LECVb$Expectation
+LEVb <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
+               block, 1L, 0.00001)
+lvb <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, block = block, varonly = FALSE)
+all.equal(LEVb, lvb)
 
-lb1 <- LinStatExpCov(X = x, Y = y, weights = weights, subset =
-subset[block[subset] == 1])
-lb2 <- LinStatExpCov(X = x, Y = y, weights = weights, subset =
-subset[block[subset] == 2])
-lb1$Expectation + lb2$Expectation - lcvb$Expectation
-
-max(abs(b1$Expectation - lb1$Expectation))
-max(abs(b2$Expectation - lb2$Expectation))
 
 @@
 
@@ -762,12 +746,8 @@ RC_ExpectationInfluence(N, y, Q, weights, subset_block, offset,
                         (R_xlen_t) table[b + 1], sumweights[b], ExpInf + b * Q);
 RC_ExpectationX(x, N, P, weights, subset_block, offset, 
                 (R_xlen_t) table[b + 1], ExpX);
-for (int p = 0; p < P; p++) 
-    Rprintf("p %d ExpX %f\n", p, ExpX[p]);
-C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b,
+C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b, 
                              C_get_Expectation(ans));
-for (int p = 0; p < P * Q; p++) 
-    Rprintf("p %d Exp %f\n", p, C_get_Expectation(ans)[p]);
 @}
 
 @d Compute Variance Linear Statistic
@@ -888,13 +868,13 @@ void RC_LinearStatistic
 
     if (XLENGTH(subsety) == 0) {
         RC_KronSums(x, N, P, y, Q, !DoSymmetric, &center, &center, !DoCenter, weights, 
-                    subset, Offset0, Nsubset, PQ_ans);
+                    subset, offset, Nsubset, PQ_ans);
     } else {
         if (XLENGTH(weights) > 0) 
             error("weights given for permutation");
         if (XLENGTH(subset) != XLENGTH(subsety))
             error("incorrect subsets");
-        RC_KronSums_Permutation(x, N, P, y, Q, subset, Offset0, Nsubset, 
+        RC_KronSums_Permutation(x, N, P, y, Q, subset, offset, Nsubset, 
                                 subsety, PQ_ans);
     }
 }
@@ -1084,7 +1064,7 @@ void RC_ExpectationInfluence
     double center;
 
     RC_colSums(REAL(y), N, Q, Power1, &center, !DoCenter, weights, 
-               subset, Offset0, Nsubset, P_ans);
+               subset, offset, Nsubset, P_ans);
     for (int q = 0; q < Q; q++) 
         P_ans[q] = P_ans[q] / sumweights;
 }
@@ -2400,7 +2380,6 @@ void C_colSums_dweights_isubset
         @<init subset loop@>
         @<start subset loop@>
         {
-Rprintf("subset %d\n", s[0]);
             xx = xx + diff;
             if (HAS_WEIGHTS) {
                 w = w + diff;
