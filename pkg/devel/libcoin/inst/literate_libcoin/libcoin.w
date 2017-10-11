@@ -518,7 +518,7 @@ set.seed(29)
 N <- 20L
 P <- 3L
 Q <- 4L
-L <- 5L
+L <- 2L
 x <- matrix(runif(N * P), nrow = N)
 y <- matrix(runif(N * Q), nrow = N)
 ix <- sample(1:P, size = N, replace = TRUE)
@@ -574,6 +574,17 @@ library("libcoin")
                block, 0L, 0.00001))
 lcvb <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, block = block)
 all.equal(LECVb, lcvb)
+
+b1 <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset[block == 1] - 1L, 
+            integer(0), 0L, 0.00001)
+b2 <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset[block == 2] - 1L, 
+            integer(0), 0L, 0.00001)
+b1$Expectation + b2$Expectation - lcvb$Expectation
+b1$Expectation + b2$Expectation - LECVb$Expectation
+
+lb1 <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset[block == 1])
+lb2 <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset[block == 2])
+lb1$Expectation + lb2$Expectation - lcvb$Expectation
 
 @@
 
