@@ -17,8 +17,13 @@ libcoin.R:	libcoin.pdf
 all:	libcoin.pdf libcoin.R
 
 clean:	
+	rm -rf *~
 	rm -rf libcoin.pdf
 	rm -rf libcoin.R
 	texclean libcoin
+	rm -rf libcoin.tex
+	rm -rf libcoin.Rnw
 	rm -rf *c
-	rm -rf *h	
+	rm -rf *h
+	rm -rf *o
+	rm -rf *so	

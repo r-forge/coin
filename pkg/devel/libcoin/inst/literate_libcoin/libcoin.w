@@ -271,12 +271,12 @@ and that in the one-sided case maximum type test statistics are replaced by
 #define Sumweights_SLOT                 16
 #define Table_SLOT                      17
 
-#define DoSymmetric 1
-#define DoCenter 1
-#define DoVarOnly 1
-#define Power1 1
-#define Power2 2
-#define Offset0 0
+#define DoSymmetric 			1
+#define DoCenter 			1
+#define DoVarOnly 			1
+#define Power1 				1
+#define Power2 				2
+#define Offset0 			0
 @| LinearStatistic_SLOT Expectation_SLOT Covariance_SLOT Variance_SLOT
 MPinv_SLOT ExpectationX_SLOT varonly_SLOT dim_SLOT
 ExpectationInfluence_SLOT CovarianceInfluence_SLOT VarianceInfluence_SLOT
@@ -442,7 +442,7 @@ The sum of all weights is a double
     double sumweights
 @}
 
-Subsets $\A \subseteq \{1, \dots, N\}$ 
+Subsets $\A \subseteq \{1, \dots, N\}$ are \proglang{R} style indices
 
 @d R subset Input
 @{
@@ -538,7 +538,7 @@ r2 <- rep(1:ncol(y), each = ncol(x))
 
 <<together>>=
 library("libcoin")
-LECV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
+LECV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset, 
                integer(0), 0L, 0.00001)
 lcv <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset)
 all.equal(LECV, lcv)
@@ -546,7 +546,7 @@ LECV$CovarianceInfluence
 lcv$CovarianceInfluence
 
 attr(ix, "levels") <- 1:P
-iLECV <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, subset - 1L, 
+iLECV <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, subset, 
                integer(0), 0L, 0.00001)
 ilcv <- LinStatExpCov(X = ix, Y = y, weights = weights, subset = subset)
 all.equal(iLECV, ilcv)
@@ -567,7 +567,7 @@ LSvar <- diag(V)
 V <- matrix(0, nrow = Q, ncol = Q)
 V[lower.tri(V, diag = TRUE)] <- LECV$CovarianceInfluence
 Ivar <- diag(V)
-(LEV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
+(LEV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset, 
               integer(0), 1L, 0.00001))
 lv <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, varonly = TRUE)
 all.equal(LEV, lv)
@@ -578,17 +578,18 @@ stopifnot(all.equal(LECV$LinearStatistic, LEV$LinearStatistic) &&
           all.equal(LSvar, LEV$Variance))
 
 library("libcoin")
-LECVb <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
+subset[block[subset] == 1]
+subset[block[subset] == 2]
+LECVb <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset, 
                block, 0L, 0.00001)
 lcvb <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, block = block)
 all.equal(LECVb, lcvb)
 
-LEVb <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
+LEVb <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset, 
                block, 1L, 0.00001)
 lvb <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, block = block, varonly =
 TRUE)
 all.equal(LEVb, lvb)
-
 
 @@
 
@@ -790,10 +791,10 @@ C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
 
 <<LinearStatistics>>=
 a0 <- colSums(x[subset,r1] * y[subset,r2] * weights[subset])
-a1 <- .Call("R_LinearStatistic", x, P, y, weights, subset - 1L, integer(0))
-a2 <- .Call("R_LinearStatistic", x, P, y, as.double(weights), as.double(subset - 1L), integer(0))
-a3 <- .Call("R_LinearStatistic", x, P, y, weights, as.double(subset - 1L), integer(0))
-a4 <- .Call("R_LinearStatistic", x, P, y, as.double(weights), subset - 1L, integer(0))
+a1 <- .Call("R_LinearStatistic", x, P, y, weights, subset, integer(0))
+a2 <- .Call("R_LinearStatistic", x, P, y, as.double(weights), as.double(subset), integer(0))
+a3 <- .Call("R_LinearStatistic", x, P, y, weights, as.double(subset), integer(0))
+a4 <- .Call("R_LinearStatistic", x, P, y, as.double(weights), subset, integer(0))
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4) &&
@@ -801,22 +802,22 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 a0 <- as.vector(colSums(iX[subset,r1] * y[subset,r2] * weights[subset]))
-a1 <- .Call("R_LinearStatistic", ix, P, y, weights, subset - 1L, integer(0))
-a2 <- .Call("R_LinearStatistic", ix, P, y, as.double(weights), as.double(subset - 1L), integer(0))
-a3 <- .Call("R_LinearStatistic", ix, P, y, weights, as.double(subset - 1L), integer(0))
-a4 <- .Call("R_LinearStatistic", ix, P, y, as.double(weights), subset - 1L, integer(0))
+a1 <- .Call("R_LinearStatistic", ix, P, y, weights, subset, integer(0))
+a2 <- .Call("R_LinearStatistic", ix, P, y, as.double(weights), as.double(subset), integer(0))
+a3 <- .Call("R_LinearStatistic", ix, P, y, weights, as.double(subset), integer(0))
+a4 <- .Call("R_LinearStatistic", ix, P, y, as.double(weights), subset, integer(0))
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
 
 a0 <- colSums(x[subset,r1] * y[subsety, r2])
-a1 <- .Call("R_LinearStatistic", x, P, y, integer(0), subset - 1L, subsety -1L)
-a2 <- .Call("R_LinearStatistic", x, P, y, integer(0), as.double(subset - 1L), as.double(subsety -1L))
+a1 <- .Call("R_LinearStatistic", x, P, y, integer(0), subset, subsety)
+a2 <- .Call("R_LinearStatistic", x, P, y, integer(0), as.double(subset), as.double(subsety))
 stopifnot(all.equal(a0, a1) && all.equal(a0, a1))
 
 a0 <- as.vector(colSums(iX[subset,r1] * y[subsety, r2]))
-a1 <- .Call("R_LinearStatistic", ix, P, y, integer(0), subset - 1L, subsety -1L)
-a1 <- .Call("R_LinearStatistic", ix, P, y, integer(0), as.double(subset - 1L), as.double(subsety -1L))
+a1 <- .Call("R_LinearStatistic", ix, P, y, integer(0), subset, subsety)
+a1 <- .Call("R_LinearStatistic", ix, P, y, integer(0), as.double(subset), as.double(subsety))
 stopifnot(all.equal(a0, a1))
 
 @@
@@ -1016,10 +1017,10 @@ void C_VarianceLinearStatistic
 <<ExpectationCovarianceInfluence>>=
 sw <- sum(weights[subset])
 expecty <- a0 <- colSums(y[subset, ] * weights[subset]) / sw
-a1 <- .Call("R_ExpectationInfluence", y, weights, subset - 1L);
-a2 <- .Call("R_ExpectationInfluence", y, as.double(weights), as.double(subset - 1L));
-a3 <- .Call("R_ExpectationInfluence", y, weights, as.double(subset - 1L));
-a4 <- .Call("R_ExpectationInfluence", y, as.double(weights), subset - 1L);
+a1 <- .Call("R_ExpectationInfluence", y, weights, subset);
+a2 <- .Call("R_ExpectationInfluence", y, as.double(weights), as.double(subset));
+a3 <- .Call("R_ExpectationInfluence", y, weights, as.double(subset));
+a4 <- .Call("R_ExpectationInfluence", y, as.double(weights), subset);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4) &&
@@ -1092,20 +1093,20 @@ a0 <- colSums(yc[subset, r1y] * yc[subset, r2y] * weights[subset]) / sw
 a0 <- matrix(a0, ncol = ncol(y))
 vary <- diag(a0)
 a0 <- a0[lower.tri(a0, diag = TRUE)]
-a1 <- .Call("R_CovarianceInfluence", y, weights, subset - 1L, 0L);
-a2 <- .Call("R_CovarianceInfluence", y, as.double(weights), as.double(subset - 1L), 0L);
-a3 <- .Call("R_CovarianceInfluence", y, weights, as.double(subset - 1L), 0L);
-a4 <- .Call("R_CovarianceInfluence", y, as.double(weights), subset - 1L, 0L);
+a1 <- .Call("R_CovarianceInfluence", y, weights, subset, 0L);
+a2 <- .Call("R_CovarianceInfluence", y, as.double(weights), as.double(subset), 0L);
+a3 <- .Call("R_CovarianceInfluence", y, weights, as.double(subset), 0L);
+a4 <- .Call("R_CovarianceInfluence", y, as.double(weights), subset, 0L);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4) &&
           all.equal(a0, LECV$CovarianceInfluence) &&
           all.equal(vary, LEV$VarianceInfluence))
 
-a1 <- .Call("R_CovarianceInfluence", y, weights, subset - 1L, 1L);
-a2 <- .Call("R_CovarianceInfluence", y, as.double(weights), as.double(subset - 1L), 1L);
-a3 <- .Call("R_CovarianceInfluence", y, weights, as.double(subset - 1L), 1L);
-a4 <- .Call("R_CovarianceInfluence", y, as.double(weights), subset - 1L, 1L);
+a1 <- .Call("R_CovarianceInfluence", y, weights, subset, 1L);
+a2 <- .Call("R_CovarianceInfluence", y, as.double(weights), as.double(subset), 1L);
+a3 <- .Call("R_CovarianceInfluence", y, weights, as.double(subset), 1L);
+a4 <- .Call("R_CovarianceInfluence", y, as.double(weights), subset, 1L);
 
 a0 <- vary
 
@@ -1192,38 +1193,38 @@ void RC_CovarianceInfluence
 <<ExpectationCovarianceX>>=
 a0 <- colSums(x[subset, ] * weights[subset]) 
 a0
-a1 <- .Call("R_ExpectationX", x, P, weights, subset - 1L);
-a2 <- .Call("R_ExpectationX", x, P, as.double(weights), as.double(subset - 1L));
-a3 <- .Call("R_ExpectationX", x, P, weights, as.double(subset - 1L));
-a4 <- .Call("R_ExpectationX", x, P, as.double(weights), subset - 1L);
+a1 <- .Call("R_ExpectationX", x, P, weights, subset);
+a2 <- .Call("R_ExpectationX", x, P, as.double(weights), as.double(subset));
+a3 <- .Call("R_ExpectationX", x, P, weights, as.double(subset));
+a4 <- .Call("R_ExpectationX", x, P, as.double(weights), subset);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4) &&
           all.equal(a0, LECV$ExpectationX))
 
 a0 <- colSums(x[subset, ]^2 * weights[subset]) 
-a1 <- .Call("R_CovarianceX", x, P, weights, subset - 1L, 1L);
-a2 <- .Call("R_CovarianceX", x, P, as.double(weights), as.double(subset - 1L), 1L);
-a3 <- .Call("R_CovarianceX", x, P, weights, as.double(subset - 1L), 1L);
-a4 <- .Call("R_CovarianceX", x, P, as.double(weights), subset - 1L, 1L);
+a1 <- .Call("R_CovarianceX", x, P, weights, subset, 1L);
+a2 <- .Call("R_CovarianceX", x, P, as.double(weights), as.double(subset), 1L);
+a3 <- .Call("R_CovarianceX", x, P, weights, as.double(subset), 1L);
+a4 <- .Call("R_CovarianceX", x, P, as.double(weights), subset, 1L);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
 
 a0 <- as.vector(colSums(iX[subset, ] * weights[subset]))
 a0
-a1 <- .Call("R_ExpectationX", ix, P, weights, subset - 1L);
-a2 <- .Call("R_ExpectationX", ix, P, as.double(weights), as.double(subset - 1L));
-a3 <- .Call("R_ExpectationX", ix, P, weights, as.double(subset - 1L));
-a4 <- .Call("R_ExpectationX", ix, P, as.double(weights), subset - 1L);
+a1 <- .Call("R_ExpectationX", ix, P, weights, subset);
+a2 <- .Call("R_ExpectationX", ix, P, as.double(weights), as.double(subset));
+a3 <- .Call("R_ExpectationX", ix, P, weights, as.double(subset));
+a4 <- .Call("R_ExpectationX", ix, P, as.double(weights), subset);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
 
-a1 <- .Call("R_CovarianceX", ix, P, weights, subset - 1L, 1L);
-a2 <- .Call("R_CovarianceX", ix, P, as.double(weights), as.double(subset - 1L), 1L);
-a3 <- .Call("R_CovarianceX", ix, P, weights, as.double(subset - 1L), 1L);
-a4 <- .Call("R_CovarianceX", ix, P, as.double(weights), subset - 1L, 1L);
+a1 <- .Call("R_CovarianceX", ix, P, weights, subset, 1L);
+a2 <- .Call("R_CovarianceX", ix, P, as.double(weights), as.double(subset), 1L);
+a3 <- .Call("R_CovarianceX", ix, P, weights, as.double(subset), 1L);
+a4 <- .Call("R_CovarianceX", ix, P, as.double(weights), subset, 1L);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
@@ -1236,11 +1237,11 @@ vary <- diag(a0)
 a0 <- a0[upper.tri(a0, diag = TRUE)]
 
 a0
-a1 <- .Call("R_CovarianceX", ix, P, weights, subset - 1L, 0L);
+a1 <- .Call("R_CovarianceX", ix, P, weights, subset, 0L);
 a1
-a2 <- .Call("R_CovarianceX", ix, P, as.double(weights), as.double(subset - 1L), 0L);
-a3 <- .Call("R_CovarianceX", ix, P, weights, as.double(subset - 1L), 0L);
-a4 <- .Call("R_CovarianceX", ix, P, as.double(weights), subset - 1L, 0L);
+a2 <- .Call("R_CovarianceX", ix, P, as.double(weights), as.double(subset), 0L);
+a3 <- .Call("R_CovarianceX", ix, P, weights, as.double(subset), 0L);
+a4 <- .Call("R_CovarianceX", ix, P, as.double(weights), subset, 0L);
 
 #stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 #          all.equal(a0, a3) && all.equal(a0, a4))
@@ -1391,8 +1392,9 @@ initialisation of the loop over all observations
     R_xlen_t diff = 0;
     s = subset + offset;
     w = weights;
+    /* subset is R-style index in 1:N */
     if (Nsubset > 0)
-        diff = (R_xlen_t) s[0];
+        diff = (R_xlen_t) s[0] - 1;
 @}
 
 and loop over $i = 1, \dots, N$ when no subset was specified or
@@ -1409,7 +1411,10 @@ After computions in the loop, we compute the next element
 @d continue subset loop
 @{
     if (Nsubset > 0) {
+        /* NB: diff also works with R style index */
         diff = (R_xlen_t) s[1] - s[0];
+        if (diff < 0)
+            error("subset not sorted");
         s++;
     } else {
         diff = 1;
@@ -1421,10 +1426,10 @@ After computions in the loop, we compute the next element
 
 <<SimpleSums>>=
 a0 <- sum(weights[subset])
-a1 <- .Call("R_Sums", N, weights, subset - 1L)
-a2 <- .Call("R_Sums", N, as.double(weights), as.double(subset - 1L))
-a3 <- .Call("R_Sums", N, weights, as.double(subset - 1L))
-a4 <- .Call("R_Sums", N, as.double(weights), subset - 1L)
+a1 <- .Call("R_Sums", N, weights, subset)
+a2 <- .Call("R_Sums", N, as.double(weights), as.double(subset))
+a3 <- .Call("R_Sums", N, weights, as.double(subset))
+a4 <- .Call("R_Sums", N, as.double(weights), subset)
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
 @@
@@ -1602,10 +1607,10 @@ r1 <- rep(1:ncol(x), ncol(y))
 r2 <- rep(1:ncol(y), each = ncol(x))
 
 a0 <- colSums(x[subset,r1] * y[subset,r2] * weights[subset])
-a1 <- .Call("R_KronSums", x, P, y, weights, subset - 1L)
-a2 <- .Call("R_KronSums", x, P, y, as.double(weights), as.double(subset - 1L))
-a3 <- .Call("R_KronSums", x, P, y, weights, as.double(subset - 1L))
-a4 <- .Call("R_KronSums", x, P, y, as.double(weights), subset - 1L)
+a1 <- .Call("R_KronSums", x, P, y, weights, subset)
+a2 <- .Call("R_KronSums", x, P, y, as.double(weights), as.double(subset))
+a3 <- .Call("R_KronSums", x, P, y, weights, as.double(subset))
+a4 <- .Call("R_KronSums", x, P, y, as.double(weights), subset)
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
@@ -1828,9 +1833,8 @@ void C_KronSums_dweights_isubset
 
     for (int p = 0; p < P; p++) {
         for (int q = (SYMMETRIC ? p : 0); q < Q; q++) {
-//    for (int q = 0; q < Q; q++) {
-//        for (int p = 0; p < (SYMMETRIC ? q + 1 : P); p++) {
-
+            /* SYMMETRIC is column-wise, default
+               is row-wise (maybe need to change this) */
             if (SYMMETRIC) {
                 idx = S(p, q, P); 
             } else {
@@ -1865,7 +1869,6 @@ void C_KronSums_dweights_isubset
             } else {
                 PQ_ans[idx] += (xx[0] - cx) * (yy[0] - cy);
             }
-//            PQ_ans++;
         }
     }
 @}
@@ -1876,10 +1879,10 @@ void C_KronSums_dweights_isubset
 
 a0 <- as.vector(colSums(iX[subset,r1] * 
                         y[subset,r2] * weights[subset]))
-a1 <- .Call("R_KronSums", ix, P, y, weights, subset - 1L)
-a2 <- .Call("R_KronSums", ix, P, y, as.double(weights), as.double(subset - 1L))
-a3 <- .Call("R_KronSums", ix, P, y, weights, as.double(subset - 1L))
-a4 <- .Call("R_KronSums", ix, P, y, as.double(weights), subset - 1L)
+a1 <- .Call("R_KronSums", ix, P, y, weights, subset)
+a2 <- .Call("R_KronSums", ix, P, y, as.double(weights), as.double(subset))
+a3 <- .Call("R_KronSums", ix, P, y, weights, as.double(subset))
+a4 <- .Call("R_KronSums", ix, P, y, as.double(weights), subset)
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
@@ -2001,8 +2004,8 @@ void C_XfactorKronSums_dweights_isubset
 
 <<KronSums-Permutation>>=
 a0 <- colSums(x[subset,r1] * y[subsety, r2])
-a1 <- .Call("R_KronSums_Permutation", x, P, y, subset - 1L, subsety -1L)
-a2 <- .Call("R_KronSums_Permutation", x, P, y, as.double(subset - 1L), as.double(subsety -1L))
+a1 <- .Call("R_KronSums_Permutation", x, P, y, subset, subsety)
+a2 <- .Call("R_KronSums_Permutation", x, P, y, as.double(subset), as.double(subsety))
 stopifnot(all.equal(a0, a1) && all.equal(a0, a1))
 @@
 
@@ -2124,16 +2127,18 @@ void C_KronSums_Permutation_isubset
             xx = x + N * p;
             sx = subset;
             sy = subsety;
-            diff = (R_xlen_t) sx[offset];
+            /* subset is R-style index in 1:N */
+            diff = (R_xlen_t) sx[offset] - 1;
             for (R_xlen_t i = offset; i < Nsubset - 1; i++) {
                 xx = xx + diff;
-                PQ_ans[0] += xx[0] * y[ (R_xlen_t) sy[0] + q * N];
+                /* subsety is R-style index in 1:N; - 1 needed here */
+                PQ_ans[0] += xx[0] * y[ (R_xlen_t) sy[0] - 1 + q * N];
                 diff = (R_xlen_t) sx[1] - sx[0];
                 sx++;
                 sy++;
             }
             xx = xx + diff;
-            PQ_ans[0] += xx[0] * y[ (R_xlen_t) sy[0] + q * N];
+            PQ_ans[0] += xx[0] * y[ (R_xlen_t) sy[0] - 1 + q * N];
             PQ_ans++;
         }
     }
@@ -2142,10 +2147,9 @@ void C_KronSums_Permutation_isubset
 \subsubsection{Xfactor Permuted Kronecker Sums}
 
 <<XfactorKronSums-Permutation>>=
-a0 <- as.vector(colSums(iX[subset,r1] * y[subsety,
-r2]))
-a1 <- .Call("R_KronSums_Permutation", ix, P, y, subset - 1L, subsety -1L)
-a1 <- .Call("R_KronSums_Permutation", ix, P, y, as.double(subset - 1L), as.double(subsety -1L))
+a0 <- as.vector(colSums(iX[subset,r1] * y[subsety, r2]))
+a1 <- .Call("R_KronSums_Permutation", ix, P, y, subset, subsety)
+a1 <- .Call("R_KronSums_Permutation", ix, P, y, as.double(subset), as.double(subsety))
 stopifnot(all.equal(a0, a1))
 @@
 
@@ -2195,16 +2199,18 @@ void C_XfactorKronSums_Permutation_isubset
         xx = x;
         sx = subset;
         sy = subsety;
-        diff = (R_xlen_t) sx[offset];
+        /* subset is R-style index in 1:N */
+        diff = (R_xlen_t) sx[offset] - 1;
         for (R_xlen_t i = offset; i < Nsubset - 1; i++) {
             xx = xx + diff;
-            PQ_ans[(xx[0] - 1) + q * P] += y[ (R_xlen_t) sy[0] + q * N];
+            /* subsety is R-style index in 1:N; - 1 needed here */
+            PQ_ans[(xx[0] - 1) + q * P] += y[ (R_xlen_t) sy[0] - 1 + q * N];
             diff = (R_xlen_t) sx[1] - sx[0];
             sx++;
             sy++;
         }
         xx = xx + diff;
-        PQ_ans[(xx[0] - 1) + q * P] += y[ (R_xlen_t) sy[0] + q * N];
+        PQ_ans[(xx[0] - 1) + q * P] += y[ (R_xlen_t) sy[0] - 1 + q * N];
     }
 @}
 
@@ -2214,10 +2220,10 @@ void C_XfactorKronSums_Permutation_isubset
 
 <<colSums>>=
 a0 <- colSums(x[subset,] * weights[subset])
-a1 <- .Call("R_colSums", x, weights, subset - 1L)
-a2 <- .Call("R_colSums", x, as.double(weights), as.double(subset - 1L))
-a3 <- .Call("R_colSums", x, weights, as.double(subset - 1L))
-a4 <- .Call("R_colSums", x, as.double(weights), subset - 1L)
+a1 <- .Call("R_colSums", x, weights, subset)
+a2 <- .Call("R_colSums", x, as.double(weights), as.double(subset))
+a3 <- .Call("R_colSums", x, weights, as.double(subset))
+a4 <- .Call("R_colSums", x, as.double(weights), subset)
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
@@ -2422,13 +2428,13 @@ void C_colSums_dweights_isubset
 <<OneTableSum>>=
 
 a0 <- as.vector(xtabs(weights ~ ix, subset = subset))
-a1 <- .Call("R_OneTableSums", ix, P + 1L, weights, subset - 1L)[-1]
+a1 <- .Call("R_OneTableSums", ix, P + 1L, weights, subset)[-1]
 a2 <- .Call("R_OneTableSums", ix, P + 1L, 
-            as.double(weights), as.double(subset - 1L))[-1]
+            as.double(weights), as.double(subset))[-1]
 a3 <- .Call("R_OneTableSums", ix, P + 1L, 
-            weights, as.double(subset - 1L))[-1]
+            weights, as.double(subset))[-1]
 a4 <- .Call("R_OneTableSums", ix, P + 1L, 
-            as.double(weights), subset - 1L)[-1]
+            as.double(weights), subset)[-1]
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
@@ -2635,16 +2641,16 @@ void C_OneTableSums_dweights_isubset
 
 a0 <- c(xtabs(weights ~ ix + iy, subset = subset))
 a1 <- .Call("R_TwoTableSums", ix, P + 1L, iy, Q + 1L, 
-            weights, subset - 1L)
+            weights, subset)
 a1 <- c(matrix(a1, nrow = P + 1, ncol = Q + 1)[-1,-1])
 a2 <- .Call("R_TwoTableSums", ix, P + 1L, iy, Q + 1L, 
-            as.double(weights), as.double(subset - 1L))
+            as.double(weights), as.double(subset))
 a2 <- c(matrix(a2, nrow = P + 1, ncol = Q + 1)[-1,-1])
 a3 <- .Call("R_TwoTableSums", ix, P + 1L, iy, Q + 1L, 
-            weights, as.double(subset - 1L))
+            weights, as.double(subset))
 a3 <- c(matrix(a3, nrow = P + 1, ncol = Q + 1)[-1,-1])
 a4 <- .Call("R_TwoTableSums", ix, P + 1L, iy, Q + 1L, 
-            as.double(weights), subset - 1L)
+            as.double(weights), subset)
 a4 <- c(matrix(a4, nrow = P + 1, ncol = Q + 1)[-1,-1])
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
@@ -2836,19 +2842,19 @@ void C_TwoTableSums_dweights_isubset
 
 a0 <- c(xtabs(weights ~ ix + iy + block, subset = subset))
 a1 <- .Call("R_ThreeTableSums", ix, P + 1L, iy, Q + 1L, 
-            block, L, weights, subset - 1L)
+            block, L, weights, subset)
 a1 <- c(array(a1, dim = c(P + 1, Q + 1, L))[-1,-1,])
 a2 <- .Call("R_ThreeTableSums", ix, P + 1L, iy, Q + 1L, 
             block, L,
-            as.double(weights), as.double(subset - 1L))
+            as.double(weights), as.double(subset))
 a2 <- c(array(a2, dim = c(P + 1, Q + 1, L))[-1,-1,])
 a3 <- .Call("R_ThreeTableSums", ix, P + 1L, iy, Q + 1L, 
             block, L,
-            weights, as.double(subset - 1L))
+            weights, as.double(subset))
 a3 <- c(array(a3, dim = c(P + 1, Q + 1, L))[-1,-1,])
 a4 <- .Call("R_ThreeTableSums", ix, P + 1L, iy, Q + 1L, 
             block, L,
-            as.double(weights), subset - 1L)
+            as.double(weights), subset)
 a4 <- c(array(a4, dim = c(P + 1, Q + 1, L))[-1,-1,])
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
@@ -3044,16 +3050,16 @@ void C_ThreeTableSums_dweights_isubset
 \section{Utilities}
 
 <<Helpers>>=
-a0 <- as.vector(do.call("c", tapply(subset, block[subset], function(s) s - 1)))
-a1 <- .Call("R_order_subset_wrt_block", y, subset - 1L, integer(0), block, L + 1L);
+a0 <- as.vector(do.call("c", tapply(subset, block[subset], function(s) s)))
+a1 <- .Call("R_order_subset_wrt_block", y, subset, integer(0), block, L + 1L);
 stopifnot(all.equal(a0, a1))
-a2 <- .Call("R_order_subset_wrt_block", y, subset - 1L, integer(0), integer(0), 2L);
-stopifnot(all.equal(subset - 1L, a2))
-a0 <- as.vector(do.call("c", tapply(1:N, block, function(s) s - 1)))
+a2 <- .Call("R_order_subset_wrt_block", y, subset, integer(0), integer(0), 2L);
+stopifnot(all.equal(subset, a2))
+a0 <- as.vector(do.call("c", tapply(1:N, block, function(s) s)))
 a3 <- .Call("R_order_subset_wrt_block", y, integer(0), integer(0), block, L + 1L);
 stopifnot(all.equal(a0, a3))
 a4 <- .Call("R_order_subset_wrt_block", y, integer(0), integer(0), integer(0), 2L);
-stopifnot(all.equal(0:(N - 1), a4))
+stopifnot(all.equal(1:N, a4))
 @@
 
 @d Utils
@@ -3150,10 +3156,11 @@ void C_setup_subset
 )
 {
     for (R_xlen_t i = 0; i < N; i++) {
+        /* ans is R style index in 1:N */
         if (TYPEOF(ans) == INTSXP) {
-            INTEGER(ans)[i] = i;
+            INTEGER(ans)[i] = i + 1;
         } else {
-            REAL(ans)[i] = (double) i;
+            REAL(ans)[i] = (double) i + 1;
         }
     }
 }
@@ -3180,10 +3187,11 @@ void C_setup_subset_block
         cumtable[k] = cumtable[k - 1] + REAL(blockTable)[k - 1];
 
     for (R_xlen_t i = 0; i < N; i++) {
+        /* ans is R style index in 1:N */
         if (TYPEOF(ans) == INTSXP) {
-            INTEGER(ans)[(int) cumtable[INTEGER(block)[i]]++] = i;
+            INTEGER(ans)[(int) cumtable[INTEGER(block)[i]]++] = i + 1;
         } else {
-            REAL(ans)[(R_xlen_t) cumtable[INTEGER(block)[i]]++] = (double) i;
+            REAL(ans)[(R_xlen_t) cumtable[INTEGER(block)[i]]++] = (double) i + 1;
         }
     }
 
@@ -3211,12 +3219,13 @@ void C_order_subset_wrt_block
     for (int k = 1; k < Nlevels; k++)
         cumtable[k] = cumtable[k - 1] + REAL(blockTable)[k - 1];
 
+    /* subset is R style index in 1:N */
     if (TYPEOF(subset) == INTSXP) {
         for (R_xlen_t i = 0; i < XLENGTH(subset); i++)
-            INTEGER(ans)[(int) cumtable[INTEGER(block)[INTEGER(subset)[i]]]++] = INTEGER(subset)[i];
+            INTEGER(ans)[(int) cumtable[INTEGER(block)[INTEGER(subset)[i] - 1]]++] = INTEGER(subset)[i];
     } else {
         for (R_xlen_t i = 0; i < XLENGTH(subset); i++)
-            REAL(ans)[(R_xlen_t) cumtable[INTEGER(block)[(R_xlen_t) REAL(subset)[i]]]++] = REAL(subset)[i];
+            REAL(ans)[(R_xlen_t) cumtable[INTEGER(block)[(R_xlen_t) REAL(subset)[i] - 1]]++] = REAL(subset)[i];
     }
 
     Free(cumtable); 
