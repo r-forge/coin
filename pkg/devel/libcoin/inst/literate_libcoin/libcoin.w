@@ -577,7 +577,8 @@ all.equal(LECVb, lcvb)
 
 LEVb <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
                block, 1L, 0.00001)
-lvb <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, block = block, varonly = FALSE)
+lvb <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, block = block, varonly =
+TRUE)
 all.equal(LEVb, lvb)
 
 
@@ -658,7 +659,7 @@ SEXP ans
     @<C integer Q Input@>;
     @<C integer Lb Input@>;
     double *sumweights, *table;
-    double *ExpInf, *VarInf, *CovInf, *ExpX, *VarX, *CovX;
+    double *ExpInf, *VarInf, *CovInf, *ExpX, *ExpXtotal, *VarX, *CovX;
     SEXP nullvec, subset_block;
 
     /* note: x being an integer (Xfactor) with some 0 elements is not
@@ -693,7 +694,7 @@ SEXP ans
         offset += (R_xlen_t) table[b + 1];
     }
 
-    Free(VarX); Free(CovX);
+    Free(ExpX); Free(VarX); Free(CovX);
     UNPROTECT(2);
 }
 @|RC_ExpectationCovarianceStatistic
@@ -721,7 +722,9 @@ RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset,
 ExpInf = C_get_ExpectationInfluence(ans);
 VarInf = C_get_VarianceInfluence(ans);
 CovInf = C_get_CovarianceInfluence(ans);
-ExpX = C_get_ExpectationX(ans);
+ExpXtotal = C_get_ExpectationX(ans);
+for (int p = 0; p < P; p++) ExpXtotal[p] = 0.0;
+ExpX = Calloc(P, double);
 VarX = Calloc(P, double);
 CovX = Calloc(P * (P + 1) / 2, double);
 table = C_get_TableBlock(ans);
@@ -746,6 +749,7 @@ RC_ExpectationInfluence(N, y, Q, weights, subset_block, offset,
                         (R_xlen_t) table[b + 1], sumweights[b], ExpInf + b * Q);
 RC_ExpectationX(x, N, P, weights, subset_block, offset, 
                 (R_xlen_t) table[b + 1], ExpX);
+for (int p = 0; p < P; p++) ExpXtotal[p] += ExpX[p];
 C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b, 
                              C_get_Expectation(ans));
 @}
