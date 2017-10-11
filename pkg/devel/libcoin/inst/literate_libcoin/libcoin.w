@@ -535,8 +535,46 @@ r2 <- rep(1:ncol(y), each = ncol(x))
 \section{User Interface}
 
 <<together>>=
-LECV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
-              integer(0), 0L, 0.00001)
+library("libcoin")
+(LECV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
+               integer(0), 0L, 0.00001))
+lcv <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset)
+all.equal(LECV, lcv)
+LECV$CovarianceInfluence
+lcv$CovarianceInfluence
+
+sw <- sum(weights[subset])
+expecty <- colSums(y[subset, ] * weights[subset]) / sw
+yc <- t(t(y) - expecty)
+r1y <- rep(1:ncol(y), ncol(y))
+r2y <- rep(1:ncol(y), each = ncol(y))
+matrix(colSums(yc[subset, r1y] * yc[subset, r2y] * weights[subset]) / sw,
+       ncol = Q)
+
+
+
+V <- matrix(0, nrow = P * Q, ncol = P * Q)
+V[lower.tri(V, diag = TRUE)] <- LECV$Covariance
+LSvar <- diag(V)
+V <- matrix(0, nrow = Q, ncol = Q)
+V[lower.tri(V, diag = TRUE)] <- LECV$CovarianceInfluence
+Ivar <- diag(V)
+(LEV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
+              integer(0), 1L, 0.00001))
+lv <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, varonly = TRUE)
+all.equal(LEV, lv)
+stopifnot(all.equal(LECV$LinearStatistic, LEV$LinearStatistic) &&
+          all.equal(LECV$Expectation, LEV$Expectation) &&
+          all.equal(LECV$ExpectationInfluence, LEV$ExpectationInfluence) &&
+          all.equal(Ivar, LEV$VarianceInfluence) &&
+          all.equal(LSvar, LEV$Variance))
+
+library("libcoin")
+(LECVb <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset - 1L, 
+               block, 0L, 0.00001))
+lcvb <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, block = block)
+all.equal(LECVb, lcvb)
+
 @@
 
 @d User Interface
@@ -614,7 +652,7 @@ SEXP ans
     @<C integer Q Input@>;
     @<C integer Lb Input@>;
     double *sumweights, *table;
-    double *ExpInf, *VarInf, *CovInf, *ExpX, *VarX, *CovX, *work;
+    double *ExpInf, *VarInf, *CovInf, *ExpX, *VarX, *CovX;
     SEXP nullvec, subset_block;
 
     /* note: x being an integer (Xfactor) with some 0 elements is not
@@ -642,6 +680,7 @@ SEXP ans
         }
     }
 
+    Free(VarX); Free(CovX);
     UNPROTECT(2);
 }
 @|RC_ExpectationCovarianceStatistic
@@ -669,10 +708,9 @@ RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset,
 ExpInf = C_get_ExpectationInfluence(ans);
 VarInf = C_get_VarianceInfluence(ans);
 CovInf = C_get_CovarianceInfluence(ans);
-ExpX = Calloc(P, double);
+ExpX = C_get_ExpectationX(ans);
 VarX = Calloc(P, double);
 CovX = Calloc(P * (P + 1) / 2, double);
-work = C_get_Work(ans);
 table = C_get_TableBlock(ans);
 sumweights = C_get_Sumweights(ans);
 
@@ -704,8 +742,8 @@ RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b],
                        DoVarOnly, VarInf + b * Q);
 RC_CovarianceX(x, N, P, weights, subset_block, (R_xlen_t) table[b], 
                (R_xlen_t) table[b + 1], ExpX, DoVarOnly, VarX);
-C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sumweights[b], work, b,
-                          C_get_Variance(ans));
+C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sumweights[b], 
+                          b, C_get_Variance(ans));
 @}
 
 @d Compute Covariance Linear Statistic
@@ -715,9 +753,9 @@ RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b],
                        !DoVarOnly, CovInf + b * Q * (Q + 1) / 2);
 RC_CovarianceX(x, N, P, weights, subset_block, (R_xlen_t) table[b], 
                (R_xlen_t) table[b + 1], ExpX, !DoVarOnly, CovX);
-C_VarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
-                          ExpX, CovX, sumweights[b], work, b,
-                          C_get_Covariance(ans));
+C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
+                            ExpX, CovX, sumweights[b], b,
+                            C_get_Covariance(ans));
 @}
 
 
@@ -880,14 +918,14 @@ void C_CovarianceLinearStatistic
     double *ExpX,
     double *CovX,
     @<C sumweights Input@>,
-    double *PP_sym_tmp,         /* work vector */
     const int add,
     double *PQPQ_sym_ans
 ) {
 
     double f1 = sumweights / (sumweights - 1);
     double f2 = 1.0 / (sumweights - 1);
-    double tmp;
+    double tmp, *PP_sym_tmp;
+
 
     if (P * Q == 1) {
         tmp = f1 * CovInf[0] * CovX[0];
@@ -898,12 +936,14 @@ void C_CovarianceLinearStatistic
             PQPQ_sym_ans[0] = tmp;
         }
     } else {
+        PP_sym_tmp = Calloc(P * (P + 1) / 2, double);
         C_KronSums_sym_(ExpX, 1, P,
                         PP_sym_tmp);
         for (int p = 0; p < P * (P + 1) / 2; p++)
             PP_sym_tmp[p] = f1 * CovX[p] - f2 * PP_sym_tmp[p];
         C_kronecker_sym(CovInf, Q, PP_sym_tmp, P, 1 - (add >= 1),
                         PQPQ_sym_ans);
+        Free(PP_sym_tmp);
     }
 }
 @|C_CovarianceLinearStatistic
@@ -919,23 +959,25 @@ void C_VarianceLinearStatistic
     double *ExpX,
     double *VarX,
     @<C sumweights Input@>,    
-    double *P_tmp,              /* work array */
     const int add,
     double *PQ_ans
 ) {
 
+
     if (P * Q == 1) {
         C_CovarianceLinearStatistic(P, Q, VarInf, ExpX, VarX,
-                                    sumweights, P_tmp, (add >= 1),
+                                    sumweights, (add >= 1),
                                     PQ_ans);
     } else {
-
+        double *P_tmp;
+        P_tmp = Calloc(P, double);
         double f1 = sumweights / (sumweights - 1);
         double f2 = 1.0 / (sumweights - 1);
         for (int p = 0; p < P; p++)
             P_tmp[p] = f1 * VarX[p] - f2 * ExpX[p] * ExpX[p];
         C_kronecker(VarInf, 1, Q, P_tmp, 1, P, 1 - (add >= 1),
                     PQ_ans);
+        Free(P_tmp);
     }
 }
 @|C_VarianceLinearStatistic
@@ -953,8 +995,8 @@ a3 <- .Call("R_ExpectationInfluence", y, weights, as.double(subset - 1L));
 a4 <- .Call("R_ExpectationInfluence", y, as.double(weights), subset - 1L);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))# &&
-#          all.equal(a0, LECV$ExpectationInfluence))
+          all.equal(a0, a3) && all.equal(a0, a4) &&
+          all.equal(a0, LECV$ExpectationInfluence))
 @@
 
 @d R\_ExpectationInfluence
@@ -1022,7 +1064,7 @@ r2y <- rep(1:ncol(y), each = ncol(y))
 a0 <- colSums(yc[subset, r1y] * yc[subset, r2y] * weights[subset]) / sw
 a0 <- matrix(a0, ncol = ncol(y))
 vary <- diag(a0)
-a0 <- a0[upper.tri(a0, diag = TRUE)]
+a0 <- a0[lower.tri(a0, diag = TRUE)]
 a1 <- .Call("R_CovarianceInfluence", y, weights, subset - 1L, 0L);
 a2 <- .Call("R_CovarianceInfluence", y, as.double(weights), as.double(subset - 1L), 0L);
 a3 <- .Call("R_CovarianceInfluence", y, weights, as.double(subset - 1L), 0L);
@@ -1030,7 +1072,8 @@ a4 <- .Call("R_CovarianceInfluence", y, as.double(weights), subset - 1L, 0L);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4) &&
-          all.equal(a0, LECV$CovarianceInfluence))
+          all.equal(a0, LECV$CovarianceInfluence) &&
+          all.equal(vary, LEV$VarianceInfluence))
 
 a1 <- .Call("R_CovarianceInfluence", y, weights, subset - 1L, 1L);
 a2 <- .Call("R_CovarianceInfluence", y, as.double(weights), as.double(subset - 1L), 1L);
@@ -1040,8 +1083,8 @@ a4 <- .Call("R_CovarianceInfluence", y, as.double(weights), subset - 1L, 1L);
 a0 <- vary
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-
+          all.equal(a0, a3) && all.equal(a0, a4) &&
+          all.equal(a0, LEV$VarianceInfluence))
 @@
 
 @d R\_CovarianceInfluence
@@ -1120,7 +1163,7 @@ void RC_CovarianceInfluence
 \subsection{X}
 
 <<ExpectationCovarianceX>>=
-expectx <- a0 <- colSums(x[subset, ] * weights[subset]) 
+a0 <- colSums(x[subset, ] * weights[subset]) 
 a0
 a1 <- .Call("R_ExpectationX", x, P, weights, subset - 1L);
 a2 <- .Call("R_ExpectationX", x, P, as.double(weights), as.double(subset - 1L));
@@ -1128,10 +1171,10 @@ a3 <- .Call("R_ExpectationX", x, P, weights, as.double(subset - 1L));
 a4 <- .Call("R_ExpectationX", x, P, as.double(weights), subset - 1L);
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))# &&
-#          all.equal(a0, LECV$ExpectationX))
+          all.equal(a0, a3) && all.equal(a0, a4) &&
+          all.equal(a0, LECV$ExpectationX))
 
-expectx <- a0 <- colSums(x[subset, ]^2 * weights[subset]) 
+a0 <- colSums(x[subset, ]^2 * weights[subset]) 
 a1 <- .Call("R_CovarianceX", x, P, weights, subset - 1L, 1L);
 a2 <- .Call("R_CovarianceX", x, P, as.double(weights), as.double(subset - 1L), 1L);
 a3 <- .Call("R_CovarianceX", x, P, weights, as.double(subset - 1L), 1L);
@@ -1140,7 +1183,7 @@ a4 <- .Call("R_CovarianceX", x, P, as.double(weights), subset - 1L, 1L);
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
 
-expectx <- a0 <- as.vector(colSums(iX[subset, ] * weights[subset]))
+a0 <- as.vector(colSums(iX[subset, ] * weights[subset]))
 a0
 a1 <- .Call("R_ExpectationX", ix, P + 1L, weights, subset - 1L)[-1];
 a2 <- .Call("R_ExpectationX", ix, P + 1L, as.double(weights), as.double(subset - 1L))[-1];
@@ -1196,7 +1239,8 @@ SEXP R_ExpectationX
     Nsubset = XLENGTH(subset);
 
     PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0]));
-    RC_ExpectationX(x, N, INTEGER(P)[0], weights, subset, Offset0, Nsubset, REAL(ans));
+    RC_ExpectationX(x, N, INTEGER(P)[0], weights, subset, 
+                    Offset0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
@@ -1749,12 +1793,22 @@ void C_KronSums_dweights_isubset
 @d KronSums Body
 @{
     double *xx, *yy, cx = 0.0, cy = 0.0;
+    int idx;
 
-    for (int q = 0; q < Q; q++) {
-        for (int p = 0; p < (SYMMETRIC ? q + 1 : P); p++) {
-            PQ_ans[0] = 0.0;
+    for (int p = 0; p < P; p++) {
+        for (int q = (SYMMETRIC ? p : 0); q < Q; q++) {
+//    for (int q = 0; q < Q; q++) {
+//        for (int p = 0; p < (SYMMETRIC ? q + 1 : P); p++) {
+
+            if (SYMMETRIC) {
+                idx = S(p, q, P); 
+            } else {
+                idx = q * P + p;  
+            }
+            PQ_ans[idx] = 0.0;
             yy = y + N * q;
             xx = x + N * p;
+
             if (CENTER) {
                 cx = centerx[p];
                 cy = centery[q];
@@ -1766,9 +1820,9 @@ void C_KronSums_dweights_isubset
                 yy = yy + diff;
                 if (HAS_WEIGHTS) {
                     w = w + diff;
-                    PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy) * w[0];
+                    PQ_ans[idx] += (xx[0] - cx) * (yy[0] - cy) * w[0];
                 } else {
-                    PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy);
+                    PQ_ans[idx] += (xx[0] - cx) * (yy[0] - cy);
                 }
                 @<continue subset loop@>
             }
@@ -1776,11 +1830,11 @@ void C_KronSums_dweights_isubset
             yy = yy + diff;
             if (HAS_WEIGHTS) {
                 w = w + diff;
-                PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy) * w[0];
+                PQ_ans[idx] += (xx[0] - cx) * (yy[0] - cy) * w[0];
             } else {
-                PQ_ans[0] += (xx[0] - cx) * (yy[0] - cy);
+                PQ_ans[idx] += (xx[0] - cx) * (yy[0] - cy);
             }
-            PQ_ans++;
+//            PQ_ans++;
         }
     }
 @}
@@ -3387,7 +3441,6 @@ double* C_get_ExpectationX
 (
     SEXP LECV
 ) {
-
     return(REAL(VECTOR_ELT(LECV, ExpectationX_SLOT)));
 }
 
