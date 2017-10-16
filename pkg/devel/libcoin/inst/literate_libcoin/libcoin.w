@@ -333,6 +333,7 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 @<LinearStatistics@>
 @<ExpectationCovariances@>
 @<User Interface@>
+@<2d User Interface@>
 @}
 
 The \proglang{R} interfaces are used to implement
@@ -783,19 +784,26 @@ C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
                             C_get_Covariance(ans));
 @}
 
-\subsection{dd Case}
+\subsection{2d Case}
 
 <<2d>>=
 library("libcoin")
 attr(ix, "levels") <- 1:P
 attr(iy, "levels") <- 1:Q
-# LECV <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
-#               diag(Q), iy, weights, subset, 
-#               integer(0), 0L, 0.00001)
-# lcv <- LinStatExpCov(X = diag(P), ix = ix, Y = diag(Q), iy = iy, weights = weights, subset = subset)
-#all.equal(LECV, lcv)
-#LECV$CovarianceInfluence
-#lcv$CovarianceInfluence
+iX2d <- rbind(0, diag(P))
+iY2d <- rbind(0, diag(Q))
+LECV2d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
+              iY2d, iy, weights, subset, 
+              integer(0), 0L, 0.00001)
+lcv2d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset)
+lcv2d$Sumweights
+LECV2d$Sumweights
+all.equal(LECV2d, lcv2d)
+LECV2d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
+              iY2d, iy, weights, subset, 
+              integer(0), 0L, 0.00001)
+lcv2d <- LinStatExpCov(X = integer(0), ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset)
+all.equal(LECV2d, lcv2d)
 @@
 
 @d 2d User Interface
@@ -827,7 +835,7 @@ SEXP tol
     int P, Q, Lb, Lx, Ly, Xfactor;
     R_xlen_t N, Nsubset;
 
-    N = XLENGT(ix);
+    N = XLENGTH(ix);
     Nsubset = XLENGTH(subset);
 
     if (LENGTH(x) == 0) {
@@ -835,7 +843,7 @@ SEXP tol
         Xfactor = 1;
     } else {
         P = NCOL(x);
-        INTEGER(Xfactor)[0] = 0;
+        Xfactor = 0;
     }
     Q = NCOL(y);
 
@@ -846,15 +854,15 @@ SEXP tol
     Lx = NLEVELS(ix);
     Ly = NLEVELS(iy);
 
-    PROTECT(ans = R_init_LECV_2d(P, Q, INTEGER(varonly)[0], 
-                                 Lx, Ly, Lb, Xfactor, REAL(tol)[0]));
+    PROTECT(ans = RC_init_LECV_2d(P, Q, INTEGER(varonly)[0], 
+                                  Lx, Ly, Lb, Xfactor, REAL(tol)[0]));
 
     if (Lb == 1) {
-        RC_TwoTableSums(INTEGER(ix), N, P, INTEGER(iy), Q, 
+        RC_TwoTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1, 
                         weights, subset, Offset0, Nsubset, 
                         C_get_Table(ans));
     } else {
-        RC_ThreeTableSums(INTEGER(ix), N, P, INTEGER(iy), Q, 
+        RC_ThreeTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1, 
                           INTEGER(block), Lb, weights, subset, Offset0, Nsubset, 
                           C_get_Table(ans));
     }
@@ -876,12 +884,11 @@ SEXP tol
         for (int q = 0; q < Q; q++) {
             PQ_ans[q * P + p] = 0.0;
             qPp = q * P + p;
-            qLy = q * Ly;
-            for (int i = 0; i < Lx; i++) {
-                pLxi = p * Lx + i;
-                for (int j = 0; j < Ly; j++)
-                      PQ_ans[qPp] += y[qLy + j] * x[pLxi] *
-                                     weights2d[j * Lx + i];
+            qLy = q * Lyp1;
+            for (int i = 0; i < Lxp1; i++) {
+                pLxi = p * Lxp1 + i;
+                for (int j = 0; j < Lyp1; j++)
+                      PQ_ans[qPp] += REAL(y)[qLy + j] * REAL(x)[pLxi] * table[j * Lxp1 + i];
             }
         }
     }
@@ -891,13 +898,13 @@ SEXP tol
 @{
     double *Lx1Q_ans = C_get_LinearStatistic(ans);
 
-    for (int q = 0; q < (Lx - 1) * Q; q++) Lx1Q_ans[q] = 0.0;
+    for (int q = 0; q < (Lxp1 - 1) * Q; q++) Lx1Q_ans[q] = 0.0;
 
-    for (int j = 1; j < Ly; j++) { /* j = 0 means NA */
-        for (int i = 1; i < Lx; i++) { /* i = 0 means NA */
+    for (int j = 1; j < Lyp1; j++) { /* j = 0 means NA */
+        for (int i = 1; i < Lxp1; i++) { /* i = 0 means NA */
             for (int q = 0; q < Q; q++)
-                Lx1Q_ans[q * (Lx - 1) + (i - 1)] +=
-                    weights2d[j * Lx + i] * y[q * Ly + j];
+                Lx1Q_ans[q * (Lxp1 - 1) + (i - 1)] +=
+                    table[j * Lxp1 + i] * REAL(y)[q * Lyp1 + j];
         }
     }
 @}
@@ -910,16 +917,17 @@ void RC_ExpectationCovarianceStatistic_2d
 SEXP ans
 ) {
 
-    SEXP Rcsum, Rrsum, subset;
+    SEXP Rcsum, Rrsum;
     int P, Q, Lxp1, Lyp1, Lb;
     double *ExpInf, *ExpX, *CovX;
-    double *table, *table2d, *csum, *rsum, sw, *btab;
+    double *table, *table2d, *csum, *rsum, *sw, *btab;
 
     P = C_get_P(ans);
     Q = C_get_Q(ans);
 
     ExpX = C_get_ExpectationX(ans);
     table = C_get_Table(ans);
+    sw = C_get_Sumweights(ans);
 
     Lxp1 = C_get_dimTable(ans)[0];
     Lyp1 = C_get_dimTable(ans)[1];
@@ -958,22 +966,22 @@ SEXP ans
         btab = table + Lxp1 * Lyp1 * b;
         /* column sums */
         csum[0] = 0.0; /* NA */
-        for (int q = 1; q < Lyp1; q++) {
+        for (int q = 0; q < Lyp1; q++) {
             csum[q] = 0.0;
-            for (int p = 1; p < Lxp1; p++) 
-                csum[q] += btab[q * Lyp1 + p];
+            for (int p = 0; p < Lxp1; p++)
+                csum[q] += btab[q * Lxp1 + p];
         }
         /* row sums */
         rsum[0] = 0.0; /* NA */
-        for (int p = 1; p < Lxp1; p++)  {
+        for (int p = 0; p < Lxp1; p++)  {
             rsum[p] = 0.0;
-            for (int q = 1; q < Lyp1; q++) {
-                rsum[p] += btab[q * Lyp1 + p];
+            for (int q = 0; q < Lyp1; q++)
+                rsum[p] += btab[q * Lxp1 + p];
         }
-        sw = 0;
-        for (int i = 1; i < Lxp1; i++) sw += rsum[i];
+        sw[b] = 0;
+        for (int i = 1; i < Lxp1; i++) sw[b] += rsum[i];
 
-        RC_ExpectationInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, sw, ExpInf);
+        RC_ExpectationInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, sw[b], ExpInf);
 
         if (LENGTH(x) == 0) {
             for (int p = 0; p < P; p++)
@@ -985,11 +993,11 @@ SEXP ans
         C_ExpectationLinearStatistic(P, Q, ExpInf, ExpX, b, C_get_Expectation(ans));
 
         if (C_get_varonly(ans)) {
-            C_CovarianceInfluence_weights(NROW(y), REAL(y), Q, Rcsum, subset, Offset0, 0, ExpInf, sw,
-                                          DoVarOnly, C_get_VarianceInfluence(ans));
+            RC_CovarianceInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, ExpInf, sw[b],
+                                   DoVarOnly, C_get_VarianceInfluence(ans));
         } else {
-            C_CovarianceInfluence_weights(NROW(y), REAL(y), Q, Rcsum, subset, Offset0, 0, ExpInf, sw,
-                                          !DoVarOnly, C_get_CovarianceInfluence(ans));
+            RC_CovarianceInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, ExpInf, sw[b],
+                                   !DoVarOnly, C_get_CovarianceInfluence(ans));
         }
 
         if (C_get_varonly(ans)) {
@@ -999,7 +1007,7 @@ SEXP ans
                 RC_CovarianceX(x, NROW(x), P, Rrsum, subset, Offset0, 0, ExpX, DoVarOnly, CovX);
             }
             C_VarianceLinearStatistic(P, Q, C_get_VarianceInfluence(ans),
-                                      ExpX, CovX, sw, b,
+                                      ExpX, CovX, sw[b], b,
                                       C_get_Variance(ans));
         } else {
             if (LENGTH(x) == 0) {
@@ -1009,7 +1017,7 @@ SEXP ans
                 RC_CovarianceX(x, NROW(x), P, Rrsum, subset, Offset0, 0, ExpX, !DoVarOnly, CovX);
             }
             C_CovarianceLinearStatistic(P, Q, C_get_CovarianceInfluence(ans),
-                                        ExpX, CovX, sw, b,
+                                        ExpX, CovX, sw[b], b,
                                         C_get_Covariance(ans));
         }
     }
@@ -3492,7 +3500,7 @@ int NCOL
     return(INTEGER(a)[1]);
 }
 
-int NLEVELS
+int NLEVELS	
 (
     SEXP x
 ) {
