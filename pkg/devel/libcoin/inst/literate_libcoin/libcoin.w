@@ -1,4 +1,3 @@
-
 \documentclass[a4paper]{report}
 
 %% packages
@@ -833,7 +832,8 @@ SEXP tol
 ) {
     SEXP ans;
     int P, Q, Lb, Lx, Ly, Xfactor;
-    R_xlen_t N, Nsubset;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
 
     N = XLENGTH(ix);
     Nsubset = XLENGTH(subset);
@@ -1012,7 +1012,7 @@ SEXP ans
 
     Lxp1 = C_get_dimTable(ans)[0];
     Lyp1 = C_get_dimTable(ans)[1];
-    Lb = C_get_dimTable(ans)[2];
+    Lb = C_get_Lb(ans);
 
     if (C_get_varonly(ans)) {
         CovX = Calloc(P, double);
@@ -3932,7 +3932,7 @@ int C_get_Lb
         return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));
     return(C_get_dimTable(LECV)[2]);
 }
-@|C\_get\_Lb
+@|C_get_Lb
 @}
 
 @d C\_get\_B
@@ -3970,129 +3970,100 @@ double C_get_tol
 @|C_get_tol
 @}
 
+@d Memory Input Checks
+@{
+if (P <= 0)
+    error("P is not positive");
+
+if (Q <= 0)
+    error("Q is not positive");
+
+if (Lb <= 0)
+    error("Lb is not positive");
+
+if (varonly < 0 || varonly > 1)
+    error("varonly is not 0 or 1");
+
+if (Xfactor < 0 || Xfactor > 1)
+    error("Xfactor is not 0 or 1");
+
+if (tol <= DBL_MIN)
+    error("tol is not positive");
+@}
+
+@d Memory Names
+@{
+PROTECT(names = allocVector(STRSXP, Table_SLOT + 1));
+SET_STRING_ELT(names, LinearStatistic_SLOT, mkChar("LinearStatistic"));
+SET_STRING_ELT(names, Expectation_SLOT, mkChar("Expectation"));
+SET_STRING_ELT(names, varonly_SLOT, mkChar("varonly"));
+SET_STRING_ELT(names, Variance_SLOT, mkChar("Variance"));
+SET_STRING_ELT(names, Covariance_SLOT, mkChar("Covariance"));
+SET_STRING_ELT(names, MPinv_SLOT, mkChar("MPinv"));
+SET_STRING_ELT(names, Work_SLOT, mkChar("Work"));
+SET_STRING_ELT(names, ExpectationX_SLOT, mkChar("ExpectationX"));
+SET_STRING_ELT(names, dim_SLOT, mkChar("dimension"));
+SET_STRING_ELT(names, ExpectationInfluence_SLOT,
+               mkChar("ExpectationInfluence"));
+SET_STRING_ELT(names, Xfactor_SLOT, mkChar("Xfactor"));
+SET_STRING_ELT(names, CovarianceInfluence_SLOT,
+               mkChar("CovarianceInfluence"));
+SET_STRING_ELT(names, VarianceInfluence_SLOT,
+               mkChar("VarianceInfluence"));
+SET_STRING_ELT(names, TableBlock_SLOT, mkChar("TableBlock"));
+SET_STRING_ELT(names, Sumweights_SLOT, mkChar("Sumweights"));
+SET_STRING_ELT(names, PermutedLinearStatistic_SLOT,
+               mkChar("PermutedLinearStatistic"));
+SET_STRING_ELT(names, tol_SLOT, mkChar("tol"));
+SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
+@}
+
 @d R\_init\_LECV
 @{
     SEXP vo, d, names, tolerance;
     int PQ; 
 
-    if (P <= 0)
-        error("P is not positive");
-
-    if (Q <= 0)
-        error("Q is not positive");
-
-    if (Lb <= 0)
-        error("Lb is not positive");
-
-    if (varonly < 0 || varonly > 1)
-        error("varonly is not 0 or 1");
-
-    if (Xfactor < 0 || Xfactor > 1)
-        error("Xfactor is not 0 or 1");
-
-    if (tol <= DBL_MIN)
-        error("tol is not positive");
+    @<Memory Input Checks@>
 
     PQ = P * Q;
+
+    @<Memory Names@>
 
     /* Table_SLOT is always last and only used in 2d case
        ie omitted here */
     PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));
-    PROTECT(names = allocVector(STRSXP, Table_SLOT + 1));
-
-    SET_VECTOR_ELT(ans, LinearStatistic_SLOT,
-                   allocVector(REALSXP, PQ));
-    SET_STRING_ELT(names, LinearStatistic_SLOT,
-                   mkChar("LinearStatistic"));
-
-    SET_VECTOR_ELT(ans, Expectation_SLOT,
-                   allocVector(REALSXP, PQ));
-    SET_STRING_ELT(names, Expectation_SLOT,
-                   mkChar("Expectation"));
-
-    SET_VECTOR_ELT(ans, varonly_SLOT,
-                   vo = allocVector(INTSXP, 1));
-    SET_STRING_ELT(names, varonly_SLOT,
-                   mkChar("varonly"));
-
+    SET_VECTOR_ELT(ans, LinearStatistic_SLOT, allocVector(REALSXP, PQ));
+    SET_VECTOR_ELT(ans, Expectation_SLOT, allocVector(REALSXP, PQ));
+    SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));
     INTEGER(vo)[0] = varonly;
     if (varonly) {
-        SET_VECTOR_ELT(ans, Variance_SLOT,
-                       allocVector(REALSXP, PQ));
+        SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
     } else  {
         SET_VECTOR_ELT(ans, Covariance_SLOT,
-                       allocVector(REALSXP,
-                                   PQ * (PQ + 1) / 2));
+                       allocVector(REALSXP, PQ * (PQ + 1) / 2));
     }
-
-    SET_STRING_ELT(names, Variance_SLOT,
-                   mkChar("Variance"));
-    SET_STRING_ELT(names, Covariance_SLOT,
-                   mkChar("Covariance"));
-    SET_STRING_ELT(names, MPinv_SLOT,
-                   mkChar("MPinv"));
-    SET_STRING_ELT(names, Work_SLOT,
-                   mkChar("Work"));
-
-    SET_VECTOR_ELT(ans, ExpectationX_SLOT,
-                   allocVector(REALSXP, P));
-    SET_STRING_ELT(names, ExpectationX_SLOT,
-                   mkChar("ExpectationX"));
-
-    SET_VECTOR_ELT(ans, dim_SLOT,
-                   d = allocVector(INTSXP, 2));
-    SET_STRING_ELT(names, dim_SLOT,
-                   mkChar("dimension"));
+    SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));
+    SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));
     INTEGER(d)[0] = P;
     INTEGER(d)[1] = Q;
-
     SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
                    allocVector(REALSXP, Lb * Q));
-    SET_STRING_ELT(names, ExpectationInfluence_SLOT,
-                   mkChar("ExpectationInfluence"));
 
     /* should always _both_ be there */
     SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
                    allocVector(REALSXP, Lb * Q));
-    SET_STRING_ELT(names, VarianceInfluence_SLOT,
-                   mkChar("VarianceInfluence"));
     SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
                    allocVector(REALSXP, Lb * Q * (Q + 1) / 2));
-    SET_STRING_ELT(names, CovarianceInfluence_SLOT,
-                   mkChar("CovarianceInfluence"));
 
-    SET_VECTOR_ELT(ans, Xfactor_SLOT,
-                   allocVector(INTSXP, 1));
-    SET_STRING_ELT(names, Xfactor_SLOT,
-                   mkChar("Xfactor"));
+    SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
     INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
-
-    SET_VECTOR_ELT(ans, TableBlock_SLOT,
-                   allocVector(REALSXP, Lb + 1));
-    SET_STRING_ELT(names, TableBlock_SLOT,
-                   mkChar("TableBlock"));
-
-    SET_VECTOR_ELT(ans, Sumweights_SLOT,
-                   allocVector(REALSXP, Lb));
-    SET_STRING_ELT(names, Sumweights_SLOT,
-                   mkChar("Sumweights"));
-
+    SET_VECTOR_ELT(ans, TableBlock_SLOT, allocVector(REALSXP, Lb + 1));
+    SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, Lb));
     SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
                    allocMatrix(REALSXP, 0, 0));
-    SET_STRING_ELT(names, PermutedLinearStatistic_SLOT,
-                   mkChar("PermutedLinearStatistic"));
-
-    SET_VECTOR_ELT(ans, tol_SLOT,
-                   tolerance = allocVector(REALSXP, 1));
-    SET_STRING_ELT(names, tol_SLOT,
-                   mkChar("tol"));
+    SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
     REAL(tolerance)[0] = tol;
-
-    SET_STRING_ELT(names, Table_SLOT,
-                   mkChar("Table"));
-
     namesgets(ans, names);
-@|R_init_LECV
 @}
 
 @d RC\_init\_LECV\_1d
