@@ -329,6 +329,7 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 @<SimpleSums@>
 @<Tables@>
 @<Utils@>
+@<Permutations@>
 @<LinearStatistics@>
 @<ExpectationCovariances@>
 @<User Interface@>
@@ -415,7 +416,7 @@ The weights $w_i, i = 1, \dots, N$
 
 @d R weights Input
 @{
-    SEXP weights,
+    SEXP weights
 @}
 
 can be constant one \verb|XLENGTH(weights) == 0| or integer-valued, with 
@@ -605,7 +606,7 @@ all.equal(LEVb, lvb)
 @{
 @<R x Input@>
 @<R y Input@>
-@<R weights Input@>
+@<R weights Input@>,
 @<R subset Input@>,
 @<R block Input@>
 @}
@@ -817,7 +818,7 @@ all.equal(LECV2d, lcv2d)
 SEXP ix,
 @<R y Input@>
 SEXP iy,
-@<R weights Input@>
+@<R weights Input@>,
 @<R subset Input@>,
 @<R block Input@>
 @}
@@ -1098,7 +1099,7 @@ SEXP R_LinearStatistic
     @<R x Input@>
     SEXP P,
     @<R y Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     SEXP subsety
 ) 
@@ -1128,7 +1129,7 @@ void RC_LinearStatistic
     @<C integer N Input@>,
     @<C integer P Input@>,
     @<C real y Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
     SEXP subsety,
@@ -1295,7 +1296,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 SEXP R_ExpectationInfluence
 (
     @<R y Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>
 ) 
 {
@@ -1325,7 +1326,7 @@ void RC_ExpectationInfluence
     @<C integer N Input@>,
     @<R y Input@>
     @<C integer Q Input@>,
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C sumweights Input@>,    
@@ -1383,7 +1384,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 SEXP R_CovarianceInfluence
 (
     @<R y Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     SEXP varonly
 ) 
@@ -1422,7 +1423,7 @@ void RC_CovarianceInfluence
     @<C integer N Input@>,
     @<R y Input@>
     @<C integer Q Input@>,
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
     double *ExpInf,
@@ -1518,7 +1519,7 @@ SEXP R_ExpectationX
 (
     @<R x Input@>
     SEXP P,
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>
 ) 
 {
@@ -1544,7 +1545,7 @@ void RC_ExpectationX
     @<R x Input@>
     @<C integer N Input@>,
     @<C integer P Input@>,
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C OneTableSums Answer@>
@@ -1575,7 +1576,7 @@ SEXP R_CovarianceX
 (
     @<R x Input@>
     SEXP P,
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     SEXP varonly
 ) 
@@ -1609,7 +1610,7 @@ void RC_CovarianceX
     @<R x Input@>
     @<C integer N Input@>,
     @<C integer P Input@>,
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
     double *ExpX,
@@ -1714,7 +1715,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 SEXP R_Sums
 (
     @<R N Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>
 ) 
 {
@@ -1736,7 +1737,7 @@ SEXP R_Sums
 double RC_Sums
 (
     @<C integer N Input@>,
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>
 ) 
@@ -1907,7 +1908,7 @@ SEXP R_KronSums
     @<R x Input@>
     SEXP P,
     @<R y Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>
 ) 
 {
@@ -1935,7 +1936,7 @@ SEXP R_KronSums
 void RC_KronSums
 (
     @<RC KronSums Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C KronSums Answer@>
@@ -2509,7 +2510,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 SEXP R_colSums
 (
     @<R x Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>
 ) {
 
@@ -2536,7 +2537,7 @@ SEXP R_colSums
 void RC_colSums
 (
     @<C colSums Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C colSums Answer@>
@@ -2733,7 +2734,7 @@ SEXP R_OneTableSums
 (
     @<R x Input@>
     SEXP P,
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>
 ) {
 
@@ -2758,7 +2759,7 @@ SEXP R_OneTableSums
 void RC_OneTableSums
 (
     @<C OneTableSums Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C OneTableSums Answer@>
@@ -2930,7 +2931,7 @@ SEXP R_TwoTableSums
     SEXP P,
     @<R y Input@>
     SEXP Q,
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>
 ) {
 
@@ -2955,7 +2956,7 @@ SEXP R_TwoTableSums
 void RC_TwoTableSums
 (
     @<C TwoTableSums Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C TwoTableSums Answer@>
@@ -3136,7 +3137,7 @@ SEXP R_ThreeTableSums
     SEXP Q,
     @<R block Input@>
     SEXP L,
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>
 ) {
 
@@ -3162,7 +3163,7 @@ SEXP R_ThreeTableSums
 void RC_ThreeTableSums
 (
     @<C ThreeTableSums Input@>
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C ThreeTableSums Answer@>
@@ -3312,6 +3313,10 @@ void C_ThreeTableSums_dweights_isubset
 
 \section{Utilities}
 
+
+
+\subsection{Blocks}
+
 <<Helpers>>=
 a0 <- as.vector(do.call("c", tapply(subset, block[subset], function(s) s)))
 a1 <- .Call("R_order_subset_wrt_block", y, subset, integer(0), block, L + 1L);
@@ -3340,7 +3345,7 @@ SEXP R_order_subset_wrt_block
 (
     @<R y Input@>
     @<R subset Input@>,
-    @<R weights Input@>
+    @<R weights Input@>,
     @<R block Input@>
     SEXP Nlevels
 )
@@ -3494,6 +3499,98 @@ void C_order_subset_wrt_block
     Free(cumtable); 
 }
 @}
+
+\subsection{Permutions}
+
+<<Permutations>>=
+stopifnot(all(all.equal(1:N, .Call("R_setup_subset", N, integer(0), integer(0))),
+              all.equal(rep(1:N, weights), .Call("R_setup_subset", N, weights,
+integer(0))),
+              all.equal(subset, .Call("R_setup_subset", N, integer(0),
+subset)),
+              all.equal(rep(subset, weights[subset]), .Call("R_setup_subset", N, weights,
+              subset))))
+@@
+
+@d Permutations
+@{
+@<RC\_setup\_subset@>;
+@<R\_setup\_subset@>;
+@}
+
+@d R\_setup\_subset
+@{
+SEXP R_setup_subset
+(
+    @<R N Input@>
+    @<R weights Input@>,
+    @<R subset Input@>
+)
+{
+    SEXP ans;
+
+    PROTECT(ans = RC_setup_subset(INTEGER(N)[0], weights, subset));
+
+    UNPROTECT(1);
+    return(ans);
+}
+@}
+
+
+@d RC\_setup\_subset Prototype
+@{
+SEXP RC_setup_subset
+(
+    @<C integer N Input@>,
+    @<R weights Input@>,
+    @<R subset Input@>
+)
+@}
+
+Because this will only be used when really needed (in Permutations) we can
+be a little bit more generous with memory here.
+
+@d RC\_setup\_subset
+@{
+@<RC\_setup\_subset Prototype@>
+{
+    SEXP ans, mysubset;
+    R_xlen_t sw;
+
+    if (XLENGTH(weights) == 0 && XLENGTH(subset) > 0)
+        return(subset);
+
+    if (XLENGTH(subset) == 0) {
+        PROTECT(mysubset = allocVector(REALSXP, N));
+        C_setup_subset(N, mysubset);
+    } else {
+        PROTECT(mysubset = coerceVector(subset, REALSXP));
+    }
+
+    if (XLENGTH(weights) == 0) {
+        UNPROTECT(1);
+        return(mysubset);
+    }
+        
+    sw = (R_xlen_t) RC_Sums(N, weights, mysubset, Offset0, XLENGTH(subset));
+    PROTECT(ans = allocVector(REALSXP, sw));
+
+    R_xlen_t itmp = 0;
+    for (R_xlen_t i = 0; i < XLENGTH(mysubset); i++) {
+        if (TYPEOF(weights) == REALSXP) {
+            for (R_xlen_t j = 0; j < REAL(weights)[(R_xlen_t) REAL(mysubset)[i] - 1]; j++)
+                REAL(ans)[itmp++] = REAL(mysubset)[i];
+        } else {
+            for (R_xlen_t j = 0; j < INTEGER(weights)[(R_xlen_t) REAL(mysubset)[i] - 1]; j++)
+                REAL(ans)[itmp++] = REAL(mysubset)[i];
+        }
+    }
+    UNPROTECT(2);
+    return(ans);
+}
+@}
+
+\subsection{Other Utils}
 
 @d MoreUtils
 @{
