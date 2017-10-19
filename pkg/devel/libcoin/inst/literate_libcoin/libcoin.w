@@ -329,8 +329,8 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 @<SimpleSums@>
 @<Tables@>
 @<Utils@>
-@<Permutations@>
 @<LinearStatistics@>
+@<Permutations@>
 @<ExpectationCovariances@>
 @<User Interface@>
 @<2d User Interface@>
@@ -346,6 +346,7 @@ $N$ is the number of observations
 @d R N Input
 @{
     SEXP N,
+@|N
 @}
 
 which at \proglang{C} level is represented as \verb|R_xlen_t| to allow for
@@ -354,6 +355,7 @@ $N > $ \verb|INT_MAX|
 @d C integer N Input
 @{
     R_xlen_t N
+@|N
 @}
 
 The regressors $\x_i, i = 1, \dots, N$ 
@@ -361,6 +363,7 @@ The regressors $\x_i, i = 1, \dots, N$
 @d R x Input
 @{
     SEXP x,
+@|x
 @}
 
 are either represented as a real matrix with $N$ rows and $P$ columns
@@ -368,6 +371,7 @@ are either represented as a real matrix with $N$ rows and $P$ columns
 @d C integer P Input
 @{
     int P
+@|P
 @}
 
 @d C real x Input
@@ -375,6 +379,7 @@ are either represented as a real matrix with $N$ rows and $P$ columns
     double *x,
     @<C integer N Input@>,
     @<C integer P Input@>,
+@|x
 @}
 
 or as a factor (an integer at \proglang{C} level) at $P$ levels
@@ -384,6 +389,7 @@ or as a factor (an integer at \proglang{C} level) at $P$ levels
     int *x,
     @<C integer N Input@>,
     @<C integer P Input@>,
+@|x
 @}
 
 The influence functions are also either a $N \times Q$ real matrix
@@ -391,17 +397,20 @@ The influence functions are also either a $N \times Q$ real matrix
 @d R y Input
 @{
     SEXP y,
+@|y
 @}
 
 @d C integer Q Input
 @{
     int Q
+@|Q
 @}
 
 @d C real y Input
 @{
     double *y,
     @<C integer Q Input@>,
+@|y
 @}
 
 or a factor at $Q$ levels
@@ -410,6 +419,7 @@ or a factor at $Q$ levels
 @{
     int *y,
     @<C integer Q Input@>,
+@|y
 @}
 
 The weights $w_i, i = 1, \dots, N$ 
@@ -417,6 +427,7 @@ The weights $w_i, i = 1, \dots, N$
 @d R weights Input
 @{
     SEXP weights
+@|weights
 @}
 
 can be constant one \verb|XLENGTH(weights) == 0| or integer-valued, with 
@@ -426,6 +437,7 @@ can be constant one \verb|XLENGTH(weights) == 0| or integer-valued, with
 @{
     int *weights,
     int HAS_WEIGHTS,
+@|weights, HAS_WEIGHTS
 @}
 
 Weights larger than \verb|INT_MAX| are stored as double
@@ -434,6 +446,7 @@ Weights larger than \verb|INT_MAX| are stored as double
 @{
     double *weights,
     int HAS_WEIGHTS,
+@|weights, HAS_WEIGHTS
 @}
 
 The sum of all weights is a double
@@ -441,6 +454,7 @@ The sum of all weights is a double
 @d C sumweights Input
 @{
     double sumweights
+@|sumweights
 @}
 
 Subsets $\A \subseteq \{1, \dots, N\}$ are \proglang{R} style indices
@@ -448,6 +462,7 @@ Subsets $\A \subseteq \{1, \dots, N\}$ are \proglang{R} style indices
 @d R subset Input
 @{
     SEXP subset
+@|subset
 @}
 
 are either not existant (\verb|XLENGTH(subset) == 0|) or of length
@@ -455,6 +470,7 @@ are either not existant (\verb|XLENGTH(subset) == 0|) or of length
 @d C integer Nsubset Input
 @{
     R_xlen_t Nsubset
+@|Nsubset
 @}
 
 Optionally, one can specify a subset of the subset via
@@ -463,6 +479,7 @@ Optionally, one can specify a subset of the subset via
 @{
     R_xlen_t offset,
     @<C integer Nsubset Input@>
+@|offset
 @}
 
 Subsets are stored either as integer
@@ -471,6 +488,7 @@ Subsets are stored either as integer
 @{
     int *subset,
     @<C subset range Input@>
+@|subset
 @}
 
 or double (to allow for indices larger than \verb|INT_MAX|)
@@ -479,6 +497,7 @@ or double (to allow for indices larger than \verb|INT_MAX|)
 @{
     double *subset,
     @<C subset range Input@>
+@|subset
 @}
 
 Blocks $b_i, i = 1, \dots, N$
@@ -486,6 +505,7 @@ Blocks $b_i, i = 1, \dots, N$
 @d R block Input
 @{
     SEXP block,
+@|block
 @}
 
 at $B$ levels
@@ -493,6 +513,7 @@ at $B$ levels
 @d C integer Lb Input
 @{
     int Lb
+@|Lb
 @}
 
 are stored as a factor
@@ -501,6 +522,7 @@ are stored as a factor
 @{
     int *block,
     @<C integer Lb Input@>,
+@|block
 @}
 
 The tabulation of $b$ (potentially in subsets) is
@@ -508,6 +530,7 @@ The tabulation of $b$ (potentially in subsets) is
 @d R blockTable Input
 @{
     SEXP blockTable
+@|blockTable
 @}
 
 where the table is of length $B + 1$ and the first element
@@ -788,99 +811,107 @@ C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
 <<permutations>>=
 a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset,
            integer(0), 0L, 0.00001)
-.Call("R_PermutedLinearStatistic", a, x, y, weights, subset, integer(0), 10L, 0L)
+.Call("R_PermutedLinearStatistic", x, y, weights, subset, integer(0), 10, 0L, list())
+.Call("R_PermutedLinearStatistic", x, y, weights, subset, integer(0), 10, 0L, a)
+.Call("R_PermutedLinearStatistic", x, y, weights, subset, block, 10, 0L, a)
 @@
 
-@d R\_PermutedLinearStatistic
+@d R\_PermutedLinearStatistic Prototype
 @{
 SEXP R_PermutedLinearStatistic
 (
-    const SEXP LEV,
-    const SEXP x,
-    const SEXP y,
-    const SEXP weights,
-    const SEXP subset,
-    const SEXP block,
-    const SEXP B,
-    const SEXP standardise
-) {
+    @<User Interface Inputs@>
+    SEXP nperm,
+    @<R LECV Input@>
+)
+@}
 
-    SEXP ans, expand_subset, block_subset, perm, tmp, table;
+@d R\_PermutedLinearStatistic
+@{
+@<R\_PermutedLinearStatistic Prototype@>
+{
+    SEXP ans, expand_subset, block_subset, perm, tmp, blockTable;
     double *linstat;
-    int P, Q, PQ, Lb;
+    int PQ;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
+    R_xlen_t inperm;
 
-    P = C_get_P(LEV);
-    Q = C_get_Q(LEV);
+    @<Setup Dimensions@>
     PQ = P * Q;
     N = NROW(y);
-    Lb = 1;
-    if (LENGTH(block) > 0)
-        Lb = NLEVELS(block);
+    inperm = (R_xlen_t) REAL(nperm)[0];
 
-    PROTECT(ans = allocMatrix(REALSXP, PQ, INTEGER(B)[0]));
-
-    GetRNGstate();
-
+    PROTECT(ans = allocMatrix(REALSXP, PQ, inperm));
     PROTECT(expand_subset = RC_setup_subset(N, weights, subset));
     Nsubset = XLENGTH(expand_subset);
     PROTECT(tmp = allocVector(REALSXP, Nsubset));
     PROTECT(perm = allocVector(REALSXP, Nsubset));
 
+    GetRNGstate();
     if (Lb == 1) {
-        for (int b = 0; b < INTEGER(B)[0]; b++) {
-            if (b % 256 == 0) R_CheckUserInterrupt();
-            linstat = REAL(ans) + PQ * b;
-            for (int p = 0; p < PQ; p++)
-                linstat[p] = 0;
+        for (R_xlen_t b = 0; b < inperm; b++) {
+            @<Setup Linear Statistic@>
             C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));
-            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
-                                    expand_subset, Offset0, Nsubset,
-                                    perm, linstat);
+            @<Compute Permuted Linear Statistic@>
         }
     } else {
-        PROTECT(table = allocVector(REALSXP, Lb + 1));
+        PROTECT(blockTable = allocVector(REALSXP, Lb + 1));
         /* same as RC_OneTableSums(block, noweights, expand_subset) */
         RC_OneTableSums(INTEGER(block), XLENGTH(block), Lb + 1, weights, subset, Offset0,
-                        Nsubset, REAL(table));
-        PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset, block, table));
-        for (int b = 0; b < INTEGER(B)[0]; b++) {
-            if (b % 256 == 0) R_CheckUserInterrupt();
-            linstat = REAL(ans) + PQ * b;
-            for (int p = 0; p < PQ; p++)
-                linstat[p] = 0;
-            C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(table), Lb + 1, REAL(tmp), REAL(perm));
-            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
-                                    block_subset, Offset0, Nsubset,
-                                    perm, linstat);
+                        XLENGTH(subset), REAL(blockTable));
+        PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset, 
+                                                         block, blockTable));
+        for (R_xlen_t b = 0; b < inperm; b++) {
+            @<Setup Linear Statistic@>
+            C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(blockTable), 
+                             Lb + 1, REAL(tmp), REAL(perm));
+            @<Compute Permuted Linear Statistic@>
         }
         UNPROTECT(2);
-        Free(table);
     }
-    UNPROTECT(3);
     PutRNGstate();
 
-    /*
-    if (INTEGER(standardise)[0]) {
-        for (int b = 0; b < INTEGER(B)[0]; b++) {
-            if (C_get_varonly(LEV)) {
-                C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LEV),
-                              C_get_Variance(LEV), 1, C_get_tol(LEV));
-            } else {
-                C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LEV),
-                              C_get_Covariance(LEV), 0, C_get_tol(LEV));
-            }
-        }
-    }
-    */
+    @<Standardise Linear Statistics@>
 
-    UNPROTECT(1);
+    UNPROTECT(4);
     return(ans);
 }
-
+@|R_PermutedLinearStatistic
 @}
 
+@d Setup Linear Statistic
+@{
+if (b % 256 == 0) R_CheckUserInterrupt();
+linstat = REAL(ans) + PQ * b;
+for (int p = 0; p < PQ; p++)
+    linstat[p] = 0.0;
+@}
+
+@d Compute Permuted Linear Statistic
+@{
+/* does not require weights (as RC_LinearStatistic) */
+RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
+                        expand_subset, Offset0, Nsubset,
+                        perm, linstat);
+@}
+
+@d Standardise Linear Statistics
+@{
+/*
+if (LENGTH(LECV) > 0) {
+    for (R_xlen_t b = 0; b < inperm; b++) {
+        if (C_get_varonly(LECV)) {
+            C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LECV),
+                          C_get_Variance(LECV), 1, C_get_tol(LECV));
+        } else {
+            C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LECV),
+                          C_get_Covariance(LECV), 0, C_get_tol(LECV));
+        }
+    }
+}
+*/
+@}
 
 \subsection{2d Case}
 
@@ -1217,6 +1248,7 @@ SEXP R_LinearStatistic
     UNPROTECT(1);
     return(ans);
 }
+@|R_LinearStatistic
 @}
 
 @d RC\_LinearStatistic Prototype
@@ -1415,6 +1447,7 @@ SEXP R_ExpectationInfluence
     UNPROTECT(1);
     return(ans);
 }
+@|R_ExpectationInfluence
 @}
 
 @d RC\_ExpectationInfluence Prototype
@@ -1512,6 +1545,7 @@ SEXP R_CovarianceInfluence
     UNPROTECT(2);
     return(ans);
 }
+@|R_CovarianceInfluence
 @}
 
 @d RC\_CovarianceInfluence Prototype
@@ -1634,6 +1668,7 @@ SEXP R_ExpectationX
     UNPROTECT(1);
     return(ans);
 }
+@|R_ExpectationX
 @}
 
 @d RC\_ExpectationX Prototype
@@ -1699,6 +1734,7 @@ SEXP R_CovarianceX
     UNPROTECT(2);
     return(ans);
 }
+@|R_CovarianceX
 @}
 
 @d RC\_CovarianceX Prototype
@@ -1828,6 +1864,7 @@ SEXP R_Sums
 
     return(ans);
 }
+@|R_Sums
 @}
 
 @d RC\_Sums Prototype
@@ -2027,6 +2064,7 @@ SEXP R_KronSums
     UNPROTECT(1);
     return(ans);
 }
+@|R_KronSums
 @}
 
 @d RC\_KronSums Prototype
@@ -2398,6 +2436,7 @@ SEXP R_KronSums_Permutation
     UNPROTECT(1);
     return(ans);
 }
+@|R_KronSums_Permutation
 @}
 
 @d RC\_KronSums\_Permutation Prototype
@@ -2628,6 +2667,7 @@ SEXP R_colSums
     UNPROTECT(1);
     return(ans);
 }
+@|R_colSums
 @}
 
 @d RC\_colSums Prototype
@@ -2849,6 +2889,7 @@ SEXP R_OneTableSums
     UNPROTECT(1);
     return(ans);
 }
+@|R_OneTableSums
 @}
 
 
@@ -3046,6 +3087,7 @@ SEXP R_TwoTableSums
     UNPROTECT(1);
     return(ans);
 }
+@|R_TwoTableSums
 @}
 
 
@@ -3253,6 +3295,7 @@ SEXP R_ThreeTableSums
     UNPROTECT(1);
     return(ans);
 }
+@|R_ThreeTableSums
 @}
 
 
@@ -3470,6 +3513,7 @@ SEXP R_order_subset_wrt_block
     UNPROTECT(2);
     return(ans);
 }
+@|R_order_subset_wrt_block
 @}
 
 
@@ -3511,6 +3555,7 @@ SEXP RC_order_subset_wrt_block
         return(ans);
     }
 }
+@|RC_order_subset_wrt_block
 @}
 
 @d C\_setup\_subset
@@ -3530,6 +3575,7 @@ void C_setup_subset
         }
     }
 }
+@|C_setup_subset
 @}
 
 @d C\_setup\_subset\_block
@@ -3563,6 +3609,7 @@ void C_setup_subset_block
 
     Free(cumtable);
 }
+@|C_setup_subset_block
 @}
 
 @d C\_order\_subset\_wrt\_block
@@ -3596,94 +3643,9 @@ void C_order_subset_wrt_block
 
     Free(cumtable); 
 }
+@|C_order_subset_wrt_block
 @}
 
-\subsection{Permutions}
-
-<<Permutations>>=
-stopifnot(all(all.equal(1:N, .Call("R_setup_subset", N, integer(0), integer(0))),
-              all.equal(rep(1:N, weights), .Call("R_setup_subset", N, weights,
-integer(0))),
-              all.equal(subset, .Call("R_setup_subset", N, integer(0),
-subset)),
-              all.equal(rep(subset, weights[subset]), .Call("R_setup_subset", N, weights,
-              subset))))
-@@
-
-@d Permutations
-@{
-@<RC\_setup\_subset@>;
-@<R\_setup\_subset@>;
-@<C\_permutations@>;
-@}
-
-@d C\_permutations
-@{
-void C_Permute
-(
-    double *x,
-    @<C integer N Input@>,
-    double *ans
-) {
-
-    R_xlen_t n = N, j;
-
-    for (R_xlen_t i = 0; i < N; i++) {
-        j = n * unif_rand();
-        ans[i] = x[j];
-        x[j] = x[--n];
-    }
-}
-
-void C_PermuteBlock
-(
-    double *x,
-    double *table,
-    int Ntable,
-    double *ans
-) {
-
-    double *px, *pans;
-
-    px = x;
-    pans = ans;
-
-    for (int j = 0; j < Ntable; j++) {
-        if (table[j] > 0) {
-            C_Permute(px, table[j], pans);
-            px += (R_xlen_t) table[j];
-            pans += (R_xlen_t) table[j];
-        }
-    }
-}
-
-void C_doPermuteBlock
-(
-    double *subset,
-    R_xlen_t Nsubset,
-    double *table,
-    int Nlevels,
-    double *Nsubset_tmp,
-    double *perm
-) {
-
-    Memcpy(Nsubset_tmp, subset, Nsubset);
-    C_PermuteBlock(Nsubset_tmp, table, Nlevels, perm);
-}
-
-void C_doPermute
-(
-    double *subset,
-    R_xlen_t Nsubset,
-    double *Nsubset_tmp,
-    double *perm
-) {
-
-    Memcpy(Nsubset_tmp, subset, Nsubset);
-    C_Permute(Nsubset_tmp, Nsubset, perm);
-}
-
-@}
 
 @d R\_setup\_subset
 @{
@@ -3701,6 +3663,7 @@ SEXP R_setup_subset
     UNPROTECT(1);
     return(ans);
 }
+@|R_setup_subset
 @}
 
 
@@ -3755,11 +3718,124 @@ be a little bit more generous with memory here.
     UNPROTECT(2);
     return(ans);
 }
+@|RC_setup_subset
 @}
+
+\subsection{Permutation Helpers}
+
+<<Permutations>>=
+stopifnot(all(all.equal(1:N, .Call("R_setup_subset", N, integer(0), integer(0))),
+              all.equal(rep(1:N, weights), .Call("R_setup_subset", N, weights,
+integer(0))),
+              all.equal(subset, .Call("R_setup_subset", N, integer(0),
+subset)),
+              all.equal(rep(subset, weights[subset]), .Call("R_setup_subset", N, weights,
+              subset))))
+@@
+
+@d Permutations
+@{
+@<RC\_setup\_subset@>;
+@<R\_setup\_subset@>;
+@<C\_Permute@>;
+@<C\_doPermute@>;
+@<C\_PermuteBlock@>;
+@<C\_doPermuteBlock@>;
+@}
+
+@d C\_Permute
+@{
+void C_Permute
+(
+    double *subset,
+    @<C integer Nsubset Input@>,
+    double *ans
+) {
+
+    R_xlen_t n = Nsubset, j;
+
+    for (R_xlen_t i = 0; i < Nsubset; i++) {
+        j = n * unif_rand();
+        ans[i] = subset[j];
+        subset[j] = subset[--n];
+    }
+}
+@|C_Permute
+@}
+
+@d C\_doPermute
+@{
+void C_doPermute
+(
+    double *subset,
+    @<C integer Nsubset Input@>,
+    double *Nsubset_tmp,
+    double *perm
+) {
+    Memcpy(Nsubset_tmp, subset, Nsubset);
+    C_Permute(Nsubset_tmp, Nsubset, perm);
+}
+@|C_doPermute
+@}
+
+@d C\_PermuteBlock
+@{
+void C_PermuteBlock
+(
+    double *subset,
+    double *table,
+    int Nlevels,
+    double *ans
+) {
+
+    double *px, *pans;
+
+    px = subset;
+    pans = ans;
+
+    for (R_xlen_t j = 0; j < Nlevels; j++) {
+        if (table[j] > 0) {
+            C_Permute(px, (R_xlen_t) table[j], pans);
+            px += (R_xlen_t) table[j];
+            pans += (R_xlen_t) table[j];
+        }
+    }
+}
+@|C_PermuteBlock
+@}
+
+@d C\_doPermuteBlock
+@{
+void C_doPermuteBlock
+(
+    double *subset,
+    @<C integer Nsubset Input@>,
+    double *table,
+    int Nlevels,
+    double *Nsubset_tmp,
+    double *perm
+) {
+    Memcpy(Nsubset_tmp, subset, Nsubset);
+    C_PermuteBlock(Nsubset_tmp, table, Nlevels, perm);
+}
+@|C_doPermuteBlock
+@}
+
 
 \subsection{Other Utils}
 
 @d MoreUtils
+@{
+@<NROW@>
+@<NCOL@>
+@<NLEVELS@>
+@<C\_kronecker@>
+@<C\_kronecker\_sym@>
+@<C\_KronSums\_sym@>
+@}
+
+
+@d NROW
 @{
 int NROW
 (
@@ -3773,7 +3849,11 @@ int NROW
         return(REAL(a)[0]);
     return(INTEGER(a)[0]);
 }
+@|NROW
+@}
 
+@d NCOL
+@{
 int NCOL
 (
     SEXP x
@@ -3786,7 +3866,11 @@ int NCOL
         return(REAL(a)[1]);
     return(INTEGER(a)[1]);
 }
+@|NCOL
+@}
 
+@d NLEVELS
+@{
 int NLEVELS	
 (
     SEXP x
@@ -3799,18 +3883,11 @@ int NLEVELS
         error("no levels attribute found");
    return(NROW(a));
 }
+@|NLEVELS
+@}
 
-/**
-    Computes the Kronecker product of two matrices\n
-    *\param A matrix
-    *\param m nrow(A)
-    *\param n ncol(A)
-    *\param B matrix
-    *\param r nrow(B)
-    *\param s ncol(B)
-    *\param ans return value; a pointer to a REALSXP-vector of length (mr x ns)
-*/
-
+@d C\_kronecker
+@{
 void C_kronecker
 (
     const double *A,
@@ -3843,7 +3920,11 @@ void C_kronecker
         }
     }
 }
+@|C_kronecker
+@}
 
+@d C\_kronecker\_sym
+@{
 void C_kronecker_sym
 (
     const double *A,
@@ -3877,7 +3958,11 @@ void C_kronecker_sym
         }
     }
 }
+@|C_kronecker_sym
+@}
 
+@d C\_KronSums\_sym
+@{
 /* sum_i (t(x[i,]) %*% x[i,]) */
 void C_KronSums_sym_
 (
@@ -3898,6 +3983,7 @@ void C_KronSums_sym_
         }
     }
 }
+@|C_KronSums_sym
 @}
 
 \section{Memory}
@@ -3933,6 +4019,7 @@ void C_KronSums_sym_
 @d R LECV Input
 @{
 SEXP LECV
+@|LECV
 @}
 
 @d C\_get\_P
@@ -4153,7 +4240,7 @@ double* C_get_Sumweights
         error("object does not contain sumweights slot");
     return(REAL(VECTOR_ELT(LECV, Sumweights_SLOT)));
 }
-@|C\_get\_Sumweights
+@|C_get_Sumweights
 @}
 
 @d C\_get\_Table
