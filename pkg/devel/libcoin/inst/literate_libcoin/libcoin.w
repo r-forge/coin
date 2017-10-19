@@ -600,6 +600,7 @@ all.equal(LEVb, lvb)
 @{
 @<RC\_ExpectationCovarianceStatistic@>
 @<R\_ExpectationCovarianceStatistic@>
+@<R\_PermutedLinearStatistic@>
 @}
 
 @d User Interface Inputs
@@ -783,6 +784,104 @@ C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
                             ExpX, CovX, sumweights[b], b,
                             C_get_Covariance(ans));
 @}
+
+<<permuations>>=
+a <- .Call("R_ExpectationCovarianceStatistic", x, y, integer(0), integer(0),
+           integer(0), 0L, 0.00001)
+
+.Call("R_PermutedLinearStatistic", a, x, y, integer(0), integer(0), integer(0), 10L, 0L)
+@@
+
+@d R\_PermutedLinearStatistic
+@{
+SEXP R_PermutedLinearStatistic
+(
+    const SEXP LEV,
+    const SEXP x,
+    const SEXP y,
+    const SEXP weights,
+    const SEXP subset,
+    const SEXP block,
+    const SEXP B,
+    const SEXP standardise
+) {
+
+    SEXP ans, expand_subset, block_subset, perm, tmp, table;
+    double *linstat;
+    int P, Q, PQ, Lb;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
+
+    P = C_get_P(LEV);
+    Q = C_get_Q(LEV);
+    PQ = P * Q;
+    N = NROW(y);
+    Lb = 1;
+    if (LENGTH(block) > 0)
+        Lb = NLEVELS(block);
+
+    PROTECT(ans = allocMatrix(REALSXP, PQ, INTEGER(B)[0]));
+
+    GetRNGstate();
+
+    PROTECT(expand_subset = RC_setup_subset(N, weights, subset));
+    Nsubset = XLENGTH(expand_subset);
+    PROTECT(tmp = allocVector(REALSXP, Nsubset));
+    PROTECT(perm = allocVector(REALSXP, Nsubset));
+
+    if (Lb == 1) {
+        for (int b = 0; b < INTEGER(B)[0]; b++) {
+            if (b % 256 == 0) R_CheckUserInterrupt();
+            linstat = REAL(ans) + PQ * b;
+            for (int p = 0; p < PQ; p++)
+                linstat[p] = 0;
+            C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));
+            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
+                                    expand_subset, Offset0, Nsubset,
+                                    perm, linstat);
+        }
+    } else {
+        PROTECT(table = allocVector(REALSXP, Lb + 1));
+        /* same as RC_OneTableSums(block, noweights, expand_subset) */
+        RC_OneTableSums(INTEGER(block), XLENGTH(block), Lb + 1, weights, subset, Offset0,
+                        Nsubset, REAL(table));
+        PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset, block, table));
+        for (int b = 0; b < INTEGER(B)[0]; b++) {
+            if (b % 256 == 0) R_CheckUserInterrupt();
+            linstat = REAL(ans) + PQ * b;
+            for (int p = 0; p < PQ; p++)
+                linstat[p] = 0;
+            C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(table), Lb + 1, REAL(tmp), REAL(perm));
+            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
+                                    block_subset, Offset0, Nsubset,
+                                    perm, linstat);
+        }
+        UNPROTECT(2);
+        Free(table);
+    }
+    UNPROTECT(3);
+    PutRNGstate();
+
+    /*
+    if (INTEGER(standardise)[0]) {
+        for (int b = 0; b < INTEGER(B)[0]; b++) {
+            if (C_get_varonly(LEV)) {
+                C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LEV),
+                              C_get_Variance(LEV), 1, C_get_tol(LEV));
+            } else {
+                C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LEV),
+                              C_get_Covariance(LEV), 0, C_get_tol(LEV));
+            }
+        }
+    }
+    */
+
+    UNPROTECT(1);
+    return(ans);
+}
+
+@}
+
 
 \subsection{2d Case}
 
@@ -3516,6 +3615,75 @@ subset)),
 @{
 @<RC\_setup\_subset@>;
 @<R\_setup\_subset@>;
+@<C\_permutations@>;
+@}
+
+@d C\_permutations
+@{
+void C_Permute
+(
+    double *x,
+    @<C integer N Input@>,
+    double *ans
+) {
+
+    R_xlen_t n = N, j;
+
+    for (R_xlen_t i = 0; i < N; i++) {
+        j = n * unif_rand();
+        ans[i] = x[j];
+        x[j] = x[--n];
+    }
+}
+
+void C_PermuteBlock
+(
+    double *x,
+    double *table,
+    int Ntable,
+    double *ans
+) {
+
+    double *px, *pans;
+
+    px = x;
+    pans = ans;
+
+    for (int j = 0; j < Ntable; j++) {
+        if (table[j] > 0) {
+            C_Permute(px, table[j], pans);
+            px += (R_xlen_t) table[j];
+            pans += (R_xlen_t) table[j];
+        }
+    }
+}
+
+void C_doPermuteBlock
+(
+    double *subset,
+    R_xlen_t Nsubset,
+    double *table,
+    int Nlevels,
+    double *Nsubset_tmp,
+    double *perm
+) {
+
+    Memcpy(Nsubset_tmp, subset, Nsubset);
+    C_PermuteBlock(Nsubset_tmp, table, Nlevels, perm);
+}
+
+void C_doPermute
+(
+    double *subset,
+    R_xlen_t Nsubset,
+    double *Nsubset_tmp,
+    double *perm
+) {
+
+    Memcpy(Nsubset_tmp, subset, Nsubset);
+    C_Permute(Nsubset_tmp, Nsubset, perm);
+}
+
 @}
 
 @d R\_setup\_subset
