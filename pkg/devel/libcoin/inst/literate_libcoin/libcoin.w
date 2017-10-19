@@ -785,11 +785,10 @@ C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
                             C_get_Covariance(ans));
 @}
 
-<<permuations>>=
-a <- .Call("R_ExpectationCovarianceStatistic", x, y, integer(0), integer(0),
+<<permutations>>=
+a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset,
            integer(0), 0L, 0.00001)
-
-.Call("R_PermutedLinearStatistic", a, x, y, integer(0), integer(0), integer(0), 10L, 0L)
+.Call("R_PermutedLinearStatistic", a, x, y, weights, subset, integer(0), 10L, 0L)
 @@
 
 @d R\_PermutedLinearStatistic
