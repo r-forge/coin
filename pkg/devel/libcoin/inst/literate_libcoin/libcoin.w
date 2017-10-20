@@ -570,6 +570,186 @@ r2 <- rep(1:ncol(y), each = ncol(x))
 r2Xfactor <- rep(1:ncol(y), each = ncol(Xfactor))
 @@
 
+<<Rlibcoin>>=
+LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0)) {
+
+    if (length(weights) == 0) weights <- rep(1, nrow(X))
+    if (length(subset) == 0) subset <- 1:nrow(X)
+    idx <- rep(subset, weights[subset])
+    X <- X[idx,,drop = FALSE]
+    Y <- Y[idx,,drop = FALSE]
+    sw <- length(idx)
+
+    if (length(block) == 0) {
+        ExpX <- colSums(X)
+        ExpY <- colSums(Y) / sw
+        yc <- t(t(Y) - ExpY)
+        CovY <- crossprod(yc) / sw
+        CovX <- crossprod(X)
+        Exp <- kronecker(ExpY, ExpX) 
+        Cov <- sw / (sw - 1) * kronecker(CovY, CovX) - 1 / (sw - 1) * kronecker(CovY, tcrossprod(ExpX))
+ 
+        ret <- list(LinearStatistic = as.vector(crossprod(X, Y)),
+                    Expectation = as.vector(Exp), 
+                    Covariance = Cov[lower.tri(Cov, diag = TRUE)],
+                    Variance = diag(Cov))
+   } else {
+        block <- block[idx]
+        ret <- list(LinearStatistic = 0, Expectation = 0, Covariance = 0, Variance = 0)
+        for (b in levels(block)) {
+            tmp <- LECV(X = X, Y = Y, subset = which(block == b))
+            for (l in names(ret)) ret[[l]] <- ret[[l]] + tmp[[l]]
+        }
+   }
+   return(ret)
+}
+
+cmpr <- function(ret1, ret2) {
+    ret1 <- ret1[!sapply(ret1, is.null)]
+    ret2 <- ret2[!sapply(ret2, is.null)]
+    nm1 <- names(ret1)
+    nm2 <- names(ret2)
+    nm <- c(nm1, nm2)
+    nm <- names(table(nm))[table(nm) == 2]
+    all.equal(ret1[nm], ret2[nm])
+}
+
+a <- .Call("R_ExpectationCovarianceStatistic", x, y, integer(0), integer(0),
+            integer(0), 0L, 0.00001)
+b <- LECV(x, y)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
+           iY2d, iy, integer(0), integer(0), 
+           integer(0), 0L, 0.00001)
+
+cmpr(b, d)
+
+a <- .Call("R_ExpectationCovarianceStatistic", x, y, integer(0), integer(0),
+            block, 0L, 0.00001)
+b <- LECV(x, y, block = block)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
+           iY2d, iy, integer(0), integer(0), 
+           block, 0L, 0.00001)
+
+cmpr(b, d)
+
+a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, integer(0),
+            integer(0), 0L, 0.00001)
+b <- LECV(x, y, weights = weights)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
+           iY2d, iy, weights, integer(0), 
+           integer(0), 0L, 0.00001)
+
+cmpr(b, d)
+
+a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, integer(0),
+            block, 0L, 0.00001)
+b <- LECV(x, y, weights = weights, block = block)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
+           iY2d, iy, weights, integer(0), 
+           block, 0L, 0.00001)
+
+cmpr(b, d)
+
+
+a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset,
+            integer(0), 0L, 0.00001)
+b <- LECV(x, y, weights = weights, subset = subset)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
+           iY2d, iy, weights, subset, 
+           integer(0), 0L, 0.00001)
+
+cmpr(b, d)
+
+a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset,
+           block, 0L, 0.00001)
+b <- LECV(x, y, weights = weights, subset = subset, block = block)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
+           iY2d, iy, weights, subset, 
+           block, 0L, 0.00001)
+
+cmpr(b, d)
+
+a <- .Call("R_ExpectationCovarianceStatistic", ix, y, integer(0), integer(0),
+            integer(0), 0L, 0.00001)
+b <- LECV(Xfactor, y)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
+           iY2d, iy, integer(0), integer(0),
+           integer(0), 0L, 0.00001)
+
+cmpr(b, d)
+
+a <- .Call("R_ExpectationCovarianceStatistic", ix, y, integer(0), integer(0),
+           block, 0L, 0.00001)
+b <- LECV(Xfactor, y, block = block)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
+           iY2d, iy, integer(0), integer(0),
+           block, 0L, 0.00001)
+
+cmpr(b, d)
+
+a <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, integer(0),
+            integer(0), 0L, 0.00001)
+b <- LECV(Xfactor, y, weights = weights)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
+           iY2d, iy, weights, integer(0),
+           integer(0), 0L, 0.00001)
+
+cmpr(b, d)
+a <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, integer(0),
+           block, 0L, 0.00001)
+b <- LECV(Xfactor, y, weights = weights, block = block)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
+           iY2d, iy, weights, integer(0),
+           block, 0L, 0.00001)
+
+cmpr(b, d)
+
+
+a <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, subset,
+            integer(0), 0L, 0.00001)
+b <- LECV(Xfactor, y, weights = weights, subset = subset)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
+           iY2d, iy, weights, subset,
+           integer(0), 0L, 0.00001)
+
+cmpr(b, d)
+
+
+a <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, subset,
+           block, 0L, 0.00001)
+b <- LECV(Xfactor, y, weights = weights, subset = subset, block = block)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
+           iY2d, iy, weights, subset,
+           block, 0L, 0.00001)
+
+cmpr(b, d)
+
+@@
+
 \section{User Interface}
 
 \subsection{1d Case}
