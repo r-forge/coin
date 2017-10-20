@@ -239,6 +239,7 @@ and that in the one-sided case maximum type test statistics are replaced by
 #include <Rinternals.h>
 #include <Rmath.h>
 #include <Rdefines.h>
+#include <R_ext/stats_package.h> /* for S_rcont2 */
 @}
 
 @d C Macros
@@ -317,6 +318,7 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 @o Sums.c -cc
 @{
 #include "Sums.h"
+#include <R_ext/stats_stubs.h> /* for S_rcont2 */
 @<Function Definitions@>
 @}
 
@@ -850,7 +852,7 @@ SEXP R_PermutedLinearStatistic
 
     GetRNGstate();
     if (Lb == 1) {
-        for (R_xlen_t b = 0; b < inperm; b++) {
+        for (R_xlen_t np = 0; np < inperm; np++) {
             @<Setup Linear Statistic@>
             C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));
             @<Compute Permuted Linear Statistic@>
@@ -862,7 +864,7 @@ SEXP R_PermutedLinearStatistic
                         XLENGTH(subset), REAL(blockTable));
         PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset, 
                                                          block, blockTable));
-        for (R_xlen_t b = 0; b < inperm; b++) {
+        for (R_xlen_t np = 0; np < inperm; np++) {
             @<Setup Linear Statistic@>
             C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(blockTable), 
                              Lb + 1, REAL(tmp), REAL(perm));
@@ -882,8 +884,8 @@ SEXP R_PermutedLinearStatistic
 
 @d Setup Linear Statistic
 @{
-if (b % 256 == 0) R_CheckUserInterrupt();
-linstat = REAL(ans) + PQ * b;
+if (np % 256 == 0) R_CheckUserInterrupt();
+linstat = REAL(ans) + PQ * np;
 for (int p = 0; p < PQ; p++)
     linstat[p] = 0.0;
 @}
@@ -900,12 +902,12 @@ RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
 @{
 /*
 if (LENGTH(LECV) > 0) {
-    for (R_xlen_t b = 0; b < inperm; b++) {
+    for (R_xlen_t np = 0; np < inperm; np++) {
         if (C_get_varonly(LECV)) {
-            C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LECV),
+            C_standardise(PQ, REAL(ans) + PQ * np, C_get_Expectation(LECV),
                           C_get_Variance(LECV), 1, C_get_tol(LECV));
         } else {
-            C_standardise(PQ, REAL(ans) + PQ * b, C_get_Expectation(LECV),
+            C_standardise(PQ, REAL(ans) + PQ * np, C_get_Expectation(LECV),
                           C_get_Covariance(LECV), 0, C_get_tol(LECV));
         }
     }
@@ -939,6 +941,7 @@ all.equal(LECV2d, lcv2d)
 @{
 @<RC\_ExpectationCovarianceStatistic\_2d@>
 @<R\_ExpectationCovarianceStatistic\_2d@>
+@<R\_PermutedLinearStatistic\_2d@>
 @}
 
 @d 2d User Interface Inputs
@@ -961,28 +964,8 @@ SEXP varonly,
 SEXP tol
 ) {
     SEXP ans;
-    int P, Q, Lb, Lx, Ly, Xfactor;
-    @<C integer N Input@>;
-    @<C integer Nsubset Input@>;
 
-    N = XLENGTH(ix);
-    Nsubset = XLENGTH(subset);
-
-    if (LENGTH(x) == 0) {
-        P = NLEVELS(ix);
-        Xfactor = 1;
-    } else {
-        P = NCOL(x);
-        Xfactor = 0;
-    }
-    Q = NCOL(y);
-
-    Lb = 1;
-    if (LENGTH(block) > 0)
-        Lb = NLEVELS(block);
-
-    Lx = NLEVELS(ix);
-    Ly = NLEVELS(iy);
+    @<Setup Dimensions 2d@>
 
     PROTECT(ans = RC_init_LECV_2d(P, Q, INTEGER(varonly)[0], 
                                   Lx, Ly, Lb, Xfactor, REAL(tol)[0]));
@@ -1005,36 +988,53 @@ SEXP tol
 @|R_ExpectationCovarianceStatistic_2d
 @}
 
-@d Linear Statistic 2d
+@d Setup Dimensions 2d
 @{
-int qPp, qLy, pLxi;
-double *PQ_ans = C_get_LinearStatistic(ans);
+int P, Q, Lb, Lx, Ly, Xfactor;
+@<C integer N Input@>;
+@<C integer Nsubset Input@>;
 
-for (int p = 0; p < P; p++) {
-    for (int q = 0; q < Q; q++) {
-        PQ_ans[q * P + p] = 0.0;
-        qPp = q * P + p;
-        qLy = q * Lyp1;
-        for (int i = 0; i < Lxp1; i++) {
-            pLxi = p * Lxp1 + i;
-            for (int j = 0; j < Lyp1; j++)
-                PQ_ans[qPp] += REAL(y)[qLy + j] * REAL(x)[pLxi] * table[j * Lxp1 + i];
-        }
-    }
+N = XLENGTH(ix);
+Nsubset = XLENGTH(subset);
+
+if (LENGTH(x) == 0) {
+    P = NLEVELS(ix);
+    Xfactor = 1;
+} else {
+    P = NCOL(x);
+    Xfactor = 0;
 }
+Q = NCOL(y);
+
+Lb = 1;
+if (LENGTH(block) > 0)
+    Lb = NLEVELS(block);
+
+Lx = NLEVELS(ix);
+Ly = NLEVELS(iy);
 @}
 
-@d Linear Statistic 2d Xfactor
+@d Linear Statistic 2d
 @{
-double *Lx1Q_ans = C_get_LinearStatistic(ans);
-
-for (int q = 0; q < (Lxp1 - 1) * Q; q++) Lx1Q_ans[q] = 0.0;
-
-for (int j = 1; j < Lyp1; j++) { /* j = 0 means NA */
-    for (int i = 1; i < Lxp1; i++) { /* i = 0 means NA */
-        for (int q = 0; q < Q; q++)
-            Lx1Q_ans[q * (Lxp1 - 1) + (i - 1)] +=
-                table[j * Lxp1 + i] * REAL(y)[q * Lyp1 + j];
+if (Xfactor) {
+    for (int j = 1; j < Lyp1; j++) { /* j = 0 means NA */
+        for (int i = 1; i < Lxp1; i++) { /* i = 0 means NA */
+            for (int q = 0; q < Q; q++)
+                linstat[q * (Lxp1 - 1) + (i - 1)] +=
+                    table[j * Lxp1 + i] * REAL(y)[q * Lyp1 + j];
+        }
+    }
+} else {
+    for (int p = 0; p < P; p++) {
+        for (int q = 0; q < Q; q++) {
+            int qPp = q * P + p;
+            int qLy = q * Lyp1;
+            for (int i = 0; i < Lxp1; i++) {
+                int pLxi = p * Lxp1 + i;
+                for (int j = 0; j < Lyp1; j++)
+                    linstat[qPp] += REAL(y)[qLy + j] * REAL(x)[pLxi] * table[j * Lxp1 + i];
+            }
+        }
     }
 }
 @}
@@ -1055,19 +1055,19 @@ for (int b = 0; b < Lb; b++) {
 @{
 /* column sums */
 for (int q = 0; q < Lyp1; q++) {
-    csum[q] = 0.0;
+    csum[q] = 0;
     for (int p = 0; p < Lxp1; p++)
         csum[q] += btab[q * Lxp1 + p];
 }
-csum[0] = 0.0; /* NA */
+csum[0] = 0; /* NA */
 /* row sums */
 
 for (int p = 0; p < Lxp1; p++)  {
-    rsum[p] = 0.0;
+    rsum[p] = 0;
     for (int q = 0; q < Lyp1; q++)
         rsum[p] += btab[q * Lxp1 + p];
 }
-rsum[0] = 0.0; /* NA */
+rsum[0] = 0; /* NA */
 /* total sum */
 sw[b] = 0;
 for (int i = 1; i < Lxp1; i++) sw[b] += rsum[i];
@@ -1128,9 +1128,9 @@ SEXP ans
 ) {
 
     SEXP Rcsum, Rrsum;
-    int P, Q, Lxp1, Lyp1, Lb;
+    int P, Q, Lxp1, Lyp1, Lb, Xfactor;
     double *ExpInf, *ExpX, *CovX;
-    double *table, *table2d, *csum, *rsum, *sw, *btab;
+    double *table, *table2d, *csum, *rsum, *sw, *btab, *linstat;
 
     P = C_get_P(ans);
     Q = C_get_Q(ans);
@@ -1143,6 +1143,7 @@ SEXP ans
     Lxp1 = C_get_dimTable(ans)[0];
     Lyp1 = C_get_dimTable(ans)[1];
     Lb = C_get_Lb(ans);
+    Xfactor = C_get_Xfactor(ans);
 
     if (C_get_varonly(ans)) {
         CovX = Calloc(P, double);
@@ -1158,11 +1159,10 @@ SEXP ans
 
     @<2d Total Table@>
 
-    if (LENGTH(x) == 0) {
-        @<Linear Statistic 2d Xfactor@>
-    } else {
-        @<Linear Statistic 2d@>
-    }
+    linstat = C_get_LinearStatistic(ans);
+    for (int p = 0; p < P * Q; p++)
+        linstat[p] = 0.0;
+    @<Linear Statistic 2d@>
 
     for (int b = 0; b < Lb; b++) {
         btab = table + Lxp1 * Lyp1 * b;
@@ -1179,6 +1179,132 @@ SEXP ans
 }
 @|RC_ExpectationCovarianceStatistic
 @}
+
+<<permutations-2d>>=
+LECV2d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
+              iY2d, iy, weights, subset, 
+              integer(0), 0L, 0.00001)
+LECV2d$Table
+.Call("R_PermutedLinearStatistic_2d", iX2d, ix, 
+              iY2d, iy, weights, subset, 
+              integer(0), 10, LECV2d$Table)
+LECV2d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
+              iY2d, iy, weights, subset, 
+              block, 0L, 0.00001)
+LECV2d$Table
+.Call("R_PermutedLinearStatistic_2d", iX2d, ix, 
+              iY2d, iy, weights, subset, 
+              block, 10, LECV2d$Table)
+@@
+
+@d R\_PermutedLinearStatistic\_2d Prototype
+@{
+SEXP R_PermutedLinearStatistic_2d
+(
+    @<2d User Interface Inputs@>
+    SEXP nperm,
+    SEXP itable,
+    @<R LECV Input@>
+)
+@}
+
+@d R\_PermutedLinearStatistic\_2d
+@{
+@<R\_PermutedLinearStatistic\_2d Prototype@>
+{
+    SEXP ans, Ritable;
+    int *csum, *rsum, *sw, *jwork, *table, *rtable2, maxn = 0, Lxp1, Lyp1, *btab, PQ;
+    R_xlen_t inperm;
+    double *fact, *linstat;
+
+    @<Setup Dimensions 2d@>
+
+    PQ = P * Q;
+    Lxp1 = Lx + 1;
+    Lyp1 = Ly + 1;
+    inperm = (R_xlen_t) REAL(nperm)[0];
+
+    PROTECT(ans = allocMatrix(REALSXP, PQ, inperm));
+
+    @<Setup Working Memory@>
+
+    @<Convert Table to Integer@>
+
+    for (int b = 0; b < Lb; b++) {
+        btab = INTEGER(Ritable) + Lxp1 * Lyp1 * b;
+        @<Col Row Total Sums@>
+        if (sw[b] > maxn) maxn = sw[b];
+    }
+
+    @<Setup Log-Factorials@>
+
+    GetRNGstate();
+
+    for (R_xlen_t np = 0; np < inperm; np++) {
+
+        @<Setup Linear Statistic@>
+
+        for (int p = 0; p < Lxp1 * Lyp1; p++)
+            table[p] = 0;
+
+        for (int b = 0; b < Lb; b++) {
+            @<Compute Permuted Linear Statistic 2d@>
+        }
+    }
+
+    PutRNGstate();
+
+    @<Standardise Linear Statistics@>
+
+    Free(csum); Free(rsum); Free(sw); Free(rtable2);
+    Free(jwork); Free(fact);
+    UNPROTECT(2);
+    return(ans);
+}
+@|R_PermutedLinearStatistic_2d
+@}
+
+@d Convert Table to Integer
+@{
+PROTECT(Ritable = allocVector(INTSXP, LENGTH(itable)));
+for (int i = 0; i < LENGTH(itable); i++) {
+    if (REAL(itable)[i] > INT_MAX)
+        error("cannot deal with weights larger INT_MAX in R_PermutedLinearStatistic_2d");
+    INTEGER(Ritable)[i] = (int) REAL(itable)[i];
+}
+@}
+
+@d Setup Working Memory
+@{
+csum = Calloc(Lyp1 * Lb, int);
+rsum = Calloc(Lxp1 * Lb, int);
+sw = Calloc(Lb, int);
+table = Calloc(Lxp1 * Lyp1, int);
+rtable2 = Calloc(Lx * Ly , int);
+jwork = Calloc(Lyp1, int);
+@}
+
+@d Setup Log-Factorials
+@{
+fact = Calloc(maxn + 1, double);
+/* Calculate log-factorials.  fact[i] = lgamma(i+1) */
+fact[0] = fact[1] = 0.;
+for(int j = 2; j <= maxn; j++)
+    fact[j] = fact[j - 1] + log(j);
+@}
+
+@d Compute Permuted Linear Statistic 2d
+@{
+S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,
+         csum + Lyp1 *b + 1, sw + b, fact, jwork, rtable2);
+
+for (int j1 = 1; j1 <= Lx; j1++) {
+    for (int j2 = 1; j2 <= Ly; j2++)
+        table[j2 * Lxp1 + j1] = rtable2[(j2 - 1) * Lx + (j1 - 1)];
+}
+@<Linear Statistic 2d@>
+@}
+
 
 \section{Linear Statistics}
 
