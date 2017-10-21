@@ -1253,7 +1253,7 @@ if (Xfactor) {
         for (int i = 1; i < Lxp1; i++) { /* i = 0 means NA */
             for (int q = 0; q < Q; q++)
                 linstat[q * (Lxp1 - 1) + (i - 1)] +=
-                    table[j * Lxp1 + i] * REAL(y)[q * Lyp1 + j];
+                    btab[j * Lxp1 + i] * REAL(y)[q * Lyp1 + j];
         }
     }
 } else {
@@ -1264,7 +1264,7 @@ if (Xfactor) {
             for (int i = 0; i < Lxp1; i++) {
                 int pLxi = p * Lxp1 + i;
                 for (int j = 0; j < Lyp1; j++)
-                    linstat[qPp] += REAL(y)[qLy + j] * REAL(x)[pLxi] * table[j * Lxp1 + i];
+                    linstat[qPp] += REAL(y)[qLy + j] * REAL(x)[pLxi] * btab[j * Lxp1 + i];
             }
         }
     }
@@ -1394,10 +1394,11 @@ SEXP ans
     linstat = C_get_LinearStatistic(ans);
     for (int p = 0; p < P * Q; p++)
         linstat[p] = 0.0;
-    @<Linear Statistic 2d@>
 
     for (int b = 0; b < Lb; b++) {
         btab = table + Lxp1 * Lyp1 * b;
+
+        @<Linear Statistic 2d@>
 
         @<Col Row Total Sums@>
 
@@ -1534,6 +1535,7 @@ for (int j1 = 1; j1 <= Lx; j1++) {
     for (int j2 = 1; j2 <= Ly; j2++)
         table[j2 * Lxp1 + j1] = rtable2[(j2 - 1) * Lx + (j1 - 1)];
 }
+btab = table;
 @<Linear Statistic 2d@>
 @}
 
