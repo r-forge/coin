@@ -659,6 +659,30 @@ d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix,
 cmpr(b, d)
 
 
+a <- .Call("R_ExpectationCovarianceStatistic", x, y, integer(0), subset,
+            integer(0), 0L, 0.00001)
+b <- LECV(x, y, subset = subset)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
+           iY2d, iy, integer(0),  subset,
+           integer(0), 0L, 0.00001)
+
+cmpr(b, d)
+
+a <- .Call("R_ExpectationCovarianceStatistic", x, y, integer(0), subset,
+            block, 0L, 0.00001)
+b <- LECV(x, y, subset = subset, block = block)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
+           iY2d, iy, integer(0),  subset,
+           block, 0L, 0.00001)
+
+cmpr(b, d)
+
+
+
 a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset,
             integer(0), 0L, 0.00001)
 b <- LECV(x, y, weights = weights, subset = subset)
@@ -720,6 +744,28 @@ cmpr(a, b)
 
 d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
            iY2d, iy, weights, integer(0),
+           block, 0L, 0.00001)
+
+cmpr(b, d)
+
+
+a <- .Call("R_ExpectationCovarianceStatistic", ix, y, integer(0), subset,
+            integer(0), 0L, 0.00001)
+b <- LECV(Xfactor, y, subset = subset)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
+           iY2d, iy, integer(0), subset,
+           integer(0), 0L, 0.00001)
+
+cmpr(b, d)
+a <- .Call("R_ExpectationCovarianceStatistic", ix, y, integer(0), subset,
+           block, 0L, 0.00001)
+b <- LECV(Xfactor, y, subset = subset, block = block)
+cmpr(a, b)
+
+d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
+           iY2d, iy, integer(0), subset,
            block, 0L, 0.00001)
 
 cmpr(b, d)
@@ -895,6 +941,9 @@ SEXP ans
         /* compute sum of weights in block b of subset */
         sumweights[b] = RC_Sums(N, weights, subset_block, 
                                 offset, (R_xlen_t) table[b + 1]);
+
+        /* an empty block level; don't do anything */
+        if (sumweights[b] == 0) continue;
 
         @<Compute Expectation Linear Statistic@>
 
@@ -2195,7 +2244,7 @@ double RC_Sums
         if (XLENGTH(subset) == 0) {
             return((double) N);
         } else {
-            return((double) Nsubset - offset);
+            return((double) Nsubset);
         }
     } 
     if (TYPEOF(weights) == INTSXP) {
