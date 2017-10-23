@@ -5863,4 +5863,16 @@ void attribute_visible R_init_libcoin
 }
 @}
 
+\section*{Files}
+
+@f
+
+\section*{Fragments}
+
+@m
+
+\section*{Identifiers}
+
+@u
+
 \end{document}
