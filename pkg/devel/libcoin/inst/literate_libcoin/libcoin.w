@@ -220,9 +220,222 @@ and that in the one-sided case maximum type test statistics are replaced by
     \quad \text{(greater).}
 \end{eqnarray*}
 
-\chapter{C Code}
+\chapter{R Code}
 
-@S
+@o libcoin.R -cp
+@{
+@<LinStatExpCov@>
+@<LinStatExpCov1d@>
+@<LinStatExpCov2d@>
+@<doTest@>
+@}
+
+@d LinStatExpCov
+@{
+LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
+                          subset = integer(0), block = integer(0),
+                          varonly = FALSE, nperm = 0, standardise = FALSE,
+                          tol = sqrt(.Machine$double.eps))
+{
+
+    if (is.null(ix) & is.null(iy))
+        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
+                                subset = subset, block = block,
+                                varonly = varonly, nperm = nperm,
+                                standardise = standardise, tol = tol))
+
+    if (!is.null(ix) & !is.null(iy))
+        return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
+                                weights = weights, subset = subset,
+                                block = block, varonly = varonly, nperm = nperm,
+                                standardise = standardise, tol = tol))
+
+    if (missing(X) & !is.null(ix))
+        return(.LinStatExpCov1d(X = ix, Y = Y, weights = weights,
+                                subset = subset, block = block,
+                                varonly = varonly, nperm = nperm,
+                                standardise = standardise, tol = tol))
+
+    stop("incorrect call to LinStatExpCov")
+}
+@}
+
+@d LinStatExpCov1d
+@{
+.LinStatExpCov1d <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
+                             varonly = FALSE, nperm = 0, standardise = FALSE,
+                             tol = sqrt(.Machine$double.eps))
+{
+
+    if (NROW(X) != NROW(Y))
+        stop("dimensions of X and Y don't match")
+    N <- NROW(X)
+
+    if (is.integer(X)) {
+        if (is.null(attr(X, "levels")))
+            attr(X, "levels") <- 1:max(X)
+    }
+
+    @<Check weights, subset, block@>
+
+    ms <- !(complete.cases(X) & complete.cases(Y))
+    if (all(ms))
+        stop("all observations are missing")
+    if (any(ms)) {
+        if (length(subset) > 0) {
+            if (all(subset %in% which(ms)))
+                stop("all observations are missing")
+            subset <- subset[!(subset %in% which(ms))]
+        } else {
+            subset <- (1:N)[-which(ms)]
+        }
+    }
+
+    ret <- .Call(R_ExpectationCovarianceStatistic, X, Y, weights, subset,
+                 block, as.integer(varonly), as.double(tol))
+    ret$varonly <- as.logical(ret$varonly)
+    ret$Xfactor <- as.logical(ret$Xfactor)
+    if (nperm > 0) {
+        if (standardise) {
+            standardise <- ret
+        } else {
+            standardise <- integer(0)
+        }
+        ret$PermutedLinearStatistic <-
+            .Call(R_PermutedLinearStatistic, X, Y, weights, subset,
+                  block, as.double(nperm), standardise)
+    }
+    ret
+}
+@}
+
+@d Check weights, subset, block
+@{
+if (length(weights) > 0) {
+    if (!((N == length(weights)) && all(weights >= 0)))
+        stop("incorrect weights")
+}
+
+if (length(subset) > 0) {
+    rs <- range(subset)
+    if (!((rs[2] <= N) && (rs[1] >= 1L)))
+        stop("incorrect subset")
+}
+
+if (length(block) > 0) {
+    if (!((N == length(block)) && is.factor(block)))
+        stop("incorrect block")
+}
+@}
+
+@d LinStatExpCov2d
+@{
+.LinStatExpCov2d <- function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
+                             block = integer(0), varonly = FALSE, nperm = 0,
+                             standardise = FALSE,
+                             tol = sqrt(.Machine$double.eps))
+{
+    if (!((length(ix) == length(iy)) &&
+          is.integer(ix) && is.integer(iy)))
+        stop("incorrect ix and/or iy")
+    N <- length(ix)
+
+    if (is.null(attr(ix, "levels")))
+        attr(ix, "levels") <- 1:max(ix)
+    if (is.null(attr(iy, "levels")))
+        attr(iy, "levels") <- 1:max(iy)
+
+    if (length(X) > 0) {
+        if (!((min(ix) >= 0 && nrow(X) == (length(attr(ix, "levels")) + 1)) &&
+              all(complete.cases(X)) &&
+              (nrow(X) == (length(attr(ix, "levels")) + 1))))
+            stop("incorrect X")
+    }
+
+    if (!(all(complete.cases(Y))) &&
+          (nrow(Y) == (length(attr(iy, "levels")) + 1)) &&
+          (min(iy) >= 0L && nrow(Y) == (length(attr(iy, "levels")) + 1)))
+        stop("incorrect Y")
+
+    @<Check weights, subset, block@>
+
+    ret <- .Call(R_ExpectationCovarianceStatistic_2d, X, ix, Y, iy,
+                 weights, subset, block, as.integer(varonly), as.double(tol))
+    ret$varonly <- as.logical(ret$varonly)
+    ret$Xfactor <- as.logical(ret$Xfactor)
+    if (nperm > 0) {
+        if (standardise) {
+            standardise <- ret
+        } else {
+            standardise <- integer(0)
+        }
+        ret$PermutedLinearStatistic <-
+            .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, weights, subset,
+                  block, nperm, ret$TableBlock, standardise)
+    }
+    ret
+}
+@}
+
+@d doTest
+@{
+### note: lower = FALSE => p-value; lower = TRUE => 1 - p-value
+doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
+                   alternative = c("two.sided", "less", "greater"),
+                   pvalue = TRUE, lower = FALSE, log = FALSE,
+                   minbucket = 10L, ordered = TRUE, pargs = GenzBretz())
+{
+
+    ### avoid match.arg for performance reasons
+    teststat <- teststat[1]
+    if (!any(teststat == c("maximum", "quadratic", "scalar")))
+        stop("incorrect teststat")
+    alternative <- alternative[1]
+    if (!any(alternative == c("two.sided", "less", "greater")))
+        stop("incorrect alternative")
+
+    if (teststat == "quadratic") {
+        if (alternative != "two.sided")
+            stop("incorrect alternative")
+    }
+
+    test <- which(c("maximum", "quadratic", "scalar") == teststat)
+    if (test == 3) {
+        if (length(object$LinearStatistic) != 1)
+            stop("scalar test statistic not applicable")
+        test <- 1L ### scalar is maximum internally
+    }
+    alt <- which(c("two.sided", "less", "greater") == alternative)
+
+    if (!pvalue & (NCOL(object$PermutedLinearStatistic) > 0))
+        object$PermutedLinearStatistic <- matrix(NA_real_, nrow = 0, ncol = 0)
+
+    if (!object$Xfactor) {
+        if (teststat == "quadratic") {
+            ret <- .Call(R_QuadraticTest, object,
+                         as.integer(pvalue), as.integer(lower), as.integer(log))
+        } else {
+            ret <- .Call(R_MaximumTest, object,
+                         as.integer(alt), as.integer(pvalue), as.integer(lower),
+                         as.integer(log), as.integer(pargs$maxpts),
+                         as.double(pargs$releps), as.double(pargs$abseps))
+            if (teststat == "scalar") {
+                var <- if (object$varonly) object$Variance else object$Covariance
+                ret$TestStatistic <- object$LinearStatistic - object$Expectation
+                ret$TestStatistic <-
+                    if (var > object$tol) ret$TestStatistic / sqrt(var) else NaN
+            }
+        }
+    } else {
+        ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered),
+                     as.integer(test), as.integer(minbucket),
+                     as.integer(lower), as.integer(log))
+    }
+    ret
+}
+@}
+
+\chapter{C Code}
 
 \section{Header and Source Files}
 
@@ -296,9 +509,9 @@ Power2 Offset0
 
 
 The corresponding header file contains definitions of
-functions to be used outside \verb|Sums.c|
+functions to be used outside \verb|libcoin.c|
 
-@o Sums.h -cc
+@o libcoin.h -cc
 @{
 #include "libcoin_internal.h"
 @<Function Prototypes@>
@@ -306,28 +519,23 @@ functions to be used outside \verb|Sums.c|
 
 @d Function Prototypes
 @{
-@<RC\_Sums Prototype@>;
-@<RC\_KronSums Prototype@>;
-@<RC\_KronSums\_Permutation Prototype@>;
-@<RC\_colSums Prototype@>;
-@<RC\_OneTableSums Prototype@>;
-@<RC\_TwoTableSums Prototype@>;
-@<RC\_ThreeTableSums Prototype@>;
-@<RC\_LinearStatistic Prototype@>;
-@<RC\_ExpectationInfluence Prototype@>;
-@<RC\_CovarianceInfluence Prototype@>;
-@<RC\_ExpectationX Prototype@>;
-@<RC\_CovarianceX Prototype@>;
-@<RC\_order\_subset\_wrt\_block Prototype@>;
+extern @<R\_ExpectationCovarianceStatistic Prototype@>;
+extern @<R\_PermutedLinearStatistic Prototype@>;
+extern @<R\_ExpectationCovarianceStatistic\_2d Prototype@>;
+extern @<R\_PermutedLinearStatistic\_2d Prototype@>;
+extern @<R\_QuadraticTest Prototype@>;
+extern @<R\_MaximumTest Prototype@>;
+extern @<R\_MaximallySelectedTest Prototype@>;
 @}
 
-The \proglang{C} file \verb|Sums.c| defines the \proglang{C}
+The \proglang{C} file \verb|libcoin.c| defines the \proglang{C}
 functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 
-@o Sums.c -cc
+@o libcoin.c -cc
 @{
-#include "Sums.h"
+#include "libcoin_internal.h"
 #include <R_ext/stats_stubs.h> /* for S_rcont2 */
+#include <mvtnormAPI.h>
 @<Function Definitions@>
 @}
 
@@ -550,10 +758,8 @@ The tabulation of $b$ (potentially in subsets) is
 where the table is of length $B + 1$ and the first element
 counts the number of missing values.
 
-
 <<Sums-setup>>=
-### replace with library("libcoin")
-dyn.load("Sums.so")
+library("libcoin")
 set.seed(29)
 N <- 20L
 P <- 3L
@@ -627,239 +833,43 @@ cmpr <- function(ret1, ret2) {
     all.equal(ret1[nm], ret2[nm])
 }
 
-a <- .Call("R_ExpectationCovarianceStatistic", x, y, integer(0), integer(0),
-            integer(0), 0L, 0.00001)
-b <- LECV(x, y)
-cmpr(a, b)
 
-d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
-           iY2d, iy, integer(0), integer(0), 
-           integer(0), 0L, 0.00001)
+testit <- function(...) {
+    a <- LinStatExpCov(x, y, ...)
+    b <- LECV(x, y, ...)
+    d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, ...)
+    return(cmpr(a, b) && cmpr(b, d))
+}
 
-cmpr(b, d)
+testit()
+testit(weights = weights)
+testit(subset = subset)
+testit(weights = weights, subset = subset)
+testit(block = block)
+testit(weights = weights, block = block)
+testit(subset = subset, block = block)
+testit(weights = weights, subset = subset, block = block)
 
-a <- .Call("R_ExpectationCovarianceStatistic", x, y, integer(0), integer(0),
-            block, 0L, 0.00001)
-b <- LECV(x, y, block = block)
-cmpr(a, b)
+testit <- function(...) {
+    a <- LinStatExpCov(X = ix, y, ...)
+    b <- LECV(Xfactor, y, ...)
+    d <- LinStatExpCov(X = integer(0), ix = ix, Y = iY2d, iy = iy, ...)
+    return(cmpr(a, b) && cmpr(b, d))
+}
 
-d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
-           iY2d, iy, integer(0), integer(0), 
-           block, 0L, 0.00001)
-
-cmpr(b, d)
-
-a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, integer(0),
-            integer(0), 0L, 0.00001)
-b <- LECV(x, y, weights = weights)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
-           iY2d, iy, weights, integer(0), 
-           integer(0), 0L, 0.00001)
-
-cmpr(b, d)
-
-a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, integer(0),
-            block, 0L, 0.00001)
-b <- LECV(x, y, weights = weights, block = block)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
-           iY2d, iy, weights, integer(0), 
-           block, 0L, 0.00001)
-
-cmpr(b, d)
-
-
-a <- .Call("R_ExpectationCovarianceStatistic", x, y, integer(0), subset,
-            integer(0), 0L, 0.00001)
-b <- LECV(x, y, subset = subset)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
-           iY2d, iy, integer(0),  subset,
-           integer(0), 0L, 0.00001)
-
-cmpr(b, d)
-
-a <- .Call("R_ExpectationCovarianceStatistic", x, y, integer(0), subset,
-            block, 0L, 0.00001)
-b <- LECV(x, y, subset = subset, block = block)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
-           iY2d, iy, integer(0),  subset,
-           block, 0L, 0.00001)
-
-cmpr(b, d)
-
-
-
-a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset,
-            integer(0), 0L, 0.00001)
-b <- LECV(x, y, weights = weights, subset = subset)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
-           iY2d, iy, weights, subset, 
-           integer(0), 0L, 0.00001)
-
-cmpr(b, d)
-
-a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset,
-           block, 0L, 0.00001)
-b <- LECV(x, y, weights = weights, subset = subset, block = block)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
-           iY2d, iy, weights, subset, 
-           block, 0L, 0.00001)
-
-cmpr(b, d)
-
-a <- .Call("R_ExpectationCovarianceStatistic", ix, y, integer(0), integer(0),
-            integer(0), 0L, 0.00001)
-b <- LECV(Xfactor, y)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
-           iY2d, iy, integer(0), integer(0),
-           integer(0), 0L, 0.00001)
-
-cmpr(b, d)
-
-a <- .Call("R_ExpectationCovarianceStatistic", ix, y, integer(0), integer(0),
-           block, 0L, 0.00001)
-b <- LECV(Xfactor, y, block = block)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
-           iY2d, iy, integer(0), integer(0),
-           block, 0L, 0.00001)
-
-cmpr(b, d)
-
-a <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, integer(0),
-            integer(0), 0L, 0.00001)
-b <- LECV(Xfactor, y, weights = weights)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
-           iY2d, iy, weights, integer(0),
-           integer(0), 0L, 0.00001)
-
-cmpr(b, d)
-a <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, integer(0),
-           block, 0L, 0.00001)
-b <- LECV(Xfactor, y, weights = weights, block = block)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
-           iY2d, iy, weights, integer(0),
-           block, 0L, 0.00001)
-
-cmpr(b, d)
-
-
-a <- .Call("R_ExpectationCovarianceStatistic", ix, y, integer(0), subset,
-            integer(0), 0L, 0.00001)
-b <- LECV(Xfactor, y, subset = subset)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
-           iY2d, iy, integer(0), subset,
-           integer(0), 0L, 0.00001)
-
-cmpr(b, d)
-a <- .Call("R_ExpectationCovarianceStatistic", ix, y, integer(0), subset,
-           block, 0L, 0.00001)
-b <- LECV(Xfactor, y, subset = subset, block = block)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
-           iY2d, iy, integer(0), subset,
-           block, 0L, 0.00001)
-
-cmpr(b, d)
-
-
-a <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, subset,
-            integer(0), 0L, 0.00001)
-b <- LECV(Xfactor, y, weights = weights, subset = subset)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
-           iY2d, iy, weights, subset,
-           integer(0), 0L, 0.00001)
-
-cmpr(b, d)
-
-
-a <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, subset,
-           block, 0L, 0.00001)
-b <- LECV(Xfactor, y, weights = weights, subset = subset, block = block)
-cmpr(a, b)
-
-d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
-           iY2d, iy, weights, subset,
-           block, 0L, 0.00001)
-
-cmpr(b, d)
-
+testit()
+testit(weights = weights)
+testit(subset = subset)
+testit(weights = weights, subset = subset)
+testit(block = block)
+testit(weights = weights, block = block)
+testit(subset = subset, block = block)
+testit(weights = weights, subset = subset, block = block)
 @@
 
 \section{User Interface}
 
 \subsection{1d Case}
-
-<<1d>>=
-library("libcoin")
-LECV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset, 
-               integer(0), 0L, 0.00001)
-lcv <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset)
-all.equal(LECV, lcv)
-
-iLECV <- .Call("R_ExpectationCovarianceStatistic", ix, y, weights, subset, 
-               integer(0), 0L, 0.00001)
-ilcv <- LinStatExpCov(X = ix, Y = y, weights = weights, subset = subset)
-all.equal(iLECV, ilcv)
-
-iLECVXfactor <- .Call("R_ExpectationCovarianceStatistic", Xfactor, y, weights, subset, 
-               integer(0), 0L, 0.00001)
-all.equal(iLECVXfactor, ilcv)
-all.equal(iLECVXfactor, iLECV)
-
-V <- matrix(0, nrow = P * Q, ncol = P * Q)
-V[lower.tri(V, diag = TRUE)] <- LECV$Covariance
-LSvar <- diag(V)
-V <- matrix(0, nrow = Q, ncol = Q)
-V[lower.tri(V, diag = TRUE)] <- LECV$CovarianceInfluence
-Ivar <- diag(V)
-(LEV <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset, 
-              integer(0), 1L, 0.00001))
-lv <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, varonly = TRUE)
-all.equal(LEV, lv)
-stopifnot(all.equal(LECV$LinearStatistic, LEV$LinearStatistic) &&
-          all.equal(LECV$Expectation, LEV$Expectation) &&
-          all.equal(LECV$ExpectationInfluence, LEV$ExpectationInfluence) &&
-          all.equal(Ivar, LEV$VarianceInfluence) &&
-          all.equal(LSvar, LEV$Variance))
-
-library("libcoin")
-subset[block[subset] == 1]
-subset[block[subset] == 2]
-LECVb <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset, 
-               block, 0L, 0.00001)
-lcvb <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, block = block)
-all.equal(LECVb, lcvb)
-
-LEVb <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset, 
-               block, 1L, 0.00001)
-lvb <- LinStatExpCov(X = x, Y = y, weights = weights, subset = subset, block = block, varonly =
-TRUE)
-all.equal(LEVb, lvb)
-@@
 
 @d User Interface
 @{
@@ -877,14 +887,20 @@ all.equal(LEVb, lvb)
 @<R block Input@>
 @}
 
-@d R\_ExpectationCovarianceStatistic
+@d R\_ExpectationCovarianceStatistic Prototype
 @{
 SEXP R_ExpectationCovarianceStatistic
 (
 @<User Interface Inputs@>
 SEXP varonly,
 SEXP tol
-) {
+)
+@}
+
+@d R\_ExpectationCovarianceStatistic
+@{
+@<R\_ExpectationCovarianceStatistic Prototype@>
+{
     SEXP ans;
 
     @<Setup Dimensions@>
@@ -1052,11 +1068,8 @@ C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
 @}
 
 <<permutations>>=
-a <- .Call("R_ExpectationCovarianceStatistic", x, y, weights, subset,
-           integer(0), 0L, 0.00001)
-.Call("R_PermutedLinearStatistic", x, y, weights, subset, integer(0), 10, list())
-.Call("R_PermutedLinearStatistic", x, y, weights, subset, integer(0), 10, a)
-.Call("R_PermutedLinearStatistic", x, y, weights, subset, block, 10, a)
+LinStatExpCov(x, y, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
+LinStatExpCov(x, y, weights = weights, subset = subset, block = block, nperm = 10)$PermutedLinearStatistic
 @@
 
 @d R\_PermutedLinearStatistic Prototype
@@ -1156,27 +1169,6 @@ if (LENGTH(LECV) > 0) {
 
 \subsection{2d Case}
 
-<<2d>>=
-library("libcoin")
-LECV2d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
-              iY2d, iy, weights, subset, 
-              integer(0), 0L, 0.00001)
-lcv2d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset)
-all.equal(LECV2d, lcv2d)
-all.equal(LECV2d, LECV)
-
-LECV2d <- .Call("R_ExpectationCovarianceStatistic_2d", integer(0), ix, 
-              iY2d, iy, weights, subset, 
-              integer(0), 0L, 0.00001)
-lcv2d <- LinStatExpCov(X = integer(0), ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset)
-all.equal(LECV2d, lcv2d)
-
-LECVXfactor <- .Call("R_ExpectationCovarianceStatistic", Xfactor, y,
-              weights, subset, 
-              integer(0), 0L, 0.00001)
-all.equal(LECV2d, LECVXfactor)
-
-@@
 
 @d 2d User Interface
 @{
@@ -1196,14 +1188,20 @@ SEXP iy,
 @<R block Input@>
 @}
 
-@d R\_ExpectationCovarianceStatistic\_2d
+@d R\_ExpectationCovarianceStatistic\_2d Prototype
 @{
 SEXP R_ExpectationCovarianceStatistic_2d
 (
 @<2d User Interface Inputs@>
 SEXP varonly,
 SEXP tol
-) {
+)
+@}
+
+@d R\_ExpectationCovarianceStatistic\_2d
+@{
+@<R\_ExpectationCovarianceStatistic\_2d Prototype@>
+{
     SEXP ans;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
@@ -1248,7 +1246,7 @@ if (XLENGTH(x) == 0) {
 Q = NCOL(y);
 
 Lb = 1;
-if (LENGTH(block) > 0)
+if (XLENGTH(block) > 0)
     Lb = NLEVELS(block);
 
 Lx = NLEVELS(ix);
@@ -1423,20 +1421,9 @@ SEXP ans
 @}
 
 <<permutations-2d>>=
-LECV2d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
-              iY2d, iy, weights, subset, 
-              integer(0), 0L, 0.00001)
-LECV2d$Table
-.Call("R_PermutedLinearStatistic_2d", iX2d, ix, 
-              iY2d, iy, weights, subset, 
-              integer(0), 10, LECV2d$Table, list())
-LECV2d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
-              iY2d, iy, weights, subset, 
-              block, 0L, 0.00001)
-LECV2d$Table
-.Call("R_PermutedLinearStatistic_2d", iX2d, ix, 
-              iY2d, iy, weights, subset, 
-              block, 10, LECV2d$Table, list())
+1:10
+# LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
+# LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
 @@
 
 @d R\_PermutedLinearStatistic\_2d Prototype
@@ -1556,9 +1543,10 @@ btab = table;
 @{
 @<R\_QuadraticTest@>
 @<R\_MaximumTest@>
+@<R\_MaximallySelectedTest@>
 @}
 
-@d R\_QuadraticTest
+@d R\_QuadraticTest Prototype
 @{
 SEXP R_QuadraticTest
 (
@@ -1566,7 +1554,13 @@ SEXP R_QuadraticTest
     SEXP pvalue,
     SEXP lower,
     SEXP give_log
-) {
+)
+@}
+
+@d R\_QuadraticTest
+@{
+@<R\_QuadraticTest Prototype@>
+{
 
     SEXP ans, stat, pval, names;
     double *MPinv, *ls, st, *ex;
@@ -1628,8 +1622,7 @@ int PVALUE = INTEGER(pvalue)[0];
 
 @}
 
-
-@d R\_MaximumTest
+@d R\_MaximumTest Prototype
 @{
 SEXP R_MaximumTest
 (
@@ -1641,8 +1634,13 @@ SEXP R_MaximumTest
     SEXP maxpts,
     SEXP releps,
     SEXP abseps
-) {
+)
+@}
 
+@d R\_MaximumTest
+@{
+@<R\_MaximumTest Prototype@>
+{
     SEXP ans, stat, pval, names;
     double st, *ex, *cv, *ls, tl;
     int P, Q, PQ, vo, alt, greater;
@@ -1674,12 +1672,11 @@ SEXP R_MaximumTest
             UNPROTECT(2);
             return(ans);
         }
-/*
+
         REAL(pval)[0] = C_maxtype_pvalue(REAL(stat)[0], cv, 
                                          PQ, INTEGER(alternative)[0], LOWER, GIVELOG, 
                                          INTEGER(maxpts)[0], REAL(releps)[0],
                                          REAL(abseps)[0], C_get_tol(LECV));
-*/
     } else {
         nperm = C_get_nperm(LECV);
         ls = C_get_PermutedLinearStatistic(LECV);
@@ -1707,7 +1704,7 @@ SEXP R_MaximumTest
 }
 @}
 
-@d R\_MaximallySelectedTest
+@d R\_MaximallySelectedTest Prototype
 @{
 SEXP R_MaximallySelectedTest
 (
@@ -1717,13 +1714,18 @@ SEXP R_MaximallySelectedTest
     SEXP minbucket,
     SEXP lower,
     SEXP give_log
-) {
+)
+@}
+
+@d R\_MaximallySelectedTest
+@{
+@<R\_MaximallySelectedTest Prototype@>
+{
 
     SEXP ans, index, stat, pval, names;
-    int P, Q, mb;
+    int P, mb;
 
     P = C_get_P(LECV);
-    Q = C_get_Q(LECV);
     mb = INTEGER(minbucket)[0];
 
     PROTECT(ans = allocVector(VECSXP, 3));
@@ -2015,6 +2017,7 @@ void C_standardise
 @<C\_chisq\_pvalue@>
 @<C\_perm\_pvalue@>
 @<C\_norm\_pvalue@>
+@<C\_maxtype\_pvalue@>
 @}
 
 @d C\_chisq\_pvalue
@@ -2568,39 +2571,6 @@ if (teststat == TESTSTAT_maximum) {
 
 \section{Linear Statistics}
 
-<<LinearStatistics>>=
-a0 <- colSums(x[subset,r1] * y[subset,r2] * weights[subset])
-a1 <- .Call("R_LinearStatistic", x, P, y, weights, subset, integer(0))
-a2 <- .Call("R_LinearStatistic", x, P, y, as.double(weights), as.double(subset), integer(0))
-a3 <- .Call("R_LinearStatistic", x, P, y, weights, as.double(subset), integer(0))
-a4 <- .Call("R_LinearStatistic", x, P, y, as.double(weights), subset, integer(0))
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4) &&
-          all.equal(a0, LECV$LinearStatistic))
-
-
-a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * y[subset,r2Xfactor] * weights[subset]))
-a1 <- .Call("R_LinearStatistic", ix, Lx, y, weights, subset, integer(0))
-a2 <- .Call("R_LinearStatistic", ix, Lx, y, as.double(weights), as.double(subset), integer(0))
-a3 <- .Call("R_LinearStatistic", ix, Lx, y, weights, as.double(subset), integer(0))
-a4 <- .Call("R_LinearStatistic", ix, Lx, y, as.double(weights), subset, integer(0))
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-
-a0 <- colSums(x[subset,r1] * y[subsety, r2])
-a1 <- .Call("R_LinearStatistic", x, P, y, integer(0), subset, subsety)
-a2 <- .Call("R_LinearStatistic", x, P, y, integer(0), as.double(subset), as.double(subsety))
-stopifnot(all.equal(a0, a1) && all.equal(a0, a1))
-
-a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * y[subsety, r2Xfactor]))
-a1 <- .Call("R_LinearStatistic", ix, Lx, y, integer(0), subset, subsety)
-a1 <- .Call("R_LinearStatistic", ix, Lx, y, integer(0), as.double(subset), as.double(subsety))
-stopifnot(all.equal(a0, a1))
-
-@@
-
 @d LinearStatistics
 @{
 @<RC\_LinearStatistic@>
@@ -2794,19 +2764,6 @@ void C_VarianceLinearStatistic
 
 \subsection{Influence}
 
-<<ExpectationCovarianceInfluence>>=
-sumweights <- sum(weights[subset])
-expecty <- a0 <- colSums(y[subset, ] * weights[subset]) / sumweights
-a1 <- .Call("R_ExpectationInfluence", y, weights, subset);
-a2 <- .Call("R_ExpectationInfluence", y, as.double(weights), as.double(subset));
-a3 <- .Call("R_ExpectationInfluence", y, weights, as.double(subset));
-a4 <- .Call("R_ExpectationInfluence", y, as.double(weights), subset);
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4) &&
-          all.equal(a0, LECV$ExpectationInfluence))
-@@
-
 @d R\_ExpectationInfluence
 @{
 SEXP R_ExpectationInfluence
@@ -2864,37 +2821,6 @@ void RC_ExpectationInfluence
 }
 @|RC_ExpectationInfluence
 @}
-
-<<CovarianceInfluence>>=
-sumweights <- sum(weights[subset])
-yc <- t(t(y) - expecty)
-r1y <- rep(1:ncol(y), ncol(y))
-r2y <- rep(1:ncol(y), each = ncol(y))
-a0 <- colSums(yc[subset, r1y] * yc[subset, r2y] * weights[subset]) / sumweights
-a0 <- matrix(a0, ncol = ncol(y))
-vary <- diag(a0)
-a0 <- a0[lower.tri(a0, diag = TRUE)]
-a1 <- .Call("R_CovarianceInfluence", y, weights, subset, 0L);
-a2 <- .Call("R_CovarianceInfluence", y, as.double(weights), as.double(subset), 0L);
-a3 <- .Call("R_CovarianceInfluence", y, weights, as.double(subset), 0L);
-a4 <- .Call("R_CovarianceInfluence", y, as.double(weights), subset, 0L);
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4) &&
-          all.equal(a0, LECV$CovarianceInfluence) &&
-          all.equal(vary, LEV$VarianceInfluence))
-
-a1 <- .Call("R_CovarianceInfluence", y, weights, subset, 1L);
-a2 <- .Call("R_CovarianceInfluence", y, as.double(weights), as.double(subset), 1L);
-a3 <- .Call("R_CovarianceInfluence", y, weights, as.double(subset), 1L);
-a4 <- .Call("R_CovarianceInfluence", y, as.double(weights), subset, 1L);
-
-a0 <- vary
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4) &&
-          all.equal(a0, LEV$VarianceInfluence))
-@@
 
 @d R\_CovarianceInfluence
 @{
@@ -2971,65 +2897,6 @@ void RC_CovarianceInfluence
 @}
 
 \subsection{X}
-
-<<ExpectationCovarianceX>>=
-a0 <- colSums(x[subset, ] * weights[subset]) 
-a0
-a1 <- .Call("R_ExpectationX", x, P, weights, subset);
-a2 <- .Call("R_ExpectationX", x, P, as.double(weights), as.double(subset));
-a3 <- .Call("R_ExpectationX", x, P, weights, as.double(subset));
-a4 <- .Call("R_ExpectationX", x, P, as.double(weights), subset);
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4) &&
-          all.equal(a0, LECV$ExpectationX))
-
-a0 <- colSums(x[subset, ]^2 * weights[subset]) 
-a1 <- .Call("R_CovarianceX", x, P, weights, subset, 1L);
-a2 <- .Call("R_CovarianceX", x, P, as.double(weights), as.double(subset), 1L);
-a3 <- .Call("R_CovarianceX", x, P, weights, as.double(subset), 1L);
-a4 <- .Call("R_CovarianceX", x, P, as.double(weights), subset, 1L);
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-
-a0 <- as.vector(colSums(Xfactor[subset, ] * weights[subset]))
-a0
-a1 <- .Call("R_ExpectationX", ix, Lx, weights, subset);
-a2 <- .Call("R_ExpectationX", ix, Lx, as.double(weights), as.double(subset));
-a3 <- .Call("R_ExpectationX", ix, Lx, weights, as.double(subset));
-a4 <- .Call("R_ExpectationX", ix, Lx, as.double(weights), subset);
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-
-a1 <- .Call("R_CovarianceX", ix, Lx, weights, subset, 1L);
-a2 <- .Call("R_CovarianceX", ix, Lx, as.double(weights), as.double(subset), 1L);
-a3 <- .Call("R_CovarianceX", ix, Lx, weights, as.double(subset), 1L);
-a4 <- .Call("R_CovarianceX", ix, Lx, as.double(weights), subset, 1L);
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-
-r1x <- rep(1:ncol(Xfactor), ncol(Xfactor))
-r2x <- rep(1:ncol(Xfactor), each = ncol(Xfactor))
-a0 <- colSums(Xfactor[subset, r1x] * Xfactor[subset, r2x] * weights[subset])
-a0 <- matrix(a0, ncol = ncol(Xfactor))
-vary <- diag(a0)
-a0 <- a0[upper.tri(a0, diag = TRUE)]
-
-a0
-a1 <- .Call("R_CovarianceX", ix, Lx, weights, subset, 0L);
-a1
-a2 <- .Call("R_CovarianceX", ix, Lx, as.double(weights), as.double(subset), 0L);
-a3 <- .Call("R_CovarianceX", ix, Lx, weights, as.double(subset), 0L);
-a4 <- .Call("R_CovarianceX", ix, Lx, as.double(weights), subset, 0L);
-
-#stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-#          all.equal(a0, a3) && all.equal(a0, a4))
-
-
-@@
 
 @d R\_ExpectationX
 @{
@@ -3208,17 +3075,6 @@ After computions in the loop, we compute the next element
 
 \subsection{Simple Sums}
 
-<<SimpleSums>>=
-a0 <- sum(weights[subset])
-a1 <- .Call("R_Sums", N, weights, subset)
-a2 <- .Call("R_Sums", N, as.double(weights), as.double(subset))
-a3 <- .Call("R_Sums", N, weights, as.double(subset))
-a4 <- .Call("R_Sums", N, as.double(weights), subset)
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-@@
-
-
 @d SimpleSums
 @{
 @<C\_Sums\_dweights\_dsubset@>
@@ -3386,20 +3242,6 @@ double C_Sums_dweights_isubset
 
 
 \subsection{Kronecker Sums}
-
-<<KronSums>>=
-r1 <- rep(1:ncol(x), ncol(y))
-r2 <- rep(1:ncol(y), each = ncol(x))
-
-a0 <- colSums(x[subset,r1] * y[subset,r2] * weights[subset])
-a1 <- .Call("R_KronSums", x, P, y, weights, subset)
-a2 <- .Call("R_KronSums", x, P, y, as.double(weights), as.double(subset))
-a3 <- .Call("R_KronSums", x, P, y, weights, as.double(subset))
-a4 <- .Call("R_KronSums", x, P, y, as.double(weights), subset)
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-@@
 
 @d KronSums
 @{
@@ -3661,18 +3503,6 @@ void C_KronSums_dweights_isubset
 
 \subsubsection{Xfactor Kronecker Sums}
 
-<<XfactorKronSums>>=
-
-a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * 
-                        y[subset,r2Xfactor] * weights[subset]))
-a1 <- .Call("R_KronSums", ix, Lx, y, weights, subset)
-a2 <- .Call("R_KronSums", ix, Lx, y, as.double(weights), as.double(subset))
-a3 <- .Call("R_KronSums", ix, Lx, y, weights, as.double(subset))
-a4 <- .Call("R_KronSums", ix, Lx, y, as.double(weights), subset)
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-@@
 
 @d C XfactorKronSums Input
 @{
@@ -3787,14 +3617,6 @@ void C_XfactorKronSums_dweights_isubset
 
 
 \subsubsection{Permuted Kronecker Sums}
-
-<<KronSums-Permutation>>=
-a0 <- colSums(x[subset,r1] * y[subsety, r2])
-a1 <- .Call("R_KronSums_Permutation", x, P, y, subset, subsety)
-a2 <- .Call("R_KronSums_Permutation", x, P, y, as.double(subset), as.double(subsety))
-stopifnot(all.equal(a0, a1) && all.equal(a0, a1))
-@@
-
 
 @d R\_KronSums\_Permutation
 @{
@@ -3933,14 +3755,6 @@ void C_KronSums_Permutation_isubset
 
 \subsubsection{Xfactor Permuted Kronecker Sums}
 
-<<XfactorKronSums-Permutation>>=
-a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * y[subsety, r2Xfactor]))
-a1 <- .Call("R_KronSums_Permutation", ix, Lx, y, subset, subsety)
-a1 <- .Call("R_KronSums_Permutation", ix, Lx, y, as.double(subset), as.double(subsety))
-stopifnot(all.equal(a0, a1))
-@@
-
-
 @d C\_XfactorKronSums\_Permutation\_dsubset
 @{
 void C_XfactorKronSums_Permutation_dsubset
@@ -4004,18 +3818,6 @@ void C_XfactorKronSums_Permutation_isubset
 
 
 \subsection{Column Sums}
-
-<<colSums>>=
-a0 <- colSums(x[subset,] * weights[subset])
-a1 <- .Call("R_colSums", x, weights, subset)
-a2 <- .Call("R_colSums", x, as.double(weights), as.double(subset))
-a3 <- .Call("R_colSums", x, weights, as.double(subset))
-a4 <- .Call("R_colSums", x, as.double(weights), subset)
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-@@
-
 
 @d colSums
 @{
@@ -4212,22 +4014,6 @@ void C_colSums_dweights_isubset
 \subsection{Tables}
 
 \subsubsection{OneTable Sums}
-
-<<OneTableSum>>=
-
-a0 <- as.vector(xtabs(weights ~ ixf, subset = subset))
-a1 <- .Call("R_OneTableSums", ix, Lx + 1L, weights, subset)[-1]
-a2 <- .Call("R_OneTableSums", ix, Lx + 1L, 
-            as.double(weights), as.double(subset))[-1]
-a3 <- .Call("R_OneTableSums", ix, Lx + 1L, 
-            weights, as.double(subset))[-1]
-a4 <- .Call("R_OneTableSums", ix, Lx + 1L, 
-            as.double(weights), subset)[-1]
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-@@
-
 
 @d Tables
 @{
@@ -4426,28 +4212,6 @@ void C_OneTableSums_dweights_isubset
 
 \subsubsection{TwoTable Sums}
 
-<<TwoTableSum>>=
-
-a0 <- c(xtabs(weights ~ ixf + iyf, subset = subset))
-a1 <- .Call("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            weights, subset)
-a1 <- c(matrix(a1, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
-a2 <- .Call("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            as.double(weights), as.double(subset))
-a2 <- c(matrix(a2, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
-a3 <- .Call("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            weights, as.double(subset))
-a3 <- c(matrix(a3, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
-a4 <- .Call("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            as.double(weights), subset)
-a4 <- c(matrix(a4, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-@@
-
-
-
 @d R\_TwoTableSums
 @{
 SEXP R_TwoTableSums
@@ -4627,31 +4391,6 @@ void C_TwoTableSums_dweights_isubset
 @}
 
 \subsubsection{ThreeTable Sums}
-
-<<ThreeTableSum>>=
-
-a0 <- c(xtabs(weights ~ ixf + iyf + block, subset = subset))
-a1 <- .Call("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            block, B, weights, subset)
-a1 <- c(array(a1, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
-a2 <- .Call("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            block, B,
-            as.double(weights), as.double(subset))
-a2 <- c(array(a2, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
-a3 <- .Call("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            block, B,
-            weights, as.double(subset))
-a3 <- c(array(a3, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
-a4 <- .Call("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            block, B,
-            as.double(weights), subset)
-a4 <- c(array(a4, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
-
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
-@@
-
-
 
 @d R\_ThreeTableSums
 @{
@@ -4843,19 +4582,6 @@ void C_ThreeTableSums_dweights_isubset
 
 
 \subsection{Blocks}
-
-<<Helpers>>=
-a0 <- as.vector(do.call("c", tapply(subset, block[subset], function(s) s)))
-a1 <- .Call("R_order_subset_wrt_block", y, subset, integer(0), block, B + 1L);
-stopifnot(all.equal(a0, a1))
-a2 <- .Call("R_order_subset_wrt_block", y, subset, integer(0), integer(0), 2L);
-stopifnot(all.equal(subset, a2))
-a0 <- as.vector(do.call("c", tapply(1:N, block, function(s) s)))
-a3 <- .Call("R_order_subset_wrt_block", y, integer(0), integer(0), block, B + 1L);
-stopifnot(all.equal(a0, a3))
-a4 <- .Call("R_order_subset_wrt_block", y, integer(0), integer(0), integer(0), 2L);
-stopifnot(all.equal(1:N, a4))
-@@
 
 @d Utils
 @{
@@ -5108,16 +4834,6 @@ be a little bit more generous with memory here.
 @}
 
 \subsection{Permutation Helpers}
-
-<<Permutations>>=
-stopifnot(all(all.equal(1:N, .Call("R_setup_subset", N, integer(0), integer(0))),
-              all.equal(rep(1:N, weights), .Call("R_setup_subset", N, weights,
-integer(0))),
-              all.equal(subset, .Call("R_setup_subset", N, integer(0),
-subset)),
-              all.equal(rep(subset, weights[subset]), .Call("R_setup_subset", N, weights,
-              subset))))
-@@
 
 @d Permutations
 @{
@@ -5402,10 +5118,9 @@ void C_MPinv_sym
         val = Calloc(n, double);
         vec = Calloc(n * n, double);
 
-/*
         F77_CALL(dspev)("V", "L", &n, rx, val, vec, &n, work,
                         &info);
-*/
+
         dtol = val[n - 1] * tol;
 
         for (int k = 0; k < n; k++)
@@ -5946,20 +5661,181 @@ SEXP RC_init_LECV_2d
 @|RC_init_LECV_2d
 @}
 
+\chapter{Package Infrastructure}
 
-@S
+@o AAA.R -cp
+@{
+.onUnload <- function(libpath)
+    library.dynam.unload("libcoin", libpath)
+@}
 
-\chapter{R Code}
+@o DESCRIPTION -cp
+@{
+Package: libcoin
+Title: Linear Test Statistics for Permutation Inference
+Date: 2017-10-27
+Version: 1.0-0
+Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
+                  email = "Torsten.Hothorn@@R-project.org")
+Description: Basic infrastructure for linear test statistics and permutation
+  inference in the framework of Strasser and Weber (1999) <http://epub.wu.ac.at/102/>. 
+  This package must not be used by end-users. CRAN package 'coin' implements all 
+  user interfaces and is ready to be used by anyone.
+Depends: R (>= 3.4.0)
+Imports: stats, mvtnorm
+LinkingTo: mvtnorm
+NeedsCompilation: yes
+License: GPL-2
+@}
 
-@s
+@o NAMESPACE -cp
+@{
+useDynLib(libcoin, .registration = TRUE)
 
+importFrom("stats", complete.cases)
+importFrom("mvtnorm", GenzBretz)
 
-\section{Example}
+export(LinStatExpCov, doTest)
+@}
 
-<<ex>>=
-summary(1)
-@@
+@o Makevars -cc
+@{
+PKG_CFLAGS=$(C_VISIBILITY)
+PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+@}
 
-@S
+@o libcoin-win.def -cc
+@{
+LIBRARY libcoin.dll
+EXPORTS
+  R_init_libcoin
+@}
+
+@o libcoinAPI.h -cc
+@{
+#include <R_ext/Rdynload.h>
+#include <libcoin.h>
+
+extern SEXP libcoin_R_ExpectationCovarianceStatistic(
+    SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP varonly,
+    SEXP tol
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_ExpectationCovarianceStatistic");
+    return fun(x, y, weights, subset, block, varonly, tol);
+}
+
+extern SEXP libcoin_R_PermutedLinearStatistic(
+    SEXP LEV, SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nperm,
+    SEXP standardise
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_PermutedLinearStatistic");
+    return fun(LEV, x, y, weights, subset, block, nperm, standardise);
+}
+
+extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
+    SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP weights, SEXP subset, SEXP block,
+    SEXP varonly, SEXP tol
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_ExpectationCovarianceStatistic_2d");
+    return fun(x, ix, y, iy, weights, subset, block, varonly, tol);
+}
+
+extern SEXP libcoin_R_PermutedLinearStatistic_2d(
+    SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nperm,
+    SEXP standardise
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_PermutedLinearStatistic_2d");
+    return fun(LEV, x, ix, y, iy, block, nperm, standardise);
+}
+
+extern SEXP libcoin_R_QuadraticTest(
+    SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_QuadraticTest");
+    return fun(LEV, pvalue, lower, give_log);
+}
+
+extern SEXP libcoin_R_MaximumTest(
+    SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
+    SEXP maxpts, SEXP releps, SEXP abseps
+) {
+
+  static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_MaximumTest");
+    return fun(LEV, alternative, pvalue, lower, give_log, maxpts, releps,
+               abseps);
+}
+
+extern SEXP libcoin_R_MaximallySelectedTest(
+    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_MaximallySelectedTest");
+    return fun(LEV, ordered, teststat, minbucket, lower, give_log);
+}
+@}
+
+@o libcoin-init.c -cc
+@{
+#include "libcoin.h"
+#include <R_ext/Rdynload.h>
+#include <R_ext/Visibility.h>
+
+#define CALLDEF(name, n) {#name, (DL_FUNC) &name, n}
+#define REGCALL(name) R_RegisterCCallable("libcoin", #name, (DL_FUNC) &name)
+
+static const R_CallMethodDef callMethods[] = {
+    CALLDEF(R_ExpectationCovarianceStatistic, 7),
+    CALLDEF(R_PermutedLinearStatistic, 8),
+    CALLDEF(R_ExpectationCovarianceStatistic_2d, 9),
+    CALLDEF(R_PermutedLinearStatistic_2d, 8),
+    CALLDEF(R_QuadraticTest, 4),
+    CALLDEF(R_MaximumTest, 8),
+    CALLDEF(R_MaximallySelectedTest, 6),
+    {NULL, NULL, 0}
+};
+
+void attribute_visible R_init_libcoin
+(
+    DllInfo *dll
+) {
+
+    R_registerRoutines(dll, NULL, callMethods, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+    R_forceSymbols(dll, TRUE);
+    REGCALL(R_ExpectationCovarianceStatistic);
+    REGCALL(R_PermutedLinearStatistic);
+    REGCALL(R_ExpectationCovarianceStatistic_2d);
+    REGCALL(R_PermutedLinearStatistic_2d);
+    REGCALL(R_QuadraticTest);
+    REGCALL(R_MaximumTest);
+    REGCALL(R_MaximallySelectedTest);
+}
+@}
 
 \end{document}

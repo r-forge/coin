@@ -1,20 +1,18 @@
 
-libcoin.pdf:	libcoin.w
-	nuweb -r libcoin.w
-	R CMD SHLIB Sums.c
-	mv libcoin.tex libcoin.Rnw
-	Sweave libcoin.Rnw
-	texi2dvi --pdf libcoin.tex
+libcoin.Rnw:	libcoin.w
 	nuweb -r libcoin.w
 	mv libcoin.tex libcoin.Rnw
-	Sweave libcoin.Rnw
-	texi2dvi --pdf libcoin.tex
-	pdflatex libcoin.tex
+	mv *.h src
+	mv *.c src
+	mv Makevars src
+	mv *def src
+	mv *.R R
 
-libcoin.R:	libcoin.pdf
+libcoin.R: libcoin.Rnw
 	Stangle libcoin.Rnw
+	mv libcoin.R tests
 
-all:	libcoin.pdf libcoin.R
+all:	libcoin.R
 
 clean:	
 	rm -rf *~
@@ -23,7 +21,10 @@ clean:
 	texclean libcoin
 	rm -rf libcoin.tex
 	rm -rf libcoin.Rnw
-	rm -rf *c
-	rm -rf *h
-	rm -rf *o
-	rm -rf *so	
+	rm -rf *.c
+	rm -rf *.h
+	rm -rf *.o
+	rm -rf *.so	
+	rm -rf *.def
+	rm -rf src/*
+	rm -rf R/*
