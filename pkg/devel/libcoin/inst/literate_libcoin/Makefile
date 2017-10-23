@@ -2,6 +2,7 @@
 libcoin.Rnw:	libcoin.w
 	nuweb -r libcoin.w
 	mv libcoin.tex libcoin.Rnw
+	cp libcoin.Rnw vignettes
 	mv *.h src
 	mv *.c src
 	mv Makevars src
@@ -17,6 +18,8 @@ libcoin.tex:	libcoin.Rnw
 	
 libcoin.pdf:	libcoin.tex
 	texi2dvi --pdf libcoin.tex
+	### NEED to run nuweb TWICE to
+	### sort-out page numbers
 	nuweb -r libcoin.w
 	mv libcoin.tex libcoin.Rnw
 	R CMD Sweave libcoin.Rnw

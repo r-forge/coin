@@ -3,6 +3,12 @@
 %% packages
 \usepackage{amsfonts,amstext,amsmath,amssymb,amsthm}
 
+%\VignetteIndexEntry{Implementing Permutation Tests}
+%\VignetteDepends{libcoin}
+%\VignetteKeywords{conditional inference, conditional Monte Carlo}}
+%\VignettePackage{libcoin}
+
+
 \usepackage[utf8]{inputenc}
 
 \newif\ifshowcode
@@ -227,6 +233,7 @@ and that in the one-sided case maximum type test statistics are replaced by
 @<LinStatExpCov@>
 @<LinStatExpCov1d@>
 @<LinStatExpCov2d@>
+@<vcov LinStatExpCov@>
 @<doTest@>
 @}
 
@@ -305,6 +312,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
             .Call(R_PermutedLinearStatistic, X, Y, weights, subset,
                   block, as.double(nperm), standardise)
     }
+    class(ret) <- c("LinStatExpCov1d", "LinStatExpCov")
     ret
 }
 @}
@@ -373,6 +381,20 @@ if (length(block) > 0) {
             .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, weights, subset,
                   block, nperm, ret$TableBlock, standardise)
     }
+    class(ret) <- c("LinStatExpCov2d", "LinStatExpCov")
+    ret
+}
+@}
+
+@d vcov LinStatExpCov
+@{
+vcov.LinStatExpCov <- function(object, ...) {
+    if (object$varonly)
+        stop("cannot extract covariance matrix")
+    PQ <- prod(object$dim)
+    ret <- matrix(0, nrow = PQ, ncol = PQ)
+    ret[lower.tri(ret, diag = TRUE)] <- object$Covariance
+    ret <- ret + t(ret) - diag(ret)
     ret
 }
 @}
@@ -833,7 +855,6 @@ cmpr <- function(ret1, ret2) {
     all.equal(ret1[nm], ret2[nm])
 }
 
-
 testit <- function(...) {
     a <- LinStatExpCov(x, y, ...)
     b <- LECV(x, y, ...)
@@ -841,14 +862,12 @@ testit <- function(...) {
     return(cmpr(a, b) && cmpr(b, d))
 }
 
-testit()
-testit(weights = weights)
-testit(subset = subset)
-testit(weights = weights, subset = subset)
-testit(block = block)
-testit(weights = weights, block = block)
-testit(subset = subset, block = block)
-testit(weights = weights, subset = subset, block = block)
+stopifnot(
+    testit() && testit(weights = weights) &&
+    testit(subset = subset) && testit(weights = weights, subset = subset) &&
+    testit(block = block) && testit(weights = weights, block = block) &&
+    testit(subset = subset, block = block) && 
+    testit(weights = weights, subset = subset, block = block))
 
 testit <- function(...) {
     a <- LinStatExpCov(X = ix, y, ...)
@@ -857,14 +876,12 @@ testit <- function(...) {
     return(cmpr(a, b) && cmpr(b, d))
 }
 
-testit()
-testit(weights = weights)
-testit(subset = subset)
-testit(weights = weights, subset = subset)
-testit(block = block)
-testit(weights = weights, block = block)
-testit(subset = subset, block = block)
-testit(weights = weights, subset = subset, block = block)
+stopifnot(
+    testit() && testit(weights = weights) &&
+    testit(subset = subset) && testit(weights = weights, subset = subset) &&
+    testit(block = block) && testit(weights = weights, block = block) &&
+    testit(subset = subset, block = block) && 
+    testit(weights = weights, subset = subset, block = block))
 @@
 
 \section{User Interface}
@@ -4979,12 +4996,20 @@ int NLEVELS
     SEXP x
 ) {
 
-   SEXP a;
+    SEXP a;
 
     a = getAttrib(x, R_LevelsSymbol);
-    if (a == R_NilValue)
+    if (a == R_NilValue) {
+        if (TYPEOF(x) != INTSXP)
+            error("cannot determine number of levels");
+        int maxlev = 0;
+        for (R_xlen_t i = 0; i < XLENGTH(x); i++) {
+            if (INTEGER(x)[i] > maxlev)
+                maxlev = INTEGER(x)[i];
+        }
         error("no levels attribute found");
-   return(NROW(a));
+    }
+    return(NROW(a));
 }
 @|NLEVELS
 @}
