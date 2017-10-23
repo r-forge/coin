@@ -347,6 +347,7 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 @<Test Statistics@>
 @<User Interface@>
 @<2d User Interface@>
+@<Tests@>
 @}
 
 The \proglang{R} interfaces are used to implement
@@ -1548,6 +1549,214 @@ btab = table;
 @<Linear Statistic 2d@>
 @}
 
+
+\section{Tests}
+
+@d Tests
+@{
+@<R\_QuadraticTest@>
+@<R\_MaximumTest@>
+@}
+
+@d R\_QuadraticTest
+@{
+SEXP R_QuadraticTest
+(
+    @<R LECV Input@>,
+    SEXP pvalue,
+    SEXP lower,
+    SEXP give_log
+) {
+
+    SEXP ans, stat, pval, names;
+    double *MPinv, *ls, st, *ex;
+    int rank, P, Q, PQ, greater = 0;
+    R_xlen_t nperm;
+
+    @<Setup Test Memory@>
+
+    MPinv = C_get_MPinv(LECV);
+    C_MPinv_sym(C_get_Covariance(LECV), PQ, C_get_tol(LECV), MPinv, &rank);
+
+    REAL(stat)[0] = C_quadform(PQ, C_get_LinearStatistic(LECV),
+                               C_get_Expectation(LECV), MPinv);
+
+    if (!PVALUE) {
+        UNPROTECT(2);
+        return(ans);
+    }
+
+    if (C_get_nperm(LECV) == 0) {
+        REAL(pval)[0] = C_chisq_pvalue(REAL(stat)[0], rank, LOWER, GIVELOG);
+    } else {
+        nperm = C_get_nperm(LECV);
+        ls = C_get_PermutedLinearStatistic(LECV);
+        st = REAL(stat)[0];
+        ex = C_get_Expectation(LECV);
+        greater = 0;
+        for (int np = 0; np < nperm; np++) {
+            if (GE(C_quadform(PQ, ls + PQ * np, ex, MPinv), st, C_get_tol(LECV)))
+                greater++;
+        }
+        REAL(pval)[0] = C_perm_pvalue(greater, nperm, LOWER, GIVELOG);
+    }
+
+    UNPROTECT(2);
+    return(ans);
+}
+@}
+
+@d Setup Test Memory
+@{
+P = C_get_P(LECV);
+Q = C_get_Q(LECV);
+PQ = P * Q;
+
+if (C_get_varonly(LECV) && PQ > 1)
+        error("cannot compute adjusted p-value based on variances only");
+PROTECT(ans = allocVector(VECSXP, 2));
+PROTECT(names = allocVector(STRSXP, 2));
+SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
+SET_STRING_ELT(names, 0, mkChar("TestStatistic"));
+SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
+SET_STRING_ELT(names, 1, mkChar("p.value"));
+namesgets(ans, names);
+REAL(pval)[0] = NA_REAL;
+int LOWER = INTEGER(lower)[0];
+int GIVELOG = INTEGER(give_log)[0];
+int PVALUE = INTEGER(pvalue)[0];
+
+@}
+
+
+@d R\_MaximumTest
+@{
+SEXP R_MaximumTest
+(
+    @<R LECV Input@>,
+    SEXP alternative,
+    SEXP pvalue,
+    SEXP lower,
+    SEXP give_log,
+    SEXP maxpts,
+    SEXP releps,
+    SEXP abseps
+) {
+
+    SEXP ans, stat, pval, names;
+    double st, *ex, *cv, *ls, tl;
+    int P, Q, PQ, vo, alt, greater;
+    R_xlen_t nperm;
+
+    @<Setup Test Memory@>
+
+    if (C_get_varonly(LECV)) {
+        cv = C_get_Variance(LECV);
+    } else {
+        cv = C_get_Covariance(LECV);
+    }
+
+    REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LECV),
+                               C_get_Expectation(LECV),
+                               cv, /* C_get_Covariance(LECV), */
+                               C_get_varonly(LECV),
+                               C_get_tol(LECV),
+                               INTEGER(alternative)[0]);
+
+    if (!PVALUE) {
+        UNPROTECT(2);
+        return(ans);
+    }
+
+    if (C_get_nperm(LECV) == 0) {
+        if (C_get_varonly(LECV) && PQ > 1) {
+            REAL(pval)[0] = NA_REAL;
+            UNPROTECT(2);
+            return(ans);
+        }
+/*
+        REAL(pval)[0] = C_maxtype_pvalue(REAL(stat)[0], cv, 
+                                         PQ, INTEGER(alternative)[0], LOWER, GIVELOG, 
+                                         INTEGER(maxpts)[0], REAL(releps)[0],
+                                         REAL(abseps)[0], C_get_tol(LECV));
+*/
+    } else {
+        nperm = C_get_nperm(LECV);
+        ls = C_get_PermutedLinearStatistic(LECV);
+        ex = C_get_Expectation(LECV);
+/*        cv = C_get_Covariance(LECV); */
+        vo = C_get_varonly(LECV);
+        alt = INTEGER(alternative)[0];
+        st = REAL(stat)[0];
+        tl = C_get_tol(LECV);
+        greater = 0;
+        for (int np = 0; np < nperm; np++) {
+            if (alt == ALTERNATIVE_less) {
+                if (LE(C_maxtype(PQ, ls + PQ * np, ex, cv, vo, tl, alt), st, tl))
+                    greater++;
+            } else {
+                if (GE(C_maxtype(PQ, ls + PQ * np, ex, cv, vo, tl, alt), st, tl))
+                    greater++;
+            }
+        }
+        REAL(pval)[0] = C_perm_pvalue(greater, nperm, LOWER, GIVELOG);
+    }
+
+    UNPROTECT(2);
+    return(ans);
+}
+@}
+
+@d R\_MaximallySelectedTest
+@{
+SEXP R_MaximallySelectedTest
+(
+    SEXP LECV,
+    SEXP ordered,
+    SEXP teststat,
+    SEXP minbucket,
+    SEXP lower,
+    SEXP give_log
+) {
+
+    SEXP ans, index, stat, pval, names;
+    int P, Q, mb;
+
+    P = C_get_P(LECV);
+    Q = C_get_Q(LECV);
+    mb = INTEGER(minbucket)[0];
+
+    PROTECT(ans = allocVector(VECSXP, 3));
+    PROTECT(names = allocVector(STRSXP, 3));
+    SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
+    SET_STRING_ELT(names, 0, mkChar("TestStatistic"));
+    SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
+    SET_STRING_ELT(names, 1, mkChar("p.value"));
+    REAL(pval)[0] = NA_REAL;
+
+    if (INTEGER(ordered)[0]) {
+        SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, 1));
+        C_ordered_Xfactor(LECV, mb, INTEGER(teststat)[0],
+                          INTEGER(index), REAL(stat),
+                          REAL(pval), INTEGER(lower)[0],
+                          INTEGER(give_log)[0]);
+        if (REAL(stat)[0] > 0)
+            INTEGER(index)[0]++; /* R style indexing */
+    } else {
+        SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, P));
+        C_unordered_Xfactor(LECV, mb, INTEGER(teststat)[0],
+                            INTEGER(index), REAL(stat),
+                            REAL(pval), INTEGER(lower)[0],
+                            INTEGER(give_log)[0]);
+    }
+
+    SET_STRING_ELT(names, 2, mkChar("index"));
+    namesgets(ans, names);
+
+    UNPROTECT(2);
+    return(ans);
+}
+@}
 
 \section{Test Statistics}
 
@@ -5736,6 +5945,7 @@ SEXP RC_init_LECV_2d
 }
 @|RC_init_LECV_2d
 @}
+
 
 @S
 
