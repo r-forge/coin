@@ -240,6 +240,8 @@ and that in the one-sided case maximum type test statistics are replaced by
 #include <Rmath.h>
 #include <Rdefines.h>
 #include <R_ext/stats_package.h> /* for S_rcont2 */
+#include <R_ext/Applic.h> /* for dgemm */
+#include <R_ext/Lapack.h> /* for dgesdd */
 @}
 
 @d C Macros
@@ -252,6 +254,13 @@ and that in the one-sided case maximum type test statistics are replaced by
 
 @d C Global Variables
 @{
+#define ALTERNATIVE_twosided            1
+#define ALTERNATIVE_less                2
+#define ALTERNATIVE_greater             3
+
+#define TESTSTAT_maximum                1
+#define TESTSTAT_quadratic              2
+
 #define LinearStatistic_SLOT            0
 #define Expectation_SLOT                1
 #define Covariance_SLOT                 2
@@ -326,6 +335,7 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 @{
 @<MoreUtils@>
 @<Memory@>
+@<P-Values@>
 @<KronSums@>
 @<colSums@>
 @<SimpleSums@>
@@ -334,6 +344,7 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 @<LinearStatistics@>
 @<Permutations@>
 @<ExpectationCovariances@>
+@<Test Statistics@>
 @<User Interface@>
 @<2d User Interface@>
 @}
@@ -578,16 +589,17 @@ LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = intege
     idx <- rep(subset, weights[subset])
     X <- X[idx,,drop = FALSE]
     Y <- Y[idx,,drop = FALSE]
-    sw <- length(idx)
+    sumweights <- length(idx)
 
     if (length(block) == 0) {
         ExpX <- colSums(X)
-        ExpY <- colSums(Y) / sw
+        ExpY <- colSums(Y) / sumweights
         yc <- t(t(Y) - ExpY)
-        CovY <- crossprod(yc) / sw
+        CovY <- crossprod(yc) / sumweights
         CovX <- crossprod(X)
         Exp <- kronecker(ExpY, ExpX) 
-        Cov <- sw / (sw - 1) * kronecker(CovY, CovX) - 1 / (sw - 1) * kronecker(CovY, tcrossprod(ExpX))
+        Cov <- sumweights / (sumweights - 1) * kronecker(CovY, CovX) - 
+               1 / (sumweights - 1) * kronecker(CovY, tcrossprod(ExpX))
  
         ret <- list(LinearStatistic = as.vector(crossprod(X, Y)),
                     Expectation = as.vector(Exp), 
@@ -876,7 +888,7 @@ SEXP tol
 
     @<Setup Dimensions@>
 
-    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], Lb, Xfactor, REAL(tol)[0]));
+    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], Lb, isInteger(x), REAL(tol)[0]));
 
     RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
 
@@ -889,14 +901,12 @@ SEXP tol
 
 @d Setup Dimensions
 @{
-    int P, Q, Lb, Xfactor;
+    int P, Q, Lb;
 
     if (isInteger(x)) {
         P = NLEVELS(x);
-        Xfactor = 1;
     } else {
         P = NCOL(x);
-        Xfactor = 0;
     }
     Q = NCOL(y);
 
@@ -1130,7 +1140,6 @@ RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
 
 @d Standardise Linear Statistics
 @{
-/*
 if (LENGTH(LECV) > 0) {
     for (R_xlen_t np = 0; np < inperm; np++) {
         if (C_get_varonly(LECV)) {
@@ -1142,7 +1151,6 @@ if (LENGTH(LECV) > 0) {
         }
     }
 }
-*/
 @}
 
 \subsection{2d Case}
@@ -1196,6 +1204,13 @@ SEXP varonly,
 SEXP tol
 ) {
     SEXP ans;
+    @<C integer N Input@>;
+    @<C integer Nsubset Input@>;
+    int Xfactor;
+
+    N = XLENGTH(ix);
+    Nsubset = XLENGTH(subset);
+    Xfactor = XLENGTH(x) == 0;
 
     @<Setup Dimensions 2d@>
 
@@ -1222,19 +1237,12 @@ SEXP tol
 
 @d Setup Dimensions 2d
 @{
-int P, Q, Lb, Lx, Ly, Xfactor;
-@<C integer N Input@>;
-@<C integer Nsubset Input@>;
+int P, Q, Lb, Lx, Ly;
 
-N = XLENGTH(ix);
-Nsubset = XLENGTH(subset);
-
-if (LENGTH(x) == 0) {
+if (XLENGTH(x) == 0) {
     P = NLEVELS(ix);
-    Xfactor = 1;
 } else {
     P = NCOL(x);
-    Xfactor = 0;
 }
 Q = NCOL(y);
 
@@ -1301,13 +1309,13 @@ for (int p = 0; p < Lxp1; p++)  {
 }
 rsum[0] = 0; /* NA */
 /* total sum */
-sw[b] = 0;
-for (int i = 1; i < Lxp1; i++) sw[b] += rsum[i];
+sumweights[b] = 0;
+for (int i = 1; i < Lxp1; i++) sumweights[b] += rsum[i];
 @}
 
 @d 2d Expectation
 @{
-RC_ExpectationInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, sw[b], ExpInf);
+RC_ExpectationInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, sumweights[b], ExpInf);
 
 if (LENGTH(x) == 0) {
     for (int p = 0; p < P; p++)
@@ -1322,10 +1330,10 @@ C_ExpectationLinearStatistic(P, Q, ExpInf, ExpX, b, C_get_Expectation(ans));
 @d 2d Covariance
 @{
 if (C_get_varonly(ans)) {
-    RC_CovarianceInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, ExpInf, sw[b],
+    RC_CovarianceInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, ExpInf, sumweights[b],
                            DoVarOnly, C_get_VarianceInfluence(ans));
 } else {
-    RC_CovarianceInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, ExpInf, sw[b],
+    RC_CovarianceInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, ExpInf, sumweights[b],
                            !DoVarOnly, C_get_CovarianceInfluence(ans));
 }
 
@@ -1336,7 +1344,7 @@ if (C_get_varonly(ans)) {
         RC_CovarianceX(x, NROW(x), P, Rrsum, subset, Offset0, 0, ExpX, DoVarOnly, CovX);
     }
     C_VarianceLinearStatistic(P, Q, C_get_VarianceInfluence(ans),
-                              ExpX, CovX, sw[b], b,
+                              ExpX, CovX, sumweights[b], b,
                               C_get_Variance(ans));
 } else {
     if (LENGTH(x) == 0) {
@@ -1346,7 +1354,7 @@ if (C_get_varonly(ans)) {
         RC_CovarianceX(x, NROW(x), P, Rrsum, subset, Offset0, 0, ExpX, !DoVarOnly, CovX);
     }
     C_CovarianceLinearStatistic(P, Q, C_get_CovarianceInfluence(ans),
-                                ExpX, CovX, sw[b], b,
+                                ExpX, CovX, sumweights[b], b,
                                 C_get_Covariance(ans));
 }
 @}
@@ -1362,7 +1370,7 @@ SEXP ans
     SEXP Rcsum, Rrsum;
     int P, Q, Lxp1, Lyp1, Lb, Xfactor;
     double *ExpInf, *ExpX, *CovX;
-    double *table, *table2d, *csum, *rsum, *sw, *btab, *linstat;
+    double *table, *table2d, *csum, *rsum, *sumweights, *btab, *linstat;
 
     P = C_get_P(ans);
     Q = C_get_Q(ans);
@@ -1370,7 +1378,7 @@ SEXP ans
     ExpInf = C_get_ExpectationInfluence(ans);
     ExpX = C_get_ExpectationX(ans);
     table = C_get_Table(ans);
-    sw = C_get_Sumweights(ans);
+    sumweights = C_get_Sumweights(ans);
 
     Lxp1 = C_get_dimTable(ans)[0];
     Lyp1 = C_get_dimTable(ans)[1];
@@ -1420,14 +1428,14 @@ LECV2d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix,
 LECV2d$Table
 .Call("R_PermutedLinearStatistic_2d", iX2d, ix, 
               iY2d, iy, weights, subset, 
-              integer(0), 10, LECV2d$Table)
+              integer(0), 10, LECV2d$Table, list())
 LECV2d <- .Call("R_ExpectationCovarianceStatistic_2d", iX2d, ix, 
               iY2d, iy, weights, subset, 
               block, 0L, 0.00001)
 LECV2d$Table
 .Call("R_PermutedLinearStatistic_2d", iX2d, ix, 
               iY2d, iy, weights, subset, 
-              block, 10, LECV2d$Table)
+              block, 10, LECV2d$Table, list())
 @@
 
 @d R\_PermutedLinearStatistic\_2d Prototype
@@ -1446,13 +1454,14 @@ SEXP R_PermutedLinearStatistic_2d
 @<R\_PermutedLinearStatistic\_2d Prototype@>
 {
     SEXP ans, Ritable;
-    int *csum, *rsum, *sw, *jwork, *table, *rtable2, maxn = 0, Lxp1, Lyp1, *btab, PQ;
+    int *csum, *rsum, *sumweights, *jwork, *table, *rtable2, maxn = 0, Lxp1, Lyp1, *btab, PQ, Xfactor;
     R_xlen_t inperm;
     double *fact, *linstat;
 
     @<Setup Dimensions 2d@>
 
     PQ = P * Q;
+    Xfactor = XLENGTH(x) == 0;
     Lxp1 = Lx + 1;
     Lyp1 = Ly + 1;
     inperm = (R_xlen_t) REAL(nperm)[0];
@@ -1466,7 +1475,7 @@ SEXP R_PermutedLinearStatistic_2d
     for (int b = 0; b < Lb; b++) {
         btab = INTEGER(Ritable) + Lxp1 * Lyp1 * b;
         @<Col Row Total Sums@>
-        if (sw[b] > maxn) maxn = sw[b];
+        if (sumweights[b] > maxn) maxn = sumweights[b];
     }
 
     @<Setup Log-Factorials@>
@@ -1489,7 +1498,7 @@ SEXP R_PermutedLinearStatistic_2d
 
     @<Standardise Linear Statistics@>
 
-    Free(csum); Free(rsum); Free(sw); Free(rtable2);
+    Free(csum); Free(rsum); Free(sumweights); Free(rtable2);
     Free(jwork); Free(fact);
     UNPROTECT(2);
     return(ans);
@@ -1511,7 +1520,7 @@ for (int i = 0; i < LENGTH(itable); i++) {
 @{
 csum = Calloc(Lyp1 * Lb, int);
 rsum = Calloc(Lxp1 * Lb, int);
-sw = Calloc(Lb, int);
+sumweights = Calloc(Lb, int);
 table = Calloc(Lxp1 * Lyp1, int);
 rtable2 = Calloc(Lx * Ly , int);
 jwork = Calloc(Lyp1, int);
@@ -1529,7 +1538,7 @@ for(int j = 2; j <= maxn; j++)
 @d Compute Permuted Linear Statistic 2d
 @{
 S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,
-         csum + Lyp1 *b + 1, sw + b, fact, jwork, rtable2);
+         csum + Lyp1 *b + 1, sumweights + b, fact, jwork, rtable2);
 
 for (int j1 = 1; j1 <= Lx; j1++) {
     for (int j2 = 1; j2 <= Ly; j2++)
@@ -1537,6 +1546,814 @@ for (int j1 = 1; j1 <= Lx; j1++) {
 }
 btab = table;
 @<Linear Statistic 2d@>
+@}
+
+
+\section{Test Statistics}
+
+@d Test Statistics
+@{
+@<C\_maxstand\_Covariance@>
+@<C\_maxstand\_Variance@>
+@<C\_minstand\_Covariance@>
+@<C\_minstand\_Variance@>
+@<C\_maxabsstand\_Covariance@>
+@<C\_maxabsstand\_Variance@>
+@<C\_quadform@>
+@<C\_maxtype@>
+@<C\_standardise@>
+@<C\_ordered\_Xfactor@>
+@<C\_unordered\_Xfactor@>
+@}
+
+@d C\_maxstand\_Covariance
+@{
+double C_maxstand_Covariance
+(
+    const int PQ,
+    const double *linstat,
+    const double *expect,
+    const double *covar_sym,
+    const double tol
+) {
+
+    double ans = R_NegInf, tmp = 0.0;
+
+    for (int p = 0; p < PQ; p++) {
+        tmp = 0.0;
+        if (covar_sym[S(p, p, PQ)] > tol)
+            tmp = (linstat[p] - expect[p]) / sqrt(covar_sym[S(p, p, PQ)]);
+        if (tmp > ans) ans = tmp;
+    }
+    return(ans);
+}
+@|C_maxstand_Covariance
+@}
+
+@d C\_maxstand\_Variance
+@{
+double C_maxstand_Variance
+(
+    const int PQ,
+    const double *linstat,
+    const double *expect,
+    const double *var,
+    const double tol
+) {
+
+    double ans = R_NegInf, tmp = 0.0;
+
+    for (int p = 0; p < PQ; p++) {
+        tmp = 0.0;
+        if (var[p] > tol)
+            tmp = (linstat[p] - expect[p]) / sqrt(var[p]);
+        if (tmp > ans) ans = tmp;
+    }
+    return(ans);
+}
+@|C_maxstand_Variance
+@}
+
+@d C\_minstand\_Covariance
+@{
+double C_minstand_Covariance
+(
+    const int PQ,
+    const double *linstat,
+    const double *expect,
+    const double *covar_sym,
+    const double tol
+) {
+
+    double ans = R_PosInf, tmp = 0.0;
+
+    for (int p = 0; p < PQ; p++) {
+        tmp = 0.0;
+        if (covar_sym[S(p, p, PQ)] > tol)
+            tmp = (linstat[p] - expect[p]) / sqrt(covar_sym[S(p, p, PQ)]);
+        if (tmp < ans) ans = tmp;
+    }
+    return(ans);
+}
+@|C_minstand_Covariance
+@}
+
+@d C\_minstand\_Variance
+@{
+double C_minstand_Variance
+(
+    const int PQ,
+    const double *linstat,
+    const double *expect,
+    const double *var,
+    const double tol
+) {
+
+    double ans = R_PosInf, tmp = 0.0;
+
+    for (int p = 0; p < PQ; p++) {
+        tmp = 0.0;
+        if (var[p] > tol)
+            tmp = (linstat[p] - expect[p]) / sqrt(var[p]);
+        if (tmp < ans) ans = tmp;
+    }
+    return(ans);
+}
+@|C_minstand_Variance
+@}
+
+@d C\_maxabsstand\_Covariance
+@{
+double C_maxabsstand_Covariance
+(
+    const int PQ,
+    const double *linstat,
+    const double *expect,
+    const double *covar_sym,
+    const double tol
+) {
+
+    double ans = R_NegInf, tmp = 0.0;
+
+    for (int p = 0; p < PQ; p++) {
+        tmp = 0.0;
+        if (covar_sym[S(p, p, PQ)] > tol)
+            tmp = fabs((linstat[p] - expect[p]) /
+                  sqrt(covar_sym[S(p, p, PQ)]));
+        if (tmp > ans) ans = tmp;
+    }
+    return(ans);
+}
+@|C_maxabsstand_Covariance
+@}
+
+@d C\_maxabsstand\_Variance
+@{
+double C_maxabsstand_Variance
+(
+    const int PQ,
+    const double *linstat,
+    const double *expect,
+    const double *var,
+    const double tol
+) {
+
+    double ans = R_NegInf, tmp = 0.0;
+
+    for (int p = 0; p < PQ; p++) {
+        tmp = 0.0;
+        if (var[p] > tol)
+            tmp = fabs((linstat[p] - expect[p]) / sqrt(var[p]));
+        if (tmp > ans) ans = tmp;
+    }
+    return(ans);
+}
+@|C_maxabsstand_Variance
+@}
+
+@d C\_quadform
+@{
+double C_quadform
+(
+    const int PQ,
+    const double *linstat,
+    const double *expect,
+    const double *MPinv_sym
+) {
+
+    double ans = 0.0, tmp = 0.0;
+
+    for (int q = 0; q < PQ; q++) {
+        tmp = 0.0;
+        for (int p = 0; p < PQ; p++)
+            tmp += (linstat[p] - expect[p]) * MPinv_sym[S(p, q, PQ)];
+        ans += tmp * (linstat[q] - expect[q]);
+    }
+    return(ans);
+}
+@|C_quadform
+@}
+
+@d C\_maxtype
+@{
+double C_maxtype
+(
+    const int PQ,
+    const double *linstat,
+    const double *expect,
+    const double *covar,
+    const int varonly,
+    const double tol,
+    const int alternative
+) {
+
+    double ret = 0.0;
+
+    if (varonly) {
+        if (alternative ==  ALTERNATIVE_twosided) {
+            ret = C_maxabsstand_Variance(PQ, linstat, expect, covar, tol);
+        } else if (alternative == ALTERNATIVE_less) {
+            ret = C_minstand_Variance(PQ, linstat, expect, covar, tol);
+        } else if (alternative == ALTERNATIVE_greater) {
+            ret = C_maxstand_Variance(PQ, linstat, expect, covar, tol);
+        }
+    } else {
+        if (alternative ==  ALTERNATIVE_twosided) {
+            ret = C_maxabsstand_Covariance(PQ, linstat, expect, covar, tol);
+        } else if (alternative == ALTERNATIVE_less) {
+            ret = C_minstand_Covariance(PQ, linstat, expect, covar, tol);
+        } else if (alternative == ALTERNATIVE_greater) {
+            ret = C_maxstand_Covariance(PQ, linstat, expect, covar, tol);
+        }
+    }
+    return(ret);
+}
+@|C_maxtype
+@}
+
+@d C\_standardise
+@{
+void C_standardise
+(
+    const int PQ,
+    double *linstat,            /* in place standardisation */
+    const double *expect,
+    const double *covar,
+    const int varonly,
+    const double tol
+) {
+
+    double var;
+
+    for (int p = 0; p < PQ; p++) {
+        if (varonly) {
+            var = covar[p];
+        } else {
+            var = covar[S(p, p, PQ)];
+        }
+        if (var > tol) {
+            linstat[p] = (linstat[p] - expect[p]) / sqrt(var);
+        } else {
+            linstat[p] = NAN;
+        }
+    }
+}
+@|C_standardise
+@}
+
+@d P-Values
+@{
+@<C\_chisq\_pvalue@>
+@<C\_perm\_pvalue@>
+@<C\_norm\_pvalue@>
+@}
+
+@d C\_chisq\_pvalue
+@{
+/* lower = 1 means p-value, lower = 0 means 1 - p-value */
+double C_chisq_pvalue
+(
+    const double stat,
+    const int df,
+    const int lower,
+    const int give_log
+) {
+    return(pchisq(stat, (double) df, lower, give_log));
+}
+@|C_chisq_pvalue
+@}
+
+@d C\_perm\_pvalue
+@{
+double C_perm_pvalue
+(
+    const int greater,
+    const double nperm,
+    const int lower,
+    const int give_log
+) {
+
+    double ret;
+
+    if (give_log) {
+         if (lower) {
+             ret = log1p(- (double) greater / nperm);
+         } else {
+             ret = log(greater) - log(nperm);
+         }
+    } else {
+        if (lower) {
+            ret = 1.0 - (double) greater / nperm;
+        } else {
+            ret = (double) greater / nperm;
+        }
+    }
+    return(ret);
+}
+@|C_perm_pvalue
+@}
+
+@d C\_norm\_pvalue
+@{
+double C_norm_pvalue
+(
+    const double stat,
+    const int alternative,
+    const int lower,
+    const int give_log
+) {
+
+    double ret;
+
+    if (alternative == ALTERNATIVE_less) {
+        return(pnorm(stat, 0.0, 1.0, 1 - lower, give_log));
+    } else if (alternative == ALTERNATIVE_greater) {
+        return(pnorm(stat, 0.0, 1.0, lower, give_log));
+    } else if (alternative == ALTERNATIVE_twosided) {
+        if (lower) {
+            ret = pnorm(fabs(stat)*-1.0, 0.0, 1.0, 1, 0);
+            if (give_log) {
+                return(log1p(- 2 * ret));
+            } else {
+                return(1 - 2 * ret);
+            }
+        } else {
+            ret = pnorm(fabs(stat)*-1.0, 0.0, 1.0, 1, give_log);
+            if (give_log) {
+                return(ret + log(2));
+            } else {
+                return(2 * ret);
+            }
+        }
+    }
+    return(NA_REAL);
+}
+@}
+
+@d C\_maxtype\_pvalue
+@{
+double C_maxtype_pvalue
+(
+    const double stat,
+    const double *Covariance,
+    const int n,
+    const int alternative,
+    const int lower,
+    const int give_log,
+    int maxpts, /* const? */
+    double releps,
+    double abseps,
+    double tol
+) {
+
+    int nu = 0, inform, i, j, sub, nonzero, *infin, *index, rnd = 0;
+    double ans, myerror, *lowerbnd, *upperbnd, *delta, *corr, *sd;
+
+    /* univariate problem */
+    if (n == 1)
+        return(C_norm_pvalue(stat, alternative, lower, give_log));
+
+    if (n == 2)
+         corr = Calloc(1, double);
+    else
+         corr = Calloc(n + ((n - 2) * (n - 1))/2, double);
+
+    sd = Calloc(n, double);
+    lowerbnd = Calloc(n, double);
+    upperbnd = Calloc(n, double);
+    infin = Calloc(n, int);
+    delta = Calloc(n, double);
+    index = Calloc(n, int);
+
+    /* determine elements with non-zero variance */
+
+    nonzero = 0;
+    for (i = 0; i < n; i++) {
+        if (Covariance[S(i, i, n)] > tol) {
+            index[nonzero] = i;
+            nonzero++;
+        }
+    }
+
+    /* mvtdst assumes the unique elements of the triangular
+       covariance matrix to be passes as argument CORREL
+    */
+
+    for (int nz = 0; nz < nonzero; nz++) {
+
+        /* handle elements with non-zero variance only */
+        i = index[nz];
+
+        /* standard deviations */
+        sd[i] = sqrt(Covariance[S(i, i, n)]);
+
+        if (alternative == ALTERNATIVE_less) {
+            lowerbnd[nz] = stat;
+            upperbnd[nz] = R_PosInf;
+            infin[nz] = 1;
+        } else if (alternative == ALTERNATIVE_greater) {
+            lowerbnd[nz] = R_NegInf;
+            upperbnd[nz] = stat;
+            infin[nz] = 0;
+        } else if (alternative == ALTERNATIVE_twosided) {
+            lowerbnd[nz] = fabs(stat) * -1.0;
+            upperbnd[nz] = fabs(stat);
+            infin[nz] = 2;
+        }
+
+        delta[nz] = 0.0;
+
+        /* set up vector of correlations, i.e., the upper
+           triangular part of the covariance matrix) */
+        for (int jz = 0; jz < nz; jz++) {
+            j = index[jz];
+            sub = (int) (jz + 1) + (double) ((nz - 1) * nz) / 2 - 1;
+            if (sd[i] == 0.0 || sd[j] == 0.0)
+                corr[sub] = 0.0;
+            else
+                corr[sub] = Covariance[S(i, j, n)] / (sd[i] * sd[j]);
+        }
+    }
+
+    /* call mvtnorm's mvtdst C function defined in mvtnorm/include/mvtnormAPI.h */
+    mvtnorm_C_mvtdst(&nonzero, &nu, lowerbnd, upperbnd, infin, corr, delta,
+                     &maxpts, &abseps, &releps, &myerror, &ans, &inform, &rnd);
+
+    /* inform == 0 means: everything is OK */
+    switch (inform) {
+        case 0: break;
+        case 1: warning("cmvnorm: completion with ERROR > EPS"); break;
+        case 2: warning("cmvnorm: N > 1000 or N < 1");
+                ans = 0.0;
+                break;
+        case 3: warning("cmvnorm: correlation matrix not positive semi-definite");
+                ans = 0.0;
+                break;
+        default: warning("cmvnorm: unknown problem in MVTDST");
+                ans = 0.0;
+    }
+    Free(corr); Free(sd); Free(lowerbnd); Free(upperbnd);
+    Free(infin); Free(delta);
+
+    /* ans = 1 - p-value */
+    if (lower) {
+        if (give_log)
+            return(log(ans)); /* log(1 - p-value) */
+        return(ans); /* 1 - p-value */
+    } else {
+        if (give_log)
+            return(log1p(ans)); /* log(p-value) */
+        return(1 - ans); /* p-value */
+    }
+}
+@|C_maxtype_pvalue
+@}
+
+@d maxstat Xfactor Variables
+@{
+SEXP LECV,
+const int minbucket,
+const int teststat,
+int *wmax,
+double *maxstat,
+double *pval,
+const int lower,
+const int give_log
+@}
+
+@d C\_ordered\_Xfactor
+@{
+void C_ordered_Xfactor
+(
+@<maxstat Xfactor Variables@>
+) {
+
+    @<Setup maxstat Variables@> 
+
+    @<Setup maxstat Memory@> 
+
+    wmax[0] = NA_INTEGER;
+
+    for (int p = 0; p < P; p++) {
+        sumleft += ExpX[p];
+        sumright -= ExpX[p];
+
+        for (int q = 0; q < Q; q++) {
+            mlinstat[q] += linstat[q * P + p];
+            for (int np = 0; np < nperm; np++)
+                mblinstat[q + np * Q] += blinstat[q * P + p + np * PQ];
+            mexpect[q] += expect[q * P + p];
+            if (Lb == 1) {
+                @<Compute maxstat Variance / Covariance Directly@>
+            } else {
+                @<Compute maxstat Variance / Covariance from Total Covariance@>
+            }
+        }
+
+        if ((sumleft >= minbucket) && (sumright >= minbucket) && (ExpX[p] > 0)) {
+
+            ls = mlinstat; 
+            @<Compute maxstat Test Statistic@>
+            if (tmp > maxstat[0]) {
+                wmax[0] = p;
+                maxstat[0] = tmp;
+            }
+
+            for (int np = 0; np < nperm; np++) {
+                ls = mblinstat + np * Q;
+                @<Compute maxstat Test Statistic@>
+                if (tmp > bmaxstat[np])
+                    bmaxstat[np] = tmp;
+            }
+        }
+    }
+    @<Compute maxstat Permutation P-Value@>
+    Free(mlinstat); Free(mexpect); Free(mblinstat); Free(bmaxstat);
+    Free(mvar); Free(mcovar); Free(mMPinv);
+}
+@}
+
+@d Setup maxstat Variables
+@{
+double *linstat, *expect, *covar, *varinf, *covinf, *ExpX, *blinstat, tol, *ls;
+int P, Q, Lb;
+R_xlen_t nperm;
+
+double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat,
+       tmp, sumleft, sumright, sumweights;
+int rank, PQ, greater;
+
+Q = C_get_Q(LECV);
+P = C_get_Q(LECV);
+PQ = P * Q;
+Lb = C_get_Lb(LECV);
+if (Lb > 1 && C_get_varonly(LECV)) 
+    error("need covarinance for maximally statistics with blocks");
+linstat = C_get_LinearStatistic(LECV);
+expect = C_get_Expectation(LECV);
+covar = C_get_Covariance(LECV);
+ExpX = C_get_ExpectationX(LECV);
+varinf = C_get_VarianceInfluence(LECV);
+covinf = C_get_CovarianceInfluence(LECV);
+nperm = C_get_nperm(LECV);
+if (nperm > 0)
+    blinstat = C_get_PermutedLinearStatistic(LECV);
+tol = C_get_tol(LECV);
+@}
+
+@d Setup maxstat Memory
+@{
+mlinstat = Calloc(Q, double);
+mexpect = Calloc(Q, double);
+if (teststat == TESTSTAT_maximum) {
+   mvar = Calloc(Q, double);
+   /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+   mcovar = Calloc(1, double);
+   mMPinv = Calloc(1, double);
+} else {
+   mcovar = Calloc(Q * (Q + 1) / 2, double);
+   mMPinv = Calloc(Q * (Q + 1) / 2, double);
+   /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+   mvar = Calloc(1, double);
+}
+if (nperm > 0) {
+    mblinstat = Calloc(Q * nperm, double);
+    bmaxstat = Calloc(nperm, double);
+} else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+    mblinstat = Calloc(1, double);
+    bmaxstat = Calloc(1, double);
+}
+
+maxstat[0] = 0.0;
+
+for (int q = 0; q < Q; q++) {
+    mlinstat[q] = 0.0;
+    mexpect[q] = 0.0;
+    if (teststat == TESTSTAT_maximum)
+        mvar[q] = 0.0;
+    for (int np = 0; np < nperm; np++) mblinstat[q + np * Q] = 0.0;
+}
+if (teststat == TESTSTAT_quadratic) {
+    for (int q = 0; q < Q * (Q + 1) / 2; q++)
+        mcovar[q] = 0.0;
+}
+
+sumleft = 0.0;
+sumright = 0.0;
+for (int p = 0; p < P; p++)
+    sumright += ExpX[p];
+sumweights = sumright;
+@}
+
+@d Compute maxstat Variance / Covariance from Total Covariance
+@{
+if (teststat == TESTSTAT_maximum) {
+    for (int pp = 0; pp < p; pp++)
+        mvar[q] += 2 * covar[S(pp + q * P, p + P * q, P * Q)];
+     mvar[q] += covar[S(p + q * P, p + P * q, P * Q)];
+} else {
+     for (int qq = 0; qq <= q; qq++) {
+         for (int pp = 0; pp < p; pp++)
+             mcovar[S(q, qq, Q)] += 2 * covar[S(pp + q * P, p + P * qq, P * Q)];
+         mcovar[S(q, qq, Q)] += covar[S(p + q * P, p + P * qq, P * Q)];
+     }
+}
+@}
+
+@d Compute maxstat Variance / Covariance Directly
+@{
+/* does not work with blocks! */
+if (teststat == TESTSTAT_maximum) {
+    C_VarianceLinearStatistic(1, Q, varinf, &sumleft, &sumleft,
+                              sumweights, 0, mvar);
+} else {
+    C_CovarianceLinearStatistic(1, Q, covinf, &sumleft, &sumleft,
+                                sumweights, 0, mcovar);
+}
+@}
+
+@d Compute maxstat Test Statistic
+@{
+if (teststat == TESTSTAT_maximum) {
+    tmp = C_maxtype(Q, ls, mexpect, mvar, 1, tol,
+                    ALTERNATIVE_twosided);
+} else {
+    C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
+    tmp = C_quadform(Q, ls, mexpect, mMPinv);
+}
+@}
+
+@d Compute maxstat Permutation P-Value
+@{
+if (nperm > 0) {
+    greater = 0;
+    for (int np = 0; np < nperm; np++) {
+        if (bmaxstat[np] > maxstat[0]) greater++;
+    }
+    pval[0] = C_perm_pvalue(greater, nperm, lower, give_log);
+}
+@}
+
+@d C\_unordered\_Xfactor
+@{
+void C_unordered_Xfactor
+(
+@<maxstat Xfactor Variables@>
+) {
+
+    double *mtmp;
+    int qPp, nc, *levels, Pnonzero, *indl, *contrast;
+
+    @<Setup maxstat Variables@>
+
+    @<Setup maxstat Memory@>
+    mtmp = Calloc(P, double);
+
+    for (int p = 0; p < P; p++) wmax[p] = NA_INTEGER;
+
+    @<Count Levels@>
+
+    for (int j = 1; j < mi; j++) { /* go though all splits */
+ 
+        @<Setup unordered maxstat Contrasts@>
+
+        @<Compute unordered maxstat Linear Statistic and Expectation@>
+
+        if (Lb == 1) {
+            @<Compute unordered maxstat Variance / Covariance from Total Covariance@>
+        } else {
+            @<Compute unordered maxstat Variance / Covariance Directly@>
+        }
+
+        if ((sumleft >= minbucket) && (sumright >= minbucket)) {
+
+            ls = mlinstat;
+            @<Compute maxstat Test Statistic@>
+            if (tmp > maxstat[0]) {
+                for (int p = 0; p < Pnonzero; p++)
+                    wmax[levels[p]] = contrast[levels[p]];
+                maxstat[0] = tmp;
+            }
+
+            for (int np = 0; np < nperm; np++) {
+                ls = mblinstat + np * Q;
+                @<Compute maxstat Test Statistic@>
+                if (tmp > bmaxstat[np])
+                    bmaxstat[np] = tmp;
+            }
+        }
+    }
+
+    @<Compute maxstat Permutation P-Value@>
+
+    Free(mlinstat); Free(mexpect); Free(levels); Free(contrast); Free(indl); Free(mtmp);
+    Free(mblinstat); Free(bmaxstat); Free(mvar); Free(mcovar); Free(mMPinv);
+}
+
+
+@}
+
+@d Count Levels
+@{
+contrast = Calloc(P, int);
+Pnonzero = 0;
+for (int p = 0; p < P; p++) {
+    if (ExpX[p] > 0) Pnonzero++;
+}
+levels = Calloc(Pnonzero, int);
+nc = 0;
+for (int p = 0; p < P; p++) {
+    if (ExpX[p] > 0) {
+        levels[nc] = p;
+        nc++;
+    }
+}
+
+if (Pnonzero >= 31)
+    error("cannot search for unordered splits in >= 31 levels");
+
+int mi = 1;
+for (int l = 1; l < Pnonzero; l++) mi *= 2;
+indl = Calloc(Pnonzero, int);
+for (int p = 0; p < Pnonzero; p++) indl[p] = 0;
+@}
+
+@d Setup unordered maxstat Contrasts
+@{
+/* indl determines if level p is left or right */
+int jj = j;
+for (int l = 1; l < Pnonzero; l++) {
+    indl[l] = (jj%2);
+    jj /= 2;
+}
+
+sumleft = 0.0;
+sumright = 0.0;
+for (int p = 0; p < P; p++) contrast[p] = 0;
+for (int p = 0; p < Pnonzero; p++) {
+    sumleft += indl[p] * ExpX[levels[p]];
+    sumright += (1 - indl[p]) * ExpX[levels[p]];
+    contrast[levels[p]] = indl[p];
+}
+@}
+
+@d Compute unordered maxstat Linear Statistic and Expectation
+@{
+for (int q = 0; q < Q; q++) {
+    mlinstat[q] = 0.0;
+    mexpect[q] = 0.0;
+    for (int np = 0; np < nperm; np++)
+        mblinstat[q + np * Q] = 0.0;
+    for (int p = 0; p < P; p++) {
+        qPp = q * P + p;
+        mlinstat[q] += contrast[p] * linstat[qPp];
+        mexpect[q] += contrast[p] * expect[qPp];
+        for (int np = 0; np < nperm; np++)
+            mblinstat[q + np * Q] += contrast[p] * blinstat[q * P + p + np * PQ];
+    }
+}
+@}
+
+@d Compute unordered maxstat Variance / Covariance from Total Covariance
+@{
+if (teststat == TESTSTAT_maximum) {
+    for (int q = 0; q < Q; q++) {
+        mvar[q] = 0.0;
+        for (int p = 0; p < P; p++) {
+            qPp = q * P + p;
+            mtmp[p] = 0.0;
+            for (int pp = 0; pp < P; pp++)
+                mtmp[p] += contrast[pp] * covar[S(pp + q * P, qPp, PQ)];
+	}
+        for (int p = 0; p < P; p++)
+            mvar[q] += contrast[p] * mtmp[p];
+    }
+} else {
+    for (int q = 0; q < Q; q++) {
+        for (int qq = 0; qq <= q; qq++)
+            mcovar[S(q, qq, Q)] = 0.0;
+        for (int qq = 0; qq <= q; qq++) {
+            for (int p = 0; p < P; p++) {
+                mtmp[p] = 0.0;
+                for (int pp = 0; pp < P; pp++)
+                    mtmp[p] += contrast[pp] * covar[S(pp + q * P, p + P * qq, P * Q)];
+            }
+            for (int p = 0; p < P; p++)
+                mcovar[S(q, qq, Q)] += contrast[p] * mtmp[p];
+        }
+    }
+}
+@}
+
+@d Compute unordered maxstat Variance / Covariance Directly
+@{
+if (teststat == TESTSTAT_maximum) {
+    C_VarianceLinearStatistic(1, Q, varinf, &sumleft, &sumleft,
+                              sumweights, 0, mvar);
+} else {
+    C_CovarianceLinearStatistic(1, Q, covinf, &sumleft, &sumleft,
+                                sumweights, 0, mcovar);
+}
 @}
 
 
@@ -1769,8 +2586,8 @@ void C_VarianceLinearStatistic
 \subsection{Influence}
 
 <<ExpectationCovarianceInfluence>>=
-sw <- sum(weights[subset])
-expecty <- a0 <- colSums(y[subset, ] * weights[subset]) / sw
+sumweights <- sum(weights[subset])
+expecty <- a0 <- colSums(y[subset, ] * weights[subset]) / sumweights
 a1 <- .Call("R_ExpectationInfluence", y, weights, subset);
 a2 <- .Call("R_ExpectationInfluence", y, as.double(weights), as.double(subset));
 a3 <- .Call("R_ExpectationInfluence", y, weights, as.double(subset));
@@ -1794,16 +2611,16 @@ SEXP R_ExpectationInfluence
     @<C integer Q Input@>;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
-    double sw;
+    double sumweights;
 
     Q = NCOL(y);
     N = XLENGTH(y) / Q;
     Nsubset = XLENGTH(subset);
 
-    sw = RC_Sums(N, weights, subset, Offset0, Nsubset);
+    sumweights = RC_Sums(N, weights, subset, Offset0, Nsubset);
 
     PROTECT(ans = allocVector(REALSXP, Q));
-    RC_ExpectationInfluence(N, y, Q, weights, subset, Offset0, Nsubset, sw, REAL(ans));
+    RC_ExpectationInfluence(N, y, Q, weights, subset, Offset0, Nsubset, sumweights, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
@@ -1840,11 +2657,11 @@ void RC_ExpectationInfluence
 @}
 
 <<CovarianceInfluence>>=
-sw <- sum(weights[subset])
+sumweights <- sum(weights[subset])
 yc <- t(t(y) - expecty)
 r1y <- rep(1:ncol(y), ncol(y))
 r2y <- rep(1:ncol(y), each = ncol(y))
-a0 <- colSums(yc[subset, r1y] * yc[subset, r2y] * weights[subset]) / sw
+a0 <- colSums(yc[subset, r1y] * yc[subset, r2y] * weights[subset]) / sumweights
 a0 <- matrix(a0, ncol = ncol(y))
 vary <- diag(a0)
 a0 <- a0[lower.tri(a0, diag = TRUE)]
@@ -1885,7 +2702,7 @@ SEXP R_CovarianceInfluence
     @<C integer Q Input@>;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
-    double sw;
+    double sumweights;
 
     Q = NCOL(y);
     N = XLENGTH(y) / Q;
@@ -1893,14 +2710,14 @@ SEXP R_CovarianceInfluence
 
     PROTECT(ExpInf = R_ExpectationInfluence(y, weights, subset));
 
-    sw = RC_Sums(N, weights, subset, Offset0, Nsubset);
+    sumweights = RC_Sums(N, weights, subset, Offset0, Nsubset);
 
     if (INTEGER(varonly)[0]) {
         PROTECT(ans = allocVector(REALSXP, Q));
     } else {
         PROTECT(ans = allocVector(REALSXP, Q * (Q + 1) / 2));
     }
-    RC_CovarianceInfluence(N, y, Q, weights, subset, Offset0, Nsubset, REAL(ExpInf), sw, 
+    RC_CovarianceInfluence(N, y, Q, weights, subset, Offset0, Nsubset, REAL(ExpInf), sumweights, 
                            INTEGER(varonly)[0], REAL(ans));
     UNPROTECT(2);
     return(ans);
@@ -3836,8 +4653,8 @@ stopifnot(all.equal(1:N, a4))
 @<C\_setup\_subset@>
 @<C\_setup\_subset\_block@>
 @<C\_order\_subset\_wrt\_block@>
-@<RC\_order\_subset\_wrt\_block@>;
-@<R\_order\_subset\_wrt\_block@>;
+@<RC\_order\_subset\_wrt\_block@>
+@<R\_order\_subset\_wrt\_block@>
 @}
 
 @d R\_order\_subset\_wrt\_block
@@ -4045,7 +4862,7 @@ be a little bit more generous with memory here.
 @<RC\_setup\_subset Prototype@>
 {
     SEXP ans, mysubset;
-    R_xlen_t sw;
+    R_xlen_t sumweights;
 
     if (XLENGTH(weights) == 0 && XLENGTH(subset) > 0)
         return(subset);
@@ -4062,8 +4879,8 @@ be a little bit more generous with memory here.
         return(mysubset);
     }
         
-    sw = (R_xlen_t) RC_Sums(N, weights, mysubset, Offset0, XLENGTH(subset));
-    PROTECT(ans = allocVector(REALSXP, sw));
+    sumweights = (R_xlen_t) RC_Sums(N, weights, mysubset, Offset0, XLENGTH(subset));
+    PROTECT(ans = allocVector(REALSXP, sumweights));
 
     R_xlen_t itmp = 0;
     for (R_xlen_t i = 0; i < XLENGTH(mysubset); i++) {
@@ -4095,12 +4912,12 @@ subset)),
 
 @d Permutations
 @{
-@<RC\_setup\_subset@>;
-@<R\_setup\_subset@>;
-@<C\_Permute@>;
-@<C\_doPermute@>;
-@<C\_PermuteBlock@>;
-@<C\_doPermuteBlock@>;
+@<RC\_setup\_subset@>
+@<R\_setup\_subset@>
+@<C\_Permute@>
+@<C\_doPermute@>
+@<C\_PermuteBlock@>
+@<C\_doPermuteBlock@>
 @}
 
 @d C\_Permute
@@ -4192,6 +5009,7 @@ void C_doPermuteBlock
 @<C\_kronecker@>
 @<C\_kronecker\_sym@>
 @<C\_KronSums\_sym@>
+@<C\_MPinv\_sym@>
 @}
 
 
@@ -4346,6 +5164,62 @@ void C_KronSums_sym_
 @|C_KronSums_sym
 @}
 
+@d C\_MPinv\_sym
+@{
+void C_MPinv_sym
+(
+    const double *x,
+    const int n,
+    const double tol,
+    double *dMP,
+    int *rank
+) {
+
+    double *val, *vec, dtol, *rx, *work, valinv;
+    int valzero = 0, info = 0, kn;
+
+    if (n == 1) {
+        if (x[0] > tol) {
+            dMP[0] = 1 / x[0];
+            rank[0] = 1;
+        } else {
+            dMP[0] = 0;
+            rank[0] = 0;
+        }
+    } else {
+        rx = Calloc(n * (n + 1) / 2, double);
+        Memcpy(rx, x, n * (n + 1) / 2);
+        work = Calloc(3 * n, double);
+        val = Calloc(n, double);
+        vec = Calloc(n * n, double);
+
+/*
+        F77_CALL(dspev)("V", "L", &n, rx, val, vec, &n, work,
+                        &info);
+*/
+        dtol = val[n - 1] * tol;
+
+        for (int k = 0; k < n; k++)
+            valzero += (val[k] < dtol);
+        rank[0] = n - valzero;
+
+        for (int k = 0; k < n * (n + 1) / 2; k++) dMP[k] = 0.0;
+
+        for (int k = valzero; k < n; k++) {
+            valinv = 1 / val[k];
+            kn = k * n;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j <= i; j++) {
+                    /* MP is symmetric */
+                    dMP[S(i, j, n)] += valinv * vec[kn + i] * vec[kn + j];
+                }
+            }
+        }
+        Free(rx); Free(work); Free(val); Free(vec);
+    }
+}
+@}
+
 \section{Memory}
 
 @d Memory
@@ -4369,7 +5243,7 @@ void C_KronSums_sym_
 @<C\_get\_Table@>
 @<C\_get\_dimTable@>
 @<C\_get\_Lb@>
-@<C\_get\_B@>
+@<C\_get\_nperm@>
 @<C\_get\_PermutedLinearStatistic@>
 @<C\_get\_tol@>
 @<RC\_init\_LECV\_1d@>
@@ -4646,16 +5520,16 @@ int C_get_Lb
 @|C_get_Lb
 @}
 
-@d C\_get\_B
+@d C\_get\_nperm
 @{
-int C_get_B
+R_xlen_t C_get_nperm
 (
 @<R LECV Input@>
 ) {
-
-    return(NCOL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));
+    int PQ = C_get_P(LECV) * C_get_Q(LECV);
+    return(XLENGTH(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)) / PQ);
 }
-@|C_get_B
+@|C_get_nperm
 @}
 
 @d C\_get\_PermutedLinearStatistic
