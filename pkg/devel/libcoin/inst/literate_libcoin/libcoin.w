@@ -235,6 +235,7 @@ and that in the one-sided case maximum type test statistics are replaced by
 @<LinStatExpCov2d@>
 @<vcov LinStatExpCov@>
 @<doTest@>
+.libcoinCall <- function(FUN, ...) .Call(FUN, ...)
 @}
 
 @d LinStatExpCov
@@ -397,6 +398,7 @@ vcov.LinStatExpCov <- function(object, ...) {
     ret <- ret + t(ret) - diag(ret)
     ret
 }
+
 @}
 
 @d doTest
@@ -548,6 +550,8 @@ extern @<R\_PermutedLinearStatistic\_2d Prototype@>;
 extern @<R\_QuadraticTest Prototype@>;
 extern @<R\_MaximumTest Prototype@>;
 extern @<R\_MaximallySelectedTest Prototype@>;
+extern @<R\_ExpectationInfluence Prototype@>;
+extern @<R\_CovarianceInfluence Prototype@>;
 @}
 
 The \proglang{C} file \verb|libcoin.c| defines the \proglang{C}
@@ -2781,7 +2785,21 @@ void C_VarianceLinearStatistic
 
 \subsection{Influence}
 
-@d R\_ExpectationInfluence
+<<ExpectationInfluence>>=
+sumweights <- sum(weights[subset])
+expecty <- a0 <- colSums(y[subset, ] * weights[subset]) / sumweights
+a1 <- libcoin:::.libcoinCall("R_ExpectationInfluence", y, weights, subset);
+a2 <- libcoin:::.libcoinCall("R_ExpectationInfluence", y, as.double(weights), as.double(subset));
+a3 <- libcoin:::.libcoinCall("R_ExpectationInfluence", y, weights, as.double(subset));
+a4 <- libcoin:::.libcoinCall("R_ExpectationInfluence", y, as.double(weights), subset);
+a5 <- LinStatExpCov(x, y, weights = weights, subset = subset)$ExpectationInfluence
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4) &&
+          all.equal(a0, a5))
+@@
+
+@d R\_ExpectationInfluence Prototype
 @{
 SEXP R_ExpectationInfluence
 (
@@ -2789,6 +2807,11 @@ SEXP R_ExpectationInfluence
     @<R weights Input@>,
     @<R subset Input@>
 ) 
+@}
+
+@d R\_ExpectationInfluence
+@{
+@<R\_ExpectationInfluence Prototype@>
 {
     SEXP ans;
     @<C integer Q Input@>;
@@ -2839,7 +2862,39 @@ void RC_ExpectationInfluence
 @|RC_ExpectationInfluence
 @}
 
-@d R\_CovarianceInfluence
+<<CovarianceInfluence>>=
+sumweights <- sum(weights[subset])
+yc <- t(t(y) - expecty)
+r1y <- rep(1:ncol(y), ncol(y))
+r2y <- rep(1:ncol(y), each = ncol(y))
+a0 <- colSums(yc[subset, r1y] * yc[subset, r2y] * weights[subset]) / sumweights
+a0 <- matrix(a0, ncol = ncol(y))
+vary <- diag(a0)
+a0 <- a0[lower.tri(a0, diag = TRUE)]
+a1 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, weights, subset, 0L);
+a2 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, as.double(weights), as.double(subset), 0L);
+a3 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, weights, as.double(subset), 0L);
+a4 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, as.double(weights), subset, 0L);
+a5 <- LinStatExpCov(x, y, weights = weights, subset = subset)$CovarianceInfluence
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4) &&
+          all.equal(a0, a5))
+
+a1 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, weights, subset, 1L);
+a2 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, as.double(weights), as.double(subset), 1L);
+a3 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, weights, as.double(subset), 1L);
+a4 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, as.double(weights), subset, 1L);
+a5 <- LinStatExpCov(x, y, weights = weights, subset = subset, varonly = TRUE)$VarianceInfluence
+a0 <- vary
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4) &&
+          all.equal(a0, a5))
+@@
+
+
+@d R\_CovarianceInfluence Prototype
 @{
 SEXP R_CovarianceInfluence
 (
@@ -2847,7 +2902,12 @@ SEXP R_CovarianceInfluence
     @<R weights Input@>,
     @<R subset Input@>,
     SEXP varonly
-) 
+)
+@} 
+
+@d R\_CovarianceInfluence
+@{
+@<R\_CovarianceInfluence Prototype@>
 {
     SEXP ans;
     SEXP ExpInf;
@@ -5842,6 +5902,8 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_QuadraticTest, 4),
     CALLDEF(R_MaximumTest, 8),
     CALLDEF(R_MaximallySelectedTest, 6),
+    CALLDEF(R_ExpectationInfluence, 3),
+    CALLDEF(R_CovarianceInfluence, 4),
     {NULL, NULL, 0}
 };
 
@@ -5860,6 +5922,8 @@ void attribute_visible R_init_libcoin
     REGCALL(R_QuadraticTest);
     REGCALL(R_MaximumTest);
     REGCALL(R_MaximallySelectedTest);
+    REGCALL(R_ExpectationInfluence);
+    REGCALL(R_CovarianceInfluence);
 }
 @}
 
