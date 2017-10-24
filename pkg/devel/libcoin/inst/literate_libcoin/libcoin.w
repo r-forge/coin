@@ -382,7 +382,7 @@ if (length(block) > 0) {
         }
         ret$PermutedLinearStatistic <-
             .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, weights, subset,
-                  block, nperm, ret$TableBlock, standardise)
+                  block, nperm, ret$Table, standardise)
     }
     class(ret) <- c("LinStatExpCov2d", "LinStatExpCov")
     ret
@@ -397,7 +397,8 @@ vcov.LinStatExpCov <- function(object, ...) {
     PQ <- prod(object$dim)
     ret <- matrix(0, nrow = PQ, ncol = PQ)
     ret[lower.tri(ret, diag = TRUE)] <- object$Covariance
-    ret <- ret + t(ret) - diag(ret)
+    ret <- ret + t(ret)
+    diag(ret) <- diag(ret) / 2
     ret
 }
 
@@ -1615,9 +1616,8 @@ SEXP ans
 @}
 
 <<permutations-2d>>=
-1:10
-# LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
-# LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
+LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
+LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
 @@
 
 @d R\_PermutedLinearStatistic\_2d Prototype
@@ -3308,7 +3308,7 @@ r2x <- rep(1:ncol(Xfactor), each = ncol(Xfactor))
 a0 <- colSums(Xfactor[subset, r1x] * Xfactor[subset, r2x] * weights[subset])
 a0 <- matrix(a0, ncol = ncol(Xfactor))
 vary <- diag(a0)
-a0 <- a0[upper.tri(a0, diag = TRUE)]
+a0 <- a0[lower.tri(a0, diag = TRUE)]
 
 a0
 a1 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, subset, 0L);
@@ -3603,14 +3603,13 @@ double C_Sums_dweights_isubset
 @|C_Sums_dweights_isubset
 @}
 
-
 @d Sums Body
 @{
 
     double ans = 0.0;
 
     if (Nsubset > 0) {
-        if (!HAS_WEIGHTS) return((double) Nsubset - offset);
+        if (!HAS_WEIGHTS) return((double) Nsubset); 
     } else {
         if (!HAS_WEIGHTS) return((double) N);
     }
@@ -3656,20 +3655,26 @@ r1 <- rep(1:ncol(x), ncol(y))
 r2 <- rep(1:ncol(y), each = ncol(x))
 
 a0 <- colSums(x[subset,r1] * y[subset,r2] * weights[subset])
-a1 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, weights, subset)
-a2 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, as.double(weights), as.double(subset))
-a3 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, weights, as.double(subset))
-a4 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, as.double(weights), subset)
+a1 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, weights, subset, 0L)
+a2 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, as.double(weights),
+as.double(subset), 0L)
+a3 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, weights,
+as.double(subset), 0L)
+a4 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, as.double(weights),
+subset, 0L)
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
 
 a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * 
                         y[subset,r2Xfactor] * weights[subset]))
-a1 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, weights, subset)
-a2 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, as.double(weights), as.double(subset))
-a3 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, weights, as.double(subset))
-a4 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, as.double(weights), subset)
+a1 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, weights, subset, 0L)
+a2 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, as.double(weights),
+as.double(subset), 0L)
+a3 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, weights,
+as.double(subset), 0L)
+a4 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, as.double(weights),
+subset, 0L)
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
@@ -3685,7 +3690,8 @@ SEXP R_KronSums
     SEXP P,
     @<R y Input@>
     @<R weights Input@>,
-    @<R subset Input@>
+    @<R subset Input@>,
+    SEXP symmetric
 ) 
 @}
 
@@ -3704,8 +3710,12 @@ SEXP R_KronSums
     N = XLENGTH(y) / Q;
     Nsubset = XLENGTH(subset);
 
-    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
-    RC_KronSums(x, N, INTEGER(P)[0], REAL(y), Q, !DoSymmetric, &center, &center, 
+    if (INTEGER(symmetric)[0]) {
+        PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * (INTEGER(P)[0] + 1) / 2));
+    } else {
+        PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
+    }
+    RC_KronSums(x, N, INTEGER(P)[0], REAL(y), Q, INTEGER(symmetric)[0], &center, &center, 
                 !DoCenter, weights, subset, Offset0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
@@ -3874,7 +3884,7 @@ void C_KronSums_dweights_isubset
 
 @d KronSums Body
 @{
-    double *xx, *yy, cx = 0.0, cy = 0.0;
+    double *xx, *yy, cx = 0.0, cy = 0.0, *thisPQ_ans;
     int idx;
 
     for (int p = 0; p < P; p++) {
@@ -3887,6 +3897,7 @@ void C_KronSums_dweights_isubset
                 idx = q * P + p;  
             }
             PQ_ans[idx] = 0.0;
+            thisPQ_ans = PQ_ans + idx;
             yy = y + N * q;
             xx = x + N * p;
 
@@ -3901,9 +3912,17 @@ void C_KronSums_dweights_isubset
                 yy = yy + diff;
                 if (HAS_WEIGHTS) {
                     w = w + diff;
-                    PQ_ans[idx] += (xx[0] - cx) * (yy[0] - cy) * w[0];
+                    if (CENTER) {
+                        thisPQ_ans[0] += (xx[0] - cx) * (yy[0] - cy) * w[0];
+                    } else {
+                        thisPQ_ans[0] += xx[0] * yy[0] * w[0];
+                    }
                 } else {
-                    PQ_ans[idx] += (xx[0] - cx) * (yy[0] - cy);
+                    if (CENTER) {
+                        thisPQ_ans[0] += (xx[0] - cx) * (yy[0] - cy);
+                    } else {
+                        thisPQ_ans[0] += xx[0] * yy[0];
+                    }
                 }
                 @<continue subset loop@>
             }
@@ -3911,9 +3930,9 @@ void C_KronSums_dweights_isubset
             yy = yy + diff;
             if (HAS_WEIGHTS) {
                 w = w + diff;
-                PQ_ans[idx] += (xx[0] - cx) * (yy[0] - cy) * w[0];
+                thisPQ_ans[0] += (xx[0] - cx) * (yy[0] - cy) * w[0];
             } else {
-                PQ_ans[idx] += (xx[0] - cx) * (yy[0] - cy);
+                thisPQ_ans[0] += (xx[0] - cx) * (yy[0] - cy);
             }
         }
     }
@@ -6237,9 +6256,10 @@ export(LinStatExpCov, doTest)
 S3method(vcov, LinStatExpCov)
 @}
 
+Flag \verb|-g| is for \verb|operf| profiling
 @o Makevars -cc
 @{
-PKG_CFLAGS=$(C_VISIBILITY)
+PKG_CFLAGS=$(C_VISIBILITY) -g
 PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 @}
 
@@ -6273,7 +6293,7 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_ExpectationX, 4),
     CALLDEF(R_CovarianceX, 5),
     CALLDEF(R_Sums, 3),
-    CALLDEF(R_KronSums, 5),
+    CALLDEF(R_KronSums, 6),
     CALLDEF(R_KronSums_Permutation, 5),
     CALLDEF(R_colSums, 3),
     CALLDEF(R_OneTableSums, 4), 
