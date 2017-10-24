@@ -552,6 +552,15 @@ extern @<R\_MaximumTest Prototype@>;
 extern @<R\_MaximallySelectedTest Prototype@>;
 extern @<R\_ExpectationInfluence Prototype@>;
 extern @<R\_CovarianceInfluence Prototype@>;
+extern @<R\_ExpectationX Prototype@>;
+extern @<R\_CovarianceX Prototype@>;
+extern @<R\_Sums Prototype@>;
+extern @<R\_KronSums Prototype@>;
+extern @<R\_KronSums\_Permutation Prototype@>;
+extern @<R\_colSums Prototype@>;
+extern @<R\_OneTableSums Prototype@>;
+extern @<R\_TwoTableSums Prototype@>;
+extern @<R\_ThreeTableSums Prototype@>;
 @}
 
 The \proglang{C} file \verb|libcoin.c| defines the \proglang{C}
@@ -865,6 +874,9 @@ testit <- function(...) {
     d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, ...)
     return(cmpr(a, b) && cmpr(b, d))
 }
+
+LECVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset)
+LEVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset, varonly = TRUE)
 
 stopifnot(
     testit() && testit(weights = weights) &&
@@ -2975,7 +2987,7 @@ void RC_CovarianceInfluence
 
 \subsection{X}
 
-@d R\_ExpectationX
+@d R\_ExpectationX Prototype
 @{
 SEXP R_ExpectationX
 (
@@ -2983,7 +2995,12 @@ SEXP R_ExpectationX
     SEXP P,
     @<R weights Input@>,
     @<R subset Input@>
-) 
+)
+@}
+
+@d R\_ExpectationX
+@{
+@<R\_ExpectationX Prototype@>
 {
     SEXP ans;
     @<C integer N Input@>;
@@ -3033,7 +3050,67 @@ void RC_ExpectationX
 @|RC_ExpectationX
 @}
 
-@d R\_CovarianceX
+<<ExpectationCovarianceX>>=
+a0 <- colSums(x[subset, ] * weights[subset]) 
+a0
+a1 <- libcoin:::.libcoinCall("R_ExpectationX", x, P, weights, subset);
+a2 <- libcoin:::.libcoinCall("R_ExpectationX", x, P, as.double(weights), as.double(subset));
+a3 <- libcoin:::.libcoinCall("R_ExpectationX", x, P, weights, as.double(subset));
+a4 <- libcoin:::.libcoinCall("R_ExpectationX", x, P, as.double(weights), subset);
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4) &&
+          all.equal(a0, LECVxyws$ExpectationX))
+
+a0 <- colSums(x[subset, ]^2 * weights[subset]) 
+a1 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, weights, subset, 1L);
+a2 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, as.double(weights), as.double(subset), 1L);
+a3 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, weights, as.double(subset), 1L);
+a4 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, as.double(weights), subset, 1L);
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+
+a0 <- as.vector(colSums(Xfactor[subset, ] * weights[subset]))
+a0
+a1 <- libcoin:::.libcoinCall("R_ExpectationX", ix, Lx, weights, subset);
+a2 <- libcoin:::.libcoinCall("R_ExpectationX", ix, Lx, as.double(weights), as.double(subset));
+a3 <- libcoin:::.libcoinCall("R_ExpectationX", ix, Lx, weights, as.double(subset));
+a4 <- libcoin:::.libcoinCall("R_ExpectationX", ix, Lx, as.double(weights), subset);
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+
+a1 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, subset, 1L);
+a2 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), as.double(subset), 1L);
+a3 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, as.double(subset), 1L);
+a4 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), subset, 1L);
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+
+r1x <- rep(1:ncol(Xfactor), ncol(Xfactor))
+r2x <- rep(1:ncol(Xfactor), each = ncol(Xfactor))
+a0 <- colSums(Xfactor[subset, r1x] * Xfactor[subset, r2x] * weights[subset])
+a0 <- matrix(a0, ncol = ncol(Xfactor))
+vary <- diag(a0)
+a0 <- a0[upper.tri(a0, diag = TRUE)]
+
+a0
+a1 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, subset, 0L);
+a1
+a2 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), as.double(subset), 0L);
+a3 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, as.double(subset), 0L);
+a4 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), subset, 0L);
+
+#stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+#          all.equal(a0, a3) && all.equal(a0, a4))
+
+
+@@
+
+
+@d R\_CovarianceX Prototype
 @{
 SEXP R_CovarianceX
 (
@@ -3042,7 +3119,12 @@ SEXP R_CovarianceX
     @<R weights Input@>,
     @<R subset Input@>,
     SEXP varonly
-) 
+)
+@}
+
+@d R\_CovarianceX
+@{
+@<R\_CovarianceX Prototype@>
 {
     SEXP ans;
     SEXP ExpX;
@@ -3162,15 +3244,30 @@ After computions in the loop, we compute the next element
 @<R\_Sums@>
 @}
 
+<<SimpleSums>>=
+a0 <- sum(weights[subset])
+a1 <- libcoin:::.libcoinCall("R_Sums", N, weights, subset)
+a2 <- libcoin:::.libcoinCall("R_Sums", N, as.double(weights), as.double(subset))
+a3 <- libcoin:::.libcoinCall("R_Sums", N, weights, as.double(subset))
+a4 <- libcoin:::.libcoinCall("R_Sums", N, as.double(weights), subset)
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+@@
 
-@d R\_Sums
+
+@d R\_Sums Prototype
 @{
 SEXP R_Sums
 (
     @<R N Input@>
     @<R weights Input@>,
     @<R subset Input@>
-) 
+)
+@}
+
+@d R\_Sums
+@{
+@<R\_Sums Prototype@>
 {
     SEXP ans;
     @<C integer Nsubset Input@>;
@@ -3340,8 +3437,33 @@ double C_Sums_dweights_isubset
 @<R\_KronSums\_Permutation@>
 @}
 
+<<KronSums>>=
+r1 <- rep(1:ncol(x), ncol(y))
+r2 <- rep(1:ncol(y), each = ncol(x))
 
-@d R\_KronSums
+a0 <- colSums(x[subset,r1] * y[subset,r2] * weights[subset])
+a1 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, weights, subset)
+a2 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, as.double(weights), as.double(subset))
+a3 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, weights, as.double(subset))
+a4 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, as.double(weights), subset)
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+
+a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * 
+                        y[subset,r2Xfactor] * weights[subset]))
+a1 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, weights, subset)
+a2 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, as.double(weights), as.double(subset))
+a3 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, weights, as.double(subset))
+a4 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, as.double(weights), subset)
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+
+@@
+
+
+@d R\_KronSums Prototype
 @{
 SEXP R_KronSums
 (
@@ -3351,6 +3473,11 @@ SEXP R_KronSums
     @<R weights Input@>,
     @<R subset Input@>
 ) 
+@}
+
+@d R\_KronSums
+@{
+@<R\_KronSums Prototype@>
 {
     SEXP ans;
     @<C integer Q Input@>;
@@ -3695,7 +3822,20 @@ void C_XfactorKronSums_dweights_isubset
 
 \subsubsection{Permuted Kronecker Sums}
 
-@d R\_KronSums\_Permutation
+
+<<KronSums-Permutation>>=
+a0 <- colSums(x[subset,r1] * y[subsety, r2])
+a1 <- libcoin:::.libcoinCall("R_KronSums_Permutation", x, P, y, subset, subsety)
+a2 <- libcoin:::.libcoinCall("R_KronSums_Permutation", x, P, y, as.double(subset), as.double(subsety))
+stopifnot(all.equal(a0, a1) && all.equal(a0, a1))
+
+a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * y[subsety, r2Xfactor]))
+a1 <- libcoin:::.libcoinCall("R_KronSums_Permutation", ix, Lx, y, subset, subsety)
+a1 <- libcoin:::.libcoinCall("R_KronSums_Permutation", ix, Lx, y, as.double(subset), as.double(subsety))
+stopifnot(all.equal(a0, a1))
+@@
+
+@d R\_KronSums\_Permutation Prototype
 @{
 SEXP R_KronSums_Permutation
 (
@@ -3704,8 +3844,13 @@ SEXP R_KronSums_Permutation
     @<R y Input@>
     @<R subset Input@>,
     SEXP subsety
-) {
+)
+@}
 
+@d R\_KronSums\_Permutation
+@{
+@<R\_KronSums\_Permutation Prototype@>
+{
     SEXP ans;
     @<C integer Q Input@>;
     @<C integer N Input@>;
@@ -3906,16 +4051,32 @@ void C_XfactorKronSums_Permutation_isubset
 @<R\_colSums@>
 @}
 
+<<colSums>>=
+a0 <- colSums(x[subset,] * weights[subset])
+a1 <- libcoin:::.libcoinCall("R_colSums", x, weights, subset)
+a2 <- libcoin:::.libcoinCall("R_colSums", x, as.double(weights), as.double(subset))
+a3 <- libcoin:::.libcoinCall("R_colSums", x, weights, as.double(subset))
+a4 <- libcoin:::.libcoinCall("R_colSums", x, as.double(weights), subset)
 
-@d R\_colSums
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+@@
+
+
+@d R\_colSums Prototype
 @{
 SEXP R_colSums
 (
     @<R x Input@>
     @<R weights Input@>,
     @<R subset Input@>
-) {
+)
+@}
 
+@d R\_colSums
+@{
+@<R\_colSums Prototype@>
+{
     SEXP ans;
     int P;
     @<C integer N Input@>;
@@ -4114,8 +4275,23 @@ void C_colSums_dweights_isubset
 @<R\_ThreeTableSums@>
 @}
 
+<<OneTableSum>>=
 
-@d R\_OneTableSums
+a0 <- as.vector(xtabs(weights ~ ixf, subset = subset))
+a1 <- libcoin:::.libcoinCall("R_OneTableSums", ix, Lx + 1L, weights, subset)[-1]
+a2 <- libcoin:::.libcoinCall("R_OneTableSums", ix, Lx + 1L, 
+            as.double(weights), as.double(subset))[-1]
+a3 <- libcoin:::.libcoinCall("R_OneTableSums", ix, Lx + 1L, 
+            weights, as.double(subset))[-1]
+a4 <- libcoin:::.libcoinCall("R_OneTableSums", ix, Lx + 1L, 
+            as.double(weights), subset)[-1]
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+@@
+
+
+@d R\_OneTableSums Prototype
 @{
 SEXP R_OneTableSums
 (
@@ -4123,7 +4299,13 @@ SEXP R_OneTableSums
     SEXP P,
     @<R weights Input@>,
     @<R subset Input@>
-) {
+)
+@}
+
+@d R\_OneTableSums
+@{
+@<R\_OneTableSums Prototype@>
+{
 
     SEXP ans;
     @<C integer N Input@>;
@@ -4289,7 +4471,28 @@ void C_OneTableSums_dweights_isubset
 
 \subsubsection{TwoTable Sums}
 
-@d R\_TwoTableSums
+<<TwoTableSum>>=
+
+a0 <- c(xtabs(weights ~ ixf + iyf, subset = subset))
+a1 <- libcoin:::.libcoinCall("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
+            weights, subset)
+a1 <- c(matrix(a1, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
+a2 <- libcoin:::.libcoinCall("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
+            as.double(weights), as.double(subset))
+a2 <- c(matrix(a2, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
+a3 <- libcoin:::.libcoinCall("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
+            weights, as.double(subset))
+a3 <- c(matrix(a3, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
+a4 <- libcoin:::.libcoinCall("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
+            as.double(weights), subset)
+a4 <- c(matrix(a4, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+@@
+
+
+@d R\_TwoTableSums Prototype
 @{
 SEXP R_TwoTableSums
 (
@@ -4299,7 +4502,13 @@ SEXP R_TwoTableSums
     SEXP Q,
     @<R weights Input@>,
     @<R subset Input@>
-) {
+)
+@}
+
+@d R\_TwoTableSums
+@{
+@<R\_TwoTableSums Prototype@>
+{
 
     SEXP ans;
     @<C integer N Input@>;
@@ -4469,7 +4678,32 @@ void C_TwoTableSums_dweights_isubset
 
 \subsubsection{ThreeTable Sums}
 
-@d R\_ThreeTableSums
+
+<<ThreeTableSum>>=
+
+a0 <- c(xtabs(weights ~ ixf + iyf + block, subset = subset))
+a1 <- libcoin:::.libcoinCall("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
+            block, B, weights, subset)
+a1 <- c(array(a1, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
+a2 <- libcoin:::.libcoinCall("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
+            block, B,
+            as.double(weights), as.double(subset))
+a2 <- c(array(a2, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
+a3 <- libcoin:::.libcoinCall("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
+            block, B,
+            weights, as.double(subset))
+a3 <- c(array(a3, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
+a4 <- libcoin:::.libcoinCall("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
+            block, B,
+            as.double(weights), subset)
+a4 <- c(array(a4, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
+
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
+@@
+
+
+@d R\_ThreeTableSums Prototype
 @{
 SEXP R_ThreeTableSums
 (
@@ -4481,8 +4715,13 @@ SEXP R_ThreeTableSums
     SEXP L,
     @<R weights Input@>,
     @<R subset Input@>
-) {
+)
+@}
 
+@d R\_ThreeTableSums
+@{
+@<R\_ThreeTableSums Prototype@>
+{
     SEXP ans;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
@@ -5904,6 +6143,15 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_MaximallySelectedTest, 6),
     CALLDEF(R_ExpectationInfluence, 3),
     CALLDEF(R_CovarianceInfluence, 4),
+    CALLDEF(R_ExpectationX, 4),
+    CALLDEF(R_CovarianceX, 5),
+    CALLDEF(R_Sums, 3),
+    CALLDEF(R_KronSums, 5),
+    CALLDEF(R_KronSums_Permutation, 5),
+    CALLDEF(R_colSums, 3),
+    CALLDEF(R_OneTableSums, 4), 
+    CALLDEF(R_TwoTableSums, 6),
+    CALLDEF(R_ThreeTableSums, 8),
     {NULL, NULL, 0}
 };
 
