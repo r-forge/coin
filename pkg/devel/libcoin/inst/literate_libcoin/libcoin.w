@@ -1249,15 +1249,15 @@ SEXP R_PermutedLinearStatistic
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_PermutedLinearStatistic(
-    SEXP LEV, SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nperm,
-    SEXP standardise
+    SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nperm,
+    SEXP LECV
 ) {
 
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_PermutedLinearStatistic");
-    return fun(LEV, x, y, weights, subset, block, nperm, standardise);
+    return fun(x, y, weights, subset, block, nperm, LECV);
 }
 @}
 
@@ -1634,15 +1634,15 @@ SEXP R_PermutedLinearStatistic_2d
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_PermutedLinearStatistic_2d(
-    SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nperm,
-    SEXP standardise
+    SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nperm,
+    SEXP itable, SEXP LECV
 ) {
 
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_PermutedLinearStatistic_2d");
-    return fun(LEV, x, ix, y, iy, block, nperm, standardise);
+    return fun(x, ix, y, iy, block, nperm, itable, LECV);
 }
 @}
 
@@ -6262,7 +6262,7 @@ EXPORTS
 
 static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_ExpectationCovarianceStatistic, 7),
-    CALLDEF(R_PermutedLinearStatistic, 8),
+    CALLDEF(R_PermutedLinearStatistic, 7),
     CALLDEF(R_ExpectationCovarianceStatistic_2d, 9),
     CALLDEF(R_PermutedLinearStatistic_2d, 8),
     CALLDEF(R_QuadraticTest, 4),
@@ -6281,7 +6281,10 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_ThreeTableSums, 8),
     {NULL, NULL, 0}
 };
+@}
 
+@o libcoin-init.c -cc
+@{
 void attribute_visible R_init_libcoin
 (
     DllInfo *dll
