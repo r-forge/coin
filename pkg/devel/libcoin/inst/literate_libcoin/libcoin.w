@@ -6299,6 +6299,15 @@ void attribute_visible R_init_libcoin
     REGCALL(R_MaximallySelectedTest);
     REGCALL(R_ExpectationInfluence);
     REGCALL(R_CovarianceInfluence);
+    REGCALL(R_ExpectationX);
+    REGCALL(R_CovarianceX);
+    REGCALL(R_Sums);
+    REGCALL(R_KronSums);
+    REGCALL(R_KronSums_Permutation);
+    REGCALL(R_colSums);
+    REGCALL(R_OneTableSums);
+    REGCALL(R_TwoTableSums);
+    REGCALL(R_ThreeTableSums);
 }
 @}
 
