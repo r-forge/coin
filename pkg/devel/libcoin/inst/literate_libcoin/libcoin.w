@@ -238,14 +238,16 @@ and that in the one-sided case maximum type test statistics are replaced by
 .libcoinCall <- function(FUN, ...) .Call(FUN, ...)
 @}
 
+@d LinStatExpCov Prototype
+@{(X, Y, ix = NULL, iy = NULL, weights = integer(0),
+ subset = integer(0), block = integer(0),
+ varonly = FALSE, nperm = 0, standardise = FALSE,
+ tol = sqrt(.Machine$double.eps))@}
+
 @d LinStatExpCov
 @{
-LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
-                          subset = integer(0), block = integer(0),
-                          varonly = FALSE, nperm = 0, standardise = FALSE,
-                          tol = sqrt(.Machine$double.eps))
+LinStatExpCov <- function@<LinStatExpCov Prototype@>
 {
-
     if (is.null(ix) & is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
                                 subset = subset, block = block,
@@ -401,13 +403,16 @@ vcov.LinStatExpCov <- function(object, ...) {
 
 @}
 
+@d doTest Prototype
+@{(object, teststat = c("maximum", "quadratic", "scalar"),
+   alternative = c("two.sided", "less", "greater"),
+   pvalue = TRUE, lower = FALSE, log = FALSE,
+   minbucket = 10L, ordered = TRUE, pargs = GenzBretz())@}
+
 @d doTest
 @{
 ### note: lower = FALSE => p-value; lower = TRUE => 1 - p-value
-doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
-                   alternative = c("two.sided", "less", "greater"),
-                   pvalue = TRUE, lower = FALSE, log = FALSE,
-                   minbucket = 10L, ordered = TRUE, pargs = GenzBretz())
+doTest <- function@<doTest Prototype@>
 {
 
     ### avoid match.arg for performance reasons
@@ -457,6 +462,113 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     }
     ret
 }
+@}
+
+\section{Manual Page}
+
+@o LinStatExpCov.Rd -cp
+@{
+\name{LinStatExpCov}
+\alias{LinStatExpCov}
+\title{
+  Linear Statistics with Expectation and Covariance
+}
+\description{
+  Strasser-Weber type linear statistics and their expectation
+  and covariance under the independence hypothesis
+}
+\usage{
+LinStatExpCov@<LinStatExpCov Prototype@>
+}
+\arguments{
+  \item{X}{numeric matrix of transformations.}
+  \item{Y}{numeric matrix of influence functions.}
+  \item{ix}{an optional integer vector expanding \code{X}.}
+  \item{iy}{an optional integer vector expanding \code{Y}.}
+  \item{weights}{an optional integer vector of non-negative case weights.}
+  \item{subset}{an optional integer vector defining a subset of observations.}
+  \item{block}{an optional factor defining independent blocks of observations.}
+  \item{varonly}{a logical asking for variances only.}
+  \item{nperm}{an integer defining the number of permuted statistics to draw.}
+  \item{standardise}{a logical asking to standardise the permuted statistics.}
+  \item{tol}{tolerance for zero variances.}
+}
+\details{
+  The function, after minimal preprocessing, calls the underlying C code
+  and computes the linear statistic, its expectation and covariance and,
+  optionally, \code{nperm} samples from its permutation distribution.
+
+  When both \code{ix} and \code{iy} are missing, the number of rows of
+  \code{X} and \code{Y} is the same, ie the number of observations.
+
+  When \code{X} is missing and \code{ix} a factor, the code proceeds as
+  if \code{X} were a dummy matrix of \code{ix} without explicitly
+  computing this matrix.
+
+  Both \code{ix} and \code{iy} being present means the code treats them
+  as subsetting vectors for \code{X} and \code{Y}. Note that \code{ix = 0}
+  or \code{iy = 0} means that the corresponding observation is missing
+  and the first row or \code{X} and \code{Y} must be zero.
+
+}
+\value{
+  A list.
+}
+\references{
+  Strasser, H. and Weber, C.  (1999).  On the asymptotic theory of permutation
+  statistics.  \emph{Mathematical Methods of Statistics} \bold{8}(2), 220--250.
+}
+
+\examples{
+
+ wilcox.test(Ozone ~ Month, data = airquality,
+             subset = Month \%in\% c(5, 8))
+
+ aq <- subset(airquality, Month \%in\% c(5, 8))
+ X <- as.double(aq$Month == 5)
+ Y <- as.double(rank(aq$Ozone))
+
+ doTest(LinStatExpCov(X, Y))
+
+}
+\keyword{htest}
+@}
+
+@o doTest.Rd -cp
+@{
+\name{doTest}
+\alias{doTest}
+\title{
+  Permutation Test
+}
+\description{
+  Perform permutation test for a linear statistic
+}
+\usage{
+doTest@<doTest Prototype@>
+}
+\arguments{
+  \item{object}{an object returned by \code{\link{LinStatExpCov}}.}
+  \item{teststat}{type of test statistic to use.}
+  \item{alternative}{alternative for scalar or maximum-type statistics.}
+  \item{pvalue}{a logical indicating if a p-value shall be computed.}
+  \item{lower}{a logical indicating if a p-value (\code{lower} is \code{FALSE})
+               or 1 - p-value (\code{lower} is \code{TRUE}) shall be returned.}
+  \item{log}{a logical, if \code{TRUE} probabilities are log-probabilities.}
+  \item{minbucket}{minimum weight in either of two groups for maximally selected
+                   statistics.}
+  \item{ordered}{a logical, if \code{TRUE} maximally selected statistics
+                 assume that the cutpoints are ordered.}
+  \item{pargs}{arguments as in \code{\link[mvtnorm]{GenzBretz}}.}
+}
+\details{
+  Computes a test statistic, a corresponding p-value and, optionally, cutpoints for
+  maximally selected statistics.
+}
+\value{
+  A list.
+}
+\keyword{htest}
 @}
 
 \chapter{C Code}
@@ -6020,6 +6132,7 @@ importFrom("stats", complete.cases)
 importFrom("mvtnorm", GenzBretz)
 
 export(LinStatExpCov, doTest)
+S3method(vcov, LinStatExpCov)
 @}
 
 @o Makevars -cc
