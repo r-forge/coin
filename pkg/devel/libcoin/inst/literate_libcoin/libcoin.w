@@ -145,7 +145,7 @@ in a permutation symmetric way.  We will give specific examples on how to choose
 $g$ and $h$ later on.
 
 With $\x_i = g(\X_i) \in \R^P$ and $\y_i = h(\Y_i, \{\Y_i, i \in \A\}) \in \R^Q$ we write
-\begin{eqnarray} \label{linstat}
+\begin{eqnarray} \label{linstatsimple}
 \T(A) = \vec\left(\sum_{i \in \A} w_i \x_i \y_i^\top\right)
 \in \R^{PQ}.
 \end{eqnarray}
@@ -195,7 +195,7 @@ $\mu = \sum_{b = 1}^B \mu(A_b)$ and $\Sigma = \sum_{b = 1}^B \Sigma(A_b)$.
 
 Having the conditional expectation and covariance at hand we are able to
 standardize a linear statistic $\T \in \R^{PQ}$ of the form
-(\ref{linstat}). Univariate test statistics~$c$ mapping an observed linear
+(\ref{linstatsimple}). Univariate test statistics~$c$ mapping an observed linear
 statistic $\mathbf{t} \in
 \R^{PQ}$ into the real line can be of arbitrary form.  An obvious choice is
 the maximum of the absolute values of the standardized linear statistic
@@ -1032,6 +1032,25 @@ stopifnot(
 @<R block Input@>
 @}
 
+@o libcoinAPI.h -cc
+@{
+#include <R_ext/Rdynload.h>
+#include <libcoin.h>
+
+extern SEXP libcoin_R_ExpectationCovarianceStatistic(
+    SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP varonly,
+    SEXP tol
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_ExpectationCovarianceStatistic");
+    return fun(x, y, weights, subset, block, varonly, tol);
+}
+@}
+
+
 @d R\_ExpectationCovarianceStatistic Prototype
 @{
 SEXP R_ExpectationCovarianceStatistic
@@ -1227,6 +1246,21 @@ SEXP R_PermutedLinearStatistic
 )
 @}
 
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_PermutedLinearStatistic(
+    SEXP LEV, SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nperm,
+    SEXP standardise
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_PermutedLinearStatistic");
+    return fun(LEV, x, y, weights, subset, block, nperm, standardise);
+}
+@}
+
 @d R\_PermutedLinearStatistic
 @{
 @<R\_PermutedLinearStatistic Prototype@>
@@ -1341,6 +1375,21 @@ SEXP R_ExpectationCovarianceStatistic_2d
 SEXP varonly,
 SEXP tol
 )
+@}
+
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
+    SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP weights, SEXP subset, SEXP block,
+    SEXP varonly, SEXP tol
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_ExpectationCovarianceStatistic_2d");
+    return fun(x, ix, y, iy, weights, subset, block, varonly, tol);
+}
 @}
 
 @d R\_ExpectationCovarianceStatistic\_2d
@@ -1582,6 +1631,21 @@ SEXP R_PermutedLinearStatistic_2d
 )
 @}
 
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_PermutedLinearStatistic_2d(
+    SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nperm,
+    SEXP standardise
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_PermutedLinearStatistic_2d");
+    return fun(LEV, x, ix, y, iy, block, nperm, standardise);
+}
+@}
+
 @d R\_PermutedLinearStatistic\_2d
 @{
 @<R\_PermutedLinearStatistic\_2d Prototype@>
@@ -1689,6 +1753,44 @@ btab = table;
 @<R\_QuadraticTest@>
 @<R\_MaximumTest@>
 @<R\_MaximallySelectedTest@>
+@}
+
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_QuadraticTest(
+    SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_QuadraticTest");
+    return fun(LEV, pvalue, lower, give_log);
+}
+
+extern SEXP libcoin_R_MaximumTest(
+    SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
+    SEXP maxpts, SEXP releps, SEXP abseps
+) {
+
+  static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_MaximumTest");
+    return fun(LEV, alternative, pvalue, lower, give_log, maxpts, releps,
+               abseps);
+}
+
+extern SEXP libcoin_R_MaximallySelectedTest(
+    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
+) {
+
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_MaximallySelectedTest");
+    return fun(LEV, ordered, teststat, minbucket, lower, give_log);
+}
 @}
 
 @d R\_QuadraticTest Prototype
@@ -6148,94 +6250,6 @@ EXPORTS
   R_init_libcoin
 @}
 
-@o libcoinAPI.h -cc
-@{
-#include <R_ext/Rdynload.h>
-#include <libcoin.h>
-
-extern SEXP libcoin_R_ExpectationCovarianceStatistic(
-    SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP varonly,
-    SEXP tol
-) {
-
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_ExpectationCovarianceStatistic");
-    return fun(x, y, weights, subset, block, varonly, tol);
-}
-
-extern SEXP libcoin_R_PermutedLinearStatistic(
-    SEXP LEV, SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nperm,
-    SEXP standardise
-) {
-
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_PermutedLinearStatistic");
-    return fun(LEV, x, y, weights, subset, block, nperm, standardise);
-}
-
-extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
-    SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP weights, SEXP subset, SEXP block,
-    SEXP varonly, SEXP tol
-) {
-
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_ExpectationCovarianceStatistic_2d");
-    return fun(x, ix, y, iy, weights, subset, block, varonly, tol);
-}
-
-extern SEXP libcoin_R_PermutedLinearStatistic_2d(
-    SEXP LEV, SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nperm,
-    SEXP standardise
-) {
-
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_PermutedLinearStatistic_2d");
-    return fun(LEV, x, ix, y, iy, block, nperm, standardise);
-}
-
-extern SEXP libcoin_R_QuadraticTest(
-    SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log
-) {
-
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_QuadraticTest");
-    return fun(LEV, pvalue, lower, give_log);
-}
-
-extern SEXP libcoin_R_MaximumTest(
-    SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
-    SEXP maxpts, SEXP releps, SEXP abseps
-) {
-
-  static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_MaximumTest");
-    return fun(LEV, alternative, pvalue, lower, give_log, maxpts, releps,
-               abseps);
-}
-
-extern SEXP libcoin_R_MaximallySelectedTest(
-    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
-) {
-
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_MaximallySelectedTest");
-    return fun(LEV, ordered, teststat, minbucket, lower, give_log);
-}
-@}
 
 @o libcoin-init.c -cc
 @{

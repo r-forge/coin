@@ -40,5 +40,14 @@ clean:
 	rm -rf *.o
 	rm -rf *.so	
 	rm -rf *.def
+	rm -rf *.Rd
+	rm -rf *.R
+	rm -rf Makevars
+	rm -rf nw*
 	rm -rf src/*
 	rm -rf R/*
+	rm -rf man/*
+	rm -rf vignettes/*
+	rm -rf tests/*
+		
+	
