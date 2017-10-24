@@ -8,6 +8,7 @@ libcoin.Rnw:	libcoin.w
 	mv Makevars src
 	mv *def src
 	mv *.R R
+	mv *.Rd man
 
 libcoin.R: libcoin.Rnw
 	Stangle libcoin.Rnw
