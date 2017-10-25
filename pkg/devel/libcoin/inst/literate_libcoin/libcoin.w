@@ -1112,6 +1112,7 @@ SEXP ans
     @<C integer Lb Input@>;
     double *sumweights, *table;
     double *ExpInf, *VarInf, *CovInf, *ExpX, *ExpXtotal, *VarX, *CovX;
+    double *tmpV, *tmpCV;
     SEXP nullvec, subset_block;
 
     /* note: x being an integer (Xfactor) with some 0 elements is not
@@ -1138,6 +1139,15 @@ SEXP ans
         if (sumweights[b] == 0) continue;
 
         @<Compute Expectation Linear Statistic@>
+
+        /* C_ordered_Xfactor and C_unordered_Xfactor need both VarInf and CovInf */
+        RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], 
+                              (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b], 
+                              !DoVarOnly, CovInf + b * Q * (Q + 1) / 2);
+        /* extract variance from covariance */
+        tmpCV = CovInf + b * Q * (Q + 1) / 2;
+        tmpV = VarInf + b * Q;
+        for (int q = 0; q < Q; q++) tmpV[q] = tmpCV[S(q, q, Q)];
 
         if (C_get_varonly(ans)) {
             @<Compute Variance Linear Statistic@>
@@ -1211,9 +1221,6 @@ C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b,
 
 @d Compute Variance Linear Statistic
 @{
-RC_CovarianceInfluence(N, y, Q, weights, subset_block, offset, 
-                       (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b], 
-                       DoVarOnly, VarInf + b * Q);
 RC_CovarianceX(x, N, P, weights, subset_block, offset, 
                (R_xlen_t) table[b + 1], ExpX, DoVarOnly, VarX);
 C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sumweights[b], 
@@ -1222,9 +1229,6 @@ C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sumweights[b],
 
 @d Compute Covariance Linear Statistic
 @{
-RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], 
-                       (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b], 
-                       !DoVarOnly, CovInf + b * Q * (Q + 1) / 2);
 RC_CovarianceX(x, N, P, weights, subset_block, (R_xlen_t) table[b], 
                (R_xlen_t) table[b + 1], ExpX, !DoVarOnly, CovX);
 C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
@@ -1523,13 +1527,11 @@ C_ExpectationLinearStatistic(P, Q, ExpInf, ExpX, b, C_get_Expectation(ans));
 
 @d 2d Covariance
 @{
-if (C_get_varonly(ans)) {
-    RC_CovarianceInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, ExpInf, sumweights[b],
-                           DoVarOnly, C_get_VarianceInfluence(ans));
-} else {
-    RC_CovarianceInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, ExpInf, sumweights[b],
-                           !DoVarOnly, C_get_CovarianceInfluence(ans));
-}
+/* C_ordered_Xfactor needs both VarInf and CovInf */
+RC_CovarianceInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, ExpInf, sumweights[b],
+                       !DoVarOnly, C_get_CovarianceInfluence(ans));
+for (int q = 0; q < Q; q++) 
+    C_get_VarianceInfluence(ans)[q] = C_get_CovarianceInfluence(ans)[S(q, q, Q)];
 
 if (C_get_varonly(ans)) {
     if (LENGTH(x) == 0) {
@@ -2543,15 +2545,19 @@ double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat,
 int rank, PQ, greater;
 
 Q = C_get_Q(LECV);
-P = C_get_Q(LECV);
+P = C_get_P(LECV);
 PQ = P * Q;
 Lb = C_get_Lb(LECV);
-if (Lb > 1 && C_get_varonly(LECV)) 
-    error("need covarinance for maximally statistics with blocks");
+if ((Lb > 1 || teststat != TESTSTAT_maximum)) {
+    if (C_get_varonly(LECV)) {
+        error("need covarinance for maximally statistics with blocks");
+    }
+    covar = C_get_Covariance(LECV);
+}
 linstat = C_get_LinearStatistic(LECV);
 expect = C_get_Expectation(LECV);
-covar = C_get_Covariance(LECV);
 ExpX = C_get_ExpectationX(LECV);
+/* both need to be there */
 varinf = C_get_VarianceInfluence(LECV);
 covinf = C_get_CovarianceInfluence(LECV);
 nperm = C_get_nperm(LECV);
@@ -3310,17 +3316,13 @@ a0 <- matrix(a0, ncol = ncol(Xfactor))
 vary <- diag(a0)
 a0 <- a0[lower.tri(a0, diag = TRUE)]
 
-a0
-a1 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, subset, 0L);
-a1
-a2 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), as.double(subset), 0L);
-a3 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, as.double(subset), 0L);
-a4 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), subset, 0L);
+a1 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, subset, 0L)
+a2 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), as.double(subset), 0L)
+a3 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, as.double(subset), 0L)
+a4 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), subset, 0L)
 
-#stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-#          all.equal(a0, a3) && all.equal(a0, a4))
-
-
+stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
+          all.equal(a0, a3) && all.equal(a0, a4))
 @@
 
 
@@ -3389,6 +3391,8 @@ void RC_CovarianceX
         if (VARONLY) {
             for (int p = 0; p < P; p++) PQ_ans[p] = ExpX[p];
         } else {
+            for (int p = 0; p < P * (P + 1) / 2; p++) 
+                PQ_ans[p] = 0.0;
             for (int p = 0; p < P; p++)
                 PQ_ans[S(p, p, P)] = ExpX[p];
         }
