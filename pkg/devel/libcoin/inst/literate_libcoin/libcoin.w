@@ -465,7 +465,42 @@ doTest <- function@<doTest Prototype@>
 }
 @}
 
-\section{Manual Page}
+@d ctabs Prototype
+@{(ix, iy = integer(0), block = integer(0), weights = integer(0),
+   subset = integer(0))@}
+
+
+@o ctabs.R -cp
+@{
+ctabs <- function@<ctabs Prototype@>
+{
+
+    stopifnot(is.integer(ix))
+    N <- length(ix)
+    if (is.null(attr(ix, "levels")))
+        attr(ix, "levels") <- 1:max(ix)
+
+    if (length(iy) > 0) {
+        stopifnot(length(iy) == N)
+        stopifnot(is.integer(ix))
+        if (is.null(attr(iy, "levels")))
+            attr(iy, "levels") <- 1:max(iy)
+    }
+
+    @<Check weights, subset, block@>
+
+    if (length(iy) == 0 && length(block) == 0)
+        return(.Call(R_OneTableSums, ix, weights, subset))
+    if (length(block) == 0)
+        return(.Call(R_TwoTableSums, ix, iy, weights, subset))
+    if (length(iy) == 0)
+        return(.Call(R_TwoTableSums, ix, block, weights, subset)[,-1,drop = FALSE])
+    return(.Call(R_ThreeTableSums, ix, iy, block, weights, subset))
+}
+@}
+
+
+\section{Manual Pages}
 
 @o LinStatExpCov.Rd -cp
 @{
@@ -570,6 +605,41 @@ doTest@<doTest Prototype@>
   A list.
 }
 \keyword{htest}
+@}
+
+@o ctabs.Rd -cp
+@{
+\name{ctabs}
+\alias{ctabs}
+\title{
+    Cross Tabulation
+}
+\description{
+    Efficient weighted cross tabulation of two factors and a block
+}
+\usage{
+ctabs@<ctabs Prototype@>
+}
+\arguments{
+  \item{ix}{a integer of positive values with zero indicating a missing.}
+  \item{iy}{an optional integer of positive values with zero indicating a missing.}
+  \item{block}{an optional blocking factor without missings.}
+  \item{weights}{an optional vector of weights, integer or double.}
+  \item{subset}{an optional integer vector indicating a subset.}
+}
+\details{
+  A faster version of \code{xtabs(weights ~ ix + iy + block, subset)}.
+}
+\value{
+  If \code{block} is present, a three-way table. Otherwise,
+  a one- or two-dimensional table.
+}
+\examples{
+
+  ctabs(1:5, 1:5, 1:5 / 5)
+
+}
+\keyword{univar}
 @}
 
 \chapter{C Code}
@@ -4515,13 +4585,10 @@ void C_colSums_dweights_isubset
 <<OneTableSum>>=
 
 a0 <- as.vector(xtabs(weights ~ ixf, subset = subset))
-a1 <- libcoin:::.libcoinCall("R_OneTableSums", ix, Lx + 1L, weights, subset)[-1]
-a2 <- libcoin:::.libcoinCall("R_OneTableSums", ix, Lx + 1L, 
-            as.double(weights), as.double(subset))[-1]
-a3 <- libcoin:::.libcoinCall("R_OneTableSums", ix, Lx + 1L, 
-            weights, as.double(subset))[-1]
-a4 <- libcoin:::.libcoinCall("R_OneTableSums", ix, Lx + 1L, 
-            as.double(weights), subset)[-1]
+a1 <- ctabs(ix, weights = weights, subset = subset)[-1]
+a2 <- ctabs(ix, weights = as.double(weights), subset = as.double(subset))[-1]
+a3 <- ctabs(ix, weights = weights, subset = as.double(subset))[-1]
+a4 <- ctabs(ix, weights = as.double(weights), subset = subset)[-1]
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
@@ -4533,7 +4600,6 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 SEXP R_OneTableSums
 (
     @<R x Input@>
-    SEXP P,
     @<R weights Input@>,
     @<R subset Input@>
 )
@@ -4547,13 +4613,15 @@ SEXP R_OneTableSums
     SEXP ans;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
+    int P;
 
     N = XLENGTH(x);
     Nsubset = XLENGTH(subset);
+    P = NLEVELS(x) + 1;
     
-    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0]));
-    RC_OneTableSums(INTEGER(x), N, INTEGER(P)[0],  
-                 weights, subset, Offset0, Nsubset, REAL(ans));
+    PROTECT(ans = allocVector(REALSXP, P));
+    RC_OneTableSums(INTEGER(x), N, P, weights, subset, 
+                    Offset0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
 }
@@ -4710,19 +4778,15 @@ void C_OneTableSums_dweights_isubset
 
 <<TwoTableSum>>=
 
-a0 <- c(xtabs(weights ~ ixf + iyf, subset = subset))
-a1 <- libcoin:::.libcoinCall("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            weights, subset)
-a1 <- c(matrix(a1, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
-a2 <- libcoin:::.libcoinCall("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            as.double(weights), as.double(subset))
-a2 <- c(matrix(a2, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
-a3 <- libcoin:::.libcoinCall("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            weights, as.double(subset))
-a3 <- c(matrix(a3, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
-a4 <- libcoin:::.libcoinCall("R_TwoTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            as.double(weights), subset)
-a4 <- c(matrix(a4, nrow = Lx + 1, ncol = Ly + 1)[-1,-1])
+a0 <- xtabs(weights ~ ixf + iyf, subset = subset)
+class(a0) <- "matrix"
+dimnames(a0) <- NULL
+attributes(a0)$call <- NULL
+a1 <- ctabs(ix, iy, weights = weights, subset = subset)[-1, -1]
+a2 <- ctabs(ix, iy, weights = as.double(weights), 
+            subset = as.double(subset))[-1, -1]
+a3 <- ctabs(ix, iy, weights = weights, subset = as.double(subset))[-1, -1]
+a4 <- ctabs(ix, iy, weights = as.double(weights), subset = subset)[-1, -1]
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
@@ -4734,9 +4798,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 SEXP R_TwoTableSums
 (
     @<R x Input@>
-    SEXP P,
     @<R y Input@>
-    SEXP Q,
     @<R weights Input@>,
     @<R subset Input@>
 )
@@ -4747,17 +4809,24 @@ SEXP R_TwoTableSums
 @<R\_TwoTableSums Prototype@>
 {
 
-    SEXP ans;
+    SEXP ans, dim;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
+    int P, Q;
 
     N = XLENGTH(x);
     Nsubset = XLENGTH(subset);
+    P = NLEVELS(x) + 1;
+    Q = NLEVELS(y) + 1;
     
-    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * INTEGER(Q)[0]));
-    RC_TwoTableSums(INTEGER(x), N, INTEGER(P)[0], INTEGER(y), INTEGER(Q)[0], 
-                 weights, subset, Offset0, Nsubset, REAL(ans));
-    UNPROTECT(1);
+    PROTECT(ans = allocVector(REALSXP, P * Q));
+    PROTECT(dim = allocVector(INTSXP, 2));
+    INTEGER(dim)[0] = P;
+    INTEGER(dim)[1] = Q;
+    dimgets(ans, dim);
+    RC_TwoTableSums(INTEGER(x), N, P, INTEGER(y), Q, 
+                    weights, subset, Offset0, Nsubset, REAL(ans));
+    UNPROTECT(2);
     return(ans);
 }
 @|R_TwoTableSums
@@ -4917,23 +4986,14 @@ void C_TwoTableSums_dweights_isubset
 
 
 <<ThreeTableSum>>=
-
-a0 <- c(xtabs(weights ~ ixf + iyf + block, subset = subset))
-a1 <- libcoin:::.libcoinCall("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            block, B, weights, subset)
-a1 <- c(array(a1, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
-a2 <- libcoin:::.libcoinCall("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            block, B,
-            as.double(weights), as.double(subset))
-a2 <- c(array(a2, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
-a3 <- libcoin:::.libcoinCall("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            block, B,
-            weights, as.double(subset))
-a3 <- c(array(a3, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
-a4 <- libcoin:::.libcoinCall("R_ThreeTableSums", ix, Lx + 1L, iy, Ly + 1L, 
-            block, B,
-            as.double(weights), subset)
-a4 <- c(array(a4, dim = c(Lx + 1, Ly + 1, B))[-1,-1,])
+a0 <- xtabs(weights ~ ixf + iyf + block, subset = subset)
+class(a0) <- "array"
+dimnames(a0) <- NULL
+attributes(a0)$call <- NULL
+a1 <- ctabs(ix, iy, block, weights, subset)[-1, -1,]
+a2 <- ctabs(ix, iy, block, as.double(weights), as.double(subset))[-1,-1,]
+a3 <- ctabs(ix, iy, block, weights, as.double(subset))[-1,-1,]
+a4 <- ctabs(ix, iy, block, as.double(weights), subset)[-1,-1,]
 
 stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
@@ -4945,11 +5005,8 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 SEXP R_ThreeTableSums
 (
     @<R x Input@>
-    SEXP P,
     @<R y Input@>
-    SEXP Q,
     @<R block Input@>
-    SEXP L,
     @<R weights Input@>,
     @<R subset Input@>
 )
@@ -4959,18 +5016,27 @@ SEXP R_ThreeTableSums
 @{
 @<R\_ThreeTableSums Prototype@>
 {
-    SEXP ans;
+    SEXP ans, dim;
     @<C integer N Input@>;
     @<C integer Nsubset Input@>;
+    int P, Q, B;
 
     N = XLENGTH(x);
     Nsubset = XLENGTH(subset);
+    P = NLEVELS(x) + 1;
+    Q = NLEVELS(y) + 1;
+    B = NLEVELS(block);
     
-    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * INTEGER(Q)[0] * INTEGER(L)[0]));
-    RC_ThreeTableSums(INTEGER(x), N, INTEGER(P)[0], INTEGER(y), INTEGER(Q)[0], 
-                      INTEGER(block), INTEGER(L)[0],
+    PROTECT(ans = allocVector(REALSXP, P * Q * B));
+    PROTECT(dim = allocVector(INTSXP, 3));
+    INTEGER(dim)[0] = P;
+    INTEGER(dim)[1] = Q;
+    INTEGER(dim)[2] = B;
+    dimgets(ans, dim);
+    RC_ThreeTableSums(INTEGER(x), N, P, INTEGER(y), Q, 
+                      INTEGER(block), B,
                       weights, subset, Offset0, Nsubset, REAL(ans));
-    UNPROTECT(1);
+    UNPROTECT(2);
     return(ans);
 }
 @|R_ThreeTableSums
@@ -5166,7 +5232,7 @@ SEXP R_order_subset_wrt_block
         error("cannot deal with weights here");
 
     if (INTEGER(Nlevels)[0] > 2) {
-        PROTECT(blockTable = R_OneTableSums(block, Nlevels, weights, subset));
+        PROTECT(blockTable = R_OneTableSums(block, weights, subset));
     } else {
         PROTECT(blockTable = allocVector(REALSXP, 2));
         REAL(blockTable)[0] = 0.0;
@@ -5533,17 +5599,20 @@ int NLEVELS
 ) {
 
     SEXP a;
+    int maxlev = 0;
 
     a = getAttrib(x, R_LevelsSymbol);
     if (a == R_NilValue) {
+        Rprintf("no levels!");
         if (TYPEOF(x) != INTSXP)
             error("cannot determine number of levels");
-        int maxlev = 0;
         for (R_xlen_t i = 0; i < XLENGTH(x); i++) {
+Rprintf("i %d x %d ", i, INTEGER(x)[i]);
             if (INTEGER(x)[i] > maxlev)
                 maxlev = INTEGER(x)[i];
         }
-        error("no levels attribute found");
+        Rprintf("maxlev %d \n", maxlev);
+        return(maxlev);
     }
     return(NROW(a));
 }
@@ -6256,7 +6325,7 @@ useDynLib(libcoin, .registration = TRUE)
 importFrom("stats", complete.cases)
 importFrom("mvtnorm", GenzBretz)
 
-export(LinStatExpCov, doTest)
+export(LinStatExpCov, doTest, ctabs)
 S3method(vcov, LinStatExpCov)
 @}
 
@@ -6300,9 +6369,9 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_KronSums, 6),
     CALLDEF(R_KronSums_Permutation, 5),
     CALLDEF(R_colSums, 3),
-    CALLDEF(R_OneTableSums, 4), 
-    CALLDEF(R_TwoTableSums, 6),
-    CALLDEF(R_ThreeTableSums, 8),
+    CALLDEF(R_OneTableSums, 3), 
+    CALLDEF(R_TwoTableSums, 4),
+    CALLDEF(R_ThreeTableSums, 5),
     {NULL, NULL, 0}
 };
 @}
