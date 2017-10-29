@@ -636,7 +636,7 @@ ctabs@<ctabs Prototype@>
 }
 \examples{
 
-  ctabs(1:5, 1:5, 1:5 / 5)
+  ctabs(ix = 1:5, iy = 1:5, weights = 1:5 / 5)
 
 }
 \keyword{univar}
