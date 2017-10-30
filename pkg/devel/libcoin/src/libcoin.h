@@ -33,8 +33,8 @@ extern
        ,
        /* R block Input */
 
-           SEXP block,
-       
+           SEXP block
+       ,
        
        SEXP varonly,
        SEXP tol
@@ -63,8 +63,8 @@ extern
            ,
            /* R block Input */
 
-               SEXP block,
-           
+               SEXP block
+           ,
            
            SEXP nperm,
            /* R LECV Input */
@@ -98,8 +98,8 @@ extern
        ,
        /* R block Input */
 
-           SEXP block,
-       
+           SEXP block
+       ,
        
        SEXP varonly,
        SEXP tol
@@ -130,8 +130,8 @@ extern
            ,
            /* R block Input */
 
-               SEXP block,
-           
+               SEXP block
+           ,
            
            SEXP nperm,
            SEXP itable,
@@ -379,7 +379,24 @@ extern
            
            /* R block Input */
            
-               SEXP block,
+               SEXP block
+           ,
+           /* R weights Input */
+           
+               SEXP weights
+           ,
+           /* R subset Input */
+           
+               SEXP subset
+           
+       )
+       ;
+extern 
+       SEXP R_order_subset_wrt_block
+       (
+           /* R y Input */
+           
+               SEXP y,
            
            /* R weights Input */
            
@@ -388,6 +405,10 @@ extern
            /* R subset Input */
            
                SEXP subset
+           ,
+           /* R block Input */
+           
+               SEXP block
            
        )
        ;

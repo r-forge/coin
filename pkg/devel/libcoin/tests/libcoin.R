@@ -356,3 +356,12 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
           all.equal(a0, a3) && all.equal(a0, a4))
 
 
+###################################################
+### code chunk number 15: blocks
+###################################################
+sb <- sample(block)
+ns1 <- do.call("c", tapply(subset, sb[subset], function(i) i))
+ns2 <- libcoin:::.libcoinCall("R_order_subset_wrt_block", y, integer(0), subset, sb)
+all.equal(ns1, ns2, check.attributes = FALSE)
+
+

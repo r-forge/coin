@@ -747,6 +747,7 @@ extern @<R\_colSums Prototype@>;
 extern @<R\_OneTableSums Prototype@>;
 extern @<R\_TwoTableSums Prototype@>;
 extern @<R\_ThreeTableSums Prototype@>;
+extern @<R\_order\_subset\_wrt\_block Prototype@>;
 @}
 
 The \proglang{C} file \verb|libcoin.c| defines the \proglang{C}
@@ -948,7 +949,7 @@ Blocks $b_i, i = 1, \dots, N$
 
 @d R block Input
 @{
-    SEXP block,
+    SEXP block
 @|block
 @}
 
@@ -1108,7 +1109,7 @@ stopifnot(
 @<R y Input@>
 @<R weights Input@>,
 @<R subset Input@>,
-@<R block Input@>
+@<R block Input@>,
 @}
 
 @o libcoinAPI.h -cc
@@ -1448,7 +1449,7 @@ SEXP ix,
 SEXP iy,
 @<R weights Input@>,
 @<R subset Input@>,
-@<R block Input@>
+@<R block Input@>,
 @}
 
 @d R\_ExpectationCovarianceStatistic\_2d Prototype
@@ -2905,37 +2906,6 @@ if (teststat == TESTSTAT_maximum) {
 @d LinearStatistics
 @{
 @<RC\_LinearStatistic@>
-@<R\_LinearStatistic@>
-@}
-
-@d R\_LinearStatistic
-@{
-SEXP R_LinearStatistic
-(
-    @<R x Input@>
-    SEXP P,
-    @<R y Input@>
-    @<R weights Input@>,
-    @<R subset Input@>,
-    SEXP subsety
-) 
-{
-    SEXP ans;
-    @<C integer Q Input@>;
-    @<C integer N Input@>;
-    @<C integer Nsubset Input@>;
-
-    Q = NCOL(y);
-    N = XLENGTH(y) / Q;
-    Nsubset = XLENGTH(subset);
-
-    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
-    RC_LinearStatistic(x, N, INTEGER(P)[0], REAL(y), Q, 
-                       weights, subset, Offset0, Nsubset, subsety, REAL(ans));
-    UNPROTECT(1);
-    return(ans);
-}
-@|R_LinearStatistic
 @}
 
 @d RC\_LinearStatistic Prototype
@@ -4991,7 +4961,7 @@ SEXP R_ThreeTableSums
 (
     @<R x Input@>
     @<R y Input@>
-    @<R block Input@>
+    @<R block Input@>,
     @<R weights Input@>,
     @<R subset Input@>
 )
@@ -5187,6 +5157,13 @@ void C_ThreeTableSums_dweights_isubset
 
 \subsection{Blocks}
 
+<<blocks>>=
+sb <- sample(block)
+ns1 <- do.call("c", tapply(subset, sb[subset], function(i) i))
+ns2 <- libcoin:::.libcoinCall("R_order_subset_wrt_block", y, integer(0), subset, sb)
+all.equal(ns1, ns2, check.attributes = FALSE)
+@@
+
 @d Utils
 @{
 @<C\_setup\_subset@>
@@ -5196,16 +5173,20 @@ void C_ThreeTableSums_dweights_isubset
 @<R\_order\_subset\_wrt\_block@>
 @}
 
-@d R\_order\_subset\_wrt\_block
+@d R\_order\_subset\_wrt\_block Prototype
 @{
 SEXP R_order_subset_wrt_block
 (
     @<R y Input@>
-    @<R subset Input@>,
     @<R weights Input@>,
+    @<R subset Input@>,
     @<R block Input@>
-    SEXP Nlevels
 )
+@}
+
+@d R\_order\_subset\_wrt\_block
+@{
+@<R\_order\_subset\_wrt\_block Prototype@>
 {
 
     @<C integer N Input@>;
@@ -5216,7 +5197,7 @@ SEXP R_order_subset_wrt_block
     if (XLENGTH(weights) > 0)
         error("cannot deal with weights here");
 
-    if (INTEGER(Nlevels)[0] > 2) {
+    if (NLEVELS(block) > 1) {
         PROTECT(blockTable = R_OneTableSums(block, weights, subset));
     } else {
         PROTECT(blockTable = allocVector(REALSXP, 2));
@@ -5239,7 +5220,7 @@ SEXP RC_order_subset_wrt_block
 (
     @<C integer N Input@>,
     @<R subset Input@>,
-    @<R block Input@>
+    @<R block Input@>,
     @<R blockTable Input@>
 )
 @}
@@ -5299,7 +5280,7 @@ void C_setup_subset
 void C_setup_subset_block
 (
     @<C integer N Input@>,
-    @<R block Input@>
+    @<R block Input@>,
     @<R blockTable Input@>,
     SEXP ans
 )
@@ -5333,7 +5314,7 @@ void C_setup_subset_block
 void C_order_subset_wrt_block
 (
     @<R subset Input@>,
-    @<R block Input@>
+    @<R block Input@>,
     @<R blockTable Input@>,
     SEXP ans
 )
@@ -5361,27 +5342,6 @@ void C_order_subset_wrt_block
 }
 @|C_order_subset_wrt_block
 @}
-
-
-@d R\_setup\_subset
-@{
-SEXP R_setup_subset
-(
-    @<R N Input@>
-    @<R weights Input@>,
-    @<R subset Input@>
-)
-{
-    SEXP ans;
-
-    PROTECT(ans = RC_setup_subset(INTEGER(N)[0], weights, subset));
-
-    UNPROTECT(1);
-    return(ans);
-}
-@|R_setup_subset
-@}
-
 
 @d RC\_setup\_subset Prototype
 @{
@@ -5442,7 +5402,6 @@ be a little bit more generous with memory here.
 @d Permutations
 @{
 @<RC\_setup\_subset@>
-@<R\_setup\_subset@>
 @<C\_Permute@>
 @<C\_doPermute@>
 @<C\_PermuteBlock@>
@@ -6361,6 +6320,7 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_OneTableSums, 3), 
     CALLDEF(R_TwoTableSums, 4),
     CALLDEF(R_ThreeTableSums, 5),
+    CALLDEF(R_order_subset_wrt_block, 4),
     {NULL, NULL, 0}
 };
 @}
@@ -6394,6 +6354,7 @@ void attribute_visible R_init_libcoin
     REGCALL(R_OneTableSums);
     REGCALL(R_TwoTableSums);
     REGCALL(R_ThreeTableSums);
+    REGCALL(R_order_subset_wrt_block);
 }
 @}
 

@@ -5075,8 +5075,8 @@ SEXP R_ThreeTableSums
     
     /* R block Input */
     
-        SEXP block,
-    
+        SEXP block
+    ,
     /* R weights Input */
     
         SEXP weights
@@ -5152,8 +5152,8 @@ void C_setup_subset_block
     ,
     /* R block Input */
     
-        SEXP block,
-    
+        SEXP block
+    ,
     /* R blockTable Input */
     
         SEXP blockTable
@@ -5193,8 +5193,8 @@ void C_order_subset_wrt_block
     ,
     /* R block Input */
     
-        SEXP block,
-    
+        SEXP block
+    ,
     /* R blockTable Input */
     
         SEXP blockTable
@@ -5240,8 +5240,8 @@ SEXP RC_order_subset_wrt_block
     ,
     /* R block Input */
     
-        SEXP block,
-    
+        SEXP block
+    ,
     /* R blockTable Input */
     
         SEXP blockTable
@@ -5275,26 +5275,28 @@ SEXP RC_order_subset_wrt_block
 
 /* R\_order\_subset\_wrt\_block */
 
+/* R\_order\_subset\_wrt\_block Prototype */
+
 SEXP R_order_subset_wrt_block
 (
     /* R y Input */
     
         SEXP y,
     
-    /* R subset Input */
-    
-        SEXP subset
-    ,
     /* R weights Input */
     
         SEXP weights
     ,
+    /* R subset Input */
+    
+        SEXP subset
+    ,
     /* R block Input */
     
-        SEXP block,
+        SEXP block
     
-    SEXP Nlevels
 )
+
 {
 
     /* C integer N Input */
@@ -5308,7 +5310,7 @@ SEXP R_order_subset_wrt_block
     if (XLENGTH(weights) > 0)
         error("cannot deal with weights here");
 
-    if (INTEGER(Nlevels)[0] > 2) {
+    if (NLEVELS(block) > 1) {
         PROTECT(blockTable = R_OneTableSums(block, weights, subset));
     } else {
         PROTECT(blockTable = allocVector(REALSXP, 2));
@@ -5390,55 +5392,6 @@ void RC_LinearStatistic
     }
 }
 
-/* R\_LinearStatistic */
-
-SEXP R_LinearStatistic
-(
-    /* R x Input */
-    
-        SEXP x,
-    
-    SEXP P,
-    /* R y Input */
-    
-        SEXP y,
-    
-    /* R weights Input */
-    
-        SEXP weights
-    ,
-    /* R subset Input */
-    
-        SEXP subset
-    ,
-    SEXP subsety
-) 
-{
-    SEXP ans;
-    /* C integer Q Input */
-    
-        int Q
-    ;
-    /* C integer N Input */
-    
-        R_xlen_t N
-    ;
-    /* C integer Nsubset Input */
-    
-        R_xlen_t Nsubset
-    ;
-
-    Q = NCOL(y);
-    N = XLENGTH(y) / Q;
-    Nsubset = XLENGTH(subset);
-
-    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
-    RC_LinearStatistic(x, N, INTEGER(P)[0], REAL(y), Q, 
-                       weights, subset, Offset0, Nsubset, subsety, REAL(ans));
-    UNPROTECT(1);
-    return(ans);
-}
-
 
 /* Permutations */
 
@@ -5495,32 +5448,6 @@ SEXP RC_setup_subset
         }
     }
     UNPROTECT(2);
-    return(ans);
-}
-
-/* R\_setup\_subset */
-
-SEXP R_setup_subset
-(
-    /* R N Input */
-    
-        SEXP N,
-    
-    /* R weights Input */
-    
-        SEXP weights
-    ,
-    /* R subset Input */
-    
-        SEXP subset
-    
-)
-{
-    SEXP ans;
-
-    PROTECT(ans = RC_setup_subset(INTEGER(N)[0], weights, subset));
-
-    UNPROTECT(1);
     return(ans);
 }
 
@@ -6838,8 +6765,8 @@ void RC_ExpectationCovarianceStatistic
 ,
 /* R block Input */
 
-    SEXP block,
-
+    SEXP block
+,
 
 SEXP ans
 ) {
@@ -6998,8 +6925,8 @@ SEXP R_ExpectationCovarianceStatistic
 ,
 /* R block Input */
 
-    SEXP block,
-
+    SEXP block
+,
 
 SEXP varonly,
 SEXP tol
@@ -7058,8 +6985,8 @@ SEXP R_PermutedLinearStatistic
     ,
     /* R block Input */
 
-        SEXP block,
-    
+        SEXP block
+    ,
     
     SEXP nperm,
     /* R LECV Input */
@@ -7198,8 +7125,8 @@ SEXP iy,
 ,
 /* R block Input */
 
-    SEXP block,
-
+    SEXP block
+,
 
 SEXP ans
 ) {
@@ -7377,8 +7304,8 @@ SEXP iy,
 ,
 /* R block Input */
 
-    SEXP block,
-
+    SEXP block
+,
 
 SEXP varonly,
 SEXP tol
@@ -7466,8 +7393,8 @@ SEXP R_PermutedLinearStatistic_2d
     ,
     /* R block Input */
 
-        SEXP block,
-    
+        SEXP block
+    ,
     
     SEXP nperm,
     SEXP itable,

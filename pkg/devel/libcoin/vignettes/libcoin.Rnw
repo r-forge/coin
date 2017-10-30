@@ -945,7 +945,7 @@ and that in the one-sided case maximum type test statistics are replaced by
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@CovarianceInfluence_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Covariance_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@dim_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@DoCenter@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@DoSymmetric@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@DoVarOnly@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@ExpectationInfluence_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@ExpectationX_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Expectation_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@LinearStatistic_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@MPinv_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@Offset0@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Power1@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Power2@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@Sumweights_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@TableBlock_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Table_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@tol_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@VarianceInfluence_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Variance_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@varonly_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Work_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Xfactor_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@CovarianceInfluence_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Covariance_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@dim_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@DoCenter@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@DoSymmetric@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@DoVarOnly@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@ExpectationInfluence_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@ExpectationX_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Expectation_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@LinearStatistic_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@MPinv_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@Offset0@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Power1@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Power2@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@Sumweights_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@TableBlock_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Table_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@tol_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@VarianceInfluence_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Variance_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@varonly_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Work_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@Xfactor_SLOT@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -996,6 +996,7 @@ functions to be used outside \verb|libcoin.c|
 \mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_OneTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@;@\\
 \mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_TwoTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@;@\\
 \mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_ThreeTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_order\_subset\_wrt\_block Prototype}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@;@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1082,8 +1083,8 @@ $N$ is the number of observations
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1103,8 +1104,8 @@ $N > $ \verb|INT_MAX|
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1123,8 +1124,8 @@ The regressors $\x_i, i = 1, \dots, N$
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1144,7 +1145,7 @@ are either represented as a real matrix with $N$ rows and $P$ columns
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@P@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@P@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1164,7 +1165,7 @@ are either represented as a real matrix with $N$ rows and $P$ columns
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1186,7 +1187,7 @@ or as a factor (an integer at \proglang{C} level) at $P$ levels
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1205,8 +1206,8 @@ The influence functions are also either a $N \times Q$ real matrix
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1223,8 +1224,8 @@ The influence functions are also either a $N \times Q$ real matrix
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@Q@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@Q@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1243,7 +1244,7 @@ The influence functions are also either a $N \times Q$ real matrix
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1264,7 +1265,7 @@ or a factor at $Q$ levels
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1283,8 +1284,8 @@ The weights $w_i, i = 1, \dots, N$
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1306,7 +1307,7 @@ can be constant one \verb|XLENGTH(weights) == 0| or integer-valued, with
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1327,7 +1328,7 @@ Weights larger than \verb|INT_MAX| are stored as double
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1366,8 +1367,8 @@ Subsets $\A \subseteq \{1, \dots, N\}$ are \proglang{R} style indices
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1386,8 +1387,8 @@ are either not existant (\verb|XLENGTH(subset) == 0|) or of length
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@Nsubset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@Nsubset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1429,7 +1430,7 @@ Subsets are stored either as integer
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1450,7 +1451,7 @@ or double (to allow for indices larger than \verb|INT_MAX|)
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1463,7 +1464,7 @@ Blocks $b_i, i = 1, \dots, N$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    SEXP block,@\\
+\mbox{}\verb@    SEXP block@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1684,7 +1685,7 @@ stopifnot(
 \mbox{}\verb@@\hbox{$\langle\,${\itshape R y Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape R weights Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2251,7 +2252,7 @@ LinStatExpCov(x, y, weights = weights, subset = subset, block = block, nperm = 1
 \mbox{}\verb@SEXP iy,@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape R weights Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -4419,7 +4420,6 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_LinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_LinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -4433,48 +4433,6 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap122}\raggedright\small
-\NWtarget{nuweb?}{} $\langle\,${\itshape R\_LinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
-\vspace{-1ex}
-\begin{list}{}{} \item
-\mbox{}\verb@@\\
-\mbox{}\verb@SEXP R_LinearStatistic@\\
-\mbox{}\verb@(@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R x Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    SEXP P,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R y Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R weights Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    SEXP subsety@\\
-\mbox{}\verb@) @\\
-\mbox{}\verb@{@\\
-\mbox{}\verb@    SEXP ans;@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Q Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Nsubset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@    Q = NCOL(y);@\\
-\mbox{}\verb@    N = XLENGTH(y) / Q;@\\
-\mbox{}\verb@    Nsubset = XLENGTH(subset);@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));@\\
-\mbox{}\verb@    RC_LinearStatistic(x, N, INTEGER(P)[0], REAL(y), Q, @\\
-\mbox{}\verb@                       weights, subset, Offset0, Nsubset, subsety, REAL(ans));@\\
-\mbox{}\verb@    UNPROTECT(1);@\\
-\mbox{}\verb@    return(ans);@\\
-\mbox{}\verb@}@\\
-\mbox{}\verb@@{\NWsep}
-\end{list}
-\vspace{-1.5ex}
-\footnotesize
-\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@R_LinearStatistic@\nobreak\ \NWtxtIdentsNotUsed.\item \NWtxtIdentsUsed\nobreak\  \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@NCOL@\nobreak\ \NWlink{nuweb?}{?}, \verb@Nsubset@\nobreak\ \NWlink{nuweb?}{?}, \verb@Offset0@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}, \verb@Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@RC_LinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@y@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item{}
-\end{list}
-\end{minipage}\vspace{4ex}
-\end{flushleft}
-\begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap123}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_LinearStatistic Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4503,7 +4461,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap124}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap123}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_LinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4530,7 +4488,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@RC_LinearStatistic@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@DoCenter@\nobreak\ \NWlink{nuweb?}{?}, \verb@DoSymmetric@\nobreak\ \NWlink{nuweb?}{?}, \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@Nsubset@\nobreak\ \NWlink{nuweb?}{?}, \verb@offset@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}, \verb@Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@RC_KronSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@RC_KronSums_Permutation@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@y@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@RC_LinearStatistic@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@DoCenter@\nobreak\ \NWlink{nuweb?}{?}, \verb@DoSymmetric@\nobreak\ \NWlink{nuweb?}{?}, \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@Nsubset@\nobreak\ \NWlink{nuweb?}{?}, \verb@offset@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}, \verb@Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@RC_KronSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@RC_KronSums_Permutation@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@y@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -4538,7 +4496,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \section{Expectation and Covariance}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap125}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap124}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ExpectationCovariances}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4568,7 +4526,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \subsection{Linear Statistic}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap126}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap125}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_ExpectationLinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4603,7 +4561,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap127}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap126}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_CovarianceLinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4656,7 +4614,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap128}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap127}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_VarianceLinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4718,7 +4676,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 @
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap129}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap128}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationInfluence Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4741,7 +4699,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap130}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap129}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4777,7 +4735,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap131}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap130}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ExpectationInfluence Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4805,7 +4763,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap132}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap131}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ExpectationInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4863,7 +4821,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap133}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap132}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_CovarianceInfluence Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4887,7 +4845,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap134}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap133}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_CovarianceInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4931,7 +4889,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap135}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap134}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_CovarianceInfluence Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4961,7 +4919,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap136}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap135}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_CovarianceInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4994,7 +4952,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \subsection{X}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap137}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap136}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationX Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5018,7 +4976,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap138}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap137}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationX}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5050,7 +5008,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap139}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap138}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ExpectationX Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5077,7 +5035,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap140}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap139}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ExpectationX}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5163,7 +5121,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap141}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap140}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_CovarianceX Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5188,7 +5146,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap142}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap141}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_CovarianceX}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5227,7 +5185,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap143}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap142}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_CovarianceX Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5256,7 +5214,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap144}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap143}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_CovarianceX}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5302,7 +5260,7 @@ various sums over observations, weights, or blocks. We start with an
 initialisation of the loop over all observations
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap145}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap144}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5329,7 +5287,7 @@ over the subset of the subset given by \verb|offset| and \verb|Nsubset|,
 allowing for number of observations larger than \verb|INT_MAX|
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap146}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap145}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5349,7 +5307,7 @@ allowing for number of observations larger than \verb|INT_MAX|
 After computions in the loop, we compute the next element
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap147}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap146}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5377,7 +5335,7 @@ After computions in the loop, we compute the next element
 \subsection{Simple Sums}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap148}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap147}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape SimpleSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5411,7 +5369,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap149}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap148}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_Sums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5434,7 +5392,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap150}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap149}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_Sums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5464,7 +5422,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap151}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap150}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_Sums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5488,7 +5446,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap152}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap151}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_Sums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5532,7 +5490,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap153}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap152}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_Sums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5559,7 +5517,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap154}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap153}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_Sums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5587,7 +5545,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap155}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap154}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_Sums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5614,7 +5572,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap156}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap155}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_Sums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5642,7 +5600,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap157}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap156}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Sums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5681,7 +5639,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \subsection{Kronecker Sums}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap158}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap157}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape KronSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5746,7 +5704,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap159}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap158}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_KronSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5772,7 +5730,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap160}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap159}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_KronSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5812,7 +5770,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap161}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap160}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_KronSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5837,7 +5795,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap162}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap161}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_KronSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5904,7 +5862,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap163}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap162}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC KronSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5929,7 +5887,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap164}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap163}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C KronSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5952,7 +5910,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap165}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap164}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5970,7 +5928,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap166}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap165}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5998,7 +5956,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap167}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap166}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6027,7 +5985,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap168}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap167}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6055,7 +6013,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap169}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap168}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6083,7 +6041,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap170}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap169}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape KronSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6155,7 +6113,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap171}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap170}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C XfactorKronSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6174,7 +6132,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap172}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap171}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6202,7 +6160,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap173}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap172}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6231,7 +6189,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap174}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap173}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6259,7 +6217,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap175}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap174}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6287,7 +6245,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap176}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap175}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape XfactorKronSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6355,7 +6313,7 @@ stopifnot(all.equal(a0, a1))
 @
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap177}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap176}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_KronSums\_Permutation Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6380,7 +6338,7 @@ stopifnot(all.equal(a0, a1))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap178}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap177}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_KronSums\_Permutation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6414,7 +6372,7 @@ stopifnot(all.equal(a0, a1))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap179}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap178}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_KronSums\_Permutation Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6442,7 +6400,7 @@ stopifnot(all.equal(a0, a1))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap180}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap179}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_KronSums\_Permutation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6483,7 +6441,7 @@ stopifnot(all.equal(a0, a1))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap181}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap180}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_Permutation\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6511,7 +6469,7 @@ stopifnot(all.equal(a0, a1))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap182}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap181}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_Permutation\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6542,7 +6500,7 @@ Because \verb|subset| might not be ordered (in the presence of blocks) we
 have to go through all elements explicitly here.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap183}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap182}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape KronSums Permutation Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6574,7 +6532,7 @@ have to go through all elements explicitly here.
 \subsubsection{Xfactor Permuted Kronecker Sums}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap184}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap183}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_Permutation\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6602,7 +6560,7 @@ have to go through all elements explicitly here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap185}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap184}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_Permutation\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6630,7 +6588,7 @@ have to go through all elements explicitly here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap186}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap185}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape XfactorKronSums Permutation Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6659,7 +6617,7 @@ have to go through all elements explicitly here.
 \subsection{Column Sums}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap187}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap186}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape colSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6694,7 +6652,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap188}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap187}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_colSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6717,7 +6675,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap189}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap188}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_colSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6752,7 +6710,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap190}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap189}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_colSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6777,7 +6735,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap191}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap190}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_colSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6818,7 +6776,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap192}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap191}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C colSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6839,7 +6797,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap193}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap192}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C colSums Answer}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6857,7 +6815,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap194}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap193}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_colSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6885,7 +6843,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap195}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap194}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_colSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6914,7 +6872,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap196}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap195}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_colSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6942,7 +6900,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap197}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap196}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_colSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6971,7 +6929,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap198}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap197}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape colSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7021,7 +6979,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \subsubsection{OneTable Sums}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap199}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap198}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Tables}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7069,7 +7027,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap200}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap199}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_OneTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7092,7 +7050,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap201}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap200}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_OneTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7127,7 +7085,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap202}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap201}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_OneTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7152,7 +7110,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap203}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap202}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_OneTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7193,7 +7151,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap204}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap203}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C OneTableSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7211,7 +7169,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap205}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap204}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C OneTableSums Answer}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7229,7 +7187,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap206}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap205}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_OneTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7257,7 +7215,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap207}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap206}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_OneTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7286,7 +7244,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap208}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap207}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_OneTableSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7314,7 +7272,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap209}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap208}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_OneTableSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7343,7 +7301,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap210}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap209}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape OneTableSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7403,7 +7361,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap211}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap210}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_TwoTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7427,7 +7385,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap212}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap211}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_TwoTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7467,7 +7425,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap213}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap212}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_TwoTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7492,7 +7450,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap214}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap213}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_TwoTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7533,7 +7491,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap215}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap214}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C TwoTableSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7552,7 +7510,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap216}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap215}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C TwoTableSums Answer}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7570,7 +7528,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap217}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap216}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_TwoTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7598,7 +7556,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap218}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap217}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_TwoTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7627,7 +7585,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap219}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap218}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_TwoTableSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7655,7 +7613,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap220}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap219}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_TwoTableSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7684,7 +7642,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap221}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap220}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape TwoTableSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7746,7 +7704,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap222}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap221}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ThreeTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7755,7 +7713,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R x Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R y Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R weights Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
@@ -7771,7 +7729,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap223}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap222}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ThreeTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7813,7 +7771,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap224}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap223}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ThreeTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7838,7 +7796,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap225}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap224}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ThreeTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7879,7 +7837,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap226}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap225}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C ThreeTableSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7899,7 +7857,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap227}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap226}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C ThreeTableSums Answer}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7917,7 +7875,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap228}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap227}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_ThreeTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7945,7 +7903,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap229}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap228}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_ThreeTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7974,7 +7932,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap230}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap229}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_ThreeTableSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8002,7 +7960,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap231}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap230}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_ThreeTableSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8031,7 +7989,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap232}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap231}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ThreeTableSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8083,8 +8041,15 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 \subsection{Blocks}
 
+<<blocks>>=
+sb <- sample(block)
+ns1 <- do.call("c", tapply(subset, sb[subset], function(i) i))
+ns2 <- libcoin:::.libcoinCall("R_order_subset_wrt_block", y, integer(0), subset, sb)
+all.equal(ns1, ns2, check.attributes = FALSE)
+@
+
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap233}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap232}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Utils}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8106,19 +8071,36 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap234}\raggedright\small
-\NWtarget{nuweb?}{} $\langle\,${\itshape R\_order\_subset\_wrt\_block}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\begin{minipage}{\linewidth}\label{scrap233}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape R\_order\_subset\_wrt\_block Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@SEXP R_order_subset_wrt_block@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R y Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R weights Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    SEXP Nlevels@\\
 \mbox{}\verb@)@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@R_order_subset_wrt_block@\nobreak\ \NWlink{nuweb?}{?}.
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap234}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape R\_order\_subset\_wrt\_block}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_order\_subset\_wrt\_block Prototype}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@;@\\
@@ -8129,7 +8111,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \mbox{}\verb@    if (XLENGTH(weights) > 0)@\\
 \mbox{}\verb@        error("cannot deal with weights here");@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (INTEGER(Nlevels)[0] > 2) {@\\
+\mbox{}\verb@    if (NLEVELS(block) > 1) {@\\
 \mbox{}\verb@        PROTECT(blockTable = R_OneTableSums(block, weights, subset));@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        PROTECT(blockTable = allocVector(REALSXP, 2));@\\
@@ -8148,7 +8130,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@R_order_subset_wrt_block@\nobreak\ \NWtxtIdentsNotUsed.\item \NWtxtIdentsUsed\nobreak\  \verb@block@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@blockTable@\nobreak\ \NWlink{nuweb?}{?}, \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@NCOL@\nobreak\ \NWlink{nuweb?}{?}, \verb@Offset0@\nobreak\ \NWlink{nuweb?}{?}, \verb@RC_order_subset_wrt_block@\nobreak\ \NWlink{nuweb?}{?}, \verb@RC_Sums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_OneTableSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@y@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@R_order_subset_wrt_block@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@block@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@blockTable@\nobreak\ \NWlink{nuweb?}{?}, \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@NCOL@\nobreak\ \NWlink{nuweb?}{?}, \verb@NLEVELS@\nobreak\ \NWlink{nuweb?}{?}, \verb@Offset0@\nobreak\ \NWlink{nuweb?}{?}, \verb@RC_order_subset_wrt_block@\nobreak\ \NWlink{nuweb?}{?}, \verb@RC_Sums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_OneTableSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@y@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -8163,7 +8145,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R blockTable Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
@@ -8260,7 +8242,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \mbox{}\verb@void C_setup_subset_block@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R blockTable Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    SEXP ans@\\
 \mbox{}\verb@)@\\
@@ -8306,7 +8288,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \mbox{}\verb@void C_order_subset_wrt_block@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R blockTable Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    SEXP ans@\\
 \mbox{}\verb@)@\\
@@ -8345,37 +8327,6 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap240}\raggedright\small
-\NWtarget{nuweb?}{} $\langle\,${\itshape R\_setup\_subset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
-\vspace{-1ex}
-\begin{list}{}{} \item
-\mbox{}\verb@@\\
-\mbox{}\verb@SEXP R_setup_subset@\\
-\mbox{}\verb@(@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R N Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R weights Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@)@\\
-\mbox{}\verb@{@\\
-\mbox{}\verb@    SEXP ans;@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@    PROTECT(ans = RC_setup_subset(INTEGER(N)[0], weights, subset));@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@    UNPROTECT(1);@\\
-\mbox{}\verb@    return(ans);@\\
-\mbox{}\verb@}@\\
-\mbox{}\verb@@{\NWsep}
-\end{list}
-\vspace{-1.5ex}
-\footnotesize
-\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@R_setup_subset@\nobreak\ \NWtxtIdentsNotUsed.\item \NWtxtIdentsUsed\nobreak\  \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@RC_setup_subset@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
-\item{}
-\end{list}
-\end{minipage}\vspace{4ex}
-\end{flushleft}
-\begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap241}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_setup\_subset Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8401,7 +8352,7 @@ Because this will only be used when really needed (in Permutations) we can
 be a little bit more generous with memory here.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap242}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap241}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_setup\_subset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8448,7 +8399,7 @@ be a little bit more generous with memory here.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@RC_setup_subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@C_setup_subset@\nobreak\ \NWlink{nuweb?}{?}, \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@Offset0@\nobreak\ \NWlink{nuweb?}{?}, \verb@RC_Sums@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@sumweights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@RC_setup_subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@C_setup_subset@\nobreak\ \NWlink{nuweb?}{?}, \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@Offset0@\nobreak\ \NWlink{nuweb?}{?}, \verb@RC_Sums@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@sumweights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -8456,13 +8407,12 @@ be a little bit more generous with memory here.
 \subsection{Permutation Helpers}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap243}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap242}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Permutations}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_setup\_subset}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_setup\_subset}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape C\_Permute}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape C\_doPermute}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape C\_PermuteBlock}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -8479,7 +8429,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap244}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap243}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_Permute}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8511,7 +8461,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap245}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap244}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_doPermute}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8538,7 +8488,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap246}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap245}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_PermuteBlock}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8576,7 +8526,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap247}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap246}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_doPermuteBlock}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8607,7 +8557,7 @@ be a little bit more generous with memory here.
 \subsection{Other Utils}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap248}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap247}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape MoreUtils}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8631,7 +8581,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap249}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap248}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape NROW}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8660,7 +8610,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap250}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap249}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape NCOL}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8683,13 +8633,13 @@ be a little bit more generous with memory here.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@NCOL@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@NCOL@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap251}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap250}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape NLEVELS}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8723,13 +8673,13 @@ be a little bit more generous with memory here.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@NLEVELS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@NROW@\nobreak\ \NWlink{nuweb?}{?}, \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@NLEVELS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@NROW@\nobreak\ \NWlink{nuweb?}{?}, \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap252}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap251}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_kronecker}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8778,7 +8728,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap253}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap252}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_kronecker\_sym}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8828,7 +8778,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap254}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap253}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_sym}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8865,7 +8815,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap255}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap254}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_MPinv\_sym}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8935,7 +8885,7 @@ be a little bit more generous with memory here.
 \section{Memory}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap256}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap255}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Memory}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8976,7 +8926,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap257}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap256}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8994,7 +8944,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap258}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap257}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_P}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9018,7 +8968,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap259}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap258}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Q}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9042,7 +8992,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap260}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap259}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_varonly}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9066,7 +9016,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap261}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap260}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Xfactor}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9090,7 +9040,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap262}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap261}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_LinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9114,7 +9064,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap263}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap262}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Expectation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9138,7 +9088,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap264}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap263}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Variance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9175,7 +9125,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap265}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap264}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Covariance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9204,7 +9154,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap266}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap265}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_MPinv}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9237,7 +9187,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap267}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap266}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_ExpectationX}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9260,7 +9210,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap268}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap267}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_ExpectationInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9284,7 +9234,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap269}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap268}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_CovarianceInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9308,7 +9258,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap270}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap269}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_VarianceInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9332,7 +9282,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap271}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap270}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Work}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9356,7 +9306,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap272}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap271}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_TableBlock}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9382,7 +9332,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap273}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap272}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Sumweights}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9407,7 +9357,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap274}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap273}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Table}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9433,7 +9383,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap275}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap274}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_dimTable}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9460,7 +9410,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap276}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap275}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Lb}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9486,7 +9436,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap277}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap276}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_nperm}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9510,7 +9460,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap278}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap277}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_PermutedLinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9534,7 +9484,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap279}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap278}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_tol}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9557,7 +9507,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap280}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap279}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Memory Input Checks}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9591,7 +9541,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap281}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap280}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Memory Names}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9631,7 +9581,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap282}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap281}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_init\_LECV}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9692,7 +9642,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap283}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap282}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_init\_LECV\_1d}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9741,7 +9691,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap284}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap283}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_init\_LECV\_2d}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9804,7 +9754,7 @@ be a little bit more generous with memory here.
 \chapter{Package Infrastructure}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap285}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap284}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"AAA.R"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9823,7 +9773,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap286}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap285}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"DESCRIPTION"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9855,7 +9805,7 @@ be a little bit more generous with memory here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap287}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap286}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"NAMESPACE"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9880,7 +9830,7 @@ be a little bit more generous with memory here.
 Add flag \verb|-g| to \verb|PKG\_CFLAGS| for \verb|operf| profiling (this is
 not portable).
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap288}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap287}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"Makevars"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9898,7 +9848,7 @@ not portable).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap289}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap288}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoin-win.def"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9917,7 +9867,7 @@ not portable).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap290}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap289}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoin-init.c"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9949,6 +9899,7 @@ not portable).
 \mbox{}\verb@    CALLDEF(R_OneTableSums, 3), @\\
 \mbox{}\verb@    CALLDEF(R_TwoTableSums, 4),@\\
 \mbox{}\verb@    CALLDEF(R_ThreeTableSums, 5),@\\
+\mbox{}\verb@    CALLDEF(R_order_subset_wrt_block, 4),@\\
 \mbox{}\verb@    {NULL, NULL, 0}@\\
 \mbox{}\verb@};@\\
 \mbox{}\verb@@{\NWsep}
@@ -9957,13 +9908,13 @@ not portable).
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtFileDefBy\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@R_colSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_CovarianceInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_CovarianceX@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationCovarianceStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationCovarianceStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationX@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_KronSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_KronSums_Permutation@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_OneTableSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_Sums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ThreeTableSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_TwoTableSums@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@R_colSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_CovarianceInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_CovarianceX@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationCovarianceStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationCovarianceStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationX@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_KronSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_KronSums_Permutation@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_OneTableSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_order_subset_wrt_block@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_Sums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ThreeTableSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_TwoTableSums@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap291}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap290}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoin-init.c"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9995,6 +9946,7 @@ not portable).
 \mbox{}\verb@    REGCALL(R_OneTableSums);@\\
 \mbox{}\verb@    REGCALL(R_TwoTableSums);@\\
 \mbox{}\verb@    REGCALL(R_ThreeTableSums);@\\
+\mbox{}\verb@    REGCALL(R_order_subset_wrt_block);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -10002,13 +9954,13 @@ not portable).
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtFileDefBy\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@R_colSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_CovarianceInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_CovarianceX@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationCovarianceStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationCovarianceStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationX@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_KronSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_KronSums_Permutation@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_OneTableSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_Sums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ThreeTableSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_TwoTableSums@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@R_colSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_CovarianceInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_CovarianceX@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationCovarianceStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationCovarianceStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ExpectationX@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_KronSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_KronSums_Permutation@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_OneTableSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_order_subset_wrt_block@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_Sums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_ThreeTableSums@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_TwoTableSums@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap292}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap291}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R Header}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10030,7 +9982,7 @@ not portable).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap293}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap292}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C Header}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10094,13 +10046,13 @@ not portable).
 \item $\langle\,$C integer block Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$C integer Lb Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$C integer N Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item $\langle\,$C integer N Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$C integer Nsubset Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item $\langle\,$C integer Nsubset Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
 \item $\langle\,$C integer P Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$C integer Q Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item $\langle\,$C integer Q Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
 \item $\langle\,$C integer subset Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
@@ -10295,15 +10247,14 @@ not portable).
 \item $\langle\,$R Includes\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$R LECV Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$R N Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+\item $\langle\,$R N Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$R subset Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$R subset Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item $\langle\,$R weights Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$R weights Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item $\langle\,$R x Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$R x Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-}
-\item $\langle\,$R y Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item $\langle\,$R y Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
 \item $\langle\,$RC KronSums Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$RC\_colSums\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
@@ -10367,7 +10318,6 @@ not portable).
 \item $\langle\,$R\_KronSums\_Permutation\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$R\_KronSums\_Permutation Prototype\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$R\_LinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$R\_MaximallySelectedTest\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$R\_MaximallySelectedTest Prototype\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
@@ -10378,6 +10328,8 @@ not portable).
 \item $\langle\,$R\_OneTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
 \item $\langle\,$R\_order\_subset\_wrt\_block\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$R\_order\_subset\_wrt\_block Prototype\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+}
 \item $\langle\,$R\_PermutedLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$R\_PermutedLinearStatistic Prototype\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
@@ -10387,7 +10339,6 @@ not portable).
 \item $\langle\,$R\_QuadraticTest\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$R\_QuadraticTest Prototype\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$R\_setup\_subset\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$R\_Sums\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$R\_Sums Prototype\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
@@ -10538,18 +10489,18 @@ not portable).
 \item \verb@LECV@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@LinearStatistic_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@MPinv_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@N@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@NCOL@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
-\item \verb@NLEVELS@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
+\item \verb@N@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@NCOL@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
+\item \verb@NLEVELS@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@NROW@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}.
-\item \verb@Nsubset@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@Nsubset@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@offset@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@Offset0@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@P@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@Offset0@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@P@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@PermutedLinearStatistic_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@Power1@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@Power2@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@Q@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@Q@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@RC_colSums@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@RC_CovarianceInfluence@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@RC_CovarianceX@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
@@ -10560,10 +10511,10 @@ not portable).
 \item \verb@RC_init_LECV_2d@: \NWlink{nuweb?}{?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@RC_KronSums@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@RC_KronSums_Permutation@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
-\item \verb@RC_LinearStatistic@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
+\item \verb@RC_LinearStatistic@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@RC_OneTableSums@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@RC_order_subset_wrt_block@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
-\item \verb@RC_setup_subset@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
+\item \verb@RC_setup_subset@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@RC_Sums@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@RC_ThreeTableSums@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@RC_TwoTableSums@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
@@ -10576,17 +10527,15 @@ not portable).
 \item \verb@R_ExpectationX@: \NWlink{nuweb?}{?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@R_KronSums@: \NWlink{nuweb?}{?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@R_KronSums_Permutation@: \NWlink{nuweb?}{?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@R_LinearStatistic@: \underline{\NWlink{nuweb?}{?}}.
 \item \verb@R_OneTableSums@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@R_order_subset_wrt_block@: \underline{\NWlink{nuweb?}{?}}.
+\item \verb@R_order_subset_wrt_block@: \NWlink{nuweb?}{?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@R_PermutedLinearStatistic@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@R_PermutedLinearStatistic_2d@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@R_setup_subset@: \underline{\NWlink{nuweb?}{?}}.
 \item \verb@R_Sums@: \NWlink{nuweb?}{?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@R_ThreeTableSums@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@R_TwoTableSums@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@S@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@subset@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@subset@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@sumweights@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@Sumweights_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@TableBlock_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
@@ -10595,12 +10544,12 @@ not portable).
 \item \verb@VarianceInfluence_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@Variance_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@varonly_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@weights@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@weights,@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@weights@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@weights,@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@Work_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@x@: \NWlink{nuweb?}{?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@x@: \NWlink{nuweb?}{?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@Xfactor_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@y@: \NWlink{nuweb?}{?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@y@: \NWlink{nuweb?}{?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \end{list}}
 
 \end{document}
