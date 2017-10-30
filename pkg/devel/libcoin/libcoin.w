@@ -249,6 +249,11 @@ and that in the one-sided case maximum type test statistics are replaced by
 @{
 LinStatExpCov <- function@<LinStatExpCov Prototype@>
 {
+    if (missing(X) & !is.null(ix) & is.null(iy)) {
+        X <- ix
+        ix <- NULL
+    }
+    
     if (is.null(ix) & is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
                                 subset = subset, block = block,
@@ -259,12 +264,6 @@ LinStatExpCov <- function@<LinStatExpCov Prototype@>
         return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
                                 weights = weights, subset = subset,
                                 block = block, varonly = varonly, nperm = nperm,
-                                standardise = standardise, tol = tol))
-
-    if (missing(X) & !is.null(ix))
-        return(.LinStatExpCov1d(X = ix, Y = Y, weights = weights,
-                                subset = subset, block = block,
-                                varonly = varonly, nperm = nperm,
                                 standardise = standardise, tol = tol))
 
     stop("incorrect call to LinStatExpCov")
@@ -1033,7 +1032,7 @@ LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = intege
  
         ret <- list(LinearStatistic = as.vector(crossprod(X, Y)),
                     Expectation = as.vector(Exp), 
-                    Covariance = Cov[lower.tri(Cov, diag = TRUE)],
+                    Covariance = Cov,
                     Variance = diag(Cov))
    } else {
         block <- block[idx]
@@ -1047,6 +1046,10 @@ LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = intege
 }
 
 cmpr <- function(ret1, ret2) {
+    if (inherits(ret1, "LinStatExpCov")) {
+        if (!ret1$varonly)
+            ret1$Covariance <- vcov(ret1)
+    }
     ret1 <- ret1[!sapply(ret1, is.null)]
     ret2 <- ret2[!sapply(ret2, is.null)]
     nm1 <- names(ret1)
@@ -1060,7 +1063,7 @@ testit <- function(...) {
     a <- LinStatExpCov(x, y, ...)
     b <- LECV(x, y, ...)
     d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, ...)
-    return(cmpr(a, b) && cmpr(b, d))
+    return(cmpr(a, b) && cmpr(d, b))
 }
 
 LECVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset)
@@ -1077,7 +1080,7 @@ testit <- function(...) {
     a <- LinStatExpCov(X = ix, y, ...)
     b <- LECV(Xfactor, y, ...)
     d <- LinStatExpCov(X = integer(0), ix = ix, Y = iY2d, iy = iy, ...)
-    return(cmpr(a, b) && cmpr(b, d))
+    return(cmpr(a, b) && cmpr(d, b))
 }
 
 stopifnot(
@@ -6295,6 +6298,7 @@ Description: Basic infrastructure for linear test statistics and permutation
   This package must not be used by end-users. CRAN package 'coin' implements all 
   user interfaces and is ready to be used by anyone.
 Depends: R (>= 3.4.0)
+Suggests: coin
 Imports: stats, mvtnorm
 LinkingTo: mvtnorm
 NeedsCompilation: yes

@@ -57,7 +57,7 @@ LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = intege
  
         ret <- list(LinearStatistic = as.vector(crossprod(X, Y)),
                     Expectation = as.vector(Exp), 
-                    Covariance = Cov[lower.tri(Cov, diag = TRUE)],
+                    Covariance = Cov,
                     Variance = diag(Cov))
    } else {
         block <- block[idx]
@@ -71,6 +71,10 @@ LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = intege
 }
 
 cmpr <- function(ret1, ret2) {
+    if (inherits(ret1, "LinStatExpCov")) {
+        if (!ret1$varonly)
+            ret1$Covariance <- vcov(ret1)
+    }
     ret1 <- ret1[!sapply(ret1, is.null)]
     ret2 <- ret2[!sapply(ret2, is.null)]
     nm1 <- names(ret1)
@@ -84,7 +88,7 @@ testit <- function(...) {
     a <- LinStatExpCov(x, y, ...)
     b <- LECV(x, y, ...)
     d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, ...)
-    return(cmpr(a, b) && cmpr(b, d))
+    return(cmpr(a, b) && cmpr(d, b))
 }
 
 LECVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset)
@@ -101,7 +105,7 @@ testit <- function(...) {
     a <- LinStatExpCov(X = ix, y, ...)
     b <- LECV(Xfactor, y, ...)
     d <- LinStatExpCov(X = integer(0), ix = ix, Y = iY2d, iy = iy, ...)
-    return(cmpr(a, b) && cmpr(b, d))
+    return(cmpr(a, b) && cmpr(d, b))
 }
 
 stopifnot(

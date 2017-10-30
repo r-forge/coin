@@ -14,6 +14,11 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
                           varonly = FALSE, nperm = 0, standardise = FALSE,
                           tol = sqrt(.Machine$double.eps))
 {
+    if (missing(X) & !is.null(ix) & is.null(iy)) {
+        X <- ix
+        ix <- NULL
+    }
+    
     if (is.null(ix) & is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
                                 subset = subset, block = block,
@@ -24,12 +29,6 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
         return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
                                 weights = weights, subset = subset,
                                 block = block, varonly = varonly, nperm = nperm,
-                                standardise = standardise, tol = tol))
-
-    if (missing(X) & !is.null(ix))
-        return(.LinStatExpCov1d(X = ix, Y = Y, weights = weights,
-                                subset = subset, block = block,
-                                varonly = varonly, nperm = nperm,
                                 standardise = standardise, tol = tol))
 
     stop("incorrect call to LinStatExpCov")
