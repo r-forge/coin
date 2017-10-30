@@ -2,12 +2,13 @@
 #include "coin_common.h"
 
 /* Helpers.c */
+/*
 extern SEXP R_kronecker
 (
     SEXP A,
     SEXP B
 );
-
+*/
 extern SEXP R_maxstattrafo
 (
     SEXP x,

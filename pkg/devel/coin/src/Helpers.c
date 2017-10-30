@@ -7,12 +7,13 @@
 
 #include "coin_common.h"
 #include <R_ext/Rdynload.h>
+/*
 #include <libcoinAPI.h>     /* libcoin_R_kronecker */
-
+/*
 SEXP R_kronecker(SEXP A, SEXP B) {
     return(libcoin_R_kronecker(A, B));
 }
-
+*/
 int nrow(SEXP x) {
     SEXP a;
 
