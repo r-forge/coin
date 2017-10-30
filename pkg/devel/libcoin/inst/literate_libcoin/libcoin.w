@@ -1364,7 +1364,10 @@ extern SEXP libcoin_R_PermutedLinearStatistic(
         for (R_xlen_t np = 0; np < inperm; np++) {
             @<Setup Linear Statistic@>
             C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));
-            @<Compute Permuted Linear Statistic@>
+           /* does not require weights (as RC_LinearStatistic) */
+           RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
+                                   expand_subset, Offset0, Nsubset,
+                                   perm, linstat);
         }
     } else {
         PROTECT(blockTable = allocVector(REALSXP, Lb + 1));
@@ -1373,11 +1376,15 @@ extern SEXP libcoin_R_PermutedLinearStatistic(
                         XLENGTH(subset), REAL(blockTable));
         PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset, 
                                                          block, blockTable));
+
         for (R_xlen_t np = 0; np < inperm; np++) {
             @<Setup Linear Statistic@>
             C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(blockTable), 
                              Lb + 1, REAL(tmp), REAL(perm));
-            @<Compute Permuted Linear Statistic@>
+            /* does not require weights (as RC_LinearStatistic) */
+            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
+                                    block_subset, Offset0, Nsubset,
+                                    perm, linstat);
         }
         UNPROTECT(2);
     }
@@ -1397,14 +1404,6 @@ if (np % 256 == 0) R_CheckUserInterrupt();
 linstat = REAL(ans) + PQ * np;
 for (int p = 0; p < PQ; p++)
     linstat[p] = 0.0;
-@}
-
-@d Compute Permuted Linear Statistic
-@{
-/* does not require weights (as RC_LinearStatistic) */
-RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
-                        expand_subset, Offset0, Nsubset,
-                        perm, linstat);
 @}
 
 @d Standardise Linear Statistics
@@ -4232,7 +4231,6 @@ void C_KronSums_Permutation_dsubset
     @<C KronSums Answer@>
 ) 
 {
-    double *sx, *sy;
     @<KronSums Permutation Body@>
 }
 @|C_KronSums_Permutation_dsubset
@@ -4249,36 +4247,27 @@ void C_KronSums_Permutation_isubset
     @<C KronSums Answer@>
 ) 
 {
-    int *sx, *sy;
     @<KronSums Permutation Body@>
 }
 @|C_KronSums_Permutation_isubset
 @}
 
+Because \verb|subset| might not be ordered (in the presence of blocks) we
+have to go through all elements explicitly here.
+
 @d KronSums Permutation Body
 @{
-    R_xlen_t diff;
-    double *xx;
+    R_xlen_t qP, qN, pN, qPp;
 
     for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
         for (int p = 0; p < P; p++) {
-            PQ_ans[0] = 0.0;
-            xx = x + N * p;
-            sx = subset;
-            sy = subsety;
-            /* subset is R-style index in 1:N */
-            diff = (R_xlen_t) sx[offset] - 1;
-            for (R_xlen_t i = offset; i < Nsubset - 1; i++) {
-                xx = xx + diff;
-                /* subsety is R-style index in 1:N; - 1 needed here */
-                PQ_ans[0] += xx[0] * y[ (R_xlen_t) sy[0] - 1 + q * N];
-                diff = (R_xlen_t) sx[1] - sx[0];
-                sx++;
-                sy++;
-            }
-            xx = xx + diff;
-            PQ_ans[0] += xx[0] * y[ (R_xlen_t) sy[0] - 1 + q * N];
-            PQ_ans++;
+            qPp = qP + p;
+            PQ_ans[qPp] = 0.0;
+            pN = p * N;
+            for (R_xlen_t i = offset; i < Nsubset; i++)
+                PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] * x[pN + (R_xlen_t) subset[i] - 1];
         }
     }
 @}
@@ -4296,7 +4285,6 @@ void C_XfactorKronSums_Permutation_dsubset
     @<C KronSums Answer@>
 ) 
 {
-    double *sx, *sy;
     @<XfactorKronSums Permutation Body@>
 }
 @|C_XfactorKronSums_Permutation_dsubset
@@ -4313,35 +4301,23 @@ void C_XfactorKronSums_Permutation_isubset
     @<C KronSums Answer@>
 ) 
 {
-    int *sx, *sy;
     @<XfactorKronSums Permutation Body@>
 }
 @|C_XfactorKronSums_Permutation_isubset
 @}
 
+
 @d XfactorKronSums Permutation Body
 @{
-    R_xlen_t diff;
-    int *xx;
+    R_xlen_t qP, qN;
 
     for (int p = 0; p < P * Q; p++) PQ_ans[p] = 0.0;
 
     for (int q = 0; q < Q; q++) {
-        xx = x;
-        sx = subset;
-        sy = subsety;
-        /* subset is R-style index in 1:N */
-        diff = (R_xlen_t) sx[offset] - 1;
-        for (R_xlen_t i = offset; i < Nsubset - 1; i++) {
-            xx = xx + diff;
-            /* subsety is R-style index in 1:N; - 1 needed here */
-            PQ_ans[(xx[0] - 1) + q * P] += y[ (R_xlen_t) sy[0] - 1 + q * N];
-            diff = (R_xlen_t) sx[1] - sx[0];
-            sx++;
-            sy++;
-        }
-        xx = xx + diff;
-        PQ_ans[(xx[0] - 1) + q * P] += y[ (R_xlen_t) sy[0] - 1 + q * N];
+        qP = q * P;
+        qN = q * N;
+        for (R_xlen_t i = offset; i < Nsubset; i++)
+            PQ_ans[x[(R_xlen_t) subset[i] - 1] - 1 + qP] += y[qN + (R_xlen_t) subsety[i] - 1];
     }
 @}
 
