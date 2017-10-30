@@ -2618,10 +2618,9 @@ Q = C_get_Q(LECV);
 P = C_get_P(LECV);
 PQ = P * Q;
 Lb = C_get_Lb(LECV);
-if ((Lb > 1 || teststat != TESTSTAT_maximum)) {
-    if (C_get_varonly(LECV)) {
+if (Lb > 1) {
+    if (C_get_varonly(LECV))
         error("need covarinance for maximally statistics with blocks");
-    }
     covar = C_get_Covariance(LECV);
 }
 linstat = C_get_LinearStatistic(LECV);
@@ -2755,9 +2754,9 @@ void C_unordered_Xfactor
         @<Compute unordered maxstat Linear Statistic and Expectation@>
 
         if (Lb == 1) {
-            @<Compute unordered maxstat Variance / Covariance from Total Covariance@>
-        } else {
             @<Compute unordered maxstat Variance / Covariance Directly@>
+        } else {
+            @<Compute unordered maxstat Variance / Covariance from Total Covariance@>
         }
 
         if ((sumleft >= minbucket) && (sumright >= minbucket)) {
