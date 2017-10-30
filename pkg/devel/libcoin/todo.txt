@@ -1,2 +1,1 @@
 
-  o check if VarInf and CovInf can be recycled

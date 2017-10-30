@@ -1,3 +1,11 @@
 
+# R Header
+
+###
+### TO NOT EDIT THIS FILE
+### 
+### Edit `libcoin.w' and run `nuweb -r libcoin.w'
+###
+
 .onUnload <- function(libpath)
     library.dynam.unload("libcoin", libpath)

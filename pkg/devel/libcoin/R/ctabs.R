@@ -1,27 +1,52 @@
 
-ctabs <- function(ix, iy = integer(0), weights = integer(0),
-                  subset = integer(0), block = integer(0))
+# R Header
+
+###
+### TO NOT EDIT THIS FILE
+### 
+### Edit `libcoin.w' and run `nuweb -r libcoin.w'
+###
+
+ctabs <- function(ix, iy = integer(0), block = integer(0), weights = integer(0),
+                    subset = integer(0))
 {
 
+    stopifnot(is.integer(ix))
+    N <- length(ix)
     if (is.null(attr(ix, "levels")))
-            attr(ix, "levels") <- 1:max(ix)
+        attr(ix, "levels") <- 1:max(ix)
 
     if (length(iy) > 0) {
+        stopifnot(length(iy) == N)
+        stopifnot(is.integer(ix))
         if (is.null(attr(iy, "levels")))
             attr(iy, "levels") <- 1:max(iy)
     }
 
-    if (length(subset) > 0) subset <- subset - 1L
+    # Check weights, subset, block
+    
+    if (length(weights) > 0) {
+        if (!((N == length(weights)) && all(weights >= 0)))
+            stop("incorrect weights")
+    }
 
-    ret <- .Call(R_tables, ix, iy, weights, subset, block)
+    if (length(subset) > 0) {
+        rs <- range(subset)
+        if (!((rs[2] <= N) && (rs[1] >= 1L)))
+            stop("incorrect subset")
+    }
 
     if (length(block) > 0) {
-        if (length(iy) == 0)
-            ret <- ret[,,-1, drop = FALSE]
-        else
-            ret <- ret[,,-dim(ret)[3], drop = FALSE]
-    } else {
-        ret <- ret[,,,drop = TRUE]
+        if (!((N == length(block)) && is.factor(block)))
+            stop("incorrect block")
     }
-    ret
+    
+
+    if (length(iy) == 0 && length(block) == 0)
+        return(.Call(R_OneTableSums, ix, weights, subset))
+    if (length(block) == 0)
+        return(.Call(R_TwoTableSums, ix, iy, weights, subset))
+    if (length(iy) == 0)
+        return(.Call(R_TwoTableSums, ix, block, weights, subset)[,-1,drop = FALSE])
+    return(.Call(R_ThreeTableSums, ix, iy, block, weights, subset))
 }

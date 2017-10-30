@@ -1,55 +1,85 @@
 
-### int64:
-# nrow(X), nrow(Y) > INT_MAX
-# weights = integer or double
-# subset = integer or double
+# R Header
+
+###
+### TO NOT EDIT THIS FILE
+### 
+### Edit `libcoin.w' and run `nuweb -r libcoin.w'
+###
+
+# LinStatExpCov
+
+LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
+                          subset = integer(0), block = integer(0),
+                          varonly = FALSE, nperm = 0, standardise = FALSE,
+                          tol = sqrt(.Machine$double.eps))
+{
+    if (is.null(ix) & is.null(iy))
+        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
+                                subset = subset, block = block,
+                                varonly = varonly, nperm = nperm,
+                                standardise = standardise, tol = tol))
+
+    if (!is.null(ix) & !is.null(iy))
+        return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
+                                weights = weights, subset = subset,
+                                block = block, varonly = varonly, nperm = nperm,
+                                standardise = standardise, tol = tol))
+
+    if (missing(X) & !is.null(ix))
+        return(.LinStatExpCov1d(X = ix, Y = Y, weights = weights,
+                                subset = subset, block = block,
+                                varonly = varonly, nperm = nperm,
+                                standardise = standardise, tol = tol))
+
+    stop("incorrect call to LinStatExpCov")
+}
+
+# LinStatExpCov1d
 
 .LinStatExpCov1d <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
-                             varonly = FALSE, B = 0L, standardise = FALSE,
+                             varonly = FALSE, nperm = 0, standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
 
     if (NROW(X) != NROW(Y))
         stop("dimensions of X and Y don't match")
+    N <- NROW(X)
 
     if (is.integer(X)) {
         if (is.null(attr(X, "levels")))
             attr(X, "levels") <- 1:max(X)
     }
 
+    # Check weights, subset, block
+    
     if (length(weights) > 0) {
-        if (!((NROW(X) == length(weights)) &&
-              is.integer(weights) &&
-              all(weights >= 0)))
+        if (!((N == length(weights)) && all(weights >= 0)))
             stop("incorrect weights")
     }
 
     if (length(subset) > 0) {
         rs <- range(subset)
-        if (!((rs[2] <= NROW(X)) &&
-              (rs[1] >= 1L) &&
-              is.integer(subset)))
+        if (!((rs[2] <= N) && (rs[1] >= 1L)))
             stop("incorrect subset")
-        if (rs[1] == 0) stop("subset has start 1 index")
-        subset <- subset - 1L
     }
 
     if (length(block) > 0) {
-        if (!((NROW(X) == length(block)) &&
-              is.factor(block)))
+        if (!((N == length(block)) && is.factor(block)))
             stop("incorrect block")
     }
+    
 
     ms <- !(complete.cases(X) & complete.cases(Y))
     if (all(ms))
         stop("all observations are missing")
     if (any(ms)) {
         if (length(subset) > 0) {
-            if (all(subset %in% (which(ms) - 1L)))
+            if (all(subset %in% which(ms)))
                 stop("all observations are missing")
-            subset <- subset[!(subset %in% (which(ms) - 1L))]
+            subset <- subset[!(subset %in% which(ms))]
         } else {
-            subset <- (0:(NROW(X) - 1))[-which(ms)]
+            subset <- (1:N)[-which(ms)]
         }
     }
 
@@ -57,21 +87,31 @@
                  block, as.integer(varonly), as.double(tol))
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
-    if (B > 0)
+    if (nperm > 0) {
+        if (standardise) {
+            standardise <- ret
+        } else {
+            standardise <- integer(0)
+        }
         ret$PermutedLinearStatistic <-
-            .Call(R_PermutedLinearStatistic, ret, X, Y, weights, subset,
-                  block, as.integer(B), as.integer(standardise))
+            .Call(R_PermutedLinearStatistic, X, Y, weights, subset,
+                  block, as.double(nperm), standardise)
+    }
+    class(ret) <- c("LinStatExpCov1d", "LinStatExpCov")
     ret
 }
 
+# LinStatExpCov2d
+
 .LinStatExpCov2d <- function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
-                             block = integer(0), varonly = FALSE, B = 0,
+                             block = integer(0), varonly = FALSE, nperm = 0,
                              standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
     if (!((length(ix) == length(iy)) &&
           is.integer(ix) && is.integer(iy)))
         stop("incorrect ix and/or iy")
+    N <- length(ix)
 
     if (is.null(attr(ix, "levels")))
         attr(ix, "levels") <- 1:max(ix)
@@ -90,73 +130,64 @@
           (min(iy) >= 0L && nrow(Y) == (length(attr(iy, "levels")) + 1)))
         stop("incorrect Y")
 
+    # Check weights, subset, block
+    
     if (length(weights) > 0) {
-        if (!((length(ix) == length(weights)) &&
-              is.integer(weights) &&
-              all(weights >= 0)))
+        if (!((N == length(weights)) && all(weights >= 0)))
             stop("incorrect weights")
     }
 
     if (length(subset) > 0) {
         rs <- range(subset)
-        if (!((rs[2] <= length(ix)) &&
-              (rs[1] >= 1L) &&
-              is.integer(subset)))
+        if (!((rs[2] <= N) && (rs[1] >= 1L)))
             stop("incorrect subset")
-        if (rs[1] == 0) stop("subset has start 1 index")
-        subset <- subset - 1L
     }
 
-    if (!missing(block) && length(block) > 0) {
-        if (!((length(ix) == length(block)) &&
-              is.factor(block)))
+    if (length(block) > 0) {
+        if (!((N == length(block)) && is.factor(block)))
             stop("incorrect block")
     }
+    
 
     ret <- .Call(R_ExpectationCovarianceStatistic_2d, X, ix, Y, iy,
                  weights, subset, block, as.integer(varonly), as.double(tol))
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
-    if (B > 0)
+    if (nperm > 0) {
+        if (standardise) {
+            standardise <- ret
+        } else {
+            standardise <- integer(0)
+        }
         ret$PermutedLinearStatistic <-
-            .Call(R_PermutedLinearStatistic_2d, ret, X, ix, Y, iy,
-                  block, as.integer(B), as.integer(standardise))
+            .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, weights, subset,
+                  block, nperm, ret$Table, standardise)
+    }
+    class(ret) <- c("LinStatExpCov2d", "LinStatExpCov")
     ret
 }
 
-LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
-                          subset = integer(0), block = integer(0),
-                          varonly = FALSE, B = 0, standardise = FALSE,
-                          tol = sqrt(.Machine$double.eps))
-{
+# vcov LinStatExpCov
 
-    if (is.null(ix) & is.null(iy))
-        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
-                                subset = subset, block = block,
-                                varonly = varonly, B = B,
-                                standardise = standardise, tol = tol))
-
-    if (!is.null(ix) & !is.null(iy))
-        return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
-                                weights = weights, subset = subset,
-                                block = block, varonly = varonly, B = B,
-                                standardise = standardise, tol = tol))
-
-    if (missing(X) & !is.null(ix))
-        return(.LinStatExpCov1d(X = ix, Y = Y, weights = weights,
-                                subset = subset, block = block,
-                                varonly = varonly, B = B,
-                                standardise = standardise, tol = tol))
-
-    stop("incorrect call to LinStatExpCov")
+vcov.LinStatExpCov <- function(object, ...) {
+    if (object$varonly)
+        stop("cannot extract covariance matrix")
+    PQ <- prod(object$dim)
+    ret <- matrix(0, nrow = PQ, ncol = PQ)
+    ret[lower.tri(ret, diag = TRUE)] <- object$Covariance
+    ret <- ret + t(ret)
+    diag(ret) <- diag(ret) / 2
+    ret
 }
 
 
+# doTest
+
 ### note: lower = FALSE => p-value; lower = TRUE => 1 - p-value
 doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
-                   alternative = c("two.sided", "less", "greater"),
-                   pvalue = TRUE, lower = FALSE, log = FALSE,
-                   minbucket = 10L, ordered = TRUE, pargs = GenzBretz())
+                     alternative = c("two.sided", "less", "greater"),
+                     pvalue = TRUE, lower = FALSE, log = FALSE,
+                     minbucket = 10L, ordered = TRUE, pargs = GenzBretz())
 {
 
     ### avoid match.arg for performance reasons
@@ -206,3 +237,5 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     }
     ret
 }
+
+.libcoinCall <- function(FUN, ...) .Call(FUN, ...)

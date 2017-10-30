@@ -1567,18 +1567,18 @@ for (int b = 0; b < Lb; b++) {
 
 @d Col Row Total Sums
 @{
+/* Remember: first row / column count NAs */
 /* column sums */
-for (int q = 0; q < Lyp1; q++) {
+for (int q = 1; q < Lyp1; q++) {
     csum[q] = 0;
-    for (int p = 0; p < Lxp1; p++)
+    for (int p = 1; p < Lxp1; p++)
         csum[q] += btab[q * Lxp1 + p];
 }
 csum[0] = 0; /* NA */
 /* row sums */
-
-for (int p = 0; p < Lxp1; p++)  {
+for (int p = 1; p < Lxp1; p++)  {
     rsum[p] = 0;
-    for (int q = 0; q < Lyp1; q++)
+    for (int q = 1; q < Lyp1; q++)
         rsum[p] += btab[q * Lxp1 + p];
 }
 rsum[0] = 0; /* NA */

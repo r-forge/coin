@@ -1,11 +1,29 @@
 
+/* C Header */
+
+/*
+    TO NOT EDIT THIS FILE
+    
+    Edit `libcoin.w' and run `nuweb -r libcoin.w'
+*/
+
+/* R Includes */
+
 #include <R.h>
 #include <Rinternals.h>
 #include <Rmath.h>
 #include <Rdefines.h>
+#include <R_ext/stats_package.h> /* for S_rcont2 */
 #include <R_ext/Applic.h> /* for dgemm */
 #include <R_ext/Lapack.h> /* for dgesdd */
-#include <R_ext/stats_package.h> /* for S_rcont2 */
+
+/* C Macros */
+
+#define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)
+#define LE(x, y, tol)  ((x) < (y)) || (fabs((x) - (y)) < (tol))
+#define GE(x, y, tol)  ((x) > (y)) || (fabs((x) - (y)) < (tol))
+
+/* C Global Variables */
 
 #define ALTERNATIVE_twosided            1
 #define ALTERNATIVE_less                2
@@ -13,11 +31,6 @@
 
 #define TESTSTAT_maximum                1
 #define TESTSTAT_quadratic              2
-
-/* S[i, j] for n x n symmetric matrix in lower packed storage allowing for i < j */
-#define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)
-#define LE(x, y, tol)  ((x) < (y)) || (fabs((x) - (y)) < (tol))
-#define GE(x, y, tol)  ((x) > (y)) || (fabs((x) - (y)) < (tol))
 
 #define LinearStatistic_SLOT            0
 #define Expectation_SLOT                1
@@ -38,5 +51,10 @@
 #define Sumweights_SLOT                 16
 #define Table_SLOT                      17
 
-#define LONG_INTEGER			1
-typedef R_xlen_t xint;
+#define DoSymmetric                     1
+#define DoCenter                        1
+#define DoVarOnly                       1
+#define Power1                          1
+#define Power2                          2
+#define Offset0                         0
+

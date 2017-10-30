@@ -48,6 +48,6 @@ clean:
 	rm -rf R/*
 	rm -rf man/*
 	rm -rf vignettes/*
-	rm -rf tests/*
+	rm -rf tests/libcoin.R*
 		
 	
