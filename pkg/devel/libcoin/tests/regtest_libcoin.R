@@ -338,23 +338,35 @@ blk <- gl(4, n/4)
 ux <- sort(unique(x))
 ix <- unclass(cut(x, breaks = c(-Inf, ux[-length(ux)] + diff(ux) / 2, Inf)))
 
+cmp3 <- function(t1, t2)
+    stopifnot(all.equal(statistic(t1), t2$TestStatistic))
+
+cmp4 <- function(t1, t2)
+    stopifnot(all.equal(t1$TestStatistic, sqrt(t2$TestStatistic)))
+
 (mt <- maxstat_test(y ~ x , distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, y, nperm = 1000)
 (tst <- doTest(lev, teststat = "maximum"))
+cmp3(mt, tst)
 ux[tst$index]
-(tst <- doTest(lev, teststat = "quadratic"))
-ux[tst$index]
+(tst2 <- doTest(lev, teststat = "quadratic"))
+cmp4(tst, tst2)
+ux[tst2$index]
 lev <- LinStatExpCov(ix, y, nperm = 1000, varonly = TRUE)
 (tst <- doTest(lev, teststat = "maximum"))
+cmp3(mt, tst)
 ux[tst$index]
-(tst <- doTest(lev, teststat = "quadratic"))
-ux[tst$index]
+(tst2 <- doTest(lev, teststat = "quadratic"))
+cmp4(tst, tst2)
+ux[tst2$index]
 
 (mt <- maxstat_test(y ~ x | blk, distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, y, block = blk, nperm = 1000)
 (tst <- doTest(lev, teststat = "maximum"))
+cmp3(mt, tst)
 ux[tst$index]
-(tst <- doTest(lev, teststat = "quadratic"))
+(tst2 <- doTest(lev, teststat = "quadratic"))
+cmp4(tst, tst2)
 ux[tst$index]
 lev <- LinStatExpCov(ix, y, block = blk, nperm = 1000, varonly = TRUE)
 try(tst <- doTest(lev, teststat = "maximum"))
@@ -362,11 +374,13 @@ try(tst <- doTest(lev, teststat = "maximum"))
 (mt <- maxstat_test(y + y2 ~ x , distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, cbind(y, y2), nperm = 1000)
 (tst <- doTest(lev, teststat = "maximum"))
+cmp3(mt, tst)
 ux[tst$index]
 (tst <- doTest(lev, teststat = "quadratic"))
 ux[tst$index]
 lev <- LinStatExpCov(ix, cbind(y, y2), nperm = 1000, varonly = TRUE)
 (tst <- doTest(lev, teststat = "maximum"))
+cmp3(mt, tst)
 ux[tst$index]
 (tst <- doTest(lev, teststat = "quadratic"))
 ux[tst$index]
@@ -374,6 +388,7 @@ ux[tst$index]
 (mt <- maxstat_test(y + y2 ~ x | blk, distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, cbind(y, y2), block = blk, nperm = 1000)
 (tst <- doTest(lev, teststat = "maximum"))
+cmp3(mt, tst)
 ux[tst$index]
 (tst <- doTest(lev, teststat = "quadratic"))
 ux[tst$index]
@@ -389,33 +404,43 @@ blk <- gl(5, n)
 (mt <- maxstat_test(y ~ x , distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, y, nperm = 1000)
 (tst <- doTest(lev, teststat = "maximum", ordered = FALSE))
-(tst <- doTest(lev, teststat = "quadratic", ordered = FALSE))
+cmp3(mt, tst)
+(tst2 <- doTest(lev, teststat = "quadratic", ordered = FALSE))
+cmp4(tst, tst2)
 lev <- LinStatExpCov(ix, y, nperm = 1000, varonly = TRUE)
 (tst <- doTest(lev, teststat = "maximum", ordered = FALSE))
-(tst <- doTest(lev, teststat = "quadratic", ordered = FALSE))
+cmp3(mt, tst)
+(tst2 <- doTest(lev, teststat = "quadratic", ordered = FALSE))
+cmp4(tst, tst2)
 
 (mt <- maxstat_test(y ~ x | blk, distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, y, block = blk, nperm = 1000)
 (tst <- doTest(lev, teststat = "maximum", ordered = FALSE))
-(tst <- doTest(lev, teststat = "quadratic", ordered = FALSE))
+cmp3(mt, tst)
+(tst2 <- doTest(lev, teststat = "quadratic", ordered = FALSE))
+cmp4(tst, tst2)
 lev <- LinStatExpCov(ix, y, block = blk, nperm = 1000, varonly = TRUE)
 try(tst <- doTest(lev, teststat = "maximum", ordered = FALSE))
 
 (mt <- maxstat_test(y + y2 ~ x , distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, cbind(y, y2), nperm = 1000)
 (tst <- doTest(lev, teststat = "maximum", ordered = FALSE))
+cmp3(mt, tst)
 (tst <- doTest(lev, teststat = "quadratic", ordered = FALSE))
 lev <- LinStatExpCov(ix, cbind(y, y2), nperm = 1000, varonly = TRUE)
 (tst <- doTest(lev, teststat = "maximum", ordered = FALSE))
+cmp3(mt, tst)
 (tst <- doTest(lev, teststat = "quadratic", ordered = FALSE))
 
 (mt <- maxstat_test(y + y2 ~ x | blk, distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, cbind(y, y2), block = blk, nperm = 50)
 (tst <- doTest(lev, teststat = "maximum", ordered = FALSE))
-(tst <- doTest(lev, teststat = "quadratic", ordered = FALSE))
+cmp3(mt, tst)
+(tst2 <- doTest(lev, teststat = "quadratic", ordered = FALSE))
 
-xx <- factor(x == levels(x)[tst$index == 1])
+xx <- factor(x == levels(x)[tst2$index == 1])
 (it <- independence_test(y + y2 ~ xx | blk, teststat = "quadratic"))
+cmp3(it, tst2)
 
 lev <- LinStatExpCov(ix, cbind(y, y2), block = blk, nperm = 1000, varonly = TRUE)
 try(tst <- doTest(lev, teststat = "maximum", ordered = FALSE))
