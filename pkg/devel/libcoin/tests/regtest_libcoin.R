@@ -21,17 +21,17 @@ cmp <- function(t1, t2) {
         var2 <- covariance(t2)
         var2 <- var2[!upper.tri(var2)]
     }
-    all.equal(
+    stopifnot(all.equal(
         list(t1$LinearStatistic, t1$Expectation, var1),
         list(t2@statistic@linearstatistic, t2@statistic@expectation, var2),
         check.attributes = FALSE
-    )
+    ))
 }
 
 cmp2 <- function(t1, t2) {
     nm <- c("LinearStatistic", "Expectation",
             if(t1$varonly == 1) "Variance" else "Covariance")
-    all.equal(t1[nm], t2[nm])
+    stopifnot(all.equal(t1[nm], t2[nm]))
 }
 
 t1 <-LinStatExpCov(X, Y)
