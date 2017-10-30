@@ -34,11 +34,28 @@ cmp2 <- function(t1, t2) {
     stopifnot(all.equal(t1[nm], t2[nm]))
 }
 
+cmp3 <- function(t1, t2, pvalue = FALSE) {
+    stopifnot(all.equal(statistic(t1), t2$TestStatistic))
+    if (pvalue)
+        stopifnot(all.equal(unclass(pvalue(t1)), t2$p.value, check.attributes = FALSE))
+}
+
+cmp4 <- function(t1, t2)
+    stopifnot(all.equal(t1$TestStatistic, sqrt(t2$TestStatistic)))
+
+
 t1 <-LinStatExpCov(X, Y)
 t1v <-LinStatExpCov(X, Y, varonly = TRUE)
 t2 <- independence_test(Y ~ X)
 cmp(t1, t2)
 cmp(t1v, t2)
+cmp3(t2, doTest(t1, teststat = "maximum"), pvalue = TRUE)
+t3 <- independence_test(Y ~ X, teststat = "maximum", alternative = "less")
+cmp3(t3, doTest(t1, teststat = "maximum", alternative = "less"), pvalue = TRUE)
+t3 <- independence_test(Y ~ X, teststat = "maximum", alternative = "greater")
+cmp3(t3, doTest(t1, teststat = "maximum", alternative = "greater"), pvalue = TRUE)
+t3 <- independence_test(Y ~ X, teststat = "quadratic")
+cmp3(t3, doTest(t1, teststat = "quadratic"), pvalue = TRUE)
 
 t1 <-LinStatExpCov(X, Y, weights = w)
 t1v <-LinStatExpCov(X, Y, weights = w, varonly = TRUE)
