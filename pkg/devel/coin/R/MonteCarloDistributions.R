@@ -10,7 +10,7 @@ MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
     ## <FIXME> use standardize = TRUE if appropriate?
     montecarlo <- function(B)
         LinStatExpCov(X = x, Y = y, weights = as.integer(weights), block = factor(block),
-                      B = B)$PermutedLinearStatistic
+                      nperm = B)$PermutedLinearStatistic
     ## </FIXME>
 
     if (parallel == "no")
