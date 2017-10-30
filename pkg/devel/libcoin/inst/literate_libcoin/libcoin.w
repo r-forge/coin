@@ -230,6 +230,7 @@ and that in the one-sided case maximum type test statistics are replaced by
 
 @o libcoin.R -cp
 @{
+@<R Header@>
 @<LinStatExpCov@>
 @<LinStatExpCov1d@>
 @<LinStatExpCov2d@>
@@ -472,6 +473,7 @@ doTest <- function@<doTest Prototype@>
 
 @o ctabs.R -cp
 @{
+@<R Header@>
 ctabs <- function@<ctabs Prototype@>
 {
 
@@ -648,6 +650,7 @@ ctabs@<ctabs Prototype@>
 
 @o libcoin_internal.h -cc
 @{
+@<C Header@>
 @<R Includes@>
 @<C Macros@>
 @<C Global Variables@>
@@ -720,6 +723,7 @@ functions to be used outside \verb|libcoin.c|
 
 @o libcoin.h -cc
 @{
+@<C Header@>
 #include "libcoin_internal.h"
 @<Function Prototypes@>
 @}
@@ -751,6 +755,7 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 
 @o libcoin.c -cc
 @{
+@<C Header@>
 #include "libcoin_internal.h"
 #include <R_ext/stats_stubs.h> /* for S_rcont2 */
 #include <mvtnormAPI.h>
@@ -1105,6 +1110,7 @@ stopifnot(
 
 @o libcoinAPI.h -cc
 @{
+@<C Header@>
 #include <R_ext/Rdynload.h>
 #include <libcoin.h>
 
@@ -6271,6 +6277,7 @@ SEXP RC_init_LECV_2d
 
 @o AAA.R -cp
 @{
+@<R Header@>
 .onUnload <- function(libpath)
     library.dynam.unload("libcoin", libpath)
 @}
@@ -6305,10 +6312,11 @@ export(LinStatExpCov, doTest, ctabs)
 S3method(vcov, LinStatExpCov)
 @}
 
-Flag \verb|-g| is for \verb|operf| profiling
+Add flag \verb|-g| to \verb|PKG\_CFLAGS| for \verb|operf| profiling (this is
+not portable).
 @o Makevars -cc
 @{
-PKG_CFLAGS=$(C_VISIBILITY) -g
+PKG_CFLAGS=$(C_VISIBILITY)
 PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 @}
 
@@ -6322,6 +6330,7 @@ EXPORTS
 
 @o libcoin-init.c -cc
 @{
+@<C Header@>
 #include "libcoin.h"
 #include <R_ext/Rdynload.h>
 #include <R_ext/Visibility.h>
@@ -6354,6 +6363,7 @@ static const R_CallMethodDef callMethods[] = {
 
 @o libcoin-init.c -cc
 @{
+@<C Header@>
 void attribute_visible R_init_libcoin
 (
     DllInfo *dll
@@ -6381,6 +6391,24 @@ void attribute_visible R_init_libcoin
     REGCALL(R_TwoTableSums);
     REGCALL(R_ThreeTableSums);
 }
+@}
+
+@d R Header
+@{
+###
+### TO NOT EDIT THIS FILE
+### 
+### Edit `libcoin.w' and run `nuweb -r libcoin.w'
+###
+@}
+
+@d C Header
+@{
+/*
+    TO NOT EDIT THIS FILE
+    
+    Edit `libcoin.w' and run `nuweb -r libcoin.w'
+*/
 @}
 
 \section*{Files}
