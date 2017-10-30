@@ -1205,24 +1205,25 @@ SEXP ans
         sumweights[b] = RC_Sums(N, weights, subset_block, 
                                 offset, (R_xlen_t) table[b + 1]);
 
-        /* an empty block level; don't do anything */
-        if (sumweights[b] == 0) continue;
+        /* don't do anything for empty blocks */
+        if (sumweights[b] > 0) {
 
-        @<Compute Expectation Linear Statistic@>
+            @<Compute Expectation Linear Statistic@>
 
-        /* C_ordered_Xfactor and C_unordered_Xfactor need both VarInf and CovInf */
-        RC_CovarianceInfluence(N, y, Q, weights, subset_block, (R_xlen_t) table[b], 
-                              (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b], 
-                              !DoVarOnly, CovInf + b * Q * (Q + 1) / 2);
-        /* extract variance from covariance */
-        tmpCV = CovInf + b * Q * (Q + 1) / 2;
-        tmpV = VarInf + b * Q;
-        for (int q = 0; q < Q; q++) tmpV[q] = tmpCV[S(q, q, Q)];
+            /* C_ordered_Xfactor and C_unordered_Xfactor need both VarInf and CovInf */
+            RC_CovarianceInfluence(N, y, Q, weights, subset_block, offset, 
+                                  (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b], 
+                                  !DoVarOnly, CovInf + b * Q * (Q + 1) / 2);
+            /* extract variance from covariance */
+            tmpCV = CovInf + b * Q * (Q + 1) / 2;
+            tmpV = VarInf + b * Q;
+            for (int q = 0; q < Q; q++) tmpV[q] = tmpCV[S(q, q, Q)];
 
-        if (C_get_varonly(ans)) {
-            @<Compute Variance Linear Statistic@>
-        } else {
-            @<Compute Covariance Linear Statistic@>
+            if (C_get_varonly(ans)) {
+                @<Compute Variance Linear Statistic@>
+            } else {
+                @<Compute Covariance Linear Statistic@>
+            }
         }
 
         /* next iteration starts with subset[table[b + 1]] */
@@ -1299,7 +1300,7 @@ C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sumweights[b],
 
 @d Compute Covariance Linear Statistic
 @{
-RC_CovarianceX(x, N, P, weights, subset_block, (R_xlen_t) table[b], 
+RC_CovarianceX(x, N, P, weights, subset_block, offset, 
                (R_xlen_t) table[b + 1], ExpX, !DoVarOnly, CovX);
 C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
                             ExpX, CovX, sumweights[b], b,
