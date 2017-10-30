@@ -695,12 +695,11 @@ ctabs@<ctabs Prototype@>
 #define CovarianceInfluence_SLOT        9
 #define VarianceInfluence_SLOT          10
 #define Xfactor_SLOT                    11
-#define Work_SLOT                       12
-#define tol_SLOT                        13
-#define PermutedLinearStatistic_SLOT    14
-#define TableBlock_SLOT                 15
-#define Sumweights_SLOT                 16
-#define Table_SLOT                      17
+#define tol_SLOT                        12
+#define PermutedLinearStatistic_SLOT    13
+#define TableBlock_SLOT                 14
+#define Sumweights_SLOT                 15
+#define Table_SLOT                      16
 
 #define DoSymmetric 			1
 #define DoCenter 			1
@@ -711,7 +710,7 @@ ctabs@<ctabs Prototype@>
 @| LinearStatistic_SLOT Expectation_SLOT Covariance_SLOT Variance_SLOT
 MPinv_SLOT ExpectationX_SLOT varonly_SLOT dim_SLOT
 ExpectationInfluence_SLOT CovarianceInfluence_SLOT VarianceInfluence_SLOT
-Xfactor_SLOT Work_SLOT tol_SLOT PermutedLinearStatistic_SLOT
+Xfactor_SLOT tol_SLOT PermutedLinearStatistic_SLOT
 TableBlock_SLOT Sumweights_SLOT Table_SLOT DoSymmetric DoCenter DoVarOnly Power1
 Power2 Offset0
 @}
@@ -5735,7 +5734,6 @@ void C_MPinv_sym
 @<C\_get\_ExpectationInfluence@>
 @<C\_get\_CovarianceInfluence@>
 @<C\_get\_VarianceInfluence@>
-@<C\_get\_Work@>
 @<C\_get\_TableBlock@>
 @<C\_get\_Sumweights@>
 @<C\_get\_Table@>
@@ -5936,18 +5934,6 @@ double* C_get_VarianceInfluence
 @|C_get_VarianceInfluence
 @}
 
-@d C\_get\_Work
-@{
-double* C_get_Work
-(
-@<R LECV Input@>
-) {
-
-    return(REAL(VECTOR_ELT(LECV, Work_SLOT)));
-}
-@|C_get_Work
-@}
-
 @d C\_get\_TableBlock
 @{
 double* C_get_TableBlock
@@ -6083,7 +6069,6 @@ SET_STRING_ELT(names, varonly_SLOT, mkChar("varonly"));
 SET_STRING_ELT(names, Variance_SLOT, mkChar("Variance"));
 SET_STRING_ELT(names, Covariance_SLOT, mkChar("Covariance"));
 SET_STRING_ELT(names, MPinv_SLOT, mkChar("MPinv"));
-SET_STRING_ELT(names, Work_SLOT, mkChar("Work"));
 SET_STRING_ELT(names, ExpectationX_SLOT, mkChar("ExpectationX"));
 SET_STRING_ELT(names, dim_SLOT, mkChar("dimension"));
 SET_STRING_ELT(names, ExpectationInfluence_SLOT,
@@ -6147,6 +6132,24 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
     SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
     REAL(tolerance)[0] = tol;
     namesgets(ans, names);
+
+    /* set inital zeros */
+    for (int p = 0; p < PQ; p++) {
+        C_get_LinearStatistic(ans)[p] = 0.0;
+        C_get_Expectation(ans)[p] = 0.0;
+        if (varonly)
+            C_get_Variance(ans)[p] = 0.0;
+    }
+    if (!varonly) {
+        for (int p = 0; p < PQ * (PQ + 1) / 2; p++)
+            C_get_Covariance(ans)[p] = 0.0;
+    }
+    for (int q = 0; q < Q; q++) {
+        C_get_ExpectationInfluence(ans)[q] = 0.0;
+        C_get_VarianceInfluence(ans)[q] = 0.0;
+    }
+    for (int q = 0; q < Q * (Q + 1) / 2; q++)
+        C_get_CovarianceInfluence(ans)[q] = 0.0;
 @}
 
 @d RC\_init\_LECV\_1d
@@ -6164,15 +6167,6 @@ SEXP RC_init_LECV_1d
     SEXP ans;
 
     @<R\_init\_LECV@>
-
-    if (varonly) {
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP, 3 * P + 1));
-    } else  {
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP,
-                           P + 2 * P * (P + 1) / 2 + 1));
-    }
 
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
                    allocVector(REALSXP, Lb + 1));
@@ -6208,15 +6202,6 @@ SEXP RC_init_LECV_2d
         error("Ly is not positive");
 
     @<R\_init\_LECV@>
-
-    if (varonly) {
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP, 2 * P));
-    } else  {
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP,
-                           2 * P * (P + 1) / 2));
-    }
 
     PROTECT(tabdim = allocVector(INTSXP, 3));
     INTEGER(tabdim)[0] = Lx + 1;

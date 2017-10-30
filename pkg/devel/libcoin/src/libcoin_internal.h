@@ -44,12 +44,11 @@
 #define CovarianceInfluence_SLOT        9
 #define VarianceInfluence_SLOT          10
 #define Xfactor_SLOT                    11
-#define Work_SLOT                       12
-#define tol_SLOT                        13
-#define PermutedLinearStatistic_SLOT    14
-#define TableBlock_SLOT                 15
-#define Sumweights_SLOT                 16
-#define Table_SLOT                      17
+#define tol_SLOT                        12
+#define PermutedLinearStatistic_SLOT    13
+#define TableBlock_SLOT                 14
+#define Sumweights_SLOT                 15
+#define Table_SLOT                      16
 
 #define DoSymmetric                     1
 #define DoCenter                        1

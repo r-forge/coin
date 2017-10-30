@@ -427,19 +427,6 @@ SEXP LECV
     return(REAL(VECTOR_ELT(LECV, VarianceInfluence_SLOT)));
 }
 
-/* C\_get\_Work */
-
-double* C_get_Work
-(
-/* R LECV Input */
-
-SEXP LECV
-
-) {
-
-    return(REAL(VECTOR_ELT(LECV, Work_SLOT)));
-}
-
 /* C\_get\_TableBlock */
 
 double* C_get_TableBlock
@@ -613,7 +600,6 @@ SEXP RC_init_LECV_1d
         SET_STRING_ELT(names, Variance_SLOT, mkChar("Variance"));
         SET_STRING_ELT(names, Covariance_SLOT, mkChar("Covariance"));
         SET_STRING_ELT(names, MPinv_SLOT, mkChar("MPinv"));
-        SET_STRING_ELT(names, Work_SLOT, mkChar("Work"));
         SET_STRING_ELT(names, ExpectationX_SLOT, mkChar("ExpectationX"));
         SET_STRING_ELT(names, dim_SLOT, mkChar("dimension"));
         SET_STRING_ELT(names, ExpectationInfluence_SLOT,
@@ -666,16 +652,25 @@ SEXP RC_init_LECV_1d
         SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
         REAL(tolerance)[0] = tol;
         namesgets(ans, names);
-    
 
-    if (varonly) {
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP, 3 * P + 1));
-    } else  {
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP,
-                           P + 2 * P * (P + 1) / 2 + 1));
-    }
+        /* set inital zeros */
+        for (int p = 0; p < PQ; p++) {
+            C_get_LinearStatistic(ans)[p] = 0.0;
+            C_get_Expectation(ans)[p] = 0.0;
+            if (varonly)
+                C_get_Variance(ans)[p] = 0.0;
+        }
+        if (!varonly) {
+            for (int p = 0; p < PQ * (PQ + 1) / 2; p++)
+                C_get_Covariance(ans)[p] = 0.0;
+        }
+        for (int q = 0; q < Q; q++) {
+            C_get_ExpectationInfluence(ans)[q] = 0.0;
+            C_get_VarianceInfluence(ans)[q] = 0.0;
+        }
+        for (int q = 0; q < Q * (Q + 1) / 2; q++)
+            C_get_CovarianceInfluence(ans)[q] = 0.0;
+    
 
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
                    allocVector(REALSXP, Lb + 1));
@@ -754,7 +749,6 @@ SEXP RC_init_LECV_2d
         SET_STRING_ELT(names, Variance_SLOT, mkChar("Variance"));
         SET_STRING_ELT(names, Covariance_SLOT, mkChar("Covariance"));
         SET_STRING_ELT(names, MPinv_SLOT, mkChar("MPinv"));
-        SET_STRING_ELT(names, Work_SLOT, mkChar("Work"));
         SET_STRING_ELT(names, ExpectationX_SLOT, mkChar("ExpectationX"));
         SET_STRING_ELT(names, dim_SLOT, mkChar("dimension"));
         SET_STRING_ELT(names, ExpectationInfluence_SLOT,
@@ -807,16 +801,25 @@ SEXP RC_init_LECV_2d
         SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
         REAL(tolerance)[0] = tol;
         namesgets(ans, names);
-    
 
-    if (varonly) {
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP, 2 * P));
-    } else  {
-        SET_VECTOR_ELT(ans, Work_SLOT,
-                       allocVector(REALSXP,
-                           2 * P * (P + 1) / 2));
-    }
+        /* set inital zeros */
+        for (int p = 0; p < PQ; p++) {
+            C_get_LinearStatistic(ans)[p] = 0.0;
+            C_get_Expectation(ans)[p] = 0.0;
+            if (varonly)
+                C_get_Variance(ans)[p] = 0.0;
+        }
+        if (!varonly) {
+            for (int p = 0; p < PQ * (PQ + 1) / 2; p++)
+                C_get_Covariance(ans)[p] = 0.0;
+        }
+        for (int q = 0; q < Q; q++) {
+            C_get_ExpectationInfluence(ans)[q] = 0.0;
+            C_get_VarianceInfluence(ans)[q] = 0.0;
+        }
+        for (int q = 0; q < Q * (Q + 1) / 2; q++)
+            C_get_CovarianceInfluence(ans)[q] = 0.0;
+    
 
     PROTECT(tabdim = allocVector(INTSXP, 3));
     INTEGER(tabdim)[0] = Lx + 1;
