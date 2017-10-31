@@ -11,7 +11,7 @@
 \usage{
 LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0),
               subset = integer(0), block = integer(0),
-              varonly = FALSE, nperm = 0, standardise = FALSE,
+              varonly = FALSE, nperm = B, B = 0, standardise = FALSE,
               tol = sqrt(.Machine$double.eps))
 }
 \arguments{

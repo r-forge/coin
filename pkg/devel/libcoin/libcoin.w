@@ -250,10 +250,12 @@ available as matrices \verb|X| and \verb|Y|, both with the same number of
 rows $N$. The second interface (labelled ``2d'') handles the case when the
 data is available in aggregated form; details will be explained later.
 
+FIXME: remove B (only for backward compatibility).
+
 @d LinStatExpCov Prototype
 @{(X, Y, ix = NULL, iy = NULL, weights = integer(0),
  subset = integer(0), block = integer(0),
- varonly = FALSE, nperm = 0, standardise = FALSE,
+ varonly = FALSE, nperm = B, B = 0, standardise = FALSE,
  tol = sqrt(.Machine$double.eps))@}
 
 @d LinStatExpCov
