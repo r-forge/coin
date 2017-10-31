@@ -306,14 +306,12 @@ LinStatExpCov <- function@<LinStatExpCov Prototype@>
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
     if (nperm > 0) {
-        if (standardise) {
-            standardise <- ret
-        } else {
-            standardise <- integer(0)
-        }
         ret$PermutedLinearStatistic <-
             .Call(R_PermutedLinearStatistic, X, Y, weights, subset,
-                  block, as.double(nperm), standardise)
+                  block, as.double(nperm))
+        if (standardise)
+            ret$StandardisedPermutedLinearStatistic <-
+                .Call(R_StandardisePermutedLinearStatistic, ret)
     }
     class(ret) <- c("LinStatExpCov1d", "LinStatExpCov")
     ret
@@ -375,14 +373,12 @@ if (length(block) > 0) {
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
     if (nperm > 0) {
-        if (standardise) {
-            standardise <- ret
-        } else {
-            standardise <- integer(0)
-        }
         ret$PermutedLinearStatistic <-
             .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, weights, subset,
-                  block, nperm, ret$Table, standardise)
+                  block, nperm, ret$Table)
+        if (standardise)
+            ret$StandardisedPermutedLinearStatistic <-
+                .Call(R_StandardisePermutedLinearStatistic, ret)
     }
     class(ret) <- c("LinStatExpCov2d", "LinStatExpCov")
     ret
@@ -407,7 +403,7 @@ vcov.LinStatExpCov <- function(object, ...) {
 @d doTest Prototype
 @{(object, teststat = c("maximum", "quadratic", "scalar"),
    alternative = c("two.sided", "less", "greater"),
-   pvalue = TRUE, lower = FALSE, log = FALSE,
+   pvalue = TRUE, lower = FALSE, log = FALSE, PermutedStatistics = FALSE,
    minbucket = 10L, ordered = TRUE, pargs = GenzBretz())@}
 
 @d doTest
@@ -443,11 +439,13 @@ doTest <- function@<doTest Prototype@>
     if (!object$Xfactor) {
         if (teststat == "quadratic") {
             ret <- .Call(R_QuadraticTest, object,
-                         as.integer(pvalue), as.integer(lower), as.integer(log))
+                         as.integer(pvalue), as.integer(lower),
+                         as.integer(log), as.integer(PermutedStatistics))
         } else {
             ret <- .Call(R_MaximumTest, object,
                          as.integer(alt), as.integer(pvalue), as.integer(lower),
-                         as.integer(log), as.integer(pargs$maxpts),
+                         as.integer(log), as.integer(PermutedStatistics),
+                         as.integer(pargs$maxpts),
                          as.double(pargs$releps), as.double(pargs$abseps))
             if (teststat == "scalar") {
                 var <- if (object$varonly) object$Variance else object$Covariance
@@ -460,6 +458,7 @@ doTest <- function@<doTest Prototype@>
         ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered),
                      as.integer(test), as.integer(minbucket),
                      as.integer(lower), as.integer(log))
+        if (!PermutedStatistics) ret$PermutedStatistics <- NULL
     }
     ret
 }
@@ -697,9 +696,10 @@ ctabs@<ctabs Prototype@>
 #define Xfactor_SLOT                    11
 #define tol_SLOT                        12
 #define PermutedLinearStatistic_SLOT    13
-#define TableBlock_SLOT                 14
-#define Sumweights_SLOT                 15
-#define Table_SLOT                      16
+#define StandardisedPermutedLinearStatistic_SLOT    14
+#define TableBlock_SLOT                 15
+#define Sumweights_SLOT                 16
+#define Table_SLOT                      17
 
 #define DoSymmetric 			1
 #define DoCenter 			1
@@ -710,7 +710,7 @@ ctabs@<ctabs Prototype@>
 @| LinearStatistic_SLOT Expectation_SLOT Covariance_SLOT Variance_SLOT
 MPinv_SLOT ExpectationX_SLOT varonly_SLOT dim_SLOT
 ExpectationInfluence_SLOT CovarianceInfluence_SLOT VarianceInfluence_SLOT
-Xfactor_SLOT tol_SLOT PermutedLinearStatistic_SLOT
+Xfactor_SLOT tol_SLOT PermutedLinearStatistic_SLOT StandardisedPermutedLinearStatistic_SLOT
 TableBlock_SLOT Sumweights_SLOT Table_SLOT DoSymmetric DoCenter DoVarOnly Power1
 Power2 Offset0
 @}
@@ -730,6 +730,7 @@ functions to be used outside \verb|libcoin.c|
 @{
 extern @<R\_ExpectationCovarianceStatistic Prototype@>;
 extern @<R\_PermutedLinearStatistic Prototype@>;
+extern @<R\_StandardisePermutedLinearStatistic Prototype@>;
 extern @<R\_ExpectationCovarianceStatistic\_2d Prototype@>;
 extern @<R\_PermutedLinearStatistic\_2d Prototype@>;
 extern @<R\_QuadraticTest Prototype@>;
@@ -1100,6 +1101,7 @@ stopifnot(
 @<RC\_ExpectationCovarianceStatistic@>
 @<R\_ExpectationCovarianceStatistic@>
 @<R\_PermutedLinearStatistic@>
+@<R\_StandardisePermutedLinearStatistic@>
 @}
 
 @d User Interface Inputs
@@ -1326,23 +1328,21 @@ LinStatExpCov(x, y, weights = weights, subset = subset, block = block, nperm = 1
 SEXP R_PermutedLinearStatistic
 (
     @<User Interface Inputs@>
-    SEXP nperm,
-    @<R LECV Input@>
+    SEXP nperm
 )
 @}
 
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_PermutedLinearStatistic(
-    SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nperm,
-    SEXP LECV
+    SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nperm
 ) {
 
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_PermutedLinearStatistic");
-    return fun(x, y, weights, subset, block, nperm, LECV);
+    return fun(x, y, weights, subset, block, nperm);
 }
 @}
 
@@ -1399,8 +1399,6 @@ extern SEXP libcoin_R_PermutedLinearStatistic(
     }
     PutRNGstate();
 
-    @<Standardise Linear Statistics@>
-
     UNPROTECT(4);
     return(ans);
 }
@@ -1415,18 +1413,54 @@ for (int p = 0; p < PQ; p++)
     linstat[p] = 0.0;
 @}
 
-@d Standardise Linear Statistics
+@o libcoinAPI.h -cc
 @{
-if (LENGTH(LECV) > 0) {
-    for (R_xlen_t np = 0; np < inperm; np++) {
+extern SEXP libcoin_StandardisePermutedLinearStatistic(
+    SEXP LECV
+) {
+    static SEXP(*fun)(SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP))
+            R_GetCCallable("libcoin", "R_StandardisePermutedLinearStatistic");
+    return fun(LECV);
+}
+@}
+
+@d R\_StandardisePermutedLinearStatistic Prototype
+@{
+SEXP R_StandardisePermutedLinearStatistic
+(
+    SEXP LECV
+)
+@}
+
+@d R\_StandardisePermutedLinearStatistic
+@{
+@<R\_StandardisePermutedLinearStatistic Prototype@>
+{
+    SEXP ans;
+    R_xlen_t nperm = C_get_nperm(LECV);
+    double *ls;
+    if (!nperm) return(R_NilValue);
+    int PQ = C_get_P(LECV) * C_get_Q(LECV);
+    
+    PROTECT(ans = allocMatrix(REALSXP, PQ, nperm));
+
+    for (R_xlen_t np = 0; np < nperm; np++) {
+        ls = REAL(ans) + PQ * np;
+        /* copy first; standarisation is in place */
+        for (int p = 0; p < PQ; p++) 
+            ls[p] = C_get_PermutedLinearStatistic(LECV)[p + PQ * np];
         if (C_get_varonly(LECV)) {
-            C_standardise(PQ, REAL(ans) + PQ * np, C_get_Expectation(LECV),
+            C_standardise(PQ, ls, C_get_Expectation(LECV),
                           C_get_Variance(LECV), 1, C_get_tol(LECV));
         } else {
-            C_standardise(PQ, REAL(ans) + PQ * np, C_get_Expectation(LECV),
+            C_standardise(PQ, ls, C_get_Expectation(LECV),
                           C_get_Covariance(LECV), 0, C_get_tol(LECV));
         }
     }
+    UNPROTECT(1);
+    return(ans);
 }
 @}
 
@@ -1707,8 +1741,7 @@ SEXP R_PermutedLinearStatistic_2d
 (
     @<2d User Interface Inputs@>
     SEXP nperm,
-    SEXP itable,
-    @<R LECV Input@>
+    SEXP itable
 )
 @}
 
@@ -1716,14 +1749,14 @@ SEXP R_PermutedLinearStatistic_2d
 @{
 extern SEXP libcoin_R_PermutedLinearStatistic_2d(
     SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nperm,
-    SEXP itable, SEXP LECV
+    SEXP itable
 ) {
 
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_PermutedLinearStatistic_2d");
-    return fun(x, ix, y, iy, block, nperm, itable, LECV);
+    return fun(x, ix, y, iy, block, nperm, itable);
 }
 @}
 
@@ -1773,8 +1806,6 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
     }
 
     PutRNGstate();
-
-    @<Standardise Linear Statistics@>
 
     Free(csum); Free(rsum); Free(sumweights); Free(rtable2);
     Free(jwork); Free(fact);
@@ -1839,31 +1870,31 @@ btab = table;
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_QuadraticTest(
-    SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log
-) {
+    SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log, SEXP PermutedStatistics
 
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP) = NULL;
+) {
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP))
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_QuadraticTest");
-    return fun(LEV, pvalue, lower, give_log);
+    return fun(LEV, pvalue, lower, give_log, PermutedStatistics);
 }
 
 extern SEXP libcoin_R_MaximumTest(
-    SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
-    SEXP maxpts, SEXP releps, SEXP abseps
+    SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log, 
+    SEXP PermutedStatistics, SEXP maxpts, SEXP releps, SEXP abseps
 ) {
 
-  static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+  static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_MaximumTest");
-    return fun(LEV, alternative, pvalue, lower, give_log, maxpts, releps,
+    return fun(LEV, alternative, pvalue, lower, give_log, PermutedStatistics, maxpts, releps,
                abseps);
 }
 
 extern SEXP libcoin_R_MaximallySelectedTest(
-    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
+    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log 
 ) {
 
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
@@ -1881,7 +1912,8 @@ SEXP R_QuadraticTest
     @<R LECV Input@>,
     SEXP pvalue,
     SEXP lower,
-    SEXP give_log
+    SEXP give_log,
+    SEXP PermutedStatistics
 )
 @}
 
@@ -1890,8 +1922,8 @@ SEXP R_QuadraticTest
 @<R\_QuadraticTest Prototype@>
 {
 
-    SEXP ans, stat, pval, names;
-    double *MPinv, *ls, st, *ex;
+    SEXP ans, stat, pval, names, permstat;
+    double *MPinv, *ls, st, pst, *ex;
     int rank, P, Q, PQ, greater = 0;
     R_xlen_t nperm;
 
@@ -1916,9 +1948,11 @@ SEXP R_QuadraticTest
         st = REAL(stat)[0];
         ex = C_get_Expectation(LECV);
         greater = 0;
-        for (int np = 0; np < nperm; np++) {
-            if (GE(C_quadform(PQ, ls + PQ * np, ex, MPinv), st, C_get_tol(LECV)))
+        for (R_xlen_t np = 0; np < nperm; np++) {
+            pst = C_quadform(PQ, ls + PQ * np, ex, MPinv);
+            if (GE(pst, st, C_get_tol(LECV)))
                 greater++;
+            if (PSTAT) REAL(permstat)[np] = pst;
         }
         REAL(pval)[0] = C_perm_pvalue(greater, nperm, LOWER, GIVELOG);
     }
@@ -1936,8 +1970,15 @@ PQ = P * Q;
 
 if (C_get_varonly(LECV) && PQ > 1)
         error("cannot compute adjusted p-value based on variances only");
-PROTECT(ans = allocVector(VECSXP, 2));
-PROTECT(names = allocVector(STRSXP, 2));
+if (C_get_nperm(LECV) > 0 && INTEGER(PermutedStatistics)[0]) {
+    PROTECT(ans = allocVector(VECSXP, 3));
+    PROTECT(names = allocVector(STRSXP, 3));
+    SET_VECTOR_ELT(ans, 2, permstat = allocVector(REALSXP, C_get_nperm(LECV)));
+    SET_STRING_ELT(names, 2, mkChar("PermutedStatistics"));
+} else {
+    PROTECT(ans = allocVector(VECSXP, 2));
+    PROTECT(names = allocVector(STRSXP, 2));
+}
 SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
 SET_STRING_ELT(names, 0, mkChar("TestStatistic"));
 SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
@@ -1947,7 +1988,7 @@ REAL(pval)[0] = NA_REAL;
 int LOWER = INTEGER(lower)[0];
 int GIVELOG = INTEGER(give_log)[0];
 int PVALUE = INTEGER(pvalue)[0];
-
+int PSTAT = INTEGER(PermutedStatistics)[0];
 @}
 
 @d R\_MaximumTest Prototype
@@ -1959,6 +2000,7 @@ SEXP R_MaximumTest
     SEXP pvalue,
     SEXP lower,
     SEXP give_log,
+    SEXP PermutedStatistics,
     SEXP maxpts,
     SEXP releps,
     SEXP abseps
@@ -1969,8 +2011,8 @@ SEXP R_MaximumTest
 @{
 @<R\_MaximumTest Prototype@>
 {
-    SEXP ans, stat, pval, names;
-    double st, *ex, *cv, *ls, tl;
+    SEXP ans, stat, pval, names, permstat;
+    double st, pst, *ex, *cv, *ls, tl;
     int P, Q, PQ, vo, alt, greater;
     R_xlen_t nperm;
 
@@ -2015,14 +2057,16 @@ SEXP R_MaximumTest
         st = REAL(stat)[0];
         tl = C_get_tol(LECV);
         greater = 0;
-        for (int np = 0; np < nperm; np++) {
+        for (R_xlen_t np = 0; np < nperm; np++) {
+            pst = C_maxtype(PQ, ls + PQ * np, ex, cv, vo, tl, alt);
             if (alt == ALTERNATIVE_less) {
-                if (LE(C_maxtype(PQ, ls + PQ * np, ex, cv, vo, tl, alt), st, tl))
+                if (LE(pst, st, tl))
                     greater++;
             } else {
-                if (GE(C_maxtype(PQ, ls + PQ * np, ex, cv, vo, tl, alt), st, tl))
+                if (GE(pst, st, tl))
                     greater++;
             }
+            if (PSTAT) REAL(permstat)[np] = pst;
         }
         REAL(pval)[0] = C_perm_pvalue(greater, nperm, LOWER, GIVELOG);
     }
@@ -2050,24 +2094,26 @@ SEXP R_MaximallySelectedTest
 @<R\_MaximallySelectedTest Prototype@>
 {
 
-    SEXP ans, index, stat, pval, names;
+    SEXP ans, index, stat, pval, names, permstat;
     int P, mb;
 
     P = C_get_P(LECV);
     mb = INTEGER(minbucket)[0];
 
-    PROTECT(ans = allocVector(VECSXP, 3));
-    PROTECT(names = allocVector(STRSXP, 3));
+    PROTECT(ans = allocVector(VECSXP, 4));
+    PROTECT(names = allocVector(STRSXP, 4));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
     SET_STRING_ELT(names, 0, mkChar("TestStatistic"));
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
     SET_STRING_ELT(names, 1, mkChar("p.value"));
+    SET_VECTOR_ELT(ans, 3, permstat = allocVector(REALSXP, C_get_nperm(LECV)));
+    SET_STRING_ELT(names, 3, mkChar("PermutedStatistics"));
     REAL(pval)[0] = NA_REAL;
 
     if (INTEGER(ordered)[0]) {
         SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, 1));
         C_ordered_Xfactor(LECV, mb, INTEGER(teststat)[0],
-                          INTEGER(index), REAL(stat),
+                          INTEGER(index), REAL(stat), REAL(permstat),
                           REAL(pval), INTEGER(lower)[0],
                           INTEGER(give_log)[0]);
         if (REAL(stat)[0] > 0)
@@ -2075,7 +2121,7 @@ SEXP R_MaximallySelectedTest
     } else {
         SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, P));
         C_unordered_Xfactor(LECV, mb, INTEGER(teststat)[0],
-                            INTEGER(index), REAL(stat),
+                            INTEGER(index), REAL(stat), REAL(permstat),
                             REAL(pval), INTEGER(lower)[0],
                             INTEGER(give_log)[0]);
     }
@@ -2268,6 +2314,7 @@ double C_quadform
             tmp += (linstat[p] - expect[p]) * MPinv_sym[S(p, q, PQ)];
         ans += tmp * (linstat[q] - expect[q]);
     }
+
     return(ans);
 }
 @|C_quadform
@@ -2556,6 +2603,7 @@ const int minbucket,
 const int teststat,
 int *wmax,
 double *maxstat,
+double *bmaxstat,
 double *pval,
 const int lower,
 const int give_log
@@ -2580,7 +2628,7 @@ void C_ordered_Xfactor
 
         for (int q = 0; q < Q; q++) {
             mlinstat[q] += linstat[q * P + p];
-            for (int np = 0; np < nperm; np++)
+            for (R_xlen_t np = 0; np < nperm; np++)
                 mblinstat[q + np * Q] += blinstat[q * P + p + np * PQ];
             mexpect[q] += expect[q * P + p];
             if (Lb == 1) {
@@ -2599,7 +2647,7 @@ void C_ordered_Xfactor
                 maxstat[0] = tmp;
             }
 
-            for (int np = 0; np < nperm; np++) {
+            for (R_xlen_t np = 0; np < nperm; np++) {
                 ls = mblinstat + np * Q;
                 @<Compute maxstat Test Statistic@>
                 if (tmp > bmaxstat[np])
@@ -2608,7 +2656,7 @@ void C_ordered_Xfactor
         }
     }
     @<Compute maxstat Permutation P-Value@>
-    Free(mlinstat); Free(mexpect); Free(mblinstat); Free(bmaxstat);
+    Free(mlinstat); Free(mexpect); Free(mblinstat); 
     Free(mvar); Free(mcovar); Free(mMPinv);
 }
 @}
@@ -2619,7 +2667,7 @@ double *linstat, *expect, *covar, *varinf, *covinf, *ExpX, *blinstat, tol, *ls;
 int P, Q, Lb;
 R_xlen_t nperm;
 
-double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat,
+double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, 
        tmp, sumleft, sumright, sumweights;
 int rank, PQ, greater;
 
@@ -2661,10 +2709,8 @@ if (teststat == TESTSTAT_maximum) {
 }
 if (nperm > 0) {
     mblinstat = Calloc(Q * nperm, double);
-    bmaxstat = Calloc(nperm, double);
 } else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
     mblinstat = Calloc(1, double);
-    bmaxstat = Calloc(1, double);
 }
 
 maxstat[0] = 0.0;
@@ -2674,7 +2720,7 @@ for (int q = 0; q < Q; q++) {
     mexpect[q] = 0.0;
     if (teststat == TESTSTAT_maximum)
         mvar[q] = 0.0;
-    for (int np = 0; np < nperm; np++) mblinstat[q + np * Q] = 0.0;
+    for (R_xlen_t np = 0; np < nperm; np++) mblinstat[q + np * Q] = 0.0;
 }
 if (teststat == TESTSTAT_quadratic) {
     for (int q = 0; q < Q * (Q + 1) / 2; q++)
@@ -2730,7 +2776,7 @@ if (teststat == TESTSTAT_maximum) {
 @{
 if (nperm > 0) {
     greater = 0;
-    for (int np = 0; np < nperm; np++) {
+    for (R_xlen_t np = 0; np < nperm; np++) {
         if (bmaxstat[np] > maxstat[0]) greater++;
     }
     pval[0] = C_perm_pvalue(greater, nperm, lower, give_log);
@@ -2778,7 +2824,7 @@ void C_unordered_Xfactor
                 maxstat[0] = tmp;
             }
 
-            for (int np = 0; np < nperm; np++) {
+            for (R_xlen_t np = 0; np < nperm; np++) {
                 ls = mblinstat + np * Q;
                 @<Compute maxstat Test Statistic@>
                 if (tmp > bmaxstat[np])
@@ -2790,7 +2836,7 @@ void C_unordered_Xfactor
     @<Compute maxstat Permutation P-Value@>
 
     Free(mlinstat); Free(mexpect); Free(levels); Free(contrast); Free(indl); Free(mtmp);
-    Free(mblinstat); Free(bmaxstat); Free(mvar); Free(mcovar); Free(mMPinv);
+    Free(mblinstat); Free(mvar); Free(mcovar); Free(mMPinv);
 }
 
 
@@ -2845,13 +2891,13 @@ for (int p = 0; p < Pnonzero; p++) {
 for (int q = 0; q < Q; q++) {
     mlinstat[q] = 0.0;
     mexpect[q] = 0.0;
-    for (int np = 0; np < nperm; np++)
+    for (R_xlen_t np = 0; np < nperm; np++)
         mblinstat[q + np * Q] = 0.0;
     for (int p = 0; p < P; p++) {
         qPp = q * P + p;
         mlinstat[q] += contrast[p] * linstat[qPp];
         mexpect[q] += contrast[p] * expect[qPp];
-        for (int np = 0; np < nperm; np++)
+        for (R_xlen_t np = 0; np < nperm; np++)
             mblinstat[q + np * Q] += contrast[p] * blinstat[q * P + p + np * PQ];
     }
 }
@@ -6082,6 +6128,8 @@ SET_STRING_ELT(names, TableBlock_SLOT, mkChar("TableBlock"));
 SET_STRING_ELT(names, Sumweights_SLOT, mkChar("Sumweights"));
 SET_STRING_ELT(names, PermutedLinearStatistic_SLOT,
                mkChar("PermutedLinearStatistic"));
+SET_STRING_ELT(names, StandardisedPermutedLinearStatistic_SLOT,
+               mkChar("StandardisedPermutedLinearStatistic"));
 SET_STRING_ELT(names, tol_SLOT, mkChar("tol"));
 SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
 @}
@@ -6128,6 +6176,8 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
     SET_VECTOR_ELT(ans, TableBlock_SLOT, allocVector(REALSXP, Lb + 1));
     SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, Lb));
     SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
+                   allocMatrix(REALSXP, 0, 0));
+    SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
                    allocMatrix(REALSXP, 0, 0));
     SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
     REAL(tolerance)[0] = tol;
@@ -6289,10 +6339,11 @@ EXPORTS
 static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_ExpectationCovarianceStatistic, 7),
     CALLDEF(R_PermutedLinearStatistic, 7),
+    CALLDEF(R_StandardisePermutedLinearStatistic, 1),
     CALLDEF(R_ExpectationCovarianceStatistic_2d, 9),
     CALLDEF(R_PermutedLinearStatistic_2d, 8),
-    CALLDEF(R_QuadraticTest, 4),
-    CALLDEF(R_MaximumTest, 8),
+    CALLDEF(R_QuadraticTest, 5),
+    CALLDEF(R_MaximumTest, 9),
     CALLDEF(R_MaximallySelectedTest, 6),
     CALLDEF(R_ExpectationInfluence, 3),
     CALLDEF(R_CovarianceInfluence, 4),
@@ -6323,6 +6374,7 @@ void attribute_visible R_init_libcoin
     R_forceSymbols(dll, TRUE);
     REGCALL(R_ExpectationCovarianceStatistic);
     REGCALL(R_PermutedLinearStatistic);
+    REGCALL(R_StandardisePermutedLinearStatistic);
     REGCALL(R_ExpectationCovarianceStatistic_2d);
     REGCALL(R_PermutedLinearStatistic_2d);
     REGCALL(R_QuadraticTest);

@@ -613,6 +613,8 @@ SEXP RC_init_LECV_1d
         SET_STRING_ELT(names, Sumweights_SLOT, mkChar("Sumweights"));
         SET_STRING_ELT(names, PermutedLinearStatistic_SLOT,
                        mkChar("PermutedLinearStatistic"));
+        SET_STRING_ELT(names, StandardisedPermutedLinearStatistic_SLOT,
+                       mkChar("StandardisedPermutedLinearStatistic"));
         SET_STRING_ELT(names, tol_SLOT, mkChar("tol"));
         SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
         
@@ -648,6 +650,8 @@ SEXP RC_init_LECV_1d
         SET_VECTOR_ELT(ans, TableBlock_SLOT, allocVector(REALSXP, Lb + 1));
         SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, Lb));
         SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
+                       allocMatrix(REALSXP, 0, 0));
+        SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
                        allocMatrix(REALSXP, 0, 0));
         SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
         REAL(tolerance)[0] = tol;
@@ -762,6 +766,8 @@ SEXP RC_init_LECV_2d
         SET_STRING_ELT(names, Sumweights_SLOT, mkChar("Sumweights"));
         SET_STRING_ELT(names, PermutedLinearStatistic_SLOT,
                        mkChar("PermutedLinearStatistic"));
+        SET_STRING_ELT(names, StandardisedPermutedLinearStatistic_SLOT,
+                       mkChar("StandardisedPermutedLinearStatistic"));
         SET_STRING_ELT(names, tol_SLOT, mkChar("tol"));
         SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
         
@@ -797,6 +803,8 @@ SEXP RC_init_LECV_2d
         SET_VECTOR_ELT(ans, TableBlock_SLOT, allocVector(REALSXP, Lb + 1));
         SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, Lb));
         SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
+                       allocMatrix(REALSXP, 0, 0));
+        SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
                        allocMatrix(REALSXP, 0, 0));
         SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
         REAL(tolerance)[0] = tol;
@@ -6234,6 +6242,7 @@ double C_quadform
             tmp += (linstat[p] - expect[p]) * MPinv_sym[S(p, q, PQ)];
         ans += tmp * (linstat[q] - expect[q]);
     }
+
     return(ans);
 }
 
@@ -6311,6 +6320,7 @@ const int minbucket,
 const int teststat,
 int *wmax,
 double *maxstat,
+double *bmaxstat,
 double *pval,
 const int lower,
 const int give_log
@@ -6323,7 +6333,7 @@ const int give_log
     int P, Q, Lb;
     R_xlen_t nperm;
 
-    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat,
+    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, 
            tmp, sumleft, sumright, sumweights;
     int rank, PQ, greater;
 
@@ -6365,10 +6375,8 @@ const int give_log
     }
     if (nperm > 0) {
         mblinstat = Calloc(Q * nperm, double);
-        bmaxstat = Calloc(nperm, double);
     } else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
         mblinstat = Calloc(1, double);
-        bmaxstat = Calloc(1, double);
     }
 
     maxstat[0] = 0.0;
@@ -6378,7 +6386,7 @@ const int give_log
         mexpect[q] = 0.0;
         if (teststat == TESTSTAT_maximum)
             mvar[q] = 0.0;
-        for (int np = 0; np < nperm; np++) mblinstat[q + np * Q] = 0.0;
+        for (R_xlen_t np = 0; np < nperm; np++) mblinstat[q + np * Q] = 0.0;
     }
     if (teststat == TESTSTAT_quadratic) {
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
@@ -6400,7 +6408,7 @@ const int give_log
 
         for (int q = 0; q < Q; q++) {
             mlinstat[q] += linstat[q * P + p];
-            for (int np = 0; np < nperm; np++)
+            for (R_xlen_t np = 0; np < nperm; np++)
                 mblinstat[q + np * Q] += blinstat[q * P + p + np * PQ];
             mexpect[q] += expect[q * P + p];
             if (Lb == 1) {
@@ -6451,7 +6459,7 @@ const int give_log
                 maxstat[0] = tmp;
             }
 
-            for (int np = 0; np < nperm; np++) {
+            for (R_xlen_t np = 0; np < nperm; np++) {
                 ls = mblinstat + np * Q;
                 /* Compute maxstat Test Statistic */
                 
@@ -6472,13 +6480,13 @@ const int give_log
     
     if (nperm > 0) {
         greater = 0;
-        for (int np = 0; np < nperm; np++) {
+        for (R_xlen_t np = 0; np < nperm; np++) {
             if (bmaxstat[np] > maxstat[0]) greater++;
         }
         pval[0] = C_perm_pvalue(greater, nperm, lower, give_log);
     }
     
-    Free(mlinstat); Free(mexpect); Free(mblinstat); Free(bmaxstat);
+    Free(mlinstat); Free(mexpect); Free(mblinstat); 
     Free(mvar); Free(mcovar); Free(mMPinv);
 }
 
@@ -6493,6 +6501,7 @@ const int minbucket,
 const int teststat,
 int *wmax,
 double *maxstat,
+double *bmaxstat,
 double *pval,
 const int lower,
 const int give_log
@@ -6508,7 +6517,7 @@ const int give_log
     int P, Q, Lb;
     R_xlen_t nperm;
 
-    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, *bmaxstat,
+    double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, 
            tmp, sumleft, sumright, sumweights;
     int rank, PQ, greater;
 
@@ -6550,10 +6559,8 @@ const int give_log
     }
     if (nperm > 0) {
         mblinstat = Calloc(Q * nperm, double);
-        bmaxstat = Calloc(nperm, double);
     } else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
         mblinstat = Calloc(1, double);
-        bmaxstat = Calloc(1, double);
     }
 
     maxstat[0] = 0.0;
@@ -6563,7 +6570,7 @@ const int give_log
         mexpect[q] = 0.0;
         if (teststat == TESTSTAT_maximum)
             mvar[q] = 0.0;
-        for (int np = 0; np < nperm; np++) mblinstat[q + np * Q] = 0.0;
+        for (R_xlen_t np = 0; np < nperm; np++) mblinstat[q + np * Q] = 0.0;
     }
     if (teststat == TESTSTAT_quadratic) {
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
@@ -6631,13 +6638,13 @@ const int give_log
         for (int q = 0; q < Q; q++) {
             mlinstat[q] = 0.0;
             mexpect[q] = 0.0;
-            for (int np = 0; np < nperm; np++)
+            for (R_xlen_t np = 0; np < nperm; np++)
                 mblinstat[q + np * Q] = 0.0;
             for (int p = 0; p < P; p++) {
                 qPp = q * P + p;
                 mlinstat[q] += contrast[p] * linstat[qPp];
                 mexpect[q] += contrast[p] * expect[qPp];
-                for (int np = 0; np < nperm; np++)
+                for (R_xlen_t np = 0; np < nperm; np++)
                     mblinstat[q + np * Q] += contrast[p] * blinstat[q * P + p + np * PQ];
             }
         }
@@ -6706,7 +6713,7 @@ const int give_log
                 maxstat[0] = tmp;
             }
 
-            for (int np = 0; np < nperm; np++) {
+            for (R_xlen_t np = 0; np < nperm; np++) {
                 ls = mblinstat + np * Q;
                 /* Compute maxstat Test Statistic */
                 
@@ -6728,7 +6735,7 @@ const int give_log
     
     if (nperm > 0) {
         greater = 0;
-        for (int np = 0; np < nperm; np++) {
+        for (R_xlen_t np = 0; np < nperm; np++) {
             if (bmaxstat[np] > maxstat[0]) greater++;
         }
         pval[0] = C_perm_pvalue(greater, nperm, lower, give_log);
@@ -6736,7 +6743,7 @@ const int give_log
     
 
     Free(mlinstat); Free(mexpect); Free(levels); Free(contrast); Free(indl); Free(mtmp);
-    Free(mblinstat); Free(bmaxstat); Free(mvar); Free(mcovar); Free(mMPinv);
+    Free(mblinstat); Free(mvar); Free(mcovar); Free(mMPinv);
 }
 
 
@@ -6991,11 +6998,7 @@ SEXP R_PermutedLinearStatistic
         SEXP block
     ,
     
-    SEXP nperm,
-    /* R LECV Input */
-    
-    SEXP LECV
-    
+    SEXP nperm
 )
 
 {
@@ -7080,22 +7083,42 @@ SEXP R_PermutedLinearStatistic
     }
     PutRNGstate();
 
-    /* Standardise Linear Statistics */
+    UNPROTECT(4);
+    return(ans);
+}
+
+/* R\_StandardisePermutedLinearStatistic */
+
+/* R\_StandardisePermutedLinearStatistic Prototype */
+
+SEXP R_StandardisePermutedLinearStatistic
+(
+    SEXP LECV
+)
+
+{
+    SEXP ans;
+    R_xlen_t nperm = C_get_nperm(LECV);
+    double *ls;
+    if (!nperm) return(R_NilValue);
+    int PQ = C_get_P(LECV) * C_get_Q(LECV);
     
-    if (LENGTH(LECV) > 0) {
-        for (R_xlen_t np = 0; np < inperm; np++) {
-            if (C_get_varonly(LECV)) {
-                C_standardise(PQ, REAL(ans) + PQ * np, C_get_Expectation(LECV),
-                              C_get_Variance(LECV), 1, C_get_tol(LECV));
-            } else {
-                C_standardise(PQ, REAL(ans) + PQ * np, C_get_Expectation(LECV),
-                              C_get_Covariance(LECV), 0, C_get_tol(LECV));
-            }
+    PROTECT(ans = allocMatrix(REALSXP, PQ, nperm));
+
+    for (R_xlen_t np = 0; np < nperm; np++) {
+        ls = REAL(ans) + PQ * np;
+        /* copy first; standarisation is in place */
+        for (int p = 0; p < PQ; p++) 
+            ls[p] = C_get_PermutedLinearStatistic(LECV)[p + PQ * np];
+        if (C_get_varonly(LECV)) {
+            C_standardise(PQ, ls, C_get_Expectation(LECV),
+                          C_get_Variance(LECV), 1, C_get_tol(LECV));
+        } else {
+            C_standardise(PQ, ls, C_get_Expectation(LECV),
+                          C_get_Covariance(LECV), 0, C_get_tol(LECV));
         }
     }
-    
-
-    UNPROTECT(4);
+    UNPROTECT(1);
     return(ans);
 }
 
@@ -7400,11 +7423,7 @@ SEXP R_PermutedLinearStatistic_2d
     ,
     
     SEXP nperm,
-    SEXP itable,
-    /* R LECV Input */
-    
-    SEXP LECV
-    
+    SEXP itable
 )
 
 {
@@ -7551,21 +7570,6 @@ SEXP R_PermutedLinearStatistic_2d
 
     PutRNGstate();
 
-    /* Standardise Linear Statistics */
-    
-    if (LENGTH(LECV) > 0) {
-        for (R_xlen_t np = 0; np < inperm; np++) {
-            if (C_get_varonly(LECV)) {
-                C_standardise(PQ, REAL(ans) + PQ * np, C_get_Expectation(LECV),
-                              C_get_Variance(LECV), 1, C_get_tol(LECV));
-            } else {
-                C_standardise(PQ, REAL(ans) + PQ * np, C_get_Expectation(LECV),
-                              C_get_Covariance(LECV), 0, C_get_tol(LECV));
-            }
-        }
-    }
-    
-
     Free(csum); Free(rsum); Free(sumweights); Free(rtable2);
     Free(jwork); Free(fact);
     UNPROTECT(2);
@@ -7587,13 +7591,14 @@ SEXP R_QuadraticTest
     ,
     SEXP pvalue,
     SEXP lower,
-    SEXP give_log
+    SEXP give_log,
+    SEXP PermutedStatistics
 )
 
 {
 
-    SEXP ans, stat, pval, names;
-    double *MPinv, *ls, st, *ex;
+    SEXP ans, stat, pval, names, permstat;
+    double *MPinv, *ls, st, pst, *ex;
     int rank, P, Q, PQ, greater = 0;
     R_xlen_t nperm;
 
@@ -7605,8 +7610,15 @@ SEXP R_QuadraticTest
 
     if (C_get_varonly(LECV) && PQ > 1)
             error("cannot compute adjusted p-value based on variances only");
-    PROTECT(ans = allocVector(VECSXP, 2));
-    PROTECT(names = allocVector(STRSXP, 2));
+    if (C_get_nperm(LECV) > 0 && INTEGER(PermutedStatistics)[0]) {
+        PROTECT(ans = allocVector(VECSXP, 3));
+        PROTECT(names = allocVector(STRSXP, 3));
+        SET_VECTOR_ELT(ans, 2, permstat = allocVector(REALSXP, C_get_nperm(LECV)));
+        SET_STRING_ELT(names, 2, mkChar("PermutedStatistics"));
+    } else {
+        PROTECT(ans = allocVector(VECSXP, 2));
+        PROTECT(names = allocVector(STRSXP, 2));
+    }
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
     SET_STRING_ELT(names, 0, mkChar("TestStatistic"));
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
@@ -7616,7 +7628,7 @@ SEXP R_QuadraticTest
     int LOWER = INTEGER(lower)[0];
     int GIVELOG = INTEGER(give_log)[0];
     int PVALUE = INTEGER(pvalue)[0];
-
+    int PSTAT = INTEGER(PermutedStatistics)[0];
     
 
     MPinv = C_get_MPinv(LECV);
@@ -7638,9 +7650,11 @@ SEXP R_QuadraticTest
         st = REAL(stat)[0];
         ex = C_get_Expectation(LECV);
         greater = 0;
-        for (int np = 0; np < nperm; np++) {
-            if (GE(C_quadform(PQ, ls + PQ * np, ex, MPinv), st, C_get_tol(LECV)))
+        for (R_xlen_t np = 0; np < nperm; np++) {
+            pst = C_quadform(PQ, ls + PQ * np, ex, MPinv);
+            if (GE(pst, st, C_get_tol(LECV)))
                 greater++;
+            if (PSTAT) REAL(permstat)[np] = pst;
         }
         REAL(pval)[0] = C_perm_pvalue(greater, nperm, LOWER, GIVELOG);
     }
@@ -7663,14 +7677,15 @@ SEXP R_MaximumTest
     SEXP pvalue,
     SEXP lower,
     SEXP give_log,
+    SEXP PermutedStatistics,
     SEXP maxpts,
     SEXP releps,
     SEXP abseps
 )
 
 {
-    SEXP ans, stat, pval, names;
-    double st, *ex, *cv, *ls, tl;
+    SEXP ans, stat, pval, names, permstat;
+    double st, pst, *ex, *cv, *ls, tl;
     int P, Q, PQ, vo, alt, greater;
     R_xlen_t nperm;
 
@@ -7682,8 +7697,15 @@ SEXP R_MaximumTest
 
     if (C_get_varonly(LECV) && PQ > 1)
             error("cannot compute adjusted p-value based on variances only");
-    PROTECT(ans = allocVector(VECSXP, 2));
-    PROTECT(names = allocVector(STRSXP, 2));
+    if (C_get_nperm(LECV) > 0 && INTEGER(PermutedStatistics)[0]) {
+        PROTECT(ans = allocVector(VECSXP, 3));
+        PROTECT(names = allocVector(STRSXP, 3));
+        SET_VECTOR_ELT(ans, 2, permstat = allocVector(REALSXP, C_get_nperm(LECV)));
+        SET_STRING_ELT(names, 2, mkChar("PermutedStatistics"));
+    } else {
+        PROTECT(ans = allocVector(VECSXP, 2));
+        PROTECT(names = allocVector(STRSXP, 2));
+    }
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
     SET_STRING_ELT(names, 0, mkChar("TestStatistic"));
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
@@ -7693,7 +7715,7 @@ SEXP R_MaximumTest
     int LOWER = INTEGER(lower)[0];
     int GIVELOG = INTEGER(give_log)[0];
     int PVALUE = INTEGER(pvalue)[0];
-
+    int PSTAT = INTEGER(PermutedStatistics)[0];
     
 
     if (C_get_varonly(LECV)) {
@@ -7735,14 +7757,16 @@ SEXP R_MaximumTest
         st = REAL(stat)[0];
         tl = C_get_tol(LECV);
         greater = 0;
-        for (int np = 0; np < nperm; np++) {
+        for (R_xlen_t np = 0; np < nperm; np++) {
+            pst = C_maxtype(PQ, ls + PQ * np, ex, cv, vo, tl, alt);
             if (alt == ALTERNATIVE_less) {
-                if (LE(C_maxtype(PQ, ls + PQ * np, ex, cv, vo, tl, alt), st, tl))
+                if (LE(pst, st, tl))
                     greater++;
             } else {
-                if (GE(C_maxtype(PQ, ls + PQ * np, ex, cv, vo, tl, alt), st, tl))
+                if (GE(pst, st, tl))
                     greater++;
             }
+            if (PSTAT) REAL(permstat)[np] = pst;
         }
         REAL(pval)[0] = C_perm_pvalue(greater, nperm, LOWER, GIVELOG);
     }
@@ -7767,24 +7791,26 @@ SEXP R_MaximallySelectedTest
 
 {
 
-    SEXP ans, index, stat, pval, names;
+    SEXP ans, index, stat, pval, names, permstat;
     int P, mb;
 
     P = C_get_P(LECV);
     mb = INTEGER(minbucket)[0];
 
-    PROTECT(ans = allocVector(VECSXP, 3));
-    PROTECT(names = allocVector(STRSXP, 3));
+    PROTECT(ans = allocVector(VECSXP, 4));
+    PROTECT(names = allocVector(STRSXP, 4));
     SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
     SET_STRING_ELT(names, 0, mkChar("TestStatistic"));
     SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
     SET_STRING_ELT(names, 1, mkChar("p.value"));
+    SET_VECTOR_ELT(ans, 3, permstat = allocVector(REALSXP, C_get_nperm(LECV)));
+    SET_STRING_ELT(names, 3, mkChar("PermutedStatistics"));
     REAL(pval)[0] = NA_REAL;
 
     if (INTEGER(ordered)[0]) {
         SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, 1));
         C_ordered_Xfactor(LECV, mb, INTEGER(teststat)[0],
-                          INTEGER(index), REAL(stat),
+                          INTEGER(index), REAL(stat), REAL(permstat),
                           REAL(pval), INTEGER(lower)[0],
                           INTEGER(give_log)[0]);
         if (REAL(stat)[0] > 0)
@@ -7792,7 +7818,7 @@ SEXP R_MaximallySelectedTest
     } else {
         SET_VECTOR_ELT(ans, 2, index = allocVector(INTSXP, P));
         C_unordered_Xfactor(LECV, mb, INTEGER(teststat)[0],
-                            INTEGER(index), REAL(stat),
+                            INTEGER(index), REAL(stat), REAL(permstat),
                             REAL(pval), INTEGER(lower)[0],
                             INTEGER(give_log)[0]);
     }

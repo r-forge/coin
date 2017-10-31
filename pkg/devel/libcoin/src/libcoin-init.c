@@ -17,10 +17,11 @@
 static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_ExpectationCovarianceStatistic, 7),
     CALLDEF(R_PermutedLinearStatistic, 7),
+    CALLDEF(R_StandardisePermutedLinearStatistic, 1),
     CALLDEF(R_ExpectationCovarianceStatistic_2d, 9),
     CALLDEF(R_PermutedLinearStatistic_2d, 8),
-    CALLDEF(R_QuadraticTest, 4),
-    CALLDEF(R_MaximumTest, 8),
+    CALLDEF(R_QuadraticTest, 5),
+    CALLDEF(R_MaximumTest, 9),
     CALLDEF(R_MaximallySelectedTest, 6),
     CALLDEF(R_ExpectationInfluence, 3),
     CALLDEF(R_CovarianceInfluence, 4),
@@ -55,6 +56,7 @@ void attribute_visible R_init_libcoin
     R_forceSymbols(dll, TRUE);
     REGCALL(R_ExpectationCovarianceStatistic);
     REGCALL(R_PermutedLinearStatistic);
+    REGCALL(R_StandardisePermutedLinearStatistic);
     REGCALL(R_ExpectationCovarianceStatistic_2d);
     REGCALL(R_PermutedLinearStatistic_2d);
     REGCALL(R_QuadraticTest);

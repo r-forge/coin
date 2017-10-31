@@ -46,9 +46,10 @@
 #define Xfactor_SLOT                    11
 #define tol_SLOT                        12
 #define PermutedLinearStatistic_SLOT    13
-#define TableBlock_SLOT                 14
-#define Sumweights_SLOT                 15
-#define Table_SLOT                      16
+#define StandardisedPermutedLinearStatistic_SLOT    14
+#define TableBlock_SLOT                 15
+#define Sumweights_SLOT                 16
+#define Table_SLOT                      17
 
 #define DoSymmetric                     1
 #define DoCenter                        1

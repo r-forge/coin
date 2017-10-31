@@ -87,14 +87,12 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
     if (nperm > 0) {
-        if (standardise) {
-            standardise <- ret
-        } else {
-            standardise <- integer(0)
-        }
         ret$PermutedLinearStatistic <-
             .Call(R_PermutedLinearStatistic, X, Y, weights, subset,
-                  block, as.double(nperm), standardise)
+                  block, as.double(nperm))
+        if (standardise)
+            ret$StandardisedPermutedLinearStatistic <-
+                .Call(R_StandardisePermutedLinearStatistic, ret)
     }
     class(ret) <- c("LinStatExpCov1d", "LinStatExpCov")
     ret
@@ -153,14 +151,12 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
     if (nperm > 0) {
-        if (standardise) {
-            standardise <- ret
-        } else {
-            standardise <- integer(0)
-        }
         ret$PermutedLinearStatistic <-
             .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, weights, subset,
-                  block, nperm, ret$Table, standardise)
+                  block, nperm, ret$Table)
+        if (standardise)
+            ret$StandardisedPermutedLinearStatistic <-
+                .Call(R_StandardisePermutedLinearStatistic, ret)
     }
     class(ret) <- c("LinStatExpCov2d", "LinStatExpCov")
     ret
@@ -185,7 +181,7 @@ vcov.LinStatExpCov <- function(object, ...) {
 ### note: lower = FALSE => p-value; lower = TRUE => 1 - p-value
 doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
                      alternative = c("two.sided", "less", "greater"),
-                     pvalue = TRUE, lower = FALSE, log = FALSE,
+                     pvalue = TRUE, lower = FALSE, log = FALSE, PermutedStatistics = FALSE,
                      minbucket = 10L, ordered = TRUE, pargs = GenzBretz())
 {
 
@@ -216,11 +212,13 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     if (!object$Xfactor) {
         if (teststat == "quadratic") {
             ret <- .Call(R_QuadraticTest, object,
-                         as.integer(pvalue), as.integer(lower), as.integer(log))
+                         as.integer(pvalue), as.integer(lower),
+                         as.integer(log), as.integer(PermutedStatistics))
         } else {
             ret <- .Call(R_MaximumTest, object,
                          as.integer(alt), as.integer(pvalue), as.integer(lower),
-                         as.integer(log), as.integer(pargs$maxpts),
+                         as.integer(log), as.integer(PermutedStatistics),
+                         as.integer(pargs$maxpts),
                          as.double(pargs$releps), as.double(pargs$abseps))
             if (teststat == "scalar") {
                 var <- if (object$varonly) object$Variance else object$Covariance
@@ -233,6 +231,7 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
         ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered),
                      as.integer(test), as.integer(minbucket),
                      as.integer(lower), as.integer(log))
+        if (!PermutedStatistics) ret$PermutedStatistics <- NULL
     }
     ret
 }

@@ -66,11 +66,13 @@ extern
                SEXP block
            ,
            
-           SEXP nperm,
-           /* R LECV Input */
-           
+           SEXP nperm
+       )
+       ;
+extern 
+       SEXP R_StandardisePermutedLinearStatistic
+       (
            SEXP LECV
-           
        )
        ;
 extern 
@@ -134,11 +136,7 @@ extern
            ,
            
            SEXP nperm,
-           SEXP itable,
-           /* R LECV Input */
-           
-           SEXP LECV
-           
+           SEXP itable
        )
        ;
 extern 
@@ -150,7 +148,8 @@ extern
            ,
            SEXP pvalue,
            SEXP lower,
-           SEXP give_log
+           SEXP give_log,
+           SEXP PermutedStatistics
        )
        ;
 extern 
@@ -164,6 +163,7 @@ extern
            SEXP pvalue,
            SEXP lower,
            SEXP give_log,
+           SEXP PermutedStatistics,
            SEXP maxpts,
            SEXP releps,
            SEXP abseps

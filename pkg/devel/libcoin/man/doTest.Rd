@@ -10,7 +10,7 @@
 \usage{
 doTest(object, teststat = c("maximum", "quadratic", "scalar"),
          alternative = c("two.sided", "less", "greater"),
-         pvalue = TRUE, lower = FALSE, log = FALSE,
+         pvalue = TRUE, lower = FALSE, log = FALSE, PermutedStatistics = FALSE,
          minbucket = 10L, ordered = TRUE, pargs = GenzBretz())
 }
 \arguments{
