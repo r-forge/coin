@@ -312,6 +312,9 @@ FIXME: remove B (only for backward compatibility).
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (missing(X)) X <- integer(0)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    ### <FIXME> for the time being only!!! </FIXME>@\\
+\mbox{}\verb@    if (length(subset) > 0) subset <- sort(subset)@\\
 \mbox{}\verb@    @\\
 \mbox{}\verb@    if (is.null(ix) & is.null(iy))@\\
 \mbox{}\verb@        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,@\\

@@ -268,6 +268,9 @@ LinStatExpCov <- function@<LinStatExpCov Prototype@>
     }
 
     if (missing(X)) X <- integer(0)
+
+    ### <FIXME> for the time being only!!! </FIXME>
+    if (length(subset) > 0) subset <- sort(subset)
     
     if (is.null(ix) & is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
