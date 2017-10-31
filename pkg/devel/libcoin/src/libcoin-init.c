@@ -16,10 +16,10 @@
 
 static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_ExpectationCovarianceStatistic, 7),
-    CALLDEF(R_PermutedLinearStatistic, 7),
+    CALLDEF(R_PermutedLinearStatistic, 6),
     CALLDEF(R_StandardisePermutedLinearStatistic, 1),
     CALLDEF(R_ExpectationCovarianceStatistic_2d, 9),
-    CALLDEF(R_PermutedLinearStatistic_2d, 8),
+    CALLDEF(R_PermutedLinearStatistic_2d, 7),
     CALLDEF(R_QuadraticTest, 5),
     CALLDEF(R_MaximumTest, 9),
     CALLDEF(R_MaximallySelectedTest, 6),

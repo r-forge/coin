@@ -472,8 +472,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
     ret$Xfactor <- as.logical(ret$Xfactor)
     if (nperm > 0) {
         ret$PermutedLinearStatistic <-
-            .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, weights, subset,
-                  block, nperm, ret$Table)
+            .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, block, nperm, ret$Table)
         if (standardise)
             ret$StandardisedPermutedLinearStatistic <-
                 .Call(R_StandardisePermutedLinearStatistic, ret)
@@ -1649,6 +1648,7 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
         for (R_xlen_t np = 0; np < inperm; np++) {
             @<Setup Linear Statistic@>
             C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));
+
             RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, expand_subset, 
                                     Offset0, Nsubset, perm, linstat);
         }
@@ -2013,7 +2013,11 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 @{
 SEXP R_PermutedLinearStatistic_2d
 (
-    @<2d User Interface Inputs@>
+    @<R x Input@>
+    SEXP ix,
+    @<R y Input@>
+    SEXP iy,
+    @<R block Input@>,
     SEXP nperm,
     SEXP itable
 )
@@ -5662,7 +5666,8 @@ SEXP RC_setup_subset
 @}
 
 Because this will only be used when really needed (in Permutations) we can
-be a little bit more generous with memory here.
+be a little bit more generous with memory here. The return value is always
+\verb|REALSXP|.
 
 @d RC\_setup\_subset
 @{
@@ -5670,9 +5675,6 @@ be a little bit more generous with memory here.
 {
     SEXP ans, mysubset;
     R_xlen_t sumweights;
-
-    if (XLENGTH(weights) == 0 && XLENGTH(subset) > 0)
-        return(subset);
 
     if (XLENGTH(subset) == 0) {
         PROTECT(mysubset = allocVector(REALSXP, N));
@@ -6601,10 +6603,10 @@ EXPORTS
 
 static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_ExpectationCovarianceStatistic, 7),
-    CALLDEF(R_PermutedLinearStatistic, 7),
+    CALLDEF(R_PermutedLinearStatistic, 6),
     CALLDEF(R_StandardisePermutedLinearStatistic, 1),
     CALLDEF(R_ExpectationCovarianceStatistic_2d, 9),
-    CALLDEF(R_PermutedLinearStatistic_2d, 8),
+    CALLDEF(R_PermutedLinearStatistic_2d, 7),
     CALLDEF(R_QuadraticTest, 5),
     CALLDEF(R_MaximumTest, 9),
     CALLDEF(R_MaximallySelectedTest, 6),

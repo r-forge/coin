@@ -163,8 +163,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     ret$Xfactor <- as.logical(ret$Xfactor)
     if (nperm > 0) {
         ret$PermutedLinearStatistic <-
-            .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, weights, subset,
-                  block, nperm, ret$Table)
+            .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, block, nperm, ret$Table)
         if (standardise)
             ret$StandardisedPermutedLinearStatistic <-
                 .Call(R_StandardisePermutedLinearStatistic, ret)

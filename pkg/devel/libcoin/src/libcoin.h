@@ -110,31 +110,20 @@ extern
 extern 
        SEXP R_PermutedLinearStatistic_2d
        (
-           /* 2d User Interface Inputs */
-           
            /* R x Input */
-
+           
                SEXP x,
            
            SEXP ix,
            /* R y Input */
-
+           
                SEXP y,
            
            SEXP iy,
-           /* R weights Input */
-
-               SEXP weights
-           ,
-           /* R subset Input */
-
-               SEXP subset
-           ,
            /* R block Input */
-
+           
                SEXP block
            ,
-           
            SEXP nperm,
            SEXP itable
        )
