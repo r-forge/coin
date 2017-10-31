@@ -76,7 +76,6 @@ SR_shift_2sample <- function(object, fact) {
 
             ### update density
             Prob <- kronecker(dens$Prob, Prob)
-            # Prob <- .Call(R_kronecker, dens$Prob, Prob)
             Prob <- vapply(split(Prob[o],
                                  rep.int(seq_along(idx), diff(c(0L, idx)))),
                            sum, NA_real_, USE.NAMES = FALSE)
