@@ -2921,7 +2921,10 @@ void C_ordered_Xfactor
 
         if ((sumleft >= minbucket) && (sumright >= minbucket) && (ExpX[p] > 0)) {
 
-            ls = mlinstat; 
+            ls = mlinstat;
+            /* compute MPinv only once */
+            if (teststat != TESTSTAT_maximum) 
+                C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
             @<Compute maxstat Test Statistic@>
             if (tmp > maxstat[0]) {
                 wmax[0] = p;
@@ -2940,6 +2943,7 @@ void C_ordered_Xfactor
     Free(mlinstat); Free(mexpect); Free(mblinstat); 
     Free(mvar); Free(mcovar); Free(mMPinv);
 }
+@|C_ordered_Xfactor
 @}
 
 @d Setup maxstat Variables
@@ -3001,7 +3005,10 @@ for (int q = 0; q < Q; q++) {
     mexpect[q] = 0.0;
     if (teststat == TESTSTAT_maximum)
         mvar[q] = 0.0;
-    for (R_xlen_t np = 0; np < nperm; np++) mblinstat[q + np * Q] = 0.0;
+    for (R_xlen_t np = 0; np < nperm; np++) {
+        mblinstat[q + np * Q] = 0.0;
+        bmaxstat[np] = 0.0;
+    }
 }
 if (teststat == TESTSTAT_quadratic) {
     for (int q = 0; q < Q * (Q + 1) / 2; q++)
@@ -3048,7 +3055,6 @@ if (teststat == TESTSTAT_maximum) {
     tmp = C_maxtype(Q, ls, mexpect, mvar, 1, tol,
                     ALTERNATIVE_twosided);
 } else {
-    C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
     tmp = C_quadform(Q, ls, mexpect, mMPinv);
 }
 @}
@@ -3098,6 +3104,9 @@ void C_unordered_Xfactor
         if ((sumleft >= minbucket) && (sumright >= minbucket)) {
 
             ls = mlinstat;
+            /* compute MPinv only once */
+            if (teststat != TESTSTAT_maximum) 
+                C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
             @<Compute maxstat Test Statistic@>
             if (tmp > maxstat[0]) {
                 for (int p = 0; p < Pnonzero; p++)
@@ -3119,8 +3128,7 @@ void C_unordered_Xfactor
     Free(mlinstat); Free(mexpect); Free(levels); Free(contrast); Free(indl); Free(mtmp);
     Free(mblinstat); Free(mvar); Free(mcovar); Free(mMPinv);
 }
-
-
+@|C_unordered_Xfactor
 @}
 
 @d Count Levels

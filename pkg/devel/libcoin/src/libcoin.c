@@ -6373,7 +6373,10 @@ const int give_log
         mexpect[q] = 0.0;
         if (teststat == TESTSTAT_maximum)
             mvar[q] = 0.0;
-        for (R_xlen_t np = 0; np < nperm; np++) mblinstat[q + np * Q] = 0.0;
+        for (R_xlen_t np = 0; np < nperm; np++) {
+            mblinstat[q + np * Q] = 0.0;
+            bmaxstat[np] = 0.0;
+        }
     }
     if (teststat == TESTSTAT_quadratic) {
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
@@ -6430,14 +6433,16 @@ const int give_log
 
         if ((sumleft >= minbucket) && (sumright >= minbucket) && (ExpX[p] > 0)) {
 
-            ls = mlinstat; 
+            ls = mlinstat;
+            /* compute MPinv only once */
+            if (teststat != TESTSTAT_maximum) 
+                C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
             /* Compute maxstat Test Statistic */
             
             if (teststat == TESTSTAT_maximum) {
                 tmp = C_maxtype(Q, ls, mexpect, mvar, 1, tol,
                                 ALTERNATIVE_twosided);
             } else {
-                C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
                 tmp = C_quadform(Q, ls, mexpect, mMPinv);
             }
             
@@ -6454,7 +6459,6 @@ const int give_log
                     tmp = C_maxtype(Q, ls, mexpect, mvar, 1, tol,
                                     ALTERNATIVE_twosided);
                 } else {
-                    C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
                     tmp = C_quadform(Q, ls, mexpect, mMPinv);
                 }
                 
@@ -6557,7 +6561,10 @@ const int give_log
         mexpect[q] = 0.0;
         if (teststat == TESTSTAT_maximum)
             mvar[q] = 0.0;
-        for (R_xlen_t np = 0; np < nperm; np++) mblinstat[q + np * Q] = 0.0;
+        for (R_xlen_t np = 0; np < nperm; np++) {
+            mblinstat[q + np * Q] = 0.0;
+            bmaxstat[np] = 0.0;
+        }
     }
     if (teststat == TESTSTAT_quadratic) {
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
@@ -6684,13 +6691,15 @@ const int give_log
         if ((sumleft >= minbucket) && (sumright >= minbucket)) {
 
             ls = mlinstat;
+            /* compute MPinv only once */
+            if (teststat != TESTSTAT_maximum) 
+                C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
             /* Compute maxstat Test Statistic */
             
             if (teststat == TESTSTAT_maximum) {
                 tmp = C_maxtype(Q, ls, mexpect, mvar, 1, tol,
                                 ALTERNATIVE_twosided);
             } else {
-                C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
                 tmp = C_quadform(Q, ls, mexpect, mMPinv);
             }
             
@@ -6708,7 +6717,6 @@ const int give_log
                     tmp = C_maxtype(Q, ls, mexpect, mvar, 1, tol,
                                     ALTERNATIVE_twosided);
                 } else {
-                    C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
                     tmp = C_quadform(Q, ls, mexpect, mMPinv);
                 }
                 
@@ -6732,8 +6740,6 @@ const int give_log
     Free(mlinstat); Free(mexpect); Free(levels); Free(contrast); Free(indl); Free(mtmp);
     Free(mblinstat); Free(mvar); Free(mcovar); Free(mMPinv);
 }
-
-
 
 
 /* User Interface */
