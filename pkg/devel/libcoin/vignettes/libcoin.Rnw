@@ -2413,15 +2413,10 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Nsubset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@;@\\
 \mbox{}\verb@    R_xlen_t inperm;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@Rprintf("a1 ");@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup Dimensions}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    PQ = P * Q;@\\
 \mbox{}\verb@    N = NROW(y);@\\
 \mbox{}\verb@    inperm = (R_xlen_t) REAL(nperm)[0];@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@Rprintf("a2 ");@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(ans = allocMatrix(REALSXP, PQ, inperm));@\\
 \mbox{}\verb@    PROTECT(expand_subset = RC_setup_subset(N, weights, subset));@\\
@@ -2429,26 +2424,14 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 \mbox{}\verb@    PROTECT(tmp = allocVector(REALSXP, Nsubset));@\\
 \mbox{}\verb@    PROTECT(perm = allocVector(REALSXP, Nsubset));@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@Rprintf("a3 ");@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@    GetRNGstate();@\\
 \mbox{}\verb@    if (B == 1) {@\\
 \mbox{}\verb@        for (R_xlen_t np = 0; np < inperm; np++) {@\\
-\mbox{}\verb@Rprintf("a4 ");@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@            @\hbox{$\langle\,${\itshape Setup Linear Statistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@Rprintf("a5 ");@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@Rprintf("a6 %d %d", TYPEOF(expand_subset), INTSXP);@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@            C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, expand_subset, @\\
 \mbox{}\verb@                                    Offset0, Nsubset, perm, linstat);@\\
-\mbox{}\verb@Rprintf("a7 ");@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        PROTECT(blockTable = allocVector(REALSXP, B + 1));@\\
@@ -8734,7 +8717,8 @@ all.equal(ns1, ns2, check.attributes = FALSE)
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 Because this will only be used when really needed (in Permutations) we can
-be a little bit more generous with memory here.
+be a little bit more generous with memory here. The return value is always
+\verb|REALSXP|.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap245}\raggedright\small
@@ -8746,11 +8730,6 @@ be a little bit more generous with memory here.
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans, mysubset;@\\
 \mbox{}\verb@    R_xlen_t sumweights;@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@/*@\\
-\mbox{}\verb@    if (XLENGTH(weights) == 0 && XLENGTH(subset) > 0)@\\
-\mbox{}\verb@        return(subset);@\\
-\mbox{}\verb@*/@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (XLENGTH(subset) == 0) {@\\
 \mbox{}\verb@        PROTECT(mysubset = allocVector(REALSXP, N));@\\

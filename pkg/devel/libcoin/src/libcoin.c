@@ -5420,11 +5420,6 @@ SEXP RC_setup_subset
     SEXP ans, mysubset;
     R_xlen_t sumweights;
 
-/*
-    if (XLENGTH(weights) == 0 && XLENGTH(subset) > 0)
-        return(subset);
-*/
-
     if (XLENGTH(subset) == 0) {
         PROTECT(mysubset = allocVector(REALSXP, N));
         C_setup_subset(N, mysubset);
@@ -7005,8 +7000,6 @@ SEXP R_PermutedLinearStatistic
     ;
     R_xlen_t inperm;
 
-Rprintf("a1 ");
-
     /* Setup Dimensions */
     
         int P, Q, B;
@@ -7026,23 +7019,15 @@ Rprintf("a1 ");
     N = NROW(y);
     inperm = (R_xlen_t) REAL(nperm)[0];
 
-Rprintf("a2 ");
-
-
     PROTECT(ans = allocMatrix(REALSXP, PQ, inperm));
     PROTECT(expand_subset = RC_setup_subset(N, weights, subset));
     Nsubset = XLENGTH(expand_subset);
     PROTECT(tmp = allocVector(REALSXP, Nsubset));
     PROTECT(perm = allocVector(REALSXP, Nsubset));
 
-Rprintf("a3 ");
-
-
     GetRNGstate();
     if (B == 1) {
         for (R_xlen_t np = 0; np < inperm; np++) {
-Rprintf("a4 ");
-
             /* Setup Linear Statistic */
             
             if (np % 256 == 0) R_CheckUserInterrupt();
@@ -7050,17 +7035,10 @@ Rprintf("a4 ");
             for (int p = 0; p < PQ; p++)
                 linstat[p] = 0.0;
             
-Rprintf("a5 ");
-
-Rprintf("a6 %d %d", TYPEOF(expand_subset), INTSXP);
-
-
             C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));
 
             RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, expand_subset, 
                                     Offset0, Nsubset, perm, linstat);
-Rprintf("a7 ");
-
         }
     } else {
         PROTECT(blockTable = allocVector(REALSXP, B + 1));
