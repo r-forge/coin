@@ -21,6 +21,7 @@ doTest(object, teststat = c("maximum", "quadratic", "scalar"),
   \item{lower}{a logical indicating if a p-value (\code{lower} is \code{FALSE})
                or 1 - p-value (\code{lower} is \code{TRUE}) shall be returned.}
   \item{log}{a logical, if \code{TRUE} probabilities are log-probabilities.}
+  \item{PermutedStatistics}{a logical, return permuted test statistics.}
   \item{minbucket}{minimum weight in either of two groups for maximally selected
                    statistics.}
   \item{ordered}{a logical, if \code{TRUE} maximally selected statistics

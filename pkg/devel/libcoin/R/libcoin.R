@@ -18,6 +18,8 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
         X <- ix
         ix <- NULL
     }
+
+    if (missing(X)) X <- integer(0)
     
     if (is.null(ix) & is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
@@ -45,6 +47,8 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
         stop("dimensions of X and Y don't match")
     N <- NROW(X)
 
+    if (is.factor(X)) X <- unclass(X)
+
     if (is.integer(X)) {
         if (is.null(attr(X, "levels")))
             attr(X, "levels") <- 1:max(X)
@@ -69,6 +73,8 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     }
     
 
+    # Handle Missing Values
+    
     ms <- !(complete.cases(X) & complete.cases(Y))
     if (all(ms))
         stop("all observations are missing")
@@ -81,6 +87,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
             subset <- (1:N)[-which(ms)]
         }
     }
+    
 
     ret <- .Call(R_ExpectationCovarianceStatistic, X, Y, weights, subset,
                  block, as.integer(varonly), as.double(tol))
@@ -105,6 +112,10 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
                              standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
+
+    if (is.factor(ix)) ix <- unclass(ix)
+    if (is.factor(iy)) ix <- unclass(iy)
+
     if (!((length(ix) == length(iy)) &&
           is.integer(ix) && is.integer(iy)))
         stop("incorrect ix and/or iy")
@@ -174,7 +185,6 @@ vcov.LinStatExpCov <- function(object, ...) {
     diag(ret) <- diag(ret) / 2
     ret
 }
-
 
 # doTest
 

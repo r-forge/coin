@@ -8,8 +8,8 @@
 */
 
 #include "libcoin_internal.h"
-#include <R_ext/stats_stubs.h> /* for S_rcont2 */
-#include <mvtnormAPI.h>
+#include <R_ext/stats_stubs.h>  /* for S_rcont2 */
+#include <mvtnormAPI.h>         /* for calling mvtnorm */
 /* Function Definitions */
 
 /* MoreUtils */
@@ -487,9 +487,9 @@ SEXP LECV
                              R_DimSymbol)));
 }
 
-/* C\_get\_Lb */
+/* C\_get\_B */
 
-int C_get_Lb
+int C_get_B
 (
 /* R LECV Input */
 
@@ -553,9 +553,9 @@ SEXP RC_init_LECV_1d
         int Q
     ,
     int varonly,
-    /* C integer Lb Input */
+    /* C integer B Input */
     
-        int Lb
+        int B
     ,
     int Xfactor,
     double tol
@@ -576,8 +576,8 @@ SEXP RC_init_LECV_1d
         if (Q <= 0)
             error("Q is not positive");
 
-        if (Lb <= 0)
-            error("Lb is not positive");
+        if (B <= 0)
+            error("B is not positive");
 
         if (varonly < 0 || varonly > 1)
             error("varonly is not 0 or 1");
@@ -637,18 +637,18 @@ SEXP RC_init_LECV_1d
         INTEGER(d)[0] = P;
         INTEGER(d)[1] = Q;
         SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
-                       allocVector(REALSXP, Lb * Q));
+                       allocVector(REALSXP, B * Q));
 
         /* should always _both_ be there */
         SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
-                       allocVector(REALSXP, Lb * Q));
+                       allocVector(REALSXP, B * Q));
         SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                       allocVector(REALSXP, Lb * Q * (Q + 1) / 2));
+                       allocVector(REALSXP, B * Q * (Q + 1) / 2));
 
         SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
         INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
-        SET_VECTOR_ELT(ans, TableBlock_SLOT, allocVector(REALSXP, Lb + 1));
-        SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, Lb));
+        SET_VECTOR_ELT(ans, TableBlock_SLOT, allocVector(REALSXP, B + 1));
+        SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, B));
         SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
                        allocMatrix(REALSXP, 0, 0));
         SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
@@ -677,10 +677,10 @@ SEXP RC_init_LECV_1d
     
 
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
-                   allocVector(REALSXP, Lb + 1));
+                   allocVector(REALSXP, B + 1));
 
     SET_VECTOR_ELT(ans, Sumweights_SLOT,
-                   allocVector(REALSXP, Lb));
+                   allocVector(REALSXP, B));
 
     UNPROTECT(2);
     return(ans);
@@ -701,9 +701,9 @@ SEXP RC_init_LECV_2d
     int varonly,
     int Lx,
     int Ly,
-    /* C integer Lb Input */
+    /* C integer B Input */
     
-        int Lb
+        int B
     ,
     int Xfactor,
     double tol
@@ -729,8 +729,8 @@ SEXP RC_init_LECV_2d
         if (Q <= 0)
             error("Q is not positive");
 
-        if (Lb <= 0)
-            error("Lb is not positive");
+        if (B <= 0)
+            error("B is not positive");
 
         if (varonly < 0 || varonly > 1)
             error("varonly is not 0 or 1");
@@ -790,18 +790,18 @@ SEXP RC_init_LECV_2d
         INTEGER(d)[0] = P;
         INTEGER(d)[1] = Q;
         SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
-                       allocVector(REALSXP, Lb * Q));
+                       allocVector(REALSXP, B * Q));
 
         /* should always _both_ be there */
         SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
-                       allocVector(REALSXP, Lb * Q));
+                       allocVector(REALSXP, B * Q));
         SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                       allocVector(REALSXP, Lb * Q * (Q + 1) / 2));
+                       allocVector(REALSXP, B * Q * (Q + 1) / 2));
 
         SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
         INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
-        SET_VECTOR_ELT(ans, TableBlock_SLOT, allocVector(REALSXP, Lb + 1));
-        SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, Lb));
+        SET_VECTOR_ELT(ans, TableBlock_SLOT, allocVector(REALSXP, B + 1));
+        SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, B));
         SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
                        allocMatrix(REALSXP, 0, 0));
         SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
@@ -832,7 +832,7 @@ SEXP RC_init_LECV_2d
     PROTECT(tabdim = allocVector(INTSXP, 3));
     INTEGER(tabdim)[0] = Lx + 1;
     INTEGER(tabdim)[1] = Ly + 1;
-    INTEGER(tabdim)[2] = Lb;
+    INTEGER(tabdim)[2] = B;
     SET_VECTOR_ELT(ans, Table_SLOT,
                    tab = allocVector(REALSXP,
                        INTEGER(tabdim)[0] *
@@ -4550,9 +4550,9 @@ void C_ThreeTableSums_dweights_dsubset
         /* C integer block Input */
         
             int *block,
-            /* C integer Lb Input */
+            /* C integer B Input */
             
-                int Lb
+                int B
             ,
         
     
@@ -4584,7 +4584,7 @@ void C_ThreeTableSums_dweights_dsubset
     
         int *xx, *yy, *bb, PQ = P * Q;
 
-        for (int p = 0; p < PQ * Lb; p++) PQL_ans[p] = 0.0;
+        for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
 
         yy = y;
         xx = x;
@@ -4666,9 +4666,9 @@ void C_ThreeTableSums_iweights_dsubset
         /* C integer block Input */
         
             int *block,
-            /* C integer Lb Input */
+            /* C integer B Input */
             
-                int Lb
+                int B
             ,
         
     
@@ -4701,7 +4701,7 @@ void C_ThreeTableSums_iweights_dsubset
     
         int *xx, *yy, *bb, PQ = P * Q;
 
-        for (int p = 0; p < PQ * Lb; p++) PQL_ans[p] = 0.0;
+        for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
 
         yy = y;
         xx = x;
@@ -4783,9 +4783,9 @@ void C_ThreeTableSums_iweights_isubset
         /* C integer block Input */
         
             int *block,
-            /* C integer Lb Input */
+            /* C integer B Input */
             
-                int Lb
+                int B
             ,
         
     
@@ -4817,7 +4817,7 @@ void C_ThreeTableSums_iweights_isubset
     
         int *xx, *yy, *bb, PQ = P * Q;
 
-        for (int p = 0; p < PQ * Lb; p++) PQL_ans[p] = 0.0;
+        for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
 
         yy = y;
         xx = x;
@@ -4899,9 +4899,9 @@ void C_ThreeTableSums_dweights_isubset
         /* C integer block Input */
         
             int *block,
-            /* C integer Lb Input */
+            /* C integer B Input */
             
-                int Lb
+                int B
             ,
         
     
@@ -4934,7 +4934,7 @@ void C_ThreeTableSums_dweights_isubset
     
         int *xx, *yy, *bb, PQ = P * Q;
 
-        for (int p = 0; p < PQ * Lb; p++) PQL_ans[p] = 0.0;
+        for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
 
         yy = y;
         xx = x;
@@ -5018,9 +5018,9 @@ void RC_ThreeTableSums
         /* C integer block Input */
         
             int *block,
-            /* C integer Lb Input */
+            /* C integer B Input */
             
-                int Lb
+                int B
             ,
         
     
@@ -5049,21 +5049,21 @@ void RC_ThreeTableSums
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
-            C_ThreeTableSums_iweights_isubset(x, N, P, y, Q, block, Lb, 
+            C_ThreeTableSums_iweights_isubset(x, N, P, y, Q, block, B, 
                                         INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
                                         offset, Nsubset, PQL_ans);
         } else {
-            C_ThreeTableSums_iweights_dsubset(x, N, P, y, Q, block, Lb,
+            C_ThreeTableSums_iweights_dsubset(x, N, P, y, Q, block, B,
                                         INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
                                         offset, Nsubset, PQL_ans);
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
-            C_ThreeTableSums_dweights_isubset(x, N, P, y, Q, block, Lb,
+            C_ThreeTableSums_dweights_isubset(x, N, P, y, Q, block, B,
                                         REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
                                         offset, Nsubset, PQL_ans);
         } else {
-            C_ThreeTableSums_dweights_dsubset(x, N, P, y, Q, block, Lb,
+            C_ThreeTableSums_dweights_dsubset(x, N, P, y, Q, block, B,
                                         REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
                                         offset, Nsubset, PQL_ans);
         }
@@ -5380,7 +5380,6 @@ void RC_LinearStatistic
             R_xlen_t Nsubset
         
     ,
-    SEXP subsety,
     /* C KronSums Answer */
     
         double *PQ_ans
@@ -5390,17 +5389,8 @@ void RC_LinearStatistic
 {
     double center;
 
-    if (XLENGTH(subsety) == 0) {
-        RC_KronSums(x, N, P, y, Q, !DoSymmetric, &center, &center, !DoCenter, weights, 
-                    subset, offset, Nsubset, PQ_ans);
-    } else {
-        if (XLENGTH(weights) > 0) 
-            error("weights given for permutation");
-        if (XLENGTH(subset) != XLENGTH(subsety))
-            error("incorrect subsets");
-        RC_KronSums_Permutation(x, N, P, y, Q, subset, offset, Nsubset, 
-                                subsety, PQ_ans);
-    }
+    RC_KronSums(x, N, P, y, Q, !DoSymmetric, &center, &center, !DoCenter, weights, 
+                subset, offset, Nsubset, PQ_ans);
 }
 
 
@@ -6330,7 +6320,7 @@ const int give_log
     /* Setup maxstat Variables */
     
     double *linstat, *expect, *covar, *varinf, *covinf, *ExpX, *blinstat, tol, *ls;
-    int P, Q, Lb;
+    int P, Q, B;
     R_xlen_t nperm;
 
     double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, 
@@ -6340,8 +6330,8 @@ const int give_log
     Q = C_get_Q(LECV);
     P = C_get_P(LECV);
     PQ = P * Q;
-    Lb = C_get_Lb(LECV);
-    if (Lb > 1) {
+    B = C_get_B(LECV);
+    if (B > 1) {
         if (C_get_varonly(LECV))
             error("need covarinance for maximally statistics with blocks");
         covar = C_get_Covariance(LECV);
@@ -6411,7 +6401,7 @@ const int give_log
             for (R_xlen_t np = 0; np < nperm; np++)
                 mblinstat[q + np * Q] += blinstat[q * P + p + np * PQ];
             mexpect[q] += expect[q * P + p];
-            if (Lb == 1) {
+            if (B == 1) {
                 /* Compute maxstat Variance / Covariance Directly */
                 
                 /* does not work with blocks! */
@@ -6514,7 +6504,7 @@ const int give_log
     /* Setup maxstat Variables */
     
     double *linstat, *expect, *covar, *varinf, *covinf, *ExpX, *blinstat, tol, *ls;
-    int P, Q, Lb;
+    int P, Q, B;
     R_xlen_t nperm;
 
     double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, 
@@ -6524,8 +6514,8 @@ const int give_log
     Q = C_get_Q(LECV);
     P = C_get_P(LECV);
     PQ = P * Q;
-    Lb = C_get_Lb(LECV);
-    if (Lb > 1) {
+    B = C_get_B(LECV);
+    if (B > 1) {
         if (C_get_varonly(LECV))
             error("need covarinance for maximally statistics with blocks");
         covar = C_get_Covariance(LECV);
@@ -6650,7 +6640,7 @@ const int give_log
         }
         
 
-        if (Lb == 1) {
+        if (B == 1) {
             /* Compute unordered maxstat Variance / Covariance Directly */
             
             if (teststat == TESTSTAT_maximum) {
@@ -6793,33 +6783,27 @@ SEXP ans
     
         int Q
     ;
-    /* C integer Lb Input */
+    /* C integer B Input */
     
-        int Lb
+        int B
     ;
     double *sumweights, *table;
     double *ExpInf, *VarInf, *CovInf, *ExpX, *ExpXtotal, *VarX, *CovX;
     double *tmpV, *tmpCV;
     SEXP nullvec, subset_block;
 
-    /* note: x being an integer (Xfactor) with some 0 elements is not
-             handled correctly (as sumweights doesnt't take this information
-             into account; use subset to exclude these missings (as done
-             in libcoin::LinStatExpCov) */
-
     /* Extract Dimensions */
     
     P = C_get_P(ans);
     Q = C_get_Q(ans);
     N = NROW(x);
-    Lb = C_get_Lb(ans);
+    B = C_get_B(ans);
     
 
     /* Compute Linear Statistic */
     
-    PROTECT(nullvec = allocVector(INTSXP, 0));
     RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset, 
-                       Offset0, XLENGTH(subset), nullvec,
+                       Offset0, XLENGTH(subset),
                        C_get_LinearStatistic(ans));
     
 
@@ -6835,12 +6819,13 @@ SEXP ans
     CovX = Calloc(P * (P + 1) / 2, double);
     table = C_get_TableBlock(ans);
     sumweights = C_get_Sumweights(ans);
+    PROTECT(nullvec = allocVector(INTSXP, 0));
 
-    if (Lb == 1) {
+    if (B == 1) {
         table[0] = 0.0;
         table[1] = RC_Sums(N, nullvec, subset, Offset0, XLENGTH(subset));
     } else {
-        RC_OneTableSums(INTEGER(block), N, Lb + 1, nullvec, subset, Offset0, 
+        RC_OneTableSums(INTEGER(block), N, B + 1, nullvec, subset, Offset0, 
                         XLENGTH(subset), table);
     }
     if (table[0] > 0)
@@ -6852,7 +6837,7 @@ SEXP ans
     /* start with subset[0] */
     R_xlen_t offset = (R_xlen_t) table[0];
 
-    for (int b = 0; b < Lb; b++) {
+    for (int b = 0; b < B; b++) {
 
         /* compute sum of weights in block b of subset */
         sumweights[b] = RC_Sums(N, weights, subset_block, 
@@ -6872,6 +6857,8 @@ SEXP ans
                                          C_get_Expectation(ans));
             
 
+            /* Compute Covariance Influence */
+            
             /* C_ordered_Xfactor and C_unordered_Xfactor need both VarInf and CovInf */
             RC_CovarianceInfluence(N, y, Q, weights, subset_block, offset, 
                                   (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b], 
@@ -6880,6 +6867,7 @@ SEXP ans
             tmpCV = CovInf + b * Q * (Q + 1) / 2;
             tmpV = VarInf + b * Q;
             for (int q = 0; q < Q; q++) tmpV[q] = tmpCV[S(q, q, Q)];
+            
 
             if (C_get_varonly(ans)) {
                 /* Compute Variance Linear Statistic */
@@ -6947,7 +6935,7 @@ SEXP tol
 
     /* Setup Dimensions */
     
-        int P, Q, Lb;
+        int P, Q, B;
 
         if (isInteger(x)) {
             P = NLEVELS(x);
@@ -6956,12 +6944,12 @@ SEXP tol
         }
         Q = NCOL(y);
 
-        Lb = 1;
+        B = 1;
         if (LENGTH(block) > 0)
-            Lb = NLEVELS(block);
+            B = NLEVELS(block);
     
 
-    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], Lb, isInteger(x), REAL(tol)[0]));
+    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], B, isInteger(x), REAL(tol)[0]));
 
     RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
 
@@ -7017,7 +7005,7 @@ SEXP R_PermutedLinearStatistic
 
     /* Setup Dimensions */
     
-        int P, Q, Lb;
+        int P, Q, B;
 
         if (isInteger(x)) {
             P = NLEVELS(x);
@@ -7026,9 +7014,9 @@ SEXP R_PermutedLinearStatistic
         }
         Q = NCOL(y);
 
-        Lb = 1;
+        B = 1;
         if (LENGTH(block) > 0)
-            Lb = NLEVELS(block);
+            B = NLEVELS(block);
     
     PQ = P * Q;
     N = NROW(y);
@@ -7041,7 +7029,7 @@ SEXP R_PermutedLinearStatistic
     PROTECT(perm = allocVector(REALSXP, Nsubset));
 
     GetRNGstate();
-    if (Lb == 1) {
+    if (B == 1) {
         for (R_xlen_t np = 0; np < inperm; np++) {
             /* Setup Linear Statistic */
             
@@ -7051,15 +7039,13 @@ SEXP R_PermutedLinearStatistic
                 linstat[p] = 0.0;
             
             C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));
-           /* does not require weights (as RC_LinearStatistic) */
-           RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
-                                   expand_subset, Offset0, Nsubset,
-                                   perm, linstat);
+            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, expand_subset, 
+                                    Offset0, Nsubset, perm, linstat);
         }
     } else {
-        PROTECT(blockTable = allocVector(REALSXP, Lb + 1));
+        PROTECT(blockTable = allocVector(REALSXP, B + 1));
         /* same as RC_OneTableSums(block, noweights, expand_subset) */
-        RC_OneTableSums(INTEGER(block), XLENGTH(block), Lb + 1, weights, subset, Offset0,
+        RC_OneTableSums(INTEGER(block), XLENGTH(block), B + 1, weights, subset, Offset0,
                         XLENGTH(subset), REAL(blockTable));
         PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset, 
                                                          block, blockTable));
@@ -7073,11 +7059,9 @@ SEXP R_PermutedLinearStatistic
                 linstat[p] = 0.0;
             
             C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(blockTable), 
-                             Lb + 1, REAL(tmp), REAL(perm));
-            /* does not require weights (as RC_LinearStatistic) */
-            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
-                                    block_subset, Offset0, Nsubset,
-                                    perm, linstat);
+                             B + 1, REAL(tmp), REAL(perm));
+            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, block_subset, 
+                                    Offset0, Nsubset, perm, linstat);
         }
         UNPROTECT(2);
     }
@@ -7158,7 +7142,7 @@ SEXP ans
 ) {
 
     SEXP Rcsum, Rrsum;
-    int P, Q, Lxp1, Lyp1, Lb, Xfactor;
+    int P, Q, Lxp1, Lyp1, B, Xfactor;
     double *ExpInf, *ExpX, *CovX;
     double *table, *table2d, *csum, *rsum, *sumweights, *btab, *linstat;
 
@@ -7172,7 +7156,7 @@ SEXP ans
 
     Lxp1 = C_get_dimTable(ans)[0];
     Lyp1 = C_get_dimTable(ans)[1];
-    Lb = C_get_Lb(ans);
+    B = C_get_B(ans);
     Xfactor = C_get_Xfactor(ans);
 
     if (C_get_varonly(ans)) {
@@ -7191,7 +7175,7 @@ SEXP ans
     
     for (int i = 0; i < Lxp1 * Lyp1; i++)
         table2d[i] = 0.0;
-    for (int b = 0; b < Lb; b++) {
+    for (int b = 0; b < B; b++) {
         for (int i = 0; i < Lxp1; i++) {
             for (int j = 0; j < Lyp1; j++)
                 table2d[j * Lxp1 + i] += table[b * Lxp1 * Lyp1 + j * Lxp1 + i];
@@ -7203,7 +7187,7 @@ SEXP ans
     for (int p = 0; p < P * Q; p++)
         linstat[p] = 0.0;
 
-    for (int b = 0; b < Lb; b++) {
+    for (int b = 0; b < B; b++) {
         btab = table + Lxp1 * Lyp1 * b;
 
         /* Linear Statistic 2d */
@@ -7355,7 +7339,7 @@ SEXP tol
 
     /* Setup Dimensions 2d */
     
-    int P, Q, Lb, Lx, Ly;
+    int P, Q, B, Lx, Ly;
 
     if (XLENGTH(x) == 0) {
         P = NLEVELS(ix);
@@ -7364,24 +7348,24 @@ SEXP tol
     }
     Q = NCOL(y);
 
-    Lb = 1;
+    B = 1;
     if (XLENGTH(block) > 0)
-        Lb = NLEVELS(block);
+        B = NLEVELS(block);
 
     Lx = NLEVELS(ix);
     Ly = NLEVELS(iy);
     
 
     PROTECT(ans = RC_init_LECV_2d(P, Q, INTEGER(varonly)[0], 
-                                  Lx, Ly, Lb, Xfactor, REAL(tol)[0]));
+                                  Lx, Ly, B, Xfactor, REAL(tol)[0]));
 
-    if (Lb == 1) {
+    if (B == 1) {
         RC_TwoTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1, 
                         weights, subset, Offset0, Nsubset, 
                         C_get_Table(ans));
     } else {
         RC_ThreeTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1, 
-                          INTEGER(block), Lb, weights, subset, Offset0, Nsubset, 
+                          INTEGER(block), B, weights, subset, Offset0, Nsubset, 
                           C_get_Table(ans));
     }
     RC_ExpectationCovarianceStatistic_2d(x, ix, y, iy, weights,
@@ -7434,7 +7418,7 @@ SEXP R_PermutedLinearStatistic_2d
 
     /* Setup Dimensions 2d */
     
-    int P, Q, Lb, Lx, Ly;
+    int P, Q, B, Lx, Ly;
 
     if (XLENGTH(x) == 0) {
         P = NLEVELS(ix);
@@ -7443,9 +7427,9 @@ SEXP R_PermutedLinearStatistic_2d
     }
     Q = NCOL(y);
 
-    Lb = 1;
+    B = 1;
     if (XLENGTH(block) > 0)
-        Lb = NLEVELS(block);
+        B = NLEVELS(block);
 
     Lx = NLEVELS(ix);
     Ly = NLEVELS(iy);
@@ -7461,9 +7445,9 @@ SEXP R_PermutedLinearStatistic_2d
 
     /* Setup Working Memory */
     
-    csum = Calloc(Lyp1 * Lb, int);
-    rsum = Calloc(Lxp1 * Lb, int);
-    sumweights = Calloc(Lb, int);
+    csum = Calloc(Lyp1 * B, int);
+    rsum = Calloc(Lxp1 * B, int);
+    sumweights = Calloc(B, int);
     table = Calloc(Lxp1 * Lyp1, int);
     rtable2 = Calloc(Lx * Ly , int);
     jwork = Calloc(Lyp1, int);
@@ -7479,7 +7463,7 @@ SEXP R_PermutedLinearStatistic_2d
     }
     
 
-    for (int b = 0; b < Lb; b++) {
+    for (int b = 0; b < B; b++) {
         btab = INTEGER(Ritable) + Lxp1 * Lyp1 * b;
         /* Col Row Total Sums */
         
@@ -7529,7 +7513,7 @@ SEXP R_PermutedLinearStatistic_2d
         for (int p = 0; p < Lxp1 * Lyp1; p++)
             table[p] = 0;
 
-        for (int b = 0; b < Lb; b++) {
+        for (int b = 0; b < B; b++) {
             /* Compute Permuted Linear Statistic 2d */
             
             S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,

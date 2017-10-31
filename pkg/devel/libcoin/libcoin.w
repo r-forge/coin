@@ -114,14 +114,15 @@ urlcolor={linkcolor}%
 \chapter{Introduction}
 \pagenumbering{arabic}
 
-In the following we assume that we are provided with $n$ observations
+The \pkg{libcoin} package implements a generic framework for permutation
+tests. We assume that we are provided with $n$ observations
 \begin{eqnarray*}
-(\Y_i, \X_i, w_i, b_i), \quad i = 1, \dots, N.
+(\Y_i, \X_i, w_i, \text{block}_i), \quad i = 1, \dots, N.
 \end{eqnarray*}
 The variables $\Y$ and $\X$ from sample spaces $\mathcal{Y}$ and
 $\mathcal{X}$ may
 be measured at arbitrary scales and may be multivariate as well. In addition
-to those measurements, case weights $w_i \in \N$ and a factor $b_i \in \{1, \dots, B\}$
+to those measurements, case weights $w_i \in \N$ and a factor $\text{block}_i \in \{1, \dots, B\}$
 coding for $B$ independent blocks may
 be available.
 We are interested in testing the null hypothesis of independence of $\Y$ and
@@ -134,7 +135,7 @@ scalar test statistics for testing $H_0$ from multivariate linear statistics
 of a specific linear form. Let $\A \subseteq \{1, \dots, N\}$ denote some subset of the
 observation numbers and consider the linear statistic
 \begin{eqnarray} \label{linstat}
-\T(A) = \vec\left(\sum_{i \in \A} w_i g(\X_i) h(\Y_i, \{\Y_i \mid i \in \A\})^\top\right)
+\T(\A) = \vec\left(\sum_{i \in \A} w_i g(\X_i) h(\Y_i, \{\Y_i \mid i \in \A\})^\top\right)
 \in \R^{pq}.
 \end{eqnarray}
 Here, $g: \mathcal{X} \rightarrow \R^P$ is a transformation of
@@ -146,7 +147,7 @@ $g$ and $h$ later on.
 
 With $\x_i = g(\X_i) \in \R^P$ and $\y_i = h(\Y_i, \{\Y_i, i \in \A\}) \in \R^Q$ we write
 \begin{eqnarray} \label{linstatsimple}
-\T(A) = \vec\left(\sum_{i \in \A} w_i \x_i \y_i^\top\right)
+\T(\A) = \vec\left(\sum_{i \in \A} w_i \x_i \y_i^\top\right)
 \in \R^{PQ}.
 \end{eqnarray}
 The \pkg{libcoin} package doesn't handle neither $g$ nor $h$, this is the job
@@ -156,42 +157,42 @@ The distribution of $\T$  depends on the joint
 distribution of $\Y$ and $\X$, which is unknown under almost all practical
 circumstances. At least under the null hypothesis one can dispose of this
 dependency by fixing $\X_i, i \in \A$ and conditioning on all possible
-permutations $S(A)$ of the responses $\Y_i, i \in \A$.
+permutations $S(\A)$ of the responses $\Y_i, i \in \A$.
 This principle leads to test procedures known
 as \textit{permutation tests}.
-The conditional expectation $\mu(A) \in \R^{PQ}$ and covariance
-$\Sigma(A) \in \R^{PQ \times PQ}$
+The conditional expectation $\mu(\A) \in \R^{PQ}$ and covariance
+$\Sigma(\A) \in \R^{PQ \times PQ}$
 of $\T$ under $H_0$ given
-all permutations $\sigma \in S(A)$ of the responses are derived by
+all permutations $\sigma \in S(\A)$ of the responses are derived by
 \cite{strasserweber1999}:
 \begin{eqnarray}
-\mu(A) & = & \E(\T(A) \mid S(A)) = \vec \left( \left( \sum_{i \in \A} w_i \x_i \right) \E(h \mid S(A))^\top
+\mu(\A) & = & \E(\T(\A) \mid S(\A)) = \vec \left( \left( \sum_{i \in \A} w_i \x_i \right) \E(h \mid S(\A))^\top
 \right), \nonumber \\
-\Sigma(A) & = & \V(\T(A) \mid S(A)) \nonumber \\
+\Sigma(\A) & = & \V(\T(\A) \mid S(\A)) \nonumber \\
 & = &
-    \frac{\ws}{\ws(A) - 1}  \V(h \mid S(A)) \otimes
+    \frac{\ws}{\ws(\A) - 1}  \V(h \mid S(\A)) \otimes
         \left(\sum_{i \in \A} w_i  \x_i \otimes w_i \x_i^\top \right)
 \label{expectcovar}
 \\
-& - & \frac{1}{\ws(A) - 1}  \V(h \mid S(A))  \otimes \left(
+& - & \frac{1}{\ws(\A) - 1}  \V(h \mid S(\A))  \otimes \left(
         \sum_{i \in \A} w_i \x_i \right)
 \otimes \left( \sum_{i \in \A} w_i \x_i\right)^\top
 \nonumber
 \end{eqnarray}
-where $\ws(A) = \sum_{i \in \A} w_i$ denotes the sum of the case weights,
+where $\ws(\A) = \sum_{i \in \A} w_i$ denotes the sum of the case weights,
 and $\otimes$ is the Kronecker product. The conditional expectation of the
 influence function is
 \begin{eqnarray*}
-\E(h \mid S(A)) = \ws(A)^{-1} \sum_{i \in \A} w_i \y_i \in
+\E(h \mid S(\A)) = \ws(\A)^{-1} \sum_{i \in \A} w_i \y_i \in
 \R^Q
 \end{eqnarray*}
 with corresponding $Q \times Q$ covariance matrix
 \begin{eqnarray*}
-\V(h \mid S(A)) = \ws(A)^{-1} \sum_{i \in \A} w_i \left(\y_i - \E(h \mid S(A)) \right) \left(\y_i  - \E(h \mid S(A))\right)^\top.
+\V(h \mid S(\A)) = \ws(\A)^{-1} \sum_{i \in \A} w_i \left(\y_i - \E(h \mid S(\A)) \right) \left(\y_i  - \E(h \mid S(\A))\right)^\top.
 \end{eqnarray*}
 
-With $A_b = \{i \mid b_i = b\}$ we get $\T = \sum_{b = 1}^B T(A_b)$,
-$\mu = \sum_{b = 1}^B \mu(A_b)$ and $\Sigma = \sum_{b = 1}^B \Sigma(A_b)$.
+With $A_b = \{i \mid \text{block}_i = b\}$ we get $\T = \sum_{b = 1}^B T(\A_b)$,
+$\mu = \sum_{b = 1}^B \mu(\A_b)$ and $\Sigma = \sum_{b = 1}^B \Sigma(\A_b)$.
 
 Having the conditional expectation and covariance at hand we are able to
 standardize a linear statistic $\T \in \R^{PQ}$ of the form
@@ -228,6 +229,8 @@ and that in the one-sided case maximum type test statistics are replaced by
 
 \chapter{R Code}
 
+\section{R User Interface}
+
 @o libcoin.R -cp
 @{
 @<R Header@>
@@ -238,6 +241,14 @@ and that in the one-sided case maximum type test statistics are replaced by
 @<doTest@>
 .libcoinCall <- function(FUN, ...) .Call(FUN, ...)
 @}
+
+The \pkg{libcoin} package implements two functions, \verb|LinStatExpCov| and
+\verb|doTest| for the computation of linear statistics, their expectation
+and covariance as well as for the computation of test statistics and
+$p$-values. There are two interfaces: One (labelled ``1d'') when the data is
+available as matrices \verb|X| and \verb|Y|, both with the same number of
+rows $N$. The second interface (labelled ``2d'') handles the case when the
+data is available in aggregated form; details will be explained later.
 
 @d LinStatExpCov Prototype
 @{(X, Y, ix = NULL, iy = NULL, weights = integer(0),
@@ -253,6 +264,8 @@ LinStatExpCov <- function@<LinStatExpCov Prototype@>
         X <- ix
         ix <- NULL
     }
+
+    if (missing(X)) X <- integer(0)
     
     if (is.null(ix) & is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
@@ -270,53 +283,18 @@ LinStatExpCov <- function@<LinStatExpCov Prototype@>
 }
 @}
 
-@d LinStatExpCov1d
-@{
-.LinStatExpCov1d <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
-                             varonly = FALSE, nperm = 0, standardise = FALSE,
-                             tol = sqrt(.Machine$double.eps))
-{
+\subsection{One-Dimensional Case (``1d'')}
 
-    if (NROW(X) != NROW(Y))
-        stop("dimensions of X and Y don't match")
-    N <- NROW(X)
-
-    if (is.integer(X)) {
-        if (is.null(attr(X, "levels")))
-            attr(X, "levels") <- 1:max(X)
-    }
-
-    @<Check weights, subset, block@>
-
-    ms <- !(complete.cases(X) & complete.cases(Y))
-    if (all(ms))
-        stop("all observations are missing")
-    if (any(ms)) {
-        if (length(subset) > 0) {
-            if (all(subset %in% which(ms)))
-                stop("all observations are missing")
-            subset <- subset[!(subset %in% which(ms))]
-        } else {
-            subset <- (1:N)[-which(ms)]
-        }
-    }
-
-    ret <- .Call(R_ExpectationCovarianceStatistic, X, Y, weights, subset,
-                 block, as.integer(varonly), as.double(tol))
-    ret$varonly <- as.logical(ret$varonly)
-    ret$Xfactor <- as.logical(ret$Xfactor)
-    if (nperm > 0) {
-        ret$PermutedLinearStatistic <-
-            .Call(R_PermutedLinearStatistic, X, Y, weights, subset,
-                  block, as.double(nperm))
-        if (standardise)
-            ret$StandardisedPermutedLinearStatistic <-
-                .Call(R_StandardisePermutedLinearStatistic, ret)
-    }
-    class(ret) <- c("LinStatExpCov1d", "LinStatExpCov")
-    ret
-}
-@}
+We assume that $\x_i$ and $\y_i$ for $i = 1, \dots, N$ are available as
+numeric matrices \verb|X| and \verb|Y| with $N$ rows as well as $P$ and $Q$
+columns, respectively. The special case of a dummy matrix
+\verb|X| with $P$ columns can also be represented by a factor at $P$ levels.
+The vector of case weights \verb|weights| can be stored as \verb|integer|
+or \verb|double| (possibly resulting from an aggregation of $N > $
+\verb|INT_MAX| observations). The subset vector \verb|subset| may contain
+the elements $1, \dots, N$ as \verb|integer| or \verb|double| (for $N > $
+\verb|INT_MAX|) and can be longer than $N$. The \verb|subset| vector MUST be
+sorted. \verb|block| is a factor at $B$ levels of length $N$. 
 
 @d Check weights, subset, block
 @{
@@ -337,6 +315,120 @@ if (length(block) > 0) {
 }
 @}
 
+
+
+Missing values are only allowed in \verb|X| and
+\verb|Y|, all other vectors must not contain \verb|NA|s. Missing values are
+dealt with by excluding the corresponding observations from the subset
+vector.
+
+@d Handle Missing Values
+@{
+ms <- !(complete.cases(X) & complete.cases(Y))
+if (all(ms))
+    stop("all observations are missing")
+if (any(ms)) {
+    if (length(subset) > 0) {
+        if (all(subset %in% which(ms)))
+            stop("all observations are missing")
+        subset <- subset[!(subset %in% which(ms))]
+    } else {
+        subset <- (1:N)[-which(ms)]
+    }
+}
+@}
+
+The logical argument \verb|varonly| triggers the computation of the diagonal
+elements of the covariance matrix $\Sigma$ only. \verb|nperm| permuted linear statistics
+under the null hypothesis $H_0$ are returned on the original and
+standardised scale (the latter only when \verb|standardise| is \verb|TRUE|).
+Variances smaller than \verb|tol| are treated as being zero.
+
+@d LinStatExpCov1d
+@{
+.LinStatExpCov1d <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
+                             varonly = FALSE, nperm = 0, standardise = FALSE,
+                             tol = sqrt(.Machine$double.eps))
+{
+
+    if (NROW(X) != NROW(Y))
+        stop("dimensions of X and Y don't match")
+    N <- NROW(X)
+
+    if (is.factor(X)) X <- unclass(X)
+
+    if (is.integer(X)) {
+        if (is.null(attr(X, "levels")))
+            attr(X, "levels") <- 1:max(X)
+    }
+
+    @<Check weights, subset, block@>
+
+    @<Handle Missing Values@>
+
+    ret <- .Call(R_ExpectationCovarianceStatistic, X, Y, weights, subset,
+                 block, as.integer(varonly), as.double(tol))
+    ret$varonly <- as.logical(ret$varonly)
+    ret$Xfactor <- as.logical(ret$Xfactor)
+    if (nperm > 0) {
+        ret$PermutedLinearStatistic <-
+            .Call(R_PermutedLinearStatistic, X, Y, weights, subset,
+                  block, as.double(nperm))
+        if (standardise)
+            ret$StandardisedPermutedLinearStatistic <-
+                .Call(R_StandardisePermutedLinearStatistic, ret)
+    }
+    class(ret) <- c("LinStatExpCov1d", "LinStatExpCov")
+    ret
+}
+@}
+
+Here is a simple example. We have five groups and a uniform outcome (rounded
+to one digit) and want
+to test independence of group membership and outcome. The simplest way is
+to set-up the dummy matrix explicitly:
+<<1dex-1>>=
+library("libcoin")
+set.seed(290875)
+x <- gl(5, 20)
+y <- round(runif(length(x)), 1)
+ls1 <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1))
+ls1$LinearStatistic
+tapply(y, x, sum)
+@@
+The linear statistic is simply the sum of the response in each group.
+Alternatively, we can compute the same object without setting-up the dummy
+matrix:
+<<1dex-2>>=
+ls2 <- LinStatExpCov(X = x, Y = matrix(y, ncol = 1))
+all.equal(ls1, ls2)
+@@
+The results are identical, except for a logical indicating that a factor was
+used to represent the dummy matrix \verb|X|.
+
+\subsection{Two-Dimensional Case (``2d'')}
+
+Sometimes the data takes only a few unique values and considerable
+computational speedups can be achieved taking this information into account.
+Let \verb|ix| denote an integer vector with elements $0, \dots, L_x$ of
+length $N$ and 
+\verb|iy| an integer vector with elements $0, \dots, L_y$, also of length
+$N$. The matrix
+\verb|X| is now of dimension $(L_x + 1) \times P$ and the matrix \verb|Y|
+of dimension $(L_y + 1) \times Q$. The combination of \verb|X| and \verb|ix|
+means that the $i$th observation corresponds to the row \verb|X[ix[i] + 1,]|.
+This looks cumbersome in \proglang{R} notation but is a very efficient way
+of dealing with missing values at \proglang{C} level. By convention, 
+elements of \verb|ix| being zero denote a missing value (\verb|NA|s are not
+allowed in \verb|ix| and \verb|iy|). Thus, the first row of \verb|X| 
+corresponds to a missing value. If the first row is simply zero, missing
+values do not contribute to any of the sums computed later. Even more
+important is the fact that all entities, such as linear statistics etc., can
+be computed from the two-way tabulation (therefore the abbrevation ``2d'') 
+over the $N$ elements of \verb|ix| and \verb|iy|. Once such a
+table was computed, the remaining computations can be performed in
+dimension $L_x \times L_y$, typically much smaller than $N$.
+
 @d LinStatExpCov2d
 @{
 .LinStatExpCov2d <- function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
@@ -344,6 +436,10 @@ if (length(block) > 0) {
                              standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
+
+    if (is.factor(ix)) ix <- unclass(ix)
+    if (is.factor(iy)) ix <- unclass(iy)
+
     if (!((length(ix) == length(iy)) &&
           is.integer(ix) && is.integer(iy)))
         stop("incorrect ix and/or iy")
@@ -385,6 +481,36 @@ if (length(block) > 0) {
 }
 @}
 
+In our small example, we can set-up the data in the following way
+<<2dex-1>>=
+X <- rbind(0, diag(nlevels(x)))
+ix <- unclass(x)
+ylev <- sort(unique(y))
+Y <- rbind(0, matrix(ylev, ncol = 1))
+iy <- .bincode(y, breaks = c(-Inf, ylev, Inf))
+ls3 <- LinStatExpCov(X = X, ix = ix, Y = Y, iy = iy)
+all.equal(ls1, ls3)
+@@
+Similar to the one-dimensional case, we can also omit the \verb|X| matrix
+here
+<<2dex-2>>=
+ls4 <- LinStatExpCov(ix = ix, Y = Y, iy = iy)
+all.equal(ls3, ls4)
+@@
+It is important to note that all computations are based on the tabulations
+<<2dex-3>>=
+ls3$Table
+xtabs(~ ix + iy)
+@@
+where the former would record missing values in the first row / column.
+
+\subsection{Methods and Tests}
+
+Objects of class \verb|LinStatExpCov| returned by \verb|LinStatExpCov()|
+contain the symmetric covariance matrix as a vector of the lower triangular
+elements. The \verb|vcov| method allows to extract the full covariance
+matrix from such an object.
+
 @d vcov LinStatExpCov
 @{
 vcov.LinStatExpCov <- function(object, ...) {
@@ -397,8 +523,23 @@ vcov.LinStatExpCov <- function(object, ...) {
     diag(ret) <- diag(ret) / 2
     ret
 }
-
 @}
+
+<<vcov-1>>=
+ls1$Covariance
+vcov(ls1)
+@@
+
+The most important task is, however, to compute test statistics and
+$p$-values. \verb|doTest()| allows to compute the statistics $c_\text{max}$
+(taking \verb|alternative| into account) and $c_\text{quad}$ along with the
+corresponding $p$-values. If \verb|nperm = 0| was used in the call to
+\verb|LinStatExpCov()|, $p$-values are obtained from the limiting asymptotic
+distribution whenever such a thing is available at reasonable costs.
+Otherwise, the permutation $p$-value is returned (along with the permuted
+test statistics when \verb|PermutedStatistics| is \verb|TRUE|). The
+$p$-values (\verb|lower = FALSE|) or $(1 - p)$-values (\verb|lower = TRUE|) 
+can be computed on the log-scale.
 
 @d doTest Prototype
 @{(object, teststat = c("maximum", "quadratic", "scalar"),
@@ -464,10 +605,31 @@ doTest <- function@<doTest Prototype@>
 }
 @}
 
+<<doTest-1>>=
+### c_max test statistic
+### no p-value
+doTest(ls1, teststat = "maximum", pvalue = FALSE)
+### p-value
+doTest(ls1, teststat = "maximum")
+### log(p)-value
+doTest(ls1, teststat = "maximum", log = TRUE)
+### (1-p)-value
+doTest(ls1, teststat = "maximum", lower = TRUE)
+### log(1 - p)-value
+doTest(ls1, teststat = "maximum", lower = TRUE, log = TRUE)
+### quadratic
+doTest(ls1, teststat = "quadratic")
+@@
+
+\subsection{Tabulations}
+
+The tabulation of \verb|ix| and \verb|iy| can be computed without
+necessarily computing the corresponding linear statistics via
+\verb|ctabs()|.
+
 @d ctabs Prototype
 @{(ix, iy = integer(0), block = integer(0), weights = integer(0),
    subset = integer(0))@}
-
 
 @o ctabs.R -cp
 @{
@@ -499,6 +661,11 @@ ctabs <- function@<ctabs Prototype@>
 }
 @}
 
+<<ctabsex-1>>=
+t1 <- ctabs(ix = ix, iy = iy)
+t2 <- xtabs(~ ix + iy)
+max(abs(t1[-1, -1] - t2))
+@@
 
 \section{Manual Pages}
 
@@ -591,6 +758,7 @@ doTest@<doTest Prototype@>
   \item{lower}{a logical indicating if a p-value (\code{lower} is \code{FALSE})
                or 1 - p-value (\code{lower} is \code{TRUE}) shall be returned.}
   \item{log}{a logical, if \code{TRUE} probabilities are log-probabilities.}
+  \item{PermutedStatistics}{a logical, return permuted test statistics.}
   \item{minbucket}{minimum weight in either of two groups for maximally selected
                    statistics.}
   \item{ordered}{a logical, if \code{TRUE} maximally selected statistics
@@ -644,6 +812,17 @@ ctabs@<ctabs Prototype@>
 
 \chapter{C Code}
 
+The main motivation to implement the \pkg{libcoin} package comes from the
+demand to compute high-dimensional linear statistics (with large $P$ and
+$Q$) and the corresponding test statistics very often, either for sampling
+from the permutation null distribution $H_0$ or for different subsets of the
+data. Especially the latter task can be performed \emph{without} actually
+subsetting the data via the \verb|subset| argument very efficiently (in
+terms of memory consumption and, depending on the circumstances, speed).
+
+We start with the definition of some macros and global variables in the
+header files.
+
 \section{Header and Source Files}
 
 @o libcoin_internal.h -cc
@@ -653,6 +832,9 @@ ctabs@<ctabs Prototype@>
 @<C Macros@>
 @<C Global Variables@>
 @}
+
+These includes provide some \proglang{R} infrastructure at \proglang{C}
+level.
 
 @d R Includes
 @{
@@ -665,6 +847,11 @@ ctabs@<ctabs Prototype@>
 #include <R_ext/Lapack.h> /* for dgesdd */
 @}
 
+We need three macros: \verb|S| computes the element $\Sigma_{ij}$ of a
+symmetric $n \times n$ matrix when only the lower triangular elements are
+stored. \verb|LE| implements $\le$ with some tolerance, \verb|GE| implements
+$\ge$.
+
 @d C Macros
 @{
 #define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)
@@ -675,38 +862,38 @@ ctabs@<ctabs Prototype@>
 
 @d C Global Variables
 @{
-#define ALTERNATIVE_twosided            1
-#define ALTERNATIVE_less                2
-#define ALTERNATIVE_greater             3
+#define ALTERNATIVE_twosided				1
+#define ALTERNATIVE_less				2
+#define ALTERNATIVE_greater				3
 
-#define TESTSTAT_maximum                1
-#define TESTSTAT_quadratic              2
+#define TESTSTAT_maximum				1
+#define TESTSTAT_quadratic				2
 
-#define LinearStatistic_SLOT            0
-#define Expectation_SLOT                1
-#define Covariance_SLOT                 2
-#define Variance_SLOT                   3
-#define MPinv_SLOT                      4
-#define ExpectationX_SLOT               5
-#define varonly_SLOT                    6
-#define dim_SLOT                        7
-#define ExpectationInfluence_SLOT       8
-#define CovarianceInfluence_SLOT        9
-#define VarianceInfluence_SLOT          10
-#define Xfactor_SLOT                    11
-#define tol_SLOT                        12
-#define PermutedLinearStatistic_SLOT    13
-#define StandardisedPermutedLinearStatistic_SLOT    14
-#define TableBlock_SLOT                 15
-#define Sumweights_SLOT                 16
-#define Table_SLOT                      17
+#define LinearStatistic_SLOT				0
+#define Expectation_SLOT				1
+#define Covariance_SLOT					2
+#define Variance_SLOT					3
+#define MPinv_SLOT					4
+#define ExpectationX_SLOT				5
+#define varonly_SLOT					6
+#define dim_SLOT					7
+#define ExpectationInfluence_SLOT			8
+#define CovarianceInfluence_SLOT			9
+#define VarianceInfluence_SLOT				10
+#define Xfactor_SLOT					11
+#define tol_SLOT					12
+#define PermutedLinearStatistic_SLOT			13
+#define StandardisedPermutedLinearStatistic_SLOT	14
+#define TableBlock_SLOT					15
+#define Sumweights_SLOT					16
+#define Table_SLOT					17
 
-#define DoSymmetric 			1
-#define DoCenter 			1
-#define DoVarOnly 			1
-#define Power1 				1
-#define Power2 				2
-#define Offset0 			0
+#define DoSymmetric					1
+#define DoCenter 					1
+#define DoVarOnly 					1
+#define Power1 						1
+#define Power2 						2
+#define Offset0 					0
 @| LinearStatistic_SLOT Expectation_SLOT Covariance_SLOT Variance_SLOT
 MPinv_SLOT ExpectationX_SLOT varonly_SLOT dim_SLOT
 ExpectationInfluence_SLOT CovarianceInfluence_SLOT VarianceInfluence_SLOT
@@ -717,7 +904,9 @@ Power2 Offset0
 
 
 The corresponding header file contains definitions of
-functions to be used outside \verb|libcoin.c|
+functions that can be called via \verb|.Call()| from the \pkg{libcoin}
+package. In addition, packages linking to \pkg{libcoin} can access these
+function at \proglang{C} level (at your own risk, of course!).
 
 @o libcoin.h -cc
 @{
@@ -750,15 +939,15 @@ extern @<R\_ThreeTableSums Prototype@>;
 extern @<R\_order\_subset\_wrt\_block Prototype@>;
 @}
 
-The \proglang{C} file \verb|libcoin.c| defines the \proglang{C}
-functions and a corresponding \proglang{R} interface (via \verb|.C()|)
+The \proglang{C} file \verb|libcoin.c| contains all \proglang{C}
+functions and corresponding \proglang{R} interfaces.
 
 @o libcoin.c -cc
 @{
 @<C Header@>
 #include "libcoin_internal.h"
-#include <R_ext/stats_stubs.h> /* for S_rcont2 */
-#include <mvtnormAPI.h>
+#include <R_ext/stats_stubs.h> 	/* for S_rcont2 */
+#include <mvtnormAPI.h>		/* for calling mvtnorm */
 @<Function Definitions@>
 @}
 
@@ -780,9 +969,6 @@ functions and a corresponding \proglang{R} interface (via \verb|.C()|)
 @<2d User Interface@>
 @<Tests@>
 @}
-
-The \proglang{R} interfaces are used to implement
-regression tests to be called from within \proglang{R}
 
 \section{Variables}
 
@@ -875,8 +1061,8 @@ The weights $w_i, i = 1, \dots, N$
 @|weights
 @}
 
-can be constant one \verb|XLENGTH(weights) == 0| or integer-valued, with 
-\verb|HAS_WEIGHTS == 0| in the former case
+can be constant one (\verb|XLENGTH(weights) == 0| or \verb|weights = integer(0)|) 
+or integer-valued, with \verb|HAS_WEIGHTS == 0| in the former case
 
 @d C integer weights Input
 @{
@@ -910,7 +1096,7 @@ Subsets $\A \subseteq \{1, \dots, N\}$ are \proglang{R} style indices
 @|subset
 @}
 
-are either not existant (\verb|XLENGTH(subset) == 0|) or of length
+are either not existent (\verb|XLENGTH(subset) == 0|) or of length
 
 @d C integer Nsubset Input
 @{
@@ -926,6 +1112,8 @@ Optionally, one can specify a subset of the subset via
     @<C integer Nsubset Input@>
 @|offset
 @}
+
+where \verb|offset| is a \proglang{C} style index for \verb|subset|.
 
 Subsets are stored either as integer
 
@@ -945,7 +1133,7 @@ or double (to allow for indices larger than \verb|INT_MAX|)
 @|subset
 @}
 
-Blocks $b_i, i = 1, \dots, N$
+Blocks $\text{block}_i, i = 1, \dots, N$
 
 @d R block Input
 @{
@@ -955,10 +1143,10 @@ Blocks $b_i, i = 1, \dots, N$
 
 at $B$ levels
 
-@d C integer Lb Input
+@d C integer B Input
 @{
-    int Lb
-@|Lb
+    int B
+@|B
 @}
 
 are stored as a factor
@@ -966,11 +1154,11 @@ are stored as a factor
 @d C integer block Input
 @{
     int *block,
-    @<C integer Lb Input@>,
+    @<C integer B Input@>,
 @|block
 @}
 
-The tabulation of $b$ (potentially in subsets) is
+The tabulation of block (potentially in subsets) is
 
 @d R blockTable Input
 @{
@@ -979,11 +1167,14 @@ The tabulation of $b$ (potentially in subsets) is
 @}
 
 where the table is of length $B + 1$ and the first element
-counts the number of missing values.
+counts the number of missing values (although these are NOT allowed in
+block).
 
-<<Sums-setup>>=
-library("libcoin")
-set.seed(29)
+\subsection{Example Data and Code}
+
+We start with setting-up some toy data sets to be used as test bed. The data
+over both the 1d and the 2d case, including weights, subsets and blocks.
+<<ex-setup>>=
 N <- 20L
 P <- 3L
 Lx <- 10L
@@ -1010,6 +1201,11 @@ r1Xfactor <- rep(1:ncol(Xfactor), ncol(y))
 r2 <- rep(1:ncol(y), each = ncol(x))
 r2Xfactor <- rep(1:ncol(y), each = ncol(Xfactor))
 @@
+
+As a benchmark, we implement linear statistics, their expectation and
+covariance, taking weights, subsets and blocks into account, at \proglang{R}
+level. In a sense, the core of the \pkg{libcoin} package is ``just'' a less
+memory-hungry and sometimes faster version of this simple function.
 
 <<Rlibcoin>>=
 LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0)) {
@@ -1045,7 +1241,9 @@ LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = intege
    }
    return(ret)
 }
+@@
 
+<<cmpr>>=
 cmpr <- function(ret1, ret2) {
     if (inherits(ret1, "LinStatExpCov")) {
         if (!ret1$varonly)
@@ -1059,31 +1257,42 @@ cmpr <- function(ret1, ret2) {
     nm <- names(table(nm))[table(nm) == 2]
     all.equal(ret1[nm], ret2[nm])
 }
+@@
 
+We now compute the linear statistic along with corresponding expectation,
+variance and covariance for later reuse.
+
+<<benchmarks>>=
+LECVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset)
+LEVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset, varonly = TRUE)
+@@
+
+The following tests compare the high-level \proglang{R} implementation
+(function \verb|LECV()|) with the 1d and 2d \proglang{C} level
+implementations in the two sitations with and without specification of
+\verb|X| (ie, the dummy matrix in the latter case).
+
+<<tests>>=
+### with X given
 testit <- function(...) {
     a <- LinStatExpCov(x, y, ...)
     b <- LECV(x, y, ...)
     d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, ...)
     return(cmpr(a, b) && cmpr(d, b))
 }
-
-LECVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset)
-LEVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset, varonly = TRUE)
-
 stopifnot(
     testit() && testit(weights = weights) &&
     testit(subset = subset) && testit(weights = weights, subset = subset) &&
     testit(block = block) && testit(weights = weights, block = block) &&
     testit(subset = subset, block = block) && 
     testit(weights = weights, subset = subset, block = block))
-
+### without dummy matrix X
 testit <- function(...) {
     a <- LinStatExpCov(X = ix, y, ...)
     b <- LECV(Xfactor, y, ...)
     d <- LinStatExpCov(X = integer(0), ix = ix, Y = iY2d, iy = iy, ...)
     return(cmpr(a, b) && cmpr(d, b))
 }
-
 stopifnot(
     testit() && testit(weights = weights) &&
     testit(subset = subset) && testit(weights = weights, subset = subset) &&
@@ -1092,9 +1301,26 @@ stopifnot(
     testit(weights = weights, subset = subset, block = block))
 @@
 
-\section{User Interface}
+All three implementations give the same results.
 
-\subsection{1d Case}
+\section{Conventions}
+
+Functions starting with \verb|R_| are \proglang{C} functions callable via
+\verb|.Call()| from \proglang{R}. That means they all return \verb|SEXP|.
+These functions allocate memory handled by \proglang{R}.
+
+Functions starting with \verb|RC_| are \proglang{C} functions with 
+\verb|SEXP| or pointer arguments and possibly an \verb|SEXP| return value. 
+
+Functions starting with \verb|C_| only take pointer arguments and return a
+scalar nor nothing.
+
+Return values (arguments modified by a function) are named \verb|ans|,
+sometimes with dimension (for example: \verb|PQ_ans|).
+
+\section{C User Interface}
+
+\subsection{One-Dimensional Case (``1d'')}
 
 @d User Interface
 @{
@@ -1104,6 +1330,10 @@ stopifnot(
 @<R\_StandardisePermutedLinearStatistic@>
 @}
 
+The data are given as $\x_i$ and $\y_i$ for $i = 1, \dots, N$, optionally
+with weights, subset and blocks. The latter three variables are ignored when
+specified as \verb|integer(0)|.
+
 @d User Interface Inputs
 @{
 @<R x Input@>
@@ -1112,6 +1342,8 @@ stopifnot(
 @<R subset Input@>,
 @<R block Input@>,
 @}
+
+This function can be called from other packages.
 
 @o libcoinAPI.h -cc
 @{
@@ -1143,6 +1375,9 @@ SEXP tol
 )
 @}
 
+The \proglang{C} interface essentially sets-up the necessary memory and
+calls a \proglang{C} level function for the computations.
+
 @d R\_ExpectationCovarianceStatistic
 @{
 @<R\_ExpectationCovarianceStatistic Prototype@>
@@ -1151,7 +1386,7 @@ SEXP tol
 
     @<Setup Dimensions@>
 
-    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], Lb, isInteger(x), REAL(tol)[0]));
+    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], B, isInteger(x), REAL(tol)[0]));
 
     RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
 
@@ -1161,10 +1396,13 @@ SEXP tol
 @|R_ExpectationCovarianceStatistic
 @}
 
+$P$, $Q$ and $B$ are first extracted from the data. The case where \verb|X|
+is an implicitly specified dummy matrix, the dimension $P$ is the number of
+levels of \verb|x|.
 
 @d Setup Dimensions
 @{
-    int P, Q, Lb;
+    int P, Q, B;
 
     if (isInteger(x)) {
         P = NLEVELS(x);
@@ -1173,10 +1411,19 @@ SEXP tol
     }
     Q = NCOL(y);
 
-    Lb = 1;
+    B = 1;
     if (LENGTH(block) > 0)
-        Lb = NLEVELS(block);
+        B = NLEVELS(block);
 @}
+
+The core function first computes the linear statistic (as there is no need
+to pay attention to blocks) and, in a second step, starts a loop over
+potential blocks.
+
+FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not
+             handled correctly (as \verb|sumweights| doesnt't take this information
+             into account; use subset to exclude these missings (as done
+             in libcoin::LinStatExpCov)
 
 
 @d RC\_ExpectationCovarianceStatistic
@@ -1190,16 +1437,11 @@ SEXP ans
     @<C integer N Input@>;
     @<C integer P Input@>;
     @<C integer Q Input@>;
-    @<C integer Lb Input@>;
+    @<C integer B Input@>;
     double *sumweights, *table;
     double *ExpInf, *VarInf, *CovInf, *ExpX, *ExpXtotal, *VarX, *CovX;
     double *tmpV, *tmpCV;
     SEXP nullvec, subset_block;
-
-    /* note: x being an integer (Xfactor) with some 0 elements is not
-             handled correctly (as sumweights doesnt't take this information
-             into account; use subset to exclude these missings (as done
-             in libcoin::LinStatExpCov) */
 
     @<Extract Dimensions@>
 
@@ -1210,7 +1452,7 @@ SEXP ans
     /* start with subset[0] */
     R_xlen_t offset = (R_xlen_t) table[0];
 
-    for (int b = 0; b < Lb; b++) {
+    for (int b = 0; b < B; b++) {
 
         /* compute sum of weights in block b of subset */
         sumweights[b] = RC_Sums(N, weights, subset_block, 
@@ -1221,14 +1463,7 @@ SEXP ans
 
             @<Compute Expectation Linear Statistic@>
 
-            /* C_ordered_Xfactor and C_unordered_Xfactor need both VarInf and CovInf */
-            RC_CovarianceInfluence(N, y, Q, weights, subset_block, offset, 
-                                  (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b], 
-                                  !DoVarOnly, CovInf + b * Q * (Q + 1) / 2);
-            /* extract variance from covariance */
-            tmpCV = CovInf + b * Q * (Q + 1) / 2;
-            tmpV = VarInf + b * Q;
-            for (int q = 0; q < Q; q++) tmpV[q] = tmpCV[S(q, q, Q)];
+            @<Compute Covariance Influence@>
 
             if (C_get_varonly(ans)) {
                 @<Compute Variance Linear Statistic@>
@@ -1247,22 +1482,29 @@ SEXP ans
 @|RC_ExpectationCovarianceStatistic
 @}
 
+The dimensions are available from the return object:
 
 @d Extract Dimensions
 @{
 P = C_get_P(ans);
 Q = C_get_Q(ans);
 N = NROW(x);
-Lb = C_get_Lb(ans);
+B = C_get_B(ans);
 @}
+
+The linear statistic $\T(\A)$ can be computed without taking blocks into account.
 
 @d Compute Linear Statistic
 @{
-PROTECT(nullvec = allocVector(INTSXP, 0));
 RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset, 
-                   Offset0, XLENGTH(subset), nullvec,
+                   Offset0, XLENGTH(subset),
                    C_get_LinearStatistic(ans));
 @}
+
+We next extract memory from the return object and allocate some additional
+memory. The most important step is to tabulate blocks and to order the
+subset with respect to blocks. In absense of block, this just returns
+subset.
 
 @d Setup Memory and Subsets in Blocks
 @{
@@ -1276,12 +1518,13 @@ VarX = Calloc(P, double);
 CovX = Calloc(P * (P + 1) / 2, double);
 table = C_get_TableBlock(ans);
 sumweights = C_get_Sumweights(ans);
+PROTECT(nullvec = allocVector(INTSXP, 0));
 
-if (Lb == 1) {
+if (B == 1) {
     table[0] = 0.0;
     table[1] = RC_Sums(N, nullvec, subset, Offset0, XLENGTH(subset));
 } else {
-    RC_OneTableSums(INTEGER(block), N, Lb + 1, nullvec, subset, Offset0, 
+    RC_OneTableSums(INTEGER(block), N, B + 1, nullvec, subset, Offset0, 
                     XLENGTH(subset), table);
 }
 if (table[0] > 0)
@@ -1289,6 +1532,10 @@ if (table[0] > 0)
 PROTECT(subset_block = RC_order_subset_wrt_block(N, subset, block, 
                                                  VECTOR_ELT(ans, TableBlock_SLOT)));
 @}
+
+We compute $\mu(\A)$ based on $\E(h \mid S(\A))$ and $\sum_{i \in \A} w_i \x_i$
+for the subset given by subset and the $b$th level of block. The expectation
+is initialised zero when $b = 0$ and values add-up over blocks.
 
 @d Compute Expectation Linear Statistic
 @{
@@ -1300,6 +1547,25 @@ for (int p = 0; p < P; p++) ExpXtotal[p] += ExpX[p];
 C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b, 
                              C_get_Expectation(ans));
 @}
+
+The covariance $\V(h \mid S(\A))$ is now computed for the subset given by
+subset and the $b$th level of block. Note that \verb|CovInf| stores the
+values for each block in the return object (for later reuse).
+
+@d Compute Covariance Influence
+@{
+/* C_ordered_Xfactor and C_unordered_Xfactor need both VarInf and CovInf */
+RC_CovarianceInfluence(N, y, Q, weights, subset_block, offset, 
+                      (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b], 
+                      !DoVarOnly, CovInf + b * Q * (Q + 1) / 2);
+/* extract variance from covariance */
+tmpCV = CovInf + b * Q * (Q + 1) / 2;
+tmpV = VarInf + b * Q;
+for (int q = 0; q < Q; q++) tmpV[q] = tmpCV[S(q, q, Q)];
+@}
+
+We can now compute the variance or covariance of the linear statistic
+$\Sigma(\A)$:
 
 @d Compute Variance Linear Statistic
 @{
@@ -1318,10 +1584,9 @@ C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
                             C_get_Covariance(ans));
 @}
 
-<<permutations>>=
-LinStatExpCov(x, y, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
-LinStatExpCov(x, y, weights = weights, subset = subset, block = block, nperm = 10)$PermutedLinearStatistic
-@@
+The computation of permuted linear statistics is done outside this general
+function. The user interface is the same, except for an additional number of
+permutations to be specified.
 
 @d R\_PermutedLinearStatistic Prototype
 @{
@@ -1346,6 +1611,15 @@ extern SEXP libcoin_R_PermutedLinearStatistic(
 }
 @}
 
+The dimensions are extracted from the data in the same ways as above. The
+function differentiates between the absense and presense of blocks.
+Weights are removed by expanding subset accordingly. Once within-block
+permutations were set-up the Kronecker product of \verb|X| and \verb|Y| is
+computed. Note that this function returns the matrix of permuted linear
+statistics; the \proglang{R} interface assigns this matrix to the
+corresponding element of the \verb|LinStatExpCov| object (because we are not
+allowed to modify existing \proglang{R} objects at \proglang{C} level).
+
 @d R\_PermutedLinearStatistic
 @{
 @<R\_PermutedLinearStatistic Prototype@>
@@ -1369,19 +1643,17 @@ extern SEXP libcoin_R_PermutedLinearStatistic(
     PROTECT(perm = allocVector(REALSXP, Nsubset));
 
     GetRNGstate();
-    if (Lb == 1) {
+    if (B == 1) {
         for (R_xlen_t np = 0; np < inperm; np++) {
             @<Setup Linear Statistic@>
             C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));
-           /* does not require weights (as RC_LinearStatistic) */
-           RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
-                                   expand_subset, Offset0, Nsubset,
-                                   perm, linstat);
+            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, expand_subset, 
+                                    Offset0, Nsubset, perm, linstat);
         }
     } else {
-        PROTECT(blockTable = allocVector(REALSXP, Lb + 1));
+        PROTECT(blockTable = allocVector(REALSXP, B + 1));
         /* same as RC_OneTableSums(block, noweights, expand_subset) */
-        RC_OneTableSums(INTEGER(block), XLENGTH(block), Lb + 1, weights, subset, Offset0,
+        RC_OneTableSums(INTEGER(block), XLENGTH(block), B + 1, weights, subset, Offset0,
                         XLENGTH(subset), REAL(blockTable));
         PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset, 
                                                          block, blockTable));
@@ -1389,11 +1661,9 @@ extern SEXP libcoin_R_PermutedLinearStatistic(
         for (R_xlen_t np = 0; np < inperm; np++) {
             @<Setup Linear Statistic@>
             C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(blockTable), 
-                             Lb + 1, REAL(tmp), REAL(perm));
-            /* does not require weights (as RC_LinearStatistic) */
-            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q,
-                                    block_subset, Offset0, Nsubset,
-                                    perm, linstat);
+                             B + 1, REAL(tmp), REAL(perm));
+            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, block_subset, 
+                                    Offset0, Nsubset, perm, linstat);
         }
         UNPROTECT(2);
     }
@@ -1425,6 +1695,9 @@ extern SEXP libcoin_StandardisePermutedLinearStatistic(
     return fun(LECV);
 }
 @}
+
+This small function takes an object containing permuted linear statistics
+and returns the matrix of standardised linear statistics.
 
 @d R\_StandardisePermutedLinearStatistic Prototype
 @{
@@ -1464,8 +1737,7 @@ SEXP R_StandardisePermutedLinearStatistic
 }
 @}
 
-\subsection{2d Case}
-
+\subsection{Two-Dimensional Case (``2d'')}
 
 @d 2d User Interface
 @{
@@ -1526,15 +1798,15 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
     @<Setup Dimensions 2d@>
 
     PROTECT(ans = RC_init_LECV_2d(P, Q, INTEGER(varonly)[0], 
-                                  Lx, Ly, Lb, Xfactor, REAL(tol)[0]));
+                                  Lx, Ly, B, Xfactor, REAL(tol)[0]));
 
-    if (Lb == 1) {
+    if (B == 1) {
         RC_TwoTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1, 
                         weights, subset, Offset0, Nsubset, 
                         C_get_Table(ans));
     } else {
         RC_ThreeTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1, 
-                          INTEGER(block), Lb, weights, subset, Offset0, Nsubset, 
+                          INTEGER(block), B, weights, subset, Offset0, Nsubset, 
                           C_get_Table(ans));
     }
     RC_ExpectationCovarianceStatistic_2d(x, ix, y, iy, weights,
@@ -1548,7 +1820,7 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
 
 @d Setup Dimensions 2d
 @{
-int P, Q, Lb, Lx, Ly;
+int P, Q, B, Lx, Ly;
 
 if (XLENGTH(x) == 0) {
     P = NLEVELS(ix);
@@ -1557,9 +1829,9 @@ if (XLENGTH(x) == 0) {
 }
 Q = NCOL(y);
 
-Lb = 1;
+B = 1;
 if (XLENGTH(block) > 0)
-    Lb = NLEVELS(block);
+    B = NLEVELS(block);
 
 Lx = NLEVELS(ix);
 Ly = NLEVELS(iy);
@@ -1594,7 +1866,7 @@ if (Xfactor) {
 @{
 for (int i = 0; i < Lxp1 * Lyp1; i++)
     table2d[i] = 0.0;
-for (int b = 0; b < Lb; b++) {
+for (int b = 0; b < B; b++) {
     for (int i = 0; i < Lxp1; i++) {
         for (int j = 0; j < Lyp1; j++)
             table2d[j * Lxp1 + i] += table[b * Lxp1 * Lyp1 + j * Lxp1 + i];
@@ -1677,7 +1949,7 @@ SEXP ans
 ) {
 
     SEXP Rcsum, Rrsum;
-    int P, Q, Lxp1, Lyp1, Lb, Xfactor;
+    int P, Q, Lxp1, Lyp1, B, Xfactor;
     double *ExpInf, *ExpX, *CovX;
     double *table, *table2d, *csum, *rsum, *sumweights, *btab, *linstat;
 
@@ -1691,7 +1963,7 @@ SEXP ans
 
     Lxp1 = C_get_dimTable(ans)[0];
     Lyp1 = C_get_dimTable(ans)[1];
-    Lb = C_get_Lb(ans);
+    B = C_get_B(ans);
     Xfactor = C_get_Xfactor(ans);
 
     if (C_get_varonly(ans)) {
@@ -1712,7 +1984,7 @@ SEXP ans
     for (int p = 0; p < P * Q; p++)
         linstat[p] = 0.0;
 
-    for (int b = 0; b < Lb; b++) {
+    for (int b = 0; b < B; b++) {
         btab = table + Lxp1 * Lyp1 * b;
 
         @<Linear Statistic 2d@>
@@ -1783,7 +2055,7 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
 
     @<Convert Table to Integer@>
 
-    for (int b = 0; b < Lb; b++) {
+    for (int b = 0; b < B; b++) {
         btab = INTEGER(Ritable) + Lxp1 * Lyp1 * b;
         @<Col Row Total Sums@>
         if (sumweights[b] > maxn) maxn = sumweights[b];
@@ -1800,7 +2072,7 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
         for (int p = 0; p < Lxp1 * Lyp1; p++)
             table[p] = 0;
 
-        for (int b = 0; b < Lb; b++) {
+        for (int b = 0; b < B; b++) {
             @<Compute Permuted Linear Statistic 2d@>
         }
     }
@@ -1827,9 +2099,9 @@ for (int i = 0; i < LENGTH(itable); i++) {
 
 @d Setup Working Memory
 @{
-csum = Calloc(Lyp1 * Lb, int);
-rsum = Calloc(Lxp1 * Lb, int);
-sumweights = Calloc(Lb, int);
+csum = Calloc(Lyp1 * B, int);
+rsum = Calloc(Lxp1 * B, int);
+sumweights = Calloc(B, int);
 table = Calloc(Lxp1 * Lyp1, int);
 rtable2 = Calloc(Lx * Ly , int);
 jwork = Calloc(Lyp1, int);
@@ -2631,7 +2903,7 @@ void C_ordered_Xfactor
             for (R_xlen_t np = 0; np < nperm; np++)
                 mblinstat[q + np * Q] += blinstat[q * P + p + np * PQ];
             mexpect[q] += expect[q * P + p];
-            if (Lb == 1) {
+            if (B == 1) {
                 @<Compute maxstat Variance / Covariance Directly@>
             } else {
                 @<Compute maxstat Variance / Covariance from Total Covariance@>
@@ -2664,7 +2936,7 @@ void C_ordered_Xfactor
 @d Setup maxstat Variables
 @{
 double *linstat, *expect, *covar, *varinf, *covinf, *ExpX, *blinstat, tol, *ls;
-int P, Q, Lb;
+int P, Q, B;
 R_xlen_t nperm;
 
 double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, 
@@ -2674,8 +2946,8 @@ int rank, PQ, greater;
 Q = C_get_Q(LECV);
 P = C_get_P(LECV);
 PQ = P * Q;
-Lb = C_get_Lb(LECV);
-if (Lb > 1) {
+B = C_get_B(LECV);
+if (B > 1) {
     if (C_get_varonly(LECV))
         error("need covarinance for maximally statistics with blocks");
     covar = C_get_Covariance(LECV);
@@ -2808,7 +3080,7 @@ void C_unordered_Xfactor
 
         @<Compute unordered maxstat Linear Statistic and Expectation@>
 
-        if (Lb == 1) {
+        if (B == 1) {
             @<Compute unordered maxstat Variance / Covariance Directly@>
         } else {
             @<Compute unordered maxstat Variance / Covariance from Total Covariance@>
@@ -2945,7 +3217,6 @@ if (teststat == TESTSTAT_maximum) {
 }
 @}
 
-
 \section{Linear Statistics}
 
 @d LinearStatistics
@@ -2964,7 +3235,6 @@ void RC_LinearStatistic
     @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
-    SEXP subsety,
     @<C KronSums Answer@>
 ) 
 @}
@@ -2975,17 +3245,8 @@ void RC_LinearStatistic
 {
     double center;
 
-    if (XLENGTH(subsety) == 0) {
-        RC_KronSums(x, N, P, y, Q, !DoSymmetric, &center, &center, !DoCenter, weights, 
-                    subset, offset, Nsubset, PQ_ans);
-    } else {
-        if (XLENGTH(weights) > 0) 
-            error("weights given for permutation");
-        if (XLENGTH(subset) != XLENGTH(subsety))
-            error("incorrect subsets");
-        RC_KronSums_Permutation(x, N, P, y, Q, subset, offset, Nsubset, 
-                                subsety, PQ_ans);
-    }
+    RC_KronSums(x, N, P, y, Q, !DoSymmetric, &center, &center, !DoCenter, weights, 
+                subset, offset, Nsubset, PQ_ans);
 }
 @|RC_LinearStatistic
 @}
@@ -5061,21 +5322,21 @@ void RC_ThreeTableSums
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
-            C_ThreeTableSums_iweights_isubset(x, N, P, y, Q, block, Lb, 
+            C_ThreeTableSums_iweights_isubset(x, N, P, y, Q, block, B, 
                                         INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
                                         offset, Nsubset, PQL_ans);
         } else {
-            C_ThreeTableSums_iweights_dsubset(x, N, P, y, Q, block, Lb,
+            C_ThreeTableSums_iweights_dsubset(x, N, P, y, Q, block, B,
                                         INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
                                         offset, Nsubset, PQL_ans);
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
-            C_ThreeTableSums_dweights_isubset(x, N, P, y, Q, block, Lb,
+            C_ThreeTableSums_dweights_isubset(x, N, P, y, Q, block, B,
                                         REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
                                         offset, Nsubset, PQL_ans);
         } else {
-            C_ThreeTableSums_dweights_dsubset(x, N, P, y, Q, block, Lb,
+            C_ThreeTableSums_dweights_dsubset(x, N, P, y, Q, block, B,
                                         REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
                                         offset, Nsubset, PQL_ans);
         }
@@ -5166,7 +5427,7 @@ void C_ThreeTableSums_dweights_isubset
 @{
     int *xx, *yy, *bb, PQ = P * Q;
 
-    for (int p = 0; p < PQ * Lb; p++) PQL_ans[p] = 0.0;
+    for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
 
     yy = y;
     xx = x;
@@ -5784,7 +6045,7 @@ void C_MPinv_sym
 @<C\_get\_Sumweights@>
 @<C\_get\_Table@>
 @<C\_get\_dimTable@>
-@<C\_get\_Lb@>
+@<C\_get\_B@>
 @<C\_get\_nperm@>
 @<C\_get\_PermutedLinearStatistic@>
 @<C\_get\_tol@>
@@ -6036,9 +6297,9 @@ int* C_get_dimTable
 @|C_get_dimTable
 @}
 
-@d C\_get\_Lb
+@d C\_get\_B
 @{
-int C_get_Lb
+int C_get_B
 (
 @<R LECV Input@>
 ) {
@@ -6047,7 +6308,7 @@ int C_get_Lb
         return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));
     return(C_get_dimTable(LECV)[2]);
 }
-@|C_get_Lb
+@|C_get_B
 @}
 
 @d C\_get\_nperm
@@ -6093,8 +6354,8 @@ if (P <= 0)
 if (Q <= 0)
     error("Q is not positive");
 
-if (Lb <= 0)
-    error("Lb is not positive");
+if (B <= 0)
+    error("B is not positive");
 
 if (varonly < 0 || varonly > 1)
     error("varonly is not 0 or 1");
@@ -6163,18 +6424,18 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
     INTEGER(d)[0] = P;
     INTEGER(d)[1] = Q;
     SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
-                   allocVector(REALSXP, Lb * Q));
+                   allocVector(REALSXP, B * Q));
 
     /* should always _both_ be there */
     SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
-                   allocVector(REALSXP, Lb * Q));
+                   allocVector(REALSXP, B * Q));
     SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                   allocVector(REALSXP, Lb * Q * (Q + 1) / 2));
+                   allocVector(REALSXP, B * Q * (Q + 1) / 2));
 
     SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
     INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
-    SET_VECTOR_ELT(ans, TableBlock_SLOT, allocVector(REALSXP, Lb + 1));
-    SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, Lb));
+    SET_VECTOR_ELT(ans, TableBlock_SLOT, allocVector(REALSXP, B + 1));
+    SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, B));
     SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
                    allocMatrix(REALSXP, 0, 0));
     SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
@@ -6209,7 +6470,7 @@ SEXP RC_init_LECV_1d
     @<C integer P Input@>,
     @<C integer Q Input@>,
     int varonly,
-    @<C integer Lb Input@>,
+    @<C integer B Input@>,
     int Xfactor,
     double tol
 ) {
@@ -6219,10 +6480,10 @@ SEXP RC_init_LECV_1d
     @<R\_init\_LECV@>
 
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
-                   allocVector(REALSXP, Lb + 1));
+                   allocVector(REALSXP, B + 1));
 
     SET_VECTOR_ELT(ans, Sumweights_SLOT,
-                   allocVector(REALSXP, Lb));
+                   allocVector(REALSXP, B));
 
     UNPROTECT(2);
     return(ans);
@@ -6239,7 +6500,7 @@ SEXP RC_init_LECV_2d
     int varonly,
     int Lx,
     int Ly,
-    @<C integer Lb Input@>,
+    @<C integer B Input@>,
     int Xfactor,
     double tol
 ) {
@@ -6256,7 +6517,7 @@ SEXP RC_init_LECV_2d
     PROTECT(tabdim = allocVector(INTSXP, 3));
     INTEGER(tabdim)[0] = Lx + 1;
     INTEGER(tabdim)[1] = Ly + 1;
-    INTEGER(tabdim)[2] = Lb;
+    INTEGER(tabdim)[2] = B;
     SET_VECTOR_ELT(ans, Table_SLOT,
                    tab = allocVector(REALSXP,
                        INTEGER(tabdim)[0] *
