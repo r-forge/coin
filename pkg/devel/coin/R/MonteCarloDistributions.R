@@ -5,13 +5,16 @@ split_index <- function(n, by) {
             use.names = FALSE)
 }
 
-MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
+MonteCarlo <- function(x, y, block, weights, B, standardise = FALSE, parallel, ncpus, cl) {
 
-    ## <FIXME> use standardize = TRUE if appropriate?
-    montecarlo <- function(B)
-        LinStatExpCov(X = x, Y = y, weights = as.integer(weights), block = factor(block),
-                      nperm = B)$PermutedLinearStatistic
-    ## </FIXME>
+    montecarlo <- function(B) {
+        ret <- LinStatExpCov(X = x, Y = y, weights = as.integer(weights), block = factor(block),
+                      nperm = B, standardise = as.integer(standardise))
+        if (standardise) 
+            return(ret[c("PermutedLinearStatistic",
+                         "StandardisedPermutedLinearStatistic")])
+        return(ret)
+    }
 
     if (parallel == "no")
         montecarlo(B)

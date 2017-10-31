@@ -203,15 +203,13 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        ## <FIXME> pls can be computed by LinStatExpCov(..., standardize = TRUE)
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(B), ...)
-        ## </FIXME>
+                       object@weights, as.integer(B), standardise = TRUE, ...)
 
         ## <FIXME> can transform p, q, x instead of those </FIXME>
-        ## <FIXME> variance can be 0; libcoin handles this </FIXME>
-        pls <- sort((plsraw - expectation(object)) / sqrt(variance(object)))
+        pls <- sort(plsraw$StandardisedPermutedLinearStatistic)
+        plsraw <- plsraw$PermutedLinearStatistic
 
         p <- function(q) {
             mean(pls %LE% q)
@@ -293,14 +291,12 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        ## <FIXME> pls can be computed by LinStatExpCov(..., standardize = TRUE)
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(B), ...)
-        ## </FIXME>
+                       object@weights, as.integer(B), standardise = TRUE, ...)
 
-        ## <FIXME> variance can be 0; libcoin handles this </FIXME>
-        pls <- (plsraw - expectation(object)) / sqrt(variance(object))
+        pls <- plsraw$StandardisedPermutedLinearStatistic
+        plsraw <- plsraw$PermutedLinearStatistic
 
         ## <FIXME>
         ## pls is a rather large object (potentially)
@@ -402,15 +398,23 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        ## <FIXME> pls can be computed by LinStatExpCov(..., standardize = TRUE)
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(B), ...)
-        ## </FIXME>
+                       object@weights, as.integer(B), standardise = FALSE, ...)
 
-        ## <FIXME> variance can be 0; libcoin handles this </FIXME>
-        pls <- plsraw - expectation(object)
-        pls <- sort(rowSums(crossprod(pls, object@covarianceplus) * t(pls)))
+        ### sometimes we fiddle with the covariance; for example
+        ### in chisq_test(); fall back to old code when this is the case
+        CV <- covariance(object)
+        if (isTRUE(all.equal(vcov(plsraw), covariance(object),
+                             check.attributes = FALSE))) {
+            pls <- sort(doTest(plsraw, teststat = "quadratic", 
+                               PermutedStatistics = TRUE)$PermutedStatistics)
+            plsraw <- plsraw$PermutedLinearStatistic
+        } else {
+            plsraw <- plsraw$PermutedLinearStatistic
+            pls <- plsraw - expectation(object)
+            pls <- sort(rowSums(crossprod(pls, object@covarianceplus) * t(pls)))
+        }
 
         p <- function(q) {
             mean(pls %LE% q)
