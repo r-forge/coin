@@ -354,28 +354,6 @@ SEXP LECV
     return(REAL(VECTOR_ELT(LECV, Covariance_SLOT)));
 }
 
-/* C\_get\_MPinv */
-
-double* C_get_MPinv
-(
-/* R LECV Input */
-
-SEXP LECV
-
-) {
-
-    int PQ = C_get_P(LECV) * C_get_Q(LECV);
-    if (C_get_varonly(LECV) && PQ > 1)
-        error("Cannot extract MPinv from variance only object");
-    /* allocate memory on as needed basis */
-    if (isNull(VECTOR_ELT(LECV, MPinv_SLOT))) {
-        SET_VECTOR_ELT(LECV, MPinv_SLOT,
-                       allocVector(REALSXP,
-                                   PQ * (PQ + 1) / 2));
-    }
-    return(REAL(VECTOR_ELT(LECV, MPinv_SLOT)));
-}
-
 /* C\_get\_ExpectationX */
 
 double* C_get_ExpectationX
@@ -599,7 +577,6 @@ SEXP RC_init_LECV_1d
         SET_STRING_ELT(names, varonly_SLOT, mkChar("varonly"));
         SET_STRING_ELT(names, Variance_SLOT, mkChar("Variance"));
         SET_STRING_ELT(names, Covariance_SLOT, mkChar("Covariance"));
-        SET_STRING_ELT(names, MPinv_SLOT, mkChar("MPinv"));
         SET_STRING_ELT(names, ExpectationX_SLOT, mkChar("ExpectationX"));
         SET_STRING_ELT(names, dim_SLOT, mkChar("dimension"));
         SET_STRING_ELT(names, ExpectationInfluence_SLOT,
@@ -752,7 +729,6 @@ SEXP RC_init_LECV_2d
         SET_STRING_ELT(names, varonly_SLOT, mkChar("varonly"));
         SET_STRING_ELT(names, Variance_SLOT, mkChar("Variance"));
         SET_STRING_ELT(names, Covariance_SLOT, mkChar("Covariance"));
-        SET_STRING_ELT(names, MPinv_SLOT, mkChar("MPinv"));
         SET_STRING_ELT(names, ExpectationX_SLOT, mkChar("ExpectationX"));
         SET_STRING_ELT(names, dim_SLOT, mkChar("dimension"));
         SET_STRING_ELT(names, ExpectationInfluence_SLOT,
@@ -7608,7 +7584,7 @@ SEXP R_QuadraticTest
     int PSTAT = INTEGER(PermutedStatistics)[0];
     
 
-    MPinv = C_get_MPinv(LECV);
+    MPinv = Calloc(PQ * (PQ + 1) / 2, double); /* was: C_get_MPinv(LECV); */
     C_MPinv_sym(C_get_Covariance(LECV), PQ, C_get_tol(LECV), MPinv, &rank);
 
     REAL(stat)[0] = C_quadform(PQ, C_get_LinearStatistic(LECV),
@@ -7616,6 +7592,7 @@ SEXP R_QuadraticTest
 
     if (!PVALUE) {
         UNPROTECT(2);
+        Free(MPinv);
         return(ans);
     }
 
@@ -7637,6 +7614,7 @@ SEXP R_QuadraticTest
     }
 
     UNPROTECT(2);
+    Free(MPinv);
     return(ans);
 }
 

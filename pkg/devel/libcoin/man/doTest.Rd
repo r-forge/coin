@@ -11,7 +11,8 @@
 doTest(object, teststat = c("maximum", "quadratic", "scalar"),
          alternative = c("two.sided", "less", "greater"),
          pvalue = TRUE, lower = FALSE, log = FALSE, PermutedStatistics = FALSE,
-         minbucket = 10L, ordered = TRUE, pargs = GenzBretz())
+         minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor, 
+         pargs = GenzBretz())
 }
 \arguments{
   \item{object}{an object returned by \code{\link{LinStatExpCov}}.}
@@ -26,6 +27,10 @@ doTest(object, teststat = c("maximum", "quadratic", "scalar"),
                    statistics.}
   \item{ordered}{a logical, if \code{TRUE} maximally selected statistics
                  assume that the cutpoints are ordered.}
+  \item{maxselect}{a logical, if \code{TRUE} maximally selected
+                   statistics are computed. This requires that \code{X}
+                   was an implicitly defined design matrix in
+                   \code{\link{LinStatExpCov}}.}
   \item{pargs}{arguments as in \code{\link[mvtnorm]{GenzBretz}}.}
 }
 \details{

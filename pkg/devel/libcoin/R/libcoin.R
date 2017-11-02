@@ -194,7 +194,8 @@ vcov.LinStatExpCov <- function(object, ...) {
 doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
                      alternative = c("two.sided", "less", "greater"),
                      pvalue = TRUE, lower = FALSE, log = FALSE, PermutedStatistics = FALSE,
-                     minbucket = 10L, ordered = TRUE, pargs = GenzBretz())
+                     minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor, 
+                     pargs = GenzBretz())
 {
 
     ### avoid match.arg for performance reasons
@@ -205,7 +206,10 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     if (!any(alternative == c("two.sided", "less", "greater")))
         stop("incorrect alternative")
 
-    if (teststat == "quadratic") {
+    if (maxselect)
+        stopifnot(object$Xfactor)
+
+    if (teststat == "quadratic" || maxselect) {
         if (alternative != "two.sided")
             stop("incorrect alternative")
     }
@@ -221,7 +225,7 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     if (!pvalue & (NCOL(object$PermutedLinearStatistic) > 0))
         object$PermutedLinearStatistic <- matrix(NA_real_, nrow = 0, ncol = 0)
 
-    if (!object$Xfactor) {
+    if (!maxselect) {
         if (teststat == "quadratic") {
             ret <- .Call(R_QuadraticTest, object,
                          as.integer(pvalue), as.integer(lower),
@@ -245,6 +249,39 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
                      as.integer(lower), as.integer(log))
         if (!PermutedStatistics) ret$PermutedStatistics <- NULL
     }
+    ret
+}
+
+# Contrasts
+
+`%*%` <- function(x, y) UseMethod("%*%", y)
+`%*%.default` <- base::`%*%`
+`%*%.LinStatExpCov` <- function(x, y) {
+    stopifnot(!y$varonly)
+    stopifnot(is.numeric(x))
+    if (is.vector(x)) x <- matrix(x, nrow = 1)
+    P <- y$dimension[1]
+    stopifnot(ncol(x) == P)
+    Q <- y$dimension[2]
+    ret <- y
+    xLS <- x %*% matrix(y$LinearStatistic, nrow = P)
+    xExp <- x %*% matrix(y$Expectation, nrow = P)
+    xExpX <- x %*% matrix(y$ExpectationX, nrow = P)
+    xCov <- tcrossprod(x %*% vcov(y), x)
+    if (length(y$PermutedLinearStatistic) > 0) {
+        xPS <- apply(y$PermutedLinearStatistic, 2, function(y)
+                     as.vector(x %*% matrix(y, nrow = P)))
+        if (!is.matrix(xPS)) xPS <- matrix(xPS, nrow = 1)
+        ret$PermutedLinearStatistic <- xPS
+    }
+    ret$LinearStatistic <- as.vector(xLS)
+    ret$Expectation <- as.vector(xExp)
+    ret$ExpectationX <- as.vector(xExpX)
+    ret$Covariance <- as.vector(xCov[lower.tri(xCov, diag = TRUE)])
+    ret$dimension <- c(nrow(x), Q)
+    ret$Xfactor <- FALSE
+    if (length(y$StandardisedPermutedLinearStatistics) > 0)
+        ret$StandardisedPermutedLinearStatistics <- matrix(0)
     ret
 }
 

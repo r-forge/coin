@@ -72,7 +72,18 @@ doTest(ls1, teststat = "quadratic")
 
 
 ###################################################
-### code chunk number 8: ctabsex-1
+### code chunk number 8: Contrasts-1
+###################################################
+set.seed(29)
+ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1), nperm = 100)
+set.seed(29)
+ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), nperm = 100)
+ls1c <- c(1:5) %*% ls1d
+all.equal(ls1c, ls1s)
+
+
+###################################################
+### code chunk number 9: ctabsex-1
 ###################################################
 t1 <- ctabs(ix = ix, iy = iy)
 t2 <- xtabs(~ ix + iy)
@@ -80,7 +91,7 @@ max(abs(t1[-1, -1] - t2))
 
 
 ###################################################
-### code chunk number 9: ex-setup
+### code chunk number 10: ex-setup
 ###################################################
 N <- 20L
 P <- 3L
@@ -110,7 +121,7 @@ r2Xfactor <- rep(1:ncol(y), each = ncol(Xfactor))
 
 
 ###################################################
-### code chunk number 10: Rlibcoin
+### code chunk number 11: Rlibcoin
 ###################################################
 LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0)) {
 
@@ -148,7 +159,7 @@ LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = intege
 
 
 ###################################################
-### code chunk number 11: cmpr
+### code chunk number 12: cmpr
 ###################################################
 cmpr <- function(ret1, ret2) {
     if (inherits(ret1, "LinStatExpCov")) {
@@ -166,14 +177,14 @@ cmpr <- function(ret1, ret2) {
 
 
 ###################################################
-### code chunk number 12: benchmarks
+### code chunk number 13: benchmarks
 ###################################################
 LECVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset)
 LEVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset, varonly = TRUE)
 
 
 ###################################################
-### code chunk number 13: tests
+### code chunk number 14: tests
 ###################################################
 ### with X given
 testit <- function(...) {
@@ -204,14 +215,14 @@ stopifnot(
 
 
 ###################################################
-### code chunk number 14: permutations-2d
+### code chunk number 15: permutations-2d
 ###################################################
 LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
 LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
 
 
 ###################################################
-### code chunk number 15: ExpectationInfluence
+### code chunk number 16: ExpectationInfluence
 ###################################################
 sumweights <- sum(weights[subset])
 expecty <- a0 <- colSums(y[subset, ] * weights[subset]) / sumweights
@@ -227,7 +238,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 16: CovarianceInfluence
+### code chunk number 17: CovarianceInfluence
 ###################################################
 sumweights <- sum(weights[subset])
 yc <- t(t(y) - expecty)
@@ -260,7 +271,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 17: ExpectationCovarianceX
+### code chunk number 18: ExpectationCovarianceX
 ###################################################
 a0 <- colSums(x[subset, ] * weights[subset]) 
 a0
@@ -317,7 +328,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 18: SimpleSums
+### code chunk number 19: SimpleSums
 ###################################################
 a0 <- sum(weights[subset])
 a1 <- libcoin:::.libcoinCall("R_Sums", N, weights, subset)
@@ -329,7 +340,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 19: KronSums
+### code chunk number 20: KronSums
 ###################################################
 r1 <- rep(1:ncol(x), ncol(y))
 r2 <- rep(1:ncol(y), each = ncol(x))
@@ -362,7 +373,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 20: KronSums-Permutation
+### code chunk number 21: KronSums-Permutation
 ###################################################
 a0 <- colSums(x[subset,r1] * y[subsety, r2])
 a1 <- libcoin:::.libcoinCall("R_KronSums_Permutation", x, P, y, subset, subsety)
@@ -376,7 +387,7 @@ stopifnot(all.equal(a0, a1))
 
 
 ###################################################
-### code chunk number 21: colSums
+### code chunk number 22: colSums
 ###################################################
 a0 <- colSums(x[subset,] * weights[subset])
 a1 <- libcoin:::.libcoinCall("R_colSums", x, weights, subset)
@@ -389,7 +400,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 22: OneTableSum
+### code chunk number 23: OneTableSum
 ###################################################
 
 a0 <- as.vector(xtabs(weights ~ ixf, subset = subset))
@@ -403,7 +414,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 23: TwoTableSum
+### code chunk number 24: TwoTableSum
 ###################################################
 
 a0 <- xtabs(weights ~ ixf + iyf, subset = subset)
@@ -421,7 +432,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 24: ThreeTableSum
+### code chunk number 25: ThreeTableSum
 ###################################################
 a0 <- xtabs(weights ~ ixf + iyf + block, subset = subset)
 class(a0) <- "array"
@@ -437,7 +448,7 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 25: blocks
+### code chunk number 26: blocks
 ###################################################
 sb <- sample(block)
 ns1 <- do.call("c", tapply(subset, sb[subset], function(i) i))

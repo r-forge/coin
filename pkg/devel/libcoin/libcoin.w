@@ -239,6 +239,7 @@ and that in the one-sided case maximum type test statistics are replaced by
 @<LinStatExpCov2d@>
 @<vcov LinStatExpCov@>
 @<doTest@>
+@<Contrasts@>
 .libcoinCall <- function(FUN, ...) .Call(FUN, ...)
 @}
 
@@ -549,7 +550,8 @@ can be computed on the log-scale.
 @{(object, teststat = c("maximum", "quadratic", "scalar"),
    alternative = c("two.sided", "less", "greater"),
    pvalue = TRUE, lower = FALSE, log = FALSE, PermutedStatistics = FALSE,
-   minbucket = 10L, ordered = TRUE, pargs = GenzBretz())@}
+   minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor, 
+   pargs = GenzBretz())@}
 
 @d doTest
 @{
@@ -565,7 +567,10 @@ doTest <- function@<doTest Prototype@>
     if (!any(alternative == c("two.sided", "less", "greater")))
         stop("incorrect alternative")
 
-    if (teststat == "quadratic") {
+    if (maxselect)
+        stopifnot(object$Xfactor)
+
+    if (teststat == "quadratic" || maxselect) {
         if (alternative != "two.sided")
             stop("incorrect alternative")
     }
@@ -581,7 +586,7 @@ doTest <- function@<doTest Prototype@>
     if (!pvalue & (NCOL(object$PermutedLinearStatistic) > 0))
         object$PermutedLinearStatistic <- matrix(NA_real_, nrow = 0, ncol = 0)
 
-    if (!object$Xfactor) {
+    if (!maxselect) {
         if (teststat == "quadratic") {
             ret <- .Call(R_QuadraticTest, object,
                          as.integer(pvalue), as.integer(lower),
@@ -623,6 +628,56 @@ doTest(ls1, teststat = "maximum", lower = TRUE)
 doTest(ls1, teststat = "maximum", lower = TRUE, log = TRUE)
 ### quadratic
 doTest(ls1, teststat = "quadratic")
+@@
+
+Sometimes we are interested in contrasts of linear statistics and their
+corresponding properties. Examples include linear-by-linear association
+tests, where we assign numeric scores to each level of a factor. To
+implement this, we make \verb|%*%| generic so that we can then multiply a
+matrix to an object of class \verb|LinStatExpCov|.
+
+@d Contrasts
+@{
+`%*%` <- function(x, y) UseMethod("%*%", y)
+`%*%.default` <- base::`%*%`
+`%*%.LinStatExpCov` <- function(x, y) {
+    stopifnot(!y$varonly)
+    stopifnot(is.numeric(x))
+    if (is.vector(x)) x <- matrix(x, nrow = 1)
+    P <- y$dimension[1]
+    stopifnot(ncol(x) == P)
+    Q <- y$dimension[2]
+    ret <- y
+    xLS <- x %*% matrix(y$LinearStatistic, nrow = P)
+    xExp <- x %*% matrix(y$Expectation, nrow = P)
+    xExpX <- x %*% matrix(y$ExpectationX, nrow = P)
+    xCov <- tcrossprod(x %*% vcov(y), x)
+    if (length(y$PermutedLinearStatistic) > 0) {
+        xPS <- apply(y$PermutedLinearStatistic, 2, function(y)
+                     as.vector(x %*% matrix(y, nrow = P)))
+        if (!is.matrix(xPS)) xPS <- matrix(xPS, nrow = 1)
+        ret$PermutedLinearStatistic <- xPS
+    }
+    ret$LinearStatistic <- as.vector(xLS)
+    ret$Expectation <- as.vector(xExp)
+    ret$ExpectationX <- as.vector(xExpX)
+    ret$Covariance <- as.vector(xCov[lower.tri(xCov, diag = TRUE)])
+    ret$dimension <- c(nrow(x), Q)
+    ret$Xfactor <- FALSE
+    if (length(y$StandardisedPermutedLinearStatistics) > 0)
+        ret$StandardisedPermutedLinearStatistics <- matrix(0)
+    ret
+}
+@}
+
+Here is an example for a linear-by-linear association test.
+<<Contrasts-1>>=
+set.seed(29)
+ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1), nperm = 100)
+set.seed(29)
+ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), nperm = 100)
+ls1c <- c(1:5) %*% ls1d
+all.equal(ls1c, ls1s)
 @@
 
 \subsection{Tabulations}
@@ -767,6 +822,10 @@ doTest@<doTest Prototype@>
                    statistics.}
   \item{ordered}{a logical, if \code{TRUE} maximally selected statistics
                  assume that the cutpoints are ordered.}
+  \item{maxselect}{a logical, if \code{TRUE} maximally selected
+                   statistics are computed. This requires that \code{X}
+                   was an implicitly defined design matrix in
+                   \code{\link{LinStatExpCov}}.}
   \item{pargs}{arguments as in \code{\link[mvtnorm]{GenzBretz}}.}
 }
 \details{
@@ -877,20 +936,19 @@ $\ge$.
 #define Expectation_SLOT				1
 #define Covariance_SLOT					2
 #define Variance_SLOT					3
-#define MPinv_SLOT					4
-#define ExpectationX_SLOT				5
-#define varonly_SLOT					6
-#define dim_SLOT					7
-#define ExpectationInfluence_SLOT			8
-#define CovarianceInfluence_SLOT			9
-#define VarianceInfluence_SLOT				10
-#define Xfactor_SLOT					11
-#define tol_SLOT					12
-#define PermutedLinearStatistic_SLOT			13
-#define StandardisedPermutedLinearStatistic_SLOT	14
-#define TableBlock_SLOT					15
-#define Sumweights_SLOT					16
-#define Table_SLOT					17
+#define ExpectationX_SLOT				4
+#define varonly_SLOT					5
+#define dim_SLOT					6
+#define ExpectationInfluence_SLOT			7
+#define CovarianceInfluence_SLOT			8
+#define VarianceInfluence_SLOT				9
+#define Xfactor_SLOT					10
+#define tol_SLOT					11
+#define PermutedLinearStatistic_SLOT			12
+#define StandardisedPermutedLinearStatistic_SLOT	13
+#define TableBlock_SLOT					14
+#define Sumweights_SLOT					15
+#define Table_SLOT					16
 
 #define DoSymmetric					1
 #define DoCenter 					1
@@ -899,7 +957,7 @@ $\ge$.
 #define Power2 						2
 #define Offset0 					0
 @| LinearStatistic_SLOT Expectation_SLOT Covariance_SLOT Variance_SLOT
-MPinv_SLOT ExpectationX_SLOT varonly_SLOT dim_SLOT
+ExpectationX_SLOT varonly_SLOT dim_SLOT
 ExpectationInfluence_SLOT CovarianceInfluence_SLOT VarianceInfluence_SLOT
 Xfactor_SLOT tol_SLOT PermutedLinearStatistic_SLOT StandardisedPermutedLinearStatistic_SLOT
 TableBlock_SLOT Sumweights_SLOT Table_SLOT DoSymmetric DoCenter DoVarOnly Power1
@@ -2210,7 +2268,7 @@ SEXP R_QuadraticTest
 
     @<Setup Test Memory@>
 
-    MPinv = C_get_MPinv(LECV);
+    MPinv = Calloc(PQ * (PQ + 1) / 2, double); /* was: C_get_MPinv(LECV); */
     C_MPinv_sym(C_get_Covariance(LECV), PQ, C_get_tol(LECV), MPinv, &rank);
 
     REAL(stat)[0] = C_quadform(PQ, C_get_LinearStatistic(LECV),
@@ -2218,6 +2276,7 @@ SEXP R_QuadraticTest
 
     if (!PVALUE) {
         UNPROTECT(2);
+        Free(MPinv);
         return(ans);
     }
 
@@ -2239,6 +2298,7 @@ SEXP R_QuadraticTest
     }
 
     UNPROTECT(2);
+    Free(MPinv);
     return(ans);
 }
 @}
@@ -6051,7 +6111,6 @@ void C_MPinv_sym
 @<C\_get\_Expectation@>
 @<C\_get\_Variance@>
 @<C\_get\_Covariance@>
-@<C\_get\_MPinv@>
 @<C\_get\_ExpectationX@>
 @<C\_get\_ExpectationInfluence@>
 @<C\_get\_CovarianceInfluence@>
@@ -6186,27 +6245,6 @@ double* C_get_Covariance
     return(REAL(VECTOR_ELT(LECV, Covariance_SLOT)));
 }
 @|C_get_Covariance
-@}
-
-@d C\_get\_MPinv
-@{
-double* C_get_MPinv
-(
-@<R LECV Input@>
-) {
-
-    int PQ = C_get_P(LECV) * C_get_Q(LECV);
-    if (C_get_varonly(LECV) && PQ > 1)
-        error("Cannot extract MPinv from variance only object");
-    /* allocate memory on as needed basis */
-    if (isNull(VECTOR_ELT(LECV, MPinv_SLOT))) {
-        SET_VECTOR_ELT(LECV, MPinv_SLOT,
-                       allocVector(REALSXP,
-                                   PQ * (PQ + 1) / 2));
-    }
-    return(REAL(VECTOR_ELT(LECV, MPinv_SLOT)));
-}
-@|C_get_MPinv
 @}
 
 @d C\_get\_ExpectationX
@@ -6390,7 +6428,6 @@ SET_STRING_ELT(names, Expectation_SLOT, mkChar("Expectation"));
 SET_STRING_ELT(names, varonly_SLOT, mkChar("varonly"));
 SET_STRING_ELT(names, Variance_SLOT, mkChar("Variance"));
 SET_STRING_ELT(names, Covariance_SLOT, mkChar("Covariance"));
-SET_STRING_ELT(names, MPinv_SLOT, mkChar("MPinv"));
 SET_STRING_ELT(names, ExpectationX_SLOT, mkChar("ExpectationX"));
 SET_STRING_ELT(names, dim_SLOT, mkChar("dimension"));
 SET_STRING_ELT(names, ExpectationInfluence_SLOT,
@@ -6579,11 +6616,12 @@ License: GPL-2
 @{
 useDynLib(libcoin, .registration = TRUE)
 
-importFrom("stats", complete.cases)
+importFrom("stats", complete.cases, vcov)
 importFrom("mvtnorm", GenzBretz)
 
-export(LinStatExpCov, doTest, ctabs)
-S3method(vcov, LinStatExpCov)
+export(LinStatExpCov, doTest, ctabs, "%*%")
+S3method("vcov", "LinStatExpCov")
+S3method("%*%", "LinStatExpCov")
 @}
 
 Add flag \verb|-g| to \verb|PKG\_CFLAGS| for \verb|operf| profiling (this is
