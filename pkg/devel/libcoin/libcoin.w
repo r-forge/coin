@@ -677,7 +677,7 @@ ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1), nperm 
 set.seed(29)
 ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), nperm = 100)
 ls1c <- c(1:5) %*% ls1d
-all.equal(ls1c, ls1s)
+stopifnot(isTRUE(all.equal(ls1c, ls1s)))
 @@
 
 \subsection{Tabulations}
@@ -1317,7 +1317,7 @@ cmpr <- function(ret1, ret2) {
     nm2 <- names(ret2)
     nm <- c(nm1, nm2)
     nm <- names(table(nm))[table(nm) == 2]
-    all.equal(ret1[nm], ret2[nm])
+    isTRUE(all.equal(ret1[nm], ret2[nm]))
 }
 @@
 
