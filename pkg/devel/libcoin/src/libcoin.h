@@ -401,4 +401,11 @@ extern
            
        )
        ;
+extern 
+       SEXP R_kronecker
+       (
+           SEXP A,
+           SEXP B
+       )
+       ;
 

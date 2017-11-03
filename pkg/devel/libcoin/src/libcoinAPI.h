@@ -101,3 +101,14 @@ extern SEXP libcoin_R_MaximallySelectedTest(
             R_GetCCallable("libcoin", "R_MaximallySelectedTest");
     return fun(LEV, ordered, teststat, minbucket, lower, give_log);
 }
+
+extern SEXP libcoin_R_kronecker(
+    SEXP A, SEXP B
+) {
+
+    static SEXP(*fun)(SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_kronecker");
+    return fun(A, B);
+}

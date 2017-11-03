@@ -27,7 +27,7 @@ tapply(y, x, sum)
 ### code chunk number 2: 1dex-2
 ###################################################
 ls2 <- LinStatExpCov(X = x, Y = matrix(y, ncol = 1))
-isequal(ls1, ls2)
+all.equal(ls1, ls2)
 
 
 ###################################################
@@ -39,14 +39,14 @@ ylev <- sort(unique(y))
 Y <- rbind(0, matrix(ylev, ncol = 1))
 iy <- .bincode(y, breaks = c(-Inf, ylev, Inf))
 ls3 <- LinStatExpCov(X = X, ix = ix, Y = Y, iy = iy)
-isequal(ls1, ls3)
+all.equal(ls1, ls3)
 
 
 ###################################################
 ### code chunk number 4: 2dex-2
 ###################################################
 ls4 <- LinStatExpCov(ix = ix, Y = Y, iy = iy)
-isequal(ls3, ls4)
+all.equal(ls3, ls4)
 
 
 ###################################################
@@ -87,7 +87,6 @@ doTest(ls1, teststat = "quadratic")
 set.seed(29)
 ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1), 
                       nperm = 10, standardise = TRUE)
-print(ls1d$StandardisedPermutedLinearStatistic)
 set.seed(29)
 ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), 
                       nperm = 10, standardise = TRUE)
@@ -467,5 +466,15 @@ sb <- sample(block)
 ns1 <- do.call("c", tapply(subset, sb[subset], function(i) i))
 ns2 <- libcoin:::.libcoinCall("R_order_subset_wrt_block", y, integer(0), subset, sb)
 stopifnot(isequal(ns1, ns2))
+
+
+###################################################
+### code chunk number 27: kronecker
+###################################################
+A <- matrix(runif(12), ncol = 3)
+B <- matrix(runif(10), ncol = 2)
+K1 <- kronecker(A, B)
+K2 <- libcoin:::.libcoinCall("R_kronecker", A, B)
+stopifnot(isequal(K1, K2))
 
 

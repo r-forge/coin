@@ -3,6 +3,12 @@
 
 /* Helpers.c */
 
+SEXP R_kronecker
+(
+    SEXP A, 
+    SEXP B
+);
+
 extern SEXP R_maxstattrafo
 (
     SEXP x,

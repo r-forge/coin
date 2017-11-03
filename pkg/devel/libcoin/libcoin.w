@@ -1012,6 +1012,7 @@ extern @<R\_OneTableSums Prototype@>;
 extern @<R\_TwoTableSums Prototype@>;
 extern @<R\_ThreeTableSums Prototype@>;
 extern @<R\_order\_subset\_wrt\_block Prototype@>;
+extern @<R\_kronecker Prototype@>;
 @}
 
 The \proglang{C} file \verb|libcoin.c| contains all \proglang{C}
@@ -5892,6 +5893,7 @@ void C_doPermuteBlock
 @<C\_kronecker\_sym@>
 @<C\_KronSums\_sym@>
 @<C\_MPinv\_sym@>
+@<R\_kronecker@>
 @}
 
 
@@ -5955,6 +5957,59 @@ Rprintf("i %d x %d ", i, INTEGER(x)[i]);
     return(NROW(a));
 }
 @|NLEVELS
+@}
+
+<<kronecker>>=
+A <- matrix(runif(12), ncol = 3)
+B <- matrix(runif(10), ncol = 2)
+K1 <- kronecker(A, B)
+K2 <- libcoin:::.libcoinCall("R_kronecker", A, B)
+stopifnot(isequal(K1, K2))
+@@
+
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_kronecker(
+    SEXP A, SEXP B
+) {
+
+    static SEXP(*fun)(SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_kronecker");
+    return fun(A, B);
+}
+@}
+
+@d R\_kronecker Prototype
+@{
+SEXP R_kronecker
+(
+    SEXP A,
+    SEXP B
+)
+@}
+
+@d R\_kronecker
+@{
+@<R\_kronecker Prototype@>
+{
+    int m, n, r, s;
+    SEXP ans;
+
+    if (!isReal(A) || !isReal(B))
+        error("R_kronecker: A and / or B are not of type REALSXP");
+
+    m = NROW(A);
+    n = NCOL(A);
+    r = NROW(B);
+    s = NCOL(B);
+
+    PROTECT(ans = allocMatrix(REALSXP, m * n, r * s));
+    C_kronecker(REAL(A), m, n, REAL(B), r, s, 1, REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
 @}
 
 @d C\_kronecker
@@ -6684,6 +6739,7 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_TwoTableSums, 4),
     CALLDEF(R_ThreeTableSums, 5),
     CALLDEF(R_order_subset_wrt_block, 4),
+    CALLDEF(R_kronecker, 2),
     {NULL, NULL, 0}
 };
 @}
@@ -6719,6 +6775,7 @@ void attribute_visible R_init_libcoin
     REGCALL(R_TwoTableSums);
     REGCALL(R_ThreeTableSums);
     REGCALL(R_order_subset_wrt_block);
+    REGCALL(R_kronecker);
 }
 @}
 
