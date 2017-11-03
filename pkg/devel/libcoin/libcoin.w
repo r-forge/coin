@@ -2855,67 +2855,9 @@ double C_maxtype_pvalue
     if (n == 1)
         return(C_norm_pvalue(stat, alternative, lower, give_log));
 
-    if (n == 2)
-         corr = Calloc(1, double);
-    else
-         corr = Calloc(n + ((n - 2) * (n - 1))/2, double);
+    @<Setup mvtnorm Memory@>
 
-    sd = Calloc(n, double);
-    lowerbnd = Calloc(n, double);
-    upperbnd = Calloc(n, double);
-    infin = Calloc(n, int);
-    delta = Calloc(n, double);
-    index = Calloc(n, int);
-
-    /* determine elements with non-zero variance */
-
-    nonzero = 0;
-    for (i = 0; i < n; i++) {
-        if (Covariance[S(i, i, n)] > tol) {
-            index[nonzero] = i;
-            nonzero++;
-        }
-    }
-
-    /* mvtdst assumes the unique elements of the triangular
-       covariance matrix to be passes as argument CORREL
-    */
-
-    for (int nz = 0; nz < nonzero; nz++) {
-
-        /* handle elements with non-zero variance only */
-        i = index[nz];
-
-        /* standard deviations */
-        sd[i] = sqrt(Covariance[S(i, i, n)]);
-
-        if (alternative == ALTERNATIVE_less) {
-            lowerbnd[nz] = stat;
-            upperbnd[nz] = R_PosInf;
-            infin[nz] = 1;
-        } else if (alternative == ALTERNATIVE_greater) {
-            lowerbnd[nz] = R_NegInf;
-            upperbnd[nz] = stat;
-            infin[nz] = 0;
-        } else if (alternative == ALTERNATIVE_twosided) {
-            lowerbnd[nz] = fabs(stat) * -1.0;
-            upperbnd[nz] = fabs(stat);
-            infin[nz] = 2;
-        }
-
-        delta[nz] = 0.0;
-
-        /* set up vector of correlations, i.e., the upper
-           triangular part of the covariance matrix) */
-        for (int jz = 0; jz < nz; jz++) {
-            j = index[jz];
-            sub = (int) (jz + 1) + (double) ((nz - 1) * nz) / 2 - 1;
-            if (sd[i] == 0.0 || sd[j] == 0.0)
-                corr[sub] = 0.0;
-            else
-                corr[sub] = Covariance[S(i, j, n)] / (sd[i] * sd[j]);
-        }
-    }
+    @<Setup mvtnorm Correlation@>
 
     /* call mvtnorm's mvtdst C function defined in mvtnorm/include/mvtnormAPI.h */
     mvtnorm_C_mvtdst(&nonzero, &nu, lowerbnd, upperbnd, infin, corr, delta,
@@ -2950,6 +2892,76 @@ double C_maxtype_pvalue
 }
 @|C_maxtype_pvalue
 @}
+
+@d Setup mvtnorm Memory 
+@{
+if (n == 2)
+    corr = Calloc(1, double);
+else
+    corr = Calloc(n + ((n - 2) * (n - 1))/2, double);
+
+sd = Calloc(n, double);
+lowerbnd = Calloc(n, double);
+upperbnd = Calloc(n, double);
+infin = Calloc(n, int);
+delta = Calloc(n, double);
+index = Calloc(n, int);
+
+/* determine elements with non-zero variance */
+
+nonzero = 0;
+for (i = 0; i < n; i++) {
+    if (Covariance[S(i, i, n)] > tol) {
+        index[nonzero] = i;
+        nonzero++;
+    }
+}
+@}
+
+
+\verb|mvtdst| assumes the unique elements of the triangular
+covariance matrix to be passed as argument \verb|CORREL|
+
+@d Setup mvtnorm Correlation
+@{
+for (int nz = 0; nz < nonzero; nz++) {
+    /* handle elements with non-zero variance only */
+    i = index[nz];
+
+    /* standard deviations */
+    sd[i] = sqrt(Covariance[S(i, i, n)]);
+
+    if (alternative == ALTERNATIVE_less) {
+        lowerbnd[nz] = stat;
+        upperbnd[nz] = R_PosInf;
+        infin[nz] = 1;
+    } else if (alternative == ALTERNATIVE_greater) {
+        lowerbnd[nz] = R_NegInf;
+        upperbnd[nz] = stat;
+        infin[nz] = 0;
+    } else if (alternative == ALTERNATIVE_twosided) {
+        lowerbnd[nz] = fabs(stat) * -1.0;
+        upperbnd[nz] = fabs(stat);
+        infin[nz] = 2;
+    }
+
+    delta[nz] = 0.0;
+
+    /* set up vector of correlations, i.e., the upper
+       triangular part of the covariance matrix) */
+    for (int jz = 0; jz < nz; jz++) {
+        j = index[jz];
+        sub = (int) (jz + 1) + (double) ((nz - 1) * nz) / 2 - 1;
+        if (sd[i] == 0.0 || sd[j] == 0.0)
+            corr[sub] = 0.0;
+        else
+            corr[sub] = Covariance[S(i, j, n)] / (sd[i] * sd[j]);
+    }
+}
+@}
+
+
+
 
 @d maxstat Xfactor Variables
 @{
@@ -4571,25 +4583,25 @@ void RC_KronSums_Permutation
 @<RC\_KronSums\_Permutation Prototype@>
 {
     if (TYPEOF(x) == INTSXP) {
-    if (TYPEOF(subset) == INTSXP) {
-        C_XfactorKronSums_Permutation_isubset(INTEGER(x), N, P, y, Q, 
-                                       INTEGER(subset), offset, Nsubset, 
-                                       INTEGER(subsety), PQ_ans);
+        if (TYPEOF(subset) == INTSXP) {
+            C_XfactorKronSums_Permutation_isubset(INTEGER(x), N, P, y, Q, 
+                                                  INTEGER(subset), offset, Nsubset, 
+                                                  INTEGER(subsety), PQ_ans);
         } else {
-        C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q, 
-                                       REAL(subset), offset, Nsubset, 
-                                       REAL(subsety), PQ_ans);
+            C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q, 
+                                                  REAL(subset), offset, Nsubset, 
+                                                  REAL(subsety), PQ_ans);
     }
     } else {
-    if (TYPEOF(subset) == INTSXP) {
-        C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q, 
-                                       INTEGER(subset), offset, Nsubset, 
-                                       INTEGER(subsety), PQ_ans);
+        if (TYPEOF(subset) == INTSXP) {
+            C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q, 
+                                           INTEGER(subset), offset, Nsubset, 
+                                           INTEGER(subsety), PQ_ans);
         } else {
-        C_KronSums_Permutation_dsubset(REAL(x), N, P, y, Q, 
-                                       REAL(subset), offset, Nsubset, 
-                                       REAL(subsety), PQ_ans);
-    }
+            C_KronSums_Permutation_dsubset(REAL(x), N, P, y, Q, 
+                                           REAL(subset), offset, Nsubset, 
+                                           REAL(subsety), PQ_ans);
+        }
     }
 }
 @|RC_KronSums_Permutation
@@ -4642,7 +4654,8 @@ have to go through all elements explicitly here.
             PQ_ans[qPp] = 0.0;
             pN = p * N;
             for (R_xlen_t i = offset; i < Nsubset; i++)
-                PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] * x[pN + (R_xlen_t) subset[i] - 1];
+                PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] * 
+                               x[pN + (R_xlen_t) subset[i] - 1];
         }
     }
 @}
@@ -6564,23 +6577,29 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
     REAL(tolerance)[0] = tol;
     namesgets(ans, names);
 
-    /* set inital zeros */
-    for (int p = 0; p < PQ; p++) {
-        C_get_LinearStatistic(ans)[p] = 0.0;
-        C_get_Expectation(ans)[p] = 0.0;
-        if (varonly)
-            C_get_Variance(ans)[p] = 0.0;
-    }
-    if (!varonly) {
-        for (int p = 0; p < PQ * (PQ + 1) / 2; p++)
-            C_get_Covariance(ans)[p] = 0.0;
-    }
-    for (int q = 0; q < Q; q++) {
-        C_get_ExpectationInfluence(ans)[q] = 0.0;
-        C_get_VarianceInfluence(ans)[q] = 0.0;
-    }
-    for (int q = 0; q < Q * (Q + 1) / 2; q++)
-        C_get_CovarianceInfluence(ans)[q] = 0.0;
+    @<Initialise Zero@>
+
+@}
+
+@d Initialise Zero
+@{
+/* set inital zeros */
+for (int p = 0; p < PQ; p++) {
+    C_get_LinearStatistic(ans)[p] = 0.0;
+    C_get_Expectation(ans)[p] = 0.0;
+    if (varonly)
+        C_get_Variance(ans)[p] = 0.0;
+}
+if (!varonly) {
+    for (int p = 0; p < PQ * (PQ + 1) / 2; p++)
+        C_get_Covariance(ans)[p] = 0.0;
+}
+for (int q = 0; q < Q; q++) {
+    C_get_ExpectationInfluence(ans)[q] = 0.0;
+    C_get_VarianceInfluence(ans)[q] = 0.0;
+}
+for (int q = 0; q < Q * (Q + 1) / 2; q++)
+    C_get_CovarianceInfluence(ans)[q] = 0.0;
 @}
 
 @d RC\_init\_LECV\_1d
@@ -6796,6 +6815,8 @@ void attribute_visible R_init_libcoin
     Edit `libcoin.w' and run `nuweb -r libcoin.w'
 */
 @}
+
+\chapter*{Index}
 
 \section*{Files}
 

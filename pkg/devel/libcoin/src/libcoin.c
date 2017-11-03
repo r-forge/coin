@@ -662,6 +662,8 @@ SEXP RC_init_LECV_1d
         REAL(tolerance)[0] = tol;
         namesgets(ans, names);
 
+        /* Initialise Zero */
+        
         /* set inital zeros */
         for (int p = 0; p < PQ; p++) {
             C_get_LinearStatistic(ans)[p] = 0.0;
@@ -679,6 +681,8 @@ SEXP RC_init_LECV_1d
         }
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
             C_get_CovarianceInfluence(ans)[q] = 0.0;
+        
+
     
 
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
@@ -814,6 +818,8 @@ SEXP RC_init_LECV_2d
         REAL(tolerance)[0] = tol;
         namesgets(ans, names);
 
+        /* Initialise Zero */
+        
         /* set inital zeros */
         for (int p = 0; p < PQ; p++) {
             C_get_LinearStatistic(ans)[p] = 0.0;
@@ -831,6 +837,8 @@ SEXP RC_init_LECV_2d
         }
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
             C_get_CovarianceInfluence(ans)[q] = 0.0;
+        
+
     
 
     PROTECT(tabdim = allocVector(INTSXP, 3));
@@ -951,10 +959,12 @@ double C_maxtype_pvalue
     if (n == 1)
         return(C_norm_pvalue(stat, alternative, lower, give_log));
 
+    /* Setup mvtnorm Memory */
+    
     if (n == 2)
-         corr = Calloc(1, double);
+        corr = Calloc(1, double);
     else
-         corr = Calloc(n + ((n - 2) * (n - 1))/2, double);
+        corr = Calloc(n + ((n - 2) * (n - 1))/2, double);
 
     sd = Calloc(n, double);
     lowerbnd = Calloc(n, double);
@@ -972,13 +982,11 @@ double C_maxtype_pvalue
             nonzero++;
         }
     }
+    
 
-    /* mvtdst assumes the unique elements of the triangular
-       covariance matrix to be passes as argument CORREL
-    */
-
+    /* Setup mvtnorm Correlation */
+    
     for (int nz = 0; nz < nonzero; nz++) {
-
         /* handle elements with non-zero variance only */
         i = index[nz];
 
@@ -1012,6 +1020,7 @@ double C_maxtype_pvalue
                 corr[sub] = Covariance[S(i, j, n)] / (sd[i] * sd[j]);
         }
     }
+    
 
     /* call mvtnorm's mvtdst C function defined in mvtnorm/include/mvtnormAPI.h */
     mvtnorm_C_mvtdst(&nonzero, &nu, lowerbnd, upperbnd, infin, corr, delta,
@@ -2260,7 +2269,8 @@ void C_KronSums_Permutation_isubset
                 PQ_ans[qPp] = 0.0;
                 pN = p * N;
                 for (R_xlen_t i = offset; i < Nsubset; i++)
-                    PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] * x[pN + (R_xlen_t) subset[i] - 1];
+                    PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] * 
+                                   x[pN + (R_xlen_t) subset[i] - 1];
             }
         }
     
@@ -2321,7 +2331,8 @@ void C_KronSums_Permutation_dsubset
                 PQ_ans[qPp] = 0.0;
                 pN = p * N;
                 for (R_xlen_t i = offset; i < Nsubset; i++)
-                    PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] * x[pN + (R_xlen_t) subset[i] - 1];
+                    PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] * 
+                                   x[pN + (R_xlen_t) subset[i] - 1];
             }
         }
     
@@ -2490,25 +2501,25 @@ void RC_KronSums_Permutation
 
 {
     if (TYPEOF(x) == INTSXP) {
-    if (TYPEOF(subset) == INTSXP) {
-        C_XfactorKronSums_Permutation_isubset(INTEGER(x), N, P, y, Q, 
-                                       INTEGER(subset), offset, Nsubset, 
-                                       INTEGER(subsety), PQ_ans);
+        if (TYPEOF(subset) == INTSXP) {
+            C_XfactorKronSums_Permutation_isubset(INTEGER(x), N, P, y, Q, 
+                                                  INTEGER(subset), offset, Nsubset, 
+                                                  INTEGER(subsety), PQ_ans);
         } else {
-        C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q, 
-                                       REAL(subset), offset, Nsubset, 
-                                       REAL(subsety), PQ_ans);
+            C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q, 
+                                                  REAL(subset), offset, Nsubset, 
+                                                  REAL(subsety), PQ_ans);
     }
     } else {
-    if (TYPEOF(subset) == INTSXP) {
-        C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q, 
-                                       INTEGER(subset), offset, Nsubset, 
-                                       INTEGER(subsety), PQ_ans);
+        if (TYPEOF(subset) == INTSXP) {
+            C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q, 
+                                           INTEGER(subset), offset, Nsubset, 
+                                           INTEGER(subsety), PQ_ans);
         } else {
-        C_KronSums_Permutation_dsubset(REAL(x), N, P, y, Q, 
-                                       REAL(subset), offset, Nsubset, 
-                                       REAL(subsety), PQ_ans);
-    }
+            C_KronSums_Permutation_dsubset(REAL(x), N, P, y, Q, 
+                                           REAL(subset), offset, Nsubset, 
+                                           REAL(subsety), PQ_ans);
+        }
     }
 }
 
