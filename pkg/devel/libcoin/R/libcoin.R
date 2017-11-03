@@ -280,8 +280,9 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     ret$Covariance <- as.vector(xCov[lower.tri(xCov, diag = TRUE)])
     ret$dimension <- c(nrow(x), Q)
     ret$Xfactor <- FALSE
-    if (length(y$StandardisedPermutedLinearStatistics) > 0)
-        ret$StandardisedPermutedLinearStatistics <- matrix(0)
+    if (length(y$StandardisedPermutedLinearStatistic) > 0)
+        ret$StandardisedPermutedLinearStatistic <-
+            .Call(R_StandardisePermutedLinearStatistic, ret)
     ret
 }
 

@@ -4,6 +4,16 @@
 ###################################################
 ### code chunk number 1: 1dex-1
 ###################################################
+isequal <- function(a, b) {
+    attributes(a) <- NULL
+    attributes(b) <- NULL
+    if (!isTRUE(all.equal(a, b))) {
+        print(a, digits = 10)
+        print(b, digits = 10)
+        FALSE
+    } else
+        TRUE
+}
 library("libcoin")
 set.seed(290875)
 x <- gl(5, 20)
@@ -17,7 +27,7 @@ tapply(y, x, sum)
 ### code chunk number 2: 1dex-2
 ###################################################
 ls2 <- LinStatExpCov(X = x, Y = matrix(y, ncol = 1))
-all.equal(ls1, ls2)
+isequal(ls1, ls2)
 
 
 ###################################################
@@ -29,14 +39,14 @@ ylev <- sort(unique(y))
 Y <- rbind(0, matrix(ylev, ncol = 1))
 iy <- .bincode(y, breaks = c(-Inf, ylev, Inf))
 ls3 <- LinStatExpCov(X = X, ix = ix, Y = Y, iy = iy)
-all.equal(ls1, ls3)
+isequal(ls1, ls3)
 
 
 ###################################################
 ### code chunk number 4: 2dex-2
 ###################################################
 ls4 <- LinStatExpCov(ix = ix, Y = Y, iy = iy)
-all.equal(ls3, ls4)
+isequal(ls3, ls4)
 
 
 ###################################################
@@ -75,11 +85,14 @@ doTest(ls1, teststat = "quadratic")
 ### code chunk number 8: Contrasts-1
 ###################################################
 set.seed(29)
-ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1), nperm = 100)
+ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1), 
+                      nperm = 10, standardise = TRUE)
+print(ls1d$StandardisedPermutedLinearStatistic)
 set.seed(29)
-ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), nperm = 100)
+ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), 
+                      nperm = 10, standardise = TRUE)
 ls1c <- c(1:5) %*% ls1d
-all.equal(ls1c, ls1s)
+stopifnot(isequal(ls1c, ls1s))
 
 
 ###################################################
@@ -172,7 +185,7 @@ cmpr <- function(ret1, ret2) {
     nm2 <- names(ret2)
     nm <- c(nm1, nm2)
     nm <- names(table(nm))[table(nm) == 2]
-    all.equal(ret1[nm], ret2[nm])
+    isequal(ret1[nm], ret2[nm])
 }
 
 
@@ -232,9 +245,9 @@ a3 <- libcoin:::.libcoinCall("R_ExpectationInfluence", y, weights, as.double(sub
 a4 <- libcoin:::.libcoinCall("R_ExpectationInfluence", y, as.double(weights), subset);
 a5 <- LinStatExpCov(x, y, weights = weights, subset = subset)$ExpectationInfluence
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4) &&
-          all.equal(a0, a5))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4) &&
+          isequal(a0, a5))
 
 
 ###################################################
@@ -254,9 +267,9 @@ a3 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, weights, as.double(subs
 a4 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, as.double(weights), subset, 0L);
 a5 <- LinStatExpCov(x, y, weights = weights, subset = subset)$CovarianceInfluence
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4) &&
-          all.equal(a0, a5))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4) &&
+          isequal(a0, a5))
 
 a1 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, weights, subset, 1L);
 a2 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, as.double(weights), as.double(subset), 1L);
@@ -265,9 +278,9 @@ a4 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, as.double(weights), sub
 a5 <- LinStatExpCov(x, y, weights = weights, subset = subset, varonly = TRUE)$VarianceInfluence
 a0 <- vary
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4) &&
-          all.equal(a0, a5))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4) &&
+          isequal(a0, a5))
 
 
 ###################################################
@@ -280,9 +293,9 @@ a2 <- libcoin:::.libcoinCall("R_ExpectationX", x, P, as.double(weights), as.doub
 a3 <- libcoin:::.libcoinCall("R_ExpectationX", x, P, weights, as.double(subset));
 a4 <- libcoin:::.libcoinCall("R_ExpectationX", x, P, as.double(weights), subset);
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4) &&
-          all.equal(a0, LECVxyws$ExpectationX))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4) &&
+          isequal(a0, LECVxyws$ExpectationX))
 
 a0 <- colSums(x[subset, ]^2 * weights[subset]) 
 a1 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, weights, subset, 1L);
@@ -290,8 +303,8 @@ a2 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, as.double(weights), as.doubl
 a3 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, weights, as.double(subset), 1L);
 a4 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, as.double(weights), subset, 1L);
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4))
 
 a0 <- as.vector(colSums(Xfactor[subset, ] * weights[subset]))
 a0
@@ -300,16 +313,16 @@ a2 <- libcoin:::.libcoinCall("R_ExpectationX", ix, Lx, as.double(weights), as.do
 a3 <- libcoin:::.libcoinCall("R_ExpectationX", ix, Lx, weights, as.double(subset));
 a4 <- libcoin:::.libcoinCall("R_ExpectationX", ix, Lx, as.double(weights), subset);
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4))
 
 a1 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, subset, 1L);
 a2 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), as.double(subset), 1L);
 a3 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, as.double(subset), 1L);
 a4 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), subset, 1L);
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4))
 
 r1x <- rep(1:ncol(Xfactor), ncol(Xfactor))
 r2x <- rep(1:ncol(Xfactor), each = ncol(Xfactor))
@@ -323,8 +336,8 @@ a2 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), as.dou
 a3 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, as.double(subset), 0L)
 a4 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), subset, 0L)
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4))
 
 
 ###################################################
@@ -335,8 +348,8 @@ a1 <- libcoin:::.libcoinCall("R_Sums", N, weights, subset)
 a2 <- libcoin:::.libcoinCall("R_Sums", N, as.double(weights), as.double(subset))
 a3 <- libcoin:::.libcoinCall("R_Sums", N, weights, as.double(subset))
 a4 <- libcoin:::.libcoinCall("R_Sums", N, as.double(weights), subset)
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4))
 
 
 ###################################################
@@ -354,8 +367,8 @@ as.double(subset), 0L)
 a4 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, as.double(weights),
 subset, 0L)
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4))
 
 a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * 
                         y[subset,r2Xfactor] * weights[subset]))
@@ -367,8 +380,8 @@ as.double(subset), 0L)
 a4 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, as.double(weights),
 subset, 0L)
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4))
 
 
 
@@ -378,12 +391,12 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 a0 <- colSums(x[subset,r1] * y[subsety, r2])
 a1 <- libcoin:::.libcoinCall("R_KronSums_Permutation", x, P, y, subset, subsety)
 a2 <- libcoin:::.libcoinCall("R_KronSums_Permutation", x, P, y, as.double(subset), as.double(subsety))
-stopifnot(all.equal(a0, a1) && all.equal(a0, a1))
+stopifnot(isequal(a0, a1) && isequal(a0, a1))
 
 a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * y[subsety, r2Xfactor]))
 a1 <- libcoin:::.libcoinCall("R_KronSums_Permutation", ix, Lx, y, subset, subsety)
 a1 <- libcoin:::.libcoinCall("R_KronSums_Permutation", ix, Lx, y, as.double(subset), as.double(subsety))
-stopifnot(all.equal(a0, a1))
+stopifnot(isequal(a0, a1))
 
 
 ###################################################
@@ -395,8 +408,8 @@ a2 <- libcoin:::.libcoinCall("R_colSums", x, as.double(weights), as.double(subse
 a3 <- libcoin:::.libcoinCall("R_colSums", x, weights, as.double(subset))
 a4 <- libcoin:::.libcoinCall("R_colSums", x, as.double(weights), subset)
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4))
 
 
 ###################################################
@@ -409,8 +422,8 @@ a2 <- ctabs(ix, weights = as.double(weights), subset = as.double(subset))[-1]
 a3 <- ctabs(ix, weights = weights, subset = as.double(subset))[-1]
 a4 <- ctabs(ix, weights = as.double(weights), subset = subset)[-1]
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4))
 
 
 ###################################################
@@ -427,8 +440,8 @@ a2 <- ctabs(ix, iy, weights = as.double(weights),
 a3 <- ctabs(ix, iy, weights = weights, subset = as.double(subset))[-1, -1]
 a4 <- ctabs(ix, iy, weights = as.double(weights), subset = subset)[-1, -1]
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4))
 
 
 ###################################################
@@ -443,8 +456,8 @@ a2 <- ctabs(ix, iy, block, as.double(weights), as.double(subset))[-1,-1,]
 a3 <- ctabs(ix, iy, block, weights, as.double(subset))[-1,-1,]
 a4 <- ctabs(ix, iy, block, as.double(weights), subset)[-1,-1,]
 
-stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
-          all.equal(a0, a3) && all.equal(a0, a4))
+stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
+          isequal(a0, a3) && isequal(a0, a4))
 
 
 ###################################################
@@ -453,6 +466,6 @@ stopifnot(all.equal(a0, a1) && all.equal(a0, a2) &&
 sb <- sample(block)
 ns1 <- do.call("c", tapply(subset, sb[subset], function(i) i))
 ns2 <- libcoin:::.libcoinCall("R_order_subset_wrt_block", y, integer(0), subset, sb)
-all.equal(ns1, ns2, check.attributes = FALSE)
+stopifnot(isequal(ns1, ns2))
 
 
