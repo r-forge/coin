@@ -6706,7 +6706,7 @@ useDynLib(libcoin, .registration = TRUE)
 importFrom("stats", complete.cases, vcov)
 importFrom("mvtnorm", GenzBretz)
 
-export(LinStatExpCov, doTest, ctabs, "%*%")
+export(LinStatExpCov, doTest, ctabs, "%*%", "%*%.default")
 S3method("vcov", "LinStatExpCov")
 S3method("%*%", "LinStatExpCov")
 @}
