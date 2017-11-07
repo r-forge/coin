@@ -25,16 +25,23 @@ ctabs <- function(ix, iy = integer(0), block = integer(0), weights = integer(0),
 
     # Check weights, subset, block
     
+
+    if (is.null(weights)) weights <- integer(0)
+
     if (length(weights) > 0) {
         if (!((N == length(weights)) && all(weights >= 0)))
             stop("incorrect weights")
     }
+
+    if (is.null(subset)) subset <- integer(0)
 
     if (length(subset) > 0) {
         rs <- range(subset)
         if (!((rs[2] <= N) && (rs[1] >= 1L)))
             stop("incorrect subset")
     }
+
+    if (is.null(block)) block <- integer(0)
 
     if (length(block) > 0) {
         if (!((N == length(block)) && is.factor(block)))

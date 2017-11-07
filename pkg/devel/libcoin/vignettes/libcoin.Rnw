@@ -361,16 +361,23 @@ sorted. \verb|block| is a factor at $B$ levels of length $N$.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@if (is.null(weights)) weights <- integer(0)@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@if (length(weights) > 0) {@\\
 \mbox{}\verb@    if (!((N == length(weights)) && all(weights >= 0)))@\\
 \mbox{}\verb@        stop("incorrect weights")@\\
 \mbox{}\verb@}@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@if (is.null(subset)) subset <- integer(0)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (length(subset) > 0) {@\\
 \mbox{}\verb@    rs <- range(subset)@\\
 \mbox{}\verb@    if (!((rs[2] <= N) && (rs[1] >= 1L)))@\\
 \mbox{}\verb@        stop("incorrect subset")@\\
 \mbox{}\verb@}@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@if (is.null(block)) block <- integer(0)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (length(block) > 0) {@\\
 \mbox{}\verb@    if (!((N == length(block)) && is.factor(block)))@\\
