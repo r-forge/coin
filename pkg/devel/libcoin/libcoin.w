@@ -276,14 +276,16 @@ LinStatExpCov <- function@<LinStatExpCov Prototype@>
     
     if (is.null(ix) & is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
-                                subset = subset, block = block,
+                                subset = subset, block = block, 
+                                checkNAs = checkNAs,
                                 varonly = varonly, nperm = nperm,
                                 standardise = standardise, tol = tol))
 
     if (!is.null(ix) & !is.null(iy))
         return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
                                 weights = weights, subset = subset,
-                                block = block, varonly = varonly, nperm = nperm,
+                                block = block, varonly = varonly, 
+                                checkNAs = checkNAs, nperm = nperm,
                                 standardise = standardise, tol = tol))
 
     stop("incorrect call to LinStatExpCov")
@@ -311,12 +313,14 @@ if (is.null(weights)) weights <- integer(0)
 if (length(weights) > 0) {
     if (!((N == length(weights)) && all(weights >= 0)))
         stop("incorrect weights")
+    if (checkNAs) stopifnot(all(!is.na(weights)))
 }
 
 if (is.null(subset)) subset <- integer(0)
 
 if (length(subset) > 0) {
     rs <- range(subset)
+    if (any(is.na(rs))) stop("no missing values allowed in subset")
     if (!((rs[2] <= N) && (rs[1] >= 1L)))
         stop("incorrect subset")
 }
@@ -326,10 +330,9 @@ if (is.null(block)) block <- integer(0)
 if (length(block) > 0) {
     if (!((N == length(block)) && is.factor(block)))
         stop("incorrect block")
+    if (checkNAs) stopifnot(all(!is.na(block)))
 }
 @}
-
-
 
 Missing values are only allowed in \verb|X| and
 \verb|Y|, all other vectors must not contain \verb|NA|s. Missing values are
@@ -378,10 +381,14 @@ Variances smaller than \verb|tol| are treated as being zero.
             attr(X, "levels") <- 1:rg[2]
     }
 
+    if (is.factor(X) && checkNAs)
+        stopifnot(all(!is.na(X)))
+
     @<Check weights, subset, block@>
 
-    if (checkNAs)
+    if (checkNAs) {
         @<Handle Missing Values@>
+    }
 
     ret <- .Call(R_ExpectationCovarianceStatistic, X, Y, weights, subset,
                  block, as.integer(varonly), as.double(tol))
@@ -459,7 +466,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 @d LinStatExpCov2d
 @{
 .LinStatExpCov2d <- function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
-                             block = integer(0), varonly = FALSE, nperm = 0,
+                             block = integer(0), checkNAs = TRUE, varonly = FALSE, nperm = 0,
                              standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
@@ -504,6 +511,8 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 }
 @}
 
+\verb|ix| can be a factor but without any missing values
+
 @d Check ix
 @{
 if (is.null(attr(ix, "levels"))) {
@@ -512,6 +521,8 @@ if (is.null(attr(ix, "levels"))) {
         stop("no missing values allowed in ix") 
     stopifnot(rg[1] >= 0)
     attr(ix, "levels") <- 1:rg[2]
+} else {
+    if (checkNAs) stopifnot(all(!is.na(ix)))
 }
 @}
 
@@ -523,6 +534,8 @@ if (is.null(attr(iy, "levels"))) {
         stop("no missing values allowed in iy") 
     stopifnot(rg[1] >= 0)
     attr(iy, "levels") <- 1:rg[2]
+} else {
+    if (checkNAs) stopifnot(all(!is.na(ix)))
 }
 @}
 
@@ -682,7 +695,7 @@ matrix to an object of class \verb|LinStatExpCov|.
 @d Contrasts
 @{
 `%*%` <- function(x, y) UseMethod("%*%", y)
-`%*%.default` <- base::`%*%`
+`%*%.default` <- function(x, y) base::`%*%`(x, y)
 `%*%.LinStatExpCov` <- function(x, y) {
     stopifnot(!y$varonly)
     stopifnot(is.numeric(x))
@@ -736,7 +749,7 @@ necessarily computing the corresponding linear statistics via
 
 @d ctabs Prototype
 @{(ix, iy = integer(0), block = integer(0), weights = integer(0),
-   subset = integer(0))@}
+   subset = integer(0), checkNAs = TRUE)@}
 
 @o ctabs.R -cp
 @{
@@ -905,6 +918,7 @@ ctabs@<ctabs Prototype@>
   \item{block}{an optional blocking factor without missings.}
   \item{weights}{an optional vector of weights, integer or double.}
   \item{subset}{an optional integer vector indicating a subset.}
+  \item{checkNAs}{a logical for switching off missing value checks.}
 }
 \details{
   A faster version of \code{xtabs(weights ~ ix + iy + block, subset)}.
@@ -1604,9 +1618,6 @@ The dimensions are available from the return object:
 @d Extract Dimensions
 @{
 P = C_get_P(ans);
-
-Rprintf("P %d \n", P);
-
 Q = C_get_Q(ans);
 N = NROW(x);
 B = C_get_B(ans);
@@ -4251,9 +4262,6 @@ void RC_KronSums
 @{
 @<RC\_KronSums Prototype@>
 {
-
-    Rprintf("TYPEOF %d \n", TYPEOF(x));
-
     if (TYPEOF(x) == INTSXP) {
         if (SYMMETRIC) error("not implemented");
         if (CENTER) error("not implemented");
@@ -6010,15 +6018,12 @@ int NLEVELS
 
     a = getAttrib(x, R_LevelsSymbol);
     if (a == R_NilValue) {
-        Rprintf("no levels!");
         if (TYPEOF(x) != INTSXP)
             error("cannot determine number of levels");
         for (R_xlen_t i = 0; i < XLENGTH(x); i++) {
-Rprintf("i %d x %d ", i, INTEGER(x)[i]);
             if (INTEGER(x)[i] > maxlev)
                 maxlev = INTEGER(x)[i];
         }
-        Rprintf("maxlev %d \n", maxlev);
         return(maxlev);
     }
     return(NROW(a));

@@ -27,14 +27,16 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     
     if (is.null(ix) & is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
-                                subset = subset, block = block,
+                                subset = subset, block = block, 
+                                checkNAs = checkNAs,
                                 varonly = varonly, nperm = nperm,
                                 standardise = standardise, tol = tol))
 
     if (!is.null(ix) & !is.null(iy))
         return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
                                 weights = weights, subset = subset,
-                                block = block, varonly = varonly, nperm = nperm,
+                                block = block, varonly = varonly, 
+                                checkNAs = checkNAs, nperm = nperm,
                                 standardise = standardise, tol = tol))
 
     stop("incorrect call to LinStatExpCov")
@@ -60,6 +62,9 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
             attr(X, "levels") <- 1:rg[2]
     }
 
+    if (is.factor(X) && checkNAs)
+        stopifnot(all(!is.na(X)))
+
     # Check weights, subset, block
     
 
@@ -68,12 +73,14 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     if (length(weights) > 0) {
         if (!((N == length(weights)) && all(weights >= 0)))
             stop("incorrect weights")
+        if (checkNAs) stopifnot(all(!is.na(weights)))
     }
 
     if (is.null(subset)) subset <- integer(0)
 
     if (length(subset) > 0) {
         rs <- range(subset)
+        if (any(is.na(rs))) stop("no missing values allowed in subset")
         if (!((rs[2] <= N) && (rs[1] >= 1L)))
             stop("incorrect subset")
     }
@@ -83,10 +90,11 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     if (length(block) > 0) {
         if (!((N == length(block)) && is.factor(block)))
             stop("incorrect block")
+        if (checkNAs) stopifnot(all(!is.na(block)))
     }
     
 
-    if (checkNAs)
+    if (checkNAs) {
         # Handle Missing Values
         
         ms <- !(complete.cases(X) & complete.cases(Y))
@@ -102,6 +110,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
             }
         }
         
+    }
 
     ret <- .Call(R_ExpectationCovarianceStatistic, X, Y, weights, subset,
                  block, as.integer(varonly), as.double(tol))
@@ -122,7 +131,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
 # LinStatExpCov2d
 
 .LinStatExpCov2d <- function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
-                             block = integer(0), varonly = FALSE, nperm = 0,
+                             block = integer(0), checkNAs = TRUE, varonly = FALSE, nperm = 0,
                              standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
@@ -141,6 +150,8 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
             stop("no missing values allowed in ix") 
         stopifnot(rg[1] >= 0)
         attr(ix, "levels") <- 1:rg[2]
+    } else {
+        if (checkNAs) stopifnot(all(!is.na(ix)))
     }
     
 
@@ -152,6 +163,8 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
             stop("no missing values allowed in iy") 
         stopifnot(rg[1] >= 0)
         attr(iy, "levels") <- 1:rg[2]
+    } else {
+        if (checkNAs) stopifnot(all(!is.na(ix)))
     }
     
 
@@ -175,12 +188,14 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     if (length(weights) > 0) {
         if (!((N == length(weights)) && all(weights >= 0)))
             stop("incorrect weights")
+        if (checkNAs) stopifnot(all(!is.na(weights)))
     }
 
     if (is.null(subset)) subset <- integer(0)
 
     if (length(subset) > 0) {
         rs <- range(subset)
+        if (any(is.na(rs))) stop("no missing values allowed in subset")
         if (!((rs[2] <= N) && (rs[1] >= 1L)))
             stop("incorrect subset")
     }
@@ -190,6 +205,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     if (length(block) > 0) {
         if (!((N == length(block)) && is.factor(block)))
             stop("incorrect block")
+        if (checkNAs) stopifnot(all(!is.na(block)))
     }
     
 
@@ -288,7 +304,7 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
 # Contrasts
 
 `%*%` <- function(x, y) UseMethod("%*%", y)
-`%*%.default` <- base::`%*%`
+`%*%.default` <- function(x, y) base::`%*%`(x, y)
 `%*%.LinStatExpCov` <- function(x, y) {
     stopifnot(!y$varonly)
     stopifnot(is.numeric(x))

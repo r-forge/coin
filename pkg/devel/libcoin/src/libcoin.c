@@ -56,15 +56,12 @@ int NLEVELS
 
     a = getAttrib(x, R_LevelsSymbol);
     if (a == R_NilValue) {
-        Rprintf("no levels!");
         if (TYPEOF(x) != INTSXP)
             error("cannot determine number of levels");
         for (R_xlen_t i = 0; i < XLENGTH(x); i++) {
-Rprintf("i %d x %d ", i, INTEGER(x)[i]);
             if (INTEGER(x)[i] > maxlev)
                 maxlev = INTEGER(x)[i];
         }
-        Rprintf("maxlev %d \n", maxlev);
         return(maxlev);
     }
     return(NROW(a));
@@ -2111,9 +2108,6 @@ void RC_KronSums
 ) 
 
 {
-
-    Rprintf("TYPEOF %d \n", TYPEOF(x));
-
     if (TYPEOF(x) == INTSXP) {
         if (SYMMETRIC) error("not implemented");
         if (CENTER) error("not implemented");
@@ -6820,9 +6814,6 @@ SEXP ans
     /* Extract Dimensions */
     
     P = C_get_P(ans);
-
-    Rprintf("P %d \n", P);
-
     Q = C_get_Q(ans);
     N = NROW(x);
     B = C_get_B(ans);

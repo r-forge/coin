@@ -320,14 +320,16 @@ FIXME: remove B (only for backward compatibility).
 \mbox{}\verb@    @\\
 \mbox{}\verb@    if (is.null(ix) & is.null(iy))@\\
 \mbox{}\verb@        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,@\\
-\mbox{}\verb@                                subset = subset, block = block,@\\
+\mbox{}\verb@                                subset = subset, block = block, @\\
+\mbox{}\verb@                                checkNAs = checkNAs,@\\
 \mbox{}\verb@                                varonly = varonly, nperm = nperm,@\\
 \mbox{}\verb@                                standardise = standardise, tol = tol))@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!is.null(ix) & !is.null(iy))@\\
 \mbox{}\verb@        return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,@\\
 \mbox{}\verb@                                weights = weights, subset = subset,@\\
-\mbox{}\verb@                                block = block, varonly = varonly, nperm = nperm,@\\
+\mbox{}\verb@                                block = block, varonly = varonly, @\\
+\mbox{}\verb@                                checkNAs = checkNAs, nperm = nperm,@\\
 \mbox{}\verb@                                standardise = standardise, tol = tol))@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    stop("incorrect call to LinStatExpCov")@\\
@@ -368,12 +370,14 @@ sorted. \verb|block| is a factor at $B$ levels of length $N$.
 \mbox{}\verb@if (length(weights) > 0) {@\\
 \mbox{}\verb@    if (!((N == length(weights)) && all(weights >= 0)))@\\
 \mbox{}\verb@        stop("incorrect weights")@\\
+\mbox{}\verb@    if (checkNAs) stopifnot(all(!is.na(weights)))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (is.null(subset)) subset <- integer(0)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (length(subset) > 0) {@\\
 \mbox{}\verb@    rs <- range(subset)@\\
+\mbox{}\verb@    if (any(is.na(rs))) stop("no missing values allowed in subset")@\\
 \mbox{}\verb@    if (!((rs[2] <= N) && (rs[1] >= 1L)))@\\
 \mbox{}\verb@        stop("incorrect subset")@\\
 \mbox{}\verb@}@\\
@@ -383,6 +387,7 @@ sorted. \verb|block| is a factor at $B$ levels of length $N$.
 \mbox{}\verb@if (length(block) > 0) {@\\
 \mbox{}\verb@    if (!((N == length(block)) && is.factor(block)))@\\
 \mbox{}\verb@        stop("incorrect block")@\\
+\mbox{}\verb@    if (checkNAs) stopifnot(all(!is.na(block)))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -459,10 +464,14 @@ Variances smaller than \verb|tol| are treated as being zero.
 \mbox{}\verb@            attr(X, "levels") <- 1:rg[2]@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
+\mbox{}\verb@    if (is.factor(X) && checkNAs)@\\
+\mbox{}\verb@        stopifnot(all(!is.na(X)))@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Check weights, subset, block}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (checkNAs)@\\
+\mbox{}\verb@    if (checkNAs) {@\\
 \mbox{}\verb@        @\hbox{$\langle\,${\itshape Handle Missing Values}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ret <- .Call(R_ExpectationCovarianceStatistic, X, Y, weights, subset,@\\
 \mbox{}\verb@                 block, as.integer(varonly), as.double(tol))@\\
@@ -553,7 +562,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.LinStatExpCov2d <- function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),@\\
-\mbox{}\verb@                             block = integer(0), varonly = FALSE, nperm = 0,@\\
+\mbox{}\verb@                             block = integer(0), checkNAs = TRUE, varonly = FALSE, nperm = 0,@\\
 \mbox{}\verb@                             standardise = FALSE,@\\
 \mbox{}\verb@                             tol = sqrt(.Machine$double.eps))@\\
 \mbox{}\verb@{@\\
@@ -602,11 +611,13 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@block@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@R_ExpectationCovarianceStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@block@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@R_ExpectationCovarianceStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
+\verb|ix| can be a factor but without any missing values
+
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap8}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Check ix}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
@@ -619,6 +630,8 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \mbox{}\verb@        stop("no missing values allowed in ix") @\\
 \mbox{}\verb@    stopifnot(rg[1] >= 0)@\\
 \mbox{}\verb@    attr(ix, "levels") <- 1:rg[2]@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    if (checkNAs) stopifnot(all(!is.na(ix)))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -643,6 +656,8 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \mbox{}\verb@        stop("no missing values allowed in iy") @\\
 \mbox{}\verb@    stopifnot(rg[1] >= 0)@\\
 \mbox{}\verb@    attr(iy, "levels") <- 1:rg[2]@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    if (checkNAs) stopifnot(all(!is.na(ix)))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -854,7 +869,7 @@ matrix to an object of class \verb|LinStatExpCov|.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@`%*%` <- function(x, y) UseMethod("%*%", y)@\\
-\mbox{}\verb@`%*%.default` <- base::`%*%`@\\
+\mbox{}\verb@`%*%.default` <- function(x, y) base::`%*%`(x, y)@\\
 \mbox{}\verb@`%*%.LinStatExpCov` <- function(x, y) {@\\
 \mbox{}\verb@    stopifnot(!y$varonly)@\\
 \mbox{}\verb@    stopifnot(is.numeric(x))@\\
@@ -921,7 +936,7 @@ necessarily computing the corresponding linear statistics via
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@(ix, iy = integer(0), block = integer(0), weights = integer(0),@\\
-\mbox{}\verb@   subset = integer(0))@{\NWsep}
+\mbox{}\verb@   subset = integer(0), checkNAs = TRUE)@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
 \footnotesize
@@ -1139,6 +1154,7 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@  \item{block}{an optional blocking factor without missings.}@\\
 \mbox{}\verb@  \item{weights}{an optional vector of weights, integer or double.}@\\
 \mbox{}\verb@  \item{subset}{an optional integer vector indicating a subset.}@\\
+\mbox{}\verb@  \item{checkNAs}{a logical for switching off missing value checks.}@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\details{@\\
 \mbox{}\verb@  A faster version of \code{xtabs(weights ~ ix + iy + block, subset)}.@\\
@@ -1656,7 +1672,7 @@ or integer-valued, with \verb|HAS_WEIGHTS == 0| in the former case
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1677,7 +1693,7 @@ Weights larger than \verb|INT_MAX| are stored as double
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -2307,9 +2323,6 @@ The dimensions are available from the return object:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@P = C_get_P(ans);@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@Rprintf("P %d \n", P);@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@Q = C_get_Q(ans);@\\
 \mbox{}\verb@N = NROW(x);@\\
 \mbox{}\verb@B = C_get_B(ans);@\\
@@ -6377,9 +6390,6 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_KronSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@    Rprintf("TYPEOF %d \n", TYPEOF(x));@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@    if (TYPEOF(x) == INTSXP) {@\\
 \mbox{}\verb@        if (SYMMETRIC) error("not implemented");@\\
 \mbox{}\verb@        if (CENTER) error("not implemented");@\\
@@ -9232,15 +9242,12 @@ be a little bit more generous with memory here. The return value is always
 \mbox{}\verb@@\\
 \mbox{}\verb@    a = getAttrib(x, R_LevelsSymbol);@\\
 \mbox{}\verb@    if (a == R_NilValue) {@\\
-\mbox{}\verb@        Rprintf("no levels!");@\\
 \mbox{}\verb@        if (TYPEOF(x) != INTSXP)@\\
 \mbox{}\verb@            error("cannot determine number of levels");@\\
 \mbox{}\verb@        for (R_xlen_t i = 0; i < XLENGTH(x); i++) {@\\
-\mbox{}\verb@Rprintf("i %d x %d ", i, INTEGER(x)[i]);@\\
 \mbox{}\verb@            if (INTEGER(x)[i] > maxlev)@\\
 \mbox{}\verb@                maxlev = INTEGER(x)[i];@\\
 \mbox{}\verb@        }@\\
-\mbox{}\verb@        Rprintf("maxlev %d \n", maxlev);@\\
 \mbox{}\verb@        return(maxlev);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    return(NROW(a));@\\
@@ -11198,7 +11205,7 @@ not portable).
 \item \verb@Variance_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@varonly_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@weights@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@weights,@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@weights,@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@x@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@Xfactor_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@y@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.

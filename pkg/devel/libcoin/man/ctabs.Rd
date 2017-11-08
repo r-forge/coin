@@ -9,7 +9,7 @@
 }
 \usage{
 ctabs(ix, iy = integer(0), block = integer(0), weights = integer(0),
-        subset = integer(0))
+        subset = integer(0), checkNAs = TRUE)
 }
 \arguments{
   \item{ix}{a integer of positive values with zero indicating a missing.}
@@ -17,6 +17,7 @@ ctabs(ix, iy = integer(0), block = integer(0), weights = integer(0),
   \item{block}{an optional blocking factor without missings.}
   \item{weights}{an optional vector of weights, integer or double.}
   \item{subset}{an optional integer vector indicating a subset.}
+  \item{checkNAs}{a logical for switching off missing value checks.}
 }
 \details{
   A faster version of \code{xtabs(weights ~ ix + iy + block, subset)}.
