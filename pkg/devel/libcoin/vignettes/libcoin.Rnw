@@ -450,11 +450,13 @@ Variances smaller than \verb|tol| are treated as being zero.
 \mbox{}\verb@        stop("dimensions of X and Y don't match")@\\
 \mbox{}\verb@    N <- NROW(X)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (is.factor(X)) X <- unclass(X)@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@    if (is.integer(X)) {@\\
+\mbox{}\verb@        rg <- range(X)@\\
+\mbox{}\verb@        if (any(is.na(rg)))@\\
+\mbox{}\verb@            stop("no missing values allowed in X") @\\
+\mbox{}\verb@        stopifnot(rg[1] > 0) ### no missing values allowed here!@\\
 \mbox{}\verb@        if (is.null(attr(X, "levels")))@\\
-\mbox{}\verb@            attr(X, "levels") <- 1:max(X)@\\
+\mbox{}\verb@            attr(X, "levels") <- 1:rg[2]@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Check weights, subset, block}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -556,29 +558,26 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \mbox{}\verb@                             tol = sqrt(.Machine$double.eps))@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (is.factor(ix)) ix <- unclass(ix)@\\
-\mbox{}\verb@    if (is.factor(iy)) ix <- unclass(iy)@\\
+\mbox{}\verb@    IF <- function(x) is.integer(x) || is.factor(x)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (!((length(ix) == length(iy)) &&@\\
-\mbox{}\verb@          is.integer(ix) && is.integer(iy)))@\\
+\mbox{}\verb@    if (!((length(ix) == length(iy)) && IF(ix) && IF(iy)))@\\
 \mbox{}\verb@        stop("incorrect ix and/or iy")@\\
 \mbox{}\verb@    N <- length(ix)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (is.null(attr(ix, "levels")))@\\
-\mbox{}\verb@        attr(ix, "levels") <- 1:max(ix)@\\
-\mbox{}\verb@    if (is.null(attr(iy, "levels")))@\\
-\mbox{}\verb@        attr(iy, "levels") <- 1:max(iy)@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Check ix}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Check iy}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (length(X) > 0) {@\\
-\mbox{}\verb@        if (!((min(ix) >= 0 && nrow(X) == (length(attr(ix, "levels")) + 1)) &&@\\
+\mbox{}\verb@        if (!(nrow(X) == (length(attr(ix, "levels")) + 1) &&@\\
 \mbox{}\verb@              all(complete.cases(X)) &&@\\
-\mbox{}\verb@              (nrow(X) == (length(attr(ix, "levels")) + 1))))@\\
+\mbox{}\verb@             (nrow(X) == (length(attr(ix, "levels")) + 1))))@\\
 \mbox{}\verb@            stop("incorrect X")@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!(all(complete.cases(Y))) &&@\\
 \mbox{}\verb@          (nrow(Y) == (length(attr(iy, "levels")) + 1)) &&@\\
-\mbox{}\verb@          (min(iy) >= 0L && nrow(Y) == (length(attr(iy, "levels")) + 1)))@\\
+\mbox{}\verb@          (nrow(Y) == (length(attr(iy, "levels")) + 1)))@\\
 \mbox{}\verb@        stop("incorrect Y")@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Check weights, subset, block}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -603,7 +602,55 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@block@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@R_ExpectationCovarianceStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@block@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@N@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@R_ExpectationCovarianceStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@R_PermutedLinearStatistic_2d@\nobreak\ \NWlink{nuweb?}{?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}, \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap8}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Check ix}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (is.null(attr(ix, "levels"))) {@\\
+\mbox{}\verb@    rg <- range(ix)@\\
+\mbox{}\verb@    if (any(is.na(rg)))@\\
+\mbox{}\verb@        stop("no missing values allowed in ix") @\\
+\mbox{}\verb@    stopifnot(rg[1] >= 0)@\\
+\mbox{}\verb@    attr(ix, "levels") <- 1:rg[2]@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap9}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Check iy}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (is.null(attr(iy, "levels"))) {@\\
+\mbox{}\verb@    rg <- range(iy)@\\
+\mbox{}\verb@    if (any(is.na(rg)))@\\
+\mbox{}\verb@        stop("no missing values allowed in iy") @\\
+\mbox{}\verb@    stopifnot(rg[1] >= 0)@\\
+\mbox{}\verb@    attr(iy, "levels") <- 1:rg[2]@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -616,6 +663,9 @@ ylev <- sort(unique(y))
 Y <- rbind(0, matrix(ylev, ncol = 1))
 iy <- .bincode(y, breaks = c(-Inf, ylev, Inf))
 ls3 <- LinStatExpCov(X = X, ix = ix, Y = Y, iy = iy)
+all.equal(ls1, ls3)
+### works also with factors
+ls3 <- LinStatExpCov(X = X, ix = factor(ix), Y = Y, iy = factor(iy))
 all.equal(ls1, ls3)
 @
 Similar to the one-dimensional case, we can also omit the \verb|X| matrix
@@ -639,7 +689,7 @@ elements. The \verb|vcov| method allows to extract the full covariance
 matrix from such an object.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap8}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap10}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape vcov LinStatExpCov}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -682,7 +732,7 @@ $p$-values (\verb|lower = FALSE|) or $(1 - p)$-values (\verb|lower = TRUE|)
 can be computed on the log-scale.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap9}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap11}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape doTest Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -702,7 +752,7 @@ can be computed on the log-scale.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap10}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap12}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape doTest}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -798,7 +848,7 @@ implement this, we make \verb|%*%| generic so that we can then multiply a
 matrix to an object of class \verb|LinStatExpCov|.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap11}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap13}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Contrasts}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -866,7 +916,7 @@ necessarily computing the corresponding linear statistics via
 \verb|ctabs()|.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap12}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap14}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ctabs Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -883,7 +933,7 @@ necessarily computing the corresponding linear statistics via
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap13}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap15}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"ctabs.R"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -892,16 +942,15 @@ necessarily computing the corresponding linear statistics via
 \mbox{}\verb@ctabs <- function@\hbox{$\langle\,${\itshape ctabs Prototype}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    stopifnot(is.integer(ix))@\\
+\mbox{}\verb@    stopifnot(is.integer(ix) || is.factor(ix))@\\
 \mbox{}\verb@    N <- length(ix)@\\
-\mbox{}\verb@    if (is.null(attr(ix, "levels")))@\\
-\mbox{}\verb@        attr(ix, "levels") <- 1:max(ix)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Check ix}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (length(iy) > 0) {@\\
 \mbox{}\verb@        stopifnot(length(iy) == N)@\\
-\mbox{}\verb@        stopifnot(is.integer(ix))@\\
-\mbox{}\verb@        if (is.null(attr(iy, "levels")))@\\
-\mbox{}\verb@            attr(iy, "levels") <- 1:max(iy)@\\
+\mbox{}\verb@        stopifnot(is.integer(iy) || is.factor(iy))@\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape Check iy}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Check weights, subset, block}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -933,7 +982,7 @@ max(abs(t1[-1, -1] - t2))
 \section{Manual Pages}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap14}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap16}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"LinStatExpCov.Rd"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1014,7 +1063,7 @@ max(abs(t1[-1, -1] - t2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap15}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap17}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"doTest.Rd"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1068,7 +1117,7 @@ max(abs(t1[-1, -1] - t2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap16}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap18}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"ctabs.Rd"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1130,7 +1179,7 @@ header files.
 \section{Header and Source Files}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap17}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap19}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoin_internal.h"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1153,7 +1202,7 @@ These includes provide some \proglang{R} infrastructure at \proglang{C}
 level.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap18}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap20}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R Includes}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1182,7 +1231,7 @@ stored. \verb|LE| implements $\le$ with some tolerance, \verb|GE| implements
 $\ge$.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap19}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap21}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C Macros}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1202,7 +1251,7 @@ $\ge$.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap20}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap22}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C Global Variables}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1255,7 +1304,7 @@ package. In addition, packages linking to \pkg{libcoin} can access these
 function at \proglang{C} level (at your own risk, of course!).
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap21}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap23}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoin.h"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1274,7 +1323,7 @@ function at \proglang{C} level (at your own risk, of course!).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap22}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap24}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Function Prototypes}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1315,7 +1364,7 @@ The \proglang{C} file \verb|libcoin.c| contains all \proglang{C}
 functions and corresponding \proglang{R} interfaces.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap23}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap25}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoin.c"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1336,7 +1385,7 @@ functions and corresponding \proglang{R} interfaces.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap24}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap26}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Function Definitions}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1372,7 +1421,7 @@ functions and corresponding \proglang{R} interfaces.
 $N$ is the number of observations
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap25}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap27}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R N Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1393,7 +1442,7 @@ which at \proglang{C} level is represented as \verb|R_xlen_t| to allow for
 $N > $ \verb|INT_MAX|
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap26}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap28}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1413,7 +1462,7 @@ $N > $ \verb|INT_MAX|
 The regressors $\x_i, i = 1, \dots, N$ 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap27}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap29}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R x Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1425,7 +1474,7 @@ The regressors $\x_i, i = 1, \dots, N$
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1433,7 +1482,7 @@ The regressors $\x_i, i = 1, \dots, N$
 are either represented as a real matrix with $N$ rows and $P$ columns
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap28}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap30}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C integer P Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1451,7 +1500,7 @@ are either represented as a real matrix with $N$ rows and $P$ columns
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap29}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap31}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C real x Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1465,7 +1514,7 @@ are either represented as a real matrix with $N$ rows and $P$ columns
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1473,7 +1522,7 @@ are either represented as a real matrix with $N$ rows and $P$ columns
 or as a factor (an integer at \proglang{C} level) at $P$ levels
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap30}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap32}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C integer x Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1487,7 +1536,7 @@ or as a factor (an integer at \proglang{C} level) at $P$ levels
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1495,7 +1544,7 @@ or as a factor (an integer at \proglang{C} level) at $P$ levels
 The influence functions are also either a $N \times Q$ real matrix
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap31}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap33}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R y Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1513,7 +1562,7 @@ The influence functions are also either a $N \times Q$ real matrix
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap32}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap34}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C integer Q Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1531,7 +1580,7 @@ The influence functions are also either a $N \times Q$ real matrix
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap33}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap35}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C real y Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1552,7 +1601,7 @@ The influence functions are also either a $N \times Q$ real matrix
 or a factor at $Q$ levels
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap34}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap36}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C integer y Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1573,7 +1622,7 @@ or a factor at $Q$ levels
 The weights $w_i, i = 1, \dots, N$ 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap35}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap37}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R weights Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1594,7 +1643,7 @@ can be constant one (\verb|XLENGTH(weights) == 0| or \verb|weights = integer(0)|
 or integer-valued, with \verb|HAS_WEIGHTS == 0| in the former case
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap36}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap38}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1607,7 +1656,7 @@ or integer-valued, with \verb|HAS_WEIGHTS == 0| in the former case
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1615,7 +1664,7 @@ or integer-valued, with \verb|HAS_WEIGHTS == 0| in the former case
 Weights larger than \verb|INT_MAX| are stored as double
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap37}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap39}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C real weights Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1628,7 +1677,7 @@ Weights larger than \verb|INT_MAX| are stored as double
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@HAS_WEIGHTS@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights,@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1636,7 +1685,7 @@ Weights larger than \verb|INT_MAX| are stored as double
 The sum of all weights is a double
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap38}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap40}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C sumweights Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1656,7 +1705,7 @@ The sum of all weights is a double
 Subsets $\A \subseteq \{1, \dots, N\}$ are \proglang{R} style indices
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap39}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap41}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1676,7 +1725,7 @@ Subsets $\A \subseteq \{1, \dots, N\}$ are \proglang{R} style indices
 are either not existent (\verb|XLENGTH(subset) == 0|) or of length
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap40}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap42}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C integer Nsubset Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1696,7 +1745,7 @@ are either not existent (\verb|XLENGTH(subset) == 0|) or of length
 Optionally, one can specify a subset of the subset via
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap41}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap43}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1719,7 +1768,7 @@ where \verb|offset| is a \proglang{C} style index for \verb|subset|.
 Subsets are stored either as integer
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap42}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap44}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1740,7 +1789,7 @@ Subsets are stored either as integer
 or double (to allow for indices larger than \verb|INT_MAX|)
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap43}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap45}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C real subset Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1761,7 +1810,7 @@ or double (to allow for indices larger than \verb|INT_MAX|)
 Blocks $\text{block}_i, i = 1, \dots, N$
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap44}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap46}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R block Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1781,7 +1830,7 @@ Blocks $\text{block}_i, i = 1, \dots, N$
 at $B$ levels
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap45}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap47}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C integer B Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1801,7 +1850,7 @@ at $B$ levels
 are stored as a factor
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap46}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap48}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C integer block Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1822,7 +1871,7 @@ are stored as a factor
 The tabulation of block (potentially in subsets) is
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap47}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap49}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R blockTable Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -1996,7 +2045,7 @@ sometimes with dimension (for example: \verb|PQ_ans|).
 \subsection{One-Dimensional Case (``1d'')}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap48}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap50}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape User Interface}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2021,7 +2070,7 @@ with weights, subset and blocks. The latter three variables are ignored when
 specified as \verb|integer(0)|.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap49}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap51}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape User Interface Inputs}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2045,7 +2094,7 @@ specified as \verb|integer(0)|.
 This function can be called from other packages.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap50}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2077,7 +2126,7 @@ This function can be called from other packages.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap51}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationCovarianceStatistic Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2103,7 +2152,7 @@ The \proglang{C} interface essentially sets-up the necessary memory and
 calls a \proglang{C} level function for the computations.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationCovarianceStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2114,7 +2163,7 @@ calls a \proglang{C} level function for the computations.
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup Dimensions}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], B, isInteger(x), REAL(tol)[0]));@\\
+\mbox{}\verb@    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], B, TYPEOF(x) == INTSXP, REAL(tol)[0]));@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);@\\
 \mbox{}\verb@@\\
@@ -2137,14 +2186,14 @@ is an implicitly specified dummy matrix, the dimension $P$ is the number of
 levels of \verb|x|.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap55}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup Dimensions}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@    int P, Q, B;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (isInteger(x)) {@\\
+\mbox{}\verb@    if (TYPEOF(x) == INTSXP) {@\\
 \mbox{}\verb@        P = NLEVELS(x);@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        P = NCOL(x);@\\
@@ -2176,7 +2225,7 @@ FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ExpectationCovarianceStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2252,12 +2301,15 @@ FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not
 The dimensions are available from the return object:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap55}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Extract Dimensions}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@P = C_get_P(ans);@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@Rprintf("P %d \n", P);@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@Q = C_get_Q(ans);@\\
 \mbox{}\verb@N = NROW(x);@\\
 \mbox{}\verb@B = C_get_B(ans);@\\
@@ -2275,7 +2327,7 @@ The dimensions are available from the return object:
 The linear statistic $\T(\A)$ can be computed without taking blocks into account.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute Linear Statistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2300,7 +2352,7 @@ subset with respect to blocks. In absense of block, this just returns
 subset.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup Memory and Subsets in Blocks}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2344,7 +2396,7 @@ for the subset given by subset and the $b$th level of block. The expectation
 is initialised zero when $b = 0$ and values add-up over blocks.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute Expectation Linear Statistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2372,7 +2424,7 @@ subset and the $b$th level of block. Note that \verb|CovInf| stores the
 values for each block in the return object (for later reuse).
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute Covariance Influence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2400,7 +2452,7 @@ We can now compute the variance or covariance of the linear statistic
 $\Sigma(\A)$:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute Variance Linear Statistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2421,7 +2473,7 @@ $\Sigma(\A)$:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute Covariance Linear Statistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2447,7 +2499,7 @@ function. The user interface is the same, except for an additional number of
 permutations to be specified.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_PermutedLinearStatistic Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2469,7 +2521,7 @@ permutations to be specified.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap65}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2505,7 +2557,7 @@ corresponding element of the \verb|LinStatExpCov| object (because we are not
 allowed to modify existing \proglang{R} objects at \proglang{C} level).
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_PermutedLinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2573,7 +2625,7 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap65}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap67}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup Linear Statistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2594,7 +2646,7 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap68}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2623,7 +2675,7 @@ This small function takes an object containing permuted linear statistics
 and returns the matrix of standardised linear statistics.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap67}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap69}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_StandardisePermutedLinearStatistic Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2644,7 +2696,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap68}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap70}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_StandardisePermutedLinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2689,7 +2741,7 @@ and returns the matrix of standardised linear statistics.
 \subsection{Two-Dimensional Case (``2d'')}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap69}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap71}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape 2d User Interface}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2709,7 +2761,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap70}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap72}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape 2d User Interface Inputs}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2733,7 +2785,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap71}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap73}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationCovarianceStatistic\_2d Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2756,7 +2808,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap72}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap74}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2784,7 +2836,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap73}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap75}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationCovarianceStatistic\_2d}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2832,7 +2884,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap74}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap76}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup Dimensions 2d}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2864,7 +2916,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap75}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap77}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Linear Statistic 2d}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2902,7 +2954,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap76}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap78}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape 2d Total Table}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2927,7 +2979,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap77}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap79}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Col Row Total Sums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2962,7 +3014,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap78}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap80}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape 2d Expectation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -2989,7 +3041,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap79}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap81}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape 2d Covariance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3032,7 +3084,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap80}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap82}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ExpectationCovarianceStatistic\_2d}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3118,7 +3170,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 @
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap81}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap83}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_PermutedLinearStatistic\_2d Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3145,7 +3197,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap82}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap84}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3173,7 +3225,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap83}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap85}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_PermutedLinearStatistic\_2d}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3240,7 +3292,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap84}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap86}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Convert Table to Integer}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3263,7 +3315,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap85}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap87}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup Working Memory}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3286,7 +3338,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap86}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap88}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup Log-Factorials}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3308,7 +3360,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap87}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap89}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute Permuted Linear Statistic 2d}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3336,7 +3388,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \section{Tests}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap88}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap90}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Tests}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3356,7 +3408,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap89}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap91}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3407,7 +3459,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap90}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap92}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_QuadraticTest Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3432,7 +3484,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap91}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap93}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_QuadraticTest}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3492,7 +3544,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap92}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap94}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup Test Memory}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3534,7 +3586,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap93}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap95}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_MaximumTest Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3563,7 +3615,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap94}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap96}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_MaximumTest}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3645,7 +3697,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap95}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap97}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_MaximallySelectedTest Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3671,7 +3723,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap96}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap98}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_MaximallySelectedTest}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3731,7 +3783,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \section{Test Statistics}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap97}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap99}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Test Statistics}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3759,7 +3811,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap98}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap100}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_maxstand\_Covariance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3795,7 +3847,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap99}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap101}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_maxstand\_Variance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3831,7 +3883,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap100}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap102}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_minstand\_Covariance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3867,7 +3919,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap101}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap103}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_minstand\_Variance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3903,7 +3955,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap102}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap104}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_maxabsstand\_Covariance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3940,7 +3992,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap103}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap105}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_maxabsstand\_Variance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3976,7 +4028,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap104}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap106}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_quadform}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4012,7 +4064,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap105}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap107}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_maxtype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4061,7 +4113,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap106}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap108}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_standardise}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4103,7 +4155,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap107}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap109}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape P-Values}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4124,7 +4176,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap108}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap110}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_chisq\_pvalue}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4151,7 +4203,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap109}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap111}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_perm\_pvalue}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4193,7 +4245,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap110}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap112}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_norm\_pvalue}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4243,7 +4295,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap111}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap113}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_maxtype\_pvalue}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4316,7 +4368,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap112}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap114}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup mvtnorm Memory}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4357,7 +4409,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 covariance matrix to be passed as argument \verb|CORREL|
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap113}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap115}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup mvtnorm Correlation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4408,7 +4460,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap114}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap116}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape maxstat Xfactor Variables}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4434,7 +4486,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap115}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap117}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_ordered\_Xfactor}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4502,7 +4554,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap116}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap118}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup maxstat Variables}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4546,7 +4598,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap117}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap119}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup maxstat Memory}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4604,7 +4656,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap118}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap120}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute maxstat Variance / Covariance from Total Covariance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4632,7 +4684,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap119}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap121}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute maxstat Variance / Covariance Directly}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4657,7 +4709,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap120}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap122}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute maxstat Test Statistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4680,7 +4732,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap121}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap123}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute maxstat Permutation P-Value}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4704,7 +4756,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap122}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap124}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_unordered\_Xfactor}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4777,7 +4829,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap123}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap125}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Count Levels}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4815,7 +4867,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap124}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap126}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Setup unordered maxstat Contrasts}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4847,7 +4899,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap125}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap127}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute unordered maxstat Linear Statistic and Expectation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4877,7 +4929,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap126}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap128}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute unordered maxstat Variance / Covariance from Total Covariance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4921,7 +4973,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap127}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap129}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Compute unordered maxstat Variance / Covariance Directly}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4947,7 +4999,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \section{Linear Statistics}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap128}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap130}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape LinearStatistics}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4965,7 +5017,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap129}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap131}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_LinearStatistic Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4993,7 +5045,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap130}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap132}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_LinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5019,7 +5071,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \section{Expectation and Covariance}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap131}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap133}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ExpectationCovariances}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5049,7 +5101,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \subsection{Linear Statistic}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap132}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap134}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_ExpectationLinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5084,7 +5136,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap133}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap135}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_CovarianceLinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5137,7 +5189,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap134}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap136}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_VarianceLinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5199,7 +5251,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 @
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap135}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap137}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationInfluence Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5222,7 +5274,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap136}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap138}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5258,7 +5310,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap137}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap139}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ExpectationInfluence Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5286,7 +5338,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap138}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap140}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ExpectationInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5344,7 +5396,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap139}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap141}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_CovarianceInfluence Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5368,7 +5420,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap140}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap142}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_CovarianceInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5412,7 +5464,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap141}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap143}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_CovarianceInfluence Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5442,7 +5494,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap142}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap144}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_CovarianceInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5475,7 +5527,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \subsection{X}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap143}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap145}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationX Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5499,7 +5551,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap144}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap146}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ExpectationX}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5531,7 +5583,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap145}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap147}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ExpectationX Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5558,7 +5610,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap146}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap148}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ExpectationX}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5644,7 +5696,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap147}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap149}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_CovarianceX Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5669,7 +5721,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap148}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap150}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_CovarianceX}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5708,7 +5760,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap149}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap151}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_CovarianceX Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5737,7 +5789,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap150}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap152}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_CovarianceX}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5783,7 +5835,7 @@ various sums over observations, weights, or blocks. We start with an
 initialisation of the loop over all observations
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap151}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap153}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5810,7 +5862,7 @@ over the subset of the subset given by \verb|offset| and \verb|Nsubset|,
 allowing for number of observations larger than \verb|INT_MAX|
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap152}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap154}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5830,7 +5882,7 @@ allowing for number of observations larger than \verb|INT_MAX|
 After computions in the loop, we compute the next element
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap153}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap155}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5858,7 +5910,7 @@ After computions in the loop, we compute the next element
 \subsection{Simple Sums}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap154}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap156}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape SimpleSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5892,7 +5944,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap155}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap157}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_Sums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5915,7 +5967,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap156}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap158}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_Sums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5945,7 +5997,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap157}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap159}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_Sums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5969,7 +6021,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap158}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap160}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_Sums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6013,7 +6065,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap159}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap161}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_Sums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6040,7 +6092,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap160}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap162}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_Sums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6068,7 +6120,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap161}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap163}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_Sums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6095,7 +6147,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap162}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap164}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_Sums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6123,7 +6175,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap163}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap165}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Sums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6162,7 +6214,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \subsection{Kronecker Sums}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap164}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap166}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape KronSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6227,7 +6279,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap165}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap167}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_KronSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6253,7 +6305,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap166}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap168}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_KronSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6293,7 +6345,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap167}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap169}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_KronSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6318,13 +6370,16 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap168}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap170}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_KronSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_KronSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    Rprintf("TYPEOF %d \n", TYPEOF(x));@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    if (TYPEOF(x) == INTSXP) {@\\
 \mbox{}\verb@        if (SYMMETRIC) error("not implemented");@\\
 \mbox{}\verb@        if (CENTER) error("not implemented");@\\
@@ -6385,7 +6440,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap169}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap171}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC KronSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6410,7 +6465,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap170}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap172}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C KronSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6433,7 +6488,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap171}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap173}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6451,7 +6506,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap172}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap174}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6479,7 +6534,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap173}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap175}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6508,7 +6563,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap174}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap176}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6536,7 +6591,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap175}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap177}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6564,7 +6619,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap176}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap178}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape KronSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6636,7 +6691,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap177}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap179}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C XfactorKronSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6655,7 +6710,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap178}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap180}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6683,7 +6738,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap179}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap181}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6712,7 +6767,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap180}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap182}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6740,7 +6795,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap181}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap183}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6768,7 +6823,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap182}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap184}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape XfactorKronSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6836,7 +6891,7 @@ stopifnot(isequal(a0, a1))
 @
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap183}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap185}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_KronSums\_Permutation Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6861,7 +6916,7 @@ stopifnot(isequal(a0, a1))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap184}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap186}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_KronSums\_Permutation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6895,7 +6950,7 @@ stopifnot(isequal(a0, a1))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap185}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap187}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_KronSums\_Permutation Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6923,7 +6978,7 @@ stopifnot(isequal(a0, a1))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap186}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap188}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_KronSums\_Permutation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6964,7 +7019,7 @@ stopifnot(isequal(a0, a1))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap187}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap189}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_Permutation\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -6992,7 +7047,7 @@ stopifnot(isequal(a0, a1))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap188}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap190}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_Permutation\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7023,7 +7078,7 @@ Because \verb|subset| might not be ordered (in the presence of blocks) we
 have to go through all elements explicitly here.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap189}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap191}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape KronSums Permutation Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7056,7 +7111,7 @@ have to go through all elements explicitly here.
 \subsubsection{Xfactor Permuted Kronecker Sums}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap190}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap192}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_Permutation\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7084,7 +7139,7 @@ have to go through all elements explicitly here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap191}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap193}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_XfactorKronSums\_Permutation\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7112,7 +7167,7 @@ have to go through all elements explicitly here.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap192}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap194}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape XfactorKronSums Permutation Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7141,7 +7196,7 @@ have to go through all elements explicitly here.
 \subsection{Column Sums}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap193}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap195}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape colSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7176,7 +7231,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap194}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap196}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_colSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7199,7 +7254,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap195}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap197}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_colSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7234,7 +7289,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap196}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap198}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_colSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7259,7 +7314,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap197}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap199}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_colSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7300,7 +7355,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap198}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap200}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C colSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7321,7 +7376,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap199}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap201}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C colSums Answer}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7339,7 +7394,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap200}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap202}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_colSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7367,7 +7422,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap201}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap203}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_colSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7396,7 +7451,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap202}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap204}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_colSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7424,7 +7479,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap203}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap205}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_colSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7453,7 +7508,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap204}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap206}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape colSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7503,7 +7558,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \subsubsection{OneTable Sums}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap205}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap207}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Tables}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7551,7 +7606,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap206}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap208}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_OneTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7574,7 +7629,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap207}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap209}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_OneTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7609,7 +7664,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap208}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap210}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_OneTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7634,7 +7689,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap209}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap211}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_OneTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7675,7 +7730,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap210}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap212}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C OneTableSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7693,7 +7748,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap211}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap213}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C OneTableSums Answer}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7711,7 +7766,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap212}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap214}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_OneTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7739,7 +7794,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap213}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap215}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_OneTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7768,7 +7823,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap214}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap216}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_OneTableSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7796,7 +7851,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap215}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap217}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_OneTableSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7825,7 +7880,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap216}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap218}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape OneTableSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7885,7 +7940,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap217}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap219}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_TwoTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7909,7 +7964,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap218}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap220}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_TwoTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7949,7 +8004,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap219}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap221}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_TwoTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -7974,7 +8029,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap220}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap222}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_TwoTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8015,7 +8070,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap221}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap223}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C TwoTableSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8034,7 +8089,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap222}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap224}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C TwoTableSums Answer}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8052,7 +8107,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap223}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap225}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_TwoTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8080,7 +8135,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap224}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap226}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_TwoTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8109,7 +8164,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap225}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap227}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_TwoTableSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8137,7 +8192,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap226}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap228}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_TwoTableSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8166,7 +8221,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap227}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap229}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape TwoTableSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8228,7 +8283,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap228}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap230}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ThreeTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8253,7 +8308,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap229}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap231}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_ThreeTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8295,7 +8350,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap230}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap232}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ThreeTableSums Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8320,7 +8375,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap231}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap233}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_ThreeTableSums}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8361,7 +8416,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap232}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap234}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C ThreeTableSums Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8381,7 +8436,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap233}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap235}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C ThreeTableSums Answer}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8399,7 +8454,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap234}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap236}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_ThreeTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8427,7 +8482,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap235}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap237}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_ThreeTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8456,7 +8511,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap236}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap238}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_ThreeTableSums\_iweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8484,7 +8539,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap237}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap239}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_ThreeTableSums\_dweights\_isubset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8513,7 +8568,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap238}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap240}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ThreeTableSums Body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8573,7 +8628,7 @@ stopifnot(isequal(ns1, ns2))
 @
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap239}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap241}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Utils}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8595,7 +8650,7 @@ stopifnot(isequal(ns1, ns2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap240}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap242}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_order\_subset\_wrt\_block Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8619,7 +8674,7 @@ stopifnot(isequal(ns1, ns2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap241}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap243}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_order\_subset\_wrt\_block}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8660,7 +8715,7 @@ stopifnot(isequal(ns1, ns2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap242}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap244}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_order\_subset\_wrt\_block Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8684,7 +8739,7 @@ stopifnot(isequal(ns1, ns2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap243}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap245}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_order\_subset\_wrt\_block}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8726,7 +8781,7 @@ stopifnot(isequal(ns1, ns2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap244}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap246}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_setup\_subset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8758,7 +8813,7 @@ stopifnot(isequal(ns1, ns2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap245}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap247}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_setup\_subset\_block}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8804,7 +8859,7 @@ stopifnot(isequal(ns1, ns2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap246}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap248}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_order\_subset\_wrt\_block}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8850,7 +8905,7 @@ stopifnot(isequal(ns1, ns2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap247}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap249}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_setup\_subset Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8877,7 +8932,7 @@ be a little bit more generous with memory here. The return value is always
 \verb|REALSXP|.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap248}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap250}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_setup\_subset}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8929,7 +8984,7 @@ be a little bit more generous with memory here. The return value is always
 \subsection{Permutation Helpers}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap249}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap251}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Permutations}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8951,7 +9006,7 @@ be a little bit more generous with memory here. The return value is always
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap250}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap252}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_Permute}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -8983,7 +9038,7 @@ be a little bit more generous with memory here. The return value is always
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap251}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap253}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_doPermute}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9010,7 +9065,7 @@ be a little bit more generous with memory here. The return value is always
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap252}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap254}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_PermuteBlock}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9048,7 +9103,7 @@ be a little bit more generous with memory here. The return value is always
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap253}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap255}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_doPermuteBlock}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9079,7 +9134,7 @@ be a little bit more generous with memory here. The return value is always
 \subsection{Other Utils}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap254}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap256}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape MoreUtils}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9104,7 +9159,7 @@ be a little bit more generous with memory here. The return value is always
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap255}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap257}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape NROW}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9133,7 +9188,7 @@ be a little bit more generous with memory here. The return value is always
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap256}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap258}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape NCOL}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9162,7 +9217,7 @@ be a little bit more generous with memory here. The return value is always
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap257}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap259}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape NLEVELS}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9210,7 +9265,7 @@ stopifnot(isequal(K1, K2))
 @
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap258}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap260}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoinAPI.h"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9237,7 +9292,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap259}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap261}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_kronecker Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9259,7 +9314,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap260}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap262}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_kronecker}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9294,7 +9349,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap261}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap263}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_kronecker}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9343,7 +9398,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap262}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap264}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_kronecker\_sym}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9393,7 +9448,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap263}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap265}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_KronSums\_sym}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9430,7 +9485,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap264}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap266}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_MPinv\_sym}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9500,7 +9555,7 @@ stopifnot(isequal(K1, K2))
 \section{Memory}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap265}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap267}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Memory}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9539,7 +9594,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap266}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap268}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9557,7 +9612,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap267}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap269}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_P}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9581,7 +9636,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap268}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap270}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Q}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9605,7 +9660,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap269}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap271}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_varonly}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9629,7 +9684,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap270}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap272}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Xfactor}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9653,7 +9708,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap271}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap273}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_LinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9677,7 +9732,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap272}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap274}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Expectation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9701,7 +9756,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap273}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap275}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Variance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9738,7 +9793,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap274}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap276}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Covariance}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9767,7 +9822,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap275}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap277}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_ExpectationX}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9790,7 +9845,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap276}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap278}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_ExpectationInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9814,7 +9869,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap277}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap279}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_CovarianceInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9838,7 +9893,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap278}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap280}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_VarianceInfluence}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9862,7 +9917,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap279}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap281}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_TableBlock}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9888,7 +9943,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap280}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap282}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Sumweights}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9913,7 +9968,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap281}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap283}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_Table}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9939,7 +9994,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap282}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap284}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_dimTable}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9966,7 +10021,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap283}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap285}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_B}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -9992,7 +10047,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap284}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap286}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_nperm}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10016,7 +10071,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap285}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap287}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_PermutedLinearStatistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10040,7 +10095,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap286}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap288}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_tol}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10063,7 +10118,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap287}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap289}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Memory Input Checks}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10097,7 +10152,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap288}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap290}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Memory Names}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10137,7 +10192,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap289}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap291}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R\_init\_LECV}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10205,7 +10260,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap290}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap292}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Initialise Zero}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10239,7 +10294,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap291}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap293}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_init\_LECV\_1d}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10279,7 +10334,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap292}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap294}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape RC\_init\_LECV\_2d}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10333,7 +10388,7 @@ stopifnot(isequal(K1, K2))
 \chapter{Package Infrastructure}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap293}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap295}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"AAA.R"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10352,7 +10407,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap294}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap296}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"DESCRIPTION"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10384,7 +10439,7 @@ stopifnot(isequal(K1, K2))
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap295}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap297}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"NAMESPACE"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10410,7 +10465,7 @@ stopifnot(isequal(K1, K2))
 Add flag \verb|-g| to \verb|PKG\_CFLAGS| for \verb|operf| profiling (this is
 not portable).
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap296}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap298}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"Makevars"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10428,7 +10483,7 @@ not portable).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap297}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap299}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoin-win.def"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10447,7 +10502,7 @@ not portable).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap298}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap300}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoin-init.c"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10496,7 +10551,7 @@ not portable).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap299}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap301}\raggedright\small
 \NWtarget{nuweb?}{} \verb@"libcoin-init.c"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10544,7 +10599,7 @@ not portable).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap300}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap302}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape R Header}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10566,7 +10621,7 @@ not portable).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap301}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap303}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape C Header}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -10678,6 +10733,10 @@ not portable).
 \item $\langle\,$C TwoTableSums Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
 \item $\langle\,$C XfactorKronSums Input\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+}
+\item $\langle\,$Check ix\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+}
+\item $\langle\,$Check iy\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
 \item $\langle\,$Check weights, subset, block\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
@@ -11139,8 +11198,8 @@ not portable).
 \item \verb@Variance_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@varonly_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@weights@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@weights,@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \verb@x@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@weights,@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@x@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@Xfactor_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@y@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \end{list}}

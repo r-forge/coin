@@ -369,11 +369,13 @@ Variances smaller than \verb|tol| are treated as being zero.
         stop("dimensions of X and Y don't match")
     N <- NROW(X)
 
-    if (is.factor(X)) X <- unclass(X)
-
     if (is.integer(X)) {
+        rg <- range(X)
+        if (any(is.na(rg)))
+            stop("no missing values allowed in X") 
+        stopifnot(rg[1] > 0) ### no missing values allowed here!
         if (is.null(attr(X, "levels")))
-            attr(X, "levels") <- 1:max(X)
+            attr(X, "levels") <- 1:rg[2]
     }
 
     @<Check weights, subset, block@>
@@ -462,29 +464,26 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
                              tol = sqrt(.Machine$double.eps))
 {
 
-    if (is.factor(ix)) ix <- unclass(ix)
-    if (is.factor(iy)) ix <- unclass(iy)
+    IF <- function(x) is.integer(x) || is.factor(x)
 
-    if (!((length(ix) == length(iy)) &&
-          is.integer(ix) && is.integer(iy)))
+    if (!((length(ix) == length(iy)) && IF(ix) && IF(iy)))
         stop("incorrect ix and/or iy")
     N <- length(ix)
 
-    if (is.null(attr(ix, "levels")))
-        attr(ix, "levels") <- 1:max(ix)
-    if (is.null(attr(iy, "levels")))
-        attr(iy, "levels") <- 1:max(iy)
+    @<Check ix@>
+
+    @<Check iy@>
 
     if (length(X) > 0) {
-        if (!((min(ix) >= 0 && nrow(X) == (length(attr(ix, "levels")) + 1)) &&
+        if (!(nrow(X) == (length(attr(ix, "levels")) + 1) &&
               all(complete.cases(X)) &&
-              (nrow(X) == (length(attr(ix, "levels")) + 1))))
+             (nrow(X) == (length(attr(ix, "levels")) + 1))))
             stop("incorrect X")
     }
 
     if (!(all(complete.cases(Y))) &&
           (nrow(Y) == (length(attr(iy, "levels")) + 1)) &&
-          (min(iy) >= 0L && nrow(Y) == (length(attr(iy, "levels")) + 1)))
+          (nrow(Y) == (length(attr(iy, "levels")) + 1)))
         stop("incorrect Y")
 
     @<Check weights, subset, block@>
@@ -505,6 +504,28 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 }
 @}
 
+@d Check ix
+@{
+if (is.null(attr(ix, "levels"))) {
+    rg <- range(ix)
+    if (any(is.na(rg)))
+        stop("no missing values allowed in ix") 
+    stopifnot(rg[1] >= 0)
+    attr(ix, "levels") <- 1:rg[2]
+}
+@}
+
+@d Check iy
+@{
+if (is.null(attr(iy, "levels"))) {
+    rg <- range(iy)
+    if (any(is.na(rg)))
+        stop("no missing values allowed in iy") 
+    stopifnot(rg[1] >= 0)
+    attr(iy, "levels") <- 1:rg[2]
+}
+@}
+
 In our small example, we can set-up the data in the following way
 <<2dex-1>>=
 X <- rbind(0, diag(nlevels(x)))
@@ -513,6 +534,9 @@ ylev <- sort(unique(y))
 Y <- rbind(0, matrix(ylev, ncol = 1))
 iy <- .bincode(y, breaks = c(-Inf, ylev, Inf))
 ls3 <- LinStatExpCov(X = X, ix = ix, Y = Y, iy = iy)
+all.equal(ls1, ls3)
+### works also with factors
+ls3 <- LinStatExpCov(X = X, ix = factor(ix), Y = Y, iy = factor(iy))
 all.equal(ls1, ls3)
 @@
 Similar to the one-dimensional case, we can also omit the \verb|X| matrix
@@ -720,16 +744,15 @@ necessarily computing the corresponding linear statistics via
 ctabs <- function@<ctabs Prototype@>
 {
 
-    stopifnot(is.integer(ix))
+    stopifnot(is.integer(ix) || is.factor(ix))
     N <- length(ix)
-    if (is.null(attr(ix, "levels")))
-        attr(ix, "levels") <- 1:max(ix)
+
+    @<Check ix@>
 
     if (length(iy) > 0) {
         stopifnot(length(iy) == N)
-        stopifnot(is.integer(ix))
-        if (is.null(attr(iy, "levels")))
-            attr(iy, "levels") <- 1:max(iy)
+        stopifnot(is.integer(iy) || is.factor(iy))
+        @<Check iy@>
     }
 
     @<Check weights, subset, block@>
@@ -1474,7 +1497,7 @@ calls a \proglang{C} level function for the computations.
 
     @<Setup Dimensions@>
 
-    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], B, isInteger(x), REAL(tol)[0]));
+    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], B, TYPEOF(x) == INTSXP, REAL(tol)[0]));
 
     RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
 
@@ -1492,7 +1515,7 @@ levels of \verb|x|.
 @{
     int P, Q, B;
 
-    if (isInteger(x)) {
+    if (TYPEOF(x) == INTSXP) {
         P = NLEVELS(x);
     } else {
         P = NCOL(x);
@@ -1581,6 +1604,9 @@ The dimensions are available from the return object:
 @d Extract Dimensions
 @{
 P = C_get_P(ans);
+
+Rprintf("P %d \n", P);
+
 Q = C_get_Q(ans);
 N = NROW(x);
 B = C_get_B(ans);
@@ -4225,6 +4251,9 @@ void RC_KronSums
 @{
 @<RC\_KronSums Prototype@>
 {
+
+    Rprintf("TYPEOF %d \n", TYPEOF(x));
+
     if (TYPEOF(x) == INTSXP) {
         if (SYMMETRIC) error("not implemented");
         if (CENTER) error("not implemented");

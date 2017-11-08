@@ -11,16 +11,33 @@ ctabs <- function(ix, iy = integer(0), block = integer(0), weights = integer(0),
                     subset = integer(0))
 {
 
-    stopifnot(is.integer(ix))
+    stopifnot(is.integer(ix) || is.factor(ix))
     N <- length(ix)
-    if (is.null(attr(ix, "levels")))
-        attr(ix, "levels") <- 1:max(ix)
+
+    # Check ix
+    
+    if (is.null(attr(ix, "levels"))) {
+        rg <- range(ix)
+        if (any(is.na(rg)))
+            stop("no missing values allowed in ix") 
+        stopifnot(rg[1] >= 0)
+        attr(ix, "levels") <- 1:rg[2]
+    }
+    
 
     if (length(iy) > 0) {
         stopifnot(length(iy) == N)
-        stopifnot(is.integer(ix))
-        if (is.null(attr(iy, "levels")))
-            attr(iy, "levels") <- 1:max(iy)
+        stopifnot(is.integer(iy) || is.factor(iy))
+        # Check iy
+        
+        if (is.null(attr(iy, "levels"))) {
+            rg <- range(iy)
+            if (any(is.na(rg)))
+                stop("no missing values allowed in iy") 
+            stopifnot(rg[1] >= 0)
+            attr(iy, "levels") <- 1:rg[2]
+        }
+        
     }
 
     # Check weights, subset, block

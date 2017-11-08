@@ -40,6 +40,9 @@ Y <- rbind(0, matrix(ylev, ncol = 1))
 iy <- .bincode(y, breaks = c(-Inf, ylev, Inf))
 ls3 <- LinStatExpCov(X = X, ix = ix, Y = Y, iy = iy)
 all.equal(ls1, ls3)
+### works also with factors
+ls3 <- LinStatExpCov(X = X, ix = factor(ix), Y = Y, iy = factor(iy))
+all.equal(ls1, ls3)
 
 
 ###################################################

@@ -2111,6 +2111,9 @@ void RC_KronSums
 ) 
 
 {
+
+    Rprintf("TYPEOF %d \n", TYPEOF(x));
+
     if (TYPEOF(x) == INTSXP) {
         if (SYMMETRIC) error("not implemented");
         if (CENTER) error("not implemented");
@@ -6817,6 +6820,9 @@ SEXP ans
     /* Extract Dimensions */
     
     P = C_get_P(ans);
+
+    Rprintf("P %d \n", P);
+
     Q = C_get_Q(ans);
     N = NROW(x);
     B = C_get_B(ans);
@@ -6965,7 +6971,7 @@ SEXP tol
     
         int P, Q, B;
 
-        if (isInteger(x)) {
+        if (TYPEOF(x) == INTSXP) {
             P = NLEVELS(x);
         } else {
             P = NCOL(x);
@@ -6977,7 +6983,7 @@ SEXP tol
             B = NLEVELS(block);
     
 
-    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], B, isInteger(x), REAL(tol)[0]));
+    PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], B, TYPEOF(x) == INTSXP, REAL(tol)[0]));
 
     RC_ExpectationCovarianceStatistic(x, y, weights, subset, block, ans);
 
@@ -7035,7 +7041,7 @@ SEXP R_PermutedLinearStatistic
     
         int P, Q, B;
 
-        if (isInteger(x)) {
+        if (TYPEOF(x) == INTSXP) {
             P = NLEVELS(x);
         } else {
             P = NCOL(x);
