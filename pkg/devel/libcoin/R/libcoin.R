@@ -54,12 +54,14 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     N <- NROW(X)
 
     if (is.integer(X)) {
-        rg <- range(X)
-        if (any(is.na(rg)))
-            stop("no missing values allowed in X") 
-        stopifnot(rg[1] > 0) ### no missing values allowed here!
-        if (is.null(attr(X, "levels")))
-            attr(X, "levels") <- 1:rg[2]
+        if (is.null(attr(X, "levels")) || checkNAs) {
+            rg <- range(X)
+            if (any(is.na(rg)))
+                stop("no missing values allowed in X") 
+            stopifnot(rg[1] > 0) ### no missing values allowed here!
+            if (is.null(attr(X, "levels")))
+                attr(X, "levels") <- 1:rg[2]
+        }
     }
 
     if (is.factor(X) && checkNAs)
@@ -78,7 +80,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
 
     if (is.null(subset)) subset <- integer(0)
 
-    if (length(subset) > 0) {
+    if (length(subset) > 0 && checkNAs) {
         rs <- range(subset)
         if (any(is.na(rs))) stop("no missing values allowed in subset")
         if (!((rs[2] <= N) && (rs[1] >= 1L)))
@@ -193,7 +195,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
 
     if (is.null(subset)) subset <- integer(0)
 
-    if (length(subset) > 0) {
+    if (length(subset) > 0 && checkNAs) {
         rs <- range(subset)
         if (any(is.na(rs))) stop("no missing values allowed in subset")
         if (!((rs[2] <= N) && (rs[1] >= 1L)))

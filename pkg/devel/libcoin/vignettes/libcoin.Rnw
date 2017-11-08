@@ -375,7 +375,7 @@ sorted. \verb|block| is a factor at $B$ levels of length $N$.
 \mbox{}\verb@@\\
 \mbox{}\verb@if (is.null(subset)) subset <- integer(0)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@if (length(subset) > 0) {@\\
+\mbox{}\verb@if (length(subset) > 0 && checkNAs) {@\\
 \mbox{}\verb@    rs <- range(subset)@\\
 \mbox{}\verb@    if (any(is.na(rs))) stop("no missing values allowed in subset")@\\
 \mbox{}\verb@    if (!((rs[2] <= N) && (rs[1] >= 1L)))@\\
@@ -456,12 +456,14 @@ Variances smaller than \verb|tol| are treated as being zero.
 \mbox{}\verb@    N <- NROW(X)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (is.integer(X)) {@\\
-\mbox{}\verb@        rg <- range(X)@\\
-\mbox{}\verb@        if (any(is.na(rg)))@\\
-\mbox{}\verb@            stop("no missing values allowed in X") @\\
-\mbox{}\verb@        stopifnot(rg[1] > 0) ### no missing values allowed here!@\\
-\mbox{}\verb@        if (is.null(attr(X, "levels")))@\\
-\mbox{}\verb@            attr(X, "levels") <- 1:rg[2]@\\
+\mbox{}\verb@        if (is.null(attr(X, "levels")) || checkNAs) {@\\
+\mbox{}\verb@            rg <- range(X)@\\
+\mbox{}\verb@            if (any(is.na(rg)))@\\
+\mbox{}\verb@                stop("no missing values allowed in X") @\\
+\mbox{}\verb@            stopifnot(rg[1] > 0) ### no missing values allowed here!@\\
+\mbox{}\verb@            if (is.null(attr(X, "levels")))@\\
+\mbox{}\verb@                attr(X, "levels") <- 1:rg[2]@\\
+\mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (is.factor(X) && checkNAs)@\\
@@ -1022,7 +1024,9 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@  \item{weights}{an optional integer vector of non-negative case weights.}@\\
 \mbox{}\verb@  \item{subset}{an optional integer vector defining a subset of observations.}@\\
 \mbox{}\verb@  \item{block}{an optional factor defining independent blocks of observations.}@\\
-\mbox{}\verb@  \item{checkNAs}{a logical for switching off missing value checks.}@\\
+\mbox{}\verb@  \item{checkNAs}{a logical for switching off missing value checks. This@\\
+\mbox{}\verb@      included switching off checks for suitable values of \code{subset}. @\\
+\mbox{}\verb@      Use at your own risk.}@\\
 \mbox{}\verb@  \item{varonly}{a logical asking for variances only.}@\\
 \mbox{}\verb@  \item{nperm}{an integer defining the number of permuted statistics to draw.}@\\
 \mbox{}\verb@  \item{standardise}{a logical asking to standardise the permuted statistics.}@\\

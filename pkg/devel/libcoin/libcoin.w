@@ -318,7 +318,7 @@ if (length(weights) > 0) {
 
 if (is.null(subset)) subset <- integer(0)
 
-if (length(subset) > 0) {
+if (length(subset) > 0 && checkNAs) {
     rs <- range(subset)
     if (any(is.na(rs))) stop("no missing values allowed in subset")
     if (!((rs[2] <= N) && (rs[1] >= 1L)))
@@ -373,12 +373,14 @@ Variances smaller than \verb|tol| are treated as being zero.
     N <- NROW(X)
 
     if (is.integer(X)) {
-        rg <- range(X)
-        if (any(is.na(rg)))
-            stop("no missing values allowed in X") 
-        stopifnot(rg[1] > 0) ### no missing values allowed here!
-        if (is.null(attr(X, "levels")))
-            attr(X, "levels") <- 1:rg[2]
+        if (is.null(attr(X, "levels")) || checkNAs) {
+            rg <- range(X)
+            if (any(is.na(rg)))
+                stop("no missing values allowed in X") 
+            stopifnot(rg[1] > 0) ### no missing values allowed here!
+            if (is.null(attr(X, "levels")))
+                attr(X, "levels") <- 1:rg[2]
+        }
     }
 
     if (is.factor(X) && checkNAs)
@@ -810,7 +812,9 @@ LinStatExpCov@<LinStatExpCov Prototype@>
   \item{weights}{an optional integer vector of non-negative case weights.}
   \item{subset}{an optional integer vector defining a subset of observations.}
   \item{block}{an optional factor defining independent blocks of observations.}
-  \item{checkNAs}{a logical for switching off missing value checks.}
+  \item{checkNAs}{a logical for switching off missing value checks. This
+      included switching off checks for suitable values of \code{subset}. 
+      Use at your own risk.}
   \item{varonly}{a logical asking for variances only.}
   \item{nperm}{an integer defining the number of permuted statistics to draw.}
   \item{standardise}{a logical asking to standardise the permuted statistics.}

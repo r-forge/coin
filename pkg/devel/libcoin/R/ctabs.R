@@ -57,7 +57,7 @@ ctabs <- function(ix, iy = integer(0), block = integer(0), weights = integer(0),
 
     if (is.null(subset)) subset <- integer(0)
 
-    if (length(subset) > 0) {
+    if (length(subset) > 0 && checkNAs) {
         rs <- range(subset)
         if (any(is.na(rs))) stop("no missing values allowed in subset")
         if (!((rs[2] <= N) && (rs[1] >= 1L)))
