@@ -256,6 +256,7 @@ FIXME: remove B (only for backward compatibility).
 @d LinStatExpCov Prototype
 @{(X, Y, ix = NULL, iy = NULL, weights = integer(0),
  subset = integer(0), block = integer(0),
+ checkNAs = TRUE, 
  varonly = FALSE, nperm = B, B = 0, standardise = FALSE,
  tol = sqrt(.Machine$double.eps))@}
 
@@ -271,7 +272,7 @@ LinStatExpCov <- function@<LinStatExpCov Prototype@>
     if (missing(X)) X <- integer(0)
 
     ### <FIXME> for the time being only!!! </FIXME>
-    if (length(subset) > 0) subset <- sort(subset)
+##    if (length(subset) > 0) subset <- sort(subset)
     
     if (is.null(ix) & is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
@@ -360,7 +361,7 @@ Variances smaller than \verb|tol| are treated as being zero.
 @d LinStatExpCov1d
 @{
 .LinStatExpCov1d <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
-                             varonly = FALSE, nperm = 0, standardise = FALSE,
+                             checkNAs = TRUE, varonly = FALSE, nperm = 0, standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
 
@@ -377,7 +378,8 @@ Variances smaller than \verb|tol| are treated as being zero.
 
     @<Check weights, subset, block@>
 
-    @<Handle Missing Values@>
+    if (checkNAs)
+        @<Handle Missing Values@>
 
     ret <- .Call(R_ExpectationCovarianceStatistic, X, Y, weights, subset,
                  block, as.integer(varonly), as.double(tol))
@@ -669,6 +671,7 @@ matrix to an object of class \verb|LinStatExpCov|.
     xExp <- x %*% matrix(y$Expectation, nrow = P)
     xExpX <- x %*% matrix(y$ExpectationX, nrow = P)
     xCov <- tcrossprod(x %*% vcov(y), x)
+    if (!is.matrix(xCov)) xCov <- matrix(xCov)
     if (length(y$PermutedLinearStatistic) > 0) {
         xPS <- apply(y$PermutedLinearStatistic, 2, function(y)
                      as.vector(x %*% matrix(y, nrow = P)))
@@ -679,6 +682,7 @@ matrix to an object of class \verb|LinStatExpCov|.
     ret$Expectation <- as.vector(xExp)
     ret$ExpectationX <- as.vector(xExpX)
     ret$Covariance <- as.vector(xCov[lower.tri(xCov, diag = TRUE)])
+    ret$Variance <- diag(xCov)
     ret$dimension <- c(nrow(x), Q)
     ret$Xfactor <- FALSE
     if (length(y$StandardisedPermutedLinearStatistic) > 0)
@@ -770,6 +774,7 @@ LinStatExpCov@<LinStatExpCov Prototype@>
   \item{weights}{an optional integer vector of non-negative case weights.}
   \item{subset}{an optional integer vector defining a subset of observations.}
   \item{block}{an optional factor defining independent blocks of observations.}
+  \item{checkNAs}{a logical for switching off missing value checks.}
   \item{varonly}{a logical asking for variances only.}
   \item{nperm}{an integer defining the number of permuted statistics to draw.}
   \item{standardise}{a logical asking to standardise the permuted statistics.}
@@ -1559,6 +1564,12 @@ SEXP ans
         offset += (R_xlen_t) table[b + 1];
     }
 
+    /* always return variances */
+    if (!C_get_varonly(ans)) {
+        for (int p = 0; p < P * Q; p++) 
+            C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, P * Q)];
+    }
+
     Free(ExpX); Free(VarX); Free(CovX);
     UNPROTECT(2);
 }
@@ -2080,6 +2091,13 @@ SEXP ans
         @<2d Covariance@>
 
     }
+
+    /* always return variances */
+    if (!C_get_varonly(ans)) {
+        for (int p = 0; p < P * Q; p++) 
+            C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, P * Q)];
+    }
+
     Free(table2d); 
     UNPROTECT(2);
 }
@@ -6556,6 +6574,8 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
     if (varonly) {
         SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
     } else  {
+        /* always return variance */
+        SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
         SET_VECTOR_ELT(ans, Covariance_SLOT,
                        allocVector(REALSXP, PQ * (PQ + 1) / 2));
     }

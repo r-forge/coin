@@ -11,6 +11,7 @@
 
 LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
                           subset = integer(0), block = integer(0),
+                          checkNAs = TRUE, 
                           varonly = FALSE, nperm = B, B = 0, standardise = FALSE,
                           tol = sqrt(.Machine$double.eps))
 {
@@ -22,7 +23,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     if (missing(X)) X <- integer(0)
 
     ### <FIXME> for the time being only!!! </FIXME>
-    if (length(subset) > 0) subset <- sort(subset)
+##    if (length(subset) > 0) subset <- sort(subset)
     
     if (is.null(ix) & is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
@@ -42,7 +43,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
 # LinStatExpCov1d
 
 .LinStatExpCov1d <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
-                             varonly = FALSE, nperm = 0, standardise = FALSE,
+                             checkNAs = TRUE, varonly = FALSE, nperm = 0, standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
 
@@ -83,21 +84,22 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     }
     
 
-    # Handle Missing Values
-    
-    ms <- !(complete.cases(X) & complete.cases(Y))
-    if (all(ms))
-        stop("all observations are missing")
-    if (any(ms)) {
-        if (length(subset) > 0) {
-            if (all(subset %in% which(ms)))
-                stop("all observations are missing")
-            subset <- subset[!(subset %in% which(ms))]
-        } else {
-            subset <- (1:N)[-which(ms)]
+    if (checkNAs)
+        # Handle Missing Values
+        
+        ms <- !(complete.cases(X) & complete.cases(Y))
+        if (all(ms))
+            stop("all observations are missing")
+        if (any(ms)) {
+            if (length(subset) > 0) {
+                if (all(subset %in% which(ms)))
+                    stop("all observations are missing")
+                subset <- subset[!(subset %in% which(ms))]
+            } else {
+                subset <- (1:N)[-which(ms)]
+            }
         }
-    }
-    
+        
 
     ret <- .Call(R_ExpectationCovarianceStatistic, X, Y, weights, subset,
                  block, as.integer(varonly), as.double(tol))
@@ -282,6 +284,7 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     xExp <- x %*% matrix(y$Expectation, nrow = P)
     xExpX <- x %*% matrix(y$ExpectationX, nrow = P)
     xCov <- tcrossprod(x %*% vcov(y), x)
+    if (!is.matrix(xCov)) xCov <- matrix(xCov)
     if (length(y$PermutedLinearStatistic) > 0) {
         xPS <- apply(y$PermutedLinearStatistic, 2, function(y)
                      as.vector(x %*% matrix(y, nrow = P)))
@@ -292,6 +295,7 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     ret$Expectation <- as.vector(xExp)
     ret$ExpectationX <- as.vector(xExpX)
     ret$Covariance <- as.vector(xCov[lower.tri(xCov, diag = TRUE)])
+    ret$Variance <- diag(xCov)
     ret$dimension <- c(nrow(x), Q)
     ret$Xfactor <- FALSE
     if (length(y$StandardisedPermutedLinearStatistic) > 0)

@@ -11,6 +11,7 @@
 \usage{
 LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0),
               subset = integer(0), block = integer(0),
+              checkNAs = TRUE, 
               varonly = FALSE, nperm = B, B = 0, standardise = FALSE,
               tol = sqrt(.Machine$double.eps))
 }
@@ -22,6 +23,7 @@ LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0),
   \item{weights}{an optional integer vector of non-negative case weights.}
   \item{subset}{an optional integer vector defining a subset of observations.}
   \item{block}{an optional factor defining independent blocks of observations.}
+  \item{checkNAs}{a logical for switching off missing value checks.}
   \item{varonly}{a logical asking for variances only.}
   \item{nperm}{an integer defining the number of permuted statistics to draw.}
   \item{standardise}{a logical asking to standardise the permuted statistics.}

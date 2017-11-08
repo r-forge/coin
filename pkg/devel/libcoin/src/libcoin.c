@@ -634,6 +634,8 @@ SEXP RC_init_LECV_1d
         if (varonly) {
             SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
         } else  {
+            /* always return variance */
+            SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
             SET_VECTOR_ELT(ans, Covariance_SLOT,
                            allocVector(REALSXP, PQ * (PQ + 1) / 2));
         }
@@ -790,6 +792,8 @@ SEXP RC_init_LECV_2d
         if (varonly) {
             SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
         } else  {
+            /* always return variance */
+            SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
             SET_VECTOR_ELT(ans, Covariance_SLOT,
                            allocVector(REALSXP, PQ * (PQ + 1) / 2));
         }
@@ -6911,6 +6915,12 @@ SEXP ans
         offset += (R_xlen_t) table[b + 1];
     }
 
+    /* always return variances */
+    if (!C_get_varonly(ans)) {
+        for (int p = 0; p < P * Q; p++) 
+            C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, P * Q)];
+    }
+
     Free(ExpX); Free(VarX); Free(CovX);
     UNPROTECT(2);
 }
@@ -7301,6 +7311,13 @@ SEXP ans
         
 
     }
+
+    /* always return variances */
+    if (!C_get_varonly(ans)) {
+        for (int p = 0; p < P * Q; p++) 
+            C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, P * Q)];
+    }
+
     Free(table2d); 
     UNPROTECT(2);
 }
