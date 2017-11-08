@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2017-02-27 r72261) -- "Unsuffered Consequences"
+R version 3.4.2 (2017-09-28) -- "Short Summer"
 Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -23,6 +23,8 @@ Type 'q()' to quit R.
 > iris[3, "Sepal.Width"] <- NA
 > 
 > iris1 <- inum(iris, nmax = 5, as.interval = "Sepal.Width")
+> 
+> iris1a <- inum(iris, nmax = 5, as.interval = c("Sepal.Width", "Sepal.Length"))
 > 
 > iris2 <- inum(iris, nmax = 5, total = TRUE, as.interval = "Sepal.Width")
 > iris2cc <- inum(iris, nmax = 5, total = TRUE, as.interval = "Sepal.Width", complete.cases.only = TRUE)
@@ -318,4 +320,4 @@ ix
 > 
 > proc.time()
    user  system elapsed 
-  0.852   0.068   0.907 
+  0.320   0.024   0.342 

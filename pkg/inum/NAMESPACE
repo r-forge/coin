@@ -1,5 +1,6 @@
 
 importFrom("stats", "quantile", "weights", "xtabs")
+importFrom("libcoin", "ctabs")
 
 export("inum", "interval", "enum")
 

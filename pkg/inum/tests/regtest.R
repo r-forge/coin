@@ -7,6 +7,8 @@ iris[3, "Sepal.Width"] <- NA
 
 iris1 <- inum(iris, nmax = 5, as.interval = "Sepal.Width")
 
+iris1a <- inum(iris, nmax = 5, as.interval = c("Sepal.Width", "Sepal.Length"))
+
 iris2 <- inum(iris, nmax = 5, total = TRUE, as.interval = "Sepal.Width")
 iris2cc <- inum(iris, nmax = 5, total = TRUE, as.interval = "Sepal.Width", complete.cases.only = TRUE)
 

@@ -35,7 +35,6 @@ enum.integer <- function(x) {
 enum.numeric <- function(x)
     return(enum.integer(x))
 
-
 levels.enum <- function(x)
     attr(x, "levels")
 
