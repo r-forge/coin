@@ -140,8 +140,8 @@ r2Xfactor <- rep(1:ncol(y), each = ncol(Xfactor))
 ###################################################
 LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0)) {
 
-    if (length(weights) == 0) weights <- rep(1, nrow(X))
-    if (length(subset) == 0) subset <- 1:nrow(X)
+    if (length(weights) == 0) weights <- rep(1, NROW(X))
+    if (length(subset) == 0) subset <- 1:NROW(X)
     idx <- rep(subset, weights[subset])
     X <- X[idx,,drop = FALSE]
     Y <- Y[idx,,drop = FALSE]

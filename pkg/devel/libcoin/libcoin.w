@@ -484,15 +484,15 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
     @<Check iy@>
 
     if (length(X) > 0) {
-        if (!(nrow(X) == (length(attr(ix, "levels")) + 1) &&
+        if (!(NROW(X) == (length(attr(ix, "levels")) + 1) &&
               all(complete.cases(X)) &&
-             (nrow(X) == (length(attr(ix, "levels")) + 1))))
+             (NROW(X) == (length(attr(ix, "levels")) + 1))))
             stop("incorrect X")
     }
 
     if (!(all(complete.cases(Y))) &&
-          (nrow(Y) == (length(attr(iy, "levels")) + 1)) &&
-          (nrow(Y) == (length(attr(iy, "levels")) + 1)))
+          (NROW(Y) == (length(attr(iy, "levels")) + 1)) &&
+          (NROW(Y) == (length(attr(iy, "levels")) + 1)))
         stop("incorrect Y")
 
     @<Check weights, subset, block@>
@@ -722,7 +722,7 @@ matrix to an object of class \verb|LinStatExpCov|.
     ret$ExpectationX <- as.vector(xExpX)
     ret$Covariance <- as.vector(xCov[lower.tri(xCov, diag = TRUE)])
     ret$Variance <- diag(xCov)
-    ret$dimension <- c(nrow(x), Q)
+    ret$dimension <- c(NROW(x), Q)
     ret$Xfactor <- FALSE
     if (length(y$StandardisedPermutedLinearStatistic) > 0)
         ret$StandardisedPermutedLinearStatistic <-
@@ -1339,8 +1339,8 @@ memory-hungry and sometimes faster version of this simple function.
 <<Rlibcoin>>=
 LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0)) {
 
-    if (length(weights) == 0) weights <- rep(1, nrow(X))
-    if (length(subset) == 0) subset <- 1:nrow(X)
+    if (length(weights) == 0) weights <- rep(1, NROW(X))
+    if (length(subset) == 0) subset <- 1:NROW(X)
     idx <- rep(subset, weights[subset])
     X <- X[idx,,drop = FALSE]
     Y <- Y[idx,,drop = FALSE]

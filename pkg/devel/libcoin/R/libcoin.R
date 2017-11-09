@@ -171,15 +171,15 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     
 
     if (length(X) > 0) {
-        if (!(nrow(X) == (length(attr(ix, "levels")) + 1) &&
+        if (!(NROW(X) == (length(attr(ix, "levels")) + 1) &&
               all(complete.cases(X)) &&
-             (nrow(X) == (length(attr(ix, "levels")) + 1))))
+             (NROW(X) == (length(attr(ix, "levels")) + 1))))
             stop("incorrect X")
     }
 
     if (!(all(complete.cases(Y))) &&
-          (nrow(Y) == (length(attr(iy, "levels")) + 1)) &&
-          (nrow(Y) == (length(attr(iy, "levels")) + 1)))
+          (NROW(Y) == (length(attr(iy, "levels")) + 1)) &&
+          (NROW(Y) == (length(attr(iy, "levels")) + 1)))
         stop("incorrect Y")
 
     # Check weights, subset, block
@@ -331,7 +331,7 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     ret$ExpectationX <- as.vector(xExpX)
     ret$Covariance <- as.vector(xCov[lower.tri(xCov, diag = TRUE)])
     ret$Variance <- diag(xCov)
-    ret$dimension <- c(nrow(x), Q)
+    ret$dimension <- c(NROW(x), Q)
     ret$Xfactor <- FALSE
     if (length(y$StandardisedPermutedLinearStatistic) > 0)
         ret$StandardisedPermutedLinearStatistic <-
