@@ -485,14 +485,12 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 
     if (length(X) > 0) {
         if (!(NROW(X) == (length(attr(ix, "levels")) + 1) &&
-              all(complete.cases(X)) &&
-             (NROW(X) == (length(attr(ix, "levels")) + 1))))
+              all(complete.cases(X))))
             stop("incorrect X")
     }
 
-    if (!(all(complete.cases(Y))) &&
-          (NROW(Y) == (length(attr(iy, "levels")) + 1)) &&
-          (NROW(Y) == (length(attr(iy, "levels")) + 1)))
+    if (!(NROW(Y) == (length(attr(iy, "levels")) + 1) &&
+          all(complete.cases(Y))))
         stop("incorrect Y")
 
     @<Check weights, subset, block@>
@@ -537,7 +535,7 @@ if (is.null(attr(iy, "levels"))) {
     stopifnot(rg[1] >= 0)
     attr(iy, "levels") <- 1:rg[2]
 } else {
-    if (checkNAs) stopifnot(all(!is.na(ix)))
+    if (checkNAs) stopifnot(all(!is.na(iy)))
 }
 @}
 

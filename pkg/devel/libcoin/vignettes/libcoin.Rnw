@@ -581,14 +581,12 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (length(X) > 0) {@\\
 \mbox{}\verb@        if (!(NROW(X) == (length(attr(ix, "levels")) + 1) &&@\\
-\mbox{}\verb@              all(complete.cases(X)) &&@\\
-\mbox{}\verb@             (NROW(X) == (length(attr(ix, "levels")) + 1))))@\\
+\mbox{}\verb@              all(complete.cases(X))))@\\
 \mbox{}\verb@            stop("incorrect X")@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (!(all(complete.cases(Y))) &&@\\
-\mbox{}\verb@          (NROW(Y) == (length(attr(iy, "levels")) + 1)) &&@\\
-\mbox{}\verb@          (NROW(Y) == (length(attr(iy, "levels")) + 1)))@\\
+\mbox{}\verb@    if (!(NROW(Y) == (length(attr(iy, "levels")) + 1) &&@\\
+\mbox{}\verb@          all(complete.cases(Y))))@\\
 \mbox{}\verb@        stop("incorrect Y")@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Check weights, subset, block}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
