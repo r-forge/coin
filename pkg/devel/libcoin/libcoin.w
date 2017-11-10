@@ -522,6 +522,10 @@ if (is.null(attr(ix, "levels"))) {
     stopifnot(rg[1] >= 0)
     attr(ix, "levels") <- 1:rg[2]
 } else {
+    ### lev can be data.frame (see inum::inum)
+    lev <- attr(ix, "levels")
+    if (!is.vector(lev)) lev <- 1:NROW(lev)
+    attr(ix, "levels") <- lev
     if (checkNAs) stopifnot(all(!is.na(ix)))
 }
 @}
@@ -535,6 +539,10 @@ if (is.null(attr(iy, "levels"))) {
     stopifnot(rg[1] >= 0)
     attr(iy, "levels") <- 1:rg[2]
 } else {
+    ### lev can be data.frame (see inum::inum)
+    lev <- attr(iy, "levels")
+    if (!is.vector(lev)) lev <- 1:NROW(lev)
+    attr(iy, "levels") <- lev
     if (checkNAs) stopifnot(all(!is.na(iy)))
 }
 @}

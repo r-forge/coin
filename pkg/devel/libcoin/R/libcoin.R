@@ -146,31 +146,35 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
 
     # Check ix
     
-    if (is.null(xlev <- attr(ix, "levels"))) {
+    if (is.null(attr(ix, "levels"))) {
         rg <- range(ix)
         if (any(is.na(rg)))
             stop("no missing values allowed in ix") 
         stopifnot(rg[1] >= 0)
         attr(ix, "levels") <- 1:rg[2]
     } else {
+        ### lev can be data.frame (see inum::inum)
+        lev <- attr(ix, "levels")
+        if (!is.vector(lev)) lev <- 1:NROW(lev)
+        attr(ix, "levels") <- lev
         if (checkNAs) stopifnot(all(!is.na(ix)))
-        ### xlev can be a data.frame; see inum::inum
-        if (!is.vector(xlev)) attr(ix, "levels") <- 1:NROW(xlev)
     }
     
 
     # Check iy
     
-    if (is.null(ylev <- attr(iy, "levels"))) {
+    if (is.null(attr(iy, "levels"))) {
         rg <- range(iy)
         if (any(is.na(rg)))
             stop("no missing values allowed in iy") 
         stopifnot(rg[1] >= 0)
         attr(iy, "levels") <- 1:rg[2]
     } else {
-        if (checkNAs) stopifnot(all(!is.na(ix)))
-        ### ylev can be a data.frame; see inum::inum
-        if (!is.vector(ylev)) attr(iy, "levels") <- 1:NROW(ylev)
+        ### lev can be data.frame (see inum::inum)
+        lev <- attr(iy, "levels")
+        if (!is.vector(lev)) lev <- 1:NROW(lev)
+        attr(iy, "levels") <- lev
+        if (checkNAs) stopifnot(all(!is.na(iy)))
     }
     
 
@@ -180,7 +184,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
             stop("incorrect X")
     }
 
-    if (!(NROW(Y) == (NROW(attr(iy, "levels")) + 1) &&
+    if (!(NROW(Y) == (length(attr(iy, "levels")) + 1) &&
           all(complete.cases(Y))))
         stop("incorrect Y")
 

@@ -23,6 +23,10 @@ ctabs <- function(ix, iy = integer(0), block = integer(0), weights = integer(0),
         stopifnot(rg[1] >= 0)
         attr(ix, "levels") <- 1:rg[2]
     } else {
+        ### lev can be data.frame (see inum::inum)
+        lev <- attr(ix, "levels")
+        if (!is.vector(lev)) lev <- 1:NROW(lev)
+        attr(ix, "levels") <- lev
         if (checkNAs) stopifnot(all(!is.na(ix)))
     }
     
@@ -39,7 +43,11 @@ ctabs <- function(ix, iy = integer(0), block = integer(0), weights = integer(0),
             stopifnot(rg[1] >= 0)
             attr(iy, "levels") <- 1:rg[2]
         } else {
-            if (checkNAs) stopifnot(all(!is.na(ix)))
+            ### lev can be data.frame (see inum::inum)
+            lev <- attr(iy, "levels")
+            if (!is.vector(lev)) lev <- 1:NROW(lev)
+            attr(iy, "levels") <- lev
+            if (checkNAs) stopifnot(all(!is.na(iy)))
         }
         
     }
