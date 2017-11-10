@@ -11,7 +11,7 @@ Represents elements of a data frame as \code{enum} or \code{interval}.
 inum(object, nmax = 20, ...)
 \method{inum}{data.frame}(object, nmax = 20, ignore = NULL, 
      total = FALSE, weights = NULL, as.interval = "",
-     complete.cases.only = FALSE, ...)
+     complete.cases.only = FALSE, meanlevels = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -37,6 +37,11 @@ instead of \code{\link{enum}}.
 }
   \item{complete.cases.only}{
 A logical. \code{TRUE} removes all rows with missing values.
+}
+  \item{meanlevels}{
+A logical. \code{TRUE}, the level is the mean of the observations in the
+corresponding bin. The default \code{FALSE} uses the largest observation in
+the bin.
 }
   \item{\dots}{
 Additional arguments, currently ignored.

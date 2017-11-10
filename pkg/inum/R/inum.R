@@ -7,7 +7,7 @@ inum.default <- function(object, nmax = 20, ...)
 
 inum.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE, 
                            weights = NULL, as.interval = "", 
-                           complete.cases.only = FALSE, ...) {
+                           complete.cases.only = FALSE, meanlevels = FALSE, ...) {
 
     if (total) {
         bdr <- inum(object, nmax = nmax, ignore = ignore, 
@@ -72,7 +72,7 @@ inum.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
 
     if (!is.null(ignore)) {
         if (is.integer(ignore)) cn <- cn[-ignore]
-        if (is.character(ignore)) cn <- cn[cn != ignore]
+        if (is.character(ignore)) cn <- cn[!(cn %in% ignore)]
     }
 
     if (any(as.interval != "")) {
@@ -99,16 +99,23 @@ inum.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
                     ### assign sorted unique values
                     attr(ix, "levels") <- as.double(oux)
                 } else {
-                    ### compute mean of x-values for each level
-                    ### and assign; first element corresponds to NAs
-                    w <- x
-                    w[is.na(w)] <- 0 ### does not count
-                    ix2 <- unclass(ix) ### is of length + 1
-                    attr(ix2, "levels") <- NULL
-                    sx <- libcoin::ctabs(ix = ix2, weights = w)[-1] ### w/o NAs
-                    cn <- libcoin::ctabs(ix = ix2)[-1]
-                    lev <- sx / cn
-                    attr(ix, "levels") <- lev
+                    if (meanlevels) {
+                        ### compute mean of x-values for each level
+                        ### and assign; first element corresponds to NAs
+                        w <- x
+                        w[is.na(w)] <- 0 ### does not count
+                        ix2 <- unclass(ix) ### is of length + 1
+                        attr(ix2, "levels") <- NULL
+                        sx <- libcoin::ctabs(ix = ix2, weights = w)[-1] ### w/o NAs
+                        cn <- libcoin::ctabs(ix = ix2)[-1]
+                        lev <- sx / cn
+                        attr(ix, "levels") <- lev
+                    } else {
+                        ### this maximises distances to original
+                        ### measurements but leads to correct cutpoints
+                        nux <- c(ux, xmax)
+                        attr(ix, "levels") <- as.double(nux)
+                    }
                 }
                 class(ix) <- c("enum", "integer")
              }

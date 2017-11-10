@@ -7,7 +7,7 @@
 \itemize{
   \item{All multiple variables in \code{as.interval}.}
   \item{When \code{nmax} is smaller than the number of
-        unique values, use the means of the observations
+        unique values, optionally use the means of the observations
         in each bin as level (and not the corresponding quantiles
         as in earlier version) to minimise bias.}
 }
