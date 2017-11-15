@@ -6862,8 +6862,8 @@ SEXP ans
         sumweights[b] = RC_Sums(N, weights, subset_block, 
                                 offset, (R_xlen_t) table[b + 1]);
 
-        /* don't do anything for empty blocks */
-        if (sumweights[b] > 0) {
+        /* don't do anything for empty blocks or blocks with weight 1 */
+        if (sumweights[b] > 1) {
 
             /* Compute Expectation Linear Statistic */
             

@@ -2286,8 +2286,8 @@ FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not
 \mbox{}\verb@        sumweights[b] = RC_Sums(N, weights, subset_block, @\\
 \mbox{}\verb@                                offset, (R_xlen_t) table[b + 1]);@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@        /* don't do anything for empty blocks */@\\
-\mbox{}\verb@        if (sumweights[b] > 0) {@\\
+\mbox{}\verb@        /* don't do anything for empty blocks or blocks with weight 1 */@\\
+\mbox{}\verb@        if (sumweights[b] > 1) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@            @\hbox{$\langle\,${\itshape Compute Expectation Linear Statistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
