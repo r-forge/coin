@@ -324,7 +324,17 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     xLS <- x %*% matrix(y$LinearStatistic, nrow = P)
     xExp <- x %*% matrix(y$Expectation, nrow = P)
     xExpX <- x %*% matrix(y$ExpectationX, nrow = P)
-    xCov <- tcrossprod(x %*% vcov(y), x)
+    if (Q == 1) {
+        xCov <- tcrossprod(x %*% vcov(y), x)
+    } else {
+        zmat <- matrix(0, nrow = P * Q, ncol = nrow(x))
+        mat <- rbind(t(x), zmat)
+        mat <- mat[rep(1:nrow(mat), Q - 1),,drop = FALSE]
+        mat <- rbind(mat, t(x))
+        mat <- matrix(mat, ncol = Q * nrow(x))
+        mat <- t(mat)
+        xCov <- tcrossprod(mat %*% vcov(y), mat)
+    }
     if (!is.matrix(xCov)) xCov <- matrix(xCov)
     if (length(y$PermutedLinearStatistic) > 0) {
         xPS <- apply(y$PermutedLinearStatistic, 2, function(y)

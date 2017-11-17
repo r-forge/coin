@@ -95,6 +95,14 @@ ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1),
                       nperm = 10, standardise = TRUE)
 ls1c <- c(1:5) %*% ls1d
 stopifnot(isequal(ls1c, ls1s))
+set.seed(29)
+ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2), 
+                      nperm = 10, standardise = TRUE)
+set.seed(29)
+ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2), 
+                      nperm = 10, standardise = TRUE)
+ls1c <- c(1:5) %*% ls1d
+stopifnot(isequal(ls1c, ls1s))
 
 
 ###################################################

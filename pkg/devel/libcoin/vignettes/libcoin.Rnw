@@ -889,7 +889,17 @@ matrix to an object of class \verb|LinStatExpCov|.
 \mbox{}\verb@    xLS <- x %*% matrix(y$LinearStatistic, nrow = P)@\\
 \mbox{}\verb@    xExp <- x %*% matrix(y$Expectation, nrow = P)@\\
 \mbox{}\verb@    xExpX <- x %*% matrix(y$ExpectationX, nrow = P)@\\
-\mbox{}\verb@    xCov <- tcrossprod(x %*% vcov(y), x)@\\
+\mbox{}\verb@    if (Q == 1) {@\\
+\mbox{}\verb@        xCov <- tcrossprod(x %*% vcov(y), x)@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        zmat <- matrix(0, nrow = P * Q, ncol = nrow(x))@\\
+\mbox{}\verb@        mat <- rbind(t(x), zmat)@\\
+\mbox{}\verb@        mat <- mat[rep(1:nrow(mat), Q - 1),,drop = FALSE]@\\
+\mbox{}\verb@        mat <- rbind(mat, t(x))@\\
+\mbox{}\verb@        mat <- matrix(mat, ncol = Q * nrow(x))@\\
+\mbox{}\verb@        mat <- t(mat)@\\
+\mbox{}\verb@        xCov <- tcrossprod(mat %*% vcov(y), mat)@\\
+\mbox{}\verb@    }@\\
 \mbox{}\verb@    if (!is.matrix(xCov)) xCov <- matrix(xCov)@\\
 \mbox{}\verb@    if (length(y$PermutedLinearStatistic) > 0) {@\\
 \mbox{}\verb@        xPS <- apply(y$PermutedLinearStatistic, 2, function(y)@\\
@@ -927,6 +937,14 @@ ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1),
                       nperm = 10, standardise = TRUE)
 set.seed(29)
 ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), 
+                      nperm = 10, standardise = TRUE)
+ls1c <- c(1:5) %*% ls1d
+stopifnot(isequal(ls1c, ls1s))
+set.seed(29)
+ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2), 
+                      nperm = 10, standardise = TRUE)
+set.seed(29)
+ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2), 
                       nperm = 10, standardise = TRUE)
 ls1c <- c(1:5) %*% ls1d
 stopifnot(isequal(ls1c, ls1s))
