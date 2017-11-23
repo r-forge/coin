@@ -369,14 +369,14 @@ sorted. \verb|block| is a factor at $B$ levels of length $N$.
 \mbox{}\verb@if (length(weights) > 0) {@\\
 \mbox{}\verb@    if (!((N == length(weights)) && all(weights >= 0)))@\\
 \mbox{}\verb@        stop("incorrect weights")@\\
-\mbox{}\verb@    if (checkNAs) stopifnot(all(!is.na(weights)))@\\
+\mbox{}\verb@    if (checkNAs) stopifnot(!anyNA(weights))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (is.null(subset)) subset <- integer(0)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (length(subset) > 0 && checkNAs) {@\\
 \mbox{}\verb@    rs <- range(subset)@\\
-\mbox{}\verb@    if (any(is.na(rs))) stop("no missing values allowed in subset")@\\
+\mbox{}\verb@    if (anyNA(rs)) stop("no missing values allowed in subset")@\\
 \mbox{}\verb@    if (!((rs[2] <= N) && (rs[1] >= 1L)))@\\
 \mbox{}\verb@        stop("incorrect subset")@\\
 \mbox{}\verb@}@\\
@@ -386,7 +386,7 @@ sorted. \verb|block| is a factor at $B$ levels of length $N$.
 \mbox{}\verb@if (length(block) > 0) {@\\
 \mbox{}\verb@    if (!((N == length(block)) && is.factor(block)))@\\
 \mbox{}\verb@        stop("incorrect block")@\\
-\mbox{}\verb@    if (checkNAs) stopifnot(all(!is.na(block)))@\\
+\mbox{}\verb@    if (checkNAs) stopifnot(!anyNA(block))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -457,7 +457,7 @@ Variances smaller than \verb|tol| are treated as being zero.
 \mbox{}\verb@    if (is.integer(X)) {@\\
 \mbox{}\verb@        if (is.null(attr(X, "levels")) || checkNAs) {@\\
 \mbox{}\verb@            rg <- range(X)@\\
-\mbox{}\verb@            if (any(is.na(rg)))@\\
+\mbox{}\verb@            if (anyNA(rg))@\\
 \mbox{}\verb@                stop("no missing values allowed in X") @\\
 \mbox{}\verb@            stopifnot(rg[1] > 0) ### no missing values allowed here!@\\
 \mbox{}\verb@            if (is.null(attr(X, "levels")))@\\
@@ -466,7 +466,7 @@ Variances smaller than \verb|tol| are treated as being zero.
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (is.factor(X) && checkNAs)@\\
-\mbox{}\verb@        stopifnot(all(!is.na(X)))@\\
+\mbox{}\verb@        stopifnot(!anyNA(X))@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Check weights, subset, block}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -625,7 +625,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \mbox{}\verb@@\\
 \mbox{}\verb@if (is.null(attr(ix, "levels"))) {@\\
 \mbox{}\verb@    rg <- range(ix)@\\
-\mbox{}\verb@    if (any(is.na(rg)))@\\
+\mbox{}\verb@    if (anyNA(rg))@\\
 \mbox{}\verb@        stop("no missing values allowed in ix") @\\
 \mbox{}\verb@    stopifnot(rg[1] >= 0)@\\
 \mbox{}\verb@    attr(ix, "levels") <- 1:rg[2]@\\
@@ -634,7 +634,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \mbox{}\verb@    lev <- attr(ix, "levels")@\\
 \mbox{}\verb@    if (!is.vector(lev)) lev <- 1:NROW(lev)@\\
 \mbox{}\verb@    attr(ix, "levels") <- lev@\\
-\mbox{}\verb@    if (checkNAs) stopifnot(all(!is.na(ix)))@\\
+\mbox{}\verb@    if (checkNAs) stopifnot(!anyNA(ix))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -655,7 +655,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \mbox{}\verb@@\\
 \mbox{}\verb@if (is.null(attr(iy, "levels"))) {@\\
 \mbox{}\verb@    rg <- range(iy)@\\
-\mbox{}\verb@    if (any(is.na(rg)))@\\
+\mbox{}\verb@    if (anyNA(rg))@\\
 \mbox{}\verb@        stop("no missing values allowed in iy") @\\
 \mbox{}\verb@    stopifnot(rg[1] >= 0)@\\
 \mbox{}\verb@    attr(iy, "levels") <- 1:rg[2]@\\
@@ -664,7 +664,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \mbox{}\verb@    lev <- attr(iy, "levels")@\\
 \mbox{}\verb@    if (!is.vector(lev)) lev <- 1:NROW(lev)@\\
 \mbox{}\verb@    attr(iy, "levels") <- lev@\\
-\mbox{}\verb@    if (checkNAs) stopifnot(all(!is.na(iy)))@\\
+\mbox{}\verb@    if (checkNAs) stopifnot(!anyNA(iy))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
