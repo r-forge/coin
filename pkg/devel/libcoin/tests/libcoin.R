@@ -249,10 +249,10 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 ###################################################
 sumweights <- sum(weights[subset])
 expecty <- a0 <- colSums(y[subset, ] * weights[subset]) / sumweights
-a1 <- libcoin:::.libcoinCall("R_ExpectationInfluence", y, weights, subset);
-a2 <- libcoin:::.libcoinCall("R_ExpectationInfluence", y, as.double(weights), as.double(subset));
-a3 <- libcoin:::.libcoinCall("R_ExpectationInfluence", y, weights, as.double(subset));
-a4 <- libcoin:::.libcoinCall("R_ExpectationInfluence", y, as.double(weights), subset);
+a1 <- .Call(libcoin:::R_ExpectationInfluence, y, weights, subset);
+a2 <- .Call(libcoin:::R_ExpectationInfluence, y, as.double(weights), as.double(subset));
+a3 <- .Call(libcoin:::R_ExpectationInfluence, y, weights, as.double(subset));
+a4 <- .Call(libcoin:::R_ExpectationInfluence, y, as.double(weights), subset);
 a5 <- LinStatExpCov(x, y, weights = weights, subset = subset)$ExpectationInfluence
 
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
@@ -271,20 +271,20 @@ a0 <- colSums(yc[subset, r1y] * yc[subset, r2y] * weights[subset]) / sumweights
 a0 <- matrix(a0, ncol = ncol(y))
 vary <- diag(a0)
 a0 <- a0[lower.tri(a0, diag = TRUE)]
-a1 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, weights, subset, 0L);
-a2 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, as.double(weights), as.double(subset), 0L);
-a3 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, weights, as.double(subset), 0L);
-a4 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, as.double(weights), subset, 0L);
+a1 <- .Call(libcoin:::R_CovarianceInfluence, y, weights, subset, 0L);
+a2 <- .Call(libcoin:::R_CovarianceInfluence, y, as.double(weights), as.double(subset), 0L);
+a3 <- .Call(libcoin:::R_CovarianceInfluence, y, weights, as.double(subset), 0L);
+a4 <- .Call(libcoin:::R_CovarianceInfluence, y, as.double(weights), subset, 0L);
 a5 <- LinStatExpCov(x, y, weights = weights, subset = subset)$CovarianceInfluence
 
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4) &&
           isequal(a0, a5))
 
-a1 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, weights, subset, 1L);
-a2 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, as.double(weights), as.double(subset), 1L);
-a3 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, weights, as.double(subset), 1L);
-a4 <- libcoin:::.libcoinCall("R_CovarianceInfluence", y, as.double(weights), subset, 1L);
+a1 <- .Call(libcoin:::R_CovarianceInfluence, y, weights, subset, 1L);
+a2 <- .Call(libcoin:::R_CovarianceInfluence, y, as.double(weights), as.double(subset), 1L);
+a3 <- .Call(libcoin:::R_CovarianceInfluence, y, weights, as.double(subset), 1L);
+a4 <- .Call(libcoin:::R_CovarianceInfluence, y, as.double(weights), subset, 1L);
 a5 <- LinStatExpCov(x, y, weights = weights, subset = subset, varonly = TRUE)$VarianceInfluence
 a0 <- vary
 
@@ -298,38 +298,38 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 ###################################################
 a0 <- colSums(x[subset, ] * weights[subset]) 
 a0
-a1 <- libcoin:::.libcoinCall("R_ExpectationX", x, P, weights, subset);
-a2 <- libcoin:::.libcoinCall("R_ExpectationX", x, P, as.double(weights), as.double(subset));
-a3 <- libcoin:::.libcoinCall("R_ExpectationX", x, P, weights, as.double(subset));
-a4 <- libcoin:::.libcoinCall("R_ExpectationX", x, P, as.double(weights), subset);
+a1 <- .Call(libcoin:::R_ExpectationX, x, P, weights, subset);
+a2 <- .Call(libcoin:::R_ExpectationX, x, P, as.double(weights), as.double(subset));
+a3 <- .Call(libcoin:::R_ExpectationX, x, P, weights, as.double(subset));
+a4 <- .Call(libcoin:::R_ExpectationX, x, P, as.double(weights), subset);
 
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4) &&
           isequal(a0, LECVxyws$ExpectationX))
 
 a0 <- colSums(x[subset, ]^2 * weights[subset]) 
-a1 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, weights, subset, 1L);
-a2 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, as.double(weights), as.double(subset), 1L);
-a3 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, weights, as.double(subset), 1L);
-a4 <- libcoin:::.libcoinCall("R_CovarianceX", x, P, as.double(weights), subset, 1L);
+a1 <- .Call(libcoin:::R_CovarianceX, x, P, weights, subset, 1L);
+a2 <- .Call(libcoin:::R_CovarianceX, x, P, as.double(weights), as.double(subset), 1L);
+a3 <- .Call(libcoin:::R_CovarianceX, x, P, weights, as.double(subset), 1L);
+a4 <- .Call(libcoin:::R_CovarianceX, x, P, as.double(weights), subset, 1L);
 
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 
 a0 <- as.vector(colSums(Xfactor[subset, ] * weights[subset]))
 a0
-a1 <- libcoin:::.libcoinCall("R_ExpectationX", ix, Lx, weights, subset);
-a2 <- libcoin:::.libcoinCall("R_ExpectationX", ix, Lx, as.double(weights), as.double(subset));
-a3 <- libcoin:::.libcoinCall("R_ExpectationX", ix, Lx, weights, as.double(subset));
-a4 <- libcoin:::.libcoinCall("R_ExpectationX", ix, Lx, as.double(weights), subset);
+a1 <- .Call(libcoin:::R_ExpectationX, ix, Lx, weights, subset);
+a2 <- .Call(libcoin:::R_ExpectationX, ix, Lx, as.double(weights), as.double(subset));
+a3 <- .Call(libcoin:::R_ExpectationX, ix, Lx, weights, as.double(subset));
+a4 <- .Call(libcoin:::R_ExpectationX, ix, Lx, as.double(weights), subset);
 
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 
-a1 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, subset, 1L);
-a2 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), as.double(subset), 1L);
-a3 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, as.double(subset), 1L);
-a4 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), subset, 1L);
+a1 <- .Call(libcoin:::R_CovarianceX, ix, Lx, weights, subset, 1L);
+a2 <- .Call(libcoin:::R_CovarianceX, ix, Lx, as.double(weights), as.double(subset), 1L);
+a3 <- .Call(libcoin:::R_CovarianceX, ix, Lx, weights, as.double(subset), 1L);
+a4 <- .Call(libcoin:::R_CovarianceX, ix, Lx, as.double(weights), subset, 1L);
 
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
@@ -341,10 +341,10 @@ a0 <- matrix(a0, ncol = ncol(Xfactor))
 vary <- diag(a0)
 a0 <- a0[lower.tri(a0, diag = TRUE)]
 
-a1 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, subset, 0L)
-a2 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), as.double(subset), 0L)
-a3 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, weights, as.double(subset), 0L)
-a4 <- libcoin:::.libcoinCall("R_CovarianceX", ix, Lx, as.double(weights), subset, 0L)
+a1 <- .Call(libcoin:::R_CovarianceX, ix, Lx, weights, subset, 0L)
+a2 <- .Call(libcoin:::R_CovarianceX, ix, Lx, as.double(weights), as.double(subset), 0L)
+a3 <- .Call(libcoin:::R_CovarianceX, ix, Lx, weights, as.double(subset), 0L)
+a4 <- .Call(libcoin:::R_CovarianceX, ix, Lx, as.double(weights), subset, 0L)
 
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
@@ -354,10 +354,10 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 ### code chunk number 19: SimpleSums
 ###################################################
 a0 <- sum(weights[subset])
-a1 <- libcoin:::.libcoinCall("R_Sums", N, weights, subset)
-a2 <- libcoin:::.libcoinCall("R_Sums", N, as.double(weights), as.double(subset))
-a3 <- libcoin:::.libcoinCall("R_Sums", N, weights, as.double(subset))
-a4 <- libcoin:::.libcoinCall("R_Sums", N, as.double(weights), subset)
+a1 <- .Call(libcoin:::R_Sums, N, weights, subset)
+a2 <- .Call(libcoin:::R_Sums, N, as.double(weights), as.double(subset))
+a3 <- .Call(libcoin:::R_Sums, N, weights, as.double(subset))
+a4 <- .Call(libcoin:::R_Sums, N, as.double(weights), subset)
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 
@@ -369,26 +369,20 @@ r1 <- rep(1:ncol(x), ncol(y))
 r2 <- rep(1:ncol(y), each = ncol(x))
 
 a0 <- colSums(x[subset,r1] * y[subset,r2] * weights[subset])
-a1 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, weights, subset, 0L)
-a2 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, as.double(weights),
-as.double(subset), 0L)
-a3 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, weights,
-as.double(subset), 0L)
-a4 <- libcoin:::.libcoinCall("R_KronSums", x, P, y, as.double(weights),
-subset, 0L)
+a1 <- .Call(libcoin:::R_KronSums, x, P, y, weights, subset, 0L)
+a2 <- .Call(libcoin:::R_KronSums, x, P, y, as.double(weights), as.double(subset), 0L)
+a3 <- .Call(libcoin:::R_KronSums, x, P, y, weights, as.double(subset), 0L)
+a4 <- .Call(libcoin:::R_KronSums, x, P, y, as.double(weights), subset, 0L)
 
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 
 a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * 
                         y[subset,r2Xfactor] * weights[subset]))
-a1 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, weights, subset, 0L)
-a2 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, as.double(weights),
-as.double(subset), 0L)
-a3 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, weights,
-as.double(subset), 0L)
-a4 <- libcoin:::.libcoinCall("R_KronSums", ix, Lx, y, as.double(weights),
-subset, 0L)
+a1 <- .Call(libcoin:::R_KronSums, ix, Lx, y, weights, subset, 0L)
+a2 <- .Call(libcoin:::R_KronSums, ix, Lx, y, as.double(weights), as.double(subset), 0L)
+a3 <- .Call(libcoin:::R_KronSums, ix, Lx, y, weights, as.double(subset), 0L)
+a4 <- .Call(libcoin:::R_KronSums, ix, Lx, y, as.double(weights), subset, 0L)
 
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
@@ -399,13 +393,13 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 ### code chunk number 21: KronSums-Permutation
 ###################################################
 a0 <- colSums(x[subset,r1] * y[subsety, r2])
-a1 <- libcoin:::.libcoinCall("R_KronSums_Permutation", x, P, y, subset, subsety)
-a2 <- libcoin:::.libcoinCall("R_KronSums_Permutation", x, P, y, as.double(subset), as.double(subsety))
+a1 <- .Call(libcoin:::R_KronSums_Permutation, x, P, y, subset, subsety)
+a2 <- .Call(libcoin:::R_KronSums_Permutation, x, P, y, as.double(subset), as.double(subsety))
 stopifnot(isequal(a0, a1) && isequal(a0, a1))
 
 a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * y[subsety, r2Xfactor]))
-a1 <- libcoin:::.libcoinCall("R_KronSums_Permutation", ix, Lx, y, subset, subsety)
-a1 <- libcoin:::.libcoinCall("R_KronSums_Permutation", ix, Lx, y, as.double(subset), as.double(subsety))
+a1 <- .Call(libcoin:::R_KronSums_Permutation, ix, Lx, y, subset, subsety)
+a1 <- .Call(libcoin:::R_KronSums_Permutation, ix, Lx, y, as.double(subset), as.double(subsety))
 stopifnot(isequal(a0, a1))
 
 
@@ -413,10 +407,10 @@ stopifnot(isequal(a0, a1))
 ### code chunk number 22: colSums
 ###################################################
 a0 <- colSums(x[subset,] * weights[subset])
-a1 <- libcoin:::.libcoinCall("R_colSums", x, weights, subset)
-a2 <- libcoin:::.libcoinCall("R_colSums", x, as.double(weights), as.double(subset))
-a3 <- libcoin:::.libcoinCall("R_colSums", x, weights, as.double(subset))
-a4 <- libcoin:::.libcoinCall("R_colSums", x, as.double(weights), subset)
+a1 <- .Call(libcoin:::R_colSums, x, weights, subset)
+a2 <- .Call(libcoin:::R_colSums, x, as.double(weights), as.double(subset))
+a3 <- .Call(libcoin:::R_colSums, x, weights, as.double(subset))
+a4 <- .Call(libcoin:::R_colSums, x, as.double(weights), subset)
 
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
@@ -475,7 +469,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 ###################################################
 sb <- sample(block)
 ns1 <- do.call("c", tapply(subset, sb[subset], function(i) i))
-ns2 <- libcoin:::.libcoinCall("R_order_subset_wrt_block", y, integer(0), subset, sb)
+ns2 <- .Call(libcoin:::R_order_subset_wrt_block, y, integer(0), subset, sb)
 stopifnot(isequal(ns1, ns2))
 
 
@@ -485,7 +479,7 @@ stopifnot(isequal(ns1, ns2))
 A <- matrix(runif(12), ncol = 3)
 B <- matrix(runif(10), ncol = 2)
 K1 <- kronecker(A, B)
-K2 <- libcoin:::.libcoinCall("R_kronecker", A, B)
+K2 <- .Call(libcoin:::R_kronecker, A, B)
 stopifnot(isequal(K1, K2))
 
 

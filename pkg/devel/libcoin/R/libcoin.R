@@ -355,4 +355,3 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     ret
 }
 
-.libcoinCall <- function(FUN, ...) .Call(FUN, ...)
