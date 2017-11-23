@@ -1,4 +1,6 @@
 libcoin.w
 libcoin.tex
+libcoin.Rnw
 Makefile
+ToDo
 inst/C_API_example
