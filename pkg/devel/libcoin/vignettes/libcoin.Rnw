@@ -410,7 +410,7 @@ vector.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@ms <- !(complete.cases(X) & complete.cases(Y))@\\
+\mbox{}\verb@ms <- !complete.cases(X, Y)@\\
 \mbox{}\verb@if (all(ms))@\\
 \mbox{}\verb@    stop("all observations are missing")@\\
 \mbox{}\verb@if (any(ms)) {@\\

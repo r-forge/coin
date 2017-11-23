@@ -340,7 +340,7 @@ vector.
 
 @d Handle Missing Values
 @{
-ms <- !(complete.cases(X) & complete.cases(Y))
+ms <- !complete.cases(X, Y)
 if (all(ms))
     stop("all observations are missing")
 if (any(ms)) {
