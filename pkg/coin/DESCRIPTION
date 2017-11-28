@@ -1,6 +1,6 @@
 Package: coin
-Version: 1.2-1
-Date: 2017-07-16
+Version: 1.2-2
+Date: 2017-11-28
 Title: Conditional Inference Procedures in a Permutation Test Framework
 Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
                     email = "Torsten.Hothorn@R-project.org"),
@@ -15,7 +15,7 @@ Description: Conditional inference procedures for the general independence
   censored, ordered and multivariate problems.
 Depends: R (>= 2.14.0), methods, survival
 Imports: stats, modeltools (>= 0.2-9), mvtnorm (>= 1.0-5), multcomp
-Suggests: parallel, xtable, e1071, vcd, TH.data (>= 1.0-7), libcoin (>= 0.9-0)
+Suggests: parallel, xtable, e1071, vcd, TH.data (>= 1.0-7)
 LazyData: yes
 NeedsCompilation: yes
 ByteCompile: yes
