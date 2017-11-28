@@ -277,8 +277,6 @@ available as matrices \verb|X| and \verb|Y|, both with the same number of
 rows $N$. The second interface (labelled ``2d'') handles the case when the
 data is available in aggregated form; details will be explained later.
 
-FIXME: remove B (only for backward compatibility).
-
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap2}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape LinStatExpCov Prototype}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
@@ -287,14 +285,14 @@ FIXME: remove B (only for backward compatibility).
 \mbox{}\verb@(X, Y, ix = NULL, iy = NULL, weights = integer(0),@\\
 \mbox{}\verb@ subset = integer(0), block = integer(0),@\\
 \mbox{}\verb@ checkNAs = TRUE, @\\
-\mbox{}\verb@ varonly = FALSE, nperm = B, B = 0, standardise = FALSE,@\\
+\mbox{}\verb@ varonly = FALSE, nresample = 0, standardise = FALSE,@\\
 \mbox{}\verb@ tol = sqrt(.Machine$double.eps))@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@B@\nobreak\ \NWlink{nuweb?}{?}, \verb@block@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@block@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \verb@subset@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \verb@weights@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -321,14 +319,14 @@ FIXME: remove B (only for backward compatibility).
 \mbox{}\verb@        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,@\\
 \mbox{}\verb@                                subset = subset, block = block, @\\
 \mbox{}\verb@                                checkNAs = checkNAs,@\\
-\mbox{}\verb@                                varonly = varonly, nperm = nperm,@\\
+\mbox{}\verb@                                varonly = varonly, nresample = nresample,@\\
 \mbox{}\verb@                                standardise = standardise, tol = tol))@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!is.null(ix) & !is.null(iy))@\\
 \mbox{}\verb@        return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,@\\
 \mbox{}\verb@                                weights = weights, subset = subset,@\\
 \mbox{}\verb@                                block = block, varonly = varonly, @\\
-\mbox{}\verb@                                checkNAs = checkNAs, nperm = nperm,@\\
+\mbox{}\verb@                                checkNAs = checkNAs, nresample = nresample,@\\
 \mbox{}\verb@                                standardise = standardise, tol = tol))@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    stop("incorrect call to LinStatExpCov")@\\
@@ -434,7 +432,7 @@ vector.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 The logical argument \verb|varonly| triggers the computation of the diagonal
-elements of the covariance matrix $\Sigma$ only. \verb|nperm| permuted linear statistics
+elements of the covariance matrix $\Sigma$ only. \verb|nresample| permuted linear statistics
 under the null hypothesis $H_0$ are returned on the original and
 standardised scale (the latter only when \verb|standardise| is \verb|TRUE|).
 Variances smaller than \verb|tol| are treated as being zero.
@@ -446,7 +444,7 @@ Variances smaller than \verb|tol| are treated as being zero.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.LinStatExpCov1d <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),@\\
-\mbox{}\verb@                             checkNAs = TRUE, varonly = FALSE, nperm = 0, standardise = FALSE,@\\
+\mbox{}\verb@                             checkNAs = TRUE, varonly = FALSE, nresample = 0, standardise = FALSE,@\\
 \mbox{}\verb@                             tol = sqrt(.Machine$double.eps))@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
@@ -478,10 +476,10 @@ Variances smaller than \verb|tol| are treated as being zero.
 \mbox{}\verb@                 block, as.integer(varonly), as.double(tol))@\\
 \mbox{}\verb@    ret$varonly <- as.logical(ret$varonly)@\\
 \mbox{}\verb@    ret$Xfactor <- as.logical(ret$Xfactor)@\\
-\mbox{}\verb@    if (nperm > 0) {@\\
+\mbox{}\verb@    if (nresample > 0) {@\\
 \mbox{}\verb@        ret$PermutedLinearStatistic <-@\\
 \mbox{}\verb@            .Call(R_PermutedLinearStatistic, X, Y, weights, subset,@\\
-\mbox{}\verb@                  block, as.double(nperm))@\\
+\mbox{}\verb@                  block, as.double(nresample))@\\
 \mbox{}\verb@        if (standardise)@\\
 \mbox{}\verb@            ret$StandardisedPermutedLinearStatistic <-@\\
 \mbox{}\verb@                .Call(R_StandardisePermutedLinearStatistic, ret)@\\
@@ -563,7 +561,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.LinStatExpCov2d <- function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),@\\
-\mbox{}\verb@                             block = integer(0), checkNAs = TRUE, varonly = FALSE, nperm = 0,@\\
+\mbox{}\verb@                             block = integer(0), checkNAs = TRUE, varonly = FALSE, nresample = 0,@\\
 \mbox{}\verb@                             standardise = FALSE,@\\
 \mbox{}\verb@                             tol = sqrt(.Machine$double.eps))@\\
 \mbox{}\verb@{@\\
@@ -594,9 +592,9 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \mbox{}\verb@                 weights, subset, block, as.integer(varonly), as.double(tol))@\\
 \mbox{}\verb@    ret$varonly <- as.logical(ret$varonly)@\\
 \mbox{}\verb@    ret$Xfactor <- as.logical(ret$Xfactor)@\\
-\mbox{}\verb@    if (nperm > 0) {@\\
+\mbox{}\verb@    if (nresample > 0) {@\\
 \mbox{}\verb@        ret$PermutedLinearStatistic <-@\\
-\mbox{}\verb@            .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, block, nperm, ret$Table)@\\
+\mbox{}\verb@            .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, block, nresample, ret$Table)@\\
 \mbox{}\verb@        if (standardise)@\\
 \mbox{}\verb@            ret$StandardisedPermutedLinearStatistic <-@\\
 \mbox{}\verb@                .Call(R_StandardisePermutedLinearStatistic, ret)@\\
@@ -745,7 +743,7 @@ vcov(ls1)
 The most important task is, however, to compute test statistics and
 $p$-values. \verb|doTest()| allows to compute the statistics $c_\text{max}$
 (taking \verb|alternative| into account) and $c_\text{quad}$ along with the
-corresponding $p$-values. If \verb|nperm = 0| was used in the call to
+corresponding $p$-values. If \verb|nresample = 0| was used in the call to
 \verb|LinStatExpCov()|, $p$-values are obtained from the limiting asymptotic
 distribution whenever such a thing is available at reasonable costs.
 Otherwise, the permutation $p$-value is returned (along with the permuted
@@ -931,18 +929,18 @@ Here is an example for a linear-by-linear association test.
 <<Contrasts-1>>=
 set.seed(29)
 ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1), 
-                      nperm = 10, standardise = TRUE)
+                      nresample = 10, standardise = TRUE)
 set.seed(29)
 ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), 
-                      nperm = 10, standardise = TRUE)
+                      nresample = 10, standardise = TRUE)
 ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
 set.seed(29)
 ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2), 
-                      nperm = 10, standardise = TRUE)
+                      nresample = 10, standardise = TRUE)
 set.seed(29)
 ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2), 
-                      nperm = 10, standardise = TRUE)
+                      nresample = 10, standardise = TRUE)
 ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
 @
@@ -1051,7 +1049,7 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@      included switching off checks for suitable values of \code{subset}. @\\
 \mbox{}\verb@      Use at your own risk.}@\\
 \mbox{}\verb@  \item{varonly}{a logical asking for variances only.}@\\
-\mbox{}\verb@  \item{nperm}{an integer defining the number of permuted statistics to draw.}@\\
+\mbox{}\verb@  \item{nresample}{an integer defining the number of permuted statistics to draw.}@\\
 \mbox{}\verb@  \item{standardise}{a logical asking to standardise the permuted statistics.}@\\
 \mbox{}\verb@  \item{tol}{tolerance for zero variances.}@\\
 \mbox{}\verb@  \item{x}{a contrast matrix to be left-multiplied in case \code{X} was a factor.}@\\
@@ -1060,7 +1058,7 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@\details{@\\
 \mbox{}\verb@  The function, after minimal preprocessing, calls the underlying C code@\\
 \mbox{}\verb@  and computes the linear statistic, its expectation and covariance and,@\\
-\mbox{}\verb@  optionally, \code{nperm} samples from its permutation distribution.@\\
+\mbox{}\verb@  optionally, \code{nresample} samples from its permutation distribution.@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@  When both \code{ix} and \code{iy} are missing, the number of rows of@\\
 \mbox{}\verb@  \code{X} and \code{Y} is the same, ie the number of observations.@\\
@@ -1889,7 +1887,7 @@ at $B$ levels
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@B@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@B@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -2551,7 +2549,7 @@ permutations to be specified.
 \mbox{}\verb@SEXP R_PermutedLinearStatistic@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape User Interface Inputs}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    SEXP nperm@\\
+\mbox{}\verb@    SEXP nresample@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -2571,14 +2569,14 @@ permutations to be specified.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@extern SEXP libcoin_R_PermutedLinearStatistic(@\\
-\mbox{}\verb@    SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nperm@\\
+\mbox{}\verb@    SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nresample@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;@\\
 \mbox{}\verb@    if(fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_PermutedLinearStatistic");@\\
-\mbox{}\verb@    return fun(x, y, weights, subset, block, nperm);@\\
+\mbox{}\verb@    return fun(x, y, weights, subset, block, nresample);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -2613,14 +2611,14 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 \mbox{}\verb@    int PQ;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Nsubset Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@    R_xlen_t inperm;@\\
+\mbox{}\verb@    R_xlen_t inresample;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup Dimensions}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    PQ = P * Q;@\\
 \mbox{}\verb@    N = NROW(y);@\\
-\mbox{}\verb@    inperm = (R_xlen_t) REAL(nperm)[0];@\\
+\mbox{}\verb@    inresample = (R_xlen_t) REAL(nresample)[0];@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    PROTECT(ans = allocMatrix(REALSXP, PQ, inperm));@\\
+\mbox{}\verb@    PROTECT(ans = allocMatrix(REALSXP, PQ, inresample));@\\
 \mbox{}\verb@    PROTECT(expand_subset = RC_setup_subset(N, weights, subset));@\\
 \mbox{}\verb@    Nsubset = XLENGTH(expand_subset);@\\
 \mbox{}\verb@    PROTECT(tmp = allocVector(REALSXP, Nsubset));@\\
@@ -2628,7 +2626,7 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 \mbox{}\verb@@\\
 \mbox{}\verb@    GetRNGstate();@\\
 \mbox{}\verb@    if (B == 1) {@\\
-\mbox{}\verb@        for (R_xlen_t np = 0; np < inperm; np++) {@\\
+\mbox{}\verb@        for (R_xlen_t np = 0; np < inresample; np++) {@\\
 \mbox{}\verb@            @\hbox{$\langle\,${\itshape Setup Linear Statistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@            C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));@\\
 \mbox{}\verb@@\\
@@ -2643,7 +2641,7 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 \mbox{}\verb@        PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset, @\\
 \mbox{}\verb@                                                         block, blockTable));@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@        for (R_xlen_t np = 0; np < inperm; np++) {@\\
+\mbox{}\verb@        for (R_xlen_t np = 0; np < inresample; np++) {@\\
 \mbox{}\verb@            @\hbox{$\langle\,${\itshape Setup Linear Statistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@            C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(blockTable), @\\
 \mbox{}\verb@                             B + 1, REAL(tmp), REAL(perm));@\\
@@ -2748,14 +2746,14 @@ and returns the matrix of standardised linear statistics.
 \mbox{}\verb@@\hbox{$\langle\,${\itshape R\_StandardisePermutedLinearStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
-\mbox{}\verb@    R_xlen_t nperm = C_get_nperm(LECV);@\\
+\mbox{}\verb@    R_xlen_t nresample = C_get_nresample(LECV);@\\
 \mbox{}\verb@    double *ls;@\\
-\mbox{}\verb@    if (!nperm) return(R_NilValue);@\\
+\mbox{}\verb@    if (!nresample) return(R_NilValue);@\\
 \mbox{}\verb@    int PQ = C_get_P(LECV) * C_get_Q(LECV);@\\
 \mbox{}\verb@    @\\
-\mbox{}\verb@    PROTECT(ans = allocMatrix(REALSXP, PQ, nperm));@\\
+\mbox{}\verb@    PROTECT(ans = allocMatrix(REALSXP, PQ, nresample));@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (R_xlen_t np = 0; np < nperm; np++) {@\\
+\mbox{}\verb@    for (R_xlen_t np = 0; np < nresample; np++) {@\\
 \mbox{}\verb@        ls = REAL(ans) + PQ * np;@\\
 \mbox{}\verb@        /* copy first; standarisation is in place */@\\
 \mbox{}\verb@        for (int p = 0; p < PQ; p++) @\\
@@ -2777,7 +2775,7 @@ and returns the matrix of standardised linear statistics.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_nperm@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_P@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_standardise@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_P@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_standardise@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -3209,8 +3207,8 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 <<permutations-2d>>=
-LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
-LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
+LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
+LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
 @
 
 \begin{flushleft} \small
@@ -3226,7 +3224,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R y Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    SEXP iy,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R block Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    SEXP nperm,@\\
+\mbox{}\verb@    SEXP nresample,@\\
 \mbox{}\verb@    SEXP itable@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
@@ -3247,7 +3245,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@extern SEXP libcoin_R_PermutedLinearStatistic_2d(@\\
-\mbox{}\verb@    SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nperm,@\\
+\mbox{}\verb@    SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nresample,@\\
 \mbox{}\verb@    SEXP itable@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@@\\
@@ -3255,7 +3253,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@    if(fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_PermutedLinearStatistic_2d");@\\
-\mbox{}\verb@    return fun(x, ix, y, iy, block, nperm, itable);@\\
+\mbox{}\verb@    return fun(x, ix, y, iy, block, nresample, itable);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -3278,7 +3276,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans, Ritable;@\\
 \mbox{}\verb@    int *csum, *rsum, *sumweights, *jwork, *table, *rtable2, maxn = 0, Lxp1, Lyp1, *btab, PQ, Xfactor;@\\
-\mbox{}\verb@    R_xlen_t inperm;@\\
+\mbox{}\verb@    R_xlen_t inresample;@\\
 \mbox{}\verb@    double *fact, *linstat;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup Dimensions 2d}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -3287,9 +3285,9 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@    Xfactor = XLENGTH(x) == 0;@\\
 \mbox{}\verb@    Lxp1 = Lx + 1;@\\
 \mbox{}\verb@    Lyp1 = Ly + 1;@\\
-\mbox{}\verb@    inperm = (R_xlen_t) REAL(nperm)[0];@\\
+\mbox{}\verb@    inresample = (R_xlen_t) REAL(nresample)[0];@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    PROTECT(ans = allocMatrix(REALSXP, PQ, inperm));@\\
+\mbox{}\verb@    PROTECT(ans = allocMatrix(REALSXP, PQ, inresample));@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup Working Memory}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -3305,7 +3303,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@@\\
 \mbox{}\verb@    GetRNGstate();@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (R_xlen_t np = 0; np < inperm; np++) {@\\
+\mbox{}\verb@    for (R_xlen_t np = 0; np < inresample; np++) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@        @\hbox{$\langle\,${\itshape Setup Linear Statistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -3539,7 +3537,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@    SEXP ans, stat, pval, names, permstat;@\\
 \mbox{}\verb@    double *MPinv, *ls, st, pst, *ex;@\\
 \mbox{}\verb@    int rank, P, Q, PQ, greater = 0;@\\
-\mbox{}\verb@    R_xlen_t nperm;@\\
+\mbox{}\verb@    R_xlen_t nresample;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup Test Memory}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -3555,21 +3553,21 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@        return(ans);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (C_get_nperm(LECV) == 0) {@\\
+\mbox{}\verb@    if (C_get_nresample(LECV) == 0) {@\\
 \mbox{}\verb@        REAL(pval)[0] = C_chisq_pvalue(REAL(stat)[0], rank, LOWER, GIVELOG);@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        nperm = C_get_nperm(LECV);@\\
+\mbox{}\verb@        nresample = C_get_nresample(LECV);@\\
 \mbox{}\verb@        ls = C_get_PermutedLinearStatistic(LECV);@\\
 \mbox{}\verb@        st = REAL(stat)[0];@\\
 \mbox{}\verb@        ex = C_get_Expectation(LECV);@\\
 \mbox{}\verb@        greater = 0;@\\
-\mbox{}\verb@        for (R_xlen_t np = 0; np < nperm; np++) {@\\
+\mbox{}\verb@        for (R_xlen_t np = 0; np < nresample; np++) {@\\
 \mbox{}\verb@            pst = C_quadform(PQ, ls + PQ * np, ex, MPinv);@\\
 \mbox{}\verb@            if (GE(pst, st, C_get_tol(LECV)))@\\
 \mbox{}\verb@                greater++;@\\
 \mbox{}\verb@            if (PSTAT) REAL(permstat)[np] = pst;@\\
 \mbox{}\verb@        }@\\
-\mbox{}\verb@        REAL(pval)[0] = C_perm_pvalue(greater, nperm, LOWER, GIVELOG);@\\
+\mbox{}\verb@        REAL(pval)[0] = C_perm_pvalue(greater, nresample, LOWER, GIVELOG);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
@@ -3582,7 +3580,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@C_chisq_pvalue@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_nperm@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_quadform@\nobreak\ \NWlink{nuweb?}{?}, \verb@GE@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}, \verb@Q@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@C_chisq_pvalue@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_quadform@\nobreak\ \NWlink{nuweb?}{?}, \verb@GE@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}, \verb@Q@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -3599,10 +3597,10 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@@\\
 \mbox{}\verb@if (C_get_varonly(LECV) && PQ > 1)@\\
 \mbox{}\verb@        error("cannot compute adjusted p-value based on variances only");@\\
-\mbox{}\verb@if (C_get_nperm(LECV) > 0 && INTEGER(PermutedStatistics)[0]) {@\\
+\mbox{}\verb@if (C_get_nresample(LECV) > 0 && INTEGER(PermutedStatistics)[0]) {@\\
 \mbox{}\verb@    PROTECT(ans = allocVector(VECSXP, 3));@\\
 \mbox{}\verb@    PROTECT(names = allocVector(STRSXP, 3));@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, 2, permstat = allocVector(REALSXP, C_get_nperm(LECV)));@\\
+\mbox{}\verb@    SET_VECTOR_ELT(ans, 2, permstat = allocVector(REALSXP, C_get_nresample(LECV)));@\\
 \mbox{}\verb@    SET_STRING_ELT(names, 2, mkChar("PermutedStatistics"));@\\
 \mbox{}\verb@} else {@\\
 \mbox{}\verb@    PROTECT(ans = allocVector(VECSXP, 2));@\\
@@ -3624,7 +3622,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_nperm@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_P@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}, \verb@Q@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_nresample@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_P@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}, \verb@Q@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -3669,7 +3667,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@    SEXP ans, stat, pval, names, permstat;@\\
 \mbox{}\verb@    double st, pst, *ex, *cv, *ls, tl;@\\
 \mbox{}\verb@    int P, Q, PQ, vo, alt, greater;@\\
-\mbox{}\verb@    R_xlen_t nperm;@\\
+\mbox{}\verb@    R_xlen_t nresample;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup Test Memory}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -3691,7 +3689,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@        return(ans);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (C_get_nperm(LECV) == 0) {@\\
+\mbox{}\verb@    if (C_get_nresample(LECV) == 0) {@\\
 \mbox{}\verb@        if (C_get_varonly(LECV) && PQ > 1) {@\\
 \mbox{}\verb@            REAL(pval)[0] = NA_REAL;@\\
 \mbox{}\verb@            UNPROTECT(2);@\\
@@ -3703,7 +3701,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@                                         INTEGER(maxpts)[0], REAL(releps)[0],@\\
 \mbox{}\verb@                                         REAL(abseps)[0], C_get_tol(LECV));@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        nperm = C_get_nperm(LECV);@\\
+\mbox{}\verb@        nresample = C_get_nresample(LECV);@\\
 \mbox{}\verb@        ls = C_get_PermutedLinearStatistic(LECV);@\\
 \mbox{}\verb@        ex = C_get_Expectation(LECV);@\\
 \mbox{}\verb@/*        cv = C_get_Covariance(LECV); */@\\
@@ -3712,7 +3710,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@        st = REAL(stat)[0];@\\
 \mbox{}\verb@        tl = C_get_tol(LECV);@\\
 \mbox{}\verb@        greater = 0;@\\
-\mbox{}\verb@        for (R_xlen_t np = 0; np < nperm; np++) {@\\
+\mbox{}\verb@        for (R_xlen_t np = 0; np < nresample; np++) {@\\
 \mbox{}\verb@            pst = C_maxtype(PQ, ls + PQ * np, ex, cv, vo, tl, alt);@\\
 \mbox{}\verb@            if (alt == ALTERNATIVE_less) {@\\
 \mbox{}\verb@                if (LE(pst, st, tl))@\\
@@ -3723,7 +3721,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@            }@\\
 \mbox{}\verb@            if (PSTAT) REAL(permstat)[np] = pst;@\\
 \mbox{}\verb@        }@\\
-\mbox{}\verb@        REAL(pval)[0] = C_perm_pvalue(greater, nperm, LOWER, GIVELOG);@\\
+\mbox{}\verb@        REAL(pval)[0] = C_perm_pvalue(greater, nresample, LOWER, GIVELOG);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
@@ -3735,7 +3733,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_nperm@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_maxtype@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_maxtype_pvalue@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb?}{?}, \verb@GE@\nobreak\ \NWlink{nuweb?}{?}, \verb@LE@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}, \verb@Q@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_maxtype@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_maxtype_pvalue@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb?}{?}, \verb@GE@\nobreak\ \NWlink{nuweb?}{?}, \verb@LE@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}, \verb@Q@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -3787,7 +3785,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@    SET_STRING_ELT(names, 0, mkChar("TestStatistic"));@\\
 \mbox{}\verb@    SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));@\\
 \mbox{}\verb@    SET_STRING_ELT(names, 1, mkChar("p.value"));@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, 3, permstat = allocVector(REALSXP, C_get_nperm(LECV)));@\\
+\mbox{}\verb@    SET_VECTOR_ELT(ans, 3, permstat = allocVector(REALSXP, C_get_nresample(LECV)));@\\
 \mbox{}\verb@    SET_STRING_ELT(names, 3, mkChar("PermutedStatistics"));@\\
 \mbox{}\verb@    REAL(pval)[0] = NA_REAL;@\\
 \mbox{}\verb@@\\
@@ -3819,7 +3817,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_nperm@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_P@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_ordered_Xfactor@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_unordered_Xfactor@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_nresample@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_P@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_ordered_Xfactor@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_unordered_Xfactor@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -4255,7 +4253,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@double C_perm_pvalue@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    const int greater,@\\
-\mbox{}\verb@    const double nperm,@\\
+\mbox{}\verb@    const double nresample,@\\
 \mbox{}\verb@    const int lower,@\\
 \mbox{}\verb@    const int give_log@\\
 \mbox{}\verb@) {@\\
@@ -4264,15 +4262,15 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = 
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (give_log) {@\\
 \mbox{}\verb@         if (lower) {@\\
-\mbox{}\verb@             ret = log1p(- (double) greater / nperm);@\\
+\mbox{}\verb@             ret = log1p(- (double) greater / nresample);@\\
 \mbox{}\verb@         } else {@\\
-\mbox{}\verb@             ret = log(greater) - log(nperm);@\\
+\mbox{}\verb@             ret = log(greater) - log(nresample);@\\
 \mbox{}\verb@         }@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (lower) {@\\
-\mbox{}\verb@            ret = 1.0 - (double) greater / nperm;@\\
+\mbox{}\verb@            ret = 1.0 - (double) greater / nresample;@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            ret = (double) greater / nperm;@\\
+\mbox{}\verb@            ret = (double) greater / nresample;@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    return(ret);@\\
@@ -4552,7 +4550,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@@\\
 \mbox{}\verb@        for (int q = 0; q < Q; q++) {@\\
 \mbox{}\verb@            mlinstat[q] += linstat[q * P + p];@\\
-\mbox{}\verb@            for (R_xlen_t np = 0; np < nperm; np++)@\\
+\mbox{}\verb@            for (R_xlen_t np = 0; np < nresample; np++)@\\
 \mbox{}\verb@                mblinstat[q + np * Q] += blinstat[q * P + p + np * PQ];@\\
 \mbox{}\verb@            mexpect[q] += expect[q * P + p];@\\
 \mbox{}\verb@            if (B == 1) {@\\
@@ -4574,7 +4572,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@                maxstat[0] = tmp;@\\
 \mbox{}\verb@            }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@            for (R_xlen_t np = 0; np < nperm; np++) {@\\
+\mbox{}\verb@            for (R_xlen_t np = 0; np < nresample; np++) {@\\
 \mbox{}\verb@                ls = mblinstat + np * Q;@\\
 \mbox{}\verb@                @\hbox{$\langle\,${\itshape Compute maxstat Test Statistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@                if (tmp > bmaxstat[np])@\\
@@ -4605,7 +4603,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@@\\
 \mbox{}\verb@double *linstat, *expect, *covar, *varinf, *covinf, *ExpX, *blinstat, tol, *ls;@\\
 \mbox{}\verb@int P, Q, B;@\\
-\mbox{}\verb@R_xlen_t nperm;@\\
+\mbox{}\verb@R_xlen_t nresample;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, @\\
 \mbox{}\verb@       tmp, sumleft, sumright, sumweights;@\\
@@ -4626,8 +4624,8 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@/* both need to be there */@\\
 \mbox{}\verb@varinf = C_get_VarianceInfluence(LECV);@\\
 \mbox{}\verb@covinf = C_get_CovarianceInfluence(LECV);@\\
-\mbox{}\verb@nperm = C_get_nperm(LECV);@\\
-\mbox{}\verb@if (nperm > 0)@\\
+\mbox{}\verb@nresample = C_get_nresample(LECV);@\\
+\mbox{}\verb@if (nresample > 0)@\\
 \mbox{}\verb@    blinstat = C_get_PermutedLinearStatistic(LECV);@\\
 \mbox{}\verb@tol = C_get_tol(LECV);@\\
 \mbox{}\verb@@{\NWsep}
@@ -4636,7 +4634,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@B@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_B@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_CovarianceInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_ExpectationX@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_nperm@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_P@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_VarianceInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}, \verb@Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@sumweights@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@B@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_B@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_CovarianceInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_ExpectationX@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_P@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_VarianceInfluence@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@P@\nobreak\ \NWlink{nuweb?}{?}, \verb@Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@sumweights@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -4660,8 +4658,8 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@   /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */@\\
 \mbox{}\verb@   mvar = Calloc(1, double);@\\
 \mbox{}\verb@}@\\
-\mbox{}\verb@if (nperm > 0) {@\\
-\mbox{}\verb@    mblinstat = Calloc(Q * nperm, double);@\\
+\mbox{}\verb@if (nresample > 0) {@\\
+\mbox{}\verb@    mblinstat = Calloc(Q * nresample, double);@\\
 \mbox{}\verb@} else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */@\\
 \mbox{}\verb@    mblinstat = Calloc(1, double);@\\
 \mbox{}\verb@}@\\
@@ -4673,7 +4671,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@    mexpect[q] = 0.0;@\\
 \mbox{}\verb@    if (teststat == TESTSTAT_maximum)@\\
 \mbox{}\verb@        mvar[q] = 0.0;@\\
-\mbox{}\verb@    for (R_xlen_t np = 0; np < nperm; np++) {@\\
+\mbox{}\verb@    for (R_xlen_t np = 0; np < nresample; np++) {@\\
 \mbox{}\verb@        mblinstat[q + np * Q] = 0.0;@\\
 \mbox{}\verb@        bmaxstat[np] = 0.0;@\\
 \mbox{}\verb@    }@\\
@@ -4781,12 +4779,12 @@ covariance matrix to be passed as argument \verb|CORREL|
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@if (nperm > 0) {@\\
+\mbox{}\verb@if (nresample > 0) {@\\
 \mbox{}\verb@    greater = 0;@\\
-\mbox{}\verb@    for (R_xlen_t np = 0; np < nperm; np++) {@\\
+\mbox{}\verb@    for (R_xlen_t np = 0; np < nresample; np++) {@\\
 \mbox{}\verb@        if (bmaxstat[np] > maxstat[0]) greater++;@\\
 \mbox{}\verb@    }@\\
-\mbox{}\verb@    pval[0] = C_perm_pvalue(greater, nperm, lower, give_log);@\\
+\mbox{}\verb@    pval[0] = C_perm_pvalue(greater, nresample, lower, give_log);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -4847,7 +4845,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@                maxstat[0] = tmp;@\\
 \mbox{}\verb@            }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@            for (R_xlen_t np = 0; np < nperm; np++) {@\\
+\mbox{}\verb@            for (R_xlen_t np = 0; np < nresample; np++) {@\\
 \mbox{}\verb@                ls = mblinstat + np * Q;@\\
 \mbox{}\verb@                @\hbox{$\langle\,${\itshape Compute maxstat Test Statistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@                if (tmp > bmaxstat[np])@\\
@@ -4951,13 +4949,13 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@for (int q = 0; q < Q; q++) {@\\
 \mbox{}\verb@    mlinstat[q] = 0.0;@\\
 \mbox{}\verb@    mexpect[q] = 0.0;@\\
-\mbox{}\verb@    for (R_xlen_t np = 0; np < nperm; np++)@\\
+\mbox{}\verb@    for (R_xlen_t np = 0; np < nresample; np++)@\\
 \mbox{}\verb@        mblinstat[q + np * Q] = 0.0;@\\
 \mbox{}\verb@    for (int p = 0; p < P; p++) {@\\
 \mbox{}\verb@        qPp = q * P + p;@\\
 \mbox{}\verb@        mlinstat[q] += contrast[p] * linstat[qPp];@\\
 \mbox{}\verb@        mexpect[q] += contrast[p] * expect[qPp];@\\
-\mbox{}\verb@        for (R_xlen_t np = 0; np < nperm; np++)@\\
+\mbox{}\verb@        for (R_xlen_t np = 0; np < nresample; np++)@\\
 \mbox{}\verb@            mblinstat[q + np * Q] += contrast[p] * blinstat[q * P + p + np * PQ];@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
@@ -9609,7 +9607,7 @@ stopifnot(isequal(K1, K2))
 \mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_Table}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_dimTable}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_B}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_nperm}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_nresample}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_PermutedLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_tol}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_init\_LECV\_1d}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
@@ -10080,11 +10078,11 @@ stopifnot(isequal(K1, K2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap286}\raggedright\small
-\NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_nperm}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape C\_get\_nresample}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@R_xlen_t C_get_nperm@\\
+\mbox{}\verb@R_xlen_t C_get_nresample@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
@@ -10097,7 +10095,7 @@ stopifnot(isequal(K1, K2))
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_nperm@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_P@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb?}{?}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_nresample@\nobreak\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_P@\nobreak\ \NWlink{nuweb?}{?}, \verb@C_get_Q@\nobreak\ \NWlink{nuweb?}{?}, \verb@LECV@\nobreak\ \NWlink{nuweb?}{?}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb?}{?}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -10815,7 +10813,7 @@ not portable).
 \item $\langle\,$C\_get\_ExpectationInfluence\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$C\_get\_ExpectationX\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$C\_get\_LinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
-\item $\langle\,$C\_get\_nperm\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$C\_get\_nresample\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$C\_get\_P\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$C\_get\_PermutedLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$C\_get\_Q\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
@@ -11077,7 +11075,7 @@ not portable).
 
 
 {\small\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \verb@B@: \NWlink{nuweb?}{?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+\item \verb@B@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@block@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@blockTable@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@CovarianceInfluence_SLOT@: \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
@@ -11099,7 +11097,7 @@ not portable).
 \item \verb@C_get_ExpectationInfluence@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}.
 \item \verb@C_get_ExpectationX@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@C_get_LinearStatistic@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}.
-\item \verb@C_get_nperm@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
+\item \verb@C_get_nresample@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@C_get_P@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 \item \verb@C_get_PermutedLinearStatistic@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}.
 \item \verb@C_get_Q@: \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}, \underline{\NWlink{nuweb?}{?}}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.

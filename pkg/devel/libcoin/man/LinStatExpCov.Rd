@@ -13,7 +13,7 @@
 LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0),
               subset = integer(0), block = integer(0),
               checkNAs = TRUE, 
-              varonly = FALSE, nperm = B, B = 0, standardise = FALSE,
+              varonly = FALSE, nresample = 0, standardise = FALSE,
               tol = sqrt(.Machine$double.eps))
 lmult(x, object)
 }
@@ -29,7 +29,7 @@ lmult(x, object)
       included switching off checks for suitable values of \code{subset}. 
       Use at your own risk.}
   \item{varonly}{a logical asking for variances only.}
-  \item{nperm}{an integer defining the number of permuted statistics to draw.}
+  \item{nresample}{an integer defining the number of permuted statistics to draw.}
   \item{standardise}{a logical asking to standardise the permuted statistics.}
   \item{tol}{tolerance for zero variances.}
   \item{x}{a contrast matrix to be left-multiplied in case \code{X} was a factor.}
@@ -38,7 +38,7 @@ lmult(x, object)
 \details{
   The function, after minimal preprocessing, calls the underlying C code
   and computes the linear statistic, its expectation and covariance and,
-  optionally, \code{nperm} samples from its permutation distribution.
+  optionally, \code{nresample} samples from its permutation distribution.
 
   When both \code{ix} and \code{iy} are missing, the number of rows of
   \code{X} and \code{Y} is the same, ie the number of observations.

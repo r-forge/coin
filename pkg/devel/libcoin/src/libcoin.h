@@ -66,7 +66,7 @@ extern
                SEXP block
            ,
            
-           SEXP nperm
+           SEXP nresample
        )
        ;
 extern 
@@ -124,7 +124,7 @@ extern
            
                SEXP block
            ,
-           SEXP nperm,
+           SEXP nresample,
            SEXP itable
        )
        ;

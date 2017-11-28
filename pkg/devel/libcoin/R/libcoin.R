@@ -12,7 +12,7 @@
 LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
                           subset = integer(0), block = integer(0),
                           checkNAs = TRUE, 
-                          varonly = FALSE, nperm = B, B = 0, standardise = FALSE,
+                          varonly = FALSE, nresample = 0, standardise = FALSE,
                           tol = sqrt(.Machine$double.eps))
 {
     if (missing(X) & !is.null(ix) & is.null(iy)) {
@@ -29,14 +29,14 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
                                 subset = subset, block = block, 
                                 checkNAs = checkNAs,
-                                varonly = varonly, nperm = nperm,
+                                varonly = varonly, nresample = nresample,
                                 standardise = standardise, tol = tol))
 
     if (!is.null(ix) & !is.null(iy))
         return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
                                 weights = weights, subset = subset,
                                 block = block, varonly = varonly, 
-                                checkNAs = checkNAs, nperm = nperm,
+                                checkNAs = checkNAs, nresample = nresample,
                                 standardise = standardise, tol = tol))
 
     stop("incorrect call to LinStatExpCov")
@@ -45,7 +45,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
 # LinStatExpCov1d
 
 .LinStatExpCov1d <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
-                             checkNAs = TRUE, varonly = FALSE, nperm = 0, standardise = FALSE,
+                             checkNAs = TRUE, varonly = FALSE, nresample = 0, standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
 
@@ -118,10 +118,10 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
                  block, as.integer(varonly), as.double(tol))
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
-    if (nperm > 0) {
+    if (nresample > 0) {
         ret$PermutedLinearStatistic <-
             .Call(R_PermutedLinearStatistic, X, Y, weights, subset,
-                  block, as.double(nperm))
+                  block, as.double(nresample))
         if (standardise)
             ret$StandardisedPermutedLinearStatistic <-
                 .Call(R_StandardisePermutedLinearStatistic, ret)
@@ -133,7 +133,7 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
 # LinStatExpCov2d
 
 .LinStatExpCov2d <- function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
-                             block = integer(0), checkNAs = TRUE, varonly = FALSE, nperm = 0,
+                             block = integer(0), checkNAs = TRUE, varonly = FALSE, nresample = 0,
                              standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
@@ -221,9 +221,9 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
                  weights, subset, block, as.integer(varonly), as.double(tol))
     ret$varonly <- as.logical(ret$varonly)
     ret$Xfactor <- as.logical(ret$Xfactor)
-    if (nperm > 0) {
+    if (nresample > 0) {
         ret$PermutedLinearStatistic <-
-            .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, block, nperm, ret$Table)
+            .Call(R_PermutedLinearStatistic_2d, X, ix, Y, iy, block, nresample, ret$Table)
         if (standardise)
             ret$StandardisedPermutedLinearStatistic <-
                 .Call(R_StandardisePermutedLinearStatistic, ret)

@@ -23,14 +23,14 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic(
 }
 
 extern SEXP libcoin_R_PermutedLinearStatistic(
-    SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nperm
+    SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nresample
 ) {
 
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_PermutedLinearStatistic");
-    return fun(x, y, weights, subset, block, nperm);
+    return fun(x, y, weights, subset, block, nresample);
 }
 
 extern SEXP libcoin_StandardisePermutedLinearStatistic(
@@ -56,7 +56,7 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
 }
 
 extern SEXP libcoin_R_PermutedLinearStatistic_2d(
-    SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nperm,
+    SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nresample,
     SEXP itable
 ) {
 
@@ -64,7 +64,7 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_PermutedLinearStatistic_2d");
-    return fun(x, ix, y, iy, block, nperm, itable);
+    return fun(x, ix, y, iy, block, nresample, itable);
 }
 
 extern SEXP libcoin_R_QuadraticTest(

@@ -89,18 +89,18 @@ doTest(ls1, teststat = "quadratic")
 ###################################################
 set.seed(29)
 ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1), 
-                      nperm = 10, standardise = TRUE)
+                      nresample = 10, standardise = TRUE)
 set.seed(29)
 ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), 
-                      nperm = 10, standardise = TRUE)
+                      nresample = 10, standardise = TRUE)
 ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
 set.seed(29)
 ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2), 
-                      nperm = 10, standardise = TRUE)
+                      nresample = 10, standardise = TRUE)
 set.seed(29)
 ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2), 
-                      nperm = 10, standardise = TRUE)
+                      nresample = 10, standardise = TRUE)
 ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
 
@@ -240,8 +240,8 @@ stopifnot(
 ###################################################
 ### code chunk number 15: permutations-2d
 ###################################################
-LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
-LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nperm = 10)$PermutedLinearStatistic
+LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
+LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
 
 
 ###################################################
