@@ -3,14 +3,14 @@
 \encoding{UTF-8}
 \title{News for Package \pkg{inum}}
 
-\section{Changes in version 0.9-3 (2017-11-08)}{
+\section{Changes in version 0.9-3 (2017-11-28)}{
 \itemize{
-  \item{All multiple variables in \code{as.interval}.}
+  \item{Allow multiple variables in \code{as.interval}.}
   \item{When \code{nmax} is smaller than the number of
         unique values, optionally use the means of the observations
         in each bin as level (and not the corresponding quantiles
         as in earlier version) to minimise bias.}
-}
+  }
 }
 
 \section{Changes in version 0.9-2 (2017-02-27)}{
