@@ -1,5 +1,0 @@
-
-useDynLib(libcoinEx, .registration = TRUE)
-
-import("libcoin")
-export(ExpectationCovarianceStatistic)
