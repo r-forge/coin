@@ -9,7 +9,7 @@ MonteCarlo <- function(x, y, block, weights, B, standardise = FALSE, parallel, n
 
     montecarlo <- function(B) {
         ret <- LinStatExpCov(X = x, Y = y, weights = as.integer(weights), block = factor(block),
-                      nperm = B, standardise = as.integer(standardise))
+                      nresample = B, standardise = as.integer(standardise))
         if (standardise) 
             return(ret[c("PermutedLinearStatistic",
                          "StandardisedPermutedLinearStatistic")])
