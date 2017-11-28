@@ -864,7 +864,7 @@ doTest(ls1, teststat = "quadratic")
 Sometimes we are interested in contrasts of linear statistics and their
 corresponding properties. Examples include linear-by-linear association
 tests, where we assign numeric scores to each level of a factor. To
-implement this, we make \verb|%*%| generic so that we can then multiply a
+implement this, we implement \verb|lmult| so that we can then left-multiply a
 matrix to an object of class \verb|LinStatExpCov|.
 
 \begin{flushleft} \small
