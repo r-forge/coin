@@ -1,6 +1,7 @@
 
 \name{LinStatExpCov}
 \alias{LinStatExpCov}
+\alias{lmult}
 \title{
   Linear Statistics with Expectation and Covariance
 }
@@ -14,6 +15,7 @@ LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0),
               checkNAs = TRUE, 
               varonly = FALSE, nperm = B, B = 0, standardise = FALSE,
               tol = sqrt(.Machine$double.eps))
+lmult(x, object)
 }
 \arguments{
   \item{X}{numeric matrix of transformations.}
@@ -30,6 +32,8 @@ LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0),
   \item{nperm}{an integer defining the number of permuted statistics to draw.}
   \item{standardise}{a logical asking to standardise the permuted statistics.}
   \item{tol}{tolerance for zero variances.}
+  \item{x}{a contrast matrix to be left-multiplied in case \code{X} was a factor.}
+  \item{object}{an object of class \code{LinStatExpCov}.}
 }
 \details{
   The function, after minimal preprocessing, calls the underlying C code
@@ -48,6 +52,8 @@ LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0),
   or \code{iy = 0} means that the corresponding observation is missing
   and the first row or \code{X} and \code{Y} must be zero.
 
+  \code{lmult} allows left-multiplication of a contrast matrix when \code{X}
+  was (equivalent to) a factor.
 }
 \value{
   A list.

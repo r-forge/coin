@@ -311,21 +311,19 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
 
 # Contrasts
 
-`%*%` <- function(x, y) UseMethod("%*%", y)
-`%*%.default` <- function(x, y) base::`%*%`(x, y)
-`%*%.LinStatExpCov` <- function(x, y) {
-    stopifnot(!y$varonly)
+lmult <- function(x, object) {
+    stopifnot(!object$varonly)
     stopifnot(is.numeric(x))
     if (is.vector(x)) x <- matrix(x, nrow = 1)
-    P <- y$dimension[1]
+    P <- object$dimension[1]
     stopifnot(ncol(x) == P)
-    Q <- y$dimension[2]
-    ret <- y
-    xLS <- x %*% matrix(y$LinearStatistic, nrow = P)
-    xExp <- x %*% matrix(y$Expectation, nrow = P)
-    xExpX <- x %*% matrix(y$ExpectationX, nrow = P)
+    Q <- object$dimension[2]
+    ret <- object
+    xLS <- x %*% matrix(object$LinearStatistic, nrow = P)
+    xExp <- x %*% matrix(object$Expectation, nrow = P)
+    xExpX <- x %*% matrix(object$ExpectationX, nrow = P)
     if (Q == 1) {
-        xCov <- tcrossprod(x %*% vcov(y), x)
+        xCov <- tcrossprod(x %*% vcov(object), x)
     } else {
         zmat <- matrix(0, nrow = P * Q, ncol = nrow(x))
         mat <- rbind(t(x), zmat)
@@ -333,11 +331,11 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
         mat <- rbind(mat, t(x))
         mat <- matrix(mat, ncol = Q * nrow(x))
         mat <- t(mat)
-        xCov <- tcrossprod(mat %*% vcov(y), mat)
+        xCov <- tcrossprod(mat %*% vcov(object), mat)
     }
     if (!is.matrix(xCov)) xCov <- matrix(xCov)
-    if (length(y$PermutedLinearStatistic) > 0) {
-        xPS <- apply(y$PermutedLinearStatistic, 2, function(y)
+    if (length(object$PermutedLinearStatistic) > 0) {
+        xPS <- apply(object$PermutedLinearStatistic, 2, function(y)
                      as.vector(x %*% matrix(y, nrow = P)))
         if (!is.matrix(xPS)) xPS <- matrix(xPS, nrow = 1)
         ret$PermutedLinearStatistic <- xPS
@@ -349,7 +347,7 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
     ret$Variance <- diag(xCov)
     ret$dimension <- c(NROW(x), Q)
     ret$Xfactor <- FALSE
-    if (length(y$StandardisedPermutedLinearStatistic) > 0)
+    if (length(object$StandardisedPermutedLinearStatistic) > 0)
         ret$StandardisedPermutedLinearStatistic <-
             .Call(R_StandardisePermutedLinearStatistic, ret)
     ret

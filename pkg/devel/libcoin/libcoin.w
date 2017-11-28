@@ -701,21 +701,19 @@ matrix to an object of class \verb|LinStatExpCov|.
 
 @d Contrasts
 @{
-`%*%` <- function(x, y) UseMethod("%*%", y)
-`%*%.default` <- function(x, y) base::`%*%`(x, y)
-`%*%.LinStatExpCov` <- function(x, y) {
-    stopifnot(!y$varonly)
+lmult <- function(x, object) {
+    stopifnot(!object$varonly)
     stopifnot(is.numeric(x))
     if (is.vector(x)) x <- matrix(x, nrow = 1)
-    P <- y$dimension[1]
+    P <- object$dimension[1]
     stopifnot(ncol(x) == P)
-    Q <- y$dimension[2]
-    ret <- y
-    xLS <- x %*% matrix(y$LinearStatistic, nrow = P)
-    xExp <- x %*% matrix(y$Expectation, nrow = P)
-    xExpX <- x %*% matrix(y$ExpectationX, nrow = P)
+    Q <- object$dimension[2]
+    ret <- object
+    xLS <- x %*% matrix(object$LinearStatistic, nrow = P)
+    xExp <- x %*% matrix(object$Expectation, nrow = P)
+    xExpX <- x %*% matrix(object$ExpectationX, nrow = P)
     if (Q == 1) {
-        xCov <- tcrossprod(x %*% vcov(y), x)
+        xCov <- tcrossprod(x %*% vcov(object), x)
     } else {
         zmat <- matrix(0, nrow = P * Q, ncol = nrow(x))
         mat <- rbind(t(x), zmat)
@@ -723,11 +721,11 @@ matrix to an object of class \verb|LinStatExpCov|.
         mat <- rbind(mat, t(x))
         mat <- matrix(mat, ncol = Q * nrow(x))
         mat <- t(mat)
-        xCov <- tcrossprod(mat %*% vcov(y), mat)
+        xCov <- tcrossprod(mat %*% vcov(object), mat)
     }
     if (!is.matrix(xCov)) xCov <- matrix(xCov)
-    if (length(y$PermutedLinearStatistic) > 0) {
-        xPS <- apply(y$PermutedLinearStatistic, 2, function(y)
+    if (length(object$PermutedLinearStatistic) > 0) {
+        xPS <- apply(object$PermutedLinearStatistic, 2, function(y)
                      as.vector(x %*% matrix(y, nrow = P)))
         if (!is.matrix(xPS)) xPS <- matrix(xPS, nrow = 1)
         ret$PermutedLinearStatistic <- xPS
@@ -739,7 +737,7 @@ matrix to an object of class \verb|LinStatExpCov|.
     ret$Variance <- diag(xCov)
     ret$dimension <- c(NROW(x), Q)
     ret$Xfactor <- FALSE
-    if (length(y$StandardisedPermutedLinearStatistic) > 0)
+    if (length(object$StandardisedPermutedLinearStatistic) > 0)
         ret$StandardisedPermutedLinearStatistic <-
             .Call(R_StandardisePermutedLinearStatistic, ret)
     ret
@@ -754,7 +752,7 @@ ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1),
 set.seed(29)
 ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), 
                       nperm = 10, standardise = TRUE)
-ls1c <- c(1:5) %*% ls1d
+ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
 set.seed(29)
 ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2), 
@@ -762,7 +760,7 @@ ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2),
 set.seed(29)
 ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2), 
                       nperm = 10, standardise = TRUE)
-ls1c <- c(1:5) %*% ls1d
+ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
 @@
 
@@ -817,6 +815,7 @@ max(abs(t1[-1, -1] - t2))
 @{
 \name{LinStatExpCov}
 \alias{LinStatExpCov}
+\alias{lmult}
 \title{
   Linear Statistics with Expectation and Covariance
 }
@@ -826,6 +825,7 @@ max(abs(t1[-1, -1] - t2))
 }
 \usage{
 LinStatExpCov@<LinStatExpCov Prototype@>
+lmult(x, object)
 }
 \arguments{
   \item{X}{numeric matrix of transformations.}
@@ -842,6 +842,8 @@ LinStatExpCov@<LinStatExpCov Prototype@>
   \item{nperm}{an integer defining the number of permuted statistics to draw.}
   \item{standardise}{a logical asking to standardise the permuted statistics.}
   \item{tol}{tolerance for zero variances.}
+  \item{x}{a contrast matrix to be left-multiplied in case \code{X} was a factor.}
+  \item{object}{an object of class \code{LinStatExpCov}.}
 }
 \details{
   The function, after minimal preprocessing, calls the underlying C code
@@ -860,6 +862,8 @@ LinStatExpCov@<LinStatExpCov Prototype@>
   or \code{iy = 0} means that the corresponding observation is missing
   and the first row or \code{X} and \code{Y} must be zero.
 
+  \code{lmult} allows left-multiplication of a contrast matrix when \code{X}
+  was (equivalent to) a factor.
 }
 \value{
   A list.
@@ -6788,9 +6792,8 @@ useDynLib(libcoin, .registration = TRUE)
 importFrom("stats", complete.cases, vcov)
 importFrom("mvtnorm", GenzBretz)
 
-export(LinStatExpCov, doTest, ctabs, "%*%", "%*%.default")
+export(LinStatExpCov, doTest, ctabs, "lmult")
 S3method("vcov", "LinStatExpCov")
-S3method("%*%", "LinStatExpCov")
 @}
 
 Add flag \verb|-g| to \verb|PKG\_CFLAGS| for \verb|operf| profiling (this is
