@@ -6866,13 +6866,18 @@ SEXP ans
 
     for (int b = 0; b < B; b++) {
 
+        /* Compute Sum of Weights in Block */
+        
         /* compute sum of weights in block b of subset */
         if (table[b + 1] > 0) {
             sumweights[b] = RC_Sums(N, weights, subset_block, 
                                     offset, (R_xlen_t) table[b + 1]);
         } else {
+            /* offset = something and Nsubset = 0 means Nsubset = N in
+               RC_Sums; catch empty or zero-weight block levels here */
             sumweights[b] = 0.0;
         }
+        
 
         /* don't do anything for empty blocks or blocks with weight 1 */
         if (sumweights[b] > 1) {
@@ -6924,11 +6929,14 @@ SEXP ans
         offset += (R_xlen_t) table[b + 1];
     }
 
+    /* Compute Variance from Covariance */
+    
     /* always return variances */
     if (!C_get_varonly(ans)) {
         for (int p = 0; p < P * Q; p++) 
             C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, P * Q)];
     }
+    
 
     Free(ExpX); Free(VarX); Free(CovX);
     UNPROTECT(2);

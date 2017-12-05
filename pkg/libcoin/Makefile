@@ -47,7 +47,7 @@ clean:
 	rm -rf src/*
 	rm -rf R/*
 	rm -rf man/*
-	rm -rf vignettes/*
+	rm -rf vignettes/*Rnw
 	rm -rf tests/libcoin.R*
 		
 	

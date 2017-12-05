@@ -227,6 +227,11 @@ and that in the one-sided case maximum type test statistics are replaced by
     \quad \text{(greater).}
 \end{eqnarray*}
 
+This single source file implements and documents the \pkg{libcoin} package
+following the literate programming paradigm. The keynote lecture on literate
+programming by Donald E.~Knuth given at useR! 2016 in Stanford very much
+motivated this little experiment.
+
 \chapter{R Code}
 
 \section{R User Interface}
@@ -1608,15 +1613,7 @@ SEXP ans
 
     for (int b = 0; b < B; b++) {
 
-        /* compute sum of weights in block b of subset */
-        if (table[b + 1] > 0) {
-            sumweights[b] = RC_Sums(N, weights, subset_block, 
-                                    offset, (R_xlen_t) table[b + 1]);
-        } else {
-            /* offset = something and Nsubset = 0 means Nsubset = N in
-               RC_Sums; catch empty or zero-weight block levels here */
-            sumweights[b] = 0.0;
-        }
+        @<Compute Sum of Weights in Block@>
 
         /* don't do anything for empty blocks or blocks with weight 1 */
         if (sumweights[b] > 1) {
@@ -1636,11 +1633,7 @@ SEXP ans
         offset += (R_xlen_t) table[b + 1];
     }
 
-    /* always return variances */
-    if (!C_get_varonly(ans)) {
-        for (int p = 0; p < P * Q; p++) 
-            C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, P * Q)];
-    }
+    @<Compute Variance from Covariance@>
 
     Free(ExpX); Free(VarX); Free(CovX);
     UNPROTECT(2);
@@ -1703,6 +1696,19 @@ We compute $\mu(\A)$ based on $\E(h \mid S(\A))$ and $\sum_{i \in \A} w_i \x_i$
 for the subset given by subset and the $b$th level of block. The expectation
 is initialised zero when $b = 0$ and values add-up over blocks.
 
+@d Compute Sum of Weights in Block
+@{
+/* compute sum of weights in block b of subset */
+if (table[b + 1] > 0) {
+    sumweights[b] = RC_Sums(N, weights, subset_block, 
+                            offset, (R_xlen_t) table[b + 1]);
+} else {
+    /* offset = something and Nsubset = 0 means Nsubset = N in
+       RC_Sums; catch empty or zero-weight block levels here */
+    sumweights[b] = 0.0;
+}
+@}
+
 @d Compute Expectation Linear Statistic
 @{
 RC_ExpectationInfluence(N, y, Q, weights, subset_block, offset, 
@@ -1748,6 +1754,15 @@ RC_CovarianceX(x, N, P, weights, subset_block, offset,
 C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
                             ExpX, CovX, sumweights[b], b,
                             C_get_Covariance(ans));
+@}
+
+@d Compute Variance from Covariance
+@{
+/* always return variances */
+if (!C_get_varonly(ans)) {
+    for (int p = 0; p < P * Q; p++) 
+        C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, P * Q)];
+}
 @}
 
 The computation of permuted linear statistics is done outside this general
@@ -6922,5 +6937,8 @@ void attribute_visible R_init_libcoin
 \section*{Identifiers}
 
 @u
+
+\bibliographystyle{plainnat}
+\bibliography{libcoin}
 
 \end{document}
