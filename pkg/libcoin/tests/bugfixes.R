@@ -2,6 +2,7 @@
 library("libcoin")
 
 ### by Henric Winell
+set.seed(29)
 X <- runif(10)
 Y <- runif(10)
 o <- LinStatExpCov(X, Y)

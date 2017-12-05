@@ -568,7 +568,7 @@ SEXP RC_init_LECV_1d
 
     /* R\_init\_LECV */
     
-        SEXP vo, d, names, tolerance;
+        SEXP vo, d, names, tolerance, tmp;
         int PQ; 
 
         /* Memory Input Checks */
@@ -641,13 +641,17 @@ SEXP RC_init_LECV_1d
         INTEGER(d)[0] = P;
         INTEGER(d)[1] = Q;
         SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
-                       allocVector(REALSXP, B * Q));
+                       tmp = allocVector(REALSXP, B * Q));
+        for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
 
         /* should always _both_ be there */
         SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
-                       allocVector(REALSXP, B * Q));
+                       tmp = allocVector(REALSXP, B * Q));
+        for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
+
         SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                       allocVector(REALSXP, B * Q * (Q + 1) / 2));
+                       tmp = allocVector(REALSXP, B * Q * (Q + 1) / 2));
+        for (int q = 0; q < B * Q * (Q + 1) / 2; q++) REAL(tmp)[q] = 0.0;
 
         SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
         INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
@@ -726,7 +730,7 @@ SEXP RC_init_LECV_2d
 
     /* R\_init\_LECV */
     
-        SEXP vo, d, names, tolerance;
+        SEXP vo, d, names, tolerance, tmp;
         int PQ; 
 
         /* Memory Input Checks */
@@ -799,13 +803,17 @@ SEXP RC_init_LECV_2d
         INTEGER(d)[0] = P;
         INTEGER(d)[1] = Q;
         SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
-                       allocVector(REALSXP, B * Q));
+                       tmp = allocVector(REALSXP, B * Q));
+        for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
 
         /* should always _both_ be there */
         SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
-                       allocVector(REALSXP, B * Q));
+                       tmp = allocVector(REALSXP, B * Q));
+        for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
+
         SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                       allocVector(REALSXP, B * Q * (Q + 1) / 2));
+                       tmp = allocVector(REALSXP, B * Q * (Q + 1) / 2));
+        for (int q = 0; q < B * Q * (Q + 1) / 2; q++) REAL(tmp)[q] = 0.0;
 
         SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
         INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
@@ -6859,8 +6867,12 @@ SEXP ans
     for (int b = 0; b < B; b++) {
 
         /* compute sum of weights in block b of subset */
-        sumweights[b] = RC_Sums(N, weights, subset_block, 
-                                offset, (R_xlen_t) table[b + 1]);
+        if (table[b + 1] > 0) {
+            sumweights[b] = RC_Sums(N, weights, subset_block, 
+                                    offset, (R_xlen_t) table[b + 1]);
+        } else {
+            sumweights[b] = 0.0;
+        }
 
         /* don't do anything for empty blocks or blocks with weight 1 */
         if (sumweights[b] > 1) {
@@ -6908,7 +6920,7 @@ SEXP ans
             }
         }
 
-        /* next iteration starts with subset[table[b + 1]] */
+        /* next iteration starts with subset[cumsum(table[1:(b + 1)])] */
         offset += (R_xlen_t) table[b + 1];
     }
 
