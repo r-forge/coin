@@ -2,7 +2,6 @@
 libcoin.Rnw:	libcoin.w
 	nuweb -r libcoin.w
 	mv libcoin.tex libcoin.Rnw
-	cp libcoin.Rnw vignettes
 	mv *.h src
 	mv *.c src
 	mv Makevars src
@@ -25,11 +24,13 @@ libcoin.pdf:	libcoin.tex
 	mv libcoin.tex libcoin.Rnw
 	R CMD Sweave libcoin.Rnw
 	pdflatex libcoin.tex
-	rm -rf libcoin.Rnw
+	pdflatex libcoin.tex
+	cp libcoin.Rnw vignettes
 
-all:	libcoin.R
+all:	libcoin.R libcoin.pdf
 
 clean:	
+	./cleanup
 	rm -rf *~
 	rm -rf libcoin.pdf
 	rm -rf libcoin.R
@@ -45,13 +46,14 @@ clean:
 	rm -rf *.R
 	rm -rf Makevars
 	rm -rf nw*
+	rm -rf *bbl
+	rm -rf *brf
+	rm -rf *wk
+
+distclean: clean
 	rm -rf src/*
 	rm -rf R/*
 	rm -rf man/*
 	rm -rf vignettes/*Rnw
 	rm -rf tests/libcoin.R*
-	rm -rf *bbl
-	rm -rf *brf
-	rm -rf *wk
-		
 	

@@ -6999,6 +6999,6 @@ void attribute_visible R_init_libcoin
 @u
 
 \bibliographystyle{plainnat}
-\bibliography{libcoin}
+\bibliography{\Sexpr{system.file("libcoin.bib", package = "libcoin")}}
 
 \end{document}
