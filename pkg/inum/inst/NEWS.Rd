@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \title{News for Package \pkg{inum}}
 
-\section{Changes in version 0.9-3 (2017-11-28)}{
+\section{Changes in version 1.0-0 (2017-12-12)}{
 \itemize{
   \item{Allow multiple variables in \code{as.interval}.}
   \item{When \code{nmax} is smaller than the number of
