@@ -11389,6 +11389,6 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \end{list}}
 
 \bibliographystyle{plainnat}
-\bibliography{\Sexpr{system.file("libcoin.bib", package = "libcoin")}}
+\bibliography{\Sexpr{gsub("\\.bib", "", system.file("libcoin.bib", package = "libcoin"))}}
 
 \end{document}
