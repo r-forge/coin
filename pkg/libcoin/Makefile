@@ -25,6 +25,7 @@ libcoin.pdf:	libcoin.tex
 	mv libcoin.tex libcoin.Rnw
 	R CMD Sweave libcoin.Rnw
 	pdflatex libcoin.tex
+	rm -rf libcoin.Rnw
 
 all:	libcoin.R
 
@@ -49,5 +50,8 @@ clean:
 	rm -rf man/*
 	rm -rf vignettes/*Rnw
 	rm -rf tests/libcoin.R*
+	rm -rf *bbl
+	rm -rf *brf
+	rm -rf *wk
 		
 	

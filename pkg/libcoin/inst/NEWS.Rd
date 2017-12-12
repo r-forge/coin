@@ -2,10 +2,11 @@
 \name{NEWS}
 \title{NEWS file for the \pkg{libcoin} package}
 
-\section{Changes in Version 1.0-0 (2017-11-xx)}{
+\section{Changes in Version 1.0-0 (2017-12-12)}{
   \itemize{
     \item Make the package truly literate; there is one single NUWEB file
           called \code{libcoin.w} which generates the complete package.
+    \item The package can now deal with long vectors.
   }
 }
 

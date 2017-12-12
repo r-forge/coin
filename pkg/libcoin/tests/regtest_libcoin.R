@@ -12,6 +12,12 @@ w <- as.integer(floor(runif(n, max = 4)))
 s <- sort(sample(1:n, floor(n/2), replace = TRUE))
 b <- sample(gl(2, 2, length = n))
 
+tol <- if (.Platform$OS.type == "unix") {
+    sqrt(.Machine$double.eps) 
+} else {
+   .Machine$double.eps^(1/5)
+}
+
 cmp <- function(t1, t2) {
     if (is.null(t1$Covariance)) {
         var1 <- t1$Variance
@@ -24,24 +30,24 @@ cmp <- function(t1, t2) {
     stopifnot(all.equal(
         list(t1$LinearStatistic, t1$Expectation, var1),
         list(t2@statistic@linearstatistic, t2@statistic@expectation, var2),
-        check.attributes = FALSE
+        check.attributes = FALSE, tolerance = tol
     ))
 }
 
 cmp2 <- function(t1, t2) {
     nm <- c("LinearStatistic", "Expectation",
             if(t1$varonly == 1) "Variance" else "Covariance")
-    stopifnot(all.equal(t1[nm], t2[nm]))
+    stopifnot(all.equal(t1[nm], t2[nm], tolerance = tol))
 }
 
 cmp3 <- function(t1, t2, pvalue = FALSE) {
-    stopifnot(all.equal(statistic(t1), t2$TestStatistic))
+    stopifnot(all.equal(statistic(t1), t2$TestStatistic, tolerance = tol))
     if (pvalue)
-        stopifnot(all.equal(unclass(pvalue(t1)), t2$p.value, check.attributes = FALSE))
+        stopifnot(all.equal(unclass(pvalue(t1)), t2$p.value, check.attributes = FALSE, tolerance = tol))
 }
 
 cmp4 <- function(t1, t2)
-    stopifnot(all.equal(t1$TestStatistic, sqrt(t2$TestStatistic)))
+    stopifnot(all.equal(t1$TestStatistic, sqrt(t2$TestStatistic), tolerance = tol))
 
 
 t1 <-LinStatExpCov(X, Y)
@@ -356,10 +362,10 @@ ux <- sort(unique(x))
 ix <- unclass(cut(x, breaks = c(-Inf, ux[-length(ux)] + diff(ux) / 2, Inf)))
 
 cmp3 <- function(t1, t2)
-    stopifnot(all.equal(statistic(t1), t2$TestStatistic))
+    stopifnot(all.equal(statistic(t1), t2$TestStatistic, tolerance = tol))
 
 cmp4 <- function(t1, t2)
-    stopifnot(all.equal(t1$TestStatistic, sqrt(t2$TestStatistic)))
+    stopifnot(all.equal(t1$TestStatistic, sqrt(t2$TestStatistic), tolerance = tol))
 
 (mt <- maxstat_test(y ~ x , distrib = approximate(B = 1000)))
 lev <- LinStatExpCov(ix, y, nresample = 1000)

@@ -240,8 +240,8 @@ stopifnot(
 ###################################################
 ### code chunk number 15: permutations-2d
 ###################################################
-LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
-LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
+LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, 
+              weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
 
 
 ###################################################

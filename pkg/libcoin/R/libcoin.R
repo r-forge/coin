@@ -254,9 +254,7 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
                      minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor, 
                      pargs = GenzBretz())
 {
-
-    ### avoid match.arg for performance reasons
-    teststat <- teststat[1]
+    teststat <- match.arg(teststat, choices = c("maximum", "quadratic", "scalar"))
     if (!any(teststat == c("maximum", "quadratic", "scalar")))
         stop("incorrect teststat")
     alternative <- alternative[1]
@@ -284,15 +282,13 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
 
     if (!maxselect) {
         if (teststat == "quadratic") {
-            ret <- .Call(R_QuadraticTest, object,
-                         as.integer(pvalue), as.integer(lower),
+            ret <- .Call(R_QuadraticTest, object, as.integer(pvalue), as.integer(lower),
                          as.integer(log), as.integer(PermutedStatistics))
         } else {
-            ret <- .Call(R_MaximumTest, object,
-                         as.integer(alt), as.integer(pvalue), as.integer(lower),
-                         as.integer(log), as.integer(PermutedStatistics),
-                         as.integer(pargs$maxpts),
-                         as.double(pargs$releps), as.double(pargs$abseps))
+            ret <- .Call(R_MaximumTest, object, as.integer(alt), as.integer(pvalue), 
+                         as.integer(lower), as.integer(log), as.integer(PermutedStatistics),
+                         as.integer(pargs$maxpts), as.double(pargs$releps), 
+                         as.double(pargs$abseps))
             if (teststat == "scalar") {
                 var <- if (object$varonly) object$Variance else object$Covariance
                 ret$TestStatistic <- object$LinearStatistic - object$Expectation
@@ -301,11 +297,10 @@ doTest <- function(object, teststat = c("maximum", "quadratic", "scalar"),
             }
         }
     } else {
-        ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered),
-                     as.integer(test), as.integer(minbucket),
-                     as.integer(lower), as.integer(log))
-        if (!PermutedStatistics) ret$PermutedStatistics <- NULL
+        ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered), as.integer(test), 
+                     as.integer(minbucket), as.integer(lower), as.integer(log))
     }
+    if (!PermutedStatistics) ret$PermutedStatistics <- NULL
     ret
 }
 

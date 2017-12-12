@@ -41,6 +41,8 @@ pagecolor={linkcolor},%
 urlcolor={linkcolor}%
 ]{hyperref}
 
+\usepackage[round]{natbib}
+
 \setlength{\oddsidemargin}{0in}
 \setlength{\evensidemargin}{0in}
 \setlength{\topmargin}{0in}
@@ -624,9 +626,7 @@ can be computed on the log-scale.
 ### note: lower = FALSE => p-value; lower = TRUE => 1 - p-value
 doTest <- function@<doTest Prototype@>
 {
-
-    ### avoid match.arg for performance reasons
-    teststat <- teststat[1]
+    teststat <- match.arg(teststat, choices = c("maximum", "quadratic", "scalar"))
     if (!any(teststat == c("maximum", "quadratic", "scalar")))
         stop("incorrect teststat")
     alternative <- alternative[1]
@@ -654,15 +654,13 @@ doTest <- function@<doTest Prototype@>
 
     if (!maxselect) {
         if (teststat == "quadratic") {
-            ret <- .Call(R_QuadraticTest, object,
-                         as.integer(pvalue), as.integer(lower),
+            ret <- .Call(R_QuadraticTest, object, as.integer(pvalue), as.integer(lower),
                          as.integer(log), as.integer(PermutedStatistics))
         } else {
-            ret <- .Call(R_MaximumTest, object,
-                         as.integer(alt), as.integer(pvalue), as.integer(lower),
-                         as.integer(log), as.integer(PermutedStatistics),
-                         as.integer(pargs$maxpts),
-                         as.double(pargs$releps), as.double(pargs$abseps))
+            ret <- .Call(R_MaximumTest, object, as.integer(alt), as.integer(pvalue), 
+                         as.integer(lower), as.integer(log), as.integer(PermutedStatistics),
+                         as.integer(pargs$maxpts), as.double(pargs$releps), 
+                         as.double(pargs$abseps))
             if (teststat == "scalar") {
                 var <- if (object$varonly) object$Variance else object$Covariance
                 ret$TestStatistic <- object$LinearStatistic - object$Expectation
@@ -671,11 +669,10 @@ doTest <- function@<doTest Prototype@>
             }
         }
     } else {
-        ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered),
-                     as.integer(test), as.integer(minbucket),
-                     as.integer(lower), as.integer(log))
-        if (!PermutedStatistics) ret$PermutedStatistics <- NULL
+        ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered), as.integer(test), 
+                     as.integer(minbucket), as.integer(lower), as.integer(log))
     }
+    if (!PermutedStatistics) ret$PermutedStatistics <- NULL
     ret
 }
 @}
@@ -2130,35 +2127,7 @@ void RC_ExpectationCovarianceStatistic_2d
 SEXP ans
 ) {
 
-    SEXP Rcsum, Rrsum;
-    int P, Q, Lxp1, Lyp1, B, Xfactor;
-    double *ExpInf, *ExpX, *CovX;
-    double *table, *table2d, *csum, *rsum, *sumweights, *btab, *linstat;
-
-    P = C_get_P(ans);
-    Q = C_get_Q(ans);
-
-    ExpInf = C_get_ExpectationInfluence(ans);
-    ExpX = C_get_ExpectationX(ans);
-    table = C_get_Table(ans);
-    sumweights = C_get_Sumweights(ans);
-
-    Lxp1 = C_get_dimTable(ans)[0];
-    Lyp1 = C_get_dimTable(ans)[1];
-    B = C_get_B(ans);
-    Xfactor = C_get_Xfactor(ans);
-
-    if (C_get_varonly(ans)) {
-        CovX = Calloc(P, double);
-    } else {
-        CovX = Calloc(P * (P + 1) / 2, double);
-    }
-
-    table2d = Calloc(Lxp1 * Lyp1, double);
-    PROTECT(Rcsum = allocVector(REALSXP, Lyp1));
-    csum = REAL(Rcsum);
-    PROTECT(Rrsum = allocVector(REALSXP, Lxp1));
-    rsum = REAL(Rrsum);
+    @<2d Memory@>
 
     @<2d Total Table@>
 
@@ -2191,9 +2160,43 @@ SEXP ans
 @|RC_ExpectationCovarianceStatistic
 @}
 
+@d 2d Memory
+@{
+SEXP Rcsum, Rrsum;
+int P, Q, Lxp1, Lyp1, B, Xfactor;
+double *ExpInf, *ExpX, *CovX;
+double *table, *table2d, *csum, *rsum, *sumweights, *btab, *linstat;
+
+P = C_get_P(ans);
+Q = C_get_Q(ans);
+
+ExpInf = C_get_ExpectationInfluence(ans);
+ExpX = C_get_ExpectationX(ans);
+table = C_get_Table(ans);
+sumweights = C_get_Sumweights(ans);
+
+Lxp1 = C_get_dimTable(ans)[0];
+Lyp1 = C_get_dimTable(ans)[1];
+B = C_get_B(ans);
+Xfactor = C_get_Xfactor(ans);
+
+if (C_get_varonly(ans)) {
+    CovX = Calloc(P, double);
+} else {
+    CovX = Calloc(P * (P + 1) / 2, double);
+}
+
+table2d = Calloc(Lxp1 * Lyp1, double);
+PROTECT(Rcsum = allocVector(REALSXP, Lyp1));
+csum = REAL(Rcsum);
+PROTECT(Rrsum = allocVector(REALSXP, Lxp1));
+rsum = REAL(Rrsum);
+@}
+
+
 <<permutations-2d>>=
-LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
-LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
+LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, 
+              weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
 @@
 
 @d R\_PermutedLinearStatistic\_2d Prototype
@@ -2437,15 +2440,16 @@ PQ = P * Q;
 
 if (C_get_varonly(LECV) && PQ > 1)
         error("cannot compute adjusted p-value based on variances only");
-if (C_get_nresample(LECV) > 0 && INTEGER(PermutedStatistics)[0]) {
+/*  if (C_get_nresample(LECV) > 0 && INTEGER(PermutedStatistics)[0]) { */
     PROTECT(ans = allocVector(VECSXP, 3));
     PROTECT(names = allocVector(STRSXP, 3));
     SET_VECTOR_ELT(ans, 2, permstat = allocVector(REALSXP, C_get_nresample(LECV)));
     SET_STRING_ELT(names, 2, mkChar("PermutedStatistics"));
-} else {
+/*  } else {
     PROTECT(ans = allocVector(VECSXP, 2));
     PROTECT(names = allocVector(STRSXP, 2));
 }
+*/
 SET_VECTOR_ELT(ans, 0, stat = allocVector(REALSXP, 1));
 SET_STRING_ELT(names, 0, mkChar("TestStatistic"));
 SET_VECTOR_ELT(ans, 1, pval = allocVector(REALSXP, 1));
@@ -2490,14 +2494,9 @@ SEXP R_MaximumTest
     } else {
         cv = C_get_Covariance(LECV);
     }
-
     REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LECV),
-                               C_get_Expectation(LECV),
-                               cv, /* C_get_Covariance(LECV), */
-                               C_get_varonly(LECV),
-                               C_get_tol(LECV),
-                               INTEGER(alternative)[0]);
-
+        C_get_Expectation(LECV), cv, C_get_varonly(LECV), C_get_tol(LECV),
+        INTEGER(alternative)[0]);
     if (!PVALUE) {
         UNPROTECT(2);
         return(ans);
@@ -2509,16 +2508,13 @@ SEXP R_MaximumTest
             UNPROTECT(2);
             return(ans);
         }
-
         REAL(pval)[0] = C_maxtype_pvalue(REAL(stat)[0], cv, 
-                                         PQ, INTEGER(alternative)[0], LOWER, GIVELOG, 
-                                         INTEGER(maxpts)[0], REAL(releps)[0],
-                                         REAL(abseps)[0], C_get_tol(LECV));
+            PQ, INTEGER(alternative)[0], LOWER, GIVELOG, INTEGER(maxpts)[0], 
+            REAL(releps)[0], REAL(abseps)[0], C_get_tol(LECV));
     } else {
         nresample = C_get_nresample(LECV);
         ls = C_get_PermutedLinearStatistic(LECV);
         ex = C_get_Expectation(LECV);
-/*        cv = C_get_Covariance(LECV); */
         vo = C_get_varonly(LECV);
         alt = INTEGER(alternative)[0];
         st = REAL(stat)[0];
@@ -2527,17 +2523,14 @@ SEXP R_MaximumTest
         for (R_xlen_t np = 0; np < nresample; np++) {
             pst = C_maxtype(PQ, ls + PQ * np, ex, cv, vo, tl, alt);
             if (alt == ALTERNATIVE_less) {
-                if (LE(pst, st, tl))
-                    greater++;
+                if (LE(pst, st, tl)) greater++;
             } else {
-                if (GE(pst, st, tl))
-                    greater++;
+                if (GE(pst, st, tl)) greater++;
             }
             if (PSTAT) REAL(permstat)[np] = pst;
         }
         REAL(pval)[0] = C_perm_pvalue(greater, nresample, LOWER, GIVELOG);
     }
-
     UNPROTECT(2);
     return(ans);
 }
@@ -3140,6 +3133,7 @@ void C_ordered_Xfactor
     @<Compute maxstat Permutation P-Value@>
     Free(mlinstat); Free(mexpect); Free(mblinstat); 
     Free(mvar); Free(mcovar); Free(mMPinv);
+    if (nresample == 0) Free(blinstat);
 }
 @|C_ordered_Xfactor
 @}
@@ -3162,6 +3156,8 @@ if (B > 1) {
     if (C_get_varonly(LECV))
         error("need covarinance for maximally statistics with blocks");
     covar = C_get_Covariance(LECV);
+} else {
+    covar = C_get_Variance(LECV); /* make -Wall happy */
 }
 linstat = C_get_LinearStatistic(LECV);
 expect = C_get_Expectation(LECV);
@@ -3194,6 +3190,7 @@ if (nresample > 0) {
     mblinstat = Calloc(Q * nresample, double);
 } else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
     mblinstat = Calloc(1, double);
+    blinstat = Calloc(1, double);
 }
 
 maxstat[0] = 0.0;
@@ -3325,6 +3322,7 @@ void C_unordered_Xfactor
 
     Free(mlinstat); Free(mexpect); Free(levels); Free(contrast); Free(indl); Free(mtmp);
     Free(mblinstat); Free(mvar); Free(mcovar); Free(mMPinv);
+    if (nresample == 0) Free(blinstat);
 }
 @|C_unordered_Xfactor
 @}
@@ -4307,51 +4305,9 @@ void RC_KronSums
 @<RC\_KronSums Prototype@>
 {
     if (TYPEOF(x) == INTSXP) {
-        if (SYMMETRIC) error("not implemented");
-        if (CENTER) error("not implemented");
-    if (TYPEOF(weights) == INTSXP) {
-        if (TYPEOF(subset) == INTSXP) {
-            C_XfactorKronSums_iweights_isubset(INTEGER(x), N, P, y, Q, 
-                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
-                                        offset, Nsubset, PQ_ans);
-        } else {
-            C_XfactorKronSums_iweights_dsubset(INTEGER(x), N, P, y, Q, 
-                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
-                                        offset, Nsubset, PQ_ans);
-        }
+        @<KronSums Integer x@>
     } else {
-        if (TYPEOF(subset) == INTSXP) {
-            C_XfactorKronSums_dweights_isubset(INTEGER(x), N, P, y, Q, 
-                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
-                                        offset, Nsubset, PQ_ans);
-        } else {
-            C_XfactorKronSums_dweights_dsubset(INTEGER(x), N, P, y, Q, 
-                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
-                                        offset, Nsubset, PQ_ans);
-        }
-    }
-    } else {
-    if (TYPEOF(weights) == INTSXP) {
-        if (TYPEOF(subset) == INTSXP) {
-            C_KronSums_iweights_isubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
-                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
-                                        offset, Nsubset, PQ_ans);
-        } else {
-            C_KronSums_iweights_dsubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
-                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
-                                        offset, Nsubset, PQ_ans);
-        }
-    } else {
-        if (TYPEOF(subset) == INTSXP) {
-            C_KronSums_dweights_isubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
-                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
-                                        offset, Nsubset, PQ_ans);
-        } else {
-            C_KronSums_dweights_dsubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
-                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
-                                        offset, Nsubset, PQ_ans);
-        }
-    }
+        @<KronSums Double x@>
     }
 }
 @|RC_KronSums
@@ -4382,6 +4338,58 @@ void RC_KronSums
 @d C KronSums Answer
 @{
     double *PQ_ans
+@}
+
+@d KronSums Integer x
+@{
+if (SYMMETRIC) error("not implemented");
+if (CENTER) error("not implemented");
+if (TYPEOF(weights) == INTSXP) {
+    if (TYPEOF(subset) == INTSXP) {
+        C_XfactorKronSums_iweights_isubset(INTEGER(x), N, P, y, Q, 
+            INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+            offset, Nsubset, PQ_ans);
+    } else {
+        C_XfactorKronSums_iweights_dsubset(INTEGER(x), N, P, y, Q, 
+            INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+            offset, Nsubset, PQ_ans);
+    }
+} else {
+    if (TYPEOF(subset) == INTSXP) {
+        C_XfactorKronSums_dweights_isubset(INTEGER(x), N, P, y, Q, 
+            REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+            offset, Nsubset, PQ_ans);
+    } else {
+        C_XfactorKronSums_dweights_dsubset(INTEGER(x), N, P, y, Q, 
+            REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+            offset, Nsubset, PQ_ans);
+    }
+}
+@}
+
+@d KronSums Double x
+@{
+if (TYPEOF(weights) == INTSXP) {
+    if (TYPEOF(subset) == INTSXP) {
+        C_KronSums_iweights_isubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+            INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+            offset, Nsubset, PQ_ans);
+    } else {
+        C_KronSums_iweights_dsubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+            INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+            offset, Nsubset, PQ_ans);
+    }
+} else {
+    if (TYPEOF(subset) == INTSXP) {
+        C_KronSums_dweights_isubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+            REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+            offset, Nsubset, PQ_ans);
+    } else {
+        C_KronSums_dweights_dsubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
+            REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+            offset, Nsubset, PQ_ans);
+    }
+}
 @}
 
 @d C\_KronSums\_dweights\_dsubset
@@ -6637,13 +6645,10 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
     int PQ; 
 
     @<Memory Input Checks@>
-
     PQ = P * Q;
-
     @<Memory Names@>
 
-    /* Table_SLOT is always last and only used in 2d case
-       ie omitted here */
+    /* Table_SLOT is always last and only used in 2d case, ie omitted here */
     PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));
     SET_VECTOR_ELT(ans, LinearStatistic_SLOT, allocVector(REALSXP, PQ));
     SET_VECTOR_ELT(ans, Expectation_SLOT, allocVector(REALSXP, PQ));
@@ -6792,7 +6797,7 @@ SEXP RC_init_LECV_2d
 @{
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 2017-10-27
+Date: 2017-12-12
 Version: 1.0-0
 Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@@R-project.org")
