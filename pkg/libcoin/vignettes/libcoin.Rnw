@@ -10559,8 +10559,8 @@ stopifnot(isequal(K1, K2))
 \mbox{}\verb@@\\
 \mbox{}\verb@Package: libcoin@\\
 \mbox{}\verb@Title: Linear Test Statistics for Permutation Inference@\\
-\mbox{}\verb@Date: 2017-12-12@\\
-\mbox{}\verb@Version: 1.0-0@\\
+\mbox{}\verb@Date: 2017-12-13@\\
+\mbox{}\verb@Version: 1.0-1@\\
 \mbox{}\verb@Authors@{\tt @}\verb@R: person("Torsten", "Hothorn", role = c("aut", "cre"),@\\
 \mbox{}\verb@                  email = "Torsten.Hothorn@{\tt @}\verb@R-project.org")@\\
 \mbox{}\verb@Description: Basic infrastructure for linear test statistics and permutation@\\
