@@ -1,11 +1,39 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-
-\section{Changes in version 1.2-2 (2017-11-28)}{
+\section{Changes in version 1.3-0 (20YY-MM-DD)}{
+  \subsection{New features}{
     \itemize{
-      \item Move \pkg{libcoin} regression tests to \pkg{libcoin} 1.0-0.
+      \item
     }
+  }
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{User-visible changes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Other changes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Deprecated and defunct}{
+    \itemize{
+      \item
+    }
+  }
+}
+\section{Changes in version 1.2-2 (2017-11-28)}{
+  \subsection{Other changes}{
+    \itemize{
+      \item \pkg{libcoin} regression tests are now in \pkg{libcoin} 1.0-0.
+    }
+  }
 }
 \section{Changes in version 1.2-1 (2017-07-16)}{
   \subsection{Bug fixes}{
@@ -90,9 +118,12 @@
   }
   \subsection{User-visible changes}{
     \itemize{
-      \item Version 1.0-5 of the \pkg{mvtnorm} package is now required.
-
       \item Documentation updates.
+    }
+  }
+  \subsection{Other changes}{
+    \itemize{
+      \item Version 1.0-5 of the \pkg{mvtnorm} package is now required.
     }
   }
 }
@@ -473,8 +504,11 @@
       \item The package manual has been completely revised.
 
       \item The memory consumption during computations has been reduced.
-
-      \item Henric Winell, a long-term collaborator who donated almost all
+    }
+  }
+  \subsection{Other changes}{
+    \itemize{
+      \item Henric Winell, a long-time collaborator who donated almost all
       changes in \pkg{coin} 1.1-0, is now listed as author.  Welcome on board,
       Henric!
     }
