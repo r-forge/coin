@@ -26,6 +26,11 @@
     }
   }
 }
+\section{Changes in version 1.2-2 (2017-11-28)}{
+  \itemize{
+    \item Move \pkg{libcoin} regression tests to \pkg{libcoin} 1.0-0.
+  }
+}
 \section{Changes in version 1.2-1 (2017-07-16)}{
   \subsection{Bug fixes}{
     \itemize{
