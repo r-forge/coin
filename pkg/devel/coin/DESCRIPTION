@@ -3,7 +3,8 @@ Version: 2.0-0
 Date: 20YY-MM-DD
 Title: Conditional Inference Procedures in a Permutation Test Framework
 Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
-                    email = "Torsten.Hothorn@R-project.org"),
+                    email = "Torsten.Hothorn@R-project.org",
+                    comment = c(ORCID = "0000-0001-8301-0471")),
              person("Kurt", "Hornik", role = "aut"),
              person("Mark A.", "van de Wiel", role = "aut"),
              person("Henric", "Winell", role = "aut"),
