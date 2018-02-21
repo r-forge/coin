@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2016-11-01 r71616) -- "Unsuffered Consequences"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R Under development (unstable) (2018-02-20 r74280) -- "Unsuffered Consequences"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -92,9 +92,9 @@ Loading required package: survival
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "asympt"))
 [1] 0.1794892
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx"))
-[1] 0.1783
+[1] 0.1956
 99 percent confidence interval:
- 0.1685459 0.1883622 
+ 0.1854798 0.2060117 
 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact"))
 [1] 0.1847028
@@ -105,9 +105,9 @@ Loading required package: survival
 0.08974461 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx",
 +                    alternative = "less"))
-[1] 0.0951
+[1] 0.0885
 99 percent confidence interval:
- 0.08768812 0.10290050 
+ 0.08133160 0.09606348 
 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact",
 +                    alternative = "less"))
@@ -119,9 +119,9 @@ Loading required package: survival
 0.9102554 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx",
 +                    alternative = "greater"))
-[1] 0.9067
+[1] 0.9158
 99 percent confidence interval:
- 0.8989630 0.9140466 
+ 0.9083975 0.9228033 
 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "exact",
 +                    alternative = "greater"))
@@ -750,4 +750,4 @@ Error in SR_shift_1sample(object, fact = attr(int, "fact")) :
 > 
 > proc.time()
    user  system elapsed 
-   1.71    0.14    1.84 
+   1.56    0.12    1.68 

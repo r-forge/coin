@@ -176,9 +176,9 @@ alternative hypothesis: two.sided
 +     distribution = "approxima ..." ... [TRUNCATED] 
 
 > pvalue(it)
-[1] 0
+[1] 1e-04
 99 percent confidence interval:
- 0.0000000000 0.0005296914 
+ 5.012541e-07 7.427741e-04 
 
 
 > pvalue(it, method = "single-step")
@@ -186,14 +186,14 @@ Warning in .local(object, ...) :
   p-values may be incorrect due to violation
   of the subset pivotality condition
                
-II - I   0.6541
-III - I  0.0403
-IV - I   0.0247
-III - II 0.0002
-IV - II  0.0000
-IV - III 0.9990
+II - I   0.6618
+III - I  0.0399
+IV - I   0.0228
+III - II 0.0001
+IV - II  0.0001
+IV - III 0.9989
 
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-  1.468   0.040   1.503 
+   1.20    0.03    1.29 

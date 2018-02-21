@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2017-07-02 r72880) -- "Unsuffered Consequences"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R Under development (unstable) (2018-02-20 r74280) -- "Unsuffered Consequences"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -2640,26 +2640,26 @@ Error in .local(object, ...) :
 > it_ums <- independence_test(y1 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "scalar")
 > (dp_ums <- dperm(it_ums, 0:1))
-[1] 0.0311 0.0000
+[1] 0.0334 0.0000
 > stopifnot(isequal(dp_ums, c(dperm(it_ums, 0), dperm(it_ums, 1))))
 > (pp_ums <- pperm(it_ums, 0:1))
-[1] 0.5251 0.8457
+[1] 0.5210 0.8487
 > stopifnot(isequal(pp_ums, c(pperm(it_ums, 0), pperm(it_ums, 1))))
 > (qp_ums <- qperm(it_ums, c(0.5, 0.75)))
 [1] 0.0000000 0.6803361
 > stopifnot(isequal(qp_ums, c(qperm(it_ums, 0.5), qperm(it_ums, 0.75))))
 > (pv_ums <- pvalue(it_ums@distribution, 0:1))
-[1] 1.0000 0.3181
+[1] 1.0000 0.3117
 > stopifnot(isequal(pv_ums, c(pvalue(it_ums@distribution, 0),
 +                             pvalue(it_ums@distribution, 1))))
 > (mp_ums <- midpvalue(it_ums@distribution, 0:1))
-[1] 0.9689 0.3181
+[1] 0.9666 0.3117
 > stopifnot(isequal(mp_ums, c(midpvalue(it_ums@distribution, 0),
 +                             midpvalue(it_ums@distribution, 1))))
 > (pi_ums <- pvalue_interval(it_ums@distribution, 0:1))
       [,1]   [,2]
-p_0 0.9378 0.3181
-p_1 1.0000 0.3181
+p_0 0.9332 0.3117
+p_1 1.0000 0.3117
 > stopifnot(isequal(pi_ums, cbind(pvalue_interval(it_ums@distribution, 0),
 +                                 pvalue_interval(it_ums@distribution, 1))))
 > 
@@ -2667,26 +2667,26 @@ p_1 1.0000 0.3181
 > it_umq <- independence_test(y1 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "quad")
 > (dp_umq <- dperm(it_umq, 0:1))
-[1] 0.0316 0.0000
+[1] 0.0328 0.0000
 > stopifnot(isequal(dp_umq, c(dperm(it_umq, 0), dperm(it_umq, 1))))
 > (pp_umq <- pperm(it_umq, 0:1))
-[1] 0.0316 0.6813
+[1] 0.0328 0.6853
 > stopifnot(isequal(pp_umq, c(pperm(it_umq, 0), pperm(it_umq, 1))))
 > (qp_umq <- qperm(it_umq, c(0.5, 0.75)))
-[1] 0.4628571 1.4628571
+[1] 0.4628571 1.2857143
 > stopifnot(isequal(qp_umq, c(qperm(it_umq, 0.5), qperm(it_umq, 0.75))))
 > (pv_umq <- pvalue(it_umq@distribution, 0:1))
-[1] 1.0000 0.3187
+[1] 1.0000 0.3147
 > stopifnot(isequal(pv_umq, c(pvalue(it_umq@distribution, 0),
 +                             pvalue(it_umq@distribution, 1))))
 > (mp_umq <- midpvalue(it_umq@distribution, 0:1))
-[1] 0.9842 0.3187
+[1] 0.9836 0.3147
 > stopifnot(isequal(mp_umq, c(midpvalue(it_umq@distribution, 0),
 +                             midpvalue(it_umq@distribution, 1))))
 > (pi_umq <- pvalue_interval(it_umq@distribution, 0:1))
       [,1]   [,2]
-p_0 0.9684 0.3187
-p_1 1.0000 0.3187
+p_0 0.9672 0.3147
+p_1 1.0000 0.3147
 > stopifnot(isequal(pi_umq, cbind(pvalue_interval(it_umq@distribution, 0),
 +                                 pvalue_interval(it_umq@distribution, 1))))
 > 
@@ -2694,26 +2694,26 @@ p_1 1.0000 0.3187
 > it_mmm <- independence_test(y1 + y2 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "max")
 > (dp_mmm <- dperm(it_mmm, 0:1))
-[1] 0.0012 0.0000
+[1] 0.0017 0.0000
 > stopifnot(isequal(dp_mmm, c(dperm(it_mmm, 0), dperm(it_mmm, 1))))
 > (pp_mmm <- pperm(it_mmm, 0:1))
-[1] 0.0012 0.4571
+[1] 0.0017 0.4639
 > stopifnot(isequal(pp_mmm, c(pperm(it_mmm, 0), pperm(it_mmm, 1))))
 > (qp_mmm <- qperm(it_mmm, c(0.5, 0.75)))
 [1] 1.058301 1.511858
 > stopifnot(isequal(qp_mmm, c(qperm(it_mmm, 0.5), qperm(it_mmm, 0.75))))
 > (pv_mmm <- pvalue(it_mmm@distribution, 0:1))
-[1] 1.0000 0.5429
+[1] 1.0000 0.5361
 > stopifnot(isequal(pv_mmm, c(pvalue(it_mmm@distribution, 0),
 +                             pvalue(it_mmm@distribution, 1))))
 > (mp_mmm <- midpvalue(it_mmm@distribution, 0:1))
-[1] 0.9988 0.5429
+[1] 0.9983 0.5361
 > stopifnot(isequal(mp_mmm, c(midpvalue(it_mmm@distribution, 0),
 +                             midpvalue(it_mmm@distribution, 1))))
 > (pi_mmm <- pvalue_interval(it_mmm@distribution, 0:1))
       [,1]   [,2]
-p_0 0.9976 0.5429
-p_1 1.0000 0.5429
+p_0 0.9966 0.5361
+p_1 1.0000 0.5361
 > stopifnot(isequal(pi_mmm, cbind(pvalue_interval(it_mmm@distribution, 0),
 +                                 pvalue_interval(it_mmm@distribution, 1))))
 > 
@@ -2721,26 +2721,26 @@ p_1 1.0000 0.5429
 > it_mmq <- independence_test(y1 + y2 ~ x,  data = dta,
 +                             distribution = "approximate", teststat = "quad")
 > (dp_mmq <- dperm(it_mmq, 0:1))
-[1] 0.0015 0.0000
+[1] 7e-04 0e+00
 > stopifnot(isequal(dp_mmq, c(dperm(it_mmq, 0), dperm(it_mmq, 1))))
 > (pp_mmq <- pperm(it_mmq, 0:1))
-[1] 0.0015 0.3783
+[1] 0.0007 0.3821
 > stopifnot(isequal(pp_mmq, c(pperm(it_mmq, 0), pperm(it_mmq, 1))))
 > (qp_mmq <- qperm(it_mmq, c(0.5, 0.75)))
-[1] 1.472861 2.875774
+[1] 1.465562 2.820424
 > stopifnot(isequal(qp_mmq, c(qperm(it_mmq, 0.5), qperm(it_mmq, 0.75))))
 > (pv_mmq <- pvalue(it_mmq@distribution, 0:1))
-[1] 1.0000 0.6217
+[1] 1.0000 0.6179
 > stopifnot(isequal(pv_mmq, c(pvalue(it_mmq@distribution, 0),
 +                             pvalue(it_mmq@distribution, 1))))
 > (mp_mmq <- midpvalue(it_mmq@distribution, 0:1))
-[1] 0.99925 0.62170
+[1] 0.99965 0.61790
 > stopifnot(isequal(mp_mmq, c(midpvalue(it_mmq@distribution, 0),
 +                             midpvalue(it_mmq@distribution, 1))))
 > (pi_mmq <- pvalue_interval(it_mmq@distribution, 0:1))
       [,1]   [,2]
-p_0 0.9985 0.6217
-p_1 1.0000 0.6217
+p_0 0.9993 0.6179
+p_1 1.0000 0.6179
 > stopifnot(isequal(pi_mmq, cbind(pvalue_interval(it_mmq@distribution, 0),
 +                                 pvalue_interval(it_mmq@distribution, 1))))
 > 
@@ -2800,4 +2800,4 @@ p_1 1.0000000 0.3149992
 > 
 > proc.time()
    user  system elapsed 
-   4.45    0.65    5.12 
+   4.40    0.48    4.84 

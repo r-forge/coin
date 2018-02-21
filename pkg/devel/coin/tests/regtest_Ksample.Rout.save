@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2016-11-01 r71616) -- "Unsuffered Consequences"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R Under development (unstable) (2018-02-20 r74280) -- "Unsuffered Consequences"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -74,7 +74,7 @@ Error in .local(.Object, ...) : 'block' is not a factor
 > 
 > ### sanity checks
 > try(fligner_test(x ~ y, data = dat))
-Error in fligner_test.IndependenceProblem(object = <S4 object of class structure("IndependenceProblem", package = "coin")>) : 
+Error in fligner_test.IndependenceProblem(object = new("IndependenceProblem",  : 
   'x' is not a numeric variable
 > try(fligner_test(x ~ y | y, data = dat))
 Error in .local(.Object, ...) : 'block' is not a factor
@@ -625,4 +625,4 @@ alternative hypothesis: greater
 > 
 > proc.time()
    user  system elapsed 
-   1.37    0.03    1.40 
+   1.28    0.09    1.37 

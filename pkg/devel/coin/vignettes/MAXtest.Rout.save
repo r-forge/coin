@@ -86,9 +86,9 @@ Total  &  24 & 99 & 123  \\
 
 > for (i in 1:nrow(out)) cat(rownames(out)[i], " & ", 
 +     paste(out[i, ], collapse = " & "), "\\\\ \n")
-dominant  &  18 & 16.5854 & 2.0391 & 0.6938 & 0.3907 & 0.3326 \\ 
-additive  &  28 & 22.4390 & 3.2687 & 1.7013 & 0.0868 & 0.0681 \\ 
-recessive  &  10 & 5.8537 & 1.8951 & 2.1879 & 0.0303 & 0.0374 \\ 
+dominant  &  18 & 16.5854 & 2.0391 & 0.6938 & 0.3907 & 0.3302 \\ 
+additive  &  28 & 22.4390 & 3.2687 & 1.7013 & 0.0868 & 0.0654 \\ 
+recessive  &  10 & 5.8537 & 1.8951 & 2.1879 & 0.0303 & 0.0359 \\ 
 
 > xtable(xtabs(~IL1B_511 + group + gender, data = psoriasis))
 Male  &  &  Control & Early Onset & Late Onset & Total \\ \hline 
@@ -155,9 +155,9 @@ recessive  &  0.7241&0.9819 \\
 
 > for (i in 1:nrow(out)) cat(rownames(out)[i], " & ", 
 +     paste(out[i, ], collapse = " & "), "\\\\ \n")
-dominant  &  337 & 320.4287 & 7.0531 & 2.3495 & 0.0207 & 0.0113 \\ 
-additive  &  438 & 404.0265 & 10.1618 & 3.3433 & 0.0012 & 7e-04 \\ 
-recessive  &  101 & 83.5979 & 5.2912 & 3.2889 & 0.0012 & 9e-04 \\ 
+dominant  &  337 & 320.4287 & 7.0531 & 2.3495 & 0.0207 & 0.0112 \\ 
+additive  &  438 & 404.0265 & 10.1618 & 3.3433 & 0.0012 & 0.001 \\ 
+recessive  &  101 & 83.5979 & 5.2912 & 3.2889 & 0.0012 & 0.0013 \\ 
 
 > me <- as.table(matrix(c(6, 8, 10, 32, 47, 20), byrow = TRUE, 
 +     nrow = 2, dimnames = list(Group = c("In situ", "Control"), 
@@ -252,4 +252,4 @@ alternative hypothesis: greater
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 11.796   0.060  11.855 
+  10.82    0.04   10.92 
