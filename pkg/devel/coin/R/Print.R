@@ -120,12 +120,12 @@ setMethod("show",
 )
 
 print.ci <- function(x, ...) {
-    if(!is.null(x$conf.int)) {
+    if (hasName(x, "conf.int")) {
         cat(format(100 * attr(x$conf.int, "conf.level")),
             "percent confidence interval:\n",
             format(c(x$conf.int[1], x$conf.int[2])), "\n")
     }
-    if(!is.null(x$estimate)) {
+    if (hasName(x, "estimate")) {
         cat("sample estimates:\n")
         print(x$estimate, ...)
     }
@@ -144,6 +144,6 @@ print.MCp <- function(x, ...) {
 
 print.cutpoint <- function(x, ...) {
     cat(paste0("  ", dQuote("best"), " cutpoint: ", x$label, "\n"))
-    if (!is.null(x$covariable))
+    if (hasName(x, "covariable"))
         cat(paste0("       covariable: ", x$covariable, "\n"))
 }
