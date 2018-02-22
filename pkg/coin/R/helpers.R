@@ -537,3 +537,8 @@ if (getRversion() < "3.2.0") {
     lengths <- function(x, use.names = TRUE)
         vapply(x, length, NA_integer_, USE.NAMES = use.names)
 }
+
+if (getRversion() < "3.4.0") {
+    hasName <- function(x, name) match(name, names(x), nomatch = 0L) > 0L
+} else
+    hasName <- utils::hasName
