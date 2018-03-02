@@ -44,7 +44,7 @@
   }
   \subsection{User-visible changes}{
     \itemize{
-      \item
+      \item The Pearson chi-squared test is now computed more efficiently.
     }
   }
   \subsection{Other changes}{
