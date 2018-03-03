@@ -38,6 +38,10 @@ ptwo <- drop(mantelhaen.test(table(dat$y, dat$x, dat$block),
 stopifnot(isequal(pvalue(cmh_test(y ~ x | block, data = dat)), ptwo))
 stopifnot(isequal(pvalue(cmh_test(table(dat$y, dat$x, dat$block))), ptwo))
 
+### Linear-by-linear Test, asymptotic distribution
+lbl_test(y ~ x | block, data = dat)
+lbl_test(table(dat$y, dat$x, dat$block))
+
 
 ### generate data: r x c x K
 dat <- data.frame(x = gl(4, 25), y = gl(5, 20)[sample(1:100)],
@@ -51,12 +55,17 @@ ptwo <- drop(mantelhaen.test(table(dat$y, dat$x, dat$block),
 stopifnot(isequal(pvalue(cmh_test(y ~ x | block, data = dat)), ptwo))
 stopifnot(isequal(pvalue(cmh_test(table(dat$y, dat$x, dat$block))), ptwo))
 
+### Linear-by-linear Test, asymptotic distribution
+lbl_test(y ~ x | block, data = dat)
+lbl_test(table(dat$y, dat$x, dat$block))
+
 
 ### 2x2 table and maxstat
 x <- c(rep(1,51), rep(2,49))
 y <- factor(c(rep(0,49), rep(1,51)))[sample(1:100)]
-stopifnot(isequal(as.vector(statistic(independence_test(table(x, y)))),
-as.vector(statistic(maxstat_test(y ~ x )))))
+sit <- as.vector(statistic(independence_test(table(x, y))))
+stopifnot(isequal(as.vector(statistic(maxstat_test(y ~ x))), sit))
+stopifnot(isequal(as.vector(statistic(maxstat_test(table(x, y)))), sit))
 
 
 ### maxstat for multiple, ordered and unordered covariates

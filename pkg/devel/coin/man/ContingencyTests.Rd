@@ -30,7 +30,7 @@
 
 \method{lbl_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
 \method{lbl_test}{table}(object, \dots)
-\method{lbl_test}{IndependenceProblem}(object, distribution = c("asymptotic", "approximate", "none"), \dots)
+\method{lbl_test}{IndependenceProblem}(object, \dots)
 }
 \arguments{
   \item{formula}{
@@ -52,14 +52,6 @@
   \item{object}{
     an object inheriting from classes \code{"table"} or
     \code{"\linkS4class{IndependenceProblem}"}.
-  }
-  \item{distribution}{
-    a character, the conditional null distribution of the test statistic can be
-    approximated by its asymptotic distribution (\code{"asymptotic"}, default)
-    or via Monte Carlo resampling (\code{"approximate"}).  Alternatively, the
-    functions \code{\link{asymptotic}} or \code{\link{approximate}} can be used.
-    Computation of the null distribution can be suppressed by specifying
-    \code{"none"}.
   }
   \item{\dots}{
     further arguments to be passed to \code{\link{independence_test}}.
