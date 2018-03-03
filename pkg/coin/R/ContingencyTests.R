@@ -151,20 +151,16 @@ lbl_test.table <- function(object, ...) {
             c(list(object = table2IndependenceProblem(object)), list(...)))
 }
 
-lbl_test.IndependenceProblem <- function(object,
-    distribution = c("asymptotic", "approximate", "none"), ...) {
+lbl_test.IndependenceProblem <- function(object, ...) {
 
     ## convert factors to ordered
     object@x[] <- lapply(object@x, function(x)
-        if (is.factor(x) && nlevels(x) > 2) ordered(x) else x)
+        if (is.factor(x) && nlevels(x) > 2) as.ordered(x) else x)
     object@y[] <- lapply(object@y, function(y)
-        if (is.factor(y) && nlevels(y) > 2) ordered(y) else y)
+        if (is.factor(y) && nlevels(y) > 2) as.ordered(y) else y)
 
     args <- setup_args(
         teststat = "scalar",
-        distribution = check_distribution_arg(
-            distribution, values = c("asymptotic", "approximate", "none")
-        ),
         check = function(object) {
             if (!is_doubly_ordered(object))
                 stop(sQuote("object"),
