@@ -231,19 +231,29 @@ setGeneric("statistic",
 setMethod("statistic",
     signature = "IndependenceLinearStatistic",
     definition = function(object,
-        type = c("test", "linear", "standardized"), ...) {
+        type = c("test", "linear", "centered", "standardized"), ...) {
             nc <- ncol(object@ytrans)
             nr <- ncol(object@xtrans)
             type <- match.arg(type)
             dn <- statnames(object)$dimnames
             switch(type,
-                "test"         = stop(sQuote(paste("type =", dQuote("test"))),
-                                      " not defined for objects of class ",
-                                      dQuote("IndependenceLinearStatistic")),
-                "linear"       = matrix(object@linearstatistic,
-                                        nrow = nr, ncol = nc, dimnames = dn),
-                "standardized" = matrix(object@standardizedlinearstatistic,
-                                        nrow = nr, ncol = nc, dimnames = dn)
+                "test" = stop(
+                    sQuote(paste("type =", dQuote("test"))),
+                    " not defined for objects of class ",
+                    dQuote("IndependenceLinearStatistic")
+                ),
+                "linear" = matrix(
+                    object@linearstatistic,
+                    nrow = nr, ncol = nc, dimnames = dn
+                ),
+                "centered" = matrix(
+                    object@linearstatistic - object@expectation,
+                    nrow = nr, ncol = nc, dimnames = dn
+                ),
+                "standardized" = matrix(
+                    object@standardizedlinearstatistic,
+                    nrow = nr, ncol = nc, dimnames = dn
+                )
             )
     }
 )
@@ -251,17 +261,25 @@ setMethod("statistic",
 setMethod("statistic",
     signature = "IndependenceTestStatistic",
     definition = function(object,
-        type = c("test", "linear", "standardized"), ...) {
+        type = c("test", "linear", "centered", "standardized"), ...) {
             nc <- ncol(object@ytrans)
             nr <- ncol(object@xtrans)
             type <- match.arg(type)
             dn <- statnames(object)$dimnames
             switch(type,
-                "test"         = object@teststatistic,
-                "linear"       = matrix(object@linearstatistic,
-                                        nrow = nr, ncol = nc, dimnames = dn),
-                "standardized" = matrix(object@standardizedlinearstatistic,
-                                        nrow = nr, ncol = nc, dimnames = dn)
+                "test" = object@teststatistic,
+                "linear" = matrix(
+                    object@linearstatistic,
+                    nrow = nr, ncol = nc, dimnames = dn
+                ),
+                "centered" = matrix(
+                    object@linearstatistic - object@expectation,
+                    nrow = nr, ncol = nc, dimnames = dn
+                ),
+                "standardized" = matrix(
+                    object@standardizedlinearstatistic,
+                    nrow = nr, ncol = nc, dimnames = dn
+                )
             )
     }
 )
@@ -269,7 +287,7 @@ setMethod("statistic",
 setMethod("statistic",
     signature = "IndependenceTest",
     definition = function(object,
-        type = c("test", "linear", "standardized"), ...) {
+        type = c("test", "linear", "centered", "standardized"), ...) {
             statistic(object@statistic, type)
     }
 )

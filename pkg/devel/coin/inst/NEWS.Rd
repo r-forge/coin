@@ -34,7 +34,8 @@
 \section{Changes in version 1.3-0 (20YY-MM-DD)}{
   \subsection{New features}{
     \itemize{
-      \item
+      \item The centered linear statistic can now be extracted (see
+      \code{?statistic}).
     }
   }
   \subsection{Bug fixes}{
