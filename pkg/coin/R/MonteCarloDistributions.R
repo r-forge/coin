@@ -5,7 +5,7 @@ split_index <- function(n, by) {
             use.names = FALSE)
 }
 
-MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
+MonteCarlo <- function(x, y, block, weights, nresample, parallel, ncpus, cl) {
     ## expand observations for non-unit weights
     if (!is_unity(weights)) {
         idx <- rep.int(seq_along(weights), weights)
@@ -14,12 +14,12 @@ MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
         block <- block[idx]
     }
 
-    montecarlo <- function(B)
+    montecarlo <- function(nresample)
         .Call(R_MonteCarloIndependenceTest,
-              x, y, as.integer(block), as.integer(B))
+              x, y, as.integer(block), as.integer(nresample))
 
     if (parallel == "no")
-        montecarlo(B)
+        montecarlo(nresample)
     else {
         ## load the 'parallel' namespace if necessary
         if (!isNamespaceLoaded("parallel")) {
@@ -59,7 +59,7 @@ MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
             if (as.integer(ncpus) < 2L)
                 warning("parallel operation requires at least two processes")
             do.call("cbind",
-                    parallel::mclapply(split_index(B, ncpus),
+                    parallel::mclapply(split_index(nresample, ncpus),
                                        FUN = montecarlo, mc.cores = ncpus))
         } else {
             if (is.null(cl)) {
@@ -82,7 +82,7 @@ MonteCarlo <- function(x, y, block, weights, B, parallel, ncpus, cl) {
             if (ncpus < 2L)
                 warning("parallel operation requires at least two processes")
             do.call("cbind",
-                    parallel::clusterApply(cl, x = split_index(B, ncpus),
+                    parallel::clusterApply(cl, x = split_index(nresample, ncpus),
                                            fun = montecarlo))
         }
     }

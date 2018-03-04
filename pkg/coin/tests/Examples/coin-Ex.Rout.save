@@ -44,7 +44,7 @@ Loading required package: survival
 > CWD[1:6] <- 100 * CWD[1:6] # scaling (to avoid harmless warning)
 > mt <- maxstat_test(sample2 + sample3 + sample4 +
 +                    sample6 + sample7 + sample8 ~ trend, data = CWD,
-+                    distribution = approximate(B = 100000))
++                    distribution = approximate(nresample = 100000))
 > 
 > ## Absolute maximum of standardized statistics (t = 3.08)
 > statistic(mt)
@@ -100,7 +100,7 @@ chi-squared = 2.5714, df = 1, p-value = 0.1088
 > 
 > ## Approximative (Monte Carlo) Pearson chi-squared test
 > ct <- chisq_test(davis,
-+                  distribution = approximate(B = 10000))
++                  distribution = approximate(nresample = 10000))
 > pvalue(ct)          # standard p-value
 [1] 0.2849
 99 percent confidence interval:
@@ -296,7 +296,7 @@ alternative hypothesis: two.sided
 > 
 > ## Approximative (Monte Carlo) Pearson chi-squared test (Armitage, 1955, p. 379)
 > chisq_test(armitage,
-+            distribution = approximate(B = 10000)) # chi^2 = 5.91
++            distribution = approximate(nresample = 10000)) # chi^2 = 5.91
 
 	Approximative Pearson Chi-Squared Test
 
@@ -306,7 +306,7 @@ chi-squared = 5.9085, p-value = 0.1186
 > 
 > ## Approximative (Monte Carlo) Cochran-Armitage test (Armitage, 1955, p. 379)
 > (ct <- chisq_test(armitage,
-+                   distribution = approximate(B = 10000),
++                   distribution = approximate(nresample = 10000),
 +                   scores = list("Crater" = c(-1.5, -0.5, 0.5, 1.5))))
 
 	Approximative Linear-by-Linear Association Test
@@ -583,7 +583,7 @@ alternative hypothesis: true mu is greater than 0
 +                   hypothalamus + striatum + hippocampus ~ treatment,
 +                   data = benzos,
 +                   teststat = "quadratic",
-+                   distribution = approximate(B = 10000),
++                   distribution = approximate(nresample = 10000),
 +                   ytrafo = function(data)
 +                       trafo(data, numeric_trafo = rank_trafo)) # Q = 16.129
 
@@ -688,7 +688,7 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > ## Approximative (Monte Carlo) Fisher-Pitman test
 > pvalue(oneway_test(pd ~ age, data = diffusion,
-+                    distribution = approximate(B = 10000)))
++                    distribution = approximate(nresample = 10000)))
 [1] 0.1311
 99 percent confidence interval:
  0.1225338 0.1400198 
@@ -774,7 +774,7 @@ alternative hypothesis: true mu is not equal to 0
 > 
 > ## Approximative (Monte Carlo) Kruskal-Wallis test
 > kruskal_test(length ~ site, data = yoy,
-+              distribution = approximate(B = 10000))
++              distribution = approximate(nresample = 10000))
 
 	Approximative Kruskal-Wallis Test
 
@@ -786,7 +786,7 @@ chi-squared = 22.852, p-value < 2.2e-16
 > ## Hollander and Wolfe (1999, p. 244)
 > ## (where Steel-Dwass results are given)
 > it <- independence_test(length ~ site, data = yoy,
-+                         distribution = approximate(B = 50000),
++                         distribution = approximate(nresample = 50000),
 +                         ytrafo = function(data)
 +                             trafo(data, numeric_trafo = rank_trafo),
 +                         xtrafo = mcp_trafo(site = "Tukey"))
@@ -893,7 +893,7 @@ chi-squared = 8.0526, df = 3, p-value = 0.04494
 > 
 > ## Approximative Cochran Q test
 > mt <- mh_test(diphtheria ~ media | case, data = cochran,
-+               distribution = approximate(B = 10000))
++               distribution = approximate(nresample = 10000))
 > pvalue(mt)          # standard p-value
 [1] 0.0536
 99 percent confidence interval:
@@ -1146,7 +1146,7 @@ sample estimates:
 > ## Serial operation
 > set.seed(123)
 > cmh_test(disease ~ smoking | gender, data = alzheimer,
-+          distribution = approximate(B = 100000))
++          distribution = approximate(nresample = 100000))
 
 	Approximative Generalized Cochran-Mantel-Haenszel Test
 
@@ -1160,13 +1160,13 @@ chi-squared = 23.316, p-value = 0.00052
 > ##D ## Multicore with 8 processes (not for MS Windows)
 > ##D set.seed(123, kind = "L'Ecuyer-CMRG")
 > ##D cmh_test(disease ~ smoking | gender, data = alzheimer,
-> ##D          distribution = approximate(B = 100000,
+> ##D          distribution = approximate(nresample = 100000,
 > ##D                                     parallel = "multicore", ncpus = 8))
 > ##D 
 > ##D ## Automatic PSOCK cluster with 4 processes
 > ##D set.seed(123, kind = "L'Ecuyer-CMRG")
 > ##D cmh_test(disease ~ smoking | gender, data = alzheimer,
-> ##D          distribution = approximate(B = 100000,
+> ##D          distribution = approximate(nresample = 100000,
 > ##D                                     parallel = "snow", ncpus = 4))
 > ##D 
 > ##D ## Registered FORK cluster with 12 processes (not for MS Windows)
@@ -1174,7 +1174,7 @@ chi-squared = 23.316, p-value = 0.00052
 > ##D parallel::setDefaultCluster(fork12) # register default cluster
 > ##D set.seed(123, kind = "L'Ecuyer-CMRG")
 > ##D cmh_test(disease ~ smoking | gender, data = alzheimer,
-> ##D          distribution = approximate(B = 100000,
+> ##D          distribution = approximate(nresample = 100000,
 > ##D                                     parallel = "snow"))
 > ##D parallel::stopCluster(fork12) # clean-up
 > ##D 
@@ -1182,7 +1182,7 @@ chi-squared = 23.316, p-value = 0.00052
 > ##D psock8 <- parallel::makeCluster(8, "PSOCK") # set-up cluster
 > ##D set.seed(123, kind = "L'Ecuyer-CMRG")
 > ##D cmh_test(disease ~ smoking | gender, data = alzheimer,
-> ##D          distribution = approximate(B = 100000,
+> ##D          distribution = approximate(nresample = 100000,
 > ##D                                     parallel = "snow", cl = psock8))
 > ##D parallel::stopCluster(psock8) # clean-up
 > ## End(Not run)
@@ -1300,7 +1300,7 @@ alternative hypothesis: true ratio of scales is not equal to 1
 +     cbind("Location" = rank_trafo(y), "Scale" = ansari_trafo(y))
 > 
 > independence_test(counts ~ treatment, data = platelet,
-+                   distribution = approximate(B = 10000),
++                   distribution = approximate(nresample = 10000),
 +                   ytrafo = function(data)
 +                       trafo(data, numeric_trafo = lepage_trafo),
 +                   teststat = "quadratic")
@@ -1314,7 +1314,7 @@ chi-squared = 9.3384, p-value = 0.0042
 > ## Why was the null hypothesis rejected?
 > ## Note: maximum statistic instead of quadratic form
 > ltm <- independence_test(counts ~ treatment, data = platelet,
-+                          distribution = approximate(B = 10000),
++                          distribution = approximate(nresample = 10000),
 +                          ytrafo = function(data)
 +                              trafo(data, numeric_trafo = lepage_trafo))
 > 
@@ -1444,7 +1444,7 @@ alternative hypothesis: true theta is not equal to 1
 +                   rho = rho.gamma["rho"], gamma = rho.gamma["gamma"])
 > 
 > it <- independence_test(Surv(time, event) ~ group, data = lungcancer,
-+                         distribution = approximate(B = 10000),
++                         distribution = approximate(nresample = 10000),
 +                         ytrafo = function(data)
 +                             trafo(data, surv_trafo = lee_trafo))
 > pvalue(it, method = "step-down")
@@ -1783,7 +1783,7 @@ alternative hypothesis: greater
 > 
 > ## One-sided approximative (Monte Carlo) Page test
 > friedman_test(strength ~ potash | block, data = cotton, alternative = "greater",
-+               distribution = approximate(B = 10000))
++               distribution = approximate(nresample = 10000))
 
 	Approximative Page Test
 
@@ -1811,7 +1811,7 @@ alternative hypothesis: greater
 > ## Approximative (Monte Carlo) Friedman test
 > ## Quade (1979, p. 683)
 > friedman_test(y ~ x | b, data = dta,
-+               distribution = approximate(B = 10000)) # chi^2 = 6.000
++               distribution = approximate(nresample = 10000)) # chi^2 = 6.000
 
 	Approximative Friedman Test
 
@@ -1823,7 +1823,7 @@ chi-squared = 6, p-value = 0.0502
 > ## Approximative (Monte Carlo) Quade test
 > ## Quade (1979, p. 683)
 > (qt <- quade_test(y ~ x | b, data = dta,
-+                   distribution = approximate(B = 10000))) # W = 8.157
++                   distribution = approximate(nresample = 10000))) # W = 8.157
 
 	Approximative Quade Test
 
@@ -2316,7 +2316,7 @@ alternative hypothesis: true theta is not equal to 1
 > 
 > ## Stratified approximative (Monte Carlo) logrank test
 > logrank_test(Surv(time, event) ~ group | histology, data = glioma,
-+              distribution = approximate(B = 10000))
++              distribution = approximate(nresample = 10000))
 
 	Approximative Two-Sample Logrank Test
 
@@ -2371,7 +2371,7 @@ sample estimates:
 > ### ** Examples
 > 
 > ## Approximative (Monte Carlo) linear-by-linear association test
-> lbl_test(jobsatisfaction, distribution = approximate(B = 10000))
+> lbl_test(jobsatisfaction, distribution = approximate(nresample = 10000))
 
 	Approximative Linear-by-Linear Association Test
 
@@ -2403,7 +2403,8 @@ alternative hypothesis: two.sided
 > ## Note: midpoint scores (p < 0.05)
 > midpoints <- c(0, 0.5, 1.5, 4.0, 7.0)
 > chisq_test(malformation ~ consumption, data = malformations,
-+            distribution = approximate(B = 1000), alternative = "greater",
++            distribution = approximate(nresample = 1000),
++            alternative = "greater",
 +            scores = list(consumption = midpoints))
 
 	Approximative Linear-by-Linear Association Test
@@ -2417,7 +2418,8 @@ alternative hypothesis: greater
 > ## Note: midrank scores (p > 0.05)
 > midranks <- c(8557.5, 24375.5, 32013.0, 32473.0, 32555.5)
 > chisq_test(malformation ~ consumption, data = malformations,
-+            distribution = approximate(B = 1000), alternative = "greater",
++            distribution = approximate(nresample = 1000),
++            alternative = "greater",
 +            scores = list(consumption = midranks))
 
 	Approximative Linear-by-Linear Association Test
@@ -2430,7 +2432,8 @@ alternative hypothesis: greater
 > ## One-sided approximative (Monte Carlo) Cochran-Armitage test
 > ## Note: equally spaced scores (p > 0.05)
 > chisq_test(malformation ~ consumption, data = malformations,
-+            distribution = approximate(B = 1000), alternative = "greater")
++            distribution = approximate(nresample = 1000),
++            alternative = "greater")
 
 	Approximative Linear-by-Linear Association Test
 
@@ -2544,7 +2547,7 @@ control 0.007187993 0.0111254 0.0152947
 > ## One-sided approximative Fisher-Pitman test
 > oneway_test(pain ~ group, data = neuropathy,
 +             alternative = "less",
-+             distribution = approximate(B = 10000))
++             distribution = approximate(nresample = 10000))
 
 	Approximative Two-Sample Fisher-Pitman Permutation Test
 
@@ -2556,7 +2559,7 @@ alternative hypothesis: true mu is less than 0
 > ## One-sided approximative Wilcoxon-Mann-Whitney test
 > wilcox_test(pain ~ group, data = neuropathy,
 +             alternative = "less",
-+             distribution = approximate(B = 10000))
++             distribution = approximate(nresample = 10000))
 
 	Approximative Wilcoxon-Mann-Whitney Test
 
@@ -2568,7 +2571,7 @@ alternative hypothesis: true mu is less than 0
 > ## One-sided approximative Conover-Salsburg test
 > oneway_test(pain ~ group, data = neuropathy,
 +             alternative = "less",
-+             distribution = approximate(B = 10000),
++             distribution = approximate(nresample = 10000),
 +             ytrafo = function(data)
 +                 trafo(data, numeric_trafo = consal_trafo))
 
@@ -2582,7 +2585,7 @@ alternative hypothesis: true mu is less than 0
 > ## One-sided approximative maximum test for a range of 'a' values
 > it <- independence_test(pain ~ group, data = neuropathy,
 +                         alternative = "less",
-+                         distribution = approximate(B = 10000),
++                         distribution = approximate(nresample = 10000),
 +                         ytrafo = function(data)
 +                             trafo(data, numeric_trafo = function(y)
 +                                 consal_trafo(y, a = 2:7)))
@@ -2650,7 +2653,7 @@ control 0.2377 0.0994 0.062 0.0511 0.0483 0.0492
 > ## Approximative multivariate (all three responses) test
 > it <- independence_test(Surv(time, event) + Surv(dmin, tumor) + ntumor ~ group,
 +                         data = photocar,
-+                         distribution = approximate(B = 10000))
++                         distribution = approximate(nresample = 10000))
 > 
 > ## Global p-value
 > pvalue(it)
@@ -2725,7 +2728,7 @@ alternative hypothesis: true ratio of scales is not equal to 1
 > 
 > ## Approximative (Monte Carlo) bivariate Fisher-Pitman test
 > (it <- independence_test(y1 + y2 ~ x, data = dta2,
-+                          distribution = approximate(B = 10000)))
++                          distribution = approximate(nresample = 10000)))
 
 	Approximative General Independence Test
 
@@ -2774,7 +2777,7 @@ alternative hypothesis: two.sided
 > ## Approximative (Monte Carlo) Fisher-Pitman test with contrasts
 > ## Note: all pairwise comparisons
 > (it <- independence_test(length ~ site, data = yoy,
-+                          distribution = approximate(B = 10000),
++                          distribution = approximate(nresample = 10000),
 +                          xtrafo = mcp_trafo(site = "Tukey")))
 
 	Approximative General Independence Test
@@ -2995,7 +2998,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.91 0.09 10.01 NA NA 
+Time elapsed:  9.72 0.21 9.97 NA NA 
 > grDevices::dev.off()
 null device 
           1 

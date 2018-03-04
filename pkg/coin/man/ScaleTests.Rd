@@ -188,7 +188,7 @@ lepage_trafo <- function(y)
     cbind("Location" = rank_trafo(y), "Scale" = ansari_trafo(y))
 
 independence_test(counts ~ treatment, data = platelet,
-                  distribution = approximate(B = 10000),
+                  distribution = approximate(nresample = 10000),
                   ytrafo = function(data)
                       trafo(data, numeric_trafo = lepage_trafo),
                   teststat = "quadratic")
@@ -196,7 +196,7 @@ independence_test(counts ~ treatment, data = platelet,
 ## Why was the null hypothesis rejected?
 ## Note: maximum statistic instead of quadratic form
 ltm <- independence_test(counts ~ treatment, data = platelet,
-                         distribution = approximate(B = 10000),
+                         distribution = approximate(nresample = 10000),
                          ytrafo = function(data)
                              trafo(data, numeric_trafo = lepage_trafo))
 

@@ -32,6 +32,6 @@
 }
 \examples{
 ## Approximative (Monte Carlo) linear-by-linear association test
-lbl_test(jobsatisfaction, distribution = approximate(B = 10000))
+lbl_test(jobsatisfaction, distribution = approximate(nresample = 10000))
 }
 \keyword{datasets}

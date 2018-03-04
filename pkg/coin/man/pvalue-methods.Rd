@@ -184,7 +184,7 @@ dta2 <- data.frame(
 
 ## Approximative (Monte Carlo) bivariate Fisher-Pitman test
 (it <- independence_test(y1 + y2 ~ x, data = dta2,
-                         distribution = approximate(B = 10000)))
+                         distribution = approximate(nresample = 10000)))
 
 ## Global p-value
 pvalue(it)
@@ -214,7 +214,7 @@ yoy <- data.frame(
 ## Approximative (Monte Carlo) Fisher-Pitman test with contrasts
 ## Note: all pairwise comparisons
 (it <- independence_test(length ~ site, data = yoy,
-                         distribution = approximate(B = 10000),
+                         distribution = approximate(nresample = 10000),
                          xtrafo = mcp_trafo(site = "Tukey")))
 
 ## Joint distribution step-down p-values

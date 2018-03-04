@@ -198,14 +198,21 @@ setGeneric("ApproxNullDistribution",
 ### method for scalar test statistics
 setMethod("ApproxNullDistribution",
     signature = "ScalarIndependenceTestStatistic",
-    definition = function(object, B = 10000, ...) {
+    definition = function(object, nresample = 10000L, B, ...) {
+        ## <DEPRECATED>
+        if (!missing(B)) {
+            warning(sQuote("B"), " is deprecated; use ", sQuote("nresample"),
+                    " instead")
+            nresample <- B
+        }
+        ## </DEPRECATED>
         if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(B), ...)
+                       object@weights, as.integer(nresample), ...)
 
         ## <FIXME> can transform p, q, x instead of those </FIXME>
         pls <- sort((plsraw - expectation(object)) / sqrt(variance(object)))
@@ -226,7 +233,7 @@ setMethod("ApproxNullDistribution",
                        "two.sided" = mean(abs(pls) %GE% abs(q))
                    )
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_binom(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_binom(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET
@@ -238,7 +245,7 @@ setMethod("ApproxNullDistribution",
                      else
                          d(q)
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_midp(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_midp(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET
@@ -285,14 +292,21 @@ setMethod("ApproxNullDistribution",
 ### method for max-type test statistics
 setMethod("ApproxNullDistribution",
     signature = "MaxTypeIndependenceTestStatistic",
-    definition = function(object, B = 10000, ...) {
+    definition = function(object, nresample = 10000L, B, ...) {
+        ## <DEPRECATED>
+        if (!missing(B)) {
+            warning(sQuote("B"), " is deprecated; use ", sQuote("nresample"),
+                    " instead")
+            nresample <- B
+        }
+        ## </DEPRECATED>
         if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(B), ...)
+                       object@weights, as.integer(nresample), ...)
 
         pls <- (plsraw - expectation(object)) / sqrt(variance(object))
 
@@ -330,7 +344,7 @@ setMethod("ApproxNullDistribution",
                        "two.sided" = mean(colSums(abs(pls) %GE% q) > 0)
                    )
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_binom(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_binom(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET
@@ -342,7 +356,7 @@ setMethod("ApproxNullDistribution",
                      else
                          d(q)
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_midp(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_midp(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET
@@ -391,14 +405,21 @@ setMethod("ApproxNullDistribution",
 ### method for quad-type test statistics
 setMethod("ApproxNullDistribution",
     signature = "QuadTypeIndependenceTestStatistic",
-    definition = function(object, B = 10000, ...) {
+    definition = function(object, nresample = 10000L, B, ...) {
+        ## <DEPRECATED>
+        if (!missing(B)) {
+            warning(sQuote("B"), " is deprecated; use ", sQuote("nresample"),
+                    " instead")
+            nresample <- B
+        }
+        ## </DEPRECATED>
         if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(B), ...)
+                       object@weights, as.integer(nresample), ...)
 
         pls <- plsraw - expectation(object)
         pls <- sort(rowSums(crossprod(pls, object@covarianceplus) * t(pls)))
@@ -415,7 +436,7 @@ setMethod("ApproxNullDistribution",
         pvalue <- function(q, conf.int) {
             RET <- mean(pls %GE% q)
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_binom(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_binom(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET
@@ -423,7 +444,7 @@ setMethod("ApproxNullDistribution",
         midpvalue <- function(q, conf.int, z) {
             RET <- pvalue(q, conf.int = FALSE) - z * d(q)
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_midp(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_midp(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET
