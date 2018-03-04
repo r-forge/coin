@@ -198,14 +198,21 @@ setGeneric("ApproxNullDistribution",
 ### method for scalar test statistics
 setMethod("ApproxNullDistribution",
     signature = "ScalarIndependenceTestStatistic",
-    definition = function(object, B = 10000, ...) {
+    definition = function(object, nresample = 10000L, B, ...) {
+        ## <DEPRECATED>
+        if (!missing(B)) {
+            warning(sQuote("B"), " is deprecated; use ", sQuote("nresample"),
+                    " instead")
+            nresample <- B
+        }
+        ## </DEPRECATED>
         if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(B), standardise = TRUE, ...)
+                       object@weights, as.integer(nresample), standardise = TRUE, ...)
 
         ## <FIXME> can transform p, q, x instead of those </FIXME>
         pls <- sort(plsraw$StandardisedPermutedLinearStatistic)
@@ -227,7 +234,7 @@ setMethod("ApproxNullDistribution",
                        "two.sided" = mean(abs(pls) %GE% abs(q))
                    )
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_binom(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_binom(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET
@@ -239,7 +246,7 @@ setMethod("ApproxNullDistribution",
                      else
                          d(q)
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_midp(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_midp(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET
@@ -286,14 +293,21 @@ setMethod("ApproxNullDistribution",
 ### method for max-type test statistics
 setMethod("ApproxNullDistribution",
     signature = "MaxTypeIndependenceTestStatistic",
-    definition = function(object, B = 10000, ...) {
+    definition = function(object, nresample = 10000L, B, ...) {
+        ## <DEPRECATED>
+        if (!missing(B)) {
+            warning(sQuote("B"), " is deprecated; use ", sQuote("nresample"),
+                    " instead")
+            nresample <- B
+        }
+        ## </DEPRECATED>
         if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(B), standardise = TRUE, ...)
+                       object@weights, as.integer(nresample), standardise = TRUE, ...)
 
         pls <- plsraw$StandardisedPermutedLinearStatistic
         plsraw <- plsraw$PermutedLinearStatistic
@@ -332,7 +346,7 @@ setMethod("ApproxNullDistribution",
                        "two.sided" = mean(colSums(abs(pls) %GE% q) > 0)
                    )
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_binom(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_binom(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET
@@ -344,7 +358,7 @@ setMethod("ApproxNullDistribution",
                      else
                          d(q)
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_midp(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_midp(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET
@@ -393,21 +407,28 @@ setMethod("ApproxNullDistribution",
 ### method for quad-type test statistics
 setMethod("ApproxNullDistribution",
     signature = "QuadTypeIndependenceTestStatistic",
-    definition = function(object, B = 10000, ...) {
+    definition = function(object, nresample = 10000L, B, ...) {
+        ## <DEPRECATED>
+        if (!missing(B)) {
+            warning(sQuote("B"), " is deprecated; use ", sQuote("nresample"),
+                    " instead")
+            nresample <- B
+        }
+        ## </DEPRECATED>
         if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(B), standardise = FALSE, ...)
+                       object@weights, as.integer(nresample), standardise = FALSE, ...)
 
         ### sometimes we fiddle with the covariance; for example
         ### in chisq_test(); fall back to old code when this is the case
         CV <- covariance(object)
         if (isTRUE(all.equal(vcov(plsraw), covariance(object),
                              check.attributes = FALSE))) {
-            pls <- sort(doTest(plsraw, teststat = "quadratic", 
+            pls <- sort(doTest(plsraw, teststat = "quadratic",
                                PermutedStatistics = TRUE)$PermutedStatistics)
             plsraw <- plsraw$PermutedLinearStatistic
         } else {
@@ -428,7 +449,7 @@ setMethod("ApproxNullDistribution",
         pvalue <- function(q, conf.int) {
             RET <- mean(pls %GE% q)
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_binom(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_binom(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET
@@ -436,7 +457,7 @@ setMethod("ApproxNullDistribution",
         midpvalue <- function(q, conf.int, z) {
             RET <- pvalue(q, conf.int = FALSE) - z * d(q)
             if (conf.int) {
-                attr(RET, "conf.int") <- confint_midp(round(RET * B), B)
+                attr(RET, "conf.int") <- confint_midp(round(RET * nresample), nresample)
                 class(RET) <- "MCp"
             }
             RET

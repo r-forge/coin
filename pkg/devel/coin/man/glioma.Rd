@@ -85,6 +85,6 @@ logrank_test(Surv(time, event) ~ group, data = gbm,
 
 ## Stratified approximative (Monte Carlo) logrank test
 logrank_test(Surv(time, event) ~ group | histology, data = glioma,
-             distribution = approximate(B = 10000))
+             distribution = approximate(nresample = 10000))
 }
 \keyword{datasets}

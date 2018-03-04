@@ -170,7 +170,7 @@ mh_test(diphtheria ~ media | case, data = cochran) # Q = 8.05
 
 ## Approximative Cochran Q test
 mt <- mh_test(diphtheria ~ media | case, data = cochran,
-              distribution = approximate(B = 10000))
+              distribution = approximate(nresample = 10000))
 pvalue(mt)          # standard p-value
 midpvalue(mt)       # mid-p-value
 pvalue_interval(mt) # p-value interval

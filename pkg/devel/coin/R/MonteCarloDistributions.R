@@ -5,19 +5,19 @@ split_index <- function(n, by) {
             use.names = FALSE)
 }
 
-MonteCarlo <- function(x, y, block, weights, B, standardise = FALSE, parallel, ncpus, cl) {
+MonteCarlo <- function(x, y, block, weights, nresample, standardise = FALSE, parallel, ncpus, cl) {
 
-    montecarlo <- function(B) {
+    montecarlo <- function(nresample) {
         ret <- LinStatExpCov(X = x, Y = y, weights = as.integer(weights), block = factor(block),
-                      nresample = B, standardise = as.integer(standardise))
-        if (standardise) 
+                      nresample = nresample, standardise = as.integer(standardise))
+        if (standardise)
             return(ret[c("PermutedLinearStatistic",
                          "StandardisedPermutedLinearStatistic")])
         return(ret)
     }
 
     if (parallel == "no")
-        montecarlo(B)
+        montecarlo(nresample)
     else {
         ## load the 'parallel' namespace if necessary
         if (!isNamespaceLoaded("parallel")) {
@@ -57,7 +57,7 @@ MonteCarlo <- function(x, y, block, weights, B, standardise = FALSE, parallel, n
             if (as.integer(ncpus) < 2L)
                 warning("parallel operation requires at least two processes")
             do.call("cbind",
-                    parallel::mclapply(split_index(B, ncpus),
+                    parallel::mclapply(split_index(nresample, ncpus),
                                        FUN = montecarlo, mc.cores = ncpus))
         } else {
             if (is.null(cl)) {
@@ -80,7 +80,7 @@ MonteCarlo <- function(x, y, block, weights, B, standardise = FALSE, parallel, n
             if (ncpus < 2L)
                 warning("parallel operation requires at least two processes")
             do.call("cbind",
-                    parallel::clusterApply(cl, x = split_index(B, ncpus),
+                    parallel::clusterApply(cl, x = split_index(nresample, ncpus),
                                            fun = montecarlo))
         }
     }

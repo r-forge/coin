@@ -138,7 +138,7 @@ chisq_test(davis)
 
 ## Approximative (Monte Carlo) Pearson chi-squared test
 ct <- chisq_test(davis,
-                 distribution = approximate(B = 10000))
+                 distribution = approximate(nresample = 10000))
 pvalue(ct)          # standard p-value
 midpvalue(ct)       # mid-p-value
 pvalue_interval(ct) # p-value interval
@@ -249,11 +249,11 @@ armitage <- as.table(armitage)
 
 ## Approximative (Monte Carlo) Pearson chi-squared test (Armitage, 1955, p. 379)
 chisq_test(armitage,
-           distribution = approximate(B = 10000)) # chi^2 = 5.91
+           distribution = approximate(nresample = 10000)) # chi^2 = 5.91
 
 ## Approximative (Monte Carlo) Cochran-Armitage test (Armitage, 1955, p. 379)
 (ct <- chisq_test(armitage,
-                  distribution = approximate(B = 10000),
+                  distribution = approximate(nresample = 10000),
                   scores = list("Crater" = c(-1.5, -0.5, 0.5, 1.5))))
 statistic(ct)^2 # chi_0^2 = 5.26
 

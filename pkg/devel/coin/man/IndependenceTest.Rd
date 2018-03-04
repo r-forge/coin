@@ -213,7 +213,7 @@ independence_test(cerebellum + brainstem + cortex +
                   hypothalamus + striatum + hippocampus ~ treatment,
                   data = benzos,
                   teststat = "quadratic",
-                  distribution = approximate(B = 10000),
+                  distribution = approximate(nresample = 10000),
                   ytrafo = function(data)
                       trafo(data, numeric_trafo = rank_trafo)) # Q = 16.129
 }

@@ -55,14 +55,17 @@
   }
   \subsection{Deprecated and defunct}{
     \itemize{
-      \item
+      \item The \code{B} argument of \code{approximate()} and
+      \code{ApproxNullDistribution()} is now deprecated and has been replaced by
+      \code{nresample} (to conform with the \pkg{libcoin}, \pkg{party} and
+      \pkg{partykit} packages).
     }
   }
 }
 \section{Changes in version 1.2-2 (2017-11-28)}{
   \subsection{Other changes}{
     \itemize{
-      \item \pkg{libcoin} regression tests are now in \pkg{libcoin} 1.0-0.
+      \item The \pkg{libcoin} regression tests are now in \pkg{libcoin} 1.0-0.
     }
   }
 }

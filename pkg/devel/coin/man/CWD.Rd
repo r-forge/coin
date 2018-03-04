@@ -85,7 +85,7 @@
 CWD[1:6] <- 100 * CWD[1:6] # scaling (to avoid harmless warning)
 mt <- maxstat_test(sample2 + sample3 + sample4 +
                    sample6 + sample7 + sample8 ~ trend, data = CWD,
-                   distribution = approximate(B = 100000))
+                   distribution = approximate(nresample = 100000))
 
 ## Absolute maximum of standardized statistics (t = 3.08)
 statistic(mt)

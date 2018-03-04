@@ -391,7 +391,7 @@ lee_trafo <- function(y)
                   rho = rho.gamma["rho"], gamma = rho.gamma["gamma"])
 
 it <- independence_test(Surv(time, event) ~ group, data = lungcancer,
-                        distribution = approximate(B = 10000),
+                        distribution = approximate(nresample = 10000),
                         ytrafo = function(data)
                             trafo(data, surv_trafo = lee_trafo))
 pvalue(it, method = "step-down")

@@ -329,7 +329,7 @@ Income        VeryDiss LitSat ModSat VerySat
 15000-25000 -1.0958361 -1.50130926  0.2361231  1.4614123
 >25000      -1.0377629 -0.08983052 -0.5946119  1.2031648
 
-> it <- independence_test(js, distribution = approximate(B = 10000), 
+> it <- independence_test(js, distribution = approximate(nresample = 10000), 
 +     scores = list(Job.Satisfaction = 1:4, Income = 1:4))
 
 > pvalue(it)
@@ -360,4 +360,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.85    0.09    2.98 
+   2.84    0.14    3.01 

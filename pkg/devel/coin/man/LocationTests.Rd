@@ -192,7 +192,7 @@ oneway_test(pd ~ age, data = diffusion)
 
 ## Approximative (Monte Carlo) Fisher-Pitman test
 pvalue(oneway_test(pd ~ age, data = diffusion,
-                   distribution = approximate(B = 10000)))
+                   distribution = approximate(nresample = 10000)))
 
 ## Exact Fisher-Pitman test
 pvalue(ot <- oneway_test(pd ~ age, data = diffusion,
@@ -252,13 +252,13 @@ yoy <- data.frame(
 
 ## Approximative (Monte Carlo) Kruskal-Wallis test
 kruskal_test(length ~ site, data = yoy,
-             distribution = approximate(B = 10000))
+             distribution = approximate(nresample = 10000))
 
 ## Approximative (Monte Carlo) Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
 ## Hollander and Wolfe (1999, p. 244)
 ## (where Steel-Dwass results are given)
 it <- independence_test(length ~ site, data = yoy,
-                        distribution = approximate(B = 50000),
+                        distribution = approximate(nresample = 50000),
                         ytrafo = function(data)
                             trafo(data, numeric_trafo = rank_trafo),
                         xtrafo = mcp_trafo(site = "Tukey"))

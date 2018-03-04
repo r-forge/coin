@@ -225,7 +225,7 @@ friedman_test(strength ~ potash | block, data = cotton, alternative = "greater")
 
 ## One-sided approximative (Monte Carlo) Page test
 friedman_test(strength ~ potash | block, data = cotton, alternative = "greater",
-              distribution = approximate(B = 10000))
+              distribution = approximate(nresample = 10000))
 
 
 ## Data from Quade (1979, p. 683)
@@ -244,12 +244,12 @@ dta <- data.frame(
 ## Approximative (Monte Carlo) Friedman test
 ## Quade (1979, p. 683)
 friedman_test(y ~ x | b, data = dta,
-              distribution = approximate(B = 10000)) # chi^2 = 6.000
+              distribution = approximate(nresample = 10000)) # chi^2 = 6.000
 
 ## Approximative (Monte Carlo) Quade test
 ## Quade (1979, p. 683)
 (qt <- quade_test(y ~ x | b, data = dta,
-                  distribution = approximate(B = 10000))) # W = 8.157
+                  distribution = approximate(nresample = 10000))) # W = 8.157
 
 ## Comparison with R's quade.test() function
 quade.test(y ~ x | b, data = dta)

@@ -754,8 +754,8 @@ supply a function that can compute a \Rclass{PValue} object from an
 
 For the most important special cases, suitable function
 \emph{generators} are provided in \pkg{coin}. For example, the function
-\code{approximate(B = 1000)} returns a Monte Carlo function that draws
-\code{B} (default: \Sexpr{formals(approximate)$B}) random permutations.  Similarly, \code{exact()}
+\code{approximate(nresample = 1000)} returns a Monte Carlo function that draws
+\code{nresample} (default: \Sexpr{formals(approximate)$nresample}) random permutations.  Similarly, \code{exact()}
 and \code{approximate()} return functions computing the exact or
 asymptotic null distributions, respectively. Again, computational
 details in the computation of the null distribution can be controlled
@@ -981,7 +981,7 @@ instead of the omnibus $\chi^2$ statistic. This can be conveniently performed
 within \pkg{coin}, e.g., using simple equi-distant scores and a Monte Carlo
 approximation of the null distribution:
 <<jobsatisfaction-ordinal, echo = TRUE>>=
-it <- independence_test(js, distribution = approximate(B = 10000),
+it <- independence_test(js, distribution = approximate(nresample = 10000),
   scores = list(Job.Satisfaction = 1:4, Income = 1:4))
 pvalue(it)
 @
