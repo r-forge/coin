@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2017-05-16 r72684) -- "Unsuffered Consequences"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R Under development (unstable) (2018-02-20 r74280) -- "Unsuffered Consequences"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -25,6 +25,7 @@ Type 'q()' to quit R.
 Loading required package: survival
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
 > cleanEx()
 > nameEx("CWD")
 > ### * CWD
@@ -2892,9 +2893,36 @@ x   1 2 3 4
   4 0 0 3 1
   5 0 0 0 4
 > 
-> ## Illustrating departures from the null hypothesis of independence using the
-> ## standardized linear statistic
+> ## The centered linear statistic...
+> statistic(ct, type = "centered")
+   1  2  3  4
+1  3 -1 -1 -1
+2  0  2 -1 -1
+3 -1  1  1 -1
+4 -1 -1  2  0
+5 -1 -1 -1  3
+> 
+> ## ...is identical to
+> statistic(ct, type = "linear") - expectation(ct)
+   1  2  3  4
+1  3 -1 -1 -1
+2  0  2 -1 -1
+3 -1  1  1 -1
+4 -1 -1  2  0
+5 -1 -1 -1  3
+> 
+> ## The standardized linear statistic, illustrating departures from the null
+> ## hypothesis of independence...
 > statistic(ct, type = "standardized")
+          1         2         3         4
+1  3.774917 -1.258306 -1.258306 -1.258306
+2  0.000000  2.516611 -1.258306 -1.258306
+3 -1.258306  1.258306  1.258306 -1.258306
+4 -1.258306 -1.258306  2.516611  0.000000
+5 -1.258306 -1.258306 -1.258306  3.774917
+> 
+> ## ...is identical to
+> (statistic(ct, type = "linear") - expectation(ct)) / sqrt(variance(ct))
           1         2         3         4
 1  3.774917 -1.258306 -1.258306 -1.258306
 2  0.000000  2.516611 -1.258306 -1.258306
@@ -2964,9 +2992,10 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > 
 > ### * <FOOTER>
 > ###
+> cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  10.63 0.14 10.8 NA NA 
+Time elapsed:  9.91 0.09 10.01 NA NA 
 > grDevices::dev.off()
 null device 
           1 
