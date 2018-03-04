@@ -4,15 +4,8 @@ asymptotic <- function(maxpts = 25000, abseps = 0.001, releps = 0) {
                                releps = releps)
 }
 
-approximate <- function(nresample = 10000L, B, parallel = c("no", "multicore", "snow"),
+approximate <- function(nresample = 10000L, parallel = c("no", "multicore", "snow"),
                         ncpus = 1L, cl = NULL) {
-    ## <DEPRECATED>
-    if (!missing(B)) {
-        warning(sQuote("B"), " is deprecated; use ", sQuote("nresample"),
-                " instead")
-        nresample <- B
-    }
-    ## <DEPRECATED>
     parallel <- match.arg(parallel)
     function(object)
         ApproxNullDistribution(object, nresample = nresample, parallel = parallel,

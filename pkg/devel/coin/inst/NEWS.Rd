@@ -27,7 +27,8 @@
   }
   \subsection{Deprecated and defunct}{
     \itemize{
-      \item
+      \item The \code{B} argument of \code{approximate()} and
+      \code{ApproxNullDistribution()} is now defunct and has been removed.
     }
   }
 }

@@ -198,14 +198,7 @@ setGeneric("ApproxNullDistribution",
 ### method for scalar test statistics
 setMethod("ApproxNullDistribution",
     signature = "ScalarIndependenceTestStatistic",
-    definition = function(object, nresample = 10000L, B, ...) {
-        ## <DEPRECATED>
-        if (!missing(B)) {
-            warning(sQuote("B"), " is deprecated; use ", sQuote("nresample"),
-                    " instead")
-            nresample <- B
-        }
-        ## </DEPRECATED>
+    definition = function(object, nresample = 10000L, ...) {
         if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
@@ -293,14 +286,7 @@ setMethod("ApproxNullDistribution",
 ### method for max-type test statistics
 setMethod("ApproxNullDistribution",
     signature = "MaxTypeIndependenceTestStatistic",
-    definition = function(object, nresample = 10000L, B, ...) {
-        ## <DEPRECATED>
-        if (!missing(B)) {
-            warning(sQuote("B"), " is deprecated; use ", sQuote("nresample"),
-                    " instead")
-            nresample <- B
-        }
-        ## </DEPRECATED>
+    definition = function(object, nresample = 10000L, ...) {
         if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
@@ -407,14 +393,7 @@ setMethod("ApproxNullDistribution",
 ### method for quad-type test statistics
 setMethod("ApproxNullDistribution",
     signature = "QuadTypeIndependenceTestStatistic",
-    definition = function(object, nresample = 10000L, B, ...) {
-        ## <DEPRECATED>
-        if (!missing(B)) {
-            warning(sQuote("B"), " is deprecated; use ", sQuote("nresample"),
-                    " instead")
-            nresample <- B
-        }
-        ## </DEPRECATED>
+    definition = function(object, nresample = 10000L, ...) {
         if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)

@@ -10,7 +10,7 @@
 }
 \usage{
 asymptotic(maxpts = 25000, abseps = 0.001, releps = 0)
-approximate(nresample = 10000L, B, parallel = c("no", "multicore", "snow"),
+approximate(nresample = 10000L, parallel = c("no", "multicore", "snow"),
             ncpus = 1L, cl = NULL)
 exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
 }
@@ -29,9 +29,6 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
     a positive integer, the number of Monte Carlo replicates used for the
     computation of the approximative reference distribution.  Defaults to
     \code{10000L}.
-  }
-  \item{B}{
-    deprecated, use \code{nresample} instead.
   }
   \item{parallel}{
     a character, the type of parallel operation: either \code{"no"} (default),
@@ -93,13 +90,6 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
   automatic choice is made (\code{algorithm = "auto"}) but the shift and
   split-up algorithms can be selected by setting \code{algorithm} to either
   \code{"shift"} or \code{"split-up"} respectively.
-}
-\note{
-  In versions of \pkg{coin} prior to 1.3-0, the number of Monte Carlo replicates
-  in \code{approximate()} was specified using the now deprecated \code{B}
-  argument.  \strong{This will be made defunct and removed in a future release.}
-  It has been replaced by the \code{nresample} argument (for conformity with the
-  \pkg{libcoin}, \pkg{party} and \pkg{partykit} packages).
 }
 \references{
   Genz, A. and Bretz, F.  (2009).  \emph{Computation of Multivariate Normal and
