@@ -8,12 +8,8 @@ split_index <- function(n, by) {
 MonteCarlo <- function(x, y, block, weights, nresample, standardise = FALSE, parallel, ncpus, cl) {
 
     montecarlo <- function(nresample) {
-        ret <- LinStatExpCov(X = x, Y = y, weights = as.integer(weights), block = factor(block),
+        LinStatExpCov(X = x, Y = y, weights = as.integer(weights), block = factor(block),
                       nresample = nresample, standardise = as.integer(standardise))
-        if (standardise)
-            return(ret[c("PermutedLinearStatistic",
-                         "StandardisedPermutedLinearStatistic")])
-        return(ret)
     }
 
     if (parallel == "no")

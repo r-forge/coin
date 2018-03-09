@@ -5,7 +5,7 @@ importFrom("methods", callNextMethod, extends, getSlots, new, validObject)
 importMethodsFrom("methods", initialize, show)
 importFrom("stats", complete.cases, confint, cov2cor, dchisq, dnorm, median,
                     model.frame, model.matrix, na.pass, pbinom, pchisq, pnorm,
-                    qbeta, qchisq, qnorm, quantile, runif, setNames, uniroot, vcov)
+                    qbeta, qchisq, qnorm, quantile, runif, setNames, uniroot)
 importFrom("utils", hasName)
 importFrom("libcoin", LinStatExpCov, doTest)
 importFrom("modeltools", ModelEnvFormula)

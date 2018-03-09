@@ -312,7 +312,7 @@ chi-squared = 5.9085, p-value = 0.1186
 	Approximative Linear-by-Linear Association Test
 
 data:  Crater (ordered) by Treatment (A, B)
-Z = 2.2932, p-value = 0.0156
+Z = 2.2932, p-value = 0.0291
 alternative hypothesis: two.sided
 
 > statistic(ct)^2 # chi_0^2 = 5.26
@@ -2410,7 +2410,7 @@ alternative hypothesis: two.sided
 	Approximative Linear-by-Linear Association Test
 
 data:  malformation by consumption (0 < <1 < 1-2 < 3-5 < >=6)
-Z = 2.5632, p-value = 0.016
+Z = 2.5632, p-value = 0.017
 alternative hypothesis: greater
 
 > 
@@ -2425,7 +2425,7 @@ alternative hypothesis: greater
 	Approximative Linear-by-Linear Association Test
 
 data:  malformation by consumption (0 < <1 < 1-2 < 3-5 < >=6)
-Z = 0.59208, p-value = 0.267
+Z = 0.59208, p-value = 0.269
 alternative hypothesis: greater
 
 > 
@@ -2438,7 +2438,7 @@ alternative hypothesis: greater
 	Approximative Linear-by-Linear Association Test
 
 data:  malformation by consumption (0 < <1 < 1-2 < 3-5 < >=6)
-Z = 1.352, p-value = 0.083
+Z = 1.352, p-value = 0.117
 alternative hypothesis: greater
 
 > 
@@ -2998,7 +2998,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.33 0.25 9.6 NA NA 
+Time elapsed:  9.64 0.22 9.93 NA NA 
 > grDevices::dev.off()
 null device 
           1 
