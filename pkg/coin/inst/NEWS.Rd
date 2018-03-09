@@ -4,6 +4,11 @@
 \section{Changes in version 1.3-0 (20YY-MM-DD)}{
   \subsection{New features}{
     \itemize{
+      \item Linear statistics, their expectation and covariances as well as
+      permuted linear statistics are now computed by package \pkg{libcoin};
+      asymptotic and exact \eqn{p}-values are not affected by this change, but
+      approximate \eqn{p}-values will differ within random variation.
+
       \item The centered linear statistic can now be extracted (see
       \code{?statistic}).
     }

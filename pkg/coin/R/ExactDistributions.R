@@ -74,7 +74,7 @@ SR_shift_2sample <- function(object, fact) {
             idx <- c(which(T[-1L] %NE% T[-n]), n)
             T <- T[idx]
 
-            ### update density
+            ### update density (use C_kronecker from libcoin)
             Prob <- .Call(R_kronecker, dens$Prob, Prob)
             Prob <- vapply(split(Prob[o],
                                  rep.int(seq_along(idx), diff(c(0L, idx)))),

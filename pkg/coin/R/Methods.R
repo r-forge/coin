@@ -212,10 +212,11 @@ setMethod("ApproxNullDistribution",
 
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(nresample), ...)
+                       object@weights, as.integer(nresample), standardise = TRUE, ...)
 
         ## <FIXME> can transform p, q, x instead of those </FIXME>
-        pls <- sort((plsraw - expectation(object)) / sqrt(variance(object)))
+        pls <- sort(plsraw$StandardisedPermutedLinearStatistic)
+        plsraw <- plsraw$PermutedLinearStatistic
 
         p <- function(q) {
             mean(pls %LE% q)
@@ -306,9 +307,10 @@ setMethod("ApproxNullDistribution",
 
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(nresample), ...)
+                       object@weights, as.integer(nresample), standardise = TRUE, ...)
 
-        pls <- (plsraw - expectation(object)) / sqrt(variance(object))
+        pls <- plsraw$StandardisedPermutedLinearStatistic
+        plsraw <- plsraw$PermutedLinearStatistic
 
         ## <FIXME>
         ## pls is a rather large object (potentially)
@@ -419,10 +421,21 @@ setMethod("ApproxNullDistribution",
 
         plsraw <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(nresample), ...)
+                       object@weights, as.integer(nresample), standardise = FALSE, ...)
 
-        pls <- plsraw - expectation(object)
-        pls <- sort(rowSums(crossprod(pls, object@covarianceplus) * t(pls)))
+        ### sometimes we fiddle with the covariance; for example
+        ### in chisq_test(); fall back to old code when this is the case
+        CV <- covariance(object)
+        if (isTRUE(all.equal(vcov(plsraw), covariance(object),
+                             check.attributes = FALSE))) {
+            pls <- sort(doTest(plsraw, teststat = "quadratic",
+                               PermutedStatistics = TRUE)$PermutedStatistics)
+            plsraw <- plsraw$PermutedLinearStatistic
+        } else {
+            plsraw <- plsraw$PermutedLinearStatistic
+            pls <- plsraw - expectation(object)
+            pls <- sort(rowSums(crossprod(pls, object@covarianceplus) * t(pls)))
+        }
 
         p <- function(q) {
             mean(pls %LE% q)

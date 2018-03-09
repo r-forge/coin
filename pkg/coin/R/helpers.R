@@ -25,56 +25,6 @@ exact <- function(algorithm = c("auto", "shift", "split-up"), fact = NULL) {
         ExactNullDistribution(object, algorithm = algorithm, fact = fact)
 }
 
-LinearStatistic <- function(x, y, weights) {
-    storage.mode(x) <- "double"
-    storage.mode(y) <- "double"
-    storage.mode(weights) <- "double"
-    .Call(R_LinearStatistic, x, y, weights)
-}
-
-ExpectCovarInfluence <- function(y, weights) {
-    storage.mode(y) <- "double"
-    storage.mode(weights) <- "double"
-    .Call(R_ExpectCovarInfluence, y, weights)
-}
-
-expectvaronly <- function(x, y, weights) {
-    indx <- rep.int(seq_len(nrow(x)), weights)
-    x <- x[indx, , drop = FALSE]
-    y <- y[indx, , drop = FALSE]
-    n <- nrow(x)
-    Ey <- colMeans(y)
-    Vy <- rowMeans((t(y) - Ey)^2)
-
-    rSx <- colSums(x)
-    rSx2 <- colSums(x^2)
-    ## in case rSx _and_ Ey are _both_ vectors
-    E <- .Call(R_kronecker, Ey, rSx)
-    V <- n / (n - 1) * .Call(R_kronecker, Vy, rSx2)
-    V <- V - 1 / (n - 1) * .Call(R_kronecker, Vy, rSx^2)
-    list(E = drop(E), V = matrix(V, nrow = 1L))
-}
-
-ExpectCovarLinearStatistic <- function(x, y, weights, varonly = FALSE) {
-    if (varonly) {
-        ev <- expectvaronly(x, y, weights)
-### <FIXME> This conflicts with the "new" initialize methods that were brought
-###         over from 'party' in r927
-###         new("ExpectCovar", expectation = ev$E, covariance = ev$V)
-### </FIXME>
-        ec <- new("ExpectCovar")
-        ec@expectation <- ev$E
-        ec@covariance <- ev$V
-        ec
-    } else {
-        storage.mode(x) <- "double"
-        storage.mode(y) <- "double"
-        storage.mode(weights) <- "double"
-        expcovinf <- ExpectCovarInfluence(y, weights)
-        .Call(R_ExpectCovarLinearStatistic, x, y, weights, expcovinf)
-    }
-}
-
 pmvn <- function(lower, upper, mean, corr, conf.int, ...) {
     p <- if (length(corr) > 1L)
              pmvnorm(lower = lower, upper = upper, mean = mean,
@@ -530,22 +480,3 @@ setColnames <- function (object, nm) {
 
 n_decimal_digits <- function(x)
     nchar(sub("^[[:digit:]]*[.]", "", format(min(x), scientific = FALSE)))
-
-if (getRversion() < "2.15.0")
-    paste0 <- function(...) paste(..., sep = "")
-
-if (getRversion() < "3.1.0") {
-    cospi <- function(x) cos(pi * x)
-    anyNA <- function(x) any(is.na(x))
-}
-
-if (getRversion() < "3.2.0") {
-    isNamespaceLoaded <- function(name) !is.null(.getNamespace(name))
-    lengths <- function(x, use.names = TRUE)
-        vapply(x, length, NA_integer_, USE.NAMES = use.names)
-}
-
-if (getRversion() < "3.4.0") {
-    hasName <- function(x, name) match(name, names(x), nomatch = 0L) > 0L
-} else
-    hasName <- utils::hasName

@@ -122,8 +122,16 @@ setMethod("initialize",
                   sQuote("IndependenceTestProblem"))
 
         .Object <- copyslots(object, .Object)
+
+        lstev <- LinStatExpCov(X = object@xtrans, Y = object@ytrans,
+                               weights = as.integer(object@weights), block = object@block,
+                               varonly = varonly)
+
+        ### was: LinearStatistic(object@xtrans, object@ytrans, object@weights))
         .Object@linearstatistic <-
-            drop(LinearStatistic(object@xtrans, object@ytrans, object@weights))
+            drop(lstev$LinearStatistic) 
+
+        if (FALSE) {
         ### <REMINDER>
         ### for teststat = "maximum" and distribution = "approx"
         ### we don't need the covariance matrix but the variances only
@@ -152,10 +160,22 @@ setMethod("initialize",
                 cov <- cov + expcov@covariance
             }
         }
+        }        
+
         nm <- statnames(object)$names # pretty names
-        exp <- drop(exp)
+        exp <- lstev$Expectation
         names(exp) <- nm
         .Object@expectation <- exp
+
+        cov <- matrix(0, nrow = length(exp), ncol = length(exp))
+        if (varonly) {
+            cov <- lstev$Variance
+        } else {
+            cov[lower.tri(cov, diag = TRUE)] <- lstev$Covariance
+            cov <- cov + t(cov)
+            diag(cov) <- diag(cov) / 2
+        }
+
         .Object@covariance <- if (varonly) {
                                   cov <- drop(cov)
                                   names(cov) <- nm
