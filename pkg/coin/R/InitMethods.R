@@ -121,38 +121,26 @@ setMethod("initialize",
             stop("Argument ", sQuote("object"), " is not of class ",
                   sQuote("IndependenceTestProblem"))
 
-        .Object <- copyslots(object, .Object)
-
-        lstev <- LinStatExpCov(X = object@xtrans, Y = object@ytrans,
-                               weights = as.integer(object@weights), block = object@block,
-                               varonly = varonly)
-
-        ### was: LinearStatistic(object@xtrans, object@ytrans, object@weights))
-        .Object@linearstatistic <-
-            drop(lstev$LinearStatistic)
-
+        lsev <- LinStatExpCov(X = object@xtrans, Y = object@ytrans,
+                              weights = as.integer(object@weights),
+                              block = object@block,
+                              varonly = varonly)
         nm <- statnames(object)$names # pretty names
-        exp <- lstev$Expectation
-        names(exp) <- nm
-        .Object@expectation <- exp
 
-        cov <- matrix(0, nrow = length(exp), ncol = length(exp))
-        if (varonly) {
-            cov <- lstev$Variance
-        } else {
-            cov[lower.tri(cov, diag = TRUE)] <- lstev$Covariance
-            cov <- cov + t(cov)
-            diag(cov) <- diag(cov) / 2
-        }
-
-        .Object@covariance <- if (varonly) {
-                                  cov <- drop(cov)
-                                  names(cov) <- nm
-                                  new("Variance", cov)
-                              } else {
-                                  dimnames(cov) <- list(nm, nm)
-                                  new("CovarianceMatrix", cov)
-                              }
+        .Object <- copyslots(object, .Object)
+        .Object@linearstatistic <- drop(lsev$LinearStatistic)
+        .Object@expectation <- setNames(lsev$Expectation, nm)
+        .Object@covariance <-
+            if (varonly) {
+                new("Variance", setNames(drop(lsev$Variance), nm))
+            } else {
+                cov <- matrix(0, nrow = length(nm), ncol = length(nm),
+                              dimnames = list(nm, nm))
+                cov[lower.tri(cov, diag = TRUE)] <- lsev$Covariance
+                cov <- cov + t(cov)
+                diag(cov) <- diag(cov) / 2
+                new("CovarianceMatrix", cov)
+            }
 
         if (any(variance(.Object) < eps()))
             warning("The conditional covariance matrix has ",
