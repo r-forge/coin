@@ -129,38 +129,7 @@ setMethod("initialize",
 
         ### was: LinearStatistic(object@xtrans, object@ytrans, object@weights))
         .Object@linearstatistic <-
-            drop(lstev$LinearStatistic) 
-
-        if (FALSE) {
-        ### <REMINDER>
-        ### for teststat = "maximum" and distribution = "approx"
-        ### we don't need the covariance matrix but the variances only
-        ### </REMINDER>
-        if (nlevels(object@block) == 1L) {
-            expcov <- ExpectCovarLinearStatistic(
-                object@xtrans,
-                object@ytrans,
-                object@weights,
-                varonly = varonly
-            )
-            exp <- expcov@expectation
-            cov <- expcov@covariance
-        } else {
-            exp <- 0
-            cov <- 0
-            for (lev in levels(object@block)) {
-                idx <- object@block == lev
-                expcov <- ExpectCovarLinearStatistic(
-                    object@xtrans[idx, , drop = FALSE],
-                    object@ytrans[idx, , drop = FALSE],
-                    object@weights[idx],
-                    varonly = varonly
-                )
-                exp <- exp + expcov@expectation
-                cov <- cov + expcov@covariance
-            }
-        }
-        }        
+            drop(lstev$LinearStatistic)
 
         nm <- statnames(object)$names # pretty names
         exp <- lstev$Expectation
