@@ -16,8 +16,8 @@ Description: Conditional inference procedures for the general independence
   problem including two-sample, K-sample (non-parametric ANOVA), correlation,
   censored, ordered and multivariate problems.
 Depends: R (>= 3.4.0), survival
-Imports: methods, stats, utils, libcoin (>= 1.0-0), modeltools (>= 0.2-9), mvtnorm (>= 1.0-5), multcomp
-Suggests: parallel, xtable, e1071, vcd, TH.data (>= 1.0-7)
+Imports: methods, parallel, stats, utils, libcoin (>= 1.0-0), modeltools (>= 0.2-9), mvtnorm (>= 1.0-5), multcomp
+Suggests: xtable, e1071, vcd, TH.data (>= 1.0-7)
 LinkingTo: libcoin (>= 1.0-0)
 LazyData: yes
 NeedsCompilation: yes
