@@ -8,8 +8,13 @@ split_index <- function(n, by) {
 MonteCarlo <- function(x, y, block, weights, nresample, standardise = FALSE, parallel, ncpus, cl) {
 
     montecarlo <- function(nresample) {
-        LinStatExpCov(X = x, Y = y, weights = as.integer(weights), block = factor(block),
-                      nresample = nresample, standardise = as.integer(standardise))
+        ret <- LinStatExpCov(X = x, Y = y, weights = as.integer(weights),
+                              block = as.factor(block), nresample = nresample,
+                              standardise = as.integer(standardise))
+        if (standardise)
+            ret[c("Variance", "PermutedLinearStatistic",
+                   "StandardisedPermutedLinearStatistic")]
+        ret
     }
 
     if (parallel == "no")
@@ -52,9 +57,8 @@ MonteCarlo <- function(x, y, block, weights, nresample, standardise = FALSE, par
                      " is not available for MS Windows")
             if (as.integer(ncpus) < 2L)
                 warning("parallel operation requires at least two processes")
-            do.call("cbind",
-                    parallel::mclapply(split_index(nresample, ncpus),
-                                       FUN = montecarlo, mc.cores = ncpus))
+            ret <- parallel::mclapply(split_index(nresample, ncpus),
+                                      FUN = montecarlo, mc.cores = ncpus)
         } else {
             if (is.null(cl)) {
                 ## has a default cluster been registered?
@@ -75,9 +79,16 @@ MonteCarlo <- function(x, y, block, weights, nresample, standardise = FALSE, par
             ncpus <- as.integer(length(cl))
             if (ncpus < 2L)
                 warning("parallel operation requires at least two processes")
-            do.call("cbind",
-                    parallel::clusterApply(cl, x = split_index(nresample, ncpus),
-                                           fun = montecarlo))
+            ret <- parallel::clusterApply(cl, x = split_index(nresample, ncpus),
+                                          fun = montecarlo)
         }
+        ret[[1]]$PermutedLinearStatistic <-
+            do.call("cbind", lapply(ret, function(i)
+                i$PermutedLinearStatistic))
+        if (standardise)
+            ret[[1]]$StandardisedPermutedLinearStatistic <-
+                do.call("cbind", lapply(ret, function(i)
+                    i$StandardisedPermutedLinearStatistic))
+        ret[[1]]
     }
 }
