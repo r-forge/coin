@@ -9,11 +9,11 @@ MonteCarlo <- function(x, y, block, weights, nresample, standardise = FALSE, par
 
     montecarlo <- function(nresample) {
         ret <- LinStatExpCov(X = x, Y = y, weights = as.integer(weights),
-                              block = as.factor(block), nresample = nresample,
-                              standardise = as.integer(standardise))
+                             block = as.factor(block), nresample = nresample,
+                             standardise = as.integer(standardise))
         if (standardise)
             ret[c("Variance", "PermutedLinearStatistic",
-                   "StandardisedPermutedLinearStatistic")]
+                  "StandardisedPermutedLinearStatistic")]
         ret
     }
 
@@ -22,11 +22,8 @@ MonteCarlo <- function(x, y, block, weights, nresample, standardise = FALSE, par
     else {
         if (RNGkind()[1L] == "L'Ecuyer-CMRG")
             ## advance stream in master process upon exit
-            on.exit(assign(".Random.seed",
-                           value = nextRNGStream(
-                               get(".Random.seed", envir = .GlobalEnv,
-                                   inherits = FALSE)),
-                           envir = .GlobalEnv))
+            on.exit(.GlobalEnv[[".Random.seed"]] <-
+                        nextRNGStream(.GlobalEnv[[".Random.seed"]]))
 
         if (parallel == "multicore") {
             if (.Platform$OS.type == "windows")
@@ -41,10 +38,7 @@ MonteCarlo <- function(x, y, block, weights, nresample, standardise = FALSE, par
                 ## has a default cluster been registered?
                 ## see parallel:::defaultCluster
                 ## <FIXME> R-3.5.0 has 'getDefaultCluster()' </FIXME>
-                cl <- get("default",
-                          envir = get(".reg", envir = getNamespace("parallel"),
-                                      inherits = FALSE),
-                          inherits = FALSE)
+                cl <- getNamespace("parallel")$.reg$default
                 if (is.null(cl)) {
                     ## no default cluster, so setup a PSOCK cluster
                     cl <- makePSOCKcluster(ncpus)
