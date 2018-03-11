@@ -6,6 +6,7 @@ setMethod("initialize",
         .Object@expectation <- rep(0, pq)
         .Object@covariance <- matrix(0, nrow = pq, ncol = pq)
         .Object@dimension  <- as.integer(pq)
+
         .Object
     }
 )
@@ -100,8 +101,9 @@ setMethod("initialize",
             stop("Argument ", sQuote("object"), " is not of class ",
                  sQuote("IndependenceProblem"))
 
-        .Object <- copyslots(object, .Object)
         tr <- check_trafo(xtrafo(object@x), ytrafo(object@y))
+
+        .Object <- copyslots(object, .Object)
         .Object@xtrans <- tr$xtrafo
         .Object@ytrans <- tr$ytrafo
         .Object@xtrafo <- xtrafo
@@ -161,13 +163,13 @@ setMethod("initialize",
             stop("Argument ", sQuote("object"), " is not of class ",
                   sQuote("IndependenceLinearStatistic"))
 
+        ss <- (object@linearstatistic - expectation(object)) /
+                  sqrt(variance(object))
+
         .Object <- copyslots(object, .Object)
+        .Object@teststatistic <- .Object@standardizedlinearstatistic <- drop(ss)
         .Object@alternative <- match.arg(alternative)
         .Object@paired <- paired
-        standstat <- (object@linearstatistic - expectation(object)) /
-                       sqrt(variance(object))
-        .Object@teststatistic <- .Object@standardizedlinearstatistic <-
-            drop(standstat)
 
         .Object
     }
@@ -183,16 +185,17 @@ setMethod("initialize",
             stop("Argument ", sQuote("object"), " is not of class ",
                   sQuote("IndependenceLinearStatistic"))
 
+        ss <- (object@linearstatistic - expectation(object)) /
+                  sqrt(variance(object))
+
         .Object <- copyslots(object, .Object)
-        .Object@alternative <- match.arg(alternative)
-        standstat <- (object@linearstatistic - expectation(object)) /
-                       sqrt(variance(object))
         .Object@teststatistic <-
             switch(alternative,
-                "less" = drop(min(standstat)),
-                "greater" = drop(max(standstat)),
-                "two.sided" = drop(max(abs(standstat))))
-        .Object@standardizedlinearstatistic <- standstat
+                "less"      = drop(min(ss)),
+                "greater"   = drop(max(ss)),
+                "two.sided" = drop(max(abs(ss))))
+        .Object@standardizedlinearstatistic <- ss
+        .Object@alternative <- match.arg(alternative)
 
         .Object
     }
@@ -207,15 +210,15 @@ setMethod("initialize",
             stop("Argument ", sQuote("object"), " is not of class ",
                   sQuote("IndependenceLinearStatistic"))
 
-        .Object <- copyslots(object, .Object)
+        cs <- object@linearstatistic - expectation(object)
         mp <- MPinv(covariance(object), ...)
+
+        .Object <- copyslots(object, .Object)
+        .Object@teststatistic <- drop(cs %*% mp$MPinv %*% cs)
+        .Object@standardizedlinearstatistic <- cs / sqrt(variance(object))
         .Object@covarianceplus <- mp$MPinv
         .Object@df <- mp$rank
         .Object@paired <- paired
-        stand <- (object@linearstatistic - expectation(object))
-        .Object@teststatistic <-
-            drop(stand %*% .Object@covarianceplus %*% stand)
-        .Object@standardizedlinearstatistic <- stand / sqrt(variance(object))
 
         .Object
     }
