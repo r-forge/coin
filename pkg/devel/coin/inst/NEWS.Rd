@@ -36,14 +36,17 @@
       permuted linear statistics are now computed by package \pkg{libcoin};
       asymptotic and exact \eqn{p}-values are not affected by this change, but
       approximate \eqn{p}-values will differ within random variation.
-      
+
       \item The centered linear statistic can now be extracted (see
       \code{?statistic}).
     }
   }
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item The class definition of \code{"PValue"} erroneously included the
+      \code{midpvalue} and \code{pvalueinterval} slots; these slots are now part
+      of the \code{"NullDistribution"} subclass (as they should have
+      originally).
     }
   }
   \subsection{User-visible changes}{

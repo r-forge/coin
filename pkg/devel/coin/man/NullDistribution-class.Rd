@@ -24,24 +24,32 @@
   \code{"ApproxNullDistribution"}, \code{"AsymptNullDistribution"} or
   \code{"ExactNullDistribution"}:
   \describe{
-    \item{\code{q}:}{
-      Object of class \code{"function"}.  The quantile function of the reference
+    \item{\code{name}:}{
+      Object of class \code{"character"}.  The name of the reference
+      distribution.
+    }
+    \item{\code{p}:}{
+      Object of class \code{"function"}.  The distribution function of the
+      reference distribution.
+    }
+    \item{\code{pvalue}:}{
+      Object of class \code{"function"}.  The \eqn{p}-value function of the
+      reference distribution.
+    }
+    \item{\code{parameters}:}{
+      Object of class \code{"list"}.  Additional parameters.
+    }
+    \item{\code{support}:}{
+      Object of class \code{"function"}.  The support of the reference
       distribution.
     }
     \item{\code{d}:}{
       Object of class \code{"function"}.  The density function of the reference
       distribution.
     }
-    \item{\code{support}:}{
-      Object of class \code{"function"}.  The support of the reference
+    \item{\code{q}:}{
+      Object of class \code{"function"}.  The quantile function of the reference
       distribution.
-    }
-    \item{\code{parameters}:}{
-      Object of class \code{"list"}.  Additional parameters.
-    }
-    \item{\code{pvalue}:}{
-      Object of class \code{"function"}.  The \eqn{p}-value function of the
-      reference distribution.
     }
     \item{\code{midpvalue}:}{
       Object of class \code{"function"}.  The mid-\eqn{p}-value function of the
@@ -50,14 +58,6 @@
     \item{\code{pvalueinterval}:}{
       Object of class \code{"function"}.  The \eqn{p}-value interval function of
       the reference distribution.
-    }
-    \item{\code{p}:}{
-      Object of class \code{"function"}.  The distribution function of the
-      reference distribution.
-    }
-    \item{\code{name}:}{
-      Object of class \code{"character"}.  The name of the reference
-      distribution.
     }
   }
   Additionally, for objects of classes \code{"ApproxNullDistribution"} or
