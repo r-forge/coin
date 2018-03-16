@@ -12,25 +12,17 @@
 }
 \section{Slots}{
   \describe{
-    \item{\code{pvalue}:}{
-      Object of class \code{"function"}.  The \eqn{p}-value function of the
-      reference distribution.
-    }
-    \item{\code{midpvalue}:}{
-      Object of class \code{"function"}.  The mid-\eqn{p}-value function of the
-      reference distribution.
-    }
-    \item{\code{pvalueinterval}:}{
-      Object of class \code{"function"}.  The \eqn{p}-value interval function of
-      the reference distribution.
+    \item{\code{name}:}{
+      Object of class \code{"character"}.  The name of the reference
+      distribution.
     }
     \item{\code{p}:}{
       Object of class \code{"function"}.  The distribution function of the
       reference distribution.
     }
-    \item{\code{name}:}{
-      Object of class \code{"character"}.  The name of the reference
-      distribution.
+    \item{\code{pvalue}:}{
+      Object of class \code{"function"}.  The \eqn{p}-value function of the
+      reference distribution.
     }
   }
 }

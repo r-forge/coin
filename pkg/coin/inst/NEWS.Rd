@@ -15,7 +15,10 @@
   }
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item The class definition of \code{"PValue"} erroneously included the
+      \code{midpvalue} and \code{pvalueinterval} slots; these slots are now part
+      of the \code{"NullDistribution"} subclass (as they should have
+      originally).
     }
   }
   \subsection{User-visible changes}{

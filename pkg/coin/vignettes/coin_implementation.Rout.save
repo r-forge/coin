@@ -162,8 +162,6 @@ Slot & Class \\ \hline
  & \\
 Slot & Class \\ \hline 
 \code{pvalue} & \Rclass{function} \\
-\code{midpvalue} & \Rclass{function} \\
-\code{pvalueinterval} & \Rclass{function} \\
 \code{p} & \Rclass{function} \\
 \code{name} & \Rclass{character} \\
 \hline
@@ -177,6 +175,8 @@ Slot & Class \\ \hline
 \multicolumn{2}{l}{Contains \Rclass{PValue}} \\
  & \\
 Slot & Class \\ \hline 
+\code{pvalueinterval} & \Rclass{function} \\
+\code{midpvalue} & \Rclass{function} \\
 \code{q} & \Rclass{function} \\
 \code{d} & \Rclass{function} \\
 \code{support} & \Rclass{function} \\
@@ -360,4 +360,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.84    0.20    3.04 
+   3.04    0.09    3.15 

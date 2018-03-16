@@ -128,18 +128,14 @@ setClass("QuadTypeIndependenceTestStatistic",
 ### p-values
 setClass("PValue",
     slots = c(
-        pvalue         = "function",
-        midpvalue      = "function",
-        pvalueinterval = "function",
-        p              = "function",
-        name           = "character"
+        pvalue = "function",
+        p      = "function",
+        name   = "character"
     ),
     prototype = list(
-        pvalue         = function(q) NA,
-        midpvalue      = function(q) NA,
-        pvalueinterval = function(q) NA,
-        p              = function(q) NA,
-        name           = NA_character_
+        pvalue = function(q) NA,
+        p      = function(q) NA,
+        name   = NA_character_
     )
 )
 
@@ -147,16 +143,20 @@ setClass("PValue",
 setClass("NullDistribution",
     contains = "PValue",
     slots = c(
-        q          = "function",
-        d          = "function",
-        support    = "function",
-        parameters = "list"
+        pvalueinterval = "function",
+        midpvalue      = "function",
+        q              = "function",
+        d              = "function",
+        support        = "function",
+        parameters     = "list"
     ),
     prototype = list(
-        q          = function(p) NA,
-        d          = function(x) NA,
-        support    = function() NA,
-        parameters = list()
+        pvalueinterval = function(q) NA,
+        midpvalue      = function(q) NA,
+        q              = function(p) NA,
+        d              = function(x) NA,
+        support        = function() NA,
+        parameters     = list()
     )
 )
 

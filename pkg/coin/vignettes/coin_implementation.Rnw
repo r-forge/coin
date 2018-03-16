@@ -578,7 +578,7 @@ only
 <<PValue, results = tex>>=
 toLatex(c2t("PValue"))
 @
-or, where possible, is augmented by its density and quantile functions:
+or, where possible, is augmented by, e.g., its density and quantile functions:
 <<NullDistribution, results = tex>>=
 toLatex(c2t("NullDistribution"))
 @
