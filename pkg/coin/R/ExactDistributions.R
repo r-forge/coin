@@ -98,10 +98,10 @@ SR_shift_2sample <- function(object, fact) {
                        sum, NA_real_, USE.NAMES = FALSE)
     }
 
-    p <- function(q) {
+    p_fun <- function(q) {
         sum(Prob[T %LE% q])
     }
-    q <- function(p) {
+    q_fun <- function(p) {
         idx <- which(cumsum(Prob) %LT% p)
         if (length(idx) == 0L)
             T[1L]
@@ -110,14 +110,14 @@ SR_shift_2sample <- function(object, fact) {
         else
             T[max(idx) + 1L]
     }
-    d <- function(x) {
+    d_fun <- function(x) {
         eq <- T %EQ% x
         if (any(eq))
             Prob[eq]
         else
             0
     }
-    pvalue <- function(q) {
+    pvalue_fun <- function(q) {
         if (teststat == "scalar")
             switch(object@alternative,
                 "less"      = sum(Prob[T %LE% q]),
@@ -137,44 +137,61 @@ SR_shift_2sample <- function(object, fact) {
                 sum(Prob[T %GE% q])
         }
     }
-    midpvalue <- function(q, z) {
-        pvalue(q) - z *
+    midpvalue_fun <- function(q, z) {
+        pvalue_fun(q) - z *
           if (teststat == "scalar" && object@alternative == "two.sided")
-              d(-q) + d(q) # both tails
+              d_fun(-q) + d_fun(q) # both tails
           else
-              d(q)
+              d_fun(q)
     }
 
+    p <- function(q) {
+        if (length(q) < 2L)
+            p_fun(q)
+        else
+            vapply(q, p_fun, NA_real_)
+    }
+    q <- function(p) {
+        if (length(p) < 2L)
+            q_fun(p)
+        else
+            vapply(p, q_fun, NA_real_)
+    }
+    d <- function(x) {
+        if (length(x) < 2L)
+            d_fun(x)
+        else
+            vapply(x, d_fun, NA_real_)
+    }
+    pvalue <- function(q) {
+        if (length(q) < 2L)
+            pvalue_fun(q)
+        else
+            vapply(q, pvalue_fun, NA_real_)
+    }
+    midpvalue <- function(q) {
+        if (length(q) < 2L)
+            midpvalue_fun(q, z = 0.5)
+        else
+            vapply(q, midpvalue_fun, NA_real_, z = 0.5)
+    }
+    pvalueinterval <- function(q) {
+        if (length(q) < 2L)
+            midpvalue_fun(q, z = c("p_0" = 1, "p_1" = 0))
+        else
+            vapply(q, midpvalue_fun, c(NA_real_, NA_real_),
+                   z = c("p_0" = 1, "p_1" = 0))
+    }
+    support <- function() T
+
     new("ExactNullDistribution",
-        p = function(q) {
-            vapply(q, p, NA_real_)
-        },
-        q = function(p) {
-            vapply(p, q, NA_real_)
-        },
-        d = function(x) {
-            vapply(x, d, NA_real_)
-        },
-        pvalue = function(q) {
-            if (length(q) < 2L)
-                pvalue(q)
-            else
-                vapply(q, pvalue, NA_real_)
-        },
-        midpvalue = function(q) {
-            if (length(q) < 2L)
-                midpvalue(q, z = 0.5)
-            else
-                vapply(q, midpvalue, NA_real_, z = 0.5)
-        },
-        pvalueinterval = function(q) {
-            if (length(q) < 2L)
-                midpvalue(q, z = c("p_0" = 1, "p_1" = 0))
-            else
-                vapply(q, midpvalue, c(NA_real_, NA_real_),
-                       z = c("p_0" = 1, "p_1" = 0))
-        },
-        support = function() T,
+        p = p,
+        q = q,
+        d = d,
+        pvalue = pvalue,
+        midpvalue = midpvalue,
+        pvalueinterval = pvalueinterval,
+        support = support,
         name = paste0("Exact Distribution for Independent Two-Sample Tests",
                       " (Streitberg-Roehmel Shift Algorithm)"))
 }
@@ -257,10 +274,10 @@ SR_shift_1sample <- function(object, fact) {
                        sum, NA_real_, USE.NAMES = FALSE)
     }
 
-    p <- function(q) {
+    p_fun <- function(q) {
         sum(Prob[T %LE% q])
     }
-    q <- function(p) {
+    q_fun <- function(p) {
         idx <- which(cumsum(Prob) %LT% p)
         if (length(idx) == 0L)
             T[1L]
@@ -269,14 +286,14 @@ SR_shift_1sample <- function(object, fact) {
         else
             T[max(idx) + 1L]
     }
-    d <- function(x) {
+    d_fun <- function(x) {
         eq <- T %EQ% x
         if (any(eq))
             Prob[eq]
         else
             0
     }
-    pvalue <- function(q) {
+    pvalue_fun <- function(q) {
         if (teststat == "scalar")
             switch(object@alternative,
                 "less"      = sum(Prob[T %LE% q]),
@@ -296,44 +313,61 @@ SR_shift_1sample <- function(object, fact) {
                 sum(Prob[T %GE% q])
         }
     }
-    midpvalue <- function(q, z) {
-        pvalue(q) - z *
+    midpvalue_fun <- function(q, z) {
+        pvalue_fun(q) - z *
           if (teststat == "scalar" && object@alternative == "two.sided")
-              d(-q) + d(q) # both tails
+              d_fun(-q) + d_fun(q) # both tails
           else
-              d(q)
+              d_fun(q)
     }
 
+    p <- function(q) {
+        if (length(q) < 2L)
+            p_fun(q)
+        else
+            vapply(q, p_fun, NA_real_)
+    }
+    q <- function(p) {
+        if (length(p) < 2L)
+            q_fun(p)
+        else
+            vapply(p, q_fun, NA_real_)
+    }
+    d <- function(x) {
+        if (length(x) < 2L)
+            d_fun(x)
+        else
+            vapply(x, d_fun, NA_real_)
+    }
+    pvalue <- function(q) {
+        if (length(q) < 2L)
+            pvalue_fun(q)
+        else
+            vapply(q, pvalue_fun, NA_real_)
+    }
+    midpvalue <- function(q) {
+        if (length(q) < 2L)
+            midpvalue_fun(q, z = 0.5)
+        else
+            vapply(q, midpvalue_fun, NA_real_, z = 0.5)
+    }
+    pvalueinterval <- function(q) {
+        if (length(q) < 2L)
+            midpvalue_fun(q, z = c("p_0" = 1, "p_1" = 0))
+        else
+            vapply(q, midpvalue_fun, c(NA_real_, NA_real_),
+                   z = c("p_0" = 1, "p_1" = 0))
+    }
+    support <- function() T
+
     new("ExactNullDistribution",
-        p = function(q) {
-            vapply(q, p, NA_real_)
-        },
-        q = function(p) {
-            vapply(p, q, NA_real_)
-        },
-        d = function(x) {
-            vapply(x, d, NA_real_)
-        },
-        pvalue = function(q) {
-            if (length(q) < 2L)
-                pvalue(q)
-            else
-                vapply(q, pvalue, NA_real_)
-        },
-        midpvalue = function(q) {
-            if (length(q) < 2L)
-                midpvalue(q, z = 0.5)
-            else
-                vapply(q, midpvalue, NA_real_, z = 0.5)
-        },
-        pvalueinterval = function(q) {
-            if (length(q) < 2L)
-                midpvalue(q, z = c("p_0" = 1, "p_1" = 0))
-            else
-                vapply(q, midpvalue, c(NA_real_, NA_real_),
-                       z = c("p_0" = 1, "p_1" = 0))
-        },
-        support = function() T,
+        p = p,
+        q = q,
+        d = d,
+        pvalue = pvalue,
+        midpvalue = midpvalue,
+        pvalueinterval = pvalueinterval,
+        support = support,
         name = paste0("Exact Distribution for Dependent Two-Sample Tests",
                       " (Streitberg-Roehmel Shift Algorithm)"))
 }
@@ -369,12 +403,12 @@ vdW_split_up_2sample <- function(object) {
     storage.mode(m) <- "integer"
     tol <- eps()
 
-    p <- function(q) {
+    p_fun <- function(q) {
         T <- q * sqrt(variance(object)) + expectation(object)
         .Call(R_split_up_2sample, scores, m, T, tol)
     }
-    q <- function(p) {
-        f <- function(x) p(x) - p
+    q_fun <- function(p) {
+        f <- function(x) p_fun(x) - p
         rr <- if (p <= 0.5)
                   uniroot(f, interval = c(-10, 1), tol = tol)
               else
@@ -397,35 +431,45 @@ vdW_split_up_2sample <- function(object) {
         }
         rr$root
     }
-    pvalue <- function(q) {
+    pvalue_fun <- function(q) {
         switch(object@alternative,
-            "less"      = p(q),
-            "greater"   = 1 - p(q - 10 * tol),
+            "less"      = p_fun(q),
+            "greater"   = 1 - p_fun(q - 10 * tol),
             "two.sided" = {
                 if (q == 0)
                     1L
                 else if (q > 0)
-                    p(-q) + (1 - p(q - 10 * tol))
+                    p_fun(-q) + (1 - p_fun(q - 10 * tol))
                 else
-                    p(q) + (1 - p(-q - 10 * tol))
+                    p_fun(q) + (1 - p_fun(-q - 10 * tol))
             }
         )
     }
 
+    p <- function(q) {
+        if (length(q) < 2L)
+            p_fun(q)
+        else
+            vapply(q, p_fun, NA_real_)
+    }
+    q <- function(p) {
+        if (length(p) < 2L)
+            q_fun(p)
+        else
+            vapply(p, q_fun, NA_real_)
+    }
+    pvalue <- function(q) {
+        if (length(q) < 2L)
+            pvalue_fun(q)
+        else
+            vapply(q, pvalue_fun, NA_real_)
+    }
+
     new("ExactNullDistribution",
-        p = function(q) {
-            vapply(q, p, NA_real_)
-        },
-        q = function(p) {
-            vapply(p, q, NA_real_)
-        },
+        p = p,
+        q = q,
         d = function(x) NA,
-        pvalue = function(q) {
-            if (length(q) < 2L)
-                pvalue(q)
-            else
-                vapply(q, pvalue, NA_real_)
-        },
+        pvalue = pvalue,
         midpvalue = function(q) NA,
         pvalueinterval = function(q) NA,
         support = function() NA,
