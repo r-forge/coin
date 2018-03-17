@@ -185,7 +185,6 @@ SR_shift_2sample <- function(object, fact) {
     support <- function() T
 
     new("ExactNullDistribution",
-        seed = seed,
         p = p,
         q = q,
         d = d,
@@ -362,7 +361,6 @@ SR_shift_1sample <- function(object, fact) {
     support <- function() T
 
     new("ExactNullDistribution",
-        seed = seed,
         p = p,
         q = q,
         d = d,
@@ -469,7 +467,7 @@ vdW_split_up_2sample <- function(object) {
 
     new("ExactNullDistribution",
         p = p,
-        q = q
+        q = q,
         d = function(x) NA,
         pvalue = pvalue,
         midpvalue = function(q) NA,

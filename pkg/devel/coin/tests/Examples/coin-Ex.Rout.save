@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2018-02-20 r74280) -- "Unsuffered Consequences"
+R Under development (unstable) (2018-03-15 r74406) -- "Unsuffered Consequences"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -1233,8 +1233,7 @@ chi-squared = 23.316, p-value = 0.00052
 > 
 > ## One-sided p-value
 > pperm(at, q = statistic(at))
-       1 
-0.698635 
+[1] 0.698635
 > 
 > ## Random number generation
 > rperm(at, n = 5)
@@ -2998,7 +2997,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.64 0.22 9.93 NA NA 
+Time elapsed:  9.83 0.22 10.1 NA NA 
 > grDevices::dev.off()
 null device 
           1 
