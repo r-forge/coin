@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2018-02-20 r74280) -- "Unsuffered Consequences"
+R Under development (unstable) (2018-03-15 r74406) -- "Unsuffered Consequences"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -101,8 +101,7 @@ Loading required package: survival
 > 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "asympt",
 +                    alternative = "less"))
-         1 
-0.08974461 
+[1] 0.08974461
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx",
 +                    alternative = "less"))
 [1] 0.0885
@@ -115,8 +114,7 @@ Loading required package: survival
 > 
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "asympt",
 +                    alternative = "greater"))
-        1 
-0.9102554 
+[1] 0.9102554
 > pvalue(wilcox_test(y ~ x | block, data = dat, distribution = "approx",
 +                    alternative = "greater"))
 [1] 0.9158
@@ -750,4 +748,4 @@ Error in SR_shift_1sample(object, fact = attr(int, "fact")) :
 > 
 > proc.time()
    user  system elapsed 
-   1.56    0.12    1.68 
+   1.71    0.06    1.76 

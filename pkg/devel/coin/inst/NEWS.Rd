@@ -45,13 +45,19 @@
     \itemize{
       \item The class definition of \code{"PValue"} erroneously included the
       \code{midpvalue} and \code{pvalueinterval} slots; these slots are now part
-      of the \code{"NullDistribution"} subclass (as they should have
+      of the \code{"NullDistribution"} subclass (as they should have been
       originally).
     }
   }
   \subsection{User-visible changes}{
     \itemize{
       \item The Pearson chi-squared test is now computed more efficiently.
+
+      \item Extracting the test statistic or the (global) p-value sometimes
+      returned a named result; the results are now unnamed.
+
+      \item The quantile function now returns a named vector if its \code{p}
+      argument is named.
     }
   }
   \subsection{Other changes}{
