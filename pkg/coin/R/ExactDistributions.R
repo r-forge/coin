@@ -146,22 +146,16 @@ SR_shift_2sample <- function(object, fact) {
     }
 
     p <- function(q) {
-        if (length(q) < 2L)
-            p_fun(q)
-        else
-            vapply(q, p_fun, NA_real_)
+        ## NOTE: 'vapply' provide names
+        vapply(q, p_fun, NA_real_)
     }
     q <- function(p) {
-        if (length(p) < 2L)
-            q_fun(p)
-        else
-            vapply(p, q_fun, NA_real_)
+        ## NOTE: 'vapply' provide names
+        vapply(p, q_fun, NA_real_)
     }
     d <- function(x) {
-        if (length(x) < 2L)
-            d_fun(x)
-        else
-            vapply(x, d_fun, NA_real_)
+        ## NOTE: 'vapply' provide names
+        vapply(x, d_fun, NA_real_)
     }
     pvalue <- function(q) {
         if (length(q) < 2L)
@@ -322,22 +316,16 @@ SR_shift_1sample <- function(object, fact) {
     }
 
     p <- function(q) {
-        if (length(q) < 2L)
-            p_fun(q)
-        else
-            vapply(q, p_fun, NA_real_)
+        ## NOTE: 'vapply' provide names
+        vapply(q, p_fun, NA_real_)
     }
     q <- function(p) {
-        if (length(p) < 2L)
-            q_fun(p)
-        else
-            vapply(p, q_fun, NA_real_)
+        ## NOTE: 'vapply' provide names
+        vapply(p, q_fun, NA_real_)
     }
     d <- function(x) {
-        if (length(x) < 2L)
-            d_fun(x)
-        else
-            vapply(x, d_fun, NA_real_)
+        ## NOTE: 'vapply' provide names
+        vapply(x, d_fun, NA_real_)
     }
     pvalue <- function(q) {
         if (length(q) < 2L)
@@ -447,16 +435,12 @@ vdW_split_up_2sample <- function(object) {
     }
 
     p <- function(q) {
-        if (length(q) < 2L)
-            p_fun(q)
-        else
-            vapply(q, p_fun, NA_real_)
+        ## NOTE: 'vapply' provide names
+        vapply(q, p_fun, NA_real_)
     }
     q <- function(p) {
-        if (length(p) < 2L)
-            q_fun(p)
-        else
-            vapply(p, q_fun, NA_real_)
+        ## NOTE: 'vapply' provide names
+        vapply(p, q_fun, NA_real_)
     }
     pvalue <- function(q) {
         if (length(q) < 2L)

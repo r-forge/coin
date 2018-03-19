@@ -167,7 +167,8 @@ setMethod("initialize",
                   sqrt(variance(object))
 
         .Object <- copyslots(object, .Object)
-        .Object@teststatistic <- .Object@standardizedlinearstatistic <- drop(ss)
+        .Object@teststatistic <- unname(ss)
+        .Object@standardizedlinearstatistic <- ss
         .Object@alternative <- match.arg(alternative)
         .Object@paired <- paired
 
@@ -191,9 +192,10 @@ setMethod("initialize",
         .Object <- copyslots(object, .Object)
         .Object@teststatistic <-
             switch(alternative,
-                "less"      = drop(min(ss)),
-                "greater"   = drop(max(ss)),
-                "two.sided" = drop(max(abs(ss))))
+                "less"      = min(ss),
+                "greater"   = max(ss),
+                "two.sided" = max(abs(ss))
+            )
         .Object@standardizedlinearstatistic <- ss
         .Object@alternative <- match.arg(alternative)
 
