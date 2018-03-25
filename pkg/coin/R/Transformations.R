@@ -419,6 +419,45 @@ of_trafo <- function(x, scores = NULL) {
         stop(sQuote("scores"), " does not match the number of levels")
 }
 
+### Zheng (2008)
+ordered_scores <- function(r, s) {
+    n <- length(s)
+    if (r == 1)      # 'x' has three levels => simplest case!
+        matrix(s, nrow = 1, ncol = n)
+    else if (n == 1) # => all order-preserving binary partitions
+        matrix(s, nrow = r, ncol = 1)
+    else {           # 'x' has four or more levels
+        s1 <- ordered_scores(r - 1, s)
+        s2 <- ordered_scores(r, s[-1])
+        cbind(rbind(s[1], s1), s2)
+    }
+}
+
+zheng_trafo <- function(x, increment = 0.1) {
+    if (!is.ordered(x))
+        warning(sQuote(deparse(substitute(x))), " is not an ordered factor")
+    if (increment <= 0 || increment > 1)
+        stop(sQuote("increment"),
+             " must be greater than 0, but not greater than 1")
+    r <- nlevels(x) - 2
+    if(r == 0)
+        stop(sQuote(deparse(substitute(x))), " has less than three levels")
+
+    ## compute scores
+    scores <- rbind(0, ordered_scores(r, seq.int(0, 1, increment)), 1)
+
+    ## compute colnames
+    cn <- format(scores, digits = min(n_decimal_digits(increment), 4),
+                 scientific = FALSE)
+    cn <- vapply(seq_len(ncol(cn)), function(i)
+                     paste0(if (is_ytrafo()) "eta" else "gamma", " = (",
+                            paste0(cn[, i], collapse = ", "),
+                            ")"),
+                 NA_character_)
+
+    setDimnames(scores[x, , drop = FALSE], list(seq_along(x), cn))
+}
+
 ### transformation function
 trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
                   ordered_trafo = of_trafo, surv_trafo = logrank_trafo,

@@ -1856,7 +1856,8 @@ Quade F = 8.3765, num df = 2, denom df = 12, p-value = 0.005284
 > ### Aliases: id_trafo rank_trafo normal_trafo median_trafo savage_trafo
 > ###   consal_trafo koziol_trafo klotz_trafo mood_trafo ansari_trafo
 > ###   fligner_trafo logrank_trafo logrank_weight maxstat_trafo
-> ###   fmaxstat_trafo ofmaxstat_trafo f_trafo of_trafo trafo mcp_trafo
+> ###   fmaxstat_trafo ofmaxstat_trafo f_trafo of_trafo zheng_trafo trafo
+> ###   mcp_trafo
 > ### Keywords: manip
 > 
 > ### ** Examples
@@ -1914,6 +1915,21 @@ attr(,"contrasts")$x
 4  2  3
 5  3  4
 6  3  4
+> zheng_trafo(ox, increment = 1/3)
+  gamma = (0.0000, 0.0000, 1.0000) gamma = (0.0000, 0.3333, 1.0000)
+1                                0                        0.0000000
+2                                0                        0.0000000
+3                                0                        0.3333333
+4                                0                        0.3333333
+5                                1                        1.0000000
+6                                1                        1.0000000
+  gamma = (0.0000, 0.6667, 1.0000) gamma = (0.0000, 1.0000, 1.0000)
+1                        0.0000000                                0
+2                        0.0000000                                0
+3                        0.6666667                                1
+4                        0.6666667                                1
+5                        1.0000000                                1
+6                        1.0000000                                1
 > 
 > ## Normal scores
 > y <- runif(6)
@@ -2377,6 +2393,24 @@ Z = 2.5736, p-value = 0.0104
 alternative hypothesis: two.sided
 
 > 
+> ## Not run: 
+> ##D ## Approximative (Monte Carlo) score-independent association test
+> ##D ## Winell and Lindbaeck (2018)
+> ##D (it <- independence_test(jobsatisfaction,
+> ##D                          distribution = approximate(nresample = 10000),
+> ##D                          xtrafo = function(data)
+> ##D                              trafo(data, factor_trafo = function(x)
+> ##D                                  zheng_trafo(ordered(x))),
+> ##D                          ytrafo = function(data)
+> ##D                              trafo(data, factor_trafo = function(y)
+> ##D                                  zheng_trafo(ordered(y)))))
+> ##D 
+> ##D ## Extract the "best" set of scores
+> ##D ss <- statistic(it, type = "standardized")
+> ##D idx <- which(abs(ss) == max(abs(ss)), arr.ind = TRUE)
+> ##D ss[idx[1], idx[2], drop = FALSE]
+> ## End(Not run)
+> 
 > 
 > 
 > cleanEx()
@@ -2436,6 +2470,23 @@ data:  malformation by consumption (0 < <1 < 1-2 < 3-5 < >=6)
 Z = 1.352, p-value = 0.117
 alternative hypothesis: greater
 
+> 
+> ## Not run: 
+> ##D ## One-sided approximative (Monte Carlo) score-independent Cochran-Armitage test
+> ##D ## Winell and Lindbaeck (2018)
+> ##D (it <- independence_test(malformation ~ consumption, data = malformations,
+> ##D                          distribution = approximate(nresample = 1000,
+> ##D                                                     parallel = "snow",
+> ##D                                                     ncpus = 8),
+> ##D                          alternative = "greater",
+> ##D                          xtrafo = function(data)
+> ##D                              trafo(data, ordered_trafo = zheng_trafo)))
+> ##D 
+> ##D ## Extract the "best" set of scores
+> ##D ss <- statistic(it, type = "standardized")
+> ##D idx <- which(ss == max(ss), arr.ind = TRUE)
+> ##D ss[idx[1], idx[2], drop = FALSE]
+> ## End(Not run)
 > 
 > 
 > 
@@ -2984,6 +3035,27 @@ data:  response by
 chi-squared = 11.957, df = 3, p-value = 0.007533
 
 > 
+> ## Asymptotic score-independent Stuart(-Maxwell) test
+> ## Winell and Lindbaeck (2018)
+> (st <- symmetry_test(vision,
++                      ytrafo = function(data)
++                          trafo(data, factor_trafo = function(y)
++                              zheng_trafo(ordered(y)))))
+
+	Asymptotic General Symmetry Test
+
+data:  response by
+	 conditions (Right.Eye, Left.Eye) 
+	 stratified by block
+maxT = 3.4484, p-value = 0.003294
+alternative hypothesis: two.sided
+
+> ss <- statistic(st, type = "standardized")
+> idx <- which(abs(ss) == max(abs(ss)), arr.ind = TRUE)
+> ss[idx[1], idx[2], drop = FALSE]
+          eta = (0.0, 0.3, 0.7, 1.0)
+Right.Eye                  -3.448397
+> 
 > 
 > 
 > ### * <FOOTER>
@@ -2991,7 +3063,7 @@ chi-squared = 11.957, df = 3, p-value = 0.007533
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.71 0.14 9.91 NA NA 
+Time elapsed:  11.51 0.14 11.68 NA NA 
 > grDevices::dev.off()
 null device 
           1 

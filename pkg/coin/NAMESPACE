@@ -32,7 +32,7 @@ export(independence_test,
        klotz_trafo, mood_trafo, ansari_trafo, fligner_trafo,
        logrank_trafo, logrank_weight,
        maxstat_trafo, fmaxstat_trafo, ofmaxstat_trafo,
-       f_trafo, of_trafo, mcp_trafo,
+       f_trafo, of_trafo, zheng_trafo, mcp_trafo,
        asymptotic, approximate, exact)
 
 exportClasses("ExpectCovar", "ExpectCovarInfluence", "CovarianceMatrix",
