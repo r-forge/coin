@@ -37,6 +37,11 @@
       asymptotic and exact \eqn{p}-values are not affected by this change, but
       approximate \eqn{p}-values will differ within random variation.
 
+      \item Ordered factors can now be transformed to a finite collection of
+      order-restricted scores (see \code{?zheng_trafo}); this can be used to
+      formulate score-independent tests for ordered categorical data (see
+      \code{?malformations}, \code{?jobsatisfaction} and \code{?vision}).
+
       \item The centered linear statistic can now be extracted (see
       \code{?statistic}).
     }

@@ -1,6 +1,7 @@
 \name{malformations}
 \docType{data}
 \alias{malformations}
+\encoding{UTF-8}
 \title{Maternal Drinking and Congenital Sex Organ Malformation}
 \description{
   A subset of data from a study on the relationship between maternal alcohol
@@ -26,18 +27,28 @@
   congenital malformations (Mills and Graubard, 1987).  The subset given here
   concerns only sex organ malformation (Mills and Graubard, 1987, Tab. 4).
 
-  Graubard and Korn (1987) used this data set to illustrate that different
-  choices of scores for ordinal variables can lead to conflicting conclusions.
+  This data set was used by Graubard and Korn (1987) to illustrate that
+  different choices of scores for ordinal variables can lead to conflicting
+  conclusions.  Zheng (2008) also used the data, demonstrating two different
+  score-independent tests for ordered categorical data; see also Winell and
+  \enc{Lindbäck}{Lindbaeck} (2018).
 }
 \source{
   Mills, J. L. and Graubard, B. I.  (1987).  Is moderate drinking during
   pregnancy associated with an increased risk for malformations?
-  \emph{Pediatrics} \bold{80}(3), 309--314.
+  \emph{Pediatrics} \bold{80}(3), 309--314. %Note: no DOI available
 }
 \references{
   Graubard, B. I. and Korn, E. L.  (1987).  Choice of column scores for testing
   independence in ordered \eqn{2 \times K}{2 x K} contingency tables.
-  \emph{Biometrics} \bold{43}(2), 471--476.
+  \emph{Biometrics} \bold{43}(2), 471--476.  \doi{10.2307/2531828}
+
+  Winell, H. and \enc{Lindbäck}{Lindbaeck}, J.  (2018).  A general
+  score-independent test for order-restricted inference.  \emph{Manuscript}.
+
+  Zheng, G.  (2008).  Analysis of ordered categorical data: Two
+  score-independent approaches.  \emph{Biometrics} \bold{64}(4), 1276–-1279.
+  \doi{10.1111/j.1541-0420.2008.00992.x}
 }
 \examples{
 ## Graubard and Korn (1987, Tab. 3)
@@ -63,5 +74,20 @@ chisq_test(malformation ~ consumption, data = malformations,
 chisq_test(malformation ~ consumption, data = malformations,
            distribution = approximate(nresample = 1000),
            alternative = "greater")
+
+\dontrun{## One-sided approximative (Monte Carlo) score-independent Cochran-Armitage test
+## Winell and Lindbaeck (2018)
+(it <- independence_test(malformation ~ consumption, data = malformations,
+                         distribution = approximate(nresample = 1000,
+                                                    parallel = "snow",
+                                                    ncpus = 8),
+                         alternative = "greater",
+                         xtrafo = function(data)
+                             trafo(data, ordered_trafo = zheng_trafo)))
+
+## Extract the "best" set of scores
+ss <- statistic(it, type = "standardized")
+idx <- which(ss == max(ss), arr.ind = TRUE)
+ss[idx[1], idx[2], drop = FALSE]}
 }
 \keyword{datasets}

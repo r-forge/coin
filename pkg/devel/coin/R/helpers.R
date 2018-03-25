@@ -471,5 +471,10 @@ setColnames <- function (object, nm) {
     object
 }
 
+setDimnames <- function(object, nm) {
+    dimnames(object) <- nm
+    object
+}
+
 n_decimal_digits <- function(x)
     nchar(sub("^[[:digit:]]*[.]", "", format(min(x), scientific = FALSE)))
