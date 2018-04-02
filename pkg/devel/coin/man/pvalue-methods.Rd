@@ -128,8 +128,8 @@
 }
 \note{
   The mid-\eqn{p}-value and \eqn{p}-value interval of asymptotic permutation
-  distributions for maximum-type tests or exact permutation distributions
-  obtained by the split-up algoritm is reported as \code{NA}.
+  distributions or exact permutation distributions obtained by the split-up
+  algoritm is reported as \code{NA}.
 }
 \references{
   Berger, V. W.  (2000).  Pros and cons of permutation tests in clinical trials.
