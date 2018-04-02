@@ -139,17 +139,19 @@ chisq_test(davis)
 ## Approximative (Monte Carlo) Pearson chi-squared test
 ct <- chisq_test(davis,
                  distribution = approximate(nresample = 10000))
-pvalue(ct)          # standard p-value
-midpvalue(ct)       # mid-p-value
-pvalue_interval(ct) # p-value interval
+pvalue(ct)             # standard p-value
+midpvalue(ct)          # mid-p-value
+pvalue_interval(ct)    # p-value interval
+size(ct, alpha = 0.05) # test size at alpha = 0.05 using the p-value
 
 ## Exact Pearson chi-squared test (Davis, 1986)
 ## Note: disagrees with Fisher's exact test
 ct <- chisq_test(davis,
                  distribution = "exact")
-pvalue(ct)          # standard p-value
-midpvalue(ct)       # mid-p-value
-pvalue_interval(ct) # p-value interval
+pvalue(ct)             # standard p-value
+midpvalue(ct)          # mid-p-value
+pvalue_interval(ct)    # p-value interval
+size(ct, alpha = 0.05) # test size at alpha = 0.05 using the p-value
 fisher.test(davis)
 
 
@@ -170,8 +172,9 @@ cancer <- as.table(cancer)
 ## Note: agrees with Fishers's exact test
 (ct <- chisq_test(cancer,
                   distribution = "exact"))
-midpvalue(ct)       # mid-p-value
-pvalue_interval(ct) # p-value interval
+midpvalue(ct)          # mid-p-value
+pvalue_interval(ct)    # p-value interval
+size(ct, alpha = 0.05) # test size at alpha = 0.05 using the p-value
 fisher.test(cancer)
 
 

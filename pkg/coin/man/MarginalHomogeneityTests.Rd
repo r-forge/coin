@@ -171,9 +171,10 @@ mh_test(diphtheria ~ media | case, data = cochran) # Q = 8.05
 ## Approximative Cochran Q test
 mt <- mh_test(diphtheria ~ media | case, data = cochran,
               distribution = approximate(nresample = 10000))
-pvalue(mt)          # standard p-value
-midpvalue(mt)       # mid-p-value
-pvalue_interval(mt) # p-value interval
+pvalue(mt)             # standard p-value
+midpvalue(mt)          # mid-p-value
+pvalue_interval(mt)    # p-value interval
+size(mt, alpha = 0.05) # test size at alpha = 0.05 using the p-value
 
 
 ## Opinions on Pre- and Extramarital Sex

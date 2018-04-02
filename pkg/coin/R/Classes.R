@@ -143,6 +143,7 @@ setClass("PValue",
 setClass("NullDistribution",
     contains = "PValue",
     slots = c(
+        size           = "function",
         pvalueinterval = "function",
         midpvalue      = "function",
         q              = "function",
@@ -151,6 +152,7 @@ setClass("NullDistribution",
         parameters     = "list"
     ),
     prototype = list(
+        size           = function(alpha, type) NA,
         pvalueinterval = function(q) NA,
         midpvalue      = function(q) NA,
         q              = function(p) NA,

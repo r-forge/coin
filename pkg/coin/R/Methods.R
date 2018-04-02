@@ -28,6 +28,7 @@ setMethod("AsymptNullDistribution",
             pvalue = pvalue,
             midpvalue = function(q) NA,
             pvalueinterval = function(q) NA,
+            size = function(alpha, type) NA,
             support = function() NA,
             name = "Univariate Normal Distribution")
     }
@@ -89,6 +90,7 @@ setMethod("AsymptNullDistribution",
             pvalue = pvalue,
             midpvalue = function(q) NA,
             pvalueinterval = function(q) NA,
+            size = function(alpha, type) NA,
             support = function() NA,
             name = "Multivariate Normal Distribution",
             parameters = list(corr = corr))
@@ -113,6 +115,7 @@ setMethod("AsymptNullDistribution",
             pvalue = pvalue,
             midpvalue = function(q) NA,
             pvalueinterval = function(q) NA,
+            size = function(alpha, type) NA,
             support = function() NA,
             name = "Chi-Squared Distribution",
             parameters = list(df = df))
@@ -297,6 +300,11 @@ setMethod("ApproxNullDistribution",
             else
                 pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # keep unique
         }
+        size <- function(alpha, type) {
+            pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
+            spt <- support()
+            vapply(alpha, function(a) sum(d(spt[pv_fun(spt) %LE% a])), NA_real_)
+        }
 
         new("ApproxNullDistribution",
             seed = seed,
@@ -306,6 +314,7 @@ setMethod("ApproxNullDistribution",
             pvalue = pvalue,
             midpvalue = midpvalue,
             pvalueinterval = pvalueinterval,
+            size = size,
             support = support,
             name = "Monte Carlo Distribution")
     }
@@ -423,6 +432,11 @@ setMethod("ApproxNullDistribution",
                 tmp[c(tmp[-1L] %NE% tmp[-length(tmp)], TRUE)] # keep unique
             }
         }
+        size <- function(alpha, type) {
+            pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
+            spt <- support()
+            vapply(alpha, function(a) sum(d(spt[pv_fun(spt) %LE% a])), NA_real_)
+        }
 
         new("ApproxNullDistribution",
             seed = seed,
@@ -432,6 +446,7 @@ setMethod("ApproxNullDistribution",
             pvalue = pvalue,
             midpvalue = midpvalue,
             pvalueinterval = pvalueinterval,
+            size = size,
             support = support,
             name = "Monte Carlo Distribution")
     }
@@ -530,6 +545,11 @@ setMethod("ApproxNullDistribution",
             else
                 pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # keep unique
         }
+        size <- function(alpha, type) {
+            pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
+            spt <- support()
+            vapply(alpha, function(a) sum(d(spt[pv_fun(spt) %LE% a])), NA_real_)
+        }
 
         new("ApproxNullDistribution",
             seed = seed,
@@ -539,6 +559,7 @@ setMethod("ApproxNullDistribution",
             pvalue = pvalue,
             midpvalue = midpvalue,
             pvalueinterval = pvalueinterval,
+            size = size,
             support = support,
             name = "Monte Carlo Distribution")
     }

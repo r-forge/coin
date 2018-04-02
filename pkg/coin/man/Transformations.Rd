@@ -164,9 +164,9 @@ mcp_trafo(\dots)
     applied to each level of \code{block} separately.  Defaults to \code{NULL}.
   }
   \item{\dots}{
-    \code{logrank_trafo}: further arguments to be passed to \code{weight}.
+    \code{logrank_trafo()}: further arguments to be passed to \code{weight}.
     % NOTE: this line is necessary for correct rendering
-    \code{mcp_trafo}: factor name and contrast matrix (as matrix or character)
+    \code{mcp_trafo()}: factor name and contrast matrix (as matrix or character)
     in a \samp{tag = value} format for multiple comparisons based on a single
     unordered factor; see \code{\link[multcomp:glht]{mcp}} in package
     \pkg{multcomp}.

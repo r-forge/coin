@@ -59,6 +59,10 @@
       Object of class \code{"function"}.  The \eqn{p}-value interval function of
       the reference distribution.
     }
+    \item{\code{size}:}{
+      Object of class \code{"function"}.  The size function of the reference
+      distribution.
+    }
   }
   Additionally, for objects of classes \code{"ApproxNullDistribution"} or
   \code{"AsymptNullDistribution"}:
@@ -114,6 +118,10 @@
     \item{rperm}{
       \code{signature(object = "NullDistribution")}: See the documentation for
       \code{\link{rperm}} for details.
+    }
+    \item{size}{
+      \code{signature(object = "NullDistribution")}: See the documentation for
+      \code{\link{size}} for details.
     }
     \item{support}{
       \code{signature(object = "NullDistribution")}: See the documentation for

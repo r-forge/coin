@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2018-03-15 r74406) -- "Unsuffered Consequences"
+R Under development (unstable) (2018-03-28 r74482) -- "Unsuffered Consequences"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -101,31 +101,35 @@ chi-squared = 2.5714, df = 1, p-value = 0.1088
 > ## Approximative (Monte Carlo) Pearson chi-squared test
 > ct <- chisq_test(davis,
 +                  distribution = approximate(nresample = 10000))
-> pvalue(ct)          # standard p-value
+> pvalue(ct)             # standard p-value
 [1] 0.2849
 99 percent confidence interval:
  0.2733285 0.2966774 
 
-> midpvalue(ct)       # mid-p-value
+> midpvalue(ct)          # mid-p-value
 [1] 0.151
 99 percent confidence interval:
  0.1419433 0.1603887 
 
-> pvalue_interval(ct) # p-value interval
+> pvalue_interval(ct)    # p-value interval
    p_0    p_1 
 0.0171 0.2849 
+> size(ct, alpha = 0.05) # test size at alpha = 0.05 using the p-value
+[1] 0.0171
 > 
 > ## Exact Pearson chi-squared test (Davis, 1986)
 > ## Note: disagrees with Fisher's exact test
 > ct <- chisq_test(davis,
 +                  distribution = "exact")
-> pvalue(ct)          # standard p-value
+> pvalue(ct)             # standard p-value
 [1] 0.2860301
-> midpvalue(ct)       # mid-p-value
+> midpvalue(ct)          # mid-p-value
 [1] 0.1527409
-> pvalue_interval(ct) # p-value interval
+> pvalue_interval(ct)    # p-value interval
        p_0        p_1 
 0.01945181 0.28603006 
+> size(ct, alpha = 0.05) # test size at alpha = 0.05 using the p-value
+[1] 0.01945181
 > fisher.test(davis)
 
 	Fisher's Exact Test for Count Data
@@ -164,11 +168,13 @@ odds ratio
 data:  Cancer by Treatment (Surgery, Radiation)
 chi-squared = 0.59915, p-value = 0.6384
 
-> midpvalue(ct)       # mid-p-value
+> midpvalue(ct)          # mid-p-value
 [1] 0.5006832
-> pvalue_interval(ct) # p-value interval
+> pvalue_interval(ct)    # p-value interval
       p_0       p_1 
 0.3629407 0.6384258 
+> size(ct, alpha = 0.05) # test size at alpha = 0.05 using the p-value
+[1] 0.01143318
 > fisher.test(cancer)
 
 	Fisher's Exact Test for Count Data
@@ -890,19 +896,21 @@ chi-squared = 8.0526, df = 3, p-value = 0.04494
 > ## Approximative Cochran Q test
 > mt <- mh_test(diphtheria ~ media | case, data = cochran,
 +               distribution = approximate(nresample = 10000))
-> pvalue(mt)          # standard p-value
+> pvalue(mt)             # standard p-value
 [1] 0.0536
 99 percent confidence interval:
  0.04796230 0.05966731 
 
-> midpvalue(mt)       # mid-p-value
+> midpvalue(mt)          # mid-p-value
 [1] 0.0439
 99 percent confidence interval:
  0.03883667 0.04939715 
 
-> pvalue_interval(mt) # p-value interval
+> pvalue_interval(mt)    # p-value interval
    p_0    p_1 
 0.0342 0.0536 
+> size(mt, alpha = 0.05) # test size at alpha = 0.05 using the p-value
+[1] 0.0342
 > 
 > 
 > ## Opinions on Pre- and Extramarital Sex
@@ -2728,13 +2736,15 @@ C             0.000            0.0000  0.999
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: pvalue-methods
-> ### Title: Computation of the p-Value, Mid-p-Value and p-Value Interval
+> ### Title: Computation of the p-Value, Mid-p-Value, p-Value Interval and
+> ###   Test Size
 > ### Aliases: pvalue pvalue-methods pvalue,IndependenceTest-method
 > ###   pvalue,MaxTypeIndependenceTest-method pvalue,NullDistribution-method
 > ###   midpvalue midpvalue-methods midpvalue,IndependenceTest-method
 > ###   midpvalue,NullDistribution-method pvalue_interval
 > ###   pvalue_interval-methods pvalue_interval,IndependenceTest-method
-> ###   pvalue_interval,NullDistribution-method
+> ###   pvalue_interval,NullDistribution-method size size-methods
+> ###   size,IndependenceTest-method size,NullDistribution-method
 > ### Keywords: methods htest
 > 
 > ### ** Examples
@@ -2761,6 +2771,10 @@ alternative hypothesis: true ratio of scales is not equal to 1
 > pvalue_interval(at)
       p_0       p_1 
 0.6027301 0.7102340 
+> size(at, alpha = 0.05)
+[1] 0.03830999
+> size(at, alpha = 0.05, type = "mid-p-value")
+[1] 0.05633376
 > 
 > 
 > ## Bivariate two-sample problem
@@ -3063,7 +3077,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  11.51 0.14 11.68 NA NA 
+Time elapsed:  12.21 0.19 12.45 NA NA 
 > grDevices::dev.off()
 null device 
           1 

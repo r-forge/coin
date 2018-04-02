@@ -177,6 +177,11 @@ SR_shift_2sample <- function(object, fact) {
                    z = c("p_0" = 1, "p_1" = 0))
     }
     support <- function() T
+    size <- function(alpha, type) {
+        pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
+        spt <- support()
+        vapply(alpha, function(a) sum(d(spt[pv_fun(spt) %LE% a])), NA_real_)
+    }
 
     new("ExactNullDistribution",
         p = p,
@@ -185,6 +190,7 @@ SR_shift_2sample <- function(object, fact) {
         pvalue = pvalue,
         midpvalue = midpvalue,
         pvalueinterval = pvalueinterval,
+        size = size,
         support = support,
         name = paste0("Exact Distribution for Independent Two-Sample Tests",
                       " (Streitberg-Roehmel Shift Algorithm)"))
@@ -347,6 +353,11 @@ SR_shift_1sample <- function(object, fact) {
                    z = c("p_0" = 1, "p_1" = 0))
     }
     support <- function() T
+    size <- function(alpha, type) {
+        pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
+        spt <- support()
+        vapply(alpha, function(a) sum(d(spt[pv_fun(spt) %LE% a])), NA_real_)
+    }
 
     new("ExactNullDistribution",
         p = p,
@@ -355,6 +366,7 @@ SR_shift_1sample <- function(object, fact) {
         pvalue = pvalue,
         midpvalue = midpvalue,
         pvalueinterval = pvalueinterval,
+        size = size,
         support = support,
         name = paste0("Exact Distribution for Dependent Two-Sample Tests",
                       " (Streitberg-Roehmel Shift Algorithm)"))
@@ -456,6 +468,7 @@ vdW_split_up_2sample <- function(object) {
         pvalue = pvalue,
         midpvalue = function(q) NA,
         pvalueinterval = function(q) NA,
+        size = function(alpha, type) NA,
         support = function() NA,
         name = paste0("Exact Distribution for Independent Two-Sample Tests",
                       " (van de Wiel Split-Up Algorithm)"))

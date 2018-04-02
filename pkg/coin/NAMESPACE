@@ -48,7 +48,7 @@ exportClasses("ExpectCovar", "ExpectCovarInfluence", "CovarianceMatrix",
               "SymmetryProblem")
 
 exportMethods("initialize", "show", "pvalue", "midpvalue", "pvalue_interval",
-              "statistic", "dperm", "pperm", "qperm", "rperm", "support",
+              "size", "statistic", "dperm", "pperm", "qperm", "rperm", "support",
               "expectation", "covariance", "variance", "AsymptNullDistribution",
               "ApproxNullDistribution", "ExactNullDistribution")
 
