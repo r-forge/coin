@@ -455,7 +455,7 @@ based upon which we can now set up a test statistic.
 \begin{tabular}{lp{9.5cm}}
 \hline
 Function & Description \\ \hline
-\code{statistic(object, type)} & Extraction of the linear statistic $\t$ (\code{type = "linear"}), 
+\code{statistic(object, type)} & Extraction of the linear statistic $\t$ (\code{type = "linear"}),
                                  the centered statistic $\t - \mu$ (\code{type = "centered"}),
                                  the standardized statistic $\z$ (\code{type = "standardized"}) or
                                  the final test statistic $c$ (\code{type = "test"}, only for
@@ -578,7 +578,7 @@ only
 <<PValue, results = tex>>=
 toLatex(c2t("PValue"))
 @
-or, where possible, is augmented by, e.g., its density and quantile functions:
+or, where possible, augmented by, e.g., its density and quantile functions:
 <<NullDistribution, results = tex>>=
 toLatex(c2t("NullDistribution"))
 @
@@ -615,6 +615,10 @@ Method & Description \\
   conditional null distribution. \\
 \code{pvalue_interval(object)} & Computation of the $p$-value interval
   based on an observed test statistic $c$ and its conditional null distribution. \\
+\code{size(object, alpha, type)} & Computation of the test size at the nominal
+  significance level $\alpha$ using either the rejection region corresponding to
+  the $p$-value (\code{type = "p-value"}) or the mid-$p$-value
+  (\code{type = "mid-p-value"}). \\
 \code{dperm(object, x)} & Evaluation of the probability density function at $x$. \\
 \code{pperm(object, q)} & Evaluation of the cumulative distribution function for quantile $q$.\\
 \code{qperm(object, p)} & Evaluation of the quantile function for probability $p$.\\

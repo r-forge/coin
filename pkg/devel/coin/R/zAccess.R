@@ -111,6 +111,32 @@ setMethod("pvalue_interval",
 )
 
 
+### generic method for extracting size from objects
+setGeneric("size",
+    function(object, ...) {
+        standardGeneric("size")
+    }
+)
+
+setMethod("size",
+    signature = "NullDistribution",
+    definition = function(object,
+        alpha, type = c("p-value", "mid-p-value"), ...) {
+            type <- match.arg(type)
+            object@size(alpha, type)
+    }
+)
+
+setMethod("size",
+    signature = "IndependenceTest",
+    definition = function(object,
+        alpha, type = c("p-value", "mid-p-value"), ...) {
+            type <- match.arg(type)
+            size(object@distribution, alpha, type)
+    }
+)
+
+
 ### generic method for the permutation distribution from objects
 setGeneric("dperm",
     function(object, x, ...) {

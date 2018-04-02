@@ -37,6 +37,7 @@ stopifnot(  is.null(   names(         pvalue(asy_scl, method = "step-down"   )) 
 stopifnot(  is.null(   names(         pvalue(asy_scl, method = "unadjusted"  ))                 ))
 ## stopifnot(  is.null(   names(      midpvalue(asy_scl                         ))                 )) # NA
 ## stopifnot(identical(   names(pvalue_interval(asy_scl                         )), c("p_0", "p_1"))) # NA
+## stopifnot(  is.null(   names(           size(asy_scl,  alpha = 0.05          ))                 )) # NA
 
 ### Quadratic univariate
 asy_qdr_u <- independence_test(y1 ~ x, distr = "asymptotic", teststat = "quadratic")
@@ -63,6 +64,7 @@ stopifnot(  is.null(   names(         pvalue(asy_qdr_u, method = "step-down"   )
 stopifnot(  is.null(   names(         pvalue(asy_qdr_u, method = "unadjusted"  ))                 ))
 ## stopifnot(  is.null(   names(      midpvalue(asy_qdr_u                         ))                 )) # NA
 ## stopifnot(identical(   names(pvalue_interval(asy_qdr_u                         )), c("p_0", "p_1"))) # NA
+## stopifnot(  is.null(   names(           size(asy_qdr_u,  alpha = 0.05          ))                 )) # NA
 
 ### Maximum
 asy_mxm <- independence_test(y1 + y2 ~ x, distribution = "asymptotic", teststat = "maximum")
@@ -89,32 +91,34 @@ stopifnot(identical(dimnames(         pvalue(asy_mxm, method = "step-down"   )),
 stopifnot(identical(dimnames(         pvalue(asy_mxm, method = "unadjusted"  )), list("1", c("y1", "y2"))                  ))
 ## stopifnot(  is.null(   names(      midpvalue(asy_mxm                         ))                                            )) # NA
 ## stopifnot(identical(   names(pvalue_interval(asy_mxm                         )), c("p_0", "p_1")                           )) # NA
+## stopifnot(  is.null(   names(           size(asy_mxm,  alpha = 0.05          ))                                            )) # NA
 
 ### Quadratic multivariate
 asy_qdr_m <- independence_test(y1 + y2 ~ x, distr = "asymptotic", teststat = "quadratic")
-s <- unname(statistic(asy_qdr_m))
+s <- statistic(asy_qdr_m)
 
-stopifnot(identical(   names(   expectation(asy_qdr_m                          )), c("1:y1", "1:y2")                         ))
-stopifnot(identical(   names(      variance(asy_qdr_m                          )), c("1:y1", "1:y2")                         ))
-stopifnot(identical(dimnames(    covariance(asy_qdr_m                          )), list(c("1:y1", "1:y2"), c("1:y1", "1:y2"))))
-stopifnot(  is.null(   names(     statistic(asy_qdr_m,    type = "test"        ))                                            ))
-stopifnot(identical(dimnames(     statistic(asy_qdr_m,    type = "linear"      )), list("1", c("y1", "y2"))                  ))
-stopifnot(identical(dimnames(     statistic(asy_qdr_m,    type = "centered"    )), list("1", c("y1", "y2"))                  ))
-stopifnot(identical(dimnames(     statistic(asy_qdr_m,    type = "standardized")), list("1", c("y1", "y2"))                  ))
-## stopifnot(  is.null(   names(       support(asy_qdr_m                          ))                                            )) # NA
-stopifnot(  is.null(   names(         dperm(asy_qdr_m,       x =       s       ))                                            ))
-stopifnot(identical(   names(         dperm(asy_qdr_m,       x = c(s = s)      )), "s"                                       ))
-stopifnot(  is.null(   names(         pperm(asy_qdr_m,       q =       s       ))                                            ))
-stopifnot(identical(   names(         pperm(asy_qdr_m,       q = c(s = s)      )), "s"                                       ))
-stopifnot(  is.null(   names(         qperm(asy_qdr_m,       p =       0.75    ))                                            ))
-stopifnot(identical(   names(         qperm(asy_qdr_m,       p = c(s = 0.75)   )), "s"                                       ))
-stopifnot(  is.null(   names(         rperm(asy_qdr_m,       n =       5       ))                                            ))
+stopifnot(identical(   names(    expectation(asy_qdr_m                         )), c("1:y1", "1:y2")                         ))
+stopifnot(identical(   names(       variance(asy_qdr_m                         )), c("1:y1", "1:y2")                         ))
+stopifnot(identical(dimnames(     covariance(asy_qdr_m                         )), list(c("1:y1", "1:y2"), c("1:y1", "1:y2"))))
+stopifnot(  is.null(   names(      statistic(asy_qdr_m,   type = "test"        ))                                            ))
+stopifnot(identical(dimnames(      statistic(asy_qdr_m,   type = "linear"      )), list("1", c("y1", "y2"))                  ))
+stopifnot(identical(dimnames(      statistic(asy_qdr_m,   type = "centered"    )), list("1", c("y1", "y2"))                  ))
+stopifnot(identical(dimnames(      statistic(asy_qdr_m,   type = "standardized")), list("1", c("y1", "y2"))                  ))
+## stopifnot(  is.null(   names(        support(asy_qdr_m                         ))                                            )) # NA
+stopifnot(  is.null(   names(          dperm(asy_qdr_m,      x =       s       ))                                            ))
+stopifnot(identical(   names(          dperm(asy_qdr_m,      x = c(s = s)      )), "s"                                       ))
+stopifnot(  is.null(   names(          pperm(asy_qdr_m,      q =       s       ))                                            ))
+stopifnot(identical(   names(          pperm(asy_qdr_m,      q = c(s = s)      )), "s"                                       ))
+stopifnot(  is.null(   names(          qperm(asy_qdr_m,      p =       0.75    ))                                            ))
+stopifnot(identical(   names(          qperm(asy_qdr_m,      p = c(s = 0.75)   )), "s"                                       ))
+stopifnot(  is.null(   names(          rperm(asy_qdr_m,      n =       5       ))                                            ))
 stopifnot(  is.null(   names(         pvalue(asy_qdr_m, method = "global"      ))                                            ))
 stopifnot(  is.null(   names(         pvalue(asy_qdr_m, method = "single-step" ))                                            ))
 stopifnot(  is.null(   names(         pvalue(asy_qdr_m, method = "step-down"   ))                                            ))
 stopifnot(  is.null(   names(         pvalue(asy_qdr_m, method = "unadjusted"  ))                                            ))
-## stopifnot(  is.null(   names(      midpvalue(asy_mxm                           ))                                            )) # NA
-## stopifnot(identical(   names(pvalue_interval(asy_mxm                           )), c("p_0", "p_1" )                          )) # NA
+## stopifnot(  is.null(   names(      midpvalue(asy_qdr_m                         ))                                            )) # NA
+## stopifnot(identical(   names(pvalue_interval(asy_qdr_m                         )), c("p_0", "p_1" )                          )) # NA
+## stopifnot(  is.null(   names(           size(asy_qdr_m,  alpha = 0.05          ))                                            )) # NA
 
 
 ###
@@ -123,7 +127,7 @@ stopifnot(  is.null(   names(         pvalue(asy_qdr_m, method = "unadjusted"  )
 
 ### Scalar
 app_scl <- independence_test(y1 ~ x, distr = "approximate")
-s <- unname(statistic(app_scl))
+s <- statistic(app_scl)
 
 stopifnot(identical(   names(    expectation(app_scl                         )), "1"            ))
 stopifnot(identical(   names(       variance(app_scl                         )), "1"            ))
@@ -146,6 +150,7 @@ stopifnot(  is.null(   names(         pvalue(app_scl, method = "step-down"   )) 
 stopifnot(  is.null(   names(         pvalue(app_scl, method = "unadjusted"  ))                 ))
 stopifnot(  is.null(   names(      midpvalue(app_scl                         ))                 ))
 stopifnot(identical(   names(pvalue_interval(app_scl                         )), c("p_0", "p_1")))
+stopifnot(  is.null(   names(           size(app_scl,  alpha = 0.05          ))                 ))
 
 ### Quadratic univariate
 app_qdr_u <- independence_test(y1 ~ x, distr = "approximate", teststat = "quadratic")
@@ -164,7 +169,7 @@ stopifnot(identical(   names(          dperm(app_qdr_u,      x = c(s = s)      )
 stopifnot(  is.null(   names(          pperm(app_qdr_u,      q =       s       ))                 ))
 stopifnot(identical(   names(          pperm(app_qdr_u,      q = c(s = s)      )), "s"            ))
 stopifnot(  is.null(   names(          qperm(app_qdr_u,      p =       0.75    ))                 ))
-stopifnot(identical(   names(          qperm(app_qdr_u,      p = c(s = 0.75)   )), "s"            ))  # unnamed in < 1.3-0
+stopifnot(identical(   names(          qperm(app_qdr_u,      p = c(s = 0.75)   )), "s"            )) # unnamed in < 1.3-0
 stopifnot(  is.null(   names(          rperm(app_qdr_u,      n =       5       ))                 ))
 stopifnot(  is.null(   names(         pvalue(app_qdr_u, method = "global"      ))                 ))
 stopifnot(  is.null(   names(         pvalue(app_qdr_u, method = "single-step" ))                 ))
@@ -172,6 +177,7 @@ stopifnot(  is.null(   names(         pvalue(app_qdr_u, method = "step-down"   )
 stopifnot(  is.null(   names(         pvalue(app_qdr_u, method = "unadjusted"  ))                 ))
 stopifnot(  is.null(   names(      midpvalue(app_qdr_u                         ))                 ))
 stopifnot(identical(   names(pvalue_interval(app_qdr_u                         )), c("p_0", "p_1")))
+stopifnot(  is.null(   names(           size(app_qdr_u,  alpha = 0.05          ))                 ))
 
 ### Maximum
 app_mxm <- independence_test(y1 + y2 ~ x, distr = "approximate", teststat = "maximum")
@@ -198,10 +204,11 @@ stopifnot(identical(dimnames(         pvalue(app_mxm, method = "step-down"   )),
 stopifnot(identical(dimnames(         pvalue(app_mxm, method = "unadjusted"  )), list("1", c("y1", "y2"))                  ))
 stopifnot(  is.null(   names(      midpvalue(app_mxm                         ))                                            ))
 stopifnot(identical(   names(pvalue_interval(app_mxm                         )), c("p_0", "p_1")                           ))
+stopifnot(  is.null(   names(           size(app_mxm,  alpha = 0.05          ))                                            ))
 
 ### Quadratic multivariate
 app_qdr_m <- independence_test(y1 + y2 ~ x, distr = "approximate", teststat = "quadratic")
-s <- unname(statistic(app_qdr_m))
+s <- statistic(app_qdr_m)
 
 stopifnot(identical(   names(    expectation(app_qdr_m                         )), c("1:y1", "1:y2")                         ))
 stopifnot(identical(   names(       variance(app_qdr_m                         )), c("1:y1", "1:y2")                         ))
@@ -216,7 +223,7 @@ stopifnot(identical(   names(          dperm(app_qdr_m,      x = c(s = s)      )
 stopifnot(  is.null(   names(          pperm(app_qdr_m,      q =       s       ))                                            ))
 stopifnot(identical(   names(          pperm(app_qdr_m,      q = c(s = s)      )), "s"                                       ))
 stopifnot(  is.null(   names(          qperm(app_qdr_m,      p =       0.75    ))                                            ))
-stopifnot(identical(   names(          qperm(app_qdr_m,      p = c(s = 0.75)   )), "s"                                       ))  # unnamed in < 1.3-0
+stopifnot(identical(   names(          qperm(app_qdr_m,      p = c(s = 0.75)   )), "s"                                       )) # unnamed in < 1.3-0
 stopifnot(  is.null(   names(          rperm(app_qdr_m,      n =       5       ))                                            ))
 stopifnot(  is.null(   names(         pvalue(app_qdr_m, method = "global"      ))                                            ))
 stopifnot(  is.null(   names(         pvalue(app_qdr_m, method = "single-step" ))                                            ))
@@ -224,6 +231,7 @@ stopifnot(  is.null(   names(         pvalue(app_qdr_m, method = "step-down"   )
 stopifnot(  is.null(   names(         pvalue(app_qdr_m, method = "unadjusted"  ))                                            ))
 stopifnot(  is.null(   names(      midpvalue(app_qdr_m                         ))                                            ))
 stopifnot(identical(   names(pvalue_interval(app_qdr_m                         )), c("p_0", "p_1")                           ))
+stopifnot(  is.null(   names(           size(app_qdr_m,  alpha = 0.05          ))                                            ))
 
 
 ###
@@ -232,7 +240,7 @@ stopifnot(identical(   names(pvalue_interval(app_qdr_m                         )
 
 ### Scalar
 shf_scl <- independence_test(y1 ~ x, distr = exact(algo = "shift"))
-s <- unname(statistic(shf_scl))
+s <- statistic(shf_scl)
 
 stopifnot(identical(   names(    expectation(shf_scl                         )), "1"            ))
 stopifnot(identical(   names(       variance(shf_scl                         )), "1"            ))
@@ -255,10 +263,11 @@ stopifnot(  is.null(   names(         pvalue(shf_scl, method = "step-down"   )) 
 stopifnot(  is.null(   names(         pvalue(shf_scl, method = "unadjusted"  ))                 ))
 stopifnot(  is.null(   names(      midpvalue(shf_scl                         ))                 ))
 stopifnot(identical(   names(pvalue_interval(shf_scl                         )), c("p_0", "p_1")))
+stopifnot(  is.null(   names(           size(shf_scl,  alpha = 0.05          ))                 ))
 
 ### Quadratic univarite
 shf_qdr_u <- independence_test(y1 ~ x, distr = exact(algo = "shift"), teststat = "quadratic")
-s <- unname(statistic(shf_qdr_u))
+s <- statistic(shf_qdr_u)
 
 stopifnot(identical(   names(    expectation(shf_qdr_u                         )), "1"            ))
 stopifnot(identical(   names(       variance(shf_qdr_u                         )), "1"            ))
@@ -281,6 +290,7 @@ stopifnot(  is.null(   names(         pvalue(shf_qdr_u, method = "step-down"   )
 stopifnot(  is.null(   names(         pvalue(shf_qdr_u, method = "unadjusted"  ))                 ))
 stopifnot(  is.null(   names(      midpvalue(shf_qdr_u                         ))                 ))
 stopifnot(identical(   names(pvalue_interval(shf_qdr_u                         )), c("p_0", "p_1")))
+stopifnot(  is.null(   names(           size(shf_qdr_u,  alpha = 0.05          ))                 ))
 
 
 ###
@@ -289,7 +299,7 @@ stopifnot(identical(   names(pvalue_interval(shf_qdr_u                         )
 
 ### Scalar
 spl_scl <- independence_test(y1 ~ x, distr = exact(algo = "split"))
-s <- unname(statistic(spl_scl))
+s <- statistic(spl_scl)
 
 stopifnot(identical(   names(    expectation(spl_scl                         )), "1"            ))
 stopifnot(identical(   names(       variance(spl_scl                         )), "1"            ))
@@ -312,3 +322,4 @@ stopifnot(  is.null(   names(         pvalue(spl_scl, method = "step-down"   )) 
 stopifnot(  is.null(   names(         pvalue(spl_scl, method = "unadjusted"  ))                 ))
 ## stopifnot(  is.null(   names(      midpvalue(spl_scl                         ))                 )) # NA
 ## stopifnot(identical(   names(pvalue_interval(spl_scl                         )), c("p_0", "p_1"))) # NA
+## stopifnot(  is.null(   names(           size(spl_scl,  alpha = 0.05          ))                 )) # NA

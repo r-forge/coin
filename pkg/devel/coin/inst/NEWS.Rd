@@ -42,6 +42,9 @@
       formulate score-independent tests for ordered categorical data (see
       \code{?malformations}, \code{?jobsatisfaction} and \code{?vision}).
 
+      \item The test size, i.e., the actual significance level, of approximate
+      (Monte Carlo) and exact tests can now be computed (see \code{?size}).
+
       \item The centered linear statistic can now be extracted (see
       \code{?statistic}).
     }
