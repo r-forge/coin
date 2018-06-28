@@ -27,7 +27,7 @@
 \renewcommand{\vec}{\text{vec}}
 
 %% code commands
-\newcommand{\Rclass}[1]{`\code{#1}'}
+\newcommand{\Rclass}[1]{\code{"#1"}}
 
 %% hyphenation
 \hyphenation{Qua-dra-tic}
@@ -248,7 +248,7 @@ treatment & \Sexpr{paste(sort(rotarod$time[13:24]), collapse = " & ")} \\
 
 Utilizing \pkg{coin}, the hypothesis of independence of length of time and group assignment can
 be specified by a formula which, together with a data frame \code{rotarod},
-serve as arguments to \code{independence_test}:
+serve as arguments to \code{independence_test()}:
 <<Ex, echo = TRUE>>=
 library("coin")
 data("rotarod", package = "coin")
@@ -629,7 +629,7 @@ Method & Description \\
 \caption{\label{tab:dists} Classes and methods for conditional null distributions.}
 \end{center}
 \end{table}
-The \code{support} function returns the support of a discrete distribution.
+The \code{support()} function returns the support of a discrete distribution.
 
 
 
