@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2018-03-28 r74482) -- "Unsuffered Consequences"
+R Under development (unstable) (2018-06-21 r74929) -- "Unsuffered Consequences"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -1374,7 +1374,7 @@ survdiff(formula = Surv(time) ~ group, data = callaert)
 group=0 7        7     9.84      0.82      3.76
 group=1 8        8     5.16      1.56      3.76
 
- Chisq= 3.8  on 1 degrees of freedom, p= 0.0523 
+ Chisq= 3.8  on 1 degrees of freedom, p= 0.05 
 > 
 > ## Exact logrank test using mid-ranks (p = 0.0505)
 > logrank_test(Surv(time) ~ group, data = callaert, distribution = "exact")
@@ -3077,7 +3077,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  11.93 0.22 12.26 NA NA 
+Time elapsed:  12.3 0.12 12.5 NA NA 
 > grDevices::dev.off()
 null device 
           1 
