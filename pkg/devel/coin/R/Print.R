@@ -82,7 +82,7 @@ setMethod("show",
             method = paste(distname, object@method)
         )
         if (length(object@nullvalue) > 0)
-            RET$null.value = setNames(object@nullvalue, nm = object@parameter)
+            RET$null.value <- setNames(object@nullvalue, nm = object@parameter)
         if (length(object@estimates) > 0)
             RET <- c(RET, object@estimates)
         class(RET) <- "htest"
@@ -110,7 +110,7 @@ setMethod("show",
             estimate = ci$estimate
         )
         if (length(object@nullvalue) > 0)
-            RET$null.value = setNames(object@nullvalue, nm = object@parameter)
+            RET$null.value <- setNames(object@nullvalue, nm = object@parameter)
         if (length(object@estimates) > 0)
             RET <- c(RET, object@estimates)
         class(RET) <- "htest"
