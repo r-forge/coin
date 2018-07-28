@@ -131,11 +131,13 @@ consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
     cs <- function(a) {
         switch(ties.method,
             "mid-ranks" = {
-                (rank_trafo(x) / (sum(!is.na(x)) + 1))^(a - 1)},
+                (rank_trafo(x) / (sum(!is.na(x)) + 1))^(a - 1)
+            },
             "average-scores" = {
                  s <- (rank_trafo(x, ties.method = "random") /
                          (sum(!is.na(x)) + 1))^(a - 1)
-                 average_scores(s, x)}
+                 average_scores(s, x)
+            }
         )
     }
 

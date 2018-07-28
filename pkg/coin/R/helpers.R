@@ -328,7 +328,7 @@ is_integer <- function(x, fact = NULL) {
     RET
 }
 
-is_monotone <- function (x)
+is_monotone <- function(x)
     all(x == cummax(x)) || all(x == cummin(x))
 
 isequal <- function(a, b) {
@@ -468,12 +468,12 @@ get_ytrans <- function(object) object@statistic@ytrans
 is_unity <- function(x)
     max(abs(x - 1.0)) < eps()
 
-setRownames <- function (object, nm) {
+setRownames <- function(object, nm) {
     rownames(object) <- nm
     object
 }
 
-setColnames <- function (object, nm) {
+setColnames <- function(object, nm) {
     colnames(object) <- nm
     object
 }
