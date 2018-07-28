@@ -36,7 +36,7 @@
 \source{
   Mills, J. L. and Graubard, B. I.  (1987).  Is moderate drinking during
   pregnancy associated with an increased risk for malformations?
-  \emph{Pediatrics} \bold{80}(3), 309--314. %Note: no DOI available
+  \emph{Pediatrics} \bold{80}(3), 309--314.
 }
 \references{
   Graubard, B. I. and Korn, E. L.  (1987).  Choice of column scores for testing
@@ -44,7 +44,8 @@
   \emph{Biometrics} \bold{43}(2), 471--476.  \doi{10.2307/2531828}
 
   Winell, H. and \enc{Lindbäck}{Lindbaeck}, J.  (2018).  A general
-  score-independent test for order-restricted inference.  \emph{Manuscript}.
+  score-independent test for order-restricted inference.  \emph{Statistics in
+    Medicine}, 1--13.  \doi{10.1002/sim.7690}
 
   Zheng, G.  (2008).  Analysis of ordered categorical data: Two
   score-independent approaches.  \emph{Biometrics} \bold{64}(4), 1276–-1279.
@@ -75,7 +76,8 @@ chisq_test(malformation ~ consumption, data = malformations,
            distribution = approximate(nresample = 1000),
            alternative = "greater")
 
-\dontrun{## One-sided approximative (Monte Carlo) score-independent Cochran-Armitage test
+\dontrun{
+## One-sided approximative (Monte Carlo) score-independent Cochran-Armitage test
 ## Winell and Lindbaeck (2018)
 (it <- independence_test(malformation ~ consumption, data = malformations,
                          distribution = approximate(nresample = 1000,
