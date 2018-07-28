@@ -35,13 +35,15 @@
 }
 \references{
   Winell, H. and \enc{Lindbäck}{Lindbaeck}, J.  (2018).  A general
-  score-independent test for order-restricted inference.  \emph{Manuscript}.
+  score-independent test for order-restricted inference.  \emph{Statistics in
+    Medicine}, 1--13.  \doi{10.1002/sim.7690}
 }
 \examples{
 ## Approximative (Monte Carlo) linear-by-linear association test
 lbl_test(jobsatisfaction, distribution = approximate(nresample = 10000))
 
-\dontrun{## Approximative (Monte Carlo) score-independent association test
+\dontrun{
+## Approximative (Monte Carlo) score-independent association test
 ## Winell and Lindbaeck (2018)
 (it <- independence_test(jobsatisfaction,
                          distribution = approximate(nresample = 10000),

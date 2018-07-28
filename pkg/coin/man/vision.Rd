@@ -35,19 +35,20 @@
   \doi{10.2307/2333101}
 }
 \references{
-  Stuart, A.  (1955).  A test for homogeneity of the marginal distribution in a
+  Stuart, A.  (1955).  A test for homogeneity of the marginal distributions in a
   two-way classification.  \emph{Biometrika} \bold{42}(3/4), 412--416.
   \doi{10.1093/biomet/42.3-4.412}
 
   Winell, H. and \enc{Lindbäck}{Lindbaeck}, J.  (2018).  A general
-  score-independent test for order-restricted inference.  \emph{Manuscript}.
+  score-independent test for order-restricted inference.  \emph{Statistics in
+    Medicine}, 1--13.  \doi{10.1002/sim.7690}
 }
 \examples{
-## Asymptotic Stuart(-Maxwell) test (Q = 11.96)
+## Asymptotic Stuart test (Q = 11.96)
 diag(vision) <- 0 # speed-up
 mh_test(vision)
 
-## Asymptotic score-independent Stuart(-Maxwell) test
+## Asymptotic score-independent Stuart-Birch test
 ## Winell and Lindbaeck (2018)
 (st <- symmetry_test(vision,
                      ytrafo = function(data)
