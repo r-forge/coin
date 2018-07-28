@@ -309,7 +309,7 @@
   Lee, J. W.  (1996).  Some versatile tests based on the simultaneous use of
   weighted log-rank statistics.  \emph{Biometrics} \bold{52}(2), 721--725.
 
-  \enc{Letón}{Leton}, E. and Zuluaga, P.  (2001).  Equivalence between scores
+  \enc{Letón}{Leton}, E. and Zuluaga, P.  (2001).  Equivalence between score
   and weighted tests for survival curves.  \emph{Communications in Statistics --
     Theory and Methods} \bold{30}(4), 591--608.
 

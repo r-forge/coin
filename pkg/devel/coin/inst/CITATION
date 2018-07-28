@@ -35,7 +35,7 @@ citEntry(entry = "Article",
 
   textVersion  =
   paste("Torsten Hothorn, Kurt Hornik, Mark A. van de Wiel, Achim Zeileis (2008).",
-        "Implementing a Class of Permutation Tests:  The coin Package.",
+        "Implementing a Class of Permutation Tests: The coin Package.",
         "Journal of Statistical Software 28(8), 1-23.",
         "URL http://www.jstatsoft.org/v28/i08/."),
 

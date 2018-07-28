@@ -66,6 +66,8 @@
 
       \item The quantile function now returns a named vector if its \code{p}
       argument is named.
+
+      \item Documentation updates.
     }
   }
   \subsection{Other changes}{

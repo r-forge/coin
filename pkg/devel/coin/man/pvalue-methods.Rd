@@ -181,7 +181,7 @@
   distributions.  \emph{The American Statistician} \bold{51}(1), 3--8.
 
   Westfall, P. H. and Young, S. S.  (1993).  \emph{Resampling-Based Multiple
-  Testing: Examples and Methods for \eqn{p}-Value Adjustment}.  New York: John
+    Testing: Examples and Methods for \eqn{p}-Value Adjustment}.  New York: John
   Wiley & Sons.
 }
 \examples{

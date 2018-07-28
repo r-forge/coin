@@ -82,11 +82,11 @@
   was given by Page (1963) and is known as the Page test.
 
   For \code{wilcoxsign_test}, the default method of handling zeros
-  (\code{zero.method = "Pratt"}), due to Pratt (1959), first rank transforms the
+  (\code{zero.method = "Pratt"}), due to Pratt (1959), first rank-transforms the
   absolute differences (including zeros) and then discards the ranks
-  corresponding to the zero-differences.  The proposal by Wilcoxon (1949) first
-  discards the zero-differences and then rank transforms the remaining absolute
-  differences (\code{zero.method = "Wilcoxon"}).
+  corresponding to the zero-differences.  The proposal by Wilcoxon (1949, p. 6)
+  first discards the zero-differences and then rank-transforms the remaining
+  absolute differences (\code{zero.method = "Wilcoxon"}).
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
@@ -116,8 +116,8 @@
   with additive block effects.  \emph{Journal of the American Statistical
     Association} \bold{74}(367), 680--683.
 
-  Wilcoxon, F.  (1949).  Some rapid approximate statistical procedures.
-  \emph{Annals of the New York Academy of Sciences} \bold{52}(6), 808--814.
+  Wilcoxon, F.  (1949).  \emph{Some Rapid Approximate Statistical Procedures}.
+  New York: American Cyanamid Company.
 }
 \examples{
 ## Example data from ?wilcox.test
