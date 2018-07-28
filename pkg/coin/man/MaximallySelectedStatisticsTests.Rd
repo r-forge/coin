@@ -133,8 +133,8 @@
   Hothorn, T. and Zeileis, A.  (2008).  Generalized maximally selected
   statistics.  \emph{Biometrics} \bold{64}(4), 1263--1269.
 
-  Lausen, B., Hothorn, T., Bretz, F. and Schumacher, M.  (2004).  Optimally
-  selected prognostic factors.  \emph{Biometrical Journal} \bold{46}(3),
+  Lausen, B., Hothorn, T., Bretz, F. and Schumacher, M.  (2004).  Assessment of
+  optimal selected prognostic factors.  \emph{Biometrical Journal} \bold{46}(3),
   364--374.
 
   Lausen, B. and Schumacher, M.  (1992).  Maximally selected rank statistics.

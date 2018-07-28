@@ -147,7 +147,7 @@
 }
 \references{
   Gerig, T.  (1969).  A multivariate extension of Friedman's
-  \eqn{\chi^2_r}{chi^2_r} test.  \emph{Journal of the American Statistical
+  \eqn{\chi^2_r}{chi^2_r}-test.  \emph{Journal of the American Statistical
     Association} \bold{64}(328), 1595--1608.
 
   Hothorn, T., Hornik, K., van de Wiel, M. A. and Zeileis, A.  (2006).  A Lego
@@ -155,7 +155,7 @@
   \bold{60}(3), 257--263.
 
   Hothorn, T., Hornik, K., van de Wiel, M. A. and Zeileis, A.  (2008).
-  Implementing a class of permutation tests: the coin package.  \emph{Journal of
+  Implementing a class of permutation tests: The coin package.  \emph{Journal of
     Statistical Software} \bold{28}(8), 1--23.
   \url{http://www.jstatsoft.org/v28/i08/}
 
