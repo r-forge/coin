@@ -54,7 +54,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
         ## we need to compute the statistics just to the right of
         ## each step
         ds <- diff(steps)
-        justright <- min(abs(ds[abs(ds) > eps()])) / 2
+        justright <- min(abs(ds[abs(ds) > sqrt_eps])) / 2
         jumps <- vapply(steps + justright, fse, NA_real_)
 
         ## determine if the statistics are in- or decreasing
@@ -246,7 +246,7 @@ confint_scale <- function(object, nulldistr, level = 0.95,
         ## we need to compute the statistics just to the right of
         ## each step
         ds <- diff(steps)
-        justright <- min(abs(ds[abs(ds) > eps()])) / 2
+        justright <- min(abs(ds[abs(ds) > sqrt_eps])) / 2
         jumps <- vapply(steps + justright, fse, NA_real_)
 
         ## determine if the statistics are in- or decreasing
@@ -476,7 +476,7 @@ confint_midp <- function(x, n, conf.level = 0.99) {
             ## 0.5 * dbinom(...) + pbinom(..., lower.tail = FALSE)
             mean(pbinom(c(x, x - 1), n, a, lower.tail = TRUE)) - p
         UR <- function(p)
-            uniroot(f, c(0, 1), p, tol = .Machine$double.eps)$root
+            uniroot(f, c(0, 1), p, tol = eps)$root
         ci <- c(UR(1 - alpha / 2), UR(alpha / 2))
     } else if (x == 0) {
         ci <- c(0, 1 - alpha^(1 / n))

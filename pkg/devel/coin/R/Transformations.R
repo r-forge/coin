@@ -174,7 +174,7 @@ maxstat_trafo <- ofmaxstat_trafo <-
     }
     qx <- quantile(x, probs = c(minprob, maxprob), na.rm = TRUE, names = FALSE,
                    type = 1)
-    if (diff(qx) < .Machine$double.eps)
+    if (diff(qx) < eps)
         return(NULL)
     cp <- sort(unique(x))
     cp <- cp[-length(cp)]

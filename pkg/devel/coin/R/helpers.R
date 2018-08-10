@@ -48,7 +48,7 @@ qmvn <- function(p, mean, corr, ...) {
 }
 
 ### copied from package MASS
-MPinv <- function (X, tol = eps())
+MPinv <- function (X, tol = sqrt_eps)
 {
     if (length(dim(X)) > 2L || !(is.numeric(X) || is.complex(X)))
         stop("X must be a numeric or complex matrix")
@@ -315,7 +315,7 @@ is_scalar <- function(object)
 is_integer <- function(x, fact = NULL) {
     if (is.null(fact))
         fact <- c(1, 2, 10, 100, 1000, 10000, 100000)
-    f <- vapply(fact, function(f) max(abs(round(x * f) - (x * f))) < eps(), NA)
+    f <- vapply(fact, function(f) max(abs(round(x * f) - (x * f))) < sqrt_eps, NA)
     if (RET <- any(f))
         attr(RET, "fact") <- min(fact[f])
     RET
@@ -433,25 +433,23 @@ varnames <- function(object) {
         paste(ynames, "by", xnames, collapse = "")
 }
 
-eps <- function() sqrt(.Machine$double.eps)
-
 `%EQ%` <- function(x, y)
-    abs(x - y) < eps()
+    abs(x - y) < sqrt_eps
 
 `%NE%` <- function(x, y)
-    abs(x - y) >= eps()
+    abs(x - y) >= sqrt_eps
 
 `%GE%` <- function(x, y)
-    x > y | abs(x - y) < eps()
+    x > y | abs(x - y) < sqrt_eps
 
 `%LE%` <- function(x, y)
-    x < y | abs(x - y) < eps()
+    x < y | abs(x - y) < sqrt_eps
 
 `%GT%` <- function(x, y)
-    (x - y) >= eps()
+    (x - y) >= sqrt_eps
 
 `%LT%` <- function(x, y)
-    (y - x) >= eps()
+    (y - x) >= sqrt_eps
 
 ### don't use! never!
 get_weights <- function(object) object@statistic@weights
@@ -459,7 +457,7 @@ get_xtrans <- function(object) object@statistic@xtrans
 get_ytrans <- function(object) object@statistic@ytrans
 
 is_unity <- function(x)
-    max(abs(x - 1.0)) < eps()
+    max(abs(x - 1.0)) < sqrt_eps
 
 setRownames <- function(object, nm) {
     rownames(object) <- nm
