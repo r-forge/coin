@@ -51,7 +51,7 @@ setClass("IndependenceProblem",
         dims <- ((nrow(object@x) == nrow(object@y)) &&
                  (nrow(object@x) == length(object@block)))
         dims <- dims && (length(object@block) == length(object@weights))
-        Wint <- max(abs(object@weights - floor(object@weights))) < eps()
+        Wint <- max(abs(object@weights - floor(object@weights))) < sqrt_eps
         block <- all(table(object@block) > 1L)
         NAs <- all(complete.cases(object@x) & complete.cases(object@y))
         (dims && block) && (NAs && Wint)

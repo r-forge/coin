@@ -401,27 +401,26 @@ vdW_split_up_2sample <- function(object) {
     storage.mode(scores) <- "double"
     m <- sum(xtrans)
     storage.mode(m) <- "integer"
-    tol <- eps()
 
     p_fun <- function(q) {
         T <- q * sqrt(variance(object)) + expectation(object)
-        .Call(R_split_up_2sample, scores, m, T, tol)
+        .Call(R_split_up_2sample, scores, m, T, sqrt_eps)
     }
     q_fun <- function(p) {
         f <- function(x) p_fun(x) - p
         rr <- if (p <= 0.5)
-                  uniroot(f, interval = c(-10, 1), tol = tol)
+                  uniroot(f, interval = c(-10, 1), tol = sqrt_eps)
               else
-                  uniroot(f, interval = c(-1, 10), tol = tol)
+                  uniroot(f, interval = c(-1, 10), tol = sqrt_eps)
         ## make sure quantile leads to pdf >= p
         if (rr$f.root < 0)
-            rr$root <- rr$root + tol
+            rr$root <- rr$root + sqrt_eps
         ## pdf is constant here
-        if (rr$estim.prec > tol) {
+        if (rr$estim.prec > sqrt_eps) {
             r1 <- rr$root
             d <- min(diff(sort(scores[!duplicated(scores)]))) /
                    sqrt(variance(object))
-            while (d > tol) {
+            while (d > sqrt_eps) {
                 if (f(r1 - d) >= 0)
                     r1 <- r1 - d
                 else
@@ -434,14 +433,14 @@ vdW_split_up_2sample <- function(object) {
     pvalue_fun <- function(q) {
         switch(object@alternative,
             "less"      = p_fun(q),
-            "greater"   = 1 - p_fun(q - 10 * tol),
+            "greater"   = 1 - p_fun(q - 10 * sqrt_eps),
             "two.sided" = {
                 if (q == 0)
                     1L
                 else if (q > 0)
-                    p_fun(-q) + (1 - p_fun(q - 10 * tol))
+                    p_fun(-q) + (1 - p_fun(q - 10 * sqrt_eps))
                 else
-                    p_fun(q) + (1 - p_fun(-q - 10 * tol))
+                    p_fun(q) + (1 - p_fun(-q - 10 * sqrt_eps))
             }
         )
     }

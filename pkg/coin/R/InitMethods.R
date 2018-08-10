@@ -144,7 +144,7 @@ setMethod("initialize",
                 new("CovarianceMatrix", cov)
             }
 
-        if (any(variance(.Object) < eps()))
+        if (any(variance(.Object) < sqrt_eps))
             warning("The conditional covariance matrix has ",
                     "zero diagonal elements")
 
