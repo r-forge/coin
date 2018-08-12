@@ -47,7 +47,7 @@
   C., Fiorenza, M., Gatti, M., Caliceti, P. and Paganelli, G.  (2002).
   Pretargeted adjuvant radioimmunotherapy with Yttrium-90-biotin in malignant
   glioma patients: A pilot study.  \emph{British Journal of Cancer}
-  \bold{86}(2), 207--212.
+  \bold{86}(2), 207--212.  \doi{10.1038/sj.bjc.6600047}
 }
 \examples{
 ## Grade III glioma

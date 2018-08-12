@@ -139,15 +139,16 @@
 \references{
   Bauer, D. F.  (1972).  Constructing confidence sets using rank statistics.
   \emph{Journal of the American Statistical Association} \bold{67}(339),
-  687--690.
+  687--690.  \doi{10.1080/01621459.1972.10481279}
 
   Conover, W. J. and Iman, R. L.  (1978).  Some exact tables for the squared
   ranks test.  \emph{Communications in Statistics -- Simulation and Computation}
-  \bold{7}(5), 491--513.
+  \bold{7}(5), 491--513.  \doi{10.1080/03610917808812093}
 
   Conover, W. J., Johnson, M. E. and Johnson, M. M.  (1981).  A comparative
   study of tests for homogeneity of variances, with applications to the outer
   continental shelf bidding data.  \emph{Technometrics} \bold{23}(4), 351--361.
+  \doi{10.1080/00401706.1981.10487680}
 
   \enc{Hájek}{Hajek}, J., \enc{Šidák}{Sidak}, Z. and Sen, P. K.  (1999).
   \emph{Theory of Rank Tests}, Second Edition.  San Diego: Academic Press.

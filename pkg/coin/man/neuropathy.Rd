@@ -25,6 +25,7 @@
   Conover, W. J. and Salsburg, D. S.  (1988).  Locally most powerful tests for
   detecting treatment effects when only a subset of patients can be expected to
   \dQuote{respond} to treatment.  \emph{Biometrics} \bold{44}(1), 189--196.
+  \doi{10.2307/2531906}
 }
 \examples{
 ## Conover and Salsburg (1988, Tab. 2)
