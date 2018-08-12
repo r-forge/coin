@@ -15,9 +15,10 @@ bibentry(
     volume  = "60",
     number  = "3",
     pages   = "257--263",
-    header = paste("Use the following references when citing the",
-                   sQuote("coin"), "package in publications:"),
-    footer = "for the implemented theoretical framework and/or",
+    doi     = "10.1198/000313006X118430",
+    header  = paste("Use the following references when citing the",
+                    sQuote("coin"), "package in publications:"),
+    footer  = "for the implemented theoretical framework and/or",
 )
 
 bibentry(
@@ -37,6 +38,6 @@ bibentry(
     volume  = "28",
     number  = "8",
     pages   = "1--23",
-    url     = "http://www.jstatsoft.org/v28/i08/",
+    doi     = "10.18637/jss.v028.i08",
     footer  = "for the implementation approach."
 )

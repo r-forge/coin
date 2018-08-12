@@ -150,7 +150,7 @@
 \references{
   Bauer, D. F.  (1972).  Constructing confidence sets using rank statistics.
   \emph{Journal of the American Statistical Association} \bold{67}(339),
-  687--690.
+  687--690.  \doi{10.1080/01621459.1972.10481279}
 
   \enc{Hájek}{Hajek}, J., \enc{Šidák}{Sidak}, Z. and Sen, P. K.  (1999).
   \emph{Theory of Rank Tests}, Second Edition.  San Diego: Academic Press.

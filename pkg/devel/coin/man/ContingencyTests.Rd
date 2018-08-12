@@ -103,25 +103,27 @@
   Hoboken, New Jersey: John Wiley & Sons.
 
   Armitage, P.  (1955).  Tests for linear trends in proportions and frequencies.
-  \emph{Biometrics} \bold{11}(3), 375--386.
+  \emph{Biometrics} \bold{11}(3), 375--386.  \doi{10.2307/3001775}
 
   Cochran, W.G.  (1954). Some methods for strengthening the common \eqn{\chi^2}
-  tests.  \emph{Biometrics} \bold{10}(4), 417--451.
+  tests.  \emph{Biometrics} \bold{10}(4), 417--451.  \doi{10.2307/3001616}
 
   Davis, L. J.  (1986).  Exact tests for \eqn{2 \times 2}{2 x 2} contingency
   tables.  \emph{The American Statistician} \bold{40}(2), 139--141.
+  \doi{10.1080/00031305.1986.10475377}
 
   Landis, J. R., Heyman, E. R. and Koch, G. G.  (1978).  Average partial
   association in three-way contingency tables: a review and discussion of
   alternative tests.  \emph{International Statistical Review} \bold{46}(3),
-  237--254.
+  237--254.  \doi{10.2307/1402373}
 
   Mantel, N.  (1963).  Chi-square tests with one degree of freedom: extensions
   of the Mantel-Haenszel procedure.  \emph{Journal of the American Statistical
-    Association} \bold{58}(303), 690--700.
+    Association} \bold{58}(303), 690--700.  \doi{10.1080/01621459.1963.10500879}
 
   Yates, F.  (1948).  The analysis of contingency tables with groupings based on
   quantitative characters.  \emph{Biometrika} \bold{35}(1/2), 176--181.
+  \doi{10.1093/biomet/35.1-2.176}
 }
 \examples{
 ## Example data

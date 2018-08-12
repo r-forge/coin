@@ -106,15 +106,15 @@
 
   Page, E. B.  (1963).  Ordered hypotheses for multiple treatments: a
   significance test for linear ranks.  \emph{Journal of the American Statistical
-    Association} \bold{58}(301), 216--230.
+    Association} \bold{58}(301), 216--230.  \doi{10.1080/01621459.1963.10500843}
 
   Pratt, J. W.  (1959).  Remarks on zeros and ties in the Wilcoxon signed rank
   procedures.  \emph{Journal of the American Statistical Association}
-  \bold{54}(287), 655--667.
+  \bold{54}(287), 655--667.  \doi{10.1080/01621459.1959.10501526}
 
   Quade, D.  (1979).  Using weighted rankings in the analysis of complete blocks
   with additive block effects.  \emph{Journal of the American Statistical
-    Association} \bold{74}(367), 680--683.
+    Association} \bold{74}(367), 680--683.  \doi{10.1080/01621459.1979.10481670}
 
   Wilcoxon, F.  (1949).  \emph{Some Rapid Approximate Statistical Procedures}.
   New York: American Cyanamid Company.

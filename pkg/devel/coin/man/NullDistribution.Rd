@@ -97,8 +97,7 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
 
   Hothorn, T., Hornik, K., van de Wiel, M. A. and Zeileis, A.  (2008).
   Implementing a class of permutation tests: The coin package.  \emph{Journal of
-    Statistical Software} \bold{28}(8), 1--23.
-  \url{http://www.jstatsoft.org/v28/i08/}
+    Statistical Software} \bold{28}(8), 1--23.  \doi{10.18637/jss.v028.i08}
 
   Streitberg, B. and \enc{Röhmel}{Roehmel}, J.  (1986).  Exact distributions
   for permutations and rank tests: an introduction to some recently published
@@ -110,7 +109,7 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
 
   van de Wiel, M. A.  (2001).  The split-up algorithm: a fast symbolic method
   for computing p-values of distribution-free statistics.  \emph{Computational
-    Statistics} \bold{16}(4), 519--538.
+    Statistics} \bold{16}(4), 519--538.  \doi{10.1007/s180-001-8328-6}
 }
 \examples{
 ## Approximative (Monte Carlo) Cochran-Mantel-Haenszel test

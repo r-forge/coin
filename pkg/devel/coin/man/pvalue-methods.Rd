@@ -163,22 +163,25 @@
 \references{
   Berger, V. W.  (2000).  Pros and cons of permutation tests in clinical trials.
   \emph{Statistics in Medicine} \bold{19}(10), 1319--1328.
+  \doi{10.1002/(SICI)1097-0258(20000530)19:10<1319::AID-SIM490>3.0.CO;2-0}
 
   Berger, V. W.  (2001).  The \eqn{p}-value interval as an inferential tool.
-  \emph{The Statistician} \bold{50}(1), 79--85.
+  \emph{The Statistician} \bold{50}(1), 79--85.  \doi{10.1111/1467-9884.00262}
 
   Bretz, F., Hothorn, T. and Westfall, P.  (2011).  \emph{Multiple Comparisons
     Using R}.  Boca Raton: CRC Press.
 
   Hirji, K. F., Tan, S.-J. and Elashoff, R. M.  (1991).  A quasi-exact test for
   comparing two binomial proportions.  \emph{Statistics in Medicine}
-  \bold{10}(7), 1137--1153.
+  \bold{10}(7), 1137--1153.  \doi{10.1002/sim.4780100713}
 
   Westfall, P. H. and Troendle, J. F.  (2008).  Multiple testing with minimal
   assumptions.  \emph{Biometrical Journal} \bold{50}(5), 745--755.
+  \doi{10.1002/bimj.200710456}
 
   Westfall, P. H. and Wolfinger, R. D.  (1997).  Multiple tests with discrete
   distributions.  \emph{The American Statistician} \bold{51}(1), 3--8.
+  \doi{10.1080/00031305.1997.10473577}
 
   Westfall, P. H. and Young, S. S.  (1993).  \emph{Resampling-Based Multiple
     Testing: Examples and Methods for \eqn{p}-Value Adjustment}.  New York: John
