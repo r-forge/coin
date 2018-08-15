@@ -105,7 +105,7 @@ dens <- dperm(at, x = supp)
 ## Plotting the density
 plot(supp, dens, type = "s")
 
-## 95 \% quantile
+## 95\% quantile
 qperm(at, p = 0.95)
 
 ## One-sided p-value

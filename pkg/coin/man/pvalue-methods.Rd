@@ -82,7 +82,7 @@
   interval and test size respectively.
 
   For \code{pvalue}, the global \eqn{p}-value (\code{method = "global"}) is
-  returned by default and is given with an associated 99 \% confidence interval
+  returned by default and is given with an associated 99\% confidence interval
   when resampling is used to determine the null distribution (which for maximum
   statistics may be true even in the asymptotic case).
 
@@ -124,7 +124,7 @@
   Unadjusted \eqn{p}-values are obtained using \code{method = "unadjusted"}.
 
   For \code{midpvalue}, the global mid-\eqn{p}-value is given with an associated
-  99 \% mid-\eqn{p} confidence interval when resampling is used to determine the
+  99\% mid-\eqn{p} confidence interval when resampling is used to determine the
   null distribution.  The two-sided mid-\eqn{p}-value is computed according to
   the minimum likelihood method (Hirji \emph{et al.}, 1991).
 
@@ -149,7 +149,6 @@
   particular nominal significance level.  However, as pointed out by Berger
   (2001), even when the actual and nominal significance levels are identical,
   conservatism may still affect the \eqn{p}-value.
-
 }
 \value{
   The \eqn{p}-value, mid-\eqn{p}-value, \eqn{p}-value interval or test size

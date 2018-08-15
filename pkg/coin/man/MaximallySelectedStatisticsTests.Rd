@@ -56,12 +56,12 @@
   }
   \item{minprob}{
     a numeric, a fraction between 0 and 0.5 specifying that cutpoints only
-    greater than the \code{minprob} \eqn{\cdot}{*} 100 \% quantile of \code{x1},
+    greater than the \code{minprob} \eqn{\cdot}{*} 100\% quantile of \code{x1},
     \dots, \code{xp} are considered.  Defaults to \code{0.1}.
   }
   \item{maxprob}{
     a numeric, a fraction between 0.5 and 1 specifying that cutpoints only
-    smaller than the \code{maxprob} \eqn{\cdot}{*} 100 \% quantile of \code{x1},
+    smaller than the \code{maxprob} \eqn{\cdot}{*} 100\% quantile of \code{x1},
     \dots, \code{xp} are considered.  Defaults to \code{1 - minprob}.
   }
   \item{\dots}{

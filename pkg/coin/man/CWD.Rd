@@ -92,10 +92,10 @@ mt <- maxstat_test(sample2 + sample3 + sample4 +
 ## Absolute maximum of standardized statistics (t = 3.08)
 statistic(mt)
 
-## 5 \% critical value (t_0.05 = 2.86)
+## 5\% critical value (t_0.05 = 2.86)
 (c <- qperm(mt, 0.95))
 
-## Only 'sample8' exceeds the 5 \% critical value
+## Only 'sample8' exceeds the 5\% critical value
 sts <- statistic(mt, type = "standardized")
 idx <- which(sts > c, arr.ind = TRUE)
 sts[unique(idx[, 1]), unique(idx[, 2]), drop = FALSE]

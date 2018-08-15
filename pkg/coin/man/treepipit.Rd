@@ -20,7 +20,7 @@
     \item{\code{coverstorey}}{
       cover of canopy overstorey (\%).  The crown cover is described relative to
       a fully stocked stand.  Very dense overstorey with multiple crown cover
-      could reach values greater than 100 \%.
+      could reach values greater than 100\%.
     }
     \item{\code{coverregen}}{
       cover of regeneration and shrubs (\%).

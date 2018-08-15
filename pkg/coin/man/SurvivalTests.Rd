@@ -357,13 +357,13 @@
   \doi{10.1093/biomet/64.1.156}
 }
 \examples{
-## Example data (Callaert, 2003, Tab.1)
+## Example data (Callaert, 2003, Tab. 1)
 callaert <- data.frame(
     time = c(1, 1, 5, 6, 6, 6, 6, 2, 2, 2, 3, 4, 4, 5, 5),
     group = factor(rep(0:1, c(7, 8)))
 )
 
-## Logrank scores using mid-ranks (Callaert, 2003, Tab.2)
+## Logrank scores using mid-ranks (Callaert, 2003, Tab. 2)
 with(callaert,
      logrank_trafo(Surv(time)))
 
