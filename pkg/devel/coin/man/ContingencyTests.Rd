@@ -251,7 +251,7 @@ armitage <- matrix(
     dimnames = list(
         "Treatment" = c("A", "B"),
            "Crater" = c("Larger", "< 2/3 healed",
-                        "=> 2/3 healed", "Healed")
+                        ">= 2/3 healed", "Healed")
     )
 )
 armitage <- as.table(armitage)
