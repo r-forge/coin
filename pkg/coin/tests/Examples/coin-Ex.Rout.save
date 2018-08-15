@@ -2402,16 +2402,16 @@ alternative hypothesis: two.sided
 
 > 
 > ## Not run: 
-> ##D ## Approximative (Monte Carlo) score-independent association test
+> ##D ## Approximative (Monte Carlo) score-independent test
 > ##D ## Winell and Lindbaeck (2018)
 > ##D (it <- independence_test(jobsatisfaction,
 > ##D                          distribution = approximate(nresample = 10000),
 > ##D                          xtrafo = function(data)
 > ##D                              trafo(data, factor_trafo = function(x)
-> ##D                                  zheng_trafo(ordered(x))),
+> ##D                                  zheng_trafo(as.ordered(x))),
 > ##D                          ytrafo = function(data)
 > ##D                              trafo(data, factor_trafo = function(y)
-> ##D                                  zheng_trafo(ordered(y)))))
+> ##D                                  zheng_trafo(as.ordered(y)))))
 > ##D 
 > ##D ## Extract the "best" set of scores
 > ##D ss <- statistic(it, type = "standardized")
@@ -2480,7 +2480,7 @@ alternative hypothesis: greater
 
 > 
 > ## Not run: 
-> ##D ## One-sided approximative (Monte Carlo) score-independent Cochran-Armitage test
+> ##D ## One-sided approximative (Monte Carlo) score-independent test
 > ##D ## Winell and Lindbaeck (2018)
 > ##D (it <- independence_test(malformation ~ consumption, data = malformations,
 > ##D                          distribution = approximate(nresample = 1000,
@@ -3049,12 +3049,12 @@ data:  response by
 chi-squared = 11.957, df = 3, p-value = 0.007533
 
 > 
-> ## Asymptotic score-independent Stuart-Birch test
+> ## Asymptotic score-independent test
 > ## Winell and Lindbaeck (2018)
 > (st <- symmetry_test(vision,
 +                      ytrafo = function(data)
 +                          trafo(data, factor_trafo = function(y)
-+                              zheng_trafo(ordered(y)))))
++                              zheng_trafo(as.ordered(y)))))
 
 	Asymptotic General Symmetry Test
 
@@ -3077,7 +3077,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  12.38 0.25 12.68 NA NA 
+Time elapsed:  12.14 0.09 12.31 NA NA 
 > grDevices::dev.off()
 null device 
           1 
