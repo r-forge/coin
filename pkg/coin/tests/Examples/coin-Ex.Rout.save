@@ -50,11 +50,11 @@ Loading required package: survival
 > statistic(mt)
 [1] 3.079268
 > 
-> ## 5 % critical value (t_0.05 = 2.86)
+> ## 5% critical value (t_0.05 = 2.86)
 > (c <- qperm(mt, 0.95))
 [1] 2.855509
 > 
-> ## Only 'sample8' exceeds the 5 % critical value
+> ## Only 'sample8' exceeds the 5% critical value
 > sts <- statistic(mt, type = "standardized")
 > idx <- which(sts > c, arr.ind = TRUE)
 > sts[unique(idx[, 1]), unique(idx[, 2]), drop = FALSE]
@@ -293,7 +293,7 @@ alternative hypothesis: two.sided
 +     dimnames = list(
 +         "Treatment" = c("A", "B"),
 +            "Crater" = c("Larger", "< 2/3 healed",
-+                         "=> 2/3 healed", "Healed")
++                         ">= 2/3 healed", "Healed")
 +     )
 + )
 > armitage <- as.table(armitage)
@@ -1231,7 +1231,7 @@ chi-squared = 23.316, p-value = 0.00052
 > ## Plotting the density
 > plot(supp, dens, type = "s")
 > 
-> ## 95 % quantile
+> ## 95% quantile
 > qperm(at, p = 0.95)
 [1] 1.669331
 > 
@@ -1352,13 +1352,13 @@ Control 0.00349714 0.4665
 > 
 > ### ** Examples
 > 
-> ## Example data (Callaert, 2003, Tab.1)
+> ## Example data (Callaert, 2003, Tab. 1)
 > callaert <- data.frame(
 +     time = c(1, 1, 5, 6, 6, 6, 6, 2, 2, 2, 3, 4, 4, 5, 5),
 +     group = factor(rep(0:1, c(7, 8)))
 + )
 > 
-> ## Logrank scores using mid-ranks (Callaert, 2003, Tab.2)
+> ## Logrank scores using mid-ranks (Callaert, 2003, Tab. 2)
 > with(callaert,
 +      logrank_trafo(Surv(time)))
  [1] -0.8666667 -0.8666667  0.1148962  1.1148962  1.1148962  1.1148962
@@ -2201,10 +2201,10 @@ attr(,"conf.level")
 > ### Aliases: expectation expectation-methods
 > ###   expectation,IndependenceLinearStatistic-method
 > ###   expectation,IndependenceTest-method variance variance-methods
-> ###   variance,CovarianceMatrix-method
+> ###   variance,Variance-method variance,CovarianceMatrix-method
 > ###   variance,IndependenceLinearStatistic-method
-> ###   variance,IndependenceTest-method variance,Variance-method covariance
-> ###   covariance-methods covariance,CovarianceMatrix-method
+> ###   variance,IndependenceTest-method covariance covariance-methods
+> ###   covariance,CovarianceMatrix-method
 > ###   covariance,IndependenceLinearStatistic-method
 > ###   covariance,IndependenceTest-method
 > ### Keywords: methods
@@ -3077,7 +3077,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  12.14 0.09 12.31 NA NA 
+Time elapsed:  12.67 0.23 12.93 NA NA 
 > grDevices::dev.off()
 null device 
           1 
