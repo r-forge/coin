@@ -36,23 +36,23 @@
 \references{
   Winell, H. and \enc{Lindbäck}{Lindbaeck}, J.  (2018).  A general
   score-independent test for order-restricted inference.  \emph{Statistics in
-    Medicine}, 1--13.  \doi{10.1002/sim.7690}
+    Medicine} \bold{37}(21), 3078--3090.  \doi{10.1002/sim.7690}
 }
 \examples{
 ## Approximative (Monte Carlo) linear-by-linear association test
 lbl_test(jobsatisfaction, distribution = approximate(nresample = 10000))
 
 \dontrun{
-## Approximative (Monte Carlo) score-independent association test
+## Approximative (Monte Carlo) score-independent test
 ## Winell and Lindbaeck (2018)
 (it <- independence_test(jobsatisfaction,
                          distribution = approximate(nresample = 10000),
                          xtrafo = function(data)
                              trafo(data, factor_trafo = function(x)
-                                 zheng_trafo(ordered(x))),
+                                 zheng_trafo(as.ordered(x))),
                          ytrafo = function(data)
                              trafo(data, factor_trafo = function(y)
-                                 zheng_trafo(ordered(y)))))
+                                 zheng_trafo(as.ordered(y)))))
 
 ## Extract the "best" set of scores
 ss <- statistic(it, type = "standardized")

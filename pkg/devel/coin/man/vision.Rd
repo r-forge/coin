@@ -41,19 +41,19 @@
 
   Winell, H. and \enc{Lindbäck}{Lindbaeck}, J.  (2018).  A general
   score-independent test for order-restricted inference.  \emph{Statistics in
-    Medicine}, 1--13.  \doi{10.1002/sim.7690}
+    Medicine} \bold{37}(21), 3078--3090.  \doi{10.1002/sim.7690}
 }
 \examples{
 ## Asymptotic Stuart test (Q = 11.96)
 diag(vision) <- 0 # speed-up
 mh_test(vision)
 
-## Asymptotic score-independent Stuart-Birch test
+## Asymptotic score-independent test
 ## Winell and Lindbaeck (2018)
 (st <- symmetry_test(vision,
                      ytrafo = function(data)
                          trafo(data, factor_trafo = function(y)
-                             zheng_trafo(ordered(y)))))
+                             zheng_trafo(as.ordered(y)))))
 ss <- statistic(st, type = "standardized")
 idx <- which(abs(ss) == max(abs(ss)), arr.ind = TRUE)
 ss[idx[1], idx[2], drop = FALSE]

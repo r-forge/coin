@@ -45,7 +45,7 @@
 
   Winell, H. and \enc{Lindbäck}{Lindbaeck}, J.  (2018).  A general
   score-independent test for order-restricted inference.  \emph{Statistics in
-    Medicine}, 1--13.  \doi{10.1002/sim.7690}
+    Medicine} \bold{37}(21), 3078--3090.  \doi{10.1002/sim.7690}
 
   Zheng, G.  (2008).  Analysis of ordered categorical data: Two
   score-independent approaches.  \emph{Biometrics} \bold{64}(4), 1276–-1279.
@@ -77,7 +77,7 @@ chisq_test(malformation ~ consumption, data = malformations,
            alternative = "greater")
 
 \dontrun{
-## One-sided approximative (Monte Carlo) score-independent Cochran-Armitage test
+## One-sided approximative (Monte Carlo) score-independent test
 ## Winell and Lindbaeck (2018)
 (it <- independence_test(malformation ~ consumption, data = malformations,
                          distribution = approximate(nresample = 1000,
