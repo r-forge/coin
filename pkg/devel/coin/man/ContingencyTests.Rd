@@ -141,6 +141,7 @@ davis <- as.table(davis)
 
 ## Asymptotic Pearson chi-squared test
 chisq_test(davis)
+chisq.test(davis, correct = FALSE) # same as above
 
 ## Approximative (Monte Carlo) Pearson chi-squared test
 ct <- chisq_test(davis,

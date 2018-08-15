@@ -97,6 +97,15 @@ x <= 71 3.079268
 data:  Var2 by Var1 (A, B)
 chi-squared = 2.5714, df = 1, p-value = 0.1088
 
+> chisq.test(davis, correct = FALSE) # same as above
+Warning in chisq.test(davis, correct = FALSE) :
+  Chi-squared approximation may be incorrect
+
+	Pearson's Chi-squared test
+
+data:  davis
+X-squared = 2.5714, df = 1, p-value = 0.1088
+
 > 
 > ## Approximative (Monte Carlo) Pearson chi-squared test
 > ct <- chisq_test(davis,
@@ -3077,7 +3086,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  12.31 0.14 12.49 NA NA 
+Time elapsed:  12.14 0.15 12.33 NA NA 
 > grDevices::dev.off()
 null device 
           1 
