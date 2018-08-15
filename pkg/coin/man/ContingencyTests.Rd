@@ -78,8 +78,8 @@
   the situation when either the response or the covariate is an ordered factor;
   see also Cochran (1954) and Armitage (1955) for the particular case when
   \code{y} is a binary factor and \code{x} is ordered.  The Mantel-Haenszel
-  statistic was similarly extended by Mantel (1963) and Landis, Heyman and Koch
-  (1978).
+  statistic (Mantel and Haenszel, 1959) was similarly extended by Mantel (1963)
+  and Landis, Heyman and Koch (1978).
 
   The conditional null distribution of the test statistic is used to obtain
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
@@ -116,6 +116,10 @@
   association in three-way contingency tables: a review and discussion of
   alternative tests.  \emph{International Statistical Review} \bold{46}(3),
   237--254.  \doi{10.2307/1402373}
+
+  Mantel, N. and Haenszel, W.  (1959).  Statistical aspects of the analysis of
+  data from retrospective studies of disease.  \emph{Journal of the National
+    Cancer Institute} \bold{22}(4), 719--748.  \doi{10.1093/jnci/22.4.719}
 
   Mantel, N.  (1963).  Chi-square tests with one degree of freedom: extensions
   of the Mantel-Haenszel procedure.  \emph{Journal of the American Statistical
