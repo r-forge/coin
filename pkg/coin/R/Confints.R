@@ -452,37 +452,43 @@ simconfint_location <- function(object, level = 0.95,
 
 
 ### Exact Clopper-Pearson CI for a binomial parameter
-confint_binom <- function(x, n, conf.level = 0.99) {
-    alpha <- (1 - conf.level) / 2
-    lower <- if (x == 0)
-                 0
-             else
-                 qbeta(alpha, x, n - x + 1)
-    upper <- if (x == n)
-                 1
-             else
-                 qbeta(1 - alpha, x + 1, n - x)
-    ci <- c(lower, upper)
-    attr(ci, "conf.level") <- conf.level
+confint_binom <-
+    function(x, n, level = 0.99)
+{
+    alpha <- 1 - level
+
+    ci <- if (x >= 0 && x <= n) {
+              c(if (x == 0) 0 else qbeta(alpha / 2, x, n - x + 1),
+                if (x == n) 1 else qbeta(1 - alpha / 2, x + 1, n - x))
+          } else {
+              stop(sQuote("x"), " must be larger or equal to 0 and",
+                   " smaller or equal to ", sQuote("n"))
+          }
+    attr(ci, "conf.level") <- level
     ci
 }
 
 
 ### Mid-p CI for a binomial parameter (see Berry and Armitage, 1995)
-confint_midp <- function(x, n, conf.level = 0.99) {
-    alpha <- 1 - conf.level
-    if (x > 0 & x < n) {
-        f <- function(a, p)
-            ## 0.5 * dbinom(...) + pbinom(..., lower.tail = FALSE)
-            mean(pbinom(c(x, x - 1), n, a, lower.tail = TRUE)) - p
-        UR <- function(p)
-            uniroot(f, c(0, 1), p, tol = eps)$root
-        ci <- c(UR(1 - alpha / 2), UR(alpha / 2))
-    } else if (x == 0) {
-        ci <- c(0, 1 - alpha^(1 / n))
-    } else if (x == n) {
-        ci <- c(alpha^(1 / n), 1)
-    }
-    attr(ci, "conf.level") <- conf.level
+confint_midp <-
+    function(x, n, level = 0.99, tol = coin:::eps)
+{
+    alpha <- 1 - level
+
+    ci <- if (x > 0 && x < n) {
+              f <- function(p, a)
+                  ## 0.5 * dbinom(...) + pbinom(..., lower.tail = FALSE)
+                  mean(pbinom(c(x, x - 1), n, p, lower.tail = FALSE)) - a
+              c(uniroot(f, c(0, 1),     alpha / 2, tol = tol)$root,
+                uniroot(f, c(0, 1), 1 - alpha / 2, tol = tol)$root)
+          } else if (x == 0) {
+              c(0, 1 - alpha^(1 / n))
+          } else if (x == n) {
+              c(alpha^(1 / n), 1)
+          } else {
+              stop(sQuote("x"), " must be larger or equal to 0 and",
+                   " smaller or equal to ", sQuote("n"))
+          }
+    attr(ci, "conf.level") <- level
     ci
 }
