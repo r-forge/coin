@@ -451,44 +451,36 @@ simconfint_location <- function(object, level = 0.95,
 }
 
 
-### Exact Clopper-Pearson CI for a binomial parameter
+### CI for a binomial parameter
 confint_binom <-
-    function(x, n, level = 0.99)
+    function(x, n, level = 0.95, method = c("exact", "mid-p"), tol = coin:::eps)
 {
-    alpha <- 1 - level
+    method <- match.arg(method)
 
-    ci <- if (x >= 0 && x <= n) {
-              c(if (x == 0) 0 else qbeta(alpha / 2, x, n - x + 1),
-                if (x == n) 1 else qbeta(1 - alpha / 2, x + 1, n - x))
-          } else {
-              stop(sQuote("x"), " must be larger or equal to 0 and",
-                   " smaller or equal to ", sQuote("n"))
-          }
-    attr(ci, "conf.level") <- level
-    ci
-}
-
-
-### Mid-p CI for a binomial parameter (see Berry and Armitage, 1995)
-confint_midp <-
-    function(x, n, level = 0.99, tol = coin:::eps)
-{
-    alpha <- 1 - level
-
-    ci <- if (x > 0 && x < n) {
-              f <- function(p, a)
-                  ## 0.5 * dbinom(...) + pbinom(..., lower.tail = FALSE)
-                  mean(pbinom(c(x, x - 1), n, p, lower.tail = FALSE)) - a
-              c(uniroot(f, c(0, 1),     alpha / 2, tol = tol)$root,
-                uniroot(f, c(0, 1), 1 - alpha / 2, tol = tol)$root)
-          } else if (x == 0) {
-              c(0, 1 - alpha^(1 / n))
-          } else if (x == n) {
-              c(alpha^(1 / n), 1)
-          } else {
-              stop(sQuote("x"), " must be larger or equal to 0 and",
-                   " smaller or equal to ", sQuote("n"))
-          }
-    attr(ci, "conf.level") <- level
-    ci
+    RET <- if (x >= 0 && x <= n) {
+               alpha <- 1 - level
+               if (method == "exact") {
+                   ## exact Clopper-Pearson interval
+                   c(if (x == 0) 0 else qbeta(alpha / 2, x, n - x + 1),
+                     if (x == n) 1 else qbeta(1 - alpha / 2, x + 1, n - x))
+               } else {
+                   ## mid-p interval (see Berry and Armitage, 1995)
+                   if (x == 0) {
+                       c(0, 1 - alpha^(1 / n))
+                   } else if (x == n) {
+                       c(alpha^(1 / n), 1)
+                   } else {
+                       f <- function(p, a)
+                           ## 0.5 * dbinom(...) + pbinom(..., lower.tail = FALSE)
+                           mean(pbinom(c(x, x - 1), n, p, lower.tail = FALSE)) - a
+                       c(uniroot(f, c(0, 1),     alpha / 2, tol = tol)$root,
+                         uniroot(f, c(0, 1), 1 - alpha / 2, tol = tol)$root)
+                   }
+               }
+           } else {
+               stop(sQuote("x"), " must be larger or equal to 0 and",
+                    " smaller or equal to ", sQuote("n"))
+           }
+    attr(RET, "conf.level") <- level
+    RET
 }
