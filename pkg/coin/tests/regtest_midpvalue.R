@@ -12,32 +12,32 @@ options(useFancyQuotes = FALSE)
 
 
 ### Berry and Armitage (1995, p. 420)
-mpci <- coin:::confint_midp(5, 20, 0.95)
+mpci <- coin:::confint_binom(5, 20, level = 0.95, method = "mid-p")
 stopifnot(isequal(round(mpci, 3), c(0.098, 0.470)))
 
 
 ### Agresti and Gottard (2001, p. 369)
-mpci <- coin:::confint_midp(4, 10, 0.95)
+mpci <- coin:::confint_binom(4, 10, level = 0.95, method = "mid-p")
 stopifnot(isequal(round(mpci, 3), c(0.142, 0.709)))
 
-mpci <- coin:::confint_midp(0, 10, 0.95)
+mpci <- coin:::confint_binom(0, 10, level = 0.95, method = "mid-p")
 stopifnot(isequal(round(mpci[1], 3), 0))
 
-mpci <- coin:::confint_midp(10, 10, 0.95)
+mpci <- coin:::confint_binom(10, 10, level = 0.95, method = "mid-p")
 stopifnot(isequal(round(mpci[2], 3), 1))
 
 
 ### Newcombe (1998, p. 861, Tab. I)
-mpci <- coin:::confint_midp(81, 263, 0.95)
+mpci <- coin:::confint_binom(81, 263, level = 0.95, method = "mid-p")
 stopifnot(isequal(round(mpci, 4), c(0.2544, 0.3658)))
 
-mpci <- coin:::confint_midp(15, 148, 0.95)
+mpci <- coin:::confint_binom(15, 148, level = 0.95, method = "mid-p")
 stopifnot(isequal(round(mpci, 4), c(0.0601, 0.1581)))
 
-mpci <- coin:::confint_midp(0, 20, 0.95)
+mpci <- coin:::confint_binom(0, 20, level = 0.95, method = "mid-p")
 stopifnot(isequal(round(mpci, 4), c(0.0000, 0.1391)))
 
-mpci <- coin:::confint_midp(1, 29, 0.95)
+mpci <- coin:::confint_binom(1, 29, level = 0.95, method = "mid-p")
 stopifnot(isequal(round(mpci, 4), c(0.0017, 0.1585)))
 
 

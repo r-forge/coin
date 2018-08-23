@@ -244,7 +244,8 @@ setMethod("ApproxNullDistribution",
                    )
             if (conf.int) {
                 attr(RET, "conf.int") <-
-                    confint_binom(round(RET * nresample), nresample)
+                    confint_binom(round(RET * nresample), nresample,
+                                  level = 0.99, method = "exact")
                 class(RET) <- "MCp"
             }
             RET
@@ -257,7 +258,8 @@ setMethod("ApproxNullDistribution",
                          d_fun(q)
             if (conf.int) {
                 attr(RET, "conf.int") <-
-                    confint_midp(round(RET * nresample), nresample)
+                    confint_binom(round(RET * nresample), nresample,
+                                  level = 0.99, method = "mid-p")
                 class(RET) <- "MCp"
             }
             RET
@@ -374,7 +376,8 @@ setMethod("ApproxNullDistribution",
                    )
             if (conf.int) {
                 attr(RET, "conf.int") <-
-                    confint_binom(round(RET * nresample), nresample)
+                    confint_binom(round(RET * nresample), nresample,
+                                  level = 0.99, method = "exact")
                 class(RET) <- "MCp"
             }
             RET
@@ -387,7 +390,8 @@ setMethod("ApproxNullDistribution",
                          d_fun(q)
             if (conf.int) {
                 attr(RET, "conf.int") <-
-                    confint_midp(round(RET * nresample), nresample)
+                    confint_binom(round(RET * nresample), nresample,
+                                  level = 0.99, method = "mid-p")
                 class(RET) <- "MCp"
             }
             RET
@@ -493,7 +497,8 @@ setMethod("ApproxNullDistribution",
             RET <- mean(pls %GE% q)
             if (conf.int) {
                 attr(RET, "conf.int") <-
-                    confint_binom(round(RET * nresample), nresample)
+                    confint_binom(round(RET * nresample), nresample,
+                                  level = 0.99, method = "exact")
                 class(RET) <- "MCp"
             }
             RET
@@ -502,7 +507,8 @@ setMethod("ApproxNullDistribution",
             RET <- pvalue_fun(q, conf.int = FALSE) - z * d_fun(q)
             if (conf.int) {
                 attr(RET, "conf.int") <-
-                    confint_midp(round(RET * nresample), nresample)
+                    confint_binom(round(RET * nresample), nresample,
+                                  level = 0.99, method = "mid-p")
                 class(RET) <- "MCp"
             }
             RET
