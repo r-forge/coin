@@ -461,8 +461,8 @@ confint_binom <-
                alpha <- 1 - level
                if (method == "exact") {
                    ## exact Clopper-Pearson interval
-                   c(if (x == 0) 0 else qbeta(alpha / 2, x, n - x + 1),
-                     if (x == n) 1 else qbeta(1 - alpha / 2, x + 1, n - x))
+                   c(if (x == 0) 0 else qbeta(    alpha / 2, x    , n - x + 1),
+                     if (x == n) 1 else qbeta(1 - alpha / 2, x + 1, n - x    ))
                } else {
                    ## mid-p interval (see Berry and Armitage, 1995)
                    if (x == 0) {
@@ -473,8 +473,8 @@ confint_binom <-
                        f <- function(p, a)
                            ## 0.5 * dbinom(...) + pbinom(..., lower.tail = FALSE)
                            mean(pbinom(c(x, x - 1), n, p, lower.tail = FALSE)) - a
-                       c(uniroot(f, c(0, 1),     alpha / 2, tol = tol)$root,
-                         uniroot(f, c(0, 1), 1 - alpha / 2, tol = tol)$root)
+                       c(uniroot(f, c(0, 1), a =     alpha / 2, tol = tol)$root,
+                         uniroot(f, c(0, 1), a = 1 - alpha / 2, tol = tol)$root)
                    }
                }
            } else {
