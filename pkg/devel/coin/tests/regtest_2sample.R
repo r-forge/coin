@@ -279,7 +279,7 @@ stopifnot(isequal(ci$estimate, mean(c(35/30, 370 / 290))))
 
 ata <- ansari_test(y ~ x, data = scale,
                    conf.int = TRUE, conf.level = 0.988)
-confint(ata)
+confint(ata)                                                  # wrong in < 1.3-0
 
 ### Taha Test
 tt <- taha_test(y ~ x, data = scale, di = "ex",
@@ -289,7 +289,7 @@ confint(tt)
 
 tta <- taha_test(y ~ x, data = scale,
                  conf.int = TRUE, conf.level = 0.51)
-confint(tta)
+confint(tta)                                                  # wrong in < 1.3-0
 
 ### Klotz Test
 kt <- klotz_test(y ~ x, data = scale, di = "ex",
@@ -299,7 +299,7 @@ confint(kt)
 
 kta <- klotz_test(y ~ x, data = scale,
                   conf.int = TRUE, conf.level = 0.988)
-confint(kta)
+confint(kta)                                                  # wrong in < 1.3-0
 
 ### Mood Test
 mt <- mood_test(y ~ x, data = scale, di = "ex",
@@ -309,7 +309,7 @@ confint(mt)
 
 mta <- mood_test(y ~ x, data = scale,
                  conf.int = TRUE, conf.level = 0.988)
-confint(mta)
+confint(mta)                                                  # wrong in < 1.3-0
 
 ### Fligner-Killeen Test
 ft <- fligner_test(y ~ x, data = scale, di = "ex",
@@ -319,7 +319,7 @@ confint(ft)
 
 fta <- fligner_test(y ~ x, data = scale,
                     conf.int = TRUE, conf.level = 0.988)
-confint(fta)
+confint(fta)                                                  # wrong in < 1.3-0
 
 ### Conover-Iman Test
 ct <- conover_test(y ~ x, data = scale, di = "ex",
@@ -329,7 +329,8 @@ confint(ct)
 
 cta <- conover_test(y ~ x, data = scale,
                     conf.int = TRUE, conf.level = 0.988)
-confint(cta)
+confint(cta)                                                  # wrong in < 1.3-0
+
 
 ### ties handling
 y1 <- c(14 , 18 , 2 , 4 , -5 , 14 , -3 , -1 , 1 , 6 , 3 , 3)

@@ -51,6 +51,10 @@
   }
   \subsection{Bug fixes}{
     \itemize{
+      \item The point and/or interval estimate of the ratio of scales parameter
+      (for tests against scale alternatives) were incorrect when using the
+      asymptotic null distribution.
+
       \item The class definition of \code{"PValue"} erroneously included the
       \code{midpvalue} and \code{pvalueinterval} slots; these slots are now part
       of the \code{"NullDistribution"} subclass (as they should have been

@@ -188,8 +188,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
 }
 
 
-confint_scale <- function(object, nulldistr, level = 0.95,
-    approx = FALSE, ...) {
+confint_scale <- function(object, nulldistr, level = 0.95, ...) {
 
     if (!extends(class(object), "ScalarIndependenceTestStatistic"))
         stop("Argument ", sQuote("object"), " is not of class ",
@@ -198,6 +197,7 @@ confint_scale <- function(object, nulldistr, level = 0.95,
     if (!extends(class(nulldistr), "NullDistribution"))
         stop("Argument ", sQuote("nulldistr"), " is not of class ",
              sQuote("NullDistribution"))
+    approx <- inherits(nulldistr, "AsymptNullDistribution")
 
     ## <FIXME> drop unused levels!
     if (!is_2sample(object))
