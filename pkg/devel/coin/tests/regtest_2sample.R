@@ -234,6 +234,9 @@ wt0 <- wilcox.test(y ~ x, data = location, conf.int = TRUE)
 stopifnot(isequal(wt0$confint, ci$confint))
 stopifnot(isequal(wt0$estimate, ci$estimate))
 
+wta <- wilcox_test(y ~ x, data = location, conf.int = TRUE)
+confint(wta)
+
 ### Normal Scores Test
 nt <- normal_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
 nt
@@ -241,11 +244,24 @@ ci <- confint(nt)
 stopifnot(isequal(ci$conf.int, c(-6, 30)))
 stopifnot(isequal(ci$estimate, 11))
 
+nta <- normal_test(y ~ x, data = location, conf.int = TRUE)
+confint(nta)
+
 ### Median Test
-median_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
+mt <- median_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
+mt
+confint(mt)
+
+mta <- median_test(y ~ x, data = location, conf.int = TRUE)
+confint(mta)
 
 ### Savage Test
-savage_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
+st <- savage_test(y ~ x, data = location, conf.int = TRUE, di = "ex")
+st
+confint(st)
+
+sta <- savage_test(y ~ x, data = location, conf.int = TRUE)
+confint(sta)
 
 
 ### Scale Tests
@@ -261,26 +277,59 @@ ci <- confint(at)
 stopifnot(isequal(ci$conf.int, c(10, 556) / c(68, 27)))
 stopifnot(isequal(ci$estimate, mean(c(35/30, 370 / 290))))
 
+ata <- ansari_test(y ~ x, data = scale,
+                   conf.int = TRUE, conf.level = 0.988)
+confint(ata)
+
 ### Taha Test
-taha_test(y ~ x, data = scale, di = "ex",
-          conf.int = TRUE, conf.level = 0.54)
+tt <- taha_test(y ~ x, data = scale, di = "ex",
+                conf.int = TRUE, conf.level = 0.51)
+tt
+confint(tt)
+
+tta <- taha_test(y ~ x, data = scale,
+                 conf.int = TRUE, conf.level = 0.51)
+confint(tta)
 
 ### Klotz Test
-klotz_test(y ~ x, data = scale, di = "ex",
-           conf.int = TRUE, conf.level = 0.988)
+kt <- klotz_test(y ~ x, data = scale, di = "ex",
+                 conf.int = TRUE, conf.level = 0.988)
+kt
+confint(kt)
+
+kta <- klotz_test(y ~ x, data = scale,
+                  conf.int = TRUE, conf.level = 0.988)
+confint(kta)
 
 ### Mood Test
-mood_test(y ~ x, data = scale, di = "ex",
-          conf.int = TRUE, conf.level = 0.988)
+mt <- mood_test(y ~ x, data = scale, di = "ex",
+                conf.int = TRUE, conf.level = 0.988)
+mt
+confint(mt)
+
+mta <- mood_test(y ~ x, data = scale,
+                 conf.int = TRUE, conf.level = 0.988)
+confint(mta)
 
 ### Fligner-Killeen Test
-fligner_test(y ~ x, data = scale, di = "ex",
-                  conf.int = TRUE, conf.level = 0.988)
+ft <- fligner_test(y ~ x, data = scale, di = "ex",
+                   conf.int = TRUE, conf.level = 0.988)
+ft
+confint(ft)
+
+fta <- fligner_test(y ~ x, data = scale,
+                    conf.int = TRUE, conf.level = 0.988)
+confint(fta)
 
 ### Conover-Iman Test
-conover_test(y ~ x, data = scale, di = "ex",
-             conf.int = TRUE, conf.level = 0.988)
+ct <- conover_test(y ~ x, data = scale, di = "ex",
+                   conf.int = TRUE, conf.level = 0.988)
+ct
+confint(ct)
 
+cta <- conover_test(y ~ x, data = scale,
+                    conf.int = TRUE, conf.level = 0.988)
+confint(cta)
 
 ### ties handling
 y1 <- c(14 , 18 , 2 , 4 , -5 , 14 , -3 , -1 , 1 , 6 , 3 , 3)
