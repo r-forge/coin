@@ -76,7 +76,7 @@
   }
   \subsection{Other changes}{
     \itemize{
-      \item
+      \item \R version \eqn{\ge}{>=}3.4.0 is now required.
     }
   }
   \subsection{Deprecated and defunct}{
