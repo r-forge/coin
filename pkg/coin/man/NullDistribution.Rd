@@ -10,8 +10,8 @@
 }
 \usage{
 asymptotic(maxpts = 25000, abseps = 0.001, releps = 0)
-approximate(nresample = 10000L, B, parallel = c("no", "multicore", "snow"),
-            ncpus = 1L, cl = NULL)
+approximate(nresample = 10000L, parallel = c("no", "multicore", "snow"),
+            ncpus = 1L, cl = NULL, B)
 exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
 }
 \arguments{
@@ -30,9 +30,6 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
     computation of the approximative reference distribution.  Defaults to
     \code{10000L}.
   }
-  \item{B}{
-    deprecated, use \code{nresample} instead.
-  }
   \item{parallel}{
     a character, the type of parallel operation: either \code{"no"} (default),
     \code{"multicore"} or \code{"snow"}.
@@ -45,6 +42,9 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
     an object inheriting from class \code{"cluster"}, specifying an optional
     \pkg{parallel} or \pkg{snow} cluster if \code{parallel = "snow"}.  Defaults
     to \code{NULL}.
+  }
+  \item{B}{
+    deprecated, use \code{nresample} instead.
   }
   \item{algorithm}{
     a character, the algorithm used for the computation of the exact reference
