@@ -1,6 +1,6 @@
 confint_location <- function(object, nulldistr, level = 0.95, ...) {
 
-    if (!extends(class(object), "ScalarIndependenceTestStatistic"))
+    if (!inherits(object, "ScalarIndependenceTestStatistic"))
         stop("Argument ", sQuote("object"), " is not of class ",
              sQuote("ScalarIndependenceTestStatistic"))
 
@@ -9,7 +9,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
         warning(sQuote("object"), " does not represent a two sample problem")
     ## </FIXME>
 
-    if (!extends(class(nulldistr), "NullDistribution"))
+    if (!inherits(nulldistr, "NullDistribution"))
         stop("Argument ", sQuote("nulldistr"), " is not of class ",
              sQuote("NullDistribution"))
     approx <- inherits(nulldistr, "AsymptNullDistribution")
@@ -190,11 +190,11 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
 
 confint_scale <- function(object, nulldistr, level = 0.95, ...) {
 
-    if (!extends(class(object), "ScalarIndependenceTestStatistic"))
+    if (!inherits(object, "ScalarIndependenceTestStatistic"))
         stop("Argument ", sQuote("object"), " is not of class ",
              sQuote("ScalarIndependenceTestStatistic"))
 
-    if (!extends(class(nulldistr), "NullDistribution"))
+    if (!inherits(nulldistr, "NullDistribution"))
         stop("Argument ", sQuote("nulldistr"), " is not of class ",
              sQuote("NullDistribution"))
     approx <- inherits(nulldistr, "AsymptNullDistribution")
@@ -398,7 +398,7 @@ simconfint_location <- function(object, level = 0.95,
     approx = FALSE, ...) {
 
     if (!(is_Ksample(object@statistic) &&
-        extends(class(object), "MaxTypeIndependenceTest")))
+        inherits(object, "MaxTypeIndependenceTest")))
         stop(sQuote("object"), " is not an object of class ",
              sQuote("MaxTypeIndependenceTest"),
              " representing a K sample problem")

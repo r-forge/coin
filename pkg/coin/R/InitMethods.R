@@ -97,7 +97,7 @@ setMethod("initialize",
     signature = "IndependenceTestProblem",
     definition = function(.Object, object, xtrafo = trafo, ytrafo = trafo, ...) {
 
-        if (!extends(class(object), "IndependenceProblem"))
+        if (!inherits(object, "IndependenceProblem"))
             stop("Argument ", sQuote("object"), " is not of class ",
                  sQuote("IndependenceProblem"))
 
@@ -119,7 +119,7 @@ setMethod("initialize",
     signature = "IndependenceLinearStatistic",
     definition = function(.Object, object, varonly = FALSE, ...) {
 
-        if (!extends(class(object), "IndependenceTestProblem"))
+        if (!inherits(object, "IndependenceTestProblem"))
             stop("Argument ", sQuote("object"), " is not of class ",
                   sQuote("IndependenceTestProblem"))
 
@@ -159,7 +159,7 @@ setMethod("initialize",
     definition = function(.Object, object,
         alternative = c("two.sided", "less", "greater"), paired = FALSE, ...) {
 
-        if (!extends(class(object), "IndependenceLinearStatistic"))
+        if (!inherits(object, "IndependenceLinearStatistic"))
             stop("Argument ", sQuote("object"), " is not of class ",
                   sQuote("IndependenceLinearStatistic"))
 
@@ -182,7 +182,7 @@ setMethod("initialize",
     definition = function(.Object, object,
         alternative = c("two.sided", "less", "greater"), ...) {
 
-        if (!extends(class(object), "IndependenceLinearStatistic"))
+        if (!inherits(object, "IndependenceLinearStatistic"))
             stop("Argument ", sQuote("object"), " is not of class ",
                   sQuote("IndependenceLinearStatistic"))
 
@@ -208,7 +208,7 @@ setMethod("initialize",
     signature = "QuadTypeIndependenceTestStatistic",
     definition = function(.Object, object, paired = FALSE, ...) {
 
-        if (!extends(class(object), "IndependenceLinearStatistic"))
+        if (!inherits(object, "IndependenceLinearStatistic"))
             stop("Argument ", sQuote("object"), " is not of class ",
                   sQuote("IndependenceLinearStatistic"))
 

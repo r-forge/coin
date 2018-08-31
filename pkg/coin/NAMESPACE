@@ -1,7 +1,7 @@
 useDynLib(coin, .registration = TRUE)
 
 importFrom("survival", is.Surv)
-importFrom("methods", callNextMethod, extends, getSlots, new, validObject)
+importFrom("methods", callNextMethod, getSlots, new, validObject)
 importMethodsFrom("methods", initialize, show)
 importFrom("parallel", clusterApply, clusterSetRNGStream, makePSOCKcluster,
                        mclapply, nextRNGStream, stopCluster)

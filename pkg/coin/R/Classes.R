@@ -202,8 +202,7 @@ setClass("ScalarIndependenceTest",
     ),
     prototype = list(parameter = "mu"),
     validity = function(object)
-        extends(class(object@statistic),
-                "ScalarIndependenceTestStatistic")
+        inherits(object@statistic, "ScalarIndependenceTestStatistic")
 )
 
 ### possibly with confidence intervals
@@ -219,16 +218,14 @@ setClass("ScalarIndependenceTestConfint",
 setClass("MaxTypeIndependenceTest",
     contains = "IndependenceTest",
     validity = function(object)
-        extends(class(object@statistic),
-                "MaxTypeIndependenceTestStatistic")
+        inherits(object@statistic, "MaxTypeIndependenceTestStatistic")
 )
 
 ### quad form test statistics
 setClass("QuadTypeIndependenceTest",
     contains = "IndependenceTest",
     validity = function(object)
-        extends(class(object@statistic),
-                "QuadTypeIndependenceTestStatistic")
+        inherits(object@statistic, "QuadTypeIndependenceTestStatistic")
 )
 
 ### SymmetryProblems

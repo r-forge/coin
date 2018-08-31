@@ -100,11 +100,11 @@ asdmaxT <- function(object) {
 ### stepdown maxT multiple testing procedure
 stepdown <- function(object, ...) {
 
-    if (!(extends(class(object), "MaxTypeIndependenceTest")))
+    if (!inherits(object, "MaxTypeIndependenceTest"))
         stop(sQuote("object"), " is not of class ",
              sQuote("MaxTypeIndependenceTest"))
 
-    if (extends(class(object@distribution), "AsymptNullDistribution"))
+    if (inherits(object@distribution, "AsymptNullDistribution"))
         asdmaxT(object)
     else {
         ## raw simulation results, scores have been handled already
@@ -136,11 +136,11 @@ marginal <- function(object, bonferroni, stepdown, ...) {
     ## distributions are available
     ## </FIXME>
 
-    if (!(extends(class(object), "MaxTypeIndependenceTest")))
+    if (!inherits(object, "MaxTypeIndependenceTest"))
         stop(sQuote("object"), " is not of class ",
              sQuote("MaxTypeIndependenceTest"))
 
-    if (extends(class(object@distribution), "AsymptNullDistribution")) {
+    if (inherits(object@distribution, "AsymptNullDistribution")) {
         ## unadjusted p-values
         ts <- statistic(object, type = "standardized")
         ret <- switch(object@statistic@alternative,
@@ -281,7 +281,7 @@ npmcp <- function(object) {
 ### unadjusted p-values
 unadjusted <- function(object, ...) {
 
-    if (extends(class(object@distribution), "AsymptNullDistribution")) {
+    if (inherits(object@distribution, "AsymptNullDistribution")) {
         ts <- statistic(object, type = "standardized")
         ret <- switch(object@statistic@alternative,
                       "two.sided" = 2 * pmin.int(pnorm(ts), 1 - pnorm(ts)),

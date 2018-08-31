@@ -1,9 +1,9 @@
 ### Streitberg-Roehmel algorithm for two independent samples
 SR_shift_2sample <- function(object, fact) {
     teststat <-
-        if (extends(class(object), "ScalarIndependenceTestStatistic"))
+        if (inherits(object, "ScalarIndependenceTestStatistic"))
             "scalar"
-        else if (extends(class(object), "QuadTypeIndependenceTestStatistic"))
+        else if (inherits(object, "QuadTypeIndependenceTestStatistic"))
             "quadratic"
         else
             stop("Argument ", sQuote("object"), " is not of class ",
@@ -221,9 +221,9 @@ cSR_shift_2sample <- function(scores, m, fact) {
 ### Streitberg-Roehmel algorithm for two paired samples
 SR_shift_1sample <- function(object, fact) {
     teststat <-
-        if (extends(class(object), "ScalarIndependenceTestStatistic"))
+        if (inherits(object, "ScalarIndependenceTestStatistic"))
             "scalar"
-        else if (extends(class(object), "QuadTypeIndependenceTestStatistic"))
+        else if (inherits(object, "QuadTypeIndependenceTestStatistic"))
             "quadratic"
         else
             stop("Argument ", sQuote("object"), " is not of class ",
@@ -377,7 +377,7 @@ SR_shift_1sample <- function(object, fact) {
 vdW_split_up_2sample <- function(object) {
     ## <FIXME> on.exit(ex <- .C("FreeW", PACKAGE = "coin")) </FIXME>
 
-    if (!extends(class(object), "ScalarIndependenceTestStatistic"))
+    if (!inherits(object, "ScalarIndependenceTestStatistic"))
         stop("Argument ", sQuote("object"), " is not of class ",
              sQuote("ScalarIndependenceTestStatistic"))
 
