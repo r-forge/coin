@@ -71,6 +71,9 @@
       \item The quantile function now returns a named vector if its \code{p}
       argument is named.
 
+      \item Objects of class \code{"ApproxNullDistribution"} now has a slot
+      \code{nresample} containing the number of Monte Carlo replicates.
+
       \item Documentation updates.
     }
   }

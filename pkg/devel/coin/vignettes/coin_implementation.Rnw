@@ -583,9 +583,10 @@ or, where possible, augmented by, e.g., its density and quantile functions:
 toLatex(c2t("NullDistribution"))
 @
 Currently, there are three classes extending \Rclass{NullDistribution}:
-\Rclass{ExactNullDistribution}, \Rclass{ApproxNullDistribution} (adding a slot
-\code{seed} containing the current state of the random number generator) and
-\Rclass{AsymptNullDistribution}.
+\Rclass{ExactNullDistribution}, \Rclass{ApproxNullDistribution} (adding slots
+\code{seed} and \code{nresample} containing, respectively, the current state of
+the random number generator and the number of Monte Carlo replicates) and
+\Rclass{AsymptNullDistribution} (adding a slot \code{seed}).
 All of them can be queried for probabilities, quantiles, etc., using
 suitable methods (see Table~\ref{tab:dists} for an overview).
 New methods for computing or approximating the conditional distribution
