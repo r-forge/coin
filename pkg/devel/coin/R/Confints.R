@@ -453,7 +453,7 @@ simconfint_location <- function(object, level = 0.95,
 
 ### CI for a binomial parameter
 confint_binom <-
-    function(x, n, level = 0.95, method = c("exact", "mid-p"), tol = coin:::eps)
+    function(x, n, level = 0.95, method = c("exact", "mid-p"), tol = eps)
 {
     method <- match.arg(method)
 
