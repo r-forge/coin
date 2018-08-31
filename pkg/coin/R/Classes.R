@@ -173,7 +173,8 @@ setClass("AsymptNullDistribution",
 setClass("ApproxNullDistribution",
     contains = "NullDistribution",
     slots = c(
-        seed = "integer"
+        seed      = "integer",
+        nresample = "numeric"
     )
 )
 

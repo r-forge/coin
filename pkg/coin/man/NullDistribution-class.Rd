@@ -72,6 +72,12 @@
       (i.e., the value of \code{.Random.seed}).
     }
   }
+  Additionally, for objects of class \code{"ApproxNullDistribution"}:
+  \describe{
+    \item{\code{nresample}:}{
+      Object of class \code{"numeric"}.  The number of Monte Carlo replicates.
+    }
+  }
 }
 \section{Extends}{
   For objects of class \code{"NullDistribution"}: \cr
