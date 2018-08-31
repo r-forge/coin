@@ -358,7 +358,7 @@ setMethod("covariance",
 setMethod("covariance",
     signature = "IndependenceLinearStatistic",
     definition = function(object, ...) {
-        if (!extends(class(object@covariance), "CovarianceMatrix"))
+        if (!inherits(object@covariance, "CovarianceMatrix"))
             covariance(new("IndependenceLinearStatistic",
                            object, varonly = FALSE))
         else
