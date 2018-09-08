@@ -47,6 +47,9 @@
 
       \item The centered linear statistic can now be extracted (see
       \code{?statistic}).
+
+      \item \eqn{P}-values can now be extracted from objects of class
+      \code{"PValue"} using \code{pvalue()}.
     }
   }
   \subsection{Bug fixes}{
@@ -88,6 +91,8 @@
       \code{ApproxNullDistribution()} is now deprecated and has been replaced by
       \code{nresample} (to conform with the \pkg{libcoin}, \pkg{party} and
       \pkg{partykit} packages).
+
+      \item Class \code{"PValue"} is now deprecated.
     }
   }
 }

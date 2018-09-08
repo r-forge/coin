@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2018-07-24 r75005) -- "Unsuffered Consequences"
+R Under development (unstable) (2018-08-31 r75222) -- "Unsuffered Consequences"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -2747,12 +2747,13 @@ C             0.000            0.0000  0.999
 > ### Name: pvalue-methods
 > ### Title: Computation of the p-Value, Mid-p-Value, p-Value Interval and
 > ###   Test Size
-> ### Aliases: pvalue pvalue-methods pvalue,IndependenceTest-method
-> ###   pvalue,MaxTypeIndependenceTest-method pvalue,NullDistribution-method
-> ###   midpvalue midpvalue-methods midpvalue,IndependenceTest-method
-> ###   midpvalue,NullDistribution-method pvalue_interval
-> ###   pvalue_interval-methods pvalue_interval,IndependenceTest-method
-> ###   pvalue_interval,NullDistribution-method size size-methods
+> ### Aliases: pvalue pvalue-methods pvalue,PValue-method
+> ###   pvalue,NullDistribution-method pvalue,IndependenceTest-method
+> ###   pvalue,MaxTypeIndependenceTest-method midpvalue midpvalue-methods
+> ###   midpvalue,NullDistribution-method midpvalue,IndependenceTest-method
+> ###   pvalue_interval pvalue_interval-methods
+> ###   pvalue_interval,NullDistribution-method
+> ###   pvalue_interval,IndependenceTest-method size size-methods
 > ###   size,IndependenceTest-method size,NullDistribution-method
 > ### Keywords: methods htest
 > 
@@ -3086,7 +3087,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  12.14 0.15 12.33 NA NA 
+Time elapsed:  12.36 0.34 12.77 NA NA 
 > grDevices::dev.off()
 null device 
           1 

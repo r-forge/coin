@@ -27,6 +27,11 @@
   }
 }
 \section{Methods}{
-  No methods defined with class \code{"PValue"} in the signature.
+  \describe{
+    \item{pvalue}{
+      \code{signature(object = "PValue")}: See the documentation for
+      \code{\link{pvalue}} for details.
+    }
+  }
 }
 \keyword{classes}

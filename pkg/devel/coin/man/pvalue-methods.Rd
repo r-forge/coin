@@ -2,17 +2,18 @@
 \docType{methods}
 \alias{pvalue}
 \alias{pvalue-methods}
+\alias{pvalue,PValue-method}
+\alias{pvalue,NullDistribution-method}
 \alias{pvalue,IndependenceTest-method}
 \alias{pvalue,MaxTypeIndependenceTest-method}
-\alias{pvalue,NullDistribution-method}
 \alias{midpvalue}
 \alias{midpvalue-methods}
-\alias{midpvalue,IndependenceTest-method}
 \alias{midpvalue,NullDistribution-method}
+\alias{midpvalue,IndependenceTest-method}
 \alias{pvalue_interval}
 \alias{pvalue_interval-methods}
-\alias{pvalue_interval,IndependenceTest-method}
 \alias{pvalue_interval,NullDistribution-method}
+\alias{pvalue_interval,IndependenceTest-method}
 \alias{size}
 \alias{size-methods}
 \alias{size,IndependenceTest-method}
@@ -26,26 +27,31 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
+\S4method{pvalue}{PValue}(object, q, \dots)
+\S4method{pvalue}{NullDistribution}(object, q, \dots)
 \S4method{pvalue}{IndependenceTest}(object, \dots)
 \S4method{pvalue}{MaxTypeIndependenceTest}(object, method = c("global", "single-step",
                           "step-down", "unadjusted"),
        distribution = c("joint", "marginal"),
        type = c("Bonferroni", "Sidak"), \dots)
-\S4method{pvalue}{NullDistribution}(object, q, \dots)
 
-\S4method{midpvalue}{IndependenceTest}(object, \dots)
 \S4method{midpvalue}{NullDistribution}(object, q, \dots)
+\S4method{midpvalue}{IndependenceTest}(object, \dots)
 
-\S4method{pvalue_interval}{IndependenceTest}(object, \dots)
 \S4method{pvalue_interval}{NullDistribution}(object, q, \dots)
+\S4method{pvalue_interval}{IndependenceTest}(object, \dots)
 
-\S4method{size}{IndependenceTest}(object, alpha, type = c("p-value", "mid-p-value"), \dots)
 \S4method{size}{NullDistribution}(object, alpha, type = c("p-value", "mid-p-value"), \dots)
+\S4method{size}{IndependenceTest}(object, alpha, type = c("p-value", "mid-p-value"), \dots)
 }
 \arguments{
   \item{object}{
     an object from which the \eqn{p}-value, mid-\eqn{p}-value, \eqn{p}-value
     interval or test size can be computed.
+  }
+  \item{q}{
+    a numeric, the quantile for which the \eqn{p}-value, mid-\eqn{p}-value or
+    \eqn{p}-value interval is computed.
   }
   \item{method}{
     a character, the method used for the \eqn{p}-value computation: either
@@ -63,10 +69,6 @@
     % NOTE: this line is necessary for correct rendering
     \code{size()}: a character, the type of rejection region used when computing
     the test size: either \code{"p-value"} (default) or \code{"mid-p-value"}.
-  }
-  \item{q}{
-    a numeric, the quantile for which the \eqn{p}-value, mid-\eqn{p}-value or
-    \eqn{p}-value interval is computed.
   }
   \item{alpha}{
     a numeric, the nominal significance level \eqn{\alpha} at which the test size
