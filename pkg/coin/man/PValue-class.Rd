@@ -27,6 +27,16 @@
   }
 }
 \section{Methods}{
-  No methods defined with class \code{"PValue"} in the signature.
+  \describe{
+    \item{pvalue}{
+      \code{signature(object = "PValue")}: See the documentation for
+      \code{\link{pvalue}} for details.
+    }
+  }
+}
+\note{
+  Starting with \pkg{coin} version 1.3-0, this class is deprecated and will be
+  replaced by class \code{"NullDistribution"}.  \strong{It will be made defunct
+    and removed in a future release.}
 }
 \keyword{classes}

@@ -5,6 +5,17 @@ setGeneric("pvalue",
     }
 )
 
+### <DEPRECATED>
+### The "PValue"" class was made defunct in 1.3-0 and at the same time this
+### method was added as a temporary solution.
+setMethod("pvalue",
+    signature = "PValue",
+    definition = function(object, q, ...) {
+        object@pvalue(q)
+    }
+)
+### </DEPRECATED>
+
 setMethod("pvalue",
     signature = "NullDistribution",
     definition = function(object, q, ...) {
@@ -43,7 +54,7 @@ setMethod("pvalue",
             ## NOTE: Two ^^ spaces needed for correct rendering
 
             if (method == "global")
-                pvalue(object@distribution, object@statistic@teststatistic)
+                callNextMethod(object)
             else if (method == "single-step") {
                 if (distribution == "joint")
                     singlestep(object, ...)
