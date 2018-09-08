@@ -1,6 +1,6 @@
 
-R version 3.4.1 (2017-06-30) -- "Single Candle"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R Under development (unstable) (2018-08-31 r75222) -- "Unsuffered Consequences"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -867,6 +867,27 @@ Loading required package: survival
 > stopifnot(isFALSE(y %LT% x))
 > stopifnot( isTRUE(z %LT% x))
 > 
+> 
+> ###
+> ### Test the 'n_decimal_digits' function
+> ###
+> 
+> n_decimal_digits <- coin:::n_decimal_digits
+> 
+> stopifnot(identical(0L, n_decimal_digits(     0     )))
+> stopifnot(identical(0L, n_decimal_digits(     0.0   )))
+> stopifnot(identical(1L, n_decimal_digits(     0.1   )))
+> stopifnot(identical(2L, n_decimal_digits(     0.01  )))
+> 
+> stopifnot(identical(0L, n_decimal_digits(c(0, 0    ))))
+> stopifnot(identical(1L, n_decimal_digits(c(0, 0.1  ))))
+> stopifnot(identical(2L, n_decimal_digits(c(0, 0.01 ))))
+> 
+> try(n_decimal_digits(-0.1)) # --> error
+Error in n_decimal_digits(-0.1) : 'x' must be in [0, 1]
+> try(n_decimal_digits( 1.1)) # --> error
+Error in n_decimal_digits(1.1) : 'x' must be in [0, 1]
+> 
 > proc.time()
    user  system elapsed 
-   1.07    0.12    1.20 
+   1.32    0.12    1.40 
