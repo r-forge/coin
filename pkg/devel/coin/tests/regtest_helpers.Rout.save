@@ -874,23 +874,20 @@ Loading required package: survival
 > 
 > n_decimal_digits <- coin:::n_decimal_digits
 > 
-> try(stopifnot(identical(0L, n_decimal_digits(  0      ))))  # fails
-Error in try(stopifnot(identical(0L, n_decimal_digits(0)))) : 
-  identical(0L, n_decimal_digits(0)) is not TRUE
-> try(stopifnot(identical(0L, n_decimal_digits(  0.0    ))))  # fails
-Error in try(stopifnot(identical(0L, n_decimal_digits(0)))) : 
-  identical(0L, n_decimal_digits(0)) is not TRUE
-> stopifnot(identical(1L, n_decimal_digits(  0.1    )))
-> stopifnot(identical(2L, n_decimal_digits(  0.01   )))
+> stopifnot(identical(0L, n_decimal_digits(     0     )))
+> stopifnot(identical(0L, n_decimal_digits(     0.0   )))
+> stopifnot(identical(1L, n_decimal_digits(     0.1   )))
+> stopifnot(identical(2L, n_decimal_digits(     0.01  )))
 > 
-> try(stopifnot(identical(0L, n_decimal_digits(c(0   , 0))))) # fails
-Error in try(stopifnot(identical(0L, n_decimal_digits(c(0, 0))))) : 
-  identical(0L, n_decimal_digits(c(0, 0))) is not TRUE
-> stopifnot(identical(1L, n_decimal_digits(c(0.1 , 0))))
-> try(stopifnot(identical(2L, n_decimal_digits(c(0.01, 0))))) # fails
-Error in try(stopifnot(identical(2L, n_decimal_digits(c(0.01, 0))))) : 
-  identical(2L, n_decimal_digits(c(0.01, 0))) is not TRUE
+> stopifnot(identical(0L, n_decimal_digits(c(0, 0    ))))
+> stopifnot(identical(1L, n_decimal_digits(c(0, 0.1  ))))
+> stopifnot(identical(2L, n_decimal_digits(c(0, 0.01 ))))
+> 
+> try(n_decimal_digits(-0.1)) # --> error
+Error in n_decimal_digits(-0.1) : 'x' must be in [0, 1]
+> try(n_decimal_digits( 1.1)) # --> error
+Error in n_decimal_digits(1.1) : 'x' must be in [0, 1]
 > 
 > proc.time()
    user  system elapsed 
-   1.21    0.12    1.32 
+   1.34    0.09    1.43 
