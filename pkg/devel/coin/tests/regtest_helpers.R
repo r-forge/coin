@@ -848,3 +848,19 @@ stopifnot(isFALSE(w %LT% x))
 stopifnot(isFALSE(x %LT% x))
 stopifnot(isFALSE(y %LT% x))
 stopifnot( isTRUE(z %LT% x))
+
+
+###
+### Test the 'n_decimal_digits' function
+###
+
+n_decimal_digits <- coin:::n_decimal_digits
+
+try(stopifnot(identical(0L, n_decimal_digits(  0      ))))  # fails
+try(stopifnot(identical(0L, n_decimal_digits(  0.0    ))))  # fails
+stopifnot(identical(1L, n_decimal_digits(  0.1    )))
+stopifnot(identical(2L, n_decimal_digits(  0.01   )))
+
+try(stopifnot(identical(0L, n_decimal_digits(c(0   , 0))))) # fails
+stopifnot(identical(1L, n_decimal_digits(c(0.1 , 0))))
+try(stopifnot(identical(2L, n_decimal_digits(c(0.01, 0))))) # fails

@@ -1,6 +1,6 @@
 
-R version 3.4.1 (2017-06-30) -- "Single Candle"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R Under development (unstable) (2018-08-31 r75222) -- "Unsuffered Consequences"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -867,6 +867,30 @@ Loading required package: survival
 > stopifnot(isFALSE(y %LT% x))
 > stopifnot( isTRUE(z %LT% x))
 > 
+> 
+> ###
+> ### Test the 'n_decimal_digits' function
+> ###
+> 
+> n_decimal_digits <- coin:::n_decimal_digits
+> 
+> try(stopifnot(identical(0L, n_decimal_digits(  0      ))))  # fails
+Error in try(stopifnot(identical(0L, n_decimal_digits(0)))) : 
+  identical(0L, n_decimal_digits(0)) is not TRUE
+> try(stopifnot(identical(0L, n_decimal_digits(  0.0    ))))  # fails
+Error in try(stopifnot(identical(0L, n_decimal_digits(0)))) : 
+  identical(0L, n_decimal_digits(0)) is not TRUE
+> stopifnot(identical(1L, n_decimal_digits(  0.1    )))
+> stopifnot(identical(2L, n_decimal_digits(  0.01   )))
+> 
+> try(stopifnot(identical(0L, n_decimal_digits(c(0   , 0))))) # fails
+Error in try(stopifnot(identical(0L, n_decimal_digits(c(0, 0))))) : 
+  identical(0L, n_decimal_digits(c(0, 0))) is not TRUE
+> stopifnot(identical(1L, n_decimal_digits(c(0.1 , 0))))
+> try(stopifnot(identical(2L, n_decimal_digits(c(0.01, 0))))) # fails
+Error in try(stopifnot(identical(2L, n_decimal_digits(c(0.01, 0))))) : 
+  identical(2L, n_decimal_digits(c(0.01, 0))) is not TRUE
+> 
 > proc.time()
    user  system elapsed 
-   1.10    0.18    1.23 
+   1.21    0.12    1.32 
