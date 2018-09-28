@@ -3,16 +3,16 @@
 \alias{statistic}
 \alias{statistic-methods}
 \alias{statistic,IndependenceLinearStatistic-method}
-\alias{statistic,IndependenceTest-method}
 \alias{statistic,IndependenceTestStatistic-method}
+\alias{statistic,IndependenceTest-method}
 \title{Extraction of the Test Statistic and Linear Statistic}
 \description{
   Methods for extraction of the test statistic and linear statistic.
 }
 \usage{
 \S4method{statistic}{IndependenceLinearStatistic}(object, type = c("test", "linear", "centered", "standardized"), \dots)
-\S4method{statistic}{IndependenceTest}(object, type = c("test", "linear", "centered", "standardized"), \dots)
 \S4method{statistic}{IndependenceTestStatistic}(object, type = c("test", "linear", "centered", "standardized"), \dots)
+\S4method{statistic}{IndependenceTest}(object, type = c("test", "linear", "centered", "standardized"), \dots)
 }
 \arguments{
   \item{object}{
