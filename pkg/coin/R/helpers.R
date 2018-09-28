@@ -343,7 +343,7 @@ isequal <- function(a, b) {
 }
 
 has_distribution <- function(args)
-    !(is.character(args$distribution) && args$distribution == "none")
+    !(is.character(args$distribution) && args$distribution[1L] == "none")
 
 check_distribution_arg <- function(distribution,
     values = c("asymptotic", "approximate", "exact", "none")) {
@@ -395,7 +395,8 @@ statnames <- function(object) {
     list(dimnames = dn,
          names = paste(rep.int((dn[[1L]]), nc),
                        rep.int((dn[[2L]]), rep.int(nr, nc)),
-                       sep = ifelse(dn[[1L]] == "" || dn[[2L]] == "", "", ":")))
+                       sep = if (all(dn[[1L]] == "") | all(dn[[2L]] == "")) ""
+                             else ":"))
 }
 
 varnames <- function(object) {
