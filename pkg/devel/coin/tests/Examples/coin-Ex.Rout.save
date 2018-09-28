@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2018-08-31 r75222) -- "Unsuffered Consequences"
+R Under development (unstable) (2018-09-24 r75356) -- "Unsuffered Consequences"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -1210,14 +1210,14 @@ chi-squared = 23.316, p-value = 0.00052
 > 
 > ### Name: PermutationDistribution-methods
 > ### Title: Computation of the Permutation Distribution
-> ### Aliases: dperm dperm-methods dperm,IndependenceTest-method
-> ###   dperm,NullDistribution-method pperm pperm-methods
-> ###   pperm,IndependenceTest-method pperm,NullDistribution-method qperm
-> ###   qperm-methods qperm,IndependenceTest-method
-> ###   qperm,NullDistribution-method rperm rperm-methods
-> ###   rperm,IndependenceTest-method rperm,NullDistribution-method support
-> ###   support-methods support,IndependenceTest-method
-> ###   support,NullDistribution-method
+> ### Aliases: dperm dperm-methods dperm,NullDistribution-method
+> ###   dperm,IndependenceTest-method pperm pperm-methods
+> ###   pperm,NullDistribution-method pperm,IndependenceTest-method qperm
+> ###   qperm-methods qperm,NullDistribution-method
+> ###   qperm,IndependenceTest-method rperm rperm-methods
+> ###   rperm,NullDistribution-method rperm,IndependenceTest-method support
+> ###   support-methods support,NullDistribution-method
+> ###   support,IndependenceTest-method
 > ### Keywords: methods htest distribution
 > 
 > ### ** Examples
@@ -2926,8 +2926,8 @@ alternative hypothesis: true mu is not equal to 0
 > ### Title: Extraction of the Test Statistic and Linear Statistic
 > ### Aliases: statistic statistic-methods
 > ###   statistic,IndependenceLinearStatistic-method
-> ###   statistic,IndependenceTest-method
 > ###   statistic,IndependenceTestStatistic-method
+> ###   statistic,IndependenceTest-method
 > ### Keywords: methods
 > 
 > ### ** Examples
@@ -3087,7 +3087,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  12.36 0.34 12.77 NA NA 
+Time elapsed:  11.86 0.22 12.12 NA NA 
 > grDevices::dev.off()
 null device 
           1 
