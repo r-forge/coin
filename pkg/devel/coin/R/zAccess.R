@@ -6,8 +6,8 @@ setGeneric("pvalue",
 )
 
 ### <DEPRECATED>
-### The "PValue"" class was made defunct in 1.3-0 and at the same time this
-### method was added as a temporary solution.
+### The "PValue" class was made defunct in 1.3-0 and at the same time this
+### method was added as a temporary solution.  To be removed in 2.0-0.
 setMethod("pvalue",
     signature = "PValue",
     definition = function(object, q, ...) {
@@ -26,7 +26,7 @@ setMethod("pvalue",
 setMethod("pvalue",
     signature = "IndependenceTest",
     definition = function(object, ...) {
-        pvalue(object@distribution, object@statistic@teststatistic)
+        callGeneric(object@distribution, object@statistic@teststatistic, ...)
     }
 )
 
@@ -48,7 +48,7 @@ setMethod("pvalue",
             ## NOTE: Two ^^ spaces needed for correct rendering
 
             if (method == "global")
-                callNextMethod(object)
+                callNextMethod(object, ...)
             else if (method == "single-step") {
                 if (distribution == "joint")
                     singlestep(object, ...)
@@ -95,7 +95,7 @@ setMethod("midpvalue",
 setMethod("midpvalue",
     signature = "IndependenceTest",
     definition = function(object, ...) {
-        midpvalue(object@distribution, object@statistic@teststatistic)
+        callGeneric(object@distribution, object@statistic@teststatistic, ...)
     }
 )
 
@@ -117,7 +117,7 @@ setMethod("pvalue_interval",
 setMethod("pvalue_interval",
     signature = "IndependenceTest",
     definition = function(object, ...) {
-        pvalue_interval(object@distribution, object@statistic@teststatistic)
+        callGeneric(object@distribution, object@statistic@teststatistic, ...)
     }
 )
 
@@ -142,8 +142,7 @@ setMethod("size",
     signature = "IndependenceTest",
     definition = function(object,
         alpha, type = c("p-value", "mid-p-value"), ...) {
-            type <- match.arg(type)
-            size(object@distribution, alpha, type)
+            callGeneric(object@distribution, alpha, type, ...)
     }
 )
 
@@ -165,7 +164,7 @@ setMethod("dperm",
 setMethod("dperm",
     signature = "IndependenceTest",
     definition = function(object, x, ...) {
-        dperm(object@distribution, x)
+        callGeneric(object@distribution, x, ...)
     }
 )
 
@@ -187,7 +186,7 @@ setMethod("pperm",
 setMethod("pperm",
     signature = "IndependenceTest",
     definition = function(object, q, ...) {
-        pperm(object@distribution, q)
+        callGeneric(object@distribution, q, ...)
     }
 )
 
@@ -209,7 +208,7 @@ setMethod("qperm",
 setMethod("qperm",
     signature = "IndependenceTest",
     definition = function(object, p, ...) {
-        qperm(object@distribution, p)
+        callGeneric(object@distribution, p, ...)
     }
 )
 
@@ -231,7 +230,7 @@ setMethod("rperm",
 setMethod("rperm",
     signature = "IndependenceTest",
     definition = function(object, n, ...) {
-        rperm(object@distribution, n)
+        callGeneric(object@distribution, n, ...)
     }
 )
 
@@ -253,7 +252,7 @@ setMethod("support",
 setMethod("support",
     signature = "IndependenceTest",
     definition = function(object, ...) {
-        support(object@distribution, ...)
+        callGeneric(object@distribution, ...)
     }
 )
 
@@ -325,7 +324,7 @@ setMethod("statistic",
     signature = "IndependenceTest",
     definition = function(object,
         type = c("test", "linear", "centered", "standardized"), ...) {
-            statistic(object@statistic, type)
+            callGeneric(object@statistic, type, ...)
     }
 )
 
@@ -347,7 +346,7 @@ setMethod("expectation",
 setMethod("expectation",
     signature = "IndependenceTest",
     definition = function(object, ...) {
-        expectation(object@statistic, ...)
+        callGeneric(object@statistic, ...)
     }
 )
 
@@ -370,17 +369,15 @@ setMethod("covariance",
     signature = "IndependenceLinearStatistic",
     definition = function(object, ...) {
         if (!inherits(object@covariance, "CovarianceMatrix"))
-            covariance(new("IndependenceLinearStatistic",
-                           object, varonly = FALSE))
-        else
-            covariance(object@covariance)
+            object <- new("IndependenceLinearStatistic", object, varonly = FALSE)
+        callGeneric(object@covariance, ...)
     }
 )
 
 setMethod("covariance",
     signature = "IndependenceTest",
     definition = function(object, ...) {
-        covariance(object@statistic, ...)
+        callGeneric(object@statistic, ...)
     }
 )
 
@@ -409,13 +406,13 @@ setMethod("variance",
 setMethod("variance",
     signature = "IndependenceLinearStatistic",
     definition = function(object, ...) {
-        variance(object@covariance)
+        callGeneric(object@covariance, ...)
     }
 )
 
 setMethod("variance",
     signature = "IndependenceTest",
     definition = function(object, ...) {
-        variance(object@statistic, ...)
+        callGeneric(object@statistic, ...)
     }
 )
