@@ -268,9 +268,9 @@ setMethod("statistic",
     signature = "IndependenceLinearStatistic",
     definition = function(object,
         type = c("test", "linear", "centered", "standardized"), ...) {
-            nc <- ncol(object@ytrans)
-            nr <- ncol(object@xtrans)
             type <- match.arg(type)
+            nr <- ncol(object@xtrans)
+            nc <- ncol(object@ytrans)
             dn <- statnames(object)$dimnames
             switch(type,
                 "test" = stop(
@@ -298,25 +298,11 @@ setMethod("statistic",
     signature = "IndependenceTestStatistic",
     definition = function(object,
         type = c("test", "linear", "centered", "standardized"), ...) {
-            nc <- ncol(object@ytrans)
-            nr <- ncol(object@xtrans)
             type <- match.arg(type)
-            dn <- statnames(object)$dimnames
-            switch(type,
-                "test" = object@teststatistic,
-                "linear" = matrix(
-                    object@linearstatistic,
-                    nrow = nr, ncol = nc, dimnames = dn
-                ),
-                "centered" = matrix(
-                    object@linearstatistic - object@expectation,
-                    nrow = nr, ncol = nc, dimnames = dn
-                ),
-                "standardized" = matrix(
-                    object@standardizedlinearstatistic,
-                    nrow = nr, ncol = nc, dimnames = dn
-                )
-            )
+            if (type == "test")
+                object@teststatistic
+            else
+                callNextMethod(object, type, ...)
     }
 )
 
