@@ -1,59 +1,77 @@
 ### single-step maxT multiple testing procedure
-singlestep <- function(object, ...) {
+setGeneric("singlestep",
+    function(object1, object2, ...) {
+        standardGeneric("singlestep")
+    }
+)
 
-    ## reorder test statistics to ensure consistency with "global"/"step-down"
-    switch(object@statistic@alternative,
-        "two.sided" = {
-            z <- abs(statistic(object, type = "standardized"))
-            o <- order(z, decreasing = TRUE) # abs. largest z first
-        },
-        "greater" = {
-            z <- statistic(object, type = "standardized")
-            o <- order(z, decreasing = TRUE) # largest z first
-        },
-        "less" = {
-            z <- statistic(object, type = "standardized")
-            o <- order(z) # smallest z first
-        }
-    )
+setMethod("singlestep",
+    signature = list("MaxTypeIndependenceTestStatistic", "NullDistribution"),
+    definition = function(object1, object2, ...) {
+        ## reorder test statistics to ensure consistency with "global"/"step-down"
+        switch(object1@alternative,
+            "two.sided" = {
+                z <- abs(statistic(object1, type = "standardized"))
+                o <- order(z, decreasing = TRUE) # abs. largest z first
+            },
+            "greater" = {
+                z <- statistic(object1, type = "standardized")
+                o <- order(z, decreasing = TRUE) # largest z first
+            },
+            "less" = {
+                z <- statistic(object1, type = "standardized")
+                o <- order(z)                    # smallest z first
+            }
+        )
 
-    ## iterate over unique test statistics only and remap
-    pq <- length(z)
-    RET <- z[o]
-    idx <- c(which(RET[-1L] %NE% RET[-pq]), pq) # unique z
-    RET <- pvalue(object@distribution, RET[idx], ...)
+        ## iterate over unique test statistics only and remap
+        pq <- length(z)
+        RET <- z[o]
+        idx <- c(which(RET[-1L] %NE% RET[-pq]), pq) # unique z
+        RET <- pvalue(object2, RET[idx], ...)
 
-    matrix(rep.int(RET, diff(c(0L, idx)))[order(o)], # remapping
-           nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
-}
+        matrix(rep.int(RET, diff(c(0L, idx)))[order(o)], # remapping
+               nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
+    }
+)
+
+setMethod("singlestep",
+    signature = list("MaxTypeIndependenceTest", "missing"),
+    definition = function(object1, object2, ...) {
+        callGeneric(object1@statistic, object1@distribution, ...)
+    }
+)
+
 
 ### step-down maxT multiple testing procedure
-stepdown <- function(object, ...) {
+setGeneric("stepdown",
+    function(object1, object2, ...) {
+        standardGeneric("stepdown")
+    }
+)
 
-    if (!inherits(object, "MaxTypeIndependenceTest"))
-        stop(sQuote("object"), " is not of class ",
-             sQuote("MaxTypeIndependenceTest"))
-
-    if (inherits(object@distribution, "AsymptNullDistribution")) {
+setMethod("stepdown",
+    signature = list("MaxTypeIndependenceTestStatistic", "AsymptNullDistribution"),
+    definition = function(object1, object2, ...) {
         ## reorder upper and/or lower limits using test statistics
-        switch(object@statistic@alternative,
+        switch(object1@alternative,
             "two.sided" = {
-                z <- abs(statistic(object, type = "standardized"))
+                z <- abs(statistic(object1, type = "standardized"))
                 o <- order(z, decreasing = TRUE) # abs. largest z first
                 pq <- length(z)
                 upper <- z[o]
                 lower <- -upper
             },
             "greater" = {
-                z <- statistic(object, type = "standardized")
+                z <- statistic(object1, type = "standardized")
                 o <- order(z, decreasing = TRUE) # largest z first
                 pq <- length(z)
                 upper <- z[o]
                 lower <- rep.int(-Inf, pq)
             },
             "less" = {
-                z <- statistic(object, type = "standardized")
-                o <- order(z) # smallest z first
+                z <- statistic(object1, type = "standardized")
+                o <- order(z)                    # smallest z first
                 pq <- length(z)
                 upper <- rep.int(Inf, pq)
                 lower <- z[o]
@@ -61,7 +79,7 @@ stepdown <- function(object, ...) {
         )
 
         ## step-down based on multivariate normality
-        Rho <- cov2cor(covariance(object))
+        Rho <- cov2cor(covariance(object1))
         RET <- numeric(pq)
         RET[1] <- pmvn(lower = lower[1], upper = upper[1],
                        mean = rep.int(0, pq), corr = Rho,
@@ -81,22 +99,27 @@ stepdown <- function(object, ...) {
 
         matrix(1 - RET[order(o)], nrow = nrow(z), ncol = ncol(z),
                dimnames = dimnames(z))
-    } else {
+    }
+)
+
+setMethod("stepdown",
+    signature = list("MaxTypeIndependenceTestStatistic", "ApproxNullDistribution"),
+    definition = function(object1, object2, ...) {
         ## standardized observed and permuted test statistics
-        mu <- expectation(object)
-        sigma <- sqrt(variance(object))
-        switch(object@statistic@alternative,
+        mu <- expectation(object1)
+        sigma <- sqrt(variance(object1))
+        switch(object1@alternative,
             "two.sided" = {
-                z <- abs(statistic(object, type = "standardized"))
-                zp <- abs(t((support(object, raw = TRUE) - mu) / sigma))
+                z <- abs(statistic(object1, type = "standardized"))
+                zp <- abs(t((support(object2, raw = TRUE) - mu) / sigma))
             },
             "greater" = {
-                z <- statistic(object, type = "standardized")
-                zp <- t((support(object, raw = TRUE) - mu) / sigma)
+                z <- statistic(object1, type = "standardized")
+                zp <- t((support(object2, raw = TRUE) - mu) / sigma)
             },
             "less" = {
-                z <- -(statistic(object, type = "standardized"))
-                zp <- -t((support(object, raw = TRUE) - mu) / sigma)
+                z <- -statistic(object1, type = "standardized")
+                zp <- -t((support(object2, raw = TRUE) - mu) / sigma)
             }
         )
 
@@ -118,24 +141,30 @@ stepdown <- function(object, ...) {
         matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
                dimnames = dimnames(z))
     }
-}
+)
+
+setMethod("stepdown",
+    signature = list("MaxTypeIndependenceTest", "missing"),
+    definition = function(object1, object2, ...) {
+        callGeneric(object1@statistic, object1@distribution, ...)
+    }
+)
+
 
 ### Adjusted marginal p-values taking discreteness into account in the
 ### permutation case (Westfall and Wolfinger, 1997)
-marginal <- function(object, stepdown, bonferroni, ...) {
+setGeneric("marginal",
+    function(object1, object2, ...) {
+        standardGeneric("marginal")
+    }
+)
 
-    ## <FIXME> this should be possible when the _exact_ marginal
-    ## distributions are available
-    ## </FIXME>
-
-    if (!inherits(object, "MaxTypeIndependenceTest"))
-        stop(sQuote("object"), " is not of class ",
-             sQuote("MaxTypeIndependenceTest"))
-
-    if (inherits(object@distribution, "AsymptNullDistribution")) {
+setMethod("marginal",
+    signature = list("MaxTypeIndependenceTestStatistic", "AsymptNullDistribution"),
+    definition = function(object1, object2, stepdown, bonferroni, ...) {
         ## unadjusted p-values
-        z <- statistic(object, type = "standardized")
-        RET <- switch(object@statistic@alternative,
+        z <- statistic(object1, type = "standardized")
+        RET <- switch(object1@alternative,
                    "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z)),
                    "greater"   = 1 - pnorm(z),
                    "less"      = pnorm(z)
@@ -143,34 +172,39 @@ marginal <- function(object, stepdown, bonferroni, ...) {
 
         ## adjustment
         RET <- if (!stepdown) {
-            if (bonferroni) pmin.int(1, length(RET) * RET) # Bonferroni
-            else 1 - (1 - RET)^length(RET) # Sidak
-        } else {
-            n <- length(RET)
-            o <- order(RET)
-            if (bonferroni) # Bonferroni-Holm
-                pmin.int(1, cummax((n - seq_len(n) + 1L) * RET[o])[order(o)])
-            else # Sidak-Holm
-                cummax(1 - (1 - RET[o])^(n - seq_len(n) + 1L))[order(o)]
-        }
+                   if (bonferroni) pmin.int(1, length(RET) * RET) # Bonferroni
+                   else 1 - (1 - RET)^length(RET)                 # Sidak
+               } else {
+                   n <- length(RET)
+                   o <- order(RET)
+                   if (bonferroni) # Bonferroni-Holm
+                       pmin.int(1, cummax((n - seq_len(n) + 1L) * RET[o])[order(o)])
+                   else            # Sidak-Holm
+                       cummax(1 - (1 - RET[o])^(n - seq_len(n) + 1L))[order(o)]
+               }
 
         matrix(RET, nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
-    } else {
+    }
+)
+
+setMethod("marginal",
+    signature = list("MaxTypeIndependenceTestStatistic", "ApproxNullDistribution"),
+    definition = function(object1, object2, stepdown, bonferroni, ...) {
         ## standardized observed and permuted test statistics
-        mu <- expectation(object)
-        sigma <- sqrt(variance(object))
-        switch(object@statistic@alternative,
+        mu <- expectation(object1)
+        sigma <- sqrt(variance(object1))
+        switch(object1@alternative,
             "two.sided" = {
-                z <- abs(statistic(object, type = "standardized"))
-                zp <- abs(t((support(object, raw = TRUE) - mu) / sigma))
+                z <- abs(statistic(object1, type = "standardized"))
+                zp <- abs(t((support(object2, raw = TRUE) - mu) / sigma))
             },
             "greater" = {
-                z <- statistic(object, type = "standardized")
-                zp <- t((support(object, raw = TRUE) - mu) / sigma)
+                z <- statistic(object1, type = "standardized")
+                zp <- t((support(object2, raw = TRUE) - mu) / sigma)
             },
             "less" = {
-                z <- -(statistic(object, type = "standardized"))
-                zp <- -t((support(object, raw = TRUE) - mu) / sigma)
+                z <- -statistic(object1, type = "standardized")
+                zp <- -t((support(object2, raw = TRUE) - mu) / sigma)
             }
         )
 
@@ -189,7 +223,7 @@ marginal <- function(object, stepdown, bonferroni, ...) {
             p[[i]] <- vapply(ux, foo, NA_real_, x = zp[, i])
         }
 
-        ## discrete adjustment
+        ## discreteness adjustment
         RET <- rep.int(1 - bonferroni, length(z)) # zeros (ones) for Bonferroni (Sidak)
         for (i in 1:length(pu)) {
             qq <- if (stepdown) i else 1 # 'i' => successively smaller subsets
@@ -208,36 +242,55 @@ marginal <- function(object, stepdown, bonferroni, ...) {
         matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
                dimnames = dimnames(z))
     }
-}
+)
+
+setMethod("marginal",
+    signature = list("MaxTypeIndependenceTest", "missing"),
+    definition = function(object1, object2, stepdown, bonferroni, ...) {
+        callGeneric(object1@statistic, object1@distribution, stepdown, bonferroni, ...)
+    }
+)
+
 
 ### unadjusted p-values
-unadjusted <- function(object, ...) {
+setGeneric("unadjusted",
+    function(object1, object2, ...) {
+        standardGeneric("unadjusted")
+    }
+)
 
-    if (inherits(object@distribution, "AsymptNullDistribution")) {
-        z <- statistic(object, type = "standardized")
-        RET <- switch(object@statistic@alternative,
+setMethod("unadjusted",
+    signature = list("MaxTypeIndependenceTestStatistic", "AsymptNullDistribution"),
+    definition = function(object1, object2, ...) {
+        z <- statistic(object1, type = "standardized")
+        RET <- switch(object1@alternative,
                    "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z)),
                    "greater"   = 1 - pnorm(z),
                    "less"      = pnorm(z)
                )
 
         matrix(RET, nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
-    } else {
+    }
+)
+
+setMethod("unadjusted",
+    signature = list("MaxTypeIndependenceTestStatistic", "ApproxNullDistribution"),
+    definition = function(object1, object2, ...) {
         ## standardized observed and permuted test statistics
-        mu <- expectation(object)
-        sigma <- sqrt(variance(object))
-        switch(object@statistic@alternative,
+        mu <- expectation(object1)
+        sigma <- sqrt(variance(object1))
+        switch(object1@alternative,
             "two.sided" = {
-                z <- abs(statistic(object, type = "standardized"))
-                zp <- abs((support(object, raw = TRUE) - mu) / sigma)
+                z <- abs(statistic(object1, type = "standardized"))
+                zp <- abs(support(object2, raw = TRUE) - mu) / sigma
             },
             "greater" = {
-                z <- statistic(object, type = "standardized")
-                zp <- (support(object, raw = TRUE) - mu) / sigma
+                z <- statistic(object1, type = "standardized")
+                zp <- (support(object2, raw = TRUE) - mu) / sigma
             },
             "less" = {
-                z <- -(statistic(object, type = "standardized"))
-                zp <- -(support(object, raw = TRUE) - mu) / sigma
+                z <- -statistic(object1, type = "standardized")
+                zp <- -(support(object2, raw = TRUE) - mu) / sigma
             }
         )
 
@@ -245,7 +298,15 @@ unadjusted <- function(object, ...) {
         matrix(rowMeans(zp %GE% as.vector(z)),
                nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
     }
-}
+)
+
+setMethod("unadjusted",
+    signature = list("MaxTypeIndependenceTest", "missing"),
+    definition = function(object1, object2, ...) {
+        callGeneric(object1@statistic, object1@distribution, ...)
+    }
+)
+
 
 ### compute p-values under subset pivotality (Westfall, 1997)
 npmcp <- function(object) {
