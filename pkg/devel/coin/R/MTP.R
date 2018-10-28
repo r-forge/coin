@@ -1,30 +1,33 @@
-### single step maxT multiple testing procedure
+### single-step maxT multiple testing procedure
 singlestep <- function(object, ...) {
 
     ## reorder test statistics to ensure consistency with "global"/"step-down"
     switch(object@statistic@alternative,
-           "two.sided" = {
-               ts <- abs(statistic(object, type = "standardized"))
-               o <- order(ts, decreasing = TRUE)}, # abs. largest ts first
-           "greater" = {
-               ts <- statistic(object, type = "standardized")
-               o <- order(ts, decreasing = TRUE)}, # largest ts first
-           "less" = {
-               ts <- statistic(object, type = "standardized")
-               o <- order(ts) # smallest ts first
-           })
+        "two.sided" = {
+            z <- abs(statistic(object, type = "standardized"))
+            o <- order(z, decreasing = TRUE) # abs. largest z first
+        },
+        "greater" = {
+            z <- statistic(object, type = "standardized")
+            o <- order(z, decreasing = TRUE) # largest z first
+        },
+        "less" = {
+            z <- statistic(object, type = "standardized")
+            o <- order(z) # smallest z first
+        }
+    )
 
     ## iterate over unique test statistics only and remap
-    pq <- length(ts)
-    ots <- ts[o]
-    idx <- c(which(ots[-1L] %NE% ots[-pq]), pq) # unique ts
-    ret <- object@distribution@pvalue(ots[idx], ...)
+    pq <- length(z)
+    RET <- z[o]
+    idx <- c(which(RET[-1L] %NE% RET[-pq]), pq) # unique z
+    RET <- pvalue(object@distribution, RET[idx], ...)
 
-    matrix(rep.int(ret, diff(c(0L, idx)))[order(o)], # remapping
-           nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
+    matrix(rep.int(RET, diff(c(0L, idx)))[order(o)], # remapping
+           nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
 }
 
-### stepdown maxT multiple testing procedure
+### step-down maxT multiple testing procedure
 stepdown <- function(object, ...) {
 
     if (!inherits(object, "MaxTypeIndependenceTest"))
@@ -34,89 +37,92 @@ stepdown <- function(object, ...) {
     if (inherits(object@distribution, "AsymptNullDistribution")) {
         ## reorder upper and/or lower limits using test statistics
         switch(object@statistic@alternative,
-               "two.sided" = {
-                   ts <- abs(statistic(object, type = "standardized"))
-                   pq <- length(ts)
-                   o <- order(ts, decreasing = TRUE) # abs. largest ts first
-                   upper <- ts[o]
-                   lower <- -upper},
-               "greater" = {
-                   ts <- statistic(object, type = "standardized")
-                   pq <- length(ts)
-                   o <- order(ts, decreasing = TRUE) # largest ts first
-                   upper <- ts[o]
-                   lower <- rep.int(-Inf, pq)},
-               "less" = {
-                   ts <- statistic(object, type = "standardized")
-                   pq <- length(ts)
-                   o <- order(ts) # smallest ts first
-                   upper <- rep.int(Inf, pq)
-                   lower <- ts[o]})
-
-        ## correlation matrix
-        corr <- cov2cor(covariance(object))
+            "two.sided" = {
+                z <- abs(statistic(object, type = "standardized"))
+                o <- order(z, decreasing = TRUE) # abs. largest z first
+                pq <- length(z)
+                upper <- z[o]
+                lower <- -upper
+            },
+            "greater" = {
+                z <- statistic(object, type = "standardized")
+                o <- order(z, decreasing = TRUE) # largest z first
+                pq <- length(z)
+                upper <- z[o]
+                lower <- rep.int(-Inf, pq)
+            },
+            "less" = {
+                z <- statistic(object, type = "standardized")
+                o <- order(z) # smallest z first
+                pq <- length(z)
+                upper <- rep.int(Inf, pq)
+                lower <- z[o]
+            }
+        )
 
         ## step-down based on multivariate normality
-        ret <- numeric(pq)
-        ret[1] <- pmvn(lower = lower[1], upper = upper[1],
-                       mean = rep.int(0, pq), corr = corr,
+        Rho <- cov2cor(covariance(object))
+        RET <- numeric(pq)
+        RET[1] <- pmvn(lower = lower[1], upper = upper[1],
+                       mean = rep.int(0, pq), corr = Rho,
                        conf.int = FALSE)
         if (pq > 1) {
             oo <- o
             for (i in 2:pq) {
                 j <- rank(oo)[1] # reindexing needed in each step
-                corr <- corr[-j, -j]
+                Rho <- Rho[-j, -j]
                 oo <- oo[-1]
-                ret[i] <- min(ret[i - 1],
+                RET[i] <- min(RET[i - 1],
                               pmvn(lower = lower[i], upper = upper[i],
-                                   mean = rep.int(0, length(oo)), corr = corr,
+                                   mean = rep.int(0, length(oo)), corr = Rho,
                                    conf.int = FALSE))
             }
         }
 
-        matrix(1 - ret[order(o)], nrow = nrow(ts), ncol = ncol(ts),
-               dimnames = dimnames(ts))
+        matrix(1 - RET[order(o)], nrow = nrow(z), ncol = ncol(z),
+               dimnames = dimnames(z))
     } else {
-        ## raw simulation results, scores have been handled already
-        pls <- support(object, raw = TRUE)
-
-        ## standardize
-        dcov <- sqrt(variance(object))
-        expect <- expectation(object)
+        ## standardized observed and permuted test statistics
+        mu <- expectation(object)
+        sigma <- sqrt(variance(object))
         switch(object@statistic@alternative,
-               "two.sided" = {
-                   pls <- abs(t((pls - expect) / dcov))
-                   ts <- abs(statistic(object, type = "standardized"))},
-               "greater" = {
-                   pls <- t((pls - expect) / dcov)
-                   ts <- statistic(object, type = "standardized")},
-               "less" = {
-                   pls <- -t((pls - expect) / dcov)
-                   ts <- -(statistic(object, type = "standardized"))})
+            "two.sided" = {
+                z <- abs(statistic(object, type = "standardized"))
+                zp <- abs(t((support(object, raw = TRUE) - mu) / sigma))
+            },
+            "greater" = {
+                z <- statistic(object, type = "standardized")
+                zp <- t((support(object, raw = TRUE) - mu) / sigma)
+            },
+            "less" = {
+                z <- -(statistic(object, type = "standardized"))
+                zp <- -t((support(object, raw = TRUE) - mu) / sigma)
+            }
+        )
 
         ## reorder simulations using (increasing) test statistics
-        o <- order(ts) # smallest ts first
-        pls <- pls[, o, drop = FALSE]
+        o <- order(z) # smallest z first
+        zp <- zp[, o, drop = FALSE]
 
         ## algorithm 2.8 (Free Step-Down Resampling Method) in
         ## Westfall & Young (1993), page 66 _using standardized
         ## statistics instead of p-values_!
-        if (ncol(pls) > 1) {
-            for (j in 2:ncol(pls))
-                pls[, j] <- pmax.int(pls[, j], pls[, j - 1])
+        if (ncol(zp) > 1) {
+            for (j in 2:ncol(zp))
+                zp[, j] <- pmax.int(zp[, j], zp[, j - 1])
         }
-        ret <- rowMeans(t(pls) %GE% ts[o])
-        for (i in (length(ret) - 1):1)
-            ret[i] <- max(ret[i], ret[i + 1]) # enforce monotonicity, page 67
+        RET <- rowMeans(t(zp) %GE% z[o])
+        for (i in (length(RET) - 1):1)
+            RET[i] <- max(RET[i], RET[i + 1]) # enforce monotonicity, page 67
 
-        matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts),
-               dimnames = dimnames(ts))
+        matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
+               dimnames = dimnames(z))
     }
 }
 
 ### Adjusted marginal p-values taking discreteness into account in the
 ### permutation case (Westfall and Wolfinger, 1997)
-marginal <- function(object, bonferroni, stepdown, ...) {
+marginal <- function(object, stepdown, bonferroni, ...) {
 
     ## <FIXME> this should be possible when the _exact_ marginal
     ## distributions are available
@@ -128,77 +134,79 @@ marginal <- function(object, bonferroni, stepdown, ...) {
 
     if (inherits(object@distribution, "AsymptNullDistribution")) {
         ## unadjusted p-values
-        ts <- statistic(object, type = "standardized")
-        ret <- switch(object@statistic@alternative,
-                      "two.sided" = 2 * pmin.int(pnorm(ts), 1 - pnorm(ts)),
-                      "greater"   = 1 - pnorm(ts),
-                      "less"      = pnorm(ts))
+        z <- statistic(object, type = "standardized")
+        RET <- switch(object@statistic@alternative,
+                   "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z)),
+                   "greater"   = 1 - pnorm(z),
+                   "less"      = pnorm(z)
+               )
 
         ## adjustment
-        ret <- if (!stepdown) {
-            if (bonferroni) pmin.int(1, length(ret) * ret) # Bonferroni
-            else 1 - (1 - ret)^length(ret) # Sidak
+        RET <- if (!stepdown) {
+            if (bonferroni) pmin.int(1, length(RET) * RET) # Bonferroni
+            else 1 - (1 - RET)^length(RET) # Sidak
         } else {
-            n <- length(ret)
-            o <- order(ret)
+            n <- length(RET)
+            o <- order(RET)
             if (bonferroni) # Bonferroni-Holm
-                pmin.int(1, cummax((n - seq_len(n) + 1L) * ret[o])[order(o)])
+                pmin.int(1, cummax((n - seq_len(n) + 1L) * RET[o])[order(o)])
             else # Sidak-Holm
-                cummax(1 - (1 - ret[o])^(n - seq_len(n) + 1L))[order(o)]
+                cummax(1 - (1 - RET[o])^(n - seq_len(n) + 1L))[order(o)]
         }
 
-        matrix(ret, nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
+        matrix(RET, nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
     } else {
-        ## raw simulation results, scores have been handled already
-        pls <- support(object, raw = TRUE)
-
-        ## standardize
-        dcov <- sqrt(variance(object))
-        expect <- expectation(object)
+        ## standardized observed and permuted test statistics
+        mu <- expectation(object)
+        sigma <- sqrt(variance(object))
         switch(object@statistic@alternative,
-               "two.sided" = {
-                   pls <- abs(t((pls - expect) / dcov))
-                   ts <- abs(statistic(object, type = "standardized"))},
-               "greater" = {
-                   pls <- t((pls - expect) / dcov)
-                   ts <- statistic(object, type = "standardized")},
-               "less" = {
-                   pls <- -t((pls - expect) / dcov)
-                   ts <- -(statistic(object, type = "standardized"))})
+            "two.sided" = {
+                z <- abs(statistic(object, type = "standardized"))
+                zp <- abs(t((support(object, raw = TRUE) - mu) / sigma))
+            },
+            "greater" = {
+                z <- statistic(object, type = "standardized")
+                zp <- t((support(object, raw = TRUE) - mu) / sigma)
+            },
+            "less" = {
+                z <- -(statistic(object, type = "standardized"))
+                zp <- -t((support(object, raw = TRUE) - mu) / sigma)
+            }
+        )
 
         ## reorder simulations using the (decreasing) test statistics
-        o <- order(ts, decreasing = TRUE) # largest ts first
-        pls <- pls[, o, drop = FALSE]
+        o <- order(z, decreasing = TRUE) # largest z first
+        zp <- zp[, o, drop = FALSE]
 
         ## unadjusted p-values
-        pu <- rowMeans(t(pls) %GE% ts[o])
+        pu <- rowMeans(t(zp) %GE% z[o])
 
         ## permutation distribution
         foo <- function(x, t) mean(x %GE% t)
-        p <- vector(mode = "list", length = ncol(pls))
-        for (i in 1:ncol(pls)) {
-            ux <- unique(pls[, i])
-            p[[i]] <- vapply(ux, foo, NA_real_, x = pls[, i])
+        p <- vector(mode = "list", length = ncol(zp))
+        for (i in 1:ncol(zp)) {
+            ux <- unique(zp[, i])
+            p[[i]] <- vapply(ux, foo, NA_real_, x = zp[, i])
         }
 
         ## discrete adjustment
-        ret <- rep.int(1 - bonferroni, length(ts)) # zeros (ones) for Bonferroni (Sidak)
+        RET <- rep.int(1 - bonferroni, length(z)) # zeros (ones) for Bonferroni (Sidak)
         for (i in 1:length(pu)) {
             qq <- if (stepdown) i else 1 # 'i' => successively smaller subsets
             for (q in qq:length(p)) {
                 x <- p[[q]][p[[q]] <= pu[i]] # below eq. 2
                 if (length(x) > 0) {
-                    ret[i] <- if (bonferroni) ret[i] + max(x) # eq. 4
-                              else ret[i] * (1 - max(x)) # eq. 2
+                    RET[i] <- if (bonferroni) RET[i] + max(x) # eq. 4
+                              else RET[i] * (1 - max(x)) # eq. 2
                 }
             }
         }
-        ret <- if (!bonferroni) pmin.int(1 - ret, 1) else pmin.int(ret, 1)
-        for (i in 2:length(ret))
-            ret[i] <- max(ret[i - 1], ret[i]) # enforce monotonicity
+        RET <- if (!bonferroni) pmin.int(1 - RET, 1) else pmin.int(RET, 1)
+        for (i in 2:length(RET))
+            RET[i] <- max(RET[i - 1], RET[i]) # enforce monotonicity
 
-        matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts),
-               dimnames = dimnames(ts))
+        matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
+               dimnames = dimnames(z))
     }
 }
 
@@ -206,34 +214,36 @@ marginal <- function(object, bonferroni, stepdown, ...) {
 unadjusted <- function(object, ...) {
 
     if (inherits(object@distribution, "AsymptNullDistribution")) {
-        ts <- statistic(object, type = "standardized")
-        ret <- switch(object@statistic@alternative,
-                      "two.sided" = 2 * pmin.int(pnorm(ts), 1 - pnorm(ts)),
-                      "greater"   = 1 - pnorm(ts),
-                      "less"      = pnorm(ts))
+        z <- statistic(object, type = "standardized")
+        RET <- switch(object@statistic@alternative,
+                   "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z)),
+                   "greater"   = 1 - pnorm(z),
+                   "less"      = pnorm(z)
+               )
 
-        matrix(ret, nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
+        matrix(RET, nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
     } else {
-        ## raw simulation results, scores have been handled already
-        pls <- support(object, raw = TRUE)
-
-        ## standardize
-        dcov <- sqrt(variance(object))
-        expect <- expectation(object)
+        ## standardized observed and permuted test statistics
+        mu <- expectation(object)
+        sigma <- sqrt(variance(object))
         switch(object@statistic@alternative,
-               "two.sided" = {
-                   pls <- abs((pls - expect) / dcov)
-                   ts <- abs(statistic(object, type = "standardized"))},
-               "greater" = {
-                   pls <- (pls - expect) / dcov
-                   ts <- statistic(object, type = "standardized")},
-               "less" = {
-                   pls <- -(pls - expect) / dcov
-                   ts <- -(statistic(object, type = "standardized"))})
+            "two.sided" = {
+                z <- abs(statistic(object, type = "standardized"))
+                zp <- abs((support(object, raw = TRUE) - mu) / sigma)
+            },
+            "greater" = {
+                z <- statistic(object, type = "standardized")
+                zp <- (support(object, raw = TRUE) - mu) / sigma
+            },
+            "less" = {
+                z <- -(statistic(object, type = "standardized"))
+                zp <- -(support(object, raw = TRUE) - mu) / sigma
+            }
+        )
 
         ## unadjusted p-values
-        matrix(rowMeans(pls %GE% as.vector(ts)),
-               nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
+        matrix(rowMeans(zp %GE% as.vector(z)),
+               nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
     }
 }
 
@@ -247,21 +257,21 @@ npmcp <- function(object) {
     alternative <- object@statistic@alternative
 
     ## <FIXME> it is currently hard to ask a distribution object
-    ## for its type (and arguments). Its a design bug.
+    ## for its type (and arguments). It's a design bug.
     distribution <- object@call$distribution
     ## </FIXME>
-    stand_tstat <- statistic(object, type = "standardized")
-    tstat <- switch(alternative,
-                    "less" = stand_tstat,
-                    "greater" = -stand_tstat,
-                    "two.sided" = -abs(stand_tstat))
+    z <- switch(alternative,
+             "two.sided" = -abs(statistic(object, type = "standardized")),
+             "greater" = -statistic(object, type = "standardized"),
+             "less" = statistic(object, type = "standardized")
+         )
 
     ## get contrast matrix from xtrans
     C <- attr(object@statistic@xtrans, "contrast")
     stopifnot(inherits(C, "matrix"))
 
     ## order test statistics, most "extreme" one comes first
-    Corder <- C[order(tstat), , drop = FALSE]
+    Corder <- C[order(z), , drop = FALSE]
 
     ## compute allowed subsets of hypotheses
     ## returns list consisting of lists (one for each rejection step of H0)
@@ -290,11 +300,11 @@ npmcp <- function(object) {
         pvalue(it)
     }
 
-    p <- vapply(ms, function(sub) # for every list of allowed subsets
+    RET <- vapply(ms, function(sub) # for every list of allowed subsets
         max(vapply(sub, foo, NA_real_)), NA_real_) # for every subset
 
-    for (i in 2:length(p))
-        p[i] <- max(p[i-1], p[i]) # forces pvalue monotonicity
+    for (i in 2:length(RET))
+        RET[i] <- max(RET[i - 1], RET[i]) # enforce monotonicity
 
-    matrix(p[rank(tstat)], dimnames = dimnames(tstat))
+    matrix(RET[rank(z)], dimnames = dimnames(z))
 }
