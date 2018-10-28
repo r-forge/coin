@@ -202,6 +202,41 @@ marginal <- function(object, bonferroni, stepdown, ...) {
     }
 }
 
+### unadjusted p-values
+unadjusted <- function(object, ...) {
+
+    if (inherits(object@distribution, "AsymptNullDistribution")) {
+        ts <- statistic(object, type = "standardized")
+        ret <- switch(object@statistic@alternative,
+                      "two.sided" = 2 * pmin.int(pnorm(ts), 1 - pnorm(ts)),
+                      "greater"   = 1 - pnorm(ts),
+                      "less"      = pnorm(ts))
+
+        matrix(ret, nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
+    } else {
+        ## raw simulation results, scores have been handled already
+        pls <- support(object, raw = TRUE)
+
+        ## standardize
+        dcov <- sqrt(variance(object))
+        expect <- expectation(object)
+        switch(object@statistic@alternative,
+               "two.sided" = {
+                   pls <- abs((pls - expect) / dcov)
+                   ts <- abs(statistic(object, type = "standardized"))},
+               "greater" = {
+                   pls <- (pls - expect) / dcov
+                   ts <- statistic(object, type = "standardized")},
+               "less" = {
+                   pls <- -(pls - expect) / dcov
+                   ts <- -(statistic(object, type = "standardized"))})
+
+        ## unadjusted p-values
+        matrix(rowMeans(pls %GE% as.vector(ts)),
+               nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
+    }
+}
+
 ### compute p-values under subset pivotality (Westfall, 1997)
 npmcp <- function(object) {
 
@@ -262,39 +297,4 @@ npmcp <- function(object) {
         p[i] <- max(p[i-1], p[i]) # forces pvalue monotonicity
 
     matrix(p[rank(tstat)], dimnames = dimnames(tstat))
-}
-
-### unadjusted p-values
-unadjusted <- function(object, ...) {
-
-    if (inherits(object@distribution, "AsymptNullDistribution")) {
-        ts <- statistic(object, type = "standardized")
-        ret <- switch(object@statistic@alternative,
-                      "two.sided" = 2 * pmin.int(pnorm(ts), 1 - pnorm(ts)),
-                      "greater"   = 1 - pnorm(ts),
-                      "less"      = pnorm(ts))
-
-        matrix(ret, nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
-    } else {
-        ## raw simulation results, scores have been handled already
-        pls <- support(object, raw = TRUE)
-
-        ## standardize
-        dcov <- sqrt(variance(object))
-        expect <- expectation(object)
-        switch(object@statistic@alternative,
-               "two.sided" = {
-                   pls <- abs((pls - expect) / dcov)
-                   ts <- abs(statistic(object, type = "standardized"))},
-               "greater" = {
-                   pls <- (pls - expect) / dcov
-                   ts <- statistic(object, type = "standardized")},
-               "less" = {
-                   pls <- -(pls - expect) / dcov
-                   ts <- -(statistic(object, type = "standardized"))})
-
-        ## unadjusted p-values
-        matrix(rowMeans(pls %GE% as.vector(ts)),
-               nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
-    }
 }
