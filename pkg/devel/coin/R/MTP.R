@@ -24,79 +24,6 @@ singlestep <- function(object, ...) {
            nrow = nrow(ts), ncol = ncol(ts), dimnames = dimnames(ts))
 }
 
-### algorithm 2.8 (Free Step-Down Resampling Method) in
-### Westfall & Young (1993), page 66 _using standardized
-### statistics instead of p-values_!
-rsdmaxT <- function(pls, ts) {
-
-    ## reorder simulations using (increasing) test statistics
-    o <- order(ts) # smallest ts first
-    pls <- pls[, o, drop = FALSE]
-
-    ## algorithm 2.8 (Free Step-Down Resampling Method) in
-    ## Westfall & Young (1993), page 66 _using standardized
-    ## statistics instead of p-values_!
-    if (ncol(pls) > 1) {
-        for (j in 2:ncol(pls))
-            pls[, j] <- pmax.int(pls[, j], pls[, j - 1])
-    }
-    ret <- rowMeans(t(pls) %GE% ts[o])
-    for (i in (length(ret) - 1):1)
-        ret[i] <- max(ret[i], ret[i + 1]) # enforce monotonicity, page 67
-
-    matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts),
-           dimnames = dimnames(ts))
-}
-
-### step-down using the asymptotic distribution
-asdmaxT <- function(object) {
-
-    ## reorder upper and/or lower limits using test statistics
-    switch(object@statistic@alternative,
-           "two.sided" = {
-               ts <- abs(statistic(object, type = "standardized"))
-               pq <- length(ts)
-               o <- order(ts, decreasing = TRUE) # abs. largest ts first
-               upper <- ts[o]
-               lower <- -upper},
-           "greater" = {
-               ts <- statistic(object, type = "standardized")
-               pq <- length(ts)
-               o <- order(ts, decreasing = TRUE) # largest ts first
-               upper <- ts[o]
-               lower <- rep.int(-Inf, pq)},
-           "less" = {
-               ts <- statistic(object, type = "standardized")
-               pq <- length(ts)
-               o <- order(ts) # smallest ts first
-               upper <- rep.int(Inf, pq)
-               lower <- ts[o]})
-
-    ## correlation matrix
-    corr <- cov2cor(covariance(object))
-
-    ## step-down based on multivariate normality
-    ret <- numeric(pq)
-    ret[1] <- pmvn(lower = lower[1], upper = upper[1],
-                   mean = rep.int(0, pq), corr = corr,
-                   conf.int = FALSE)
-    if (pq > 1) {
-        oo <- o
-        for (i in 2:pq) {
-            j <- rank(oo)[1] # reindexing needed in each step
-            corr <- corr[-j, -j]
-            oo <- oo[-1]
-            ret[i] <- min(ret[i - 1],
-                          pmvn(lower = lower[i], upper = upper[i],
-                               mean = rep.int(0, length(oo)), corr = corr,
-                               conf.int = FALSE))
-        }
-    }
-
-    matrix(1 - ret[order(o)], nrow = nrow(ts), ncol = ncol(ts),
-           dimnames = dimnames(ts))
-}
-
 ### stepdown maxT multiple testing procedure
 stepdown <- function(object, ...) {
 
@@ -104,9 +31,52 @@ stepdown <- function(object, ...) {
         stop(sQuote("object"), " is not of class ",
              sQuote("MaxTypeIndependenceTest"))
 
-    if (inherits(object@distribution, "AsymptNullDistribution"))
-        asdmaxT(object)
-    else {
+    if (inherits(object@distribution, "AsymptNullDistribution")) {
+        ## reorder upper and/or lower limits using test statistics
+        switch(object@statistic@alternative,
+               "two.sided" = {
+                   ts <- abs(statistic(object, type = "standardized"))
+                   pq <- length(ts)
+                   o <- order(ts, decreasing = TRUE) # abs. largest ts first
+                   upper <- ts[o]
+                   lower <- -upper},
+               "greater" = {
+                   ts <- statistic(object, type = "standardized")
+                   pq <- length(ts)
+                   o <- order(ts, decreasing = TRUE) # largest ts first
+                   upper <- ts[o]
+                   lower <- rep.int(-Inf, pq)},
+               "less" = {
+                   ts <- statistic(object, type = "standardized")
+                   pq <- length(ts)
+                   o <- order(ts) # smallest ts first
+                   upper <- rep.int(Inf, pq)
+                   lower <- ts[o]})
+
+        ## correlation matrix
+        corr <- cov2cor(covariance(object))
+
+        ## step-down based on multivariate normality
+        ret <- numeric(pq)
+        ret[1] <- pmvn(lower = lower[1], upper = upper[1],
+                       mean = rep.int(0, pq), corr = corr,
+                       conf.int = FALSE)
+        if (pq > 1) {
+            oo <- o
+            for (i in 2:pq) {
+                j <- rank(oo)[1] # reindexing needed in each step
+                corr <- corr[-j, -j]
+                oo <- oo[-1]
+                ret[i] <- min(ret[i - 1],
+                              pmvn(lower = lower[i], upper = upper[i],
+                                   mean = rep.int(0, length(oo)), corr = corr,
+                                   conf.int = FALSE))
+            }
+        }
+
+        matrix(1 - ret[order(o)], nrow = nrow(ts), ncol = ncol(ts),
+               dimnames = dimnames(ts))
+    } else {
         ## raw simulation results, scores have been handled already
         pls <- support(object, raw = TRUE)
 
@@ -124,7 +94,23 @@ stepdown <- function(object, ...) {
                    pls <- -t((pls - expect) / dcov)
                    ts <- -(statistic(object, type = "standardized"))})
 
-        rsdmaxT(pls, ts)
+        ## reorder simulations using (increasing) test statistics
+        o <- order(ts) # smallest ts first
+        pls <- pls[, o, drop = FALSE]
+
+        ## algorithm 2.8 (Free Step-Down Resampling Method) in
+        ## Westfall & Young (1993), page 66 _using standardized
+        ## statistics instead of p-values_!
+        if (ncol(pls) > 1) {
+            for (j in 2:ncol(pls))
+                pls[, j] <- pmax.int(pls[, j], pls[, j - 1])
+        }
+        ret <- rowMeans(t(pls) %GE% ts[o])
+        for (i in (length(ret) - 1):1)
+            ret[i] <- max(ret[i], ret[i + 1]) # enforce monotonicity, page 67
+
+        matrix(ret[order(o)], nrow = nrow(ts), ncol = ncol(ts),
+               dimnames = dimnames(ts))
     }
 }
 
