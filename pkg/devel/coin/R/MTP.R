@@ -216,12 +216,11 @@ setMethod("marginal",
         pu <- rowMeans(t(zp) %GE% z[o])
 
         ## permutation distribution
-        foo <- function(x, t) mean(x %GE% t)
-        p <- vector(mode = "list", length = ncol(zp))
-        for (i in 1:ncol(zp)) {
-            ux <- unique(zp[, i])
-            p[[i]] <- vapply(ux, foo, NA_real_, x = zp[, i])
-        }
+        p <- lapply(seq_len(ncol(zp)), function(i) {
+            zp_i <- zp[, i]
+            vapply(unique(zp_i), function(x, t) mean(x %GE% t), NA_real_,
+                   x = zp_i)
+        })
 
         ## discreteness adjustment
         RET <- rep.int(1 - bonferroni, length(z)) # zeros (ones) for Bonferroni (Sidak)
