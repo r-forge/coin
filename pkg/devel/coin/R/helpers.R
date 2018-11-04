@@ -475,13 +475,11 @@ setDimnames <- function(object, nm) {
     object
 }
 
-### heuristic for determining the number of decimal digits of numbers in [0, 1]
+### heuristic for determining the printed number of decimal digits
 ### note that, e.g., 1.00 --> 0, 1.10 --> 1, 1.01 --> 2
 n_decimal_digits <-
     function(x)
 {
-    if (any(x < 0) || any(x > 1))
-        stop(sQuote("x"), " must be in [0, 1]")
-    nchar(sub("^[[:digit:]]*[.]?", "",
+    nchar(sub("^-?[[:space:]]?[[:digit:]]*[.]?", "",
               format(x, digits = 15, scientific = FALSE)[1]))
 }

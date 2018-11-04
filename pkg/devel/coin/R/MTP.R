@@ -30,8 +30,19 @@ setMethod("singlestep",
         idx <- c(which(RET[-1L] %NE% RET[-pq]), pq) # unique z
         RET <- pvalue(object2, RET[idx], ...)
 
-        matrix(rep.int(RET, diff(c(0L, idx)))[order(o)], # remapping
-               nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
+        RET <- matrix(rep.int(RET, diff(c(0L, idx)))[order(o)], # remapping
+                      nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
+        class(RET) <- "pvalue"
+        RET
+    }
+)
+
+setMethod("singlestep",
+    signature = list("MaxTypeIndependenceTestStatistic", "ApproxNullDistribution"),
+    definition = function(object1, object2, ...) {
+        RET <- callNextMethod(object1, object2, ...)
+        attr(RET, "nresample") <- object2@nresample
+        RET
     }
 )
 
@@ -97,8 +108,10 @@ setMethod("stepdown",
             }
         }
 
-        matrix(1 - RET[order(o)], nrow = nrow(z), ncol = ncol(z),
-               dimnames = dimnames(z))
+        RET <- matrix(1 - RET[order(o)], nrow = nrow(z), ncol = ncol(z),
+                      dimnames = dimnames(z))
+        class(RET) <- "pvalue"
+        RET
     }
 )
 
@@ -138,8 +151,11 @@ setMethod("stepdown",
         for (i in (length(RET) - 1):1)
             RET[i] <- max(RET[i], RET[i + 1]) # enforce monotonicity, page 67
 
-        matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
-               dimnames = dimnames(z))
+        RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
+                      dimnames = dimnames(z))
+        class(RET) <- "pvalue"
+        attr(RET, "nresample") <- object2@nresample
+        RET
     }
 )
 
@@ -183,7 +199,10 @@ setMethod("marginal",
                        cummax(1 - (1 - RET[o])^(n - seq_len(n) + 1L))[order(o)]
                }
 
-        matrix(RET, nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
+        RET <- matrix(RET, nrow = nrow(z), ncol = ncol(z),
+                      dimnames = dimnames(z))
+        class(RET) <- "pvalue"
+        RET
     }
 )
 
@@ -238,8 +257,11 @@ setMethod("marginal",
         for (i in 2:length(RET))
             RET[i] <- max(RET[i - 1], RET[i]) # enforce monotonicity
 
-        matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
-               dimnames = dimnames(z))
+        RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
+                      dimnames = dimnames(z))
+        class(RET) <- "pvalue"
+        attr(RET, "nresample") <- object2@nresample
+        RET
     }
 )
 
@@ -268,7 +290,10 @@ setMethod("unadjusted",
                    "less"      = pnorm(z)
                )
 
-        matrix(RET, nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
+        RET <- matrix(RET, nrow = nrow(z), ncol = ncol(z),
+                      dimnames = dimnames(z))
+        class(RET) <- "pvalue"
+        RET
     }
 )
 
@@ -294,8 +319,11 @@ setMethod("unadjusted",
         )
 
         ## unadjusted p-values
-        matrix(rowMeans(zp %GE% as.vector(z)),
-               nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
+        RET <- matrix(rowMeans(zp %GE% as.vector(z)),
+                      nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
+        class(RET) <- "pvalue"
+        attr(RET, "nresample") <- object2@nresample
+        RET
     }
 )
 

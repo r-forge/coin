@@ -105,6 +105,10 @@
       \code{signature(object = "NullDistribution")}: See the documentation for
       \code{\link{midpvalue}} for details.
     }
+    \item{midpvalue}{
+      \code{signature(object = "ApproxNullDistribution")}: See the documentation
+      for \code{\link{midpvalue}} for details.
+    }
     \item{pperm}{
       \code{signature(object = "NullDistribution")}: See the documentation for
       \code{\link{pperm}} for details.
@@ -112,6 +116,10 @@
     \item{pvalue}{
       \code{signature(object = "NullDistribution")}: See the documentation for
       \code{\link{pvalue}} for details.
+    }
+    \item{pvalue}{
+      \code{signature(object = "ApproxNullDistribution")}: See the documentation
+      for \code{\link{pvalue}} for details.
     }
     \item{pvalue_interval}{
       \code{signature(object = "NullDistribution")}: See the documentation for

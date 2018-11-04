@@ -6,12 +6,14 @@ setGeneric("pvalue",
 )
 
 ### <DEPRECATED>
-### The "PValue" class was made defunct in 1.3-0 and at the same time this
+### The "PValue" class was deprecated in 1.3-0 and at the same time this
 ### method was added as a temporary solution.  To be removed in 2.0-0.
 setMethod("pvalue",
     signature = "PValue",
     definition = function(object, q, ...) {
-        object@pvalue(q)
+        RET <- object@pvalue(q)
+        class(RET) <- "pvalue"
+        RET
     }
 )
 ### </DEPRECATED>
@@ -19,7 +21,18 @@ setMethod("pvalue",
 setMethod("pvalue",
     signature = "NullDistribution",
     definition = function(object, q, ...) {
-        object@pvalue(q)
+        RET <- object@pvalue(q)
+        class(RET) <- "pvalue"
+        RET
+    }
+)
+
+setMethod("pvalue",
+    signature = "ApproxNullDistribution",
+    definition = function(object, q, ...) {
+        RET <- callNextMethod(object, q, ...)
+        attr(RET, "nresample") <- object@nresample
+        RET
     }
 )
 
@@ -88,7 +101,18 @@ setGeneric("midpvalue",
 setMethod("midpvalue",
     signature = "NullDistribution",
     definition = function(object, q, ...) {
-        object@midpvalue(q)
+        RET <- object@midpvalue(q)
+        class(RET) <- "pvalue"
+        RET
+    }
+)
+
+setMethod("midpvalue",
+    signature = "ApproxNullDistribution",
+    definition = function(object, q, ...) {
+        RET <- callNextMethod(object, q, ...)
+        attr(RET, "nresample") <- object@nresample
+        RET
     }
 )
 

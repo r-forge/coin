@@ -76,7 +76,6 @@ setMethod("AsymptNullDistribution",
                 attr(ci, "conf.level") <-
                     attr(attr(RET, "conf.int"), "conf.level")
                 attr(RET, "conf.int") <- ci
-                class(RET) <- "MCp"
                 RET
             } else
                 1 - vapply(q, p_fun, NA_real_, conf.int = FALSE, ...)
@@ -239,7 +238,6 @@ setMethod("ApproxNullDistribution",
                 attr(RET, "conf.int") <-
                     confint_binom(round(RET * nresample), nresample,
                                   level = 0.99, method = "exact")
-                class(RET) <- "MCp"
             }
             RET
         }
@@ -253,7 +251,6 @@ setMethod("ApproxNullDistribution",
                 attr(RET, "conf.int") <-
                     confint_binom(round(RET * nresample), nresample,
                                   level = 0.99, method = "mid-p")
-                class(RET) <- "MCp"
             }
             RET
         }
@@ -365,7 +362,6 @@ setMethod("ApproxNullDistribution",
                 attr(RET, "conf.int") <-
                     confint_binom(round(RET * nresample), nresample,
                                   level = 0.99, method = "exact")
-                class(RET) <- "MCp"
             }
             RET
         }
@@ -379,7 +375,6 @@ setMethod("ApproxNullDistribution",
                 attr(RET, "conf.int") <-
                     confint_binom(round(RET * nresample), nresample,
                                   level = 0.99, method = "mid-p")
-                class(RET) <- "MCp"
             }
             RET
         }
@@ -480,7 +475,6 @@ setMethod("ApproxNullDistribution",
                 attr(RET, "conf.int") <-
                     confint_binom(round(RET * nresample), nresample,
                                   level = 0.99, method = "exact")
-                class(RET) <- "MCp"
             }
             RET
         }
@@ -490,7 +484,6 @@ setMethod("ApproxNullDistribution",
                 attr(RET, "conf.int") <-
                     confint_binom(round(RET * nresample), nresample,
                                   level = 0.99, method = "mid-p")
-                class(RET) <- "MCp"
             }
             RET
         }
