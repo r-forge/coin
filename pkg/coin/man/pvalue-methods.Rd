@@ -4,11 +4,13 @@
 \alias{pvalue-methods}
 \alias{pvalue,PValue-method}
 \alias{pvalue,NullDistribution-method}
+\alias{pvalue,ApproxNullDistribution-method}
 \alias{pvalue,IndependenceTest-method}
 \alias{pvalue,MaxTypeIndependenceTest-method}
 \alias{midpvalue}
 \alias{midpvalue-methods}
 \alias{midpvalue,NullDistribution-method}
+\alias{midpvalue,ApproxNullDistribution-method}
 \alias{midpvalue,IndependenceTest-method}
 \alias{pvalue_interval}
 \alias{pvalue_interval-methods}
@@ -16,8 +18,8 @@
 \alias{pvalue_interval,IndependenceTest-method}
 \alias{size}
 \alias{size-methods}
-\alias{size,IndependenceTest-method}
 \alias{size,NullDistribution-method}
+\alias{size,IndependenceTest-method}
 \encoding{UTF-8}
 \title{Computation of the \eqn{p}-Value, Mid-\eqn{p}-Value, \eqn{p}-Value
   Interval and Test Size}
@@ -29,6 +31,7 @@
 \usage{
 \S4method{pvalue}{PValue}(object, q, \dots)
 \S4method{pvalue}{NullDistribution}(object, q, \dots)
+\S4method{pvalue}{ApproxNullDistribution}(object, q, \dots)
 \S4method{pvalue}{IndependenceTest}(object, \dots)
 \S4method{pvalue}{MaxTypeIndependenceTest}(object, method = c("global", "single-step",
                           "step-down", "unadjusted"),
@@ -36,6 +39,7 @@
        type = c("Bonferroni", "Sidak"), \dots)
 
 \S4method{midpvalue}{NullDistribution}(object, q, \dots)
+\S4method{midpvalue}{ApproxNullDistribution}(object, q, \dots)
 \S4method{midpvalue}{IndependenceTest}(object, \dots)
 
 \S4method{pvalue_interval}{NullDistribution}(object, q, \dots)

@@ -38,10 +38,15 @@
   }
   \subsection{User-visible changes}{
     \itemize{
+      \item Asymptotic and exact \eqn{p}-values smaller than machine precision,
+      i.e., \code{.Machine$double.eps}, or approximate (Monte Carlo)
+      \eqn{p}-values smaller than resampling precision, i.e., \code{1 /
+        nresample}, are now reported as such in the printed output.
+
       \item The Pearson chi-squared test is now computed more efficiently.
 
-      \item Extracting the test statistic or the (global) p-value sometimes
-      returned a named result; the results are now unnamed.
+      \item Extracting the test statistic or the (global) \eqn{p}-value
+      sometimes returned a named result; the results are now unnamed.
 
       \item The quantile function now returns a named vector if its \code{p}
       argument is named.

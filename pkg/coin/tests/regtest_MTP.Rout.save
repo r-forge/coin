@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2018-02-20 r74280) -- "Unsuffered Consequences"
+R Under development (unstable) (2018-11-02 r75535) -- "Unsuffered Consequences"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -239,24 +239,24 @@ Control 0.05503  1 0.14164  1
 > pvalue(it4 <- independence_test(x1 + x2 ~ gr,
 +                                 distribution = approximate(nresample = 10000)),
 +        method = "unadjusted")
-      x1     x2
-1 0.0000 0.0000
-2 0.5428 0.4729
-3 0.0001 0.0001
+       x1      x2
+1 <0.0001 <0.0001
+2  0.5428  0.4729
+3  0.0001  0.0001
 > pvalue(it5 <- independence_test(x1 + x2 ~ gr, alternative = "less",
 +                                 distribution = approximate(nresample = 10000)),
 +        method = "unadjusted")
-      x1     x2
-1 0.0000 1.0000
-2 0.7370 0.2385
-3 0.9998 0.0000
+       x1      x2
+1 <0.0001  1.0000
+2  0.7370  0.2385
+3  0.9998 <0.0001
 > pvalue(it6 <- independence_test(x1 + x2 ~ gr, alternative = "greater",
 +                                 distribution = approximate(nresample = 10000)),
 +        method = "unadjusted")
-      x1     x2
-1 1.0000 0.0000
-2 0.2653 0.7536
-3 0.0003 1.0000
+      x1      x2
+1 1.0000 <0.0001
+2 0.2653  0.7536
+3 0.0003  1.0000
 > 
 > ### consistency of minimum p-value for "global"/"single-step"/"step-down"
 > 
@@ -406,4 +406,4 @@ Control 0.05503  1 0.14164  1
 > 
 > proc.time()
    user  system elapsed 
-   2.57    0.14    2.73 
+   2.56    0.20    2.79 

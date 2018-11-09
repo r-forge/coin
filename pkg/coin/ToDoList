@@ -80,3 +80,4 @@ o  some trafos need to take weights into account -> ranks?
 
 o  permutation p-value = 0 means pval < 1 / nresample, not < 1e-16 (as
    format.pval reports)
+   [DONE]

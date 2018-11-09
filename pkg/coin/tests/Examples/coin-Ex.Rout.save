@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2018-09-24 r75356) -- "Unsuffered Consequences"
+R Under development (unstable) (2018-11-02 r75535) -- "Unsuffered Consequences"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -790,7 +790,7 @@ alternative hypothesis: true mu is not equal to 0
 	Approximative Kruskal-Wallis Test
 
 data:  length by site (I, II, III, IV)
-chi-squared = 22.852, p-value < 2.2e-16
+chi-squared = 22.852, p-value < 1e-04
 
 > 
 > ## Approximative (Monte Carlo) Nemenyi-Damico-Wolfe-Dunn test (joint ranking)
@@ -2351,7 +2351,7 @@ alternative hypothesis: true theta is not equal to 1
 data:  Surv(time, event) by
 	 group (Control, RIT) 
 	 stratified by histology
-Z = -3.6704, p-value < 2.2e-16
+Z = -3.6704, p-value < 1e-04
 alternative hypothesis: true theta is not equal to 1
 
 > 
@@ -2718,7 +2718,7 @@ control 0.2377 0.0994 0.062 0.0511 0.0483 0.0492
 > 
 > ## Global p-value
 > pvalue(it)
-[1] 0
+[1] <1e-04
 99 percent confidence interval:
  0.0000000000 0.0005296914 
 
@@ -2732,8 +2732,8 @@ C         -7.077674         -6.284743 -0.4151904
 > pvalue(it, method = "single-step")
   Surv(time, event) Surv(dmin, tumor) ntumor
 A             0.129            0.1850  1.000
-B             0.000            0.0003  1.000
-C             0.000            0.0000  0.999
+B            <0.001            0.0003  1.000
+C            <0.001           <0.0001  0.999
 > 
 > 
 > 
@@ -2748,13 +2748,14 @@ C             0.000            0.0000  0.999
 > ### Title: Computation of the p-Value, Mid-p-Value, p-Value Interval and
 > ###   Test Size
 > ### Aliases: pvalue pvalue-methods pvalue,PValue-method
-> ###   pvalue,NullDistribution-method pvalue,IndependenceTest-method
-> ###   pvalue,MaxTypeIndependenceTest-method midpvalue midpvalue-methods
-> ###   midpvalue,NullDistribution-method midpvalue,IndependenceTest-method
-> ###   pvalue_interval pvalue_interval-methods
-> ###   pvalue_interval,NullDistribution-method
+> ###   pvalue,NullDistribution-method pvalue,ApproxNullDistribution-method
+> ###   pvalue,IndependenceTest-method pvalue,MaxTypeIndependenceTest-method
+> ###   midpvalue midpvalue-methods midpvalue,NullDistribution-method
+> ###   midpvalue,ApproxNullDistribution-method
+> ###   midpvalue,IndependenceTest-method pvalue_interval
+> ###   pvalue_interval-methods pvalue_interval,NullDistribution-method
 > ###   pvalue_interval,IndependenceTest-method size size-methods
-> ###   size,IndependenceTest-method size,NullDistribution-method
+> ###   size,NullDistribution-method size,IndependenceTest-method
 > ### Keywords: methods htest
 > 
 > ### ** Examples
@@ -3087,7 +3088,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  11.94 0.39 12.34 NA NA 
+Time elapsed:  12.22 0.34 12.59 NA NA 
 > grDevices::dev.off()
 null device 
           1 
