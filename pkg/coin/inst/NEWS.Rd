@@ -4,11 +4,6 @@
 \section{Changes in version 1.3-0 (20YY-MM-DD)}{
   \subsection{New features}{
     \itemize{
-      \item Linear statistics, their expectation and covariances as well as
-      permuted linear statistics are now computed by package \pkg{libcoin};
-      asymptotic and exact \eqn{p}-values are not affected by this change, but
-      approximate \eqn{p}-values will differ within random variation.
-
       \item Ordered factors can now be transformed to a finite collection of
       order-restricted scores (see \code{?zheng_trafo}); this can be used to
       formulate score-independent tests for ordered categorical data (see
@@ -56,12 +51,17 @@
 
       \item The \sQuote{coin_implementation} vignette has been renamed to
       \sQuote{Implementation}.
-      
+
       \item Documentation updates.
     }
   }
   \subsection{Other changes}{
     \itemize{
+      \item The linear statistic, its conditional expectation and covariance,
+      and permuted linear statistics are now computed by package \pkg{libcoin}.%% ;
+      %% asymptotic and exact \eqn{p}-values are not affected by this change, but
+      %% approximate \eqn{p}-values will differ within random variation.
+
       \item \R version \eqn{\ge}{>=}3.4.0 is now required.
     }
   }
