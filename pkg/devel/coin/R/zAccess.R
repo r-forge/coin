@@ -64,25 +64,25 @@ setMethod("pvalue",
                 callNextMethod(object, ...)
             else if (method == "single-step") {
                 if (distribution == "joint")
-                    singlestep(object, ...)
+                    joint(object, stepdown = FALSE, ...)
                 else {
                     if (type == "Bonferroni")
-                        marginal(object, bonferroni = TRUE,
-                                 stepdown = FALSE, ...)
+                        marginal(object, stepdown = FALSE,
+                                 bonferroni = TRUE, ...)
                     else
-                        marginal(object, bonferroni = FALSE,
-                                 stepdown = FALSE, ...)
+                        marginal(object, stepdown = FALSE,
+                                 bonferroni = FALSE, ...)
                 }
             } else if (method == "step-down") {
                 if (distribution == "joint")
-                    stepdown(object, ...)
+                    joint(object, stepdown = TRUE, ...)
                 else {
                     if (type == "Bonferroni")
-                        marginal(object, bonferroni = TRUE,
-                                 stepdown = TRUE, ...)
+                        marginal(object, stepdown = TRUE,
+                                 bonferroni = TRUE, ...)
                     else
-                        marginal(object, bonferroni = FALSE,
-                                 stepdown = TRUE, ...)
+                        marginal(object, stepdown = TRUE,
+                                 bonferroni = FALSE, ...)
                 }
             }
             else
