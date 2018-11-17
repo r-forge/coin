@@ -69,7 +69,7 @@
     \itemize{
       \item The \code{B} argument of \code{approximate()} and
       \code{ApproxNullDistribution()} is now deprecated and has been replaced by
-      \code{nresample} (to conform with the \pkg{libcoin}, \pkg{party} and
+      \code{nresample} (for consistency with the \pkg{libcoin}, \pkg{party} and
       \pkg{partykit} packages).
 
       \item Class \code{"PValue"} is now deprecated.
