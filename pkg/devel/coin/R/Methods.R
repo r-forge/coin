@@ -333,30 +333,28 @@ setMethod("ApproxNullDistribution",
         ## try not to copy it too often -- abs() kills you
         ## </FIXME>
 
-        pmaxmin <- function() {
-            pls <- switch(object@alternative,
-                       "less"      = do.call("pmin.int", as.data.frame(t(pls))),
-                       "greater"   = do.call("pmax.int", as.data.frame(t(pls))),
-                       "two.sided" = do.call("pmax.int", as.data.frame(t(abs(pls))))
-                   )
-            sort(pls)
-        }
+        pls <- switch(object@alternative,
+                   "less"      = do.call("pmin.int", as.data.frame(t(pls))),
+                   "greater"   = do.call("pmax.int", as.data.frame(t(pls))),
+                   "two.sided" = do.call("pmax.int", as.data.frame(t(abs(pls))))
+               )
+        pls <- sort(pls)
 
         p_fun <- function(q) {
             switch(object@alternative,
-                "less"      = mean(colSums(pls %GE% q) == nrow(pls)),
-                "greater"   = mean(colSums(pls %LE% q) == nrow(pls)),
-                "two.sided" = mean(colSums(abs(pls) %LE% q) == nrow(pls))
+                "less"      = mean(pls %GE% q),
+                "greater"   = mean(pls %LE% q),
+                "two.sided" = mean(pls %LE% q)
             )
         }
         d_fun <- function(x) {
-            mean(pmaxmin() %EQ% x)
+            mean(pls %EQ% x)
         }
         pvalue_fun <- function(q, conf.int) {
             RET <- switch(object@alternative,
-                       "less"      = mean(colSums(pls %LE% q) > 0),
-                       "greater"   = mean(colSums(pls %GE% q) > 0),
-                       "two.sided" = mean(colSums(abs(pls) %GE% q) > 0)
+                       "less"      = mean(pls %LE% q),
+                       "greater"   = mean(pls %GE% q),
+                       "two.sided" = mean(pls %GE% q)
                    )
             if (conf.int) {
                 attr(RET, "conf.int") <-
@@ -384,7 +382,7 @@ setMethod("ApproxNullDistribution",
             vapply(q, p_fun, NA_real_)
         }
         q <- function(p) {                               # implicitly vectorized
-            setNames(quantile(pmaxmin(), probs = p, names = FALSE, type = 1L),
+            setNames(quantile(pls, probs = p, names = FALSE, type = 1L),
                      nm = names(p))
         }
         d <- function(x) {
@@ -413,10 +411,8 @@ setMethod("ApproxNullDistribution",
         support <- function(raw = FALSE) {
             if (raw)
                 plsraw
-            else {
-                tmp <- pmaxmin()
-                tmp[c(tmp[-1L] %NE% tmp[-length(tmp)], TRUE)] # keep unique
-            }
+            else
+                pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # keep unique
         }
         size <- function(alpha, type) {
             pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
