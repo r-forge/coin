@@ -47,7 +47,7 @@ setMethod("joint",
             RET <- pvalue(object2, RET[idx], ...)
             RET <- rep.int(RET, diff(c(0L, idx)))  # remapping
         } else {
-            ## step-down based on multivariate normality
+            ## free step-down based on multivariate normality
             Rho <- cov2cor(covariance(object1))
             RET <- numeric(pq)
             RET[1] <- pmvn(lower = lower[1], upper = upper[1],
@@ -81,38 +81,32 @@ setMethod("joint",
         if (!stepdown) {
             RET <- callNextMethod(object1, object2, stepdown, ...)
         } else {
-            ## standardized observed and permuted test statistics
+            ## free step-down based on the resampling distribution
+            ## (Westfall & Young, 1993, p. 66-67, Algorithm 2.8)
+            ## using standardized statistics instead of p-values
             mu <- expectation(object1)
             sigma <- sqrt(variance(object1))
             switch(object1@alternative,
                 "less" = {
-                    z <- -statistic(object1, type = "standardized")
-                    zp <- -t((support(object2, raw = TRUE) - mu) / sigma)
+                    z <- statistic(object1, type = "standardized")
+                    o <- order(z, decreasing = TRUE) # largest z first
+                    RET <- (support(object2, raw = TRUE) - mu) / sigma
+                    RET <- rowMeans(colCummins(RET[o, ]) %LE% z[o])
                 },
                 "greater" = {
                     z <- statistic(object1, type = "standardized")
-                    zp <- t((support(object2, raw = TRUE) - mu) / sigma)
+                    o <- order(z)                    # smallest z first
+                    RET <- (support(object2, raw = TRUE) - mu) / sigma
+                    RET <- rowMeans(colCummaxs(RET[o, ]) %GE% z[o])
                 },
                 "two.sided" = {
                     z <- abs(statistic(object1, type = "standardized"))
-                    zp <- abs(t((support(object2, raw = TRUE) - mu) / sigma))
+                    o <- order(z)                    # abs. smallest z first
+                    RET <- abs(support(object2, raw = TRUE) - mu) / sigma
+                    RET <- rowMeans(colCummaxs(RET[o, ]) %GE% z[o])
                 }
             )
-
-            ## reorder simulations using (increasing) test statistics
-            o <- order(z) # smallest z first
-            zp <- zp[, o, drop = FALSE]
-
-            ## algorithm 2.8 (Free Step-Down Resampling Method) in
-            ## Westfall & Young (1993), page 66 _using standardized
-            ## statistics instead of p-values_!
-            if (ncol(zp) > 1) {
-                for (j in 2:ncol(zp))
-                    zp[, j] <- pmax.int(zp[, j], zp[, j - 1])
-            }
-            RET <- rowMeans(t(zp) %GE% z[o])
-            for (i in (length(RET) - 1):1)
-                RET[i] <- max(RET[i], RET[i + 1]) # enforce monotonicity, page 67
+            RET <- rev(cummax(rev(RET))) # enforce monotonicity
 
             RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
                           dimnames = dimnames(z))

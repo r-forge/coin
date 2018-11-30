@@ -10,7 +10,7 @@ importFrom("stats", complete.cases, confint, cov2cor, dchisq, dnorm, median,
                     qbeta, qchisq, qnorm, quantile, runif, setNames, uniroot)
 importFrom("utils", hasName)
 importFrom("libcoin", LinStatExpCov, doTest)
-importFrom("matrixStats", colMaxs, colMins)
+importFrom("matrixStats", colCummaxs, colCummins, colMaxs, colMins)
 importFrom("modeltools", ModelEnvFormula)
 importMethodsFrom("modeltools", has, na.omit)
 importFrom("mvtnorm", pmvnorm, qmvnorm)
