@@ -334,11 +334,10 @@ setMethod("ApproxNullDistribution",
         ## </FIXME>
 
         pls <- switch(object@alternative,
-                   "less"      = do.call("pmin.int", as.data.frame(t(pls))),
-                   "greater"   = do.call("pmax.int", as.data.frame(t(pls))),
-                   "two.sided" = do.call("pmax.int", as.data.frame(t(abs(pls))))
+                   "less"      = sort(colMins(pls)),
+                   "greater"   = sort(colMaxs(pls)),
+                   "two.sided" = sort(colMaxs(abs(pls)))
                )
-        pls <- sort(pls)
 
         p_fun <- function(q) {
             switch(object@alternative,
