@@ -9,7 +9,7 @@
       formulate score-independent tests for ordered categorical data (see
       \code{?malformations}, \code{?jobsatisfaction} and \code{?vision}).
 
-      \item The test size, i.e., the actual significance level, of approximate
+      \item The test size, i.e., the actual significance level, of approximative
       (Monte Carlo) and exact tests can now be computed (see \code{?size}).
 
       \item The centered linear statistic can now be extracted (see
@@ -34,9 +34,14 @@
   \subsection{User-visible changes}{
     \itemize{
       \item Asymptotic and exact \eqn{p}-values smaller than machine precision,
-      i.e., \code{.Machine$double.eps}, or approximate (Monte Carlo)
+      i.e., \code{.Machine$double.eps}, or approximative (Monte Carlo)
       \eqn{p}-values smaller than resampling precision, i.e., \code{1 /
         nresample}, are now reported as such in the printed output.
+
+      \item Computations on the approximative (Monte Carlo) null distribution
+      for maximum-type tests, e.g., single-step adjusted \eqn{p}-values, are now
+      (much) more efficient at the expense of slightly longer computation time
+      of the null distribution itself.
 
       \item The Pearson chi-squared test is now computed more efficiently.
 
@@ -62,7 +67,8 @@
       %% asymptotic and exact \eqn{p}-values are not affected by this change, but
       %% approximate \eqn{p}-values will differ within random variation.
 
-      \item \R version \eqn{\ge}{>=}3.4.0 is now required.
+      \item \R version \eqn{\ge}{>=}3.4.0 and package \pkg{matrixStats} are now
+      required.
     }
   }
   \subsection{Deprecated and defunct}{
