@@ -11,13 +11,13 @@ setMethod("joint",
     definition = function(object1, object2, stepdown, ...) {
         ## reorder test statistics to ensure consistency with "global"/"step-down"
         switch(object1@alternative,
-            "two.sided" = {
-                z <- abs(statistic(object1, type = "standardized"))
-                o <- order(z, decreasing = TRUE) # abs. largest z first
+            "less" = {
+                z <- statistic(object1, type = "standardized")
+                o <- order(z)                    # smallest z first
                 pq <- length(z)
                 if (stepdown) {
-                    upper <- z[o]
-                    lower <- -upper
+                    upper <- rep.int(Inf, pq)
+                    lower <- z[o]
                 }
             },
             "greater" = {
@@ -29,13 +29,13 @@ setMethod("joint",
                     lower <- rep.int(-Inf, pq)
                 }
             },
-            "less" = {
-                z <- statistic(object1, type = "standardized")
-                o <- order(z)                    # smallest z first
+            "two.sided" = {
+                z <- abs(statistic(object1, type = "standardized"))
+                o <- order(z, decreasing = TRUE) # abs. largest z first
                 pq <- length(z)
                 if (stepdown) {
-                    upper <- rep.int(Inf, pq)
-                    lower <- z[o]
+                    upper <- z[o]
+                    lower <- -upper
                 }
             }
         )
@@ -85,17 +85,17 @@ setMethod("joint",
             mu <- expectation(object1)
             sigma <- sqrt(variance(object1))
             switch(object1@alternative,
-                "two.sided" = {
-                    z <- abs(statistic(object1, type = "standardized"))
-                    zp <- abs(t((support(object2, raw = TRUE) - mu) / sigma))
+                "less" = {
+                    z <- -statistic(object1, type = "standardized")
+                    zp <- -t((support(object2, raw = TRUE) - mu) / sigma)
                 },
                 "greater" = {
                     z <- statistic(object1, type = "standardized")
                     zp <- t((support(object2, raw = TRUE) - mu) / sigma)
                 },
-                "less" = {
-                    z <- -statistic(object1, type = "standardized")
-                    zp <- -t((support(object2, raw = TRUE) - mu) / sigma)
+                "two.sided" = {
+                    z <- abs(statistic(object1, type = "standardized"))
+                    zp <- abs(t((support(object2, raw = TRUE) - mu) / sigma))
                 }
             )
 
@@ -146,9 +146,9 @@ setMethod("marginal",
         ## unadjusted p-values
         z <- statistic(object1, type = "standardized")
         RET <- switch(object1@alternative,
-                   "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z)),
+                   "less"      = pnorm(z),
                    "greater"   = 1 - pnorm(z),
-                   "less"      = pnorm(z)
+                   "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z))
                )
 
         ## adjustment
@@ -178,17 +178,17 @@ setMethod("marginal",
         mu <- expectation(object1)
         sigma <- sqrt(variance(object1))
         switch(object1@alternative,
-            "two.sided" = {
-                z <- abs(statistic(object1, type = "standardized"))
-                zp <- abs(t((support(object2, raw = TRUE) - mu) / sigma))
+            "less" = {
+                z <- -statistic(object1, type = "standardized")
+                zp <- -t((support(object2, raw = TRUE) - mu) / sigma)
             },
             "greater" = {
                 z <- statistic(object1, type = "standardized")
                 zp <- t((support(object2, raw = TRUE) - mu) / sigma)
             },
-            "less" = {
-                z <- -statistic(object1, type = "standardized")
-                zp <- -t((support(object2, raw = TRUE) - mu) / sigma)
+            "two.sided" = {
+                z <- abs(statistic(object1, type = "standardized"))
+                zp <- abs(t((support(object2, raw = TRUE) - mu) / sigma))
             }
         )
 
