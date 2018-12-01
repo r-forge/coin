@@ -244,9 +244,9 @@ setMethod("unadjusted",
     definition = function(object1, object2, ...) {
         z <- statistic(object1, type = "standardized")
         RET <- switch(object1@alternative,
-                   "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z)),
+                   "less"      = pnorm(z),
                    "greater"   = 1 - pnorm(z),
-                   "less"      = pnorm(z)
+                   "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z))
                )
 
         RET <- matrix(RET, nrow = nrow(z), ncol = ncol(z),
@@ -263,17 +263,17 @@ setMethod("unadjusted",
         mu <- expectation(object1)
         sigma <- sqrt(variance(object1))
         switch(object1@alternative,
-            "two.sided" = {
-                z <- abs(statistic(object1, type = "standardized"))
-                zp <- abs(support(object2, raw = TRUE) - mu) / sigma
+            "less" = {
+                z <- -statistic(object1, type = "standardized")
+                zp <- -(support(object2, raw = TRUE) - mu) / sigma
             },
             "greater" = {
                 z <- statistic(object1, type = "standardized")
                 zp <- (support(object2, raw = TRUE) - mu) / sigma
             },
-            "less" = {
-                z <- -statistic(object1, type = "standardized")
-                zp <- -(support(object2, raw = TRUE) - mu) / sigma
+            "two.sided" = {
+                z <- abs(statistic(object1, type = "standardized"))
+                zp <- abs(support(object2, raw = TRUE) - mu) / sigma
             }
         )
 
@@ -308,9 +308,9 @@ npmcp <- function(object) {
     distribution <- object@call$distribution
     ## </FIXME>
     z <- switch(alternative,
-             "two.sided" = -abs(statistic(object, type = "standardized")),
-             "greater" = -statistic(object, type = "standardized"),
-             "less" = statistic(object, type = "standardized")
+             "less"      = statistic(object, type = "standardized"),
+             "greater"   = -statistic(object, type = "standardized"),
+             "two.sided" = -abs(statistic(object, type = "standardized"))
          )
 
     ## get contrast matrix from xtrans
