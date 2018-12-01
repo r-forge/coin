@@ -264,22 +264,24 @@ setMethod("unadjusted",
         sigma <- sqrt(variance(object1))
         switch(object1@alternative,
             "less" = {
-                z <- -statistic(object1, type = "standardized")
-                zp <- -(support(object2, raw = TRUE) - mu) / sigma
+                z <- statistic(object1, type = "standardized")
+                RET <- (support(object2, raw = TRUE) - mu) / sigma
+                RET <- rowMeans(RET %LE% as.vector(z))
             },
             "greater" = {
                 z <- statistic(object1, type = "standardized")
-                zp <- (support(object2, raw = TRUE) - mu) / sigma
+                RET <- (support(object2, raw = TRUE) - mu) / sigma
+                RET <- rowMeans(RET %GE% as.vector(z))
             },
             "two.sided" = {
                 z <- abs(statistic(object1, type = "standardized"))
-                zp <- abs(support(object2, raw = TRUE) - mu) / sigma
+                RET <- abs(support(object2, raw = TRUE) - mu) / sigma
+                RET <- rowMeans(RET %GE% as.vector(z))
             }
         )
 
-        ## unadjusted p-values
-        RET <- matrix(rowMeans(zp %GE% as.vector(z)),
-                      nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
+        RET <- matrix(RET, nrow = nrow(z), ncol = ncol(z),
+                      dimnames = dimnames(z))
         class(RET) <- "pvalue"
         attr(RET, "nresample") <- object2@nresample
         RET
