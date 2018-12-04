@@ -208,7 +208,8 @@ setMethod("ApproxNullDistribution",
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         plsraw <-
-            MonteCarlo(object, nresample = nresample, standardise = TRUE, ...)
+            MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
+                       object@weights, as.integer(nresample), standardise = TRUE, ...)
 
         ## <FIXME> can transform p, q, x instead of those </FIXME>
         ## NOTE: The *unconditional* variance is used by 'chisq_test()'; we need
@@ -321,7 +322,8 @@ setMethod("ApproxNullDistribution",
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         plsraw <-
-            MonteCarlo(object, nresample = nresample, standardise = TRUE, ...)
+            MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
+                       object@weights, as.integer(nresample), standardise = TRUE, ...)
 
         pls <- plsraw$StandardisedPermutedLinearStatistic
         plsraw <- plsraw$PermutedLinearStatistic
@@ -441,7 +443,8 @@ setMethod("ApproxNullDistribution",
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
         plsraw <-
-            MonteCarlo(object, nresample = nresample, standardise = FALSE, ...)
+            MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
+                       object@weights, as.integer(nresample), standardise = FALSE, ...)
 
         ## NOTE: The *unconditional* variance is used by 'chisq_test()'; we need
         ##       to detect this and compute the test statistic manually.

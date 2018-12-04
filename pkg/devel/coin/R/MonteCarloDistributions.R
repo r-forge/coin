@@ -1,19 +1,16 @@
-split_index <- function(n, by)
-{
+split_index <- function(n, by) {
     if (n < by)
         by <- n
     lengths(lapply(seq_len(by), function(i) seq.int(i, n, by)),
             use.names = FALSE)
 }
 
-MonteCarlo <- function(object, nresample, standardise, parallel, ncpus, cl)
-{
+MonteCarlo <- function(x, y, block, weights, nresample, standardise = FALSE, parallel, ncpus, cl) {
+
     montecarlo <- function(nresample) {
-        ret <- LinStatExpCov(X = object@xtrans, Y = object@ytrans,
-                             ## <FIXME> coercion shouldn't be necessary </FIXME>
-                             weights = as.integer(object@weights),
-                             block = object@block,
-                             nresample = nresample, standardise = standardise)
+        ret <- LinStatExpCov(X = x, Y = y, weights = as.integer(weights),
+                             block = as.factor(block), nresample = nresample,
+                             standardise = as.integer(standardise))
         if (standardise)
             ret[c("Variance", "PermutedLinearStatistic",
                   "StandardisedPermutedLinearStatistic")]
