@@ -207,19 +207,18 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        plsraw <-
+        pls <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
                        object@weights, as.integer(nresample), standardise = TRUE, ...)
 
         ## <FIXME> can transform p, q, x instead of those </FIXME>
         ## NOTE: The *unconditional* variance is used by 'chisq_test()'; we need
         ##       to detect this and compute the test statistic manually.
-        if (all(plsraw$Variance %EQ% variance(object))) {
-            pls <- sort(plsraw$StandardisedPermutedLinearStatistic)
-            plsraw <- plsraw$PermutedLinearStatistic
+        if (all(pls$Variance %EQ% variance(object))) {
+            pls <- sort(pls$StandardisedPermutedLinearStatistic)
         } else {
-            plsraw <- plsraw$PermutedLinearStatistic
-            pls <- sort((plsraw - expectation(object)) / sqrt(variance(object)))
+            pls <- pls$PermutedLinearStatistic
+            pls <- sort((pls - expectation(object)) / sqrt(variance(object)))
         }
 
         p_fun <- function(q) {
@@ -288,7 +287,7 @@ setMethod("ApproxNullDistribution",
         }
         support <- function(raw = FALSE) {
             if (raw)
-                plsraw
+                pls
             else
                 pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # keep unique
         }
@@ -321,39 +320,38 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        plsraw <-
+        mpls <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
                        object@weights, as.integer(nresample), standardise = TRUE, ...)
 
-        pls <- plsraw$StandardisedPermutedLinearStatistic
-        plsraw <- plsraw$PermutedLinearStatistic
+        mpls <- mpls$StandardisedPermutedLinearStatistic
 
         ## <FIXME>
         ## pls is a rather large object (potentially)
         ## try not to copy it too often -- abs() kills you
         ## </FIXME>
 
-        pls <- switch(object@alternative,
-                   "less"      = sort(colMins(pls)),
-                   "greater"   = sort(colMaxs(pls)),
-                   "two.sided" = sort(colMaxs(abs(pls)))
+        jpls <- switch(object@alternative,
+                   "less"      = sort(colMins(mpls)),
+                   "greater"   = sort(colMaxs(mpls)),
+                   "two.sided" = sort(colMaxs(abs(mpls)))
                )
 
         p_fun <- function(q) {
             switch(object@alternative,
-                "less"      = mean(pls %GE% q),
-                "greater"   = mean(pls %LE% q),
-                "two.sided" = mean(pls %LE% q)
+                "less"      = mean(jpls %GE% q),
+                "greater"   = mean(jpls %LE% q),
+                "two.sided" = mean(jpls %LE% q)
             )
         }
         d_fun <- function(x) {
-            mean(pls %EQ% x)
+            mean(jpls %EQ% x)
         }
         pvalue_fun <- function(q, conf.int) {
             RET <- switch(object@alternative,
-                       "less"      = mean(pls %LE% q),
-                       "greater"   = mean(pls %GE% q),
-                       "two.sided" = mean(pls %GE% q)
+                       "less"      = mean(jpls %LE% q),
+                       "greater"   = mean(jpls %GE% q),
+                       "two.sided" = mean(jpls %GE% q)
                    )
             if (conf.int) {
                 attr(RET, "conf.int") <-
@@ -381,7 +379,7 @@ setMethod("ApproxNullDistribution",
             vapply(q, p_fun, NA_real_)
         }
         q <- function(p) {                               # implicitly vectorized
-            setNames(quantile(pls, probs = p, names = FALSE, type = 1L),
+            setNames(quantile(jpls, probs = p, names = FALSE, type = 1L),
                      nm = names(p))
         }
         d <- function(x) {
@@ -409,9 +407,9 @@ setMethod("ApproxNullDistribution",
         }
         support <- function(raw = FALSE) {
             if (raw)
-                plsraw
+                mpls
             else
-                pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # keep unique
+                jpls[c(jpls[-1L] %NE% jpls[-length(jpls)], TRUE)] # keep unique
         }
         size <- function(alpha, type) {
             pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
@@ -442,19 +440,18 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        plsraw <-
+        pls <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
                        object@weights, as.integer(nresample), standardise = FALSE, ...)
 
         ## NOTE: The *unconditional* variance is used by 'chisq_test()'; we need
         ##       to detect this and compute the test statistic manually.
-        if (all(plsraw$Variance %EQ% variance(object))) {
-            pls <- sort(doTest(plsraw, teststat = "quadratic",
+        if (all(pls$Variance %EQ% variance(object))) {
+            pls <- sort(doTest(pls, teststat = "quadratic",
                                PermutedStatistics = TRUE)$PermutedStatistics)
-            plsraw <- plsraw$PermutedLinearStatistic
         } else {
-            plsraw <- plsraw$PermutedLinearStatistic
-            pls <- plsraw - expectation(object)
+            pls <- pls$PermutedLinearStatistic
+            pls <- pls - expectation(object)
             pls <- sort(rowSums(crossprod(pls, object@covarianceplus) * t(pls)))
         }
 
@@ -516,7 +513,7 @@ setMethod("ApproxNullDistribution",
         }
         support <- function(raw = FALSE) {
             if (raw)
-                plsraw
+                pls
             else
                 pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # keep unique
         }

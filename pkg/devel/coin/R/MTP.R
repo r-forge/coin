@@ -84,25 +84,23 @@ setMethod("joint",
             ## free step-down based on the resampling distribution
             ## (Westfall & Young, 1993, p. 66-67, Algorithm 2.8)
             ## using standardized statistics instead of p-values
-            mu <- expectation(object1)
-            sigma <- sqrt(variance(object1))
             switch(object1@alternative,
                 "less" = {
                     z <- statistic(object1, type = "standardized")
                     o <- order(z, decreasing = TRUE) # largest z first
-                    RET <- (support(object2, raw = TRUE) - mu) / sigma
+                    RET <- support(object2, raw = TRUE)
                     RET <- rowMeans(colCummins(RET[o, ]) %LE% z[o])
                 },
                 "greater" = {
                     z <- statistic(object1, type = "standardized")
                     o <- order(z)                    # smallest z first
-                    RET <- (support(object2, raw = TRUE) - mu) / sigma
+                    RET <- support(object2, raw = TRUE)
                     RET <- rowMeans(colCummaxs(RET[o, ]) %GE% z[o])
                 },
                 "two.sided" = {
                     z <- abs(statistic(object1, type = "standardized"))
                     o <- order(z)                    # abs. smallest z first
-                    RET <- abs(support(object2, raw = TRUE) - mu) / sigma
+                    RET <- abs(support(object2, raw = TRUE))
                     RET <- rowMeans(colCummaxs(RET[o, ]) %GE% z[o])
                 }
             )
@@ -169,20 +167,18 @@ setMethod("marginal",
     signature = list("MaxTypeIndependenceTestStatistic", "ApproxNullDistribution"),
     definition = function(object1, object2, stepdown, bonferroni, ...) {
         ## standardized observed and permuted test statistics
-        mu <- expectation(object1)
-        sigma <- sqrt(variance(object1))
         switch(object1@alternative,
             "less" = {
                 z <- -statistic(object1, type = "standardized")
-                zp <- -t((support(object2, raw = TRUE) - mu) / sigma)
+                zp <- -t(support(object2, raw = TRUE))
             },
             "greater" = {
                 z <- statistic(object1, type = "standardized")
-                zp <- t((support(object2, raw = TRUE) - mu) / sigma)
+                zp <- t(support(object2, raw = TRUE))
             },
             "two.sided" = {
                 z <- abs(statistic(object1, type = "standardized"))
-                zp <- abs(t((support(object2, raw = TRUE) - mu) / sigma))
+                zp <- abs(t(support(object2, raw = TRUE)))
             }
         )
 
@@ -260,22 +256,20 @@ setMethod("unadjusted",
     signature = list("MaxTypeIndependenceTestStatistic", "ApproxNullDistribution"),
     definition = function(object1, object2, ...) {
         ## standardized observed and permuted test statistics
-        mu <- expectation(object1)
-        sigma <- sqrt(variance(object1))
         switch(object1@alternative,
             "less" = {
                 z <- statistic(object1, type = "standardized")
-                RET <- (support(object2, raw = TRUE) - mu) / sigma
+                RET <- support(object2, raw = TRUE)
                 RET <- rowMeans(RET %LE% as.vector(z))
             },
             "greater" = {
                 z <- statistic(object1, type = "standardized")
-                RET <- (support(object2, raw = TRUE) - mu) / sigma
+                RET <- support(object2, raw = TRUE)
                 RET <- rowMeans(RET %GE% as.vector(z))
             },
             "two.sided" = {
                 z <- abs(statistic(object1, type = "standardized"))
-                RET <- abs(support(object2, raw = TRUE) - mu) / sigma
+                RET <- abs(support(object2, raw = TRUE))
                 RET <- rowMeans(RET %GE% as.vector(z))
             }
         )
