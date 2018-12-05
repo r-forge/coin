@@ -1,11 +1,30 @@
-
 #include "coin_common.h"
 
 /* Helpers.c */
-
-SEXP R_kronecker
+extern SEXP R_ExpectationCovarianceStatistic
 (
-    SEXP A, 
+    SEXP x,
+    SEXP y,
+    SEXP weights,
+    SEXP subset,
+    SEXP block,
+    SEXP varonly,
+    SEXP tol
+);
+
+extern SEXP R_PermutedLinearStatistic
+(
+    SEXP x,
+    SEXP y,
+    SEXP weights,
+    SEXP subset,
+    SEXP block,
+    SEXP nresample
+);
+
+extern SEXP R_kronecker
+(
+    SEXP A,
     SEXP B
 );
 

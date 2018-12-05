@@ -207,19 +207,9 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        pls <-
-            MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(nresample), standardise = TRUE, ...)
-
-        ## <FIXME> can transform p, q, x instead of those </FIXME>
-        ## NOTE: The *unconditional* variance is used by 'chisq_test()'; we need
-        ##       to detect this and compute the test statistic manually.
-        if (all(pls$Variance %EQ% variance(object))) {
-            pls <- sort(pls$StandardisedPermutedLinearStatistic)
-        } else {
-            pls <- pls$PermutedLinearStatistic
-            pls <- sort((pls - expectation(object)) / sqrt(variance(object)))
-        }
+        pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
+                          object@weights, nresample, ...)
+        pls <- sort((pls - expectation(object)) / sqrt(variance(object)))
 
         p_fun <- function(q) {
             mean(pls %LE% q)
@@ -320,22 +310,15 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        pls <-
-            MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(nresample), standardise = TRUE, ...)
-
-        pls <- pls$StandardisedPermutedLinearStatistic
-
-        ## <FIXME>
-        ## pls is a rather large object (potentially)
-        ## try not to copy it too often -- abs() kills you
-        ## </FIXME>
+        pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
+                          object@weights, nresample, ...)
+        pls <- (pls - expectation(object)) / sqrt(variance(object))
 
         mpls <- switch(object@alternative,
-                   "less"      = sort(colMins(pls)),
-                   "greater"   = sort(colMaxs(pls)),
-                   "two.sided" = sort(colMaxs(abs(pls)))
-               )
+                    "less"      = sort(colMins(pls)),
+                    "greater"   = sort(colMaxs(pls)),
+                    "two.sided" = sort(colMaxs(abs(pls)))
+                )
 
         p_fun <- function(q) {
             switch(object@alternative,
@@ -440,20 +423,10 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        pls <-
-            MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
-                       object@weights, as.integer(nresample), standardise = FALSE, ...)
-
-        ## NOTE: The *unconditional* variance is used by 'chisq_test()'; we need
-        ##       to detect this and compute the test statistic manually.
-        if (all(pls$Variance %EQ% variance(object))) {
-            pls <- sort(doTest(pls, teststat = "quadratic",
-                               PermutedStatistics = TRUE)$PermutedStatistics)
-        } else {
-            pls <- pls$PermutedLinearStatistic
-            pls <- pls - expectation(object)
-            pls <- sort(rowSums(crossprod(pls, object@covarianceplus) * t(pls)))
-        }
+        pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
+                          object@weights, nresample, ...)
+        pls <- pls - expectation(object)
+        pls <- sort(colSums(pls * (object@covarianceplus %*% pls)))
 
         p_fun <- function(q) {
             mean(pls %LE% q)

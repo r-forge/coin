@@ -121,24 +121,24 @@ setMethod("initialize",
 
         if (!inherits(object, "IndependenceTestProblem"))
             stop("Argument ", sQuote("object"), " is not of class ",
-                  sQuote("IndependenceTestProblem"))
+                 sQuote("IndependenceTestProblem"))
 
-        lsev <- LinStatExpCov(X = object@xtrans, Y = object@ytrans,
-                              weights = as.integer(object@weights),
-                              block = object@block,
-                              varonly = varonly)
         nm <- statnames(object)$names # pretty names
 
+        ecs <- .Call(R_ExpectationCovarianceStatistic,
+                     object@xtrans, object@ytrans, object@weights, integer(0),
+                     object@block, varonly, sqrt_eps)
+
         .Object <- copyslots(object, .Object)
-        .Object@linearstatistic <- drop(lsev$LinearStatistic)
-        .Object@expectation <- setNames(lsev$Expectation, nm)
+        .Object@linearstatistic <- drop(ecs$LinearStatistic)
+        .Object@expectation <- setNames(ecs$Expectation, nm)
         .Object@covariance <-
             if (varonly) {
-                new("Variance", setNames(drop(lsev$Variance), nm))
+                new("Variance", setNames(drop(ecs$Variance), nm))
             } else {
-                cov <- matrix(0, nrow = length(nm), ncol = length(nm),
-                              dimnames = list(nm, nm))
-                cov[lower.tri(cov, diag = TRUE)] <- lsev$Covariance
+                pq <- length(nm)
+                cov <- matrix(0, nrow = pq, ncol = pq, dimnames = list(nm, nm))
+                cov[lower.tri(cov, diag = TRUE)] <- ecs$Covariance
                 cov <- cov + t(cov)
                 diag(cov) <- diag(cov) / 2
                 new("CovarianceMatrix", cov)
@@ -161,7 +161,7 @@ setMethod("initialize",
 
         if (!inherits(object, "IndependenceLinearStatistic"))
             stop("Argument ", sQuote("object"), " is not of class ",
-                  sQuote("IndependenceLinearStatistic"))
+                 sQuote("IndependenceLinearStatistic"))
 
         ss <- (object@linearstatistic - expectation(object)) /
                   sqrt(variance(object))
@@ -184,7 +184,7 @@ setMethod("initialize",
 
         if (!inherits(object, "IndependenceLinearStatistic"))
             stop("Argument ", sQuote("object"), " is not of class ",
-                  sQuote("IndependenceLinearStatistic"))
+                 sQuote("IndependenceLinearStatistic"))
 
         ss <- (object@linearstatistic - expectation(object)) /
                   sqrt(variance(object))
@@ -210,7 +210,7 @@ setMethod("initialize",
 
         if (!inherits(object, "IndependenceLinearStatistic"))
             stop("Argument ", sQuote("object"), " is not of class ",
-                  sQuote("IndependenceLinearStatistic"))
+                 sQuote("IndependenceLinearStatistic"))
 
         cs <- object@linearstatistic - expectation(object)
         mp <- MPinv(covariance(object), ...)

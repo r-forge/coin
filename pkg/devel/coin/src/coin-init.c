@@ -5,6 +5,8 @@
 #define CALLDEF(name, n) {#name, (DL_FUNC) &name, n}
 
 static const R_CallMethodDef callMethods[] = {
+    CALLDEF(R_ExpectationCovarianceStatistic, 7),
+    CALLDEF(R_PermutedLinearStatistic, 6),
     CALLDEF(R_kronecker, 2),
     CALLDEF(R_maxstattrafo, 2),
     CALLDEF(R_outersum, 2),
