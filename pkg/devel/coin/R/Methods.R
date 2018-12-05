@@ -320,38 +320,38 @@ setMethod("ApproxNullDistribution",
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
 
-        mpls <-
+        pls <-
             MonteCarlo(object@xtrans, object@ytrans, as.integer(object@block),
                        object@weights, as.integer(nresample), standardise = TRUE, ...)
 
-        mpls <- mpls$StandardisedPermutedLinearStatistic
+        pls <- pls$StandardisedPermutedLinearStatistic
 
         ## <FIXME>
         ## pls is a rather large object (potentially)
         ## try not to copy it too often -- abs() kills you
         ## </FIXME>
 
-        jpls <- switch(object@alternative,
-                   "less"      = sort(colMins(mpls)),
-                   "greater"   = sort(colMaxs(mpls)),
-                   "two.sided" = sort(colMaxs(abs(mpls)))
+        mpls <- switch(object@alternative,
+                   "less"      = sort(colMins(pls)),
+                   "greater"   = sort(colMaxs(pls)),
+                   "two.sided" = sort(colMaxs(abs(pls)))
                )
 
         p_fun <- function(q) {
             switch(object@alternative,
-                "less"      = mean(jpls %GE% q),
-                "greater"   = mean(jpls %LE% q),
-                "two.sided" = mean(jpls %LE% q)
+                "less"      = mean(mpls %GE% q),
+                "greater"   = mean(mpls %LE% q),
+                "two.sided" = mean(mpls %LE% q)
             )
         }
         d_fun <- function(x) {
-            mean(jpls %EQ% x)
+            mean(mpls %EQ% x)
         }
         pvalue_fun <- function(q, conf.int) {
             RET <- switch(object@alternative,
-                       "less"      = mean(jpls %LE% q),
-                       "greater"   = mean(jpls %GE% q),
-                       "two.sided" = mean(jpls %GE% q)
+                       "less"      = mean(mpls %LE% q),
+                       "greater"   = mean(mpls %GE% q),
+                       "two.sided" = mean(mpls %GE% q)
                    )
             if (conf.int) {
                 attr(RET, "conf.int") <-
@@ -379,7 +379,7 @@ setMethod("ApproxNullDistribution",
             vapply(q, p_fun, NA_real_)
         }
         q <- function(p) {                               # implicitly vectorized
-            setNames(quantile(jpls, probs = p, names = FALSE, type = 1L),
+            setNames(quantile(mpls, probs = p, names = FALSE, type = 1L),
                      nm = names(p))
         }
         d <- function(x) {
@@ -407,9 +407,9 @@ setMethod("ApproxNullDistribution",
         }
         support <- function(raw = FALSE) {
             if (raw)
-                mpls
+                pls
             else
-                jpls[c(jpls[-1L] %NE% jpls[-length(jpls)], TRUE)] # keep unique
+                mpls[c(mpls[-1L] %NE% mpls[-length(mpls)], TRUE)] # keep unique
         }
         size <- function(alpha, type) {
             pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
