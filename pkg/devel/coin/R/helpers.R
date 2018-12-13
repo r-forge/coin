@@ -441,10 +441,10 @@ varnames <- function(object) {
     abs(x - y) >= sqrt_eps
 
 `%GE%` <- function(x, y)
-    x > y | abs(x - y) < sqrt_eps
+    (y - x) < sqrt_eps
 
 `%LE%` <- function(x, y)
-    x < y | abs(x - y) < sqrt_eps
+    (x - y) < sqrt_eps
 
 `%GT%` <- function(x, y)
     (x - y) >= sqrt_eps
