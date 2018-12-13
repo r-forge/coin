@@ -2420,8 +2420,17 @@ subset.
 \mbox{}\verb@ExpXtotal = C_get_ExpectationX(ans);@\\
 \mbox{}\verb@for (int p = 0; p < P; p++) ExpXtotal[p] = 0.0;@\\
 \mbox{}\verb@ExpX = Calloc(P, double);@\\
-\mbox{}\verb@VarX = Calloc(P, double);@\\
-\mbox{}\verb@CovX = Calloc(P * (P + 1) / 2, double);@\\
+\mbox{}\verb@/* Fix by Joanidis Kristoforos: P > INT_MAX is possible@\\
+\mbox{}\verb@   for maximally selected statistics (when X is an integer).@\\
+\mbox{}\verb@   2018-12-13@\\
+\mbox{}\verb@*/@\\
+\mbox{}\verb@if (C_get_varonly(ans)) {@\\
+\mbox{}\verb@    VarX = Calloc(P, double);@\\
+\mbox{}\verb@    CovX = Calloc(0, double);@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    VarX = Calloc(0, double);@\\
+\mbox{}\verb@    CovX = Calloc(P * (P + 1) / 2, double);@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@table = C_get_TableBlock(ans);@\\
 \mbox{}\verb@sumweights = C_get_Sumweights(ans);@\\
 \mbox{}\verb@PROTECT(nullvec = allocVector(INTSXP, 0));@\\
@@ -2443,7 +2452,7 @@ subset.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb34}{34}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@B@\nobreak\ \NWlink{nuweb28c}{28c}, \verb@block@\nobreak\ \NWlink{nuweb28b}{28b}\NWlink{nuweb28d}{d}, \verb@C_get_CovarianceInfluence@\nobreak\ \NWlink{nuweb149a}{149a}, \verb@C_get_ExpectationInfluence@\nobreak\ \NWlink{nuweb148c}{148c}, \verb@C_get_ExpectationX@\nobreak\ \NWlink{nuweb148b}{148b}, \verb@C_get_Sumweights@\nobreak\ \NWlink{nuweb150a}{150a}, \verb@C_get_TableBlock@\nobreak\ \NWlink{nuweb149c}{149c}, \verb@C_get_VarianceInfluence@\nobreak\ \NWlink{nuweb149b}{149b}, \verb@N@\nobreak\ \NWlink{nuweb24b}{24b}\NWlink{nuweb24c}{c}, \verb@Offset0@\nobreak\ \NWlink{nuweb22b}{22b}, \verb@P@\nobreak\ \NWlink{nuweb25a}{25a}, \verb@RC_OneTableSums@\nobreak\ \NWlink{nuweb118a}{118a}, \verb@RC_order_subset_wrt_block@\nobreak\ \NWlink{nuweb132b}{132b}, \verb@RC_Sums@\nobreak\ \NWlink{nuweb94a}{94a}, \verb@subset@\nobreak\ \NWlink{nuweb27b}{27b}\NWlink{nuweb27e}{e}\NWlink{nuweb28a}{, 28a}, \verb@sumweights@\nobreak\ \NWlink{nuweb27a}{27a}, \verb@TableBlock_SLOT@\nobreak\ \NWlink{nuweb22b}{22b}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@B@\nobreak\ \NWlink{nuweb28c}{28c}, \verb@block@\nobreak\ \NWlink{nuweb28b}{28b}\NWlink{nuweb28d}{d}, \verb@C_get_CovarianceInfluence@\nobreak\ \NWlink{nuweb149a}{149a}, \verb@C_get_ExpectationInfluence@\nobreak\ \NWlink{nuweb148c}{148c}, \verb@C_get_ExpectationX@\nobreak\ \NWlink{nuweb148b}{148b}, \verb@C_get_Sumweights@\nobreak\ \NWlink{nuweb150a}{150a}, \verb@C_get_TableBlock@\nobreak\ \NWlink{nuweb149c}{149c}, \verb@C_get_VarianceInfluence@\nobreak\ \NWlink{nuweb149b}{149b}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb146b}{146b}, \verb@N@\nobreak\ \NWlink{nuweb24b}{24b}\NWlink{nuweb24c}{c}, \verb@Offset0@\nobreak\ \NWlink{nuweb22b}{22b}, \verb@P@\nobreak\ \NWlink{nuweb25a}{25a}, \verb@RC_OneTableSums@\nobreak\ \NWlink{nuweb118a}{118a}, \verb@RC_order_subset_wrt_block@\nobreak\ \NWlink{nuweb132b}{132b}, \verb@RC_Sums@\nobreak\ \NWlink{nuweb94a}{94a}, \verb@subset@\nobreak\ \NWlink{nuweb27b}{27b}\NWlink{nuweb27e}{e}\NWlink{nuweb28a}{, 28a}, \verb@sumweights@\nobreak\ \NWlink{nuweb27a}{27a}, \verb@TableBlock_SLOT@\nobreak\ \NWlink{nuweb22b}{22b}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -9821,7 +9830,7 @@ stopifnot(isequal(K1, K2))
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb145a}{145a}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_varonly@\nobreak\ \NWlink{nuweb34}{34}\NWlink{nuweb38b}{, 38b}\NWlink{nuweb42a}{, 42a}\NWlink{nuweb47}{, 47}\NWlink{nuweb48}{, 48}\NWlink{nuweb49}{, 49}\NWlink{nuweb56a}{, 56a}\NWlink{nuweb57}{, 57}\NWlink{nuweb72}{, 72}\NWlink{nuweb148a}{, 148a}.\item \NWtxtIdentsUsed\nobreak\  \verb@LECV@\nobreak\ \NWlink{nuweb145b}{145b}, \verb@varonly_SLOT@\nobreak\ \NWlink{nuweb22b}{22b}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_varonly@\nobreak\ \NWlink{nuweb34}{34}\NWlink{nuweb36a}{, 36a}\NWlink{nuweb38b}{, 38b}\NWlink{nuweb42a}{, 42a}\NWlink{nuweb47}{, 47}\NWlink{nuweb48}{, 48}\NWlink{nuweb49}{, 49}\NWlink{nuweb56a}{, 56a}\NWlink{nuweb57}{, 57}\NWlink{nuweb72}{, 72}\NWlink{nuweb148a}{, 148a}.\item \NWtxtIdentsUsed\nobreak\  \verb@LECV@\nobreak\ \NWlink{nuweb145b}{145b}, \verb@varonly_SLOT@\nobreak\ \NWlink{nuweb22b}{22b}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -10559,8 +10568,8 @@ stopifnot(isequal(K1, K2))
 \mbox{}\verb@@\\
 \mbox{}\verb@Package: libcoin@\\
 \mbox{}\verb@Title: Linear Test Statistics for Permutation Inference@\\
-\mbox{}\verb@Date: 2017-12-13@\\
-\mbox{}\verb@Version: 1.0-1@\\
+\mbox{}\verb@Date: 2018-12-13@\\
+\mbox{}\verb@Version: 1.0-2@\\
 \mbox{}\verb@Authors@{\tt @}\verb@R: person("Torsten", "Hothorn", role = c("aut", "cre"),@\\
 \mbox{}\verb@                  email = "Torsten.Hothorn@{\tt @}\verb@R-project.org")@\\
 \mbox{}\verb@Description: Basic infrastructure for linear test statistics and permutation@\\
@@ -11264,7 +11273,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \item \verb@C_get_tol@: \NWlink{nuweb42a}{42a}\NWlink{nuweb55}{, 55}\NWlink{nuweb57}{, 57}\NWlink{nuweb72}{, 72}, \underline{\NWlink{nuweb152a}{152a}}.
 \item \verb@C_get_Variance@: \NWlink{nuweb37c}{37c}\NWlink{nuweb38b}{, 38b}\NWlink{nuweb42a}{, 42a}\NWlink{nuweb47}{, 47}\NWlink{nuweb48}{, 48}\NWlink{nuweb57}{, 57}\NWlink{nuweb72}{, 72}, \underline{\NWlink{nuweb147c}{147c}}\NWlink{nuweb148a}{, 148a}\NWlink{nuweb155a}{, 155a}.
 \item \verb@C_get_VarianceInfluence@: \NWlink{nuweb36a}{36a}\NWlink{nuweb47}{, 47}\NWlink{nuweb72}{, 72}, \underline{\NWlink{nuweb149b}{149b}}\NWlink{nuweb155a}{, 155a}.
-\item \verb@C_get_varonly@: \NWlink{nuweb34}{34}\NWlink{nuweb38b}{, 38b}\NWlink{nuweb42a}{, 42a}\NWlink{nuweb47}{, 47}\NWlink{nuweb48}{, 48}\NWlink{nuweb49}{, 49}\NWlink{nuweb56a}{, 56a}\NWlink{nuweb57}{, 57}\NWlink{nuweb72}{, 72}, \underline{\NWlink{nuweb146b}{146b}}\NWlink{nuweb148a}{, 148a}.
+\item \verb@C_get_varonly@: \NWlink{nuweb34}{34}\NWlink{nuweb36a}{, 36a}\NWlink{nuweb38b}{, 38b}\NWlink{nuweb42a}{, 42a}\NWlink{nuweb47}{, 47}\NWlink{nuweb48}{, 48}\NWlink{nuweb49}{, 49}\NWlink{nuweb56a}{, 56a}\NWlink{nuweb57}{, 57}\NWlink{nuweb72}{, 72}, \underline{\NWlink{nuweb146b}{146b}}\NWlink{nuweb148a}{, 148a}.
 \item \verb@C_get_Xfactor@: \NWlink{nuweb49}{49}, \underline{\NWlink{nuweb146c}{146c}}.
 \item \verb@C_kronecker@: \NWlink{nuweb82}{82}\NWlink{nuweb140b}{, 140b}, \underline{\NWlink{nuweb141}{141}}.
 \item \verb@C_kronecker_sym@: \NWlink{nuweb81}{81}, \underline{\NWlink{nuweb142}{142}}.

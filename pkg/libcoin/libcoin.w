@@ -1689,7 +1689,7 @@ CovInf = C_get_CovarianceInfluence(ans);
 ExpXtotal = C_get_ExpectationX(ans);
 for (int p = 0; p < P; p++) ExpXtotal[p] = 0.0;
 ExpX = Calloc(P, double);
-/* Fix by Joanidis Kristiforos: P > INT_MAX is possible
+/* Fix by Joanidis Kristoforos: P > INT_MAX is possible
    for maximally selected statistics (when X is an integer).
    2018-12-13
 */
@@ -6827,8 +6827,8 @@ SEXP RC_init_LECV_2d
 @{
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 2017-12-13
-Version: 1.0-1
+Date: 2018-12-13
+Version: 1.0-2
 Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@@R-project.org")
 Description: Basic infrastructure for linear test statistics and permutation

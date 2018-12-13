@@ -66,3 +66,9 @@ lev2 <- LinStatExpCov(X = X, Y = Y, ix = ix, iy = iy)
 lev2$Sumweights
 t2 <- doTest(lev2, teststat = "quadratic")
 stopifnot(all.equal(t1, t2))
+
+### unnecessary memory allocation; fixed in 1.0-2
+N <- 46341L
+y <- runif(N)
+x <- 1:N
+lev1 <- LinStatExpCov(X = x, Y = y, varonly = TRUE)

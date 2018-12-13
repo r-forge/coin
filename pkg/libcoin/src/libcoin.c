@@ -6870,8 +6870,17 @@ SEXP ans
     ExpXtotal = C_get_ExpectationX(ans);
     for (int p = 0; p < P; p++) ExpXtotal[p] = 0.0;
     ExpX = Calloc(P, double);
-    VarX = Calloc(P, double);
-    CovX = Calloc(P * (P + 1) / 2, double);
+    /* Fix by Joanidis Kristoforos: P > INT_MAX is possible
+       for maximally selected statistics (when X is an integer).
+       2018-12-13
+    */
+    if (C_get_varonly(ans)) {
+        VarX = Calloc(P, double);
+        CovX = Calloc(0, double);
+    } else {
+        VarX = Calloc(0, double);
+        CovX = Calloc(P * (P + 1) / 2, double);
+    }
     table = C_get_TableBlock(ans);
     sumweights = C_get_Sumweights(ans);
     PROTECT(nullvec = allocVector(INTSXP, 0));
