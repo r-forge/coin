@@ -68,7 +68,10 @@ t2 <- doTest(lev2, teststat = "quadratic")
 stopifnot(all.equal(t1, t2))
 
 ### unnecessary memory allocation; fixed in 1.0-2
-N <- 46341L
+N <- 146341L
 y <- runif(N)
 x <- 1:N
 lev1 <- LinStatExpCov(X = x, Y = y, varonly = TRUE)
+# Note: N * (N + 1) / 2 > .Machine$integer.max
+try(lev2 <- LinStatExpCov(X = x, Y = y, varonly = FALSE))
+

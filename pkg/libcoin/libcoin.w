@@ -1695,10 +1695,10 @@ ExpX = Calloc(P, double);
 */
 if (C_get_varonly(ans)) {
     VarX = Calloc(P, double);
-    CovX = Calloc(0, double);
+    CovX = Calloc(1, double);
 } else {
-    VarX = Calloc(0, double);
-    CovX = Calloc(P * (P + 1) / 2, double);
+    VarX = Calloc(1, double);
+    CovX = Calloc(PP12(P), double);
 }
 table = C_get_TableBlock(ans);
 sumweights = C_get_Sumweights(ans);
@@ -1785,8 +1785,8 @@ C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
 @{
 /* always return variances */
 if (!C_get_varonly(ans)) {
-    for (int p = 0; p < P * Q; p++) 
-        C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, P * Q)];
+    for (int p = 0; p < mPQB(P, Q, 1); p++) 
+        C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, mPQB(P, Q, 1))];
 }
 @}
 
@@ -1838,7 +1838,7 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
     R_xlen_t inresample;
 
     @<Setup Dimensions@>
-    PQ = P * Q;
+    PQ = mPQB(P, Q, 1);
     N = NROW(y);
     inresample = (R_xlen_t) REAL(nresample)[0];
 
@@ -2136,7 +2136,7 @@ if (C_get_varonly(ans)) {
                               C_get_Variance(ans));
 } else {
     if (LENGTH(x) == 0) {
-        for (int p = 0; p < P * (P + 1) / 2; p++) CovX[p] = 0.0;
+        for (int p = 0; p < PP12(P); p++) CovX[p] = 0.0;
         for (int p = 0; p < P; p++) CovX[S(p, p, P)] = ExpX[p];
     } else {
         RC_CovarianceX(x, NROW(x), P, Rrsum, subset, Offset0, 0, ExpX, !DoVarOnly, CovX);
@@ -2160,7 +2160,7 @@ SEXP ans
     @<2d Total Table@>
 
     linstat = C_get_LinearStatistic(ans);
-    for (int p = 0; p < P * Q; p++)
+    for (int p = 0; p < mPQB(P, Q, 1); p++)
         linstat[p] = 0.0;
 
     for (int b = 0; b < B; b++) {
@@ -2178,8 +2178,8 @@ SEXP ans
 
     /* always return variances */
     if (!C_get_varonly(ans)) {
-        for (int p = 0; p < P * Q; p++) 
-            C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, P * Q)];
+        for (int p = 0; p < mPQB(P, Q, 1); p++) 
+            C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, mPQB(P, Q, 1))];
     }
 
     Free(CovX);
@@ -2212,7 +2212,7 @@ Xfactor = C_get_Xfactor(ans);
 if (C_get_varonly(ans)) {
     CovX = Calloc(P, double);
 } else {
-    CovX = Calloc(P * (P + 1) / 2, double);
+    CovX = Calloc(PP12(P), double);
 }
 
 table2d = Calloc(Lxp1 * Lyp1, double);
@@ -2268,7 +2268,7 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
 
     @<Setup Dimensions 2d@>
 
-    PQ = P * Q;
+    PQ = mPQB(P, Q, 1);
     Xfactor = XLENGTH(x) == 0;
     Lxp1 = Lx + 1;
     Lyp1 = Ly + 1;
@@ -2426,7 +2426,7 @@ SEXP R_QuadraticTest
 
     @<Setup Test Memory@>
 
-    MPinv = Calloc(PQ * (PQ + 1) / 2, double); /* was: C_get_MPinv(LECV); */
+    MPinv = Calloc(PP12(PQ), double); /* was: C_get_MPinv(LECV); */
     C_MPinv_sym(C_get_Covariance(LECV), PQ, C_get_tol(LECV), MPinv, &rank);
 
     REAL(stat)[0] = C_quadform(PQ, C_get_LinearStatistic(LECV),
@@ -2465,7 +2465,7 @@ SEXP R_QuadraticTest
 @{
 P = C_get_P(LECV);
 Q = C_get_Q(LECV);
-PQ = P * Q;
+PQ = mPQB(P, Q, 1);
 
 if (C_get_varonly(LECV) && PQ > 1)
         error("cannot compute adjusted p-value based on variances only");
@@ -3179,7 +3179,7 @@ int rank, PQ, greater;
 
 Q = C_get_Q(LECV);
 P = C_get_P(LECV);
-PQ = P * Q;
+PQ = mPQB(P, Q, 1);
 B = C_get_B(LECV);
 if (B > 1) {
     if (C_get_varonly(LECV))
@@ -3250,13 +3250,13 @@ sumweights = sumright;
 @{
 if (teststat == TESTSTAT_maximum) {
     for (int pp = 0; pp < p; pp++)
-        mvar[q] += 2 * covar[S(pp + q * P, p + P * q, P * Q)];
-     mvar[q] += covar[S(p + q * P, p + P * q, P * Q)];
+        mvar[q] += 2 * covar[S(pp + q * P, p + P * q, mPQB(P, Q, 1))];
+     mvar[q] += covar[S(p + q * P, p + P * q, mPQB(P, Q, 1))];
 } else {
      for (int qq = 0; qq <= q; qq++) {
          for (int pp = 0; pp < p; pp++)
-             mcovar[S(q, qq, Q)] += 2 * covar[S(pp + q * P, p + P * qq, P * Q)];
-         mcovar[S(q, qq, Q)] += covar[S(p + q * P, p + P * qq, P * Q)];
+             mcovar[S(q, qq, Q)] += 2 * covar[S(pp + q * P, p + P * qq, mPQB(P, Q, 1))];
+         mcovar[S(q, qq, Q)] += covar[S(p + q * P, p + P * qq, mPQB(P, Q, 1))];
      }
 }
 @}
@@ -3439,7 +3439,8 @@ if (teststat == TESTSTAT_maximum) {
             for (int p = 0; p < P; p++) {
                 mtmp[p] = 0.0;
                 for (int pp = 0; pp < P; pp++)
-                    mtmp[p] += contrast[pp] * covar[S(pp + q * P, p + P * qq, P * Q)];
+                    mtmp[p] += contrast[pp] * covar[S(pp + q * P, p + P * qq,
+                                                      mPQB(P, Q, 1))];
             }
             for (int p = 0; p < P; p++)
                 mcovar[S(q, qq, Q)] += contrast[p] * mtmp[p];
@@ -3525,7 +3526,7 @@ void C_ExpectationLinearStatistic
 ) {
 
     if (!add)
-        for (int p = 0; p < P * Q; p++) PQ_ans[p] = 0.0;
+        for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
     for (int p = 0; p < P; p++) {
         for (int q = 0; q < Q; q++)
@@ -3554,7 +3555,7 @@ void C_CovarianceLinearStatistic
     double tmp, *PP_sym_tmp;
 
 
-    if (P * Q == 1) {
+    if (mPQB(P, Q, 1) == 1) {
         tmp = f1 * CovInf[0] * CovX[0];
         tmp -= f2 * CovInf[0] * ExpX[0] * ExpX[0];
         if (add) {
@@ -3563,10 +3564,10 @@ void C_CovarianceLinearStatistic
             PQPQ_sym_ans[0] = tmp;
         }
     } else {
-        PP_sym_tmp = Calloc(P * (P + 1) / 2, double);
+        PP_sym_tmp = Calloc(PP12(P), double);
         C_KronSums_sym_(ExpX, 1, P,
                         PP_sym_tmp);
-        for (int p = 0; p < P * (P + 1) / 2; p++)
+        for (int p = 0; p < PP12(P); p++)
             PP_sym_tmp[p] = f1 * CovX[p] - f2 * PP_sym_tmp[p];
         C_kronecker_sym(CovInf, Q, PP_sym_tmp, P, 1 - (add >= 1),
                         PQPQ_sym_ans);
@@ -3591,7 +3592,7 @@ void C_VarianceLinearStatistic
 ) {
 
 
-    if (P * Q == 1) {
+    if (mPQB(P, Q, 1) == 1) {
         C_CovarianceLinearStatistic(P, Q, VarInf, ExpX, VarX,
                                     sumweights, (add >= 1),
                                     PQ_ans);
@@ -3987,7 +3988,7 @@ void RC_CovarianceX
         if (VARONLY) {
             for (int p = 0; p < P; p++) PQ_ans[p] = ExpX[p];
         } else {
-            for (int p = 0; p < P * (P + 1) / 2; p++) 
+            for (int p = 0; p < PP12(P); p++) 
                 PQ_ans[p] = 0.0;
             for (int p = 0; p < P; p++)
                 PQ_ans[S(p, p, P)] = ExpX[p];
@@ -4621,7 +4622,7 @@ void C_XfactorKronSums_dweights_isubset
     int *xx, ixi;
     double *yy;
  
-    for (int p = 0; p < P * Q; p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
     for (int q = 0; q < Q; q++) {
         yy = y + N * q;
@@ -4842,7 +4843,7 @@ void C_XfactorKronSums_Permutation_isubset
 @{
     R_xlen_t qP, qN;
 
-    for (int p = 0; p < P * Q; p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
     for (int q = 0; q < Q; q++) {
         qP = q * P;
@@ -5327,7 +5328,7 @@ SEXP R_TwoTableSums
     P = NLEVELS(x) + 1;
     Q = NLEVELS(y) + 1;
     
-    PROTECT(ans = allocVector(REALSXP, P * Q));
+    PROTECT(ans = allocVector(REALSXP, mPQB(P, Q, 1)));
     PROTECT(dim = allocVector(INTSXP, 2));
     INTEGER(dim)[0] = P;
     INTEGER(dim)[1] = Q;
@@ -5535,7 +5536,7 @@ SEXP R_ThreeTableSums
     Q = NLEVELS(y) + 1;
     B = NLEVELS(block);
     
-    PROTECT(ans = allocVector(REALSXP, P * Q * B));
+    PROTECT(ans = allocVector(REALSXP, mPQB(P, Q, B)));
     PROTECT(dim = allocVector(INTSXP, 3));
     INTEGER(dim)[0] = P;
     INTEGER(dim)[1] = Q;
@@ -5672,7 +5673,7 @@ void C_ThreeTableSums_dweights_isubset
 
 @d ThreeTableSums Body
 @{
-    int *xx, *yy, *bb, PQ = P * Q;
+    int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);
 
     for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
 
@@ -6112,6 +6113,48 @@ int NLEVELS
 @|NLEVELS
 @}
 
+Check for integer overflow when computing $P (P + 1) / 2$ and $P Q$.
+
+@d PP12
+@{
+int PP12
+(
+    int P
+) {
+
+    double dP = (double) P;
+    double ans;
+
+    ans = dP * (dP + 1) / 2;
+
+    if (ans > INT_MAX)
+        error("cannot allocate memory: number of levels too large");
+
+    return((int) ans);
+}
+@|PP12
+@}
+
+@d mPQB
+@{
+int mPQB
+(
+    int P,
+    int Q,
+    int B
+) {
+
+    double ans = P * Q * B;
+
+    if (ans > INT_MAX)
+        error("cannot allocate memory: number of levels too large");
+
+    return((int) ans);
+}
+@|mPQB
+@}
+
+
 <<kronecker>>=
 A <- matrix(runif(12), ncol = 3)
 B <- matrix(runif(10), ncol = 2)
@@ -6326,6 +6369,8 @@ void C_MPinv_sym
 @{
 @<C\_get\_P@>
 @<C\_get\_Q@>
+@<PP12@>
+@<mPQB@>
 @<C\_get\_varonly@>
 @<C\_get\_Xfactor@>
 @<C\_get\_LinearStatistic@>
@@ -6674,7 +6719,7 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
     int PQ; 
 
     @<Memory Input Checks@>
-    PQ = P * Q;
+    PQ = mPQB(P, Q, 1);
     @<Memory Names@>
 
     /* Table_SLOT is always last and only used in 2d case, ie omitted here */
@@ -6689,7 +6734,7 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
         /* always return variance */
         SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
         SET_VECTOR_ELT(ans, Covariance_SLOT,
-                       allocVector(REALSXP, PQ * (PQ + 1) / 2));
+                       allocVector(REALSXP, PP12(PQ)));
     }
     SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));
     SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));
@@ -6735,7 +6780,7 @@ for (int p = 0; p < PQ; p++) {
         C_get_Variance(ans)[p] = 0.0;
 }
 if (!varonly) {
-    for (int p = 0; p < PQ * (PQ + 1) / 2; p++)
+    for (int p = 0; p < PP12(PQ) / 2; p++)
         C_get_Covariance(ans)[p] = 0.0;
 }
 for (int q = 0; q < Q; q++) {
