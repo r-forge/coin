@@ -279,7 +279,8 @@ setMethod("ApproxNullDistribution",
             if (raw)
                 pls
             else {
-                pls <- sort(pls)
+                ## NOTE: '%NE%' is expensive, so drop duplicates first
+                pls <- sort(unique(pls))
                 pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # unique +/- eps
             }
         }
@@ -394,7 +395,8 @@ setMethod("ApproxNullDistribution",
             if (raw)
                 pls
             else {
-                mpls <- sort(mpls)
+                ## NOTE: '%NE%' is expensive, so drop duplicates first
+                mpls <- sort(unique(mpls))
                 mpls[c(mpls[-1L] %NE% mpls[-length(mpls)], TRUE)] # unique +/- eps
             }
         }
@@ -492,7 +494,8 @@ setMethod("ApproxNullDistribution",
             if (raw)
                 pls
             else {
-                pls <- sort(pls)
+                ## NOTE: '%NE%' is expensive, so drop duplicates first
+                pls <- sort(unique(pls))
                 pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # unique +/- eps
             }
         }
