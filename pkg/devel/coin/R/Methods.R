@@ -209,7 +209,7 @@ setMethod("ApproxNullDistribution",
 
         pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
                           object@weights, nresample, ...)
-        pls <- sort((pls - expectation(object)) / sqrt(variance(object)))
+        pls <- (pls - expectation(object)) / sqrt(variance(object))
 
         p_fun <- function(q) {
             mean(pls %LE% q)
@@ -278,8 +278,10 @@ setMethod("ApproxNullDistribution",
         support <- function(raw = FALSE) {
             if (raw)
                 pls
-            else
-                pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # keep unique
+            else {
+                pls <- sort(pls)
+                pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # unique +/- eps
+            }
         }
         size <- function(alpha, type) {
             pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
@@ -315,9 +317,9 @@ setMethod("ApproxNullDistribution",
         pls <- (pls - expectation(object)) / sqrt(variance(object))
 
         mpls <- switch(object@alternative,
-                    "less"      = sort(colMins(pls)),
-                    "greater"   = sort(colMaxs(pls)),
-                    "two.sided" = sort(colMaxs(abs(pls)))
+                    "less"      = colMins(pls),
+                    "greater"   = colMaxs(pls),
+                    "two.sided" = colMaxs(abs(pls))
                 )
 
         p_fun <- function(q) {
@@ -391,8 +393,10 @@ setMethod("ApproxNullDistribution",
         support <- function(raw = FALSE) {
             if (raw)
                 pls
-            else
-                mpls[c(mpls[-1L] %NE% mpls[-length(mpls)], TRUE)] # keep unique
+            else {
+                mpls <- sort(mpls)
+                mpls[c(mpls[-1L] %NE% mpls[-length(mpls)], TRUE)] # unique +/- eps
+            }
         }
         size <- function(alpha, type) {
             pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
@@ -426,7 +430,7 @@ setMethod("ApproxNullDistribution",
         pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
                           object@weights, nresample, ...)
         pls <- pls - expectation(object)
-        pls <- sort(colSums(pls * (object@covarianceplus %*% pls)))
+        pls <- colSums(pls * (object@covarianceplus %*% pls))
 
         p_fun <- function(q) {
             mean(pls %LE% q)
@@ -487,8 +491,10 @@ setMethod("ApproxNullDistribution",
         support <- function(raw = FALSE) {
             if (raw)
                 pls
-            else
-                pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # keep unique
+            else {
+                pls <- sort(pls)
+                pls[c(pls[-1L] %NE% pls[-length(pls)], TRUE)] # unique +/- eps
+            }
         }
         size <- function(alpha, type) {
             pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
