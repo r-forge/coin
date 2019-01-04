@@ -9,45 +9,68 @@ setGeneric("joint",
 setMethod("joint",
     signature = list("MaxTypeIndependenceTestStatistic", "NullDistribution"),
     definition = function(object1, object2, stepdown, ...) {
-        ## reorder test statistics to ensure consistency with "global"/"step-down"
-        switch(object1@alternative,
-            "less" = {
-                z <- statistic(object1, type = "standardized")
-                o <- order(z)                    # smallest z first
-                pq <- length(z)
-                if (stepdown) {
+        if (!stepdown) {
+            switch(object1@alternative,
+                "less" = {
+                    z <- statistic(object1, type = "standardized")
+                    o <- order(z)                    # smallest z first
+                },
+                "greater" = {
+                    z <- statistic(object1, type = "standardized")
+                    o <- order(z, decreasing = TRUE) # largest z first
+                },
+                "two.sided" = {
+                    z <- abs(statistic(object1, type = "standardized"))
+                    o <- order(z, decreasing = TRUE) # abs. largest z first
+                }
+            )
+            ## compute p-values for unique test statistics only and remap
+            RET <- z[o]
+            pq <- length(RET)
+            idx <- c(which(RET[-1L] %NE% RET[-pq]), pq) # unique +/- eps
+            RET <- rep.int(pvalue(object2, RET[idx], ...), diff(c(0L, idx)))
+
+            RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
+                          dimnames = dimnames(z))
+            class(RET) <- "pvalue"
+            RET
+        } else {
+            stop("cannot compute step-down adjusted p-values for objects of class ",
+                 dQuote("NullDistribution"))
+        }
+    }
+)
+
+setMethod("joint",
+    signature = list("MaxTypeIndependenceTestStatistic", "AsymptNullDistribution"),
+    definition = function(object1, object2, stepdown, ...) {
+        if (!stepdown) {
+            callNextMethod(object1, object2, stepdown, ...)
+        } else {
+            ## free step-down based on multivariate normality
+            switch(object1@alternative,
+                "less" = {
+                    z <- statistic(object1, type = "standardized")
+                    o <- order(z)                    # smallest z first
+                    pq <- length(z)
                     upper <- rep.int(Inf, pq)
                     lower <- z[o]
-                }
-            },
-            "greater" = {
-                z <- statistic(object1, type = "standardized")
-                o <- order(z, decreasing = TRUE) # largest z first
-                pq <- length(z)
-                if (stepdown) {
+                },
+                "greater" = {
+                    z <- statistic(object1, type = "standardized")
+                    o <- order(z, decreasing = TRUE) # largest z first
+                    pq <- length(z)
                     upper <- z[o]
                     lower <- rep.int(-Inf, pq)
-                }
-            },
-            "two.sided" = {
-                z <- abs(statistic(object1, type = "standardized"))
-                o <- order(z, decreasing = TRUE) # abs. largest z first
-                pq <- length(z)
-                if (stepdown) {
+                },
+                "two.sided" = {
+                    z <- abs(statistic(object1, type = "standardized"))
+                    o <- order(z, decreasing = TRUE) # abs. largest z first
+                    pq <- length(z)
                     upper <- z[o]
                     lower <- -upper
                 }
-            }
-        )
-
-        if (!stepdown) {
-            ## iterate over unique test statistics only and remap
-            RET <- z[o]
-            idx <- c(which(RET[-1L] %NE% RET[-pq]), pq) # unique z
-            RET <- pvalue(object2, RET[idx], ...)
-            RET <- rep.int(RET, diff(c(0L, idx)))  # remapping
-        } else {
-            ## free step-down based on multivariate normality
+            )
             Rho <- cov2cor(covariance(object1))
             RET <- numeric(pq)
             RET[1] <- pmvn(lower = lower[1], upper = upper[1],
@@ -66,12 +89,12 @@ setMethod("joint",
                 }
             }
             RET <- 1 - RET
-        }
 
-        RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
-                      dimnames = dimnames(z))
-        class(RET) <- "pvalue"
-        RET
+            RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
+                          dimnames = dimnames(z))
+            class(RET) <- "pvalue"
+            RET
+        }
     }
 )
 
