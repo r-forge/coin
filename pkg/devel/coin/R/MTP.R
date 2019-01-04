@@ -189,28 +189,28 @@ setMethod("marginal",
         switch(object1@alternative,
             "less" = {
                 z <- -statistic(object1, type = "standardized")
-                zp <- -t(support(object2, raw = TRUE))
+                zp <- -support(object2, raw = TRUE)
             },
             "greater" = {
                 z <- statistic(object1, type = "standardized")
-                zp <- t(support(object2, raw = TRUE))
+                zp <- support(object2, raw = TRUE)
             },
             "two.sided" = {
                 z <- abs(statistic(object1, type = "standardized"))
-                zp <- abs(t(support(object2, raw = TRUE)))
+                zp <- abs(support(object2, raw = TRUE))
             }
         )
 
         ## reorder simulations using the (decreasing) test statistics
         o <- order(z, decreasing = TRUE) # largest z first
-        zp <- zp[, o, drop = FALSE]
+        zp <- zp[o, ]
 
         ## unadjusted p-values
-        pu <- rowMeans(t(zp) %GE% z[o])
+        pu <- rowMeans(zp %GE% z[o])
 
         ## permutation distribution
-        p <- lapply(seq_len(ncol(zp)), function(i) {
-            zp_i <- zp[, i]
+        p <- lapply(seq_len(nrow(zp)), function(i) {
+            zp_i <- zp[i, ]
             vapply(unique(zp_i), function(x, t) mean(x %GE% t), NA_real_,
                    x = zp_i)
         })
