@@ -162,8 +162,10 @@ setMethod("marginal",
 
         ## adjustment
         RET <- if (!stepdown) {
-                   if (bonferroni) pmin.int(1, length(RET) * RET) # Bonferroni
-                   else 1 - (1 - RET)^length(RET)                 # Sidak
+                   if (bonferroni) # Bonferroni
+                       pmin.int(1, length(RET) * RET)
+                   else            # Sidak
+                       1 - (1 - RET)^length(RET)
                } else {
                    n <- length(RET)
                    o <- order(RET)
@@ -225,9 +227,12 @@ setMethod("marginal",
                 }
             }
         }
-        RET <- if (!bonferroni) pmin.int(1 - RET, 1) else pmin.int(RET, 1)
-        for (i in 2:length(RET))
-            RET[i] <- max(RET[i - 1], RET[i]) # enforce monotonicity
+        RET <- if (bonferroni) # Bonferroni(-Holm)
+                   pmin.int(1, RET)
+               else            # Sidak(-Holm)
+                   1 - RET
+        if (stepdown)
+            RET <- cummax(RET) # enforce monotonicity
 
         RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
                       dimnames = dimnames(z))
