@@ -73,22 +73,16 @@ setMethod("joint",
             )
             Rho <- cov2cor(covariance(object1))
             RET <- numeric(pq)
-            RET[1] <- pmvn(lower = lower[1], upper = upper[1],
-                           mean = rep.int(0, pq), corr = Rho,
-                           conf.int = FALSE)
-            if (pq > 1) {
-                oo <- o
-                for (i in 2:pq) {
-                    j <- rank(oo)[1] # reindexing needed in each step
-                    Rho <- Rho[-j, -j]
-                    oo <- oo[-1]
-                    RET[i] <- min(RET[i - 1],
-                                  pmvn(lower = lower[i], upper = upper[i],
-                                       mean = rep.int(0, length(oo)), corr = Rho,
-                                       conf.int = FALSE))
-                }
+            oo <- o
+            for (i in 1:pq) {
+                RET[i] <- pmvn(lower = lower[i], upper = upper[i],
+                               mean = rep.int(0, length(oo)), corr = Rho,
+                               conf.int = FALSE)
+                j <- rank(oo)[1] # reindexing needed in each step
+                Rho <- Rho[-j, -j, drop = FALSE]
+                oo <- oo[-1]
             }
-            RET <- 1 - RET
+            RET <- cummax(1 - RET) # enforce monotonicity
 
             RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
                           dimnames = dimnames(z))
