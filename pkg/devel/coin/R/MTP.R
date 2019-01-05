@@ -220,7 +220,16 @@ setMethod("marginal",
         for (i in 1:length(pu)) {
             qq <- if (stepdown) i else 1 # 'i' => successively smaller subsets
             for (q in qq:length(p)) {
+                ## <FIXME>
+                ## This is a thinko:
                 x <- p[[q]][p[[q]] <= pu[i]] # below eq. 2
+                ## The marginal test statistics and p-values are not guaranteed
+                ## to result in the same "cutoff".  The max-T procedure needs to
+                ## be defined along the lines of
+                ##      p[[q]][Z[[q]] >= z[i]]
+                ## where p is the attainable p-values, Z is the corresponding
+                ## test statistics and z is the observed test statistic.
+                ## </FIXME>
                 if (length(x) > 0) {
                     RET[i] <- if (bonferroni) RET[i] + max(x) # eq. 4
                               else RET[i] * (1 - max(x)) # eq. 2
