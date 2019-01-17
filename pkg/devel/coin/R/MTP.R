@@ -99,7 +99,7 @@ setMethod("joint",
             RET <- callNextMethod(object1, object2, stepdown, ...)
         } else {
             ## free step-down based on the resampling distribution
-            ## (Westfall & Young, 1993, p. 66-67, Algorithm 2.8)
+            ## (Westfall and Young, 1993, p. 66-67, Algorithm 2.8)
             ## using standardized statistics instead of p-values
             switch(object1@alternative,
                 "less" = {
@@ -185,66 +185,43 @@ setMethod("marginal",
 setMethod("marginal",
     signature = list("MaxTypeIndependenceTestStatistic", "ApproxNullDistribution"),
     definition = function(object1, object2, stepdown, bonferroni, ...) {
-        ## standardized observed and permuted test statistics
         switch(object1@alternative,
             "less" = {
                 z <- -statistic(object1, type = "standardized")
-                zp <- -support(object2, raw = TRUE)
+                RET <- -support(object2, raw = TRUE)
             },
             "greater" = {
                 z <- statistic(object1, type = "standardized")
-                zp <- support(object2, raw = TRUE)
+                RET <- support(object2, raw = TRUE)
             },
             "two.sided" = {
                 z <- abs(statistic(object1, type = "standardized"))
-                zp <- abs(support(object2, raw = TRUE))
+                RET <- abs(support(object2, raw = TRUE))
             }
         )
-
-        ## reorder simulations using the (decreasing) test statistics
-        o <- order(z, decreasing = TRUE) # largest z first
-        zp <- zp[o, ]
-
-        ## unadjusted p-values
-        pu <- rowMeans(zp %GE% z[o])
-
-        ## permutation distribution
-        p <- lapply(seq_len(nrow(zp)), function(i) {
-            zp_i <- zp[i, ]
-            vapply(unique(zp_i), function(x, t) mean(x %GE% t), NA_real_,
-                   x = zp_i)
-        })
-
-        ## discreteness adjustment (see Westfall and Wolfinger, 1997)
-        RET <- rep.int(1 - bonferroni, length(z)) # zeros (ones) for Bonferroni (Sidak)
-        for (i in 1:length(pu)) {
-            qq <- if (stepdown) i else 1 # 'i' => successively smaller subsets
-            for (q in qq:length(p)) {
-                ## <FIXME>
-                ## This is a thinko:
-                x <- p[[q]][p[[q]] <= pu[i]] # below eq. 2
-                ## The marginal test statistics and p-values are not guaranteed
-                ## to result in the same "cutoff".  The max-T procedure needs to
-                ## be defined along the lines of
-                ##      p[[q]][Z[[q]] >= z[i]]
-                ## where p is the attainable p-values, Z is the corresponding
-                ## test statistics and z is the observed test statistic.
-                ## </FIXME>
-                if (length(x) > 0) {
-                    RET[i] <- if (bonferroni) RET[i] + max(x) # eq. 4
-                              else RET[i] * (1 - max(x)) # eq. 2
-                }
-            }
+        a <- attributes(z) # get dim and dimnames
+        pq <- length(z)
+        if (stepdown) {
+            o <- order(z, decreasing = TRUE) # largest z first
+            z <- z[o]
+            RET <- RET[o, ]
         }
-        RET <- if (bonferroni) # Bonferroni(-Holm)
-                   pmin.int(1, RET)
-               else            # Sidak(-Holm)
-                   1 - RET
-        if (stepdown)
-            RET <- cummax(RET) # enforce monotonicity
 
-        RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
-                      dimnames = dimnames(z))
+        ## single-step and free step-down based on the marginal resampling
+        ## distributions (Westfall and Wolfinger, 1997) using standardized
+        ## statistics instead of p-values
+        RET <- vapply(seq_len(pq), function(i) {
+            j <- if (stepdown) i else 1
+            p <- rowMeans(RET[j:pq,, drop = FALSE] %GE% z[i])
+            if (bonferroni) # Bonferroni(-Holm)
+                pmin.int(1, sum(p)) # eq. 4
+            else            # Sidak(-Holm)
+                1 - prod(1 - p)     # eq. 2
+        }, NA_real_)
+        if (stepdown)
+            RET <- cummax(RET)[order(o)] # enforce monotonicity
+
+        attributes(RET) <- a # set dim and dimnames
         class(RET) <- "pvalue"
         attr(RET, "nresample") <- object2@nresample
         RET
