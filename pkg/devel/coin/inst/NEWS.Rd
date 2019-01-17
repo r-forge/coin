@@ -49,8 +49,8 @@
   }
   \subsection{Bug fixes}{
     \itemize{
-      \item Adjusted \eqn{p}-values based on the marginal distributions were
-      incorrect under some circumstances.
+      \item Adjusted \eqn{p}-values based on the approximative (Monte Carlo)
+      marginal null distributions were incorrect under some circumstances.
 
       \item The point and/or interval estimate of the ratio of scales parameter
       (for tests against scale alternatives) were incorrect when using the

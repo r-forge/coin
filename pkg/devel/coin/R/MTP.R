@@ -207,12 +207,22 @@ setMethod("marginal",
             RET <- RET[o, ]
         }
 
+        ## marginal resampling distributions (assuming large z rejects H_0)
+        RET <- lapply(1:pq, function(i) {
+            Z_i <- RET[i, ]
+            z_i <- unique(Z_i)
+            z_i <- z_i[z_i %GE% min(z)] # optimization? '%GE%' is expensive...
+            p_i <- vapply(z_i, function(z_i) mean(Z_i %GE% z_i), NA_real_)
+            list(z = z_i, p = p_i)
+        })
         ## single-step and free step-down based on the marginal resampling
         ## distributions (Westfall and Wolfinger, 1997) using standardized
         ## statistics instead of p-values
-        RET <- vapply(seq_len(pq), function(i) {
-            j <- if (stepdown) i else 1
-            p <- rowMeans(RET[j:pq,, drop = FALSE] %GE% z[i])
+        RET <- vapply(1:pq, function(i) {
+            p <- vapply(if (stepdown) i:pq else 1:pq, function(j) {
+                RET_j <- RET[[j]]
+                max(RET_j$p[RET_j$z %GE% z[i]], 0) # below eq. 2
+            }, NA_real_)
             if (bonferroni) # Bonferroni(-Holm)
                 pmin.int(1, sum(p)) # eq. 4
             else            # Sidak(-Holm)
