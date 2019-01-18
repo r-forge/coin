@@ -352,7 +352,7 @@ check_distribution_arg <- function(distribution,
         if (distribution == "none")
             function(object) new("NullDistribution")
         else
-            eval(parse(text = paste0(distribution, "()")))
+            eval(call(distribution))
     } else
         distribution
 }
