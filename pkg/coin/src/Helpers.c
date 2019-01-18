@@ -7,7 +7,19 @@
 
 #include "coin_common.h"
 #include <R_ext/Rdynload.h>
-#include <libcoinAPI.h>     /* libcoin_R_kronecker */
+#include <libcoinAPI.h>
+
+SEXP R_ExpectationCovarianceStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
+                                      SEXP block, SEXP varonly, SEXP tol) {
+    return(libcoin_R_ExpectationCovarianceStatistic(x, y, weights, subset,
+                                                    block, varonly, tol));
+}
+
+SEXP R_PermutedLinearStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
+                               SEXP block, SEXP nresample) {
+    return(libcoin_R_PermutedLinearStatistic(x, y, weights, subset,
+                                             block, nresample));
+}
 
 SEXP R_kronecker(SEXP A, SEXP B) {
     return(libcoin_R_kronecker(A, B));

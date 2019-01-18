@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2018-11-02 r75535) -- "Unsuffered Consequences"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R Under development (unstable) (2019-01-14 r75992) -- "Unsuffered Consequences"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -2825,8 +2825,8 @@ alternative hypothesis: two.sided
 > 
 > ## Sidak step-down p-values
 > pvalue(it, method = "step-down", distribution = "marginal", type = "Sidak")
-          y1    y2
-1 0.01096975 0.979
+         y1    y2
+1 0.0110692 0.979
 > 
 > ## Unadjusted p-values
 > pvalue(it, method = "unadjusted")
@@ -3088,7 +3088,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  12.22 0.34 12.59 NA NA 
+Time elapsed:  10.44 0.15 10.64 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -21,6 +21,9 @@
   }
   \subsection{Bug fixes}{
     \itemize{
+      \item Adjusted \eqn{p}-values based on the approximative (Monte Carlo)
+      marginal null distributions were incorrect under some circumstances.
+
       \item The point and/or interval estimate of the ratio of scales parameter
       (for tests against scale alternatives) were incorrect when using the
       asymptotic null distribution.
@@ -39,14 +42,13 @@
         nresample}, are now reported as such in the printed output.
 
       \item Computations on the approximative (Monte Carlo) null distribution
-      for maximum-type tests, e.g., single-step adjusted \eqn{p}-values, are now
-      (much) more efficient at the expense of slightly longer computation time
-      of the null distribution itself.
+      for maximum-type tests, e.g., adjusted \eqn{p}-values, are now more
+      efficient. 
 
       \item The Pearson chi-squared test is now computed more efficiently.
 
-      \item Extracting the test statistic or the (global) \eqn{p}-value
-      sometimes returned a named result; the results are now unnamed.
+      \item Extracting the test statistic or the (global) \eqn{p}-value returned
+      a named result under some circumstances; the results are now unnamed.
 
       \item The quantile function now returns a named vector if its \code{p}
       argument is named.
@@ -122,7 +124,7 @@
       supplied non-right-censored input; it now results in an error.
 
       \item The maximally selected statistics transformation for ordered factors
-      sometimes returned the wrong labels.
+      returned the wrong labels under some circumstances.
     }
   }
   \subsection{User-visible changes}{
@@ -366,10 +368,10 @@
       \item The Brown-Mood median test \eqn{p}-value computation used the wrong
       tail of the null distribution in the one-sided case.
 
-      \item The test statistic of the Wilcoxon signed-rank test sometimes had
-      the wrong sign, due to being based on the sum of the absolute values of
-      the negative, instead of the positive, differences between the paired
-      measurements.
+      \item The test statistic of the Wilcoxon signed-rank test had the wrong
+      sign under some circumstances, due to being based on the sum of the
+      absolute values of the negative differences, instead of the positive,
+      between the paired measurements.
 
       \item The Friedman test did not warn when weights were supplied.
 
@@ -384,11 +386,11 @@
       levels, causing problems, e.g., if trying to use the \code{subset}
       argument of the \code{formula} methods.
 
-      \item Transformations involving ordered factors or survival data sometimes
-      failed when performed within blocks.
+      \item Transformations involving ordered factors or survival data failed
+      under some circumstances when performed within blocks.
 
-      \item The maximally selected statistics transformation for factors
-      sometimes dropped its column names.
+      \item The maximally selected statistics transformation for factors dropped
+      its column names under some circumstances.
 
       \item The maximally selected statistics transformation for factors
       retained unused levels.
@@ -403,7 +405,7 @@
       were wrong.
 
       \item The smallest single-step and step-down adjusted \eqn{p}-values
-      sometimes differed from the global \eqn{p}-value.
+      differed from the global \eqn{p}-value under some circumstances.
 
       \item Single-step adjusted \eqn{p}-values were too small when the support
       of the null distribution contained values equal to the observed test
@@ -427,8 +429,8 @@
       distributions for maximum-type tests were not handling vector arguments
       correctly.
 
-      \item The quantile function of exact permutation distributions sometimes
-      reported \code{NA} when the 100 \% quantile was requested.
+      \item The quantile function of exact permutation distributions reported
+      \code{NA} when the 100 \% quantile was requested under some circumstances.
 
       \item The support of exact permutation distributions for stratified tests
       was not guaranteed to be distinct and ordered, which in turn caused
@@ -1103,7 +1105,7 @@
     statistics.
 
     \item Only variances (instead of the whole covariance matrix) is computed
-    when the distribution of maximum type test statistics is to be
+    when the distribution of maximum-type test statistics is to be
     \emph{approximated}.
 
     \item \code{data} may be an object of class \code{"exprSet"} (->

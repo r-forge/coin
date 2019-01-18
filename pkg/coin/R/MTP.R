@@ -9,69 +9,86 @@ setGeneric("joint",
 setMethod("joint",
     signature = list("MaxTypeIndependenceTestStatistic", "NullDistribution"),
     definition = function(object1, object2, stepdown, ...) {
-        ## reorder test statistics to ensure consistency with "global"/"step-down"
-        switch(object1@alternative,
-            "two.sided" = {
-                z <- abs(statistic(object1, type = "standardized"))
-                o <- order(z, decreasing = TRUE) # abs. largest z first
-                pq <- length(z)
-                if (stepdown) {
+        if (!stepdown) {
+            switch(object1@alternative,
+                "less" = {
+                    z <- statistic(object1, type = "standardized")
+                    o <- order(z)                    # smallest z first
+                },
+                "greater" = {
+                    z <- statistic(object1, type = "standardized")
+                    o <- order(z, decreasing = TRUE) # largest z first
+                },
+                "two.sided" = {
+                    z <- abs(statistic(object1, type = "standardized"))
+                    o <- order(z, decreasing = TRUE) # abs. largest z first
+                }
+            )
+            ## compute p-values for unique test statistics only and remap
+            RET <- z[o]
+            pq <- length(RET)
+            idx <- c(which(RET[-1L] %NE% RET[-pq]), pq) # unique +/- eps
+            RET <- rep.int(pvalue(object2, RET[idx], ...), diff(c(0L, idx)))
+
+            RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
+                          dimnames = dimnames(z))
+            class(RET) <- "pvalue"
+            RET
+        } else {
+            stop("cannot compute step-down adjusted p-values for objects of class ",
+                 dQuote("NullDistribution"))
+        }
+    }
+)
+
+setMethod("joint",
+    signature = list("MaxTypeIndependenceTestStatistic", "AsymptNullDistribution"),
+    definition = function(object1, object2, stepdown, ...) {
+        if (!stepdown) {
+            callNextMethod(object1, object2, stepdown, ...)
+        } else {
+            ## free step-down based on multivariate normality
+            switch(object1@alternative,
+                "less" = {
+                    z <- statistic(object1, type = "standardized")
+                    o <- order(z)                    # smallest z first
+                    pq <- length(z)
+                    upper <- rep.int(Inf, pq)
+                    lower <- z[o]
+                },
+                "greater" = {
+                    z <- statistic(object1, type = "standardized")
+                    o <- order(z, decreasing = TRUE) # largest z first
+                    pq <- length(z)
+                    upper <- z[o]
+                    lower <- rep.int(-Inf, pq)
+                },
+                "two.sided" = {
+                    z <- abs(statistic(object1, type = "standardized"))
+                    o <- order(z, decreasing = TRUE) # abs. largest z first
+                    pq <- length(z)
                     upper <- z[o]
                     lower <- -upper
                 }
-            },
-            "greater" = {
-                z <- statistic(object1, type = "standardized")
-                o <- order(z, decreasing = TRUE) # largest z first
-                pq <- length(z)
-                if (stepdown) {
-                    upper <- z[o]
-                    lower <- rep.int(-Inf, pq)
-                }
-            },
-            "less" = {
-                z <- statistic(object1, type = "standardized")
-                o <- order(z)                    # smallest z first
-                pq <- length(z)
-                if (stepdown) {
-                    upper <- rep.int(Inf, pq)
-                    lower <- z[o]
-                }
-            }
-        )
-
-        if (!stepdown) {
-            ## iterate over unique test statistics only and remap
-            RET <- z[o]
-            idx <- c(which(RET[-1L] %NE% RET[-pq]), pq) # unique z
-            RET <- pvalue(object2, RET[idx], ...)
-            RET <- rep.int(RET, diff(c(0L, idx)))  # remapping
-        } else {
-            ## step-down based on multivariate normality
+            )
             Rho <- cov2cor(covariance(object1))
             RET <- numeric(pq)
-            RET[1] <- pmvn(lower = lower[1], upper = upper[1],
-                           mean = rep.int(0, pq), corr = Rho,
-                           conf.int = FALSE)
-            if (pq > 1) {
-                oo <- o
-                for (i in 2:pq) {
-                    j <- rank(oo)[1] # reindexing needed in each step
-                    Rho <- Rho[-j, -j]
-                    oo <- oo[-1]
-                    RET[i] <- min(RET[i - 1],
-                                  pmvn(lower = lower[i], upper = upper[i],
-                                       mean = rep.int(0, length(oo)), corr = Rho,
-                                       conf.int = FALSE))
-                }
+            oo <- o
+            for (i in 1:pq) {
+                RET[i] <- pmvn(lower = lower[i], upper = upper[i],
+                               mean = rep.int(0, length(oo)), corr = Rho,
+                               conf.int = FALSE)
+                j <- rank(oo)[1] # reindexing needed in each step
+                Rho <- Rho[-j, -j, drop = FALSE]
+                oo <- oo[-1]
             }
-            RET <- 1 - RET
-        }
+            RET <- cummax(1 - RET) # enforce monotonicity
 
-        RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
-                      dimnames = dimnames(z))
-        class(RET) <- "pvalue"
-        RET
+            RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
+                          dimnames = dimnames(z))
+            class(RET) <- "pvalue"
+            RET
+        }
     }
 )
 
@@ -81,38 +98,30 @@ setMethod("joint",
         if (!stepdown) {
             RET <- callNextMethod(object1, object2, stepdown, ...)
         } else {
-            ## standardized observed and permuted test statistics
-            mu <- expectation(object1)
-            sigma <- sqrt(variance(object1))
+            ## free step-down based on the resampling distribution
+            ## (Westfall and Young, 1993, p. 66-67, Algorithm 2.8)
+            ## using standardized statistics instead of p-values
             switch(object1@alternative,
-                "two.sided" = {
-                    z <- abs(statistic(object1, type = "standardized"))
-                    zp <- abs(t((support(object2, raw = TRUE) - mu) / sigma))
+                "less" = {
+                    z <- statistic(object1, type = "standardized")
+                    o <- order(z, decreasing = TRUE) # largest z first
+                    RET <- support(object2, raw = TRUE)
+                    RET <- rowMeans(colCummins(RET[o, ]) %LE% z[o])
                 },
                 "greater" = {
                     z <- statistic(object1, type = "standardized")
-                    zp <- t((support(object2, raw = TRUE) - mu) / sigma)
+                    o <- order(z)                    # smallest z first
+                    RET <- support(object2, raw = TRUE)
+                    RET <- rowMeans(colCummaxs(RET[o, ]) %GE% z[o])
                 },
-                "less" = {
-                    z <- -statistic(object1, type = "standardized")
-                    zp <- -t((support(object2, raw = TRUE) - mu) / sigma)
+                "two.sided" = {
+                    z <- abs(statistic(object1, type = "standardized"))
+                    o <- order(z)                    # abs. smallest z first
+                    RET <- abs(support(object2, raw = TRUE))
+                    RET <- rowMeans(colCummaxs(RET[o, ]) %GE% z[o])
                 }
             )
-
-            ## reorder simulations using (increasing) test statistics
-            o <- order(z) # smallest z first
-            zp <- zp[, o, drop = FALSE]
-
-            ## algorithm 2.8 (Free Step-Down Resampling Method) in
-            ## Westfall & Young (1993), page 66 _using standardized
-            ## statistics instead of p-values_!
-            if (ncol(zp) > 1) {
-                for (j in 2:ncol(zp))
-                    zp[, j] <- pmax.int(zp[, j], zp[, j - 1])
-            }
-            RET <- rowMeans(t(zp) %GE% z[o])
-            for (i in (length(RET) - 1):1)
-                RET[i] <- max(RET[i], RET[i + 1]) # enforce monotonicity, page 67
+            RET <- rev(cummax(rev(RET))) # enforce monotonicity
 
             RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
                           dimnames = dimnames(z))
@@ -146,15 +155,17 @@ setMethod("marginal",
         ## unadjusted p-values
         z <- statistic(object1, type = "standardized")
         RET <- switch(object1@alternative,
-                   "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z)),
+                   "less"      = pnorm(z),
                    "greater"   = 1 - pnorm(z),
-                   "less"      = pnorm(z)
+                   "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z))
                )
 
         ## adjustment
         RET <- if (!stepdown) {
-                   if (bonferroni) pmin.int(1, length(RET) * RET) # Bonferroni
-                   else 1 - (1 - RET)^length(RET)                 # Sidak
+                   if (bonferroni) # Bonferroni
+                       pmin.int(1, length(RET) * RET)
+                   else            # Sidak
+                       1 - (1 - RET)^length(RET)
                } else {
                    n <- length(RET)
                    o <- order(RET)
@@ -174,56 +185,53 @@ setMethod("marginal",
 setMethod("marginal",
     signature = list("MaxTypeIndependenceTestStatistic", "ApproxNullDistribution"),
     definition = function(object1, object2, stepdown, bonferroni, ...) {
-        ## standardized observed and permuted test statistics
-        mu <- expectation(object1)
-        sigma <- sqrt(variance(object1))
         switch(object1@alternative,
-            "two.sided" = {
-                z <- abs(statistic(object1, type = "standardized"))
-                zp <- abs(t((support(object2, raw = TRUE) - mu) / sigma))
+            "less" = {
+                z <- -statistic(object1, type = "standardized")
+                RET <- -support(object2, raw = TRUE)
             },
             "greater" = {
                 z <- statistic(object1, type = "standardized")
-                zp <- t((support(object2, raw = TRUE) - mu) / sigma)
+                RET <- support(object2, raw = TRUE)
             },
-            "less" = {
-                z <- -statistic(object1, type = "standardized")
-                zp <- -t((support(object2, raw = TRUE) - mu) / sigma)
+            "two.sided" = {
+                z <- abs(statistic(object1, type = "standardized"))
+                RET <- abs(support(object2, raw = TRUE))
             }
         )
-
-        ## reorder simulations using the (decreasing) test statistics
-        o <- order(z, decreasing = TRUE) # largest z first
-        zp <- zp[, o, drop = FALSE]
-
-        ## unadjusted p-values
-        pu <- rowMeans(t(zp) %GE% z[o])
-
-        ## permutation distribution
-        p <- lapply(seq_len(ncol(zp)), function(i) {
-            zp_i <- zp[, i]
-            vapply(unique(zp_i), function(x, t) mean(x %GE% t), NA_real_,
-                   x = zp_i)
-        })
-
-        ## discreteness adjustment (see Westfall and Wolfinger, 1997)
-        RET <- rep.int(1 - bonferroni, length(z)) # zeros (ones) for Bonferroni (Sidak)
-        for (i in 1:length(pu)) {
-            qq <- if (stepdown) i else 1 # 'i' => successively smaller subsets
-            for (q in qq:length(p)) {
-                x <- p[[q]][p[[q]] <= pu[i]] # below eq. 2
-                if (length(x) > 0) {
-                    RET[i] <- if (bonferroni) RET[i] + max(x) # eq. 4
-                              else RET[i] * (1 - max(x)) # eq. 2
-                }
-            }
+        a <- attributes(z) # get dim and dimnames
+        pq <- length(z)
+        if (stepdown) {
+            o <- order(z, decreasing = TRUE) # largest z first
+            z <- z[o]
+            RET <- RET[o, ]
         }
-        RET <- if (!bonferroni) pmin.int(1 - RET, 1) else pmin.int(RET, 1)
-        for (i in 2:length(RET))
-            RET[i] <- max(RET[i - 1], RET[i]) # enforce monotonicity
 
-        RET <- matrix(RET[order(o)], nrow = nrow(z), ncol = ncol(z),
-                      dimnames = dimnames(z))
+        ## marginal resampling distributions (assuming large z rejects H_0)
+        RET <- lapply(1:pq, function(i) {
+            Z_i <- RET[i, ]
+            z_i <- unique(Z_i)
+            z_i <- z_i[z_i %GE% min(z)] # optimization? '%GE%' is expensive...
+            p_i <- vapply(z_i, function(z_i) mean(Z_i %GE% z_i), NA_real_)
+            list(z = z_i, p = p_i)
+        })
+        ## single-step and free step-down based on the marginal resampling
+        ## distributions (Westfall and Wolfinger, 1997) using standardized
+        ## statistics instead of p-values
+        RET <- vapply(1:pq, function(i) {
+            p <- vapply(if (stepdown) i:pq else 1:pq, function(j) {
+                RET_j <- RET[[j]]
+                max(RET_j$p[RET_j$z %GE% z[i]], 0) # below eq. 2
+            }, NA_real_)
+            if (bonferroni) # Bonferroni(-Holm)
+                pmin.int(1, sum(p)) # eq. 4
+            else            # Sidak(-Holm)
+                1 - prod(1 - p)     # eq. 2
+        }, NA_real_)
+        if (stepdown)
+            RET <- cummax(RET)[order(o)] # enforce monotonicity
+
+        attributes(RET) <- a # set dim and dimnames
         class(RET) <- "pvalue"
         attr(RET, "nresample") <- object2@nresample
         RET
@@ -250,9 +258,9 @@ setMethod("unadjusted",
     definition = function(object1, object2, ...) {
         z <- statistic(object1, type = "standardized")
         RET <- switch(object1@alternative,
-                   "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z)),
+                   "less"      = pnorm(z),
                    "greater"   = 1 - pnorm(z),
-                   "less"      = pnorm(z)
+                   "two.sided" = 2 * pmin.int(pnorm(z), 1 - pnorm(z))
                )
 
         RET <- matrix(RET, nrow = nrow(z), ncol = ncol(z),
@@ -266,26 +274,26 @@ setMethod("unadjusted",
     signature = list("MaxTypeIndependenceTestStatistic", "ApproxNullDistribution"),
     definition = function(object1, object2, ...) {
         ## standardized observed and permuted test statistics
-        mu <- expectation(object1)
-        sigma <- sqrt(variance(object1))
         switch(object1@alternative,
-            "two.sided" = {
-                z <- abs(statistic(object1, type = "standardized"))
-                zp <- abs(support(object2, raw = TRUE) - mu) / sigma
+            "less" = {
+                z <- statistic(object1, type = "standardized")
+                RET <- support(object2, raw = TRUE)
+                RET <- rowMeans(RET %LE% as.vector(z))
             },
             "greater" = {
                 z <- statistic(object1, type = "standardized")
-                zp <- (support(object2, raw = TRUE) - mu) / sigma
+                RET <- support(object2, raw = TRUE)
+                RET <- rowMeans(RET %GE% as.vector(z))
             },
-            "less" = {
-                z <- -statistic(object1, type = "standardized")
-                zp <- -(support(object2, raw = TRUE) - mu) / sigma
+            "two.sided" = {
+                z <- abs(statistic(object1, type = "standardized"))
+                RET <- abs(support(object2, raw = TRUE))
+                RET <- rowMeans(RET %GE% as.vector(z))
             }
         )
 
-        ## unadjusted p-values
-        RET <- matrix(rowMeans(zp %GE% as.vector(z)),
-                      nrow = nrow(z), ncol = ncol(z), dimnames = dimnames(z))
+        RET <- matrix(RET, nrow = nrow(z), ncol = ncol(z),
+                      dimnames = dimnames(z))
         class(RET) <- "pvalue"
         attr(RET, "nresample") <- object2@nresample
         RET
@@ -314,9 +322,9 @@ npmcp <- function(object) {
     distribution <- object@call$distribution
     ## </FIXME>
     z <- switch(alternative,
-             "two.sided" = -abs(statistic(object, type = "standardized")),
-             "greater" = -statistic(object, type = "standardized"),
-             "less" = statistic(object, type = "standardized")
+             "less"      = statistic(object, type = "standardized"),
+             "greater"   = -statistic(object, type = "standardized"),
+             "two.sided" = -abs(statistic(object, type = "standardized"))
          )
 
     ## get contrast matrix from xtrans

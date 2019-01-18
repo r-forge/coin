@@ -442,22 +442,22 @@ varnames <- function(object) {
 }
 
 `%EQ%` <- function(x, y)
-    abs(x - y) < sqrt_eps
+    abs(x - y) <= sqrt_eps
 
 `%NE%` <- function(x, y)
-    abs(x - y) >= sqrt_eps
+    abs(x - y) > sqrt_eps
 
 `%GE%` <- function(x, y)
-    x > y | abs(x - y) < sqrt_eps
+    (y - x) <= sqrt_eps
 
 `%LE%` <- function(x, y)
-    x < y | abs(x - y) < sqrt_eps
+    (x - y) <= sqrt_eps
 
 `%GT%` <- function(x, y)
-    (x - y) >= sqrt_eps
+    (x - y) > sqrt_eps
 
 `%LT%` <- function(x, y)
-    (y - x) >= sqrt_eps
+    (y - x) > sqrt_eps
 
 ### don't use! never!
 get_weights <- function(object) object@statistic@weights
