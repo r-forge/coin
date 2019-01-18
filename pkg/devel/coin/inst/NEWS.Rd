@@ -70,9 +70,8 @@
         nresample}, are now reported as such in the printed output.
 
       \item Computations on the approximative (Monte Carlo) null distribution
-      for maximum-type tests, e.g., single-step adjusted \eqn{p}-values, are now
-      (much) more efficient at the expense of slightly longer computation time
-      of the null distribution itself.
+      for maximum-type tests, e.g., adjusted \eqn{p}-values, are now more
+      efficient. 
 
       \item The Pearson chi-squared test is now computed more efficiently.
 
@@ -1134,7 +1133,7 @@
     statistics.
 
     \item Only variances (instead of the whole covariance matrix) is computed
-    when the distribution of maximum type test statistics is to be
+    when the distribution of maximum-type test statistics is to be
     \emph{approximated}.
 
     \item \code{data} may be an object of class \code{"exprSet"} (->
