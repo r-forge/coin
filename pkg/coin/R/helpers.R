@@ -31,7 +31,7 @@ pmvn <- function(lower, upper, mean, corr, conf.int, ...) {
                      corr = corr, ...)
          else
              pmvnorm(lower = lower, upper = upper, mean = mean,
-                     sigma = 1L, ...)
+                     sigma = 1, ...)
     if (conf.int) {
         error <- attr(p, "error")
         attributes(p) <- NULL
