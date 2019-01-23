@@ -3,6 +3,12 @@
 \encoding{UTF-8}
 \title{News for Package \pkg{inum}}
 
+\section{Changes in version 1.0-1 (2019-01-23)}{
+\itemize{
+  \item{Differences must be larger than \code{sqrt(.Machine$double.eps)}.}
+  }
+}
+
 \section{Changes in version 1.0-0 (2017-12-12)}{
 \itemize{
   \item{Allow multiple variables in \code{as.interval}.}
