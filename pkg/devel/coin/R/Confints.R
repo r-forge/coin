@@ -394,6 +394,44 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
 }
 
 
+### CI for a binomial parameter
+confint_binom <-
+    function(x, n, level = 0.95, method = c("exact", "mid-p"), tol = eps)
+{
+    method <- match.arg(method)
+
+    RET <- if (x >= 0 && x <= n) {
+               alpha <- 1 - level
+               if (method == "exact") {
+                   ## exact Clopper-Pearson interval
+                   c(if (x == 0) 0 else qbeta(    alpha / 2, x    , n - x + 1),
+                     if (x == n) 1 else qbeta(1 - alpha / 2, x + 1, n - x    ))
+               } else {
+                   ## mid-p interval (see Berry and Armitage, 1995)
+                   if (x == 0) {
+                       c(0, 1 - alpha^(1 / n))
+                   } else if (x == n) {
+                       c(alpha^(1 / n), 1)
+                   } else {
+                       f <- function(p, a)
+                           ## 0.5 * dbinom(...) + pbinom(..., lower.tail = FALSE)
+                           mean(pbinom(c(x, x - 1), n, p, lower.tail = FALSE)) - a
+                       c(uniroot(f, c(0, 1), a =     alpha / 2, tol = tol)$root,
+                         uniroot(f, c(0, 1), a = 1 - alpha / 2, tol = tol)$root)
+                   }
+               }
+           } else {
+               stop(sQuote("x"), " must be larger or equal to 0 and",
+                    " smaller or equal to ", sQuote("n"))
+           }
+    attr(RET, "conf.level") <- level
+    RET
+}
+
+
+###
+### Currently unused
+###
 simconfint_location <- function(object, level = 0.95,
     approx = FALSE, ...) {
 
@@ -446,41 +484,6 @@ simconfint_location <- function(object, level = 0.95,
     colnames(RET)[2L:3L] <-
         paste(c((1 - level) / 2, 1 - (1 - level) / 2) * 100, "%")
     rownames(RET) <- colnames(object@statistic@xtrans)
-    attr(RET, "conf.level") <- level
-    RET
-}
-
-
-### CI for a binomial parameter
-confint_binom <-
-    function(x, n, level = 0.95, method = c("exact", "mid-p"), tol = eps)
-{
-    method <- match.arg(method)
-
-    RET <- if (x >= 0 && x <= n) {
-               alpha <- 1 - level
-               if (method == "exact") {
-                   ## exact Clopper-Pearson interval
-                   c(if (x == 0) 0 else qbeta(    alpha / 2, x    , n - x + 1),
-                     if (x == n) 1 else qbeta(1 - alpha / 2, x + 1, n - x    ))
-               } else {
-                   ## mid-p interval (see Berry and Armitage, 1995)
-                   if (x == 0) {
-                       c(0, 1 - alpha^(1 / n))
-                   } else if (x == n) {
-                       c(alpha^(1 / n), 1)
-                   } else {
-                       f <- function(p, a)
-                           ## 0.5 * dbinom(...) + pbinom(..., lower.tail = FALSE)
-                           mean(pbinom(c(x, x - 1), n, p, lower.tail = FALSE)) - a
-                       c(uniroot(f, c(0, 1), a =     alpha / 2, tol = tol)$root,
-                         uniroot(f, c(0, 1), a = 1 - alpha / 2, tol = tol)$root)
-                   }
-               }
-           } else {
-               stop(sQuote("x"), " must be larger or equal to 0 and",
-                    " smaller or equal to ", sQuote("n"))
-           }
     attr(RET, "conf.level") <- level
     RET
 }
