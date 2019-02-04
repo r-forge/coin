@@ -1,46 +1,42 @@
-confint_location <- function(object, nulldistr, level = 0.95, ...) {
+setGeneric("confint_location",
+    function(object1, object2, ...) {
+        standardGeneric("confint_location")
+    }
+)
 
-    if (!inherits(object, "ScalarIndependenceTestStatistic"))
-        stop("Argument ", sQuote("object"), " is not of class ",
-             sQuote("ScalarIndependenceTestStatistic"))
+setMethod("confint_location",
+    signature = list("ScalarIndependenceTestStatistic", "NullDistribution"),
+    definition = function(object1, object2, level, ...) {
+        ## <FIXME> drop unused levels!
+        if (!is_2sample(object1))
+            warning(sQuote("object1"), " does not represent a two-sample problem")
+        ## </FIXME>
 
-    ## <FIXME> drop unused levels!
-    if (!is_2sample(object))
-        warning(sQuote("object"), " does not represent a two sample problem")
-    ## </FIXME>
+        if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
+            stop("cannot compute confidence intervals with blocks or weights")
 
-    if (!inherits(nulldistr, "NullDistribution"))
-        stop("Argument ", sQuote("nulldistr"), " is not of class ",
-             sQuote("NullDistribution"))
-    approx <- inherits(nulldistr, "AsymptNullDistribution")
+        alternative <- object1@alternative
 
-    if (nlevels(object@block) != 1L || !is_unity(object@weights))
-        stop("cannot compute confidence intervals with blocks or weights")
+        if(!((length(level) == 1L)
+            && is.finite(level)
+            && (level > 0)
+            && (level < 1)))
+            stop("level must be a single number between 0 and 1")
 
-    alternative <- object@alternative
+        scores <- object1@y[[1L]]
+        groups <- object1@xtrans[, 1L]
 
-    if(!((length(level) == 1L)
-       && is.finite(level)
-       && (level > 0)
-       && (level < 1)))
-       stop("level must be a single number between 0 and 1")
+        ## raw data
+        x <- sort(scores[groups > 0])
+        y <- sort(scores[groups < 1])
+        alpha <- 1 - level
 
-    scores <- object@y[[1L]]
-    groups <- object@xtrans[, 1L]
+        foo <- function(x, d) x - d
 
-    ## raw data
-    x <- sort(scores[groups > 0])
-    y <- sort(scores[groups < 1])
-    alpha <- 1 - level
-
-    foo <- function(x, d) x - d
-
-    if (!approx) {
-
+        ## explicitly compute all possible steps
         steps <- c()
-        ## explicitely compute all possible steps
-        for (lev in levels(object@block)) {
-            thisblock <- (object@block == lev)
+        for (lev in levels(object1@block)) {
+            thisblock <- (object1@block == lev)
             ytmp <- sort(split(scores[thisblock], groups[thisblock])[[1L]])
             xtmp <- sort(split(scores[thisblock], groups[thisblock])[[2L]])
             steps <- c(steps, as.vector(outer(xtmp, ytmp, foo)))
@@ -49,7 +45,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
 
         ## computes the statistic under the alternative 'd'
         fse <- function(d)
-            sum(object@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
+            sum(object1@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
 
         ## we need to compute the statistics just to the right of
         ## each step
@@ -74,10 +70,10 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
             ##   STATISTIC <  qlower OR
             ##   STATISTIC >= qupper
             ##
-            qlower <- drop(qperm(nulldistr, alpha / 2) *
-                             sqrt(variance(object)) + expectation(object))
-            qupper <- drop(qperm(nulldistr, 1 - alpha / 2) *
-                             sqrt(variance(object)) + expectation(object))
+            qlower <- drop(qperm(object2, alpha / 2) *
+                             sqrt(variance(object1)) + expectation(object1))
+            qupper <- drop(qperm(object2, 1 - alpha / 2) *
+                             sqrt(variance(object1)) + expectation(object1))
 
             ## Check if the statistic exceeds both quantiles first.
             if (qlower < min(jumps) || qupper > max(jumps)) {
@@ -121,13 +117,46 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
         attr(cint, "conf.level") <- level
 
         ## was: median(steps) which will not work for blocks etc.
-        u <- jumps - expectation(object)
+        u <- jumps - expectation(object1)
         sgr <- ifelse(decreasing, min(steps[u %LE% 0]), max(steps[u %LE% 0]))
         sle <- ifelse(decreasing, min(steps[u < 0]), min(steps[u > 0]))
 
         ESTIMATE <- mean(c(sle, sgr), na.rm = TRUE)
         names(ESTIMATE) <- "difference in location"
-    } else {
+
+        list(conf.int = cint, estimate = ESTIMATE)
+    }
+)
+
+setMethod("confint_location",
+    signature = list("ScalarIndependenceTestStatistic", "AsymptNullDistribution"),
+    definition = function(object1, object2, level, ...) {
+        ## <FIXME> drop unused levels!
+        if (!is_2sample(object1))
+            warning(sQuote("object1"), " does not represent a two-sample problem")
+        ## </FIXME>
+
+        if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
+            stop("cannot compute confidence intervals with blocks or weights")
+
+        alternative <- object1@alternative
+
+        if(!((length(level) == 1L)
+            && is.finite(level)
+            && (level > 0)
+            && (level < 1)))
+            stop("level must be a single number between 0 and 1")
+
+        scores <- object1@y[[1L]]
+        groups <- object1@xtrans[, 1L]
+
+        ## raw data
+        x <- sort(scores[groups > 0])
+        y <- sort(scores[groups < 1])
+        alpha <- 1 - level
+
+        foo <- function(x, d) x - d
+
         ## approximate the steps
         ## Here we search the root of the function 'fsa' on the set
         ## c(mumin, mumax).
@@ -139,8 +168,8 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
         ## is a confidence limit for the median.
 
         fsa <- function(d, zq) {
-           STAT <- sum(object@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
-           (STAT - expectation(object)) / sqrt(variance(object)) - zq
+           STAT <- sum(object1@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
+           (STAT - expectation(object1)) / sqrt(variance(object1)) - zq
         }
 
         mumin <- min(x) - max(y)
@@ -149,8 +178,8 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
         ccia <- function(alpha) {
             ## Check if the statistic exceeds both quantiles
             ## first: otherwise 'uniroot' won't work anyway
-            statu <- fsa(mumin, zq = qperm(nulldistr, alpha / 2))
-            statl <- fsa(mumax, zq = qperm(nulldistr, 1 - alpha / 2))
+            statu <- fsa(mumin, zq = qperm(object2, alpha / 2))
+            statl <- fsa(mumax, zq = qperm(object2, 1 - alpha / 2))
             if (sign(statu) == sign(statl)) {
                 warning(paste("Samples differ in location:",
                               "Cannot compute confidence set,",
@@ -158,9 +187,9 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
                 return(c(NA, NA))
             }
             u <- uniroot(fsa, c(mumin, mumax),
-                         zq = qperm(nulldistr, alpha / 2), ...)$root
+                         zq = qperm(object2, alpha / 2), ...)$root
             l <- uniroot(fsa, c(mumin, mumax),
-                         zq = qperm(nulldistr, 1 - alpha / 2), ...)$root
+                         zq = qperm(object2, 1 - alpha / 2), ...)$root
             ## The process of the statistics does not need to be
             ## increasing: sort is ok here.
             sort(c(u, l))
@@ -182,55 +211,51 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
         } else
             ESTIMATE <- uniroot(fsa, c(mumin, mumax), zq = 0, ...)$root
         names(ESTIMATE) <- "difference in location"
+
+        list(conf.int = cint, estimate = ESTIMATE)
     }
-
-    list(conf.int = cint, estimate = ESTIMATE)
-}
+)
 
 
-confint_scale <- function(object, nulldistr, level = 0.95, ...) {
+setGeneric("confint_scale",
+    function(object1, object2, ...) {
+        standardGeneric("confint_scale")
+    }
+)
 
-    if (!inherits(object, "ScalarIndependenceTestStatistic"))
-        stop("Argument ", sQuote("object"), " is not of class ",
-             sQuote("ScalarIndependenceTestStatistic"))
+setMethod("confint_scale",
+    signature = list("ScalarIndependenceTestStatistic", "NullDistribution"),
+    definition = function(object1, object2, level, ...) {
+        ## <FIXME> drop unused levels!
+        if (!is_2sample(object1))
+            warning(sQuote("object1"), " does not represent a two-sample problem")
+        ## </FIXME>
 
-    if (!inherits(nulldistr, "NullDistribution"))
-        stop("Argument ", sQuote("nulldistr"), " is not of class ",
-             sQuote("NullDistribution"))
-    approx <- inherits(nulldistr, "AsymptNullDistribution")
+        if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
+            stop("cannot compute confidence intervals with blocks or weights")
 
-    ## <FIXME> drop unused levels!
-    if (!is_2sample(object))
-        warning(sQuote("object"), " does not represent a two sample problem")
-    ## </FIXME>
+        alternative <- object1@alternative
 
-    if (nlevels(object@block) != 1L || !is_unity(object@weights))
-        stop("cannot compute confidence intervals with blocks or weights")
+        if(!((length(level) == 1L)
+            && is.finite(level)
+            && (level > 0)
+            && (level < 1)))
+            stop("level must be a single number between 0 and 1")
 
-    alternative <- object@alternative
+        scores <- object1@y[[1L]]
+        groups <- object1@xtrans[, 1L]
 
-    if(!((length(level) == 1L)
-       && is.finite(level)
-       && (level > 0)
-       && (level < 1)))
-       stop("level must be a single number between 0 and 1")
+        ## raw data
+        x <- sort(scores[groups > 0])
+        y <- sort(scores[groups < 1])
+        alpha <- 1 - level
 
-    scores <- object@y[[1L]]
-    groups <- object@xtrans[, 1L]
+        foo <- function(x, d) x / d
 
-    ## raw data
-    x <- sort(scores[groups > 0])
-    y <- sort(scores[groups < 1])
-    alpha <- 1 - level
-
-    foo <- function(x, d) x / d
-
-    if (!approx) {
-
-        ## explicitely compute all possible steps
+        ## explicitly compute all possible steps
         steps <- c()
-        for (lev in levels(object@block)) {
-            thisblock <- (object@block == lev)
+        for (lev in levels(object1@block)) {
+            thisblock <- (object1@block == lev)
             ytmp <- sort(split(scores[thisblock], groups[thisblock])[[1L]])
             xtmp <- sort(split(scores[thisblock], groups[thisblock])[[2L]])
             ratio <-  outer(xtmp, ytmp, "/")
@@ -241,7 +266,7 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
 
         ## computes the statistic under the alternative 'd'
         fse <- function(d)
-            sum(object@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
+            sum(object1@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
 
         ## we need to compute the statistics just to the right of
         ## each step
@@ -266,10 +291,10 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
             ##   STATISTIC <  qlower OR
             ##   STATISTIC >= qupper
             ##
-            qlower <- drop(qperm(nulldistr, alpha / 2) *
-                             sqrt(variance(object)) + expectation(object))
-            qupper <- drop(qperm(nulldistr, 1 - alpha / 2) *
-                             sqrt(variance(object)) + expectation(object))
+            qlower <- drop(qperm(object2, alpha / 2) *
+                             sqrt(variance(object1)) + expectation(object1))
+            qupper <- drop(qperm(object2, 1 - alpha / 2) *
+                             sqrt(variance(object1)) + expectation(object1))
 
             ## Check if the statistic exceeds both quantiles first.
             if (qlower < min(jumps) || qupper > max(jumps)) {
@@ -312,13 +337,46 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
                 )
         attr(cint, "conf.level") <- level
 
-        u <- jumps - expectation(object)
+        u <- jumps - expectation(object1)
         sgr <- ifelse(decreasing, min(steps[u %LE% 0]), max(steps[u %LE% 0]))
         sle <- ifelse(decreasing, min(steps[u < 0]), min(steps[u > 0]))
 
         ESTIMATE <- mean(c(sle, sgr), na.rm = TRUE)
         names(ESTIMATE) <- "ratio of scales"
-    } else {
+
+        list(conf.int = cint, estimate = ESTIMATE)
+    }
+)
+
+setMethod("confint_scale",
+    signature = list("ScalarIndependenceTestStatistic", "AsymptNullDistribution"),
+    definition = function(object1, object2, level, ...) {
+        ## <FIXME> drop unused levels!
+        if (!is_2sample(object1))
+            warning(sQuote("object1"), " does not represent a two-sample problem")
+        ## </FIXME>
+
+        if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
+            stop("cannot compute confidence intervals with blocks or weights")
+
+        alternative <- object1@alternative
+
+        if(!((length(level) == 1L)
+            && is.finite(level)
+            && (level > 0)
+            && (level < 1)))
+            stop("level must be a single number between 0 and 1")
+
+        scores <- object1@y[[1L]]
+        groups <- object1@xtrans[, 1L]
+
+        ## raw data
+        x <- sort(scores[groups > 0])
+        y <- sort(scores[groups < 1])
+        alpha <- 1 - level
+
+        foo <- function(x, d) x / d
+
         ## approximate the steps
         ## Here we search the root of the function 'fsa' on the set
         ## c(mumin, mumax).
@@ -330,8 +388,8 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
         ## is a confidence limit for the median.
 
         fsa <- function(d, zq) {
-           STAT <- sum(object@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
-           (STAT - expectation(object)) / sqrt(variance(object)) - zq
+           STAT <- sum(object1@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
+           (STAT - expectation(object1)) / sqrt(variance(object1)) - zq
         }
 
         srangepos <- NULL
@@ -355,8 +413,8 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
         ccia <- function(alpha) {
             ## Check if the statistic exceeds both quantiles
             ## first: otherwise 'uniroot' won't work anyway
-            statu <- fsa(mumin, zq = qperm(nulldistr, alpha / 2))
-            statl <- fsa(mumax, zq = qperm(nulldistr, 1 - alpha / 2))
+            statu <- fsa(mumin, zq = qperm(object2, alpha / 2))
+            statl <- fsa(mumax, zq = qperm(object2, 1 - alpha / 2))
             if (sign(statu) == sign(statl)) {
                 warning(paste("Samples differ in location:",
                               "Cannot compute confidence set,",
@@ -364,9 +422,9 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
                 return(c(NA, NA))
             }
             u <- uniroot(fsa, c(mumin, mumax),
-                         zq = qperm(nulldistr, alpha / 2), ...)$root
+                         zq = qperm(object2, alpha / 2), ...)$root
             l <- uniroot(fsa, c(mumin, mumax),
-                         zq = qperm(nulldistr, 1 - alpha / 2), ...)$root
+                         zq = qperm(object2, 1 - alpha / 2), ...)$root
             ## The process of the statistics does not need to be
             ## increasing: sort is ok here.
             sort(c(u, l))
@@ -388,10 +446,10 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
         } else
             ESTIMATE <- uniroot(fsa, c(mumin, mumax), zq = 0, ...)$root
         names(ESTIMATE) <- "ratio of scales"
-    }
 
-    list(conf.int = cint, estimate = ESTIMATE)
-}
+        list(conf.int = cint, estimate = ESTIMATE)
+    }
+)
 
 
 ### CI for a binomial parameter
