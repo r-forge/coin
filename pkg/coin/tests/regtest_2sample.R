@@ -367,29 +367,34 @@ prostatic <- within(prostatic,
 ### Gehan
 lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
                    type = "Gehan")
+stopifnot(identical(lt@method, "Two-Sample Gehan-Breslow Test"))
 isequal(round(statistic(lt)^2, 4), 3.8400)
 isequal(round(pvalue(lt), 4), 0.0500)
 
 ### Peto-Peto
 lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
                    type = "Fleming-Harrington", rho = 1)
+stopifnot(identical(lt@method, "Two-Sample Fleming-Harrington Test"))
 isequal(round(statistic(lt)^2, 4), 4.0657)
 isequal(round(pvalue(lt), 4), 0.0438)
 
 ### Prentice
 lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
                    type = "Prentice")
+stopifnot(identical(lt@method, "Two-Sample Prentice Test"))
 isequal(round(statistic(lt)^2, 4), 4.1229)
 isequal(round(pvalue(lt), 4), 0.0423)
 
 ### LR Altshuler
 lt <- logrank_test(Surv(time, event) ~ group, data = prostatic)
+stopifnot(identical(lt@method, "Two-Sample Logrank Test"))
 isequal(round(statistic(lt)^2, 4), 4.4343)
 isequal(round(pvalue(lt), 4), 0.0352)
 
 ### Tarone-Ware
 lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
                    type = "Tarone-Ware")
+stopifnot(identical(lt@method, "Two-Sample Tarone-Ware Test"))
 isequal(round(statistic(lt)^2, 4), 4.3443)
 isequal(round(pvalue(lt), 4), 0.0371)
 
