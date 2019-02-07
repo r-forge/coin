@@ -949,6 +949,7 @@ ratio of scales
 > ### Gehan
 > lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
 +                    type = "Gehan")
+> stopifnot(identical(lt@method, "Two-Sample Gehan-Breslow Test"))
 > isequal(round(statistic(lt)^2, 4), 3.8400)
 [1] TRUE
 > isequal(round(pvalue(lt), 4), 0.0500)
@@ -957,6 +958,7 @@ ratio of scales
 > ### Peto-Peto
 > lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
 +                    type = "Fleming-Harrington", rho = 1)
+> stopifnot(identical(lt@method, "Two-Sample Fleming-Harrington Test"))
 > isequal(round(statistic(lt)^2, 4), 4.0657)
 [1] TRUE
 > isequal(round(pvalue(lt), 4), 0.0438)
@@ -965,6 +967,7 @@ ratio of scales
 > ### Prentice
 > lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
 +                    type = "Prentice")
+> stopifnot(identical(lt@method, "Two-Sample Prentice Test"))
 > isequal(round(statistic(lt)^2, 4), 4.1229)
 [1] TRUE
 > isequal(round(pvalue(lt), 4), 0.0423)
@@ -972,6 +975,7 @@ ratio of scales
 > 
 > ### LR Altshuler
 > lt <- logrank_test(Surv(time, event) ~ group, data = prostatic)
+> stopifnot(identical(lt@method, "Two-Sample Logrank Test"))
 > isequal(round(statistic(lt)^2, 4), 4.4343)
 [1] TRUE
 > isequal(round(pvalue(lt), 4), 0.0352)
@@ -980,6 +984,7 @@ ratio of scales
 > ### Tarone-Ware
 > lt <- logrank_test(Surv(time, event) ~ group, data = prostatic,
 +                    type = "Tarone-Ware")
+> stopifnot(identical(lt@method, "Two-Sample Tarone-Ware Test"))
 > isequal(round(statistic(lt)^2, 4), 4.3443)
 [1] TRUE
 > isequal(round(pvalue(lt), 4), 0.0371)
@@ -999,4 +1004,4 @@ Error in SR_shift_1sample(object, fact = attr(int, "fact")) :
 > 
 > proc.time()
    user  system elapsed 
-   1.93    0.12    2.07 
+   2.10    0.17    2.28 
