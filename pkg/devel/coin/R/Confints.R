@@ -34,13 +34,7 @@ setMethod("confint_location",
         foo <- function(x, d) x - d
 
         ## explicitly compute all possible steps
-        steps <- c()
-        for (lev in levels(object1@block)) {
-            thisblock <- (object1@block == lev)
-            ytmp <- sort(split(scores[thisblock], groups[thisblock])[[1L]])
-            xtmp <- sort(split(scores[thisblock], groups[thisblock])[[2L]])
-            steps <- c(steps, as.vector(outer(xtmp, ytmp, foo)))
-        }
+        steps <- outer(x, y, foo)
         steps <- sort(unique(steps))
 
         ## computes the statistic under the alternative 'd'
@@ -253,15 +247,8 @@ setMethod("confint_scale",
         foo <- function(x, d) x / d
 
         ## explicitly compute all possible steps
-        steps <- c()
-        for (lev in levels(object1@block)) {
-            thisblock <- (object1@block == lev)
-            ytmp <- sort(split(scores[thisblock], groups[thisblock])[[1L]])
-            xtmp <- sort(split(scores[thisblock], groups[thisblock])[[2L]])
-            ratio <-  outer(xtmp, ytmp, "/")
-            aratio <- ratio[ratio >= 0]
-            steps <- c(steps, aratio)
-        }
+        steps <-  outer(x, y, foo)
+        steps <- steps[steps >= 0]
         steps <- sort(unique(steps))
 
         ## computes the statistic under the alternative 'd'
