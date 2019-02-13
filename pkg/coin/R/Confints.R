@@ -1,28 +1,25 @@
 confint_location <- function(object, nulldistr, level = 0.95, ...) {
 
     if (!inherits(object, "ScalarIndependenceTestStatistic"))
-        stop("Argument ", sQuote("object"), " is not of class ",
-             sQuote("ScalarIndependenceTestStatistic"))
+        stop(sQuote("object"), " is not of class ",
+             dQuote("ScalarIndependenceTestStatistic"))
 
     ## <FIXME> drop unused levels!
     if (!is_2sample(object))
-        warning(sQuote("object"), " does not represent a two sample problem")
+        warning(sQuote("object"), " does not represent a two-sample problem")
     ## </FIXME>
 
     if (!inherits(nulldistr, "NullDistribution"))
-        stop("Argument ", sQuote("nulldistr"), " is not of class ",
-             sQuote("NullDistribution"))
+        stop(sQuote("nulldistr"), " is not of class ",
+             dQuote("NullDistribution"))
     approx <- inherits(nulldistr, "AsymptNullDistribution")
 
     if (nlevels(object@block) != 1L || !is_unity(object@weights))
-        stop("cannot compute confidence intervals with blocks or weights")
+        stop("cannot compute confidence interval with blocks or weights")
 
     alternative <- object@alternative
 
-    if(!((length(level) == 1L)
-       && is.finite(level)
-       && (level > 0)
-       && (level < 1)))
+    if (!(length(level) == 1L && level > 0 && level < 1))
        stop("level must be a single number between 0 and 1")
 
     scores <- object@y[[1L]]
@@ -64,7 +61,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
 
         ## this is safe
         if (!(increasing || decreasing))
-            stop("cannot compute confidence intervals:",
+            stop("cannot compute confidence interval: ",
                  "the step function is not monotone")
 
         cci <- function(alpha) {
@@ -81,7 +78,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
 
             ## Check if the statistic exceeds both quantiles first.
             if (qlower < min(jumps) || qupper > max(jumps)) {
-                warning("Cannot compute confidence intervals")
+                warning("cannot compute confidence interval")
                 return(c(NA, NA))
             }
 
@@ -152,9 +149,8 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
             statu <- fsa(mumin, zq = qperm(nulldistr, alpha / 2))
             statl <- fsa(mumax, zq = qperm(nulldistr, 1 - alpha / 2))
             if (sign(statu) == sign(statl)) {
-                warning(paste("Samples differ in location:",
-                              "Cannot compute confidence set,",
-                              "returning NA"))
+                warning("samples differ in location: ",
+                        "cannot compute confidence set, returning NA")
                 return(c(NA, NA))
             }
             u <- uniroot(fsa, c(mumin, mumax),
@@ -178,7 +174,7 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
         statl <- fsa(mumax, zq = 0)
         if (sign(statu) == sign(statl)) {
             ESTIMATE <- NA
-            warning("Cannot compute estimate, returning NA")
+            warning("cannot compute estimate, returning NA")
         } else
             ESTIMATE <- uniroot(fsa, c(mumin, mumax), zq = 0, ...)$root
         names(ESTIMATE) <- "difference in location"
@@ -191,29 +187,26 @@ confint_location <- function(object, nulldistr, level = 0.95, ...) {
 confint_scale <- function(object, nulldistr, level = 0.95, ...) {
 
     if (!inherits(object, "ScalarIndependenceTestStatistic"))
-        stop("Argument ", sQuote("object"), " is not of class ",
-             sQuote("ScalarIndependenceTestStatistic"))
+        stop(sQuote("object"), " is not of class ",
+             dQuote("ScalarIndependenceTestStatistic"))
 
     if (!inherits(nulldistr, "NullDistribution"))
-        stop("Argument ", sQuote("nulldistr"), " is not of class ",
-             sQuote("NullDistribution"))
+        stop(sQuote("nulldistr"), " is not of class ",
+             dQuote("NullDistribution"))
     approx <- inherits(nulldistr, "AsymptNullDistribution")
 
     ## <FIXME> drop unused levels!
     if (!is_2sample(object))
-        warning(sQuote("object"), " does not represent a two sample problem")
+        warning(sQuote("object"), " does not represent a two-sample problem")
     ## </FIXME>
 
     if (nlevels(object@block) != 1L || !is_unity(object@weights))
-        stop("cannot compute confidence intervals with blocks or weights")
+        stop("cannot compute confidence interval with blocks or weights")
 
     alternative <- object@alternative
 
-    if(!((length(level) == 1L)
-       && is.finite(level)
-       && (level > 0)
-       && (level < 1)))
-       stop("level must be a single number between 0 and 1")
+    if (!(length(level) == 1L && level > 0 && level < 1))
+        stop("level must be a single number between 0 and 1")
 
     scores <- object@y[[1L]]
     groups <- object@xtrans[, 1L]
@@ -256,7 +249,7 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
 
         ## this is safe
         if (!(increasing || decreasing))
-            stop("cannot compute confidence intervals:",
+            stop("cannot compute confidence interval:",
                  "the step function is not monotone")
 
         cci <- function(alpha) {
@@ -273,7 +266,7 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
 
             ## Check if the statistic exceeds both quantiles first.
             if (qlower < min(jumps) || qupper > max(jumps)) {
-                warning("Cannot compute confidence intervals")
+                warning("cannot compute confidence interval")
                 return(c(NA, NA))
             }
 
@@ -345,8 +338,7 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
                 c(min(x[x %LE% 0], na.rm = TRUE) / max(y[y < 0], na.rm = TRUE),
                   max(x[x %LE% 0], na.rm = TRUE) / min(y[y < 0], na.rm = TRUE))
         if (any(is.infinite(c(srangepos, srangeneg)))) {
-            stop(paste("Cannot compute asymptotic confidence",
-                       "set or estimator"))
+            stop("cannot compute asymptotic confidence set or estimator")
         }
 
         mumin <- range(c(srangepos, srangeneg), na.rm = FALSE)[1L]
@@ -358,9 +350,8 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
             statu <- fsa(mumin, zq = qperm(nulldistr, alpha / 2))
             statl <- fsa(mumax, zq = qperm(nulldistr, 1 - alpha / 2))
             if (sign(statu) == sign(statl)) {
-                warning(paste("Samples differ in location:",
-                              "Cannot compute confidence set,",
-                              "returning NA"))
+                warning("samples differ in location: ",
+                        "cannot compute confidence set, returning NA")
                 return(c(NA, NA))
             }
             u <- uniroot(fsa, c(mumin, mumax),
@@ -384,7 +375,7 @@ confint_scale <- function(object, nulldistr, level = 0.95, ...) {
         statl <- fsa(mumax, zq = 0)
         if (sign(statu) == sign(statl)) {
             ESTIMATE <- NA
-            warning("Cannot compute estimate, returning NA")
+            warning("cannot compute estimate, returning NA")
         } else
             ESTIMATE <- uniroot(fsa, c(mumin, mumax), zq = 0, ...)$root
         names(ESTIMATE) <- "ratio of scales"
@@ -400,12 +391,12 @@ simconfint_location <- function(object, level = 0.95,
     if (!(is_Ksample(object@statistic) &&
         inherits(object, "MaxTypeIndependenceTest")))
         stop(sQuote("object"), " is not an object of class ",
-             sQuote("MaxTypeIndependenceTest"),
-             " representing a K sample problem")
+             dQuote("MaxTypeIndependenceTest"),
+             " representing a K-sample problem")
 
     xtrans <- object@statistic@xtrans
     if (!all(apply(xtrans, 2L, function(x) all(x %in% c(-1, 0, 1)))))
-        stop("Only differences are allowed as contrasts")
+        stop("only differences are allowed as contrasts")
 
     estimate <- c()
     lower <- c()

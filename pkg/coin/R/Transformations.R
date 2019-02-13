@@ -252,9 +252,8 @@ logrank_trafo <-
     ties.method <- match.arg(ties.method)
 
     if (!(is.Surv(x) && isTRUE(attr(x, "type") == "right")))
-        stop(sQuote(deparse(substitute(x))),
-             " is not an object of class ", dQuote("Surv"),
-             " representing right-censored data")
+        stop(sQuote(deparse(substitute(x))), " is not of class ",
+             dQuote("Surv"), " representing right-censored data")
 
     cc <- complete.cases(x)
     time <- x[cc, 1]
@@ -387,7 +386,7 @@ logrank_weight <-
 f_trafo <- function(x) {
     mf <- model.frame(~ x, na.action = na.pass, drop.unused.levels = TRUE)
     if (nlevels(mf$x) == 1)
-        stop("Can't deal with factors containing only one level")
+        stop("can't deal with factors containing only one level")
     ## construct design matrix _without_ intercept
     mm <- model.matrix(~ x - 1, data = mf)
     colnames(mm) <- levels(mf$x)
@@ -452,9 +451,8 @@ zheng_trafo <- function(x, increment = 0.1) {
     cn <- format(scores, digits = min(n_decimal_digits(increment), 4),
                  scientific = FALSE)
     cn <- vapply(seq_len(ncol(cn)), function(i)
-                     paste0(if (is_ytrafo()) "eta" else "gamma", " = (",
-                            paste0(cn[, i], collapse = ", "),
-                            ")"),
+                     paste0(if (is_ytrafo()) "eta" else "gamma",
+                            " = (", paste0(cn[, i], collapse = ", "), ")"),
                  NA_character_)
 
     setDimnames(scores[x, , drop = FALSE], list(seq_along(x), cn))
@@ -466,7 +464,8 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
                   var_trafo = NULL, block = NULL) {
 
     if (!(is.data.frame(data) || is.list(data)))
-        stop(sQuote("data"), " is not a data.frame or list")
+        stop(sQuote("data"), " is not of class ",
+             dQuote("data.frame"), " or ", dQuote("list"))
 
 ### <FIXME> This two-pass procedure for 'block' is *very* expensive
 ###         for large datasets
@@ -530,7 +529,7 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
     cn <- c()
     for (i in 1:length(tr)) {
         if (nrow(tr[[i]]) != nrow(data))
-            stop("Transformation of variable ", names(tr)[i],
+            stop("transformation of variable ", names(tr)[i],
                  " are not of length / nrow", nrow(data))
         ret <- cbind(ret, tr[[i]])
         if (is.null(colnames(tr[[i]]))) {

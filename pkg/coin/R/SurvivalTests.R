@@ -38,8 +38,7 @@ logrank_test.IndependenceProblem <- function(object,
                      " does not represent a K-sample problem",
                      " (maybe the grouping variable is not a factor?)")
             if (!is_censored_y(object))
-                stop(sQuote(colnames(object@y)),
-                     " is not a censored variable")
+                stop(sQuote(colnames(object@y)), " is not a censored variable")
             TRUE
         }
     )

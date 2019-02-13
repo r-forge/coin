@@ -95,7 +95,7 @@ ft <- function(test, class, formula, data = list(), subset = NULL,
     ## warn users of weighted rank tests
     if (test %in% ranktests && !is.null(object@weights) &&
         !is_unity(object@weights))
-        warning("Rank transformation doesn't take weights into account")
+        warning("rank transformation doesn't take weights into account")
 
     do.call(test, c(list(object = object), args))
 }
@@ -158,7 +158,7 @@ setscores <- function(x, scores) {
 
     missing <- varnames[!varnames %in% c(colnames(x@x), colnames(x@y))]
     if (length(missing) > 0L)
-        stop("Variable(s) ", paste(missing, sep = ", "),
+        stop("variable(s) ", paste(missing, sep = ", "),
              " not found in ", sQuote("x"))
     ## <FIXME> Repeated reassignment to S4 objects may be expensive
     for (var in varnames) {
@@ -192,7 +192,7 @@ check_trafo <- function(tx, ty) {
     if (!(is.numeric(ty) || is.logical(ty)))
         stop(sQuote("ytrafo"), " does not return a numeric or logical vector")
     if (NROW(tx) != NROW(ty))
-        stop("Dimensions of returns of ", sQuote("xtrafo"), " and ",
+        stop("dimensions of returns of ", sQuote("xtrafo"), " and ",
              sQuote("ytrafo"), " don't match")
     if (!is.matrix(tx)) tx <- matrix(tx, ncol = 1L)
     if (!is.matrix(ty)) ty <- matrix(ty, ncol = 1L)
@@ -203,7 +203,7 @@ check_trafo <- function(tx, ty) {
 
 table2df <- function(x) {
     if (!is.table(x))
-        stop(sQuote("x"), " is not of class ", sQuote("table"))
+        stop(sQuote("x"), " is not of class ", dQuote("table"))
     x <- as.data.frame(x)
     freq <- x[["Freq"]]
     x <- x[rep.int(seq_len(nrow(x)), freq), , drop = FALSE]
