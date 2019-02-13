@@ -13,14 +13,11 @@ setMethod("confint_location",
         ## </FIXME>
 
         if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
-            stop("cannot compute confidence intervals with blocks or weights")
+            stop("cannot compute confidence interval with blocks or weights")
 
         alternative <- object1@alternative
 
-        if(!((length(level) == 1L)
-            && is.finite(level)
-            && (level > 0)
-            && (level < 1)))
+        if (!(length(level) == 1L && level > 0 && level < 1))
             stop("level must be a single number between 0 and 1")
 
         scores <- object1@y[[1L]]
@@ -54,7 +51,7 @@ setMethod("confint_location",
 
         ## this is safe
         if (!(increasing || decreasing))
-            stop("cannot compute confidence intervals:",
+            stop("cannot compute confidence interval: ",
                  "the step function is not monotone")
 
         cci <- function(alpha) {
@@ -71,7 +68,7 @@ setMethod("confint_location",
 
             ## Check if the statistic exceeds both quantiles first.
             if (qlower < min(jumps) || qupper > max(jumps)) {
-                warning("Cannot compute confidence intervals")
+                warning("cannot compute confidence interval")
                 return(c(NA, NA))
             }
 
@@ -131,14 +128,11 @@ setMethod("confint_location",
         ## </FIXME>
 
         if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
-            stop("cannot compute confidence intervals with blocks or weights")
+            stop("cannot compute confidence interval with blocks or weights")
 
         alternative <- object1@alternative
 
-        if(!((length(level) == 1L)
-            && is.finite(level)
-            && (level > 0)
-            && (level < 1)))
+        if (!(length(level) == 1L && level > 0 && level < 1))
             stop("level must be a single number between 0 and 1")
 
         scores <- object1@y[[1L]]
@@ -175,9 +169,8 @@ setMethod("confint_location",
             statu <- fsa(mumin, zq = qperm(object2, alpha / 2))
             statl <- fsa(mumax, zq = qperm(object2, 1 - alpha / 2))
             if (sign(statu) == sign(statl)) {
-                warning(paste("Samples differ in location:",
-                              "Cannot compute confidence set,",
-                              "returning NA"))
+                warning("samples differ in location: ",
+                        "cannot compute confidence set, returning NA")
                 return(c(NA, NA))
             }
             u <- uniroot(fsa, c(mumin, mumax),
@@ -201,7 +194,7 @@ setMethod("confint_location",
         statl <- fsa(mumax, zq = 0)
         if (sign(statu) == sign(statl)) {
             ESTIMATE <- NA
-            warning("Cannot compute estimate, returning NA")
+            warning("cannot compute estimate, returning NA")
         } else
             ESTIMATE <- uniroot(fsa, c(mumin, mumax), zq = 0, ...)$root
         names(ESTIMATE) <- "difference in location"
@@ -226,14 +219,11 @@ setMethod("confint_scale",
         ## </FIXME>
 
         if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
-            stop("cannot compute confidence intervals with blocks or weights")
+            stop("cannot compute confidence interval with blocks or weights")
 
         alternative <- object1@alternative
 
-        if(!((length(level) == 1L)
-            && is.finite(level)
-            && (level > 0)
-            && (level < 1)))
+        if (!(length(level) == 1L && level > 0 && level < 1))
             stop("level must be a single number between 0 and 1")
 
         scores <- object1@y[[1L]]
@@ -268,7 +258,7 @@ setMethod("confint_scale",
 
         ## this is safe
         if (!(increasing || decreasing))
-            stop("cannot compute confidence intervals:",
+            stop("cannot compute confidence interval: ",
                  "the step function is not monotone")
 
         cci <- function(alpha) {
@@ -285,7 +275,7 @@ setMethod("confint_scale",
 
             ## Check if the statistic exceeds both quantiles first.
             if (qlower < min(jumps) || qupper > max(jumps)) {
-                warning("Cannot compute confidence intervals")
+                warning("cannot compute confidence interval")
                 return(c(NA, NA))
             }
 
@@ -344,14 +334,11 @@ setMethod("confint_scale",
         ## </FIXME>
 
         if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
-            stop("cannot compute confidence intervals with blocks or weights")
+            stop("cannot compute confidence interval with blocks or weights")
 
         alternative <- object1@alternative
 
-        if(!((length(level) == 1L)
-            && is.finite(level)
-            && (level > 0)
-            && (level < 1)))
+        if (!(length(level) == 1L && level > 0 && level < 1))
             stop("level must be a single number between 0 and 1")
 
         scores <- object1@y[[1L]]
@@ -389,10 +376,8 @@ setMethod("confint_scale",
             srangeneg <-
                 c(min(x[x %LE% 0], na.rm = TRUE) / max(y[y < 0], na.rm = TRUE),
                   max(x[x %LE% 0], na.rm = TRUE) / min(y[y < 0], na.rm = TRUE))
-        if (any(is.infinite(c(srangepos, srangeneg)))) {
-            stop(paste("Cannot compute asymptotic confidence",
-                       "set or estimator"))
-        }
+        if (any(is.infinite(c(srangepos, srangeneg))))
+            stop("cannot compute asymptotic confidence set or estimator")
 
         mumin <- range(c(srangepos, srangeneg), na.rm = FALSE)[1L]
         mumax <- range(c(srangepos, srangeneg), na.rm = FALSE)[2L]
@@ -403,9 +388,8 @@ setMethod("confint_scale",
             statu <- fsa(mumin, zq = qperm(object2, alpha / 2))
             statl <- fsa(mumax, zq = qperm(object2, 1 - alpha / 2))
             if (sign(statu) == sign(statl)) {
-                warning(paste("Samples differ in location:",
-                              "Cannot compute confidence set,",
-                              "returning NA"))
+                warning("samples differ in location: ",
+                        "cannot compute confidence set, returning NA")
                 return(c(NA, NA))
             }
             u <- uniroot(fsa, c(mumin, mumax),
@@ -429,7 +413,7 @@ setMethod("confint_scale",
         statl <- fsa(mumax, zq = 0)
         if (sign(statu) == sign(statl)) {
             ESTIMATE <- NA
-            warning("Cannot compute estimate, returning NA")
+            warning("cannot compute estimate, returning NA")
         } else
             ESTIMATE <- uniroot(fsa, c(mumin, mumax), zq = 0, ...)$root
         names(ESTIMATE) <- "ratio of scales"
@@ -482,13 +466,13 @@ simconfint_location <- function(object, level = 0.95,
 
     if (!(is_Ksample(object@statistic) &&
         inherits(object, "MaxTypeIndependenceTest")))
-        stop(sQuote("object"), " is not an object of class ",
-             sQuote("MaxTypeIndependenceTest"),
-             " representing a K sample problem")
+        stop(sQuote("object"), " is not of class ",
+             dQuote("MaxTypeIndependenceTest"),
+             " representing a K-sample problem")
 
     xtrans <- object@statistic@xtrans
     if (!all(apply(xtrans, 2L, function(x) all(x %in% c(-1, 0, 1)))))
-        stop("Only differences are allowed as contrasts")
+        stop("only differences are allowed as contrasts")
 
     estimate <- c()
     lower <- c()

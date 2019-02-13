@@ -6,9 +6,9 @@ SR_shift_2sample <- function(object, fact) {
         else if (inherits(object, "QuadTypeIndependenceTestStatistic"))
             "quadratic"
         else
-            stop("Argument ", sQuote("object"), " is not of class ",
-                 sQuote("ScalarIndependenceTestStatistic"), " or ",
-                 sQuote("QuadTypeIndependenceTestStatistic"))
+            stop(sQuote("object"), " is not of class ",
+                 dQuote("ScalarIndependenceTestStatistic"), " or ",
+                 dQuote("QuadTypeIndependenceTestStatistic"))
 
     if (!is_2sample(object))
         stop(sQuote("object"),
@@ -226,9 +226,9 @@ SR_shift_1sample <- function(object, fact) {
         else if (inherits(object, "QuadTypeIndependenceTestStatistic"))
             "quadratic"
         else
-            stop("Argument ", sQuote("object"), " is not of class ",
-                 sQuote("ScalarIndependenceTestStatistic"), " or ",
-                 sQuote("QuadTypeIndependenceTestStatistic"))
+            stop(sQuote("object"), " is not of class ",
+                 dQuote("ScalarIndependenceTestStatistic"), " or ",
+                 dQuote("QuadTypeIndependenceTestStatistic"))
 
     if (!is_2sample(object))
         stop(sQuote("object"),
@@ -378,8 +378,8 @@ vdW_split_up_2sample <- function(object) {
     ## <FIXME> on.exit(ex <- .C("FreeW", PACKAGE = "coin")) </FIXME>
 
     if (!inherits(object, "ScalarIndependenceTestStatistic"))
-        stop("Argument ", sQuote("object"), " is not of class ",
-             sQuote("ScalarIndependenceTestStatistic"))
+        stop(sQuote("object"), " is not of class ",
+             dQuote("ScalarIndependenceTestStatistic"))
 
     if (!is_2sample(object))
         stop(sQuote("object"),

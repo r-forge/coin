@@ -85,7 +85,7 @@ setMethod("initialize",
                                as.double(weights)
 
         if (!validObject(.Object))
-            stop("not a valid object of class ", sQuote("IndependenceProblem"))
+            stop("not a valid object of class ", dQuote("IndependenceProblem"))
 
         .Object
     }
@@ -98,8 +98,8 @@ setMethod("initialize",
     definition = function(.Object, object, xtrafo = trafo, ytrafo = trafo, ...) {
 
         if (!inherits(object, "IndependenceProblem"))
-            stop("Argument ", sQuote("object"), " is not of class ",
-                 sQuote("IndependenceProblem"))
+            stop(sQuote("object"), " is not of class ",
+                 dQuote("IndependenceProblem"))
 
         tr <- check_trafo(xtrafo(object@x), ytrafo(object@y))
 
@@ -120,8 +120,8 @@ setMethod("initialize",
     definition = function(.Object, object, varonly = FALSE, ...) {
 
         if (!inherits(object, "IndependenceTestProblem"))
-            stop("Argument ", sQuote("object"), " is not of class ",
-                 sQuote("IndependenceTestProblem"))
+            stop(sQuote("object"), " is not of class ",
+                 dQuote("IndependenceTestProblem"))
 
         nm <- statnames(object)$names # pretty names
 
@@ -160,8 +160,8 @@ setMethod("initialize",
         alternative = c("two.sided", "less", "greater"), paired = FALSE, ...) {
 
         if (!inherits(object, "IndependenceLinearStatistic"))
-            stop("Argument ", sQuote("object"), " is not of class ",
-                 sQuote("IndependenceLinearStatistic"))
+            stop(sQuote("object"), " is not of class ",
+                 dQuote("IndependenceLinearStatistic"))
 
         ss <- (object@linearstatistic - expectation(object)) /
                   sqrt(variance(object))
@@ -183,8 +183,8 @@ setMethod("initialize",
         alternative = c("two.sided", "less", "greater"), ...) {
 
         if (!inherits(object, "IndependenceLinearStatistic"))
-            stop("Argument ", sQuote("object"), " is not of class ",
-                 sQuote("IndependenceLinearStatistic"))
+            stop(sQuote("object"), " is not of class ",
+                 dQuote("IndependenceLinearStatistic"))
 
         ss <- (object@linearstatistic - expectation(object)) /
                   sqrt(variance(object))
@@ -209,8 +209,8 @@ setMethod("initialize",
     definition = function(.Object, object, paired = FALSE, ...) {
 
         if (!inherits(object, "IndependenceLinearStatistic"))
-            stop("Argument ", sQuote("object"), " is not of class ",
-                 sQuote("IndependenceLinearStatistic"))
+            stop(sQuote("object"), " is not of class ",
+                 dQuote("IndependenceLinearStatistic"))
 
         cs <- object@linearstatistic - expectation(object)
         mp <- MPinv(covariance(object), ...)
