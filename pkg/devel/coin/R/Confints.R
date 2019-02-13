@@ -11,22 +11,21 @@ setMethod("confint_location",
         if (!is_2sample(object1))
             warning(sQuote("object1"), " does not represent a two-sample problem")
         ## </FIXME>
-
         if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
             stop("cannot compute confidence interval with blocks or weights")
-
-        alternative <- object1@alternative
-
         if (!(length(level) == 1L && level > 0 && level < 1))
             stop("level must be a single number between 0 and 1")
 
         scores <- object1@y[[1L]]
         groups <- object1@xtrans[, 1L]
+        ytrafo <- object1@ytrafo
+        mu <- expectation(object1)
+        sigma <- sqrt(variance(object1))
+        alpha <- 1 - level
 
         ## raw data
         x <- sort(scores[groups > 0])
         y <- sort(scores[groups < 1])
-        alpha <- 1 - level
 
         foo <- function(x, d) x - d
 
@@ -35,37 +34,30 @@ setMethod("confint_location",
         steps <- sort(unique(steps))
 
         ## computes the statistic under the alternative 'd'
-        fse <- function(d)
-            sum(object1@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
+        fs <- function(d)
+            sum(ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
 
         ## we need to compute the statistics just to the right of
         ## each step
         ds <- diff(steps)
         justright <- min(abs(ds[abs(ds) > sqrt_eps])) / 2
-        jumps <- vapply(steps + justright, fse, NA_real_)
+        jumps <- vapply(steps + justright, fs, NA_real_)
 
         ## determine if the statistics are in- or decreasing
         ## jumpsdiffs <- diff(jumps)
         increasing <- all(diff(jumps[c(1L, length(jumps))]) > 0)
         decreasing <- all(diff(jumps[c(1L, length(jumps))]) < 0)
-
         ## this is safe
         if (!(increasing || decreasing))
             stop("cannot compute confidence interval: ",
                  "the step function is not monotone")
 
         cci <- function(alpha) {
-            ## the quantiles:
-            ## we reject iff
-            ##
+            ## the quantiles: reject iff
             ##   STATISTIC <  qlower OR
             ##   STATISTIC >= qupper
-            ##
-            qlower <- drop(qperm(object2, alpha / 2) *
-                             sqrt(variance(object1)) + expectation(object1))
-            qupper <- drop(qperm(object2, 1 - alpha / 2) *
-                             sqrt(variance(object1)) + expectation(object1))
-
+            qlower <- drop(qperm(object2,     alpha / 2) * sigma + mu)
+            qupper <- drop(qperm(object2, 1 - alpha / 2) * sigma + mu)
             ## Check if the statistic exceeds both quantiles first.
             if (qlower < min(jumps) || qupper > max(jumps)) {
                 warning("cannot compute confidence interval")
@@ -73,34 +65,23 @@ setMethod("confint_location",
             }
 
             if (increasing) {
-                ##
-                ##  We do NOT reject for all steps with
-                ##
-                ##     STATISTICS >= qlower AND
-                ##     STATISTICS < qupper
-                ##
-                ##  but the open right interval ends with the
-                ##  step with STATISTIC == qupper
-                ##
-                ci <- c(min(steps[qlower %LE% jumps]),
-                        min(steps[jumps > qupper]))
+                ## do NOT reject for all steps with
+                ##   STATISTICS >= qlower AND
+                ##   STATISTICS <  qupper
+                ## but the open right interval ends with the
+                ## step with STATISTIC == qupper
+                c(min(steps[jumps %GE% qlower]), min(steps[jumps > qupper]))
             } else {
-                ##
-                ##  We do NOT reject for all steps with
-                ##
-                ##     STATISTICS >= qlower AND
-                ##     STATISTICS < qupper
-                ##
-                ##  but the open left interval ends with the
-                ##  step with STATISTIC == qupper
-                ##
-                ci <- c(min(steps[jumps %LE% qupper]),
-                        min(steps[jumps < qlower]))
+                ## do NOT reject for all steps with
+                ##   STATISTICS >= qlower AND
+                ##   STATISTICS <  qupper
+                ## but the open left interval ends with the
+                ## step with STATISTIC == qupper
+                c(min(steps[jumps %LE% qupper]), min(steps[jumps < qlower]))
             }
-            ci
         }
 
-        cint <- switch(alternative,
+        cint <- switch(object1@alternative,
                     "two.sided" = cci(alpha),
                     "greater"   = c(cci(alpha * 2)[1L], Inf),
                     "less"      = c(-Inf, cci(alpha * 2)[2L])
@@ -108,10 +89,8 @@ setMethod("confint_location",
         attr(cint, "conf.level") <- level
 
         ## was: median(steps) which will not work for blocks etc.
-        u <- jumps - expectation(object1)
-        sgr <- ifelse(decreasing, min(steps[u %LE% 0]), max(steps[u %LE% 0]))
-        sle <- ifelse(decreasing, min(steps[u < 0]), min(steps[u > 0]))
-
+        sgr <- ifelse(decreasing, min(steps[jumps %LE% mu]), max(steps[jumps %LE% mu]))
+        sle <- ifelse(decreasing, min(steps[jumps < mu]), min(steps[jumps > mu]))
         ESTIMATE <- mean(c(sle, sgr), na.rm = TRUE)
         names(ESTIMATE) <- "difference in location"
 
@@ -126,27 +105,26 @@ setMethod("confint_location",
         if (!is_2sample(object1))
             warning(sQuote("object1"), " does not represent a two-sample problem")
         ## </FIXME>
-
         if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
             stop("cannot compute confidence interval with blocks or weights")
-
-        alternative <- object1@alternative
-
         if (!(length(level) == 1L && level > 0 && level < 1))
             stop("level must be a single number between 0 and 1")
 
         scores <- object1@y[[1L]]
         groups <- object1@xtrans[, 1L]
+        ytrafo <- object1@ytrafo
+        mu <- expectation(object1)
+        sigma <- sqrt(variance(object1))
+        alpha <- 1 - level
 
         ## raw data
         x <- sort(scores[groups > 0])
         y <- sort(scores[groups < 1])
-        alpha <- 1 - level
 
         foo <- function(x, d) x - d
 
         ## approximate the steps
-        ## Here we search the root of the function 'fsa' on the set
+        ## Here we search the root of the function 'fs' on the set
         ## c(mumin, mumax).
         ##
         ## This returns a value from c(mumin, mumax) for which
@@ -155,48 +133,46 @@ setMethod("confint_location",
         ## within the critical region, and that implies that '
         ## is a confidence limit for the median.
 
-        fsa <- function(d, zq) {
-           STAT <- sum(object1@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
-           (STAT - expectation(object1)) / sqrt(variance(object1)) - zq
-        }
+        fs <- function(d, zq)
+            (sum(ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)]) - mu) / sigma - zq
 
         mumin <- min(x) - max(y)
         mumax <- max(x) - min(y)
 
-        ccia <- function(alpha) {
+        cci <- function(alpha) {
             ## Check if the statistic exceeds both quantiles
             ## first: otherwise 'uniroot' won't work anyway
-            statu <- fsa(mumin, zq = qperm(object2, alpha / 2))
-            statl <- fsa(mumax, zq = qperm(object2, 1 - alpha / 2))
+            statu <- fs(mumin, zq = qperm(object2,     alpha / 2))
+            statl <- fs(mumax, zq = qperm(object2, 1 - alpha / 2))
             if (sign(statu) == sign(statl)) {
                 warning("samples differ in location: ",
                         "cannot compute confidence set, returning NA")
                 return(c(NA, NA))
             }
-            u <- uniroot(fsa, c(mumin, mumax),
-                         zq = qperm(object2, alpha / 2), ...)$root
-            l <- uniroot(fsa, c(mumin, mumax),
+            u <- uniroot(fs, c(mumin, mumax),
+                         zq = qperm(object2,     alpha / 2), ...)$root
+            l <- uniroot(fs, c(mumin, mumax),
                          zq = qperm(object2, 1 - alpha / 2), ...)$root
             ## The process of the statistics does not need to be
             ## increasing: sort is ok here.
             sort(c(u, l))
         }
 
-        cint <- switch(alternative,
-                    "two.sided" = ccia(alpha),
-                    "greater"   = c(ccia(alpha * 2)[1L], Inf),
-                    "less"      = c(-Inf, ccia(alpha * 2)[2L])
+        cint <- switch(object1@alternative,
+                    "two.sided" = cci(alpha),
+                    "greater"   = c(cci(alpha * 2)[1L], Inf),
+                    "less"      = c(-Inf, cci(alpha * 2)[2L])
                 )
         attr(cint, "conf.level") <- level
 
         ## Check if the statistic exceeds both quantiles first.
-        statu <- fsa(mumin, zq = 0)
-        statl <- fsa(mumax, zq = 0)
-        if (sign(statu) == sign(statl)) {
-            ESTIMATE <- NA
-            warning("cannot compute estimate, returning NA")
-        } else
-            ESTIMATE <- uniroot(fsa, c(mumin, mumax), zq = 0, ...)$root
+        statu <- fs(mumin, zq = 0)
+        statl <- fs(mumax, zq = 0)
+        ESTIMATE <- if (sign(statu) == sign(statl)) {
+                        warning("cannot compute estimate, returning NA")
+                        NA
+                    } else
+                        uniroot(fs, c(mumin, mumax), zq = 0, ...)$root
         names(ESTIMATE) <- "difference in location"
 
         list(conf.int = cint, estimate = ESTIMATE)
@@ -217,62 +193,54 @@ setMethod("confint_scale",
         if (!is_2sample(object1))
             warning(sQuote("object1"), " does not represent a two-sample problem")
         ## </FIXME>
-
         if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
             stop("cannot compute confidence interval with blocks or weights")
-
-        alternative <- object1@alternative
-
         if (!(length(level) == 1L && level > 0 && level < 1))
             stop("level must be a single number between 0 and 1")
 
         scores <- object1@y[[1L]]
         groups <- object1@xtrans[, 1L]
+        ytrafo <- object1@ytrafo
+        mu <- expectation(object1)
+        sigma <- sqrt(variance(object1))
+        alpha <- 1 - level
 
         ## raw data
         x <- sort(scores[groups > 0])
         y <- sort(scores[groups < 1])
-        alpha <- 1 - level
 
         foo <- function(x, d) x / d
 
         ## explicitly compute all possible steps
-        steps <-  outer(x, y, foo)
+        steps <- outer(x, y, foo)
         steps <- steps[steps >= 0]
         steps <- sort(unique(steps))
 
         ## computes the statistic under the alternative 'd'
-        fse <- function(d)
-            sum(object1@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
+        fs <- function(d)
+            sum(ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
 
         ## we need to compute the statistics just to the right of
         ## each step
         ds <- diff(steps)
         justright <- min(abs(ds[abs(ds) > sqrt_eps])) / 2
-        jumps <- vapply(steps + justright, fse, NA_real_)
+        jumps <- vapply(steps + justright, fs, NA_real_)
 
         ## determine if the statistics are in- or decreasing
         ## jumpsdiffs <- diff(jumps)
         increasing <- all(diff(jumps[c(1L, length(jumps))]) > 0)
         decreasing <- all(diff(jumps[c(1L, length(jumps))]) < 0)
-
         ## this is safe
         if (!(increasing || decreasing))
             stop("cannot compute confidence interval: ",
                  "the step function is not monotone")
 
         cci <- function(alpha) {
-            ## the quantiles:
-            ## we reject iff
-            ##
+            ## the quantiles: reject iff
             ##   STATISTIC <  qlower OR
             ##   STATISTIC >= qupper
-            ##
-            qlower <- drop(qperm(object2, alpha / 2) *
-                             sqrt(variance(object1)) + expectation(object1))
-            qupper <- drop(qperm(object2, 1 - alpha / 2) *
-                             sqrt(variance(object1)) + expectation(object1))
-
+            qlower <- drop(qperm(object2,     alpha / 2) * sigma + mu)
+            qupper <- drop(qperm(object2, 1 - alpha / 2) * sigma + mu)
             ## Check if the statistic exceeds both quantiles first.
             if (qlower < min(jumps) || qupper > max(jumps)) {
                 warning("cannot compute confidence interval")
@@ -280,44 +248,31 @@ setMethod("confint_scale",
             }
 
             if (increasing) {
-                ##
-                ##  We do NOT reject for all steps with
-                ##
-                ##     STATISTICS >= qlower AND
-                ##     STATISTICS < qupper
-                ##
-                ##  but the open right interval ends with the
-                ##  step with STATISTIC == qupper
-                ##
-                ci <- c(min(steps[qlower %LE% jumps]),
-                        min(steps[jumps > qupper]))
+                ## do NOT reject for all steps with
+                ##   STATISTICS >= qlower AND
+                ##   STATISTICS <  qupper
+                ## but the open right interval ends with the
+                ## step with STATISTIC == qupper
+                c(min(steps[jumps %GE% qlower]), min(steps[jumps > qupper]))
             } else {
-                ##
-                ##  We do NOT reject for all steps with
-                ##
-                ##     STATISTICS >= qlower AND
-                ##     STATISTICS < qupper
-                ##
-                ##  but the open left interval ends with the
-                ##  step with STATISTIC == qupper
-                ##
-                ci <- c(min(steps[jumps %LE% qupper]),
-                        min(steps[jumps < qlower]))
+                ## do NOT reject for all steps with
+                ##   STATISTICS >= qlower AND
+                ##   STATISTICS <  qupper
+                ## but the open left interval ends with the
+                ## step with STATISTIC == qupper
+                c(min(steps[jumps %LE% qupper]), min(steps[jumps < qlower]))
             }
-            ci
         }
 
-        cint <- switch(alternative,
+        cint <- switch(object1@alternative,
                     "two.sided" = cci(alpha),
                     "greater"   = c(cci(alpha * 2)[1L], Inf),
                     "less"      = c(0, cci(alpha * 2)[2L])
                 )
         attr(cint, "conf.level") <- level
 
-        u <- jumps - expectation(object1)
-        sgr <- ifelse(decreasing, min(steps[u %LE% 0]), max(steps[u %LE% 0]))
-        sle <- ifelse(decreasing, min(steps[u < 0]), min(steps[u > 0]))
-
+        sgr <- ifelse(decreasing, min(steps[jumps %LE% mu]), max(steps[jumps %LE% mu]))
+        sle <- ifelse(decreasing, min(steps[jumps < mu]), min(steps[jumps > mu]))
         ESTIMATE <- mean(c(sle, sgr), na.rm = TRUE)
         names(ESTIMATE) <- "ratio of scales"
 
@@ -332,27 +287,26 @@ setMethod("confint_scale",
         if (!is_2sample(object1))
             warning(sQuote("object1"), " does not represent a two-sample problem")
         ## </FIXME>
-
         if (nlevels(object1@block) != 1L || !is_unity(object1@weights))
             stop("cannot compute confidence interval with blocks or weights")
-
-        alternative <- object1@alternative
-
         if (!(length(level) == 1L && level > 0 && level < 1))
             stop("level must be a single number between 0 and 1")
 
         scores <- object1@y[[1L]]
         groups <- object1@xtrans[, 1L]
+        ytrafo <- object1@ytrafo
+        mu <- expectation(object1)
+        sigma <- sqrt(variance(object1))
+        alpha <- 1 - level
 
         ## raw data
         x <- sort(scores[groups > 0])
         y <- sort(scores[groups < 1])
-        alpha <- 1 - level
 
         foo <- function(x, d) x / d
 
         ## approximate the steps
-        ## Here we search the root of the function 'fsa' on the set
+        ## Here we search the root of the function 'fs' on the set
         ## c(mumin, mumax).
         ##
         ## This returns a value from c(mumin, mumax) for which
@@ -361,10 +315,8 @@ setMethod("confint_scale",
         ## within the critical region, and that implies that '
         ## is a confidence limit for the median.
 
-        fsa <- function(d, zq) {
-           STAT <- sum(object1@ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)])
-           (STAT - expectation(object1)) / sqrt(variance(object1)) - zq
-        }
+        fs <- function(d, zq)
+           (sum(ytrafo(data.frame(c(foo(x, d), y)))[seq_along(x)]) - mu) / sigma - zq
 
         srangepos <- NULL
         srangeneg <- NULL
@@ -382,40 +334,40 @@ setMethod("confint_scale",
         mumin <- range(c(srangepos, srangeneg), na.rm = FALSE)[1L]
         mumax <- range(c(srangepos, srangeneg), na.rm = FALSE)[2L]
 
-        ccia <- function(alpha) {
+        cci <- function(alpha) {
             ## Check if the statistic exceeds both quantiles
             ## first: otherwise 'uniroot' won't work anyway
-            statu <- fsa(mumin, zq = qperm(object2, alpha / 2))
-            statl <- fsa(mumax, zq = qperm(object2, 1 - alpha / 2))
+            statu <- fs(mumin, zq = qperm(object2, alpha / 2))
+            statl <- fs(mumax, zq = qperm(object2, 1 - alpha / 2))
             if (sign(statu) == sign(statl)) {
                 warning("samples differ in location: ",
                         "cannot compute confidence set, returning NA")
                 return(c(NA, NA))
             }
-            u <- uniroot(fsa, c(mumin, mumax),
+            u <- uniroot(fs, c(mumin, mumax),
                          zq = qperm(object2, alpha / 2), ...)$root
-            l <- uniroot(fsa, c(mumin, mumax),
+            l <- uniroot(fs, c(mumin, mumax),
                          zq = qperm(object2, 1 - alpha / 2), ...)$root
             ## The process of the statistics does not need to be
             ## increasing: sort is ok here.
             sort(c(u, l))
         }
 
-        cint <- switch(alternative,
-                    "two.sided" = ccia(alpha),
-                    "greater"   = c(ccia(alpha*2)[1L], Inf),
-                    "less"      = c(0, ccia(alpha*2)[2L])
+        cint <- switch(object1@alternative,
+                    "two.sided" = cci(alpha),
+                    "greater"   = c(cci(alpha*2)[1L], Inf),
+                    "less"      = c(0, cci(alpha*2)[2L])
                 )
         attr(cint, "conf.level") <- level
 
         ## Check if the statistic exceeds both quantiles first.
-        statu <- fsa(mumin, zq = 0)
-        statl <- fsa(mumax, zq = 0)
-        if (sign(statu) == sign(statl)) {
-            ESTIMATE <- NA
-            warning("cannot compute estimate, returning NA")
-        } else
-            ESTIMATE <- uniroot(fsa, c(mumin, mumax), zq = 0, ...)$root
+        statu <- fs(mumin, zq = 0)
+        statl <- fs(mumax, zq = 0)
+        ESTIMATE <- if (sign(statu) == sign(statl)) {
+                        warning("cannot compute estimate, returning NA")
+                        NA
+                    } else
+                        uniroot(fs, c(mumin, mumax), zq = 0, ...)$root
         names(ESTIMATE) <- "ratio of scales"
 
         list(conf.int = cint, estimate = ESTIMATE)
