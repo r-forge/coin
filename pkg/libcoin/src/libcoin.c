@@ -679,12 +679,15 @@ SEXP RC_init_LECV_1d
         SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));
         INTEGER(vo)[0] = varonly;
         if (varonly) {
-            SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
+            SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
+            for (int q = 0; q < PQ; q++) REAL(tmp)[q] = 0.0;
         } else  {
             /* always return variance */
             SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
+            for (int q = 0; q < PQ; q++) REAL(tmp)[q] = 0.0;
             SET_VECTOR_ELT(ans, Covariance_SLOT,
-                           allocVector(REALSXP, PP12(PQ)));
+                           tmp = allocVector(REALSXP, PP12(PQ)));
+            for (int q = 0; q < PP12(PQ); q++) REAL(tmp)[q] = 0.0;
         }
         SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));
         SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));
@@ -839,12 +842,15 @@ SEXP RC_init_LECV_2d
         SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));
         INTEGER(vo)[0] = varonly;
         if (varonly) {
-            SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
+            SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
+            for (int q = 0; q < PQ; q++) REAL(tmp)[q] = 0.0;
         } else  {
             /* always return variance */
             SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
+            for (int q = 0; q < PQ; q++) REAL(tmp)[q] = 0.0;
             SET_VECTOR_ELT(ans, Covariance_SLOT,
-                           allocVector(REALSXP, PP12(PQ)));
+                           tmp = allocVector(REALSXP, PP12(PQ)));
+            for (int q = 0; q < PP12(PQ); q++) REAL(tmp)[q] = 0.0;
         }
         SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));
         SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));
