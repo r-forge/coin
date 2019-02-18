@@ -6733,7 +6733,7 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
         for (int q = 0; q < PQ; q++) REAL(tmp)[q] = 0.0;
     } else  {
         /* always return variance */
-        SET_VECTOR_ELT(ans, Variance_SLOT, allocVector(REALSXP, PQ));
+        SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
         for (int q = 0; q < PQ; q++) REAL(tmp)[q] = 0.0;
         SET_VECTOR_ELT(ans, Covariance_SLOT,
                        tmp = allocVector(REALSXP, PP12(PQ)));
