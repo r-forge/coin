@@ -6730,14 +6730,11 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
     INTEGER(vo)[0] = varonly;
     if (varonly) {
         SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
-        for (int q = 0; q < PQ; q++) REAL(tmp)[q] = 0.0;
     } else  {
         /* always return variance */
         SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
-        for (int q = 0; q < PQ; q++) REAL(tmp)[q] = 0.0;
         SET_VECTOR_ELT(ans, Covariance_SLOT,
                        tmp = allocVector(REALSXP, PP12(PQ)));
-        for (int q = 0; q < PP12(PQ); q++) REAL(tmp)[q] = 0.0;
     }
     SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));
     SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));
@@ -6783,7 +6780,7 @@ for (int p = 0; p < PQ; p++) {
         C_get_Variance(ans)[p] = 0.0;
 }
 if (!varonly) {
-    for (int p = 0; p < PP12(PQ) / 2; p++)
+    for (int p = 0; p < PP12(PQ); p++)
         C_get_Covariance(ans)[p] = 0.0;
 }
 for (int q = 0; q < Q; q++) {
@@ -6875,8 +6872,8 @@ SEXP RC_init_LECV_2d
 @{
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 2018-12-13
-Version: 1.0-2
+Date: 2019-02-18
+Version: 1.0-3
 Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@@R-project.org")
 Description: Basic infrastructure for linear test statistics and permutation
