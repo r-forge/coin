@@ -97,8 +97,10 @@
       %% asymptotic and exact \eqn{p}-values are not affected by this change, but
       %% approximate \eqn{p}-values will differ within random variation.
 
-      \item \R version \eqn{\ge}{>=}3.4.0 and package \pkg{matrixStats} are now
-      required.
+      \item \code{confint()} is now an S4 method.
+      
+      \item \R version \eqn{\ge}{>=}3.4.0 and packages \pkg{stats4} and
+      \pkg{matrixStats} are now required.
     }
   }
   \subsection{Deprecated and defunct}{
