@@ -107,7 +107,7 @@ setMethod("show",
                         "ApproxNullDistribution" = "Approximative",
                         "ExactNullDistribution"  = "Exact"
                     )
-        ci <- confint(object, level = object@conf.level)
+        ci <- confint(object)
 
         RET <- list(
             statistic = setNames(statistic(object), nm = "Z"),

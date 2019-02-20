@@ -542,13 +542,23 @@ setMethod("ExactNullDistribution",
 )
 
 
-### S3 method for extraction of confidence intervals
-confint.ScalarIndependenceTestConfint <-
-    function(object, parm, level = 0.95, ...) {
-        x <- if ("level" %in% names(match.call()))
-                 object@confint(level)
-             else
-                 object@confint(object@conf.level)
-        class(x) <- "ci"
-        x
-}
+### method for extraction of confidence intervals
+setMethod("confint",
+    signature = "IndependenceTest",
+    definition = function(object, parm, level = 0.95, ...) {
+        stop("cannot compute confidence interval for objects of class ",
+             dQuote(class(object)))
+    }
+)
+
+setMethod("confint",
+    signature = "ScalarIndependenceTestConfint",
+    definition = function(object, parm, level = 0.95, ...) {
+        ci <- if (missing(level))
+                  object@confint(object@conf.level)
+              else
+                  object@confint(level)
+        class(ci) <- "ci"
+        ci
+    }
+)

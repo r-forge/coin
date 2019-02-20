@@ -5,9 +5,10 @@ importFrom("methods", callGeneric, callNextMethod, getSlots, new, validObject)
 importMethodsFrom("methods", initialize, show)
 importFrom("parallel", clusterApply, clusterSetRNGStream, makePSOCKcluster,
                        mclapply, nextRNGStream, stopCluster)
-importFrom("stats", complete.cases, confint, cov2cor, dchisq, dnorm, median,
+importFrom("stats", complete.cases, cov2cor, dchisq, dnorm, median,
                     model.frame, model.matrix, na.pass, pbinom, pchisq, pnorm,
                     qbeta, qchisq, qnorm, quantile, runif, setNames, uniroot)
+importMethodsFrom("stats4", confint)
 importFrom("utils", hasName)
 importFrom("libcoin", LinStatExpCov) # Not used, but needed to access C API
 importFrom("matrixStats", colCummaxs, colCummins, colMaxs, colMins)
@@ -51,7 +52,7 @@ exportClasses("ExpectCovar", "ExpectCovarInfluence", "CovarianceMatrix",
 exportMethods("initialize", "show", "pvalue", "midpvalue", "pvalue_interval",
               "size", "statistic", "dperm", "pperm", "qperm", "rperm", "support",
               "expectation", "covariance", "variance", "AsymptNullDistribution",
-              "ApproxNullDistribution", "ExactNullDistribution")
+              "ApproxNullDistribution", "ExactNullDistribution", "confint")
 
 S3method(independence_test, formula)
 S3method(independence_test, table)
@@ -125,8 +126,6 @@ S3method(lbl_test, IndependenceProblem)
 S3method(mh_test, formula)
 S3method(mh_test, table)
 S3method(mh_test, SymmetryProblem)
-
-S3method(confint, ScalarIndependenceTestConfint)
 
 S3method(format, pvalue)
 
