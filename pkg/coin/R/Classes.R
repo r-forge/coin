@@ -87,7 +87,7 @@ setClass("IndependenceLinearStatistic",
 
 ### Tests based on linear statistics
 setClass("IndependenceTestStatistic",
-    contains = c("IndependenceLinearStatistic", "VIRTUAL"),
+    contains = c("VIRTUAL", "IndependenceLinearStatistic"),
     slots = c(
         teststatistic               = "numeric",
         standardizedlinearstatistic = "numeric"
