@@ -200,7 +200,7 @@ table2df <- function(x) {
     x <- as.data.frame(x)
     freq <- x[["Freq"]]
     x <- x[rep.int(seq_len(nrow(x)), freq), , drop = FALSE]
-    rownames(x) <- seq_len(nrow(x))
+    rownames(x) <- NULL
     x[, colnames(x) != "Freq"]
 }
 
@@ -217,19 +217,35 @@ table2df_sym <- function(x) {
                                  labels = lx))
 }
 
-table2IndependenceProblem <- function(object) {
-
-    df <- as.data.frame(object)
-    if (ncol(df) == 3L)
+table2IndependenceProblem <-
+    function(x)
+{
+    x <- as.data.frame(x)
+    if (ncol(x) == 3L)
         new("IndependenceProblem",
-            x = df[1L], y = df[2L], block = NULL, weights = df[["Freq"]])
-    else if (ncol(df) == 4L) {
-        attr(df[[3L]], "blockname") <- colnames(df)[3L]
+            x = x[1L], y = x[2L], block = NULL, weights = x[["Freq"]])
+    else if (ncol(x) == 4L) {
+        attr(x[[3L]], "blockname") <- colnames(x)[3L]
         new("IndependenceProblem",
-            x = df[1L], y = df[2L], block = df[[3L]], weights = df[["Freq"]])
+            x = x[1L], y = x[2L], block = x[[3L]], weights = x[["Freq"]])
     } else
         stop(sQuote("object"), " is not a two- or three-way contingency table")
 }
+
+table2SymmetryProblem <-
+    function(x)
+{
+    x <- as.data.frame(x)
+    ## SymmetryProblem cannot handle weights, so expand manually
+    x <- x[rep.int(seq_len(nrow(x)), x[["Freq"]]), -ncol(x)]
+    lx <- levels(x[[1L]])
+    if (!all(vapply(x, function(x) all(levels(x) == lx), NA)))
+        stop("table ", sQuote("x"), " does not represent a symmetry problem")
+    new("SymmetryProblem",
+        x = data.frame(conditions = gl(ncol(x), nrow(x), labels = colnames(x))),
+        y = data.frame(response = unlist(x, recursive = FALSE, use.names = FALSE)))
+}
+
 
 is_ytrafo <- function()
     any(vapply(sys.calls(), function(i)
