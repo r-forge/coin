@@ -97,9 +97,9 @@ mt
 est <- mt@estimates$estimate
 xsel <- dat[[est[[1]]]]
 if (is.factor(xsel) && !is.ordered(xsel)) {
-    xx <- xsel %in% est[2]
+    xx <- xsel %in% est[[2]]
 } else {
-    xx <- xsel <= est[2]
+    xx <- xsel <= est[[2]]
 }
 stopifnot(isequal(statistic(mt),
                   abs(statistic(independence_test(w ~ xx, data = dat)))))
