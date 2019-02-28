@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.3-0 (20YY-MM-DD)}{
+\section{Changes in version 1.3-0 (2019-02-28)}{
   \subsection{New features}{
     \itemize{
       \item Ordered factors can now be transformed to a finite collection of
@@ -60,6 +60,9 @@
       \sQuote{Implementation}.
 
       \item Documentation updates.
+
+      \item Some regression tests use \code{RNGversion("3.5.2")} in order
+            to obtain backward compatible results.
     }
   }
   \subsection{Other changes}{
