@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2018-02-20 r74280) -- "Unsuffered Consequences"
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
 Copyright (C) 2018 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -186,9 +186,9 @@ sample estimates:
 > est <- mt@estimates$estimate
 > xsel <- dat[[est[[1]]]]
 > if (is.factor(xsel) && !is.ordered(xsel)) {
-+     xx <- xsel %in% est[2]
++     xx <- xsel %in% est[[2]]
 + } else {
-+     xx <- xsel <= est[2]
++     xx <- xsel <= est[[2]]
 + }
 > stopifnot(isequal(statistic(mt),
 +                   abs(statistic(independence_test(w ~ xx, data = dat)))))
@@ -207,4 +207,4 @@ sample estimates:
 > 
 > proc.time()
    user  system elapsed 
-   2.01    0.12    2.12 
+  1.954   0.048   1.998 
