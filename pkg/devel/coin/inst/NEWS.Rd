@@ -29,7 +29,7 @@
     }
   }
 }
-\section{Changes in version 1.3-0 (20YY-MM-DD)}{
+\section{Changes in version 1.3-0 (2019-03-01)}{
   \subsection{New features}{
     \itemize{
       \item Ordered factors can now be transformed to a finite collection of
@@ -74,8 +74,8 @@
       \eqn{p}-values smaller than resampling precision, i.e., \code{1 /
         nresample}, are now reported as such in the printed output.
 
-      \item Computations on the approximative (Monte Carlo) null distribution
-      for maximum-type tests, e.g., adjusted \eqn{p}-values, are now more
+      \item Computations on the approximative (Monte Carlo) null distribution,
+      e.g., adjusted \eqn{p}-values for maximum-type tests, are now more
       efficient.
 
       \item The Pearson chi-squared test is now computed more efficiently.
