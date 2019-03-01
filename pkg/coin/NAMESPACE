@@ -37,7 +37,7 @@ export(independence_test,
        f_trafo, of_trafo, zheng_trafo, mcp_trafo,
        asymptotic, approximate, exact)
 
-exportClasses("ExpectCovar", "ExpectCovarInfluence", "CovarianceMatrix",
+exportClasses("CovarianceMatrix",
               "Variance", "VarCovar", "IndependenceProblem",
               "IndependenceTestProblem", "IndependenceLinearStatistic",
               "IndependenceTestStatistic", "MaxTypeIndependenceTestStatistic",
