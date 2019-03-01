@@ -365,18 +365,23 @@ check_distribution_arg <- function(distribution,
 }
 
 setup_args <- function(...) {
-    cl <- match.call(independence_test.IndependenceProblem,
-                     call = sys.call(sys.parent()), expand.dots = FALSE)
-    ## find default arguments and values
-    args <- formals(independence_test.IndependenceProblem)
+    cl <- sys.call(sys.parent())
+    fun <- if (inherits(cl$object, "SymmetryProblem"))
+               symmetry_test.SymmetryProblem
+           else
+               independence_test.IndependenceProblem
+    cl <- match.call(fun, call = cl, expand.dots = FALSE)
+    ## get default arguments and values
+    args <- formals(fun)
     args$object <- args$... <- NULL
     nm <- names(args)
     ## replace default values with user-specified values
     for (i in nm[nm %in% names(cl)])
         args[[i]] <- cl[[i]]
     ## override default and user-specified values
-    for (i in nm[nm %in% names(list(...))])
-        args[[i]] <- list(...)[[i]]
+    dots <- list(...)
+    for (i in nm[nm %in% names(dots)])
+        args[[i]] <- dots[[i]]
     lapply(args, eval.parent)
 }
 

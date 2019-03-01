@@ -385,6 +385,7 @@ x <- factor(rep(1:2, 15))
 id <- gl(15, 2)
 it <- independence_test(y ~ x | id, distribution = "exact") # Wrong
 wt <- wilcoxsign_test(y ~ x | id, distribution = "exact") # OK! p = 6.104e-5
+wt@distribution@name
 stopifnot(isequal(pvalue(it), pvalue(wt)))
 
 ### chisq_test standardized test statistic was wrong

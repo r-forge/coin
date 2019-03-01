@@ -666,6 +666,8 @@ attr(,"assign")
 > id <- gl(15, 2)
 > it <- independence_test(y ~ x | id, distribution = "exact") # Wrong
 > wt <- wilcoxsign_test(y ~ x | id, distribution = "exact") # OK! p = 6.104e-5
+> wt@distribution@name
+[1] "Exact Distribution for Dependent Two-Sample Tests (Streitberg-Roehmel Shift Algorithm)"
 > stopifnot(isequal(pvalue(it), pvalue(wt)))
 > 
 > ### chisq_test standardized test statistic was wrong
@@ -986,4 +988,4 @@ Error in logrank_trafo(y) :
 > 
 > proc.time()
    user  system elapsed 
-   2.06    0.14    2.20 
+   1.90    0.18    2.07 
