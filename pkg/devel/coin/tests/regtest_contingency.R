@@ -2,6 +2,7 @@
 ### testing the independence of a factor
 ### 'y' and a factor factor 'x' (possibly blocked)
 
+suppressWarnings(RNGversion("3.5.2"))
 set.seed(290875)
 library("coin")
 isequal <- coin:::isequal
@@ -97,9 +98,9 @@ mt
 est <- mt@estimates$estimate
 xsel <- dat[[est[[1]]]]
 if (is.factor(xsel) && !is.ordered(xsel)) {
-    xx <- xsel %in% est[2]
+    xx <- xsel %in% est[[2]]
 } else {
-    xx <- xsel <= est[2]
+    xx <- xsel <= est[[2]]
 }
 stopifnot(isequal(statistic(mt),
                   abs(statistic(independence_test(w ~ xx, data = dat)))))

@@ -2,6 +2,7 @@
 ### testing the independence of a numeric variable
 ### 'y' and a factor 'x' (possibly blocked)
 
+suppressWarnings(RNGversion("3.5.2"))
 set.seed(290875)
 library("coin")
 isequal <- coin:::isequal

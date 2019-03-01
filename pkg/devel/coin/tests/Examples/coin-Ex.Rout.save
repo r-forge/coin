@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2019-01-14 r75992) -- "Unsuffered Consequences"
+R Under development (unstable) (2019-02-27 r76167) -- "Unsuffered Consequences"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -2219,7 +2219,9 @@ attr(,"conf.level")
 > ### Keywords: methods
 > 
 > ### ** Examples
-> 
+> ## Don't show: 
+> suppressWarnings(RNGversion("3.5.2")); set.seed(711109)
+> ## End(Don't show)
 > ## Example data
 > dta <- data.frame(
 +     y = gl(3, 2),
@@ -3088,7 +3090,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.5 0.15 9.91 NA NA 
+Time elapsed:  10.43 0.18 10.67 NA NA 
 > grDevices::dev.off()
 null device 
           1 

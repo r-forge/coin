@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2018-02-20 r74280) -- "Unsuffered Consequences"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R Under development (unstable) (2019-02-27 r76167) -- "Unsuffered Consequences"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -19,6 +19,7 @@ Type 'q()' to quit R.
 > ### testing the independence of a factor
 > ### 'y' and a factor factor 'x' (possibly blocked)
 > 
+> suppressWarnings(RNGversion("3.5.2"))
 > set.seed(290875)
 > library("coin")
 Loading required package: survival
@@ -186,9 +187,9 @@ sample estimates:
 > est <- mt@estimates$estimate
 > xsel <- dat[[est[[1]]]]
 > if (is.factor(xsel) && !is.ordered(xsel)) {
-+     xx <- xsel %in% est[2]
++     xx <- xsel %in% est[[2]]
 + } else {
-+     xx <- xsel <= est[2]
++     xx <- xsel <= est[[2]]
 + }
 > stopifnot(isequal(statistic(mt),
 +                   abs(statistic(independence_test(w ~ xx, data = dat)))))
@@ -207,4 +208,4 @@ sample estimates:
 > 
 > proc.time()
    user  system elapsed 
-   2.06    0.06    2.11 
+   2.21    0.10    2.31 
