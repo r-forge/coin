@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.3-0 (2019-02-28)}{
+\section{Changes in version 1.3-0 (20YY-MM-DD)}{
   \subsection{New features}{
     \itemize{
       \item Ordered factors can now be transformed to a finite collection of
@@ -28,6 +28,11 @@
       (for tests against scale alternatives) were incorrect when using the
       asymptotic null distribution.
 
+      \item Exact distributions of symmetry tests for paired data, e.g., the
+      exact sign and Wilcoxon signed-rank tests, used the
+      Streitberg-\enc{Röhmel}{Roehmel} algorithm for independent samples instead
+      of the more efficient version for dependent samples.
+
       \item The class definition of \code{"PValue"} erroneously included the
       \code{midpvalue} and \code{pvalueinterval} slots; these slots are now part
       of the \code{"NullDistribution"} subclass (as they should have been
@@ -43,7 +48,7 @@
 
       \item Computations on the approximative (Monte Carlo) null distribution
       for maximum-type tests, e.g., adjusted \eqn{p}-values, are now more
-      efficient. 
+      efficient.
 
       \item The Pearson chi-squared test is now computed more efficiently.
 
@@ -60,9 +65,6 @@
       \sQuote{Implementation}.
 
       \item Documentation updates.
-
-      \item Some regression tests use \code{RNGversion("3.5.2")} in order
-            to obtain backward compatible results.
     }
   }
   \subsection{Other changes}{
@@ -73,7 +75,7 @@
       %% approximate \eqn{p}-values will differ within random variation.
 
       \item \code{confint()} is now an S4 method.
-      
+
       \item \R version \eqn{\ge}{>=}3.4.0 and packages \pkg{stats4} and
       \pkg{matrixStats} are now required.
     }
