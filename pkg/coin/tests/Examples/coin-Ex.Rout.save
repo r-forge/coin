@@ -1,7 +1,7 @@
 
 R Under development (unstable) (2019-02-27 r76167) -- "Unsuffered Consequences"
 Copyright (C) 2019 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -20,6 +20,7 @@ Type 'q()' to quit R.
 > pkgname <- "coin"
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
+> options(pager = "console")
 > library('coin')
 Loading required package: survival
 > 
@@ -2218,7 +2219,9 @@ attr(,"conf.level")
 > ### Keywords: methods
 > 
 > ### ** Examples
-> 
+> ## Don't show: 
+> suppressWarnings(RNGversion("3.5.2")); set.seed(711109)
+> ## End(Don't show)
 > ## Example data
 > dta <- data.frame(
 +     y = gl(3, 2),
@@ -2232,8 +2235,8 @@ attr(,"conf.level")
 > (l <- statistic(ct, type = "linear"))
   1 2 3
 1 1 0 1
-2 1 1 0
-3 0 1 1
+2 0 2 0
+3 1 0 1
 > 
 > ## ...and its expectation...
 > (El <- expectation(ct))
@@ -2269,15 +2272,15 @@ attr(,"conf.level")
 > (l - El) / sqrt(variance(ct))
           1         2         3
 1  0.559017 -1.118034  0.559017
-2  0.559017  0.559017 -1.118034
-3 -1.118034  0.559017  0.559017
+2 -1.118034  2.236068 -1.118034
+3  0.559017 -1.118034  0.559017
 > 
 > ## ...is identical to the standardized linear statistic
 > statistic(ct, type = "standardized")
           1         2         3
 1  0.559017 -1.118034  0.559017
-2  0.559017  0.559017 -1.118034
-3 -1.118034  0.559017  0.559017
+2 -1.118034  2.236068 -1.118034
+3  0.559017 -1.118034  0.559017
 > 
 > 
 > 
@@ -3087,7 +3090,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  38.132 0.464 38.632 0 0 
+Time elapsed:  10.55 0.22 10.79 NA NA 
 > grDevices::dev.off()
 null device 
           1 

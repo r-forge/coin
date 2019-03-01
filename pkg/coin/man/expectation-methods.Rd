@@ -52,7 +52,7 @@
   The expectation, variance or covariance of the linear statistic extracted from
   \code{object}.  A numeric vector or matrix.
 }
-\examples{
+\examples{\dontshow{suppressWarnings(RNGversion("3.5.2")); set.seed(711109)}
 ## Example data
 dta <- data.frame(
     y = gl(3, 2),
