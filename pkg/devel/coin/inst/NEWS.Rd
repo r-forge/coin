@@ -89,6 +89,9 @@
       \item Objects of class \code{"ApproxNullDistribution"} now has a slot
       \code{nresample} containing the number of Monte Carlo replicates.
 
+      \item Classes \code{"ExpectCovar"} and \code{"ExpectCovarInfluence"} have
+      been moved to the \pkg{party} package.
+
       \item The \sQuote{coin_implementation} vignette has been renamed to
       \sQuote{Implementation}.
 
