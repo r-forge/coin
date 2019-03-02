@@ -1,24 +1,3 @@
-### "ExpectCovar" and "ExpectCovarInfluence" are no
-### longer needed but currently imported by party
-
-### Conditional Expectation and Covariance
-setClass("ExpectCovar",
-    slots = c(
-        expectation = "numeric",
-        covariance  = "matrix",
-        dimension   = "integer"
-   )
-)
-
-### Expectation and Covariance of the influence function
-### (+ sum of weights)
-setClass("ExpectCovarInfluence",
-    contains = "ExpectCovar",
-    slots = c(
-        sumweights = "numeric"
-    )
-)
-
 ### Covariance matrix
 setClass("CovarianceMatrix",
     slots = c(
