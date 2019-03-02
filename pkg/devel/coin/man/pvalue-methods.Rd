@@ -2,7 +2,6 @@
 \docType{methods}
 \alias{pvalue}
 \alias{pvalue-methods}
-\alias{pvalue,PValue-method}
 \alias{pvalue,NullDistribution-method}
 \alias{pvalue,ApproxNullDistribution-method}
 \alias{pvalue,IndependenceTest-method}
@@ -29,7 +28,6 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
-\S4method{pvalue}{PValue}(object, q, \dots)
 \S4method{pvalue}{NullDistribution}(object, q, \dots)
 \S4method{pvalue}{ApproxNullDistribution}(object, q, \dots)
 \S4method{pvalue}{IndependenceTest}(object, \dots)

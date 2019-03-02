@@ -104,40 +104,31 @@ setClass("QuadTypeIndependenceTestStatistic",
     )
 )
 
-### p-values
-setClass("PValue",
-    slots = c(
-        pvalue = "function",
-        p      = "function",
-        name   = "character"
-    ),
-    prototype = list(
-        pvalue = function(q) NA,
-        p      = function(q) NA,
-        name   = NA_character_
-    )
-)
-
 ### Null distribution
 setClass("NullDistribution",
-    contains = "PValue",
     slots = c(
-        size           = "function",
-        pvalueinterval = "function",
-        midpvalue      = "function",
-        q              = "function",
-        d              = "function",
+        name           = "character",
+        parameters     = "list",
         support        = "function",
-        parameters     = "list"
+        d              = "function",
+        p              = "function",
+        q              = "function",
+        pvalue         = "function",
+        midpvalue      = "function",
+        pvalueinterval = "function",
+        size           = "function"
     ),
     prototype = list(
-        size           = function(alpha, type) NA,
-        pvalueinterval = function(q) NA,
-        midpvalue      = function(q) NA,
-        q              = function(p) NA,
-        d              = function(x) NA,
+        name           = NA_character_,
+        parameters     = list(),
         support        = function() NA,
-        parameters     = list()
+        d              = function(x) NA,
+        p              = function(q) NA,
+        q              = function(p) NA,
+        pvalue         = function(q) NA,
+        midpvalue      = function(q) NA,
+        pvalueinterval = function(q) NA,
+        size           = function(alpha, type) NA
     )
 )
 
@@ -164,7 +155,7 @@ setClass("ExactNullDistribution",
 ### the "fitted" test including data and everything
 setClass("IndependenceTest",
     slots = c(
-        distribution = "PValue", # was: "NullDistribution",
+        distribution = "NullDistribution",
         statistic    = "IndependenceTestStatistic",
         estimates    = "list",
         method       = "character",

@@ -5,19 +5,6 @@ setGeneric("pvalue",
     }
 )
 
-### <DEPRECATED>
-### The "PValue" class was deprecated in 1.3-0 and at the same time this
-### method was added as a temporary solution.  To be removed in 2.0-0.
-setMethod("pvalue",
-    signature = "PValue",
-    definition = function(object, q, ...) {
-        RET <- object@pvalue(q)
-        class(RET) <- "pvalue"
-        RET
-    }
-)
-### </DEPRECATED>
-
 setMethod("pvalue",
     signature = "NullDistribution",
     definition = function(object, q, ...) {

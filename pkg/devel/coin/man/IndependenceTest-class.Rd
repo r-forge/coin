@@ -37,7 +37,7 @@
   \code{"ScalarIndependenceTest"} or \code{"ScalarIndependenceTestConfint"}:
   \describe{
     \item{\code{distribution}:}{
-      Object of class \code{"\linkS4class{PValue}"}.  The reference
+      Object of class \code{"\linkS4class{NullDistribution}"}.  The reference
       distribution.
     }
     \item{\code{statistic}:}{

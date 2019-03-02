@@ -155,33 +155,22 @@ Slot & Class \\ \hline
 \end{tabular}
 \end{center}
 
-> toLatex(c2t("PValue"))
-\begin{center}
-\begin{tabular}{ll}
-\multicolumn{2}{l}{Class \Rclass{PValue}} \\
- & \\
-Slot & Class \\ \hline 
-\code{pvalue} & \Rclass{function} \\
-\code{p} & \Rclass{function} \\
-\code{name} & \Rclass{character} \\
-\hline
-\end{tabular}
-\end{center}
-
 > toLatex(c2t("NullDistribution"))
 \begin{center}
 \begin{tabular}{ll}
 \multicolumn{2}{l}{Class \Rclass{NullDistribution}} \\
-\multicolumn{2}{l}{Contains \Rclass{PValue}} \\
  & \\
 Slot & Class \\ \hline 
-\code{size} & \Rclass{function} \\
-\code{pvalueinterval} & \Rclass{function} \\
-\code{midpvalue} & \Rclass{function} \\
-\code{q} & \Rclass{function} \\
-\code{d} & \Rclass{function} \\
-\code{support} & \Rclass{function} \\
+\code{name} & \Rclass{character} \\
 \code{parameters} & \Rclass{list} \\
+\code{support} & \Rclass{function} \\
+\code{d} & \Rclass{function} \\
+\code{p} & \Rclass{function} \\
+\code{q} & \Rclass{function} \\
+\code{pvalue} & \Rclass{function} \\
+\code{midpvalue} & \Rclass{function} \\
+\code{pvalueinterval} & \Rclass{function} \\
+\code{size} & \Rclass{function} \\
 \hline
 \end{tabular}
 \end{center}
@@ -200,7 +189,7 @@ Slot & Class \\ \hline
 \multicolumn{2}{l}{Class \Rclass{IndependenceTest}} \\
  & \\
 Slot & Class \\ \hline 
-\code{distribution} & \Rclass{PValue} \\
+\code{distribution} & \Rclass{NullDistribution} \\
 \code{statistic} & \Rclass{IndependenceTestStatistic} \\
 \code{estimates} & \Rclass{list} \\
 \code{method} & \Rclass{character} \\
@@ -361,4 +350,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   3.17    0.14    3.32 
+   2.32    0.20    2.59 

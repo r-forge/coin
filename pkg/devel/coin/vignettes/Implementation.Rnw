@@ -573,12 +573,9 @@ $c_\text{quad}$ which follow a $\chi^2$ distribution with degrees of freedom
 given by the rank of $\Sigma$ \citep[see][Chapter 29]{johnsonkotz1970},
 asymptotic probabilities can be computed straightforwardly.
 
-A null distribution is represented by either a distribution (and $p$-value) function
-only
-<<PValue, results = tex>>=
-toLatex(c2t("PValue"))
-@
-or, where possible, augmented by, e.g., its density and quantile functions:
+At the minimum, a null distribution is represented by distribution and $p$-value
+functions only, but can where possible be augmented by, e.g., its density and
+quantile functions:
 <<NullDistribution, results = tex>>=
 toLatex(c2t("NullDistribution"))
 @
@@ -591,7 +588,7 @@ All of them can be queried for probabilities, quantiles, etc., using
 suitable methods (see Table~\ref{tab:dists} for an overview).
 New methods for computing or approximating the conditional distribution
 can be integrated into the framework via suitable
-inheritance from \Rclass{PValue} (an example is given in Section~\ref{sec:ui}).
+inheritance from \Rclass{NullDistribution} (an example is given in Section~\ref{sec:ui}).
 
 \begin{table}[tb]
 \begin{center}
@@ -652,7 +649,7 @@ available as well.
 \subsection{Objects for conditional tests} \label{sec:testobj}
 
 A conditional test is represented by a test statistic of class \Rclass{IndependenceTestStatistic}
-and its conditional null distribution inheriting from class \Rclass{PValue}.
+and its conditional null distribution inheriting from class \Rclass{NullDistribution}.
 In addition, a character string giving the name of the test procedure is defined
 in class \Rclass{IndependenceTest}:
 <<IndependenceTest, results = tex>>=
@@ -754,7 +751,7 @@ from this and passed on to the associated method.
 In the simplest case, the \code{distribution} argument of the \code{independence_test()}
 methods can be specified by a simple character string. However, this
 is not flexible enough in some situations and hence it is also possible to
-supply a function that can compute a \Rclass{PValue} object from an
+supply a function that can compute a \Rclass{NullDistribution} object from an
 \Rclass{IndependenceTestStatistic} object.
 
 For the most important special cases, suitable function
@@ -770,7 +767,7 @@ Additionally, it is also possible to set \code{distribution} to a user-supplied
 algorithm for computing the conditional null distribution. It just has to be
 provided in the form of a function taking an object inheriting from
 \Rclass{IndependenceTestStatistic} and returning an object inheriting from
-class \Rclass{PValue}.
+class \Rclass{NullDistribution}.
 
 As an example, consider the computation of the exact $p$-value
 for testing independence of two continuous random variables. The identity
@@ -792,7 +789,7 @@ sexact <- function(object) {
   pstats <- apply(perms, 1, function(p) sum(x[p,] * y))
   pstats <- (pstats - expectation(object)) / sqrt(variance(object))
   p <- function(q) 1 - mean(pstats > q)
-  new("PValue", p = p, pvalue = p)
+  new("NullDistribution", name = "Exact Distribution", p = p, pvalue = p)
 }
 @
 Note that above implementation is kept simple for the purpose of

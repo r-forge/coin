@@ -26,6 +26,8 @@
     \itemize{
       \item The \code{B} argument of \code{approximate()} and
       \code{ApproxNullDistribution()} is now defunct and has been removed.
+
+      \item Class \code{"PValue"} is now defunct and has been removed.
     }
   }
 }

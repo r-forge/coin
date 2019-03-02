@@ -28,14 +28,6 @@
       Object of class \code{"character"}.  The name of the reference
       distribution.
     }
-    \item{\code{p}:}{
-      Object of class \code{"function"}.  The distribution function of the
-      reference distribution.
-    }
-    \item{\code{pvalue}:}{
-      Object of class \code{"function"}.  The \eqn{p}-value function of the
-      reference distribution.
-    }
     \item{\code{parameters}:}{
       Object of class \code{"list"}.  Additional parameters.
     }
@@ -47,9 +39,17 @@
       Object of class \code{"function"}.  The density function of the reference
       distribution.
     }
+    \item{\code{p}:}{
+      Object of class \code{"function"}.  The distribution function of the
+      reference distribution.
+    }
     \item{\code{q}:}{
       Object of class \code{"function"}.  The quantile function of the reference
       distribution.
+    }
+    \item{\code{pvalue}:}{
+      Object of class \code{"function"}.  The \eqn{p}-value function of the
+      reference distribution.
     }
     \item{\code{midpvalue}:}{
       Object of class \code{"function"}.  The mid-\eqn{p}-value function of the
@@ -80,14 +80,9 @@
   }
 }
 \section{Extends}{
-  For objects of class \code{"NullDistribution"}: \cr
-  Class \code{"\linkS4class{PValue}"}, directly.
-
   For objects of classes \code{"ApproxNullDistribution"},
   \code{"AsymptNullDistribution"} or \code{"ExactNullDistribution"}: \cr
-  Class \code{"NullDistribution"}, directly. \cr
-  Class \code{"\linkS4class{PValue}"}, by class \code{"NullDistribution"},
-  distance 2.
+  Class \code{"NullDistribution"}, directly.
 }
 \section{Known Subclasses}{
   For objects of class \code{"NullDistribution"}: \cr
