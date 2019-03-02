@@ -29,7 +29,7 @@
     }
   }
 }
-\section{Changes in version 1.3-0 (2019-03-01)}{
+\section{Changes in version 1.3-0 (2019-03-02)}{
   \subsection{New features}{
     \itemize{
       \item Ordered factors can now be transformed to a finite collection of
