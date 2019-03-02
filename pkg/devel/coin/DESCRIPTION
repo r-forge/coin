@@ -16,7 +16,7 @@ Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
 Description: Conditional inference procedures for the general independence
   problem including two-sample, K-sample (non-parametric ANOVA), correlation,
   censored, ordered and multivariate problems.
-Depends: R (>= 3.4.0), survival
+Depends: R (>= 3.5.0), survival
 Imports: methods, parallel, stats, stats4, utils, libcoin (>= 1.0-0), matrixStats (>= 0.54.0), modeltools (>= 0.2-9), mvtnorm (>= 1.0-5), multcomp
 Suggests: xtable, e1071, vcd, TH.data (>= 1.0-7)
 LinkingTo: libcoin (>= 1.0-0)
