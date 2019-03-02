@@ -82,9 +82,9 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
 
   The exact reference distribution, currently available for univariate
   two-sample problems only, is computed using either the shift algorithm
-  (Streitberg and \enc{Röhmel}{Roehmel}, 1986, 1987) or the split-up algorithm
-  (van de Wiel, 2001).  The shift algorithm handles blocks pertaining to, e.g.,
-  pre- and post-stratification, but can only be used with positive
+  (Streitberg and \enc{Röhmel}{Roehmel}, 1984, 1986, 1987) or the split-up
+  algorithm (van de Wiel, 2001).  The shift algorithm handles blocks pertaining
+  to, e.g., pre- and post-stratification, but can only be used with positive
   integer-valued scores \eqn{h(\bf{Y})}{h(Y)}.  The split-up algorithm can be
   used with non-integer scores, but does not handle blocks.  By default, an
   automatic choice is made (\code{algorithm = "auto"}) but the shift and
@@ -99,6 +99,10 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
   Implementing a class of permutation tests: The coin package.  \emph{Journal of
     Statistical Software} \bold{28}(8), 1--23.  \doi{10.18637/jss.v028.i08}
 
+  Streitberg, B. and \enc{Röhmel}{Roehmel}, J.  (1984).  Exact nonparametrics
+  in APL.  \emph{APL Quote Quad} \bold{14}(4), 313--325.
+  \doi{10.1145/384283.801115}
+  
   Streitberg, B. and \enc{Röhmel}{Roehmel}, J.  (1986).  Exact distributions
   for permutations and rank tests: an introduction to some recently published
   algorithms.  \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.
