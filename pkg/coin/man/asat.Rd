@@ -28,7 +28,7 @@
   Hauschke, D., Kieser, M. and Hothorn, L. A.  (1999).  Proof of safety in
   toxicology based on the ratio of two means for normally distributed data.
   \emph{Biometrical Journal} \bold{41}(3), 295--304.
-  \doi{10.1002/(SICI)1521-4036(199906)41:3<295::AID-BIMJ295>3.0.CO;2-2}
+  \doi{10.1002/(SICI)1521-4036(199906)41:3%3C295::AID-BIMJ295%3E3.0.CO;2-2}
 
   Hothorn, L. A.  (1992).  Biometrische analyse toxikologischer untersuchungen.
   In J. Adam (Ed.), \emph{Statistisches Know-How in der Medizinischen

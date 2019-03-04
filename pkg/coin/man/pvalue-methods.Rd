@@ -174,7 +174,7 @@
 \references{
   Berger, V. W.  (2000).  Pros and cons of permutation tests in clinical trials.
   \emph{Statistics in Medicine} \bold{19}(10), 1319--1328.
-  \doi{10.1002/(SICI)1097-0258(20000530)19:10<1319::AID-SIM490>3.0.CO;2-0}
+  \doi{10.1002/(SICI)1097-0258(20000530)19:10%3C1319::AID-SIM490%3E3.0.CO;2-0}
 
   Berger, V. W.  (2001).  The \eqn{p}-value interval as an inferential tool.
   \emph{The Statistician} \bold{50}(1), 79--85.  \doi{10.1111/1467-9884.00262}
