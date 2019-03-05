@@ -31,7 +31,7 @@
   Salib, E. and Hillier, V.  (1997).  A case-control study of smoking and
   Alzheimer's disease.  \emph{International Journal of Geriatric Psychiatry}
   \bold{12}(3), 295--300.
-  \doi{10.1002/(SICI)1099-1166(199703)12:3%3C295::AID-GPS476%3E3.0.CO;2-3}
+  \doi{10.1002/(SICI)1099-1166(199703)12:3<295::AID-GPS476>3.0.CO;2-3}
 }
 \references{
   Hothorn, T., Hornik, K., van de Wiel, M. A. and Zeileis, A.  (2006).  A Lego
