@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Version 1.0-20</title>
+    <title>Version 1.3-0</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="">
-    <link rel="canonical" href="http://coin.r-forge.r-project.org/2011/10/04/1.0-20/">
+    <link rel="canonical" href="http://coin.r-forge.r-project.org/2019/03/04/1.3-0/">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="http://coin.r-forge.r-project.org/css/main.css">
@@ -62,13 +62,74 @@ hljs.initHighlightingOnLoad();
       <div class="post">
 
   <header class="post-header">
-    <h1>Version 1.0-20</h1>
-    <p class="meta">Oct 4, 2011</p>
+    <h1>Version 1.3-0</h1>
+    <p class="meta">Mar 4, 2019</p>
   </header>
 
   <article class="post-content">
-  <ul>
-<li> Report a warning for rank tests with weights. </li>
+  <h2>New features</h2>
+<ul>
+<li> Ordered factors can now be transformed to a finite collection of
+ order-restricted scores (see ?zheng_trafo); this can be used to
+ formulate score-independent tests for ordered categorical data (see
+ ?malformations, ?jobsatisfaction and ?vision). </li>
+<li> The test size, i.e., the actual significance level, of approximative
+ (Monte Carlo) and exact tests can now be computed (see ?size). </li>
+<li> The centered linear statistic can now be extracted (see ?statistic). </li>
+<li> P-values can now be extracted from objects of class "PValue" using
+ pvalue(). </li>
+</ul>
+<h2>Bug fixes</h2>
+<ul>
+<li> Adjusted p-values based on the approximative (Monte Carlo) marginal
+ null distributions were incorrect under some circumstances. </li>
+<li> The point and/or interval estimate of the ratio of scales parameter
+ (for tests against scale alternatives) were incorrect when using
+ the asymptotic null distribution. </li>
+<li> Exact distributions of symmetry tests for paired data, e.g., the
+ exact sign and Wilcoxon signed-rank tests, used the
+ Streitberg-Röhmel algorithm for independent samples instead of the
+ more efficient version for dependent samples. </li>
+<li> The class definition of "PValue" erroneously included the midpvalue
+ and pvalueinterval slots; these slots are now part of the
+ "NullDistribution" subclass (as they should have been originally). </li>
+</ul>
+<h2>User-visible changes</h2>
+<ul>
+<li> Asymptotic and exact p-values smaller than machine precision, i.e.,
+ .Machine$double.eps, or approximative (Monte Carlo) p-values
+ smaller than resampling precision, i.e., 1 / nresample, are now
+ reported as such in the printed output. </li>
+<li> Computations on the approximative (Monte Carlo) null distribution,
+ e.g., adjusted p-values for maximum-type tests, are now more
+ efficient. </li>
+<li> The Pearson chi-squared test is now computed more efficiently. </li>
+<li> Extracting the test statistic or the (global) p-value returned a
+ named result under some circumstances; the results are now unnamed. </li>
+<li> The quantile function now returns a named vector if its p argument
+ is named. </li>
+<li> Objects of class "ApproxNullDistribution" now has a slot nresample
+ containing the number of Monte Carlo replicates. </li>
+<li> Classes "ExpectCovar" and "ExpectCovarInfluence" have been moved to
+ the party package. </li>
+<li> The ‘coin_implementation’ vignette has been renamed to
+ ‘Implementation’. </li>
+<li> Documentation updates. </li>
+</ul>
+<h2>Other changes</h2>
+<ul>
+<li> The linear statistic, its conditional expectation and covariance,
+ and permuted linear statistics are now computed by package libcoin. </li>
+<li> confint() is now an S4 method. </li>
+<li> R version >=3.4.0 and packages stats4 and matrixStats are now
+ required. </li>
+</ul>
+<h2>Deprecated and defunct</h2>
+<ul>
+<li> The B argument of approximate() and ApproxNullDistribution() is now
+ deprecated and has been replaced by nresample (for consistency with
+ the libcoin, party and partykit packages). </li>
+<li> Class "PValue" is now deprecated. </li>
 </ul>
 
   </article>

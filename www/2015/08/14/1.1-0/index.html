@@ -179,10 +179,10 @@ hljs.initHighlightingOnLoad();
  variable. </li>
 <li> The Brown-Mood median test p-value computation used the wrong tail
  of the null distribution in the one-sided case. </li>
-<li> The test statistic of the Wilcoxon signed-rank test sometimes had
- the wrong sign, due to being based on the sum of the absolute
- values of the negative, instead of the positive, differences
- between the paired measurements. </li>
+<li> The test statistic of the Wilcoxon signed-rank test had the wrong
+ sign under some circumstances, due to being based on the sum of the
+ absolute values of the negative differences, instead of the
+ positive, between the paired measurements. </li>
 <li> The Friedman test did not warn when weights were supplied. </li>
 <li> Maximally selected statistics did not handle user-specified scores
  for ordinal variables correctly. </li>
@@ -192,10 +192,10 @@ hljs.initHighlightingOnLoad();
 <li> Stratified tests were not allowed if block had unused factor levels,
  causing problems, e.g., if trying to use the subset argument of the
  formula methods. </li>
-<li> Transformations involving ordered factors or survival data sometimes
- failed when performed within blocks. </li>
-<li> The maximally selected statistics transformation for factors
- sometimes dropped its column names. </li>
+<li> Transformations involving ordered factors or survival data failed
+ under some circumstances when performed within blocks. </li>
+<li> The maximally selected statistics transformation for factors dropped
+ its column names under some circumstances. </li>
 <li> The maximally selected statistics transformation for factors
  retained unused levels. </li>
 <li> Approximative (Monte Carlo) p-values for stratified tests were wrong
@@ -204,8 +204,8 @@ hljs.initHighlightingOnLoad();
  contained precisely two observations. </li>
 <li> Exact p-values for tests with an ordinal grouping variable were
  wrong. </li>
-<li> The smallest single-step and step-down adjusted p-values sometimes
- differed from the global p-value. </li>
+<li> The smallest single-step and step-down adjusted p-values differed
+ from the global p-value under some circumstances. </li>
 <li> Single-step adjusted p-values were too small when the support of the
  null distribution contained values equal to the observed test
  statistics. </li>
@@ -222,8 +222,8 @@ hljs.initHighlightingOnLoad();
 <li> The distribution and quantile functions of asymptotic permutation
  distributions for maximum-type tests were not handling vector
  arguments correctly. </li>
-<li> The quantile function of exact permutation distributions sometimes
- reported NA when the 100 % quantile was requested. </li>
+<li> The quantile function of exact permutation distributions reported NA
+ when the 100 % quantile was requested under some circumstances. </li>
 <li> The support of exact permutation distributions for stratified tests
  was not guaranteed to be distinct and ordered, which in turn caused
  failure when trying to obtain values from the density and quantile
@@ -317,7 +317,10 @@ hljs.initHighlightingOnLoad();
  of the random number generator. </li>
 <li> The package manual has been completely revised. </li>
 <li> The memory consumption during computations has been reduced. </li>
-<li> Henric Winell, a long-term collaborator who donated almost all
+</ul>
+<h2>Other changes</h2>
+<ul>
+<li> Henric Winell, a long-time collaborator who donated almost all
  changes in coin 1.1-0, is now listed as author.  Welcome on board,
  Henric! </li>
 </ul>
@@ -349,7 +352,7 @@ hljs.initHighlightingOnLoad();
 
     <A class="page-link" HREF=http://CRAN.R-project.org/web/packages/coin/coin.pdf>Manual</A>
     
-    <A class="page-link" HREF=http://CRAN.R-project.org/src/contrib/coin_1.2-2.tar.gz>Source</A>
+    <A class="page-link" HREF=http://CRAN.R-project.org/src/contrib/coin_1.3-0.tar.gz>Source</A>
 
     <A class="page-link" HREF=https://r-forge.r-project.org/projects/coin>Development</A>
 
