@@ -30,8 +30,8 @@ setMethod(".confint",
         x <- sort(scores[groups > 0])
         y <- sort(scores[groups < 1])
 
-        foo <- function(x, d)
-            if (location) x - d else x / d
+        foo <- if (location) function(x, d) x - d
+               else          function(x, d) x / d
 
         ## explicitly compute all possible steps
         steps <- outer(x, y, foo)
@@ -131,8 +131,8 @@ setMethod(".confint",
         x <- sort(scores[groups > 0])
         y <- sort(scores[groups < 1])
 
-        foo <- function(x, d)
-            if (location) x - d else x / d
+        foo <- if (location) function(x, d) x - d
+               else          function(x, d) x / d
 
         ## approximate the steps
         ## Here we search the root of the function 'fs' on the set
