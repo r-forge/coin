@@ -178,9 +178,9 @@ setMethod(".confint",
                 return(c(NA, NA))
             }
             u <- uniroot(fs, c(mumin, mumax),
-                         zq = qperm(object2,     alpha / 2), ...)$root
+                         zq = qperm(object2,     alpha / 2), tol = sqrt_eps)$root
             l <- uniroot(fs, c(mumin, mumax),
-                         zq = qperm(object2, 1 - alpha / 2), ...)$root
+                         zq = qperm(object2, 1 - alpha / 2), tol = sqrt_eps)$root
             ## The process of the statistics does not need to be
             ## increasing: sort is ok here.
             sort(c(u, l))
@@ -200,7 +200,7 @@ setMethod(".confint",
                         warning("cannot compute estimate, returning NA")
                         NA
                     } else
-                        uniroot(fs, c(mumin, mumax), zq = 0, ...)$root
+                        uniroot(fs, c(mumin, mumax), zq = 0, tol = sqrt_eps)$root
         names(ESTIMATE) <- if (location) "difference in location"
                            else          "ratio of scales"
 

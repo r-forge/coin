@@ -326,10 +326,10 @@ data:  Route.Time by Route (A, B)
 Z = -3.0245, p-value = 0.002491
 alternative hypothesis: true mu is not equal to 0
 95 percent confidence interval:
- -3.6999810 -0.4999788
+ -3.7 -0.5
 sample estimates:
 difference in location 
-            -0.9000475 
+                  -0.9 
 
 > wilcox_test(Route.Time~Route2,conf.int=TRUE)
 
@@ -339,10 +339,10 @@ data:  Route.Time by Route2 (B, A)
 Z = 3.0245, p-value = 0.002491
 alternative hypothesis: true mu is not equal to 0
 95 percent confidence interval:
- 0.4999788 3.6999810
+ 0.5 3.7
 sample estimates:
 difference in location 
-             0.9000352 
+                   0.9 
 
 > wilcox_test(Route.Time~Route,conf.int=TRUE, distr = exact())
 
@@ -988,4 +988,4 @@ Error in logrank_trafo(y) :
 > 
 > proc.time()
    user  system elapsed 
-   1.90    0.18    2.07 
+   2.17    0.09    2.28 
