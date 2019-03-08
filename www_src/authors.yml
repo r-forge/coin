@@ -8,6 +8,14 @@
   url: http://user.math.uzh.ch/hothorn/
   image: /img/torsten_hothorn.jpg
   comment: ~
+- name: Henric Winell
+  given: Henric
+  family: Winell
+  role: aut
+  email: ~
+  comment: ~
+  url: http://ki.se/en/people/henwin
+  image: /img/henric_winell.jpg
 - name: Kurt Hornik
   given: Kurt
   family: Hornik
@@ -24,14 +32,6 @@
   comment: ~
   url: http://www.few.vu.nl/~mavdwiel/
   image: /img/mark_van_de_wiel.jpg
-- name: Henric Winell
-  given: Henric
-  family: Winell
-  role: aut
-  email: ~
-  comment: ~
-  url: http://ki.se/en/people/henwin
-  image: /img/henric_winell.jpg
 - name: Achim Zeileis
   given: Achim
   family: Zeileis
