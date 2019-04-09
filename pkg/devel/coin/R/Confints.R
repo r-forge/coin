@@ -153,14 +153,20 @@ setMethod(".confint",
         } else {
             srangepos <- NULL
             srangeneg <- NULL
-            if (any(x > 0) && any(y > 0))
+            if (any(xGT0 <- x %GT% 0) && any(yGT0 <- y %GT% 0)) {
+                xGT0 <- x[xGT0]
+                yGT0 <- y[yGT0]
                 srangepos <-
-                    c(min(x[x > 0], na.rm = TRUE) / max(y[y > 0], na.rm = TRUE),
-                      max(x[x > 0], na.rm = TRUE) / min(y[y > 0], na.rm = TRUE))
-            if (any(x %LE% 0) && any(y < 0))
+                    c(min(xGT0, na.rm = TRUE) / max(yGT0, na.rm = TRUE),
+                      max(xGT0, na.rm = TRUE) / min(yGT0, na.rm = TRUE))
+            }
+            if (any(xLE0 <- x %LE% 0) && any(yLT0 <- y %LT% 0)) {
+                xLE0 <- x[xLE0]
+                yLT0 <- y[yLT0]
                 srangeneg <-
-                    c(min(x[x %LE% 0], na.rm = TRUE) / max(y[y < 0], na.rm = TRUE),
-                      max(x[x %LE% 0], na.rm = TRUE) / min(y[y < 0], na.rm = TRUE))
+                    c(min(xLE0, na.rm = TRUE) / max(yLT0, na.rm = TRUE),
+                      max(xLE0, na.rm = TRUE) / min(yLT0, na.rm = TRUE))
+            }
             if (any(is.infinite(c(srangepos, srangeneg))))
                 stop("cannot compute asymptotic confidence set or estimator")
             mumin <- range(c(srangepos, srangeneg), na.rm = FALSE)[1L]
