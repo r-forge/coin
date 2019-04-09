@@ -169,8 +169,9 @@ setMethod(".confint",
             }
             if (any(is.infinite(c(srangepos, srangeneg))))
                 stop("cannot compute asymptotic confidence set or estimator")
-            mumin <- range(c(srangepos, srangeneg), na.rm = FALSE)[1L]
-            mumax <- range(c(srangepos, srangeneg), na.rm = FALSE)[2L]
+            srange <- c(srangepos, srangeneg)
+            mumin <- min(srange)
+            mumax <- max(srange)
         }
 
         cci <- function(alpha) {
