@@ -76,14 +76,14 @@ setMethod(".confint",
                 ##   STATISTICS <  qupper
                 ## but the open right interval ends with the
                 ## step with STATISTIC == qupper
-                c(min(steps[jumps %GE% qlower]), min(steps[jumps > qupper]))
+                c(min(steps[jumps %GE% qlower]), min(steps[jumps %GT% qupper]))
             } else {
                 ## do NOT reject for all steps with
                 ##   STATISTICS >= qlower AND
                 ##   STATISTICS <  qupper
                 ## but the open left interval ends with the
                 ## step with STATISTIC == qupper
-                c(min(steps[jumps %LE% qupper]), min(steps[jumps < qlower]))
+                c(min(steps[jumps %LE% qupper]), min(steps[jumps %LT% qlower]))
             }
         }
 
@@ -96,7 +96,7 @@ setMethod(".confint",
 
         ## was: median(steps) which will not work for blocks etc.
         sgr <- ifelse(decreasing, min(steps[jumps %LE% mu]), max(steps[jumps %LE% mu]))
-        sle <- ifelse(decreasing, min(steps[jumps < mu]), min(steps[jumps > mu]))
+        sle <- ifelse(decreasing, min(steps[jumps %LT% mu]), min(steps[jumps %GT% mu]))
         ESTIMATE <- mean(c(sle, sgr), na.rm = TRUE)
         names(ESTIMATE) <- if (location) "difference in location"
                            else          "ratio of scales"
