@@ -46,9 +46,7 @@ setMethod(".confint",
 
         ## we need to compute the statistics just to the right of
         ## each step
-        ds <- diff(steps)
-        justright <- min(abs(ds[abs(ds) > sqrt_eps])) / 2
-        jumps <- vapply(steps + justright, fs, NA_real_)
+        jumps <- vapply(steps + min(diff(steps)) / 2, fs, NA_real_)
 
         ## determine if the statistics are in- or decreasing
         ## jumpsdiffs <- diff(jumps)
