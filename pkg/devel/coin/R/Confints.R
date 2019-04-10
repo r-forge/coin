@@ -38,6 +38,7 @@ setMethod(".confint",
         if (!location)
             steps <- steps[steps >= 0]
         steps <- sort(unique(steps))
+        steps <- steps[c(steps[-1L] %NE% steps[-length(steps)], TRUE)] # unique +/- eps
 
         ## computes the statistic under the alternative 'd'
         fs <- function(d)
