@@ -95,9 +95,11 @@ setMethod(".confint",
         attr(cint, "conf.level") <- level
 
         ## was: median(steps) which will not work for blocks etc.
-        sgr <- if (decreasing) min(steps[jumps %LE% mu]) else max(steps[jumps %LE% mu])
-        sle <- if (decreasing) min(steps[jumps %LT% mu]) else min(steps[jumps %GT% mu])
-        ESTIMATE <- mean(c(sle, sgr), na.rm = TRUE)
+        ESTIMATE <- if (increasing)
+                        c(min(steps[jumps %GE% mu]), min(steps[jumps %GT% mu]))
+                    else
+                        c(min(steps[jumps %LE% mu]), min(steps[jumps %LT% mu]))
+        ESTIMATE <- mean(ESTIMATE, na.rm = TRUE)
         names(ESTIMATE) <- if (location) "difference in location"
                            else          "ratio of scales"
 
