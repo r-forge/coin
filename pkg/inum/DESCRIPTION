@@ -1,6 +1,6 @@
 Package: inum
 Title: Interval and Enum-Type Representation of Vectors
-Date: 2019-01-23
+Date: 2019-04-24
 Version: 1.0-1
 Authors@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@R-project.org")

@@ -1,6 +1,7 @@
 
 library("inum")
 data("iris")
+suppressWarnings(RNGversion("3.5.3"))
 set.seed(29)
 
 iris[3, "Sepal.Width"] <- NA
