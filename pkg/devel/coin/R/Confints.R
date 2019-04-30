@@ -61,8 +61,8 @@ setMethod(".confint",
             ## the quantiles: reject iff
             ##   STATISTIC <  qlower OR
             ##   STATISTIC >= qupper
-            qlower <- drop(qperm(object2,     alpha / 2) * sigma + mu)
-            qupper <- drop(qperm(object2, 1 - alpha / 2) * sigma + mu)
+            qlower <- qperm(object2,     alpha / 2) * sigma + mu
+            qupper <- qperm(object2, 1 - alpha / 2) * sigma + mu
             ## Check if the statistic exceeds both quantiles first.
             if (qlower < min(jumps) || qupper > max(jumps)) {
                 warning("cannot compute confidence interval")
