@@ -4,7 +4,8 @@
 \section{Changes in version 1.3-1 (20YY-MM-DD)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item Precision issues in point and interval estimates for location and
+      scale problems.
     }
   }
   \subsection{User-visible changes}{
@@ -126,8 +127,8 @@
 \section{Changes in version 1.2-1 (2017-07-16)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item Precision problem in the quantile function of exact null
-      distributions computed by the shift algorithm.
+      \item Precision issue in the quantile function of exact null distributions
+      computed by the shift algorithm.
     }
   }
 }
@@ -143,14 +144,14 @@
   }
   \subsection{Bug fixes}{
     \itemize{
-      \item Precision problem in the density function of approximative (Monte
+      \item Precision issue in the density function of approximative (Monte
       Carlo) null distributions.  This also impacts mid-\eqn{p}-values and
       \eqn{p}-value intervals.
 
-      \item Precision problem in the support of approximative (Monte Carlo) null
+      \item Precision issue in the support of approximative (Monte Carlo) null
       distributions.
 
-      \item Precision problem in the symmetric median scores transformation.
+      \item Precision issue in the symmetric median scores transformation.
 
       \item The weighted logrank transformation returned nonsense scores when
       supplied non-right-censored input; it now results in an error.
@@ -696,13 +697,13 @@
 }
 \section{Changes in version 1.0-9 (2009-12-30)}{
   \itemize{
-    \item Again precision problems in van de Wiel algorithm: \code{qperm()}
+    \item Again precision issues in van de Wiel algorithm: \code{qperm()}
     suffered from too large tolerances of the inverted probability function.
   }
 }
 \section{Changes in version 1.0-8 (2009-10-30)}{
   \itemize{
-    \item Precision problems in van de Wiel algorithm fixed.  In rare cases,
+    \item Precision issues in van de Wiel algorithm fixed.  In rare cases,
     \eqn{P(T < t)} was returned as \eqn{p}-value instead of \eqn{P(T \le t)}.
     Two statistics are now considered equal (in all computations) when the
     difference is smaller than \code{sqrt(.Machine$double.eps)}.
@@ -795,8 +796,8 @@
 }
 \section{Changes in version 0.6-6 (2007-08-13)}{
   \itemize{
-    \item Fix precision problems with exact \eqn{p}-values (spotted by Michael
-    Fay \email{mfay@niaid.nih.gov}.
+    \item Fix precision issues with exact \eqn{p}-values (spotted by Michael Fay
+    \email{mfay@niaid.nih.gov}.
   }
 }
 \section{Changes in version 0.6-5 (2007-07-23)}{
