@@ -72,7 +72,7 @@ copyslots <- function(source, target) {
     if (length(slots) == 0)
         stop("no common slots to copy to")
     for (s in slots)
-        eval(parse(text = paste("target@", s, " <- source@", s)))
+        eval(str2lang(paste0("target@", s, " <- source@", s)))
     target
 }
 
@@ -502,3 +502,6 @@ n_decimal_digits <-
     nchar(sub("^-?[[:space:]]?[[:digit:]]*[.]?", "",
               format(x, digits = 15, scientific = FALSE)[1]))
 }
+
+if (getRversion() < "3.6.0")
+    str2lang <- function(s) parse(text = s, keep.source = FALSE)[[1]]
