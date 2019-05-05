@@ -479,18 +479,23 @@ get_ytrans <- function(object) object@statistic@ytrans
 is_unity <- function(x)
     max(abs(x - 1.0)) < sqrt_eps
 
-setRownames <- function(object, nm) {
-    rownames(object) <- nm
+setRownames <- function(object, value) {
+    rownames(object) <- value
     object
 }
 
-setColnames <- function(object, nm) {
-    colnames(object) <- nm
+setColnames <- function(object, value) {
+    colnames(object) <- value
     object
 }
 
-setDimnames <- function(object, nm) {
-    dimnames(object) <- nm
+setDimnames <- function(object, value) {
+    dimnames(object) <- value
+    object
+}
+
+setAttributes <- function(object, value) {
+    attributes(object) <- value
     object
 }
 

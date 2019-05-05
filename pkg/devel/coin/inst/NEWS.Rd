@@ -40,7 +40,9 @@
   }
   \subsection{User-visible changes}{
     \itemize{
-      \item
+      \item The density, distribution and quantile functions now propagate any
+      attributes of the \code{x}, \code{q} and \code{p} arguments, respectively, 
+      to the results.
     }
   }
   \subsection{Other changes}{
