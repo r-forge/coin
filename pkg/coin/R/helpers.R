@@ -34,10 +34,9 @@ pmvn <- function(lower, upper, mean, corr, conf.int, ...) {
                      sigma = 1, ...)
     if (conf.int) {
         error <- attr(p, "error")
-        attributes(p) <- NULL
         ci <- c(max(0, p - error), min(p + error, 1))
-        attr(ci, "conf.level") <- 0.99
-        attr(p, "conf.int") <- ci
+        attributes(ci) <- list("conf.level" = 0.99)
+        attributes(p) <- list("conf.int" = ci)
     } else
         attributes(p) <- NULL
     p
