@@ -9,7 +9,7 @@ setMethod("pvalue",
     signature = "NullDistribution",
     definition = function(object, q, ...) {
         RET <- object@pvalue(q)
-        class(RET) <- "pvalue"
+        class(RET) <- c("pvalue", "numeric")
         RET
     }
 )
@@ -89,7 +89,7 @@ setMethod("midpvalue",
     signature = "NullDistribution",
     definition = function(object, q, ...) {
         RET <- object@midpvalue(q)
-        class(RET) <- "pvalue"
+        class(RET) <- c("pvalue", "numeric")
         RET
     }
 )
