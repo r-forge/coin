@@ -88,18 +88,18 @@ doTest(ls1, teststat = "quadratic")
 ### code chunk number 8: Contrasts-1
 ###################################################
 set.seed(29)
-ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1), 
+ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1),
                       nresample = 10, standardise = TRUE)
 set.seed(29)
-ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), 
+ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1),
                       nresample = 10, standardise = TRUE)
 ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
 set.seed(29)
-ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2), 
+ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2),
                       nresample = 10, standardise = TRUE)
 set.seed(29)
-ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2), 
+ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2),
                       nresample = 10, standardise = TRUE)
 ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
@@ -161,12 +161,12 @@ LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = intege
         yc <- t(t(Y) - ExpY)
         CovY <- crossprod(yc) / sumweights
         CovX <- crossprod(X)
-        Exp <- kronecker(ExpY, ExpX) 
-        Cov <- sumweights / (sumweights - 1) * kronecker(CovY, CovX) - 
+        Exp <- kronecker(ExpY, ExpX)
+        Cov <- sumweights / (sumweights - 1) * kronecker(CovY, CovX) -
                1 / (sumweights - 1) * kronecker(CovY, tcrossprod(ExpX))
- 
+
         ret <- list(LinearStatistic = as.vector(crossprod(X, Y)),
-                    Expectation = as.vector(Exp), 
+                    Expectation = as.vector(Exp),
                     Covariance = Cov,
                     Variance = diag(Cov))
    } else {
@@ -220,7 +220,7 @@ stopifnot(
     testit() && testit(weights = weights) &&
     testit(subset = subset) && testit(weights = weights, subset = subset) &&
     testit(block = block) && testit(weights = weights, block = block) &&
-    testit(subset = subset, block = block) && 
+    testit(subset = subset, block = block) &&
     testit(weights = weights, subset = subset, block = block))
 ### without dummy matrix X
 testit <- function(...) {
@@ -233,14 +233,14 @@ stopifnot(
     testit() && testit(weights = weights) &&
     testit(subset = subset) && testit(weights = weights, subset = subset) &&
     testit(block = block) && testit(weights = weights, block = block) &&
-    testit(subset = subset, block = block) && 
+    testit(subset = subset, block = block) &&
     testit(weights = weights, subset = subset, block = block))
 
 
 ###################################################
 ### code chunk number 15: permutations-2d
 ###################################################
-LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, 
+LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
               weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
 
 
@@ -296,7 +296,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 ###################################################
 ### code chunk number 18: ExpectationCovarianceX
 ###################################################
-a0 <- colSums(x[subset, ] * weights[subset]) 
+a0 <- colSums(x[subset, ] * weights[subset])
 a0
 a1 <- .Call(libcoin:::R_ExpectationX, x, P, weights, subset);
 a2 <- .Call(libcoin:::R_ExpectationX, x, P, as.double(weights), as.double(subset));
@@ -307,7 +307,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4) &&
           isequal(a0, LECVxyws$ExpectationX))
 
-a0 <- colSums(x[subset, ]^2 * weights[subset]) 
+a0 <- colSums(x[subset, ]^2 * weights[subset])
 a1 <- .Call(libcoin:::R_CovarianceX, x, P, weights, subset, 1L);
 a2 <- .Call(libcoin:::R_CovarianceX, x, P, as.double(weights), as.double(subset), 1L);
 a3 <- .Call(libcoin:::R_CovarianceX, x, P, weights, as.double(subset), 1L);
@@ -377,7 +377,7 @@ a4 <- .Call(libcoin:::R_KronSums, x, P, y, as.double(weights), subset, 0L)
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 
-a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * 
+a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] *
                         y[subset,r2Xfactor] * weights[subset]))
 a1 <- .Call(libcoin:::R_KronSums, ix, Lx, y, weights, subset, 0L)
 a2 <- .Call(libcoin:::R_KronSums, ix, Lx, y, as.double(weights), as.double(subset), 0L)
@@ -439,7 +439,7 @@ class(a0) <- "matrix"
 dimnames(a0) <- NULL
 attributes(a0)$call <- NULL
 a1 <- ctabs(ix, iy, weights = weights, subset = subset)[-1, -1]
-a2 <- ctabs(ix, iy, weights = as.double(weights), 
+a2 <- ctabs(ix, iy, weights = as.double(weights),
             subset = as.double(subset))[-1, -1]
 a3 <- ctabs(ix, iy, weights = weights, subset = as.double(subset))[-1, -1]
 a4 <- ctabs(ix, iy, weights = as.double(weights), subset = subset)[-1, -1]

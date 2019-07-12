@@ -310,7 +310,7 @@ data is available in aggregated form; details will be explained later.
 \begin{list}{}{} \item
 \mbox{}\verb@(X, Y, ix = NULL, iy = NULL, weights = integer(0),@\\
 \mbox{}\verb@ subset = integer(0), block = integer(0),@\\
-\mbox{}\verb@ checkNAs = TRUE, @\\
+\mbox{}\verb@ checkNAs = TRUE,@\\
 \mbox{}\verb@ varonly = FALSE, nresample = 0, standardise = FALSE,@\\
 \mbox{}\verb@ tol = sqrt(.Machine$double.eps))@{\NWsep}
 \end{list}
@@ -340,10 +340,10 @@ data is available in aggregated form; details will be explained later.
 \mbox{}\verb@@\\
 \mbox{}\verb@    ### <FIXME> for the time being only!!! </FIXME>@\\
 \mbox{}\verb@##    if (length(subset) > 0) subset <- sort(subset)@\\
-\mbox{}\verb@    @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    if (is.null(ix) & is.null(iy))@\\
 \mbox{}\verb@        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,@\\
-\mbox{}\verb@                                subset = subset, block = block, @\\
+\mbox{}\verb@                                subset = subset, block = block,@\\
 \mbox{}\verb@                                checkNAs = checkNAs,@\\
 \mbox{}\verb@                                varonly = varonly, nresample = nresample,@\\
 \mbox{}\verb@                                standardise = standardise, tol = tol))@\\
@@ -351,7 +351,7 @@ data is available in aggregated form; details will be explained later.
 \mbox{}\verb@    if (!is.null(ix) & !is.null(iy))@\\
 \mbox{}\verb@        return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,@\\
 \mbox{}\verb@                                weights = weights, subset = subset,@\\
-\mbox{}\verb@                                block = block, varonly = varonly, @\\
+\mbox{}\verb@                                block = block, varonly = varonly,@\\
 \mbox{}\verb@                                checkNAs = checkNAs, nresample = nresample,@\\
 \mbox{}\verb@                                standardise = standardise, tol = tol))@\\
 \mbox{}\verb@@\\
@@ -379,7 +379,7 @@ or \verb|double| (possibly resulting from an aggregation of $N > $
 \verb|INT_MAX| observations). The subset vector \verb|subset| may contain
 the elements $1, \dots, N$ as \verb|integer| or \verb|double| (for $N > $
 \verb|INT_MAX|) and can be longer than $N$. The \verb|subset| vector MUST be
-sorted. \verb|block| is a factor at $B$ levels of length $N$. 
+sorted. \verb|block| is a factor at $B$ levels of length $N$.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap4}\raggedright\small
@@ -482,7 +482,7 @@ Variances smaller than \verb|tol| are treated as being zero.
 \mbox{}\verb@        if (is.null(attr(X, "levels")) || checkNAs) {@\\
 \mbox{}\verb@            rg <- range(X)@\\
 \mbox{}\verb@            if (anyNA(rg))@\\
-\mbox{}\verb@                stop("no missing values allowed in X") @\\
+\mbox{}\verb@                stop("no missing values allowed in X")@\\
 \mbox{}\verb@            stopifnot(rg[1] > 0) ### no missing values allowed here!@\\
 \mbox{}\verb@            if (is.null(attr(X, "levels")))@\\
 \mbox{}\verb@                attr(X, "levels") <- 1:rg[2]@\\
@@ -562,20 +562,20 @@ used to represent the dummy matrix \verb|X|.
 Sometimes the data takes only a few unique values and considerable
 computational speedups can be achieved taking this information into account.
 Let \verb|ix| denote an integer vector with elements $0, \dots, L_x$ of
-length $N$ and 
+length $N$ and
 \verb|iy| an integer vector with elements $0, \dots, L_y$, also of length
 $N$. The matrix
 \verb|X| is now of dimension $(L_x + 1) \times P$ and the matrix \verb|Y|
 of dimension $(L_y + 1) \times Q$. The combination of \verb|X| and \verb|ix|
 means that the $i$th observation corresponds to the row \verb|X[ix[i] + 1,]|.
 This looks cumbersome in \proglang{R} notation but is a very efficient way
-of dealing with missing values at \proglang{C} level. By convention, 
+of dealing with missing values at \proglang{C} level. By convention,
 elements of \verb|ix| being zero denote a missing value (\verb|NA|s are not
-allowed in \verb|ix| and \verb|iy|). Thus, the first row of \verb|X| 
+allowed in \verb|ix| and \verb|iy|). Thus, the first row of \verb|X|
 corresponds to a missing value. If the first row is simply zero, missing
 values do not contribute to any of the sums computed later. Even more
 important is the fact that all entities, such as linear statistics etc., can
-be computed from the two-way tabulation (therefore the abbrevation ``2d'') 
+be computed from the two-way tabulation (therefore the abbrevation ``2d'')
 over the $N$ elements of \verb|ix| and \verb|iy|. Once such a
 table was computed, the remaining computations can be performed in
 dimension $L_x \times L_y$, typically much smaller than $N$.
@@ -650,7 +650,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \mbox{}\verb@if (is.null(attr(ix, "levels"))) {@\\
 \mbox{}\verb@    rg <- range(ix)@\\
 \mbox{}\verb@    if (anyNA(rg))@\\
-\mbox{}\verb@        stop("no missing values allowed in ix") @\\
+\mbox{}\verb@        stop("no missing values allowed in ix")@\\
 \mbox{}\verb@    stopifnot(rg[1] >= 0)@\\
 \mbox{}\verb@    attr(ix, "levels") <- 1:rg[2]@\\
 \mbox{}\verb@} else {@\\
@@ -680,7 +680,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \mbox{}\verb@if (is.null(attr(iy, "levels"))) {@\\
 \mbox{}\verb@    rg <- range(iy)@\\
 \mbox{}\verb@    if (anyNA(rg))@\\
-\mbox{}\verb@        stop("no missing values allowed in iy") @\\
+\mbox{}\verb@        stop("no missing values allowed in iy")@\\
 \mbox{}\verb@    stopifnot(rg[1] >= 0)@\\
 \mbox{}\verb@    attr(iy, "levels") <- 1:rg[2]@\\
 \mbox{}\verb@} else {@\\
@@ -774,7 +774,7 @@ corresponding $p$-values. If \verb|nresample = 0| was used in the call to
 distribution whenever such a thing is available at reasonable costs.
 Otherwise, the permutation $p$-value is returned (along with the permuted
 test statistics when \verb|PermutedStatistics| is \verb|TRUE|). The
-$p$-values (\verb|lower = FALSE|) or $(1 - p)$-values (\verb|lower = TRUE|) 
+$p$-values (\verb|lower = FALSE|) or $(1 - p)$-values (\verb|lower = TRUE|)
 can be computed on the log-scale.
 
 \begin{flushleft} \small
@@ -785,7 +785,7 @@ can be computed on the log-scale.
 \mbox{}\verb@(object, teststat = c("maximum", "quadratic", "scalar"),@\\
 \mbox{}\verb@   alternative = c("two.sided", "less", "greater"),@\\
 \mbox{}\verb@   pvalue = TRUE, lower = FALSE, log = FALSE, PermutedStatistics = FALSE,@\\
-\mbox{}\verb@   minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor, @\\
+\mbox{}\verb@   minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor,@\\
 \mbox{}\verb@   pargs = GenzBretz())@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -837,9 +837,9 @@ can be computed on the log-scale.
 \mbox{}\verb@            ret <- .Call(R_QuadraticTest, object, as.integer(pvalue), as.integer(lower),@\\
 \mbox{}\verb@                         as.integer(log), as.integer(PermutedStatistics))@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            ret <- .Call(R_MaximumTest, object, as.integer(alt), as.integer(pvalue), @\\
+\mbox{}\verb@            ret <- .Call(R_MaximumTest, object, as.integer(alt), as.integer(pvalue),@\\
 \mbox{}\verb@                         as.integer(lower), as.integer(log), as.integer(PermutedStatistics),@\\
-\mbox{}\verb@                         as.integer(pargs$maxpts), as.double(pargs$releps), @\\
+\mbox{}\verb@                         as.integer(pargs$maxpts), as.double(pargs$releps),@\\
 \mbox{}\verb@                         as.double(pargs$abseps))@\\
 \mbox{}\verb@            if (teststat == "scalar") {@\\
 \mbox{}\verb@                var <- if (object$varonly) object$Variance else object$Covariance@\\
@@ -849,7 +849,7 @@ can be computed on the log-scale.
 \mbox{}\verb@            }@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered), as.integer(test), @\\
+\mbox{}\verb@        ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered), as.integer(test),@\\
 \mbox{}\verb@                     as.integer(minbucket), as.integer(lower), as.integer(log))@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    if (!PermutedStatistics) ret$PermutedStatistics <- NULL@\\
@@ -949,18 +949,18 @@ matrix to an object of class \verb|LinStatExpCov|.
 Here is an example for a linear-by-linear association test.
 <<Contrasts-1>>=
 set.seed(29)
-ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1), 
+ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1),
                       nresample = 10, standardise = TRUE)
 set.seed(29)
-ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), 
+ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1),
                       nresample = 10, standardise = TRUE)
 ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
 set.seed(29)
-ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2), 
+ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2),
                       nresample = 10, standardise = TRUE)
 set.seed(29)
-ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2), 
+ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2),
                       nresample = 10, standardise = TRUE)
 ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
@@ -1067,7 +1067,7 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@  \item{subset}{an optional integer vector defining a subset of observations.}@\\
 \mbox{}\verb@  \item{block}{an optional factor defining independent blocks of observations.}@\\
 \mbox{}\verb@  \item{checkNAs}{a logical for switching off missing value checks. This@\\
-\mbox{}\verb@      included switching off checks for suitable values of \code{subset}. @\\
+\mbox{}\verb@      included switching off checks for suitable values of \code{subset}.@\\
 \mbox{}\verb@      Use at your own risk.}@\\
 \mbox{}\verb@  \item{varonly}{a logical asking for variances only.}@\\
 \mbox{}\verb@  \item{nresample}{an integer defining the number of permuted statistics to draw.}@\\
@@ -1525,7 +1525,7 @@ $N > $ \verb|INT_MAX|
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
-The regressors $\x_i, i = 1, \dots, N$ 
+The regressors $\x_i, i = 1, \dots, N$
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap29}\raggedright\small
@@ -1685,7 +1685,7 @@ or a factor at $Q$ levels
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
-The weights $w_i, i = 1, \dots, N$ 
+The weights $w_i, i = 1, \dots, N$
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap37}\raggedright\small
@@ -1705,7 +1705,7 @@ The weights $w_i, i = 1, \dots, N$
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
-can be constant one (\verb|XLENGTH(weights) == 0| or \verb|weights = integer(0)|) 
+can be constant one (\verb|XLENGTH(weights) == 0| or \verb|weights = integer(0)|)
 or integer-valued, with \verb|HAS_WEIGHTS == 0| in the former case
 
 \begin{flushleft} \small
@@ -2011,12 +2011,12 @@ LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = intege
         yc <- t(t(Y) - ExpY)
         CovY <- crossprod(yc) / sumweights
         CovX <- crossprod(X)
-        Exp <- kronecker(ExpY, ExpX) 
-        Cov <- sumweights / (sumweights - 1) * kronecker(CovY, CovX) - 
+        Exp <- kronecker(ExpY, ExpX)
+        Cov <- sumweights / (sumweights - 1) * kronecker(CovY, CovX) -
                1 / (sumweights - 1) * kronecker(CovY, tcrossprod(ExpX))
- 
+
         ret <- list(LinearStatistic = as.vector(crossprod(X, Y)),
-                    Expectation = as.vector(Exp), 
+                    Expectation = as.vector(Exp),
                     Covariance = Cov,
                     Variance = diag(Cov))
    } else {
@@ -2072,7 +2072,7 @@ stopifnot(
     testit() && testit(weights = weights) &&
     testit(subset = subset) && testit(weights = weights, subset = subset) &&
     testit(block = block) && testit(weights = weights, block = block) &&
-    testit(subset = subset, block = block) && 
+    testit(subset = subset, block = block) &&
     testit(weights = weights, subset = subset, block = block))
 ### without dummy matrix X
 testit <- function(...) {
@@ -2085,7 +2085,7 @@ stopifnot(
     testit() && testit(weights = weights) &&
     testit(subset = subset) && testit(weights = weights, subset = subset) &&
     testit(block = block) && testit(weights = weights, block = block) &&
-    testit(subset = subset, block = block) && 
+    testit(subset = subset, block = block) &&
     testit(weights = weights, subset = subset, block = block))
 @
 
@@ -2097,8 +2097,8 @@ Functions starting with \verb|R_| are \proglang{C} functions callable via
 \verb|.Call()| from \proglang{R}. That means they all return \verb|SEXP|.
 These functions allocate memory handled by \proglang{R}.
 
-Functions starting with \verb|RC_| are \proglang{C} functions with 
-\verb|SEXP| or pointer arguments and possibly an \verb|SEXP| return value. 
+Functions starting with \verb|RC_| are \proglang{C} functions with
+\verb|SEXP| or pointer arguments and possibly an \verb|SEXP| return value.
 
 Functions starting with \verb|C_| only take pointer arguments and return a
 scalar nor nothing.
@@ -2389,7 +2389,7 @@ The linear statistic $\T(\A)$ can be computed without taking blocks into account
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset, @\\
+\mbox{}\verb@RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset,@\\
 \mbox{}\verb@                   Offset0, XLENGTH(subset),@\\
 \mbox{}\verb@                   C_get_LinearStatistic(ans));@\\
 \mbox{}\verb@@{\NWsep}
@@ -2439,12 +2439,12 @@ subset.
 \mbox{}\verb@    table[0] = 0.0;@\\
 \mbox{}\verb@    table[1] = RC_Sums(N, nullvec, subset, Offset0, XLENGTH(subset));@\\
 \mbox{}\verb@} else {@\\
-\mbox{}\verb@    RC_OneTableSums(INTEGER(block), N, B + 1, nullvec, subset, Offset0, @\\
+\mbox{}\verb@    RC_OneTableSums(INTEGER(block), N, B + 1, nullvec, subset, Offset0,@\\
 \mbox{}\verb@                    XLENGTH(subset), table);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@if (table[0] > 0)@\\
 \mbox{}\verb@    error("No missing values allowed in block");@\\
-\mbox{}\verb@PROTECT(subset_block = RC_order_subset_wrt_block(N, subset, block, @\\
+\mbox{}\verb@PROTECT(subset_block = RC_order_subset_wrt_block(N, subset, block,@\\
 \mbox{}\verb@                                                 VECTOR_ELT(ans, TableBlock_SLOT)));@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -2469,7 +2469,7 @@ is initialised zero when $b = 0$ and values add-up over blocks.
 \mbox{}\verb@@\\
 \mbox{}\verb@/* compute sum of weights in block b of subset */@\\
 \mbox{}\verb@if (table[b + 1] > 0) {@\\
-\mbox{}\verb@    sumweights[b] = RC_Sums(N, weights, subset_block, @\\
+\mbox{}\verb@    sumweights[b] = RC_Sums(N, weights, subset_block,@\\
 \mbox{}\verb@                            offset, (R_xlen_t) table[b + 1]);@\\
 \mbox{}\verb@} else {@\\
 \mbox{}\verb@    /* offset = something and Nsubset = 0 means Nsubset = N in@\\
@@ -2493,12 +2493,12 @@ is initialised zero when $b = 0$ and values add-up over blocks.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@RC_ExpectationInfluence(N, y, Q, weights, subset_block, offset, @\\
+\mbox{}\verb@RC_ExpectationInfluence(N, y, Q, weights, subset_block, offset,@\\
 \mbox{}\verb@                        (R_xlen_t) table[b + 1], sumweights[b], ExpInf + b * Q);@\\
-\mbox{}\verb@RC_ExpectationX(x, N, P, weights, subset_block, offset, @\\
+\mbox{}\verb@RC_ExpectationX(x, N, P, weights, subset_block, offset,@\\
 \mbox{}\verb@                (R_xlen_t) table[b + 1], ExpX);@\\
 \mbox{}\verb@for (int p = 0; p < P; p++) ExpXtotal[p] += ExpX[p];@\\
-\mbox{}\verb@C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b, @\\
+\mbox{}\verb@C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b,@\\
 \mbox{}\verb@                             C_get_Expectation(ans));@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -2522,8 +2522,8 @@ values for each block in the return object (for later reuse).
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@/* C_ordered_Xfactor and C_unordered_Xfactor need both VarInf and CovInf */@\\
-\mbox{}\verb@RC_CovarianceInfluence(N, y, Q, weights, subset_block, offset, @\\
-\mbox{}\verb@                      (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b], @\\
+\mbox{}\verb@RC_CovarianceInfluence(N, y, Q, weights, subset_block, offset,@\\
+\mbox{}\verb@                      (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b],@\\
 \mbox{}\verb@                      !DoVarOnly, CovInf + b * Q * (Q + 1) / 2);@\\
 \mbox{}\verb@/* extract variance from covariance */@\\
 \mbox{}\verb@tmpCV = CovInf + b * Q * (Q + 1) / 2;@\\
@@ -2549,9 +2549,9 @@ $\Sigma(\A)$:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@RC_CovarianceX(x, N, P, weights, subset_block, offset, @\\
+\mbox{}\verb@RC_CovarianceX(x, N, P, weights, subset_block, offset,@\\
 \mbox{}\verb@               (R_xlen_t) table[b + 1], ExpX, DoVarOnly, VarX);@\\
-\mbox{}\verb@C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sumweights[b], @\\
+\mbox{}\verb@C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sumweights[b],@\\
 \mbox{}\verb@                          b, C_get_Variance(ans));@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -2570,7 +2570,7 @@ $\Sigma(\A)$:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@RC_CovarianceX(x, N, P, weights, subset_block, offset, @\\
+\mbox{}\verb@RC_CovarianceX(x, N, P, weights, subset_block, offset,@\\
 \mbox{}\verb@               (R_xlen_t) table[b + 1], ExpX, !DoVarOnly, CovX);@\\
 \mbox{}\verb@C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,@\\
 \mbox{}\verb@                            ExpX, CovX, sumweights[b], b,@\\
@@ -2594,7 +2594,7 @@ $\Sigma(\A)$:
 \mbox{}\verb@@\\
 \mbox{}\verb@/* always return variances */@\\
 \mbox{}\verb@if (!C_get_varonly(ans)) {@\\
-\mbox{}\verb@    for (int p = 0; p < mPQB(P, Q, 1); p++) @\\
+\mbox{}\verb@    for (int p = 0; p < mPQB(P, Q, 1); p++)@\\
 \mbox{}\verb@        C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, mPQB(P, Q, 1))];@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -2702,7 +2702,7 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 \mbox{}\verb@            @\hbox{$\langle\,${\itshape Setup Linear Statistic}\nobreak\ {\footnotesize \NWlink{nuweb41a}{41a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@            C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, expand_subset, @\\
+\mbox{}\verb@            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, expand_subset,@\\
 \mbox{}\verb@                                    Offset0, Nsubset, perm, linstat);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
@@ -2710,14 +2710,14 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 \mbox{}\verb@        /* same as RC_OneTableSums(block, noweights, expand_subset) */@\\
 \mbox{}\verb@        RC_OneTableSums(INTEGER(block), XLENGTH(block), B + 1, weights, subset, Offset0,@\\
 \mbox{}\verb@                        XLENGTH(subset), REAL(blockTable));@\\
-\mbox{}\verb@        PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset, @\\
+\mbox{}\verb@        PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset,@\\
 \mbox{}\verb@                                                         block, blockTable));@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@        for (R_xlen_t np = 0; np < inresample; np++) {@\\
 \mbox{}\verb@            @\hbox{$\langle\,${\itshape Setup Linear Statistic}\nobreak\ {\footnotesize \NWlink{nuweb41a}{41a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@            C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(blockTable), @\\
+\mbox{}\verb@            C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(blockTable),@\\
 \mbox{}\verb@                             B + 1, REAL(tmp), REAL(perm));@\\
-\mbox{}\verb@            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, block_subset, @\\
+\mbox{}\verb@            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, block_subset,@\\
 \mbox{}\verb@                                    Offset0, Nsubset, perm, linstat);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@        UNPROTECT(2);@\\
@@ -2822,13 +2822,13 @@ and returns the matrix of standardised linear statistics.
 \mbox{}\verb@    double *ls;@\\
 \mbox{}\verb@    if (!nresample) return(R_NilValue);@\\
 \mbox{}\verb@    int PQ = C_get_P(LECV) * C_get_Q(LECV);@\\
-\mbox{}\verb@    @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(ans = allocMatrix(REALSXP, PQ, nresample));@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    for (R_xlen_t np = 0; np < nresample; np++) {@\\
 \mbox{}\verb@        ls = REAL(ans) + PQ * np;@\\
 \mbox{}\verb@        /* copy first; standarisation is in place */@\\
-\mbox{}\verb@        for (int p = 0; p < PQ; p++) @\\
+\mbox{}\verb@        for (int p = 0; p < PQ; p++)@\\
 \mbox{}\verb@            ls[p] = C_get_PermutedLinearStatistic(LECV)[p + PQ * np];@\\
 \mbox{}\verb@        if (C_get_varonly(LECV)) {@\\
 \mbox{}\verb@            C_standardise(PQ, ls, C_get_Expectation(LECV),@\\
@@ -2968,16 +2968,16 @@ and returns the matrix of standardised linear statistics.
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup Dimensions 2d}\nobreak\ {\footnotesize \NWlink{nuweb45a}{45a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    PROTECT(ans = RC_init_LECV_2d(P, Q, INTEGER(varonly)[0], @\\
+\mbox{}\verb@    PROTECT(ans = RC_init_LECV_2d(P, Q, INTEGER(varonly)[0],@\\
 \mbox{}\verb@                                  Lx, Ly, B, Xfactor, REAL(tol)[0]));@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (B == 1) {@\\
-\mbox{}\verb@        RC_TwoTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1, @\\
-\mbox{}\verb@                        weights, subset, Offset0, Nsubset, @\\
+\mbox{}\verb@        RC_TwoTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1,@\\
+\mbox{}\verb@                        weights, subset, Offset0, Nsubset,@\\
 \mbox{}\verb@                        C_get_Table(ans));@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        RC_ThreeTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1, @\\
-\mbox{}\verb@                          INTEGER(block), B, weights, subset, Offset0, Nsubset, @\\
+\mbox{}\verb@        RC_ThreeTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1,@\\
+\mbox{}\verb@                          INTEGER(block), B, weights, subset, Offset0, Nsubset,@\\
 \mbox{}\verb@                          C_get_Table(ans));@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    RC_ExpectationCovarianceStatistic_2d(x, ix, y, iy, weights,@\\
@@ -3163,7 +3163,7 @@ and returns the matrix of standardised linear statistics.
 \mbox{}\verb@/* C_ordered_Xfactor needs both VarInf and CovInf */@\\
 \mbox{}\verb@RC_CovarianceInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, ExpInf, sumweights[b],@\\
 \mbox{}\verb@                       !DoVarOnly, C_get_CovarianceInfluence(ans));@\\
-\mbox{}\verb@for (int q = 0; q < Q; q++) @\\
+\mbox{}\verb@for (int q = 0; q < Q; q++)@\\
 \mbox{}\verb@    C_get_VarianceInfluence(ans)[q] = C_get_CovarianceInfluence(ans)[S(q, q, Q)];@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (C_get_varonly(ans)) {@\\
@@ -3232,12 +3232,12 @@ and returns the matrix of standardised linear statistics.
 \mbox{}\verb@@\\
 \mbox{}\verb@    /* always return variances */@\\
 \mbox{}\verb@    if (!C_get_varonly(ans)) {@\\
-\mbox{}\verb@        for (int p = 0; p < mPQB(P, Q, 1); p++) @\\
+\mbox{}\verb@        for (int p = 0; p < mPQB(P, Q, 1); p++)@\\
 \mbox{}\verb@            C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, mPQB(P, Q, 1))];@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    Free(CovX);@\\
-\mbox{}\verb@    Free(table2d); @\\
+\mbox{}\verb@    Free(table2d);@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -3298,7 +3298,7 @@ and returns the matrix of standardised linear statistics.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 <<permutations-2d>>=
-LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, 
+LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
               weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
 @
 
@@ -3558,7 +3558,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@extern SEXP libcoin_R_MaximumTest(@\\
-\mbox{}\verb@    SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log, @\\
+\mbox{}\verb@    SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,@\\
 \mbox{}\verb@    SEXP PermutedStatistics, SEXP maxpts, SEXP releps, SEXP abseps@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@@\\
@@ -3571,7 +3571,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@extern SEXP libcoin_R_MaximallySelectedTest(@\\
-\mbox{}\verb@    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log @\\
+\mbox{}\verb@    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;@\\
@@ -3782,8 +3782,8 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \mbox{}\verb@            UNPROTECT(2);@\\
 \mbox{}\verb@            return(ans);@\\
 \mbox{}\verb@        }@\\
-\mbox{}\verb@        REAL(pval)[0] = C_maxtype_pvalue(REAL(stat)[0], cv, @\\
-\mbox{}\verb@            PQ, INTEGER(alternative)[0], LOWER, GIVELOG, INTEGER(maxpts)[0], @\\
+\mbox{}\verb@        REAL(pval)[0] = C_maxtype_pvalue(REAL(stat)[0], cv,@\\
+\mbox{}\verb@            PQ, INTEGER(alternative)[0], LOWER, GIVELOG, INTEGER(maxpts)[0],@\\
 \mbox{}\verb@            REAL(releps)[0], REAL(abseps)[0], C_get_tol(LECV));@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        nresample = C_get_nresample(LECV);@\\
@@ -4619,9 +4619,9 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@@\hbox{$\langle\,${\itshape maxstat Xfactor Variables}\nobreak\ {\footnotesize \NWlink{nuweb70b}{70b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup maxstat Variables}\nobreak\ {\footnotesize \NWlink{nuweb72}{72}}$\,\rangle$}\verb@ @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup maxstat Variables}\nobreak\ {\footnotesize \NWlink{nuweb72}{72}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup maxstat Memory}\nobreak\ {\footnotesize \NWlink{nuweb73}{73}}$\,\rangle$}\verb@ @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup maxstat Memory}\nobreak\ {\footnotesize \NWlink{nuweb73}{73}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    wmax[0] = NA_INTEGER;@\\
 \mbox{}\verb@@\\
@@ -4645,7 +4645,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@@\\
 \mbox{}\verb@            ls = mlinstat;@\\
 \mbox{}\verb@            /* compute MPinv only once */@\\
-\mbox{}\verb@            if (teststat != TESTSTAT_maximum) @\\
+\mbox{}\verb@            if (teststat != TESTSTAT_maximum)@\\
 \mbox{}\verb@                C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);@\\
 \mbox{}\verb@            @\hbox{$\langle\,${\itshape Compute maxstat Test Statistic}\nobreak\ {\footnotesize \NWlink{nuweb74c}{74c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@            if (tmp > maxstat[0]) {@\\
@@ -4662,7 +4662,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Compute maxstat Permutation P-Value}\nobreak\ {\footnotesize \NWlink{nuweb75}{75}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    Free(mlinstat); Free(mexpect); Free(mblinstat); @\\
+\mbox{}\verb@    Free(mlinstat); Free(mexpect); Free(mblinstat);@\\
 \mbox{}\verb@    Free(mvar); Free(mcovar); Free(mMPinv);@\\
 \mbox{}\verb@    if (nresample == 0) Free(blinstat);@\\
 \mbox{}\verb@}@\\
@@ -4687,7 +4687,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@int P, Q, B;@\\
 \mbox{}\verb@R_xlen_t nresample;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, @\\
+\mbox{}\verb@double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv,@\\
 \mbox{}\verb@       tmp, sumleft, sumright, sumweights;@\\
 \mbox{}\verb@int rank, PQ, greater;@\\
 \mbox{}\verb@@\\
@@ -4906,7 +4906,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Count Levels}\nobreak\ {\footnotesize \NWlink{nuweb77a}{77a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    for (int j = 1; j < mi; j++) { /* go though all splits */@\\
-\mbox{}\verb@ @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@        @\hbox{$\langle\,${\itshape Setup unordered maxstat Contrasts}\nobreak\ {\footnotesize \NWlink{nuweb77b}{77b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@        @\hbox{$\langle\,${\itshape Compute unordered maxstat Linear Statistic and Expectation}\nobreak\ {\footnotesize \NWlink{nuweb78a}{78a}}$\,\rangle$}\verb@@\\
@@ -4921,7 +4921,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@@\\
 \mbox{}\verb@            ls = mlinstat;@\\
 \mbox{}\verb@            /* compute MPinv only once */@\\
-\mbox{}\verb@            if (teststat != TESTSTAT_maximum) @\\
+\mbox{}\verb@            if (teststat != TESTSTAT_maximum)@\\
 \mbox{}\verb@                C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);@\\
 \mbox{}\verb@            @\hbox{$\langle\,${\itshape Compute maxstat Test Statistic}\nobreak\ {\footnotesize \NWlink{nuweb74c}{74c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@            if (tmp > maxstat[0]) {@\\
@@ -5161,7 +5161,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -5183,7 +5183,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double center;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    RC_KronSums(x, N, P, y, Q, !DoSymmetric, &center, &center, !DoCenter, weights, @\\
+\mbox{}\verb@    RC_KronSums(x, N, P, y, Q, !DoSymmetric, &center, &center, !DoCenter, weights,@\\
 \mbox{}\verb@                subset, offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -5330,7 +5330,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@    double *VarInf,@\\
 \mbox{}\verb@    double *ExpX,@\\
 \mbox{}\verb@    double *VarX,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C sumweights Input}\nobreak\ {\footnotesize \NWlink{nuweb27a}{27a}}$\,\rangle$}\verb@,    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C sumweights Input}\nobreak\ {\footnotesize \NWlink{nuweb27a}{27a}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    const int add,@\\
 \mbox{}\verb@    double *PQ_ans@\\
 \mbox{}\verb@) {@\\
@@ -5390,7 +5390,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R y Input}\nobreak\ {\footnotesize \NWlink{nuweb25d}{25d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26c}{26c}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -5452,9 +5452,9 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26c}{26c}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C sumweights Input}\nobreak\ {\footnotesize \NWlink{nuweb27a}{27a}}$\,\rangle$}\verb@,    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C sumweights Input}\nobreak\ {\footnotesize \NWlink{nuweb27a}{27a}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C colSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb113c}{113c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -5476,9 +5476,9 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double center;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    RC_colSums(REAL(y), N, Q, Power1, &center, !DoCenter, weights, @\\
+\mbox{}\verb@    RC_colSums(REAL(y), N, Q, Power1, &center, !DoCenter, weights,@\\
 \mbox{}\verb@               subset, offset, Nsubset, P_ans);@\\
-\mbox{}\verb@    for (int q = 0; q < Q; q++) @\\
+\mbox{}\verb@    for (int q = 0; q < Q; q++)@\\
 \mbox{}\verb@        P_ans[q] = P_ans[q] / sumweights;@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -5576,7 +5576,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        PROTECT(ans = allocVector(REALSXP, Q * (Q + 1) / 2));@\\
 \mbox{}\verb@    }@\\
-\mbox{}\verb@    RC_CovarianceInfluence(N, y, Q, weights, subset, Offset0, Nsubset, REAL(ExpInf), sumweights, @\\
+\mbox{}\verb@    RC_CovarianceInfluence(N, y, Q, weights, subset, Offset0, Nsubset, REAL(ExpInf), sumweights,@\\
 \mbox{}\verb@                           INTEGER(varonly)[0], REAL(ans));@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
 \mbox{}\verb@    return(ans);@\\
@@ -5610,7 +5610,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C sumweights Input}\nobreak\ {\footnotesize \NWlink{nuweb27a}{27a}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    int VARONLY,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -5631,14 +5631,14 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_CovarianceInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb85b}{85b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (VARONLY) {@\\
-\mbox{}\verb@        RC_colSums(REAL(y), N, Q, Power2, ExpInf, DoCenter, weights, @\\
+\mbox{}\verb@        RC_colSums(REAL(y), N, Q, Power2, ExpInf, DoCenter, weights,@\\
 \mbox{}\verb@                   subset, offset, Nsubset, PQ_ans);@\\
-\mbox{}\verb@        for (int q = 0; q < Q; q++) @\\
+\mbox{}\verb@        for (int q = 0; q < Q; q++)@\\
 \mbox{}\verb@            PQ_ans[q] = PQ_ans[q] / sumweights;@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        RC_KronSums(y, N, Q, REAL(y), Q, DoSymmetric, ExpInf, ExpInf, DoCenter, weights, @\\
+\mbox{}\verb@        RC_KronSums(y, N, Q, REAL(y), Q, DoSymmetric, ExpInf, ExpInf, DoCenter, weights,@\\
 \mbox{}\verb@                    subset, offset, Nsubset, PQ_ans);@\\
-\mbox{}\verb@        for (int q = 0; q < Q * (Q + 1) / 2; q++) @\\
+\mbox{}\verb@        for (int q = 0; q < Q * (Q + 1) / 2; q++)@\\
 \mbox{}\verb@            PQ_ans[q] = PQ_ans[q] / sumweights;@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
@@ -5695,7 +5695,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    Nsubset = XLENGTH(subset);@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0]));@\\
-\mbox{}\verb@    RC_ExpectationX(x, N, INTEGER(P)[0], weights, subset, @\\
+\mbox{}\verb@    RC_ExpectationX(x, N, INTEGER(P)[0], weights, subset,@\\
 \mbox{}\verb@                    Offset0, Nsubset, REAL(ans));@\\
 \mbox{}\verb@    UNPROTECT(1);@\\
 \mbox{}\verb@    return(ans);@\\
@@ -5726,7 +5726,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C OneTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb118c}{118c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -5769,7 +5769,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 <<ExpectationCovarianceX>>=
-a0 <- colSums(x[subset, ] * weights[subset]) 
+a0 <- colSums(x[subset, ] * weights[subset])
 a0
 a1 <- .Call(libcoin:::R_ExpectationX, x, P, weights, subset);
 a2 <- .Call(libcoin:::R_ExpectationX, x, P, as.double(weights), as.double(subset));
@@ -5780,7 +5780,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4) &&
           isequal(a0, LECVxyws$ExpectationX))
 
-a0 <- colSums(x[subset, ]^2 * weights[subset]) 
+a0 <- colSums(x[subset, ]^2 * weights[subset])
 a1 <- .Call(libcoin:::R_CovarianceX, x, P, weights, subset, 1L);
 a2 <- .Call(libcoin:::R_CovarianceX, x, P, as.double(weights), as.double(subset), 1L);
 a3 <- .Call(libcoin:::R_CovarianceX, x, P, weights, as.double(subset), 1L);
@@ -5872,7 +5872,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * (INTEGER(P)[0] + 1) / 2));@\\
 \mbox{}\verb@    }@\\
-\mbox{}\verb@    RC_CovarianceX(x, N, INTEGER(P)[0], weights, subset, Offset0, Nsubset, REAL(ExpX), @\\
+\mbox{}\verb@    RC_CovarianceX(x, N, INTEGER(P)[0], weights, subset, Offset0, Nsubset, REAL(ExpX),@\\
 \mbox{}\verb@                   INTEGER(varonly)[0], REAL(ans));@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
 \mbox{}\verb@    return(ans);@\\
@@ -5905,7 +5905,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    double *ExpX,@\\
 \mbox{}\verb@    int VARONLY,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -5931,17 +5931,17 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@        if (VARONLY) {@\\
 \mbox{}\verb@            for (int p = 0; p < P; p++) PQ_ans[p] = ExpX[p];@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            for (int p = 0; p < PP12(P); p++) @\\
+\mbox{}\verb@            for (int p = 0; p < PP12(P); p++)@\\
 \mbox{}\verb@                PQ_ans[p] = 0.0;@\\
 \mbox{}\verb@            for (int p = 0; p < P; p++)@\\
 \mbox{}\verb@                PQ_ans[S(p, p, P)] = ExpX[p];@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (VARONLY) {@\\
-\mbox{}\verb@            RC_colSums(REAL(x), N, P, Power2, &center, !DoCenter, weights, @\\
+\mbox{}\verb@            RC_colSums(REAL(x), N, P, Power2, &center, !DoCenter, weights,@\\
 \mbox{}\verb@                       subset, offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            RC_KronSums(x, N, P, REAL(x), P, DoSymmetric, &center, &center, !DoCenter, weights, @\\
+\mbox{}\verb@            RC_KronSums(x, N, P, REAL(x), P, DoSymmetric, &center, &center, !DoCenter, weights,@\\
 \mbox{}\verb@                        subset, offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
@@ -5996,7 +5996,7 @@ allowing for number of observations larger than \verb|INT_MAX|
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++) @\\
+\mbox{}\verb@    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6107,7 +6107,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Nsubset Input}\nobreak\ {\footnotesize \NWlink{nuweb27c}{27c}}$\,\rangle$}\verb@;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    Nsubset = XLENGTH(subset);@\\
-\mbox{}\verb@    @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(ans = allocVector(REALSXP, 1));@\\
 \mbox{}\verb@    REAL(ans)[0] = RC_Sums(INTEGER(N)[0], weights, subset, Offset0, Nsubset);@\\
 \mbox{}\verb@    UNPROTECT(1);@\\
@@ -6137,7 +6137,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26c}{26c}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6163,13 +6163,13 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@        } else {@\\
 \mbox{}\verb@            return((double) Nsubset);@\\
 \mbox{}\verb@        }@\\
-\mbox{}\verb@    } @\\
+\mbox{}\verb@    }@\\
 \mbox{}\verb@    if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
 \mbox{}\verb@            return(C_Sums_iweights_isubset(N, INTEGER(weights), XLENGTH(weights),@\\
 \mbox{}\verb@                                           INTEGER(subset), offset, Nsubset));@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            return(C_Sums_iweights_dsubset(N, INTEGER(weights), XLENGTH(weights), @\\
+\mbox{}\verb@            return(C_Sums_iweights_dsubset(N, INTEGER(weights), XLENGTH(weights),@\\
 \mbox{}\verb@                                           REAL(subset), offset, Nsubset));@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
@@ -6204,9 +6204,9 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C real weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26e}{26e}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C real subset Input}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    double *s, *w; @\\
+\mbox{}\verb@    double *s, *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Sums Body}\nobreak\ {\footnotesize \NWlink{nuweb96a}{96a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -6231,10 +6231,10 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C real subset Input}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double *s;@\\
-\mbox{}\verb@    int *w; @\\
+\mbox{}\verb@    int *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Sums Body}\nobreak\ {\footnotesize \NWlink{nuweb96a}{96a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -6259,7 +6259,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    int *s, *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Sums Body}\nobreak\ {\footnotesize \NWlink{nuweb96a}{96a}}$\,\rangle$}\verb@@\\
@@ -6286,9 +6286,9 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C real weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26e}{26e}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    int *s; @\\
+\mbox{}\verb@    int *s;@\\
 \mbox{}\verb@    double *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Sums Body}\nobreak\ {\footnotesize \NWlink{nuweb96a}{96a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
@@ -6313,17 +6313,17 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    double ans = 0.0;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (Nsubset > 0) {@\\
-\mbox{}\verb@        if (!HAS_WEIGHTS) return((double) Nsubset); @\\
+\mbox{}\verb@        if (!HAS_WEIGHTS) return((double) Nsubset);@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (!HAS_WEIGHTS) return((double) N);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb91b}{91b}}$\,\rangle$}\verb@    @\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb92a}{92a}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb91b}{91b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb92a}{92a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    {@\\
 \mbox{}\verb@        w = w + diff;@\\
 \mbox{}\verb@        ans += w[0];@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb92b}{92b}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb92b}{92b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    w = w + diff;@\\
 \mbox{}\verb@    ans += w[0];@\\
@@ -6388,7 +6388,7 @@ a4 <- .Call(libcoin:::R_KronSums, x, P, y, as.double(weights), subset, 0L)
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 
-a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * 
+a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] *
                         y[subset,r2Xfactor] * weights[subset]))
 a1 <- .Call(libcoin:::R_KronSums, ix, Lx, y, weights, subset, 0L)
 a2 <- .Call(libcoin:::R_KronSums, ix, Lx, y, as.double(weights), as.double(subset), 0L)
@@ -6415,7 +6415,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26c}{26c}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    SEXP symmetric@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6451,7 +6451,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));@\\
 \mbox{}\verb@    }@\\
-\mbox{}\verb@    RC_KronSums(x, N, INTEGER(P)[0], REAL(y), Q, INTEGER(symmetric)[0], &center, &center, @\\
+\mbox{}\verb@    RC_KronSums(x, N, INTEGER(P)[0], REAL(y), Q, INTEGER(symmetric)[0], &center, &center,@\\
 \mbox{}\verb@                !DoCenter, weights, subset, Offset0, Nsubset, REAL(ans));@\\
 \mbox{}\verb@    UNPROTECT(1);@\\
 \mbox{}\verb@    return(ans);@\\
@@ -6480,7 +6480,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6593,22 +6593,22 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@if (CENTER) error("not implemented");@\\
 \mbox{}\verb@if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@    if (TYPEOF(subset) == INTSXP) {@\\
-\mbox{}\verb@        C_XfactorKronSums_iweights_isubset(INTEGER(x), N, P, y, Q, @\\
-\mbox{}\verb@            INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@        C_XfactorKronSums_iweights_isubset(INTEGER(x), N, P, y, Q,@\\
+\mbox{}\verb@            INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@            offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        C_XfactorKronSums_iweights_dsubset(INTEGER(x), N, P, y, Q, @\\
-\mbox{}\verb@            INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@        C_XfactorKronSums_iweights_dsubset(INTEGER(x), N, P, y, Q,@\\
+\mbox{}\verb@            INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@            offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@} else {@\\
 \mbox{}\verb@    if (TYPEOF(subset) == INTSXP) {@\\
-\mbox{}\verb@        C_XfactorKronSums_dweights_isubset(INTEGER(x), N, P, y, Q, @\\
-\mbox{}\verb@            REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@        C_XfactorKronSums_dweights_isubset(INTEGER(x), N, P, y, Q,@\\
+\mbox{}\verb@            REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@            offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        C_XfactorKronSums_dweights_dsubset(INTEGER(x), N, P, y, Q, @\\
-\mbox{}\verb@            REAL(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@        C_XfactorKronSums_dweights_dsubset(INTEGER(x), N, P, y, Q,@\\
+\mbox{}\verb@            REAL(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@            offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
@@ -6632,21 +6632,21 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@    if (TYPEOF(subset) == INTSXP) {@\\
 \mbox{}\verb@        C_KronSums_iweights_isubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,@\\
-\mbox{}\verb@            INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@            INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@            offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        C_KronSums_iweights_dsubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,@\\
-\mbox{}\verb@            INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@            INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@            offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@} else {@\\
 \mbox{}\verb@    if (TYPEOF(subset) == INTSXP) {@\\
 \mbox{}\verb@        C_KronSums_dweights_isubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,@\\
-\mbox{}\verb@            REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@            REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@            offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        C_KronSums_dweights_dsubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,@\\
-\mbox{}\verb@            REAL(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@            REAL(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@            offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
@@ -6675,7 +6675,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    double *s, *w; @\\
+\mbox{}\verb@    double *s, *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape KronSums Body}\nobreak\ {\footnotesize \NWlink{nuweb103}{103}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -6698,13 +6698,13 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_KronSums_iweights_dsubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Input}\nobreak\ {\footnotesize \NWlink{nuweb99c}{99c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C real subset Input}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double *s;@\\
-\mbox{}\verb@    int *w; @\\
+\mbox{}\verb@    int *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape KronSums Body}\nobreak\ {\footnotesize \NWlink{nuweb103}{103}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -6727,10 +6727,10 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_KronSums_iweights_isubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Input}\nobreak\ {\footnotesize \NWlink{nuweb99c}{99c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    int *s, *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape KronSums Body}\nobreak\ {\footnotesize \NWlink{nuweb103}{103}}$\,\rangle$}\verb@@\\
@@ -6755,11 +6755,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_KronSums_dweights_isubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Input}\nobreak\ {\footnotesize \NWlink{nuweb99c}{99c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26e}{26e}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26e}{26e}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
-\mbox{}\verb@    int *s; @\\
+\mbox{}\verb@    int *s;@\\
 \mbox{}\verb@    double *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape KronSums Body}\nobreak\ {\footnotesize \NWlink{nuweb103}{103}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
@@ -6788,9 +6788,9 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@            /* SYMMETRIC is column-wise, default@\\
 \mbox{}\verb@               is row-wise (maybe need to change this) */@\\
 \mbox{}\verb@            if (SYMMETRIC) {@\\
-\mbox{}\verb@                idx = S(p, q, P); @\\
+\mbox{}\verb@                idx = S(p, q, P);@\\
 \mbox{}\verb@            } else {@\\
-\mbox{}\verb@                idx = q * P + p;  @\\
+\mbox{}\verb@                idx = q * P + p;@\\
 \mbox{}\verb@            }@\\
 \mbox{}\verb@            PQ_ans[idx] = 0.0;@\\
 \mbox{}\verb@            thisPQ_ans = PQ_ans + idx;@\\
@@ -6879,7 +6879,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    double *s, *w; @\\
+\mbox{}\verb@    double *s, *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape XfactorKronSums Body}\nobreak\ {\footnotesize \NWlink{nuweb106}{106}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -6902,13 +6902,13 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_XfactorKronSums_iweights_dsubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C XfactorKronSums Input}\nobreak\ {\footnotesize \NWlink{nuweb104a}{104a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C real subset Input}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double *s;@\\
-\mbox{}\verb@    int *w; @\\
+\mbox{}\verb@    int *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape XfactorKronSums Body}\nobreak\ {\footnotesize \NWlink{nuweb106}{106}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -6931,10 +6931,10 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_XfactorKronSums_iweights_isubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C XfactorKronSums Input}\nobreak\ {\footnotesize \NWlink{nuweb104a}{104a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    int *s, *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape XfactorKronSums Body}\nobreak\ {\footnotesize \NWlink{nuweb106}{106}}$\,\rangle$}\verb@@\\
@@ -6959,11 +6959,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_XfactorKronSums_dweights_isubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C XfactorKronSums Input}\nobreak\ {\footnotesize \NWlink{nuweb104a}{104a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26e}{26e}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26e}{26e}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
-\mbox{}\verb@    int *s; @\\
+\mbox{}\verb@    int *s;@\\
 \mbox{}\verb@    double *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape XfactorKronSums Body}\nobreak\ {\footnotesize \NWlink{nuweb106}{106}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
@@ -6986,7 +6986,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@@\\
 \mbox{}\verb@    int *xx, ixi;@\\
 \mbox{}\verb@    double *yy;@\\
-\mbox{}\verb@ @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    for (int q = 0; q < Q; q++) {@\\
@@ -7087,9 +7087,9 @@ stopifnot(isequal(a0, a1))
 \mbox{}\verb@    Q = NCOL(y);@\\
 \mbox{}\verb@    N = XLENGTH(y) / Q;@\\
 \mbox{}\verb@    Nsubset = XLENGTH(subset);@\\
-\mbox{}\verb@    @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));@\\
-\mbox{}\verb@    RC_KronSums_Permutation(x, N, INTEGER(P)[0], REAL(y), Q, subset, Offset0, Nsubset, @\\
+\mbox{}\verb@    RC_KronSums_Permutation(x, N, INTEGER(P)[0], REAL(y), Q, subset, Offset0, Nsubset,@\\
 \mbox{}\verb@                            subsety, REAL(ans));@\\
 \mbox{}\verb@    UNPROTECT(1);@\\
 \mbox{}\verb@    return(ans);@\\
@@ -7121,7 +7121,7 @@ stopifnot(isequal(a0, a1))
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    SEXP subsety,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7143,22 +7143,22 @@ stopifnot(isequal(a0, a1))
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (TYPEOF(x) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
-\mbox{}\verb@            C_XfactorKronSums_Permutation_isubset(INTEGER(x), N, P, y, Q, @\\
-\mbox{}\verb@                                                  INTEGER(subset), offset, Nsubset, @\\
+\mbox{}\verb@            C_XfactorKronSums_Permutation_isubset(INTEGER(x), N, P, y, Q,@\\
+\mbox{}\verb@                                                  INTEGER(subset), offset, Nsubset,@\\
 \mbox{}\verb@                                                  INTEGER(subsety), PQ_ans);@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q, @\\
-\mbox{}\verb@                                                  REAL(subset), offset, Nsubset, @\\
+\mbox{}\verb@            C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q,@\\
+\mbox{}\verb@                                                  REAL(subset), offset, Nsubset,@\\
 \mbox{}\verb@                                                  REAL(subsety), PQ_ans);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
-\mbox{}\verb@            C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q, @\\
-\mbox{}\verb@                                           INTEGER(subset), offset, Nsubset, @\\
+\mbox{}\verb@            C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q,@\\
+\mbox{}\verb@                                           INTEGER(subset), offset, Nsubset,@\\
 \mbox{}\verb@                                           INTEGER(subsety), PQ_ans);@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            C_KronSums_Permutation_dsubset(REAL(x), N, P, y, Q, @\\
-\mbox{}\verb@                                           REAL(subset), offset, Nsubset, @\\
+\mbox{}\verb@            C_KronSums_Permutation_dsubset(REAL(x), N, P, y, Q,@\\
+\mbox{}\verb@                                           REAL(subset), offset, Nsubset,@\\
 \mbox{}\verb@                                           REAL(subsety), PQ_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
@@ -7187,7 +7187,7 @@ stopifnot(isequal(a0, a1))
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C real subset Input}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    double *subsety,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape KronSums Permutation Body}\nobreak\ {\footnotesize \NWlink{nuweb109b}{109b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
@@ -7215,7 +7215,7 @@ stopifnot(isequal(a0, a1))
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    int *subsety,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape KronSums Permutation Body}\nobreak\ {\footnotesize \NWlink{nuweb109b}{109b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
@@ -7249,7 +7249,7 @@ have to go through all elements explicitly here.
 \mbox{}\verb@            PQ_ans[qPp] = 0.0;@\\
 \mbox{}\verb@            pN = p * N;@\\
 \mbox{}\verb@            for (R_xlen_t i = offset; i < Nsubset; i++)@\\
-\mbox{}\verb@                PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] * @\\
+\mbox{}\verb@                PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] *@\\
 \mbox{}\verb@                               x[pN + (R_xlen_t) subset[i] - 1];@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
@@ -7279,7 +7279,7 @@ have to go through all elements explicitly here.
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C real subset Input}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    double *subsety,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape XfactorKronSums Permutation Body}\nobreak\ {\footnotesize \NWlink{nuweb110c}{110c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
@@ -7307,7 +7307,7 @@ have to go through all elements explicitly here.
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    int *subsety,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C KronSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb99d}{99d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape XfactorKronSums Permutation Body}\nobreak\ {\footnotesize \NWlink{nuweb110c}{110c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
@@ -7426,9 +7426,9 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    P = NCOL(x);@\\
 \mbox{}\verb@    N = XLENGTH(x) / P;@\\
 \mbox{}\verb@    Nsubset = XLENGTH(subset);@\\
-\mbox{}\verb@    @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(ans = allocVector(REALSXP, P));@\\
-\mbox{}\verb@    RC_colSums(REAL(x), N, P, Power1, &center, !DoCenter, weights, subset, Offset0, @\\
+\mbox{}\verb@    RC_colSums(REAL(x), N, P, Power1, &center, !DoCenter, weights, subset, Offset0,@\\
 \mbox{}\verb@               Nsubset, REAL(ans));@\\
 \mbox{}\verb@    UNPROTECT(1);@\\
 \mbox{}\verb@    return(ans);@\\
@@ -7457,7 +7457,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C colSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb113c}{113c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7480,21 +7480,21 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
 \mbox{}\verb@            C_colSums_iweights_isubset(x, N, P, power, centerx, CENTER,@\\
-\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        } else {@\\
 \mbox{}\verb@            C_colSums_iweights_dsubset(x, N, P, power, centerx, CENTER,@\\
-\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
 \mbox{}\verb@            C_colSums_dweights_isubset(x, N, P, power, centerx, CENTER,@\\
-\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        } else {@\\
 \mbox{}\verb@            C_colSums_dweights_dsubset(x, N, P, power, centerx, CENTER,@\\
-\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
@@ -7558,12 +7558,12 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_colSums_dweights_dsubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C colSums Input}\nobreak\ {\footnotesize \NWlink{nuweb113b}{113b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26e}{26e}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26e}{26e}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C real subset Input}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C colSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb113c}{113c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    double *s, *w; @\\
+\mbox{}\verb@    double *s, *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape colSums Body}\nobreak\ {\footnotesize \NWlink{nuweb115b}{115b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -7586,13 +7586,13 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_colSums_iweights_dsubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C colSums Input}\nobreak\ {\footnotesize \NWlink{nuweb113b}{113b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C real subset Input}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C colSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb113c}{113c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double *s;@\\
-\mbox{}\verb@    int *w; @\\
+\mbox{}\verb@    int *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape colSums Body}\nobreak\ {\footnotesize \NWlink{nuweb115b}{115b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -7615,10 +7615,10 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_colSums_iweights_isubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C colSums Input}\nobreak\ {\footnotesize \NWlink{nuweb113b}{113b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C colSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb113c}{113c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    int *s, *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape colSums Body}\nobreak\ {\footnotesize \NWlink{nuweb115b}{115b}}$\,\rangle$}\verb@@\\
@@ -7643,12 +7643,12 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_colSums_dweights_isubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C colSums Input}\nobreak\ {\footnotesize \NWlink{nuweb113b}{113b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26e}{26e}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26e}{26e}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C colSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb113c}{113c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    int *s; @\\
+\mbox{}\verb@    int *s;@\\
 \mbox{}\verb@    double *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape colSums Body}\nobreak\ {\footnotesize \NWlink{nuweb115b}{115b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
@@ -7801,9 +7801,9 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    N = XLENGTH(x);@\\
 \mbox{}\verb@    Nsubset = XLENGTH(subset);@\\
 \mbox{}\verb@    P = NLEVELS(x) + 1;@\\
-\mbox{}\verb@    @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(ans = allocVector(REALSXP, P));@\\
-\mbox{}\verb@    RC_OneTableSums(INTEGER(x), N, P, weights, subset, @\\
+\mbox{}\verb@    RC_OneTableSums(INTEGER(x), N, P, weights, subset,@\\
 \mbox{}\verb@                    Offset0, Nsubset, REAL(ans));@\\
 \mbox{}\verb@    UNPROTECT(1);@\\
 \mbox{}\verb@    return(ans);@\\
@@ -7832,7 +7832,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C OneTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb118c}{118c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7854,22 +7854,22 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
-\mbox{}\verb@            C_OneTableSums_iweights_isubset(x, N, P, @\\
-\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@            C_OneTableSums_iweights_isubset(x, N, P,@\\
+\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            C_OneTableSums_iweights_dsubset(x, N, P, @\\
-\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@            C_OneTableSums_iweights_dsubset(x, N, P,@\\
+\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
-\mbox{}\verb@            C_OneTableSums_dweights_isubset(x, N, P, @\\
-\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@            C_OneTableSums_dweights_isubset(x, N, P,@\\
+\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            C_OneTableSums_dweights_dsubset(x, N, P, @\\
-\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@            C_OneTableSums_dweights_dsubset(x, N, P,@\\
+\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
@@ -7935,7 +7935,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C OneTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb118c}{118c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    double *s, *w; @\\
+\mbox{}\verb@    double *s, *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape OneTableSums Body}\nobreak\ {\footnotesize \NWlink{nuweb120b}{120b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -7964,7 +7964,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double *s;@\\
-\mbox{}\verb@    int *w; @\\
+\mbox{}\verb@    int *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape OneTableSums Body}\nobreak\ {\footnotesize \NWlink{nuweb120b}{120b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -7987,7 +7987,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_OneTableSums_iweights_isubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C OneTableSums Input}\nobreak\ {\footnotesize \NWlink{nuweb118b}{118b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C OneTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb118c}{118c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
@@ -8020,7 +8020,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C OneTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb118c}{118c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    int *s; @\\
+\mbox{}\verb@    int *s;@\\
 \mbox{}\verb@    double *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape OneTableSums Body}\nobreak\ {\footnotesize \NWlink{nuweb120b}{120b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
@@ -8085,7 +8085,7 @@ class(a0) <- "matrix"
 dimnames(a0) <- NULL
 attributes(a0)$call <- NULL
 a1 <- ctabs(ix, iy, weights = weights, subset = subset)[-1, -1]
-a2 <- ctabs(ix, iy, weights = as.double(weights), 
+a2 <- ctabs(ix, iy, weights = as.double(weights),
             subset = as.double(subset))[-1, -1]
 a3 <- ctabs(ix, iy, weights = weights, subset = as.double(subset))[-1, -1]
 a4 <- ctabs(ix, iy, weights = as.double(weights), subset = subset)[-1, -1]
@@ -8137,13 +8137,13 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    Nsubset = XLENGTH(subset);@\\
 \mbox{}\verb@    P = NLEVELS(x) + 1;@\\
 \mbox{}\verb@    Q = NLEVELS(y) + 1;@\\
-\mbox{}\verb@    @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(ans = allocVector(REALSXP, mPQB(P, Q, 1)));@\\
 \mbox{}\verb@    PROTECT(dim = allocVector(INTSXP, 2));@\\
 \mbox{}\verb@    INTEGER(dim)[0] = P;@\\
 \mbox{}\verb@    INTEGER(dim)[1] = Q;@\\
 \mbox{}\verb@    dimgets(ans, dim);@\\
-\mbox{}\verb@    RC_TwoTableSums(INTEGER(x), N, P, INTEGER(y), Q, @\\
+\mbox{}\verb@    RC_TwoTableSums(INTEGER(x), N, P, INTEGER(y), Q,@\\
 \mbox{}\verb@                    weights, subset, Offset0, Nsubset, REAL(ans));@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
 \mbox{}\verb@    return(ans);@\\
@@ -8172,7 +8172,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C TwoTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb123a}{123a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -8194,22 +8194,22 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
-\mbox{}\verb@            C_TwoTableSums_iweights_isubset(x, N, P, y, Q, @\\
-\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@            C_TwoTableSums_iweights_isubset(x, N, P, y, Q,@\\
+\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            C_TwoTableSums_iweights_dsubset(x, N, P, y, Q, @\\
-\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@            C_TwoTableSums_iweights_dsubset(x, N, P, y, Q,@\\
+\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
-\mbox{}\verb@            C_TwoTableSums_dweights_isubset(x, N, P, y, Q, @\\
-\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@            C_TwoTableSums_dweights_isubset(x, N, P, y, Q,@\\
+\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            C_TwoTableSums_dweights_dsubset(x, N, P, y, Q, @\\
-\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@            C_TwoTableSums_dweights_dsubset(x, N, P, y, Q,@\\
+\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, PQ_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
@@ -8276,7 +8276,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C TwoTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb123a}{123a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    double *s, *w; @\\
+\mbox{}\verb@    double *s, *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape TwoTableSums Body}\nobreak\ {\footnotesize \NWlink{nuweb125}{125}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -8305,7 +8305,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double *s;@\\
-\mbox{}\verb@    int *w; @\\
+\mbox{}\verb@    int *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape TwoTableSums Body}\nobreak\ {\footnotesize \NWlink{nuweb125}{125}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -8328,7 +8328,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_TwoTableSums_iweights_isubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C TwoTableSums Input}\nobreak\ {\footnotesize \NWlink{nuweb122c}{122c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C TwoTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb123a}{123a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
@@ -8361,7 +8361,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C TwoTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb123a}{123a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    int *s; @\\
+\mbox{}\verb@    int *s;@\\
 \mbox{}\verb@    double *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape TwoTableSums Body}\nobreak\ {\footnotesize \NWlink{nuweb125}{125}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
@@ -8481,14 +8481,14 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    P = NLEVELS(x) + 1;@\\
 \mbox{}\verb@    Q = NLEVELS(y) + 1;@\\
 \mbox{}\verb@    B = NLEVELS(block);@\\
-\mbox{}\verb@    @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(ans = allocVector(REALSXP, mPQB(P, Q, B)));@\\
 \mbox{}\verb@    PROTECT(dim = allocVector(INTSXP, 3));@\\
 \mbox{}\verb@    INTEGER(dim)[0] = P;@\\
 \mbox{}\verb@    INTEGER(dim)[1] = Q;@\\
 \mbox{}\verb@    INTEGER(dim)[2] = B;@\\
 \mbox{}\verb@    dimgets(ans, dim);@\\
-\mbox{}\verb@    RC_ThreeTableSums(INTEGER(x), N, P, INTEGER(y), Q, @\\
+\mbox{}\verb@    RC_ThreeTableSums(INTEGER(x), N, P, INTEGER(y), Q,@\\
 \mbox{}\verb@                      INTEGER(block), B,@\\
 \mbox{}\verb@                      weights, subset, Offset0, Nsubset, REAL(ans));@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
@@ -8518,7 +8518,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape R subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C ThreeTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb128a}{128a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@) @\\
+\mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -8540,22 +8540,22 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
-\mbox{}\verb@            C_ThreeTableSums_iweights_isubset(x, N, P, y, Q, block, B, @\\
-\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@            C_ThreeTableSums_iweights_isubset(x, N, P, y, Q, block, B,@\\
+\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, PQL_ans);@\\
 \mbox{}\verb@        } else {@\\
 \mbox{}\verb@            C_ThreeTableSums_iweights_dsubset(x, N, P, y, Q, block, B,@\\
-\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, PQL_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
 \mbox{}\verb@            C_ThreeTableSums_dweights_isubset(x, N, P, y, Q, block, B,@\\
-\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), @\\
+\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, PQL_ans);@\\
 \mbox{}\verb@        } else {@\\
 \mbox{}\verb@            C_ThreeTableSums_dweights_dsubset(x, N, P, y, Q, block, B,@\\
-\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), @\\
+\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset),@\\
 \mbox{}\verb@                                        offset, Nsubset, PQL_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
@@ -8623,7 +8623,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C ThreeTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb128a}{128a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    double *s, *w; @\\
+\mbox{}\verb@    double *s, *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape ThreeTableSums Body}\nobreak\ {\footnotesize \NWlink{nuweb130a}{130a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -8652,7 +8652,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double *s;@\\
-\mbox{}\verb@    int *w; @\\
+\mbox{}\verb@    int *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape ThreeTableSums Body}\nobreak\ {\footnotesize \NWlink{nuweb130a}{130a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -8675,7 +8675,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@void C_ThreeTableSums_iweights_isubset@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C ThreeTableSums Input}\nobreak\ {\footnotesize \NWlink{nuweb127c}{127c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@    @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer weights Input}\nobreak\ {\footnotesize \NWlink{nuweb26d}{26d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer subset Input}\nobreak\ {\footnotesize \NWlink{nuweb27e}{27e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C ThreeTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb128a}{128a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
@@ -8708,7 +8708,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C ThreeTableSums Answer}\nobreak\ {\footnotesize \NWlink{nuweb128a}{128a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    int *s; @\\
+\mbox{}\verb@    int *s;@\\
 \mbox{}\verb@    double *w;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape ThreeTableSums Body}\nobreak\ {\footnotesize \NWlink{nuweb130a}{130a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
@@ -8853,7 +8853,7 @@ stopifnot(isequal(ns1, ns2))
 \mbox{}\verb@        REAL(blockTable)[0] = 0.0;@\\
 \mbox{}\verb@        REAL(blockTable)[1] = RC_Sums(N, weights, subset, Offset0, XLENGTH(subset));@\\
 \mbox{}\verb@    }@\\
-\mbox{}\verb@    @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(ans = RC_order_subset_wrt_block(N, subset, block, blockTable));@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
@@ -9028,7 +9028,7 @@ stopifnot(isequal(ns1, ns2))
 \mbox{}\verb@    SEXP ans@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    double *cumtable;    @\\
+\mbox{}\verb@    double *cumtable;@\\
 \mbox{}\verb@    int Nlevels = LENGTH(blockTable);@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    cumtable = Calloc(Nlevels, double);@\\
@@ -9047,7 +9047,7 @@ stopifnot(isequal(ns1, ns2))
 \mbox{}\verb@            REAL(ans)[(R_xlen_t) cumtable[INTEGER(block)[(R_xlen_t) REAL(subset)[i] - 1]]++] = REAL(subset)[i];@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    Free(cumtable); @\\
+\mbox{}\verb@    Free(cumtable);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -9109,7 +9109,7 @@ be a little bit more generous with memory here. The return value is always
 \mbox{}\verb@        UNPROTECT(1);@\\
 \mbox{}\verb@        return(mysubset);@\\
 \mbox{}\verb@    }@\\
-\mbox{}\verb@        @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    sumweights = (R_xlen_t) RC_Sums(N, weights, mysubset, Offset0, XLENGTH(subset));@\\
 \mbox{}\verb@    PROTECT(ans = allocVector(REALSXP, sumweights));@\\
 \mbox{}\verb@@\\
@@ -9378,7 +9378,7 @@ be a little bit more generous with memory here. The return value is always
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@int NLEVELS     @\\
+\mbox{}\verb@int NLEVELS@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    SEXP x@\\
 \mbox{}\verb@) {@\\
@@ -10418,7 +10418,7 @@ stopifnot(isequal(K1, K2))
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@    SEXP vo, d, names, tolerance, tmp;@\\
-\mbox{}\verb@    int PQ; @\\
+\mbox{}\verb@    int PQ;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Memory Input Checks}\nobreak\ {\footnotesize \NWlink{nuweb153b}{153b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    PQ = mPQB(P, Q, 1);@\\
@@ -10641,8 +10641,8 @@ stopifnot(isequal(K1, K2))
 \mbox{}\verb@Authors@{\tt @}\verb@R: person("Torsten", "Hothorn", role = c("aut", "cre"),@\\
 \mbox{}\verb@                  email = "Torsten.Hothorn@{\tt @}\verb@R-project.org")@\\
 \mbox{}\verb@Description: Basic infrastructure for linear test statistics and permutation@\\
-\mbox{}\verb@  inference in the framework of Strasser and Weber (1999) <http://epub.wu.ac.at/102/>. @\\
-\mbox{}\verb@  This package must not be used by end-users. CRAN package 'coin' implements all @\\
+\mbox{}\verb@  inference in the framework of Strasser and Weber (1999) <http://epub.wu.ac.at/102/>.@\\
+\mbox{}\verb@  This package must not be used by end-users. CRAN package 'coin' implements all@\\
 \mbox{}\verb@  user interfaces and is ready to be used by anyone.@\\
 \mbox{}\verb@Depends: R (>= 3.4.0)@\\
 \mbox{}\verb@Suggests: coin@\\
@@ -10722,7 +10722,7 @@ not portable).
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
-Other packages can link against \pkg{libcoin}. A small example package 
+Other packages can link against \pkg{libcoin}. A small example package
 is contained in \texttt{libcoin/inst/C\_API\_example}.
 
 \begin{flushleft} \small
@@ -10756,7 +10756,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \mbox{}\verb@    CALLDEF(R_KronSums, 6),@\\
 \mbox{}\verb@    CALLDEF(R_KronSums_Permutation, 5),@\\
 \mbox{}\verb@    CALLDEF(R_colSums, 3),@\\
-\mbox{}\verb@    CALLDEF(R_OneTableSums, 3), @\\
+\mbox{}\verb@    CALLDEF(R_OneTableSums, 3),@\\
 \mbox{}\verb@    CALLDEF(R_TwoTableSums, 4),@\\
 \mbox{}\verb@    CALLDEF(R_ThreeTableSums, 5),@\\
 \mbox{}\verb@    CALLDEF(R_order_subset_wrt_block, 4),@\\
@@ -10829,10 +10829,10 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@###    Copyright (C) 2017-2019 Torsten Hothorn@\\
-\mbox{}\verb@### @\\
+\mbox{}\verb@###@\\
 \mbox{}\verb@###    This file is part of the 'libcoin' R add-on package.@\\
 \mbox{}\verb@###@\\
-\mbox{}\verb@###    'libcoin' is free software: you can redistribute it and/or modify  @\\
+\mbox{}\verb@###    'libcoin' is free software: you can redistribute it and/or modify@\\
 \mbox{}\verb@###    it under the terms of the GNU General Public License as published by@\\
 \mbox{}\verb@###    the Free Software Foundation, version 2.@\\
 \mbox{}\verb@###@\\
@@ -10846,7 +10846,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \mbox{}\verb@###@\\
 \mbox{}\verb@###@\\
 \mbox{}\verb@###    DO NOT EDIT THIS FILE@\\
-\mbox{}\verb@### @\\
+\mbox{}\verb@###@\\
 \mbox{}\verb@###    Edit 'libcoin.w' and run 'nuweb -r libcoin.w'@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -10884,7 +10884,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \mbox{}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    DO NOT EDIT THIS FILE@\\
-\mbox{}\verb@    @\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    Edit 'libcoin.w' and run 'nuweb -r libcoin.w'@\\
 \mbox{}\verb@*/@\\
 \mbox{}\verb@@{\NWsep}

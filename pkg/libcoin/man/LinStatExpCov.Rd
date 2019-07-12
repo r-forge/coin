@@ -12,7 +12,7 @@
 \usage{
 LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0),
               subset = integer(0), block = integer(0),
-              checkNAs = TRUE, 
+              checkNAs = TRUE,
               varonly = FALSE, nresample = 0, standardise = FALSE,
               tol = sqrt(.Machine$double.eps))
 lmult(x, object)
@@ -26,7 +26,7 @@ lmult(x, object)
   \item{subset}{an optional integer vector defining a subset of observations.}
   \item{block}{an optional factor defining independent blocks of observations.}
   \item{checkNAs}{a logical for switching off missing value checks. This
-      included switching off checks for suitable values of \code{subset}. 
+      included switching off checks for suitable values of \code{subset}.
       Use at your own risk.}
   \item{varonly}{a logical asking for variances only.}
   \item{nresample}{an integer defining the number of permuted statistics to draw.}

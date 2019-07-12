@@ -279,7 +279,7 @@ data is available in aggregated form; details will be explained later.
 @d LinStatExpCov Prototype
 @{(X, Y, ix = NULL, iy = NULL, weights = integer(0),
  subset = integer(0), block = integer(0),
- checkNAs = TRUE, 
+ checkNAs = TRUE,
  varonly = FALSE, nresample = 0, standardise = FALSE,
  tol = sqrt(.Machine$double.eps))@}
 
@@ -296,10 +296,10 @@ LinStatExpCov <- function@<LinStatExpCov Prototype@>
 
     ### <FIXME> for the time being only!!! </FIXME>
 ##    if (length(subset) > 0) subset <- sort(subset)
-    
+
     if (is.null(ix) & is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
-                                subset = subset, block = block, 
+                                subset = subset, block = block,
                                 checkNAs = checkNAs,
                                 varonly = varonly, nresample = nresample,
                                 standardise = standardise, tol = tol))
@@ -307,7 +307,7 @@ LinStatExpCov <- function@<LinStatExpCov Prototype@>
     if (!is.null(ix) & !is.null(iy))
         return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
                                 weights = weights, subset = subset,
-                                block = block, varonly = varonly, 
+                                block = block, varonly = varonly,
                                 checkNAs = checkNAs, nresample = nresample,
                                 standardise = standardise, tol = tol))
 
@@ -326,7 +326,7 @@ or \verb|double| (possibly resulting from an aggregation of $N > $
 \verb|INT_MAX| observations). The subset vector \verb|subset| may contain
 the elements $1, \dots, N$ as \verb|integer| or \verb|double| (for $N > $
 \verb|INT_MAX|) and can be longer than $N$. The \verb|subset| vector MUST be
-sorted. \verb|block| is a factor at $B$ levels of length $N$. 
+sorted. \verb|block| is a factor at $B$ levels of length $N$.
 
 @d Check weights, subset, block
 @{
@@ -399,7 +399,7 @@ Variances smaller than \verb|tol| are treated as being zero.
         if (is.null(attr(X, "levels")) || checkNAs) {
             rg <- range(X)
             if (anyNA(rg))
-                stop("no missing values allowed in X") 
+                stop("no missing values allowed in X")
             stopifnot(rg[1] > 0) ### no missing values allowed here!
             if (is.null(attr(X, "levels")))
                 attr(X, "levels") <- 1:rg[2]
@@ -470,20 +470,20 @@ used to represent the dummy matrix \verb|X|.
 Sometimes the data takes only a few unique values and considerable
 computational speedups can be achieved taking this information into account.
 Let \verb|ix| denote an integer vector with elements $0, \dots, L_x$ of
-length $N$ and 
+length $N$ and
 \verb|iy| an integer vector with elements $0, \dots, L_y$, also of length
 $N$. The matrix
 \verb|X| is now of dimension $(L_x + 1) \times P$ and the matrix \verb|Y|
 of dimension $(L_y + 1) \times Q$. The combination of \verb|X| and \verb|ix|
 means that the $i$th observation corresponds to the row \verb|X[ix[i] + 1,]|.
 This looks cumbersome in \proglang{R} notation but is a very efficient way
-of dealing with missing values at \proglang{C} level. By convention, 
+of dealing with missing values at \proglang{C} level. By convention,
 elements of \verb|ix| being zero denote a missing value (\verb|NA|s are not
-allowed in \verb|ix| and \verb|iy|). Thus, the first row of \verb|X| 
+allowed in \verb|ix| and \verb|iy|). Thus, the first row of \verb|X|
 corresponds to a missing value. If the first row is simply zero, missing
 values do not contribute to any of the sums computed later. Even more
 important is the fact that all entities, such as linear statistics etc., can
-be computed from the two-way tabulation (therefore the abbrevation ``2d'') 
+be computed from the two-way tabulation (therefore the abbrevation ``2d'')
 over the $N$ elements of \verb|ix| and \verb|iy|. Once such a
 table was computed, the remaining computations can be performed in
 dimension $L_x \times L_y$, typically much smaller than $N$.
@@ -541,7 +541,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 if (is.null(attr(ix, "levels"))) {
     rg <- range(ix)
     if (anyNA(rg))
-        stop("no missing values allowed in ix") 
+        stop("no missing values allowed in ix")
     stopifnot(rg[1] >= 0)
     attr(ix, "levels") <- 1:rg[2]
 } else {
@@ -558,7 +558,7 @@ if (is.null(attr(ix, "levels"))) {
 if (is.null(attr(iy, "levels"))) {
     rg <- range(iy)
     if (anyNA(rg))
-        stop("no missing values allowed in iy") 
+        stop("no missing values allowed in iy")
     stopifnot(rg[1] >= 0)
     attr(iy, "levels") <- 1:rg[2]
 } else {
@@ -630,14 +630,14 @@ corresponding $p$-values. If \verb|nresample = 0| was used in the call to
 distribution whenever such a thing is available at reasonable costs.
 Otherwise, the permutation $p$-value is returned (along with the permuted
 test statistics when \verb|PermutedStatistics| is \verb|TRUE|). The
-$p$-values (\verb|lower = FALSE|) or $(1 - p)$-values (\verb|lower = TRUE|) 
+$p$-values (\verb|lower = FALSE|) or $(1 - p)$-values (\verb|lower = TRUE|)
 can be computed on the log-scale.
 
 @d doTest Prototype
 @{(object, teststat = c("maximum", "quadratic", "scalar"),
    alternative = c("two.sided", "less", "greater"),
    pvalue = TRUE, lower = FALSE, log = FALSE, PermutedStatistics = FALSE,
-   minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor, 
+   minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor,
    pargs = GenzBretz())@}
 
 @d doTest
@@ -676,9 +676,9 @@ doTest <- function@<doTest Prototype@>
             ret <- .Call(R_QuadraticTest, object, as.integer(pvalue), as.integer(lower),
                          as.integer(log), as.integer(PermutedStatistics))
         } else {
-            ret <- .Call(R_MaximumTest, object, as.integer(alt), as.integer(pvalue), 
+            ret <- .Call(R_MaximumTest, object, as.integer(alt), as.integer(pvalue),
                          as.integer(lower), as.integer(log), as.integer(PermutedStatistics),
-                         as.integer(pargs$maxpts), as.double(pargs$releps), 
+                         as.integer(pargs$maxpts), as.double(pargs$releps),
                          as.double(pargs$abseps))
             if (teststat == "scalar") {
                 var <- if (object$varonly) object$Variance else object$Covariance
@@ -688,7 +688,7 @@ doTest <- function@<doTest Prototype@>
             }
         }
     } else {
-        ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered), as.integer(test), 
+        ret <- .Call(R_MaximallySelectedTest, object, as.integer(ordered), as.integer(test),
                      as.integer(minbucket), as.integer(lower), as.integer(log))
     }
     if (!PermutedStatistics) ret$PermutedStatistics <- NULL
@@ -766,18 +766,18 @@ lmult <- function(x, object) {
 Here is an example for a linear-by-linear association test.
 <<Contrasts-1>>=
 set.seed(29)
-ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1), 
+ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1),
                       nresample = 10, standardise = TRUE)
 set.seed(29)
-ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1), 
+ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1),
                       nresample = 10, standardise = TRUE)
 ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
 set.seed(29)
-ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2), 
+ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2),
                       nresample = 10, standardise = TRUE)
 set.seed(29)
-ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2), 
+ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2),
                       nresample = 10, standardise = TRUE)
 ls1c <- lmult(c(1:5), ls1d)
 stopifnot(isequal(ls1c, ls1s))
@@ -855,7 +855,7 @@ lmult(x, object)
   \item{subset}{an optional integer vector defining a subset of observations.}
   \item{block}{an optional factor defining independent blocks of observations.}
   \item{checkNAs}{a logical for switching off missing value checks. This
-      included switching off checks for suitable values of \code{subset}. 
+      included switching off checks for suitable values of \code{subset}.
       Use at your own risk.}
   \item{varonly}{a logical asking for variances only.}
   \item{nresample}{an integer defining the number of permuted statistics to draw.}
@@ -1164,7 +1164,7 @@ $N > $ \verb|INT_MAX|
 @|N
 @}
 
-The regressors $\x_i, i = 1, \dots, N$ 
+The regressors $\x_i, i = 1, \dots, N$
 
 @d R x Input
 @{
@@ -1228,7 +1228,7 @@ or a factor at $Q$ levels
 @|y
 @}
 
-The weights $w_i, i = 1, \dots, N$ 
+The weights $w_i, i = 1, \dots, N$
 
 @d R weights Input
 @{
@@ -1236,7 +1236,7 @@ The weights $w_i, i = 1, \dots, N$
 @|weights
 @}
 
-can be constant one (\verb|XLENGTH(weights) == 0| or \verb|weights = integer(0)|) 
+can be constant one (\verb|XLENGTH(weights) == 0| or \verb|weights = integer(0)|)
 or integer-valued, with \verb|HAS_WEIGHTS == 0| in the former case
 
 @d C integer weights Input
@@ -1398,12 +1398,12 @@ LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = intege
         yc <- t(t(Y) - ExpY)
         CovY <- crossprod(yc) / sumweights
         CovX <- crossprod(X)
-        Exp <- kronecker(ExpY, ExpX) 
-        Cov <- sumweights / (sumweights - 1) * kronecker(CovY, CovX) - 
+        Exp <- kronecker(ExpY, ExpX)
+        Cov <- sumweights / (sumweights - 1) * kronecker(CovY, CovX) -
                1 / (sumweights - 1) * kronecker(CovY, tcrossprod(ExpX))
- 
+
         ret <- list(LinearStatistic = as.vector(crossprod(X, Y)),
-                    Expectation = as.vector(Exp), 
+                    Expectation = as.vector(Exp),
                     Covariance = Cov,
                     Variance = diag(Cov))
    } else {
@@ -1459,7 +1459,7 @@ stopifnot(
     testit() && testit(weights = weights) &&
     testit(subset = subset) && testit(weights = weights, subset = subset) &&
     testit(block = block) && testit(weights = weights, block = block) &&
-    testit(subset = subset, block = block) && 
+    testit(subset = subset, block = block) &&
     testit(weights = weights, subset = subset, block = block))
 ### without dummy matrix X
 testit <- function(...) {
@@ -1472,7 +1472,7 @@ stopifnot(
     testit() && testit(weights = weights) &&
     testit(subset = subset) && testit(weights = weights, subset = subset) &&
     testit(block = block) && testit(weights = weights, block = block) &&
-    testit(subset = subset, block = block) && 
+    testit(subset = subset, block = block) &&
     testit(weights = weights, subset = subset, block = block))
 @@
 
@@ -1484,8 +1484,8 @@ Functions starting with \verb|R_| are \proglang{C} functions callable via
 \verb|.Call()| from \proglang{R}. That means they all return \verb|SEXP|.
 These functions allocate memory handled by \proglang{R}.
 
-Functions starting with \verb|RC_| are \proglang{C} functions with 
-\verb|SEXP| or pointer arguments and possibly an \verb|SEXP| return value. 
+Functions starting with \verb|RC_| are \proglang{C} functions with
+\verb|SEXP| or pointer arguments and possibly an \verb|SEXP| return value.
 
 Functions starting with \verb|C_| only take pointer arguments and return a
 scalar nor nothing.
@@ -1671,7 +1671,7 @@ The linear statistic $\T(\A)$ can be computed without taking blocks into account
 
 @d Compute Linear Statistic
 @{
-RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset, 
+RC_LinearStatistic(x, N, P, REAL(y), Q, weights, subset,
                    Offset0, XLENGTH(subset),
                    C_get_LinearStatistic(ans));
 @}
@@ -1708,12 +1708,12 @@ if (B == 1) {
     table[0] = 0.0;
     table[1] = RC_Sums(N, nullvec, subset, Offset0, XLENGTH(subset));
 } else {
-    RC_OneTableSums(INTEGER(block), N, B + 1, nullvec, subset, Offset0, 
+    RC_OneTableSums(INTEGER(block), N, B + 1, nullvec, subset, Offset0,
                     XLENGTH(subset), table);
 }
 if (table[0] > 0)
     error("No missing values allowed in block");
-PROTECT(subset_block = RC_order_subset_wrt_block(N, subset, block, 
+PROTECT(subset_block = RC_order_subset_wrt_block(N, subset, block,
                                                  VECTOR_ELT(ans, TableBlock_SLOT)));
 @}
 
@@ -1725,7 +1725,7 @@ is initialised zero when $b = 0$ and values add-up over blocks.
 @{
 /* compute sum of weights in block b of subset */
 if (table[b + 1] > 0) {
-    sumweights[b] = RC_Sums(N, weights, subset_block, 
+    sumweights[b] = RC_Sums(N, weights, subset_block,
                             offset, (R_xlen_t) table[b + 1]);
 } else {
     /* offset = something and Nsubset = 0 means Nsubset = N in
@@ -1736,12 +1736,12 @@ if (table[b + 1] > 0) {
 
 @d Compute Expectation Linear Statistic
 @{
-RC_ExpectationInfluence(N, y, Q, weights, subset_block, offset, 
+RC_ExpectationInfluence(N, y, Q, weights, subset_block, offset,
                         (R_xlen_t) table[b + 1], sumweights[b], ExpInf + b * Q);
-RC_ExpectationX(x, N, P, weights, subset_block, offset, 
+RC_ExpectationX(x, N, P, weights, subset_block, offset,
                 (R_xlen_t) table[b + 1], ExpX);
 for (int p = 0; p < P; p++) ExpXtotal[p] += ExpX[p];
-C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b, 
+C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b,
                              C_get_Expectation(ans));
 @}
 
@@ -1752,8 +1752,8 @@ values for each block in the return object (for later reuse).
 @d Compute Covariance Influence
 @{
 /* C_ordered_Xfactor and C_unordered_Xfactor need both VarInf and CovInf */
-RC_CovarianceInfluence(N, y, Q, weights, subset_block, offset, 
-                      (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b], 
+RC_CovarianceInfluence(N, y, Q, weights, subset_block, offset,
+                      (R_xlen_t) table[b + 1], ExpInf + b * Q, sumweights[b],
                       !DoVarOnly, CovInf + b * Q * (Q + 1) / 2);
 /* extract variance from covariance */
 tmpCV = CovInf + b * Q * (Q + 1) / 2;
@@ -1766,15 +1766,15 @@ $\Sigma(\A)$:
 
 @d Compute Variance Linear Statistic
 @{
-RC_CovarianceX(x, N, P, weights, subset_block, offset, 
+RC_CovarianceX(x, N, P, weights, subset_block, offset,
                (R_xlen_t) table[b + 1], ExpX, DoVarOnly, VarX);
-C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sumweights[b], 
+C_VarianceLinearStatistic(P, Q, VarInf + b * Q, ExpX, VarX, sumweights[b],
                           b, C_get_Variance(ans));
 @}
 
 @d Compute Covariance Linear Statistic
 @{
-RC_CovarianceX(x, N, P, weights, subset_block, offset, 
+RC_CovarianceX(x, N, P, weights, subset_block, offset,
                (R_xlen_t) table[b + 1], ExpX, !DoVarOnly, CovX);
 C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
                             ExpX, CovX, sumweights[b], b,
@@ -1785,7 +1785,7 @@ C_CovarianceLinearStatistic(P, Q, CovInf + b * Q * (Q + 1) / 2,
 @{
 /* always return variances */
 if (!C_get_varonly(ans)) {
-    for (int p = 0; p < mPQB(P, Q, 1); p++) 
+    for (int p = 0; p < mPQB(P, Q, 1); p++)
         C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, mPQB(P, Q, 1))];
 }
 @}
@@ -1854,7 +1854,7 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
             @<Setup Linear Statistic@>
             C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));
 
-            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, expand_subset, 
+            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, expand_subset,
                                     Offset0, Nsubset, perm, linstat);
         }
     } else {
@@ -1862,14 +1862,14 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
         /* same as RC_OneTableSums(block, noweights, expand_subset) */
         RC_OneTableSums(INTEGER(block), XLENGTH(block), B + 1, weights, subset, Offset0,
                         XLENGTH(subset), REAL(blockTable));
-        PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset, 
+        PROTECT(block_subset = RC_order_subset_wrt_block(XLENGTH(block), expand_subset,
                                                          block, blockTable));
 
         for (R_xlen_t np = 0; np < inresample; np++) {
             @<Setup Linear Statistic@>
-            C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(blockTable), 
+            C_doPermuteBlock(REAL(block_subset), Nsubset, REAL(blockTable),
                              B + 1, REAL(tmp), REAL(perm));
-            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, block_subset, 
+            RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, block_subset,
                                     Offset0, Nsubset, perm, linstat);
         }
         UNPROTECT(2);
@@ -1923,13 +1923,13 @@ SEXP R_StandardisePermutedLinearStatistic
     double *ls;
     if (!nresample) return(R_NilValue);
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
-    
+
     PROTECT(ans = allocMatrix(REALSXP, PQ, nresample));
 
     for (R_xlen_t np = 0; np < nresample; np++) {
         ls = REAL(ans) + PQ * np;
         /* copy first; standarisation is in place */
-        for (int p = 0; p < PQ; p++) 
+        for (int p = 0; p < PQ; p++)
             ls[p] = C_get_PermutedLinearStatistic(LECV)[p + PQ * np];
         if (C_get_varonly(LECV)) {
             C_standardise(PQ, ls, C_get_Expectation(LECV),
@@ -2004,16 +2004,16 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
 
     @<Setup Dimensions 2d@>
 
-    PROTECT(ans = RC_init_LECV_2d(P, Q, INTEGER(varonly)[0], 
+    PROTECT(ans = RC_init_LECV_2d(P, Q, INTEGER(varonly)[0],
                                   Lx, Ly, B, Xfactor, REAL(tol)[0]));
 
     if (B == 1) {
-        RC_TwoTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1, 
-                        weights, subset, Offset0, Nsubset, 
+        RC_TwoTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1,
+                        weights, subset, Offset0, Nsubset,
                         C_get_Table(ans));
     } else {
-        RC_ThreeTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1, 
-                          INTEGER(block), B, weights, subset, Offset0, Nsubset, 
+        RC_ThreeTableSums(INTEGER(ix), N, Lx + 1, INTEGER(iy), Ly + 1,
+                          INTEGER(block), B, weights, subset, Offset0, Nsubset,
                           C_get_Table(ans));
     }
     RC_ExpectationCovarianceStatistic_2d(x, ix, y, iy, weights,
@@ -2122,7 +2122,7 @@ C_ExpectationLinearStatistic(P, Q, ExpInf, ExpX, b, C_get_Expectation(ans));
 /* C_ordered_Xfactor needs both VarInf and CovInf */
 RC_CovarianceInfluence(NROW(y), y, Q, Rcsum, subset, Offset0, 0, ExpInf, sumweights[b],
                        !DoVarOnly, C_get_CovarianceInfluence(ans));
-for (int q = 0; q < Q; q++) 
+for (int q = 0; q < Q; q++)
     C_get_VarianceInfluence(ans)[q] = C_get_CovarianceInfluence(ans)[S(q, q, Q)];
 
 if (C_get_varonly(ans)) {
@@ -2178,12 +2178,12 @@ SEXP ans
 
     /* always return variances */
     if (!C_get_varonly(ans)) {
-        for (int p = 0; p < mPQB(P, Q, 1); p++) 
+        for (int p = 0; p < mPQB(P, Q, 1); p++)
             C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, mPQB(P, Q, 1))];
     }
 
     Free(CovX);
-    Free(table2d); 
+    Free(table2d);
     UNPROTECT(2);
 }
 @|RC_ExpectationCovarianceStatistic
@@ -2224,7 +2224,7 @@ rsum = REAL(Rrsum);
 
 
 <<permutations-2d>>=
-LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, 
+LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
               weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
 @@
 
@@ -2378,7 +2378,7 @@ extern SEXP libcoin_R_QuadraticTest(
 }
 
 extern SEXP libcoin_R_MaximumTest(
-    SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log, 
+    SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
     SEXP PermutedStatistics, SEXP maxpts, SEXP releps, SEXP abseps
 ) {
 
@@ -2391,7 +2391,7 @@ extern SEXP libcoin_R_MaximumTest(
 }
 
 extern SEXP libcoin_R_MaximallySelectedTest(
-    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log 
+    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
 ) {
 
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
@@ -2537,8 +2537,8 @@ SEXP R_MaximumTest
             UNPROTECT(2);
             return(ans);
         }
-        REAL(pval)[0] = C_maxtype_pvalue(REAL(stat)[0], cv, 
-            PQ, INTEGER(alternative)[0], LOWER, GIVELOG, INTEGER(maxpts)[0], 
+        REAL(pval)[0] = C_maxtype_pvalue(REAL(stat)[0], cv,
+            PQ, INTEGER(alternative)[0], LOWER, GIVELOG, INTEGER(maxpts)[0],
             REAL(releps)[0], REAL(abseps)[0], C_get_tol(LECV));
     } else {
         nresample = C_get_nresample(LECV);
@@ -3027,7 +3027,7 @@ double C_maxtype_pvalue
 @|C_maxtype_pvalue
 @}
 
-@d Setup mvtnorm Memory 
+@d Setup mvtnorm Memory
 @{
 if (n == 2)
     corr = Calloc(1, double);
@@ -3117,9 +3117,9 @@ void C_ordered_Xfactor
 @<maxstat Xfactor Variables@>
 ) {
 
-    @<Setup maxstat Variables@> 
+    @<Setup maxstat Variables@>
 
-    @<Setup maxstat Memory@> 
+    @<Setup maxstat Memory@>
 
     wmax[0] = NA_INTEGER;
 
@@ -3143,7 +3143,7 @@ void C_ordered_Xfactor
 
             ls = mlinstat;
             /* compute MPinv only once */
-            if (teststat != TESTSTAT_maximum) 
+            if (teststat != TESTSTAT_maximum)
                 C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
             @<Compute maxstat Test Statistic@>
             if (tmp > maxstat[0]) {
@@ -3160,7 +3160,7 @@ void C_ordered_Xfactor
         }
     }
     @<Compute maxstat Permutation P-Value@>
-    Free(mlinstat); Free(mexpect); Free(mblinstat); 
+    Free(mlinstat); Free(mexpect); Free(mblinstat);
     Free(mvar); Free(mcovar); Free(mMPinv);
     if (nresample == 0) Free(blinstat);
 }
@@ -3173,7 +3173,7 @@ double *linstat, *expect, *covar, *varinf, *covinf, *ExpX, *blinstat, tol, *ls;
 int P, Q, B;
 R_xlen_t nresample;
 
-double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv, 
+double *mlinstat, *mblinstat, *mexpect, *mvar, *mcovar, *mMPinv,
        tmp, sumleft, sumright, sumweights;
 int rank, PQ, greater;
 
@@ -3314,7 +3314,7 @@ void C_unordered_Xfactor
     @<Count Levels@>
 
     for (int j = 1; j < mi; j++) { /* go though all splits */
- 
+
         @<Setup unordered maxstat Contrasts@>
 
         @<Compute unordered maxstat Linear Statistic and Expectation@>
@@ -3329,7 +3329,7 @@ void C_unordered_Xfactor
 
             ls = mlinstat;
             /* compute MPinv only once */
-            if (teststat != TESTSTAT_maximum) 
+            if (teststat != TESTSTAT_maximum)
                 C_MPinv_sym(mcovar, Q, tol, mMPinv, &rank);
             @<Compute maxstat Test Statistic@>
             if (tmp > maxstat[0]) {
@@ -3479,7 +3479,7 @@ void RC_LinearStatistic
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C KronSums Answer@>
-) 
+)
 @}
 
 @d RC\_LinearStatistic
@@ -3488,7 +3488,7 @@ void RC_LinearStatistic
 {
     double center;
 
-    RC_KronSums(x, N, P, y, Q, !DoSymmetric, &center, &center, !DoCenter, weights, 
+    RC_KronSums(x, N, P, y, Q, !DoSymmetric, &center, &center, !DoCenter, weights,
                 subset, offset, Nsubset, PQ_ans);
 }
 @|RC_LinearStatistic
@@ -3536,7 +3536,7 @@ void C_ExpectationLinearStatistic
 @|C_ExpectationLinearStatistic
 @}
 
-@d C\_CovarianceLinearStatistic 
+@d C\_CovarianceLinearStatistic
 @{
 void C_CovarianceLinearStatistic
 (
@@ -3577,7 +3577,7 @@ void C_CovarianceLinearStatistic
 @|C_CovarianceLinearStatistic
 @}
 
-@d C\_VarianceLinearStatistic 
+@d C\_VarianceLinearStatistic
 @{
 void C_VarianceLinearStatistic
 (
@@ -3586,7 +3586,7 @@ void C_VarianceLinearStatistic
     double *VarInf,
     double *ExpX,
     double *VarX,
-    @<C sumweights Input@>,    
+    @<C sumweights Input@>,
     const int add,
     double *PQ_ans
 ) {
@@ -3635,7 +3635,7 @@ SEXP R_ExpectationInfluence
     @<R y Input@>
     @<R weights Input@>,
     @<R subset Input@>
-) 
+)
 @}
 
 @d R\_ExpectationInfluence
@@ -3672,9 +3672,9 @@ void RC_ExpectationInfluence
     @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>,
-    @<C sumweights Input@>,    
+    @<C sumweights Input@>,
     @<C colSums Answer@>
-) 
+)
 @}
 
 @d RC\_ExpectationInfluence
@@ -3683,9 +3683,9 @@ void RC_ExpectationInfluence
 {
     double center;
 
-    RC_colSums(REAL(y), N, Q, Power1, &center, !DoCenter, weights, 
+    RC_colSums(REAL(y), N, Q, Power1, &center, !DoCenter, weights,
                subset, offset, Nsubset, P_ans);
-    for (int q = 0; q < Q; q++) 
+    for (int q = 0; q < Q; q++)
         P_ans[q] = P_ans[q] / sumweights;
 }
 @|RC_ExpectationInfluence
@@ -3732,7 +3732,7 @@ SEXP R_CovarianceInfluence
     @<R subset Input@>,
     SEXP varonly
 )
-@} 
+@}
 
 @d R\_CovarianceInfluence
 @{
@@ -3758,7 +3758,7 @@ SEXP R_CovarianceInfluence
     } else {
         PROTECT(ans = allocVector(REALSXP, Q * (Q + 1) / 2));
     }
-    RC_CovarianceInfluence(N, y, Q, weights, subset, Offset0, Nsubset, REAL(ExpInf), sumweights, 
+    RC_CovarianceInfluence(N, y, Q, weights, subset, Offset0, Nsubset, REAL(ExpInf), sumweights,
                            INTEGER(varonly)[0], REAL(ans));
     UNPROTECT(2);
     return(ans);
@@ -3780,7 +3780,7 @@ void RC_CovarianceInfluence
     @<C sumweights Input@>,
     int VARONLY,
     @<C KronSums Answer@>
-) 
+)
 @}
 
 @d RC\_CovarianceInfluence
@@ -3788,14 +3788,14 @@ void RC_CovarianceInfluence
 @<RC\_CovarianceInfluence Prototype@>
 {
     if (VARONLY) {
-        RC_colSums(REAL(y), N, Q, Power2, ExpInf, DoCenter, weights, 
+        RC_colSums(REAL(y), N, Q, Power2, ExpInf, DoCenter, weights,
                    subset, offset, Nsubset, PQ_ans);
-        for (int q = 0; q < Q; q++) 
+        for (int q = 0; q < Q; q++)
             PQ_ans[q] = PQ_ans[q] / sumweights;
     } else {
-        RC_KronSums(y, N, Q, REAL(y), Q, DoSymmetric, ExpInf, ExpInf, DoCenter, weights, 
+        RC_KronSums(y, N, Q, REAL(y), Q, DoSymmetric, ExpInf, ExpInf, DoCenter, weights,
                     subset, offset, Nsubset, PQ_ans);
-        for (int q = 0; q < Q * (Q + 1) / 2; q++) 
+        for (int q = 0; q < Q * (Q + 1) / 2; q++)
             PQ_ans[q] = PQ_ans[q] / sumweights;
     }
 }
@@ -3827,7 +3827,7 @@ SEXP R_ExpectationX
     Nsubset = XLENGTH(subset);
 
     PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0]));
-    RC_ExpectationX(x, N, INTEGER(P)[0], weights, subset, 
+    RC_ExpectationX(x, N, INTEGER(P)[0], weights, subset,
                     Offset0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
@@ -3846,7 +3846,7 @@ void RC_ExpectationX
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C OneTableSums Answer@>
-) 
+)
 @}
 
 @d RC\_ExpectationX
@@ -3868,7 +3868,7 @@ void RC_ExpectationX
 @}
 
 <<ExpectationCovarianceX>>=
-a0 <- colSums(x[subset, ] * weights[subset]) 
+a0 <- colSums(x[subset, ] * weights[subset])
 a0
 a1 <- .Call(libcoin:::R_ExpectationX, x, P, weights, subset);
 a2 <- .Call(libcoin:::R_ExpectationX, x, P, as.double(weights), as.double(subset));
@@ -3879,7 +3879,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4) &&
           isequal(a0, LECVxyws$ExpectationX))
 
-a0 <- colSums(x[subset, ]^2 * weights[subset]) 
+a0 <- colSums(x[subset, ]^2 * weights[subset])
 a1 <- .Call(libcoin:::R_CovarianceX, x, P, weights, subset, 1L);
 a2 <- .Call(libcoin:::R_CovarianceX, x, P, as.double(weights), as.double(subset), 1L);
 a3 <- .Call(libcoin:::R_CovarianceX, x, P, weights, as.double(subset), 1L);
@@ -3954,7 +3954,7 @@ SEXP R_CovarianceX
     } else {
         PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * (INTEGER(P)[0] + 1) / 2));
     }
-    RC_CovarianceX(x, N, INTEGER(P)[0], weights, subset, Offset0, Nsubset, REAL(ExpX), 
+    RC_CovarianceX(x, N, INTEGER(P)[0], weights, subset, Offset0, Nsubset, REAL(ExpX),
                    INTEGER(varonly)[0], REAL(ans));
     UNPROTECT(2);
     return(ans);
@@ -3975,7 +3975,7 @@ void RC_CovarianceX
     double *ExpX,
     int VARONLY,
     @<C KronSums Answer@>
-) 
+)
 @}
 
 @d RC\_CovarianceX
@@ -3988,17 +3988,17 @@ void RC_CovarianceX
         if (VARONLY) {
             for (int p = 0; p < P; p++) PQ_ans[p] = ExpX[p];
         } else {
-            for (int p = 0; p < PP12(P); p++) 
+            for (int p = 0; p < PP12(P); p++)
                 PQ_ans[p] = 0.0;
             for (int p = 0; p < P; p++)
                 PQ_ans[S(p, p, P)] = ExpX[p];
         }
     } else {
         if (VARONLY) {
-            RC_colSums(REAL(x), N, P, Power2, &center, !DoCenter, weights, 
+            RC_colSums(REAL(x), N, P, Power2, &center, !DoCenter, weights,
                        subset, offset, Nsubset, PQ_ans);
         } else {
-            RC_KronSums(x, N, P, REAL(x), P, DoSymmetric, &center, &center, !DoCenter, weights, 
+            RC_KronSums(x, N, P, REAL(x), P, DoSymmetric, &center, &center, !DoCenter, weights,
                         subset, offset, Nsubset, PQ_ans);
         }
     }
@@ -4028,7 +4028,7 @@ allowing for number of observations larger than \verb|INT_MAX|
 
 @d start subset loop
 @{
-    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++) 
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
 @}
 
 After computions in the loop, we compute the next element
@@ -4088,7 +4088,7 @@ SEXP R_Sums
     @<C integer Nsubset Input@>;
 
     Nsubset = XLENGTH(subset);
-    
+
     PROTECT(ans = allocVector(REALSXP, 1));
     REAL(ans)[0] = RC_Sums(INTEGER(N)[0], weights, subset, Offset0, Nsubset);
     UNPROTECT(1);
@@ -4106,7 +4106,7 @@ double RC_Sums
     @<R weights Input@>,
     @<R subset Input@>,
     @<C subset range Input@>
-) 
+)
 @}
 
 @d RC\_Sums
@@ -4119,13 +4119,13 @@ double RC_Sums
         } else {
             return((double) Nsubset);
         }
-    } 
+    }
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
             return(C_Sums_iweights_isubset(N, INTEGER(weights), XLENGTH(weights),
                                            INTEGER(subset), offset, Nsubset));
         } else {
-            return(C_Sums_iweights_dsubset(N, INTEGER(weights), XLENGTH(weights), 
+            return(C_Sums_iweights_dsubset(N, INTEGER(weights), XLENGTH(weights),
                                            REAL(subset), offset, Nsubset));
         }
     } else {
@@ -4149,9 +4149,9 @@ double C_Sums_dweights_dsubset
     @<C integer N Input@>,
     @<C real weights Input@>
     @<C real subset Input@>
-) 
+)
 {
-    double *s, *w; 
+    double *s, *w;
     @<Sums Body@>
 }
 @|C_Sums_dweights_dsubset
@@ -4164,10 +4164,10 @@ double C_Sums_iweights_dsubset
     @<C integer N Input@>,
     @<C integer weights Input@>
     @<C real subset Input@>
-) 
+)
 {
     double *s;
-    int *w; 
+    int *w;
     @<Sums Body@>
 }
 @|C_Sums_iweights_dsubset
@@ -4180,7 +4180,7 @@ double C_Sums_iweights_isubset
     @<C integer N Input@>,
     @<C integer weights Input@>
     @<C integer subset Input@>
-) 
+)
 {
     int *s, *w;
     @<Sums Body@>
@@ -4195,9 +4195,9 @@ double C_Sums_dweights_isubset
     @<C integer N Input@>,
     @<C real weights Input@>
     @<C integer subset Input@>
-) 
+)
 {
-    int *s; 
+    int *s;
     double *w;
     @<Sums Body@>
 }
@@ -4210,17 +4210,17 @@ double C_Sums_dweights_isubset
     double ans = 0.0;
 
     if (Nsubset > 0) {
-        if (!HAS_WEIGHTS) return((double) Nsubset); 
+        if (!HAS_WEIGHTS) return((double) Nsubset);
     } else {
         if (!HAS_WEIGHTS) return((double) N);
     }
 
-    @<init subset loop@>    
-    @<start subset loop@>    
+    @<init subset loop@>
+    @<start subset loop@>
     {
         w = w + diff;
         ans += w[0];
-        @<continue subset loop@>    
+        @<continue subset loop@>
     }
     w = w + diff;
     ans += w[0];
@@ -4264,7 +4264,7 @@ a4 <- .Call(libcoin:::R_KronSums, x, P, y, as.double(weights), subset, 0L)
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 
-a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * 
+a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] *
                         y[subset,r2Xfactor] * weights[subset]))
 a1 <- .Call(libcoin:::R_KronSums, ix, Lx, y, weights, subset, 0L)
 a2 <- .Call(libcoin:::R_KronSums, ix, Lx, y, as.double(weights), as.double(subset), 0L)
@@ -4287,7 +4287,7 @@ SEXP R_KronSums
     @<R weights Input@>,
     @<R subset Input@>,
     SEXP symmetric
-) 
+)
 @}
 
 @d R\_KronSums
@@ -4310,7 +4310,7 @@ SEXP R_KronSums
     } else {
         PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
     }
-    RC_KronSums(x, N, INTEGER(P)[0], REAL(y), Q, INTEGER(symmetric)[0], &center, &center, 
+    RC_KronSums(x, N, INTEGER(P)[0], REAL(y), Q, INTEGER(symmetric)[0], &center, &center,
                 !DoCenter, weights, subset, Offset0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
@@ -4327,7 +4327,7 @@ void RC_KronSums
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C KronSums Answer@>
-) 
+)
 @}
 
 @d RC\_KronSums
@@ -4376,22 +4376,22 @@ if (SYMMETRIC) error("not implemented");
 if (CENTER) error("not implemented");
 if (TYPEOF(weights) == INTSXP) {
     if (TYPEOF(subset) == INTSXP) {
-        C_XfactorKronSums_iweights_isubset(INTEGER(x), N, P, y, Q, 
-            INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+        C_XfactorKronSums_iweights_isubset(INTEGER(x), N, P, y, Q,
+            INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),
             offset, Nsubset, PQ_ans);
     } else {
-        C_XfactorKronSums_iweights_dsubset(INTEGER(x), N, P, y, Q, 
-            INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+        C_XfactorKronSums_iweights_dsubset(INTEGER(x), N, P, y, Q,
+            INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),
             offset, Nsubset, PQ_ans);
     }
 } else {
     if (TYPEOF(subset) == INTSXP) {
-        C_XfactorKronSums_dweights_isubset(INTEGER(x), N, P, y, Q, 
-            REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+        C_XfactorKronSums_dweights_isubset(INTEGER(x), N, P, y, Q,
+            REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),
             offset, Nsubset, PQ_ans);
     } else {
-        C_XfactorKronSums_dweights_dsubset(INTEGER(x), N, P, y, Q, 
-            REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+        C_XfactorKronSums_dweights_dsubset(INTEGER(x), N, P, y, Q,
+            REAL(weights), XLENGTH(weights) > 0, REAL(subset),
             offset, Nsubset, PQ_ans);
     }
 }
@@ -4402,21 +4402,21 @@ if (TYPEOF(weights) == INTSXP) {
 if (TYPEOF(weights) == INTSXP) {
     if (TYPEOF(subset) == INTSXP) {
         C_KronSums_iweights_isubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
-            INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+            INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),
             offset, Nsubset, PQ_ans);
     } else {
         C_KronSums_iweights_dsubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
-            INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+            INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),
             offset, Nsubset, PQ_ans);
     }
 } else {
     if (TYPEOF(subset) == INTSXP) {
         C_KronSums_dweights_isubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
-            REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+            REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),
             offset, Nsubset, PQ_ans);
     } else {
         C_KronSums_dweights_dsubset(REAL(x), N, P, y, Q, SYMMETRIC, centerx, centery, CENTER,
-            REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+            REAL(weights), XLENGTH(weights) > 0, REAL(subset),
             offset, Nsubset, PQ_ans);
     }
 }
@@ -4432,7 +4432,7 @@ void C_KronSums_dweights_dsubset
     @<C KronSums Answer@>
 )
 {
-    double *s, *w; 
+    double *s, *w;
     @<KronSums Body@>
 }
 @|C_KronSums_dweights_dsubset
@@ -4443,13 +4443,13 @@ void C_KronSums_dweights_dsubset
 void C_KronSums_iweights_dsubset
 (
     @<C KronSums Input@>
-    @<C integer weights Input@>    
+    @<C integer weights Input@>
     @<C real subset Input@>,
     @<C KronSums Answer@>
-) 
+)
 {
     double *s;
-    int *w; 
+    int *w;
     @<KronSums Body@>
 }
 @|C_KronSums_iweights_dsubset
@@ -4460,10 +4460,10 @@ void C_KronSums_iweights_dsubset
 void C_KronSums_iweights_isubset
 (
     @<C KronSums Input@>
-    @<C integer weights Input@>    
+    @<C integer weights Input@>
     @<C integer subset Input@>,
     @<C KronSums Answer@>
-) 
+)
 {
     int *s, *w;
     @<KronSums Body@>
@@ -4476,11 +4476,11 @@ void C_KronSums_iweights_isubset
 void C_KronSums_dweights_isubset
 (
     @<C KronSums Input@>
-    @<C real weights Input@>    
+    @<C real weights Input@>
     @<C integer subset Input@>,
     @<C KronSums Answer@>
 ) {
-    int *s; 
+    int *s;
     double *w;
     @<KronSums Body@>
 }
@@ -4497,9 +4497,9 @@ void C_KronSums_dweights_isubset
             /* SYMMETRIC is column-wise, default
                is row-wise (maybe need to change this) */
             if (SYMMETRIC) {
-                idx = S(p, q, P); 
+                idx = S(p, q, P);
             } else {
-                idx = q * P + p;  
+                idx = q * P + p;
             }
             PQ_ans[idx] = 0.0;
             thisPQ_ans = PQ_ans + idx;
@@ -4562,7 +4562,7 @@ void C_XfactorKronSums_dweights_dsubset
     @<C KronSums Answer@>
 )
 {
-    double *s, *w; 
+    double *s, *w;
     @<XfactorKronSums Body@>
 }
 @|C_XfactorKronSums_dweights_dsubset
@@ -4573,13 +4573,13 @@ void C_XfactorKronSums_dweights_dsubset
 void C_XfactorKronSums_iweights_dsubset
 (
     @<C XfactorKronSums Input@>
-    @<C integer weights Input@>    
+    @<C integer weights Input@>
     @<C real subset Input@>,
     @<C KronSums Answer@>
-) 
+)
 {
     double *s;
-    int *w; 
+    int *w;
     @<XfactorKronSums Body@>
 }
 @|C_XfactorKronSums_iweights_dsubset
@@ -4590,10 +4590,10 @@ void C_XfactorKronSums_iweights_dsubset
 void C_XfactorKronSums_iweights_isubset
 (
     @<C XfactorKronSums Input@>
-    @<C integer weights Input@>    
+    @<C integer weights Input@>
     @<C integer subset Input@>,
     @<C KronSums Answer@>
-) 
+)
 {
     int *s, *w;
     @<XfactorKronSums Body@>
@@ -4606,11 +4606,11 @@ void C_XfactorKronSums_iweights_isubset
 void C_XfactorKronSums_dweights_isubset
 (
     @<C XfactorKronSums Input@>
-    @<C real weights Input@>    
+    @<C real weights Input@>
     @<C integer subset Input@>,
     @<C KronSums Answer@>
 ) {
-    int *s; 
+    int *s;
     double *w;
     @<XfactorKronSums Body@>
 }
@@ -4621,7 +4621,7 @@ void C_XfactorKronSums_dweights_isubset
 @{
     int *xx, ixi;
     double *yy;
- 
+
     for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
     for (int q = 0; q < Q; q++) {
@@ -4697,9 +4697,9 @@ SEXP R_KronSums_Permutation
     Q = NCOL(y);
     N = XLENGTH(y) / Q;
     Nsubset = XLENGTH(subset);
-    
+
     PROTECT(ans = allocVector(REALSXP, INTEGER(P)[0] * Q));
-    RC_KronSums_Permutation(x, N, INTEGER(P)[0], REAL(y), Q, subset, Offset0, Nsubset, 
+    RC_KronSums_Permutation(x, N, INTEGER(P)[0], REAL(y), Q, subset, Offset0, Nsubset,
                             subsety, REAL(ans));
     UNPROTECT(1);
     return(ans);
@@ -4719,7 +4719,7 @@ void RC_KronSums_Permutation
     @<C subset range Input@>,
     SEXP subsety,
     @<C KronSums Answer@>
-) 
+)
 @}
 
 @d RC\_KronSums\_Permutation
@@ -4728,22 +4728,22 @@ void RC_KronSums_Permutation
 {
     if (TYPEOF(x) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
-            C_XfactorKronSums_Permutation_isubset(INTEGER(x), N, P, y, Q, 
-                                                  INTEGER(subset), offset, Nsubset, 
+            C_XfactorKronSums_Permutation_isubset(INTEGER(x), N, P, y, Q,
+                                                  INTEGER(subset), offset, Nsubset,
                                                   INTEGER(subsety), PQ_ans);
         } else {
-            C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q, 
-                                                  REAL(subset), offset, Nsubset, 
+            C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q,
+                                                  REAL(subset), offset, Nsubset,
                                                   REAL(subsety), PQ_ans);
     }
     } else {
         if (TYPEOF(subset) == INTSXP) {
-            C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q, 
-                                           INTEGER(subset), offset, Nsubset, 
+            C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q,
+                                           INTEGER(subset), offset, Nsubset,
                                            INTEGER(subsety), PQ_ans);
         } else {
-            C_KronSums_Permutation_dsubset(REAL(x), N, P, y, Q, 
-                                           REAL(subset), offset, Nsubset, 
+            C_KronSums_Permutation_dsubset(REAL(x), N, P, y, Q,
+                                           REAL(subset), offset, Nsubset,
                                            REAL(subsety), PQ_ans);
         }
     }
@@ -4760,7 +4760,7 @@ void C_KronSums_Permutation_dsubset
     @<C real subset Input@>,
     double *subsety,
     @<C KronSums Answer@>
-) 
+)
 {
     @<KronSums Permutation Body@>
 }
@@ -4776,7 +4776,7 @@ void C_KronSums_Permutation_isubset
     @<C integer subset Input@>,
     int *subsety,
     @<C KronSums Answer@>
-) 
+)
 {
     @<KronSums Permutation Body@>
 }
@@ -4798,7 +4798,7 @@ have to go through all elements explicitly here.
             PQ_ans[qPp] = 0.0;
             pN = p * N;
             for (R_xlen_t i = offset; i < Nsubset; i++)
-                PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] * 
+                PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] *
                                x[pN + (R_xlen_t) subset[i] - 1];
         }
     }
@@ -4815,7 +4815,7 @@ void C_XfactorKronSums_Permutation_dsubset
     @<C real subset Input@>,
     double *subsety,
     @<C KronSums Answer@>
-) 
+)
 {
     @<XfactorKronSums Permutation Body@>
 }
@@ -4831,7 +4831,7 @@ void C_XfactorKronSums_Permutation_isubset
     @<C integer subset Input@>,
     int *subsety,
     @<C KronSums Answer@>
-) 
+)
 {
     @<XfactorKronSums Permutation Body@>
 }
@@ -4902,9 +4902,9 @@ SEXP R_colSums
     P = NCOL(x);
     N = XLENGTH(x) / P;
     Nsubset = XLENGTH(subset);
-    
+
     PROTECT(ans = allocVector(REALSXP, P));
-    RC_colSums(REAL(x), N, P, Power1, &center, !DoCenter, weights, subset, Offset0, 
+    RC_colSums(REAL(x), N, P, Power1, &center, !DoCenter, weights, subset, Offset0,
                Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
@@ -4921,7 +4921,7 @@ void RC_colSums
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C colSums Answer@>
-) 
+)
 @}
 
 @d RC\_colSums
@@ -4931,21 +4931,21 @@ void RC_colSums
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
             C_colSums_iweights_isubset(x, N, P, power, centerx, CENTER,
-                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),
                                         offset, Nsubset, P_ans);
         } else {
             C_colSums_iweights_dsubset(x, N, P, power, centerx, CENTER,
-                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),
                                         offset, Nsubset, P_ans);
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
             C_colSums_dweights_isubset(x, N, P, power, centerx, CENTER,
-                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),
                                         offset, Nsubset, P_ans);
         } else {
             C_colSums_dweights_dsubset(x, N, P, power, centerx, CENTER,
-                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset),
                                         offset, Nsubset, P_ans);
         }
     }
@@ -4971,12 +4971,12 @@ void RC_colSums
 void C_colSums_dweights_dsubset
 (
     @<C colSums Input@>
-    @<C real weights Input@>    
+    @<C real weights Input@>
     @<C real subset Input@>,
     @<C colSums Answer@>
-) 
+)
 {
-    double *s, *w; 
+    double *s, *w;
     @<colSums Body@>
 }
 @|C_colSums_dweights_dsubset
@@ -4987,13 +4987,13 @@ void C_colSums_dweights_dsubset
 void C_colSums_iweights_dsubset
 (
     @<C colSums Input@>
-    @<C integer weights Input@>    
+    @<C integer weights Input@>
     @<C real subset Input@>,
     @<C colSums Answer@>
-) 
+)
 {
     double *s;
-    int *w; 
+    int *w;
     @<colSums Body@>
 }
 @|C_colSums_iweights_dsubset
@@ -5004,10 +5004,10 @@ void C_colSums_iweights_dsubset
 void C_colSums_iweights_isubset
 (
     @<C colSums Input@>
-    @<C integer weights Input@>    
+    @<C integer weights Input@>
     @<C integer subset Input@>,
     @<C colSums Answer@>
-) 
+)
 {
     int *s, *w;
     @<colSums Body@>
@@ -5020,12 +5020,12 @@ void C_colSums_iweights_isubset
 void C_colSums_dweights_isubset
 (
     @<C colSums Input@>
-    @<C real weights Input@>    
+    @<C real weights Input@>
     @<C integer subset Input@>,
     @<C colSums Answer@>
-) 
+)
 {
-    int *s; 
+    int *s;
     double *w;
     @<colSums Body@>
 }
@@ -5127,9 +5127,9 @@ SEXP R_OneTableSums
     N = XLENGTH(x);
     Nsubset = XLENGTH(subset);
     P = NLEVELS(x) + 1;
-    
+
     PROTECT(ans = allocVector(REALSXP, P));
-    RC_OneTableSums(INTEGER(x), N, P, weights, subset, 
+    RC_OneTableSums(INTEGER(x), N, P, weights, subset,
                     Offset0, Nsubset, REAL(ans));
     UNPROTECT(1);
     return(ans);
@@ -5147,7 +5147,7 @@ void RC_OneTableSums
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C OneTableSums Answer@>
-) 
+)
 @}
 
 @d RC\_OneTableSums
@@ -5156,22 +5156,22 @@ void RC_OneTableSums
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
-            C_OneTableSums_iweights_isubset(x, N, P, 
-                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+            C_OneTableSums_iweights_isubset(x, N, P,
+                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),
                                         offset, Nsubset, P_ans);
         } else {
-            C_OneTableSums_iweights_dsubset(x, N, P, 
-                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+            C_OneTableSums_iweights_dsubset(x, N, P,
+                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),
                                         offset, Nsubset, P_ans);
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
-            C_OneTableSums_dweights_isubset(x, N, P, 
-                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+            C_OneTableSums_dweights_isubset(x, N, P,
+                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),
                                         offset, Nsubset, P_ans);
         } else {
-            C_OneTableSums_dweights_dsubset(x, N, P, 
-                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+            C_OneTableSums_dweights_dsubset(x, N, P,
+                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset),
                                         offset, Nsubset, P_ans);
         }
     }
@@ -5199,7 +5199,7 @@ void C_OneTableSums_dweights_dsubset
     @<C OneTableSums Answer@>
 )
 {
-    double *s, *w; 
+    double *s, *w;
     @<OneTableSums Body@>
 }
 @|C_OneTableSums_dweights_dsubset
@@ -5216,7 +5216,7 @@ void C_OneTableSums_iweights_dsubset
 )
 {
     double *s;
-    int *w; 
+    int *w;
     @<OneTableSums Body@>
 }
 @|C_OneTableSums_iweights_dsubset
@@ -5227,7 +5227,7 @@ void C_OneTableSums_iweights_dsubset
 void C_OneTableSums_iweights_isubset
 (
     @<C OneTableSums Input@>
-    @<C integer weights Input@>    
+    @<C integer weights Input@>
     @<C integer subset Input@>,
     @<C OneTableSums Answer@>
 )
@@ -5248,7 +5248,7 @@ void C_OneTableSums_dweights_isubset
     @<C OneTableSums Answer@>
 )
 {
-    int *s; 
+    int *s;
     double *w;
     @<OneTableSums Body@>
 }
@@ -5292,7 +5292,7 @@ class(a0) <- "matrix"
 dimnames(a0) <- NULL
 attributes(a0)$call <- NULL
 a1 <- ctabs(ix, iy, weights = weights, subset = subset)[-1, -1]
-a2 <- ctabs(ix, iy, weights = as.double(weights), 
+a2 <- ctabs(ix, iy, weights = as.double(weights),
             subset = as.double(subset))[-1, -1]
 a3 <- ctabs(ix, iy, weights = weights, subset = as.double(subset))[-1, -1]
 a4 <- ctabs(ix, iy, weights = as.double(weights), subset = subset)[-1, -1]
@@ -5327,13 +5327,13 @@ SEXP R_TwoTableSums
     Nsubset = XLENGTH(subset);
     P = NLEVELS(x) + 1;
     Q = NLEVELS(y) + 1;
-    
+
     PROTECT(ans = allocVector(REALSXP, mPQB(P, Q, 1)));
     PROTECT(dim = allocVector(INTSXP, 2));
     INTEGER(dim)[0] = P;
     INTEGER(dim)[1] = Q;
     dimgets(ans, dim);
-    RC_TwoTableSums(INTEGER(x), N, P, INTEGER(y), Q, 
+    RC_TwoTableSums(INTEGER(x), N, P, INTEGER(y), Q,
                     weights, subset, Offset0, Nsubset, REAL(ans));
     UNPROTECT(2);
     return(ans);
@@ -5351,7 +5351,7 @@ void RC_TwoTableSums
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C TwoTableSums Answer@>
-) 
+)
 @}
 
 @d RC\_TwoTableSums
@@ -5360,22 +5360,22 @@ void RC_TwoTableSums
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
-            C_TwoTableSums_iweights_isubset(x, N, P, y, Q, 
-                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+            C_TwoTableSums_iweights_isubset(x, N, P, y, Q,
+                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),
                                         offset, Nsubset, PQ_ans);
         } else {
-            C_TwoTableSums_iweights_dsubset(x, N, P, y, Q, 
-                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+            C_TwoTableSums_iweights_dsubset(x, N, P, y, Q,
+                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),
                                         offset, Nsubset, PQ_ans);
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
-            C_TwoTableSums_dweights_isubset(x, N, P, y, Q, 
-                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+            C_TwoTableSums_dweights_isubset(x, N, P, y, Q,
+                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),
                                         offset, Nsubset, PQ_ans);
         } else {
-            C_TwoTableSums_dweights_dsubset(x, N, P, y, Q, 
-                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+            C_TwoTableSums_dweights_dsubset(x, N, P, y, Q,
+                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset),
                                         offset, Nsubset, PQ_ans);
         }
     }
@@ -5404,7 +5404,7 @@ void C_TwoTableSums_dweights_dsubset
     @<C TwoTableSums Answer@>
 )
 {
-    double *s, *w; 
+    double *s, *w;
     @<TwoTableSums Body@>
 }
 @|C_TwoTableSums_dweights_dsubset
@@ -5421,7 +5421,7 @@ void C_TwoTableSums_iweights_dsubset
 )
 {
     double *s;
-    int *w; 
+    int *w;
     @<TwoTableSums Body@>
 }
 @|C_TwoTableSums_iweights_dsubset
@@ -5432,7 +5432,7 @@ void C_TwoTableSums_iweights_dsubset
 void C_TwoTableSums_iweights_isubset
 (
     @<C TwoTableSums Input@>
-    @<C integer weights Input@>    
+    @<C integer weights Input@>
     @<C integer subset Input@>,
     @<C TwoTableSums Answer@>
 )
@@ -5453,7 +5453,7 @@ void C_TwoTableSums_dweights_isubset
     @<C TwoTableSums Answer@>
 )
 {
-    int *s; 
+    int *s;
     double *w;
     @<TwoTableSums Body@>
 }
@@ -5535,14 +5535,14 @@ SEXP R_ThreeTableSums
     P = NLEVELS(x) + 1;
     Q = NLEVELS(y) + 1;
     B = NLEVELS(block);
-    
+
     PROTECT(ans = allocVector(REALSXP, mPQB(P, Q, B)));
     PROTECT(dim = allocVector(INTSXP, 3));
     INTEGER(dim)[0] = P;
     INTEGER(dim)[1] = Q;
     INTEGER(dim)[2] = B;
     dimgets(ans, dim);
-    RC_ThreeTableSums(INTEGER(x), N, P, INTEGER(y), Q, 
+    RC_ThreeTableSums(INTEGER(x), N, P, INTEGER(y), Q,
                       INTEGER(block), B,
                       weights, subset, Offset0, Nsubset, REAL(ans));
     UNPROTECT(2);
@@ -5561,7 +5561,7 @@ void RC_ThreeTableSums
     @<R subset Input@>,
     @<C subset range Input@>,
     @<C ThreeTableSums Answer@>
-) 
+)
 @}
 
 @d RC\_ThreeTableSums
@@ -5570,22 +5570,22 @@ void RC_ThreeTableSums
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
-            C_ThreeTableSums_iweights_isubset(x, N, P, y, Q, block, B, 
-                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+            C_ThreeTableSums_iweights_isubset(x, N, P, y, Q, block, B,
+                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),
                                         offset, Nsubset, PQL_ans);
         } else {
             C_ThreeTableSums_iweights_dsubset(x, N, P, y, Q, block, B,
-                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),
                                         offset, Nsubset, PQL_ans);
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
             C_ThreeTableSums_dweights_isubset(x, N, P, y, Q, block, B,
-                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset), 
+                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),
                                         offset, Nsubset, PQL_ans);
         } else {
             C_ThreeTableSums_dweights_dsubset(x, N, P, y, Q, block, B,
-                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset), 
+                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset),
                                         offset, Nsubset, PQL_ans);
         }
     }
@@ -5615,7 +5615,7 @@ void C_ThreeTableSums_dweights_dsubset
     @<C ThreeTableSums Answer@>
 )
 {
-    double *s, *w; 
+    double *s, *w;
     @<ThreeTableSums Body@>
 }
 @|C_ThreeTableSums_dweights_dsubset
@@ -5632,7 +5632,7 @@ void C_ThreeTableSums_iweights_dsubset
 )
 {
     double *s;
-    int *w; 
+    int *w;
     @<ThreeTableSums Body@>
 }
 @|C_ThreeTableSums_iweights_dsubset
@@ -5643,7 +5643,7 @@ void C_ThreeTableSums_iweights_dsubset
 void C_ThreeTableSums_iweights_isubset
 (
     @<C ThreeTableSums Input@>
-    @<C integer weights Input@>    
+    @<C integer weights Input@>
     @<C integer subset Input@>,
     @<C ThreeTableSums Answer@>
 )
@@ -5664,7 +5664,7 @@ void C_ThreeTableSums_dweights_isubset
     @<C ThreeTableSums Answer@>
 )
 {
-    int *s; 
+    int *s;
     double *w;
     @<ThreeTableSums Body@>
 }
@@ -5758,7 +5758,7 @@ SEXP R_order_subset_wrt_block
         REAL(blockTable)[0] = 0.0;
         REAL(blockTable)[1] = RC_Sums(N, weights, subset, Offset0, XLENGTH(subset));
     }
-    
+
     PROTECT(ans = RC_order_subset_wrt_block(N, subset, block, blockTable));
 
     UNPROTECT(2);
@@ -5873,7 +5873,7 @@ void C_order_subset_wrt_block
     SEXP ans
 )
 {
-    double *cumtable;    
+    double *cumtable;
     int Nlevels = LENGTH(blockTable);
 
     cumtable = Calloc(Nlevels, double);
@@ -5892,7 +5892,7 @@ void C_order_subset_wrt_block
             REAL(ans)[(R_xlen_t) cumtable[INTEGER(block)[(R_xlen_t) REAL(subset)[i] - 1]]++] = REAL(subset)[i];
     }
 
-    Free(cumtable); 
+    Free(cumtable);
 }
 @|C_order_subset_wrt_block
 @}
@@ -5929,7 +5929,7 @@ be a little bit more generous with memory here. The return value is always
         UNPROTECT(1);
         return(mysubset);
     }
-        
+
     sumweights = (R_xlen_t) RC_Sums(N, weights, mysubset, Offset0, XLENGTH(subset));
     PROTECT(ans = allocVector(REALSXP, sumweights));
 
@@ -6090,7 +6090,7 @@ int NCOL
 
 @d NLEVELS
 @{
-int NLEVELS	
+int NLEVELS
 (
     SEXP x
 ) {
@@ -6716,7 +6716,7 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
 @d R\_init\_LECV
 @{
     SEXP vo, d, names, tolerance, tmp;
-    int PQ; 
+    int PQ;
 
     @<Memory Input Checks@>
     PQ = mPQB(P, Q, 1);
@@ -6877,8 +6877,8 @@ Version: 1.0-5
 Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@@R-project.org")
 Description: Basic infrastructure for linear test statistics and permutation
-  inference in the framework of Strasser and Weber (1999) <http://epub.wu.ac.at/102/>. 
-  This package must not be used by end-users. CRAN package 'coin' implements all 
+  inference in the framework of Strasser and Weber (1999) <http://epub.wu.ac.at/102/>.
+  This package must not be used by end-users. CRAN package 'coin' implements all
   user interfaces and is ready to be used by anyone.
 Depends: R (>= 3.4.0)
 Suggests: coin
@@ -6914,7 +6914,7 @@ EXPORTS
   R_init_libcoin
 @}
 
-Other packages can link against \pkg{libcoin}. A small example package 
+Other packages can link against \pkg{libcoin}. A small example package
 is contained in \texttt{libcoin/inst/C\_API\_example}.
 
 @o libcoin-init.c -cc
@@ -6944,7 +6944,7 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_KronSums, 6),
     CALLDEF(R_KronSums_Permutation, 5),
     CALLDEF(R_colSums, 3),
-    CALLDEF(R_OneTableSums, 3), 
+    CALLDEF(R_OneTableSums, 3),
     CALLDEF(R_TwoTableSums, 4),
     CALLDEF(R_ThreeTableSums, 5),
     CALLDEF(R_order_subset_wrt_block, 4),
@@ -6991,10 +6991,10 @@ void attribute_visible R_init_libcoin
 @d R Header
 @{
 ###    Copyright (C) 2017-2019 Torsten Hothorn
-### 
+###
 ###    This file is part of the 'libcoin' R add-on package.
 ###
-###    'libcoin' is free software: you can redistribute it and/or modify  
+###    'libcoin' is free software: you can redistribute it and/or modify
 ###    it under the terms of the GNU General Public License as published by
 ###    the Free Software Foundation, version 2.
 ###
@@ -7008,7 +7008,7 @@ void attribute_visible R_init_libcoin
 ###
 ###
 ###    DO NOT EDIT THIS FILE
-### 
+###
 ###    Edit 'libcoin.w' and run 'nuweb -r libcoin.w'
 @}
 
@@ -7033,7 +7033,7 @@ void attribute_visible R_init_libcoin
 
 
     DO NOT EDIT THIS FILE
-    
+
     Edit 'libcoin.w' and run 'nuweb -r libcoin.w'
 */
 @}
