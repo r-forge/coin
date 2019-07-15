@@ -37,7 +37,6 @@ int NROW
 (
     SEXP x
 ) {
-
     SEXP a;
     a = getAttrib(x, R_DimSymbol);
     if (a == R_NilValue) return(XLENGTH(x));
@@ -52,7 +51,6 @@ int NCOL
 (
     SEXP x
 ) {
-
     SEXP a;
     a = getAttrib(x, R_DimSymbol);
     if (a == R_NilValue) return(1);
@@ -67,7 +65,6 @@ int NLEVELS
 (
     SEXP x
 ) {
-
     SEXP a;
     int maxlev = 0;
 
@@ -97,7 +94,6 @@ void C_kronecker
     const int overwrite,
     double *ans
 ) {
-
     int i, j, k, l, mr, js, ir;
     double y;
 
@@ -130,7 +126,6 @@ void C_kronecker_sym
     const int overwrite,
     double *ans
 ) {
-
     int i, j, k, l, mr, js, ir, s;
     double y;
 
@@ -283,7 +278,6 @@ int C_get_P
 SEXP LECV
 
 ) {
-
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[0]);
 }
 
@@ -296,7 +290,6 @@ int C_get_Q
 SEXP LECV
 
 ) {
-
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[1]);
 }
 
@@ -306,7 +299,6 @@ int PP12
 (
     int P
 ) {
-
     double dP = (double) P;
     double ans;
 
@@ -326,7 +318,6 @@ int mPQB
     int Q,
     int B
 ) {
-
     double ans = P * Q * B;
 
     if (ans > INT_MAX)
@@ -344,7 +335,6 @@ int C_get_varonly
 SEXP LECV
 
 ) {
-
     return(INTEGER(VECTOR_ELT(LECV, varonly_SLOT))[0]);
 }
 
@@ -357,7 +347,6 @@ int C_get_Xfactor
 SEXP LECV
 
 ) {
-
     return(INTEGER(VECTOR_ELT(LECV, Xfactor_SLOT))[0]);
 }
 
@@ -370,7 +359,6 @@ double* C_get_LinearStatistic
 SEXP LECV
 
 ) {
-
     return(REAL(VECTOR_ELT(LECV, LinearStatistic_SLOT)));
 }
 
@@ -383,7 +371,6 @@ double* C_get_Expectation
 SEXP LECV
 
 ) {
-
     return(REAL(VECTOR_ELT(LECV, Expectation_SLOT)));
 }
 
@@ -396,7 +383,6 @@ double* C_get_Variance
 SEXP LECV
 
 ) {
-
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     double *var, *covar;
 
@@ -422,7 +408,6 @@ double* C_get_Covariance
 SEXP LECV
 
 ) {
-
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     if (C_get_varonly(LECV) && PQ > 1)
         error("Cannot extract covariance from variance only object");
@@ -452,7 +437,6 @@ double* C_get_ExpectationInfluence
 SEXP LECV
 
 ) {
-
     return(REAL(VECTOR_ELT(LECV, ExpectationInfluence_SLOT)));
 }
 
@@ -465,7 +449,6 @@ double* C_get_CovarianceInfluence
 SEXP LECV
 
 ) {
-
     return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));
 }
 
@@ -491,7 +474,6 @@ double* C_get_TableBlock
 SEXP LECV
 
 ) {
-
     if (VECTOR_ELT(LECV, TableBlock_SLOT) == R_NilValue)
         error("object does not contain table block slot");
     return(REAL(VECTOR_ELT(LECV, TableBlock_SLOT)));
@@ -5387,7 +5369,6 @@ SEXP R_order_subset_wrt_block
 )
 
 {
-
     /* C integer N Input */
     
         R_xlen_t N
@@ -5573,7 +5554,6 @@ void C_PermuteBlock
     int Nlevels,
     double *ans
 ) {
-
     double *px, *pans;
 
     px = subset;
@@ -6860,7 +6840,6 @@ void RC_ExpectationCovarianceStatistic
 
 SEXP ans
 ) {
-
     /* C integer N Input */
     
         R_xlen_t N
@@ -7258,7 +7237,6 @@ SEXP iy,
 
 SEXP ans
 ) {
-
     /* 2d Memory */
     
     SEXP Rcsum, Rrsum;

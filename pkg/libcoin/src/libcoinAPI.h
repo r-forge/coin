@@ -31,7 +31,6 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic(
     SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP varonly,
     SEXP tol
 ) {
-
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -42,7 +41,6 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic(
 extern SEXP libcoin_R_PermutedLinearStatistic(
     SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nresample
 ) {
-
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -64,7 +62,6 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
     SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP weights, SEXP subset, SEXP block,
     SEXP varonly, SEXP tol
 ) {
-
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -76,7 +73,6 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
     SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nresample,
     SEXP itable
 ) {
-
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -86,7 +82,6 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
 
 extern SEXP libcoin_R_QuadraticTest(
     SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log, SEXP PermutedStatistics
-
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
@@ -99,7 +94,6 @@ extern SEXP libcoin_R_MaximumTest(
     SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
     SEXP PermutedStatistics, SEXP maxpts, SEXP releps, SEXP abseps
 ) {
-
   static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -111,7 +105,6 @@ extern SEXP libcoin_R_MaximumTest(
 extern SEXP libcoin_R_MaximallySelectedTest(
     SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
 ) {
-
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -122,7 +115,6 @@ extern SEXP libcoin_R_MaximallySelectedTest(
 extern SEXP libcoin_R_kronecker(
     SEXP A, SEXP B
 ) {
-
     static SEXP(*fun)(SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP))

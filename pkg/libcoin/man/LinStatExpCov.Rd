@@ -64,7 +64,6 @@ lmult(x, object)
 }
 
 \examples{
-
  wilcox.test(Ozone ~ Month, data = airquality,
              subset = Month \%in\% c(5, 8))
 
@@ -73,6 +72,5 @@ lmult(x, object)
  Y <- as.double(rank(aq$Ozone))
 
  doTest(LinStatExpCov(X, Y))
-
 }
 \keyword{htest}

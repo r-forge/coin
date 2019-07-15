@@ -63,7 +63,6 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
                              checkNAs = TRUE, varonly = FALSE, nresample = 0, standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
-
     if (NROW(X) != NROW(Y))
         stop("dimensions of X and Y don't match")
     N <- NROW(X)
@@ -84,7 +83,6 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
 
     # Check weights, subset, block
     
-
     if (is.null(weights)) weights <- integer(0)
 
     if (length(weights) > 0) {
@@ -152,7 +150,6 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
                              standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
-
     IF <- function(x) is.integer(x) || is.factor(x)
 
     if (!((length(ix) == length(iy)) && IF(ix) && IF(iy)))
@@ -205,7 +202,6 @@ LinStatExpCov <- function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
 
     # Check weights, subset, block
     
-
     if (is.null(weights)) weights <- integer(0)
 
     if (length(weights) > 0) {

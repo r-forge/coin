@@ -27,8 +27,6 @@ ctabs(ix, iy = integer(0), block = integer(0), weights = integer(0),
   a one- or two-dimensional table.
 }
 \examples{
-
   ctabs(ix = 1:5, iy = 1:5, weights = 1:5 / 5)
-
 }
 \keyword{univar}

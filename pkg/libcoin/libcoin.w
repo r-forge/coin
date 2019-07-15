@@ -330,7 +330,6 @@ sorted. \verb|block| is a factor at $B$ levels of length $N$.
 
 @d Check weights, subset, block
 @{
-
 if (is.null(weights)) weights <- integer(0)
 
 if (length(weights) > 0) {
@@ -390,7 +389,6 @@ Variances smaller than \verb|tol| are treated as being zero.
                              checkNAs = TRUE, varonly = FALSE, nresample = 0, standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
-
     if (NROW(X) != NROW(Y))
         stop("dimensions of X and Y don't match")
     N <- NROW(X)
@@ -495,7 +493,6 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
                              standardise = FALSE,
                              tol = sqrt(.Machine$double.eps))
 {
-
     IF <- function(x) is.integer(x) || is.factor(x)
 
     if (!((length(ix) == length(iy)) && IF(ix) && IF(iy)))
@@ -798,7 +795,6 @@ necessarily computing the corresponding linear statistics via
 @<R Header@>
 ctabs <- function@<ctabs Prototype@>
 {
-
     stopifnot(is.integer(ix) || is.factor(ix))
     N <- length(ix)
 
@@ -893,7 +889,6 @@ lmult(x, object)
 }
 
 \examples{
-
  wilcox.test(Ozone ~ Month, data = airquality,
              subset = Month \%in\% c(5, 8))
 
@@ -902,7 +897,6 @@ lmult(x, object)
  Y <- as.double(rank(aq$Ozone))
 
  doTest(LinStatExpCov(X, Y))
-
 }
 \keyword{htest}
 @}
@@ -978,9 +972,7 @@ ctabs@<ctabs Prototype@>
   a one- or two-dimensional table.
 }
 \examples{
-
   ctabs(ix = 1:5, iy = 1:5, weights = 1:5 / 5)
-
 }
 \keyword{univar}
 @}
@@ -1530,7 +1522,6 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic(
     SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP varonly,
     SEXP tol
 ) {
-
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -1608,7 +1599,6 @@ void RC_ExpectationCovarianceStatistic
 @<User Interface Inputs@>
 SEXP ans
 ) {
-
     @<C integer N Input@>;
     @<C integer P Input@>;
     @<C integer Q Input@>;
@@ -1808,7 +1798,6 @@ SEXP R_PermutedLinearStatistic
 extern SEXP libcoin_R_PermutedLinearStatistic(
     SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nresample
 ) {
-
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -1980,7 +1969,6 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
     SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP weights, SEXP subset, SEXP block,
     SEXP varonly, SEXP tol
 ) {
-
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -2154,7 +2142,6 @@ void RC_ExpectationCovarianceStatistic_2d
 @<2d User Interface Inputs@>
 SEXP ans
 ) {
-
     @<2d Memory@>
 
     @<2d Total Table@>
@@ -2248,7 +2235,6 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
     SEXP x, SEXP ix, SEXP y, SEXP iy, SEXP block, SEXP nresample,
     SEXP itable
 ) {
-
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -2368,7 +2354,6 @@ btab = table;
 @{
 extern SEXP libcoin_R_QuadraticTest(
     SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log, SEXP PermutedStatistics
-
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
@@ -2381,7 +2366,6 @@ extern SEXP libcoin_R_MaximumTest(
     SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
     SEXP PermutedStatistics, SEXP maxpts, SEXP releps, SEXP abseps
 ) {
-
   static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -2393,7 +2377,6 @@ extern SEXP libcoin_R_MaximumTest(
 extern SEXP libcoin_R_MaximallySelectedTest(
     SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
 ) {
-
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
@@ -5742,7 +5725,6 @@ SEXP R_order_subset_wrt_block
 @{
 @<R\_order\_subset\_wrt\_block Prototype@>
 {
-
     @<C integer N Input@>;
     SEXP blockTable, ans;
 
@@ -6004,7 +5986,6 @@ void C_PermuteBlock
     int Nlevels,
     double *ans
 ) {
-
     double *px, *pans;
 
     px = subset;
@@ -6060,7 +6041,6 @@ int NROW
 (
     SEXP x
 ) {
-
     SEXP a;
     a = getAttrib(x, R_DimSymbol);
     if (a == R_NilValue) return(XLENGTH(x));
@@ -6077,7 +6057,6 @@ int NCOL
 (
     SEXP x
 ) {
-
     SEXP a;
     a = getAttrib(x, R_DimSymbol);
     if (a == R_NilValue) return(1);
@@ -6094,7 +6073,6 @@ int NLEVELS
 (
     SEXP x
 ) {
-
     SEXP a;
     int maxlev = 0;
 
@@ -6121,7 +6099,6 @@ int PP12
 (
     int P
 ) {
-
     double dP = (double) P;
     double ans;
 
@@ -6143,7 +6120,6 @@ int mPQB
     int Q,
     int B
 ) {
-
     double ans = P * Q * B;
 
     if (ans > INT_MAX)
@@ -6168,7 +6144,6 @@ stopifnot(isequal(K1, K2))
 extern SEXP libcoin_R_kronecker(
     SEXP A, SEXP B
 ) {
-
     static SEXP(*fun)(SEXP, SEXP) = NULL;
     if(fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP))
@@ -6221,7 +6196,6 @@ void C_kronecker
     const int overwrite,
     double *ans
 ) {
-
     int i, j, k, l, mr, js, ir;
     double y;
 
@@ -6256,7 +6230,6 @@ void C_kronecker_sym
     const int overwrite,
     double *ans
 ) {
-
     int i, j, k, l, mr, js, ir, s;
     double y;
 
@@ -6405,7 +6378,6 @@ int C_get_P
 (
 @<R LECV Input@>
 ) {
-
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[0]);
 }
 @|C_get_P
@@ -6417,7 +6389,6 @@ int C_get_Q
 (
 @<R LECV Input@>
 ) {
-
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[1]);
 }
 @|C_get_Q
@@ -6429,7 +6400,6 @@ int C_get_varonly
 (
 @<R LECV Input@>
 ) {
-
     return(INTEGER(VECTOR_ELT(LECV, varonly_SLOT))[0]);
 }
 @|C_get_varonly
@@ -6441,7 +6411,6 @@ int C_get_Xfactor
 (
 @<R LECV Input@>
 ) {
-
     return(INTEGER(VECTOR_ELT(LECV, Xfactor_SLOT))[0]);
 }
 @|C_get_Xfactor
@@ -6453,7 +6422,6 @@ double* C_get_LinearStatistic
 (
 @<R LECV Input@>
 ) {
-
     return(REAL(VECTOR_ELT(LECV, LinearStatistic_SLOT)));
 }
 @|C_get_LinearStatistic
@@ -6465,7 +6433,6 @@ double* C_get_Expectation
 (
 @<R LECV Input@>
 ) {
-
     return(REAL(VECTOR_ELT(LECV, Expectation_SLOT)));
 }
 @|C_get_Expectation
@@ -6477,7 +6444,6 @@ double* C_get_Variance
 (
 @<R LECV Input@>
 ) {
-
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     double *var, *covar;
 
@@ -6502,7 +6468,6 @@ double* C_get_Covariance
 (
 @<R LECV Input@>
 ) {
-
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     if (C_get_varonly(LECV) && PQ > 1)
         error("Cannot extract covariance from variance only object");
@@ -6530,7 +6495,6 @@ double* C_get_ExpectationInfluence
 (
 @<R LECV Input@>
 ) {
-
     return(REAL(VECTOR_ELT(LECV, ExpectationInfluence_SLOT)));
 }
 @|C_get_ExpectationInfluence
@@ -6542,7 +6506,6 @@ double* C_get_CovarianceInfluence
 (
 @<R LECV Input@>
 ) {
-
     return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));
 }
 @|C_get_CovarianceInfluence
@@ -6566,7 +6529,6 @@ double* C_get_TableBlock
 (
 @<R LECV Input@>
 ) {
-
     if (VECTOR_ELT(LECV, TableBlock_SLOT) == R_NilValue)
         error("object does not contain table block slot");
     return(REAL(VECTOR_ELT(LECV, TableBlock_SLOT)));
@@ -6960,7 +6922,6 @@ void attribute_visible R_init_libcoin
 (
     DllInfo *dll
 ) {
-
     R_registerRoutines(dll, NULL, callMethods, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
     R_forceSymbols(dll, TRUE);
