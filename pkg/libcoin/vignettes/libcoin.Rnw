@@ -1062,9 +1062,9 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@  \item{weights}{an optional integer vector of non-negative case weights.}@\\
 \mbox{}\verb@  \item{subset}{an optional integer vector defining a subset of observations.}@\\
 \mbox{}\verb@  \item{block}{an optional factor defining independent blocks of observations.}@\\
-\mbox{}\verb@  \item{checkNAs}{a logical for switching off missing value checks. This@\\
-\mbox{}\verb@      included switching off checks for suitable values of \code{subset}.@\\
-\mbox{}\verb@      Use at your own risk.}@\\
+\mbox{}\verb@  \item{checkNAs}{a logical for switching off missing value checks.  This@\\
+\mbox{}\verb@    included switching off checks for suitable values of \code{subset}.@\\
+\mbox{}\verb@    Use at your own risk.}@\\
 \mbox{}\verb@  \item{varonly}{a logical asking for variances only.}@\\
 \mbox{}\verb@  \item{nresample}{an integer defining the number of permuted statistics to draw.}@\\
 \mbox{}\verb@  \item{standardise}{a logical asking to standardise the permuted statistics.}@\\
@@ -1085,7 +1085,7 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@  computing this matrix.@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@  Both \code{ix} and \code{iy} being present means the code treats them@\\
-\mbox{}\verb@  as subsetting vectors for \code{X} and \code{Y}. Note that \code{ix = 0}@\\
+\mbox{}\verb@  as subsetting vectors for \code{X} and \code{Y}.  Note that \code{ix = 0}@\\
 \mbox{}\verb@  or \code{iy = 0} means that the corresponding observation is missing@\\
 \mbox{}\verb@  and the first row or \code{X} and \code{Y} must be zero.@\\
 \mbox{}\verb@@\\
@@ -1101,14 +1101,13 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@\examples{@\\
-\mbox{}\verb@ wilcox.test(Ozone ~ Month, data = airquality,@\\
-\mbox{}\verb@             subset = Month \%in\% c(5, 8))@\\
+\mbox{}\verb@wilcox.test(Ozone ~ Month, data = airquality, subset = Month \%in\% c(5, 8))@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@ aq <- subset(airquality, Month \%in\% c(5, 8))@\\
-\mbox{}\verb@ X <- as.double(aq$Month == 5)@\\
-\mbox{}\verb@ Y <- as.double(rank(aq$Ozone))@\\
+\mbox{}\verb@aq <- subset(airquality, Month \%in\% c(5, 8))@\\
+\mbox{}\verb@X <- as.double(aq$Month == 5)@\\
+\mbox{}\verb@Y <- as.double(rank(aq$Ozone))@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@ doTest(LinStatExpCov(X, Y))@\\
+\mbox{}\verb@doTest(LinStatExpCov(X, Y))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\keyword{htest}@\\
 \mbox{}\verb@@{\NWsep}
@@ -1116,7 +1115,7 @@ max(abs(t1[-1, -1] - t2))
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtIdentsUsed\nobreak\  \verb@block@\nobreak\ \NWlink{nuweb28b}{28b}\NWlink{nuweb28d}{d}, \verb@subset@\nobreak\ \NWlink{nuweb27b}{27b}\NWlink{nuweb27e}{e}\NWlink{nuweb28a}{, 28a}, \verb@weights@\nobreak\ \NWlink{nuweb26c}{26c}, \verb@x@\nobreak\ \NWlink{nuweb24d}{24d}\NWlink{nuweb25b}{, 25b}\NWlink{nuweb25c}{c}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@block@\nobreak\ \NWlink{nuweb28b}{28b}\NWlink{nuweb28d}{d}, \verb@subset@\nobreak\ \NWlink{nuweb27b}{27b}\NWlink{nuweb27e}{e}\NWlink{nuweb28a}{, 28a}, \verb@weights@\nobreak\ \NWlink{nuweb26c}{26c}, \verb@x@\nobreak\ \NWlink{nuweb24d}{24d}\NWlink{nuweb25b}{, 25b}\NWlink{nuweb25c}{c}, \verb@y@\nobreak\ \NWlink{nuweb25d}{25d}\NWlink{nuweb26a}{, 26a}\NWlink{nuweb26b}{b}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1144,22 +1143,21 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@  \item{alternative}{alternative for scalar or maximum-type statistics.}@\\
 \mbox{}\verb@  \item{pvalue}{a logical indicating if a p-value shall be computed.}@\\
 \mbox{}\verb@  \item{lower}{a logical indicating if a p-value (\code{lower} is \code{FALSE})@\\
-\mbox{}\verb@               or 1 - p-value (\code{lower} is \code{TRUE}) shall be returned.}@\\
+\mbox{}\verb@    or 1 - p-value (\code{lower} is \code{TRUE}) shall be returned.}@\\
 \mbox{}\verb@  \item{log}{a logical, if \code{TRUE} probabilities are log-probabilities.}@\\
 \mbox{}\verb@  \item{PermutedStatistics}{a logical, return permuted test statistics.}@\\
 \mbox{}\verb@  \item{minbucket}{minimum weight in either of two groups for maximally selected@\\
-\mbox{}\verb@                   statistics.}@\\
-\mbox{}\verb@  \item{ordered}{a logical, if \code{TRUE} maximally selected statistics@\\
-\mbox{}\verb@                 assume that the cutpoints are ordered.}@\\
-\mbox{}\verb@  \item{maxselect}{a logical, if \code{TRUE} maximally selected@\\
-\mbox{}\verb@                   statistics are computed. This requires that \code{X}@\\
-\mbox{}\verb@                   was an implicitly defined design matrix in@\\
-\mbox{}\verb@                   \code{\link{LinStatExpCov}}.}@\\
+\mbox{}\verb@    statistics.}@\\
+\mbox{}\verb@  \item{ordered}{a logical, if \code{TRUE} maximally selected statistics assume@\\
+\mbox{}\verb@    that the cutpoints are ordered.}@\\
+\mbox{}\verb@  \item{maxselect}{a logical, if \code{TRUE} maximally selected statistics are@\\
+\mbox{}\verb@    computed.  This requires that \code{X} was an implicitly defined design@\\
+\mbox{}\verb@    matrix in \code{\link{LinStatExpCov}}.}@\\
 \mbox{}\verb@  \item{pargs}{arguments as in \code{\link[mvtnorm]{GenzBretz}}.}@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\details{@\\
-\mbox{}\verb@  Computes a test statistic, a corresponding p-value and, optionally, cutpoints for@\\
-\mbox{}\verb@  maximally selected statistics.@\\
+\mbox{}\verb@  Computes a test statistic, a corresponding p-value and, optionally, cutpoints@\\
+\mbox{}\verb@  for maximally selected statistics.@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\value{@\\
 \mbox{}\verb@  A list.@\\
@@ -1184,17 +1182,18 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@\name{ctabs}@\\
 \mbox{}\verb@\alias{ctabs}@\\
 \mbox{}\verb@\title{@\\
-\mbox{}\verb@    Cross Tabulation@\\
+\mbox{}\verb@  Cross Tabulation@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\description{@\\
-\mbox{}\verb@    Efficient weighted cross tabulation of two factors and a block@\\
+\mbox{}\verb@  Efficient weighted cross tabulation of two factors and a block@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\usage{@\\
 \mbox{}\verb@ctabs@\hbox{$\langle\,${\itshape ctabs Prototype}\nobreak\ {\footnotesize \NWlink{nuweb15a}{15a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\arguments{@\\
 \mbox{}\verb@  \item{ix}{a integer of positive values with zero indicating a missing.}@\\
-\mbox{}\verb@  \item{iy}{an optional integer of positive values with zero indicating a missing.}@\\
+\mbox{}\verb@  \item{iy}{an optional integer of positive values with zero indicating a@\\
+\mbox{}\verb@    missing.}@\\
 \mbox{}\verb@  \item{block}{an optional blocking factor without missings.}@\\
 \mbox{}\verb@  \item{weights}{an optional vector of weights, integer or double.}@\\
 \mbox{}\verb@  \item{subset}{an optional integer vector indicating a subset.}@\\
@@ -1208,7 +1207,7 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@  a one- or two-dimensional table.@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\examples{@\\
-\mbox{}\verb@  ctabs(ix = 1:5, iy = 1:5, weights = 1:5 / 5)@\\
+\mbox{}\verb@ctabs(ix = 1:5, iy = 1:5, weights = 1:5 / 5)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\keyword{univar}@\\
 \mbox{}\verb@@{\NWsep}
@@ -1614,7 +1613,7 @@ The influence functions are also either a $N \times Q$ real matrix
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb31b}{31b}\NWlink{nuweb42c}{, 42c}\NWlink{nuweb50a}{, 50a}\NWlink{nuweb83a}{, 83a}\NWlink{nuweb83c}{c}\NWlink{nuweb84b}{, 84b}\NWlink{nuweb85b}{, 85b}\NWlink{nuweb97}{, 97}\NWlink{nuweb107a}{, 107a}\NWlink{nuweb121a}{, 121a}\NWlink{nuweb126a}{, 126a}\NWlink{nuweb131a}{, 131a}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb26a}{, 26a}\NWlink{nuweb26b}{b}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb79d}{, 79d}\NWlink{nuweb83b}{, 83b}\NWlink{nuweb84a}{, 84a}\NWlink{nuweb85a}{, 85a}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb98a}{, 98a}\NWlink{nuweb100}{, 100}\NWlink{nuweb101a}{, 101a}\NWlink{nuweb103}{, 103}\NWlink{nuweb106}{, 106}\NWlink{nuweb107b}{, 107b}\NWlink{nuweb108a}{, 108a}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110c}{, 110c}\NWlink{nuweb121b}{, 121b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb125}{, 125}\NWlink{nuweb126b}{, 126b}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb130a}{, 130a}\NWlink{nuweb131b}{, 131b}\NWlink{nuweb142}{, 142}\NWlink{nuweb143}{, 143}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb18}{, 18}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb26a}{, 26a}\NWlink{nuweb26b}{b}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb79d}{, 79d}\NWlink{nuweb83b}{, 83b}\NWlink{nuweb84a}{, 84a}\NWlink{nuweb85a}{, 85a}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb98a}{, 98a}\NWlink{nuweb100}{, 100}\NWlink{nuweb101a}{, 101a}\NWlink{nuweb103}{, 103}\NWlink{nuweb106}{, 106}\NWlink{nuweb107b}{, 107b}\NWlink{nuweb108a}{, 108a}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110c}{, 110c}\NWlink{nuweb121b}{, 121b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb125}{, 125}\NWlink{nuweb126b}{, 126b}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb130a}{, 130a}\NWlink{nuweb131b}{, 131b}\NWlink{nuweb142}{, 142}\NWlink{nuweb143}{, 143}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1651,7 +1650,7 @@ The influence functions are also either a $N \times Q$ real matrix
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb79c}{79c}\NWlink{nuweb99b}{, 99b}\NWlink{nuweb99c}{c}\NWlink{nuweb104a}{, 104a}\NWlink{nuweb107c}{, 107c}\NWlink{nuweb108b}{, 108b}\NWlink{nuweb109a}{, 109a}\NWlink{nuweb110a}{, 110a}\NWlink{nuweb110b}{b}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb25d}{, 25d}\NWlink{nuweb26b}{, 26b}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb79d}{, 79d}\NWlink{nuweb83b}{, 83b}\NWlink{nuweb84a}{, 84a}\NWlink{nuweb85a}{, 85a}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb98a}{, 98a}\NWlink{nuweb100}{, 100}\NWlink{nuweb101a}{, 101a}\NWlink{nuweb103}{, 103}\NWlink{nuweb106}{, 106}\NWlink{nuweb107b}{, 107b}\NWlink{nuweb108a}{, 108a}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110c}{, 110c}\NWlink{nuweb121b}{, 121b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb125}{, 125}\NWlink{nuweb126b}{, 126b}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb130a}{, 130a}\NWlink{nuweb131b}{, 131b}\NWlink{nuweb142}{, 142}\NWlink{nuweb143}{, 143}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb18}{, 18}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb25d}{, 25d}\NWlink{nuweb26b}{, 26b}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb79d}{, 79d}\NWlink{nuweb83b}{, 83b}\NWlink{nuweb84a}{, 84a}\NWlink{nuweb85a}{, 85a}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb98a}{, 98a}\NWlink{nuweb100}{, 100}\NWlink{nuweb101a}{, 101a}\NWlink{nuweb103}{, 103}\NWlink{nuweb106}{, 106}\NWlink{nuweb107b}{, 107b}\NWlink{nuweb108a}{, 108a}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110c}{, 110c}\NWlink{nuweb121b}{, 121b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb125}{, 125}\NWlink{nuweb126b}{, 126b}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb130a}{, 130a}\NWlink{nuweb131b}{, 131b}\NWlink{nuweb142}{, 142}\NWlink{nuweb143}{, 143}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1672,7 +1671,7 @@ or a factor at $Q$ levels
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb122c}{122c}\NWlink{nuweb127c}{, 127c}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb25d}{, 25d}\NWlink{nuweb26a}{, 26a}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb79d}{, 79d}\NWlink{nuweb83b}{, 83b}\NWlink{nuweb84a}{, 84a}\NWlink{nuweb85a}{, 85a}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb98a}{, 98a}\NWlink{nuweb100}{, 100}\NWlink{nuweb101a}{, 101a}\NWlink{nuweb103}{, 103}\NWlink{nuweb106}{, 106}\NWlink{nuweb107b}{, 107b}\NWlink{nuweb108a}{, 108a}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110c}{, 110c}\NWlink{nuweb121b}{, 121b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb125}{, 125}\NWlink{nuweb126b}{, 126b}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb130a}{, 130a}\NWlink{nuweb131b}{, 131b}\NWlink{nuweb142}{, 142}\NWlink{nuweb143}{, 143}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb18}{, 18}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb25d}{, 25d}\NWlink{nuweb26a}{, 26a}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb79d}{, 79d}\NWlink{nuweb83b}{, 83b}\NWlink{nuweb84a}{, 84a}\NWlink{nuweb85a}{, 85a}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb98a}{, 98a}\NWlink{nuweb100}{, 100}\NWlink{nuweb101a}{, 101a}\NWlink{nuweb103}{, 103}\NWlink{nuweb106}{, 106}\NWlink{nuweb107b}{, 107b}\NWlink{nuweb108a}{, 108a}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110c}{, 110c}\NWlink{nuweb121b}{, 121b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb125}{, 125}\NWlink{nuweb126b}{, 126b}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb130a}{, 130a}\NWlink{nuweb131b}{, 131b}\NWlink{nuweb142}{, 142}\NWlink{nuweb143}{, 143}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -11427,7 +11426,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \item \verb@weights,@: \NWlink{nuweb4}{4}\NWlink{nuweb6}{, 6}\NWlink{nuweb8}{, 8}\NWlink{nuweb15b}{, 15b}\NWlink{nuweb20}{, 20}, \underline{\NWlink{nuweb26d}{26d}}, \underline{\NWlink{nuweb26e}{26e}}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb36b}{, 36b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb37c}{c}\NWlink{nuweb38a}{, 38a}\NWlink{nuweb38d}{d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb79d}{, 79d}\NWlink{nuweb83b}{, 83b}\NWlink{nuweb84a}{, 84a}\NWlink{nuweb85a}{, 85a}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88}{, 88}\NWlink{nuweb90a}{, 90a}\NWlink{nuweb91a}{, 91a}\NWlink{nuweb93b}{, 93b}\NWlink{nuweb98a}{, 98a}\NWlink{nuweb112a}{, 112a}\NWlink{nuweb117a}{, 117a}\NWlink{nuweb121b}{, 121b}\NWlink{nuweb126b}{, 126b}\NWlink{nuweb131b}{, 131b}\NWlink{nuweb135a}{, 135a}.
 \item \verb@x@: \NWlink{nuweb8}{8}\NWlink{nuweb14}{, 14}\NWlink{nuweb18}{, 18}\NWlink{nuweb22a}{, 22a}, \underline{\NWlink{nuweb24d}{24d}}, \underline{\NWlink{nuweb25b}{25b}}, \underline{\NWlink{nuweb25c}{25c}}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35a}{, 35a}\NWlink{nuweb35b}{b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37c}{c}\NWlink{nuweb38a}{, 38a}\NWlink{nuweb38d}{d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb51}{, 51}\NWlink{nuweb79d}{, 79d}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88}{, 88}\NWlink{nuweb90a}{, 90a}\NWlink{nuweb91a}{, 91a}\NWlink{nuweb98a}{, 98a}\NWlink{nuweb99a}{, 99a}\NWlink{nuweb100}{, 100}\NWlink{nuweb101a}{, 101a}\NWlink{nuweb103}{, 103}\NWlink{nuweb106}{, 106}\NWlink{nuweb107b}{, 107b}\NWlink{nuweb108a}{, 108a}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110c}{, 110c}\NWlink{nuweb112a}{, 112a}\NWlink{nuweb113a}{, 113a}\NWlink{nuweb115b}{, 115b}\NWlink{nuweb117a}{, 117a}\NWlink{nuweb118a}{, 118a}\NWlink{nuweb120b}{, 120b}\NWlink{nuweb121b}{, 121b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb125}{, 125}\NWlink{nuweb126b}{, 126b}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb130a}{, 130a}\NWlink{nuweb138b}{, 138b}\NWlink{nuweb138c}{c}\NWlink{nuweb139a}{, 139a}\NWlink{nuweb144}{, 144}\NWlink{nuweb145}{, 145}.
 \item \verb@Xfactor_SLOT@: \underline{\NWlink{nuweb22b}{22b}}\NWlink{nuweb147c}{, 147c}\NWlink{nuweb154}{, 154}\NWlink{nuweb155}{, 155}.
-\item \verb@y@: \NWlink{nuweb14}{14}\NWlink{nuweb22a}{, 22a}, \underline{\NWlink{nuweb25d}{25d}}, \underline{\NWlink{nuweb26a}{26a}}, \underline{\NWlink{nuweb26b}{26b}}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb79d}{, 79d}\NWlink{nuweb83b}{, 83b}\NWlink{nuweb84a}{, 84a}\NWlink{nuweb85a}{, 85a}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb98a}{, 98a}\NWlink{nuweb100}{, 100}\NWlink{nuweb101a}{, 101a}\NWlink{nuweb103}{, 103}\NWlink{nuweb106}{, 106}\NWlink{nuweb107b}{, 107b}\NWlink{nuweb108a}{, 108a}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110c}{, 110c}\NWlink{nuweb121b}{, 121b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb125}{, 125}\NWlink{nuweb126b}{, 126b}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb130a}{, 130a}\NWlink{nuweb131b}{, 131b}\NWlink{nuweb142}{, 142}\NWlink{nuweb143}{, 143}.
+\item \verb@y@: \NWlink{nuweb14}{14}\NWlink{nuweb18}{, 18}\NWlink{nuweb22a}{, 22a}, \underline{\NWlink{nuweb25d}{25d}}, \underline{\NWlink{nuweb26a}{26a}}, \underline{\NWlink{nuweb26b}{26b}}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb79d}{, 79d}\NWlink{nuweb83b}{, 83b}\NWlink{nuweb84a}{, 84a}\NWlink{nuweb85a}{, 85a}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb98a}{, 98a}\NWlink{nuweb100}{, 100}\NWlink{nuweb101a}{, 101a}\NWlink{nuweb103}{, 103}\NWlink{nuweb106}{, 106}\NWlink{nuweb107b}{, 107b}\NWlink{nuweb108a}{, 108a}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110c}{, 110c}\NWlink{nuweb121b}{, 121b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb125}{, 125}\NWlink{nuweb126b}{, 126b}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb130a}{, 130a}\NWlink{nuweb131b}{, 131b}\NWlink{nuweb142}{, 142}\NWlink{nuweb143}{, 143}.
 \end{list}}
 
 \bibliographystyle{plainnat}

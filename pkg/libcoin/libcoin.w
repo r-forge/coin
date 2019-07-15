@@ -850,9 +850,9 @@ lmult(x, object)
   \item{weights}{an optional integer vector of non-negative case weights.}
   \item{subset}{an optional integer vector defining a subset of observations.}
   \item{block}{an optional factor defining independent blocks of observations.}
-  \item{checkNAs}{a logical for switching off missing value checks. This
-      included switching off checks for suitable values of \code{subset}.
-      Use at your own risk.}
+  \item{checkNAs}{a logical for switching off missing value checks.  This
+    included switching off checks for suitable values of \code{subset}.
+    Use at your own risk.}
   \item{varonly}{a logical asking for variances only.}
   \item{nresample}{an integer defining the number of permuted statistics to draw.}
   \item{standardise}{a logical asking to standardise the permuted statistics.}
@@ -873,7 +873,7 @@ lmult(x, object)
   computing this matrix.
 
   Both \code{ix} and \code{iy} being present means the code treats them
-  as subsetting vectors for \code{X} and \code{Y}. Note that \code{ix = 0}
+  as subsetting vectors for \code{X} and \code{Y}.  Note that \code{ix = 0}
   or \code{iy = 0} means that the corresponding observation is missing
   and the first row or \code{X} and \code{Y} must be zero.
 
@@ -889,14 +889,13 @@ lmult(x, object)
 }
 
 \examples{
- wilcox.test(Ozone ~ Month, data = airquality,
-             subset = Month \%in\% c(5, 8))
+wilcox.test(Ozone ~ Month, data = airquality, subset = Month \%in\% c(5, 8))
 
- aq <- subset(airquality, Month \%in\% c(5, 8))
- X <- as.double(aq$Month == 5)
- Y <- as.double(rank(aq$Ozone))
+aq <- subset(airquality, Month \%in\% c(5, 8))
+X <- as.double(aq$Month == 5)
+Y <- as.double(rank(aq$Ozone))
 
- doTest(LinStatExpCov(X, Y))
+doTest(LinStatExpCov(X, Y))
 }
 \keyword{htest}
 @}
@@ -920,22 +919,21 @@ doTest@<doTest Prototype@>
   \item{alternative}{alternative for scalar or maximum-type statistics.}
   \item{pvalue}{a logical indicating if a p-value shall be computed.}
   \item{lower}{a logical indicating if a p-value (\code{lower} is \code{FALSE})
-               or 1 - p-value (\code{lower} is \code{TRUE}) shall be returned.}
+    or 1 - p-value (\code{lower} is \code{TRUE}) shall be returned.}
   \item{log}{a logical, if \code{TRUE} probabilities are log-probabilities.}
   \item{PermutedStatistics}{a logical, return permuted test statistics.}
   \item{minbucket}{minimum weight in either of two groups for maximally selected
-                   statistics.}
-  \item{ordered}{a logical, if \code{TRUE} maximally selected statistics
-                 assume that the cutpoints are ordered.}
-  \item{maxselect}{a logical, if \code{TRUE} maximally selected
-                   statistics are computed. This requires that \code{X}
-                   was an implicitly defined design matrix in
-                   \code{\link{LinStatExpCov}}.}
+    statistics.}
+  \item{ordered}{a logical, if \code{TRUE} maximally selected statistics assume
+    that the cutpoints are ordered.}
+  \item{maxselect}{a logical, if \code{TRUE} maximally selected statistics are
+    computed.  This requires that \code{X} was an implicitly defined design
+    matrix in \code{\link{LinStatExpCov}}.}
   \item{pargs}{arguments as in \code{\link[mvtnorm]{GenzBretz}}.}
 }
 \details{
-  Computes a test statistic, a corresponding p-value and, optionally, cutpoints for
-  maximally selected statistics.
+  Computes a test statistic, a corresponding p-value and, optionally, cutpoints
+  for maximally selected statistics.
 }
 \value{
   A list.
@@ -948,17 +946,18 @@ doTest@<doTest Prototype@>
 \name{ctabs}
 \alias{ctabs}
 \title{
-    Cross Tabulation
+  Cross Tabulation
 }
 \description{
-    Efficient weighted cross tabulation of two factors and a block
+  Efficient weighted cross tabulation of two factors and a block
 }
 \usage{
 ctabs@<ctabs Prototype@>
 }
 \arguments{
   \item{ix}{a integer of positive values with zero indicating a missing.}
-  \item{iy}{an optional integer of positive values with zero indicating a missing.}
+  \item{iy}{an optional integer of positive values with zero indicating a
+    missing.}
   \item{block}{an optional blocking factor without missings.}
   \item{weights}{an optional vector of weights, integer or double.}
   \item{subset}{an optional integer vector indicating a subset.}
@@ -972,7 +971,7 @@ ctabs@<ctabs Prototype@>
   a one- or two-dimensional table.
 }
 \examples{
-  ctabs(ix = 1:5, iy = 1:5, weights = 1:5 / 5)
+ctabs(ix = 1:5, iy = 1:5, weights = 1:5 / 5)
 }
 \keyword{univar}
 @}
