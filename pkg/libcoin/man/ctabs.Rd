@@ -9,7 +9,7 @@
 }
 \usage{
 ctabs(ix, iy = integer(0), block = integer(0), weights = integer(0),
-        subset = integer(0), checkNAs = TRUE)
+      subset = integer(0), checkNAs = TRUE)
 }
 \arguments{
   \item{ix}{a integer of positive values with zero indicating a missing.}

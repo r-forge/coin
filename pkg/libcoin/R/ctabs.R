@@ -22,8 +22,9 @@
 ###
 ###    Edit 'libcoin.w' and run 'nuweb -r libcoin.w'
 
-ctabs <- function(ix, iy = integer(0), block = integer(0), weights = integer(0),
-                    subset = integer(0), checkNAs = TRUE)
+ctabs <-
+function(ix, iy = integer(0), block = integer(0), weights = integer(0),
+         subset = integer(0), checkNAs = TRUE)
 {
     stopifnot(is.integer(ix) || is.factor(ix))
     N <- length(ix)
@@ -37,7 +38,7 @@ ctabs <- function(ix, iy = integer(0), block = integer(0), weights = integer(0),
         stopifnot(rg[1] >= 0)
         attr(ix, "levels") <- 1:rg[2]
     } else {
-        ### lev can be data.frame (see inum::inum)
+        ## lev can be data.frame (see inum::inum)
         lev <- attr(ix, "levels")
         if (!is.vector(lev)) lev <- 1:NROW(lev)
         attr(ix, "levels") <- lev
@@ -57,7 +58,7 @@ ctabs <- function(ix, iy = integer(0), block = integer(0), weights = integer(0),
             stopifnot(rg[1] >= 0)
             attr(iy, "levels") <- 1:rg[2]
         } else {
-            ### lev can be data.frame (see inum::inum)
+            ## lev can be data.frame (see inum::inum)
             lev <- attr(iy, "levels")
             if (!is.vector(lev)) lev <- 1:NROW(lev)
             attr(iy, "levels") <- lev

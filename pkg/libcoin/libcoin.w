@@ -278,14 +278,14 @@ data is available in aggregated form; details will be explained later.
 
 @d LinStatExpCov Prototype
 @{(X, Y, ix = NULL, iy = NULL, weights = integer(0),
- subset = integer(0), block = integer(0),
- checkNAs = TRUE,
+ subset = integer(0), block = integer(0), checkNAs = TRUE,
  varonly = FALSE, nresample = 0, standardise = FALSE,
  tol = sqrt(.Machine$double.eps))@}
 
 @d LinStatExpCov
 @{
-LinStatExpCov <- function@<LinStatExpCov Prototype@>
+LinStatExpCov <-
+function@<LinStatExpCov Prototype@>
 {
     if (missing(X) & !is.null(ix) & is.null(iy)) {
         X <- ix
@@ -294,7 +294,7 @@ LinStatExpCov <- function@<LinStatExpCov Prototype@>
 
     if (missing(X)) X <- integer(0)
 
-    ### <FIXME> for the time being only!!! </FIXME>
+    ## <FIXME> for the time being only!!! </FIXME>
 ##    if (length(subset) > 0) subset <- sort(subset)
 
     if (is.null(ix) & is.null(iy))
@@ -385,9 +385,10 @@ Variances smaller than \verb|tol| are treated as being zero.
 
 @d LinStatExpCov1d
 @{
-.LinStatExpCov1d <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
-                             checkNAs = TRUE, varonly = FALSE, nresample = 0, standardise = FALSE,
-                             tol = sqrt(.Machine$double.eps))
+.LinStatExpCov1d <-
+function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
+         checkNAs = TRUE, varonly = FALSE, nresample = 0, standardise = FALSE,
+         tol = sqrt(.Machine$double.eps))
 {
     if (NROW(X) != NROW(Y))
         stop("dimensions of X and Y don't match")
@@ -398,7 +399,7 @@ Variances smaller than \verb|tol| are treated as being zero.
             rg <- range(X)
             if (anyNA(rg))
                 stop("no missing values allowed in X")
-            stopifnot(rg[1] > 0) ### no missing values allowed here!
+            stopifnot(rg[1] > 0) # no missing values allowed here!
             if (is.null(attr(X, "levels")))
                 attr(X, "levels") <- 1:rg[2]
         }
@@ -488,10 +489,10 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 
 @d LinStatExpCov2d
 @{
-.LinStatExpCov2d <- function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
-                             block = integer(0), checkNAs = TRUE, varonly = FALSE, nresample = 0,
-                             standardise = FALSE,
-                             tol = sqrt(.Machine$double.eps))
+.LinStatExpCov2d <-
+function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
+         block = integer(0), checkNAs = TRUE, varonly = FALSE, nresample = 0,
+         standardise = FALSE, tol = sqrt(.Machine$double.eps))
 {
     IF <- function(x) is.integer(x) || is.factor(x)
 
@@ -542,7 +543,7 @@ if (is.null(attr(ix, "levels"))) {
     stopifnot(rg[1] >= 0)
     attr(ix, "levels") <- 1:rg[2]
 } else {
-    ### lev can be data.frame (see inum::inum)
+    ## lev can be data.frame (see inum::inum)
     lev <- attr(ix, "levels")
     if (!is.vector(lev)) lev <- 1:NROW(lev)
     attr(ix, "levels") <- lev
@@ -559,7 +560,7 @@ if (is.null(attr(iy, "levels"))) {
     stopifnot(rg[1] >= 0)
     attr(iy, "levels") <- 1:rg[2]
 } else {
-    ### lev can be data.frame (see inum::inum)
+    ## lev can be data.frame (see inum::inum)
     lev <- attr(iy, "levels")
     if (!is.vector(lev)) lev <- 1:NROW(lev)
     attr(iy, "levels") <- lev
@@ -602,7 +603,9 @@ matrix from such an object.
 
 @d vcov LinStatExpCov
 @{
-vcov.LinStatExpCov <- function(object, ...) {
+vcov.LinStatExpCov <-
+function(object, ...)
+{
     if (object$varonly)
         stop("cannot extract covariance matrix")
     PQ <- prod(object$dim)
@@ -632,15 +635,16 @@ can be computed on the log-scale.
 
 @d doTest Prototype
 @{(object, teststat = c("maximum", "quadratic", "scalar"),
-   alternative = c("two.sided", "less", "greater"),
-   pvalue = TRUE, lower = FALSE, log = FALSE, PermutedStatistics = FALSE,
-   minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor,
-   pargs = GenzBretz())@}
+ alternative = c("two.sided", "less", "greater"), pvalue = TRUE,
+ lower = FALSE, log = FALSE, PermutedStatistics = FALSE,
+ minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor,
+ pargs = GenzBretz())@}
 
 @d doTest
 @{
 ### note: lower = FALSE => p-value; lower = TRUE => 1 - p-value
-doTest <- function@<doTest Prototype@>
+doTest <-
+function@<doTest Prototype@>
 {
     teststat <- match.arg(teststat, choices = c("maximum", "quadratic", "scalar"))
     if (!any(teststat == c("maximum", "quadratic", "scalar")))
@@ -661,7 +665,7 @@ doTest <- function@<doTest Prototype@>
     if (test == 3) {
         if (length(object$LinearStatistic) != 1)
             stop("scalar test statistic not applicable")
-        test <- 1L ### scalar is maximum internally
+        test <- 1L # scalar is maximum internally
     }
     alt <- which(c("two.sided", "less", "greater") == alternative)
 
@@ -717,7 +721,9 @@ matrix to an object of class \verb|LinStatExpCov|.
 
 @d Contrasts
 @{
-lmult <- function(x, object) {
+lmult <-
+function(x, object)
+{
     stopifnot(!object$varonly)
     stopifnot(is.numeric(x))
     if (is.vector(x)) x <- matrix(x, nrow = 1)
@@ -788,12 +794,13 @@ necessarily computing the corresponding linear statistics via
 
 @d ctabs Prototype
 @{(ix, iy = integer(0), block = integer(0), weights = integer(0),
-   subset = integer(0), checkNAs = TRUE)@}
+ subset = integer(0), checkNAs = TRUE)@}
 
 @o ctabs.R -cp
 @{
 @<R Header@>
-ctabs <- function@<ctabs Prototype@>
+ctabs <-
+function@<ctabs Prototype@>
 {
     stopifnot(is.integer(ix) || is.factor(ix))
     N <- length(ix)
@@ -894,7 +901,6 @@ wilcox.test(Ozone ~ Month, data = airquality, subset = Month \%in\% c(5, 8))
 aq <- subset(airquality, Month \%in\% c(5, 8))
 X <- as.double(aq$Month == 5)
 Y <- as.double(rank(aq$Ozone))
-
 doTest(LinStatExpCov(X, Y))
 }
 \keyword{htest}

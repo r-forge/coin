@@ -11,8 +11,7 @@
 }
 \usage{
 LinStatExpCov(X, Y, ix = NULL, iy = NULL, weights = integer(0),
-              subset = integer(0), block = integer(0),
-              checkNAs = TRUE,
+              subset = integer(0), block = integer(0), checkNAs = TRUE,
               varonly = FALSE, nresample = 0, standardise = FALSE,
               tol = sqrt(.Machine$double.eps))
 lmult(x, object)
@@ -69,7 +68,6 @@ wilcox.test(Ozone ~ Month, data = airquality, subset = Month \%in\% c(5, 8))
 aq <- subset(airquality, Month \%in\% c(5, 8))
 X <- as.double(aq$Month == 5)
 Y <- as.double(rank(aq$Ozone))
-
 doTest(LinStatExpCov(X, Y))
 }
 \keyword{htest}

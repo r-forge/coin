@@ -9,10 +9,10 @@
 }
 \usage{
 doTest(object, teststat = c("maximum", "quadratic", "scalar"),
-         alternative = c("two.sided", "less", "greater"),
-         pvalue = TRUE, lower = FALSE, log = FALSE, PermutedStatistics = FALSE,
-         minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor,
-         pargs = GenzBretz())
+       alternative = c("two.sided", "less", "greater"), pvalue = TRUE,
+       lower = FALSE, log = FALSE, PermutedStatistics = FALSE,
+       minbucket = 10L, ordered = TRUE, maxselect = object$Xfactor,
+       pargs = GenzBretz())
 }
 \arguments{
   \item{object}{an object returned by \code{\link{LinStatExpCov}}.}
