@@ -2759,7 +2759,7 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@extern SEXP libcoin_StandardisePermutedLinearStatistic(@\\
+\mbox{}\verb@extern SEXP libcoin_R_StandardisePermutedLinearStatistic(@\\
 \mbox{}\verb@    SEXP LECV@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP) = NULL;@\\

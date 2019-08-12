@@ -48,7 +48,7 @@ extern SEXP libcoin_R_PermutedLinearStatistic(
     return fun(x, y, weights, subset, block, nresample);
 }
 
-extern SEXP libcoin_StandardisePermutedLinearStatistic(
+extern SEXP libcoin_R_StandardisePermutedLinearStatistic(
     SEXP LECV
 ) {
     static SEXP(*fun)(SEXP) = NULL;

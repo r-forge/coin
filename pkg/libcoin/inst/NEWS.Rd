@@ -4,6 +4,8 @@
 
 \section{Changes in Version 1.0-5 (20YY-MM-DD)}{
   \itemize{
+    \item Function \code{libcoin_StandardisePermutedLinearStatistic} was renamed
+          to \code{libcoin_R_StandardisePermutedLinearStatistic}.
     \item Documentation updates.
   }
 }
@@ -26,7 +28,7 @@
           unnecessary memory allocation.  Report and fix by Joanidis
           Kristoforos.
     \item Some additional checks for integer overflow.
-    }
+  }
 }
 
 \section{Changes in Version 1.0-1 (2017-12-13)}{

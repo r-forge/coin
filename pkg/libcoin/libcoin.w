@@ -1886,7 +1886,7 @@ for (int p = 0; p < PQ; p++)
 
 @o libcoinAPI.h -cc
 @{
-extern SEXP libcoin_StandardisePermutedLinearStatistic(
+extern SEXP libcoin_R_StandardisePermutedLinearStatistic(
     SEXP LECV
 ) {
     static SEXP(*fun)(SEXP) = NULL;
