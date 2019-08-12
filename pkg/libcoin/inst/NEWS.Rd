@@ -4,7 +4,7 @@
 
 \section{Changes in Version 1.0-5 (20YY-MM-DD)}{
   \itemize{
-    \item
+    \item Documentation updates.
   }
 }
 

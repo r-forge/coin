@@ -30,7 +30,7 @@ doTest(object, teststat = c("maximum", "quadratic", "scalar"),
   \item{maxselect}{a logical, if \code{TRUE} maximally selected statistics are
     computed.  This requires that \code{X} was an implicitly defined design
     matrix in \code{\link{LinStatExpCov}}.}
-  \item{pargs}{arguments as in \code{\link[mvtnorm]{GenzBretz}}.}
+  \item{pargs}{arguments as in \code{\link[mvtnorm:algorithms]{GenzBretz}}.}
 }
 \details{
   Computes a test statistic, a corresponding p-value and, optionally, cutpoints
