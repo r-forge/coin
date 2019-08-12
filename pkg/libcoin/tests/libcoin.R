@@ -1,5 +1,4 @@
 ### R code from vignette source 'libcoin.Rnw'
-### Encoding: UTF-8
 
 ###################################################
 ### code chunk number 1: 1dex-1
