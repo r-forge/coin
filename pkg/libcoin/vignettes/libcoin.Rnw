@@ -1106,7 +1106,6 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@  Strasser, H. and Weber, C.  (1999).  On the asymptotic theory of permutation@\\
 \mbox{}\verb@  statistics.  \emph{Mathematical Methods of Statistics} \bold{8}(2), 220--250.@\\
 \mbox{}\verb@}@\\
-\mbox{}\verb@@\\
 \mbox{}\verb@\examples{@\\
 \mbox{}\verb@wilcox.test(Ozone ~ Month, data = airquality, subset = Month \%in\% c(5, 8))@\\
 \mbox{}\verb@@\\

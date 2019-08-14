@@ -894,7 +894,6 @@ lmult(x, object)
   Strasser, H. and Weber, C.  (1999).  On the asymptotic theory of permutation
   statistics.  \emph{Mathematical Methods of Statistics} \bold{8}(2), 220--250.
 }
-
 \examples{
 wilcox.test(Ozone ~ Month, data = airquality, subset = Month \%in\% c(5, 8))
 
