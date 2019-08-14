@@ -6921,7 +6921,6 @@ static const R_CallMethodDef callMethods[] = {
 
 @o libcoin-init.c -cc
 @{
-@<C Header@>
 void attribute_visible R_init_libcoin
 (
     DllInfo *dll

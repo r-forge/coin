@@ -10746,7 +10746,6 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C Header}\nobreak\ {\footnotesize \NWlink{nuweb162b}{162b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@void attribute_visible R_init_libcoin@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    DllInfo *dll@\\
@@ -10857,7 +10856,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb21a}{21a}\NWlink{nuweb23a}{, 23a}\NWlink{nuweb23c}{c}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb160}{, 160}\NWlink{nuweb161}{, 161}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb21a}{21a}\NWlink{nuweb23a}{, 23a}\NWlink{nuweb23c}{c}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb160}{, 160}.
 
 \item{}
 \end{list}
@@ -10904,7 +10903,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \item $\langle\,$C colSums Input\nobreak\ {\footnotesize \NWlink{nuweb113b}{113b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112b}{112b}\NWlink{nuweb114a}{, 114a}\NWlink{nuweb114b}{b}\NWlink{nuweb114c}{c}\NWlink{nuweb115a}{, 115a}.
 }
 \item $\langle\,$C Global Variables\nobreak\ {\footnotesize \NWlink{nuweb22b}{22b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb21a}{21a}.}
-\item $\langle\,$C Header\nobreak\ {\footnotesize \NWlink{nuweb162b}{162b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb21a}{21a}\NWlink{nuweb23a}{, 23a}\NWlink{nuweb23c}{c}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb160}{, 160}\NWlink{nuweb161}{, 161}.
+\item $\langle\,$C Header\nobreak\ {\footnotesize \NWlink{nuweb162b}{162b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb21a}{21a}\NWlink{nuweb23a}{, 23a}\NWlink{nuweb23c}{c}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb160}{, 160}.
 }
 \item $\langle\,$C integer B Input\nobreak\ {\footnotesize \NWlink{nuweb28c}{28c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb28d}{28d}\NWlink{nuweb34}{, 34}\NWlink{nuweb156b}{, 156b}\NWlink{nuweb157}{, 157}.
 }
