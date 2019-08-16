@@ -115,6 +115,34 @@ void C_kronecker
     }
 }
 
+/* R\_kronecker */
+
+/* R\_kronecker Prototype */
+
+SEXP R_kronecker
+(
+    SEXP A,
+    SEXP B
+)
+
+{
+    int m, n, r, s;
+    SEXP ans;
+
+    if (!isReal(A) || !isReal(B))
+        error("R_kronecker: A and / or B are not of type REALSXP");
+
+    m = NROW(A);
+    n = NCOL(A);
+    r = NROW(B);
+    s = NCOL(B);
+
+    PROTECT(ans = allocMatrix(REALSXP, m * n, r * s));
+    C_kronecker(REAL(A), m, n, REAL(B), r, s, 1, REAL(ans));
+    UNPROTECT(1);
+    return(ans);
+}
+
 /* C\_kronecker\_sym */
 
 void C_kronecker_sym
@@ -238,31 +266,31 @@ void C_MPinv_sym
     }
 }
 
-/* R\_kronecker */
+/* R\_MPinv\_sym */
 
-/* R\_kronecker Prototype */
+/* R\_MPinv\_sym Prototype */
 
-SEXP R_kronecker
+SEXP R_MPinv_sym
 (
-    SEXP A,
-    SEXP B
+    SEXP x,
+    SEXP n,
+    SEXP tol
 )
 
 {
-    int m, n, r, s;
-    SEXP ans;
+    SEXP ans, names, MPinv, rank;
 
-    if (!isReal(A) || !isReal(B))
-        error("R_kronecker: A and / or B are not of type REALSXP");
+    PROTECT(ans = allocVector(VECSXP, 2));
+    PROTECT(names = allocVector(STRSXP, 2));
+    SET_VECTOR_ELT(ans, 0, MPinv = allocVector(REALSXP, LENGTH(x)));
+    SET_STRING_ELT(names, 0, mkChar("MPinv"));
+    SET_VECTOR_ELT(ans, 1, rank = allocVector(INTSXP, 1));
+    SET_STRING_ELT(names, 1, mkChar("rank"));
+    namesgets(ans, names);
 
-    m = NROW(A);
-    n = NCOL(A);
-    r = NROW(B);
-    s = NCOL(B);
+    C_MPinv_sym(REAL(x), INTEGER(n)[0], REAL(tol)[0], REAL(MPinv), INTEGER(rank));
 
-    PROTECT(ans = allocMatrix(REALSXP, m * n, r * s));
-    C_kronecker(REAL(A), m, n, REAL(B), r, s, 1, REAL(ans));
-    UNPROTECT(1);
+    UNPROTECT(2);
     return(ans);
 }
 
@@ -6288,6 +6316,37 @@ double C_quadform
         ans += tmp * (linstat[q] - expect[q]);
     }
 
+    return(ans);
+}
+
+/* R\_quadform */
+
+/* R\_quadform Prototype */
+
+SEXP R_quadform
+(
+    SEXP linstat,
+    SEXP expect,
+    SEXP MPinv_sym
+)
+
+{
+    SEXP ans;
+    int n, PQ;
+    double *dlinstat, *dexpect, *dMPinv_sym, *dans;
+
+    n = NCOL(linstat);
+    PQ = NROW(linstat);
+    dlinstat = REAL(linstat);
+    dexpect = REAL(expect);
+    dMPinv_sym = REAL(MPinv_sym);
+
+    PROTECT(ans = allocVector(REALSXP, n));
+    dans = REAL(ans);
+    for (int i = 0; i < n; i++)
+      dans[i] = C_quadform(PQ, dlinstat + PQ * i, dexpect, dMPinv_sym);
+
+    UNPROTECT(1);
     return(ans);
 }
 

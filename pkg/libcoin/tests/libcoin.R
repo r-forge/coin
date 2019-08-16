@@ -244,7 +244,33 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 
 
 ###################################################
-### code chunk number 16: ExpectationInfluence
+### code chunk number 16: quadform
+###################################################
+MPinverse <- function(x, tol = sqrt(.Machine$double.eps)) {
+    SVD <- svd(x)
+    pos <- SVD$d > max(tol * SVD$d[1L], 0)
+    inv <- SVD$v[, pos, drop = FALSE] %*%
+             ((1/SVD$d[pos]) * t(SVD$u[, pos, drop = FALSE]))
+    list(MPinv = inv, rank = sum(pos))
+}
+
+quadform <- function (linstat, expect, MPinv) {
+    censtat <- linstat - expect
+    censtat %*% MPinv %*% censtat
+}
+
+linstat <- ls1$LinearStatistic
+expect <- ls1$Expectation
+MPinv <- MPinverse(vcov(ls1))$MPinv
+MPinv_sym <- MPinv[lower.tri(MPinv, diag = TRUE)]
+qf1 <- quadform(linstat, expect, MPinv)
+qf2 <- .Call(libcoin:::R_quadform, linstat, expect, MPinv_sym)
+
+stopifnot(isequal(qf1, qf2))
+
+
+###################################################
+### code chunk number 17: ExpectationInfluence
 ###################################################
 sumweights <- sum(weights[subset])
 expecty <- a0 <- colSums(y[subset, ] * weights[subset]) / sumweights
@@ -260,7 +286,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 17: CovarianceInfluence
+### code chunk number 18: CovarianceInfluence
 ###################################################
 sumweights <- sum(weights[subset])
 yc <- t(t(y) - expecty)
@@ -293,7 +319,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 18: ExpectationCovarianceX
+### code chunk number 19: ExpectationCovarianceX
 ###################################################
 a0 <- colSums(x[subset, ] * weights[subset])
 a0
@@ -350,7 +376,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 19: SimpleSums
+### code chunk number 20: SimpleSums
 ###################################################
 a0 <- sum(weights[subset])
 a1 <- .Call(libcoin:::R_Sums, N, weights, subset)
@@ -362,7 +388,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 20: KronSums
+### code chunk number 21: KronSums
 ###################################################
 r1 <- rep(1:ncol(x), ncol(y))
 r2 <- rep(1:ncol(y), each = ncol(x))
@@ -389,7 +415,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 21: KronSums-Permutation
+### code chunk number 22: KronSums-Permutation
 ###################################################
 a0 <- colSums(x[subset,r1] * y[subsety, r2])
 a1 <- .Call(libcoin:::R_KronSums_Permutation, x, P, y, subset, subsety)
@@ -403,7 +429,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2))
 
 
 ###################################################
-### code chunk number 22: colSums
+### code chunk number 23: colSums
 ###################################################
 a0 <- colSums(x[subset,] * weights[subset])
 a1 <- .Call(libcoin:::R_colSums, x, weights, subset)
@@ -416,7 +442,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 23: OneTableSum
+### code chunk number 24: OneTableSum
 ###################################################
 
 a0 <- as.vector(xtabs(weights ~ ixf, subset = subset))
@@ -430,7 +456,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 24: TwoTableSum
+### code chunk number 25: TwoTableSum
 ###################################################
 
 a0 <- xtabs(weights ~ ixf + iyf, subset = subset)
@@ -448,7 +474,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 25: ThreeTableSum
+### code chunk number 26: ThreeTableSum
 ###################################################
 a0 <- xtabs(weights ~ ixf + iyf + block, subset = subset)
 class(a0) <- "array"
@@ -464,7 +490,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 
 ###################################################
-### code chunk number 26: blocks
+### code chunk number 27: blocks
 ###################################################
 sb <- sample(block)
 ns1 <- do.call("c", tapply(subset, sb[subset], function(i) i))
@@ -473,12 +499,28 @@ stopifnot(isequal(ns1, ns2))
 
 
 ###################################################
-### code chunk number 27: kronecker
+### code chunk number 28: kronecker
 ###################################################
 A <- matrix(runif(12), ncol = 3)
 B <- matrix(runif(10), ncol = 2)
 K1 <- kronecker(A, B)
 K2 <- .Call(libcoin:::R_kronecker, A, B)
 stopifnot(isequal(K1, K2))
+
+
+###################################################
+### code chunk number 29: MPinv
+###################################################
+covar <- vcov(ls1)
+covar_sym <- ls1$Covariance
+n <- (sqrt(1 + 8 * length(covar_sym)) - 1) / 2
+
+tol <- sqrt(.Machine$double.eps)
+MP1 <- MPinverse(covar, tol)
+MP2 <- .Call(libcoin:::R_MPinv_sym, covar_sym, as.integer(n), tol)
+
+lt <- lower.tri(covar, diag = TRUE)
+stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) &&
+          isequal(MP1$rank, MP2$rank))
 
 

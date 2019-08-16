@@ -288,6 +288,31 @@ $p.value
 [11,]  7.221054  7.329256  7.097392
 [12,] 10.669965 10.540119 10.702889
 
+> MPinverse <- function(x, tol = sqrt(.Machine$double.eps)) {
++     SVD <- svd(x)
++     pos <- SVD$d > max(tol * SVD$d[1], 0)
++     inv <- SVD$v[, pos .... [TRUNCATED] 
+
+> quadform <- function(linstat, expect, MPinv) {
++     censtat <- linstat - expect
++     censtat %*% MPinv %*% censtat
++ }
+
+> linstat <- ls1$LinearStatistic
+
+> expect <- ls1$Expectation
+
+> MPinv <- MPinverse(vcov(ls1))$MPinv
+
+> MPinv_sym <- MPinv[lower.tri(MPinv, diag = TRUE)]
+
+> qf1 <- quadform(linstat, expect, MPinv)
+
+> qf2 <- .Call(libcoin:::R_quadform, linstat, expect, 
++     MPinv_sym)
+
+> stopifnot(isequal(qf1, qf2))
+
 > sumweights <- sum(weights[subset])
 
 > expecty <- a0 <- colSums(y[subset, ] * weights[subset])/sumweights
@@ -631,7 +656,25 @@ $p.value
 
 > stopifnot(isequal(K1, K2))
 
+> covar <- vcov(ls1)
+
+> covar_sym <- ls1$Covariance
+
+> n <- (sqrt(1 + 8 * length(covar_sym)) - 1)/2
+
+> tol <- sqrt(.Machine$double.eps)
+
+> MP1 <- MPinverse(covar, tol)
+
+> MP2 <- .Call(libcoin:::R_MPinv_sym, covar_sym, as.integer(n), 
++     tol)
+
+> lt <- lower.tri(covar, diag = TRUE)
+
+> stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) && isequal(MP1$rank, 
++     MP2$rank))
+
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   0.75    0.07    0.84 
+   0.76    0.04    0.84 

@@ -1107,7 +1107,9 @@ extern @<R\_OneTableSums Prototype@>;
 extern @<R\_TwoTableSums Prototype@>;
 extern @<R\_ThreeTableSums Prototype@>;
 extern @<R\_order\_subset\_wrt\_block Prototype@>;
+extern @<R\_quadform Prototype@>;
 extern @<R\_kronecker Prototype@>;
+extern @<R\_MPinv\_sym Prototype@>;
 @}
 
 The \proglang{C} file \verb|libcoin.c| contains all \proglang{C}
@@ -2621,6 +2623,7 @@ SEXP R_MaximallySelectedTest
 @<C\_maxabsstand\_Covariance@>
 @<C\_maxabsstand\_Variance@>
 @<C\_quadform@>
+@<R\_quadform@>
 @<C\_maxtype@>
 @<C\_standardise@>
 @<C\_ordered\_Xfactor@>
@@ -2770,6 +2773,79 @@ double C_maxabsstand_Variance
     return(ans);
 }
 @|C_maxabsstand_Variance
+@}
+
+
+<<quadform>>=
+MPinverse <- function(x, tol = sqrt(.Machine$double.eps)) {
+    SVD <- svd(x)
+    pos <- SVD$d > max(tol * SVD$d[1L], 0)
+    inv <- SVD$v[, pos, drop = FALSE] %*%
+             ((1/SVD$d[pos]) * t(SVD$u[, pos, drop = FALSE]))
+    list(MPinv = inv, rank = sum(pos))
+}
+
+quadform <- function (linstat, expect, MPinv) {
+    censtat <- linstat - expect
+    censtat %*% MPinv %*% censtat
+}
+
+linstat <- ls1$LinearStatistic
+expect <- ls1$Expectation
+MPinv <- MPinverse(vcov(ls1))$MPinv
+MPinv_sym <- MPinv[lower.tri(MPinv, diag = TRUE)]
+qf1 <- quadform(linstat, expect, MPinv)
+qf2 <- .Call(libcoin:::R_quadform, linstat, expect, MPinv_sym)
+
+stopifnot(isequal(qf1, qf2))
+@@
+
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_quadform(
+    SEXP linstat, SEXP expect, SEXP MPinv_sym
+) {
+    static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_quadform");
+    return fun(linstat, expect, MPinv_sym);
+}
+@}
+
+@d R\_quadform Prototype
+@{
+SEXP R_quadform
+(
+    SEXP linstat,
+    SEXP expect,
+    SEXP MPinv_sym
+)
+@}
+
+@d R\_quadform
+@{
+@<R\_quadform Prototype@>
+{
+    SEXP ans;
+    int n, PQ;
+    double *dlinstat, *dexpect, *dMPinv_sym, *dans;
+
+    n = NCOL(linstat);
+    PQ = NROW(linstat);
+    dlinstat = REAL(linstat);
+    dexpect = REAL(expect);
+    dMPinv_sym = REAL(MPinv_sym);
+
+    PROTECT(ans = allocVector(REALSXP, n));
+    dans = REAL(ans);
+    for (int i = 0; i < n; i++)
+      dans[i] = C_quadform(PQ, dlinstat + PQ * i, dexpect, dMPinv_sym);
+
+    UNPROTECT(1);
+    return(ans);
+}
+@|R_quadform
 @}
 
 @d C\_quadform
@@ -6032,10 +6108,11 @@ void C_doPermuteBlock
 @<NCOL@>
 @<NLEVELS@>
 @<C\_kronecker@>
+@<R\_kronecker@>
 @<C\_kronecker\_sym@>
 @<C\_KronSums\_sym@>
 @<C\_MPinv\_sym@>
-@<R\_kronecker@>
+@<R\_MPinv\_sym@>
 @}
 
 
@@ -6283,6 +6360,66 @@ void C_KronSums_sym_
     }
 }
 @|C_KronSums_sym
+@}
+
+
+<<MPinv>>=
+covar <- vcov(ls1)
+covar_sym <- ls1$Covariance
+n <- (sqrt(1 + 8 * length(covar_sym)) - 1) / 2
+
+tol <- sqrt(.Machine$double.eps)
+MP1 <- MPinverse(covar, tol)
+MP2 <- .Call(libcoin:::R_MPinv_sym, covar_sym, as.integer(n), tol)
+
+lt <- lower.tri(covar, diag = TRUE)
+stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) &&
+          isequal(MP1$rank, MP2$rank))
+@@
+
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_MPinv_sym(
+    SEXP x, SEXP n, SEXP tol
+) {
+    static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_MPinv_sym");
+    return fun(x, n, tol);
+}
+@}
+
+@d R\_MPinv\_sym Prototype
+@{
+SEXP R_MPinv_sym
+(
+    SEXP x,
+    SEXP n,
+    SEXP tol
+)
+@}
+
+@d R\_MPinv\_sym
+@{
+@<R\_MPinv\_sym Prototype@>
+{
+    SEXP ans, names, MPinv, rank;
+
+    PROTECT(ans = allocVector(VECSXP, 2));
+    PROTECT(names = allocVector(STRSXP, 2));
+    SET_VECTOR_ELT(ans, 0, MPinv = allocVector(REALSXP, LENGTH(x)));
+    SET_STRING_ELT(names, 0, mkChar("MPinv"));
+    SET_VECTOR_ELT(ans, 1, rank = allocVector(INTSXP, 1));
+    SET_STRING_ELT(names, 1, mkChar("rank"));
+    namesgets(ans, names);
+
+    C_MPinv_sym(REAL(x), INTEGER(n)[0], REAL(tol)[0], REAL(MPinv), INTEGER(rank));
+
+    UNPROTECT(2);
+    return(ans);
+}
+@|R_MPinv_sym
 @}
 
 @d C\_MPinv\_sym
@@ -6914,7 +7051,9 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_TwoTableSums, 4),
     CALLDEF(R_ThreeTableSums, 5),
     CALLDEF(R_order_subset_wrt_block, 4),
+    CALLDEF(R_quadform, 3),
     CALLDEF(R_kronecker, 2),
+    CALLDEF(R_MPinv_sym, 3),
     {NULL, NULL, 0}
 };
 @}
@@ -6948,7 +7087,9 @@ void attribute_visible R_init_libcoin
     REGCALL(R_TwoTableSums);
     REGCALL(R_ThreeTableSums);
     REGCALL(R_order_subset_wrt_block);
+    REGCALL(R_quadform);
     REGCALL(R_kronecker);
+    REGCALL(R_MPinv_sym);
 }
 @}
 

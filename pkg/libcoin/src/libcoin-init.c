@@ -52,7 +52,9 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_TwoTableSums, 4),
     CALLDEF(R_ThreeTableSums, 5),
     CALLDEF(R_order_subset_wrt_block, 4),
+    CALLDEF(R_quadform, 3),
     CALLDEF(R_kronecker, 2),
+    CALLDEF(R_MPinv_sym, 3),
     {NULL, NULL, 0}
 };
 
@@ -83,5 +85,7 @@ void attribute_visible R_init_libcoin
     REGCALL(R_TwoTableSums);
     REGCALL(R_ThreeTableSums);
     REGCALL(R_order_subset_wrt_block);
+    REGCALL(R_quadform);
     REGCALL(R_kronecker);
+    REGCALL(R_MPinv_sym);
 }

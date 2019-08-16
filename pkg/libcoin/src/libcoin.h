@@ -419,10 +419,26 @@ extern
        )
        ;
 extern 
+       SEXP R_quadform
+       (
+           SEXP linstat,
+           SEXP expect,
+           SEXP MPinv_sym
+       )
+       ;
+extern 
        SEXP R_kronecker
        (
            SEXP A,
            SEXP B
+       )
+       ;
+extern 
+       SEXP R_MPinv_sym
+       (
+           SEXP x,
+           SEXP n,
+           SEXP tol
        )
        ;
 

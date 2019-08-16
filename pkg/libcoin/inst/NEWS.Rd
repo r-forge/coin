@@ -4,6 +4,9 @@
 
 \section{Changes in Version 1.0-5 (20YY-MM-DD)}{
   \itemize{
+    \item New R interfaces \code{R_quadform} and \code{R_MPinv_sym},
+          corresponding to the C functions \code{C_quadform} and
+          \code{C_MPinv_sym}, added and exported to the C API.
     \item Function \code{libcoin_StandardisePermutedLinearStatistic} was renamed
           to \code{libcoin_R_StandardisePermutedLinearStatistic}.
     \item Documentation updates.

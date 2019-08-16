@@ -112,6 +112,16 @@ extern SEXP libcoin_R_MaximallySelectedTest(
     return fun(LEV, ordered, teststat, minbucket, lower, give_log);
 }
 
+extern SEXP libcoin_R_quadform(
+    SEXP linstat, SEXP expect, SEXP MPinv_sym
+) {
+    static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_quadform");
+    return fun(linstat, expect, MPinv_sym);
+}
+
 extern SEXP libcoin_R_kronecker(
     SEXP A, SEXP B
 ) {
@@ -120,4 +130,14 @@ extern SEXP libcoin_R_kronecker(
         fun = (SEXP(*)(SEXP, SEXP))
             R_GetCCallable("libcoin", "R_kronecker");
     return fun(A, B);
+}
+
+extern SEXP libcoin_R_MPinv_sym(
+    SEXP x, SEXP n, SEXP tol
+) {
+    static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_MPinv_sym");
+    return fun(x, n, tol);
 }
