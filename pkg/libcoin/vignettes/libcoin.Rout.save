@@ -525,7 +525,7 @@ $p.value
 > a2 <- .Call(libcoin:::R_KronSums_Permutation, x, P, 
 +     y, as.double(subset), as.double(subsety))
 
-> stopifnot(isequal(a0, a1) && isequal(a0, a1))
+> stopifnot(isequal(a0, a1) && isequal(a0, a2))
 
 > a0 <- as.vector(colSums(Xfactor[subset, r1Xfactor] * 
 +     y[subsety, r2Xfactor]))
@@ -533,10 +533,10 @@ $p.value
 > a1 <- .Call(libcoin:::R_KronSums_Permutation, ix, 
 +     Lx, y, subset, subsety)
 
-> a1 <- .Call(libcoin:::R_KronSums_Permutation, ix, 
+> a2 <- .Call(libcoin:::R_KronSums_Permutation, ix, 
 +     Lx, y, as.double(subset), as.double(subsety))
 
-> stopifnot(isequal(a0, a1))
+> stopifnot(isequal(a0, a1) && isequal(a0, a2))
 
 > a0 <- colSums(x[subset, ] * weights[subset])
 
@@ -634,4 +634,4 @@ $p.value
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   0.67    0.09    0.81 
+   0.75    0.07    0.84 

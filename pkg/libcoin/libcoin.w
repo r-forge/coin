@@ -4652,12 +4652,12 @@ void C_XfactorKronSums_dweights_isubset
 a0 <- colSums(x[subset,r1] * y[subsety, r2])
 a1 <- .Call(libcoin:::R_KronSums_Permutation, x, P, y, subset, subsety)
 a2 <- .Call(libcoin:::R_KronSums_Permutation, x, P, y, as.double(subset), as.double(subsety))
-stopifnot(isequal(a0, a1) && isequal(a0, a1))
+stopifnot(isequal(a0, a1) && isequal(a0, a2))
 
 a0 <- as.vector(colSums(Xfactor[subset,r1Xfactor] * y[subsety, r2Xfactor]))
 a1 <- .Call(libcoin:::R_KronSums_Permutation, ix, Lx, y, subset, subsety)
-a1 <- .Call(libcoin:::R_KronSums_Permutation, ix, Lx, y, as.double(subset), as.double(subsety))
-stopifnot(isequal(a0, a1))
+a2 <- .Call(libcoin:::R_KronSums_Permutation, ix, Lx, y, as.double(subset), as.double(subsety))
+stopifnot(isequal(a0, a1) && isequal(a0, a2))
 @@
 
 @d R\_KronSums\_Permutation Prototype
