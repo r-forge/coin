@@ -115,21 +115,23 @@ urlcolor={linkcolor}%
 
 \chapter*{Licence}
 
-Copyright (C) 2017-2019 Torsten Hothorn
+{\setlength{\parindent}{0cm}
+Copyright (C) 2017-2019 Torsten Hothorn \\
 
-This file is part of the `libcoin' R add-on package.
+This file is part of the `libcoin' R add-on package. \\
 
 `libcoin' is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, version 2.
+the Free Software Foundation, version 2. \\
 
 `libcoin' is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+GNU General Public License for more details. \\
 
 You should have received a copy of the GNU General Public License
 along with `libcoin'.  If not, see <http://www.gnu.org/licenses/>.
+}
 
 \chapter{Introduction}
 \pagenumbering{arabic}
