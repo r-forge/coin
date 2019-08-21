@@ -743,12 +743,7 @@ matrix from such an object.
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (object$varonly)@\\
 \mbox{}\verb@        stop("cannot extract covariance matrix")@\\
-\mbox{}\verb@    PQ <- prod(object$dim)@\\
-\mbox{}\verb@    ret <- matrix(0, nrow = PQ, ncol = PQ)@\\
-\mbox{}\verb@    ret[lower.tri(ret, diag = TRUE)] <- object$Covariance@\\
-\mbox{}\verb@    ret <- ret + t(ret)@\\
-\mbox{}\verb@    diag(ret) <- diag(ret) / 2@\\
-\mbox{}\verb@    ret@\\
+\mbox{}\verb@    drop(.Call(R_unpack_sym, object$Covariance, NULL, 0L))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -756,7 +751,7 @@ matrix from such an object.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb3a}{3a}.
-
+\item \NWtxtIdentsUsed\nobreak\  \verb@R_unpack_sym@\nobreak\ \NWlink{nuweb150}{150}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -10078,7 +10073,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb140a}{140a}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@R_unpack_sym@\nobreak\ \NWlink{nuweb149a}{149a}\NWlink{nuweb149b}{b}\NWlink{nuweb165}{, 165}\NWlink{nuweb166}{, 166}.\item \NWtxtIdentsUsed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb24d}{24d}\NWlink{nuweb25b}{, 25b}\NWlink{nuweb25c}{c}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@R_unpack_sym@\nobreak\ \NWlink{nuweb10}{10}\NWlink{nuweb149a}{, 149a}\NWlink{nuweb149b}{b}\NWlink{nuweb165}{, 165}\NWlink{nuweb166}{, 166}.\item \NWtxtIdentsUsed\nobreak\  \verb@x@\nobreak\ \NWlink{nuweb24d}{24d}\NWlink{nuweb25b}{, 25b}\NWlink{nuweb25c}{c}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -11768,7 +11763,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \item \verb@R_Sums@: \NWlink{nuweb95a}{95a}, \underline{\NWlink{nuweb95b}{95b}}\NWlink{nuweb165}{, 165}\NWlink{nuweb166}{, 166}.
 \item \verb@R_ThreeTableSums@: \NWlink{nuweb16}{16}\NWlink{nuweb128a}{, 128a}, \underline{\NWlink{nuweb128b}{128b}}\NWlink{nuweb165}{, 165}\NWlink{nuweb166}{, 166}.
 \item \verb@R_TwoTableSums@: \NWlink{nuweb16}{16}\NWlink{nuweb123a}{, 123a}, \underline{\NWlink{nuweb123b}{123b}}\NWlink{nuweb165}{, 165}\NWlink{nuweb166}{, 166}.
-\item \verb@R_unpack_sym@: \NWlink{nuweb149a}{149a}\NWlink{nuweb149b}{b}, \underline{\NWlink{nuweb150}{150}}\NWlink{nuweb165}{, 165}\NWlink{nuweb166}{, 166}.
+\item \verb@R_unpack_sym@: \NWlink{nuweb10}{10}\NWlink{nuweb149a}{, 149a}\NWlink{nuweb149b}{b}, \underline{\NWlink{nuweb150}{150}}\NWlink{nuweb165}{, 165}\NWlink{nuweb166}{, 166}.
 \item \verb@S@: \underline{\NWlink{nuweb22a}{22a}}\NWlink{nuweb37b}{, 37b}\NWlink{nuweb38b}{, 38b}\NWlink{nuweb47}{, 47}\NWlink{nuweb48}{, 48}\NWlink{nuweb60b}{, 60b}\NWlink{nuweb61b}{, 61b}\NWlink{nuweb62b}{, 62b}\NWlink{nuweb65}{, 65}\NWlink{nuweb67a}{, 67a}\NWlink{nuweb71}{, 71}\NWlink{nuweb72a}{, 72a}\NWlink{nuweb76a}{, 76a}\NWlink{nuweb80b}{, 80b}\NWlink{nuweb93a}{, 93a}\NWlink{nuweb105}{, 105}\NWlink{nuweb145}{, 145}\NWlink{nuweb146a}{, 146a}\NWlink{nuweb148}{, 148}\NWlink{nuweb153b}{, 153b}.
 \item \verb@StandardisedPermutedLinearStatistic_SLOT@: \underline{\NWlink{nuweb22b}{22b}}\NWlink{nuweb159}{, 159}\NWlink{nuweb160}{, 160}.
 \item \verb@subset@: \NWlink{nuweb3b}{3b}\NWlink{nuweb4}{, 4}\NWlink{nuweb5a}{, 5a}\NWlink{nuweb5b}{b}\NWlink{nuweb6}{, 6}\NWlink{nuweb8}{, 8}\NWlink{nuweb15}{, 15}\NWlink{nuweb16}{, 16}\NWlink{nuweb18}{, 18}\NWlink{nuweb20}{, 20}, \underline{\NWlink{nuweb27b}{27b}}, \underline{\NWlink{nuweb27e}{27e}}, \underline{\NWlink{nuweb28a}{28a}}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb34}{, 34}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb36a}{, 36a}\NWlink{nuweb36b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb81d}{, 81d}\NWlink{nuweb85b}{, 85b}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88a}{, 88a}\NWlink{nuweb89a}{, 89a}\NWlink{nuweb90}{, 90}\NWlink{nuweb92a}{, 92a}\NWlink{nuweb93a}{, 93a}\NWlink{nuweb93b}{b}\NWlink{nuweb94b}{, 94b}\NWlink{nuweb95b}{, 95b}\NWlink{nuweb96a}{, 96a}\NWlink{nuweb100a}{, 100a}\NWlink{nuweb102}{, 102}\NWlink{nuweb103a}{, 103a}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110a}{, 110a}\NWlink{nuweb111b}{, 111b}\NWlink{nuweb112c}{, 112c}\NWlink{nuweb114a}{, 114a}\NWlink{nuweb115a}{, 115a}\NWlink{nuweb119a}{, 119a}\NWlink{nuweb120a}{, 120a}\NWlink{nuweb123b}{, 123b}\NWlink{nuweb124b}{, 124b}\NWlink{nuweb128b}{, 128b}\NWlink{nuweb129b}{, 129b}\NWlink{nuweb133b}{, 133b}\NWlink{nuweb134b}{, 134b}\NWlink{nuweb136a}{, 136a}\NWlink{nuweb137a}{, 137a}\NWlink{nuweb138a}{, 138a}\NWlink{nuweb138b}{b}\NWlink{nuweb139a}{, 139a}\NWlink{nuweb139b}{b}.

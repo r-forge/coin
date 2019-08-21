@@ -608,12 +608,7 @@ function(object, ...)
 {
     if (object$varonly)
         stop("cannot extract covariance matrix")
-    PQ <- prod(object$dim)
-    ret <- matrix(0, nrow = PQ, ncol = PQ)
-    ret[lower.tri(ret, diag = TRUE)] <- object$Covariance
-    ret <- ret + t(ret)
-    diag(ret) <- diag(ret) / 2
-    ret
+    drop(.Call(R_unpack_sym, object$Covariance, NULL, 0L))
 }
 @}
 
