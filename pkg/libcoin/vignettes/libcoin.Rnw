@@ -130,21 +130,21 @@ urlcolor={linkcolor}%
 
 \chapter*{Licence}
 
-    Copyright (C) 2017-2019 Torsten Hothorn
+Copyright (C) 2017-2019 Torsten Hothorn
 
-    This file is part of the `libcoin' R add-on package.
+This file is part of the `libcoin' R add-on package.
 
-    `libcoin' is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, version 2.
+`libcoin' is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 2.
 
-    `libcoin' is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+`libcoin' is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with `libcoin'.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with `libcoin'.  If not, see <http://www.gnu.org/licenses/>.
 
 \chapter{Introduction}
 \pagenumbering{arabic}
@@ -1485,7 +1485,7 @@ $N$ is the number of observations
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    SEXP N,@\\
+\mbox{}\verb@SEXP N,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1506,7 +1506,7 @@ $N > $ \verb|INT_MAX|
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    R_xlen_t N@\\
+\mbox{}\verb@R_xlen_t N@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1526,7 +1526,7 @@ The regressors $\x_i, i = 1, \dots, N$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    SEXP x,@\\
+\mbox{}\verb@SEXP x,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1546,7 +1546,7 @@ are either represented as a real matrix with $N$ rows and $P$ columns
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int P@\\
+\mbox{}\verb@int P@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1564,9 +1564,9 @@ are either represented as a real matrix with $N$ rows and $P$ columns
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double *x,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer P Input}\nobreak\ {\footnotesize \NWlink{nuweb25a}{25a}}$\,\rangle$}\verb@,@\\
+\mbox{}\verb@double *x,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer P Input}\nobreak\ {\footnotesize \NWlink{nuweb25a}{25a}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1586,9 +1586,9 @@ or as a factor (an integer at \proglang{C} level) at $P$ levels
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int *x,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer P Input}\nobreak\ {\footnotesize \NWlink{nuweb25a}{25a}}$\,\rangle$}\verb@,@\\
+\mbox{}\verb@int *x,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer P Input}\nobreak\ {\footnotesize \NWlink{nuweb25a}{25a}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1608,7 +1608,7 @@ The influence functions are also either a $N \times Q$ real matrix
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    SEXP y,@\\
+\mbox{}\verb@SEXP y,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1626,7 +1626,7 @@ The influence functions are also either a $N \times Q$ real matrix
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int Q@\\
+\mbox{}\verb@int Q@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1644,8 +1644,8 @@ The influence functions are also either a $N \times Q$ real matrix
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double *y,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Q Input}\nobreak\ {\footnotesize \NWlink{nuweb25e}{25e}}$\,\rangle$}\verb@,@\\
+\mbox{}\verb@double *y,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer Q Input}\nobreak\ {\footnotesize \NWlink{nuweb25e}{25e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1665,8 +1665,8 @@ or a factor at $Q$ levels
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int *y,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Q Input}\nobreak\ {\footnotesize \NWlink{nuweb25e}{25e}}$\,\rangle$}\verb@,@\\
+\mbox{}\verb@int *y,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer Q Input}\nobreak\ {\footnotesize \NWlink{nuweb25e}{25e}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1686,7 +1686,7 @@ The weights $w_i, i = 1, \dots, N$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    SEXP weights@\\
+\mbox{}\verb@SEXP weights@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1707,8 +1707,8 @@ or integer-valued, with \verb|HAS_WEIGHTS == 0| in the former case
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int *weights,@\\
-\mbox{}\verb@    int HAS_WEIGHTS,@\\
+\mbox{}\verb@int *weights,@\\
+\mbox{}\verb@int HAS_WEIGHTS,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1728,8 +1728,8 @@ Weights larger than \verb|INT_MAX| are stored as double
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double *weights,@\\
-\mbox{}\verb@    int HAS_WEIGHTS,@\\
+\mbox{}\verb@double *weights,@\\
+\mbox{}\verb@int HAS_WEIGHTS,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1749,7 +1749,7 @@ The sum of all weights is a double
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double sumweights@\\
+\mbox{}\verb@double sumweights@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1769,7 +1769,7 @@ Subsets $\A \subseteq \{1, \dots, N\}$ are \proglang{R} style indices
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    SEXP subset@\\
+\mbox{}\verb@SEXP subset@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1789,7 +1789,7 @@ are either not existent (\verb|XLENGTH(subset) == 0|) or of length
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    R_xlen_t Nsubset@\\
+\mbox{}\verb@R_xlen_t Nsubset@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1809,8 +1809,8 @@ Optionally, one can specify a subset of the subset via
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    R_xlen_t offset,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Nsubset Input}\nobreak\ {\footnotesize \NWlink{nuweb27c}{27c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@R_xlen_t offset,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer Nsubset Input}\nobreak\ {\footnotesize \NWlink{nuweb27c}{27c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1832,8 +1832,8 @@ Subsets are stored either as integer
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int *subset,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@int *subset,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1853,8 +1853,8 @@ or double (to allow for indices larger than \verb|INT_MAX|)
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double *subset,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@double *subset,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C subset range Input}\nobreak\ {\footnotesize \NWlink{nuweb27d}{27d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1874,7 +1874,7 @@ Blocks $\text{block}_i, i = 1, \dots, N$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    SEXP block@\\
+\mbox{}\verb@SEXP block@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1894,7 +1894,7 @@ at $B$ levels
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int B@\\
+\mbox{}\verb@int B@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1914,8 +1914,8 @@ are stored as a factor
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int *block,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer B Input}\nobreak\ {\footnotesize \NWlink{nuweb28c}{28c}}$\,\rangle$}\verb@,@\\
+\mbox{}\verb@int *block,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer B Input}\nobreak\ {\footnotesize \NWlink{nuweb28c}{28c}}$\,\rangle$}\verb@,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -1935,7 +1935,7 @@ The tabulation of block (potentially in subsets) is
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    SEXP blockTable@\\
+\mbox{}\verb@SEXP blockTable@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2130,7 +2130,7 @@ specified as \verb|integer(0)|.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap51}\raggedright\small
-\NWtarget{nuweb31b}{} $\langle\,${\itshape User Interface Inputs}\nobreak\ {\footnotesize {31b}}$\,\rangle\equiv$
+\NWtarget{nuweb31b}{} $\langle\,${\itshape User Interface Input}\nobreak\ {\footnotesize {31b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2191,9 +2191,9 @@ This function can be called from other packages.
 \mbox{}\verb@@\\
 \mbox{}\verb@SEXP R_ExpectationCovarianceStatistic@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape User Interface Inputs}\nobreak\ {\footnotesize \NWlink{nuweb31b}{31b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@SEXP varonly,@\\
-\mbox{}\verb@SEXP tol@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape User Interface Input}\nobreak\ {\footnotesize \NWlink{nuweb31b}{31b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    SEXP varonly,@\\
+\mbox{}\verb@    SEXP tol@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -2249,18 +2249,18 @@ levels of \verb|x|.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int P, Q, B;@\\
+\mbox{}\verb@int P, Q, B;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (TYPEOF(x) == INTSXP) {@\\
-\mbox{}\verb@        P = NLEVELS(x);@\\
-\mbox{}\verb@    } else {@\\
-\mbox{}\verb@        P = NCOL(x);@\\
-\mbox{}\verb@    }@\\
-\mbox{}\verb@    Q = NCOL(y);@\\
+\mbox{}\verb@if (TYPEOF(x) == INTSXP) {@\\
+\mbox{}\verb@    P = NLEVELS(x);@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    P = NCOL(x);@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@Q = NCOL(y);@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    B = 1;@\\
-\mbox{}\verb@    if (LENGTH(block) > 0)@\\
-\mbox{}\verb@        B = NLEVELS(block);@\\
+\mbox{}\verb@B = 1;@\\
+\mbox{}\verb@if (LENGTH(block) > 0)@\\
+\mbox{}\verb@    B = NLEVELS(block);@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2276,10 +2276,10 @@ The core function first computes the linear statistic (as there is no need
 to pay attention to blocks) and, in a second step, starts a loop over
 potential blocks.
 
-FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not
-             handled correctly (as \verb|sumweights| doesnt't take this information
-             into account; use subset to exclude these missings (as done
-             in libcoin::LinStatExpCov)
+FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not handled
+        correctly (as \verb|sumweights| doesnt't take this information into
+        account; use subset to exclude these missings (as done in
+        libcoin::LinStatExpCov)
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
@@ -2289,8 +2289,8 @@ FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not
 \mbox{}\verb@@\\
 \mbox{}\verb@void RC_ExpectationCovarianceStatistic@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape User Interface Inputs}\nobreak\ {\footnotesize \NWlink{nuweb31b}{31b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@SEXP ans@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape User Interface Input}\nobreak\ {\footnotesize \NWlink{nuweb31b}{31b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    SEXP ans@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer P Input}\nobreak\ {\footnotesize \NWlink{nuweb25a}{25a}}$\,\rangle$}\verb@;@\\
@@ -2610,7 +2610,7 @@ permutations to be specified.
 \mbox{}\verb@@\\
 \mbox{}\verb@SEXP R_PermutedLinearStatistic@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape User Interface Inputs}\nobreak\ {\footnotesize \NWlink{nuweb31b}{31b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape User Interface Input}\nobreak\ {\footnotesize \NWlink{nuweb31b}{31b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    SEXP nresample@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
@@ -2864,7 +2864,7 @@ and returns the matrix of standardised linear statistics.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap74}\raggedright\small
-\NWtarget{nuweb42c}{} $\langle\,${\itshape 2d User Interface Inputs}\nobreak\ {\footnotesize {42c}}$\,\rangle\equiv$
+\NWtarget{nuweb42c}{} $\langle\,${\itshape 2d User Interface Input}\nobreak\ {\footnotesize {42c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2894,9 +2894,9 @@ and returns the matrix of standardised linear statistics.
 \mbox{}\verb@@\\
 \mbox{}\verb@SEXP R_ExpectationCovarianceStatistic_2d@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape 2d User Interface Inputs}\nobreak\ {\footnotesize \NWlink{nuweb42c}{42c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@SEXP varonly,@\\
-\mbox{}\verb@SEXP tol@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape 2d User Interface Input}\nobreak\ {\footnotesize \NWlink{nuweb42c}{42c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    SEXP varonly,@\\
+\mbox{}\verb@    SEXP tol@\\
 \mbox{}\verb@)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -3192,8 +3192,8 @@ and returns the matrix of standardised linear statistics.
 \mbox{}\verb@@\\
 \mbox{}\verb@void RC_ExpectationCovarianceStatistic_2d@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape 2d User Interface Inputs}\nobreak\ {\footnotesize \NWlink{nuweb42c}{42c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@SEXP ans@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape 2d User Interface Input}\nobreak\ {\footnotesize \NWlink{nuweb42c}{42c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    SEXP ans@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape 2d Memory}\nobreak\ {\footnotesize \NWlink{nuweb49}{49}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -4693,7 +4693,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@@\\
 \mbox{}\verb@void C_ordered_Xfactor@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape maxstat Xfactor Variables}\nobreak\ {\footnotesize \NWlink{nuweb72b}{72b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape maxstat Xfactor Variables}\nobreak\ {\footnotesize \NWlink{nuweb72b}{72b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup maxstat Variables}\nobreak\ {\footnotesize \NWlink{nuweb74}{74}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -4965,7 +4965,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@@\\
 \mbox{}\verb@void C_unordered_Xfactor@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape maxstat Xfactor Variables}\nobreak\ {\footnotesize \NWlink{nuweb72b}{72b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape maxstat Xfactor Variables}\nobreak\ {\footnotesize \NWlink{nuweb72b}{72b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    double *mtmp;@\\
 \mbox{}\verb@    int qPp, nc, *levels, Pnonzero, *indl, *contrast;@\\
@@ -6035,12 +6035,12 @@ initialisation of the loop over all observations
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    R_xlen_t diff = 0;@\\
-\mbox{}\verb@    s = subset + offset;@\\
-\mbox{}\verb@    w = weights;@\\
-\mbox{}\verb@    /* subset is R-style index in 1:N */@\\
-\mbox{}\verb@    if (Nsubset > 0)@\\
-\mbox{}\verb@        diff = (R_xlen_t) s[0] - 1;@\\
+\mbox{}\verb@R_xlen_t diff = 0;@\\
+\mbox{}\verb@s = subset + offset;@\\
+\mbox{}\verb@w = weights;@\\
+\mbox{}\verb@/* subset is R-style index in 1:N */@\\
+\mbox{}\verb@if (Nsubset > 0)@\\
+\mbox{}\verb@    diff = (R_xlen_t) s[0] - 1;@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6062,7 +6062,7 @@ allowing for number of observations larger than \verb|INT_MAX|
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)@\\
+\mbox{}\verb@for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6082,15 +6082,15 @@ After computions in the loop, we compute the next element
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (Nsubset > 0) {@\\
-\mbox{}\verb@        /* NB: diff also works with R style index */@\\
-\mbox{}\verb@        diff = (R_xlen_t) s[1] - s[0];@\\
-\mbox{}\verb@        if (diff < 0)@\\
-\mbox{}\verb@            error("subset not sorted");@\\
-\mbox{}\verb@        s++;@\\
-\mbox{}\verb@    } else {@\\
-\mbox{}\verb@        diff = 1;@\\
-\mbox{}\verb@    }@\\
+\mbox{}\verb@if (Nsubset > 0) {@\\
+\mbox{}\verb@    /* NB: diff also works with R style index */@\\
+\mbox{}\verb@    diff = (R_xlen_t) s[1] - s[0];@\\
+\mbox{}\verb@    if (diff < 0)@\\
+\mbox{}\verb@        error("subset not sorted");@\\
+\mbox{}\verb@    s++;@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    diff = 1;@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6371,25 +6371,25 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double ans = 0.0;@\\
+\mbox{}\verb@double ans = 0.0;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (Nsubset > 0) {@\\
-\mbox{}\verb@        if (!HAS_WEIGHTS) return((double) Nsubset);@\\
-\mbox{}\verb@    } else {@\\
-\mbox{}\verb@        if (!HAS_WEIGHTS) return((double) N);@\\
-\mbox{}\verb@    }@\\
+\mbox{}\verb@if (Nsubset > 0) {@\\
+\mbox{}\verb@    if (!HAS_WEIGHTS) return((double) Nsubset);@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    if (!HAS_WEIGHTS) return((double) N);@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    {@\\
-\mbox{}\verb@        w = w + diff;@\\
-\mbox{}\verb@        ans += w[0];@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    }@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    w = w + diff;@\\
 \mbox{}\verb@    ans += w[0];@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@w = w + diff;@\\
+\mbox{}\verb@ans += w[0];@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    return(ans);@\\
+\mbox{}\verb@return(ans);@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6582,14 +6582,14 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R x Input}\nobreak\ {\footnotesize \NWlink{nuweb24d}{24d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer P Input}\nobreak\ {\footnotesize \NWlink{nuweb25a}{25a}}$\,\rangle$}\verb@,@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real y Input}\nobreak\ {\footnotesize \NWlink{nuweb26a}{26a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    const int SYMMETRIC,@\\
-\mbox{}\verb@    double *centerx,@\\
-\mbox{}\verb@    double *centery,@\\
-\mbox{}\verb@    const int CENTER,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R x Input}\nobreak\ {\footnotesize \NWlink{nuweb24d}{24d}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer P Input}\nobreak\ {\footnotesize \NWlink{nuweb25a}{25a}}$\,\rangle$}\verb@,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C real y Input}\nobreak\ {\footnotesize \NWlink{nuweb26a}{26a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@const int SYMMETRIC,@\\
+\mbox{}\verb@double *centerx,@\\
+\mbox{}\verb@double *centery,@\\
+\mbox{}\verb@const int CENTER,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6607,12 +6607,12 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real x Input}\nobreak\ {\footnotesize \NWlink{nuweb25b}{25b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real y Input}\nobreak\ {\footnotesize \NWlink{nuweb26a}{26a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    const int SYMMETRIC,@\\
-\mbox{}\verb@    double *centerx,@\\
-\mbox{}\verb@    double *centery,@\\
-\mbox{}\verb@    const int CENTER,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C real x Input}\nobreak\ {\footnotesize \NWlink{nuweb25b}{25b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C real y Input}\nobreak\ {\footnotesize \NWlink{nuweb26a}{26a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@const int SYMMETRIC,@\\
+\mbox{}\verb@double *centerx,@\\
+\mbox{}\verb@double *centery,@\\
+\mbox{}\verb@const int CENTER,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6630,7 +6630,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double *PQ_ans@\\
+\mbox{}\verb@double *PQ_ans@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6907,8 +6907,8 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer x Input}\nobreak\ {\footnotesize \NWlink{nuweb25c}{25c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real y Input}\nobreak\ {\footnotesize \NWlink{nuweb26a}{26a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer x Input}\nobreak\ {\footnotesize \NWlink{nuweb25c}{25c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C real y Input}\nobreak\ {\footnotesize \NWlink{nuweb26a}{26a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7036,30 +7036,17 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int *xx, ixi;@\\
-\mbox{}\verb@    double *yy;@\\
+\mbox{}\verb@int *xx, ixi;@\\
+\mbox{}\verb@double *yy;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;@\\
+\mbox{}\verb@for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (int q = 0; q < Q; q++) {@\\
-\mbox{}\verb@        yy = y + N * q;@\\
-\mbox{}\verb@        xx = x;@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@        {@\\
-\mbox{}\verb@            xx = xx + diff;@\\
-\mbox{}\verb@            yy = yy + diff;@\\
-\mbox{}\verb@            ixi = xx[0] - 1;@\\
-\mbox{}\verb@            if (HAS_WEIGHTS) {@\\
-\mbox{}\verb@                w = w + diff;@\\
-\mbox{}\verb@                if (ixi >= 0)@\\
-\mbox{}\verb@                    PQ_ans[ixi + q * P] += yy[0] * w[0];@\\
-\mbox{}\verb@            } else {@\\
-\mbox{}\verb@                if (ixi >= 0)@\\
-\mbox{}\verb@                    PQ_ans[ixi + q * P] += yy[0];@\\
-\mbox{}\verb@            }@\\
-\mbox{}\verb@            @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@        }@\\
+\mbox{}\verb@for (int q = 0; q < Q; q++) {@\\
+\mbox{}\verb@    yy = y + N * q;@\\
+\mbox{}\verb@    xx = x;@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    {@\\
 \mbox{}\verb@        xx = xx + diff;@\\
 \mbox{}\verb@        yy = yy + diff;@\\
 \mbox{}\verb@        ixi = xx[0] - 1;@\\
@@ -7071,7 +7058,20 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@            if (ixi >= 0)@\\
 \mbox{}\verb@                PQ_ans[ixi + q * P] += yy[0];@\\
 \mbox{}\verb@        }@\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    }@\\
+\mbox{}\verb@    xx = xx + diff;@\\
+\mbox{}\verb@    yy = yy + diff;@\\
+\mbox{}\verb@    ixi = xx[0] - 1;@\\
+\mbox{}\verb@    if (HAS_WEIGHTS) {@\\
+\mbox{}\verb@        w = w + diff;@\\
+\mbox{}\verb@        if (ixi >= 0)@\\
+\mbox{}\verb@            PQ_ans[ixi + q * P] += yy[0] * w[0];@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        if (ixi >= 0)@\\
+\mbox{}\verb@            PQ_ans[ixi + q * P] += yy[0];@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7201,7 +7201,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2))
 \mbox{}\verb@            C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q,@\\
 \mbox{}\verb@                                                  REAL(subset), offset, Nsubset,@\\
 \mbox{}\verb@                                                  REAL(subsety), PQ_ans);@\\
-\mbox{}\verb@    }@\\
+\mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
 \mbox{}\verb@            C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q,@\\
@@ -7288,20 +7288,20 @@ have to go through all elements explicitly here.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    R_xlen_t qP, qN, pN, qPp;@\\
+\mbox{}\verb@R_xlen_t qP, qN, pN, qPp;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (int q = 0; q < Q; q++) {@\\
-\mbox{}\verb@        qN = q * N;@\\
-\mbox{}\verb@        qP = q * P;@\\
-\mbox{}\verb@        for (int p = 0; p < P; p++) {@\\
-\mbox{}\verb@            qPp = qP + p;@\\
-\mbox{}\verb@            PQ_ans[qPp] = 0.0;@\\
-\mbox{}\verb@            pN = p * N;@\\
-\mbox{}\verb@            for (R_xlen_t i = offset; i < Nsubset; i++)@\\
-\mbox{}\verb@                PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] *@\\
-\mbox{}\verb@                               x[pN + (R_xlen_t) subset[i] - 1];@\\
-\mbox{}\verb@        }@\\
+\mbox{}\verb@for (int q = 0; q < Q; q++) {@\\
+\mbox{}\verb@    qN = q * N;@\\
+\mbox{}\verb@    qP = q * P;@\\
+\mbox{}\verb@    for (int p = 0; p < P; p++) {@\\
+\mbox{}\verb@        qPp = qP + p;@\\
+\mbox{}\verb@        PQ_ans[qPp] = 0.0;@\\
+\mbox{}\verb@        pN = p * N;@\\
+\mbox{}\verb@        for (R_xlen_t i = offset; i < Nsubset; i++)@\\
+\mbox{}\verb@            PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] *@\\
+\mbox{}\verb@                           x[pN + (R_xlen_t) subset[i] - 1];@\\
 \mbox{}\verb@    }@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7375,16 +7375,16 @@ have to go through all elements explicitly here.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    R_xlen_t qP, qN;@\\
+\mbox{}\verb@R_xlen_t qP, qN;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;@\\
+\mbox{}\verb@for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (int q = 0; q < Q; q++) {@\\
-\mbox{}\verb@        qP = q * P;@\\
-\mbox{}\verb@        qN = q * N;@\\
-\mbox{}\verb@        for (R_xlen_t i = offset; i < Nsubset; i++)@\\
-\mbox{}\verb@            PQ_ans[x[(R_xlen_t) subset[i] - 1] - 1 + qP] += y[qN + (R_xlen_t) subsety[i] - 1];@\\
-\mbox{}\verb@    }@\\
+\mbox{}\verb@for (int q = 0; q < Q; q++) {@\\
+\mbox{}\verb@    qP = q * P;@\\
+\mbox{}\verb@    qN = q * N;@\\
+\mbox{}\verb@    for (R_xlen_t i = offset; i < Nsubset; i++)@\\
+\mbox{}\verb@        PQ_ans[x[(R_xlen_t) subset[i] - 1] - 1 + qP] += y[qN + (R_xlen_t) subsety[i] - 1];@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7527,22 +7527,22 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
 \mbox{}\verb@            C_colSums_iweights_isubset(x, N, P, power, centerx, CENTER,@\\
-\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
-\mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
+\mbox{}\verb@                                       INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
+\mbox{}\verb@                                       offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        } else {@\\
 \mbox{}\verb@            C_colSums_iweights_dsubset(x, N, P, power, centerx, CENTER,@\\
-\mbox{}\verb@                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),@\\
-\mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
+\mbox{}\verb@                                       INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),@\\
+\mbox{}\verb@                                       offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
 \mbox{}\verb@            C_colSums_dweights_isubset(x, N, P, power, centerx, CENTER,@\\
-\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
-\mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
+\mbox{}\verb@                                       REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),@\\
+\mbox{}\verb@                                       offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        } else {@\\
 \mbox{}\verb@            C_colSums_dweights_dsubset(x, N, P, power, centerx, CENTER,@\\
-\mbox{}\verb@                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset),@\\
-\mbox{}\verb@                                        offset, Nsubset, P_ans);@\\
+\mbox{}\verb@                                       REAL(weights), XLENGTH(weights) > 0, REAL(subset),@\\
+\mbox{}\verb@                                       offset, Nsubset, P_ans);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
@@ -7563,10 +7563,10 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C real x Input}\nobreak\ {\footnotesize \NWlink{nuweb25b}{25b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    const int power,@\\
-\mbox{}\verb@    double *centerx,@\\
-\mbox{}\verb@    const int CENTER,@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C real x Input}\nobreak\ {\footnotesize \NWlink{nuweb25b}{25b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@const int power,@\\
+\mbox{}\verb@double *centerx,@\\
+\mbox{}\verb@const int CENTER,@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7584,7 +7584,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double *P_ans@\\
+\mbox{}\verb@double *P_ans@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7712,26 +7712,17 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double *xx, cx = 0.0;@\\
+\mbox{}\verb@double *xx, cx = 0.0;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (int p = 0; p < P; p++) {@\\
-\mbox{}\verb@        P_ans[0] = 0.0;@\\
-\mbox{}\verb@        xx = x + N * p;@\\
-\mbox{}\verb@        if (CENTER) {@\\
-\mbox{}\verb@            cx = centerx[p];@\\
-\mbox{}\verb@        }@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@        {@\\
-\mbox{}\verb@            xx = xx + diff;@\\
-\mbox{}\verb@            if (HAS_WEIGHTS) {@\\
-\mbox{}\verb@                w = w + diff;@\\
-\mbox{}\verb@                P_ans[0] += pow(xx[0] - cx, power) * w[0];@\\
-\mbox{}\verb@            } else {@\\
-\mbox{}\verb@                P_ans[0] += pow(xx[0] - cx, power);@\\
-\mbox{}\verb@            }@\\
-\mbox{}\verb@            @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@        }@\\
+\mbox{}\verb@for (int p = 0; p < P; p++) {@\\
+\mbox{}\verb@    P_ans[0] = 0.0;@\\
+\mbox{}\verb@    xx = x + N * p;@\\
+\mbox{}\verb@    if (CENTER) {@\\
+\mbox{}\verb@        cx = centerx[p];@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    {@\\
 \mbox{}\verb@        xx = xx + diff;@\\
 \mbox{}\verb@        if (HAS_WEIGHTS) {@\\
 \mbox{}\verb@            w = w + diff;@\\
@@ -7739,8 +7730,17 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@        } else {@\\
 \mbox{}\verb@            P_ans[0] += pow(xx[0] - cx, power);@\\
 \mbox{}\verb@        }@\\
-\mbox{}\verb@        P_ans++;@\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    }@\\
+\mbox{}\verb@    xx = xx + diff;@\\
+\mbox{}\verb@    if (HAS_WEIGHTS) {@\\
+\mbox{}\verb@        w = w + diff;@\\
+\mbox{}\verb@        P_ans[0] += pow(xx[0] - cx, power) * w[0];@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        P_ans[0] += pow(xx[0] - cx, power);@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    P_ans++;@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7931,7 +7931,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer x Input}\nobreak\ {\footnotesize \NWlink{nuweb25c}{25c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer x Input}\nobreak\ {\footnotesize \NWlink{nuweb25c}{25c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7949,7 +7949,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double *P_ans@\\
+\mbox{}\verb@double *P_ans@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -8077,30 +8077,30 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int *xx;@\\
+\mbox{}\verb@int *xx;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (int p = 0; p < P; p++) P_ans[p] = 0.0;@\\
+\mbox{}\verb@for (int p = 0; p < P; p++) P_ans[p] = 0.0;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    xx = x;@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    {@\\
-\mbox{}\verb@        xx = xx + diff;@\\
-\mbox{}\verb@        if (HAS_WEIGHTS) {@\\
-\mbox{}\verb@            w = w + diff;@\\
-\mbox{}\verb@            P_ans[xx[0]] += (double) w[0];@\\
-\mbox{}\verb@        } else {@\\
-\mbox{}\verb@            P_ans[xx[0]]++;@\\
-\mbox{}\verb@        }@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    }@\\
+\mbox{}\verb@xx = x;@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    xx = xx + diff;@\\
 \mbox{}\verb@    if (HAS_WEIGHTS) {@\\
 \mbox{}\verb@        w = w + diff;@\\
-\mbox{}\verb@        P_ans[xx[0]] += w[0];@\\
+\mbox{}\verb@        P_ans[xx[0]] += (double) w[0];@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        P_ans[xx[0]]++;@\\
 \mbox{}\verb@    }@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@xx = xx + diff;@\\
+\mbox{}\verb@if (HAS_WEIGHTS) {@\\
+\mbox{}\verb@    w = w + diff;@\\
+\mbox{}\verb@    P_ans[xx[0]] += w[0];@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    P_ans[xx[0]]++;@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -8264,8 +8264,8 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer x Input}\nobreak\ {\footnotesize \NWlink{nuweb25c}{25c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer y Input}\nobreak\ {\footnotesize \NWlink{nuweb26b}{26b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer x Input}\nobreak\ {\footnotesize \NWlink{nuweb25c}{25c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer y Input}\nobreak\ {\footnotesize \NWlink{nuweb26b}{26b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -8283,7 +8283,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double *PQ_ans@\\
+\mbox{}\verb@double *PQ_ans@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -8411,33 +8411,33 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int *xx, *yy;@\\
+\mbox{}\verb@int *xx, *yy;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;@\\
+\mbox{}\verb@for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    yy = y;@\\
-\mbox{}\verb@    xx = x;@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    {@\\
-\mbox{}\verb@        xx = xx + diff;@\\
-\mbox{}\verb@        yy = yy + diff;@\\
-\mbox{}\verb@        if (HAS_WEIGHTS) {@\\
-\mbox{}\verb@            w = w + diff;@\\
-\mbox{}\verb@            PQ_ans[yy[0] * P + xx[0]] += (double) w[0];@\\
-\mbox{}\verb@        } else {@\\
-\mbox{}\verb@            PQ_ans[yy[0] * P + xx[0]]++;@\\
-\mbox{}\verb@        }@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    }@\\
+\mbox{}\verb@yy = y;@\\
+\mbox{}\verb@xx = x;@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    xx = xx + diff;@\\
 \mbox{}\verb@    yy = yy + diff;@\\
 \mbox{}\verb@    if (HAS_WEIGHTS) {@\\
 \mbox{}\verb@        w = w + diff;@\\
-\mbox{}\verb@        PQ_ans[yy[0] * P + xx[0]] += w[0];@\\
+\mbox{}\verb@        PQ_ans[yy[0] * P + xx[0]] += (double) w[0];@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        PQ_ans[yy[0] * P + xx[0]]++;@\\
 \mbox{}\verb@    }@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@xx = xx + diff;@\\
+\mbox{}\verb@yy = yy + diff;@\\
+\mbox{}\verb@if (HAS_WEIGHTS) {@\\
+\mbox{}\verb@    w = w + diff;@\\
+\mbox{}\verb@    PQ_ans[yy[0] * P + xx[0]] += w[0];@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    PQ_ans[yy[0] * P + xx[0]]++;@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -8604,9 +8604,9 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer x Input}\nobreak\ {\footnotesize \NWlink{nuweb25c}{25c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer y Input}\nobreak\ {\footnotesize \NWlink{nuweb26b}{26b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer block Input}\nobreak\ {\footnotesize \NWlink{nuweb28d}{28d}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer x Input}\nobreak\ {\footnotesize \NWlink{nuweb25c}{25c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer y Input}\nobreak\ {\footnotesize \NWlink{nuweb26b}{26b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C integer block Input}\nobreak\ {\footnotesize \NWlink{nuweb28d}{28d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -8624,7 +8624,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    double *PQL_ans@\\
+\mbox{}\verb@double *PQL_ans@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -8752,36 +8752,36 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);@\\
+\mbox{}\verb@int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;@\\
+\mbox{}\verb@for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    yy = y;@\\
-\mbox{}\verb@    xx = x;@\\
-\mbox{}\verb@    bb = block;@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    {@\\
-\mbox{}\verb@        xx = xx + diff;@\\
-\mbox{}\verb@        yy = yy + diff;@\\
-\mbox{}\verb@        bb = bb + diff;@\\
-\mbox{}\verb@        if (HAS_WEIGHTS) {@\\
-\mbox{}\verb@            w = w + diff;@\\
-\mbox{}\verb@            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];@\\
-\mbox{}\verb@        } else {@\\
-\mbox{}\verb@            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;@\\
-\mbox{}\verb@        }@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    }@\\
+\mbox{}\verb@yy = y;@\\
+\mbox{}\verb@xx = x;@\\
+\mbox{}\verb@bb = block;@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape init subset loop}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape start subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94a}{94a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@{@\\
 \mbox{}\verb@    xx = xx + diff;@\\
 \mbox{}\verb@    yy = yy + diff;@\\
 \mbox{}\verb@    bb = bb + diff;@\\
 \mbox{}\verb@    if (HAS_WEIGHTS) {@\\
 \mbox{}\verb@        w = w + diff;@\\
-\mbox{}\verb@        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];@\\
+\mbox{}\verb@        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;@\\
 \mbox{}\verb@    }@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape continue subset loop}\nobreak\ {\footnotesize \NWlink{nuweb94b}{94b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@xx = xx + diff;@\\
+\mbox{}\verb@yy = yy + diff;@\\
+\mbox{}\verb@bb = bb + diff;@\\
+\mbox{}\verb@if (HAS_WEIGHTS) {@\\
+\mbox{}\verb@    w = w + diff;@\\
+\mbox{}\verb@    PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -10066,7 +10066,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@int C_get_P@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[0]);@\\
 \mbox{}\verb@}@\\
@@ -10089,7 +10089,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@int C_get_Q@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[1]);@\\
 \mbox{}\verb@}@\\
@@ -10112,7 +10112,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@int C_get_varonly@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(INTEGER(VECTOR_ELT(LECV, varonly_SLOT))[0]);@\\
 \mbox{}\verb@}@\\
@@ -10135,7 +10135,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@int C_get_Xfactor@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(INTEGER(VECTOR_ELT(LECV, Xfactor_SLOT))[0]);@\\
 \mbox{}\verb@}@\\
@@ -10158,7 +10158,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_LinearStatistic@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(REAL(VECTOR_ELT(LECV, LinearStatistic_SLOT)));@\\
 \mbox{}\verb@}@\\
@@ -10181,7 +10181,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_Expectation@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(REAL(VECTOR_ELT(LECV, Expectation_SLOT)));@\\
 \mbox{}\verb@}@\\
@@ -10204,7 +10204,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_Variance@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    int PQ = C_get_P(LECV) * C_get_Q(LECV);@\\
 \mbox{}\verb@    double *var, *covar;@\\
@@ -10240,7 +10240,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_Covariance@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    int PQ = C_get_P(LECV) * C_get_Q(LECV);@\\
 \mbox{}\verb@    if (C_get_varonly(LECV) && PQ > 1)@\\
@@ -10268,7 +10268,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_ExpectationX@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(REAL(VECTOR_ELT(LECV, ExpectationX_SLOT)));@\\
 \mbox{}\verb@}@\\
@@ -10291,7 +10291,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_ExpectationInfluence@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(REAL(VECTOR_ELT(LECV, ExpectationInfluence_SLOT)));@\\
 \mbox{}\verb@}@\\
@@ -10314,7 +10314,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_CovarianceInfluence@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));@\\
 \mbox{}\verb@}@\\
@@ -10337,7 +10337,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_VarianceInfluence@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(REAL(VECTOR_ELT(LECV, VarianceInfluence_SLOT)));@\\
 \mbox{}\verb@}@\\
@@ -10360,7 +10360,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_TableBlock@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    if (VECTOR_ELT(LECV, TableBlock_SLOT) == R_NilValue)@\\
 \mbox{}\verb@        error("object does not contain table block slot");@\\
@@ -10385,7 +10385,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_Sumweights@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    if (VECTOR_ELT(LECV, Sumweights_SLOT) == R_NilValue)@\\
 \mbox{}\verb@        error("object does not contain sumweights slot");@\\
@@ -10410,7 +10410,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_Table@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    if (LENGTH(LECV) <= Table_SLOT)@\\
 \mbox{}\verb@        error("Cannot extract table from object");@\\
@@ -10435,7 +10435,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@int* C_get_dimTable@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    if (LENGTH(LECV) <= Table_SLOT)@\\
 \mbox{}\verb@        error("Cannot extract table from object");@\\
@@ -10461,7 +10461,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@int C_get_B@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    if (VECTOR_ELT(LECV, TableBlock_SLOT) != R_NilValue)@\\
 \mbox{}\verb@        return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));@\\
@@ -10486,7 +10486,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@R_xlen_t C_get_nresample@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    int PQ = C_get_P(LECV) * C_get_Q(LECV);@\\
 \mbox{}\verb@    return(XLENGTH(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)) / PQ);@\\
@@ -10510,7 +10510,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double* C_get_PermutedLinearStatistic@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(REAL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));@\\
 \mbox{}\verb@}@\\
@@ -10533,7 +10533,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@@\\
 \mbox{}\verb@double C_get_tol@\\
 \mbox{}\verb@(@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R LECV Input}\nobreak\ {\footnotesize \NWlink{nuweb150b}{150b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    return(REAL(VECTOR_ELT(LECV, tol_SLOT))[0]);@\\
 \mbox{}\verb@}@\\
@@ -10628,58 +10628,58 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@    SEXP vo, d, names, tolerance, tmp;@\\
-\mbox{}\verb@    int PQ;@\\
+\mbox{}\verb@SEXP vo, d, names, tolerance, tmp;@\\
+\mbox{}\verb@int PQ;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Memory Input Checks}\nobreak\ {\footnotesize \NWlink{nuweb157a}{157a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    PQ = mPQB(P, Q, 1);@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Memory Names}\nobreak\ {\footnotesize \NWlink{nuweb157b}{157b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape Memory Input Checks}\nobreak\ {\footnotesize \NWlink{nuweb157a}{157a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@PQ = mPQB(P, Q, 1);@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape Memory Names}\nobreak\ {\footnotesize \NWlink{nuweb157b}{157b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    /* Table_SLOT is always last and only used in 2d case, ie omitted here */@\\
-\mbox{}\verb@    PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, LinearStatistic_SLOT, allocVector(REALSXP, PQ));@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, Expectation_SLOT, allocVector(REALSXP, PQ));@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));@\\
-\mbox{}\verb@    INTEGER(vo)[0] = varonly;@\\
-\mbox{}\verb@    if (varonly) {@\\
-\mbox{}\verb@        SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));@\\
-\mbox{}\verb@    } else  {@\\
-\mbox{}\verb@        /* always return variance */@\\
-\mbox{}\verb@        SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));@\\
-\mbox{}\verb@        SET_VECTOR_ELT(ans, Covariance_SLOT,@\\
-\mbox{}\verb@                       tmp = allocVector(REALSXP, PP12(PQ)));@\\
-\mbox{}\verb@    }@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));@\\
-\mbox{}\verb@    INTEGER(d)[0] = P;@\\
-\mbox{}\verb@    INTEGER(d)[1] = Q;@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,@\\
-\mbox{}\verb@                   tmp = allocVector(REALSXP, B * Q));@\\
-\mbox{}\verb@    for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;@\\
+\mbox{}\verb@/* Table_SLOT is always last and only used in 2d case, ie omitted here */@\\
+\mbox{}\verb@PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, LinearStatistic_SLOT, allocVector(REALSXP, PQ));@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, Expectation_SLOT, allocVector(REALSXP, PQ));@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));@\\
+\mbox{}\verb@INTEGER(vo)[0] = varonly;@\\
+\mbox{}\verb@if (varonly) {@\\
+\mbox{}\verb@    SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));@\\
+\mbox{}\verb@} else  {@\\
+\mbox{}\verb@    /* always return variance */@\\
+\mbox{}\verb@    SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));@\\
+\mbox{}\verb@    SET_VECTOR_ELT(ans, Covariance_SLOT,@\\
+\mbox{}\verb@                   tmp = allocVector(REALSXP, PP12(PQ)));@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));@\\
+\mbox{}\verb@INTEGER(d)[0] = P;@\\
+\mbox{}\verb@INTEGER(d)[1] = Q;@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,@\\
+\mbox{}\verb@               tmp = allocVector(REALSXP, B * Q));@\\
+\mbox{}\verb@for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    /* should always _both_ be there */@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,@\\
-\mbox{}\verb@                   tmp = allocVector(REALSXP, B * Q));@\\
-\mbox{}\verb@    for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;@\\
+\mbox{}\verb@/* should always _both_ be there */@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,@\\
+\mbox{}\verb@               tmp = allocVector(REALSXP, B * Q));@\\
+\mbox{}\verb@for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,@\\
-\mbox{}\verb@                   tmp = allocVector(REALSXP, B * Q * (Q + 1) / 2));@\\
-\mbox{}\verb@    for (int q = 0; q < B * Q * (Q + 1) / 2; q++) REAL(tmp)[q] = 0.0;@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,@\\
+\mbox{}\verb@               tmp = allocVector(REALSXP, B * Q * (Q + 1) / 2));@\\
+\mbox{}\verb@for (int q = 0; q < B * Q * (Q + 1) / 2; q++) REAL(tmp)[q] = 0.0;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));@\\
-\mbox{}\verb@    INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, TableBlock_SLOT, tmp = allocVector(REALSXP, B + 1));@\\
-\mbox{}\verb@    for (int q = 0; q < B + 1; q++) REAL(tmp)[q] = 0.0;@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, B));@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,@\\
-\mbox{}\verb@                   allocMatrix(REALSXP, 0, 0));@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,@\\
-\mbox{}\verb@                   allocMatrix(REALSXP, 0, 0));@\\
-\mbox{}\verb@    SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));@\\
-\mbox{}\verb@    REAL(tolerance)[0] = tol;@\\
-\mbox{}\verb@    namesgets(ans, names);@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));@\\
+\mbox{}\verb@INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, TableBlock_SLOT, tmp = allocVector(REALSXP, B + 1));@\\
+\mbox{}\verb@for (int q = 0; q < B + 1; q++) REAL(tmp)[q] = 0.0;@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, B));@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,@\\
+\mbox{}\verb@               allocMatrix(REALSXP, 0, 0));@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,@\\
+\mbox{}\verb@               allocMatrix(REALSXP, 0, 0));@\\
+\mbox{}\verb@SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));@\\
+\mbox{}\verb@REAL(tolerance)[0] = tol;@\\
+\mbox{}\verb@namesgets(ans, names);@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Initialise Zero}\nobreak\ {\footnotesize \NWlink{nuweb159a}{159a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape Initialise Zero}\nobreak\ {\footnotesize \NWlink{nuweb159a}{159a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -11145,7 +11145,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \item $\langle\,$2d Memory\nobreak\ {\footnotesize \NWlink{nuweb49}{49}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb48}{48}.}
 \item $\langle\,$2d Total Table\nobreak\ {\footnotesize \NWlink{nuweb46a}{46a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb48}{48}.}
 \item $\langle\,$2d User Interface\nobreak\ {\footnotesize \NWlink{nuweb42b}{42b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
-\item $\langle\,$2d User Interface Inputs\nobreak\ {\footnotesize \NWlink{nuweb42c}{42c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb43a}{43a}\NWlink{nuweb48}{, 48}.
+\item $\langle\,$2d User Interface Input\nobreak\ {\footnotesize \NWlink{nuweb42c}{42c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb43a}{43a}\NWlink{nuweb48}{, 48}.
 }
 \item $\langle\,$C colSums Answer\nobreak\ {\footnotesize \NWlink{nuweb114c}{114c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb85c}{85c}\NWlink{nuweb113c}{, 113c}\NWlink{nuweb115a}{, 115a}\NWlink{nuweb115b}{b}\NWlink{nuweb115c}{c}\NWlink{nuweb116a}{, 116a}.
 }
@@ -11517,7 +11517,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \item $\langle\,$TwoTableSums Body\nobreak\ {\footnotesize \NWlink{nuweb126}{126}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb124b}{124b}\NWlink{nuweb124c}{c}\NWlink{nuweb125a}{, 125a}\NWlink{nuweb125b}{b}.
 }
 \item $\langle\,$User Interface\nobreak\ {\footnotesize \NWlink{nuweb31a}{31a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
-\item $\langle\,$User Interface Inputs\nobreak\ {\footnotesize \NWlink{nuweb31b}{31b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb32b}{32b}\NWlink{nuweb34}{, 34}\NWlink{nuweb38c}{, 38c}.
+\item $\langle\,$User Interface Input\nobreak\ {\footnotesize \NWlink{nuweb31b}{31b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb32b}{32b}\NWlink{nuweb34}{, 34}\NWlink{nuweb38c}{, 38c}.
 }
 \item $\langle\,$Utils\nobreak\ {\footnotesize \NWlink{nuweb131b}{131b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
 \item $\langle\,$vcov LinStatExpCov\nobreak\ {\footnotesize \NWlink{nuweb10}{10}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb3a}{3a}.}

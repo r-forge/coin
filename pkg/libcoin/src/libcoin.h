@@ -30,57 +30,57 @@
 extern 
        SEXP R_ExpectationCovarianceStatistic
        (
-       /* User Interface Inputs */
-
-       /* R x Input */
+           /* User Interface Input */
+           
+           /* R x Input */
 
            SEXP x,
-       
-       /* R y Input */
+           
+           /* R y Input */
 
            SEXP y,
-       
-       /* R weights Input */
+           
+           /* R weights Input */
 
            SEXP weights
-       ,
-       /* R subset Input */
+           ,
+           /* R subset Input */
 
            SEXP subset
-       ,
-       /* R block Input */
+           ,
+           /* R block Input */
 
            SEXP block
-       ,
-       
-       SEXP varonly,
-       SEXP tol
+           ,
+           
+           SEXP varonly,
+           SEXP tol
        )
        ;
 extern 
        SEXP R_PermutedLinearStatistic
        (
-           /* User Interface Inputs */
+           /* User Interface Input */
            
            /* R x Input */
 
-               SEXP x,
+           SEXP x,
            
            /* R y Input */
 
-               SEXP y,
+           SEXP y,
            
            /* R weights Input */
 
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
 
-               SEXP subset
+           SEXP subset
            ,
            /* R block Input */
 
-               SEXP block
+           SEXP block
            ,
            
            SEXP nresample
@@ -95,33 +95,33 @@ extern
 extern 
        SEXP R_ExpectationCovarianceStatistic_2d
        (
-       /* 2d User Interface Inputs */
-
-       /* R x Input */
+           /* 2d User Interface Input */
+           
+           /* R x Input */
 
            SEXP x,
-       
-       SEXP ix,
-       /* R y Input */
+           
+           SEXP ix,
+           /* R y Input */
 
            SEXP y,
-       
-       SEXP iy,
-       /* R weights Input */
+           
+           SEXP iy,
+           /* R weights Input */
 
            SEXP weights
-       ,
-       /* R subset Input */
+           ,
+           /* R subset Input */
 
            SEXP subset
-       ,
-       /* R block Input */
+           ,
+           /* R block Input */
 
            SEXP block
-       ,
-       
-       SEXP varonly,
-       SEXP tol
+           ,
+           
+           SEXP varonly,
+           SEXP tol
        )
        ;
 extern 
@@ -129,17 +129,17 @@ extern
        (
            /* R x Input */
            
-               SEXP x,
+           SEXP x,
            
            SEXP ix,
            /* R y Input */
            
-               SEXP y,
+           SEXP y,
            
            SEXP iy,
            /* R block Input */
            
-               SEXP block
+           SEXP block
            ,
            SEXP nresample,
            SEXP itable
@@ -191,15 +191,15 @@ extern
        (
            /* R y Input */
            
-               SEXP y,
+           SEXP y,
            
            /* R weights Input */
            
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            
        )
        ;
@@ -208,15 +208,15 @@ extern
        (
            /* R y Input */
            
-               SEXP y,
+           SEXP y,
            
            /* R weights Input */
            
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            ,
            SEXP varonly
        )
@@ -226,16 +226,16 @@ extern
        (
            /* R x Input */
            
-               SEXP x,
+           SEXP x,
            
            SEXP P,
            /* R weights Input */
            
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            
        )
        ;
@@ -244,16 +244,16 @@ extern
        (
            /* R x Input */
            
-               SEXP x,
+           SEXP x,
            
            SEXP P,
            /* R weights Input */
            
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            ,
            SEXP varonly
        )
@@ -263,15 +263,15 @@ extern
        (
            /* R N Input */
            
-               SEXP N,
+           SEXP N,
            
            /* R weights Input */
            
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            
        )
        ;
@@ -280,20 +280,20 @@ extern
        (
            /* R x Input */
            
-               SEXP x,
+           SEXP x,
            
            SEXP P,
            /* R y Input */
            
-               SEXP y,
+           SEXP y,
            
            /* R weights Input */
            
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            ,
            SEXP symmetric
        )
@@ -303,16 +303,16 @@ extern
        (
            /* R x Input */
            
-               SEXP x,
+           SEXP x,
            
            SEXP P,
            /* R y Input */
            
-               SEXP y,
+           SEXP y,
            
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            ,
            SEXP subsety
        )
@@ -322,15 +322,15 @@ extern
        (
            /* R x Input */
            
-               SEXP x,
+           SEXP x,
            
            /* R weights Input */
            
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            
        )
        ;
@@ -339,15 +339,15 @@ extern
        (
            /* R x Input */
            
-               SEXP x,
+           SEXP x,
            
            /* R weights Input */
            
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            
        )
        ;
@@ -356,19 +356,19 @@ extern
        (
            /* R x Input */
            
-               SEXP x,
+           SEXP x,
            
            /* R y Input */
            
-               SEXP y,
+           SEXP y,
            
            /* R weights Input */
            
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            
        )
        ;
@@ -377,23 +377,23 @@ extern
        (
            /* R x Input */
            
-               SEXP x,
+           SEXP x,
            
            /* R y Input */
            
-               SEXP y,
+           SEXP y,
            
            /* R block Input */
            
-               SEXP block
+           SEXP block
            ,
            /* R weights Input */
            
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            
        )
        ;
@@ -402,19 +402,19 @@ extern
        (
            /* R y Input */
            
-               SEXP y,
+           SEXP y,
            
            /* R weights Input */
            
-               SEXP weights
+           SEXP weights
            ,
            /* R subset Input */
            
-               SEXP subset
+           SEXP subset
            ,
            /* R block Input */
            
-               SEXP block
+           SEXP block
            
        )
        ;

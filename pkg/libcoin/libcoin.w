@@ -115,21 +115,21 @@ urlcolor={linkcolor}%
 
 \chapter*{Licence}
 
-    Copyright (C) 2017-2019 Torsten Hothorn
+Copyright (C) 2017-2019 Torsten Hothorn
 
-    This file is part of the `libcoin' R add-on package.
+This file is part of the `libcoin' R add-on package.
 
-    `libcoin' is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, version 2.
+`libcoin' is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 2.
 
-    `libcoin' is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+`libcoin' is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with `libcoin'.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with `libcoin'.  If not, see <http://www.gnu.org/licenses/>.
 
 \chapter{Introduction}
 \pagenumbering{arabic}
@@ -1144,7 +1144,7 @@ $N$ is the number of observations
 
 @d R N Input
 @{
-    SEXP N,
+SEXP N,
 @|N
 @}
 
@@ -1153,7 +1153,7 @@ $N > $ \verb|INT_MAX|
 
 @d C integer N Input
 @{
-    R_xlen_t N
+R_xlen_t N
 @|N
 @}
 
@@ -1161,7 +1161,7 @@ The regressors $\x_i, i = 1, \dots, N$
 
 @d R x Input
 @{
-    SEXP x,
+SEXP x,
 @|x
 @}
 
@@ -1169,15 +1169,15 @@ are either represented as a real matrix with $N$ rows and $P$ columns
 
 @d C integer P Input
 @{
-    int P
+int P
 @|P
 @}
 
 @d C real x Input
 @{
-    double *x,
-    @<C integer N Input@>,
-    @<C integer P Input@>,
+double *x,
+@<C integer N Input@>,
+@<C integer P Input@>,
 @|x
 @}
 
@@ -1185,9 +1185,9 @@ or as a factor (an integer at \proglang{C} level) at $P$ levels
 
 @d C integer x Input
 @{
-    int *x,
-    @<C integer N Input@>,
-    @<C integer P Input@>,
+int *x,
+@<C integer N Input@>,
+@<C integer P Input@>,
 @|x
 @}
 
@@ -1195,20 +1195,20 @@ The influence functions are also either a $N \times Q$ real matrix
 
 @d R y Input
 @{
-    SEXP y,
+SEXP y,
 @|y
 @}
 
 @d C integer Q Input
 @{
-    int Q
+int Q
 @|Q
 @}
 
 @d C real y Input
 @{
-    double *y,
-    @<C integer Q Input@>,
+double *y,
+@<C integer Q Input@>,
 @|y
 @}
 
@@ -1216,8 +1216,8 @@ or a factor at $Q$ levels
 
 @d C integer y Input
 @{
-    int *y,
-    @<C integer Q Input@>,
+int *y,
+@<C integer Q Input@>,
 @|y
 @}
 
@@ -1225,7 +1225,7 @@ The weights $w_i, i = 1, \dots, N$
 
 @d R weights Input
 @{
-    SEXP weights
+SEXP weights
 @|weights
 @}
 
@@ -1234,8 +1234,8 @@ or integer-valued, with \verb|HAS_WEIGHTS == 0| in the former case
 
 @d C integer weights Input
 @{
-    int *weights,
-    int HAS_WEIGHTS,
+int *weights,
+int HAS_WEIGHTS,
 @|weights, HAS_WEIGHTS
 @}
 
@@ -1243,8 +1243,8 @@ Weights larger than \verb|INT_MAX| are stored as double
 
 @d C real weights Input
 @{
-    double *weights,
-    int HAS_WEIGHTS,
+double *weights,
+int HAS_WEIGHTS,
 @|weights, HAS_WEIGHTS
 @}
 
@@ -1252,7 +1252,7 @@ The sum of all weights is a double
 
 @d C sumweights Input
 @{
-    double sumweights
+double sumweights
 @|sumweights
 @}
 
@@ -1260,7 +1260,7 @@ Subsets $\A \subseteq \{1, \dots, N\}$ are \proglang{R} style indices
 
 @d R subset Input
 @{
-    SEXP subset
+SEXP subset
 @|subset
 @}
 
@@ -1268,7 +1268,7 @@ are either not existent (\verb|XLENGTH(subset) == 0|) or of length
 
 @d C integer Nsubset Input
 @{
-    R_xlen_t Nsubset
+R_xlen_t Nsubset
 @|Nsubset
 @}
 
@@ -1276,8 +1276,8 @@ Optionally, one can specify a subset of the subset via
 
 @d C subset range Input
 @{
-    R_xlen_t offset,
-    @<C integer Nsubset Input@>
+R_xlen_t offset,
+@<C integer Nsubset Input@>
 @|offset
 @}
 
@@ -1287,8 +1287,8 @@ Subsets are stored either as integer
 
 @d C integer subset Input
 @{
-    int *subset,
-    @<C subset range Input@>
+int *subset,
+@<C subset range Input@>
 @|subset
 @}
 
@@ -1296,8 +1296,8 @@ or double (to allow for indices larger than \verb|INT_MAX|)
 
 @d C real subset Input
 @{
-    double *subset,
-    @<C subset range Input@>
+double *subset,
+@<C subset range Input@>
 @|subset
 @}
 
@@ -1305,7 +1305,7 @@ Blocks $\text{block}_i, i = 1, \dots, N$
 
 @d R block Input
 @{
-    SEXP block
+SEXP block
 @|block
 @}
 
@@ -1313,7 +1313,7 @@ at $B$ levels
 
 @d C integer B Input
 @{
-    int B
+int B
 @|B
 @}
 
@@ -1321,8 +1321,8 @@ are stored as a factor
 
 @d C integer block Input
 @{
-    int *block,
-    @<C integer B Input@>,
+int *block,
+@<C integer B Input@>,
 @|block
 @}
 
@@ -1330,7 +1330,7 @@ The tabulation of block (potentially in subsets) is
 
 @d R blockTable Input
 @{
-    SEXP blockTable
+SEXP blockTable
 @|blockTable
 @}
 
@@ -1502,7 +1502,7 @@ The data are given as $\x_i$ and $\y_i$ for $i = 1, \dots, N$, optionally
 with weights, subset and blocks. The latter three variables are ignored when
 specified as \verb|integer(0)|.
 
-@d User Interface Inputs
+@d User Interface Input
 @{
 @<R x Input@>
 @<R y Input@>
@@ -1535,9 +1535,9 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic(
 @{
 SEXP R_ExpectationCovarianceStatistic
 (
-@<User Interface Inputs@>
-SEXP varonly,
-SEXP tol
+    @<User Interface Input@>
+    SEXP varonly,
+    SEXP tol
 )
 @}
 
@@ -1568,35 +1568,35 @@ levels of \verb|x|.
 
 @d Setup Dimensions
 @{
-    int P, Q, B;
+int P, Q, B;
 
-    if (TYPEOF(x) == INTSXP) {
-        P = NLEVELS(x);
-    } else {
-        P = NCOL(x);
-    }
-    Q = NCOL(y);
+if (TYPEOF(x) == INTSXP) {
+    P = NLEVELS(x);
+} else {
+    P = NCOL(x);
+}
+Q = NCOL(y);
 
-    B = 1;
-    if (LENGTH(block) > 0)
-        B = NLEVELS(block);
+B = 1;
+if (LENGTH(block) > 0)
+    B = NLEVELS(block);
 @}
 
 The core function first computes the linear statistic (as there is no need
 to pay attention to blocks) and, in a second step, starts a loop over
 potential blocks.
 
-FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not
-             handled correctly (as \verb|sumweights| doesnt't take this information
-             into account; use subset to exclude these missings (as done
-             in libcoin::LinStatExpCov)
+FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not handled
+        correctly (as \verb|sumweights| doesnt't take this information into
+        account; use subset to exclude these missings (as done in
+        libcoin::LinStatExpCov)
 
 @d RC\_ExpectationCovarianceStatistic
 @{
 void RC_ExpectationCovarianceStatistic
 (
-@<User Interface Inputs@>
-SEXP ans
+    @<User Interface Input@>
+    SEXP ans
 ) {
     @<C integer N Input@>;
     @<C integer P Input@>;
@@ -1787,7 +1787,7 @@ permutations to be specified.
 @{
 SEXP R_PermutedLinearStatistic
 (
-    @<User Interface Inputs@>
+    @<User Interface Input@>
     SEXP nresample
 )
 @}
@@ -1940,7 +1940,7 @@ SEXP R_StandardisePermutedLinearStatistic
 @<R\_PermutedLinearStatistic\_2d@>
 @}
 
-@d 2d User Interface Inputs
+@d 2d User Interface Input
 @{
 @<R x Input@>
 SEXP ix,
@@ -1955,9 +1955,9 @@ SEXP iy,
 @{
 SEXP R_ExpectationCovarianceStatistic_2d
 (
-@<2d User Interface Inputs@>
-SEXP varonly,
-SEXP tol
+    @<2d User Interface Input@>
+    SEXP varonly,
+    SEXP tol
 )
 @}
 
@@ -2137,8 +2137,8 @@ if (C_get_varonly(ans)) {
 @{
 void RC_ExpectationCovarianceStatistic_2d
 (
-@<2d User Interface Inputs@>
-SEXP ans
+    @<2d User Interface Input@>
+    SEXP ans
 ) {
     @<2d Memory@>
 
@@ -3148,7 +3148,7 @@ const int give_log
 @{
 void C_ordered_Xfactor
 (
-@<maxstat Xfactor Variables@>
+    @<maxstat Xfactor Variables@>
 ) {
     @<Setup maxstat Variables@>
 
@@ -3330,7 +3330,7 @@ if (nresample > 0) {
 @{
 void C_unordered_Xfactor
 (
-@<maxstat Xfactor Variables@>
+    @<maxstat Xfactor Variables@>
 ) {
     double *mtmp;
     int qPp, nc, *levels, Pnonzero, *indl, *contrast;
@@ -4036,12 +4036,12 @@ initialisation of the loop over all observations
 
 @d init subset loop
 @{
-    R_xlen_t diff = 0;
-    s = subset + offset;
-    w = weights;
-    /* subset is R-style index in 1:N */
-    if (Nsubset > 0)
-        diff = (R_xlen_t) s[0] - 1;
+R_xlen_t diff = 0;
+s = subset + offset;
+w = weights;
+/* subset is R-style index in 1:N */
+if (Nsubset > 0)
+    diff = (R_xlen_t) s[0] - 1;
 @}
 
 and loop over $i = 1, \dots, N$ when no subset was specified or
@@ -4050,22 +4050,22 @@ allowing for number of observations larger than \verb|INT_MAX|
 
 @d start subset loop
 @{
-    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
 @}
 
 After computions in the loop, we compute the next element
 
 @d continue subset loop
 @{
-    if (Nsubset > 0) {
-        /* NB: diff also works with R style index */
-        diff = (R_xlen_t) s[1] - s[0];
-        if (diff < 0)
-            error("subset not sorted");
-        s++;
-    } else {
-        diff = 1;
-    }
+if (Nsubset > 0) {
+    /* NB: diff also works with R style index */
+    diff = (R_xlen_t) s[1] - s[0];
+    if (diff < 0)
+        error("subset not sorted");
+    s++;
+} else {
+    diff = 1;
+}
 @}
 
 \subsection{Simple Sums}
@@ -4223,25 +4223,25 @@ double C_Sums_dweights_isubset
 
 @d Sums Body
 @{
-    double ans = 0.0;
+double ans = 0.0;
 
-    if (Nsubset > 0) {
-        if (!HAS_WEIGHTS) return((double) Nsubset);
-    } else {
-        if (!HAS_WEIGHTS) return((double) N);
-    }
+if (Nsubset > 0) {
+    if (!HAS_WEIGHTS) return((double) Nsubset);
+} else {
+    if (!HAS_WEIGHTS) return((double) N);
+}
 
-    @<init subset loop@>
-    @<start subset loop@>
-    {
-        w = w + diff;
-        ans += w[0];
-        @<continue subset loop@>
-    }
+@<init subset loop@>
+@<start subset loop@>
+{
     w = w + diff;
     ans += w[0];
+    @<continue subset loop@>
+}
+w = w + diff;
+ans += w[0];
 
-    return(ans);
+return(ans);
 @}
 
 \subsection{Kronecker Sums}
@@ -4358,29 +4358,29 @@ void RC_KronSums
 
 @d RC KronSums Input
 @{
-    @<R x Input@>
-    @<C integer N Input@>,
-    @<C integer P Input@>,
-    @<C real y Input@>
-    const int SYMMETRIC,
-    double *centerx,
-    double *centery,
-    const int CENTER,
+@<R x Input@>
+@<C integer N Input@>,
+@<C integer P Input@>,
+@<C real y Input@>
+const int SYMMETRIC,
+double *centerx,
+double *centery,
+const int CENTER,
 @}
 
 @d C KronSums Input
 @{
-    @<C real x Input@>
-    @<C real y Input@>
-    const int SYMMETRIC,
-    double *centerx,
-    double *centery,
-    const int CENTER,
+@<C real x Input@>
+@<C real y Input@>
+const int SYMMETRIC,
+double *centerx,
+double *centery,
+const int CENTER,
 @}
 
 @d C KronSums Answer
 @{
-    double *PQ_ans
+double *PQ_ans
 @}
 
 @d KronSums Integer x
@@ -4557,8 +4557,8 @@ void C_KronSums_dweights_isubset
 
 @d C XfactorKronSums Input
 @{
-    @<C integer x Input@>
-    @<C real y Input@>
+@<C integer x Input@>
+@<C real y Input@>
 @}
 
 @d C\_XfactorKronSums\_dweights\_dsubset
@@ -4625,30 +4625,17 @@ void C_XfactorKronSums_dweights_isubset
 
 @d XfactorKronSums Body
 @{
-    int *xx, ixi;
-    double *yy;
+int *xx, ixi;
+double *yy;
 
-    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
+for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
-    for (int q = 0; q < Q; q++) {
-        yy = y + N * q;
-        xx = x;
-        @<init subset loop@>
-        @<start subset loop@>
-        {
-            xx = xx + diff;
-            yy = yy + diff;
-            ixi = xx[0] - 1;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                if (ixi >= 0)
-                    PQ_ans[ixi + q * P] += yy[0] * w[0];
-            } else {
-                if (ixi >= 0)
-                    PQ_ans[ixi + q * P] += yy[0];
-            }
-            @<continue subset loop@>
-        }
+for (int q = 0; q < Q; q++) {
+    yy = y + N * q;
+    xx = x;
+    @<init subset loop@>
+    @<start subset loop@>
+    {
         xx = xx + diff;
         yy = yy + diff;
         ixi = xx[0] - 1;
@@ -4660,7 +4647,20 @@ void C_XfactorKronSums_dweights_isubset
             if (ixi >= 0)
                 PQ_ans[ixi + q * P] += yy[0];
         }
+        @<continue subset loop@>
     }
+    xx = xx + diff;
+    yy = yy + diff;
+    ixi = xx[0] - 1;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        if (ixi >= 0)
+            PQ_ans[ixi + q * P] += yy[0] * w[0];
+    } else {
+        if (ixi >= 0)
+            PQ_ans[ixi + q * P] += yy[0];
+    }
+}
 @}
 
 \subsubsection{Permuted Kronecker Sums}
@@ -4739,7 +4739,7 @@ void RC_KronSums_Permutation
             C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q,
                                                   REAL(subset), offset, Nsubset,
                                                   REAL(subsety), PQ_ans);
-    }
+        }
     } else {
         if (TYPEOF(subset) == INTSXP) {
             C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q,
@@ -4790,20 +4790,20 @@ have to go through all elements explicitly here.
 
 @d KronSums Permutation Body
 @{
-    R_xlen_t qP, qN, pN, qPp;
+R_xlen_t qP, qN, pN, qPp;
 
-    for (int q = 0; q < Q; q++) {
-        qN = q * N;
-        qP = q * P;
-        for (int p = 0; p < P; p++) {
-            qPp = qP + p;
-            PQ_ans[qPp] = 0.0;
-            pN = p * N;
-            for (R_xlen_t i = offset; i < Nsubset; i++)
-                PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] *
-                               x[pN + (R_xlen_t) subset[i] - 1];
-        }
+for (int q = 0; q < Q; q++) {
+    qN = q * N;
+    qP = q * P;
+    for (int p = 0; p < P; p++) {
+        qPp = qP + p;
+        PQ_ans[qPp] = 0.0;
+        pN = p * N;
+        for (R_xlen_t i = offset; i < Nsubset; i++)
+            PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] *
+                           x[pN + (R_xlen_t) subset[i] - 1];
     }
+}
 @}
 
 \subsubsection{Xfactor Permuted Kronecker Sums}
@@ -4840,16 +4840,16 @@ void C_XfactorKronSums_Permutation_isubset
 
 @d XfactorKronSums Permutation Body
 @{
-    R_xlen_t qP, qN;
+R_xlen_t qP, qN;
 
-    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
+for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
-    for (int q = 0; q < Q; q++) {
-        qP = q * P;
-        qN = q * N;
-        for (R_xlen_t i = offset; i < Nsubset; i++)
-            PQ_ans[x[(R_xlen_t) subset[i] - 1] - 1 + qP] += y[qN + (R_xlen_t) subsety[i] - 1];
-    }
+for (int q = 0; q < Q; q++) {
+    qP = q * P;
+    qN = q * N;
+    for (R_xlen_t i = offset; i < Nsubset; i++)
+        PQ_ans[x[(R_xlen_t) subset[i] - 1] - 1 + qP] += y[qN + (R_xlen_t) subsety[i] - 1];
+}
 @}
 
 \subsection{Column Sums}
@@ -4928,22 +4928,22 @@ void RC_colSums
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
             C_colSums_iweights_isubset(x, N, P, power, centerx, CENTER,
-                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),
-                                        offset, Nsubset, P_ans);
+                                       INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),
+                                       offset, Nsubset, P_ans);
         } else {
             C_colSums_iweights_dsubset(x, N, P, power, centerx, CENTER,
-                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),
-                                        offset, Nsubset, P_ans);
+                                       INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),
+                                       offset, Nsubset, P_ans);
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
             C_colSums_dweights_isubset(x, N, P, power, centerx, CENTER,
-                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),
-                                        offset, Nsubset, P_ans);
+                                       REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),
+                                       offset, Nsubset, P_ans);
         } else {
             C_colSums_dweights_dsubset(x, N, P, power, centerx, CENTER,
-                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset),
-                                        offset, Nsubset, P_ans);
+                                       REAL(weights), XLENGTH(weights) > 0, REAL(subset),
+                                       offset, Nsubset, P_ans);
         }
     }
 }
@@ -4952,15 +4952,15 @@ void RC_colSums
 
 @d C colSums Input
 @{
-    @<C real x Input@>
-    const int power,
-    double *centerx,
-    const int CENTER,
+@<C real x Input@>
+const int power,
+double *centerx,
+const int CENTER,
 @}
 
 @d C colSums Answer
 @{
-    double *P_ans
+double *P_ans
 @}
 
 @d C\_colSums\_dweights\_dsubset
@@ -5027,26 +5027,17 @@ void C_colSums_dweights_isubset
 
 @d colSums Body
 @{
-    double *xx, cx = 0.0;
+double *xx, cx = 0.0;
 
-    for (int p = 0; p < P; p++) {
-        P_ans[0] = 0.0;
-        xx = x + N * p;
-        if (CENTER) {
-            cx = centerx[p];
-        }
-        @<init subset loop@>
-        @<start subset loop@>
-        {
-            xx = xx + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                P_ans[0] += pow(xx[0] - cx, power) * w[0];
-            } else {
-                P_ans[0] += pow(xx[0] - cx, power);
-            }
-            @<continue subset loop@>
-        }
+for (int p = 0; p < P; p++) {
+    P_ans[0] = 0.0;
+    xx = x + N * p;
+    if (CENTER) {
+        cx = centerx[p];
+    }
+    @<init subset loop@>
+    @<start subset loop@>
+    {
         xx = xx + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
@@ -5054,8 +5045,17 @@ void C_colSums_dweights_isubset
         } else {
             P_ans[0] += pow(xx[0] - cx, power);
         }
-        P_ans++;
+        @<continue subset loop@>
     }
+    xx = xx + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        P_ans[0] += pow(xx[0] - cx, power) * w[0];
+    } else {
+        P_ans[0] += pow(xx[0] - cx, power);
+    }
+    P_ans++;
+}
 @}
 
 \subsection{Tables}
@@ -5170,12 +5170,12 @@ void RC_OneTableSums
 
 @d C OneTableSums Input
 @{
-    @<C integer x Input@>
+@<C integer x Input@>
 @}
 
 @d C OneTableSums Answer
 @{
-    double *P_ans
+double *P_ans
 @}
 
 @d C\_OneTableSums\_dweights\_dsubset
@@ -5242,30 +5242,30 @@ void C_OneTableSums_dweights_isubset
 
 @d OneTableSums Body
 @{
-    int *xx;
+int *xx;
 
-    for (int p = 0; p < P; p++) P_ans[p] = 0.0;
+for (int p = 0; p < P; p++) P_ans[p] = 0.0;
 
-    xx = x;
-    @<init subset loop@>
-    @<start subset loop@>
-    {
-        xx = xx + diff;
-        if (HAS_WEIGHTS) {
-            w = w + diff;
-            P_ans[xx[0]] += (double) w[0];
-        } else {
-            P_ans[xx[0]]++;
-        }
-        @<continue subset loop@>
-    }
+xx = x;
+@<init subset loop@>
+@<start subset loop@>
+{
     xx = xx + diff;
     if (HAS_WEIGHTS) {
         w = w + diff;
-        P_ans[xx[0]] += w[0];
+        P_ans[xx[0]] += (double) w[0];
     } else {
         P_ans[xx[0]]++;
     }
+    @<continue subset loop@>
+}
+xx = xx + diff;
+if (HAS_WEIGHTS) {
+    w = w + diff;
+    P_ans[xx[0]] += w[0];
+} else {
+    P_ans[xx[0]]++;
+}
 @}
 
 \subsubsection{TwoTable Sums}
@@ -5367,13 +5367,13 @@ void RC_TwoTableSums
 
 @d C TwoTableSums Input
 @{
-    @<C integer x Input@>
-    @<C integer y Input@>
+@<C integer x Input@>
+@<C integer y Input@>
 @}
 
 @d C TwoTableSums Answer
 @{
-    double *PQ_ans
+double *PQ_ans
 @}
 
 @d C\_TwoTableSums\_dweights\_dsubset
@@ -5440,33 +5440,33 @@ void C_TwoTableSums_dweights_isubset
 
 @d TwoTableSums Body
 @{
-    int *xx, *yy;
+int *xx, *yy;
 
-    for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
+for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
 
-    yy = y;
-    xx = x;
-    @<init subset loop@>
-    @<start subset loop@>
-    {
-        xx = xx + diff;
-        yy = yy + diff;
-        if (HAS_WEIGHTS) {
-            w = w + diff;
-            PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
-        } else {
-            PQ_ans[yy[0] * P + xx[0]]++;
-        }
-        @<continue subset loop@>
-    }
+yy = y;
+xx = x;
+@<init subset loop@>
+@<start subset loop@>
+{
     xx = xx + diff;
     yy = yy + diff;
     if (HAS_WEIGHTS) {
         w = w + diff;
-        PQ_ans[yy[0] * P + xx[0]] += w[0];
+        PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
     } else {
         PQ_ans[yy[0] * P + xx[0]]++;
     }
+    @<continue subset loop@>
+}
+xx = xx + diff;
+yy = yy + diff;
+if (HAS_WEIGHTS) {
+    w = w + diff;
+    PQ_ans[yy[0] * P + xx[0]] += w[0];
+} else {
+    PQ_ans[yy[0] * P + xx[0]]++;
+}
 @}
 
 \subsubsection{ThreeTable Sums}
@@ -5570,14 +5570,14 @@ void RC_ThreeTableSums
 
 @d C ThreeTableSums Input
 @{
-    @<C integer x Input@>
-    @<C integer y Input@>
-    @<C integer block Input@>
+@<C integer x Input@>
+@<C integer y Input@>
+@<C integer block Input@>
 @}
 
 @d C ThreeTableSums Answer
 @{
-    double *PQL_ans
+double *PQL_ans
 @}
 
 @d C\_ThreeTableSums\_dweights\_dsubset
@@ -5644,36 +5644,36 @@ void C_ThreeTableSums_dweights_isubset
 
 @d ThreeTableSums Body
 @{
-    int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);
+int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);
 
-    for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
+for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
 
-    yy = y;
-    xx = x;
-    bb = block;
-    @<init subset loop@>
-    @<start subset loop@>
-    {
-        xx = xx + diff;
-        yy = yy + diff;
-        bb = bb + diff;
-        if (HAS_WEIGHTS) {
-            w = w + diff;
-            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];
-        } else {
-            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
-        }
-        @<continue subset loop@>
-    }
+yy = y;
+xx = x;
+bb = block;
+@<init subset loop@>
+@<start subset loop@>
+{
     xx = xx + diff;
     yy = yy + diff;
     bb = bb + diff;
     if (HAS_WEIGHTS) {
         w = w + diff;
-        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];
+        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];
     } else {
         PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
     }
+    @<continue subset loop@>
+}
+xx = xx + diff;
+yy = yy + diff;
+bb = bb + diff;
+if (HAS_WEIGHTS) {
+    w = w + diff;
+    PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];
+} else {
+    PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
+}
 @}
 
 \section{Utilities}
@@ -6499,7 +6499,7 @@ SEXP LECV
 @{
 int C_get_P
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[0]);
 }
@@ -6510,7 +6510,7 @@ int C_get_P
 @{
 int C_get_Q
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[1]);
 }
@@ -6521,7 +6521,7 @@ int C_get_Q
 @{
 int C_get_varonly
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(INTEGER(VECTOR_ELT(LECV, varonly_SLOT))[0]);
 }
@@ -6532,7 +6532,7 @@ int C_get_varonly
 @{
 int C_get_Xfactor
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(INTEGER(VECTOR_ELT(LECV, Xfactor_SLOT))[0]);
 }
@@ -6543,7 +6543,7 @@ int C_get_Xfactor
 @{
 double* C_get_LinearStatistic
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(REAL(VECTOR_ELT(LECV, LinearStatistic_SLOT)));
 }
@@ -6554,7 +6554,7 @@ double* C_get_LinearStatistic
 @{
 double* C_get_Expectation
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(REAL(VECTOR_ELT(LECV, Expectation_SLOT)));
 }
@@ -6565,7 +6565,7 @@ double* C_get_Expectation
 @{
 double* C_get_Variance
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     double *var, *covar;
@@ -6589,7 +6589,7 @@ double* C_get_Variance
 @{
 double* C_get_Covariance
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     if (C_get_varonly(LECV) && PQ > 1)
@@ -6605,7 +6605,7 @@ double* C_get_Covariance
 @{
 double* C_get_ExpectationX
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(REAL(VECTOR_ELT(LECV, ExpectationX_SLOT)));
 }
@@ -6616,7 +6616,7 @@ double* C_get_ExpectationX
 @{
 double* C_get_ExpectationInfluence
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(REAL(VECTOR_ELT(LECV, ExpectationInfluence_SLOT)));
 }
@@ -6627,7 +6627,7 @@ double* C_get_ExpectationInfluence
 @{
 double* C_get_CovarianceInfluence
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));
 }
@@ -6638,7 +6638,7 @@ double* C_get_CovarianceInfluence
 @{
 double* C_get_VarianceInfluence
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(REAL(VECTOR_ELT(LECV, VarianceInfluence_SLOT)));
 }
@@ -6649,7 +6649,7 @@ double* C_get_VarianceInfluence
 @{
 double* C_get_TableBlock
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     if (VECTOR_ELT(LECV, TableBlock_SLOT) == R_NilValue)
         error("object does not contain table block slot");
@@ -6662,7 +6662,7 @@ double* C_get_TableBlock
 @{
 double* C_get_Sumweights
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     if (VECTOR_ELT(LECV, Sumweights_SLOT) == R_NilValue)
         error("object does not contain sumweights slot");
@@ -6675,7 +6675,7 @@ double* C_get_Sumweights
 @{
 double* C_get_Table
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     if (LENGTH(LECV) <= Table_SLOT)
         error("Cannot extract table from object");
@@ -6688,7 +6688,7 @@ double* C_get_Table
 @{
 int* C_get_dimTable
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     if (LENGTH(LECV) <= Table_SLOT)
         error("Cannot extract table from object");
@@ -6702,7 +6702,7 @@ int* C_get_dimTable
 @{
 int C_get_B
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     if (VECTOR_ELT(LECV, TableBlock_SLOT) != R_NilValue)
         return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));
@@ -6715,7 +6715,7 @@ int C_get_B
 @{
 R_xlen_t C_get_nresample
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     return(XLENGTH(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)) / PQ);
@@ -6727,7 +6727,7 @@ R_xlen_t C_get_nresample
 @{
 double* C_get_PermutedLinearStatistic
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(REAL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));
 }
@@ -6738,7 +6738,7 @@ double* C_get_PermutedLinearStatistic
 @{
 double C_get_tol
 (
-@<R LECV Input@>
+    @<R LECV Input@>
 ) {
     return(REAL(VECTOR_ELT(LECV, tol_SLOT))[0]);
 }
@@ -6795,58 +6795,58 @@ SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
 
 @d R\_init\_LECV
 @{
-    SEXP vo, d, names, tolerance, tmp;
-    int PQ;
+SEXP vo, d, names, tolerance, tmp;
+int PQ;
 
-    @<Memory Input Checks@>
-    PQ = mPQB(P, Q, 1);
-    @<Memory Names@>
+@<Memory Input Checks@>
+PQ = mPQB(P, Q, 1);
+@<Memory Names@>
 
-    /* Table_SLOT is always last and only used in 2d case, ie omitted here */
-    PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));
-    SET_VECTOR_ELT(ans, LinearStatistic_SLOT, allocVector(REALSXP, PQ));
-    SET_VECTOR_ELT(ans, Expectation_SLOT, allocVector(REALSXP, PQ));
-    SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));
-    INTEGER(vo)[0] = varonly;
-    if (varonly) {
-        SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
-    } else  {
-        /* always return variance */
-        SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
-        SET_VECTOR_ELT(ans, Covariance_SLOT,
-                       tmp = allocVector(REALSXP, PP12(PQ)));
-    }
-    SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));
-    SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));
-    INTEGER(d)[0] = P;
-    INTEGER(d)[1] = Q;
-    SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
-                   tmp = allocVector(REALSXP, B * Q));
-    for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
+/* Table_SLOT is always last and only used in 2d case, ie omitted here */
+PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));
+SET_VECTOR_ELT(ans, LinearStatistic_SLOT, allocVector(REALSXP, PQ));
+SET_VECTOR_ELT(ans, Expectation_SLOT, allocVector(REALSXP, PQ));
+SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));
+INTEGER(vo)[0] = varonly;
+if (varonly) {
+    SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
+} else  {
+    /* always return variance */
+    SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
+    SET_VECTOR_ELT(ans, Covariance_SLOT,
+                   tmp = allocVector(REALSXP, PP12(PQ)));
+}
+SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));
+SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));
+INTEGER(d)[0] = P;
+INTEGER(d)[1] = Q;
+SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
+               tmp = allocVector(REALSXP, B * Q));
+for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
 
-    /* should always _both_ be there */
-    SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
-                   tmp = allocVector(REALSXP, B * Q));
-    for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
+/* should always _both_ be there */
+SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
+               tmp = allocVector(REALSXP, B * Q));
+for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
 
-    SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                   tmp = allocVector(REALSXP, B * Q * (Q + 1) / 2));
-    for (int q = 0; q < B * Q * (Q + 1) / 2; q++) REAL(tmp)[q] = 0.0;
+SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
+               tmp = allocVector(REALSXP, B * Q * (Q + 1) / 2));
+for (int q = 0; q < B * Q * (Q + 1) / 2; q++) REAL(tmp)[q] = 0.0;
 
-    SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
-    INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
-    SET_VECTOR_ELT(ans, TableBlock_SLOT, tmp = allocVector(REALSXP, B + 1));
-    for (int q = 0; q < B + 1; q++) REAL(tmp)[q] = 0.0;
-    SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, B));
-    SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
-                   allocMatrix(REALSXP, 0, 0));
-    SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
-                   allocMatrix(REALSXP, 0, 0));
-    SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
-    REAL(tolerance)[0] = tol;
-    namesgets(ans, names);
+SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
+INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
+SET_VECTOR_ELT(ans, TableBlock_SLOT, tmp = allocVector(REALSXP, B + 1));
+for (int q = 0; q < B + 1; q++) REAL(tmp)[q] = 0.0;
+SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, B));
+SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
+               allocMatrix(REALSXP, 0, 0));
+SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
+               allocMatrix(REALSXP, 0, 0));
+SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
+REAL(tolerance)[0] = tol;
+namesgets(ans, names);
 
-    @<Initialise Zero@>
+@<Initialise Zero@>
 @}
 
 @d Initialise Zero

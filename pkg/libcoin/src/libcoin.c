@@ -185,15 +185,15 @@ void C_KronSums_sym_
 (
     /* C real x Input */
     
-        double *x,
-        /* C integer N Input */
-        
-            R_xlen_t N
-        ,
-        /* C integer P Input */
-        
-            int P
-        ,
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
     
     double *PP_sym_ans
 ) {
@@ -354,10 +354,10 @@ SEXP R_unpack_sym
 
 int C_get_P
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[0]);
 }
@@ -366,10 +366,10 @@ SEXP LECV
 
 int C_get_Q
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[1]);
 }
@@ -411,10 +411,10 @@ int mPQB
 
 int C_get_varonly
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(INTEGER(VECTOR_ELT(LECV, varonly_SLOT))[0]);
 }
@@ -423,10 +423,10 @@ SEXP LECV
 
 int C_get_Xfactor
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(INTEGER(VECTOR_ELT(LECV, Xfactor_SLOT))[0]);
 }
@@ -435,10 +435,10 @@ SEXP LECV
 
 double* C_get_LinearStatistic
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(REAL(VECTOR_ELT(LECV, LinearStatistic_SLOT)));
 }
@@ -447,10 +447,10 @@ SEXP LECV
 
 double* C_get_Expectation
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(REAL(VECTOR_ELT(LECV, Expectation_SLOT)));
 }
@@ -459,10 +459,10 @@ SEXP LECV
 
 double* C_get_Variance
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     double *var, *covar;
@@ -484,10 +484,10 @@ SEXP LECV
 
 double* C_get_Covariance
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     if (C_get_varonly(LECV) && PQ > 1)
@@ -501,10 +501,10 @@ SEXP LECV
 
 double* C_get_ExpectationX
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(REAL(VECTOR_ELT(LECV, ExpectationX_SLOT)));
 }
@@ -513,10 +513,10 @@ SEXP LECV
 
 double* C_get_ExpectationInfluence
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(REAL(VECTOR_ELT(LECV, ExpectationInfluence_SLOT)));
 }
@@ -525,10 +525,10 @@ SEXP LECV
 
 double* C_get_CovarianceInfluence
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));
 }
@@ -537,10 +537,10 @@ SEXP LECV
 
 double* C_get_VarianceInfluence
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(REAL(VECTOR_ELT(LECV, VarianceInfluence_SLOT)));
 }
@@ -549,10 +549,10 @@ SEXP LECV
 
 double* C_get_TableBlock
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     if (VECTOR_ELT(LECV, TableBlock_SLOT) == R_NilValue)
         error("object does not contain table block slot");
@@ -563,10 +563,10 @@ SEXP LECV
 
 double* C_get_Sumweights
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     if (VECTOR_ELT(LECV, Sumweights_SLOT) == R_NilValue)
         error("object does not contain sumweights slot");
@@ -577,10 +577,10 @@ SEXP LECV
 
 double* C_get_Table
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     if (LENGTH(LECV) <= Table_SLOT)
         error("Cannot extract table from object");
@@ -591,10 +591,10 @@ SEXP LECV
 
 int* C_get_dimTable
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     if (LENGTH(LECV) <= Table_SLOT)
         error("Cannot extract table from object");
@@ -606,10 +606,10 @@ SEXP LECV
 
 int C_get_B
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     if (VECTOR_ELT(LECV, TableBlock_SLOT) != R_NilValue)
         return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));
@@ -620,10 +620,10 @@ SEXP LECV
 
 R_xlen_t C_get_nresample
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     int PQ = C_get_P(LECV) * C_get_Q(LECV);
     return(XLENGTH(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)) / PQ);
@@ -633,10 +633,10 @@ SEXP LECV
 
 double* C_get_PermutedLinearStatistic
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(REAL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));
 }
@@ -645,10 +645,10 @@ SEXP LECV
 
 double C_get_tol
 (
-/* R LECV Input */
-
-SEXP LECV
-
+    /* R LECV Input */
+    
+    SEXP LECV
+    
 ) {
     return(REAL(VECTOR_ELT(LECV, tol_SLOT))[0]);
 }
@@ -659,16 +659,16 @@ SEXP RC_init_LECV_1d
 (
     /* C integer P Input */
     
-        int P
+    int P
     ,
     /* C integer Q Input */
     
-        int Q
+    int Q
     ,
     int varonly,
     /* C integer B Input */
     
-        int B
+    int B
     ,
     int Xfactor,
     double tol
@@ -677,121 +677,121 @@ SEXP RC_init_LECV_1d
 
     /* R\_init\_LECV */
     
-        SEXP vo, d, names, tolerance, tmp;
-        int PQ;
+    SEXP vo, d, names, tolerance, tmp;
+    int PQ;
 
-        /* Memory Input Checks */
-        
-        if (P <= 0)
-            error("P is not positive");
+    /* Memory Input Checks */
 
-        if (Q <= 0)
-            error("Q is not positive");
+    if (P <= 0)
+        error("P is not positive");
 
-        if (B <= 0)
-            error("B is not positive");
+    if (Q <= 0)
+        error("Q is not positive");
 
-        if (varonly < 0 || varonly > 1)
-            error("varonly is not 0 or 1");
+    if (B <= 0)
+        error("B is not positive");
 
-        if (Xfactor < 0 || Xfactor > 1)
-            error("Xfactor is not 0 or 1");
+    if (varonly < 0 || varonly > 1)
+        error("varonly is not 0 or 1");
 
-        if (tol <= DBL_MIN)
-            error("tol is not positive");
-        
-        PQ = mPQB(P, Q, 1);
-        /* Memory Names */
-        
-        PROTECT(names = allocVector(STRSXP, Table_SLOT + 1));
-        SET_STRING_ELT(names, LinearStatistic_SLOT, mkChar("LinearStatistic"));
-        SET_STRING_ELT(names, Expectation_SLOT, mkChar("Expectation"));
-        SET_STRING_ELT(names, varonly_SLOT, mkChar("varonly"));
-        SET_STRING_ELT(names, Variance_SLOT, mkChar("Variance"));
-        SET_STRING_ELT(names, Covariance_SLOT, mkChar("Covariance"));
-        SET_STRING_ELT(names, ExpectationX_SLOT, mkChar("ExpectationX"));
-        SET_STRING_ELT(names, dim_SLOT, mkChar("dimension"));
-        SET_STRING_ELT(names, ExpectationInfluence_SLOT,
-                       mkChar("ExpectationInfluence"));
-        SET_STRING_ELT(names, Xfactor_SLOT, mkChar("Xfactor"));
-        SET_STRING_ELT(names, CovarianceInfluence_SLOT,
-                       mkChar("CovarianceInfluence"));
-        SET_STRING_ELT(names, VarianceInfluence_SLOT,
-                       mkChar("VarianceInfluence"));
-        SET_STRING_ELT(names, TableBlock_SLOT, mkChar("TableBlock"));
-        SET_STRING_ELT(names, Sumweights_SLOT, mkChar("Sumweights"));
-        SET_STRING_ELT(names, PermutedLinearStatistic_SLOT,
-                       mkChar("PermutedLinearStatistic"));
-        SET_STRING_ELT(names, StandardisedPermutedLinearStatistic_SLOT,
-                       mkChar("StandardisedPermutedLinearStatistic"));
-        SET_STRING_ELT(names, tol_SLOT, mkChar("tol"));
-        SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
-        
+    if (Xfactor < 0 || Xfactor > 1)
+        error("Xfactor is not 0 or 1");
 
-        /* Table_SLOT is always last and only used in 2d case, ie omitted here */
-        PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));
-        SET_VECTOR_ELT(ans, LinearStatistic_SLOT, allocVector(REALSXP, PQ));
-        SET_VECTOR_ELT(ans, Expectation_SLOT, allocVector(REALSXP, PQ));
-        SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));
-        INTEGER(vo)[0] = varonly;
-        if (varonly) {
-            SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
-        } else  {
-            /* always return variance */
-            SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
-            SET_VECTOR_ELT(ans, Covariance_SLOT,
-                           tmp = allocVector(REALSXP, PP12(PQ)));
-        }
-        SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));
-        SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));
-        INTEGER(d)[0] = P;
-        INTEGER(d)[1] = Q;
-        SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
-                       tmp = allocVector(REALSXP, B * Q));
-        for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
+    if (tol <= DBL_MIN)
+        error("tol is not positive");
+    
+    PQ = mPQB(P, Q, 1);
+    /* Memory Names */
 
-        /* should always _both_ be there */
-        SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
-                       tmp = allocVector(REALSXP, B * Q));
-        for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
+    PROTECT(names = allocVector(STRSXP, Table_SLOT + 1));
+    SET_STRING_ELT(names, LinearStatistic_SLOT, mkChar("LinearStatistic"));
+    SET_STRING_ELT(names, Expectation_SLOT, mkChar("Expectation"));
+    SET_STRING_ELT(names, varonly_SLOT, mkChar("varonly"));
+    SET_STRING_ELT(names, Variance_SLOT, mkChar("Variance"));
+    SET_STRING_ELT(names, Covariance_SLOT, mkChar("Covariance"));
+    SET_STRING_ELT(names, ExpectationX_SLOT, mkChar("ExpectationX"));
+    SET_STRING_ELT(names, dim_SLOT, mkChar("dimension"));
+    SET_STRING_ELT(names, ExpectationInfluence_SLOT,
+                   mkChar("ExpectationInfluence"));
+    SET_STRING_ELT(names, Xfactor_SLOT, mkChar("Xfactor"));
+    SET_STRING_ELT(names, CovarianceInfluence_SLOT,
+                   mkChar("CovarianceInfluence"));
+    SET_STRING_ELT(names, VarianceInfluence_SLOT,
+                   mkChar("VarianceInfluence"));
+    SET_STRING_ELT(names, TableBlock_SLOT, mkChar("TableBlock"));
+    SET_STRING_ELT(names, Sumweights_SLOT, mkChar("Sumweights"));
+    SET_STRING_ELT(names, PermutedLinearStatistic_SLOT,
+                   mkChar("PermutedLinearStatistic"));
+    SET_STRING_ELT(names, StandardisedPermutedLinearStatistic_SLOT,
+                   mkChar("StandardisedPermutedLinearStatistic"));
+    SET_STRING_ELT(names, tol_SLOT, mkChar("tol"));
+    SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
+    
 
-        SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                       tmp = allocVector(REALSXP, B * Q * (Q + 1) / 2));
-        for (int q = 0; q < B * Q * (Q + 1) / 2; q++) REAL(tmp)[q] = 0.0;
+    /* Table_SLOT is always last and only used in 2d case, ie omitted here */
+    PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));
+    SET_VECTOR_ELT(ans, LinearStatistic_SLOT, allocVector(REALSXP, PQ));
+    SET_VECTOR_ELT(ans, Expectation_SLOT, allocVector(REALSXP, PQ));
+    SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));
+    INTEGER(vo)[0] = varonly;
+    if (varonly) {
+        SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
+    } else  {
+        /* always return variance */
+        SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
+        SET_VECTOR_ELT(ans, Covariance_SLOT,
+                       tmp = allocVector(REALSXP, PP12(PQ)));
+    }
+    SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));
+    SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));
+    INTEGER(d)[0] = P;
+    INTEGER(d)[1] = Q;
+    SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
+                   tmp = allocVector(REALSXP, B * Q));
+    for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
 
-        SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
-        INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
-        SET_VECTOR_ELT(ans, TableBlock_SLOT, tmp = allocVector(REALSXP, B + 1));
-        for (int q = 0; q < B + 1; q++) REAL(tmp)[q] = 0.0;
-        SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, B));
-        SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
-                       allocMatrix(REALSXP, 0, 0));
-        SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
-                       allocMatrix(REALSXP, 0, 0));
-        SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
-        REAL(tolerance)[0] = tol;
-        namesgets(ans, names);
+    /* should always _both_ be there */
+    SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
+                   tmp = allocVector(REALSXP, B * Q));
+    for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
 
-        /* Initialise Zero */
-        
-        /* set inital zeros */
-        for (int p = 0; p < PQ; p++) {
-            C_get_LinearStatistic(ans)[p] = 0.0;
-            C_get_Expectation(ans)[p] = 0.0;
-            if (varonly)
-                C_get_Variance(ans)[p] = 0.0;
-        }
-        if (!varonly) {
-            for (int p = 0; p < PP12(PQ); p++)
-                C_get_Covariance(ans)[p] = 0.0;
-        }
-        for (int q = 0; q < Q; q++) {
-            C_get_ExpectationInfluence(ans)[q] = 0.0;
-            C_get_VarianceInfluence(ans)[q] = 0.0;
-        }
-        for (int q = 0; q < Q * (Q + 1) / 2; q++)
-            C_get_CovarianceInfluence(ans)[q] = 0.0;
-        
+    SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
+                   tmp = allocVector(REALSXP, B * Q * (Q + 1) / 2));
+    for (int q = 0; q < B * Q * (Q + 1) / 2; q++) REAL(tmp)[q] = 0.0;
+
+    SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
+    INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
+    SET_VECTOR_ELT(ans, TableBlock_SLOT, tmp = allocVector(REALSXP, B + 1));
+    for (int q = 0; q < B + 1; q++) REAL(tmp)[q] = 0.0;
+    SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, B));
+    SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
+                   allocMatrix(REALSXP, 0, 0));
+    SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
+                   allocMatrix(REALSXP, 0, 0));
+    SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
+    REAL(tolerance)[0] = tol;
+    namesgets(ans, names);
+
+    /* Initialise Zero */
+
+    /* set inital zeros */
+    for (int p = 0; p < PQ; p++) {
+        C_get_LinearStatistic(ans)[p] = 0.0;
+        C_get_Expectation(ans)[p] = 0.0;
+        if (varonly)
+            C_get_Variance(ans)[p] = 0.0;
+    }
+    if (!varonly) {
+        for (int p = 0; p < PP12(PQ); p++)
+            C_get_Covariance(ans)[p] = 0.0;
+    }
+    for (int q = 0; q < Q; q++) {
+        C_get_ExpectationInfluence(ans)[q] = 0.0;
+        C_get_VarianceInfluence(ans)[q] = 0.0;
+    }
+    for (int q = 0; q < Q * (Q + 1) / 2; q++)
+        C_get_CovarianceInfluence(ans)[q] = 0.0;
+    
     
 
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
@@ -810,18 +810,18 @@ SEXP RC_init_LECV_2d
 (
     /* C integer P Input */
     
-        int P
+    int P
     ,
     /* C integer Q Input */
     
-        int Q
+    int Q
     ,
     int varonly,
     int Lx,
     int Ly,
     /* C integer B Input */
     
-        int B
+    int B
     ,
     int Xfactor,
     double tol
@@ -836,121 +836,121 @@ SEXP RC_init_LECV_2d
 
     /* R\_init\_LECV */
     
-        SEXP vo, d, names, tolerance, tmp;
-        int PQ;
+    SEXP vo, d, names, tolerance, tmp;
+    int PQ;
 
-        /* Memory Input Checks */
-        
-        if (P <= 0)
-            error("P is not positive");
+    /* Memory Input Checks */
 
-        if (Q <= 0)
-            error("Q is not positive");
+    if (P <= 0)
+        error("P is not positive");
 
-        if (B <= 0)
-            error("B is not positive");
+    if (Q <= 0)
+        error("Q is not positive");
 
-        if (varonly < 0 || varonly > 1)
-            error("varonly is not 0 or 1");
+    if (B <= 0)
+        error("B is not positive");
 
-        if (Xfactor < 0 || Xfactor > 1)
-            error("Xfactor is not 0 or 1");
+    if (varonly < 0 || varonly > 1)
+        error("varonly is not 0 or 1");
 
-        if (tol <= DBL_MIN)
-            error("tol is not positive");
-        
-        PQ = mPQB(P, Q, 1);
-        /* Memory Names */
-        
-        PROTECT(names = allocVector(STRSXP, Table_SLOT + 1));
-        SET_STRING_ELT(names, LinearStatistic_SLOT, mkChar("LinearStatistic"));
-        SET_STRING_ELT(names, Expectation_SLOT, mkChar("Expectation"));
-        SET_STRING_ELT(names, varonly_SLOT, mkChar("varonly"));
-        SET_STRING_ELT(names, Variance_SLOT, mkChar("Variance"));
-        SET_STRING_ELT(names, Covariance_SLOT, mkChar("Covariance"));
-        SET_STRING_ELT(names, ExpectationX_SLOT, mkChar("ExpectationX"));
-        SET_STRING_ELT(names, dim_SLOT, mkChar("dimension"));
-        SET_STRING_ELT(names, ExpectationInfluence_SLOT,
-                       mkChar("ExpectationInfluence"));
-        SET_STRING_ELT(names, Xfactor_SLOT, mkChar("Xfactor"));
-        SET_STRING_ELT(names, CovarianceInfluence_SLOT,
-                       mkChar("CovarianceInfluence"));
-        SET_STRING_ELT(names, VarianceInfluence_SLOT,
-                       mkChar("VarianceInfluence"));
-        SET_STRING_ELT(names, TableBlock_SLOT, mkChar("TableBlock"));
-        SET_STRING_ELT(names, Sumweights_SLOT, mkChar("Sumweights"));
-        SET_STRING_ELT(names, PermutedLinearStatistic_SLOT,
-                       mkChar("PermutedLinearStatistic"));
-        SET_STRING_ELT(names, StandardisedPermutedLinearStatistic_SLOT,
-                       mkChar("StandardisedPermutedLinearStatistic"));
-        SET_STRING_ELT(names, tol_SLOT, mkChar("tol"));
-        SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
-        
+    if (Xfactor < 0 || Xfactor > 1)
+        error("Xfactor is not 0 or 1");
 
-        /* Table_SLOT is always last and only used in 2d case, ie omitted here */
-        PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));
-        SET_VECTOR_ELT(ans, LinearStatistic_SLOT, allocVector(REALSXP, PQ));
-        SET_VECTOR_ELT(ans, Expectation_SLOT, allocVector(REALSXP, PQ));
-        SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));
-        INTEGER(vo)[0] = varonly;
-        if (varonly) {
-            SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
-        } else  {
-            /* always return variance */
-            SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
-            SET_VECTOR_ELT(ans, Covariance_SLOT,
-                           tmp = allocVector(REALSXP, PP12(PQ)));
-        }
-        SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));
-        SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));
-        INTEGER(d)[0] = P;
-        INTEGER(d)[1] = Q;
-        SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
-                       tmp = allocVector(REALSXP, B * Q));
-        for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
+    if (tol <= DBL_MIN)
+        error("tol is not positive");
+    
+    PQ = mPQB(P, Q, 1);
+    /* Memory Names */
 
-        /* should always _both_ be there */
-        SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
-                       tmp = allocVector(REALSXP, B * Q));
-        for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
+    PROTECT(names = allocVector(STRSXP, Table_SLOT + 1));
+    SET_STRING_ELT(names, LinearStatistic_SLOT, mkChar("LinearStatistic"));
+    SET_STRING_ELT(names, Expectation_SLOT, mkChar("Expectation"));
+    SET_STRING_ELT(names, varonly_SLOT, mkChar("varonly"));
+    SET_STRING_ELT(names, Variance_SLOT, mkChar("Variance"));
+    SET_STRING_ELT(names, Covariance_SLOT, mkChar("Covariance"));
+    SET_STRING_ELT(names, ExpectationX_SLOT, mkChar("ExpectationX"));
+    SET_STRING_ELT(names, dim_SLOT, mkChar("dimension"));
+    SET_STRING_ELT(names, ExpectationInfluence_SLOT,
+                   mkChar("ExpectationInfluence"));
+    SET_STRING_ELT(names, Xfactor_SLOT, mkChar("Xfactor"));
+    SET_STRING_ELT(names, CovarianceInfluence_SLOT,
+                   mkChar("CovarianceInfluence"));
+    SET_STRING_ELT(names, VarianceInfluence_SLOT,
+                   mkChar("VarianceInfluence"));
+    SET_STRING_ELT(names, TableBlock_SLOT, mkChar("TableBlock"));
+    SET_STRING_ELT(names, Sumweights_SLOT, mkChar("Sumweights"));
+    SET_STRING_ELT(names, PermutedLinearStatistic_SLOT,
+                   mkChar("PermutedLinearStatistic"));
+    SET_STRING_ELT(names, StandardisedPermutedLinearStatistic_SLOT,
+                   mkChar("StandardisedPermutedLinearStatistic"));
+    SET_STRING_ELT(names, tol_SLOT, mkChar("tol"));
+    SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
+    
 
-        SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
-                       tmp = allocVector(REALSXP, B * Q * (Q + 1) / 2));
-        for (int q = 0; q < B * Q * (Q + 1) / 2; q++) REAL(tmp)[q] = 0.0;
+    /* Table_SLOT is always last and only used in 2d case, ie omitted here */
+    PROTECT(ans = allocVector(VECSXP, Table_SLOT + 1));
+    SET_VECTOR_ELT(ans, LinearStatistic_SLOT, allocVector(REALSXP, PQ));
+    SET_VECTOR_ELT(ans, Expectation_SLOT, allocVector(REALSXP, PQ));
+    SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));
+    INTEGER(vo)[0] = varonly;
+    if (varonly) {
+        SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
+    } else  {
+        /* always return variance */
+        SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
+        SET_VECTOR_ELT(ans, Covariance_SLOT,
+                       tmp = allocVector(REALSXP, PP12(PQ)));
+    }
+    SET_VECTOR_ELT(ans, ExpectationX_SLOT, allocVector(REALSXP, P));
+    SET_VECTOR_ELT(ans, dim_SLOT, d = allocVector(INTSXP, 2));
+    INTEGER(d)[0] = P;
+    INTEGER(d)[1] = Q;
+    SET_VECTOR_ELT(ans, ExpectationInfluence_SLOT,
+                   tmp = allocVector(REALSXP, B * Q));
+    for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
 
-        SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
-        INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
-        SET_VECTOR_ELT(ans, TableBlock_SLOT, tmp = allocVector(REALSXP, B + 1));
-        for (int q = 0; q < B + 1; q++) REAL(tmp)[q] = 0.0;
-        SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, B));
-        SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
-                       allocMatrix(REALSXP, 0, 0));
-        SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
-                       allocMatrix(REALSXP, 0, 0));
-        SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
-        REAL(tolerance)[0] = tol;
-        namesgets(ans, names);
+    /* should always _both_ be there */
+    SET_VECTOR_ELT(ans, VarianceInfluence_SLOT,
+                   tmp = allocVector(REALSXP, B * Q));
+    for (int q = 0; q < B * Q; q++) REAL(tmp)[q] = 0.0;
 
-        /* Initialise Zero */
-        
-        /* set inital zeros */
-        for (int p = 0; p < PQ; p++) {
-            C_get_LinearStatistic(ans)[p] = 0.0;
-            C_get_Expectation(ans)[p] = 0.0;
-            if (varonly)
-                C_get_Variance(ans)[p] = 0.0;
-        }
-        if (!varonly) {
-            for (int p = 0; p < PP12(PQ); p++)
-                C_get_Covariance(ans)[p] = 0.0;
-        }
-        for (int q = 0; q < Q; q++) {
-            C_get_ExpectationInfluence(ans)[q] = 0.0;
-            C_get_VarianceInfluence(ans)[q] = 0.0;
-        }
-        for (int q = 0; q < Q * (Q + 1) / 2; q++)
-            C_get_CovarianceInfluence(ans)[q] = 0.0;
-        
+    SET_VECTOR_ELT(ans, CovarianceInfluence_SLOT,
+                   tmp = allocVector(REALSXP, B * Q * (Q + 1) / 2));
+    for (int q = 0; q < B * Q * (Q + 1) / 2; q++) REAL(tmp)[q] = 0.0;
+
+    SET_VECTOR_ELT(ans, Xfactor_SLOT, allocVector(INTSXP, 1));
+    INTEGER(VECTOR_ELT(ans, Xfactor_SLOT))[0] = Xfactor;
+    SET_VECTOR_ELT(ans, TableBlock_SLOT, tmp = allocVector(REALSXP, B + 1));
+    for (int q = 0; q < B + 1; q++) REAL(tmp)[q] = 0.0;
+    SET_VECTOR_ELT(ans, Sumweights_SLOT, allocVector(REALSXP, B));
+    SET_VECTOR_ELT(ans, PermutedLinearStatistic_SLOT,
+                   allocMatrix(REALSXP, 0, 0));
+    SET_VECTOR_ELT(ans, StandardisedPermutedLinearStatistic_SLOT,
+                   allocMatrix(REALSXP, 0, 0));
+    SET_VECTOR_ELT(ans, tol_SLOT, tolerance = allocVector(REALSXP, 1));
+    REAL(tolerance)[0] = tol;
+    namesgets(ans, names);
+
+    /* Initialise Zero */
+
+    /* set inital zeros */
+    for (int p = 0; p < PQ; p++) {
+        C_get_LinearStatistic(ans)[p] = 0.0;
+        C_get_Expectation(ans)[p] = 0.0;
+        if (varonly)
+            C_get_Variance(ans)[p] = 0.0;
+    }
+    if (!varonly) {
+        for (int p = 0; p < PP12(PQ); p++)
+            C_get_Covariance(ans)[p] = 0.0;
+    }
+    for (int q = 0; q < Q; q++) {
+        C_get_ExpectationInfluence(ans)[q] = 0.0;
+        C_get_VarianceInfluence(ans)[q] = 0.0;
+    }
+    for (int q = 0; q < Q * (Q + 1) / 2; q++)
+        C_get_CovarianceInfluence(ans)[q] = 0.0;
+    
     
 
     PROTECT(tabdim = allocVector(INTSXP, 3));
@@ -1172,51 +1172,51 @@ void C_KronSums_dweights_dsubset
 (
     /* C KronSums Input */
     
-        /* C real x Input */
-        
-            double *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C real y Input */
-        
-            double *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
-        const int SYMMETRIC,
-        double *centerx,
-        double *centery,
-        const int CENTER,
+    /* C real x Input */
+
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C real y Input */
+
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
+    const int SYMMETRIC,
+    double *centerx,
+    double *centery,
+    const int CENTER,
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     double *s, *w;
@@ -1245,16 +1245,16 @@ void C_KronSums_dweights_dsubset
                 }
                 /* init subset loop */
                 
-                    R_xlen_t diff = 0;
-                    s = subset + offset;
-                    w = weights;
-                    /* subset is R-style index in 1:N */
-                    if (Nsubset > 0)
-                        diff = (R_xlen_t) s[0] - 1;
+                R_xlen_t diff = 0;
+                s = subset + offset;
+                w = weights;
+                /* subset is R-style index in 1:N */
+                if (Nsubset > 0)
+                    diff = (R_xlen_t) s[0] - 1;
                 
                 /* start subset loop */
                 
-                    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
                 
                 {
                     xx = xx + diff;
@@ -1275,15 +1275,15 @@ void C_KronSums_dweights_dsubset
                     }
                     /* continue subset loop */
                     
-                        if (Nsubset > 0) {
-                            /* NB: diff also works with R style index */
-                            diff = (R_xlen_t) s[1] - s[0];
-                            if (diff < 0)
-                                error("subset not sorted");
-                            s++;
-                        } else {
-                            diff = 1;
-                        }
+                    if (Nsubset > 0) {
+                        /* NB: diff also works with R style index */
+                        diff = (R_xlen_t) s[1] - s[0];
+                        if (diff < 0)
+                            error("subset not sorted");
+                        s++;
+                    } else {
+                        diff = 1;
+                    }
                     
                 }
                 xx = xx + diff;
@@ -1305,51 +1305,51 @@ void C_KronSums_iweights_dsubset
 (
     /* C KronSums Input */
     
-        /* C real x Input */
-        
-            double *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C real y Input */
-        
-            double *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
-        const int SYMMETRIC,
-        double *centerx,
-        double *centery,
-        const int CENTER,
+    /* C real x Input */
+
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C real y Input */
+
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
+    const int SYMMETRIC,
+    double *centerx,
+    double *centery,
+    const int CENTER,
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     double *s;
@@ -1379,16 +1379,16 @@ void C_KronSums_iweights_dsubset
                 }
                 /* init subset loop */
                 
-                    R_xlen_t diff = 0;
-                    s = subset + offset;
-                    w = weights;
-                    /* subset is R-style index in 1:N */
-                    if (Nsubset > 0)
-                        diff = (R_xlen_t) s[0] - 1;
+                R_xlen_t diff = 0;
+                s = subset + offset;
+                w = weights;
+                /* subset is R-style index in 1:N */
+                if (Nsubset > 0)
+                    diff = (R_xlen_t) s[0] - 1;
                 
                 /* start subset loop */
                 
-                    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
                 
                 {
                     xx = xx + diff;
@@ -1409,15 +1409,15 @@ void C_KronSums_iweights_dsubset
                     }
                     /* continue subset loop */
                     
-                        if (Nsubset > 0) {
-                            /* NB: diff also works with R style index */
-                            diff = (R_xlen_t) s[1] - s[0];
-                            if (diff < 0)
-                                error("subset not sorted");
-                            s++;
-                        } else {
-                            diff = 1;
-                        }
+                    if (Nsubset > 0) {
+                        /* NB: diff also works with R style index */
+                        diff = (R_xlen_t) s[1] - s[0];
+                        if (diff < 0)
+                            error("subset not sorted");
+                        s++;
+                    } else {
+                        diff = 1;
+                    }
                     
                 }
                 xx = xx + diff;
@@ -1439,51 +1439,51 @@ void C_KronSums_iweights_isubset
 (
     /* C KronSums Input */
     
-        /* C real x Input */
-        
-            double *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C real y Input */
-        
-            double *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
-        const int SYMMETRIC,
-        double *centerx,
-        double *centery,
-        const int CENTER,
+    /* C real x Input */
+
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C real y Input */
+
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
+    const int SYMMETRIC,
+    double *centerx,
+    double *centery,
+    const int CENTER,
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     int *s, *w;
@@ -1512,16 +1512,16 @@ void C_KronSums_iweights_isubset
                 }
                 /* init subset loop */
                 
-                    R_xlen_t diff = 0;
-                    s = subset + offset;
-                    w = weights;
-                    /* subset is R-style index in 1:N */
-                    if (Nsubset > 0)
-                        diff = (R_xlen_t) s[0] - 1;
+                R_xlen_t diff = 0;
+                s = subset + offset;
+                w = weights;
+                /* subset is R-style index in 1:N */
+                if (Nsubset > 0)
+                    diff = (R_xlen_t) s[0] - 1;
                 
                 /* start subset loop */
                 
-                    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
                 
                 {
                     xx = xx + diff;
@@ -1542,15 +1542,15 @@ void C_KronSums_iweights_isubset
                     }
                     /* continue subset loop */
                     
-                        if (Nsubset > 0) {
-                            /* NB: diff also works with R style index */
-                            diff = (R_xlen_t) s[1] - s[0];
-                            if (diff < 0)
-                                error("subset not sorted");
-                            s++;
-                        } else {
-                            diff = 1;
-                        }
+                    if (Nsubset > 0) {
+                        /* NB: diff also works with R style index */
+                        diff = (R_xlen_t) s[1] - s[0];
+                        if (diff < 0)
+                            error("subset not sorted");
+                        s++;
+                    } else {
+                        diff = 1;
+                    }
                     
                 }
                 xx = xx + diff;
@@ -1572,51 +1572,51 @@ void C_KronSums_dweights_isubset
 (
     /* C KronSums Input */
     
-        /* C real x Input */
-        
-            double *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C real y Input */
-        
-            double *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
-        const int SYMMETRIC,
-        double *centerx,
-        double *centery,
-        const int CENTER,
+    /* C real x Input */
+
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C real y Input */
+
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
+    const int SYMMETRIC,
+    double *centerx,
+    double *centery,
+    const int CENTER,
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     int *s;
@@ -1646,16 +1646,16 @@ void C_KronSums_dweights_isubset
                 }
                 /* init subset loop */
                 
-                    R_xlen_t diff = 0;
-                    s = subset + offset;
-                    w = weights;
-                    /* subset is R-style index in 1:N */
-                    if (Nsubset > 0)
-                        diff = (R_xlen_t) s[0] - 1;
+                R_xlen_t diff = 0;
+                s = subset + offset;
+                w = weights;
+                /* subset is R-style index in 1:N */
+                if (Nsubset > 0)
+                    diff = (R_xlen_t) s[0] - 1;
                 
                 /* start subset loop */
                 
-                    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
                 
                 {
                     xx = xx + diff;
@@ -1676,15 +1676,15 @@ void C_KronSums_dweights_isubset
                     }
                     /* continue subset loop */
                     
-                        if (Nsubset > 0) {
-                            /* NB: diff also works with R style index */
-                            diff = (R_xlen_t) s[1] - s[0];
-                            if (diff < 0)
-                                error("subset not sorted");
-                            s++;
-                        } else {
-                            diff = 1;
-                        }
+                    if (Nsubset > 0) {
+                        /* NB: diff also works with R style index */
+                        diff = (R_xlen_t) s[1] - s[0];
+                        if (diff < 0)
+                            error("subset not sorted");
+                        s++;
+                    } else {
+                        diff = 1;
+                    }
                     
                 }
                 xx = xx + diff;
@@ -1706,98 +1706,74 @@ void C_XfactorKronSums_dweights_dsubset
 (
     /* C XfactorKronSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C real y Input */
-        
-            double *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C real y Input */
+
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     double *s, *w;
     /* XfactorKronSums Body */
     
-        int *xx, ixi;
-        double *yy;
+    int *xx, ixi;
+    double *yy;
 
-        for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
-        for (int q = 0; q < Q; q++) {
-            yy = y + N * q;
-            xx = x;
-            /* init subset loop */
-            
-                R_xlen_t diff = 0;
-                s = subset + offset;
-                w = weights;
-                /* subset is R-style index in 1:N */
-                if (Nsubset > 0)
-                    diff = (R_xlen_t) s[0] - 1;
-            
-            /* start subset loop */
-            
-                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-            
-            {
-                xx = xx + diff;
-                yy = yy + diff;
-                ixi = xx[0] - 1;
-                if (HAS_WEIGHTS) {
-                    w = w + diff;
-                    if (ixi >= 0)
-                        PQ_ans[ixi + q * P] += yy[0] * w[0];
-                } else {
-                    if (ixi >= 0)
-                        PQ_ans[ixi + q * P] += yy[0];
-                }
-                /* continue subset loop */
-                
-                    if (Nsubset > 0) {
-                        /* NB: diff also works with R style index */
-                        diff = (R_xlen_t) s[1] - s[0];
-                        if (diff < 0)
-                            error("subset not sorted");
-                        s++;
-                    } else {
-                        diff = 1;
-                    }
-                
-            }
+    for (int q = 0; q < Q; q++) {
+        yy = y + N * q;
+        xx = x;
+        /* init subset loop */
+        
+        R_xlen_t diff = 0;
+        s = subset + offset;
+        w = weights;
+        /* subset is R-style index in 1:N */
+        if (Nsubset > 0)
+            diff = (R_xlen_t) s[0] - 1;
+        
+        /* start subset loop */
+        
+        for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+        
+        {
             xx = xx + diff;
             yy = yy + diff;
             ixi = xx[0] - 1;
@@ -1809,7 +1785,31 @@ void C_XfactorKronSums_dweights_dsubset
                 if (ixi >= 0)
                     PQ_ans[ixi + q * P] += yy[0];
             }
+            /* continue subset loop */
+            
+            if (Nsubset > 0) {
+                /* NB: diff also works with R style index */
+                diff = (R_xlen_t) s[1] - s[0];
+                if (diff < 0)
+                    error("subset not sorted");
+                s++;
+            } else {
+                diff = 1;
+            }
+            
         }
+        xx = xx + diff;
+        yy = yy + diff;
+        ixi = xx[0] - 1;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            if (ixi >= 0)
+                PQ_ans[ixi + q * P] += yy[0] * w[0];
+        } else {
+            if (ixi >= 0)
+                PQ_ans[ixi + q * P] += yy[0];
+        }
+    }
     
 }
 
@@ -1819,99 +1819,75 @@ void C_XfactorKronSums_iweights_dsubset
 (
     /* C XfactorKronSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C real y Input */
-        
-            double *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C real y Input */
+
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     double *s;
     int *w;
     /* XfactorKronSums Body */
     
-        int *xx, ixi;
-        double *yy;
+    int *xx, ixi;
+    double *yy;
 
-        for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
-        for (int q = 0; q < Q; q++) {
-            yy = y + N * q;
-            xx = x;
-            /* init subset loop */
-            
-                R_xlen_t diff = 0;
-                s = subset + offset;
-                w = weights;
-                /* subset is R-style index in 1:N */
-                if (Nsubset > 0)
-                    diff = (R_xlen_t) s[0] - 1;
-            
-            /* start subset loop */
-            
-                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-            
-            {
-                xx = xx + diff;
-                yy = yy + diff;
-                ixi = xx[0] - 1;
-                if (HAS_WEIGHTS) {
-                    w = w + diff;
-                    if (ixi >= 0)
-                        PQ_ans[ixi + q * P] += yy[0] * w[0];
-                } else {
-                    if (ixi >= 0)
-                        PQ_ans[ixi + q * P] += yy[0];
-                }
-                /* continue subset loop */
-                
-                    if (Nsubset > 0) {
-                        /* NB: diff also works with R style index */
-                        diff = (R_xlen_t) s[1] - s[0];
-                        if (diff < 0)
-                            error("subset not sorted");
-                        s++;
-                    } else {
-                        diff = 1;
-                    }
-                
-            }
+    for (int q = 0; q < Q; q++) {
+        yy = y + N * q;
+        xx = x;
+        /* init subset loop */
+        
+        R_xlen_t diff = 0;
+        s = subset + offset;
+        w = weights;
+        /* subset is R-style index in 1:N */
+        if (Nsubset > 0)
+            diff = (R_xlen_t) s[0] - 1;
+        
+        /* start subset loop */
+        
+        for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+        
+        {
             xx = xx + diff;
             yy = yy + diff;
             ixi = xx[0] - 1;
@@ -1923,7 +1899,31 @@ void C_XfactorKronSums_iweights_dsubset
                 if (ixi >= 0)
                     PQ_ans[ixi + q * P] += yy[0];
             }
+            /* continue subset loop */
+            
+            if (Nsubset > 0) {
+                /* NB: diff also works with R style index */
+                diff = (R_xlen_t) s[1] - s[0];
+                if (diff < 0)
+                    error("subset not sorted");
+                s++;
+            } else {
+                diff = 1;
+            }
+            
         }
+        xx = xx + diff;
+        yy = yy + diff;
+        ixi = xx[0] - 1;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            if (ixi >= 0)
+                PQ_ans[ixi + q * P] += yy[0] * w[0];
+        } else {
+            if (ixi >= 0)
+                PQ_ans[ixi + q * P] += yy[0];
+        }
+    }
     
 }
 
@@ -1933,98 +1933,74 @@ void C_XfactorKronSums_iweights_isubset
 (
     /* C XfactorKronSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C real y Input */
-        
-            double *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C real y Input */
+
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     int *s, *w;
     /* XfactorKronSums Body */
     
-        int *xx, ixi;
-        double *yy;
+    int *xx, ixi;
+    double *yy;
 
-        for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
-        for (int q = 0; q < Q; q++) {
-            yy = y + N * q;
-            xx = x;
-            /* init subset loop */
-            
-                R_xlen_t diff = 0;
-                s = subset + offset;
-                w = weights;
-                /* subset is R-style index in 1:N */
-                if (Nsubset > 0)
-                    diff = (R_xlen_t) s[0] - 1;
-            
-            /* start subset loop */
-            
-                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-            
-            {
-                xx = xx + diff;
-                yy = yy + diff;
-                ixi = xx[0] - 1;
-                if (HAS_WEIGHTS) {
-                    w = w + diff;
-                    if (ixi >= 0)
-                        PQ_ans[ixi + q * P] += yy[0] * w[0];
-                } else {
-                    if (ixi >= 0)
-                        PQ_ans[ixi + q * P] += yy[0];
-                }
-                /* continue subset loop */
-                
-                    if (Nsubset > 0) {
-                        /* NB: diff also works with R style index */
-                        diff = (R_xlen_t) s[1] - s[0];
-                        if (diff < 0)
-                            error("subset not sorted");
-                        s++;
-                    } else {
-                        diff = 1;
-                    }
-                
-            }
+    for (int q = 0; q < Q; q++) {
+        yy = y + N * q;
+        xx = x;
+        /* init subset loop */
+        
+        R_xlen_t diff = 0;
+        s = subset + offset;
+        w = weights;
+        /* subset is R-style index in 1:N */
+        if (Nsubset > 0)
+            diff = (R_xlen_t) s[0] - 1;
+        
+        /* start subset loop */
+        
+        for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+        
+        {
             xx = xx + diff;
             yy = yy + diff;
             ixi = xx[0] - 1;
@@ -2036,7 +2012,31 @@ void C_XfactorKronSums_iweights_isubset
                 if (ixi >= 0)
                     PQ_ans[ixi + q * P] += yy[0];
             }
+            /* continue subset loop */
+            
+            if (Nsubset > 0) {
+                /* NB: diff also works with R style index */
+                diff = (R_xlen_t) s[1] - s[0];
+                if (diff < 0)
+                    error("subset not sorted");
+                s++;
+            } else {
+                diff = 1;
+            }
+            
         }
+        xx = xx + diff;
+        yy = yy + diff;
+        ixi = xx[0] - 1;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            if (ixi >= 0)
+                PQ_ans[ixi + q * P] += yy[0] * w[0];
+        } else {
+            if (ixi >= 0)
+                PQ_ans[ixi + q * P] += yy[0];
+        }
+    }
     
 }
 
@@ -2046,99 +2046,75 @@ void C_XfactorKronSums_dweights_isubset
 (
     /* C XfactorKronSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C real y Input */
-        
-            double *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C real y Input */
+
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     int *s;
     double *w;
     /* XfactorKronSums Body */
     
-        int *xx, ixi;
-        double *yy;
+    int *xx, ixi;
+    double *yy;
 
-        for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
-        for (int q = 0; q < Q; q++) {
-            yy = y + N * q;
-            xx = x;
-            /* init subset loop */
-            
-                R_xlen_t diff = 0;
-                s = subset + offset;
-                w = weights;
-                /* subset is R-style index in 1:N */
-                if (Nsubset > 0)
-                    diff = (R_xlen_t) s[0] - 1;
-            
-            /* start subset loop */
-            
-                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-            
-            {
-                xx = xx + diff;
-                yy = yy + diff;
-                ixi = xx[0] - 1;
-                if (HAS_WEIGHTS) {
-                    w = w + diff;
-                    if (ixi >= 0)
-                        PQ_ans[ixi + q * P] += yy[0] * w[0];
-                } else {
-                    if (ixi >= 0)
-                        PQ_ans[ixi + q * P] += yy[0];
-                }
-                /* continue subset loop */
-                
-                    if (Nsubset > 0) {
-                        /* NB: diff also works with R style index */
-                        diff = (R_xlen_t) s[1] - s[0];
-                        if (diff < 0)
-                            error("subset not sorted");
-                        s++;
-                    } else {
-                        diff = 1;
-                    }
-                
-            }
+    for (int q = 0; q < Q; q++) {
+        yy = y + N * q;
+        xx = x;
+        /* init subset loop */
+        
+        R_xlen_t diff = 0;
+        s = subset + offset;
+        w = weights;
+        /* subset is R-style index in 1:N */
+        if (Nsubset > 0)
+            diff = (R_xlen_t) s[0] - 1;
+        
+        /* start subset loop */
+        
+        for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+        
+        {
             xx = xx + diff;
             yy = yy + diff;
             ixi = xx[0] - 1;
@@ -2150,7 +2126,31 @@ void C_XfactorKronSums_dweights_isubset
                 if (ixi >= 0)
                     PQ_ans[ixi + q * P] += yy[0];
             }
+            /* continue subset loop */
+            
+            if (Nsubset > 0) {
+                /* NB: diff also works with R style index */
+                diff = (R_xlen_t) s[1] - s[0];
+                if (diff < 0)
+                    error("subset not sorted");
+                s++;
+            } else {
+                diff = 1;
+            }
+            
         }
+        xx = xx + diff;
+        yy = yy + diff;
+        ixi = xx[0] - 1;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            if (ixi >= 0)
+                PQ_ans[ixi + q * P] += yy[0] * w[0];
+        } else {
+            if (ixi >= 0)
+                PQ_ans[ixi + q * P] += yy[0];
+        }
+    }
     
 }
 
@@ -2162,50 +2162,50 @@ void RC_KronSums
 (
     /* RC KronSums Input */
     
-        /* R x Input */
-        
-            SEXP x,
-        
-        /* C integer N Input */
-        
-            R_xlen_t N
-        ,
-        /* C integer P Input */
-        
-            int P
-        ,
-        /* C real y Input */
-        
-            double *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
-        const int SYMMETRIC,
-        double *centerx,
-        double *centery,
-        const int CENTER,
+    /* R x Input */
+
+    SEXP x,
+    
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    /* C real y Input */
+
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
+    const int SYMMETRIC,
+    double *centerx,
+    double *centery,
+    const int CENTER,
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     ,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 )
 
@@ -2273,20 +2273,20 @@ SEXP R_KronSums
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     SEXP P,
     /* R y Input */
     
-        SEXP y,
+    SEXP y,
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     SEXP symmetric
 )
@@ -2295,15 +2295,15 @@ SEXP R_KronSums
     SEXP ans;
     /* C integer Q Input */
     
-        int Q
+    int Q
     ;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
 
     double center;
@@ -2329,58 +2329,58 @@ void C_KronSums_Permutation_isubset
 (
     /* C real x Input */
     
-        double *x,
-        /* C integer N Input */
-        
-            R_xlen_t N
-        ,
-        /* C integer P Input */
-        
-            int P
-        ,
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
     
     /* C real y Input */
     
-        double *y,
-        /* C integer Q Input */
-        
-            int Q
-        ,
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     int *subsety,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     /* KronSums Permutation Body */
     
-        R_xlen_t qP, qN, pN, qPp;
+    R_xlen_t qP, qN, pN, qPp;
 
-        for (int q = 0; q < Q; q++) {
-            qN = q * N;
-            qP = q * P;
-            for (int p = 0; p < P; p++) {
-                qPp = qP + p;
-                PQ_ans[qPp] = 0.0;
-                pN = p * N;
-                for (R_xlen_t i = offset; i < Nsubset; i++)
-                    PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] *
-                                   x[pN + (R_xlen_t) subset[i] - 1];
-            }
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) {
+            qPp = qP + p;
+            PQ_ans[qPp] = 0.0;
+            pN = p * N;
+            for (R_xlen_t i = offset; i < Nsubset; i++)
+                PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] *
+                               x[pN + (R_xlen_t) subset[i] - 1];
         }
+    }
     
 }
 
@@ -2390,58 +2390,58 @@ void C_KronSums_Permutation_dsubset
 (
     /* C real x Input */
     
-        double *x,
-        /* C integer N Input */
-        
-            R_xlen_t N
-        ,
-        /* C integer P Input */
-        
-            int P
-        ,
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
     
     /* C real y Input */
     
-        double *y,
-        /* C integer Q Input */
-        
-            int Q
-        ,
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     double *subsety,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     /* KronSums Permutation Body */
     
-        R_xlen_t qP, qN, pN, qPp;
+    R_xlen_t qP, qN, pN, qPp;
 
-        for (int q = 0; q < Q; q++) {
-            qN = q * N;
-            qP = q * P;
-            for (int p = 0; p < P; p++) {
-                qPp = qP + p;
-                PQ_ans[qPp] = 0.0;
-                pN = p * N;
-                for (R_xlen_t i = offset; i < Nsubset; i++)
-                    PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] *
-                                   x[pN + (R_xlen_t) subset[i] - 1];
-            }
+    for (int q = 0; q < Q; q++) {
+        qN = q * N;
+        qP = q * P;
+        for (int p = 0; p < P; p++) {
+            qPp = qP + p;
+            PQ_ans[qPp] = 0.0;
+            pN = p * N;
+            for (R_xlen_t i = offset; i < Nsubset; i++)
+                PQ_ans[qPp] += y[qN + (R_xlen_t) subsety[i] - 1] *
+                               x[pN + (R_xlen_t) subset[i] - 1];
         }
+    }
     
 }
 
@@ -2451,54 +2451,54 @@ void C_XfactorKronSums_Permutation_isubset
 (
     /* C integer x Input */
     
-        int *x,
-        /* C integer N Input */
-        
-            R_xlen_t N
-        ,
-        /* C integer P Input */
-        
-            int P
-        ,
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
     
     /* C real y Input */
     
-        double *y,
-        /* C integer Q Input */
-        
-            int Q
-        ,
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     int *subsety,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     /* XfactorKronSums Permutation Body */
     
-        R_xlen_t qP, qN;
+    R_xlen_t qP, qN;
 
-        for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
-        for (int q = 0; q < Q; q++) {
-            qP = q * P;
-            qN = q * N;
-            for (R_xlen_t i = offset; i < Nsubset; i++)
-                PQ_ans[x[(R_xlen_t) subset[i] - 1] - 1 + qP] += y[qN + (R_xlen_t) subsety[i] - 1];
-        }
+    for (int q = 0; q < Q; q++) {
+        qP = q * P;
+        qN = q * N;
+        for (R_xlen_t i = offset; i < Nsubset; i++)
+            PQ_ans[x[(R_xlen_t) subset[i] - 1] - 1 + qP] += y[qN + (R_xlen_t) subsety[i] - 1];
+    }
     
 }
 
@@ -2508,54 +2508,54 @@ void C_XfactorKronSums_Permutation_dsubset
 (
     /* C integer x Input */
     
-        int *x,
-        /* C integer N Input */
-        
-            R_xlen_t N
-        ,
-        /* C integer P Input */
-        
-            int P
-        ,
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
     
     /* C real y Input */
     
-        double *y,
-        /* C integer Q Input */
-        
-            int Q
-        ,
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     double *subsety,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     /* XfactorKronSums Permutation Body */
     
-        R_xlen_t qP, qN;
+    R_xlen_t qP, qN;
 
-        for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
-        for (int q = 0; q < Q; q++) {
-            qP = q * P;
-            qN = q * N;
-            for (R_xlen_t i = offset; i < Nsubset; i++)
-                PQ_ans[x[(R_xlen_t) subset[i] - 1] - 1 + qP] += y[qN + (R_xlen_t) subsety[i] - 1];
-        }
+    for (int q = 0; q < Q; q++) {
+        qP = q * P;
+        qN = q * N;
+        for (R_xlen_t i = offset; i < Nsubset; i++)
+            PQ_ans[x[(R_xlen_t) subset[i] - 1] - 1 + qP] += y[qN + (R_xlen_t) subsety[i] - 1];
+    }
     
 }
 
@@ -2567,40 +2567,40 @@ void RC_KronSums_Permutation
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* C integer P Input */
     
-        int P
+    int P
     ,
     /* C real y Input */
     
-        double *y,
-        /* C integer Q Input */
-        
-            int Q
-        ,
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
     
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     ,
     SEXP subsety,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 )
 
@@ -2614,7 +2614,7 @@ void RC_KronSums_Permutation
             C_XfactorKronSums_Permutation_dsubset(INTEGER(x), N, P, y, Q,
                                                   REAL(subset), offset, Nsubset,
                                                   REAL(subsety), PQ_ans);
-    }
+        }
     } else {
         if (TYPEOF(subset) == INTSXP) {
             C_KronSums_Permutation_isubset(REAL(x), N, P, y, Q,
@@ -2636,16 +2636,16 @@ SEXP R_KronSums_Permutation
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     SEXP P,
     /* R y Input */
     
-        SEXP y,
+    SEXP y,
     
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     SEXP subsety
 )
@@ -2654,15 +2654,15 @@ SEXP R_KronSums_Permutation
     SEXP ans;
     /* C integer Q Input */
     
-        int Q
+    int Q
     ;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
 
     Q = NCOL(y);
@@ -2685,89 +2685,69 @@ void C_colSums_dweights_dsubset
 (
     /* C colSums Input */
     
-        /* C real x Input */
-        
-            double *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        const int power,
-        double *centerx,
-        const int CENTER,
+    /* C real x Input */
+
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    const int power,
+    double *centerx,
+    const int CENTER,
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C colSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 ) {
     double *s, *w;
     /* colSums Body */
     
-        double *xx, cx = 0.0;
+    double *xx, cx = 0.0;
 
-        for (int p = 0; p < P; p++) {
-            P_ans[0] = 0.0;
-            xx = x + N * p;
-            if (CENTER) {
-                cx = centerx[p];
-            }
-            /* init subset loop */
-            
-                R_xlen_t diff = 0;
-                s = subset + offset;
-                w = weights;
-                /* subset is R-style index in 1:N */
-                if (Nsubset > 0)
-                    diff = (R_xlen_t) s[0] - 1;
-            
-            /* start subset loop */
-            
-                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-            
-            {
-                xx = xx + diff;
-                if (HAS_WEIGHTS) {
-                    w = w + diff;
-                    P_ans[0] += pow(xx[0] - cx, power) * w[0];
-                } else {
-                    P_ans[0] += pow(xx[0] - cx, power);
-                }
-                /* continue subset loop */
-                
-                    if (Nsubset > 0) {
-                        /* NB: diff also works with R style index */
-                        diff = (R_xlen_t) s[1] - s[0];
-                        if (diff < 0)
-                            error("subset not sorted");
-                        s++;
-                    } else {
-                        diff = 1;
-                    }
-                
-            }
+    for (int p = 0; p < P; p++) {
+        P_ans[0] = 0.0;
+        xx = x + N * p;
+        if (CENTER) {
+            cx = centerx[p];
+        }
+        /* init subset loop */
+        
+        R_xlen_t diff = 0;
+        s = subset + offset;
+        w = weights;
+        /* subset is R-style index in 1:N */
+        if (Nsubset > 0)
+            diff = (R_xlen_t) s[0] - 1;
+        
+        /* start subset loop */
+        
+        for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+        
+        {
             xx = xx + diff;
             if (HAS_WEIGHTS) {
                 w = w + diff;
@@ -2775,8 +2755,28 @@ void C_colSums_dweights_dsubset
             } else {
                 P_ans[0] += pow(xx[0] - cx, power);
             }
-            P_ans++;
+            /* continue subset loop */
+            
+            if (Nsubset > 0) {
+                /* NB: diff also works with R style index */
+                diff = (R_xlen_t) s[1] - s[0];
+                if (diff < 0)
+                    error("subset not sorted");
+                s++;
+            } else {
+                diff = 1;
+            }
+            
         }
+        xx = xx + diff;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            P_ans[0] += pow(xx[0] - cx, power) * w[0];
+        } else {
+            P_ans[0] += pow(xx[0] - cx, power);
+        }
+        P_ans++;
+    }
     
 }
 
@@ -2786,90 +2786,70 @@ void C_colSums_iweights_dsubset
 (
     /* C colSums Input */
     
-        /* C real x Input */
-        
-            double *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        const int power,
-        double *centerx,
-        const int CENTER,
+    /* C real x Input */
+
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    const int power,
+    double *centerx,
+    const int CENTER,
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C colSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 ) {
     double *s;
     int *w;
     /* colSums Body */
     
-        double *xx, cx = 0.0;
+    double *xx, cx = 0.0;
 
-        for (int p = 0; p < P; p++) {
-            P_ans[0] = 0.0;
-            xx = x + N * p;
-            if (CENTER) {
-                cx = centerx[p];
-            }
-            /* init subset loop */
-            
-                R_xlen_t diff = 0;
-                s = subset + offset;
-                w = weights;
-                /* subset is R-style index in 1:N */
-                if (Nsubset > 0)
-                    diff = (R_xlen_t) s[0] - 1;
-            
-            /* start subset loop */
-            
-                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-            
-            {
-                xx = xx + diff;
-                if (HAS_WEIGHTS) {
-                    w = w + diff;
-                    P_ans[0] += pow(xx[0] - cx, power) * w[0];
-                } else {
-                    P_ans[0] += pow(xx[0] - cx, power);
-                }
-                /* continue subset loop */
-                
-                    if (Nsubset > 0) {
-                        /* NB: diff also works with R style index */
-                        diff = (R_xlen_t) s[1] - s[0];
-                        if (diff < 0)
-                            error("subset not sorted");
-                        s++;
-                    } else {
-                        diff = 1;
-                    }
-                
-            }
+    for (int p = 0; p < P; p++) {
+        P_ans[0] = 0.0;
+        xx = x + N * p;
+        if (CENTER) {
+            cx = centerx[p];
+        }
+        /* init subset loop */
+        
+        R_xlen_t diff = 0;
+        s = subset + offset;
+        w = weights;
+        /* subset is R-style index in 1:N */
+        if (Nsubset > 0)
+            diff = (R_xlen_t) s[0] - 1;
+        
+        /* start subset loop */
+        
+        for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+        
+        {
             xx = xx + diff;
             if (HAS_WEIGHTS) {
                 w = w + diff;
@@ -2877,8 +2857,28 @@ void C_colSums_iweights_dsubset
             } else {
                 P_ans[0] += pow(xx[0] - cx, power);
             }
-            P_ans++;
+            /* continue subset loop */
+            
+            if (Nsubset > 0) {
+                /* NB: diff also works with R style index */
+                diff = (R_xlen_t) s[1] - s[0];
+                if (diff < 0)
+                    error("subset not sorted");
+                s++;
+            } else {
+                diff = 1;
+            }
+            
         }
+        xx = xx + diff;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            P_ans[0] += pow(xx[0] - cx, power) * w[0];
+        } else {
+            P_ans[0] += pow(xx[0] - cx, power);
+        }
+        P_ans++;
+    }
     
 }
 
@@ -2888,89 +2888,69 @@ void C_colSums_iweights_isubset
 (
     /* C colSums Input */
     
-        /* C real x Input */
-        
-            double *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        const int power,
-        double *centerx,
-        const int CENTER,
+    /* C real x Input */
+
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    const int power,
+    double *centerx,
+    const int CENTER,
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C colSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 ) {
     int *s, *w;
     /* colSums Body */
     
-        double *xx, cx = 0.0;
+    double *xx, cx = 0.0;
 
-        for (int p = 0; p < P; p++) {
-            P_ans[0] = 0.0;
-            xx = x + N * p;
-            if (CENTER) {
-                cx = centerx[p];
-            }
-            /* init subset loop */
-            
-                R_xlen_t diff = 0;
-                s = subset + offset;
-                w = weights;
-                /* subset is R-style index in 1:N */
-                if (Nsubset > 0)
-                    diff = (R_xlen_t) s[0] - 1;
-            
-            /* start subset loop */
-            
-                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-            
-            {
-                xx = xx + diff;
-                if (HAS_WEIGHTS) {
-                    w = w + diff;
-                    P_ans[0] += pow(xx[0] - cx, power) * w[0];
-                } else {
-                    P_ans[0] += pow(xx[0] - cx, power);
-                }
-                /* continue subset loop */
-                
-                    if (Nsubset > 0) {
-                        /* NB: diff also works with R style index */
-                        diff = (R_xlen_t) s[1] - s[0];
-                        if (diff < 0)
-                            error("subset not sorted");
-                        s++;
-                    } else {
-                        diff = 1;
-                    }
-                
-            }
+    for (int p = 0; p < P; p++) {
+        P_ans[0] = 0.0;
+        xx = x + N * p;
+        if (CENTER) {
+            cx = centerx[p];
+        }
+        /* init subset loop */
+        
+        R_xlen_t diff = 0;
+        s = subset + offset;
+        w = weights;
+        /* subset is R-style index in 1:N */
+        if (Nsubset > 0)
+            diff = (R_xlen_t) s[0] - 1;
+        
+        /* start subset loop */
+        
+        for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+        
+        {
             xx = xx + diff;
             if (HAS_WEIGHTS) {
                 w = w + diff;
@@ -2978,8 +2958,28 @@ void C_colSums_iweights_isubset
             } else {
                 P_ans[0] += pow(xx[0] - cx, power);
             }
-            P_ans++;
+            /* continue subset loop */
+            
+            if (Nsubset > 0) {
+                /* NB: diff also works with R style index */
+                diff = (R_xlen_t) s[1] - s[0];
+                if (diff < 0)
+                    error("subset not sorted");
+                s++;
+            } else {
+                diff = 1;
+            }
+            
         }
+        xx = xx + diff;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            P_ans[0] += pow(xx[0] - cx, power) * w[0];
+        } else {
+            P_ans[0] += pow(xx[0] - cx, power);
+        }
+        P_ans++;
+    }
     
 }
 
@@ -2989,90 +2989,70 @@ void C_colSums_dweights_isubset
 (
     /* C colSums Input */
     
-        /* C real x Input */
-        
-            double *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        const int power,
-        double *centerx,
-        const int CENTER,
+    /* C real x Input */
+
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    const int power,
+    double *centerx,
+    const int CENTER,
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C colSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 ) {
     int *s;
     double *w;
     /* colSums Body */
     
-        double *xx, cx = 0.0;
+    double *xx, cx = 0.0;
 
-        for (int p = 0; p < P; p++) {
-            P_ans[0] = 0.0;
-            xx = x + N * p;
-            if (CENTER) {
-                cx = centerx[p];
-            }
-            /* init subset loop */
-            
-                R_xlen_t diff = 0;
-                s = subset + offset;
-                w = weights;
-                /* subset is R-style index in 1:N */
-                if (Nsubset > 0)
-                    diff = (R_xlen_t) s[0] - 1;
-            
-            /* start subset loop */
-            
-                for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-            
-            {
-                xx = xx + diff;
-                if (HAS_WEIGHTS) {
-                    w = w + diff;
-                    P_ans[0] += pow(xx[0] - cx, power) * w[0];
-                } else {
-                    P_ans[0] += pow(xx[0] - cx, power);
-                }
-                /* continue subset loop */
-                
-                    if (Nsubset > 0) {
-                        /* NB: diff also works with R style index */
-                        diff = (R_xlen_t) s[1] - s[0];
-                        if (diff < 0)
-                            error("subset not sorted");
-                        s++;
-                    } else {
-                        diff = 1;
-                    }
-                
-            }
+    for (int p = 0; p < P; p++) {
+        P_ans[0] = 0.0;
+        xx = x + N * p;
+        if (CENTER) {
+            cx = centerx[p];
+        }
+        /* init subset loop */
+        
+        R_xlen_t diff = 0;
+        s = subset + offset;
+        w = weights;
+        /* subset is R-style index in 1:N */
+        if (Nsubset > 0)
+            diff = (R_xlen_t) s[0] - 1;
+        
+        /* start subset loop */
+        
+        for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+        
+        {
             xx = xx + diff;
             if (HAS_WEIGHTS) {
                 w = w + diff;
@@ -3080,8 +3060,28 @@ void C_colSums_dweights_isubset
             } else {
                 P_ans[0] += pow(xx[0] - cx, power);
             }
-            P_ans++;
+            /* continue subset loop */
+            
+            if (Nsubset > 0) {
+                /* NB: diff also works with R style index */
+                diff = (R_xlen_t) s[1] - s[0];
+                if (diff < 0)
+                    error("subset not sorted");
+                s++;
+            } else {
+                diff = 1;
+            }
+            
         }
+        xx = xx + diff;
+        if (HAS_WEIGHTS) {
+            w = w + diff;
+            P_ans[0] += pow(xx[0] - cx, power) * w[0];
+        } else {
+            P_ans[0] += pow(xx[0] - cx, power);
+        }
+        P_ans++;
+    }
     
 }
 
@@ -3093,41 +3093,41 @@ void RC_colSums
 (
     /* C colSums Input */
     
-        /* C real x Input */
-        
-            double *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        const int power,
-        double *centerx,
-        const int CENTER,
+    /* C real x Input */
+
+    double *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    const int power,
+    double *centerx,
+    const int CENTER,
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     ,
     /* C colSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 )
 
@@ -3135,22 +3135,22 @@ void RC_colSums
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
             C_colSums_iweights_isubset(x, N, P, power, centerx, CENTER,
-                                        INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),
-                                        offset, Nsubset, P_ans);
+                                       INTEGER(weights), XLENGTH(weights) > 0, INTEGER(subset),
+                                       offset, Nsubset, P_ans);
         } else {
             C_colSums_iweights_dsubset(x, N, P, power, centerx, CENTER,
-                                        INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),
-                                        offset, Nsubset, P_ans);
+                                       INTEGER(weights), XLENGTH(weights) > 0, REAL(subset),
+                                       offset, Nsubset, P_ans);
         }
     } else {
         if (TYPEOF(subset) == INTSXP) {
             C_colSums_dweights_isubset(x, N, P, power, centerx, CENTER,
-                                        REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),
-                                        offset, Nsubset, P_ans);
+                                       REAL(weights), XLENGTH(weights) > 0, INTEGER(subset),
+                                       offset, Nsubset, P_ans);
         } else {
             C_colSums_dweights_dsubset(x, N, P, power, centerx, CENTER,
-                                        REAL(weights), XLENGTH(weights) > 0, REAL(subset),
-                                        offset, Nsubset, P_ans);
+                                       REAL(weights), XLENGTH(weights) > 0, REAL(subset),
+                                       offset, Nsubset, P_ans);
         }
     }
 }
@@ -3163,15 +3163,15 @@ SEXP R_colSums
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     
 )
 
@@ -3180,11 +3180,11 @@ SEXP R_colSums
     int P;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
     double center;
 
@@ -3208,70 +3208,70 @@ double C_Sums_dweights_dsubset
 (
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     
 ) {
     double *s, *w;
     /* Sums Body */
     
-        double ans = 0.0;
+    double ans = 0.0;
 
-        if (Nsubset > 0) {
-            if (!HAS_WEIGHTS) return((double) Nsubset);
-        } else {
-            if (!HAS_WEIGHTS) return((double) N);
-        }
+    if (Nsubset > 0) {
+        if (!HAS_WEIGHTS) return((double) Nsubset);
+    } else {
+        if (!HAS_WEIGHTS) return((double) N);
+    }
 
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            w = w + diff;
-            ans += w[0];
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         w = w + diff;
         ans += w[0];
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    w = w + diff;
+    ans += w[0];
 
-        return(ans);
+    return(ans);
     
 }
 
@@ -3281,71 +3281,71 @@ double C_Sums_iweights_dsubset
 (
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     
 ) {
     double *s;
     int *w;
     /* Sums Body */
     
-        double ans = 0.0;
+    double ans = 0.0;
 
-        if (Nsubset > 0) {
-            if (!HAS_WEIGHTS) return((double) Nsubset);
-        } else {
-            if (!HAS_WEIGHTS) return((double) N);
-        }
+    if (Nsubset > 0) {
+        if (!HAS_WEIGHTS) return((double) Nsubset);
+    } else {
+        if (!HAS_WEIGHTS) return((double) N);
+    }
 
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            w = w + diff;
-            ans += w[0];
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         w = w + diff;
         ans += w[0];
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    w = w + diff;
+    ans += w[0];
 
-        return(ans);
+    return(ans);
     
 }
 
@@ -3355,70 +3355,70 @@ double C_Sums_iweights_isubset
 (
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     
 ) {
     int *s, *w;
     /* Sums Body */
     
-        double ans = 0.0;
+    double ans = 0.0;
 
-        if (Nsubset > 0) {
-            if (!HAS_WEIGHTS) return((double) Nsubset);
-        } else {
-            if (!HAS_WEIGHTS) return((double) N);
-        }
+    if (Nsubset > 0) {
+        if (!HAS_WEIGHTS) return((double) Nsubset);
+    } else {
+        if (!HAS_WEIGHTS) return((double) N);
+    }
 
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            w = w + diff;
-            ans += w[0];
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         w = w + diff;
         ans += w[0];
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    w = w + diff;
+    ans += w[0];
 
-        return(ans);
+    return(ans);
     
 }
 
@@ -3428,71 +3428,71 @@ double C_Sums_dweights_isubset
 (
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     
 ) {
     int *s;
     double *w;
     /* Sums Body */
     
-        double ans = 0.0;
+    double ans = 0.0;
 
-        if (Nsubset > 0) {
-            if (!HAS_WEIGHTS) return((double) Nsubset);
-        } else {
-            if (!HAS_WEIGHTS) return((double) N);
-        }
+    if (Nsubset > 0) {
+        if (!HAS_WEIGHTS) return((double) Nsubset);
+    } else {
+        if (!HAS_WEIGHTS) return((double) N);
+    }
 
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            w = w + diff;
-            ans += w[0];
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         w = w + diff;
         ans += w[0];
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    w = w + diff;
+    ans += w[0];
 
-        return(ans);
+    return(ans);
     
 }
 
@@ -3504,23 +3504,23 @@ double RC_Sums
 (
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     
 )
 
@@ -3559,15 +3559,15 @@ SEXP R_Sums
 (
     /* R N Input */
     
-        SEXP N,
+    SEXP N,
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     
 )
 
@@ -3575,7 +3575,7 @@ SEXP R_Sums
     SEXP ans;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
 
     Nsubset = XLENGTH(subset);
@@ -3596,90 +3596,90 @@ void C_OneTableSums_dweights_dsubset
 (
     /* C OneTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C OneTableSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 ) {
     double *s, *w;
     /* OneTableSums Body */
     
-        int *xx;
+    int *xx;
 
-        for (int p = 0; p < P; p++) P_ans[p] = 0.0;
+    for (int p = 0; p < P; p++) P_ans[p] = 0.0;
 
-        xx = x;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                P_ans[xx[0]] += (double) w[0];
-            } else {
-                P_ans[xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    xx = x;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            P_ans[xx[0]] += w[0];
+            P_ans[xx[0]] += (double) w[0];
         } else {
             P_ans[xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        P_ans[xx[0]] += w[0];
+    } else {
+        P_ans[xx[0]]++;
+    }
     
 }
 
@@ -3689,91 +3689,91 @@ void C_OneTableSums_iweights_dsubset
 (
     /* C OneTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C OneTableSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 ) {
     double *s;
     int *w;
     /* OneTableSums Body */
     
-        int *xx;
+    int *xx;
 
-        for (int p = 0; p < P; p++) P_ans[p] = 0.0;
+    for (int p = 0; p < P; p++) P_ans[p] = 0.0;
 
-        xx = x;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                P_ans[xx[0]] += (double) w[0];
-            } else {
-                P_ans[xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    xx = x;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            P_ans[xx[0]] += w[0];
+            P_ans[xx[0]] += (double) w[0];
         } else {
             P_ans[xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        P_ans[xx[0]] += w[0];
+    } else {
+        P_ans[xx[0]]++;
+    }
     
 }
 
@@ -3783,90 +3783,90 @@ void C_OneTableSums_iweights_isubset
 (
     /* C OneTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C OneTableSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 ) {
     int *s, *w;
     /* OneTableSums Body */
     
-        int *xx;
+    int *xx;
 
-        for (int p = 0; p < P; p++) P_ans[p] = 0.0;
+    for (int p = 0; p < P; p++) P_ans[p] = 0.0;
 
-        xx = x;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                P_ans[xx[0]] += (double) w[0];
-            } else {
-                P_ans[xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    xx = x;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            P_ans[xx[0]] += w[0];
+            P_ans[xx[0]] += (double) w[0];
         } else {
             P_ans[xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        P_ans[xx[0]] += w[0];
+    } else {
+        P_ans[xx[0]]++;
+    }
     
 }
 
@@ -3876,91 +3876,91 @@ void C_OneTableSums_dweights_isubset
 (
     /* C OneTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C OneTableSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 ) {
     int *s;
     double *w;
     /* OneTableSums Body */
     
-        int *xx;
+    int *xx;
 
-        for (int p = 0; p < P; p++) P_ans[p] = 0.0;
+    for (int p = 0; p < P; p++) P_ans[p] = 0.0;
 
-        xx = x;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                P_ans[xx[0]] += (double) w[0];
-            } else {
-                P_ans[xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    xx = x;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            P_ans[xx[0]] += w[0];
+            P_ans[xx[0]] += (double) w[0];
         } else {
             P_ans[xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        P_ans[xx[0]] += w[0];
+    } else {
+        P_ans[xx[0]]++;
+    }
     
 }
 
@@ -3972,38 +3972,38 @@ void RC_OneTableSums
 (
     /* C OneTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     ,
     /* C OneTableSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 )
 
@@ -4039,15 +4039,15 @@ SEXP R_OneTableSums
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     
 )
 
@@ -4055,11 +4055,11 @@ SEXP R_OneTableSums
     SEXP ans;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
     int P;
 
@@ -4080,101 +4080,101 @@ void C_TwoTableSums_dweights_dsubset
 (
     /* C TwoTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C integer y Input */
-        
-            int *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C integer y Input */
+
+    int *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C TwoTableSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     double *s, *w;
     /* TwoTableSums Body */
     
-        int *xx, *yy;
+    int *xx, *yy;
 
-        for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
 
-        yy = y;
-        xx = x;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            yy = yy + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
-            } else {
-                PQ_ans[yy[0] * P + xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    yy = y;
+    xx = x;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         yy = yy + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            PQ_ans[yy[0] * P + xx[0]] += w[0];
+            PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
         } else {
             PQ_ans[yy[0] * P + xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    yy = yy + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        PQ_ans[yy[0] * P + xx[0]] += w[0];
+    } else {
+        PQ_ans[yy[0] * P + xx[0]]++;
+    }
     
 }
 
@@ -4184,102 +4184,102 @@ void C_TwoTableSums_iweights_dsubset
 (
     /* C TwoTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C integer y Input */
-        
-            int *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C integer y Input */
+
+    int *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C TwoTableSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     double *s;
     int *w;
     /* TwoTableSums Body */
     
-        int *xx, *yy;
+    int *xx, *yy;
 
-        for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
 
-        yy = y;
-        xx = x;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            yy = yy + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
-            } else {
-                PQ_ans[yy[0] * P + xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    yy = y;
+    xx = x;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         yy = yy + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            PQ_ans[yy[0] * P + xx[0]] += w[0];
+            PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
         } else {
             PQ_ans[yy[0] * P + xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    yy = yy + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        PQ_ans[yy[0] * P + xx[0]] += w[0];
+    } else {
+        PQ_ans[yy[0] * P + xx[0]]++;
+    }
     
 }
 
@@ -4289,101 +4289,101 @@ void C_TwoTableSums_iweights_isubset
 (
     /* C TwoTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C integer y Input */
-        
-            int *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C integer y Input */
+
+    int *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C TwoTableSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     int *s, *w;
     /* TwoTableSums Body */
     
-        int *xx, *yy;
+    int *xx, *yy;
 
-        for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
 
-        yy = y;
-        xx = x;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            yy = yy + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
-            } else {
-                PQ_ans[yy[0] * P + xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    yy = y;
+    xx = x;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         yy = yy + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            PQ_ans[yy[0] * P + xx[0]] += w[0];
+            PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
         } else {
             PQ_ans[yy[0] * P + xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    yy = yy + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        PQ_ans[yy[0] * P + xx[0]] += w[0];
+    } else {
+        PQ_ans[yy[0] * P + xx[0]]++;
+    }
     
 }
 
@@ -4393,102 +4393,102 @@ void C_TwoTableSums_dweights_isubset
 (
     /* C TwoTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C integer y Input */
-        
-            int *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C integer y Input */
+
+    int *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C TwoTableSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 ) {
     int *s;
     double *w;
     /* TwoTableSums Body */
     
-        int *xx, *yy;
+    int *xx, *yy;
 
-        for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
+    for (int p = 0; p < Q * P; p++) PQ_ans[p] = 0.0;
 
-        yy = y;
-        xx = x;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            yy = yy + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
-            } else {
-                PQ_ans[yy[0] * P + xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    yy = y;
+    xx = x;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         yy = yy + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            PQ_ans[yy[0] * P + xx[0]] += w[0];
+            PQ_ans[yy[0] * P + xx[0]] += (double) w[0];
         } else {
             PQ_ans[yy[0] * P + xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    yy = yy + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        PQ_ans[yy[0] * P + xx[0]] += w[0];
+    } else {
+        PQ_ans[yy[0] * P + xx[0]]++;
+    }
     
 }
 
@@ -4500,46 +4500,46 @@ void RC_TwoTableSums
 (
     /* C TwoTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C integer y Input */
-        
-            int *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C integer y Input */
+
+    int *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     ,
     /* C TwoTableSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 )
 
@@ -4575,19 +4575,19 @@ SEXP R_TwoTableSums
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     /* R y Input */
     
-        SEXP y,
+    SEXP y,
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     
 )
 
@@ -4595,11 +4595,11 @@ SEXP R_TwoTableSums
     SEXP ans, dim;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
     int P, Q;
 
@@ -4625,112 +4625,112 @@ void C_ThreeTableSums_dweights_dsubset
 (
     /* C ThreeTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C integer y Input */
-        
-            int *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
-        /* C integer block Input */
-        
-            int *block,
-            /* C integer B Input */
-            
-                int B
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C integer y Input */
+
+    int *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
+    /* C integer block Input */
+
+    int *block,
+    /* C integer B Input */
+
+    int B
+    ,
+    
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C ThreeTableSums Answer */
     
-        double *PQL_ans
+    double *PQL_ans
     
 ) {
     double *s, *w;
     /* ThreeTableSums Body */
     
-        int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);
+    int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);
 
-        for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
+    for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
 
-        yy = y;
-        xx = x;
-        bb = block;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            yy = yy + diff;
-            bb = bb + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];
-            } else {
-                PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    yy = y;
+    xx = x;
+    bb = block;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         yy = yy + diff;
         bb = bb + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];
+            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];
         } else {
             PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    yy = yy + diff;
+    bb = bb + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];
+    } else {
+        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
+    }
     
 }
 
@@ -4740,113 +4740,113 @@ void C_ThreeTableSums_iweights_dsubset
 (
     /* C ThreeTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C integer y Input */
-        
-            int *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
-        /* C integer block Input */
-        
-            int *block,
-            /* C integer B Input */
-            
-                int B
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C integer y Input */
+
+    int *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
+    /* C integer block Input */
+
+    int *block,
+    /* C integer B Input */
+
+    int B
+    ,
+    
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C real subset Input */
     
-        double *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    double *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C ThreeTableSums Answer */
     
-        double *PQL_ans
+    double *PQL_ans
     
 ) {
     double *s;
     int *w;
     /* ThreeTableSums Body */
     
-        int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);
+    int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);
 
-        for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
+    for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
 
-        yy = y;
-        xx = x;
-        bb = block;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            yy = yy + diff;
-            bb = bb + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];
-            } else {
-                PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    yy = y;
+    xx = x;
+    bb = block;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         yy = yy + diff;
         bb = bb + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];
+            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];
         } else {
             PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    yy = yy + diff;
+    bb = bb + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];
+    } else {
+        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
+    }
     
 }
 
@@ -4856,112 +4856,112 @@ void C_ThreeTableSums_iweights_isubset
 (
     /* C ThreeTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C integer y Input */
-        
-            int *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
-        /* C integer block Input */
-        
-            int *block,
-            /* C integer B Input */
-            
-                int B
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C integer y Input */
+
+    int *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
+    /* C integer block Input */
+
+    int *block,
+    /* C integer B Input */
+
+    int B
+    ,
+    
     
     /* C integer weights Input */
     
-        int *weights,
-        int HAS_WEIGHTS,
+    int *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C ThreeTableSums Answer */
     
-        double *PQL_ans
+    double *PQL_ans
     
 ) {
     int *s, *w;
     /* ThreeTableSums Body */
     
-        int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);
+    int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);
 
-        for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
+    for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
 
-        yy = y;
-        xx = x;
-        bb = block;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            yy = yy + diff;
-            bb = bb + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];
-            } else {
-                PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    yy = y;
+    xx = x;
+    bb = block;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         yy = yy + diff;
         bb = bb + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];
+            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];
         } else {
             PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    yy = yy + diff;
+    bb = bb + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];
+    } else {
+        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
+    }
     
 }
 
@@ -4971,113 +4971,113 @@ void C_ThreeTableSums_dweights_isubset
 (
     /* C ThreeTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C integer y Input */
-        
-            int *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
-        /* C integer block Input */
-        
-            int *block,
-            /* C integer B Input */
-            
-                int B
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C integer y Input */
+
+    int *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
+    /* C integer block Input */
+
+    int *block,
+    /* C integer B Input */
+
+    int B
+    ,
+    
     
     /* C real weights Input */
     
-        double *weights,
-        int HAS_WEIGHTS,
+    double *weights,
+    int HAS_WEIGHTS,
     
     /* C integer subset Input */
     
-        int *subset,
-        /* C subset range Input */
-        
-            R_xlen_t offset,
-            /* C integer Nsubset Input */
-            
-                R_xlen_t Nsubset
-            
-        
+    int *subset,
+    /* C subset range Input */
+
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
+    
     ,
     /* C ThreeTableSums Answer */
     
-        double *PQL_ans
+    double *PQL_ans
     
 ) {
     int *s;
     double *w;
     /* ThreeTableSums Body */
     
-        int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);
+    int *xx, *yy, *bb, PQ = mPQB(P, Q, 1);
 
-        for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
+    for (int p = 0; p < PQ * B; p++) PQL_ans[p] = 0.0;
 
-        yy = y;
-        xx = x;
-        bb = block;
-        /* init subset loop */
-        
-            R_xlen_t diff = 0;
-            s = subset + offset;
-            w = weights;
-            /* subset is R-style index in 1:N */
-            if (Nsubset > 0)
-                diff = (R_xlen_t) s[0] - 1;
-        
-        /* start subset loop */
-        
-            for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
-        
-        {
-            xx = xx + diff;
-            yy = yy + diff;
-            bb = bb + diff;
-            if (HAS_WEIGHTS) {
-                w = w + diff;
-                PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];
-            } else {
-                PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
-            }
-            /* continue subset loop */
-            
-                if (Nsubset > 0) {
-                    /* NB: diff also works with R style index */
-                    diff = (R_xlen_t) s[1] - s[0];
-                    if (diff < 0)
-                        error("subset not sorted");
-                    s++;
-                } else {
-                    diff = 1;
-                }
-            
-        }
+    yy = y;
+    xx = x;
+    bb = block;
+    /* init subset loop */
+
+    R_xlen_t diff = 0;
+    s = subset + offset;
+    w = weights;
+    /* subset is R-style index in 1:N */
+    if (Nsubset > 0)
+        diff = (R_xlen_t) s[0] - 1;
+    
+    /* start subset loop */
+
+    for (R_xlen_t i = 0; i < (Nsubset == 0 ? N : Nsubset) - 1; i++)
+    
+    {
         xx = xx + diff;
         yy = yy + diff;
         bb = bb + diff;
         if (HAS_WEIGHTS) {
             w = w + diff;
-            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];
+            PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += (double) w[0];
         } else {
             PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
         }
+        /* continue subset loop */
+        
+        if (Nsubset > 0) {
+            /* NB: diff also works with R style index */
+            diff = (R_xlen_t) s[1] - s[0];
+            if (diff < 0)
+                error("subset not sorted");
+            s++;
+        } else {
+            diff = 1;
+        }
+        
+    }
+    xx = xx + diff;
+    yy = yy + diff;
+    bb = bb + diff;
+    if (HAS_WEIGHTS) {
+        w = w + diff;
+        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]] += w[0];
+    } else {
+        PQL_ans[(bb[0] - 1) * PQ + yy[0] * P + xx[0]]++;
+    }
     
 }
 
@@ -5089,54 +5089,54 @@ void RC_ThreeTableSums
 (
     /* C ThreeTableSums Input */
     
-        /* C integer x Input */
-        
-            int *x,
-            /* C integer N Input */
-            
-                R_xlen_t N
-            ,
-            /* C integer P Input */
-            
-                int P
-            ,
-        
-        /* C integer y Input */
-        
-            int *y,
-            /* C integer Q Input */
-            
-                int Q
-            ,
-        
-        /* C integer block Input */
-        
-            int *block,
-            /* C integer B Input */
-            
-                int B
-            ,
-        
+    /* C integer x Input */
+
+    int *x,
+    /* C integer N Input */
+
+    R_xlen_t N
+    ,
+    /* C integer P Input */
+
+    int P
+    ,
+    
+    /* C integer y Input */
+
+    int *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
+    
+    /* C integer block Input */
+
+    int *block,
+    /* C integer B Input */
+
+    int B
+    ,
+    
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     ,
     /* C ThreeTableSums Answer */
     
-        double *PQL_ans
+    double *PQL_ans
     
 )
 
@@ -5172,23 +5172,23 @@ SEXP R_ThreeTableSums
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     /* R y Input */
     
-        SEXP y,
+    SEXP y,
     
     /* R block Input */
     
-        SEXP block
+    SEXP block
     ,
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     
 )
 
@@ -5196,11 +5196,11 @@ SEXP R_ThreeTableSums
     SEXP ans, dim;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
     int P, Q, B;
 
@@ -5232,7 +5232,7 @@ void C_setup_subset
 (
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     SEXP ans
 ) {
@@ -5252,15 +5252,15 @@ void C_setup_subset_block
 (
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* R block Input */
     
-        SEXP block
+    SEXP block
     ,
     /* R blockTable Input */
     
-        SEXP blockTable
+    SEXP blockTable
     ,
     SEXP ans
 ) {
@@ -5292,15 +5292,15 @@ void C_order_subset_wrt_block
 (
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* R block Input */
     
-        SEXP block
+    SEXP block
     ,
     /* R blockTable Input */
     
-        SEXP blockTable
+    SEXP blockTable
     ,
     SEXP ans
 ) {
@@ -5334,19 +5334,19 @@ SEXP RC_order_subset_wrt_block
 (
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* R block Input */
     
-        SEXP block
+    SEXP block
     ,
     /* R blockTable Input */
     
-        SEXP blockTable
+    SEXP blockTable
     
 )
 
@@ -5383,26 +5383,26 @@ SEXP R_order_subset_wrt_block
 (
     /* R y Input */
     
-        SEXP y,
+    SEXP y,
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* R block Input */
     
-        SEXP block
+    SEXP block
     
 )
 
 {
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     SEXP blockTable, ans;
 
@@ -5436,43 +5436,43 @@ void RC_LinearStatistic
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* C integer P Input */
     
-        int P
+    int P
     ,
     /* C real y Input */
     
-        double *y,
-        /* C integer Q Input */
-        
-            int Q
-        ,
+    double *y,
+    /* C integer Q Input */
+
+    int Q
+    ,
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     ,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 )
 
@@ -5494,15 +5494,15 @@ SEXP RC_setup_subset
 (
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     
 )
 
@@ -5546,7 +5546,7 @@ void C_Permute
     double *subset,
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ,
     double *ans
 ) {
@@ -5566,7 +5566,7 @@ void C_doPermute
     double *subset,
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ,
     double *Nsubset_tmp,
     double *perm
@@ -5605,7 +5605,7 @@ void C_doPermuteBlock
     double *subset,
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ,
     double *table,
     int Nlevels,
@@ -5627,39 +5627,39 @@ void RC_ExpectationInfluence
 (
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* R y Input */
     
-        SEXP y,
+    SEXP y,
     
     /* C integer Q Input */
     
-        int Q
+    int Q
     ,
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     ,
     /* C sumweights Input */
     
-        double sumweights
+    double sumweights
     ,
     /* C colSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 )
 
@@ -5680,15 +5680,15 @@ SEXP R_ExpectationInfluence
 (
     /* R y Input */
     
-        SEXP y,
+    SEXP y,
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     
 )
 
@@ -5696,15 +5696,15 @@ SEXP R_ExpectationInfluence
     SEXP ans;
     /* C integer Q Input */
     
-        int Q
+    int Q
     ;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
     double sumweights;
 
@@ -5728,41 +5728,41 @@ void RC_CovarianceInfluence
 (
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* R y Input */
     
-        SEXP y,
+    SEXP y,
     
     /* C integer Q Input */
     
-        int Q
+    int Q
     ,
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     ,
     double *ExpInf,
     /* C sumweights Input */
     
-        double sumweights
+    double sumweights
     ,
     int VARONLY,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 )
 
@@ -5788,15 +5788,15 @@ SEXP R_CovarianceInfluence
 (
     /* R y Input */
     
-        SEXP y,
+    SEXP y,
     
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     SEXP varonly
 )
@@ -5806,15 +5806,15 @@ SEXP R_CovarianceInfluence
     SEXP ExpInf;
     /* C integer Q Input */
     
-        int Q
+    int Q
     ;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
     double sumweights;
 
@@ -5845,35 +5845,35 @@ void RC_ExpectationX
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* C integer P Input */
     
-        int P
+    int P
     ,
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     ,
     /* C OneTableSums Answer */
     
-        double *P_ans
+    double *P_ans
     
 )
 
@@ -5898,16 +5898,16 @@ SEXP R_ExpectationX
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     SEXP P,
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     
 )
 
@@ -5915,11 +5915,11 @@ SEXP R_ExpectationX
     SEXP ans;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
 
     N = XLENGTH(x) / INTEGER(P)[0];
@@ -5940,37 +5940,37 @@ void RC_CovarianceX
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ,
     /* C integer P Input */
     
-        int P
+    int P
     ,
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     /* C subset range Input */
     
-        R_xlen_t offset,
-        /* C integer Nsubset Input */
-        
-            R_xlen_t Nsubset
-        
+    R_xlen_t offset,
+    /* C integer Nsubset Input */
+
+    R_xlen_t Nsubset
+    
     ,
     double *ExpX,
     int VARONLY,
     /* C KronSums Answer */
     
-        double *PQ_ans
+    double *PQ_ans
     
 )
 
@@ -6005,16 +6005,16 @@ SEXP R_CovarianceX
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     SEXP P,
     /* R weights Input */
     
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
     
-        SEXP subset
+    SEXP subset
     ,
     SEXP varonly
 )
@@ -6024,11 +6024,11 @@ SEXP R_CovarianceX
     SEXP ExpX;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
 
     N = XLENGTH(x) / INTEGER(P)[0];
@@ -6053,11 +6053,11 @@ void C_ExpectationLinearStatistic
 (
     /* C integer P Input */
     
-        int P
+    int P
     ,
     /* C integer Q Input */
     
-        int Q
+    int Q
     ,
     double *ExpInf,
     double *ExpX,
@@ -6079,18 +6079,18 @@ void C_CovarianceLinearStatistic
 (
     /* C integer P Input */
     
-        int P
+    int P
     ,
     /* C integer Q Input */
     
-        int Q
+    int Q
     ,
     double *CovInf,
     double *ExpX,
     double *CovX,
     /* C sumweights Input */
     
-        double sumweights
+    double sumweights
     ,
     const int add,
     double *PQPQ_sym_ans
@@ -6125,18 +6125,18 @@ void C_VarianceLinearStatistic
 (
     /* C integer P Input */
     
-        int P
+    int P
     ,
     /* C integer Q Input */
     
-        int Q
+    int Q
     ,
     double *VarInf,
     double *ExpX,
     double *VarX,
     /* C sumweights Input */
     
-        double sumweights
+    double sumweights
     ,
     const int add,
     double *PQ_ans
@@ -6405,18 +6405,18 @@ void C_standardise
 
 void C_ordered_Xfactor
 (
-/* maxstat Xfactor Variables */
-
-SEXP LECV,
-const int minbucket,
-const int teststat,
-int *wmax,
-double *maxstat,
-double *bmaxstat,
-double *pval,
-const int lower,
-const int give_log
-
+    /* maxstat Xfactor Variables */
+    
+    SEXP LECV,
+    const int minbucket,
+    const int teststat,
+    int *wmax,
+    double *maxstat,
+    double *bmaxstat,
+    double *pval,
+    const int lower,
+    const int give_log
+    
 ) {
     /* Setup maxstat Variables */
     
@@ -6592,18 +6592,18 @@ const int give_log
 
 void C_unordered_Xfactor
 (
-/* maxstat Xfactor Variables */
-
-SEXP LECV,
-const int minbucket,
-const int teststat,
-int *wmax,
-double *maxstat,
-double *bmaxstat,
-double *pval,
-const int lower,
-const int give_log
-
+    /* maxstat Xfactor Variables */
+    
+    SEXP LECV,
+    const int minbucket,
+    const int teststat,
+    int *wmax,
+    double *maxstat,
+    double *bmaxstat,
+    double *pval,
+    const int lower,
+    const int give_log
+    
 ) {
     double *mtmp;
     int qPp, nc, *levels, Pnonzero, *indl, *contrast;
@@ -6858,46 +6858,46 @@ const int give_log
 
 void RC_ExpectationCovarianceStatistic
 (
-/* User Interface Inputs */
-
-/* R x Input */
+    /* User Interface Input */
+    
+    /* R x Input */
 
     SEXP x,
-
-/* R y Input */
+    
+    /* R y Input */
 
     SEXP y,
-
-/* R weights Input */
+    
+    /* R weights Input */
 
     SEXP weights
-,
-/* R subset Input */
+    ,
+    /* R subset Input */
 
     SEXP subset
-,
-/* R block Input */
+    ,
+    /* R block Input */
 
     SEXP block
-,
-
-SEXP ans
+    ,
+    
+    SEXP ans
 ) {
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer P Input */
     
-        int P
+    int P
     ;
     /* C integer Q Input */
     
-        int Q
+    int Q
     ;
     /* C integer B Input */
     
-        int B
+    int B
     ;
     double *sumweights, *table;
     double *ExpInf, *VarInf, *CovInf, *ExpX, *ExpXtotal, *VarX, *CovX;
@@ -7042,31 +7042,31 @@ SEXP ans
 
 SEXP R_ExpectationCovarianceStatistic
 (
-/* User Interface Inputs */
-
-/* R x Input */
+    /* User Interface Input */
+    
+    /* R x Input */
 
     SEXP x,
-
-/* R y Input */
+    
+    /* R y Input */
 
     SEXP y,
-
-/* R weights Input */
+    
+    /* R weights Input */
 
     SEXP weights
-,
-/* R subset Input */
+    ,
+    /* R subset Input */
 
     SEXP subset
-,
-/* R block Input */
+    ,
+    /* R block Input */
 
     SEXP block
-,
-
-SEXP varonly,
-SEXP tol
+    ,
+    
+    SEXP varonly,
+    SEXP tol
 )
 
 {
@@ -7074,18 +7074,18 @@ SEXP tol
 
     /* Setup Dimensions */
     
-        int P, Q, B;
+    int P, Q, B;
 
-        if (TYPEOF(x) == INTSXP) {
-            P = NLEVELS(x);
-        } else {
-            P = NCOL(x);
-        }
-        Q = NCOL(y);
+    if (TYPEOF(x) == INTSXP) {
+        P = NLEVELS(x);
+    } else {
+        P = NCOL(x);
+    }
+    Q = NCOL(y);
 
-        B = 1;
-        if (LENGTH(block) > 0)
-            B = NLEVELS(block);
+    B = 1;
+    if (LENGTH(block) > 0)
+        B = NLEVELS(block);
     
 
     PROTECT(ans = RC_init_LECV_1d(P, Q, INTEGER(varonly)[0], B, TYPEOF(x) == INTSXP, REAL(tol)[0]));
@@ -7102,27 +7102,27 @@ SEXP tol
 
 SEXP R_PermutedLinearStatistic
 (
-    /* User Interface Inputs */
+    /* User Interface Input */
     
     /* R x Input */
 
-        SEXP x,
+    SEXP x,
     
     /* R y Input */
 
-        SEXP y,
+    SEXP y,
     
     /* R weights Input */
 
-        SEXP weights
+    SEXP weights
     ,
     /* R subset Input */
 
-        SEXP subset
+    SEXP subset
     ,
     /* R block Input */
 
-        SEXP block
+    SEXP block
     ,
     
     SEXP nresample
@@ -7134,28 +7134,28 @@ SEXP R_PermutedLinearStatistic
     int PQ;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
     R_xlen_t inresample;
 
     /* Setup Dimensions */
     
-        int P, Q, B;
+    int P, Q, B;
 
-        if (TYPEOF(x) == INTSXP) {
-            P = NLEVELS(x);
-        } else {
-            P = NCOL(x);
-        }
-        Q = NCOL(y);
+    if (TYPEOF(x) == INTSXP) {
+        P = NLEVELS(x);
+    } else {
+        P = NCOL(x);
+    }
+    Q = NCOL(y);
 
-        B = 1;
-        if (LENGTH(block) > 0)
-            B = NLEVELS(block);
+    B = 1;
+    if (LENGTH(block) > 0)
+        B = NLEVELS(block);
     
     PQ = mPQB(P, Q, 1);
     N = NROW(y);
@@ -7252,32 +7252,32 @@ SEXP R_StandardisePermutedLinearStatistic
 
 void RC_ExpectationCovarianceStatistic_2d
 (
-/* 2d User Interface Inputs */
-
-/* R x Input */
+    /* 2d User Interface Input */
+    
+    /* R x Input */
 
     SEXP x,
-
-SEXP ix,
-/* R y Input */
+    
+    SEXP ix,
+    /* R y Input */
 
     SEXP y,
-
-SEXP iy,
-/* R weights Input */
+    
+    SEXP iy,
+    /* R weights Input */
 
     SEXP weights
-,
-/* R subset Input */
+    ,
+    /* R subset Input */
 
     SEXP subset
-,
-/* R block Input */
+    ,
+    /* R block Input */
 
     SEXP block
-,
-
-SEXP ans
+    ,
+    
+    SEXP ans
 ) {
     /* 2d Memory */
     
@@ -7440,44 +7440,44 @@ SEXP ans
 
 SEXP R_ExpectationCovarianceStatistic_2d
 (
-/* 2d User Interface Inputs */
-
-/* R x Input */
+    /* 2d User Interface Input */
+    
+    /* R x Input */
 
     SEXP x,
-
-SEXP ix,
-/* R y Input */
+    
+    SEXP ix,
+    /* R y Input */
 
     SEXP y,
-
-SEXP iy,
-/* R weights Input */
+    
+    SEXP iy,
+    /* R weights Input */
 
     SEXP weights
-,
-/* R subset Input */
+    ,
+    /* R subset Input */
 
     SEXP subset
-,
-/* R block Input */
+    ,
+    /* R block Input */
 
     SEXP block
-,
-
-SEXP varonly,
-SEXP tol
+    ,
+    
+    SEXP varonly,
+    SEXP tol
 )
 
 {
     SEXP ans;
     /* C integer N Input */
     
-        R_xlen_t N
+    R_xlen_t N
     ;
     /* C integer Nsubset Input */
     
-        R_xlen_t Nsubset
+    R_xlen_t Nsubset
     ;
     int Xfactor;
 
@@ -7531,17 +7531,17 @@ SEXP R_PermutedLinearStatistic_2d
 (
     /* R x Input */
     
-        SEXP x,
+    SEXP x,
     
     SEXP ix,
     /* R y Input */
     
-        SEXP y,
+    SEXP y,
     
     SEXP iy,
     /* R block Input */
     
-        SEXP block
+    SEXP block
     ,
     SEXP nresample,
     SEXP itable
