@@ -4,6 +4,8 @@
 
 \section{Changes in Version 1.0-5 (20YY-MM-DD)}{
   \itemize{
+    \item New function \code{R_unpack_sym} for unpacking a symmetric matrix
+          stored in lower-packed storage mode.
     \item New R interfaces \code{R_quadform} and \code{R_MPinv_sym},
           corresponding to the C functions \code{C_quadform} and
           \code{C_MPinv_sym}, added and exported to the C API.

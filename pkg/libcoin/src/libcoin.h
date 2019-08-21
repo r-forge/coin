@@ -441,4 +441,12 @@ extern
            SEXP tol
        )
        ;
+extern 
+       SEXP R_unpack_sym
+       (
+           SEXP x,
+           SEXP names,
+           SEXP diagonly
+       )
+       ;
 

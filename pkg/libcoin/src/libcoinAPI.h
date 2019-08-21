@@ -141,3 +141,13 @@ extern SEXP libcoin_R_MPinv_sym(
             R_GetCCallable("libcoin", "R_MPinv_sym");
     return fun(x, n, tol);
 }
+
+extern SEXP libcoin_R_unpack_sym(
+    SEXP x, SEXP names, SEXP diagonly
+) {
+    static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_unpack_sym");
+    return fun(x, names, diagonly);
+}

@@ -524,3 +524,18 @@ stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) &&
           isequal(MP1$rank, MP2$rank))
 
 
+###################################################
+### code chunk number 30: unpack
+###################################################
+m <- matrix(c(3, 2, 1,
+              2, 4, 2,
+              1, 2, 5),
+            ncol = 3)
+
+s <- m[lower.tri(m, diag = TRUE)]
+u1 <- .Call(libcoin:::R_unpack_sym, s, NULL, 0L)
+u2 <- .Call(libcoin:::R_unpack_sym, s, NULL, 1L)
+
+stopifnot(isequal(m, u1) && isequal(diag(m), u2))
+
+

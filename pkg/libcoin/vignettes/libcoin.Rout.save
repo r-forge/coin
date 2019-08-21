@@ -674,7 +674,17 @@ $p.value
 > stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) && isequal(MP1$rank, 
 +     MP2$rank))
 
+> m <- matrix(c(3, 2, 1, 2, 4, 2, 1, 2, 5), ncol = 3)
+
+> s <- m[lower.tri(m, diag = TRUE)]
+
+> u1 <- .Call(libcoin:::R_unpack_sym, s, NULL, 0)
+
+> u2 <- .Call(libcoin:::R_unpack_sym, s, NULL, 1)
+
+> stopifnot(isequal(m, u1) && isequal(diag(m), u2))
+
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   0.76    0.04    0.84 
+   0.78    0.04    0.87 

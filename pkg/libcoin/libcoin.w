@@ -1110,6 +1110,7 @@ extern @<R\_order\_subset\_wrt\_block Prototype@>;
 extern @<R\_quadform Prototype@>;
 extern @<R\_kronecker Prototype@>;
 extern @<R\_MPinv\_sym Prototype@>;
+extern @<R\_unpack\_sym Prototype@>;
 @}
 
 The \proglang{C} file \verb|libcoin.c| contains all \proglang{C}
@@ -6113,6 +6114,7 @@ void C_doPermuteBlock
 @<C\_KronSums\_sym@>
 @<C\_MPinv\_sym@>
 @<R\_MPinv\_sym@>
+@<R\_unpack\_sym@>
 @}
 
 
@@ -6475,6 +6477,91 @@ void C_MPinv_sym
         Free(rx); Free(work); Free(val); Free(vec);
     }
 }
+@}
+
+<<unpack>>=
+m <- matrix(c(3, 2, 1,
+              2, 4, 2,
+              1, 2, 5),
+            ncol = 3)
+
+s <- m[lower.tri(m, diag = TRUE)]
+u1 <- .Call(libcoin:::R_unpack_sym, s, NULL, 0L)
+u2 <- .Call(libcoin:::R_unpack_sym, s, NULL, 1L)
+
+stopifnot(isequal(m, u1) && isequal(diag(m), u2))
+@@
+
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_unpack_sym(
+    SEXP x, SEXP names, SEXP diagonly
+) {
+    static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;
+    if(fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_unpack_sym");
+    return fun(x, names, diagonly);
+}
+@}
+
+@d R\_unpack\_sym Prototype
+@{
+SEXP R_unpack_sym
+(
+    SEXP x,
+    SEXP names,
+    SEXP diagonly
+)
+@}
+
+@d R\_unpack\_sym
+@{
+@<R\_unpack\_sym Prototype@>
+{
+    R_xlen_t n, k = 0;
+    SEXP ans, dimnames;
+    double *dx, *dans;
+
+    // m = n * (n + 1)/2 <=> n^2 + n - 2 * m = 0
+    n = sqrt(0.25 + 2 * XLENGTH(x)) - 0.5;
+
+    dx = REAL(x);
+    if (INTEGER(diagonly)[0]) {
+        PROTECT(ans = allocVector(REALSXP, n));
+        if (names != R_NilValue) {
+            namesgets(ans, names);
+        }
+        dans = REAL(ans);
+        for (R_xlen_t i = 0; i < n; i++) {
+            dans[i] = dx[k];
+            k += n - i;
+        }
+    } else {
+        PROTECT(ans = allocMatrix(REALSXP, n, n));
+        if (names != R_NilValue) {
+            PROTECT(dimnames = allocVector(VECSXP, 2));
+            SET_VECTOR_ELT(dimnames, 0, names);
+            SET_VECTOR_ELT(dimnames, 1, names);
+            dimnamesgets(ans, dimnames);
+            UNPROTECT(1);
+        }
+        dans = REAL(ans);
+        for (R_xlen_t i = 0; i < n; i++) {
+            dans[i * n + i] = dx[k];     // diagonal
+            k++;
+            for (R_xlen_t j = i + 1; j < n; j++) {
+                dans[i * n + j] = dx[k]; // lower triangular
+                dans[j * n + i] = dx[k]; // upper triangular
+                k++;
+            }
+        }
+    }
+
+    UNPROTECT(1);
+    return ans;
+}
+@|R_unpack_sym
 @}
 
 \section{Memory}
@@ -7054,6 +7141,7 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_quadform, 3),
     CALLDEF(R_kronecker, 2),
     CALLDEF(R_MPinv_sym, 3),
+    CALLDEF(R_unpack_sym, 3),
     {NULL, NULL, 0}
 };
 @}
@@ -7090,6 +7178,7 @@ void attribute_visible R_init_libcoin
     REGCALL(R_quadform);
     REGCALL(R_kronecker);
     REGCALL(R_MPinv_sym);
+    REGCALL(R_unpack_sym);
 }
 @}
 

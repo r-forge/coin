@@ -294,6 +294,61 @@ SEXP R_MPinv_sym
     return(ans);
 }
 
+/* R\_unpack\_sym */
+
+/* R\_unpack\_sym Prototype */
+
+SEXP R_unpack_sym
+(
+    SEXP x,
+    SEXP names,
+    SEXP diagonly
+)
+
+{
+    R_xlen_t n, k = 0;
+    SEXP ans, dimnames;
+    double *dx, *dans;
+
+    // m = n * (n + 1)/2 <=> n^2 + n - 2 * m = 0
+    n = sqrt(0.25 + 2 * XLENGTH(x)) - 0.5;
+
+    dx = REAL(x);
+    if (INTEGER(diagonly)[0]) {
+        PROTECT(ans = allocVector(REALSXP, n));
+        if (names != R_NilValue) {
+            namesgets(ans, names);
+        }
+        dans = REAL(ans);
+        for (R_xlen_t i = 0; i < n; i++) {
+            dans[i] = dx[k];
+            k += n - i;
+        }
+    } else {
+        PROTECT(ans = allocMatrix(REALSXP, n, n));
+        if (names != R_NilValue) {
+            PROTECT(dimnames = allocVector(VECSXP, 2));
+            SET_VECTOR_ELT(dimnames, 0, names);
+            SET_VECTOR_ELT(dimnames, 1, names);
+            dimnamesgets(ans, dimnames);
+            UNPROTECT(1);
+        }
+        dans = REAL(ans);
+        for (R_xlen_t i = 0; i < n; i++) {
+            dans[i * n + i] = dx[k];     // diagonal
+            k++;
+            for (R_xlen_t j = i + 1; j < n; j++) {
+                dans[i * n + j] = dx[k]; // lower triangular
+                dans[j * n + i] = dx[k]; // upper triangular
+                k++;
+            }
+        }
+    }
+
+    UNPROTECT(1);
+    return ans;
+}
+
 
 /* Memory */
 
