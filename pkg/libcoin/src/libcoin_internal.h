@@ -37,8 +37,8 @@
 /* C Macros */
 
 #define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)
-#define LE(x, y, tol)  ((x) < (y)) || (fabs((x) - (y)) < (tol))
-#define GE(x, y, tol)  ((x) > (y)) || (fabs((x) - (y)) < (tol))
+#define LE(x, y, tol) ((x) < (y)) || (fabs((x) - (y)) < (tol))
+#define GE(x, y, tol) ((x) > (y)) || (fabs((x) - (y)) < (tol))
 
 /* C Global Variables */
 

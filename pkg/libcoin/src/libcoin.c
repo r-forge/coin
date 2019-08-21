@@ -206,7 +206,7 @@ void C_KronSums_sym_
             pN = p * N;
             SpqP = S(p, q, P);
             for (int i = 0; i < N; i++)
-                 PP_sym_ans[SpqP] +=  x[qN + i] * x[pN + i];
+                 PP_sym_ans[SpqP] += x[qN + i] * x[pN + i];
         }
     }
 }
@@ -736,7 +736,7 @@ SEXP RC_init_LECV_1d
     INTEGER(vo)[0] = varonly;
     if (varonly) {
         SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
-    } else  {
+    } else {
         /* always return variance */
         SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
         SET_VECTOR_ELT(ans, Covariance_SLOT,
@@ -895,7 +895,7 @@ SEXP RC_init_LECV_2d
     INTEGER(vo)[0] = varonly;
     if (varonly) {
         SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
-    } else  {
+    } else {
         /* always return variance */
         SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
         SET_VECTOR_ELT(ans, Covariance_SLOT,
@@ -6355,7 +6355,7 @@ double C_maxtype
     double ret = 0.0;
 
     if (varonly) {
-        if (alternative ==  ALTERNATIVE_twosided) {
+        if (alternative == ALTERNATIVE_twosided) {
             ret = C_maxabsstand_Variance(PQ, linstat, expect, covar, tol);
         } else if (alternative == ALTERNATIVE_less) {
             ret = C_minstand_Variance(PQ, linstat, expect, covar, tol);
@@ -6363,7 +6363,7 @@ double C_maxtype
             ret = C_maxstand_Variance(PQ, linstat, expect, covar, tol);
         }
     } else {
-        if (alternative ==  ALTERNATIVE_twosided) {
+        if (alternative == ALTERNATIVE_twosided) {
             ret = C_maxabsstand_Covariance(PQ, linstat, expect, covar, tol);
         } else if (alternative == ALTERNATIVE_less) {
             ret = C_minstand_Covariance(PQ, linstat, expect, covar, tol);
@@ -7367,7 +7367,7 @@ void RC_ExpectationCovarianceStatistic_2d
         }
         csum[0] = 0; /* NA */
         /* row sums */
-        for (int p = 1; p < Lxp1; p++)  {
+        for (int p = 1; p < Lxp1; p++) {
             rsum[p] = 0;
             for (int q = 1; q < Lyp1; q++)
                 rsum[p] += btab[q * Lxp1 + p];
@@ -7613,7 +7613,7 @@ SEXP R_PermutedLinearStatistic_2d
         }
         csum[0] = 0; /* NA */
         /* row sums */
-        for (int p = 1; p < Lxp1; p++)  {
+        for (int p = 1; p < Lxp1; p++) {
             rsum[p] = 0;
             for (int q = 1; q < Lyp1; q++)
                 rsum[p] += btab[q * Lxp1 + p];
@@ -7846,7 +7846,7 @@ SEXP R_MaximumTest
     } else {
         cv = C_get_Covariance(LECV);
     }
-    REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LECV),
+    REAL(stat)[0] = C_maxtype(PQ, C_get_LinearStatistic(LECV),
         C_get_Expectation(LECV), cv, C_get_varonly(LECV), C_get_tol(LECV),
         INTEGER(alternative)[0]);
     if (!PVALUE) {

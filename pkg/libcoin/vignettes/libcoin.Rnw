@@ -1293,8 +1293,8 @@ $\ge$.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@#define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)@\\
-\mbox{}\verb@#define LE(x, y, tol)  ((x) < (y)) || (fabs((x) - (y)) < (tol))@\\
-\mbox{}\verb@#define GE(x, y, tol)  ((x) > (y)) || (fabs((x) - (y)) < (tol))@\\
+\mbox{}\verb@#define LE(x, y, tol) ((x) < (y)) || (fabs((x) - (y)) < (tol))@\\
+\mbox{}\verb@#define GE(x, y, tol) ((x) > (y)) || (fabs((x) - (y)) < (tol))@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2167,7 +2167,7 @@ This function can be called from other packages.
 \mbox{}\verb@    SEXP tol@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_ExpectationCovarianceStatistic");@\\
 \mbox{}\verb@    return fun(x, y, weights, subset, block, varonly, tol);@\\
@@ -2634,7 +2634,7 @@ permutations to be specified.
 \mbox{}\verb@    SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nresample@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_PermutedLinearStatistic");@\\
 \mbox{}\verb@    return fun(x, y, weights, subset, block, nresample);@\\
@@ -2757,7 +2757,7 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 \mbox{}\verb@    SEXP LECV@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_StandardisePermutedLinearStatistic");@\\
 \mbox{}\verb@    return fun(LECV);@\\
@@ -2920,7 +2920,7 @@ and returns the matrix of standardised linear statistics.
 \mbox{}\verb@    SEXP varonly, SEXP tol@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_ExpectationCovarianceStatistic_2d");@\\
 \mbox{}\verb@    return fun(x, ix, y, iy, weights, subset, block, varonly, tol);@\\
@@ -3094,7 +3094,7 @@ and returns the matrix of standardised linear statistics.
 \mbox{}\verb@}@\\
 \mbox{}\verb@csum[0] = 0; /* NA */@\\
 \mbox{}\verb@/* row sums */@\\
-\mbox{}\verb@for (int p = 1; p < Lxp1; p++)  {@\\
+\mbox{}\verb@for (int p = 1; p < Lxp1; p++) {@\\
 \mbox{}\verb@    rsum[p] = 0;@\\
 \mbox{}\verb@    for (int q = 1; q < Lyp1; q++)@\\
 \mbox{}\verb@        rsum[p] += btab[q * Lxp1 + p];@\\
@@ -3325,7 +3325,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \mbox{}\verb@    SEXP itable@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_PermutedLinearStatistic_2d");@\\
 \mbox{}\verb@    return fun(x, ix, y, iy, block, nresample, itable);@\\
@@ -3533,7 +3533,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \mbox{}\verb@    SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log, SEXP PermutedStatistics@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_QuadraticTest");@\\
 \mbox{}\verb@    return fun(LEV, pvalue, lower, give_log, PermutedStatistics);@\\
@@ -3544,7 +3544,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \mbox{}\verb@    SEXP PermutedStatistics, SEXP maxpts, SEXP releps, SEXP abseps@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@  static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_MaximumTest");@\\
 \mbox{}\verb@    return fun(LEV, alternative, pvalue, lower, give_log, PermutedStatistics, maxpts, releps,@\\
@@ -3555,7 +3555,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \mbox{}\verb@    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_MaximallySelectedTest");@\\
 \mbox{}\verb@    return fun(LEV, ordered, teststat, minbucket, lower, give_log);@\\
@@ -3747,7 +3747,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        cv = C_get_Covariance(LECV);@\\
 \mbox{}\verb@    }@\\
-\mbox{}\verb@    REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LECV),@\\
+\mbox{}\verb@    REAL(stat)[0] = C_maxtype(PQ, C_get_LinearStatistic(LECV),@\\
 \mbox{}\verb@        C_get_Expectation(LECV), cv, C_get_varonly(LECV), C_get_tol(LECV),@\\
 \mbox{}\verb@        INTEGER(alternative)[0]);@\\
 \mbox{}\verb@    if (!PVALUE) {@\\
@@ -4157,7 +4157,7 @@ stopifnot(isequal(qf1, qf2))
 \mbox{}\verb@    SEXP linstat, SEXP expect, SEXP MPinv_sym@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_quadform");@\\
 \mbox{}\verb@    return fun(linstat, expect, MPinv_sym);@\\
@@ -4287,7 +4287,7 @@ stopifnot(isequal(qf1, qf2))
 \mbox{}\verb@    double ret = 0.0;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (varonly) {@\\
-\mbox{}\verb@        if (alternative ==  ALTERNATIVE_twosided) {@\\
+\mbox{}\verb@        if (alternative == ALTERNATIVE_twosided) {@\\
 \mbox{}\verb@            ret = C_maxabsstand_Variance(PQ, linstat, expect, covar, tol);@\\
 \mbox{}\verb@        } else if (alternative == ALTERNATIVE_less) {@\\
 \mbox{}\verb@            ret = C_minstand_Variance(PQ, linstat, expect, covar, tol);@\\
@@ -4295,7 +4295,7 @@ stopifnot(isequal(qf1, qf2))
 \mbox{}\verb@            ret = C_maxstand_Variance(PQ, linstat, expect, covar, tol);@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        if (alternative ==  ALTERNATIVE_twosided) {@\\
+\mbox{}\verb@        if (alternative == ALTERNATIVE_twosided) {@\\
 \mbox{}\verb@            ret = C_maxabsstand_Covariance(PQ, linstat, expect, covar, tol);@\\
 \mbox{}\verb@        } else if (alternative == ALTERNATIVE_less) {@\\
 \mbox{}\verb@            ret = C_minstand_Covariance(PQ, linstat, expect, covar, tol);@\\
@@ -9504,7 +9504,7 @@ stopifnot(isequal(K1, K2))
 \mbox{}\verb@    SEXP A, SEXP B@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_kronecker");@\\
 \mbox{}\verb@    return fun(A, B);@\\
@@ -9695,7 +9695,7 @@ stopifnot(isequal(K1, K2))
 \mbox{}\verb@            pN = p * N;@\\
 \mbox{}\verb@            SpqP = S(p, q, P);@\\
 \mbox{}\verb@            for (int i = 0; i < N; i++)@\\
-\mbox{}\verb@                 PP_sym_ans[SpqP] +=  x[qN + i] * x[pN + i];@\\
+\mbox{}\verb@                 PP_sym_ans[SpqP] += x[qN + i] * x[pN + i];@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
@@ -9734,7 +9734,7 @@ stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) &&
 \mbox{}\verb@    SEXP x, SEXP n, SEXP tol@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_MPinv_sym");@\\
 \mbox{}\verb@    return fun(x, n, tol);@\\
@@ -9897,7 +9897,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@    SEXP x, SEXP names, SEXP diagonly@\\
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;@\\
-\mbox{}\verb@    if(fun == NULL)@\\
+\mbox{}\verb@    if (fun == NULL)@\\
 \mbox{}\verb@        fun = (SEXP(*)(SEXP, SEXP, SEXP))@\\
 \mbox{}\verb@            R_GetCCallable("libcoin", "R_unpack_sym");@\\
 \mbox{}\verb@    return fun(x, names, diagonly);@\\
@@ -10643,7 +10643,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@INTEGER(vo)[0] = varonly;@\\
 \mbox{}\verb@if (varonly) {@\\
 \mbox{}\verb@    SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));@\\
-\mbox{}\verb@} else  {@\\
+\mbox{}\verb@} else {@\\
 \mbox{}\verb@    /* always return variance */@\\
 \mbox{}\verb@    SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));@\\
 \mbox{}\verb@    SET_VECTOR_ELT(ans, Covariance_SLOT,@\\

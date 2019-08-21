@@ -1020,8 +1020,8 @@ $\ge$.
 @d C Macros
 @{
 #define S(i, j, n) ((i) >= (j) ? (n) * (j) + (i) - (j) * ((j) + 1) / 2 : (n) * (i) + (j) - (i) * ((i) + 1) / 2)
-#define LE(x, y, tol)  ((x) < (y)) || (fabs((x) - (y)) < (tol))
-#define GE(x, y, tol)  ((x) > (y)) || (fabs((x) - (y)) < (tol))
+#define LE(x, y, tol) ((x) < (y)) || (fabs((x) - (y)) < (tol))
+#define GE(x, y, tol) ((x) > (y)) || (fabs((x) - (y)) < (tol))
 @| S LE GE
 @}
 
@@ -1524,7 +1524,7 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic(
     SEXP tol
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_ExpectationCovarianceStatistic");
     return fun(x, y, weights, subset, block, varonly, tol);
@@ -1798,7 +1798,7 @@ extern SEXP libcoin_R_PermutedLinearStatistic(
     SEXP x, SEXP y, SEXP weights, SEXP subset, SEXP block, SEXP nresample
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_PermutedLinearStatistic");
     return fun(x, y, weights, subset, block, nresample);
@@ -1883,7 +1883,7 @@ extern SEXP libcoin_R_StandardisePermutedLinearStatistic(
     SEXP LECV
 ) {
     static SEXP(*fun)(SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP))
             R_GetCCallable("libcoin", "R_StandardisePermutedLinearStatistic");
     return fun(LECV);
@@ -1968,7 +1968,7 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
     SEXP varonly, SEXP tol
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_ExpectationCovarianceStatistic_2d");
     return fun(x, ix, y, iy, weights, subset, block, varonly, tol);
@@ -2078,7 +2078,7 @@ for (int q = 1; q < Lyp1; q++) {
 }
 csum[0] = 0; /* NA */
 /* row sums */
-for (int p = 1; p < Lxp1; p++)  {
+for (int p = 1; p < Lxp1; p++) {
     rsum[p] = 0;
     for (int q = 1; q < Lyp1; q++)
         rsum[p] += btab[q * Lxp1 + p];
@@ -2233,7 +2233,7 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
     SEXP itable
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_PermutedLinearStatistic_2d");
     return fun(x, ix, y, iy, block, nresample, itable);
@@ -2351,7 +2351,7 @@ extern SEXP libcoin_R_QuadraticTest(
     SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log, SEXP PermutedStatistics
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_QuadraticTest");
     return fun(LEV, pvalue, lower, give_log, PermutedStatistics);
@@ -2362,7 +2362,7 @@ extern SEXP libcoin_R_MaximumTest(
     SEXP PermutedStatistics, SEXP maxpts, SEXP releps, SEXP abseps
 ) {
   static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_MaximumTest");
     return fun(LEV, alternative, pvalue, lower, give_log, PermutedStatistics, maxpts, releps,
@@ -2373,7 +2373,7 @@ extern SEXP libcoin_R_MaximallySelectedTest(
     SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_MaximallySelectedTest");
     return fun(LEV, ordered, teststat, minbucket, lower, give_log);
@@ -2500,7 +2500,7 @@ SEXP R_MaximumTest
     } else {
         cv = C_get_Covariance(LECV);
     }
-    REAL(stat)[0] =  C_maxtype(PQ, C_get_LinearStatistic(LECV),
+    REAL(stat)[0] = C_maxtype(PQ, C_get_LinearStatistic(LECV),
         C_get_Expectation(LECV), cv, C_get_varonly(LECV), C_get_tol(LECV),
         INTEGER(alternative)[0]);
     if (!PVALUE) {
@@ -2787,7 +2787,7 @@ extern SEXP libcoin_R_quadform(
     SEXP linstat, SEXP expect, SEXP MPinv_sym
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_quadform");
     return fun(linstat, expect, MPinv_sym);
@@ -2867,7 +2867,7 @@ double C_maxtype
     double ret = 0.0;
 
     if (varonly) {
-        if (alternative ==  ALTERNATIVE_twosided) {
+        if (alternative == ALTERNATIVE_twosided) {
             ret = C_maxabsstand_Variance(PQ, linstat, expect, covar, tol);
         } else if (alternative == ALTERNATIVE_less) {
             ret = C_minstand_Variance(PQ, linstat, expect, covar, tol);
@@ -2875,7 +2875,7 @@ double C_maxtype
             ret = C_maxstand_Variance(PQ, linstat, expect, covar, tol);
         }
     } else {
-        if (alternative ==  ALTERNATIVE_twosided) {
+        if (alternative == ALTERNATIVE_twosided) {
             ret = C_maxabsstand_Covariance(PQ, linstat, expect, covar, tol);
         } else if (alternative == ALTERNATIVE_less) {
             ret = C_minstand_Covariance(PQ, linstat, expect, covar, tol);
@@ -6126,7 +6126,7 @@ extern SEXP libcoin_R_kronecker(
     SEXP A, SEXP B
 ) {
     static SEXP(*fun)(SEXP, SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP))
             R_GetCCallable("libcoin", "R_kronecker");
     return fun(A, B);
@@ -6254,7 +6254,7 @@ void C_KronSums_sym_
             pN = p * N;
             SpqP = S(p, q, P);
             for (int i = 0; i < N; i++)
-                 PP_sym_ans[SpqP] +=  x[qN + i] * x[pN + i];
+                 PP_sym_ans[SpqP] += x[qN + i] * x[pN + i];
         }
     }
 }
@@ -6281,7 +6281,7 @@ extern SEXP libcoin_R_MPinv_sym(
     SEXP x, SEXP n, SEXP tol
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_MPinv_sym");
     return fun(x, n, tol);
@@ -6393,7 +6393,7 @@ extern SEXP libcoin_R_unpack_sym(
     SEXP x, SEXP names, SEXP diagonly
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;
-    if(fun == NULL)
+    if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_unpack_sym");
     return fun(x, names, diagonly);
@@ -6810,7 +6810,7 @@ SET_VECTOR_ELT(ans, varonly_SLOT, vo = allocVector(INTSXP, 1));
 INTEGER(vo)[0] = varonly;
 if (varonly) {
     SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
-} else  {
+} else {
     /* always return variance */
     SET_VECTOR_ELT(ans, Variance_SLOT, tmp = allocVector(REALSXP, PQ));
     SET_VECTOR_ELT(ans, Covariance_SLOT,
