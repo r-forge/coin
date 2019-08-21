@@ -197,7 +197,6 @@ void C_KronSums_sym_
     
     double *PP_sym_ans
 ) {
-
     int pN, qN, SpqP;
 
     for (int q = 0; q < P; q++) {
@@ -222,7 +221,6 @@ void C_MPinv_sym
     double *dMP,
     int *rank
 ) {
-
     double *val, *vec, dtol, *rx, *work, valinv;
     int valzero = 0, info = 0, kn;
 
@@ -544,7 +542,6 @@ double* C_get_VarianceInfluence
 SEXP LECV
 
 ) {
-
     return(REAL(VECTOR_ELT(LECV, VarianceInfluence_SLOT)));
 }
 
@@ -585,7 +582,6 @@ double* C_get_Table
 SEXP LECV
 
 ) {
-
     if (LENGTH(LECV) <= Table_SLOT)
         error("Cannot extract table from object");
     return(REAL(VECTOR_ELT(LECV, Table_SLOT)));
@@ -600,7 +596,6 @@ int* C_get_dimTable
 SEXP LECV
 
 ) {
-
     if (LENGTH(LECV) <= Table_SLOT)
         error("Cannot extract table from object");
     return(INTEGER(getAttrib(VECTOR_ELT(LECV, Table_SLOT),
@@ -616,7 +611,6 @@ int C_get_B
 SEXP LECV
 
 ) {
-
     if (VECTOR_ELT(LECV, TableBlock_SLOT) != R_NilValue)
         return(LENGTH(VECTOR_ELT(LECV, Sumweights_SLOT)));
     return(C_get_dimTable(LECV)[2]);
@@ -644,7 +638,6 @@ double* C_get_PermutedLinearStatistic
 SEXP LECV
 
 ) {
-
     return(REAL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));
 }
 
@@ -680,7 +673,6 @@ SEXP RC_init_LECV_1d
     int Xfactor,
     double tol
 ) {
-
     SEXP ans;
 
     /* R\_init\_LECV */
@@ -800,7 +792,6 @@ SEXP RC_init_LECV_1d
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
             C_get_CovarianceInfluence(ans)[q] = 0.0;
         
-
     
 
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
@@ -960,7 +951,6 @@ SEXP RC_init_LECV_2d
         for (int q = 0; q < Q * (Q + 1) / 2; q++)
             C_get_CovarianceInfluence(ans)[q] = 0.0;
         
-
     
 
     PROTECT(tabdim = allocVector(INTSXP, 3));
@@ -1003,7 +993,6 @@ double C_perm_pvalue
     const int lower,
     const int give_log
 ) {
-
     double ret;
 
     if (give_log) {
@@ -1031,7 +1020,6 @@ double C_norm_pvalue
     const int lower,
     const int give_log
 ) {
-
     double ret;
 
     if (alternative == ALTERNATIVE_less) {
@@ -1073,7 +1061,6 @@ double C_maxtype_pvalue
     double abseps,
     double tol
 ) {
-
     int nu = 0, inform, i, j, sub, nonzero, *infin, *index, rnd = 0;
     double ans, myerror, *lowerbnd, *upperbnd, *delta, *corr, *sd;
 
@@ -1231,8 +1218,7 @@ void C_KronSums_dweights_dsubset
     
         double *PQ_ans
     
-)
-{
+) {
     double *s, *w;
     /* KronSums Body */
     
@@ -1365,8 +1351,7 @@ void C_KronSums_iweights_dsubset
     
         double *PQ_ans
     
-)
-{
+) {
     double *s;
     int *w;
     /* KronSums Body */
@@ -1500,8 +1485,7 @@ void C_KronSums_iweights_isubset
     
         double *PQ_ans
     
-)
-{
+) {
     int *s, *w;
     /* KronSums Body */
     
@@ -1764,8 +1748,7 @@ void C_XfactorKronSums_dweights_dsubset
     
         double *PQ_ans
     
-)
-{
+) {
     double *s, *w;
     /* XfactorKronSums Body */
     
@@ -1878,8 +1861,7 @@ void C_XfactorKronSums_iweights_dsubset
     
         double *PQ_ans
     
-)
-{
+) {
     double *s;
     int *w;
     /* XfactorKronSums Body */
@@ -1993,8 +1975,7 @@ void C_XfactorKronSums_iweights_isubset
     
         double *PQ_ans
     
-)
-{
+) {
     int *s, *w;
     /* XfactorKronSums Body */
     
@@ -2383,8 +2364,7 @@ void C_KronSums_Permutation_isubset
     
         double *PQ_ans
     
-)
-{
+) {
     /* KronSums Permutation Body */
     
         R_xlen_t qP, qN, pN, qPp;
@@ -2445,8 +2425,7 @@ void C_KronSums_Permutation_dsubset
     
         double *PQ_ans
     
-)
-{
+) {
     /* KronSums Permutation Body */
     
         R_xlen_t qP, qN, pN, qPp;
@@ -2507,8 +2486,7 @@ void C_XfactorKronSums_Permutation_isubset
     
         double *PQ_ans
     
-)
-{
+) {
     /* XfactorKronSums Permutation Body */
     
         R_xlen_t qP, qN;
@@ -2565,8 +2543,7 @@ void C_XfactorKronSums_Permutation_dsubset
     
         double *PQ_ans
     
-)
-{
+) {
     /* XfactorKronSums Permutation Body */
     
         R_xlen_t qP, qN;
@@ -2745,8 +2722,7 @@ void C_colSums_dweights_dsubset
     
         double *P_ans
     
-)
-{
+) {
     double *s, *w;
     /* colSums Body */
     
@@ -2847,8 +2823,7 @@ void C_colSums_iweights_dsubset
     
         double *P_ans
     
-)
-{
+) {
     double *s;
     int *w;
     /* colSums Body */
@@ -2950,8 +2925,7 @@ void C_colSums_iweights_isubset
     
         double *P_ans
     
-)
-{
+) {
     int *s, *w;
     /* colSums Body */
     
@@ -3052,8 +3026,7 @@ void C_colSums_dweights_isubset
     
         double *P_ans
     
-)
-{
+) {
     int *s;
     double *w;
     /* colSums Body */
@@ -3254,12 +3227,10 @@ double C_Sums_dweights_dsubset
             
         
     
-)
-{
+) {
     double *s, *w;
     /* Sums Body */
     
-
         double ans = 0.0;
 
         if (Nsubset > 0) {
@@ -3329,13 +3300,11 @@ double C_Sums_iweights_dsubset
             
         
     
-)
-{
+) {
     double *s;
     int *w;
     /* Sums Body */
     
-
         double ans = 0.0;
 
         if (Nsubset > 0) {
@@ -3405,12 +3374,10 @@ double C_Sums_iweights_isubset
             
         
     
-)
-{
+) {
     int *s, *w;
     /* Sums Body */
     
-
         double ans = 0.0;
 
         if (Nsubset > 0) {
@@ -3480,13 +3447,11 @@ double C_Sums_dweights_isubset
             
         
     
-)
-{
+) {
     int *s;
     double *w;
     /* Sums Body */
     
-
         double ans = 0.0;
 
         if (Nsubset > 0) {
@@ -3665,8 +3630,7 @@ void C_OneTableSums_dweights_dsubset
     
         double *P_ans
     
-)
-{
+) {
     double *s, *w;
     /* OneTableSums Body */
     
@@ -3759,8 +3723,7 @@ void C_OneTableSums_iweights_dsubset
     
         double *P_ans
     
-)
-{
+) {
     double *s;
     int *w;
     /* OneTableSums Body */
@@ -3854,8 +3817,7 @@ void C_OneTableSums_iweights_isubset
     
         double *P_ans
     
-)
-{
+) {
     int *s, *w;
     /* OneTableSums Body */
     
@@ -3948,8 +3910,7 @@ void C_OneTableSums_dweights_isubset
     
         double *P_ans
     
-)
-{
+) {
     int *s;
     double *w;
     /* OneTableSums Body */
@@ -4091,7 +4052,6 @@ SEXP R_OneTableSums
 )
 
 {
-
     SEXP ans;
     /* C integer N Input */
     
@@ -4162,8 +4122,7 @@ void C_TwoTableSums_dweights_dsubset
     
         double *PQ_ans
     
-)
-{
+) {
     double *s, *w;
     /* TwoTableSums Body */
     
@@ -4267,8 +4226,7 @@ void C_TwoTableSums_iweights_dsubset
     
         double *PQ_ans
     
-)
-{
+) {
     double *s;
     int *w;
     /* TwoTableSums Body */
@@ -4373,8 +4331,7 @@ void C_TwoTableSums_iweights_isubset
     
         double *PQ_ans
     
-)
-{
+) {
     int *s, *w;
     /* TwoTableSums Body */
     
@@ -4478,8 +4435,7 @@ void C_TwoTableSums_dweights_isubset
     
         double *PQ_ans
     
-)
-{
+) {
     int *s;
     double *w;
     /* TwoTableSums Body */
@@ -4636,7 +4592,6 @@ SEXP R_TwoTableSums
 )
 
 {
-
     SEXP ans, dim;
     /* C integer N Input */
     
@@ -4720,8 +4675,7 @@ void C_ThreeTableSums_dweights_dsubset
     
         double *PQL_ans
     
-)
-{
+) {
     double *s, *w;
     /* ThreeTableSums Body */
     
@@ -4836,8 +4790,7 @@ void C_ThreeTableSums_iweights_dsubset
     
         double *PQL_ans
     
-)
-{
+) {
     double *s;
     int *w;
     /* ThreeTableSums Body */
@@ -4953,8 +4906,7 @@ void C_ThreeTableSums_iweights_isubset
     
         double *PQL_ans
     
-)
-{
+) {
     int *s, *w;
     /* ThreeTableSums Body */
     
@@ -5069,8 +5021,7 @@ void C_ThreeTableSums_dweights_isubset
     
         double *PQL_ans
     
-)
-{
+) {
     int *s;
     double *w;
     /* ThreeTableSums Body */
@@ -5284,8 +5235,7 @@ void C_setup_subset
         R_xlen_t N
     ,
     SEXP ans
-)
-{
+) {
     for (R_xlen_t i = 0; i < N; i++) {
         /* ans is R style index in 1:N */
         if (TYPEOF(ans) == INTSXP) {
@@ -5313,8 +5263,7 @@ void C_setup_subset_block
         SEXP blockTable
     ,
     SEXP ans
-)
-{
+) {
     double *cumtable;
     int Nlevels = LENGTH(blockTable);
 
@@ -5354,8 +5303,7 @@ void C_order_subset_wrt_block
         SEXP blockTable
     ,
     SEXP ans
-)
-{
+) {
     double *cumtable;
     int Nlevels = LENGTH(blockTable);
 
@@ -5602,7 +5550,6 @@ void C_Permute
     ,
     double *ans
 ) {
-
     R_xlen_t n = Nsubset, j;
 
     for (R_xlen_t i = 0; i < Nsubset; i++) {
@@ -6117,7 +6064,6 @@ void C_ExpectationLinearStatistic
     const int add,
     double *PQ_ans
 ) {
-
     if (!add)
         for (int p = 0; p < mPQB(P, Q, 1); p++) PQ_ans[p] = 0.0;
 
@@ -6149,11 +6095,9 @@ void C_CovarianceLinearStatistic
     const int add,
     double *PQPQ_sym_ans
 ) {
-
     double f1 = sumweights / (sumweights - 1);
     double f2 = 1.0 / (sumweights - 1);
     double tmp, *PP_sym_tmp;
-
 
     if (mPQB(P, Q, 1) == 1) {
         tmp = f1 * CovInf[0] * CovX[0];
@@ -6197,8 +6141,6 @@ void C_VarianceLinearStatistic
     const int add,
     double *PQ_ans
 ) {
-
-
     if (mPQB(P, Q, 1) == 1) {
         C_CovarianceLinearStatistic(P, Q, VarInf, ExpX, VarX,
                                     sumweights, (add >= 1),
@@ -6229,7 +6171,6 @@ double C_maxstand_Covariance
     const double *covar_sym,
     const double tol
 ) {
-
     double ans = R_NegInf, tmp = 0.0;
 
     for (int p = 0; p < PQ; p++) {
@@ -6251,7 +6192,6 @@ double C_maxstand_Variance
     const double *var,
     const double tol
 ) {
-
     double ans = R_NegInf, tmp = 0.0;
 
     for (int p = 0; p < PQ; p++) {
@@ -6273,7 +6213,6 @@ double C_minstand_Covariance
     const double *covar_sym,
     const double tol
 ) {
-
     double ans = R_PosInf, tmp = 0.0;
 
     for (int p = 0; p < PQ; p++) {
@@ -6295,7 +6234,6 @@ double C_minstand_Variance
     const double *var,
     const double tol
 ) {
-
     double ans = R_PosInf, tmp = 0.0;
 
     for (int p = 0; p < PQ; p++) {
@@ -6317,7 +6255,6 @@ double C_maxabsstand_Covariance
     const double *covar_sym,
     const double tol
 ) {
-
     double ans = R_NegInf, tmp = 0.0;
 
     for (int p = 0; p < PQ; p++) {
@@ -6340,7 +6277,6 @@ double C_maxabsstand_Variance
     const double *var,
     const double tol
 ) {
-
     double ans = R_NegInf, tmp = 0.0;
 
     for (int p = 0; p < PQ; p++) {
@@ -6361,7 +6297,6 @@ double C_quadform
     const double *expect,
     const double *MPinv_sym
 ) {
-
     double ans = 0.0, tmp = 0.0;
 
     for (int q = 0; q < PQ; q++) {
@@ -6417,7 +6352,6 @@ double C_maxtype
     const double tol,
     const int alternative
 ) {
-
     double ret = 0.0;
 
     if (varonly) {
@@ -6451,7 +6385,6 @@ void C_standardise
     const int varonly,
     const double tol
 ) {
-
     double var;
 
     for (int p = 0; p < PQ; p++) {
@@ -6485,7 +6418,6 @@ const int lower,
 const int give_log
 
 ) {
-
     /* Setup maxstat Variables */
     
     double *linstat, *expect, *covar, *varinf, *covinf, *ExpX, *blinstat, tol, *ls;
@@ -6607,7 +6539,6 @@ const int give_log
         }
 
         if ((sumleft >= minbucket) && (sumright >= minbucket) && (ExpX[p] > 0)) {
-
             ls = mlinstat;
             /* compute MPinv only once */
             if (teststat != TESTSTAT_maximum)
@@ -6674,7 +6605,6 @@ const int lower,
 const int give_log
 
 ) {
-
     double *mtmp;
     int qPp, nc, *levels, Pnonzero, *indl, *contrast;
 
@@ -6869,7 +6799,6 @@ const int give_log
         }
 
         if ((sumleft >= minbucket) && (sumright >= minbucket)) {
-
             ls = mlinstat;
             /* compute MPinv only once */
             if (teststat != TESTSTAT_maximum)
@@ -7249,7 +7178,6 @@ SEXP R_PermutedLinearStatistic
                 linstat[p] = 0.0;
             
             C_doPermute(REAL(expand_subset), Nsubset, REAL(tmp), REAL(perm));
-
             RC_KronSums_Permutation(x, NROW(x), P, REAL(y), Q, expand_subset,
                                     Offset0, Nsubset, perm, linstat);
         }
@@ -7493,7 +7421,6 @@ SEXP ans
                                         C_get_Covariance(ans));
         }
         
-
     }
 
     /* always return variances */
@@ -7711,7 +7638,6 @@ SEXP R_PermutedLinearStatistic_2d
     GetRNGstate();
 
     for (R_xlen_t np = 0; np < inresample; np++) {
-
         /* Setup Linear Statistic */
         
         if (np % 256 == 0) R_CheckUserInterrupt();
@@ -7790,7 +7716,6 @@ SEXP R_QuadraticTest
 )
 
 {
-
     SEXP ans, stat, pval, names, permstat;
     double *MPinv, *ls, st, pst, *ex;
     int rank, P, Q, PQ, greater = 0;
@@ -7977,7 +7902,6 @@ SEXP R_MaximallySelectedTest
 )
 
 {
-
     SEXP ans, index, stat, pval, names, permstat;
     int P, mb;
 

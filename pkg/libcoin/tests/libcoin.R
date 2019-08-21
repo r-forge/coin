@@ -413,7 +413,6 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 
 
-
 ###################################################
 ### code chunk number 22: KronSums-Permutation
 ###################################################
@@ -444,7 +443,6 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 ###################################################
 ### code chunk number 24: OneTableSum
 ###################################################
-
 a0 <- as.vector(xtabs(weights ~ ixf, subset = subset))
 a1 <- ctabs(ix, weights = weights, subset = subset)[-1]
 a2 <- ctabs(ix, weights = as.double(weights), subset = as.double(subset))[-1]
@@ -458,7 +456,6 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 ###################################################
 ### code chunk number 25: TwoTableSum
 ###################################################
-
 a0 <- xtabs(weights ~ ixf + iyf, subset = subset)
 class(a0) <- "matrix"
 dimnames(a0) <- NULL
