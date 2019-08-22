@@ -2,13 +2,13 @@
 \name{NEWS}
 \title{NEWS file for the \pkg{libcoin} package}
 
-\section{Changes in Version 1.0-5 (20YY-MM-DD)}{
+\section{Changes in Version 1.0-5 (2019-08-22)}{
   \itemize{
     \item New function \code{R_unpack_sym} for unpacking a symmetric matrix
           stored in lower-packed storage mode.
-    \item New R interfaces \code{R_quadform} and \code{R_MPinv_sym},
-          corresponding to the C functions \code{C_quadform} and
-          \code{C_MPinv_sym}, added and exported to the C API.
+    \item New functions \code{R_quadform} and \code{R_MPinv_sym} providing
+          interfaces to the \proglang{C} functions \code{C_quadform} and
+          \code{C_MPinv_sym}.
     \item Function \code{libcoin_StandardisePermutedLinearStatistic} was renamed
           to \code{libcoin_R_StandardisePermutedLinearStatistic}.
     \item Documentation updates.
@@ -44,15 +44,15 @@
 
 \section{Changes in Version 1.0-0 (2017-12-12)}{
   \itemize{
-    \item Make the package truly literate; there is one single NUWEB file called
-          \code{libcoin.w} which generates the complete package.
+    \item Make the package truly literate; there is one single \proglang{NUWEB}
+          file called \file{libcoin.w} which generates the complete package.
     \item The package can now deal with long vectors.
   }
 }
 
 \section{Changes in Version 0.9-3 (2017-07-02)}{
   \itemize{
-    \item Remove copy of \code{rcont2} from the \code{stats} package as it is
+    \item Remove copy of \code{rcont2} from the \pkg{stats} package as it is
           exported now.
   }
 }
@@ -64,12 +64,11 @@
   }
 }
 
-
 \section{Changes in Version 0.9-1 (2017-02-06)}{
   \itemize{
-    \item Calling \pkg{libcoin}'s C routines (using \code{.Call()}) now requires
-          the entry points to be specified as \R objects, i.e., the use of
-          character strings is no longer allowed.
+    \item Calling \pkg{libcoin}'s \proglang{C} routines (using \code{.Call()})
+          now requires the entry points to be specified as \R objects, i.e., the
+          use of character strings is no longer allowed.
     \item Stop when all observations are missing.
     \item 2d case with missings in at least one variable used incorrect sample
           sizes and thus produced wrong results.
