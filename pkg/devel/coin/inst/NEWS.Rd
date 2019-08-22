@@ -31,11 +31,11 @@
     }
   }
 }
-\section{Changes in version 1.3-1 (20YY-MM-DD)}{
+\section{Changes in version 1.3-1 (2019-08-22)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item Precision issues in point and interval estimates for location and
-      scale problems.
+      \item Precision issues in point and interval estimates associated with
+      location and scale problems.
     }
   }
   \subsection{User-visible changes}{
@@ -45,16 +45,6 @@
       to the results.
 
       \item Documentation updates.
-    }
-  }
-  \subsection{Other changes}{
-    \itemize{
-      \item
-    }
-  }
-  \subsection{Deprecated and defunct}{
-    \itemize{
-      \item
     }
   }
 }
@@ -870,7 +860,7 @@
 }
 \section{Changes in version 0.6-0 (2007-03-01)}{
   \itemize{
-    \item Rename some C source files & update doxygen documentation.
+    \item Rename some \proglang{C} source files & update doxygen documentation.
 
     \item Simplify some methods and the class structure.
 
@@ -930,7 +920,7 @@
   \itemize{
     \item Add \code{$(FLIBS)} to \file{Makevars}.
 
-    \item Include doxygen documentation for C functions.
+    \item Include doxygen documentation for \proglang{C} functions.
 
     \item Documentation updates.
   }
@@ -1004,7 +994,7 @@
 }
 \section{Changes in version 0.4-4 (2006-02-03)}{
   \itemize{
-    \item Make R CMD check happy and move \file{src/README} to
+    \item Make \command{R CMD check} happy and move \file{src/README} to
     \file{inst/README}.
   }
 }
@@ -1046,7 +1036,7 @@
   \itemize{
     \item Export \code{independence_test.table()}.
 
-    \item Add \code{conf.level} attribute for \code{MCp} objects when
+    \item Add \code{conf.level} attribute for \code{"MCp"} objects when
     quasi-randomized Monte Carlo procedures (from \pkg{mvtnorm}) have been used.
 
     \item Add new \code{var_trafo} argument to \code{trafo()}.
@@ -1071,9 +1061,9 @@
 }
 \section{Changes in version 0.3-6 (2005-11-17)}{
   \itemize{
-    \item Internal C function \code{R_MonteCarloIndependenceTest} returns a
-    \eqn{pq \times B}{pq x B} matrix instead of a list with B elements (the
-    linear statistic for each random permutation of the data).
+    \item Internal \proglang{C} function \code{R_MonteCarloIndependenceTest}
+    returns a \eqn{pq \times B}{pq x B} matrix instead of a list with \eqn{B}
+    elements (the linear statistic for each random permutation of the data).
 
     \item Various simplifications for the computations of adjusted
     \eqn{p}-values.
@@ -1087,17 +1077,17 @@
     \item Fix \code{print} method for marginal homogeneity tests
     (\samp{...stratified by block...}).
 
-    \item \code{R_kronecker} in C now available.
+    \item \code{R_kronecker} in \proglang{C} now available.
 
-    \item C versions of \code{nrow()} and \code{ncol()} return 1 or length for
-    vectors.
+    \item \proglang{C} versions of \code{nrow()} and \code{ncol()} return 1 or
+    length for vectors.
 
     \item Some internal optimisation.
 
-    \item C functions \code{nrow(x)} and \code{ncol(x)} return \code{LENGTH(x)}
-    or \code{1} when \code{x} has no \code{dim} attribute.
+    \item \proglang{C} functions \code{nrow(x)} and \code{ncol(x)} return
+    \code{LENGTH(x)} or \code{1} when \code{x} has no \code{dim} attribute.
 
-    \item New R-interface function \code{R_kronecker} to \code{C_kronecker}
+    \item New \R interface function \code{R_kronecker} to \code{C_kronecker}
     (which returns a _vector_!).
 
     \item Speedup of variance computations in internal functions.
