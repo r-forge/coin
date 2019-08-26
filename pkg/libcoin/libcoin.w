@@ -460,7 +460,8 @@ Alternatively, we can compute the same object without setting-up the dummy
 matrix:
 <<1dex-2>>=
 ls2 <- LinStatExpCov(X = x, Y = matrix(y, ncol = 1))
-all.equal(ls1, ls2)
+all.equal(ls1[-grep("Xfactor", names(ls1))], 
+          ls2[-grep("Xfactor", names(ls2))])
 @@
 The results are identical, except for a logical indicating that a factor was
 used to represent the dummy matrix \verb|X|.
@@ -577,16 +578,19 @@ ylev <- sort(unique(y))
 Y <- rbind(0, matrix(ylev, ncol = 1))
 iy <- .bincode(y, breaks = c(-Inf, ylev, Inf))
 ls3 <- LinStatExpCov(X = X, ix = ix, Y = Y, iy = iy)
-all.equal(ls1, ls3)
+all.equal(ls1[-grep("Table", names(ls1))], 
+          ls3[-grep("Table", names(ls3))])
 ### works also with factors
 ls3 <- LinStatExpCov(X = X, ix = factor(ix), Y = Y, iy = factor(iy))
-all.equal(ls1, ls3)
+all.equal(ls1[-grep("Table", names(ls1))], 
+          ls3[-grep("Table", names(ls3))])
 @@
 Similar to the one-dimensional case, we can also omit the \verb|X| matrix
 here
 <<2dex-2>>=
 ls4 <- LinStatExpCov(ix = ix, Y = Y, iy = iy)
-all.equal(ls3, ls4)
+all.equal(ls3[-grep("Xfactor", names(ls3))], 
+          ls4[-grep("Xfactor", names(ls4))])
 @@
 It is important to note that all computations are based on the tabulations
 <<2dex-3>>=
