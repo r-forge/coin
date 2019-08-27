@@ -11,7 +11,7 @@ libcoin.Rnw:	libcoin.w
 
 libcoin.R: libcoin.Rnw
 	Stangle libcoin.Rnw
-	mv libcoin.R tests
+#	mv libcoin.R tests
 
 libcoin.tex:	libcoin.Rnw
 	R CMD Sweave libcoin.Rnw
@@ -27,7 +27,7 @@ libcoin.pdf:	libcoin.tex
 	pdflatex libcoin.tex
 	cp libcoin.Rnw vignettes
 
-all:	libcoin.R libcoin.pdf
+all:	libcoin.pdf
 
 clean:	
 	./cleanup
