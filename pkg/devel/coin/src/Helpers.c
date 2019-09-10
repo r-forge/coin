@@ -21,8 +21,29 @@ SEXP R_PermutedLinearStatistic(SEXP x, SEXP y, SEXP weights, SEXP subset,
                                              block, nresample));
 }
 
+SEXP R_quadform(SEXP linstat, SEXP expect, SEXP MPinv_sym) {
+    return(libcoin_R_quadform(linstat, expect, MPinv_sym));
+}
+
 SEXP R_kronecker(SEXP A, SEXP B) {
     return(libcoin_R_kronecker(A, B));
+}
+
+SEXP R_MPinv_sym(SEXP x, SEXP n, SEXP tol) {
+    SEXP m;
+
+    PROTECT(m = allocVector(INTSXP, 1));
+    if (INTEGER(n)[0] > 0)
+        INTEGER(m)[0] = INTEGER(n)[0];
+    else
+        INTEGER(m)[0] = (sqrt(1 + 8 * LENGTH(x)) - 1) / 2;
+
+    UNPROTECT(1);
+    return(libcoin_R_MPinv_sym(x, m, tol));
+}
+
+SEXP R_unpack_sym(SEXP x, SEXP names, SEXP diagonly) {
+    return(libcoin_R_unpack_sym( x,  names,  diagonly));
 }
 
 int nrow(SEXP x) {
@@ -46,7 +67,6 @@ int ncol(SEXP x) {
         return(INTEGER(getAttrib(x, R_DimSymbol))[1]);
     }
 }
-
 
 SEXP R_maxstattrafo(SEXP x, SEXP cutpoints) {
 

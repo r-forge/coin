@@ -54,8 +54,8 @@
       statistic.
     }
     \item{\code{covariance}:}{
-      Object of class \code{"\linkS4class{VarCovar}"}.  The covariance or
-      variance of the linear statistic.
+      Object of class \code{"numeric"}.  The lower triangular elements of the
+      covariance of the linear statistic.
     }
     \item{\code{xtrans}:}{
       Object of class \code{"matrix"}.  The transformed \code{x}.
@@ -93,8 +93,8 @@
   Additionally, for objects of class \code{"QuadTypeIndependenceTest"}:
   \describe{
     \item{\code{covarianceplus}:}{
-      Object of class \code{"matrix"}.  The Moore-Penrose inverse of the
-      covariance matrix.
+      Object of class \code{"numeric"}.  The lower triangular elements of the
+      Moore-Penrose inverse of the covariance of the linear statistic.
     }
     \item{\code{df}:}{
       Object of class \code{"numeric"}.  The rank of the covariance matrix.
