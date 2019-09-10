@@ -1,26 +1,3 @@
-### <DEPRECATED>
-### Note: The "CovarianceMatrix", "Variance" and "VarCovar" classes were
-### deprecated in 1.4-0.  To be removed in 2.0-0.
-### Covariance matrix
-setClass("CovarianceMatrix",
-    slots = c(
-        covariance = "matrix"
-    )
-)
-
-### Variance only
-setClass("Variance",
-    slots = c(
-        variance = "numeric"
-    )
-)
-
-### Virtual class for covariance and variance
-setClassUnion("VarCovar",
-    members = c("CovarianceMatrix", "Variance")
-)
-### </DEPRECATED>
-
 ### Class for raw data: a set of 'x' variables and a set of 'y' variables,
 ### possibly blocked and with weights
 setClass("IndependenceProblem",

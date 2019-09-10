@@ -31,13 +31,12 @@
   }
   \subsection{Deprecated and defunct}{
     \itemize{
-      \item Classes \code{"Variance"}, \code{"CovarianceMatrix"} and
-      \code{"VarCovar"} are now deprecated.
-
       \item The \code{B} argument of \code{approximate()} and
       \code{ApproxNullDistribution()} is now defunct and has been removed.
 
-      \item Class \code{"PValue"} is now defunct and has been removed.
+      \item Classes \code{"Variance"}, \code{"CovarianceMatrix"},
+      \code{"VarCovar"} and \code{"PValue"} are now defunct and have been
+      removed.
     }
   }
 }

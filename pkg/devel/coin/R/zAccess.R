@@ -356,17 +356,6 @@ setGeneric("covariance",
     }
 )
 
-### <DEPRECATED>
-### Note: The "CovarianceMatrix", "Variance" and "VarCovar" classes were
-### deprecated in 1.4-0.  To be removed in 2.0-0.
-setMethod("covariance",
-    signature = "CovarianceMatrix",
-    definition = function(object, ...) {
-        object@covariance
-    }
-)
-### </DEPRECATED>
-
 setMethod("covariance",
     signature = "IndependenceLinearStatistic",
     definition = function(object, ...) {
@@ -389,24 +378,6 @@ setGeneric("variance",
         standardGeneric("variance")
     }
 )
-
-### <DEPRECATED>
-### Note: The "CovarianceMatrix", "Variance" and "VarCovar" classes were
-### deprecated in 1.4-0.  To be removed in 2.0-0.
-setMethod("variance",
-    signature = "Variance",
-    definition = function(object, ...) {
-        object@variance
-    }
-)
-
-setMethod("variance",
-    signature = "CovarianceMatrix",
-    definition = function(object, ...) {
-        diag(object@covariance)
-    }
-)
-### </DEPRECATED>
 
 setMethod("variance",
     signature = "IndependenceLinearStatistic",

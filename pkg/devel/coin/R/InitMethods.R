@@ -1,23 +1,3 @@
-### <DEPRECATED>
-### Note: The "CovarianceMatrix", "Variance" and "VarCovar" classes were
-### deprecated in 1.4-0.  To be removed in 2.0-0.
-### new("CovarianceMatrix", ...)
-setMethod("initialize",
-    signature = "CovarianceMatrix",
-    definition = function(.Object, covariance, ...) {
-        callNextMethod(.Object, covariance = covariance, ...)
-    }
-)
-
-### new("Variance", ...)
-setMethod("initialize",
-    signature = "Variance",
-    definition = function(.Object, variance, ...) {
-        callNextMethod(.Object, variance = variance, ...)
-    }
-)
-### </DEPRECATED>
-
 ### new("IndependenceProblem", ...)
 ### initialized data
 setMethod("initialize",

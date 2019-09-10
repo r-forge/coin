@@ -6,13 +6,10 @@
 \alias{expectation,IndependenceTest-method}
 \alias{variance}
 \alias{variance-methods}
-\alias{variance,Variance-method}
-\alias{variance,CovarianceMatrix-method}
 \alias{variance,IndependenceLinearStatistic-method}
 \alias{variance,IndependenceTest-method}
 \alias{covariance}
 \alias{covariance-methods}
-\alias{covariance,CovarianceMatrix-method}
 \alias{covariance,IndependenceLinearStatistic-method}
 \alias{covariance,IndependenceTest-method}
 \title{Extraction of the Expectation, Variance and Covariance of the Linear
@@ -25,12 +22,9 @@
 \S4method{expectation}{IndependenceLinearStatistic}(object, \dots)
 \S4method{expectation}{IndependenceTest}(object, \dots)
 
-\S4method{variance}{Variance}(object, \dots)
-\S4method{variance}{CovarianceMatrix}(object, \dots)
 \S4method{variance}{IndependenceLinearStatistic}(object, \dots)
 \S4method{variance}{IndependenceTest}(object, \dots)
 
-\S4method{covariance}{CovarianceMatrix}(object, \dots)
 \S4method{covariance}{IndependenceLinearStatistic}(object, \dots)
 \S4method{covariance}{IndependenceTest}(object, \dots)
 }
