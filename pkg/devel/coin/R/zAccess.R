@@ -358,16 +358,31 @@ setGeneric("covariance",
 
 setMethod("covariance",
     signature = "IndependenceLinearStatistic",
-    definition = function(object, ...) {
+    definition = function(object, invert = FALSE, ...) {
         nm <- statnames(object)$names
-        .Call(R_unpack_sym, object@covariance, nm, 0L)
+        if (invert) {
+            mp <- .Call(R_MPinv_sym, 0L, object@covariance)
+            .Call(R_unpack_sym, mp$MPinv, nm, 0L)
+        } else
+            .Call(R_unpack_sym, object@covariance, nm, 0L)
+    }
+)
+
+setMethod("covariance",
+    signature = "QuadTypeIndependenceTestStatistic",
+    definition = function(object, invert = FALSE, ...) {
+        nm <- statnames(object)$names
+        if (invert)
+            .Call(R_unpack_sym, object@covarianceplus, nm, 0L)
+        else
+            callNextMethod(object, invert, ...)
     }
 )
 
 setMethod("covariance",
     signature = "IndependenceTest",
-    definition = function(object, ...) {
-        callGeneric(object@statistic, ...)
+    definition = function(object, invert = FALSE, ...) {
+        callGeneric(object@statistic, invert, ...)
     }
 )
 

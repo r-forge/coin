@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2019-07-02 r76766) -- "Unsuffered Consequences"
+R Under development (unstable) (2019-09-07 r77160) -- "Unsuffered Consequences"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -2244,11 +2244,10 @@ attr(,"conf.level")
 > ### Aliases: expectation expectation-methods
 > ###   expectation,IndependenceLinearStatistic-method
 > ###   expectation,IndependenceTest-method variance variance-methods
-> ###   variance,Variance-method variance,CovarianceMatrix-method
 > ###   variance,IndependenceLinearStatistic-method
 > ###   variance,IndependenceTest-method covariance covariance-methods
-> ###   covariance,CovarianceMatrix-method
 > ###   covariance,IndependenceLinearStatistic-method
+> ###   covariance,QuadTypeIndependenceTestStatistic-method
 > ###   covariance,IndependenceTest-method
 > ### Keywords: methods
 > 
@@ -2266,21 +2265,21 @@ attr(,"conf.level")
 > ct <- cmh_test(y ~ x, data = dta)
 > 
 > ## The linear statistic, i.e., the contingency table...
-> (l <- statistic(ct, type = "linear"))
+> (T <- statistic(ct, type = "linear"))
   1 2 3
 1 1 0 1
 2 0 2 0
 3 1 0 1
 > 
 > ## ...and its expectation...
-> (El <- expectation(ct))
+> (mu <- expectation(ct))
       1:1       2:1       3:1       1:2       2:2       3:2       1:3       2:3 
 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 
       3:3 
 0.6666667 
 > 
-> ## ...and covariance
-> (Vl <- covariance(ct))
+> ## ...and covariance...
+> (Sigma <- covariance(ct))
             1:1         2:1         3:1         1:2         2:2         3:2
 1:1  0.35555556 -0.17777778 -0.17777778 -0.17777778  0.08888889  0.08888889
 2:1 -0.17777778  0.35555556 -0.17777778  0.08888889 -0.17777778  0.08888889
@@ -2302,8 +2301,31 @@ attr(,"conf.level")
 2:3 -0.17777778  0.35555556 -0.17777778
 3:3 -0.17777778 -0.17777778  0.35555556
 > 
+> ## ...and its inverse
+> (SigmaPlus <- covariance(ct, invert = TRUE))
+           1:1        2:1        3:1        1:2        2:2        3:2
+1:1  0.5555556 -0.2777778 -0.2777778 -0.2777778  0.1388889  0.1388889
+2:1 -0.2777778  0.5555556 -0.2777778  0.1388889 -0.2777778  0.1388889
+3:1 -0.2777778 -0.2777778  0.5555556  0.1388889  0.1388889 -0.2777778
+1:2 -0.2777778  0.1388889  0.1388889  0.5555556 -0.2777778 -0.2777778
+2:2  0.1388889 -0.2777778  0.1388889 -0.2777778  0.5555556 -0.2777778
+3:2  0.1388889  0.1388889 -0.2777778 -0.2777778 -0.2777778  0.5555556
+1:3 -0.2777778  0.1388889  0.1388889 -0.2777778  0.1388889  0.1388889
+2:3  0.1388889 -0.2777778  0.1388889  0.1388889 -0.2777778  0.1388889
+3:3  0.1388889  0.1388889 -0.2777778  0.1388889  0.1388889 -0.2777778
+           1:3        2:3        3:3
+1:1 -0.2777778  0.1388889  0.1388889
+2:1  0.1388889 -0.2777778  0.1388889
+3:1  0.1388889  0.1388889 -0.2777778
+1:2 -0.2777778  0.1388889  0.1388889
+2:2  0.1388889 -0.2777778  0.1388889
+3:2  0.1388889  0.1388889 -0.2777778
+1:3  0.5555556 -0.2777778 -0.2777778
+2:3 -0.2777778  0.5555556 -0.2777778
+3:3 -0.2777778 -0.2777778  0.5555556
+> 
 > ## The standardized contingency table...
-> (l - El) / sqrt(variance(ct))
+> (T - mu) / sqrt(variance(ct))
           1         2         3
 1  0.559017 -1.118034  0.559017
 2 -1.118034  2.236068 -1.118034
@@ -2315,6 +2337,16 @@ attr(,"conf.level")
 1  0.559017 -1.118034  0.559017
 2 -1.118034  2.236068 -1.118034
 3  0.559017 -1.118034  0.559017
+> 
+> ## The quadratic form...
+> U <- as.vector(T - mu)
+> U %*% SigmaPlus %*% U
+     [,1]
+[1,]    5
+> 
+> ## ...is identical to the test statistic
+> statistic(ct, type = "test")
+[1] 5
 > 
 > 
 > 
@@ -3124,7 +3156,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  10.75 0.24 11.03 NA NA 
+Time elapsed:  10.5 0.11 10.64 NA NA 
 > grDevices::dev.off()
 null device 
           1 

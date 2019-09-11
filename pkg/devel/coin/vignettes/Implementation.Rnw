@@ -461,7 +461,9 @@ Function & Description \\ \hline
                                  the final test statistic $c$ (\code{type = "test"}, only for
                                  objects inheriting from \Rclass{IndependenceTestStatistic}). \\
 \code{expectation(object)} & Extraction of the conditional expectation~$\mu$. \\
-\code{covariance(object)} & Extraction of the full conditional covariance matrix~$\Sigma$. \\
+\code{covariance(object, invert)} & Extraction of the full conditional covariance matrix~$\Sigma$
+                                    (\code{invert = FALSE}) or its Moore-Penrose inverse $\Sigma^+$
+                                    (\code{invert = TRUE}). \\
 \code{variance(object)} & Extraction of the diagonal elements of the conditional covariance matrix
                           $\text{diag}(\Sigma)$. \\ \hline
 \end{tabular}
