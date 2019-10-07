@@ -216,9 +216,12 @@ setMethod("ApproxNullDistribution",
             }
         }
         size <- function(alpha, type) {
-            pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
             spt <- support()
-            vapply(alpha, function(a) sum(d(spt[pv_fun(spt) %LE% a])), NA_real_)
+            pv <- if (type == "mid-p-value")
+                      midpvalue(spt)
+                  else
+                      pvalue(spt)
+            vapply(alpha, function(a) sum(d(spt[pv %LE% a])), NA_real_)
         }
 
         new("ApproxNullDistribution",
@@ -332,9 +335,12 @@ setMethod("ApproxNullDistribution",
             }
         }
         size <- function(alpha, type) {
-            pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
             spt <- support()
-            vapply(alpha, function(a) sum(d(spt[pv_fun(spt) %LE% a])), NA_real_)
+            pv <- if (type == "mid-p-value")
+                      midpvalue(spt)
+                  else
+                      pvalue(spt)
+            vapply(alpha, function(a) sum(d(spt[pv %LE% a])), NA_real_)
         }
 
         new("ApproxNullDistribution",
@@ -430,9 +436,12 @@ setMethod("ApproxNullDistribution",
             }
         }
         size <- function(alpha, type) {
-            pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
             spt <- support()
-            vapply(alpha, function(a) sum(d(spt[pv_fun(spt) %LE% a])), NA_real_)
+            pv <- if (type == "mid-p-value")
+                      midpvalue(spt)
+                  else
+                      pvalue(spt)
+            vapply(alpha, function(a) sum(d(spt[pv %LE% a])), NA_real_)
         }
 
         new("ApproxNullDistribution",
