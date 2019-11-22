@@ -361,7 +361,7 @@ setMethod("covariance",
     definition = function(object, invert = FALSE, ...) {
         nm <- statnames(object)$names
         if (invert) {
-            mp <- .Call(R_MPinv_sym, 0L, object@covariance)
+            mp <- .Call(R_MPinv_sym, object@covariance, 0L, sqrt_eps)
             .Call(R_unpack_sym, mp$MPinv, nm, 0L)
         } else
             .Call(R_unpack_sym, object@covariance, nm, 0L)
