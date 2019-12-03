@@ -10,7 +10,8 @@
   }
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item Extraction of the standardized linear statistic from objects of
+      class \code{"IndependenceLinearStatistic"} resulted in an error.
     }
   }
   \subsection{User-visible changes}{
@@ -1079,7 +1080,7 @@
     \eqn{p}-values.
 
     \item \code{I()} in \code{formula}e could still cause trouble with class
-    \code{AsIs}, now fixed.
+    \code{"AsIs"}, now fixed.
 
     \item Logical variables are now allowed in \code{formula}e (and are treated
     like \code{factor}s).
@@ -1139,7 +1140,7 @@
 }
 \section{Changes in version 0.2-13 (2005-07-11)}{
   \itemize{
-    \item \code{I()} in \code{formula}e returns objects of class \code{AsIs}
+    \item \code{I()} in \code{formula}e returns objects of class \code{"AsIs"} 
     which caused troubles in \code{trafo()}.
   }
 }
