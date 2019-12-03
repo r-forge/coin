@@ -168,6 +168,10 @@
       \code{signature(object = "ScalarIndependenceTestStatistic")}: See the
       documentation for \code{\link{ExactNullDistribution}} for details.
     }
+    \item{covariance}{
+      \code{signature(object = "QuadTypeIndependenceTestStatistic")}: See the
+      documentation for \code{\link{covariance}} for details.
+    }
     \item{initialize}{
       \code{signature(.Object = "MaxTypeIndependenceTestStatistic")}: See the
       documentation for \code{\link[methods:new]{initialize}} (in package

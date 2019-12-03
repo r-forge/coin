@@ -4,7 +4,8 @@
 \section{Changes in version 1.4-0 (20YY-MM-DD)}{
   \subsection{New features}{
     \itemize{
-      \item
+      \item The Moore-Penrose inverse of the conditional covariance matrix can
+      now be extracted (see \code{?covariance}).
     }
   }
   \subsection{Bug fixes}{
