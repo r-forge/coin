@@ -15,7 +15,7 @@
   }
   \subsection{User-visible changes}{
     \itemize{
-      \item
+      \item The test size is now computed more efficiently.
     }
   }
   \subsection{Other changes}{

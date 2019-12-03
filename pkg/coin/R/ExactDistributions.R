@@ -178,9 +178,12 @@ SR_shift_2sample <- function(object, fact) {
     }
     support <- function() T
     size <- function(alpha, type) {
-        pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
         spt <- support()
-        vapply(alpha, function(a) sum(d(spt[pv_fun(spt) %LE% a])), NA_real_)
+        pv <- if (type == "mid-p-value")
+                  midpvalue(spt)
+              else
+                  pvalue(spt)
+        vapply(alpha, function(a) sum(d(spt[pv %LE% a])), NA_real_)
     }
 
     new("ExactNullDistribution",
@@ -354,9 +357,12 @@ SR_shift_1sample <- function(object, fact) {
     }
     support <- function() T
     size <- function(alpha, type) {
-        pv_fun <- if (type == "mid-p-value") midpvalue else pvalue
         spt <- support()
-        vapply(alpha, function(a) sum(d(spt[pv_fun(spt) %LE% a])), NA_real_)
+        pv <- if (type == "mid-p-value")
+                  midpvalue(spt)
+              else
+                  pvalue(spt)
+        vapply(alpha, function(a) sum(d(spt[pv %LE% a])), NA_real_)
     }
 
     new("ExactNullDistribution",
