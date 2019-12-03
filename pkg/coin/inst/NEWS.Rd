@@ -1,6 +1,33 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
+\section{Changes in version 1.4-0 (20YY-MM-DD)}{
+  \subsection{New features}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{User-visible changes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Other changes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Deprecated and defunct}{
+    \itemize{
+      \item
+    }
+  }
+}
 \section{Changes in version 1.3-1 (2019-08-22)}{
   \subsection{Bug fixes}{
     \itemize{
@@ -90,9 +117,7 @@
   \subsection{Other changes}{
     \itemize{
       \item The linear statistic, its conditional expectation and covariance,
-      and permuted linear statistics are now computed by package \pkg{libcoin}.%% ;
-      %% asymptotic and exact \eqn{p}-values are not affected by this change, but
-      %% approximate \eqn{p}-values will differ within random variation.
+      and permuted linear statistics are now computed by package \pkg{libcoin}.
 
       \item \code{confint()} is now an S4 method.
 
