@@ -317,7 +317,8 @@ setMethod("statistic",
                     nrow = nr, ncol = nc, dimnames = dn
                 ),
                 "standardized" = matrix(
-                    object@standardizedlinearstatistic,
+                    (object@linearstatistic - object@expectation) /
+                        sqrt(variance(object)),
                     nrow = nr, ncol = nc, dimnames = dn
                 )
             )
@@ -329,10 +330,21 @@ setMethod("statistic",
     definition = function(object,
         type = c("test", "linear", "centered", "standardized"), ...) {
             type <- match.arg(type)
-            if (type == "test")
-                object@teststatistic
-            else
+            switch(type,
+                "test" = {
+                    object@teststatistic
+                },
+                "standardized" = {
+                    nr <- ncol(object@xtrans)
+                    nc <- ncol(object@ytrans)
+                    dn <- statnames(object)$dimnames
+                    matrix(
+                        object@standardizedlinearstatistic,
+                        nrow = nr, ncol = nc, dimnames = dn
+                    )
+                },
                 callNextMethod(object, type, ...)
+            )
     }
 )
 

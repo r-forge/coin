@@ -601,3 +601,7 @@ try(logrank_trafo(y))
 ### 'ofmaxstat_trafo' had the labeling wrong
 of <- ordered(c(1, 1, 2, 3, 3, 4))
 ofmaxstat_trafo(of, minprob = 0.34) # was {1} vs. {2, 3, 4}
+
+### 'statistic(*, "standardized")' didn't work for "IndependenceLinearStatistic"
+ils <- new("IndependenceLinearStatistic", it2@statistic)
+statistic(ils, type = "standardized")
