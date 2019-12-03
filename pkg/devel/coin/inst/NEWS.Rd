@@ -4,6 +4,38 @@
 \section{Changes in version 2.0-0 (20YY-MM-DD)}{
   \subsection{New features}{
     \itemize{
+      \item
+    }
+  }
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{User-visible changes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Other changes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Deprecated and defunct}{
+    \itemize{
+      \item The \code{B} argument of \code{approximate()} and
+      \code{ApproxNullDistribution()} is now defunct and has been removed.
+
+      \item Classes \code{"Variance"}, \code{"CovarianceMatrix"},
+      \code{"VarCovar"} and \code{"PValue"} are now defunct and have been
+      removed.
+    }
+  }
+}
+\section{Changes in version 1.4-0 (20YY-MM-DD)}{
+  \subsection{New features}{
+    \itemize{
       \item The Moore-Penrose inverse of the conditional covariance matrix can
       now be extracted (see \code{?covariance}).
     }
@@ -33,39 +65,8 @@
   }
   \subsection{Deprecated and defunct}{
     \itemize{
-      \item The \code{B} argument of \code{approximate()} and
-      \code{ApproxNullDistribution()} is now defunct and has been removed.
-
-      \item Classes \code{"Variance"}, \code{"CovarianceMatrix"},
-      \code{"VarCovar"} and \code{"PValue"} are now defunct and have been
-      removed.
-    }
-  }
-}
-\section{Changes in version 1.4-0 (20YY-MM-DD)}{
-  \subsection{New features}{
-    \itemize{
-      \item
-    }
-  }
-  \subsection{Bug fixes}{
-    \itemize{
-      \item
-    }
-  }
-  \subsection{User-visible changes}{
-    \itemize{
-      \item
-    }
-  }
-  \subsection{Other changes}{
-    \itemize{
-      \item
-    }
-  }
-  \subsection{Deprecated and defunct}{
-    \itemize{
-      \item
+      \item Classes \code{"Variance"}, \code{"CovarianceMatrix"} and
+      \code{"VarCovar"} are now deprecated.
     }
   }
 }
