@@ -77,7 +77,7 @@ Slot & Class \\ \hline
 Slot & Class \\ \hline 
 \code{linearstatistic} & \Rclass{numeric} \\
 \code{expectation} & \Rclass{numeric} \\
-\code{covariance} & \Rclass{VarCovar} \\
+\code{covariance} & \Rclass{numeric} \\
 \hline
 \end{tabular}
 \end{center}
@@ -148,7 +148,7 @@ Slot & Class \\ \hline
 \multicolumn{2}{l}{Contains \Rclass{IndependenceTestStatistic}} \\
  & \\
 Slot & Class \\ \hline 
-\code{covarianceplus} & \Rclass{matrix} \\
+\code{covarianceplus} & \Rclass{numeric} \\
 \code{df} & \Rclass{numeric} \\
 \code{paired} & \Rclass{logical} \\
 \hline
@@ -361,4 +361,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.42    0.10    2.56 
+   2.39    0.12    2.60 

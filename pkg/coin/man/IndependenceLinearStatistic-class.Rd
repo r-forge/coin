@@ -10,11 +10,9 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \section{Objects from the Class}{
-  Objects can be created by calls of the form \preformatted{     new("IndependenceLinearStatistic", object, varonly = FALSE, \dots)}
+  Objects can be created by calls of the form \preformatted{     new("IndependenceLinearStatistic", object, \dots)}
   where \code{object} is an object of class
-  \code{"\linkS4class{IndependenceTestProblem}"}, \code{varonly} is a logical
-  indicating that slot \code{covariance} (see \sQuote{Slots}) should only
-  contain the diagonal elements of the covariance matrix.
+  \code{"\linkS4class{IndependenceTestProblem}"}.
 }
 \section{Slots}{
   \describe{
@@ -26,8 +24,8 @@
       statistic.
     }
     \item{\code{covariance}:}{
-      Object of class \code{"\linkS4class{VarCovar}"}.  The covariance or
-      variance of the linear statistic.
+      Object of class \code{"numeric"}.  The lower triangular elements of the
+      covariance of the linear statistic.
     }
     \item{\code{xtrans}:}{
       Object of class \code{"matrix"}.  The transformed \code{x}.

@@ -355,7 +355,8 @@ setGeneric("expectation",
 setMethod("expectation",
     signature = "IndependenceLinearStatistic",
     definition = function(object, ...) {
-        object@expectation
+        nm <- statnames(object)$names
+        setNames(object@expectation, nm)
     }
 )
 
@@ -374,19 +375,22 @@ setGeneric("covariance",
     }
 )
 
+### <DEPRECATED>
+### Note: The "CovarianceMatrix", "Variance" and "VarCovar" classes were
+### deprecated in 1.4-0.  To be removed in 2.0-0.
 setMethod("covariance",
     signature = "CovarianceMatrix",
     definition = function(object, ...) {
         object@covariance
     }
 )
+### </DEPRECATED>
 
 setMethod("covariance",
     signature = "IndependenceLinearStatistic",
     definition = function(object, ...) {
-        if (!inherits(object@covariance, "CovarianceMatrix"))
-            object <- new("IndependenceLinearStatistic", object, varonly = FALSE)
-        callGeneric(object@covariance, ...)
+        nm <- statnames(object)$names
+        .Call(R_unpack_sym, object@covariance, nm, 0L)
     }
 )
 
@@ -405,6 +409,9 @@ setGeneric("variance",
     }
 )
 
+### <DEPRECATED>
+### Note: The "CovarianceMatrix", "Variance" and "VarCovar" classes were
+### deprecated in 1.4-0.  To be removed in 2.0-0.
 setMethod("variance",
     signature = "Variance",
     definition = function(object, ...) {
@@ -418,11 +425,13 @@ setMethod("variance",
         diag(object@covariance)
     }
 )
+### </DEPRECATED>
 
 setMethod("variance",
     signature = "IndependenceLinearStatistic",
     definition = function(object, ...) {
-        callGeneric(object@covariance, ...)
+       nm <- statnames(object)$names
+       .Call(R_unpack_sym, object@covariance, nm, 1L)
     }
 )
 

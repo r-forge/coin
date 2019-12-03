@@ -1,3 +1,6 @@
+### <DEPRECATED>
+### Note: The "CovarianceMatrix", "Variance" and "VarCovar" classes were
+### deprecated in 1.4-0.  To be removed in 2.0-0.
 ### new("CovarianceMatrix", ...)
 setMethod("initialize",
     signature = "CovarianceMatrix",
@@ -13,6 +16,7 @@ setMethod("initialize",
         callNextMethod(.Object, variance = variance, ...)
     }
 )
+### </DEPRECATED>
 
 ### new("IndependenceProblem", ...)
 ### initialized data
@@ -91,32 +95,19 @@ setMethod("initialize",
 ### compute test statistics and their expectation / covariance matrix
 setMethod("initialize",
     signature = "IndependenceLinearStatistic",
-    definition = function(.Object, object, varonly = FALSE, ...) {
+    definition = function(.Object, object, ...) {
 
         if (!inherits(object, "IndependenceTestProblem"))
             stop(sQuote("object"), " is not of class ",
                  dQuote("IndependenceTestProblem"))
 
-        nm <- statnames(object)$names # pretty names
-
         ecs <- .Call(R_ExpectationCovarianceStatistic,
                      object@xtrans, object@ytrans, object@weights, integer(0),
-                     object@block, varonly, sqrt_eps)
-
+                     object@block, 0L, sqrt_eps)
         .Object <- copyslots(object, .Object)
-        .Object@linearstatistic <- drop(ecs$LinearStatistic)
-        .Object@expectation <- setNames(ecs$Expectation, nm)
-        .Object@covariance <-
-            if (varonly) {
-                new("Variance", setNames(drop(ecs$Variance), nm))
-            } else {
-                pq <- length(nm)
-                cov <- matrix(0, nrow = pq, ncol = pq, dimnames = list(nm, nm))
-                cov[lower.tri(cov, diag = TRUE)] <- ecs$Covariance
-                cov <- cov + t(cov)
-                diag(cov) <- diag(cov) / 2
-                new("CovarianceMatrix", cov)
-            }
+        .Object@linearstatistic <- ecs$LinearStatistic
+        .Object@expectation <- ecs$Expectation
+        .Object@covariance <- ecs$Covariance
 
         if (any(variance(.Object) < sqrt_eps))
             warning("The conditional covariance matrix has ",
@@ -186,12 +177,13 @@ setMethod("initialize",
             stop(sQuote("object"), " is not of class ",
                  dQuote("IndependenceLinearStatistic"))
 
-        cs <- object@linearstatistic - expectation(object)
-        mp <- MPinv(covariance(object), ...)
+        mp <- .Call(R_MPinv_sym, object@covariance, 0L, sqrt_eps)
 
         .Object <- copyslots(object, .Object)
-        .Object@teststatistic <- drop(cs %*% mp$MPinv %*% cs)
-        .Object@standardizedlinearstatistic <- cs / sqrt(variance(object))
+        .Object@teststatistic <-
+            .Call(R_quadform, object@linearstatistic, object@expectation, mp$MPinv)
+        .Object@standardizedlinearstatistic <-
+            (object@linearstatistic - expectation(object)) / sqrt(variance(object))
         .Object@covarianceplus <- mp$MPinv
         .Object@df <- mp$rank
         .Object@paired <- paired

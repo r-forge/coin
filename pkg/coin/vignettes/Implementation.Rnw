@@ -424,10 +424,10 @@ are stored in objects of class \Rclass{IndependenceLinearStatistic}:
 <<IndependenceLinearStatistic, results = tex>>=
 toLatex(c2t("IndependenceLinearStatistic"))
 @
-Class \Rclass{VarCovar} represents either a complete covariance matrix
-or its diagonal elements only. By default, only the conditional variances
-are stored, the whole covariance matrix can be computed as needed (see below).
-In the rotating rats example, such an object is easily created via
+The conditional covariance matrix is stored as a vector, containing the lower
+triangular elements only, but the full covariance matrix can be extracted as
+needed (see below).  In the rotating rats example, such an object is easily
+created via
 
 <<Ex-IndependenceLinearStatistic, echo = TRUE>>=
 ils <- new("IndependenceLinearStatistic", itp)
@@ -461,8 +461,7 @@ Function & Description \\ \hline
                                  the final test statistic $c$ (\code{type = "test"}, only for
                                  objects inheriting from \Rclass{IndependenceTestStatistic}). \\
 \code{expectation(object)} & Extraction of the conditional expectation~$\mu$. \\
-\code{covariance(object)} & Extraction of the complete conditional covariance
-  matrix~$\Sigma$. \\
+\code{covariance(object)} & Extraction of the full conditional covariance matrix~$\Sigma$. \\
 \code{variance(object)} & Extraction of the diagonal elements of the conditional covariance matrix
                           $\text{diag}(\Sigma)$. \\ \hline
 \end{tabular}
@@ -533,7 +532,7 @@ Alternatively, a quadratic form $c_\text{quad}(\mathbf{t}, \mu, \Sigma)  =
 is computationally more expensive because the Moore-Penrose
 inverse $\Sigma^+$ of $\Sigma$ is involved. Such statistics are represented
 by objects of class \Rclass{QuadTypeIndependenceTestStatistic} defining slots
-for $\Sigma^+$ and its rank (degrees of freedom):
+for the lower triangular part of $\Sigma^+$ and its rank (degrees of freedom):
 <<QuadTypeIndependenceTestStatistic, results = tex>>=
 toLatex(c2t("QuadTypeIndependenceTestStatistic"))
 @

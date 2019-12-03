@@ -19,12 +19,20 @@
   }
   \subsection{Other changes}{
     \itemize{
-      \item \R version \eqn{\ge}{>=}3.5.0 is now required.
+      \item The internal storage of the covariance and its Moore-Penrose
+      inverse, i.e., slots \code{covariance} and \code{covarianceplus} in
+      classes inheriting from \code{"IndependenceLinearStatistic"} and
+      \code{"QuadTypeIndependenceTestStatistic"} respectively, has been changed
+      and now uses a memory-efficient packed format.
+
+      \item \R \eqn{\ge}{>=}3.5.0 and package \pkg{libcoin} \eqn{\ge}{>=}1.0-5
+      are now required.
     }
   }
   \subsection{Deprecated and defunct}{
     \itemize{
-      \item
+      \item Classes \code{"Variance"}, \code{"CovarianceMatrix"} and
+      \code{"VarCovar"} are now deprecated.
     }
   }
 }
@@ -121,7 +129,7 @@
 
       \item \code{confint()} is now an S4 method.
 
-      \item \R version \eqn{\ge}{>=}3.4.0 and packages \pkg{stats4} and
+      \item \R \eqn{\ge}{>=}3.4.0 and packages \pkg{stats4} and
       \pkg{matrixStats} are now required.
     }
   }
@@ -231,7 +239,7 @@
   }
   \subsection{Other changes}{
     \itemize{
-      \item Version 1.0-5 of the \pkg{mvtnorm} package is now required.
+      \item Package \pkg{mvtnorm} \eqn{\ge}{>=}1.0-5 is now required.
     }
   }
 }
