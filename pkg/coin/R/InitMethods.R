@@ -92,7 +92,7 @@ setMethod("initialize",
 )
 
 ### new("IndependenceLinearStatistic", ...)
-### compute test statistics and their expectation / covariance matrix
+### compute linear statistics and their expectation / covariance matrix
 setMethod("initialize",
     signature = "IndependenceLinearStatistic",
     definition = function(.Object, object, ...) {
@@ -117,6 +117,24 @@ setMethod("initialize",
     }
 )
 
+### compute standardized linear statistics
+setMethod("initialize",
+    signature = "IndependenceTestStatistic",
+    definition = function(.Object, object, ...) {
+
+        if (!inherits(object, "IndependenceLinearStatistic"))
+            stop(sQuote("object"), " is not of class ",
+                 dQuote("IndependenceLinearStatistic"))
+
+        .Object <- copyslots(object, .Object)
+        .Object@standardizedlinearstatistic <-
+            as.vector((object@linearstatistic - expectation(object)) /
+                      sqrt(variance(object)))
+
+        .Object
+    }
+)
+
 ### new("ScalarIndependenceTestStatistic", ...)
 ### the basis of well known univariate tests
 setMethod("initialize",
@@ -124,16 +142,8 @@ setMethod("initialize",
     definition = function(.Object, object,
         alternative = c("two.sided", "less", "greater"), paired = FALSE, ...) {
 
-        if (!inherits(object, "IndependenceLinearStatistic"))
-            stop(sQuote("object"), " is not of class ",
-                 dQuote("IndependenceLinearStatistic"))
-
-        ss <- as.vector((object@linearstatistic - expectation(object)) /
-                        sqrt(variance(object)))
-
-        .Object <- copyslots(object, .Object)
-        .Object@teststatistic <- unname(ss)
-        .Object@standardizedlinearstatistic <- ss
+        .Object <- callNextMethod(.Object, object)
+        .Object@teststatistic <- .Object@standardizedlinearstatistic
         .Object@alternative <- match.arg(alternative)
         .Object@paired <- paired
 
@@ -147,21 +157,13 @@ setMethod("initialize",
     definition = function(.Object, object,
         alternative = c("two.sided", "less", "greater"), ...) {
 
-        if (!inherits(object, "IndependenceLinearStatistic"))
-            stop(sQuote("object"), " is not of class ",
-                 dQuote("IndependenceLinearStatistic"))
-
-        ss <- as.vector((object@linearstatistic - expectation(object)) /
-                        sqrt(variance(object)))
-
-        .Object <- copyslots(object, .Object)
+        .Object <- callNextMethod(.Object, object)
         .Object@teststatistic <-
             switch(alternative,
-                "less"      = min(ss),
-                "greater"   = max(ss),
-                "two.sided" = max(abs(ss))
+                "less"      = min(.Object@standardizedlinearstatistic),
+                "greater"   = max(.Object@standardizedlinearstatistic),
+                "two.sided" = max(abs(.Object@standardizedlinearstatistic))
             )
-        .Object@standardizedlinearstatistic <- ss
         .Object@alternative <- match.arg(alternative)
 
         .Object
@@ -173,18 +175,11 @@ setMethod("initialize",
     signature = "QuadTypeIndependenceTestStatistic",
     definition = function(.Object, object, paired = FALSE, ...) {
 
-        if (!inherits(object, "IndependenceLinearStatistic"))
-            stop(sQuote("object"), " is not of class ",
-                 dQuote("IndependenceLinearStatistic"))
-
         mp <- .Call(R_MPinv_sym, object@covariance, 0L, sqrt_eps)
 
-        .Object <- copyslots(object, .Object)
+        .Object <- callNextMethod(.Object, object)
         .Object@teststatistic <-
             .Call(R_quadform, object@linearstatistic, object@expectation, mp$MPinv)
-        .Object@standardizedlinearstatistic <-
-            as.vector((object@linearstatistic - expectation(object)) /
-                      sqrt(variance(object)))
         .Object@covarianceplus <- mp$MPinv
         .Object@df <- mp$rank
         .Object@paired <- paired
