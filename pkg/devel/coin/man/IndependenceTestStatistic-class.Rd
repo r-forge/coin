@@ -4,6 +4,7 @@
 \alias{MaxTypeIndependenceTestStatistic-class}
 \alias{QuadTypeIndependenceTestStatistic-class}
 \alias{ScalarIndependenceTestStatistic-class}
+\alias{initialize,IndependenceTestStatistic-method}
 \alias{initialize,MaxTypeIndependenceTestStatistic-method}
 \alias{initialize,QuadTypeIndependenceTestStatistic-method}
 \alias{initialize,ScalarIndependenceTestStatistic-method}
@@ -171,6 +172,11 @@
     \item{covariance}{
       \code{signature(object = "QuadTypeIndependenceTestStatistic")}: See the
       documentation for \code{\link{covariance}} for details.
+    }
+    \item{initialize}{
+      \code{signature(.Object = "IndependenceTestStatistic")}: See the
+      documentation for \code{\link[methods:new]{initialize}} (in package
+      \pkg{methods}) for details.
     }
     \item{initialize}{
       \code{signature(.Object = "MaxTypeIndependenceTestStatistic")}: See the
