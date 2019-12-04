@@ -89,12 +89,12 @@ Slot & Class \\ \hline
 control 180
 
 > expectation(ils)
-control 
-    150 
+           
+control 150
 
 > variance(ils)
- control 
-151.3043 
+                
+control 151.3043
 
 > toLatex(c2t("IndependenceTestStatistic"))
 \begin{center}
@@ -361,4 +361,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.39    0.12    2.60 
+   2.39    0.26    2.71 

@@ -791,7 +791,8 @@ sexact <- function(object) {
   y <- object@ytrans
   perms <- permutations(nrow(x))
   pstats <- apply(perms, 1, function(p) sum(x[p,] * y))
-  pstats <- (pstats - expectation(object)) / sqrt(variance(object))
+  pstats <- (pstats - as.vector(expectation(object))) /
+      sqrt(as.vector(variance(object)))
   p <- function(q) 1 - mean(pstats > q)
   new("PValue", p = p, pvalue = p)
 }

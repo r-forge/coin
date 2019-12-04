@@ -128,8 +128,8 @@ setMethod("initialize",
             stop(sQuote("object"), " is not of class ",
                  dQuote("IndependenceLinearStatistic"))
 
-        ss <- (object@linearstatistic - expectation(object)) /
-                  sqrt(variance(object))
+        ss <- as.vector((object@linearstatistic - expectation(object)) /
+                        sqrt(variance(object)))
 
         .Object <- copyslots(object, .Object)
         .Object@teststatistic <- unname(ss)
@@ -151,8 +151,8 @@ setMethod("initialize",
             stop(sQuote("object"), " is not of class ",
                  dQuote("IndependenceLinearStatistic"))
 
-        ss <- (object@linearstatistic - expectation(object)) /
-                  sqrt(variance(object))
+        ss <- as.vector((object@linearstatistic - expectation(object)) /
+                        sqrt(variance(object)))
 
         .Object <- copyslots(object, .Object)
         .Object@teststatistic <-
@@ -183,7 +183,8 @@ setMethod("initialize",
         .Object@teststatistic <-
             .Call(R_quadform, object@linearstatistic, object@expectation, mp$MPinv)
         .Object@standardizedlinearstatistic <-
-            (object@linearstatistic - expectation(object)) / sqrt(variance(object))
+            as.vector((object@linearstatistic - expectation(object)) /
+                      sqrt(variance(object)))
         .Object@covarianceplus <- mp$MPinv
         .Object@df <- mp$rank
         .Object@paired <- paired

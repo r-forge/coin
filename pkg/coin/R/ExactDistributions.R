@@ -83,9 +83,9 @@ SR_shift_2sample <- function(object, fact) {
     }
 
     if (teststat == "scalar")
-        T <- (T - expectation(object)) / sqrt(variance(object))
+        T <- (T - as.vector(expectation(object))) / sqrt(as.vector(variance(object)))
     else {
-        T <- (T - expectation(object))^2 / variance(object)
+        T <- (T - as.vector(expectation(object)))^2 / as.vector(variance(object))
         ## make sure T is ordered and distinct
         n <- length(T)
         o <- order(T)
@@ -262,9 +262,9 @@ SR_shift_1sample <- function(object, fact) {
     T <- (T - 1) / fact
 
     if (teststat == "scalar")
-        T <- (T - expectation(object)) / sqrt(variance(object))
+        T <- (T - as.vector(expectation(object))) / sqrt(as.vector(variance(object)))
     else {
-        T <- (T - expectation(object))^2 / variance(object)
+        T <- (T - as.vector(expectation(object)))^2 / as.vector(variance(object))
         ## make sure T is ordered and distinct
         n <- length(T)
         o <- order(T)
