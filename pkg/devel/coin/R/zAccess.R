@@ -299,7 +299,7 @@ setMethod("statistic",
                 ),
                 "standardized" = matrix(
                     (object@linearstatistic - object@expectation) /
-                        sqrt(variance(object)),
+                        sqrt(as.vector(variance(object))),
                     nrow = nr, ncol = nc, dimnames = dn
                 )
             )

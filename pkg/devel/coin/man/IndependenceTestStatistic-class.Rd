@@ -48,14 +48,13 @@
       Object of class \code{"numeric"}.  The standardized linear statistic.
     }
     \item{\code{linearstatistic}:}{
-      Object of class \code{"numeric"}.  The linear statistic.
+      Object of class \code{"matrix"}.  The linear statistic.
     }
     \item{\code{expectation}:}{
-      Object of class \code{"numeric"}.  The expectation of the linear
-      statistic.
+      Object of class \code{"matrix"}.  The expectation of the linear statistic.
     }
     \item{\code{covariance}:}{
-      Object of class \code{"numeric"}.  The lower triangular elements of the
+      Object of class \code{"matrix"}.  The lower triangular elements of the
       covariance of the linear statistic.
     }
     \item{\code{xtrans}:}{

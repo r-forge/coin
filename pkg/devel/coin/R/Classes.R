@@ -39,9 +39,9 @@ setClass("IndependenceTestProblem",
 setClass("IndependenceLinearStatistic",
     contains = "IndependenceTestProblem",
     slots = c(
-        linearstatistic = "numeric",
-        expectation     = "numeric",
-        covariance      = "numeric"
+        linearstatistic = "matrix",
+        expectation     = "matrix",
+        covariance      = "matrix"
     )
 )
 

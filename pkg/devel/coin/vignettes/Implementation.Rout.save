@@ -75,9 +75,9 @@ Slot & Class \\ \hline
 \multicolumn{2}{l}{Contains \Rclass{IndependenceTestProblem}} \\
  & \\
 Slot & Class \\ \hline 
-\code{linearstatistic} & \Rclass{numeric} \\
-\code{expectation} & \Rclass{numeric} \\
-\code{covariance} & \Rclass{numeric} \\
+\code{linearstatistic} & \Rclass{matrix} \\
+\code{expectation} & \Rclass{matrix} \\
+\code{covariance} & \Rclass{matrix} \\
 \hline
 \end{tabular}
 \end{center}
@@ -350,4 +350,4 @@ alternative hypothesis: two.sided
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   2.40    0.14    2.60 
+   2.43    0.10    2.61 

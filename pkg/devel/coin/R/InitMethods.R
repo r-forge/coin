@@ -84,10 +84,11 @@ setMethod("initialize",
         ecs <- .Call(R_ExpectationCovarianceStatistic,
                      object@xtrans, object@ytrans, object@weights, integer(0),
                      object@block, 0L, sqrt_eps)
+
         .Object <- copyslots(object, .Object)
-        .Object@linearstatistic <- ecs$LinearStatistic
-        .Object@expectation <- ecs$Expectation
-        .Object@covariance <- ecs$Covariance
+        .Object@linearstatistic <- as.matrix(ecs$LinearStatistic)
+        .Object@expectation <- as.matrix(ecs$Expectation)
+        .Object@covariance <- as.matrix(ecs$Covariance)
 
         if (any(variance(.Object) < sqrt_eps))
             warning("The conditional covariance matrix has ",
@@ -108,8 +109,7 @@ setMethod("initialize",
 
         .Object <- copyslots(object, .Object)
         .Object@standardizedlinearstatistic <-
-            as.vector((object@linearstatistic - expectation(object)) /
-                      sqrt(variance(object)))
+            as.vector(statistic(object, type = "standardize"))
 
         .Object
     }
