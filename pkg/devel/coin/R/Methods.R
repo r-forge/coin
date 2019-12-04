@@ -140,7 +140,8 @@ setMethod("ApproxNullDistribution",
 
         pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
                           object@weights, nresample, ...)
-        pls <- (pls - expectation(object)) / sqrt(variance(object))
+        pls <- (pls - as.vector(expectation(object))) /
+                   sqrt(as.vector(variance(object)))
 
         p_fun <- function(q) {
             mean(pls %LE% q)
@@ -249,7 +250,8 @@ setMethod("ApproxNullDistribution",
 
         pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
                           object@weights, nresample, ...)
-        pls <- (pls - expectation(object)) / sqrt(variance(object))
+        pls <- (pls - as.vector(expectation(object))) /
+                   sqrt(as.vector(variance(object)))
 
         mpls <- switch(object@alternative,
                     "less"      = colMins(pls),

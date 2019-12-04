@@ -33,8 +33,11 @@ III 119
 IV  116
 
 > expectation(it)
-  I  II III  IV 
-205 205 205 205 
+       
+I   205
+II  205
+III 205
+IV  205
 
 > covariance(it)
             I        II       III        IV
@@ -196,4 +199,4 @@ IV - III 0.9989
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   1.87    0.29    2.28 
+   1.23    0.09    1.39 

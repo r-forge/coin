@@ -348,8 +348,13 @@ setGeneric("expectation",
 setMethod("expectation",
     signature = "IndependenceLinearStatistic",
     definition = function(object, ...) {
-        nm <- statnames(object)$names
-        setNames(object@expectation, nm)
+        nr <- ncol(object@xtrans)
+        nc <- ncol(object@ytrans)
+        dn <- statnames(object)$dimnames
+        matrix(
+            object@expectation,
+            nrow = nr, ncol = nc, dimnames = dn
+        )
     }
 )
 
@@ -409,8 +414,13 @@ setGeneric("variance",
 setMethod("variance",
     signature = "IndependenceLinearStatistic",
     definition = function(object, ...) {
-       nm <- statnames(object)$names
-       .Call(R_unpack_sym, object@covariance, nm, 1L)
+        nr <- ncol(object@xtrans)
+        nc <- ncol(object@ytrans)
+        dn <- statnames(object)$dimnames
+        matrix(
+            .Call(R_unpack_sym, object@covariance, NULL, 1L),
+            nrow = nr, ncol = nc, dimnames = dn
+        )
     }
 )
 

@@ -48,6 +48,10 @@
   }
   \subsection{User-visible changes}{
     \itemize{
+      \item Extraction of the conditional expectation or variance now returns a
+      matrix instead of a vector (for consistency with linear statistics and
+      \eqn{p}-values).
+
       \item The test size is now computed more efficiently.
     }
   }
@@ -161,7 +165,7 @@
       \item The linear statistic, its conditional expectation and covariance,
       and permuted linear statistics are now computed by package \pkg{libcoin}.
 
-      \item \code{confint()} is now an S4 method.
+      \item \code{confint()} is now an \proglang{S4} method.
 
       \item \R \eqn{\ge}{>=}3.4.0 and packages \pkg{stats4} and
       \pkg{matrixStats} are now required.
@@ -1166,7 +1170,7 @@
 }
 \section{Changes in version 0.2-13 (2005-07-11)}{
   \itemize{
-    \item \code{I()} in \code{formula}e returns objects of class \code{"AsIs"} 
+    \item \code{I()} in \code{formula}e returns objects of class \code{"AsIs"}
     which caused troubles in \code{trafo()}.
   }
 }
