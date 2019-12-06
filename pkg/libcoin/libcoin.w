@@ -460,7 +460,7 @@ Alternatively, we can compute the same object without setting-up the dummy
 matrix:
 <<1dex-2>>=
 ls2 <- LinStatExpCov(X = x, Y = matrix(y, ncol = 1))
-all.equal(ls1[-grep("Xfactor", names(ls1))], 
+all.equal(ls1[-grep("Xfactor", names(ls1))],
           ls2[-grep("Xfactor", names(ls2))])
 @@
 The results are identical, except for a logical indicating that a factor was
@@ -578,18 +578,18 @@ ylev <- sort(unique(y))
 Y <- rbind(0, matrix(ylev, ncol = 1))
 iy <- .bincode(y, breaks = c(-Inf, ylev, Inf))
 ls3 <- LinStatExpCov(X = X, ix = ix, Y = Y, iy = iy)
-all.equal(ls1[-grep("Table", names(ls1))], 
+all.equal(ls1[-grep("Table", names(ls1))],
           ls3[-grep("Table", names(ls3))])
 ### works also with factors
 ls3 <- LinStatExpCov(X = X, ix = factor(ix), Y = Y, iy = factor(iy))
-all.equal(ls1[-grep("Table", names(ls1))], 
+all.equal(ls1[-grep("Table", names(ls1))],
           ls3[-grep("Table", names(ls3))])
 @@
 Similar to the one-dimensional case, we can also omit the \verb|X| matrix
 here
 <<2dex-2>>=
 ls4 <- LinStatExpCov(ix = ix, Y = Y, iy = iy)
-all.equal(ls3[-grep("Xfactor", names(ls3))], 
+all.equal(ls3[-grep("Xfactor", names(ls3))],
           ls4[-grep("Xfactor", names(ls4))])
 @@
 It is important to note that all computations are based on the tabulations
@@ -1110,6 +1110,7 @@ extern @<R\_quadform Prototype@>;
 extern @<R\_kronecker Prototype@>;
 extern @<R\_MPinv\_sym Prototype@>;
 extern @<R\_unpack\_sym Prototype@>;
+extern @<R\_pack\_sym Prototype@>;
 @}
 
 The \proglang{C} file \verb|libcoin.c| contains all \proglang{C}
@@ -6020,6 +6021,7 @@ void C_doPermuteBlock
 @<C\_MPinv\_sym@>
 @<R\_MPinv\_sym@>
 @<R\_unpack\_sym@>
+@<R\_pack\_sym@>
 @}
 
 @d NROW
@@ -6462,6 +6464,66 @@ SEXP R_unpack_sym
     return ans;
 }
 @|R_unpack_sym
+@}
+
+<<pack>>=
+m <- matrix(c(4, 3, 2, 1,
+              3, 5, 4, 2,
+              2, 4, 6, 5,
+              1, 2, 5, 7),
+            ncol = 4)
+
+s <- m[lower.tri(m, diag = TRUE)]
+p <- .Call(libcoin:::R_pack_sym, m)
+
+stopifnot(isequal(s, p))
+@@
+
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_pack_sym(
+    SEXP x
+) {
+    static SEXP(*fun)(SEXP) = NULL;
+    if (fun == NULL)
+        fun = (SEXP(*)(SEXP))
+            R_GetCCallable("libcoin", "R_pack_sym");
+    return fun(x);
+}
+@}
+
+@d R\_pack\_sym Prototype
+@{
+SEXP R_pack_sym
+(
+    SEXP x
+)
+@}
+
+@d R\_pack\_sym
+@{
+@<R\_pack\_sym Prototype@>
+{
+    R_xlen_t n, k = 0;
+    SEXP ans;
+    double *dx, *dans;
+
+    n = NROW(x);
+    dx = REAL(x);
+    PROTECT(ans = allocVector(REALSXP, n * (n + 1) / 2));
+    dans = REAL(ans);
+
+    for (R_xlen_t i = 0; i < n; i++) {
+        for (R_xlen_t j = i; j < n; j++) {
+          dans[k] = dx[i * n + j];
+          k++;
+        }
+    }
+
+    UNPROTECT(1);
+    return ans;
+}
+@|R_pack_sym
 @}
 
 \section{Memory}
@@ -7035,6 +7097,7 @@ static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_kronecker, 2),
     CALLDEF(R_MPinv_sym, 3),
     CALLDEF(R_unpack_sym, 3),
+    CALLDEF(R_pack_sym, 1),
     {NULL, NULL, 0}
 };
 @}
@@ -7072,6 +7135,7 @@ void attribute_visible R_init_libcoin
     REGCALL(R_kronecker);
     REGCALL(R_MPinv_sym);
     REGCALL(R_unpack_sym);
+    REGCALL(R_pack_sym);
 }
 @}
 

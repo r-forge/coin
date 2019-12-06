@@ -347,6 +347,36 @@ SEXP R_unpack_sym
     return ans;
 }
 
+/* R\_pack\_sym */
+
+/* R\_pack\_sym Prototype */
+
+SEXP R_pack_sym
+(
+    SEXP x
+)
+
+{
+    R_xlen_t n, k = 0;
+    SEXP ans;
+    double *dx, *dans;
+
+    n = NROW(x);
+    dx = REAL(x);
+    PROTECT(ans = allocVector(REALSXP, n * (n + 1) / 2));
+    dans = REAL(ans);
+
+    for (R_xlen_t i = 0; i < n; i++) {
+        for (R_xlen_t j = i; j < n; j++) {
+          dans[k] = dx[i * n + j];
+          k++;
+        }
+    }
+
+    UNPROTECT(1);
+    return ans;
+}
+
 
 /* Memory */
 

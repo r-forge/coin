@@ -4,7 +4,8 @@
 
 \section{Changes in Version 1.0-6 (20YY-MM-DD)}{
   \itemize{
-    \item
+    \item New function \code{R_pack_sym} for transforming a symmetric matrix to
+          lower-packed storage mode.
   }
 }
 
