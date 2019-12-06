@@ -1014,8 +1014,7 @@ level.
 #include <Rmath.h>
 #include <Rdefines.h>
 #include <R_ext/stats_package.h> /* for S_rcont2 */
-#include <R_ext/Applic.h> /* for dgemm */
-#include <R_ext/Lapack.h> /* for dgesdd */
+#include <R_ext/Lapack.h> /* for dspev */
 @}
 
 We need three macros: \verb|S| computes the element $\Sigma_{ij}$ of a

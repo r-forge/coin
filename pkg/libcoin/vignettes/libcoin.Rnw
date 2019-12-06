@@ -1274,8 +1274,7 @@ level.
 \mbox{}\verb@#include <Rmath.h>@\\
 \mbox{}\verb@#include <Rdefines.h>@\\
 \mbox{}\verb@#include <R_ext/stats_package.h> /* for S_rcont2 */@\\
-\mbox{}\verb@#include <R_ext/Applic.h> /* for dgemm */@\\
-\mbox{}\verb@#include <R_ext/Lapack.h> /* for dgesdd */@\\
+\mbox{}\verb@#include <R_ext/Lapack.h> /* for dspev */@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
