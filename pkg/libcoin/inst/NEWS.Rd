@@ -2,6 +2,12 @@
 \name{NEWS}
 \title{NEWS file for the \pkg{libcoin} package}
 
+\section{Changes in Version 1.0-6 (20YY-MM-DD)}{
+  \itemize{
+    \item
+  }
+}
+
 \section{Changes in Version 1.0-5 (2019-08-22)}{
   \itemize{
     \item New function \code{R_unpack_sym} for unpacking a symmetric matrix
