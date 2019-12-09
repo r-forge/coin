@@ -1,4 +1,4 @@
-### generic method for extracting p-values from objects
+### methods for extracting p-values
 setGeneric("pvalue",
     function(object, ...) {
         standardGeneric("pvalue")
@@ -78,7 +78,7 @@ setMethod("pvalue",
 )
 
 
-### generic method for extracting mid-p-values from objects
+### methods for extracting mid-p-values
 setGeneric("midpvalue",
     function(object, ...) {
         standardGeneric("midpvalue")
@@ -111,7 +111,7 @@ setMethod("midpvalue",
 )
 
 
-### generic method for extracting p-value intervals from objects
+### methods for extracting p-value intervals
 setGeneric("pvalue_interval",
     function(object, ...) {
         standardGeneric("pvalue_interval")
@@ -133,7 +133,7 @@ setMethod("pvalue_interval",
 )
 
 
-### generic method for extracting size from objects
+### methods for extracting test size
 setGeneric("size",
     function(object, ...) {
         standardGeneric("size")
@@ -158,7 +158,7 @@ setMethod("size",
 )
 
 
-### generic method for the permutation distribution from objects
+### methods for extracting the density function
 setGeneric("dperm",
     function(object, x, ...) {
         standardGeneric("dperm")
@@ -180,7 +180,7 @@ setMethod("dperm",
 )
 
 
-### generic method for the permutation distribution from objects
+### methods for extracting the distribution function
 setGeneric("pperm",
     function(object, q, ...) {
         standardGeneric("pperm")
@@ -202,7 +202,7 @@ setMethod("pperm",
 )
 
 
-### generic method for the permutation distribution from objects
+### methods for extracting the quantile function
 setGeneric("qperm",
     function(object, p, ...) {
         standardGeneric("qperm")
@@ -224,7 +224,7 @@ setMethod("qperm",
 )
 
 
-### generic method for the permutation distribution from objects
+### methods for extracting random deviates
 setGeneric("rperm",
     function(object, n, ...) {
         standardGeneric("rperm")
@@ -246,7 +246,7 @@ setMethod("rperm",
 )
 
 
-### generic method for the permutation distribution from objects
+### methods for extracting the support
 setGeneric("support",
     function(object, ...) {
         standardGeneric("support")
@@ -268,7 +268,7 @@ setMethod("support",
 )
 
 
-### generic method for extracting statistics from objects
+### methods for extracting test statistics etc.
 setGeneric("statistic",
     function(object, ...) {
         standardGeneric("statistic")
@@ -338,7 +338,7 @@ setMethod("statistic",
 )
 
 
-### generic method for extracting expectations from objects
+### methods for extracting expectations
 setGeneric("expectation",
     function(object, ...) {
         standardGeneric("expectation")
@@ -366,7 +366,7 @@ setMethod("expectation",
 )
 
 
-### generic method for extracting the covariance matrix from objects
+### methods for extracting the covariance matrix
 setGeneric("covariance",
     function(object, ...) {
         standardGeneric("covariance")
@@ -404,7 +404,7 @@ setMethod("covariance",
 )
 
 
-### generic method for extracting the variances
+### methods for extracting the variances
 setGeneric("variance",
     function(object, ...) {
         standardGeneric("variance")
