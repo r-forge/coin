@@ -6,6 +6,12 @@
     \itemize{
       \item The Moore-Penrose inverse of the conditional covariance matrix can
       now be extracted (see \code{?covariance}).
+
+      \item For tests of conditional independence within blocks, the partial
+      linear statistic for each block and its conditional expectation and
+      variance as well as its conditional covariance and corresponding
+      Moore-Penrose inverse can now be extracted (see \code{?statistic},
+      \code{?expectation}, \code{?variance} and \code{?covariance}).
     }
   }
   \subsection{Bug fixes}{
@@ -25,11 +31,14 @@
   }
   \subsection{Other changes}{
     \itemize{
-      \item The internal storage of the covariance and its Moore-Penrose
-      inverse, i.e., slots \code{covariance} and \code{covarianceplus} in
-      classes inheriting from \code{"IndependenceLinearStatistic"} and
-      \code{"QuadTypeIndependenceTestStatistic"} respectively, has been changed
-      and now uses a memory-efficient packed format.
+      \item The internal storage of the linear statistic and its conditional
+      expectation and covariance, i.e., slots \code{linearstatistic},
+      \code{expectation} and \code{covariance} in classes inheriting from
+      \code{"IndependenceLinearStatistic"}, as well as the Moore-Penrose inverse
+      of the conditional covariance, i.e., slot \code{covarianceplus} in classes
+      inheriting from \code{"QuadTypeIndependenceTestStatistic"}, has been
+      changed.  In particular, the conditional covariance and its Moore-Penrose
+      inverse now use a memory-efficient packed format.
 
       \item \R \eqn{\ge}{>=}3.5.0 and package \pkg{libcoin} \eqn{\ge}{>=}1.0-5
       are now required.

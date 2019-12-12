@@ -287,6 +287,44 @@ setMethod("support",
 )
 
 
+### *internal* methods for extracting the linear statistic
+setGeneric(".linearstatistic",
+    function(object, ...) {
+        standardGeneric(".linearstatistic")
+    }
+)
+
+setMethod(".linearstatistic",
+    signature = "IndependenceLinearStatistic",
+    definition = function(object, partial, ...) {
+        RET <- object@linearstatistic
+        r <- ncol(RET)
+        if (r > 1 && !partial)
+            RET <- as.matrix(rowSums(RET))
+        RET
+    }
+)
+
+
+### *internal* methods for extracting the centered linear statistic
+setGeneric(".centeredlinearstatistic",
+    function(object, ...) {
+        standardGeneric(".centeredlinearstatistic")
+    }
+)
+
+setMethod(".centeredlinearstatistic",
+    signature = "IndependenceLinearStatistic",
+    definition = function(object, partial, ...) {
+        RET <- object@linearstatistic - object@expectation
+        r <- ncol(RET)
+        if (r > 1 && !partial)
+            RET <- as.matrix(rowSums(RET))
+        RET
+    }
+)
+
+
 ### methods for extracting test statistics etc.
 setGeneric("statistic",
     function(object, ...) {
@@ -297,62 +335,83 @@ setGeneric("statistic",
 setMethod("statistic",
     signature = "IndependenceLinearStatistic",
     definition = function(object,
-        type = c("test", "linear", "centered", "standardized"), ...) {
+        type = c("test", "linear", "centered", "standardized"),
+        partial = FALSE, ...) {
             type <- match.arg(type)
-            nr <- ncol(object@xtrans)
-            nc <- ncol(object@ytrans)
+            p <- ncol(object@xtrans)
+            q <- ncol(object@ytrans)
+            r <- nlevels(object@block)
             dn <- statnames(object)$dimnames
-            switch(type,
-                "test" = stop(
-                    sQuote(paste("type =", dQuote("test"))),
-                    " not defined for objects of class ",
-                    dQuote("IndependenceLinearStatistic")
-                ),
-                "linear" = matrix(
-                    object@linearstatistic,
-                    nrow = nr, ncol = nc, dimnames = dn
-                ),
-                "centered" = matrix(
-                    object@linearstatistic - object@expectation,
-                    nrow = nr, ncol = nc, dimnames = dn
-                ),
-                "standardized" = matrix(
-                    (object@linearstatistic - object@expectation) /
-                        sqrt(variance(object)),
-                    nrow = nr, ncol = nc, dimnames = dn
-                )
-            )
+            RET <- switch(type,
+                       "test" = stop(
+                           sQuote(paste("type =", dQuote("test"))),
+                           " not defined for objects of class ",
+                           dQuote("IndependenceLinearStatistic")
+                       ),
+                       "linear" = {
+                           .linearstatistic(object, partial, ...)
+                       },
+                       "centered" = {
+                           .centeredlinearstatistic(object, partial, ...)
+                       },
+                       "standardized" = {
+                           .centeredlinearstatistic(object, partial, ...) /
+                               sqrt(.variance(object, partial, ...))
+                       }
+                   )
+            if (r > 1 && partial)
+                setAttributes(RET, list(dim = c(p, q, r), dimnames = dn))
+            else
+                setAttributes(RET, list(dim = c(p, q), dimnames = dn[-3]))
     }
 )
 
 setMethod("statistic",
     signature = "IndependenceTestStatistic",
     definition = function(object,
-        type = c("test", "linear", "centered", "standardized"), ...) {
+        type = c("test", "linear", "centered", "standardized"),
+        partial = FALSE, ...) {
             type <- match.arg(type)
-            switch(type,
-                "test" = {
-                    object@teststatistic
-                },
-                "standardized" = {
-                    nr <- ncol(object@xtrans)
-                    nc <- ncol(object@ytrans)
+            if (type == "test")
+                object@teststatistic
+            else if (type == "standardized" && !partial) {
+                    p <- ncol(object@xtrans)
+                    q <- ncol(object@ytrans)
                     dn <- statnames(object)$dimnames
                     matrix(
                         object@standardizedlinearstatistic,
-                        nrow = nr, ncol = nc, dimnames = dn
+                        nrow = p, ncol = q, dimnames = dn[-3]
                     )
-                },
-                callNextMethod(object, type, ...)
-            )
+            } else
+                callNextMethod(object, type, partial, ...)
     }
 )
 
 setMethod("statistic",
     signature = "IndependenceTest",
     definition = function(object,
-        type = c("test", "linear", "centered", "standardized"), ...) {
-            callGeneric(object@statistic, type, ...)
+        type = c("test", "linear", "centered", "standardized"),
+        partial = FALSE, ...) {
+            callGeneric(object@statistic, type, partial, ...)
+    }
+)
+
+
+### *internal* methods for extracting expectations
+setGeneric(".expectation",
+    function(object, ...) {
+        standardGeneric(".expectation")
+    }
+)
+
+setMethod(".expectation",
+    signature = "IndependenceLinearStatistic",
+    definition = function(object, partial, ...) {
+        RET <- object@expectation
+        r <- ncol(RET)
+        if (r > 1 && !partial)
+            RET <- as.matrix(rowSums(RET))
+        RET
     }
 )
 
@@ -366,21 +425,63 @@ setGeneric("expectation",
 
 setMethod("expectation",
     signature = "IndependenceLinearStatistic",
-    definition = function(object, ...) {
-        nr <- ncol(object@xtrans)
-        nc <- ncol(object@ytrans)
+    definition = function(object, partial = FALSE, ...) {
+        RET <- .expectation(object, partial, ...)
+        p <- ncol(object@xtrans)
+        q <- ncol(object@ytrans)
+        r <- ncol(expectation)
         dn <- statnames(object)$dimnames
-        matrix(
-            object@expectation,
-            nrow = nr, ncol = nc, dimnames = dn
-        )
+        if (r > 1 && partial)
+            setAttributes(RET, list(dim = c(p, q, r), dimnames = dn))
+        else
+            setAttributes(RET, list(dim = c(p, q), dimnames = dn[-3]))
     }
 )
 
 setMethod("expectation",
     signature = "IndependenceTest",
-    definition = function(object, ...) {
-        callGeneric(object@statistic, ...)
+    definition = function(object, partial = FALSE, ...) {
+        callGeneric(object@statistic, partial, ...)
+    }
+)
+
+
+### *internal* methods for extracting the covariances
+setGeneric(".covariance",
+    function(object, ...) {
+        standardGeneric(".covariance")
+    }
+)
+
+setMethod(".covariance",
+    signature = "IndependenceLinearStatistic",
+    definition = function(object, invert, partial, ...) {
+        RET <- object@covariance
+        r <- ncol(RET)
+        if (r > 1 && partial) {
+            if (invert) {
+                mp_rank <- integer(r)
+                for (i in seq_len(r)) {
+                    mp <- .Call(R_MPinv_sym, RET[, i], 0L, sqrt_eps)
+                    RET[, i] <- mp$MPinv
+                    mp_rank[i] <- mp$rank
+                }
+            }
+            RET
+        } else {
+            if (r > 1)
+                RET <- rowSums(RET)
+            if (invert) {
+                mp <- .Call(R_MPinv_sym, RET, 0L, sqrt_eps)
+                RET <- mp$MPinv
+                mp_rank <- mp$rank
+            }
+            RET <- as.matrix(RET)
+        }
+
+        if (invert)
+            attr(RET, "rank") <- mp_rank
+        RET
     }
 )
 
@@ -405,31 +506,59 @@ setMethod("covariance",
 
 setMethod("covariance",
     signature = "IndependenceLinearStatistic",
-    definition = function(object, invert = FALSE, ...) {
-        nm <- statnames(object)$names
-        if (invert) {
-            mp <- .Call(R_MPinv_sym, object@covariance, 0L, sqrt_eps)
-            .Call(R_unpack_sym, mp$MPinv, nm, 0L)
-        } else
-            .Call(R_unpack_sym, object@covariance, nm, 0L)
+    definition = function(object, invert = FALSE, partial = FALSE, ...) {
+        RET <- .covariance(object, invert, partial, ...)
+        pq <- nrow(object@linearstatistic)
+        r <- ncol(RET)
+        nm <- statnames(object)
+        RET <- unlist(lapply(seq_len(r), function(i)
+            .Call(R_unpack_sym, RET[, i], NULL, 0L)))
+        if (r > 1 && partial)
+            setAttributes(RET, list(dim = c(pq, pq, r),
+                                    dimnames = list(nm$names, nm$names,
+                                                    nm$dimnames[[3]])))
+        else
+            setAttributes(RET, list(dim = c(pq, pq),
+                                    dimnames = list(nm$names, nm$names)))
     }
 )
 
 setMethod("covariance",
     signature = "QuadTypeIndependenceTestStatistic",
-    definition = function(object, invert = FALSE, ...) {
+    definition = function(object, invert = FALSE, partial = FALSE, ...) {
         nm <- statnames(object)$names
-        if (invert)
+        if (invert && !partial) {
             .Call(R_unpack_sym, object@covarianceplus, nm, 0L)
-        else
-            callNextMethod(object, invert, ...)
+        } else
+            callNextMethod(object, invert, partial, ...)
     }
 )
 
 setMethod("covariance",
     signature = "IndependenceTest",
-    definition = function(object, invert = FALSE, ...) {
-        callGeneric(object@statistic, invert, ...)
+    definition = function(object, invert = FALSE, partial = FALSE, ...) {
+        callGeneric(object@statistic, invert, partial, ...)
+    }
+)
+
+
+### *internal* methods for extracting the variances
+setGeneric(".variance",
+    function(object, ...) {
+        standardGeneric(".variance")
+    }
+)
+
+setMethod(".variance",
+    signature = "IndependenceLinearStatistic",
+    definition = function(object, partial, ...) {
+        RET <- object@covariance
+        r <- ncol(RET)
+        RET <- do.call("cbind", lapply(seq_len(r), function(i)
+            .Call(R_unpack_sym, RET[, i], NULL, 1L)))
+        if (r > 1 && !partial)
+            RET <- as.matrix(rowSums(RET))
+        RET
     }
 )
 
@@ -461,20 +590,22 @@ setMethod("variance",
 
 setMethod("variance",
     signature = "IndependenceLinearStatistic",
-    definition = function(object, ...) {
-        nr <- ncol(object@xtrans)
-        nc <- ncol(object@ytrans)
+    definition = function(object, partial = FALSE, ...) {
+        RET <- .variance(object, partial, ...)
+        p <- ncol(object@xtrans)
+        q <- ncol(object@ytrans)
+        r <- ncol(RET)
         dn <- statnames(object)$dimnames
-        matrix(
-            .Call(R_unpack_sym, object@covariance, NULL, 1L),
-            nrow = nr, ncol = nc, dimnames = dn
-        )
+        if (r > 1 && partial)
+            setAttributes(RET, list(dim = c(p, q, r), dimnames = dn))
+        else
+            setAttributes(RET, list(dim = c(p, q), dimnames = dn[-3]))
     }
 )
 
 setMethod("variance",
     signature = "IndependenceTest",
-    definition = function(object, ...) {
-        callGeneric(object@statistic, ...)
+    definition = function(object, partial = FALSE, ...) {
+        callGeneric(object@statistic, partial, ...)
     }
 )

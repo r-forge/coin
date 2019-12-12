@@ -17,15 +17,15 @@
 \section{Slots}{
   \describe{
     \item{\code{linearstatistic}:}{
-      Object of class \code{"numeric"}.  The linear statistic.
+      Object of class \code{"matrix"}.  The linear statistic for each block.
     }
     \item{\code{expectation}:}{
-      Object of class \code{"numeric"}.  The expectation of the linear
-      statistic.
+      Object of class \code{"matrix"}.  The expectation of the linear statistic
+      for each block.
     }
     \item{\code{covariance}:}{
-      Object of class \code{"numeric"}.  The lower triangular elements of the
-      covariance of the linear statistic.
+      Object of class \code{"matrix"}.  The lower triangular elements of the
+      covariance of the linear statistic for each block.
     }
     \item{\code{xtrans}:}{
       Object of class \code{"matrix"}.  The transformed \code{x}.

@@ -23,27 +23,31 @@
   linear statistic.
 }
 \usage{
-\S4method{expectation}{IndependenceLinearStatistic}(object, \dots)
-\S4method{expectation}{IndependenceTest}(object, \dots)
+\S4method{expectation}{IndependenceLinearStatistic}(object, partial = FALSE, \dots)
+\S4method{expectation}{IndependenceTest}(object, partial = FALSE, \dots)
 
 \S4method{variance}{Variance}(object, \dots)
 \S4method{variance}{CovarianceMatrix}(object, \dots)
-\S4method{variance}{IndependenceLinearStatistic}(object, \dots)
-\S4method{variance}{IndependenceTest}(object, \dots)
+\S4method{variance}{IndependenceLinearStatistic}(object, partial = FALSE, \dots)
+\S4method{variance}{IndependenceTest}(object, partial = FALSE, \dots)
 
 \S4method{covariance}{CovarianceMatrix}(object, \dots)
-\S4method{covariance}{IndependenceLinearStatistic}(object, invert = FALSE, \dots)
-\S4method{covariance}{QuadTypeIndependenceTestStatistic}(object, invert = FALSE, \dots)
-\S4method{covariance}{IndependenceTest}(object, invert = FALSE, \dots)
+\S4method{covariance}{IndependenceLinearStatistic}(object, invert = FALSE, partial = FALSE, \dots)
+\S4method{covariance}{QuadTypeIndependenceTestStatistic}(object, invert = FALSE, partial = FALSE, \dots)
+\S4method{covariance}{IndependenceTest}(object, invert = FALSE, partial = FALSE, \dots)
 }
 \arguments{
   \item{object}{
     an object from which the expectation, variance or covariance of the linear
     statistic can be extracted.
   }
+  \item{partial}{
+    a logical indicating that the partial result for each block should be
+    extracted.  Defaults to \code{FALSE}.
+  }
   \item{invert}{
     a logical indicating that the Moore-Penrose inverse of the covariance should
-    be computed.  Defaults to \code{FALSE}.
+    be extracted.  Defaults to \code{FALSE}.
   }
   \item{\dots}{
     further arguments (currently ignored).
@@ -53,10 +57,13 @@
   The methods \code{expectation}, \code{variance} and \code{covariance} extract
   the expectation, variance and covariance, respectively, of the linear
   statistic.
+
+  For tests of conditional independence within blocks, the partial result for
+  each block is obtained by setting \code{partial = TRUE}.
 }
 \value{
   The expectation, variance or covariance of the linear statistic extracted from
-  \code{object}.  A matrix.
+  \code{object}.  A matrix or array.
 }
 \examples{\dontshow{suppressWarnings(RNGversion("3.5.2")); set.seed(711109)}
 ## Example data
@@ -74,6 +81,9 @@ ct <- cmh_test(y ~ x, data = dta)
 ## ...and its expectation...
 (mu <- expectation(ct))
 
+## ...and variance...
+(sigma <- variance(ct))
+
 ## ...and covariance...
 (Sigma <- covariance(ct))
 
@@ -81,7 +91,7 @@ ct <- cmh_test(y ~ x, data = dta)
 (SigmaPlus <- covariance(ct, invert = TRUE))
 
 ## The standardized contingency table...
-(T - mu) / sqrt(variance(ct))
+(T - mu) / sqrt(sigma)
 
 ## ...is identical to the standardized linear statistic
 statistic(ct, type = "standardized")

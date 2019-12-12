@@ -83,9 +83,11 @@ SR_shift_2sample <- function(object, fact) {
     }
 
     if (teststat == "scalar")
-        T <- (T - as.vector(expectation(object))) / sqrt(as.vector(variance(object)))
+        T <- (T - as.vector(.expectation(object, partial = FALSE))) /
+            sqrt(as.vector(.variance(object, partial = FALSE)))
     else {
-        T <- (T - as.vector(expectation(object)))^2 / as.vector(variance(object))
+        T <- (T - as.vector(.expectation(object, partial = FALSE)))^2 /
+            as.vector(.variance(object, partial = FALSE))
         ## make sure T is ordered and distinct
         n <- length(T)
         o <- order(T)
@@ -262,9 +264,11 @@ SR_shift_1sample <- function(object, fact) {
     T <- (T - 1) / fact
 
     if (teststat == "scalar")
-        T <- (T - as.vector(expectation(object))) / sqrt(as.vector(variance(object)))
+        T <- (T - as.vector(.expectation(object, partial = FALSE))) /
+            sqrt(as.vector(.variance(object, partial = FALSE)))
     else {
-        T <- (T - as.vector(expectation(object)))^2 / as.vector(variance(object))
+        T <- (T - as.vector(.expectation(object, partial = FALSE)))^2 /
+            as.vector(.variance(object, partial = FALSE))
         ## make sure T is ordered and distinct
         n <- length(T)
         o <- order(T)
@@ -409,7 +413,8 @@ vdW_split_up_2sample <- function(object) {
     storage.mode(m) <- "integer"
 
     p_fun <- function(q) {
-        T <- q * sqrt(variance(object)) + expectation(object)
+        T <- q * sqrt(.variance(object, partial = FALSE)) +
+            .expectation(object, partial = FALSE)
         .Call(R_split_up_2sample, scores, m, T, sqrt_eps)
     }
     q_fun <- function(p) {
@@ -425,7 +430,7 @@ vdW_split_up_2sample <- function(object) {
         if (rr$estim.prec > sqrt_eps) {
             r1 <- rr$root
             d <- min(diff(sort(scores[!duplicated(scores)]))) /
-                   sqrt(variance(object))
+                sqrt(.variance(object, partial = FALSE))
             while (d > sqrt_eps) {
                 if (f(r1 - d) >= 0)
                     r1 <- r1 - d
