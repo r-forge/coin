@@ -81,18 +81,46 @@ setMethod("initialize",
             stop(sQuote("object"), " is not of class ",
                  dQuote("IndependenceTestProblem"))
 
-        ecs <- .Call(R_ExpectationCovarianceStatistic,
-                     object@xtrans, object@ytrans, object@weights, integer(0),
-                     object@block, 0L, sqrt_eps)
+        block <- object@block
+        r <- nlevels(block)
+
+        if (r == 1) {
+            ecs <- .Call(R_ExpectationCovarianceStatistic,
+                         object@xtrans,
+                         object@ytrans,
+                         object@weights,
+                         integer(0), integer(0), 0L, sqrt_eps)
+            linearstatistic <- as.matrix(ecs$LinearStatistic)
+            expectation <-  as.matrix(ecs$Expectation)
+            covariance <- as.matrix(ecs$Covariance)
+        } else {
+            ytrans <- object@ytrans
+            xtrans <- object@xtrans
+            weights <- object@weights
+            pq <- ncol(xtrans) * ncol(ytrans)
+
+            linearstatistic <- matrix(NA_real_, nrow = pq, ncol = r)
+            expectation <- matrix(NA_real_, nrow = pq, ncol = r)
+            covariance <- matrix(NA_real_, nrow = pq * (pq + 1) / 2, ncol = r)
+
+            bl <- levels(block)
+            for (i in seq_len(r)) {
+                block_i <- block == bl[i]
+                ecs <- .Call(R_ExpectationCovarianceStatistic,
+                             xtrans[block_i,, drop = FALSE],
+                             ytrans[block_i,, drop = FALSE],
+                             weights[block_i],
+                             integer(0), integer(0), 0L, sqrt_eps)
+                linearstatistic[, i] <- ecs$LinearStatistic
+                expectation[, i] <- ecs$Expectation
+                covariance[, i] <- ecs$Covariance
+            }
+        }
 
         .Object <- copyslots(object, .Object)
-        .Object@linearstatistic <- as.matrix(ecs$LinearStatistic)
-        .Object@expectation <- as.matrix(ecs$Expectation)
-        .Object@covariance <- as.matrix(ecs$Covariance)
-
-        if (any(variance(.Object) < sqrt_eps))
-            warning("The conditional covariance matrix has ",
-                    "zero diagonal elements")
+        .Object@linearstatistic <- linearstatistic
+        .Object@expectation <- expectation
+        .Object@covariance <- covariance
 
         .Object
     }
@@ -107,9 +135,16 @@ setMethod("initialize",
             stop(sQuote("object"), " is not of class ",
                  dQuote("IndependenceLinearStatistic"))
 
+        variance <- .variance(object, partial = FALSE)
+
         .Object <- copyslots(object, .Object)
         .Object@standardizedlinearstatistic <-
-            as.vector(statistic(object, type = "standardize"))
+            as.vector(.centeredlinearstatistic(object, partial = FALSE) /
+                      sqrt(variance))
+
+        if (any(variance < sqrt_eps))
+            warning("The conditional covariance matrix has ",
+                    "zero diagonal elements")
 
         .Object
     }
@@ -155,13 +190,16 @@ setMethod("initialize",
     signature = "QuadTypeIndependenceTestStatistic",
     definition = function(.Object, object, paired = FALSE, ...) {
 
-        mp <- .Call(R_MPinv_sym, object@covariance, 0L, sqrt_eps)
+        covarianceplus <- .covariance(object, invert = TRUE, partial = FALSE)
 
         .Object <- callNextMethod(.Object, object)
         .Object@teststatistic <-
-            .Call(R_quadform, object@linearstatistic, object@expectation, mp$MPinv)
-        .Object@covarianceplus <- mp$MPinv
-        .Object@df <- mp$rank
+            .Call(R_quadform,
+                  .linearstatistic(object, partial = FALSE),
+                  .expectation(object, partial = FALSE),
+                  covarianceplus)
+        .Object@df <- attr(covarianceplus, "rank")
+        .Object@covarianceplus <- as.vector(covarianceplus)
         .Object@paired <- paired
 
         .Object

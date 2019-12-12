@@ -41,8 +41,8 @@ setMethod("AsymptNullDistribution",
         if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
             runif(1L)
         seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
-        corr <- cov2cor(covariance(object))
-        pq <- length(expectation(object))
+        corr <- cov2cor(covariance(object, partial = FALSE))
+        pq <- nrow(corr)
 
         p_fun <- function(q, conf.int, ...) {
             switch(object@alternative,
@@ -140,8 +140,8 @@ setMethod("ApproxNullDistribution",
 
         pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
                           object@weights, nresample, ...)
-        pls <- (pls - as.vector(expectation(object))) /
-                   sqrt(as.vector(variance(object)))
+        pls <- (pls - as.vector(.expectation(object, partial = FALSE))) /
+                   sqrt(as.vector(.variance(object, partial = FALSE)))
 
         p_fun <- function(q) {
             mean(pls %LE% q)
@@ -250,8 +250,8 @@ setMethod("ApproxNullDistribution",
 
         pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
                           object@weights, nresample, ...)
-        pls <- (pls - as.vector(expectation(object))) /
-                   sqrt(as.vector(variance(object)))
+        pls <- (pls - as.vector(.expectation(object, partial = FALSE))) /
+                   sqrt(as.vector(.variance(object, partial = FALSE)))
 
         mpls <- switch(object@alternative,
                     "less"      = colMins(pls),
@@ -370,7 +370,10 @@ setMethod("ApproxNullDistribution",
 
         pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
                           object@weights, nresample, ...)
-        pls <- .Call(R_quadform, pls, object@expectation, object@covarianceplus)
+        pls <- .Call(R_quadform,
+                     pls,
+                     .expectation(object, partial = FALSE),
+                     object@covarianceplus)
 
         p_fun <- function(q) {
             mean(pls %LE% q)

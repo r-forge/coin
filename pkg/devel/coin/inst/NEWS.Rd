@@ -38,6 +38,12 @@
     \itemize{
       \item The Moore-Penrose inverse of the conditional covariance matrix can
       now be extracted (see \code{?covariance}).
+
+      \item For tests of conditional independence within blocks, the partial
+      linear statistic for each block and its conditional expectation and
+      variance as well as its conditional covariance and corresponding
+      Moore-Penrose inverse can now be extracted (see \code{?statistic},
+      \code{?expectation}, \code{?variance} and \code{?covariance}).
     }
   }
   \subsection{Bug fixes}{
