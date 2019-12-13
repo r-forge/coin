@@ -227,7 +227,7 @@ measured, up to a maximum of $300$ seconds. The rats were randomly assigned to t
 and treatment groups, thus a re-randomization test as implemented
 in \code{independence_test()} is the appropriate way to investigate
 if the response is independent of the group assignment. The data are particularly
-challenging because of the many ties in the (right-censored) response ($\Sexpr{sum(rotarod$time == 300)}$
+challenging because of the many ties in the (right-censored) response ($\Sexpr{sum(rotarod[["time"]] == 300)}$
 observations take the maximal value $300$) and the quasi-complete separation (smaller values of time
 are only observed in the treatment group). Conceptually, this makes computation of the
 two-sided exact $p$-value for any two-sample contrast very simple:
@@ -241,8 +241,8 @@ because several simple algorithms fail.
 \begin{tabular}{|r|rrrrrrrrrrrr|}
 \hline
 \code{group} & \multicolumn{12}{|l|}{\code{time}} \\ \hline
-control & \Sexpr{paste(rotarod$time[1:12], collapse = " & ")} \\
-treatment & \Sexpr{paste(sort(rotarod$time[13:24]), collapse = " & ")} \\
+control & \Sexpr{paste(rotarod[["time"]][1:12], collapse = " & ")} \\
+treatment & \Sexpr{paste(sort(rotarod[["time"]][13:24]), collapse = " & ")} \\
 \hline
 \end{tabular}
 \caption{The \code{rotarod} data: length of \code{time} on rotating cylinder by
@@ -294,7 +294,7 @@ In the following we give a brief overview of the general theory for permutation 
 as developed by \cite{StrasserWeber1999} and implemented by \cite{Hothorn:2006:AmStat}.
 
 The task is to test the independence of two variables $\Y$ and $\X$
-from sample spaces $\sY$ and $sX$ which may
+from sample spaces $\sY$ and $\sX$ which may
 be measured at arbitrary scales and may be multivariate as well.
 In addition, $B \in \{1, \dots, r\}$, a nominal factor with $r$ levels, indicates a certain block
 structure of the observations: for example study centers in a
@@ -490,7 +490,6 @@ Function & Description \\
 \end{center}
 \end{table}
 
-
 The specification of the inference procedure is completed by the definition
 of a univariate test statistic $c$
 which is represented by a \emph{virtual} class \Rclass{IndependenceTestStatistic}:
@@ -544,7 +543,6 @@ in quotes.  Again a special class
 <<MaxTypeIndependenceTestStatistic, results = tex>>=
 toLatex(c2t("MaxTypeIndependenceTestStatistic"))
 @
-
 
 Alternatively, a quadratic form $c_\text{quad}(\t, \mub, \Sigmab) =
 (\t - \mub)^\top \Sigmab^+ (\t - \mub)$ can be used as test statistic. It
@@ -770,7 +768,8 @@ supply a function that can compute a \Rclass{NullDistribution} object from an
 For the most important special cases, suitable function
 \emph{generators} are provided in \pkg{coin}. For example, the function
 \code{approximate(nresample = 1000)} returns a Monte Carlo function that draws
-\code{nresample} (default: \Sexpr{formals(approximate)$nresample}) random permutations.  Similarly, \code{exact()}
+\code{nresample} (default: \Sexpr{formals(approximate)[["nresample"]]}) random
+permutations.  Similarly, \code{exact()}
 and \code{approximate()} return functions computing the exact or
 asymptotic null distributions, respectively. Again, computational
 details in the computation of the null distribution can be controlled
@@ -1072,9 +1071,9 @@ The \pkg{coin} package imports packages \pkg{mvtnorm}
 distribution and \pkg{modeltools} \citep{PKG:modeltools} for
 formula parsing.
 The class structure, internal functionality, user interface and examples are
-based on \pkg{coin} version \Sexpr{packageDescription("coin")$Version}, available
+based on \pkg{coin} version \Sexpr{packageVersion("coin")}, available
 under the terms of the General Public License from \url{https://CRAN.R-project.org/}.
-\proglang{R} version \Sexpr{paste(version$major, version$minor, sep = ".")} \citep{rcore2007}
+\proglang{R} version \Sexpr{getRversion()} \citep{rcore2007}
 was used for the computations, Figure~\ref{jsplot} was created using the \pkg{vcd}
 package \citep{vcd}.
 
