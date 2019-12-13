@@ -1141,7 +1141,7 @@ The \pkg{coin} package imports packages \pkg{mvtnorm}
 distribution and \pkg{modeltools} \citep{PKG:modeltools} for
 formula parsing.
 The class structure, internal functionality, user interface and examples are
-based on \pkg{coin} version \Sexpr{packageVersion("coin")}, available
+based on \pkg{coin} version \Sexpr{packageDescription("coin")[["Version"]]}, available
 under the terms of the General Public License from \url{https://CRAN.R-project.org/}.
 \proglang{R} version \Sexpr{getRversion()} \citep{rcore2019}
 was used for the computations, Figure~\ref{jsplot} was created using the \pkg{vcd}
