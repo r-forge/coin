@@ -181,7 +181,7 @@ tests, are implemented in
 many different statistical computing environments.
 These implementations, for example
 \code{wilcox.test()} for the Wilcoxon-Mann-Whitney test or
-\code{mantelhaen.test()} for the Cochran-Mantel-Haenszel $\chi^2$ test in \proglang{R} \citep{rcore2007}
+\code{mantelhaen.test()} for the Cochran-Mantel-Haenszel $\chi^2$ test in \proglang{R} \citep{rcore2019}
 or the tools implemented in \pkg{StatXact} \citep{StatXact6},
 \pkg{LogXact} \citep{LogXact8}, or \proglang{Stata} \citep{Stata}---see \cite{Oster2002,Oster2003}
 for an overview---all follow the classical classification scheme of inference procedures and
@@ -196,7 +196,7 @@ Theoretical insights by \cite{StrasserWeber1999} open up the way
 to a unified treatment of a huge class of permutation
 tests. The \pkg{coin} package for \underline{co}nditional \underline{in}ference
 is the computational counterpart to this theoretical framework,
-implemented in the \proglang{R} system for statistical computing \citep{rcore2007}.
+implemented in the \proglang{R} system for statistical computing \citep{rcore2019}.
 \cite{Hothorn:2006:AmStat} introduce the package and illustrate the
 transition from theory to practice. Here, we focus on the design principles upon which the
 \pkg{coin} implementation is based as well as on the more technical issues
