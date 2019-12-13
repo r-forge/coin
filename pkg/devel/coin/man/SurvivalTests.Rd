@@ -234,7 +234,7 @@
     \quad
     t_{(0)} \equiv 0
   }{
-    v_k = 1 / 2 * (t_(k - 1) + t_(k)) / t_(m),   t_(0) := 1
+    v_k = 1 / 2 * (t_(k - 1) + t_(k)) / t_(m),   t_(0) := 0
   }
   is the standardized mid-point between the \eqn{(k - 1)}th and the \eqn{k}th
   event time.  (This is a slight generalization of Self's original proposal in

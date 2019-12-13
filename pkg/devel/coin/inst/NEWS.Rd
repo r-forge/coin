@@ -59,6 +59,8 @@
       \eqn{p}-values).
 
       \item The test size is now computed more efficiently.
+
+      \item Documentation updates.
     }
   }
   \subsection{Other changes}{
