@@ -410,7 +410,7 @@ setMethod("expectation",
         RET <- .expectation(object, partial, ...)
         p <- ncol(object@xtrans)
         q <- ncol(object@ytrans)
-        r <- ncol(expectation)
+        r <- ncol(RET)
         dn <- statnames(object)$dimnames
         if (r > 1 && partial)
             setAttributes(RET, list(dim = c(p, q, r), dimnames = dn))
