@@ -301,6 +301,7 @@
 
   Cox, D. R. (1972).  Regression models and life-tables (with discussion).
   \emph{Journal of the Royal Statistical Society} B \bold{34}(2), 187--220.
+  \doi{10.1111/j.2517-6161.1972.tb00899.x}
 
   Fleming, T. R. and Harrington, D. P.  (1991).  \emph{Counting Processes and
     Survival Analysis}.  New York: John Wiley & Sons.
