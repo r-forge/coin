@@ -1014,6 +1014,7 @@ level.
 #include <Rmath.h>
 #include <Rdefines.h>
 #include <R_ext/stats_package.h> /* for S_rcont2 */
+#include <Rversion.h>           // for R_VERSION
 #include <R_ext/Lapack.h> /* for dspev */
 @}
 
@@ -2329,10 +2330,18 @@ for(int j = 2; j <= maxn; j++)
     fact[j] = fact[j - 1] + log(j);
 @}
 
+Note: the interface to \verb|S_rcont2| changed in  \textsf{R} 4.1-0.
 @d Compute Permuted Linear Statistic 2d
 @{
-S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,
-         csum + Lyp1 *b + 1, sumweights + b, fact, jwork, rtable2);
+#if defined(R_VERSION) && R_VERSION >= R_Version(4, 1, 0)
+            S_rcont2(Lx, Ly,
+                    rsum + Lxp1 * b + 1,
+                    csum + Lyp1 * b + 1,
+                    sumweights[b], fact, jwork, rtable2);
+#else      
+            S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,
+                     csum + Lyp1 *b + 1, sumweights + b, fact, jwork, rtable2);
+#endif
 
 for (int j1 = 1; j1 <= Lx; j1++) {
     for (int j2 = 1; j2 <= Ly; j2++)
@@ -7017,7 +7026,7 @@ SEXP RC_init_LECV_2d
 @{
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 20YY-MM-DD
+Date: 2020-08-13
 Version: 1.0-6
 Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@@R-project.org")
