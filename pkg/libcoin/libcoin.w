@@ -7031,7 +7031,7 @@ Version: 1.0-6
 Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@@R-project.org")
 Description: Basic infrastructure for linear test statistics and permutation
-  inference in the framework of Strasser and Weber (1999) <http://epub.wu.ac.at/102/>.
+  inference in the framework of Strasser and Weber (1999) <https://epub.wu.ac.at/102/>.
   This package must not be used by end-users. CRAN package 'coin' implements all
   user interfaces and is ready to be used by anyone.
 Depends: R (>= 3.4.0)
