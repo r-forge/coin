@@ -2,8 +2,11 @@
 \name{NEWS}
 \title{NEWS file for the \pkg{libcoin} package}
 
-\section{Changes in Version 1.0-6 (20YY-MM-DD)}{
+<<<<<<< .mine
+\section{Changes in Version 1.0-6 (2020-08-13)}{
   \itemize{
+    \item Interface to \code{S_rcont2} changed in \pkg{stats}, thanks
+          to Martin Maechler for a fix.
     \item New function \code{R_pack_sym} for transforming a symmetric matrix to
           lower-packed storage mode.
   }
