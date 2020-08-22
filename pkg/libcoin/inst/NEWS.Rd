@@ -2,6 +2,12 @@
 \name{NEWS}
 \title{NEWS file for the \pkg{libcoin} package}
 
+\section{Changes in Version 1.0-7 (20YY-MM-DD)}{
+  \itemize{
+    \item
+  }
+}
+
 \section{Changes in Version 1.0-6 (2020-08-13)}{
   \itemize{
     \item Interface to \code{S_rcont2} changed in \pkg{stats}, thanks
