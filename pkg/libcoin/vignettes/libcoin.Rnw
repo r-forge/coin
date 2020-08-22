@@ -131,7 +131,7 @@ urlcolor={linkcolor}%
 \chapter*{Licence}
 
 {\setlength{\parindent}{0cm}
-Copyright (C) 2017-2019 Torsten Hothorn \\
+Copyright (C) 2017-2020 Torsten Hothorn \\
 
 This file is part of the \pkg{libcoin} R add-on package. \\
 
@@ -11157,7 +11157,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@###    Copyright (C) 2017-2019 Torsten Hothorn@\\
+\mbox{}\verb@###    Copyright (C) 2017-2020 Torsten Hothorn@\\
 \mbox{}\verb@###@\\
 \mbox{}\verb@###    This file is part of the 'libcoin' R add-on package.@\\
 \mbox{}\verb@###@\\
@@ -11195,7 +11195,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@/*@\\
-\mbox{}\verb@    Copyright (C) 2017-2019 Torsten Hothorn@\\
+\mbox{}\verb@    Copyright (C) 2017-2020 Torsten Hothorn@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    This file is part of the 'libcoin' R add-on package.@\\
 \mbox{}\verb@@\\
