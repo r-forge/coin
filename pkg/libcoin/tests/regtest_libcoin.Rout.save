@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2019-12-05 r77528) -- "Unsuffered Consequences"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R Under development (unstable) (2020-08-20 r79057) -- "Unsuffered Consequences"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -49,8 +49,8 @@ Loading required package: survival
 +         list(t1$LinearStatistic,
 +              t1$Expectation,
 +              var1),
-+         list(as.vector(t2@statistic@linearstatistic),
-+              as.vector(t2@statistic@expectation),
++         list(as.vector(statistic(t2, type = "linear")),
++              as.vector(expectation(t2)),
 +              var2),
 +         check.attributes = FALSE, tolerance = tol
 +     ))
@@ -811,4 +811,4 @@ Error in doTest(lev, teststat = "maximum", ordered = FALSE) :
 > 
 > proc.time()
    user  system elapsed 
-   3.89    0.31    4.21 
+   4.35    0.34    4.95 
