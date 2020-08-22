@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2019-12-05 r77528) -- "Unsuffered Consequences"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R Under development (unstable) (2020-08-20 r79057) -- "Unsuffered Consequences"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -1698,7 +1698,7 @@ pos 40
 > ## Comparison with R's wilcox.test() function
 > wilcox.test(y1, y2, paired = TRUE, alternative = "greater")
 
-	Wilcoxon signed rank test
+	Wilcoxon signed rank exact test
 
 data:  y1 and y2
 V = 40, p-value = 0.01953
@@ -3225,7 +3225,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  11.02 0.19 11.22 NA NA 
+Time elapsed:  11.08 0.26 11.36 NA NA 
 > grDevices::dev.off()
 null device 
           1 
