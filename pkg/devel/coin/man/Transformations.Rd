@@ -40,9 +40,10 @@ logrank_trafo(x, ties.method = c("mid-ranks", "Hothorn-Lausen",
                                  "average-scores"),
               weight = logrank_weight, \dots)
 logrank_weight(time, n.risk, n.event,
-               type = c("logrank", "Gehan-Breslow", "Tarone-Ware", "Prentice",
-                        "Prentice-Marek", "Andersen-Borgan-Gill-Keiding",
-                        "Fleming-Harrington", "Gaugler-Kim-Liao", "Self"),
+               type = c("logrank", "Gehan-Breslow", "Tarone-Ware",
+                        "Peto-Peto", "Prentice", "Prentice-Marek",
+                        "Andersen-Borgan-Gill-Keiding", "Fleming-Harrington",
+                        "Gaugler-Kim-Liao", "Self"),
                rho = NULL, gamma = NULL)
 f_trafo(x)
 of_trafo(x, scores = NULL)
@@ -100,9 +101,10 @@ mcp_trafo(\dots)
   }
   \item{type}{
     a character, one of \code{"logrank"} (default), \code{"Gehan-Breslow"},
-    \code{"Tarone-Ware"}, \code{"Prentice"}, \code{"Prentice-Marek"},
-    \code{"Andersen-Borgan-Gill-Keiding"}, \code{"Fleming-Harrington"},
-    \code{"Gaugler-Kim-Liao"} or \code{"Self"}; see \code{\link{logrank_test}}.
+    \code{"Tarone-Ware"}, \code{"Peto-Peto"}, \code{"Prentice"},
+    \code{"Prentice-Marek"}, \code{"Andersen-Borgan-Gill-Keiding"},
+    \code{"Fleming-Harrington"}, \code{"Gaugler-Kim-Liao"} or \code{"Self"}; see
+    \code{\link{logrank_test}}.
   }
   \item{rho}{
     a numeric vector, the \eqn{\rho} constant when \code{type} is
