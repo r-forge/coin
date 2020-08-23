@@ -4,6 +4,9 @@
 \section{Changes in version 1.4-0 (20YY-MM-DD)}{
   \subsection{New features}{
     \itemize{
+      \item The Peto-Peto test for right-censored data is now available (see
+      \code{?logrank_test} and \code{?logrank_weight}).
+
       \item The Moore-Penrose inverse of the conditional covariance matrix can
       now be extracted (see \code{?covariance}).
 
