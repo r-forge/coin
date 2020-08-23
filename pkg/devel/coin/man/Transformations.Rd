@@ -101,18 +101,18 @@ mcp_trafo(\dots)
   \item{type}{
     a character, one of \code{"logrank"} (default), \code{"Gehan-Breslow"},
     \code{"Tarone-Ware"}, \code{"Prentice"}, \code{"Prentice-Marek"},
-    \code{"Andersen-Borgan-Gill-Keiding"}, \code{"Fleming-Harrington"} or
-    \code{"Self"}; see \code{\link{logrank_test}}.
+    \code{"Andersen-Borgan-Gill-Keiding"}, \code{"Fleming-Harrington"},
+    \code{"Gaugler-Kim-Liao"} or \code{"Self"}; see \code{\link{logrank_test}}.
   }
   \item{rho}{
     a numeric vector, the \eqn{\rho} constant when \code{type} is
-    \code{"Tarone-Ware"}, \code{"Fleming-Harrington"} or \code{"Self"}; see
-    \code{\link{logrank_test}}.  Defaults to \code{NULL}, implying \code{0.5}
-    for \code{type = "Tarone-Ware"} and \code{0} otherwise.
+    \code{"Tarone-Ware"}, \code{"Fleming-Harrington"}, \code{"Gaugler-Kim-Liao"}
+    or \code{"Self"}; see \code{\link{logrank_test}}.  Defaults to \code{NULL},
+    implying \code{0.5} for \code{type = "Tarone-Ware"} and \code{0} otherwise.
   }
   \item{gamma}{
     a numeric vector, the \eqn{\gamma} constant when \code{type} is
-    \code{"Fleming-Harrington"} or \code{"Self"}; see
+    \code{"Fleming-Harrington"}, \code{"Gaugler-Kim-Liao"} or \code{"Self"}; see
     \code{\link{logrank_test}}.  Defaults to \code{NULL}, implying \code{0}.
   }
   \item{scores}{
