@@ -530,6 +530,8 @@ setMethod("ExactNullDistribution",
     definition = function(object,
         algorithm = c("auto", "shift", "split-up"), ...) {
             algorithm <- match.arg(algorithm)
+            if (NCOL(object@ytrans) > 1L)
+                stop("cannot compute exact distribution with multivariate scores")
             if (object@paired) {
                 if (algorithm == "split-up")
                     stop("split-up algorithm not implemented for paired samples")

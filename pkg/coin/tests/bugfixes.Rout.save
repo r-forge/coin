@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2019-12-01 r77492) -- "Unsuffered Consequences"
-Copyright (C) 2019 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -995,6 +995,11 @@ Error in logrank_trafo(y) :
           
  -3.779645
 > 
+> tab <- as.table(matrix(c(5, 14, 8, 4, 25, 5, 32, 6), nrow = 2))
+> try(chisq_test(tab, distr = exact()))
+Error in .local(object, ...) : 
+  cannot compute exact distribution with multivariate scores
+> 
 > proc.time()
    user  system elapsed 
-   1.93    0.26    2.15 
+  2.503   0.089   2.583 

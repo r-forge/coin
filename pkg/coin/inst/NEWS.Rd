@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.4-0 (20YY-MM-DD)}{
+\section{Changes in version 1.4-0 (2020-12-07)}{
   \subsection{New features}{
     \itemize{
       \item The Peto-Peto test for right-censored data is now available (see
@@ -21,6 +21,8 @@
     \itemize{
       \item Extraction of the standardized linear statistic from objects of
       class \code{"IndependenceLinearStatistic"} resulted in an error.
+    \item \code{distribution = exact()} worked for quadratic test
+        statistics with multivariate scores when it shouldn't have.
     }
   }
   \subsection{User-visible changes}{
