@@ -995,11 +995,12 @@ Error in logrank_trafo(y) :
           
  -3.779645
 > 
+> ### exact appeared to work for multivariate quadratic two-sample tests
 > tab <- as.table(matrix(c(5, 14, 8, 4, 25, 5, 32, 6), nrow = 2))
-> try(chisq_test(tab, distr = exact()))
+> try(independence_test(tab, distr = exact(), teststat = "quad"))
 Error in .local(object, ...) : 
   cannot compute exact distribution with multivariate scores
 > 
 > proc.time()
    user  system elapsed 
-   2.34    0.18    2.62 
+   2.28    0.23    2.53 
