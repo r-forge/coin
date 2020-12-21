@@ -19,11 +19,12 @@
   }
   \subsection{Bug fixes}{
     \itemize{
+      \item Exact multivariate two-sample tests with quadratic test statistics
+      appeared to work but returned nonsense \eqn{p}-values); it now results in
+      an error.
+
       \item Extraction of the standardized linear statistic from objects of
       class \code{"IndependenceLinearStatistic"} resulted in an error.
-
-      \item \code{distribution = exact()} worked for quadratic test statistics
-      with multivariate scores when it shouldn't have.
     }
   }
   \subsection{User-visible changes}{
