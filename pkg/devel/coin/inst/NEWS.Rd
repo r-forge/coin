@@ -838,7 +838,7 @@
 }
 \section{Changes in version 1.0-0 (2008-11-06)}{
   \itemize{
-    \item JSS paper \url{http://www.jstatsoft.org/v28/i08/} documents version
+    \item JSS paper \url{https://www.jstatsoft.org/v28/i08/} documents version
     1.0-0.
 
     \item Set default for \code{<IndependenceTest>@method} to
