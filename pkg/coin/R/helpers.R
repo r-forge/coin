@@ -520,6 +520,3 @@ n_decimal_digits <-
     nchar(sub("^-?[[:space:]]?[[:digit:]]*[.]?", "",
               format(x, digits = 15, scientific = FALSE)[1]))
 }
-
-if (getRversion() < "3.6.0")
-    str2lang <- function(s) parse(text = s, keep.source = FALSE)[[1]]
