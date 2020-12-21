@@ -606,5 +606,6 @@ ofmaxstat_trafo(of, minprob = 0.34) # was {1} vs. {2, 3, 4}
 ils <- new("IndependenceLinearStatistic", it2@statistic)
 statistic(ils, type = "standardized")
 
+### exact appeared to work for multivariate quadratic two-sample tests
 tab <- as.table(matrix(c(5, 14, 8, 4, 25, 5, 32, 6), nrow = 2))
-try(chisq_test(tab, distr = exact()))
+try(independence_test(tab, distr = exact(), teststat = "quad"))
