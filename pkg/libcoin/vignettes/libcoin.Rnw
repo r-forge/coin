@@ -10959,7 +10959,7 @@ stopifnot(isequal(s, p))
 \mbox{}\verb@@\\
 \mbox{}\verb@Package: libcoin@\\
 \mbox{}\verb@Title: Linear Test Statistics for Permutation Inference@\\
-\mbox{}\verb@Date: 20YY-MM-DD@\\
+\mbox{}\verb@Date: 2020-12-21@\\
 \mbox{}\verb@Version: 1.0-7@\\
 \mbox{}\verb@Authors@{\tt @}\verb@R: person("Torsten", "Hothorn", role = c("aut", "cre"),@\\
 \mbox{}\verb@                  email = "Torsten.Hothorn@{\tt @}\verb@R-project.org")@\\
