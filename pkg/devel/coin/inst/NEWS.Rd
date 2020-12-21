@@ -53,6 +53,9 @@
     \itemize{
       \item Extraction of the standardized linear statistic from objects of
       class \code{"IndependenceLinearStatistic"} resulted in an error.
+
+      \item \code{distribution = exact()} worked for quadratic test statistics
+      with multivariate scores when it shouldn't have. 
     }
   }
   \subsection{User-visible changes}{
