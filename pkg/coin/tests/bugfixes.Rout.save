@@ -1,7 +1,7 @@
 
-R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+R Under development (unstable) (2020-12-20 r79658) -- "Unsuffered Consequences"
 Copyright (C) 2020 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -995,11 +995,12 @@ Error in logrank_trafo(y) :
           
  -3.779645
 > 
+> ### exact appeared to work for multivariate quadratic two-sample tests
 > tab <- as.table(matrix(c(5, 14, 8, 4, 25, 5, 32, 6), nrow = 2))
-> try(chisq_test(tab, distr = exact()))
+> try(independence_test(tab, distr = exact(), teststat = "quad"))
 Error in .local(object, ...) : 
   cannot compute exact distribution with multivariate scores
 > 
 > proc.time()
    user  system elapsed 
-  2.503   0.089   2.583 
+   2.39    0.12    2.57 
