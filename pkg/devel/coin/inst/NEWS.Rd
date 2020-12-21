@@ -33,7 +33,7 @@
     }
   }
 }
-\section{Changes in version 1.4-0 (20YY-MM-DD)}{
+\section{Changes in version 1.4-0 (2020-12-21)}{
   \subsection{New features}{
     \itemize{
       \item The Peto-Peto test for right-censored data is now available (see
