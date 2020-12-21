@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.4-0 (2020-12-07)}{
+\section{Changes in version 1.4-0 (2020-12-21)}{
   \subsection{New features}{
     \itemize{
       \item The Peto-Peto test for right-censored data is now available (see
