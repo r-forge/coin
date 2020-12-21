@@ -55,7 +55,7 @@
       class \code{"IndependenceLinearStatistic"} resulted in an error.
 
       \item \code{distribution = exact()} worked for quadratic test statistics
-      with multivariate scores when it shouldn't have. 
+      with multivariate scores when it shouldn't have.
     }
   }
   \subsection{User-visible changes}{
@@ -80,7 +80,7 @@
       changed.  In particular, the conditional covariance and its Moore-Penrose
       inverse now use a memory-efficient packed format.
 
-      \item \R \eqn{\ge}{>=}3.5.0 and package \pkg{libcoin} \eqn{\ge}{>=}1.0-5
+      \item \R \eqn{\ge}{>=}3.6.0 and package \pkg{libcoin} \eqn{\ge}{>=}1.0-5
       are now required.
     }
   }
