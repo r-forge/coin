@@ -2326,7 +2326,7 @@ jwork = Calloc(Lyp1, int);
 fact = Calloc(maxn + 1, double);
 /* Calculate log-factorials.  fact[i] = lgamma(i+1) */
 fact[0] = fact[1] = 0.;
-for(int j = 2; j <= maxn; j++)
+for (int j = 2; j <= maxn; j++)
     fact[j] = fact[j - 1] + log(j);
 @}
 
@@ -6193,21 +6193,21 @@ void C_kronecker
     const int overwrite,
     double *ans
 ) {
-    int i, j, k, l, mr, js, ir;
+    int mr, js, ir;
     double y;
 
     if (overwrite) {
-        for (i = 0; i < m * r * n * s; i++) ans[i] = 0.0;
+        for (int i = 0; i < m * r * n * s; i++) ans[i] = 0.0;
     }
 
     mr = m * r;
-    for (i = 0; i < m; i++) {
+    for (int i = 0; i < m; i++) {
         ir = i * r;
-        for (j = 0; j < n; j++) {
+        for (int j = 0; j < n; j++) {
             js = j * s;
             y = A[j*m + i];
-            for (k = 0; k < r; k++) {
-                for (l = 0; l < s; l++)
+            for (int k = 0; k < r; k++) {
+                for (int l = 0; l < s; l++)
                     ans[(js + l) * mr + ir + k] += y * B[l * r + k];
             }
         }
@@ -6227,23 +6227,23 @@ void C_kronecker_sym
     const int overwrite,
     double *ans
 ) {
-    int i, j, k, l, mr, js, ir, s;
+    int mr, js, ir, s;
     double y;
 
     mr = m * r;
     s = r;
 
     if (overwrite) {
-        for (i = 0; i < mr * (mr + 1) / 2; i++) ans[i] = 0.0;
+        for (int i = 0; i < mr * (mr + 1) / 2; i++) ans[i] = 0.0;
     }
 
-    for (i = 0; i < m; i++) {
+    for (int i = 0; i < m; i++) {
         ir = i * r;
-        for (j = 0; j <= i; j++) {
+        for (int j = 0; j <= i; j++) {
             js = j * s;
             y = A[S(i, j, m)];
-            for (k = 0; k < r; k++) {
-                for (l = 0; l < (j < i ? s : k + 1); l++) {
+            for (int k = 0; k < r; k++) {
+                for (int l = 0; l < (j < i ? s : k + 1); l++) {
                     ans[S(ir + k, js + l, mr)] += y * B[S(k, l, r)];
                 }
             }
