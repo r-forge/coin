@@ -4,6 +4,7 @@
 
 \section{Changes in Version 1.0-7 (20YY-MM-DD)}{
   \itemize{
+    \item Correct spelling in error message.
     \item Regression tests updated for \pkg{coin} 1.4-0.
   }
 }

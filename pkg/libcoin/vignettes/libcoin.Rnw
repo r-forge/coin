@@ -4787,7 +4787,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@B = C_get_B(LECV);@\\
 \mbox{}\verb@if (B > 1) {@\\
 \mbox{}\verb@    if (C_get_varonly(LECV))@\\
-\mbox{}\verb@        error("need covarinance for maximally statistics with blocks");@\\
+\mbox{}\verb@        error("need covariance for maximally statistics with blocks");@\\
 \mbox{}\verb@    covar = C_get_Covariance(LECV);@\\
 \mbox{}\verb@} else {@\\
 \mbox{}\verb@    covar = C_get_Variance(LECV); /* make -Wall happy */@\\

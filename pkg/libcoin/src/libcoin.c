@@ -6464,7 +6464,7 @@ void C_ordered_Xfactor
     B = C_get_B(LECV);
     if (B > 1) {
         if (C_get_varonly(LECV))
-            error("need covarinance for maximally statistics with blocks");
+            error("need covariance for maximally statistics with blocks");
         covar = C_get_Covariance(LECV);
     } else {
         covar = C_get_Variance(LECV); /* make -Wall happy */
@@ -6654,7 +6654,7 @@ void C_unordered_Xfactor
     B = C_get_B(LECV);
     if (B > 1) {
         if (C_get_varonly(LECV))
-            error("need covarinance for maximally statistics with blocks");
+            error("need covariance for maximally statistics with blocks");
         covar = C_get_Covariance(LECV);
     } else {
         covar = C_get_Variance(LECV); /* make -Wall happy */
