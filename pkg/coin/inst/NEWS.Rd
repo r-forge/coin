@@ -1,7 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
-\section{Changes in version 1.4-0 (2020-12-21)}{
+\section{Changes in version 1.4-0 (2021-01-15)}{
   \subsection{New features}{
     \itemize{
       \item The Peto-Peto test for right-censored data is now available (see
@@ -20,7 +20,7 @@
   \subsection{Bug fixes}{
     \itemize{
       \item Exact multivariate two-sample tests with quadratic test statistics
-      appeared to work but returned nonsense \eqn{p}-values); it now results in
+      appeared to work but returned nonsense \eqn{p}-values; it now results in
       an error.
 
       \item Extraction of the standardized linear statistic from objects of
