@@ -131,7 +131,7 @@ urlcolor={linkcolor}%
 \chapter*{Licence}
 
 {\setlength{\parindent}{0cm}
-Copyright (C) 2017-2020 Torsten Hothorn \\
+Copyright (C) 2017-2021 Torsten Hothorn \\
 
 This file is part of the \pkg{libcoin} R add-on package. \\
 
@@ -3494,7 +3494,7 @@ Note: the interface to \verb|S_rcont2| changed in  \textsf{R} 4.1-0.
 \mbox{}\verb@                    rsum + Lxp1 * b + 1,@\\
 \mbox{}\verb@                    csum + Lyp1 * b + 1,@\\
 \mbox{}\verb@                    sumweights[b], fact, jwork, rtable2);@\\
-\mbox{}\verb@#else      @\\
+\mbox{}\verb@#else@\\
 \mbox{}\verb@            S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,@\\
 \mbox{}\verb@                     csum + Lyp1 *b + 1, sumweights + b, fact, jwork, rtable2);@\\
 \mbox{}\verb@#endif@\\
@@ -10959,7 +10959,7 @@ stopifnot(isequal(s, p))
 \mbox{}\verb@@\\
 \mbox{}\verb@Package: libcoin@\\
 \mbox{}\verb@Title: Linear Test Statistics for Permutation Inference@\\
-\mbox{}\verb@Date: 2020-12-21@\\
+\mbox{}\verb@Date: 2021-01-15@\\
 \mbox{}\verb@Version: 1.0-7@\\
 \mbox{}\verb@Authors@{\tt @}\verb@R: person("Torsten", "Hothorn", role = c("aut", "cre"),@\\
 \mbox{}\verb@                  email = "Torsten.Hothorn@{\tt @}\verb@R-project.org")@\\
@@ -11157,7 +11157,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@###    Copyright (C) 2017-2020 Torsten Hothorn@\\
+\mbox{}\verb@###    Copyright (C) 2017-2021 Torsten Hothorn@\\
 \mbox{}\verb@###@\\
 \mbox{}\verb@###    This file is part of the 'libcoin' R add-on package.@\\
 \mbox{}\verb@###@\\
@@ -11195,7 +11195,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@/*@\\
-\mbox{}\verb@    Copyright (C) 2017-2020 Torsten Hothorn@\\
+\mbox{}\verb@    Copyright (C) 2017-2021 Torsten Hothorn@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    This file is part of the 'libcoin' R add-on package.@\\
 \mbox{}\verb@@\\

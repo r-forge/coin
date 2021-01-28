@@ -2338,7 +2338,7 @@ Note: the interface to \verb|S_rcont2| changed in  \textsf{R} 4.1-0.
                     rsum + Lxp1 * b + 1,
                     csum + Lyp1 * b + 1,
                     sumweights[b], fact, jwork, rtable2);
-#else      
+#else
             S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,
                      csum + Lyp1 *b + 1, sumweights + b, fact, jwork, rtable2);
 #endif
@@ -7150,7 +7150,7 @@ void attribute_visible R_init_libcoin
 
 @d R Header
 @{
-###    Copyright (C) 2017-2020 Torsten Hothorn
+###    Copyright (C) 2017-2021 Torsten Hothorn
 ###
 ###    This file is part of the 'libcoin' R add-on package.
 ###
@@ -7175,7 +7175,7 @@ void attribute_visible R_init_libcoin
 @d C Header
 @{
 /*
-    Copyright (C) 2017-2020 Torsten Hothorn
+    Copyright (C) 2017-2021 Torsten Hothorn
 
     This file is part of the 'libcoin' R add-on package.
 
