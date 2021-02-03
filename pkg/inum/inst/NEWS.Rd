@@ -3,12 +3,19 @@
 \encoding{UTF-8}
 \title{News for Package \pkg{inum}}
 
+\section{Changes in version 1.0-2 (2021-02-03)}{
+\itemize{
+  \item{\code{complete.cases.only} returned nonsense.}
+  }
+}
+
 \section{Changes in version 1.0-1 (2019-01-23)}{
 \itemize{
   \item{Differences must be larger than \code{sqrt(.Machine$double.eps)}.}
   \item{Handle numeric vectors with only two distinct values.}
   }
 }
+
 
 \section{Changes in version 1.0-0 (2017-12-12)}{
 \itemize{
