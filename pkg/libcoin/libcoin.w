@@ -58,7 +58,7 @@ urlcolor={linkcolor}%
 \newcommand{\R}{\mathbb{R} }
 \newcommand{\Prob}{\mathbb{P} }
 \newcommand{\N}{\mathbb{N} }
-\newcommand{\C}{\mathbb{C} }
+%\newcommand{\C}{\mathbb{C} }
 \newcommand{\V}{\mathbb{V}} %% cal{\mbox{\textnormal{Var}}} }
 \newcommand{\E}{\mathbb{E}} %%mathcal{\mbox{\textnormal{E}}} }
 \newcommand{\Var}{\mathbb{V}} %%mathcal{\mbox{\textnormal{Var}}} }
@@ -7026,8 +7026,8 @@ SEXP RC_init_LECV_2d
 @{
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 2021-01-15
-Version: 1.0-7
+Date: 2021-02-08
+Version: 1.0-8
 Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@@R-project.org")
 Description: Basic infrastructure for linear test statistics and permutation
