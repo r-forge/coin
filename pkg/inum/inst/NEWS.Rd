@@ -3,11 +3,19 @@
 \encoding{UTF-8}
 \title{News for Package \pkg{inum}}
 
+\section{Changes in version 1.0-3 (2021-02-08)}{
+\itemize{
+  \item{Update reference output.}
+  }
+}
+
+
 \section{Changes in version 1.0-2 (2021-02-03)}{
 \itemize{
   \item{\code{complete.cases.only} returned nonsense.}
   }
 }
+
 
 \section{Changes in version 1.0-1 (2019-01-23)}{
 \itemize{
