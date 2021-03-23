@@ -5,6 +5,7 @@
 \concept{Logrank test}
 \concept{Gehan-Breslow test}
 \concept{Tarone-Ware test}
+\concept{Peto-Peto test}
 \concept{Prentice test}
 \concept{Prentice-Marek test}
 \concept{Andersen-Borgan-Gill-Keiding test}
