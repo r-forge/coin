@@ -33,6 +33,13 @@
     }
   }
 }
+\section{Changes in version 1.4-1 (2021-02-08)}{
+  \subsection{Bug fixes}{
+    \itemize{
+      \item Fix LaTeX problem.
+    }
+  }
+}
 \section{Changes in version 1.4-0 (2021-01-15)}{
   \subsection{New features}{
     \itemize{
