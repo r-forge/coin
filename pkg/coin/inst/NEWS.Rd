@@ -10,7 +10,7 @@
   }
   \subsection{User-visible changes}{
     \itemize{
-      \item
+      \item Documentation updates.
     }
   }
   \subsection{Other changes}{
