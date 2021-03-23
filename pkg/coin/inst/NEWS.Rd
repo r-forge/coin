@@ -1,6 +1,7 @@
 \name{NEWS}
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
+
 \section{Changes in version 1.4-2 (20YY-MM-DD)}{
   \subsection{Bug fixes}{
     \itemize{
@@ -23,6 +24,7 @@
     }
   }
 }
+
 \section{Changes in version 1.4-1 (2021-02-08)}{
   \subsection{Bug fixes}{
     \itemize{
@@ -108,6 +110,7 @@
     }
   }
 }
+
 \section{Changes in version 1.3-0 (2019-03-04)}{
   \subsection{New features}{
     \itemize{
@@ -199,6 +202,7 @@
     }
   }
 }
+
 \section{Changes in version 1.2-2 (2017-11-28)}{
   \subsection{Other changes}{
     \itemize{
@@ -206,6 +210,7 @@
     }
   }
 }
+
 \section{Changes in version 1.2-1 (2017-07-16)}{
   \subsection{Bug fixes}{
     \itemize{
@@ -214,6 +219,7 @@
     }
   }
 }
+
 \section{Changes in version 1.2-0 (2017-06-20)}{
   \subsection{New features}{
     \itemize{
@@ -264,6 +270,7 @@
     }
   }
 }
+
 \section{Changes in version 1.1-3 (2016-11-24)}{
   \subsection{Bug fixes}{
     \itemize{
@@ -298,6 +305,7 @@
     }
   }
 }
+
 \section{Changes in version 1.1-2 (2015-11-13)}{
   \subsection{Bug fixes}{
     \itemize{
@@ -314,6 +322,7 @@
     }
   }
 }
+
 \section{Changes in version 1.1-1 (2015-10-25)}{
   \subsection{Bug fixes}{
     \itemize{
@@ -327,6 +336,7 @@
     }
   }
 }
+
 \section{Changes in version 1.1-0 (2015-08-14)}{
   \subsection{New features}{
     \itemize{
@@ -696,17 +706,20 @@
     }
   }
 }
+
 \section{Changes in version 1.0-24 (2014-09-17)}{
   \itemize{
     \item \code{as.integer(round(x))} is safer than \code{as.integer(x)} due to
     truncation in the latter.
   }
 }
+
 \section{Changes in version 1.0-23 (2013-09-03)}{
   \itemize{
     \item Fix \file{DESCRIPTION} and \file{NAMESPACE} issues.
   }
 }
+
 \section{Changes in version 1.0-22 (2013-04-16)}{
   \itemize{
     \item Documentation updates.
@@ -714,6 +727,7 @@
     \item Test update (for Sparc Solaris).
   }
 }
+
 \section{Changes in version 1.0-21 (2012-03-08)}{
   \itemize{
     \item Move \file{inst/doc/vignettes/*} to \file{vignettes/*}.
@@ -721,27 +735,32 @@
     \item New \code{CWD} data.
   }
 }
+
 \section{Changes in version 1.0-20 (2011-10-04)}{
   \itemize{
     \item Report a warning for rank tests with weights.
   }
 }
+
 \section{Changes in version 1.0-19 (2011-08-17)}{
   \itemize{
     \item No \code{require()} in \code{.onLoad()}.
   }
 }
+
 \section{Changes in version 1.0-18 (2010-12-21)}{
   \itemize{
     \item \code{exact()} can not work for \code{symmetry_test()}; spotted by LE
     PAPE Gilles \email{lepape.gilles@neuf.fr}.
   }
 }
+
 \section{Changes in version 1.0-17 (2010-09-13}{
   \itemize{
     \item Add dependencies required for \file{tests/*}.
   }
 }
+
 \section{Changes in version 1.0-16 (2010-08-23)}{
   \itemize{
     \item Change \code{ties.method = c("HollanderWolfe", "Pratt")} to
@@ -753,6 +772,7 @@
     (suggested by Fritz Scholz).
   }
 }
+
 \section{Changes in version 1.0-14 (2010-08-10}{
   \itemize{
     \item Documentation \code{Biobase::expressionSet}.
@@ -761,28 +781,33 @@
     two-sample tests.
   }
 }
+
 \section{Changes in version 1.0-12 (2010-07-03)}{
   \itemize{
     \item Better error message for
     \code{wilcoxsign_test(c(1, 1, 1) ~ c(1, 1, 1))}.
   }
 }
+
 \section{Changes in version 1.0-11 (2010-04-13)}{
   \itemize{
     \item Bugfix in discrete MTP adjustment.
   }
 }
+
 \section{Changes in version 1.0-10 (2010-01-27)}{
   \itemize{
     \item Improve upon \code{qperm()} for van de Wiel algorithm again.
   }
 }
+
 \section{Changes in version 1.0-9 (2009-12-30)}{
   \itemize{
     \item Again precision issues in van de Wiel algorithm: \code{qperm()}
     suffered from too large tolerances of the inverted probability function.
   }
 }
+
 \section{Changes in version 1.0-8 (2009-10-30)}{
   \itemize{
     \item Precision issues in van de Wiel algorithm fixed.  In rare cases,
@@ -791,12 +816,14 @@
     difference is smaller than \code{sqrt(.Machine$double.eps)}.
   }
 }
+
 \section{Changes in version 1.0-7 (2009-09-29)}{
   \itemize{
     \item \code{dperm()}, \code{pperm()} and \code{qperm()} are vectorized also
     for exact and approximative null distributions.
   }
 }
+
 \section{Changes in version 1.0-6 (2009-09-08)}{
   \itemize{
     \item Exact distribution for independent two-sample problems with only two
@@ -804,17 +831,20 @@
     \email{fscholz@u.washington.edu}.
   }
 }
+
 \section{Changes in version 1.0-5 (2009-06-04)}{
   \itemize{
     \item Documentation updates.
   }
 }
+
 \section{Changes in version 1.0-4 (2009-05-11)}{
   \itemize{
     \item Evaluate all \code{formula}e in \code{xxx_test()}'s
     \code{parent.frame}.
   }
 }
+
 \section{Changes in version 1.0-3 (2009-04-01)}{
   \itemize{
     \item Add alternative ties handling to \code{wilcoxsign_test()} feature
@@ -823,12 +853,14 @@
     \item Vignette update.
   }
 }
+
 \section{Changes in version 1.0-2 (2009-03-16)}{
   \itemize{
     \item Fix location confidence interval problem spotted by Fritz Scholz
     \email{fscholz@u.washington.edu}.
   }
 }
+
 \section{Changes in version 1.0-1 (2009-01-09)}{
   \itemize{
     \item Add average scores for logrank test.
@@ -836,6 +868,7 @@
     \item Fix Rd problems.
   }
 }
+
 \section{Changes in version 1.0-0 (2008-11-06)}{
   \itemize{
     \item JSS paper \url{https://www.jstatsoft.org/v28/i08/} documents version
@@ -861,6 +894,7 @@
     cutpoints.
   }
 }
+
 \section{Changes in version 0.6-9 (2008-05-05)}{
   \itemize{
     \item \code{any()} was misused in one place, spotted by Kasper Daniel Hansen
@@ -869,6 +903,7 @@
     \item Code cosmetics by Johannes Huesing \email{johannes@huesing.name}.
   }
 }
+
 \section{Changes in version 0.6-7 (2007-10-09)}{
   \itemize{
     \item Remove non_function entries from Rd files.
@@ -876,12 +911,14 @@
     \item Disable \code{Biobase} example in vignette.
   }
 }
+
 \section{Changes in version 0.6-6 (2007-08-13)}{
   \itemize{
     \item Fix precision issues with exact \eqn{p}-values (spotted by Michael Fay
     \email{mfay@niaid.nih.gov}.
   }
 }
+
 \section{Changes in version 0.6-5 (2007-07-23)}{
   \itemize{
     \item Add new vignette on technical details.
@@ -892,6 +929,7 @@
     Michael Fay \email{mfay@niaid.nih.gov} for spotting this).
   }
 }
+
 \section{Changes in version 0.6-4 (2007-06-28)}{
   \itemize{
     \item Add new argument \code{ordered_trafo} to \code{trafo()} and deal with
@@ -899,11 +937,13 @@
     \code{of_trafo()}).
   }
 }
+
 \section{Changes in version 0.6-3 (2007-06-21)}{
   \itemize{
     \item New vignette \sQuote{MAXtest}.
   }
 }
+
 \section{Changes in version 0.6-2 (2007-05-13)}{
   \itemize{
     \item Print name of \code{x} variable and levels when \code{x} is a factor.
@@ -911,11 +951,13 @@
     \item New class \code{"IndependenceLinearStatistic"}.
   }
 }
+
 \section{Changes in version 0.6-1 (2007-04-25)}{
   \itemize{
     \item \code{LazyLoad: yes}.
   }
 }
+
 \section{Changes in version 0.6-0 (2007-03-01)}{
   \itemize{
     \item Rename some \proglang{C} source files & update doxygen documentation.
@@ -940,6 +982,7 @@
     \item \code{surv_test()} ignored the \code{alternative} argument.
   }
 }
+
 \section{Changes in version 0.5-2 (2006-11-03)}{
   \itemize{
     \item \code{maxstat_trafo} did not always choose the correct maximal
@@ -949,11 +992,13 @@
     (thanks to Achim Zeileis for spotting this).
   }
 }
+
 \section{Changes in version 0.5-1 (2006-10-27)}{
   \itemize{
     \item Improve formula interface for \code{wilcoxsign_test()}.
   }
 }
+
 \section{Changes in version 0.5-0 (2006-10-17)}{
   \itemize{
     \item Implement exact distribution for symmetry problems (especially
@@ -962,11 +1007,13 @@
     \item Add more checks on StatXact examples.
   }
 }
+
 \section{Changes in version 0.4-14 (2006-09-18)}{
   \itemize{
     \item Fix problems reported by valgrind.
   }
 }
+
 \section{Changes in version 0.4-13 (2006-09-13)}{
   \itemize{
     \item \file{coin-Ex.R} generated by \R 2.4.0.
@@ -974,6 +1021,7 @@
     \item \code{Enhances: Biobase}.
   }
 }
+
 \section{Changes in version 0.4-12 (2006-09-07)}{
   \itemize{
     \item Add \code{$(FLIBS)} to \file{Makevars}.
@@ -983,6 +1031,7 @@
     \item Documentation updates.
   }
 }
+
 \section{Changes in version 0.4-10 (2006-08-25)}{
   \itemize{
     \item \code{maxstat_test(y ~ x)} is now able to deal with unordered \code{x}
@@ -996,6 +1045,7 @@
     \item Add \pkg{codetools} checks to tests.
   }
 }
+
 \section{Changes in version 0.4-9 (2006-07-24)}{
   \itemize{
     \item Fix typo: Homegeneity.
@@ -1003,6 +1053,7 @@
     \item Add ASA copyright to \sQuote{LegoCondInf} vignette.
   }
 }
+
 \section{Changes in version 0.4-8 (2006-06-23)}{
   \itemize{
     \item Clarify that the Stuart-Maxwell test is computed by \code{mh_test()}
@@ -1010,6 +1061,7 @@
     \email{henric.nilsson@phadia.com} for pointing this out!).
   }
 }
+
 \section{Changes in version 0.4-7 (2006-05-16)}{
   \itemize{
     \item Improve \code{maxstat_trafo()}: some potential cutpoints could have
@@ -1022,6 +1074,7 @@
     \item Add more regression tests on \code{maxstat_test()}.
   }
 }
+
 \section{Changes in version 0.4-6 (2006-04-24)}{
   \itemize{
     \item Updated \sQuote{LegoCondInf} vignette.
@@ -1030,6 +1083,7 @@
     \samp{maxT}, or \samp{Z} instead of \samp{T}.
   }
 }
+
 \section{Changes in version 0.4-5 (2006-04-12)}{
   \itemize{
     \item User-supplied transformations can return a vector which is coerced to
@@ -1050,17 +1104,20 @@
     missing values were present.
   }
 }
+
 \section{Changes in version 0.4-4 (2006-02-03)}{
   \itemize{
     \item Make \command{R CMD check} happy and move \file{src/README} to
     \file{inst/README}.
   }
 }
+
 \section{Changes in version 0.4-3 (2006-01-12)}{
   \itemize{
     \item \code{isequal()} must not check equality of attributes.
   }
 }
+
 \section{Changes in version 0.4-2 (2005-12-21)}{
   \itemize{
     \item New data set \code{alpha}.
@@ -1071,6 +1128,7 @@
     \item New vignette with more applications.
   }
 }
+
 \section{Changes in version 0.4-1 (2005-12-02)}{
   \itemize{
     \item Documentation updates.
@@ -1090,6 +1148,7 @@
     univariate problems are currently allowed to have ordinal variables).
   }
 }
+
 \section{Changes in version 0.3-8 (2005-11-29)}{
   \itemize{
     \item Export \code{independence_test.table()}.
@@ -1102,6 +1161,7 @@
     \item Documentation updates.
   }
 }
+
 \section{Changes in version 0.3-7 (2005-11-23)}{
   \itemize{
     \item \code{statistic()} now returns correct linear and standardized
@@ -1117,6 +1177,7 @@
     asymptotic and approximative null distributions.
   }
 }
+
 \section{Changes in version 0.3-6 (2005-11-17)}{
   \itemize{
     \item Internal \proglang{C} function \code{R_MonteCarloIndependenceTest}
@@ -1151,17 +1212,20 @@
     \item Speedup of variance computations in internal functions.
   }
 }
+
 \section{Changes in version 0.3-3 (2005-09-07)}{
   \itemize{
     \item Fix more problems reported by new \pkg{codetools}.  Try to work around
     the \code{terms(y ~ ., data = data.frame(1:10))} problem in \R 2.2.0.
   }
 }
+
 \section{Changes in version 0.3-2 (2005-08-31)}{
   \itemize{
     \item Fix some problems reported by \pkg{codetools}.
   }
 }
+
 \section{Changes in version 0.3-1 (2005-08-20)}{
   \itemize{
     \item \code{alternative = "less"} and \code{alternative = "greater"} are now
@@ -1178,6 +1242,7 @@
     \item More examples added to the vignette.
   }
 }
+
 \section{Changes in version 0.2-14 (2005-07-14)}{
   \itemize{
     \item \code{distribution = "approximate"} for \code{"maxtype"} statistics
@@ -1185,12 +1250,14 @@
     multivariate (the conditional expectation was computed incorrectly).
   }
 }
+
 \section{Changes in version 0.2-13 (2005-07-11)}{
   \itemize{
     \item \code{I()} in \code{formula}e returns objects of class \code{"AsIs"}
     which caused troubles in \code{trafo()}.
   }
 }
+
 \section{Changes in version 0.2-12 (2005-06-15)}{
   \itemize{
     \item Functionality for \code{formula} parsing and evaluation is now
@@ -1203,6 +1270,7 @@
     both row- and column names set appropriately.
   }
 }
+
 \section{Changes in version 0.2-11 (2005-06-02)}{
   \itemize{
     \item The \code{distribution} argument now takes the return values of
@@ -1230,6 +1298,7 @@
     \code{ties.method} argument, see \code{?surv_test} for more information.
   }
 }
+
 \section{Changes in version 0.2-10 (2005-05-04)}{
   \itemize{
     \item \samp{asymptotical} \eqn{\rightarrow}{->} \samp{asymptotic} in
@@ -1241,6 +1310,7 @@
     different from the lhs and rhs of \code{formula}.
   }
 }
+
 \section{Changes in version 0.2-9 (2005-03-15)}{
   \itemize{
     \item \code{mergesort} is already defined in
