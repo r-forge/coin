@@ -9797,7 +9797,12 @@ stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) &&
 \mbox{}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape R\_MPinv\_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb146a}{146a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
+\mbox{}\verb@    int m;@\\
 \mbox{}\verb@    SEXP ans, names, MPinv, rank;@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    m = INTEGER(n)[0];@\\
+\mbox{}\verb@    if (m == 0)@\\
+\mbox{}\verb@        m = (int) (sqrt(0.25 + 2 * LENGTH(x)) - 0.5);@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(ans = allocVector(VECSXP, 2));@\\
 \mbox{}\verb@    PROTECT(names = allocVector(STRSXP, 2));@\\
@@ -9807,7 +9812,7 @@ stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) &&
 \mbox{}\verb@    SET_STRING_ELT(names, 1, mkChar("rank"));@\\
 \mbox{}\verb@    namesgets(ans, names);@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    C_MPinv_sym(REAL(x), INTEGER(n)[0], REAL(tol)[0], REAL(MPinv), INTEGER(rank));@\\
+\mbox{}\verb@    C_MPinv_sym(REAL(x), m, REAL(tol)[0], REAL(MPinv), INTEGER(rank));@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
 \mbox{}\verb@    return(ans);@\\

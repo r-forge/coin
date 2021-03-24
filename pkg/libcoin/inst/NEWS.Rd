@@ -4,7 +4,8 @@
 
 \section{Changes in Version 1.0-9 (20YY-MM-DD)}{
   \itemize{
-    \item
+    \item \code{R_MPinv_sym} can now determine the full dimension of the packed
+          input \code{x} by setting \code{n} to \code{0L}.
   }
 }
 
@@ -20,7 +21,6 @@
     \item Regression tests updated for \pkg{coin} 1.4-0.
   }
 }
-
 
 \section{Changes in Version 1.0-6 (2020-08-13)}{
   \itemize{

@@ -6318,7 +6318,12 @@ SEXP R_MPinv_sym
 @{
 @<R\_MPinv\_sym Prototype@>
 {
+    int m;
     SEXP ans, names, MPinv, rank;
+
+    m = INTEGER(n)[0];
+    if (m == 0)
+        m = (int) (sqrt(0.25 + 2 * LENGTH(x)) - 0.5);
 
     PROTECT(ans = allocVector(VECSXP, 2));
     PROTECT(names = allocVector(STRSXP, 2));
@@ -6328,7 +6333,7 @@ SEXP R_MPinv_sym
     SET_STRING_ELT(names, 1, mkChar("rank"));
     namesgets(ans, names);
 
-    C_MPinv_sym(REAL(x), INTEGER(n)[0], REAL(tol)[0], REAL(MPinv), INTEGER(rank));
+    C_MPinv_sym(REAL(x), m, REAL(tol)[0], REAL(MPinv), INTEGER(rank));
 
     UNPROTECT(2);
     return(ans);
