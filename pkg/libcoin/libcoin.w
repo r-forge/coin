@@ -7026,8 +7026,8 @@ SEXP RC_init_LECV_2d
 @{
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 2021-02-08
-Version: 1.0-8
+Date: 20YY-MM-DD
+Version: 1.0-9
 Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@@R-project.org")
 Description: Basic infrastructure for linear test statistics and permutation

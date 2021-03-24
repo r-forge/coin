@@ -2,6 +2,12 @@
 \name{NEWS}
 \title{NEWS file for the \pkg{libcoin} package}
 
+\section{Changes in Version 1.0-9 (20YY-MM-DD)}{
+  \itemize{
+    \item
+  }
+}
+
 \section{Changes in Version 1.0-8 (2021-02-08)}{
   \itemize{
     \item Fix LaTeX problem.
