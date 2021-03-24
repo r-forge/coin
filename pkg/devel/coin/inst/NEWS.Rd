@@ -48,7 +48,7 @@
   }
   \subsection{Other changes}{
     \itemize{
-      \item
+      \item Package \pkg{libcoin} \eqn{\ge}{>=}1.0-9 is now required.
     }
   }
   \subsection{Deprecated and defunct}{
