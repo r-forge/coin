@@ -5,7 +5,8 @@
 \section{Changes in version 1.4-2 (20YY-MM-DD)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item Partial matching of the \code{teststat} argument name failed for
+      \code{formula} methods.
     }
   }
   \subsection{User-visible changes}{
