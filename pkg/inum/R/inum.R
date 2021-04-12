@@ -58,7 +58,11 @@ inum.data.frame <- function(object, nmax = 20, ignore = NULL, total = FALSE,
             if (any(!cc)) {
                 sDF <- sDF[cc,,drop = FALSE]
                 rownames(sDF) <- 1:nrow(sDF)
-                ret <- ret - 1L
+                i <- rep.int(1L, length(cc))
+                i[!cc] <- 0
+                i <- cumsum(i)
+                i[!cc] <- 0
+                ret <- i[ret]
             }
         }  
 

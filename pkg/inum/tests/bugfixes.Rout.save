@@ -1,6 +1,6 @@
 
-R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -17,6 +17,7 @@ Type 'q()' to quit R.
 
 > 
 > library("inum")
+> set.seed(29)
 > 
 > ### there was a warning; reported by Fabian Scheipl
 > x <- 1:2 + .1
@@ -195,6 +196,156 @@ attr(,"class")
 > stopifnot(length(attr(b, "levels")[unclass(b),"Sepal.Length"]) == 150)
 > stopifnot(length(attr(c, "levels")[unclass(c),"Sepal.Length"]) == 148)
 > 
+> ### by Susanne Dandl
+> ## mini data frame with some missings
+> d <- data.frame(
++   y = rep(1:5, each = 2),
++   x = factor(rep(0:1, 5), labels = c("a", "b")),
++   z = 1:10,
++   w = 0:9/9
++ )
+> d$y[c(1, 10)] <- NA
+> 
+> i <- inum(d, total = TRUE, complete = FALSE)
+> attr(i, "levels")[i,]
+    y x  z         w (weights)
+1  NA a  1 0.0000000         1
+2   1 b  2 0.1111111         1
+3   2 a  3 0.2222222         1
+4   2 b  4 0.3333333         1
+5   3 a  5 0.4444444         1
+6   3 b  6 0.5555556         1
+7   4 a  7 0.6666667         1
+8   4 b  8 0.7777778         1
+9   5 a  9 0.8888889         1
+10 NA b 10 1.0000000         1
+> 
+> i <- inum(d, total = TRUE, complete = TRUE)
+> rbind(NA, attr(i, "levels"))[i + 1,]
+     y    x  z         w (weights)
+1   NA <NA> NA        NA        NA
+2    1    b  2 0.1111111         1
+3    2    a  3 0.2222222         1
+4    2    b  4 0.3333333         1
+5    3    a  5 0.4444444         1
+6    3    b  6 0.5555556         1
+7    4    a  7 0.6666667         1
+8    4    b  8 0.7777778         1
+9    5    a  9 0.8888889         1
+1.1 NA <NA> NA        NA        NA
+> 
+> d <- expand.grid(y = 1:5, z = 1:10)
+> d$y[c(1, nrow(d))] <- NA
+> d$w <- rpois(nrow(d), lambda = 3)
+> 
+> i1 <- inum(d, total = TRUE, complete = FALSE)
+> attr(i1, "levels")[i1,]
+    y  z w (weights)
+2  NA  1 1         1
+13  2  1 2         1
+3   3  1 1         1
+14  4  1 2         1
+24  5  1 3         1
+4   1  2 1         1
+39  2  2 5         1
+40  3  2 5         1
+5   4  2 1         1
+15  5  2 2         1
+47  1  3 7         1
+16  2  3 2         1
+17  3  3 2         1
+25  4  3 3         1
+6   5  3 1         1
+41  1  4 5         1
+32  2  4 4         1
+18  3  4 2         1
+42  4  4 5         1
+19  5  4 2         1
+33  1  5 4         1
+26  2  5 3         1
+48  3  5 7         1
+49  4  5 7         1
+27  5  5 3         1
+20  1  6 2         1
+28  2  6 3         1
+43  3  6 5         1
+34  4  6 4         1
+7   5  6 1         1
+21  1  7 2         1
+8   2  7 1         1
+9   3  7 1         1
+35  4  7 4         1
+29  5  7 3         1
+10  1  8 1         1
+45  2  8 6         1
+22  3  8 2         1
+23  4  8 2         1
+11  5  8 1         1
+30  1  9 3         1
+1   2  9 0         1
+50  3  9 7         1
+36  4  9 4         1
+12  5  9 1         1
+44  1 10 5         1
+46  2 10 6         1
+38  3 10 4         1
+31  4 10 3         1
+37 NA 10 4         1
+> 
+> i2 <- inum(d, total = TRUE, complete = TRUE)
+> rbind(NA, attr(i2, "levels"))[i2 + 1,]
+     y  z  w (weights)
+1   NA NA NA        NA
+13   2  1  2         1
+3    3  1  1         1
+14   4  1  2         1
+24   5  1  3         1
+4    1  2  1         1
+38   2  2  5         1
+39   3  2  5         1
+5    4  2  1         1
+15   5  2  2         1
+46   1  3  7         1
+16   2  3  2         1
+17   3  3  2         1
+25   4  3  3         1
+6    5  3  1         1
+40   1  4  5         1
+32   2  4  4         1
+18   3  4  2         1
+41   4  4  5         1
+19   5  4  2         1
+33   1  5  4         1
+26   2  5  3         1
+47   3  5  7         1
+48   4  5  7         1
+27   5  5  3         1
+20   1  6  2         1
+28   2  6  3         1
+42   3  6  5         1
+34   4  6  4         1
+7    5  6  1         1
+21   1  7  2         1
+8    2  7  1         1
+9    3  7  1         1
+35   4  7  4         1
+29   5  7  3         1
+10   1  8  1         1
+44   2  8  6         1
+22   3  8  2         1
+23   4  8  2         1
+11   5  8  1         1
+30   1  9  3         1
+2    2  9  0         1
+49   3  9  7         1
+36   4  9  4         1
+12   5  9  1         1
+43   1 10  5         1
+45   2 10  6         1
+37   3 10  4         1
+31   4 10  3         1
+1.1 NA NA NA        NA
+> 
 > proc.time()
    user  system elapsed 
-  0.160   0.019   0.163 
+  0.176   0.025   0.184 
