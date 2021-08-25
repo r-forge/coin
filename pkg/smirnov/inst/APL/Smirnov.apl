@@ -31,6 +31,9 @@ u←0
 ⎕←'final diag=',diag
 R←1-diag÷m!m+n
 ∇
+S←(1 2 3)(4 5 6 7)
+prob←S DMN_TIES 1÷2
+prob
 S←(1 2 3 4 5)(6 7 8 9 10 11 12)
 prob←S DMN_TIES 3÷7
 prob

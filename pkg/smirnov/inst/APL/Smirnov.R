@@ -1,5 +1,5 @@
 
-SM <- function(obs, m, n = length(obs) - m, c) {
+psmirnov <- function(obs, m, n = length(obs) - m, c) {
 
     obs <- sort(obs)
     TIES <- c(diff(obs) != 0, TRUE)
@@ -29,6 +29,6 @@ SM <- function(obs, m, n = length(obs) - m, c) {
     1 - diag / exp(lgamma(m + n + 1) - lgamma(m + 1) - lgamma(n + 1))
 }
 
-
-SM(1:12, m = 5, c = 3 / 7)
-SM(c(1, 2, 2, 3, 3, 1, 2, 3, 3, 4, 5, 6), m = 5, c = 3 / 7)
+psmirnov(1:7, m = 3, c = 1/2)
+psmirnov(1:12, m = 5, c = 3 / 7)
+psmirnov(c(1, 2, 2, 3, 3, 1, 2, 3, 3, 4, 5, 6), m = 5, c = 3 / 7)
