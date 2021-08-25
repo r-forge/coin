@@ -42,11 +42,28 @@ dks2 <- function(q, n.x, n.y, ...) {
 }
 
 ### Schröer & Trenkler
-smirnov(3 / 7, 7, 5)
+psmirnov(3 / 7, 7, 5)
 pks2(3 / 7, 7, 5)
 
-system.time(p1 <- sapply(1:999/1000, function(q) pks2(q, 100, 200)))
-system.time(p2 <- sapply(1:999/1000, function(q) smirnov(q, 100, 200)))
+system.time(p1 <- sapply(1:999/1000, function(q) pks2(q, 10, 20)))
+system.time(p2 <- sapply(1:999/1000, function(q) psmirnov(q, 10, 20)))
 
 all.equal(p1, p2)
 
+library("coin")
+gr <- rep(gl(2, 1), c(5, 7))
+x <- c(1, 2, 2, 3, 3, 1, 2, 3, 3, 4, 5, 6)
+mt <- maxstat_test(gr ~ x, minprob = 0, maxprob = 1)
+pls <- coin:::MonteCarlo(x = mt@statistic@xtrans, y = mt@statistic@ytrans, 
+                         weights = mt@statistic@weights, 
+                         block = mt@statistic@block, nresample = 100000,
+                         parallel = "no")
+
+expectation(mt)
+
+TS <- colSums(mt@statistic@xtrans)
+N <- table(gr)
+KS <- abs(TS / N[2] - pls * sum(N) / prod(N))
+mKS <- apply(KS, 2, max)
+
+mean(mKS >= 3 / 7 - sqrt(.Machine$double.eps))

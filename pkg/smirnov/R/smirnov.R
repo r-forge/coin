@@ -1,4 +1,28 @@
 
+
+### 2-sample two-sided KS distribution
+pks2 <- function(q, n.x, n.y, exact = TRUE, tol = 1e-06) {
+    if (q < 0) return(0)
+    if (q > 1) return(1)
+    if (is.numeric(q)) 
+        q <- as.double(q)
+    else stop("argument 'q' must be numeric")
+    p <- rep(0, length(q))
+    p[is.na(q)] <- NA
+    IND <- which(!is.na(q))
+    if (!length(IND)) return(p)
+    if (n.x < 1) stop("not enough 'x' data")
+    if (n.y < 1) stop("not enough 'y' data")
+    if (exact) {
+        p[IND] <- sapply(q[IND], function(s) .Call(stats:::C_pSmirnov2x, s, floor(n.x), floor(n.y)))
+    } else {
+        n <- n.x * n.y/(n.x + n.y)
+        p[IND] <- .Call(stats:::C_pKS2, p = sqrt(n) * x[IND], tol)
+    }
+    return(p)
+}
+
+
 psmirnov <- function(q, n.x, n.y, obs = NULL, two.sided = TRUE,
                      lower.tail = TRUE, log.p = FALSE) {
 
@@ -32,6 +56,7 @@ psmirnov <- function(q, n.x, n.y, obs = NULL, two.sided = TRUE,
         if (length(obs) != N)
             stop(sQuote("length(obs)"), "is not equal to", sQuote("n.x + n.y"))
         z <- sort(obs)
+        r <- rank(z, ties.method = "max")
         eqz <- diff(z) < sqrt(.Machine$double.eps)
         for (i in ix) {
             for (j in jy) {
@@ -39,6 +64,10 @@ psmirnov <- function(q, n.x, n.y, obs = NULL, two.sided = TRUE,
                 if (abs2(i / n.x - j / n.y) < q) 
                     cmat <- 1L
                 k <- i + j
+                if (r[j + 1] > n.y + i) {
+                    cat("i: ", i, "j: ", j, "\n")
+                    break;
+                }
                 if (k > 0 && k < N && eqz[k])
                     cmat <- 1L
                 fct <- 1L
@@ -61,6 +90,8 @@ psmirnov <- function(q, n.x, n.y, obs = NULL, two.sided = TRUE,
         }            
     }
 
+print(umat)
+
     term <- lgamma(n.x + n.y + 1) - lgamma(n.x + 1) - lgamma(n.y + 1)
     ret <- umat[n.x + 1, n.y + 1]
     if (lower.tail && log.p)
@@ -74,27 +105,12 @@ psmirnov <- function(q, n.x, n.y, obs = NULL, two.sided = TRUE,
 
 ### Schröer & Trenkler (1994)
 1 - psmirnov(3 / 7, 5, 7)
-1 - psmirnov(3 / 7, 5, 7, two.sided = FALSE)
-
-1 - psmirnov(3 / 7, 5, 7, obs = 1:12)
-1 - psmirnov(3 / 7, 5, 7, obs = 1:12, two.sided = FALSE)
-
-#system.time(psmirnov(.5, 100, 200))
 
 ### Schröer & Trenkler
 1 - psmirnov(3 / 7, 5, 7, obs = c(1, 2, 2, 3, 3, 1, 2, 3, 3, 4, 5, 6))
 
-x <- c(1, 2, 2, 3, 3)
-y <- c(1, 2, 3, 3, 4, 5, 6)
+### correct
+1 - 600 / choose(12, 5)
+### incorrect
+1 - 603 / choose(12, 5)
 
-s <- replicate(10000, {z <- sample(c(x, y)); ks.test(z[1:5], z[-(1:5)])$stat})
-
-mean(s >= 3/7)
-
-### Wilcox (1997)
-x <- c(0, 32, 9, 0, 2, 0, 41, 0, 0, 0, 6, 18, 3, 3, 0, 11, 11, 2, 0, 11)
-y <- c(0, 0, 0, 0, 0, 0, 0, 0, 1, 8, 0, 3, 0, 0, 32, 12, 2, 0, 0, 0)
-
-D <- ks.test(x, y, exact = FALSE)$stat
-
-1 - psmirnov(D + .01, n.x = length(x), n.y = length(y), obs = c(x, y))
