@@ -1,0 +1,289 @@
+
+R version 4.1.1 (2021-08-10) -- "Kick Things"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> library("smirnov")
+
+Attaching package: 'smirnov'
+
+The following object is masked from 'package:stats':
+
+    ks.test
+
+> 
+> set.seed(29)
+> x <- runif(15) * 10
+> y <- runif(20) * 10
+> 
+> ### two-sided asymptotic
+> stats::ks.test(x = x, y = y, exact = FALSE)
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D = 0.45, p-value = 0.06214
+alternative hypothesis: two-sided
+
+> smirnov::ks.test(x = x, y = y, exact = FALSE)
+
+	Asymptotic Two-sample Smirnov test
+
+data:  x and y
+D = 0.45, p-value = 0.06214
+alternative hypothesis: two-sided
+
+> 
+> ### two-sided exact
+> stats::ks.test(x = x, y = y, exact = TRUE)
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D = 0.45, p-value = 0.04607
+alternative hypothesis: two-sided
+
+> smirnov::ks.test(x = x, y = y, exact = TRUE)
+
+	Exact Two-sample Smirnov test
+
+data:  x and y
+D = 0.45, p-value = 0.04607
+alternative hypothesis: two-sided
+
+> 
+> ### less asymptotic
+> stats::ks.test(x = x, y = y, exact = FALSE, alternative = "less")
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D^- = 0.066667, p-value = 0.9266
+alternative hypothesis: the CDF of x lies below that of y
+
+> smirnov::ks.test(x = x, y = y, exact = FALSE, alternative = "less")
+
+	Asymptotic Two-sample Smirnov test
+
+data:  x and y
+D^- = 0.066667, p-value = 0.9266
+alternative hypothesis: the CDF of x lies below that of y
+
+> 
+> ### less exact
+> ### NOTE: stats::ks.test reports asymptotic p-value SILENTLY
+> stats::ks.test(x = x, y = y, exact = TRUE, alternative = "less")
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D^- = 0.066667, p-value = 0.9266
+alternative hypothesis: the CDF of x lies below that of y
+
+> smirnov::ks.test(x = x, y = y, exact = TRUE, alternative = "less")
+
+	Exact Two-sample Smirnov test
+
+data:  x and y
+D^- = 0.066667, p-value = 0.8929
+alternative hypothesis: the CDF of x lies below that of y
+
+> 
+> ### greater asymptotic
+> stats::ks.test(x = x, y = y, exact = FALSE, alternative = "greater")
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D^+ = 0.45, p-value = 0.03107
+alternative hypothesis: the CDF of x lies above that of y
+
+> smirnov::ks.test(x = x, y = y, exact = FALSE, alternative = "greater")
+
+	Asymptotic Two-sample Smirnov test
+
+data:  x and y
+D^+ = 0.45, p-value = 0.03107
+alternative hypothesis: the CDF of x lies above that of y
+
+> 
+> ### greater exact
+> ### NOTE: stats::ks.test reports asymptotic p-value SILENTLY
+> stats::ks.test(x = x, y = y, exact = TRUE, alternative = "greater")
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D^+ = 0.45, p-value = 0.03107
+alternative hypothesis: the CDF of x lies above that of y
+
+> smirnov::ks.test(x = x, y = y, exact = TRUE, alternative = "greater")
+
+	Exact Two-sample Smirnov test
+
+data:  x and y
+D^+ = 0.45, p-value = 0.02303
+alternative hypothesis: the CDF of x lies above that of y
+
+> 
+> x <- round(x)
+> length(unique(x))
+[1] 8
+> y <- round(y)
+> length(unique(y))
+[1] 9
+> 
+> ### two-sided asymptotic
+> stats::ks.test(x = x, y = y, exact = FALSE)
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D = 0.45, p-value = 0.06214
+alternative hypothesis: two-sided
+
+Warning message:
+In stats::ks.test(x = x, y = y, exact = FALSE) :
+  p-value will be approximate in the presence of ties
+> smirnov::ks.test(x = x, y = y, exact = FALSE)
+
+	Asymptotic Two-sample Smirnov test
+
+data:  x and y
+D = 0.45, p-value = 0.06214
+alternative hypothesis: two-sided
+
+Warning message:
+In smirnov::ks.test(x = x, y = y, exact = FALSE) :
+  p-value will be approximate in the presence of ties
+> 
+> ### two-sided exact
+> stats::ks.test(x = x, y = y, exact = TRUE)
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D = 0.45, p-value = 0.06214
+alternative hypothesis: two-sided
+
+Warning message:
+In stats::ks.test(x = x, y = y, exact = TRUE) :
+  cannot compute exact p-value with ties
+> smirnov::ks.test(x = x, y = y, exact = TRUE)
+
+	Exact Two-sample Smirnov test
+
+data:  x and y
+D = 0.45, p-value = 0.03151
+alternative hypothesis: two-sided
+
+> 
+> ### less asymptotic
+> stats::ks.test(x = x, y = y, exact = FALSE, alternative = "less")
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D^- = 6.9389e-17, p-value = 1
+alternative hypothesis: the CDF of x lies below that of y
+
+Warning message:
+In stats::ks.test(x = x, y = y, exact = FALSE, alternative = "less") :
+  p-value will be approximate in the presence of ties
+> smirnov::ks.test(x = x, y = y, exact = FALSE, alternative = "less")
+
+	Asymptotic Two-sample Smirnov test
+
+data:  x and y
+D^- = 6.9389e-17, p-value = 1
+alternative hypothesis: the CDF of x lies below that of y
+
+Warning message:
+In smirnov::ks.test(x = x, y = y, exact = FALSE, alternative = "less") :
+  p-value will be approximate in the presence of ties
+> 
+> ### less exact
+> ### NOTE: stats::ks.test reports asymptotic p-value SILENTLY
+> stats::ks.test(x = x, y = y, exact = TRUE, alternative = "less")
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D^- = 6.9389e-17, p-value = 1
+alternative hypothesis: the CDF of x lies below that of y
+
+Warning message:
+In stats::ks.test(x = x, y = y, exact = TRUE, alternative = "less") :
+  cannot compute exact p-value with ties
+> smirnov::ks.test(x = x, y = y, exact = TRUE, alternative = "less")
+
+	Exact Two-sample Smirnov test
+
+data:  x and y
+D^- = 6.9389e-17, p-value = 1
+alternative hypothesis: the CDF of x lies below that of y
+
+> 
+> ### greater asymptotic
+> stats::ks.test(x = x, y = y, exact = FALSE, alternative = "greater")
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D^+ = 0.45, p-value = 0.03107
+alternative hypothesis: the CDF of x lies above that of y
+
+Warning message:
+In stats::ks.test(x = x, y = y, exact = FALSE, alternative = "greater") :
+  p-value will be approximate in the presence of ties
+> smirnov::ks.test(x = x, y = y, exact = FALSE, alternative = "greater")
+
+	Asymptotic Two-sample Smirnov test
+
+data:  x and y
+D^+ = 0.45, p-value = 0.03107
+alternative hypothesis: the CDF of x lies above that of y
+
+Warning message:
+In smirnov::ks.test(x = x, y = y, exact = FALSE, alternative = "greater") :
+  p-value will be approximate in the presence of ties
+> 
+> ### greater exact
+> ### NOTE: stats::ks.test reports asymptotic p-value SILENTLY
+> stats::ks.test(x = x, y = y, exact = TRUE, alternative = "greater")
+
+	Two-sample Kolmogorov-Smirnov test
+
+data:  x and y
+D^+ = 0.45, p-value = 0.03107
+alternative hypothesis: the CDF of x lies above that of y
+
+Warning message:
+In stats::ks.test(x = x, y = y, exact = TRUE, alternative = "greater") :
+  cannot compute exact p-value with ties
+> smirnov::ks.test(x = x, y = y, exact = TRUE, alternative = "greater")
+
+	Exact Two-sample Smirnov test
+
+data:  x and y
+D^+ = 0.45, p-value = 0.0167
+alternative hypothesis: the CDF of x lies above that of y
+
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  0.186   0.020   0.179 

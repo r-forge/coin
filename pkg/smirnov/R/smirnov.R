@@ -1,27 +1,9 @@
 
-#  File src/library/stats/R/ks.test.R
-#  Part of the R package, https://www.R-project.org
-#
-#  Copyright (C) 1995-2019 The R Core Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  A copy of the GNU General Public License is available at
-#  https://www.R-project.org/Licenses/
-
 psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL, 
                      two.sided = TRUE, lower.tail = TRUE, log.p = FALSE) {
 
     ###
-    ### Distribution function Prob(D < q) for the Smirnov test statistic
+    ### Distribution function Prob(D < q) for the two-sample Smirnov test statistic
     ###
     ### D = sup_c | ECDF_x(c) - ECDF_y(c) | 	(two.sided)
     ###
@@ -30,7 +12,7 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
     ### Implementation translated from APL code in Appendix C.2.3 of
     ###
     ###     Gunar Schröer, Computergestützte statistische Inferenz am Beispiel der
-    ###     Kolmogoriv-Smirnov Tests, Diplomarbeit Universität Osnabrück, 1991
+    ###     Kolmogorov-Smirnov Tests, Diplomarbeit Universität Osnabrück, 1991
     ###
     ###     see also
     ###     
@@ -38,7 +20,7 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
     ###     Distributions of Kolmogorov-Smirnov Tests for Two or Three
     ###     Samples, Computational Statistics & Data Analysis, 20, 185--202
     ###
-    ### Original APL code (slightly adapted for recent dyalog)
+    ### Original APL code (slightly adapted for recent dyalog interpreter)
     ###
     ### ⍝ Get a free trial version of dyalog from https://www.dyalog.com/
     ### ⍝ Tested with version 18.0.40684
@@ -151,7 +133,8 @@ ks.test <-
             stop("not enough 'y' data")
         if(is.null(exact))
             exact <- (n.x * n.y < 10000)
-        METHOD <- paste(c("Asymptotic", "Exact")[exact + 1L], "Two-sample Smirnov test")
+        METHOD <- paste(c("Asymptotic", "Exact")[exact + 1L], 
+                        "Two-sample Smirnov test")
         TIES <- FALSE
         n <- n.x * n.y / (n.x + n.y)
         w <- c(x, y)
@@ -200,7 +183,8 @@ ks.test <-
             TIES <- TRUE
         }
         if(is.null(exact)) exact <- (n < 100) && !TIES
-        METHOD <- paste(c("Asymptotic", "Exact")[exact + 1L], "One-sample Kolmogorov-Smirnov test")
+        METHOD <- paste(c("Asymptotic", "Exact")[exact + 1L], 
+                        "One-sample Kolmogorov-Smirnov test")
         x <- y(sort(x), ...) - (0 : (n-1)) / n
         STATISTIC <- switch(alternative,
                             "two.sided" = max(c(x, 1/n - x)),
