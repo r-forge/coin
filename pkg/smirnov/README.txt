@@ -30,7 +30,9 @@ Suggested modifications to stats:
 
  - remove C_pSmirnov2x from stats/src/ks.c (only covers the unconditional
    case and is only marginally faster compared to psmirnov())
- - add psmirnov() to stats/R/ks.R
- - replace ks.test() in stats/R/ks.R
+ - add psmirnov() to stats/R/ks.R (the original APL code is contained
+   as comment and it would be good to keep this piece of code because the
+   original source in the diploma thesis is almost impossible to obtain).
+ - replace ks.test() in stats/R/ks.R after removing ::: (2x)
  - replace manual page stats/man/ks.test.Rd
 
