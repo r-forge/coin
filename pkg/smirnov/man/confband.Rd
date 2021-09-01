@@ -16,10 +16,10 @@ confband(object, level = 0.95, \dots)
   \item{\dots}{additional argument(s) for methods.}
 }
 \value{
-  A matrix with columns giving the estimated function (\code{Estimate}) as
-  well as lower and upper confidence limits each argument. Confidence
-  band control the coverage probability (\code{level}) for all 
-  intervals simultaneously.
+  A matrix with columns giving the estimated function (\code{"Estimate"}) as
+  well as lower (\code{"lwr"}) and upper (\code{"upr"}) confidence limits 
+  each argument. Confidence bands control the coverage probability 
+  (\code{"level"}) for all intervals simultaneously.
 }
 \details{
   \code{confband} is a generic function.  
@@ -39,7 +39,7 @@ confband(object, level = 0.95, \dots)
   \code{\link{ks.test}}
 }
 \examples{
-### data from Switzer (1976)
+# data from Switzer (1976)
 angle <- c(-31, -30, -25, -25, -23, -23, -22, -20, -20, -18,
            -18, -18, -16, -15, -15, -14, -13, -11, -10, - 9,
            - 8, - 7, - 7, - 7, - 6, - 6, - 4, - 4, - 3, - 2,
@@ -49,32 +49,31 @@ angle <- c(-31, -30, -25, -25, -23, -23, -22, -20, -20, -18,
            - 7, - 6, - 6,  -5, - 5, - 5, - 4, - 2, - 2, - 2,
              0,   0,   1,   1,   2,   4,   5,   5,   6,  17)
 sex <- gl(2, 40, labels = c("Female", "Male"))
-kneecap <- data.frame(angle = as.double(angle), sex = sex)
 
-(sk <- ks.test(angle ~ sex, data = kneecap))
+(sk <- ks.test(angle ~ sex))
 cb <- confband(sk, level = .945)
-### -> no indication of deviation from the null because 
-### diagonal is covered by the confidence band
-plot(cb)
+plot(cb) # => no indication of deviation from the null because 
+         # diagonal is covered by the confidence band
 
 set.seed(29)
-grp <- rep(gl(2, 1, labels = c("Group A", "Group B")), c(40, 60)*10)
-### shift model
+# artificial example
+grp <- rep(gl(2, 1, labels = c("Group A", "Group B")), c(40, 60))
+# shift model
 x1 <- rnorm(length(grp), mean = c(1, 2)[grp], sd = 1)
-### shift/scale model
+# shift/scale model
 x2 <- rnorm(length(grp), mean = c(1, 2)[grp], sd = c(1, .5)[grp])
 layout(matrix(1:4, nrow = 2))
-### treatment function is parallel to diagonal, `significant' 
-### deviation from the null of both distributions being equal
-### because diagonal not covered by confidence band
+# treatment function is parallel to diagonal, `significant' 
+# deviation from the null of both distributions being equal
+# because diagonal not covered by confidence band
 plot(confband(ks.test(x1 ~ grp)), main = "Shift model")
-### true treatment function
+# true treatment function in blue
 lines(-3:3, -3:3 + 1, col = "blue")
 boxplot(x1 ~ grp)
-### shift model not appropriate because treatment function
-### is nonlinear, also `significant' deviation from null
+# shift model not appropriate because treatment function
+# is nonlinear, also `significant' deviation from null
 plot(confband(ks.test(x2 ~ grp)), main = "Shift/scale model")
-### true treatment function
+# true treatment function
 lines(-3:3, qnorm(pnorm(-3:3, mean = 1, sd = 1), mean = 2, sd = .5), 
       col = "blue")
 boxplot(x2 ~ grp)

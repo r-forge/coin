@@ -63,8 +63,8 @@ qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
              computed.}
   \item{two.sided}{a logical indicating whether absolute (\code{TRUE}) or
                    raw differences of frequencies define the test statistic.}
-  \item{lower.tail}{a logical, if \code{TRUE} (default), probabilities are P[D <= q],
-                    otherwise, P[D > q]}.
+  \item{lower.tail}{a logical, if \code{TRUE} (default), probabilities are P[D < q],
+                    otherwise, P[D >= q]}.
   \item{log.p}{a logical, if \code{TRUE} (default), probabilities are given
                as log-probabilities.}
 
@@ -119,6 +119,10 @@ qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
   There is some more refined distribution theory for the KS test with
   estimated parameters (see Durbin, 1973), but that is not implemented
   in \code{ks.test}.
+
+  \code{psmirnov} and \code{qsmirnov} compute the distribution and quantile
+  function of the Smirnov test for two samples.
+
 }
 \value{
   A list with class \code{"htest"} containing the following components:
@@ -169,7 +173,7 @@ qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
 
   Gunar Schröer and Dietrich Trenkler (1995). Exact and Randomization 
   Distributions of Kolmogorov-Smirnov Tests for Two or Three
-  Samples. \emph{Computational Statistics \& Data Analysis}, \bold{20}(2),
+  Samples. \emph{Computational Statistics & Data Analysis}, \bold{20}(2),
   185--202. \doi{10.1016/0167-9473(94)00040-P}.
 
 }
@@ -197,8 +201,8 @@ t.test(x, x2, alternative = "g")
 wilcox.test(x, x2, alternative = "g")
 ks.test(x, x2, alternative = "l")
 
-### with ties, example from Schröer and Trenkler (1995)
-### D = 3 / 7, p = 0.2424242
+# with ties, example from Schröer and Trenkler (1995)
+# D = 3 / 7, p = 0.2424242
 ks.test(c(1, 2, 2, 3, 3), c(1, 2, 3, 3, 4, 5, 6), exact = TRUE)
 
 # formula interface, see ?wilcox.test
