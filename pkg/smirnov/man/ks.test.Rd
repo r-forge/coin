@@ -20,7 +20,8 @@ ks.test(x, \dots)
         exact = NULL)
 \method{ks.test}{formula}(formula, data, subset, na.action, \dots)
 psmirnov(q, n.x, n.y = length(obs) - n.x, obs = NULL, 
-         two.sided = TRUE, lower.tail = TRUE, log.p = FALSE)
+         two.sided = TRUE, exact = TRUE, lower.tail = TRUE, 
+         log.p = FALSE)
 qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
 }
 \arguments{
@@ -38,8 +39,7 @@ qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
     See \sQuote{Details} for the meanings of the possible values.}
   \item{exact}{\code{NULL} or a logical indicating whether an exact
     p-value should be computed.  See \sQuote{Details} for the meaning of
-    \code{NULL}.  Not available in the two-sample case for a one-sided
-    test or if ties are present.}
+    \code{NULL}.}
   \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs}
     is a numeric variable giving the data values and \code{rhs} either
     \code{1} for a one-sample Kolmogorov-Smirnov test or a factor
@@ -201,21 +201,11 @@ ks.test(x, x2, alternative = "l")
 ### D = 3 / 7, p = 0.2424242
 ks.test(c(1, 2, 2, 3, 3), c(1, 2, 3, 3, 4, 5, 6), exact = TRUE)
 
-### data from Switzer (1976)
-angle <- c(-31, -30, -25, -25, -23, -23, -22, -20, -20, -18,
-           -18, -18, -16, -15, -15, -14, -13, -11, -10, - 9,
-           - 8, - 7, - 7, - 7, - 6, - 6, - 4, - 4, - 3, - 2,
-           - 2, - 1,   1,   1,   4,   5,  11,  12,  16,  34,
-           -31, -20, -18, -16, -16, -16, -15, -14, -14, -14,
-           -14, -13, -13, -11, -11, -10, - 9, - 9, - 8, - 7,
-           - 7, - 6, - 6,  -5, - 5, - 5, - 4, - 2, - 2, - 2,
-             0,   0,   1,   1,   2,   4,   5,   5,   6,  17)
-sex <- gl(2, 40, labels = c("Female", "Male"))
-kneecap <- data.frame(angle = as.double(angle), sex = sex)
-
-(sk <- ks.test(angle ~ sex, data = kneecap))
-cb <- confband(sk, level = .945)
-plot(cb)
-
+# formula interface, see ?wilcox.test
+kst <- ks.test(Ozone ~ Month, data = airquality,
+               subset = Month \%in\% c(5, 8))
+# quantile-quantile plot + confidence bands
+plot(confband(kst)) # => null hypothesis not plausible, 
+                    # shift alternative not plausible
 }
 \keyword{htest}

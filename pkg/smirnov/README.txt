@@ -17,6 +17,8 @@ Pimp stats::ks.test
      two-sample => Smirnov test
    - Report "Exact" or "Approximate" as part of the name of the test (this
      can be debated)
+   - add formula interface and print data.name / alternative in terms
+     of variable/group level names
 
  - modifications to ks.test.Rd:
    - use correct names (Kolmogorov-Smirnov vs Smirnov) and cite
@@ -26,6 +28,11 @@ Pimp stats::ks.test
      case and cite Schröer and Trenkler (1995).
    - Add example with ties.
 
+ - new confband generic / method for ks.test
+   - implement nonparametric quantile-quantile plot and corresponding 
+     confidence bands following Switzer (1976)
+   - confband.Rd has two examples
+
 Suggested modifications to stats:
 
  - remove C_pSmirnov2x from stats/src/ks.c (only covers the unconditional
@@ -33,6 +40,15 @@ Suggested modifications to stats:
  - add psmirnov() to stats/R/ks.R (the original APL code is contained
    as comment and it would be good to keep this piece of code because the
    original source in the diploma thesis is almost impossible to obtain).
- - replace ks.test() in stats/R/ks.R after removing ::: (2x)
+   Remove ::: (1x)
+ - replace/add ks.test, ks.test.default and ks.test formula 
+   in stats/R/ks.R after removing ::: (1x)
  - replace manual page stats/man/ks.test.Rd
+ - update stats NAMESPACE
 
+Optional additions:
+
+ - add qsmirnov to stats/R/ks.R (quantile function)
+ - add confband generic (complementing stats::confint generic)
+ - add confband.ks.test and corresponding plot method (quantile-quantile
+    plot with confidence bands)

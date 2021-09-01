@@ -5,7 +5,8 @@ Version: 0.0-1
 Authors@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@R-project.org")
 Description: Exact conditional distribution of Smirnov Test.
-Suggests: stats, coin
+Imports: stats, graphics
+Suggests: coin
 NeedsCompilation: yes
 License: GPL-2
 Encoding: UTF-8

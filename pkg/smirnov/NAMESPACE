@@ -1,5 +1,6 @@
-
+	
 importFrom(stats, setNames, terms)
+importFrom(graphics, abline, lines)
 
 export(psmirnov, qsmirnov, ks.test, confband)
 

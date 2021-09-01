@@ -13,9 +13,10 @@ confband.ks.test <- function(object, level = .95, ...) {
 
     if (TIES) {
         ca <- qsmirnov(level, n.x = n.x, n.y = n.y, 
-                       obs = obs)
+                       obs = obs, exact = object$exact)
     } else {
-        ca <- qsmirnov(level, n.x = n.x, n.y = n.y)
+        ca <- qsmirnov(level, n.x = n.x, n.y = n.y, 
+                       exact = object$exact)
     }
 
     if (object$alternative != "two-sided") 

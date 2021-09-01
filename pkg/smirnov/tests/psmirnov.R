@@ -63,12 +63,12 @@ psmirnov(obs = x, n.x = 5, q = 3 / 7, lower.tail = FALSE)
 ### check quantiles
 ### Kim & Jennrich (1973) in Selected Tables in Mathematical Statistics, Vol 1
 ### (ed. Harter) Institute of Mathematical Statistics, page 129
-qsmirnov(1 - .05, 8, 6) * 8 * 6 == 34
-qsmirnov(1 - .01, 8, 6) * 8 * 6 == 40
-qsmirnov(1 - .001, 8, 6) * 8 * 6 == 48
-qsmirnov(1 - .05, 14, 10) * 140 == 74
-qsmirnov(1 - .01, 14, 10) * 140 == 90
-qsmirnov(1 - .001, 14, 10) * 140 == 106
+all.equal(qsmirnov(1 - .05, 8, 6) * 8 * 6, 34)
+all.equal(qsmirnov(1 - .01, 8, 6) * 8 * 6, 40)
+all.equal(qsmirnov(1 - .001, 8, 6) * 8 * 6, 48)
+all.equal(qsmirnov(1 - .05, 14, 10) * 140, 74)
+all.equal(qsmirnov(1 - .01, 14, 10) * 140, 90)
+all.equal(qsmirnov(1 - .001, 14, 10) * 140, 106)
 
 ### without ties
 q <- qsmirnov(1:9/10, 5, 7)

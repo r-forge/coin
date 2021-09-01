@@ -58,7 +58,7 @@ cb <- confband(sk, level = .945)
 plot(cb)
 
 set.seed(29)
-grp <- rep(gl(2, 1, labels = c("Group A", "Group B")), c(40, 60)*2)
+grp <- rep(gl(2, 1, labels = c("Group A", "Group B")), c(40, 60)*10)
 ### shift model
 x1 <- rnorm(length(grp), mean = c(1, 2)[grp], sd = 1)
 ### shift/scale model

@@ -1,6 +1,7 @@
 
 psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL, 
-                     two.sided = TRUE, lower.tail = TRUE, log.p = FALSE) {
+                     two.sided = TRUE, exact = TRUE, 
+                     lower.tail = TRUE, log.p = FALSE) {
 
     ###
     ### Distribution function Prob(D < q) for the two-sample Smirnov test statistic
@@ -72,6 +73,30 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
     n.x <- floor(n.x)
     n.y <- floor(n.y)
     N <- n.x + n.y
+    n <- n.x * n.y / (n.x + n.y)
+
+    if (!exact) {
+        ## <FIXME> let m and n be the min and max of the sample
+        ## sizes, respectively.  Then, according to Kim and Jennrich
+        ## (1973), if m < n/10, we should use the
+        ## * Kolmogorov approximation with c.c. -1/(2*n) if 1 < m < 80;
+        ## * Smirnov approximation with c.c. 1/(2*sqrt(n)) if m >= 80.
+        if (two.sided) {
+            ret[IND] <- .Call(stats:::C_pKS2, p = sqrt(n) * q[IND], tol = 1e-6)
+            ### note: C_pKS2(0) = NA but Prob(D < 0) = 0
+            ret[q < .Machine$double.eps] <- 0
+        } else {
+            ret[IND] <- 1 - exp(- 2 * n * q^2)
+        }
+        if (log.p & lower.tail)
+            return(log(ret))
+        if (!log.p & lower.tail)
+            return(ret)
+        if (log.p & !lower.tail)
+            return(log1p(-ret))
+        if (!log.p & !lower.tail)
+            return(1 - ret)
+    }
 
     TIES <- if (!is.null(obs))
         c(diff(sort(obs)) != 0, TRUE)
@@ -79,7 +104,7 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
         rep(TRUE, N)
 
     ### see stats/src/ks.c line 103ff
-    q <- (0.5 + floor(as.double(q) * n.x * n.y - 1e-7)) / (n.x * n.y);
+    stat <- (0.5 + floor(as.double(q) * n.x * n.y - 1e-7)) / (n.x * n.y);
 
     pfun <- function(q) {
         k <- diag <- 1
@@ -100,7 +125,14 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
         }
         diag
     }
-    ret[IND] <- sapply(q[IND], pfun)
+    ret[IND] <- sapply(stat[IND], pfun)
+    if (any(is.na(ret[IND]))) {
+        warning("computation of exact probability failed, returning approximation")
+        return(psmirnov(q = q, n.x = n.x, n.y = n.y,  
+                        two.sided = two.sided, exact = FALSE, 
+                        lower.tail = lower.tail, log.p = log.p))
+    }
+
     logdenom <- lgamma(N + 1) - lgamma(n.x + 1) - lgamma(n.y + 1)
     if (log.p & lower.tail)
         return(log(ret) - logdenom)
@@ -174,25 +206,19 @@ ks.test.default <-
                                  "two.sided" = "two-sided",
                                  "less" = "the CDF of x lies below that of y",
                                  "greater" = "the CDF of x lies above that of y")
-        if(exact) {
-            if (!TIES) {
-                PVAL <- switch(alternative,
-                    "two.sided" = psmirnov(STATISTIC, n.x = n.x, n.y = n.y, 
-                                           lower.tail = FALSE),
-                    "less" = psmirnov(STATISTIC, n.x = n.y, n.y = n.x, 
-                                      two.sided = FALSE, lower.tail = FALSE),
-                    "greater" = psmirnov(STATISTIC, n.x = n.x, n.y = n.y, 
-                                         two.sided = FALSE, lower.tail = FALSE))
-            } else {
-                PVAL <- switch(alternative,
-                    "two.sided" = psmirnov(STATISTIC, n.x = n.x, obs = w,
-                                           lower.tail = FALSE),
-                    "less" = psmirnov(STATISTIC, n.x = n.y, obs = w, 
-                                      two.sided = FALSE, lower.tail = FALSE),
-                    "greater" = psmirnov(STATISTIC, n.x = n.x, obs = w, 
-                                         two.sided = FALSE, lower.tail = FALSE))
-            }
-        }
+        obs <- NULL
+        if (TIES)
+            obs <- w
+        PVAL <- switch(alternative,
+            "two.sided" = psmirnov(STATISTIC, n.x = n.x, obs = w,
+                                   exact = exact,
+                                   lower.tail = FALSE),
+            "less" = psmirnov(STATISTIC, n.x = n.y, obs = w, 
+                              exact = exact,
+                              two.sided = FALSE, lower.tail = FALSE),
+            "greater" = psmirnov(STATISTIC, n.x = n.x, obs = w, 
+                                 exact = exact,
+                                 two.sided = FALSE, lower.tail = FALSE))
     } else { ## one-sample case
         if(is.character(y)) # avoid matching anything in this function
             y <- get(y, mode = "function", envir = parent.frame())
@@ -228,6 +254,10 @@ ks.test.default <-
                 }
                 pkolmogorov1x(STATISTIC, n)
             }
+        } else {
+            PVAL <- if(alternative == "two.sided")
+                        1 - .Call(stats:::C_pKS2, sqrt(n) * STATISTIC, tol = 1e-6)
+                    else exp(- 2 * n * STATISTIC^2)
         }
         nm_alternative <-
             switch(alternative,
@@ -241,34 +271,6 @@ ks.test.default <-
                                "greater" = "D^+",
                                "less" = "D^-")
 
-    if(is.null(PVAL)) { ## so not exact
-        pkstwo <- function(x, tol = 1e-6) {
-            ## Compute \sum_{-\infty}^\infty (-1)^k e^{-2k^2x^2}
-            ## Not really needed at this generality for computing a single
-            ## asymptotic p-value as below.
-            if(is.numeric(x)) x <- as.double(x)
-            else stop("argument 'x' must be numeric")
-            p <- rep(0, length(x))
-            p[is.na(x)] <- NA
-            IND <- which(!is.na(x) & (x > 0))
-            if(length(IND)) p[IND] <- .Call(stats:::C_pKS2, p = x[IND], tol)
-            p
-        }
-        ## <FIXME>
-        ## Currently, p-values for the two-sided two-sample case are
-        ## exact if n.x * n.y < 10000 (unless controlled explicitly).
-        ## In all other cases, the asymptotic distribution is used
-        ## directly.  But: let m and n be the min and max of the sample
-        ## sizes, respectively.  Then, according to Kim and Jennrich
-        ## (1973), if m < n/10, we should use the
-        ## * Kolmogorov approximation with c.c. -1/(2*n) if 1 < m < 80;
-        ## * Smirnov approximation with c.c. 1/(2*sqrt(n)) if m >= 80.
-        PVAL <- if(alternative == "two.sided")
-                    1 - pkstwo(sqrt(n) * STATISTIC)
-                else exp(- 2 * n * STATISTIC^2)
-        ## </FIXME>
-    }
-
     ## fix up possible overshoot (PR#14671)
     PVAL <- min(1.0, max(0.0, PVAL))
     RVAL <- list(statistic = STATISTIC,
@@ -276,7 +278,8 @@ ks.test.default <-
                  alternative = nm_alternative,
                  method = METHOD,
                  data.name = DNAME,
-                 data = list(x = x, y = y))
+                 data = list(x = x, y = y),
+                 exact = exact)
     class(RVAL) <- c("ks.test", "htest")
     return(RVAL)
 }
