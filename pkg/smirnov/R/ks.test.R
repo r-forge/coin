@@ -3,63 +3,63 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
                      two.sided = TRUE, exact = TRUE, 
                      lower.tail = TRUE, log.p = FALSE) {
 
-    ###
-    ### Distribution function Prob(D < q) for the two-sample Smirnov test statistic
-    ###
-    ### D = sup_c | ECDF_x(c) - ECDF_y(c) | 	(two.sided)
-    ###
-    ### D = sup_c ( ECDF_x(c) - ECDF_y(c) ) 	(!two.sided)
-    ###
-    ### Implementation translated from APL code in Appendix C.2.3 of
-    ###
-    ###     Gunar Schröer, Computergestützte statistische Inferenz am Beispiel der
-    ###     Kolmogorov-Smirnov Tests, Diplomarbeit Universität Osnabrück, 1991
-    ###
-    ###     see also
-    ###     
-    ###     Gunar Schröer and Dietrich Trenkler (1995), Exact and Randomization
-    ###     Distributions of Kolmogorov-Smirnov Tests for Two or Three
-    ###     Samples, Computational Statistics & Data Analysis, 20, 185--202
-    ###
-    ### Original APL code (slightly adapted for recent dyalog interpreter)
-    ###
-    ### ⍝ Get a free trial version of dyalog from https://www.dyalog.com/
-    ### ⍝ Tested with version 18.0.40684
-    ###      ∇R←SP DMN_TIES c;m;n;TIES;k;diag;u;v;diag_bit;d
-    ### [1]  (m n)←⍴¨SP
-    ### [2]  SP←SP[⍋SP←∊SP]
-    ### [3]  TIES←(¯1↓SP≠1⌽SP),1
-    ### [4]  k←1
-    ### [5]  diag←1
-    ### [6]  u←0
-    ### [7]  ⍝ LOOP:
-    ### [8]  :Repeat
-    ### [9]    u←u,1+¯1↑u
-    ### [10]   v←k-u
-    ### [11]   diag_bit←(u≤m)∧(v≤n)∧(u≥0)∧v≥0
-    ### [12]   ⍝(u v)←diag_bit/¨u v
-    ### [13]   u←diag_bit/u
-    ### [14]   v←diag_bit/v
-    ### [15]   d←|(u÷m)-v÷n
-    ### [16]   diag←diag_bit/(diag,0)+0,diag
-    ### [17]   diag←∊(1 0=TIES[k])/(diag×c>d)(diag)
-    ### [18]   k←k+1
-    ### [19] :Until  (m+n)<k
-    ### [20] ⍝ →LOOP×~(m+n)≥k←k+1
-    ### [21] R←1-diag÷m!m+n
-    ### [22] ∇
-    ###      S←(1 2 3)(4 5 6 7)
-    ###      prob←S DMN_TIES 1÷2
-    ###      prob
-    ### 0.6571428571
-    ###      S←(1 2 3 4 5)(6 7 8 9 10 11 12)
-    ###      prob←S DMN_TIES 3÷7
-    ###      prob
-    ### 0.5454545455
-    ###      S←(1 2 2 3 3)(1 2 3 3 4 5 6)
-    ###      prob←S DMN_TIES 3÷7
-    ###      prob
-    ### 0.2424242424
+    ##
+    ## Distribution function Prob(D < q) for the two-sample Smirnov test statistic
+    ##
+    ## D = sup_c | ECDF_x(c) - ECDF_y(c) | 	(two.sided)
+    ##
+    ## D = sup_c ( ECDF_x(c) - ECDF_y(c) ) 	(!two.sided)
+    ##
+    ## Implementation translated from APL code in Appendix C.2.3 of
+    ##
+    ##     Gunar Schröer, Computergestützte statistische Inferenz am Beispiel der
+    ##     Kolmogorov-Smirnov Tests, Diplomarbeit Universität Osnabrück, 1991
+    ##
+    ##     see also
+    ##     
+    ##     Gunar Schröer and Dietrich Trenkler (1995), Exact and Randomization
+    ##     Distributions of Kolmogorov-Smirnov Tests for Two or Three
+    ##     Samples, Computational Statistics & Data Analysis, 20, 185--202
+    ##
+    ## Original APL code (slightly adapted for recent dyalog interpreter)
+    ##
+    ## ⍝ Get a free trial version of dyalog from https://www.dyalog.com/
+    ## ⍝ Tested with version 18.0.40684
+    ##      ∇R←SP DMN_TIES c;m;n;TIES;k;diag;u;v;diag_bit;d
+    ## [1]  (m n)←⍴¨SP
+    ## [2]  SP←SP[⍋SP←∊SP]
+    ## [3]  TIES←(¯1↓SP≠1⌽SP),1
+    ## [4]  k←1
+    ## [5]  diag←1
+    ## [6]  u←0
+    ## [7]  ⍝ LOOP:
+    ## [8]  :Repeat
+    ## [9]    u←u,1+¯1↑u
+    ## [10]   v←k-u
+    ## [11]   diag_bit←(u≤m)∧(v≤n)∧(u≥0)∧v≥0
+    ## [12]   ⍝(u v)←diag_bit/¨u v
+    ## [13]   u←diag_bit/u
+    ## [14]   v←diag_bit/v
+    ## [15]   d←|(u÷m)-v÷n
+    ## [16]   diag←diag_bit/(diag,0)+0,diag
+    ## [17]   diag←∊(1 0=TIES[k])/(diag×c>d)(diag)
+    ## [18]   k←k+1
+    ## [19] :Until  (m+n)<k
+    ## [20] ⍝ →LOOP×~(m+n)≥k←k+1
+    ## [21] R←1-diag÷m!m+n
+    ## [22] ∇
+    ##      S←(1 2 3)(4 5 6 7)
+    ##      prob←S DMN_TIES 1÷2
+    ##      prob
+    ## 0.6571428571
+    ##      S←(1 2 3 4 5)(6 7 8 9 10 11 12)
+    ##      prob←S DMN_TIES 3÷7
+    ##      prob
+    ## 0.5454545455
+    ##      S←(1 2 2 3 3)(1 2 3 3 4 5 6)
+    ##      prob←S DMN_TIES 3÷7
+    ##      prob
+    ## 0.2424242424
 
     if (is.numeric(q)) 
         q <- as.double(q)
@@ -144,10 +144,16 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
         return(1 - ret / exp(logdenom))
 }
 
-qsmirnov <- function(p, n.x, n.y, two.sided = TRUE, ...) {
+qsmirnov <- function(p, n.x, n.y, two.sided = TRUE, exact = TRUE, 
+                     ...) {
+
     n.x <- floor(n.x)
     n.y <- floor(n.y)
-    stat <- c(outer(0:n.x/n.x, 0:n.y/n.y, "-"))
+    if (exact) {
+        stat <- c(outer(0:n.x/n.x, 0:n.y/n.y, "-"))
+    } else {
+        stat <- 1:1e4 / (1e4 + 1)
+    }
     if (two.sided) stat <- abs(stat)
     stat <- sort(unique(stat))
     prb <- sapply(stat, psmirnov, n.x = n.x, n.y = n.y, ...)
@@ -256,7 +262,8 @@ ks.test.default <-
             }
         } else {
             PVAL <- if(alternative == "two.sided")
-                        1 - .Call(stats:::C_pKS2, sqrt(n) * STATISTIC, tol = 1e-6)
+                        1 - .Call(stats:::C_pKS2, sqrt(n) * STATISTIC, 
+                                                  tol = 1e-6)
                     else exp(- 2 * n * STATISTIC^2)
         }
         nm_alternative <-
@@ -278,8 +285,8 @@ ks.test.default <-
                  alternative = nm_alternative,
                  method = METHOD,
                  data.name = DNAME,
-                 data = list(x = x, y = y),
-                 exact = exact)
+                 data = list(x = x, y = y), # for confband.ks.test
+                 exact = exact)             # same
     class(RVAL) <- c("ks.test", "htest")
     return(RVAL)
 }
@@ -314,8 +321,8 @@ function(formula, data, subset, na.action, ...)
         y <- do.call("ks.test", c(DATA, list(...)))
         y$alternative <- gsub("x", levels(g)[1L], y$alternative)
         y$alternative <- gsub("y", levels(g)[2L], y$alternative)
-        y$response <- rname
-        y$groups <- levels(g)
+        y$response <- rname   # for plot.confband.ks.test
+        y$groups <- levels(g) # for plot.confband.ks.test
     }
     else { # 1-sample Kolmogorov-Smirnov test
         respVar <- mf[[response]]

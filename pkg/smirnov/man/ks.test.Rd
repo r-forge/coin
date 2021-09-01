@@ -22,7 +22,7 @@ ks.test(x, \dots)
 psmirnov(q, n.x, n.y = length(obs) - n.x, obs = NULL, 
          two.sided = TRUE, exact = TRUE, lower.tail = TRUE, 
          log.p = FALSE)
-qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
+qsmirnov(p, n.x, n.y, two.sided = TRUE, exact = TRUE, \dots)
 }
 \arguments{
   \item{x}{a numeric vector of data values.}
@@ -31,7 +31,8 @@ qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
     distribution function such as \code{pnorm}.  Only continuous CDFs
     are valid.}
   \item{\dots}{parameters of the distribution specified (as a character
-    string) by \code{y}.}
+    string) by \code{y} for \code{ks.test} or arguments of \code{psmirnov}
+    for \code{qsmirnov}.}
   \item{alternative}{indicates the alternative hypothesis and must be
     one of \code{"two.sided"} (default), \code{"less"}, or
     \code{"greater"}.  You can specify just the initial letter of the
@@ -56,15 +57,17 @@ qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
     \code{getOption("na.action")}.}
   \item{q}{a numeric vector of quantiles.}
   \item{p}{a numeric vector of probabilities.}
-  \item{n.x}{length of \code{x}-vector, sample size in the first group.}
-  \item{n.y}{length of \code{y}-vector, sample size in the second group.}
+  \item{n.x}{length of \code{x}-vector, sample size in the first group in
+    the two-sample case.}
+  \item{n.y}{length of \code{y}-vector, sample size in the second group in
+    the two-sample case.}
   \item{obs}{a numeric vector of all data values (\code{x} and \code{y})
-             when the exact conditional distribution given the data shall be
-             computed.}
+             when the exact conditional distribution of the Smirnov test
+             statistic given the data shall be computed.}
   \item{two.sided}{a logical indicating whether absolute (\code{TRUE}) or
                    raw differences of frequencies define the test statistic.}
-  \item{lower.tail}{a logical, if \code{TRUE} (default), probabilities are P[D < q],
-                    otherwise, P[D >= q]}.
+  \item{lower.tail}{a logical, if \code{TRUE} (default), probabilities are
+                    \eqn{P[D < q]}, otherwise, \eqn{P[D \ge q]}.}
   \item{log.p}{a logical, if \code{TRUE} (default), probabilities are given
                as log-probabilities.}
 
@@ -114,7 +117,7 @@ qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
   this can be slow for small p-values).  The formula of Birnbaum &
   Tingey (1951) is used for the one-sample one-sided case.
 
-  If a one-sample Kolmogorov-test is used, the parameters specified in
+  If a one-sample Kolmogorov-Smirnov test is used, the parameters specified in
   \code{\dots} must be pre-specified and not estimated from the data.
   There is some more refined distribution theory for the KS test with
   estimated parameters (see Durbin, 1973), but that is not implemented
@@ -150,7 +153,7 @@ qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
   Online} (eds N. Balakrishnan, T. Colton, B. Everitt, W. Piegorsch, F. Ruggeri 
   and J.L. Teugels). \doi{10.1002/9781118445112.stat06558}.
 
-  Z. W. Birnbaum and Fred H. Tingey (1951).
+  Zygmunt W. Birnbaum and Fred H. Tingey (1951).
   One-sided confidence contours for probability distribution functions.
   \emph{The Annals of Mathematical Statistics}, \bold{22}/4, 592--596.
   \doi{10.1214/aoms/1177729550}.
@@ -161,7 +164,7 @@ qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
   Pages 295--301 (one-sample Kolmogorov test),
   309--314 (two-sample Smirnov test).
 
-  Durbin, J. (1973).
+  James Durbin (1973).
   \emph{Distribution theory for tests based on the sample distribution
     function}.
   SIAM.

@@ -18,8 +18,9 @@ confband(object, level = 0.95, \dots)
 \value{
   A matrix with columns giving the estimated function (\code{"Estimate"}) as
   well as lower (\code{"lwr"}) and upper (\code{"upr"}) confidence limits 
-  each argument. Confidence bands control the coverage probability 
-  (\code{"level"}) for all intervals simultaneously.
+  for each function argument (\code{"x"}). Confidence bands control 
+  the coverage probability (\code{"level"}) for all intervals 
+  simultaneously.
 }
 \details{
   \code{confband} is a generic function.  

@@ -22,12 +22,12 @@ confband.ks.test <- function(object, level = .95, ...) {
     if (object$alternative != "two-sided") 
         warning("computing two-sided confidance band from one-sided test")
 
-    i <- seq_along(x)
+    i <- as.double(seq_along(x))
     Re <- ceiling(i * N / n.x) - i
-    Rl <- ceiling(i * N / n.x - ca * n.y) - i
+    Rl <- ceiling(i * N / n.x - ca * as.double(n.y)) - i
     Rl[Rl < 1] <- NA
     Rl[Rl > n.y] <- NA
-    Rr <- floor(i * N / n.x - n.y / n.x + ca * n.y) - i + 1
+    Rr <- floor(i * N / n.x - n.y / n.x + ca * as.double(n.y)) - i + 1
     Rr[Rr < 1] <- NA
     Rr[Rr > n.y] <- NA
 
@@ -61,5 +61,6 @@ plot.confband.ks.test <- function(x, y = NULL,
     abline(a = 0, b = 1, col = "lightgrey")
     lines(x[, "x"], x[, "lwr"], type = "S", lty = 2)
     lines(x[, "x"], x[, "upr"], type = "S", lty = 2)
+    invisible(x)
 }
 

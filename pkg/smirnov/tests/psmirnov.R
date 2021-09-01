@@ -81,7 +81,6 @@ q <- qsmirnov(1:9/10, 5, 7, obs = obs)
 p <- psmirnov(q, 5, 7, obs = obs)
 all.equal(qsmirnov(p, 5, 7, obs = obs), q)
 
-
 ### without ties
 q <- qsmirnov(1:9/10, 5, 7, two.sided = FALSE)
 p <- psmirnov(q, 5, 7, two.sided = FALSE)
