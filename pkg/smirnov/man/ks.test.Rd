@@ -5,17 +5,23 @@
 
 \name{ks.test}
 \alias{ks.test}
+\alias{ks.test.default}
+\alias{ks.test.formula}
 \alias{psmirnov}
+\alias{qsmirnov}
 \title{Kolmogorov-Smirnov and Smirnov Tests}
 \description{
   Perform a Kolmogorov-Smirnov (one-sample) or Smirnov (two-sample) test.
 }
 \usage{
-ks.test(x, y, \dots,
+ks.test(x, \dots)
+\method{ks.test}{default}(x, y, \dots,
         alternative = c("two.sided", "less", "greater"),
         exact = NULL)
+\method{ks.test}{formula}(formula, data, subset, na.action, \dots)
 psmirnov(q, n.x, n.y = length(obs) - n.x, obs = NULL, 
          two.sided = TRUE, lower.tail = TRUE, log.p = FALSE)
+qsmirnov(p, n.x, n.y, two.sided = TRUE, \dots)
 }
 \arguments{
   \item{x}{a numeric vector of data values.}
@@ -34,7 +40,22 @@ psmirnov(q, n.x, n.y = length(obs) - n.x, obs = NULL,
     p-value should be computed.  See \sQuote{Details} for the meaning of
     \code{NULL}.  Not available in the two-sample case for a one-sided
     test or if ties are present.}
+  \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs}
+    is a numeric variable giving the data values and \code{rhs} either
+    \code{1} for a one-sample Kolmogorov-Smirnov test or a factor
+    with two levels giving the corresponding groups for a two-sample Smirnov
+    test.}
+  \item{data}{an optional matrix or data frame (or similar: see
+    \code{\link{model.frame}}) containing the variables in the
+    formula \code{formula}.  By default the variables are taken from
+    \code{environment(formula)}.}
+  \item{subset}{an optional vector specifying a subset of observations
+    to be used.}
+  \item{na.action}{a function which indicates what should happen when
+    the data contain \code{NA}s.  Defaults to
+    \code{getOption("na.action")}.}
   \item{q}{a numeric vector of quantiles.}
+  \item{p}{a numeric vector of probabilities.}
   \item{n.x}{length of \code{x}-vector, sample size in the first group.}
   \item{n.y}{length of \code{y}-vector, sample size in the second group.}
   \item{obs}{a numeric vector of all data values (\code{x} and \code{y})

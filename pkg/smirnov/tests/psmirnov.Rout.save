@@ -95,6 +95,50 @@ Loading required package: survival
 > psmirnov(obs = x, n.x = 5, q = 3 / 7, lower.tail = FALSE)
 [1] 0.2424242
 > 
+> ### check quantiles
+> ### Kim & Jennrich (1973) in Selected Tables in Mathematical Statistics, Vol 1
+> ### (ed. Harter) Institute of Mathematical Statistics, page 129
+> qsmirnov(1 - .05, 8, 6) * 8 * 6 == 34
+[1] TRUE
+> qsmirnov(1 - .01, 8, 6) * 8 * 6 == 40
+[1] TRUE
+> qsmirnov(1 - .001, 8, 6) * 8 * 6 == 48
+[1] TRUE
+> qsmirnov(1 - .05, 14, 10) * 140 == 74
+[1] TRUE
+> qsmirnov(1 - .01, 14, 10) * 140 == 90
+[1] FALSE
+> qsmirnov(1 - .001, 14, 10) * 140 == 106
+[1] TRUE
+> 
+> ### without ties
+> q <- qsmirnov(1:9/10, 5, 7)
+> p <- psmirnov(q, 5, 7)
+> all.equal(qsmirnov(p, 5, 7), q)
+[1] TRUE
+> 
+> ### with ties
+> obs <- c(1, 2, 2, 3, 3, 1, 2, 3, 3, 4, 5, 6)
+> q <- qsmirnov(1:9/10, 5, 7, obs = obs)
+> p <- psmirnov(q, 5, 7, obs = obs)
+> all.equal(qsmirnov(p, 5, 7, obs = obs), q)
+[1] TRUE
+> 
+> 
+> ### without ties
+> q <- qsmirnov(1:9/10, 5, 7, two.sided = FALSE)
+> p <- psmirnov(q, 5, 7, two.sided = FALSE)
+> all.equal(qsmirnov(p, 5, 7, two.sided = FALSE), q)
+[1] TRUE
+> 
+> ### with ties
+> obs <- c(1, 2, 2, 3, 3, 1, 2, 3, 3, 4, 5, 6)
+> q <- qsmirnov(1:9/10, 5, 7, obs = obs, two.sided = FALSE)
+> p <- psmirnov(q, 5, 7, obs = obs, two.sided = FALSE)
+> all.equal(qsmirnov(p, 5, 7, obs = obs, two.sided = FALSE), q)
+[1] TRUE
+> 
+> 
 > proc.time()
    user  system elapsed 
- 29.043   0.851  29.887 
+ 30.551   0.874  31.428 

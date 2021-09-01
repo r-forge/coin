@@ -167,7 +167,7 @@ D = 0.45, p-value = 0.06214
 alternative hypothesis: two-sided
 
 Warning message:
-In smirnov::ks.test(x = x, y = y, exact = FALSE) :
+In ks.test.default(x = x, y = y, exact = FALSE) :
   p-value will be approximate in the presence of ties
 > 
 > ### two-sided exact
@@ -212,7 +212,7 @@ D^- = 6.9389e-17, p-value = 1
 alternative hypothesis: the CDF of x lies below that of y
 
 Warning message:
-In smirnov::ks.test(x = x, y = y, exact = FALSE, alternative = "less") :
+In ks.test.default(x = x, y = y, exact = FALSE, alternative = "less") :
   p-value will be approximate in the presence of ties
 > 
 > ### less exact
@@ -258,7 +258,7 @@ D^+ = 0.45, p-value = 0.03107
 alternative hypothesis: the CDF of x lies above that of y
 
 Warning message:
-In smirnov::ks.test(x = x, y = y, exact = FALSE, alternative = "greater") :
+In ks.test.default(x = x, y = y, exact = FALSE, alternative = "greater") :
   p-value will be approximate in the presence of ties
 > 
 > ### greater exact
@@ -286,4 +286,4 @@ alternative hypothesis: the CDF of x lies above that of y
 > 
 > proc.time()
    user  system elapsed 
-  0.186   0.020   0.179 
+  0.161   0.037   0.179 

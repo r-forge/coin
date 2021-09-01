@@ -59,3 +59,37 @@ KS <- abs(TS / N[2] - pls * sum(N) / prod(N))
 mKS <- apply(KS, 2, max)
 mean(mKS >= 3 / 7 - sqrt(.Machine$double.eps))
 psmirnov(obs = x, n.x = 5, q = 3 / 7, lower.tail = FALSE)
+
+### check quantiles
+### Kim & Jennrich (1973) in Selected Tables in Mathematical Statistics, Vol 1
+### (ed. Harter) Institute of Mathematical Statistics, page 129
+qsmirnov(1 - .05, 8, 6) * 8 * 6 == 34
+qsmirnov(1 - .01, 8, 6) * 8 * 6 == 40
+qsmirnov(1 - .001, 8, 6) * 8 * 6 == 48
+qsmirnov(1 - .05, 14, 10) * 140 == 74
+qsmirnov(1 - .01, 14, 10) * 140 == 90
+qsmirnov(1 - .001, 14, 10) * 140 == 106
+
+### without ties
+q <- qsmirnov(1:9/10, 5, 7)
+p <- psmirnov(q, 5, 7)
+all.equal(qsmirnov(p, 5, 7), q)
+
+### with ties
+obs <- c(1, 2, 2, 3, 3, 1, 2, 3, 3, 4, 5, 6)
+q <- qsmirnov(1:9/10, 5, 7, obs = obs)
+p <- psmirnov(q, 5, 7, obs = obs)
+all.equal(qsmirnov(p, 5, 7, obs = obs), q)
+
+
+### without ties
+q <- qsmirnov(1:9/10, 5, 7, two.sided = FALSE)
+p <- psmirnov(q, 5, 7, two.sided = FALSE)
+all.equal(qsmirnov(p, 5, 7, two.sided = FALSE), q)
+
+### with ties
+obs <- c(1, 2, 2, 3, 3, 1, 2, 3, 3, 4, 5, 6)
+q <- qsmirnov(1:9/10, 5, 7, obs = obs, two.sided = FALSE)
+p <- psmirnov(q, 5, 7, obs = obs, two.sided = FALSE)
+all.equal(qsmirnov(p, 5, 7, obs = obs, two.sided = FALSE), q)
+

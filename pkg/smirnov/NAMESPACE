@@ -1,2 +1,7 @@
 
-export("psmirnov", "ks.test")
+importFrom(stats, setNames, terms)
+
+export(psmirnov, qsmirnov, ks.test)
+
+S3method(ks.test, default)
+S3method(ks.test, formula)

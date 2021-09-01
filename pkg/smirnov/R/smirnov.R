@@ -112,7 +112,28 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
         return(1 - ret / exp(logdenom))
 }
 
-ks.test <-
+qsmirnov <- function(p, n.x, n.y, two.sided = TRUE, ...) {
+    n.x <- floor(n.x)
+    n.y <- floor(n.y)
+    stat <- c(outer(0:n.x/n.x, 0:n.y/n.y, "-"))
+    if (two.sided) stat <- abs(stat)
+    stat <- sort(unique(stat))
+    prb <- sapply(stat, psmirnov, n.x = n.x, n.y = n.y, ...)
+    if (is.null(p)) return(list(stat = stat, prob = prb))
+    if (is.numeric(p)) 
+        p <- as.double(p)
+    else stop("argument 'p' must be numeric")
+    ret <- rep(0, length(p))
+    ret[is.na(p) | p < 0 | p > 1] <- NA
+    IND <- which(!is.na(ret))
+    if (!length(IND)) return(ret)
+    ret[IND] <- sapply(p[IND], function(u) min(stat[prb >= u]))
+    ret
+}
+
+ks.test <- function(x, ...) UseMethod("ks.test")
+
+ks.test.default <-
     function(x, y, ..., alternative = c("two.sided", "less", "greater"),
              exact = NULL)
 {
@@ -257,4 +278,41 @@ ks.test <-
                  data.name = DNAME)
     class(RVAL) <- "htest"
     return(RVAL)
+}
+
+ks.test.formula <-
+function(formula, data, subset, na.action, ...)
+{
+    if(missing(formula) || (length(formula) != 3L))
+        stop("'formula' missing or incorrect")
+    oneSample <- FALSE
+    if (length(attr(terms(formula[-2L]), "term.labels")) != 1L)
+        if (formula[[3]] == 1L)
+            oneSample <- TRUE
+        else
+            stop("'formula' missing or incorrect")
+    m <- match.call(expand.dots = FALSE)
+    if (is.matrix(eval(m$data, parent.frame())))
+        m$data <- as.data.frame(data)
+    ## need stats:: for non-standard evaluation
+    m[[1L]] <- quote(stats::model.frame)
+    m$... <- NULL
+    mf <- eval(m, parent.frame())
+    DNAME <- paste(names(mf), collapse = " by ") # works in all cases
+    names(mf) <- NULL
+    response <- attr(attr(mf, "terms"), "response")
+    if (! oneSample) { # 2-sample Smirnov test
+        g <- factor(mf[[-response]])
+        if(nlevels(g) != 2L)
+            stop("grouping factor must have exactly 2 levels")
+        DATA <- setNames(split(mf[[response]], g), c("x", "y"))
+        y <- do.call("ks.test", c(DATA, list(...)))
+    }
+    else { # 1-sample Kolmogorov-Smirnov test
+        respVar <- mf[[response]]
+        DATA <- list(x = respVar)
+        y <- do.call("ks.test", c(DATA, list(...)))
+    }
+    y$data.name <- DNAME
+    y
 }
