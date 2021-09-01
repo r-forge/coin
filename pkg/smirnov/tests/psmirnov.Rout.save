@@ -124,7 +124,6 @@ Loading required package: survival
 > all.equal(qsmirnov(p, 5, 7, obs = obs), q)
 [1] TRUE
 > 
-> 
 > ### without ties
 > q <- qsmirnov(1:9/10, 5, 7, two.sided = FALSE)
 > p <- psmirnov(q, 5, 7, two.sided = FALSE)
@@ -141,4 +140,4 @@ Loading required package: survival
 > 
 > proc.time()
    user  system elapsed 
- 28.867   0.911  29.771 
+ 29.739   0.835  30.572 
