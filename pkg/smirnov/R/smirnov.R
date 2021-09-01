@@ -155,7 +155,7 @@ ks.test.default <-
         if(is.null(exact))
             exact <- (n.x * n.y < 10000)
         METHOD <- paste(c("Asymptotic", "Exact")[exact + 1L], 
-                        "Two-sample Smirnov test")
+                        "two-sample Smirnov test")
         TIES <- FALSE
         n <- n.x * n.y / (n.x + n.y)
         w <- c(x, y)
@@ -205,7 +205,7 @@ ks.test.default <-
         }
         if(is.null(exact)) exact <- (n < 100) && !TIES
         METHOD <- paste(c("Asymptotic", "Exact")[exact + 1L], 
-                        "One-sample Kolmogorov-Smirnov test")
+                        "one-sample Kolmogorov-Smirnov test")
         x <- y(sort(x), ...) - (0 : (n-1)) / n
         STATISTIC <- switch(alternative,
                             "two.sided" = max(c(x, 1/n - x)),
@@ -275,8 +275,9 @@ ks.test.default <-
                  p.value = PVAL,
                  alternative = nm_alternative,
                  method = METHOD,
-                 data.name = DNAME)
-    class(RVAL) <- "htest"
+                 data.name = DNAME,
+                 data = list(x = x, y = y))
+    class(RVAL) <- c("ks.test", "htest")
     return(RVAL)
 }
 
@@ -298,6 +299,7 @@ function(formula, data, subset, na.action, ...)
     m[[1L]] <- quote(stats::model.frame)
     m$... <- NULL
     mf <- eval(m, parent.frame())
+    rname <- names(mf)[1L]
     DNAME <- paste(names(mf), collapse = " by ") # works in all cases
     names(mf) <- NULL
     response <- attr(attr(mf, "terms"), "response")
@@ -307,11 +309,16 @@ function(formula, data, subset, na.action, ...)
             stop("grouping factor must have exactly 2 levels")
         DATA <- setNames(split(mf[[response]], g), c("x", "y"))
         y <- do.call("ks.test", c(DATA, list(...)))
+        y$alternative <- gsub("x", levels(g)[1L], y$alternative)
+        y$alternative <- gsub("y", levels(g)[2L], y$alternative)
+        y$response <- rname
+        y$groups <- levels(g)
     }
     else { # 1-sample Kolmogorov-Smirnov test
         respVar <- mf[[response]]
         DATA <- list(x = respVar)
         y <- do.call("ks.test", c(DATA, list(...)))
+        y$alternative <- gsub("x", DNAME, y$alternative)
     }
     y$data.name <- DNAME
     y

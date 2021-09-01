@@ -1,7 +1,10 @@
 
 importFrom(stats, setNames, terms)
 
-export(psmirnov, qsmirnov, ks.test)
+export(psmirnov, qsmirnov, ks.test, confband)
 
 S3method(ks.test, default)
 S3method(ks.test, formula)
+S3method(confband, ks.test)
+S3method(plot, confband.ks.test)
+

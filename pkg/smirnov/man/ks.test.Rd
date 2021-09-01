@@ -200,5 +200,22 @@ ks.test(x, x2, alternative = "l")
 ### with ties, example from Schröer and Trenkler (1995)
 ### D = 3 / 7, p = 0.2424242
 ks.test(c(1, 2, 2, 3, 3), c(1, 2, 3, 3, 4, 5, 6), exact = TRUE)
+
+### data from Switzer (1976)
+angle <- c(-31, -30, -25, -25, -23, -23, -22, -20, -20, -18,
+           -18, -18, -16, -15, -15, -14, -13, -11, -10, - 9,
+           - 8, - 7, - 7, - 7, - 6, - 6, - 4, - 4, - 3, - 2,
+           - 2, - 1,   1,   1,   4,   5,  11,  12,  16,  34,
+           -31, -20, -18, -16, -16, -16, -15, -14, -14, -14,
+           -14, -13, -13, -11, -11, -10, - 9, - 9, - 8, - 7,
+           - 7, - 6, - 6,  -5, - 5, - 5, - 4, - 2, - 2, - 2,
+             0,   0,   1,   1,   2,   4,   5,   5,   6,  17)
+sex <- gl(2, 40, labels = c("Female", "Male"))
+kneecap <- data.frame(angle = as.double(angle), sex = sex)
+
+(sk <- ks.test(angle ~ sex, data = kneecap))
+cb <- confband(sk, level = .945)
+plot(cb)
+
 }
 \keyword{htest}
