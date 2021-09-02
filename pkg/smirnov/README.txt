@@ -37,6 +37,9 @@ Suggested modifications to stats:
 
  - remove C_pSmirnov2x from stats/src/ks.c (only covers the unconditional
    case and is only marginally faster compared to psmirnov())
+   OR
+   retain C_pSmirnov2x and call it in psmirnov when exact & is.null(obs)
+   (for testing purposes, for example)
  - add psmirnov() to stats/R/ks.R (the original APL code is contained
    as comment and it would be good to keep this piece of code because the
    original source in the diploma thesis is almost impossible to obtain).
