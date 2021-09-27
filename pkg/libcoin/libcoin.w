@@ -1009,6 +1009,7 @@ level.
 
 @d R Includes
 @{
+#define USE_FC_LEN_T
 #include <R.h>
 #include <Rinternals.h>
 #include <Rmath.h>
