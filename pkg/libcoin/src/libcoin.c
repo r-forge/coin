@@ -240,7 +240,7 @@ void C_MPinv_sym
         vec = Calloc(n * n, double);
 
         F77_CALL(dspev)("V", "L", &n, rx, val, vec, &n, work,
-                        &info);
+                        &info FCONE FCONE);
 
         dtol = val[n - 1] * tol;
 

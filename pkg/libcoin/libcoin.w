@@ -1016,7 +1016,10 @@ level.
 #include <Rdefines.h>
 #include <R_ext/stats_package.h> /* for S_rcont2 */
 #include <Rversion.h>           // for R_VERSION
-#include <R_ext/Lapack.h> /* for dspev */
+#include <R_ext/BLAS.h> /* for dspev */
+#ifndef FCONE
+# define FCONE
+#endif
 @}
 
 We need three macros: \verb|S| computes the element $\Sigma_{ij}$ of a
@@ -6371,7 +6374,7 @@ void C_MPinv_sym
         vec = Calloc(n * n, double);
 
         F77_CALL(dspev)("V", "L", &n, rx, val, vec, &n, work,
-                        &info);
+                        &info FCONE FCONE);
 
         dtol = val[n - 1] * tol;
 
@@ -7032,7 +7035,7 @@ SEXP RC_init_LECV_2d
 @{
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 20YY-MM-DD
+Date: 2021-09-27
 Version: 1.0-9
 Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@@R-project.org")

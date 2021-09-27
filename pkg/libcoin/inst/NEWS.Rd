@@ -6,6 +6,8 @@
   \itemize{
     \item \code{R_MPinv_sym} can now determine the full dimension of the packed
           input \code{x} by setting \code{n} to \code{0L}.
+    \item Add \code{#define USE_FC_LEN_T} to header as requested by CRAN
+          2021-09-25.
   }
 }
 
