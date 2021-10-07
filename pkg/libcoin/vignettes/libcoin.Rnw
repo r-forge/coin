@@ -1276,7 +1276,7 @@ level.
 \mbox{}\verb@#include <Rdefines.h>@\\
 \mbox{}\verb@#include <R_ext/stats_package.h> /* for S_rcont2 */@\\
 \mbox{}\verb@#include <Rversion.h>           // for R_VERSION@\\
-\mbox{}\verb@#include <R_ext/BLAS.h> /* for dspev */@\\
+\mbox{}\verb@#include <R_ext/Lapack.h> /* for dspev */@\\
 \mbox{}\verb@#ifndef FCONE@\\
 \mbox{}\verb@# define FCONE@\\
 \mbox{}\verb@#endif@\\
@@ -10968,7 +10968,7 @@ stopifnot(isequal(s, p))
 \mbox{}\verb@@\\
 \mbox{}\verb@Package: libcoin@\\
 \mbox{}\verb@Title: Linear Test Statistics for Permutation Inference@\\
-\mbox{}\verb@Date: 20YY-MM-DD@\\
+\mbox{}\verb@Date: 2021-09-27@\\
 \mbox{}\verb@Version: 1.0-9@\\
 \mbox{}\verb@Authors@{\tt @}\verb@R: person("Torsten", "Hothorn", role = c("aut", "cre"),@\\
 \mbox{}\verb@                  email = "Torsten.Hothorn@{\tt @}\verb@R-project.org")@\\

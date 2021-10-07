@@ -2,11 +2,12 @@
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
 
-\section{Changes in version 1.4-2 (20YY-MM-DD)}{
+\section{Changes in version 1.4-2 (2021-10-07)}{
   \subsection{Bug fixes}{
     \itemize{
       \item Partial matching of the \code{teststat} argument name failed for
       \code{formula} methods.
+      \item Fix problem reported by \code{rchk},
     }
   }
   \subsection{User-visible changes}{
@@ -17,11 +18,6 @@
   \subsection{Other changes}{
     \itemize{
       \item Package \pkg{libcoin} \eqn{\ge}{>=}1.0-9 is now required.
-    }
-  }
-  \subsection{Deprecated and defunct}{
-    \itemize{
-      \item
     }
   }
 }
