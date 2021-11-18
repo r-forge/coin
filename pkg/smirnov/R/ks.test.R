@@ -196,6 +196,10 @@ ks.test.default <-
         stop("not enough 'x' data")
     PVAL <- NULL
 
+    ### ordered variables can be treated as numeric ones as ties are handled
+    ### now
+    if (is.ordered(y)) y <- unclass(y)
+
     if(is.numeric(y)) { ## two-sample case
         DNAME <- paste(DNAME, "and", deparse1(substitute(y)))
         y <- y[!is.na(y)]
