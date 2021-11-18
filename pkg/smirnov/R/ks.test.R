@@ -98,18 +98,18 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
             return(1 - ret)
     }
 
-    ### if one wants to retain C_pSmirnov2x for testing purposes
-#    if (is.null(obs)) {
-#        ret[IND] <- sapply(q[IND], function(x) .Call(C_pSmirnov2x, x, n.x, n.y))
-#        if (log.p & lower.tail)
-#            return(log(ret))
-#        if (!log.p & lower.tail)
-#            return(ret)
-#        if (log.p & !lower.tail)
-#            return(log1p(-ret))
-#        if (!log.p & !lower.tail)
-#            return(1 - ret)
-#    }
+    ### no ties, use C_pSmirnov2x
+    if (is.null(obs)) {
+        ret[IND] <- sapply(q[IND], function(x) .Call(stats:::C_pSmirnov2x, x, n.x, n.y))
+        if (log.p & lower.tail)
+            return(log(ret))
+        if (!log.p & lower.tail)
+            return(ret)
+        if (log.p & !lower.tail)
+            return(log1p(-ret))
+        if (!log.p & !lower.tail)
+            return(1 - ret)
+    }
 
     TIES <- if (!is.null(obs))
         c(diff(sort(obs)) != 0, TRUE)
