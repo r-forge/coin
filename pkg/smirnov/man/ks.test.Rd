@@ -17,12 +17,12 @@
 ks.test(x, \dots)
 \method{ks.test}{default}(x, y, \dots,
         alternative = c("two.sided", "less", "greater"),
-        exact = NULL)
+        exact = NULL, simulate.p.value = FALSE, B = 2000)
 \method{ks.test}{formula}(formula, data, subset, na.action, \dots)
 psmirnov(q, n.x, n.y = length(obs) - n.x, obs = NULL, 
-         two.sided = TRUE, exact = TRUE, lower.tail = TRUE, 
-         log.p = FALSE)
-qsmirnov(p, n.x, n.y, two.sided = TRUE, exact = TRUE, \dots)
+         two.sided = TRUE, exact = TRUE, simulate = FALSE, B = 2000,
+         lower.tail = TRUE, log.p = FALSE)
+qsmirnov(p, n.x, n.y = length(obs) - n.x, obs = NULL, two.sided = TRUE, \dots)
 }
 \arguments{
   \item{x}{a numeric vector of data values.}
@@ -41,6 +41,10 @@ qsmirnov(p, n.x, n.y, two.sided = TRUE, exact = TRUE, \dots)
   \item{exact}{\code{NULL} or a logical indicating whether an exact
     p-value should be computed.  See \sQuote{Details} for the meaning of
     \code{NULL}.}
+  \item{simulate.p.value,simulate}{a logical indicating whether to compute p-values by
+          Monte Carlo simulation.}
+  \item{B}{an integer specifying the number of replicates used in the
+          Monte Carlo test.}
   \item{formula}{a formula of the form \code{lhs ~ rhs} where \code{lhs}
     is a numeric variable giving the data values and \code{rhs} either
     \code{1} for a one-sample Kolmogorov-Smirnov test or a factor

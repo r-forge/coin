@@ -1,6 +1,11 @@
 
+.Smirnov_sim <- function(tr, tc, B, twosided)
+        .Call("Smirnov_sim", as.integer(tr), as.integer(tc), 
+              as.integer(B), as.integer(twosided), package = "smirnov")
+
 psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL, 
                      two.sided = TRUE, exact = TRUE, 
+                     simulate = FALSE, B = 2000,
                      lower.tail = TRUE, log.p = FALSE) {
 
     ##
@@ -76,6 +81,24 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
     n <- n.x * n.y / (n.x + n.y)
 
     if (!exact) {
+        if (simulate) {
+            if (is.null(obs)) {
+                rt <- rep(1, length = N)
+            } else {
+                rt <- table(obs)
+            }
+            Dsim <- .Smirnov_sim(rt, c(n.x, n.y), B, two.sided)
+            ### need P(D < q)
+            ret[IND] <- ecdf(Dsim)(q - sqrt(.Machine$double.eps)) 
+            if (log.p & lower.tail)
+                return(log(ret))
+            if (!log.p & lower.tail)
+                return(ret)
+            if (log.p & !lower.tail)
+                return(log1p(-ret))
+            if (!log.p & !lower.tail)
+                return(1 - ret)
+        }
         ## <FIXME> let m and n be the min and max of the sample
         ## sizes, respectively.  Then, according to Kim and Jennrich
         ## (1973), if m < n/10, we should use the
@@ -157,19 +180,18 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
         return(1 - ret / exp(logdenom))
 }
 
-qsmirnov <- function(p, n.x, n.y, two.sided = TRUE, exact = TRUE, 
-                     ...) {
+qsmirnov <- function(p, n.x, n.y = length(obs) - n.x, obs = NULL, two.sided = TRUE, ...) {
 
     n.x <- floor(n.x)
     n.y <- floor(n.y)
-    if (exact) {
-        stat <- c(outer(0:n.x/n.x, 0:n.y/n.y, "-"))
+    if (n.x * n.y < 1e4) {
+        stat <- sort(unique(c(outer(0:n.x/n.x, 0:n.y/n.y, "-"))))
     } else {
-        stat <- 1:1e4 / (1e4 + 1)
+        stat <- (-1e4):1e4 / (1e4 + 1)
     }
     if (two.sided) stat <- abs(stat)
-    stat <- sort(unique(stat))
-    prb <- sapply(stat, psmirnov, n.x = n.x, n.y = n.y, ...)
+    prb <- psmirnov(stat, n.x = n.x, n.y = n.y, obs = obs, 
+                    two.sided = TRUE, log.p = FALSE, ...)
     if (is.null(p)) return(list(stat = stat, prob = prb))
     if (is.numeric(p)) 
         p <- as.double(p)
@@ -186,7 +208,7 @@ ks.test <- function(x, ...) UseMethod("ks.test")
 
 ks.test.default <-
     function(x, y, ..., alternative = c("two.sided", "less", "greater"),
-             exact = NULL)
+             exact = NULL, simulate.p.value = FALSE, B = 2000)
 {
     alternative <- match.arg(alternative)
     DNAME <- deparse1(substitute(x))
@@ -233,14 +255,14 @@ ks.test.default <-
         if (TIES)
             obs <- w
         PVAL <- switch(alternative,
-            "two.sided" = psmirnov(STATISTIC, n.x = n.x, obs = w,
-                                   exact = exact,
+            "two.sided" = psmirnov(STATISTIC, n.x = n.x, obs = w, exact = exact, 
+                                   simulate = simulate.p.value, B = B,
                                    lower.tail = FALSE),
-            "less" = psmirnov(STATISTIC, n.x = n.y, obs = w, 
-                              exact = exact,
+            "less" = psmirnov(STATISTIC, n.x = n.y, obs = w, exact = exact,
+                              simulate = simulate.p.value, B = B,
                               two.sided = FALSE, lower.tail = FALSE),
-            "greater" = psmirnov(STATISTIC, n.x = n.x, obs = w, 
-                                 exact = exact,
+            "greater" = psmirnov(STATISTIC, n.x = n.x, obs = w, exact = exact,
+                                 simulate = simulate.p.value, B = B,
                                  two.sided = FALSE, lower.tail = FALSE))
     } else { ## one-sample case
         if(is.character(y)) # avoid matching anything in this function

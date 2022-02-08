@@ -1,6 +1,7 @@
 
 library("smirnov")
 set.seed(290875)
+B <- 1e5
 
 ### note: psmirnov(, obs = NULL) uses stats:::C_pSmirnov2x, obs = something
 ### trigger Schröer-Trenkler algo
@@ -22,22 +23,17 @@ all.equal(psmirnov(n.x = 300, n.y = 520, q = 1/8, obs = 1:820, lower.tail = FALS
 psmirnov(obs = round(rnorm(820)), n.x = 300, n.y = 520, 
          q = 1/8, lower.tail = FALSE)
 
-library("coin")
-### tied example by Schröer & Trenkler (1995); use coin to 
-### approximate conditional p-value
-gr <- rep(gl(2, 1), c(5, 7))
+### tied example by Schröer & Trenkler (1995)
 x <- c(1, 2, 2, 3, 3, 1, 2, 3, 3, 4, 5, 6)
-mt <- maxstat_test(gr ~ x, minprob = 0, maxprob = 1)
-pls <- coin:::MonteCarlo(x = mt@statistic@xtrans, y = mt@statistic@ytrans, 
-                         weights = mt@statistic@weights, 
-                         block = mt@statistic@block, nresample = 1e7,
-                         parallel = "no")
-TS <- colSums(mt@statistic@xtrans)
-N <- table(gr)
-KS <- abs(TS / N[2] - pls * sum(N) / prod(N))
-mKS <- apply(KS, 2, max)
-mean(mKS >= 3 / 7 - sqrt(.Machine$double.eps))
 psmirnov(obs = x, n.x = 5, q = 3 / 7, lower.tail = FALSE)
+psmirnov(obs = x, n.x = 5, q = 3 / 7, lower.tail = FALSE, 
+         exact = FALSE, simulate = TRUE, B = B)
+psmirnov(obs = x, n.x = 5, q = 3 / 7, lower.tail = FALSE, two.sided = FALSE)
+psmirnov(obs = x, n.x = 5, q = 3 / 7, lower.tail = FALSE, two.sided = FALSE,
+         exact = FALSE, simulate = TRUE, B = B)
+psmirnov(obs = x, n.x = 5, q = 3 / 7, lower.tail = TRUE, two.sided = FALSE)
+psmirnov(obs = x, n.x = 5, q = 3 / 7, lower.tail = TRUE, two.sided = FALSE,
+         exact = FALSE, simulate = TRUE, B = B)
 
 ### check quantiles
 ### Kim & Jennrich (1973) in Selected Tables in Mathematical Statistics, Vol 1
@@ -55,6 +51,13 @@ all.equal(qsmirnov(1 - .001, n.x = 8, n.y = 6, obs = 1:14) * 8 * 6, 48)
 all.equal(qsmirnov(1 - .05, n.x = 14, n.y = 10, obs = 1:24) * 140, 74)
 all.equal(qsmirnov(1 - .01, n.x = 14, n.y = 10, obs = 1:24) * 140, 90)
 all.equal(qsmirnov(1 - .001, n.x = 14, n.y = 10, obs = 1:24) * 140, 106)
+### Monte Carlo
+all.equal(qsmirnov(1 - .05, n.x = 8, n.y = 6, obs = 1:14, exact = FALSE, simulate = TRUE, B = B) * 8 * 6, 34)
+all.equal(qsmirnov(1 - .01, n.x = 8, n.y = 6, obs = 1:14, exact = FALSE, simulate = TRUE, B = B) * 8 * 6, 40)
+all.equal(qsmirnov(1 - .001, n.x = 8, n.y = 6, obs = 1:14, exact = FALSE, simulate = TRUE, B = B) * 8 * 6, 48)
+all.equal(qsmirnov(1 - .05, n.x = 14, n.y = 10, obs = 1:24, exact = FALSE, simulate = TRUE, B = B) * 140, 74)
+all.equal(qsmirnov(1 - .01, n.x = 14, n.y = 10, obs = 1:24, exact = FALSE, simulate = TRUE, B = B) * 140, 90)
+all.equal(qsmirnov(1 - .001, n.x = 14, n.y = 10, obs = 1:24, exact = FALSE, simulate = TRUE, B = B) * 140, 106)
 
 ### without ties
 q <- qsmirnov(1:9/10, 5, 7)
@@ -79,6 +82,7 @@ p <- psmirnov(q, 5, 7, obs = obs, two.sided = FALSE)
 all.equal(qsmirnov(p, 5, 7, obs = obs, two.sided = FALSE), q)
 
 ### compare speed
+if (FALSE) {
 n.x <- 1:5 * 20
 n.y <- 1:4 * 20
 q <- 2:9 / 10
@@ -92,3 +96,4 @@ st <- sapply(1:nrow(x), function(i) {
 })
 
 summary(t(st))
+}

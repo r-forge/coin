@@ -1,5 +1,7 @@
+
+useDynLib(smirnov, .registration = TRUE)
 	
-importFrom(stats, setNames, terms)
+importFrom(stats, setNames, terms, ecdf)
 importFrom(graphics, abline, lines)
 
 export(psmirnov, qsmirnov, ks.test, confband)
