@@ -11,11 +11,12 @@ confband.ks.test <- function(object, level = .95, ...) {
     N <- n.x + n.y
     TIES <- length(unique(obs <- sort(c(x, y)))) != N
 
+    ### <FIXME>: handle simulate.p.value = TRUE and also B </FIXME>
     if (TIES) {
-        ca <- qsmirnov(level, n.x = n.x, n.y = n.y, 
-                       obs = obs, exact = object$exact)
+        ca <- qsmirnov(level, m = n.x, n = n.y, 
+                       z = obs, exact = object$exact)
     } else {
-        ca <- qsmirnov(level, n.x = n.x, n.y = n.y, 
+        ca <- qsmirnov(level, m = n.x, n = n.y, 
                        exact = object$exact)
     }
 

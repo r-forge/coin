@@ -1,5 +1,5 @@
 
-R version 4.1.1 (2021-08-10) -- "Kick Things"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -28,6 +28,7 @@ The following object is masked from 'package:stats':
 > set.seed(29)
 > x <- runif(15) * 10
 > y <- runif(20) * 10
+> B <- 1e5
 > 
 > ### two-sided asymptotic
 > stats::ks.test(x = x, y = y, exact = FALSE)
@@ -62,6 +63,14 @@ alternative hypothesis: two-sided
 
 data:  x and y
 D = 0.45, p-value = 0.04607
+alternative hypothesis: two-sided
+
+> smirnov::ks.test(x = x, y = y, exact = FALSE, simulate.p.value = TRUE, B = B)
+
+	Monte-Carlo two-sample Smirnov test
+
+data:  x and y
+D = 0.45, p-value = 0.04581
 alternative hypothesis: two-sided
 
 > 
@@ -101,6 +110,15 @@ data:  x and y
 D^- = 0.066667, p-value = 0.8929
 alternative hypothesis: the CDF of x lies below that of y
 
+> smirnov::ks.test(x = x, y = y, exact = FALSE, simulate.p.value = TRUE, 
++                  alternative = "less", B = B)
+
+	Monte-Carlo two-sample Smirnov test
+
+data:  x and y
+D^- = 0.066667, p-value = 0.8932
+alternative hypothesis: the CDF of x lies below that of y
+
 > 
 > ### greater asymptotic
 > stats::ks.test(x = x, y = y, exact = FALSE, alternative = "greater")
@@ -136,6 +154,15 @@ alternative hypothesis: the CDF of x lies above that of y
 
 data:  x and y
 D^+ = 0.45, p-value = 0.02303
+alternative hypothesis: the CDF of x lies above that of y
+
+> smirnov::ks.test(x = x, y = y, exact = FALSE, simulate.p.value = TRUE, 
++                  B = B, alternative = "greater")
+
+	Monte-Carlo two-sample Smirnov test
+
+data:  x and y
+D^+ = 0.45, p-value = 0.02313
 alternative hypothesis: the CDF of x lies above that of y
 
 > 
@@ -190,6 +217,14 @@ data:  x and y
 D = 0.45, p-value = 0.03151
 alternative hypothesis: two-sided
 
+> smirnov::ks.test(x = x, y = y, exact = FALSE, simulate.p.value = TRUE, B = B)
+
+	Monte-Carlo two-sample Smirnov test
+
+data:  x and y
+D = 0.45, p-value = 0.03183
+alternative hypothesis: two-sided
+
 > 
 > ### less asymptotic
 > stats::ks.test(x = x, y = y, exact = FALSE, alternative = "less")
@@ -231,6 +266,15 @@ In stats::ks.test(x = x, y = y, exact = TRUE, alternative = "less") :
 > smirnov::ks.test(x = x, y = y, exact = TRUE, alternative = "less")
 
 	Exact two-sample Smirnov test
+
+data:  x and y
+D^- = 6.9389e-17, p-value = 1
+alternative hypothesis: the CDF of x lies below that of y
+
+> smirnov::ks.test(x = x, y = y, exact = FALSE, simulate.p.value = TRUE, 
++                  B = B, alternative = "less")
+
+	Monte-Carlo two-sample Smirnov test
 
 data:  x and y
 D^- = 6.9389e-17, p-value = 1
@@ -282,8 +326,77 @@ data:  x and y
 D^+ = 0.45, p-value = 0.0167
 alternative hypothesis: the CDF of x lies above that of y
 
+> smirnov::ks.test(x = x, y = y, exact = FALSE, simulate.p.value = TRUE, 
++                  B = B, alternative = "greater")
+
+	Monte-Carlo two-sample Smirnov test
+
+data:  x and y
+D^+ = 0.45, p-value = 0.01676
+alternative hypothesis: the CDF of x lies above that of y
+
 > 
+> ### an extreme example
+> x <- runif(5) * 10
+> y <- runif(500) * 10
+> ### two-sided asymptotic
+> smirnov::ks.test(x = x, y = y, exact = FALSE)
+
+	Asymptotic two-sample Smirnov test
+
+data:  x and y
+D = 0.376, p-value = 0.4859
+alternative hypothesis: two-sided
+
+> smirnov::ks.test(x = x, y = y, exact = TRUE)
+
+	Exact two-sample Smirnov test
+
+data:  x and y
+D = 0.376, p-value = 0.3874
+alternative hypothesis: two-sided
+
+> smirnov::ks.test(x = x, y = y, exact = FALSE, simulate.p.value = TRUE, B = B)
+
+	Monte-Carlo two-sample Smirnov test
+
+data:  x and y
+D = 0.376, p-value = 0.3831
+alternative hypothesis: two-sided
+
+> 
+> ### even more extreme example
+> x <- 1:5
+> y <- round(runif(500) * 10)
+> ### two-sided asymptotic
+> smirnov::ks.test(x = x, y = y, exact = FALSE)
+
+	Asymptotic two-sample Smirnov test
+
+data:  x and y
+D = 0.452, p-value = 0.264
+alternative hypothesis: two-sided
+
+Warning message:
+In ks.test.default(x = x, y = y, exact = FALSE) :
+  p-value will be approximate in the presence of ties
+> smirnov::ks.test(x = x, y = y, exact = TRUE)
+
+	Exact two-sample Smirnov test
+
+data:  x and y
+D = 0.452, p-value = 0.1824
+alternative hypothesis: two-sided
+
+> smirnov::ks.test(x = x, y = y, exact = FALSE, simulate.p.value = TRUE, B = B)
+
+	Monte-Carlo two-sample Smirnov test
+
+data:  x and y
+D = 0.452, p-value = 0.1822
+alternative hypothesis: two-sided
+
 > 
 > proc.time()
    user  system elapsed 
-  0.159   0.028   0.173 
+  1.446   0.016   1.456 

@@ -19,10 +19,10 @@ ks.test(x, \dots)
         alternative = c("two.sided", "less", "greater"),
         exact = NULL, simulate.p.value = FALSE, B = 2000)
 \method{ks.test}{formula}(formula, data, subset, na.action, \dots)
-psmirnov(q, n.x, n.y = length(obs) - n.x, obs = NULL, 
+psmirnov(q, m, n = length(z) - m, z = NULL, 
          two.sided = TRUE, exact = TRUE, simulate = FALSE, B = 2000,
          lower.tail = TRUE, log.p = FALSE)
-qsmirnov(p, n.x, n.y = length(obs) - n.x, obs = NULL, two.sided = TRUE, \dots)
+qsmirnov(p, m, n = length(z) - m, z = NULL, two.sided = TRUE, \dots)
 }
 \arguments{
   \item{x}{a numeric vector of data values.}
@@ -61,11 +61,11 @@ qsmirnov(p, n.x, n.y = length(obs) - n.x, obs = NULL, two.sided = TRUE, \dots)
     \code{getOption("na.action")}.}
   \item{q}{a numeric vector of quantiles.}
   \item{p}{a numeric vector of probabilities.}
-  \item{n.x}{length of \code{x}-vector, sample size in the first group in
+  \item{m}{length of \code{x}-vector, sample size in the first group in
     the two-sample case.}
-  \item{n.y}{length of \code{y}-vector, sample size in the second group in
+  \item{n}{length of \code{y}-vector, sample size in the second group in
     the two-sample case.}
-  \item{obs}{a numeric vector of all data values (\code{x} and \code{y})
+  \item{z}{a numeric vector of all data values (\code{x} and \code{y})
              when the exact conditional distribution of the Smirnov test
              statistic given the data shall be computed.}
   \item{two.sided}{a logical indicating whether absolute (\code{TRUE}) or

@@ -1,9 +1,9 @@
 
 .Smirnov_sim <- function(tr, tc, B, twosided)
-        .Call("Smirnov_sim", as.integer(tr), as.integer(tc), 
-              as.integer(B), as.integer(twosided), package = "smirnov")
+    .Call("Smirnov_sim", as.integer(tr), as.integer(tc), 
+          as.integer(B), as.integer(twosided), package = "smirnov")
 
-psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL, 
+psmirnov <- function(q, m, n = length(z) - m, z = NULL, 
                      two.sided = TRUE, exact = TRUE, 
                      simulate = FALSE, B = 2000,
                      lower.tail = TRUE, log.p = FALSE) {
@@ -73,19 +73,19 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
     ret[is.na(q) | q < 0 | q > 1] <- NA
     IND <- which(!is.na(ret))
     if (!length(IND)) return(ret)
-    if (n.x < 1) stop("not enough 'x' data")
-    if (n.y < 1) stop("not enough 'y' data")
-    n.x <- floor(n.x)
-    n.y <- floor(n.y)
+    if (m < 1) stop("not enough 'x' data")
+    if (n < 1) stop("not enough 'y' data")
+    n.x <- floor(m)
+    n.y <- floor(n)
     N <- n.x + n.y
     n <- n.x * n.y / (n.x + n.y)
 
     if (!exact) {
         if (simulate) {
-            if (is.null(obs)) {
+            if (is.null(z)) {
                 rt <- rep(1, length = N)
             } else {
-                rt <- table(obs)
+                rt <- table(z)
             }
             Dsim <- .Smirnov_sim(rt, c(n.x, n.y), B, two.sided)
             ### need P(D < q)
@@ -122,7 +122,7 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
     }
 
     ### no ties, use C_pSmirnov2x
-    if (is.null(obs)) {
+    if (is.null(z)) {
         ret[IND] <- sapply(q[IND], function(x) .Call(stats:::C_pSmirnov2x, x, n.x, n.y))
         if (log.p & lower.tail)
             return(log(ret))
@@ -134,8 +134,8 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
             return(1 - ret)
     }
 
-    TIES <- if (!is.null(obs))
-        c(diff(sort(obs)) != 0, TRUE)
+    TIES <- if (!is.null(z))
+        c(diff(sort(z)) != 0, TRUE)
     else
         rep(TRUE, N)
 
@@ -163,9 +163,10 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
     }
     ret[IND] <- sapply(stat[IND], pfun)
     if (any(is.na(ret[IND]))) {
-        warning("computation of exact probability failed, returning approximation")
-        return(psmirnov(q = q, n.x = n.x, n.y = n.y,  
+        warning("computation of exact probability failed, returning Monte Carlo approximation")
+        return(psmirnov(q = q, m = n.x, n = n.y, z = z, 
                         two.sided = two.sided, exact = FALSE, 
+                        simulate = TRUE, B = B,
                         lower.tail = lower.tail, log.p = log.p))
     }
 
@@ -180,17 +181,18 @@ psmirnov <- function(q, n.x, n.y = length(obs) - n.x, obs = NULL,
         return(1 - ret / exp(logdenom))
 }
 
-qsmirnov <- function(p, n.x, n.y = length(obs) - n.x, obs = NULL, two.sided = TRUE, ...) {
+qsmirnov <- function(p, m, n = length(z) - m, z = NULL, two.sided = TRUE, ...) {
 
-    n.x <- floor(n.x)
-    n.y <- floor(n.y)
+    n.x <- floor(m)
+    n.y <- floor(n)
     if (n.x * n.y < 1e4) {
+        ### note: The support is also OK in case of ties
         stat <- sort(unique(c(outer(0:n.x/n.x, 0:n.y/n.y, "-"))))
     } else {
         stat <- (-1e4):1e4 / (1e4 + 1)
     }
     if (two.sided) stat <- abs(stat)
-    prb <- psmirnov(stat, n.x = n.x, n.y = n.y, obs = obs, 
+    prb <- psmirnov(stat, m = n.x, n = n.y, z = z, 
                     two.sided = TRUE, log.p = FALSE, ...)
     if (is.null(p)) return(list(stat = stat, prob = prb))
     if (is.numeric(p)) 
@@ -223,6 +225,9 @@ ks.test.default <-
     if (is.ordered(y)) y <- unclass(y)
 
     if(is.numeric(y)) { ## two-sample case
+        args <- list(...)
+        if (length(args) > 0L) 
+            warning("Parameter(s) ", paste(names(args), collapse = ", "), " ignored")
         DNAME <- paste(DNAME, "and", deparse1(substitute(y)))
         y <- y[!is.na(y)]
         n.x <- as.double(n)             # to avoid integer overflow
@@ -231,8 +236,12 @@ ks.test.default <-
             stop("not enough 'y' data")
         if(is.null(exact))
             exact <- (n.x * n.y < 10000)
-        METHOD <- paste(c("Asymptotic", "Exact")[exact + 1L], 
-                        "two-sample Smirnov test")
+        if (!simulate.p.value) {
+            METHOD <- paste(c("Asymptotic", "Exact")[exact + 1L], 
+                            "two-sample Smirnov test")
+        } else {
+            METHOD <- "Monte-Carlo two-sample Smirnov test"
+        }
         TIES <- FALSE
         n <- n.x * n.y / (n.x + n.y)
         w <- c(x, y)
@@ -240,7 +249,7 @@ ks.test.default <-
         if(length(unique(w)) < (n.x + n.y)) {
             z <- z[c(which(diff(sort(w)) != 0), n.x + n.y)]
             TIES <- TRUE
-            if (!exact)
+            if (!exact & !simulate.p.value)
                 warning("p-value will be approximate in the presence of ties")
         }
         STATISTIC <- switch(alternative,
@@ -251,17 +260,17 @@ ks.test.default <-
                                  "two.sided" = "two-sided",
                                  "less" = "the CDF of x lies below that of y",
                                  "greater" = "the CDF of x lies above that of y")
-        obs <- NULL
+        z <- NULL
         if (TIES)
-            obs <- w
+            z <- w
         PVAL <- switch(alternative,
-            "two.sided" = psmirnov(STATISTIC, n.x = n.x, obs = w, exact = exact, 
+            "two.sided" = psmirnov(STATISTIC, m = n.x, n = n.y, z = w, exact = exact, 
                                    simulate = simulate.p.value, B = B,
                                    lower.tail = FALSE),
-            "less" = psmirnov(STATISTIC, n.x = n.y, obs = w, exact = exact,
+            "less" = psmirnov(STATISTIC, m = n.x, n = n.y, z = w,  exact = exact,
                               simulate = simulate.p.value, B = B,
                               two.sided = FALSE, lower.tail = FALSE),
-            "greater" = psmirnov(STATISTIC, n.x = n.x, obs = w, exact = exact,
+            "greater" = psmirnov(STATISTIC, m = n.x, n = n.y, z = w, exact = exact,
                                  simulate = simulate.p.value, B = B,
                                  two.sided = FALSE, lower.tail = FALSE))
     } else { ## one-sample case
