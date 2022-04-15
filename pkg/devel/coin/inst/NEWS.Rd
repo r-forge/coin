@@ -61,9 +61,8 @@
 \section{Changes in version 1.4-2 (2021-10-07)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item Partial matching of the \code{teststat} argument name failed for
+      \item Partial matching of argument \code{teststat} failed for
       \code{formula} methods.
-      \item Fix problem reported by \code{rchk},
     }
   }
   \subsection{User-visible changes}{
@@ -924,8 +923,7 @@
 
 \section{Changes in version 1.0-0 (2008-11-06)}{
   \itemize{
-    \item JSS paper \doi{10.18637/jss.v028.i08} documents version
-    1.0-0.
+    \item JSS paper \doi{10.18637/jss.v028.i08} documents version 1.0-0.
 
     \item Set default for \code{<IndependenceTest>@method} to
     \samp{General Independence Test}.
