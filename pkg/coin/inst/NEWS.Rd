@@ -2,6 +2,29 @@
 \encoding{UTF-8}
 \title{News for Package \pkg{coin}}
 
+\section{Changes in version 1.4-3 (20YY-MM-DD)}{
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{User-visible changes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Other changes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Deprecated and defunct}{
+    \itemize{
+      \item
+    }
+  }
+}
+
 \section{Changes in version 1.4-2 (2021-10-07)}{
   \subsection{Bug fixes}{
     \itemize{
