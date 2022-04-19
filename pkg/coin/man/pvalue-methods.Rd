@@ -163,7 +163,7 @@
 \note{
   The mid-\eqn{p}-value, \eqn{p}-value interval and test size of asymptotic
   permutation distributions or exact permutation distributions obtained by the
-  split-up algoritm is reported as \code{NA}.
+  split-up algorithm is reported as \code{NA}.
 
   In versions of \pkg{coin} prior to 1.1-0, a min-\eqn{P} procedure computing
   \enc{Šidák}{Sidak} single-step adjusted \eqn{p}-values accounting for

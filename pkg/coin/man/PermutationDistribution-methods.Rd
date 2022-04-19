@@ -76,7 +76,7 @@
 }
 \note{
   The density of asymptotic permutation distributions for maximum-type tests or
-  exact permutation distributions obtained by the split-up algoritm is reported
+  exact permutation distributions obtained by the split-up algorithm is reported
   as \code{NA}.  The quantile function of asymptotic permutation distributions
   for maximum-type tests cannot be computed for \code{p} less than 0.5, due to
   limitations in the \pkg{mvtnorm} package.  The support of exact permutation
