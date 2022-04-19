@@ -167,9 +167,9 @@
 
   In versions of \pkg{coin} prior to 1.1-0, a min-\eqn{P} procedure computing
   \enc{Šidák}{Sidak} single-step adjusted \eqn{p}-values accounting for
-  discreteness was available when specifying \code{method = "discrete"}.
-  \strong{This is now deprecated and will be removed in a future release} due to
-  the introduction of a more general max-\eqn{T} version of the same algorithm.
+  discreteness was available when specifying \code{method = "discrete"}.  This
+  was made \strong{defunct} in version 1.2-0 due to the introduction of a more
+  general max-\eqn{T} version of the same algorithm.
 }
 \references{
   Berger, V. W.  (2000).  Pros and cons of permutation tests in clinical trials.
