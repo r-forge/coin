@@ -161,7 +161,7 @@
 \note{
   The mid-\eqn{p}-value, \eqn{p}-value interval and test size of asymptotic
   permutation distributions or exact permutation distributions obtained by the
-  split-up algoritm is reported as \code{NA}.
+  split-up algorithm is reported as \code{NA}.
 }
 \references{
   Berger, V. W.  (2000).  Pros and cons of permutation tests in clinical trials.

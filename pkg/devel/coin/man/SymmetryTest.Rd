@@ -123,7 +123,7 @@
   ordered factor with four levels and \code{x} is a nominal factor with three
   levels, \code{scores = list(y1 = c(1, 3:5), x = c(1:2, 4))} supplies the
   scores to be used.  For ordered alternatives the scores must be monotonic, but
-  non-montonic scores are also allowed for testing against, e.g., umbrella
+  non-monotonic scores are also allowed for testing against, e.g., umbrella
   alternatives.  The length of the score vector must be equal to the number of
   factor levels.
 
