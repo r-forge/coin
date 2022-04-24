@@ -146,7 +146,7 @@
   \eqn{k}th event time are given by
   \deqn{
     C_k = \sum_{j = 1}^k w_j \frac{d_j}{n_j}
-    \quad \mbox{and} \quad
+    \quad \mathrm{and} \quad
     c_k = C_k - w_k,
   }{
     C_k = sum(j=1,\dots,k) w_j * (d_j / n_j)   and   c_k = C_k - w_k,
@@ -164,8 +164,8 @@
   \deqn{
     a_i = \left\{
       \begin{array}{ll}
-        C_{k'} & \mbox{if } \delta_i = 0 \\
-        c_{k'} & \mbox{otherwise}
+        C_{k'} & \mathrm{if}~\delta_i = 0 \\
+        c_{k'} & \mathrm{otherwise}
       \end{array}
     \right.
   }{
