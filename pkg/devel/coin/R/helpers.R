@@ -453,7 +453,7 @@ varnames <- function(object) {
         xnames <- paste(xnames, paste("\n\t stratified by", bn))
     }
 
-    if (nchar(xnames) > options("width")$width / 2)
+    if (nchar(xnames) > getOption("width") / 2)
         paste(ynames, "by\n\t", xnames, collapse = "")
     else
         paste(ynames, "by", xnames, collapse = "")
