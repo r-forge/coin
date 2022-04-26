@@ -70,7 +70,7 @@ psmirnov <- function(q, m, n = length(z) - m, z = NULL,
         q <- as.double(q)
     else stop("argument 'q' must be numeric")
     ret <- rep(0, length(q))
-    ret[is.na(q) | q < 0 | q > 1] <- NA
+    ret[is.na(q) | q < -1 | q > 1] <- NA
     IND <- which(!is.na(ret))
     if (!length(IND)) return(ret)
     if (m < 1) stop("not enough 'x' data")
