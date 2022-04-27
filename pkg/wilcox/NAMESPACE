@@ -1,0 +1,16 @@
+
+useDynLib(wilcox, .registration = TRUE)
+	
+import(stats)
+import(MASS)
+import(Matrix)
+importFrom("methods", "as")
+
+
+export(.wilcox_score, .pwilcox, .dwilcox, .qwilcox, .rwilcox)
+
+#export(wilcox.test)
+#
+#S3method(wilcox.test, default)
+#S3method(wilcox.test, formula)
+
