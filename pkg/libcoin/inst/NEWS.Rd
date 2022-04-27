@@ -2,7 +2,13 @@
 \name{NEWS}
 \title{NEWS file for the \pkg{libcoin} package}
 
-\section{Changes in Version 1.0-9 (20YY-MM-DD)}{
+\section{Changes in Version 1.0-10 (20YY-MM-DD)}{
+  \itemize{
+    \item
+  }
+}
+
+\section{Changes in Version 1.0-9 (2021-09-27)}{
   \itemize{
     \item \code{R_MPinv_sym} can now determine the full dimension of the packed
           input \code{x} by setting \code{n} to \code{0L}.

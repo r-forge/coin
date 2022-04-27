@@ -116,7 +116,7 @@ urlcolor={linkcolor}%
 \chapter*{Licence}
 
 {\setlength{\parindent}{0cm}
-Copyright (C) 2017-2021 Torsten Hothorn \\
+Copyright (C) 2017-2022 Torsten Hothorn \\
 
 This file is part of the \pkg{libcoin} R add-on package. \\
 
@@ -7035,8 +7035,8 @@ SEXP RC_init_LECV_2d
 @{
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 2021-09-27
-Version: 1.0-9
+Date: 20YY-MM-DD
+Version: 1.0-10
 Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@@R-project.org")
 Description: Basic infrastructure for linear test statistics and permutation
@@ -7159,7 +7159,7 @@ void attribute_visible R_init_libcoin
 
 @d R Header
 @{
-###    Copyright (C) 2017-2021 Torsten Hothorn
+###    Copyright (C) 2017-2022 Torsten Hothorn
 ###
 ###    This file is part of the 'libcoin' R add-on package.
 ###
@@ -7184,7 +7184,7 @@ void attribute_visible R_init_libcoin
 @d C Header
 @{
 /*
-    Copyright (C) 2017-2021 Torsten Hothorn
+    Copyright (C) 2017-2022 Torsten Hothorn
 
     This file is part of the 'libcoin' R add-on package.
 
