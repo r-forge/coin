@@ -24,26 +24,31 @@
   zc <- cut(z, breaks = c(-Inf, ct, Inf), ordered = TRUE)[, drop = TRUE]
   ix <- rep(0:1, c(n.x, n.y))
 
+  q <- -2000:2000 / 100
+  ECDF <- ecdf(z)(sort(z)[-N])
+
+  .zeta <- function(beta) {
+      ### match marginal ECDF and conditional distributions,
+      ### see doi:10.1002/sim.7890, page 3998 
+      marg <- (n.x * plogis(q) + n.y * plogis(q - beta)) / (n.x + n.y)
+      ### invert numerically
+      s <- spline(x = q, y = marg, method = "hyman")
+      return(approx(x = s$y, y = s$x, xout = ECDF, rule = 1)$y)
+  }
+
   if (length(uz) > 500) {
 
       stopifnot(!exact)
 
-      ### return polr Wald interval; optimize 
+      ### return Wald interval; optimize 
       ### hard-coded profile likelihood here
-      q <- -2000:2000 / 100
-      ECDF <- ecdf(z)(sort(z)[-N])
 
       ### nonparametric profile likelihood for beta
       prfll <- function(beta) {
-          ### match marginal ECDF and conditional distributions,
-          ### see doi:10.1002/sim.7890, page 3998 
-          marg <- (n.x * plogis(q) + n.y * plogis(q - beta)) / (n.x + n.y)
-          ### invert numerically
-          s <- spline(x = q, y = marg, method = "hyman")
-          a <- approx(x = s$y, y = s$x, xout = ECDF, rule = 1)$y
+          zeta <- .zeta(beta)
           off <- beta * ix
           ### likelihood contributions
-          prb <- plogis(c(a, Inf)[zc] - off) - plogis(c(-Inf, a)[zc] - off)
+          prb <- plogis(c(zeta, Inf)[zc] - off) - plogis(c(-Inf, zeta)[zc] - off)
           -sum(log(pmax(sqrt(.Machine$double.eps), prb)))
       }
 
@@ -63,12 +68,11 @@
       return(c(Sci, logOR))
   }
 
-  ### H_0: logOR = 0, use ECDF to compute parameters
-  zeta0 <- sort(qlogis(cumsum(table(zc)) / N))
-  parm0 <- c(zeta0[-length(zeta0)], 0)
+  ### good starting values for polr: approximate zeta for initial ilogOR
+  izeta <- .zeta(ilogOR)
+  parm0 <- c(izeta, ilogOR)
 
   ### fit proportional odds model
-
   d <- expand.grid(zc = sort(unique(zc)), grp = factor(0:1))
   grp <- factor(ix)
   d$w <- c(table(zc, grp))

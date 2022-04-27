@@ -20,8 +20,6 @@
     if (is.null(z))
         return(rwilcox(n, n.x, n.y))
 
-    z <- rank(z)
-
     ### sample from conditional distribution
     uz <- sort(unique(z))
     tb <- r2dtable(n, table(z), sizes)
@@ -60,7 +58,6 @@
 
     if (length(z) != N)
         stop(sQuote("length(z)"), "is not equal to", sQuote("sum(sizes)"))
-    z <- rank(z)
     ### ranks x.5 are possible, algo expects integer scores
     fct <- ifelse(isTRUE(all.equal(max(z - floor(z)), 0)), 1, 2)
     sc <- as.integer(sort(floor(z * fct)))
