@@ -3486,7 +3486,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
-Note: the interface to \verb|S_rcont2| changed in  \textsf{R} 4.1-0.
+Note: the interface to \verb|S_rcont2| changed in \textsf{R}-4.1.0.
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap92}\raggedright\small
 \NWtarget{nuweb53a}{} $\langle\,${\itshape Compute Permuted Linear Statistic 2d}\nobreak\ {\footnotesize {53a}}$\,\rangle\equiv$
@@ -3495,12 +3495,14 @@ Note: the interface to \verb|S_rcont2| changed in  \textsf{R} 4.1-0.
 \mbox{}\verb@@\\
 \mbox{}\verb@#if defined(R_VERSION) && R_VERSION >= R_Version(4, 1, 0)@\\
 \mbox{}\verb@            S_rcont2(Lx, Ly,@\\
-\mbox{}\verb@                    rsum + Lxp1 * b + 1,@\\
-\mbox{}\verb@                    csum + Lyp1 * b + 1,@\\
-\mbox{}\verb@                    sumweights[b], fact, jwork, rtable2);@\\
+\mbox{}\verb@                     rsum + Lxp1 * b + 1,@\\
+\mbox{}\verb@                     csum + Lyp1 * b + 1,@\\
+\mbox{}\verb@                     sumweights[b], fact, jwork, rtable2);@\\
 \mbox{}\verb@#else@\\
-\mbox{}\verb@            S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,@\\
-\mbox{}\verb@                     csum + Lyp1 *b + 1, sumweights + b, fact, jwork, rtable2);@\\
+\mbox{}\verb@            S_rcont2(&Lx, &Ly,@\\
+\mbox{}\verb@                     rsum + Lxp1 * b + 1,@\\
+\mbox{}\verb@                     csum + Lyp1 * b + 1,@\\
+\mbox{}\verb@                     sumweights + b, fact, jwork, rtable2);@\\
 \mbox{}\verb@#endif@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@for (int j1 = 1; j1 <= Lx; j1++) {@\\

@@ -2334,17 +2334,19 @@ for (int j = 2; j <= maxn; j++)
     fact[j] = fact[j - 1] + log(j);
 @}
 
-Note: the interface to \verb|S_rcont2| changed in  \textsf{R} 4.1-0.
+Note: the interface to \verb|S_rcont2| changed in \textsf{R}-4.1.0.
 @d Compute Permuted Linear Statistic 2d
 @{
 #if defined(R_VERSION) && R_VERSION >= R_Version(4, 1, 0)
             S_rcont2(Lx, Ly,
-                    rsum + Lxp1 * b + 1,
-                    csum + Lyp1 * b + 1,
-                    sumweights[b], fact, jwork, rtable2);
+                     rsum + Lxp1 * b + 1,
+                     csum + Lyp1 * b + 1,
+                     sumweights[b], fact, jwork, rtable2);
 #else
-            S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,
-                     csum + Lyp1 *b + 1, sumweights + b, fact, jwork, rtable2);
+            S_rcont2(&Lx, &Ly,
+                     rsum + Lxp1 * b + 1,
+                     csum + Lyp1 * b + 1,
+                     sumweights + b, fact, jwork, rtable2);
 #endif
 
 for (int j1 = 1; j1 <= Lx; j1++) {

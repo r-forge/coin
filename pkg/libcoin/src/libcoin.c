@@ -7689,12 +7689,14 @@ SEXP R_PermutedLinearStatistic_2d
             
             #if defined(R_VERSION) && R_VERSION >= R_Version(4, 1, 0)
                         S_rcont2(Lx, Ly,
-                                rsum + Lxp1 * b + 1,
-                                csum + Lyp1 * b + 1,
-                                sumweights[b], fact, jwork, rtable2);
+                                 rsum + Lxp1 * b + 1,
+                                 csum + Lyp1 * b + 1,
+                                 sumweights[b], fact, jwork, rtable2);
             #else
-                        S_rcont2(&Lx, &Ly, rsum + Lxp1 * b + 1,
-                                 csum + Lyp1 *b + 1, sumweights + b, fact, jwork, rtable2);
+                        S_rcont2(&Lx, &Ly,
+                                 rsum + Lxp1 * b + 1,
+                                 csum + Lyp1 * b + 1,
+                                 sumweights + b, fact, jwork, rtable2);
             #endif
 
             for (int j1 = 1; j1 <= Lx; j1++) {
