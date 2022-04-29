@@ -1012,11 +1012,8 @@ level.
 #define USE_FC_LEN_T
 #include <R.h>
 #include <Rinternals.h>
-#include <Rmath.h>
-#include <Rdefines.h>
 #include <Rversion.h>            /* for R_VERSION */
 #include <R_ext/Lapack.h>        /* for dspev */
-#include <R_ext/stats_package.h> /* for S_rcont2 */
 #ifndef FCONE
 # define FCONE
 #endif
