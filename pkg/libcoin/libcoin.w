@@ -1014,9 +1014,9 @@ level.
 #include <Rinternals.h>
 #include <Rmath.h>
 #include <Rdefines.h>
+#include <Rversion.h>            /* for R_VERSION */
+#include <R_ext/Lapack.h>        /* for dspev */
 #include <R_ext/stats_package.h> /* for S_rcont2 */
-#include <Rversion.h>           // for R_VERSION
-#include <R_ext/Lapack.h> /* for dspev */
 #ifndef FCONE
 # define FCONE
 #endif
@@ -1691,8 +1691,7 @@ for (int p = 0; p < P; p++) ExpXtotal[p] = 0.0;
 ExpX = Calloc(P, double);
 /* Fix by Joanidis Kristoforos: P > INT_MAX is possible
    for maximally selected statistics (when X is an integer).
-   2018-12-13
-*/
+   2018-12-13 */
 if (C_get_varonly(ans)) {
     VarX = Calloc(P, double);
     CovX = Calloc(1, double);
@@ -2044,7 +2043,7 @@ Ly = NLEVELS(iy);
 @d Linear Statistic 2d
 @{
 if (Xfactor) {
-    for (int j = 1; j < Lyp1; j++) { /* j = 0 means NA */
+    for (int j = 1; j < Lyp1; j++) {     /* j = 0 means NA */
         for (int i = 1; i < Lxp1; i++) { /* i = 0 means NA */
             for (int q = 0; q < Q; q++)
                 linstat[q * (Lxp1 - 1) + (i - 1)] +=
@@ -2914,7 +2913,7 @@ double C_maxtype
 void C_standardise
 (
     const int PQ,
-    double *linstat,            /* in place standardisation */
+    double *linstat,      /* in place standardisation */
     const double *expect,
     const double *covar,
     const int varonly,
@@ -3075,12 +3074,12 @@ double C_maxtype_pvalue
     /* ans = 1 - p-value */
     if (lower) {
         if (give_log)
-            return(log(ans)); /* log(1 - p-value) */
-        return(ans); /* 1 - p-value */
+            return(log(ans));   /* log(1 - p-value) */
+        return(ans);            /* 1 - p-value */
     } else {
         if (give_log)
             return(log1p(ans)); /* log(p-value) */
-        return(1 - ans); /* p-value */
+        return(1 - ans);        /* p-value */
     }
 }
 @|C_maxtype_pvalue
@@ -6445,7 +6444,7 @@ SEXP R_unpack_sym
     SEXP ans, dimnames;
     double *dx, *dans;
 
-    // m = n * (n + 1)/2 <=> n^2 + n - 2 * m = 0
+    /* m = n * (n + 1)/2 <=> n^2 + n - 2 * m = 0 */
     n = sqrt(0.25 + 2 * XLENGTH(x)) - 0.5;
 
     dx = REAL(x);
@@ -6470,11 +6469,11 @@ SEXP R_unpack_sym
         }
         dans = REAL(ans);
         for (R_xlen_t i = 0; i < n; i++) {
-            dans[i * n + i] = dx[k];     // diagonal
+            dans[i * n + i] = dx[k];     /* diagonal */
             k++;
             for (R_xlen_t j = i + 1; j < n; j++) {
-                dans[i * n + j] = dx[k]; // lower triangular
-                dans[j * n + i] = dx[k]; // upper triangular
+                dans[i * n + j] = dx[k]; /* lower triangular */
+                dans[j * n + i] = dx[k]; /* upper triangular */
                 k++;
             }
         }
