@@ -3,7 +3,7 @@ qqplot <- function(x, y, plot.it = TRUE,
                    xlab = deparse1(substitute(x)),
                    ylab = deparse1(substitute(y)), ..., 
                    conf.level = NULL, exact = NULL, 
-                   simulate = FALSE, B = 2000)
+                   simulate = FALSE, B = 2000, col = NA)
 {
     sx <- sort(x)
     sy <- sort(y)
@@ -43,24 +43,25 @@ qqplot <- function(x, y, plot.it = TRUE,
     Rr[Rr > leny] <- NA
     lwr <- sy[Rl]
     upr <- sy[Rr]
+    ret <- list(x = sx, y = sy, lwr = lwr, upr = upr)
 
     if (plot.it) {
         plot(sx, sy, xlab = xlab, ylab = ylab, type = "n", ...)
+        x <- c(min(x) - diff(range(x)) / 2, sx, 
+               max(x) + diff(range(x)) / 2)
+        lwr <- c(min(sy) - diff(range(sy)) / 2, lwr, 
+                 max(sy) + diff(range(sy)) / 2)
+        upr <- c(min(sy) - diff(range(sy)) / 2, upr, 
+                 max(sy) + diff(range(sy)) / 2)
+        x <- c(x, rev(x))
+        y <- c(lwr, rev(upr))
+        x <- x[!is.na(y)]
+        y <- y[!is.na(y)]
+        xn <- c(x[1L], rep(x[-1L], each = 2))
+        yn <- c(rep(y[-length(y)], each = 2), y[length(y)])
+        polygon(x = xn, y = yn, col = col, ...)
         points(sx, sy, ...)
-        lines(sx, lwr, type = "S", col = "grey", ...)
-        lines(sx, upr, type = "S", col = "grey", ...)
     }	
 
-    return(invisible(list(x = sx, y = sy, lwr = lwr, upr = upr)))
+    return(invisible(ret))
 }
-
-x <- rnorm(50)
-y <- rnorm(50, sd = .95)
-ex <- TRUE
-ks <- ks.test(x, y, exact = ex)
-pval <- ks$p.value
-qqplot(x, y, conf.level = 1 - pval, exact = ex)
-abline(a = 0, b = 1)
-
-qsmirnov(1 - pval, sizes = c(length(x), length(y)), exact = ex)
-ks$stat
