@@ -133,7 +133,7 @@ urlcolor={linkcolor}%
 {\setlength{\parindent}{0cm}
 Copyright (C) 2017-2022 Torsten Hothorn \\
 
-This file is part of the \pkg{libcoin} R add-on package. \\
+This file is part of the \pkg{libcoin} \proglang{R} add-on package. \\
 
 \pkg{libcoin} is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -269,9 +269,9 @@ following the literate programming paradigm. The keynote lecture on literate
 programming by Donald E.~Knuth given at useR! 2016 in Stanford very much
 motivated this little experiment.
 
-\chapter{R Code}
+\chapter{\proglang{R} Code}
 
-\section{R User Interface}
+\section{\proglang{R} User Interface}
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap1}\raggedright\small
@@ -296,8 +296,8 @@ motivated this little experiment.
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
-The \pkg{libcoin} package implements two functions, \verb|LinStatExpCov| and
-\verb|doTest| for the computation of linear statistics, their expectation
+The \pkg{libcoin} package implements two \proglang{R} functions, \verb|LinStatExpCov()| and
+\verb|doTest()| for the computation of linear statistics, their expectation
 and covariance as well as for the computation of test statistics and
 $p$-values. There are two interfaces: One (labelled ``1d'') when the data is
 available as matrices \verb|X| and \verb|Y|, both with the same number of
@@ -732,7 +732,7 @@ where the former would record missing values in the first row / column.
 
 \subsection{Methods and Tests}
 
-Objects of class \verb|LinStatExpCov| returned by \verb|LinStatExpCov()|
+Objects of class \verb|"LinStatExpCov"| returned by \verb|LinStatExpCov()|
 contain the symmetric covariance matrix as a vector of the lower triangular
 elements. The \verb|vcov| method allows to extract the full covariance
 matrix from such an object.
@@ -886,8 +886,8 @@ doTest(ls1, teststat = "quadratic")
 Sometimes we are interested in contrasts of linear statistics and their
 corresponding properties. Examples include linear-by-linear association
 tests, where we assign numeric scores to each level of a factor. To
-implement this, we implement \verb|lmult| so that we can then left-multiply a
-matrix to an object of class \verb|LinStatExpCov|.
+implement this, we implement \verb|lmult()| so that we can then left-multiply a
+matrix to an object of class \verb|"LinStatExpCov"|.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap13}\raggedright\small
@@ -1077,7 +1077,7 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@  \item{standardise}{a logical asking to standardise the permuted statistics.}@\\
 \mbox{}\verb@  \item{tol}{tolerance for zero variances.}@\\
 \mbox{}\verb@  \item{x}{a contrast matrix to be left-multiplied in case \code{X} was a factor.}@\\
-\mbox{}\verb@  \item{object}{an object of class \code{LinStatExpCov}.}@\\
+\mbox{}\verb@  \item{object}{an object of class \code{"LinStatExpCov"}.}@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\details{@\\
 \mbox{}\verb@  The function, after minimal preprocessing, calls the underlying C code@\\
@@ -1120,7 +1120,7 @@ max(abs(t1[-1, -1] - t2))
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtIdentsUsed\nobreak\  \verb@block@\nobreak\ \NWlink{nuweb28b}{28b}\NWlink{nuweb28d}{d}, \verb@subset@\nobreak\ \NWlink{nuweb27b}{27b}\NWlink{nuweb27e}{e}\NWlink{nuweb28a}{, 28a}, \verb@weights@\nobreak\ \NWlink{nuweb26c}{26c}, \verb@x@\nobreak\ \NWlink{nuweb24d}{24d}\NWlink{nuweb25b}{, 25b}\NWlink{nuweb25c}{c}, \verb@y@\nobreak\ \NWlink{nuweb25d}{25d}\NWlink{nuweb26a}{, 26a}\NWlink{nuweb26b}{b}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@block@\nobreak\ \NWlink{nuweb28b}{28b}\NWlink{nuweb28d}{d}, \verb@subset@\nobreak\ \NWlink{nuweb27b}{27b}\NWlink{nuweb27e}{e}\NWlink{nuweb28a}{, 28a}, \verb@weights@\nobreak\ \NWlink{nuweb26c}{26c}, \verb@x@\nobreak\ \NWlink{nuweb24d}{24d}\NWlink{nuweb25b}{, 25b}\NWlink{nuweb25c}{c}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1225,7 +1225,7 @@ max(abs(t1[-1, -1] - t2))
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
-\chapter{C Code}
+\chapter{\proglang{C} Code}
 
 The main motivation to implement the \pkg{libcoin} package comes from the
 demand to compute high-dimensional linear statistics (with large $P$ and
@@ -1269,13 +1269,12 @@ level.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
+\mbox{}\verb@#define STRICT_R_HEADERS@\\
 \mbox{}\verb@#define USE_FC_LEN_T@\\
+\mbox{}\verb@#include <float.h>        /* for DBL_MIN */@\\
 \mbox{}\verb@#include <R.h>@\\
 \mbox{}\verb@#include <Rinternals.h>@\\
-\mbox{}\verb@#include <Rmath.h>@\\
-\mbox{}\verb@#include <Rdefines.h>@\\
-\mbox{}\verb@#include <R_ext/stats_package.h> /* for S_rcont2 */@\\
-\mbox{}\verb@#include <Rversion.h>           // for R_VERSION@\\
+\mbox{}\verb@#include <Rversion.h>     /* for R_VERSION */@\\
 \mbox{}\verb@#include <R_ext/Lapack.h> /* for dspev */@\\
 \mbox{}\verb@#ifndef FCONE@\\
 \mbox{}\verb@# define FCONE@\\
@@ -1626,7 +1625,7 @@ The influence functions are also either a $N \times Q$ real matrix
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb31b}{31b}\NWlink{nuweb42c}{, 42c}\NWlink{nuweb50a}{, 50a}\NWlink{nuweb85a}{, 85a}\NWlink{nuweb85c}{c}\NWlink{nuweb86b}{, 86b}\NWlink{nuweb87b}{, 87b}\NWlink{nuweb99}{, 99}\NWlink{nuweb109a}{, 109a}\NWlink{nuweb122a}{, 122a}\NWlink{nuweb127a}{, 127a}\NWlink{nuweb132a}{, 132a}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb18}{, 18}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb26a}{, 26a}\NWlink{nuweb26b}{b}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb81d}{, 81d}\NWlink{nuweb85b}{, 85b}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88a}{, 88a}\NWlink{nuweb100a}{, 100a}\NWlink{nuweb102}{, 102}\NWlink{nuweb103a}{, 103a}\NWlink{nuweb105}{, 105}\NWlink{nuweb108}{, 108}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110a}{, 110a}\NWlink{nuweb111b}{, 111b}\NWlink{nuweb112b}{, 112b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb123b}{, 123b}\NWlink{nuweb126}{, 126}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb128b}{, 128b}\NWlink{nuweb131a}{, 131a}\NWlink{nuweb132b}{, 132b}\NWlink{nuweb143}{, 143}\NWlink{nuweb144}{, 144}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb26a}{, 26a}\NWlink{nuweb26b}{b}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb81d}{, 81d}\NWlink{nuweb85b}{, 85b}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88a}{, 88a}\NWlink{nuweb100a}{, 100a}\NWlink{nuweb102}{, 102}\NWlink{nuweb103a}{, 103a}\NWlink{nuweb105}{, 105}\NWlink{nuweb108}{, 108}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110a}{, 110a}\NWlink{nuweb111b}{, 111b}\NWlink{nuweb112b}{, 112b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb123b}{, 123b}\NWlink{nuweb126}{, 126}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb128b}{, 128b}\NWlink{nuweb131a}{, 131a}\NWlink{nuweb132b}{, 132b}\NWlink{nuweb143}{, 143}\NWlink{nuweb144}{, 144}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1663,7 +1662,7 @@ The influence functions are also either a $N \times Q$ real matrix
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb81c}{81c}\NWlink{nuweb101b}{, 101b}\NWlink{nuweb101c}{c}\NWlink{nuweb106a}{, 106a}\NWlink{nuweb109c}{, 109c}\NWlink{nuweb110b}{, 110b}\NWlink{nuweb111a}{, 111a}\NWlink{nuweb111c}{c}\NWlink{nuweb112a}{, 112a}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb18}{, 18}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb25d}{, 25d}\NWlink{nuweb26b}{, 26b}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb81d}{, 81d}\NWlink{nuweb85b}{, 85b}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88a}{, 88a}\NWlink{nuweb100a}{, 100a}\NWlink{nuweb102}{, 102}\NWlink{nuweb103a}{, 103a}\NWlink{nuweb105}{, 105}\NWlink{nuweb108}{, 108}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110a}{, 110a}\NWlink{nuweb111b}{, 111b}\NWlink{nuweb112b}{, 112b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb123b}{, 123b}\NWlink{nuweb126}{, 126}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb128b}{, 128b}\NWlink{nuweb131a}{, 131a}\NWlink{nuweb132b}{, 132b}\NWlink{nuweb143}{, 143}\NWlink{nuweb144}{, 144}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb25d}{, 25d}\NWlink{nuweb26b}{, 26b}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb81d}{, 81d}\NWlink{nuweb85b}{, 85b}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88a}{, 88a}\NWlink{nuweb100a}{, 100a}\NWlink{nuweb102}{, 102}\NWlink{nuweb103a}{, 103a}\NWlink{nuweb105}{, 105}\NWlink{nuweb108}{, 108}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110a}{, 110a}\NWlink{nuweb111b}{, 111b}\NWlink{nuweb112b}{, 112b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb123b}{, 123b}\NWlink{nuweb126}{, 126}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb128b}{, 128b}\NWlink{nuweb131a}{, 131a}\NWlink{nuweb132b}{, 132b}\NWlink{nuweb143}{, 143}\NWlink{nuweb144}{, 144}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -1684,7 +1683,7 @@ or a factor at $Q$ levels
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb123c}{123c}\NWlink{nuweb128c}{, 128c}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb18}{, 18}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb25d}{, 25d}\NWlink{nuweb26a}{, 26a}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb81d}{, 81d}\NWlink{nuweb85b}{, 85b}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88a}{, 88a}\NWlink{nuweb100a}{, 100a}\NWlink{nuweb102}{, 102}\NWlink{nuweb103a}{, 103a}\NWlink{nuweb105}{, 105}\NWlink{nuweb108}{, 108}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110a}{, 110a}\NWlink{nuweb111b}{, 111b}\NWlink{nuweb112b}{, 112b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb123b}{, 123b}\NWlink{nuweb126}{, 126}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb128b}{, 128b}\NWlink{nuweb131a}{, 131a}\NWlink{nuweb132b}{, 132b}\NWlink{nuweb143}{, 143}\NWlink{nuweb144}{, 144}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@y@\nobreak\ \NWlink{nuweb14}{14}\NWlink{nuweb22a}{, 22a}\NWlink{nuweb25d}{, 25d}\NWlink{nuweb26a}{, 26a}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb81d}{, 81d}\NWlink{nuweb85b}{, 85b}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88a}{, 88a}\NWlink{nuweb100a}{, 100a}\NWlink{nuweb102}{, 102}\NWlink{nuweb103a}{, 103a}\NWlink{nuweb105}{, 105}\NWlink{nuweb108}{, 108}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110a}{, 110a}\NWlink{nuweb111b}{, 111b}\NWlink{nuweb112b}{, 112b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb123b}{, 123b}\NWlink{nuweb126}{, 126}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb128b}{, 128b}\NWlink{nuweb131a}{, 131a}\NWlink{nuweb132b}{, 132b}\NWlink{nuweb143}{, 143}\NWlink{nuweb144}{, 144}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -2104,13 +2103,13 @@ These functions allocate memory handled by \proglang{R}.
 Functions starting with \verb|RC_| are \proglang{C} functions with
 \verb|SEXP| or pointer arguments and possibly an \verb|SEXP| return value.
 
-Functions starting with \verb|C_| only take pointer arguments and return a
-scalar nor nothing.
+Functions starting with \verb|C_| are \proglang{C} functions with pointer
+arguments only and return a scalar or nothing.
 
 Return values (arguments modified by a function) are named \verb|ans|,
 sometimes with dimension (for example: \verb|PQ_ans|).
 
-\section{C User Interface}
+\section{\proglang{C} User Interface}
 
 \subsection{One-Dimensional Case (``1d'')}
 
@@ -2287,10 +2286,10 @@ The core function first computes the linear statistic (as there is no need
 to pay attention to blocks) and, in a second step, starts a loop over
 potential blocks.
 
-FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not handled
-        correctly (as \verb|sumweights| doesnt't take this information into
-        account; use subset to exclude these missings (as done in
-        libcoin::LinStatExpCov)
+FIXME:  \verb|x| being an integer (\verb|Xfactor|) with some 0 elements is not handled
+        correctly (as \verb|sumweights| doesn't take this information into
+        account; use \verb|subset| to exclude these missings (as done in
+        \verb|LinStatExpCov()|)
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
@@ -2345,7 +2344,7 @@ FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not handled
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Compute Variance from Covariance}\nobreak\ {\footnotesize \NWlink{nuweb38b}{38b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    Free(ExpX); Free(VarX); Free(CovX);@\\
+\mbox{}\verb@    R_Free(ExpX); R_Free(VarX); R_Free(CovX);@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -2420,17 +2419,16 @@ subset.
 \mbox{}\verb@CovInf = C_get_CovarianceInfluence(ans);@\\
 \mbox{}\verb@ExpXtotal = C_get_ExpectationX(ans);@\\
 \mbox{}\verb@for (int p = 0; p < P; p++) ExpXtotal[p] = 0.0;@\\
-\mbox{}\verb@ExpX = Calloc(P, double);@\\
+\mbox{}\verb@ExpX = R_Calloc(P, double);@\\
 \mbox{}\verb@/* Fix by Joanidis Kristoforos: P > INT_MAX is possible@\\
 \mbox{}\verb@   for maximally selected statistics (when X is an integer).@\\
-\mbox{}\verb@   2018-12-13@\\
-\mbox{}\verb@*/@\\
+\mbox{}\verb@   2018-12-13 */@\\
 \mbox{}\verb@if (C_get_varonly(ans)) {@\\
-\mbox{}\verb@    VarX = Calloc(P, double);@\\
-\mbox{}\verb@    CovX = Calloc(1, double);@\\
+\mbox{}\verb@    VarX = R_Calloc(P, double);@\\
+\mbox{}\verb@    CovX = R_Calloc(1, double);@\\
 \mbox{}\verb@} else {@\\
-\mbox{}\verb@    VarX = Calloc(1, double);@\\
-\mbox{}\verb@    CovX = Calloc(PP12(P), double);@\\
+\mbox{}\verb@    VarX = R_Calloc(1, double);@\\
+\mbox{}\verb@    CovX = R_Calloc(PP12(P), double);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@table = C_get_TableBlock(ans);@\\
 \mbox{}\verb@sumweights = C_get_Sumweights(ans);@\\
@@ -3034,7 +3032,7 @@ and returns the matrix of standardised linear statistics.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@if (Xfactor) {@\\
-\mbox{}\verb@    for (int j = 1; j < Lyp1; j++) { /* j = 0 means NA */@\\
+\mbox{}\verb@    for (int j = 1; j < Lyp1; j++) {     /* j = 0 means NA */@\\
 \mbox{}\verb@        for (int i = 1; i < Lxp1; i++) { /* i = 0 means NA */@\\
 \mbox{}\verb@            for (int q = 0; q < Q; q++)@\\
 \mbox{}\verb@                linstat[q * (Lxp1 - 1) + (i - 1)] +=@\\
@@ -3232,8 +3230,8 @@ and returns the matrix of standardised linear statistics.
 \mbox{}\verb@            C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, mPQB(P, Q, 1))];@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    Free(CovX);@\\
-\mbox{}\verb@    Free(table2d);@\\
+\mbox{}\verb@    R_Free(CovX);@\\
+\mbox{}\verb@    R_Free(table2d);@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -3272,12 +3270,12 @@ and returns the matrix of standardised linear statistics.
 \mbox{}\verb@Xfactor = C_get_Xfactor(ans);@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (C_get_varonly(ans)) {@\\
-\mbox{}\verb@    CovX = Calloc(P, double);@\\
+\mbox{}\verb@    CovX = R_Calloc(P, double);@\\
 \mbox{}\verb@} else {@\\
-\mbox{}\verb@    CovX = Calloc(PP12(P), double);@\\
+\mbox{}\verb@    CovX = R_Calloc(PP12(P), double);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@table2d = Calloc(Lxp1 * Lyp1, double);@\\
+\mbox{}\verb@table2d = R_Calloc(Lxp1 * Lyp1, double);@\\
 \mbox{}\verb@PROTECT(Rcsum = allocVector(REALSXP, Lyp1));@\\
 \mbox{}\verb@csum = REAL(Rcsum);@\\
 \mbox{}\verb@PROTECT(Rrsum = allocVector(REALSXP, Lxp1));@\\
@@ -3402,8 +3400,8 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \mbox{}\verb@@\\
 \mbox{}\verb@    PutRNGstate();@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    Free(csum); Free(rsum); Free(sumweights); Free(rtable2);@\\
-\mbox{}\verb@    Free(jwork); Free(fact); Free(table);@\\
+\mbox{}\verb@    R_Free(csum); R_Free(rsum); R_Free(sumweights); R_Free(rtable2);@\\
+\mbox{}\verb@    R_Free(jwork); R_Free(fact); R_Free(table);@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
 \mbox{}\verb@    return(ans);@\\
 \mbox{}\verb@}@\\
@@ -3447,12 +3445,12 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@csum = Calloc(Lyp1 * B, int);@\\
-\mbox{}\verb@rsum = Calloc(Lxp1 * B, int);@\\
-\mbox{}\verb@sumweights = Calloc(B, int);@\\
-\mbox{}\verb@table = Calloc(Lxp1 * Lyp1, int);@\\
-\mbox{}\verb@rtable2 = Calloc(Lx * Ly , int);@\\
-\mbox{}\verb@jwork = Calloc(Lyp1, int);@\\
+\mbox{}\verb@csum = R_Calloc(Lyp1 * B, int);@\\
+\mbox{}\verb@rsum = R_Calloc(Lxp1 * B, int);@\\
+\mbox{}\verb@sumweights = R_Calloc(B, int);@\\
+\mbox{}\verb@table = R_Calloc(Lxp1 * Lyp1, int);@\\
+\mbox{}\verb@rtable2 = R_Calloc(Lx * Ly , int);@\\
+\mbox{}\verb@jwork = R_Calloc(Lyp1, int);@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -3470,7 +3468,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@fact = Calloc(maxn + 1, double);@\\
+\mbox{}\verb@fact = R_Calloc(maxn + 1, double);@\\
 \mbox{}\verb@/* Calculate log-factorials.  fact[i] = lgamma(i+1) */@\\
 \mbox{}\verb@fact[0] = fact[1] = 0.;@\\
 \mbox{}\verb@for (int j = 2; j <= maxn; j++)@\\
@@ -3632,7 +3630,7 @@ Note: the interface to \verb|S_rcont2| changed in \textsf{R}-4.1.0.
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup Test Memory}\nobreak\ {\footnotesize \NWlink{nuweb56a}{56a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    MPinv = Calloc(PP12(PQ), double); /* was: C_get_MPinv(LECV); */@\\
+\mbox{}\verb@    MPinv = R_Calloc(PP12(PQ), double); /* was: C_get_MPinv(LECV); */@\\
 \mbox{}\verb@    C_MPinv_sym(C_get_Covariance(LECV), PQ, C_get_tol(LECV), MPinv, &rank);@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    REAL(stat)[0] = C_quadform(PQ, C_get_LinearStatistic(LECV),@\\
@@ -3640,7 +3638,7 @@ Note: the interface to \verb|S_rcont2| changed in \textsf{R}-4.1.0.
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!PVALUE) {@\\
 \mbox{}\verb@        UNPROTECT(2);@\\
-\mbox{}\verb@        Free(MPinv);@\\
+\mbox{}\verb@        R_Free(MPinv);@\\
 \mbox{}\verb@        return(ans);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
@@ -3662,7 +3660,7 @@ Note: the interface to \verb|S_rcont2| changed in \textsf{R}-4.1.0.
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    UNPROTECT(2);@\\
-\mbox{}\verb@    Free(MPinv);@\\
+\mbox{}\verb@    R_Free(MPinv);@\\
 \mbox{}\verb@    return(ans);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -4346,7 +4344,7 @@ stopifnot(isequal(qf1, qf2))
 \mbox{}\verb@void C_standardise@\\
 \mbox{}\verb@(@\\
 \mbox{}\verb@    const int PQ,@\\
-\mbox{}\verb@    double *linstat,            /* in place standardisation */@\\
+\mbox{}\verb@    double *linstat,      /* in place standardisation */@\\
 \mbox{}\verb@    const double *expect,@\\
 \mbox{}\verb@    const double *covar,@\\
 \mbox{}\verb@    const int varonly,@\\
@@ -4563,18 +4561,18 @@ stopifnot(isequal(qf1, qf2))
 \mbox{}\verb@        default: warning("cmvnorm: unknown problem in MVTDST");@\\
 \mbox{}\verb@                ans = 0.0;@\\
 \mbox{}\verb@    }@\\
-\mbox{}\verb@    Free(corr); Free(sd); Free(lowerbnd); Free(upperbnd);@\\
-\mbox{}\verb@    Free(infin); Free(delta); Free(index);@\\
+\mbox{}\verb@    R_Free(corr); R_Free(sd); R_Free(lowerbnd); R_Free(upperbnd);@\\
+\mbox{}\verb@    R_Free(infin); R_Free(delta); R_Free(index);@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    /* ans = 1 - p-value */@\\
 \mbox{}\verb@    if (lower) {@\\
 \mbox{}\verb@        if (give_log)@\\
-\mbox{}\verb@            return(log(ans)); /* log(1 - p-value) */@\\
-\mbox{}\verb@        return(ans); /* 1 - p-value */@\\
+\mbox{}\verb@            return(log(ans));   /* log(1 - p-value) */@\\
+\mbox{}\verb@        return(ans);            /* 1 - p-value */@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (give_log)@\\
 \mbox{}\verb@            return(log1p(ans)); /* log(p-value) */@\\
-\mbox{}\verb@        return(1 - ans); /* p-value */@\\
+\mbox{}\verb@        return(1 - ans);        /* p-value */@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -4595,16 +4593,16 @@ stopifnot(isequal(qf1, qf2))
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@if (n == 2)@\\
-\mbox{}\verb@    corr = Calloc(1, double);@\\
+\mbox{}\verb@    corr = R_Calloc(1, double);@\\
 \mbox{}\verb@else@\\
-\mbox{}\verb@    corr = Calloc(n + ((n - 2) * (n - 1))/2, double);@\\
+\mbox{}\verb@    corr = R_Calloc(n + ((n - 2) * (n - 1))/2, double);@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@sd = Calloc(n, double);@\\
-\mbox{}\verb@lowerbnd = Calloc(n, double);@\\
-\mbox{}\verb@upperbnd = Calloc(n, double);@\\
-\mbox{}\verb@infin = Calloc(n, int);@\\
-\mbox{}\verb@delta = Calloc(n, double);@\\
-\mbox{}\verb@index = Calloc(n, int);@\\
+\mbox{}\verb@sd = R_Calloc(n, double);@\\
+\mbox{}\verb@lowerbnd = R_Calloc(n, double);@\\
+\mbox{}\verb@upperbnd = R_Calloc(n, double);@\\
+\mbox{}\verb@infin = R_Calloc(n, int);@\\
+\mbox{}\verb@delta = R_Calloc(n, double);@\\
+\mbox{}\verb@index = R_Calloc(n, int);@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@/* determine elements with non-zero variance */@\\
 \mbox{}\verb@@\\
@@ -4758,9 +4756,9 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Compute maxstat Permutation P-Value}\nobreak\ {\footnotesize \NWlink{nuweb77}{77}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    Free(mlinstat); Free(mexpect); Free(mblinstat);@\\
-\mbox{}\verb@    Free(mvar); Free(mcovar); Free(mMPinv);@\\
-\mbox{}\verb@    if (nresample == 0) Free(blinstat);@\\
+\mbox{}\verb@    R_Free(mlinstat); R_Free(mexpect); R_Free(mblinstat);@\\
+\mbox{}\verb@    R_Free(mvar); R_Free(mcovar); R_Free(mMPinv);@\\
+\mbox{}\verb@    if (nresample == 0) R_Free(blinstat);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -4825,24 +4823,24 @@ covariance matrix to be passed as argument \verb|CORREL|
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@mlinstat = Calloc(Q, double);@\\
-\mbox{}\verb@mexpect = Calloc(Q, double);@\\
+\mbox{}\verb@mlinstat = R_Calloc(Q, double);@\\
+\mbox{}\verb@mexpect = R_Calloc(Q, double);@\\
 \mbox{}\verb@if (teststat == TESTSTAT_maximum) {@\\
-\mbox{}\verb@   mvar = Calloc(Q, double);@\\
+\mbox{}\verb@   mvar = R_Calloc(Q, double);@\\
 \mbox{}\verb@   /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */@\\
-\mbox{}\verb@   mcovar = Calloc(1, double);@\\
-\mbox{}\verb@   mMPinv = Calloc(1, double);@\\
+\mbox{}\verb@   mcovar = R_Calloc(1, double);@\\
+\mbox{}\verb@   mMPinv = R_Calloc(1, double);@\\
 \mbox{}\verb@} else {@\\
-\mbox{}\verb@   mcovar = Calloc(Q * (Q + 1) / 2, double);@\\
-\mbox{}\verb@   mMPinv = Calloc(Q * (Q + 1) / 2, double);@\\
+\mbox{}\verb@   mcovar = R_Calloc(Q * (Q + 1) / 2, double);@\\
+\mbox{}\verb@   mMPinv = R_Calloc(Q * (Q + 1) / 2, double);@\\
 \mbox{}\verb@   /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */@\\
-\mbox{}\verb@   mvar = Calloc(1, double);@\\
+\mbox{}\verb@   mvar = R_Calloc(1, double);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@if (nresample > 0) {@\\
-\mbox{}\verb@    mblinstat = Calloc(Q * nresample, double);@\\
+\mbox{}\verb@    mblinstat = R_Calloc(Q * nresample, double);@\\
 \mbox{}\verb@} else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */@\\
-\mbox{}\verb@    mblinstat = Calloc(1, double);@\\
-\mbox{}\verb@    blinstat = Calloc(1, double);@\\
+\mbox{}\verb@    mblinstat = R_Calloc(1, double);@\\
+\mbox{}\verb@    blinstat = R_Calloc(1, double);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@maxstat[0] = 0.0;@\\
@@ -4994,7 +4992,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup maxstat Variables}\nobreak\ {\footnotesize \NWlink{nuweb74}{74}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Setup maxstat Memory}\nobreak\ {\footnotesize \NWlink{nuweb75}{75}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    mtmp = Calloc(P, double);@\\
+\mbox{}\verb@    mtmp = R_Calloc(P, double);@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    for (int p = 0; p < P; p++) wmax[p] = NA_INTEGER;@\\
 \mbox{}\verb@@\\
@@ -5035,9 +5033,9 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Compute maxstat Permutation P-Value}\nobreak\ {\footnotesize \NWlink{nuweb77}{77}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    Free(mlinstat); Free(mexpect); Free(levels); Free(contrast); Free(indl); Free(mtmp);@\\
-\mbox{}\verb@    Free(mblinstat); Free(mvar); Free(mcovar); Free(mMPinv);@\\
-\mbox{}\verb@    if (nresample == 0) Free(blinstat);@\\
+\mbox{}\verb@    R_Free(mlinstat); R_Free(mexpect); R_Free(levels); R_Free(contrast); R_Free(indl); R_Free(mtmp);@\\
+\mbox{}\verb@    R_Free(mblinstat); R_Free(mvar); R_Free(mcovar); R_Free(mMPinv);@\\
+\mbox{}\verb@    if (nresample == 0) R_Free(blinstat);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -5056,12 +5054,12 @@ covariance matrix to be passed as argument \verb|CORREL|
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@contrast = Calloc(P, int);@\\
+\mbox{}\verb@contrast = R_Calloc(P, int);@\\
 \mbox{}\verb@Pnonzero = 0;@\\
 \mbox{}\verb@for (int p = 0; p < P; p++) {@\\
 \mbox{}\verb@    if (ExpX[p] > 0) Pnonzero++;@\\
 \mbox{}\verb@}@\\
-\mbox{}\verb@levels = Calloc(Pnonzero, int);@\\
+\mbox{}\verb@levels = R_Calloc(Pnonzero, int);@\\
 \mbox{}\verb@nc = 0;@\\
 \mbox{}\verb@for (int p = 0; p < P; p++) {@\\
 \mbox{}\verb@    if (ExpX[p] > 0) {@\\
@@ -5075,7 +5073,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@@\\
 \mbox{}\verb@int mi = 1;@\\
 \mbox{}\verb@for (int l = 1; l < Pnonzero; l++) mi *= 2;@\\
-\mbox{}\verb@indl = Calloc(Pnonzero, int);@\\
+\mbox{}\verb@indl = R_Calloc(Pnonzero, int);@\\
 \mbox{}\verb@for (int p = 0; p < Pnonzero; p++) indl[p] = 0;@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -5387,14 +5385,14 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@            PQPQ_sym_ans[0] = tmp;@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        PP_sym_tmp = Calloc(PP12(P), double);@\\
+\mbox{}\verb@        PP_sym_tmp = R_Calloc(PP12(P), double);@\\
 \mbox{}\verb@        C_KronSums_sym_(ExpX, 1, P,@\\
 \mbox{}\verb@                        PP_sym_tmp);@\\
 \mbox{}\verb@        for (int p = 0; p < PP12(P); p++)@\\
 \mbox{}\verb@            PP_sym_tmp[p] = f1 * CovX[p] - f2 * PP_sym_tmp[p];@\\
 \mbox{}\verb@        C_kronecker_sym(CovInf, Q, PP_sym_tmp, P, 1 - (add >= 1),@\\
 \mbox{}\verb@                        PQPQ_sym_ans);@\\
-\mbox{}\verb@        Free(PP_sym_tmp);@\\
+\mbox{}\verb@        R_Free(PP_sym_tmp);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -5431,14 +5429,14 @@ covariance matrix to be passed as argument \verb|CORREL|
 \mbox{}\verb@                                    PQ_ans);@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        double *P_tmp;@\\
-\mbox{}\verb@        P_tmp = Calloc(P, double);@\\
+\mbox{}\verb@        P_tmp = R_Calloc(P, double);@\\
 \mbox{}\verb@        double f1 = sumweights / (sumweights - 1);@\\
 \mbox{}\verb@        double f2 = 1.0 / (sumweights - 1);@\\
 \mbox{}\verb@        for (int p = 0; p < P; p++)@\\
 \mbox{}\verb@            P_tmp[p] = f1 * VarX[p] - f2 * ExpX[p] * ExpX[p];@\\
 \mbox{}\verb@        C_kronecker(VarInf, 1, Q, P_tmp, 1, P, 1 - (add >= 1),@\\
 \mbox{}\verb@                    PQ_ans);@\\
-\mbox{}\verb@        Free(P_tmp);@\\
+\mbox{}\verb@        R_Free(P_tmp);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -5837,10 +5835,10 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \mbox{}\verb@    double center;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (TYPEOF(x) == INTSXP) {@\\
-\mbox{}\verb@        double* Pp1tmp = Calloc(P + 1, double);@\\
+\mbox{}\verb@        double* Pp1tmp = R_Calloc(P + 1, double);@\\
 \mbox{}\verb@        RC_OneTableSums(INTEGER(x), N, P + 1, weights, subset, offset, Nsubset, Pp1tmp);@\\
 \mbox{}\verb@        for (int p = 0; p < P; p++) P_ans[p] = Pp1tmp[p + 1];@\\
-\mbox{}\verb@        Free(Pp1tmp);@\\
+\mbox{}\verb@        R_Free(Pp1tmp);@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        RC_colSums(REAL(x), N, P, Power1, &center, !DoCenter, weights, subset, offset, Nsubset, P_ans);@\\
 \mbox{}\verb@    }@\\
@@ -9024,7 +9022,7 @@ stopifnot(isequal(ns1, ns2))
 \mbox{}\verb@    double *cumtable;@\\
 \mbox{}\verb@    int Nlevels = LENGTH(blockTable);@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    cumtable = Calloc(Nlevels, double);@\\
+\mbox{}\verb@    cumtable = R_Calloc(Nlevels, double);@\\
 \mbox{}\verb@    for (int k = 0; k < Nlevels; k++) cumtable[k] = 0.0;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    /* table[0] are missings, ie block == 0 ! */@\\
@@ -9040,7 +9038,7 @@ stopifnot(isequal(ns1, ns2))
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    Free(cumtable);@\\
+\mbox{}\verb@    R_Free(cumtable);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -9069,7 +9067,7 @@ stopifnot(isequal(ns1, ns2))
 \mbox{}\verb@    double *cumtable;@\\
 \mbox{}\verb@    int Nlevels = LENGTH(blockTable);@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    cumtable = Calloc(Nlevels, double);@\\
+\mbox{}\verb@    cumtable = R_Calloc(Nlevels, double);@\\
 \mbox{}\verb@    for (int k = 0; k < Nlevels; k++) cumtable[k] = 0.0;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    /* table[0] are missings, ie block == 0 ! */@\\
@@ -9085,7 +9083,7 @@ stopifnot(isequal(ns1, ns2))
 \mbox{}\verb@            REAL(ans)[(R_xlen_t) cumtable[INTEGER(block)[(R_xlen_t) REAL(subset)[i] - 1]]++] = REAL(subset)[i];@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    Free(cumtable);@\\
+\mbox{}\verb@    R_Free(cumtable);@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -9860,11 +9858,11 @@ stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) &&
 \mbox{}\verb@            rank[0] = 0;@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        rx = Calloc(n * (n + 1) / 2, double);@\\
+\mbox{}\verb@        rx = R_Calloc(n * (n + 1) / 2, double);@\\
 \mbox{}\verb@        Memcpy(rx, x, n * (n + 1) / 2);@\\
-\mbox{}\verb@        work = Calloc(3 * n, double);@\\
-\mbox{}\verb@        val = Calloc(n, double);@\\
-\mbox{}\verb@        vec = Calloc(n * n, double);@\\
+\mbox{}\verb@        work = R_Calloc(3 * n, double);@\\
+\mbox{}\verb@        val = R_Calloc(n, double);@\\
+\mbox{}\verb@        vec = R_Calloc(n * n, double);@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@        F77_CALL(dspev)("V", "L", &n, rx, val, vec, &n, work,@\\
 \mbox{}\verb@                        &info FCONE FCONE);@\\
@@ -9887,7 +9885,7 @@ stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) &&
 \mbox{}\verb@                }@\\
 \mbox{}\verb@            }@\\
 \mbox{}\verb@        }@\\
-\mbox{}\verb@        Free(rx); Free(work); Free(val); Free(vec);@\\
+\mbox{}\verb@        R_Free(rx); R_Free(work); R_Free(val); R_Free(vec);@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -9975,7 +9973,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@    SEXP ans, dimnames;@\\
 \mbox{}\verb@    double *dx, *dans;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    // m = n * (n + 1)/2 <=> n^2 + n - 2 * m = 0@\\
+\mbox{}\verb@    /* m = n * (n + 1)/2 <=> n^2 + n - 2 * m = 0 */@\\
 \mbox{}\verb@    n = sqrt(0.25 + 2 * XLENGTH(x)) - 0.5;@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    dx = REAL(x);@\\
@@ -10000,11 +9998,11 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 \mbox{}\verb@        }@\\
 \mbox{}\verb@        dans = REAL(ans);@\\
 \mbox{}\verb@        for (R_xlen_t i = 0; i < n; i++) {@\\
-\mbox{}\verb@            dans[i * n + i] = dx[k];     // diagonal@\\
+\mbox{}\verb@            dans[i * n + i] = dx[k];     /* diagonal */@\\
 \mbox{}\verb@            k++;@\\
 \mbox{}\verb@            for (R_xlen_t j = i + 1; j < n; j++) {@\\
-\mbox{}\verb@                dans[i * n + j] = dx[k]; // lower triangular@\\
-\mbox{}\verb@                dans[j * n + i] = dx[k]; // upper triangular@\\
+\mbox{}\verb@                dans[i * n + j] = dx[k]; /* lower triangular */@\\
+\mbox{}\verb@                dans[j * n + i] = dx[k]; /* upper triangular */@\\
 \mbox{}\verb@                k++;@\\
 \mbox{}\verb@            }@\\
 \mbox{}\verb@        }@\\
@@ -11822,7 +11820,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \item \verb@weights,@: \NWlink{nuweb4}{4}\NWlink{nuweb6}{, 6}\NWlink{nuweb8}{, 8}\NWlink{nuweb16}{, 16}\NWlink{nuweb20}{, 20}, \underline{\NWlink{nuweb26d}{26d}}, \underline{\NWlink{nuweb26e}{26e}}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb36b}{, 36b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb37c}{c}\NWlink{nuweb38a}{, 38a}\NWlink{nuweb38d}{d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb81d}{, 81d}\NWlink{nuweb85b}{, 85b}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88a}{, 88a}\NWlink{nuweb89a}{, 89a}\NWlink{nuweb90}{, 90}\NWlink{nuweb92a}{, 92a}\NWlink{nuweb93a}{, 93a}\NWlink{nuweb95b}{, 95b}\NWlink{nuweb100a}{, 100a}\NWlink{nuweb113b}{, 113b}\NWlink{nuweb118a}{, 118a}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb132b}{, 132b}\NWlink{nuweb136a}{, 136a}.
 \item \verb@x@: \NWlink{nuweb8}{8}\NWlink{nuweb14}{, 14}\NWlink{nuweb18}{, 18}\NWlink{nuweb22a}{, 22a}, \underline{\NWlink{nuweb24d}{24d}}, \underline{\NWlink{nuweb25b}{25b}}, \underline{\NWlink{nuweb25c}{25c}}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35a}{, 35a}\NWlink{nuweb35b}{b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37c}{c}\NWlink{nuweb38a}{, 38a}\NWlink{nuweb38d}{d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb51}{, 51}\NWlink{nuweb81d}{, 81d}\NWlink{nuweb89a}{, 89a}\NWlink{nuweb90}{, 90}\NWlink{nuweb92a}{, 92a}\NWlink{nuweb93a}{, 93a}\NWlink{nuweb100a}{, 100a}\NWlink{nuweb101a}{, 101a}\NWlink{nuweb102}{, 102}\NWlink{nuweb103a}{, 103a}\NWlink{nuweb105}{, 105}\NWlink{nuweb108}{, 108}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110a}{, 110a}\NWlink{nuweb111b}{, 111b}\NWlink{nuweb112b}{, 112b}\NWlink{nuweb113b}{, 113b}\NWlink{nuweb114a}{, 114a}\NWlink{nuweb116b}{, 116b}\NWlink{nuweb118a}{, 118a}\NWlink{nuweb119a}{, 119a}\NWlink{nuweb121b}{, 121b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb123b}{, 123b}\NWlink{nuweb126}{, 126}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb128b}{, 128b}\NWlink{nuweb131a}{, 131a}\NWlink{nuweb139b}{, 139b}\NWlink{nuweb139c}{c}\NWlink{nuweb140a}{, 140a}\NWlink{nuweb145a}{, 145a}\NWlink{nuweb145b}{b}\NWlink{nuweb146a}{, 146a}\NWlink{nuweb146b}{b}\NWlink{nuweb147}{, 147}\NWlink{nuweb148a}{, 148a}\NWlink{nuweb148b}{b}\NWlink{nuweb149}{, 149}\NWlink{nuweb150a}{, 150a}\NWlink{nuweb150b}{b}\NWlink{nuweb150c}{c}.
 \item \verb@Xfactor_SLOT@: \underline{\NWlink{nuweb22b}{22b}}\NWlink{nuweb152c}{, 152c}\NWlink{nuweb158b}{, 158b}\NWlink{nuweb159}{, 159}.
-\item \verb@y@: \NWlink{nuweb14}{14}\NWlink{nuweb18}{, 18}\NWlink{nuweb22a}{, 22a}, \underline{\NWlink{nuweb25d}{25d}}, \underline{\NWlink{nuweb26a}{26a}}, \underline{\NWlink{nuweb26b}{26b}}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb81d}{, 81d}\NWlink{nuweb85b}{, 85b}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88a}{, 88a}\NWlink{nuweb100a}{, 100a}\NWlink{nuweb102}{, 102}\NWlink{nuweb103a}{, 103a}\NWlink{nuweb105}{, 105}\NWlink{nuweb108}{, 108}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110a}{, 110a}\NWlink{nuweb111b}{, 111b}\NWlink{nuweb112b}{, 112b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb123b}{, 123b}\NWlink{nuweb126}{, 126}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb128b}{, 128b}\NWlink{nuweb131a}{, 131a}\NWlink{nuweb132b}{, 132b}\NWlink{nuweb143}{, 143}\NWlink{nuweb144}{, 144}.
+\item \verb@y@: \NWlink{nuweb14}{14}\NWlink{nuweb22a}{, 22a}, \underline{\NWlink{nuweb25d}{25d}}, \underline{\NWlink{nuweb26a}{26a}}, \underline{\NWlink{nuweb26b}{26b}}\NWlink{nuweb32a}{, 32a}\NWlink{nuweb32c}{c}\NWlink{nuweb33}{, 33}\NWlink{nuweb35b}{, 35b}\NWlink{nuweb37a}{, 37a}\NWlink{nuweb37b}{b}\NWlink{nuweb38d}{, 38d}\NWlink{nuweb40}{, 40}\NWlink{nuweb43b}{, 43b}\NWlink{nuweb44}{, 44}\NWlink{nuweb45a}{, 45a}\NWlink{nuweb45b}{b}\NWlink{nuweb46c}{, 46c}\NWlink{nuweb47}{, 47}\NWlink{nuweb50b}{, 50b}\NWlink{nuweb81d}{, 81d}\NWlink{nuweb85b}{, 85b}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb87a}{, 87a}\NWlink{nuweb88a}{, 88a}\NWlink{nuweb100a}{, 100a}\NWlink{nuweb102}{, 102}\NWlink{nuweb103a}{, 103a}\NWlink{nuweb105}{, 105}\NWlink{nuweb108}{, 108}\NWlink{nuweb109b}{, 109b}\NWlink{nuweb110a}{, 110a}\NWlink{nuweb111b}{, 111b}\NWlink{nuweb112b}{, 112b}\NWlink{nuweb122b}{, 122b}\NWlink{nuweb123b}{, 123b}\NWlink{nuweb126}{, 126}\NWlink{nuweb127b}{, 127b}\NWlink{nuweb128b}{, 128b}\NWlink{nuweb131a}{, 131a}\NWlink{nuweb132b}{, 132b}\NWlink{nuweb143}{, 143}\NWlink{nuweb144}{, 144}.
 \end{list}}
 
 \bibliographystyle{plainnat}

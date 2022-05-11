@@ -233,11 +233,11 @@ void C_MPinv_sym
             rank[0] = 0;
         }
     } else {
-        rx = Calloc(n * (n + 1) / 2, double);
+        rx = R_Calloc(n * (n + 1) / 2, double);
         Memcpy(rx, x, n * (n + 1) / 2);
-        work = Calloc(3 * n, double);
-        val = Calloc(n, double);
-        vec = Calloc(n * n, double);
+        work = R_Calloc(3 * n, double);
+        val = R_Calloc(n, double);
+        vec = R_Calloc(n * n, double);
 
         F77_CALL(dspev)("V", "L", &n, rx, val, vec, &n, work,
                         &info FCONE FCONE);
@@ -260,7 +260,7 @@ void C_MPinv_sym
                 }
             }
         }
-        Free(rx); Free(work); Free(val); Free(vec);
+        R_Free(rx); R_Free(work); R_Free(val); R_Free(vec);
     }
 }
 
@@ -313,7 +313,7 @@ SEXP R_unpack_sym
     SEXP ans, dimnames;
     double *dx, *dans;
 
-    // m = n * (n + 1)/2 <=> n^2 + n - 2 * m = 0
+    /* m = n * (n + 1)/2 <=> n^2 + n - 2 * m = 0 */
     n = sqrt(0.25 + 2 * XLENGTH(x)) - 0.5;
 
     dx = REAL(x);
@@ -338,11 +338,11 @@ SEXP R_unpack_sym
         }
         dans = REAL(ans);
         for (R_xlen_t i = 0; i < n; i++) {
-            dans[i * n + i] = dx[k];     // diagonal
+            dans[i * n + i] = dx[k];     /* diagonal */
             k++;
             for (R_xlen_t j = i + 1; j < n; j++) {
-                dans[i * n + j] = dx[k]; // lower triangular
-                dans[j * n + i] = dx[k]; // upper triangular
+                dans[i * n + j] = dx[k]; /* lower triangular */
+                dans[j * n + i] = dx[k]; /* upper triangular */
                 k++;
             }
         }
@@ -1106,16 +1106,16 @@ double C_maxtype_pvalue
     /* Setup mvtnorm Memory */
     
     if (n == 2)
-        corr = Calloc(1, double);
+        corr = R_Calloc(1, double);
     else
-        corr = Calloc(n + ((n - 2) * (n - 1))/2, double);
+        corr = R_Calloc(n + ((n - 2) * (n - 1))/2, double);
 
-    sd = Calloc(n, double);
-    lowerbnd = Calloc(n, double);
-    upperbnd = Calloc(n, double);
-    infin = Calloc(n, int);
-    delta = Calloc(n, double);
-    index = Calloc(n, int);
+    sd = R_Calloc(n, double);
+    lowerbnd = R_Calloc(n, double);
+    upperbnd = R_Calloc(n, double);
+    infin = R_Calloc(n, int);
+    delta = R_Calloc(n, double);
+    index = R_Calloc(n, int);
 
     /* determine elements with non-zero variance */
 
@@ -1183,18 +1183,18 @@ double C_maxtype_pvalue
         default: warning("cmvnorm: unknown problem in MVTDST");
                 ans = 0.0;
     }
-    Free(corr); Free(sd); Free(lowerbnd); Free(upperbnd);
-    Free(infin); Free(delta); Free(index);
+    R_Free(corr); R_Free(sd); R_Free(lowerbnd); R_Free(upperbnd);
+    R_Free(infin); R_Free(delta); R_Free(index);
 
     /* ans = 1 - p-value */
     if (lower) {
         if (give_log)
-            return(log(ans)); /* log(1 - p-value) */
-        return(ans); /* 1 - p-value */
+            return(log(ans));   /* log(1 - p-value) */
+        return(ans);            /* 1 - p-value */
     } else {
         if (give_log)
             return(log1p(ans)); /* log(p-value) */
-        return(1 - ans); /* p-value */
+        return(1 - ans);        /* p-value */
     }
 }
 
@@ -5302,7 +5302,7 @@ void C_setup_subset_block
     double *cumtable;
     int Nlevels = LENGTH(blockTable);
 
-    cumtable = Calloc(Nlevels, double);
+    cumtable = R_Calloc(Nlevels, double);
     for (int k = 0; k < Nlevels; k++) cumtable[k] = 0.0;
 
     /* table[0] are missings, ie block == 0 ! */
@@ -5318,7 +5318,7 @@ void C_setup_subset_block
         }
     }
 
-    Free(cumtable);
+    R_Free(cumtable);
 }
 
 /* C\_order\_subset\_wrt\_block */
@@ -5342,7 +5342,7 @@ void C_order_subset_wrt_block
     double *cumtable;
     int Nlevels = LENGTH(blockTable);
 
-    cumtable = Calloc(Nlevels, double);
+    cumtable = R_Calloc(Nlevels, double);
     for (int k = 0; k < Nlevels; k++) cumtable[k] = 0.0;
 
     /* table[0] are missings, ie block == 0 ! */
@@ -5358,7 +5358,7 @@ void C_order_subset_wrt_block
             REAL(ans)[(R_xlen_t) cumtable[INTEGER(block)[(R_xlen_t) REAL(subset)[i] - 1]]++] = REAL(subset)[i];
     }
 
-    Free(cumtable);
+    R_Free(cumtable);
 }
 
 /* RC\_order\_subset\_wrt\_block */
@@ -5916,10 +5916,10 @@ void RC_ExpectationX
     double center;
 
     if (TYPEOF(x) == INTSXP) {
-        double* Pp1tmp = Calloc(P + 1, double);
+        double* Pp1tmp = R_Calloc(P + 1, double);
         RC_OneTableSums(INTEGER(x), N, P + 1, weights, subset, offset, Nsubset, Pp1tmp);
         for (int p = 0; p < P; p++) P_ans[p] = Pp1tmp[p + 1];
-        Free(Pp1tmp);
+        R_Free(Pp1tmp);
     } else {
         RC_colSums(REAL(x), N, P, Power1, &center, !DoCenter, weights, subset, offset, Nsubset, P_ans);
     }
@@ -6143,14 +6143,14 @@ void C_CovarianceLinearStatistic
             PQPQ_sym_ans[0] = tmp;
         }
     } else {
-        PP_sym_tmp = Calloc(PP12(P), double);
+        PP_sym_tmp = R_Calloc(PP12(P), double);
         C_KronSums_sym_(ExpX, 1, P,
                         PP_sym_tmp);
         for (int p = 0; p < PP12(P); p++)
             PP_sym_tmp[p] = f1 * CovX[p] - f2 * PP_sym_tmp[p];
         C_kronecker_sym(CovInf, Q, PP_sym_tmp, P, 1 - (add >= 1),
                         PQPQ_sym_ans);
-        Free(PP_sym_tmp);
+        R_Free(PP_sym_tmp);
     }
 }
 
@@ -6182,14 +6182,14 @@ void C_VarianceLinearStatistic
                                     PQ_ans);
     } else {
         double *P_tmp;
-        P_tmp = Calloc(P, double);
+        P_tmp = R_Calloc(P, double);
         double f1 = sumweights / (sumweights - 1);
         double f2 = 1.0 / (sumweights - 1);
         for (int p = 0; p < P; p++)
             P_tmp[p] = f1 * VarX[p] - f2 * ExpX[p] * ExpX[p];
         C_kronecker(VarInf, 1, Q, P_tmp, 1, P, 1 - (add >= 1),
                     PQ_ans);
-        Free(P_tmp);
+        R_Free(P_tmp);
     }
 }
 
@@ -6414,7 +6414,7 @@ double C_maxtype
 void C_standardise
 (
     const int PQ,
-    double *linstat,            /* in place standardisation */
+    double *linstat,      /* in place standardisation */
     const double *expect,
     const double *covar,
     const int varonly,
@@ -6488,24 +6488,24 @@ void C_ordered_Xfactor
 
     /* Setup maxstat Memory */
     
-    mlinstat = Calloc(Q, double);
-    mexpect = Calloc(Q, double);
+    mlinstat = R_Calloc(Q, double);
+    mexpect = R_Calloc(Q, double);
     if (teststat == TESTSTAT_maximum) {
-       mvar = Calloc(Q, double);
+       mvar = R_Calloc(Q, double);
        /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-       mcovar = Calloc(1, double);
-       mMPinv = Calloc(1, double);
+       mcovar = R_Calloc(1, double);
+       mMPinv = R_Calloc(1, double);
     } else {
-       mcovar = Calloc(Q * (Q + 1) / 2, double);
-       mMPinv = Calloc(Q * (Q + 1) / 2, double);
+       mcovar = R_Calloc(Q * (Q + 1) / 2, double);
+       mMPinv = R_Calloc(Q * (Q + 1) / 2, double);
        /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-       mvar = Calloc(1, double);
+       mvar = R_Calloc(1, double);
     }
     if (nresample > 0) {
-        mblinstat = Calloc(Q * nresample, double);
+        mblinstat = R_Calloc(Q * nresample, double);
     } else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-        mblinstat = Calloc(1, double);
-        blinstat = Calloc(1, double);
+        mblinstat = R_Calloc(1, double);
+        blinstat = R_Calloc(1, double);
     }
 
     maxstat[0] = 0.0;
@@ -6618,9 +6618,9 @@ void C_ordered_Xfactor
         pval[0] = C_perm_pvalue(greater, nresample, lower, give_log);
     }
     
-    Free(mlinstat); Free(mexpect); Free(mblinstat);
-    Free(mvar); Free(mcovar); Free(mMPinv);
-    if (nresample == 0) Free(blinstat);
+    R_Free(mlinstat); R_Free(mexpect); R_Free(mblinstat);
+    R_Free(mvar); R_Free(mcovar); R_Free(mMPinv);
+    if (nresample == 0) R_Free(blinstat);
 }
 
 /* C\_unordered\_Xfactor */
@@ -6678,24 +6678,24 @@ void C_unordered_Xfactor
 
     /* Setup maxstat Memory */
     
-    mlinstat = Calloc(Q, double);
-    mexpect = Calloc(Q, double);
+    mlinstat = R_Calloc(Q, double);
+    mexpect = R_Calloc(Q, double);
     if (teststat == TESTSTAT_maximum) {
-       mvar = Calloc(Q, double);
+       mvar = R_Calloc(Q, double);
        /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-       mcovar = Calloc(1, double);
-       mMPinv = Calloc(1, double);
+       mcovar = R_Calloc(1, double);
+       mMPinv = R_Calloc(1, double);
     } else {
-       mcovar = Calloc(Q * (Q + 1) / 2, double);
-       mMPinv = Calloc(Q * (Q + 1) / 2, double);
+       mcovar = R_Calloc(Q * (Q + 1) / 2, double);
+       mMPinv = R_Calloc(Q * (Q + 1) / 2, double);
        /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-       mvar = Calloc(1, double);
+       mvar = R_Calloc(1, double);
     }
     if (nresample > 0) {
-        mblinstat = Calloc(Q * nresample, double);
+        mblinstat = R_Calloc(Q * nresample, double);
     } else { /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-        mblinstat = Calloc(1, double);
-        blinstat = Calloc(1, double);
+        mblinstat = R_Calloc(1, double);
+        blinstat = R_Calloc(1, double);
     }
 
     maxstat[0] = 0.0;
@@ -6721,18 +6721,18 @@ void C_unordered_Xfactor
         sumright += ExpX[p];
     sumweights = sumright;
     
-    mtmp = Calloc(P, double);
+    mtmp = R_Calloc(P, double);
 
     for (int p = 0; p < P; p++) wmax[p] = NA_INTEGER;
 
     /* Count Levels */
     
-    contrast = Calloc(P, int);
+    contrast = R_Calloc(P, int);
     Pnonzero = 0;
     for (int p = 0; p < P; p++) {
         if (ExpX[p] > 0) Pnonzero++;
     }
-    levels = Calloc(Pnonzero, int);
+    levels = R_Calloc(Pnonzero, int);
     nc = 0;
     for (int p = 0; p < P; p++) {
         if (ExpX[p] > 0) {
@@ -6746,7 +6746,7 @@ void C_unordered_Xfactor
 
     int mi = 1;
     for (int l = 1; l < Pnonzero; l++) mi *= 2;
-    indl = Calloc(Pnonzero, int);
+    indl = R_Calloc(Pnonzero, int);
     for (int p = 0; p < Pnonzero; p++) indl[p] = 0;
     
 
@@ -6881,9 +6881,9 @@ void C_unordered_Xfactor
     }
     
 
-    Free(mlinstat); Free(mexpect); Free(levels); Free(contrast); Free(indl); Free(mtmp);
-    Free(mblinstat); Free(mvar); Free(mcovar); Free(mMPinv);
-    if (nresample == 0) Free(blinstat);
+    R_Free(mlinstat); R_Free(mexpect); R_Free(levels); R_Free(contrast); R_Free(indl); R_Free(mtmp);
+    R_Free(mblinstat); R_Free(mvar); R_Free(mcovar); R_Free(mMPinv);
+    if (nresample == 0) R_Free(blinstat);
 }
 
 
@@ -6961,17 +6961,16 @@ void RC_ExpectationCovarianceStatistic
     CovInf = C_get_CovarianceInfluence(ans);
     ExpXtotal = C_get_ExpectationX(ans);
     for (int p = 0; p < P; p++) ExpXtotal[p] = 0.0;
-    ExpX = Calloc(P, double);
+    ExpX = R_Calloc(P, double);
     /* Fix by Joanidis Kristoforos: P > INT_MAX is possible
        for maximally selected statistics (when X is an integer).
-       2018-12-13
-    */
+       2018-12-13 */
     if (C_get_varonly(ans)) {
-        VarX = Calloc(P, double);
-        CovX = Calloc(1, double);
+        VarX = R_Calloc(P, double);
+        CovX = R_Calloc(1, double);
     } else {
-        VarX = Calloc(1, double);
-        CovX = Calloc(PP12(P), double);
+        VarX = R_Calloc(1, double);
+        CovX = R_Calloc(PP12(P), double);
     }
     table = C_get_TableBlock(ans);
     sumweights = C_get_Sumweights(ans);
@@ -7067,7 +7066,7 @@ void RC_ExpectationCovarianceStatistic
     }
     
 
-    Free(ExpX); Free(VarX); Free(CovX);
+    R_Free(ExpX); R_Free(VarX); R_Free(CovX);
     UNPROTECT(2);
 }
 
@@ -7335,12 +7334,12 @@ void RC_ExpectationCovarianceStatistic_2d
     Xfactor = C_get_Xfactor(ans);
 
     if (C_get_varonly(ans)) {
-        CovX = Calloc(P, double);
+        CovX = R_Calloc(P, double);
     } else {
-        CovX = Calloc(PP12(P), double);
+        CovX = R_Calloc(PP12(P), double);
     }
 
-    table2d = Calloc(Lxp1 * Lyp1, double);
+    table2d = R_Calloc(Lxp1 * Lyp1, double);
     PROTECT(Rcsum = allocVector(REALSXP, Lyp1));
     csum = REAL(Rcsum);
     PROTECT(Rrsum = allocVector(REALSXP, Lxp1));
@@ -7369,7 +7368,7 @@ void RC_ExpectationCovarianceStatistic_2d
         /* Linear Statistic 2d */
         
         if (Xfactor) {
-            for (int j = 1; j < Lyp1; j++) { /* j = 0 means NA */
+            for (int j = 1; j < Lyp1; j++) {     /* j = 0 means NA */
                 for (int i = 1; i < Lxp1; i++) { /* i = 0 means NA */
                     for (int q = 0; q < Q; q++)
                         linstat[q * (Lxp1 - 1) + (i - 1)] +=
@@ -7464,8 +7463,8 @@ void RC_ExpectationCovarianceStatistic_2d
             C_get_Variance(ans)[p] = C_get_Covariance(ans)[S(p, p, mPQB(P, Q, 1))];
     }
 
-    Free(CovX);
-    Free(table2d);
+    R_Free(CovX);
+    R_Free(table2d);
     UNPROTECT(2);
 }
 
@@ -7617,12 +7616,12 @@ SEXP R_PermutedLinearStatistic_2d
 
     /* Setup Working Memory */
     
-    csum = Calloc(Lyp1 * B, int);
-    rsum = Calloc(Lxp1 * B, int);
-    sumweights = Calloc(B, int);
-    table = Calloc(Lxp1 * Lyp1, int);
-    rtable2 = Calloc(Lx * Ly , int);
-    jwork = Calloc(Lyp1, int);
+    csum = R_Calloc(Lyp1 * B, int);
+    rsum = R_Calloc(Lxp1 * B, int);
+    sumweights = R_Calloc(B, int);
+    table = R_Calloc(Lxp1 * Lyp1, int);
+    rtable2 = R_Calloc(Lx * Ly , int);
+    jwork = R_Calloc(Lyp1, int);
     
 
     /* Convert Table to Integer */
@@ -7663,7 +7662,7 @@ SEXP R_PermutedLinearStatistic_2d
 
     /* Setup Log-Factorials */
     
-    fact = Calloc(maxn + 1, double);
+    fact = R_Calloc(maxn + 1, double);
     /* Calculate log-factorials.  fact[i] = lgamma(i+1) */
     fact[0] = fact[1] = 0.;
     for (int j = 2; j <= maxn; j++)
@@ -7707,7 +7706,7 @@ SEXP R_PermutedLinearStatistic_2d
             /* Linear Statistic 2d */
 
             if (Xfactor) {
-                for (int j = 1; j < Lyp1; j++) { /* j = 0 means NA */
+                for (int j = 1; j < Lyp1; j++) {     /* j = 0 means NA */
                     for (int i = 1; i < Lxp1; i++) { /* i = 0 means NA */
                         for (int q = 0; q < Q; q++)
                             linstat[q * (Lxp1 - 1) + (i - 1)] +=
@@ -7734,8 +7733,8 @@ SEXP R_PermutedLinearStatistic_2d
 
     PutRNGstate();
 
-    Free(csum); Free(rsum); Free(sumweights); Free(rtable2);
-    Free(jwork); Free(fact); Free(table);
+    R_Free(csum); R_Free(rsum); R_Free(sumweights); R_Free(rtable2);
+    R_Free(jwork); R_Free(fact); R_Free(table);
     UNPROTECT(2);
     return(ans);
 }
@@ -7795,7 +7794,7 @@ SEXP R_QuadraticTest
     int PSTAT = INTEGER(PermutedStatistics)[0];
     
 
-    MPinv = Calloc(PP12(PQ), double); /* was: C_get_MPinv(LECV); */
+    MPinv = R_Calloc(PP12(PQ), double); /* was: C_get_MPinv(LECV); */
     C_MPinv_sym(C_get_Covariance(LECV), PQ, C_get_tol(LECV), MPinv, &rank);
 
     REAL(stat)[0] = C_quadform(PQ, C_get_LinearStatistic(LECV),
@@ -7803,7 +7802,7 @@ SEXP R_QuadraticTest
 
     if (!PVALUE) {
         UNPROTECT(2);
-        Free(MPinv);
+        R_Free(MPinv);
         return(ans);
     }
 
@@ -7825,7 +7824,7 @@ SEXP R_QuadraticTest
     }
 
     UNPROTECT(2);
-    Free(MPinv);
+    R_Free(MPinv);
     return(ans);
 }
 

@@ -32,7 +32,7 @@ lmult(x, object)
   \item{standardise}{a logical asking to standardise the permuted statistics.}
   \item{tol}{tolerance for zero variances.}
   \item{x}{a contrast matrix to be left-multiplied in case \code{X} was a factor.}
-  \item{object}{an object of class \code{LinStatExpCov}.}
+  \item{object}{an object of class \code{"LinStatExpCov"}.}
 }
 \details{
   The function, after minimal preprocessing, calls the underlying C code
