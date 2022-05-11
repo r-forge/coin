@@ -118,7 +118,7 @@ urlcolor={linkcolor}%
 {\setlength{\parindent}{0cm}
 Copyright (C) 2017-2022 Torsten Hothorn \\
 
-This file is part of the \pkg{libcoin} R add-on package. \\
+This file is part of the \pkg{libcoin} \proglang{R} add-on package. \\
 
 \pkg{libcoin} is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -254,9 +254,9 @@ following the literate programming paradigm. The keynote lecture on literate
 programming by Donald E.~Knuth given at useR! 2016 in Stanford very much
 motivated this little experiment.
 
-\chapter{R Code}
+\chapter{\proglang{R} Code}
 
-\section{R User Interface}
+\section{\proglang{R} User Interface}
 
 @o libcoin.R -cp
 @{
@@ -269,8 +269,8 @@ motivated this little experiment.
 @<Contrasts@>
 @}
 
-The \pkg{libcoin} package implements two functions, \verb|LinStatExpCov| and
-\verb|doTest| for the computation of linear statistics, their expectation
+The \pkg{libcoin} package implements two \proglang{R} functions, \verb|LinStatExpCov()| and
+\verb|doTest()| for the computation of linear statistics, their expectation
 and covariance as well as for the computation of test statistics and
 $p$-values. There are two interfaces: One (labelled ``1d'') when the data is
 available as matrices \verb|X| and \verb|Y|, both with the same number of
@@ -601,7 +601,7 @@ where the former would record missing values in the first row / column.
 
 \subsection{Methods and Tests}
 
-Objects of class \verb|LinStatExpCov| returned by \verb|LinStatExpCov()|
+Objects of class \verb|"LinStatExpCov"| returned by \verb|LinStatExpCov()|
 contain the symmetric covariance matrix as a vector of the lower triangular
 elements. The \verb|vcov| method allows to extract the full covariance
 matrix from such an object.
@@ -716,8 +716,8 @@ doTest(ls1, teststat = "quadratic")
 Sometimes we are interested in contrasts of linear statistics and their
 corresponding properties. Examples include linear-by-linear association
 tests, where we assign numeric scores to each level of a factor. To
-implement this, we implement \verb|lmult| so that we can then left-multiply a
-matrix to an object of class \verb|LinStatExpCov|.
+implement this, we implement \verb|lmult()| so that we can then left-multiply a
+matrix to an object of class \verb|"LinStatExpCov"|.
 
 @d Contrasts
 @{
@@ -865,7 +865,7 @@ lmult(x, object)
   \item{standardise}{a logical asking to standardise the permuted statistics.}
   \item{tol}{tolerance for zero variances.}
   \item{x}{a contrast matrix to be left-multiplied in case \code{X} was a factor.}
-  \item{object}{an object of class \code{LinStatExpCov}.}
+  \item{object}{an object of class \code{"LinStatExpCov"}.}
 }
 \details{
   The function, after minimal preprocessing, calls the underlying C code
@@ -981,7 +981,7 @@ ctabs(ix = 1:5, iy = 1:5, weights = 1:5 / 5)
 \keyword{univar}
 @}
 
-\chapter{C Code}
+\chapter{\proglang{C} Code}
 
 The main motivation to implement the \pkg{libcoin} package comes from the
 demand to compute high-dimensional linear statistics (with large $P$ and
@@ -1490,13 +1490,13 @@ These functions allocate memory handled by \proglang{R}.
 Functions starting with \verb|RC_| are \proglang{C} functions with
 \verb|SEXP| or pointer arguments and possibly an \verb|SEXP| return value.
 
-Functions starting with \verb|C_| only take pointer arguments and return a
-scalar nor nothing.
+Functions starting with \verb|C_| are \proglang{C} functions with pointer
+arguments only and return a scalar or nothing.
 
 Return values (arguments modified by a function) are named \verb|ans|,
 sometimes with dimension (for example: \verb|PQ_ans|).
 
-\section{C User Interface}
+\section{\proglang{C} User Interface}
 
 \subsection{One-Dimensional Case (``1d'')}
 
@@ -1596,10 +1596,10 @@ The core function first computes the linear statistic (as there is no need
 to pay attention to blocks) and, in a second step, starts a loop over
 potential blocks.
 
-FIXME:  \verb|x| being an integer (Xfactor) with some 0 elements is not handled
-        correctly (as \verb|sumweights| doesnt't take this information into
-        account; use subset to exclude these missings (as done in
-        libcoin::LinStatExpCov)
+FIXME:  \verb|x| being an integer (\verb|Xfactor|) with some 0 elements is not handled
+        correctly (as \verb|sumweights| doesn't take this information into
+        account; use \verb|subset| to exclude these missings (as done in
+        \verb|LinStatExpCov()|)
 
 @d RC\_ExpectationCovarianceStatistic
 @{
