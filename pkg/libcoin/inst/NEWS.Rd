@@ -4,6 +4,7 @@
 
 \section{Changes in Version 1.0-10 (20YY-MM-DD)}{
   \itemize{
+    \item Enable \code{STRICT_R_HEADERS}.
     \item Documentation updates.
   }
 }
