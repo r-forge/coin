@@ -513,3 +513,10 @@ n_decimal_digits <-
     nchar(sub("^-?[[:space:]]?[[:digit:]]*[.]?", "",
               format(x, digits = 15, scientific = FALSE)[1]))
 }
+
+### Back-compatibility
+if (getRversion() < "4.1.0") {
+    ...names <- function() {
+        names(eval(substitute(list(...)), envir = parent.frame()))
+    }
+}
