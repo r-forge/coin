@@ -20,7 +20,7 @@
   }
   \subsection{Other changes}{
     \itemize{
-      \item
+      \item \R \eqn{\ge}{>=}4.1.0 is now required.
     }
   }
   \subsection{Deprecated and defunct}{
