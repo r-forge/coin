@@ -21,10 +21,9 @@ independence_test.IndependenceProblem <- function(object,
     xtrafo = trafo, ytrafo = trafo, scores = NULL, check = NULL,
     ...) {
 
-    addargs <- list(...)
-    if (length(addargs) > 0L)
+    if (...length() > 0L)
         warning("additional arguments ",
-                paste0(names(addargs), collapse = ", "),
+                paste0(sQuote(...names()), collapse = ", "),
                 " will be ignored")
 
     teststat <- match.arg(teststat)

@@ -556,14 +556,12 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
 ### multiple comparisons, cf. mcp(x = "Tukey") in multcomp
 mcp_trafo <- function(...) {
 
-    args <- list(...)
-    stopifnot(length(args) == 1)
+    stopifnot(...length() == 1)
 
     ret <- function(data) {
-
-        x <- data[[names(args)]]
+        x <- data[[...names()]]
         stopifnot(is.factor(x))
-        C <- args[[1]]
+        C <- ..1
         if (is.character(C)) {
             C <- contrMat(table(x), C)
         } else {
