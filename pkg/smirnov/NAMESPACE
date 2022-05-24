@@ -4,7 +4,7 @@ useDynLib(smirnov, .registration = TRUE)
 importFrom(stats, setNames, terms, ecdf)
 importFrom(graphics, abline, lines)
 
-export(psmirnov, qsmirnov, ks.test, confband)
+export(psmirnov, qsmirnov, ks.test, confband, qqplot)
 
 S3method(ks.test, default)
 S3method(ks.test, formula)

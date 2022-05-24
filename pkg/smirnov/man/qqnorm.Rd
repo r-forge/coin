@@ -17,8 +17,9 @@ qqline(y, datax = FALSE, distribution = qnorm,
 qqplot(x, y, plot.it = TRUE,
        xlab = deparse1(substitute(x)),
        ylab = deparse1(substitute(y)), \dots,
-       conf.level = NULL, exact = NULL, 
-       simulate = FALSE, B = 2000, col = NA)
+       conf.level = NULL, 
+       conf.args = list(exact = NULL, simulate.p.value = FALSE,
+                        B = 2000, col = NA, border = NULL))
 }
 \alias{qqnorm}
 \alias{qqnorm.default}
@@ -37,19 +38,16 @@ qqplot(x, y, plot.it = TRUE,
   \item{probs}{numeric vector of length two, representing probabilities.
     Corresponding quantile pairs define the line drawn.}
   \item{qtype}{the \code{type} of quantile computation used in \code{\link{quantile}}.}
+  \item{ylim, \dots}{graphical parameters.}
   \item{conf.level}{confidence level of the band. The default, \code{NULL},
     does not lead to the computation of a confidence band.}
- \item{exact}{\code{NULL} or a logical indicating whether an exact
-    p-value should be computed.  See \sQuote{Details} for the meaning of
-    \code{NULL}.}
-  \item{simulate.p.value}{a logical indicating whether to compute
-    p-values by Monte Carlo simulation.}
-  \item{B}{an integer specifying the number of replicates used in the
-    Monte Carlo test.}
-  \item{col}{the color for filling the confidence band. The default, \code{NA}, is to
-          leave the band unfilled.}
-
-  \item{ylim, \dots}{graphical parameters.}
+  \item{conf.args}{list of arguments defining confidence band computation
+    and visualisation: \code{exact} is \code{NULL} (see details) or a logical indicating whether an exact
+    p-value should be computed,  \code{simulate.p.value} is a logical indicating whether to compute
+    p-values by Monte Carlo simulation, \code{B} defines the number of replicates used in the
+    Monte Carlo test, \code{col} and \code{border} define the color for filling
+    and border of the confidence band (the default, \code{NA} and \code{NULL}, is to leave the band unfilled
+    with black borders.}
 }
 \description{
   \code{qqnorm} is a generic function the default method of which
@@ -133,8 +131,10 @@ switzer <- data.frame(
 
 ks.test(angle ~ sex, data = switzer)
 d <- with(switzer, split(angle, sex))
-with(d, qqplot(Female, Male, conf.level = 0.945, col = "lightgrey", 
-               exact = TRUE, pch = 19, xlim = c(-31, 31), ylim = c(-31, 31)))
+with(d, qqplot(Female, Male, pch = 19, xlim = c(-31, 31), ylim = c(-31, 31),
+               conf.level = 0.945, 
+               conf.args = list(col = "lightgrey", exact = TRUE))
+)
 abline(a = 0, b = 1)
 
 ## agreement with ks.test
@@ -146,7 +146,8 @@ ex <- TRUE
 (pval <- ks.test(x, y, exact = ex)$p.value)
 ## 88.8\% confidence band with bisecting line
 ## touching the lower bound
-qqplot(x, y, conf.level = 1 - pval, exact = ex, col = "lightgrey", pch = 19)
+qqplot(x, y, pch = 19, conf.level = 1 - pval, 
+       conf.args = list(exact = ex, col = "lightgrey"))
 abline(a = 0, b = 1)
 
 }
