@@ -895,11 +895,12 @@ lmult(x, object)
   statistics.  \emph{Mathematical Methods of Statistics} \bold{8}(2), 220--250.
 }
 \examples{
-wilcox.test(Ozone ~ Month, data = airquality, subset = Month \%in\% c(5, 8))
+wilcox.test(Ozone ~ Month, data = airquality, subset = Month \%in\% c(5, 8),
+            exact = FALSE, correct = FALSE)
 
 aq <- subset(airquality, Month \%in\% c(5, 8))
 X <- as.double(aq$Month == 5)
-Y <- as.double(rank(aq$Ozone))
+Y <- as.double(rank(aq$Ozone, na.last = "keep"))
 doTest(LinStatExpCov(X, Y))
 }
 \keyword{htest}

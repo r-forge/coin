@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2022-04-23 r82240 ucrt) -- "Unsuffered Consequences"
+R Under development (unstable) (2022-10-11 r83083 ucrt) -- "Unsuffered Consequences"
 Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -38,26 +38,25 @@ Type 'q()' to quit R.
 > 
 > ### ** Examples
 > 
-> wilcox.test(Ozone ~ Month, data = airquality, subset = Month %in% c(5, 8))
-Warning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...) :
-  cannot compute exact p-value with ties
+> wilcox.test(Ozone ~ Month, data = airquality, subset = Month %in% c(5, 8),
++             exact = FALSE, correct = FALSE)
 
-	Wilcoxon rank sum test with continuity correction
+	Wilcoxon rank sum test
 
 data:  Ozone by Month
-W = 127.5, p-value = 0.0001208
+W = 127.5, p-value = 0.0001164
 alternative hypothesis: true location shift is not equal to 0
 
 > 
 > aq <- subset(airquality, Month %in% c(5, 8))
 > X <- as.double(aq$Month == 5)
-> Y <- as.double(rank(aq$Ozone))
+> Y <- as.double(rank(aq$Ozone, na.last = "keep"))
 > doTest(LinStatExpCov(X, Y))
 $TestStatistic
-[1] 3.140115
+[1] 3.853635
 
 $p.value
-[1] 0.001688815
+[1] 0.0001163773
 
 > 
 > 
@@ -91,7 +90,7 @@ $p.value
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.14 0 0.14 NA NA 
+Time elapsed:  0.13 0 0.12 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -1107,11 +1107,12 @@ max(abs(t1[-1, -1] - t2))
 \mbox{}\verb@  statistics.  \emph{Mathematical Methods of Statistics} \bold{8}(2), 220--250.@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\examples{@\\
-\mbox{}\verb@wilcox.test(Ozone ~ Month, data = airquality, subset = Month \%in\% c(5, 8))@\\
+\mbox{}\verb@wilcox.test(Ozone ~ Month, data = airquality, subset = Month \%in\% c(5, 8),@\\
+\mbox{}\verb@            exact = FALSE, correct = FALSE)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@aq <- subset(airquality, Month \%in\% c(5, 8))@\\
 \mbox{}\verb@X <- as.double(aq$Month == 5)@\\
-\mbox{}\verb@Y <- as.double(rank(aq$Ozone))@\\
+\mbox{}\verb@Y <- as.double(rank(aq$Ozone, na.last = "keep"))@\\
 \mbox{}\verb@doTest(LinStatExpCov(X, Y))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@\keyword{htest}@\\
