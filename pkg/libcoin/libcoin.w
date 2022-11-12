@@ -7059,8 +7059,9 @@ useDynLib(libcoin, .registration = TRUE)
 importFrom("stats", complete.cases, vcov)
 importFrom("mvtnorm", GenzBretz)
 
-export(LinStatExpCov, doTest, ctabs, "lmult")
-S3method("vcov", "LinStatExpCov")
+export(LinStatExpCov, doTest, ctabs, lmult)
+
+S3method(vcov, LinStatExpCov)
 @}
 
 Add flag \verb|-g| to \verb|PKG\_CFLAGS| for \verb|operf| profiling (this is

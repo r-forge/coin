@@ -11004,8 +11004,9 @@ stopifnot(isequal(s, p))
 \mbox{}\verb@importFrom("stats", complete.cases, vcov)@\\
 \mbox{}\verb@importFrom("mvtnorm", GenzBretz)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@export(LinStatExpCov, doTest, ctabs, "lmult")@\\
-\mbox{}\verb@S3method("vcov", "LinStatExpCov")@\\
+\mbox{}\verb@export(LinStatExpCov, doTest, ctabs, lmult)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@S3method(vcov, LinStatExpCov)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
