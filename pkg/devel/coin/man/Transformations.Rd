@@ -182,9 +182,9 @@ mcp_trafo(\dots)
 
   \code{rank_trafo}, \code{normal_trafo}, \code{median_trafo},
   \code{savage_trafo}, \code{consal_trafo} and \code{koziol_trafo} compute rank
-  scores, normal scores, median scores, Savage scores, Conover-Salsburg scores
-  (see \code{\link{neuropathy}}) and Koziol-Nemec scores, respectively, for
-  location problems.
+  (Wilcoxon) scores, normal (van der Waerden) scores, median (Mood-Brown)
+  scores, Savage scores, Conover-Salsburg scores (see \code{\link{neuropathy}})
+  and Koziol-Nemec scores, respectively, for location problems.
 
   \code{klotz_trafo}, \code{mood_trafo}, \code{ansari_trafo} and
   \code{fligner_trafo} compute Klotz scores, Mood scores, Ansari-Bradley scores
