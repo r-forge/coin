@@ -524,6 +524,6 @@ n_decimal_digits <-
 ### Back-compatibility
 if (getRversion() < "4.1.0") {
     ...names <- function() {
-        names(eval(substitute(list(...)), envir = parent.frame()))
+        eval(quote(names(list(...))), envir = parent.frame())
     }
 }
