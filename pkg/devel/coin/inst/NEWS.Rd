@@ -311,7 +311,7 @@
     \itemize{
       \item The \code{ties.method} argument of \code{logrank_trafo()} no longer
             allows using \code{"logrank"} and \code{"HL"} to specify mid-ranks
-            and the Hothorn-Lausen method respectively.
+            and the Hothorn-Lausen method, respectively.
 
       \item Documentation updates.
     }
@@ -636,7 +636,7 @@
             in the singly ordered case, i.e., when either the response variable
             or the explanatory variable is an ordered factor; these are now
             reported as \samp{Generalized Pearson Chi-squared Test} and
-            \samp{Generalized Cochran-Mantel-Haenszel Test} respectively.
+            \samp{Generalized Cochran-Mantel-Haenszel Test}, respectively.
 
       \item The printed output of the Fisher-Pitman permutation test reported
             the parameter tested in the two-sample case when the explanatory
@@ -696,7 +696,7 @@
 
       \item The \code{teststat} argument no longer allows the use of
             maximum-type statistics and quadratic forms to be specified using
-            \code{"maxtype"} and \code{"quadtype"} respectively.
+            \code{"maxtype"} and \code{"quadtype"}, respectively.
 
       \item The median and logrank transformations are now increasing functions.
 
@@ -733,7 +733,7 @@
 
       \item In the printed output of the Ansari-Bradley test and the Spearman
             test the tested parameter has been renamed to \samp{ratio of scales}
-            and \samp{rho} respectively.
+            and \samp{rho}, respectively.
 
       \item \code{wilcoxsign_test.IndependenceProblem()} has been replaced by
             \code{wilcoxsign_test.SymmetryProblem()}.
@@ -959,8 +959,8 @@
     \item Export all classes.
 
     \item Compute linear statistics, expectations and (co)variances when
-          constructing <IndependenceLinearStatistic> instead of
-          <IndependenceTestStatistic> and define methods for this class.
+          constructing \code{"IndependenceLinearStatistic"} objects instead of
+          \code{"IndependenceTestStatistic"} and define methods for this class.
 
     \item \code{maxstat_test()} with integer weights gave \code{NA} or wrong
           cutpoints.
@@ -987,7 +987,7 @@
 \section{Changes in version 0.6-6 (2007-08-13)}{
   \itemize{
     \item Fix precision issues with exact \eqn{p}-values (spotted by Michael Fay
-          \email{mfay@niaid.nih.gov}.
+          \email{mfay@niaid.nih.gov}).
   }
 }
 
@@ -997,7 +997,7 @@
 
     \item Update to new \pkg{mvtnorm} 0.8-0.
 
-    \item Check for overflow errors in \file{StreitbergRoehmel.c} (thanks for
+    \item Check for overflow errors in \file{StreitbergRoehmel.c} (thanks to
           Michael Fay \email{mfay@niaid.nih.gov} for spotting this).
   }
 }
@@ -1144,7 +1144,7 @@
     \item Reproduce two examples from Hothorn and Lausen (2003) in
           \code{?maxstat_test} (and added \code{hohnloser} data set).
 
-    \item Add more regression tests on \code{maxstat_test()}.
+    \item Add more regression tests for \code{maxstat_test()}.
   }
 }
 
@@ -1283,7 +1283,7 @@
           attribute.
 
     \item New \R interface function \code{R_kronecker} to \code{C_kronecker}
-          (which returns a _vector_!).
+          (which returns a \emph{vector}!).
 
     \item Speedup of variance computations in internal functions.
   }
