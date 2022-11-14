@@ -159,7 +159,7 @@
   \eqn{C_{k_l}}{C_k_l} and \eqn{c_{k_l}}{c_k_l} are computed as indicated above,
   effectively assuming that no event times are tied.  The scores \eqn{C_k} and
   \eqn{c_k} are assigned the average of the scores \eqn{C_{k_l}}{C_k_l} and
-  \eqn{c_{k_l}}{c_k_l} respectively.  It then follows that the score for the
+  \eqn{c_{k_l}}{c_k_l}, respectively.  It then follows that the score for the
   \eqn{i}th subject is
   \deqn{
     a_i = \left\{
@@ -185,8 +185,8 @@
     n_k}.  The Tarone-Ware class of tests (\code{"Tarone-Ware"}) discussed by
   Tarone and Ware (1977) has \eqn{w_k = n_k^\rho}, where \eqn{\rho} is a
   constant; \eqn{\rho = 0.5} (default) was suggested by Tarone and Ware (1977),
-  but note that \eqn{\rho = 0} and \eqn{\rho = 1} lead to the the standard
-  logrank test and Gehan-Breslow test respectively.  The Peto-Peto test
+  but note that \eqn{\rho = 0} and \eqn{\rho = 1} lead to the standard logrank
+  test and Gehan-Breslow test, respectively.  The Peto-Peto test
   (\code{"Peto-Peto"}) suggested by Peto and Peto (1972) is another
   generalization of the Wilcoxon rank-sum test, where
   \deqn{
@@ -253,7 +253,7 @@
   used by default (\code{distribution = "asymptotic"}).  Alternatively, the
   distribution can be approximated via Monte Carlo resampling or computed
   exactly for univariate two-sample problems by setting \code{distribution} to
-  \code{"approximate"} or \code{"exact"} respectively.  See
+  \code{"approximate"} or \code{"exact"}, respectively.  See
   \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
   for details.
 }
