@@ -3,11 +3,18 @@
 \encoding{UTF-8}
 \title{News for Package \pkg{inum}}
 
+\section{Changes in version 1.0-5 (2023-03-09)}{
+\itemize{
+  \item{Register default methods.}
+  }
+}
+
 \section{Changes in version 1.0-4 (2021-04-12)}{
 \itemize{
   \item{\code{complete.cases.only = TRUE} did not work with all patterns of missings; bug spotted by Susanne Dandl.}
   }
 }
+
 
 
 \section{Changes in version 1.0-3 (2021-02-08)}{
