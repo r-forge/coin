@@ -151,15 +151,8 @@ psmirnov <- function(q, m, n = length(z) - m, z = NULL,
                         lower.tail = lower.tail, log.p = log.p))
     }
 
-    logdenom <- lgamma(N + 1) - lgamma(n.x + 1) - lgamma(n.y + 1)
-    if (log.p & lower.tail)
-        return(log(ret) - logdenom)
-    if (!log.p & lower.tail)
-        return(ret / exp(logdenom))
-    if (log.p & !lower.tail)
-        return(log1p(-ret / exp(logdenom)))
-    if (!log.p & !lower.tail)
-        return(1 - ret / exp(logdenom))
+    if (log.p) ret <- log(ret)
+    return(ret)
 }
 
 qsmirnov <- function(p, m, n = length(z) - m, z = NULL, two.sided = TRUE, ...) {
