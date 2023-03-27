@@ -163,7 +163,7 @@ qsmirnov <- function(p, m, n = length(z) - m, z = NULL, two.sided = TRUE, ...) {
     }
     if (two.sided) stat <- abs(stat)
     prb <- psmirnov(stat, m = n.x, n = n.y, z = z, 
-                    two.sided = TRUE, log.p = FALSE, ...)
+                    two.sided = two.sided, log.p = FALSE, ...)
     if (is.null(p)) return(list(stat = stat, prob = prb))
     if (is.numeric(p)) 
         p <- as.double(p)
