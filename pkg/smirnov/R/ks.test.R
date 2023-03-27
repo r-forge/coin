@@ -3,6 +3,19 @@
     .Call("Smirnov_sim", as.integer(tr), as.integer(tc), 
           as.integer(B), as.integer(twosided), package = "smirnov")
 
+psmirnov_exact <- function(q, sizes, z = NULL, two.sided = TRUE,
+                           lower.tail = TRUE) {
+    if(!is.null(z)) {
+        z <- (diff(sort(z)) != 0)
+        z <- if(any(z))
+            c(0L, z, 1L)
+        else
+            NULL
+    }
+    .Call("psmirnov_exact", q, sizes[1L], sizes[2L], z,
+          two.sided, lower.tail, package = "smirnov")
+}
+
 psmirnov <- function(q, m, n = length(z) - m, z = NULL, 
                      two.sided = TRUE, exact = TRUE, 
                      simulate = FALSE, B = 2000,
@@ -121,46 +134,14 @@ psmirnov <- function(q, m, n = length(z) - m, z = NULL,
             return(1 - ret)
     }
 
-    ### no ties, use C_pSmirnov2x
-    if (is.null(z)) {
-        ret[IND] <- sapply(q[IND], function(x) .Call(stats:::C_pSmirnov2x, x, n.x, n.y))
-        if (log.p & lower.tail)
-            return(log(ret))
-        if (!log.p & lower.tail)
-            return(ret)
-        if (log.p & !lower.tail)
-            return(log1p(-ret))
-        if (!log.p & !lower.tail)
-            return(1 - ret)
-    }
-
-    TIES <- if (!is.null(z))
-        c(diff(sort(z)) != 0, TRUE)
-    else
-        rep(TRUE, N)
 
     ### see stats/src/ks.c line 103ff
     stat <- (0.5 + floor(as.double(q) * n.x * n.y - 1e-7)) / (n.x * n.y);
 
-    pfun <- function(q) {
-        k <- diag <- 1
-        u <- 0
-        repeat {
-            u <- c(u, 1 + u[length(u)])
-            v <- k - u
-            diag_bit <- (u <= n.x) & (v <= n.y) & (u >= 0) & (v >= 0)
-            u <- u[diag_bit]
-            v <- v[diag_bit]
-            d <- u / n.x - v / n.y
-            if (two.sided) d <- abs(d)
-            diag <- (c(diag, 0) + c(0, diag))[diag_bit]
-            if (TIES[k])
-                diag <- diag * (q > d)
-            k <- k + 1
-            if (N < k) break
-        }
-        diag
-    }
+    pfun <- function(q)
+        psmirnov_exact(q, sizes = c(n, m), z = z, two.sided = two.sided,
+                       lower.tail = lower.tail)
+
     ret[IND] <- sapply(stat[IND], pfun)
     if (any(is.na(ret[IND]))) {
         warning("computation of exact probability failed, returning Monte Carlo approximation")
