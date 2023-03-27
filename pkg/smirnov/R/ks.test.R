@@ -134,15 +134,11 @@ psmirnov <- function(q, m, n = length(z) - m, z = NULL,
             return(1 - ret)
     }
 
-
-    ### see stats/src/ks.c line 103ff
-    stat <- (0.5 + floor(as.double(q) * n.x * n.y - 1e-7)) / (n.x * n.y);
-
     pfun <- function(q)
-        psmirnov_exact(q, sizes = c(n, m), z = z, two.sided = two.sided,
+        psmirnov_exact(q, sizes = c(n.x, n.y), z = z, two.sided = two.sided,
                        lower.tail = lower.tail)
 
-    ret[IND] <- sapply(stat[IND], pfun)
+    ret[IND] <- sapply(q[IND], pfun)
     if (any(is.na(ret[IND]))) {
         warning("computation of exact probability failed, returning Monte Carlo approximation")
         return(psmirnov(q = q, m = n.x, n = n.y, z = z, 
