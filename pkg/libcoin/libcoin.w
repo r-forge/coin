@@ -7224,6 +7224,6 @@ void attribute_visible R_init_libcoin
 @u
 
 \bibliographystyle{plainnat}
-\bibliography{\Sexpr{gsub("\\.bib", "", system.file("libcoin.bib", package = "libcoin"))}}
+\bibliography{libcoin}
 
 \end{document}

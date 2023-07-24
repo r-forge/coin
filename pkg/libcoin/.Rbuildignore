@@ -1,5 +1,6 @@
 ^libcoin.w$
 ^libcoin.tex$
+^libcoin.bib$
 ^Makefile$
 ^ToDo$
 ^inst/C_API_example$
