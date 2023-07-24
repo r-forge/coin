@@ -131,7 +131,7 @@ urlcolor={linkcolor}%
 \chapter*{Licence}
 
 {\setlength{\parindent}{0cm}
-Copyright (C) 2017-2022 Torsten Hothorn \\
+Copyright (C) 2017-2023 Torsten Hothorn \\
 
 This file is part of the \pkg{libcoin} \proglang{R} add-on package. \\
 
@@ -3813,7 +3813,7 @@ Note: the interface to \verb|S_rcont2| changed in \textsf{R}-4.1.0.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb53b}{53b}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb154a}{154a}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb153a}{153a}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb152d}{152d}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb157b}{157b}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb157c}{157c}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb157d}{157d}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb153b}{153b}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb152b}{152b}, \verb@C_maxtype@\nobreak\ \NWlink{nuweb66}{66}, \verb@C_maxtype_pvalue@\nobreak\ \NWlink{nuweb70}{70}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb68}{68}, \verb@GE@\nobreak\ \NWlink{nuweb22a}{22a}, \verb@LE@\nobreak\ \NWlink{nuweb22a}{22a}, \verb@LECV@\nobreak\ \NWlink{nuweb151b}{151b}, \verb@P@\nobreak\ \NWlink{nuweb25a}{25a}, \verb@Q@\nobreak\ \NWlink{nuweb25e}{25e}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb154a}{154a}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb153a}{153a}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb152d}{152d}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb157b}{157b}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb157d}{157d}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb153b}{153b}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb152b}{152b}, \verb@C_maxtype@\nobreak\ \NWlink{nuweb66}{66}, \verb@C_maxtype_pvalue@\nobreak\ \NWlink{nuweb70}{70}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb68}{68}, \verb@GE@\nobreak\ \NWlink{nuweb22a}{22a}, \verb@LE@\nobreak\ \NWlink{nuweb22a}{22a}, \verb@LECV@\nobreak\ \NWlink{nuweb151b}{151b}, \verb@P@\nobreak\ \NWlink{nuweb25a}{25a}, \verb@Q@\nobreak\ \NWlink{nuweb25e}{25e}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -10644,7 +10644,7 @@ stopifnot(isequal(s, p))
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb151a}{151a}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb42a}{42a}\NWlink{nuweb55}{, 55}\NWlink{nuweb57}{, 57}\NWlink{nuweb74}{, 74}.\item \NWtxtIdentsUsed\nobreak\  \verb@LECV@\nobreak\ \NWlink{nuweb151b}{151b}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb22b}{22b}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb42a}{42a}\NWlink{nuweb55}{, 55}\NWlink{nuweb74}{, 74}.\item \NWtxtIdentsUsed\nobreak\  \verb@LECV@\nobreak\ \NWlink{nuweb151b}{151b}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb22b}{22b}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -11168,7 +11168,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@###    Copyright (C) 2017-2022 Torsten Hothorn@\\
+\mbox{}\verb@###    Copyright (C) 2017-2023 Torsten Hothorn@\\
 \mbox{}\verb@###@\\
 \mbox{}\verb@###    This file is part of the 'libcoin' R add-on package.@\\
 \mbox{}\verb@###@\\
@@ -11206,7 +11206,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@/*@\\
-\mbox{}\verb@    Copyright (C) 2017-2022 Torsten Hothorn@\\
+\mbox{}\verb@    Copyright (C) 2017-2023 Torsten Hothorn@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    This file is part of the 'libcoin' R add-on package.@\\
 \mbox{}\verb@@\\
@@ -11685,7 +11685,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \item \verb@C_get_LinearStatistic@: \NWlink{nuweb35b}{35b}\NWlink{nuweb48}{, 48}\NWlink{nuweb55}{, 55}\NWlink{nuweb57}{, 57}\NWlink{nuweb74}{, 74}, \underline{\NWlink{nuweb152d}{152d}}\NWlink{nuweb160a}{, 160a}.
 \item \verb@C_get_nresample@: \NWlink{nuweb42a}{42a}\NWlink{nuweb55}{, 55}\NWlink{nuweb56a}{, 56a}\NWlink{nuweb57}{, 57}\NWlink{nuweb59}{, 59}\NWlink{nuweb74}{, 74}, \underline{\NWlink{nuweb157b}{157b}}.
 \item \verb@C_get_P@: \NWlink{nuweb35a}{35a}\NWlink{nuweb42a}{, 42a}\NWlink{nuweb49}{, 49}\NWlink{nuweb56a}{, 56a}\NWlink{nuweb59}{, 59}\NWlink{nuweb74}{, 74}, \underline{\NWlink{nuweb151c}{151c}}\NWlink{nuweb153b}{, 153b}\NWlink{nuweb154a}{, 154a}\NWlink{nuweb157b}{, 157b}.
-\item \verb@C_get_PermutedLinearStatistic@: \NWlink{nuweb42a}{42a}\NWlink{nuweb55}{, 55}\NWlink{nuweb57}{, 57}\NWlink{nuweb74}{, 74}, \underline{\NWlink{nuweb157c}{157c}}.
+\item \verb@C_get_PermutedLinearStatistic@: \NWlink{nuweb42a}{42a}\NWlink{nuweb55}{, 55}\NWlink{nuweb74}{, 74}, \underline{\NWlink{nuweb157c}{157c}}.
 \item \verb@C_get_Q@: \NWlink{nuweb35a}{35a}\NWlink{nuweb42a}{, 42a}\NWlink{nuweb49}{, 49}\NWlink{nuweb56a}{, 56a}\NWlink{nuweb74}{, 74}, \underline{\NWlink{nuweb152a}{152a}}\NWlink{nuweb153b}{, 153b}\NWlink{nuweb154a}{, 154a}\NWlink{nuweb157b}{, 157b}.
 \item \verb@C_get_Sumweights@: \NWlink{nuweb36a}{36a}\NWlink{nuweb49}{, 49}, \underline{\NWlink{nuweb156a}{156a}}.
 \item \verb@C_get_Table@: \NWlink{nuweb44}{44}\NWlink{nuweb49}{, 49}, \underline{\NWlink{nuweb156b}{156b}}.

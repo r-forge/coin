@@ -116,7 +116,7 @@ urlcolor={linkcolor}%
 \chapter*{Licence}
 
 {\setlength{\parindent}{0cm}
-Copyright (C) 2017-2022 Torsten Hothorn \\
+Copyright (C) 2017-2023 Torsten Hothorn \\
 
 This file is part of the \pkg{libcoin} \proglang{R} add-on package. \\
 
@@ -7161,7 +7161,7 @@ void attribute_visible R_init_libcoin
 
 @d R Header
 @{
-###    Copyright (C) 2017-2022 Torsten Hothorn
+###    Copyright (C) 2017-2023 Torsten Hothorn
 ###
 ###    This file is part of the 'libcoin' R add-on package.
 ###
@@ -7186,7 +7186,7 @@ void attribute_visible R_init_libcoin
 @d C Header
 @{
 /*
-    Copyright (C) 2017-2022 Torsten Hothorn
+    Copyright (C) 2017-2023 Torsten Hothorn
 
     This file is part of the 'libcoin' R add-on package.
 
