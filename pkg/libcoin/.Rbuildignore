@@ -1,5 +1,5 @@
-libcoin.w
-libcoin.tex
-Makefile
-ToDo
-inst/C_API_example
+^libcoin.w$
+^libcoin.tex$
+^Makefile$
+^ToDo$
+^inst/C_API_example$
