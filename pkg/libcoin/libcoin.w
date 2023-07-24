@@ -5702,7 +5702,7 @@ if (HAS_WEIGHTS) {
 
 <<blocks>>=
 sb <- sample(block)
-ns1 <- do.call("c", tapply(subset, sb[subset], function(i) i))
+ns1 <- do.call(c, tapply(subset, sb[subset], function(i) i))
 ns2 <- .Call(libcoin:::R_order_subset_wrt_block, y, integer(0), subset, sb)
 stopifnot(isequal(ns1, ns2))
 @@
