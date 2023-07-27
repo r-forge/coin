@@ -373,7 +373,7 @@ if (any(ms)) {
             stop("all observations are missing")
         subset <- subset[!(subset %in% which(ms))]
     } else {
-        subset <- (1:N)[-which(ms)]
+        subset <- seq_len(N)[-which(ms)]
     }
 }
 @}
@@ -402,7 +402,7 @@ function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
                 stop("no missing values allowed in X")
             stopifnot(rg[1] > 0) # no missing values allowed here!
             if (is.null(attr(X, "levels")))
-                attr(X, "levels") <- 1:rg[2]
+                attr(X, "levels") <- seq_len(rg[2])
         }
     }
 
@@ -544,11 +544,11 @@ if (is.null(attr(ix, "levels"))) {
     if (anyNA(rg))
         stop("no missing values allowed in ix")
     stopifnot(rg[1] >= 0)
-    attr(ix, "levels") <- 1:rg[2]
+    attr(ix, "levels") <- seq_len(rg[2])
 } else {
     ## lev can be data.frame (see inum::inum)
     lev <- attr(ix, "levels")
-    if (!is.vector(lev)) lev <- 1:NROW(lev)
+    if (!is.vector(lev)) lev <- seq_len(NROW(lev))
     attr(ix, "levels") <- lev
     if (checkNAs) stopifnot(!anyNA(ix))
 }
@@ -561,11 +561,11 @@ if (is.null(attr(iy, "levels"))) {
     if (anyNA(rg))
         stop("no missing values allowed in iy")
     stopifnot(rg[1] >= 0)
-    attr(iy, "levels") <- 1:rg[2]
+    attr(iy, "levels") <- seq_len(rg[2])
 } else {
     ## lev can be data.frame (see inum::inum)
     lev <- attr(iy, "levels")
-    if (!is.vector(lev)) lev <- 1:NROW(lev)
+    if (!is.vector(lev)) lev <- seq_len(NROW(lev))
     attr(iy, "levels") <- lev
     if (checkNAs) stopifnot(!anyNA(iy))
 }
@@ -740,7 +740,7 @@ function(x, object)
     } else {
         zmat <- matrix(0, nrow = P * Q, ncol = nrow(x))
         mat <- rbind(t(x), zmat)
-        mat <- mat[rep(1:nrow(mat), Q - 1),, drop = FALSE]
+        mat <- mat[rep(seq_len(nrow(mat)), Q - 1),, drop = FALSE]
         mat <- rbind(mat, t(x))
         mat <- matrix(mat, ncol = Q * nrow(x))
         mat <- t(mat)
@@ -775,7 +775,7 @@ ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(y, ncol = 1),
 set.seed(29)
 ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, ncol = 1),
                       nresample = 10, standardise = TRUE)
-ls1c <- lmult(c(1:5), ls1d)
+ls1c <- lmult(1:5, ls1d)
 stopifnot(isequal(ls1c, ls1s))
 set.seed(29)
 ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2),
@@ -783,7 +783,7 @@ ls1d <- LinStatExpCov(X = model.matrix(~ x - 1), Y = matrix(c(y, y), ncol = 2),
 set.seed(29)
 ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, y), ncol = 2),
                       nresample = 10, standardise = TRUE)
-ls1c <- lmult(c(1:5), ls1d)
+ls1c <- lmult(1:5, ls1d)
 stopifnot(isequal(ls1c, ls1s))
 @@
 
@@ -1392,7 +1392,7 @@ LECV <-
 function(X, Y, weights = integer(0), subset = integer(0), block = integer(0))
 {
     if (length(weights) == 0) weights <- rep(1, NROW(X))
-    if (length(subset) == 0) subset <- 1:NROW(X)
+    if (length(subset) == 0) subset <- seq_len(NROW(X))
     idx <- rep(subset, weights[subset])
     X <- X[idx,, drop = FALSE]
     Y <- Y[idx,, drop = FALSE]

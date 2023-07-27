@@ -75,7 +75,7 @@ function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
                 stop("no missing values allowed in X")
             stopifnot(rg[1] > 0) # no missing values allowed here!
             if (is.null(attr(X, "levels")))
-                attr(X, "levels") <- 1:rg[2]
+                attr(X, "levels") <- seq_len(rg[2])
         }
     }
 
@@ -122,7 +122,7 @@ function(X, Y, weights = integer(0), subset = integer(0), block = integer(0),
                     stop("all observations are missing")
                 subset <- subset[!(subset %in% which(ms))]
             } else {
-                subset <- (1:N)[-which(ms)]
+                subset <- seq_len(N)[-which(ms)]
             }
         }
         
@@ -164,11 +164,11 @@ function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
         if (anyNA(rg))
             stop("no missing values allowed in ix")
         stopifnot(rg[1] >= 0)
-        attr(ix, "levels") <- 1:rg[2]
+        attr(ix, "levels") <- seq_len(rg[2])
     } else {
         ## lev can be data.frame (see inum::inum)
         lev <- attr(ix, "levels")
-        if (!is.vector(lev)) lev <- 1:NROW(lev)
+        if (!is.vector(lev)) lev <- seq_len(NROW(lev))
         attr(ix, "levels") <- lev
         if (checkNAs) stopifnot(!anyNA(ix))
     }
@@ -181,11 +181,11 @@ function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
         if (anyNA(rg))
             stop("no missing values allowed in iy")
         stopifnot(rg[1] >= 0)
-        attr(iy, "levels") <- 1:rg[2]
+        attr(iy, "levels") <- seq_len(rg[2])
     } else {
         ## lev can be data.frame (see inum::inum)
         lev <- attr(iy, "levels")
-        if (!is.vector(lev)) lev <- 1:NROW(lev)
+        if (!is.vector(lev)) lev <- seq_len(NROW(lev))
         attr(iy, "levels") <- lev
         if (checkNAs) stopifnot(!anyNA(iy))
     }
@@ -334,7 +334,7 @@ function(x, object)
     } else {
         zmat <- matrix(0, nrow = P * Q, ncol = nrow(x))
         mat <- rbind(t(x), zmat)
-        mat <- mat[rep(1:nrow(mat), Q - 1),, drop = FALSE]
+        mat <- mat[rep(seq_len(nrow(mat)), Q - 1),, drop = FALSE]
         mat <- rbind(mat, t(x))
         mat <- matrix(mat, ncol = Q * nrow(x))
         mat <- t(mat)

@@ -36,11 +36,11 @@ function(ix, iy = integer(0), block = integer(0), weights = integer(0),
         if (anyNA(rg))
             stop("no missing values allowed in ix")
         stopifnot(rg[1] >= 0)
-        attr(ix, "levels") <- 1:rg[2]
+        attr(ix, "levels") <- seq_len(rg[2])
     } else {
         ## lev can be data.frame (see inum::inum)
         lev <- attr(ix, "levels")
-        if (!is.vector(lev)) lev <- 1:NROW(lev)
+        if (!is.vector(lev)) lev <- seq_len(NROW(lev))
         attr(ix, "levels") <- lev
         if (checkNAs) stopifnot(!anyNA(ix))
     }
@@ -56,11 +56,11 @@ function(ix, iy = integer(0), block = integer(0), weights = integer(0),
             if (anyNA(rg))
                 stop("no missing values allowed in iy")
             stopifnot(rg[1] >= 0)
-            attr(iy, "levels") <- 1:rg[2]
+            attr(iy, "levels") <- seq_len(rg[2])
         } else {
             ## lev can be data.frame (see inum::inum)
             lev <- attr(iy, "levels")
-            if (!is.vector(lev)) lev <- 1:NROW(lev)
+            if (!is.vector(lev)) lev <- seq_len(NROW(lev))
             attr(iy, "levels") <- lev
             if (checkNAs) stopifnot(!anyNA(iy))
         }

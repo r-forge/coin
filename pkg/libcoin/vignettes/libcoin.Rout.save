@@ -150,7 +150,7 @@ $p.value
 > ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(y, 
 +     ncol = 1), nresample = 10, standardise = TRUE)
 
-> ls1c <- lmult(c(1:5), ls1d)
+> ls1c <- lmult(1:5, ls1d)
 
 > stopifnot(isequal(ls1c, ls1s))
 
@@ -164,7 +164,7 @@ $p.value
 > ls1s <- LinStatExpCov(X = as.double(1:5)[x], Y = matrix(c(y, 
 +     y), ncol = 2), nresample = 10, standardise = TRUE)
 
-> ls1c <- lmult(c(1:5), ls1d)
+> ls1c <- lmult(1:5, ls1d)
 
 > stopifnot(isequal(ls1c, ls1s))
 
@@ -696,4 +696,4 @@ $p.value
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   1.42    0.15    1.60 
+   1.07    0.12    1.20 
