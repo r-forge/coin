@@ -299,17 +299,17 @@ function@<LinStatExpCov Prototype@>
 ##    if (length(subset) > 0) subset <- sort(subset)
 
     if (is.null(ix) & is.null(iy))
-        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,
-                                subset = subset, block = block,
-                                checkNAs = checkNAs,
+        return(.LinStatExpCov1d(X = X, Y = Y,
+                                weights = weights, subset = subset,
+                                block = block, checkNAs = checkNAs,
                                 varonly = varonly, nresample = nresample,
                                 standardise = standardise, tol = tol))
 
     if (!is.null(ix) & !is.null(iy))
         return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
                                 weights = weights, subset = subset,
-                                block = block, varonly = varonly,
-                                checkNAs = checkNAs, nresample = nresample,
+                                block = block, checkNAs = checkNAs,
+                                varonly = varonly, nresample = nresample,
                                 standardise = standardise, tol = tol))
 
     stop("incorrect call to LinStatExpCov")

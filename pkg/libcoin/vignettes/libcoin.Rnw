@@ -343,17 +343,17 @@ data is available in aggregated form; details will be explained later.
 \mbox{}\verb@##    if (length(subset) > 0) subset <- sort(subset)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (is.null(ix) & is.null(iy))@\\
-\mbox{}\verb@        return(.LinStatExpCov1d(X = X, Y = Y, weights = weights,@\\
-\mbox{}\verb@                                subset = subset, block = block,@\\
-\mbox{}\verb@                                checkNAs = checkNAs,@\\
+\mbox{}\verb@        return(.LinStatExpCov1d(X = X, Y = Y,@\\
+\mbox{}\verb@                                weights = weights, subset = subset,@\\
+\mbox{}\verb@                                block = block, checkNAs = checkNAs,@\\
 \mbox{}\verb@                                varonly = varonly, nresample = nresample,@\\
 \mbox{}\verb@                                standardise = standardise, tol = tol))@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!is.null(ix) & !is.null(iy))@\\
 \mbox{}\verb@        return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,@\\
 \mbox{}\verb@                                weights = weights, subset = subset,@\\
-\mbox{}\verb@                                block = block, varonly = varonly,@\\
-\mbox{}\verb@                                checkNAs = checkNAs, nresample = nresample,@\\
+\mbox{}\verb@                                block = block, checkNAs = checkNAs,@\\
+\mbox{}\verb@                                varonly = varonly, nresample = nresample,@\\
 \mbox{}\verb@                                standardise = standardise, tol = tol))@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    stop("incorrect call to LinStatExpCov")@\\
