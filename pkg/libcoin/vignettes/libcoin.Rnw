@@ -332,7 +332,7 @@ data is available in aggregated form; details will be explained later.
 \mbox{}\verb@LinStatExpCov <-@\\
 \mbox{}\verb@function@\hbox{$\langle\,${\itshape LinStatExpCov Prototype}\nobreak\ {\footnotesize \NWlink{nuweb3b}{3b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
-\mbox{}\verb@    if (missing(X) & !is.null(ix) & is.null(iy)) {@\\
+\mbox{}\verb@    if (missing(X) && !is.null(ix) && is.null(iy)) {@\\
 \mbox{}\verb@        X <- ix@\\
 \mbox{}\verb@        ix <- NULL@\\
 \mbox{}\verb@    }@\\
@@ -342,14 +342,14 @@ data is available in aggregated form; details will be explained later.
 \mbox{}\verb@    ## <FIXME> for the time being only!!! </FIXME>@\\
 \mbox{}\verb@##    if (length(subset) > 0) subset <- sort(subset)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (is.null(ix) & is.null(iy))@\\
+\mbox{}\verb@    if (is.null(ix) && is.null(iy))@\\
 \mbox{}\verb@        return(.LinStatExpCov1d(X = X, Y = Y,@\\
 \mbox{}\verb@                                weights = weights, subset = subset,@\\
 \mbox{}\verb@                                block = block, checkNAs = checkNAs,@\\
 \mbox{}\verb@                                varonly = varonly, nresample = nresample,@\\
 \mbox{}\verb@                                standardise = standardise, tol = tol))@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (!is.null(ix) & !is.null(iy))@\\
+\mbox{}\verb@    if (!is.null(ix) && !is.null(iy))@\\
 \mbox{}\verb@        return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,@\\
 \mbox{}\verb@                                weights = weights, subset = subset,@\\
 \mbox{}\verb@                                block = block, checkNAs = checkNAs,@\\
@@ -831,7 +831,7 @@ can be computed on the log-scale.
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    alt <- which(c("two.sided", "less", "greater") == alternative)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (!pvalue & (NCOL(object$PermutedLinearStatistic) > 0))@\\
+\mbox{}\verb@    if (!pvalue && (NCOL(object$PermutedLinearStatistic) > 0))@\\
 \mbox{}\verb@        object$PermutedLinearStatistic <- matrix(NA_real_, nrow = 0, ncol = 0)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!maxselect) {@\\

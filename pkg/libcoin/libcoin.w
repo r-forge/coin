@@ -288,7 +288,7 @@ data is available in aggregated form; details will be explained later.
 LinStatExpCov <-
 function@<LinStatExpCov Prototype@>
 {
-    if (missing(X) & !is.null(ix) & is.null(iy)) {
+    if (missing(X) && !is.null(ix) && is.null(iy)) {
         X <- ix
         ix <- NULL
     }
@@ -298,14 +298,14 @@ function@<LinStatExpCov Prototype@>
     ## <FIXME> for the time being only!!! </FIXME>
 ##    if (length(subset) > 0) subset <- sort(subset)
 
-    if (is.null(ix) & is.null(iy))
+    if (is.null(ix) && is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y,
                                 weights = weights, subset = subset,
                                 block = block, checkNAs = checkNAs,
                                 varonly = varonly, nresample = nresample,
                                 standardise = standardise, tol = tol))
 
-    if (!is.null(ix) & !is.null(iy))
+    if (!is.null(ix) && !is.null(iy))
         return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
                                 weights = weights, subset = subset,
                                 block = block, checkNAs = checkNAs,
@@ -670,7 +670,7 @@ function@<doTest Prototype@>
     }
     alt <- which(c("two.sided", "less", "greater") == alternative)
 
-    if (!pvalue & (NCOL(object$PermutedLinearStatistic) > 0))
+    if (!pvalue && (NCOL(object$PermutedLinearStatistic) > 0))
         object$PermutedLinearStatistic <- matrix(NA_real_, nrow = 0, ncol = 0)
 
     if (!maxselect) {

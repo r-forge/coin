@@ -30,7 +30,7 @@ function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
          varonly = FALSE, nresample = 0, standardise = FALSE,
          tol = sqrt(.Machine$double.eps))
 {
-    if (missing(X) & !is.null(ix) & is.null(iy)) {
+    if (missing(X) && !is.null(ix) && is.null(iy)) {
         X <- ix
         ix <- NULL
     }
@@ -40,14 +40,14 @@ function(X, Y, ix = NULL, iy = NULL, weights = integer(0),
     ## <FIXME> for the time being only!!! </FIXME>
 ##    if (length(subset) > 0) subset <- sort(subset)
 
-    if (is.null(ix) & is.null(iy))
+    if (is.null(ix) && is.null(iy))
         return(.LinStatExpCov1d(X = X, Y = Y,
                                 weights = weights, subset = subset,
                                 block = block, checkNAs = checkNAs,
                                 varonly = varonly, nresample = nresample,
                                 standardise = standardise, tol = tol))
 
-    if (!is.null(ix) & !is.null(iy))
+    if (!is.null(ix) && !is.null(iy))
         return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
                                 weights = weights, subset = subset,
                                 block = block, checkNAs = checkNAs,
@@ -287,7 +287,7 @@ function(object, teststat = c("maximum", "quadratic", "scalar"),
     }
     alt <- which(c("two.sided", "less", "greater") == alternative)
 
-    if (!pvalue & (NCOL(object$PermutedLinearStatistic) > 0))
+    if (!pvalue && (NCOL(object$PermutedLinearStatistic) > 0))
         object$PermutedLinearStatistic <- matrix(NA_real_, nrow = 0, ncol = 0)
 
     if (!maxselect) {
