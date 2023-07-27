@@ -158,7 +158,7 @@ of a specific linear form. Let $\A \subseteq \{1, \dots, N\}$ denote some subset
 observation numbers and consider the linear statistic
 \begin{eqnarray} \label{linstat}
 \T(\A) = \vec\left(\sum_{i \in \A} w_i g(\X_i) h(\Y_i, \{\Y_i \mid i \in \A\})^\top\right)
-\in \R^{pq}.
+\in \R^{PQ}.
 \end{eqnarray}
 Here, $g: \mathcal{X} \rightarrow \R^P$ is a transformation of
 $\X$ known as the \emph{regression function} and $h: \mathcal{Y} \times
