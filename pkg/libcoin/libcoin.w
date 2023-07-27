@@ -437,7 +437,8 @@ to one digit) and want
 to test independence of group membership and outcome. The simplest way is
 to set-up the dummy matrix explicitly:
 <<1dex-1>>=
-isequal <- function(a, b) {
+isequal <-
+function(a, b) {
     attributes(a) <- NULL
     attributes(b) <- NULL
     if (!isTRUE(all.equal(a, b))) {
@@ -739,7 +740,7 @@ function(x, object)
     } else {
         zmat <- matrix(0, nrow = P * Q, ncol = nrow(x))
         mat <- rbind(t(x), zmat)
-        mat <- mat[rep(1:nrow(mat), Q - 1),,drop = FALSE]
+        mat <- mat[rep(1:nrow(mat), Q - 1),, drop = FALSE]
         mat <- rbind(mat, t(x))
         mat <- matrix(mat, ncol = Q * nrow(x))
         mat <- t(mat)
@@ -1387,13 +1388,14 @@ level. In a sense, the core of the \pkg{libcoin} package is ``just'' a less
 memory-hungry and sometimes faster version of this simple function.
 
 <<Rlibcoin>>=
-LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = integer(0)) {
-
+LECV <-
+function(X, Y, weights = integer(0), subset = integer(0), block = integer(0))
+{
     if (length(weights) == 0) weights <- rep(1, NROW(X))
     if (length(subset) == 0) subset <- 1:NROW(X)
     idx <- rep(subset, weights[subset])
-    X <- X[idx,,drop = FALSE]
-    Y <- Y[idx,,drop = FALSE]
+    X <- X[idx,, drop = FALSE]
+    Y <- Y[idx,, drop = FALSE]
     sumweights <- length(idx)
 
     if (length(block) == 0) {
@@ -1423,7 +1425,9 @@ LECV <- function(X, Y, weights = integer(0), subset = integer(0), block = intege
 @@
 
 <<cmpr>>=
-cmpr <- function(ret1, ret2) {
+cmpr <-
+function(ret1, ret2)
+{
     if (inherits(ret1, "LinStatExpCov")) {
         if (!ret1$varonly)
             ret1$Covariance <- vcov(ret1)
@@ -1453,7 +1457,9 @@ implementations in the two sitations with and without specification of
 
 <<tests>>=
 ### with X given
-testit <- function(...) {
+testit <-
+function(...)
+{
     a <- LinStatExpCov(x, y, ...)
     b <- LECV(x, y, ...)
     d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, ...)
@@ -1465,8 +1471,11 @@ stopifnot(
     testit(block = block) && testit(weights = weights, block = block) &&
     testit(subset = subset, block = block) &&
     testit(weights = weights, subset = subset, block = block))
+
 ### without dummy matrix X
-testit <- function(...) {
+testit <-
+function(...)
+{
     a <- LinStatExpCov(X = ix, y, ...)
     b <- LECV(Xfactor, y, ...)
     d <- LinStatExpCov(X = integer(0), ix = ix, Y = iY2d, iy = iy, ...)
@@ -2778,7 +2787,9 @@ double C_maxabsstand_Variance
 
 
 <<quadform>>=
-MPinverse <- function(x, tol = sqrt(.Machine$double.eps)) {
+MPinverse <-
+function(x, tol = sqrt(.Machine$double.eps))
+{
     SVD <- svd(x)
     pos <- SVD$d > max(tol * SVD$d[1L], 0)
     inv <- SVD$v[, pos, drop = FALSE] %*%
@@ -2786,7 +2797,9 @@ MPinverse <- function(x, tol = sqrt(.Machine$double.eps)) {
     list(MPinv = inv, rank = sum(pos))
 }
 
-quadform <- function (linstat, expect, MPinv) {
+quadform <-
+function(linstat, expect, MPinv)
+{
     censtat <- linstat - expect
     censtat %*% MPinv %*% censtat
 }
@@ -7028,7 +7041,8 @@ SEXP RC_init_LECV_2d
 @o AAA.R -cp
 @{
 @<R Header@>
-.onUnload <- function(libpath)
+.onUnload <-
+function(libpath)
     library.dynam.unload("libcoin", libpath)
 @}
 
