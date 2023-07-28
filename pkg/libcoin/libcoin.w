@@ -740,7 +740,7 @@ function(x, object)
     } else {
         zmat <- matrix(0, nrow = P * Q, ncol = nrow(x))
         mat <- rbind(t(x), zmat)
-        mat <- mat[rep(seq_len(nrow(mat)), Q - 1),, drop = FALSE]
+        mat <- mat[rep.int(seq_len(nrow(mat)), Q - 1),, drop = FALSE]
         mat <- rbind(mat, t(x))
         mat <- matrix(mat, ncol = Q * nrow(x))
         mat <- t(mat)
@@ -1391,9 +1391,9 @@ memory-hungry and sometimes faster version of this simple function.
 LECV <-
 function(X, Y, weights = integer(0), subset = integer(0), block = integer(0))
 {
-    if (length(weights) == 0) weights <- rep(1, NROW(X))
+    if (length(weights) == 0) weights <- rep.int(1, NROW(X))
     if (length(subset) == 0) subset <- seq_len(NROW(X))
-    idx <- rep(subset, weights[subset])
+    idx <- rep.int(subset, weights[subset])
     X <- X[idx,, drop = FALSE]
     Y <- Y[idx,, drop = FALSE]
     sumweights <- length(idx)
@@ -1412,15 +1412,15 @@ function(X, Y, weights = integer(0), subset = integer(0), block = integer(0))
                     Expectation = as.vector(Exp),
                     Covariance = Cov,
                     Variance = diag(Cov))
-   } else {
+    } else {
         block <- block[idx]
         ret <- list(LinearStatistic = 0, Expectation = 0, Covariance = 0, Variance = 0)
         for (b in levels(block)) {
             tmp <- LECV(X = X, Y = Y, subset = which(block == b))
             for (l in names(ret)) ret[[l]] <- ret[[l]] + tmp[[l]]
         }
-   }
-   return(ret)
+    }
+    return(ret)
 }
 @@
 

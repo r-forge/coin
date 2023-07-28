@@ -334,7 +334,7 @@ function(x, object)
     } else {
         zmat <- matrix(0, nrow = P * Q, ncol = nrow(x))
         mat <- rbind(t(x), zmat)
-        mat <- mat[rep(seq_len(nrow(mat)), Q - 1),, drop = FALSE]
+        mat <- mat[rep.int(seq_len(nrow(mat)), Q - 1),, drop = FALSE]
         mat <- rbind(mat, t(x))
         mat <- matrix(mat, ncol = Q * nrow(x))
         mat <- t(mat)

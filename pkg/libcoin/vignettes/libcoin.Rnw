@@ -914,7 +914,7 @@ matrix to an object of class \verb|"LinStatExpCov"|.
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        zmat <- matrix(0, nrow = P * Q, ncol = nrow(x))@\\
 \mbox{}\verb@        mat <- rbind(t(x), zmat)@\\
-\mbox{}\verb@        mat <- mat[rep(seq_len(nrow(mat)), Q - 1),, drop = FALSE]@\\
+\mbox{}\verb@        mat <- mat[rep.int(seq_len(nrow(mat)), Q - 1),, drop = FALSE]@\\
 \mbox{}\verb@        mat <- rbind(mat, t(x))@\\
 \mbox{}\verb@        mat <- matrix(mat, ncol = Q * nrow(x))@\\
 \mbox{}\verb@        mat <- t(mat)@\\
@@ -2004,9 +2004,9 @@ memory-hungry and sometimes faster version of this simple function.
 LECV <-
 function(X, Y, weights = integer(0), subset = integer(0), block = integer(0))
 {
-    if (length(weights) == 0) weights <- rep(1, NROW(X))
+    if (length(weights) == 0) weights <- rep.int(1, NROW(X))
     if (length(subset) == 0) subset <- seq_len(NROW(X))
-    idx <- rep(subset, weights[subset])
+    idx <- rep.int(subset, weights[subset])
     X <- X[idx,, drop = FALSE]
     Y <- Y[idx,, drop = FALSE]
     sumweights <- length(idx)
@@ -2025,15 +2025,15 @@ function(X, Y, weights = integer(0), subset = integer(0), block = integer(0))
                     Expectation = as.vector(Exp),
                     Covariance = Cov,
                     Variance = diag(Cov))
-   } else {
+    } else {
         block <- block[idx]
         ret <- list(LinearStatistic = 0, Expectation = 0, Covariance = 0, Variance = 0)
         for (b in levels(block)) {
             tmp <- LECV(X = X, Y = Y, subset = which(block == b))
             for (l in names(ret)) ret[[l]] <- ret[[l]] + tmp[[l]]
         }
-   }
-   return(ret)
+    }
+    return(ret)
 }
 @
 
