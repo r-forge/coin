@@ -299,20 +299,19 @@ function@<LinStatExpCov Prototype@>
 ##    if (length(subset) > 0) subset <- sort(subset)
 
     if (is.null(ix) && is.null(iy))
-        return(.LinStatExpCov1d(X = X, Y = Y,
-                                weights = weights, subset = subset,
-                                block = block, checkNAs = checkNAs,
-                                varonly = varonly, nresample = nresample,
-                                standardise = standardise, tol = tol))
-
-    if (!is.null(ix) && !is.null(iy))
-        return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
-                                weights = weights, subset = subset,
-                                block = block, checkNAs = checkNAs,
-                                varonly = varonly, nresample = nresample,
-                                standardise = standardise, tol = tol))
-
-    stop("incorrect call to LinStatExpCov")
+        .LinStatExpCov1d(X = X, Y = Y,
+                         weights = weights, subset = subset,
+                         block = block, checkNAs = checkNAs,
+                         varonly = varonly, nresample = nresample,
+                         standardise = standardise, tol = tol)
+    else if (!is.null(ix) && !is.null(iy))
+        .LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,
+                         weights = weights, subset = subset,
+                         block = block, checkNAs = checkNAs,
+                         varonly = varonly, nresample = nresample,
+                         standardise = standardise, tol = tol)
+    else
+        stop("incorrect call to ", sQuote("LinStatExpCov()"))
 }
 @}
 
@@ -535,7 +534,7 @@ function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
 }
 @}
 
-\verb|ix| can be a factor but without any missing values
+\verb|ix| and \verb|iy| can be factors but without any missing values
 
 @d Check ix
 @{
@@ -816,13 +815,15 @@ function@<ctabs Prototype@>
 
     @<Check weights, subset, block@>
 
-    if (length(iy) == 0 && length(block) == 0)
-        return(.Call(R_OneTableSums, ix, weights, subset))
-    if (length(block) == 0)
-        return(.Call(R_TwoTableSums, ix, iy, weights, subset))
     if (length(iy) == 0)
-        return(.Call(R_TwoTableSums, ix, block, weights, subset)[,-1,drop = FALSE])
-    return(.Call(R_ThreeTableSums, ix, iy, block, weights, subset))
+        if (length(block) == 0)
+            .Call(R_OneTableSums, ix, weights, subset)
+        else
+            .Call(R_TwoTableSums, ix, block, weights, subset)[, -1, drop = FALSE]
+    else if (length(block) == 0)
+        .Call(R_TwoTableSums, ix, iy, weights, subset)
+    else
+        .Call(R_ThreeTableSums, ix, iy, block, weights, subset)
 }
 @}
 
@@ -1420,7 +1421,7 @@ function(X, Y, weights = integer(0), subset = integer(0), block = integer(0))
             for (l in names(ret)) ret[[l]] <- ret[[l]] + tmp[[l]]
         }
     }
-    return(ret)
+    ret
 }
 @@
 
@@ -1463,7 +1464,7 @@ function(...)
     a <- LinStatExpCov(x, y, ...)
     b <- LECV(x, y, ...)
     d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, ...)
-    return(cmpr(a, b) && cmpr(d, b))
+    cmpr(a, b) && cmpr(d, b)
 }
 stopifnot(
     testit() && testit(weights = weights) &&
@@ -1479,7 +1480,7 @@ function(...)
     a <- LinStatExpCov(X = ix, y, ...)
     b <- LECV(Xfactor, y, ...)
     d <- LinStatExpCov(X = integer(0), ix = ix, Y = iY2d, iy = iy, ...)
-    return(cmpr(a, b) && cmpr(d, b))
+    cmpr(a, b) && cmpr(d, b)
 }
 stopifnot(
     testit() && testit(weights = weights) &&

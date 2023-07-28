@@ -95,11 +95,13 @@ function(ix, iy = integer(0), block = integer(0), weights = integer(0),
     }
     
 
-    if (length(iy) == 0 && length(block) == 0)
-        return(.Call(R_OneTableSums, ix, weights, subset))
-    if (length(block) == 0)
-        return(.Call(R_TwoTableSums, ix, iy, weights, subset))
     if (length(iy) == 0)
-        return(.Call(R_TwoTableSums, ix, block, weights, subset)[,-1,drop = FALSE])
-    return(.Call(R_ThreeTableSums, ix, iy, block, weights, subset))
+        if (length(block) == 0)
+            .Call(R_OneTableSums, ix, weights, subset)
+        else
+            .Call(R_TwoTableSums, ix, block, weights, subset)[, -1, drop = FALSE]
+    else if (length(block) == 0)
+        .Call(R_TwoTableSums, ix, iy, weights, subset)
+    else
+        .Call(R_ThreeTableSums, ix, iy, block, weights, subset)
 }

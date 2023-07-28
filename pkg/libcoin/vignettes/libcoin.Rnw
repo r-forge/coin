@@ -343,20 +343,19 @@ data is available in aggregated form; details will be explained later.
 \mbox{}\verb@##    if (length(subset) > 0) subset <- sort(subset)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (is.null(ix) && is.null(iy))@\\
-\mbox{}\verb@        return(.LinStatExpCov1d(X = X, Y = Y,@\\
-\mbox{}\verb@                                weights = weights, subset = subset,@\\
-\mbox{}\verb@                                block = block, checkNAs = checkNAs,@\\
-\mbox{}\verb@                                varonly = varonly, nresample = nresample,@\\
-\mbox{}\verb@                                standardise = standardise, tol = tol))@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@    if (!is.null(ix) && !is.null(iy))@\\
-\mbox{}\verb@        return(.LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,@\\
-\mbox{}\verb@                                weights = weights, subset = subset,@\\
-\mbox{}\verb@                                block = block, checkNAs = checkNAs,@\\
-\mbox{}\verb@                                varonly = varonly, nresample = nresample,@\\
-\mbox{}\verb@                                standardise = standardise, tol = tol))@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@    stop("incorrect call to LinStatExpCov")@\\
+\mbox{}\verb@        .LinStatExpCov1d(X = X, Y = Y,@\\
+\mbox{}\verb@                         weights = weights, subset = subset,@\\
+\mbox{}\verb@                         block = block, checkNAs = checkNAs,@\\
+\mbox{}\verb@                         varonly = varonly, nresample = nresample,@\\
+\mbox{}\verb@                         standardise = standardise, tol = tol)@\\
+\mbox{}\verb@    else if (!is.null(ix) && !is.null(iy))@\\
+\mbox{}\verb@        .LinStatExpCov2d(X = X, Y = Y, ix = ix, iy = iy,@\\
+\mbox{}\verb@                         weights = weights, subset = subset,@\\
+\mbox{}\verb@                         block = block, checkNAs = checkNAs,@\\
+\mbox{}\verb@                         varonly = varonly, nresample = nresample,@\\
+\mbox{}\verb@                         standardise = standardise, tol = tol)@\\
+\mbox{}\verb@    else@\\
+\mbox{}\verb@        stop("incorrect call to ", sQuote("LinStatExpCov()"))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -640,7 +639,7 @@ dimension $L_x \times L_y$, typically much smaller than $N$.
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
-\verb|ix| can be a factor but without any missing values
+\verb|ix| and \verb|iy| can be factors but without any missing values
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap8}\raggedright\small
@@ -1016,13 +1015,15 @@ necessarily computing the corresponding linear statistics via
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Check weights, subset, block}\nobreak\ {\footnotesize \NWlink{nuweb5a}{5a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (length(iy) == 0 && length(block) == 0)@\\
-\mbox{}\verb@        return(.Call(R_OneTableSums, ix, weights, subset))@\\
-\mbox{}\verb@    if (length(block) == 0)@\\
-\mbox{}\verb@        return(.Call(R_TwoTableSums, ix, iy, weights, subset))@\\
 \mbox{}\verb@    if (length(iy) == 0)@\\
-\mbox{}\verb@        return(.Call(R_TwoTableSums, ix, block, weights, subset)[,-1,drop = FALSE])@\\
-\mbox{}\verb@    return(.Call(R_ThreeTableSums, ix, iy, block, weights, subset))@\\
+\mbox{}\verb@        if (length(block) == 0)@\\
+\mbox{}\verb@            .Call(R_OneTableSums, ix, weights, subset)@\\
+\mbox{}\verb@        else@\\
+\mbox{}\verb@            .Call(R_TwoTableSums, ix, block, weights, subset)[, -1, drop = FALSE]@\\
+\mbox{}\verb@    else if (length(block) == 0)@\\
+\mbox{}\verb@        .Call(R_TwoTableSums, ix, iy, weights, subset)@\\
+\mbox{}\verb@    else@\\
+\mbox{}\verb@        .Call(R_ThreeTableSums, ix, iy, block, weights, subset)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -2033,7 +2034,7 @@ function(X, Y, weights = integer(0), subset = integer(0), block = integer(0))
             for (l in names(ret)) ret[[l]] <- ret[[l]] + tmp[[l]]
         }
     }
-    return(ret)
+    ret
 }
 @
 
@@ -2076,7 +2077,7 @@ function(...)
     a <- LinStatExpCov(x, y, ...)
     b <- LECV(x, y, ...)
     d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, ...)
-    return(cmpr(a, b) && cmpr(d, b))
+    cmpr(a, b) && cmpr(d, b)
 }
 stopifnot(
     testit() && testit(weights = weights) &&
@@ -2092,7 +2093,7 @@ function(...)
     a <- LinStatExpCov(X = ix, y, ...)
     b <- LECV(Xfactor, y, ...)
     d <- LinStatExpCov(X = integer(0), ix = ix, Y = iY2d, iy = iy, ...)
-    return(cmpr(a, b) && cmpr(d, b))
+    cmpr(a, b) && cmpr(d, b)
 }
 stopifnot(
     testit() && testit(weights = weights) &&
