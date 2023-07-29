@@ -81,7 +81,7 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
 }
 
 extern SEXP libcoin_R_QuadraticTest(
-    SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log, SEXP PermutedStatistics
+    SEXP LECV, SEXP pvalue, SEXP lower, SEXP give_log, SEXP PermutedStatistics
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if (fun == NULL)
@@ -91,7 +91,7 @@ extern SEXP libcoin_R_QuadraticTest(
 }
 
 extern SEXP libcoin_R_MaximumTest(
-    SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
+    SEXP LECV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
     SEXP PermutedStatistics, SEXP maxpts, SEXP releps, SEXP abseps
 ) {
   static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
@@ -103,7 +103,7 @@ extern SEXP libcoin_R_MaximumTest(
 }
 
 extern SEXP libcoin_R_MaximallySelectedTest(
-    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
+    SEXP LECV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
 ) {
     static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
     if (fun == NULL)

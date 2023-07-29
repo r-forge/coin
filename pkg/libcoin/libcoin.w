@@ -1537,6 +1537,16 @@ specified as \verb|integer(0)|.
 @<R block Input@>,
 @}
 
+@d R\_ExpectationCovarianceStatistic Prototype
+@{
+SEXP R_ExpectationCovarianceStatistic
+(
+    @<User Interface Input@>
+    SEXP varonly,
+    SEXP tol
+)
+@}
+
 This function can be called from other packages.
 
 @o libcoinAPI.h -cc
@@ -1555,16 +1565,6 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic(
             R_GetCCallable("libcoin", "R_ExpectationCovarianceStatistic");
     return fun(x, y, weights, subset, block, varonly, tol);
 }
-@}
-
-@d R\_ExpectationCovarianceStatistic Prototype
-@{
-SEXP R_ExpectationCovarianceStatistic
-(
-    @<User Interface Input@>
-    SEXP varonly,
-    SEXP tol
-)
 @}
 
 The \proglang{C} interface essentially sets-up the necessary memory and
@@ -1817,6 +1817,8 @@ SEXP R_PermutedLinearStatistic
 )
 @}
 
+This function can be called from other packages.
+
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_PermutedLinearStatistic(
@@ -1902,6 +1904,19 @@ for (int p = 0; p < PQ; p++)
     linstat[p] = 0.0;
 @}
 
+This small function takes an object containing permuted linear statistics
+and returns the matrix of standardised linear statistics.
+
+@d R\_StandardisePermutedLinearStatistic Prototype
+@{
+SEXP R_StandardisePermutedLinearStatistic
+(
+    SEXP LECV
+)
+@}
+
+This function can be called from other packages.
+
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_StandardisePermutedLinearStatistic(
@@ -1913,17 +1928,6 @@ extern SEXP libcoin_R_StandardisePermutedLinearStatistic(
             R_GetCCallable("libcoin", "R_StandardisePermutedLinearStatistic");
     return fun(LECV);
 }
-@}
-
-This small function takes an object containing permuted linear statistics
-and returns the matrix of standardised linear statistics.
-
-@d R\_StandardisePermutedLinearStatistic Prototype
-@{
-SEXP R_StandardisePermutedLinearStatistic
-(
-    SEXP LECV
-)
 @}
 
 @d R\_StandardisePermutedLinearStatistic
@@ -1985,6 +1989,8 @@ SEXP R_ExpectationCovarianceStatistic_2d
     SEXP tol
 )
 @}
+
+This function can be called from other packages.
 
 @o libcoinAPI.h -cc
 @{
@@ -2251,6 +2257,8 @@ SEXP R_PermutedLinearStatistic_2d
 )
 @}
 
+This function can be called from other packages.
+
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_PermutedLinearStatistic_2d(
@@ -2380,41 +2388,6 @@ btab = table;
 @<R\_MaximallySelectedTest@>
 @}
 
-@o libcoinAPI.h -cc
-@{
-extern SEXP libcoin_R_QuadraticTest(
-    SEXP LEV, SEXP pvalue, SEXP lower, SEXP give_log, SEXP PermutedStatistics
-) {
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if (fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_QuadraticTest");
-    return fun(LEV, pvalue, lower, give_log, PermutedStatistics);
-}
-
-extern SEXP libcoin_R_MaximumTest(
-    SEXP LEV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
-    SEXP PermutedStatistics, SEXP maxpts, SEXP releps, SEXP abseps
-) {
-  static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if (fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_MaximumTest");
-    return fun(LEV, alternative, pvalue, lower, give_log, PermutedStatistics, maxpts, releps,
-               abseps);
-}
-
-extern SEXP libcoin_R_MaximallySelectedTest(
-    SEXP LEV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
-) {
-    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
-    if (fun == NULL)
-        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
-            R_GetCCallable("libcoin", "R_MaximallySelectedTest");
-    return fun(LEV, ordered, teststat, minbucket, lower, give_log);
-}
-@}
-
 @d R\_QuadraticTest Prototype
 @{
 SEXP R_QuadraticTest
@@ -2425,6 +2398,21 @@ SEXP R_QuadraticTest
     SEXP give_log,
     SEXP PermutedStatistics
 )
+@}
+
+This function can be called from other packages.
+
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_QuadraticTest(
+    SEXP LECV, SEXP pvalue, SEXP lower, SEXP give_log, SEXP PermutedStatistics
+) {
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if (fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_QuadraticTest");
+    return fun(LEV, pvalue, lower, give_log, PermutedStatistics);
+}
 @}
 
 @d R\_QuadraticTest
@@ -2519,6 +2507,23 @@ SEXP R_MaximumTest
 )
 @}
 
+This function can be called from other packages.
+
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_MaximumTest(
+    SEXP LECV, SEXP alternative, SEXP pvalue, SEXP lower, SEXP give_log,
+    SEXP PermutedStatistics, SEXP maxpts, SEXP releps, SEXP abseps
+) {
+  static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if (fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_MaximumTest");
+    return fun(LEV, alternative, pvalue, lower, give_log, PermutedStatistics, maxpts, releps,
+               abseps);
+}
+@}
+
 @d R\_MaximumTest
 @{
 @<R\_MaximumTest Prototype@>
@@ -2588,6 +2593,21 @@ SEXP R_MaximallySelectedTest
     SEXP lower,
     SEXP give_log
 )
+@}
+
+This function can be called from other packages.
+
+@o libcoinAPI.h -cc
+@{
+extern SEXP libcoin_R_MaximallySelectedTest(
+    SEXP LECV, SEXP ordered, SEXP teststat, SEXP minbucket, SEXP lower, SEXP give_log
+) {
+    static SEXP(*fun)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP) = NULL;
+    if (fun == NULL)
+        fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
+            R_GetCCallable("libcoin", "R_MaximallySelectedTest");
+    return fun(LEV, ordered, teststat, minbucket, lower, give_log);
+}
 @}
 
 @d R\_MaximallySelectedTest
@@ -2820,6 +2840,18 @@ qf2 <- .Call(libcoin:::R_quadform, linstat, expect, MPinv_sym)
 stopifnot(isequal(qf1, qf2))
 @@
 
+@d R\_quadform Prototype
+@{
+SEXP R_quadform
+(
+    SEXP linstat,
+    SEXP expect,
+    SEXP MPinv_sym
+)
+@}
+
+This function can be called from other packages.
+
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_quadform(
@@ -2831,16 +2863,6 @@ extern SEXP libcoin_R_quadform(
             R_GetCCallable("libcoin", "R_quadform");
     return fun(linstat, expect, MPinv_sym);
 }
-@}
-
-@d R\_quadform Prototype
-@{
-SEXP R_quadform
-(
-    SEXP linstat,
-    SEXP expect,
-    SEXP MPinv_sym
-)
 @}
 
 @d R\_quadform
@@ -6160,6 +6182,17 @@ K2 <- .Call(libcoin:::R_kronecker, A, B)
 stopifnot(isequal(K1, K2))
 @@
 
+@d R\_kronecker Prototype
+@{
+SEXP R_kronecker
+(
+    SEXP A,
+    SEXP B
+)
+@}
+
+This function can be called from other packages.
+
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_kronecker(
@@ -6171,15 +6204,6 @@ extern SEXP libcoin_R_kronecker(
             R_GetCCallable("libcoin", "R_kronecker");
     return fun(A, B);
 }
-@}
-
-@d R\_kronecker Prototype
-@{
-SEXP R_kronecker
-(
-    SEXP A,
-    SEXP B
-)
 @}
 
 @d R\_kronecker
@@ -6315,6 +6339,18 @@ stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) &&
           isequal(MP1$rank, MP2$rank))
 @@
 
+@d R\_MPinv\_sym Prototype
+@{
+SEXP R_MPinv_sym
+(
+    SEXP x,
+    SEXP n,
+    SEXP tol
+)
+@}
+
+This function can be called from other packages.
+
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_MPinv_sym(
@@ -6326,16 +6362,6 @@ extern SEXP libcoin_R_MPinv_sym(
             R_GetCCallable("libcoin", "R_MPinv_sym");
     return fun(x, n, tol);
 }
-@}
-
-@d R\_MPinv\_sym Prototype
-@{
-SEXP R_MPinv_sym
-(
-    SEXP x,
-    SEXP n,
-    SEXP tol
-)
 @}
 
 @d R\_MPinv\_sym
@@ -6432,6 +6458,18 @@ u2 <- .Call(libcoin:::R_unpack_sym, s, NULL, 1L)
 stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 @@
 
+@d R\_unpack\_sym Prototype
+@{
+SEXP R_unpack_sym
+(
+    SEXP x,
+    SEXP names,
+    SEXP diagonly
+)
+@}
+
+This function can be called from other packages.
+
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_unpack_sym(
@@ -6443,16 +6481,6 @@ extern SEXP libcoin_R_unpack_sym(
             R_GetCCallable("libcoin", "R_unpack_sym");
     return fun(x, names, diagonly);
 }
-@}
-
-@d R\_unpack\_sym Prototype
-@{
-SEXP R_unpack_sym
-(
-    SEXP x,
-    SEXP names,
-    SEXP diagonly
-)
 @}
 
 @d R\_unpack\_sym
@@ -6517,6 +6545,16 @@ p <- .Call(libcoin:::R_pack_sym, m)
 stopifnot(isequal(s, p))
 @@
 
+@d R\_pack\_sym Prototype
+@{
+SEXP R_pack_sym
+(
+    SEXP x
+)
+@}
+
+This function can be called from other packages.
+
 @o libcoinAPI.h -cc
 @{
 extern SEXP libcoin_R_pack_sym(
@@ -6528,14 +6566,6 @@ extern SEXP libcoin_R_pack_sym(
             R_GetCCallable("libcoin", "R_pack_sym");
     return fun(x);
 }
-@}
-
-@d R\_pack\_sym Prototype
-@{
-SEXP R_pack_sym
-(
-    SEXP x
-)
 @}
 
 @d R\_pack\_sym
