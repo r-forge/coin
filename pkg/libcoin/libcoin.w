@@ -1389,39 +1389,42 @@ level. In a sense, the core of the \pkg{libcoin} package is ``just'' a less
 memory-hungry and sometimes faster version of this simple function.
 
 <<Rlibcoin>>=
-LECV <-
+LSEC <-
 function(X, Y, weights = integer(0), subset = integer(0), block = integer(0))
 {
     if (length(weights) == 0) weights <- rep.int(1, NROW(X))
     if (length(subset) == 0) subset <- seq_len(NROW(X))
-    idx <- rep.int(subset, weights[subset])
-    X <- X[idx,, drop = FALSE]
-    Y <- Y[idx,, drop = FALSE]
-    sumweights <- length(idx)
+
+    X <- X[subset,, drop = FALSE]
+    Y <- Y[subset,, drop = FALSE]
+    weights <- weights[subset]
 
     if (length(block) == 0) {
-        ExpX <- colSums(X)
-        ExpY <- colSums(Y) / sumweights
-        yc <- t(t(Y) - ExpY)
-        CovY <- crossprod(yc) / sumweights
-        CovX <- crossprod(X)
+        w. <- sum(weights)
+        wX <- weights * X
+        wY <- weights * Y
+        ExpX <- colSums(wX)
+        ExpY <- colSums(wY) / w.
+        CovX <- crossprod(X, wX)
+        Yc <- t(t(Y) - ExpY)
+        CovY <- crossprod(Yc, weights * Yc) / w.
+        T <- crossprod(X, wY)
         Exp <- kronecker(ExpY, ExpX)
-        Cov <- sumweights / (sumweights - 1) * kronecker(CovY, CovX) -
-               1 / (sumweights - 1) * kronecker(CovY, tcrossprod(ExpX))
+        Cov <- w. / (w. - 1) * kronecker(CovY, CovX) -
+                1 / (w. - 1) * kronecker(CovY, tcrossprod(ExpX))
 
-        ret <- list(LinearStatistic = as.vector(crossprod(X, Y)),
-                    Expectation = as.vector(Exp),
-                    Covariance = Cov,
-                    Variance = diag(Cov))
+        list(LinearStatistic = as.vector(T), Expectation = as.vector(Exp),
+             Covariance = Cov, Variance = diag(Cov))
     } else {
-        block <- block[idx]
-        ret <- list(LinearStatistic = 0, Expectation = 0, Covariance = 0, Variance = 0)
+        block <- block[subset]
+        ret <- list(LinearStatistic = 0, Expectation = 0,
+                    Covariance = 0, Variance = 0)
         for (b in levels(block)) {
-            tmp <- LECV(X = X, Y = Y, subset = which(block == b))
+            tmp <- LSEC(X = X, Y = Y, weights = weights, subset = which(block == b))
             for (l in names(ret)) ret[[l]] <- ret[[l]] + tmp[[l]]
         }
+        ret
     }
-    ret
 }
 @@
 
@@ -1452,7 +1455,7 @@ LEVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset, varonly = TRU
 @@
 
 The following tests compare the high-level \proglang{R} implementation
-(function \verb|LECV()|) with the 1d and 2d \proglang{C} level
+(function \verb|LSEC()|) with the 1d and 2d \proglang{C} level
 implementations in the two sitations with and without specification of
 \verb|X| (ie, the dummy matrix in the latter case).
 
@@ -1462,7 +1465,7 @@ testit <-
 function(...)
 {
     a <- LinStatExpCov(x, y, ...)
-    b <- LECV(x, y, ...)
+    b <- LSEC(x, y, ...)
     d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy, ...)
     cmpr(a, b) && cmpr(d, b)
 }
@@ -1471,14 +1474,15 @@ stopifnot(
     testit(subset = subset) && testit(weights = weights, subset = subset) &&
     testit(block = block) && testit(weights = weights, block = block) &&
     testit(subset = subset, block = block) &&
-    testit(weights = weights, subset = subset, block = block))
+    testit(weights = weights, subset = subset, block = block)
+)
 
 ### without dummy matrix X
 testit <-
 function(...)
 {
     a <- LinStatExpCov(X = ix, y, ...)
-    b <- LECV(Xfactor, y, ...)
+    b <- LSEC(Xfactor, y, ...)
     d <- LinStatExpCov(X = integer(0), ix = ix, Y = iY2d, iy = iy, ...)
     cmpr(a, b) && cmpr(d, b)
 }
@@ -1487,7 +1491,8 @@ stopifnot(
     testit(subset = subset) && testit(weights = weights, subset = subset) &&
     testit(block = block) && testit(weights = weights, block = block) &&
     testit(subset = subset, block = block) &&
-    testit(weights = weights, subset = subset, block = block))
+    testit(weights = weights, subset = subset, block = block)
+)
 @@
 
 All three implementations give the same results.

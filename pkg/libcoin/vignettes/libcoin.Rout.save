@@ -225,7 +225,7 @@ $p.value
 
 > r2Xfactor <- rep(1:ncol(y), each = ncol(Xfactor))
 
-> LECV <- function(X, Y, weights = integer(0), subset = integer(0), 
+> LSEC <- function(X, Y, weights = integer(0), subset = integer(0), 
 +     block = integer(0)) {
 +     if (length(weights) == 0) 
 +         weights <- .... [TRUNCATED] 
@@ -243,7 +243,7 @@ $p.value
 
 > testit <- function(...) {
 +     a <- LinStatExpCov(x, y, ...)
-+     b <- LECV(x, y, ...)
++     b <- LSEC(x, y, ...)
 +     d <- LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy =  .... [TRUNCATED] 
 
 > stopifnot(testit() && testit(weights = weights) && 
@@ -252,7 +252,7 @@ $p.value
 
 > testit <- function(...) {
 +     a <- LinStatExpCov(X = ix, y, ...)
-+     b <- LECV(Xfactor, y, ...)
++     b <- LSEC(Xfactor, y, ...)
 +     d <- LinStatExpCov(X = integer(0), ix = ix .... [TRUNCATED] 
 
 > stopifnot(testit() && testit(weights = weights) && 
@@ -696,4 +696,4 @@ $p.value
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   1.07    0.12    1.20 
+   1.04    0.20    1.18 
