@@ -315,7 +315,9 @@ $p.value
 
 > sumweights <- sum(weights[subset])
 
-> expecty <- a0 <- colSums(y[subset, ] * weights[subset])/sumweights
+> expecty <- colSums(y[subset, ] * weights[subset])/sumweights
+
+> a0 <- expecty
 
 > a1 <- .Call(libcoin:::R_ExpectationInfluence, y, weights, 
 +     subset)
@@ -368,6 +370,8 @@ $p.value
 > stopifnot(isequal(a0, a1) && isequal(a0, a2) && isequal(a0, 
 +     a3) && isequal(a0, a4) && isequal(a0, a5))
 
+> a0 <- vary
+
 > a1 <- .Call(libcoin:::R_CovarianceInfluence, y, weights, 
 +     subset, 1)
 
@@ -383,15 +387,10 @@ $p.value
 > a5 <- LinStatExpCov(x, y, weights = weights, subset = subset, 
 +     varonly = TRUE)$VarianceInfluence
 
-> a0 <- vary
-
 > stopifnot(isequal(a0, a1) && isequal(a0, a2) && isequal(a0, 
 +     a3) && isequal(a0, a4) && isequal(a0, a5))
 
 > a0 <- colSums(x[subset, ] * weights[subset])
-
-> a0
-[1] 59.67771 31.68129 47.29375
 
 > a1 <- .Call(libcoin:::R_ExpectationX, x, P, weights, 
 +     subset)
@@ -426,9 +425,6 @@ $p.value
 +     a3) && isequal(a0, a4))
 
 > a0 <- as.vector(colSums(Xfactor[subset, ] * weights[subset]))
-
-> a0
- [1]  0 15  1  4  9  2 20  6  0 15
 
 > a1 <- .Call(libcoin:::R_ExpectationX, ix, Lx, weights, 
 +     subset)
@@ -696,4 +692,4 @@ $p.value
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
-   1.04    0.20    1.18 
+   0.90    0.26    1.18 
