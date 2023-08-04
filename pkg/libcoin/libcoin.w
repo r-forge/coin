@@ -43,14 +43,7 @@ urlcolor={linkcolor}%
 
 \usepackage{underscore}
 
-\setlength{\oddsidemargin}{0in}
-\setlength{\evensidemargin}{0in}
-\setlength{\topmargin}{0in}
-\addtolength{\topmargin}{-\headheight}
-\addtolength{\topmargin}{-\headsep}
-\setlength{\textheight}{8.9in}
-\setlength{\textwidth}{6.5in}
-\setlength{\marginparwidth}{0.5in}
+\usepackage[top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
 
 \newcommand{\pkg}[1]{\textbf{#1}}
 \newcommand{\proglang}[1]{\textsf{#1}}
