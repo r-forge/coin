@@ -15,14 +15,13 @@
 \newcommand{\NWuseHyperlinks}{}
 \documentclass[a4paper]{report}
 
-%% packages
-\usepackage{amsfonts,amstext,amsmath,amssymb,amsthm}
-
 %\VignetteIndexEntry{Implementing Permutation Tests}
 %\VignetteDepends{libcoin}
 %\VignetteKeywords{conditional inference, conditional Monte Carlo}}
 %\VignettePackage{libcoin}
 
+%% packages
+\usepackage{amsfonts,amstext,amsmath,amssymb,amsthm}
 
 \usepackage[utf8]{inputenc}
 
@@ -56,6 +55,8 @@ urlcolor={linkcolor}%
 ]{hyperref}
 
 \usepackage[round]{natbib}
+
+\usepackage{underscore}
 
 \setlength{\oddsidemargin}{0in}
 \setlength{\evensidemargin}{0in}
@@ -1395,31 +1396,31 @@ function at \proglang{C} level (at your own risk, of course!).
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_ExpectationCovarianceStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb32b}{32b}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_PermutedLinearStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb38c}{38c}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_StandardisePermutedLinearStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb41b}{41b}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_ExpectationCovarianceStatistic\_2d Prototype}\nobreak\ {\footnotesize \NWlink{nuweb43a}{43a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_PermutedLinearStatistic\_2d Prototype}\nobreak\ {\footnotesize \NWlink{nuweb50a}{50a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_QuadraticTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb53c}{53c}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_MaximumTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_MaximallySelectedTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb59a}{59a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_ExpectationInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb86a}{86a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_CovarianceInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb87b}{87b}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_ExpectationX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb89b}{89b}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_CovarianceX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb92a}{92a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_Sums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb95a}{95a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_KronSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb99}{99}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_KronSums\_Permutation Prototype}\nobreak\ {\footnotesize \NWlink{nuweb109a}{109a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_colSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb113a}{113a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_OneTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb117b}{117b}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_TwoTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb122a}{122a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_ThreeTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb127a}{127a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_order\_subset\_wrt\_block Prototype}\nobreak\ {\footnotesize \NWlink{nuweb132a}{132a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_quadform Prototype}\nobreak\ {\footnotesize \NWlink{nuweb65a}{65a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_kronecker Prototype}\nobreak\ {\footnotesize \NWlink{nuweb141b}{141b}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_MPinv\_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb145b}{145b}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_unpack\_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb148a}{148a}}$\,\rangle$}\verb@;@\\
-\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R\_pack\_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb150a}{150a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_ExpectationCovarianceStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb32b}{32b}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_PermutedLinearStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb38c}{38c}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_StandardisePermutedLinearStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb41b}{41b}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_ExpectationCovarianceStatistic_2d Prototype}\nobreak\ {\footnotesize \NWlink{nuweb43a}{43a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_PermutedLinearStatistic_2d Prototype}\nobreak\ {\footnotesize \NWlink{nuweb50a}{50a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_QuadraticTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb53c}{53c}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_MaximumTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_MaximallySelectedTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb59a}{59a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_ExpectationInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb86a}{86a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_CovarianceInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb87b}{87b}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_ExpectationX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb89b}{89b}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_CovarianceX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb92a}{92a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_Sums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb95a}{95a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_KronSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb99}{99}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_KronSums_Permutation Prototype}\nobreak\ {\footnotesize \NWlink{nuweb109a}{109a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_colSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb113a}{113a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_OneTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb117b}{117b}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_TwoTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb122a}{122a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_ThreeTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb127a}{127a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_order_subset_wrt_block Prototype}\nobreak\ {\footnotesize \NWlink{nuweb132a}{132a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_quadform Prototype}\nobreak\ {\footnotesize \NWlink{nuweb65a}{65a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_kronecker Prototype}\nobreak\ {\footnotesize \NWlink{nuweb141b}{141b}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_MPinv_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb145b}{145b}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_unpack_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb148a}{148a}}$\,\rangle$}\verb@;@\\
+\mbox{}\verb@extern @\hbox{$\langle\,${\itshape R_pack_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb150a}{150a}}$\,\rangle$}\verb@;@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2136,10 +2137,10 @@ sometimes with dimension (for example: \verb|PQ_ans|).
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_ExpectationCovarianceStatistic}\nobreak\ {\footnotesize \NWlink{nuweb34}{34}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_ExpectationCovarianceStatistic}\nobreak\ {\footnotesize \NWlink{nuweb33a}{33a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_PermutedLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb40}{40}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_StandardisePermutedLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb42a}{42a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_ExpectationCovarianceStatistic}\nobreak\ {\footnotesize \NWlink{nuweb34}{34}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_ExpectationCovarianceStatistic}\nobreak\ {\footnotesize \NWlink{nuweb33a}{33a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_PermutedLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb40}{40}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_StandardisePermutedLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb42a}{42a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2179,7 +2180,7 @@ specified as \verb|integer(0)|.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
-\NWtarget{nuweb32b}{} $\langle\,${\itshape R\_ExpectationCovarianceStatistic Prototype}\nobreak\ {\footnotesize {32b}}$\,\rangle\equiv$
+\NWtarget{nuweb32b}{} $\langle\,${\itshape R_ExpectationCovarianceStatistic Prototype}\nobreak\ {\footnotesize {32b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2238,11 +2239,11 @@ calls a \proglang{C} level function for the computations.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
-\NWtarget{nuweb33a}{} $\langle\,${\itshape R\_ExpectationCovarianceStatistic}\nobreak\ {\footnotesize {33a}}$\,\rangle\equiv$
+\NWtarget{nuweb33a}{} $\langle\,${\itshape R_ExpectationCovarianceStatistic}\nobreak\ {\footnotesize {33a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_ExpectationCovarianceStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb32b}{32b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_ExpectationCovarianceStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb32b}{32b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@@\\
@@ -2310,7 +2311,7 @@ FIXME:  \verb|x| being an integer (\verb|Xfactor|) with some 0 elements is not h
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
-\NWtarget{nuweb34}{} $\langle\,${\itshape RC\_ExpectationCovarianceStatistic}\nobreak\ {\footnotesize {34}}$\,\rangle\equiv$
+\NWtarget{nuweb34}{} $\langle\,${\itshape RC_ExpectationCovarianceStatistic}\nobreak\ {\footnotesize {34}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2630,7 +2631,7 @@ permutations to be specified.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
-\NWtarget{nuweb38c}{} $\langle\,${\itshape R\_PermutedLinearStatistic Prototype}\nobreak\ {\footnotesize {38c}}$\,\rangle\equiv$
+\NWtarget{nuweb38c}{} $\langle\,${\itshape R_PermutedLinearStatistic Prototype}\nobreak\ {\footnotesize {38c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2689,11 +2690,11 @@ allowed to modify existing \proglang{R} objects at \proglang{C} level).
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap68}\raggedright\small
-\NWtarget{nuweb40}{} $\langle\,${\itshape R\_PermutedLinearStatistic}\nobreak\ {\footnotesize {40}}$\,\rangle\equiv$
+\NWtarget{nuweb40}{} $\langle\,${\itshape R_PermutedLinearStatistic}\nobreak\ {\footnotesize {40}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_PermutedLinearStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb38c}{38c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_PermutedLinearStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb38c}{38c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans, expand_subset, block_subset, perm, tmp, blockTable;@\\
 \mbox{}\verb@    double *linstat;@\\
@@ -2780,7 +2781,7 @@ and returns the matrix of standardised linear statistics.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap70}\raggedright\small
-\NWtarget{nuweb41b}{} $\langle\,${\itshape R\_StandardisePermutedLinearStatistic Prototype}\nobreak\ {\footnotesize {41b}}$\,\rangle\equiv$
+\NWtarget{nuweb41b}{} $\langle\,${\itshape R_StandardisePermutedLinearStatistic Prototype}\nobreak\ {\footnotesize {41b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2829,11 +2830,11 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap72}\raggedright\small
-\NWtarget{nuweb42a}{} $\langle\,${\itshape R\_StandardisePermutedLinearStatistic}\nobreak\ {\footnotesize {42a}}$\,\rangle\equiv$
+\NWtarget{nuweb42a}{} $\langle\,${\itshape R_StandardisePermutedLinearStatistic}\nobreak\ {\footnotesize {42a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_StandardisePermutedLinearStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb41b}{41b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_StandardisePermutedLinearStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb41b}{41b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    R_xlen_t nresample = C_get_nresample(LECV);@\\
@@ -2878,9 +2879,9 @@ This function can be called from other packages.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_ExpectationCovarianceStatistic\_2d}\nobreak\ {\footnotesize \NWlink{nuweb48}{48}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_ExpectationCovarianceStatistic\_2d}\nobreak\ {\footnotesize \NWlink{nuweb44}{44}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_PermutedLinearStatistic\_2d}\nobreak\ {\footnotesize \NWlink{nuweb51}{51}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_ExpectationCovarianceStatistic_2d}\nobreak\ {\footnotesize \NWlink{nuweb48}{48}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_ExpectationCovarianceStatistic_2d}\nobreak\ {\footnotesize \NWlink{nuweb44}{44}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_PermutedLinearStatistic_2d}\nobreak\ {\footnotesize \NWlink{nuweb51}{51}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2918,7 +2919,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap75}\raggedright\small
-\NWtarget{nuweb43a}{} $\langle\,${\itshape R\_ExpectationCovarianceStatistic\_2d Prototype}\nobreak\ {\footnotesize {43a}}$\,\rangle\equiv$
+\NWtarget{nuweb43a}{} $\langle\,${\itshape R_ExpectationCovarianceStatistic_2d Prototype}\nobreak\ {\footnotesize {43a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2970,11 +2971,11 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap77}\raggedright\small
-\NWtarget{nuweb44}{} $\langle\,${\itshape R\_ExpectationCovarianceStatistic\_2d}\nobreak\ {\footnotesize {44}}$\,\rangle\equiv$
+\NWtarget{nuweb44}{} $\langle\,${\itshape R_ExpectationCovarianceStatistic_2d}\nobreak\ {\footnotesize {44}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_ExpectationCovarianceStatistic\_2d Prototype}\nobreak\ {\footnotesize \NWlink{nuweb43a}{43a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_ExpectationCovarianceStatistic_2d Prototype}\nobreak\ {\footnotesize \NWlink{nuweb43a}{43a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@;@\\
@@ -3218,7 +3219,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap84}\raggedright\small
-\NWtarget{nuweb48}{} $\langle\,${\itshape RC\_ExpectationCovarianceStatistic\_2d}\nobreak\ {\footnotesize {48}}$\,\rangle\equiv$
+\NWtarget{nuweb48}{} $\langle\,${\itshape RC_ExpectationCovarianceStatistic_2d}\nobreak\ {\footnotesize {48}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3321,7 +3322,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap86}\raggedright\small
-\NWtarget{nuweb50a}{} $\langle\,${\itshape R\_PermutedLinearStatistic\_2d Prototype}\nobreak\ {\footnotesize {50a}}$\,\rangle\equiv$
+\NWtarget{nuweb50a}{} $\langle\,${\itshape R_PermutedLinearStatistic_2d Prototype}\nobreak\ {\footnotesize {50a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3377,11 +3378,11 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap88}\raggedright\small
-\NWtarget{nuweb51}{} $\langle\,${\itshape R\_PermutedLinearStatistic\_2d}\nobreak\ {\footnotesize {51}}$\,\rangle\equiv$
+\NWtarget{nuweb51}{} $\langle\,${\itshape R_PermutedLinearStatistic_2d}\nobreak\ {\footnotesize {51}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_PermutedLinearStatistic\_2d Prototype}\nobreak\ {\footnotesize \NWlink{nuweb50a}{50a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_PermutedLinearStatistic_2d Prototype}\nobreak\ {\footnotesize \NWlink{nuweb50a}{50a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans, Ritable;@\\
 \mbox{}\verb@    int *csum, *rsum, *sumweights, *jwork, *table, *rtable2, maxn = 0, Lxp1, Lyp1, *btab, PQ, Xfactor;@\\
@@ -3553,9 +3554,9 @@ Note: the interface to \verb|S_rcont2| changed in \textsf{R}-4.1.0.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_QuadraticTest}\nobreak\ {\footnotesize \NWlink{nuweb55}{55}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_MaximumTest}\nobreak\ {\footnotesize \NWlink{nuweb58}{58}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_MaximallySelectedTest}\nobreak\ {\footnotesize \NWlink{nuweb60}{60}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_QuadraticTest}\nobreak\ {\footnotesize \NWlink{nuweb55}{55}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_MaximumTest}\nobreak\ {\footnotesize \NWlink{nuweb58}{58}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_MaximallySelectedTest}\nobreak\ {\footnotesize \NWlink{nuweb60}{60}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -3569,7 +3570,7 @@ Note: the interface to \verb|S_rcont2| changed in \textsf{R}-4.1.0.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap94}\raggedright\small
-\NWtarget{nuweb53c}{} $\langle\,${\itshape R\_QuadraticTest Prototype}\nobreak\ {\footnotesize {53c}}$\,\rangle\equiv$
+\NWtarget{nuweb53c}{} $\langle\,${\itshape R_QuadraticTest Prototype}\nobreak\ {\footnotesize {53c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3622,11 +3623,11 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap96}\raggedright\small
-\NWtarget{nuweb55}{} $\langle\,${\itshape R\_QuadraticTest}\nobreak\ {\footnotesize {55}}$\,\rangle\equiv$
+\NWtarget{nuweb55}{} $\langle\,${\itshape R_QuadraticTest}\nobreak\ {\footnotesize {55}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_QuadraticTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb53c}{53c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_QuadraticTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb53c}{53c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans, stat, pval, names, permstat;@\\
 \mbox{}\verb@    double *MPinv, *ls, st, pst, *ex;@\\
@@ -3724,7 +3725,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap98}\raggedright\small
-\NWtarget{nuweb56b}{} $\langle\,${\itshape R\_MaximumTest Prototype}\nobreak\ {\footnotesize {56b}}$\,\rangle\equiv$
+\NWtarget{nuweb56b}{} $\langle\,${\itshape R_MaximumTest Prototype}\nobreak\ {\footnotesize {56b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3783,11 +3784,11 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap100}\raggedright\small
-\NWtarget{nuweb58}{} $\langle\,${\itshape R\_MaximumTest}\nobreak\ {\footnotesize {58}}$\,\rangle\equiv$
+\NWtarget{nuweb58}{} $\langle\,${\itshape R_MaximumTest}\nobreak\ {\footnotesize {58}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_MaximumTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_MaximumTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans, stat, pval, names, permstat;@\\
 \mbox{}\verb@    double st, pst, *ex, *cv, *ls, tl;@\\
@@ -3847,14 +3848,14 @@ This function can be called from other packages.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb53b}{53b}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb155a}{155a}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb154a}{154a}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb153d}{153d}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb158b}{158b}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb158d}{158d}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb154b}{154b}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb153b}{153b}, \verb@C_maxtype@\nobreak\ \NWlink{nuweb67}{67}, \verb@C_maxtype_pvalue@\nobreak\ \NWlink{nuweb71}{71}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb69}{69}, \verb@GE@\nobreak\ \NWlink{nuweb22a}{22a}, \verb@LE@\nobreak\ \NWlink{nuweb22a}{22a}, \verb@LECV@\nobreak\ \NWlink{nuweb152b}{152b}, \verb@P@\nobreak\ \NWlink{nuweb25a}{25a}, \verb@Q@\nobreak\ \NWlink{nuweb25e}{25e}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb155a}{155a}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb154a}{154a}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb153d}{153d}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb158b}{158b}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb158c}{158c}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb158d}{158d}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb154b}{154b}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb153b}{153b}, \verb@C_maxtype@\nobreak\ \NWlink{nuweb67}{67}, \verb@C_maxtype_pvalue@\nobreak\ \NWlink{nuweb71}{71}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb69}{69}, \verb@GE@\nobreak\ \NWlink{nuweb22a}{22a}, \verb@LE@\nobreak\ \NWlink{nuweb22a}{22a}, \verb@LECV@\nobreak\ \NWlink{nuweb152b}{152b}, \verb@P@\nobreak\ \NWlink{nuweb25a}{25a}, \verb@Q@\nobreak\ \NWlink{nuweb25e}{25e}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap101}\raggedright\small
-\NWtarget{nuweb59a}{} $\langle\,${\itshape R\_MaximallySelectedTest Prototype}\nobreak\ {\footnotesize {59a}}$\,\rangle\equiv$
+\NWtarget{nuweb59a}{} $\langle\,${\itshape R_MaximallySelectedTest Prototype}\nobreak\ {\footnotesize {59a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3908,11 +3909,11 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap103}\raggedright\small
-\NWtarget{nuweb60}{} $\langle\,${\itshape R\_MaximallySelectedTest}\nobreak\ {\footnotesize {60}}$\,\rangle\equiv$
+\NWtarget{nuweb60}{} $\langle\,${\itshape R_MaximallySelectedTest}\nobreak\ {\footnotesize {60}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_MaximallySelectedTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb59a}{59a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_MaximallySelectedTest Prototype}\nobreak\ {\footnotesize \NWlink{nuweb59a}{59a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans, index, stat, pval, names, permstat;@\\
 \mbox{}\verb@    int P, mb;@\\
@@ -3971,18 +3972,18 @@ This function can be called from other packages.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_maxstand\_Covariance}\nobreak\ {\footnotesize \NWlink{nuweb61b}{61b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_maxstand\_Variance}\nobreak\ {\footnotesize \NWlink{nuweb62a}{62a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_minstand\_Covariance}\nobreak\ {\footnotesize \NWlink{nuweb62b}{62b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_minstand\_Variance}\nobreak\ {\footnotesize \NWlink{nuweb63a}{63a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_maxabsstand\_Covariance}\nobreak\ {\footnotesize \NWlink{nuweb63b}{63b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_maxabsstand\_Variance}\nobreak\ {\footnotesize \NWlink{nuweb64}{64}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_quadform}\nobreak\ {\footnotesize \NWlink{nuweb66}{66}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_quadform}\nobreak\ {\footnotesize \NWlink{nuweb65c}{65c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_maxtype}\nobreak\ {\footnotesize \NWlink{nuweb67}{67}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_standardise}\nobreak\ {\footnotesize \NWlink{nuweb68a}{68a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_ordered\_Xfactor}\nobreak\ {\footnotesize \NWlink{nuweb74}{74}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_unordered\_Xfactor}\nobreak\ {\footnotesize \NWlink{nuweb79}{79}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_maxstand_Covariance}\nobreak\ {\footnotesize \NWlink{nuweb61b}{61b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_maxstand_Variance}\nobreak\ {\footnotesize \NWlink{nuweb62a}{62a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_minstand_Covariance}\nobreak\ {\footnotesize \NWlink{nuweb62b}{62b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_minstand_Variance}\nobreak\ {\footnotesize \NWlink{nuweb63a}{63a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_maxabsstand_Covariance}\nobreak\ {\footnotesize \NWlink{nuweb63b}{63b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_maxabsstand_Variance}\nobreak\ {\footnotesize \NWlink{nuweb64}{64}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_quadform}\nobreak\ {\footnotesize \NWlink{nuweb66}{66}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_quadform}\nobreak\ {\footnotesize \NWlink{nuweb65c}{65c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_maxtype}\nobreak\ {\footnotesize \NWlink{nuweb67}{67}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_standardise}\nobreak\ {\footnotesize \NWlink{nuweb68a}{68a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_ordered_Xfactor}\nobreak\ {\footnotesize \NWlink{nuweb74}{74}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_unordered_Xfactor}\nobreak\ {\footnotesize \NWlink{nuweb79}{79}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -3996,7 +3997,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap105}\raggedright\small
-\NWtarget{nuweb61b}{} $\langle\,${\itshape C\_maxstand\_Covariance}\nobreak\ {\footnotesize {61b}}$\,\rangle\equiv$
+\NWtarget{nuweb61b}{} $\langle\,${\itshape C_maxstand_Covariance}\nobreak\ {\footnotesize {61b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4031,7 +4032,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap106}\raggedright\small
-\NWtarget{nuweb62a}{} $\langle\,${\itshape C\_maxstand\_Variance}\nobreak\ {\footnotesize {62a}}$\,\rangle\equiv$
+\NWtarget{nuweb62a}{} $\langle\,${\itshape C_maxstand_Variance}\nobreak\ {\footnotesize {62a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4066,7 +4067,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap107}\raggedright\small
-\NWtarget{nuweb62b}{} $\langle\,${\itshape C\_minstand\_Covariance}\nobreak\ {\footnotesize {62b}}$\,\rangle\equiv$
+\NWtarget{nuweb62b}{} $\langle\,${\itshape C_minstand_Covariance}\nobreak\ {\footnotesize {62b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4101,7 +4102,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap108}\raggedright\small
-\NWtarget{nuweb63a}{} $\langle\,${\itshape C\_minstand\_Variance}\nobreak\ {\footnotesize {63a}}$\,\rangle\equiv$
+\NWtarget{nuweb63a}{} $\langle\,${\itshape C_minstand_Variance}\nobreak\ {\footnotesize {63a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4136,7 +4137,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap109}\raggedright\small
-\NWtarget{nuweb63b}{} $\langle\,${\itshape C\_maxabsstand\_Covariance}\nobreak\ {\footnotesize {63b}}$\,\rangle\equiv$
+\NWtarget{nuweb63b}{} $\langle\,${\itshape C_maxabsstand_Covariance}\nobreak\ {\footnotesize {63b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4172,7 +4173,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap110}\raggedright\small
-\NWtarget{nuweb64}{} $\langle\,${\itshape C\_maxabsstand\_Variance}\nobreak\ {\footnotesize {64}}$\,\rangle\equiv$
+\NWtarget{nuweb64}{} $\langle\,${\itshape C_maxabsstand_Variance}\nobreak\ {\footnotesize {64}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4235,7 +4236,7 @@ stopifnot(isequal(qf1, qf2))
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap111}\raggedright\small
-\NWtarget{nuweb65a}{} $\langle\,${\itshape R\_quadform Prototype}\nobreak\ {\footnotesize {65a}}$\,\rangle\equiv$
+\NWtarget{nuweb65a}{} $\langle\,${\itshape R_quadform Prototype}\nobreak\ {\footnotesize {65a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4286,11 +4287,11 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap113}\raggedright\small
-\NWtarget{nuweb65c}{} $\langle\,${\itshape R\_quadform}\nobreak\ {\footnotesize {65c}}$\,\rangle\equiv$
+\NWtarget{nuweb65c}{} $\langle\,${\itshape R_quadform}\nobreak\ {\footnotesize {65c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_quadform Prototype}\nobreak\ {\footnotesize \NWlink{nuweb65a}{65a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_quadform Prototype}\nobreak\ {\footnotesize \NWlink{nuweb65a}{65a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    int n, PQ;@\\
@@ -4323,7 +4324,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap114}\raggedright\small
-\NWtarget{nuweb66}{} $\langle\,${\itshape C\_quadform}\nobreak\ {\footnotesize {66}}$\,\rangle\equiv$
+\NWtarget{nuweb66}{} $\langle\,${\itshape C_quadform}\nobreak\ {\footnotesize {66}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4358,7 +4359,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap115}\raggedright\small
-\NWtarget{nuweb67}{} $\langle\,${\itshape C\_maxtype}\nobreak\ {\footnotesize {67}}$\,\rangle\equiv$
+\NWtarget{nuweb67}{} $\langle\,${\itshape C_maxtype}\nobreak\ {\footnotesize {67}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4406,7 +4407,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap116}\raggedright\small
-\NWtarget{nuweb68a}{} $\langle\,${\itshape C\_standardise}\nobreak\ {\footnotesize {68a}}$\,\rangle\equiv$
+\NWtarget{nuweb68a}{} $\langle\,${\itshape C_standardise}\nobreak\ {\footnotesize {68a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4451,10 +4452,10 @@ This function can be called from other packages.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_chisq\_pvalue}\nobreak\ {\footnotesize \NWlink{nuweb68c}{68c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_perm\_pvalue}\nobreak\ {\footnotesize \NWlink{nuweb69}{69}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_norm\_pvalue}\nobreak\ {\footnotesize \NWlink{nuweb70}{70}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_maxtype\_pvalue}\nobreak\ {\footnotesize \NWlink{nuweb71}{71}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_chisq_pvalue}\nobreak\ {\footnotesize \NWlink{nuweb68c}{68c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_perm_pvalue}\nobreak\ {\footnotesize \NWlink{nuweb69}{69}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_norm_pvalue}\nobreak\ {\footnotesize \NWlink{nuweb70}{70}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_maxtype_pvalue}\nobreak\ {\footnotesize \NWlink{nuweb71}{71}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -4468,7 +4469,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap118}\raggedright\small
-\NWtarget{nuweb68c}{} $\langle\,${\itshape C\_chisq\_pvalue}\nobreak\ {\footnotesize {68c}}$\,\rangle\equiv$
+\NWtarget{nuweb68c}{} $\langle\,${\itshape C_chisq_pvalue}\nobreak\ {\footnotesize {68c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4495,7 +4496,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap119}\raggedright\small
-\NWtarget{nuweb69}{} $\langle\,${\itshape C\_perm\_pvalue}\nobreak\ {\footnotesize {69}}$\,\rangle\equiv$
+\NWtarget{nuweb69}{} $\langle\,${\itshape C_perm_pvalue}\nobreak\ {\footnotesize {69}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4536,7 +4537,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap120}\raggedright\small
-\NWtarget{nuweb70}{} $\langle\,${\itshape C\_norm\_pvalue}\nobreak\ {\footnotesize {70}}$\,\rangle\equiv$
+\NWtarget{nuweb70}{} $\langle\,${\itshape C_norm_pvalue}\nobreak\ {\footnotesize {70}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4585,7 +4586,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap121}\raggedright\small
-\NWtarget{nuweb71}{} $\langle\,${\itshape C\_maxtype\_pvalue}\nobreak\ {\footnotesize {71}}$\,\rangle\equiv$
+\NWtarget{nuweb71}{} $\langle\,${\itshape C_maxtype_pvalue}\nobreak\ {\footnotesize {71}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4775,7 +4776,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap125}\raggedright\small
-\NWtarget{nuweb74}{} $\langle\,${\itshape C\_ordered\_Xfactor}\nobreak\ {\footnotesize {74}}$\,\rangle\equiv$
+\NWtarget{nuweb74}{} $\langle\,${\itshape C_ordered_Xfactor}\nobreak\ {\footnotesize {74}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5047,7 +5048,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap132}\raggedright\small
-\NWtarget{nuweb79}{} $\langle\,${\itshape C\_unordered\_Xfactor}\nobreak\ {\footnotesize {79}}$\,\rangle\equiv$
+\NWtarget{nuweb79}{} $\langle\,${\itshape C_unordered_Xfactor}\nobreak\ {\footnotesize {79}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5294,7 +5295,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_LinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb82d}{82d}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_LinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb82d}{82d}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -5308,7 +5309,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap139}\raggedright\small
-\NWtarget{nuweb82c}{} $\langle\,${\itshape RC\_LinearStatistic Prototype}\nobreak\ {\footnotesize {82c}}$\,\rangle\equiv$
+\NWtarget{nuweb82c}{} $\langle\,${\itshape RC_LinearStatistic Prototype}\nobreak\ {\footnotesize {82c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5336,11 +5337,11 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap140}\raggedright\small
-\NWtarget{nuweb82d}{} $\langle\,${\itshape RC\_LinearStatistic}\nobreak\ {\footnotesize {82d}}$\,\rangle\equiv$
+\NWtarget{nuweb82d}{} $\langle\,${\itshape RC_LinearStatistic}\nobreak\ {\footnotesize {82d}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_LinearStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb82c}{82c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_LinearStatistic Prototype}\nobreak\ {\footnotesize \NWlink{nuweb82c}{82c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double center;@\\
 \mbox{}\verb@@\\
@@ -5366,17 +5367,17 @@ covariance matrix to be passed as argument \verb|CORREL|
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_ExpectationInfluence}\nobreak\ {\footnotesize \NWlink{nuweb87a}{87a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_ExpectationInfluence}\nobreak\ {\footnotesize \NWlink{nuweb86b}{86b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_CovarianceInfluence}\nobreak\ {\footnotesize \NWlink{nuweb89a}{89a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_CovarianceInfluence}\nobreak\ {\footnotesize \NWlink{nuweb88a}{88a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_ExpectationX}\nobreak\ {\footnotesize \NWlink{nuweb91}{91}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_ExpectationX}\nobreak\ {\footnotesize \NWlink{nuweb90a}{90a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_CovarianceX}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_CovarianceX}\nobreak\ {\footnotesize \NWlink{nuweb92b}{92b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_ExpectationLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb83b}{83b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_CovarianceLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb84}{84}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_VarianceLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb85}{85}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_ExpectationInfluence}\nobreak\ {\footnotesize \NWlink{nuweb87a}{87a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_ExpectationInfluence}\nobreak\ {\footnotesize \NWlink{nuweb86b}{86b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_CovarianceInfluence}\nobreak\ {\footnotesize \NWlink{nuweb89a}{89a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_CovarianceInfluence}\nobreak\ {\footnotesize \NWlink{nuweb88a}{88a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_ExpectationX}\nobreak\ {\footnotesize \NWlink{nuweb91}{91}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_ExpectationX}\nobreak\ {\footnotesize \NWlink{nuweb90a}{90a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_CovarianceX}\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_CovarianceX}\nobreak\ {\footnotesize \NWlink{nuweb92b}{92b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_ExpectationLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb83b}{83b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_CovarianceLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb84}{84}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_VarianceLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb85}{85}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -5392,7 +5393,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap142}\raggedright\small
-\NWtarget{nuweb83b}{} $\langle\,${\itshape C\_ExpectationLinearStatistic}\nobreak\ {\footnotesize {83b}}$\,\rangle\equiv$
+\NWtarget{nuweb83b}{} $\langle\,${\itshape C_ExpectationLinearStatistic}\nobreak\ {\footnotesize {83b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5426,7 +5427,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap143}\raggedright\small
-\NWtarget{nuweb84}{} $\langle\,${\itshape C\_CovarianceLinearStatistic}\nobreak\ {\footnotesize {84}}$\,\rangle\equiv$
+\NWtarget{nuweb84}{} $\langle\,${\itshape C_CovarianceLinearStatistic}\nobreak\ {\footnotesize {84}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5477,7 +5478,7 @@ covariance matrix to be passed as argument \verb|CORREL|
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap144}\raggedright\small
-\NWtarget{nuweb85}{} $\langle\,${\itshape C\_VarianceLinearStatistic}\nobreak\ {\footnotesize {85}}$\,\rangle\equiv$
+\NWtarget{nuweb85}{} $\langle\,${\itshape C_VarianceLinearStatistic}\nobreak\ {\footnotesize {85}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5539,7 +5540,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap145}\raggedright\small
-\NWtarget{nuweb86a}{} $\langle\,${\itshape R\_ExpectationInfluence Prototype}\nobreak\ {\footnotesize {86a}}$\,\rangle\equiv$
+\NWtarget{nuweb86a}{} $\langle\,${\itshape R_ExpectationInfluence Prototype}\nobreak\ {\footnotesize {86a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5562,11 +5563,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap146}\raggedright\small
-\NWtarget{nuweb86b}{} $\langle\,${\itshape R\_ExpectationInfluence}\nobreak\ {\footnotesize {86b}}$\,\rangle\equiv$
+\NWtarget{nuweb86b}{} $\langle\,${\itshape R_ExpectationInfluence}\nobreak\ {\footnotesize {86b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_ExpectationInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb86a}{86a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_ExpectationInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb86a}{86a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Q Input}\nobreak\ {\footnotesize \NWlink{nuweb25e}{25e}}$\,\rangle$}\verb@;@\\
@@ -5598,7 +5599,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap147}\raggedright\small
-\NWtarget{nuweb86c}{} $\langle\,${\itshape RC\_ExpectationInfluence Prototype}\nobreak\ {\footnotesize {86c}}$\,\rangle\equiv$
+\NWtarget{nuweb86c}{} $\langle\,${\itshape RC_ExpectationInfluence Prototype}\nobreak\ {\footnotesize {86c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5626,11 +5627,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap148}\raggedright\small
-\NWtarget{nuweb87a}{} $\langle\,${\itshape RC\_ExpectationInfluence}\nobreak\ {\footnotesize {87a}}$\,\rangle\equiv$
+\NWtarget{nuweb87a}{} $\langle\,${\itshape RC_ExpectationInfluence}\nobreak\ {\footnotesize {87a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_ExpectationInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb86c}{86c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_ExpectationInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb86c}{86c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double center;@\\
 \mbox{}\verb@@\\
@@ -5684,7 +5685,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap149}\raggedright\small
-\NWtarget{nuweb87b}{} $\langle\,${\itshape R\_CovarianceInfluence Prototype}\nobreak\ {\footnotesize {87b}}$\,\rangle\equiv$
+\NWtarget{nuweb87b}{} $\langle\,${\itshape R_CovarianceInfluence Prototype}\nobreak\ {\footnotesize {87b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5708,11 +5709,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap150}\raggedright\small
-\NWtarget{nuweb88a}{} $\langle\,${\itshape R\_CovarianceInfluence}\nobreak\ {\footnotesize {88a}}$\,\rangle\equiv$
+\NWtarget{nuweb88a}{} $\langle\,${\itshape R_CovarianceInfluence}\nobreak\ {\footnotesize {88a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_CovarianceInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb87b}{87b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_CovarianceInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb87b}{87b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    SEXP ExpInf;@\\
@@ -5752,7 +5753,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap151}\raggedright\small
-\NWtarget{nuweb88b}{} $\langle\,${\itshape RC\_CovarianceInfluence Prototype}\nobreak\ {\footnotesize {88b}}$\,\rangle\equiv$
+\NWtarget{nuweb88b}{} $\langle\,${\itshape RC_CovarianceInfluence Prototype}\nobreak\ {\footnotesize {88b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5782,11 +5783,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap152}\raggedright\small
-\NWtarget{nuweb89a}{} $\langle\,${\itshape RC\_CovarianceInfluence}\nobreak\ {\footnotesize {89a}}$\,\rangle\equiv$
+\NWtarget{nuweb89a}{} $\langle\,${\itshape RC_CovarianceInfluence}\nobreak\ {\footnotesize {89a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_CovarianceInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb88b}{88b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_CovarianceInfluence Prototype}\nobreak\ {\footnotesize \NWlink{nuweb88b}{88b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (VARONLY) {@\\
 \mbox{}\verb@        RC_colSums(REAL(y), N, Q, Power2, ExpInf, DoCenter, weights,@\\
@@ -5815,7 +5816,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap153}\raggedright\small
-\NWtarget{nuweb89b}{} $\langle\,${\itshape R\_ExpectationX Prototype}\nobreak\ {\footnotesize {89b}}$\,\rangle\equiv$
+\NWtarget{nuweb89b}{} $\langle\,${\itshape R_ExpectationX Prototype}\nobreak\ {\footnotesize {89b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5839,11 +5840,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap154}\raggedright\small
-\NWtarget{nuweb90a}{} $\langle\,${\itshape R\_ExpectationX}\nobreak\ {\footnotesize {90a}}$\,\rangle\equiv$
+\NWtarget{nuweb90a}{} $\langle\,${\itshape R_ExpectationX}\nobreak\ {\footnotesize {90a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_ExpectationX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb89b}{89b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_ExpectationX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb89b}{89b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@;@\\
@@ -5871,7 +5872,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap155}\raggedright\small
-\NWtarget{nuweb90b}{} $\langle\,${\itshape RC\_ExpectationX Prototype}\nobreak\ {\footnotesize {90b}}$\,\rangle\equiv$
+\NWtarget{nuweb90b}{} $\langle\,${\itshape RC_ExpectationX Prototype}\nobreak\ {\footnotesize {90b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -5898,11 +5899,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap156}\raggedright\small
-\NWtarget{nuweb91}{} $\langle\,${\itshape RC\_ExpectationX}\nobreak\ {\footnotesize {91}}$\,\rangle\equiv$
+\NWtarget{nuweb91}{} $\langle\,${\itshape RC_ExpectationX}\nobreak\ {\footnotesize {91}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_ExpectationX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb90b}{90b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_ExpectationX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb90b}{90b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double center;@\\
 \mbox{}\verb@@\\
@@ -5981,7 +5982,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap157}\raggedright\small
-\NWtarget{nuweb92a}{} $\langle\,${\itshape R\_CovarianceX Prototype}\nobreak\ {\footnotesize {92a}}$\,\rangle\equiv$
+\NWtarget{nuweb92a}{} $\langle\,${\itshape R_CovarianceX Prototype}\nobreak\ {\footnotesize {92a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6006,11 +6007,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap158}\raggedright\small
-\NWtarget{nuweb92b}{} $\langle\,${\itshape R\_CovarianceX}\nobreak\ {\footnotesize {92b}}$\,\rangle\equiv$
+\NWtarget{nuweb92b}{} $\langle\,${\itshape R_CovarianceX}\nobreak\ {\footnotesize {92b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_CovarianceX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb92a}{92a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_CovarianceX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb92a}{92a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    SEXP ExpX;@\\
@@ -6045,7 +6046,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap159}\raggedright\small
-\NWtarget{nuweb93a}{} $\langle\,${\itshape RC\_CovarianceX Prototype}\nobreak\ {\footnotesize {93a}}$\,\rangle\equiv$
+\NWtarget{nuweb93a}{} $\langle\,${\itshape RC_CovarianceX Prototype}\nobreak\ {\footnotesize {93a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6074,11 +6075,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap160}\raggedright\small
-\NWtarget{nuweb93b}{} $\langle\,${\itshape RC\_CovarianceX}\nobreak\ {\footnotesize {93b}}$\,\rangle\equiv$
+\NWtarget{nuweb93b}{} $\langle\,${\itshape RC_CovarianceX}\nobreak\ {\footnotesize {93b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_CovarianceX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb93a}{93a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_CovarianceX Prototype}\nobreak\ {\footnotesize \NWlink{nuweb93a}{93a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    double center;@\\
 \mbox{}\verb@@\\
@@ -6199,12 +6200,12 @@ After computions in the loop, we compute the next element
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_Sums\_dweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb96b}{96b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_Sums\_iweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb97a}{97a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_Sums\_iweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb97b}{97b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_Sums\_dweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb97c}{97c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_Sums}\nobreak\ {\footnotesize \NWlink{nuweb96a}{96a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_Sums}\nobreak\ {\footnotesize \NWlink{nuweb95b}{95b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_Sums_dweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb96b}{96b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_Sums_iweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb97a}{97a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_Sums_iweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb97b}{97b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_Sums_dweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb97c}{97c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_Sums}\nobreak\ {\footnotesize \NWlink{nuweb96a}{96a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_Sums}\nobreak\ {\footnotesize \NWlink{nuweb95b}{95b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6230,7 +6231,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap165}\raggedright\small
-\NWtarget{nuweb95a}{} $\langle\,${\itshape R\_Sums Prototype}\nobreak\ {\footnotesize {95a}}$\,\rangle\equiv$
+\NWtarget{nuweb95a}{} $\langle\,${\itshape R_Sums Prototype}\nobreak\ {\footnotesize {95a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6253,11 +6254,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap166}\raggedright\small
-\NWtarget{nuweb95b}{} $\langle\,${\itshape R\_Sums}\nobreak\ {\footnotesize {95b}}$\,\rangle\equiv$
+\NWtarget{nuweb95b}{} $\langle\,${\itshape R_Sums}\nobreak\ {\footnotesize {95b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_Sums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb95a}{95a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_Sums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb95a}{95a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Nsubset Input}\nobreak\ {\footnotesize \NWlink{nuweb27c}{27c}}$\,\rangle$}\verb@;@\\
@@ -6283,7 +6284,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap167}\raggedright\small
-\NWtarget{nuweb95c}{} $\langle\,${\itshape RC\_Sums Prototype}\nobreak\ {\footnotesize {95c}}$\,\rangle\equiv$
+\NWtarget{nuweb95c}{} $\langle\,${\itshape RC_Sums Prototype}\nobreak\ {\footnotesize {95c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6307,11 +6308,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap168}\raggedright\small
-\NWtarget{nuweb96a}{} $\langle\,${\itshape RC\_Sums}\nobreak\ {\footnotesize {96a}}$\,\rangle\equiv$
+\NWtarget{nuweb96a}{} $\langle\,${\itshape RC_Sums}\nobreak\ {\footnotesize {96a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_Sums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb95c}{95c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_Sums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb95c}{95c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (XLENGTH(weights) == 0) {@\\
 \mbox{}\verb@        if (XLENGTH(subset) == 0) {@\\
@@ -6351,7 +6352,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap169}\raggedright\small
-\NWtarget{nuweb96b}{} $\langle\,${\itshape C\_Sums\_dweights\_dsubset}\nobreak\ {\footnotesize {96b}}$\,\rangle\equiv$
+\NWtarget{nuweb96b}{} $\langle\,${\itshape C_Sums_dweights_dsubset}\nobreak\ {\footnotesize {96b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6377,7 +6378,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap170}\raggedright\small
-\NWtarget{nuweb97a}{} $\langle\,${\itshape C\_Sums\_iweights\_dsubset}\nobreak\ {\footnotesize {97a}}$\,\rangle\equiv$
+\NWtarget{nuweb97a}{} $\langle\,${\itshape C_Sums_iweights_dsubset}\nobreak\ {\footnotesize {97a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6404,7 +6405,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap171}\raggedright\small
-\NWtarget{nuweb97b}{} $\langle\,${\itshape C\_Sums\_iweights\_isubset}\nobreak\ {\footnotesize {97b}}$\,\rangle\equiv$
+\NWtarget{nuweb97b}{} $\langle\,${\itshape C_Sums_iweights_isubset}\nobreak\ {\footnotesize {97b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6430,7 +6431,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap172}\raggedright\small
-\NWtarget{nuweb97c}{} $\langle\,${\itshape C\_Sums\_dweights\_isubset}\nobreak\ {\footnotesize {97c}}$\,\rangle\equiv$
+\NWtarget{nuweb97c}{} $\langle\,${\itshape C_Sums_dweights_isubset}\nobreak\ {\footnotesize {97c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6499,22 +6500,22 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_KronSums\_dweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb103b}{103b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_KronSums\_iweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb104a}{104a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_KronSums\_iweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb104b}{104b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_KronSums\_dweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb104c}{104c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_XfactorKronSums\_dweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb106b}{106b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_XfactorKronSums\_iweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb106c}{106c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_XfactorKronSums\_iweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb107a}{107a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_XfactorKronSums\_dweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb107b}{107b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_KronSums}\nobreak\ {\footnotesize \NWlink{nuweb101a}{101a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_KronSums}\nobreak\ {\footnotesize \NWlink{nuweb100a}{100a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_KronSums\_Permutation\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb111a}{111a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_KronSums\_Permutation\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb110b}{110b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_XfactorKronSums\_Permutation\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb112a}{112a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_XfactorKronSums\_Permutation\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb111c}{111c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_KronSums\_Permutation}\nobreak\ {\footnotesize \NWlink{nuweb110a}{110a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_KronSums\_Permutation}\nobreak\ {\footnotesize \NWlink{nuweb109b}{109b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_KronSums_dweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb103b}{103b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_KronSums_iweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb104a}{104a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_KronSums_iweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb104b}{104b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_KronSums_dweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb104c}{104c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_XfactorKronSums_dweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb106b}{106b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_XfactorKronSums_iweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb106c}{106c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_XfactorKronSums_iweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb107a}{107a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_XfactorKronSums_dweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb107b}{107b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_KronSums}\nobreak\ {\footnotesize \NWlink{nuweb101a}{101a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_KronSums}\nobreak\ {\footnotesize \NWlink{nuweb100a}{100a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_KronSums_Permutation_isubset}\nobreak\ {\footnotesize \NWlink{nuweb111a}{111a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_KronSums_Permutation_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb110b}{110b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_XfactorKronSums_Permutation_isubset}\nobreak\ {\footnotesize \NWlink{nuweb112a}{112a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_XfactorKronSums_Permutation_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb111c}{111c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_KronSums_Permutation}\nobreak\ {\footnotesize \NWlink{nuweb110a}{110a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_KronSums_Permutation}\nobreak\ {\footnotesize \NWlink{nuweb109b}{109b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -6552,7 +6553,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap175}\raggedright\small
-\NWtarget{nuweb99}{} $\langle\,${\itshape R\_KronSums Prototype}\nobreak\ {\footnotesize {99}}$\,\rangle\equiv$
+\NWtarget{nuweb99}{} $\langle\,${\itshape R_KronSums Prototype}\nobreak\ {\footnotesize {99}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6578,11 +6579,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap176}\raggedright\small
-\NWtarget{nuweb100a}{} $\langle\,${\itshape R\_KronSums}\nobreak\ {\footnotesize {100a}}$\,\rangle\equiv$
+\NWtarget{nuweb100a}{} $\langle\,${\itshape R_KronSums}\nobreak\ {\footnotesize {100a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_KronSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb99}{99}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_KronSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb99}{99}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Q Input}\nobreak\ {\footnotesize \NWlink{nuweb25e}{25e}}$\,\rangle$}\verb@;@\\
@@ -6618,7 +6619,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap177}\raggedright\small
-\NWtarget{nuweb100b}{} $\langle\,${\itshape RC\_KronSums Prototype}\nobreak\ {\footnotesize {100b}}$\,\rangle\equiv$
+\NWtarget{nuweb100b}{} $\langle\,${\itshape RC_KronSums Prototype}\nobreak\ {\footnotesize {100b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6643,11 +6644,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap178}\raggedright\small
-\NWtarget{nuweb101a}{} $\langle\,${\itshape RC\_KronSums}\nobreak\ {\footnotesize {101a}}$\,\rangle\equiv$
+\NWtarget{nuweb101a}{} $\langle\,${\itshape RC_KronSums}\nobreak\ {\footnotesize {101a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_KronSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb100b}{100b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_KronSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb100b}{100b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (TYPEOF(x) == INTSXP) {@\\
 \mbox{}\verb@        @\hbox{$\langle\,${\itshape KronSums Integer x}\nobreak\ {\footnotesize \NWlink{nuweb102}{102}}$\,\rangle$}\verb@@\\
@@ -6812,7 +6813,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap184}\raggedright\small
-\NWtarget{nuweb103b}{} $\langle\,${\itshape C\_KronSums\_dweights\_dsubset}\nobreak\ {\footnotesize {103b}}$\,\rangle\equiv$
+\NWtarget{nuweb103b}{} $\langle\,${\itshape C_KronSums_dweights_dsubset}\nobreak\ {\footnotesize {103b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6839,7 +6840,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap185}\raggedright\small
-\NWtarget{nuweb104a}{} $\langle\,${\itshape C\_KronSums\_iweights\_dsubset}\nobreak\ {\footnotesize {104a}}$\,\rangle\equiv$
+\NWtarget{nuweb104a}{} $\langle\,${\itshape C_KronSums_iweights_dsubset}\nobreak\ {\footnotesize {104a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6867,7 +6868,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap186}\raggedright\small
-\NWtarget{nuweb104b}{} $\langle\,${\itshape C\_KronSums\_iweights\_isubset}\nobreak\ {\footnotesize {104b}}$\,\rangle\equiv$
+\NWtarget{nuweb104b}{} $\langle\,${\itshape C_KronSums_iweights_isubset}\nobreak\ {\footnotesize {104b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -6894,7 +6895,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap187}\raggedright\small
-\NWtarget{nuweb104c}{} $\langle\,${\itshape C\_KronSums\_dweights\_isubset}\nobreak\ {\footnotesize {104c}}$\,\rangle\equiv$
+\NWtarget{nuweb104c}{} $\langle\,${\itshape C_KronSums_dweights_isubset}\nobreak\ {\footnotesize {104c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7012,7 +7013,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap190}\raggedright\small
-\NWtarget{nuweb106b}{} $\langle\,${\itshape C\_XfactorKronSums\_dweights\_dsubset}\nobreak\ {\footnotesize {106b}}$\,\rangle\equiv$
+\NWtarget{nuweb106b}{} $\langle\,${\itshape C_XfactorKronSums_dweights_dsubset}\nobreak\ {\footnotesize {106b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7039,7 +7040,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap191}\raggedright\small
-\NWtarget{nuweb106c}{} $\langle\,${\itshape C\_XfactorKronSums\_iweights\_dsubset}\nobreak\ {\footnotesize {106c}}$\,\rangle\equiv$
+\NWtarget{nuweb106c}{} $\langle\,${\itshape C_XfactorKronSums_iweights_dsubset}\nobreak\ {\footnotesize {106c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7067,7 +7068,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap192}\raggedright\small
-\NWtarget{nuweb107a}{} $\langle\,${\itshape C\_XfactorKronSums\_iweights\_isubset}\nobreak\ {\footnotesize {107a}}$\,\rangle\equiv$
+\NWtarget{nuweb107a}{} $\langle\,${\itshape C_XfactorKronSums_iweights_isubset}\nobreak\ {\footnotesize {107a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7094,7 +7095,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap193}\raggedright\small
-\NWtarget{nuweb107b}{} $\langle\,${\itshape C\_XfactorKronSums\_dweights\_isubset}\nobreak\ {\footnotesize {107b}}$\,\rangle\equiv$
+\NWtarget{nuweb107b}{} $\langle\,${\itshape C_XfactorKronSums_dweights_isubset}\nobreak\ {\footnotesize {107b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7191,7 +7192,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2))
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap195}\raggedright\small
-\NWtarget{nuweb109a}{} $\langle\,${\itshape R\_KronSums\_Permutation Prototype}\nobreak\ {\footnotesize {109a}}$\,\rangle\equiv$
+\NWtarget{nuweb109a}{} $\langle\,${\itshape R_KronSums_Permutation Prototype}\nobreak\ {\footnotesize {109a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7216,11 +7217,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap196}\raggedright\small
-\NWtarget{nuweb109b}{} $\langle\,${\itshape R\_KronSums\_Permutation}\nobreak\ {\footnotesize {109b}}$\,\rangle\equiv$
+\NWtarget{nuweb109b}{} $\langle\,${\itshape R_KronSums_Permutation}\nobreak\ {\footnotesize {109b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_KronSums\_Permutation Prototype}\nobreak\ {\footnotesize \NWlink{nuweb109a}{109a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_KronSums_Permutation Prototype}\nobreak\ {\footnotesize \NWlink{nuweb109a}{109a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer Q Input}\nobreak\ {\footnotesize \NWlink{nuweb25e}{25e}}$\,\rangle$}\verb@;@\\
@@ -7250,7 +7251,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap197}\raggedright\small
-\NWtarget{nuweb109c}{} $\langle\,${\itshape RC\_KronSums\_Permutation Prototype}\nobreak\ {\footnotesize {109c}}$\,\rangle\equiv$
+\NWtarget{nuweb109c}{} $\langle\,${\itshape RC_KronSums_Permutation Prototype}\nobreak\ {\footnotesize {109c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7278,11 +7279,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap198}\raggedright\small
-\NWtarget{nuweb110a}{} $\langle\,${\itshape RC\_KronSums\_Permutation}\nobreak\ {\footnotesize {110a}}$\,\rangle\equiv$
+\NWtarget{nuweb110a}{} $\langle\,${\itshape RC_KronSums_Permutation}\nobreak\ {\footnotesize {110a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_KronSums\_Permutation Prototype}\nobreak\ {\footnotesize \NWlink{nuweb109c}{109c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_KronSums_Permutation Prototype}\nobreak\ {\footnotesize \NWlink{nuweb109c}{109c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (TYPEOF(x) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
@@ -7319,7 +7320,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap199}\raggedright\small
-\NWtarget{nuweb110b}{} $\langle\,${\itshape C\_KronSums\_Permutation\_dsubset}\nobreak\ {\footnotesize {110b}}$\,\rangle\equiv$
+\NWtarget{nuweb110b}{} $\langle\,${\itshape C_KronSums_Permutation_dsubset}\nobreak\ {\footnotesize {110b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7346,7 +7347,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap200}\raggedright\small
-\NWtarget{nuweb111a}{} $\langle\,${\itshape C\_KronSums\_Permutation\_isubset}\nobreak\ {\footnotesize {111a}}$\,\rangle\equiv$
+\NWtarget{nuweb111a}{} $\langle\,${\itshape C_KronSums_Permutation_isubset}\nobreak\ {\footnotesize {111a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7409,7 +7410,7 @@ have to go through all elements explicitly here.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap202}\raggedright\small
-\NWtarget{nuweb111c}{} $\langle\,${\itshape C\_XfactorKronSums\_Permutation\_dsubset}\nobreak\ {\footnotesize {111c}}$\,\rangle\equiv$
+\NWtarget{nuweb111c}{} $\langle\,${\itshape C_XfactorKronSums_Permutation_dsubset}\nobreak\ {\footnotesize {111c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7436,7 +7437,7 @@ have to go through all elements explicitly here.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap203}\raggedright\small
-\NWtarget{nuweb112a}{} $\langle\,${\itshape C\_XfactorKronSums\_Permutation\_isubset}\nobreak\ {\footnotesize {112a}}$\,\rangle\equiv$
+\NWtarget{nuweb112a}{} $\langle\,${\itshape C_XfactorKronSums_Permutation_isubset}\nobreak\ {\footnotesize {112a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7496,12 +7497,12 @@ have to go through all elements explicitly here.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_colSums\_dweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb115a}{115a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_colSums\_iweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb115b}{115b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_colSums\_iweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb115c}{115c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_colSums\_dweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb116a}{116a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_colSums}\nobreak\ {\footnotesize \NWlink{nuweb114a}{114a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_colSums}\nobreak\ {\footnotesize \NWlink{nuweb113b}{113b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_colSums_dweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb115a}{115a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_colSums_iweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb115b}{115b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_colSums_iweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb115c}{115c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_colSums_dweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb116a}{116a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_colSums}\nobreak\ {\footnotesize \NWlink{nuweb114a}{114a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_colSums}\nobreak\ {\footnotesize \NWlink{nuweb113b}{113b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7527,7 +7528,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap206}\raggedright\small
-\NWtarget{nuweb113a}{} $\langle\,${\itshape R\_colSums Prototype}\nobreak\ {\footnotesize {113a}}$\,\rangle\equiv$
+\NWtarget{nuweb113a}{} $\langle\,${\itshape R_colSums Prototype}\nobreak\ {\footnotesize {113a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7550,11 +7551,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap207}\raggedright\small
-\NWtarget{nuweb113b}{} $\langle\,${\itshape R\_colSums}\nobreak\ {\footnotesize {113b}}$\,\rangle\equiv$
+\NWtarget{nuweb113b}{} $\langle\,${\itshape R_colSums}\nobreak\ {\footnotesize {113b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_colSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb113a}{113a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_colSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb113a}{113a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    int P;@\\
@@ -7585,7 +7586,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap208}\raggedright\small
-\NWtarget{nuweb113c}{} $\langle\,${\itshape RC\_colSums Prototype}\nobreak\ {\footnotesize {113c}}$\,\rangle\equiv$
+\NWtarget{nuweb113c}{} $\langle\,${\itshape RC_colSums Prototype}\nobreak\ {\footnotesize {113c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7610,11 +7611,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap209}\raggedright\small
-\NWtarget{nuweb114a}{} $\langle\,${\itshape RC\_colSums}\nobreak\ {\footnotesize {114a}}$\,\rangle\equiv$
+\NWtarget{nuweb114a}{} $\langle\,${\itshape RC_colSums}\nobreak\ {\footnotesize {114a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_colSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb113c}{113c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_colSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb113c}{113c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
@@ -7690,7 +7691,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap212}\raggedright\small
-\NWtarget{nuweb115a}{} $\langle\,${\itshape C\_colSums\_dweights\_dsubset}\nobreak\ {\footnotesize {115a}}$\,\rangle\equiv$
+\NWtarget{nuweb115a}{} $\langle\,${\itshape C_colSums_dweights_dsubset}\nobreak\ {\footnotesize {115a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7717,7 +7718,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap213}\raggedright\small
-\NWtarget{nuweb115b}{} $\langle\,${\itshape C\_colSums\_iweights\_dsubset}\nobreak\ {\footnotesize {115b}}$\,\rangle\equiv$
+\NWtarget{nuweb115b}{} $\langle\,${\itshape C_colSums_iweights_dsubset}\nobreak\ {\footnotesize {115b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7745,7 +7746,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap214}\raggedright\small
-\NWtarget{nuweb115c}{} $\langle\,${\itshape C\_colSums\_iweights\_isubset}\nobreak\ {\footnotesize {115c}}$\,\rangle\equiv$
+\NWtarget{nuweb115c}{} $\langle\,${\itshape C_colSums_iweights_isubset}\nobreak\ {\footnotesize {115c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7772,7 +7773,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap215}\raggedright\small
-\NWtarget{nuweb116a}{} $\langle\,${\itshape C\_colSums\_dweights\_isubset}\nobreak\ {\footnotesize {116a}}$\,\rangle\equiv$
+\NWtarget{nuweb116a}{} $\langle\,${\itshape C_colSums_dweights_isubset}\nobreak\ {\footnotesize {116a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7854,24 +7855,24 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_OneTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb120a}{120a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_OneTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb120b}{120b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_OneTableSums\_iweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb120c}{120c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_OneTableSums\_dweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb121a}{121a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_OneTableSums}\nobreak\ {\footnotesize \NWlink{nuweb119a}{119a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_OneTableSums}\nobreak\ {\footnotesize \NWlink{nuweb118a}{118a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_TwoTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb124b}{124b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_TwoTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb124c}{124c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_TwoTableSums\_iweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb125a}{125a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_TwoTableSums\_dweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb125b}{125b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_TwoTableSums}\nobreak\ {\footnotesize \NWlink{nuweb123b}{123b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_TwoTableSums}\nobreak\ {\footnotesize \NWlink{nuweb122b}{122b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_ThreeTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb129b}{129b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_ThreeTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb129c}{129c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_ThreeTableSums\_iweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb130a}{130a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_ThreeTableSums\_dweights\_isubset}\nobreak\ {\footnotesize \NWlink{nuweb130b}{130b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_ThreeTableSums}\nobreak\ {\footnotesize \NWlink{nuweb128b}{128b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_ThreeTableSums}\nobreak\ {\footnotesize \NWlink{nuweb127b}{127b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_OneTableSums_dweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb120a}{120a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_OneTableSums_iweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb120b}{120b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_OneTableSums_iweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb120c}{120c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_OneTableSums_dweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb121a}{121a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_OneTableSums}\nobreak\ {\footnotesize \NWlink{nuweb119a}{119a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_OneTableSums}\nobreak\ {\footnotesize \NWlink{nuweb118a}{118a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_TwoTableSums_dweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb124b}{124b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_TwoTableSums_iweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb124c}{124c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_TwoTableSums_iweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb125a}{125a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_TwoTableSums_dweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb125b}{125b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_TwoTableSums}\nobreak\ {\footnotesize \NWlink{nuweb123b}{123b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_TwoTableSums}\nobreak\ {\footnotesize \NWlink{nuweb122b}{122b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_ThreeTableSums_dweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb129b}{129b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_ThreeTableSums_iweights_dsubset}\nobreak\ {\footnotesize \NWlink{nuweb129c}{129c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_ThreeTableSums_iweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb130a}{130a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_ThreeTableSums_dweights_isubset}\nobreak\ {\footnotesize \NWlink{nuweb130b}{130b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_ThreeTableSums}\nobreak\ {\footnotesize \NWlink{nuweb128b}{128b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_ThreeTableSums}\nobreak\ {\footnotesize \NWlink{nuweb127b}{127b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -7896,7 +7897,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap218}\raggedright\small
-\NWtarget{nuweb117b}{} $\langle\,${\itshape R\_OneTableSums Prototype}\nobreak\ {\footnotesize {117b}}$\,\rangle\equiv$
+\NWtarget{nuweb117b}{} $\langle\,${\itshape R_OneTableSums Prototype}\nobreak\ {\footnotesize {117b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7919,11 +7920,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap219}\raggedright\small
-\NWtarget{nuweb118a}{} $\langle\,${\itshape R\_OneTableSums}\nobreak\ {\footnotesize {118a}}$\,\rangle\equiv$
+\NWtarget{nuweb118a}{} $\langle\,${\itshape R_OneTableSums}\nobreak\ {\footnotesize {118a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_OneTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb117b}{117b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_OneTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb117b}{117b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@;@\\
@@ -7953,7 +7954,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap220}\raggedright\small
-\NWtarget{nuweb118b}{} $\langle\,${\itshape RC\_OneTableSums Prototype}\nobreak\ {\footnotesize {118b}}$\,\rangle\equiv$
+\NWtarget{nuweb118b}{} $\langle\,${\itshape RC_OneTableSums Prototype}\nobreak\ {\footnotesize {118b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -7978,11 +7979,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap221}\raggedright\small
-\NWtarget{nuweb119a}{} $\langle\,${\itshape RC\_OneTableSums}\nobreak\ {\footnotesize {119a}}$\,\rangle\equiv$
+\NWtarget{nuweb119a}{} $\langle\,${\itshape RC_OneTableSums}\nobreak\ {\footnotesize {119a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_OneTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb118b}{118b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_OneTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb118b}{118b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
@@ -8055,7 +8056,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap224}\raggedright\small
-\NWtarget{nuweb120a}{} $\langle\,${\itshape C\_OneTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize {120a}}$\,\rangle\equiv$
+\NWtarget{nuweb120a}{} $\langle\,${\itshape C_OneTableSums_dweights_dsubset}\nobreak\ {\footnotesize {120a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8082,7 +8083,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap225}\raggedright\small
-\NWtarget{nuweb120b}{} $\langle\,${\itshape C\_OneTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize {120b}}$\,\rangle\equiv$
+\NWtarget{nuweb120b}{} $\langle\,${\itshape C_OneTableSums_iweights_dsubset}\nobreak\ {\footnotesize {120b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8110,7 +8111,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap226}\raggedright\small
-\NWtarget{nuweb120c}{} $\langle\,${\itshape C\_OneTableSums\_iweights\_isubset}\nobreak\ {\footnotesize {120c}}$\,\rangle\equiv$
+\NWtarget{nuweb120c}{} $\langle\,${\itshape C_OneTableSums_iweights_isubset}\nobreak\ {\footnotesize {120c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8137,7 +8138,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap227}\raggedright\small
-\NWtarget{nuweb121a}{} $\langle\,${\itshape C\_OneTableSums\_dweights\_isubset}\nobreak\ {\footnotesize {121a}}$\,\rangle\equiv$
+\NWtarget{nuweb121a}{} $\langle\,${\itshape C_OneTableSums_dweights_isubset}\nobreak\ {\footnotesize {121a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8223,7 +8224,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap229}\raggedright\small
-\NWtarget{nuweb122a}{} $\langle\,${\itshape R\_TwoTableSums Prototype}\nobreak\ {\footnotesize {122a}}$\,\rangle\equiv$
+\NWtarget{nuweb122a}{} $\langle\,${\itshape R_TwoTableSums Prototype}\nobreak\ {\footnotesize {122a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8247,11 +8248,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap230}\raggedright\small
-\NWtarget{nuweb122b}{} $\langle\,${\itshape R\_TwoTableSums}\nobreak\ {\footnotesize {122b}}$\,\rangle\equiv$
+\NWtarget{nuweb122b}{} $\langle\,${\itshape R_TwoTableSums}\nobreak\ {\footnotesize {122b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_TwoTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb122a}{122a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_TwoTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb122a}{122a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans, dim;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@;@\\
@@ -8286,7 +8287,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap231}\raggedright\small
-\NWtarget{nuweb123a}{} $\langle\,${\itshape RC\_TwoTableSums Prototype}\nobreak\ {\footnotesize {123a}}$\,\rangle\equiv$
+\NWtarget{nuweb123a}{} $\langle\,${\itshape RC_TwoTableSums Prototype}\nobreak\ {\footnotesize {123a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8311,11 +8312,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap232}\raggedright\small
-\NWtarget{nuweb123b}{} $\langle\,${\itshape RC\_TwoTableSums}\nobreak\ {\footnotesize {123b}}$\,\rangle\equiv$
+\NWtarget{nuweb123b}{} $\langle\,${\itshape RC_TwoTableSums}\nobreak\ {\footnotesize {123b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_TwoTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb123a}{123a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_TwoTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb123a}{123a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
@@ -8389,7 +8390,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap235}\raggedright\small
-\NWtarget{nuweb124b}{} $\langle\,${\itshape C\_TwoTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize {124b}}$\,\rangle\equiv$
+\NWtarget{nuweb124b}{} $\langle\,${\itshape C_TwoTableSums_dweights_dsubset}\nobreak\ {\footnotesize {124b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8416,7 +8417,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap236}\raggedright\small
-\NWtarget{nuweb124c}{} $\langle\,${\itshape C\_TwoTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize {124c}}$\,\rangle\equiv$
+\NWtarget{nuweb124c}{} $\langle\,${\itshape C_TwoTableSums_iweights_dsubset}\nobreak\ {\footnotesize {124c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8444,7 +8445,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap237}\raggedright\small
-\NWtarget{nuweb125a}{} $\langle\,${\itshape C\_TwoTableSums\_iweights\_isubset}\nobreak\ {\footnotesize {125a}}$\,\rangle\equiv$
+\NWtarget{nuweb125a}{} $\langle\,${\itshape C_TwoTableSums_iweights_isubset}\nobreak\ {\footnotesize {125a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8471,7 +8472,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap238}\raggedright\small
-\NWtarget{nuweb125b}{} $\langle\,${\itshape C\_TwoTableSums\_dweights\_isubset}\nobreak\ {\footnotesize {125b}}$\,\rangle\equiv$
+\NWtarget{nuweb125b}{} $\langle\,${\itshape C_TwoTableSums_dweights_isubset}\nobreak\ {\footnotesize {125b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8559,7 +8560,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap240}\raggedright\small
-\NWtarget{nuweb127a}{} $\langle\,${\itshape R\_ThreeTableSums Prototype}\nobreak\ {\footnotesize {127a}}$\,\rangle\equiv$
+\NWtarget{nuweb127a}{} $\langle\,${\itshape R_ThreeTableSums Prototype}\nobreak\ {\footnotesize {127a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8584,11 +8585,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap241}\raggedright\small
-\NWtarget{nuweb127b}{} $\langle\,${\itshape R\_ThreeTableSums}\nobreak\ {\footnotesize {127b}}$\,\rangle\equiv$
+\NWtarget{nuweb127b}{} $\langle\,${\itshape R_ThreeTableSums}\nobreak\ {\footnotesize {127b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_ThreeTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb127a}{127a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_ThreeTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb127a}{127a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans, dim;@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@;@\\
@@ -8626,7 +8627,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap242}\raggedright\small
-\NWtarget{nuweb128a}{} $\langle\,${\itshape RC\_ThreeTableSums Prototype}\nobreak\ {\footnotesize {128a}}$\,\rangle\equiv$
+\NWtarget{nuweb128a}{} $\langle\,${\itshape RC_ThreeTableSums Prototype}\nobreak\ {\footnotesize {128a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8651,11 +8652,11 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap243}\raggedright\small
-\NWtarget{nuweb128b}{} $\langle\,${\itshape RC\_ThreeTableSums}\nobreak\ {\footnotesize {128b}}$\,\rangle\equiv$
+\NWtarget{nuweb128b}{} $\langle\,${\itshape RC_ThreeTableSums}\nobreak\ {\footnotesize {128b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_ThreeTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb128a}{128a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_ThreeTableSums Prototype}\nobreak\ {\footnotesize \NWlink{nuweb128a}{128a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    if (TYPEOF(weights) == INTSXP) {@\\
 \mbox{}\verb@        if (TYPEOF(subset) == INTSXP) {@\\
@@ -8730,7 +8731,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap246}\raggedright\small
-\NWtarget{nuweb129b}{} $\langle\,${\itshape C\_ThreeTableSums\_dweights\_dsubset}\nobreak\ {\footnotesize {129b}}$\,\rangle\equiv$
+\NWtarget{nuweb129b}{} $\langle\,${\itshape C_ThreeTableSums_dweights_dsubset}\nobreak\ {\footnotesize {129b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8757,7 +8758,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap247}\raggedright\small
-\NWtarget{nuweb129c}{} $\langle\,${\itshape C\_ThreeTableSums\_iweights\_dsubset}\nobreak\ {\footnotesize {129c}}$\,\rangle\equiv$
+\NWtarget{nuweb129c}{} $\langle\,${\itshape C_ThreeTableSums_iweights_dsubset}\nobreak\ {\footnotesize {129c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8785,7 +8786,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap248}\raggedright\small
-\NWtarget{nuweb130a}{} $\langle\,${\itshape C\_ThreeTableSums\_iweights\_isubset}\nobreak\ {\footnotesize {130a}}$\,\rangle\equiv$
+\NWtarget{nuweb130a}{} $\langle\,${\itshape C_ThreeTableSums_iweights_isubset}\nobreak\ {\footnotesize {130a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8812,7 +8813,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap249}\raggedright\small
-\NWtarget{nuweb130b}{} $\langle\,${\itshape C\_ThreeTableSums\_dweights\_isubset}\nobreak\ {\footnotesize {130b}}$\,\rangle\equiv$
+\NWtarget{nuweb130b}{} $\langle\,${\itshape C_ThreeTableSums_dweights_isubset}\nobreak\ {\footnotesize {130b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8904,11 +8905,11 @@ stopifnot(isequal(ns1, ns2))
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_setup\_subset}\nobreak\ {\footnotesize \NWlink{nuweb134a}{134a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_setup\_subset\_block}\nobreak\ {\footnotesize \NWlink{nuweb134b}{134b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_order\_subset\_wrt\_block}\nobreak\ {\footnotesize \NWlink{nuweb135a}{135a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_order\_subset\_wrt\_block}\nobreak\ {\footnotesize \NWlink{nuweb133b}{133b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_order\_subset\_wrt\_block}\nobreak\ {\footnotesize \NWlink{nuweb132b}{132b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_setup_subset}\nobreak\ {\footnotesize \NWlink{nuweb134a}{134a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_setup_subset_block}\nobreak\ {\footnotesize \NWlink{nuweb134b}{134b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_order_subset_wrt_block}\nobreak\ {\footnotesize \NWlink{nuweb135a}{135a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_order_subset_wrt_block}\nobreak\ {\footnotesize \NWlink{nuweb133b}{133b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_order_subset_wrt_block}\nobreak\ {\footnotesize \NWlink{nuweb132b}{132b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -8922,7 +8923,7 @@ stopifnot(isequal(ns1, ns2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap252}\raggedright\small
-\NWtarget{nuweb132a}{} $\langle\,${\itshape R\_order\_subset\_wrt\_block Prototype}\nobreak\ {\footnotesize {132a}}$\,\rangle\equiv$
+\NWtarget{nuweb132a}{} $\langle\,${\itshape R_order_subset_wrt_block Prototype}\nobreak\ {\footnotesize {132a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -8946,11 +8947,11 @@ stopifnot(isequal(ns1, ns2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap253}\raggedright\small
-\NWtarget{nuweb132b}{} $\langle\,${\itshape R\_order\_subset\_wrt\_block}\nobreak\ {\footnotesize {132b}}$\,\rangle\equiv$
+\NWtarget{nuweb132b}{} $\langle\,${\itshape R_order_subset_wrt_block}\nobreak\ {\footnotesize {132b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_order\_subset\_wrt\_block Prototype}\nobreak\ {\footnotesize \NWlink{nuweb132a}{132a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_order_subset_wrt_block Prototype}\nobreak\ {\footnotesize \NWlink{nuweb132a}{132a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape C integer N Input}\nobreak\ {\footnotesize \NWlink{nuweb24c}{24c}}$\,\rangle$}\verb@;@\\
 \mbox{}\verb@    SEXP blockTable, ans;@\\
@@ -8986,7 +8987,7 @@ stopifnot(isequal(ns1, ns2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap254}\raggedright\small
-\NWtarget{nuweb133a}{} $\langle\,${\itshape RC\_order\_subset\_wrt\_block Prototype}\nobreak\ {\footnotesize {133a}}$\,\rangle\equiv$
+\NWtarget{nuweb133a}{} $\langle\,${\itshape RC_order_subset_wrt_block Prototype}\nobreak\ {\footnotesize {133a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9010,11 +9011,11 @@ stopifnot(isequal(ns1, ns2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap255}\raggedright\small
-\NWtarget{nuweb133b}{} $\langle\,${\itshape RC\_order\_subset\_wrt\_block}\nobreak\ {\footnotesize {133b}}$\,\rangle\equiv$
+\NWtarget{nuweb133b}{} $\langle\,${\itshape RC_order_subset_wrt_block}\nobreak\ {\footnotesize {133b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_order\_subset\_wrt\_block Prototype}\nobreak\ {\footnotesize \NWlink{nuweb133a}{133a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_order_subset_wrt_block Prototype}\nobreak\ {\footnotesize \NWlink{nuweb133a}{133a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@    int NOBLOCK = (XLENGTH(block) == 0 || XLENGTH(blockTable) == 2);@\\
@@ -9052,7 +9053,7 @@ stopifnot(isequal(ns1, ns2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap256}\raggedright\small
-\NWtarget{nuweb134a}{} $\langle\,${\itshape C\_setup\_subset}\nobreak\ {\footnotesize {134a}}$\,\rangle\equiv$
+\NWtarget{nuweb134a}{} $\langle\,${\itshape C_setup_subset}\nobreak\ {\footnotesize {134a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9083,7 +9084,7 @@ stopifnot(isequal(ns1, ns2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap257}\raggedright\small
-\NWtarget{nuweb134b}{} $\langle\,${\itshape C\_setup\_subset\_block}\nobreak\ {\footnotesize {134b}}$\,\rangle\equiv$
+\NWtarget{nuweb134b}{} $\langle\,${\itshape C_setup_subset_block}\nobreak\ {\footnotesize {134b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9128,7 +9129,7 @@ stopifnot(isequal(ns1, ns2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap258}\raggedright\small
-\NWtarget{nuweb135a}{} $\langle\,${\itshape C\_order\_subset\_wrt\_block}\nobreak\ {\footnotesize {135a}}$\,\rangle\equiv$
+\NWtarget{nuweb135a}{} $\langle\,${\itshape C_order_subset_wrt_block}\nobreak\ {\footnotesize {135a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9173,7 +9174,7 @@ stopifnot(isequal(ns1, ns2))
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap259}\raggedright\small
-\NWtarget{nuweb135b}{} $\langle\,${\itshape RC\_setup\_subset Prototype}\nobreak\ {\footnotesize {135b}}$\,\rangle\equiv$
+\NWtarget{nuweb135b}{} $\langle\,${\itshape RC_setup_subset Prototype}\nobreak\ {\footnotesize {135b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9200,11 +9201,11 @@ be a little bit more generous with memory here. The return value is always
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap260}\raggedright\small
-\NWtarget{nuweb136a}{} $\langle\,${\itshape RC\_setup\_subset}\nobreak\ {\footnotesize {136a}}$\,\rangle\equiv$
+\NWtarget{nuweb136a}{} $\langle\,${\itshape RC_setup_subset}\nobreak\ {\footnotesize {136a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_setup\_subset Prototype}\nobreak\ {\footnotesize \NWlink{nuweb135b}{135b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_setup_subset Prototype}\nobreak\ {\footnotesize \NWlink{nuweb135b}{135b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    SEXP ans, mysubset;@\\
 \mbox{}\verb@    R_xlen_t sumweights;@\\
@@ -9256,11 +9257,11 @@ be a little bit more generous with memory here. The return value is always
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_setup\_subset}\nobreak\ {\footnotesize \NWlink{nuweb136a}{136a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_Permute}\nobreak\ {\footnotesize \NWlink{nuweb137a}{137a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_doPermute}\nobreak\ {\footnotesize \NWlink{nuweb137b}{137b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_PermuteBlock}\nobreak\ {\footnotesize \NWlink{nuweb138a}{138a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_doPermuteBlock}\nobreak\ {\footnotesize \NWlink{nuweb138b}{138b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_setup_subset}\nobreak\ {\footnotesize \NWlink{nuweb136a}{136a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_Permute}\nobreak\ {\footnotesize \NWlink{nuweb137a}{137a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_doPermute}\nobreak\ {\footnotesize \NWlink{nuweb137b}{137b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_PermuteBlock}\nobreak\ {\footnotesize \NWlink{nuweb138a}{138a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_doPermuteBlock}\nobreak\ {\footnotesize \NWlink{nuweb138b}{138b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -9274,7 +9275,7 @@ be a little bit more generous with memory here. The return value is always
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap262}\raggedright\small
-\NWtarget{nuweb137a}{} $\langle\,${\itshape C\_Permute}\nobreak\ {\footnotesize {137a}}$\,\rangle\equiv$
+\NWtarget{nuweb137a}{} $\langle\,${\itshape C_Permute}\nobreak\ {\footnotesize {137a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9305,7 +9306,7 @@ be a little bit more generous with memory here. The return value is always
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap263}\raggedright\small
-\NWtarget{nuweb137b}{} $\langle\,${\itshape C\_doPermute}\nobreak\ {\footnotesize {137b}}$\,\rangle\equiv$
+\NWtarget{nuweb137b}{} $\langle\,${\itshape C_doPermute}\nobreak\ {\footnotesize {137b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9332,7 +9333,7 @@ be a little bit more generous with memory here. The return value is always
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap264}\raggedright\small
-\NWtarget{nuweb138a}{} $\langle\,${\itshape C\_PermuteBlock}\nobreak\ {\footnotesize {138a}}$\,\rangle\equiv$
+\NWtarget{nuweb138a}{} $\langle\,${\itshape C_PermuteBlock}\nobreak\ {\footnotesize {138a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9369,7 +9370,7 @@ be a little bit more generous with memory here. The return value is always
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap265}\raggedright\small
-\NWtarget{nuweb138b}{} $\langle\,${\itshape C\_doPermuteBlock}\nobreak\ {\footnotesize {138b}}$\,\rangle\equiv$
+\NWtarget{nuweb138b}{} $\langle\,${\itshape C_doPermuteBlock}\nobreak\ {\footnotesize {138b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9407,14 +9408,14 @@ be a little bit more generous with memory here. The return value is always
 \mbox{}\verb@@\hbox{$\langle\,${\itshape NROW}\nobreak\ {\footnotesize \NWlink{nuweb139b}{139b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape NCOL}\nobreak\ {\footnotesize \NWlink{nuweb139c}{139c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape NLEVELS}\nobreak\ {\footnotesize \NWlink{nuweb140a}{140a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_kronecker}\nobreak\ {\footnotesize \NWlink{nuweb143}{143}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_kronecker}\nobreak\ {\footnotesize \NWlink{nuweb142}{142}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_kronecker\_sym}\nobreak\ {\footnotesize \NWlink{nuweb144}{144}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_KronSums\_sym}\nobreak\ {\footnotesize \NWlink{nuweb145a}{145a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_MPinv\_sym}\nobreak\ {\footnotesize \NWlink{nuweb147}{147}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_MPinv\_sym}\nobreak\ {\footnotesize \NWlink{nuweb146b}{146b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_unpack\_sym}\nobreak\ {\footnotesize \NWlink{nuweb149}{149}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_pack\_sym}\nobreak\ {\footnotesize \NWlink{nuweb151}{151}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_kronecker}\nobreak\ {\footnotesize \NWlink{nuweb143}{143}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_kronecker}\nobreak\ {\footnotesize \NWlink{nuweb142}{142}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_kronecker_sym}\nobreak\ {\footnotesize \NWlink{nuweb144}{144}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_KronSums_sym}\nobreak\ {\footnotesize \NWlink{nuweb145a}{145a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_MPinv_sym}\nobreak\ {\footnotesize \NWlink{nuweb147}{147}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_MPinv_sym}\nobreak\ {\footnotesize \NWlink{nuweb146b}{146b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_unpack_sym}\nobreak\ {\footnotesize \NWlink{nuweb149}{149}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_pack_sym}\nobreak\ {\footnotesize \NWlink{nuweb151}{151}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -9593,7 +9594,7 @@ stopifnot(isequal(K1, K2))
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap272}\raggedright\small
-\NWtarget{nuweb141b}{} $\langle\,${\itshape R\_kronecker Prototype}\nobreak\ {\footnotesize {141b}}$\,\rangle\equiv$
+\NWtarget{nuweb141b}{} $\langle\,${\itshape R_kronecker Prototype}\nobreak\ {\footnotesize {141b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9643,11 +9644,11 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap274}\raggedright\small
-\NWtarget{nuweb142}{} $\langle\,${\itshape R\_kronecker}\nobreak\ {\footnotesize {142}}$\,\rangle\equiv$
+\NWtarget{nuweb142}{} $\langle\,${\itshape R_kronecker}\nobreak\ {\footnotesize {142}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_kronecker Prototype}\nobreak\ {\footnotesize \NWlink{nuweb141b}{141b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_kronecker Prototype}\nobreak\ {\footnotesize \NWlink{nuweb141b}{141b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    int m, n, r, s;@\\
 \mbox{}\verb@    SEXP ans;@\\
@@ -9678,7 +9679,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap275}\raggedright\small
-\NWtarget{nuweb143}{} $\langle\,${\itshape C\_kronecker}\nobreak\ {\footnotesize {143}}$\,\rangle\equiv$
+\NWtarget{nuweb143}{} $\langle\,${\itshape C_kronecker}\nobreak\ {\footnotesize {143}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9726,7 +9727,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap276}\raggedright\small
-\NWtarget{nuweb144}{} $\langle\,${\itshape C\_kronecker\_sym}\nobreak\ {\footnotesize {144}}$\,\rangle\equiv$
+\NWtarget{nuweb144}{} $\langle\,${\itshape C_kronecker_sym}\nobreak\ {\footnotesize {144}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9775,7 +9776,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap277}\raggedright\small
-\NWtarget{nuweb145a}{} $\langle\,${\itshape C\_KronSums\_sym}\nobreak\ {\footnotesize {145a}}$\,\rangle\equiv$
+\NWtarget{nuweb145a}{} $\langle\,${\itshape C_KronSums_sym}\nobreak\ {\footnotesize {145a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9825,7 +9826,7 @@ stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) &&
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap278}\raggedright\small
-\NWtarget{nuweb145b}{} $\langle\,${\itshape R\_MPinv\_sym Prototype}\nobreak\ {\footnotesize {145b}}$\,\rangle\equiv$
+\NWtarget{nuweb145b}{} $\langle\,${\itshape R_MPinv_sym Prototype}\nobreak\ {\footnotesize {145b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9876,11 +9877,11 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap280}\raggedright\small
-\NWtarget{nuweb146b}{} $\langle\,${\itshape R\_MPinv\_sym}\nobreak\ {\footnotesize {146b}}$\,\rangle\equiv$
+\NWtarget{nuweb146b}{} $\langle\,${\itshape R_MPinv_sym}\nobreak\ {\footnotesize {146b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_MPinv\_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb145b}{145b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_MPinv_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb145b}{145b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    int m;@\\
 \mbox{}\verb@    SEXP ans, names, MPinv, rank;@\\
@@ -9915,7 +9916,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap281}\raggedright\small
-\NWtarget{nuweb147}{} $\langle\,${\itshape C\_MPinv\_sym}\nobreak\ {\footnotesize {147}}$\,\rangle\equiv$
+\NWtarget{nuweb147}{} $\langle\,${\itshape C_MPinv_sym}\nobreak\ {\footnotesize {147}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -9995,7 +9996,7 @@ stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap282}\raggedright\small
-\NWtarget{nuweb148a}{} $\langle\,${\itshape R\_unpack\_sym Prototype}\nobreak\ {\footnotesize {148a}}$\,\rangle\equiv$
+\NWtarget{nuweb148a}{} $\langle\,${\itshape R_unpack_sym Prototype}\nobreak\ {\footnotesize {148a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10046,11 +10047,11 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap284}\raggedright\small
-\NWtarget{nuweb149}{} $\langle\,${\itshape R\_unpack\_sym}\nobreak\ {\footnotesize {149}}$\,\rangle\equiv$
+\NWtarget{nuweb149}{} $\langle\,${\itshape R_unpack_sym}\nobreak\ {\footnotesize {149}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_unpack\_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb148a}{148a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_unpack_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb148a}{148a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    R_xlen_t n, k = 0;@\\
 \mbox{}\verb@    SEXP ans, dimnames;@\\
@@ -10120,7 +10121,7 @@ stopifnot(isequal(s, p))
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap285}\raggedright\small
-\NWtarget{nuweb150a}{} $\langle\,${\itshape R\_pack\_sym Prototype}\nobreak\ {\footnotesize {150a}}$\,\rangle\equiv$
+\NWtarget{nuweb150a}{} $\langle\,${\itshape R_pack_sym Prototype}\nobreak\ {\footnotesize {150a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10169,11 +10170,11 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap287}\raggedright\small
-\NWtarget{nuweb151}{} $\langle\,${\itshape R\_pack\_sym}\nobreak\ {\footnotesize {151}}$\,\rangle\equiv$
+\NWtarget{nuweb151}{} $\langle\,${\itshape R_pack_sym}\nobreak\ {\footnotesize {151}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape R\_pack\_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb150a}{150a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R_pack_sym Prototype}\nobreak\ {\footnotesize \NWlink{nuweb150a}{150a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@    R_xlen_t n, k = 0;@\\
 \mbox{}\verb@    SEXP ans;@\\
@@ -10213,30 +10214,30 @@ This function can be called from other packages.
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_P}\nobreak\ {\footnotesize \NWlink{nuweb152c}{152c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_Q}\nobreak\ {\footnotesize \NWlink{nuweb153a}{153a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_P}\nobreak\ {\footnotesize \NWlink{nuweb152c}{152c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_Q}\nobreak\ {\footnotesize \NWlink{nuweb153a}{153a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape PP12}\nobreak\ {\footnotesize \NWlink{nuweb140b}{140b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape mPQB}\nobreak\ {\footnotesize \NWlink{nuweb141a}{141a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_varonly}\nobreak\ {\footnotesize \NWlink{nuweb153b}{153b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_Xfactor}\nobreak\ {\footnotesize \NWlink{nuweb153c}{153c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_LinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb153d}{153d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_Expectation}\nobreak\ {\footnotesize \NWlink{nuweb154a}{154a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_Variance}\nobreak\ {\footnotesize \NWlink{nuweb154b}{154b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_Covariance}\nobreak\ {\footnotesize \NWlink{nuweb155a}{155a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_ExpectationX}\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_ExpectationInfluence}\nobreak\ {\footnotesize \NWlink{nuweb155c}{155c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_CovarianceInfluence}\nobreak\ {\footnotesize \NWlink{nuweb156a}{156a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_VarianceInfluence}\nobreak\ {\footnotesize \NWlink{nuweb156b}{156b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_TableBlock}\nobreak\ {\footnotesize \NWlink{nuweb156c}{156c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_Sumweights}\nobreak\ {\footnotesize \NWlink{nuweb157a}{157a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_Table}\nobreak\ {\footnotesize \NWlink{nuweb157b}{157b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_dimTable}\nobreak\ {\footnotesize \NWlink{nuweb157c}{157c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_B}\nobreak\ {\footnotesize \NWlink{nuweb158a}{158a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_nresample}\nobreak\ {\footnotesize \NWlink{nuweb158b}{158b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_PermutedLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb158c}{158c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape C\_get\_tol}\nobreak\ {\footnotesize \NWlink{nuweb158d}{158d}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_init\_LECV\_1d}\nobreak\ {\footnotesize \NWlink{nuweb161b}{161b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape RC\_init\_LECV\_2d}\nobreak\ {\footnotesize \NWlink{nuweb162}{162}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_varonly}\nobreak\ {\footnotesize \NWlink{nuweb153b}{153b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_Xfactor}\nobreak\ {\footnotesize \NWlink{nuweb153c}{153c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_LinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb153d}{153d}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_Expectation}\nobreak\ {\footnotesize \NWlink{nuweb154a}{154a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_Variance}\nobreak\ {\footnotesize \NWlink{nuweb154b}{154b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_Covariance}\nobreak\ {\footnotesize \NWlink{nuweb155a}{155a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_ExpectationX}\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_ExpectationInfluence}\nobreak\ {\footnotesize \NWlink{nuweb155c}{155c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_CovarianceInfluence}\nobreak\ {\footnotesize \NWlink{nuweb156a}{156a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_VarianceInfluence}\nobreak\ {\footnotesize \NWlink{nuweb156b}{156b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_TableBlock}\nobreak\ {\footnotesize \NWlink{nuweb156c}{156c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_Sumweights}\nobreak\ {\footnotesize \NWlink{nuweb157a}{157a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_Table}\nobreak\ {\footnotesize \NWlink{nuweb157b}{157b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_dimTable}\nobreak\ {\footnotesize \NWlink{nuweb157c}{157c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_B}\nobreak\ {\footnotesize \NWlink{nuweb158a}{158a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_nresample}\nobreak\ {\footnotesize \NWlink{nuweb158b}{158b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_PermutedLinearStatistic}\nobreak\ {\footnotesize \NWlink{nuweb158c}{158c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_get_tol}\nobreak\ {\footnotesize \NWlink{nuweb158d}{158d}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_init_LECV_1d}\nobreak\ {\footnotesize \NWlink{nuweb161b}{161b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape RC_init_LECV_2d}\nobreak\ {\footnotesize \NWlink{nuweb162}{162}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -10268,7 +10269,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap290}\raggedright\small
-\NWtarget{nuweb152c}{} $\langle\,${\itshape C\_get\_P}\nobreak\ {\footnotesize {152c}}$\,\rangle\equiv$
+\NWtarget{nuweb152c}{} $\langle\,${\itshape C_get_P}\nobreak\ {\footnotesize {152c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10291,7 +10292,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap291}\raggedright\small
-\NWtarget{nuweb153a}{} $\langle\,${\itshape C\_get\_Q}\nobreak\ {\footnotesize {153a}}$\,\rangle\equiv$
+\NWtarget{nuweb153a}{} $\langle\,${\itshape C_get_Q}\nobreak\ {\footnotesize {153a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10314,7 +10315,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap292}\raggedright\small
-\NWtarget{nuweb153b}{} $\langle\,${\itshape C\_get\_varonly}\nobreak\ {\footnotesize {153b}}$\,\rangle\equiv$
+\NWtarget{nuweb153b}{} $\langle\,${\itshape C_get_varonly}\nobreak\ {\footnotesize {153b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10337,7 +10338,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap293}\raggedright\small
-\NWtarget{nuweb153c}{} $\langle\,${\itshape C\_get\_Xfactor}\nobreak\ {\footnotesize {153c}}$\,\rangle\equiv$
+\NWtarget{nuweb153c}{} $\langle\,${\itshape C_get_Xfactor}\nobreak\ {\footnotesize {153c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10360,7 +10361,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap294}\raggedright\small
-\NWtarget{nuweb153d}{} $\langle\,${\itshape C\_get\_LinearStatistic}\nobreak\ {\footnotesize {153d}}$\,\rangle\equiv$
+\NWtarget{nuweb153d}{} $\langle\,${\itshape C_get_LinearStatistic}\nobreak\ {\footnotesize {153d}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10383,7 +10384,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap295}\raggedright\small
-\NWtarget{nuweb154a}{} $\langle\,${\itshape C\_get\_Expectation}\nobreak\ {\footnotesize {154a}}$\,\rangle\equiv$
+\NWtarget{nuweb154a}{} $\langle\,${\itshape C_get_Expectation}\nobreak\ {\footnotesize {154a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10406,7 +10407,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap296}\raggedright\small
-\NWtarget{nuweb154b}{} $\langle\,${\itshape C\_get\_Variance}\nobreak\ {\footnotesize {154b}}$\,\rangle\equiv$
+\NWtarget{nuweb154b}{} $\langle\,${\itshape C_get_Variance}\nobreak\ {\footnotesize {154b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10442,7 +10443,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap297}\raggedright\small
-\NWtarget{nuweb155a}{} $\langle\,${\itshape C\_get\_Covariance}\nobreak\ {\footnotesize {155a}}$\,\rangle\equiv$
+\NWtarget{nuweb155a}{} $\langle\,${\itshape C_get_Covariance}\nobreak\ {\footnotesize {155a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10470,7 +10471,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap298}\raggedright\small
-\NWtarget{nuweb155b}{} $\langle\,${\itshape C\_get\_ExpectationX}\nobreak\ {\footnotesize {155b}}$\,\rangle\equiv$
+\NWtarget{nuweb155b}{} $\langle\,${\itshape C_get_ExpectationX}\nobreak\ {\footnotesize {155b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10493,7 +10494,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap299}\raggedright\small
-\NWtarget{nuweb155c}{} $\langle\,${\itshape C\_get\_ExpectationInfluence}\nobreak\ {\footnotesize {155c}}$\,\rangle\equiv$
+\NWtarget{nuweb155c}{} $\langle\,${\itshape C_get_ExpectationInfluence}\nobreak\ {\footnotesize {155c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10516,7 +10517,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap300}\raggedright\small
-\NWtarget{nuweb156a}{} $\langle\,${\itshape C\_get\_CovarianceInfluence}\nobreak\ {\footnotesize {156a}}$\,\rangle\equiv$
+\NWtarget{nuweb156a}{} $\langle\,${\itshape C_get_CovarianceInfluence}\nobreak\ {\footnotesize {156a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10539,7 +10540,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap301}\raggedright\small
-\NWtarget{nuweb156b}{} $\langle\,${\itshape C\_get\_VarianceInfluence}\nobreak\ {\footnotesize {156b}}$\,\rangle\equiv$
+\NWtarget{nuweb156b}{} $\langle\,${\itshape C_get_VarianceInfluence}\nobreak\ {\footnotesize {156b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10562,7 +10563,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap302}\raggedright\small
-\NWtarget{nuweb156c}{} $\langle\,${\itshape C\_get\_TableBlock}\nobreak\ {\footnotesize {156c}}$\,\rangle\equiv$
+\NWtarget{nuweb156c}{} $\langle\,${\itshape C_get_TableBlock}\nobreak\ {\footnotesize {156c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10587,7 +10588,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap303}\raggedright\small
-\NWtarget{nuweb157a}{} $\langle\,${\itshape C\_get\_Sumweights}\nobreak\ {\footnotesize {157a}}$\,\rangle\equiv$
+\NWtarget{nuweb157a}{} $\langle\,${\itshape C_get_Sumweights}\nobreak\ {\footnotesize {157a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10612,7 +10613,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap304}\raggedright\small
-\NWtarget{nuweb157b}{} $\langle\,${\itshape C\_get\_Table}\nobreak\ {\footnotesize {157b}}$\,\rangle\equiv$
+\NWtarget{nuweb157b}{} $\langle\,${\itshape C_get_Table}\nobreak\ {\footnotesize {157b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10637,7 +10638,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap305}\raggedright\small
-\NWtarget{nuweb157c}{} $\langle\,${\itshape C\_get\_dimTable}\nobreak\ {\footnotesize {157c}}$\,\rangle\equiv$
+\NWtarget{nuweb157c}{} $\langle\,${\itshape C_get_dimTable}\nobreak\ {\footnotesize {157c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10663,7 +10664,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap306}\raggedright\small
-\NWtarget{nuweb158a}{} $\langle\,${\itshape C\_get\_B}\nobreak\ {\footnotesize {158a}}$\,\rangle\equiv$
+\NWtarget{nuweb158a}{} $\langle\,${\itshape C_get_B}\nobreak\ {\footnotesize {158a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10688,7 +10689,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap307}\raggedright\small
-\NWtarget{nuweb158b}{} $\langle\,${\itshape C\_get\_nresample}\nobreak\ {\footnotesize {158b}}$\,\rangle\equiv$
+\NWtarget{nuweb158b}{} $\langle\,${\itshape C_get_nresample}\nobreak\ {\footnotesize {158b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10712,7 +10713,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap308}\raggedright\small
-\NWtarget{nuweb158c}{} $\langle\,${\itshape C\_get\_PermutedLinearStatistic}\nobreak\ {\footnotesize {158c}}$\,\rangle\equiv$
+\NWtarget{nuweb158c}{} $\langle\,${\itshape C_get_PermutedLinearStatistic}\nobreak\ {\footnotesize {158c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10728,14 +10729,14 @@ This function can be called from other packages.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb152a}{152a}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb42a}{42a}\NWlink{nuweb55}{, 55}\NWlink{nuweb75}{, 75}.\item \NWtxtIdentsUsed\nobreak\  \verb@LECV@\nobreak\ \NWlink{nuweb152b}{152b}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb22b}{22b}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb42a}{42a}\NWlink{nuweb55}{, 55}\NWlink{nuweb58}{, 58}\NWlink{nuweb75}{, 75}.\item \NWtxtIdentsUsed\nobreak\  \verb@LECV@\nobreak\ \NWlink{nuweb152b}{152b}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb22b}{22b}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap309}\raggedright\small
-\NWtarget{nuweb158d}{} $\langle\,${\itshape C\_get\_tol}\nobreak\ {\footnotesize {158d}}$\,\rangle\equiv$
+\NWtarget{nuweb158d}{} $\langle\,${\itshape C_get_tol}\nobreak\ {\footnotesize {158d}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10832,7 +10833,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap312}\raggedright\small
-\NWtarget{nuweb160}{} $\langle\,${\itshape R\_init\_LECV}\nobreak\ {\footnotesize {160}}$\,\rangle\equiv$
+\NWtarget{nuweb160}{} $\langle\,${\itshape R_init_LECV}\nobreak\ {\footnotesize {160}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10935,7 +10936,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap314}\raggedright\small
-\NWtarget{nuweb161b}{} $\langle\,${\itshape RC\_init\_LECV\_1d}\nobreak\ {\footnotesize {161b}}$\,\rangle\equiv$
+\NWtarget{nuweb161b}{} $\langle\,${\itshape RC_init_LECV_1d}\nobreak\ {\footnotesize {161b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10950,7 +10951,7 @@ This function can be called from other packages.
 \mbox{}\verb@) {@\\
 \mbox{}\verb@    SEXP ans;@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R\_init\_LECV}\nobreak\ {\footnotesize \NWlink{nuweb160}{160}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R_init_LECV}\nobreak\ {\footnotesize \NWlink{nuweb160}{160}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    SET_VECTOR_ELT(ans, TableBlock_SLOT,@\\
 \mbox{}\verb@                   allocVector(REALSXP, B + 1));@\\
@@ -10974,7 +10975,7 @@ This function can be called from other packages.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap315}\raggedright\small
-\NWtarget{nuweb162}{} $\langle\,${\itshape RC\_init\_LECV\_2d}\nobreak\ {\footnotesize {162}}$\,\rangle\equiv$
+\NWtarget{nuweb162}{} $\langle\,${\itshape RC_init_LECV_2d}\nobreak\ {\footnotesize {162}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -10997,7 +10998,7 @@ This function can be called from other packages.
 \mbox{}\verb@    if (Ly <= 0)@\\
 \mbox{}\verb@        error("Ly is not positive");@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape R\_init\_LECV}\nobreak\ {\footnotesize \NWlink{nuweb160}{160}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape R_init_LECV}\nobreak\ {\footnotesize \NWlink{nuweb160}{160}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    PROTECT(tabdim = allocVector(INTSXP, 3));@\\
 \mbox{}\verb@    INTEGER(tabdim)[0] = Lx + 1;@\\
@@ -11102,7 +11103,7 @@ This function can be called from other packages.
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
-Add flag \verb|-g| to \verb|PKG\_CFLAGS| for \verb|operf| profiling (this is
+Add flag \verb|-g| to \verb|PKG_CFLAGS| for \verb|operf| profiling (this is
 not portable).
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap319}\raggedright\small
@@ -11142,7 +11143,7 @@ not portable).
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 Other packages can link against \pkg{libcoin}. A small example package
-is contained in \texttt{libcoin/inst/C\_API\_example}.
+is contained in \texttt{libcoin/inst/C_API_example}.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap321}\raggedright\small
@@ -11451,87 +11452,87 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \item $\langle\,$Count Levels\nobreak\ {\footnotesize \NWlink{nuweb80a}{80a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb79}{79}.}
 \item $\langle\,$ctabs Prototype\nobreak\ {\footnotesize \NWlink{nuweb15}{15}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb16}{16}\NWlink{nuweb20}{, 20}.
 }
-\item $\langle\,$C\_chisq\_pvalue\nobreak\ {\footnotesize \NWlink{nuweb68c}{68c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68b}{68b}.}
-\item $\langle\,$C\_colSums\_dweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb115a}{115a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
-\item $\langle\,$C\_colSums\_dweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb116a}{116a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
-\item $\langle\,$C\_colSums\_iweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb115b}{115b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
-\item $\langle\,$C\_colSums\_iweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb115c}{115c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
-\item $\langle\,$C\_CovarianceLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb84}{84}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
-\item $\langle\,$C\_doPermute\nobreak\ {\footnotesize \NWlink{nuweb137b}{137b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136b}{136b}.}
-\item $\langle\,$C\_doPermuteBlock\nobreak\ {\footnotesize \NWlink{nuweb138b}{138b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136b}{136b}.}
-\item $\langle\,$C\_ExpectationLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb83b}{83b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
-\item $\langle\,$C\_get\_B\nobreak\ {\footnotesize \NWlink{nuweb158a}{158a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_Covariance\nobreak\ {\footnotesize \NWlink{nuweb155a}{155a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_CovarianceInfluence\nobreak\ {\footnotesize \NWlink{nuweb156a}{156a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_dimTable\nobreak\ {\footnotesize \NWlink{nuweb157c}{157c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_Expectation\nobreak\ {\footnotesize \NWlink{nuweb154a}{154a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_ExpectationInfluence\nobreak\ {\footnotesize \NWlink{nuweb155c}{155c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_ExpectationX\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_LinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb153d}{153d}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_nresample\nobreak\ {\footnotesize \NWlink{nuweb158b}{158b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_P\nobreak\ {\footnotesize \NWlink{nuweb152c}{152c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_PermutedLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb158c}{158c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_Q\nobreak\ {\footnotesize \NWlink{nuweb153a}{153a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_Sumweights\nobreak\ {\footnotesize \NWlink{nuweb157a}{157a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_Table\nobreak\ {\footnotesize \NWlink{nuweb157b}{157b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_TableBlock\nobreak\ {\footnotesize \NWlink{nuweb156c}{156c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_tol\nobreak\ {\footnotesize \NWlink{nuweb158d}{158d}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_Variance\nobreak\ {\footnotesize \NWlink{nuweb154b}{154b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_VarianceInfluence\nobreak\ {\footnotesize \NWlink{nuweb156b}{156b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_varonly\nobreak\ {\footnotesize \NWlink{nuweb153b}{153b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_get\_Xfactor\nobreak\ {\footnotesize \NWlink{nuweb153c}{153c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$C\_kronecker\nobreak\ {\footnotesize \NWlink{nuweb143}{143}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
-\item $\langle\,$C\_kronecker\_sym\nobreak\ {\footnotesize \NWlink{nuweb144}{144}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
-\item $\langle\,$C\_KronSums\_dweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb103b}{103b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$C\_KronSums\_dweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb104c}{104c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$C\_KronSums\_iweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb104a}{104a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$C\_KronSums\_iweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb104b}{104b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$C\_KronSums\_Permutation\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb110b}{110b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$C\_KronSums\_Permutation\_isubset\nobreak\ {\footnotesize \NWlink{nuweb111a}{111a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$C\_KronSums\_sym\nobreak\ {\footnotesize \NWlink{nuweb145a}{145a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
-\item $\langle\,$C\_maxabsstand\_Covariance\nobreak\ {\footnotesize \NWlink{nuweb63b}{63b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$C\_maxabsstand\_Variance\nobreak\ {\footnotesize \NWlink{nuweb64}{64}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$C\_maxstand\_Covariance\nobreak\ {\footnotesize \NWlink{nuweb61b}{61b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$C\_maxstand\_Variance\nobreak\ {\footnotesize \NWlink{nuweb62a}{62a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$C\_maxtype\nobreak\ {\footnotesize \NWlink{nuweb67}{67}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$C\_maxtype\_pvalue\nobreak\ {\footnotesize \NWlink{nuweb71}{71}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68b}{68b}.}
-\item $\langle\,$C\_minstand\_Covariance\nobreak\ {\footnotesize \NWlink{nuweb62b}{62b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$C\_minstand\_Variance\nobreak\ {\footnotesize \NWlink{nuweb63a}{63a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$C\_MPinv\_sym\nobreak\ {\footnotesize \NWlink{nuweb147}{147}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
-\item $\langle\,$C\_norm\_pvalue\nobreak\ {\footnotesize \NWlink{nuweb70}{70}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68b}{68b}.}
-\item $\langle\,$C\_OneTableSums\_dweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb120a}{120a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_OneTableSums\_dweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb121a}{121a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_OneTableSums\_iweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb120b}{120b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_OneTableSums\_iweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb120c}{120c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_ordered\_Xfactor\nobreak\ {\footnotesize \NWlink{nuweb74}{74}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$C\_order\_subset\_wrt\_block\nobreak\ {\footnotesize \NWlink{nuweb135a}{135a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb131b}{131b}.}
-\item $\langle\,$C\_Permute\nobreak\ {\footnotesize \NWlink{nuweb137a}{137a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136b}{136b}.}
-\item $\langle\,$C\_PermuteBlock\nobreak\ {\footnotesize \NWlink{nuweb138a}{138a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136b}{136b}.}
-\item $\langle\,$C\_perm\_pvalue\nobreak\ {\footnotesize \NWlink{nuweb69}{69}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68b}{68b}.}
-\item $\langle\,$C\_quadform\nobreak\ {\footnotesize \NWlink{nuweb66}{66}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$C\_setup\_subset\nobreak\ {\footnotesize \NWlink{nuweb134a}{134a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb131b}{131b}.}
-\item $\langle\,$C\_setup\_subset\_block\nobreak\ {\footnotesize \NWlink{nuweb134b}{134b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb131b}{131b}.}
-\item $\langle\,$C\_standardise\nobreak\ {\footnotesize \NWlink{nuweb68a}{68a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$C\_Sums\_dweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb96b}{96b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
-\item $\langle\,$C\_Sums\_dweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb97c}{97c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
-\item $\langle\,$C\_Sums\_iweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb97a}{97a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
-\item $\langle\,$C\_Sums\_iweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb97b}{97b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
-\item $\langle\,$C\_ThreeTableSums\_dweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb129b}{129b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_ThreeTableSums\_dweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb130b}{130b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_ThreeTableSums\_iweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb129c}{129c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_ThreeTableSums\_iweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb130a}{130a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_TwoTableSums\_dweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb124b}{124b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_TwoTableSums\_dweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb125b}{125b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_TwoTableSums\_iweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb124c}{124c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_TwoTableSums\_iweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb125a}{125a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$C\_unordered\_Xfactor\nobreak\ {\footnotesize \NWlink{nuweb79}{79}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$C\_VarianceLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb85}{85}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
-\item $\langle\,$C\_XfactorKronSums\_dweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb106b}{106b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$C\_XfactorKronSums\_dweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb107b}{107b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$C\_XfactorKronSums\_iweights\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb106c}{106c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$C\_XfactorKronSums\_iweights\_isubset\nobreak\ {\footnotesize \NWlink{nuweb107a}{107a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$C\_XfactorKronSums\_Permutation\_dsubset\nobreak\ {\footnotesize \NWlink{nuweb111c}{111c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$C\_XfactorKronSums\_Permutation\_isubset\nobreak\ {\footnotesize \NWlink{nuweb112a}{112a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_chisq_pvalue\nobreak\ {\footnotesize \NWlink{nuweb68c}{68c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68b}{68b}.}
+\item $\langle\,$C_colSums_dweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb115a}{115a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
+\item $\langle\,$C_colSums_dweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb116a}{116a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
+\item $\langle\,$C_colSums_iweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb115b}{115b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
+\item $\langle\,$C_colSums_iweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb115c}{115c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
+\item $\langle\,$C_CovarianceLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb84}{84}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
+\item $\langle\,$C_doPermute\nobreak\ {\footnotesize \NWlink{nuweb137b}{137b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136b}{136b}.}
+\item $\langle\,$C_doPermuteBlock\nobreak\ {\footnotesize \NWlink{nuweb138b}{138b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136b}{136b}.}
+\item $\langle\,$C_ExpectationLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb83b}{83b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
+\item $\langle\,$C_get_B\nobreak\ {\footnotesize \NWlink{nuweb158a}{158a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_Covariance\nobreak\ {\footnotesize \NWlink{nuweb155a}{155a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_CovarianceInfluence\nobreak\ {\footnotesize \NWlink{nuweb156a}{156a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_dimTable\nobreak\ {\footnotesize \NWlink{nuweb157c}{157c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_Expectation\nobreak\ {\footnotesize \NWlink{nuweb154a}{154a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_ExpectationInfluence\nobreak\ {\footnotesize \NWlink{nuweb155c}{155c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_ExpectationX\nobreak\ {\footnotesize \NWlink{nuweb155b}{155b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_LinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb153d}{153d}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_nresample\nobreak\ {\footnotesize \NWlink{nuweb158b}{158b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_P\nobreak\ {\footnotesize \NWlink{nuweb152c}{152c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_PermutedLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb158c}{158c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_Q\nobreak\ {\footnotesize \NWlink{nuweb153a}{153a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_Sumweights\nobreak\ {\footnotesize \NWlink{nuweb157a}{157a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_Table\nobreak\ {\footnotesize \NWlink{nuweb157b}{157b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_TableBlock\nobreak\ {\footnotesize \NWlink{nuweb156c}{156c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_tol\nobreak\ {\footnotesize \NWlink{nuweb158d}{158d}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_Variance\nobreak\ {\footnotesize \NWlink{nuweb154b}{154b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_VarianceInfluence\nobreak\ {\footnotesize \NWlink{nuweb156b}{156b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_varonly\nobreak\ {\footnotesize \NWlink{nuweb153b}{153b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_get_Xfactor\nobreak\ {\footnotesize \NWlink{nuweb153c}{153c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$C_kronecker\nobreak\ {\footnotesize \NWlink{nuweb143}{143}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
+\item $\langle\,$C_kronecker_sym\nobreak\ {\footnotesize \NWlink{nuweb144}{144}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
+\item $\langle\,$C_KronSums_dweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb103b}{103b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_KronSums_dweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb104c}{104c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_KronSums_iweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb104a}{104a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_KronSums_iweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb104b}{104b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_KronSums_Permutation_dsubset\nobreak\ {\footnotesize \NWlink{nuweb110b}{110b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_KronSums_Permutation_isubset\nobreak\ {\footnotesize \NWlink{nuweb111a}{111a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_KronSums_sym\nobreak\ {\footnotesize \NWlink{nuweb145a}{145a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
+\item $\langle\,$C_maxabsstand_Covariance\nobreak\ {\footnotesize \NWlink{nuweb63b}{63b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$C_maxabsstand_Variance\nobreak\ {\footnotesize \NWlink{nuweb64}{64}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$C_maxstand_Covariance\nobreak\ {\footnotesize \NWlink{nuweb61b}{61b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$C_maxstand_Variance\nobreak\ {\footnotesize \NWlink{nuweb62a}{62a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$C_maxtype\nobreak\ {\footnotesize \NWlink{nuweb67}{67}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$C_maxtype_pvalue\nobreak\ {\footnotesize \NWlink{nuweb71}{71}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68b}{68b}.}
+\item $\langle\,$C_minstand_Covariance\nobreak\ {\footnotesize \NWlink{nuweb62b}{62b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$C_minstand_Variance\nobreak\ {\footnotesize \NWlink{nuweb63a}{63a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$C_MPinv_sym\nobreak\ {\footnotesize \NWlink{nuweb147}{147}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
+\item $\langle\,$C_norm_pvalue\nobreak\ {\footnotesize \NWlink{nuweb70}{70}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68b}{68b}.}
+\item $\langle\,$C_OneTableSums_dweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb120a}{120a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_OneTableSums_dweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb121a}{121a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_OneTableSums_iweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb120b}{120b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_OneTableSums_iweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb120c}{120c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_ordered_Xfactor\nobreak\ {\footnotesize \NWlink{nuweb74}{74}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$C_order_subset_wrt_block\nobreak\ {\footnotesize \NWlink{nuweb135a}{135a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb131b}{131b}.}
+\item $\langle\,$C_Permute\nobreak\ {\footnotesize \NWlink{nuweb137a}{137a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136b}{136b}.}
+\item $\langle\,$C_PermuteBlock\nobreak\ {\footnotesize \NWlink{nuweb138a}{138a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136b}{136b}.}
+\item $\langle\,$C_perm_pvalue\nobreak\ {\footnotesize \NWlink{nuweb69}{69}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68b}{68b}.}
+\item $\langle\,$C_quadform\nobreak\ {\footnotesize \NWlink{nuweb66}{66}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$C_setup_subset\nobreak\ {\footnotesize \NWlink{nuweb134a}{134a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb131b}{131b}.}
+\item $\langle\,$C_setup_subset_block\nobreak\ {\footnotesize \NWlink{nuweb134b}{134b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb131b}{131b}.}
+\item $\langle\,$C_standardise\nobreak\ {\footnotesize \NWlink{nuweb68a}{68a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$C_Sums_dweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb96b}{96b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
+\item $\langle\,$C_Sums_dweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb97c}{97c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
+\item $\langle\,$C_Sums_iweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb97a}{97a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
+\item $\langle\,$C_Sums_iweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb97b}{97b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
+\item $\langle\,$C_ThreeTableSums_dweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb129b}{129b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_ThreeTableSums_dweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb130b}{130b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_ThreeTableSums_iweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb129c}{129c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_ThreeTableSums_iweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb130a}{130a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_TwoTableSums_dweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb124b}{124b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_TwoTableSums_dweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb125b}{125b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_TwoTableSums_iweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb124c}{124c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_TwoTableSums_iweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb125a}{125a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$C_unordered_Xfactor\nobreak\ {\footnotesize \NWlink{nuweb79}{79}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$C_VarianceLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb85}{85}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
+\item $\langle\,$C_XfactorKronSums_dweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb106b}{106b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_XfactorKronSums_dweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb107b}{107b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_XfactorKronSums_iweights_dsubset\nobreak\ {\footnotesize \NWlink{nuweb106c}{106c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_XfactorKronSums_iweights_isubset\nobreak\ {\footnotesize \NWlink{nuweb107a}{107a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_XfactorKronSums_Permutation_dsubset\nobreak\ {\footnotesize \NWlink{nuweb111c}{111c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$C_XfactorKronSums_Permutation_isubset\nobreak\ {\footnotesize \NWlink{nuweb112a}{112a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
 \item $\langle\,$doTest\nobreak\ {\footnotesize \NWlink{nuweb12}{12}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb3a}{3a}.}
 \item $\langle\,$doTest Prototype\nobreak\ {\footnotesize \NWlink{nuweb11}{11}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb12}{12}\NWlink{nuweb19}{, 19}.
 }
@@ -11592,114 +11593,114 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \item $\langle\,$R y Input\nobreak\ {\footnotesize \NWlink{nuweb25d}{25d}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb32a}{32a}\NWlink{nuweb42c}{, 42c}\NWlink{nuweb50a}{, 50a}\NWlink{nuweb86a}{, 86a}\NWlink{nuweb86c}{c}\NWlink{nuweb87b}{, 87b}\NWlink{nuweb88b}{, 88b}\NWlink{nuweb99}{, 99}\NWlink{nuweb109a}{, 109a}\NWlink{nuweb122a}{, 122a}\NWlink{nuweb127a}{, 127a}\NWlink{nuweb132a}{, 132a}.
 }
 \item $\langle\,$RC KronSums Input\nobreak\ {\footnotesize \NWlink{nuweb101b}{101b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb100b}{100b}.}
-\item $\langle\,$RC\_colSums\nobreak\ {\footnotesize \NWlink{nuweb114a}{114a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
-\item $\langle\,$RC\_colSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb113c}{113c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb114a}{114a}.}
-\item $\langle\,$RC\_CovarianceInfluence\nobreak\ {\footnotesize \NWlink{nuweb89a}{89a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
-\item $\langle\,$RC\_CovarianceInfluence Prototype\nobreak\ {\footnotesize \NWlink{nuweb88b}{88b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb89a}{89a}.}
-\item $\langle\,$RC\_CovarianceX\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
-\item $\langle\,$RC\_CovarianceX Prototype\nobreak\ {\footnotesize \NWlink{nuweb93a}{93a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb93b}{93b}.}
-\item $\langle\,$RC\_ExpectationCovarianceStatistic\nobreak\ {\footnotesize \NWlink{nuweb34}{34}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb31}{31}.}
-\item $\langle\,$RC\_ExpectationCovarianceStatistic\_2d\nobreak\ {\footnotesize \NWlink{nuweb48}{48}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb42b}{42b}.}
-\item $\langle\,$RC\_ExpectationInfluence\nobreak\ {\footnotesize \NWlink{nuweb87a}{87a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
-\item $\langle\,$RC\_ExpectationInfluence Prototype\nobreak\ {\footnotesize \NWlink{nuweb86c}{86c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb87a}{87a}.}
-\item $\langle\,$RC\_ExpectationX\nobreak\ {\footnotesize \NWlink{nuweb91}{91}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
-\item $\langle\,$RC\_ExpectationX Prototype\nobreak\ {\footnotesize \NWlink{nuweb90b}{90b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb91}{91}.}
-\item $\langle\,$RC\_init\_LECV\_1d\nobreak\ {\footnotesize \NWlink{nuweb161b}{161b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$RC\_init\_LECV\_2d\nobreak\ {\footnotesize \NWlink{nuweb162}{162}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
-\item $\langle\,$RC\_KronSums\nobreak\ {\footnotesize \NWlink{nuweb101a}{101a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$RC\_KronSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb100b}{100b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb101a}{101a}.}
-\item $\langle\,$RC\_KronSums\_Permutation\nobreak\ {\footnotesize \NWlink{nuweb110a}{110a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$RC\_KronSums\_Permutation Prototype\nobreak\ {\footnotesize \NWlink{nuweb109c}{109c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb110a}{110a}.}
-\item $\langle\,$RC\_LinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb82d}{82d}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb82b}{82b}.}
-\item $\langle\,$RC\_LinearStatistic Prototype\nobreak\ {\footnotesize \NWlink{nuweb82c}{82c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb82d}{82d}.}
-\item $\langle\,$RC\_OneTableSums\nobreak\ {\footnotesize \NWlink{nuweb119a}{119a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$RC\_OneTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb118b}{118b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb119a}{119a}.}
-\item $\langle\,$RC\_order\_subset\_wrt\_block\nobreak\ {\footnotesize \NWlink{nuweb133b}{133b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb131b}{131b}.}
-\item $\langle\,$RC\_order\_subset\_wrt\_block Prototype\nobreak\ {\footnotesize \NWlink{nuweb133a}{133a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb133b}{133b}.}
-\item $\langle\,$RC\_setup\_subset\nobreak\ {\footnotesize \NWlink{nuweb136a}{136a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136b}{136b}.}
-\item $\langle\,$RC\_setup\_subset Prototype\nobreak\ {\footnotesize \NWlink{nuweb135b}{135b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136a}{136a}.}
-\item $\langle\,$RC\_Sums\nobreak\ {\footnotesize \NWlink{nuweb96a}{96a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
-\item $\langle\,$RC\_Sums Prototype\nobreak\ {\footnotesize \NWlink{nuweb95c}{95c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb96a}{96a}.}
-\item $\langle\,$RC\_ThreeTableSums\nobreak\ {\footnotesize \NWlink{nuweb128b}{128b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$RC\_ThreeTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb128a}{128a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb128b}{128b}.}
-\item $\langle\,$RC\_TwoTableSums\nobreak\ {\footnotesize \NWlink{nuweb123b}{123b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$RC\_TwoTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb123a}{123a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb123b}{123b}.}
-\item $\langle\,$R\_colSums\nobreak\ {\footnotesize \NWlink{nuweb113b}{113b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
-\item $\langle\,$R\_colSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb113a}{113a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb113b}{, 113b}.
+\item $\langle\,$RC_colSums\nobreak\ {\footnotesize \NWlink{nuweb114a}{114a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
+\item $\langle\,$RC_colSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb113c}{113c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb114a}{114a}.}
+\item $\langle\,$RC_CovarianceInfluence\nobreak\ {\footnotesize \NWlink{nuweb89a}{89a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
+\item $\langle\,$RC_CovarianceInfluence Prototype\nobreak\ {\footnotesize \NWlink{nuweb88b}{88b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb89a}{89a}.}
+\item $\langle\,$RC_CovarianceX\nobreak\ {\footnotesize \NWlink{nuweb93b}{93b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
+\item $\langle\,$RC_CovarianceX Prototype\nobreak\ {\footnotesize \NWlink{nuweb93a}{93a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb93b}{93b}.}
+\item $\langle\,$RC_ExpectationCovarianceStatistic\nobreak\ {\footnotesize \NWlink{nuweb34}{34}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb31}{31}.}
+\item $\langle\,$RC_ExpectationCovarianceStatistic_2d\nobreak\ {\footnotesize \NWlink{nuweb48}{48}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb42b}{42b}.}
+\item $\langle\,$RC_ExpectationInfluence\nobreak\ {\footnotesize \NWlink{nuweb87a}{87a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
+\item $\langle\,$RC_ExpectationInfluence Prototype\nobreak\ {\footnotesize \NWlink{nuweb86c}{86c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb87a}{87a}.}
+\item $\langle\,$RC_ExpectationX\nobreak\ {\footnotesize \NWlink{nuweb91}{91}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
+\item $\langle\,$RC_ExpectationX Prototype\nobreak\ {\footnotesize \NWlink{nuweb90b}{90b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb91}{91}.}
+\item $\langle\,$RC_init_LECV_1d\nobreak\ {\footnotesize \NWlink{nuweb161b}{161b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$RC_init_LECV_2d\nobreak\ {\footnotesize \NWlink{nuweb162}{162}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb152a}{152a}.}
+\item $\langle\,$RC_KronSums\nobreak\ {\footnotesize \NWlink{nuweb101a}{101a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$RC_KronSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb100b}{100b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb101a}{101a}.}
+\item $\langle\,$RC_KronSums_Permutation\nobreak\ {\footnotesize \NWlink{nuweb110a}{110a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$RC_KronSums_Permutation Prototype\nobreak\ {\footnotesize \NWlink{nuweb109c}{109c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb110a}{110a}.}
+\item $\langle\,$RC_LinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb82d}{82d}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb82b}{82b}.}
+\item $\langle\,$RC_LinearStatistic Prototype\nobreak\ {\footnotesize \NWlink{nuweb82c}{82c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb82d}{82d}.}
+\item $\langle\,$RC_OneTableSums\nobreak\ {\footnotesize \NWlink{nuweb119a}{119a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$RC_OneTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb118b}{118b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb119a}{119a}.}
+\item $\langle\,$RC_order_subset_wrt_block\nobreak\ {\footnotesize \NWlink{nuweb133b}{133b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb131b}{131b}.}
+\item $\langle\,$RC_order_subset_wrt_block Prototype\nobreak\ {\footnotesize \NWlink{nuweb133a}{133a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb133b}{133b}.}
+\item $\langle\,$RC_setup_subset\nobreak\ {\footnotesize \NWlink{nuweb136a}{136a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136b}{136b}.}
+\item $\langle\,$RC_setup_subset Prototype\nobreak\ {\footnotesize \NWlink{nuweb135b}{135b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb136a}{136a}.}
+\item $\langle\,$RC_Sums\nobreak\ {\footnotesize \NWlink{nuweb96a}{96a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
+\item $\langle\,$RC_Sums Prototype\nobreak\ {\footnotesize \NWlink{nuweb95c}{95c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb96a}{96a}.}
+\item $\langle\,$RC_ThreeTableSums\nobreak\ {\footnotesize \NWlink{nuweb128b}{128b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$RC_ThreeTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb128a}{128a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb128b}{128b}.}
+\item $\langle\,$RC_TwoTableSums\nobreak\ {\footnotesize \NWlink{nuweb123b}{123b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$RC_TwoTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb123a}{123a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb123b}{123b}.}
+\item $\langle\,$R_colSums\nobreak\ {\footnotesize \NWlink{nuweb113b}{113b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb112c}{112c}.}
+\item $\langle\,$R_colSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb113a}{113a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb113b}{, 113b}.
 }
-\item $\langle\,$R\_CovarianceInfluence\nobreak\ {\footnotesize \NWlink{nuweb88a}{88a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
-\item $\langle\,$R\_CovarianceInfluence Prototype\nobreak\ {\footnotesize \NWlink{nuweb87b}{87b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb88a}{, 88a}.
+\item $\langle\,$R_CovarianceInfluence\nobreak\ {\footnotesize \NWlink{nuweb88a}{88a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
+\item $\langle\,$R_CovarianceInfluence Prototype\nobreak\ {\footnotesize \NWlink{nuweb87b}{87b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb88a}{, 88a}.
 }
-\item $\langle\,$R\_CovarianceX\nobreak\ {\footnotesize \NWlink{nuweb92b}{92b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
-\item $\langle\,$R\_CovarianceX Prototype\nobreak\ {\footnotesize \NWlink{nuweb92a}{92a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb92b}{, 92b}.
+\item $\langle\,$R_CovarianceX\nobreak\ {\footnotesize \NWlink{nuweb92b}{92b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
+\item $\langle\,$R_CovarianceX Prototype\nobreak\ {\footnotesize \NWlink{nuweb92a}{92a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb92b}{, 92b}.
 }
-\item $\langle\,$R\_ExpectationCovarianceStatistic\nobreak\ {\footnotesize \NWlink{nuweb33a}{33a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb31}{31}.}
-\item $\langle\,$R\_ExpectationCovarianceStatistic Prototype\nobreak\ {\footnotesize \NWlink{nuweb32b}{32b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb33a}{, 33a}.
+\item $\langle\,$R_ExpectationCovarianceStatistic\nobreak\ {\footnotesize \NWlink{nuweb33a}{33a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb31}{31}.}
+\item $\langle\,$R_ExpectationCovarianceStatistic Prototype\nobreak\ {\footnotesize \NWlink{nuweb32b}{32b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb33a}{, 33a}.
 }
-\item $\langle\,$R\_ExpectationCovarianceStatistic\_2d\nobreak\ {\footnotesize \NWlink{nuweb44}{44}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb42b}{42b}.}
-\item $\langle\,$R\_ExpectationCovarianceStatistic\_2d Prototype\nobreak\ {\footnotesize \NWlink{nuweb43a}{43a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb44}{, 44}.
+\item $\langle\,$R_ExpectationCovarianceStatistic_2d\nobreak\ {\footnotesize \NWlink{nuweb44}{44}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb42b}{42b}.}
+\item $\langle\,$R_ExpectationCovarianceStatistic_2d Prototype\nobreak\ {\footnotesize \NWlink{nuweb43a}{43a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb44}{, 44}.
 }
-\item $\langle\,$R\_ExpectationInfluence\nobreak\ {\footnotesize \NWlink{nuweb86b}{86b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
-\item $\langle\,$R\_ExpectationInfluence Prototype\nobreak\ {\footnotesize \NWlink{nuweb86a}{86a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb86b}{, 86b}.
+\item $\langle\,$R_ExpectationInfluence\nobreak\ {\footnotesize \NWlink{nuweb86b}{86b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
+\item $\langle\,$R_ExpectationInfluence Prototype\nobreak\ {\footnotesize \NWlink{nuweb86a}{86a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb86b}{, 86b}.
 }
-\item $\langle\,$R\_ExpectationX\nobreak\ {\footnotesize \NWlink{nuweb90a}{90a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
-\item $\langle\,$R\_ExpectationX Prototype\nobreak\ {\footnotesize \NWlink{nuweb89b}{89b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb90a}{, 90a}.
+\item $\langle\,$R_ExpectationX\nobreak\ {\footnotesize \NWlink{nuweb90a}{90a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb83a}{83a}.}
+\item $\langle\,$R_ExpectationX Prototype\nobreak\ {\footnotesize \NWlink{nuweb89b}{89b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb90a}{, 90a}.
 }
-\item $\langle\,$R\_init\_LECV\nobreak\ {\footnotesize \NWlink{nuweb160}{160}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb161b}{161b}\NWlink{nuweb162}{, 162}.
+\item $\langle\,$R_init_LECV\nobreak\ {\footnotesize \NWlink{nuweb160}{160}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb161b}{161b}\NWlink{nuweb162}{, 162}.
 }
-\item $\langle\,$R\_kronecker\nobreak\ {\footnotesize \NWlink{nuweb142}{142}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
-\item $\langle\,$R\_kronecker Prototype\nobreak\ {\footnotesize \NWlink{nuweb141b}{141b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb142}{, 142}.
+\item $\langle\,$R_kronecker\nobreak\ {\footnotesize \NWlink{nuweb142}{142}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
+\item $\langle\,$R_kronecker Prototype\nobreak\ {\footnotesize \NWlink{nuweb141b}{141b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb142}{, 142}.
 }
-\item $\langle\,$R\_KronSums\nobreak\ {\footnotesize \NWlink{nuweb100a}{100a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$R\_KronSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb99}{99}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb100a}{, 100a}.
+\item $\langle\,$R_KronSums\nobreak\ {\footnotesize \NWlink{nuweb100a}{100a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$R_KronSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb99}{99}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb100a}{, 100a}.
 }
-\item $\langle\,$R\_KronSums\_Permutation\nobreak\ {\footnotesize \NWlink{nuweb109b}{109b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
-\item $\langle\,$R\_KronSums\_Permutation Prototype\nobreak\ {\footnotesize \NWlink{nuweb109a}{109a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb109b}{, 109b}.
+\item $\langle\,$R_KronSums_Permutation\nobreak\ {\footnotesize \NWlink{nuweb109b}{109b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb98b}{98b}.}
+\item $\langle\,$R_KronSums_Permutation Prototype\nobreak\ {\footnotesize \NWlink{nuweb109a}{109a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb109b}{, 109b}.
 }
-\item $\langle\,$R\_MaximallySelectedTest\nobreak\ {\footnotesize \NWlink{nuweb60}{60}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb53b}{53b}.}
-\item $\langle\,$R\_MaximallySelectedTest Prototype\nobreak\ {\footnotesize \NWlink{nuweb59a}{59a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb60}{, 60}.
+\item $\langle\,$R_MaximallySelectedTest\nobreak\ {\footnotesize \NWlink{nuweb60}{60}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb53b}{53b}.}
+\item $\langle\,$R_MaximallySelectedTest Prototype\nobreak\ {\footnotesize \NWlink{nuweb59a}{59a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb60}{, 60}.
 }
-\item $\langle\,$R\_MaximumTest\nobreak\ {\footnotesize \NWlink{nuweb58}{58}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb53b}{53b}.}
-\item $\langle\,$R\_MaximumTest Prototype\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb58}{, 58}.
+\item $\langle\,$R_MaximumTest\nobreak\ {\footnotesize \NWlink{nuweb58}{58}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb53b}{53b}.}
+\item $\langle\,$R_MaximumTest Prototype\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb58}{, 58}.
 }
-\item $\langle\,$R\_MPinv\_sym\nobreak\ {\footnotesize \NWlink{nuweb146b}{146b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
-\item $\langle\,$R\_MPinv\_sym Prototype\nobreak\ {\footnotesize \NWlink{nuweb145b}{145b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb146b}{, 146b}.
+\item $\langle\,$R_MPinv_sym\nobreak\ {\footnotesize \NWlink{nuweb146b}{146b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
+\item $\langle\,$R_MPinv_sym Prototype\nobreak\ {\footnotesize \NWlink{nuweb145b}{145b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb146b}{, 146b}.
 }
-\item $\langle\,$R\_OneTableSums\nobreak\ {\footnotesize \NWlink{nuweb118a}{118a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$R\_OneTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb117b}{117b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb118a}{, 118a}.
+\item $\langle\,$R_OneTableSums\nobreak\ {\footnotesize \NWlink{nuweb118a}{118a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$R_OneTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb117b}{117b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb118a}{, 118a}.
 }
-\item $\langle\,$R\_order\_subset\_wrt\_block\nobreak\ {\footnotesize \NWlink{nuweb132b}{132b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb131b}{131b}.}
-\item $\langle\,$R\_order\_subset\_wrt\_block Prototype\nobreak\ {\footnotesize \NWlink{nuweb132a}{132a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb132b}{, 132b}.
+\item $\langle\,$R_order_subset_wrt_block\nobreak\ {\footnotesize \NWlink{nuweb132b}{132b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb131b}{131b}.}
+\item $\langle\,$R_order_subset_wrt_block Prototype\nobreak\ {\footnotesize \NWlink{nuweb132a}{132a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb132b}{, 132b}.
 }
-\item $\langle\,$R\_pack\_sym\nobreak\ {\footnotesize \NWlink{nuweb151}{151}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
-\item $\langle\,$R\_pack\_sym Prototype\nobreak\ {\footnotesize \NWlink{nuweb150a}{150a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb151}{, 151}.
+\item $\langle\,$R_pack_sym\nobreak\ {\footnotesize \NWlink{nuweb151}{151}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
+\item $\langle\,$R_pack_sym Prototype\nobreak\ {\footnotesize \NWlink{nuweb150a}{150a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb151}{, 151}.
 }
-\item $\langle\,$R\_PermutedLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb40}{40}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb31}{31}.}
-\item $\langle\,$R\_PermutedLinearStatistic Prototype\nobreak\ {\footnotesize \NWlink{nuweb38c}{38c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb40}{, 40}.
+\item $\langle\,$R_PermutedLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb40}{40}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb31}{31}.}
+\item $\langle\,$R_PermutedLinearStatistic Prototype\nobreak\ {\footnotesize \NWlink{nuweb38c}{38c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb40}{, 40}.
 }
-\item $\langle\,$R\_PermutedLinearStatistic\_2d\nobreak\ {\footnotesize \NWlink{nuweb51}{51}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb42b}{42b}.}
-\item $\langle\,$R\_PermutedLinearStatistic\_2d Prototype\nobreak\ {\footnotesize \NWlink{nuweb50a}{50a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb51}{, 51}.
+\item $\langle\,$R_PermutedLinearStatistic_2d\nobreak\ {\footnotesize \NWlink{nuweb51}{51}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb42b}{42b}.}
+\item $\langle\,$R_PermutedLinearStatistic_2d Prototype\nobreak\ {\footnotesize \NWlink{nuweb50a}{50a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb51}{, 51}.
 }
-\item $\langle\,$R\_quadform\nobreak\ {\footnotesize \NWlink{nuweb65c}{65c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
-\item $\langle\,$R\_quadform Prototype\nobreak\ {\footnotesize \NWlink{nuweb65a}{65a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb65c}{, 65c}.
+\item $\langle\,$R_quadform\nobreak\ {\footnotesize \NWlink{nuweb65c}{65c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb61a}{61a}.}
+\item $\langle\,$R_quadform Prototype\nobreak\ {\footnotesize \NWlink{nuweb65a}{65a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb65c}{, 65c}.
 }
-\item $\langle\,$R\_QuadraticTest\nobreak\ {\footnotesize \NWlink{nuweb55}{55}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb53b}{53b}.}
-\item $\langle\,$R\_QuadraticTest Prototype\nobreak\ {\footnotesize \NWlink{nuweb53c}{53c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb55}{, 55}.
+\item $\langle\,$R_QuadraticTest\nobreak\ {\footnotesize \NWlink{nuweb55}{55}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb53b}{53b}.}
+\item $\langle\,$R_QuadraticTest Prototype\nobreak\ {\footnotesize \NWlink{nuweb53c}{53c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb55}{, 55}.
 }
-\item $\langle\,$R\_StandardisePermutedLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb42a}{42a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb31}{31}.}
-\item $\langle\,$R\_StandardisePermutedLinearStatistic Prototype\nobreak\ {\footnotesize \NWlink{nuweb41b}{41b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb42a}{, 42a}.
+\item $\langle\,$R_StandardisePermutedLinearStatistic\nobreak\ {\footnotesize \NWlink{nuweb42a}{42a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb31}{31}.}
+\item $\langle\,$R_StandardisePermutedLinearStatistic Prototype\nobreak\ {\footnotesize \NWlink{nuweb41b}{41b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb42a}{, 42a}.
 }
-\item $\langle\,$R\_Sums\nobreak\ {\footnotesize \NWlink{nuweb95b}{95b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
-\item $\langle\,$R\_Sums Prototype\nobreak\ {\footnotesize \NWlink{nuweb95a}{95a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb95b}{, 95b}.
+\item $\langle\,$R_Sums\nobreak\ {\footnotesize \NWlink{nuweb95b}{95b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb94d}{94d}.}
+\item $\langle\,$R_Sums Prototype\nobreak\ {\footnotesize \NWlink{nuweb95a}{95a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb95b}{, 95b}.
 }
-\item $\langle\,$R\_ThreeTableSums\nobreak\ {\footnotesize \NWlink{nuweb127b}{127b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$R\_ThreeTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb127a}{127a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb127b}{, 127b}.
+\item $\langle\,$R_ThreeTableSums\nobreak\ {\footnotesize \NWlink{nuweb127b}{127b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$R_ThreeTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb127a}{127a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb127b}{, 127b}.
 }
-\item $\langle\,$R\_TwoTableSums\nobreak\ {\footnotesize \NWlink{nuweb122b}{122b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
-\item $\langle\,$R\_TwoTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb122a}{122a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb122b}{, 122b}.
+\item $\langle\,$R_TwoTableSums\nobreak\ {\footnotesize \NWlink{nuweb122b}{122b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb117a}{117a}.}
+\item $\langle\,$R_TwoTableSums Prototype\nobreak\ {\footnotesize \NWlink{nuweb122a}{122a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb122b}{, 122b}.
 }
-\item $\langle\,$R\_unpack\_sym\nobreak\ {\footnotesize \NWlink{nuweb149}{149}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
-\item $\langle\,$R\_unpack\_sym Prototype\nobreak\ {\footnotesize \NWlink{nuweb148a}{148a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb149}{, 149}.
+\item $\langle\,$R_unpack_sym\nobreak\ {\footnotesize \NWlink{nuweb149}{149}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb139a}{139a}.}
+\item $\langle\,$R_unpack_sym Prototype\nobreak\ {\footnotesize \NWlink{nuweb148a}{148a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb23b}{23b}\NWlink{nuweb149}{, 149}.
 }
 \item $\langle\,$Setup Dimensions\nobreak\ {\footnotesize \NWlink{nuweb33b}{33b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb33a}{33a}\NWlink{nuweb40}{, 40}.
 }
@@ -11770,7 +11771,7 @@ is contained in \texttt{libcoin/inst/C\_API\_example}.
 \item \verb@C_get_LinearStatistic@: \NWlink{nuweb35b}{35b}\NWlink{nuweb48}{, 48}\NWlink{nuweb55}{, 55}\NWlink{nuweb58}{, 58}\NWlink{nuweb75}{, 75}, \underline{\NWlink{nuweb153d}{153d}}\NWlink{nuweb161a}{, 161a}.
 \item \verb@C_get_nresample@: \NWlink{nuweb42a}{42a}\NWlink{nuweb55}{, 55}\NWlink{nuweb56a}{, 56a}\NWlink{nuweb58}{, 58}\NWlink{nuweb60}{, 60}\NWlink{nuweb75}{, 75}, \underline{\NWlink{nuweb158b}{158b}}.
 \item \verb@C_get_P@: \NWlink{nuweb35a}{35a}\NWlink{nuweb42a}{, 42a}\NWlink{nuweb49}{, 49}\NWlink{nuweb56a}{, 56a}\NWlink{nuweb60}{, 60}\NWlink{nuweb75}{, 75}, \underline{\NWlink{nuweb152c}{152c}}\NWlink{nuweb154b}{, 154b}\NWlink{nuweb155a}{, 155a}\NWlink{nuweb158b}{, 158b}.
-\item \verb@C_get_PermutedLinearStatistic@: \NWlink{nuweb42a}{42a}\NWlink{nuweb55}{, 55}\NWlink{nuweb75}{, 75}, \underline{\NWlink{nuweb158c}{158c}}.
+\item \verb@C_get_PermutedLinearStatistic@: \NWlink{nuweb42a}{42a}\NWlink{nuweb55}{, 55}\NWlink{nuweb58}{, 58}\NWlink{nuweb75}{, 75}, \underline{\NWlink{nuweb158c}{158c}}.
 \item \verb@C_get_Q@: \NWlink{nuweb35a}{35a}\NWlink{nuweb42a}{, 42a}\NWlink{nuweb49}{, 49}\NWlink{nuweb56a}{, 56a}\NWlink{nuweb75}{, 75}, \underline{\NWlink{nuweb153a}{153a}}\NWlink{nuweb154b}{, 154b}\NWlink{nuweb155a}{, 155a}\NWlink{nuweb158b}{, 158b}.
 \item \verb@C_get_Sumweights@: \NWlink{nuweb36a}{36a}\NWlink{nuweb49}{, 49}, \underline{\NWlink{nuweb157a}{157a}}.
 \item \verb@C_get_Table@: \NWlink{nuweb44}{44}\NWlink{nuweb49}{, 49}, \underline{\NWlink{nuweb157b}{157b}}.

@@ -81,7 +81,7 @@ int NLEVELS
     return(NROW(a));
 }
 
-/* C\_kronecker */
+/* C_kronecker */
 
 void C_kronecker
 (
@@ -115,9 +115,9 @@ void C_kronecker
     }
 }
 
-/* R\_kronecker */
+/* R_kronecker */
 
-/* R\_kronecker Prototype */
+/* R_kronecker Prototype */
 
 SEXP R_kronecker
 (
@@ -143,7 +143,7 @@ SEXP R_kronecker
     return(ans);
 }
 
-/* C\_kronecker\_sym */
+/* C_kronecker_sym */
 
 void C_kronecker_sym
 (
@@ -178,7 +178,7 @@ void C_kronecker_sym
     }
 }
 
-/* C\_KronSums\_sym */
+/* C_KronSums_sym */
 
 /* sum_i (t(x[i,]) %*% x[i,]) */
 void C_KronSums_sym_
@@ -211,7 +211,7 @@ void C_KronSums_sym_
     }
 }
 
-/* C\_MPinv\_sym */
+/* C_MPinv_sym */
 
 void C_MPinv_sym
 (
@@ -264,9 +264,9 @@ void C_MPinv_sym
     }
 }
 
-/* R\_MPinv\_sym */
+/* R_MPinv_sym */
 
-/* R\_MPinv\_sym Prototype */
+/* R_MPinv_sym Prototype */
 
 SEXP R_MPinv_sym
 (
@@ -297,9 +297,9 @@ SEXP R_MPinv_sym
     return(ans);
 }
 
-/* R\_unpack\_sym */
+/* R_unpack_sym */
 
-/* R\_unpack\_sym Prototype */
+/* R_unpack_sym Prototype */
 
 SEXP R_unpack_sym
 (
@@ -352,9 +352,9 @@ SEXP R_unpack_sym
     return ans;
 }
 
-/* R\_pack\_sym */
+/* R_pack_sym */
 
-/* R\_pack\_sym Prototype */
+/* R_pack_sym Prototype */
 
 SEXP R_pack_sym
 (
@@ -385,7 +385,7 @@ SEXP R_pack_sym
 
 /* Memory */
 
-/* C\_get\_P */
+/* C_get_P */
 
 int C_get_P
 (
@@ -397,7 +397,7 @@ int C_get_P
     return(INTEGER(VECTOR_ELT(LECV, dim_SLOT))[0]);
 }
 
-/* C\_get\_Q */
+/* C_get_Q */
 
 int C_get_Q
 (
@@ -442,7 +442,7 @@ int mPQB
     return((int) ans);
 }
 
-/* C\_get\_varonly */
+/* C_get_varonly */
 
 int C_get_varonly
 (
@@ -454,7 +454,7 @@ int C_get_varonly
     return(INTEGER(VECTOR_ELT(LECV, varonly_SLOT))[0]);
 }
 
-/* C\_get\_Xfactor */
+/* C_get_Xfactor */
 
 int C_get_Xfactor
 (
@@ -466,7 +466,7 @@ int C_get_Xfactor
     return(INTEGER(VECTOR_ELT(LECV, Xfactor_SLOT))[0]);
 }
 
-/* C\_get\_LinearStatistic */
+/* C_get_LinearStatistic */
 
 double* C_get_LinearStatistic
 (
@@ -478,7 +478,7 @@ double* C_get_LinearStatistic
     return(REAL(VECTOR_ELT(LECV, LinearStatistic_SLOT)));
 }
 
-/* C\_get\_Expectation */
+/* C_get_Expectation */
 
 double* C_get_Expectation
 (
@@ -490,7 +490,7 @@ double* C_get_Expectation
     return(REAL(VECTOR_ELT(LECV, Expectation_SLOT)));
 }
 
-/* C\_get\_Variance */
+/* C_get_Variance */
 
 double* C_get_Variance
 (
@@ -515,7 +515,7 @@ double* C_get_Variance
     return(REAL(VECTOR_ELT(LECV, Variance_SLOT)));
 }
 
-/* C\_get\_Covariance */
+/* C_get_Covariance */
 
 double* C_get_Covariance
 (
@@ -532,7 +532,7 @@ double* C_get_Covariance
     return(REAL(VECTOR_ELT(LECV, Covariance_SLOT)));
 }
 
-/* C\_get\_ExpectationX */
+/* C_get_ExpectationX */
 
 double* C_get_ExpectationX
 (
@@ -544,7 +544,7 @@ double* C_get_ExpectationX
     return(REAL(VECTOR_ELT(LECV, ExpectationX_SLOT)));
 }
 
-/* C\_get\_ExpectationInfluence */
+/* C_get_ExpectationInfluence */
 
 double* C_get_ExpectationInfluence
 (
@@ -556,7 +556,7 @@ double* C_get_ExpectationInfluence
     return(REAL(VECTOR_ELT(LECV, ExpectationInfluence_SLOT)));
 }
 
-/* C\_get\_CovarianceInfluence */
+/* C_get_CovarianceInfluence */
 
 double* C_get_CovarianceInfluence
 (
@@ -568,7 +568,7 @@ double* C_get_CovarianceInfluence
     return(REAL(VECTOR_ELT(LECV, CovarianceInfluence_SLOT)));
 }
 
-/* C\_get\_VarianceInfluence */
+/* C_get_VarianceInfluence */
 
 double* C_get_VarianceInfluence
 (
@@ -580,7 +580,7 @@ double* C_get_VarianceInfluence
     return(REAL(VECTOR_ELT(LECV, VarianceInfluence_SLOT)));
 }
 
-/* C\_get\_TableBlock */
+/* C_get_TableBlock */
 
 double* C_get_TableBlock
 (
@@ -594,7 +594,7 @@ double* C_get_TableBlock
     return(REAL(VECTOR_ELT(LECV, TableBlock_SLOT)));
 }
 
-/* C\_get\_Sumweights */
+/* C_get_Sumweights */
 
 double* C_get_Sumweights
 (
@@ -608,7 +608,7 @@ double* C_get_Sumweights
     return(REAL(VECTOR_ELT(LECV, Sumweights_SLOT)));
 }
 
-/* C\_get\_Table */
+/* C_get_Table */
 
 double* C_get_Table
 (
@@ -622,7 +622,7 @@ double* C_get_Table
     return(REAL(VECTOR_ELT(LECV, Table_SLOT)));
 }
 
-/* C\_get\_dimTable */
+/* C_get_dimTable */
 
 int* C_get_dimTable
 (
@@ -637,7 +637,7 @@ int* C_get_dimTable
                              R_DimSymbol)));
 }
 
-/* C\_get\_B */
+/* C_get_B */
 
 int C_get_B
 (
@@ -651,7 +651,7 @@ int C_get_B
     return(C_get_dimTable(LECV)[2]);
 }
 
-/* C\_get\_nresample */
+/* C_get_nresample */
 
 R_xlen_t C_get_nresample
 (
@@ -664,7 +664,7 @@ R_xlen_t C_get_nresample
     return(XLENGTH(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)) / PQ);
 }
 
-/* C\_get\_PermutedLinearStatistic */
+/* C_get_PermutedLinearStatistic */
 
 double* C_get_PermutedLinearStatistic
 (
@@ -676,7 +676,7 @@ double* C_get_PermutedLinearStatistic
     return(REAL(VECTOR_ELT(LECV, PermutedLinearStatistic_SLOT)));
 }
 
-/* C\_get\_tol */
+/* C_get_tol */
 
 double C_get_tol
 (
@@ -688,7 +688,7 @@ double C_get_tol
     return(REAL(VECTOR_ELT(LECV, tol_SLOT))[0]);
 }
 
-/* RC\_init\_LECV\_1d */
+/* RC_init_LECV_1d */
 
 SEXP RC_init_LECV_1d
 (
@@ -710,7 +710,7 @@ SEXP RC_init_LECV_1d
 ) {
     SEXP ans;
 
-    /* R\_init\_LECV */
+    /* R_init_LECV */
     
     SEXP vo, d, names, tolerance, tmp;
     int PQ;
@@ -839,7 +839,7 @@ SEXP RC_init_LECV_1d
     return(ans);
 }
 
-/* RC\_init\_LECV\_2d */
+/* RC_init_LECV_2d */
 
 SEXP RC_init_LECV_2d
 (
@@ -869,7 +869,7 @@ SEXP RC_init_LECV_2d
     if (Ly <= 0)
         error("Ly is not positive");
 
-    /* R\_init\_LECV */
+    /* R_init_LECV */
     
     SEXP vo, d, names, tolerance, tmp;
     int PQ;
@@ -1006,7 +1006,7 @@ SEXP RC_init_LECV_2d
 
 /* P-Values */
 
-/* C\_chisq\_pvalue */
+/* C_chisq_pvalue */
 
 /* lower = 1 means p-value, lower = 0 means 1 - p-value */
 double C_chisq_pvalue
@@ -1019,7 +1019,7 @@ double C_chisq_pvalue
     return(pchisq(stat, (double) df, lower, give_log));
 }
 
-/* C\_perm\_pvalue */
+/* C_perm_pvalue */
 
 double C_perm_pvalue
 (
@@ -1046,7 +1046,7 @@ double C_perm_pvalue
     return(ret);
 }
 
-/* C\_norm\_pvalue */
+/* C_norm_pvalue */
 
 double C_norm_pvalue
 (
@@ -1081,7 +1081,7 @@ double C_norm_pvalue
     return(NA_REAL);
 }
 
-/* C\_maxtype\_pvalue */
+/* C_maxtype_pvalue */
 
 double C_maxtype_pvalue
 (
@@ -1201,7 +1201,7 @@ double C_maxtype_pvalue
 
 /* KronSums */
 
-/* C\_KronSums\_dweights\_dsubset */
+/* C_KronSums_dweights_dsubset */
 
 void C_KronSums_dweights_dsubset
 (
@@ -1334,7 +1334,7 @@ void C_KronSums_dweights_dsubset
     
 }
 
-/* C\_KronSums\_iweights\_dsubset */
+/* C_KronSums_iweights_dsubset */
 
 void C_KronSums_iweights_dsubset
 (
@@ -1468,7 +1468,7 @@ void C_KronSums_iweights_dsubset
     
 }
 
-/* C\_KronSums\_iweights\_isubset */
+/* C_KronSums_iweights_isubset */
 
 void C_KronSums_iweights_isubset
 (
@@ -1601,7 +1601,7 @@ void C_KronSums_iweights_isubset
     
 }
 
-/* C\_KronSums\_dweights\_isubset */
+/* C_KronSums_dweights_isubset */
 
 void C_KronSums_dweights_isubset
 (
@@ -1735,7 +1735,7 @@ void C_KronSums_dweights_isubset
     
 }
 
-/* C\_XfactorKronSums\_dweights\_dsubset */
+/* C_XfactorKronSums_dweights_dsubset */
 
 void C_XfactorKronSums_dweights_dsubset
 (
@@ -1848,7 +1848,7 @@ void C_XfactorKronSums_dweights_dsubset
     
 }
 
-/* C\_XfactorKronSums\_iweights\_dsubset */
+/* C_XfactorKronSums_iweights_dsubset */
 
 void C_XfactorKronSums_iweights_dsubset
 (
@@ -1962,7 +1962,7 @@ void C_XfactorKronSums_iweights_dsubset
     
 }
 
-/* C\_XfactorKronSums\_iweights\_isubset */
+/* C_XfactorKronSums_iweights_isubset */
 
 void C_XfactorKronSums_iweights_isubset
 (
@@ -2075,7 +2075,7 @@ void C_XfactorKronSums_iweights_isubset
     
 }
 
-/* C\_XfactorKronSums\_dweights\_isubset */
+/* C_XfactorKronSums_dweights_isubset */
 
 void C_XfactorKronSums_dweights_isubset
 (
@@ -2189,9 +2189,9 @@ void C_XfactorKronSums_dweights_isubset
     
 }
 
-/* RC\_KronSums */
+/* RC_KronSums */
 
-/* RC\_KronSums Prototype */
+/* RC_KronSums Prototype */
 
 void RC_KronSums
 (
@@ -2300,9 +2300,9 @@ void RC_KronSums
     }
 }
 
-/* R\_KronSums */
+/* R_KronSums */
 
-/* R\_KronSums Prototype */
+/* R_KronSums Prototype */
 
 SEXP R_KronSums
 (
@@ -2358,7 +2358,7 @@ SEXP R_KronSums
     return(ans);
 }
 
-/* C\_KronSums\_Permutation\_isubset */
+/* C_KronSums_Permutation_isubset */
 
 void C_KronSums_Permutation_isubset
 (
@@ -2419,7 +2419,7 @@ void C_KronSums_Permutation_isubset
     
 }
 
-/* C\_KronSums\_Permutation\_dsubset */
+/* C_KronSums_Permutation_dsubset */
 
 void C_KronSums_Permutation_dsubset
 (
@@ -2480,7 +2480,7 @@ void C_KronSums_Permutation_dsubset
     
 }
 
-/* C\_XfactorKronSums\_Permutation\_isubset */
+/* C_XfactorKronSums_Permutation_isubset */
 
 void C_XfactorKronSums_Permutation_isubset
 (
@@ -2537,7 +2537,7 @@ void C_XfactorKronSums_Permutation_isubset
     
 }
 
-/* C\_XfactorKronSums\_Permutation\_dsubset */
+/* C_XfactorKronSums_Permutation_dsubset */
 
 void C_XfactorKronSums_Permutation_dsubset
 (
@@ -2594,9 +2594,9 @@ void C_XfactorKronSums_Permutation_dsubset
     
 }
 
-/* RC\_KronSums\_Permutation */
+/* RC_KronSums_Permutation */
 
-/* RC\_KronSums\_Permutation Prototype */
+/* RC_KronSums_Permutation Prototype */
 
 void RC_KronSums_Permutation
 (
@@ -2663,9 +2663,9 @@ void RC_KronSums_Permutation
     }
 }
 
-/* R\_KronSums\_Permutation */
+/* R_KronSums_Permutation */
 
-/* R\_KronSums\_Permutation Prototype */
+/* R_KronSums_Permutation Prototype */
 
 SEXP R_KronSums_Permutation
 (
@@ -2714,7 +2714,7 @@ SEXP R_KronSums_Permutation
 
 /* colSums */
 
-/* C\_colSums\_dweights\_dsubset */
+/* C_colSums_dweights_dsubset */
 
 void C_colSums_dweights_dsubset
 (
@@ -2815,7 +2815,7 @@ void C_colSums_dweights_dsubset
     
 }
 
-/* C\_colSums\_iweights\_dsubset */
+/* C_colSums_iweights_dsubset */
 
 void C_colSums_iweights_dsubset
 (
@@ -2917,7 +2917,7 @@ void C_colSums_iweights_dsubset
     
 }
 
-/* C\_colSums\_iweights\_isubset */
+/* C_colSums_iweights_isubset */
 
 void C_colSums_iweights_isubset
 (
@@ -3018,7 +3018,7 @@ void C_colSums_iweights_isubset
     
 }
 
-/* C\_colSums\_dweights\_isubset */
+/* C_colSums_dweights_isubset */
 
 void C_colSums_dweights_isubset
 (
@@ -3120,9 +3120,9 @@ void C_colSums_dweights_isubset
     
 }
 
-/* RC\_colSums */
+/* RC_colSums */
 
-/* RC\_colSums Prototype */
+/* RC_colSums Prototype */
 
 void RC_colSums
 (
@@ -3190,9 +3190,9 @@ void RC_colSums
     }
 }
 
-/* R\_colSums */
+/* R_colSums */
 
-/* R\_colSums Prototype */
+/* R_colSums Prototype */
 
 SEXP R_colSums
 (
@@ -3237,7 +3237,7 @@ SEXP R_colSums
 
 /* SimpleSums */
 
-/* C\_Sums\_dweights\_dsubset */
+/* C_Sums_dweights_dsubset */
 
 double C_Sums_dweights_dsubset
 (
@@ -3310,7 +3310,7 @@ double C_Sums_dweights_dsubset
     
 }
 
-/* C\_Sums\_iweights\_dsubset */
+/* C_Sums_iweights_dsubset */
 
 double C_Sums_iweights_dsubset
 (
@@ -3384,7 +3384,7 @@ double C_Sums_iweights_dsubset
     
 }
 
-/* C\_Sums\_iweights\_isubset */
+/* C_Sums_iweights_isubset */
 
 double C_Sums_iweights_isubset
 (
@@ -3457,7 +3457,7 @@ double C_Sums_iweights_isubset
     
 }
 
-/* C\_Sums\_dweights\_isubset */
+/* C_Sums_dweights_isubset */
 
 double C_Sums_dweights_isubset
 (
@@ -3531,9 +3531,9 @@ double C_Sums_dweights_isubset
     
 }
 
-/* RC\_Sums */
+/* RC_Sums */
 
-/* RC\_Sums Prototype */
+/* RC_Sums Prototype */
 
 double RC_Sums
 (
@@ -3586,9 +3586,9 @@ double RC_Sums
     }
 }
 
-/* R\_Sums */
+/* R_Sums */
 
-/* R\_Sums Prototype */
+/* R_Sums Prototype */
 
 SEXP R_Sums
 (
@@ -3625,7 +3625,7 @@ SEXP R_Sums
 
 /* Tables */
 
-/* C\_OneTableSums\_dweights\_dsubset */
+/* C_OneTableSums_dweights_dsubset */
 
 void C_OneTableSums_dweights_dsubset
 (
@@ -3718,7 +3718,7 @@ void C_OneTableSums_dweights_dsubset
     
 }
 
-/* C\_OneTableSums\_iweights\_dsubset */
+/* C_OneTableSums_iweights_dsubset */
 
 void C_OneTableSums_iweights_dsubset
 (
@@ -3812,7 +3812,7 @@ void C_OneTableSums_iweights_dsubset
     
 }
 
-/* C\_OneTableSums\_iweights\_isubset */
+/* C_OneTableSums_iweights_isubset */
 
 void C_OneTableSums_iweights_isubset
 (
@@ -3905,7 +3905,7 @@ void C_OneTableSums_iweights_isubset
     
 }
 
-/* C\_OneTableSums\_dweights\_isubset */
+/* C_OneTableSums_dweights_isubset */
 
 void C_OneTableSums_dweights_isubset
 (
@@ -3999,9 +3999,9 @@ void C_OneTableSums_dweights_isubset
     
 }
 
-/* RC\_OneTableSums */
+/* RC_OneTableSums */
 
-/* RC\_OneTableSums Prototype */
+/* RC_OneTableSums Prototype */
 
 void RC_OneTableSums
 (
@@ -4066,9 +4066,9 @@ void RC_OneTableSums
     }
 }
 
-/* R\_OneTableSums */
+/* R_OneTableSums */
 
-/* R\_OneTableSums Prototype */
+/* R_OneTableSums Prototype */
 
 SEXP R_OneTableSums
 (
@@ -4109,7 +4109,7 @@ SEXP R_OneTableSums
     return(ans);
 }
 
-/* C\_TwoTableSums\_dweights\_dsubset */
+/* C_TwoTableSums_dweights_dsubset */
 
 void C_TwoTableSums_dweights_dsubset
 (
@@ -4213,7 +4213,7 @@ void C_TwoTableSums_dweights_dsubset
     
 }
 
-/* C\_TwoTableSums\_iweights\_dsubset */
+/* C_TwoTableSums_iweights_dsubset */
 
 void C_TwoTableSums_iweights_dsubset
 (
@@ -4318,7 +4318,7 @@ void C_TwoTableSums_iweights_dsubset
     
 }
 
-/* C\_TwoTableSums\_iweights\_isubset */
+/* C_TwoTableSums_iweights_isubset */
 
 void C_TwoTableSums_iweights_isubset
 (
@@ -4422,7 +4422,7 @@ void C_TwoTableSums_iweights_isubset
     
 }
 
-/* C\_TwoTableSums\_dweights\_isubset */
+/* C_TwoTableSums_dweights_isubset */
 
 void C_TwoTableSums_dweights_isubset
 (
@@ -4527,9 +4527,9 @@ void C_TwoTableSums_dweights_isubset
     
 }
 
-/* RC\_TwoTableSums */
+/* RC_TwoTableSums */
 
-/* RC\_TwoTableSums Prototype */
+/* RC_TwoTableSums Prototype */
 
 void RC_TwoTableSums
 (
@@ -4602,9 +4602,9 @@ void RC_TwoTableSums
     }
 }
 
-/* R\_TwoTableSums */
+/* R_TwoTableSums */
 
-/* R\_TwoTableSums Prototype */
+/* R_TwoTableSums Prototype */
 
 SEXP R_TwoTableSums
 (
@@ -4654,7 +4654,7 @@ SEXP R_TwoTableSums
     return(ans);
 }
 
-/* C\_ThreeTableSums\_dweights\_dsubset */
+/* C_ThreeTableSums_dweights_dsubset */
 
 void C_ThreeTableSums_dweights_dsubset
 (
@@ -4769,7 +4769,7 @@ void C_ThreeTableSums_dweights_dsubset
     
 }
 
-/* C\_ThreeTableSums\_iweights\_dsubset */
+/* C_ThreeTableSums_iweights_dsubset */
 
 void C_ThreeTableSums_iweights_dsubset
 (
@@ -4885,7 +4885,7 @@ void C_ThreeTableSums_iweights_dsubset
     
 }
 
-/* C\_ThreeTableSums\_iweights\_isubset */
+/* C_ThreeTableSums_iweights_isubset */
 
 void C_ThreeTableSums_iweights_isubset
 (
@@ -5000,7 +5000,7 @@ void C_ThreeTableSums_iweights_isubset
     
 }
 
-/* C\_ThreeTableSums\_dweights\_isubset */
+/* C_ThreeTableSums_dweights_isubset */
 
 void C_ThreeTableSums_dweights_isubset
 (
@@ -5116,9 +5116,9 @@ void C_ThreeTableSums_dweights_isubset
     
 }
 
-/* RC\_ThreeTableSums */
+/* RC_ThreeTableSums */
 
-/* RC\_ThreeTableSums Prototype */
+/* RC_ThreeTableSums Prototype */
 
 void RC_ThreeTableSums
 (
@@ -5199,9 +5199,9 @@ void RC_ThreeTableSums
     }
 }
 
-/* R\_ThreeTableSums */
+/* R_ThreeTableSums */
 
-/* R\_ThreeTableSums Prototype */
+/* R_ThreeTableSums Prototype */
 
 SEXP R_ThreeTableSums
 (
@@ -5261,7 +5261,7 @@ SEXP R_ThreeTableSums
 
 /* Utils */
 
-/* C\_setup\_subset */
+/* C_setup_subset */
 
 void C_setup_subset
 (
@@ -5281,7 +5281,7 @@ void C_setup_subset
     }
 }
 
-/* C\_setup\_subset\_block */
+/* C_setup_subset_block */
 
 void C_setup_subset_block
 (
@@ -5321,7 +5321,7 @@ void C_setup_subset_block
     R_Free(cumtable);
 }
 
-/* C\_order\_subset\_wrt\_block */
+/* C_order_subset_wrt_block */
 
 void C_order_subset_wrt_block
 (
@@ -5361,9 +5361,9 @@ void C_order_subset_wrt_block
     R_Free(cumtable);
 }
 
-/* RC\_order\_subset\_wrt\_block */
+/* RC_order_subset_wrt_block */
 
-/* RC\_order\_subset\_wrt\_block Prototype */
+/* RC_order_subset_wrt_block Prototype */
 
 SEXP RC_order_subset_wrt_block
 (
@@ -5410,9 +5410,9 @@ SEXP RC_order_subset_wrt_block
     }
 }
 
-/* R\_order\_subset\_wrt\_block */
+/* R_order_subset_wrt_block */
 
-/* R\_order\_subset\_wrt\_block Prototype */
+/* R_order_subset_wrt_block Prototype */
 
 SEXP R_order_subset_wrt_block
 (
@@ -5463,9 +5463,9 @@ SEXP R_order_subset_wrt_block
 
 /* LinearStatistics */
 
-/* RC\_LinearStatistic */
+/* RC_LinearStatistic */
 
-/* RC\_LinearStatistic Prototype */
+/* RC_LinearStatistic Prototype */
 
 void RC_LinearStatistic
 (
@@ -5521,9 +5521,9 @@ void RC_LinearStatistic
 
 /* Permutations */
 
-/* RC\_setup\_subset */
+/* RC_setup_subset */
 
-/* RC\_setup\_subset Prototype */
+/* RC_setup_subset Prototype */
 
 SEXP RC_setup_subset
 (
@@ -5574,7 +5574,7 @@ SEXP RC_setup_subset
     return(ans);
 }
 
-/* C\_Permute */
+/* C_Permute */
 
 void C_Permute
 (
@@ -5594,7 +5594,7 @@ void C_Permute
     }
 }
 
-/* C\_doPermute */
+/* C_doPermute */
 
 void C_doPermute
 (
@@ -5610,7 +5610,7 @@ void C_doPermute
     C_Permute(Nsubset_tmp, Nsubset, perm);
 }
 
-/* C\_PermuteBlock */
+/* C_PermuteBlock */
 
 void C_PermuteBlock
 (
@@ -5633,7 +5633,7 @@ void C_PermuteBlock
     }
 }
 
-/* C\_doPermuteBlock */
+/* C_doPermuteBlock */
 
 void C_doPermuteBlock
 (
@@ -5654,9 +5654,9 @@ void C_doPermuteBlock
 
 /* ExpectationCovariances */
 
-/* RC\_ExpectationInfluence */
+/* RC_ExpectationInfluence */
 
-/* RC\_ExpectationInfluence Prototype */
+/* RC_ExpectationInfluence Prototype */
 
 void RC_ExpectationInfluence
 (
@@ -5707,9 +5707,9 @@ void RC_ExpectationInfluence
         P_ans[q] = P_ans[q] / sumweights;
 }
 
-/* R\_ExpectationInfluence */
+/* R_ExpectationInfluence */
 
-/* R\_ExpectationInfluence Prototype */
+/* R_ExpectationInfluence Prototype */
 
 SEXP R_ExpectationInfluence
 (
@@ -5755,9 +5755,9 @@ SEXP R_ExpectationInfluence
     return(ans);
 }
 
-/* RC\_CovarianceInfluence */
+/* RC_CovarianceInfluence */
 
-/* RC\_CovarianceInfluence Prototype */
+/* RC_CovarianceInfluence Prototype */
 
 void RC_CovarianceInfluence
 (
@@ -5815,9 +5815,9 @@ void RC_CovarianceInfluence
     }
 }
 
-/* R\_CovarianceInfluence */
+/* R_CovarianceInfluence */
 
-/* R\_CovarianceInfluence Prototype */
+/* R_CovarianceInfluence Prototype */
 
 SEXP R_CovarianceInfluence
 (
@@ -5872,9 +5872,9 @@ SEXP R_CovarianceInfluence
     return(ans);
 }
 
-/* RC\_ExpectationX */
+/* RC_ExpectationX */
 
-/* RC\_ExpectationX Prototype */
+/* RC_ExpectationX Prototype */
 
 void RC_ExpectationX
 (
@@ -5925,9 +5925,9 @@ void RC_ExpectationX
     }
 }
 
-/* R\_ExpectationX */
+/* R_ExpectationX */
 
-/* R\_ExpectationX Prototype */
+/* R_ExpectationX Prototype */
 
 SEXP R_ExpectationX
 (
@@ -5967,9 +5967,9 @@ SEXP R_ExpectationX
     return(ans);
 }
 
-/* RC\_CovarianceX */
+/* RC_CovarianceX */
 
-/* RC\_CovarianceX Prototype */
+/* RC_CovarianceX Prototype */
 
 void RC_CovarianceX
 (
@@ -6032,9 +6032,9 @@ void RC_CovarianceX
     }
 }
 
-/* R\_CovarianceX */
+/* R_CovarianceX */
 
-/* R\_CovarianceX Prototype */
+/* R_CovarianceX Prototype */
 
 SEXP R_CovarianceX
 (
@@ -6082,7 +6082,7 @@ SEXP R_CovarianceX
     return(ans);
 }
 
-/* C\_ExpectationLinearStatistic */
+/* C_ExpectationLinearStatistic */
 
 void C_ExpectationLinearStatistic
 (
@@ -6108,7 +6108,7 @@ void C_ExpectationLinearStatistic
     }
 }
 
-/* C\_CovarianceLinearStatistic */
+/* C_CovarianceLinearStatistic */
 
 void C_CovarianceLinearStatistic
 (
@@ -6154,7 +6154,7 @@ void C_CovarianceLinearStatistic
     }
 }
 
-/* C\_VarianceLinearStatistic */
+/* C_VarianceLinearStatistic */
 
 void C_VarianceLinearStatistic
 (
@@ -6196,7 +6196,7 @@ void C_VarianceLinearStatistic
 
 /* Test Statistics */
 
-/* C\_maxstand\_Covariance */
+/* C_maxstand_Covariance */
 
 double C_maxstand_Covariance
 (
@@ -6217,7 +6217,7 @@ double C_maxstand_Covariance
     return(ans);
 }
 
-/* C\_maxstand\_Variance */
+/* C_maxstand_Variance */
 
 double C_maxstand_Variance
 (
@@ -6238,7 +6238,7 @@ double C_maxstand_Variance
     return(ans);
 }
 
-/* C\_minstand\_Covariance */
+/* C_minstand_Covariance */
 
 double C_minstand_Covariance
 (
@@ -6259,7 +6259,7 @@ double C_minstand_Covariance
     return(ans);
 }
 
-/* C\_minstand\_Variance */
+/* C_minstand_Variance */
 
 double C_minstand_Variance
 (
@@ -6280,7 +6280,7 @@ double C_minstand_Variance
     return(ans);
 }
 
-/* C\_maxabsstand\_Covariance */
+/* C_maxabsstand_Covariance */
 
 double C_maxabsstand_Covariance
 (
@@ -6302,7 +6302,7 @@ double C_maxabsstand_Covariance
     return(ans);
 }
 
-/* C\_maxabsstand\_Variance */
+/* C_maxabsstand_Variance */
 
 double C_maxabsstand_Variance
 (
@@ -6323,7 +6323,7 @@ double C_maxabsstand_Variance
     return(ans);
 }
 
-/* C\_quadform */
+/* C_quadform */
 
 double C_quadform
 (
@@ -6344,9 +6344,9 @@ double C_quadform
     return(ans);
 }
 
-/* R\_quadform */
+/* R_quadform */
 
-/* R\_quadform Prototype */
+/* R_quadform Prototype */
 
 SEXP R_quadform
 (
@@ -6375,7 +6375,7 @@ SEXP R_quadform
     return(ans);
 }
 
-/* C\_maxtype */
+/* C_maxtype */
 
 double C_maxtype
 (
@@ -6409,7 +6409,7 @@ double C_maxtype
     return(ret);
 }
 
-/* C\_standardise */
+/* C_standardise */
 
 void C_standardise
 (
@@ -6436,7 +6436,7 @@ void C_standardise
     }
 }
 
-/* C\_ordered\_Xfactor */
+/* C_ordered_Xfactor */
 
 void C_ordered_Xfactor
 (
@@ -6623,7 +6623,7 @@ void C_ordered_Xfactor
     if (nresample == 0) R_Free(blinstat);
 }
 
-/* C\_unordered\_Xfactor */
+/* C_unordered_Xfactor */
 
 void C_unordered_Xfactor
 (
@@ -6889,7 +6889,7 @@ void C_unordered_Xfactor
 
 /* User Interface */
 
-/* RC\_ExpectationCovarianceStatistic */
+/* RC_ExpectationCovarianceStatistic */
 
 void RC_ExpectationCovarianceStatistic
 (
@@ -7070,9 +7070,9 @@ void RC_ExpectationCovarianceStatistic
     UNPROTECT(2);
 }
 
-/* R\_ExpectationCovarianceStatistic */
+/* R_ExpectationCovarianceStatistic */
 
-/* R\_ExpectationCovarianceStatistic Prototype */
+/* R_ExpectationCovarianceStatistic Prototype */
 
 SEXP R_ExpectationCovarianceStatistic
 (
@@ -7130,9 +7130,9 @@ SEXP R_ExpectationCovarianceStatistic
     return(ans);
 }
 
-/* R\_PermutedLinearStatistic */
+/* R_PermutedLinearStatistic */
 
-/* R\_PermutedLinearStatistic Prototype */
+/* R_PermutedLinearStatistic Prototype */
 
 SEXP R_PermutedLinearStatistic
 (
@@ -7244,9 +7244,9 @@ SEXP R_PermutedLinearStatistic
     return(ans);
 }
 
-/* R\_StandardisePermutedLinearStatistic */
+/* R_StandardisePermutedLinearStatistic */
 
-/* R\_StandardisePermutedLinearStatistic Prototype */
+/* R_StandardisePermutedLinearStatistic Prototype */
 
 SEXP R_StandardisePermutedLinearStatistic
 (
@@ -7282,7 +7282,7 @@ SEXP R_StandardisePermutedLinearStatistic
 
 /* 2d User Interface */
 
-/* RC\_ExpectationCovarianceStatistic\_2d */
+/* RC_ExpectationCovarianceStatistic_2d */
 
 void RC_ExpectationCovarianceStatistic_2d
 (
@@ -7468,9 +7468,9 @@ void RC_ExpectationCovarianceStatistic_2d
     UNPROTECT(2);
 }
 
-/* R\_ExpectationCovarianceStatistic\_2d */
+/* R_ExpectationCovarianceStatistic_2d */
 
-/* R\_ExpectationCovarianceStatistic\_2d Prototype */
+/* R_ExpectationCovarianceStatistic_2d Prototype */
 
 SEXP R_ExpectationCovarianceStatistic_2d
 (
@@ -7557,9 +7557,9 @@ SEXP R_ExpectationCovarianceStatistic_2d
     return(ans);
 }
 
-/* R\_PermutedLinearStatistic\_2d */
+/* R_PermutedLinearStatistic_2d */
 
-/* R\_PermutedLinearStatistic\_2d Prototype */
+/* R_PermutedLinearStatistic_2d Prototype */
 
 SEXP R_PermutedLinearStatistic_2d
 (
@@ -7742,9 +7742,9 @@ SEXP R_PermutedLinearStatistic_2d
 
 /* Tests */
 
-/* R\_QuadraticTest */
+/* R_QuadraticTest */
 
-/* R\_QuadraticTest Prototype */
+/* R_QuadraticTest Prototype */
 
 SEXP R_QuadraticTest
 (
@@ -7828,9 +7828,9 @@ SEXP R_QuadraticTest
     return(ans);
 }
 
-/* R\_MaximumTest */
+/* R_MaximumTest */
 
-/* R\_MaximumTest Prototype */
+/* R_MaximumTest Prototype */
 
 SEXP R_MaximumTest
 (
@@ -7930,9 +7930,9 @@ SEXP R_MaximumTest
     return(ans);
 }
 
-/* R\_MaximallySelectedTest */
+/* R_MaximallySelectedTest */
 
-/* R\_MaximallySelectedTest Prototype */
+/* R_MaximallySelectedTest Prototype */
 
 SEXP R_MaximallySelectedTest
 (

@@ -1,13 +1,12 @@
 \documentclass[a4paper]{report}
 
-%% packages
-\usepackage{amsfonts,amstext,amsmath,amssymb,amsthm}
-
 %\VignetteIndexEntry{Implementing Permutation Tests}
 %\VignetteDepends{libcoin}
 %\VignetteKeywords{conditional inference, conditional Monte Carlo}}
 %\VignettePackage{libcoin}
 
+%% packages
+\usepackage{amsfonts,amstext,amsmath,amssymb,amsthm}
 
 \usepackage[utf8]{inputenc}
 
@@ -41,6 +40,8 @@ urlcolor={linkcolor}%
 ]{hyperref}
 
 \usepackage[round]{natbib}
+
+\usepackage{underscore}
 
 \setlength{\oddsidemargin}{0in}
 \setlength{\evensidemargin}{0in}
@@ -1092,31 +1093,31 @@ function at \proglang{C} level (at your own risk, of course!).
 
 @d Function Prototypes
 @{
-extern @<R\_ExpectationCovarianceStatistic Prototype@>;
-extern @<R\_PermutedLinearStatistic Prototype@>;
-extern @<R\_StandardisePermutedLinearStatistic Prototype@>;
-extern @<R\_ExpectationCovarianceStatistic\_2d Prototype@>;
-extern @<R\_PermutedLinearStatistic\_2d Prototype@>;
-extern @<R\_QuadraticTest Prototype@>;
-extern @<R\_MaximumTest Prototype@>;
-extern @<R\_MaximallySelectedTest Prototype@>;
-extern @<R\_ExpectationInfluence Prototype@>;
-extern @<R\_CovarianceInfluence Prototype@>;
-extern @<R\_ExpectationX Prototype@>;
-extern @<R\_CovarianceX Prototype@>;
-extern @<R\_Sums Prototype@>;
-extern @<R\_KronSums Prototype@>;
-extern @<R\_KronSums\_Permutation Prototype@>;
-extern @<R\_colSums Prototype@>;
-extern @<R\_OneTableSums Prototype@>;
-extern @<R\_TwoTableSums Prototype@>;
-extern @<R\_ThreeTableSums Prototype@>;
-extern @<R\_order\_subset\_wrt\_block Prototype@>;
-extern @<R\_quadform Prototype@>;
-extern @<R\_kronecker Prototype@>;
-extern @<R\_MPinv\_sym Prototype@>;
-extern @<R\_unpack\_sym Prototype@>;
-extern @<R\_pack\_sym Prototype@>;
+extern @<R_ExpectationCovarianceStatistic Prototype@>;
+extern @<R_PermutedLinearStatistic Prototype@>;
+extern @<R_StandardisePermutedLinearStatistic Prototype@>;
+extern @<R_ExpectationCovarianceStatistic_2d Prototype@>;
+extern @<R_PermutedLinearStatistic_2d Prototype@>;
+extern @<R_QuadraticTest Prototype@>;
+extern @<R_MaximumTest Prototype@>;
+extern @<R_MaximallySelectedTest Prototype@>;
+extern @<R_ExpectationInfluence Prototype@>;
+extern @<R_CovarianceInfluence Prototype@>;
+extern @<R_ExpectationX Prototype@>;
+extern @<R_CovarianceX Prototype@>;
+extern @<R_Sums Prototype@>;
+extern @<R_KronSums Prototype@>;
+extern @<R_KronSums_Permutation Prototype@>;
+extern @<R_colSums Prototype@>;
+extern @<R_OneTableSums Prototype@>;
+extern @<R_TwoTableSums Prototype@>;
+extern @<R_ThreeTableSums Prototype@>;
+extern @<R_order_subset_wrt_block Prototype@>;
+extern @<R_quadform Prototype@>;
+extern @<R_kronecker Prototype@>;
+extern @<R_MPinv_sym Prototype@>;
+extern @<R_unpack_sym Prototype@>;
+extern @<R_pack_sym Prototype@>;
 @}
 
 The \proglang{C} file \verb|libcoin.c| contains all \proglang{C}
@@ -1519,10 +1520,10 @@ sometimes with dimension (for example: \verb|PQ_ans|).
 
 @d User Interface
 @{
-@<RC\_ExpectationCovarianceStatistic@>
-@<R\_ExpectationCovarianceStatistic@>
-@<R\_PermutedLinearStatistic@>
-@<R\_StandardisePermutedLinearStatistic@>
+@<RC_ExpectationCovarianceStatistic@>
+@<R_ExpectationCovarianceStatistic@>
+@<R_PermutedLinearStatistic@>
+@<R_StandardisePermutedLinearStatistic@>
 @}
 
 The data are given as $\x_i$ and $\y_i$ for $i = 1, \dots, N$, optionally
@@ -1538,7 +1539,7 @@ specified as \verb|integer(0)|.
 @<R block Input@>,
 @}
 
-@d R\_ExpectationCovarianceStatistic Prototype
+@d R_ExpectationCovarianceStatistic Prototype
 @{
 SEXP R_ExpectationCovarianceStatistic
 (
@@ -1571,9 +1572,9 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic(
 The \proglang{C} interface essentially sets-up the necessary memory and
 calls a \proglang{C} level function for the computations.
 
-@d R\_ExpectationCovarianceStatistic
+@d R_ExpectationCovarianceStatistic
 @{
-@<R\_ExpectationCovarianceStatistic Prototype@>
+@<R_ExpectationCovarianceStatistic Prototype@>
 {
     SEXP ans;
 
@@ -1618,7 +1619,7 @@ FIXME:  \verb|x| being an integer (\verb|Xfactor|) with some 0 elements is not h
         account; use \verb|subset| to exclude these missings (as done in
         \verb|LinStatExpCov()|)
 
-@d RC\_ExpectationCovarianceStatistic
+@d RC_ExpectationCovarianceStatistic
 @{
 void RC_ExpectationCovarianceStatistic
 (
@@ -1809,7 +1810,7 @@ The computation of permuted linear statistics is done outside this general
 function. The user interface is the same, except for an additional number of
 permutations to be specified.
 
-@d R\_PermutedLinearStatistic Prototype
+@d R_PermutedLinearStatistic Prototype
 @{
 SEXP R_PermutedLinearStatistic
 (
@@ -1842,9 +1843,9 @@ statistics; the \proglang{R} interface assigns this matrix to the
 corresponding element of the \verb|LinStatExpCov| object (because we are not
 allowed to modify existing \proglang{R} objects at \proglang{C} level).
 
-@d R\_PermutedLinearStatistic
+@d R_PermutedLinearStatistic
 @{
-@<R\_PermutedLinearStatistic Prototype@>
+@<R_PermutedLinearStatistic Prototype@>
 {
     SEXP ans, expand_subset, block_subset, perm, tmp, blockTable;
     double *linstat;
@@ -1908,7 +1909,7 @@ for (int p = 0; p < PQ; p++)
 This small function takes an object containing permuted linear statistics
 and returns the matrix of standardised linear statistics.
 
-@d R\_StandardisePermutedLinearStatistic Prototype
+@d R_StandardisePermutedLinearStatistic Prototype
 @{
 SEXP R_StandardisePermutedLinearStatistic
 (
@@ -1931,9 +1932,9 @@ extern SEXP libcoin_R_StandardisePermutedLinearStatistic(
 }
 @}
 
-@d R\_StandardisePermutedLinearStatistic
+@d R_StandardisePermutedLinearStatistic
 @{
-@<R\_StandardisePermutedLinearStatistic Prototype@>
+@<R_StandardisePermutedLinearStatistic Prototype@>
 {
     SEXP ans;
     R_xlen_t nresample = C_get_nresample(LECV);
@@ -1965,9 +1966,9 @@ extern SEXP libcoin_R_StandardisePermutedLinearStatistic(
 
 @d 2d User Interface
 @{
-@<RC\_ExpectationCovarianceStatistic\_2d@>
-@<R\_ExpectationCovarianceStatistic\_2d@>
-@<R\_PermutedLinearStatistic\_2d@>
+@<RC_ExpectationCovarianceStatistic_2d@>
+@<R_ExpectationCovarianceStatistic_2d@>
+@<R_PermutedLinearStatistic_2d@>
 @}
 
 @d 2d User Interface Input
@@ -1981,7 +1982,7 @@ SEXP iy,
 @<R block Input@>,
 @}
 
-@d R\_ExpectationCovarianceStatistic\_2d Prototype
+@d R_ExpectationCovarianceStatistic_2d Prototype
 @{
 SEXP R_ExpectationCovarianceStatistic_2d
 (
@@ -2007,9 +2008,9 @@ extern SEXP libcoin_R_ExpectationCovarianceStatistic_2d(
 }
 @}
 
-@d R\_ExpectationCovarianceStatistic\_2d
+@d R_ExpectationCovarianceStatistic_2d
 @{
-@<R\_ExpectationCovarianceStatistic\_2d Prototype@>
+@<R_ExpectationCovarianceStatistic_2d Prototype@>
 {
     SEXP ans;
     @<C integer N Input@>;
@@ -2165,7 +2166,7 @@ if (C_get_varonly(ans)) {
 }
 @}
 
-@d RC\_ExpectationCovarianceStatistic\_2d
+@d RC_ExpectationCovarianceStatistic_2d
 @{
 void RC_ExpectationCovarianceStatistic_2d
 (
@@ -2244,7 +2245,7 @@ LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
               weights = weights, subset = subset, nresample = 10)$PermutedLinearStatistic
 @@
 
-@d R\_PermutedLinearStatistic\_2d Prototype
+@d R_PermutedLinearStatistic_2d Prototype
 @{
 SEXP R_PermutedLinearStatistic_2d
 (
@@ -2274,9 +2275,9 @@ extern SEXP libcoin_R_PermutedLinearStatistic_2d(
 }
 @}
 
-@d R\_PermutedLinearStatistic\_2d
+@d R_PermutedLinearStatistic_2d
 @{
-@<R\_PermutedLinearStatistic\_2d Prototype@>
+@<R_PermutedLinearStatistic_2d Prototype@>
 {
     SEXP ans, Ritable;
     int *csum, *rsum, *sumweights, *jwork, *table, *rtable2, maxn = 0, Lxp1, Lyp1, *btab, PQ, Xfactor;
@@ -2384,12 +2385,12 @@ btab = table;
 
 @d Tests
 @{
-@<R\_QuadraticTest@>
-@<R\_MaximumTest@>
-@<R\_MaximallySelectedTest@>
+@<R_QuadraticTest@>
+@<R_MaximumTest@>
+@<R_MaximallySelectedTest@>
 @}
 
-@d R\_QuadraticTest Prototype
+@d R_QuadraticTest Prototype
 @{
 SEXP R_QuadraticTest
 (
@@ -2416,9 +2417,9 @@ extern SEXP libcoin_R_QuadraticTest(
 }
 @}
 
-@d R\_QuadraticTest
+@d R_QuadraticTest
 @{
-@<R\_QuadraticTest Prototype@>
+@<R_QuadraticTest Prototype@>
 {
     SEXP ans, stat, pval, names, permstat;
     double *MPinv, *ls, st, pst, *ex;
@@ -2492,7 +2493,7 @@ int PVALUE = INTEGER(pvalue)[0];
 int PSTAT = INTEGER(PermutedStatistics)[0];
 @}
 
-@d R\_MaximumTest Prototype
+@d R_MaximumTest Prototype
 @{
 SEXP R_MaximumTest
 (
@@ -2525,9 +2526,9 @@ extern SEXP libcoin_R_MaximumTest(
 }
 @}
 
-@d R\_MaximumTest
+@d R_MaximumTest
 @{
-@<R\_MaximumTest Prototype@>
+@<R_MaximumTest Prototype@>
 {
     SEXP ans, stat, pval, names, permstat;
     double st, pst, *ex, *cv, *ls, tl;
@@ -2583,7 +2584,7 @@ extern SEXP libcoin_R_MaximumTest(
 }
 @}
 
-@d R\_MaximallySelectedTest Prototype
+@d R_MaximallySelectedTest Prototype
 @{
 SEXP R_MaximallySelectedTest
 (
@@ -2611,9 +2612,9 @@ extern SEXP libcoin_R_MaximallySelectedTest(
 }
 @}
 
-@d R\_MaximallySelectedTest
+@d R_MaximallySelectedTest
 @{
-@<R\_MaximallySelectedTest Prototype@>
+@<R_MaximallySelectedTest Prototype@>
 {
     SEXP ans, index, stat, pval, names, permstat;
     int P, mb;
@@ -2659,21 +2660,21 @@ extern SEXP libcoin_R_MaximallySelectedTest(
 
 @d Test Statistics
 @{
-@<C\_maxstand\_Covariance@>
-@<C\_maxstand\_Variance@>
-@<C\_minstand\_Covariance@>
-@<C\_minstand\_Variance@>
-@<C\_maxabsstand\_Covariance@>
-@<C\_maxabsstand\_Variance@>
-@<C\_quadform@>
-@<R\_quadform@>
-@<C\_maxtype@>
-@<C\_standardise@>
-@<C\_ordered\_Xfactor@>
-@<C\_unordered\_Xfactor@>
+@<C_maxstand_Covariance@>
+@<C_maxstand_Variance@>
+@<C_minstand_Covariance@>
+@<C_minstand_Variance@>
+@<C_maxabsstand_Covariance@>
+@<C_maxabsstand_Variance@>
+@<C_quadform@>
+@<R_quadform@>
+@<C_maxtype@>
+@<C_standardise@>
+@<C_ordered_Xfactor@>
+@<C_unordered_Xfactor@>
 @}
 
-@d C\_maxstand\_Covariance
+@d C_maxstand_Covariance
 @{
 double C_maxstand_Covariance
 (
@@ -2696,7 +2697,7 @@ double C_maxstand_Covariance
 @|C_maxstand_Covariance
 @}
 
-@d C\_maxstand\_Variance
+@d C_maxstand_Variance
 @{
 double C_maxstand_Variance
 (
@@ -2719,7 +2720,7 @@ double C_maxstand_Variance
 @|C_maxstand_Variance
 @}
 
-@d C\_minstand\_Covariance
+@d C_minstand_Covariance
 @{
 double C_minstand_Covariance
 (
@@ -2742,7 +2743,7 @@ double C_minstand_Covariance
 @|C_minstand_Covariance
 @}
 
-@d C\_minstand\_Variance
+@d C_minstand_Variance
 @{
 double C_minstand_Variance
 (
@@ -2765,7 +2766,7 @@ double C_minstand_Variance
 @|C_minstand_Variance
 @}
 
-@d C\_maxabsstand\_Covariance
+@d C_maxabsstand_Covariance
 @{
 double C_maxabsstand_Covariance
 (
@@ -2789,7 +2790,7 @@ double C_maxabsstand_Covariance
 @|C_maxabsstand_Covariance
 @}
 
-@d C\_maxabsstand\_Variance
+@d C_maxabsstand_Variance
 @{
 double C_maxabsstand_Variance
 (
@@ -2841,7 +2842,7 @@ qf2 <- .Call(libcoin:::R_quadform, linstat, expect, MPinv_sym)
 stopifnot(isequal(qf1, qf2))
 @@
 
-@d R\_quadform Prototype
+@d R_quadform Prototype
 @{
 SEXP R_quadform
 (
@@ -2866,9 +2867,9 @@ extern SEXP libcoin_R_quadform(
 }
 @}
 
-@d R\_quadform
+@d R_quadform
 @{
-@<R\_quadform Prototype@>
+@<R_quadform Prototype@>
 {
     SEXP ans;
     int n, PQ;
@@ -2891,7 +2892,7 @@ extern SEXP libcoin_R_quadform(
 @|R_quadform
 @}
 
-@d C\_quadform
+@d C_quadform
 @{
 double C_quadform
 (
@@ -2914,7 +2915,7 @@ double C_quadform
 @|C_quadform
 @}
 
-@d C\_maxtype
+@d C_maxtype
 @{
 double C_maxtype
 (
@@ -2950,7 +2951,7 @@ double C_maxtype
 @|C_maxtype
 @}
 
-@d C\_standardise
+@d C_standardise
 @{
 void C_standardise
 (
@@ -2981,13 +2982,13 @@ void C_standardise
 
 @d P-Values
 @{
-@<C\_chisq\_pvalue@>
-@<C\_perm\_pvalue@>
-@<C\_norm\_pvalue@>
-@<C\_maxtype\_pvalue@>
+@<C_chisq_pvalue@>
+@<C_perm_pvalue@>
+@<C_norm_pvalue@>
+@<C_maxtype_pvalue@>
 @}
 
-@d C\_chisq\_pvalue
+@d C_chisq_pvalue
 @{
 /* lower = 1 means p-value, lower = 0 means 1 - p-value */
 double C_chisq_pvalue
@@ -3002,7 +3003,7 @@ double C_chisq_pvalue
 @|C_chisq_pvalue
 @}
 
-@d C\_perm\_pvalue
+@d C_perm_pvalue
 @{
 double C_perm_pvalue
 (
@@ -3031,7 +3032,7 @@ double C_perm_pvalue
 @|C_perm_pvalue
 @}
 
-@d C\_norm\_pvalue
+@d C_norm_pvalue
 @{
 double C_norm_pvalue
 (
@@ -3067,7 +3068,7 @@ double C_norm_pvalue
 }
 @}
 
-@d C\_maxtype\_pvalue
+@d C_maxtype_pvalue
 @{
 double C_maxtype_pvalue
 (
@@ -3206,7 +3207,7 @@ const int lower,
 const int give_log
 @}
 
-@d C\_ordered\_Xfactor
+@d C_ordered_Xfactor
 @{
 void C_ordered_Xfactor
 (
@@ -3388,7 +3389,7 @@ if (nresample > 0) {
 }
 @}
 
-@d C\_unordered\_Xfactor
+@d C_unordered_Xfactor
 @{
 void C_unordered_Xfactor
 (
@@ -3556,10 +3557,10 @@ if (teststat == TESTSTAT_maximum) {
 
 @d LinearStatistics
 @{
-@<RC\_LinearStatistic@>
+@<RC_LinearStatistic@>
 @}
 
-@d RC\_LinearStatistic Prototype
+@d RC_LinearStatistic Prototype
 @{
 void RC_LinearStatistic
 (
@@ -3574,9 +3575,9 @@ void RC_LinearStatistic
 )
 @}
 
-@d RC\_LinearStatistic
+@d RC_LinearStatistic
 @{
-@<RC\_LinearStatistic Prototype@>
+@<RC_LinearStatistic Prototype@>
 {
     double center;
 
@@ -3590,22 +3591,22 @@ void RC_LinearStatistic
 
 @d ExpectationCovariances
 @{
-@<RC\_ExpectationInfluence@>
-@<R\_ExpectationInfluence@>
-@<RC\_CovarianceInfluence@>
-@<R\_CovarianceInfluence@>
-@<RC\_ExpectationX@>
-@<R\_ExpectationX@>
-@<RC\_CovarianceX@>
-@<R\_CovarianceX@>
-@<C\_ExpectationLinearStatistic@>
-@<C\_CovarianceLinearStatistic@>
-@<C\_VarianceLinearStatistic@>
+@<RC_ExpectationInfluence@>
+@<R_ExpectationInfluence@>
+@<RC_CovarianceInfluence@>
+@<R_CovarianceInfluence@>
+@<RC_ExpectationX@>
+@<R_ExpectationX@>
+@<RC_CovarianceX@>
+@<R_CovarianceX@>
+@<C_ExpectationLinearStatistic@>
+@<C_CovarianceLinearStatistic@>
+@<C_VarianceLinearStatistic@>
 @}
 
 \subsection{Linear Statistic}
 
-@d C\_ExpectationLinearStatistic
+@d C_ExpectationLinearStatistic
 @{
 void C_ExpectationLinearStatistic
 (
@@ -3627,7 +3628,7 @@ void C_ExpectationLinearStatistic
 @|C_ExpectationLinearStatistic
 @}
 
-@d C\_CovarianceLinearStatistic
+@d C_CovarianceLinearStatistic
 @{
 void C_CovarianceLinearStatistic
 (
@@ -3666,7 +3667,7 @@ void C_CovarianceLinearStatistic
 @|C_CovarianceLinearStatistic
 @}
 
-@d C\_VarianceLinearStatistic
+@d C_VarianceLinearStatistic
 @{
 void C_VarianceLinearStatistic
 (
@@ -3716,7 +3717,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a5))
 @@
 
-@d R\_ExpectationInfluence Prototype
+@d R_ExpectationInfluence Prototype
 @{
 SEXP R_ExpectationInfluence
 (
@@ -3726,9 +3727,9 @@ SEXP R_ExpectationInfluence
 )
 @}
 
-@d R\_ExpectationInfluence
+@d R_ExpectationInfluence
 @{
-@<R\_ExpectationInfluence Prototype@>
+@<R_ExpectationInfluence Prototype@>
 {
     SEXP ans;
     @<C integer Q Input@>;
@@ -3750,7 +3751,7 @@ SEXP R_ExpectationInfluence
 @|R_ExpectationInfluence
 @}
 
-@d RC\_ExpectationInfluence Prototype
+@d RC_ExpectationInfluence Prototype
 @{
 void RC_ExpectationInfluence
 (
@@ -3765,9 +3766,9 @@ void RC_ExpectationInfluence
 )
 @}
 
-@d RC\_ExpectationInfluence
+@d RC_ExpectationInfluence
 @{
-@<RC\_ExpectationInfluence Prototype@>
+@<RC_ExpectationInfluence Prototype@>
 {
     double center;
 
@@ -3811,7 +3812,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a5))
 @@
 
-@d R\_CovarianceInfluence Prototype
+@d R_CovarianceInfluence Prototype
 @{
 SEXP R_CovarianceInfluence
 (
@@ -3822,9 +3823,9 @@ SEXP R_CovarianceInfluence
 )
 @}
 
-@d R\_CovarianceInfluence
+@d R_CovarianceInfluence
 @{
-@<R\_CovarianceInfluence Prototype@>
+@<R_CovarianceInfluence Prototype@>
 {
     SEXP ans;
     SEXP ExpInf;
@@ -3854,7 +3855,7 @@ SEXP R_CovarianceInfluence
 @|R_CovarianceInfluence
 @}
 
-@d RC\_CovarianceInfluence Prototype
+@d RC_CovarianceInfluence Prototype
 @{
 void RC_CovarianceInfluence
 (
@@ -3871,9 +3872,9 @@ void RC_CovarianceInfluence
 )
 @}
 
-@d RC\_CovarianceInfluence
+@d RC_CovarianceInfluence
 @{
-@<RC\_CovarianceInfluence Prototype@>
+@<RC_CovarianceInfluence Prototype@>
 {
     if (VARONLY) {
         RC_colSums(REAL(y), N, Q, Power2, ExpInf, DoCenter, weights,
@@ -3892,7 +3893,7 @@ void RC_CovarianceInfluence
 
 \subsection{X}
 
-@d R\_ExpectationX Prototype
+@d R_ExpectationX Prototype
 @{
 SEXP R_ExpectationX
 (
@@ -3903,9 +3904,9 @@ SEXP R_ExpectationX
 )
 @}
 
-@d R\_ExpectationX
+@d R_ExpectationX
 @{
-@<R\_ExpectationX Prototype@>
+@<R_ExpectationX Prototype@>
 {
     SEXP ans;
     @<C integer N Input@>;
@@ -3923,7 +3924,7 @@ SEXP R_ExpectationX
 @|R_ExpectationX
 @}
 
-@d RC\_ExpectationX Prototype
+@d RC_ExpectationX Prototype
 @{
 void RC_ExpectationX
 (
@@ -3937,9 +3938,9 @@ void RC_ExpectationX
 )
 @}
 
-@d RC\_ExpectationX
+@d RC_ExpectationX
 @{
-@<RC\_ExpectationX Prototype@>
+@<RC_ExpectationX Prototype@>
 {
     double center;
 
@@ -4008,7 +4009,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 @@
 
-@d R\_CovarianceX Prototype
+@d R_CovarianceX Prototype
 @{
 SEXP R_CovarianceX
 (
@@ -4020,9 +4021,9 @@ SEXP R_CovarianceX
 )
 @}
 
-@d R\_CovarianceX
+@d R_CovarianceX
 @{
-@<R\_CovarianceX Prototype@>
+@<R_CovarianceX Prototype@>
 {
     SEXP ans;
     SEXP ExpX;
@@ -4047,7 +4048,7 @@ SEXP R_CovarianceX
 @|R_CovarianceX
 @}
 
-@d RC\_CovarianceX Prototype
+@d RC_CovarianceX Prototype
 @{
 void RC_CovarianceX
 (
@@ -4063,9 +4064,9 @@ void RC_CovarianceX
 )
 @}
 
-@d RC\_CovarianceX
+@d RC_CovarianceX
 @{
-@<RC\_CovarianceX Prototype@>
+@<RC_CovarianceX Prototype@>
 {
     double center;
 
@@ -4135,12 +4136,12 @@ if (Nsubset > 0) {
 
 @d SimpleSums
 @{
-@<C\_Sums\_dweights\_dsubset@>
-@<C\_Sums\_iweights\_dsubset@>
-@<C\_Sums\_iweights\_isubset@>
-@<C\_Sums\_dweights\_isubset@>
-@<RC\_Sums@>
-@<R\_Sums@>
+@<C_Sums_dweights_dsubset@>
+@<C_Sums_iweights_dsubset@>
+@<C_Sums_iweights_isubset@>
+@<C_Sums_dweights_isubset@>
+@<RC_Sums@>
+@<R_Sums@>
 @}
 
 <<SimpleSums>>=
@@ -4155,7 +4156,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 @@
 
 
-@d R\_Sums Prototype
+@d R_Sums Prototype
 @{
 SEXP R_Sums
 (
@@ -4165,9 +4166,9 @@ SEXP R_Sums
 )
 @}
 
-@d R\_Sums
+@d R_Sums
 @{
-@<R\_Sums Prototype@>
+@<R_Sums Prototype@>
 {
     SEXP ans;
     @<C integer Nsubset Input@>;
@@ -4183,7 +4184,7 @@ SEXP R_Sums
 @|R_Sums
 @}
 
-@d RC\_Sums Prototype
+@d RC_Sums Prototype
 @{
 double RC_Sums
 (
@@ -4194,9 +4195,9 @@ double RC_Sums
 )
 @}
 
-@d RC\_Sums
+@d RC_Sums
 @{
-@<RC\_Sums Prototype@>
+@<RC_Sums Prototype@>
 {
     if (XLENGTH(weights) == 0) {
         if (XLENGTH(subset) == 0) {
@@ -4227,7 +4228,7 @@ double RC_Sums
 @}
 
 
-@d C\_Sums\_dweights\_dsubset
+@d C_Sums_dweights_dsubset
 @{
 double C_Sums_dweights_dsubset
 (
@@ -4241,7 +4242,7 @@ double C_Sums_dweights_dsubset
 @|C_Sums_dweights_dsubset
 @}
 
-@d C\_Sums\_iweights\_dsubset
+@d C_Sums_iweights_dsubset
 @{
 double C_Sums_iweights_dsubset
 (
@@ -4256,7 +4257,7 @@ double C_Sums_iweights_dsubset
 @|C_Sums_iweights_dsubset
 @}
 
-@d C\_Sums\_iweights\_isubset
+@d C_Sums_iweights_isubset
 @{
 double C_Sums_iweights_isubset
 (
@@ -4270,7 +4271,7 @@ double C_Sums_iweights_isubset
 @|C_Sums_iweights_isubset
 @}
 
-@d C\_Sums\_dweights\_isubset
+@d C_Sums_dweights_isubset
 @{
 double C_Sums_dweights_isubset
 (
@@ -4312,22 +4313,22 @@ return(ans);
 
 @d KronSums
 @{
-@<C\_KronSums\_dweights\_dsubset@>
-@<C\_KronSums\_iweights\_dsubset@>
-@<C\_KronSums\_iweights\_isubset@>
-@<C\_KronSums\_dweights\_isubset@>
-@<C\_XfactorKronSums\_dweights\_dsubset@>
-@<C\_XfactorKronSums\_iweights\_dsubset@>
-@<C\_XfactorKronSums\_iweights\_isubset@>
-@<C\_XfactorKronSums\_dweights\_isubset@>
-@<RC\_KronSums@>
-@<R\_KronSums@>
-@<C\_KronSums\_Permutation\_isubset@>
-@<C\_KronSums\_Permutation\_dsubset@>
-@<C\_XfactorKronSums\_Permutation\_isubset@>
-@<C\_XfactorKronSums\_Permutation\_dsubset@>
-@<RC\_KronSums\_Permutation@>
-@<R\_KronSums\_Permutation@>
+@<C_KronSums_dweights_dsubset@>
+@<C_KronSums_iweights_dsubset@>
+@<C_KronSums_iweights_isubset@>
+@<C_KronSums_dweights_isubset@>
+@<C_XfactorKronSums_dweights_dsubset@>
+@<C_XfactorKronSums_iweights_dsubset@>
+@<C_XfactorKronSums_iweights_isubset@>
+@<C_XfactorKronSums_dweights_isubset@>
+@<RC_KronSums@>
+@<R_KronSums@>
+@<C_KronSums_Permutation_isubset@>
+@<C_KronSums_Permutation_dsubset@>
+@<C_XfactorKronSums_Permutation_isubset@>
+@<C_XfactorKronSums_Permutation_dsubset@>
+@<RC_KronSums_Permutation@>
+@<R_KronSums_Permutation@>
 @}
 
 <<KronSums>>=
@@ -4354,7 +4355,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 @@
 
-@d R\_KronSums Prototype
+@d R_KronSums Prototype
 @{
 SEXP R_KronSums
 (
@@ -4367,9 +4368,9 @@ SEXP R_KronSums
 )
 @}
 
-@d R\_KronSums
+@d R_KronSums
 @{
-@<R\_KronSums Prototype@>
+@<R_KronSums Prototype@>
 {
     SEXP ans;
     @<C integer Q Input@>;
@@ -4395,7 +4396,7 @@ SEXP R_KronSums
 @|R_KronSums
 @}
 
-@d RC\_KronSums Prototype
+@d RC_KronSums Prototype
 @{
 void RC_KronSums
 (
@@ -4407,9 +4408,9 @@ void RC_KronSums
 )
 @}
 
-@d RC\_KronSums
+@d RC_KronSums
 @{
-@<RC\_KronSums Prototype@>
+@<RC_KronSums Prototype@>
 {
     if (TYPEOF(x) == INTSXP) {
         @<KronSums Integer x@>
@@ -4499,7 +4500,7 @@ if (TYPEOF(weights) == INTSXP) {
 }
 @}
 
-@d C\_KronSums\_dweights\_dsubset
+@d C_KronSums_dweights_dsubset
 @{
 void C_KronSums_dweights_dsubset
 (
@@ -4514,7 +4515,7 @@ void C_KronSums_dweights_dsubset
 @|C_KronSums_dweights_dsubset
 @}
 
-@d C\_KronSums\_iweights\_dsubset
+@d C_KronSums_iweights_dsubset
 @{
 void C_KronSums_iweights_dsubset
 (
@@ -4530,7 +4531,7 @@ void C_KronSums_iweights_dsubset
 @|C_KronSums_iweights_dsubset
 @}
 
-@d C\_KronSums\_iweights\_isubset
+@d C_KronSums_iweights_isubset
 @{
 void C_KronSums_iweights_isubset
 (
@@ -4545,7 +4546,7 @@ void C_KronSums_iweights_isubset
 @|C_KronSums_iweights_isubset
 @}
 
-@d C\_KronSums\_dweights\_isubset
+@d C_KronSums_dweights_isubset
 @{
 void C_KronSums_dweights_isubset
 (
@@ -4625,7 +4626,7 @@ void C_KronSums_dweights_isubset
 @<C real y Input@>
 @}
 
-@d C\_XfactorKronSums\_dweights\_dsubset
+@d C_XfactorKronSums_dweights_dsubset
 @{
 void C_XfactorKronSums_dweights_dsubset
 (
@@ -4640,7 +4641,7 @@ void C_XfactorKronSums_dweights_dsubset
 @|C_XfactorKronSums_dweights_dsubset
 @}
 
-@d C\_XfactorKronSums\_iweights\_dsubset
+@d C_XfactorKronSums_iweights_dsubset
 @{
 void C_XfactorKronSums_iweights_dsubset
 (
@@ -4656,7 +4657,7 @@ void C_XfactorKronSums_iweights_dsubset
 @|C_XfactorKronSums_iweights_dsubset
 @}
 
-@d C\_XfactorKronSums\_iweights\_isubset
+@d C_XfactorKronSums_iweights_isubset
 @{
 void C_XfactorKronSums_iweights_isubset
 (
@@ -4671,7 +4672,7 @@ void C_XfactorKronSums_iweights_isubset
 @|C_XfactorKronSums_iweights_isubset
 @}
 
-@d C\_XfactorKronSums\_dweights\_isubset
+@d C_XfactorKronSums_dweights_isubset
 @{
 void C_XfactorKronSums_dweights_isubset
 (
@@ -4743,7 +4744,7 @@ a2 <- .Call(libcoin:::R_KronSums_Permutation, ix, Lx, y, as.double(subset), as.d
 stopifnot(isequal(a0, a1) && isequal(a0, a2))
 @@
 
-@d R\_KronSums\_Permutation Prototype
+@d R_KronSums_Permutation Prototype
 @{
 SEXP R_KronSums_Permutation
 (
@@ -4755,9 +4756,9 @@ SEXP R_KronSums_Permutation
 )
 @}
 
-@d R\_KronSums\_Permutation
+@d R_KronSums_Permutation
 @{
-@<R\_KronSums\_Permutation Prototype@>
+@<R_KronSums_Permutation Prototype@>
 {
     SEXP ans;
     @<C integer Q Input@>;
@@ -4777,7 +4778,7 @@ SEXP R_KronSums_Permutation
 @|R_KronSums_Permutation
 @}
 
-@d RC\_KronSums\_Permutation Prototype
+@d RC_KronSums_Permutation Prototype
 @{
 void RC_KronSums_Permutation
 (
@@ -4792,9 +4793,9 @@ void RC_KronSums_Permutation
 )
 @}
 
-@d RC\_KronSums\_Permutation
+@d RC_KronSums_Permutation
 @{
-@<RC\_KronSums\_Permutation Prototype@>
+@<RC_KronSums_Permutation Prototype@>
 {
     if (TYPEOF(x) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
@@ -4821,7 +4822,7 @@ void RC_KronSums_Permutation
 @|RC_KronSums_Permutation
 @}
 
-@d C\_KronSums\_Permutation\_dsubset
+@d C_KronSums_Permutation_dsubset
 @{
 void C_KronSums_Permutation_dsubset
 (
@@ -4836,7 +4837,7 @@ void C_KronSums_Permutation_dsubset
 @|C_KronSums_Permutation_dsubset
 @}
 
-@d C\_KronSums\_Permutation\_isubset
+@d C_KronSums_Permutation_isubset
 @{
 void C_KronSums_Permutation_isubset
 (
@@ -4874,7 +4875,7 @@ for (int q = 0; q < Q; q++) {
 
 \subsubsection{Xfactor Permuted Kronecker Sums}
 
-@d C\_XfactorKronSums\_Permutation\_dsubset
+@d C_XfactorKronSums_Permutation_dsubset
 @{
 void C_XfactorKronSums_Permutation_dsubset
 (
@@ -4889,7 +4890,7 @@ void C_XfactorKronSums_Permutation_dsubset
 @|C_XfactorKronSums_Permutation_dsubset
 @}
 
-@d C\_XfactorKronSums\_Permutation\_isubset
+@d C_XfactorKronSums_Permutation_isubset
 @{
 void C_XfactorKronSums_Permutation_isubset
 (
@@ -4922,12 +4923,12 @@ for (int q = 0; q < Q; q++) {
 
 @d colSums
 @{
-@<C\_colSums\_dweights\_dsubset@>
-@<C\_colSums\_iweights\_dsubset@>
-@<C\_colSums\_iweights\_isubset@>
-@<C\_colSums\_dweights\_isubset@>
-@<RC\_colSums@>
-@<R\_colSums@>
+@<C_colSums_dweights_dsubset@>
+@<C_colSums_iweights_dsubset@>
+@<C_colSums_iweights_isubset@>
+@<C_colSums_dweights_isubset@>
+@<RC_colSums@>
+@<R_colSums@>
 @}
 
 <<colSums>>=
@@ -4942,7 +4943,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
 @@
 
 
-@d R\_colSums Prototype
+@d R_colSums Prototype
 @{
 SEXP R_colSums
 (
@@ -4952,9 +4953,9 @@ SEXP R_colSums
 )
 @}
 
-@d R\_colSums
+@d R_colSums
 @{
-@<R\_colSums Prototype@>
+@<R_colSums Prototype@>
 {
     SEXP ans;
     int P;
@@ -4975,7 +4976,7 @@ SEXP R_colSums
 @|R_colSums
 @}
 
-@d RC\_colSums Prototype
+@d RC_colSums Prototype
 @{
 void RC_colSums
 (
@@ -4987,9 +4988,9 @@ void RC_colSums
 )
 @}
 
-@d RC\_colSums
+@d RC_colSums
 @{
-@<RC\_colSums Prototype@>
+@<RC_colSums Prototype@>
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
@@ -5029,7 +5030,7 @@ const int CENTER,
 double *P_ans
 @}
 
-@d C\_colSums\_dweights\_dsubset
+@d C_colSums_dweights_dsubset
 @{
 void C_colSums_dweights_dsubset
 (
@@ -5044,7 +5045,7 @@ void C_colSums_dweights_dsubset
 @|C_colSums_dweights_dsubset
 @}
 
-@d C\_colSums\_iweights\_dsubset
+@d C_colSums_iweights_dsubset
 @{
 void C_colSums_iweights_dsubset
 (
@@ -5060,7 +5061,7 @@ void C_colSums_iweights_dsubset
 @|C_colSums_iweights_dsubset
 @}
 
-@d C\_colSums\_iweights\_isubset
+@d C_colSums_iweights_isubset
 @{
 void C_colSums_iweights_isubset
 (
@@ -5075,7 +5076,7 @@ void C_colSums_iweights_isubset
 @|C_colSums_iweights_isubset
 @}
 
-@d C\_colSums\_dweights\_isubset
+@d C_colSums_dweights_isubset
 @{
 void C_colSums_dweights_isubset
 (
@@ -5130,24 +5131,24 @@ for (int p = 0; p < P; p++) {
 
 @d Tables
 @{
-@<C\_OneTableSums\_dweights\_dsubset@>
-@<C\_OneTableSums\_iweights\_dsubset@>
-@<C\_OneTableSums\_iweights\_isubset@>
-@<C\_OneTableSums\_dweights\_isubset@>
-@<RC\_OneTableSums@>
-@<R\_OneTableSums@>
-@<C\_TwoTableSums\_dweights\_dsubset@>
-@<C\_TwoTableSums\_iweights\_dsubset@>
-@<C\_TwoTableSums\_iweights\_isubset@>
-@<C\_TwoTableSums\_dweights\_isubset@>
-@<RC\_TwoTableSums@>
-@<R\_TwoTableSums@>
-@<C\_ThreeTableSums\_dweights\_dsubset@>
-@<C\_ThreeTableSums\_iweights\_dsubset@>
-@<C\_ThreeTableSums\_iweights\_isubset@>
-@<C\_ThreeTableSums\_dweights\_isubset@>
-@<RC\_ThreeTableSums@>
-@<R\_ThreeTableSums@>
+@<C_OneTableSums_dweights_dsubset@>
+@<C_OneTableSums_iweights_dsubset@>
+@<C_OneTableSums_iweights_isubset@>
+@<C_OneTableSums_dweights_isubset@>
+@<RC_OneTableSums@>
+@<R_OneTableSums@>
+@<C_TwoTableSums_dweights_dsubset@>
+@<C_TwoTableSums_iweights_dsubset@>
+@<C_TwoTableSums_iweights_isubset@>
+@<C_TwoTableSums_dweights_isubset@>
+@<RC_TwoTableSums@>
+@<R_TwoTableSums@>
+@<C_ThreeTableSums_dweights_dsubset@>
+@<C_ThreeTableSums_iweights_dsubset@>
+@<C_ThreeTableSums_iweights_isubset@>
+@<C_ThreeTableSums_dweights_isubset@>
+@<RC_ThreeTableSums@>
+@<R_ThreeTableSums@>
 @}
 
 <<OneTableSum>>=
@@ -5161,7 +5162,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 @@
 
-@d R\_OneTableSums Prototype
+@d R_OneTableSums Prototype
 @{
 SEXP R_OneTableSums
 (
@@ -5171,9 +5172,9 @@ SEXP R_OneTableSums
 )
 @}
 
-@d R\_OneTableSums
+@d R_OneTableSums
 @{
-@<R\_OneTableSums Prototype@>
+@<R_OneTableSums Prototype@>
 {
     SEXP ans;
     @<C integer N Input@>;
@@ -5193,7 +5194,7 @@ SEXP R_OneTableSums
 @|R_OneTableSums
 @}
 
-@d RC\_OneTableSums Prototype
+@d RC_OneTableSums Prototype
 @{
 void RC_OneTableSums
 (
@@ -5205,9 +5206,9 @@ void RC_OneTableSums
 )
 @}
 
-@d RC\_OneTableSums
+@d RC_OneTableSums
 @{
-@<RC\_OneTableSums Prototype@>
+@<RC_OneTableSums Prototype@>
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
@@ -5244,7 +5245,7 @@ void RC_OneTableSums
 double *P_ans
 @}
 
-@d C\_OneTableSums\_dweights\_dsubset
+@d C_OneTableSums_dweights_dsubset
 @{
 void C_OneTableSums_dweights_dsubset
 (
@@ -5259,7 +5260,7 @@ void C_OneTableSums_dweights_dsubset
 @|C_OneTableSums_dweights_dsubset
 @}
 
-@d C\_OneTableSums\_iweights\_dsubset
+@d C_OneTableSums_iweights_dsubset
 @{
 void C_OneTableSums_iweights_dsubset
 (
@@ -5275,7 +5276,7 @@ void C_OneTableSums_iweights_dsubset
 @|C_OneTableSums_iweights_dsubset
 @}
 
-@d C\_OneTableSums\_iweights\_isubset
+@d C_OneTableSums_iweights_isubset
 @{
 void C_OneTableSums_iweights_isubset
 (
@@ -5290,7 +5291,7 @@ void C_OneTableSums_iweights_isubset
 @|C_OneTableSums_iweights_isubset
 @}
 
-@d C\_OneTableSums\_dweights\_isubset
+@d C_OneTableSums_dweights_isubset
 @{
 void C_OneTableSums_dweights_isubset
 (
@@ -5351,7 +5352,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 @@
 
-@d R\_TwoTableSums Prototype
+@d R_TwoTableSums Prototype
 @{
 SEXP R_TwoTableSums
 (
@@ -5362,9 +5363,9 @@ SEXP R_TwoTableSums
 )
 @}
 
-@d R\_TwoTableSums
+@d R_TwoTableSums
 @{
-@<R\_TwoTableSums Prototype@>
+@<R_TwoTableSums Prototype@>
 {
     SEXP ans, dim;
     @<C integer N Input@>;
@@ -5390,7 +5391,7 @@ SEXP R_TwoTableSums
 @}
 
 
-@d RC\_TwoTableSums Prototype
+@d RC_TwoTableSums Prototype
 @{
 void RC_TwoTableSums
 (
@@ -5402,9 +5403,9 @@ void RC_TwoTableSums
 )
 @}
 
-@d RC\_TwoTableSums
+@d RC_TwoTableSums
 @{
-@<RC\_TwoTableSums Prototype@>
+@<RC_TwoTableSums Prototype@>
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
@@ -5442,7 +5443,7 @@ void RC_TwoTableSums
 double *PQ_ans
 @}
 
-@d C\_TwoTableSums\_dweights\_dsubset
+@d C_TwoTableSums_dweights_dsubset
 @{
 void C_TwoTableSums_dweights_dsubset
 (
@@ -5457,7 +5458,7 @@ void C_TwoTableSums_dweights_dsubset
 @|C_TwoTableSums_dweights_dsubset
 @}
 
-@d C\_TwoTableSums\_iweights\_dsubset
+@d C_TwoTableSums_iweights_dsubset
 @{
 void C_TwoTableSums_iweights_dsubset
 (
@@ -5473,7 +5474,7 @@ void C_TwoTableSums_iweights_dsubset
 @|C_TwoTableSums_iweights_dsubset
 @}
 
-@d C\_TwoTableSums\_iweights\_isubset
+@d C_TwoTableSums_iweights_isubset
 @{
 void C_TwoTableSums_iweights_isubset
 (
@@ -5488,7 +5489,7 @@ void C_TwoTableSums_iweights_isubset
 @|C_TwoTableSums_iweights_isubset
 @}
 
-@d C\_TwoTableSums\_dweights\_isubset
+@d C_TwoTableSums_dweights_isubset
 @{
 void C_TwoTableSums_dweights_isubset
 (
@@ -5551,7 +5552,7 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 @@
 
-@d R\_ThreeTableSums Prototype
+@d R_ThreeTableSums Prototype
 @{
 SEXP R_ThreeTableSums
 (
@@ -5563,9 +5564,9 @@ SEXP R_ThreeTableSums
 )
 @}
 
-@d R\_ThreeTableSums
+@d R_ThreeTableSums
 @{
-@<R\_ThreeTableSums Prototype@>
+@<R_ThreeTableSums Prototype@>
 {
     SEXP ans, dim;
     @<C integer N Input@>;
@@ -5593,7 +5594,7 @@ SEXP R_ThreeTableSums
 @|R_ThreeTableSums
 @}
 
-@d RC\_ThreeTableSums Prototype
+@d RC_ThreeTableSums Prototype
 @{
 void RC_ThreeTableSums
 (
@@ -5605,9 +5606,9 @@ void RC_ThreeTableSums
 )
 @}
 
-@d RC\_ThreeTableSums
+@d RC_ThreeTableSums
 @{
-@<RC\_ThreeTableSums Prototype@>
+@<RC_ThreeTableSums Prototype@>
 {
     if (TYPEOF(weights) == INTSXP) {
         if (TYPEOF(subset) == INTSXP) {
@@ -5646,7 +5647,7 @@ void RC_ThreeTableSums
 double *PQL_ans
 @}
 
-@d C\_ThreeTableSums\_dweights\_dsubset
+@d C_ThreeTableSums_dweights_dsubset
 @{
 void C_ThreeTableSums_dweights_dsubset
 (
@@ -5661,7 +5662,7 @@ void C_ThreeTableSums_dweights_dsubset
 @|C_ThreeTableSums_dweights_dsubset
 @}
 
-@d C\_ThreeTableSums\_iweights\_dsubset
+@d C_ThreeTableSums_iweights_dsubset
 @{
 void C_ThreeTableSums_iweights_dsubset
 (
@@ -5677,7 +5678,7 @@ void C_ThreeTableSums_iweights_dsubset
 @|C_ThreeTableSums_iweights_dsubset
 @}
 
-@d C\_ThreeTableSums\_iweights\_isubset
+@d C_ThreeTableSums_iweights_isubset
 @{
 void C_ThreeTableSums_iweights_isubset
 (
@@ -5692,7 +5693,7 @@ void C_ThreeTableSums_iweights_isubset
 @|C_ThreeTableSums_iweights_isubset
 @}
 
-@d C\_ThreeTableSums\_dweights\_isubset
+@d C_ThreeTableSums_dweights_isubset
 @{
 void C_ThreeTableSums_dweights_isubset
 (
@@ -5757,14 +5758,14 @@ stopifnot(isequal(ns1, ns2))
 
 @d Utils
 @{
-@<C\_setup\_subset@>
-@<C\_setup\_subset\_block@>
-@<C\_order\_subset\_wrt\_block@>
-@<RC\_order\_subset\_wrt\_block@>
-@<R\_order\_subset\_wrt\_block@>
+@<C_setup_subset@>
+@<C_setup_subset_block@>
+@<C_order_subset_wrt_block@>
+@<RC_order_subset_wrt_block@>
+@<R_order_subset_wrt_block@>
 @}
 
-@d R\_order\_subset\_wrt\_block Prototype
+@d R_order_subset_wrt_block Prototype
 @{
 SEXP R_order_subset_wrt_block
 (
@@ -5775,9 +5776,9 @@ SEXP R_order_subset_wrt_block
 )
 @}
 
-@d R\_order\_subset\_wrt\_block
+@d R_order_subset_wrt_block
 @{
-@<R\_order\_subset\_wrt\_block Prototype@>
+@<R_order_subset_wrt_block Prototype@>
 {
     @<C integer N Input@>;
     SEXP blockTable, ans;
@@ -5804,7 +5805,7 @@ SEXP R_order_subset_wrt_block
 @}
 
 
-@d RC\_order\_subset\_wrt\_block Prototype
+@d RC_order_subset_wrt_block Prototype
 @{
 SEXP RC_order_subset_wrt_block
 (
@@ -5815,9 +5816,9 @@ SEXP RC_order_subset_wrt_block
 )
 @}
 
-@d RC\_order\_subset\_wrt\_block
+@d RC_order_subset_wrt_block
 @{
-@<RC\_order\_subset\_wrt\_block Prototype@>
+@<RC_order_subset_wrt_block Prototype@>
 {
     SEXP ans;
     int NOBLOCK = (XLENGTH(block) == 0 || XLENGTH(blockTable) == 2);
@@ -5845,7 +5846,7 @@ SEXP RC_order_subset_wrt_block
 @|RC_order_subset_wrt_block
 @}
 
-@d C\_setup\_subset
+@d C_setup_subset
 @{
 void C_setup_subset
 (
@@ -5864,7 +5865,7 @@ void C_setup_subset
 @|C_setup_subset
 @}
 
-@d C\_setup\_subset\_block
+@d C_setup_subset_block
 @{
 void C_setup_subset_block
 (
@@ -5897,7 +5898,7 @@ void C_setup_subset_block
 @|C_setup_subset_block
 @}
 
-@d C\_order\_subset\_wrt\_block
+@d C_order_subset_wrt_block
 @{
 void C_order_subset_wrt_block
 (
@@ -5930,7 +5931,7 @@ void C_order_subset_wrt_block
 @|C_order_subset_wrt_block
 @}
 
-@d RC\_setup\_subset Prototype
+@d RC_setup_subset Prototype
 @{
 SEXP RC_setup_subset
 (
@@ -5944,9 +5945,9 @@ Because this will only be used when really needed (in Permutations) we can
 be a little bit more generous with memory here. The return value is always
 \verb|REALSXP|.
 
-@d RC\_setup\_subset
+@d RC_setup_subset
 @{
-@<RC\_setup\_subset Prototype@>
+@<RC_setup_subset Prototype@>
 {
     SEXP ans, mysubset;
     R_xlen_t sumweights;
@@ -5986,14 +5987,14 @@ be a little bit more generous with memory here. The return value is always
 
 @d Permutations
 @{
-@<RC\_setup\_subset@>
-@<C\_Permute@>
-@<C\_doPermute@>
-@<C\_PermuteBlock@>
-@<C\_doPermuteBlock@>
+@<RC_setup_subset@>
+@<C_Permute@>
+@<C_doPermute@>
+@<C_PermuteBlock@>
+@<C_doPermuteBlock@>
 @}
 
-@d C\_Permute
+@d C_Permute
 @{
 void C_Permute
 (
@@ -6012,7 +6013,7 @@ void C_Permute
 @|C_Permute
 @}
 
-@d C\_doPermute
+@d C_doPermute
 @{
 void C_doPermute
 (
@@ -6027,7 +6028,7 @@ void C_doPermute
 @|C_doPermute
 @}
 
-@d C\_PermuteBlock
+@d C_PermuteBlock
 @{
 void C_PermuteBlock
 (
@@ -6052,7 +6053,7 @@ void C_PermuteBlock
 @|C_PermuteBlock
 @}
 
-@d C\_doPermuteBlock
+@d C_doPermuteBlock
 @{
 void C_doPermuteBlock
 (
@@ -6076,14 +6077,14 @@ void C_doPermuteBlock
 @<NROW@>
 @<NCOL@>
 @<NLEVELS@>
-@<C\_kronecker@>
-@<R\_kronecker@>
-@<C\_kronecker\_sym@>
-@<C\_KronSums\_sym@>
-@<C\_MPinv\_sym@>
-@<R\_MPinv\_sym@>
-@<R\_unpack\_sym@>
-@<R\_pack\_sym@>
+@<C_kronecker@>
+@<R_kronecker@>
+@<C_kronecker_sym@>
+@<C_KronSums_sym@>
+@<C_MPinv_sym@>
+@<R_MPinv_sym@>
+@<R_unpack_sym@>
+@<R_pack_sym@>
 @}
 
 @d NROW
@@ -6191,7 +6192,7 @@ K2 <- .Call(libcoin:::R_kronecker, A, B)
 stopifnot(isequal(K1, K2))
 @@
 
-@d R\_kronecker Prototype
+@d R_kronecker Prototype
 @{
 SEXP R_kronecker
 (
@@ -6215,9 +6216,9 @@ extern SEXP libcoin_R_kronecker(
 }
 @}
 
-@d R\_kronecker
+@d R_kronecker
 @{
-@<R\_kronecker Prototype@>
+@<R_kronecker Prototype@>
 {
     int m, n, r, s;
     SEXP ans;
@@ -6237,7 +6238,7 @@ extern SEXP libcoin_R_kronecker(
 }
 @}
 
-@d C\_kronecker
+@d C_kronecker
 @{
 void C_kronecker
 (
@@ -6273,7 +6274,7 @@ void C_kronecker
 @|C_kronecker
 @}
 
-@d C\_kronecker\_sym
+@d C_kronecker_sym
 @{
 void C_kronecker_sym
 (
@@ -6310,7 +6311,7 @@ void C_kronecker_sym
 @|C_kronecker_sym
 @}
 
-@d C\_KronSums\_sym
+@d C_KronSums_sym
 @{
 /* sum_i (t(x[i,]) %*% x[i,]) */
 void C_KronSums_sym_
@@ -6348,7 +6349,7 @@ stopifnot(isequal(MP1$MPinv[lt], MP2$MPinv) &&
           isequal(MP1$rank, MP2$rank))
 @@
 
-@d R\_MPinv\_sym Prototype
+@d R_MPinv_sym Prototype
 @{
 SEXP R_MPinv_sym
 (
@@ -6373,9 +6374,9 @@ extern SEXP libcoin_R_MPinv_sym(
 }
 @}
 
-@d R\_MPinv\_sym
+@d R_MPinv_sym
 @{
-@<R\_MPinv\_sym Prototype@>
+@<R_MPinv_sym Prototype@>
 {
     int m;
     SEXP ans, names, MPinv, rank;
@@ -6400,7 +6401,7 @@ extern SEXP libcoin_R_MPinv_sym(
 @|R_MPinv_sym
 @}
 
-@d C\_MPinv\_sym
+@d C_MPinv_sym
 @{
 void C_MPinv_sym
 (
@@ -6467,7 +6468,7 @@ u2 <- .Call(libcoin:::R_unpack_sym, s, NULL, 1L)
 stopifnot(isequal(m, u1) && isequal(diag(m), u2))
 @@
 
-@d R\_unpack\_sym Prototype
+@d R_unpack_sym Prototype
 @{
 SEXP R_unpack_sym
 (
@@ -6492,9 +6493,9 @@ extern SEXP libcoin_R_unpack_sym(
 }
 @}
 
-@d R\_unpack\_sym
+@d R_unpack_sym
 @{
-@<R\_unpack\_sym Prototype@>
+@<R_unpack_sym Prototype@>
 {
     R_xlen_t n, k = 0;
     SEXP ans, dimnames;
@@ -6554,7 +6555,7 @@ p <- .Call(libcoin:::R_pack_sym, m)
 stopifnot(isequal(s, p))
 @@
 
-@d R\_pack\_sym Prototype
+@d R_pack_sym Prototype
 @{
 SEXP R_pack_sym
 (
@@ -6577,9 +6578,9 @@ extern SEXP libcoin_R_pack_sym(
 }
 @}
 
-@d R\_pack\_sym
+@d R_pack_sym
 @{
-@<R\_pack\_sym Prototype@>
+@<R_pack_sym Prototype@>
 {
     R_xlen_t n, k = 0;
     SEXP ans;
@@ -6607,30 +6608,30 @@ extern SEXP libcoin_R_pack_sym(
 
 @d Memory
 @{
-@<C\_get\_P@>
-@<C\_get\_Q@>
+@<C_get_P@>
+@<C_get_Q@>
 @<PP12@>
 @<mPQB@>
-@<C\_get\_varonly@>
-@<C\_get\_Xfactor@>
-@<C\_get\_LinearStatistic@>
-@<C\_get\_Expectation@>
-@<C\_get\_Variance@>
-@<C\_get\_Covariance@>
-@<C\_get\_ExpectationX@>
-@<C\_get\_ExpectationInfluence@>
-@<C\_get\_CovarianceInfluence@>
-@<C\_get\_VarianceInfluence@>
-@<C\_get\_TableBlock@>
-@<C\_get\_Sumweights@>
-@<C\_get\_Table@>
-@<C\_get\_dimTable@>
-@<C\_get\_B@>
-@<C\_get\_nresample@>
-@<C\_get\_PermutedLinearStatistic@>
-@<C\_get\_tol@>
-@<RC\_init\_LECV\_1d@>
-@<RC\_init\_LECV\_2d@>
+@<C_get_varonly@>
+@<C_get_Xfactor@>
+@<C_get_LinearStatistic@>
+@<C_get_Expectation@>
+@<C_get_Variance@>
+@<C_get_Covariance@>
+@<C_get_ExpectationX@>
+@<C_get_ExpectationInfluence@>
+@<C_get_CovarianceInfluence@>
+@<C_get_VarianceInfluence@>
+@<C_get_TableBlock@>
+@<C_get_Sumweights@>
+@<C_get_Table@>
+@<C_get_dimTable@>
+@<C_get_B@>
+@<C_get_nresample@>
+@<C_get_PermutedLinearStatistic@>
+@<C_get_tol@>
+@<RC_init_LECV_1d@>
+@<RC_init_LECV_2d@>
 @}
 
 @d R LECV Input
@@ -6639,7 +6640,7 @@ SEXP LECV
 @|LECV
 @}
 
-@d C\_get\_P
+@d C_get_P
 @{
 int C_get_P
 (
@@ -6650,7 +6651,7 @@ int C_get_P
 @|C_get_P
 @}
 
-@d C\_get\_Q
+@d C_get_Q
 @{
 int C_get_Q
 (
@@ -6661,7 +6662,7 @@ int C_get_Q
 @|C_get_Q
 @}
 
-@d C\_get\_varonly
+@d C_get_varonly
 @{
 int C_get_varonly
 (
@@ -6672,7 +6673,7 @@ int C_get_varonly
 @|C_get_varonly
 @}
 
-@d C\_get\_Xfactor
+@d C_get_Xfactor
 @{
 int C_get_Xfactor
 (
@@ -6683,7 +6684,7 @@ int C_get_Xfactor
 @|C_get_Xfactor
 @}
 
-@d C\_get\_LinearStatistic
+@d C_get_LinearStatistic
 @{
 double* C_get_LinearStatistic
 (
@@ -6694,7 +6695,7 @@ double* C_get_LinearStatistic
 @|C_get_LinearStatistic
 @}
 
-@d C\_get\_Expectation
+@d C_get_Expectation
 @{
 double* C_get_Expectation
 (
@@ -6705,7 +6706,7 @@ double* C_get_Expectation
 @|C_get_Expectation
 @}
 
-@d C\_get\_Variance
+@d C_get_Variance
 @{
 double* C_get_Variance
 (
@@ -6729,7 +6730,7 @@ double* C_get_Variance
 @|C_get_Variance
 @}
 
-@d C\_get\_Covariance
+@d C_get_Covariance
 @{
 double* C_get_Covariance
 (
@@ -6745,7 +6746,7 @@ double* C_get_Covariance
 @|C_get_Covariance
 @}
 
-@d C\_get\_ExpectationX
+@d C_get_ExpectationX
 @{
 double* C_get_ExpectationX
 (
@@ -6756,7 +6757,7 @@ double* C_get_ExpectationX
 @|C_get_ExpectationX
 @}
 
-@d C\_get\_ExpectationInfluence
+@d C_get_ExpectationInfluence
 @{
 double* C_get_ExpectationInfluence
 (
@@ -6767,7 +6768,7 @@ double* C_get_ExpectationInfluence
 @|C_get_ExpectationInfluence
 @}
 
-@d C\_get\_CovarianceInfluence
+@d C_get_CovarianceInfluence
 @{
 double* C_get_CovarianceInfluence
 (
@@ -6778,7 +6779,7 @@ double* C_get_CovarianceInfluence
 @|C_get_CovarianceInfluence
 @}
 
-@d C\_get\_VarianceInfluence
+@d C_get_VarianceInfluence
 @{
 double* C_get_VarianceInfluence
 (
@@ -6789,7 +6790,7 @@ double* C_get_VarianceInfluence
 @|C_get_VarianceInfluence
 @}
 
-@d C\_get\_TableBlock
+@d C_get_TableBlock
 @{
 double* C_get_TableBlock
 (
@@ -6802,7 +6803,7 @@ double* C_get_TableBlock
 @|C_get_TableBlock
 @}
 
-@d C\_get\_Sumweights
+@d C_get_Sumweights
 @{
 double* C_get_Sumweights
 (
@@ -6815,7 +6816,7 @@ double* C_get_Sumweights
 @|C_get_Sumweights
 @}
 
-@d C\_get\_Table
+@d C_get_Table
 @{
 double* C_get_Table
 (
@@ -6828,7 +6829,7 @@ double* C_get_Table
 @|C_get_Table
 @}
 
-@d C\_get\_dimTable
+@d C_get_dimTable
 @{
 int* C_get_dimTable
 (
@@ -6842,7 +6843,7 @@ int* C_get_dimTable
 @|C_get_dimTable
 @}
 
-@d C\_get\_B
+@d C_get_B
 @{
 int C_get_B
 (
@@ -6855,7 +6856,7 @@ int C_get_B
 @|C_get_B
 @}
 
-@d C\_get\_nresample
+@d C_get_nresample
 @{
 R_xlen_t C_get_nresample
 (
@@ -6867,7 +6868,7 @@ R_xlen_t C_get_nresample
 @|C_get_nresample
 @}
 
-@d C\_get\_PermutedLinearStatistic
+@d C_get_PermutedLinearStatistic
 @{
 double* C_get_PermutedLinearStatistic
 (
@@ -6878,7 +6879,7 @@ double* C_get_PermutedLinearStatistic
 @|C_get_PermutedLinearStatistic
 @}
 
-@d C\_get\_tol
+@d C_get_tol
 @{
 double C_get_tol
 (
@@ -6937,7 +6938,7 @@ SET_STRING_ELT(names, tol_SLOT, mkChar("tol"));
 SET_STRING_ELT(names, Table_SLOT, mkChar("Table"));
 @}
 
-@d R\_init\_LECV
+@d R_init_LECV
 @{
 SEXP vo, d, names, tolerance, tmp;
 int PQ;
@@ -7014,7 +7015,7 @@ for (int q = 0; q < Q * (Q + 1) / 2; q++)
     C_get_CovarianceInfluence(ans)[q] = 0.0;
 @}
 
-@d RC\_init\_LECV\_1d
+@d RC_init_LECV_1d
 @{
 SEXP RC_init_LECV_1d
 (
@@ -7027,7 +7028,7 @@ SEXP RC_init_LECV_1d
 ) {
     SEXP ans;
 
-    @<R\_init\_LECV@>
+    @<R_init_LECV@>
 
     SET_VECTOR_ELT(ans, TableBlock_SLOT,
                    allocVector(REALSXP, B + 1));
@@ -7041,7 +7042,7 @@ SEXP RC_init_LECV_1d
 @|RC_init_LECV_1d
 @}
 
-@d RC\_init\_LECV\_2d
+@d RC_init_LECV_2d
 @{
 SEXP RC_init_LECV_2d
 (
@@ -7062,7 +7063,7 @@ SEXP RC_init_LECV_2d
     if (Ly <= 0)
         error("Ly is not positive");
 
-    @<R\_init\_LECV@>
+    @<R_init_LECV@>
 
     PROTECT(tabdim = allocVector(INTSXP, 3));
     INTEGER(tabdim)[0] = Lx + 1;
@@ -7123,7 +7124,7 @@ export(LinStatExpCov, doTest, ctabs, lmult)
 S3method(vcov, LinStatExpCov)
 @}
 
-Add flag \verb|-g| to \verb|PKG\_CFLAGS| for \verb|operf| profiling (this is
+Add flag \verb|-g| to \verb|PKG_CFLAGS| for \verb|operf| profiling (this is
 not portable).
 @o Makevars -cc
 @{
@@ -7139,7 +7140,7 @@ EXPORTS
 @}
 
 Other packages can link against \pkg{libcoin}. A small example package
-is contained in \texttt{libcoin/inst/C\_API\_example}.
+is contained in \texttt{libcoin/inst/C_API_example}.
 
 @o libcoin-init.c -cc
 @{
