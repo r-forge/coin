@@ -54,6 +54,8 @@ urlcolor={linkcolor}%
 
 \newcommand{\pkg}[1]{\textbf{#1}}
 \newcommand{\proglang}[1]{\textsf{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\texttt{#1}}
 
 \newcommand{\R}{\mathbb{R} }
 \newcommand{\Prob}{\mathbb{P} }
@@ -269,11 +271,11 @@ motivated this little experiment.
 @<Contrasts@>
 @}
 
-The \pkg{libcoin} package implements two \proglang{R} functions, \verb|LinStatExpCov()| and
-\verb|doTest()| for the computation of linear statistics, their expectation
+The \pkg{libcoin} package implements two \proglang{R} functions, \code{LinStatExpCov()} and
+\code{doTest()} for the computation of linear statistics, their expectation
 and covariance as well as for the computation of test statistics and
 $p$-values. There are two interfaces: One (labelled ``1d'') when the data is
-available as matrices \verb|X| and \verb|Y|, both with the same number of
+available as matrices \code{X} and \code{Y}, both with the same number of
 rows $N$. The second interface (labelled ``2d'') handles the case when the
 data is available in aggregated form; details will be explained later.
 
@@ -318,15 +320,15 @@ function@<LinStatExpCov Prototype@>
 \subsection{One-Dimensional Case (``1d'')}
 
 We assume that $\x_i$ and $\y_i$ for $i = 1, \dots, N$ are available as
-numeric matrices \verb|X| and \verb|Y| with $N$ rows as well as $P$ and $Q$
+numeric matrices \code{X} and \code{Y} with $N$ rows as well as $P$ and $Q$
 columns, respectively. The special case of a dummy matrix
-\verb|X| with $P$ columns can also be represented by a factor at $P$ levels.
-The vector of case weights \verb|weights| can be stored as \verb|integer|
-or \verb|double| (possibly resulting from an aggregation of $N > $
-\verb|INT_MAX| observations). The subset vector \verb|subset| may contain
-the elements $1, \dots, N$ as \verb|integer| or \verb|double| (for $N > $
-\verb|INT_MAX|) and can be longer than $N$. The \verb|subset| vector MUST be
-sorted. \verb|block| is a factor at $B$ levels of length $N$.
+\code{X} with $P$ columns can also be represented by a factor at $P$ levels.
+The vector of case weights \code{weights} can be stored as \code{integer}
+or \code{double} (possibly resulting from an aggregation of $N > $
+\code{INT_MAX} observations). The subset vector \code{subset} may contain
+the elements $1, \dots, N$ as \code{integer} or \code{double} (for $N > $
+\code{INT_MAX}) and can be longer than $N$. The \code{subset} vector MUST be
+sorted. \code{block} is a factor at $B$ levels of length $N$.
 
 @d Check weights, subset, block
 @{
@@ -356,8 +358,8 @@ if (length(block) > 0) {
 }
 @}
 
-Missing values are only allowed in \verb|X| and
-\verb|Y|, all other vectors must not contain \verb|NA|s. Missing values are
+Missing values are only allowed in \code{X} and
+\code{Y}, all other vectors must not contain \code{NA}s. Missing values are
 dealt with by excluding the corresponding observations from the subset
 vector.
 
@@ -377,11 +379,11 @@ if (any(ms)) {
 }
 @}
 
-The logical argument \verb|varonly| triggers the computation of the diagonal
-elements of the covariance matrix $\Sigma$ only. \verb|nresample| permuted linear statistics
+The logical argument \code{varonly} triggers the computation of the diagonal
+elements of the covariance matrix $\Sigma$ only. \code{nresample} permuted linear statistics
 under the null hypothesis $H_0$ are returned on the original and
-standardised scale (the latter only when \verb|standardise| is \verb|TRUE|).
-Variances smaller than \verb|tol| are treated as being zero.
+standardised scale (the latter only when \code{standardise} is \code{TRUE}).
+Variances smaller than \code{tol} are treated as being zero.
 
 @d LinStatExpCov1d
 @{
@@ -464,28 +466,28 @@ all.equal(ls1[-grep("Xfactor", names(ls1))],
           ls2[-grep("Xfactor", names(ls2))])
 @@
 The results are identical, except for a logical indicating that a factor was
-used to represent the dummy matrix \verb|X|.
+used to represent the dummy matrix \code{X}.
 
 \subsection{Two-Dimensional Case (``2d'')}
 
 Sometimes the data takes only a few unique values and considerable
 computational speedups can be achieved taking this information into account.
-Let \verb|ix| denote an integer vector with elements $0, \dots, L_x$ of
+Let \code{ix} denote an integer vector with elements $0, \dots, L_x$ of
 length $N$ and
-\verb|iy| an integer vector with elements $0, \dots, L_y$, also of length
+\code{iy} an integer vector with elements $0, \dots, L_y$, also of length
 $N$. The matrix
-\verb|X| is now of dimension $(L_x + 1) \times P$ and the matrix \verb|Y|
-of dimension $(L_y + 1) \times Q$. The combination of \verb|X| and \verb|ix|
-means that the $i$th observation corresponds to the row \verb|X[ix[i] + 1,]|.
+\code{X} is now of dimension $(L_x + 1) \times P$ and the matrix \code{Y}
+of dimension $(L_y + 1) \times Q$. The combination of \code{X} and \code{ix}
+means that the $i$th observation corresponds to the row \code{X[ix[i] + 1,]}.
 This looks cumbersome in \proglang{R} notation but is a very efficient way
 of dealing with missing values at \proglang{C} level. By convention,
-elements of \verb|ix| being zero denote a missing value (\verb|NA|s are not
-allowed in \verb|ix| and \verb|iy|). Thus, the first row of \verb|X|
+elements of \code{ix} being zero denote a missing value (\code{NA}s are not
+allowed in \code{ix} and \code{iy}). Thus, the first row of \code{X}
 corresponds to a missing value. If the first row is simply zero, missing
 values do not contribute to any of the sums computed later. Even more
 important is the fact that all entities, such as linear statistics etc., can
 be computed from the two-way tabulation (therefore the abbrevation ``2d'')
-over the $N$ elements of \verb|ix| and \verb|iy|. Once such a
+over the $N$ elements of \code{ix} and \code{iy}. Once such a
 table was computed, the remaining computations can be performed in
 dimension $L_x \times L_y$, typically much smaller than $N$.
 
@@ -534,7 +536,7 @@ function(X = numeric(0), Y, ix, iy, weights = integer(0), subset = integer(0),
 }
 @}
 
-\verb|ix| and \verb|iy| can be factors but without any missing values
+\code{ix} and \code{iy} can be factors but without any missing values
 
 @d Check ix
 @{
@@ -585,7 +587,7 @@ ls3 <- LinStatExpCov(X = X, ix = factor(ix), Y = Y, iy = factor(iy))
 all.equal(ls1[-grep("Table", names(ls1))],
           ls3[-grep("Table", names(ls3))])
 @@
-Similar to the one-dimensional case, we can also omit the \verb|X| matrix
+Similar to the one-dimensional case, we can also omit the \code{X} matrix
 here
 <<2dex-2>>=
 ls4 <- LinStatExpCov(ix = ix, Y = Y, iy = iy)
@@ -601,9 +603,9 @@ where the former would record missing values in the first row / column.
 
 \subsection{Methods and Tests}
 
-Objects of class \verb|"LinStatExpCov"| returned by \verb|LinStatExpCov()|
+Objects of class \code{"LinStatExpCov"} returned by \code{LinStatExpCov()}
 contain the symmetric covariance matrix as a vector of the lower triangular
-elements. The \verb|vcov| method allows to extract the full covariance
+elements. The \code{vcov} method allows to extract the full covariance
 matrix from such an object.
 
 @d vcov LinStatExpCov
@@ -623,14 +625,14 @@ vcov(ls1)
 @@
 
 The most important task is, however, to compute test statistics and
-$p$-values. \verb|doTest()| allows to compute the statistics $c_\text{max}$
-(taking \verb|alternative| into account) and $c_\text{quad}$ along with the
-corresponding $p$-values. If \verb|nresample = 0| was used in the call to
-\verb|LinStatExpCov()|, $p$-values are obtained from the limiting asymptotic
+$p$-values. \code{doTest()} allows to compute the statistics $c_\text{max}$
+(taking \code{alternative} into account) and $c_\text{quad}$ along with the
+corresponding $p$-values. If \code{nresample = 0} was used in the call to
+\code{LinStatExpCov()}, $p$-values are obtained from the limiting asymptotic
 distribution whenever such a thing is available at reasonable costs.
 Otherwise, the permutation $p$-value is returned (along with the permuted
-test statistics when \verb|PermutedStatistics| is \verb|TRUE|). The
-$p$-values (\verb|lower = FALSE|) or $(1 - p)$-values (\verb|lower = TRUE|)
+test statistics when \code{PermutedStatistics} is \code{TRUE}). The
+$p$-values (\code{lower = FALSE}) or $(1 - p)$-values (\code{lower = TRUE})
 can be computed on the log-scale.
 
 @d doTest Prototype
@@ -716,8 +718,8 @@ doTest(ls1, teststat = "quadratic")
 Sometimes we are interested in contrasts of linear statistics and their
 corresponding properties. Examples include linear-by-linear association
 tests, where we assign numeric scores to each level of a factor. To
-implement this, we implement \verb|lmult()| so that we can then left-multiply a
-matrix to an object of class \verb|"LinStatExpCov"|.
+implement this, we implement \code{lmult()} so that we can then left-multiply a
+matrix to an object of class \code{"LinStatExpCov"}.
 
 @d Contrasts
 @{
@@ -788,9 +790,9 @@ stopifnot(isequal(ls1c, ls1s))
 
 \subsection{Tabulations}
 
-The tabulation of \verb|ix| and \verb|iy| can be computed without
+The tabulation of \code{ix} and \code{iy} can be computed without
 necessarily computing the corresponding linear statistics via
-\verb|ctabs()|.
+\code{ctabs()}.
 
 @d ctabs Prototype
 @{(ix, iy = integer(0), block = integer(0), weights = integer(0),
@@ -991,7 +993,7 @@ demand to compute high-dimensional linear statistics (with large $P$ and
 $Q$) and the corresponding test statistics very often, either for sampling
 from the permutation null distribution $H_0$ or for different subsets of the
 data. Especially the latter task can be performed \emph{without} actually
-subsetting the data via the \verb|subset| argument very efficiently (in
+subsetting the data via the \code{subset} argument very efficiently (in
 terms of memory consumption and, depending on the circumstances, speed).
 
 We start with the definition of some macros and global variables in the
@@ -1024,9 +1026,9 @@ level.
 #endif
 @}
 
-We need three macros: \verb|S| computes the element $\Sigma_{ij}$ of a
+We need three macros: \code{S} computes the element $\Sigma_{ij}$ of a
 symmetric $n \times n$ matrix when only the lower triangular elements are
-stored. \verb|LE| implements $\le$ with some tolerance, \verb|GE| implements
+stored. \code{LE} implements $\le$ with some tolerance, \code{GE} implements
 $\ge$.
 
 @d C Macros
@@ -1080,7 +1082,7 @@ Power2 Offset0
 
 
 The corresponding header file contains definitions of
-functions that can be called via \verb|.Call()| from the \pkg{libcoin}
+functions that can be called via \code{.Call()} from the \pkg{libcoin}
 package. In addition, packages linking to \pkg{libcoin} can access these
 function at \proglang{C} level (at your own risk, of course!).
 
@@ -1120,7 +1122,7 @@ extern @<R_unpack_sym Prototype@>;
 extern @<R_pack_sym Prototype@>;
 @}
 
-The \proglang{C} file \verb|libcoin.c| contains all \proglang{C}
+The \proglang{C} file \file{libcoin.c} contains all \proglang{C}
 functions and corresponding \proglang{R} interfaces.
 
 @o libcoin.c -cc
@@ -1161,8 +1163,8 @@ SEXP N,
 @|N
 @}
 
-which at \proglang{C} level is represented as \verb|R_xlen_t| to allow for
-$N > $ \verb|INT_MAX|
+which at \proglang{C} level is represented as \code{R_xlen_t} to allow for
+$N > $ \code{INT_MAX}
 
 @d C integer N Input
 @{
@@ -1242,8 +1244,8 @@ SEXP weights
 @|weights
 @}
 
-can be constant one (\verb|XLENGTH(weights) == 0| or \verb|weights = integer(0)|)
-or integer-valued, with \verb|HAS_WEIGHTS == 0| in the former case
+can be constant one (\code{XLENGTH(weights) == 0} or \code{weights = integer(0)})
+or integer-valued, with \code{HAS_WEIGHTS == 0} in the former case
 
 @d C integer weights Input
 @{
@@ -1252,7 +1254,7 @@ int HAS_WEIGHTS,
 @|weights, HAS_WEIGHTS
 @}
 
-Weights larger than \verb|INT_MAX| are stored as double
+Weights larger than \code{INT_MAX} are stored as double
 
 @d C real weights Input
 @{
@@ -1277,7 +1279,7 @@ SEXP subset
 @|subset
 @}
 
-are either not existent (\verb|XLENGTH(subset) == 0|) or of length
+are either not existent (\code{XLENGTH(subset) == 0}) or of length
 
 @d C integer Nsubset Input
 @{
@@ -1294,7 +1296,7 @@ R_xlen_t offset,
 @|offset
 @}
 
-where \verb|offset| is a \proglang{C} style index for \verb|subset|.
+where \code{offset} is a \proglang{C} style index for \code{subset}.
 
 Subsets are stored either as integer
 
@@ -1305,7 +1307,7 @@ int *subset,
 @|subset
 @}
 
-or double (to allow for indices larger than \verb|INT_MAX|)
+or double (to allow for indices larger than \code{INT_MAX})
 
 @d C real subset Input
 @{
@@ -1455,9 +1457,9 @@ LEVxyws <- LinStatExpCov(x, y, weights = weights, subset = subset, varonly = TRU
 @@
 
 The following tests compare the high-level \proglang{R} implementation
-(function \verb|LSEC()|) with the 1d and 2d \proglang{C} level
+(function \code{LSEC()}) with the 1d and 2d \proglang{C} level
 implementations in the two sitations with and without specification of
-\verb|X| (ie, the dummy matrix in the latter case).
+\code{X} (ie, the dummy matrix in the latter case).
 
 <<tests>>=
 ### with X given
@@ -1501,18 +1503,18 @@ All three implementations give the same results.
 
 \section{Conventions}
 
-Functions starting with \verb|R_| are \proglang{C} functions callable via
-\verb|.Call()| from \proglang{R}. That means they all return \verb|SEXP|.
+Functions starting with \code{R_} are \proglang{C} functions callable via
+\code{.Call()} from \proglang{R}. That means they all return \code{SEXP}.
 These functions allocate memory handled by \proglang{R}.
 
-Functions starting with \verb|RC_| are \proglang{C} functions with
-\verb|SEXP| or pointer arguments and possibly an \verb|SEXP| return value.
+Functions starting with \code{RC_} are \proglang{C} functions with
+\code{SEXP} or pointer arguments and possibly an \code{SEXP} return value.
 
-Functions starting with \verb|C_| are \proglang{C} functions with pointer
+Functions starting with \code{C_} are \proglang{C} functions with pointer
 arguments only and return a scalar or nothing.
 
-Return values (arguments modified by a function) are named \verb|ans|,
-sometimes with dimension (for example: \verb|PQ_ans|).
+Return values (arguments modified by a function) are named \code{ans},
+sometimes with dimension (for example: \code{PQ_ans}).
 
 \section{\proglang{C} User Interface}
 
@@ -1528,7 +1530,7 @@ sometimes with dimension (for example: \verb|PQ_ans|).
 
 The data are given as $\x_i$ and $\y_i$ for $i = 1, \dots, N$, optionally
 with weights, subset and blocks. The latter three variables are ignored when
-specified as \verb|integer(0)|.
+specified as \code{integer(0)}.
 
 @d User Interface Input
 @{
@@ -1590,9 +1592,9 @@ calls a \proglang{C} level function for the computations.
 @|R_ExpectationCovarianceStatistic
 @}
 
-$P$, $Q$ and $B$ are first extracted from the data. The case where \verb|X|
+$P$, $Q$ and $B$ are first extracted from the data. The case where \code{X}
 is an implicitly specified dummy matrix, the dimension $P$ is the number of
-levels of \verb|x|.
+levels of \code{x}.
 
 @d Setup Dimensions
 @{
@@ -1614,10 +1616,10 @@ The core function first computes the linear statistic (as there is no need
 to pay attention to blocks) and, in a second step, starts a loop over
 potential blocks.
 
-FIXME:  \verb|x| being an integer (\verb|Xfactor|) with some 0 elements is not handled
-        correctly (as \verb|sumweights| doesn't take this information into
-        account; use \verb|subset| to exclude these missings (as done in
-        \verb|LinStatExpCov()|)
+FIXME:  \code{x} being an integer (\code{Xfactor}) with some 0 elements is not handled
+        correctly (as \code{sumweights} doesn't take this information into
+        account; use \code{subset} to exclude these missings (as done in
+        \code{LinStatExpCov()})
 
 @d RC_ExpectationCovarianceStatistic
 @{
@@ -1762,7 +1764,7 @@ C_ExpectationLinearStatistic(P, Q, ExpInf + b * Q, ExpX, b,
 @}
 
 The covariance $\V(h \mid S(\A))$ is now computed for the subset given by
-subset and the $b$th level of block. Note that \verb|CovInf| stores the
+subset and the $b$th level of block. Note that \code{CovInf} stores the
 values for each block in the return object (for later reuse).
 
 @d Compute Covariance Influence
@@ -1837,10 +1839,10 @@ extern SEXP libcoin_R_PermutedLinearStatistic(
 The dimensions are extracted from the data in the same ways as above. The
 function differentiates between the absense and presense of blocks.
 Weights are removed by expanding subset accordingly. Once within-block
-permutations were set-up the Kronecker product of \verb|X| and \verb|Y| is
+permutations were set-up the Kronecker product of \code{X} and \code{Y} is
 computed. Note that this function returns the matrix of permuted linear
 statistics; the \proglang{R} interface assigns this matrix to the
-corresponding element of the \verb|LinStatExpCov| object (because we are not
+corresponding element of the \code{LinStatExpCov} object (because we are not
 allowed to modify existing \proglang{R} objects at \proglang{C} level).
 
 @d R_PermutedLinearStatistic
@@ -2358,7 +2360,7 @@ for (int j = 2; j <= maxn; j++)
     fact[j] = fact[j - 1] + log(j);
 @}
 
-Note: the interface to \verb|S_rcont2| changed in \textsf{R}-4.1.0.
+Note: the interface to \code{S_rcont2} changed in \textsf{R}-4.1.0.
 @d Compute Permuted Linear Statistic 2d
 @{
 #if defined(R_VERSION) && R_VERSION >= R_Version(4, 1, 0)
@@ -3153,8 +3155,8 @@ for (i = 0; i < n; i++) {
 }
 @}
 
-\verb|mvtdst| assumes the unique elements of the triangular
-covariance matrix to be passed as argument \verb|CORREL|
+\code{mvtdst} assumes the unique elements of the triangular
+covariance matrix to be passed as argument \code{CORREL}
 
 @d Setup mvtnorm Correlation
 @{
@@ -4109,8 +4111,8 @@ if (Nsubset > 0)
 @}
 
 and loop over $i = 1, \dots, N$ when no subset was specified or
-over the subset of the subset given by \verb|offset| and \verb|Nsubset|,
-allowing for number of observations larger than \verb|INT_MAX|
+over the subset of the subset given by \code{offset} and \code{Nsubset},
+allowing for number of observations larger than \code{INT_MAX}
 
 @d start subset loop
 @{
@@ -4852,7 +4854,7 @@ void C_KronSums_Permutation_isubset
 @|C_KronSums_Permutation_isubset
 @}
 
-Because \verb|subset| might not be ordered (in the presence of blocks) we
+Because \code{subset} might not be ordered (in the presence of blocks) we
 have to go through all elements explicitly here.
 
 @d KronSums Permutation Body
@@ -5943,7 +5945,7 @@ SEXP RC_setup_subset
 
 Because this will only be used when really needed (in Permutations) we can
 be a little bit more generous with memory here. The return value is always
-\verb|REALSXP|.
+\code{REALSXP}.
 
 @d RC_setup_subset
 @{
@@ -7124,7 +7126,7 @@ export(LinStatExpCov, doTest, ctabs, lmult)
 S3method(vcov, LinStatExpCov)
 @}
 
-Add flag \verb|-g| to \verb|PKG_CFLAGS| for \verb|operf| profiling (this is
+Add flag \code{-g} to \code{PKG_CFLAGS} for \code{operf} profiling (this is
 not portable).
 @o Makevars -cc
 @{
