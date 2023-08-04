@@ -30,14 +30,13 @@ pagebackref,%
 hyperfigures,%
 breaklinks,%
 colorlinks,%
-pdfpagemode=None,%
+pdfpagemode=UseNone,%
 pdfstartview=FitBH,%
 linkcolor={linkcolor},%
 anchorcolor={linkcolor},%
 citecolor={linkcolor},%
 filecolor={linkcolor},%
 menucolor={linkcolor},%
-pagecolor={linkcolor},%
 urlcolor={linkcolor}%
 ]{hyperref}
 
