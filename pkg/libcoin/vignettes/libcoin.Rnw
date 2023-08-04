@@ -60,6 +60,8 @@ urlcolor={linkcolor}%
 
 \usepackage[top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
 
+\usepackage{lmodern}
+
 \newcommand{\pkg}[1]{\textbf{#1}}
 \newcommand{\proglang}[1]{\textsf{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
