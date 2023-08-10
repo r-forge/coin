@@ -286,10 +286,9 @@
   }
   \subsection{Deprecated and defunct}{
     \itemize{
-      \item \code{surv_test()} is now defunct and has been removed.
+      \item Function \code{surv_test()} is now defunct.
 
-      \item \code{method = "discrete"} in \code{pvalue()} is now defunct and has
-            been removed.
+      \item Option \code{method = "discrete"} in \code{pvalue()} is now defunct.
 
       \item The \code{dperm()}, \code{pperm()} and \code{qperm()} methods for
             objects of class \code{"AsymptNullDistribution"} are no longer
