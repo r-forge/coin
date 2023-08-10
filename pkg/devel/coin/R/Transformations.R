@@ -419,7 +419,7 @@ of_trafo <- function(x, scores = NULL) {
     if (!is.list(scores))
         scores <- list(scores)
     if (all(lengths(scores) == nl))
-        setRownames(do.call("cbind", scores)[x, , drop = FALSE], seq_along(x))
+        setRownames(do.call(cbind, scores)[x, , drop = FALSE], seq_along(x))
     else
         stop(sQuote("scores"), " does not match the number of levels")
 }

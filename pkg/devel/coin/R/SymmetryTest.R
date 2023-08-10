@@ -10,7 +10,7 @@ symmetry_test.formula <- function(formula, data = list(), subset = NULL,
 
 symmetry_test.table <- function(object, ...) {
 
-    do.call("symmetry_test",
+    do.call(symmetry_test,
             c(list(object = table2SymmetryProblem(object)), list(...)))
 }
 

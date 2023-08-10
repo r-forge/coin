@@ -10,7 +10,7 @@ chisq_test.formula <- function(formula, data = list(), subset = NULL,
 
 chisq_test.table <- function(object, ...) {
 
-    do.call("chisq_test",
+    do.call(chisq_test,
             c(list(object = table2IndependenceProblem(object)), list(...)))
 }
 
@@ -97,7 +97,7 @@ cmh_test.formula <- function(formula, data = list(), subset = NULL,
 
 cmh_test.table <- function(object, ...) {
 
-    do.call("cmh_test",
+    do.call(cmh_test,
             c(list(object = table2IndependenceProblem(object)), list(...)))
 }
 
@@ -124,7 +124,7 @@ cmh_test.IndependenceProblem <- function(object, ...) {
             "scalar"
         else "quadratic"
 
-    object <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call(independence_test, c(list(object = object), args))
 
     if (is_doubly_ordered(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
@@ -147,7 +147,7 @@ lbl_test.formula <- function(formula, data = list(), subset = NULL,
 
 lbl_test.table <- function(object, ...) {
 
-    do.call("lbl_test",
+    do.call(lbl_test,
             c(list(object = table2IndependenceProblem(object)), list(...)))
 }
 
@@ -169,7 +169,7 @@ lbl_test.IndependenceProblem <- function(object, ...) {
         }
     )
 
-    object <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call(independence_test, c(list(object = object), args))
 
     object@method <- "Linear-by-Linear Association Test"
 

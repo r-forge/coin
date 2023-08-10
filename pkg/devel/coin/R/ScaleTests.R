@@ -32,7 +32,7 @@ taha_test.IndependenceProblem <- function(object,
     ## set test statistic to scalar for two-sample test
     args$teststat <- if (twosamp) "scalar" else "quadratic"
 
-    object <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call(independence_test, c(list(object = object), args))
 
     if (twosamp) {
         object@method <- "Two-Sample Taha Test"
@@ -85,7 +85,7 @@ klotz_test.IndependenceProblem <- function(object,
     ## set test statistic to scalar for two-sample test
     args$teststat <- if (twosamp) "scalar" else "quadratic"
 
-    object <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call(independence_test, c(list(object = object), args))
 
     if (twosamp) {
         object@method <- "Two-Sample Klotz Test"
@@ -138,7 +138,7 @@ mood_test.IndependenceProblem <- function(object,
     ## set test statistic to scalar for two-sample test
     args$teststat <- if (twosamp) "scalar" else "quadratic"
 
-    object <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call(independence_test, c(list(object = object), args))
 
     if (twosamp) {
         object@method <- "Two-Sample Mood Test"
@@ -201,7 +201,7 @@ ansari_test.IndependenceProblem <- function(object,
             args$alternative <- "less"
     }
 
-    object <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call(independence_test, c(list(object = object), args))
 
     if (twosamp) {
         object@method <- "Two-Sample Ansari-Bradley Test"
@@ -259,7 +259,7 @@ fligner_test.IndependenceProblem <- function(object,
     object@y[[1]] <- object@y[[1]] -
         tapply(object@y[[1]], object@x[[1]], median)[object@x[[1]]]
 
-    object <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call(independence_test, c(list(object = object), args))
 
     if (twosamp) {
         object@method <- "Two-Sample Fligner-Killeen Test"
@@ -315,7 +315,7 @@ conover_test.IndependenceProblem <- function(object,
     object@y[[1]] <- object@y[[1]] -
         tapply(object@y[[1]], object@x[[1]], mean)[object@x[[1]]]
 
-    object <- do.call("independence_test", c(list(object = object), args))
+    object <- do.call(independence_test, c(list(object = object), args))
 
     if (twosamp) {
         object@method <- "Two-Sample Conover-Iman Test"

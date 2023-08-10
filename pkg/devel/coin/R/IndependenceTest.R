@@ -10,7 +10,7 @@ independence_test.formula <- function(formula, data = list(), subset = NULL,
 
 independence_test.table <- function(object, ...) {
 
-    do.call("independence_test",
+    do.call(independence_test,
             c(list(object = table2IndependenceProblem(object)), list(...)))
 }
 
