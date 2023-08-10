@@ -87,7 +87,7 @@ extern SEXP libcoin_R_QuadraticTest(
     if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_QuadraticTest");
-    return fun(LEV, pvalue, lower, give_log, PermutedStatistics);
+    return fun(LECV, pvalue, lower, give_log, PermutedStatistics);
 }
 
 extern SEXP libcoin_R_MaximumTest(
@@ -98,7 +98,7 @@ extern SEXP libcoin_R_MaximumTest(
     if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_MaximumTest");
-    return fun(LEV, alternative, pvalue, lower, give_log, PermutedStatistics, maxpts, releps,
+    return fun(LECV, alternative, pvalue, lower, give_log, PermutedStatistics, maxpts, releps,
                abseps);
 }
 
@@ -109,7 +109,7 @@ extern SEXP libcoin_R_MaximallySelectedTest(
     if (fun == NULL)
         fun = (SEXP(*)(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP))
             R_GetCCallable("libcoin", "R_MaximallySelectedTest");
-    return fun(LEV, ordered, teststat, minbucket, lower, give_log);
+    return fun(LECV, ordered, teststat, minbucket, lower, give_log);
 }
 
 extern SEXP libcoin_R_quadform(
