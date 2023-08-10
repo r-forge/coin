@@ -28,7 +28,7 @@ MonteCarlo <-
                      " is not available for MS Windows")
             if (as.integer(ncpus) < 2L)
                 warning("parallel operation requires at least two processes")
-            do.call("cbind", mclapply(split_index(nresample, ncpus),
+            do.call(cbind, mclapply(split_index(nresample, ncpus),
                                       FUN = montecarlo, mc.cores = ncpus))
         } else {
             if (is.null(cl)) {
@@ -46,7 +46,7 @@ MonteCarlo <-
             ncpus <- as.integer(length(cl))
             if (ncpus < 2L)
                 warning("parallel operation requires at least two processes")
-            do.call("cbind", clusterApply(cl, x = split_index(nresample, ncpus),
+            do.call(cbind, clusterApply(cl, x = split_index(nresample, ncpus),
                                           fun = montecarlo))
         }
     }

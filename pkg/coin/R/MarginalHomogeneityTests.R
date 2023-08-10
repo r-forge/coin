@@ -9,7 +9,7 @@ mh_test.formula <- function(formula, data = list(), subset = NULL, ...) {
 
 mh_test.table <- function(object, ...) {
 
-    do.call("mh_test",
+    do.call(mh_test,
             c(list(object = table2SymmetryProblem(object)), list(...)))
 }
 
@@ -36,7 +36,7 @@ mh_test.SymmetryProblem <- function(object, ...) {
             "scalar"
         else "quadratic"
 
-    object <- do.call("symmetry_test", c(list(object = object), args))
+    object <- do.call(symmetry_test, c(list(object = object), args))
 
     if (is_ordered(object@statistic))
         object@method <- "Marginal Homogeneity Test for Ordered Data"

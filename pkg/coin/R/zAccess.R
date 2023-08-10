@@ -554,7 +554,7 @@ setMethod(".variance",
     definition = function(object, partial, ...) {
         RET <- object@covariance
         r <- ncol(RET)
-        RET <- do.call("cbind", lapply(seq_len(r), function(i)
+        RET <- do.call(cbind, lapply(seq_len(r), function(i)
             .Call(R_unpack_sym, RET[, i], NULL, 1L)))
         if (r > 1 && !partial)
             RET <- as.matrix(rowSums(RET))
