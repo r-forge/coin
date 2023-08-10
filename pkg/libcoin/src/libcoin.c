@@ -6491,15 +6491,15 @@ void C_ordered_Xfactor
     mlinstat = R_Calloc(Q, double);
     mexpect = R_Calloc(Q, double);
     if (teststat == TESTSTAT_maximum) {
-       mvar = R_Calloc(Q, double);
-       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-       mcovar = R_Calloc(1, double);
-       mMPinv = R_Calloc(1, double);
+        mvar = R_Calloc(Q, double);
+        /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+        mcovar = R_Calloc(1, double);
+        mMPinv = R_Calloc(1, double);
     } else {
-       mcovar = R_Calloc(Q * (Q + 1) / 2, double);
-       mMPinv = R_Calloc(Q * (Q + 1) / 2, double);
-       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-       mvar = R_Calloc(1, double);
+        mcovar = R_Calloc(Q * (Q + 1) / 2, double);
+        mMPinv = R_Calloc(Q * (Q + 1) / 2, double);
+        /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+        mvar = R_Calloc(1, double);
     }
     if (nresample > 0) {
         mblinstat = R_Calloc(Q * nresample, double);
@@ -6561,13 +6561,13 @@ void C_ordered_Xfactor
                 if (teststat == TESTSTAT_maximum) {
                     for (int pp = 0; pp < p; pp++)
                         mvar[q] += 2 * covar[S(pp + q * P, p + P * q, mPQB(P, Q, 1))];
-                     mvar[q] += covar[S(p + q * P, p + P * q, mPQB(P, Q, 1))];
+                    mvar[q] += covar[S(p + q * P, p + P * q, mPQB(P, Q, 1))];
                 } else {
-                     for (int qq = 0; qq <= q; qq++) {
-                         for (int pp = 0; pp < p; pp++)
-                             mcovar[S(q, qq, Q)] += 2 * covar[S(pp + q * P, p + P * qq, mPQB(P, Q, 1))];
-                         mcovar[S(q, qq, Q)] += covar[S(p + q * P, p + P * qq, mPQB(P, Q, 1))];
-                     }
+                    for (int qq = 0; qq <= q; qq++) {
+                        for (int pp = 0; pp < p; pp++)
+                            mcovar[S(q, qq, Q)] += 2 * covar[S(pp + q * P, p + P * qq, mPQB(P, Q, 1))];
+                        mcovar[S(q, qq, Q)] += covar[S(p + q * P, p + P * qq, mPQB(P, Q, 1))];
+                    }
                 }
                 
             }
@@ -6681,15 +6681,15 @@ void C_unordered_Xfactor
     mlinstat = R_Calloc(Q, double);
     mexpect = R_Calloc(Q, double);
     if (teststat == TESTSTAT_maximum) {
-       mvar = R_Calloc(Q, double);
-       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-       mcovar = R_Calloc(1, double);
-       mMPinv = R_Calloc(1, double);
+        mvar = R_Calloc(Q, double);
+        /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+        mcovar = R_Calloc(1, double);
+        mMPinv = R_Calloc(1, double);
     } else {
-       mcovar = R_Calloc(Q * (Q + 1) / 2, double);
-       mMPinv = R_Calloc(Q * (Q + 1) / 2, double);
-       /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-       mvar = R_Calloc(1, double);
+        mcovar = R_Calloc(Q * (Q + 1) / 2, double);
+        mMPinv = R_Calloc(Q * (Q + 1) / 2, double);
+        /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+        mvar = R_Calloc(1, double);
     }
     if (nresample > 0) {
         mblinstat = R_Calloc(Q * nresample, double);

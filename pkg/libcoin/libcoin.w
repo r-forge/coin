@@ -79,7 +79,8 @@ urlcolor={linkcolor}%
 \newcommand{\xn}{\mathbf{x}_{\text{new}}}
 \newcommand{\y}{\mathbf{y}}
 \newcommand{\w}{\mathbf{w}}
-\newcommand{\ws}{\mathbf{w}_\cdot}
+\newcommand{\sbullet}{\mathbin{\vcenter{\hbox{\scalebox{0.5}{$\bullet$}}}}}
+\newcommand{\wdot}{\mathbf{w}_{\sbullet}}
 \renewcommand{\t}{\mathbf{t}}
 \newcommand{\M}{\mathbf{M}}
 \renewcommand{\vec}{\text{vec}}
@@ -98,6 +99,8 @@ urlcolor={linkcolor}%
 \newcommand{\eone}{\widehat{\text{Err}}^{(1)}}
 \newcommand{\eplus}{\widehat{\text{Err}}^{(.632+)}}
 \newcommand{\eoob}{\widehat{\text{Err}}^{(oob)}}
+\newcommand{\mub}{\boldsymbol{\mu}}
+\newcommand{\Sigmab}{\boldsymbol{\Sigma}}
 
 
 \author{Torsten Hothorn \\ Universit\"at Z\"urich}
@@ -179,70 +182,70 @@ dependency by fixing $\X_i, i \in \A$ and conditioning on all possible
 permutations $S(\A)$ of the responses $\Y_i, i \in \A$.
 This principle leads to test procedures known
 as \textit{permutation tests}.
-The conditional expectation $\mu(\A) \in \R^{PQ}$ and covariance
-$\Sigma(\A) \in \R^{PQ \times PQ}$
+The conditional expectation $\mub(\A) \in \R^{PQ}$ and covariance
+$\Sigmab(\A) \in \R^{PQ \times PQ}$
 of $\T$ under $H_0$ given
 all permutations $\sigma \in S(\A)$ of the responses are derived by
 \cite{strasserweber1999}:
 \begin{eqnarray}
-\mu(\A) & = & \E(\T(\A) \mid S(\A)) = \vec \left( \left( \sum_{i \in \A} w_i \x_i \right) \E(h \mid S(\A))^\top
+\mub(\A) & = & \E(\T(\A) \mid S(\A)) = \vec \left( \left( \sum_{i \in \A} w_i \x_i \right) \E(h \mid S(\A))^\top
 \right), \nonumber \\
-\Sigma(\A) & = & \V(\T(\A) \mid S(\A)) \nonumber \\
+\Sigmab(\A) & = & \V(\T(\A) \mid S(\A)) \nonumber \\
 & = &
-    \frac{\ws}{\ws(\A) - 1}  \V(h \mid S(\A)) \otimes
+    \frac{\wdot}{\wdot(\A) - 1}  \V(h \mid S(\A)) \otimes
         \left(\sum_{i \in \A} w_i  \x_i \otimes w_i \x_i^\top \right)
 \label{expectcovar}
 \\
-& - & \frac{1}{\ws(\A) - 1}  \V(h \mid S(\A))  \otimes \left(
+& - & \frac{1}{\wdot(\A) - 1}  \V(h \mid S(\A))  \otimes \left(
         \sum_{i \in \A} w_i \x_i \right)
 \otimes \left( \sum_{i \in \A} w_i \x_i\right)^\top
 \nonumber
 \end{eqnarray}
-where $\ws(\A) = \sum_{i \in \A} w_i$ denotes the sum of the case weights,
+where $\wdot(\A) = \sum_{i \in \A} w_i$ denotes the sum of the case weights,
 and $\otimes$ is the Kronecker product. The conditional expectation of the
 influence function is
 \begin{eqnarray*}
-\E(h \mid S(\A)) = \ws(\A)^{-1} \sum_{i \in \A} w_i \y_i \in
+\E(h \mid S(\A)) = \wdot(\A)^{-1} \sum_{i \in \A} w_i \y_i \in
 \R^Q
 \end{eqnarray*}
 with corresponding $Q \times Q$ covariance matrix
 \begin{eqnarray*}
-\V(h \mid S(\A)) = \ws(\A)^{-1} \sum_{i \in \A} w_i \left(\y_i - \E(h \mid S(\A)) \right) \left(\y_i  - \E(h \mid S(\A))\right)^\top.
+\V(h \mid S(\A)) = \wdot(\A)^{-1} \sum_{i \in \A} w_i \left(\y_i - \E(h \mid S(\A)) \right) \left(\y_i  - \E(h \mid S(\A))\right)^\top.
 \end{eqnarray*}
 
 With $A_b = \{i \mid \text{block}_i = b\}$ we get $\T = \sum_{b = 1}^B T(\A_b)$,
-$\mu = \sum_{b = 1}^B \mu(\A_b)$ and $\Sigma = \sum_{b = 1}^B \Sigma(\A_b)$.
+$\mub = \sum_{b = 1}^B \mub(\A_b)$ and $\Sigmab = \sum_{b = 1}^B \Sigmab(\A_b)$.
 
 Having the conditional expectation and covariance at hand we are able to
 standardize a linear statistic $\T \in \R^{PQ}$ of the form
 (\ref{linstatsimple}). Univariate test statistics~$c$ mapping an observed linear
-statistic $\mathbf{t} \in
+statistic $\t \in
 \R^{PQ}$ into the real line can be of arbitrary form.  An obvious choice is
 the maximum of the absolute values of the standardized linear statistic
 \begin{eqnarray*}
-c_\text{max}(\mathbf{t}, \mu, \Sigma)  = \max \left| \frac{\mathbf{t} -
-\mu}{\text{diag}(\Sigma)^{1/2}} \right|
+c_\text{max}(\t, \mub, \Sigmab)  = \max \left| \frac{\t -
+\mub}{\text{diag}(\Sigmab)^{1/2}} \right|
 \end{eqnarray*}
-utilizing the conditional expectation $\mu$ and covariance matrix
-$\Sigma$. The application of a quadratic form $c_\text{quad}(\mathbf{t}, \mu,
-\Sigma)  =
-(\mathbf{t} - \mu) \Sigma^+ (\mathbf{t} - \mu)^\top$ is one alternative, although
+utilizing the conditional expectation $\mub$ and covariance matrix
+$\Sigmab$. The application of a quadratic form $c_\text{quad}(\t, \mub,
+\Sigmab)  =
+(\t - \mub) \Sigmab^+ (\t - \mub)^\top$ is one alternative, although
 computationally more expensive because the Moore-Penrose
-inverse $\Sigma^+$ of $\Sigma$ is involved.
+inverse $\Sigmab^+$ of $\Sigmab$ is involved.
 
 The definition of one- and two-sided $p$-values used for the computations in
 the \pkg{libcoin} package is
 \begin{eqnarray*}
-P(c(\T, \mu, \Sigma) &\le& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(less)} \\
-P(c(\T, \mu, \Sigma) &\ge& c(\mathbf{t}, \mu, \Sigma)) \quad \text{(greater)}\\
-P(|c(\T, \mu, \Sigma)| &\le& |c(\mathbf{t}, \mu, \Sigma)|) \quad \text{(two-sided).}
+P(c(\T, \mub, \Sigmab) &\le& c(\t, \mub, \Sigmab)) \quad \text{(less)} \\
+P(c(\T, \mub, \Sigmab) &\ge& c(\t, \mub, \Sigmab)) \quad \text{(greater)}\\
+P(|c(\T, \mub, \Sigmab)| &\le& |c(\t, \mub, \Sigmab)|) \quad \text{(two-sided).}
 \end{eqnarray*}
 Note that for quadratic forms only two-sided $p$-values are available
 and that in the one-sided case maximum type test statistics are replaced by
 \begin{eqnarray*}
-\min \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
+\min \left( \frac{\t - \mub}{\text{diag}(\Sigmab)^{1/2}} \right)
     \quad \text{(less) and }
-\max \left( \frac{\mathbf{t} - \mu}{\text{diag}(\Sigma)^{1/2}} \right)
+\max \left( \frac{\t - \mub}{\text{diag}(\Sigmab)^{1/2}} \right)
     \quad \text{(greater).}
 \end{eqnarray*}
 
@@ -375,7 +378,7 @@ if (any(ms)) {
 @}
 
 The logical argument \code{varonly} triggers the computation of the diagonal
-elements of the covariance matrix $\Sigma$ only. \code{nresample} permuted linear statistics
+elements of the covariance matrix $\Sigmab$ only. \code{nresample} permuted linear statistics
 under the null hypothesis $H_0$ are returned on the original and
 standardised scale (the latter only when \code{standardise} is \code{TRUE}).
 Variances smaller than \code{tol} are treated as being zero.
@@ -1021,7 +1024,7 @@ level.
 #endif
 @}
 
-We need three macros: \code{S} computes the element $\Sigma_{ij}$ of a
+We need three macros: \code{S} computes the element $\sigma_{ij}$ of a
 symmetric $n \times n$ matrix when only the lower triangular elements are
 stored. \code{LE} implements $\le$ with some tolerance, \code{GE} implements
 $\ge$.
@@ -1074,7 +1077,6 @@ Xfactor_SLOT tol_SLOT PermutedLinearStatistic_SLOT StandardisedPermutedLinearSta
 TableBlock_SLOT Sumweights_SLOT Table_SLOT DoSymmetric DoCenter DoVarOnly Power1
 Power2 Offset0
 @}
-
 
 The corresponding header file contains definitions of
 functions that can be called via \code{.Call()} from the \pkg{libcoin}
@@ -1730,7 +1732,7 @@ PROTECT(subset_block = RC_order_subset_wrt_block(N, subset, block,
                                                  VECTOR_ELT(ans, TableBlock_SLOT)));
 @}
 
-We compute $\mu(\A)$ based on $\E(h \mid S(\A))$ and $\sum_{i \in \A} w_i \x_i$
+We compute $\mub(\A)$ based on $\E(h \mid S(\A))$ and $\sum_{i \in \A} w_i \x_i$
 for the subset given by subset and the $b$th level of block. The expectation
 is initialised zero when $b = 0$ and values add-up over blocks.
 
@@ -1775,7 +1777,7 @@ for (int q = 0; q < Q; q++) tmpV[q] = tmpCV[S(q, q, Q)];
 @}
 
 We can now compute the variance or covariance of the linear statistic
-$\Sigma(\A)$:
+$\Sigmab(\A)$:
 
 @d Compute Variance Linear Statistic
 @{
@@ -2235,7 +2237,6 @@ csum = REAL(Rcsum);
 PROTECT(Rrsum = allocVector(REALSXP, Lxp1));
 rsum = REAL(Rrsum);
 @}
-
 
 <<permutations-2d>>=
 LinStatExpCov(X = iX2d, ix = ix, Y = iY2d, iy = iy,
@@ -2810,7 +2811,6 @@ double C_maxabsstand_Variance
 @|C_maxabsstand_Variance
 @}
 
-
 <<quadform>>=
 MPinverse <-
 function(x, tol = sqrt(.Machine$double.eps))
@@ -3297,15 +3297,15 @@ tol = C_get_tol(LECV);
 mlinstat = R_Calloc(Q, double);
 mexpect = R_Calloc(Q, double);
 if (teststat == TESTSTAT_maximum) {
-   mvar = R_Calloc(Q, double);
-   /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-   mcovar = R_Calloc(1, double);
-   mMPinv = R_Calloc(1, double);
+    mvar = R_Calloc(Q, double);
+    /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+    mcovar = R_Calloc(1, double);
+    mMPinv = R_Calloc(1, double);
 } else {
-   mcovar = R_Calloc(Q * (Q + 1) / 2, double);
-   mMPinv = R_Calloc(Q * (Q + 1) / 2, double);
-   /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
-   mvar = R_Calloc(1, double);
+    mcovar = R_Calloc(Q * (Q + 1) / 2, double);
+    mMPinv = R_Calloc(Q * (Q + 1) / 2, double);
+    /* not needed, but allocate anyway to make -Wmaybe-uninitialized happy */
+    mvar = R_Calloc(1, double);
 }
 if (nresample > 0) {
     mblinstat = R_Calloc(Q * nresample, double);
@@ -3343,13 +3343,13 @@ sumweights = sumright;
 if (teststat == TESTSTAT_maximum) {
     for (int pp = 0; pp < p; pp++)
         mvar[q] += 2 * covar[S(pp + q * P, p + P * q, mPQB(P, Q, 1))];
-     mvar[q] += covar[S(p + q * P, p + P * q, mPQB(P, Q, 1))];
+    mvar[q] += covar[S(p + q * P, p + P * q, mPQB(P, Q, 1))];
 } else {
-     for (int qq = 0; qq <= q; qq++) {
-         for (int pp = 0; pp < p; pp++)
-             mcovar[S(q, qq, Q)] += 2 * covar[S(pp + q * P, p + P * qq, mPQB(P, Q, 1))];
-         mcovar[S(q, qq, Q)] += covar[S(p + q * P, p + P * qq, mPQB(P, Q, 1))];
-     }
+    for (int qq = 0; qq <= q; qq++) {
+        for (int pp = 0; pp < p; pp++)
+            mcovar[S(q, qq, Q)] += 2 * covar[S(pp + q * P, p + P * qq, mPQB(P, Q, 1))];
+        mcovar[S(q, qq, Q)] += covar[S(p + q * P, p + P * qq, mPQB(P, Q, 1))];
+    }
 }
 @}
 
@@ -4152,7 +4152,6 @@ stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 @@
 
-
 @d R_Sums Prototype
 @{
 SEXP R_Sums
@@ -4223,7 +4222,6 @@ double RC_Sums
 }
 @|RC_Sums
 @}
-
 
 @d C_Sums_dweights_dsubset
 @{
@@ -4938,7 +4936,6 @@ a4 <- .Call(libcoin:::R_colSums, x, as.double(weights), subset)
 stopifnot(isequal(a0, a1) && isequal(a0, a2) &&
           isequal(a0, a3) && isequal(a0, a4))
 @@
-
 
 @d R_colSums Prototype
 @{
@@ -5800,7 +5797,6 @@ SEXP R_order_subset_wrt_block
 }
 @|R_order_subset_wrt_block
 @}
-
 
 @d RC_order_subset_wrt_block Prototype
 @{
