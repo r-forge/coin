@@ -539,7 +539,7 @@ trafo <- function(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
         if (is.null(colnames(tr[[i]]))) {
             cn <- c(cn, rep.int("", ncol(tr[[i]])))
         } else {
-            cn <- c(cn, paste0(ifelse(length(tr) > 1, ".", ""), colnames(tr[[i]])))
+            cn <- c(cn, paste0(if (length(tr) > 1) "." else "", colnames(tr[[i]])))
         }
         assignvar <- c(assignvar, rep.int(i, ncol(tr[[i]])))
     }
