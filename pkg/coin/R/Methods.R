@@ -38,9 +38,12 @@ setMethod("AsymptNullDistribution",
 setMethod("AsymptNullDistribution",
     signature = "MaxTypeIndependenceTestStatistic",
     definition = function(object, ...) {
-        if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
+        seed <- get0(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+        if (is.null(seed)) {
             runif(1L)
-        seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+            seed <- .GlobalEnv[[".Random.seed"]]
+        }
+
         corr <- cov2cor(covariance(object, partial = FALSE))
         pq <- nrow(corr)
 
@@ -141,9 +144,11 @@ setMethod("ApproxNullDistribution",
             nresample <- B
         }
         ## </DEPRECATED>
-        if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
+        seed <- get0(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+        if (is.null(seed)) {
             runif(1L)
-        seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+            seed <- .GlobalEnv[[".Random.seed"]]
+        }
 
         pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
                           object@weights, nresample, ...)
@@ -258,9 +263,11 @@ setMethod("ApproxNullDistribution",
             nresample <- B
         }
         ## </DEPRECATED>
-        if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
+        seed <- get0(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+        if (is.null(seed)) {
             runif(1L)
-        seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+            seed <- .GlobalEnv[[".Random.seed"]]
+        }
 
         pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
                           object@weights, nresample, ...)
@@ -385,9 +392,11 @@ setMethod("ApproxNullDistribution",
             nresample <- B
         }
         ## </DEPRECATED>
-        if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
+        seed <- get0(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+        if (is.null(seed)) {
             runif(1L)
-        seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
+            seed <- .GlobalEnv[[".Random.seed"]]
+        }
 
         pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
                           object@weights, nresample, ...)
