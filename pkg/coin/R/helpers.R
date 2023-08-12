@@ -73,12 +73,11 @@ MPinv <- function (X, tol = sqrt_eps)
 }
 
 copyslots <- function(source, target) {
-    slots <- names(getSlots(class(source)))
-    slots <- slots[(slots %in% names(getSlots(class(target))))]
+    slots <- slotNames(source)
+    slots <- slots[slots %in% slotNames(target)]
     if (length(slots) == 0)
         stop("no common slots to copy to")
-    for (s in slots)
-        eval(str2lang(paste0("target@", s, " <- source@", s)))
+    eval(str2expression(paste0("target@", slots, " <- source@", slots)))
     target
 }
 
