@@ -11,7 +11,7 @@ maxstat_test.formula <- function(formula, data = list(), subset = NULL,
 maxstat_test.table <- function(object, ...) {
 
     do.call(maxstat_test,
-            c(list(object = table2IndependenceProblem(object)), list(...)))
+            c(object = table2IndependenceProblem(object), list(...)))
 }
 
 maxstat_test.IndependenceProblem <- function(object,
@@ -39,7 +39,7 @@ maxstat_test.IndependenceProblem <- function(object,
         args$scores <- NULL
     }
 
-    object <- do.call(independence_test, c(list(object = object), args))
+    object <- do.call(independence_test, c(object = object, args))
 
     object@method <- "Generalized Maximally Selected Statistics"
 
