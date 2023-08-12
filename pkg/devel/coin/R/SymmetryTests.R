@@ -15,7 +15,7 @@ sign_test.formula <- function(formula, data = list(), subset = NULL, ...)
     }
     object <- new("SymmetryProblem", x = object$x, y = object$y,
                   block = object$block)
-    do.call(sign_test, c(list(object = object), list(...)))
+    do.call(sign_test, c(object = object, list(...)))
 }
 
 sign_test.SymmetryProblem <- function(object, ...) {
@@ -49,7 +49,7 @@ sign_test.SymmetryProblem <- function(object, ...) {
 
     args <- setup_args(teststat = "scalar", paired = TRUE)
 
-    object <- do.call(symmetry_test, c(list(object = object), args))
+    object <- do.call(symmetry_test, c(object = object, args))
 
     object@method <- "Sign Test"
     object@nullvalue <- 0
@@ -75,7 +75,7 @@ wilcoxsign_test.formula <- function(formula, data = list(), subset = NULL, ...)
     }
     object <- new("SymmetryProblem", x = object$x, y = object$y,
                   block = object$block)
-    do.call(wilcoxsign_test, c(list(object = object), list(...)))
+    do.call(wilcoxsign_test, c(object = object, list(...)))
 }
 
 wilcoxsign_test.SymmetryProblem <- function(object,
@@ -122,7 +122,7 @@ wilcoxsign_test.SymmetryProblem <- function(object,
 
     args <- setup_args(teststat = "scalar", paired = TRUE)
 
-    object <- do.call(symmetry_test, c(list(object = object), args))
+    object <- do.call(symmetry_test, c(object = object, args))
 
     if (zero.method == "Pratt")
         object@method <- "Wilcoxon-Pratt Signed-Rank Test"
@@ -168,7 +168,7 @@ friedman_test.SymmetryProblem <- function(object, ...) {
     args$teststat <- if (is_ordered_x(object)) "scalar"
                      else "quadratic"
 
-    object <- do.call(symmetry_test, c(list(object = object), args))
+    object <- do.call(symmetry_test, c(object = object, args))
 
     if (is_ordered_x(object@statistic))
         object@method <- "Page Test"
@@ -216,7 +216,7 @@ quade_test.SymmetryProblem <- function(object, ...) {
     object@y[[1]] <- unsplit(lapply(seq_along(Q), function(i) Q[i] * R[[i]]),
                              object@block)
 
-    object <- do.call(symmetry_test, c(list(object = object), args))
+    object <- do.call(symmetry_test, c(object = object, args))
 
     if (is_ordered_x(object@statistic))
         object@method <- "Linear-by-Linear Association Test"
