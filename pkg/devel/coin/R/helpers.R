@@ -88,7 +88,7 @@ ft <- function(name, class, formula, data = list(), subset = NULL,
         !is_unity(object@weights))
         warning("rank transformation doesn't take weights into account")
 
-    do.call(name, c(list(object = object), args))
+    do.call(name, c(object = object, args))
 }
 
 ranktests <-
