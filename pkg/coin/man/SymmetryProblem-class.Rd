@@ -27,7 +27,8 @@
       Object of class \code{"factor"}.  The block structure.
     }
     \item{\code{weights}:}{
-      Object of class \code{"numeric"}.  The case weights.
+      Object of class \code{"numeric"}.  The case weights.  (Not yet
+      implemented!)
     }
   }
 }

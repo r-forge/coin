@@ -443,7 +443,7 @@ try(friedman_test(y ~ x + x2 | b, data = dta))
 try(friedman_test(y ~ x2 | b, data = dta)) # was ok
 
 ### friedman_test didn't warn on weights
-friedman_test(y ~ x | b, data = dta,  weights = ~ w)
+try(friedman_test(y ~ x | b, data = dta,  weights = ~ w))
 
 ### chisq_test ignored xtrafo and ytrafo
 chisq_test(as.table(jobsatisfaction[, , "Female"]),
