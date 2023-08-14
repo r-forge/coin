@@ -15,7 +15,10 @@
   }
   \subsection{Other changes}{
     \itemize{
-      \item
+      \item The Fligner-Killeen test, the Conover-Iman test and the Quade test
+            performed transformations of the response variable prior to applying
+            the influence function; these transformations are now done inside the
+            influence function.
     }
   }
   \subsection{Deprecated and defunct}{

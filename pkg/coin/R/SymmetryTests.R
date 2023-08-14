@@ -1,4 +1,4 @@
-### sign test
+### Sign test
 sign_test <- function(object, ...) UseMethod("sign_test")
 
 sign_test.formula <- function(formula, data = list(), subset = NULL, ...)
@@ -134,7 +134,7 @@ wilcoxsign_test.SymmetryProblem <- function(object,
 }
 
 
-### Friedman Test
+### Friedman test
 friedman_test <- function(object, ...) UseMethod("friedman_test")
 
 friedman_test.formula <- function(formula, data = list(), subset = NULL, ...) {
@@ -145,10 +145,10 @@ friedman_test.formula <- function(formula, data = list(), subset = NULL, ...) {
 
 friedman_test.SymmetryProblem <- function(object, ...) {
 
+    block <- object@block
     args <- setup_args(
         ytrafo = function(data)
-            trafo(data, numeric_trafo = rank_trafo,
-                  block = object@block),
+            trafo(data, numeric_trafo = rank_trafo, block = block),
         check = function(object) {
             if (!is_Ksample(object))
                 stop(sQuote("object"),
@@ -179,7 +179,7 @@ friedman_test.SymmetryProblem <- function(object, ...) {
 }
 
 
-### Quade Test
+### Quade test
 quade_test <- function(object, ...) UseMethod("quade_test")
 
 quade_test.formula <- function(formula, data = list(), subset = NULL, ...) {
@@ -190,12 +190,24 @@ quade_test.formula <- function(formula, data = list(), subset = NULL, ...) {
 
 quade_test.SymmetryProblem <- function(object, ...) {
 
+    block <- object@block
     args <- setup_args(
+        ytrafo = function(data) {
+            trafo(data, numeric_trafo = function(y) {
+                y <- split(y, block)
+                R <- lapply(y, function(y) rank_trafo(y) - (length(y) + 1) / 2)
+                Q <- rank(vapply(y, function(y) max(y) - min(y), NA_real_,
+                                 USE.NAMES = FALSE))
+                unsplit(lapply(seq_along(Q), function(i) Q[i] * R[[i]]), block)
+            })
+        },
         check = function(object) {
             if (!is_Ksample(object))
                 stop(sQuote("object"),
                      " does not represent a K-sample problem",
                      " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
             TRUE
         }
     )
@@ -207,14 +219,6 @@ quade_test.SymmetryProblem <- function(object, ...) {
     ## set test statistic to scalar for linear-by-linear tests
     args$teststat <- if (is_ordered_x(object)) "scalar"
                      else "quadratic"
-
-    if (!is_numeric_y(object))
-        stop(sQuote(colnames(object@y)), " is not a numeric variable")
-    y <- split(object@y[[1]], object@block)
-    R <- lapply(y, function(y) rank(y) - (length(y) + 1) / 2)
-    Q <- rank(vapply(y, function(y) max(y) - min(y), NA_real_, USE.NAMES = FALSE))
-    object@y[[1]] <- unsplit(lapply(seq_along(Q), function(i) Q[i] * R[[i]]),
-                             object@block)
 
     object <- do.call(symmetry_test, c(object = object, args))
 
