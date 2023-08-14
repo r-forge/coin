@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2022-05-09 r82330 ucrt) -- "Unsuffered Consequences"
-Copyright (C) 2022 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+R Under development (unstable) (2023-07-23 r84741 ucrt) -- "Unsuffered Consequences"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -1915,7 +1915,7 @@ Quade F = 8.3765, num df = 2, denom df = 12, p-value = 0.005284
 > 
 > ## quade.test() uses an F-statistic
 > b <- nlevels(qt@statistic@block)
-> A <- sum(qt@statistic@y^2)
+> A <- sum(qt@statistic@ytrans^2)
 > B <- sum(statistic(qt, type = "linear")^2) / b
 > (b - 1) * B / (A - B) # F = 8.3765
 [1] 8.376528
@@ -3221,7 +3221,7 @@ Right.Eye                  -3.448397
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  15.63 1.35 16.99 NA NA 
+Time elapsed:  13.4 1.27 14.65 NA NA 
 > grDevices::dev.off()
 null device 
           1 

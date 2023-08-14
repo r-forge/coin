@@ -50,7 +50,7 @@ taha_test.IndependenceProblem <- function(object,
 }
 
 
-### Klotz Test
+### Klotz test
 klotz_test <- function(object, ...) UseMethod("klotz_test")
 
 klotz_test.formula <- function(formula, data = list(), subset = NULL,
@@ -103,7 +103,7 @@ klotz_test.IndependenceProblem <- function(object,
 }
 
 
-### Mood Test
+### Mood test
 mood_test <- function(object, ...) UseMethod("mood_test")
 
 mood_test.formula <- function(formula, data = list(), subset = NULL,
@@ -236,15 +236,20 @@ fligner_test.IndependenceProblem <- function(object,
 
     twosamp <- is_2sample(object)
 
+    x <- object@x[[1]]
     args <- setup_args(
         ytrafo = function(data)
             trafo(data, numeric_trafo = function(y)
-                fligner_trafo(y, ties.method = ties.method)),
+                ## eliminate location differences
+                fligner_trafo(y - ave(y, x, FUN = median),
+                              ties.method = ties.method)),
         check = function(object) {
             if (!is_Ksample(object))
                 stop(sQuote("object"),
                      " does not represent a K-sample problem",
                      " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
             if (is_ordered_x(object))
                 stop(sQuote(colnames(object@x)), " is an ordered factor")
             TRUE
@@ -252,12 +257,6 @@ fligner_test.IndependenceProblem <- function(object,
     )
     ## set test statistic to scalar for two-sample test
     args$teststat <- if (twosamp) "scalar" else "quadratic"
-
-    ## eliminate location differences (see 'stats/R/fligner.test')
-    if (!is_numeric_y(object))
-        stop(sQuote(colnames(object@y)), " is not a numeric variable")
-    object@y[[1]] <- object@y[[1]] -
-        tapply(object@y[[1]], object@x[[1]], median)[object@x[[1]]]
 
     object <- do.call(independence_test, c(object = object, args))
 
@@ -277,7 +276,7 @@ fligner_test.IndependenceProblem <- function(object,
 }
 
 
-### Conover-Iman (1978) test
+### Conover-Iman test (1978)
 conover_test <- function(object, ...) UseMethod("conover_test")
 
 conover_test.formula <- function(formula, data = list(), subset = NULL,
@@ -292,15 +291,19 @@ conover_test.IndependenceProblem <- function(object,
 
     twosamp <- is_2sample(object)
 
+    x <- object@x[[1]]
     args <- setup_args(
         ytrafo = function(data)
             trafo(data, numeric_trafo = function(y)
-                rank_trafo(abs(y))^2),
+                ## eliminate location differences
+                rank_trafo(abs(y - ave(y, x, FUN = mean)))^2),
         check = function(object) {
             if (!is_Ksample(object))
                 stop(sQuote("object"),
                      " does not represent a K-sample problem",
                      " (maybe the grouping variable is not a factor?)")
+            if (!is_numeric_y(object))
+                stop(sQuote(colnames(object@y)), " is not a numeric variable")
             if (is_ordered_x(object))
                 stop(sQuote(colnames(object@x)), " is an ordered factor")
             TRUE
@@ -308,12 +311,6 @@ conover_test.IndependenceProblem <- function(object,
     )
     ## set test statistic to scalar for two-sample test
     args$teststat <- if (twosamp) "scalar" else "quadratic"
-
-    ## eliminate location differences
-    if (!is_numeric_y(object))
-        stop(sQuote(colnames(object@y)), " is not a numeric variable")
-    object@y[[1]] <- object@y[[1]] -
-        tapply(object@y[[1]], object@x[[1]], mean)[object@x[[1]]]
 
     object <- do.call(independence_test, c(object = object, args))
 
