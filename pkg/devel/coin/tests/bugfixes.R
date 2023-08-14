@@ -291,7 +291,7 @@ y <- c(2, 4, NA, 3)
 wilcoxsign_test(x ~ y)
 
 ### no observations left after removing NAs
-x <- c(NA, NA)
+x <- c(NA_real_, NA_real_)
 y <- c(1, 1)
 try(wilcoxsign_test(x ~ y))
 
