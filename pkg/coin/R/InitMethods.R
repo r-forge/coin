@@ -58,9 +58,9 @@ setMethod("initialize",
                              block
                          }
         .Object@weights <- if (is.null(weights))
-                               rep.int(1.0, nrow(x))
+                               rep.int(1L, nrow(x))
                            else
-                               as.double(weights)
+                               weights
 
         if (!validObject(.Object))
             stop("not a valid object of class ", dQuote("IndependenceProblem"))
@@ -249,9 +249,9 @@ setMethod("initialize",
                          else
                              block
         .Object@weights <- if (is.null(weights))
-                               rep.int(1.0, nrow(x))
+                               rep.int(1L, nrow(x))
                            else
-                               as.double(weights)
+                               weights
 
         if (!validObject(.Object))
             stop("not a valid object of class ", sQuote("SymmetryProblem"))
