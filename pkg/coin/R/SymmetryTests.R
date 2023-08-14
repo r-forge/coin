@@ -5,13 +5,16 @@ sign_test.formula <- function(formula, data = list(), subset = NULL, ...)
 {
     object <- formula2data(formula, data, subset, frame = parent.frame(), ...)
     if (is.null(object$block)) {
-        if (is.Surv(object$y[[1]]))
-            stop(sQuote("y"), " is not a numeric variable")
-        if (is.Surv(object$x[[1]]))
-            stop(sQuote("x"), " is not a numeric variable")
-        object <- list(y = data.frame(y = c(object$y[[1]], object$x[[1]])),
-                       x = data.frame(x = gl(2, length(object$x[[1]]))),
-                       block = factor(rep.int(1:length(object$x[[1]]), 2)))
+        y <- object$y[[1]]
+        if (!is.numeric(y) || is.Surv(y))
+            stop(sQuote(colnames(object$y)), " is not a numeric variable")
+        x <- object$x[[1]]
+        if (!is.numeric(x) || is.Surv(x))
+            stop(sQuote(colnames(object$x)), " is not a numeric variable")
+        n <- length(x)
+        object <- list(x = data.frame(x = gl(2, n)),
+                       y = data.frame(y = c(y, x)),
+                       block = gl(n, 1, 2 * n))
     }
     object <- new("SymmetryProblem", x = object$x, y = object$y,
                   block = object$block)
@@ -20,19 +23,20 @@ sign_test.formula <- function(formula, data = list(), subset = NULL, ...)
 
 sign_test.SymmetryProblem <- function(object, ...) {
 
-    y <- object@y[[1]]
-    x <- object@x[[1]]
-
     if (!is_numeric_y(object))
-        stop(sQuote("y"), " is not a numeric variable")
-    if (is_2sample(object))
-        diffs <- tapply(1:length(y), object@block, function(b)
-            y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]])
-    else
+        stop(sQuote(colnames(object@y)), " is not a numeric variable")
+    if (!is_2sample(object))
         stop(sQuote("object"),
              " does not represent a paired two-sample problem",
              " (maybe the grouping variable is not a factor?)")
 
+    y <- object@y[[1]]
+    x <- object@x[[1]]
+    lx <- levels(x); lx1 <- lx[1]; lx2 <- lx[2]
+    diffs <- tapply(seq_along(y), object@block, function(b) {
+        yb <- y[b]; xb <- x[b]
+        yb[xb == lx1] - yb[xb == lx2]
+    })
     abs_diffs <- abs(diffs)
     if (all(abs_diffs < eps))
         stop("all pairwise differences equal zero")
@@ -41,10 +45,8 @@ sign_test.SymmetryProblem <- function(object, ...) {
     n <- length(diffs)
 
     object <- new("SymmetryProblem",
-                  x = data.frame(x = factor(rep.int(0:1, n),
-                                            labels = c("pos", "neg"))),
-                  y = data.frame(y = as.vector(rbind(as.numeric(diffs > 0),
-                                                     as.numeric(diffs < 0)))),
+                  x = data.frame(x = gl(2, 1, 2 * n, labels = c("pos", "neg"))),
+                  y = data.frame(y = as.numeric(rbind(diffs > 0, diffs < 0))),
                   block = gl(n, 2))
 
     args <- setup_args(teststat = "scalar", paired = TRUE)
@@ -65,13 +67,16 @@ wilcoxsign_test.formula <- function(formula, data = list(), subset = NULL, ...)
 {
     object <- formula2data(formula, data, subset, frame = parent.frame(), ...)
     if (is.null(object$block)) {
-        if (is.Surv(object$y[[1]]))
-            stop(sQuote("y"), " is not a numeric variable")
-        if (is.Surv(object$x[[1]]))
-            stop(sQuote("x"), " is not a numeric variable")
-        object <- list(y = data.frame(y = c(object$y[[1]], object$x[[1]])),
-                       x = data.frame(x = gl(2, length(object$x[[1]]))),
-                       block = factor(rep.int(1:length(object$x[[1]]), 2)))
+        y <- object$y[[1]]
+        if (!is.numeric(y) || is.Surv(y))
+            stop(sQuote(colnames(object$y)), " is not a numeric variable")
+        x <- object$x[[1]]
+        if (!is.numeric(x) || is.Surv(x))
+            stop(sQuote(colnames(object$x)), " is not a numeric variable")
+        n <- length(x)
+        object <- list(x = data.frame(x = gl(2, n)),
+                       y = data.frame(y = c(y, x)),
+                       block = gl(n, 1, 2 * n))
     }
     object <- new("SymmetryProblem", x = object$x, y = object$y,
                   block = object$block)
@@ -83,40 +88,38 @@ wilcoxsign_test.SymmetryProblem <- function(object,
 
     zero.method <- match.arg(zero.method)
 
-    y <- object@y[[1]]
-    x <- object@x[[1]]
-
     if (!is_numeric_y(object))
-        stop(sQuote("y"), " is not a numeric variable")
-    if (is_2sample(object))
-        diffs <- tapply(1:length(y), object@block, function(b)
-            y[b][x[b] == levels(x)[1]] - y[b][x[b] == levels(x)[2]])
-    else
+        stop(sQuote(colnames(object@y)), " is not a numeric variable")
+    if (!is_2sample(object))
         stop(sQuote("object"),
              " does not represent a paired two-sample problem",
              " (maybe the grouping variable is not a factor?)")
 
+    y <- object@y[[1]]
+    x <- object@x[[1]]
+    lx <- levels(x); lx1 <- lx[1]; lx2 <- lx[2]
+    diffs <- tapply(seq_along(y), object@block, function(b) {
+        yb <- y[b]; xb <- x[b]
+        yb[xb == lx1] - yb[xb == lx2]
+    })
     abs_diffs <- abs(diffs)
     if (all(abs_diffs < eps))
         stop("all pairwise differences equal zero")
 
     pos_abs_diffs <- abs_diffs > 0
+    diffs <- diffs[pos_abs_diffs]
     if (zero.method == "Pratt") {
-        rank_abs_diffs <- rank(abs_diffs)
-        pos <- (rank_abs_diffs * (diffs > 0))[pos_abs_diffs]
-        neg <- (rank_abs_diffs * (diffs < 0))[pos_abs_diffs]
+        rank_abs_diffs <- rank_trafo(abs_diffs)[pos_abs_diffs]
     } else {
-        diffs <- diffs[pos_abs_diffs]
         abs_diffs <- abs_diffs[pos_abs_diffs]
-        rank_abs_diffs <- rank(abs_diffs)
-        pos <- rank_abs_diffs * (diffs > 0)
-        neg <- rank_abs_diffs * (diffs < 0)
+        rank_abs_diffs <- rank_trafo(abs_diffs)
     }
+    pos <- rank_abs_diffs * (diffs > 0)
+    neg <- rank_abs_diffs * (diffs < 0)
     n <- length(pos)
 
     object <- new("SymmetryProblem",
-                  x = data.frame(x = factor(rep.int(0:1, n),
-                                            labels = c("pos", "neg"))),
+                  x = data.frame(x = gl(2, 1, 2 * n, labels = c("pos", "neg"))),
                   y = data.frame(y = as.vector(rbind(pos, neg))),
                   block = gl(n, 2))
 
