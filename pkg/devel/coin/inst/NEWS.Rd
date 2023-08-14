@@ -42,7 +42,9 @@
 \section{Changes in version 1.4-3 (20YY-MM-DD)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item Supplying case weights to tests for marginal homogeneity or symmetry
+            hypotheses appeared to work, but returned incorrect test statistics
+            and \eqn{p}-values; it now results in an error.
     }
   }
   \subsection{User-visible changes}{
@@ -112,7 +114,7 @@
   \subsection{Bug fixes}{
     \itemize{
       \item Exact multivariate two-sample tests with quadratic test statistics
-            appeared to work but returned nonsense \eqn{p}-values; it now
+            appeared to work but returned incorrect \eqn{p}-values; it now
             results in an error.
 
       \item Extraction of the standardized linear statistic from objects of
@@ -572,7 +574,7 @@
             absolute values of the negative differences, instead of the
             positive, between the paired measurements.
 
-      \item The Friedman test did not warn when weights were supplied.
+      \item The Friedman test did not warn when case weights were supplied.
 
       \item Maximally selected statistics did not handle user-specified scores
             for ordinal variables correctly.
@@ -817,7 +819,7 @@
 
 \section{Changes in version 1.0-20 (2011-10-04)}{
   \itemize{
-    \item Report a warning for rank tests with weights.
+    \item Report a warning for rank tests with case weights.
   }
 }
 
@@ -969,8 +971,8 @@
           constructing \code{"IndependenceLinearStatistic"} objects instead of
           \code{"IndependenceTestStatistic"} and define methods for this class.
 
-    \item \code{maxstat_test()} with integer weights gave \code{NA} or wrong
-          cutpoints.
+    \item \code{maxstat_test()} with integer case weights gave \code{NA} or
+          wrong cutpoints.
   }
 }
 
@@ -1051,7 +1053,7 @@
 
     \item Do not compute design matrices in \code{ModelEnvFormula}.
 
-    \item Expand weights if \code{distribution = approximate()}.
+    \item Expand case weights if \code{distribution = approximate()}.
 
     \item Assign names to user-specified transformation in case they are
           missing.

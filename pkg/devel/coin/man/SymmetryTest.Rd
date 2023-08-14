@@ -36,7 +36,7 @@
   \item{weights}{
     an optional formula of the form \code{~ w} defining integer valued case
     weights for each observation.  Defaults to \code{NULL}, implying equal
-    weight for all observations.
+    weight for all observations.  (Not yet implemented!)
   }
   \item{object}{
     an object inheriting from classes \code{"table"} (with identical
