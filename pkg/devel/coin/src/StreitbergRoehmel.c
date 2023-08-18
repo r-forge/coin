@@ -51,7 +51,7 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a,  SEXP m_b,
     SEXP H, x;                  /* matrix of permutations and vector
                                    of probabilities */
 
-    int i, j, k, sum_a = 0, sum_b = 0, s_a = 0, s_b = 0, isb;
+    int sum_a = 0, sum_b = 0, s_a = 0, s_b = 0, isb;
     double msum = 0.0;          /* little helpers */
 
     int *iscore_a, *iscore_b;   /* pointers to R structures */
@@ -81,7 +81,7 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a,  SEXP m_b,
 
     /* compute the total sum of the scores and check if they are >= 0 */
 
-    for (i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         if (iscore_a[i] < 0)
             error("score_a for observation number %d is negative", i);
         if (iscore_b[i] < 0)
@@ -104,9 +104,9 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a,  SEXP m_b,
     PROTECT(H = allocVector(REALSXP, (sum_a + 1) * (sum_b + 1)));
     dH = REAL(H);
 
-    for (i = 0; i <= sum_a; i++) {
+    for (int i = 0; i <= sum_a; i++) {
         isb = i * (sum_b + 1);
-        for (j = 0; j <= sum_b; j++) dH[isb + j] = 0.0;
+        for (int j = 0; j <= sum_b; j++) dH[isb + j] = 0.0;
     }
 
     /*
@@ -115,7 +115,7 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a,  SEXP m_b,
 
     dH[0] = 1.0;
 
-    for (k = 0; k < n; k++) {
+    for (int k = 0; k < n; k++) {
         s_a += iscore_a[k];
         s_b += iscore_b[k];
 
@@ -126,9 +126,9 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a,  SEXP m_b,
             sum_b = min(sum_b, c)
         */
 
-        for (i = imin2(im_a, s_a); i >= iscore_a[k]; i--) {
+        for (int i = imin2(im_a, s_a); i >= iscore_a[k]; i--) {
             isb = i * (sum_b + 1);
-            for (j = imin2(im_b,s_b); j >= iscore_b[k]; j--)
+            for (int j = imin2(im_b,s_b); j >= iscore_b[k]; j--)
                 dH[isb + j] +=
                     dH[(i - iscore_a[k]) * (sum_b + 1) + (j - iscore_b[k])];
         }
@@ -151,7 +151,7 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a,  SEXP m_b,
         */
 
         isb = im_a * (sum_b + 1);
-        for (j = 0; j < sum_b; j++) {
+        for (int j = 0; j < sum_b; j++) {
             if (!R_FINITE(dH[isb + j + 1]))
                 error("overflow error; cannot compute exact distribution");
             dx[j] = dH[isb + j + 1];
@@ -166,7 +166,7 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a,  SEXP m_b,
             [dpq] stuff is done in R
         */
 
-        for (j = 0; j < sum_b; j++)
+        for (int j = 0; j < sum_b; j++)
             dx[j] = dx[j]/msum;
 
         UNPROTECT(2);
@@ -204,7 +204,7 @@ SEXP R_cpermdist1(SEXP scores) {
     int n;      /* number of observations */
     SEXP H;     /* vector giving the density of statistics 0:sum(scores) */
 
-    int i, k, sum_a = 0, s_a = 0; /* little helpers */
+    int sum_a = 0, s_a = 0; /* little helpers */
     int *iscores;
     double msum = 0.0;
     double *dH;
@@ -212,7 +212,7 @@ SEXP R_cpermdist1(SEXP scores) {
     n = LENGTH(scores);
     iscores = INTEGER(scores);
 
-    for (i = 0; i < n; i++) sum_a += iscores[i];
+    for (int i = 0; i < n; i++) sum_a += iscores[i];
 
     /*
       Initialize H
@@ -220,7 +220,7 @@ SEXP R_cpermdist1(SEXP scores) {
 
     PROTECT(H = allocVector(REALSXP, sum_a + 1));
     dH = REAL(H);
-    for (i = 0; i <= sum_a; i++) dH[i] = 0.0;
+    for (int i = 0; i <= sum_a; i++) dH[i] = 0.0;
 
     /*
       start the shift-algorithm with H[0] = 1.0
@@ -228,9 +228,9 @@ SEXP R_cpermdist1(SEXP scores) {
 
     dH[0] = 1.0;
 
-    for (k = 0; k < n; k++) {
+    for (int k = 0; k < n; k++) {
         s_a = s_a + iscores[k];
-            for (i = s_a; i >= iscores[k]; i--)
+            for (int i = s_a; i >= iscores[k]; i--)
                 dH[i] = dH[i] + dH[i - iscores[k]];
     }
 
@@ -239,7 +239,7 @@ SEXP R_cpermdist1(SEXP scores) {
         get the number of permutations
     */
 
-    for (i = 0; i <= sum_a; i++) {
+    for (int i = 0; i <= sum_a; i++) {
         if (!R_FINITE(dH[i]))
             error("overflow error: cannot compute exact distribution");
         msum += dH[i];
@@ -252,7 +252,7 @@ SEXP R_cpermdist1(SEXP scores) {
         [dpq] stuff is done in R
     */
 
-    for (i = 0; i <= sum_a; i++)
+    for (int i = 0; i <= sum_a; i++)
         dH[i] = dH[i]/msum;     /* 0 is a possible realization */
 
     UNPROTECT(1);
