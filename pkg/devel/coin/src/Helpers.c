@@ -44,7 +44,7 @@ int nrow(SEXP x) {
     if (a == R_NilValue) {
         return(LENGTH(x));
     } else {
-        return(INTEGER(getAttrib(x, R_DimSymbol))[0]);
+        return(INTEGER(a)[0]);
     }
 }
 
@@ -55,7 +55,7 @@ int ncol(SEXP x) {
     if (a == R_NilValue) {
         return(1);
     } else {
-        return(INTEGER(getAttrib(x, R_DimSymbol))[1]);
+        return(INTEGER(a)[1]);
     }
 }
 
