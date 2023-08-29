@@ -281,7 +281,7 @@ void makeW(celW **W, int a, int b, int start, double *rs, double tol) {
     int rank;
     int hulp;
 
-    for (int j = 1; j <= b; j++) {  /* verander naar 0!! */
+    for (long j = 1; j <= b; j++) {  /* verander naar 0!! */
 
         if (j < a) {
             hulp = j;
@@ -289,7 +289,7 @@ void makeW(celW **W, int a, int b, int start, double *rs, double tol) {
             hulp = a;
         }
 
-        for (int i = 1; i <= hulp; i++) {
+        for (long i = 1; i <= hulp; i++) {
             if (i <= j/2 || j == 1) {
                 rank = start+j;
                 fillcell(W, i, j, rank - 1, rs, tol);
