@@ -34,13 +34,18 @@ typedef struct {
 
 double binomi(int m, int n) {
 
-    double bin = 1, bin1 = 1, bin2 = 1;
+    double bin;
 
-    for (int i = 1; i <= n; i++)
-        bin1 = bin1 * (m + 1 - i);
-    for (int j = 1; j <= n; j++)
-        bin2 = bin2 * j;
-    bin = bin1 / bin2;
+    if (n == 0)
+        bin = 1.0;
+    else {
+        bin = m;
+        for (int i = 2; i <= n; i++) {
+            /* divide first to keep bin as small as possible */
+            bin /= i;
+            bin *= (m + 1 - i);
+        }
+    }
 
     return(bin);
 }
@@ -50,7 +55,7 @@ celW** reserveW(int a, int b) {
     long res = 0;
     celW** W;
 
-    /* <FIXME> 
+    /* <FIXME>
        need to free memory in case Calloc barfs
        WRE advertises on.exit but I still need a pointer to the memory
        </FIXME> */
@@ -301,7 +306,7 @@ SEXP R_split_up_2sample(SEXP scores, SEXP m, SEXP obs, SEXP tol) {
        size of one group and 'obs' is the scalar observed test statistic, i.e.,
        the sum of the 'm' scores measured in one group. */
 
-    int b, c;
+    int b, c, bp, be;
     double ob, bino, tot, prob;
     SEXP ans;
 
@@ -309,6 +314,8 @@ SEXP R_split_up_2sample(SEXP scores, SEXP m, SEXP obs, SEXP tol) {
     double *rs;
 
     b = LENGTH(scores);
+    bp = (b + 1) / 2;
+    be = b / 2;
     rs = REAL(scores);
     c = INTEGER(m)[0];
     ob = REAL(obs)[0];
@@ -317,16 +324,16 @@ SEXP R_split_up_2sample(SEXP scores, SEXP m, SEXP obs, SEXP tol) {
     bino = binomi(b, c);
 
     /* allocate and initialise memory */
-    W1 = reserveW(c, (b + 1) / 2);
-    initW(c, (b + 1) / 2, W1);
-    W2 = reserveW(c, (b + 1) / 2);
-    initW(c, (b + 1) / 2, W2);
+    W1 = reserveW(c, bp);
+    initW(c, bp, W1);
+    W2 = reserveW(c, bp);
+    initW(c, bp, W2);
 
-    makeW(W1, c,       b / 2,     0, rs, REAL(tol)[0]);
-    makeW(W2, c, (b + 1) / 2, b / 2, rs, REAL(tol)[0]);
+    makeW(W1, c, be,  0, rs, REAL(tol)[0]);
+    makeW(W2, c, bp, be, rs, REAL(tol)[0]);
 
     for (int u = 0; u <= c; u++)
-        cumulcoef(W2, u, (b + 1) / 2);
+        cumulcoef(W2, u, bp);
 
     /* number of permutations <= ob */
     tot = numbersmall(c, b, ob, W1, W2, REAL(tol)[0]);
