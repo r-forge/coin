@@ -11,10 +11,7 @@
     *\date $Date$
 */
 
-#include <R.h>
-#include <Rmath.h>
-#include <Rdefines.h>
-
+#include "coin_common.h"
 
 /**
     The probability distribution for the independent two sample problem.
@@ -309,7 +306,6 @@ SEXP R_split_up_2sample(SEXP scores, SEXP m, SEXP obs, SEXP tol) {
     int b, c, bp, be;
     double ob, bino, tot, prob;
     SEXP ans;
-
     celW **W1, **W2;
     double *rs;
 
