@@ -7,9 +7,8 @@
     *\date $Date$
 */
 
-#include <R.h>
-#include <Rmath.h>
-#include <Rdefines.h>
+#include "coin_common.h"
+#include <Rmath.h> /* for imin2 */
 
 /**
     The density of the permutation distribution for independent two-sample
