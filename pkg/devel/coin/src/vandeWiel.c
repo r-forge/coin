@@ -57,10 +57,10 @@ celW** reserveW(int a, int b) {
        WRE advertises on.exit but I still need a pointer to the memory
        </FIXME> */
 
-    W = Calloc(a + 1, celW*);
+    W = R_Calloc(a + 1, celW*);
 
     for (int i = 0; i <= a; i++)
-        W[i] = Calloc(b + 1, celW);
+        W[i] = R_Calloc(b + 1, celW);
 
     for (int i = 0; i <= a; i++) {
         for (int j = i; j <= b; j++) {
@@ -78,9 +78,9 @@ celW** reserveW(int a, int b) {
 void FreeW(int a, celW **W) {
 
     for (int i = a; i >= 0; i--)
-        Free(W[i]);
+        R_Free(W[i]);
 
-    Free(W);
+    R_Free(W);
 }
 
 void initW(int a, int b, celW **W) {
@@ -140,8 +140,8 @@ void mymergesort(celW temptw, long tijd) {
     celW copiep;
     int t1 = 0, t2 = 0;
 
-    copiep.c = Calloc(temptw.length, double);
-    copiep.x = Calloc(temptw.length, double);
+    copiep.c = R_Calloc(temptw.length, double);
+    copiep.x = R_Calloc(temptw.length, double);
 
     for (int i = 0; i < temptw.length; i++) {
         copiep.c[i] = temptw.c[i];
@@ -172,8 +172,8 @@ void mymergesort(celW temptw, long tijd) {
         }
         R_CheckUserInterrupt();
     }
-    Free(copiep.c);
-    Free(copiep.x);
+    R_Free(copiep.c);
+    R_Free(copiep.x);
 }
 
 void fillcell(celW **W, int i1, int j1, int r, double *rs, double tol) {
@@ -185,8 +185,8 @@ void fillcell(celW **W, int i1, int j1, int r, double *rs, double tol) {
     long tijd;
     celW temp2;
 
-    temp2.c = Calloc(W[i1 - 1][j1 - 1].length + W[i1][j1 - 1].length, double);
-    temp2.x = Calloc(W[i1 - 1][j1 - 1].length + W[i1][j1 - 1].length, double);
+    temp2.c = R_Calloc(W[i1 - 1][j1 - 1].length + W[i1][j1 - 1].length, double);
+    temp2.x = R_Calloc(W[i1 - 1][j1 - 1].length + W[i1][j1 - 1].length, double);
     temp2.length = W[i1 - 1][j1 - 1].length;
 
     for (int j = 0; j < temp2.length; j++) {
@@ -210,8 +210,8 @@ void fillcell(celW **W, int i1, int j1, int r, double *rs, double tol) {
         W[i1][j1].x[j] = temp2.x[j];
     }
 
-    Free(temp2.c);
-    Free(temp2.x);
+    R_Free(temp2.c);
+    R_Free(temp2.x);
 }
 
 void mirrorW(celW **W,int ce, int bep, int start, double *rs) {
