@@ -104,8 +104,8 @@ SEXP R_maxstattrafo(SEXP x, SEXP cutpoints) {
 */
 
 void C_outersum (const double *A, const int m, const int n,
-                  const double *B, const int r, const int s,
-                  double *ans) {
+                 const double *B, const int r, const int s,
+                 double *ans) {
 
     int mr, js, ir;
     double y;
