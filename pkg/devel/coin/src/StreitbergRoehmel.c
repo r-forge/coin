@@ -24,13 +24,12 @@
     Randomisierungstests im allgemeinen c-Stichprobenfall.  EDV in Medizin und
     Biologie 18(1), 12-19.
 
-    *\param score_a score vector (typically c(1,1,...,1))
     *\param score_b score vector (typically ranks)
     *\param m_a integer indicating the sum of m_a elements of score_a
     *\param m_b integer indicating the sum of m_b elements of score_b
 */
 
-SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a, SEXP m_b) {
+SEXP R_cpermdist2(SEXP score_b, SEXP m_a, SEXP m_b) {
     /* Compute the joint permutation distribution of the sum of the first 'm_a'
        elements of 'score_a' and 'score_b'.  In this case the exact conditional
        distribution in the independent two-sample problem is computed. */
@@ -43,34 +42,25 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a, SEXP m_b) {
     int sum_a = 0, sum_b = 0, sum_bp1, s_a = 0, s_b = 0, isb;
     double msum = 0.0;
     /* pointers to R structures */
-    int *iscore_a, *iscore_b;
+    int *iscore_b;
     double *dH, *dx;
 
     /* some basic checks, should be improved */
-    if (!isVector(score_a))
-        error("score_a is not a vector");
-
     if (!isVector(score_b))
         error("score_b is not a vector");
 
-    n = LENGTH(score_a);
+    n = LENGTH(score_b);
 
-    if (LENGTH(score_b) != n)
-        error("length of score_a and score_b differ");
-
-    iscore_a = INTEGER(score_a);
     iscore_b = INTEGER(score_b);
 
     im_a = INTEGER(m_a)[0];
     im_b = INTEGER(m_b)[0];
 
     /* compute the total sum of the scores and check if they are >= 0 */
+    sum_a = n; /* remember: score_a = (1,...,1) */
     for (int i = 0; i < n; i++) {
-        if (iscore_a[i] < 0)
-            error("score_a for observation number %d is negative", i);
         if (iscore_b[i] < 0)
             error("score_b for observation number %d is negative", i);
-        sum_a += iscore_a[i];
         sum_b += iscore_b[i];
     }
 
@@ -90,15 +80,15 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a, SEXP m_b) {
     /* start the shift algorithm with H[0,0] = 1 */
     dH[0] = 1.0;
     for (int k = 0; k < n; k++) {
-        s_a += iscore_a[k];
+        s_a += 1; /* remember: score_a = (1,...,1) */
         s_b += iscore_b[k];
         /* compute H up to row im_a and column im_b
            Note: sum_a = min(sum_a, m) and sum_b = min(sum_b, c) */
-        for (int i = imin2(im_a, s_a); i >= iscore_a[k]; i--) {
+        for (int i = imin2(im_a, s_a); i >= 1; i--) {
             isb = i * sum_bp1;
             for (int j = imin2(im_b, s_b); j >= iscore_b[k]; j--)
                 dH[isb + j] +=
-                    dH[(i - iscore_a[k]) * sum_bp1 + (j - iscore_b[k])];
+                    dH[(i - 1) * sum_bp1 + (j - iscore_b[k])];
         }
     }
 

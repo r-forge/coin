@@ -32,7 +32,7 @@ SR_shift_2sample <- function(object, fact) {
     ## first block
     block_1 <- (block == lev[1L])
     scores <- ytrans[block_1]
-    m <- sum(xtrans[block_1] == 1L)
+    m <- sum(xtrans[block_1])
 
     ## compute T and density
     if (m == 0L)
@@ -52,7 +52,7 @@ SR_shift_2sample <- function(object, fact) {
         for (i in seq_len(nb)[-1L]) {
             block_i <- (block == lev[i])
             scores <- ytrans[block_i]
-            m <- sum(xtrans[block_i] == 1L)
+            m <- sum(xtrans[block_i])
 
             ## compute T and density
             if (m == 0L)
@@ -215,7 +215,7 @@ cSR_shift_2sample <- function(scores, m, fact) {
     m_b <- sum(sort(scores)[(n + 1L - m):n])
 
     Prob <- .Call(R_cpermdist2,
-                  score_a = rep.int(1L, n), score_b = scores,
+                  score_b = scores,
                   m_a = m, m_b = m_b)
     T <- which(Prob != 0)
 
