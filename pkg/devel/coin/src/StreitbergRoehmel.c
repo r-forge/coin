@@ -38,7 +38,7 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
     /* matrix of permutations and vector of probs */
     SEXP x;
     /* little helpers */
-    int sum_a, sum_b = 0, sum_bp1, s_a = 0, s_b = 0, isb;
+    int sum_a, sum_b = 0, sum_bp1, s_a = 0, s_b = 0, idx, idx2, min_b;
     double msum = 0.0;
     /* pointers to R structures */
     int *iscore_b;
@@ -53,7 +53,6 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
     iscore_b = INTEGER(score_b);
 
     /* optimization according to Streitberg and Röhmel
-       Let
            sum_a := min(sum_a, m_a)
            sum_b := min(sum_b, m_b)
        where
@@ -72,9 +71,9 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
     sum_bp1 = sum_b + 1;
     dH = R_Calloc((sum_a + 1) * sum_bp1, double);
     for (int i = 0; i <= sum_a; i++) {
-        isb = i * sum_bp1;
+        idx = i * sum_bp1;
         for (int j = 0; j <= sum_b; j++)
-            dH[isb + j] = 0.0;
+            dH[idx + j] = 0.0;
     }
 
     /* start the shift algorithm with H[0,0] = 1 */
@@ -84,22 +83,23 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
         s_b += iscore_b[k];
         /* compute H up to row sum_a (i.e., m_a) and column sum_b (i.e., m_b)
            Note: sum_a = min(sum_a, m) and sum_b = min(sum_b, c) */
+        min_b = imin2(sum_b, s_b);
         for (int i = imin2(sum_a, s_a); i >= 1; i--) {
-            isb = i * sum_bp1;
-            for (int j = imin2(sum_b, s_b); j >= iscore_b[k]; j--)
-                dH[isb + j] +=
-                    dH[(i - 1) * sum_bp1 + (j - iscore_b[k])];
+            idx = i * sum_bp1;
+            idx2 = (i - 1) * sum_bp1 - iscore_b[k];
+            for (int j = min_b; j >= iscore_b[k]; j--)
+                dH[idx + j] += dH[idx2 + j];
         }
     }
 
     PROTECT(x = allocVector(REALSXP, sum_b));
     dx = REAL(x);
     /* get the values for sample size sum_a (i.e., m_a) (in row m) and sum it up */
-    isb = sum_a * sum_bp1;
+    idx = sum_a * sum_bp1 + 1;
     for (int j = 0; j < sum_b; j++) {
-        if (!R_FINITE(dH[isb + j + 1]))
+        if (!R_FINITE(dH[idx + j]))
             error("overflow error; cannot compute exact distribution");
-        dx[j] = dH[isb + j + 1];
+        dx[j] = dH[idx + j];
         msum += dx[j];
     }
     if (!R_FINITE(msum) || msum == 0.0)
