@@ -1,4 +1,4 @@
-### Streitberg-Roehmel algorithm for two independent samples
+### Streitberg-Röhmel shift algorithm for two independent samples
 SR_shift_2sample <- function(object, fact) {
     teststat <-
         if (inherits(object, "ScalarIndependenceTestStatistic"))
@@ -216,14 +216,14 @@ cSR_shift_2sample <- function(scores, m, fact) {
 
     Prob <- .Call(R_cpermdist2,
                   score_a = rep.int(1L, n), score_b = scores,
-                  m_a = m, m_b = m_b, retProb = TRUE)
+                  m_a = m, m_b = m_b)
     T <- which(Prob != 0)
 
     list(T = (T + add * m) / fact, Prob = Prob[T])
 }
 
 
-### Streitberg-Roehmel algorithm for two paired samples
+### Streitberg-Röhmel shift algorithm for two paired samples
 SR_shift_1sample <- function(object, fact) {
     teststat <-
         if (inherits(object, "ScalarIndependenceTestStatistic"))
