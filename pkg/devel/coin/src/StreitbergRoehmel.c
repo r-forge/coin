@@ -26,7 +26,6 @@
 
     *\param score_b score vector (typically ranks)
     *\param m_a integer indicating the sum of m_a elements of score_a
-    *\param m_b integer indicating the sum of m_b elements of score_b
 */
 
 SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
@@ -35,11 +34,11 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
        distribution in the independent two-sample problem is computed. */
 
     /* number of observations */
-    int n, im_a, im_b = 0;
+    int n;
     /* matrix of permutations and vector of probs */
     SEXP x;
     /* little helpers */
-    int sum_a = 0, sum_b = 0, sum_bp1, s_a = 0, s_b = 0, isb;
+    int sum_a, sum_b = 0, sum_bp1, s_a = 0, s_b = 0, isb;
     double msum = 0.0;
     /* pointers to R structures */
     int *iscore_b;
@@ -53,21 +52,21 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
 
     iscore_b = INTEGER(score_b);
 
-    im_a = INTEGER(m_a)[0];
-    for (int i = n - im_a; i < n; i++)
-        im_b += iscore_b[i];
-
-    /* compute the total sum of the scores and check if they are >= 0 */
-    sum_a = n; /* remember: score_a = (1,...,1) */
-    for (int i = 0; i < n; i++) {
-        if (iscore_b[i] < 0)
-            error("score_b for observation number %d is negative", i);
+    /* optimization according to Streitberg and Röhmel
+       Let
+           sum_a := min(sum_a, m_a)
+           sum_b := min(sum_b, m_b)
+       where
+           sum_a = sum(score_a) = sum(1,...,1) = n
+             m_a = sum of m_a elements of score_a
+           sum_b = sum(score_b)
+             m_b = sum of (n - m_a + 1) largest elements of score_b
+       whence
+           sum_a > m_a => sum_a := min(sum_a, m_a) = m_a
+           sum_b > m_a => sum_b := min(sum_b, m_b) = m_b */
+    sum_a = INTEGER(m_a)[0];
+    for (int i = n - sum_a; i < n; i++)
         sum_b += iscore_b[i];
-    }
-
-    /* optimization according to Streitberg and Röhmel */
-    sum_a = imin2(sum_a, im_a);
-    sum_b = imin2(sum_b, im_b);
 
     /* initialize H */
     sum_bp1 = sum_b + 1;
@@ -83,11 +82,11 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
     for (int k = 0; k < n; k++) {
         s_a += 1; /* remember: score_a = (1,...,1) */
         s_b += iscore_b[k];
-        /* compute H up to row im_a and column im_b
+        /* compute H up to row sum_a (i.e., m_a) and column sum_b (i.e., m_b)
            Note: sum_a = min(sum_a, m) and sum_b = min(sum_b, c) */
-        for (int i = imin2(im_a, s_a); i >= 1; i--) {
+        for (int i = imin2(sum_a, s_a); i >= 1; i--) {
             isb = i * sum_bp1;
-            for (int j = imin2(im_b, s_b); j >= iscore_b[k]; j--)
+            for (int j = imin2(sum_b, s_b); j >= iscore_b[k]; j--)
                 dH[isb + j] +=
                     dH[(i - 1) * sum_bp1 + (j - iscore_b[k])];
         }
@@ -95,8 +94,8 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
 
     PROTECT(x = allocVector(REALSXP, sum_b));
     dx = REAL(x);
-    /* get the values for sample size im_a (in row m) and sum it up */
-    isb = im_a * (sum_b + 1);
+    /* get the values for sample size sum_a (i.e., m_a) (in row m) and sum it up */
+    isb = sum_a * sum_bp1;
     for (int j = 0; j < sum_b; j++) {
         if (!R_FINITE(dH[isb + j + 1]))
             error("overflow error; cannot compute exact distribution");
@@ -106,7 +105,7 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
     if (!R_FINITE(msum) || msum == 0.0)
         error("overflow error; cannot compute exact distribution");
     /* compute probabilities and return the density x to R
-       the support is min(score_b):sum(score_b) */
+       Note: the support is min(score_b):sum(score_b) */
     for (int j = 0; j < sum_b; j++)
         dx[j] = dx[j] / msum;
 
