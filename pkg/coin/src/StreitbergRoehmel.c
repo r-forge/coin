@@ -28,12 +28,9 @@
     *\param score_b score vector (typically ranks)
     *\param m_a integer indicating the sum of m_a elements of score_a
     *\param m_b integer indicating the sum of m_b elements of score_b
-    *\param retProb logical indicating whether the density (TRUE) or the matrix
-                    of all permutations should be returned
 */
 
-SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a, SEXP m_b,
-                  SEXP retProb) {
+SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a, SEXP m_b) {
     /* Compute the joint permutation distribution of the sum of the first 'm_a'
        elements of 'score_a' and 'score_b'.  In this case the exact conditional
        distribution in the independent two-sample problem is computed. */
@@ -41,9 +38,9 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a, SEXP m_b,
     /* number of observations */
     int n, im_a, im_b;
     /* matrix of permutations and vector of probs */
-    SEXP H, x;
+    SEXP x;
     /* little helpers */
-    int sum_a = 0, sum_b = 0, s_a = 0, s_b = 0, isb;
+    int sum_a = 0, sum_b = 0, sum_bp1, s_a = 0, s_b = 0, isb;
     double msum = 0.0;
     /* pointers to R structures */
     int *iscore_a, *iscore_b;
@@ -61,13 +58,10 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a, SEXP m_b,
     if (LENGTH(score_b) != n)
         error("length of score_a and score_b differ");
 
-    if (TYPEOF(retProb) != LGLSXP)
-        error("retProb is not a logical");
-
     iscore_a = INTEGER(score_a);
     iscore_b = INTEGER(score_b);
 
-    im_a = INTEGER(m_a)[0]; /* cosmetics only */
+    im_a = INTEGER(m_a)[0];
     im_b = INTEGER(m_b)[0];
 
     /* compute the total sum of the scores and check if they are >= 0 */
@@ -85,10 +79,10 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a, SEXP m_b,
     sum_b = imin2(sum_b, im_b);
 
     /* initialize H */
-    PROTECT(H = allocVector(REALSXP, (sum_a + 1) * (sum_b + 1)));
-    dH = REAL(H);
+    sum_bp1 = sum_b + 1;
+    dH = R_Calloc((sum_a + 1) * sum_bp1, double);
     for (int i = 0; i <= sum_a; i++) {
-        isb = i * (sum_b + 1);
+        isb = i * sum_bp1;
         for (int j = 0; j <= sum_b; j++)
             dH[isb + j] = 0.0;
     }
@@ -101,39 +95,34 @@ SEXP R_cpermdist2(SEXP score_a, SEXP score_b, SEXP m_a, SEXP m_b,
         /* compute H up to row im_a and column im_b
            Note: sum_a = min(sum_a, m) and sum_b = min(sum_b, c) */
         for (int i = imin2(im_a, s_a); i >= iscore_a[k]; i--) {
-            isb = i * (sum_b + 1);
+            isb = i * sum_bp1;
             for (int j = imin2(im_b, s_b); j >= iscore_b[k]; j--)
                 dH[isb + j] +=
-                    dH[(i - iscore_a[k]) * (sum_b + 1) + (j - iscore_b[k])];
+                    dH[(i - iscore_a[k]) * sum_bp1 + (j - iscore_b[k])];
         }
     }
 
-    /* return the whole matrix H
-       Note: use matrix(H, nrow = m_a + 1, byrow = TRUE) in R */
-    if (!LOGICAL(retProb)[0]) {
-        UNPROTECT(1);
-        return(H);
-    } else {
-        PROTECT(x = allocVector(REALSXP, sum_b));
-        dx = REAL(x);
-        /* get the values for sample size im_a (in row m) and sum it up */
-        isb = im_a * (sum_b + 1);
-        for (int j = 0; j < sum_b; j++) {
-            if (!R_FINITE(dH[isb + j + 1]))
-                error("overflow error; cannot compute exact distribution");
-            dx[j] = dH[isb + j + 1];
-            msum += dx[j];
-        }
-        if (!R_FINITE(msum) || msum == 0.0)
+    PROTECT(x = allocVector(REALSXP, sum_b));
+    dx = REAL(x);
+    /* get the values for sample size im_a (in row m) and sum it up */
+    isb = im_a * (sum_b + 1);
+    for (int j = 0; j < sum_b; j++) {
+        if (!R_FINITE(dH[isb + j + 1]))
             error("overflow error; cannot compute exact distribution");
-        /* compute probabilities and return the density x to R
-           the support is min(score_b):sum(score_b) */
-        for (int j = 0; j < sum_b; j++)
-            dx[j] = dx[j] / msum;
-
-        UNPROTECT(2);
-        return(x);
+        dx[j] = dH[isb + j + 1];
+        msum += dx[j];
     }
+    if (!R_FINITE(msum) || msum == 0.0)
+        error("overflow error; cannot compute exact distribution");
+    /* compute probabilities and return the density x to R
+       the support is min(score_b):sum(score_b) */
+    for (int j = 0; j < sum_b; j++)
+        dx[j] = dx[j] / msum;
+
+    R_Free(dH);
+
+    UNPROTECT(1);
+    return(x);
 }
 
 /**
