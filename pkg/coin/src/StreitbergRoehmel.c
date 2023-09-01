@@ -29,13 +29,13 @@
     *\param m_b integer indicating the sum of m_b elements of score_b
 */
 
-SEXP R_cpermdist2(SEXP score_b, SEXP m_a, SEXP m_b) {
+SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
     /* Compute the joint permutation distribution of the sum of the first 'm_a'
        elements of 'score_a' and 'score_b'.  In this case the exact conditional
        distribution in the independent two-sample problem is computed. */
 
     /* number of observations */
-    int n, im_a, im_b;
+    int n, im_a, im_b = 0;
     /* matrix of permutations and vector of probs */
     SEXP x;
     /* little helpers */
@@ -54,7 +54,8 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a, SEXP m_b) {
     iscore_b = INTEGER(score_b);
 
     im_a = INTEGER(m_a)[0];
-    im_b = INTEGER(m_b)[0];
+    for (int i = n - im_a; i < n; i++)
+        im_b += iscore_b[i];
 
     /* compute the total sum of the scores and check if they are >= 0 */
     sum_a = n; /* remember: score_a = (1,...,1) */

@@ -207,16 +207,13 @@ cSR_shift_2sample <- function(scores, m, fact) {
         stop("not a two sample problem")
 
     ## integer scores with sum(scores) minimal
-    scores <- round(scores * fact)
+    scores <- sort(round(scores * fact))
     storage.mode(scores) <- "integer"
     add <- min(scores - 1L)
     scores <- scores - add
     storage.mode(m) <- "integer"
-    m_b <- sum(sort(scores)[(n + 1L - m):n])
 
-    Prob <- .Call(R_cpermdist2,
-                  score_b = scores,
-                  m_a = m, m_b = m_b)
+    Prob <- .Call(R_cpermdist2, score_b = scores, m_a = m)
     T <- which(Prob != 0)
 
     list(T = (T + add * m) / fact, Prob = Prob[T])

@@ -66,8 +66,7 @@ extern SEXP R_outersum
 extern SEXP R_cpermdist2
 (
     SEXP score_b,
-    SEXP m_a,
-    SEXP m_b
+    SEXP m_a
 );
 
 extern SEXP R_cpermdist1
