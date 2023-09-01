@@ -33,23 +33,13 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
        elements of 'score_a' and 'score_b'.  In this case the exact conditional
        distribution in the independent two-sample problem is computed. */
 
-    /* number of observations */
-    int n;
-    /* matrix of permutations and vector of probs */
-    SEXP x;
-    /* little helpers */
-    int sum_a, sum_b = 0, sum_bp1, s_a = 0, s_b = 0, idx, idx2, min_b;
+    int n, sum_a, sum_b = 0, sum_bp1, s_a = 0, s_b = 0, idx, idx2, min_b;
     double msum = 0.0;
-    /* pointers to R structures */
+    SEXP x;
     int *iscore_b;
     double *dH, *dx;
 
-    /* some basic checks, should be improved */
-    if (!isVector(score_b))
-        error("score_b is not a vector");
-
     n = LENGTH(score_b);
-
     iscore_b = INTEGER(score_b);
 
     /* optimization according to Streitberg and Röhmel
@@ -62,7 +52,7 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
              m_b = sum of (n - m_a + 1) largest elements of score_b
        whence
            sum_a > m_a => sum_a := min(sum_a, m_a) = m_a
-           sum_b > m_a => sum_b := min(sum_b, m_b) = m_b */
+           sum_b > m_b => sum_b := min(sum_b, m_b) = m_b */
     sum_a = INTEGER(m_a)[0];
     for (int i = n - sum_a; i < n; i++)
         sum_b += iscore_b[i];
@@ -135,14 +125,9 @@ SEXP R_cpermdist1(SEXP scores) {
     /* compute the permutation distribution of the sum of the absolute values of
        the positive elements of 'scores' */
 
-    /* number of observations */
-    int n;
-    /* vector giving the density of statistics 0:sum(scores) */
-    SEXP H;
-    /* little helpers */
-    int sum_a = 0, s_a = 0;
+    int n, sum_a = 0, s_a = 0;
     double msum = 0.0;
-    /* pointers to R structures */
+    SEXP H;
     int *iscores;
     double *dH;
 
