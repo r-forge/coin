@@ -380,9 +380,9 @@ setMethod("ApproxNullDistribution",
         pls <- MonteCarlo(object@xtrans, object@ytrans, object@block,
                           object@weights, nresample, ...)
         pls <- .Call(R_quadform,
-                     pls,
-                     .expectation(object, partial = FALSE),
-                     object@covarianceplus)
+                     linstat = pls,
+                     expect = .expectation(object, partial = FALSE),
+                     MPinv_sym = object@covarianceplus)
 
         p_fun <- function(q) {
             mean(pls %LE% q)

@@ -12,7 +12,8 @@ MonteCarlo <-
 {
     montecarlo <- function(nresample)
         .Call(R_PermutedLinearStatistic,
-              x, y, weights, integer(0), block, as.double(nresample))
+              x = x, y = y, weights = weights, subset = integer(0),
+              block = block, nresample = as.double(nresample))
 
     if (parallel == "no")
         montecarlo(nresample)

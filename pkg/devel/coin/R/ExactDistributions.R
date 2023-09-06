@@ -65,7 +65,7 @@ SR_shift_2sample <- function(object, fact) {
                 stop("cannot compute exact distribution")
 
             ## update T
-            T <- .Call(R_outersum, dens$T, T)
+            T <- .Call(R_outersum, A = dens$T, B = T)
 
             ## make sure T is ordered and distinct
             n <- length(T)
@@ -75,7 +75,7 @@ SR_shift_2sample <- function(object, fact) {
             T <- T[idx]
 
             ### update density (use C_kronecker from libcoin)
-            Prob <- .Call(R_kronecker, dens$Prob, Prob)
+            Prob <- .Call(R_kronecker, A = dens$Prob, B = Prob)
             Prob <- vapply(split(Prob[o],
                                  rep.int(seq_along(idx), diff(c(0L, idx)))),
                            sum, NA_real_, USE.NAMES = FALSE)
@@ -254,7 +254,7 @@ SR_shift_1sample <- function(object, fact) {
         s[s != 0] # remove zeros
     }, NA_real_)
     storage.mode(scores) <- "integer"
-    Prob <- .Call(R_cpermdist1, scores)
+    Prob <- .Call(R_cpermdist1, scores = scores)
     T <- which(Prob != 0)
     Prob <- Prob[T]
     ## 0 is possible
@@ -412,7 +412,8 @@ vdW_split_up_2sample <- function(object) {
     p_fun <- function(q) {
         T <- q * sqrt(.variance(object, partial = FALSE)) +
             .expectation(object, partial = FALSE)
-        .Call(R_split_up_2sample, scores, m, T, sqrt_eps)
+        .Call(R_split_up_2sample,
+              scores = scores, m = m, obs = T, tol = sqrt_eps)
     }
     q_fun <- function(p) {
         f <- function(x) p_fun(x) - p
