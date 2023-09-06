@@ -146,9 +146,9 @@ SEXP R_cpermdist1(SEXP scores) {
     /* start the shift algorithm with H[0] = 1.0 */
     dH[0] = 1.0;
     for (int k = 0; k < n; k++) {
-        s_a = s_a + iscores[k];
-            for (int i = s_a; i >= iscores[k]; i--)
-                dH[i] = dH[i] + dH[i - iscores[k]];
+        s_a += iscores[k];
+        for (int i = s_a; i >= iscores[k]; i--)
+            dH[i] += dH[i - iscores[k]];
     }
 
     /* get the number of permutations */
