@@ -182,7 +182,7 @@ maxstat_trafo <- ofmaxstat_trafo <-
               cp[cp >= qx[1] & cp <= qx[2]]
           else
               cp[cp >= qx[1] & cp < qx[2]]
-    cm <- .Call(R_maxstattrafo, as.double(x), as.double(cp))
+    cm <- .Call(R_maxstattrafo, x = as.double(x), cutpoints = as.double(cp))
     dimnames(cm) <- list(
         seq_along(x),
         if (ORDERED) {
