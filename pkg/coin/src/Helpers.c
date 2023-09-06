@@ -1,8 +1,7 @@
 /**
     Some additional functionality for package 'coin'
+
     *\file Helpers.c
-    *\author $Author$
-    *\date $Date$
 */
 
 #include "coin_common.h"

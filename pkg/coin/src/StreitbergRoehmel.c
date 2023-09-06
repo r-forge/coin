@@ -3,8 +3,6 @@
     Streitberg and Röhmel Shift Algorithm
 
     *\file StreitbergRoehmel.c
-    *\author $Author$
-    *\date $Date$
 */
 
 #include "coin_common.h"

@@ -7,8 +7,6 @@
             Torsten Hothorn <Torsten.Hothorn@R-project.org>
 
     *\file vandeWiel.c
-    *\author $Author$
-    *\date $Date$
 */
 
 #include "coin_common.h"
