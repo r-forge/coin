@@ -87,7 +87,7 @@
   \code{size} compute the \eqn{p}-value, mid-\eqn{p}-value, \eqn{p}-value
   interval and test size respectively.
 
-  For \code{pvalue}, the global \eqn{p}-value (\code{method = "global"}) is
+  For \code{pvalue()}, the global \eqn{p}-value (\code{method = "global"}) is
   returned by default and is given with an associated 99\% confidence interval
   when resampling is used to determine the null distribution (which for maximum
   statistics may be true even in the asymptotic case).
@@ -129,22 +129,22 @@
 
   Unadjusted \eqn{p}-values are obtained using \code{method = "unadjusted"}.
 
-  For \code{midpvalue}, the global mid-\eqn{p}-value is given with an associated
-  99\% mid-\eqn{p} confidence interval when resampling is used to determine the
-  null distribution.  The two-sided mid-\eqn{p}-value is computed according to
-  the minimum likelihood method (Hirji \emph{et al.}, 1991).
+  For \code{midpvalue()}, the global mid-\eqn{p}-value is given with an
+  associated 99\% mid-\eqn{p} confidence interval when resampling is used to
+  determine the null distribution.  The two-sided mid-\eqn{p}-value is computed
+  according to the minimum likelihood method (Hirji \emph{et al.}, 1991).
 
-  The \eqn{p}-value interval \eqn{(p_0, p_1]} obtained by \code{pvalue_interval}
-  was proposed by Berger (2000, 2001), where the upper endpoint \eqn{p_1} is the
-  conventional \eqn{p}-value and the mid-point, i.e., \eqn{p_{0.5}}{p_0.5}, is
-  the mid-\eqn{p}-value.  The lower endpoint \eqn{p_0} is the smallest
-  \eqn{p}-value attainable if no conservatism attributable to the discreteness
-  of the null distribution is present.  The length of the \eqn{p}-value interval
-  is the null probability of the observed outcome and provides a data-dependent
-  measure of conservatism that is completely independent of the nominal
-  significance level.
+  The \eqn{p}-value interval \eqn{(p_0, p_1]} obtained by
+  \code{pvalue_interval()} was proposed by Berger (2000, 2001), where the upper
+  endpoint \eqn{p_1} is the conventional \eqn{p}-value and the mid-point, i.e.,
+  \eqn{p_{0.5}}{p_0.5}, is the mid-\eqn{p}-value.  The lower endpoint \eqn{p_0}
+  is the smallest \eqn{p}-value attainable if no conservatism attributable to
+  the discreteness of the null distribution is present.  The length of the
+  \eqn{p}-value interval is the null probability of the observed outcome and
+  provides a data-dependent measure of conservatism that is completely
+  independent of the nominal significance level.
 
-  For \code{size}, the test size, i.e., the actual significance level, at the
+  For \code{size()}, the test size, i.e., the actual significance level, at the
   nominal significance level \eqn{\alpha} is computed using either the rejection
   region corresponding to the \eqn{p}-value (\code{type = "p-value"}, default)
   or the mid-\eqn{p}-value (\code{type = "mid-p-value"}).  The test size is, in

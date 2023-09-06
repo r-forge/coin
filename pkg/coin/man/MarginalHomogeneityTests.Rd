@@ -35,11 +35,11 @@
     \code{dimnames} components) or \code{"\linkS4class{SymmetryProblem}"}.
   }
   \item{\dots}{
-    further arguments to be passed to \code{\link{symmetry_test}}.
+    further arguments to be passed to \code{\link{symmetry_test}()}.
   }
 }
 \details{
-  \code{mh_test} provides the McNemar test, the Cochran \eqn{Q} test, the
+  \code{mh_test()} provides the McNemar test, the Cochran \eqn{Q} test, the
   Stuart(-Maxwell) test and the Madansky test of interchangeability.  A general
   description of these methods is given by Agresti (2002).
 
@@ -63,7 +63,7 @@
 
   If \code{y} and/or \code{x} are ordered factors, the default scores,
   \code{1:nlevels(y)} and \code{1:nlevels(x)} respectively, can be altered using
-  the \code{scores} argument (see \code{\link{symmetry_test}}); this argument
+  the \code{scores} argument (see \code{\link{symmetry_test}()}); this argument
   can also be used to coerce nominal factors to class \code{"ordered"}.  If both
   \code{y} and \code{x} are ordered factors, a linear-by-linear association test
   is computed and the direction of the alternative hypothesis can be specified
@@ -78,8 +78,8 @@
   distribution can be approximated via Monte Carlo resampling or computed
   exactly for univariate two-sample problems by setting \code{distribution} to
   \code{"approximate"} or \code{"exact"} respectively.  See
-  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
-  for details.
+  \code{\link{asymptotic}()}, \code{\link{approximate}()} and
+  \code{\link{exact}()} for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.

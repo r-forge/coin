@@ -56,12 +56,12 @@
     (default) or \code{"Wilcoxon"}; see \sQuote{Details}.
   }
   \item{\dots}{
-    further arguments to be passed to \code{\link{symmetry_test}}.
+    further arguments to be passed to \code{\link{symmetry_test}()}.
   }
 }
 \details{
-  \code{sign_test}, \code{wilcoxsign_test}, \code{friedman_test} and
-  \code{quade_test} provide the sign test, the Wilcoxon signed-rank test, the
+  \code{sign_test()}, \code{wilcoxsign_test()}, \code{friedman_test()} and
+  \code{quade_test()} provide the sign test, the Wilcoxon signed-rank test, the
   Friedman test, the Page test and the Quade test.  A general description of
   these methods is given by Hollander and Wolfe (1999).
 
@@ -74,14 +74,14 @@
   measurement on the same subject.
 
   If \code{x} is an ordered factor, the default scores, \code{1:nlevels(x)}, can
-  be altered using the \code{scores} argument (see \code{\link{symmetry_test}});
+  be altered using the \code{scores} argument (see \code{\link{symmetry_test}()});
   this argument can also be used to coerce nominal factors to class
   \code{"ordered"}.  In this case, a linear-by-linear association test is
   computed and the direction of the alternative hypothesis can be specified
   using the \code{alternative} argument.  For the Friedman test, this extension
   was given by Page (1963) and is known as the Page test.
 
-  For \code{wilcoxsign_test}, the default method of handling zeros
+  For \code{wilcoxsign_test()}, the default method of handling zeros
   (\code{zero.method = "Pratt"}), due to Pratt (1959), first rank-transforms the
   absolute differences (including zeros) and then discards the ranks
   corresponding to the zero-differences.  The proposal by Wilcoxon (1949, p. 6)
@@ -94,8 +94,8 @@
   distribution can be approximated via Monte Carlo resampling or computed
   exactly for univariate two-sample problems by setting \code{distribution} to
   \code{"approximate"} or \code{"exact"} respectively.  See
-  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
-  for details.
+  \code{\link{asymptotic}()}, \code{\link{approximate}()} and
+  \code{\link{exact}()} for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.

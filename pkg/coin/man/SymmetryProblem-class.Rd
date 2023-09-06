@@ -39,7 +39,7 @@
   \describe{
     \item{initialize}{
       \code{signature(.Object = "SymmetryProblem")}: See the documentation for
-      \code{\link[methods:new]{initialize}} (in package \pkg{methods}) for
+      \code{\link[methods:new]{initialize}()} (in package \pkg{methods}) for
       details.
     }
   }

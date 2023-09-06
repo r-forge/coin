@@ -56,15 +56,16 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
   }
 }
 \details{
-  \code{asymptotic}, \code{approximate} and \code{exact} can be supplied to the
-  \code{distribution} argument of, e.g., \code{\link{independence_test}} to
-  provide control of the specification of the asymptotic, approximative (Monte
-  Carlo) and exact reference distribution respectively.
+  \code{asymptotic()}, \code{approximate()} and \code{exact()} can be supplied
+  to the \code{distribution} argument of, e.g.,
+  \code{\link{independence_test}()} to provide control of the specification of
+  the asymptotic, approximative (Monte Carlo) and exact reference distribution,
+  respectively.
 
   The asymptotic reference distribution is computed using a randomised
   quasi-Monte Carlo method (Genz and Bretz, 2009) and is applicable to arbitrary
   covariance structures with dimensions up to 1000.  See
-  \code{\link[mvtnorm:algorithms]{GenzBretz}} in package \pkg{mvtnorm} for
+  \code{\link[mvtnorm:algorithms]{GenzBretz}()} in package \pkg{mvtnorm} for
   details on \code{maxpts}, \code{abseps} and \code{releps}.
 
   The approximative (Monte Carlo) reference distribution is obtained by a
@@ -77,7 +78,7 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
   Windows) or \code{"snow"}.  In the latter case, if \code{cl = NULL} (default)
   a cluster with \code{ncpus} processes is created on the local machine unless a
   default cluster has been registered (see
-  \code{\link[parallel:makeCluster]{setDefaultCluster}} in package
+  \code{\link[parallel:makeCluster]{setDefaultCluster}()} in package
   \pkg{parallel}) in which case that gets used instead.  Alternatively, the use
   of an optional \pkg{parallel} or \pkg{snow} cluster can be specified by
   \code{cl}.  See \sQuote{Examples} and package \pkg{parallel} for details on
@@ -118,7 +119,7 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
   Streitberg, B. and \enc{Röhmel}{Roehmel}, J.  (1984).  Exact nonparametrics
   in APL.  \emph{APL Quote Quad} \bold{14}(4), 313--325.
   \doi{10.1145/384283.801115}
-  
+
   Streitberg, B. and \enc{Röhmel}{Roehmel}, J.  (1986).  Exact distributions
   for permutations and rank tests: an introduction to some recently published
   algorithms.  \emph{Statistical Software Newsletter} \bold{12}(1), 10--17.

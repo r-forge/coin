@@ -110,82 +110,82 @@
     }
     \item{covariance}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{covariance}} for details.
+      \code{\link{covariance}()} for details.
     }
     \item{dperm}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{dperm}} for details.
+      \code{\link{dperm}()} for details.
     }
     \item{expectation}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{expectation}} for details.
+      \code{\link{expectation}()} for details.
     }
     \item{midpvalue}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{midpvalue}} for details.
+      \code{\link{midpvalue}()} for details.
     }
     \item{pperm}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{pperm}} for details.
+      \code{\link{pperm}()} for details.
     }
     \item{pvalue}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{pvalue}} for details.
+      \code{\link{pvalue}()} for details.
     }
     \item{pvalue}{
       \code{signature(object = "MaxTypeIndependenceTest")}: See the
-      documentation for \code{\link{pvalue}} for details.
+      documentation for \code{\link{pvalue}()} for details.
     }
     \item{pvalue_interval}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{pvalue_interval}} for details.
+      \code{\link{pvalue_interval}()} for details.
     }
     \item{qperm}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{qperm}} for details.
+      \code{\link{qperm}()} for details.
     }
     \item{rperm}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{rperm}} for details.
+      \code{\link{rperm}()} for details.
     }
     \item{show}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link[methods]{show}} (in package \pkg{methods}) for details.
+      \code{\link[methods]{show}()} (in package \pkg{methods}) for details.
     }
     \item{show}{
       \code{signature(object = "MaxTypeIndependenceTest")}: See the
-      documentation for \code{\link[methods]{show}} (in package \pkg{methods})
+      documentation for \code{\link[methods]{show}()} (in package \pkg{methods})
       for details.
     }
     \item{show}{
       \code{signature(object = "QuadTypeIndependenceTest")}: See the
-      documentation for \code{\link[methods]{show}} (in package \pkg{methods})
+      documentation for \code{\link[methods]{show}()} (in package \pkg{methods})
       for details.
     }
     \item{show}{
       \code{signature(object = "ScalarIndependenceTest")}: See the documentation
-      for \code{\link[methods]{show}} (in package \pkg{methods}) for details.
+      for \code{\link[methods]{show}()} (in package \pkg{methods}) for details.
     }
     \item{show}{
       \code{signature(object = "ScalarIndependenceTestConfint")}: See the
-      documentation for \code{\link[methods]{show}} (in package \pkg{methods})
+      documentation for \code{\link[methods]{show}()} (in package \pkg{methods})
       for details.
     }
     \item{size}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{size}} for details.
+      \code{\link{size}()} for details.
     }
     \item{statistic}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{statistic}} for details.
+      \code{\link{statistic}()} for details.
     }
     \item{support}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{support}} for details.
+      \code{\link{support}()} for details.
     }
     \item{variance}{
       \code{signature(object = "IndependenceTest")}: See the documentation for
-      \code{\link{variance}} for details.
+      \code{\link{variance}()} for details.
     }
   }
 }
