@@ -65,12 +65,12 @@
   }
   \item{xtrafo}{
     a function of transformations to be applied to the factor \code{x} supplied
-    in \code{formula}; see \sQuote{Details}.  Defaults to \code{\link{trafo}}.
+    in \code{formula}; see \sQuote{Details}.  Defaults to \code{\link{trafo}()}.
   }
   \item{ytrafo}{
     a function of transformations to be applied to the variables \code{y1},
     \dots, \code{yq} supplied in \code{formula}; see \sQuote{Details}.  Defaults
-    to \code{\link{trafo}}.
+    to \code{\link{trafo}()}.
   }
   \item{scores}{
     a named list of scores to be attached to ordered factors; see
@@ -92,7 +92,7 @@
   }
 }
 \details{
-  \code{symmetry_test} provides a general symmetry test for a set of variables
+  \code{symmetry_test()} provides a general symmetry test for a set of variables
   measured on arbitrary scales.  This function is based on the general framework
   for conditional inference procedures proposed by Strasser and Weber (1999).
   The salient parts of the Strasser-Weber framework are elucidated by Hothorn
@@ -109,7 +109,7 @@
   the \code{teststat} argument.  Influence and regression functions, i.e.,
   transformations of \code{y1}, \dots, \code{yq} and \code{x}, are specified by
   the \code{ytrafo} and \code{xtrafo} arguments respectively; see
-  \code{\link{trafo}} for the collection of transformation functions currently
+  \code{\link{trafo}()} for the collection of transformation functions currently
   available.  This allows for implementation of both novel and familiar test
   statistics, e.g., the McNemar test, the Cochran \eqn{Q} test, the Wilcoxon
   signed-rank test and the Friedman test.  Furthermore, multivariate extensions
@@ -133,8 +133,8 @@
   distribution can be approximated via Monte Carlo resampling or computed
   exactly for univariate two-sample problems by setting \code{distribution} to
   \code{"approximate"} or \code{"exact"} respectively.  See
-  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
-  for details.
+  \code{\link{asymptotic}()}, \code{\link{approximate}()} and
+  \code{\link{exact}()} for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.

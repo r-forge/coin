@@ -139,63 +139,63 @@
   \describe{
     \item{ApproxNullDistribution}{
       \code{signature(object = "MaxTypeIndependenceTestStatistic")}: See the
-      documentation for \code{\link{ApproxNullDistribution}} for details.
+      documentation for \code{\link{ApproxNullDistribution}()} for details.
     }
     \item{ApproxNullDistribution}{
       \code{signature(object = "QuadTypeIndependenceTestStatistic")}: See the
-      documentation for \code{\link{ApproxNullDistribution}} for details.
+      documentation for \code{\link{ApproxNullDistribution}()} for details.
     }
     \item{ApproxNullDistribution}{
       \code{signature(object = "ScalarIndependenceTestStatistic")}: See the
-      documentation for \code{\link{ApproxNullDistribution}} for details.
+      documentation for \code{\link{ApproxNullDistribution}()} for details.
     }
     \item{AsymptNullDistribution}{
       \code{signature(object = "MaxTypeIndependenceTestStatistic")}: See the
-      documentation for \code{\link{AsymptNullDistribution}} for details.
+      documentation for \code{\link{AsymptNullDistribution}()} for details.
     }
     \item{AsymptNullDistribution}{
       \code{signature(object = "QuadTypeIndependenceTestStatistic")}: See the
-      documentation for \code{\link{AsymptNullDistribution}} for details.
+      documentation for \code{\link{AsymptNullDistribution}()} for details.
     }
     \item{AsymptNullDistribution}{
       \code{signature(object = "ScalarIndependenceTestStatistic")}: See the
-      documentation for \code{\link{AsymptNullDistribution}} for details.
+      documentation for \code{\link{AsymptNullDistribution}()} for details.
     }
     \item{ExactNullDistribution}{
       \code{signature(object = "QuadTypeIndependenceTestStatistic")}: See the
-      documentation for \code{\link{ExactNullDistribution}} for details.
+      documentation for \code{\link{ExactNullDistribution}()} for details.
     }
     \item{ExactNullDistribution}{
       \code{signature(object = "ScalarIndependenceTestStatistic")}: See the
-      documentation for \code{\link{ExactNullDistribution}} for details.
+      documentation for \code{\link{ExactNullDistribution}()} for details.
     }
     \item{covariance}{
       \code{signature(object = "QuadTypeIndependenceTestStatistic")}: See the
-      documentation for \code{\link{covariance}} for details.
+      documentation for \code{\link{covariance}()} for details.
     }
     \item{initialize}{
       \code{signature(.Object = "IndependenceTestStatistic")}: See the
-      documentation for \code{\link[methods:new]{initialize}} (in package
+      documentation for \code{\link[methods:new]{initialize}()} (in package
       \pkg{methods}) for details.
     }
     \item{initialize}{
       \code{signature(.Object = "MaxTypeIndependenceTestStatistic")}: See the
-      documentation for \code{\link[methods:new]{initialize}} (in package
+      documentation for \code{\link[methods:new]{initialize}()} (in package
       \pkg{methods}) for details.
     }
     \item{initialize}{
       \code{signature(.Object = "QuadTypeIndependenceTestStatistic")}: See the
-      documentation for \code{\link[methods:new]{initialize}} (in package
+      documentation for \code{\link[methods:new]{initialize}()} (in package
       \pkg{methods}) for details.
     }
     \item{initialize}{
       \code{signature(.Object = "ScalarIndependenceTestStatistic")}: See the
-      documentation for \code{\link[methods:new]{initialize}} (in package
+      documentation for \code{\link[methods:new]{initialize}()} (in package
       \pkg{methods}) for details.
     }
     \item{statistic}{
       \code{signature(object = "IndependenceTestStatistic")}: See the
-      documentation for \code{\link{statistic}} for details.
+      documentation for \code{\link{statistic}()} for details.
     }
   }
 }

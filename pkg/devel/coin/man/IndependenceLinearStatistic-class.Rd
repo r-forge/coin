@@ -71,24 +71,24 @@
   \describe{
     \item{covariance}{
       \code{signature(object = "IndependenceLinearStatistic")}: See the
-      documentation for \code{\link{covariance}} for details.
+      documentation for \code{\link{covariance}()} for details.
     }
     \item{expectation}{
       \code{signature(object = "IndependenceLinearStatistic")}: See the
-      documentation for \code{\link{expectation}} for details.
+      documentation for \code{\link{expectation}()} for details.
     }
     \item{initialize}{
       \code{signature(.Object = "IndependenceLinearStatistic")}: See the
-      documentation for \code{\link[methods:new]{initialize}} (in package
+      documentation for \code{\link[methods:new]{initialize}()} (in package
       \pkg{methods}) for details.
     }
     \item{statistic}{
       \code{signature(object = "IndependenceLinearStatistic")}: See the
-      documentation for \code{\link{statistic}} for details.
+      documentation for \code{\link{statistic}()} for details.
     }
     \item{variance}{
       \code{signature(object = "IndependenceLinearStatistic")}: See the
-      documentation for \code{\link{variance}} for details.
+      documentation for \code{\link{variance}()} for details.
     }
   }
 }

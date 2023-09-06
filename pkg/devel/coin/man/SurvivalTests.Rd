@@ -77,11 +77,11 @@
     \sQuote{Details}.  Defaults to \code{NULL}, implying \code{0}.
   }
   \item{\dots}{
-    further arguments to be passed to \code{\link{independence_test}}.
+    further arguments to be passed to \code{\link{independence_test}()}.
   }
 }
 \details{
-  \code{logrank_test} provides the weighted logrank test reformulated as a
+  \code{logrank_test()} provides the weighted logrank test reformulated as a
   linear rank test.  The family of weighted logrank tests encompasses a large
   collection of tests commonly used in the analysis of survival data including,
   but not limited to, the standard (unweighted) logrank test, the Gehan-Breslow
@@ -105,7 +105,7 @@
 
   If \code{x} is an ordered factor, the default scores, \code{1:nlevels(x)}, can
   be altered using the \code{scores} argument (see
-  \code{\link{independence_test}}); this argument can also be used to coerce
+  \code{\link{independence_test}()}); this argument can also be used to coerce
   nominal factors to class \code{"ordered"}.  In this case, a linear-by-linear
   association test is computed and the direction of the alternative hypothesis
   can be specified using the \code{alternative} argument.  This type of
@@ -253,27 +253,27 @@
   distribution can be approximated via Monte Carlo resampling or computed
   exactly for univariate two-sample problems by setting \code{distribution} to
   \code{"approximate"} or \code{"exact"}, respectively.  See
-  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
-  for details.
+  \code{\link{asymptotic}()}, \code{\link{approximate}()} and
+  \code{\link{exact}()} for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
 }
 \note{
   Peto and Peto (1972) proposed the test statistic implemented in
-  \code{logrank_test} and named it the \emph{logrank test}.  However, the
+  \code{logrank_test()} and named it the \emph{logrank test}.  However, the
   Mantel-Cox test (Mantel, 1966; Cox, 1972), as implemented in
-  \code{\link[survival]{survdiff}} (in package \pkg{survival}), is also known as
-  the logrank test.  These tests are similar, but differ in the choice of
+  \code{\link[survival]{survdiff}()} (in package \pkg{survival}), is also known
+  as the logrank test.  These tests are similar, but differ in the choice of
   probability model: the (Peto-Peto) logrank test uses the permutational
   variance, whereas the Mantel-Cox test is based on the hypergeometric variance.
 
-  Combining \code{\link{independence_test}} or \code{\link{symmetry_test}} with
-  \code{\link{logrank_trafo}} offers more flexibility than \code{logrank_test}
-  and allows for, among other things, maximum-type versatile test procedures
-  (e.g., Lee, 1996; see \sQuote{Examples}) and user-supplied logrank weights
-  (see \code{\link{GTSG}} for tests against Weibull-type or crossing-curve
-  alternatives).
+  Combining \code{\link{independence_test}()} or \code{\link{symmetry_test}()}
+  with \code{\link{logrank_trafo}()} offers more flexibility than
+  \code{logrank_test()} and allows for, among other things, maximum-type
+  versatile test procedures (e.g., Lee, 1996; see \sQuote{Examples}) and
+  user-supplied logrank weights (see \code{\link{GTSG}} for tests against
+  Weibull-type or crossing-curve alternatives).
 }
 \references{
   Andersen, P. K., Borgan, \enc{Ø}{O}., Gill, R. and Keiding, N.  (1982).

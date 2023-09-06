@@ -65,12 +65,12 @@
   \item{xtrafo}{
     a function of transformations to be applied to the variables \code{x1},
     \dots, \code{xp} supplied in \code{formula}; see \sQuote{Details}.  Defaults
-    to \code{\link{trafo}}.
+    to \code{\link{trafo}()}.
   }
   \item{ytrafo}{
     a function of transformations to be applied to the variables \code{y1},
     \dots, \code{yq} supplied in \code{formula}; see \sQuote{Details}.  Defaults
-    to \code{\link{trafo}}.
+    to \code{\link{trafo}()}.
   }
   \item{scores}{
     a named list of scores to be attached to ordered factors; see
@@ -86,12 +86,12 @@
   }
 }
 \details{
-  \code{independence_test} provides a general independence test for two sets of
-  variables measured on arbitrary scales.  This function is based on the general
-  framework for conditional inference procedures proposed by Strasser and Weber
-  (1999).  The salient parts of the Strasser-Weber framework are elucidated by
-  Hothorn \emph{et al.} (2006) and a thorough description of the software
-  implementation is given by Hothorn \emph{et al.} (2008).
+  \code{independence_test()} provides a general independence test for two sets
+  of variables measured on arbitrary scales.  This function is based on the
+  general framework for conditional inference procedures proposed by Strasser
+  and Weber (1999).  The salient parts of the Strasser-Weber framework are
+  elucidated by Hothorn \emph{et al.} (2006) and a thorough description of the
+  software implementation is given by Hothorn \emph{et al.} (2008).
 
   The null hypothesis of independence, or conditional independence given
   \code{block}, between \code{y1}, \dots, \code{yq} and \code{x1}, \dots,
@@ -102,7 +102,7 @@
   \code{teststat} argument.  Influence and regression functions, i.e.,
   transformations of \code{y1}, \dots, \code{yq} and \code{x1}, \dots,
   \code{xp}, are specified by the \code{ytrafo} and \code{xtrafo} arguments
-  respectively; see \code{\link{trafo}} for the collection of transformation
+  respectively; see \code{\link{trafo}()} for the collection of transformation
   functions currently available.  This allows for implementation of both novel
   and familiar test statistics, e.g., the Pearson \eqn{\chi^2} test, the
   generalized Cochran-Mantel-Haenszel test, the Spearman correlation test, the
@@ -129,8 +129,8 @@
   distribution can be approximated via Monte Carlo resampling or computed
   exactly for univariate two-sample problems by setting \code{distribution} to
   \code{"approximate"} or \code{"exact"} respectively.  See
-  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
-  for details.
+  \code{\link{asymptotic}()}, \code{\link{approximate}()} and
+  \code{\link{exact}()} for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.

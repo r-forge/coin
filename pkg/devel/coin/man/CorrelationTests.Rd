@@ -73,15 +73,15 @@
   \item{mid.score}{
     a character, the score assigned to observations exactly equal to the median:
     either 0 (\code{"0"}, default), 0.5 (\code{"0.5"}) or 1 (\code{"1"}); see
-    \code{\link{median_test}}.
+    \code{\link{median_test}()}.
   }
   \item{\dots}{
-    further arguments to be passed to \code{\link{independence_test}}.
+    further arguments to be passed to \code{\link{independence_test}()}.
   }
 }
 \details{
-  \code{spearman_test}, \code{fisyat_test}, \code{quadrant_test} and
-  \code{koziol_test} provide the Spearman correlation test, the Fisher-Yates
+  \code{spearman_test()}, \code{fisyat_test()}, \code{quadrant_test()} and
+  \code{koziol_test()} provide the Spearman correlation test, the Fisher-Yates
   correlation test using van der Waerden scores, the quadrant test and the
   Koziol-Nemec test.  A general description of these methods is given by
   \enc{Hájek}{Hajek}, \enc{Šidák}{Sidak} and Sen (1999, Sec. 4.6).  The
@@ -96,8 +96,8 @@
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
   used by default (\code{distribution = "asymptotic"}).  Alternatively, the
   distribution can be approximated via Monte Carlo resampling by setting
-  \code{distribution} to \code{"approximate"}.  See \code{\link{asymptotic}} and
-  \code{\link{approximate}} for details.
+  \code{distribution} to \code{"approximate"}.  See \code{\link{asymptotic}()}
+  and \code{\link{approximate}()} for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.

@@ -91,13 +91,13 @@
     \sQuote{Details}.
   }
   \item{\dots}{
-    further arguments to be passed to \code{\link{independence_test}}.
+    further arguments to be passed to \code{\link{independence_test}()}.
   }
 }
 \details{
-  \code{oneway_test}, \code{wilcox_test}, \code{kruskal_test},
-  \code{normal_test}, \code{median_test} and \code{savage_test} provide the
-  Fisher-Pitman permutation test, the Wilcoxon-Mann-Whitney test, the
+  \code{oneway_test()}, \code{wilcox_test()}, \code{kruskal_test()},
+  \code{normal_test()}, \code{median_test()} and \code{savage_test()} provide
+  the Fisher-Pitman permutation test, the Wilcoxon-Mann-Whitney test, the
   Kruskal-Wallis test, the van der Waerden test, the Brown-Mood median test and
   the Savage test.  A general description of these methods is given by Hollander
   and Wolfe (1999). For the adjustment of scores for tied values see
@@ -111,12 +111,12 @@
   \code{alternative = "less"}, the null hypothesis is \eqn{H_0\!: \mu \ge
     0}{H_0: mu >= 0}.  When \code{alternative = "greater"}, the null hypothesis
   is \eqn{H_0\!: \mu \le 0}{H_0: mu <= 0}.  Confidence intervals for the
-  difference in location are available (except for \code{oneway_test}) and
+  difference in location are available (except for \code{oneway_test()}) and
   computed according to Bauer (1972).
 
   If \code{x} is an ordered factor, the default scores, \code{1:nlevels(x)}, can
   be altered using the \code{scores} argument (see
-  \code{\link{independence_test}}); this argument can also be used to coerce
+  \code{\link{independence_test}()}); this argument can also be used to coerce
   nominal factors to class \code{"ordered"}.  In this case, a linear-by-linear
   association test is computed and the direction of the alternative hypothesis
   can be specified using the \code{alternative} argument.
@@ -140,12 +140,12 @@
   distribution can be approximated via Monte Carlo resampling or computed
   exactly for univariate two-sample problems by setting \code{distribution} to
   \code{"approximate"} or \code{"exact"} respectively.  See
-  \code{\link{asymptotic}}, \code{\link{approximate}} and \code{\link{exact}}
-  for details.
+  \code{\link{asymptotic}()}, \code{\link{approximate}()} and
+  \code{\link{exact}()} for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
-  Confidence intervals can be extracted by \link[stats]{confint}.
+  Confidence intervals can be extracted by \code{\link[stats]{confint}()}.
 }
 \references{
   Bauer, D. F.  (1972).  Constructing confidence sets using rank statistics.

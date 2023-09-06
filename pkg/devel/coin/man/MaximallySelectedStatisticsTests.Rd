@@ -65,11 +65,11 @@
     \dots, \code{xp} are considered.  Defaults to \code{1 - minprob}.
   }
   \item{\dots}{
-    further arguments to be passed to \code{\link{independence_test}}.
+    further arguments to be passed to \code{\link{independence_test}()}.
   }
 }
 \details{
-  \code{maxstat_test} provides generalized maximally selected statistics.  The
+  \code{maxstat_test()} provides generalized maximally selected statistics.  The
   family of maximally selected statistics encompasses a large collection of
   procedures used for the estimation of simple cutpoint models including, but
   not limited to, maximally selected \eqn{\chi^2}{chi^2} statistics, maximally
@@ -96,7 +96,7 @@
 
   If, say, \code{y1} and/or \code{x1} are ordered factors, the default scores,
   \code{1:nlevels(y1)} and \code{1:nlevels(x1)} respectively, can be altered
-  using the \code{scores} argument (see \code{\link{independence_test}}); this
+  using the \code{scores} argument (see \code{\link{independence_test}()}); this
   argument can also be used to coerce nominal factors to class \code{"ordered"}.
   If both, say, \code{y1} and \code{x1} are ordered factors, a linear-by-linear
   association test is computed and the direction of the alternative hypothesis
@@ -109,8 +109,8 @@
   \eqn{p}-values and an asymptotic approximation of the exact distribution is
   used by default (\code{distribution = "asymptotic"}).  Alternatively, the
   distribution can be approximated via Monte Carlo resampling by setting
-  \code{distribution} to \code{"approximate"}.  See \code{\link{asymptotic}} and
-  \code{\link{approximate}} for details.
+  \code{distribution} to \code{"approximate"}.  See \code{\link{asymptotic}()}
+  and \code{\link{approximate}()} for details.
 }
 \value{
   An object inheriting from class \code{"\linkS4class{IndependenceTest}"}.
