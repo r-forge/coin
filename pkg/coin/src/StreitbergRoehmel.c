@@ -16,6 +16,9 @@
 
     REFERENCES
 
+    Streitberg, B. and Röhmel, J.  (1984).  Exact nonparametrics in APL.  APL
+    Quote Quad 14(4), 313-325.
+
     Streitberg, B. and Röhmel, J.  (1986).  Exact distributions for permutations
     and rank tests: An introduction to some recently published algorithms.
     Statistical Software Newsletter 12(1), 10-17.
@@ -109,6 +112,9 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
     The density of the permutation distribution for one sample problems.
 
     REFERENCES
+
+    Streitberg, B. and Röhmel, J.  (1984).  Exact nonparametrics in APL.  APL
+    Quote Quad 14(4), 313-325.
 
     Streitberg, B. and Röhmel, J.  (1986).  Exact distributions for permutations
     and rank tests: An introduction to some recently published algorithms.
