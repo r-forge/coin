@@ -49,7 +49,8 @@
   }
   \subsection{User-visible changes}{
     \itemize{
-      \item The shift algorithm now allows for user interrupt.
+      \item The shift algorithm is now computationally more efficient and allows
+            for user interrupt.
 
       \item Documentation updates.
     }
