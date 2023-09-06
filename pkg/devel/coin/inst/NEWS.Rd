@@ -49,6 +49,8 @@
   }
   \subsection{User-visible changes}{
     \itemize{
+      \item The shift algorithm now allows for user interrupt.
+
       \item Documentation updates.
     }
   }
@@ -58,11 +60,6 @@
             performed transformations of the response variable prior to applying
             the influence function; these transformations are now done inside the
             influence function.
-    }
-  }
-  \subsection{Deprecated and defunct}{
-    \itemize{
-      \item
     }
   }
 }

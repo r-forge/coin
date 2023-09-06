@@ -34,7 +34,7 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
        elements of 'score_a' and 'score_b'.  In this case the exact conditional
        distribution in the independent two-sample problem is computed. */
 
-    int n, sum_a, sum_b = 0, sum_bp1, s_a = 0, s_b = 0, idx, idx2, min_b;
+    int n, sum_a, sum_b = 0, sum_bp1, s_a = 0, s_b = 0, min_b, idx, idx2, ic;
     double msum = 0.0;
     SEXP x;
     int *iscore_b;
@@ -60,7 +60,7 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
 
     /* initialize H */
     sum_bp1 = sum_b + 1;
-    dH = R_Calloc((sum_a + 1) * sum_bp1, double);
+    dH = (double*) R_alloc((sum_a + 1) * sum_bp1, sizeof(double));
     for (int i = 0; i <= sum_a; i++) {
         idx = i * sum_bp1;
         for (int j = 0; j <= sum_b; j++)
@@ -69,6 +69,7 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
 
     /* start the shift algorithm with H[0,0] = 1 */
     dH[0] = 1.0;
+    ic = 10000;
     for (int k = 0; k < n; k++) {
         s_a += 1; /* remember: score_a = (1,...,1) */
         s_b += iscore_b[k];
@@ -78,8 +79,13 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
         for (int i = imin2(sum_a, s_a); i >= 1; i--) {
             idx = i * sum_bp1;
             idx2 = (i - 1) * sum_bp1 - iscore_b[k];
-            for (int j = min_b; j >= iscore_b[k]; j--)
+            for (int j = min_b; j >= iscore_b[k]; j--) {
+                if(!(--ic)) {
+                    R_CheckUserInterrupt();
+                    ic = 10000;
+                }
                 dH[idx + j] += dH[idx2 + j];
+            }
         }
     }
 
@@ -99,8 +105,6 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
        Note: the support is min(score_b):sum(score_b) */
     for (int j = 0; j < sum_b; j++)
         dx[j] = dx[j] / msum;
-
-    R_Free(dH);
 
     UNPROTECT(1);
     return(x);
@@ -129,7 +133,7 @@ SEXP R_cpermdist1(SEXP scores) {
     /* compute the permutation distribution of the sum of the absolute values of
        the positive elements of 'scores' */
 
-    int n, sum_a = 0, s_a = 0;
+    int n, sum_a = 0, s_a = 0, ic;
     double msum = 0.0;
     SEXP H;
     int *iscores;
@@ -149,10 +153,16 @@ SEXP R_cpermdist1(SEXP scores) {
 
     /* start the shift algorithm with H[0] = 1.0 */
     dH[0] = 1.0;
+    ic = 10000;
     for (int k = 0; k < n; k++) {
         s_a += iscores[k];
-        for (int i = s_a; i >= iscores[k]; i--)
+        for (int i = s_a; i >= iscores[k]; i--) {
+            if (!(--ic)) {
+                R_CheckUserInterrupt();
+                ic = 10000;
+             }
             dH[i] += dH[i - iscores[k]];
+        }
     }
 
     /* get the number of permutations */
