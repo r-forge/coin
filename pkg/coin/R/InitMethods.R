@@ -132,7 +132,7 @@ setMethod("initialize",
                              y = ytrans[block_i,, drop = FALSE],
                              weights = weights[block_i],
                              subset = integer(0), block = integer(0),
-                             varonly = 0L, sqrt_eps = tol)
+                             varonly = 0L, tol = sqrt_eps)
                 linearstatistic[, i] <- ecs$LinearStatistic
                 expectation[, i] <- ecs$Expectation
                 covariance[, i] <- ecs$Covariance
