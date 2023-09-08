@@ -15,7 +15,6 @@
 \concept{Fisher-Yates correlation test}
 \concept{Quadrant test}
 \concept{Koziol-Nemec test}
-\encoding{UTF-8}
 \title{Correlation Tests}
 \description{
   Testing the independence of two numeric variables.

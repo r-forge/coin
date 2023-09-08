@@ -26,5 +26,6 @@ LinkingTo: libcoin (>= 1.0-9)
 LazyData: yes
 NeedsCompilation: yes
 ByteCompile: yes
+Encoding: UTF-8
 License: GPL-2
 URL: http://coin.r-forge.r-project.org

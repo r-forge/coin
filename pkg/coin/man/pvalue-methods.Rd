@@ -20,7 +20,6 @@
 \alias{size-methods}
 \alias{size,NullDistribution-method}
 \alias{size,IndependenceTest-method}
-\encoding{UTF-8}
 \title{Computation of the \eqn{p}-Value, Mid-\eqn{p}-Value, \eqn{p}-Value
   Interval and Test Size}
 \description{

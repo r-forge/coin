@@ -23,7 +23,6 @@
 \concept{van der Waerden test}
 \concept{Brown-Mood median test}
 \concept{Savage test}
-\encoding{UTF-8}
 \title{Two- and \eqn{K}-Sample Location Tests}
 \description{
   Testing the equality of the distributions of a numeric response variable in

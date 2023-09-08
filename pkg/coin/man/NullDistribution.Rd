@@ -2,7 +2,6 @@
 \alias{asymptotic}
 \alias{approximate}
 \alias{exact}
-\encoding{UTF-8}
 \title{Specification of the Reference Distribution}
 \description{
   Specification of the asymptotic, approximative (Monte Carlo) and exact
