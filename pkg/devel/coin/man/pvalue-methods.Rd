@@ -28,23 +28,23 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
-\S4method{pvalue}{NullDistribution}(object, q, \dots)
-\S4method{pvalue}{ApproxNullDistribution}(object, q, \dots)
-\S4method{pvalue}{IndependenceTest}(object, \dots)
+\S4method{pvalue}{NullDistribution}(object, q, ...)
+\S4method{pvalue}{ApproxNullDistribution}(object, q, ...)
+\S4method{pvalue}{IndependenceTest}(object, ...)
 \S4method{pvalue}{MaxTypeIndependenceTest}(object, method = c("global", "single-step",
                           "step-down", "unadjusted"),
        distribution = c("joint", "marginal"),
-       type = c("Bonferroni", "Sidak"), \dots)
+       type = c("Bonferroni", "Sidak"), ...)
 
-\S4method{midpvalue}{NullDistribution}(object, q, \dots)
-\S4method{midpvalue}{ApproxNullDistribution}(object, q, \dots)
-\S4method{midpvalue}{IndependenceTest}(object, \dots)
+\S4method{midpvalue}{NullDistribution}(object, q, ...)
+\S4method{midpvalue}{ApproxNullDistribution}(object, q, ...)
+\S4method{midpvalue}{IndependenceTest}(object, ...)
 
-\S4method{pvalue_interval}{NullDistribution}(object, q, \dots)
-\S4method{pvalue_interval}{IndependenceTest}(object, \dots)
+\S4method{pvalue_interval}{NullDistribution}(object, q, ...)
+\S4method{pvalue_interval}{IndependenceTest}(object, ...)
 
-\S4method{size}{NullDistribution}(object, alpha, type = c("p-value", "mid-p-value"), \dots)
-\S4method{size}{IndependenceTest}(object, alpha, type = c("p-value", "mid-p-value"), \dots)
+\S4method{size}{NullDistribution}(object, alpha, type = c("p-value", "mid-p-value"), ...)
+\S4method{size}{IndependenceTest}(object, alpha, type = c("p-value", "mid-p-value"), ...)
 }
 \arguments{
   \item{object}{
@@ -76,7 +76,7 @@
     a numeric, the nominal significance level \eqn{\alpha} at which the test size
     is computed.
   }
-  \item{\dots}{
+  \item{...}{
     further arguments (currently ignored).
   }
 }

@@ -22,20 +22,20 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
-\method{spearman_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{spearman_test}{IndependenceProblem}(object, distribution = c("asymptotic", "approximate", "none"), \dots)
+\method{spearman_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
+\method{spearman_test}{IndependenceProblem}(object, distribution = c("asymptotic", "approximate", "none"), ...)
 
-\method{fisyat_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{fisyat_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{fisyat_test}{IndependenceProblem}(object, distribution = c("asymptotic", "approximate", "none"),
-            ties.method = c("mid-ranks", "average-scores"), \dots)
+            ties.method = c("mid-ranks", "average-scores"), ...)
 
-\method{quadrant_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{quadrant_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{quadrant_test}{IndependenceProblem}(object, distribution = c("asymptotic", "approximate", "none"),
-              mid.score = c("0", "0.5", "1"), \dots)
+              mid.score = c("0", "0.5", "1"), ...)
 
-\method{koziol_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{koziol_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{koziol_test}{IndependenceProblem}(object, distribution = c("asymptotic", "approximate", "none"),
-            ties.method = c("mid-ranks", "average-scores"), \dots)
+            ties.method = c("mid-ranks", "average-scores"), ...)
 }
 \arguments{
   \item{formula}{
@@ -75,7 +75,7 @@
     either 0 (\code{"0"}, default), 0.5 (\code{"0.5"}) or 1 (\code{"1"}); see
     \code{\link{median_test}()}.
   }
-  \item{\dots}{
+  \item{...}{
     further arguments to be passed to \code{\link{independence_test}()}.
   }
 }

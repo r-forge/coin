@@ -9,21 +9,21 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
-\method{independence_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{independence_test}{table}(object, \dots)
+\method{independence_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
+\method{independence_test}{table}(object, ...)
 \method{independence_test}{IndependenceProblem}(object, teststat = c("maximum", "quadratic", "scalar"),
                   distribution = c("asymptotic", "approximate",
                                    "exact", "none"),
                   alternative = c("two.sided", "less", "greater"),
                   xtrafo = trafo, ytrafo = trafo, scores = NULL,
-                  check = NULL, \dots)
+                  check = NULL, ...)
 }
 \arguments{
   \item{formula}{
     a formula of the form \code{y1 + ... + yq ~ x1 + ... + xp | block} where
-    \code{y1}, \dots, \code{yq} and \code{x1}, \dots, \code{xp} are measured on
-    arbitrary scales (nominal, ordinal or continuous with or without censoring)
-    and \code{block} is an optional factor for stratification.
+    \code{y1}, \ldots, \code{yq} and \code{x1}, \ldots, \code{xp} are measured
+    on arbitrary scales (nominal, ordinal or continuous with or without
+    censoring) and \code{block} is an optional factor for stratification.
   }
   \item{data}{
     an optional data frame containing the variables in the model formula.
@@ -64,13 +64,13 @@
   }
   \item{xtrafo}{
     a function of transformations to be applied to the variables \code{x1},
-    \dots, \code{xp} supplied in \code{formula}; see \sQuote{Details}.  Defaults
-    to \code{\link{trafo}()}.
+    \ldots, \code{xp} supplied in \code{formula}; see \sQuote{Details}.
+    Defaults to \code{\link{trafo}()}.
   }
   \item{ytrafo}{
     a function of transformations to be applied to the variables \code{y1},
-    \dots, \code{yq} supplied in \code{formula}; see \sQuote{Details}.  Defaults
-    to \code{\link{trafo}()}.
+    \ldots, \code{yq} supplied in \code{formula}; see \sQuote{Details}.
+    Defaults to \code{\link{trafo}()}.
   }
   \item{scores}{
     a named list of scores to be attached to ordered factors; see
@@ -81,7 +81,7 @@
     \code{"\linkS4class{IndependenceTest}"} in order to check for specific
     properties of the data.  Defaults to \code{NULL}.
   }
-  \item{\dots}{
+  \item{...}{
     further arguments to be passed to or from other methods (currently ignored).
   }
 }
@@ -94,13 +94,13 @@
   software implementation is given by Hothorn \emph{et al.} (2008).
 
   The null hypothesis of independence, or conditional independence given
-  \code{block}, between \code{y1}, \dots, \code{yq} and \code{x1}, \dots,
+  \code{block}, between \code{y1}, \ldots, \code{yq} and \code{x1}, \ldots,
   \code{xp} is tested.
 
   A vector of case weights, e.g., observation counts, can be supplied through
   the \code{weights} argument and the type of test statistic is specified by the
   \code{teststat} argument.  Influence and regression functions, i.e.,
-  transformations of \code{y1}, \dots, \code{yq} and \code{x1}, \dots,
+  transformations of \code{y1}, \ldots, \code{yq} and \code{x1}, \ldots,
   \code{xp}, are specified by the \code{ytrafo} and \code{xtrafo} arguments
   respectively; see \code{\link{trafo}()} for the collection of transformation
   functions currently available.  This allows for implementation of both novel

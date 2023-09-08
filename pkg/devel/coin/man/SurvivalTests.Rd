@@ -20,14 +20,14 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
-\method{logrank_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{logrank_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{logrank_test}{IndependenceProblem}(object, ties.method = c("mid-ranks", "Hothorn-Lausen",
                                      "average-scores"),
              type = c("logrank", "Gehan-Breslow", "Tarone-Ware",
                       "Peto-Peto", "Prentice", "Prentice-Marek",
                       "Andersen-Borgan-Gill-Keiding",
                       "Fleming-Harrington", "Gaugler-Kim-Liao", "Self"),
-             rho = NULL, gamma = NULL, \dots)
+             rho = NULL, gamma = NULL, ...)
 }
 \arguments{
   \item{formula}{
@@ -76,7 +76,7 @@
     \code{"Fleming-Harrington"}, \code{"Gaugler-Kim-Liao"} or \code{"Self"}; see
     \sQuote{Details}.  Defaults to \code{NULL}, implying \code{0}.
   }
-  \item{\dots}{
+  \item{...}{
     further arguments to be passed to \code{\link{independence_test}()}.
   }
 }
@@ -116,11 +116,11 @@
   right-censored random sample of size \eqn{n}, where \eqn{t_i} is the observed
   survival time and \eqn{\delta_i} is the status indicator (\eqn{\delta_i} is 0
   for right-censored observations and 1 otherwise).  To allow for ties in the
-  data, let \eqn{t_{(1)} < t_{(2)} < \cdots < t_{(m)}}{t_(1) < t_(2) < \dots <
+  data, let \eqn{t_{(1)} < t_{(2)} < \cdots < t_{(m)}}{t_(1) < t_(2) < ... <
     t_(m)} represent the \eqn{m}, \eqn{m \le n}, ordered distinct event times.
   At time \eqn{t_{(k)}}{t_(k)}, \eqn{k = 1, 2, \ldots, m}, the number of events
   and the number of subjects at risk are given by \eqn{d_k = \sum_{i = 1}^n
-    I\!\left(t_i = t_{(k)}\,|\, \delta_i = 1\right)}{d_k = sum(i = 1, \dots, n)
+    I\!\left(t_i = t_{(k)}\,|\, \delta_i = 1\right)}{d_k = sum(i = 1, ..., n)
     I(t_i = t_(k) | delta_i = 1)} and \eqn{n_k = n - r_k}, respectively, where
   \eqn{r_k} depends on the ties handling method.
 
@@ -133,13 +133,13 @@
   \deqn{
     r_k = \sum_{i = 1}^n I\!\left(t_i < t_{(k)}\right)
   }{
-    r_k = sum(i = 1, \dots, n) I(t_i < t_(k))
+    r_k = sum(i = 1, ..., n) I(t_i < t_(k))
   }
   whereas the Hothorn-Lausen method uses
   \deqn{
     r_k = \sum_{i = 1}^n I\!\left(t_i \le t_{(k)}\right) - 1.
   }{
-    r_k = sum(i = 1, \dots, n) I(t_i <= t_(k)) - 1.
+    r_k = sum(i = 1, ..., n) I(t_i <= t_(k)) - 1.
   }
   The scores assigned to right-censored and uncensored observations at the
   \eqn{k}th event time are given by
@@ -148,7 +148,7 @@
     \quad \mathrm{and} \quad
     c_k = C_k - w_k,
   }{
-    C_k = sum(j=1,\dots,k) w_j * (d_j / n_j)   and   c_k = C_k - w_k,
+    C_k = sum(j = 1, ..., k) w_j * (d_j / n_j)   and   c_k = C_k - w_k,
   }
   respectively, where \eqn{w} is the logrank weight.  For the average-scores
   method, used by, e.g., the software package StatXact, the \eqn{d_k} events
@@ -191,7 +191,7 @@
   \deqn{
     w_k = \hat{S}_k = \prod_{j = 0}^{k - 1} \frac{n_j - d_j}{n_j}
   }{
-    w_k = Shat_k = prod(j = 0, \dots, k - 1) (n_j - d_j) / n_j
+    w_k = Shat_k = prod(j = 0, ..., k - 1) (n_j - d_j) / n_j
   }
   is the \emph{left-continuous} Kaplan-Meier estimator of the survival function,
   \eqn{n_0 \equiv n}{n_0 := n} and \eqn{d_0 \equiv 0}{d_0 := 0}.  The Prentice
@@ -200,7 +200,7 @@
   \deqn{
     w_k = \prod_{j = 1}^k \frac{n_j}{n_j + d_j}.
   }{
-    w_k = prod(j = 1, \dots, k) n_j / (n_j + d_j).
+    w_k = prod(j = 1, ..., k) n_j / (n_j + d_j).
   }
   The Prentice-Marek test (\code{"Prentice-Marek"}) is yet another
   generalization of the Wilcoxon rank-sum test discussed by Prentice and Marek
@@ -208,7 +208,7 @@
   \deqn{
     w_k = \tilde{S}_k = \prod_{j = 1}^k \frac{n_j + 1 - d_j}{n_j + 1}.
   }{
-    w_k = Stilde_k = prod(j = 1, \dots, k) (n_j + 1 - d_j) / (n_j + 1).
+    w_k = Stilde_k = prod(j = 1, ..., k) (n_j + 1 - d_j) / (n_j + 1).
   }
   The Andersen-Borgan-Gill-Keiding test (\code{"Andersen-Borgan-Gill-Keiding"})
   suggested by Andersen \emph{et al.} (1982) is a modified version of the
@@ -216,7 +216,7 @@
   \deqn{
     w_k = \frac{n_k}{n_k + 1} \prod_{j = 0}^{k - 1} \frac{n_j + 1 - d_j}{n_j + 1},
   }{
-    w_k = (n_k / (n_k + 1)) prod(j = 0, \dots, k - 1) (n_j + 1 - d_j) / (n_j + 1),
+    w_k = (n_k / (n_k + 1)) prod(j = 0, ..., k - 1) (n_j + 1 - d_j) / (n_j + 1),
   }
   where, again, \eqn{n_0 \equiv n}{n_0 := n} and \eqn{d_0 \equiv 0}{d_0 := 0}.
   The Fleming-Harrington class of tests (\code{"Fleming-Harrington"}) proposed

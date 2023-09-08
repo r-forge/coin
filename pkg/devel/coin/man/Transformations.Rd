@@ -38,7 +38,7 @@ ansari_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 fligner_trafo(x, ties.method = c("mid-ranks", "average-scores"))
 logrank_trafo(x, ties.method = c("mid-ranks", "Hothorn-Lausen",
                                  "average-scores"),
-              weight = logrank_weight, \dots)
+              weight = logrank_weight, ...)
 logrank_weight(time, n.risk, n.event,
                type = c("logrank", "Gehan-Breslow", "Tarone-Ware",
                         "Peto-Peto", "Prentice", "Prentice-Marek",
@@ -54,7 +54,7 @@ ofmaxstat_trafo(x, minprob = 0.1, maxprob = 1 - minprob)
 trafo(data, numeric_trafo = id_trafo, factor_trafo = f_trafo,
       ordered_trafo = of_trafo, surv_trafo = logrank_trafo,
       var_trafo = NULL, block = NULL)
-mcp_trafo(\dots)
+mcp_trafo(...)
 }
 \arguments{
   \item{x}{
@@ -166,7 +166,7 @@ mcp_trafo(\dots)
     an optional factor whose levels are interpreted as blocks.  \code{trafo} is
     applied to each level of \code{block} separately.  Defaults to \code{NULL}.
   }
-  \item{\dots}{
+  \item{...}{
     \code{logrank_trafo()}: further arguments to be passed to \code{weight}.
     % NOTE: this line is necessary for correct rendering
     \code{mcp_trafo()}: factor name and contrast matrix (as matrix or character)
