@@ -4,7 +4,6 @@
 \alias{maxstat_test.table}
 \alias{maxstat_test.IndependenceProblem}
 \concept{Generalized maximally selected statistics}
-\encoding{UTF-8}
 \title{Generalized Maximally Selected Statistics}
 \description{
   Testing the independence of two sets of variables measured on arbitrary scales

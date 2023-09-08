@@ -23,7 +23,6 @@
 \concept{Ansari-Bradley test}
 \concept{Fligner-Killeen test}
 \concept{Conover-Iman test}
-\encoding{UTF-8}
 \title{Two- and \eqn{K}-Sample Scale Tests}
 \description{
   Testing the equality of the distributions of a numeric response variable in

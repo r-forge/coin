@@ -1,5 +1,4 @@
 \name{NEWS}
-\encoding{UTF-8}
 \title{News for Package \pkg{coin}}
 
 \section{Changes in version 2.0-0 (20YY-MM-DD)}{

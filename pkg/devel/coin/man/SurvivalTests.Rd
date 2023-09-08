@@ -12,7 +12,6 @@
 \concept{Fleming-Harrington test}
 \concept{Gaugler-Kim-Liao test}
 \concept{Self test}
-\encoding{UTF-8}
 \title{Two- and \eqn{K}-Sample Tests for Censored Data}
 \description{
   Testing the equality of the survival distributions in two or more independent
