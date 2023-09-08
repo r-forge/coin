@@ -23,11 +23,11 @@
   cannot be created from it directly.
 
   Objects can be created by calls of the form \preformatted{     new("MaxTypeIndependenceTestStatistic", object,
-         alternative = c("two.sided", "less", "greater"), \dots),
+         alternative = c("two.sided", "less", "greater"), ...),
 
-     new("QuadTypeIndependenceTestStatistic", object, paired = FALSE, \dots)}
+     new("QuadTypeIndependenceTestStatistic", object, paired = FALSE, ...)}
   and \preformatted{     new("ScalarIndependenceTestStatistic", object,
-         alternative = c("two.sided", "less", "greater"), paired = FALSE, \dots)}
+         alternative = c("two.sided", "less", "greater"), paired = FALSE, ...)}
   where \code{object} is an object of class
   \code{"IndependenceLinearStatistic"}, \code{alternative} is a character
   specifying the direction of the alternative hypothesis and \code{paired} is a

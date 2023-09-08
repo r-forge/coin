@@ -31,26 +31,26 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
-\method{oneway_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{oneway_test}{IndependenceProblem}(object, \dots)
+\method{oneway_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
+\method{oneway_test}{IndependenceProblem}(object, ...)
 
-\method{wilcox_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{wilcox_test}{IndependenceProblem}(object, conf.int = FALSE, conf.level = 0.95, \dots)
+\method{wilcox_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
+\method{wilcox_test}{IndependenceProblem}(object, conf.int = FALSE, conf.level = 0.95, ...)
 
-\method{kruskal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{kruskal_test}{IndependenceProblem}(object, \dots)
+\method{kruskal_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
+\method{kruskal_test}{IndependenceProblem}(object, ...)
 
-\method{normal_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{normal_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{normal_test}{IndependenceProblem}(object, ties.method = c("mid-ranks", "average-scores"),
-            conf.int = FALSE, conf.level = 0.95, \dots)
+            conf.int = FALSE, conf.level = 0.95, ...)
 
-\method{median_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{median_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{median_test}{IndependenceProblem}(object, mid.score = c("0", "0.5", "1"),
-            conf.int = FALSE, conf.level = 0.95, \dots)
+            conf.int = FALSE, conf.level = 0.95, ...)
 
-\method{savage_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
+\method{savage_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{savage_test}{IndependenceProblem}(object, ties.method = c("mid-ranks", "average-scores"),
-            conf.int = FALSE, conf.level = 0.95, \dots)
+            conf.int = FALSE, conf.level = 0.95, ...)
 }
 \arguments{
   \item{formula}{
@@ -90,7 +90,7 @@
     either 0 (\code{"0"}, default), 0.5 (\code{"0.5"}) or 1 (\code{"1"}); see
     \sQuote{Details}.
   }
-  \item{\dots}{
+  \item{...}{
     further arguments to be passed to \code{\link{independence_test}()}.
   }
 }

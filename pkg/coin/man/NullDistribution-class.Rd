@@ -12,12 +12,12 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \section{Objects from the Class}{
-  Objects can be created by calls of the form \preformatted{     new("NullDistribution", \dots),
+  Objects can be created by calls of the form \preformatted{     new("NullDistribution", ...),
 
-     new("ApproxNullDistribution", \dots),
+     new("ApproxNullDistribution", ...),
 
-     new("AsymptNullDistribution", \dots)}
-  and \preformatted{     new("ExactNullDistribution", \dots).}
+     new("AsymptNullDistribution", ...)}
+  and \preformatted{     new("ExactNullDistribution", ...).}
 }
 \section{Slots}{
   For objects of classes \code{"NullDistribution"},

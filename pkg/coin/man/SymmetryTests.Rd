@@ -22,17 +22,17 @@
   block design.
 }
 \usage{
-\method{sign_test}{formula}(formula, data, subset = NULL, \dots)
-\method{sign_test}{SymmetryProblem}(object, \dots)
+\method{sign_test}{formula}(formula, data, subset = NULL, ...)
+\method{sign_test}{SymmetryProblem}(object, ...)
 
-\method{wilcoxsign_test}{formula}(formula, data, subset = NULL, \dots)
-\method{wilcoxsign_test}{SymmetryProblem}(object, zero.method = c("Pratt", "Wilcoxon"), \dots)
+\method{wilcoxsign_test}{formula}(formula, data, subset = NULL, ...)
+\method{wilcoxsign_test}{SymmetryProblem}(object, zero.method = c("Pratt", "Wilcoxon"), ...)
 
-\method{friedman_test}{formula}(formula, data, subset = NULL, \dots)
-\method{friedman_test}{SymmetryProblem}(object, \dots)
+\method{friedman_test}{formula}(formula, data, subset = NULL, ...)
+\method{friedman_test}{SymmetryProblem}(object, ...)
 
-\method{quade_test}{formula}(formula, data, subset = NULL, \dots)
-\method{quade_test}{SymmetryProblem}(object, \dots)
+\method{quade_test}{formula}(formula, data, subset = NULL, ...)
+\method{quade_test}{SymmetryProblem}(object, ...)
 }
 \arguments{
   \item{formula}{
@@ -55,7 +55,7 @@
     a character, the method used to handle zeros: either \code{"Pratt"}
     (default) or \code{"Wilcoxon"}; see \sQuote{Details}.
   }
-  \item{\dots}{
+  \item{...}{
     further arguments to be passed to \code{\link{symmetry_test}()}.
   }
 }

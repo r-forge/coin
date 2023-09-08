@@ -9,7 +9,7 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \section{Objects from the Class}{
-  Objects can be created by calls of the form \preformatted{     new("IndependenceTestProblem", object, xtrafo = trafo, ytrafo = trafo, \dots)}
+  Objects can be created by calls of the form \preformatted{     new("IndependenceTestProblem", object, xtrafo = trafo, ytrafo = trafo, ...)}
   where \code{object} is an object of class
   \code{"\linkS4class{IndependenceProblem}"}, \code{xtrafo} is the regression
   function \eqn{g(\mathbf{X})}{g(X)} and \code{ytrafo} is the influence function

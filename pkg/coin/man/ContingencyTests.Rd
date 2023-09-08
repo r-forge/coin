@@ -20,17 +20,17 @@
   Testing the independence of two nominal or ordered factors.
 }
 \usage{
-\method{chisq_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{chisq_test}{table}(object, \dots)
-\method{chisq_test}{IndependenceProblem}(object, \dots)
+\method{chisq_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
+\method{chisq_test}{table}(object, ...)
+\method{chisq_test}{IndependenceProblem}(object, ...)
 
-\method{cmh_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{cmh_test}{table}(object, \dots)
-\method{cmh_test}{IndependenceProblem}(object, \dots)
+\method{cmh_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
+\method{cmh_test}{table}(object, ...)
+\method{cmh_test}{IndependenceProblem}(object, ...)
 
-\method{lbl_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{lbl_test}{table}(object, \dots)
-\method{lbl_test}{IndependenceProblem}(object, \dots)
+\method{lbl_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
+\method{lbl_test}{table}(object, ...)
+\method{lbl_test}{IndependenceProblem}(object, ...)
 }
 \arguments{
   \item{formula}{
@@ -53,7 +53,7 @@
     an object inheriting from classes \code{"table"} or
     \code{"\linkS4class{IndependenceProblem}"}.
   }
-  \item{\dots}{
+  \item{...}{
     further arguments to be passed to \code{\link{independence_test}()}.
   }
 }

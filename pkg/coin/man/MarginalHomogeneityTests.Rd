@@ -13,9 +13,9 @@
   complete block design.
 }
 \usage{
-\method{mh_test}{formula}(formula, data, subset = NULL, \dots)
-\method{mh_test}{table}(object, \dots)
-\method{mh_test}{SymmetryProblem}(object, \dots)
+\method{mh_test}{formula}(formula, data, subset = NULL, ...)
+\method{mh_test}{table}(object, ...)
+\method{mh_test}{SymmetryProblem}(object, ...)
 }
 \arguments{
   \item{formula}{
@@ -34,7 +34,7 @@
     an object inheriting from classes \code{"table"} (with identical
     \code{dimnames} components) or \code{"\linkS4class{SymmetryProblem}"}.
   }
-  \item{\dots}{
+  \item{...}{
     further arguments to be passed to \code{\link{symmetry_test}()}.
   }
 }

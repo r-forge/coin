@@ -20,16 +20,16 @@
   exact reference distribution.
 }
 \usage{
-\S4method{AsymptNullDistribution}{MaxTypeIndependenceTestStatistic}(object, \dots)
-\S4method{AsymptNullDistribution}{QuadTypeIndependenceTestStatistic}(object, \dots)
-\S4method{AsymptNullDistribution}{ScalarIndependenceTestStatistic}(object, \dots)
+\S4method{AsymptNullDistribution}{MaxTypeIndependenceTestStatistic}(object, ...)
+\S4method{AsymptNullDistribution}{QuadTypeIndependenceTestStatistic}(object, ...)
+\S4method{AsymptNullDistribution}{ScalarIndependenceTestStatistic}(object, ...)
 
-\S4method{ApproxNullDistribution}{MaxTypeIndependenceTestStatistic}(object, nresample = 10000L, B, \dots)
-\S4method{ApproxNullDistribution}{QuadTypeIndependenceTestStatistic}(object, nresample = 10000L, B, \dots)
-\S4method{ApproxNullDistribution}{ScalarIndependenceTestStatistic}(object, nresample = 10000L, B, \dots)
+\S4method{ApproxNullDistribution}{MaxTypeIndependenceTestStatistic}(object, nresample = 10000L, ...)
+\S4method{ApproxNullDistribution}{QuadTypeIndependenceTestStatistic}(object, nresample = 10000L, ...)
+\S4method{ApproxNullDistribution}{ScalarIndependenceTestStatistic}(object, nresample = 10000L, ...)
 
-\S4method{ExactNullDistribution}{QuadTypeIndependenceTestStatistic}(object, algorithm = c("auto", "shift", "split-up"), \dots)
-\S4method{ExactNullDistribution}{ScalarIndependenceTestStatistic}(object, algorithm = c("auto", "shift", "split-up"), \dots)
+\S4method{ExactNullDistribution}{QuadTypeIndependenceTestStatistic}(object, algorithm = c("auto", "shift", "split-up"), ...)
+\S4method{ExactNullDistribution}{ScalarIndependenceTestStatistic}(object, algorithm = c("auto", "shift", "split-up"), ...)
 }
 \arguments{
   \item{object}{
@@ -49,7 +49,7 @@
     distribution: either \code{"auto"} (default), \code{"shift"} or
     \code{"split-up"}.
   }
-  \item{\dots}{
+  \item{...}{
     further arguments to be passed to or from methods.
   }
 }

@@ -10,19 +10,19 @@
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
-\method{symmetry_test}{formula}(formula, data, subset = NULL, weights = NULL, \dots)
-\method{symmetry_test}{table}(object, \dots)
+\method{symmetry_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
+\method{symmetry_test}{table}(object, ...)
 \method{symmetry_test}{SymmetryProblem}(object, teststat = c("maximum", "quadratic", "scalar"),
               distribution = c("asymptotic", "approximate",
                                "exact", "none"),
               alternative = c("two.sided", "less", "greater"),
               xtrafo = trafo, ytrafo = trafo, scores = NULL,
-              check = NULL, paired = FALSE, \dots)
+              check = NULL, paired = FALSE, ...)
 }
 \arguments{
   \item{formula}{
     a formula of the form \code{y1 + ... + yq ~ x | block} where \code{y1},
-    \dots, \code{yq} are measured on arbitrary scales (nominal, ordinal or
+    \ldots, \code{yq} are measured on arbitrary scales (nominal, ordinal or
     continuous with or without censoring), \code{x} is a factor and \code{block}
     is an optional factor (which is generated automatically if omitted).
   }
@@ -69,8 +69,8 @@
   }
   \item{ytrafo}{
     a function of transformations to be applied to the variables \code{y1},
-    \dots, \code{yq} supplied in \code{formula}; see \sQuote{Details}.  Defaults
-    to \code{\link{trafo}()}.
+    \ldots, \code{yq} supplied in \code{formula}; see \sQuote{Details}.
+    Defaults to \code{\link{trafo}()}.
   }
   \item{scores}{
     a named list of scores to be attached to ordered factors; see
@@ -87,7 +87,7 @@
     of the positive differences between the paired observations.  Defaults to
     \code{FALSE}.
   }
-  \item{\dots}{
+  \item{...}{
     further arguments to be passed to or from other methods (currently ignored).
   }
 }
@@ -100,14 +100,14 @@
   is given by Hothorn \emph{et al.} (2008).
 
   The null hypothesis of symmetry is tested.  The response variables and the
-  measurement conditions are given by \code{y1}, \dots, \code{yq} and \code{x},
+  measurement conditions are given by \code{y1}, \ldots, \code{yq} and \code{x},
   respectively, and \code{block} is a factor where each level corresponds to
   exactly one subject with repeated measurements.
 
   A vector of case weights, e.g., observation counts, can be supplied through
   the \code{weights} argument and the type of test statistic is specified by
   the \code{teststat} argument.  Influence and regression functions, i.e.,
-  transformations of \code{y1}, \dots, \code{yq} and \code{x}, are specified by
+  transformations of \code{y1}, \ldots, \code{yq} and \code{x}, are specified by
   the \code{ytrafo} and \code{xtrafo} arguments respectively; see
   \code{\link{trafo}()} for the collection of transformation functions currently
   available.  This allows for implementation of both novel and familiar test
