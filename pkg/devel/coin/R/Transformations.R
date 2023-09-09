@@ -1,7 +1,9 @@
 ### compute average scores, see Hajek, Sidak, Sen (page 131ff)
-average_scores <- function(s, x) {
-    for (d in unique(x))
-        s[x == d] <- mean(s[x == d], na.rm = TRUE)
+.average_scores <- function(s, x) {
+    for (d in unique(x)) {
+        idx <- x == d
+        s[idx] <- mean(s[idx], na.rm = TRUE)
+    }
     s
 }
 
@@ -26,7 +28,7 @@ klotz_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
         "average-scores" = {
             s <- qnorm(rank_trafo(x, ties.method = "random") /
                          (sum(!is.na(x)) + 1))^2
-            average_scores(s, x)
+            .average_scores(s, x)
         }
     )
 }
@@ -41,7 +43,7 @@ mood_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
         "average-scores" = {
             s <- (rank_trafo(x, ties.method = "random") -
                     (sum(!is.na(x)) + 1) / 2)^2
-            average_scores(s, x)
+            .average_scores(s, x)
         }
     )
 }
@@ -57,7 +59,7 @@ ansari_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
         "average-scores" = {
             r <- rank_trafo(x, ties.method = "random")
             s <- pmin.int(r, sum(!is.na(x)) - r + 1)
-            average_scores(s, x)
+            .average_scores(s, x)
         }
     )
 }
@@ -72,7 +74,7 @@ fligner_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
         "average-scores" = {
             s <- qnorm((1 + rank_trafo(abs(x), ties.method = "random") /
                           (sum(!is.na(x)) + 1)) / 2)
-            average_scores(s, x)
+            .average_scores(s, x)
         }
     )
 }
@@ -87,7 +89,7 @@ normal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
         "average-scores" = {
             s <- qnorm(rank_trafo(x, ties.method = "random") /
                          (sum(!is.na(x)) + 1))
-            average_scores(s, x)
+            .average_scores(s, x)
         }
     )
 }
@@ -118,7 +120,7 @@ savage_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
         "average-scores" = {
             o <- order(x)
             s <- 1 / (sum(!is.na(x)) - r(x, "first") + 1)
-            average_scores(cumsum(s[o])[order(o)], x) - 1
+            .average_scores(cumsum(s[o])[order(o)], x) - 1
         }
     )
 }
@@ -136,7 +138,7 @@ consal_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
             "average-scores" = {
                  s <- (rank_trafo(x, ties.method = "random") /
                          (sum(!is.na(x)) + 1))^(a - 1)
-                 average_scores(s, x)
+                 .average_scores(s, x)
             }
         )
     }
@@ -156,7 +158,7 @@ koziol_trafo <- function(x, ties.method = c("mid-ranks", "average-scores"),
         "average-scores" = {
             s <- sqrt(2) * cospi(j * rank_trafo(x, ties.method = "random") /
                                    (sum(!is.na(x)) + 1))
-            average_scores(s, x)
+            .average_scores(s, x)
         }
     )
 }
@@ -202,7 +204,7 @@ maxstat_trafo <- ofmaxstat_trafo <-
 
 ### compute index matrix of all 2^(nlevel - 1) possible splits
 ### code translated from package 'tree'
-fsplits <-
+.fsplits <-
     function(nlevel)
 {
     mi <- 2.0^(nlevel - 1L) - 1.0
@@ -225,7 +227,7 @@ fmaxstat_trafo <-
 {
     x <- factor(x) # drop unused levels
     lev <- levels(x)
-    cp <- fsplits(length(lev))
+    cp <- .fsplits(length(lev))
     n_cp <- nrow(cp)
     cm <- matrix(0.0, nrow = length(x), ncol = n_cp)
     nm <- vector(mode = "character", length = n_cp)
@@ -293,8 +295,10 @@ logrank_trafo <-
             if (ties.method != "average-scores")
                 cumsum(w * n_event / n_risk)[idx] - event * w[idx]
             else # average over events only
-                average_scores(cumsum(w * n_event / n_risk)[idx] - event * w[idx],
-                               time0 + (1 - event) * noise)
+                .average_scores(
+                    cumsum(w * n_event / n_risk)[idx] - event * w[idx],
+                    time0 + (1 - event) * noise
+                )
     } else {
         scores <- matrix(NA_real_, nrow = length(cc), ncol = nw,
                          dimnames = list(NULL, colnames(w)))
@@ -303,8 +307,10 @@ logrank_trafo <-
                 if (ties.method != "average-scores")
                     cumsum(w[, i] * n_event / n_risk)[idx] - event * w[idx, i]
                 else # average over events only
-                    average_scores(cumsum(w[, i] * n_event / n_risk)[idx] - event * w[idx, i],
-                                   time0 + (1 - event) * noise)
+                    .average_scores(
+                        cumsum(w[, i] * n_event / n_risk)[idx] - event * w[idx, i],
+                        time0 + (1 - event) * noise
+                    )
             }, time)
     }
     scores
@@ -425,15 +431,15 @@ of_trafo <- function(x, scores = NULL) {
 }
 
 ### Zheng (2008)
-ordered_scores <- function(r, s) {
+.ordered_scores <- function(r, s) {
     n <- length(s)
     if (r == 1)      # 'x' has three levels => simplest case!
         matrix(s, nrow = 1, ncol = n)
     else if (n == 1) # => all order-preserving binary partitions
         matrix(s, nrow = r, ncol = 1)
     else {           # 'x' has four or more levels
-        s1 <- ordered_scores(r - 1, s)
-        s2 <- ordered_scores(r, s[-1])
+        s1 <- .ordered_scores(r - 1, s)
+        s2 <- .ordered_scores(r, s[-1])
         cbind(rbind(s[1], s1), s2)
     }
 }
@@ -449,7 +455,7 @@ zheng_trafo <- function(x, increment = 0.1) {
         stop(sQuote(deparse(substitute(x))), " has less than three levels")
 
     ## compute scores
-    scores <- rbind(0, ordered_scores(r, seq.int(0, 1, increment)), 1)
+    scores <- rbind(0, .ordered_scores(r, seq.int(0, 1, increment)), 1)
 
     ## compute colnames
     cn <- format(scores, digits = min(n_decimal_digits(increment), 4),
