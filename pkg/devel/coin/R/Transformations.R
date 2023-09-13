@@ -1,11 +1,7 @@
 ### compute average scores, see Hajek, Sidak, Sen (page 131ff)
-.average_scores <- function(s, x) {
-    for (d in unique(x)) {
-        idx <- x == d
-        s[idx] <- mean(s[idx], na.rm = TRUE)
-    }
-    s
-}
+.average_scores <-
+function(s, x)
+    ave(s, factor(x))
 
 ### identity transformation
 id_trafo <- function(x) x
@@ -273,16 +269,15 @@ logrank_trafo <-
                                   else "max")
     o <- order(time, event)
     or <- r[o]
-    uor <- unique(or)
 
     ## number at risk, number of ties and events at the ordered unique times
-    n_risk <- n - uor + 1L
+    n_risk <- n - unique(or) + 1L
     n_ties <- if (ties.method != "Hothorn-Lausen") -diff(c(n_risk, 0L))
               else -diff(c(n - unique(rank(time, ties.method = "min")[o]) + 1L, 0L))
-    n_event <- vapply(uor, function(i) sum(event[o][i == or]), NA_real_)
+    n_event <- vapply(split(event[o], or), sum, NA_real_, USE.NAMES = FALSE)
 
     ## index: expands ties and returns in original order
-    idx <- rep.int(seq_along(n_ties), n_ties)[r] # => uor[idx] == r
+    idx <- rep.int(seq_along(n_ties), n_ties)[r] # => unique(or)[idx] == r
 
     ## weights
     w <- weight(sort(unique(time)), n_risk, n_event, ...)
