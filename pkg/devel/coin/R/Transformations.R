@@ -3,15 +3,21 @@
 function(s, x)
     ave(s, factor(x))
 
+### rank with NAs kept in place
+.rank <-
+function(x, ties.method = "average") {
+    if (ties.method == "mid-ranks")
+        ties.method <- "average"
+    rank(x, na.last = "keep", ties.method = ties.method)
+}
+
 ### identity transformation
 id_trafo <- function(x) x
 
 ### rank transformation
 rank_trafo <- function(x, ties.method = c("mid-ranks", "random")) {
     ties.method <- match.arg(ties.method)
-    rank(x, na.last = "keep",
-         ties.method = if (ties.method == "mid-ranks") "average"
-                       else "random")
+    .rank(x, ties.method = ties.method)
 }
 
 ## Klotz (1962)
@@ -105,17 +111,14 @@ median_trafo <- function(x, mid.score = c("0", "0.5", "1")) {
 ### Savage scores
 savage_trafo <- function(x, ties.method = c("mid-ranks", "average-scores")) {
     ties.method <- match.arg(ties.method)
-
-    r <- function(x, t) rank(x, na.last = "keep", ties.method = t)
-
     switch(ties.method,
         "mid-ranks" = {
-            s <- 1 / (sum(!is.na(x)) - r(x, "min") + 1)
-            cumsum(s[order(x)])[r(x, "max")] - 1
+            s <- 1 / (sum(!is.na(x)) - .rank(x, ties.method = "min") + 1)
+            cumsum(s[order(x)])[.rank(x, ties.method = "max")] - 1
         },
         "average-scores" = {
             o <- order(x)
-            s <- 1 / (sum(!is.na(x)) - r(x, "first") + 1)
+            s <- 1 / (sum(!is.na(x)) - .rank(x, ties.method = "first") + 1)
             .average_scores(cumsum(s[o])[order(o)], x) - 1
         }
     )
