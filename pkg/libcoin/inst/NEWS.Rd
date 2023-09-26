@@ -1,3 +1,5 @@
+\newcommand{\C}{\ifelse{latex}{\out{\textsf{C}}}{C}}
+\newcommand{\nuweb}{\ifelse{latex}{\out{\textsf{nuweb}}}{nuweb}}
 
 \name{NEWS}
 \title{NEWS file for the \pkg{libcoin} package}
@@ -5,7 +7,7 @@
 \section{Changes in Version 1.0-10 (20YY-MM-DD)}{
   \itemize{
     \item Enable \code{STRICT_R_HEADERS}.
-    \item The nuweb sources are now included (see \file{../inst/nuweb/}).
+    \item The \nuweb source code is now included (see \file{../inst/nuweb/}).
     \item Documentation updates.
   }
 }
@@ -21,7 +23,7 @@
 
 \section{Changes in Version 1.0-8 (2021-02-08)}{
   \itemize{
-    \item Fix LaTeX problem.
+    \item Fix \LaTeX problem.
   }
 }
 
@@ -36,17 +38,17 @@
   \itemize{
     \item Interface to \code{S_rcont2} changed in \pkg{stats}, thanks
           to Martin Maechler for a fix.
-    \item New function \code{R_pack_sym} for transforming a symmetric matrix to
-          lower-packed storage mode.
+    \item New \C function \code{R_pack_sym} for transforming a symmetric matrix
+          to lower-packed storage mode.
   }
 }
 
 \section{Changes in Version 1.0-5 (2019-08-22)}{
   \itemize{
-    \item New function \code{R_unpack_sym} for unpacking a symmetric matrix
+    \item New \C function \code{R_unpack_sym} for unpacking a symmetric matrix
           stored in lower-packed storage mode.
-    \item New functions \code{R_quadform} and \code{R_MPinv_sym} providing
-          interfaces to the \proglang{C} functions \code{C_quadform} and
+    \item New \C functions \code{R_quadform} and \code{R_MPinv_sym} providing
+          interfaces to the internal functions \code{C_quadform} and
           \code{C_MPinv_sym}.
     \item Function \code{libcoin_StandardisePermutedLinearStatistic} was renamed
           to \code{libcoin_R_StandardisePermutedLinearStatistic}.
@@ -83,8 +85,8 @@
 
 \section{Changes in Version 1.0-0 (2017-12-12)}{
   \itemize{
-    \item Make the package truly literate; there is one single \proglang{NUWEB}
-          file called \file{libcoin.w} which generates the complete package.
+    \item Make the package truly literate; there is one single \nuweb file
+          called \file{libcoin.w} which generates the complete package.
     \item The package can now deal with long vectors.
   }
 }
@@ -105,9 +107,9 @@
 
 \section{Changes in Version 0.9-1 (2017-02-06)}{
   \itemize{
-    \item Calling \pkg{libcoin}'s \proglang{C} routines (using \code{.Call()})
-          now requires the entry points to be specified as \R objects, i.e., the
-          use of character strings is no longer allowed.
+    \item Calling \pkg{libcoin}'s \C routines (using \code{.Call()}) now
+          requires the entry points to be specified as \R objects, i.e., the use
+          of character strings is no longer allowed.
     \item Stop when all observations are missing.
     \item 2d case with missings in at least one variable used incorrect sample
           sizes and thus produced wrong results.
