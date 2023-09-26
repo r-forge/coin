@@ -4,7 +4,7 @@
 \name{NEWS}
 \title{NEWS file for the \pkg{libcoin} package}
 
-\section{Changes in Version 1.0-10 (20YY-MM-DD)}{
+\section{Changes in Version 1.0-10 (2023-09-26)}{
   \itemize{
     \item Enable \code{STRICT_R_HEADERS}.
     \item The \nuweb source code is now included (see \file{../inst/nuweb/}).

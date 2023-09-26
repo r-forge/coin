@@ -7089,7 +7089,7 @@ function(libpath)
 @{
 Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
-Date: 20YY-MM-DD
+Date: 2023-09-26
 Version: 1.0-10
 Authors@@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
                   email = "Torsten.Hothorn@@R-project.org")

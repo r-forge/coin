@@ -11053,7 +11053,7 @@ This function can be called from other packages.
 \mbox{}\verb@@\\
 \mbox{}\verb@Package: libcoin@\\
 \mbox{}\verb@Title: Linear Test Statistics for Permutation Inference@\\
-\mbox{}\verb@Date: 20YY-MM-DD@\\
+\mbox{}\verb@Date: 2023-09-26@\\
 \mbox{}\verb@Version: 1.0-10@\\
 \mbox{}\verb@Authors@{\tt @}\verb@R: person("Torsten", "Hothorn", role = c("aut", "cre"),@\\
 \mbox{}\verb@                  email = "Torsten.Hothorn@{\tt @}\verb@R-project.org")@\\
