@@ -94,7 +94,7 @@
   numeric covariates \code{x1}, \ldots, \code{xp}.
 
   If, say, \code{y1} and/or \code{x1} are ordered factors, the default scores,
-  \code{1:nlevels(y1)} and \code{1:nlevels(x1)} respectively, can be altered
+  \code{1:nlevels(y1)} and \code{1:nlevels(x1)}, respectively, can be altered
   using the \code{scores} argument (see \code{\link{independence_test}()}); this
   argument can also be used to coerce nominal factors to class \code{"ordered"}.
   If both, say, \code{y1} and \code{x1} are ordered factors, a linear-by-linear
@@ -117,7 +117,7 @@
 \note{
   Starting with \pkg{coin} version 1.1-0, maximum statistics and quadratic forms
   can no longer be specified using \code{teststat = "maxtype"} and
-  \code{teststat = "quadtype"} respectively (as was used in versions prior to
+  \code{teststat = "quadtype"}, respectively (as was used in versions prior to
   0.4-5).
 }
 \references{

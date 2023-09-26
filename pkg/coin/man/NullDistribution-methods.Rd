@@ -56,7 +56,7 @@
 \details{
   The methods \code{AsymptNullDistribution}, \code{ApproxNullDistribution} and
   \code{ExactNullDistribution} compute the asymptotic, approximative (Monte
-  Carlo) and exact reference distribution respectively.
+  Carlo) and exact reference distribution, respectively.
 }
 \note{
   In versions of \pkg{coin} prior to 1.3-0, the number of Monte Carlo replicates in

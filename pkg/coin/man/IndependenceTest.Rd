@@ -101,7 +101,7 @@
   the \code{weights} argument and the type of test statistic is specified by the
   \code{teststat} argument.  Influence and regression functions, i.e.,
   transformations of \code{y1}, \ldots, \code{yq} and \code{x1}, \ldots,
-  \code{xp}, are specified by the \code{ytrafo} and \code{xtrafo} arguments
+  \code{xp}, are specified by the \code{ytrafo} and \code{xtrafo} arguments,
   respectively; see \code{\link{trafo}()} for the collection of transformation
   functions currently available.  This allows for implementation of both novel
   and familiar test statistics, e.g., the Pearson \eqn{\chi^2} test, the
@@ -113,7 +113,7 @@
   effort (see \sQuote{Examples}).
 
   If, say, \code{y1} and/or \code{x1} are ordered factors, the default scores,
-  \code{1:nlevels(y1)} and \code{1:nlevels(x1)} respectively, can be altered
+  \code{1:nlevels(y1)} and \code{1:nlevels(x1)}, respectively, can be altered
   using the \code{scores} argument; this argument can also be used to coerce
   nominal factors to class \code{"ordered"}.  For example, when \code{y1} is an
   ordered factor with four levels and \code{x1} is a nominal factor with three
@@ -128,7 +128,7 @@
   used by default (\code{distribution = "asymptotic"}).  Alternatively, the
   distribution can be approximated via Monte Carlo resampling or computed
   exactly for univariate two-sample problems by setting \code{distribution} to
-  \code{"approximate"} or \code{"exact"} respectively.  See
+  \code{"approximate"} or \code{"exact"}, respectively.  See
   \code{\link{asymptotic}()}, \code{\link{approximate}()} and
   \code{\link{exact}()} for details.
 }
@@ -138,7 +138,7 @@
 \note{
   Starting with \pkg{coin} version 1.1-0, maximum statistics and quadratic forms
   can no longer be specified using \code{teststat = "maxtype"} and
-  \code{teststat = "quadtype"} respectively (as was used in versions prior to
+  \code{teststat = "quadtype"}, respectively (as was used in versions prior to
   0.4-5).
 }
 \references{

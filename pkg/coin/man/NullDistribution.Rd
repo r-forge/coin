@@ -91,8 +91,8 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
   integer-valued scores \eqn{h(\bf{Y})}{h(Y)}.  The split-up algorithm can be
   used with non-integer scores, but does not handle blocks.  By default, an
   automatic choice is made (\code{algorithm = "auto"}) but the shift and
-  split-up algorithms can be selected by setting \code{algorithm} to either
-  \code{"shift"} or \code{"split-up"} respectively.
+  split-up algorithms can be selected by setting \code{algorithm} to
+  \code{"shift"} or \code{"split-up"}, respectively.
 }
 \note{
   Starting with \pkg{coin} version 1.1-0, the default for \code{algorithm} is
