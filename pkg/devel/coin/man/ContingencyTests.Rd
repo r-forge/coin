@@ -67,8 +67,8 @@
   \code{block}, between \code{y} and \code{x} is tested.
 
   If \code{y} and/or \code{x} are ordered factors, the default scores,
-  \code{1:nlevels(y)} and \code{1:nlevels(x)} respectively, can be altered using
-  the \code{scores} argument (see \code{\link{independence_test}()}); this
+  \code{1:nlevels(y)} and \code{1:nlevels(x)}, respectively, can be altered
+  using the \code{scores} argument (see \code{\link{independence_test}()}); this
   argument can also be used to coerce nominal factors to class \code{"ordered"}.
   (\code{lbl_test()} coerces to class \code{"ordered"} under any circumstances.)
   If both \code{y} and \code{x} are ordered factors, a linear-by-linear
@@ -86,7 +86,7 @@
   used by default (\code{distribution = "asymptotic"}).  Alternatively, the
   distribution can be approximated via Monte Carlo resampling or computed
   exactly for univariate two-sample problems by setting \code{distribution} to
-  \code{"approximate"} or \code{"exact"} respectively.  See
+  \code{"approximate"} or \code{"exact"}, respectively.  See
   \code{\link{asymptotic}()}, \code{\link{approximate}()} and
   \code{\link{exact}()} for details.
 }

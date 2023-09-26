@@ -53,7 +53,7 @@
 \details{
   The methods \code{AsymptNullDistribution}, \code{ApproxNullDistribution} and
   \code{ExactNullDistribution} compute the asymptotic, approximative (Monte
-  Carlo) and exact reference distribution respectively.
+  Carlo) and exact reference distribution, respectively.
 }
 \value{
   An object of class \code{"\linkS4class{AsymptNullDistribution}"},

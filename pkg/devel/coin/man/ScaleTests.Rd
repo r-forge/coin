@@ -120,7 +120,7 @@
   used by default (\code{distribution = "asymptotic"}).  Alternatively, the
   distribution can be approximated via Monte Carlo resampling or computed
   exactly for univariate two-sample problems by setting \code{distribution} to
-  \code{"approximate"} or \code{"exact"} respectively.  See
+  \code{"approximate"} or \code{"exact"}, respectively.  See
   \code{\link{asymptotic}()}, \code{\link{approximate}()} and
   \code{\link{exact}()} for details.
 }

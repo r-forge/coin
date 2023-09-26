@@ -82,7 +82,7 @@
 \details{
   The methods \code{pvalue}, \code{midpvalue}, \code{pvalue_interval} and
   \code{size} compute the \eqn{p}-value, mid-\eqn{p}-value, \eqn{p}-value
-  interval and test size respectively.
+  interval and test size, respectively.
 
   For \code{pvalue()}, the global \eqn{p}-value (\code{method = "global"}) is
   returned by default and is given with an associated 99\% confidence interval
@@ -103,13 +103,13 @@
 
   Assuming \emph{subset pivotality}, single-step or \emph{free} step-down
   adjusted \eqn{p}-values using max-\eqn{T} procedures are obtained by setting
-  \code{method} to \code{"single-step"} or \code{"step-down"} respectively.  In
+  \code{method} to \code{"single-step"} or \code{"step-down"}, respectively.  In
   both cases, the \code{distribution} argument specifies whether the adjustment
   is based on the joint distribution (\code{"joint"}) or the marginal
   distributions (\code{"marginal"}) of the test statistics.  For procedures
   based on the marginal distributions, Bonferroni- or \enc{Šidák}{Sidak}-type
   adjustment can be specified through the \code{type} argument by setting it to
-  \code{"Bonferroni"} or \code{"Sidak"} respectively.
+  \code{"Bonferroni"} or \code{"Sidak"}, respectively.
 
   The \eqn{p}-value adjustment procedures based on the joint distribution of the
   test statistics fully utilizes distributional characteristics, such as
@@ -118,7 +118,7 @@
   distribution-based procedures are typically more powerful.  Details regarding
   the single-step and \emph{free} step-down procedures based on the joint
   distribution can be found in Westfall and Young (1993); in particular, this
-  implementation uses Equation 2.8 with Algorithm 2.5 and 2.8 respectively.
+  implementation uses Equation 2.8 with Algorithm 2.5 and 2.8, respectively.
   Westfall and Wolfinger (1997) provide details of the marginal
   distributions-based single-step and \emph{free} step-down procedures.  The
   generalization of Westfall and Wolfinger (1997) to arbitrary test statistics,
