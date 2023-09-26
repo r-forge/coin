@@ -1,7 +1,7 @@
 \name{NEWS}
 \title{News for Package \pkg{coin}}
 
-\section{Changes in version 1.4-3 (20YY-MM-DD)}{
+\section{Changes in version 1.4-3 (2023-09-26)}{
   \subsection{Bug fixes}{
     \itemize{
       \item Supplying case weights to tests for marginal homogeneity or symmetry
@@ -21,7 +21,7 @@
     \itemize{
       \item The Fligner-Killeen test, the Conover-Iman test and the Quade test
             performed transformations of the response variable prior to applying
-            the influence function; these transformations are now done inside the
+            the influence function; these transformations are now done within the
             influence function.
     }
   }
