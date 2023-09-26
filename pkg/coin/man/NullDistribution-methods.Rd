@@ -24,9 +24,9 @@
 \S4method{AsymptNullDistribution}{QuadTypeIndependenceTestStatistic}(object, ...)
 \S4method{AsymptNullDistribution}{ScalarIndependenceTestStatistic}(object, ...)
 
-\S4method{ApproxNullDistribution}{MaxTypeIndependenceTestStatistic}(object, nresample = 10000L, ...)
-\S4method{ApproxNullDistribution}{QuadTypeIndependenceTestStatistic}(object, nresample = 10000L, ...)
-\S4method{ApproxNullDistribution}{ScalarIndependenceTestStatistic}(object, nresample = 10000L, ...)
+\S4method{ApproxNullDistribution}{MaxTypeIndependenceTestStatistic}(object, nresample = 10000L, B, ...)
+\S4method{ApproxNullDistribution}{QuadTypeIndependenceTestStatistic}(object, nresample = 10000L, B, ...)
+\S4method{ApproxNullDistribution}{ScalarIndependenceTestStatistic}(object, nresample = 10000L, B, ...)
 
 \S4method{ExactNullDistribution}{QuadTypeIndependenceTestStatistic}(object, algorithm = c("auto", "shift", "split-up"), ...)
 \S4method{ExactNullDistribution}{ScalarIndependenceTestStatistic}(object, algorithm = c("auto", "shift", "split-up"), ...)
