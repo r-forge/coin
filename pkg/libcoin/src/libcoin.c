@@ -6996,7 +6996,7 @@ void RC_ExpectationCovarianceStatistic
 
         /* Compute Sum of Weights in Block */
         
-        /* compute sum of weights in block b of subset */
+        /* compute sum of case weights in block b of subset */
         if (table[b + 1] > 0) {
             sumweights[b] = RC_Sums(N, weights, subset_block,
                                     offset, (R_xlen_t) table[b + 1]);

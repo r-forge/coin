@@ -967,7 +967,7 @@ ctabs@<ctabs Prototype@>
   \item{iy}{an optional integer of positive values with zero indicating a
     missing.}
   \item{block}{an optional blocking factor without missings.}
-  \item{weights}{an optional vector of weights, integer or double.}
+  \item{weights}{an optional vector of case weights, integer or double.}
   \item{subset}{an optional integer vector indicating a subset.}
   \item{checkNAs}{a logical for switching off missing value checks.}
 }
@@ -1233,7 +1233,7 @@ int *y,
 @|y
 @}
 
-The weights $w_i, i = 1, \dots, N$
+The case weights $w_i, i = 1, \dots, N$
 
 @d R weights Input
 @{
@@ -1251,7 +1251,7 @@ int HAS_WEIGHTS,
 @|weights, HAS_WEIGHTS
 @}
 
-Weights larger than \code{INT_MAX} are stored as double
+Case weights larger than \code{INT_MAX} are stored as double
 
 @d C real weights Input
 @{
@@ -1260,7 +1260,7 @@ int HAS_WEIGHTS,
 @|weights, HAS_WEIGHTS
 @}
 
-The sum of all weights is a double
+The sum of all case weights is a double
 
 @d C sumweights Input
 @{
@@ -1353,7 +1353,7 @@ block).
 \subsection{Example Data and Code}
 
 We start with setting-up some toy data sets to be used as test bed. The data
-over both the 1d and the 2d case, including weights, subsets and blocks.
+over both the 1d and the 2d case, including case weights, subsets and blocks.
 <<ex-setup>>=
 N <- 20L
 P <- 3L
@@ -1383,7 +1383,7 @@ r2Xfactor <- rep(1:ncol(y), each = ncol(Xfactor))
 @@
 
 As a benchmark, we implement linear statistics, their expectation and
-covariance, taking weights, subsets and blocks into account, at \proglang{R}
+covariance, taking case weights, subsets and blocks into account, at \proglang{R}
 level. In a sense, the core of the \pkg{libcoin} package is ``just'' a less
 memory-hungry and sometimes faster version of this simple function.
 
@@ -1526,7 +1526,7 @@ sometimes with dimension (for example: \code{PQ_ans}).
 @}
 
 The data are given as $\x_i$ and $\y_i$ for $i = 1, \dots, N$, optionally
-with weights, subset and blocks. The latter three variables are ignored when
+with case weights, subset and blocks. The latter three variables are ignored when
 specified as \code{integer(0)}.
 
 @d User Interface Input
@@ -1738,7 +1738,7 @@ is initialised zero when $b = 0$ and values add-up over blocks.
 
 @d Compute Sum of Weights in Block
 @{
-/* compute sum of weights in block b of subset */
+/* compute sum of case weights in block b of subset */
 if (table[b + 1] > 0) {
     sumweights[b] = RC_Sums(N, weights, subset_block,
                             offset, (R_xlen_t) table[b + 1]);
@@ -1835,7 +1835,7 @@ extern SEXP libcoin_R_PermutedLinearStatistic(
 
 The dimensions are extracted from the data in the same ways as above. The
 function differentiates between the absense and presense of blocks.
-Weights are removed by expanding subset accordingly. Once within-block
+Case weights are removed by expanding subset accordingly. Once within-block
 permutations were set-up the Kronecker product of \code{X} and \code{Y} is
 computed. Note that this function returns the matrix of permuted linear
 statistics; the \proglang{R} interface assigns this matrix to the
@@ -4092,7 +4092,7 @@ void RC_CovarianceX
 \section{Computing Sums}
 
 The core concept of all functions in the section is the computation of
-various sums over observations, weights, or blocks. We start with an
+various sums over observations, case weights, or blocks. We start with an
 initialisation of the loop over all observations
 
 @d init subset loop
