@@ -6,6 +6,7 @@
 
 \section{Changes in Version 1.0-10 (2023-09-26)}{
   \itemize{
+    \item Add Henric Winell as author.
     \item Enable \code{STRICT_R_HEADERS}.
     \item The \nuweb source code is now included (see \file{../inst/nuweb/}).
     \item Documentation updates.
