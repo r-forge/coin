@@ -3848,7 +3848,7 @@ This function can be called from other packages.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb50a}{50a}.
-\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb143c}{143c}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb143a}{143a}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb142d}{142d}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb146b}{146b}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb146d}{146d}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb143b}{143b}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb142b}{142b}, \verb@C_maxtype@\nobreak\ \NWlink{nuweb63}{63}, \verb@C_maxtype_pvalue@\nobreak\ \NWlink{nuweb67}{67}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb65}{65}, \verb@GE@\nobreak\ \NWlink{nuweb21a}{21a}, \verb@LE@\nobreak\ \NWlink{nuweb21a}{21a}, \verb@LECV@\nobreak\ \NWlink{nuweb141b}{141b}, \verb@P@\nobreak\ \NWlink{nuweb24a}{24a}, \verb@Q@\nobreak\ \NWlink{nuweb24e}{24e}.
+\item \NWtxtIdentsUsed\nobreak\  \verb@C_get_Covariance@\nobreak\ \NWlink{nuweb143c}{143c}, \verb@C_get_Expectation@\nobreak\ \NWlink{nuweb143a}{143a}, \verb@C_get_LinearStatistic@\nobreak\ \NWlink{nuweb142d}{142d}, \verb@C_get_nresample@\nobreak\ \NWlink{nuweb146b}{146b}, \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb146c}{146c}, \verb@C_get_tol@\nobreak\ \NWlink{nuweb146d}{146d}, \verb@C_get_Variance@\nobreak\ \NWlink{nuweb143b}{143b}, \verb@C_get_varonly@\nobreak\ \NWlink{nuweb142b}{142b}, \verb@C_maxtype@\nobreak\ \NWlink{nuweb63}{63}, \verb@C_maxtype_pvalue@\nobreak\ \NWlink{nuweb67}{67}, \verb@C_perm_pvalue@\nobreak\ \NWlink{nuweb65}{65}, \verb@GE@\nobreak\ \NWlink{nuweb21a}{21a}, \verb@LE@\nobreak\ \NWlink{nuweb21a}{21a}, \verb@LECV@\nobreak\ \NWlink{nuweb141b}{141b}, \verb@P@\nobreak\ \NWlink{nuweb24a}{24a}, \verb@Q@\nobreak\ \NWlink{nuweb24e}{24e}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -10727,7 +10727,7 @@ This function can be called from other packages.
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
 \item \NWtxtMacroRefIn\ \NWlink{nuweb141a}{141a}.
-\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb39a}{39a}\NWlink{nuweb51}{, 51}\NWlink{nuweb71}{, 71}.\item \NWtxtIdentsUsed\nobreak\  \verb@LECV@\nobreak\ \NWlink{nuweb141b}{141b}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb21b}{21b}.
+\item \NWtxtIdentsDefed\nobreak\  \verb@C_get_PermutedLinearStatistic@\nobreak\ \NWlink{nuweb39a}{39a}\NWlink{nuweb51}{, 51}\NWlink{nuweb54}{, 54}\NWlink{nuweb71}{, 71}.\item \NWtxtIdentsUsed\nobreak\  \verb@LECV@\nobreak\ \NWlink{nuweb141b}{141b}, \verb@PermutedLinearStatistic_SLOT@\nobreak\ \NWlink{nuweb21b}{21b}.
 \item{}
 \end{list}
 \end{minipage}\vspace{4ex}
@@ -11769,7 +11769,7 @@ is contained in \texttt{libcoin/inst/C_API_example}.
 \item \verb@C_get_LinearStatistic@: \NWlink{nuweb33b}{33b}\NWlink{nuweb45}{, 45}\NWlink{nuweb51}{, 51}\NWlink{nuweb54}{, 54}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb142d}{142d}}\NWlink{nuweb149a}{, 149a}.
 \item \verb@C_get_nresample@: \NWlink{nuweb39a}{39a}\NWlink{nuweb51}{, 51}\NWlink{nuweb52a}{, 52a}\NWlink{nuweb54}{, 54}\NWlink{nuweb56}{, 56}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb146b}{146b}}.
 \item \verb@C_get_P@: \NWlink{nuweb33a}{33a}\NWlink{nuweb39a}{, 39a}\NWlink{nuweb46}{, 46}\NWlink{nuweb52a}{, 52a}\NWlink{nuweb56}{, 56}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb141c}{141c}}\NWlink{nuweb143b}{, 143b}\NWlink{nuweb143c}{c}\NWlink{nuweb146b}{, 146b}.
-\item \verb@C_get_PermutedLinearStatistic@: \NWlink{nuweb39a}{39a}\NWlink{nuweb51}{, 51}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb146c}{146c}}.
+\item \verb@C_get_PermutedLinearStatistic@: \NWlink{nuweb39a}{39a}\NWlink{nuweb51}{, 51}\NWlink{nuweb54}{, 54}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb146c}{146c}}.
 \item \verb@C_get_Q@: \NWlink{nuweb33a}{33a}\NWlink{nuweb39a}{, 39a}\NWlink{nuweb46}{, 46}\NWlink{nuweb52a}{, 52a}\NWlink{nuweb71}{, 71}, \underline{\NWlink{nuweb142a}{142a}}\NWlink{nuweb143b}{, 143b}\NWlink{nuweb143c}{c}\NWlink{nuweb146b}{, 146b}.
 \item \verb@C_get_Sumweights@: \NWlink{nuweb34a}{34a}\NWlink{nuweb46}{, 46}, \underline{\NWlink{nuweb145b}{145b}}.
 \item \verb@C_get_Table@: \NWlink{nuweb41a}{41a}\NWlink{nuweb46}{, 46}, \underline{\NWlink{nuweb145c}{145c}}.

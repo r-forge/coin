@@ -73,16 +73,17 @@ hljs.initHighlightingOnLoad();
 (see ?logrank_test and ?logrank_weight). </li>
 <li> The Moore-Penrose inverse of the conditional covariance matrix
 can now be extracted (see ?covariance). </li>
-<li> For tests of conditional independence within blocks, the
-partial linear statistic for each block and its conditional
-expectation and variance as well as its conditional covariance
-and corresponding Moore-Penrose inverse can now be extracted
-(see ?statistic, ?expectation, ?variance and ?covariance). </li>
+<li> For tests of conditional independence within blocks, i.e.,
+stratified tests, the partial linear statistic for each block
+and its conditional expectation and variance as well as its
+conditional covariance and corresponding Moore-Penrose inverse
+can now be extracted (see ?statistic, ?expectation, ?variance
+and ?covariance). </li>
 </ul>
 <h2>Bug fixes</h2>
 <ul>
 <li> Exact multivariate two-sample tests with quadratic test
-statistics appeared to work but returned nonsense p-values; it
+statistics appeared to work but returned incorrect p-values; it
 now results in an error. </li>
 <li> Extraction of the standardized linear statistic from objects of
 class "IndependenceLinearStatistic" resulted in an error. </li>
@@ -133,7 +134,7 @@ deprecated. </li>
 
     <A class="page-link" HREF=http://CRAN.R-project.org/web/packages/coin/coin.pdf>Manual</A>
     
-    <A class="page-link" HREF=http://CRAN.R-project.org/src/contrib/coin_1.4-1.tar.gz>Source</A>
+    <A class="page-link" HREF=http://CRAN.R-project.org/src/contrib/coin_1.4-3.tar.gz>Source</A>
 
     <A class="page-link" HREF=https://r-forge.r-project.org/projects/coin>Development</A>
 
