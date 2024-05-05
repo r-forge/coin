@@ -3,8 +3,11 @@ Package: libcoin
 Title: Linear Test Statistics for Permutation Inference
 Date: 2023-09-26
 Version: 1.0-10
-Authors@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
-                  email = "Torsten.Hothorn@R-project.org")
+Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
+                    email = "Torsten.Hothorn@R-project.org",
+                    comment = c(ORCID = "0000-0001-8301-0471")),
+             person("Henric", "Winell", role = "aut",
+                    comment = c(ORCID = "0000-0001-7995-3047")))
 Description: Basic infrastructure for linear test statistics and permutation
   inference in the framework of Strasser and Weber (1999) <https://epub.wu.ac.at/102/>.
   This package must not be used by end-users. CRAN package 'coin' implements all
