@@ -23,6 +23,7 @@ Lehmann.numeric <- function(y, x, nbins = 0, ...) {
 Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann"), conf.level = .95, ...)
 {
 
+    tol <- sqrt(.Machine$double.eps)
     xrt <- table(y, x)
     xt1 <- xrt[,1]
     xt2 <- xrt[,2]
@@ -55,8 +56,8 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         putheta <- c(p, 1)
         plxtheta <- c(0, p <- F(theta - beta))
         puxtheta <- c(p, 1)
-        ret <- sum(xt1 * log(putheta - pltheta)) + 
-               sum(xt2 * log(puxtheta - plxtheta))
+        ret <- sum(xt1 * log(pmax(tol, putheta - pltheta))) + 
+               sum(xt2 * log(pmax(tol, puxtheta - plxtheta)))
         -ret
     }
 
@@ -65,8 +66,8 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         theta <- cumsum(parm[-1L])
         ltheta <- c(-Inf, theta)
         utheta <- c(theta, Inf)
-        f <- F(utheta) - F(ltheta)
-        fx <- F(utheta - beta) - F(ltheta - beta)
+        f <- pmax(tol, F(utheta) - F(ltheta))
+        fx <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
         z <- xt1 * f(utheta) / f
         ret <- c(0, rev(cumsum(rev(z)[-1])))
         z <- xt1 * f(ltheta) / f
@@ -83,38 +84,52 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         theta <- cumsum(parm[-1L])
         ltheta <- c(-Inf, theta)
         utheta <- c(theta, Inf)
-        f <- (F(utheta) - F(ltheta))
-        fx <- (F(utheta - beta) - F(ltheta - beta))
+
+        f <- pmax(tol, F(utheta) - F(ltheta))
+        fb <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
+
         i1 <- length(utheta)
         i2 <- 1
-        b <- -((xt1 * f(utheta) * f(ltheta) / f^2)[-c(i2)] +
-               (xt2 * f(utheta - beta) * f(ltheta - beta) / fx^2)[-c(i2)])
+
+        fu <- f(utheta)
+        fub <- f(utheta - beta)
+        fl <- f(ltheta)
+        flb <- f(ltheta - beta)
+        fpu <- fp(utheta)
+        fpl <- fp(ltheta)
+        fpub <- fp(utheta - beta)
+        fplb <- fp(ltheta - beta)
+
+        b <- -((xt1 * fu * fl / f^2)[-c(i2)] +
+               (xt2 * fub * flb / fb^2)[-c(i2)])
         b <- b[-length(b)]
-        z <- ((xt2 * fp(utheta - beta) / fx)[-i1] - 
-              (xt2 * fp(ltheta - beta) / fx)[-i2] - 
-              ((xt2 * f(utheta - beta)^2 / fx^2)[-i1] - 
-               (xt2 * f(utheta - beta) * f(ltheta - beta) / fx^2)[-i2] -
-               (xt2 * f(utheta - beta) * f(ltheta - beta) / fx^2)[-i1] +
-               (xt2 * f(ltheta - beta)^2 / fx^2)[-i2]))
-        a <- ((xt1 * fp(utheta) / f)[-i1] - 
-              (xt1 * fp(ltheta) / f)[-i2] - 
-              ((xt1 * f(utheta)^2 / f^2)[-i1] + 
-               (xt1 * f(ltheta)^2 / f^2)[-i2]))
-        a <- a + ((xt2 * fp(utheta - beta) / fx)[-i1] - 
-              (xt2 * fp(ltheta - beta) / fx)[-i2] - 
-              ((xt2 * f(utheta - beta)^2 / fx^2)[-i1] +
-               (xt2 * f(ltheta - beta)^2 / fx^2)[-i2]))
-        h <- -sum(xt2 * (fp(utheta - beta) / fx - 
-                         fp(ltheta - beta) / fx -
-                         (f(utheta - beta)^2 / fx^2 - 
-                          2 * f(utheta - beta) * f(ltheta - beta) / fx^2 +
-                          f(ltheta - beta)^2 / fx^2)))
-        c(Schur_symtri(a = -a, b = b, X = z, Z = h))
+        x <- ((xt2 * fpub / fb)[-i1] - 
+              (xt2 * fplb / fb)[-i2] - 
+              ((xt2 * fub^2 / fb^2)[-i1] - 
+               (xt2 * fub * flb / fb^2)[-i2] -
+               (xt2 * fub * flb / fb^2)[-i1] +
+               (xt2 * flb^2 / fb^2)[-i2]))
+        a <- ((xt1 * fpu / f)[-i1] - 
+              (xt1 * fpl / f)[-i2] - 
+              ((xt1 * fu^2 / f^2)[-i1] + 
+               (xt1 * fl^2 / f^2)[-i2]))
+        a <- a + ((xt2 * fpub / fb)[-i1] - 
+              (xt2 * fplb / fb)[-i2] - 
+              ((xt2 * fub^2 / fb^2)[-i1] +
+               (xt2 * flb^2 / fb^2)[-i2]))
+        z <- -sum(xt2 * (fpub / fb - 
+                         fplb / fb -
+                         (fub^2 / fb^2 - 
+                          2 * fub * flb / fb^2 +
+                          flb^2 / fb^2)
+                         )
+                 )
+        c(Schur_symtri(a = -a, b = b, X = x, Z = z))
     }
 
     ql <- Q(1:(length(xt1) - 1L) / length(xt1))
     theta <- c(start, ql[1], diff(ql))
-    lwr <- c(-Inf, -Inf, rep(sqrt(.Machine$double.eps), length(theta) - 2))
+    lwr <- c(-Inf, -Inf, rep(tol, length(theta) - 2))
     upr <- rep(Inf, length(theta))
 
     ret <- optim(par = theta, fn = ll, gr = sc, 
