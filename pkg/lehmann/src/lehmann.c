@@ -48,7 +48,7 @@ void C_symtrisolve (double *a, double *b, int n, double *ans)
     double *d, prodb;
     int i;
     
-    PROTECT(Rd = allocVector(REALSXP, n));
+    PROTECT(Rd = allocVector(REALSXP, n + 1));
     d = REAL(Rd);
     
     d[n] = a[n];
@@ -145,7 +145,7 @@ SEXP R_symtrisolve_quadform (SEXP a, SEXP b, SEXP X)
     for (p = 0; p < P * P; p++)
         dans[p] = 0.0;
 
-    PROTECT(xA = allocVector(REALSXP, N - 1));
+    PROTECT(xA = allocVector(REALSXP, N));
     dxA = REAL(xA);
         
     for (p = 0; p < P; p++) {
