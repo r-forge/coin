@@ -1,0 +1,4 @@
+
+useDynLib(lehmann, .registration = TRUE)
+
+export(Schur_symtri)
