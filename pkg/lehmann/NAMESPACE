@@ -2,7 +2,7 @@
 useDynLib(lehmann, .registration = TRUE)
 
 importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
-           "quantile", "uniroot")
+           "quantile", "uniroot","r2dtable")
 
 
 export(Schur_symtri, Lehmann)
