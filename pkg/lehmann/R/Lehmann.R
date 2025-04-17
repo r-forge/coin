@@ -61,20 +61,27 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         -ret
     }
 
+    sc0 <- function(theta) {
+        ltheta <- c(-Inf, theta)
+        utheta <- c(theta, Inf)
+        Ful <- pmax(tol, F(utheta) - F(ltheta))
+        (f(utheta) - f(ltheta)) / Ful
+    }
+
     sc <- function(parm) {
         beta <- parm[1L]
         theta <- cumsum(parm[-1L])
         ltheta <- c(-Inf, theta)
         utheta <- c(theta, Inf)
-        f <- pmax(tol, F(utheta) - F(ltheta))
-        fx <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
-        z <- xt1 * f(utheta) / f
+        Ful <- pmax(tol, F(utheta) - F(ltheta))
+        Fulb <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
+        z <- xt1 * f(utheta) / Ful
         ret <- c(0, rev(cumsum(rev(z)[-1])))
-        z <- xt1 * f(ltheta) / f
+        z <- xt1 * f(ltheta) / Ful
         ret <- ret - c(0, rev(cumsum(rev(z[-1]))))
-        z <- xt2 * f(utheta - beta) / fx
+        z <- xt2 * f(utheta - beta) / Fulb
         ret <- ret + c(-sum(z[-length(z)]), rev(cumsum(rev(z)[-1])))
-        z <- xt2 * f(ltheta - beta) / fx
+        z <- xt2 * f(ltheta - beta) / Fulb
         ret <- ret - c(-sum(z), rev(cumsum(rev(z[-1]))))
         -ret
     }
@@ -85,8 +92,8 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         ltheta <- c(-Inf, theta)
         utheta <- c(theta, Inf)
 
-        f <- pmax(tol, F(utheta) - F(ltheta))
-        fb <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
+        Ful <- pmax(tol, F(utheta) - F(ltheta))
+        Fulb <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
 
         i1 <- length(utheta)
         i2 <- 1
@@ -100,34 +107,44 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         fpub <- fp(utheta - beta)
         fplb <- fp(ltheta - beta)
 
-        b <- -((xt1 * fu * fl / f^2)[-c(i2)] +
-               (xt2 * fub * flb / fb^2)[-c(i2)])
+        b <- -((xt1 * fu * fl / Ful^2)[-c(i2)] +
+               (xt2 * fub * flb / Fulb^2)[-c(i2)])
         b <- b[-length(b)]
-        x <- ((xt2 * fpub / fb)[-i1] - 
-              (xt2 * fplb / fb)[-i2] - 
-              ((xt2 * fub^2 / fb^2)[-i1] - 
-               (xt2 * fub * flb / fb^2)[-i2] -
-               (xt2 * fub * flb / fb^2)[-i1] +
-               (xt2 * flb^2 / fb^2)[-i2]))
-        a <- ((xt1 * fpu / f)[-i1] - 
-              (xt1 * fpl / f)[-i2] - 
-              ((xt1 * fu^2 / f^2)[-i1] + 
-               (xt1 * fl^2 / f^2)[-i2]))
-        a <- a + ((xt2 * fpub / fb)[-i1] - 
-              (xt2 * fplb / fb)[-i2] - 
-              ((xt2 * fub^2 / fb^2)[-i1] +
-               (xt2 * flb^2 / fb^2)[-i2]))
-        z <- -sum(xt2 * (fpub / fb - 
-                         fplb / fb -
-                         (fub^2 / fb^2 - 
-                          2 * fub * flb / fb^2 +
-                          flb^2 / fb^2)
+        x <- ((xt2 * fpub / Fulb)[-i1] - 
+              (xt2 * fplb / Fulb)[-i2] - 
+              ((xt2 * fub^2 / Fulb^2)[-i1] - 
+               (xt2 * fub * flb / Fulb^2)[-i2] -
+               (xt2 * fub * flb / Fulb^2)[-i1] +
+               (xt2 * flb^2 / Fulb^2)[-i2]
+              )
+             )
+        a <- ((xt1 * fpu / Ful)[-i1] - 
+              (xt1 * fpl / Ful)[-i2] - 
+              ((xt1 * fu^2 / Ful^2)[-i1] + 
+               (xt1 * fl^2 / Ful^2)[-i2]
+              )
+             )
+        a <- a + ((xt2 * fpub / Fulb)[-i1] - 
+                  (xt2 * fplb / Fulb)[-i2] - 
+                  ((xt2 * fub^2 / Fulb^2)[-i1] +
+                   (xt2 * flb^2 / Fulb^2)[-i2]
+                  )
+                 )
+        z <- -sum(xt2 * (fpub / Fulb - 
+                         fplb / Fulb -
+                         (fub^2 / Fulb^2 - 
+                          2 * fub * flb / Fulb^2 +
+                          flb^2 / Fulb^2
                          )
+                        )
                  )
         c(Schur_symtri(a = -a, b = b, X = x, Z = z))
     }
 
-    ql <- Q(1:(length(xt1) - 1L) / length(xt1))
+    ### ECDF
+    cs <- cumsum(xt1 + xt2)
+    ql <- Q(cs[-length(cs)] / cs[length(cs)])
+    ### se0(ql)
     theta <- c(start, ql[1], diff(ql))
     lwr <- c(-Inf, -Inf, rep(tol, length(theta) - 2))
     upr <- rep(Inf, length(theta))
