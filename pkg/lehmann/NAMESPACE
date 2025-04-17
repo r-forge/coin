@@ -1,4 +1,11 @@
 
 useDynLib(lehmann, .registration = TRUE)
 
-export(Schur_symtri)
+importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
+           "quantile", "uniroot")
+
+
+export(Schur_symtri, Lehmann)
+
+S3method("Lehmann", "numeric")
+S3method("Lehmann", "factor")
