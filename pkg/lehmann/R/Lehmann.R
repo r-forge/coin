@@ -31,23 +31,40 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
 
     type <- match.arg(type)
 
-    if (type == "OddsRatio") {
-        ### starting value
-        xt <- table(x)
-        W <- sum(rank(y)[which(x == levels(x)[1])])
-        U <- prod(xt) + xt[1] * (xt[1] + 1) / 2 - W
-        AUC <- U / prod(xt)
-        start <- .AUC2logOR(AUC)
+    ### starting value via AUC
+    xt <- table(x)
+    W <- sum(rank(y)[which(x == levels(x)[1])])
+    U <- prod(xt) + xt[1] * (xt[1] + 1) / 2 - W
+    AUC <- U / prod(xt)
 
+
+    if (type == "OddsRatio") {
+        start <- .AUC2logOR(AUC)
         F <- plogis
         Q <- qlogis
         f <- dlogis
-        fp <- function(z) {
-            p <- plogis(z)
+        fp <- function(x) {
+            p <- plogis(x)
             return(p * (1 - p)^2 - p^2 * (1 - p))
         }
-    } else {
-        stop("not yet implemented")
+    } else if (type == "HazardRatio") {
+        start <- qlogis(AUC)
+        F <- function(x) 1 - exp(-exp(x))
+        Q <- function(p) log(-log1p(- p))
+        f <- function(x) ifelse(is.finite(x), exp(x - exp(x)), 0)
+        fp <- function(x) {
+             ex <- exp(x)
+             ifelse(is.finite(x), (ex - ex^2) / exp(ex), 0)
+        }
+    } else if (type == "Lehmann") {
+        start <- qlogis(AUC)
+        F <- function(x) exp(-exp(-x))
+        Q <- function(p) -log(-log(p))
+        f <- function(x) ifelse(is.finite(x), exp(- x - exp(-x)), 0)
+        fp <- function(x) {
+             ex <- exp(-x)
+             ifelse(is.finite(x), exp(-ex - x) * (ex - 1), 0)
+        }
     }
 
     ll <- function(parm) {

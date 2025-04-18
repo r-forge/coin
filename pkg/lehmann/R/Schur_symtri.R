@@ -11,6 +11,7 @@ Schur_symtri <- function(a, b, X, Z) {
     storage.mode(X) <- "double"
 
     idx <- which(abs(b) < .Machine$double.eps)
+    ### is problem reducible?
     if (length(idx) > 0) {
         qf <- 0
         idx <- c(0, idx, n)
