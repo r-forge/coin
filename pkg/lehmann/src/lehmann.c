@@ -29,10 +29,10 @@ int NCOL
 
 
 /* 
-   Compute inverse of a symmetric n x n tridiagonal matrix A with 
+   Compute inverse of a symmetric n x n tridiagonal matrix T with 
    diagonals `a' and off-diagonals `b'
    
-   A^{-1}_ij = u_i v_j for i < j
+   T^{-1}_ij = u_i v_j for i < j
    
    as described in DOI:10.1137/0613045
    
@@ -45,35 +45,46 @@ void C_symtrisolve (double *a, double *b, int n, double *ans)
 {
 
     SEXP Rd;
-    double *d, prodb;
+    double *d, prodb, det;
     int i;
     
     PROTECT(Rd = allocVector(REALSXP, n + 1));
     d = REAL(Rd);
     
     d[n] = a[n];
-    for (i = n - 1; i >= 0; i--)
+    det = d[n];
+    for (i = n - 1; i >= 0; i--) {
         d[i] = a[i] - b[i] * b[i] / d[i + 1];
-        
-    ans[0] = 1 / d[0];
-    prodb = 1.0;
-    for (i = 1; i <= n; i++) {
-        prodb *= -b[i - 1] / d[i - 1];
-        ans[i] = prodb;
-        ans[i] /= d[i];
+        /* DOI:10.1137/0613045 page 710: T = U D^-1 U^t with
+           diag(U) = d (upper triangular),
+           diag(D) = d (diagonal) => det(T) = prod(d)
+        */
+        det *= d[i];
     }
-    
-    d[0] = a[0];
-    for (i = 1; i <= n; i++)
-        d[i] = a[i] - b[i - 1] * b[i - 1] / d[i - 1];
 
-    ans[2 * n + 1] = 1 / (ans[n] * d[n]);
-    ans[n + 1] = 1.0;
-    prodb = 1.0;
-    for (i = 1; i < n; i++) {
-        prodb *= -b[n - i] / d[n - i];
-        ans[n + (n - i) + 1] = prodb;
-        ans[n + (n - i) + 1] /= (ans[n] * d[n]);
+    if (det == 0.0) {
+        error("Matrix not invertible");
+    } else {
+        ans[0] = 1 / d[0];
+        prodb = 1.0;
+        for (i = 1; i <= n; i++) {
+            prodb *= -b[i - 1] / d[i - 1];
+            ans[i] = prodb;
+            ans[i] /= d[i];
+        }
+    
+        d[0] = a[0];
+        for (i = 1; i <= n; i++)
+            d[i] = a[i] - b[i - 1] * b[i - 1] / d[i - 1];
+
+        ans[2 * n + 1] = 1 / (ans[n] * d[n]);
+        ans[n + 1] = 1.0;
+        prodb = 1.0;
+        for (i = 1; i < n; i++) {
+            prodb *= -b[n - i] / d[n - i];
+            ans[n + (n - i) + 1] = prodb;
+            ans[n + (n - i) + 1] /= (ans[n] * d[n]);
+        }
     }
     
     UNPROTECT(1);
@@ -105,8 +116,8 @@ SEXP R_symtrisolve (SEXP a, SEXP b)
 }
 
 /*
-    Compute t(X) %*% solve(A) * X
-    for a symmetric n x n tridiagonal matrix A with 
+    Compute t(X) %*% solve(T) * X
+    for a symmetric n x n tridiagonal matrix T with 
     diagonals `a' and off-diagonals `b'
 */
 
@@ -118,7 +129,7 @@ SEXP R_symtrisolve_quadform (SEXP a, SEXP b, SEXP X)
     int N, i, j, p, pp, P;
     
     N = LENGTH(a);
-    
+
     if (NROW(X) != N)
         error("incorrect number of rows in X");
     if (!isReal(X))
@@ -163,7 +174,7 @@ SEXP R_symtrisolve_quadform (SEXP a, SEXP b, SEXP X)
         }
     }
     
-    /* dans is symmetric */
+    /* dans = t(X) %*% solve(T) * X is symmetric */
     for (p = 0; p < P; p++) {
         for (pp = p + 1; pp < P; pp++)
             dans[pp * P + p] = dans[p * P + pp];

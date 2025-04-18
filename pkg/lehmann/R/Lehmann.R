@@ -11,12 +11,13 @@ Lehmann <- function(y, x, ...)
 
 Lehmann.numeric <- function(y, x, nbins = 0, ...) {
 
-    if (nbins) {
+    uy <- unique(y)
+    if (nbins && nbins < length(uy)) {
         breaks <- c(-Inf, quantile(y, prob = 1:nbins / (nbins + 1)), Inf)
     } else {
-        breaks <- c(-Inf, sort(unique(y)))
+        breaks <- c(-Inf, sort(uy), Inf)
     }
-    r <- cut(y, breaks = breaks)
+    r <- cut(y, breaks = breaks)[, drop = TRUE]
     Lehmann(r, x, ...)
 }
 
@@ -144,7 +145,14 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     ### ECDF
     cs <- cumsum(xt1 + xt2)
     ql <- Q(cs[-length(cs)] / cs[length(cs)])
-    ### se0(ql)
+    s <-  sc0(ql)
+    #rt <- r2dtable(1000, r = xt1 + xt2, c = c(sum(xt1), sum(xt2)))
+    #se0 <- se(c(0, ql[1], diff(ql)))
+    #print(se0)
+    #U <- sapply(rt, function(x) sum(x[,1] * s)) * sqrt(se0)
+    alpha <- (1 - conf.level) / 2
+    #print(quantile(U, probs = c(alpha, 1 - alpha)))
+
     theta <- c(start, ql[1], diff(ql))
     lwr <- c(-Inf, -Inf, rep(tol, length(theta) - 2))
     upr <- rep(Inf, length(theta))
@@ -153,5 +161,5 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
                  lower = lwr, upper = upr, 
                  method = "L-BFGS-B", ...)
     cf <- ret$par
-    c(cf[1], cf[1] + sqrt(se(cf)) * qnorm(1 - (1 - conf.level) / 2) * c(-1, 1))
+    c(cf[1], cf[1] + sqrt(se(cf)) * qnorm(1 - alpha) * c(-1, 1))
 }

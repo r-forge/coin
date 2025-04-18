@@ -14,6 +14,9 @@ c(rev(coef(m))[1], ci[nrow(ci),])
 system.time(ci <- Lehmann(y = y, x = x))
 ci
 
+system.time(ci <- Lehmann(y = y, x = x, nbins = 99))
+ci
+
 system.time(ci <- Lehmann(y = y, x = x, nbins = 100))
 ci
 
