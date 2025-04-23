@@ -21,7 +21,8 @@ Lehmann.numeric <- function(y, x, nbins = 0, ...) {
     Lehmann(r, x, ...)
 }
 
-Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann"), conf.level = .95, ...)
+Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann"), conf.level = .95, 
+                           Wald = FALSE, ...)
 {
 
     tol <- sqrt(.Machine$double.eps)
@@ -77,6 +78,17 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         ret <- sum(xt1 * log(pmax(tol, putheta - pltheta))) + 
                sum(xt2 * log(pmax(tol, puxtheta - plxtheta)))
         -ret
+    }
+
+    profile <- function(beta, start, lwr, upr) {
+        bll <- function(parm)
+            ll(c(beta, parm))
+        bsc <- function(parm)
+            sc(c(beta, parm))[-1L]
+        ret <- optim(par = start, fn = bll, gr = bsc, 
+                     lower = lwr, upper = upr, 
+                     method = "L-BFGS-B", ...)
+        ret$par
     }
 
     sc0 <- function(theta) {
@@ -178,5 +190,23 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
                  lower = lwr, upper = upr, 
                  method = "L-BFGS-B", ...)
     cf <- ret$par
-    c(cf[1], cf[1] + sqrt(se(cf)) * qnorm(1 - alpha) * c(-1, 1))
+    
+    aW <- alpha
+    if (!Wald) aW <- alpha / 4
+    WALD <- c(cf[1], cf[1] + sqrt(se(cf)) * qnorm(1 - aW) * c(-1, 1))
+    if (Wald) return(WALD)
+    
+    ### score
+    qz <- qnorm(alpha)
+    start <- cf[-1L]
+    sf <- function(b) {
+        bparm <- profile(b, start = start, lwr = lwr[-1L], upr = upr[-1L])
+        start <<- bparm
+        sc(c(b, bparm))[1L] * sqrt(se(c(b, bparm)))
+    }
+    grd <- c(WALD[2], WALD[1])
+    lci <- uniroot(function(b) sf(b) - qz, interval = grd)$root
+    grd <- c(WALD[1], WALD[3])
+    uci <- uniroot(function(b) sf(b) + qz, interval = grd)$root
+    c(cf[1], lci, uci)
 }
