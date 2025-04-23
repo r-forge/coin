@@ -195,23 +195,23 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     
     if (B) {
         if (mu == 0) {
-            s <- resid(0, ql)
+            res <- resid(0, ql)
             pstart <- parm_start[-1L]
         } else {
-            s <- resid(mu, pstart <- profile(0, start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
+            res <- resid(mu, pstart <- profile(0, start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
         }
         rt <- r2dtable(B, r = xt1 + xt2, c = c(sum(xt1), sum(xt2)))
         se0 <- se(c(0, pstart))
-        U <- sapply(rt, function(x) sum(x[,1] * s)) * sqrt(se0)
+        U <- sapply(rt, function(x) sum(x[,1] * res)) * sqrt(se0)
         qz <- quantile(U, probs = c(alpha, 1 - alpha))
     } else {
         ### score
         qz <- qnorm(c(alpha, 1 - alpha))
     }
-    start <- cf[-1L]
+    pstart <- cf[-1L]
     sf <- function(b) {
-        bparm <- profile(b, parm_start = start, lwr = lwr[-1L], upr = upr[-1L])
-        start <<- bparm
+        bparm <- profile(b, parm_start = pstart, lwr = lwr[-1L], upr = upr[-1L])
+        pstart <<- bparm
         sc(c(b, bparm))[1L] * sqrt(se(c(b, bparm)))
     }
     grd <- c(WALD[2], WALD[1])
