@@ -52,19 +52,19 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         start <- qlogis(AUC)
         F <- function(x) 1 - exp(-exp(x))
         Q <- function(p) log(-log1p(- p))
-        f <- function(x) ifelse(is.finite(x), exp(x - exp(x)), 0)
+        f <- function(x) ifelse(is.finite(x), exp(x - exp(x)), 0.0)
         fp <- function(x) {
              ex <- exp(x)
-             ifelse(is.finite(x), (ex - ex^2) / exp(ex), 0)
+             ifelse(is.finite(x), (ex - ex^2) / exp(ex), 0.0)
         }
     } else if (type == "Lehmann") {
         start <- qlogis(AUC)
         F <- function(x) exp(-exp(-x))
         Q <- function(p) -log(-log(p))
-        f <- function(x) ifelse(is.finite(x), exp(- x - exp(-x)), 0)
+        f <- function(x) ifelse(is.finite(x), exp(- x - exp(-x)), 0.0)
         fp <- function(x) {
              ex <- exp(-x)
-             ifelse(is.finite(x), exp(-ex - x) * (ex - 1), 0)
+             ifelse(is.finite(x), exp(-ex - x) * (ex - 1.0), 0.0)
         }
     }
 
