@@ -48,7 +48,7 @@ Lehmann(y = y, x = x, mu = 1, nbins = 100)
 ### permutations
 N <- 15
 x <- gl(2, N)
-y <- rlogis(length(x), location = c(0, .5)[x])
+y <- rlogis(length(x), location = c(0, 2)[x])
 
 ci <- confint(m <- orm(y ~ x))
 c(rev(coef(m))[1], ci[nrow(ci),])
