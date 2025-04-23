@@ -91,11 +91,13 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         ret$par
     }
 
-    sc0 <- function(theta) {
+    resid <- function(beta, theta) {
         ltheta <- c(-Inf, theta)
         utheta <- c(theta, Inf)
         Ful <- pmax(tol, F(utheta) - F(ltheta))
-        (f(utheta) - f(ltheta)) / Ful
+        Fulb <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
+        (xt1 > 0) * (f(utheta) - f(ltheta)) / Ful + 
+        (xt2 > 0) * (f(utheta - beta) - f(ltheta - beta)) / Fulb
     }
 
     sc <- function(parm) {
@@ -174,7 +176,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     ### ECDF
     cs <- cumsum(xt1 + xt2)
     ql <- Q(cs[-length(cs)] / cs[length(cs)])
-    s <-  sc0(ql)
+    s <-  resid(0, ql)
     #rt <- r2dtable(1000, r = xt1 + xt2, c = c(sum(xt1), sum(xt2)))
     #se0 <- se(c(0, ql[1], diff(ql)))
     #print(se0)
