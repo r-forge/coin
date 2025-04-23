@@ -26,6 +26,10 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
 {
 
     tol <- sqrt(.Machine$double.eps)
+    stopifnot(nlevels(y <- y[,drop = TRUE]) > 1L)
+    stopifnot(is.factor(x))
+    stopifnot(nlevels(x <- x[,drop = TRUE]) == 2L)
+
     xrt <- table(y, x)
     xt1 <- xrt[,1]
     xt2 <- xrt[,2]
@@ -38,9 +42,8 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     U <- prod(xt) + xt[1] * (xt[1] + 1) / 2 - W
     AUC <- U / prod(xt)
 
-
     if (type == "OddsRatio") {
-        start <- .AUC2logOR(AUC)
+        betastart <- .AUC2logOR(AUC)
         F <- plogis
         Q <- qlogis
         f <- dlogis
@@ -49,7 +52,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
             return(p * (1 - p)^2 - p^2 * (1 - p))
         }
     } else if (type == "HazardRatio") {
-        start <- qlogis(AUC)
+        betastart <- qlogis(AUC)
         F <- function(x) 1 - exp(-exp(x))
         Q <- function(p) log(-log1p(- p))
         f <- function(x) ifelse(is.finite(x), exp(x - exp(x)), 0.0)
@@ -58,7 +61,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
              ifelse(is.finite(x), (ex - ex^2) / exp(ex), 0.0)
         }
     } else if (type == "Lehmann") {
-        start <- qlogis(AUC)
+        betastart <- qlogis(AUC)
         F <- function(x) exp(-exp(-x))
         Q <- function(p) -log(-log(p))
         f <- function(x) ifelse(is.finite(x), exp(- x - exp(-x)), 0.0)
@@ -80,12 +83,12 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         -ret
     }
 
-    profile <- function(beta, start, lwr, upr) {
+    profile <- function(beta, parm_start, lwr, upr) {
         bll <- function(parm)
             ll(c(beta, parm))
         bsc <- function(parm)
             sc(c(beta, parm))[-1L]
-        ret <- optim(par = start, fn = bll, gr = bsc, 
+        ret <- optim(par = parm_start, fn = bll, gr = bsc, 
                      lower = lwr, upper = upr, 
                      method = "L-BFGS-B", ...)
         ret$par
@@ -176,10 +179,10 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     ### ECDF
     cs <- cumsum(xt1 + xt2)
     ql <- Q(cs[-length(cs)] / cs[length(cs)])
-    theta <- c(start, ql[1], diff(ql))
-    lwr <- c(-Inf, -Inf, rep(tol, length(theta) - 2))
-    upr <- rep(Inf, length(theta))
-    ret <- optim(par = theta, fn = ll, gr = sc, 
+    parm_start <- c(betastart, ql[1], diff(ql))
+    lwr <- c(-Inf, -Inf, rep(tol, length(parm_start) - 2))
+    upr <- rep(Inf, length(parm_start))
+    ret <- optim(par = parm_start, fn = ll, gr = sc, 
                  lower = lwr, upper = upr, 
                  method = "L-BFGS-B", ...)
     cf <- ret$par
@@ -193,7 +196,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     if (B) {
         if (mu == 0) {
             s <- resid(0, ql)
-            pstart <- c(ql[1], diff(ql))
+            pstart <- parm_start[-1L]
         } else {
             s <- resid(mu, pstart <- profile(0, start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
         }
@@ -207,7 +210,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     }
     start <- cf[-1L]
     sf <- function(b) {
-        bparm <- profile(b, start = start, lwr = lwr[-1L], upr = upr[-1L])
+        bparm <- profile(b, parm_start = start, lwr = lwr[-1L], upr = upr[-1L])
         start <<- bparm
         sc(c(b, bparm))[1L] * sqrt(se(c(b, bparm)))
     }
