@@ -34,4 +34,25 @@ Lehmann(y = y, x = x, type = "Lehmann")
 Lehmann(y = y, x = x, type = "Lehmann", nbins = 99)
 Lehmann(y = y, x = x, type = "Lehmann", nbins = 100)
 
+### with offset
+mu <- 1
+off <- (x == levels(x)[2]) * mu
 
+ci <- confint(m <- orm(y ~ x + offset(off)))
+c(rev(coef(m))[1], ci[nrow(ci),])
+
+Lehmann(y = y, x = x, mu = 1, Wald = TRUE)
+Lehmann(y = y, x = x, mu = 1, nbins = 99)
+Lehmann(y = y, x = x, mu = 1, nbins = 100)
+
+### permutations
+N <- 15
+x <- gl(2, N)
+y <- rlogis(length(x), location = c(0, .5)[x])
+
+ci <- confint(m <- orm(y ~ x))
+c(rev(coef(m))[1], ci[nrow(ci),])
+
+Lehmann(y = y, x = x, Wald = TRUE)
+Lehmann(y = y, x = x, Wald = FALSE)
+Lehmann(y = y, x = x, Wald = FALSE, B = 10000)

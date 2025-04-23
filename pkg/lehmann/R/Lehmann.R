@@ -21,8 +21,8 @@ Lehmann.numeric <- function(y, x, nbins = 0, ...) {
     Lehmann(r, x, ...)
 }
 
-Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann"), conf.level = .95, 
-                           Wald = FALSE, ...)
+Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann"), mu = 0, conf.level = .95, 
+                           Wald = FALSE, B = 0, ...)
 {
 
     tol <- sqrt(.Machine$double.eps)
@@ -73,7 +73,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         theta <- cumsum(parm[-1L])
         pltheta <- c(0, p <- F(theta))
         putheta <- c(p, 1)
-        plxtheta <- c(0, p <- F(theta - beta))
+        plxtheta <- c(0, p <- F(theta - mu - beta))
         puxtheta <- c(p, 1)
         ret <- sum(xt1 * log(pmax(tol, putheta - pltheta))) + 
                sum(xt2 * log(pmax(tol, puxtheta - plxtheta)))
@@ -106,14 +106,14 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         ltheta <- c(-Inf, theta)
         utheta <- c(theta, Inf)
         Ful <- pmax(tol, F(utheta) - F(ltheta))
-        Fulb <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
+        Fulb <- pmax(tol, F(utheta - mu - beta) - F(ltheta - mu - beta))
         z <- xt1 * f(utheta) / Ful
         ret <- c(0, rev(cumsum(rev(z)[-1])))
         z <- xt1 * f(ltheta) / Ful
         ret <- ret - c(0, rev(cumsum(rev(z[-1]))))
-        z <- xt2 * f(utheta - beta) / Fulb
+        z <- xt2 * f(utheta - mu - beta) / Fulb
         ret <- ret + c(-sum(z[-length(z)]), rev(cumsum(rev(z)[-1])))
-        z <- xt2 * f(ltheta - beta) / Fulb
+        z <- xt2 * f(ltheta - mu - beta) / Fulb
         ret <- ret - c(-sum(z), rev(cumsum(rev(z[-1]))))
         -ret
     }
@@ -125,19 +125,19 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         utheta <- c(theta, Inf)
 
         Ful <- pmax(tol, F(utheta) - F(ltheta))
-        Fulb <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
+        Fulb <- pmax(tol, F(utheta - mu - beta) - F(ltheta - mu - beta))
 
         i1 <- length(utheta)
         i2 <- 1
 
         fu <- f(utheta)
-        fub <- f(utheta - beta)
+        fub <- f(utheta - mu - beta)
         fl <- f(ltheta)
-        flb <- f(ltheta - beta)
+        flb <- f(ltheta - mu - beta)
         fpu <- fp(utheta)
         fpl <- fp(ltheta)
-        fpub <- fp(utheta - beta)
-        fplb <- fp(ltheta - beta)
+        fpub <- fp(utheta - mu - beta)
+        fplb <- fp(ltheta - mu - beta)
 
         b <- -((xt1 * fu * fl / Ful^2)[-c(i2)] +
                (xt2 * fub * flb / Fulb^2)[-c(i2)])
@@ -176,30 +176,35 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     ### ECDF
     cs <- cumsum(xt1 + xt2)
     ql <- Q(cs[-length(cs)] / cs[length(cs)])
-    s <-  resid(0, ql)
-    #rt <- r2dtable(1000, r = xt1 + xt2, c = c(sum(xt1), sum(xt2)))
-    #se0 <- se(c(0, ql[1], diff(ql)))
-    #print(se0)
-    #U <- sapply(rt, function(x) sum(x[,1] * s)) * sqrt(se0)
-    alpha <- (1 - conf.level) / 2
-    #print(quantile(U, probs = c(alpha, 1 - alpha)))
-
     theta <- c(start, ql[1], diff(ql))
     lwr <- c(-Inf, -Inf, rep(tol, length(theta) - 2))
     upr <- rep(Inf, length(theta))
-
     ret <- optim(par = theta, fn = ll, gr = sc, 
                  lower = lwr, upper = upr, 
                  method = "L-BFGS-B", ...)
     cf <- ret$par
-    
+
+    alpha <- (1 - conf.level) / 2
     aW <- alpha
     if (!Wald) aW <- alpha / 4
     WALD <- c(cf[1], cf[1] + sqrt(se(cf)) * qnorm(1 - aW) * c(-1, 1))
     if (Wald) return(WALD)
     
-    ### score
-    qz <- qnorm(alpha)
+    if (B) {
+        if (mu == 0) {
+            s <- resid(0, ql)
+            pstart <- c(ql[1], diff(ql))
+        } else {
+            s <- resid(mu, pstart <- profile(0, start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
+        }
+        rt <- r2dtable(B, r = xt1 + xt2, c = c(sum(xt1), sum(xt2)))
+        se0 <- se(c(0, pstart))
+        U <- sapply(rt, function(x) sum(x[,1] * s)) * sqrt(se0)
+        qz <- quantile(U, probs = c(alpha, 1 - alpha))
+    } else {
+        ### score
+        qz <- qnorm(c(alpha, 1 - alpha))
+    }
     start <- cf[-1L]
     sf <- function(b) {
         bparm <- profile(b, start = start, lwr = lwr[-1L], upr = upr[-1L])
@@ -207,8 +212,8 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         sc(c(b, bparm))[1L] * sqrt(se(c(b, bparm)))
     }
     grd <- c(WALD[2], WALD[1])
-    lci <- uniroot(function(b) sf(b) - qz, interval = grd)$root
+    lci <- uniroot(function(b) sf(b) - qz[1], interval = grd)$root
     grd <- c(WALD[1], WALD[3])
-    uci <- uniroot(function(b) sf(b) + qz, interval = grd)$root
+    uci <- uniroot(function(b) sf(b) - qz[2], interval = grd)$root
     c(cf[1], lci, uci)
 }
