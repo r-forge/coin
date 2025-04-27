@@ -99,8 +99,10 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         utheta <- c(theta, Inf)
         Ful <- pmax(tol, F(utheta) - F(ltheta))
         Fulb <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
-        (xt1 > 0) * (f(utheta) - f(ltheta)) / Ful + 
-        (xt2 > 0) * (f(utheta - beta) - f(ltheta - beta)) / Fulb
+        ret <- xt1 * (f(utheta) - f(ltheta)) / Ful + 
+               xt2 * (f(utheta - beta) - f(ltheta - beta)) / Fulb
+        ret <- ret / (xt1 + xt2)
+        ret
     }
 
     sc <- function(parm) {
