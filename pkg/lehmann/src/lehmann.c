@@ -124,8 +124,8 @@ SEXP R_symtrisolve (SEXP a, SEXP b)
 SEXP R_symtrisolve_quadform (SEXP a, SEXP b, SEXP X)
 {
 
-    SEXP ans, vu;
-    double *dans, *dx, dxA, *dvu;
+    SEXP ans, vu, cumsumvux;
+    double *dans, *dx, dxA, dxA1, dxA2, *dvu, *dcs;
     int N, i, j, p, pp, P;
     
     N = LENGTH(a);
@@ -152,13 +152,23 @@ SEXP R_symtrisolve_quadform (SEXP a, SEXP b, SEXP X)
     PROTECT(vu = allocMatrix(REALSXP, N, 2));
     dvu = REAL(vu);
     C_symtrisolve(REAL(a), REAL(b), N - 1, dvu);
+    PROTECT(cumsumvux = allocMatrix(REALSXP, N, 2));
+    dcs = REAL(cumsumvux);
 
     for (p = 0; p < P * P; p++)
         dans[p] = 0.0;
 
     for (p = 0; p < P; p++) {
+        i = 0;
+        dcs[i] = dx[p * N + i] * dvu[i];
+        dcs[N + i] = dx[p * N + i] * dvu[N + i];
+        for (i = 1; i < N; i++) {
+            dcs[i] = dcs[i - 1] + dx[p * N + i] * dvu[i];
+            dcs[N + i] = dcs[N + i - 1] + dx[p * N + i] * dvu[N + i];
+        }
         for (j = 0; j < N; j++) {
             dxA = 0.0;
+            /*
             for (i = 0; i < N; i++) {
                 if (j > i) {
                     dxA += dx[p * N + i] * dvu[N + i] * dvu[j];
@@ -166,6 +176,10 @@ SEXP R_symtrisolve_quadform (SEXP a, SEXP b, SEXP X)
                     dxA += dx[p * N + i] * dvu[i] * dvu[N + j];
                 }
             }
+            */
+            dxA1 = dcs[N + j];
+            dxA2 = dcs[N - 1] - dcs[j];
+            dxA = dxA1 * dvu[j] + dxA2 * dvu[N + j];
             for (pp = p; pp < P; pp++)
                 dans[p * P + pp] += dxA * dx[pp * N + j];
         }
@@ -176,6 +190,6 @@ SEXP R_symtrisolve_quadform (SEXP a, SEXP b, SEXP X)
         for (pp = p + 1; pp < P; pp++)
             dans[pp * P + p] = dans[p * P + pp];
     }
-    UNPROTECT(2);
+    UNPROTECT(3);
     return(ans);
 }
