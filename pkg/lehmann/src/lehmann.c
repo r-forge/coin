@@ -124,8 +124,8 @@ SEXP R_symtrisolve (SEXP a, SEXP b)
 SEXP R_symtrisolve_quadform (SEXP a, SEXP b, SEXP X)
 {
 
-    SEXP ans, vu, xA;
-    double *dans, *dx, *dxA, *dvu;
+    SEXP ans, vu;
+    double *dans, *dx, dxA, *dvu;
     int N, i, j, p, pp, P;
     
     N = LENGTH(a);
@@ -156,21 +156,18 @@ SEXP R_symtrisolve_quadform (SEXP a, SEXP b, SEXP X)
     for (p = 0; p < P * P; p++)
         dans[p] = 0.0;
 
-    PROTECT(xA = allocVector(REALSXP, N));
-    dxA = REAL(xA);
-        
     for (p = 0; p < P; p++) {
         for (j = 0; j < N; j++) {
-            dxA[j] = 0.0;
+            dxA = 0.0;
             for (i = 0; i < N; i++) {
                 if (j > i) {
-                    dxA[j] += dx[p * N + i] * dvu[N + i] * dvu[j];
+                    dxA += dx[p * N + i] * dvu[N + i] * dvu[j];
                 } else {
-                    dxA[j] += dx[p * N + i] * dvu[i] * dvu[N + j];
+                    dxA += dx[p * N + i] * dvu[i] * dvu[N + j];
                 }
             }
             for (pp = p; pp < P; pp++)
-                dans[p * P + pp] += dxA[j] * dx[pp * N + j];
+                dans[p * P + pp] += dxA * dx[pp * N + j];
         }
     }
     
@@ -179,6 +176,6 @@ SEXP R_symtrisolve_quadform (SEXP a, SEXP b, SEXP X)
         for (pp = p + 1; pp < P; pp++)
             dans[pp * P + p] = dans[p * P + pp];
     }
-    UNPROTECT(3);
+    UNPROTECT(2);
     return(ans);
 }
