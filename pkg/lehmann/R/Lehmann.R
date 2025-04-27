@@ -53,7 +53,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         }
     } else if (type == "HazardRatio") {
         betastart <- qlogis(AUC)
-        F <- function(x) 1 - exp(-exp(x))
+        F <- function(x) -expm1(-exp(x))
         Q <- function(p) log(-log1p(- p))
         f <- function(x) ifelse(is.finite(x), exp(x - exp(x)), 0.0)
         fp <- function(x) {
