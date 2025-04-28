@@ -29,15 +29,15 @@ int NCOL
 
 
 /* 
-   Compute inverse of a symmetric n x n tridiagonal matrix T with 
+   Compute inverse of a symmetric N x N tridiagonal matrix T with 
    diagonals `a' and off-diagonals `b'
    
-   T^{-1}_ij = u_i v_j for i < j
+       T^{-1}_ij = u_i v_j for i <= j
    
    as described in DOI:10.1137/0613045
    
-   The function returns a real n x 2 matrix with 1st column u
-   and second column v
+   The function computes a real n x 2 matrix `ans' with 1st column `u'
+   and second column `v'
    
 */
 
@@ -45,9 +45,13 @@ void C_symtrisolve (double *a, double *b, int n, double *ans)
 {
 
     SEXP Rd;
-    double *d, prodb, det;
+    double *d, prodb, det, *u, *v;
     int i;
+
+    u = ans;
+    v = ans + (n + 1);
     
+    /* n = N - 1 */
     PROTECT(Rd = allocVector(REALSXP, n + 1));
     d = REAL(Rd);
     
@@ -65,25 +69,25 @@ void C_symtrisolve (double *a, double *b, int n, double *ans)
     if (det == 0.0) {
         error("Matrix not invertible");
     } else {
-        ans[0] = 1 / d[0];
+        u[0] = 1 / d[0];
         prodb = 1.0;
         for (i = 1; i <= n; i++) {
             prodb *= -b[i - 1] / d[i - 1];
-            ans[i] = prodb;
-            ans[i] /= d[i];
+            u[i] = prodb;
+            u[i] /= d[i];
         }
     
         d[0] = a[0];
         for (i = 1; i <= n; i++)
             d[i] = a[i] - b[i - 1] * b[i - 1] / d[i - 1];
 
-        ans[2 * n + 1] = 1 / (ans[n] * d[n]);
-        ans[n + 1] = 1.0;
+        v[n] = 1 / (ans[n] * d[n]);
+        v[0] = 1.0;
         prodb = 1.0;
         for (i = 1; i < n; i++) {
             prodb *= -b[n - i] / d[n - i];
-            ans[n + (n - i) + 1] = prodb;
-            ans[n + (n - i) + 1] /= (ans[n] * d[n]);
+            v[n - i] = prodb;
+            v[n - i] /= (ans[n] * d[n]);
         }
     }
     
@@ -117,7 +121,7 @@ SEXP R_symtrisolve (SEXP a, SEXP b)
 
 /*
     Compute t(X) %*% solve(T) * X
-    for a symmetric n x n tridiagonal matrix T with 
+    for a symmetric N x N tridiagonal matrix T with 
     diagonals `a' and off-diagonals `b'
 */
 
