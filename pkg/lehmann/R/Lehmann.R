@@ -13,7 +13,7 @@ Lehmann.numeric <- function(y, x, nbins = 0, ...) {
 
     uy <- unique(y)
     if (nbins && nbins < length(uy)) {
-        breaks <- c(-Inf, quantile(y, prob = 1:nbins / (nbins + 1)), Inf)
+        breaks <- c(-Inf, quantile(y, prob = seq_len(nbins) / (nbins + 1L)), Inf)
     } else {
         breaks <- c(-Inf, sort(uy), Inf)
     }
@@ -42,6 +42,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     U <- prod(xt) + xt[1] * (xt[1] + 1) / 2 - W
     AUC <- U / prod(xt)
 
+    ### <TH> family-style object? </TH>
     if (type == "OddsRatio") {
         betastart <- .AUC2logOR(AUC)
         F <- plogis
@@ -88,6 +89,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
             ll(c(beta, parm))
         bsc <- function(parm)
             sc(c(beta, parm))[-1L]
+        ### <TH> try() and convergence? </TH>
         ret <- optim(par = parm_start, fn = bll, gr = bsc, 
                      lower = lwr, upper = upr, 
                      method = "L-BFGS-B", ...)
@@ -123,7 +125,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
         -ret
     }
 
-    se <- function(parm) {
+    he <- function(parm) {
         beta <- parm[1L]
         theta <- cumsum(parm[-1L])
         ltheta <- c(-Inf, theta)
@@ -184,6 +186,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     parm_start <- c(betastart, ql[1], diff(ql))
     lwr <- c(-Inf, -Inf, rep(tol, length(parm_start) - 2))
     upr <- rep(Inf, length(parm_start))
+    ### <TH> check & convergence </TH>
     ret <- optim(par = parm_start, fn = ll, gr = sc, 
                  lower = lwr, upper = upr, 
                  method = "L-BFGS-B", ...)
@@ -192,9 +195,11 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     alpha <- (1 - conf.level) / 2
     aW <- alpha
     if (!Wald) aW <- alpha / 4
-    WALD <- c(cf[1], cf[1] + sqrt(se(cf)) * qnorm(1 - aW) * c(-1, 1))
+    WALD <- c(cf[1], cf[1] + sqrt(1 / he(cf)) * qnorm(1 - aW) * c(-1, 1))
     if (Wald) return(WALD)
     
+    ### <TH> exact: as part of family-style argument ?</TH>
+
     if (B) {
         if (mu == 0) {
             res <- resid(0, ql)
@@ -203,9 +208,10 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
             res <- resid(mu, pstart <- profile(0, start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
         }
         rt <- r2dtable(B, r = xt1 + xt2, c = c(sum(xt1), sum(xt2)))
-        se0 <- se(c(0, pstart))
-        U <- sapply(rt, function(x) sum(x[,1] * res)) * sqrt(se0)
+        se0 <- sqrt(1 / he(c(0, pstart)))
+        U <- sapply(rt, function(x) sum(x[,1] * res)) * se0
         qz <- quantile(U, probs = c(alpha, 1 - alpha))
+        ### <TH> achieved alpha ? </TH>
     } else {
         ### score
         qz <- qnorm(c(alpha, 1 - alpha))
@@ -214,7 +220,7 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     sf <- function(b) {
         bparm <- profile(b, parm_start = pstart, lwr = lwr[-1L], upr = upr[-1L])
         pstart <<- bparm
-        sc(c(b, bparm))[1L] * sqrt(se(c(b, bparm)))
+        sc(c(b, bparm))[1L] * sqrt(1 / he(c(b, bparm)))
     }
     grd <- c(WALD[2], WALD[1])
     lci <- uniroot(function(b) sf(b) - qz[1], interval = grd)$root

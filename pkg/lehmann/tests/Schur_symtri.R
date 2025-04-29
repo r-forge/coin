@@ -14,10 +14,8 @@ Z <- matrix(rnorm(P * P), nrow = P)
 A <- diag(a / 2)
 A[cbind(1:(N-1),2:N)] <- b
 A <- t(A) + A
-A <- cbind(A, X)
-A <- rbind(A, cbind(t(X), Z))
 
-Z1a <- solve(A)[-(1:N),-(1:N),drop = FALSE]
+Z1a <- Z - t(X) %*% solve(A) %*% X
 Z1b <- Schur_symtri(a = a, b = b, X = X, Z = Z)
 
 stopifnot(isTRUE(all.equal(Z1a, Z1b)))
