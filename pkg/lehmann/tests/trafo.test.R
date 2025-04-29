@@ -12,9 +12,9 @@ y <- rlogis(length(x), location = c(0, 2)[x])
 ci <- confint(m <- orm(y ~ x))
 c(rev(coef(m))[1], ci[nrow(ci),])
 
-Lehmann(y = y, x = x)
-Lehmann(y = y, x = x, nbins = 99)
-Lehmann(y = y, x = x, nbins = 100)
+trafo.test(y = y, x = x)
+trafo.test(y = y, x = x, nbins = 99)
+trafo.test(y = y, x = x, nbins = 100)
 
 -coef(m <- coxph(Surv(y, rep(TRUE, length(y))) ~ x))
 -rev(confint(m))
@@ -23,16 +23,16 @@ Lehmann(y = y, x = x, nbins = 100)
 ci <- confint(m <- orm(y ~ x, family = "loglog"))
 c(rev(coef(m))[1], ci[nrow(ci),])
 
-Lehmann(y = y, x = x, type = "HazardRatio")
-Lehmann(y = y, x = x, type = "HazardRatio", nbins = 99)
-Lehmann(y = y, x = x, type = "HazardRatio", nbins = 100)
+trafo.test(y = y, x = x, type = Savage())
+trafo.test(y = y, x = x, type = Savage(), nbins = 99)
+trafo.test(y = y, x = x, type = Savage(), nbins = 100)
 
 ci <- confint(m <- orm(y ~ x, family = "cloglog"))
 c(rev(coef(m))[1], ci[nrow(ci),])
 
-Lehmann(y = y, x = x, type = "Lehmann")
-Lehmann(y = y, x = x, type = "Lehmann", nbins = 99)
-Lehmann(y = y, x = x, type = "Lehmann", nbins = 100)
+trafo.test(y = y, x = x, type = Lehmann())
+trafo.test(y = y, x = x, type = Lehmann(), nbins = 99)
+trafo.test(y = y, x = x, type = Lehmann(), nbins = 100)
 
 ### with offset
 mu <- 1
@@ -41,9 +41,9 @@ off <- (x == levels(x)[2]) * mu
 ci <- confint(m <- orm(y ~ x + offset(off)))
 c(rev(coef(m))[1], ci[nrow(ci),])
 
-Lehmann(y = y, x = x, mu = 1, Wald = TRUE)
-Lehmann(y = y, x = x, mu = 1, nbins = 99)
-Lehmann(y = y, x = x, mu = 1, nbins = 100)
+trafo.test(y = y, x = x, mu = 1, Wald = TRUE)
+trafo.test(y = y, x = x, mu = 1, nbins = 99)
+trafo.test(y = y, x = x, mu = 1, nbins = 100)
 
 ### permutations
 N <- 15
@@ -53,6 +53,6 @@ y <- rlogis(length(x), location = c(0, 2)[x])
 ci <- confint(m <- orm(y ~ x))
 c(rev(coef(m))[1], ci[nrow(ci),])
 
-Lehmann(y = y, x = x, Wald = TRUE)
-Lehmann(y = y, x = x, Wald = FALSE)
-Lehmann(y = y, x = x, Wald = FALSE, B = 10000)
+trafo.test(y = y, x = x, Wald = TRUE)
+trafo.test(y = y, x = x, Wald = FALSE)
+trafo.test(y = y, x = x, Wald = FALSE, B = 10000)

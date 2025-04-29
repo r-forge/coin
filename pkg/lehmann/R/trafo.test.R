@@ -1,15 +1,8 @@
 
-.AUC2logOR <- function(PI) {
-    f <- function(x, PI) x + (exp(-x) * (PI + exp(2 * x) * 
-        (PI - 1) + exp(x) * (1 - 2 * PI)))
-    ret <- sapply(PI, function(p) uniroot(f, PI = p, interval = 50 * c(-1, 1))$root)
-    return(ret)
-}
+trafo.test <- function(y, x, ...)
+    UseMethod("trafo.test")
 
-Lehmann <- function(y, x, ...)
-    UseMethod("Lehmann")
-
-Lehmann.numeric <- function(y, x, nbins = 0, ...) {
+trafo.test.numeric <- function(y, x, nbins = 0, ...) {
 
     uy <- unique(y)
     if (nbins && nbins < length(uy)) {
@@ -18,10 +11,10 @@ Lehmann.numeric <- function(y, x, nbins = 0, ...) {
         breaks <- c(-Inf, sort(uy), Inf)
     }
     r <- cut(y, breaks = breaks)[, drop = TRUE]
-    Lehmann(r, x, ...)
+    trafo.test(r, x, ...)
 }
 
-Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann"), mu = 0, conf.level = .95, 
+trafo.test.factor <- function(y, x, type = Wilcoxon(), mu = 0, conf.level = .95, 
                            Wald = FALSE, B = 0, ...)
 {
 
@@ -34,43 +27,17 @@ Lehmann.factor <- function(y, x, type = c("OddsRatio", "HazardRatio", "Lehmann")
     xt1 <- xrt[,1]
     xt2 <- xrt[,2]
 
-    type <- match.arg(type)
-
     ### starting value via AUC
     xt <- table(x)
     W <- sum(rank(y)[which(x == levels(x)[1])])
     U <- prod(xt) + xt[1] * (xt[1] + 1) / 2 - W
     AUC <- U / prod(xt)
 
-    ### <TH> family-style object? </TH>
-    if (type == "OddsRatio") {
-        betastart <- .AUC2logOR(AUC)
-        F <- plogis
-        Q <- qlogis
-        f <- dlogis
-        fp <- function(x) {
-            p <- plogis(x)
-            return(p * (1 - p)^2 - p^2 * (1 - p))
-        }
-    } else if (type == "HazardRatio") {
-        betastart <- qlogis(AUC)
-        F <- function(x) -expm1(-exp(x))
-        Q <- function(p) log(-log1p(- p))
-        f <- function(x) ifelse(is.finite(x), exp(x - exp(x)), 0.0)
-        fp <- function(x) {
-             ex <- exp(x)
-             ifelse(is.finite(x), (ex - ex^2) / exp(ex), 0.0)
-        }
-    } else if (type == "Lehmann") {
-        betastart <- qlogis(AUC)
-        F <- function(x) exp(-exp(-x))
-        Q <- function(p) -log(-log(p))
-        f <- function(x) ifelse(is.finite(x), exp(- x - exp(-x)), 0.0)
-        fp <- function(x) {
-             ex <- exp(-x)
-             ifelse(is.finite(x), exp(-ex - x) * (ex - 1.0), 0.0)
-        }
-    }
+    betastart <- type$PI2lp(AUC)
+    F <- type$p
+    Q <- type$q
+    f <- type$d
+    fp <- type$dd
 
     ll <- function(parm) {
         beta <- parm[1L]

@@ -2,10 +2,10 @@
 useDynLib(lehmann, .registration = TRUE)
 
 importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
-           "quantile", "uniroot","r2dtable")
+           "quantile", "uniroot","r2dtable", "pnorm", "dnorm")
 
 
-export(Schur_symtri, Lehmann)
+export(Schur_symtri, trafo.test, Wilcoxon, Lehmann, Savage, vdWaerden)
 
-S3method("Lehmann", "numeric")
-S3method("Lehmann", "factor")
+S3method("trafo.test", "numeric")
+S3method("trafo.test", "factor")

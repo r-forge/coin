@@ -17,8 +17,8 @@ c(coef(m)["xB"], ci)
 m <- Polr(y ~ x, method = "logistic")
 score_test(m, parm = "xB")
 
-lehmann::Lehmann(y = y, x = x)
-lehmann::Lehmann(y = y, x = x, B = 10000)
+trafo.test(y = y, x = x)
+trafo.test(y = y, x = x, B = 10000)
 
 ci <- confint(m <- polr(y ~ x, method = "cloglog"))
 c(coef(m)["xB"], ci)
@@ -26,8 +26,8 @@ c(coef(m)["xB"], ci)
 m <- Polr(y ~ x, method = "cloglog")
 score_test(m, parm = "xB")
 
-lehmann::Lehmann(y = y, x = x, type = "HazardRatio")
-lehmann::Lehmann(y = y, x = x, type = "HazardRatio", B = 10000)
+trafo.test(y = y, x = x, type = Savage())
+trafo.test(y = y, x = x, type = Savage(), B = 10000)
 
 ci <- confint(m <- polr(y ~ x, method = "loglog"))
 c(coef(m)["xB"], ci)
@@ -35,6 +35,14 @@ c(coef(m)["xB"], ci)
 m <- Polr(y ~ x, method = "loglog")
 score_test(m, parm = "xB")
 
-lehmann::Lehmann(y = y, x = x, type = "Lehmann")
-lehmann::Lehmann(y = y, x = x, type = "Lehmann", B = 10000)
+trafo.test(y = y, x = x, type = lehmann::Lehmann())
+trafo.test(y = y, x = x, type = lehmann::Lehmann(), B = 10000)
+
+
+m <- Polr(y ~ x, method = "probit")
+score_test(m, parm = "xB")
+
+trafo.test(y = y, x = x, type = vdWaerden())
+trafo.test(y = y, x = x, type = vdWaerden(), B = 10000)
+
 
