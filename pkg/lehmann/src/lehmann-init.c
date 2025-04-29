@@ -9,8 +9,8 @@
 #define REGCALL(name) R_RegisterCCallable("lehmann", #name, (DL_FUNC) &name)
 
 static const R_CallMethodDef callMethods[] = {
-    CALLDEF(R_symtrisolve, 2),
-    CALLDEF(R_symtrisolve_quadform, 3),
+    CALLDEF(R_symtrisolve, 3),
+    CALLDEF(R_symtrisolve_quadform, 4),
     {NULL, NULL, 0}
 };
 
