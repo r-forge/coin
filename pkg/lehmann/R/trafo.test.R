@@ -14,8 +14,9 @@ trafo.test.numeric <- function(y, x, nbins = 0, ...) {
     trafo.test(r, x, ...)
 }
 
-trafo.test.factor <- function(y, x, type = Wilcoxon(), mu = 0, conf.level = .95, 
-                           Wald = FALSE, B = 0, ...)
+trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "vdWaerden"), 
+                              mu = 0, conf.level = .95, 
+                              Wald = FALSE, B = 0, ...)
 {
 
     tol <- sqrt(.Machine$double.eps)
@@ -32,6 +33,11 @@ trafo.test.factor <- function(y, x, type = Wilcoxon(), mu = 0, conf.level = .95,
     W <- sum(rank(y)[which(x == levels(x)[1])])
     U <- prod(xt) + xt[1] * (xt[1] + 1) / 2 - W
     AUC <- U / prod(xt)
+
+    if (!inherits(type, "tfamily")) {
+        type <- match.arg(type)
+        type <- do.call(type, list())
+    }
 
     betastart <- type$PI2lp(AUC)
     F <- type$p

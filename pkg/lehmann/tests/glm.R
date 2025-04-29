@@ -22,13 +22,13 @@ lehmann::trafo.test(y = y, x = x, B = 10000)
 ci <- confint(m <- glm(y ~ x, family = binomial(link = "cloglog")))
 c(coef(m)["xB"], ci["xB",])
 
-trafo.test(y = y, x = x, type = Savage())
-trafo.test(y = y, x = x, type = Savage(), B = 10000)
+trafo.test(y = y, x = x, type = "Savage")
+trafo.test(y = y, x = x, type = "Savage", B = 10000)
 
 y <- relevel(y, levels(y)[2])
 ci <- confint(m <- glm(y ~ x, family = binomial(link = "cloglog")))
 c(coef(m)["xB"], ci["xB",])
 
-trafo.test(y = y, x = x, type = Lehmann())
-trafo.test(y = y, x = x, type = Lehmann(), B = 10000)
+trafo.test(y = y, x = x, type = "Lehmann")
+trafo.test(y = y, x = x, type = "Lehmann", B = 10000)
 

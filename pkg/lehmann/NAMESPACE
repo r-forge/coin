@@ -5,7 +5,7 @@ importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
            "quantile", "uniroot","r2dtable", "pnorm", "dnorm")
 
 
-export(Schur_symtri, trafo.test, Wilcoxon, Lehmann, Savage, vdWaerden)
+export(trafo.test)
 
 S3method("trafo.test", "numeric")
 S3method("trafo.test", "factor")
