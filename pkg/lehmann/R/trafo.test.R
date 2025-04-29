@@ -14,7 +14,11 @@ trafo.test.numeric <- function(y, x, nbins = 0, ...) {
     trafo.test(r, x, ...)
 }
 
-trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "vdWaerden"), 
+trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "vdWaerden", "Cauchy"), 
+                              ### alternative = c("two.sided", "less","greater")
+                              ### exact = FALSE (Score + Wilcoxon + !Ties)
+                              ### conf.type = c("Wald", "LRatio", "Score")
+                              ### scale = c("log", "exp", "PI", "AUC", "Overlap")
                               mu = 0, conf.level = .95, 
                               Wald = FALSE, B = 0, ...)
 {

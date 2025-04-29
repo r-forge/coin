@@ -3,6 +3,8 @@ tfamily <- function(name, p, q, d, dd, ddd, dd2d, lp2PI, PI2lp) {
 
     if (missing(ddd)) ddd <- NA
     if (missing(dd2d)) dd2d <- function(z) dd(z) / d(z)
+    if (missing(lp2PI)) lp2PI <- plogis
+    if (missing(PI2lp)) PI2lp <- qlogis
     ret <- list(name = name,
                 p = p,
                 q = q,
@@ -16,7 +18,7 @@ tfamily <- function(name, p, q, d, dd, ddd, dd2d, lp2PI, PI2lp) {
     ret
 }
 
-Wilcoxon <- function() {
+Wilcoxon <- function()
     tfamily("Wilcoxon",
             p = plogis,
             q = qlogis,
@@ -47,9 +49,8 @@ Wilcoxon <- function() {
                return(ret)
             }
     )
-}
 
-Lehmann <- function() {
+Lehmann <- function()
     tfamily("Lehmann", 
             p = function(z) exp(-exp(-z)),
             q = function(p) -log(-log(p)),
@@ -65,10 +66,10 @@ Lehmann <- function() {
             dd2d = function(z)
                exp(-z) - 1,
             lp2PI = plogis,
-            PI2lp = qlogis)
-}
+            PI2lp = qlogis
+    )
 
-Savage <- function() {
+Savage <- function()
     tfamily("Savage", 
             p = function(z) -expm1(-exp(z)),
             q = function(p) log(-log1p(- p)),
@@ -84,10 +85,10 @@ Savage <- function() {
             dd2d = function(z)
                1 - exp(z),
             lp2PI = plogis,
-            PI2lp = qlogis)
-}
+            PI2lp = qlogis
+    )
 
-vdWaerden <- function() {
+vdWaerden <- function()
     tfamily("vdWaeren", 
             p = pnorm,
             q = qnorm,
@@ -96,5 +97,16 @@ vdWaerden <- function() {
             ddd = function(z) ifelse(is.finite(z), dnorm(x = z) * (z^2 - 1), 0.0),
             dd2d = function(z) -z,
             lp2PI = function(x) pnorm(x / sqrt(2)),
-            PI2lp = function(p) qnorm(p) * sqrt(2))
-}
+            PI2lp = function(p) qnorm(p) * sqrt(2)
+    )
+
+Cauchy <- function()
+    tfamily("Cauchy", 
+            p = pcauchy,
+            q = qcauchy,
+            d = dcauchy,
+            dd = function(z) 
+                ifelse(is.finite(z), - 2 * z / (pi * (z^2 + 1)^2), 0.0),
+            ddd = function(z) 
+                ifelse(is.finite(z), 8 * x^2 / (pi * (x^2 + 1)^3) - 2 / (pi * (x^2 + 1)^2), 0.0)
+    )

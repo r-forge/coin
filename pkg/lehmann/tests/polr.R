@@ -46,3 +46,10 @@ trafo.test(y = y, x = x, type = "vdWaerden")
 trafo.test(y = y, x = x, type = "vdWaerden", B = 10000)
 
 
+m <- Polr(y ~ x, method = "cauchit")
+score_test(m, parm = "xB")
+
+trafo.test(y = y, x = x, type = "Cauchy")
+trafo.test(y = y, x = x, type = "Cauchy", B = 10000)
+
+
