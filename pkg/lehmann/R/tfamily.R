@@ -1,11 +1,12 @@
 
-tfamily <- function(name, p, q, d, dd, ddd, dd2d, lp2PI, PI2lp) {
+tfamily <- function(name, parm, p, q, d, dd, ddd, dd2d, lp2PI, PI2lp) {
 
     if (missing(ddd)) ddd <- NA
     if (missing(dd2d)) dd2d <- function(z) dd(z) / d(z)
     if (missing(lp2PI)) lp2PI <- plogis
     if (missing(PI2lp)) PI2lp <- qlogis
     ret <- list(name = name,
+                parm = parm,
                 p = p,
                 q = q,
                 d = d,
@@ -19,7 +20,7 @@ tfamily <- function(name, p, q, d, dd, ddd, dd2d, lp2PI, PI2lp) {
 }
 
 Wilcoxon <- function()
-    tfamily("Wilcoxon",
+    tfamily(name = "proportional odds model", parm = "log-odds ratio",
             p = plogis,
             q = qlogis,
             d = dlogis,
@@ -51,7 +52,7 @@ Wilcoxon <- function()
     )
 
 Lehmann <- function()
-    tfamily("Lehmann", 
+    tfamily(name = "Lehmann alternative", parm = "log-reverse time hazard ratio",
             p = function(z) exp(-exp(-z)),
             q = function(p) -log(-log(p)),
             d = function(z) ifelse(is.finite(z), exp(- z - exp(-z)), 0.0),
@@ -70,7 +71,7 @@ Lehmann <- function()
     )
 
 Savage <- function()
-    tfamily("Savage", 
+    tfamily(name = "proportional hazard model", parm = "log-hazard ratio",
             p = function(z) -expm1(-exp(z)),
             q = function(p) log(-log1p(- p)),
             d = function(z) ifelse(is.finite(z), exp(z - exp(z)), 0.0),
@@ -89,7 +90,7 @@ Savage <- function()
     )
 
 vdWaerden <- function()
-    tfamily("vdWaeren", 
+    tfamily(name = "vdWaeren", parm = "generalised Cohen's d",
             p = pnorm,
             q = qnorm,
             d = dnorm,
@@ -101,7 +102,7 @@ vdWaerden <- function()
     )
 
 Cauchy <- function()
-    tfamily("Cauchy", 
+    tfamily(name = "Cauchy", parm = "good question",
             p = pcauchy,
             q = qcauchy,
             d = dcauchy,

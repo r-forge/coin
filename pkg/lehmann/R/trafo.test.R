@@ -15,20 +15,21 @@ trafo.test.numeric <- function(y, x, nbins = 0, ...) {
 }
 
 trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "vdWaerden", "Cauchy"), 
-                              ### alternative = c("two.sided", "less","greater")
-                              inference = c("Wald", "LRatio", "Score"),
-                              ### scale = c("log", "exp", "PI/AUC", "Overlap")
+                              alternative = c("two.sided", "less", "greater"),
+                              inference = c("Wald", "LRatio", "MLScore", "PermScore"),
+                              ### parmscale = c("log", "exp", "AUC/PI", "Overlap")
                               mu = 0, conf.level = .95, 
-                              Wald = FALSE, 
                               B = 0, ### 0, ..., Inf
                               ...)
 {
 
+    DNAME <- NULL
     tol <- sqrt(.Machine$double.eps)
     stopifnot(nlevels(y <- y[,drop = TRUE]) > 1L)
     stopifnot(is.factor(x))
     stopifnot(nlevels(x <- x[,drop = TRUE]) == 2L)
     inference <- match.arg(inference)
+    alternative <- match.arg(alternative)
 
     xrt <- table(y, x)
     xt1 <- xrt[,1]
@@ -44,6 +45,7 @@ trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "v
         type <- match.arg(type)
         type <- do.call(type, list())
     }
+    names(mu) <- type$parm
 
     betastart <- type$PI2lp(AUC)
     F <- type$p
@@ -170,40 +172,108 @@ trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "v
                  lower = lwr, upper = upr, 
                  method = "L-BFGS-B", ...)
     cf <- ret$par
+    ESTIMATE <- cf[1]
+    names(ESTIMATE) <- type$parm
+    HE <- he(cf)
+    METHOD <- paste("Semiparametric two-sample inference for", type$name)
+
+    if (inference == "Wald") {
+        STATISTIC <- c("Wald Z" = unname(ESTIMATE * sqrt(HE)))
+        if (alternative == "less") {
+            PVAL <- pnorm(STATISTIC)
+            cint <- c(-Inf, ESTIMATE + qnorm(conf.level) / sqrt(HE))
+        } else if (alternative == "greater") {
+            PVAL <- pnorm(STATISTIC, lower.tail = FALSE)
+            cint <- c(ESTIMATE - qnorm(conf.level) / sqrt(HE), Inf)
+        } else {
+            PVAL <- 2 * pnorm(-abs(STATISTIC))
+            cint <- ESTIMATE + c(-1, 1) * qnorm(conf.level) / sqrt(HE)
+        }
+        attr(cint, "conf.level") <- conf.level
+        RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
+                     null.value = mu, alternative = alternative, method = METHOD, 
+                     data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
+        class(RVAL) <- "htest"
+        return(RVAL)
+    }
 
     alpha <- (1 - conf.level) / 2
     aW <- alpha
     if (inference != "Wald") aW <- alpha / 4
-    WALD <- c(cf[1], cf[1] + sqrt(1 / he(cf)) * qnorm(1 - aW) * c(-1, 1))
-    if (inference == "Wald") return(WALD)
-    
-    ### <TH> exact: as part of family-style argument ?</TH>
+    WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
 
-    if (B) {
-        if (mu == 0) {
-            res <- resid(0, ql)
-            pstart <- parm_start[-1L]
-        } else {
-            res <- resid(mu, pstart <- profile(0, start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
+
+    if (inference == "LRatio") {
+        stopifnot(alternative == "two.sided")
+        qc <- qchisq(conf.level, df = 1)
+        pstart <- cf[-1L]
+        logLRstat <- function(b) {
+            bparm <- profile(b, parm_start = pstart, lwr = lwr[-1L], upr = upr[-1L])
+            pstart <<- bparm
+            -2 * (ret$value - ll(c(b, bparm)))
         }
-        rt <- r2dtable(B, r = xt1 + xt2, c = c(sum(xt1), sum(xt2)))
-        se0 <- sqrt(1 / he(c(0, pstart)))
-        U <- sapply(rt, function(x) sum(x[,1] * res)) * se0
-        qz <- quantile(U, probs = c(alpha, 1 - alpha))
-        ### <TH> achieved alpha ? </TH>
-    } else {
-        ### score
-        qz <- qnorm(c(alpha, 1 - alpha))
+        STATISTIC <- c("LR Chisq" = unname(logLRstat(mu)))
+        PVAL <- pchisq(STATISTIC, df = 1, lower.tail = FALSE)
+
+        grd <- c(WALD[2], WALD[1])
+        lci <- uniroot(function(b) logLRstat(b) - qc, interval = grd)$root
+        grd <- c(WALD[1], WALD[3])
+        uci <- uniroot(function(b) logLRstat(b) - qc, interval = grd)$root
+        cint <- c(lci, uci)
+        attr(cint, "conf.level") <- conf.level
+        RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
+                     null.value = mu, alternative = alternative, method = METHOD, 
+                     data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
+        class(RVAL) <- "htest"
+        return(RVAL)
     }
+
     pstart <- cf[-1L]
     sf <- function(b) {
         bparm <- profile(b, parm_start = pstart, lwr = lwr[-1L], upr = upr[-1L])
         pstart <<- bparm
         sc(c(b, bparm))[1L] * sqrt(1 / he(c(b, bparm)))
     }
+    STATISTIC <- c("Score Z" = unname(sf(mu)))
+
+    if (inference == "MLScore") {
+        ### score
+        qz <- qnorm(c(alpha, 1 - alpha))
+        if (alternative == "less") {
+            PVAL <- pnorm(STATISTIC)
+        } else if (alternative == "greater") {
+            PVAL <- pnorm(STATISTIC, lower.tail = FALSE)
+        } else {
+            PVAL <- 2 * pnorm(-abs(STATISTIC))
+        }
+    } else { ### PermScore
+        if (mu == 0) {
+            res <- resid(0, ql)
+            pstart <- parm_start[-1L]
+        } else {
+            res <- resid(mu, pstart <- profile(0, start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
+        }
+        se0 <- sqrt(1 / he(c(0, pstart)))
+        tmp <- statpvalPerm(r = rep(res * se0, 2), x = gl(2, length(res)), w = c(xt1, xt2),
+                         alternative = alternative, B = B)
+        STATISTIC <- tmp[1]
+        PVAL <- tmp[2]
+        qz <- qPerm(p = c(alpha, 1 - alpha), r = rep(res * se0, 2), x = gl(2, length(res)), w = c(xt1, xt2),
+                    B = B)
+        # rt <- r2dtable(B, r = xt1 + xt2, c = c(sum(xt1), sum(xt2)))
+        # U <- sapply(rt, function(x) sum(x[,1] * res)) * se0
+        # qz <- quantile(U, probs = c(alpha, 1 - alpha))
+        ### <TH> achieved alpha ? </TH>
+    }
     grd <- c(WALD[2], WALD[1])
     lci <- uniroot(function(b) sf(b) - qz[1], interval = grd)$root
     grd <- c(WALD[1], WALD[3])
     uci <- uniroot(function(b) sf(b) - qz[2], interval = grd)$root
-    c(cf[1], lci, uci)
+    cint <- c(lci, uci)
+    attr(cint, "conf.level") <- conf.level
+    RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
+                 null.value = mu, alternative = alternative, method = METHOD, 
+                 data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
+    class(RVAL) <- "htest"
+    return(RVAL)
 }

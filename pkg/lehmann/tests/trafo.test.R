@@ -41,7 +41,7 @@ off <- (x == levels(x)[2]) * mu
 ci <- confint(m <- orm(y ~ x + offset(off)))
 c(rev(coef(m))[1], ci[nrow(ci),])
 
-trafo.test(y = y, x = x, mu = 1, Wald = TRUE)
+trafo.test(y = y, x = x, mu = 1)
 trafo.test(y = y, x = x, mu = 1, nbins = 99)
 trafo.test(y = y, x = x, mu = 1, nbins = 100)
 
@@ -53,6 +53,9 @@ y <- rlogis(length(x), location = c(0, 2)[x])
 ci <- confint(m <- orm(y ~ x))
 c(rev(coef(m))[1], ci[nrow(ci),])
 
-trafo.test(y = y, x = x, Wald = TRUE)
-trafo.test(y = y, x = x, Wald = FALSE)
-trafo.test(y = y, x = x, Wald = FALSE, B = 10000)
+trafo.test(y = y, x = x)
+trafo.test(y = y, x = x, inference = "MLScore")
+trafo.test(y = y, x = x, inference = "LRatio")
+trafo.test(y = y, x = x, inference = "PermScore", B = 0)
+trafo.test(y = y, x = x, inference = "PermScore", B = 10000)
+trafo.test(y = y, x = x, inference = "PermScore", B = Inf)
