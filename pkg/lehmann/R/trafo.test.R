@@ -16,17 +16,19 @@ trafo.test.numeric <- function(y, x, nbins = 0, ...) {
 
 trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "vdWaerden", "Cauchy"), 
                               ### alternative = c("two.sided", "less","greater")
-                              ### exact = FALSE (Score + Wilcoxon + !Ties)
-                              ### conf.type = c("Wald", "LRatio", "Score")
-                              ### scale = c("log", "exp", "PI", "AUC", "Overlap")
+                              inference = c("Wald", "LRatio", "Score"),
+                              ### scale = c("log", "exp", "PI/AUC", "Overlap")
                               mu = 0, conf.level = .95, 
-                              Wald = FALSE, B = 0, ...)
+                              Wald = FALSE, 
+                              B = 0, ### 0, ..., Inf
+                              ...)
 {
 
     tol <- sqrt(.Machine$double.eps)
     stopifnot(nlevels(y <- y[,drop = TRUE]) > 1L)
     stopifnot(is.factor(x))
     stopifnot(nlevels(x <- x[,drop = TRUE]) == 2L)
+    inference <- match.arg(inference)
 
     xrt <- table(y, x)
     xt1 <- xrt[,1]
@@ -171,9 +173,9 @@ trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "v
 
     alpha <- (1 - conf.level) / 2
     aW <- alpha
-    if (!Wald) aW <- alpha / 4
+    if (inference != "Wald") aW <- alpha / 4
     WALD <- c(cf[1], cf[1] + sqrt(1 / he(cf)) * qnorm(1 - aW) * c(-1, 1))
-    if (Wald) return(WALD)
+    if (inference == "Wald") return(WALD)
     
     ### <TH> exact: as part of family-style argument ?</TH>
 

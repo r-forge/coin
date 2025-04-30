@@ -1,0 +1,178 @@
+
+R version 4.4.3 (2025-02-28) -- "Trophy Case"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> library("lehmann")
+> library("MASS")
+> library("tram")
+Loading required package: mlt
+Loading required package: basefun
+Loading required package: variables
+Loading required package: mvtnorm
+> 
+> set.seed(29)
+> 
+> N <- 500
+> x <- gl(2, N, labels = c("A", "B"))
+> y <- rlogis(length(x), location = c(0, 2)[x])
+> y <- cut(y, breaks = c(-Inf, -1, 0, 1, Inf), ordered = TRUE)
+> 
+> ci <- confint(m <- polr(y ~ x, method = "logistic"))
+Waiting for profiling to be done...
+
+Re-fitting to get Hessian
+
+> c(coef(m)["xB"], ci)
+      xB    2.5 %   97.5 % 
+1.918767 1.661707 2.180632 
+> #score_test(m, parm = "xB")
+> 
+> m <- Polr(y ~ x, method = "logistic")
+> score_test(m, parm = "xB")
+
+	Transformation Score Test
+
+data:  Polr(formula = y ~ x, method = "logistic")
+Z = -15.052, p-value < 2.2e-16
+alternative hypothesis: true  for xB is not equal to 0
+95 percent confidence interval:
+ 1.659583 2.177948
+sample estimates:
+  for xB 
+1.918773 
+
+> 
+> trafo.test(y = y, x = x)
+       A                   
+1.918877 1.659508 2.178246 
+> trafo.test(y = y, x = x, B = 10000)
+       A                   
+1.918877 1.659508 2.178246 
+> 
+> ci <- confint(m <- polr(y ~ x, method = "cloglog"))
+Waiting for profiling to be done...
+
+Re-fitting to get Hessian
+
+> c(coef(m)["xB"], ci)
+      xB    2.5 %   97.5 % 
+1.427236 1.233706 1.626298 
+> 
+> m <- Polr(y ~ x, method = "cloglog")
+> score_test(m, parm = "xB")
+
+	Transformation Score Test
+
+data:  Polr(formula = y ~ x, method = "cloglog")
+Z = -15.414, p-value < 2.2e-16
+alternative hypothesis: true  for xB is not equal to 0
+95 percent confidence interval:
+ 1.231393 1.623076
+sample estimates:
+  for xB 
+1.427215 
+
+> 
+> trafo.test(y = y, x = x, type = "Savage")
+       A                   
+1.427188 1.231051 1.623325 
+> trafo.test(y = y, x = x, type = "Savage", B = 10000)
+       A                   
+1.427188 1.231051 1.623325 
+> 
+> ci <- confint(m <- polr(y ~ x, method = "loglog"))
+Waiting for profiling to be done...
+
+Re-fitting to get Hessian
+
+> c(coef(m)["xB"], ci)
+       xB     2.5 %    97.5 % 
+1.0176118 0.8741336 1.1620036 
+> 
+> m <- Polr(y ~ x, method = "loglog")
+> score_test(m, parm = "xB")
+
+	Transformation Score Test
+
+data:  Polr(formula = y ~ x, method = "loglog")
+Z = -14.333, p-value < 2.2e-16
+alternative hypothesis: true  for xB is not equal to 0
+95 percent confidence interval:
+ 0.8738815 1.1614645
+sample estimates:
+  for xB 
+1.017727 
+
+> 
+> trafo.test(y = y, x = x, type = "Lehmann")
+        A                     
+1.0176797 0.8737927 1.1615668 
+> trafo.test(y = y, x = x, type = "Lehmann", B = 10000)
+        A                     
+1.0176797 0.8737927 1.1615668 
+> 
+> 
+> m <- Polr(y ~ x, method = "probit")
+> score_test(m, parm = "xB")
+
+	Transformation Score Test
+
+data:  Polr(formula = y ~ x, method = "probit")
+Z = -14.949, p-value < 2.2e-16
+alternative hypothesis: true  for xB is not equal to 0
+95 percent confidence interval:
+ 0.9825038 1.2803658
+sample estimates:
+  for xB 
+1.131435 
+
+> 
+> trafo.test(y = y, x = x, type = "vdWaerden")
+        A                     
+1.1314335 0.9824897 1.2803772 
+> trafo.test(y = y, x = x, type = "vdWaerden", B = 10000)
+        A                     
+1.1314335 0.9824897 1.2803772 
+> 
+> 
+> m <- Polr(y ~ x, method = "cauchit")
+> score_test(m, parm = "xB")
+
+	Transformation Score Test
+
+data:  Polr(formula = y ~ x, method = "cauchit")
+Z = -14.548, p-value < 2.2e-16
+alternative hypothesis: true  for xB is not equal to 0
+95 percent confidence interval:
+ 1.405751 1.983649
+sample estimates:
+  for xB 
+1.694711 
+
+> 
+> trafo.test(y = y, x = x, type = "Cauchy")
+       A                   
+1.694715 1.403979 1.985450 
+> trafo.test(y = y, x = x, type = "Cauchy", B = 10000)
+       A                   
+1.694715 1.403979 1.985450 
+> 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  3.241   0.059   3.298 

@@ -2,7 +2,8 @@
 useDynLib(lehmann, .registration = TRUE)
 
 importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
-           "quantile", "uniroot","r2dtable", "pnorm", "dnorm")
+           "quantile", "uniroot","r2dtable", "pnorm", "dnorm", 
+           "dcauchy", "pcauchy", "qcauchy")
 
 
 export(trafo.test)

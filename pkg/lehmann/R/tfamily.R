@@ -108,5 +108,5 @@ Cauchy <- function()
             dd = function(z) 
                 ifelse(is.finite(z), - 2 * z / (pi * (z^2 + 1)^2), 0.0),
             ddd = function(z) 
-                ifelse(is.finite(z), 8 * x^2 / (pi * (x^2 + 1)^3) - 2 / (pi * (x^2 + 1)^2), 0.0)
+                ifelse(is.finite(z), 8 * z^2 / (pi * (z^2 + 1)^3) - 2 / (pi * (z^2 + 1)^2), 0.0)
     )

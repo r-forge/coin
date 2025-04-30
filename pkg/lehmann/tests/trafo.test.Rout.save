@@ -1,0 +1,130 @@
+
+R version 4.4.3 (2025-02-28) -- "Trophy Case"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> library("lehmann")
+> library("rms")
+Loading required package: Hmisc
+
+Attaching package: 'Hmisc'
+
+The following objects are masked from 'package:base':
+
+    format.pval, units
+
+> library("survival")
+> 
+> set.seed(29)
+> 
+> N <- 500
+> x <- gl(2, N)
+> y <- rlogis(length(x), location = c(0, 2)[x])
+> 
+> ci <- confint(m <- orm(y ~ x))
+> c(rev(coef(m))[1], ci[nrow(ci),])
+     x=2    2.5 %   97.5 % 
+1.921277 1.679687 2.162867 
+> 
+> trafo.test(y = y, x = x)
+       1                   
+1.918924 1.677248 2.160600 
+> trafo.test(y = y, x = x, nbins = 99)
+       1                   
+1.922562 1.680916 2.164208 
+> trafo.test(y = y, x = x, nbins = 100)
+       1                   
+1.920052 1.678483 2.161621 
+> 
+> -coef(m <- coxph(Surv(y, rep(TRUE, length(y))) ~ x))
+       x2 
+0.9865179 
+> -rev(confint(m))
+[1] 0.8564659 1.1165698
+> ### rms: cloglog for P(Y < y) is loglog for P(Y >= y), the latter
+> ### being used in orm()
+> ci <- confint(m <- orm(y ~ x, family = "loglog"))
+> c(rev(coef(m))[1], ci[nrow(ci),])
+      x=2     2.5 %    97.5 % 
+0.9879509 0.8578866 1.1180153 
+> 
+> trafo.test(y = y, x = x, type = "Savage")
+        1                     
+0.9862182 0.8560743 1.1163620 
+> trafo.test(y = y, x = x, type = "Savage", nbins = 99)
+        1                     
+0.9961646 0.8655973 1.1267319 
+> trafo.test(y = y, x = x, type = "Savage", nbins = 100)
+        1                     
+0.9970812 0.8665233 1.1276391 
+> 
+> ci <- confint(m <- orm(y ~ x, family = "cloglog"))
+> c(rev(coef(m))[1], ci[nrow(ci),])
+      x=2     2.5 %    97.5 % 
+0.9454023 0.8164097 1.0743950 
+> 
+> trafo.test(y = y, x = x, type = "Lehmann")
+        1                     
+0.9383008 0.8093763 1.0672253 
+> trafo.test(y = y, x = x, type = "Lehmann", nbins = 99)
+        1                     
+0.9504082 0.8209482 1.0798683 
+> trafo.test(y = y, x = x, type = "Lehmann", nbins = 100)
+        1                     
+0.9502237 0.8207489 1.0796986 
+> 
+> ### with offset
+> mu <- 1
+> off <- (x == levels(x)[2]) * mu
+> 
+> ci <- confint(m <- orm(y ~ x + offset(off)))
+> c(rev(coef(m))[1], ci[nrow(ci),])
+      x=2     2.5 %    97.5 % 
+0.9212769 0.6796872 1.1628666 
+> 
+> trafo.test(y = y, x = x, mu = 1, Wald = TRUE)
+        1                     
+0.9143918 0.6728603 1.1559234 
+> trafo.test(y = y, x = x, mu = 1, nbins = 99)
+        1                     
+0.9213959 0.6797777 1.1630141 
+> trafo.test(y = y, x = x, mu = 1, nbins = 100)
+        1                     
+0.9202640 0.6786971 1.1618309 
+> 
+> ### permutations
+> N <- 15
+> x <- gl(2, N)
+> y <- rlogis(length(x), location = c(0, 2)[x])
+> 
+> ci <- confint(m <- orm(y ~ x))
+> c(rev(coef(m))[1], ci[nrow(ci),])
+       x=2      2.5 %     97.5 % 
+ 1.0671231 -0.2207782  2.3550243 
+> 
+> trafo.test(y = y, x = x, Wald = TRUE)
+         1                       
+ 1.0667388 -0.2211638  2.3546413 
+> trafo.test(y = y, x = x, Wald = FALSE)
+         1                       
+ 1.0667388 -0.2211638  2.3546413 
+> trafo.test(y = y, x = x, Wald = FALSE, B = 10000)
+         1                       
+ 1.0667388 -0.2211638  2.3546413 
+> 
+> proc.time()
+   user  system elapsed 
+  1.453   0.059   1.508 

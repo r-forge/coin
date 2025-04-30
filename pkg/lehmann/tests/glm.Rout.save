@@ -1,0 +1,76 @@
+
+R version 4.4.3 (2025-02-28) -- "Trophy Case"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> library("lehmann")
+> #library("tram")
+> 
+> set.seed(29)
+> 
+> N <- 500
+> x <- gl(2, N, labels = c("A", "B"))
+> y <- rlogis(length(x), location = c(0, 2)[x])
+> y <- factor(y < 0)
+> 
+> ci <- confint(m <- glm(y ~ x, family = binomial()))
+Waiting for profiling to be done...
+> c(coef(m)["xB"], ci["xB",])
+       xB     2.5 %    97.5 % 
+-1.862398 -2.171654 -1.563040 
+> #score_test(m, parm = "xB")
+> 
+> #m <- Polr(y ~ x, method = "logistic")
+> #score_test(m, parm = "xB")
+> 
+> lehmann::trafo.test(y = y, x = x)
+        A                     
+-1.862398 -2.166408 -1.558389 
+> lehmann::trafo.test(y = y, x = x, B = 10000)
+        A                     
+-1.862398 -2.166408 -1.558389 
+> 
+> ci <- confint(m <- glm(y ~ x, family = binomial(link = "cloglog")))
+Waiting for profiling to be done...
+> c(coef(m)["xB"], ci["xB",])
+       xB     2.5 %    97.5 % 
+-1.548323 -1.815917 -1.293276 
+> 
+> trafo.test(y = y, x = x, type = "Savage")
+         A                       
+-1.0910313 -1.2608795 -0.9211831 
+> trafo.test(y = y, x = x, type = "Savage", B = 10000)
+         A                       
+-1.0910313 -1.2608795 -0.9211831 
+> 
+> y <- relevel(y, levels(y)[2])
+> ci <- confint(m <- glm(y ~ x, family = binomial(link = "cloglog")))
+Waiting for profiling to be done...
+> c(coef(m)["xB"], ci["xB",])
+       xB     2.5 %    97.5 % 
+1.0910314 0.9222621 1.2620976 
+> 
+> trafo.test(y = y, x = x, type = "Lehmann")
+        A                     
+1.0910313 0.9211831 1.2608795 
+> trafo.test(y = y, x = x, type = "Lehmann", B = 10000)
+        A                     
+1.0910313 0.9211831 1.2608795 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  0.136   0.026   0.157 
