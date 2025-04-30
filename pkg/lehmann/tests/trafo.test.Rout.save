@@ -40,14 +40,44 @@ The following objects are masked from 'package:base':
 1.921277 1.679687 2.162867 
 > 
 > trafo.test(y = y, x = x)
-       1                   
-1.918924 1.677248 2.160600 
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+Wald Z = 15.562, p-value < 2.2e-16
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ 1.677248 2.160600
+sample estimates:
+log-odds ratio 
+      1.918924 
+
 > trafo.test(y = y, x = x, nbins = 99)
-       1                   
-1.922562 1.680916 2.164208 
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+Wald Z = 15.594, p-value < 2.2e-16
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ 1.680916 2.164208
+sample estimates:
+log-odds ratio 
+      1.922562 
+
 > trafo.test(y = y, x = x, nbins = 100)
-       1                   
-1.920052 1.678483 2.161621 
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+Wald Z = 15.578, p-value < 2.2e-16
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ 1.678483 2.161621
+sample estimates:
+log-odds ratio 
+      1.920052 
+
 > 
 > -coef(m <- coxph(Surv(y, rep(TRUE, length(y))) ~ x))
        x2 
@@ -62,14 +92,44 @@ The following objects are masked from 'package:base':
 0.9879509 0.8578866 1.1180153 
 > 
 > trafo.test(y = y, x = x, type = "Savage")
-        1                     
-0.9862182 0.8560743 1.1163620 
+
+	Semiparametric two-sample inference for proportional hazard model
+
+data:  
+Wald Z = 14.852, p-value < 2.2e-16
+alternative hypothesis: true log-hazard ratio is not equal to 0
+95 percent confidence interval:
+ 0.8560743 1.1163620
+sample estimates:
+log-hazard ratio 
+       0.9862182 
+
 > trafo.test(y = y, x = x, type = "Savage", nbins = 99)
-        1                     
-0.9961646 0.8655973 1.1267319 
+
+	Semiparametric two-sample inference for proportional hazard model
+
+data:  
+Wald Z = 14.954, p-value < 2.2e-16
+alternative hypothesis: true log-hazard ratio is not equal to 0
+95 percent confidence interval:
+ 0.8655973 1.1267319
+sample estimates:
+log-hazard ratio 
+       0.9961646 
+
 > trafo.test(y = y, x = x, type = "Savage", nbins = 100)
-        1                     
-0.9970812 0.8665233 1.1276391 
+
+	Semiparametric two-sample inference for proportional hazard model
+
+data:  
+Wald Z = 14.968, p-value < 2.2e-16
+alternative hypothesis: true log-hazard ratio is not equal to 0
+95 percent confidence interval:
+ 0.8665233 1.1276391
+sample estimates:
+log-hazard ratio 
+       0.9970812 
+
 > 
 > ci <- confint(m <- orm(y ~ x, family = "cloglog"))
 > c(rev(coef(m))[1], ci[nrow(ci),])
@@ -77,14 +137,44 @@ The following objects are masked from 'package:base':
 0.9454023 0.8164097 1.0743950 
 > 
 > trafo.test(y = y, x = x, type = "Lehmann")
-        1                     
-0.9383008 0.8093763 1.0672253 
+
+	Semiparametric two-sample inference for Lehmann alternative
+
+data:  
+Wald Z = 14.264, p-value < 2.2e-16
+alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
+95 percent confidence interval:
+ 0.8093763 1.0672253
+sample estimates:
+log-reverse time hazard ratio 
+                    0.9383008 
+
 > trafo.test(y = y, x = x, type = "Lehmann", nbins = 99)
-        1                     
-0.9504082 0.8209482 1.0798683 
+
+	Semiparametric two-sample inference for Lehmann alternative
+
+data:  
+Wald Z = 14.389, p-value < 2.2e-16
+alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
+95 percent confidence interval:
+ 0.8209482 1.0798683
+sample estimates:
+log-reverse time hazard ratio 
+                    0.9504082 
+
 > trafo.test(y = y, x = x, type = "Lehmann", nbins = 100)
-        1                     
-0.9502237 0.8207489 1.0796986 
+
+	Semiparametric two-sample inference for Lehmann alternative
+
+data:  
+Wald Z = 14.384, p-value < 2.2e-16
+alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
+95 percent confidence interval:
+ 0.8207489 1.0796986
+sample estimates:
+log-reverse time hazard ratio 
+                    0.9502237 
+
 > 
 > ### with offset
 > mu <- 1
@@ -95,15 +185,45 @@ The following objects are masked from 'package:base':
       x=2     2.5 %    97.5 % 
 0.9212769 0.6796872 1.1628666 
 > 
-> trafo.test(y = y, x = x, mu = 1, Wald = TRUE)
-        1                     
-0.9143918 0.6728603 1.1559234 
+> trafo.test(y = y, x = x, mu = 1)
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+Wald Z = 7.42, p-value = 1.171e-13
+alternative hypothesis: true log-odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.6728603 1.1559234
+sample estimates:
+log-odds ratio 
+     0.9143918 
+
 > trafo.test(y = y, x = x, mu = 1, nbins = 99)
-        1                     
-0.9213959 0.6797777 1.1630141 
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+Wald Z = 7.4742, p-value = 7.768e-14
+alternative hypothesis: true log-odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.6797777 1.1630141
+sample estimates:
+log-odds ratio 
+     0.9213959 
+
 > trafo.test(y = y, x = x, mu = 1, nbins = 100)
-        1                     
-0.9202640 0.6786971 1.1618309 
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+Wald Z = 7.4666, p-value = 8.229e-14
+alternative hypothesis: true log-odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.6786971 1.1618309
+sample estimates:
+log-odds ratio 
+      0.920264 
+
 > 
 > ### permutations
 > N <- 15
@@ -115,16 +235,85 @@ The following objects are masked from 'package:base':
        x=2      2.5 %     97.5 % 
  1.0671231 -0.2207782  2.3550243 
 > 
-> trafo.test(y = y, x = x, Wald = TRUE)
-         1                       
- 1.0667388 -0.2211638  2.3546413 
-> trafo.test(y = y, x = x, Wald = FALSE)
-         1                       
- 1.0667388 -0.2211638  2.3546413 
-> trafo.test(y = y, x = x, Wald = FALSE, B = 10000)
-         1                       
- 1.0667388 -0.2211638  2.3546413 
+> trafo.test(y = y, x = x)
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+Wald Z = 1.6234, p-value = 0.1045
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ -0.2211638  2.3546413
+sample estimates:
+log-odds ratio 
+      1.066739 
+
+> trafo.test(y = y, x = x, inference = "MLScore")
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+Score Z = -1.6399, p-value = 0.101
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ -0.203368  2.339314
+sample estimates:
+log-odds ratio 
+      1.066739 
+
+> trafo.test(y = y, x = x, inference = "LRatio")
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+LR Chisq = 2.7131, p-value = 0.09952
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ -0.2005981  2.3929384
+sample estimates:
+log-odds ratio 
+      1.066739 
+
+> trafo.test(y = y, x = x, inference = "PermScore", B = 0)
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+Z = 1.5969, p-value = 0.1103
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ -0.2034422  2.3393139
+sample estimates:
+log-odds ratio 
+      1.066739 
+
+> trafo.test(y = y, x = x, inference = "PermScore", B = 10000)
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+Z = 1.5969, p-value = 0.1052
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ -0.1838952  2.3457518
+sample estimates:
+log-odds ratio 
+      1.066739 
+
+> trafo.test(y = y, x = x, inference = "PermScore", B = Inf)
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  
+Z = 1.5969, p-value = 0.116
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ -0.2099005  2.3457511
+sample estimates:
+log-odds ratio 
+      1.066739 
+
 > 
 > proc.time()
    user  system elapsed 
-  1.453   0.059   1.508 
+  1.861   0.083   1.940 

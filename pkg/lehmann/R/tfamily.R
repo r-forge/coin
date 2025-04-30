@@ -1,10 +1,8 @@
 
-tfamily <- function(name, parm, p, q, d, dd, ddd, dd2d, lp2PI, PI2lp) {
+tfamily <- function(name, parm, p, q, d, dd, ddd = NA, dd2d, 
+                    lp2PI = plogis, PI2lp = qlogis, lp2OVL = NA) {
 
-    if (missing(ddd)) ddd <- NA
     if (missing(dd2d)) dd2d <- function(z) dd(z) / d(z)
-    if (missing(lp2PI)) lp2PI <- plogis
-    if (missing(PI2lp)) PI2lp <- qlogis
     ret <- list(name = name,
                 parm = parm,
                 p = p,
@@ -14,7 +12,8 @@ tfamily <- function(name, parm, p, q, d, dd, ddd, dd2d, lp2PI, PI2lp) {
                 ddd = ddd,
                 dd2d = dd2d,
                 lp2PI = lp2PI,
-                PI2lp = PI2lp)
+                PI2lp = PI2lp,
+                lp2OVL = lp2OVL)
     class(ret) <- "tfamily"
     ret
 }
@@ -48,7 +47,8 @@ Wilcoxon <- function()
                ret <- sapply(p, function(p) 
                    uniroot(f, PI = p, interval = 50 * c(-1, 1))$root)
                return(ret)
-            }
+            },
+            lp2OVL = function(x) 2 * plogis(-abs(x / 2))
     )
 
 Lehmann <- function()
@@ -67,7 +67,15 @@ Lehmann <- function()
             dd2d = function(z)
                exp(-z) - 1,
             lp2PI = plogis,
-            PI2lp = qlogis
+            PI2lp = qlogis,
+            lp2OVL = function(x) {
+                x <- abs(x)
+                rt <- exp(-x / (exp(x) - 1))
+                ret <- rt^exp(x) + 1 - rt
+                ret[abs(x) < .Machine$double.eps] <- 1
+                x[] <- ret
+                return(x)
+            }
     )
 
 Savage <- function()
@@ -86,7 +94,14 @@ Savage <- function()
             dd2d = function(z)
                1 - exp(z),
             lp2PI = plogis,
-            PI2lp = qlogis
+            PI2lp = qlogis,
+            lp2OVL = function(x) {
+                x <- abs(x)
+                ret <- exp(x / (exp(-x) - 1)) - exp(-x / (exp(x) - 1)) + 1 
+                ret[abs(x) < .Machine$double.eps] <- 1
+                x[] <- ret
+                return(x)
+            }
     )
 
 vdWaerden <- function()
@@ -98,7 +113,8 @@ vdWaerden <- function()
             ddd = function(z) ifelse(is.finite(z), dnorm(x = z) * (z^2 - 1), 0.0),
             dd2d = function(z) -z,
             lp2PI = function(x) pnorm(x / sqrt(2)),
-            PI2lp = function(p) qnorm(p) * sqrt(2)
+            PI2lp = function(p) qnorm(p) * sqrt(2),
+            lp2OVL = function(x) 2 * pnorm(-abs(x / 2))
     )
 
 Cauchy <- function()

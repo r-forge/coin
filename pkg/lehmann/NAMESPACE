@@ -3,7 +3,7 @@ useDynLib(lehmann, .registration = TRUE)
 
 importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
            "quantile", "uniroot","r2dtable", "pnorm", "dnorm", 
-           "dcauchy", "pcauchy", "qcauchy")
+           "dcauchy", "pcauchy", "qcauchy", "pchisq", "qchisq")
 importFrom("coin", "independence_test", "pperm", "qperm", "approximate", "pvalue", "statistic")
 
 

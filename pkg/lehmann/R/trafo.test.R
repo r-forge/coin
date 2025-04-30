@@ -6,6 +6,7 @@ trafo.test.numeric <- function(y, x, nbins = 0, ...) {
 
     uy <- unique(y)
     if (nbins && nbins < length(uy)) {
+        nbins <- ceiling(nbins)
         breaks <- c(-Inf, quantile(y, prob = seq_len(nbins) / (nbins + 1L)), Inf)
     } else {
         breaks <- c(-Inf, sort(uy), Inf)
@@ -14,13 +15,12 @@ trafo.test.numeric <- function(y, x, nbins = 0, ...) {
     trafo.test(r, x, ...)
 }
 
-trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "vdWaerden", "Cauchy"), 
+trafo.test.factor <- function(y, x, 
+                              type = c("Wilcoxon", "Savage", "Lehmann", "vdWaerden", "Cauchy"), 
                               alternative = c("two.sided", "less", "greater"),
                               inference = c("Wald", "LRatio", "MLScore", "PermScore"),
-                              ### parmscale = c("log", "exp", "AUC/PI", "Overlap")
-                              mu = 0, conf.level = .95, 
-                              B = 0, ### 0, ..., Inf
-                              ...)
+                              # parmscale = c("log", "exp", "AUC/PI", "Overlap")
+                              mu = 0, conf.level = .95, B = 0, ...)
 {
 
     DNAME <- NULL
@@ -187,21 +187,21 @@ trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "v
             cint <- c(ESTIMATE - qnorm(conf.level) / sqrt(HE), Inf)
         } else {
             PVAL <- 2 * pnorm(-abs(STATISTIC))
-            cint <- ESTIMATE + c(-1, 1) * qnorm(conf.level) / sqrt(HE)
+            cint <- ESTIMATE + c(-1, 1) * qnorm(1 - (1 - conf.level) / 2) / sqrt(HE)
         }
         attr(cint, "conf.level") <- conf.level
         RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                      null.value = mu, alternative = alternative, method = METHOD, 
                      data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
-        class(RVAL) <- "htest"
+        class(RVAL) <- c("trafo.test", "htest")
         return(RVAL)
     }
 
-    alpha <- (1 - conf.level) / 2
+    alpha <- (1 - conf.level)
+    if (alternative == "two.sided") alpha <- alpha / 2
     aW <- alpha
-    if (inference != "Wald") aW <- alpha / 4
+    if (inference != "Wald") aW <- alpha / 10
     WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
-
 
     if (inference == "LRatio") {
         stopifnot(alternative == "two.sided")
@@ -215,16 +215,20 @@ trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "v
         STATISTIC <- c("LR Chisq" = unname(logLRstat(mu)))
         PVAL <- pchisq(STATISTIC, df = 1, lower.tail = FALSE)
 
+        lci <- -Inf
         grd <- c(WALD[2], WALD[1])
-        lci <- uniroot(function(b) logLRstat(b) - qc, interval = grd)$root
+        if (alternative != "greater")
+            lci <- uniroot(function(b) logLRstat(b) - qc, interval = grd)$root
+        uci <- Inf
         grd <- c(WALD[1], WALD[3])
-        uci <- uniroot(function(b) logLRstat(b) - qc, interval = grd)$root
+        if (alternative != "less")
+            uci <- uniroot(function(b) logLRstat(b) - qc, interval = grd)$root
         cint <- c(lci, uci)
         attr(cint, "conf.level") <- conf.level
         RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                      null.value = mu, alternative = alternative, method = METHOD, 
                      data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
-        class(RVAL) <- "htest"
+        class(RVAL) <- c("trafo.test", "htest")
         return(RVAL)
     }
 
@@ -251,11 +255,11 @@ trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "v
             res <- resid(0, ql)
             pstart <- parm_start[-1L]
         } else {
-            res <- resid(mu, pstart <- profile(0, start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
+            res <- resid(mu, pstart <- profile(0, parm_start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
         }
         se0 <- sqrt(1 / he(c(0, pstart)))
         tmp <- statpvalPerm(r = rep(res * se0, 2), x = gl(2, length(res)), w = c(xt1, xt2),
-                         alternative = alternative, B = B)
+                            alternative = alternative, B = B)
         STATISTIC <- tmp[1]
         PVAL <- tmp[2]
         qz <- qPerm(p = c(alpha, 1 - alpha), r = rep(res * se0, 2), x = gl(2, length(res)), w = c(xt1, xt2),
@@ -274,6 +278,10 @@ trafo.test.factor <- function(y, x, type = c("Wilcoxon", "Savage", "Lehmann", "v
     RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                  null.value = mu, alternative = alternative, method = METHOD, 
                  data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
-    class(RVAL) <- "htest"
+    class(RVAL) <- c("trafo.test", "htest")
     return(RVAL)
+}
+
+plot.trafo.test <- function(x, ...) {
+
 }
