@@ -35,7 +35,7 @@ Waiting for profiling to be done...
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Wald Z = -12.007, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -48,7 +48,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Score Z = 12.663, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -61,7 +61,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Z = -12.656, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -81,7 +81,7 @@ Waiting for profiling to be done...
 
 	Semiparametric two-sample inference for proportional hazard model
 
-data:  
+data:  x and y
 Wald Z = -12.59, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -94,7 +94,7 @@ log-hazard ratio
 
 	Semiparametric two-sample inference for proportional hazard model
 
-data:  
+data:  x and y
 Score Z = 13.017, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -107,7 +107,7 @@ log-hazard ratio
 
 	Semiparametric two-sample inference for proportional hazard model
 
-data:  
+data:  x and y
 Z = -12.656, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -128,7 +128,7 @@ Waiting for profiling to be done...
 
 	Semiparametric two-sample inference for Lehmann alternative
 
-data:  
+data:  x and y
 Wald Z = 12.59, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -141,7 +141,7 @@ log-reverse time hazard ratio
 
 	Semiparametric two-sample inference for Lehmann alternative
 
-data:  
+data:  x and y
 Score Z = -13.017, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -154,7 +154,7 @@ log-reverse time hazard ratio
 
 	Semiparametric two-sample inference for Lehmann alternative
 
-data:  
+data:  x and y
 Z = 12.656, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -174,7 +174,7 @@ Waiting for profiling to be done...
 
 	Semiparametric two-sample inference for Cauchy
 
-data:  
+data:  x and y
 Wald Z = 7.9958, p-value = 1.288e-15
 alternative hypothesis: true good question is not equal to 0
 95 percent confidence interval:
@@ -187,7 +187,7 @@ good question
 
 	Semiparametric two-sample inference for Cauchy
 
-data:  
+data:  x and y
 Score Z = -13.799, p-value < 2.2e-16
 alternative hypothesis: true good question is not equal to 0
 95 percent confidence interval:
@@ -200,7 +200,7 @@ good question
 
 	Semiparametric two-sample inference for Cauchy
 
-data:  
+data:  x and y
 Z = 12.656, p-value < 2.2e-16
 alternative hypothesis: true good question is not equal to 0
 95 percent confidence interval:
@@ -212,4 +212,4 @@ good question
 > 
 > proc.time()
    user  system elapsed 
-  1.160   0.047   1.203 
+  1.154   0.052   1.201 

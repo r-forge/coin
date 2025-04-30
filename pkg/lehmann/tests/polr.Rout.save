@@ -68,7 +68,7 @@ sample estimates:
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Wald Z = 14.5, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -81,7 +81,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Score Z = -15.052, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -107,7 +107,7 @@ sample estimates:
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Z = 14.807, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -133,7 +133,7 @@ sample estimates:
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Z = 14.807, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -171,7 +171,7 @@ sample estimates:
 
 	Semiparametric two-sample inference for proportional hazard model
 
-data:  
+data:  x and y
 Wald Z = 14.262, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -184,7 +184,7 @@ log-hazard ratio
 
 	Semiparametric two-sample inference for proportional hazard model
 
-data:  
+data:  x and y
 Score Z = -15.414, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -197,7 +197,7 @@ log-hazard ratio
 
 	Semiparametric two-sample inference for proportional hazard model
 
-data:  
+data:  x and y
 Z = 14.922, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -235,7 +235,7 @@ sample estimates:
 
 	Semiparametric two-sample inference for Lehmann alternative
 
-data:  
+data:  x and y
 Wald Z = 13.862, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -248,7 +248,7 @@ log-reverse time hazard ratio
 
 	Semiparametric two-sample inference for Lehmann alternative
 
-data:  
+data:  x and y
 Score Z = -14.333, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -261,7 +261,7 @@ log-reverse time hazard ratio
 
 	Semiparametric two-sample inference for Lehmann alternative
 
-data:  
+data:  x and y
 Z = 13.243, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -290,7 +290,7 @@ sample estimates:
 
 	Semiparametric two-sample inference for vdWaeren
 
-data:  
+data:  x and y
 Wald Z = 14.889, p-value < 2.2e-16
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 95 percent confidence interval:
@@ -303,7 +303,7 @@ generalised Cohen's d
 
 	Semiparametric two-sample inference for vdWaeren
 
-data:  
+data:  x and y
 Score Z = -14.95, p-value < 2.2e-16
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 95 percent confidence interval:
@@ -316,7 +316,7 @@ generalised Cohen's d
 
 	Semiparametric two-sample inference for vdWaeren
 
-data:  
+data:  x and y
 Z = 14.564, p-value < 2.2e-16
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 95 percent confidence interval:
@@ -346,7 +346,7 @@ sample estimates:
 
 	Semiparametric two-sample inference for Cauchy
 
-data:  
+data:  x and y
 Wald Z = 11.425, p-value < 2.2e-16
 alternative hypothesis: true good question is not equal to 0
 95 percent confidence interval:
@@ -359,7 +359,7 @@ good question
 
 	Semiparametric two-sample inference for Cauchy
 
-data:  
+data:  x and y
 Score Z = -14.548, p-value < 2.2e-16
 alternative hypothesis: true good question is not equal to 0
 95 percent confidence interval:
@@ -372,7 +372,7 @@ good question
 
 	Semiparametric two-sample inference for Cauchy
 
-data:  
+data:  x and y
 Z = 14.326, p-value < 2.2e-16
 alternative hypothesis: true good question is not equal to 0
 95 percent confidence interval:
@@ -386,4 +386,4 @@ good question
 > 
 > proc.time()
    user  system elapsed 
-  5.248   0.115   5.370 
+  5.274   0.044   5.327 

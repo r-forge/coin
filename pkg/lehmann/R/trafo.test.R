@@ -1,9 +1,37 @@
 
-trafo.test <- function(y, x, ...)
+trafo.test <- function(y, ...)
     UseMethod("trafo.test")
 
+trafo.test.formula <- function(formula, data, subset, na.action = na.pass, ...)
+{
+    if(missing(formula) || (length(formula) != 3L))
+        stop("'formula' missing or incorrect")
+    if (length(attr(terms(formula[-2L]), "term.labels")) != 1L)
+        stop("'formula' missing or incorrect")
+    m <- match.call(expand.dots = FALSE)
+    if (is.matrix(eval(m$data, parent.frame())))
+        m$data <- as.data.frame(data)
+    ## need stats:: for non-standard evaluation
+    m[[1L]] <- quote(stats::model.frame)
+    m$... <- NULL
+    mf <- eval(m, parent.frame())
+    DNAME <- paste(names(mf), collapse = " by ") # works in all cases
+    names(mf) <- NULL
+    response <- attr(attr(mf, "terms"), "response")
+    y <- mf[[response]]
+    g <- factor(mf[[-response]])
+    if(nlevels(g) != 2L)
+        stop("grouping factor must have exactly 2 levels")
+    ## Call the default method.
+    RVAL <- trafo.test(y = y, x = g, ...)
+    RVAL$data.name <- DNAME
+    RVAL
+}
+ 
 trafo.test.numeric <- function(y, x, nbins = 0, ...) {
 
+    DNAME <- paste(deparse1(substitute(x)), "and",
+                   deparse1(substitute(y)))
     uy <- unique(y)
     if (nbins && nbins < length(uy)) {
         nbins <- ceiling(nbins)
@@ -12,7 +40,9 @@ trafo.test.numeric <- function(y, x, nbins = 0, ...) {
         breaks <- c(-Inf, sort(uy), Inf)
     }
     r <- cut(y, breaks = breaks)[, drop = TRUE]
-    trafo.test(r, x, ...)
+    RVAL <- trafo.test(r, x, ...)
+    RVAL$data.name <- DNAME
+    RVAL
 }
 
 trafo.test.factor <- function(y, x, 
@@ -23,7 +53,9 @@ trafo.test.factor <- function(y, x,
                               mu = 0, conf.level = .95, B = 0, ...)
 {
 
-    DNAME <- NULL
+    DNAME <- paste(deparse1(substitute(x)), "and",
+                   deparse1(substitute(y)))
+
     tol <- sqrt(.Machine$double.eps)
     stopifnot(nlevels(y <- y[,drop = TRUE]) > 1L)
     stopifnot(is.factor(x))
@@ -193,6 +225,7 @@ trafo.test.factor <- function(y, x,
         RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                      null.value = mu, alternative = alternative, method = METHOD, 
                      data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
+        RVAL$type <- type
         class(RVAL) <- c("trafo.test", "htest")
         return(RVAL)
     }
@@ -228,6 +261,7 @@ trafo.test.factor <- function(y, x,
         RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                      null.value = mu, alternative = alternative, method = METHOD, 
                      data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
+        RVAL$type <- type
         class(RVAL) <- c("trafo.test", "htest")
         return(RVAL)
     }
@@ -278,10 +312,8 @@ trafo.test.factor <- function(y, x,
     RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                  null.value = mu, alternative = alternative, method = METHOD, 
                  data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
+    RVAL$type <- type
     class(RVAL) <- c("trafo.test", "htest")
     return(RVAL)
 }
 
-plot.trafo.test <- function(x, ...) {
-
-}

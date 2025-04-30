@@ -39,11 +39,26 @@ The following objects are masked from 'package:base':
      x=2    2.5 %   97.5 % 
 1.921277 1.679687 2.162867 
 > 
+> d <- data.frame(y = y, x = x)
+> 
 > trafo.test(y = y, x = x)
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
+Wald Z = 15.562, p-value < 2.2e-16
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ 1.677248 2.160600
+sample estimates:
+log-odds ratio 
+      1.918924 
+
+> trafo.test(y ~ x, data = d)
+
+	Semiparametric two-sample inference for proportional odds model
+
+data:  y by x
 Wald Z = 15.562, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -56,7 +71,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Wald Z = 15.594, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -69,7 +84,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Wald Z = 15.578, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -95,7 +110,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional hazard model
 
-data:  
+data:  x and y
 Wald Z = 14.852, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -108,7 +123,7 @@ log-hazard ratio
 
 	Semiparametric two-sample inference for proportional hazard model
 
-data:  
+data:  x and y
 Wald Z = 14.954, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -121,7 +136,7 @@ log-hazard ratio
 
 	Semiparametric two-sample inference for proportional hazard model
 
-data:  
+data:  x and y
 Wald Z = 14.968, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -140,7 +155,7 @@ log-hazard ratio
 
 	Semiparametric two-sample inference for Lehmann alternative
 
-data:  
+data:  x and y
 Wald Z = 14.264, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -153,7 +168,7 @@ log-reverse time hazard ratio
 
 	Semiparametric two-sample inference for Lehmann alternative
 
-data:  
+data:  x and y
 Wald Z = 14.389, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -166,7 +181,7 @@ log-reverse time hazard ratio
 
 	Semiparametric two-sample inference for Lehmann alternative
 
-data:  
+data:  x and y
 Wald Z = 14.384, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
@@ -189,7 +204,7 @@ log-reverse time hazard ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Wald Z = 7.42, p-value = 1.171e-13
 alternative hypothesis: true log-odds ratio is not equal to 1
 95 percent confidence interval:
@@ -202,7 +217,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Wald Z = 7.4742, p-value = 7.768e-14
 alternative hypothesis: true log-odds ratio is not equal to 1
 95 percent confidence interval:
@@ -215,7 +230,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Wald Z = 7.4666, p-value = 8.229e-14
 alternative hypothesis: true log-odds ratio is not equal to 1
 95 percent confidence interval:
@@ -239,7 +254,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Wald Z = 1.6234, p-value = 0.1045
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -252,7 +267,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Score Z = -1.6399, p-value = 0.101
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -265,7 +280,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 LR Chisq = 2.7131, p-value = 0.09952
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -278,7 +293,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Z = 1.5969, p-value = 0.1103
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -291,7 +306,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Z = 1.5969, p-value = 0.1052
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -304,7 +319,7 @@ log-odds ratio
 
 	Semiparametric two-sample inference for proportional odds model
 
-data:  
+data:  x and y
 Z = 1.5969, p-value = 0.116
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
@@ -316,4 +331,4 @@ log-odds ratio
 > 
 > proc.time()
    user  system elapsed 
-  1.861   0.083   1.940 
+  1.939   0.068   2.003 

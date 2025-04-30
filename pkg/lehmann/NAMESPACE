@@ -3,11 +3,14 @@ useDynLib(lehmann, .registration = TRUE)
 
 importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
            "quantile", "uniroot","r2dtable", "pnorm", "dnorm", 
-           "dcauchy", "pcauchy", "qcauchy", "pchisq", "qchisq")
+           "dcauchy", "pcauchy", "qcauchy", "pchisq", "qchisq", "ecdf", "na.pass", "terms")
+importFrom("graphics", "lines", "points", "polygon")
 importFrom("coin", "independence_test", "pperm", "qperm", "approximate", "pvalue", "statistic")
 
 
-export(trafo.test)
+export(trafo.test, ppplot)
 
+S3method("trafo.test", "formula")
 S3method("trafo.test", "numeric")
 S3method("trafo.test", "factor")
+S3method("ppplot", "formula")

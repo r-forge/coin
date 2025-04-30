@@ -12,7 +12,10 @@ y <- rlogis(length(x), location = c(0, 2)[x])
 ci <- confint(m <- orm(y ~ x))
 c(rev(coef(m))[1], ci[nrow(ci),])
 
+d <- data.frame(y = y, x = x)
+
 trafo.test(y = y, x = x)
+trafo.test(y ~ x, data = d)
 trafo.test(y = y, x = x, nbins = 99)
 trafo.test(y = y, x = x, nbins = 100)
 

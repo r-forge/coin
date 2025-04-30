@@ -7,7 +7,7 @@ Authors@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
 Description: Basic infrastructure for exact conditional and unconditional as well as
   asymptotic conditional and unconditional inference for parameters in Lehmann alternatives 
   for the two-sample problem.
-Imports: coin
+Imports: coin, stats, graphics
 Suggests: rms, survival, MASS, tram
 Depends: R (>= 4.4.0)
 NeedsCompilation: yes
