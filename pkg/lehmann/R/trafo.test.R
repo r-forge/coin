@@ -46,7 +46,7 @@ trafo.test.numeric <- function(y, x, nbins = 0, ...) {
 }
 
 trafo.test.factor <- function(y, x, 
-                              type = c("Wilcoxon", "Savage", "Lehmann", "vdWaerden", "Cauchy"), 
+                              link = c("logit", "probit", "cloglog", "loglog", "cauchit"), 
                               alternative = c("two.sided", "less", "greater"),
                               inference = c("Wald", "LRatio", "MLScore", "PermScore"),
                               # parmscale = c("log", "exp", "AUC/PI", "Overlap")
@@ -73,17 +73,17 @@ trafo.test.factor <- function(y, x,
     U <- prod(xt) + xt[1] * (xt[1] + 1) / 2 - W
     AUC <- U / prod(xt)
 
-    if (!inherits(type, "tfamily")) {
-        type <- match.arg(type)
-        type <- do.call(type, list())
+    if (!inherits(link, "linkfun")) {
+        link <- match.arg(link)
+        link <- do.call(link, list())
     }
-    names(mu) <- type$parm
+    names(mu) <- link$parm
 
-    betastart <- type$PI2lp(AUC)
-    F <- type$p
-    Q <- type$q
-    f <- type$d
-    fp <- type$dd
+    betastart <- link$PI2lp(AUC)
+    F <- link$p
+    Q <- link$q
+    f <- link$d
+    fp <- link$dd
 
     ll <- function(parm) {
         beta <- parm[1L]
@@ -205,9 +205,9 @@ trafo.test.factor <- function(y, x,
                  method = "L-BFGS-B", ...)
     cf <- ret$par
     ESTIMATE <- cf[1]
-    names(ESTIMATE) <- type$parm
+    names(ESTIMATE) <- link$parm
     HE <- he(cf)
-    METHOD <- paste("Semiparametric two-sample inference for", type$name)
+    METHOD <- paste("Semiparametric two-sample inference for", link$name)
 
     if (inference == "Wald") {
         STATISTIC <- c("Wald Z" = unname(ESTIMATE * sqrt(HE)))
@@ -225,7 +225,7 @@ trafo.test.factor <- function(y, x,
         RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                      null.value = mu, alternative = alternative, method = METHOD, 
                      data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
-        RVAL$type <- type
+        RVAL$link <- link
         class(RVAL) <- c("trafo.test", "htest")
         return(RVAL)
     }
@@ -261,7 +261,7 @@ trafo.test.factor <- function(y, x,
         RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                      null.value = mu, alternative = alternative, method = METHOD, 
                      data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
-        RVAL$type <- type
+        RVAL$link <- link
         class(RVAL) <- c("trafo.test", "htest")
         return(RVAL)
     }
@@ -312,7 +312,7 @@ trafo.test.factor <- function(y, x,
     RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                  null.value = mu, alternative = alternative, method = METHOD, 
                  data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
-    RVAL$type <- type
+    RVAL$link <- link
     class(RVAL) <- c("trafo.test", "htest")
     return(RVAL)
 }

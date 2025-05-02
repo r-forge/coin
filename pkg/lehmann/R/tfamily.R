@@ -1,9 +1,10 @@
 
-tfamily <- function(name, parm, p, q, d, dd, ddd = NA, dd2d, 
+linkfun <- function(alias, name, parm, p, q, d, dd, ddd = NA, dd2d, 
                     lp2PI = plogis, PI2lp = qlogis, lp2OVL = NA) {
 
     if (missing(dd2d)) dd2d <- function(z) dd(z) / d(z)
-    ret <- list(name = name,
+    ret <- list(alias = alias,
+                name = name,
                 parm = parm,
                 p = p,
                 q = q,
@@ -14,12 +15,14 @@ tfamily <- function(name, parm, p, q, d, dd, ddd = NA, dd2d,
                 lp2PI = lp2PI,
                 PI2lp = PI2lp,
                 lp2OVL = lp2OVL)
-    class(ret) <- "tfamily"
+    class(ret) <- "linkfun"
     ret
 }
 
-Wilcoxon <- function()
-    tfamily(name = "proportional odds model", parm = "log-odds ratio",
+logit <- function()
+    linkfun(alias = "Wilcoxon",
+            name = "proportional odds model", 
+            parm = "log-odds ratio",
             p = plogis,
             q = qlogis,
             d = dlogis,
@@ -51,8 +54,10 @@ Wilcoxon <- function()
             lp2OVL = function(x) 2 * plogis(-abs(x / 2))
     )
 
-Lehmann <- function()
-    tfamily(name = "Lehmann alternative", parm = "log-reverse time hazard ratio",
+loglog <- function()
+    linkfun(alias = "Lehmann", 
+            name = "Lehmann alternative", 
+            parm = "log-reverse time hazard ratio",
             p = function(z) exp(-exp(-z)),
             q = function(p) -log(-log(p)),
             d = function(z) ifelse(is.finite(z), exp(- z - exp(-z)), 0.0),
@@ -78,8 +83,10 @@ Lehmann <- function()
             }
     )
 
-Savage <- function()
-    tfamily(name = "proportional hazard model", parm = "log-hazard ratio",
+cloglog <- function()
+    linkfun(alias = "Savage",
+            name = "proportional hazard model", 
+            parm = "log-hazard ratio",
             p = function(z) -expm1(-exp(z)),
             q = function(p) log(-log1p(- p)),
             d = function(z) ifelse(is.finite(z), exp(z - exp(z)), 0.0),
@@ -104,8 +111,10 @@ Savage <- function()
             }
     )
 
-vdWaerden <- function()
-    tfamily(name = "vdWaeren", parm = "generalised Cohen's d",
+probit <- function()
+    linkfun(alias = "van der Waerden",
+            name = "vdWaeren", 
+            parm = "generalised Cohen's d",
             p = pnorm,
             q = qnorm,
             d = dnorm,
@@ -117,8 +126,9 @@ vdWaerden <- function()
             lp2OVL = function(x) 2 * pnorm(-abs(x / 2))
     )
 
-Cauchy <- function()
-    tfamily(name = "Cauchy", parm = "good question",
+cauchit <- function()
+    linkfun(alias = "Cauchy",
+            name = "Cauchy", parm = "good question",
             p = pcauchy,
             q = qcauchy,
             d = dcauchy,
