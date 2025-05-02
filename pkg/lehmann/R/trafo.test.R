@@ -210,7 +210,6 @@ trafo.test.factor <- function(y, x,
     ESTIMATE <- cf[1]
     names(ESTIMATE) <- link$parm
     HE <- he(cf)
-    METHOD <- paste("Semiparametric two-sample inference for", link$model, "models")
 
     if (inference == "Wald") {
         STATISTIC <- c("Wald Z" = unname(ESTIMATE * sqrt(HE)))
@@ -225,6 +224,7 @@ trafo.test.factor <- function(y, x,
             cint <- ESTIMATE + c(-1, 1) * qnorm(1 - (1 - conf.level) / 2) / sqrt(HE)
         }
         attr(cint, "conf.level") <- conf.level
+        TYPE <- "Wald"
     } else {
         alpha <- (1 - conf.level)
         if (alternative == "two.sided") alpha <- alpha / 2
@@ -254,7 +254,7 @@ trafo.test.factor <- function(y, x,
                 uci <- uniroot(function(b) logLRstat(b) - qc, interval = grd)$root
             cint <- c(lci, uci)
             attr(cint, "conf.level") <- conf.level
-
+            type <- "LR"
         } else {
 
             pstart <- cf[-1L]
@@ -275,6 +275,7 @@ trafo.test.factor <- function(y, x,
                 } else {
                     PVAL <- 2 * pnorm(-abs(STATISTIC))
                 }
+                TYPE <- "score"
             } else { ### PermScore
                 if (mu == 0) {
                     res <- resid(0, ql)
@@ -283,15 +284,13 @@ trafo.test.factor <- function(y, x,
                     res <- resid(mu, pstart <- profile(0, parm_start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
                 }
                 se0 <- sqrt(1 / he(c(0, pstart)))
-                tmp <- statpvalPerm(r = res * se0, xt = xrt,
-                                    alternative = alternative, B = B)
-                STATISTIC <- tmp[1]
-                PVAL <- tmp[2]
+                sp <- statpvalPerm(r = res * se0, xt = xrt,
+                                   alternative = alternative, B = B)
+                STATISTIC <- sp$STATISTIC
+                PVAL <- sp$PVAL
                 qz <- qPerm(p = c(alpha, 1 - alpha), r = res * se0, xt = xrt, B = B)
-                # rt <- r2dtable(B, r = xt1 + xt2, c = c(sum(xt1), sum(xt2)))
-                # U <- sapply(rt, function(x) sum(x[,1] * res)) * se0
-                # qz <- quantile(U, probs = c(alpha, 1 - alpha))
                 ### <TH> achieved alpha ? </TH>
+                TYPE <- paste(sp$TYPE, "permutation")
            }
            grd <- c(WALD[2], WALD[1])
            lci <- uniroot(function(b) sf(b) - qz[1], interval = grd)$root
@@ -301,6 +300,8 @@ trafo.test.factor <- function(y, x,
            attr(cint, "conf.level") <- conf.level
         }
     }
+    METHOD <- paste("Semiparametric two-sample", TYPE, "inference for",
+                    "\n", link$model, "models")
     RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                  null.value = mu, alternative = alternative, method = METHOD, 
                  data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
