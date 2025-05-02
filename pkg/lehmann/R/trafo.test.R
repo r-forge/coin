@@ -283,12 +283,11 @@ trafo.test.factor <- function(y, x,
                     res <- resid(mu, pstart <- profile(0, parm_start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
                 }
                 se0 <- sqrt(1 / he(c(0, pstart)))
-                tmp <- statpvalPerm(r = rep(res * se0, 2), x = gl(2, length(res)), w = c(xt1, xt2),
+                tmp <- statpvalPerm(r = res * se0, xt = xrt,
                                     alternative = alternative, B = B)
                 STATISTIC <- tmp[1]
                 PVAL <- tmp[2]
-                qz <- qPerm(p = c(alpha, 1 - alpha), r = rep(res * se0, 2), x = gl(2, length(res)), w = c(xt1, xt2),
-                            B = B)
+                qz <- qPerm(p = c(alpha, 1 - alpha), r = res * se0, xt = xrt, B = B)
                 # rt <- r2dtable(B, r = xt1 + xt2, c = c(sum(xt1), sum(xt2)))
                 # U <- sapply(rt, function(x) sum(x[,1] * res)) * se0
                 # qz <- quantile(U, probs = c(alpha, 1 - alpha))

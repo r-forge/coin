@@ -1,5 +1,8 @@
 
-statpvalPerm <- function(r, x, w, B = 0, alternative) {
+statpvalPerm <- function(r, xt, B = 0, alternative) {
+    x <- gl(2, length(r))
+    r <- rep(r, 2)
+    w <- c(xt)
     distribution <- "asymptotic"
     if (B) {
         if (is.finite(B))
@@ -15,7 +18,10 @@ statpvalPerm <- function(r, x, w, B = 0, alternative) {
     c(Z = statistic(it, "standardized"), pval = pvalue(it))
 }
 
-qPerm <- function(p, r, x, w, B = 0) {
+qPerm <- function(p, r, xt, B = 0) {
+    x <- gl(2, nrow(xt))
+    r <- rep(r, 2)
+    w <- c(xt)
     distribution <- "asymptotic"
     if (B) {
         if (is.finite(B))
