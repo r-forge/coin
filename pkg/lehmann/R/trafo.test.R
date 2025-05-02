@@ -42,6 +42,7 @@ trafo.test.numeric <- function(y, x, nbins = 0, ...) {
     r <- cut(y, breaks = breaks)[, drop = TRUE]
     RVAL <- trafo.test(r, x, ...)
     RVAL$data.name <- DNAME
+    RVAL$method <- gsub("Ordinal|Binary", "Semiparametric", RVAL$method)
     RVAL
 }
 
@@ -57,7 +58,7 @@ trafo.test.factor <- function(y, x,
                    deparse1(substitute(y)))
 
     tol <- sqrt(.Machine$double.eps)
-    stopifnot(nlevels(y <- y[,drop = TRUE]) > 1L)
+    stopifnot(ny <- nlevels(y <- y[,drop = TRUE]) > 1L)
     stopifnot(is.factor(x))
     stopifnot(nlevels(x <- x[,drop = TRUE]) == 2L)
     inference <- match.arg(inference)
@@ -254,7 +255,7 @@ trafo.test.factor <- function(y, x,
                 uci <- uniroot(function(b) logLRstat(b) - qc, interval = grd)$root
             cint <- c(lci, uci)
             attr(cint, "conf.level") <- conf.level
-            type <- "LR"
+            TYPE <- "LR"
         } else {
 
             pstart <- cf[-1L]
@@ -284,11 +285,11 @@ trafo.test.factor <- function(y, x,
                     res <- resid(mu, pstart <- profile(0, parm_start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
                 }
                 se0 <- sqrt(1 / he(c(0, pstart)))
-                sp <- statpvalPerm(r = res * se0, xt = xrt,
+                sp <- statpvalPerm(res = res * se0, xt = xrt,
                                    alternative = alternative, B = B)
                 STATISTIC <- sp$STATISTIC
                 PVAL <- sp$PVAL
-                qz <- qPerm(p = c(alpha, 1 - alpha), r = res * se0, xt = xrt, B = B)
+                qz <- qPerm(p = c(alpha, 1 - alpha), res = res * se0, xt = xrt, B = B)
                 ### <TH> achieved alpha ? </TH>
                 TYPE <- paste(sp$TYPE, "permutation")
            }
@@ -300,7 +301,8 @@ trafo.test.factor <- function(y, x,
            attr(cint, "conf.level") <- conf.level
         }
     }
-    METHOD <- paste("Semiparametric two-sample", TYPE, "inference for",
+    METHOD <- paste(ifelse(ny > 2, "Ordinal", "Binary"), 
+                    "two-sample", TYPE, "inference for",
                     "\n", link$model, "models")
     RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                  null.value = mu, alternative = alternative, method = METHOD, 
