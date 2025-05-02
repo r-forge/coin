@@ -30,9 +30,9 @@ c(coef(m)["xB"], ci)
 m <- Polr(y ~ x, method = "cloglog")
 score_test(m, parm = "xB")
 
-trafo.test(y = y, x = x, type = "Savage")
-trafo.test(y = y, x = x, type = "Savage", inference = "MLScore")
-trafo.test(y = y, x = x, type = "Savage", inference = "PermScore", B = 10000)
+trafo.test(y = y, x = x, link = "cloglog")
+trafo.test(y = y, x = x, link = "cloglog", inference = "MLScore")
+trafo.test(y = y, x = x, link = "cloglog", inference = "PermScore", B = 10000)
 
 ci <- confint(m <- polr(y ~ x, method = "loglog"))
 c(coef(m)["xB"], ci)
@@ -40,23 +40,23 @@ c(coef(m)["xB"], ci)
 m <- Polr(y ~ x, method = "loglog")
 score_test(m, parm = "xB")
 
-trafo.test(y = y, x = x, type = "Lehmann")
-trafo.test(y = y, x = x, type = "Lehmann", inference = "MLScore")
-trafo.test(y = y, x = x, type = "Lehmann", inference = "PermScore", B = 10000)
+trafo.test(y = y, x = x, link = "loglog")
+trafo.test(y = y, x = x, link = "loglog", inference = "MLScore")
+trafo.test(y = y, x = x, link = "loglog", inference = "PermScore", B = 10000)
 
 m <- Polr(y ~ x, method = "probit")
 score_test(m, parm = "xB")
 
-trafo.test(y = y, x = x, type = "vdWaerden")
-trafo.test(y = y, x = x, type = "vdWaerden", inference = "MLScore")
-trafo.test(y = y, x = x, type = "vdWaerden", inference = "PermScore", B = 10000)
+trafo.test(y = y, x = x, link = "probit")
+trafo.test(y = y, x = x, link = "probit", inference = "MLScore")
+trafo.test(y = y, x = x, link = "probit", inference = "PermScore", B = 10000)
 
 
 m <- Polr(y ~ x, method = "cauchit")
 score_test(m, parm = "xB")
 
-trafo.test(y = y, x = x, type = "Cauchy")
-trafo.test(y = y, x = x, type = "Cauchy", inference = "MLScore")
-trafo.test(y = y, x = x, type = "Cauchy", inference = "PermScore", B = 10000)
+trafo.test(y = y, x = x, link = "cauchit")
+trafo.test(y = y, x = x, link = "cauchit", inference = "MLScore")
+trafo.test(y = y, x = x, link = "cauchit", inference = "PermScore", B = 10000)
 
 

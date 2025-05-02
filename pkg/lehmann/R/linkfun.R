@@ -1,79 +1,115 @@
 
-linkfun <- function(alias, name, parm, p, q, d, dd, ddd = NA, dd2d, 
-                    lp2PI = plogis, PI2lp = qlogis, lp2OVL = NA) {
+.p <- function(link, q, ...)
+    link$linkinv(q = q, ...)
 
-    if (missing(dd2d)) dd2d <- function(z) dd(z) / d(z)
+.q <- function(link, p, ...)
+    link$link(p = p, ...)
+
+.d <- function(link, x, ...)
+    link$dlinkinv(x = x, ...)
+
+.dd <- function(link, x, ...)
+    link$ddlinkinv(x = x, ...)
+
+.ddd <- function(link, x, ...)
+    link$dddlinkinv(x = x, ...)
+
+.dd2d <- function(link, x, ...)
+    link$dd2dlinkinv(x = x, ...)
+
+linkfun <- function(alias, 
+                    model, 
+                    parm, 
+                    link, 
+                    linkinv,
+                    dlinkinv, 
+                    ddlinkinv,
+                    ...) {
+
     ret <- list(alias = alias,
-                name = name,
+                model = model,
                 parm = parm,
-                p = p,
-                q = q,
-                d = d,
-                dd = dd,
-                ddd = ddd,
-                dd2d = dd2d,
-                lp2PI = lp2PI,
-                PI2lp = PI2lp,
-                lp2OVL = lp2OVL)
+                link = link,
+                linkinv = linkinv,
+                dlinkinv = dlinkinv,
+                ddlinkinv = ddlinkinv)
+    if (is.null(ret$dd2d)) 
+        ret$dd2d <- function(x) 
+            ret$ddlinkinv(x) / ret$dlinkinv(x)
+    ret <- c(ret, list(...))
     class(ret) <- "linkfun"
     ret
 }
 
 logit <- function()
     linkfun(alias = "Wilcoxon",
-            name = "proportional odds model", 
+            model = "proportional odds", 
             parm = "log-odds ratio",
-            p = plogis,
-            q = qlogis,
-            d = dlogis,
-            dd = function(z) {
-                p <- plogis(z)
+            link = qlogis,
+            linkinv = plogis,
+            dlinkinv = dlogis,
+            ddlinkinv = function(x) {
+                p <- plogis(x)
                 p * (1 - p)^2 - p^2 * (1 - p)
             },
-            ddd = function(z) {
-                ex <- exp(z)
-                ifelse(is.finite(z), (ex - 4 * ex^2 + ex^3) / (1 + ex)^4, 0.0)
+            dddlinkinv = function(x) {
+                ex <- exp(x)
+                ifelse(is.finite(x), (ex - 4 * ex^2 + ex^3) / (1 + ex)^4, 0.0)
             },
-            dd2d = function(z) {
-                ex <- exp(z)
+            dd2d = function(x) {
+                ex <- exp(x)
                 (1 - ex) / (1 + ex)
             },
-            lp2PI = function(x) {
+            parm2PI = function(x) {
                OR <- exp(x)
                ret <- OR * (OR - 1 - x)/(OR - 1)^2
                ret[abs(x) < .Machine$double.eps] <- 0.5
                return(ret)
             },
-            PI2lp = function(p) {
+            PI2parm = function(p) {
                f <- function(x, PI)
                    x + (exp(-x) * (PI + exp(2 * x) * (PI - 1) + exp(x)* (1 - 2 * PI)))
                ret <- sapply(p, function(p) 
                    uniroot(f, PI = p, interval = 50 * c(-1, 1))$root)
                return(ret)
             },
-            lp2OVL = function(x) 2 * plogis(-abs(x / 2))
+            parm2OVL = function(x) 2 * plogis(-abs(x / 2))
     )
 
 loglog <- function()
     linkfun(alias = "Lehmann", 
-            name = "Lehmann alternative", 
+            model = "Lehmann alternative", 
             parm = "log-reverse time hazard ratio",
-            p = function(z) exp(-exp(-z)),
-            q = function(p) -log(-log(p)),
-            d = function(z) ifelse(is.finite(z), exp(- z - exp(-z)), 0.0),
-            dd = function(z) {
-               ex <- exp(-z)
-               ifelse(is.finite(z), exp(-ex - z) * (ex - 1.0), 0.0)
+            link = function(p, log.p = FALSE) {
+                if (!log.p) p <- log(p)
+                -log(-p)
             },
-            ddd = function(z) {
-               ex <- exp(-z)
-               ifelse(is.finite(z), exp(-z - ex) * (ex - 1)^2 - exp(-ex - 2 * z), 0.0)
+            linkinv = function(q, lower.tail = TRUE, log.p = FALSE) {
+                ### p = exp(-exp(-q))
+                if (log.p) {
+                    if (lower.tail)
+                        return(-exp(-q))
+                    return(log1p(-exp(-exp(-q))))
+                }
+                if (lower.tail)
+                    return(exp(-exp(-q)))
+                -expm1(-exp(-q))
             },
-            dd2d = function(z)
-               exp(-z) - 1,
-            lp2PI = plogis,
-            PI2lp = qlogis,
-            lp2OVL = function(x) {
+            dlinkinv = function(x) 
+                ifelse(is.finite(x), exp(- x - exp(-x)), 0.0),
+            ddlinkinv = function(x) {
+               ex <- exp(-x)
+               ifelse(is.finite(x), exp(-ex - x) * (ex - 1.0), 0.0)
+            },
+            dddlinkinv = function(x) {
+               ex <- exp(-x)
+               ifelse(is.finite(x), exp(-x - ex) * (ex - 1)^2 - exp(-ex - 2 * x), 0.0)
+            },
+            dd2d = function(x) 
+                expm1(-x),
+            parm2PI = plogis,
+            PI2parm = qlogis,
+            parm2OVL = function(x) {
                 x <- abs(x)
                 rt <- exp(-x / (exp(x) - 1))
                 ret <- rt^exp(x) + 1 - rt
@@ -85,24 +121,39 @@ loglog <- function()
 
 cloglog <- function()
     linkfun(alias = "Savage",
-            name = "proportional hazard model", 
+            model = "proportional hazards", 
             parm = "log-hazard ratio",
-            p = function(z) -expm1(-exp(z)),
-            q = function(p) log(-log1p(- p)),
-            d = function(z) ifelse(is.finite(z), exp(z - exp(z)), 0.0),
-            dd = function(z) {
-                ex <- exp(z)
-                ifelse(is.finite(z), (ex - ex^2) / exp(ex), 0.0)
+            link = function(p, log.p = FALSE) {
+                if (log.p) p <- exp(p)
+                log(-log1p(- p))
             },
-            ddd = function(z) {
-                ex <- exp(z)
-                ifelse(is.finite(z), (ex - 3*ex^2 + ex^3) / exp(ex), 0.0)
+            linkinv = function(q, lower.tail = TRUE, log.p = FALSE) {
+                ### p = 1 - exp(-exp(q))
+                ret <- exp(-exp(q))
+                if (log.p) {
+                    if (lower.tail)
+                        return(log1p(-ret))
+                    return(-exp(q))
+                }
+                if (lower.tail)
+                    return(-expm1(-exp(q)))
+                return(ret)
             },
-            dd2d = function(z)
-               1 - exp(z),
-            lp2PI = plogis,
-            PI2lp = qlogis,
-            lp2OVL = function(x) {
+            dlinkinv = function(x) 
+                ifelse(is.finite(x), exp(x - exp(x)), 0.0),
+            ddlinkinv = function(x) {
+                ex <- exp(x)
+                ifelse(is.finite(x), (ex - ex^2) / exp(ex), 0.0)
+            },
+            dddlinkinv = function(x) {
+                ex <- exp(x)
+                ifelse(is.finite(x), (ex - 3*ex^2 + ex^3) / exp(ex), 0.0)
+            },
+            dd2d = function(x)
+               -expm1(x),
+            parm2PI = plogis,
+            PI2parm = qlogis,
+            parm2OVL = function(x) {
                 x <- abs(x)
                 ret <- exp(x / (exp(-x) - 1)) - exp(-x / (exp(x) - 1)) + 1 
                 ret[abs(x) < .Machine$double.eps] <- 1
@@ -113,27 +164,30 @@ cloglog <- function()
 
 probit <- function()
     linkfun(alias = "van der Waerden",
-            name = "vdWaeren", 
+            model = "vdWaeren", 
             parm = "generalised Cohen's d",
-            p = pnorm,
-            q = qnorm,
-            d = dnorm,
-            dd = function(z) ifelse(is.finite(z), -dnorm(x = z) * z, 0.0), 
-            ddd = function(z) ifelse(is.finite(z), dnorm(x = z) * (z^2 - 1), 0.0),
-            dd2d = function(z) -z,
-            lp2PI = function(x) pnorm(x / sqrt(2)),
-            PI2lp = function(p) qnorm(p) * sqrt(2),
-            lp2OVL = function(x) 2 * pnorm(-abs(x / 2))
+            link = qnorm,
+            linkinv = pnorm,
+            dlinkinv = dnorm,
+            ddlinkinv = function(x) 
+                ifelse(is.finite(x), -dnorm(x = x) * x, 0.0), 
+            dddlinkinv = function(x) 
+                ifelse(is.finite(x), dnorm(x = x) * (x^2 - 1), 0.0),
+            dd2d = function(x) -x,
+            parm2PI = function(x) pnorm(x / sqrt(2)),
+            PI2parm = function(p) qnorm(p) * sqrt(2),
+            parm2OVL = function(x) 2 * pnorm(-abs(x / 2))
     )
 
 cauchit <- function()
     linkfun(alias = "Cauchy",
-            name = "Cauchy", parm = "good question",
-            p = pcauchy,
-            q = qcauchy,
-            d = dcauchy,
-            dd = function(z) 
-                ifelse(is.finite(z), - 2 * z / (pi * (z^2 + 1)^2), 0.0),
-            ddd = function(z) 
-                ifelse(is.finite(z), 8 * z^2 / (pi * (z^2 + 1)^3) - 2 / (pi * (z^2 + 1)^2), 0.0)
+            model = "Cauchy", 
+            parm = "good question",
+            link = qcauchy,
+            linkinv = pcauchy,
+            dlinkinv = dcauchy,
+            ddlinkinv = function(x) 
+                ifelse(is.finite(x), - 2 * x / (pi * (x^2 + 1)^2), 0.0),
+            dddlinkinv = function(x) 
+                ifelse(is.finite(x), 8 * x^2 / (pi * (x^2 + 1)^3) - 2 / (pi * (x^2 + 1)^2), 0.0)
     )

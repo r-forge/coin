@@ -26,16 +26,16 @@ trafo.test(y = y, x = x, nbins = 100)
 ci <- confint(m <- orm(y ~ x, family = "loglog"))
 c(rev(coef(m))[1], ci[nrow(ci),])
 
-trafo.test(y = y, x = x, type = "Savage")
-trafo.test(y = y, x = x, type = "Savage", nbins = 99)
-trafo.test(y = y, x = x, type = "Savage", nbins = 100)
+trafo.test(y = y, x = x, link = "cloglog")
+trafo.test(y = y, x = x, link = "cloglog", nbins = 99)
+trafo.test(y = y, x = x, link = "cloglog", nbins = 100)
 
 ci <- confint(m <- orm(y ~ x, family = "cloglog"))
 c(rev(coef(m))[1], ci[nrow(ci),])
 
-trafo.test(y = y, x = x, type = "Lehmann")
-trafo.test(y = y, x = x, type = "Lehmann", nbins = 99)
-trafo.test(y = y, x = x, type = "Lehmann", nbins = 100)
+trafo.test(y = y, x = x, link = "loglog")
+trafo.test(y = y, x = x, link = "loglog", nbins = 99)
+trafo.test(y = y, x = x, link = "loglog", nbins = 100)
 
 ### with offset
 mu <- 1

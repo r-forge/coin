@@ -62,14 +62,14 @@ ppplot.default <- function(x, y, plot.it = TRUE,
         args$border <- args$col <- NULL
         tt <- do.call("trafo.test", args)
 
-        lwr <- tt$link$p(tt$link$q(prb) - tt$conf.int[1])
-        upr <- tt$link$p(tt$link$q(prb) - tt$conf.int[2])
+        lwr <- .p(tt$link, .q(tt$link, prb) - tt$conf.int[1])
+        upr <- .p(tt$link, .q(tt$link, prb) - tt$conf.int[2])
         x <- c(prb, rev(prb))
         y <- c(lwr, rev(upr))
         xn <- c(x[1L], rep(x[-1L], each = 2))
         yn <- c(rep(y[-length(y)], each = 2), y[length(y)])
         polygon(x = xn, y = yn, col = conf.args$col, border = conf.args$border)
-        lines(prb, tt$link$p(tt$link$q(prb) - tt$estimate))
+        lines(prb, .p(tt$link, .q(tt$link, prb) - tt$estimate))
     }
     points(px, py, ...)
     return(invisible(ret)) 

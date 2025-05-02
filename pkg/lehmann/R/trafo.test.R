@@ -79,11 +79,14 @@ trafo.test.factor <- function(y, x,
     }
     names(mu) <- link$parm
 
-    betastart <- link$PI2lp(AUC)
-    F <- link$p
-    Q <- link$q
-    f <- link$d
-    fp <- link$dd
+    if (!is.null(link$PI2parm))
+        betastart <- link$PI2parm(AUC)
+    else 
+        betastart <- qlogis(AUC)
+    F <- function(x) .p(link, x)
+    Q <- function(p) .q(link, p)
+    f <- function(x) .d(link, x)
+    fp <- function(x) .dd(link, x)
 
     ll <- function(parm) {
         beta <- parm[1L]
@@ -207,7 +210,7 @@ trafo.test.factor <- function(y, x,
     ESTIMATE <- cf[1]
     names(ESTIMATE) <- link$parm
     HE <- he(cf)
-    METHOD <- paste("Semiparametric two-sample inference for", link$name)
+    METHOD <- paste("Semiparametric two-sample inference for", link$model, "models")
 
     if (inference == "Wald") {
         STATISTIC <- c("Wald Z" = unname(ESTIMATE * sqrt(HE)))
