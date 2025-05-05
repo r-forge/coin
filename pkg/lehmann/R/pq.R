@@ -17,8 +17,8 @@ statpvalPerm <- function(res, xt, B = 0, alternative) {
                 } else {
                     cf <- lr$coefficients
                     W <- sum(1:nrow(xt) * xt[,2])
-                    n.x <- unname(cs)[2]
-                    n.y <- unname(cs)[1]
+                    n.x <- unname(cs)[1]
+                    n.y <- unname(cs)[2]
                     STATISTIC <- c("U" = W - n.x * (n.x + 1) / 2)
                     PVAL <- switch(alternative, two.sided = {
                         p <- if (STATISTIC > (n.x * n.y/2)) 
@@ -74,9 +74,10 @@ qPerm <- function(p, res, xt, B = 0) {
                     warning("cannot compute exact distribution")
                 } else {
                     cf <- lr$coefficients
-                    n.x <- unname(cs)[2]
-                    n.y <- unname(cs)[1]
+                    n.x <- unname(cs)[1]
+                    n.y <- unname(cs)[2]
                     qU <- qwilcox(p, m = n.x, n = n.y)
+                    ### <TH> incorrect! </TH>
                     return(-((qU + n.x * (n.x + 1) / 2) * cf[2] + cf[1] * cs[1]))
                 }
             }

@@ -58,7 +58,7 @@ trafo.test.factor <- function(y, x,
                    deparse1(substitute(y)))
 
     tol <- sqrt(.Machine$double.eps)
-    stopifnot(ny <- nlevels(y <- y[,drop = TRUE]) > 1L)
+    stopifnot(nlevels(y <- y[,drop = TRUE]) > 1L)
     stopifnot(is.factor(x))
     stopifnot(nlevels(x <- x[,drop = TRUE]) == 2L)
     inference <- match.arg(inference)
@@ -209,7 +209,7 @@ trafo.test.factor <- function(y, x,
                  method = "L-BFGS-B", ...)
     cf <- ret$par
     ESTIMATE <- cf[1]
-    names(ESTIMATE) <- link$parm
+    names(ESTIMATE) <- paste(link$parm, ifelse(mu == 0, "", paste0("-", mu)))
     HE <- he(cf)
 
     if (inference == "Wald") {
@@ -242,7 +242,7 @@ trafo.test.factor <- function(y, x,
                 pstart <<- bparm
                 -2 * (ret$value - ll(c(b, bparm)))
             }
-            STATISTIC <- c("LR Chisq" = unname(logLRstat(mu)))
+            STATISTIC <- c("LR Chisq" = unname(logLRstat(0)))
             PVAL <- pchisq(STATISTIC, df = 1, lower.tail = FALSE)
 
             lci <- -Inf
@@ -264,7 +264,7 @@ trafo.test.factor <- function(y, x,
                 pstart <<- bparm
                 sc(c(b, bparm))[1L] * sqrt(1 / he(c(b, bparm)))
             }
-            STATISTIC <- c("Score Z" = unname(sf(mu)))
+            STATISTIC <- c("Score Z" = unname(sf(0)))
 
             if (inference == "MLScore") {
                 ### score
@@ -282,7 +282,7 @@ trafo.test.factor <- function(y, x,
                     res <- resid(0, ql)
                     pstart <- parm_start[-1L]
                 } else {
-                    res <- resid(mu, pstart <- profile(0, parm_start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L]))
+                    res <- resid(mu, cumsum(pstart <- profile(0, parm_start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L])))
                 }
                 se0 <- sqrt(1 / he(c(0, pstart)))
                 sp <- statpvalPerm(res = res * se0, xt = xrt,
@@ -293,17 +293,21 @@ trafo.test.factor <- function(y, x,
                 ### <TH> achieved alpha ? </TH>
                 TYPE <- paste(sp$TYPE, "permutation")
            }
+           lci <- -Inf
            grd <- c(WALD[2], WALD[1])
+           if (alternative != "greater")
            lci <- uniroot(function(b) sf(b) - qz[1], interval = grd)$root
+           uci <- Inf
            grd <- c(WALD[1], WALD[3])
+           if (alternative != "less")
            uci <- uniroot(function(b) sf(b) - qz[2], interval = grd)$root
            cint <- c(lci, uci)
            attr(cint, "conf.level") <- conf.level
         }
     }
-    METHOD <- paste(ifelse(ny > 2, "Ordinal", "Binary"), 
+    METHOD <- paste(ifelse(nlevels(y) > 2, "Ordinal", "Binary"), 
                     "two-sample", TYPE, "inference for",
-                    "\n", link$model, "models")
+                    link$model, "models")
     RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                  null.value = mu, alternative = alternative, method = METHOD, 
                  data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
