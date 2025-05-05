@@ -2,7 +2,7 @@
 trafo.test <- function(y, ...)
     UseMethod("trafo.test")
 
-trafo.test.formula <- function(formula, data, subset, na.action = na.pass, ...)
+trafo.test.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
 {
     if(missing(formula) || (length(formula) != 3L))
         stop("'formula' missing or incorrect")
@@ -18,18 +18,20 @@ trafo.test.formula <- function(formula, data, subset, na.action = na.pass, ...)
     DNAME <- paste(names(mf), collapse = " by ") # works in all cases
     names(mf) <- NULL
     response <- attr(attr(mf, "terms"), "response")
+    w <- as.vector(model.weights(mf))
     y <- mf[[response]]
     g <- factor(mf[[-response]])
     if(nlevels(g) != 2L)
         stop("grouping factor must have exactly 2 levels")
     ## Call the default method.
-    RVAL <- trafo.test(y = y, x = g, ...)
+    RVAL <- trafo.test(y = y, x = g, weights = w, ...)
     RVAL$data.name <- DNAME
     RVAL
 }
  
-trafo.test.numeric <- function(y, x, nbins = 0, ...) {
+trafo.test.numeric <- function(y, x, weights = NULL, nbins = 0, ...) {
 
+    stopifnot(is.null(weights))
     DNAME <- paste(deparse1(substitute(x)), "and",
                    deparse1(substitute(y)))
     uy <- unique(y)
@@ -46,33 +48,41 @@ trafo.test.numeric <- function(y, x, nbins = 0, ...) {
     RVAL
 }
 
-trafo.test.factor <- function(y, x, 
+trafo.test.factor <- function(y, x, weights = 1,
                               link = c("logit", "probit", "cloglog", "loglog", "cauchit"), 
                               alternative = c("two.sided", "less", "greater"),
                               inference = c("Wald", "LRatio", "MLScore", "PermScore"),
-                              # parmscale = c("log", "exp", "AUC/PI", "Overlap")
+                              parmscale = c("shift", "AUC/PI", "Overlap"),
                               mu = 0, conf.level = .95, B = 0, ...)
 {
 
     DNAME <- paste(deparse1(substitute(x)), "and",
                    deparse1(substitute(y)))
 
-    tol <- sqrt(.Machine$double.eps)
-    stopifnot(nlevels(y <- y[,drop = TRUE]) > 1L)
     stopifnot(is.factor(x))
-    stopifnot(nlevels(x <- x[,drop = TRUE]) == 2L)
-    inference <- match.arg(inference)
-    alternative <- match.arg(alternative)
-
-    xrt <- table(y, x)
+    d <- data.frame(y = y, x = x, w = weights)
+    xrt <- xtabs(w ~ y + x, data = d)
     xt1 <- xrt[,1]
     xt2 <- xrt[,2]
+    mm1 <- which(xt1 > 0)
+    mm1 <- mm1[c(1, length(mm1))]
+    mm2 <- which(xt2 > 0)
+    mm2 <- mm2[c(1, length(mm2))]
+    if (mm1[1] > mm2[2] || mm2[1] > mm1[2])
+        warning("Data fully separated, results instable")
+    xt <- c(xt1, xt2)
+    stopifnot(sum(xt1 + xt2 > 0) > 1L)
+    stopifnot(sum(xt1) > 0 && sum(xt2) > 0)
 
-    ### starting value via AUC
-    xt <- table(x)
-    W <- sum(rank(y)[which(x == levels(x)[1])])
-    U <- prod(xt) + xt[1] * (xt[1] + 1) / 2 - W
-    AUC <- U / prod(xt)
+    tol <- sqrt(.Machine$double.eps)
+
+    inference <- match.arg(inference)
+    alternative <- match.arg(alternative)
+    parmscale <- match.arg(parmscale)
+    if (parmscale != "shift") {
+        stopifnot(inference != "Wald")
+        stopifnot(mu == 0)
+    }
 
     if (!inherits(link, "linkfun")) {
         link <- match.arg(link)
@@ -80,10 +90,7 @@ trafo.test.factor <- function(y, x,
     }
     names(mu) <- link$parm
 
-    if (!is.null(link$PI2parm))
-        betastart <- link$PI2parm(AUC)
-    else 
-        betastart <- qlogis(AUC)
+    betastart <- 0
     F <- function(x) .p(link, x)
     Q <- function(p) .q(link, p)
     f <- function(x) .d(link, x)
@@ -308,6 +315,18 @@ trafo.test.factor <- function(y, x,
     METHOD <- paste(ifelse(nlevels(y) > 2, "Ordinal", "Binary"), 
                     "two-sample", TYPE, "inference for",
                     link$model, "models")
+    if (parmscale != "shift") {
+        if (parmscale == "AUC/PI") {
+            ESTIMATE <- link$parm2PI(ESTIMATE)
+            names(ESTIMATE) <- "AUC/PI"
+            cint <- link$parm2PI(cint)
+        }
+        if (parmscale == "Overlap") {
+            ESTIMATE <- link$parm2OVL(ESTIMATE)
+            names(ESTIMATE) <- "Overlap coefficient"
+            cint <- link$parm2OVL(sort(abs(cint), decreasing = TRUE))
+        }
+    }
     RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                  null.value = mu, alternative = alternative, method = METHOD, 
                  data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
