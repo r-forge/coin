@@ -4,7 +4,8 @@ useDynLib(lehmann, .registration = TRUE)
 importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
            "quantile", "uniroot","r2dtable", "pnorm", "dnorm", 
            "dcauchy", "pcauchy", "qcauchy", "pchisq", "qchisq", 
-           "ecdf", "na.pass", "terms", "lm.wfit", "pwilcox", "qwilcox")
+           "ecdf", "na.pass", "terms", "lm.wfit", "pwilcox", "qwilcox",
+           "model.weights", "xtabs")
 importFrom("graphics", "lines", "points", "polygon")
 
 export(trafo.test, ppplot)
