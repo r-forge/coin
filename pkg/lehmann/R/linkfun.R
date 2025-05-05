@@ -174,8 +174,8 @@ probit <- function()
             dddlinkinv = function(x) 
                 ifelse(is.finite(x), dnorm(x = x) * (x^2 - 1), 0.0),
             dd2d = function(x) -x,
-            parm2PI = function(x) pnorm(x / sqrt(2)),
-            PI2parm = function(p) qnorm(p) * sqrt(2),
+            parm2PI = function(x) pnorm(x, sd = sqrt(2)),
+            PI2parm = function(p) qnorm(p, sd = sqrt(2)),
             parm2OVL = function(x) 2 * pnorm(-abs(x / 2))
     )
 
@@ -189,5 +189,7 @@ cauchit <- function()
             ddlinkinv = function(x) 
                 ifelse(is.finite(x), - 2 * x / (pi * (x^2 + 1)^2), 0.0),
             dddlinkinv = function(x) 
-                ifelse(is.finite(x), 8 * x^2 / (pi * (x^2 + 1)^3) - 2 / (pi * (x^2 + 1)^2), 0.0)
+                ifelse(is.finite(x), 8 * x^2 / (pi * (x^2 + 1)^3) - 2 / (pi * (x^2 + 1)^2), 0.0),
+            parm2PI = function(x) pcauchy(x, scale = 2),
+            parm2OVL = function(x) 2 * pcauchy(-abs(x / 2))
     )
