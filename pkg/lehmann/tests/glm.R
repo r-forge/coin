@@ -10,9 +10,12 @@ y <- factor(y < 0)
 
 ci <- confint(m <- glm(y ~ x, family = binomial()))
 c(coef(m)["xB"], ci["xB",])
+ci <- confint(m <- glm(y ~ x, family = binomial()), test = "Rao")
+c(coef(m)["xB"], ci["xB",])
 
 trafo.test(y = y, x = x)
 trafo.test(y = y, x = x, inference = "MLScore")
+trafo.test(y = y, x = x, inference = "LR")
 trafo.test(y = y, x = x, inference = "PermScore", B = 10000)
 
 ci <- confint(m <- glm(y ~ x, family = binomial(link = "cloglog")))
