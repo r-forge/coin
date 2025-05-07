@@ -48,22 +48,36 @@ trafo.test.numeric <- function(y, x, weights = NULL, nbins = 0, ...) {
     RVAL
 }
 
-trafo.test.factor <- function(y, x, weights = 1,
-                              link = c("logit", "probit", "cloglog", "loglog", "cauchit"), 
-                              alternative = c("two.sided", "less", "greater"),
-                              inference = c("Wald", "LRatio", "MLScore", "PermScore"),
-                              parmscale = c("shift", "AUC/PI", "Overlap"),
-                              mu = 0, conf.level = .95, B = 0, ...)
-{
+trafo.test.factor <- function(y, x, weights = 1, ...) {
 
     DNAME <- paste(deparse1(substitute(x)), "and",
                    deparse1(substitute(y)))
 
     stopifnot(is.factor(x))
     d <- data.frame(y = y, x = x, w = weights)
-    xrt <- xtabs(w ~ y + x, data = d)
-    xt1 <- xrt[,1]
-    xt2 <- xrt[,2]
+    tab <- xtabs(w ~ y + x, data = d)
+    RVAL <- trafo.test(tab, ...)
+    RVAL$data.name <- DNAME
+    RVAL
+}
+
+trafo.test.table <- function(y,
+                             link = c("logit", "probit", "cloglog", "loglog", "cauchit"), 
+                             alternative = c("two.sided", "less", "greater"),
+                             inference = c("Wald", "LRatio", "MLScore", "PermScore"),
+                             parmscale = c("shift", "AUC/PI", "Overlap"),
+                             mu = 0, conf.level = .95, B = 0, ...)
+{
+
+    d <- dim(y)
+    stopifnot(length(d) == 2 && d[2] == 2)
+    dn <- dimnames(y)
+    DNAME <- NULL
+    if (!is.null(dn))
+        DNAME <- paste(names(dn)[1], "and", names(dn)[2])
+    
+    xt1 <- y[,1]
+    xt2 <- y[,2]
     mm1 <- which(xt1 > 0)
     mm1 <- mm1[c(1, length(mm1))]
     mm2 <- which(xt2 > 0)
@@ -90,7 +104,12 @@ trafo.test.factor <- function(y, x, weights = 1,
     }
     names(mu) <- link$parm
 
-    betastart <- 0
+    cs <- cumsum(xt1 + xt2) 
+    ymed <- min(c(which.min(abs(cs / cs[length(cs)] - .5)), length(xt1) - 1))
+    tab2x2 <- cbind(colSums(y[1:ymed,,drop = FALSE]), colSums(y[-(1:ymed),,drop = FALSE]))
+    betastart <- sum(log(diag(tab2x2))) - log(tab2x2[2,1]) - log(tab2x2[1,2])
+print(betastart)
+#     betastart <- 0
     F <- function(x) .p(link, x)
     Q <- function(p) .q(link, p)
     f <- function(x) .d(link, x)
@@ -292,11 +311,11 @@ trafo.test.factor <- function(y, x, weights = 1,
                     res <- resid(mu, cumsum(pstart <- profile(0, parm_start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L])))
                 }
                 se0 <- sqrt(1 / he(c(0, pstart)))
-                sp <- statpvalPerm(res = res * se0, xt = xrt,
+                sp <- statpvalPerm(res = res * se0, xt = y,
                                    alternative = alternative, B = B)
                 STATISTIC <- sp$STATISTIC
                 PVAL <- sp$PVAL
-                qz <- qPerm(p = c(alpha, 1 - alpha), res = res * se0, xt = xrt, B = B)
+                qz <- qPerm(p = c(alpha, 1 - alpha), res = res * se0, xt = y, B = B)
                 ### <TH> achieved alpha ? </TH>
                 TYPE <- paste(sp$TYPE, "permutation")
            }
