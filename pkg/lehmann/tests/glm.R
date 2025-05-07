@@ -33,9 +33,3 @@ trafo.test(y = y, x = x, link = "loglog")
 trafo.test(y = y, x = x, link = "loglog", inference = "MLScore")
 trafo.test(y = y, x = x, link = "loglog", inference = "PermScore", B = 10000)
 
-ci <- confint(m <- glm(y ~ x, family = binomial(link = "cauchit")))
-c(coef(m)["xB"], ci["xB",])
-
-trafo.test(y = y, x = x, link = "cauchit")
-trafo.test(y = y, x = x, link = "cauchit", inference = "MLScore")
-trafo.test(y = y, x = x, link = "cauchit", inference = "PermScore", B = 10000)

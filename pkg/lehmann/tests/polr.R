@@ -50,13 +50,3 @@ score_test(m, parm = "xB")
 trafo.test(y = y, x = x, link = "probit")
 trafo.test(y = y, x = x, link = "probit", inference = "MLScore")
 trafo.test(y = y, x = x, link = "probit", inference = "PermScore", B = 10000)
-
-
-m <- Polr(y ~ x, method = "cauchit")
-score_test(m, parm = "xB")
-
-trafo.test(y = y, x = x, link = "cauchit")
-trafo.test(y = y, x = x, link = "cauchit", inference = "MLScore")
-trafo.test(y = y, x = x, link = "cauchit", inference = "PermScore", B = 10000)
-
-

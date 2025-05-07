@@ -8,7 +8,7 @@ N <- 23
 x <- gl(2, N)[-(1:ceiling(N/2))]
 y <- rlogis(length(x), location = c(0, 0)[x])
 
-f <- formals(lehmann:::trafo.test.factor)
+f <- formals(lehmann:::trafo.test.table)
 args <- expand.grid(i = 1:50, 
                     link = eval(f$link),
                     alternative = eval(f$alternative),
@@ -34,7 +34,9 @@ for (i in 1:nrow(args)) {
         args$est[i] <- tr$estimate
         args$cl[i] <- tr$conf.int[1]
         args$cr[i] <- tr$conf.int[2]
+    } else {
+        stop()
     }
 }
 
-bwplot(est ~ inference + link | mu, data = args)
+bwplot(est ~ inference | link + mu, data = args)

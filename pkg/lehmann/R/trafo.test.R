@@ -62,7 +62,7 @@ trafo.test.factor <- function(y, x, weights = 1, ...) {
 }
 
 trafo.test.table <- function(y,
-                             link = c("logit", "probit", "cloglog", "loglog", "cauchit"), 
+                             link = c("logit", "probit", "cloglog", "loglog"), 
                              alternative = c("two.sided", "less", "greater"),
                              inference = c("Wald", "LRatio", "MLScore", "PermScore"),
                              parmscale = c("shift", "AUC/PI", "Overlap"),
@@ -104,12 +104,6 @@ trafo.test.table <- function(y,
     }
     names(mu) <- link$parm
 
-    cs <- cumsum(xt1 + xt2) 
-    ymed <- min(c(which.min(abs(cs / cs[length(cs)] - .5)), length(xt1) - 1))
-    tab2x2 <- cbind(colSums(y[1:ymed,,drop = FALSE]), colSums(y[-(1:ymed),,drop = FALSE]))
-    betastart <- sum(log(diag(tab2x2))) - log(tab2x2[2,1]) - log(tab2x2[1,2])
-print(betastart)
-#     betastart <- 0
     F <- function(x) .p(link, x)
     Q <- function(p) .q(link, p)
     f <- function(x) .d(link, x)
@@ -220,8 +214,21 @@ print(betastart)
                          )
                         )
                  )
-        c(Schur_symtri(a = -a, b = b, X = x, Z = z))
+        ret <- Schur_symtri(a = -a, b = b, X = x, Z = z)
+#        while (ret < tol) {
+#            a <- a - sqrt(tol)
+#            z <- z + sqrt(tol)
+#            ret <- Schur_symtri(a = -a, b = b, X = x, Z = z)
+#        }
+        return(c(ret))
     }
+
+    ### log-OR from 2x2 table as starting value
+    cs <- cumsum(xt1 + xt2) 
+    ymed <- min(c(which.min(abs(cs / cs[length(cs)] - .5)), length(xt1) - 1))
+    tab2x2 <- cbind(colSums(y[1:ymed,,drop = FALSE]), colSums(y[-(1:ymed),,drop = FALSE]))
+    betastart <- sum(log(diag(tab2x2))) - log(tab2x2[2,1]) - log(tab2x2[1,2])
+    if (!is.finite(betastart)) betastart <- 0
 
     ### ECDF
     cs <- cumsum(xt1 + xt2)
@@ -230,13 +237,19 @@ print(betastart)
     lwr <- c(-Inf, -Inf, rep(tol, length(parm_start) - 2))
     upr <- rep(Inf, length(parm_start))
     ### <TH> check & convergence </TH>
-    ret <- optim(par = parm_start, fn = ll, gr = sc, 
-                 lower = lwr, upper = upr, 
-                 method = "L-BFGS-B", ...)
+    ret <- try(optim(par = parm_start, fn = ll, gr = sc, 
+                    lower = lwr, upper = upr, 
+                    method = "L-BFGS-B", hessian = FALSE, ...))
+    if (inherits(ret, "try-error"))
+        stop("optimisation failed")
+    if (ret$convergence)
+        warning(ret$message)
     cf <- ret$par
     ESTIMATE <- cf[1]
     names(ESTIMATE) <- paste(link$parm, ifelse(mu == 0, "", paste0("-", mu)))
-    HE <- he(cf)
+    HE <- try(he(cf))
+    if (inherits(ret, "try-error"))
+        stop("Computation of Hessian failed")
 
     if (inference == "Wald") {
         STATISTIC <- c("Wald Z" = unname(ESTIMATE * sqrt(HE)))
@@ -255,8 +268,7 @@ print(betastart)
     } else {
         alpha <- (1 - conf.level)
         if (alternative == "two.sided") alpha <- alpha / 2
-        aW <- alpha
-        if (inference != "Wald") aW <- alpha / 10
+        aW <- alpha / 10
         WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
 
         if (inference == "LRatio") {
@@ -273,12 +285,35 @@ print(betastart)
 
             lci <- -Inf
             grd <- c(WALD[2], WALD[1])
-            if (alternative != "greater")
-                lci <- uniroot(function(b) logLRstat(b) - qc, interval = grd)$root
+            if (alternative != "greater") {
+                while(aW > tol) {
+                    grd <- c(WALD[2], WALD[1])
+                    lci <- try(uniroot(function(b) logLRstat(b) - qc, interval = grd)$root, silent = TRUE)
+                    if (inherits(lci, "try-error")) {
+                        aW <- aW / 2
+                        WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
+                    } else {
+                        break()
+                    }
+                }
+                if (inherits(lci, "try-error"))
+                    stop("Inverting likelihood ratio statistic failed")
+            }
             uci <- Inf
-            grd <- c(WALD[1], WALD[3])
-            if (alternative != "less")
-                uci <- uniroot(function(b) logLRstat(b) - qc, interval = grd)$root
+            if (alternative != "less") {
+                while(aW > tol) {
+                    grd <- c(WALD[1], WALD[3])
+                    uci <- try(uniroot(function(b) logLRstat(b) - qc, interval = grd)$root, silent = TRUE)
+                    if (inherits(uci, "try-error")) {
+                        aW <- aW / 2
+                        WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
+                    } else {
+                        break()
+                    }
+                }
+                if (inherits(uci, "try-error"))
+                    stop("Inverting likelihood ratio statistic failed")
+            }
             cint <- c(lci, uci)
             attr(cint, "conf.level") <- conf.level
             TYPE <- "LR"
@@ -319,14 +354,37 @@ print(betastart)
                 ### <TH> achieved alpha ? </TH>
                 TYPE <- paste(sp$TYPE, "permutation")
            }
-           lci <- -Inf
-           grd <- c(WALD[2], WALD[1])
-           if (alternative != "greater")
-           lci <- uniroot(function(b) sf(b) - qz[1], interval = grd)$root
-           uci <- Inf
-           grd <- c(WALD[1], WALD[3])
-           if (alternative != "less")
-           uci <- uniroot(function(b) sf(b) - qz[2], interval = grd)$root
+            lci <- -Inf
+            grd <- c(WALD[2], WALD[1])
+            if (alternative != "greater") {
+                while(aW > tol) {
+                    grd <- c(WALD[2], WALD[1])
+                    lci <- try(uniroot(function(b) sf(b) - qz[1], interval = grd)$root, silent = TRUE)
+                    if (inherits(lci, "try-error")) {
+                        aW <- aW / 2
+                        WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
+                    } else {
+                        break()
+                    }
+                }
+                if (inherits(lci, "try-error"))
+                    stop("Inverting score statistic failed")
+            }
+            uci <- Inf
+            if (alternative != "less") {
+                while(aW > tol) {
+                    grd <- c(WALD[1], WALD[3])
+                    uci <- try(uniroot(function(b) sf(b) - qz[2], interval = grd)$root, silent = TRUE)
+                    if (inherits(uci, "try-error")) {
+                        aW <- aW / 2
+                        WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
+                    } else {
+                        break()
+                    }
+                }
+                if (inherits(uci, "try-error"))
+                    stop("Inverting score statistic failed")
+           }
            cint <- c(lci, uci)
            attr(cint, "conf.level") <- conf.level
         }
@@ -353,4 +411,3 @@ print(betastart)
     class(RVAL) <- c("trafo.test", "htest")
     return(RVAL)
 }
-
