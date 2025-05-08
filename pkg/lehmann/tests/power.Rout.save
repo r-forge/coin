@@ -1,0 +1,178 @@
+
+R version 4.5.0 (2025-04-11) -- "How About a Twenty-Six"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> library("lehmann")
+> 
+> set.seed(29)
+> alt <- "two"
+> 
+> N <- 25
+> delta <- .759
+> 
+> (p <- power.trafo.test(n = N, delta = delta, link = "logit", alt = alt))
+$power
+[1] 0.3258779
+
+$n
+[1] 25
+
+$delta
+[1] 0.759
+
+$sig.level
+[1] 0.05
+
+> 
+> power.trafo.test(power = p$power, delta = delta, link = "logit", alt = alt)
+$power
+[1] 0.3258779
+
+$n
+[1] 25.34843
+
+$delta
+[1] 0.759
+
+$sig.level
+[1] 0.05
+
+> 
+> power.trafo.test(n = p$n, power = p$power, link = "logit", alt = alt)
+$power
+[1] 0.3258779
+
+$n
+[1] 25
+
+$delta
+[1] 0.7568369
+
+$sig.level
+[1] 0.05
+
+> 
+> power.trafo.test(n = p$n, power = p$power, delta = p$delta, sig.level =
++ NULL, link = "logit", alt = alt)
+$power
+[1] 0.3258779
+
+$n
+[1] 25
+
+$delta
+[1] 0.759
+
+$sig.level
+[1] 0.05010247
+
+> 
+> power.trafo.test(n = N, delta = -delta, link = "logit", alt = alt)
+$power
+[1] 0.3147165
+
+$n
+[1] 25
+
+$delta
+[1] -0.759
+
+$sig.level
+[1] 0.05
+
+> 
+> K <- 5
+> prob <- runif(K)
+> prob <- prob / sum(prob)
+> 
+> (p <- power.trafo.test(n = N, prob = prob, delta = delta, link = "logit", alt = alt))
+$power
+[1] 0.2918585
+
+$n
+[1] 25
+
+$delta
+[1] 0.759
+
+$sig.level
+[1] 0.05
+
+> 
+> K <- 10
+> prob <- runif(K)
+> prob <- prob / sum(prob)
+> 
+> (p <- power.trafo.test(n = N, prob = prob, delta = delta, link = "logit", alt = alt))
+$power
+[1] 0.3332511
+
+$n
+[1] 25
+
+$delta
+[1] 0.759
+
+$sig.level
+[1] 0.05
+
+> 
+> (p <- power.trafo.test(n = N, aratio = 2, prob = prob, delta = delta, link = "logit", alt = alt))
+$power
+[1] 0.4149209
+
+$n
+[1] 25
+
+$delta
+[1] 0.759
+
+$sig.level
+[1] 0.05
+
+> 
+> 
+> power.prop.test(n = 25, p1 = .5, p2 = plogis(qlogis(.5) - delta))
+
+     Two-sample comparison of proportions power calculation 
+
+              n = 25
+             p1 = 0.5
+             p2 = 0.3188634
+      sig.level = 0.05
+          power = 0.251736
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> power.trafo.test(n = 25, prob = c(.5, .5), delta = delta)
+$power
+[1] 0.2532108
+
+$n
+[1] 25
+
+$delta
+[1] 0.759
+
+$sig.level
+[1] 0.05
+
+> 
+> proc.time()
+   user  system elapsed 
+  1.255   0.039   1.291 

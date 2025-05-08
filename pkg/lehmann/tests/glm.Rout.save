@@ -1,5 +1,5 @@
 
-R version 4.4.3 (2025-02-28) -- "Trophy Case"
+R version 4.5.0 (2025-04-11) -- "How About a Twenty-Six"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -30,23 +30,28 @@ Waiting for profiling to be done...
 > c(coef(m)["xB"], ci["xB",])
        xB     2.5 %    97.5 % 
 -1.862398 -2.171654 -1.563040 
+> ci <- confint(m <- glm(y ~ x, family = binomial()), test = "Rao")
+Waiting for profiling to be done...
+> c(coef(m)["xB"], ci["xB",])
+       xB     2.5 %    97.5 % 
+-1.862398 -2.165825 -1.558914 
 > 
 > trafo.test(y = y, x = x)
 
-	Semiparametric two-sample inference for proportional odds model
+	Binary two-sample Wald inference for proportional odds models
 
 data:  x and y
 Wald Z = -12.007, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- -2.166408 -1.558389
+ -2.166409 -1.558390
 sample estimates:
-log-odds ratio 
-     -1.862398 
+log-odds ratio  
+        -1.8624 
 
 > trafo.test(y = y, x = x, inference = "MLScore")
 
-	Semiparametric two-sample inference for proportional odds model
+	Binary two-sample score inference for proportional odds models
 
 data:  x and y
 Score Z = 12.663, p-value < 2.2e-16
@@ -54,21 +59,35 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
  -2.165826 -1.558913
 sample estimates:
-log-odds ratio 
-     -1.862398 
+log-odds ratio  
+        -1.8624 
+
+> trafo.test(y = y, x = x, inference = "LR")
+
+	Binary two-sample LR inference for proportional odds models
+
+data:  x and y
+LR Chisq = 167.62, p-value < 2.2e-16
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ -2.171626 -1.563033
+sample estimates:
+log-odds ratio  
+        -1.8624 
 
 > trafo.test(y = y, x = x, inference = "PermScore", B = 10000)
 
-	Semiparametric two-sample inference for proportional odds model
+	Binary two-sample approximate permutation inference for proportional
+	odds models
 
 data:  x and y
-Z = -12.656, p-value < 2.2e-16
+Score Z = 12.663, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- -2.163055 -1.561687
+ -2.163205 -1.561537
 sample estimates:
-log-odds ratio 
-     -1.862398 
+log-odds ratio  
+        -1.8624 
 
 > 
 > ci <- confint(m <- glm(y ~ x, family = binomial(link = "cloglog")))
@@ -77,22 +96,22 @@ Waiting for profiling to be done...
        xB     2.5 %    97.5 % 
 -1.548323 -1.815917 -1.293276 
 > 
-> trafo.test(y = y, x = x, type = "Savage")
+> trafo.test(y = y, x = x, link = "cloglog")
 
-	Semiparametric two-sample inference for proportional hazard model
+	Binary two-sample Wald inference for proportional hazards models
 
 data:  x and y
 Wald Z = -12.59, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
- -1.2608795 -0.9211831
+ -1.260877 -0.921181
 sample estimates:
-log-hazard ratio 
-       -1.091031 
+log-hazard ratio  
+        -1.091029 
 
-> trafo.test(y = y, x = x, type = "Savage", inference = "MLScore")
+> trafo.test(y = y, x = x, link = "cloglog", inference = "MLScore")
 
-	Semiparametric two-sample inference for proportional hazard model
+	Binary two-sample score inference for proportional hazards models
 
 data:  x and y
 Score Z = 13.017, p-value < 2.2e-16
@@ -100,21 +119,22 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
  -1.2607445 -0.9213172
 sample estimates:
-log-hazard ratio 
-       -1.091031 
+log-hazard ratio  
+        -1.091029 
 
-> trafo.test(y = y, x = x, type = "Savage", inference = "PermScore", B = 10000)
+> trafo.test(y = y, x = x, link = "cloglog", inference = "PermScore", B = 10000)
 
-	Semiparametric two-sample inference for proportional hazard model
+	Binary two-sample approximate permutation inference for proportional
+	hazards models
 
 data:  x and y
-Z = -12.656, p-value < 2.2e-16
+Score Z = 13.017, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
- -1.259191 -0.922871
+ -1.2639723 -0.9180894
 sample estimates:
-log-hazard ratio 
-       -1.091031 
+log-hazard ratio  
+        -1.091029 
 
 > 
 > y <- relevel(y, levels(y)[2])
@@ -124,92 +144,48 @@ Waiting for profiling to be done...
        xB     2.5 %    97.5 % 
 1.0910314 0.9222621 1.2620976 
 > 
-> trafo.test(y = y, x = x, type = "Lehmann")
+> trafo.test(y = y, x = x, link = "loglog")
 
-	Semiparametric two-sample inference for Lehmann alternative
+	Binary two-sample Wald inference for Lehmann alternative models
 
 data:  x and y
 Wald Z = 12.59, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
- 0.9211831 1.2608795
+ 0.921181 1.260877
 sample estimates:
-log-reverse time hazard ratio 
-                     1.091031 
+log-reverse time hazard ratio  
+                      1.091029 
 
-> trafo.test(y = y, x = x, type = "Lehmann", inference = "MLScore")
+> trafo.test(y = y, x = x, link = "loglog", inference = "MLScore")
 
-	Semiparametric two-sample inference for Lehmann alternative
+	Binary two-sample score inference for Lehmann alternative models
 
 data:  x and y
 Score Z = -13.017, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
- 0.9213172 1.2607446
+ 0.9213173 1.2607446
 sample estimates:
-log-reverse time hazard ratio 
-                     1.091031 
+log-reverse time hazard ratio  
+                      1.091029 
 
-> trafo.test(y = y, x = x, type = "Lehmann", inference = "PermScore", B = 10000)
+> trafo.test(y = y, x = x, link = "loglog", inference = "PermScore", B = 10000)
 
-	Semiparametric two-sample inference for Lehmann alternative
+	Binary two-sample approximate permutation inference for Lehmann
+	alternative models
 
 data:  x and y
-Z = 12.656, p-value < 2.2e-16
+Score Z = -13.017, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
- 0.922871 1.259191
+ 0.9180894 1.2639724
 sample estimates:
-log-reverse time hazard ratio 
-                     1.091031 
+log-reverse time hazard ratio  
+                      1.091029 
 
 > 
-> ci <- confint(m <- glm(y ~ x, family = binomial(link = "cauchit")))
-Waiting for profiling to be done...
-> c(coef(m)["xB"], ci["xB",])
-      xB    2.5 %   97.5 % 
-2.100667 1.641375 2.689563 
-> 
-> trafo.test(y = y, x = x, type = "Cauchy")
-
-	Semiparametric two-sample inference for Cauchy
-
-data:  x and y
-Wald Z = 7.9958, p-value = 1.288e-15
-alternative hypothesis: true good question is not equal to 0
-95 percent confidence interval:
- 1.585740 2.615594
-sample estimates:
-good question 
-     2.100667 
-
-> trafo.test(y = y, x = x, type = "Cauchy", inference = "MLScore")
-
-	Semiparametric two-sample inference for Cauchy
-
-data:  x and y
-Score Z = -13.799, p-value < 2.2e-16
-alternative hypothesis: true good question is not equal to 0
-95 percent confidence interval:
- 1.599063 2.601887
-sample estimates:
-good question 
-     2.100667 
-
-> trafo.test(y = y, x = x, type = "Cauchy", inference = "PermScore", B = 10000)
-
-	Semiparametric two-sample inference for Cauchy
-
-data:  x and y
-Z = 12.656, p-value < 2.2e-16
-alternative hypothesis: true good question is not equal to 0
-95 percent confidence interval:
- 1.603435 2.597529
-sample estimates:
-good question 
-     2.100667 
-
 > 
 > proc.time()
    user  system elapsed 
-  1.154   0.052   1.201 
+  0.300   0.034   0.329 

@@ -5,10 +5,10 @@ importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
            "quantile", "uniroot","r2dtable", "pnorm", "dnorm", 
            "dcauchy", "pcauchy", "qcauchy", "pchisq", "qchisq", 
            "ecdf", "na.pass", "terms", "lm.wfit", "pwilcox", "qwilcox",
-           "model.weights", "xtabs")
+           "model.weights", "xtabs", "rmultinom")
 importFrom("graphics", "lines", "points", "polygon")
 
-export(trafo.test, ppplot)
+export(trafo.test, power.trafo.test, ppplot)
 
 S3method("trafo.test", "formula")
 S3method("trafo.test", "numeric")

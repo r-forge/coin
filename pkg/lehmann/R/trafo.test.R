@@ -66,7 +66,7 @@ trafo.test.table <- function(y,
                              alternative = c("two.sided", "less", "greater"),
                              inference = c("Wald", "LRatio", "MLScore", "PermScore"),
                              parmscale = c("shift", "AUC/PI", "Overlap"),
-                             mu = 0, conf.level = .95, B = 0, ...)
+                             mu = 0, conf.level = .95, B = 0, delta = NULL, ...)
 {
 
     d <- dim(y)
@@ -221,6 +221,13 @@ trafo.test.table <- function(y,
 #            ret <- Schur_symtri(a = -a, b = b, X = x, Z = z)
 #        }
         return(c(ret))
+    }
+
+    if (!is.null(delta)) {
+        cs <- cumsum(xt1)
+        ql <- Q(cs[-length(cs)] / cs[length(cs)]) 
+        parm <- c(delta, ql[1], diff(ql))
+        return(sqrt(1 / he(parm)))
     }
 
     ### log-OR from 2x2 table as starting value
@@ -410,4 +417,69 @@ trafo.test.table <- function(y,
     RVAL$link <- link
     class(RVAL) <- c("trafo.test", "htest")
     return(RVAL)
+}
+
+power.trafo.test <- function(n = NULL, prob = NULL, aratio = 1, delta = NULL, sig.level = .05, power = NULL,
+                             link = c("logit", "probit", "cloglog", "loglog"),
+                             alternative = c("two.sided", "less", "greater"), ...) 
+{
+
+    if (sum(vapply(list(n, delta, power, sig.level), is.null, 
+        NA)) != 1) 
+        stop("exactly one of 'n', 'delta', 'power', and 'sig.level' must be NULL")
+    stats:::assert_NULL_or_prob(sig.level)
+    stats:::assert_NULL_or_prob(power)
+
+    tol <- sqrt(.Machine$double.eps)
+
+    if (is.null(n)) 
+        n <- uniroot(function(n)
+            power.trafo.test(n = n, prob = prob, aratio = aratio, delta = delta, 
+                             sig.level = sig.level, link = link, alternative = alternative, 
+                             ...)$power
+            - power, c(2, 1e+03), 
+            tol = tol, extendInt = "upX")$root
+    else if (is.null(delta)) 
+        delta <- uniroot(function(delta) 
+            power.trafo.test(n = n, prob = prob, aratio = aratio, delta = delta, 
+                             sig.level = sig.level, link = link, alternative = alternative, 
+                             ...)$power
+            - power, 
+    ### <TH> interval depending on alternative, symmetry? </TH>
+            c(0, 10), tol = tol, extendInt = "upX")$root
+    else if (is.null(sig.level)) 
+        sig.level <- uniroot(function(sig.level) 
+            power.trafo.test(n = n, prob = prob, aratio = aratio, delta = delta, 
+                             sig.level = sig.level, link = link, alternative = alternative, 
+                             ...)$power
+            - power, c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
+    else if (is.null(power)) {
+
+        if (!inherits(link, "linkfun")) {
+            link <- match.arg(link)
+            link <- do.call(link, list())
+        }
+
+        if (is.null(prob)) prob <- rep(1 / n, n)
+        p0 <- cumsum(prob)
+        h0 <- .q(link, p0)
+        h1 <- h0 - delta
+        p1 <- .p(link, h1)
+        se <- numeric(100)
+
+        for (i in 1:length(se)) {
+            n1 <- rmultinom(1, size = n, prob = p1)
+            y <- as.table(cbind(n * prob, aratio * n1))
+            se[i] <- trafo.test(y, delta = delta, link = link, ...)
+        }
+        se <- mean(se)
+        alternative <- match.arg(alternative)
+        power  <- switch(alternative, 
+            "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + 
+                          pnorm(qnorm(sig.level / 2) - delta / se),
+            "less" = pnorm(qnorm(sig.level) - delta / se),
+            "greater" = pnorm(qnorm(sig.level) + delta / se)
+        )
+    }
+    list(power = power, n = n, delta = delta, sig.level = sig.level)
 }
