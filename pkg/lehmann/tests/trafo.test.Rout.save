@@ -46,52 +46,52 @@ The following objects are masked from 'package:base':
 	Semiparametric two-sample Wald inference for proportional odds models
 
 data:  x and y
-Wald Z = 15.547, p-value < 2.2e-16
+Wald Z = 15.5, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- 1.674251 2.157292
+ 1.667602 2.150386
 sample estimates:
 log-odds ratio  
-       1.915771 
+       1.908994 
 
 > trafo.test(y ~ x, data = d)
 
 	Semiparametric two-sample Wald inference for proportional odds models
 
 data:  y by x
-Wald Z = 15.547, p-value < 2.2e-16
+Wald Z = 15.5, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- 1.674251 2.157292
+ 1.667602 2.150386
 sample estimates:
 log-odds ratio  
-       1.915771 
+       1.908994 
 
 > trafo.test(y = y, x = x, nbins = 99)
 
 	Semiparametric two-sample Wald inference for proportional odds models
 
 data:  x and y
-Wald Z = 15.591, p-value < 2.2e-16
+Wald Z = 15.593, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- 1.680529 2.163790
+ 1.680699 2.163969
 sample estimates:
 log-odds ratio  
-       1.922159 
+       1.922334 
 
 > trafo.test(y = y, x = x, nbins = 100)
 
 	Semiparametric two-sample Wald inference for proportional odds models
 
 data:  x and y
-Wald Z = 15.581, p-value < 2.2e-16
+Wald Z = 15.58, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- 1.678827 2.161975
+ 1.678803 2.161964
 sample estimates:
 log-odds ratio  
-       1.920401 
+       1.920383 
 
 > 
 > -coef(m <- coxph(Surv(y, rep(TRUE, length(y))) ~ x))
@@ -112,13 +112,13 @@ log-odds ratio
 	models
 
 data:  x and y
-Wald Z = 14.833, p-value < 2.2e-16
+Wald Z = 14.663, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
- 0.8549403 1.1152828
+ 0.8434072 1.1036640
 sample estimates:
 log-hazard ratio  
-        0.9851116 
+        0.9735356 
 
 > trafo.test(y = y, x = x, link = "cloglog", nbins = 99)
 
@@ -126,13 +126,13 @@ log-hazard ratio
 	models
 
 data:  x and y
-Wald Z = 14.893, p-value < 2.2e-16
+Wald Z = 14.936, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
- 0.8615966 1.1227386
+ 0.8643985 1.1255259
 sample estimates:
 log-hazard ratio  
-        0.9921676 
+        0.9949622 
 
 > trafo.test(y = y, x = x, link = "cloglog", nbins = 100)
 
@@ -140,13 +140,13 @@ log-hazard ratio
 	models
 
 data:  x and y
-Wald Z = 14.934, p-value < 2.2e-16
+Wald Z = 14.922, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
- 0.8643064 1.1254441
+ 0.8635533 1.1247022
 sample estimates:
 log-hazard ratio  
-        0.9948753 
+        0.9941277 
 
 > 
 > ci <- confint(m <- orm(y ~ x, family = "cloglog"))
@@ -159,39 +159,39 @@ log-hazard ratio
 	Semiparametric two-sample Wald inference for Lehmann alternative models
 
 data:  x and y
-Wald Z = 14.475, p-value < 2.2e-16
+Wald Z = 14.477, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
- 0.8234118 1.0813120
+ 0.8235243 1.0814334
 sample estimates:
 log-reverse time hazard ratio  
-                     0.9523619 
+                     0.9524789 
 
 > trafo.test(y = y, x = x, link = "loglog", nbins = 99)
 
 	Semiparametric two-sample Wald inference for Lehmann alternative models
 
 data:  x and y
-Wald Z = 14.39, p-value < 2.2e-16
+Wald Z = 14.392, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
- 0.821052 1.079973
+ 0.8212239 1.0801546
 sample estimates:
 log-reverse time hazard ratio  
-                     0.9505127 
+                     0.9506892 
 
 > trafo.test(y = y, x = x, link = "loglog", nbins = 100)
 
 	Semiparametric two-sample Wald inference for Lehmann alternative models
 
 data:  x and y
-Wald Z = 14.381, p-value < 2.2e-16
+Wald Z = 14.38, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
- 0.8205812 1.0795378
+ 0.8204955 1.0794517
 sample estimates:
 log-reverse time hazard ratio  
-                     0.9500595 
+                     0.9499736 
 
 > 
 > ### with offset
@@ -208,39 +208,39 @@ log-reverse time hazard ratio
 	Semiparametric two-sample Wald inference for proportional odds models
 
 data:  x and y
-Wald Z = 7.4526, p-value = 9.155e-14
+Wald Z = 7.4271, p-value = 1.11e-13
 alternative hypothesis: true log-odds ratio is not equal to 1
 95 percent confidence interval:
- 0.6769578 1.1600861
+ 0.6738784 1.1570466
 sample estimates:
 log-odds ratio -1 
-        0.9185219 
+        0.9154625 
 
 > trafo.test(y = y, x = x, mu = 1, nbins = 99)
 
 	Semiparametric two-sample Wald inference for proportional odds models
 
 data:  x and y
-Wald Z = 7.4777, p-value = 7.561e-14
+Wald Z = 7.4756, p-value = 7.687e-14
 alternative hypothesis: true log-odds ratio is not equal to 1
 95 percent confidence interval:
- 0.6802495 1.1635113
+ 0.6799485 1.1631866
 sample estimates:
 log-odds ratio -1 
-        0.9218804 
+        0.9215676 
 
 > trafo.test(y = y, x = x, mu = 1, nbins = 100)
 
 	Semiparametric two-sample Wald inference for proportional odds models
 
 data:  x and y
-Wald Z = 7.4632, p-value = 8.443e-14
+Wald Z = 7.4702, p-value = 8.006e-14
 alternative hypothesis: true log-odds ratio is not equal to 1
 95 percent confidence interval:
- 0.6782578 1.1613758
+ 0.6791678 1.1623186
 sample estimates:
 log-odds ratio -1 
-        0.9198168 
+        0.9207432 
 
 > 
 > ### permutations
@@ -258,26 +258,26 @@ log-odds ratio -1
 	Semiparametric two-sample Wald inference for proportional odds models
 
 data:  x and y
-Wald Z = 1.6237, p-value = 0.1044
+Wald Z = 1.6241, p-value = 0.1043
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- -0.2209624  2.3548221
+ -0.2206717  2.3551694
 sample estimates:
 log-odds ratio  
-        1.06693 
+       1.067249 
 
 > trafo.test(y = y, x = x, inference = "MLScore")
 
 	Semiparametric two-sample score inference for proportional odds models
 
 data:  x and y
-Score Z = -1.6397, p-value = 0.1011
+Score Z = -1.6396, p-value = 0.1011
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- -0.2033291  2.3393149
+ -0.2029205  2.3393157
 sample estimates:
 log-odds ratio  
-        1.06693 
+       1.067249 
 
 > trafo.test(y = y, x = x, inference = "LRatio")
 
@@ -287,10 +287,10 @@ data:  x and y
 LR Chisq = 2.7131, p-value = 0.09952
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- -0.2005977  2.3929380
+ -0.2005976  2.3929379
 sample estimates:
 log-odds ratio  
-        1.06693 
+       1.067249 
 
 > trafo.test(y = y, x = x, inference = "PermScore", B = 0)
 
@@ -301,10 +301,10 @@ data:  x and y
 Score Z = -1.6395, p-value = 0.1103
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- -0.2364287  2.3722670
+ -0.2364294  2.3722664
 sample estimates:
 log-odds ratio  
-        1.06693 
+       1.067249 
 
 > trafo.test(y = y, x = x, inference = "PermScore", B = 10000)
 
@@ -315,10 +315,10 @@ data:  x and y
 Score Z = -1.6395, p-value = 0.1123
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- -0.2429396  2.3790876
+ -0.243043  2.379100
 sample estimates:
 log-odds ratio  
-        1.06693 
+       1.067249 
 
 > trafo.test(y = y, x = x, inference = "PermScore", B = Inf)
 
@@ -329,12 +329,12 @@ data:  x and y
 U = 151, p-value = 0.116
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- -0.2429396  2.3790876
+ -0.243043  2.379100
 sample estimates:
 log-odds ratio  
-        1.06693 
+       1.067249 
 
 > 
 > proc.time()
    user  system elapsed 
-  1.874   0.071   1.941 
+  1.846   0.091   1.933 

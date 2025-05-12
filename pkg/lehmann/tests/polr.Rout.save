@@ -75,7 +75,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
  1.659407 2.178134
 sample estimates:
 log-odds ratio  
-       1.918771 
+        1.91877 
 
 > trafo.test(y = y, x = x, inference = "MLScore")
 
@@ -88,7 +88,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
  1.659583 2.177948
 sample estimates:
 log-odds ratio  
-       1.918771 
+        1.91877 
 
 > perm_test(m, parm = "xB", distribution = "asymptotic")
 
@@ -115,7 +115,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
  1.655303 2.182228
 sample estimates:
 log-odds ratio  
-       1.918771 
+        1.91877 
 
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
@@ -142,7 +142,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
  1.654553 2.182774
 sample estimates:
 log-odds ratio  
-       1.918771 
+        1.91877 
 
 > 
 > ci <- confint(m <- polr(y ~ x, method = "cloglog"))
@@ -177,10 +177,10 @@ data:  x and y
 Wald Z = 14.262, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
- 1.231117 1.623393
+ 1.231119 1.623396
 sample estimates:
 log-hazard ratio  
-         1.427255 
+         1.427258 
 
 > trafo.test(y = y, x = x, link = "cloglog", inference = "MLScore")
 
@@ -193,7 +193,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
  1.231394 1.623048
 sample estimates:
 log-hazard ratio  
-         1.427255 
+         1.427258 
 
 > trafo.test(y = y, x = x, link = "cloglog", inference = "PermScore", B = 10000)
 
@@ -207,7 +207,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
  1.221480 1.629328
 sample estimates:
 log-hazard ratio  
-         1.427255 
+         1.427258 
 
 > 
 > ci <- confint(m <- polr(y ~ x, method = "loglog"))
@@ -242,7 +242,7 @@ data:  x and y
 Wald Z = 13.862, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
- 0.8737848 1.1615587
+ 0.8737847 1.1615585
 sample estimates:
 log-reverse time hazard ratio  
                       1.017672 
@@ -298,10 +298,10 @@ data:  x and y
 Wald Z = 14.888, p-value < 2.2e-16
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 95 percent confidence interval:
- 0.9824574 1.2803440
+ 0.9824566 1.2803432
 sample estimates:
 generalised Cohen's d  
-              1.131401 
+                1.1314 
 
 > trafo.test(y = y, x = x, link = "probit", inference = "MLScore")
 
@@ -314,7 +314,7 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  0.9825198 1.2803520
 sample estimates:
 generalised Cohen's d  
-              1.131401 
+                1.1314 
 
 > trafo.test(y = y, x = x, link = "probit", inference = "PermScore", B = 10000)
 
@@ -327,9 +327,9 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  0.9787783 1.2833000
 sample estimates:
 generalised Cohen's d  
-              1.131401 
+                1.1314 
 
 > 
 > proc.time()
    user  system elapsed 
-  4.148   0.088   4.241 
+  4.392   0.035   4.425 

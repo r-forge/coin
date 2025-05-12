@@ -44,7 +44,7 @@ data:  x and y
 Wald Z = -12.007, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
- -2.166409 -1.558390
+ -2.166410 -1.558391
 sample estimates:
 log-odds ratio  
         -1.8624 
@@ -104,7 +104,7 @@ data:  x and y
 Wald Z = -12.59, p-value < 2.2e-16
 alternative hypothesis: true log-hazard ratio is not equal to 0
 95 percent confidence interval:
- -1.260877 -0.921181
+ -1.2608775 -0.9211811
 sample estimates:
 log-hazard ratio  
         -1.091029 
@@ -152,7 +152,7 @@ data:  x and y
 Wald Z = 12.59, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 95 percent confidence interval:
- 0.921181 1.260877
+ 0.9211811 1.2608775
 sample estimates:
 log-reverse time hazard ratio  
                       1.091029 
@@ -188,4 +188,4 @@ log-reverse time hazard ratio
 > 
 > proc.time()
    user  system elapsed 
-  0.300   0.034   0.329 
+  0.319   0.029   0.344 

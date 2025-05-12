@@ -70,11 +70,52 @@ trafo.test.table <- function(y,
 {
 
     d <- dim(y)
-    stopifnot(length(d) == 2 && d[2] == 2)
-    dn <- dimnames(y)
-    DNAME <- NULL
-    if (!is.null(dn))
-        DNAME <- paste(names(dn)[1], "and", names(dn)[2])
+        dn <- dimnames(y)
+        DNAME <- NULL
+        if (!is.null(dn))
+            DNAME <- paste(names(dn)[1], "and", names(dn)[2])
+
+    inference <- match.arg(inference)
+    alternative <- match.arg(alternative)
+    parmscale <- match.arg(parmscale)
+    if (parmscale != "shift") {
+        stopifnot(inference != "Wald")
+        stopifnot(mu == 0)
+    }
+
+    if (!inherits(link, "linkfun")) {
+        link <- match.arg(link)
+        link <- do.call(link, list())
+    }
+    names(mu) <- link$parm
+
+    ### strata
+    if (length(d) == 3) {
+        stopifnot(inference != "PermScore")
+        ll <- function(parm) {
+            ret <- 0
+            for (s in seq_len(d[3]))
+                ret <- ret + trafo.test(y[,,s], link = link, inference = "Wald", delta = parm)$neglogLik
+            ret
+        }
+        sc <- function(parm) {
+            ret <- 0
+            for (s in seq_len(d[3]))
+                ret <- ret + trafo.test(y[,,s], link = link, inference = "Wald", delta = parm)$score
+            ret
+        }
+        he <- function(parm) {
+            ret <- 0
+            for (s in seq_len(d[3]))
+                ret <- ret + trafo.test(y[,,s], link = link, inference = "Wald", delta = parm)$hessian
+            ret
+        }
+        profile <- function(...) NULL
+        betastart <- 0
+        ret <- try(optim(betastart, fn = ll, gr = sc, method = "BFGS", ...))
+    } else {
+
+        stopifnot(length(d) == 2 && d[2] == 2)
 
     y <- y[rowSums(y) > 0,,drop = FALSE]
     
@@ -92,19 +133,6 @@ trafo.test.table <- function(y,
 
     tol <- sqrt(.Machine$double.eps)
 
-    inference <- match.arg(inference)
-    alternative <- match.arg(alternative)
-    parmscale <- match.arg(parmscale)
-    if (parmscale != "shift") {
-        stopifnot(inference != "Wald")
-        stopifnot(mu == 0)
-    }
-
-    if (!inherits(link, "linkfun")) {
-        link <- match.arg(link)
-        link <- do.call(link, list())
-    }
-    names(mu) <- link$parm
 
     F <- function(x) .p(link, x)
     Q <- function(p) .q(link, p)
@@ -229,7 +257,7 @@ trafo.test.table <- function(y,
     cs <- cumsum(xt1 + xt2) 
     ymed <- min(c(which.min(abs(cs / cs[length(cs)] - .5)), length(xt1) - 1))
     tab2x2 <- cbind(colSums(y[1:ymed,,drop = FALSE]), colSums(y[-(1:ymed),,drop = FALSE]))
-    betastart <- sum(log(diag(tab2x2))) - log(tab2x2[2,1]) - log(tab2x2[1,2])
+    betastart <- log(fisher.test(tab2x2)$estimate)
     if (!is.finite(betastart)) betastart <- 0
 
     ### ECDF
@@ -259,6 +287,8 @@ trafo.test.table <- function(y,
     if (ret$convergence > 1)
         warning(ret$message)
 
+    }
+
     cf <- ret$par
     if (!is.null(delta)) cf <- c(delta, cf)
     ESTIMATE <- cf[1]
@@ -266,6 +296,7 @@ trafo.test.table <- function(y,
     HE <- try(he(cf))
     if (inherits(ret, "try-error"))
         stop("Computation of Hessian failed")
+    SC <- sc(cf)
 
     if (inference == "Wald") {
         STATISTIC <- c("Wald Z" = unname(ESTIMATE * sqrt(HE)))
@@ -383,7 +414,7 @@ trafo.test.table <- function(y,
     RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                  null.value = mu, alternative = alternative, method = METHOD, 
                  data.name = DNAME, conf.int = cint, estimate = ESTIMATE,
-                 logLik = ret$value, hessian = HE)
+                 neglogLik = ret$value, score = SC[1], hessian = HE)
     RVAL$link <- link
     class(RVAL) <- c("trafo.test", "htest")
     return(RVAL)
