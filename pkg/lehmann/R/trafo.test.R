@@ -75,6 +75,8 @@ trafo.test.table <- function(y,
     DNAME <- NULL
     if (!is.null(dn))
         DNAME <- paste(names(dn)[1], "and", names(dn)[2])
+
+    y <- y[rowSums(y) > 0,,drop = FALSE]
     
     xt1 <- y[,1]
     xt2 <- y[,2]
@@ -223,13 +225,6 @@ trafo.test.table <- function(y,
         return(c(ret))
     }
 
-    if (!is.null(delta)) {
-        cs <- cumsum(xt1)
-        ql <- Q(cs[-length(cs)] / cs[length(cs)]) 
-        parm <- c(delta, ql[1], diff(ql))
-        return(sqrt(1 / he(parm)))
-    }
-
     ### log-OR from 2x2 table as starting value
     cs <- cumsum(xt1 + xt2) 
     ymed <- min(c(which.min(abs(cs / cs[length(cs)] - .5)), length(xt1) - 1))
@@ -240,18 +235,32 @@ trafo.test.table <- function(y,
     ### ECDF
     cs <- cumsum(xt1 + xt2)
     ql <- Q(cs[-length(cs)] / cs[length(cs)])
-    parm_start <- c(betastart, ql[1], diff(ql))
-    lwr <- c(-Inf, -Inf, rep(tol, length(parm_start) - 2))
-    upr <- rep(Inf, length(parm_start))
-    ### <TH> check & convergence </TH>
-    ret <- try(optim(par = parm_start, fn = ll, gr = sc, 
-                    lower = lwr, upper = upr, 
-                    method = "L-BFGS-B", hessian = FALSE, ...))
+    if (is.null(delta)) {
+        parm_start <- c(betastart, ql[1], diff(ql))
+        lwr <- c(-Inf, -Inf, rep(tol, length(parm_start) - 2))
+        upr <- rep(Inf, length(parm_start))
+        ret <- try(optim(par = parm_start, fn = ll, gr = sc, 
+                         lower = lwr, upper = upr, 
+                         method = "L-BFGS-B", hessian = FALSE, ...))
+    } else {
+        stopifnot(inference == "Wald")
+        llf <- function(parm) ll(c(delta, parm))
+        scf <- function(parm) sc(c(delta, parm))[-1L]
+        parm_start <- c(ql[1], diff(ql))
+        lwr <- c(-Inf, rep(tol, length(parm_start) - 1))
+        upr <- rep(Inf, length(parm_start) - 1)
+        ret <- try(optim(par = parm_start, fn = llf, gr = scf, 
+                         lower = lwr, upper = upr, 
+                         method = "L-BFGS-B", hessian = FALSE, ...))
+    }
+
     if (inherits(ret, "try-error"))
         stop("optimisation failed")
-    if (ret$convergence)
+    if (ret$convergence > 1)
         warning(ret$message)
+
     cf <- ret$par
+    if (!is.null(delta)) cf <- c(delta, cf)
     ESTIMATE <- cf[1]
     names(ESTIMATE) <- paste(link$parm, ifelse(mu == 0, "", paste0("-", mu)))
     HE <- try(he(cf))
@@ -293,33 +302,13 @@ trafo.test.table <- function(y,
             lci <- -Inf
             grd <- c(WALD[2], WALD[1])
             if (alternative != "greater") {
-                while(aW > tol) {
-                    grd <- c(WALD[2], WALD[1])
-                    lci <- try(uniroot(function(b) logLRstat(b) - qc, interval = grd)$root, silent = TRUE)
-                    if (inherits(lci, "try-error")) {
-                        aW <- aW / 2
-                        WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
-                    } else {
-                        break()
-                    }
-                }
-                if (inherits(lci, "try-error"))
-                    stop("Inverting likelihood ratio statistic failed")
+                grd <- c(WALD[2], WALD[1])
+                lci <- uniroot(function(b) logLRstat(b) - qc, interval = grd, extendInt = "yes")$root
             }
             uci <- Inf
             if (alternative != "less") {
-                while(aW > tol) {
-                    grd <- c(WALD[1], WALD[3])
-                    uci <- try(uniroot(function(b) logLRstat(b) - qc, interval = grd)$root, silent = TRUE)
-                    if (inherits(uci, "try-error")) {
-                        aW <- aW / 2
-                        WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
-                    } else {
-                        break()
-                    }
-                }
-                if (inherits(uci, "try-error"))
-                    stop("Inverting likelihood ratio statistic failed")
+                grd <- c(WALD[1], WALD[3])
+                uci <- uniroot(function(b) logLRstat(b) - qc, interval = grd, extendInt = "yes")$root
             }
             cint <- c(lci, uci)
             attr(cint, "conf.level") <- conf.level
@@ -364,33 +353,13 @@ trafo.test.table <- function(y,
             lci <- -Inf
             grd <- c(WALD[2], WALD[1])
             if (alternative != "greater") {
-                while(aW > tol) {
-                    grd <- c(WALD[2], WALD[1])
-                    lci <- try(uniroot(function(b) sf(b) - qz[1], interval = grd)$root, silent = TRUE)
-                    if (inherits(lci, "try-error")) {
-                        aW <- aW / 2
-                        WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
-                    } else {
-                        break()
-                    }
-                }
-                if (inherits(lci, "try-error"))
-                    stop("Inverting score statistic failed")
+                grd <- c(WALD[2], WALD[1])
+                lci <- uniroot(function(b) sf(b) - qz[1], interval = grd, extendInt = "yes")$root
             }
             uci <- Inf
             if (alternative != "less") {
-                while(aW > tol) {
-                    grd <- c(WALD[1], WALD[3])
-                    uci <- try(uniroot(function(b) sf(b) - qz[2], interval = grd)$root, silent = TRUE)
-                    if (inherits(uci, "try-error")) {
-                        aW <- aW / 2
-                        WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
-                    } else {
-                        break()
-                    }
-                }
-                if (inherits(uci, "try-error"))
-                    stop("Inverting score statistic failed")
+                grd <- c(WALD[1], WALD[3])
+                uci <- uniroot(function(b) sf(b) - qz[2], interval = grd, extendInt = "yes")$root
            }
            cint <- c(lci, uci)
            attr(cint, "conf.level") <- conf.level
@@ -413,7 +382,8 @@ trafo.test.table <- function(y,
     }
     RVAL <- list(statistic = STATISTIC, parameter = NULL, p.value = as.numeric(PVAL), 
                  null.value = mu, alternative = alternative, method = METHOD, 
-                 data.name = DNAME, conf.int = cint, estimate = ESTIMATE)
+                 data.name = DNAME, conf.int = cint, estimate = ESTIMATE,
+                 logLik = ret$value, hessian = HE)
     RVAL$link <- link
     class(RVAL) <- c("trafo.test", "htest")
     return(RVAL)
@@ -434,10 +404,10 @@ power.trafo.test <- function(n = NULL, prob = NULL, aratio = 1, delta = NULL, si
 
     if (is.null(n)) 
         n <- uniroot(function(n)
-            power.trafo.test(n = n, prob = prob, aratio = aratio, delta = delta, 
+             power.trafo.test(n = n, prob = prob, aratio = aratio, delta = delta, 
                              sig.level = sig.level, link = link, alternative = alternative, 
                              ...)$power
-            - power, c(2, 1e+03), 
+            - power, c(5, 1e+03), 
             tol = tol, extendInt = "upX")$root
     else if (is.null(delta)) 
         delta <- uniroot(function(delta) 
@@ -465,14 +435,19 @@ power.trafo.test <- function(n = NULL, prob = NULL, aratio = 1, delta = NULL, si
         h0 <- .q(link, p0)
         h1 <- h0 - delta
         p1 <- .p(link, h1)
-        se <- numeric(100)
+        se <- rep(NA, 100)
 
         for (i in 1:length(se)) {
-            n1 <- rmultinom(1, size = n, prob = p1)
-            y <- as.table(cbind(n * prob, aratio * n1))
-            se[i] <- trafo.test(y, delta = delta, link = link, ...)
+            n0 <- rmultinom(1, size = n, prob = prob)
+            n1 <- rmultinom(1, size = aratio * n, prob = c(p1[1], diff(p1)))
+            y <- as.table(cbind(n0, n1))
+            suppressWarnings(HE <- try(trafo.test(y, delta = delta, link = link,
+                                 ...)$hessian, silent = TRUE))
+            if (!inherits(HE, "try-error"))
+                se[i] <- 1 / sqrt(HE)
         }
-        se <- mean(se)
+        se <- mean(se, na.rm = TRUE)
+        if (is.na(se)) stop("approximating hessian failed")
         alternative <- match.arg(alternative)
         power  <- switch(alternative, 
             "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + 

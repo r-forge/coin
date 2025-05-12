@@ -54,8 +54,6 @@ sample estimates:
 log-odds ratio  
        1.915771 
 
-Warning message:
-In trafo.test.table(tab, ...) : NEW_X
 > trafo.test(y ~ x, data = d)
 
 	Semiparametric two-sample Wald inference for proportional odds models
@@ -69,8 +67,6 @@ sample estimates:
 log-odds ratio  
        1.915771 
 
-Warning message:
-In trafo.test.table(tab, ...) : NEW_X
 > trafo.test(y = y, x = x, nbins = 99)
 
 	Semiparametric two-sample Wald inference for proportional odds models
@@ -124,8 +120,6 @@ sample estimates:
 log-hazard ratio  
         0.9851116 
 
-Warning message:
-In trafo.test.table(tab, ...) : NEW_X
 > trafo.test(y = y, x = x, link = "cloglog", nbins = 99)
 
 	Semiparametric two-sample Wald inference for proportional hazards
@@ -140,8 +134,6 @@ sample estimates:
 log-hazard ratio  
         0.9921676 
 
-Warning message:
-In trafo.test.table(tab, ...) : NEW_X
 > trafo.test(y = y, x = x, link = "cloglog", nbins = 100)
 
 	Semiparametric two-sample Wald inference for proportional hazards
@@ -156,8 +148,6 @@ sample estimates:
 log-hazard ratio  
         0.9948753 
 
-Warning message:
-In trafo.test.table(tab, ...) : NEW_X
 > 
 > ci <- confint(m <- orm(y ~ x, family = "cloglog"))
 > c(rev(coef(m))[1], ci[nrow(ci),])
@@ -177,8 +167,6 @@ sample estimates:
 log-reverse time hazard ratio  
                      0.9523619 
 
-Warning message:
-In trafo.test.table(tab, ...) : NEW_X
 > trafo.test(y = y, x = x, link = "loglog", nbins = 99)
 
 	Semiparametric two-sample Wald inference for Lehmann alternative models
@@ -228,8 +216,6 @@ sample estimates:
 log-odds ratio -1 
         0.9185219 
 
-Warning message:
-In trafo.test.table(tab, ...) : NEW_X
 > trafo.test(y = y, x = x, mu = 1, nbins = 99)
 
 	Semiparametric two-sample Wald inference for proportional odds models
@@ -351,4 +337,4 @@ log-odds ratio
 > 
 > proc.time()
    user  system elapsed 
-  1.838   0.085   1.919 
+  1.874   0.071   1.941 
