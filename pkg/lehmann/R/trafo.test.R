@@ -6,8 +6,12 @@ trafo.test.formula <- function(formula, data, weights, subset, na.action = na.pa
 {
     if(missing(formula) || (length(formula) != 3L))
         stop("'formula' missing or incorrect")
-    if (length(attr(terms(formula[-2L]), "term.labels")) != 1L)
+    group <- 2
+    if (length(attr(terms(formula[-2L]), "term.labels")) > 2L)
         stop("'formula' missing or incorrect")
+    strata <- NA
+    if (length(attr(terms(formula[-2L]), "term.labels")) == 2L)
+       strata <- 3
     m <- match.call(expand.dots = FALSE)
     if (is.matrix(eval(m$data, parent.frame())))
         m$data <- as.data.frame(data)
@@ -20,20 +24,27 @@ trafo.test.formula <- function(formula, data, weights, subset, na.action = na.pa
     response <- attr(attr(mf, "terms"), "response")
     w <- as.vector(model.weights(mf))
     y <- mf[[response]]
-    g <- factor(mf[[-response]])
+    g <- factor(mf[[group]])
     if(nlevels(g) != 2L)
         stop("grouping factor must have exactly 2 levels")
-    ## Call the default method.
-    RVAL <- trafo.test(y = y, x = g, weights = w, ...)
+    if (is.na(strata)) {
+        ## Call the default method.
+        RVAL <- trafo.test(y = y, x = g, weights = w, ...)
+    } else {
+        st <- factor(mf[[strata]])
+        RVAL <- trafo.test(y = y, x = g, z = st, weights = w, ...)
+    }
     RVAL$data.name <- DNAME
     RVAL
 }
  
-trafo.test.numeric <- function(y, x, weights = NULL, nbins = 0, ...) {
+trafo.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {
 
-    stopifnot(is.null(weights))
     DNAME <- paste(deparse1(substitute(x)), "and",
                    deparse1(substitute(y)))
+    if (!is.null(z))
+        DNAME <- paste(DNAME, "stratified by", deparse1(substitute(z)))
+
     uy <- unique(y)
     if (nbins && nbins < length(uy)) {
         nbins <- ceiling(nbins)
@@ -42,20 +53,28 @@ trafo.test.numeric <- function(y, x, weights = NULL, nbins = 0, ...) {
         breaks <- c(-Inf, sort(uy), Inf)
     }
     r <- cut(y, breaks = breaks)[, drop = TRUE]
-    RVAL <- trafo.test(r, x, ...)
+    RVAL <- trafo.test(y = r, x = x, z = z, weights = weights, ...)
     RVAL$data.name <- DNAME
     RVAL$method <- gsub("Ordinal|Binary", "Semiparametric", RVAL$method)
     RVAL
 }
 
-trafo.test.factor <- function(y, x, weights = 1, ...) {
+trafo.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
 
     DNAME <- paste(deparse1(substitute(x)), "and",
                    deparse1(substitute(y)))
+    if (!is.null(z))
+        DNAME <- paste(DNAME, "stratified by", deparse1(substitute(z)))
 
     stopifnot(is.factor(x))
-    d <- data.frame(y = y, x = x, w = weights)
-    tab <- xtabs(w ~ y + x, data = d)
+    d <- data.frame(y = y, x = x, w = 1)
+    if (!is.null(weights)) d$w <- weights
+    if (!is.null(z)) {
+        d$z <- z
+        tab <- xtabs(w ~ y + x + z, data = d)
+    } else {
+        tab <- xtabs(w ~ y + x, data = d)
+    }
     RVAL <- trafo.test(tab, ...)
     RVAL$data.name <- DNAME
     RVAL
@@ -70,10 +89,13 @@ trafo.test.table <- function(y,
 {
 
     d <- dim(y)
-        dn <- dimnames(y)
-        DNAME <- NULL
-        if (!is.null(dn))
-            DNAME <- paste(names(dn)[1], "and", names(dn)[2])
+    dn <- dimnames(y)
+    DNAME <- NULL
+    if (!is.null(dn)) {
+        DNAME <- paste(names(dn)[1], "and", names(dn)[2])
+        if (length(dn) == 3L)
+            DNAME <- paste(DNAME, "stratified by", names(dn)[3])
+    }
 
     inference <- match.arg(inference)
     alternative <- match.arg(alternative)
@@ -89,49 +111,59 @@ trafo.test.table <- function(y,
     }
     names(mu) <- link$parm
 
+    tol <- sqrt(.Machine$double.eps)
+
     ### strata
     if (length(d) == 3) {
-        stopifnot(inference != "PermScore")
+        idx <- 1:dim(y)[1]
         ll <- function(parm) {
             ret <- 0
             for (s in seq_len(d[3]))
-                ret <- ret + trafo.test(y[,,s], link = link, inference = "Wald", delta = parm)$neglogLik
+                ret <- ret + trafo.test(y[,,s], link = link, inference = "Wald", mu = mu, delta = parm)$neglogLik
             ret
         }
         sc <- function(parm) {
             ret <- 0
             for (s in seq_len(d[3]))
-                ret <- ret + trafo.test(y[,,s], link = link, inference = "Wald", delta = parm)$score
+                ret <- ret + trafo.test(y[,,s], link = link, inference = "Wald", mu = mu, delta = parm)$score
             ret
         }
         he <- function(parm) {
             ret <- 0
             for (s in seq_len(d[3]))
-                ret <- ret + trafo.test(y[,,s], link = link, inference = "Wald", delta = parm)$hessian
+                ret <- ret + trafo.test(y[,,s], link = link, inference = "Wald", mu = mu, delta = parm)$hessian
+            ret
+        }
+        resid <- function(...) {
+            ret <- c()
+            for (s in seq_len(d[3])) {
+                tmp <- trafo.test(y[,,s], link = link, inference = "PermScore", mu = mu)$residmu
+                ret <- c(ret, tmp)
+            }
             ret
         }
         profile <- function(...) NULL
         betastart <- 0
+        ### <TH> delta for power? </TH>
         ret <- try(optim(betastart, fn = ll, gr = sc, method = "BFGS", ...))
     } else {
 
         stopifnot(length(d) == 2 && d[2] == 2)
 
-    y <- y[rowSums(y) > 0,,drop = FALSE]
-    
+    idx <- which(rowSums(y) > 0)
     xt1 <- y[,1]
     xt2 <- y[,2]
-    mm1 <- which(xt1 > 0)
-    mm1 <- mm1[c(1, length(mm1))]
-    mm2 <- which(xt2 > 0)
-    mm2 <- mm2[c(1, length(mm2))]
-    if (mm1[1] > mm2[2] || mm2[1] > mm1[2])
-        warning("Data fully separated, results instable")
+#    mm1 <- which(xt1 > 0)
+#    mm1 <- mm1[c(1, length(mm1))]
+#    mm2 <- which(xt2 > 0)
+#    mm2 <- mm2[c(1, length(mm2))]
+#    if (mm1[1] > mm2[2] || mm2[1] > mm1[2])
+#        warning("Data fully separated, results instable")
     xt <- c(xt1, xt2)
-    stopifnot(sum(xt1 + xt2 > 0) > 1L)
-    stopifnot(sum(xt1) > 0 && sum(xt2) > 0)
+#    stopifnot(sum(xt1 + xt2 > 0) > 1L)
+#    stopifnot(sum(xt1) > 0 && sum(xt2) > 0)
 
-    tol <- sqrt(.Machine$double.eps)
+
 
 
     F <- function(x) .p(link, x)
@@ -146,8 +178,8 @@ trafo.test.table <- function(y,
         putheta <- c(p, 1)
         plxtheta <- c(0, p <- F(theta - mu - beta))
         puxtheta <- c(p, 1)
-        ret <- sum(xt1 * log(pmax(tol, putheta - pltheta))) + 
-               sum(xt2 * log(pmax(tol, puxtheta - plxtheta)))
+        ret <- sum(xt1[idx] * log(pmax(tol, putheta - pltheta))) + 
+               sum(xt2[idx] * log(pmax(tol, puxtheta - plxtheta)))
         -ret
     }
 
@@ -168,9 +200,9 @@ trafo.test.table <- function(y,
         utheta <- c(theta, Inf)
         Ful <- pmax(tol, F(utheta) - F(ltheta))
         Fulb <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
-        ret <- xt1 * (f(utheta) - f(ltheta)) / Ful + 
-               xt2 * (f(utheta - beta) - f(ltheta - beta)) / Fulb
-        ret <- ret / (xt1 + xt2)
+        ret <- xt1[idx] * (f(utheta) - f(ltheta)) / Ful + 
+               xt2[idx] * (f(utheta - beta) - f(ltheta - beta)) / Fulb
+        ret <- ret / (xt1 + xt2)[idx]
         ret
     }
 
@@ -181,13 +213,13 @@ trafo.test.table <- function(y,
         utheta <- c(theta, Inf)
         Ful <- pmax(tol, F(utheta) - F(ltheta))
         Fulb <- pmax(tol, F(utheta - mu - beta) - F(ltheta - mu - beta))
-        z <- xt1 * f(utheta) / Ful
+        z <- xt1[idx] * f(utheta) / Ful
         ret <- c(0, rev(cumsum(rev(z)[-1])))
-        z <- xt1 * f(ltheta) / Ful
+        z <- xt1[idx] * f(ltheta) / Ful
         ret <- ret - c(0, rev(cumsum(rev(z[-1]))))
-        z <- xt2 * f(utheta - mu - beta) / Fulb
+        z <- xt2[idx] * f(utheta - mu - beta) / Fulb
         ret <- ret + c(-sum(z[-length(z)]), rev(cumsum(rev(z)[-1])))
-        z <- xt2 * f(ltheta - mu - beta) / Fulb
+        z <- xt2[idx] * f(ltheta - mu - beta) / Fulb
         ret <- ret - c(-sum(z), rev(cumsum(rev(z[-1]))))
         -ret
     }
@@ -212,6 +244,9 @@ trafo.test.table <- function(y,
         fpl <- fp(ltheta)
         fpub <- fp(utheta - mu - beta)
         fplb <- fp(ltheta - mu - beta)
+
+        xt1 <- xt1[idx]
+        xt2 <- xt2[idx]
 
         b <- -((xt1 * fu * fl / Ful^2)[-c(i2)] +
                (xt2 * fub * flb / Fulb^2)[-c(i2)])
@@ -245,11 +280,6 @@ trafo.test.table <- function(y,
                         )
                  )
         ret <- Schur_symtri(a = -a, b = b, X = x, Z = z)
-#        while (ret < tol) {
-#            a <- a - sqrt(tol)
-#            z <- z + sqrt(tol)
-#            ret <- Schur_symtri(a = -a, b = b, X = x, Z = z)
-#        }
         return(c(ret))
     }
 
@@ -262,7 +292,9 @@ trafo.test.table <- function(y,
 
     ### ECDF
     cs <- cumsum(xt1 + xt2)
+    cs[cs < tol] <- tol
     ql <- Q(cs[-length(cs)] / cs[length(cs)])
+    ql <- ql[idx[-length(idx)]]
     if (is.null(delta)) {
         parm_start <- c(betastart, ql[1], diff(ql))
         lwr <- c(-Inf, -Inf, rep(tol, length(parm_start) - 2))
@@ -272,14 +304,18 @@ trafo.test.table <- function(y,
                          method = "L-BFGS-B", hessian = FALSE, ...))
     } else {
         stopifnot(inference == "Wald")
-        llf <- function(parm) ll(c(delta, parm))
-        scf <- function(parm) sc(c(delta, parm))[-1L]
-        parm_start <- c(ql[1], diff(ql))
-        lwr <- c(-Inf, rep(tol, length(parm_start) - 1))
-        upr <- rep(Inf, length(parm_start) - 1)
-        ret <- try(optim(par = parm_start, fn = llf, gr = scf, 
-                         lower = lwr, upper = upr, 
-                         method = "L-BFGS-B", hessian = FALSE, ...))
+        if (length(delta) > 1) {
+            ret <- list(par = delta, value = ll(delta), convergence = 0)
+        } else {
+            llf <- function(parm) ll(c(delta, parm))
+            scf <- function(parm) sc(c(delta, parm))[-1L]
+            parm_start <- c(ql[1], diff(ql))
+            lwr <- c(-Inf, rep(tol, length(parm_start) - 1))
+            upr <- rep(Inf, length(parm_start) - 1)
+            ret <- try(optim(par = parm_start, fn = llf, gr = scf, 
+                             lower = lwr, upper = upr, 
+                             method = "L-BFGS-B", hessian = FALSE, ...))
+        }
     }
 
     if (inherits(ret, "try-error"))
@@ -290,25 +326,32 @@ trafo.test.table <- function(y,
     }
 
     cf <- ret$par
-    if (!is.null(delta)) cf <- c(delta, cf)
+    if (!is.null(delta) && length(delta) == 1L) cf <- c(delta, cf)
     ESTIMATE <- cf[1]
     names(ESTIMATE) <- paste(link$parm, ifelse(mu == 0, "", paste0("-", mu)))
     HE <- try(he(cf))
-    if (inherits(ret, "try-error"))
-        stop("Computation of Hessian failed")
+    if (inherits(HE, "try-error")) {
+        SE <- Inf
+        warning("Computation of Hessian failed")
+    } else if (HE < tol) {
+        SE <- Inf
+        warning("Data does not contain information about parameter")
+    } else {
+        SE <- 1 / sqrt(HE)
+    }
     SC <- sc(cf)
 
     if (inference == "Wald") {
-        STATISTIC <- c("Wald Z" = unname(ESTIMATE * sqrt(HE)))
+        STATISTIC <- c("Wald Z" = unname(ESTIMATE / SE))
         if (alternative == "less") {
             PVAL <- pnorm(STATISTIC)
-            cint <- c(-Inf, ESTIMATE + qnorm(conf.level) / sqrt(HE))
+            cint <- c(-Inf, ESTIMATE + qnorm(conf.level) * SE)
         } else if (alternative == "greater") {
             PVAL <- pnorm(STATISTIC, lower.tail = FALSE)
-            cint <- c(ESTIMATE - qnorm(conf.level) / sqrt(HE), Inf)
+            cint <- c(ESTIMATE - qnorm(conf.level) * SE, Inf)
         } else {
             PVAL <- 2 * pnorm(-abs(STATISTIC))
-            cint <- ESTIMATE + c(-1, 1) * qnorm(1 - (1 - conf.level) / 2) / sqrt(HE)
+            cint <- ESTIMATE + c(-1, 1) * qnorm(1 - (1 - conf.level) / 2) * SE
         }
         attr(cint, "conf.level") <- conf.level
         TYPE <- "Wald"
@@ -316,7 +359,7 @@ trafo.test.table <- function(y,
         alpha <- (1 - conf.level)
         if (alternative == "two.sided") alpha <- alpha / 2
         aW <- alpha / 10
-        WALD <- c(ESTIMATE, ESTIMATE + sqrt(1 / HE) * qnorm(1 - aW) * c(-1, 1))
+        WALD <- c(ESTIMATE, ESTIMATE + SE * qnorm(1 - aW) * c(-1, 1))
 
         if (inference == "LRatio") {
             stopifnot(alternative == "two.sided")
@@ -366,11 +409,17 @@ trafo.test.table <- function(y,
                 }
                 TYPE <- "score"
             } else { ### PermScore
+                res <- numeric(nrow(y))
                 if (mu == 0) {
-                    res <- resid(0, ql)
-                    pstart <- parm_start[-1L]
+                    if (length(dim(y)) == 2) {
+                        res[idx] <- resid(0, ql)
+                        pstart <- parm_start[-1L]
+                    } else {
+                        res <- resid()
+                        pstart <- NULL
+                    }
                 } else {
-                    res <- resid(mu, cumsum(pstart <- profile(0, parm_start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L])))
+                    res[idx] <- resid(mu, cumsum(pstart <- profile(0, parm_start = cf[-1L], lwr = lwr[-1L], upr = upr[-1L])))
                 }
                 se0 <- sqrt(1 / he(c(0, pstart)))
                 sp <- statpvalPerm(res = res * se0, xt = y,
@@ -415,11 +464,13 @@ trafo.test.table <- function(y,
                  null.value = mu, alternative = alternative, method = METHOD, 
                  data.name = DNAME, conf.int = cint, estimate = ESTIMATE,
                  neglogLik = ret$value, score = SC[1], hessian = HE)
+    if (inference == "PermScore") RVAL$residmu <- res
     RVAL$link <- link
     class(RVAL) <- c("trafo.test", "htest")
     return(RVAL)
 }
 
+### TH: prob as list for stratified samples </TH>
 power.trafo.test <- function(n = NULL, prob = NULL, aratio = 1, delta = NULL, sig.level = .05, power = NULL,
                              link = c("logit", "probit", "cloglog", "loglog"),
                              alternative = c("two.sided", "less", "greater"), ...) 
@@ -434,12 +485,12 @@ power.trafo.test <- function(n = NULL, prob = NULL, aratio = 1, delta = NULL, si
     tol <- sqrt(.Machine$double.eps)
 
     if (is.null(n)) 
-        n <- uniroot(function(n)
+        n <- ceiling(uniroot(function(n)
              power.trafo.test(n = n, prob = prob, aratio = aratio, delta = delta, 
                              sig.level = sig.level, link = link, alternative = alternative, 
                              ...)$power
             - power, c(5, 1e+03), 
-            tol = tol, extendInt = "upX")$root
+            tol = tol, extendInt = "upX")$root)
     else if (is.null(delta)) 
         delta <- uniroot(function(delta) 
             power.trafo.test(n = n, prob = prob, aratio = aratio, delta = delta, 
@@ -469,10 +520,11 @@ power.trafo.test <- function(n = NULL, prob = NULL, aratio = 1, delta = NULL, si
         se <- rep(NA, 100)
 
         for (i in 1:length(se)) {
-            n0 <- rmultinom(1, size = n, prob = prob)
+            n0 <- ceiling(prob * n)
             n1 <- rmultinom(1, size = aratio * n, prob = c(p1[1], diff(p1)))
             y <- as.table(cbind(n0, n1))
-            suppressWarnings(HE <- try(trafo.test(y, delta = delta, link = link,
+            parm <- c(delta, h0[1], diff(h0[-length(h0)]))
+            suppressWarnings(HE <- try(trafo.test(y, delta = parm, link = link,
                                  ...)$hessian, silent = TRUE))
             if (!inherits(HE, "try-error"))
                 se[i] <- 1 / sqrt(HE)

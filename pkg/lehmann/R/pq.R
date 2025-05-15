@@ -6,6 +6,9 @@ statpvalPerm <- function(res, xt, B = 0, alternative) {
 
     if (B) {
         if (!is.finite(B)) {
+            stopifnot(length(dim(xt)) == 2L)
+            rs <- rowSums(xt)
+            cs <- colSums(xt)
             B <- 10000
             if (!isTRUE(all.equal(unique(rs), 1))) {
                 warning("cannot compute exact distribution")
@@ -36,17 +39,27 @@ statpvalPerm <- function(res, xt, B = 0, alternative) {
             }
         }
 
-        rt <- r2dtable(B, r = rs, c = cs)
-        U <- sapply(rt, function(x) sum(x[,2] * res))
-        STATISTIC <- c("Score Z" = sum(res * xt[,2]))
+        if (length(dim(xt)) == 2L)
+            xt <- array(xt, dim = c(dim(xt), 1))
+
+        res <- matrix(res, ncol = dim(xt)[3L])
+        U <- 0
+        for (j in 1:dim(xt)[3L]) {
+            rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
+            U <- U + sapply(rt, function(x) sum(x[,2] * res[,j]))
+        }
+
+        STATISTIC <- c("Score Z" = sum(res * xt[,2,]))
         PVAL <- switch(alternative, two.sided = {
                     mean(abs(U) >= abs(STATISTIC))
                 }, greater = mean(U >= STATISTIC),
                    less = mean(U <= STATISTIC))
         TYPE <- "approximate"
     } else {
+        if (length(dim(xt)) == 2L)
+            xt <- array(xt, dim = c(dim(xt), 1))
         EV <- SW(res, xt)
-        STATISTIC <- c("Score Z" = sum(xt[,2] * res))
+        STATISTIC <- c("Score Z" = sum(xt[,2,] * res))
         if (alternative == "less") {
             PVAL <- pnorm(STATISTIC, mean = EV$Expectation, sd = sqrt(EV$Covariance))
         } else if (alternative == "greater") {
@@ -60,10 +73,11 @@ statpvalPerm <- function(res, xt, B = 0, alternative) {
 }
 
 qPerm <- function(p, res, xt, B = 0) {
-    rs <- rowSums(xt)
-    cs <- colSums(xt)
     if (B) {
         if (!is.finite(B)) {
+            stopifnot(length(dim(xt)) == 2L)
+            rs <- rowSums(xt)
+            cs <- colSums(xt)
             B <- 10000
             if (!isTRUE(all.equal(unique(rs), 1))) {
                 warning("cannot compute exact distribution")
@@ -82,8 +96,15 @@ qPerm <- function(p, res, xt, B = 0) {
                 }
             }
         }
-        rt <- r2dtable(B, r = rowSums(xt), c = cs)
-        U <- sapply(rt, function(x) sum(x[,2] * res))
+        if (length(dim(xt)) == 2L)
+            xt <- array(xt, dim = c(dim(xt), 1))
+
+        res <- matrix(res, ncol = dim(xt)[3L])
+        U <- 0
+        for (j in 1:dim(xt)[3L]) {
+            rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
+            U <- U + sapply(rt, function(x) sum(x[,2] * res[,j]))
+        }
         return(quantile(U, probs = p))
     } else {
         EV <- SW(res, xt)
@@ -92,6 +113,17 @@ qPerm <- function(p, res, xt, B = 0) {
 }
 
 SW <- function(res, xt) {
+
+    if (length(dim(xt)) == 3L) {
+        res <- matrix(res, ncol = dim(xt)[3])
+        ret <- list(Expectation = 0, Covariance = 0)
+        for (j in 1:dim(xt)[3]) {
+            tmp <- SW(res[,j], xt[,,j])
+            ret$Expectation <- ret$Expectation + tmp$Expectation
+            ret$Covariance <- ret$Covariance + tmp$Covariance
+        }
+        return(ret)
+    }
 
     Y <- matrix(res, ncol = 1, nrow = 2 * length(res))
     weights <- c(xt)

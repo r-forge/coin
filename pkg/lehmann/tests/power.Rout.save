@@ -26,7 +26,7 @@ Type 'q()' to quit R.
 > 
 > (p <- power.trafo.test(n = N, delta = delta, link = "logit", alternative = alt))
 $power
-[1] 0.3240233
+[1] 0.3252636
 
 $n
 [1] 25
@@ -40,10 +40,10 @@ $sig.level
 > 
 > power.trafo.test(power = p$power, delta = delta, link = "logit", alternative = alt)
 $power
-[1] 0.3240233
+[1] 0.3252636
 
 $n
-[1] 25.53797
+[1] 25
 
 $delta
 [1] 0.759
@@ -54,13 +54,13 @@ $sig.level
 > 
 > power.trafo.test(n = p$n, power = p$power, link = "logit", alternative = alt)
 $power
-[1] 0.3240233
+[1] 0.3252636
 
 $n
 [1] 25
 
 $delta
-[1] 0.7581859
+[1] 0.7603392
 
 $sig.level
 [1] 0.05
@@ -69,7 +69,7 @@ $sig.level
 > power.trafo.test(n = p$n, power = p$power, delta = p$delta, sig.level = NULL, 
 +                  link = "logit", alternative = alt)
 $power
-[1] 0.3240233
+[1] 0.3252636
 
 $n
 [1] 25
@@ -78,12 +78,12 @@ $delta
 [1] 0.759
 
 $sig.level
-[1] 0.04994709
+[1] 0.05025067
 
 > 
 > power.trafo.test(n = N, delta = -delta, link = "logit", alternative = alt)
 $power
-[1] 0.3240497
+[1] 0.326013
 
 $n
 [1] 25
@@ -102,7 +102,7 @@ $sig.level
 > (p <- power.trafo.test(n = N, prob = prob, delta = delta, link = "logit", 
 +                        alternative = alt))
 $power
-[1] 0.3003858
+[1] 0.3183348
 
 $n
 [1] 25
@@ -121,7 +121,7 @@ $sig.level
 > (p <- power.trafo.test(n = N, prob = prob, delta = delta, link = "logit",
 +                        alternative = alt))
 $power
-[1] 0.3185222
+[1] 0.343838
 
 $n
 [1] 25
@@ -136,7 +136,7 @@ $sig.level
 > (p <- power.trafo.test(n = N, aratio = 2, prob = prob, delta = delta, link = "logit",
 +                        alternative = alt))
 $power
-[1] 0.408172
+[1] 0.4539178
 
 $n
 [1] 25
@@ -164,7 +164,7 @@ NOTE: n is number in *each* group
 
 > power.trafo.test(n = 25, prob = c(.5, .5), delta = delta)
 $power
-[1] 0.2472262
+[1] 0.2569486
 
 $n
 [1] 25
@@ -178,4 +178,4 @@ $sig.level
 > 
 > proc.time()
    user  system elapsed 
- 30.919   0.036  30.959 
+  6.516   0.036   6.549 
