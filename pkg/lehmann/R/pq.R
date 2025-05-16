@@ -66,13 +66,13 @@ statpvalPerm <- function(res, xt, B = 0, alternative) {
         if (length(dim(xt)) == 2L)
             xt <- array(xt, dim = c(dim(xt), 1))
         EV <- SW(res, xt)
-        STATISTIC <- c("Score Z" = sum(xt[,2,] * res))
+        STATISTIC <- c("Score Z" = (sum(xt[,2,] * res) - EV$Expectation) / sqrt(EV$Covariance))
         if (alternative == "less") {
-            PVAL <- pnorm(STATISTIC, mean = EV$Expectation, sd = sqrt(EV$Covariance))
+            PVAL <- pnorm(STATISTIC)
         } else if (alternative == "greater") {
-            PVAL <- pnorm(STATISTIC, mean = EV$Expectation, sd = sqrt(EV$Covariance), lower.tail = FALSE)
+            PVAL <- pnorm(STATISTIC, lower.tail = FALSE)
         } else {
-            PVAL <- 2 * pnorm(-abs(STATISTIC), mean = EV$Expectation, sd = sqrt(EV$Covariance))
+            PVAL <- 2 * pnorm(-abs(STATISTIC))
         }
         TYPE <- "asymptotic"
     }

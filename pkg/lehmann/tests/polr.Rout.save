@@ -109,7 +109,7 @@ sample estimates:
 	odds models
 
 data:  x and y
-Score Z = -15.052, p-value < 2.2e-16
+Score Z = -14.807, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
  1.655303 2.182228
@@ -332,4 +332,4 @@ generalised Cohen's d
 > 
 > proc.time()
    user  system elapsed 
-  4.392   0.035   4.425 
+  4.997   0.071   5.069 

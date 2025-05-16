@@ -156,10 +156,10 @@ alternative hypothesis: two.sided
 > tt <- trafo.test(x, inference = "PermScore")
 > (tt$statistic)^2
    Score Z 
-0.02679435 
+0.02673146 
 > (tt$statistic)
   Score Z 
-0.1636898 
+0.1634976 
 > tt$p.value
 [1] 0.8701267
 > exp(tt$conf.int)
@@ -247,7 +247,7 @@ alternative hypothesis: two.sided
 	proportional odds models
 
 data:  y by w by s
-Score Z = 1.6142, p-value = 0.1266
+Score Z = 1.5275, p-value = 0.1266
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
  -1.7104706  0.2093936
@@ -311,4 +311,4 @@ alternative hypothesis: two.sided
 > 
 > proc.time()
    user  system elapsed 
-  4.120   0.099   4.225 
+  4.287   0.083   4.366 
