@@ -49,11 +49,18 @@ statpvalPerm <- function(res, xt, B = 0, alternative) {
             U <- U + sapply(rt, function(x) sum(x[,2] * res[,j]))
         }
 
+`%GE%` <- function(x, y)
+    (y - x) <= sqrt(.Machine$double.eps)
+
+`%LE%` <- function(x, y)
+    (x - y) <= sqrt(.Machine$double.eps)
+
+
         STATISTIC <- c("Score Z" = sum(res * xt[,2,]))
         PVAL <- switch(alternative, two.sided = {
-                    mean(abs(U) >= abs(STATISTIC))
-                }, greater = mean(U >= STATISTIC),
-                   less = mean(U <= STATISTIC))
+                    mean(abs(U) %GE% abs(STATISTIC))
+                }, greater = mean(U %GE% STATISTIC),
+                   less = mean(U %LE% STATISTIC))
         TYPE <- "approximate"
     } else {
         if (length(dim(xt)) == 2L)

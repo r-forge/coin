@@ -1,0 +1,314 @@
+
+R version 4.5.0 (2025-04-11) -- "How About a Twenty-Six"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> library("lehmann")
+> library("tram")
+Loading required package: mlt
+Loading required package: basefun
+Loading required package: variables
+Loading required package: mvtnorm
+> library("coin")
+Loading required package: survival
+
+Attaching package: 'coin'
+
+The following object is masked from 'package:variables':
+
+    support
+
+> 
+> set.seed(29)
+> 
+> w <- gl(2, 1)
+> s <- gl(3, 1)
+> y <- gl(2, 1)
+> d <- expand.grid(y = y, s = s, w = w)
+> d$Freq <- sample(nrow(d)) + 100
+> 
+> x <- xtabs(Freq ~ y + w + s, data = d)
+> 
+> m <- glm(y ~ w + s, data = d, weights = d$Freq, family = binomial())
+> summary(m)
+
+Call:
+glm(formula = y ~ w + s, family = binomial(), data = d, weights = d$Freq)
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)
+(Intercept)  0.06499    0.11155   0.583    0.560
+w2          -0.01832    0.11194  -0.164    0.870
+s2           0.02904    0.13697   0.212    0.832
+s3          -0.04631    0.13691  -0.338    0.735
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1770.9  on 11  degrees of freedom
+Residual deviance: 1770.5  on  8  degrees of freedom
+AIC: 1778.5
+
+Number of Fisher Scoring iterations: 3
+
+> exp(confint(profile(m, type = "LRT"))["w2",])
+    2.5 %    97.5 % 
+0.7883584 1.2227709 
+> exp(confint(profile(m, type = "Rao"))["w2",])
+    2.5 %    97.5 % 
+0.7883584 1.2227709 
+> logLik(m)
+'log Lik.' -885.2743 (df=4)
+> 
+> mantelhaen.test(x, correct = FALSE)
+
+	Mantel-Haenszel chi-squared test without continuity correction
+
+data:  x
+Mantel-Haenszel X-squared = 0.026731, df = 1, p-value = 0.8701
+alternative hypothesis: true common odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.7884217 1.2227181
+sample estimates:
+common odds ratio 
+        0.9818439 
+
+> 
+> tt <- trafo.test(x)
+> (tt$statistic)^2
+   Wald Z 
+0.0267942 
+> tt$statistic
+    Wald Z 
+-0.1636893 
+> tt$p.value
+[1] 0.8699757
+> exp(tt$conf.int)
+[1] 0.7884157 1.2227247
+attr(,"conf.level")
+[1] 0.95
+> exp(tt$estimate)
+log-odds ratio  
+      0.9818429 
+> -tt$neglogLik
+[1] -885.2743
+> 
+> tt <- trafo.test(x, inference = "LR")
+> (tt$statistic)^2
+    LR Chisq 
+0.0007179414 
+> tt$statistic
+  LR Chisq 
+0.02679443 
+> tt$p.value
+[1] 0.8699752
+> exp(tt$conf.int)
+[1] 0.7883584 1.2227708
+attr(,"conf.level")
+[1] 0.95
+> exp(tt$estimate)
+log-odds ratio  
+      0.9818429 
+> 
+> 
+> tt <- trafo.test(x, inference = "MLS")
+> (tt$statistic)^2
+   Score Z 
+0.02679435 
+> tt$statistic
+  Score Z 
+0.1636898 
+> tt$p.value
+[1] 0.8699753
+> exp(tt$conf.int)
+[1] 0.7885027 1.2225899
+attr(,"conf.level")
+[1] 0.95
+> exp(tt$estimate)
+log-odds ratio  
+      0.9818429 
+> 
+> 
+> 
+> independence_test(y ~ w | s, data = d, weights = ~ Freq)
+
+	Asymptotic General Independence Test
+
+data:  y by w (1, 2) 
+	 stratified by s
+Z = -0.1635, p-value = 0.8701
+alternative hypothesis: two.sided
+
+> 
+> 
+> tt <- trafo.test(x, inference = "PermScore")
+> (tt$statistic)^2
+   Score Z 
+0.02679435 
+> (tt$statistic)
+  Score Z 
+0.1636898 
+> tt$p.value
+[1] 0.8701267
+> exp(tt$conf.int)
+[1] 0.7882996 1.2229049
+attr(,"conf.level")
+[1] 0.95
+> exp(tt$estimate)
+log-odds ratio  
+      0.9818429 
+> 
+> mantelhaen.test(x, correct = FALSE, exact = TRUE)
+
+	Exact conditional test of independence in 2 x 2 x k tables
+
+data:  x
+S = 310, p-value = 0.9109
+alternative hypothesis: true common odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.7837943 1.2299879
+sample estimates:
+common odds ratio 
+        0.9818801 
+
+> 
+> 
+> independence_test(y ~ w | s, data = d, weights = ~ Freq, distribution = approximate(100000))
+
+	Approximative General Independence Test
+
+data:  y by w (1, 2) 
+	 stratified by s
+Z = -0.1635, p-value = 0.9114
+alternative hypothesis: two.sided
+
+> 
+> 
+> tt <- trafo.test(x, inference = "PermScore", B = 100000)
+> (tt$statistic)^2
+   Score Z 
+0.02679435 
+> tt$statistic
+  Score Z 
+0.1636898 
+> tt$p.value
+[1] 0.91305
+> exp(tt$conf.int)
+[1] 0.7882156 1.2218808
+attr(,"conf.level")
+[1] 0.95
+> exp(tt$estimate)
+log-odds ratio  
+      0.9818429 
+> 
+> independence_test(y ~ w | s, data = d, weights = ~ Freq, distribution = "exact")
+
+	Exact General Independence Test
+
+data:  y by w (1, 2) 
+	 stratified by s
+Z = -0.1635, p-value = 0.9109
+alternative hypothesis: two.sided
+
+> 
+> w <- gl(2, 1)
+> s <- gl(3, 1)
+> N <- 10
+> d <- expand.grid(1:N, s = s, w = w)
+> d$y <- rlogis(nrow(d))
+> 
+> (it <- independence_test(y ~ w | s, data = d,
++     ytrafo = function(data) 
++         trafo(data, numeric_trafo = rank_trafo, block = d$s)))
+
+	Asymptotic General Independence Test
+
+data:  y by w (1, 2) 
+	 stratified by s
+Z = 1.5275, p-value = 0.1266
+alternative hypothesis: two.sided
+
+> 
+> (tt <- trafo.test(y ~ w + s, data = d, inference = "PermScore"))
+
+	Semiparametric two-sample asymptotic permutation inference for
+	proportional odds models
+
+data:  y by w by s
+Score Z = 1.6142, p-value = 0.1266
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ -1.7104706  0.2093936
+sample estimates:
+log-odds ratio  
+     -0.7502444 
+
+> -tt$neglogLik
+[1] -178.4364
+> 
+> independence_test(y ~ w | s, data = d,
++     distribution = approximate(10000),
++     ytrafo = function(data) 
++         trafo(data, numeric_trafo = rank_trafo, block = d$s))
+
+	Approximative General Independence Test
+
+data:  y by w (1, 2) 
+	 stratified by s
+Z = 1.5275, p-value = 0.1354
+alternative hypothesis: two.sided
+
+> 
+> 
+> (tt <- trafo.test(y ~ w + s, data = d, inference = "PermScore", 
++     B = 10000))
+
+	Semiparametric two-sample approximate permutation inference for
+	proportional odds models
+
+data:  y by w by s
+Score Z = 1.6142, p-value = 0.13
+alternative hypothesis: true log-odds ratio is not equal to 0
+95 percent confidence interval:
+ -1.6911482  0.1902444
+sample estimates:
+log-odds ratio  
+     -0.7502444 
+
+> 
+> statistic(it, "linear")
+     
+1 350
+> 
+> r <- unlist(tapply(d$y, d$s, rank))
+> sum(r * (1:0)[d$w])
+[1] 330
+> 
+> independence_test(y ~ w | s, data = d, distribution = "exact",
++     ytrafo = function(data) 
++         trafo(data, numeric_trafo = rank_trafo, block = d$s))
+
+	Exact General Independence Test
+
+data:  y by w (1, 2) 
+	 stratified by s
+Z = 1.5275, p-value = 0.1329
+alternative hypothesis: two.sided
+
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  4.120   0.099   4.225 

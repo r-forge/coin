@@ -312,7 +312,7 @@ log-odds ratio
 	proportional odds models
 
 data:  x and y
-Score Z = -1.6395, p-value = 0.1123
+Score Z = -1.6395, p-value = 0.1183
 alternative hypothesis: true log-odds ratio is not equal to 0
 95 percent confidence interval:
  -0.243043  2.379100
@@ -337,4 +337,4 @@ log-odds ratio
 > 
 > proc.time()
    user  system elapsed 
-  1.846   0.091   1.933 
+  2.069   0.084   2.156 
