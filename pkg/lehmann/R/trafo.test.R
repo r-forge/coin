@@ -1,4 +1,8 @@
 
+.rcr1 <- function(z)
+#    rev(cumsum(rev(z)))    
+    cumsumrev(z)
+
 trafo.test <- function(y, ...)
     UseMethod("trafo.test")
 
@@ -89,6 +93,7 @@ trafo.test.table <- function(y,
 {
 
     d <- dim(y)
+print(d)
     dn <- dimnames(y)
     DNAME <- NULL
     if (!is.null(dn)) {
@@ -173,11 +178,13 @@ trafo.test.table <- function(y,
 
     ll <- function(parm) {
         beta <- parm[1L]
-        theta <- cumsum(parm[-1L])
-        pltheta <- c(0, p <- F(theta))
-        putheta <- c(p, 1)
-        plxtheta <- c(0, p <- F(theta - mu - beta))
-        puxtheta <- c(p, 1)
+        theta <- c(-Inf, cumsum(parm[-1L]), Inf)
+        p <- F(theta)
+        pltheta <- p[-length(p)]
+        putheta <- p[-1]
+        p <- F(theta - mu - beta)
+        plxtheta <- p[-length(p)]
+        puxtheta <- p[-1]
         ret <- sum(xt1[idx] * log(pmax(tol, putheta - pltheta))) + 
                sum(xt2[idx] * log(pmax(tol, puxtheta - plxtheta)))
         -ret
@@ -196,86 +203,110 @@ trafo.test.table <- function(y,
     }
 
     resid <- function(beta, theta) {
-        ltheta <- c(-Inf, theta)
-        utheta <- c(theta, Inf)
-        Ful <- pmax(tol, F(utheta) - F(ltheta))
-        Fulb <- pmax(tol, F(utheta - beta) - F(ltheta - beta))
-        ret <- xt1[idx] * (f(utheta) - f(ltheta)) / Ful + 
-               xt2[idx] * (f(utheta - beta) - f(ltheta - beta)) / Fulb
+        pltheta <- c(0, p <- F(theta))
+        putheta <- c(p, 1)
+        plxtheta <- c(0, p <- F(theta - beta))
+        puxtheta <- c(p, 1)
+        dltheta <- c(0, p <- f(theta))
+        dutheta <- c(p, 0)
+        dlxtheta <- c(0, p <- f(theta - beta))
+        duxtheta <- c(p, 0)
+
+        Ful <- pmax(tol, putheta - pltheta)
+        Fulb <- pmax(tol, puxtheta - plxtheta)
+        ret <- xt1[idx] * (dutheta - dltheta) / Ful + 
+               xt2[idx] * (duxtheta - dlxtheta) / Fulb
         ret <- ret / (xt1 + xt2)[idx]
         ret
     }
 
     sc <- function(parm) {
         beta <- parm[1L]
-        theta <- cumsum(parm[-1L])
-        ltheta <- c(-Inf, theta)
-        utheta <- c(theta, Inf)
-        Ful <- pmax(tol, F(utheta) - F(ltheta))
-        Fulb <- pmax(tol, F(utheta - mu - beta) - F(ltheta - mu - beta))
-        z <- xt1[idx] * f(utheta) / Ful
-        ret <- c(0, rev(cumsum(rev(z)[-1])))
-        z <- xt1[idx] * f(ltheta) / Ful
-        ret <- ret - c(0, rev(cumsum(rev(z[-1]))))
-        z <- xt2[idx] * f(utheta - mu - beta) / Fulb
-        ret <- ret + c(-sum(z[-length(z)]), rev(cumsum(rev(z)[-1])))
-        z <- xt2[idx] * f(ltheta - mu - beta) / Fulb
-        ret <- ret - c(-sum(z), rev(cumsum(rev(z[-1]))))
+        theta <- c(-Inf, cumsum(parm[-1L]), Inf)
+        p <- F(theta)
+        pltheta <- p[-length(p)]
+        putheta <- p[-1]
+        p <- F(theta - mu - beta)
+        plxtheta <- p[-length(p)]
+        puxtheta <- p[-1]
+        d <- f(theta)
+        dltheta <- d[-length(d)]
+        dutheta <- d[-1]
+        d <- f(theta - mu - beta)
+        dlxtheta <- d[-length(d)]
+        duxtheta <- d[-1]
+
+        Ful <- pmax(tol, putheta - pltheta)
+        Fulb <- pmax(tol, puxtheta - plxtheta)
+
+        ret <- numeric(length(parm))
+        z <- xt1[idx] * dutheta / Ful
+        ret[-1] <- .rcr1(z[-length(z)])
+        z <- xt1[idx] * dltheta / Ful
+        ret[-1] <- ret[-1] - .rcr1(z[-1])
+        z <- xt2[idx] * duxtheta / Fulb
+        ret[1] <- -sum(z[-length(z)])
+        ret[-1] <- ret[-1] + .rcr1(z[-length(z)])
+        z <- xt2[idx] * dlxtheta / Fulb
+        ret[1] <- ret[1] + sum(z)
+        ret[-1] <- ret[-1] - .rcr1(z[-1]) 
         -ret
     }
 
     he <- function(parm) {
         beta <- parm[1L]
         theta <- cumsum(parm[-1L])
-        ltheta <- c(-Inf, theta)
-        utheta <- c(theta, Inf)
+        pltheta <- c(0, p <- F(theta))
+        putheta <- c(p, 1)
+        plxtheta <- c(0, p <- F(theta - mu - beta))
+        puxtheta <- c(p, 1)
+        dltheta <- c(0, p <- f(theta))
+        dutheta <- c(p, 0)
+        dlxtheta <- c(0, p <- f(theta - mu - beta))
+        duxtheta <- c(p, 0)
 
-        Ful <- pmax(tol, F(utheta) - F(ltheta))
-        Fulb <- pmax(tol, F(utheta - mu - beta) - F(ltheta - mu - beta))
+        Ful <- pmax(tol, putheta - pltheta)
+        Fulb <- pmax(tol, puxtheta - plxtheta)
 
-        i1 <- length(utheta)
+        dpltheta <- c(0, p <- fp(theta))
+        dputheta <- c(p, 0)
+        dplxtheta <- c(0, p <- fp(theta - mu - beta))
+        dpuxtheta <- c(p, 0)
+
+        i1 <- length(theta) + 1
         i2 <- 1
-
-        fu <- f(utheta)
-        fub <- f(utheta - mu - beta)
-        fl <- f(ltheta)
-        flb <- f(ltheta - mu - beta)
-        fpu <- fp(utheta)
-        fpl <- fp(ltheta)
-        fpub <- fp(utheta - mu - beta)
-        fplb <- fp(ltheta - mu - beta)
 
         xt1 <- xt1[idx]
         xt2 <- xt2[idx]
 
-        b <- -((xt1 * fu * fl / Ful^2)[-c(i2)] +
-               (xt2 * fub * flb / Fulb^2)[-c(i2)])
+        b <- -((xt1 * dutheta * dltheta / Ful^2)[-c(i2)] +
+               (xt2 * duxtheta * dlxtheta / Fulb^2)[-c(i2)])
         b <- b[-length(b)]
-        x <- ((xt2 * fpub / Fulb)[-i1] - 
-              (xt2 * fplb / Fulb)[-i2] - 
-              ((xt2 * fub^2 / Fulb^2)[-i1] - 
-               (xt2 * fub * flb / Fulb^2)[-i2] -
-               (xt2 * fub * flb / Fulb^2)[-i1] +
-               (xt2 * flb^2 / Fulb^2)[-i2]
+        x <- ((xt2 * dpuxtheta / Fulb)[-i1] - 
+              (xt2 * dplxtheta / Fulb)[-i2] - 
+              ((xt2 * duxtheta^2 / Fulb^2)[-i1] - 
+               (xt2 * duxtheta * dlxtheta / Fulb^2)[-i2] -
+               (xt2 * duxtheta * dlxtheta / Fulb^2)[-i1] +
+               (xt2 * dlxtheta^2 / Fulb^2)[-i2]
               )
              )
-        a <- ((xt1 * fpu / Ful)[-i1] - 
-              (xt1 * fpl / Ful)[-i2] - 
-              ((xt1 * fu^2 / Ful^2)[-i1] + 
-               (xt1 * fl^2 / Ful^2)[-i2]
+        a <- ((xt1 * dputheta / Ful)[-i1] - 
+              (xt1 * dpltheta / Ful)[-i2] - 
+              ((xt1 * dutheta^2 / Ful^2)[-i1] + 
+               (xt1 * dltheta^2 / Ful^2)[-i2]
               )
              )
-        a <- a + ((xt2 * fpub / Fulb)[-i1] - 
-                  (xt2 * fplb / Fulb)[-i2] - 
-                  ((xt2 * fub^2 / Fulb^2)[-i1] +
-                   (xt2 * flb^2 / Fulb^2)[-i2]
+        a <- a + ((xt2 * dpuxtheta / Fulb)[-i1] - 
+                  (xt2 * dplxtheta / Fulb)[-i2] - 
+                  ((xt2 * duxtheta^2 / Fulb^2)[-i1] +
+                   (xt2 * dlxtheta^2 / Fulb^2)[-i2]
                   )
                  )
-        z <- -sum(xt2 * (fpub / Fulb - 
-                         fplb / Fulb -
-                         (fub^2 / Fulb^2 - 
-                          2 * fub * flb / Fulb^2 +
-                          flb^2 / Fulb^2
+        z <- -sum(xt2 * (dpuxtheta / Fulb - 
+                         dplxtheta / Fulb -
+                         (duxtheta^2 / Fulb^2 - 
+                          2 * duxtheta * dlxtheta / Fulb^2 +
+                          dlxtheta^2 / Fulb^2
                          )
                         )
                  )
@@ -287,7 +318,7 @@ trafo.test.table <- function(y,
     cs <- cumsum(xt1 + xt2) 
     ymed <- min(c(which.min(abs(cs / cs[length(cs)] - .5)), length(xt1) - 1))
     tab2x2 <- cbind(colSums(y[1:ymed,,drop = FALSE]), colSums(y[-(1:ymed),,drop = FALSE]))
-    betastart <- log(fisher.test(tab2x2)$estimate)
+    betastart <- sum(log(tab2x2) * c(1, -1, 1, -1)) ###fisher.test(tab2x2)$estimate)
     if (!is.finite(betastart)) betastart <- 0
 
     ### ECDF

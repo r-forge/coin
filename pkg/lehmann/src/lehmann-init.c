@@ -11,6 +11,7 @@
 static const R_CallMethodDef callMethods[] = {
     CALLDEF(R_symtrisolve, 3),
     CALLDEF(R_symtrisolve_quadform, 4),
+    CALLDEF(R_cumsumrev, 1),
     {NULL, NULL, 0}
 };
 

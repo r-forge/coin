@@ -205,3 +205,20 @@ SEXP R_symtrisolve_quadform (SEXP a, SEXP b, SEXP X, SEXP tol)
     UNPROTECT(3);
     return(ans);
 }
+
+SEXP R_cumsumrev (SEXP x) {
+
+    double sum = 0.;
+    SEXP ret;
+    double *rx = REAL(x), *rs;
+
+    PROTECT(ret = allocVector(REALSXP, XLENGTH(x)));
+    rs = REAL(ret);
+
+    for (R_xlen_t i = XLENGTH(x) - 1; i >= 0 ; i--) {
+        sum += rx[i]; /* NA and NaN propagated */
+        rs[i] = sum;
+    }
+    UNPROTECT(1);
+    return(ret);
+}
