@@ -226,8 +226,8 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
     dpum1 <- dpu[,-1L, drop = FALSE]
     prbm1 <- prb[,-1L, drop = FALSE]
 
-    b <- -rowSums(x * dpu * dpl / prb^2)[-i2]
-    b <- b[-length(b)]
+    Hoffdiag <- -rowSums(x * dpu * dpl / prb^2)[-i2]
+    Hoffdiag <- Hoffdiag[-length(Hoffdiag)]
     xm1 <- x[,-1L,drop = FALSE] 
     X <- ((xm1 * dpum1 / prbm1)[-i1,,drop = FALSE] - 
               (xm1 * dplm1 / prbm1)[-i2,,drop = FALSE] - 
@@ -237,7 +237,7 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
                (xm1 * dlm1^2 / prbm1^2)[-i2,,drop = FALSE]
               )
              )
-    a <- rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
+    Hdiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
               (x * dpl / prb)[-i2,,drop = FALSE] - 
               ((x * du^2 / prb^2)[-i1,,drop = FALSE] + 
                (x * dl^2 / prb^2)[-i2,,drop = FALSE]
@@ -252,7 +252,7 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
                         )
                  )
     if (length(Z) > 1L) Z <- diag(Z)
-    list(a = -a, b = b, X = X, Z = Z)
+    list(a = Hdiag, b = Hoffdiag, X = X, Z = Z)
 }
 @}
 
