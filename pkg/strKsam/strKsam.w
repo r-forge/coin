@@ -229,12 +229,12 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
     b <- -rowSums(x * dpu * dpl / prb^2)[-i2]
     b <- b[-length(b)]
     xm1 <- x[,-1L,drop = FALSE] 
-    X <- ((xm1 * dpum1 / prbm1)[-i1,] - 
-              (xm1 * dplm1 / prbm1)[-i2,] - 
-              ((xm1 * dum1^2 / prbm1^2)[-i1,] - 
-               (xm1 * dum1 * dlm1 / prbm1^2)[-i2,] -
-               (xm1 * dum1 * dlm1 / prbm1^2)[-i1,] +
-               (xm1 * dlm1^2 / prbm1^2)[-i2,]
+    X <- ((xm1 * dpum1 / prbm1)[-i1,,drop = FALSE] - 
+              (xm1 * dplm1 / prbm1)[-i2,,drop = FALSE] - 
+              ((xm1 * dum1^2 / prbm1^2)[-i1,,drop = FALSE] - 
+               (xm1 * dum1 * dlm1 / prbm1^2)[-i2,,drop = FALSE] -
+               (xm1 * dum1 * dlm1 / prbm1^2)[-i1,,drop = FALSE] +
+               (xm1 * dlm1^2 / prbm1^2)[-i2,,drop = FALSE]
               )
              )
     a <- rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
@@ -267,7 +267,7 @@ m <- glm(y ~ x, data = d, weights = w, family = binomial())
 logLik(m)
 F <- plogis
 f <- dlogis
-(op <- optim(par = runif(length(cf)), fn = .nll, gr = .nsc, x = w))
+(op <- optim(par = runif(length(cf)), fn = .nll, gr = .nsc, x = w, hessian = TRUE))
 fp <- function(x) {
                 p <- plogis(x)
                 p * (1 - p)^2 - p^2 * (1 - p)
@@ -276,7 +276,9 @@ fp <- function(x) {
 #tt <- trafo.test(as.table(w))
 #tt$neg
 #tt$hessian
-do.call(lehmann:::Schur_symtri, .hes(op$par, w))
+solve(do.call(lehmann:::Schur_symtri, .hes(op$par, w)))
+vcov(m)[-1,-1]
+solve(op$hessian)[1:2,1:2]
 @@
 
 \chapter*{Index}
