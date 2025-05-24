@@ -149,29 +149,30 @@ Data as $C \times K \times B$ contingency table.
 $\theta = (\beta_2, \dots, \beta_K, \vartheta_{1,b}, \vartheta_{2,b} -
 \vartheta_{1,b}, \dots, \vartheta_{C-1,b} - \vartheta_{C-2,b})$ with
 
-@o strKsam.R -cp
+@o strKsam_src.R -cp
 @{
 @<cumsumrev@>
 @<negative logLik@>
 @<negative score@>
+@<Hessian@>
 @}
 
 @d parm to prob
 @{
-b <- seq_along(ncol(x) - 1L)
+b <- seq_len(ncol(x) - 1L)
 beta <- c(0, mu + parm[b])
 theta <- c(-Inf, cumsum(parm[- b]), Inf)
 tmb <- theta - matrix(beta, nrow = length(theta),  
                             ncol = ncol(x),
                             byrow = TRUE)
 Ftmb <- F(tmb)
-prb <- Ftmb[, - 1L, drop = FALSE] - 
-       Ftmb[, - nrow(Ftmb), drop = FALSE]
+prb <- Ftmb[- 1L, , drop = FALSE] - 
+       Ftmb[- nrow(Ftmb), , drop = FALSE]
 @}
 
 @d negative logLik
 @{
-.nll <- function(parm, x, mu = numeric(ncol(x))) {
+.nll <- function(parm, x, mu = numeric(ncol(x) - 1L)) {
     @<parm to prob@>
     - sum(x * log(prb))
 }
@@ -179,43 +180,102 @@ prb <- Ftmb[, - 1L, drop = FALSE] -
 
 @d cumsumrev
 @{
-.rcr1 <- function(z)
+.rcr <- function(z)
     rev(cumsum(rev(z)))
 @}
 
 @d negative score
 @{
-.nsc <- function(parm, x, mu = numeric(ncol(x))) {
+.nsc <- function(parm, x, mu = numeric(ncol(x) - 1L)) {
     @<parm to prob@>
     ftmb <- f(tmb)
 
     ret <- numeric(length(parm))
-    zu <- x * ftmb[, - 1, drop = FALSE] / prb
-    zl <- x * ftmb[, - nrow(ftmb), drop = FALSE] / prb
+    zu <- x * ftmb[- 1, , drop = FALSE] / prb
+    zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
     ret[b] <- colSums(zl)[-1L] -
               colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
     ret[-b] <- Reduce("+", 
                       lapply(1:ncol(x), 
                           function(j) {
-                              .rcr1(zu[-nrow(zu),j]) - 
-                              .rcr1(zl[-1,j])
+                              .rcr(zu[-nrow(zu),j]) - 
+                              .rcr(zl[-1,j])
                           })
                      )
     -ret
 }
 @}
 
+@d Hessian
+@{
+.hes <- function(parm, x, mu = numeric(ncol(x) - 1L)) {
+    @<parm to prob@>
+    ftmb <- f(tmb)
+    fptmb <- fp(tmb)
+
+    i1 <- length(theta) - 1
+    i2 <- 1
+
+    dl <- ftmb[- nrow(ftmb), , drop = FALSE]
+    du <- ftmb[- 1, , drop = FALSE]
+    dpl <- fptmb[- nrow(ftmb), , drop = FALSE]
+    dpu <- fptmb[- 1, , drop = FALSE]
+    dlm1 <- dl[,-1L, drop = FALSE]
+    dum1 <- du[,-1L, drop = FALSE]
+    dplm1 <- dpl[,-1L, drop = FALSE]
+    dpum1 <- dpu[,-1L, drop = FALSE]
+    prbm1 <- prb[,-1L, drop = FALSE]
+
+    b <- -rowSums(x * dpu * dpl / prb^2)[-i2]
+    b <- b[-length(b)]
+    xm1 <- x[,-1L,drop = FALSE] 
+    X <- ((xm1 * dpum1 / prbm1)[-i1,] - 
+              (xm1 * dplm1 / prbm1)[-i2,] - 
+              ((xm1 * dum1^2 / prbm1^2)[-i1,] - 
+               (xm1 * dum1 * dlm1 / prbm1^2)[-i2,] -
+               (xm1 * dum1 * dlm1 / prbm1^2)[-i1,] +
+               (xm1 * dlm1^2 / prbm1^2)[-i2,]
+              )
+             )
+    a <- rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
+              (x * dpl / prb)[-i2,,drop = FALSE] - 
+              ((x * du^2 / prb^2)[-i1,,drop = FALSE] + 
+               (x * dl^2 / prb^2)[-i2,,drop = FALSE]
+              )
+             )
+    Z <- -sum(xm1 * (dpum1 / prbm1 - 
+                         dplm1 / prbm1 -
+                         (dum1^2 / prbm1^2 - 
+                          2 * dum1 * dlm1 / prbm1^2 +
+                          dlm1^2 / prbm1^2
+                         )
+                        )
+                 )
+    list(a = -a, b = b, X = x, Z = z)
+}
+@}
 
 <<>>=
-source("strKsam.R")
-w <- matrix(c(10, 5, 11, 8), ncol = 2)
-d <- expand.grid(y = gl(2, 1), x = gl(2, 1))
+source("strKsam_src.R")
+w <- matrix(c(10, 5, 7, 11#, 8, 9
+            ), nrow = 2)
+(d <- expand.grid(y = gl(2, 1), x = gl(2, 1)))
+d$y <- relevel(d$y, "2")
 d$w <- c(w)
 m <- glm(y ~ x, data = d, weights = w, family = binomial())
 (cf <- coef(m))
 logLik(m)
 F <- plogis
-.nll(rev(cf), w)
+f <- dlogis
+(op <- optim(par = runif(length(cf)), fn = .nll, gr = .nsc, x = w))
+fp <- function(x) {
+                p <- plogis(x)
+                p * (1 - p)^2 - p^2 * (1 - p)
+            }
+library("lehmann")
+tt <- trafo.test(as.table(w))
+tt$neg
+try(.hes(op$par, w))
 @@
 
 \chapter*{Index}
