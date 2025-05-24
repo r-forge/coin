@@ -243,7 +243,7 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
                (x * dl^2 / prb^2)[-i2,,drop = FALSE]
               )
              )
-    Z <- -sum(xm1 * (dpum1 / prbm1 - 
+    Z <- -colSums(xm1 * (dpum1 / prbm1 - 
                          dplm1 / prbm1 -
                          (dum1^2 / prbm1^2 - 
                           2 * dum1 * dlm1 / prbm1^2 +
@@ -251,15 +251,15 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
                          )
                         )
                  )
-    list(a = -a, b = b, X = x, Z = z)
+    if (length(Z) > 1L) Z <- diag(Z)
+    list(a = -a, b = b, X = X, Z = Z)
 }
 @}
 
 <<>>=
 source("strKsam_src.R")
-w <- matrix(c(10, 5, 7, 11#, 8, 9
-            ), nrow = 2)
-(d <- expand.grid(y = gl(2, 1), x = gl(2, 1)))
+w <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2)
+(d <- expand.grid(y = gl(2, 1), x = gl(3, 1)))
 d$y <- relevel(d$y, "2")
 d$w <- c(w)
 m <- glm(y ~ x, data = d, weights = w, family = binomial())
@@ -272,10 +272,11 @@ fp <- function(x) {
                 p <- plogis(x)
                 p * (1 - p)^2 - p^2 * (1 - p)
             }
-library("lehmann")
-tt <- trafo.test(as.table(w))
-tt$neg
-try(.hes(op$par, w))
+#library("lehmann")
+#tt <- trafo.test(as.table(w))
+#tt$neg
+#tt$hessian
+do.call(lehmann:::Schur_symtri, .hes(op$par, w))
 @@
 
 \chapter*{Index}
