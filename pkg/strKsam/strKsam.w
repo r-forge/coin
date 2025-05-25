@@ -21,6 +21,8 @@
 \usepackage{color}
 \definecolor{linkcolor}{rgb}{0, 0, 0.7}
 
+
+
 \usepackage[round]{natbib}
 
 
@@ -43,8 +45,8 @@ menucolor={linkcolor},%
 urlcolor={linkcolor}%
 ]{hyperref}
 
-
-%\usepackage{underscore}
+%%% ATTENTION: no bib keys with _ allowed!
+\usepackage{underscore}
 
 \usepackage[top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
 
@@ -78,6 +80,8 @@ urlcolor={linkcolor}%
 \newcommand{\Y}{\mathbf{Y}}
 \newcommand{\mH}{\mathbf{H}}
 \newcommand{\mA}{\mathbf{A}}
+\newcommand{\mL}{\mathbf{L}}
+\newcommand{\mU}{\mathbf{U}}
 \newcommand{\sX}{\mathcal{X}}
 \newcommand{\sY}{\mathcal{Y}}
 \newcommand{\T}{\mathbf{T}}
@@ -85,6 +89,8 @@ urlcolor={linkcolor}%
 \renewcommand{\a}{\mathbf{a}}
 \newcommand{\xn}{\mathbf{x}_{\text{new}}}
 \newcommand{\y}{\mathbf{y}}
+\newcommand{\uvec}{\mathbf{u}}
+\newcommand{\vvec}{\mathbf{v}}
 \newcommand{\w}{\mathbf{w}}
 \newcommand{\sbullet}{\mathbin{\vcenter{\hbox{\scalebox{0.5}{$\bullet$}}}}}
 \newcommand{\wdot}{\mathbf{w}_{\sbullet}}
@@ -257,7 +263,7 @@ To speed things up, we implement the gradient of the negative
 log-likelihood, the negative score function for the parameters in
 $\thetavec$. The score function for the empirical likelihood, evaluated at
 parameters $\vartheta_\cdot$ and $\beta_\cdot$ is given in many places
-\citep[for example in][Formula~(2)]{Hothorn_Moest_Buehlmann_2017}. The score
+\citep[for example in][Formula~(2)]{HothornMoestBuehlmann2017}. The score
 involves $f = F^\prime$:
 
 @d negative score
@@ -306,7 +312,7 @@ intercepts needs this small helper function
 We also need access to the observed Fisher information of the shift
 parameters. We proceed by implementing the Hessian for the intercept
 ($\vartheta_\cdot$) and shift ($\beta_\cdot$) parameters, as given in Formula~(4) of
-\cite{Hothorn_Moest_Buehlmann_2017} first. This partitioned matrix
+\cite{HothornMoestBuehlmann2017} first. This partitioned matrix
 \begin{eqnarray*}
 \mH(\vartheta_1, \dots, \vartheta_{C - 1}, \beta_2, \dots, \beta_K) = 
 \left(\begin{array}{ll}
@@ -558,6 +564,114 @@ solve(H)
 vcov(m)[-(1:2),-(1:2)]
 solve(op$hessian)[1:2,1:2]
 @@
+
+	
+\chapter{Schur Complement}
+
+@o Schur_src.c -cp
+@{
+@<C_symtrisolve@>
+@}
+
+For a symmetric tridiagonal quadratic $N \times N$ matrix $\mA$ we compute $\X^\top \mA^{-1} \X$
+utilising that the inverse $\mA^{-1}_{ij} = u_i v_j$ for $1 \le i \le j \le N$
+can be characterised by two vectors $\uvec$ and $\vvec$ of lengths $N$
+\citep{Meurant1992}.
+
+We begin with the diagonal $(a_1, \dots, a_N)^\top = \text{diag}(\mA)$ and the
+negative lower- and upper off-diagonal $(-b_1, \dots, -b_{N - 1}) =
+\text{diag}(\mA_{-N,-1})$. \cite{Meurant1992} starts with a decomposition
+$\mA = \mU \D_U^{-1} \mU^\top$ with $(d_1, \dots, d_N)^\top =
+\text{diag}(\D_U)$ where $\mU$ is upper triangular. The
+decomposition also allows to compute the determinant of $\mA$ as $\prod_{i =
+1}^N d_i$.
+
+@d d vec
+@{
+d[n] = a[n];
+det = d[n];
+for (i = n - 1; i >= 0; i--) {
+    d[i] = a[i] - pow(b[i], 2) / d[i + 1];
+    /* DOI:10.1137/0613045 page 710: T = U D^-1 U^t with
+       diag(U) = d (upper triangular),
+       diag(D) = d (diagonal) => det(T) = prod(d)
+    */
+    det *= d[i];
+}
+@}
+
+Following Proposition 1 in \cite{Meurant1992}, we compute $\uvec$
+
+@d u vec
+@{
+u[0] = 1 / d[0];
+prodb = 1.0;
+for (i = 1; i <= n; i++) {
+    prodb *= -b[i - 1] / d[i - 1];
+    u[i] = prodb / d[i];
+}
+@}
+
+Based on the next decomposition $\mA = \mL \D_L^{-1} \mL^\top$ with lower
+triangular $\mL$ and $(\delta_1, \dots, \delta_N)^\top = \text{diag}(\D_L)$, we
+compute
+
+@d delta vec
+@{
+delta[0] = a[0];
+for (i = 1; i <= n; i++)
+    delta[i] = a[i] - pow(b[i - 1], 2) / delta[i - 1];
+@}
+
+and then, following Proposition 2, $\vvec$
+
+@d u vec
+@{
+v[n] = 1 / (ans[n] * delta[n]);
+v[0] = 1.0;
+prodb = 1.0;
+for (i = 1; i < n; i++) {
+    prodb *= -b[n - i] / delta[n - i];
+    v[n - i] = prodb * v[n];
+}
+@}
+
+We wrap everything up in a function with arguments \code{a} and \code{b} of
+length \code{n + 1} $=N$ and \code{n} $=N - 1$, respectively. The two
+vectors $\uvec$ and $\vvec$ are stored in an $N \times 2$ real matrix \code{ans}.
+We check if the determinant is larger than a small tolerance \code{tol}
+before computing $\uvec$ and $\vvec$. The memory allocated for the $d$'s is
+reused for computing $\delta$'s.
+
+@d C_symtrisolve
+@{
+void C_symtrisolve (double *a, double *b, R_xlen_t n, double tol, double *ans)
+{
+    SEXP Rd;
+    double *d, *delta, *u, *v, prodb, det;
+    R_xlen_t i;
+
+    /* output vectors */
+    u = ans;
+    v = ans + n + 1;
+
+    /* n = N - 1 */
+    PROTECT(Rd = allocVector(REALSXP, n + 1));
+    d = REAL(Rd);
+
+    @<d vec@>
+
+    if (fabs(det) < tol) {
+        error("Matrix not invertible");
+    } else {
+        @<u vec@>
+        delta = d;
+        @<delta vec@>
+        @<v vec@>
+    }
+    UNPROTECT(1);
+}
+@}
 
 \chapter*{Index}
 
