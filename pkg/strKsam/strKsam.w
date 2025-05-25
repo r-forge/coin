@@ -205,10 +205,12 @@ whose element $(c, k, b)$ is the number of observations $(y = y_c, s = b,
 @<cumsumrev@>
 @<negative logLik@>
 @<negative score@>
+@<negative score residuals@>
 @<Hessian@>
 @<stratified negative logLik@>
 @<stratified negative score@>
 @<stratified Hessian@>
+@<stratified negative score residual@>
 @}
 
 
@@ -287,6 +289,18 @@ intercepts needs this small helper function
 @{
 .rcr <- function(z)
     rev(cumsum(rev(z)))
+@}
+
+@d negative score residuals
+@{
+.nsr <- function(parm, x, mu = numeric(ncol(x) - 1L)) {
+    @<parm to prob@>
+    ftmb <- f(tmb)
+
+    zu <- x * ftmb[- 1, , drop = FALSE] / prb
+    zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
+    rowSums(zu - zl) / rowSums(x)
+}
 @}
 
 We also need access to the observed Fisher information of the shift
@@ -419,6 +433,7 @@ f <- dlogis
              x = x, method = "BFGS", hessian = TRUE))
 c(cf[-1] * -1, cf[1]) - op$par
 logLik(m) + op$value
+.nsr(op$par, x)
 @@
 
 Parameter estimates and the in-sample log-likelihood are practically
@@ -491,6 +506,16 @@ intercept parameters are only concatenated.
 }
 @}
 
+@d stratified negative score residual
+@{
+.snsr <- function(parm, x, mu = NULL) {
+    @<stratum prep@>
+    ret <- c()
+    for (b in seq_len(B))
+        ret <- c(ret, .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu))
+    return(ret)
+}
+@}
 
 <<glm-stratum>>=
 (x <- as.table(array(c(10, 5, 7, 11, 8, 9,
@@ -511,6 +536,7 @@ vcov(m)[-(1:2),-(1:2)]
              hessian = TRUE))
 c(cf[-(1:2)] * -1, cf[1:2]) - op$par
 logLik(m) + op$value
+.snsr(op$par, x)
 @@
 
 @d stratified Hessian
