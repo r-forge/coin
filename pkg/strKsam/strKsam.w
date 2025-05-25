@@ -147,6 +147,10 @@ $g_\text{Cd}(p, \beta) =
 For some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
 and corresponding derivative $f^\prime$, we write
 $$F_Y(y \mid S = b, \rT = k) = F(F^{-1}(F_Y(y \mid S = b, \rT = 1)) - \beta_k).$$
+The negative shift term ensures that positive values of $\beta_k$ correspond
+to the situation of outcomes being stochastically larger in group $k$ than
+in group one.
+
 Note that $F(z) = \exp(-\exp(-z))$ gives rise to $g_\text{L}$, 
 $F(z) = 1 - \exp(-\exp(z))$ to $g_\text{PH}$, $F = \text{expit}$ to
 $g_\text{PO}$, and $F = \Phi$ to $g_\text{Cd}$.
@@ -288,7 +292,7 @@ parameters. We proceed by implementing the Hessian for the intercept
 \cite{Hothorn_Moest_Buehlmann_2017} first. This partitioned matrix
 \begin{eqnarray*}
 \mH(\vartheta_1, \dots, \vartheta_{C - 1}, \beta_2, \dots, \beta_K) = 
-\left(\begin{array}{cc}
+\left(\begin{array}{ll}
 \mA & \X \\
 \X^\top & \Z
 \end{array} \right)
@@ -298,80 +302,136 @@ consists of a tridiagonal $\mA \sim (C-1,C-1)$, a diagonal $\Z \sim (K - 1, K -
 compute the Fisher information matrix for the shift parameters only by means
 of the Schur complement $\Z - \X^\top \mA^{-1} \X$.
 
+In addition to probabilities \code{prb}, the Hessian necessitates the
+computation of $f()$ and $f^\prime()$ for linear functions of the
+parameters. We start preparing these objects
+
+
+@d Hessian prep
+@{
+ftmb <- f(tmb)
+fptmb <- fp(tmb)
+
+dl <- ftmb[- nrow(ftmb), , drop = FALSE]
+du <- ftmb[- 1, , drop = FALSE]
+dpl <- fptmb[- nrow(ftmb), , drop = FALSE]
+dpu <- fptmb[- 1, , drop = FALSE]
+dlm1 <- dl[,-1L, drop = FALSE]
+dum1 <- du[,-1L, drop = FALSE]
+dplm1 <- dpl[,-1L, drop = FALSE]
+dpum1 <- dpu[,-1L, drop = FALSE]
+prbm1 <- prb[,-1L, drop = FALSE]
+
+i1 <- length(intercepts) - 1
+i2 <- 1
+@}
+
+The off-diagonal elements of $\mA$ are now available as
+@d Aoffdiag
+@{
+Aoffdiag <- -rowSums(x * dpu * dpl / prb^2)[-i2]
+Aoffdiag <- Aoffdiag[-length(Aoffdiag)]
+@}
+
+and the diagonal elements of $\mA$ as
+@d Adiag
+@{
+Adiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
+                  (x * dpl / prb)[-i2,,drop = FALSE] - 
+                  ((x * du^2 / prb^2)[-i1,,drop = FALSE] + 
+                   (x * dl^2 / prb^2)[-i2,,drop = FALSE]
+                  )
+                 )
+                  
+@}
+
+For the computation of $\X$ and $\Z$, the observations corresponding to the
+control group ($k = 1$) are irrelevant, we remove these first
+
+@d X and Z
+@{
+xm1 <- x[,-1L,drop = FALSE] 
+X <- ((xm1 * dpum1 / prbm1)[-i1,,drop = FALSE] - 
+      (xm1 * dplm1 / prbm1)[-i2,,drop = FALSE] - 
+      ((xm1 * dum1^2 / prbm1^2)[-i1,,drop = FALSE] - 
+       (xm1 * dum1 * dlm1 / prbm1^2)[-i2,,drop = FALSE] -
+       (xm1 * dum1 * dlm1 / prbm1^2)[-i1,,drop = FALSE] +
+       (xm1 * dlm1^2 / prbm1^2)[-i2,,drop = FALSE]
+      )
+     )
+
+Z <- -colSums(xm1 * (dpum1 / prbm1 - 
+                     dplm1 / prbm1 -
+                     (dum1^2 / prbm1^2 - 
+                      2 * dum1 * dlm1 / prbm1^2 +
+                      dlm1^2 / prbm1^2
+                     )
+                    )
+             )
+if (length(Z) > 1L) Z <- diag(Z)
+@}
+
+Instead of computing the inverse of $\mH$ directly, we return a list
+containing the components of this block matrix for later processing
+elsewhere.
+
 @d Hessian
 @{
 .hes <- function(parm, x, mu = numeric(ncol(x) - 1L)) {
     @<parm to prob@>
-    ftmb <- f(tmb)
-    fptmb <- fp(tmb)
 
-    i1 <- length(intercepts) - 1
-    i2 <- 1
+    @<Hessian prep@>
 
-    dl <- ftmb[- nrow(ftmb), , drop = FALSE]
-    du <- ftmb[- 1, , drop = FALSE]
-    dpl <- fptmb[- nrow(ftmb), , drop = FALSE]
-    dpu <- fptmb[- 1, , drop = FALSE]
-    dlm1 <- dl[,-1L, drop = FALSE]
-    dum1 <- du[,-1L, drop = FALSE]
-    dplm1 <- dpl[,-1L, drop = FALSE]
-    dpum1 <- dpu[,-1L, drop = FALSE]
-    prbm1 <- prb[,-1L, drop = FALSE]
+    @<Aoffdiag@>
+    @<Adiag@>
+    @<X and Z@>
 
-    Aoffdiag <- -rowSums(x * dpu * dpl / prb^2)[-i2]
-    Aoffdiag <- Aoffdiag[-length(Aoffdiag)]
-    xm1 <- x[,-1L,drop = FALSE] 
-    X <- ((xm1 * dpum1 / prbm1)[-i1,,drop = FALSE] - 
-              (xm1 * dplm1 / prbm1)[-i2,,drop = FALSE] - 
-              ((xm1 * dum1^2 / prbm1^2)[-i1,,drop = FALSE] - 
-               (xm1 * dum1 * dlm1 / prbm1^2)[-i2,,drop = FALSE] -
-               (xm1 * dum1 * dlm1 / prbm1^2)[-i1,,drop = FALSE] +
-               (xm1 * dlm1^2 / prbm1^2)[-i2,,drop = FALSE]
-              )
-             )
-    Adiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
-              (x * dpl / prb)[-i2,,drop = FALSE] - 
-              ((x * du^2 / prb^2)[-i1,,drop = FALSE] + 
-               (x * dl^2 / prb^2)[-i2,,drop = FALSE]
-              )
-             )
-    Z <- -colSums(xm1 * (dpum1 / prbm1 - 
-                         dplm1 / prbm1 -
-                         (dum1^2 / prbm1^2 - 
-                          2 * dum1 * dlm1 / prbm1^2 +
-                          dlm1^2 / prbm1^2
-                         )
-                        )
-                 )
-    if (length(Z) > 1L) Z <- diag(Z)
-    list(a = Adiag, b = Aoffdiag, X = X, Z = Z)
+    return(list(a = Adiag, b = Aoffdiag, X = X, Z = Z))
 }
 @}
 
-<<>>=
+We start with an example involving $K = 3$ groups for a binary outcome and
+use a binary logistic regression model to estimate the two log-odds ratios
+$\beta_2$ and $\beta_3$ along with their estimated covariance
+<<glm>>=
 source("strKsam_src.R")
-w <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2)
-(d <- expand.grid(y = gl(2, 1), x = gl(3, 1)))
-d$y <- relevel(d$y, "2")
-d$w <- c(w)
-m <- glm(y ~ x, data = d, weights = w, family = binomial())
-(cf <- coef(m))
+(x <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2))
+d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 1))
+d$x <- c(x)
+m <- glm(y ~ t, data = d, weights = x, family = binomial())
 logLik(m)
+(cf <- coef(m))
+vcov(m)[-1,-1]
+@@
+
+Replicating these results requires specification of the inverse link
+function $F = \text{expit}$ and the density function $f$ of the standard
+logistic.
+
+<<glm-op>>=
 F <- plogis
 f <- dlogis
-(op <- optim(par = runif(length(cf)), fn = .nll, gr = .nsc, x = w, hessian = TRUE))
+(op <- optim(par = c("mt2" = 0, "mt3" = 0, "(Intercept)" = 0), 
+             fn = .nll, gr = .nsc, 
+             x = x, method = "BFGS", hessian = TRUE))
+c(cf[-1] * -1, cf[1]) - op$par
+logLik(m) + op$value
+@@
+
+Parameter estimates and the in-sample log-likelihood are practically
+identical. We now turn to the inverse Hessian of the shift terms, first
+defining the derivative of the density of the standard logistic distribtion
+<<glm-H>>=
 fp <- function(x) {
-                p <- plogis(x)
-                p * (1 - p)^2 - p^2 * (1 - p)
-            }
-#library("lehmann")
-#tt <- trafo.test(as.table(w))
-#tt$neg
-#tt$hessian
-solve(do.call(lehmann:::Schur_symtri, .hes(op$par, w)))
+    p <- plogis(x)
+    p * (1 - p)^2 - p^2 * (1 - p)
+}
+H <- .hes(op$par, x)
+solve(H$Z - crossprod(H$X,  H$X / H$a))
 vcov(m)[-1,-1]
 solve(op$hessian)[1:2,1:2]
 @@
+Also here we see practically identical results.
 
 \chapter*{Index}
 
