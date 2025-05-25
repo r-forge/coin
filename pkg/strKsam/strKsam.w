@@ -21,8 +21,12 @@
 \usepackage{color}
 \definecolor{linkcolor}{rgb}{0, 0, 0.7}
 
+\usepackage[round]{natbib}
+
+
 \usepackage[%
 backref,%
+pageanchor=false,%
 raiselinks,%
 pdfhighlight=/O,%
 pagebackref,%
@@ -39,9 +43,8 @@ menucolor={linkcolor},%
 urlcolor={linkcolor}%
 ]{hyperref}
 
-\usepackage[round]{natbib}
 
-\usepackage{underscore}
+%\usepackage{underscore}
 
 \usepackage[top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
 
@@ -71,7 +74,10 @@ urlcolor={linkcolor}%
 \newcommand{\yn}{y_{\text{new}}}
 \newcommand{\z}{\mathbf{z}}
 \newcommand{\X}{\mathbf{X}}
+\newcommand{\Z}{\mathbf{Z}}
 \newcommand{\Y}{\mathbf{Y}}
+\newcommand{\mH}{\mathbf{H}}
+\newcommand{\mA}{\mathbf{A}}
 \newcommand{\sX}{\mathcal{X}}
 \newcommand{\sY}{\mathcal{Y}}
 \newcommand{\T}{\mathbf{T}}
@@ -102,6 +108,9 @@ urlcolor={linkcolor}%
 \newcommand{\eoob}{\widehat{\text{Err}}^{(oob)}}
 \newcommand{\mub}{\boldsymbol{\mu}}
 \newcommand{\Sigmab}{\boldsymbol{\Sigma}}
+\def \thetavec        {\text{\boldmath$\theta$}}
+\newcommand{\rT}{T}
+\newcommand{\rt}{t}
 
 
 \author{Torsten Hothorn \\ Universit\"at Z\"urich}
@@ -114,40 +123,78 @@ urlcolor={linkcolor}%
 \maketitle
 \tableofcontents
 
-\chapter{Introduction}
+\chapter{Model and Parameterisation}
 \pagenumbering{arabic}
 
-Treatment group $X \in \{1, \dots, K\}$, outcome $Y \in \samY$ at least ordered,
-stratum $S \in \{1, \dots, B\}$ with conditional distribution function
-$F_Y(y \mid S = b, X = k) = \Prob(Y \le y \mid S = b, X = k)$.
+Treatment group $\rT \in \{1, \dots, K\}, K \ge 2$, outcome $Y \in \samY$ at least ordered,
+stratum $S \in \{1, \dots, B\}$ in $B \ge 1$ blocks with conditional
+cumulative distribution function (cdf)
+$F_Y(y \mid S = b, \rT = k) = \Prob(Y \le y \mid S = b, \rT = k)$.
 
-Model
+\paragraph{Model}
 
-$F(y \mid S = b, X = k) = g(F(y \mid S = b, X = 1), \beta_k)$ for all $b = 1,
-\dots, B$, $k = 2, \dots, K$, and $y \in \samY$. $\beta_1 := 0$.
+With $g: [0,1] \times \R \rightarrow \R$, we model
+$F(y \mid S = b, \rT = k) = g(F(y \mid S = b, \rT = 1), \beta_k)$ for all $b = 1,
+\dots, B$, $k = 2, \dots, K$, and $y \in \samY$ based on parameters
+$\beta_2, \dots, \beta_K \in \R$. For notational convenience: $\beta_1 := 0$. For
+example, $g_\text{L}(p, \beta) = p^{\exp(-\beta)}$ (Lehmann alternative),
+$g_\text{PH}(p, \beta) = 1 - (1 -
+p)^{\exp(-\beta)}$ proportional hazards, or
+$g_\text{PO}(p, \beta) = \text{expit}(\text{logit}(p) - \beta)$ proportional odds, or
+$g_\text{Cd}(p, \beta) =
+\Phi(\Phi^{-1}(p) - \beta)$ (generalised Cohen's $d$).
 
-$g(p, \beta) = p^{\exp(\beta)}$ or $g(p, \beta) = 1 - (1 - p)^{\exp(\beta)}$ or
-$g(p, \beta) = \text{expit}(\text{logit}(p) - \beta)$ or $g(p, \beta) =
-\Phi(\Phi^{-1}(p) - \beta)$.
+For some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
+and corresponding derivative $f^\prime$, we write
+$$F_Y(y \mid S = b, \rT = k) = F(F^{-1}(F_Y(y \mid S = b, \rT = 1)) - \beta_k).$$
+Note that $F(z) = \exp(-\exp(-z))$ gives rise to $g_\text{L}$, 
+$F(z) = 1 - \exp(-\exp(z))$ to $g_\text{PH}$, $F = \text{expit}$ to
+$g_\text{PO}$, and $F = \Phi$ to $g_\text{Cd}$.
 
-For some absolute continuous cdf $F$ with log-concave density $f = F^\prime$, we write
-$F_Y(y \mid S = b, X = k) = F(F^{-1}(F_Y(y \mid S = b, X = 0)) - \beta_k)$.
+\paragraph{Hypthesis}
 
-Hypthesis
-$H_0: \beta_k = \mu_k, k = 2, \dots, K$
+We are interested in inference for $\beta_2, \dots, \beta_K$, in terms of
+confidence intervals and hypothesis tests of the form
 
-$\samY = \{y_1 < y_2 < \cdots < y_C\}$
+$$H_0: \beta_k = \mu_k, \quad k = 2, \dots, K.$$
 
-$F_Y(y_c \mid S = b, X = k) = F(\vartheta_{c,b} - \beta_k)$ with parameters
+\paragraph{Likelihood}
+
+For an ordered categorical outcome $Y$ from sample space $\samY = \{y_1 < y_2 < \cdots <
+y_C\}$, we parameterise the model in terms of intercept ($\vartheta_\cdot$) and
+shift ($\beta_\cdot$) parameters
+
+$$F_Y(y_c \mid S = b, \rT = k) = F(\vartheta_{c,b} - \beta_k), \quad c = 1, \dots, C.$$
+
+The $C - 1$ intercept parameters are block-specific and monotone increasing
 $\vartheta_{0,b} = -\infty < \vartheta_{1,b} < \cdots < \vartheta_{C,b} = \infty$.
+We collect all parameters in a vector
+\begin{eqnarray*}
+\thetavec = (\theta_1 & := & \beta_2, \\
+               & \dots & , \\
+               \theta_{K - 1} & := & \beta_K, \\
+               \theta_{K} & := & \vartheta_{1,1}, \\
+               \theta_{K + 1} & := & \vartheta_{2,1} - \vartheta_{1,1} > 0, \\
+               &  \dots, & \\
+               \theta_{K + C - 2} & := & \vartheta_{C-1,1} - \vartheta_{C-2,1} > 0, \\
+               \theta_{K + C - 1} & := & \vartheta_{1,2}, \\
+               & \dots &, \\
+               \theta_{B (C - 1) + K - 1} & := & \vartheta_{C-1,B} - \vartheta_{C-2,B} >
+               0)
+\end{eqnarray*}
 
-For observation $(y_i = y_c, x_i = k, s_i = b)$, the log-likelihood contribution is
-$\log(F(\vartheta_{c,b} - \beta_k) - F(\vartheta_{c - 1,b} - \beta_k)$
+For the $i$th observation $(y_i = y_c, s_i = b, \rt_i = k)$ from block $b$, the log-likelihood contribution is
+$$\log(\Prob(y_{c - 1} < Y \le y_c \mid S = b, \rT = k)) = \log(F(\vartheta_{c,b} - \beta_k) - F(\vartheta_{c - 1,b} - \beta_k)).$$
 
-Data as $C \times K \times B$ contingency table.
+For an absolutely continuous outcome $Y \in \R$, we define $y_c := y_{(c)}$,
+the $c$th distinct ordered observation in the sample. The log-likelihood
+above is then the empirical or nonparametric log-likelihood.
 
-$\theta = (\beta_2, \dots, \beta_K, \vartheta_{1,b}, \vartheta_{2,b} -
-\vartheta_{1,b}, \dots, \vartheta_{C-1,b} - \vartheta_{C-2,b})$ with
+We represent the data in form of a $C \times K \times B$ contingency table,
+whose element $(c, k, b)$ is the number of observations $(y = y_c, s = b,
+\rt = k)$.
+	
+\chapter{Parameter Estimation}
 
 @o strKsam_src.R -cp
 @{
@@ -157,18 +204,32 @@ $\theta = (\beta_2, \dots, \beta_K, \vartheta_{1,b}, \vartheta_{2,b} -
 @<Hessian@>
 @}
 
+
+We start implementing the log-likelihood function for parameters \code{parm}
+$= \thetavec$ (assuming only a single block) with data from a two-way $C
+\times K$ contingency table \code{x}. 
+
+From $\thetavec$, we first extract the shift parameters $\beta_\cdot$ and
+then the intercept parameters $\vartheta_\cdot$, compute the differences
+$\vartheta_{c,1} - \beta_k$ and evaluate the probability
+\code{prb} $ = \Prob(y_{c - 1} < Y \le y_c \mid S = 1, \rT = k)$:
+
 @d parm to prob
 @{
-b <- seq_len(ncol(x) - 1L)
-beta <- c(0, mu + parm[b])
-theta <- c(-Inf, cumsum(parm[- b]), Inf)
-tmb <- theta - matrix(beta, nrow = length(theta),  
-                            ncol = ncol(x),
-                            byrow = TRUE)
+bidx <- seq_len(ncol(x) - 1L)
+beta <- c(0, mu + parm[bidx])
+intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
+                                 ncol = ncol(x),
+                                 byrow = TRUE)
 Ftmb <- F(tmb)
 prb <- Ftmb[- 1L, , drop = FALSE] - 
        Ftmb[- nrow(Ftmb), , drop = FALSE]
 @}
+
+With default null values $\mu_k = 0, k = 2, \dots, K$, we define the
+negative log-likelihood function as the weighted (by number of observations) sum of
+the log-probabilities
 
 @d negative logLik
 @{
@@ -178,11 +239,17 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
 }
 @}
 
-@d cumsumrev
-@{
-.rcr <- function(z)
-    rev(cumsum(rev(z)))
-@}
+It is important to note that, with $F$ corresponding to distribution with
+log-concave density $f$, the negative log-likelihood is a convex function of
+the parameters $\thetavec$, and thus we can solve the corresponding
+constrained minimisation problem quickly and reliably.
+
+To speed things up, we implement the gradient of the negative
+log-likelihood, the negative score function for the parameters in
+$\thetavec$. The score function for the empirical likelihood, evaluated at
+parameters $\vartheta_\cdot$ and $\beta_\cdot$ is given in many places
+\citep[for example in][Formula~(2)]{Hothorn_Moest_Buehlmann_2017}. The score
+involves $f = F^\prime$:
 
 @d negative score
 @{
@@ -193,18 +260,43 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
     ret <- numeric(length(parm))
     zu <- x * ftmb[- 1, , drop = FALSE] / prb
     zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
-    ret[b] <- colSums(zl)[-1L] -
-              colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
-    ret[-b] <- Reduce("+", 
+    ret[bidx] <- colSums(zl)[-1L] -
+                 colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
+    ret[-bidx] <- Reduce("+", 
                       lapply(1:ncol(x), 
                           function(j) {
                               .rcr(zu[-nrow(zu),j]) - 
                               .rcr(zl[-1,j])
                           })
                      )
-    -ret
+    - ret
 }
 @}
+
+Adjustment for the parameterisation in terms of differences between
+intercepts needs this small helper function
+
+@d cumsumrev
+@{
+.rcr <- function(z)
+    rev(cumsum(rev(z)))
+@}
+
+We also need access to the observed Fisher information of the shift
+parameters. We proceed by implementing the Hessian for the intercept
+($\vartheta_\cdot$) and shift ($\beta_\cdot$) parameters, as given in Formula~(4) of
+\cite{Hothorn_Moest_Buehlmann_2017} first. This partitioned matrix
+\begin{eqnarray*}
+\mH(\vartheta_1, \dots, \vartheta_{C - 1}, \beta_2, \dots, \beta_K) = 
+\left(\begin{array}{cc}
+\mA & \X \\
+\X^\top & \Z
+\end{array} \right)
+\end{eqnarray*}
+consists of a tridiagonal $\mA \sim (C-1,C-1)$, a diagonal $\Z \sim (K - 1, K -
+1)$, and a full $\X \sim (C - 1, K - 1)$ matrix. In a second step, we
+compute the Fisher information matrix for the shift parameters only by means
+of the Schur complement $\Z - \X^\top \mA^{-1} \X$.
 
 @d Hessian
 @{
@@ -213,7 +305,7 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
     ftmb <- f(tmb)
     fptmb <- fp(tmb)
 
-    i1 <- length(theta) - 1
+    i1 <- length(intercepts) - 1
     i2 <- 1
 
     dl <- ftmb[- nrow(ftmb), , drop = FALSE]
@@ -226,8 +318,8 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
     dpum1 <- dpu[,-1L, drop = FALSE]
     prbm1 <- prb[,-1L, drop = FALSE]
 
-    Hoffdiag <- -rowSums(x * dpu * dpl / prb^2)[-i2]
-    Hoffdiag <- Hoffdiag[-length(Hoffdiag)]
+    Aoffdiag <- -rowSums(x * dpu * dpl / prb^2)[-i2]
+    Aoffdiag <- Aoffdiag[-length(Aoffdiag)]
     xm1 <- x[,-1L,drop = FALSE] 
     X <- ((xm1 * dpum1 / prbm1)[-i1,,drop = FALSE] - 
               (xm1 * dplm1 / prbm1)[-i2,,drop = FALSE] - 
@@ -237,7 +329,7 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
                (xm1 * dlm1^2 / prbm1^2)[-i2,,drop = FALSE]
               )
              )
-    Hdiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
+    Adiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
               (x * dpl / prb)[-i2,,drop = FALSE] - 
               ((x * du^2 / prb^2)[-i1,,drop = FALSE] + 
                (x * dl^2 / prb^2)[-i2,,drop = FALSE]
@@ -252,7 +344,7 @@ prb <- Ftmb[- 1L, , drop = FALSE] -
                         )
                  )
     if (length(Z) > 1L) Z <- diag(Z)
-    list(a = Hdiag, b = Hoffdiag, X = X, Z = Z)
+    list(a = Adiag, b = Aoffdiag, X = X, Z = Z)
 }
 @}
 
@@ -295,7 +387,7 @@ solve(op$hessian)[1:2,1:2]
 
 @u
 
-%\bibliographystyle{plainnat}
-%\bibliography{libcoin}
+\bibliographystyle{plainnat}
+\bibliography{refs}
 
 \end{document}
