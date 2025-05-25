@@ -207,6 +207,8 @@ whose element $(c, k, b)$ is the number of observations $(y = y_c, s = b,
 @<negative score@>
 @<Hessian@>
 @<stratified negative logLik@>
+@<stratified negative score@>
+@<stratified Hessian@>
 @}
 
 
@@ -439,14 +441,14 @@ over all blocks and evaluate the negative log-likelihood for the same values
 of the shift parameters but block-specific values of the intercept
 parameters.
 
-@d stratum dim
+@d stratum prep
 @{
 if (is.table(x)) {
     C <- dim(x)[1]
     K <- dim(x)[2]
     B <- dim(x)[3]
     sidx <- gl(B, C - 1)
-    x <- lapply(1:B, function(b) x[,,b,drop = TRUE])
+    x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
 } else {
     C <- sapply(x, nrow)
     K <- unique(sapply(x, ncol))
@@ -454,25 +456,45 @@ if (is.table(x)) {
     B <- length(x)
     sidx <- factor(rep(seq_len(B), times = C), levels = seq_len(B))
 }
+bidx <- seq_len(K - 1L)
+beta <- parm[bidx]
+intercepts <- split(parm[-bidx], sidx)
+if (is.null(mu)) mu <- numeric(K - 1L)
 @}
 
 @d stratified negative logLik
 @{
 .snll <- function(parm, x, mu = NULL) {
-    @<stratum dim@>
-    beta <- parm[seq_len(K - 1)]
-    intercepts <- split(parm[-seq_len(K - 1)], sidx)
-    if (is.null(mu)) mu <- numeric(K - 1)
+    @<stratum prep@>
     ret <- 0
-    for (b in 1:B)
+    for (b in seq_len(B))
         ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu)
     return(ret)
 }
 @}
 
+In a similar way, we evaluate the gradients for each block and sum-up the
+contributions by the shift parameters whereas the gradients for the
+intercept parameters are only concatenated.
+
+@d stratified negative score
+@{
+.snsc <- function(parm, x, mu = NULL) {
+    @<stratum prep@>
+    ret <- numeric(length(bidx))
+    for (b in seq_len(B)) {
+        nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+        ret[bidx] <- ret[bidx] + nsc[bidx]
+        ret <- c(ret, nsc[-bidx])
+    }
+    return(ret)
+}
+@}
+
+
 <<glm-stratum>>=
-(x <- array(c(10, 5, 7, 11, 8, 9,
-               9, 4, 8, 15, 5, 4), dim = c(2, 3, 2)))
+(x <- as.table(array(c(10, 5, 7, 11, 8, 9,
+                        9, 4, 8, 15, 5, 4), dim = c(2, 3, 2))))
 d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 1), s = gl(2, 1))
 d$x <- c(x)
 m <- glm(y ~ s + t, data = d, weights = x, family = binomial())
@@ -482,16 +504,34 @@ vcov(m)[-(1:2),-(1:2)]
 @@
 
 <<glm-op-stratum>>=
-x <- as.table(x)
 (op <- optim(par = c("mt2" = 0, "mt3" = 0, "(Intercept 1)" = 0, "(Intercept 2)" = 0), 
-             fn = .snll, # gr = .nsc, 
+             fn = .snll, gr = .snsc, 
              x = x, 
-             # method = "BFGS", 
+             method = "BFGS", 
              hessian = TRUE))
 c(cf[-(1:2)] * -1, cf[1:2]) - op$par
 logLik(m) + op$value
 @@
 
+@d stratified Hessian
+@{
+.shes <- function(parm, x, mu = NULL) {
+    @<stratum prep@>
+    ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
+    for (b in seq_len(B)) {
+        H <- .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+        ret <- ret + do.call(lehmann:::Schur_symtri, H)
+    }
+    ret
+}
+@}
+
+<<glm-H-stratum>>=
+H <- .shes(op$par, x)
+solve(H)
+vcov(m)[-(1:2),-(1:2)]
+solve(op$hessian)[1:2,1:2]
+@@
 
 \chapter*{Index}
 
