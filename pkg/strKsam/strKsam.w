@@ -206,6 +206,7 @@ whose element $(c, k, b)$ is the number of observations $(y = y_c, s = b,
 @<negative logLik@>
 @<negative score@>
 @<Hessian@>
+@<stratified negative logLik@>
 @}
 
 
@@ -432,6 +433,65 @@ vcov(m)[-1,-1]
 solve(op$hessian)[1:2,1:2]
 @@
 Also here we see practically identical results.
+
+In the next step, we extend our results to the stratified case. We iterate
+over all blocks and evaluate the negative log-likelihood for the same values
+of the shift parameters but block-specific values of the intercept
+parameters.
+
+@d stratum dim
+@{
+if (is.table(x)) {
+    C <- dim(x)[1]
+    K <- dim(x)[2]
+    B <- dim(x)[3]
+    sidx <- gl(B, C - 1)
+    x <- lapply(1:B, function(b) x[,,b,drop = TRUE])
+} else {
+    C <- sapply(x, nrow)
+    K <- unique(sapply(x, ncol))
+    stopifnot(length(K) == 1L)
+    B <- length(x)
+    sidx <- factor(rep(seq_len(B), times = C), levels = seq_len(B))
+}
+@}
+
+@d stratified negative logLik
+@{
+.snll <- function(parm, x, mu = NULL) {
+    @<stratum dim@>
+    beta <- parm[seq_len(K - 1)]
+    intercepts <- split(parm[-seq_len(K - 1)], sidx)
+    if (is.null(mu)) mu <- numeric(K - 1)
+    ret <- 0
+    for (b in 1:B)
+        ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+    return(ret)
+}
+@}
+
+<<glm-stratum>>=
+(x <- array(c(10, 5, 7, 11, 8, 9,
+               9, 4, 8, 15, 5, 4), dim = c(2, 3, 2)))
+d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 1), s = gl(2, 1))
+d$x <- c(x)
+m <- glm(y ~ s + t, data = d, weights = x, family = binomial())
+logLik(m)
+(cf <- coef(m))
+vcov(m)[-(1:2),-(1:2)]
+@@
+
+<<glm-op-stratum>>=
+x <- as.table(x)
+(op <- optim(par = c("mt2" = 0, "mt3" = 0, "(Intercept 1)" = 0, "(Intercept 2)" = 0), 
+             fn = .snll, # gr = .nsc, 
+             x = x, 
+             # method = "BFGS", 
+             hessian = TRUE))
+c(cf[-(1:2)] * -1, cf[1:2]) - op$par
+logLik(m) + op$value
+@@
+
 
 \chapter*{Index}
 
