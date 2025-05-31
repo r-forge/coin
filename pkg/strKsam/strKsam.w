@@ -1034,7 +1034,10 @@ probit <- function()
 
 @o ML.R -cp
 @{
-@<workhorse@>
+@<ML estimation@>
+@<Wald@>
+@<LRatio@>
+@<Rao@>
 @}
 
 @d setup
@@ -1082,15 +1085,13 @@ upr <- rep(Inf, times = length(lwr))
     p[-parm] <- ret$par
     ret$negscore <- .snsc(p, x = xlist, mu = mu)[parm]
     ret$hessian <- .shes(p, x = xlist, mu = mu)
-    if (length(parm) != nrow(ret$hessian))
-        ret$hessian <- solve(solve(ret$hessian)[parm,parm])
     ret
 }
 @}
 
-@d workhorse
+@d ML estimation
 @{
-workhorse <- function(x, link, mu = 0, parm = 2:dim(x)[2L], tol = .Machine$double.eps, 
+.MLest <- function(x, link, mu = 0, parm = seq_len(K - 1), tol = .Machine$double.eps, 
                       start = NULL,
                       job = c("optim", "profile", "eval"), ...) {
 
@@ -1132,16 +1133,23 @@ workhorse <- function(x, link, mu = 0, parm = 2:dim(x)[2L], tol = .Machine$doubl
                  hessian = FALSE, ...),
         "profile" = .profile(start, parm = parm),
         "eval" = list(par = start, 
-                      value = .snll(start, x = xlist, mu = mu),
-                      negscore = .snsc(start, x = xlist, mu = mu),
-                      hessian = .shes(start, x = xlist, mu = mu)))
+                      value = .snll(start, x = xlist, mu = mu)))
+
+    ret$coefficients <- ret$par[parm]
+    if (is.null(ret$negscore))
+        ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
+    if (is.null(ret$hessian))
+        ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
+    if (length(parm) != nrow(ret$hessian))
+        ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
+    if (is.null(ret$vcov)) ret$vcov <- solve(ret$hessian)
     ret
 }
 @}
 
 <<workhorse>>=
 source("ML.R")
-workhorse(x, logit())
+.MLest(x, logit())
 op
 N <- 10
 a <- matrix(c(5, 6, 4,
@@ -1152,13 +1160,118 @@ a <- matrix(c(5, 6, 4,
                     4, 6, 5), ncol = 3, byrow = TRUE)
 x <- as.table(array(c(a[1:3,], a[-(1:3),]), dim = c(3, 3, 2)))
 x
-(ret <- workhorse(x, logit()))
-workhorse(x, logit(), start = ret$par, job = "profile")
-workhorse(x, logit(), start = ret$par, parm = 2, job = "profile")
-workhorse(x, logit(), start = ret$par, job = "eval")
+(ret <- .MLest(x, logit()))
+.MLest(x, logit(), start = ret$par, job = "profile")
+.MLest(x, logit(), start = ret$par, parm = 2, job = "profile")
+(ret <- .MLest(x, logit(), start = ret$par, job = "eval"))
 @@
 
 \chapter{ML Inference}
+
+\section{Wald}
+
+@d Wald
+@{
+.Wald <- function(coef, vcov, alternative = c("two.sided", "less", "greater"), conf.level = .95) {
+    alternative <- match.arg(alternative)
+    conf.level <- 1 - (1 - conf.level) / ((alternative != "two.sided") + 1L)
+    ESTIMATE <- coef
+    SE <- sqrt(diag(vcov))
+    STATISTIC <- c("Wald Z" = unname(ESTIMATE / SE))
+    if (alternative == "less") {
+        PVAL <- pnorm(STATISTIC)
+        CINT <- c(-Inf, ESTIMATE + qnorm(conf.level) * SE)
+    } else if (alternative == "greater") {
+        PVAL <- pnorm(STATISTIC, lower.tail = FALSE)
+        CINT <- c(ESTIMATE - qnorm(conf.level) * SE, Inf)
+    } else {
+        PVAL <- 2 * pnorm(-abs(STATISTIC))
+        CINT <- cbind(ESTIMATE - qnorm(conf.level) * SE,
+                      ESTIMATE + qnorm(conf.level) * SE)
+    }
+    list(p.value = PVAL, confint = CINT)
+}
+@}
+
+<<Wald>>=
+.Wald(ret$coefficients, ret$vcov)
+@@
+
+
+@d LRatio
+@{
+.LRatio <- function(coef, vcov, parm, alternative = c("two.sided", "less", "greater"), conf.level = .95, profile)
+{
+    alternative <- match.arg(alternative)
+    conf.level <- 1 - (1 - conf.level) / ((alternative != "two.sided") + 1L)
+
+    ull <- profile(coef[parm], parm)$value
+    rll <- profile(0, parm)$value
+
+    qc <- qchisq(conf.level, df = 1)
+
+    fun <- function(par)
+        -2 * (ull - profile(par, parm = parm)$value) - qc
+
+    W <- .Wald(coef, vcov, conf.level = 1 - (1 - conf.level) / 10)
+
+    CINT <- c(-Inf, Inf)
+    if (alternative != "greater")
+        CINT[1] <- uniroot(fun, interval = c(W$confint[parm,1], coef[parm]),
+                           extendInt = "no")$root
+    if (alternative != "less")
+        CINT[2] <- uniroot(fun, interval = c(coef[parm], W$confint[parm,2]),
+                           extendInt = "no")$root
+
+    CINT
+}
+@}
+
+<<LRatio>>=
+.LRatio(ret$coefficients, ret$vcov, parm = 1, profile = function(par, parm)
+{
+    cf <- ret$par
+    cf[parm] <- par
+    .MLest(x, link = logit(), start = cf, parm = parm, job = "profile")
+})
+@@
+
+@d Rao
+@{
+.Rao <- function(coef, vcov, parm, alternative = c("two.sided", "less", "greater"), conf.level = .95, profile)
+{
+    alternative <- match.arg(alternative)
+    conf.level <- 1 - (1 - conf.level) / ((alternative != "two.sided") + 1L)
+    qc <- qnorm(conf.level)
+
+    fun <- function(par, q) {
+        ret <- profile(par, parm = parm)
+        -ret$negscore * sqrt(ret$vcov) - q
+    }
+
+    W <- .Wald(coef, vcov, conf.level = 1 - (1 - conf.level) / 10)
+
+    CINT <- c(-Inf, Inf)
+    if (alternative != "greater")
+        CINT[1] <- uniroot(fun, interval = c(W$confint[parm,1], coef[parm]), 
+                           extendInt = "yes", q = qc)$root
+    if (alternative != "less")
+        CINT[2] <- uniroot(fun, interval = c(coef[parm], W$confint[parm,2]), 
+                           extendInt = "yes", q = -qc)$root
+
+    CINT
+}
+@}
+
+<<Rao>>=
+.Rao(ret$coefficients, ret$vcov, parm = 1, profile = function(par, parm)
+{
+    cf <- ret$par
+    cf[parm] <- par
+    .MLest(x, link = logit(), start = cf, parm = parm, job = "profile")
+})
+@@
+
 
 \chapter*{Index}
 
