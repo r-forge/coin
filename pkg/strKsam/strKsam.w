@@ -423,7 +423,7 @@ elsewhere.
     @<Adiag@>
     @<X and Z@>
 
-    return(list(a = Adiag, b = Aoffdiag, X = X, Z = Z))
+    return(Z - wcrossprod(x = X, list(a = Adiag, b = Aoffdiag)))
 }
 @}
 
@@ -466,9 +466,7 @@ fp <- function(x) {
     p <- plogis(x)
     p * (1 - p)^2 - p^2 * (1 - p)
 }
-H <- .hes(op$par, x)
-solve(H$Z - crossprod(H$X,  H$X / H$a))
-solve(H$Z - wcrossprod(H$X,  A = H))
+solve(H <- .hes(op$par, x))
 vcov(m)[-1,-1]
 solve(op$hessian)[1:2,1:2]
 @@
@@ -567,10 +565,8 @@ logLik(m) + op$value
 .shes <- function(parm, x, mu = NULL) {
     @<stratum prep@>
     ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
-    for (b in seq_len(B)) {
-        H <- .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
-        ret <- ret + (H$Z - wcrossprod(H$X, A = H))
-    }
+    for (b in seq_len(B))
+        ret <- ret + .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
     ret
 }
 @}
@@ -1034,7 +1030,7 @@ probit <- function()
 
 
 
-\chapter{ML Inference}
+\chapter{ML Estimation}
 
 @o ML.R -cp
 @{
@@ -1046,28 +1042,70 @@ probit <- function()
 K <- dim(x)[2L]
 B <- dim(x)[3L]
 xlist <- vector(mode = "list", length = B)
-start <- rep(0, times = K - 1)
+if (NS <- is.null(start))
+    start <- mu
 lwr <- rep(-Inf, times = K - 1)
 for (b in seq_len(B)) {
     xb <- matrix(x[,,b, drop = TRUE], ncol = K)
     xw <- rowSums(abs(xb)) > tol
     xlist[[b]] <- xb[xw,,drop = FALSE]
     lwr <- c(lwr, -Inf, rep.int(tol, times = sum(xw) - 2))
-    start <- c(start, -1, rep.int(1 / sum(xlist[[b]]), sum(xw) - 2))
+    if (NS) {
+        ecdf0 <- cumsum(xlist[[b]][,1])
+        ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
+        start <- c(start, Q(ecdf0))
+    }
 }
 upr <- rep(Inf, times = length(lwr))
 @}
 
+@d profile
+@{
+.profile <- function(start, parm = seq_len(K - 1)) {
+    beta <- start[parm]
+    ret <- optim(par = start[-parm], fn = function(par) {
+                     p <- numeric(length(par) + length(parm))
+                     p[parm] <- beta
+                     p[-parm] <- par
+                     .snll(p, x = xlist, mu = mu)
+                 },
+                 gr = function(par) {
+                     p <- numeric(length(par) + length(parm))
+                     p[parm] <- beta
+                     p[-parm] <- par
+                     .snsc(p, x = xlist, mu = mu)[-parm]
+                 },
+                 lower = lwr[-parm], upper = upr[-parm], method = "L-BFGS-B", 
+                 hessian = FALSE, ...)
+    p <- numeric(length(start))
+    p[parm] <- beta
+    p[-parm] <- ret$par
+    ret$negscore <- .snsc(p, x = xlist, mu = mu)[parm]
+    ret$hessian <- .shes(p, x = xlist, mu = mu)
+    if (length(parm) != nrow(ret$hessian))
+        ret$hessian <- solve(solve(ret$hessian)[parm,parm])
+    ret
+}
+@}
+
 @d workhorse
 @{
-workhorse <- function(x, link, mu = NULL, tol = .Machine$double.eps, ...) {
+workhorse <- function(x, link, mu = 0, parm = 2:dim(x)[2L], tol = .Machine$double.eps, 
+                      start = NULL,
+                      job = c("optim", "profile", "eval"), ...) {
+
+    job <- match.arg(job)
+
     stopifnot(is.table(x))
     dx <- dim(x)
     stopifnot(length(dx) == 3L)
     stopifnot(dim(x)[1L] > 1L)
-    stopifnot(dim(x)[2L] > 1L)
+    K <- dim(x)[2L]
+    stopifnot(K > 1L)
+    mu <- rep(mu, length.out = dim(x)[2L] - 1)
 
     F <- function(q) .p(link, q = q)
+    Q <- function(p) .q(link, p = p)
     f <- function(q) .d(link, x = q)
     fp <- function(q) .dd(link, x = q)
 
@@ -1082,13 +1120,21 @@ workhorse <- function(x, link, mu = NULL, tol = .Machine$double.eps, ...) {
     @<stratified negative score@>
     @<stratified Hessian@>
     @<stratified negative score residual@>
+    @<profile@>
  
-    ret <- optim(par = start, 
+    ret <- switch(job, 
+        "optim" =  optim(par = start, 
                  fn = function(parm)
                      .snll(parm, x = xlist, mu = mu),
                  gr = function(parm)
                      .snsc(parm, x = xlist, mu = mu),
-                 lower = lwr, upper = upr, method = "L-BFGS-B", ...)
+                 lower = lwr, upper = upr, method = "L-BFGS-B", 
+                 hessian = FALSE, ...),
+        "profile" = .profile(start, parm = parm),
+        "eval" = list(par = start, 
+                      value = .snll(start, x = xlist, mu = mu),
+                      negscore = .snsc(start, x = xlist, mu = mu),
+                      hessian = .shes(start, x = xlist, mu = mu)))
     ret
 }
 @}
@@ -1097,7 +1143,22 @@ workhorse <- function(x, link, mu = NULL, tol = .Machine$double.eps, ...) {
 source("ML.R")
 workhorse(x, logit())
 op
+N <- 10
+a <- matrix(c(5, 6, 4,
+                    3, 5, 7,
+                    3, 4, 5,
+                    3, 5, 6,
+                    0, 0, 0,
+                    4, 6, 5), ncol = 3, byrow = TRUE)
+x <- as.table(array(c(a[1:3,], a[-(1:3),]), dim = c(3, 3, 2)))
+x
+(ret <- workhorse(x, logit()))
+workhorse(x, logit(), start = ret$par, job = "profile")
+workhorse(x, logit(), start = ret$par, parm = 2, job = "profile")
+workhorse(x, logit(), start = ret$par, job = "eval")
 @@
+
+\chapter{ML Inference}
 
 \chapter*{Index}
 
