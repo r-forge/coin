@@ -152,7 +152,7 @@ $g_\text{Cd}(p, \beta) =
 
 For some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
 and corresponding derivative $f^\prime$, we write
-$$F_Y(y \mid S = b, \rT = k) = F(F^{-1}(F_Y(y \mid S = b, \rT = 1)) - \beta_k).$$
+$$F_Y(y \mid S = b, \rT = k) = F(F^{-1}(F_Y(y \mid S = b, \rT = 1)) - \beta_k), \quad k = 2, \dots, K.$$
 The negative shift term ensures that positive values of $\beta_k$ correspond
 to the situation of outcomes being stochastically larger in group $k$ than
 in group one.
@@ -177,7 +177,8 @@ shift ($\beta_\cdot$) parameters
 $$F_Y(y_c \mid S = b, \rT = k) = F(\vartheta_{c,b} - \beta_k), \quad c = 1, \dots, C.$$
 
 The $C - 1$ intercept parameters are block-specific and monotone increasing
-$\vartheta_{0,b} = -\infty < \vartheta_{1,b} < \cdots < \vartheta_{C,b} = \infty$.
+$\vartheta_{0,b} = -\infty < \vartheta_{1,b} < \cdots < \vartheta_{C,b} = \infty$
+within each block $b = 1, \dots, B$.
 We collect all parameters in a vector
 \begin{eqnarray*}
 \thetavec = (\theta_1 & := & \beta_2, \\
@@ -193,7 +194,8 @@ We collect all parameters in a vector
                0)
 \end{eqnarray*}
 
-For the $i$th observation $(y_i = y_c, s_i = b, \rt_i = k)$ from block $b$, the log-likelihood contribution is
+For the $i$th observation $(y_i = y_c, s_i = b, \rt_i = k)$ from block $b$
+under treatment $k$, the log-likelihood contribution is
 $$\log(\Prob(y_{c - 1} < Y \le y_c \mid S = b, \rT = k)) = \log(F(\vartheta_{c,b} - \beta_k) - F(\vartheta_{c - 1,b} - \beta_k)).$$
 
 For an absolutely continuous outcome $Y \in \R$, we define $y_c := y_{(c)}$,
@@ -201,7 +203,7 @@ the $c$th distinct ordered observation in the sample. The log-likelihood
 above is then the empirical or nonparametric log-likelihood.
 
 We represent the data in form of a $C \times K \times B$ contingency table,
-whose element $(c, k, b)$ is the number of observations $(y = y_c, s = b,
+whose element $(c, k, b)$ is the number of observations with configuration $(y = y_c, s = b,
 \rt = k)$.
 	
 \chapter{Parameter Estimation}
@@ -217,6 +219,7 @@ whose element $(c, k, b)$ is the number of observations $(y = y_c, s = b,
 @<stratified negative score@>
 @<stratified Hessian@>
 @<stratified negative score residual@>
+@<R wcrossprod@>
 @}
 
 
@@ -226,8 +229,9 @@ $= \thetavec$ (assuming only a single block) with data from a two-way $C
 
 From $\thetavec$, we first extract the shift parameters $\beta_\cdot$ and
 then the intercept parameters $\vartheta_\cdot$, compute the differences
-$\vartheta_{c,1} - \beta_k$ and evaluate the probability
-\code{prb} $ = \Prob(y_{c - 1} < Y \le y_c \mid S = 1, \rT = k)$:
+$\vartheta_{c,1} - \beta_k$ and evaluate the probabilities
+\code{prb} $ = \Prob(y_{c - 1} < Y \le y_c \mid S = 1, \rT = k)$ for all
+groups:
 
 @d parm to prob
 @{
@@ -259,22 +263,30 @@ log-concave density $f$, the negative log-likelihood is a convex function of
 the parameters $\thetavec$, and thus we can solve the corresponding
 constrained minimisation problem quickly and reliably.
 
-To speed things up, we implement the gradient of the negative
+Next, we implement the gradient of the negative
 log-likelihood, the negative score function for the parameters in
 $\thetavec$. The score function for the empirical likelihood, evaluated at
 parameters $\vartheta_\cdot$ and $\beta_\cdot$ is given in many places
 \citep[for example in][Formula~(2)]{HothornMoestBuehlmann2017}. The score
-involves $f = F^\prime$:
+involves $f = F^\prime$. We begin computing the ratio of $f(\vartheta_{c,1} -
+\beta_k)$ and the corresponding likelihood
+
+@d d p ratio
+@{
+ftmb <- f(tmb)
+zu <- x * ftmb[- 1, , drop = FALSE] / prb
+zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
+@}
+
+and compute the negative score function
 
 @d negative score
 @{
 .nsc <- function(parm, x, mu = numeric(ncol(x) - 1L)) {
     @<parm to prob@>
-    ftmb <- f(tmb)
+    @<d p ratio@>
 
     ret <- numeric(length(parm))
-    zu <- x * ftmb[- 1, , drop = FALSE] / prb
-    zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
     ret[bidx] <- colSums(zl)[-1L] -
                  colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
     ret[-bidx] <- Reduce("+", 
@@ -297,14 +309,16 @@ intercepts needs this small helper function
     rev(cumsum(rev(z)))
 @}
 
+In addition, we define negative score residuals, that is, the derivative of the
+negative log-likelihood with respect to an intercept term constrained to
+zero:
+
 @d negative score residuals
 @{
 .nsr <- function(parm, x, mu = numeric(ncol(x) - 1L)) {
     @<parm to prob@>
-    ftmb <- f(tmb)
+    @<d p ratio@>
 
-    zu <- x * ftmb[- 1, , drop = FALSE] / prb
-    zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
     rowSums(zu - zl) / rowSums(x)
 }
 @}
@@ -320,7 +334,7 @@ parameters. We proceed by implementing the Hessian for the intercept
 \X^\top & \Z
 \end{array} \right)
 \end{eqnarray*}
-consists of a tridiagonal $\mA \sim (C-1,C-1)$, a diagonal $\Z \sim (K - 1, K -
+consists of a symmetric tridiagonal $\mA \sim (C-1,C-1)$, a diagonal $\Z \sim (K - 1, K -
 1)$, and a full $\X \sim (C - 1, K - 1)$ matrix. In a second step, we
 compute the Fisher information matrix for the shift parameters only by means
 of the Schur complement $\Z - \X^\top \mA^{-1} \X$.
@@ -418,6 +432,7 @@ use a binary logistic regression model to estimate the two log-odds ratios
 $\beta_2$ and $\beta_3$ along with their estimated covariance
 <<glm>>=
 source("strKsam_src.R")
+dyn.load("Schur_src.so")
 (x <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2))
 d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 1))
 d$x <- c(x)
@@ -452,6 +467,7 @@ fp <- function(x) {
 }
 H <- .hes(op$par, x)
 solve(H$Z - crossprod(H$X,  H$X / H$a))
+solve(H$Z - wcrossprod(H$X,  A = H))
 vcov(m)[-1,-1]
 solve(op$hessian)[1:2,1:2]
 @@
@@ -552,7 +568,7 @@ logLik(m) + op$value
     ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
     for (b in seq_len(B)) {
         H <- .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
-        ret <- ret + do.call(lehmann:::Schur_symtri, H)
+        ret <- ret + (H$Z - wcrossprod(H$X, A = H))
     }
     ret
 }
@@ -568,14 +584,20 @@ solve(op$hessian)[1:2,1:2]
 	
 \chapter{Schur Complement}
 
-@o Schur_src.c -cp
+@o Schur_src.c -cc
 @{
+#define STRICT_R_HEADERS
+#include <R.h>
+#include <Rinternals.h>
 @<C_symtrisolve@>
+@<NROW@>
+@<NCOL@>
+@<wcrossprod@>
 @}
 
 For a symmetric tridiagonal quadratic $N \times N$ matrix $\mA$ we compute $\X^\top \mA^{-1} \X$
 utilising that the inverse $\mA^{-1}_{ij} = u_i v_j$ for $1 \le i \le j \le N$
-can be characterised by two vectors $\uvec$ and $\vvec$ of lengths $N$
+can be characterised by two vectors $\uvec$ and $\vvec$, each of length $N$
 \citep{Meurant1992}.
 
 We begin with the diagonal $(a_1, \dots, a_N)^\top = \text{diag}(\mA)$ and the
@@ -625,7 +647,7 @@ for (i = 1; i <= n; i++)
 
 and then, following Proposition 2, $\vvec$
 
-@d u vec
+@d v vec
 @{
 v[n] = 1 / (ans[n] * delta[n]);
 v[0] = 1.0;
@@ -670,6 +692,136 @@ void C_symtrisolve (double *a, double *b, R_xlen_t n, double tol, double *ans)
         @<v vec@>
     }
     UNPROTECT(1);
+}
+@}
+
+In the next step, we compute the weighted crossproduct 
+$\X^\top \mA^{-1} \X$$\X^\top \mA^{-1} \X$
+without memory allocation for the full $N \times N$ matrix $\mA^{-1}$.
+Because the resulting matrix is symmetric, we first compute the lower
+triangular elements only.
+
+@d lower wcrossprod
+@{
+for (p = 0; p < P; p++) {
+    i = 0;
+    dcs[i] = dx[p * N + i] * dvu[i];
+    dcs[N + i] = dx[p * N + i] * dvu[N + i];
+    for (i = 1; i < N; i++) {
+        dcs[i] = dcs[i - 1] + dx[p * N + i] * dvu[i];
+        dcs[N + i] = dcs[N + i - 1] + dx[p * N + i] * dvu[N + i];
+    }
+    for (j = 0; j < N; j++) {
+        dxA = 0.0;
+        dxA1 = dcs[N + j];
+        dxA2 = dcs[N - 1] - dcs[j];
+        dxA = dxA1 * dvu[j] + dxA2 * dvu[N + j];
+        for (pp = p; pp < P; pp++)
+            dans[p * P + pp] += dxA * dx[pp * N + j];
+    }
+}
+@}
+
+@d upper wcrossprod
+@{
+for (p = 0; p < P; p++) {
+    for (pp = p + 1; pp < P; pp++)
+        dans[pp * P + p] = dans[p * P + pp];
+}
+@}
+
+The \proglang{R} interface requires access to the number of rows and columns
+of matrices
+
+@d NROW
+@{
+R_xlen_t NROW
+(
+    SEXP x
+) {
+    SEXP a;
+    a = getAttrib(x, R_DimSymbol);
+    if (a == R_NilValue) return(XLENGTH(x));
+    if (TYPEOF(a) == REALSXP)
+        return(REAL(a)[0]);
+    return((R_xlen_t) INTEGER(a)[0]);
+}
+@}
+
+@d NCOL
+@{
+R_xlen_t NCOL
+(
+    SEXP x
+) {
+    SEXP a;
+    a = getAttrib(x, R_DimSymbol);
+    if (a == R_NilValue) return(1);
+    if (TYPEOF(a) == REALSXP)
+        return(REAL(a)[1]);
+    return((R_xlen_t) INTEGER(a)[1]);
+}
+@}
+
+@d wcrossprod
+@{
+SEXP R_wcrossprod (SEXP a, SEXP b, SEXP X, SEXP tol)
+{
+
+    SEXP ans, vu, cumsumvux;
+    double *dans, *dx, dxA, dxA1, dxA2, *dvu, *dcs;
+    R_xlen_t N, i, j;
+    int p, pp, P;
+    
+    N = XLENGTH(a);
+
+    if (NROW(X) != N)
+        error("incorrect number of rows in X");
+    if (!isReal(X))
+        error("incorrect type of X");
+    dx = REAL(X);
+    P = (int) NCOL(X);
+
+    PROTECT(ans = allocMatrix(REALSXP, P, P));
+    dans = REAL(ans);
+
+    if (XLENGTH(b) != N - 1)
+        error("incorrect length of b");
+
+    if (!isReal(a))
+        error("incorrect type of a");
+
+    if (!isReal(b))
+        error("incorrect type of b");
+
+    if (!isReal(tol))
+        error("incorrect type of tol");
+
+    PROTECT(vu = allocMatrix(REALSXP, N, 2));
+    dvu = REAL(vu);
+    C_symtrisolve(REAL(a), REAL(b), N - 1, REAL(tol)[0], dvu);
+    PROTECT(cumsumvux = allocMatrix(REALSXP, N, 2));
+    dcs = REAL(cumsumvux);
+
+    for (p = 0; p < P * P; p++)
+        dans[p] = 0.0;
+
+    @<lower wcrossprod@>
+    @<upper wcrossprod@>
+
+    UNPROTECT(3);
+    return(ans);
+}
+@}
+
+@d R wcrossprod
+@{
+wcrossprod <- function(x, A, tol = .Machine$double.eps) {
+    storage.mode(x) <- "double"
+    .Call("R_wcrossprod", a = as.double(A$a), 
+                          b = as.double(A$b),
+                          X = x,
+                          tol = tol)
 }
 @}
 

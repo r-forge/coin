@@ -2,6 +2,7 @@
 strKsam.Rnw:	strKsam.w
 	nuweb -r strKsam.w
 	mv strKsam.tex strKsam.Rnw
+	R CMD SHLIB Schur_src.c
 	#mv *.h src
 	#mv *.c src
 	#mv Makevars src
