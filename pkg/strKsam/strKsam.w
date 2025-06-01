@@ -121,7 +121,7 @@ urlcolor={linkcolor}%
 
 \author{Torsten Hothorn \\ Universit\"at Z\"urich}
 
-\title{Stratified $K$ Sample Inference}
+\title{Distribution-free Stratified $K$ Sample Inference}
 
 \begin{document}
 
@@ -139,7 +139,7 @@ $F_Y(y \mid S = b, \rT = k) = \Prob(Y \le y \mid S = b, \rT = k)$.
 
 \paragraph{Model}
 
-With $g: [0,1] \times \R \rightarrow \R$, we model
+With $g: [0,1] \times \R \rightarrow [0,1]$, we model
 $F(y \mid S = b, \rT = k) = g(F(y \mid S = b, \rT = 1), \beta_k)$ for all $b = 1,
 \dots, B$, $k = 2, \dots, K$, and $y \in \samY$ based on parameters
 $\beta_2, \dots, \beta_K \in \R$. For notational convenience: $\beta_1 := 0$. For
@@ -152,7 +152,8 @@ $g_\text{Cd}(p, \beta) =
 
 For some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
 and corresponding derivative $f^\prime$, we write
-$$F_Y(y \mid S = b, \rT = k) = F(F^{-1}(F_Y(y \mid S = b, \rT = 1)) - \beta_k), \quad k = 2, \dots, K.$$
+$$F_Y(y \mid S = b, \rT = k) = F\left(F^{-1}\left(F_Y(y \mid S = b, \rT =
+1)\right) - \beta_k\right), \quad k = 2, \dots, K.$$
 The negative shift term ensures that positive values of $\beta_k$ correspond
 to the situation of outcomes being stochastically larger in group $k$ than
 in group one.
@@ -252,7 +253,7 @@ the log-probabilities
 
 @d negative logLik
 @{
-.nll <- function(parm, x, mu = numeric(ncol(x) - 1L)) {
+.nll <- function(parm, x, mu = 0) {
     @<parm to prob@>
     - sum(x * log(prb))
 }
@@ -282,7 +283,7 @@ and compute the negative score function
 
 @d negative score
 @{
-.nsc <- function(parm, x, mu = numeric(ncol(x) - 1L)) {
+.nsc <- function(parm, x, mu = 0) {
     @<parm to prob@>
     @<d p ratio@>
 
@@ -315,7 +316,7 @@ zero:
 
 @d negative score residuals
 @{
-.nsr <- function(parm, x, mu = numeric(ncol(x) - 1L)) {
+.nsr <- function(parm, x, mu = 0) {
     @<parm to prob@>
     @<d p ratio@>
 
@@ -414,7 +415,7 @@ elsewhere.
 
 @d Hessian
 @{
-.hes <- function(parm, x, mu = numeric(ncol(x) - 1L)) {
+.hes <- function(parm, x, mu = 0) {
     @<parm to prob@>
 
     @<Hessian prep@>
@@ -495,12 +496,11 @@ if (is.table(x)) {
 bidx <- seq_len(K - 1L)
 beta <- parm[bidx]
 intercepts <- split(parm[-bidx], sidx)
-if (is.null(mu)) mu <- numeric(K - 1L)
 @}
 
 @d stratified negative logLik
 @{
-.snll <- function(parm, x, mu = NULL) {
+.snll <- function(parm, x, mu = 0) {
     @<stratum prep@>
     ret <- 0
     for (b in seq_len(B))
@@ -515,7 +515,7 @@ intercept parameters are only concatenated.
 
 @d stratified negative score
 @{
-.snsc <- function(parm, x, mu = NULL) {
+.snsc <- function(parm, x, mu = 0) {
     @<stratum prep@>
     ret <- numeric(length(bidx))
     for (b in seq_len(B)) {
@@ -529,7 +529,7 @@ intercept parameters are only concatenated.
 
 @d stratified negative score residual
 @{
-.snsr <- function(parm, x, mu = NULL) {
+.snsr <- function(parm, x, mu = 0) {
     @<stratum prep@>
     ret <- c()
     for (b in seq_len(B))
@@ -562,7 +562,7 @@ logLik(m) + op$value
 
 @d stratified Hessian
 @{
-.shes <- function(parm, x, mu = NULL) {
+.shes <- function(parm, x, mu = 0) {
     @<stratum prep@>
     ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
     for (b in seq_len(B))
@@ -1046,7 +1046,7 @@ K <- dim(x)[2L]
 B <- dim(x)[3L]
 xlist <- vector(mode = "list", length = B)
 if (NS <- is.null(start))
-    start <- mu
+    start <- rep.int(0, K - 1)
 lwr <- rep(-Inf, times = K - 1)
 for (b in seq_len(B)) {
     xb <- matrix(x[,,b, drop = TRUE], ncol = K)
@@ -1083,8 +1083,7 @@ upr <- rep(Inf, times = length(lwr))
     p <- numeric(length(start))
     p[parm] <- beta
     p[-parm] <- ret$par
-    ret$negscore <- .snsc(p, x = xlist, mu = mu)[parm]
-    ret$hessian <- .shes(p, x = xlist, mu = mu)
+    ret$par <- p
     ret
 }
 @}
@@ -1092,8 +1091,7 @@ upr <- rep(Inf, times = length(lwr))
 @d ML estimation
 @{
 .MLest <- function(x, link, mu = 0, parm = seq_len(K - 1), tol = .Machine$double.eps, 
-                      start = NULL,
-                      job = c("optim", "profile", "eval"), ...) {
+                   start = NULL, job = c("optim", "profile", "eval"), residuals = TRUE, ...) {
 
     job <- match.arg(job)
 
@@ -1103,7 +1101,6 @@ upr <- rep(Inf, times = length(lwr))
     stopifnot(dim(x)[1L] > 1L)
     K <- dim(x)[2L]
     stopifnot(K > 1L)
-    mu <- rep(mu, length.out = dim(x)[2L] - 1)
 
     F <- function(q) .p(link, q = q)
     Q <- function(p) .q(link, p = p)
@@ -1136,13 +1133,13 @@ upr <- rep(Inf, times = length(lwr))
                       value = .snll(start, x = xlist, mu = mu)))
 
     ret$coefficients <- ret$par[parm]
-    if (is.null(ret$negscore))
-        ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
-    if (is.null(ret$hessian))
-        ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
+    ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
+    ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
     if (length(parm) != nrow(ret$hessian))
         ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
-    if (is.null(ret$vcov)) ret$vcov <- solve(ret$hessian)
+    ret$vcov <- solve(ret$hessian)
+    if (residuals)
+        ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
     ret
 }
 @}
