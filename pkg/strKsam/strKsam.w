@@ -130,6 +130,7 @@ urlcolor={linkcolor}%
 \tableofcontents
 
 \chapter{Model and Parameterisation}
+\label{ch:model}
 \pagenumbering{arabic}
 
 Treatment group $\rT \in \{1, \dots, K\}, K \ge 2$, outcome $Y \in \samY$ at least ordered,
@@ -208,6 +209,7 @@ whose element $(c, k, b)$ is the number of observations with configuration $(y =
 \rt = k)$.
 	
 \chapter{Parameter Estimation}
+\label{ch:est}
 
 @o strKsam_src.R -cp
 @{
@@ -268,8 +270,8 @@ Next, we implement the gradient of the negative
 log-likelihood, the negative score function for the parameters in
 $\thetavec$. The score function for the empirical likelihood, evaluated at
 parameters $\vartheta_\cdot$ and $\beta_\cdot$ is given in many places
-\citep[for example in][Formula~(2)]{HothornMoestBuehlmann2017}. The score
-involves $f = F^\prime$. We begin computing the ratio of $f(\vartheta_{c,1} -
+\citep[for example in][Formula~(2)]{HothornMoestBuehlmann2017}. 
+We begin computing the ratio of $f(\vartheta_{c,1} -
 \beta_k)$ and the corresponding likelihood
 
 @d d p ratio
@@ -341,8 +343,8 @@ compute the Fisher information matrix for the shift parameters only by means
 of the Schur complement $\Z - \X^\top \mA^{-1} \X$.
 
 In addition to probabilities \code{prb}, the Hessian necessitates the
-computation of $f()$ and $f^\prime()$ for linear functions of the
-parameters. We start preparing these objects
+computation of $f(\vartheta_{c,1} - \beta_k)$ and $f^\prime(\vartheta_{c,1} -
+\beta_k)$. We start preparing these objects
 
 
 @d Hessian prep
@@ -360,8 +362,8 @@ dplm1 <- dpl[,-1L, drop = FALSE]
 dpum1 <- dpu[,-1L, drop = FALSE]
 prbm1 <- prb[,-1L, drop = FALSE]
 
-i1 <- length(intercepts) - 1
-i2 <- 1
+i1 <- length(intercepts) - 1L
+i2 <- 1L
 @}
 
 The off-diagonal elements of $\mA$ are now available as
@@ -409,9 +411,9 @@ Z <- -colSums(xm1 * (dpum1 / prbm1 -
 if (length(Z) > 1L) Z <- diag(Z)
 @}
 
-Instead of computing the inverse of $\mH$ directly, we return a list
-containing the components of this block matrix for later processing
-elsewhere.
+We return the Fisher information for $\beta_2, \dots, \beta_K$ as the Schur
+complement $\Z - \X^\top \mA^{-1} \X$ by means of a weighted crossproduct
+implemented in Chapter~\ref{ch:schur}.
 
 @d Hessian
 @{
@@ -580,6 +582,7 @@ solve(op$hessian)[1:2,1:2]
 
 	
 \chapter{Schur Complement}
+\label{ch:schur}
 
 @o Schur_src.c -cc
 @{
@@ -823,6 +826,7 @@ wcrossprod <- function(x, A, tol = .Machine$double.eps) {
 @}
 
 \chapter{Link Functions}
+\label{ch:link}
 
 @o linkfun.R -cp
 @{
@@ -1031,6 +1035,7 @@ probit <- function()
 
 
 \chapter{ML Estimation}
+\label{ch:ML}
 
 @o ML.R -cp
 @{
@@ -1052,7 +1057,7 @@ for (b in seq_len(B)) {
     xb <- matrix(x[,,b, drop = TRUE], ncol = K)
     xw <- rowSums(abs(xb)) > tol
     xlist[[b]] <- xb[xw,,drop = FALSE]
-    lwr <- c(lwr, -Inf, rep.int(tol, times = sum(xw) - 2))
+    lwr <- c(lwr, -Inf, rep.int(tol, times = sum(xw) - 2L))
     if (NS) {
         ecdf0 <- cumsum(xlist[[b]][,1])
         ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
@@ -1064,25 +1069,26 @@ upr <- rep(Inf, times = length(lwr))
 
 @d profile
 @{
-.profile <- function(start, parm = seq_len(K - 1)) {
-    beta <- start[parm]
-    ret <- optim(par = start[-parm], fn = function(par) {
-                     p <- numeric(length(par) + length(parm))
-                     p[parm] <- beta
-                     p[-parm] <- par
+.profile <- function(start, fix = seq_len(K - 1)) {
+    stopifnot(all(fix %in% seq_len(K - 1)))
+    beta <- start[fix]
+    ret <- optim(par = start[-fix], fn = function(par) {
+                     p <- numeric(length(par) + length(fix))
+                     p[fix] <- beta
+                     p[-fix] <- par
                      .snll(p, x = xlist, mu = mu)
                  },
                  gr = function(par) {
-                     p <- numeric(length(par) + length(parm))
-                     p[parm] <- beta
-                     p[-parm] <- par
-                     .snsc(p, x = xlist, mu = mu)[-parm]
+                     p <- numeric(length(par) + length(fix))
+                     p[fix] <- beta
+                     p[-fix] <- par
+                     .snsc(p, x = xlist, mu = mu)[-fix]
                  },
-                 lower = lwr[-parm], upper = upr[-parm], method = "L-BFGS-B", 
+                 lower = lwr[-fix], upper = upr[-fix], method = "L-BFGS-B", 
                  hessian = FALSE, ...)
     p <- numeric(length(start))
-    p[parm] <- beta
-    p[-parm] <- ret$par
+    p[fix] <- beta
+    p[-fix] <- ret$par
     ret$par <- p
     ret
 }
@@ -1090,10 +1096,8 @@ upr <- rep(Inf, times = length(lwr))
 
 @d ML estimation
 @{
-.MLest <- function(x, link, mu = 0, parm = seq_len(K - 1), tol = .Machine$double.eps, 
-                   start = NULL, job = c("optim", "profile", "eval"), residuals = TRUE, ...) {
-
-    job <- match.arg(job)
+.MLest <- function(x, link, mu = 0, start = NULL, fix = NULL, 
+                   residuals = TRUE, tol = .Machine$double.eps, ...) {
 
     stopifnot(is.table(x))
     dx <- dim(x)
@@ -1120,17 +1124,26 @@ upr <- rep(Inf, times = length(lwr))
     @<stratified negative score residual@>
     @<profile@>
  
-    ret <- switch(job, 
-        "optim" =  optim(par = start, 
-                 fn = function(parm)
-                     .snll(parm, x = xlist, mu = mu),
-                 gr = function(parm)
-                     .snsc(parm, x = xlist, mu = mu),
-                 lower = lwr, upper = upr, method = "L-BFGS-B", 
-                 hessian = FALSE, ...),
-        "profile" = .profile(start, parm = parm),
-        "eval" = list(par = start, 
-                      value = .snll(start, x = xlist, mu = mu)))
+    if (!length(fix)) {
+        ret <- optim(par = start, 
+                     fn = function(parm)
+                         .snll(parm, x = xlist, mu = mu),
+                     gr = function(parm)
+                         .snsc(parm, x = xlist, mu = mu),
+                     lower = lwr, upper = upr, method = "L-BFGS-B", 
+                     hessian = FALSE, ...)
+    } else if (length(fix) == length(start)) {
+        ret <- list(par = start, 
+                    value = .snll(start, x = xlist, mu = mu))
+    } else {
+        ret <- .profile(start, fix = fix)
+    }
+
+    if (is.null(fix) || (length(fix) == length(start)))
+        parm <- seq_len(K - 1)
+    else 
+        parm <- fix
+    if (any(parm >= K)) return(ret)
 
     ret$coefficients <- ret$par[parm]
     ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
@@ -1158,12 +1171,13 @@ a <- matrix(c(5, 6, 4,
 x <- as.table(array(c(a[1:3,], a[-(1:3),]), dim = c(3, 3, 2)))
 x
 (ret <- .MLest(x, logit()))
-.MLest(x, logit(), start = ret$par, job = "profile")
-.MLest(x, logit(), start = ret$par, parm = 2, job = "profile")
-(ret <- .MLest(x, logit(), start = ret$par, job = "eval"))
+.MLest(x, logit(), start = ret$par, fix = 1:2)
+.MLest(x, logit(), start = ret$par, fix = 2)
+(ret <- .MLest(x, logit(), start = ret$par, fix = seq_along(ret$par)))
 @@
 
 \chapter{ML Inference}
+\label{ch:MLinf}
 
 \section{Wald}
 
@@ -1229,7 +1243,7 @@ x
 {
     cf <- ret$par
     cf[parm] <- par
-    .MLest(x, link = logit(), start = cf, parm = parm, job = "profile")
+    .MLest(x, link = logit(), start = cf, fix = parm)
 })
 @@
 
@@ -1265,7 +1279,7 @@ x
 {
     cf <- ret$par
     cf[parm] <- par
-    .MLest(x, link = logit(), start = cf, parm = parm, job = "profile")
+    .MLest(x, link = logit(), start = cf, fix = parm)
 })
 @@
 
