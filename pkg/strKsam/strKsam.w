@@ -1067,6 +1067,11 @@ for (b in seq_len(B)) {
 upr <- rep(Inf, times = length(lwr))
 @}
 
+The profile negative log-likelihood can be evaluated for some of the
+parameters in $\thetavec$ (denoted as \code{fix}), the remaining parameters
+are updated. Note that \code{start} must contain the full parameter vector
+$\thetavec$.
+
 @d profile
 @{
 .profile <- function(start, fix = seq_len(K - 1)) {
