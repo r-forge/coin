@@ -293,12 +293,12 @@ and compute the negative score function
     ret[bidx] <- colSums(zl)[-1L] -
                  colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
     ret[-bidx] <- Reduce("+", 
-                      lapply(1:ncol(x), 
-                          function(j) {
-                              .rcr(zu[-nrow(zu),j]) - 
-                              .rcr(zl[-1,j])
-                          })
-                     )
+                         lapply(1:ncol(x), 
+                             function(j) {
+                                 .rcr(zu[-nrow(zu),j]) - 
+                                 .rcr(zl[-1,j])
+                             })
+                         )
     - ret
 }
 @}
@@ -1188,11 +1188,18 @@ x
 
 @d Wald
 @{
-.Wald <- function(coef, vcov, alternative = c("two.sided", "less", "greater"), conf.level = .95) {
+.Wald_pval <- function(coef, info, parm = seq_along(coef), log.p = FALSE) {
+    if (length(parm) < length(coef))
+        return(.Wald_pval(coef[parm], solve(solve(info)[parm,parm])))
+    pval <- pchisq(W <- crossprod(coef, info %*% coef), df = length(coef), lower.tail = FALSE, log.p = log.p)
+    list(STATISTIC = c("Wald chi-squared" = W), DF = length(coef), PVAL = pval)
+}
+
+.Wald_confint <- function(coef, vcov, parm, alternative = c("two.sided", "less", "greater"), conf.level = .95) {
     alternative <- match.arg(alternative)
     conf.level <- 1 - (1 - conf.level) / ((alternative != "two.sided") + 1L)
-    ESTIMATE <- coef
-    SE <- sqrt(diag(vcov))
+    ESTIMATE <- coef[parm]
+    SE <- sqrt(diag(vcov))[parm]
     STATISTIC <- c("Wald Z" = unname(ESTIMATE / SE))
     if (alternative == "less") {
         PVAL <- pnorm(STATISTIC)
@@ -1205,46 +1212,71 @@ x
         CINT <- cbind(ESTIMATE - qnorm(conf.level) * SE,
                       ESTIMATE + qnorm(conf.level) * SE)
     }
-    list(p.value = PVAL, confint = CINT)
+    list(STATISTIC = STATISTIC, PVAL = PVAL, CONFINT = CINT)
 }
 @}
 
 <<Wald>>=
-.Wald(ret$coefficients, ret$vcov)
+.Wald_pval(ret$coefficients, ret$hessian)
+.Wald_pval(ret$coefficients[1], 1 / ret$vcov[1,1])
+.Wald_confint(ret$coefficients, ret$vcov, parm = seq_along(ret$coefficients))
 @@
 
 
 @d LRatio
 @{
-.LRatio <- function(coef, vcov, parm, alternative = c("two.sided", "less", "greater"), conf.level = .95, profile)
+.LRatio_pval <- function(coef, parm, profile, log.p = FALSE) {
+   ull <- profile(coef[parm], parm)$value
+   rll <- profile(rep.int(0, length(parm)), parm)$value
+   logLR <- - 2 * (rll - ull)
+   pval <- pchisq(logLR, df = length(parm), lower.tail = FALSE, log.p = log.p)
+   list(STATISTIC = c("logLR chi-squared" = logLR), DF = length(parm), PVAL = pval)
+}
+
+.LR_confint <- function(coef, vcov, parm, alternative = c("two.sided", "less", "greater"), conf.level = .95, fun, profile)
 {
+
+    if (length(parm) > 1L)
+        return(sapply(parm, function(p) .LR_confint(coef, vcov, parm = p, alternative, fun, profile)))
+
     alternative <- match.arg(alternative)
     conf.level <- 1 - (1 - conf.level) / ((alternative != "two.sided") + 1L)
 
-    ull <- profile(coef[parm], parm)$value
-    rll <- profile(0, parm)$value
+    ret <- fun(coef, parm, profile)
+    if (alternative == "less") {
+        ret$STATISTIC <- sign(coef[parm]) * sqrt(ret$STATISTIC)
+        ret$PVAL <- pnorm(ret$STATISTIC)
+    }
+    if (alternative == "greater") {
+        ret$STATISTIC <- sign(coef[parm]) * sqrt(ret$STATISTIC)
+        ret$PVAL <- pnorm(ret$STATISTIC, lower.tail = FALSE)
+    }
 
-    qc <- qchisq(conf.level, df = 1)
+    pfun <- function(par)
+        fun(par, parm, profile, log.p = TRUE)$PVAL - log1p(- conf.level)
 
-    fun <- function(par)
-        -2 * (ull - profile(par, parm = parm)$value) - qc
-
-    W <- .Wald(coef, vcov, conf.level = 1 - (1 - conf.level) / 10)
+    W <- .Wald_confint(coef, vcov, parm, conf.level = 1 - (1 - conf.level) / 10)
 
     CINT <- c(-Inf, Inf)
     if (alternative != "greater")
-        CINT[1] <- uniroot(fun, interval = c(W$confint[parm,1], coef[parm]),
-                           extendInt = "no")$root
+        CINT[1] <- uniroot(pfun, interval = c(W$CONFINT[parm,1], coef[parm]),
+                           extendInt = "yes")$root
     if (alternative != "less")
-        CINT[2] <- uniroot(fun, interval = c(coef[parm], W$confint[parm,2]),
-                           extendInt = "no")$root
+        CINT[2] <- uniroot(pfun, interval = c(coef[parm], W$CONFINT[parm,2]),
+                           extendInt = "yes")$root
 
     CINT
 }
 @}
 
 <<LRatio>>=
-.LRatio(ret$coefficients, ret$vcov, parm = 1, profile = function(par, parm)
+.LRatio_pval(ret$coefficients, parm = 1, profile = function(par, parm)
+{
+    cf <- ret$par
+    cf[parm] <- par
+    .MLest(x, link = logit(), start = cf, fix = parm)
+})
+.LR_confint(ret$coefficients, ret$vcov, parm = 1, fun = .LRatio_pval, profile = function(par, parm)
 {
     cf <- ret$par
     cf[parm] <- par
@@ -1254,33 +1286,23 @@ x
 
 @d Rao
 @{
-.Rao <- function(coef, vcov, parm, alternative = c("two.sided", "less", "greater"), conf.level = .95, profile)
-{
-    alternative <- match.arg(alternative)
-    conf.level <- 1 - (1 - conf.level) / ((alternative != "two.sided") + 1L)
-    qc <- qnorm(conf.level)
-
-    fun <- function(par, q) {
-        ret <- profile(par, parm = parm)
-        -ret$negscore * sqrt(ret$vcov) - q
-    }
-
-    W <- .Wald(coef, vcov, conf.level = 1 - (1 - conf.level) / 10)
-
-    CINT <- c(-Inf, Inf)
-    if (alternative != "greater")
-        CINT[1] <- uniroot(fun, interval = c(W$confint[parm,1], coef[parm]), 
-                           extendInt = "yes", q = qc)$root
-    if (alternative != "less")
-        CINT[2] <- uniroot(fun, interval = c(coef[parm], W$confint[parm,2]), 
-                           extendInt = "yes", q = -qc)$root
-
-    CINT
+.Rao_pval <- function(coef, parm, profile, log.p = FALSE) {
+   ret <- profile(coef[parm], parm)
+   R <- crossprod(ret$negscore, ret$vcov %*% ret$negscore)
+   pval <- pchisq(R, df = length(parm), lower.tail = FALSE, log.p = log.p)
+   list(STATISTIC = c("Rao chi-squared" = R), DF = length(parm), PVAL = pval)
 }
 @}
 
 <<Rao>>=
-.Rao(ret$coefficients, ret$vcov, parm = 1, profile = function(par, parm)
+.Rao_pval(ret$coefficients, parm = 1, profile = function(par, parm)
+{
+    cf <- ret$par
+    cf[parm] <- par
+    .MLest(x, link = logit(), start = cf, fix = parm)
+})
+
+.LR_confint(ret$coefficients, ret$vcov, parm = 1, fun = .Rao_pval, profile = function(par, parm)
 {
     cf <- ret$par
     cf[parm] <- par
