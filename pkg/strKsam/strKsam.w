@@ -167,8 +167,12 @@ $g_\text{PO}$, and $F = \Phi$ to $g_\text{Cd}$.
 
 We are interested in inference for $\beta_2, \dots, \beta_K$, in terms of
 confidence intervals and hypothesis tests of the form
-
-$$H_0: \beta_k = \mu_k, \quad k = 2, \dots, K.$$
+\begin{eqnarray*}
+& & H_0: \beta_k - \mu_k = 0, \text{``two.sided''}, \quad k = 2, \dots, K, \\
+& & H_0: \beta_k - \mu_k \ge 0, \text{``less''}, \quad k = K = 2, \\
+& & H_0: \beta_k - \mu_k \le 0, \text{``greater''}, \quad k = K = 2,
+\end{eqnarray*}
+with the latter two options only for the two-sample case.
 
 \paragraph{Likelihood}
 
@@ -1043,6 +1047,9 @@ probit <- function()
 @<Wald@>
 @<LRatio@>
 @<Rao@>
+@<Strasser Weber@>
+@<freeway@>
+@<freeway methods@>
 @}
 
 @d setup
@@ -1102,7 +1109,8 @@ $\thetavec$.
 @d ML estimation
 @{
 .MLest <- function(x, link, mu = 0, start = NULL, fix = NULL, 
-                   residuals = TRUE, tol = .Machine$double.eps, ...) {
+                   residuals = TRUE, score = TRUE, hessian = TRUE, 
+                   tol = .Machine$double.eps, ...) {
 
     stopifnot(is.table(x))
     dx <- dim(x)
@@ -1151,13 +1159,25 @@ $\thetavec$.
     if (any(parm >= K)) return(ret)
 
     ret$coefficients <- ret$par[parm]
-    ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
-    ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
-    if (length(parm) != nrow(ret$hessian))
-        ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
-    ret$vcov <- solve(ret$hessian)
+    dn2 <- dimnames(x)[2L]
+    names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
+
+    if (score)
+        ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
+    if (hessian) {
+        ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
+        if (length(parm) != nrow(ret$hessian))
+            ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
+        ret$vcov <- solve(ret$hessian)
+        rownames(ret$vcov) <- colnames(ret$vcov) <- rownames(ret$hessian) <-
+            colnames(ret$hessian) <-  cnames
+    }
     if (residuals)
         ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
+
+    ret$table <- x
+    ret$link <- link
+
     ret
 }
 @}
@@ -1197,7 +1217,7 @@ x
 
 .Wald_confint <- function(coef, vcov, parm, alternative = c("two.sided", "less", "greater"), conf.level = .95) {
     alternative <- match.arg(alternative)
-    conf.level <- 1 - (1 - conf.level) / ((alternative != "two.sided") + 1L)
+    conf.level <- 1 - (1 - conf.level) / ((alternative == "two.sided") + 1L)
     ESTIMATE <- coef[parm]
     SE <- sqrt(diag(vcov))[parm]
     STATISTIC <- c("Wald Z" = unname(ESTIMATE / SE))
@@ -1226,7 +1246,7 @@ x
 @d LRatio
 @{
 .LRatio_pval <- function(coef, parm, profile, log.p = FALSE) {
-   ull <- profile(coef[parm], parm)$value
+   ull <- profile(coef, parm)$value
    rll <- profile(rep.int(0, length(parm)), parm)$value
    logLR <- - 2 * (rll - ull)
    pval <- pchisq(logLR, df = length(parm), lower.tail = FALSE, log.p = log.p)
@@ -1237,20 +1257,10 @@ x
 {
 
     if (length(parm) > 1L)
-        return(sapply(parm, function(p) .LR_confint(coef, vcov, parm = p, alternative, fun, profile)))
+        return(lapply(parm, function(p) .LR_confint(coef, vcov, parm = p, alternative, conf.level = conf.level, fun = fun, profile = profile)))
 
     alternative <- match.arg(alternative)
     conf.level <- 1 - (1 - conf.level) / ((alternative != "two.sided") + 1L)
-
-    ret <- fun(coef, parm, profile)
-    if (alternative == "less") {
-        ret$STATISTIC <- sign(coef[parm]) * sqrt(ret$STATISTIC)
-        ret$PVAL <- pnorm(ret$STATISTIC)
-    }
-    if (alternative == "greater") {
-        ret$STATISTIC <- sign(coef[parm]) * sqrt(ret$STATISTIC)
-        ret$PVAL <- pnorm(ret$STATISTIC, lower.tail = FALSE)
-    }
 
     pfun <- function(par)
         fun(par, parm, profile, log.p = TRUE)$PVAL - log1p(- conf.level)
@@ -1259,13 +1269,13 @@ x
 
     CINT <- c(-Inf, Inf)
     if (alternative != "greater")
-        CINT[1] <- uniroot(pfun, interval = c(W$CONFINT[parm,1], coef[parm]),
+        CINT[1] <- uniroot(pfun, interval = c(W$CONFINT[,1], coef[parm]),
                            extendInt = "yes")$root
     if (alternative != "less")
-        CINT[2] <- uniroot(pfun, interval = c(coef[parm], W$CONFINT[parm,2]),
+        CINT[2] <- uniroot(pfun, interval = c(coef[parm], W$CONFINT[,2]),
                            extendInt = "yes")$root
 
-    CINT
+    return(CINT)
 }
 @}
 
@@ -1287,7 +1297,7 @@ x
 @d Rao
 @{
 .Rao_pval <- function(coef, parm, profile, log.p = FALSE) {
-   ret <- profile(coef[parm], parm)
+   ret <- profile(coef, parm)
    R <- crossprod(ret$negscore, ret$vcov %*% ret$negscore)
    pval <- pchisq(R, df = length(parm), lower.tail = FALSE, log.p = log.p)
    list(STATISTIC = c("Rao chi-squared" = R), DF = length(parm), PVAL = pval)
@@ -1310,6 +1320,186 @@ x
 })
 @@
 
+\chapter{Permutation Inference}
+
+@d Strasser Weber
+@{
+.SW <- function(res, xt) {
+
+    stopifnot(length(res) == dim(xt)[1L])
+
+    if (length(dim(xt)) == 3L) {
+        res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3])
+        return(Reduce("+", lapply(1:dim(xt)[3L], function(j)
+            .SW(res[,j, drop = TRUE], xt[,,j, drop = TRUE]))))
+    }
+
+    Y <- matrix(res, ncol = 1, nrow = length(xt))
+    weights <- c(xt)
+    x <- gl(ncol(xt), nrow(xt))
+    X <- model.matrix(~ x, data = data.frame(x = x))[,-1L,drop = FALSE]
+
+    w. <- sum(weights)
+    wX <- weights * X
+    wY <- weights * Y
+    ExpX <- colSums(wX)
+    ExpY <- colSums(wY) / w.
+    CovX <- crossprod(X, wX)
+    Yc <- t(t(Y) - ExpY)
+    CovY <- crossprod(Yc, weights * Yc) / w.
+    Exp <- kronecker(ExpY, ExpX)
+    Cov <- w. / (w. - 1) * kronecker(CovY, CovX) -
+           1 / (w. - 1) * kronecker(CovY, tcrossprod(ExpX))
+    STAT <- crossprod(X, wY)
+    list(Statistic = STAT, Expectation = as.vector(Exp),
+         Covariance = Cov)
+}
+
+.perm <- function(res, xt, B = 10000) {
+
+    if (length(dim(xt)) == 2L)
+        xt <- array(xt, dim = c(dim(xt), 1))
+
+    res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3L])
+    stat <- 0
+    for (j in 1:dim(xt)[3L]) {
+       rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
+       stat <- stat + sapply(rt, function(x) colSums(x[,-1L, drop = FALSE] * res[,j]))
+    }
+    ret <- .SW(res, xt)
+    if (dim(xt)[2L] == 2L) {
+        ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(ret$Covariance))
+        ret$permStat <- (stat - ret$Expectation) / sqrt(ret$Covariance)
+    } else {
+        ES <- t(ret$Statistic - ret$Expectation)
+        ret$testStat <- sum(ES %*% solve(ret$Covariance) * ES)
+        ES <- t(stat - ret$Expectation)
+        ret$permStat <- rowSums(ES %*% solve(ret$Covariance) * ES)
+    }
+    ret$DF <- dim(xt)[2L] - 1L
+    ret
+}
+@}
+
+<<SW>>=
+w <- gl(2, 15)
+(s <- .SW(r <- rank(u <- runif(length(w))), model.matrix(~ 0 + w)))
+ps <- .perm(r, model.matrix(~ 0 + w), B = 100000)
+ps$testStat
+mean(abs(ps$permStat) > abs(ps$testStat) - .Machine$double.eps)
+pchisq(ps$testStat^ifelse(ps$DF == 1, 2, 1), df = ps$DF, lower.tail = FALSE)
+kruskal.test(u ~ w)
+library("coin")
+kruskal_test(u ~ w, distribution = approximate(100000))
+@@
+
+
+\chapter{Test for Equal Distributions in a Stratified One-way Layout}
+
+Distribution-free
+
+@d freeway
+@{
+free.oneway.test <- function(x, ...)
+    UseMethod("free.oneway.test")
+free.oneway.test.table <- function(object, link = c("logit", "probit", "cloglog", "loglog"), mu = 0, B = 0, ...)
+{
+    d <- dim(object)
+    dn <- dimnames(object)
+    DNAME <- NULL
+    if (!is.null(dn)) {
+        DNAME <- paste(names(dn)[1], "and", names(dn)[2])
+        if (length(dn) == 3L)
+            DNAME <- paste(DNAME, "stratified by", names(dn)[3])
+    }
+
+    if (!inherits(link, "linkfun")) {
+        link <- match.arg(link)
+        link <- do.call(link, list())
+    }
+
+    ret <- .MLest(object, link = link, mu = mu)
+    ret$DNAME <- DNAME
+
+    if (B)
+        ret$perm <- .perm(ret$residuals, object, B = B)
+
+    class(ret) <- "free.oneway.test"
+    return(ret)
+}
+@}
+
+@d freeway methods
+@{
+summary.free.oneway.test <- function(object, test = c("Wald", "LRT", "Rao", "conditionalRao"), 
+                         alternative = c("two.sided", "less", "greater"), ...)
+{
+
+    test <- match.arg(test)
+    alternative <- match.arg(alternative)
+
+    profile <- function(par, parm) {
+        cf <- object$par
+        cf[parm] <- par
+        .MLest(object$table, link = object$link, start = cf, fix = parm)
+    }
+
+    ### global
+    cf <- coef(object)
+    ret <- switch(test, "Wald" = .Wald_pval(cf, object$hessian, parm = seq_along(cf)),
+                          "LRT" = .LRatio_pval(cf, parm = seq_along(cf), profile = profile),
+                          "Rao" = .Rao_pval(cf, parm = seq_along(cf), profile = profile))
+
+    RVAL <- list(statistic = ret$STATISTIC, parameter = NULL, p.value = as.numeric(ret$PVAL), 
+        null.value = ret$mu, alternative = alternative, # method = METHOD, 
+        data.name = object$DNAME, estimate = coef(object))
+    class(RVAL) <- "htest"
+    RVAL
+
+}
+coef.free.oneway.test <- function(object, ...)
+    object$coefficients
+vcov.free.oneway.test <- function(object, ...)
+    object$vcov
+confint.free.oneway.test <- function(object, parm,
+    level = .95, alternative = c("two.sided", "less", "greater"), test = c("Wald", "LRT", "Rao", "conditionalRao"), ...)
+{
+    test <- match.arg(test)
+    if (missing(parm)) 
+        parm <- seq_along(coef(object))
+
+    profile <- function(par, parm) {
+        cf <- object$par
+        cf[parm] <- par
+        .MLest(object$table, link = object$link, start = cf, fix = parm)
+    }
+    
+    cf <- coef(object)
+    vc <- vcov(object)
+
+    ret <- switch(test, "Wald" = .Wald_confint(cf, vc, parm = parm, alternative = alternative, conf.level = level),
+                        "LRT" = .LR_confint(cf, vc, parm = parm, fun = .LRatio_pval, profile = profile, alternative = alternative, conf.level = level),
+                        "Rao" = .LR_confint(cf, vc, parm = parm, fun =.Rao_pval, profile = profile, alternative = alternative, conf.level = level))
+    ret
+
+}
+# power.free.oneway.test <- function()
+@}
+
+<<free>>=
+ft <- free.oneway.test(x)
+coef(ft)
+vcov(ft)
+summary(ft)
+library("multcomp")
+summary(glht(ft), test = Chisqtest())
+summary(ft, test = "Rao")
+summary(ft, test = "LRT")
+confint(ft)
+confint(glht(ft), calpha = univariate_calpha())
+confint(ft, test = "Rao")
+confint(ft, test = "LRT")
+@@
 
 \chapter*{Index}
 
