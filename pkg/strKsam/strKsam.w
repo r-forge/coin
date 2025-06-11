@@ -373,7 +373,7 @@ i2 <- 1L
 The off-diagonal elements of $\mA$ are now available as
 @d Aoffdiag
 @{
-Aoffdiag <- -rowSums(x * dpu * dpl / prb^2)[-i2]
+Aoffdiag <- -rowSums(x * du * dl / prb^2)[-i2]
 Aoffdiag <- Aoffdiag[-length(Aoffdiag)]
 @}
 
@@ -439,6 +439,7 @@ use a binary logistic regression model to estimate the two log-odds ratios
 $\beta_2$ and $\beta_3$ along with their estimated covariance
 <<glm>>=
 source("strKsam_src.R")
+source("ML.R")
 source("linkfun.R")
 dyn.load("Schur_src.so")
 (x <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2))
@@ -463,6 +464,9 @@ f <- dlogis
 c(cf[-1] * -1, cf[1]) - op$par
 logLik(m) + op$value
 .nsr(op$par, x)
+obj <- .MLest(as.table(x), link = logit())
+obj$coefficients
+obj$value
 @@
 
 Parameter estimates and the in-sample log-likelihood are practically
@@ -476,6 +480,7 @@ fp <- function(x) {
 solve(H <- .hes(op$par, x))
 vcov(m)[-1,-1]
 solve(op$hessian)[1:2,1:2]
+obj$vcov
 @@
 Also here we see practically identical results.
 
@@ -1050,6 +1055,7 @@ probit <- function()
 @<Strasser Weber@>
 @<freeway@>
 @<freeway methods@>
+@<freeway interfaces@>
 @}
 
 @d setup
@@ -1066,9 +1072,10 @@ for (b in seq_len(B)) {
     xlist[[b]] <- xb[xw,,drop = FALSE]
     lwr <- c(lwr, -Inf, rep.int(tol, times = sum(xw) - 2L))
     if (NS) {
-        ecdf0 <- cumsum(xlist[[b]][,1])
+        ecdf0 <- cumsum(rowSums(xlist[[b]]))
         ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
-        start <- c(start, Q(ecdf0))
+        Qecdf <- Q(ecdf0)
+        start <- c(start, Qecdf[1], diff(Qecdf))
     }
 }
 upr <- rep(Inf, times = length(lwr))
@@ -1114,6 +1121,8 @@ $\thetavec$.
 
     stopifnot(is.table(x))
     dx <- dim(x)
+    if (length(dx) == 2L)
+        x <- array(c(x), dim = dx <- c(dx, 1L))
     stopifnot(length(dx) == 3L)
     stopifnot(dim(x)[1L] > 1L)
     K <- dim(x)[2L]
@@ -1175,15 +1184,17 @@ $\thetavec$.
     if (residuals)
         ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
 
+    ret$profile <- function(start, fix)
+        .MLest(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
     ret$table <- x
-    ret$link <- link
+#    ret$link <- link
 
     ret
 }
 @}
 
 <<workhorse>>=
-source("ML.R")
+
 .MLest(x, logit())
 op
 N <- 10
@@ -1245,34 +1256,37 @@ x
 
 @d LRatio
 @{
-.LRatio_pval <- function(coef, parm, profile, log.p = FALSE) {
-   ull <- profile(coef, parm)$value
-   rll <- profile(rep.int(0, length(parm)), parm)$value
-   logLR <- - 2 * (rll - ull)
+.LRatio_pval <- function(object, value = 0, parm, log.p = FALSE) {
+   cf <- object$par
+   unll <- object$value ### neg logLik
+   cf[parm] <- value
+   rnll <- object$profile(cf, parm)$value ### neg logLik
+   logLR <- - 2 * (unll - rnll)
    pval <- pchisq(logLR, df = length(parm), lower.tail = FALSE, log.p = log.p)
    list(STATISTIC = c("logLR chi-squared" = logLR), DF = length(parm), PVAL = pval)
 }
 
-.LR_confint <- function(coef, vcov, parm, alternative = c("two.sided", "less", "greater"), conf.level = .95, fun, profile)
+.LR_confint <- function(object, parm, alternative = c("two.sided", "less", "greater"), conf.level = .95, fun)
 {
 
     if (length(parm) > 1L)
-        return(lapply(parm, function(p) .LR_confint(coef, vcov, parm = p, alternative, conf.level = conf.level, fun = fun, profile = profile)))
+        return(lapply(parm, function(p) .LR_confint(object, parm = p, alternative, conf.level = conf.level, fun = fun)))
 
     alternative <- match.arg(alternative)
     conf.level <- 1 - (1 - conf.level) / ((alternative != "two.sided") + 1L)
 
     pfun <- function(par)
-        fun(par, parm, profile, log.p = TRUE)$PVAL - log1p(- conf.level)
+        fun(object, par, parm, log.p = TRUE)$PVAL - log1p(- conf.level)
 
-    W <- .Wald_confint(coef, vcov, parm, conf.level = 1 - (1 - conf.level) / 10)
+    cf <- object$coefficients
+    W <- .Wald_confint(cf, object$vcov, parm, conf.level = 1 - (1 - conf.level) / 10)
 
     CINT <- c(-Inf, Inf)
     if (alternative != "greater")
-        CINT[1] <- uniroot(pfun, interval = c(W$CONFINT[,1], coef[parm]),
+        CINT[1] <- uniroot(pfun, interval = c(W$CONFINT[,1], cf[parm]),
                            extendInt = "yes")$root
     if (alternative != "less")
-        CINT[2] <- uniroot(pfun, interval = c(coef[parm], W$CONFINT[,2]),
+        CINT[2] <- uniroot(pfun, interval = c(cf[parm], W$CONFINT[,2]),
                            extendInt = "yes")$root
 
     return(CINT)
@@ -1280,24 +1294,17 @@ x
 @}
 
 <<LRatio>>=
-.LRatio_pval(ret$coefficients, parm = 1, profile = function(par, parm)
-{
-    cf <- ret$par
-    cf[parm] <- par
-    .MLest(x, link = logit(), start = cf, fix = parm)
-})
-.LR_confint(ret$coefficients, ret$vcov, parm = 1, fun = .LRatio_pval, profile = function(par, parm)
-{
-    cf <- ret$par
-    cf[parm] <- par
-    .MLest(x, link = logit(), start = cf, fix = parm)
-})
+obj <- .MLest(x, link = logit())
+.LRatio_pval(obj, parm = 1)
+.LR_confint(obj, parm = 1, fun = .LRatio_pval)
 @@
 
 @d Rao
 @{
-.Rao_pval <- function(coef, parm, profile, log.p = FALSE) {
-   ret <- profile(coef, parm)
+.Rao_pval <- function(object, value = 0, parm, log.p = FALSE) {
+   cf <- object$par
+   cf[parm] <- value
+   ret <- object$profile(cf, parm)
    R <- crossprod(ret$negscore, ret$vcov %*% ret$negscore)
    pval <- pchisq(R, df = length(parm), lower.tail = FALSE, log.p = log.p)
    list(STATISTIC = c("Rao chi-squared" = R), DF = length(parm), PVAL = pval)
@@ -1305,19 +1312,8 @@ x
 @}
 
 <<Rao>>=
-.Rao_pval(ret$coefficients, parm = 1, profile = function(par, parm)
-{
-    cf <- ret$par
-    cf[parm] <- par
-    .MLest(x, link = logit(), start = cf, fix = parm)
-})
-
-.LR_confint(ret$coefficients, ret$vcov, parm = 1, fun = .Rao_pval, profile = function(par, parm)
-{
-    cf <- ret$par
-    cf[parm] <- par
-    .MLest(x, link = logit(), start = cf, fix = parm)
-})
+.Rao_pval(obj, parm = 1)
+.LR_confint(obj, parm = 1, fun = .Rao_pval)
 @@
 
 \chapter{Permutation Inference}
@@ -1408,9 +1404,9 @@ free.oneway.test.table <- function(object, link = c("logit", "probit", "cloglog"
     dn <- dimnames(object)
     DNAME <- NULL
     if (!is.null(dn)) {
-        DNAME <- paste(names(dn)[1], "and", names(dn)[2])
+        DNAME <- paste(names(dn)[1], "by", names(dn)[2])
         if (length(dn) == 3L)
-            DNAME <- paste(DNAME, "stratified by", names(dn)[3])
+            DNAME <- paste(DNAME, "with strata", names(dn)[3])
     }
 
     if (!inherits(link, "linkfun")) {
@@ -1438,17 +1434,11 @@ summary.free.oneway.test <- function(object, test = c("Wald", "LRT", "Rao", "con
     test <- match.arg(test)
     alternative <- match.arg(alternative)
 
-    profile <- function(par, parm) {
-        cf <- object$par
-        cf[parm] <- par
-        .MLest(object$table, link = object$link, start = cf, fix = parm)
-    }
-
     ### global
     cf <- coef(object)
     ret <- switch(test, "Wald" = .Wald_pval(cf, object$hessian, parm = seq_along(cf)),
-                          "LRT" = .LRatio_pval(cf, parm = seq_along(cf), profile = profile),
-                          "Rao" = .Rao_pval(cf, parm = seq_along(cf), profile = profile))
+                          "LRT" = .LRatio_pval(object, parm = seq_along(cf)),
+                          "Rao" = .Rao_pval(object, parm = seq_along(cf)))
 
     RVAL <- list(statistic = ret$STATISTIC, parameter = NULL, p.value = as.numeric(ret$PVAL), 
         null.value = ret$mu, alternative = alternative, # method = METHOD, 
@@ -1461,6 +1451,8 @@ coef.free.oneway.test <- function(object, ...)
     object$coefficients
 vcov.free.oneway.test <- function(object, ...)
     object$vcov
+logLik.free.oneway.test <- function(object, ...)
+    -object$value
 confint.free.oneway.test <- function(object, parm,
     level = .95, alternative = c("two.sided", "less", "greater"), test = c("Wald", "LRT", "Rao", "conditionalRao"), ...)
 {
@@ -1468,18 +1460,12 @@ confint.free.oneway.test <- function(object, parm,
     if (missing(parm)) 
         parm <- seq_along(coef(object))
 
-    profile <- function(par, parm) {
-        cf <- object$par
-        cf[parm] <- par
-        .MLest(object$table, link = object$link, start = cf, fix = parm)
-    }
-    
     cf <- coef(object)
     vc <- vcov(object)
 
     ret <- switch(test, "Wald" = .Wald_confint(cf, vc, parm = parm, alternative = alternative, conf.level = level),
-                        "LRT" = .LR_confint(cf, vc, parm = parm, fun = .LRatio_pval, profile = profile, alternative = alternative, conf.level = level),
-                        "Rao" = .LR_confint(cf, vc, parm = parm, fun =.Rao_pval, profile = profile, alternative = alternative, conf.level = level))
+                        "LRT" = .LR_confint(object, parm = parm, fun = .LRatio_pval, alternative = alternative, conf.level = level),
+                        "Rao" = .LR_confint(object, parm = parm, fun = .Rao_pval, alternative = alternative, conf.level = level))
     ret
 
 }
@@ -1499,6 +1485,107 @@ confint(ft)
 confint(glht(ft), calpha = univariate_calpha())
 confint(ft, test = "Rao")
 confint(ft, test = "LRT")
+@@
+
+@d freeway interfaces
+@{
+free.oneway.test.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
+{
+    if(missing(formula) || (length(formula) != 3L))
+        stop("'formula' missing or incorrect")
+    group <- 2
+    if (length(attr(terms(formula[-2L]), "term.labels")) > 2L)
+        stop("'formula' missing or incorrect")
+    strata <- NA
+    if (length(attr(terms(formula[-2L]), "term.labels")) == 2L)
+       strata <- 3
+    m <- match.call(expand.dots = FALSE)
+    if (is.matrix(eval(m$data, parent.frame())))
+        m$data <- as.data.frame(data)
+    ## need stats:: for non-standard evaluation
+    m[[1L]] <- quote(stats::model.frame)
+    m$... <- NULL
+    mf <- eval(m, parent.frame())
+    DNAME <- paste(names(mf), collapse = " by ") # works in all cases
+    names(mf) <- NULL
+    response <- attr(attr(mf, "terms"), "response")
+    w <- as.vector(model.weights(mf))
+    y <- mf[[response]]
+    g <- factor(mf[[group]])
+    if(nlevels(g) != 2L)
+        stop("grouping factor must have exactly 2 levels")
+    if (is.na(strata)) {
+        ## Call the default method.
+        RVAL <- free.oneway.test(y = y, x = g, weights = w, ...)
+    } else {
+        st <- factor(mf[[strata]])
+        RVAL <- free.oneway.test(y = y, x = g, z = st, weights = w, ...)
+    }
+    RVAL$data.name <- DNAME
+    RVAL
+}
+ 
+free.oneway.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {
+
+    DNAME <- paste(deparse1(substitute(x)), "and",
+                   deparse1(substitute(y)))
+    if (!is.null(z))
+        DNAME <- paste(DNAME, "stratified by", deparse1(substitute(z)))
+
+    uy <- unique(y)
+    if (nbins && nbins < length(uy)) {
+        nbins <- ceiling(nbins)
+        breaks <- c(-Inf, quantile(y, prob = seq_len(nbins) / (nbins + 1L)), Inf)
+    } else {
+        breaks <- c(-Inf, sort(uy), Inf)
+    }
+    r <- cut(y, breaks = breaks)[, drop = TRUE]
+    RVAL <- free.oneway.test(y = r, x = x, z = z, weights = weights, ...)
+    RVAL$data.name <- DNAME
+    RVAL$method <- gsub("Ordinal|Binary", "Semiparametric", RVAL$method)
+    RVAL
+}
+
+free.oneway.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
+
+    DNAME <- paste(deparse1(substitute(x)), "and",
+                   deparse1(substitute(y)))
+    if (!is.null(z))
+        DNAME <- paste(DNAME, "stratified by", deparse1(substitute(z)))
+
+    stopifnot(is.factor(x))
+    d <- data.frame(y = y, x = x, w = 1)
+    if (!is.null(weights)) d$w <- weights
+    if (!is.null(z)) {
+        d$z <- z
+        tab <- xtabs(w ~ y + x + z, data = d)
+    } else {
+        tab <- xtabs(w ~ y + x, data = d)
+    }
+    RVAL <- free.oneway.test(tab, ...)
+    RVAL$data.name <- DNAME
+    RVAL
+}
+@}
+
+<<formula>>=
+set.seed(29)
+N <- 25
+w <- gl(2, N)
+y <- rlogis(length(w), location = c(0, 1)[w])
+summary(ft <- free.oneway.test(y ~ w))
+library("lehmann")
+trafo.test(y ~ w)
+confint(ft)
+wilcox.test(y ~ w)
+library("rms")
+rev(coef(or <- orm(y ~ w)))[1]
+logLik(or)
+logLik(ft)
+ci <- confint(or)
+ci[nrow(ci),]
+vcov(or)
+vcov(ft)
 @@
 
 \chapter*{Index}
