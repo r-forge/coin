@@ -313,7 +313,8 @@ intercepts needs this small helper function
 @d cumsumrev
 @{
 .rcr <- function(z)
-    rev(cumsum(rev(z)))
+    Reduce('+', z, accumulate = TRUE, right = TRUE)
+    ### rev(cumsum(rev(z)))
 @}
 
 In addition, we define negative score residuals, that is, the derivative of the
@@ -538,13 +539,20 @@ intercept parameters are only concatenated.
 }
 @}
 
+The score residuum is zero for an observation with weight zero, that is, a
+row of zeros in the table.
+
 @d stratified negative score residual
 @{
 .snsr <- function(parm, x, mu = 0) {
     @<stratum prep@>
     ret <- c()
-    for (b in seq_len(B))
-        ret <- c(ret, .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu))
+    for (b in seq_len(B)) {
+        idx <- attr(x[[b]], "idx")
+        sr <- numeric(length(idx))
+        sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+        ret <- c(ret, sr)
+    }
     return(ret)
 }
 @}
@@ -1070,6 +1078,7 @@ for (b in seq_len(B)) {
     xb <- matrix(x[,,b, drop = TRUE], ncol = K)
     xw <- rowSums(abs(xb)) > tol
     xlist[[b]] <- xb[xw,,drop = FALSE]
+    attr(xlist[[b]], "idx") <- xw
     lwr <- c(lwr, -Inf, rep.int(tol, times = sum(xw) - 2L))
     if (NS) {
         ecdf0 <- cumsum(rowSums(xlist[[b]]))
@@ -1117,12 +1126,12 @@ $\thetavec$.
 @{
 .MLest <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                    residuals = TRUE, score = TRUE, hessian = TRUE, 
-                   tol = .Machine$double.eps, ...) {
+                   tol = sqrt(.Machine$double.eps), ...) {
 
     stopifnot(is.table(x))
     dx <- dim(x)
     if (length(dx) == 2L)
-        x <- array(c(x), dim = dx <- c(dx, 1L))
+        x <- as.table(array(c(x), dim = dx <- c(dx, 1L)))
     stopifnot(length(dx) == 3L)
     stopifnot(dim(x)[1L] > 1L)
     K <- dim(x)[2L]
@@ -1219,10 +1228,10 @@ x
 
 @d Wald
 @{
-.Wald_pval <- function(coef, info, parm = seq_along(coef), log.p = FALSE) {
+.Wald_pval <- function(coef, info, parm = seq_along(coef)) {
     if (length(parm) < length(coef))
         return(.Wald_pval(coef[parm], solve(solve(info)[parm,parm])))
-    pval <- pchisq(W <- crossprod(coef, info %*% coef), df = length(coef), lower.tail = FALSE, log.p = log.p)
+    pval <- pchisq(W <- crossprod(coef, info %*% coef), df = length(coef), lower.tail = FALSE)
     list(STATISTIC = c("Wald chi-squared" = W), DF = length(coef), PVAL = pval)
 }
 
@@ -1256,13 +1265,13 @@ x
 
 @d LRatio
 @{
-.LRatio_pval <- function(object, value = 0, parm, log.p = FALSE) {
+.LRatio_pval <- function(object, value = 0, parm) {
    cf <- object$par
    unll <- object$value ### neg logLik
    cf[parm] <- value
    rnll <- object$profile(cf, parm)$value ### neg logLik
    logLR <- - 2 * (unll - rnll)
-   pval <- pchisq(logLR, df = length(parm), lower.tail = FALSE, log.p = log.p)
+   pval <- pchisq(logLR, df = length(parm), lower.tail = FALSE)
    list(STATISTIC = c("logLR chi-squared" = logLR), DF = length(parm), PVAL = pval)
 }
 
@@ -1276,7 +1285,7 @@ x
     conf.level <- 1 - (1 - conf.level) / ((alternative != "two.sided") + 1L)
 
     pfun <- function(par)
-        fun(object, par, parm, log.p = TRUE)$PVAL - log1p(- conf.level)
+        fun(object, par, parm)$PVAL - (1 - conf.level)
 
     cf <- object$coefficients
     W <- .Wald_confint(cf, object$vcov, parm, conf.level = 1 - (1 - conf.level) / 10)
@@ -1301,12 +1310,24 @@ obj <- .MLest(x, link = logit())
 
 @d Rao
 @{
-.Rao_pval <- function(object, value = 0, parm, log.p = FALSE) {
+.Rao_pval <- function(object, value = 0, parm, conditional = FALSE) {
    cf <- object$par
    cf[parm] <- value
    ret <- object$profile(cf, parm)
+   if (conditional) {
+       sc <- -ret$negscore
+       if (length(object$coefficients) == 1L)
+           sc <- sc / sqrt(ret$hessian)
+       Esc <- sc - object$perm$Expectation
+       pR <- sum(Esc %*% solve(object$perm$Covariance) * Esc)
+       if (!is.null(object$perm$permStat))
+           pval <- mean(pR > object$perm$permStat - sqrt(.Machine$double.eps))
+       else 
+           pval <- pchisq(pR, df = object$perm$DF, lower.tail = FALSE)
+       return(list(STATISTIC = c("Perm Rao" = pR), DF = object$perm$DF, PVAL = pval))
+   }
    R <- crossprod(ret$negscore, ret$vcov %*% ret$negscore)
-   pval <- pchisq(R, df = length(parm), lower.tail = FALSE, log.p = log.p)
+   pval <- pchisq(R, df = length(parm), lower.tail = FALSE)
    list(STATISTIC = c("Rao chi-squared" = R), DF = length(parm), PVAL = pval)
 }
 @}
@@ -1322,12 +1343,17 @@ obj <- .MLest(x, link = logit())
 @{
 .SW <- function(res, xt) {
 
-    stopifnot(length(res) == dim(xt)[1L])
-
     if (length(dim(xt)) == 3L) {
         res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3])
-        return(Reduce("+", lapply(1:dim(xt)[3L], function(j)
-            .SW(res[,j, drop = TRUE], xt[,,j, drop = TRUE]))))
+        STAT <-  Exp <- Cov <- 0
+        for (b in seq_len(dim(xt)[3L])) {
+            sw <- .SW(res[,b, drop = TRUE], xt[,,b, drop = TRUE])
+            STAT <- STAT + sw$Statistic
+            Exp <- Exp + sw$Expectation
+            Cov <- Cov + sw$Covariance
+        }
+        return(list(Statistic = STAT, Expectation = as.vector(Exp),
+                    Covariance = Cov))
     }
 
     Y <- matrix(res, ncol = 1, nrow = length(xt))
@@ -1354,25 +1380,31 @@ obj <- .MLest(x, link = logit())
 .perm <- function(res, xt, B = 10000) {
 
     if (length(dim(xt)) == 2L)
-        xt <- array(xt, dim = c(dim(xt), 1))
+        xt <- as.table(array(xt, dim = c(dim(xt), 1)))
 
     res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3L])
     stat <- 0
-    for (j in 1:dim(xt)[3L]) {
-       rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
-       stat <- stat + sapply(rt, function(x) colSums(x[,-1L, drop = FALSE] * res[,j]))
-    }
     ret <- .SW(res, xt)
     if (dim(xt)[2L] == 2L) {
         ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(ret$Covariance))
-        ret$permStat <- (stat - ret$Expectation) / sqrt(ret$Covariance)
     } else {
         ES <- t(ret$Statistic - ret$Expectation)
         ret$testStat <- sum(ES %*% solve(ret$Covariance) * ES)
-        ES <- t(stat - ret$Expectation)
-        ret$permStat <- rowSums(ES %*% solve(ret$Covariance) * ES)
     }
     ret$DF <- dim(xt)[2L] - 1L
+
+    if (B) {
+        for (j in 1:dim(xt)[3L]) {
+           rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
+           stat <- stat + sapply(rt, function(x) colSums(x[,-1L, drop = FALSE] * res[,j]))
+        }
+        if (dim(xt)[2L] == 2L) {
+            ret$permStat <- (stat - ret$Expectation) / sqrt(ret$Covariance)
+        } else {
+            ES <- t(stat - ret$Expectation)
+            ret$permStat <- rowSums(ES %*% solve(ret$Covariance) * ES)
+        }
+    }
     ret
 }
 @}
@@ -1417,8 +1449,14 @@ free.oneway.test.table <- function(object, link = c("logit", "probit", "cloglog"
     ret <- .MLest(object, link = link, mu = mu)
     ret$DNAME <- DNAME
 
-    if (B)
-        ret$perm <- .perm(ret$residuals, object, B = B)
+    cf <- ret$par
+    cf[idx <- seq_len(d[2L] - 1L)] <- 0
+    pr <- ret$profile(cf, idx)
+    if (length(cf) == 1L)
+        res <- pr$residuals / sqrt(pr$hessian)
+    else
+        res <- pr$residuals
+    ret$perm <- .perm(res, object, B = B)
 
     class(ret) <- "free.oneway.test"
     return(ret)
@@ -1427,7 +1465,7 @@ free.oneway.test.table <- function(object, link = c("logit", "probit", "cloglog"
 
 @d freeway methods
 @{
-summary.free.oneway.test <- function(object, test = c("Wald", "LRT", "Rao", "conditionalRao"), 
+summary.free.oneway.test <- function(object, test = c("Wald", "LRT", "Rao", "permRao"), 
                          alternative = c("two.sided", "less", "greater"), ...)
 {
 
@@ -1438,7 +1476,8 @@ summary.free.oneway.test <- function(object, test = c("Wald", "LRT", "Rao", "con
     cf <- coef(object)
     ret <- switch(test, "Wald" = .Wald_pval(cf, object$hessian, parm = seq_along(cf)),
                           "LRT" = .LRatio_pval(object, parm = seq_along(cf)),
-                          "Rao" = .Rao_pval(object, parm = seq_along(cf)))
+                          "Rao" = .Rao_pval(object, parm = seq_along(cf)),
+                          "permRao" = .Rao_pval(object, parm = seq_along(cf), conditional = TRUE))
 
     RVAL <- list(statistic = ret$STATISTIC, parameter = NULL, p.value = as.numeric(ret$PVAL), 
         null.value = ret$mu, alternative = alternative, # method = METHOD, 
@@ -1454,7 +1493,7 @@ vcov.free.oneway.test <- function(object, ...)
 logLik.free.oneway.test <- function(object, ...)
     -object$value
 confint.free.oneway.test <- function(object, parm,
-    level = .95, alternative = c("two.sided", "less", "greater"), test = c("Wald", "LRT", "Rao", "conditionalRao"), ...)
+    level = .95, alternative = c("two.sided", "less", "greater"), test = c("Wald", "LRT", "Rao", "permRao"), ...)
 {
     test <- match.arg(test)
     if (missing(parm)) 
@@ -1465,7 +1504,9 @@ confint.free.oneway.test <- function(object, parm,
 
     ret <- switch(test, "Wald" = .Wald_confint(cf, vc, parm = parm, alternative = alternative, conf.level = level),
                         "LRT" = .LR_confint(object, parm = parm, fun = .LRatio_pval, alternative = alternative, conf.level = level),
-                        "Rao" = .LR_confint(object, parm = parm, fun = .Rao_pval, alternative = alternative, conf.level = level))
+                        "Rao" = .LR_confint(object, parm = parm, fun = .Rao_pval, alternative = alternative, conf.level = level),
+                        "permRao" = .LR_confint(object, parm = parm, fun =
+                        function(...) .Rao_pval(..., conditional = TRUE), alternative = alternative, conf.level = level))
     ret
 
 }
@@ -1480,10 +1521,12 @@ summary(ft)
 library("multcomp")
 summary(glht(ft), test = Chisqtest())
 summary(ft, test = "Rao")
+summary(ft, test = "permRao")
 summary(ft, test = "LRT")
 confint(ft)
 confint(glht(ft), calpha = univariate_calpha())
 confint(ft, test = "Rao")
+confint(ft, test = "permRao")
 confint(ft, test = "LRT")
 @@
 
@@ -1573,10 +1616,17 @@ set.seed(29)
 N <- 25
 w <- gl(2, N)
 y <- rlogis(length(w), location = c(0, 1)[w])
-summary(ft <- free.oneway.test(y ~ w))
+ft <- free.oneway.test(y ~ w)
+summary(ft)
 library("lehmann")
 trafo.test(y ~ w)
+summary(ft, test = "LRT")
+summary(ft, test = "permRao")
+summary(ft, test = "Rao")
 confint(ft)
+confint(ft, test = "LRT")
+confint(ft, test = "permRao")
+confint(ft, test = "Rao")
 wilcox.test(y ~ w)
 library("rms")
 rev(coef(or <- orm(y ~ w)))[1]
