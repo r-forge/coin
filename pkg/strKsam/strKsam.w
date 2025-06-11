@@ -1321,7 +1321,7 @@ obj <- .MLest(x, link = logit())
        Esc <- sc - object$perm$Expectation
        pR <- sum(Esc %*% solve(object$perm$Covariance) * Esc)
        if (!is.null(object$perm$permStat))
-           pval <- mean(pR > object$perm$permStat - sqrt(.Machine$double.eps))
+           pval <- mean((object$perm$permStat - sqrt(.Machine$double.eps) > pR))
        else 
            pval <- pchisq(pR, df = object$perm$DF, lower.tail = FALSE)
        return(list(STATISTIC = c("Perm Rao" = pR), DF = object$perm$DF, PVAL = pval))
@@ -1398,12 +1398,12 @@ obj <- .MLest(x, link = logit())
            rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
            stat <- stat + sapply(rt, function(x) colSums(x[,-1L, drop = FALSE] * res[,j]))
         }
-        if (dim(xt)[2L] == 2L) {
-            ret$permStat <- (stat - ret$Expectation) / sqrt(ret$Covariance)
-        } else {
-            ES <- t(stat - ret$Expectation)
+#        if (dim(xt)[2L] == 2L) {
+#            ret$permStat <- (stat - ret$Expectation) / sqrt(ret$Covariance)
+#        } else {
+            ES <- t(matrix(stat, ncol = B) - ret$Expectation)
             ret$permStat <- rowSums(ES %*% solve(ret$Covariance) * ES)
-        }
+#        }
     }
     ret
 }
@@ -1452,7 +1452,7 @@ free.oneway.test.table <- function(object, link = c("logit", "probit", "cloglog"
     cf <- ret$par
     cf[idx <- seq_len(d[2L] - 1L)] <- 0
     pr <- ret$profile(cf, idx)
-    if (length(cf) == 1L)
+    if (d[2L] == 2L)
         res <- pr$residuals / sqrt(pr$hessian)
     else
         res <- pr$residuals
@@ -1616,7 +1616,7 @@ set.seed(29)
 N <- 25
 w <- gl(2, N)
 y <- rlogis(length(w), location = c(0, 1)[w])
-ft <- free.oneway.test(y ~ w)
+ft <- free.oneway.test(y ~ w, B = 10000)
 summary(ft)
 library("lehmann")
 trafo.test(y ~ w)
