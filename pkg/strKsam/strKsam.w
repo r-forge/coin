@@ -1061,9 +1061,11 @@ probit <- function()
 @<LRatio@>
 @<Rao@>
 @<Strasser Weber@>
-@<freeway@>
-@<freeway methods@>
-@<freeway interfaces@>
+@<free1way@>
+@<free1way methods@>
+@<free1way summary@>
+@<free1way confint@>
+@<free1way interfaces@>
 @}
 
 @d setup
@@ -1426,11 +1428,11 @@ kruskal_test(u ~ w, distribution = approximate(100000))
 
 Distribution-free
 
-@d freeway
+@d free1way
 @{
-free.oneway.test <- function(x, ...)
-    UseMethod("free.oneway.test")
-free.oneway.test.table <- function(object, link = c("logit", "probit", "cloglog", "loglog"), mu = 0, B = 0, ...)
+free1way.test <- function(x, ...)
+    UseMethod("free1way.test")
+free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "loglog"), mu = 0, B = 0, ...)
 {
     d <- dim(object)
     dn <- dimnames(object)
@@ -1446,7 +1448,7 @@ free.oneway.test.table <- function(object, link = c("logit", "probit", "cloglog"
         link <- do.call(link, list())
     }
 
-    ret <- .MLest(object, link = link, mu = mu)
+    ret <- .MLest(object, link = link, mu = mu, ...)
     ret$DNAME <- DNAME
 
     cf <- ret$par
@@ -1458,14 +1460,104 @@ free.oneway.test.table <- function(object, link = c("logit", "probit", "cloglog"
         res <- pr$residuals
     ret$perm <- .perm(res, object, B = B)
 
-    class(ret) <- "free.oneway.test"
+    class(ret) <- "free1way.test"
     return(ret)
 }
 @}
 
-@d freeway methods
+@d free1way methods
 @{
-summary.free.oneway.test <- function(object, test = c("Wald", "LRT", "Rao", "permRao"), 
+coef.free1way.test <- function(object, ...)
+    object$coefficients
+vcov.free1way.test <- function(object, ...)
+    object$vcov
+logLik.free1way.test <- function(object, ...)
+    -object$value
+@}
+
+@d free1way summary
+@{
+print.free1way.test <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
+                                alternative = c("two.sided", "less", "greater"), 
+                                tol = .Machine$double.eps, ...)
+{
+
+    test <- match.arg(test)
+    alternative <- match.arg(alternative)
+
+    ### global
+    cf <- coef(x)
+    if ((length(cf) > 1L || test == "LRT") && alternative != "two.sided") 
+        stop("Cannot compute one-sided p-values")
+
+    DF <- NULL
+    if (test == "Wald") {
+        if (alternative == "two.sided") {
+            STATISTIC <- c("Wald X-squared" = c(crossprod(cf, x$hessian %*% cf)))
+            DF <- c("df" = length(coef))
+            PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+        } else {
+            STATISTIC <- c("Wald Z" = c(cf * sqrt(x$hessian)))
+            PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+        }
+    } else if (test == "LRT") {
+        par <- x$par
+        par[seq_along(cf)] <- 0
+        unll <- x$value ### neg logLik
+        rnll <- x$profile(par, seq_along(cf))$value ### neg logLik
+        STATISTIC <- c("logLR X-squared" = - 2 * (unll - rnll))
+        DF <- c("df" = length(coef))
+        PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+    } else if (test == "Rao") {
+        par <- x$par
+        par[seq_along(cf)] <- 0
+        ret <- x$profile(par, seq_along(cf))
+        if (alternative == "two.sided") {
+            STATISTIC <- c("Rao X-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
+            DF <- c("df" = length(coef))
+            PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+        } else {
+            STATISTIC <- c("Rao Z" = -ret$negscore * sqrt(ret$vcov))
+            PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+        }
+    } else if (test == "Permutation") {
+        par <- x$par
+        par[seq_along(cf)] <- 0
+        ret <- x$profile(par, seq_along(cf))
+        sc <- -ret$negscore
+        if (length(cf) == 1L)
+           sc <- sc / sqrt(ret$hessian)
+        Esc <- sc - x$perm$Expectation
+        if (alternative == "two.sided") {
+            STATISTIC <- c("Perm X-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
+            if (!is.null(x$perm$permStat))
+                PVAL <- mean(x$perm$permStat > STATISTIC + tol)
+            else {
+                DF <- c("df" = x$perm$DF)
+                PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+            }
+        } else {
+            STATISTIC <- c("Perm Z" = Esc / sqrt(x$perm$Covariance))
+            if (!is.null(x$perm$permStat)) {
+                if (alternative == "less")
+                    PVAL <- mean(x$perm$permStat < STATISTIC - tol)
+                else
+                    PVAL <- mean(x$perm$permStat > STATISTIC + tol)
+            } else {
+                PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+            }
+        }
+
+    }
+
+    RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, 
+        null.value = ret$mu, alternative = alternative, # method = METHOD, 
+        data.name = x$DNAME, estimate = cf)
+    class(RVAL) <- "htest"
+    RVAL
+
+}
+summary.free1way.test <- function(object, test = c("Wald", "LRT", "Rao", "permRao"), 
                          alternative = c("two.sided", "less", "greater"), ...)
 {
 
@@ -1486,13 +1578,11 @@ summary.free.oneway.test <- function(object, test = c("Wald", "LRT", "Rao", "per
     RVAL
 
 }
-coef.free.oneway.test <- function(object, ...)
-    object$coefficients
-vcov.free.oneway.test <- function(object, ...)
-    object$vcov
-logLik.free.oneway.test <- function(object, ...)
-    -object$value
-confint.free.oneway.test <- function(object, parm,
+@}
+
+@d free1way confint
+@{
+confint.free1way.test <- function(object, parm,
     level = .95, alternative = c("two.sided", "less", "greater"), test = c("Wald", "LRT", "Rao", "permRao"), ...)
 {
     test <- match.arg(test)
@@ -1510,11 +1600,11 @@ confint.free.oneway.test <- function(object, parm,
     ret
 
 }
-# power.free.oneway.test <- function()
+# power.free1way.test <- function()
 @}
 
 <<free>>=
-ft <- free.oneway.test(x)
+ft <- free1way.test(x)
 coef(ft)
 vcov(ft)
 summary(ft)
@@ -1530,9 +1620,9 @@ confint(ft, test = "permRao")
 confint(ft, test = "LRT")
 @@
 
-@d freeway interfaces
+@d free1way interfaces
 @{
-free.oneway.test.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
+free1way.test.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
 {
     if(missing(formula) || (length(formula) != 3L))
         stop("'formula' missing or incorrect")
@@ -1559,16 +1649,16 @@ free.oneway.test.formula <- function(formula, data, weights, subset, na.action =
         stop("grouping factor must have exactly 2 levels")
     if (is.na(strata)) {
         ## Call the default method.
-        RVAL <- free.oneway.test(y = y, x = g, weights = w, ...)
+        RVAL <- free1way.test(y = y, x = g, weights = w, ...)
     } else {
         st <- factor(mf[[strata]])
-        RVAL <- free.oneway.test(y = y, x = g, z = st, weights = w, ...)
+        RVAL <- free1way.test(y = y, x = g, z = st, weights = w, ...)
     }
     RVAL$data.name <- DNAME
     RVAL
 }
  
-free.oneway.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {
+free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {
 
     DNAME <- paste(deparse1(substitute(x)), "and",
                    deparse1(substitute(y)))
@@ -1583,13 +1673,13 @@ free.oneway.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, 
         breaks <- c(-Inf, sort(uy), Inf)
     }
     r <- cut(y, breaks = breaks)[, drop = TRUE]
-    RVAL <- free.oneway.test(y = r, x = x, z = z, weights = weights, ...)
+    RVAL <- free1way.test(y = r, x = x, z = z, weights = weights, ...)
     RVAL$data.name <- DNAME
     RVAL$method <- gsub("Ordinal|Binary", "Semiparametric", RVAL$method)
     RVAL
 }
 
-free.oneway.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
+free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
 
     DNAME <- paste(deparse1(substitute(x)), "and",
                    deparse1(substitute(y)))
@@ -1605,7 +1695,7 @@ free.oneway.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
     } else {
         tab <- xtabs(w ~ y + x, data = d)
     }
-    RVAL <- free.oneway.test(tab, ...)
+    RVAL <- free1way.test(tab, ...)
     RVAL$data.name <- DNAME
     RVAL
 }
@@ -1616,8 +1706,18 @@ set.seed(29)
 N <- 25
 w <- gl(2, N)
 y <- rlogis(length(w), location = c(0, 1)[w])
-ft <- free.oneway.test(y ~ w, B = 10000)
+ft <- free1way.test(y ~ w, B = 10000)
 summary(ft)
+print(ft, test = "Permutation", alternative = "less")
+print(ft, test = "Permutation", alternative = "greater")
+print(ft, test = "Permutation")
+print(ft, test = "Wald", alternative = "less")
+print(ft, test = "Wald", alternative = "greater")
+print(ft, test = "Wald")
+print(ft, test = "LRT")
+print(ft, test = "Rao", alternative = "less")
+print(ft, test = "Rao", alternative = "greater")
+print(ft, test = "Rao")
 library("lehmann")
 trafo.test(y ~ w)
 summary(ft, test = "LRT")
