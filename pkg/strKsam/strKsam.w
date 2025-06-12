@@ -941,7 +941,7 @@ logit <- function()
 @{
 loglog <- function()
     linkfun(alias = "Lehmann", 
-            model = "Lehmann alternative", 
+            model = "Lehmann", 
             parm = "log-reverse time hazard ratio",
             link = function(p, log.p = FALSE) {
                 if (!log.p) p <- log(p)
@@ -1033,7 +1033,7 @@ cloglog <- function()
 @{
 probit <- function()
     linkfun(alias = "van der Waerden",
-            model = "vdWaeren", 
+            model = "latent normal shift", 
             parm = "generalised Cohen's d",
             link = qnorm,
             linkinv = pnorm,
@@ -1269,8 +1269,10 @@ if (test == "Wald") {
     Esc <- sc - x$perm$Expectation
     if (alternative == "two.sided") {
         STATISTIC <- c("Perm X-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
+        ps <- x$perm$permStat
+        if (length(cf) == 1L) ps <- ps^2
         if (!is.null(x$perm$permStat))
-            PVAL <- mean(x$perm$permStat > STATISTIC + tol)
+            PVAL <- mean(ps > STATISTIC + tol)
         else {
             DF <- c("df" = x$perm$DF)
             PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
@@ -1315,7 +1317,7 @@ if (test == "Wald") {
         CINT <- cbind(ESTIMATE - qnorm(conf.level) * SE,
                       ESTIMATE + qnorm(conf.level) * SE)
     }
-    list(STATISTIC = STATISTIC, PVAL = PVAL, CONFINT = CINT)
+    list(STATISTIC = STATISTIC, SE = SE, PVAL = PVAL, CONFINT = CINT)
 }
 @}
 
@@ -1461,12 +1463,12 @@ obj <- .MLest(x, link = logit())
            rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
            stat <- stat + sapply(rt, function(x) colSums(x[,-1L, drop = FALSE] * res[,j]))
         }
-#        if (dim(xt)[2L] == 2L) {
-#            ret$permStat <- (stat - ret$Expectation) / sqrt(ret$Covariance)
-#        } else {
+        if (dim(xt)[2L] == 2L) {
+             ret$permStat <- (stat - ret$Expectation) / sqrt(ret$Covariance)
+        } else {
             ES <- t(matrix(stat, ncol = B) - ret$Expectation)
             ret$permStat <- rowSums(ES %*% solve(ret$Covariance) * ES)
-#        }
+        }
     }
     ret
 }
@@ -1511,6 +1513,7 @@ free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "
 
     ret <- .MLest(object, link = link, mu = mu, ...)
     ret$DNAME <- DNAME
+    ret$METHOD <- paste(link$alias, "test against", link$model, "alternatives")
 
     cf <- ret$par
     cf[idx <- seq_len(d[2L] - 1L)] <- 0
@@ -1558,7 +1561,7 @@ print.free1way.test <- function(x, test = c("Permutation", "Wald", "LRT", "Rao")
     @<statistics@>
 
     RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, 
-        null.value = ret$mu, alternative = alternative, # method = METHOD, 
+        null.value = ret$mu, alternative = alternative, method = x$METHOD, 
         data.name = x$DNAME, estimate = cf)
     class(RVAL) <- "htest"
     RVAL
