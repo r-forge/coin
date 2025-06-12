@@ -1195,6 +1195,8 @@ $\thetavec$.
     ret$profile <- function(start, fix)
         .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
     ret$table <- x
+    ret$mu <- mu
+    names(ret$mu) <- link$parm
 
     class(ret) <- "free1wayML"
     ret
@@ -1455,7 +1457,7 @@ print.free1way.test <- function(x, test = c("Permutation", "Wald", "LRT", "Rao")
 
     RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, 
         null.value = ret$mu, alternative = alternative, method = x$METHOD, 
-        data.name = x$DNAME, estimate = cf)
+        data.name = x$DNAME)
     class(RVAL) <- "htest"
     RVAL
 
@@ -1529,7 +1531,7 @@ confint.free1way.test <- function(object, parm,
             att.level <- mean(object$perm$permStat > qu[1] & object$perm$permStat < qu[2])
         }
     } else {
-        qu <- rep.int(qchisq(conf.level, df = 1), 2)
+        qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided
     }
 
     for (p in parm) {
@@ -1549,12 +1551,14 @@ vcov(ft)
 summary(ft)
 library("multcomp")
 summary(glht(ft), test = Chisqtest())
-summary(ft, test = "Rao")
-summary(ft, test = "permRao")
-summary(ft, test = "LRT")
+print(ft, test = "Wald")
+summary(glht(ft), test = Chisqtest())
+print(ft, test = "Rao")
+print(ft, test = "Permutation")
+print(ft, test = "LRT")
 confint(glht(ft), calpha = univariate_calpha())
-confint(ft, test = "Rao")
 confint(ft, test = "Wald")
+confint(ft, test = "Rao")
 confint(ft, test = "LRT")
 @@
 
@@ -1658,10 +1662,8 @@ print(ft, test = "Rao", alternative = "greater")
 print(ft, test = "Rao")
 library("lehmann")
 trafo.test(y ~ w)
-summary(ft, test = "LRT")
-summary(ft, test = "permRao")
-summary(ft, test = "Rao")
-confint(ft)
+summary(ft)
+confint(ft, test = "Permutation")
 confint(ft, test = "LRT")
 confint(ft, test = "Wald")
 confint(ft, test = "Rao")
