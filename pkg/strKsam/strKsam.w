@@ -227,6 +227,7 @@ whose element $(c, k, b)$ is the number of observations with configuration $(y =
 @<stratified Hessian@>
 @<stratified negative score residual@>
 @<R wcrossprod@>
+@<Strasser Weber@>
 @}
 
 
@@ -1057,7 +1058,7 @@ probit <- function()
 @o ML.R -cp
 @{
 @<ML estimation@>
-@<Strasser Weber@>
+
 @<free1way@>
 @<free1way methods@>
 @<free1way summary@>
@@ -1121,6 +1122,56 @@ $\thetavec$.
 }
 @}
 
+@d optim
+@{
+if (!length(fix)) {
+    ret <- optim(par = start, 
+                 fn = function(parm)
+                     .snll(parm, x = xlist, mu = mu),
+                 gr = function(parm)
+                     .snsc(parm, x = xlist, mu = mu),
+                 lower = lwr, upper = upr, method = "L-BFGS-B", 
+                 hessian = FALSE, ...)
+} else if (length(fix) == length(start)) {
+    ret <- list(par = start, 
+                value = .snll(start, x = xlist, mu = mu))
+} else {
+    ret <- .profile(start, fix = fix)
+}
+@}
+
+@d post processing
+@{
+if (is.null(fix) || (length(fix) == length(start)))
+    parm <- seq_len(K - 1)
+else 
+    parm <- fix
+if (any(parm >= K)) return(ret)
+
+ret$coefficients <- ret$par[parm]
+dn2 <- dimnames(x)[2L]
+names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
+
+if (score)
+    ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
+if (hessian) {
+    ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
+    if (length(parm) != nrow(ret$hessian))
+       ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
+    ret$vcov <- solve(ret$hessian)
+    rownames(ret$vcov) <- colnames(ret$vcov) <- rownames(ret$hessian) <-
+        colnames(ret$hessian) <-  cnames
+}
+if (residuals)
+    ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
+
+ret$profile <- function(start, fix)
+    .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
+ret$table <- x
+ret$mu <- mu
+names(ret$mu) <- link$parm
+@}
+
 @d ML estimation
 @{
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
@@ -1153,61 +1204,18 @@ $\thetavec$.
     @<stratified Hessian@>
     @<stratified negative score residual@>
     @<profile@>
- 
-    if (!length(fix)) {
-        ret <- optim(par = start, 
-                     fn = function(parm)
-                         .snll(parm, x = xlist, mu = mu),
-                     gr = function(parm)
-                         .snsc(parm, x = xlist, mu = mu),
-                     lower = lwr, upper = upr, method = "L-BFGS-B", 
-                     hessian = FALSE, ...)
-    } else if (length(fix) == length(start)) {
-        ret <- list(par = start, 
-                    value = .snll(start, x = xlist, mu = mu))
-    } else {
-        ret <- .profile(start, fix = fix)
-    }
 
-    if (is.null(fix) || (length(fix) == length(start)))
-        parm <- seq_len(K - 1)
-    else 
-        parm <- fix
-    if (any(parm >= K)) return(ret)
+    @<optim@> 
+    @<post processing@>
 
-    ret$coefficients <- ret$par[parm]
-    dn2 <- dimnames(x)[2L]
-    names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
-
-    if (score)
-        ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
-    if (hessian) {
-        ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
-        if (length(parm) != nrow(ret$hessian))
-            ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
-        ret$vcov <- solve(ret$hessian)
-        rownames(ret$vcov) <- colnames(ret$vcov) <- rownames(ret$hessian) <-
-            colnames(ret$hessian) <-  cnames
-    }
-    if (residuals)
-        ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
-
-    ret$profile <- function(start, fix)
-        .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
-    ret$table <- x
-    ret$mu <- mu
-    names(ret$mu) <- link$parm
 
     class(ret) <- "free1wayML"
     ret
 }
-print.free1wayML <- function(x, ...)
-    x$coefficients
 @}
 
 <<workhorse>>=
-
-.free1wayML(x, logit())
+.free1wayML(x, logit())$coefficients
 op
 N <- 10
 a <- matrix(c(5, 6, 4,
@@ -1219,9 +1227,10 @@ a <- matrix(c(5, 6, 4,
 x <- as.table(array(c(a[1:3,], a[-(1:3),]), dim = c(3, 3, 2)))
 x
 (ret <- .free1wayML(x, logit()))
-.free1wayML(x, logit(), start = ret$par, fix = 1:2)
-.free1wayML(x, logit(), start = ret$par, fix = 2)
-(ret <- .free1wayML(x, logit(), start = ret$par, fix = seq_along(ret$par)))
+.free1wayML(x, logit(), start = ret$par, fix = 1:2)$coefficients
+.free1wayML(x, logit(), start = ret$par, fix = 2)$coefficients
+.free1wayML(x, logit(), start = ret$par, fix =
+seq_along(ret$par))$coefficients
 @@
 
 \chapter{ML Inference}
@@ -1417,6 +1426,9 @@ free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "
         res <- pr$residuals / sqrt(pr$hessian)
     else
         res <- pr$residuals
+
+    @<Strasser Weber@>
+
     ret$perm <- .perm(res, object, B = B)
 
     class(ret) <- "free1way.test"
