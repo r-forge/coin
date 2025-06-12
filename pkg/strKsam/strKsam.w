@@ -1228,6 +1228,67 @@ x
 
 \section{Wald}
 
+@d statistics
+@{
+if (test == "Wald") {
+    if (alternative == "two.sided") {
+        STATISTIC <- c("Wald X-squared" = c(crossprod(cf, x$hessian %*% cf)))
+        DF <- c("df" = length(parm))
+        PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+    } else {
+        STATISTIC <- c("Wald Z" = c(cf * sqrt(x$hessian)))
+        PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+    }
+} else if (test == "LRT") {
+    par <- x$par
+    par[parm] <- value
+    unll <- x$value ### neg logLik
+    rnll <- x$profile(par, parm)$value ### neg logLik
+    STATISTIC <- c("logLR X-squared" = - 2 * (unll - rnll))
+    DF <- c("df" = length(parm))
+    PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+} else if (test == "Rao") {
+    par <- x$par
+    par[parm] <- value
+    ret <- x$profile(par, parm)
+    if (alternative == "two.sided") {
+        STATISTIC <- c("Rao X-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
+        DF <- c("df" = length(parm))
+        PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+    } else {
+        STATISTIC <- c("Rao Z" = -ret$negscore * sqrt(ret$vcov))
+        PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+    }
+} else if (test == "Permutation") {
+    par <- x$par
+    par[parm] <- value
+    ret <- x$profile(par, parm)
+    sc <- -ret$negscore
+    if (length(cf) == 1L)
+       sc <- sc / sqrt(ret$hessian)
+    Esc <- sc - x$perm$Expectation
+    if (alternative == "two.sided") {
+        STATISTIC <- c("Perm X-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
+        if (!is.null(x$perm$permStat))
+            PVAL <- mean(x$perm$permStat > STATISTIC + tol)
+        else {
+            DF <- c("df" = x$perm$DF)
+            PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+        }
+    } else {
+        STATISTIC <- c("Perm Z" = Esc / sqrt(x$perm$Covariance))
+        if (!is.null(x$perm$permStat)) {
+            if (alternative == "less")
+                PVAL <- mean(x$perm$permStat < STATISTIC - tol)
+            else
+                PVAL <- mean(x$perm$permStat > STATISTIC + tol)
+        } else {
+            PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+        }
+    }
+}
+@}
+
 @d Wald
 @{
 .Wald_pval <- function(coef, info, parm = seq_along(coef)) {
@@ -1491,64 +1552,10 @@ print.free1way.test <- function(x, test = c("Permutation", "Wald", "LRT", "Rao")
         stop("Cannot compute one-sided p-values")
 
     DF <- NULL
-    if (test == "Wald") {
-        if (alternative == "two.sided") {
-            STATISTIC <- c("Wald X-squared" = c(crossprod(cf, x$hessian %*% cf)))
-            DF <- c("df" = length(coef))
-            PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
-        } else {
-            STATISTIC <- c("Wald Z" = c(cf * sqrt(x$hessian)))
-            PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
-        }
-    } else if (test == "LRT") {
-        par <- x$par
-        par[seq_along(cf)] <- 0
-        unll <- x$value ### neg logLik
-        rnll <- x$profile(par, seq_along(cf))$value ### neg logLik
-        STATISTIC <- c("logLR X-squared" = - 2 * (unll - rnll))
-        DF <- c("df" = length(coef))
-        PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
-    } else if (test == "Rao") {
-        par <- x$par
-        par[seq_along(cf)] <- 0
-        ret <- x$profile(par, seq_along(cf))
-        if (alternative == "two.sided") {
-            STATISTIC <- c("Rao X-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
-            DF <- c("df" = length(coef))
-            PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
-        } else {
-            STATISTIC <- c("Rao Z" = -ret$negscore * sqrt(ret$vcov))
-            PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
-        }
-    } else if (test == "Permutation") {
-        par <- x$par
-        par[seq_along(cf)] <- 0
-        ret <- x$profile(par, seq_along(cf))
-        sc <- -ret$negscore
-        if (length(cf) == 1L)
-           sc <- sc / sqrt(ret$hessian)
-        Esc <- sc - x$perm$Expectation
-        if (alternative == "two.sided") {
-            STATISTIC <- c("Perm X-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
-            if (!is.null(x$perm$permStat))
-                PVAL <- mean(x$perm$permStat > STATISTIC + tol)
-            else {
-                DF <- c("df" = x$perm$DF)
-                PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
-            }
-        } else {
-            STATISTIC <- c("Perm Z" = Esc / sqrt(x$perm$Covariance))
-            if (!is.null(x$perm$permStat)) {
-                if (alternative == "less")
-                    PVAL <- mean(x$perm$permStat < STATISTIC - tol)
-                else
-                    PVAL <- mean(x$perm$permStat > STATISTIC + tol)
-            } else {
-                PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
-            }
-        }
+    parm <- seq_along(cf)
+    value <- 0
 
-    }
+    @<statistics@>
 
     RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, 
         null.value = ret$mu, alternative = alternative, # method = METHOD, 
