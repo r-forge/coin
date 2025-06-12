@@ -465,7 +465,7 @@ f <- dlogis
 c(cf[-1] * -1, cf[1]) - op$par
 logLik(m) + op$value
 .nsr(op$par, x)
-obj <- .MLest(as.table(x), link = logit())
+obj <- .free1wayML(as.table(x), link = logit())
 obj$coefficients
 obj$value
 @@
@@ -1057,9 +1057,6 @@ probit <- function()
 @o ML.R -cp
 @{
 @<ML estimation@>
-@<Wald@>
-@<LRatio@>
-@<Rao@>
 @<Strasser Weber@>
 @<free1way@>
 @<free1way methods@>
@@ -1126,7 +1123,7 @@ $\thetavec$.
 
 @d ML estimation
 @{
-.MLest <- function(x, link, mu = 0, start = NULL, fix = NULL, 
+.free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                    residuals = TRUE, score = TRUE, hessian = TRUE, 
                    tol = sqrt(.Machine$double.eps), ...) {
 
@@ -1196,17 +1193,19 @@ $\thetavec$.
         ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
 
     ret$profile <- function(start, fix)
-        .MLest(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
+        .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
     ret$table <- x
-#    ret$link <- link
 
+    class(ret) <- "free1wayML"
     ret
 }
+print.free1wayML <- function(x, ...)
+    x$coefficients
 @}
 
 <<workhorse>>=
 
-.MLest(x, logit())
+.free1wayML(x, logit())
 op
 N <- 10
 a <- matrix(c(5, 6, 4,
@@ -1217,10 +1216,10 @@ a <- matrix(c(5, 6, 4,
                     4, 6, 5), ncol = 3, byrow = TRUE)
 x <- as.table(array(c(a[1:3,], a[-(1:3),]), dim = c(3, 3, 2)))
 x
-(ret <- .MLest(x, logit()))
-.MLest(x, logit(), start = ret$par, fix = 1:2)
-.MLest(x, logit(), start = ret$par, fix = 2)
-(ret <- .MLest(x, logit(), start = ret$par, fix = seq_along(ret$par)))
+(ret <- .free1wayML(x, logit()))
+.free1wayML(x, logit(), start = ret$par, fix = 1:2)
+.free1wayML(x, logit(), start = ret$par, fix = 2)
+(ret <- .free1wayML(x, logit(), start = ret$par, fix = seq_along(ret$par)))
 @@
 
 \chapter{ML Inference}
@@ -1267,10 +1266,9 @@ if (test == "Wald") {
     if (length(cf) == 1L)
        sc <- sc / sqrt(ret$hessian)
     Esc <- sc - x$perm$Expectation
-    if (alternative == "two.sided") {
+    if (alternative == "two.sided" && length(cf) > 1L) {
         STATISTIC <- c("Perm X-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
         ps <- x$perm$permStat
-        if (length(cf) == 1L) ps <- ps^2
         if (!is.null(x$perm$permStat))
             PVAL <- mean(ps > STATISTIC + tol)
         else {
@@ -1280,127 +1278,21 @@ if (test == "Wald") {
     } else {
         STATISTIC <- c("Perm Z" = Esc / sqrt(x$perm$Covariance))
         if (!is.null(x$perm$permStat)) {
-            if (alternative == "less")
+            if (alternative == "two.sided")
+                PVAL <- mean(abs(x$perm$permStat) < abs(STATISTIC) - tol)
+            else if (alternative == "less")
                 PVAL <- mean(x$perm$permStat < STATISTIC - tol)
             else
                 PVAL <- mean(x$perm$permStat > STATISTIC + tol)
         } else {
-            PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+            if (alternative == "two.sided")
+                PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)
+            else
+                PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
         }
     }
 }
 @}
-
-@d Wald
-@{
-.Wald_pval <- function(coef, info, parm = seq_along(coef)) {
-    if (length(parm) < length(coef))
-        return(.Wald_pval(coef[parm], solve(solve(info)[parm,parm])))
-    pval <- pchisq(W <- crossprod(coef, info %*% coef), df = length(coef), lower.tail = FALSE)
-    list(STATISTIC = c("Wald chi-squared" = W), DF = length(coef), PVAL = pval)
-}
-
-.Wald_confint <- function(coef, vcov, parm, alternative = c("two.sided", "less", "greater"), conf.level = .95) {
-    alternative <- match.arg(alternative)
-    conf.level <- 1 - (1 - conf.level) / ((alternative == "two.sided") + 1L)
-    ESTIMATE <- coef[parm]
-    SE <- sqrt(diag(vcov))[parm]
-    STATISTIC <- c("Wald Z" = unname(ESTIMATE / SE))
-    if (alternative == "less") {
-        PVAL <- pnorm(STATISTIC)
-        CINT <- c(-Inf, ESTIMATE + qnorm(conf.level) * SE)
-    } else if (alternative == "greater") {
-        PVAL <- pnorm(STATISTIC, lower.tail = FALSE)
-        CINT <- c(ESTIMATE - qnorm(conf.level) * SE, Inf)
-    } else {
-        PVAL <- 2 * pnorm(-abs(STATISTIC))
-        CINT <- cbind(ESTIMATE - qnorm(conf.level) * SE,
-                      ESTIMATE + qnorm(conf.level) * SE)
-    }
-    list(STATISTIC = STATISTIC, SE = SE, PVAL = PVAL, CONFINT = CINT)
-}
-@}
-
-<<Wald>>=
-.Wald_pval(ret$coefficients, ret$hessian)
-.Wald_pval(ret$coefficients[1], 1 / ret$vcov[1,1])
-.Wald_confint(ret$coefficients, ret$vcov, parm = seq_along(ret$coefficients))
-@@
-
-
-@d LRatio
-@{
-.LRatio_pval <- function(object, value = 0, parm) {
-   cf <- object$par
-   unll <- object$value ### neg logLik
-   cf[parm] <- value
-   rnll <- object$profile(cf, parm)$value ### neg logLik
-   logLR <- - 2 * (unll - rnll)
-   pval <- pchisq(logLR, df = length(parm), lower.tail = FALSE)
-   list(STATISTIC = c("logLR chi-squared" = logLR), DF = length(parm), PVAL = pval)
-}
-
-.LR_confint <- function(object, parm, alternative = c("two.sided", "less", "greater"), conf.level = .95, fun)
-{
-
-    if (length(parm) > 1L)
-        return(lapply(parm, function(p) .LR_confint(object, parm = p, alternative, conf.level = conf.level, fun = fun)))
-
-    alternative <- match.arg(alternative)
-    conf.level <- 1 - (1 - conf.level) / ((alternative != "two.sided") + 1L)
-
-    pfun <- function(par)
-        fun(object, par, parm)$PVAL - (1 - conf.level)
-
-    cf <- object$coefficients
-    W <- .Wald_confint(cf, object$vcov, parm, conf.level = 1 - (1 - conf.level) / 10)
-
-    CINT <- c(-Inf, Inf)
-    if (alternative != "greater")
-        CINT[1] <- uniroot(pfun, interval = c(W$CONFINT[,1], cf[parm]),
-                           extendInt = "yes")$root
-    if (alternative != "less")
-        CINT[2] <- uniroot(pfun, interval = c(cf[parm], W$CONFINT[,2]),
-                           extendInt = "yes")$root
-
-    return(CINT)
-}
-@}
-
-<<LRatio>>=
-obj <- .MLest(x, link = logit())
-.LRatio_pval(obj, parm = 1)
-.LR_confint(obj, parm = 1, fun = .LRatio_pval)
-@@
-
-@d Rao
-@{
-.Rao_pval <- function(object, value = 0, parm, conditional = FALSE) {
-   cf <- object$par
-   cf[parm] <- value
-   ret <- object$profile(cf, parm)
-   if (conditional) {
-       sc <- -ret$negscore
-       if (length(object$coefficients) == 1L)
-           sc <- sc / sqrt(ret$hessian)
-       Esc <- sc - object$perm$Expectation
-       pR <- sum(Esc %*% solve(object$perm$Covariance) * Esc)
-       if (!is.null(object$perm$permStat))
-           pval <- mean((object$perm$permStat - sqrt(.Machine$double.eps) > pR))
-       else 
-           pval <- pchisq(pR, df = object$perm$DF, lower.tail = FALSE)
-       return(list(STATISTIC = c("Perm Rao" = pR), DF = object$perm$DF, PVAL = pval))
-   }
-   R <- crossprod(ret$negscore, ret$vcov %*% ret$negscore)
-   pval <- pchisq(R, df = length(parm), lower.tail = FALSE)
-   list(STATISTIC = c("Rao chi-squared" = R), DF = length(parm), PVAL = pval)
-}
-@}
-
-<<Rao>>=
-.Rao_pval(obj, parm = 1)
-.LR_confint(obj, parm = 1, fun = .Rao_pval)
-@@
 
 \chapter{Permutation Inference}
 
@@ -1511,7 +1403,8 @@ free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "
         link <- do.call(link, list())
     }
 
-    ret <- .MLest(object, link = link, mu = mu, ...)
+    ret <- .free1wayML(object, link = link, mu = mu, ...)
+    ret$link <- link
     ret$DNAME <- DNAME
     ret$METHOD <- paste(link$alias, "test against", link$model, "alternatives")
 
@@ -1567,48 +1460,84 @@ print.free1way.test <- function(x, test = c("Permutation", "Wald", "LRT", "Rao")
     RVAL
 
 }
-summary.free1way.test <- function(object, test = c("Wald", "LRT", "Rao", "permRao"), 
-                         alternative = c("two.sided", "less", "greater"), ...)
+summary.free1way.test <- function(object, alternative = c("two.sided", "less", "greater"), ...)
 {
 
-    test <- match.arg(test)
     alternative <- match.arg(alternative)
 
-    ### global
-    cf <- coef(object)
-    ret <- switch(test, "Wald" = .Wald_pval(cf, object$hessian, parm = seq_along(cf)),
-                          "LRT" = .LRatio_pval(object, parm = seq_along(cf)),
-                          "Rao" = .Rao_pval(object, parm = seq_along(cf)),
-                          "permRao" = .Rao_pval(object, parm = seq_along(cf), conditional = TRUE))
-
-    RVAL <- list(statistic = ret$STATISTIC, parameter = NULL, p.value = as.numeric(ret$PVAL), 
-        null.value = ret$mu, alternative = alternative, # method = METHOD, 
-        data.name = object$DNAME, estimate = coef(object))
-    class(RVAL) <- "htest"
-    RVAL
-
+    ESTIMATE <- coef(object)
+    SE <- sqrt(diag(vcov(object)))
+    STATISTIC <- unname(ESTIMATE / SE)
+    if (alternative == "less") {
+        PVAL <- pnorm(STATISTIC)
+    } else if (alternative == "greater") {
+        PVAL <- pnorm(STATISTIC, lower.tail = FALSE)
+    } else {
+        PVAL <- 2 * pnorm(-abs(STATISTIC))
+    }
+    cfmat <- cbind(ESTIMATE, SE, STATISTIC, PVAL)
+    colnames(cfmat) <- c(object$link$parm, "Std. Error", "z value",
+                         switch(alternative, "two.sided" = "P(>|z|)",
+                                             "less" = "P(<z)",
+                                             "greater" = "P(>z)"))
+    ret <- list(coefficients = cfmat)
+    class(ret) <- "summary.free1way.test"
+    return(ret)
+}
+print.summary.free1way.test <- function(x, ...) {
+    cat("Coefficients:\n")
+    printCoefmat(x$coefficients)
 }
 @}
 
 @d free1way confint
 @{
 confint.free1way.test <- function(object, parm,
-    level = .95, alternative = c("two.sided", "less", "greater"), test = c("Wald", "LRT", "Rao", "permRao"), ...)
+    level = .95, test = c("Permutation", "Wald", "LRT", "Rao"), ...)
 {
+
     test <- match.arg(test)
-    if (missing(parm)) 
-        parm <- seq_along(coef(object))
+    conf.level <- 1 - (1 - level) / 2
 
     cf <- coef(object)
-    vc <- vcov(object)
+    if (missing(parm)) 
+        parm <- seq_along(cf)
 
-    ret <- switch(test, "Wald" = .Wald_confint(cf, vc, parm = parm, alternative = alternative, conf.level = level),
-                        "LRT" = .LR_confint(object, parm = parm, fun = .LRatio_pval, alternative = alternative, conf.level = level),
-                        "Rao" = .LR_confint(object, parm = parm, fun = .Rao_pval, alternative = alternative, conf.level = level),
-                        "permRao" = .LR_confint(object, parm = parm, fun =
-                        function(...) .Rao_pval(..., conditional = TRUE), alternative = alternative, conf.level = level))
-    ret
+    ESTIMATE <- cf[parm]
+    qSE <- qnorm(conf.level) * sqrt(diag(vcov(object)))[parm]
+    CINT <- cbind(ESTIMATE - qSE, ESTIMATE + qSE)
+    colnames(CINT) <- paste(100 * c(1 - conf.level, conf.level), "%")
+    if (test == "Wald")
+        return(CINT)
 
+    CINT[] <- cbind(ESTIMATE - qSE * 5, ESTIMATE + qSE * 5)
+
+    sfun <- function(value, parm, quantile) {
+        x <- object
+        alternative <- "two.sided"
+        tol <- .Machine$double.eps
+        @<statistics@>
+        return(STATISTIC - quantile)
+    }
+
+    if (test == "Permutation") {
+        stopifnot(length(cf) == 1L)
+        if (is.null(object$perm$permStat)) {
+            qu <- qnorm(conf.level) * c(-1, 1)
+        } else {
+            qu <- quantile(object$perm$permStat, probs = c(1 - conf.level, conf.level))
+            att.level <- mean(object$perm$permStat > qu[1] & object$perm$permStat < qu[2])
+        }
+    } else {
+        qu <- rep.int(qchisq(conf.level, df = 1), 2)
+    }
+
+    for (p in parm) {
+        CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), parm = p, quantile = qu[2])$root
+        CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), parm = p, quantile = qu[1])$root
+    }
+    if (test == "Permutation") attr(CINT, "Attained level") <- att.level
+    return(CINT)
 }
 # power.free1way.test <- function()
 @}
@@ -1623,10 +1552,9 @@ summary(glht(ft), test = Chisqtest())
 summary(ft, test = "Rao")
 summary(ft, test = "permRao")
 summary(ft, test = "LRT")
-confint(ft)
 confint(glht(ft), calpha = univariate_calpha())
 confint(ft, test = "Rao")
-confint(ft, test = "permRao")
+confint(ft, test = "Wald")
 confint(ft, test = "LRT")
 @@
 
@@ -1735,7 +1663,7 @@ summary(ft, test = "permRao")
 summary(ft, test = "Rao")
 confint(ft)
 confint(ft, test = "LRT")
-confint(ft, test = "permRao")
+confint(ft, test = "Wald")
 confint(ft, test = "Rao")
 wilcox.test(y ~ w)
 library("rms")
