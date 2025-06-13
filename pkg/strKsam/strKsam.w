@@ -1,6 +1,6 @@
 \documentclass[a4paper]{report}
 
-%\VignetteIndexEntry{Stratified K Sample Inference}
+%\VignetteIndexEntry{Stratified K-sample Inference}
 %\VignetteDepends{strKsam}
 %\VignetteKeywords{conditional inference, conditional Monte Carlo}}
 %\VignettePackage{strKsam}
@@ -121,7 +121,7 @@ urlcolor={linkcolor}%
 
 \author{Torsten Hothorn \\ Universit\"at Z\"urich}
 
-\title{Distribution-free Stratified $K$ Sample Inference}
+\title{Distribution-free Stratified $K$-sample Inference}
 
 \begin{document}
 
@@ -228,6 +228,7 @@ whose element $(c, k, b)$ is the number of observations with configuration $(y =
 @<stratified negative score residual@>
 @<R wcrossprod@>
 @<Strasser Weber@>
+@<resampling@>
 @}
 
 
@@ -846,6 +847,11 @@ wcrossprod <- function(x, A, tol = .Machine$double.eps) {
 \chapter{Link Functions}
 \label{ch:link}
 
+Similar to \code{family} objects, we provide some infrastructure for
+\code{link} functions $F^{-1}$ and derived quantities (\code{linkinv} $F$,
+\code{dlinkinv} $f$, and \code{ddlinkinv} $f^\prime$). If not provided, we also
+set-up the ratio $f^\prime / f$ in the constructor.
+
 @o linkfun.R -cp
 @{
 @<linkfun@>
@@ -900,6 +906,9 @@ linkfun <- function(alias,
 }
 @}
 
+We start with the logit link, that is $F(z) = (1 + \exp(-z))^{-1}$, giving rise
+to Wilcoxon or Kruskal-Wallis type score residuals:
+
 @d logit
 @{
 logit <- function()
@@ -937,6 +946,14 @@ logit <- function()
             parm2OVL = function(x) 2 * plogis(-abs(x / 2))
     )
 @}
+
+The \code{parm2PI} function converts log-odds ratios to probabilistic
+indices (or AUCs) and the inverse operation is implemented by
+\code{PI2parm}. The overlap coefficient can be obtained from a log-odds
+ratio via \code{parm2OVL}.
+
+The log-log link, with $F(z) = \exp(-\exp(-z))$, is used to construct tests
+against Lehmann alternatives:
 
 @d loglog
 @{
@@ -984,6 +1001,10 @@ loglog <- function()
     )
 @}
 
+The complementary log-log link, with $F(z) = 1 - \exp(-\exp(z))$, provides
+log-rank or Savage score residuals against proportional hazards
+alternatives:
+
 @d cloglog
 @{
 cloglog <- function()
@@ -1030,10 +1051,14 @@ cloglog <- function()
     )
 @}
 
+The probit link, with $F(z) = \Phi$, leads to normal scores tests, where the
+shift effect can be interpreted as a generalised version of Cohen's $d$,
+that is, differences on a latent normal scale with variance one:
+
 @d probit
 @{
 probit <- function()
-    linkfun(alias = "van der Waerden",
+    linkfun(alias = "van der Waerden normal scores",
             model = "latent normal shift", 
             parm = "generalised Cohen's d",
             link = qnorm,
@@ -1150,7 +1175,7 @@ if (any(parm >= K)) return(ret)
 
 ret$coefficients <- ret$par[parm]
 dn2 <- dimnames(x)[2L]
-names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
+names(ret$coefficients) <- cnames <- dn2[[1L]][1L + parm]
 
 if (score)
     ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
@@ -1180,8 +1205,10 @@ names(ret$mu) <- link$parm
 
     stopifnot(is.table(x))
     dx <- dim(x)
+    dn <- dimnames(x)
     if (length(dx) == 2L)
-        x <- as.table(array(c(x), dim = dx <- c(dx, 1L)))
+        x <- as.table(array(c(x), dim = dx <- c(dx, 1L)), 
+                      dimnames = c(dx, list("A")))
     stopifnot(length(dx) == 3L)
     stopifnot(dim(x)[1L] > 1L)
     K <- dim(x)[2L]
@@ -1193,7 +1220,6 @@ names(ret$mu) <- link$parm
     fp <- function(q) .dd(link, x = q)
 
     @<setup@>
-
     @<cumsumrev@>
     @<negative logLik@>
     @<negative score@>
@@ -1204,10 +1230,8 @@ names(ret$mu) <- link$parm
     @<stratified Hessian@>
     @<stratified negative score residual@>
     @<profile@>
-
     @<optim@> 
     @<post processing@>
-
 
     class(ret) <- "free1wayML"
     ret
@@ -1236,76 +1260,102 @@ seq_along(ret$par))$coefficients
 \chapter{ML Inference}
 \label{ch:MLinf}
 
-\section{Wald}
 
 @d statistics
 @{
 if (test == "Wald") {
-    if (alternative == "two.sided") {
-        STATISTIC <- c("Wald X-squared" = c(crossprod(cf, x$hessian %*% cf)))
-        DF <- c("df" = length(parm))
-        PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
-    } else {
-        STATISTIC <- c("Wald Z" = c(cf * sqrt(x$hessian)))
-        PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
-    }
+    @<Wald statistic@>
 } else if (test == "LRT") {
-    par <- x$par
-    par[parm] <- value
-    unll <- x$value ### neg logLik
-    rnll <- x$profile(par, parm)$value ### neg logLik
-    STATISTIC <- c("logLR X-squared" = - 2 * (unll - rnll))
-    DF <- c("df" = length(parm))
-    PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+    @<LRT@>
 } else if (test == "Rao") {
-    par <- x$par
-    par[parm] <- value
-    ret <- x$profile(par, parm)
-    if (alternative == "two.sided") {
-        STATISTIC <- c("Rao X-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
-        DF <- c("df" = length(parm))
-        PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
-    } else {
-        STATISTIC <- c("Rao Z" = -ret$negscore * sqrt(ret$vcov))
-        PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
-    }
+    @<Rao@>
 } else if (test == "Permutation") {
-    par <- x$par
-    par[parm] <- value
-    ret <- x$profile(par, parm)
-    sc <- -ret$negscore
-    if (length(cf) == 1L)
-       sc <- sc / sqrt(ret$hessian)
-    Esc <- sc - x$perm$Expectation
-    if (alternative == "two.sided" && length(cf) > 1L) {
-        STATISTIC <- c("Perm X-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
-        ps <- x$perm$permStat
-        if (!is.null(x$perm$permStat))
-            PVAL <- mean(ps > STATISTIC + tol)
-        else {
-            DF <- c("df" = x$perm$DF)
-            PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
-        }
-    } else {
-        STATISTIC <- c("Perm Z" = Esc / sqrt(x$perm$Covariance))
-        if (!is.null(x$perm$permStat)) {
-            if (alternative == "two.sided")
-                PVAL <- mean(abs(x$perm$permStat) < abs(STATISTIC) - tol)
-            else if (alternative == "less")
-                PVAL <- mean(x$perm$permStat < STATISTIC - tol)
-            else
-                PVAL <- mean(x$perm$permStat > STATISTIC + tol)
-        } else {
-            if (alternative == "two.sided")
-                PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)
-            else
-                PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
-        }
-    }
+    @<Permutation@>
 }
 @}
 
-\chapter{Permutation Inference}
+
+\section{Wald}
+
+@d Wald statistic
+@{
+if (alternative == "two.sided") {
+    STATISTIC <- c("Wald X-squared" = c(crossprod(cf, x$hessian %*% cf)))
+    DF <- c("df" = length(parm))
+    PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+} else {
+    STATISTIC <- c("Wald Z" = c(cf * sqrt(c(x$hessian))))
+    PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+}
+@}
+
+\section{Likelihood-ratio}
+
+@d LRT
+@{
+par <- x$par
+par[parm] <- value
+unll <- x$value ### neg logLik
+rnll <- x$profile(par, parm)$value ### neg logLik
+STATISTIC <- c("logLR X-squared" = - 2 * (unll - rnll))
+DF <- c("df" = length(parm))
+PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+@}
+
+\section{Rao Score}
+
+@d Rao
+@{
+par <- x$par
+par[parm] <- value
+ret <- x$profile(par, parm)
+if (alternative == "two.sided") {
+    STATISTIC <- c("Rao X-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
+    DF <- c("df" = length(parm))
+    PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+} else {
+    STATISTIC <- c("Rao Z" = -ret$negscore * sqrt(c(ret$vcov)))
+    PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+}
+@}
+
+\section{Permutation}
+
+@d Permutation
+@{
+par <- x$par
+par[parm] <- value
+ret <- x$profile(par, parm)
+sc <- -ret$negscore
+if (length(cf) == 1L)
+   sc <- sc / sqrt(c(ret$hessian))
+Esc <- sc - x$perm$Expectation
+if (alternative == "two.sided" && length(cf) > 1L) {
+    STATISTIC <- c("Perm X-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
+    ps <- x$perm$permStat
+    if (!is.null(x$perm$permStat))
+        PVAL <- mean(ps > STATISTIC + tol)
+    else {
+        DF <- c("df" = x$perm$DF)
+        PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
+    }
+} else {
+    STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
+    if (!is.null(x$perm$permStat)) {
+        if (alternative == "two.sided")
+            PVAL <- mean(abs(x$perm$permStat) < abs(STATISTIC) - tol)
+        else if (alternative == "less")
+            PVAL <- mean(x$perm$permStat < STATISTIC - tol)
+        else
+            PVAL <- mean(x$perm$permStat > STATISTIC + tol)
+    } else {
+        if (alternative == "two.sided")
+            PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)
+        else
+            PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
+    }
+}
+@}
 
 @d Strasser Weber
 @{
@@ -1344,8 +1394,11 @@ if (test == "Wald") {
     list(Statistic = STAT, Expectation = as.vector(Exp),
          Covariance = Cov)
 }
+@}
 
-.perm <- function(res, xt, B = 10000) {
+@d resampling
+@{
+.resample <- function(res, xt, B = 10000) {
 
     if (length(dim(xt)) == 2L)
         xt <- as.table(array(xt, dim = c(dim(xt), 1)))
@@ -1354,7 +1407,7 @@ if (test == "Wald") {
     stat <- 0
     ret <- .SW(res, xt)
     if (dim(xt)[2L] == 2L) {
-        ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(ret$Covariance))
+        ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(c(ret$Covariance)))
     } else {
         ES <- t(ret$Statistic - ret$Expectation)
         ret$testStat <- sum(ES %*% solve(ret$Covariance) * ES)
@@ -1367,7 +1420,7 @@ if (test == "Wald") {
            stat <- stat + sapply(rt, function(x) colSums(x[,-1L, drop = FALSE] * res[,j]))
         }
         if (dim(xt)[2L] == 2L) {
-             ret$permStat <- (stat - ret$Expectation) / sqrt(ret$Covariance)
+             ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
         } else {
             ES <- t(matrix(stat, ncol = B) - ret$Expectation)
             ret$permStat <- rowSums(ES %*% solve(ret$Covariance) * ES)
@@ -1380,7 +1433,7 @@ if (test == "Wald") {
 <<SW>>=
 w <- gl(2, 15)
 (s <- .SW(r <- rank(u <- runif(length(w))), model.matrix(~ 0 + w)))
-ps <- .perm(r, model.matrix(~ 0 + w), B = 100000)
+ps <- .resample(r, model.matrix(~ 0 + w), B = 100000)
 ps$testStat
 mean(abs(ps$permStat) > abs(ps$testStat) - .Machine$double.eps)
 pchisq(ps$testStat^ifelse(ps$DF == 1, 2, 1), df = ps$DF, lower.tail = FALSE)
@@ -1390,7 +1443,7 @@ kruskal_test(u ~ w, distribution = approximate(100000))
 @@
 
 
-\chapter{Test for Equal Distributions in a Stratified One-way Layout}
+\chapter{Distribution-free Tests in Stratified One-way Layouts}
 
 Distribution-free
 
@@ -1400,6 +1453,9 @@ free1way.test <- function(x, ...)
     UseMethod("free1way.test")
 free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "loglog"), mu = 0, B = 0, ...)
 {
+
+    cl <- match.call()
+
     d <- dim(object)
     dn <- dimnames(object)
     DNAME <- NULL
@@ -1417,22 +1473,26 @@ free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "
     ret <- .free1wayML(object, link = link, mu = mu, ...)
     ret$link <- link
     ret$data.name <- DNAME
+    ret$call <- cl
+
     alias <- link$alias
     if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]
     ret$method <- paste(ifelse(length(d) == 3L, "Stratified", ""), 
-                        paste0(d[2], "-sample"), alias, "test against", link$model, "alternatives")
+                        paste0(d[2], "-sample"), alias, 
+                        "test against", link$model, "alternatives")
 
     cf <- ret$par
     cf[idx <- seq_len(d[2L] - 1L)] <- 0
     pr <- ret$profile(cf, idx)
     if (d[2L] == 2L)
-        res <- pr$residuals / sqrt(pr$hessian)
+        res <- pr$residuals / sqrt(c(pr$hessian))
     else
         res <- pr$residuals
 
     @<Strasser Weber@>
+    @<resampling@>
 
-    ret$perm <- .perm(res, object, B = B)
+    ret$perm <- .resample(res, object, B = B)
 
     class(ret) <- "free1way.test"
     return(ret)
@@ -1441,14 +1501,14 @@ free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "
 
 @d free1way methods
 @{
-coef.free1way.test <- function(object, what = c("shift", "AUC", "PI", "OVL"), ...)
+coef.free1way.test <- function(object, what = c("shift", "PI", "AUC", "OVL"), ...)
 {
     what <- match.arg(what)
     cf <- object$coefficients
     return(switch(what, "shift" = cf,
-                        "AUC" = object$link$parm2PI(cf),
                         "PI" = object$link$parm2PI(cf),
-                       "PI" = object$link$parm2OVL(cf)))
+                        "AUC" = object$link$parm2PI(cf),	### same as PI
+                        "OVL" = object$link$parm2OVL(cf)))
 }
 vcov.free1way.test <- function(object, ...)
     object$vcov
@@ -1504,11 +1564,13 @@ summary.free1way.test <- function(object, alternative = c("two.sided", "less", "
                          switch(alternative, "two.sided" = "P(>|z|)",
                                              "less" = "P(<z)",
                                              "greater" = "P(>z)"))
-    ret <- list(coefficients = cfmat)
+    ret <- list(call = object$call, coefficients = cfmat)
     class(ret) <- "summary.free1way.test"
     return(ret)
 }
 print.summary.free1way.test <- function(x, ...) {
+    cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
+        "\n\n", sep = "")
     cat("Coefficients:\n")
     printCoefmat(x$coefficients)
 }
@@ -1518,7 +1580,7 @@ print.summary.free1way.test <- function(x, ...) {
 @{
 confint.free1way.test <- function(object, parm,
     level = .95, test = c("Permutation", "Wald", "LRT", "Rao"), 
-    what = c("shift", "AUC", "PI", "OVL"), ...)
+    what = c("shift", "PI", "AUC", "OVL"), ...)
 {
 
     test <- match.arg(test)
@@ -1531,7 +1593,7 @@ confint.free1way.test <- function(object, parm,
     ESTIMATE <- cf[parm]
     qSE <- qnorm(conf.level) * sqrt(diag(vcov(object)))[parm]
     CINT <- cbind(ESTIMATE - qSE, ESTIMATE + qSE)
-    colnames(CINT) <- paste(100 * c(1 - conf.level, conf.level), "%")
+    colnames(CINT) <- paste0(100 * c(1 - conf.level, conf.level), "%")
     if (test == "Wald")
         return(CINT)
 
@@ -1552,6 +1614,7 @@ confint.free1way.test <- function(object, parm,
         } else {
             qu <- quantile(object$perm$permStat, probs = c(1 - conf.level, conf.level))
             att.level <- mean(object$perm$permStat > qu[1] & object$perm$permStat < qu[2])
+            attr(CINT, "Attained level") <- att.level
         }
     } else {
         qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided
@@ -1563,12 +1626,10 @@ confint.free1way.test <- function(object, parm,
     }
 
     what <- match.arg(what)
-    CINT <- switch(what, "shift" = cf,
-                         "AUC" = object$link$parm2PI(CINT),
+    CINT <- switch(what, "shift" = CINT,
                          "PI" = object$link$parm2PI(CINT),
-                         "PI" = object$link$parm2OVL(CINT))
-
-    if (test == "Permutation") attr(CINT, "Attained level") <- att.level
+                         "AUC" = object$link$parm2PI(CINT), ### same as PI 
+                         "OVL" = object$link$parm2OVL(CINT))
     return(CINT)
 }
 # power.free1way.test <- function()
@@ -1597,6 +1658,8 @@ confint(ft, test = "LRT")
 free1way.test.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
 {
 
+    cl <- match.call()
+
     if(missing(formula) || (length(formula) != 3L))
         stop("'formula' missing or incorrect")
 
@@ -1622,11 +1685,12 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
     DNAME <- paste(c(names(mf)[response], group), collapse = " by ") # works in all cases
     w <- as.vector(model.weights(mf))
     y <- mf[[response]]
-    g <- factor(mf[[group]])
+    lev <- sort(unique(mf[[group]]))
+    g <- factor(mf[[group]], levels = lev, labels = paste0(group, lev))
     if (nlevels(g) < 2L)
         stop("grouping factor must have at least 2 levels")
     if (stratum) {
-        st <- factor(mf[[stratum]])
+        st <- factor(mf[[stratum]], levels = )
         if (nlevels(st) < 2L)
             stop("at least two strata must be present")
         RVAL <- free1way.test(y = y, x = g, z = st, weights = w, ...)
@@ -1636,13 +1700,15 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
         RVAL <- free1way.test(y = y, x = g, weights = w, ...)
     }
     RVAL$data.name <- DNAME
+    RVAL$call <- cl
     RVAL
 }
  
 free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {
 
-    DNAME <- paste(deparse1(substitute(x)), "by",
-                   deparse1(substitute(y)))
+    cl <- match.call()
+    DNAME <- paste(deparse1(substitute(y)), "by",
+                   deparse1(substitute(x)))
     if (!is.null(z))
         DNAME <- paste(DNAME, "with strata", deparse1(substitute(z)))
 
@@ -1656,13 +1722,15 @@ free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...
     r <- cut(y, breaks = breaks)[, drop = TRUE]
     RVAL <- free1way.test(y = r, x = x, z = z, weights = weights, ...)
     RVAL$data.name <- DNAME
+    RVAL$call <- cl
     RVAL
 }
 
 free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
 
-    DNAME <- paste(deparse1(substitute(x)), "by",
-                   deparse1(substitute(y)))
+    cl <- match.call()
+    DNAME <- paste(deparse1(substitute(y)), "by",
+                   deparse1(substitute(x)))
     if (!is.null(z))
         DNAME <- paste(DNAME, "with strata", deparse1(substitute(z)))
 
@@ -1677,6 +1745,7 @@ free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
     }
     RVAL <- free1way.test(tab, ...)
     RVAL$data.name <- DNAME
+    RVAL$call <- cl
     RVAL
 }
 @}
@@ -1719,6 +1788,19 @@ ci <- confint(or)
 ci[nrow(ci),]
 vcov(or)
 vcov(ft)
+@@
+
+\section{Tests}
+
+<<mh>>=
+example(mantelhaen.test, echo = FALSE)
+mantelhaen.test(UCBAdmissions, correct = FALSE)
+a <- free1way.test(UCBAdmissions)
+print(a, test = "Wald")
+exp(coef(a))
+exp(confint(a, test = "Wald"))
+lapply(seq_len(dim(UCBAdmissions)[3L]),
+    function(d) confint(free1way.test(UCBAdmissions[,,d])))
 @@
 
 \chapter*{Index}
