@@ -903,7 +903,7 @@ linkfun <- function(alias,
 @d logit
 @{
 logit <- function()
-    linkfun(alias = "Wilcoxon",
+    linkfun(alias = c("Wilcoxon", "Kruskal-Wallis"),
             model = "proportional odds", 
             parm = "log-odds ratio",
             link = qlogis,
@@ -1416,8 +1416,11 @@ free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "
 
     ret <- .free1wayML(object, link = link, mu = mu, ...)
     ret$link <- link
-    ret$DNAME <- DNAME
-    ret$METHOD <- paste(link$alias, "test against", link$model, "alternatives")
+    ret$data.name <- DNAME
+    alias <- link$alias
+    if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]
+    ret$method <- paste(ifelse(length(d) == 3L, "Stratified", ""), 
+                        paste0(d[2], "-sample"), alias, "test against", link$model, "alternatives")
 
     cf <- ret$par
     cf[idx <- seq_len(d[2L] - 1L)] <- 0
@@ -1438,8 +1441,15 @@ free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "
 
 @d free1way methods
 @{
-coef.free1way.test <- function(object, ...)
-    object$coefficients
+coef.free1way.test <- function(object, what = c("shift", "AUC", "PI", "OVL"), ...)
+{
+    what <- match.arg(what)
+    cf <- object$coefficients
+    return(switch(what, "shift" = cf,
+                        "AUC" = object$link$parm2PI(cf),
+                        "PI" = object$link$parm2PI(cf),
+                       "PI" = object$link$parm2OVL(cf)))
+}
 vcov.free1way.test <- function(object, ...)
     object$vcov
 logLik.free1way.test <- function(object, ...)
@@ -1468,8 +1478,8 @@ print.free1way.test <- function(x, test = c("Permutation", "Wald", "LRT", "Rao")
     @<statistics@>
 
     RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, 
-        null.value = ret$mu, alternative = alternative, method = x$METHOD, 
-        data.name = x$DNAME)
+        null.value = ret$mu, alternative = alternative, method = x$method, 
+        data.name = x$data.name)
     class(RVAL) <- "htest"
     RVAL
 
@@ -1507,7 +1517,8 @@ print.summary.free1way.test <- function(x, ...) {
 @d free1way confint
 @{
 confint.free1way.test <- function(object, parm,
-    level = .95, test = c("Permutation", "Wald", "LRT", "Rao"), ...)
+    level = .95, test = c("Permutation", "Wald", "LRT", "Rao"), 
+    what = c("shift", "AUC", "PI", "OVL"), ...)
 {
 
     test <- match.arg(test)
@@ -1550,6 +1561,13 @@ confint.free1way.test <- function(object, parm,
         CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), parm = p, quantile = qu[2])$root
         CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), parm = p, quantile = qu[1])$root
     }
+
+    what <- match.arg(what)
+    CINT <- switch(what, "shift" = cf,
+                         "AUC" = object$link$parm2PI(CINT),
+                         "PI" = object$link$parm2PI(CINT),
+                         "PI" = object$link$parm2OVL(CINT))
+
     if (test == "Permutation") attr(CINT, "Attained level") <- att.level
     return(CINT)
 }
@@ -1578,14 +1596,21 @@ confint(ft, test = "LRT")
 @{
 free1way.test.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
 {
+
     if(missing(formula) || (length(formula) != 3L))
         stop("'formula' missing or incorrect")
-    group <- 2
-    if (length(attr(terms(formula[-2L]), "term.labels")) > 2L)
+
+    strata <- function(object) object
+    formula <- terms(formula, specials = "strata")
+
+    stratum <- attr(formula, "specials")$strata
+    if (is.null(stratum)) stratum <- 0L
+    
+    if (length(attr(formula, "term.labels")) > 1L + stratum)
         stop("'formula' missing or incorrect")
-    strata <- NA
-    if (length(attr(terms(formula[-2L]), "term.labels")) == 2L)
-       strata <- 3
+    group <- attr(formula, "term.labels") 
+    if (stratum) group <- group[-(stratum - 1L)]
+
     m <- match.call(expand.dots = FALSE)
     if (is.matrix(eval(m$data, parent.frame())))
         m$data <- as.data.frame(data)
@@ -1593,20 +1618,22 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
     m[[1L]] <- quote(stats::model.frame)
     m$... <- NULL
     mf <- eval(m, parent.frame())
-    DNAME <- paste(names(mf), collapse = " by ") # works in all cases
-    names(mf) <- NULL
     response <- attr(attr(mf, "terms"), "response")
+    DNAME <- paste(c(names(mf)[response], group), collapse = " by ") # works in all cases
     w <- as.vector(model.weights(mf))
     y <- mf[[response]]
     g <- factor(mf[[group]])
-    if(nlevels(g) != 2L)
-        stop("grouping factor must have exactly 2 levels")
-    if (is.na(strata)) {
+    if (nlevels(g) < 2L)
+        stop("grouping factor must have at least 2 levels")
+    if (stratum) {
+        st <- factor(mf[[stratum]])
+        if (nlevels(st) < 2L)
+            stop("at least two strata must be present")
+        RVAL <- free1way.test(y = y, x = g, z = st, weights = w, ...)
+        DNAME <- paste(DNAME, paste("with", names(mf)[stratum]))
+    } else {
         ## Call the default method.
         RVAL <- free1way.test(y = y, x = g, weights = w, ...)
-    } else {
-        st <- factor(mf[[strata]])
-        RVAL <- free1way.test(y = y, x = g, z = st, weights = w, ...)
     }
     RVAL$data.name <- DNAME
     RVAL
@@ -1614,10 +1641,10 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
  
 free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {
 
-    DNAME <- paste(deparse1(substitute(x)), "and",
+    DNAME <- paste(deparse1(substitute(x)), "by",
                    deparse1(substitute(y)))
     if (!is.null(z))
-        DNAME <- paste(DNAME, "stratified by", deparse1(substitute(z)))
+        DNAME <- paste(DNAME, "with strata", deparse1(substitute(z)))
 
     uy <- unique(y)
     if (nbins && nbins < length(uy)) {
@@ -1629,16 +1656,15 @@ free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...
     r <- cut(y, breaks = breaks)[, drop = TRUE]
     RVAL <- free1way.test(y = r, x = x, z = z, weights = weights, ...)
     RVAL$data.name <- DNAME
-    RVAL$method <- gsub("Ordinal|Binary", "Semiparametric", RVAL$method)
     RVAL
 }
 
 free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
 
-    DNAME <- paste(deparse1(substitute(x)), "and",
+    DNAME <- paste(deparse1(substitute(x)), "by",
                    deparse1(substitute(y)))
     if (!is.null(z))
-        DNAME <- paste(DNAME, "stratified by", deparse1(substitute(z)))
+        DNAME <- paste(DNAME, "with strata", deparse1(substitute(z)))
 
     stopifnot(is.factor(x))
     d <- data.frame(y = y, x = x, w = 1)
@@ -1659,8 +1685,12 @@ free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
 set.seed(29)
 N <- 25
 w <- gl(2, N)
+s <- sample(gl(2, N))
 y <- rlogis(length(w), location = c(0, 1)[w])
-ft <- free1way.test(y ~ w, B = 10000)
+print(try(free1way.test(y ~ w + s, B = 10000)))
+ft0 <- free1way.test(y ~ w + strata(s), B = 10000)
+ft <- free1way.test(y ~ strata(s) + w, B = 10000)
+all.equal(ft0, ft0)
 summary(ft)
 print(ft, test = "Permutation", alternative = "less")
 print(ft, test = "Permutation", alternative = "greater")
@@ -1679,6 +1709,7 @@ confint(ft, test = "Permutation")
 confint(ft, test = "LRT")
 confint(ft, test = "Wald")
 confint(ft, test = "Rao")
+confint(ft, test = "Rao", what = "AUC")
 wilcox.test(y ~ w)
 library("rms")
 rev(coef(or <- orm(y ~ w)))[1]
