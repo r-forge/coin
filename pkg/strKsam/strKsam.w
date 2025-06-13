@@ -251,8 +251,8 @@ tmb <- intercepts - matrix(beta, nrow = length(intercepts),
                                  ncol = ncol(x),
                                  byrow = TRUE)
 Ftmb <- F(tmb)
-prb <- Ftmb[- 1L, , drop = FALSE] - 
-       Ftmb[- nrow(Ftmb), , drop = FALSE]
+prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+            Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
 @}
 
 With default null values $\mu_k = 0, k = 2, \dots, K$, we define the
@@ -263,7 +263,7 @@ the log-probabilities
 @{
 .nll <- function(parm, x, mu = 0) {
     @<parm to prob@>
-    - sum(x * log(prb))
+    return(- sum(x * log(prb)))
 }
 @}
 
@@ -1495,14 +1495,14 @@ free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "
 
     ret$perm <- .resample(res, object, B = B)
 
-    class(ret) <- "free1way.test"
+    class(ret) <- "free1way"
     return(ret)
 }
 @}
 
 @d free1way methods
 @{
-coef.free1way.test <- function(object, what = c("shift", "PI", "AUC", "OVL"), ...)
+coef.free1way <- function(object, what = c("shift", "PI", "AUC", "OVL"), ...)
 {
     what <- match.arg(what)
     cf <- object$coefficients
@@ -1511,17 +1511,17 @@ coef.free1way.test <- function(object, what = c("shift", "PI", "AUC", "OVL"), ..
                         "AUC" = object$link$parm2PI(cf),	### same as PI
                         "OVL" = object$link$parm2OVL(cf)))
 }
-vcov.free1way.test <- function(object, ...)
+vcov.free1way <- function(object, ...)
     object$vcov
-logLik.free1way.test <- function(object, ...)
+logLik.free1way <- function(object, ...)
     -object$value
 @}
 
 @d free1way summary
 @{
-print.free1way.test <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
-                                alternative = c("two.sided", "less", "greater"), 
-                                tol = .Machine$double.eps, ...)
+print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
+                           alternative = c("two.sided", "less", "greater"), 
+                           tol = .Machine$double.eps, ...)
 {
 
     test <- match.arg(test)
@@ -1542,10 +1542,11 @@ print.free1way.test <- function(x, test = c("Permutation", "Wald", "LRT", "Rao")
         null.value = ret$mu, alternative = alternative, method = x$method, 
         data.name = x$data.name)
     class(RVAL) <- "htest"
-    RVAL
+    print(RVAL)
+    invisible(RVAL)
 
 }
-summary.free1way.test <- function(object, alternative = c("two.sided", "less", "greater"), ...)
+summary.free1way <- function(object, alternative = c("two.sided", "less", "greater"), ...)
 {
 
     alternative <- match.arg(alternative)
@@ -1566,10 +1567,10 @@ summary.free1way.test <- function(object, alternative = c("two.sided", "less", "
                                              "less" = "P(<z)",
                                              "greater" = "P(>z)"))
     ret <- list(call = object$call, coefficients = cfmat)
-    class(ret) <- "summary.free1way.test"
+    class(ret) <- "summary.free1way"
     return(ret)
 }
-print.summary.free1way.test <- function(x, ...) {
+print.summary.free1way <- function(x, ...) {
     cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
         "\n\n", sep = "")
     cat("Coefficients:\n")
@@ -1579,7 +1580,7 @@ print.summary.free1way.test <- function(x, ...) {
 
 @d free1way confint
 @{
-confint.free1way.test <- function(object, parm,
+confint.free1way <- function(object, parm,
     level = .95, test = c("Permutation", "Wald", "LRT", "Rao"), 
     what = c("shift", "PI", "AUC", "OVL"), ...)
 {
@@ -1791,7 +1792,10 @@ vcov(or)
 vcov(ft)
 @@
 
+
 \section{Tests}
+
+Mantel-Haenszel test
 
 <<mh>>=
 example(mantelhaen.test, echo = FALSE)
@@ -1800,8 +1804,60 @@ a <- free1way.test(UCBAdmissions)
 print(a, test = "Wald")
 exp(coef(a))
 exp(confint(a, test = "Wald"))
+exp(sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
+       confint(free1way.test(UCBAdmissions[,,dept]), test = "Permutation")))
 sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
-       confint(free1way.test(UCBAdmissions[,,dept])))
+       fisher.test(UCBAdmissions[,,dept], conf.int = TRUE)$conf.int)
+@@
+
+Kruskal-Wallis
+
+<<kw>>=
+example(kruskal.test, echo = FALSE)
+kruskal.test(x ~ g)
+free1way.test(x ~ g)
+@@
+
+Savage
+
+<<sw>>=
+library("survival")
+N <- 10
+nd <- expand.grid(g = gl(3, N), s = gl(3, N))
+nd$tm <- rexp(nrow(nd))
+nd$ev <- TRUE
+survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 0)$chisq
+cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
+summary(cm)$sctest
+summary(cm)$logtest
+summary(cm)$waldtest
+ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "cloglog")
+print(ft)
+print(ft, test = "Rao")
+print(ft, test = "LRT")
+print(ft, test = "Rao")
+
+library("coin")
+independence_test(Surv(tm, ev) ~ g | s, data = nd, ytrafo = function(...)
+                  trafo(..., numeric_trafo = logrank_trafo, block = nd$s), teststat = "quad")
+
+survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 1)$chisq
+ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "logit")
+print(ft)
+print(ft, test = "Rao")
+print(ft, test = "LRT")
+print(ft, test = "Rao")
+@@
+
+Normal
+
+<<normal>>=
+N <- 50
+nd <- expand.grid(g = gl(3, N), s = gl(3, N))
+nd$y <- rnorm(nrow(nd))
+free1way.test(y ~ g + strata(s), data = nd, link = "probit")
+independence_test(y ~ g | s, data = nd, ytrafo = function(...)
+                  trafo(..., numeric_trafo = normal_trafo, block = nd$s), teststat = "quad")
 @@
 
 \chapter*{Index}
