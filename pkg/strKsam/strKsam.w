@@ -1281,7 +1281,7 @@ if (test == "Wald") {
 @d Wald statistic
 @{
 if (alternative == "two.sided") {
-    STATISTIC <- c("Wald X-squared" = c(crossprod(cf, x$hessian %*% cf)))
+    STATISTIC <- c("Wald chi-squared" = c(crossprod(cf, x$hessian %*% cf)))
     DF <- c("df" = length(parm))
     PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
 } else {
@@ -1298,7 +1298,7 @@ par <- x$par
 par[parm] <- value
 unll <- x$value ### neg logLik
 rnll <- x$profile(par, parm)$value ### neg logLik
-STATISTIC <- c("logLR X-squared" = - 2 * (unll - rnll))
+STATISTIC <- c("logLR chi-squared" = - 2 * (unll - rnll))
 DF <- c("df" = length(parm))
 PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
 @}
@@ -1311,7 +1311,7 @@ par <- x$par
 par[parm] <- value
 ret <- x$profile(par, parm)
 if (alternative == "two.sided") {
-    STATISTIC <- c("Rao X-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
+    STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))
     DF <- c("df" = length(parm))
     PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
 } else {
@@ -1332,7 +1332,7 @@ if (length(cf) == 1L)
    sc <- sc / sqrt(c(ret$hessian))
 Esc <- sc - x$perm$Expectation
 if (alternative == "two.sided" && length(cf) > 1L) {
-    STATISTIC <- c("Perm X-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
+    STATISTIC <- c("Perm chi-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
     ps <- x$perm$permStat
     if (!is.null(x$perm$permStat))
         PVAL <- mean(ps > STATISTIC + tol)
@@ -1461,9 +1461,9 @@ free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "
     dn <- dimnames(object)
     DNAME <- NULL
     if (!is.null(dn)) {
-        DNAME <- paste(names(dn)[1], "by", names(dn)[2])
+        DNAME <- paste(names(dn)[1], "by", names(dn)[2], paste0("(", paste0(dn[2], collapse = ", "), ")"))
         if (length(dn) == 3L)
-            DNAME <- paste(DNAME, "with strata", names(dn)[3])
+            DNAME <- paste(DNAME, "\n\t stratified by", names(dn)[3])
     }
 
     if (!inherits(link, "linkfun")) {
@@ -1689,6 +1689,7 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
     y <- mf[[response]]
     lev <- sort(unique(mf[[group]]))
     g <- factor(mf[[group]], levels = lev, labels = paste0(group, lev))
+    DNAME <- paste(DNAME, paste0("(", paste0(lev, collapse = ", "), ")"))
     if (nlevels(g) < 2L)
         stop("grouping factor must have at least 2 levels")
     if (stratum) {
@@ -1696,7 +1697,7 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
         if (nlevels(st) < 2L)
             stop("at least two strata must be present")
         RVAL <- free1way.test(y = y, x = g, z = st, weights = w, ...)
-        DNAME <- paste(DNAME, paste("with", names(mf)[stratum]))
+        DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[stratum]))
     } else {
         ## Call the default method.
         RVAL <- free1way.test(y = y, x = g, weights = w, ...)
@@ -1711,8 +1712,10 @@ free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...
     cl <- match.call()
     DNAME <- paste(deparse1(substitute(y)), "by",
                    deparse1(substitute(x)))
+    DNAME <- paste(DNAME, paste0("(", paste0(levels(x), collapse = ", "), ")"))
+
     if (!is.null(z))
-        DNAME <- paste(DNAME, "with strata", deparse1(substitute(z)))
+        DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))
 
     uy <- unique(y)
     if (nbins && nbins < length(uy)) {
@@ -1733,8 +1736,9 @@ free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
     cl <- match.call()
     DNAME <- paste(deparse1(substitute(y)), "by",
                    deparse1(substitute(x)))
+    DNAME <- paste(DNAME, paste0("(", paste0(levels(x), collapse = ", "), ")"))
     if (!is.null(z))
-        DNAME <- paste(DNAME, "with strata", deparse1(substitute(z)))
+        DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))
 
     stopifnot(is.factor(x))
     d <- data.frame(y = y, x = x, w = 1)
@@ -1852,8 +1856,6 @@ print(ft, test = "Rao")
 Normal
 
 <<normal>>=
-N <- 50
-nd <- expand.grid(g = gl(3, N), s = gl(3, N))
 nd$y <- rnorm(nrow(nd))
 free1way.test(y ~ g + strata(s), data = nd, link = "probit")
 independence_test(y ~ g | s, data = nd, ytrafo = function(...)
