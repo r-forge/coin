@@ -1206,12 +1206,13 @@ names(ret$mu) <- link$parm
     stopifnot(is.table(x))
     dx <- dim(x)
     dn <- dimnames(x)
-    if (length(dx) == 2L)
-        x <- as.table(array(c(x), dim = dx <- c(dx, 1L)), 
-                      dimnames = c(dx, list("A")))
+    if (length(dx) == 2L) {
+        x <- as.table(array(c(x), dim = dx <- c(dx, 1L)))
+        dimnames(x) <- dn <- c(dn, list(A = "A"))
+    }
     stopifnot(length(dx) == 3L)
-    stopifnot(dim(x)[1L] > 1L)
-    K <- dim(x)[2L]
+    stopifnot(dx[1L] > 1L)
+    K <- dx[2L]
     stopifnot(K > 1L)
 
     F <- function(q) .p(link, q = q)
@@ -1799,8 +1800,8 @@ a <- free1way.test(UCBAdmissions)
 print(a, test = "Wald")
 exp(coef(a))
 exp(confint(a, test = "Wald"))
-lapply(seq_len(dim(UCBAdmissions)[3L]),
-    function(d) confint(free1way.test(UCBAdmissions[,,d])))
+sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
+       confint(free1way.test(UCBAdmissions[,,dept])))
 @@
 
 \chapter*{Index}
