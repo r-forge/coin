@@ -1083,12 +1083,13 @@ probit <- function()
 @o ML.R -cp
 @{
 @<ML estimation@>
-
 @<free1way@>
 @<free1way methods@>
 @<free1way summary@>
 @<free1way confint@>
 @<free1way interfaces@>
+@<ppplot@>
+@<power@>
 @}
 
 @d setup
@@ -1112,7 +1113,6 @@ for (b in seq_len(B)) {
         start <- c(start, Qecdf[1], diff(Qecdf))
     }
 }
-upr <- rep(Inf, times = length(lwr))
 @}
 
 The profile negative log-likelihood can be evaluated for some of the
@@ -1137,7 +1137,7 @@ $\thetavec$.
                      p[-fix] <- par
                      .snsc(p, x = xlist, mu = mu)[-fix]
                  },
-                 lower = lwr[-fix], upper = upr[-fix], method = "L-BFGS-B", 
+                 lower = lwr[-fix], method = "L-BFGS-B", 
                  hessian = FALSE, ...)
     p <- numeric(length(start))
     p[fix] <- beta
@@ -1155,7 +1155,7 @@ if (!length(fix)) {
                      .snll(parm, x = xlist, mu = mu),
                  gr = function(parm)
                      .snsc(parm, x = xlist, mu = mu),
-                 lower = lwr, upper = upr, method = "L-BFGS-B", 
+                 lower = lwr, method = "L-BFGS-B", 
                  hessian = FALSE, ...)
 } else if (length(fix) == length(start)) {
     ret <- list(par = start, 
@@ -1861,6 +1861,264 @@ free1way.test(y ~ g + strata(s), data = nd, link = "probit")
 independence_test(y ~ g | s, data = nd, ytrafo = function(...)
                   trafo(..., numeric_trafo = normal_trafo, block = nd$s), teststat = "quad")
 @@
+
+\chapter{Model Diagnostics}
+
+@d ppplot
+@{
+ppplot <- function(x, ...)
+    UseMethod("ppplot")
+
+ppplot.formula <- function(formula, data, subset, na.action = na.pass, ...)
+{
+    if(missing(formula) || (length(formula) != 3L))
+        stop("'formula' missing or incorrect")
+    if (length(attr(terms(formula[-2L]), "term.labels")) != 1L)
+        stop("'formula' missing or incorrect")
+    m <- match.call(expand.dots = FALSE)
+    if (is.matrix(eval(m$data, parent.frame())))
+        m$data <- as.data.frame(data)
+    ## need stats:: for non-standard evaluation
+    m[[1L]] <- quote(stats::model.frame)
+    m$... <- NULL
+    mf <- eval(m, parent.frame())
+    names(mf) <- NULL
+    response <- attr(attr(mf, "terms"), "response")
+    y <- mf[[response]]
+    g <- factor(mf[[-response]])
+    if(nlevels(g) != 2L)
+        stop("grouping factor must have exactly 2 levels")
+    ## Call the default method.
+    DATA <- split(mf[[response]], g)
+    RVAL <- ppplot(x = DATA[[1L]], y = DATA[[2L]], xlab = levels(g)[1], ylab = levels(g)[2], ...)
+    return(invisible(RVAL))
+}
+
+ppplot.default <- function(x, y, plot.it = TRUE,
+            xlab = deparse1(substitute(x)),
+            ylab = deparse1(substitute(y)), 
+            interpolate = FALSE, ...,
+            conf.level = NULL, conf.args = list(type = "Wald", col = NA, border = NULL)) {
+
+    force(xlab)
+    force(ylab)
+    if (xlab == ylab) {
+        xlab <- paste0("x = ", xlab)
+        ylab <- paste0("y = ", ylab)
+    }
+
+    ex <- ecdf(x)
+    if (interpolate) {
+        vals <- sort(unique(x))
+        ex <- splinefun(vals, ex(vals), method = "hyman")
+    }
+    sy <- sort(unique(y))
+    py <- ecdf(y)(sy)
+    px <- ex(sy)
+    ret <- list(x = px, y = py)
+    if (!plot.it)
+        return(ret)
+
+    plot(px, py, xlim = c(0, 1), ylim = c(0, 1), 
+         xlab = xlab, ylab = ylab, type = "n", ...)
+
+    if (!is.null(conf.level)) {
+        prb <- seq_len(1000) / 1001
+        res <- c(x, y)
+        grp <- gl(2, 1, labels = c(xlab, ylab))
+        grp <- grp[rep(1:2, c(length(x), length(y)))]
+        args <- conf.args
+        args$y <- res
+        args$x <- grp
+        args$border <- args$col <- args$type <- NULL
+        f1w <- do.call("free1way.test", args)
+
+        ci <- confint(f1w, level = conf.level, type = args$type)
+        lwr <- .p(f1w$link, .q(f1w$link, prb) - ci[1,1])
+        upr <- .p(f1w$link, .q(f1w$link, prb) - ci[1,2])
+        x <- c(prb, rev(prb))
+        y <- c(lwr, rev(upr))
+        xn <- c(x[1L], rep(x[-1L], each = 2))
+        yn <- c(rep(y[-length(y)], each = 2), y[length(y)])
+        polygon(x = xn, y = yn, col = conf.args$col, border = conf.args$border)
+        lines(prb, .p(f1w$link, .q(f1w$link, prb) - coef(f1w)))
+    }
+    points(px, py, ...)
+    return(invisible(ret)) 
+}
+@}
+
+\begin{figure}
+<<ppplot, fig = TRUE>>=
+x <- rnorm(50)
+y <- rnorm(50)
+layout(matrix(1:2, nrow = 1))
+ppplot(x, y, conf.level = .95)
+ppplot(x, y, conf.level = .95, interpolate = TRUE)
+@@
+\end{figure}
+
+\chapter{Power and Sample Size}
+
+@d power
+@{
+power.free1way.test <- function(n = NULL, prob = NULL, alloc_ratio = 1, strata_ratio = 1, delta = NULL, sig.level = .05, power = NULL,
+                                link = c("logit", "probit", "cloglog", "loglog"),
+                                alternative = c("two.sided", "less", "greater"), nHess = 100,
+norm = TRUE,...) 
+{
+
+    if (sum(vapply(list(n, delta, power, sig.level), is.null, 
+        NA)) != 1) 
+        stop("exactly one of 'n', 'delta', 'power', and 'sig.level' must be NULL")
+    stats:::assert_NULL_or_prob(sig.level)
+    stats:::assert_NULL_or_prob(power)
+
+    tol <- sqrt(.Machine$double.eps)
+
+    if (is.null(n)) 
+        n <- ceiling(uniroot(function(n)
+             power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio, 
+                                 delta = delta, 
+                                 sig.level = sig.level, link = link, alternative = alternative, 
+                                 nHess = nHess, ...)$power
+             - power, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
+    else if (is.null(delta)) {
+        ### 2-sample only
+        stopifnot(length(alloc_ratio) == 1L)
+        delta <- uniroot(function(delta) 
+            power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio,delta = delta, 
+                                sig.level = sig.level, link = link, alternative = alternative, 
+                                nHess = nHess, ...)$power
+            - power, 
+    ### <TH> interval depending on alternative, symmetry? </TH>
+            interval = c(0, 10), tol = tol, extendInt = "upX")$root
+        }
+    else if (is.null(sig.level)) 
+        sig.level <- uniroot(function(sig.level) 
+            power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio, delta = delta, 
+                                sig.level = sig.level, link = link, alternative = alternative, 
+                                ...)$power
+            - power, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
+    else if (is.null(power)) {
+
+        if (!inherits(link, "linkfun")) {
+            link <- match.arg(link)
+            link <- do.call(link, list())
+        }
+
+        ### if not given, assume continuous distribution
+        if (is.null(prob)) prob <- rep(1 / n, n)
+        ### matrix means control distributions in different strata
+        if (!is.matrix(prob))
+            prob <- matrix(prob, nrow = NROW(prob))
+        C <- nrow(prob)
+        K <- length(delta) + 1L
+        B <- ncol(prob)
+        if (is.null(colnames(prob))) 
+            colnames(prob) <- paste0("stratum", seq_len(B))
+        if (is.null(names(delta))) 
+            names(delta) <- paste0("group", LETTERS[seq_len(K)[-1]])
+        p0 <- apply(prob, 2, cumsum)
+        h0 <- .q(link, p0)
+        if (length(alloc_ratio) == 1L) 
+            alloc_ratio <- rep_len(alloc_ratio, K - 1)
+        stopifnot(length(alloc_ratio) == K - 1)
+        if (length(strata_ratio) == 1L) 
+            strata_ratio <- rep_len(strata_ratio, B - 1)
+        stopifnot(length(strata_ratio) == B - 1)
+        ### sample size per group (columns) and stratum (rows)
+        N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
+                 matrix(c(1, strata_ratio), nrow = B, ncol = K)
+        rownames(N) <- colnames(prob)
+        colnames(N) <- c("Control", names(delta))
+        he <- 0
+
+        for (i in 1:nHess) {
+            x <- as.table(array(0, dim = c(C, K, B)))
+            parm <- delta
+            for (b in seq_len(B)) {
+                h1 <- h0[,b] - matrix(delta, nrow = C, ncol = K - 1, byrow = TRUE)
+                p1 <- .p(link, h1)
+                p <- cbind(p0[,b], p1)
+                x[,,b] <- sapply(seq_len(K), function(k) 
+                                 rmultinom(1, size = N[b, k], prob = c(p[1,k], diff(p[,k]))))
+                rs <- rowSums(x[,,b]) > 0
+                h <- h0[rs,b]
+                theta <- c(h[1], diff(h[-length(h)]))
+                parm <- c(parm, theta)
+            }
+            ### evaluate observed hessian for true parameters parm and x data
+            he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian
+        }
+        ### estimate expected Fisher information
+        he <- he / nHess
+
+        alternative <- match.arg(alternative)
+        if ((length(delta) == 1L) && norm) {
+            se <- 1 / sqrt(c(he))
+            power  <- switch(alternative, 
+                "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + 
+                              pnorm(qnorm(sig.level / 2) - delta / se),
+                "less" = pnorm(qnorm(sig.level) - delta / se),
+                "greater" = pnorm(qnorm(sig.level) + delta / se)
+            )
+        } else {
+            stopifnot(alternative == "two.sided")
+            ncp <- sum((chol(he) %*% delta)^2)
+            qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
+            power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)
+        }
+    }
+    list(power = power, n = n, delta = delta, sig.level = sig.level, N = N)
+}
+@}
+
+<<power>>=
+delta <- log(1.5)
+power.prop.test(n = 25, p1 = .5, p2 = plogis(qlogis(.5) - delta))
+power.free1way.test(n = 25, prob = c(.5, .5), delta = delta)
+prb <- matrix(c(.25, .25, .25, .25,
+                .10, .20, .30, .40), ncol = 2)
+colnames(prb) <- c("s1", "s2")
+power.free1way.test(n = 20, prob = prb, 
+                    strata_ratio = 2,
+                    alloc_ratio = c(1.5, 2, 2), 
+                    delta = log(c("low" = 1.25, "med" = 1.5, "high" = 1.75)))
+@@
+
+<<wilcox>>=
+delta <- log(3)
+N <- 15
+w <- gl(2, N)
+pw <- numeric(1000)
+for (i in seq_along(pw)) {
+    y <- rlogis(length(w), location = c(0, delta)[w])
+    pw[i] <- wilcox.test(y ~ w)$p.value
+}
+mean(pw < .05)
+
+set.seed(29)
+power.free1way.test(n = N, delta = delta)
+set.seed(29)
+power.free1way.test(n = N, delta = delta, norm = FALSE)
+@@
+
+<<kruskal>>=
+delta <- c(log(2), log(3))
+N <- 15
+w <- gl(3, N)
+pw <- numeric(1000)
+for (i in seq_along(pw)) {
+    y <- rlogis(length(w), location = c(0, delta)[w])
+    pw[i] <- kruskal.test(y ~ w)$p.value
+}
+mean(pw < .05)
+
+power.free1way.test(n = N, delta = delta)
+@@
+
+
 
 \chapter*{Index}
 
