@@ -1862,6 +1862,18 @@ independence_test(y ~ g | s, data = nd, ytrafo = function(...)
                   trafo(..., numeric_trafo = normal_trafo, block = nd$s), teststat = "quad")
 @@
 
+Friedman
+
+<<friedman>>=
+example(friedman.test, echo = FALSE)
+rt <- expand.grid(str = gl(22, 1),
+                  trt = gl(3, 1, labels = c("Round Out", "Narrow Angle", "Wide Angle")))
+rt$tm <- c(RoundingTimes)
+friedman.test(RoundingTimes)
+(f1w <- free1way.test(tm ~ trt + strata(str), data = rt))
+coef(f1w)
+@@
+
 \chapter{Model Diagnostics}
 
 @d ppplot
