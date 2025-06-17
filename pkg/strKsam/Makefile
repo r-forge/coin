@@ -2,7 +2,7 @@
 strKsam.Rnw:	strKsam.w
 	nuweb -r strKsam.w
 	mv strKsam.tex strKsam.Rnw
-	#mv *.h src
+	cp strKsam.Rnw vignettes
 	mv Schur_src.c src/Schur.c
 	#mv Makevars src
 	#mv *def src

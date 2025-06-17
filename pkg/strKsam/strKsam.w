@@ -215,8 +215,7 @@ whose element $(c, k, b)$ is the number of observations with configuration $(y =
 \chapter{Parameter Estimation}
 \label{ch:est}
 
-@o strKsam_src.R -cp
-@{
+<<localfun, echo = FALSE>>=
 @<cumsumrev@>
 @<negative logLik@>
 @<negative score@>
@@ -229,8 +228,12 @@ whose element $(c, k, b)$ is the number of observations with configuration $(y =
 @<ML estimation@>
 @<Strasser Weber@>
 @<resampling@>
-@}
-
+@<linkfun@>
+@<logit@>
+@<probit@>
+@<cloglog@>
+@<loglog@>
+@@
 
 We start implementing the log-likelihood function for parameters \code{parm}
 $= \thetavec$ (assuming only a single block) with data from a two-way $C
@@ -442,8 +445,6 @@ use a binary logistic regression model to estimate the two log-odds ratios
 $\beta_2$ and $\beta_3$ along with their estimated covariance
 <<glm>>=
 library("free1way")
-source("strKsam_src.R")
-source("R/linkfun.R")
 (x <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2))
 d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 1))
 d$x <- c(x)
@@ -2116,6 +2117,6 @@ power.free1way.test(n = N, delta = delta)
 @u
 
 \bibliographystyle{plainnat}
-\bibliography{refs}
+\bibliography{\Sexpr{gsub("\\.bib", "", system.file("refs.bib", package = "free1way"))}}
 
 \end{document}
