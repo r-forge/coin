@@ -1346,7 +1346,7 @@ if (alternative == "two.sided" && length(cf) > 1L) {
     STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
     if (!is.null(x$perm$permStat)) {
         if (alternative == "two.sided")
-            PVAL <- mean(abs(x$perm$permStat) < abs(STATISTIC) - tol)
+            PVAL <- mean(abs(x$perm$permStat) > abs(STATISTIC) + tol)
         else if (alternative == "less")
             PVAL <- mean(x$perm$permStat < STATISTIC - tol)
         else
@@ -1541,7 +1541,7 @@ print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"),
     @<statistics@>
 
     RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, 
-        null.value = ret$mu, alternative = alternative, method = x$method, 
+        null.value = x$mu, alternative = alternative, method = x$method, 
         data.name = x$data.name)
     class(RVAL) <- "htest"
     print(RVAL)

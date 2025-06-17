@@ -648,7 +648,7 @@ print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"),
     
 
     RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, 
-        null.value = ret$mu, alternative = alternative, method = x$method, 
+        null.value = x$mu, alternative = alternative, method = x$method, 
         data.name = x$data.name)
     class(RVAL) <- "htest"
     print(RVAL)

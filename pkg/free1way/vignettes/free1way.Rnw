@@ -1,0 +1,3764 @@
+\newcommand{\NWtarget}[2]{\hypertarget{#1}{#2}}
+\newcommand{\NWlink}[2]{\hyperlink{#1}{#2}}
+\newcommand{\NWtxtMacroDefBy}{Fragment defined by}
+\newcommand{\NWtxtMacroRefIn}{Fragment referenced in}
+\newcommand{\NWtxtMacroNoRef}{Fragment never referenced}
+\newcommand{\NWtxtDefBy}{Defined by}
+\newcommand{\NWtxtRefIn}{Referenced in}
+\newcommand{\NWtxtNoRef}{Not referenced}
+\newcommand{\NWtxtFileDefBy}{File defined by}
+\newcommand{\NWtxtIdentsUsed}{Uses:}
+\newcommand{\NWtxtIdentsNotUsed}{Never used}
+\newcommand{\NWtxtIdentsDefed}{Defines:}
+\newcommand{\NWsep}{${\diamond}$}
+\newcommand{\NWnotglobal}{(not defined globally)}
+\newcommand{\NWuseHyperlinks}{}
+\documentclass[a4paper]{report}
+
+%\VignetteIndexEntry{Stratified K-sample Inference}
+%\VignetteDepends{free1way,rms,coin,multcomp,survival}
+%\VignetteKeywords{conditional inference, conditional Monte Carlo}}
+%\VignettePackage{free1way}
+
+%% packages
+\usepackage{amsfonts,amstext,amsmath,amssymb,amsthm}
+
+\usepackage[utf8]{inputenc}
+
+\newif\ifshowcode
+\showcodetrue
+
+\usepackage{latexsym}
+%\usepackage{html}
+
+\usepackage{listings}
+
+\usepackage{color}
+\definecolor{linkcolor}{rgb}{0, 0, 0.7}
+
+
+
+\usepackage[round]{natbib}
+
+
+\usepackage[%
+backref,%
+pageanchor=false,%
+raiselinks,%
+pdfhighlight=/O,%
+pagebackref,%
+hyperfigures,%
+breaklinks,%
+colorlinks,%
+pdfpagemode=UseNone,%
+pdfstartview=FitBH,%
+linkcolor={linkcolor},%
+anchorcolor={linkcolor},%
+citecolor={linkcolor},%
+filecolor={linkcolor},%
+menucolor={linkcolor},%
+urlcolor={linkcolor}%
+]{hyperref}
+
+%%% ATTENTION: no bib keys with _ allowed!
+\usepackage{underscore}
+
+\usepackage[top=25mm,bottom=25mm,left=25mm,right=25mm]{geometry}
+
+\usepackage{lmodern}
+
+\newcommand{\pkg}[1]{\textbf{#1}}
+\newcommand{\proglang}[1]{\textsf{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\texttt{#1}}
+
+\newcommand{\R}{\mathbb{R} }
+\newcommand{\samY}{\mathcal{Y} }
+\newcommand{\Prob}{\mathbb{P} }
+\newcommand{\N}{\mathbb{N} }
+%\newcommand{\C}{\mathbb{C} }
+\newcommand{\V}{\mathbb{V}} %% cal{\mbox{\textnormal{Var}}} }
+\newcommand{\E}{\mathbb{E}} %%mathcal{\mbox{\textnormal{E}}} }
+\newcommand{\Var}{\mathbb{V}} %%mathcal{\mbox{\textnormal{Var}}} }
+\newcommand{\argmin}{\operatorname{argmin}\displaylimits}
+\newcommand{\argmax}{\operatorname{argmax}\displaylimits}
+\newcommand{\LS}{\mathcal{L}_n}
+\newcommand{\TS}{\mathcal{T}_n}
+\newcommand{\LSc}{\mathcal{L}_{\text{comb},n}}
+\newcommand{\LSbc}{\mathcal{L}^*_{\text{comb},n}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\yn}{y_{\text{new}}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\mH}{\mathbf{H}}
+\newcommand{\mA}{\mathbf{A}}
+\newcommand{\mL}{\mathbf{L}}
+\newcommand{\mU}{\mathbf{U}}
+\newcommand{\sX}{\mathcal{X}}
+\newcommand{\sY}{\mathcal{Y}}
+\newcommand{\T}{\mathbf{T}}
+\newcommand{\x}{\mathbf{x}}
+\renewcommand{\a}{\mathbf{a}}
+\newcommand{\xn}{\mathbf{x}_{\text{new}}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\uvec}{\mathbf{u}}
+\newcommand{\vvec}{\mathbf{v}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\sbullet}{\mathbin{\vcenter{\hbox{\scalebox{0.5}{$\bullet$}}}}}
+\newcommand{\wdot}{\mathbf{w}_{\sbullet}}
+\renewcommand{\t}{\mathbf{t}}
+\newcommand{\M}{\mathbf{M}}
+\renewcommand{\vec}{\text{vec}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\K}{\mathbf{K}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\D}{\mathbf{D}}
+\newcommand{\I}{\mathbf{I}}
+\newcommand{\bS}{\mathbf{S}}
+\newcommand{\cellx}{\pi_n[\x]}
+\newcommand{\partn}{\pi_n(\mathcal{L}_n)}
+\newcommand{\err}{\text{Err}}
+\newcommand{\ea}{\widehat{\text{Err}}^{(a)}}
+\newcommand{\ecv}{\widehat{\text{Err}}^{(cv1)}}
+\newcommand{\ecvten}{\widehat{\text{Err}}^{(cv10)}}
+\newcommand{\eone}{\widehat{\text{Err}}^{(1)}}
+\newcommand{\eplus}{\widehat{\text{Err}}^{(.632+)}}
+\newcommand{\eoob}{\widehat{\text{Err}}^{(oob)}}
+\newcommand{\mub}{\boldsymbol{\mu}}
+\newcommand{\Sigmab}{\boldsymbol{\Sigma}}
+\def \thetavec        {\text{\boldmath$\theta$}}
+\newcommand{\rT}{T}
+\newcommand{\rt}{t}
+
+
+\author{Torsten Hothorn \\ Universit\"at Z\"urich}
+
+\title{Distribution-free Stratified $K$-sample Inference}
+
+\begin{document}
+
+\pagenumbering{roman}
+\maketitle
+\tableofcontents
+
+\chapter{Model and Parameterisation}
+\label{ch:model}
+\pagenumbering{arabic}
+
+Treatment group $\rT \in \{1, \dots, K\}, K \ge 2$, outcome $Y \in \samY$ at least ordered,
+stratum $S \in \{1, \dots, B\}$ in $B \ge 1$ blocks with conditional
+cumulative distribution function (cdf)
+$F_Y(y \mid S = b, \rT = k) = \Prob(Y \le y \mid S = b, \rT = k)$.
+
+\paragraph{Model}
+
+With $g: [0,1] \times \R \rightarrow [0,1]$, we model
+$F(y \mid S = b, \rT = k) = g(F(y \mid S = b, \rT = 1), \beta_k)$ for all $b = 1,
+\dots, B$, $k = 2, \dots, K$, and $y \in \samY$ based on parameters
+$\beta_2, \dots, \beta_K \in \R$. For notational convenience: $\beta_1 := 0$. For
+example, $g_\text{L}(p, \beta) = p^{\exp(-\beta)}$ (Lehmann alternative),
+$g_\text{PH}(p, \beta) = 1 - (1 -
+p)^{\exp(-\beta)}$ proportional hazards, or
+$g_\text{PO}(p, \beta) = \text{expit}(\text{logit}(p) - \beta)$ proportional odds, or
+$g_\text{Cd}(p, \beta) =
+\Phi(\Phi^{-1}(p) - \beta)$ (generalised Cohen's $d$).
+
+For some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
+and corresponding derivative $f^\prime$, we write
+$$F_Y(y \mid S = b, \rT = k) = F\left(F^{-1}\left(F_Y(y \mid S = b, \rT =
+1)\right) - \beta_k\right), \quad k = 2, \dots, K.$$
+The negative shift term ensures that positive values of $\beta_k$ correspond
+to the situation of outcomes being stochastically larger in group $k$ than
+in group one.
+
+Note that $F(z) = \exp(-\exp(-z))$ gives rise to $g_\text{L}$, 
+$F(z) = 1 - \exp(-\exp(z))$ to $g_\text{PH}$, $F = \text{expit}$ to
+$g_\text{PO}$, and $F = \Phi$ to $g_\text{Cd}$.
+
+\paragraph{Hypthesis}
+
+We are interested in inference for $\beta_2, \dots, \beta_K$, in terms of
+confidence intervals and hypothesis tests of the form
+\begin{eqnarray*}
+& & H_0: \beta_k - \mu_k = 0, \text{``two.sided''}, \quad k = 2, \dots, K, \\
+& & H_0: \beta_k - \mu_k \ge 0, \text{``less''}, \quad k = K = 2, \\
+& & H_0: \beta_k - \mu_k \le 0, \text{``greater''}, \quad k = K = 2,
+\end{eqnarray*}
+with the latter two options only for the two-sample case.
+
+\paragraph{Likelihood}
+
+For an ordered categorical outcome $Y$ from sample space $\samY = \{y_1 < y_2 < \cdots <
+y_C\}$, we parameterise the model in terms of intercept ($\vartheta_\cdot$) and
+shift ($\beta_\cdot$) parameters
+
+$$F_Y(y_c \mid S = b, \rT = k) = F(\vartheta_{c,b} - \beta_k), \quad c = 1, \dots, C.$$
+
+The $C - 1$ intercept parameters are block-specific and monotone increasing
+$\vartheta_{0,b} = -\infty < \vartheta_{1,b} < \cdots < \vartheta_{C,b} = \infty$
+within each block $b = 1, \dots, B$.
+We collect all parameters in a vector
+\begin{eqnarray*}
+\thetavec = (\theta_1 & := & \beta_2, \\
+               & \dots & , \\
+               \theta_{K - 1} & := & \beta_K, \\
+               \theta_{K} & := & \vartheta_{1,1}, \\
+               \theta_{K + 1} & := & \vartheta_{2,1} - \vartheta_{1,1} > 0, \\
+               &  \dots, & \\
+               \theta_{K + C - 2} & := & \vartheta_{C-1,1} - \vartheta_{C-2,1} > 0, \\
+               \theta_{K + C - 1} & := & \vartheta_{1,2}, \\
+               & \dots &, \\
+               \theta_{B (C - 1) + K - 1} & := & \vartheta_{C-1,B} - \vartheta_{C-2,B} >
+               0)
+\end{eqnarray*}
+
+For the $i$th observation $(y_i = y_c, s_i = b, \rt_i = k)$ from block $b$
+under treatment $k$, the log-likelihood contribution is
+$$\log(\Prob(y_{c - 1} < Y \le y_c \mid S = b, \rT = k)) = \log(F(\vartheta_{c,b} - \beta_k) - F(\vartheta_{c - 1,b} - \beta_k)).$$
+
+For an absolutely continuous outcome $Y \in \R$, we define $y_c := y_{(c)}$,
+the $c$th distinct ordered observation in the sample. The log-likelihood
+above is then the empirical or nonparametric log-likelihood.
+
+We represent the data in form of a $C \times K \times B$ contingency table,
+whose element $(c, k, b)$ is the number of observations with configuration $(y = y_c, s = b,
+\rt = k)$.
+	
+\chapter{Parameter Estimation}
+\label{ch:est}
+
+<<localfun, echo = FALSE>>=
+
+.rcr <- function(z)
+    Reduce('+', z, accumulate = TRUE, right = TRUE)
+    ### rev(cumsum(rev(z)))
+
+
+.nll <- function(parm, x, mu = 0) {
+    
+    bidx <- seq_len(ncol(x) - 1L)
+    beta <- c(0, mu + parm[bidx])
+    intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
+                                     ncol = ncol(x),
+                                     byrow = TRUE)
+    Ftmb <- F(tmb)
+    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    
+    return(- sum(x * log(prb)))
+}
+
+
+.nsc <- function(parm, x, mu = 0) {
+    
+    bidx <- seq_len(ncol(x) - 1L)
+    beta <- c(0, mu + parm[bidx])
+    intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
+                                     ncol = ncol(x),
+                                     byrow = TRUE)
+    Ftmb <- F(tmb)
+    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    
+    
+    ftmb <- f(tmb)
+    zu <- x * ftmb[- 1, , drop = FALSE] / prb
+    zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
+    
+
+    ret <- numeric(length(parm))
+    ret[bidx] <- colSums(zl)[-1L] -
+                 colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
+    ret[-bidx] <- Reduce("+", 
+                         lapply(1:ncol(x), 
+                             function(j) {
+                                 .rcr(zu[-nrow(zu),j]) - 
+                                 .rcr(zl[-1,j])
+                             })
+                         )
+    - ret
+}
+
+
+.nsr <- function(parm, x, mu = 0) {
+    
+    bidx <- seq_len(ncol(x) - 1L)
+    beta <- c(0, mu + parm[bidx])
+    intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
+                                     ncol = ncol(x),
+                                     byrow = TRUE)
+    Ftmb <- F(tmb)
+    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    
+    
+    ftmb <- f(tmb)
+    zu <- x * ftmb[- 1, , drop = FALSE] / prb
+    zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
+    
+
+    rowSums(zu - zl) / rowSums(x)
+}
+
+
+.hes <- function(parm, x, mu = 0) {
+    
+    bidx <- seq_len(ncol(x) - 1L)
+    beta <- c(0, mu + parm[bidx])
+    intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
+                                     ncol = ncol(x),
+                                     byrow = TRUE)
+    Ftmb <- F(tmb)
+    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    
+
+    
+    ftmb <- f(tmb)
+    fptmb <- fp(tmb)
+
+    dl <- ftmb[- nrow(ftmb), , drop = FALSE]
+    du <- ftmb[- 1, , drop = FALSE]
+    dpl <- fptmb[- nrow(ftmb), , drop = FALSE]
+    dpu <- fptmb[- 1, , drop = FALSE]
+    dlm1 <- dl[,-1L, drop = FALSE]
+    dum1 <- du[,-1L, drop = FALSE]
+    dplm1 <- dpl[,-1L, drop = FALSE]
+    dpum1 <- dpu[,-1L, drop = FALSE]
+    prbm1 <- prb[,-1L, drop = FALSE]
+
+    i1 <- length(intercepts) - 1L
+    i2 <- 1L
+    
+
+    
+    Aoffdiag <- -rowSums(x * du * dl / prb^2)[-i2]
+    Aoffdiag <- Aoffdiag[-length(Aoffdiag)]
+    
+    
+    Adiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
+                      (x * dpl / prb)[-i2,,drop = FALSE] - 
+                      ((x * du^2 / prb^2)[-i1,,drop = FALSE] + 
+                       (x * dl^2 / prb^2)[-i2,,drop = FALSE]
+                      )
+                     )
+                      
+    
+    
+    xm1 <- x[,-1L,drop = FALSE] 
+    X <- ((xm1 * dpum1 / prbm1)[-i1,,drop = FALSE] - 
+          (xm1 * dplm1 / prbm1)[-i2,,drop = FALSE] - 
+          ((xm1 * dum1^2 / prbm1^2)[-i1,,drop = FALSE] - 
+           (xm1 * dum1 * dlm1 / prbm1^2)[-i2,,drop = FALSE] -
+           (xm1 * dum1 * dlm1 / prbm1^2)[-i1,,drop = FALSE] +
+           (xm1 * dlm1^2 / prbm1^2)[-i2,,drop = FALSE]
+          )
+         )
+
+    Z <- -colSums(xm1 * (dpum1 / prbm1 - 
+                         dplm1 / prbm1 -
+                         (dum1^2 / prbm1^2 - 
+                          2 * dum1 * dlm1 / prbm1^2 +
+                          dlm1^2 / prbm1^2
+                         )
+                        )
+                 )
+    if (length(Z) > 1L) Z <- diag(Z)
+    
+
+    return(Z - wcrossprod(x = X, list(a = Adiag, b = Aoffdiag)))
+}
+
+
+.snll <- function(parm, x, mu = 0) {
+    
+    if (is.table(x)) {
+        C <- dim(x)[1]
+        K <- dim(x)[2]
+        B <- dim(x)[3]
+        sidx <- gl(B, C - 1)
+        x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
+    } else {
+        C <- sapply(x, nrow)
+        K <- unique(sapply(x, ncol))
+        stopifnot(length(K) == 1L)
+        B <- length(x)
+        sidx <- factor(rep(seq_len(B), times = C - 1L), levels = seq_len(B))
+    }
+    bidx <- seq_len(K - 1L)
+    beta <- parm[bidx]
+    intercepts <- split(parm[-bidx], sidx)
+    
+    ret <- 0
+    for (b in seq_len(B))
+        ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+    return(ret)
+}
+
+
+.snsc <- function(parm, x, mu = 0) {
+    
+    if (is.table(x)) {
+        C <- dim(x)[1]
+        K <- dim(x)[2]
+        B <- dim(x)[3]
+        sidx <- gl(B, C - 1)
+        x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
+    } else {
+        C <- sapply(x, nrow)
+        K <- unique(sapply(x, ncol))
+        stopifnot(length(K) == 1L)
+        B <- length(x)
+        sidx <- factor(rep(seq_len(B), times = C - 1L), levels = seq_len(B))
+    }
+    bidx <- seq_len(K - 1L)
+    beta <- parm[bidx]
+    intercepts <- split(parm[-bidx], sidx)
+    
+    ret <- numeric(length(bidx))
+    for (b in seq_len(B)) {
+        nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+        ret[bidx] <- ret[bidx] + nsc[bidx]
+        ret <- c(ret, nsc[-bidx])
+    }
+    return(ret)
+}
+
+
+.shes <- function(parm, x, mu = 0) {
+    
+    if (is.table(x)) {
+        C <- dim(x)[1]
+        K <- dim(x)[2]
+        B <- dim(x)[3]
+        sidx <- gl(B, C - 1)
+        x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
+    } else {
+        C <- sapply(x, nrow)
+        K <- unique(sapply(x, ncol))
+        stopifnot(length(K) == 1L)
+        B <- length(x)
+        sidx <- factor(rep(seq_len(B), times = C - 1L), levels = seq_len(B))
+    }
+    bidx <- seq_len(K - 1L)
+    beta <- parm[bidx]
+    intercepts <- split(parm[-bidx], sidx)
+    
+    ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
+    for (b in seq_len(B))
+        ret <- ret + .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+    ret
+}
+
+
+.snsr <- function(parm, x, mu = 0) {
+    
+    if (is.table(x)) {
+        C <- dim(x)[1]
+        K <- dim(x)[2]
+        B <- dim(x)[3]
+        sidx <- gl(B, C - 1)
+        x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
+    } else {
+        C <- sapply(x, nrow)
+        K <- unique(sapply(x, ncol))
+        stopifnot(length(K) == 1L)
+        B <- length(x)
+        sidx <- factor(rep(seq_len(B), times = C - 1L), levels = seq_len(B))
+    }
+    bidx <- seq_len(K - 1L)
+    beta <- parm[bidx]
+    intercepts <- split(parm[-bidx], sidx)
+    
+    ret <- c()
+    for (b in seq_len(B)) {
+        idx <- attr(x[[b]], "idx")
+        sr <- numeric(length(idx))
+        sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+        ret <- c(ret, sr)
+    }
+    return(ret)
+}
+
+
+.free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
+                   residuals = TRUE, score = TRUE, hessian = TRUE, 
+                   tol = sqrt(.Machine$double.eps), ...) {
+
+    stopifnot(is.table(x))
+    dx <- dim(x)
+    dn <- dimnames(x)
+    if (length(dx) == 2L) {
+        x <- as.table(array(c(x), dim = dx <- c(dx, 1L)))
+        dimnames(x) <- dn <- c(dn, list(A = "A"))
+    }
+    stopifnot(length(dx) == 3L)
+    stopifnot(dx[1L] > 1L)
+    K <- dx[2L]
+    stopifnot(K > 1L)
+
+    F <- function(q) .p(link, q = q)
+    Q <- function(p) .q(link, p = p)
+    f <- function(q) .d(link, x = q)
+    fp <- function(q) .dd(link, x = q)
+
+    
+    K <- dim(x)[2L]
+    B <- dim(x)[3L]
+    xlist <- vector(mode = "list", length = B)
+    if (NS <- is.null(start))
+        start <- rep.int(0, K - 1)
+    lwr <- rep(-Inf, times = K - 1)
+    for (b in seq_len(B)) {
+        xb <- matrix(x[,,b, drop = TRUE], ncol = K)
+        xw <- rowSums(abs(xb)) > tol
+        xlist[[b]] <- xb[xw,,drop = FALSE]
+        attr(xlist[[b]], "idx") <- xw
+        lwr <- c(lwr, -Inf, rep.int(tol, times = sum(xw) - 2L))
+        if (NS) {
+            ecdf0 <- cumsum(rowSums(xlist[[b]]))
+            ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
+            Qecdf <- Q(ecdf0)
+            start <- c(start, Qecdf[1], diff(Qecdf))
+        }
+    }
+    
+    
+    .rcr <- function(z)
+        Reduce('+', z, accumulate = TRUE, right = TRUE)
+        ### rev(cumsum(rev(z)))
+    
+    
+    .nll <- function(parm, x, mu = 0) {
+        
+        bidx <- seq_len(ncol(x) - 1L)
+        beta <- c(0, mu + parm[bidx])
+        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
+                                         ncol = ncol(x),
+                                         byrow = TRUE)
+        Ftmb <- F(tmb)
+        prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+                    Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        
+        return(- sum(x * log(prb)))
+    }
+    
+    
+    .nsc <- function(parm, x, mu = 0) {
+        
+        bidx <- seq_len(ncol(x) - 1L)
+        beta <- c(0, mu + parm[bidx])
+        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
+                                         ncol = ncol(x),
+                                         byrow = TRUE)
+        Ftmb <- F(tmb)
+        prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+                    Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        
+        
+        ftmb <- f(tmb)
+        zu <- x * ftmb[- 1, , drop = FALSE] / prb
+        zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
+        
+
+        ret <- numeric(length(parm))
+        ret[bidx] <- colSums(zl)[-1L] -
+                     colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
+        ret[-bidx] <- Reduce("+", 
+                             lapply(1:ncol(x), 
+                                 function(j) {
+                                     .rcr(zu[-nrow(zu),j]) - 
+                                     .rcr(zl[-1,j])
+                                 })
+                             )
+        - ret
+    }
+    
+    
+    .nsr <- function(parm, x, mu = 0) {
+        
+        bidx <- seq_len(ncol(x) - 1L)
+        beta <- c(0, mu + parm[bidx])
+        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
+                                         ncol = ncol(x),
+                                         byrow = TRUE)
+        Ftmb <- F(tmb)
+        prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+                    Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        
+        
+        ftmb <- f(tmb)
+        zu <- x * ftmb[- 1, , drop = FALSE] / prb
+        zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
+        
+
+        rowSums(zu - zl) / rowSums(x)
+    }
+    
+    
+    .hes <- function(parm, x, mu = 0) {
+        
+        bidx <- seq_len(ncol(x) - 1L)
+        beta <- c(0, mu + parm[bidx])
+        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
+                                         ncol = ncol(x),
+                                         byrow = TRUE)
+        Ftmb <- F(tmb)
+        prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+                    Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        
+
+        
+        ftmb <- f(tmb)
+        fptmb <- fp(tmb)
+
+        dl <- ftmb[- nrow(ftmb), , drop = FALSE]
+        du <- ftmb[- 1, , drop = FALSE]
+        dpl <- fptmb[- nrow(ftmb), , drop = FALSE]
+        dpu <- fptmb[- 1, , drop = FALSE]
+        dlm1 <- dl[,-1L, drop = FALSE]
+        dum1 <- du[,-1L, drop = FALSE]
+        dplm1 <- dpl[,-1L, drop = FALSE]
+        dpum1 <- dpu[,-1L, drop = FALSE]
+        prbm1 <- prb[,-1L, drop = FALSE]
+
+        i1 <- length(intercepts) - 1L
+        i2 <- 1L
+        
+
+        
+        Aoffdiag <- -rowSums(x * du * dl / prb^2)[-i2]
+        Aoffdiag <- Aoffdiag[-length(Aoffdiag)]
+        
+        
+        Adiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
+                          (x * dpl / prb)[-i2,,drop = FALSE] - 
+                          ((x * du^2 / prb^2)[-i1,,drop = FALSE] + 
+                           (x * dl^2 / prb^2)[-i2,,drop = FALSE]
+                          )
+                         )
+                          
+        
+        
+        xm1 <- x[,-1L,drop = FALSE] 
+        X <- ((xm1 * dpum1 / prbm1)[-i1,,drop = FALSE] - 
+              (xm1 * dplm1 / prbm1)[-i2,,drop = FALSE] - 
+              ((xm1 * dum1^2 / prbm1^2)[-i1,,drop = FALSE] - 
+               (xm1 * dum1 * dlm1 / prbm1^2)[-i2,,drop = FALSE] -
+               (xm1 * dum1 * dlm1 / prbm1^2)[-i1,,drop = FALSE] +
+               (xm1 * dlm1^2 / prbm1^2)[-i2,,drop = FALSE]
+              )
+             )
+
+        Z <- -colSums(xm1 * (dpum1 / prbm1 - 
+                             dplm1 / prbm1 -
+                             (dum1^2 / prbm1^2 - 
+                              2 * dum1 * dlm1 / prbm1^2 +
+                              dlm1^2 / prbm1^2
+                             )
+                            )
+                     )
+        if (length(Z) > 1L) Z <- diag(Z)
+        
+
+        return(Z - wcrossprod(x = X, list(a = Adiag, b = Aoffdiag)))
+    }
+    
+    
+    .snll <- function(parm, x, mu = 0) {
+        
+        if (is.table(x)) {
+            C <- dim(x)[1]
+            K <- dim(x)[2]
+            B <- dim(x)[3]
+            sidx <- gl(B, C - 1)
+            x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
+        } else {
+            C <- sapply(x, nrow)
+            K <- unique(sapply(x, ncol))
+            stopifnot(length(K) == 1L)
+            B <- length(x)
+            sidx <- factor(rep(seq_len(B), times = C - 1L), levels = seq_len(B))
+        }
+        bidx <- seq_len(K - 1L)
+        beta <- parm[bidx]
+        intercepts <- split(parm[-bidx], sidx)
+        
+        ret <- 0
+        for (b in seq_len(B))
+            ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+        return(ret)
+    }
+    
+    
+    .snsc <- function(parm, x, mu = 0) {
+        
+        if (is.table(x)) {
+            C <- dim(x)[1]
+            K <- dim(x)[2]
+            B <- dim(x)[3]
+            sidx <- gl(B, C - 1)
+            x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
+        } else {
+            C <- sapply(x, nrow)
+            K <- unique(sapply(x, ncol))
+            stopifnot(length(K) == 1L)
+            B <- length(x)
+            sidx <- factor(rep(seq_len(B), times = C - 1L), levels = seq_len(B))
+        }
+        bidx <- seq_len(K - 1L)
+        beta <- parm[bidx]
+        intercepts <- split(parm[-bidx], sidx)
+        
+        ret <- numeric(length(bidx))
+        for (b in seq_len(B)) {
+            nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+            ret[bidx] <- ret[bidx] + nsc[bidx]
+            ret <- c(ret, nsc[-bidx])
+        }
+        return(ret)
+    }
+    
+    
+    .shes <- function(parm, x, mu = 0) {
+        
+        if (is.table(x)) {
+            C <- dim(x)[1]
+            K <- dim(x)[2]
+            B <- dim(x)[3]
+            sidx <- gl(B, C - 1)
+            x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
+        } else {
+            C <- sapply(x, nrow)
+            K <- unique(sapply(x, ncol))
+            stopifnot(length(K) == 1L)
+            B <- length(x)
+            sidx <- factor(rep(seq_len(B), times = C - 1L), levels = seq_len(B))
+        }
+        bidx <- seq_len(K - 1L)
+        beta <- parm[bidx]
+        intercepts <- split(parm[-bidx], sidx)
+        
+        ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
+        for (b in seq_len(B))
+            ret <- ret + .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+        ret
+    }
+    
+    
+    .snsr <- function(parm, x, mu = 0) {
+        
+        if (is.table(x)) {
+            C <- dim(x)[1]
+            K <- dim(x)[2]
+            B <- dim(x)[3]
+            sidx <- gl(B, C - 1)
+            x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
+        } else {
+            C <- sapply(x, nrow)
+            K <- unique(sapply(x, ncol))
+            stopifnot(length(K) == 1L)
+            B <- length(x)
+            sidx <- factor(rep(seq_len(B), times = C - 1L), levels = seq_len(B))
+        }
+        bidx <- seq_len(K - 1L)
+        beta <- parm[bidx]
+        intercepts <- split(parm[-bidx], sidx)
+        
+        ret <- c()
+        for (b in seq_len(B)) {
+            idx <- attr(x[[b]], "idx")
+            sr <- numeric(length(idx))
+            sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+            ret <- c(ret, sr)
+        }
+        return(ret)
+    }
+    
+    
+    .profile <- function(start, fix = seq_len(K - 1)) {
+        stopifnot(all(fix %in% seq_len(K - 1)))
+        beta <- start[fix]
+        ret <- optim(par = start[-fix], fn = function(par) {
+                         p <- numeric(length(par) + length(fix))
+                         p[fix] <- beta
+                         p[-fix] <- par
+                         .snll(p, x = xlist, mu = mu)
+                     },
+                     gr = function(par) {
+                         p <- numeric(length(par) + length(fix))
+                         p[fix] <- beta
+                         p[-fix] <- par
+                         .snsc(p, x = xlist, mu = mu)[-fix]
+                     },
+                     lower = lwr[-fix], method = "L-BFGS-B", 
+                     hessian = FALSE, ...)
+        p <- numeric(length(start))
+        p[fix] <- beta
+        p[-fix] <- ret$par
+        ret$par <- p
+        ret
+    }
+    
+    
+    if (!length(fix)) {
+        ret <- optim(par = start, 
+                     fn = function(parm)
+                         .snll(parm, x = xlist, mu = mu),
+                     gr = function(parm)
+                         .snsc(parm, x = xlist, mu = mu),
+                     lower = lwr, method = "L-BFGS-B", 
+                     hessian = FALSE, ...)
+    } else if (length(fix) == length(start)) {
+        ret <- list(par = start, 
+                    value = .snll(start, x = xlist, mu = mu))
+    } else {
+        ret <- .profile(start, fix = fix)
+    }
+     
+    
+    if (is.null(fix) || (length(fix) == length(start)))
+        parm <- seq_len(K - 1)
+    else 
+        parm <- fix
+    if (any(parm >= K)) return(ret)
+
+    ret$coefficients <- ret$par[parm]
+    dn2 <- dimnames(x)[2L]
+    names(ret$coefficients) <- cnames <- dn2[[1L]][1L + parm]
+
+    if (score)
+        ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
+    if (hessian) {
+        ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
+        if (length(parm) != nrow(ret$hessian))
+           ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
+        ret$vcov <- solve(ret$hessian)
+        rownames(ret$vcov) <- colnames(ret$vcov) <- rownames(ret$hessian) <-
+            colnames(ret$hessian) <-  cnames
+    }
+    if (residuals)
+        ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
+
+    ret$profile <- function(start, fix)
+        .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
+
+    ret$table <- x
+    ret$mu <- mu
+    names(ret$mu) <- link$parm
+    
+
+    class(ret) <- "free1wayML"
+    ret
+}
+
+
+.SW <- function(res, xt) {
+
+    if (length(dim(xt)) == 3L) {
+        res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3])
+        STAT <-  Exp <- Cov <- 0
+        for (b in seq_len(dim(xt)[3L])) {
+            sw <- .SW(res[,b, drop = TRUE], xt[,,b, drop = TRUE])
+            STAT <- STAT + sw$Statistic
+            Exp <- Exp + sw$Expectation
+            Cov <- Cov + sw$Covariance
+        }
+        return(list(Statistic = STAT, Expectation = as.vector(Exp),
+                    Covariance = Cov))
+    }
+
+    Y <- matrix(res, ncol = 1, nrow = length(xt))
+    weights <- c(xt)
+    x <- gl(ncol(xt), nrow(xt))
+    X <- model.matrix(~ x, data = data.frame(x = x))[,-1L,drop = FALSE]
+
+    w. <- sum(weights)
+    wX <- weights * X
+    wY <- weights * Y
+    ExpX <- colSums(wX)
+    ExpY <- colSums(wY) / w.
+    CovX <- crossprod(X, wX)
+    Yc <- t(t(Y) - ExpY)
+    CovY <- crossprod(Yc, weights * Yc) / w.
+    Exp <- kronecker(ExpY, ExpX)
+    Cov <- w. / (w. - 1) * kronecker(CovY, CovX) -
+           1 / (w. - 1) * kronecker(CovY, tcrossprod(ExpX))
+    STAT <- crossprod(X, wY)
+    list(Statistic = STAT, Expectation = as.vector(Exp),
+         Covariance = Cov)
+}
+
+
+.resample <- function(res, xt, B = 10000) {
+
+    if (length(dim(xt)) == 2L)
+        xt <- as.table(array(xt, dim = c(dim(xt), 1)))
+
+    res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3L])
+    stat <- 0
+    ret <- .SW(res, xt)
+    if (dim(xt)[2L] == 2L) {
+        ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(c(ret$Covariance)))
+    } else {
+        ES <- t(ret$Statistic - ret$Expectation)
+        ret$testStat <- sum(ES %*% solve(ret$Covariance) * ES)
+    }
+    ret$DF <- dim(xt)[2L] - 1L
+
+    if (B) {
+        for (j in 1:dim(xt)[3L]) {
+           rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
+           stat <- stat + sapply(rt, function(x) colSums(x[,-1L, drop = FALSE] * res[,j]))
+        }
+        if (dim(xt)[2L] == 2L) {
+             ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
+        } else {
+            ES <- t(matrix(stat, ncol = B) - ret$Expectation)
+            ret$permStat <- rowSums(ES %*% solve(ret$Covariance) * ES)
+        }
+    }
+    ret
+}
+
+
+.p <- function(link, q, ...)
+    link$linkinv(q = q, ...)
+
+.q <- function(link, p, ...)
+    link$link(p = p, ...)
+
+.d <- function(link, x, ...)
+    link$dlinkinv(x = x, ...)
+
+.dd <- function(link, x, ...)
+    link$ddlinkinv(x = x, ...)
+
+.ddd <- function(link, x, ...)
+    link$dddlinkinv(x = x, ...)
+
+.dd2d <- function(link, x, ...)
+    link$dd2dlinkinv(x = x, ...)
+
+linkfun <- function(alias, 
+                    model, 
+                    parm, 
+                    link, 
+                    linkinv,
+                    dlinkinv, 
+                    ddlinkinv,
+                    ...) {
+
+    ret <- list(alias = alias,
+                model = model,
+                parm = parm,
+                link = link,
+                linkinv = linkinv,
+                dlinkinv = dlinkinv,
+                ddlinkinv = ddlinkinv)
+    if (is.null(ret$dd2d)) 
+        ret$dd2d <- function(x) 
+            ret$ddlinkinv(x) / ret$dlinkinv(x)
+    ret <- c(ret, list(...))
+    class(ret) <- "linkfun"
+    ret
+}
+
+
+logit <- function()
+    linkfun(alias = c("Wilcoxon", "Kruskal-Wallis"),
+            model = "proportional odds", 
+            parm = "log-odds ratio",
+            link = qlogis,
+            linkinv = plogis,
+            dlinkinv = dlogis,
+            ddlinkinv = function(x) {
+                p <- plogis(x)
+                p * (1 - p)^2 - p^2 * (1 - p)
+            },
+            dddlinkinv = function(x) {
+                ex <- exp(x)
+                ifelse(is.finite(x), (ex - 4 * ex^2 + ex^3) / (1 + ex)^4, 0.0)
+            },
+            dd2d = function(x) {
+                ex <- exp(x)
+                (1 - ex) / (1 + ex)
+            },
+            parm2PI = function(x) {
+               OR <- exp(x)
+               ret <- OR * (OR - 1 - x)/(OR - 1)^2
+               ret[abs(x) < .Machine$double.eps] <- 0.5
+               return(ret)
+            },
+            PI2parm = function(p) {
+               f <- function(x, PI)
+                   x + (exp(-x) * (PI + exp(2 * x) * (PI - 1) + exp(x)* (1 - 2 * PI)))
+               ret <- sapply(p, function(p) 
+                   uniroot(f, PI = p, interval = 50 * c(-1, 1))$root)
+               return(ret)
+            },
+            parm2OVL = function(x) 2 * plogis(-abs(x / 2))
+    )
+
+
+probit <- function()
+    linkfun(alias = "van der Waerden normal scores",
+            model = "latent normal shift", 
+            parm = "generalised Cohen's d",
+            link = qnorm,
+            linkinv = pnorm,
+            dlinkinv = dnorm,
+            ddlinkinv = function(x) 
+                ifelse(is.finite(x), -dnorm(x = x) * x, 0.0), 
+            dddlinkinv = function(x) 
+                ifelse(is.finite(x), dnorm(x = x) * (x^2 - 1), 0.0),
+            dd2d = function(x) -x,
+            parm2PI = function(x) pnorm(x, sd = sqrt(2)),
+            PI2parm = function(p) qnorm(p, sd = sqrt(2)),
+            parm2OVL = function(x) 2 * pnorm(-abs(x / 2))
+    )
+
+
+cloglog <- function()
+    linkfun(alias = "Savage",
+            model = "proportional hazards", 
+            parm = "log-hazard ratio",
+            link = function(p, log.p = FALSE) {
+                if (log.p) p <- exp(p)
+                log(-log1p(- p))
+            },
+            linkinv = function(q, lower.tail = TRUE, log.p = FALSE) {
+                ### p = 1 - exp(-exp(q))
+                ret <- exp(-exp(q))
+                if (log.p) {
+                    if (lower.tail)
+                        return(log1p(-ret))
+                    return(-exp(q))
+                }
+                if (lower.tail)
+                    return(-expm1(-exp(q)))
+                return(ret)
+            },
+            dlinkinv = function(x) 
+                ifelse(is.finite(x), exp(x - exp(x)), 0.0),
+            ddlinkinv = function(x) {
+                ex <- exp(x)
+                ifelse(is.finite(x), (ex - ex^2) / exp(ex), 0.0)
+            },
+            dddlinkinv = function(x) {
+                ex <- exp(x)
+                ifelse(is.finite(x), (ex - 3*ex^2 + ex^3) / exp(ex), 0.0)
+            },
+            dd2d = function(x)
+               -expm1(x),
+            parm2PI = plogis,
+            PI2parm = qlogis,
+            parm2OVL = function(x) {
+                x <- abs(x)
+                ret <- exp(x / (exp(-x) - 1)) - exp(-x / (exp(x) - 1)) + 1 
+                ret[abs(x) < .Machine$double.eps] <- 1
+                x[] <- ret
+                return(x)
+            }
+    )
+
+
+loglog <- function()
+    linkfun(alias = "Lehmann", 
+            model = "Lehmann", 
+            parm = "log-reverse time hazard ratio",
+            link = function(p, log.p = FALSE) {
+                if (!log.p) p <- log(p)
+                -log(-p)
+            },
+            linkinv = function(q, lower.tail = TRUE, log.p = FALSE) {
+                ### p = exp(-exp(-q))
+                if (log.p) {
+                    if (lower.tail)
+                        return(-exp(-q))
+                    return(log1p(-exp(-exp(-q))))
+                }
+                if (lower.tail)
+                    return(exp(-exp(-q)))
+                -expm1(-exp(-q))
+            },
+            dlinkinv = function(x) 
+                ifelse(is.finite(x), exp(- x - exp(-x)), 0.0),
+            ddlinkinv = function(x) {
+               ex <- exp(-x)
+               ifelse(is.finite(x), exp(-ex - x) * (ex - 1.0), 0.0)
+            },
+            dddlinkinv = function(x) {
+               ex <- exp(-x)
+               ifelse(is.finite(x), exp(-x - ex) * (ex - 1)^2 - exp(-ex - 2 * x), 0.0)
+            },
+            dd2d = function(x) 
+                expm1(-x),
+            parm2PI = plogis,
+            PI2parm = qlogis,
+            parm2OVL = function(x) {
+                x <- abs(x)
+                rt <- exp(-x / (exp(x) - 1))
+                ret <- rt^exp(x) + 1 - rt
+                ret[abs(x) < .Machine$double.eps] <- 1
+                x[] <- ret
+                return(x)
+            }
+    )
+
+@
+
+We start implementing the log-likelihood function for parameters \code{parm}
+$= \thetavec$ (assuming only a single block) with data from a two-way $C
+\times K$ contingency table \code{x}. 
+
+From $\thetavec$, we first extract the shift parameters $\beta_\cdot$ and
+then the intercept parameters $\vartheta_\cdot$, compute the differences
+$\vartheta_{c,1} - \beta_k$ and evaluate the probabilities
+\code{prb} $ = \Prob(y_{c - 1} < Y \le y_c \mid S = 1, \rT = k)$ for all
+groups:
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap1}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@bidx <- seq_len(ncol(x) - 1L)@\\
+\mbox{}\verb@beta <- c(0, mu + parm[bidx])@\\
+\mbox{}\verb@intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)@\\
+\mbox{}\verb@tmb <- intercepts - matrix(beta, nrow = length(intercepts),  @\\
+\mbox{}\verb@                                 ncol = ncol(x),@\\
+\mbox{}\verb@                                 byrow = TRUE)@\\
+\mbox{}\verb@Ftmb <- F(tmb)@\\
+\mbox{}\verb@prb <- pmax(Ftmb[- 1L, , drop = FALSE] - @\\
+\mbox{}\verb@            Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+With default null values $\mu_k = 0, k = 2, \dots, K$, we define the
+negative log-likelihood function as the weighted (by number of observations) sum of
+the log-probabilities
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap2}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape negative logLik}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.nll <- function(parm, x, mu = 0) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    return(- sum(x * log(prb)))@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+It is important to note that, with $F$ corresponding to distribution with
+log-concave density $f$, the negative log-likelihood is a convex function of
+the parameters $\thetavec$, and thus we can solve the corresponding
+constrained minimisation problem quickly and reliably.
+
+Next, we implement the gradient of the negative
+log-likelihood, the negative score function for the parameters in
+$\thetavec$. The score function for the empirical likelihood, evaluated at
+parameters $\vartheta_\cdot$ and $\beta_\cdot$ is given in many places
+\citep[for example in][Formula~(2)]{HothornMoestBuehlmann2017}. 
+We begin computing the ratio of $f(\vartheta_{c,1} -
+\beta_k)$ and the corresponding likelihood
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap3}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape d p ratio}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@ftmb <- f(tmb)@\\
+\mbox{}\verb@zu <- x * ftmb[- 1, , drop = FALSE] / prb@\\
+\mbox{}\verb@zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+and compute the negative score function
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap4}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape negative score}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.nsc <- function(parm, x, mu = 0) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape d p ratio}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    ret <- numeric(length(parm))@\\
+\mbox{}\verb@    ret[bidx] <- colSums(zl)[-1L] -@\\
+\mbox{}\verb@                 colSums(zu[-nrow(zu),,drop = FALSE])[-1L]@\\
+\mbox{}\verb@    ret[-bidx] <- Reduce("+", @\\
+\mbox{}\verb@                         lapply(1:ncol(x), @\\
+\mbox{}\verb@                             function(j) {@\\
+\mbox{}\verb@                                 .rcr(zu[-nrow(zu),j]) - @\\
+\mbox{}\verb@                                 .rcr(zl[-1,j])@\\
+\mbox{}\verb@                             })@\\
+\mbox{}\verb@                         )@\\
+\mbox{}\verb@    - ret@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+Adjustment for the parameterisation in terms of differences between
+intercepts needs this small helper function
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap5}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape cumsumrev}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.rcr <- function(z)@\\
+\mbox{}\verb@    Reduce('+', z, accumulate = TRUE, right = TRUE)@\\
+\mbox{}\verb@    ### rev(cumsum(rev(z)))@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+In addition, we define negative score residuals, that is, the derivative of the
+negative log-likelihood with respect to an intercept term constrained to
+zero:
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap6}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape negative score residuals}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.nsr <- function(parm, x, mu = 0) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape d p ratio}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    rowSums(zu - zl) / rowSums(x)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+We also need access to the observed Fisher information of the shift
+parameters. We proceed by implementing the Hessian for the intercept
+($\vartheta_\cdot$) and shift ($\beta_\cdot$) parameters, as given in Formula~(4) of
+\cite{HothornMoestBuehlmann2017} first. This partitioned matrix
+\begin{eqnarray*}
+\mH(\vartheta_1, \dots, \vartheta_{C - 1}, \beta_2, \dots, \beta_K) = 
+\left(\begin{array}{ll}
+\mA & \X \\
+\X^\top & \Z
+\end{array} \right)
+\end{eqnarray*}
+consists of a symmetric tridiagonal $\mA \sim (C-1,C-1)$, a diagonal $\Z \sim (K - 1, K -
+1)$, and a full $\X \sim (C - 1, K - 1)$ matrix. In a second step, we
+compute the Fisher information matrix for the shift parameters only by means
+of the Schur complement $\Z - \X^\top \mA^{-1} \X$.
+
+In addition to probabilities \code{prb}, the Hessian necessitates the
+computation of $f(\vartheta_{c,1} - \beta_k)$ and $f^\prime(\vartheta_{c,1} -
+\beta_k)$. We start preparing these objects
+
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap7}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Hessian prep}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@ftmb <- f(tmb)@\\
+\mbox{}\verb@fptmb <- fp(tmb)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@dl <- ftmb[- nrow(ftmb), , drop = FALSE]@\\
+\mbox{}\verb@du <- ftmb[- 1, , drop = FALSE]@\\
+\mbox{}\verb@dpl <- fptmb[- nrow(ftmb), , drop = FALSE]@\\
+\mbox{}\verb@dpu <- fptmb[- 1, , drop = FALSE]@\\
+\mbox{}\verb@dlm1 <- dl[,-1L, drop = FALSE]@\\
+\mbox{}\verb@dum1 <- du[,-1L, drop = FALSE]@\\
+\mbox{}\verb@dplm1 <- dpl[,-1L, drop = FALSE]@\\
+\mbox{}\verb@dpum1 <- dpu[,-1L, drop = FALSE]@\\
+\mbox{}\verb@prbm1 <- prb[,-1L, drop = FALSE]@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@i1 <- length(intercepts) - 1L@\\
+\mbox{}\verb@i2 <- 1L@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+The off-diagonal elements of $\mA$ are now available as
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap8}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Aoffdiag}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@Aoffdiag <- -rowSums(x * du * dl / prb^2)[-i2]@\\
+\mbox{}\verb@Aoffdiag <- Aoffdiag[-length(Aoffdiag)]@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+and the diagonal elements of $\mA$ as
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap9}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Adiag}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@Adiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - @\\
+\mbox{}\verb@                  (x * dpl / prb)[-i2,,drop = FALSE] - @\\
+\mbox{}\verb@                  ((x * du^2 / prb^2)[-i1,,drop = FALSE] + @\\
+\mbox{}\verb@                   (x * dl^2 / prb^2)[-i2,,drop = FALSE]@\\
+\mbox{}\verb@                  )@\\
+\mbox{}\verb@                 )@\\
+\mbox{}\verb@                  @\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+For the computation of $\X$ and $\Z$, the observations corresponding to the
+control group ($k = 1$) are irrelevant, we remove these first
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap10}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape X and Z}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@xm1 <- x[,-1L,drop = FALSE] @\\
+\mbox{}\verb@X <- ((xm1 * dpum1 / prbm1)[-i1,,drop = FALSE] - @\\
+\mbox{}\verb@      (xm1 * dplm1 / prbm1)[-i2,,drop = FALSE] - @\\
+\mbox{}\verb@      ((xm1 * dum1^2 / prbm1^2)[-i1,,drop = FALSE] - @\\
+\mbox{}\verb@       (xm1 * dum1 * dlm1 / prbm1^2)[-i2,,drop = FALSE] -@\\
+\mbox{}\verb@       (xm1 * dum1 * dlm1 / prbm1^2)[-i1,,drop = FALSE] +@\\
+\mbox{}\verb@       (xm1 * dlm1^2 / prbm1^2)[-i2,,drop = FALSE]@\\
+\mbox{}\verb@      )@\\
+\mbox{}\verb@     )@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@Z <- -colSums(xm1 * (dpum1 / prbm1 - @\\
+\mbox{}\verb@                     dplm1 / prbm1 -@\\
+\mbox{}\verb@                     (dum1^2 / prbm1^2 - @\\
+\mbox{}\verb@                      2 * dum1 * dlm1 / prbm1^2 +@\\
+\mbox{}\verb@                      dlm1^2 / prbm1^2@\\
+\mbox{}\verb@                     )@\\
+\mbox{}\verb@                    )@\\
+\mbox{}\verb@             )@\\
+\mbox{}\verb@if (length(Z) > 1L) Z <- diag(Z)@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+We return the Fisher information for $\beta_2, \dots, \beta_K$ as the Schur
+complement $\Z - \X^\top \mA^{-1} \X$ by means of a weighted crossproduct
+implemented in Chapter~\ref{ch:schur}.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap11}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Hessian}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.hes <- function(parm, x, mu = 0) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Hessian prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Aoffdiag}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Adiag}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape X and Z}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    return(Z - wcrossprod(x = X, list(a = Adiag, b = Aoffdiag)))@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+We start with an example involving $K = 3$ groups for a binary outcome and
+use a binary logistic regression model to estimate the two log-odds ratios
+$\beta_2$ and $\beta_3$ along with their estimated covariance
+<<glm>>=
+library("free1way")
+(x <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2))
+d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 1))
+d$x <- c(x)
+m <- glm(y ~ t, data = d, weights = x, family = binomial())
+logLik(m)
+(cf <- coef(m))
+vcov(m)[-1,-1]
+@
+
+Replicating these results requires specification of the inverse link
+function $F = \text{expit}$ and the density function $f$ of the standard
+logistic.
+
+<<glm-op>>=
+F <- plogis
+f <- dlogis
+(op <- optim(par = c("mt2" = 0, "mt3" = 0, "(Intercept)" = 0), 
+             fn = .nll, gr = .nsc, 
+             x = x, method = "BFGS", hessian = TRUE))
+c(cf[-1] * -1, cf[1]) - op$par
+logLik(m) + op$value
+.nsr(op$par, x)
+obj <- .free1wayML(as.table(x), link = logit())
+obj$coefficients
+obj$value
+@
+
+Parameter estimates and the in-sample log-likelihood are practically
+identical. We now turn to the inverse Hessian of the shift terms, first
+defining the derivative of the density of the standard logistic distribtion
+<<glm-H>>=
+fp <- function(x) {
+    p <- plogis(x)
+    p * (1 - p)^2 - p^2 * (1 - p)
+}
+solve(H <- .hes(op$par, x))
+vcov(m)[-1,-1]
+solve(op$hessian)[1:2,1:2]
+obj$vcov
+@
+Also here we see practically identical results.
+
+In the next step, we extend our results to the stratified case. We iterate
+over all blocks and evaluate the negative log-likelihood for the same values
+of the shift parameters but block-specific values of the intercept
+parameters.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap12}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (is.table(x)) {@\\
+\mbox{}\verb@    C <- dim(x)[1]@\\
+\mbox{}\verb@    K <- dim(x)[2]@\\
+\mbox{}\verb@    B <- dim(x)[3]@\\
+\mbox{}\verb@    sidx <- gl(B, C - 1)@\\
+\mbox{}\verb@    x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    C <- sapply(x, nrow)@\\
+\mbox{}\verb@    K <- unique(sapply(x, ncol))@\\
+\mbox{}\verb@    stopifnot(length(K) == 1L)@\\
+\mbox{}\verb@    B <- length(x)@\\
+\mbox{}\verb@    sidx <- factor(rep(seq_len(B), times = C - 1L), levels = seq_len(B))@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@bidx <- seq_len(K - 1L)@\\
+\mbox{}\verb@beta <- parm[bidx]@\\
+\mbox{}\verb@intercepts <- split(parm[-bidx], sidx)@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap13}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape stratified negative logLik}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.snll <- function(parm, x, mu = 0) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    ret <- 0@\\
+\mbox{}\verb@    for (b in seq_len(B))@\\
+\mbox{}\verb@        ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu)@\\
+\mbox{}\verb@    return(ret)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+In a similar way, we evaluate the gradients for each block and sum-up the
+contributions by the shift parameters whereas the gradients for the
+intercept parameters are only concatenated.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap14}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape stratified negative score}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.snsc <- function(parm, x, mu = 0) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    ret <- numeric(length(bidx))@\\
+\mbox{}\verb@    for (b in seq_len(B)) {@\\
+\mbox{}\verb@        nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu)@\\
+\mbox{}\verb@        ret[bidx] <- ret[bidx] + nsc[bidx]@\\
+\mbox{}\verb@        ret <- c(ret, nsc[-bidx])@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    return(ret)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+The score residuum is zero for an observation with weight zero, that is, a
+row of zeros in the table.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap15}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape stratified negative score residual}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.snsr <- function(parm, x, mu = 0) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    ret <- c()@\\
+\mbox{}\verb@    for (b in seq_len(B)) {@\\
+\mbox{}\verb@        idx <- attr(x[[b]], "idx")@\\
+\mbox{}\verb@        sr <- numeric(length(idx))@\\
+\mbox{}\verb@        sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu)@\\
+\mbox{}\verb@        ret <- c(ret, sr)@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    return(ret)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+<<glm-stratum>>=
+(x <- as.table(array(c(10, 5, 7, 11, 8, 9,
+                        9, 4, 8, 15, 5, 4), dim = c(2, 3, 2))))
+d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 1), s = gl(2, 1))
+d$x <- c(x)
+m <- glm(y ~ s + t, data = d, weights = x, family = binomial())
+logLik(m)
+(cf <- coef(m))
+vcov(m)[-(1:2),-(1:2)]
+@
+
+<<glm-op-stratum>>=
+(op <- optim(par = c("mt2" = 0, "mt3" = 0, "(Intercept 1)" = 0, "(Intercept 2)" = 0), 
+             fn = .snll, gr = .snsc, 
+             x = x, 
+             method = "BFGS", 
+             hessian = TRUE))
+c(cf[-(1:2)] * -1, cf[1:2]) - op$par
+logLik(m) + op$value
+.snsr(op$par, x)
+@
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap16}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape stratified Hessian}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.shes <- function(parm, x, mu = 0) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))@\\
+\mbox{}\verb@    for (b in seq_len(B))@\\
+\mbox{}\verb@        ret <- ret + .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)@\\
+\mbox{}\verb@    ret@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+<<glm-H-stratum>>=
+H <- .shes(op$par, x)
+solve(H)
+vcov(m)[-(1:2),-(1:2)]
+solve(op$hessian)[1:2,1:2]
+@
+
+	
+\chapter{Schur Complement}
+\label{ch:schur}
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap17}\raggedright\small
+\NWtarget{nuweb?}{} \verb@"Schur_src.c"@\nobreak\ {\footnotesize {?}}$\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@#define STRICT_R_HEADERS@\\
+\mbox{}\verb@#include <R.h>@\\
+\mbox{}\verb@#include <Rinternals.h>@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape C_symtrisolve}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape NROW}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape NCOL}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape wcrossprod}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+For a symmetric tridiagonal quadratic $N \times N$ matrix $\mA$ we compute $\X^\top \mA^{-1} \X$
+utilising that the inverse $\mA^{-1}_{ij} = u_i v_j$ for $1 \le i \le j \le N$
+can be characterised by two vectors $\uvec$ and $\vvec$, each of length $N$
+\citep{Meurant1992}.
+
+We begin with the diagonal $(a_1, \dots, a_N)^\top = \text{diag}(\mA)$ and the
+negative lower- and upper off-diagonal $(-b_1, \dots, -b_{N - 1}) =
+\text{diag}(\mA_{-N,-1})$. \cite{Meurant1992} starts with a decomposition
+$\mA = \mU \D_U^{-1} \mU^\top$ with $(d_1, \dots, d_N)^\top =
+\text{diag}(\D_U)$ where $\mU$ is upper triangular. The
+decomposition also allows to compute the determinant of $\mA$ as $\prod_{i =
+1}^N d_i$.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap18}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape d vec}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@d[n] = a[n];@\\
+\mbox{}\verb@det = d[n];@\\
+\mbox{}\verb@for (i = n - 1; i >= 0; i--) {@\\
+\mbox{}\verb@    d[i] = a[i] - pow(b[i], 2) / d[i + 1];@\\
+\mbox{}\verb@    /* DOI:10.1137/0613045 page 710: T = U D^-1 U^t with@\\
+\mbox{}\verb@       diag(U) = d (upper triangular),@\\
+\mbox{}\verb@       diag(D) = d (diagonal) => det(T) = prod(d)@\\
+\mbox{}\verb@    */@\\
+\mbox{}\verb@    det *= d[i];@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+Following Proposition 1 in \cite{Meurant1992}, we compute $\uvec$
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap19}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape u vec}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@u[0] = 1 / d[0];@\\
+\mbox{}\verb@prodb = 1.0;@\\
+\mbox{}\verb@for (i = 1; i <= n; i++) {@\\
+\mbox{}\verb@    prodb *= -b[i - 1] / d[i - 1];@\\
+\mbox{}\verb@    u[i] = prodb / d[i];@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+Based on the next decomposition $\mA = \mL \D_L^{-1} \mL^\top$ with lower
+triangular $\mL$ and $(\delta_1, \dots, \delta_N)^\top = \text{diag}(\D_L)$, we
+compute
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap20}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape delta vec}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@delta[0] = a[0];@\\
+\mbox{}\verb@for (i = 1; i <= n; i++)@\\
+\mbox{}\verb@    delta[i] = a[i] - pow(b[i - 1], 2) / delta[i - 1];@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+and then, following Proposition 2, $\vvec$
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap21}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape v vec}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@v[n] = 1 / (ans[n] * delta[n]);@\\
+\mbox{}\verb@v[0] = 1.0;@\\
+\mbox{}\verb@prodb = 1.0;@\\
+\mbox{}\verb@for (i = 1; i < n; i++) {@\\
+\mbox{}\verb@    prodb *= -b[n - i] / delta[n - i];@\\
+\mbox{}\verb@    v[n - i] = prodb * v[n];@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+We wrap everything up in a function with arguments \code{a} and \code{b} of
+length \code{n + 1} $=N$ and \code{n} $=N - 1$, respectively. The two
+vectors $\uvec$ and $\vvec$ are stored in an $N \times 2$ real matrix \code{ans}.
+We check if the determinant is larger than a small tolerance \code{tol}
+before computing $\uvec$ and $\vvec$. The memory allocated for the $d$'s is
+reused for computing $\delta$'s.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap22}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape C_symtrisolve}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@void C_symtrisolve (double *a, double *b, R_xlen_t n, double tol, double *ans)@\\
+\mbox{}\verb@{@\\
+\mbox{}\verb@    SEXP Rd;@\\
+\mbox{}\verb@    double *d, *delta, *u, *v, prodb, det;@\\
+\mbox{}\verb@    R_xlen_t i;@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    /* output vectors */@\\
+\mbox{}\verb@    u = ans;@\\
+\mbox{}\verb@    v = ans + n + 1;@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    /* n = N - 1 */@\\
+\mbox{}\verb@    PROTECT(Rd = allocVector(REALSXP, n + 1));@\\
+\mbox{}\verb@    d = REAL(Rd);@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape d vec}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (fabs(det) < tol) {@\\
+\mbox{}\verb@        error("Matrix not invertible");@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape u vec}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@        delta = d;@\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape delta vec}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape v vec}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    UNPROTECT(1);@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+In the next step, we compute the weighted crossproduct 
+$\X^\top \mA^{-1} \X$$\X^\top \mA^{-1} \X$
+without memory allocation for the full $N \times N$ matrix $\mA^{-1}$.
+Because the resulting matrix is symmetric, we first compute the lower
+triangular elements only.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap23}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape lower wcrossprod}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@for (p = 0; p < P; p++) {@\\
+\mbox{}\verb@    i = 0;@\\
+\mbox{}\verb@    dcs[i] = dx[p * N + i] * dvu[i];@\\
+\mbox{}\verb@    dcs[N + i] = dx[p * N + i] * dvu[N + i];@\\
+\mbox{}\verb@    for (i = 1; i < N; i++) {@\\
+\mbox{}\verb@        dcs[i] = dcs[i - 1] + dx[p * N + i] * dvu[i];@\\
+\mbox{}\verb@        dcs[N + i] = dcs[N + i - 1] + dx[p * N + i] * dvu[N + i];@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    for (j = 0; j < N; j++) {@\\
+\mbox{}\verb@        dxA = 0.0;@\\
+\mbox{}\verb@        dxA1 = dcs[N + j];@\\
+\mbox{}\verb@        dxA2 = dcs[N - 1] - dcs[j];@\\
+\mbox{}\verb@        dxA = dxA1 * dvu[j] + dxA2 * dvu[N + j];@\\
+\mbox{}\verb@        for (pp = p; pp < P; pp++)@\\
+\mbox{}\verb@            dans[p * P + pp] += dxA * dx[pp * N + j];@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap24}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape upper wcrossprod}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@for (p = 0; p < P; p++) {@\\
+\mbox{}\verb@    for (pp = p + 1; pp < P; pp++)@\\
+\mbox{}\verb@        dans[pp * P + p] = dans[p * P + pp];@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+The \proglang{R} interface requires access to the number of rows and columns
+of matrices
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap25}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape NROW}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@R_xlen_t NROW@\\
+\mbox{}\verb@(@\\
+\mbox{}\verb@    SEXP x@\\
+\mbox{}\verb@) {@\\
+\mbox{}\verb@    SEXP a;@\\
+\mbox{}\verb@    a = getAttrib(x, R_DimSymbol);@\\
+\mbox{}\verb@    if (a == R_NilValue) return(XLENGTH(x));@\\
+\mbox{}\verb@    if (TYPEOF(a) == REALSXP)@\\
+\mbox{}\verb@        return(REAL(a)[0]);@\\
+\mbox{}\verb@    return((R_xlen_t) INTEGER(a)[0]);@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap26}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape NCOL}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@R_xlen_t NCOL@\\
+\mbox{}\verb@(@\\
+\mbox{}\verb@    SEXP x@\\
+\mbox{}\verb@) {@\\
+\mbox{}\verb@    SEXP a;@\\
+\mbox{}\verb@    a = getAttrib(x, R_DimSymbol);@\\
+\mbox{}\verb@    if (a == R_NilValue) return(1);@\\
+\mbox{}\verb@    if (TYPEOF(a) == REALSXP)@\\
+\mbox{}\verb@        return(REAL(a)[1]);@\\
+\mbox{}\verb@    return((R_xlen_t) INTEGER(a)[1]);@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap27}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape wcrossprod}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@SEXP R_wcrossprod (SEXP a, SEXP b, SEXP X, SEXP tol)@\\
+\mbox{}\verb@{@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    SEXP ans, vu, cumsumvux;@\\
+\mbox{}\verb@    double *dans, *dx, dxA, dxA1, dxA2, *dvu, *dcs;@\\
+\mbox{}\verb@    R_xlen_t N, i, j;@\\
+\mbox{}\verb@    int p, pp, P;@\\
+\mbox{}\verb@    @\\
+\mbox{}\verb@    N = XLENGTH(a);@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (NROW(X) != N)@\\
+\mbox{}\verb@        error("incorrect number of rows in X");@\\
+\mbox{}\verb@    if (!isReal(X))@\\
+\mbox{}\verb@        error("incorrect type of X");@\\
+\mbox{}\verb@    dx = REAL(X);@\\
+\mbox{}\verb@    P = (int) NCOL(X);@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    PROTECT(ans = allocMatrix(REALSXP, P, P));@\\
+\mbox{}\verb@    dans = REAL(ans);@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (XLENGTH(b) != N - 1)@\\
+\mbox{}\verb@        error("incorrect length of b");@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (!isReal(a))@\\
+\mbox{}\verb@        error("incorrect type of a");@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (!isReal(b))@\\
+\mbox{}\verb@        error("incorrect type of b");@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (!isReal(tol))@\\
+\mbox{}\verb@        error("incorrect type of tol");@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    PROTECT(vu = allocMatrix(REALSXP, N, 2));@\\
+\mbox{}\verb@    dvu = REAL(vu);@\\
+\mbox{}\verb@    C_symtrisolve(REAL(a), REAL(b), N - 1, REAL(tol)[0], dvu);@\\
+\mbox{}\verb@    PROTECT(cumsumvux = allocMatrix(REALSXP, N, 2));@\\
+\mbox{}\verb@    dcs = REAL(cumsumvux);@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    for (p = 0; p < P * P; p++)@\\
+\mbox{}\verb@        dans[p] = 0.0;@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape lower wcrossprod}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape upper wcrossprod}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    UNPROTECT(3);@\\
+\mbox{}\verb@    return(ans);@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap28}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape R wcrossprod}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@wcrossprod <- function(x, A, tol = .Machine$double.eps) {@\\
+\mbox{}\verb@    storage.mode(x) <- "double"@\\
+\mbox{}\verb@    .Call(R_wcrossprod, a = as.double(A$a), @\\
+\mbox{}\verb@                        b = as.double(A$b),@\\
+\mbox{}\verb@                        X = x,@\\
+\mbox{}\verb@                        tol = tol)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\chapter{Link Functions}
+\label{ch:link}
+
+Similar to \code{family} objects, we provide some infrastructure for
+\code{link} functions $F^{-1}$ and derived quantities (\code{linkinv} $F$,
+\code{dlinkinv} $f$, and \code{ddlinkinv} $f^\prime$). If not provided, we also
+set-up the ratio $f^\prime / f$ in the constructor.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap29}\raggedright\small
+\NWtarget{nuweb?}{} \verb@"linkfun.R"@\nobreak\ {\footnotesize {?}}$\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape linkfun}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape logit}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape probit}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape cloglog}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape loglog}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap30}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape linkfun}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.p <- function(link, q, ...)@\\
+\mbox{}\verb@    link$linkinv(q = q, ...)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@.q <- function(link, p, ...)@\\
+\mbox{}\verb@    link$link(p = p, ...)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@.d <- function(link, x, ...)@\\
+\mbox{}\verb@    link$dlinkinv(x = x, ...)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@.dd <- function(link, x, ...)@\\
+\mbox{}\verb@    link$ddlinkinv(x = x, ...)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@.ddd <- function(link, x, ...)@\\
+\mbox{}\verb@    link$dddlinkinv(x = x, ...)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@.dd2d <- function(link, x, ...)@\\
+\mbox{}\verb@    link$dd2dlinkinv(x = x, ...)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@linkfun <- function(alias, @\\
+\mbox{}\verb@                    model, @\\
+\mbox{}\verb@                    parm, @\\
+\mbox{}\verb@                    link, @\\
+\mbox{}\verb@                    linkinv,@\\
+\mbox{}\verb@                    dlinkinv, @\\
+\mbox{}\verb@                    ddlinkinv,@\\
+\mbox{}\verb@                    ...) {@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    ret <- list(alias = alias,@\\
+\mbox{}\verb@                model = model,@\\
+\mbox{}\verb@                parm = parm,@\\
+\mbox{}\verb@                link = link,@\\
+\mbox{}\verb@                linkinv = linkinv,@\\
+\mbox{}\verb@                dlinkinv = dlinkinv,@\\
+\mbox{}\verb@                ddlinkinv = ddlinkinv)@\\
+\mbox{}\verb@    if (is.null(ret$dd2d)) @\\
+\mbox{}\verb@        ret$dd2d <- function(x) @\\
+\mbox{}\verb@            ret$ddlinkinv(x) / ret$dlinkinv(x)@\\
+\mbox{}\verb@    ret <- c(ret, list(...))@\\
+\mbox{}\verb@    class(ret) <- "linkfun"@\\
+\mbox{}\verb@    ret@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+We start with the logit link, that is $F(z) = (1 + \exp(-z))^{-1}$, giving rise
+to Wilcoxon or Kruskal-Wallis type score residuals:
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap31}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape logit}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@logit <- function()@\\
+\mbox{}\verb@    linkfun(alias = c("Wilcoxon", "Kruskal-Wallis"),@\\
+\mbox{}\verb@            model = "proportional odds", @\\
+\mbox{}\verb@            parm = "log-odds ratio",@\\
+\mbox{}\verb@            link = qlogis,@\\
+\mbox{}\verb@            linkinv = plogis,@\\
+\mbox{}\verb@            dlinkinv = dlogis,@\\
+\mbox{}\verb@            ddlinkinv = function(x) {@\\
+\mbox{}\verb@                p <- plogis(x)@\\
+\mbox{}\verb@                p * (1 - p)^2 - p^2 * (1 - p)@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            dddlinkinv = function(x) {@\\
+\mbox{}\verb@                ex <- exp(x)@\\
+\mbox{}\verb@                ifelse(is.finite(x), (ex - 4 * ex^2 + ex^3) / (1 + ex)^4, 0.0)@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            dd2d = function(x) {@\\
+\mbox{}\verb@                ex <- exp(x)@\\
+\mbox{}\verb@                (1 - ex) / (1 + ex)@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            parm2PI = function(x) {@\\
+\mbox{}\verb@               OR <- exp(x)@\\
+\mbox{}\verb@               ret <- OR * (OR - 1 - x)/(OR - 1)^2@\\
+\mbox{}\verb@               ret[abs(x) < .Machine$double.eps] <- 0.5@\\
+\mbox{}\verb@               return(ret)@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            PI2parm = function(p) {@\\
+\mbox{}\verb@               f <- function(x, PI)@\\
+\mbox{}\verb@                   x + (exp(-x) * (PI + exp(2 * x) * (PI - 1) + exp(x)* (1 - 2 * PI)))@\\
+\mbox{}\verb@               ret <- sapply(p, function(p) @\\
+\mbox{}\verb@                   uniroot(f, PI = p, interval = 50 * c(-1, 1))$root)@\\
+\mbox{}\verb@               return(ret)@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            parm2OVL = function(x) 2 * plogis(-abs(x / 2))@\\
+\mbox{}\verb@    )@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+The \code{parm2PI} function converts log-odds ratios to probabilistic
+indices (or AUCs) and the inverse operation is implemented by
+\code{PI2parm}. The overlap coefficient can be obtained from a log-odds
+ratio via \code{parm2OVL}.
+
+The log-log link, with $F(z) = \exp(-\exp(-z))$, is used to construct tests
+against Lehmann alternatives:
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap32}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape loglog}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@loglog <- function()@\\
+\mbox{}\verb@    linkfun(alias = "Lehmann", @\\
+\mbox{}\verb@            model = "Lehmann", @\\
+\mbox{}\verb@            parm = "log-reverse time hazard ratio",@\\
+\mbox{}\verb@            link = function(p, log.p = FALSE) {@\\
+\mbox{}\verb@                if (!log.p) p <- log(p)@\\
+\mbox{}\verb@                -log(-p)@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            linkinv = function(q, lower.tail = TRUE, log.p = FALSE) {@\\
+\mbox{}\verb@                ### p = exp(-exp(-q))@\\
+\mbox{}\verb@                if (log.p) {@\\
+\mbox{}\verb@                    if (lower.tail)@\\
+\mbox{}\verb@                        return(-exp(-q))@\\
+\mbox{}\verb@                    return(log1p(-exp(-exp(-q))))@\\
+\mbox{}\verb@                }@\\
+\mbox{}\verb@                if (lower.tail)@\\
+\mbox{}\verb@                    return(exp(-exp(-q)))@\\
+\mbox{}\verb@                -expm1(-exp(-q))@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            dlinkinv = function(x) @\\
+\mbox{}\verb@                ifelse(is.finite(x), exp(- x - exp(-x)), 0.0),@\\
+\mbox{}\verb@            ddlinkinv = function(x) {@\\
+\mbox{}\verb@               ex <- exp(-x)@\\
+\mbox{}\verb@               ifelse(is.finite(x), exp(-ex - x) * (ex - 1.0), 0.0)@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            dddlinkinv = function(x) {@\\
+\mbox{}\verb@               ex <- exp(-x)@\\
+\mbox{}\verb@               ifelse(is.finite(x), exp(-x - ex) * (ex - 1)^2 - exp(-ex - 2 * x), 0.0)@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            dd2d = function(x) @\\
+\mbox{}\verb@                expm1(-x),@\\
+\mbox{}\verb@            parm2PI = plogis,@\\
+\mbox{}\verb@            PI2parm = qlogis,@\\
+\mbox{}\verb@            parm2OVL = function(x) {@\\
+\mbox{}\verb@                x <- abs(x)@\\
+\mbox{}\verb@                rt <- exp(-x / (exp(x) - 1))@\\
+\mbox{}\verb@                ret <- rt^exp(x) + 1 - rt@\\
+\mbox{}\verb@                ret[abs(x) < .Machine$double.eps] <- 1@\\
+\mbox{}\verb@                x[] <- ret@\\
+\mbox{}\verb@                return(x)@\\
+\mbox{}\verb@            }@\\
+\mbox{}\verb@    )@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+The complementary log-log link, with $F(z) = 1 - \exp(-\exp(z))$, provides
+log-rank or Savage score residuals against proportional hazards
+alternatives:
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap33}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape cloglog}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@cloglog <- function()@\\
+\mbox{}\verb@    linkfun(alias = "Savage",@\\
+\mbox{}\verb@            model = "proportional hazards", @\\
+\mbox{}\verb@            parm = "log-hazard ratio",@\\
+\mbox{}\verb@            link = function(p, log.p = FALSE) {@\\
+\mbox{}\verb@                if (log.p) p <- exp(p)@\\
+\mbox{}\verb@                log(-log1p(- p))@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            linkinv = function(q, lower.tail = TRUE, log.p = FALSE) {@\\
+\mbox{}\verb@                ### p = 1 - exp(-exp(q))@\\
+\mbox{}\verb@                ret <- exp(-exp(q))@\\
+\mbox{}\verb@                if (log.p) {@\\
+\mbox{}\verb@                    if (lower.tail)@\\
+\mbox{}\verb@                        return(log1p(-ret))@\\
+\mbox{}\verb@                    return(-exp(q))@\\
+\mbox{}\verb@                }@\\
+\mbox{}\verb@                if (lower.tail)@\\
+\mbox{}\verb@                    return(-expm1(-exp(q)))@\\
+\mbox{}\verb@                return(ret)@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            dlinkinv = function(x) @\\
+\mbox{}\verb@                ifelse(is.finite(x), exp(x - exp(x)), 0.0),@\\
+\mbox{}\verb@            ddlinkinv = function(x) {@\\
+\mbox{}\verb@                ex <- exp(x)@\\
+\mbox{}\verb@                ifelse(is.finite(x), (ex - ex^2) / exp(ex), 0.0)@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            dddlinkinv = function(x) {@\\
+\mbox{}\verb@                ex <- exp(x)@\\
+\mbox{}\verb@                ifelse(is.finite(x), (ex - 3*ex^2 + ex^3) / exp(ex), 0.0)@\\
+\mbox{}\verb@            },@\\
+\mbox{}\verb@            dd2d = function(x)@\\
+\mbox{}\verb@               -expm1(x),@\\
+\mbox{}\verb@            parm2PI = plogis,@\\
+\mbox{}\verb@            PI2parm = qlogis,@\\
+\mbox{}\verb@            parm2OVL = function(x) {@\\
+\mbox{}\verb@                x <- abs(x)@\\
+\mbox{}\verb@                ret <- exp(x / (exp(-x) - 1)) - exp(-x / (exp(x) - 1)) + 1 @\\
+\mbox{}\verb@                ret[abs(x) < .Machine$double.eps] <- 1@\\
+\mbox{}\verb@                x[] <- ret@\\
+\mbox{}\verb@                return(x)@\\
+\mbox{}\verb@            }@\\
+\mbox{}\verb@    )@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+The probit link, with $F(z) = \Phi$, leads to normal scores tests, where the
+shift effect can be interpreted as a generalised version of Cohen's $d$,
+that is, differences on a latent normal scale with variance one:
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap34}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape probit}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@probit <- function()@\\
+\mbox{}\verb@    linkfun(alias = "van der Waerden normal scores",@\\
+\mbox{}\verb@            model = "latent normal shift", @\\
+\mbox{}\verb@            parm = "generalised Cohen's d",@\\
+\mbox{}\verb@            link = qnorm,@\\
+\mbox{}\verb@            linkinv = pnorm,@\\
+\mbox{}\verb@            dlinkinv = dnorm,@\\
+\mbox{}\verb@            ddlinkinv = function(x) @\\
+\mbox{}\verb@                ifelse(is.finite(x), -dnorm(x = x) * x, 0.0), @\\
+\mbox{}\verb@            dddlinkinv = function(x) @\\
+\mbox{}\verb@                ifelse(is.finite(x), dnorm(x = x) * (x^2 - 1), 0.0),@\\
+\mbox{}\verb@            dd2d = function(x) -x,@\\
+\mbox{}\verb@            parm2PI = function(x) pnorm(x, sd = sqrt(2)),@\\
+\mbox{}\verb@            PI2parm = function(p) qnorm(p, sd = sqrt(2)),@\\
+\mbox{}\verb@            parm2OVL = function(x) 2 * pnorm(-abs(x / 2))@\\
+\mbox{}\verb@    )@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\chapter{ML Estimation}
+\label{ch:ML}
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap35}\raggedright\small
+\NWtarget{nuweb?}{} \verb@"free1way.R"@\nobreak\ {\footnotesize {?}}$\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape R wcrossprod}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape ML estimation}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way methods}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way confint}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way interfaces}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape ppplot}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape power}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap36}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape setup}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@K <- dim(x)[2L]@\\
+\mbox{}\verb@B <- dim(x)[3L]@\\
+\mbox{}\verb@xlist <- vector(mode = "list", length = B)@\\
+\mbox{}\verb@if (NS <- is.null(start))@\\
+\mbox{}\verb@    start <- rep.int(0, K - 1)@\\
+\mbox{}\verb@lwr <- rep(-Inf, times = K - 1)@\\
+\mbox{}\verb@for (b in seq_len(B)) {@\\
+\mbox{}\verb@    xb <- matrix(x[,,b, drop = TRUE], ncol = K)@\\
+\mbox{}\verb@    xw <- rowSums(abs(xb)) > tol@\\
+\mbox{}\verb@    xlist[[b]] <- xb[xw,,drop = FALSE]@\\
+\mbox{}\verb@    attr(xlist[[b]], "idx") <- xw@\\
+\mbox{}\verb@    lwr <- c(lwr, -Inf, rep.int(tol, times = sum(xw) - 2L))@\\
+\mbox{}\verb@    if (NS) {@\\
+\mbox{}\verb@        ecdf0 <- cumsum(rowSums(xlist[[b]]))@\\
+\mbox{}\verb@        ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]@\\
+\mbox{}\verb@        Qecdf <- Q(ecdf0)@\\
+\mbox{}\verb@        start <- c(start, Qecdf[1], diff(Qecdf))@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+The profile negative log-likelihood can be evaluated for some of the
+parameters in $\thetavec$ (denoted as \code{fix}), the remaining parameters
+are updated. Note that \code{start} must contain the full parameter vector
+$\thetavec$.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap37}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape profile}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.profile <- function(start, fix = seq_len(K - 1)) {@\\
+\mbox{}\verb@    stopifnot(all(fix %in% seq_len(K - 1)))@\\
+\mbox{}\verb@    beta <- start[fix]@\\
+\mbox{}\verb@    ret <- optim(par = start[-fix], fn = function(par) {@\\
+\mbox{}\verb@                     p <- numeric(length(par) + length(fix))@\\
+\mbox{}\verb@                     p[fix] <- beta@\\
+\mbox{}\verb@                     p[-fix] <- par@\\
+\mbox{}\verb@                     .snll(p, x = xlist, mu = mu)@\\
+\mbox{}\verb@                 },@\\
+\mbox{}\verb@                 gr = function(par) {@\\
+\mbox{}\verb@                     p <- numeric(length(par) + length(fix))@\\
+\mbox{}\verb@                     p[fix] <- beta@\\
+\mbox{}\verb@                     p[-fix] <- par@\\
+\mbox{}\verb@                     .snsc(p, x = xlist, mu = mu)[-fix]@\\
+\mbox{}\verb@                 },@\\
+\mbox{}\verb@                 lower = lwr[-fix], method = "L-BFGS-B", @\\
+\mbox{}\verb@                 hessian = FALSE, ...)@\\
+\mbox{}\verb@    p <- numeric(length(start))@\\
+\mbox{}\verb@    p[fix] <- beta@\\
+\mbox{}\verb@    p[-fix] <- ret$par@\\
+\mbox{}\verb@    ret$par <- p@\\
+\mbox{}\verb@    ret@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap38}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape optim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (!length(fix)) {@\\
+\mbox{}\verb@    ret <- optim(par = start, @\\
+\mbox{}\verb@                 fn = function(parm)@\\
+\mbox{}\verb@                     .snll(parm, x = xlist, mu = mu),@\\
+\mbox{}\verb@                 gr = function(parm)@\\
+\mbox{}\verb@                     .snsc(parm, x = xlist, mu = mu),@\\
+\mbox{}\verb@                 lower = lwr, method = "L-BFGS-B", @\\
+\mbox{}\verb@                 hessian = FALSE, ...)@\\
+\mbox{}\verb@} else if (length(fix) == length(start)) {@\\
+\mbox{}\verb@    ret <- list(par = start, @\\
+\mbox{}\verb@                value = .snll(start, x = xlist, mu = mu))@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    ret <- .profile(start, fix = fix)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap39}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape post processing}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (is.null(fix) || (length(fix) == length(start)))@\\
+\mbox{}\verb@    parm <- seq_len(K - 1)@\\
+\mbox{}\verb@else @\\
+\mbox{}\verb@    parm <- fix@\\
+\mbox{}\verb@if (any(parm >= K)) return(ret)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@ret$coefficients <- ret$par[parm]@\\
+\mbox{}\verb@dn2 <- dimnames(x)[2L]@\\
+\mbox{}\verb@names(ret$coefficients) <- cnames <- dn2[[1L]][1L + parm]@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@if (score)@\\
+\mbox{}\verb@    ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]@\\
+\mbox{}\verb@if (hessian) {@\\
+\mbox{}\verb@    ret$hessian <- .shes(ret$par, x = xlist, mu = mu)@\\
+\mbox{}\verb@    if (length(parm) != nrow(ret$hessian))@\\
+\mbox{}\verb@       ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])@\\
+\mbox{}\verb@    ret$vcov <- solve(ret$hessian)@\\
+\mbox{}\verb@    rownames(ret$vcov) <- colnames(ret$vcov) <- rownames(ret$hessian) <-@\\
+\mbox{}\verb@        colnames(ret$hessian) <-  cnames@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@if (residuals)@\\
+\mbox{}\verb@    ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@ret$profile <- function(start, fix)@\\
+\mbox{}\verb@    .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) @\\
+\mbox{}\verb@@\\
+\mbox{}\verb@ret$table <- x@\\
+\mbox{}\verb@ret$mu <- mu@\\
+\mbox{}\verb@names(ret$mu) <- link$parm@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap40}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape ML estimation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, @\\
+\mbox{}\verb@                   residuals = TRUE, score = TRUE, hessian = TRUE, @\\
+\mbox{}\verb@                   tol = sqrt(.Machine$double.eps), ...) {@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    stopifnot(is.table(x))@\\
+\mbox{}\verb@    dx <- dim(x)@\\
+\mbox{}\verb@    dn <- dimnames(x)@\\
+\mbox{}\verb@    if (length(dx) == 2L) {@\\
+\mbox{}\verb@        x <- as.table(array(c(x), dim = dx <- c(dx, 1L)))@\\
+\mbox{}\verb@        dimnames(x) <- dn <- c(dn, list(A = "A"))@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    stopifnot(length(dx) == 3L)@\\
+\mbox{}\verb@    stopifnot(dx[1L] > 1L)@\\
+\mbox{}\verb@    K <- dx[2L]@\\
+\mbox{}\verb@    stopifnot(K > 1L)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    F <- function(q) .p(link, q = q)@\\
+\mbox{}\verb@    Q <- function(p) .q(link, p = p)@\\
+\mbox{}\verb@    f <- function(q) .d(link, x = q)@\\
+\mbox{}\verb@    fp <- function(q) .dd(link, x = q)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape setup}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape cumsumrev}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape negative logLik}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape negative score}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape negative score residuals}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Hessian}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified negative logLik}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified negative score}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified Hessian}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified negative score residual}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape profile}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape optim}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@ @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape post processing}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    class(ret) <- "free1wayML"@\\
+\mbox{}\verb@    ret@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+<<workhorse>>=
+.free1wayML(x, logit())$coefficients
+op
+N <- 10
+a <- matrix(c(5, 6, 4,
+                    3, 5, 7,
+                    3, 4, 5,
+                    3, 5, 6,
+                    0, 0, 0,
+                    4, 6, 5), ncol = 3, byrow = TRUE)
+x <- as.table(array(c(a[1:3,], a[-(1:3),]), dim = c(3, 3, 2)))
+x
+(ret <- .free1wayML(x, logit()))
+.free1wayML(x, logit(), start = ret$par, fix = 1:2)$coefficients
+.free1wayML(x, logit(), start = ret$par, fix = 2)$coefficients
+.free1wayML(x, logit(), start = ret$par, fix =
+seq_along(ret$par))$coefficients
+@
+
+\chapter{ML Inference}
+\label{ch:MLinf}
+
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap41}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape statistics}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (test == "Wald") {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Wald statistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@} else if (test == "LRT") {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape LRT}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@} else if (test == "Rao") {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Rao}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@} else if (test == "Permutation") {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Permutation}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\section{Wald}
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap42}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Wald statistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (alternative == "two.sided") {@\\
+\mbox{}\verb@    STATISTIC <- c("Wald chi-squared" = c(crossprod(cf, x$hessian %*% cf)))@\\
+\mbox{}\verb@    DF <- c("df" = length(parm))@\\
+\mbox{}\verb@    PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    STATISTIC <- c("Wald Z" = c(cf * sqrt(c(x$hessian))))@\\
+\mbox{}\verb@    PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\section{Likelihood-ratio}
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap43}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape LRT}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@par <- x$par@\\
+\mbox{}\verb@par[parm] <- value@\\
+\mbox{}\verb@unll <- x$value ### neg logLik@\\
+\mbox{}\verb@rnll <- x$profile(par, parm)$value ### neg logLik@\\
+\mbox{}\verb@STATISTIC <- c("logLR chi-squared" = - 2 * (unll - rnll))@\\
+\mbox{}\verb@DF <- c("df" = length(parm))@\\
+\mbox{}\verb@PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\section{Rao Score}
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap44}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Rao}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@par <- x$par@\\
+\mbox{}\verb@par[parm] <- value@\\
+\mbox{}\verb@ret <- x$profile(par, parm)@\\
+\mbox{}\verb@if (alternative == "two.sided") {@\\
+\mbox{}\verb@    STATISTIC <- c("Rao chi-squared" = c(crossprod(ret$negscore, ret$vcov %*% ret$negscore)))@\\
+\mbox{}\verb@    DF <- c("df" = length(parm))@\\
+\mbox{}\verb@    PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    STATISTIC <- c("Rao Z" = -ret$negscore * sqrt(c(ret$vcov)))@\\
+\mbox{}\verb@    PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\section{Permutation}
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap45}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Permutation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@par <- x$par@\\
+\mbox{}\verb@par[parm] <- value@\\
+\mbox{}\verb@ret <- x$profile(par, parm)@\\
+\mbox{}\verb@sc <- -ret$negscore@\\
+\mbox{}\verb@if (length(cf) == 1L)@\\
+\mbox{}\verb@   sc <- sc / sqrt(c(ret$hessian))@\\
+\mbox{}\verb@Esc <- sc - x$perm$Expectation@\\
+\mbox{}\verb@if (alternative == "two.sided" && length(cf) > 1L) {@\\
+\mbox{}\verb@    STATISTIC <- c("Perm chi-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))@\\
+\mbox{}\verb@    ps <- x$perm$permStat@\\
+\mbox{}\verb@    if (!is.null(x$perm$permStat))@\\
+\mbox{}\verb@        PVAL <- mean(ps > STATISTIC + tol)@\\
+\mbox{}\verb@    else {@\\
+\mbox{}\verb@        DF <- c("df" = x$perm$DF)@\\
+\mbox{}\verb@        PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))@\\
+\mbox{}\verb@    if (!is.null(x$perm$permStat)) {@\\
+\mbox{}\verb@        if (alternative == "two.sided")@\\
+\mbox{}\verb@            PVAL <- mean(abs(x$perm$permStat) < abs(STATISTIC) - tol)@\\
+\mbox{}\verb@        else if (alternative == "less")@\\
+\mbox{}\verb@            PVAL <- mean(x$perm$permStat < STATISTIC - tol)@\\
+\mbox{}\verb@        else@\\
+\mbox{}\verb@            PVAL <- mean(x$perm$permStat > STATISTIC + tol)@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        if (alternative == "two.sided")@\\
+\mbox{}\verb@            PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)@\\
+\mbox{}\verb@        else@\\
+\mbox{}\verb@            PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap46}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Strasser Weber}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.SW <- function(res, xt) {@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (length(dim(xt)) == 3L) {@\\
+\mbox{}\verb@        res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3])@\\
+\mbox{}\verb@        STAT <-  Exp <- Cov <- 0@\\
+\mbox{}\verb@        for (b in seq_len(dim(xt)[3L])) {@\\
+\mbox{}\verb@            sw <- .SW(res[,b, drop = TRUE], xt[,,b, drop = TRUE])@\\
+\mbox{}\verb@            STAT <- STAT + sw$Statistic@\\
+\mbox{}\verb@            Exp <- Exp + sw$Expectation@\\
+\mbox{}\verb@            Cov <- Cov + sw$Covariance@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@        return(list(Statistic = STAT, Expectation = as.vector(Exp),@\\
+\mbox{}\verb@                    Covariance = Cov))@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    Y <- matrix(res, ncol = 1, nrow = length(xt))@\\
+\mbox{}\verb@    weights <- c(xt)@\\
+\mbox{}\verb@    x <- gl(ncol(xt), nrow(xt))@\\
+\mbox{}\verb@    X <- model.matrix(~ x, data = data.frame(x = x))[,-1L,drop = FALSE]@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    w. <- sum(weights)@\\
+\mbox{}\verb@    wX <- weights * X@\\
+\mbox{}\verb@    wY <- weights * Y@\\
+\mbox{}\verb@    ExpX <- colSums(wX)@\\
+\mbox{}\verb@    ExpY <- colSums(wY) / w.@\\
+\mbox{}\verb@    CovX <- crossprod(X, wX)@\\
+\mbox{}\verb@    Yc <- t(t(Y) - ExpY)@\\
+\mbox{}\verb@    CovY <- crossprod(Yc, weights * Yc) / w.@\\
+\mbox{}\verb@    Exp <- kronecker(ExpY, ExpX)@\\
+\mbox{}\verb@    Cov <- w. / (w. - 1) * kronecker(CovY, CovX) -@\\
+\mbox{}\verb@           1 / (w. - 1) * kronecker(CovY, tcrossprod(ExpX))@\\
+\mbox{}\verb@    STAT <- crossprod(X, wY)@\\
+\mbox{}\verb@    list(Statistic = STAT, Expectation = as.vector(Exp),@\\
+\mbox{}\verb@         Covariance = Cov)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap47}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape resampling}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.resample <- function(res, xt, B = 10000) {@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (length(dim(xt)) == 2L)@\\
+\mbox{}\verb@        xt <- as.table(array(xt, dim = c(dim(xt), 1)))@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3L])@\\
+\mbox{}\verb@    stat <- 0@\\
+\mbox{}\verb@    ret <- .SW(res, xt)@\\
+\mbox{}\verb@    if (dim(xt)[2L] == 2L) {@\\
+\mbox{}\verb@        ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(c(ret$Covariance)))@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        ES <- t(ret$Statistic - ret$Expectation)@\\
+\mbox{}\verb@        ret$testStat <- sum(ES %*% solve(ret$Covariance) * ES)@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    ret$DF <- dim(xt)[2L] - 1L@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (B) {@\\
+\mbox{}\verb@        for (j in 1:dim(xt)[3L]) {@\\
+\mbox{}\verb@           rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))@\\
+\mbox{}\verb@           stat <- stat + sapply(rt, function(x) colSums(x[,-1L, drop = FALSE] * res[,j]))@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@        if (dim(xt)[2L] == 2L) {@\\
+\mbox{}\verb@             ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))@\\
+\mbox{}\verb@        } else {@\\
+\mbox{}\verb@            ES <- t(matrix(stat, ncol = B) - ret$Expectation)@\\
+\mbox{}\verb@            ret$permStat <- rowSums(ES %*% solve(ret$Covariance) * ES)@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    ret@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+<<SW>>=
+w <- gl(2, 15)
+(s <- .SW(r <- rank(u <- runif(length(w))), model.matrix(~ 0 + w)))
+ps <- .resample(r, model.matrix(~ 0 + w), B = 100000)
+ps$testStat
+mean(abs(ps$permStat) > abs(ps$testStat) - .Machine$double.eps)
+pchisq(ps$testStat^ifelse(ps$DF == 1, 2, 1), df = ps$DF, lower.tail = FALSE)
+kruskal.test(u ~ w)
+library("coin")
+kruskal_test(u ~ w, distribution = approximate(100000))
+@
+
+
+\chapter{Distribution-free Tests in Stratified One-way Layouts}
+
+Distribution-free
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap48}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@free1way.test <- function(y, ...)@\\
+\mbox{}\verb@    UseMethod("free1way.test")@\\
+\mbox{}\verb@free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), mu = 0, B = 0, ...)@\\
+\mbox{}\verb@{@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    cl <- match.call()@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    d <- dim(y)@\\
+\mbox{}\verb@    dn <- dimnames(y)@\\
+\mbox{}\verb@    DNAME <- NULL@\\
+\mbox{}\verb@    if (!is.null(dn)) {@\\
+\mbox{}\verb@        DNAME <- paste(names(dn)[1], "by", names(dn)[2], paste0("(", paste0(dn[2], collapse = ", "), ")"))@\\
+\mbox{}\verb@        if (length(dn) == 3L)@\\
+\mbox{}\verb@            DNAME <- paste(DNAME, "\n\t stratified by", names(dn)[3])@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (!inherits(link, "linkfun")) {@\\
+\mbox{}\verb@        link <- match.arg(link)@\\
+\mbox{}\verb@        link <- do.call(link, list())@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    ret <- .free1wayML(y, link = link, mu = mu, ...)@\\
+\mbox{}\verb@    ret$link <- link@\\
+\mbox{}\verb@    ret$data.name <- DNAME@\\
+\mbox{}\verb@    ret$call <- cl@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    alias <- link$alias@\\
+\mbox{}\verb@    if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]@\\
+\mbox{}\verb@    ret$method <- paste(ifelse(length(d) == 3L, "Stratified", ""), @\\
+\mbox{}\verb@                        paste0(d[2], "-sample"), alias, @\\
+\mbox{}\verb@                        "test against", link$model, "alternatives")@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    cf <- ret$par@\\
+\mbox{}\verb@    cf[idx <- seq_len(d[2L] - 1L)] <- 0@\\
+\mbox{}\verb@    pr <- ret$profile(cf, idx)@\\
+\mbox{}\verb@    if (d[2L] == 2L)@\\
+\mbox{}\verb@        res <- pr$residuals / sqrt(c(pr$hessian))@\\
+\mbox{}\verb@    else@\\
+\mbox{}\verb@        res <- pr$residuals@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Strasser Weber}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape resampling}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    ret$perm <- .resample(res, y, B = B)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    class(ret) <- "free1way"@\\
+\mbox{}\verb@    return(ret)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap49}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way methods}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@coef.free1way <- function(object, what = c("shift", "PI", "AUC", "OVL"), ...)@\\
+\mbox{}\verb@{@\\
+\mbox{}\verb@    what <- match.arg(what)@\\
+\mbox{}\verb@    cf <- object$coefficients@\\
+\mbox{}\verb@    return(switch(what, "shift" = cf,@\\
+\mbox{}\verb@                        "PI" = object$link$parm2PI(cf),@\\
+\mbox{}\verb@                        "AUC" = object$link$parm2PI(cf),        ### same as PI@\\
+\mbox{}\verb@                        "OVL" = object$link$parm2OVL(cf)))@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@vcov.free1way <- function(object, ...)@\\
+\mbox{}\verb@    object$vcov@\\
+\mbox{}\verb@logLik.free1way <- function(object, ...)@\\
+\mbox{}\verb@    -object$value@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap50}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), @\\
+\mbox{}\verb@                           alternative = c("two.sided", "less", "greater"), @\\
+\mbox{}\verb@                           tol = .Machine$double.eps, ...)@\\
+\mbox{}\verb@{@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    test <- match.arg(test)@\\
+\mbox{}\verb@    alternative <- match.arg(alternative)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    ### global@\\
+\mbox{}\verb@    cf <- coef(x)@\\
+\mbox{}\verb@    if ((length(cf) > 1L || test == "LRT") && alternative != "two.sided") @\\
+\mbox{}\verb@        stop("Cannot compute one-sided p-values")@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    DF <- NULL@\\
+\mbox{}\verb@    parm <- seq_along(cf)@\\
+\mbox{}\verb@    value <- 0@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape statistics}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, @\\
+\mbox{}\verb@        null.value = x$mu, alternative = alternative, method = x$method, @\\
+\mbox{}\verb@        data.name = x$data.name)@\\
+\mbox{}\verb@    class(RVAL) <- "htest"@\\
+\mbox{}\verb@    print(RVAL)@\\
+\mbox{}\verb@    invisible(RVAL)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@summary.free1way <- function(object, alternative = c("two.sided", "less", "greater"), ...)@\\
+\mbox{}\verb@{@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    alternative <- match.arg(alternative)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    ESTIMATE <- coef(object)@\\
+\mbox{}\verb@    SE <- sqrt(diag(vcov(object)))@\\
+\mbox{}\verb@    STATISTIC <- unname(ESTIMATE / SE)@\\
+\mbox{}\verb@    if (alternative == "less") {@\\
+\mbox{}\verb@        PVAL <- pnorm(STATISTIC)@\\
+\mbox{}\verb@    } else if (alternative == "greater") {@\\
+\mbox{}\verb@        PVAL <- pnorm(STATISTIC, lower.tail = FALSE)@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        PVAL <- 2 * pnorm(-abs(STATISTIC))@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    cfmat <- cbind(ESTIMATE, SE, STATISTIC, PVAL)@\\
+\mbox{}\verb@    colnames(cfmat) <- c(object$link$parm, "Std. Error", "z value",@\\
+\mbox{}\verb@                         switch(alternative, "two.sided" = "P(>|z|)",@\\
+\mbox{}\verb@                                             "less" = "P(<z)",@\\
+\mbox{}\verb@                                             "greater" = "P(>z)"))@\\
+\mbox{}\verb@    ret <- list(call = object$call, coefficients = cfmat)@\\
+\mbox{}\verb@    class(ret) <- "summary.free1way"@\\
+\mbox{}\verb@    return(ret)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@print.summary.free1way <- function(x, ...) {@\\
+\mbox{}\verb@    cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"), @\\
+\mbox{}\verb@        "\n\n", sep = "")@\\
+\mbox{}\verb@    cat("Coefficients:\n")@\\
+\mbox{}\verb@    printCoefmat(x$coefficients)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap51}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way confint}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@confint.free1way <- function(object, parm,@\\
+\mbox{}\verb@    level = .95, test = c("Permutation", "Wald", "LRT", "Rao"), @\\
+\mbox{}\verb@    what = c("shift", "PI", "AUC", "OVL"), ...)@\\
+\mbox{}\verb@{@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    test <- match.arg(test)@\\
+\mbox{}\verb@    conf.level <- 1 - (1 - level) / 2@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    cf <- coef(object)@\\
+\mbox{}\verb@    if (missing(parm)) @\\
+\mbox{}\verb@        parm <- seq_along(cf)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    ESTIMATE <- cf[parm]@\\
+\mbox{}\verb@    qSE <- qnorm(conf.level) * sqrt(diag(vcov(object)))[parm]@\\
+\mbox{}\verb@    CINT <- cbind(ESTIMATE - qSE, ESTIMATE + qSE)@\\
+\mbox{}\verb@    colnames(CINT) <- paste0(100 * c(1 - conf.level, conf.level), "%")@\\
+\mbox{}\verb@    if (test == "Wald")@\\
+\mbox{}\verb@        return(CINT)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    CINT[] <- cbind(ESTIMATE - qSE * 5, ESTIMATE + qSE * 5)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    sfun <- function(value, parm, quantile) {@\\
+\mbox{}\verb@        x <- object@\\
+\mbox{}\verb@        alternative <- "two.sided"@\\
+\mbox{}\verb@        tol <- .Machine$double.eps@\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape statistics}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@        return(STATISTIC - quantile)@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (test == "Permutation") {@\\
+\mbox{}\verb@        stopifnot(length(cf) == 1L)@\\
+\mbox{}\verb@        if (is.null(object$perm$permStat)) {@\\
+\mbox{}\verb@            qu <- qnorm(conf.level) * c(-1, 1)@\\
+\mbox{}\verb@        } else {@\\
+\mbox{}\verb@            qu <- quantile(object$perm$permStat, probs = c(1 - conf.level, conf.level))@\\
+\mbox{}\verb@            att.level <- mean(object$perm$permStat > qu[1] & object$perm$permStat < qu[2])@\\
+\mbox{}\verb@            attr(CINT, "Attained level") <- att.level@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    for (p in parm) {@\\
+\mbox{}\verb@        CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), parm = p, quantile = qu[2])$root@\\
+\mbox{}\verb@        CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), parm = p, quantile = qu[1])$root@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    what <- match.arg(what)@\\
+\mbox{}\verb@    CINT <- switch(what, "shift" = CINT,@\\
+\mbox{}\verb@                         "PI" = object$link$parm2PI(CINT),@\\
+\mbox{}\verb@                         "AUC" = object$link$parm2PI(CINT), ### same as PI @\\
+\mbox{}\verb@                         "OVL" = object$link$parm2OVL(CINT))@\\
+\mbox{}\verb@    return(CINT)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@# power.free1way.test <- function()@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+<<free>>=
+ft <- free1way.test(x)
+coef(ft)
+vcov(ft)
+summary(ft)
+library("multcomp")
+summary(glht(ft), test = Chisqtest())
+print(ft, test = "Wald")
+summary(glht(ft), test = Chisqtest())
+print(ft, test = "Rao")
+print(ft, test = "Permutation")
+print(ft, test = "LRT")
+confint(glht(ft), calpha = univariate_calpha())
+confint(ft, test = "Wald")
+confint(ft, test = "Rao")
+confint(ft, test = "LRT")
+@
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way interfaces}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@free1way.test.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)@\\
+\mbox{}\verb@{@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    cl <- match.call()@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if(missing(formula) || (length(formula) != 3L))@\\
+\mbox{}\verb@        stop("'formula' missing or incorrect")@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    strata <- function(object) object@\\
+\mbox{}\verb@    formula <- terms(formula, specials = "strata")@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    stratum <- attr(formula, "specials")$strata@\\
+\mbox{}\verb@    if (is.null(stratum)) stratum <- 0L@\\
+\mbox{}\verb@    @\\
+\mbox{}\verb@    if (length(attr(formula, "term.labels")) > 1L + stratum)@\\
+\mbox{}\verb@        stop("'formula' missing or incorrect")@\\
+\mbox{}\verb@    group <- attr(formula, "term.labels") @\\
+\mbox{}\verb@    if (stratum) group <- group[-(stratum - 1L)]@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    m <- match.call(expand.dots = FALSE)@\\
+\mbox{}\verb@    if (is.matrix(eval(m$data, parent.frame())))@\\
+\mbox{}\verb@        m$data <- as.data.frame(data)@\\
+\mbox{}\verb@    ## need stats:: for non-standard evaluation@\\
+\mbox{}\verb@    m[[1L]] <- quote(stats::model.frame)@\\
+\mbox{}\verb@    m$... <- NULL@\\
+\mbox{}\verb@    mf <- eval(m, parent.frame())@\\
+\mbox{}\verb@    response <- attr(attr(mf, "terms"), "response")@\\
+\mbox{}\verb@    DNAME <- paste(c(names(mf)[response], group), collapse = " by ") # works in all cases@\\
+\mbox{}\verb@    w <- as.vector(model.weights(mf))@\\
+\mbox{}\verb@    y <- mf[[response]]@\\
+\mbox{}\verb@    lev <- sort(unique(mf[[group]]))@\\
+\mbox{}\verb@    g <- factor(mf[[group]], levels = lev, labels = paste0(group, lev))@\\
+\mbox{}\verb@    DNAME <- paste(DNAME, paste0("(", paste0(lev, collapse = ", "), ")"))@\\
+\mbox{}\verb@    if (nlevels(g) < 2L)@\\
+\mbox{}\verb@        stop("grouping factor must have at least 2 levels")@\\
+\mbox{}\verb@    if (stratum) {@\\
+\mbox{}\verb@        st <- factor(mf[[stratum]], levels = )@\\
+\mbox{}\verb@        if (nlevels(st) < 2L)@\\
+\mbox{}\verb@            stop("at least two strata must be present")@\\
+\mbox{}\verb@        RVAL <- free1way.test(y = y, x = g, z = st, weights = w, ...)@\\
+\mbox{}\verb@        DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[stratum]))@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        ## Call the default method.@\\
+\mbox{}\verb@        RVAL <- free1way.test(y = y, x = g, weights = w, ...)@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    RVAL$data.name <- DNAME@\\
+\mbox{}\verb@    RVAL$call <- cl@\\
+\mbox{}\verb@    RVAL@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@ @\\
+\mbox{}\verb@free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    cl <- match.call()@\\
+\mbox{}\verb@    DNAME <- paste(deparse1(substitute(y)), "by",@\\
+\mbox{}\verb@                   deparse1(substitute(x)))@\\
+\mbox{}\verb@    DNAME <- paste(DNAME, paste0("(", paste0(levels(x), collapse = ", "), ")"))@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (!is.null(z))@\\
+\mbox{}\verb@        DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    uy <- unique(y)@\\
+\mbox{}\verb@    if (nbins && nbins < length(uy)) {@\\
+\mbox{}\verb@        nbins <- ceiling(nbins)@\\
+\mbox{}\verb@        breaks <- c(-Inf, quantile(y, prob = seq_len(nbins) / (nbins + 1L)), Inf)@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        breaks <- c(-Inf, sort(uy), Inf)@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    r <- cut(y, breaks = breaks)[, drop = TRUE]@\\
+\mbox{}\verb@    RVAL <- free1way.test(y = r, x = x, z = z, weights = weights, ...)@\\
+\mbox{}\verb@    RVAL$data.name <- DNAME@\\
+\mbox{}\verb@    RVAL$call <- cl@\\
+\mbox{}\verb@    RVAL@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    cl <- match.call()@\\
+\mbox{}\verb@    DNAME <- paste(deparse1(substitute(y)), "by",@\\
+\mbox{}\verb@                   deparse1(substitute(x)))@\\
+\mbox{}\verb@    DNAME <- paste(DNAME, paste0("(", paste0(levels(x), collapse = ", "), ")"))@\\
+\mbox{}\verb@    if (!is.null(z))@\\
+\mbox{}\verb@        DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    stopifnot(is.factor(x))@\\
+\mbox{}\verb@    d <- data.frame(y = y, x = x, w = 1)@\\
+\mbox{}\verb@    if (!is.null(weights)) d$w <- weights@\\
+\mbox{}\verb@    if (!is.null(z)) {@\\
+\mbox{}\verb@        d$z <- z@\\
+\mbox{}\verb@        tab <- xtabs(w ~ y + x + z, data = d)@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        tab <- xtabs(w ~ y + x, data = d)@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    RVAL <- free1way.test(tab, ...)@\\
+\mbox{}\verb@    RVAL$data.name <- DNAME@\\
+\mbox{}\verb@    RVAL$call <- cl@\\
+\mbox{}\verb@    RVAL@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+<<formula>>=
+set.seed(29)
+N <- 25
+w <- gl(2, N)
+s <- sample(gl(2, N))
+y <- rlogis(length(w), location = c(0, 1)[w])
+print(try(free1way.test(y ~ w + s, B = 10000)))
+ft0 <- free1way.test(y ~ w + strata(s), B = 10000)
+ft <- free1way.test(y ~ strata(s) + w, B = 10000)
+all.equal(ft0, ft0)
+summary(ft)
+print(ft, test = "Permutation", alternative = "less")
+print(ft, test = "Permutation", alternative = "greater")
+print(ft, test = "Permutation")
+print(ft, test = "Wald", alternative = "less")
+print(ft, test = "Wald", alternative = "greater")
+print(ft, test = "Wald")
+print(ft, test = "LRT")
+print(ft, test = "Rao", alternative = "less")
+print(ft, test = "Rao", alternative = "greater")
+print(ft, test = "Rao")
+summary(ft)
+confint(ft, test = "Permutation")
+confint(ft, test = "LRT")
+confint(ft, test = "Wald")
+confint(ft, test = "Rao")
+confint(ft, test = "Rao", what = "AUC")
+wilcox.test(y ~ w)
+library("rms")
+rev(coef(or <- orm(y ~ w)))[1]
+logLik(or)
+logLik(ft)
+ci <- confint(or)
+ci[nrow(ci),]
+vcov(or)
+vcov(ft)
+@
+
+
+\section{Tests}
+
+Mantel-Haenszel test
+
+<<mh>>=
+example(mantelhaen.test, echo = FALSE)
+mantelhaen.test(UCBAdmissions, correct = FALSE)
+a <- free1way.test(UCBAdmissions)
+print(a, test = "Wald")
+exp(coef(a))
+exp(confint(a, test = "Wald"))
+exp(sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
+       confint(free1way.test(UCBAdmissions[,,dept]), test = "Permutation")))
+sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
+       fisher.test(UCBAdmissions[,,dept], conf.int = TRUE)$conf.int)
+@
+
+Kruskal-Wallis
+
+<<kw>>=
+example(kruskal.test, echo = FALSE)
+kruskal.test(x ~ g)
+free1way.test(x ~ g)
+@
+
+Savage
+
+<<sw>>=
+library("survival")
+N <- 10
+nd <- expand.grid(g = gl(3, N), s = gl(3, N))
+nd$tm <- rexp(nrow(nd))
+nd$ev <- TRUE
+survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 0)$chisq
+cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
+summary(cm)$sctest
+summary(cm)$logtest
+summary(cm)$waldtest
+ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "cloglog")
+print(ft)
+print(ft, test = "Rao")
+print(ft, test = "LRT")
+print(ft, test = "Rao")
+
+library("coin")
+independence_test(Surv(tm, ev) ~ g | s, data = nd, ytrafo = function(...)
+                  trafo(..., numeric_trafo = logrank_trafo, block = nd$s), teststat = "quad")
+
+survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 1)$chisq
+ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "logit")
+print(ft)
+print(ft, test = "Rao")
+print(ft, test = "LRT")
+print(ft, test = "Rao")
+@
+
+Normal
+
+<<normal>>=
+nd$y <- rnorm(nrow(nd))
+free1way.test(y ~ g + strata(s), data = nd, link = "probit")
+independence_test(y ~ g | s, data = nd, ytrafo = function(...)
+                  trafo(..., numeric_trafo = normal_trafo, block = nd$s), teststat = "quad")
+@
+
+Friedman
+
+<<friedman>>=
+example(friedman.test, echo = FALSE)
+rt <- expand.grid(str = gl(22, 1),
+                  trt = gl(3, 1, labels = c("Round Out", "Narrow Angle", "Wide Angle")))
+rt$tm <- c(RoundingTimes)
+friedman.test(RoundingTimes)
+(f1w <- free1way.test(tm ~ trt + strata(str), data = rt))
+coef(f1w)
+@
+
+\chapter{Model Diagnostics}
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape ppplot}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@ppplot <- function(x, y, plot.it = TRUE,@\\
+\mbox{}\verb@            xlab = deparse1(substitute(x)),@\\
+\mbox{}\verb@            ylab = deparse1(substitute(y)), @\\
+\mbox{}\verb@            interpolate = FALSE, ...,@\\
+\mbox{}\verb@            conf.level = NULL, conf.args = list(type = "Wald", col = NA, border = NULL)) {@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    force(xlab)@\\
+\mbox{}\verb@    force(ylab)@\\
+\mbox{}\verb@    if (xlab == ylab) {@\\
+\mbox{}\verb@        xlab <- paste0("x = ", xlab)@\\
+\mbox{}\verb@        ylab <- paste0("y = ", ylab)@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    ex <- ecdf(x)@\\
+\mbox{}\verb@    if (interpolate) {@\\
+\mbox{}\verb@        vals <- sort(unique(x))@\\
+\mbox{}\verb@        ex <- splinefun(vals, ex(vals), method = "hyman")@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    sy <- sort(unique(y))@\\
+\mbox{}\verb@    py <- ecdf(y)(sy)@\\
+\mbox{}\verb@    px <- ex(sy)@\\
+\mbox{}\verb@    ret <- list(x = px, y = py)@\\
+\mbox{}\verb@    if (!plot.it)@\\
+\mbox{}\verb@        return(ret)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    plot(px, py, xlim = c(0, 1), ylim = c(0, 1), @\\
+\mbox{}\verb@         xlab = xlab, ylab = ylab, type = "n", ...)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (!is.null(conf.level)) {@\\
+\mbox{}\verb@        prb <- seq_len(1000) / 1001@\\
+\mbox{}\verb@        res <- c(x, y)@\\
+\mbox{}\verb@        grp <- gl(2, 1, labels = c(xlab, ylab))@\\
+\mbox{}\verb@        grp <- grp[rep(1:2, c(length(x), length(y)))]@\\
+\mbox{}\verb@        args <- conf.args@\\
+\mbox{}\verb@        args$y <- res@\\
+\mbox{}\verb@        args$x <- grp@\\
+\mbox{}\verb@        args$border <- args$col <- args$type <- NULL@\\
+\mbox{}\verb@        f1w <- do.call("free1way.test", args)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@        ci <- confint(f1w, level = conf.level, type = args$type)@\\
+\mbox{}\verb@        lwr <- .p(f1w$link, .q(f1w$link, prb) - ci[1,1])@\\
+\mbox{}\verb@        upr <- .p(f1w$link, .q(f1w$link, prb) - ci[1,2])@\\
+\mbox{}\verb@        x <- c(prb, rev(prb))@\\
+\mbox{}\verb@        y <- c(lwr, rev(upr))@\\
+\mbox{}\verb@        xn <- c(x[1L], rep(x[-1L], each = 2))@\\
+\mbox{}\verb@        yn <- c(rep(y[-length(y)], each = 2), y[length(y)])@\\
+\mbox{}\verb@        polygon(x = xn, y = yn, col = conf.args$col, border = conf.args$border)@\\
+\mbox{}\verb@        lines(prb, .p(f1w$link, .q(f1w$link, prb) - coef(f1w)))@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    points(px, py, ...)@\\
+\mbox{}\verb@    return(invisible(ret)) @\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{figure}
+<<ppplot, fig = TRUE>>=
+y <- rnorm(50)
+x <- rnorm(50)
+layout(matrix(1:2, nrow = 1))
+ppplot(y, x, conf.level = .95)
+ppplot(y, x, conf.level = .95, interpolate = TRUE)
+@
+\end{figure}
+
+\chapter{Power and Sample Size}
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@power.free1way.test <- function(n = NULL, prob = NULL, alloc_ratio = 1, strata_ratio = 1, delta = NULL, sig.level = .05, power = NULL,@\\
+\mbox{}\verb@                                link = c("logit", "probit", "cloglog", "loglog"),@\\
+\mbox{}\verb@                                alternative = c("two.sided", "less", "greater"), nHess = 100,@\\
+\mbox{}\verb@norm = TRUE,...) @\\
+\mbox{}\verb@{@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (sum(vapply(list(n, delta, power, sig.level), is.null, @\\
+\mbox{}\verb@        NA)) != 1) @\\
+\mbox{}\verb@        stop("exactly one of 'n', 'delta', 'power', and 'sig.level' must be NULL")@\\
+\mbox{}\verb@    stats:::assert_NULL_or_prob(sig.level)@\\
+\mbox{}\verb@    stats:::assert_NULL_or_prob(power)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    tol <- sqrt(.Machine$double.eps)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (is.null(n)) @\\
+\mbox{}\verb@        n <- ceiling(uniroot(function(n)@\\
+\mbox{}\verb@             power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio, @\\
+\mbox{}\verb@                                 delta = delta, @\\
+\mbox{}\verb@                                 sig.level = sig.level, link = link, alternative = alternative, @\\
+\mbox{}\verb@                                 nHess = nHess, ...)$power@\\
+\mbox{}\verb@             - power, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)@\\
+\mbox{}\verb@    else if (is.null(delta)) {@\\
+\mbox{}\verb@        ### 2-sample only@\\
+\mbox{}\verb@        stopifnot(length(alloc_ratio) == 1L)@\\
+\mbox{}\verb@        delta <- uniroot(function(delta) @\\
+\mbox{}\verb@            power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio,delta = delta, @\\
+\mbox{}\verb@                                sig.level = sig.level, link = link, alternative = alternative, @\\
+\mbox{}\verb@                                nHess = nHess, ...)$power@\\
+\mbox{}\verb@            - power, @\\
+\mbox{}\verb@    ### <TH> interval depending on alternative, symmetry? </TH>@\\
+\mbox{}\verb@            interval = c(0, 10), tol = tol, extendInt = "upX")$root@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@    else if (is.null(sig.level)) @\\
+\mbox{}\verb@        sig.level <- uniroot(function(sig.level) @\\
+\mbox{}\verb@            power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio, delta = delta, @\\
+\mbox{}\verb@                                sig.level = sig.level, link = link, alternative = alternative, @\\
+\mbox{}\verb@                                ...)$power@\\
+\mbox{}\verb@            - power, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root@\\
+\mbox{}\verb@    else if (is.null(power)) {@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@        if (!inherits(link, "linkfun")) {@\\
+\mbox{}\verb@            link <- match.arg(link)@\\
+\mbox{}\verb@            link <- do.call(link, list())@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@        ### if not given, assume continuous distribution@\\
+\mbox{}\verb@        if (is.null(prob)) prob <- rep(1 / n, n)@\\
+\mbox{}\verb@        ### matrix means control distributions in different strata@\\
+\mbox{}\verb@        if (!is.matrix(prob))@\\
+\mbox{}\verb@            prob <- matrix(prob, nrow = NROW(prob))@\\
+\mbox{}\verb@        C <- nrow(prob)@\\
+\mbox{}\verb@        K <- length(delta) + 1L@\\
+\mbox{}\verb@        B <- ncol(prob)@\\
+\mbox{}\verb@        if (is.null(colnames(prob))) @\\
+\mbox{}\verb@            colnames(prob) <- paste0("stratum", seq_len(B))@\\
+\mbox{}\verb@        if (is.null(names(delta))) @\\
+\mbox{}\verb@            names(delta) <- paste0("group", LETTERS[seq_len(K)[-1]])@\\
+\mbox{}\verb@        p0 <- apply(prob, 2, cumsum)@\\
+\mbox{}\verb@        h0 <- .q(link, p0)@\\
+\mbox{}\verb@        if (length(alloc_ratio) == 1L) @\\
+\mbox{}\verb@            alloc_ratio <- rep_len(alloc_ratio, K - 1)@\\
+\mbox{}\verb@        stopifnot(length(alloc_ratio) == K - 1)@\\
+\mbox{}\verb@        if (length(strata_ratio) == 1L) @\\
+\mbox{}\verb@            strata_ratio <- rep_len(strata_ratio, B - 1)@\\
+\mbox{}\verb@        stopifnot(length(strata_ratio) == B - 1)@\\
+\mbox{}\verb@        ### sample size per group (columns) and stratum (rows)@\\
+\mbox{}\verb@        N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * @\\
+\mbox{}\verb@                 matrix(c(1, strata_ratio), nrow = B, ncol = K)@\\
+\mbox{}\verb@        rownames(N) <- colnames(prob)@\\
+\mbox{}\verb@        colnames(N) <- c("Control", names(delta))@\\
+\mbox{}\verb@        he <- 0@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@        for (i in 1:nHess) {@\\
+\mbox{}\verb@            x <- as.table(array(0, dim = c(C, K, B)))@\\
+\mbox{}\verb@            parm <- delta@\\
+\mbox{}\verb@            for (b in seq_len(B)) {@\\
+\mbox{}\verb@                h1 <- h0[,b] - matrix(delta, nrow = C, ncol = K - 1, byrow = TRUE)@\\
+\mbox{}\verb@                p1 <- .p(link, h1)@\\
+\mbox{}\verb@                p <- cbind(p0[,b], p1)@\\
+\mbox{}\verb@                x[,,b] <- sapply(seq_len(K), function(k) @\\
+\mbox{}\verb@                                 rmultinom(1, size = N[b, k], prob = c(p[1,k], diff(p[,k]))))@\\
+\mbox{}\verb@                rs <- rowSums(x[,,b]) > 0@\\
+\mbox{}\verb@                h <- h0[rs,b]@\\
+\mbox{}\verb@                theta <- c(h[1], diff(h[-length(h)]))@\\
+\mbox{}\verb@                parm <- c(parm, theta)@\\
+\mbox{}\verb@            }@\\
+\mbox{}\verb@            ### evaluate observed hessian for true parameters parm and x data@\\
+\mbox{}\verb@            he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@        ### estimate expected Fisher information@\\
+\mbox{}\verb@        he <- he / nHess@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@        alternative <- match.arg(alternative)@\\
+\mbox{}\verb@        if ((length(delta) == 1L) && norm) {@\\
+\mbox{}\verb@            se <- 1 / sqrt(c(he))@\\
+\mbox{}\verb@            power  <- switch(alternative, @\\
+\mbox{}\verb@                "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + @\\
+\mbox{}\verb@                              pnorm(qnorm(sig.level / 2) - delta / se),@\\
+\mbox{}\verb@                "less" = pnorm(qnorm(sig.level) - delta / se),@\\
+\mbox{}\verb@                "greater" = pnorm(qnorm(sig.level) + delta / se)@\\
+\mbox{}\verb@            )@\\
+\mbox{}\verb@        } else {@\\
+\mbox{}\verb@            stopifnot(alternative == "two.sided")@\\
+\mbox{}\verb@            ncp <- sum((chol(he) %*% delta)^2)@\\
+\mbox{}\verb@            qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)@\\
+\mbox{}\verb@            power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    list(power = power, n = n, delta = delta, sig.level = sig.level, N = N)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+<<power>>=
+delta <- log(1.5)
+power.prop.test(n = 25, p1 = .5, p2 = plogis(qlogis(.5) - delta))
+power.free1way.test(n = 25, prob = c(.5, .5), delta = delta)
+prb <- matrix(c(.25, .25, .25, .25,
+                .10, .20, .30, .40), ncol = 2)
+colnames(prb) <- c("s1", "s2")
+power.free1way.test(n = 20, prob = prb, 
+                    strata_ratio = 2,
+                    alloc_ratio = c(1.5, 2, 2), 
+                    delta = log(c("low" = 1.25, "med" = 1.5, "high" = 1.75)))
+@
+
+<<wilcox>>=
+delta <- log(3)
+N <- 15
+w <- gl(2, N)
+pw <- numeric(1000)
+for (i in seq_along(pw)) {
+    y <- rlogis(length(w), location = c(0, delta)[w])
+    pw[i] <- wilcox.test(y ~ w)$p.value
+}
+mean(pw < .05)
+
+set.seed(29)
+power.free1way.test(n = N, delta = delta)
+set.seed(29)
+power.free1way.test(n = N, delta = delta, norm = FALSE)
+@
+
+<<kruskal>>=
+delta <- c(log(2), log(3))
+N <- 15
+w <- gl(3, N)
+pw <- numeric(1000)
+for (i in seq_along(pw)) {
+    y <- rlogis(length(w), location = c(0, delta)[w])
+    pw[i] <- kruskal.test(y ~ w)$p.value
+}
+mean(pw < .05)
+
+power.free1way.test(n = N, delta = delta)
+@
+
+\chapter*{Index}
+
+\section*{Files}
+
+
+{\small\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \verb@"free1way.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb?}{?}.}
+\item \verb@"linkfun.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb?}{?}.}
+\item \verb@"Schur_src.c"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb?}{?}.}
+\end{list}}
+
+\section*{Fragments}
+
+
+{\small\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item $\langle\,$Adiag\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$Aoffdiag\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$cloglog\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$cumsumrev\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$C_symtrisolve\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$d p ratio\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+}
+\item $\langle\,$d vec\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$delta vec\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way confint\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way interfaces\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way methods\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way summary\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$Hessian\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$Hessian prep\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$linkfun\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$logit\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$loglog\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$lower wcrossprod\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$LRT\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$ML estimation\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$NCOL\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$negative logLik\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$negative score\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$negative score residuals\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$NROW\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$optim\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$parm to prob\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+}
+\item $\langle\,$Permutation\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$post processing\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$power\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$ppplot\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$probit\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$profile\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$R wcrossprod\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$Rao\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$resampling\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$setup\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$statistics\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
+}
+\item $\langle\,$Strasser Weber\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$stratified Hessian\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$stratified negative logLik\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$stratified negative score\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$stratified negative score residual\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$stratum prep\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
+}
+\item $\langle\,$u vec\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$upper wcrossprod\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$v vec\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$Wald statistic\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$wcrossprod\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$X and Z\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\end{list}}
+
+\section*{Identifiers}
+
+
+
+\bibliographystyle{plainnat}
+\bibliography{\Sexpr{gsub("\\.bib", "", system.file("refs.bib", package = "free1way"))}}
+
+\end{document}
