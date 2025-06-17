@@ -318,8 +318,8 @@ intercepts needs this small helper function
 @d cumsumrev
 @{
 .rcr <- function(z)
-    Reduce('+', z, accumulate = TRUE, right = TRUE)
-    ### rev(cumsum(rev(z)))
+    # Reduce('+', z, accumulate = TRUE, right = TRUE)
+    rev.default(cumsum(rev.default(z)))
 @}
 
 In addition, we define negative score residuals, that is, the derivative of the

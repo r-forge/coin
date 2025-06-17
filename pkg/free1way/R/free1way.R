@@ -57,8 +57,8 @@ wcrossprod <- function(x, A, tol = .Machine$double.eps) {
     # cumsumrev
     
     .rcr <- function(z)
-        Reduce('+', z, accumulate = TRUE, right = TRUE)
-        ### rev(cumsum(rev(z)))
+        # Reduce('+', z, accumulate = TRUE, right = TRUE)
+        rev.default(cumsum(rev.default(z)))
     
     # negative logLik
     
@@ -631,7 +631,7 @@ print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"),
             STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
             if (!is.null(x$perm$permStat)) {
                 if (alternative == "two.sided")
-                    PVAL <- mean(abs(x$perm$permStat) < abs(STATISTIC) - tol)
+                    PVAL <- mean(abs(x$perm$permStat) > abs(STATISTIC) + tol)
                 else if (alternative == "less")
                     PVAL <- mean(x$perm$permStat < STATISTIC - tol)
                 else
@@ -776,7 +776,7 @@ confint.free1way <- function(object, parm,
                 STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
                 if (!is.null(x$perm$permStat)) {
                     if (alternative == "two.sided")
-                        PVAL <- mean(abs(x$perm$permStat) < abs(STATISTIC) - tol)
+                        PVAL <- mean(abs(x$perm$permStat) > abs(STATISTIC) + tol)
                     else if (alternative == "less")
                         PVAL <- mean(x$perm$permStat < STATISTIC - tol)
                     else

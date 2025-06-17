@@ -233,8 +233,8 @@ whose element $(c, k, b)$ is the number of observations with configuration $(y =
 <<localfun, echo = FALSE>>=
 
 .rcr <- function(z)
-    Reduce('+', z, accumulate = TRUE, right = TRUE)
-    ### rev(cumsum(rev(z)))
+    # Reduce('+', z, accumulate = TRUE, right = TRUE)
+    rev.default(cumsum(rev.default(z)))
 
 
 .nll <- function(parm, x, mu = 0) {
@@ -532,8 +532,8 @@ whose element $(c, k, b)$ is the number of observations with configuration $(y =
     
     
     .rcr <- function(z)
-        Reduce('+', z, accumulate = TRUE, right = TRUE)
-        ### rev(cumsum(rev(z)))
+        # Reduce('+', z, accumulate = TRUE, right = TRUE)
+        rev.default(cumsum(rev.default(z)))
     
     
     .nll <- function(parm, x, mu = 0) {
@@ -1258,8 +1258,8 @@ intercepts needs this small helper function
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.rcr <- function(z)@\\
-\mbox{}\verb@    Reduce('+', z, accumulate = TRUE, right = TRUE)@\\
-\mbox{}\verb@    ### rev(cumsum(rev(z)))@\\
+\mbox{}\verb@    # Reduce('+', z, accumulate = TRUE, right = TRUE)@\\
+\mbox{}\verb@    rev.default(cumsum(rev.default(z)))@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2800,7 +2800,7 @@ seq_along(ret$par))$coefficients
 \mbox{}\verb@    STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))@\\
 \mbox{}\verb@    if (!is.null(x$perm$permStat)) {@\\
 \mbox{}\verb@        if (alternative == "two.sided")@\\
-\mbox{}\verb@            PVAL <- mean(abs(x$perm$permStat) < abs(STATISTIC) - tol)@\\
+\mbox{}\verb@            PVAL <- mean(abs(x$perm$permStat) > abs(STATISTIC) + tol)@\\
 \mbox{}\verb@        else if (alternative == "less")@\\
 \mbox{}\verb@            PVAL <- mean(x$perm$permStat < STATISTIC - tol)@\\
 \mbox{}\verb@        else@\\
