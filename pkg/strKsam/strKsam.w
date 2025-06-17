@@ -1,9 +1,9 @@
 \documentclass[a4paper]{report}
 
 %\VignetteIndexEntry{Stratified K-sample Inference}
-%\VignetteDepends{strKsam}
+%\VignetteDepends{free1way,rms,coin,multcomp,survival}
 %\VignetteKeywords{conditional inference, conditional Monte Carlo}}
-%\VignettePackage{strKsam}
+%\VignettePackage{free1way}
 
 %% packages
 \usepackage{amsfonts,amstext,amsmath,amssymb,amsthm}
