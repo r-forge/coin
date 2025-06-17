@@ -53,7 +53,7 @@ clean:
 	rm -rf *wk
 
 distclean: clean
-	rm -rf src/*
+	rm -rf src/Schur.c
 	rm -rf R/*
 	rm -rf man/*
 	rm -rf vignettes/*Rnw
