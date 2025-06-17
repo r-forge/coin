@@ -33,6 +33,7 @@ all:	strKsam.pdf
 clean:	
 	./cleanup
 	rm -rf *~
+	rm -rf *pdf
 	rm -rf strKsam.pdf
 	rm -rf strKsam.R
 	texclean strKsam
