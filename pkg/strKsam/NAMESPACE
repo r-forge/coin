@@ -1,0 +1,22 @@
+
+useDynLib(free1way, .registration = TRUE)
+
+importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
+           "quantile", "uniroot","r2dtable", "pnorm", "dnorm", 
+           "pchisq", "qchisq", "coef", "confint", "model.matrix", "printCoefmat",
+             "splinefun", "vcov",
+           "ecdf", "na.pass", "terms", "model.weights", "xtabs", "rmultinom")
+importFrom("graphics", "lines", "points", "polygon")
+
+export(free1way.test, power.free1way.test, ppplot, wcrossprod)
+
+S3method("free1way.test", "formula")
+S3method("free1way.test", "numeric")
+S3method("free1way.test", "factor")
+S3method("free1way.test", "table")
+S3method("coef", "free1way")
+S3method("vcov", "free1way")
+S3method("logLik", "free1way")
+S3method("summary", "free1way")
+S3method("print", "free1way")
+S3method("print", "summary.free1way")

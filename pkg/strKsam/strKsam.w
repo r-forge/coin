@@ -226,7 +226,7 @@ whose element $(c, k, b)$ is the number of observations with configuration $(y =
 @<stratified negative score@>
 @<stratified Hessian@>
 @<stratified negative score residual@>
-@<R wcrossprod@>
+@<ML estimation@>
 @<Strasser Weber@>
 @<resampling@>
 @}
@@ -441,10 +441,9 @@ We start with an example involving $K = 3$ groups for a binary outcome and
 use a binary logistic regression model to estimate the two log-odds ratios
 $\beta_2$ and $\beta_3$ along with their estimated covariance
 <<glm>>=
+library("free1way")
 source("strKsam_src.R")
-source("ML.R")
-source("linkfun.R")
-dyn.load("Schur_src.so")
+source("R/linkfun.R")
 (x <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2))
 d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 1))
 d$x <- c(x)
@@ -837,10 +836,10 @@ SEXP R_wcrossprod (SEXP a, SEXP b, SEXP X, SEXP tol)
 @{
 wcrossprod <- function(x, A, tol = .Machine$double.eps) {
     storage.mode(x) <- "double"
-    .Call("R_wcrossprod", a = as.double(A$a), 
-                          b = as.double(A$b),
-                          X = x,
-                          tol = tol)
+    .Call(R_wcrossprod, a = as.double(A$a), 
+                        b = as.double(A$b),
+                        X = x,
+                        tol = tol)
 }
 @}
 
@@ -1080,8 +1079,9 @@ probit <- function()
 \chapter{ML Estimation}
 \label{ch:ML}
 
-@o ML.R -cp
+@o free1way.R -cp
 @{
+@<R wcrossprod@>
 @<ML estimation@>
 @<free1way@>
 @<free1way methods@>
@@ -1192,6 +1192,7 @@ if (residuals)
 
 ret$profile <- function(start, fix)
     .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
+
 ret$table <- x
 ret$mu <- mu
 names(ret$mu) <- link$parm
@@ -1450,15 +1451,15 @@ Distribution-free
 
 @d free1way
 @{
-free1way.test <- function(x, ...)
+free1way.test <- function(y, ...)
     UseMethod("free1way.test")
-free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "loglog"), mu = 0, B = 0, ...)
+free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), mu = 0, B = 0, ...)
 {
 
     cl <- match.call()
 
-    d <- dim(object)
-    dn <- dimnames(object)
+    d <- dim(y)
+    dn <- dimnames(y)
     DNAME <- NULL
     if (!is.null(dn)) {
         DNAME <- paste(names(dn)[1], "by", names(dn)[2], paste0("(", paste0(dn[2], collapse = ", "), ")"))
@@ -1471,7 +1472,7 @@ free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "
         link <- do.call(link, list())
     }
 
-    ret <- .free1wayML(object, link = link, mu = mu, ...)
+    ret <- .free1wayML(y, link = link, mu = mu, ...)
     ret$link <- link
     ret$data.name <- DNAME
     ret$call <- cl
@@ -1493,7 +1494,7 @@ free1way.test.table <- function(object, link = c("logit", "probit", "cloglog", "
     @<Strasser Weber@>
     @<resampling@>
 
-    ret$perm <- .resample(res, object, B = B)
+    ret$perm <- .resample(res, y, B = B)
 
     class(ret) <- "free1way"
     return(ret)
@@ -1777,8 +1778,6 @@ print(ft, test = "LRT")
 print(ft, test = "Rao", alternative = "less")
 print(ft, test = "Rao", alternative = "greater")
 print(ft, test = "Rao")
-library("lehmann")
-trafo.test(y ~ w)
 summary(ft)
 confint(ft, test = "Permutation")
 confint(ft, test = "LRT")
@@ -1878,35 +1877,7 @@ coef(f1w)
 
 @d ppplot
 @{
-ppplot <- function(x, ...)
-    UseMethod("ppplot")
-
-ppplot.formula <- function(formula, data, subset, na.action = na.pass, ...)
-{
-    if(missing(formula) || (length(formula) != 3L))
-        stop("'formula' missing or incorrect")
-    if (length(attr(terms(formula[-2L]), "term.labels")) != 1L)
-        stop("'formula' missing or incorrect")
-    m <- match.call(expand.dots = FALSE)
-    if (is.matrix(eval(m$data, parent.frame())))
-        m$data <- as.data.frame(data)
-    ## need stats:: for non-standard evaluation
-    m[[1L]] <- quote(stats::model.frame)
-    m$... <- NULL
-    mf <- eval(m, parent.frame())
-    names(mf) <- NULL
-    response <- attr(attr(mf, "terms"), "response")
-    y <- mf[[response]]
-    g <- factor(mf[[-response]])
-    if(nlevels(g) != 2L)
-        stop("grouping factor must have exactly 2 levels")
-    ## Call the default method.
-    DATA <- split(mf[[response]], g)
-    RVAL <- ppplot(x = DATA[[1L]], y = DATA[[2L]], xlab = levels(g)[1], ylab = levels(g)[2], ...)
-    return(invisible(RVAL))
-}
-
-ppplot.default <- function(x, y, plot.it = TRUE,
+ppplot <- function(x, y, plot.it = TRUE,
             xlab = deparse1(substitute(x)),
             ylab = deparse1(substitute(y)), 
             interpolate = FALSE, ...,
@@ -1962,11 +1933,11 @@ ppplot.default <- function(x, y, plot.it = TRUE,
 
 \begin{figure}
 <<ppplot, fig = TRUE>>=
-x <- rnorm(50)
 y <- rnorm(50)
+x <- rnorm(50)
 layout(matrix(1:2, nrow = 1))
-ppplot(x, y, conf.level = .95)
-ppplot(x, y, conf.level = .95, interpolate = TRUE)
+ppplot(y, x, conf.level = .95)
+ppplot(y, x, conf.level = .95, interpolate = TRUE)
 @@
 \end{figure}
 
@@ -2129,8 +2100,6 @@ mean(pw < .05)
 
 power.free1way.test(n = N, delta = delta)
 @@
-
-
 
 \chapter*{Index}
 

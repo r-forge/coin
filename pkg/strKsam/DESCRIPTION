@@ -1,0 +1,13 @@
+Package: free1way
+Title: Distribution-free Tests and Confidence Intervals in Stratified Oneway Layouts
+Date: 2025-06-17
+Version: 0.0-1
+Authors@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
+                  email = "Torsten.Hothorn@R-project.org")
+Description: Basic infrastructure for exact conditional and unconditional as well as
+  asymptotic conditional and unconditional distribution-free inference for parameters in stratified oneway layouts.
+Imports: stats, graphics
+Suggests: rms, survival, MASS, tram, coin
+Depends: R (>= 4.4.0)
+NeedsCompilation: yes
+License: GPL-2
