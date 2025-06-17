@@ -1,8 +1,8 @@
 
-strKsam.Rnw:	strKsam.w
-	nuweb -r strKsam.w
-	mv strKsam.tex strKsam.Rnw
-	cp strKsam.Rnw vignettes
+free1way.Rnw:	free1way.w
+	nuweb -r free1way.w
+	mv free1way.tex free1way.Rnw
+	cp free1way.Rnw vignettes
 	mv Schur_src.c src/Schur.c
 	#mv Makevars src
 	#mv *def src
@@ -10,35 +10,35 @@ strKsam.Rnw:	strKsam.w
 	mv linkfun.R R
 	#mv *.Rd man
 
-strKsam.R: strKsam.Rnw
-	Stangle strKsam.Rnw
-#	mv strKsam.R tests
+free1way.R: free1way.Rnw
+	Stangle free1way.Rnw
+#	mv free1way.R tests
 
-strKsam.tex:	strKsam.Rnw
-	R CMD Sweave strKsam.Rnw
+free1way.tex:	free1way.Rnw
+	R CMD Sweave free1way.Rnw
 	
-strKsam.pdf:	strKsam.tex
-	texi2dvi --pdf strKsam.tex
+free1way.pdf:	free1way.tex
+	texi2dvi --pdf free1way.tex
 	### NEED to run nuweb TWICE to
 	### sort-out page numbers
-	nuweb -r strKsam.w
-	mv strKsam.tex strKsam.Rnw
-	R CMD Sweave strKsam.Rnw
-	pdflatex strKsam.tex
-	pdflatex strKsam.tex
-	# cp strKsam.Rnw vignettes
+	nuweb -r free1way.w
+	mv free1way.tex free1way.Rnw
+	R CMD Sweave free1way.Rnw
+	pdflatex free1way.tex
+	pdflatex free1way.tex
+	# cp free1way.Rnw vignettes
 
-all:	strKsam.pdf
+all:	free1way.pdf
 
 clean:	
 	./cleanup
 	rm -rf *~
 	rm -rf *pdf
-	rm -rf strKsam.pdf
-	rm -rf strKsam.R
-	texclean strKsam
-	rm -rf strKsam.tex
-	rm -rf strKsam.Rnw
+	rm -rf free1way.pdf
+	rm -rf free1way.R
+	texclean free1way
+	rm -rf free1way.tex
+	rm -rf free1way.Rnw
 	rm -rf *.c
 	rm -rf *.h
 	rm -rf *.o
@@ -57,5 +57,5 @@ distclean: clean
 	rm -rf R/*
 	rm -rf man/*
 	rm -rf vignettes/*Rnw
-	rm -rf tests/strKsam.R*
+	rm -rf tests/free1way.R*
 	
