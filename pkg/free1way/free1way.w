@@ -1088,7 +1088,9 @@ probit <- function()
 @<free1way methods@>
 @<free1way summary@>
 @<free1way confint@>
-@<free1way interfaces@>
+@<free1way formula@>
+@<free1way numeric@>
+@<free1way factor@>
 @<ppplot@>
 @<power@>
 @}
@@ -1657,7 +1659,7 @@ confint(ft, test = "Rao")
 confint(ft, test = "LRT")
 @@
 
-@d free1way interfaces
+@d free1way formula
 @{
 free1way.test.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
 {
@@ -1708,7 +1710,10 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
     RVAL$call <- cl
     RVAL
 }
- 
+@}
+
+@d free1way numeric
+@{
 free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {
 
     cl <- match.call()
@@ -1732,7 +1737,10 @@ free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...
     RVAL$call <- cl
     RVAL
 }
+@}
 
+@d free1way factor
+@{
 free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
 
     cl <- match.call()
@@ -1944,6 +1952,68 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 
 \chapter{Power and Sample Size}
 
+@d power setup
+@{
+### if not given, assume continuous distribution
+if (is.null(prob)) prob <- rep(1 / n, n)
+### matrix means control distributions in different strata
+if (!is.matrix(prob))
+    prob <- matrix(prob, nrow = NROW(prob))
+C <- nrow(prob)
+K <- length(delta) + 1L
+B <- ncol(prob)
+if (is.null(colnames(prob))) 
+    colnames(prob) <- paste0("stratum", seq_len(B))
+if (is.null(names(delta))) 
+    names(delta) <- paste0("group", LETTERS[seq_len(K)[-1]])
+p0 <- apply(prob, 2, cumsum)
+h0 <- .q(link, p0)
+if (length(alloc_ratio) == 1L) 
+    alloc_ratio <- rep_len(alloc_ratio, K - 1)
+stopifnot(length(alloc_ratio) == K - 1)
+if (length(strata_ratio) == 1L) 
+    strata_ratio <- rep_len(strata_ratio, B - 1)
+stopifnot(length(strata_ratio) == B - 1)
+### sample size per group (columns) and stratum (rows)
+N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
+         matrix(c(1, strata_ratio), nrow = B, ncol = K)
+rownames(N) <- colnames(prob)
+colnames(N) <- c("Control", names(delta))
+@}
+
+@d estimate Fisher information
+@{
+he <- 0
+for (i in 1:nHess) {
+    x <- as.table(array(0, dim = c(C, K, B)))
+    parm <- delta
+    for (b in seq_len(B)) {
+        h1 <- h0[,b] - matrix(delta, nrow = C, ncol = K - 1, byrow = TRUE)
+        p1 <- .p(link, h1)
+        p <- cbind(p0[,b], p1)
+        x[,,b] <- sapply(seq_len(K), function(k) 
+                         rmultinom(1, size = N[b, k], prob = c(p[1,k], diff(p[,k]))))
+        rs <- rowSums(x[,,b]) > 0
+        h <- h0[rs,b]
+        theta <- c(h[1], diff(h[-length(h)]))
+        parm <- c(parm, theta)
+    }
+    ### evaluate observed hessian for true parameters parm and x data
+    he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian
+}
+### estimate expected Fisher information
+he <- he / nHess
+@}
+
+@d power call
+@{
+power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
+                    strata_ratio = strata_ratio, delta = delta, 
+                    sig.level = sig.level, link = link, 
+                    alternative = alternative, 
+                    nHess = nHess, ...)$power - power
+@}
+
 @d power
 @{
 power.free1way.test <- function(n = NULL, prob = NULL, alloc_ratio = 1, strata_ratio = 1, delta = NULL, sig.level = .05, power = NULL,
@@ -1962,28 +2032,20 @@ norm = TRUE,...)
 
     if (is.null(n)) 
         n <- ceiling(uniroot(function(n)
-             power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio, 
-                                 delta = delta, 
-                                 sig.level = sig.level, link = link, alternative = alternative, 
-                                 nHess = nHess, ...)$power
-             - power, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
+             @<power call@>
+             , interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
     else if (is.null(delta)) {
         ### 2-sample only
         stopifnot(length(alloc_ratio) == 1L)
         delta <- uniroot(function(delta) 
-            power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio,delta = delta, 
-                                sig.level = sig.level, link = link, alternative = alternative, 
-                                nHess = nHess, ...)$power
-            - power, 
+             @<power call@>
     ### <TH> interval depending on alternative, symmetry? </TH>
-            interval = c(0, 10), tol = tol, extendInt = "upX")$root
+            , interval = c(0, 10), tol = tol, extendInt = "upX")$root
         }
     else if (is.null(sig.level)) 
         sig.level <- uniroot(function(sig.level) 
-            power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio, delta = delta, 
-                                sig.level = sig.level, link = link, alternative = alternative, 
-                                ...)$power
-            - power, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
+             @<power call@>
+            , interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
     else if (is.null(power)) {
 
         if (!inherits(link, "linkfun")) {
@@ -1991,52 +2053,8 @@ norm = TRUE,...)
             link <- do.call(link, list())
         }
 
-        ### if not given, assume continuous distribution
-        if (is.null(prob)) prob <- rep(1 / n, n)
-        ### matrix means control distributions in different strata
-        if (!is.matrix(prob))
-            prob <- matrix(prob, nrow = NROW(prob))
-        C <- nrow(prob)
-        K <- length(delta) + 1L
-        B <- ncol(prob)
-        if (is.null(colnames(prob))) 
-            colnames(prob) <- paste0("stratum", seq_len(B))
-        if (is.null(names(delta))) 
-            names(delta) <- paste0("group", LETTERS[seq_len(K)[-1]])
-        p0 <- apply(prob, 2, cumsum)
-        h0 <- .q(link, p0)
-        if (length(alloc_ratio) == 1L) 
-            alloc_ratio <- rep_len(alloc_ratio, K - 1)
-        stopifnot(length(alloc_ratio) == K - 1)
-        if (length(strata_ratio) == 1L) 
-            strata_ratio <- rep_len(strata_ratio, B - 1)
-        stopifnot(length(strata_ratio) == B - 1)
-        ### sample size per group (columns) and stratum (rows)
-        N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
-                 matrix(c(1, strata_ratio), nrow = B, ncol = K)
-        rownames(N) <- colnames(prob)
-        colnames(N) <- c("Control", names(delta))
-        he <- 0
-
-        for (i in 1:nHess) {
-            x <- as.table(array(0, dim = c(C, K, B)))
-            parm <- delta
-            for (b in seq_len(B)) {
-                h1 <- h0[,b] - matrix(delta, nrow = C, ncol = K - 1, byrow = TRUE)
-                p1 <- .p(link, h1)
-                p <- cbind(p0[,b], p1)
-                x[,,b] <- sapply(seq_len(K), function(k) 
-                                 rmultinom(1, size = N[b, k], prob = c(p[1,k], diff(p[,k]))))
-                rs <- rowSums(x[,,b]) > 0
-                h <- h0[rs,b]
-                theta <- c(h[1], diff(h[-length(h)]))
-                parm <- c(parm, theta)
-            }
-            ### evaluate observed hessian for true parameters parm and x data
-            he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian
-        }
-        ### estimate expected Fisher information
-        he <- he / nHess
+        @<power setup@>
+        @<estimate Fisher information@>
 
         alternative <- match.arg(alternative)
         if ((length(delta) == 1L) && norm) {

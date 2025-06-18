@@ -821,7 +821,7 @@ confint.free1way <- function(object, parm,
 }
 # power.free1way.test <- function()
 
-# free1way interfaces
+# free1way formula
 
 free1way.test.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
 {
@@ -872,7 +872,9 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
     RVAL$call <- cl
     RVAL
 }
- 
+
+# free1way numeric
+
 free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {
 
     cl <- match.call()
@@ -896,6 +898,8 @@ free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...
     RVAL$call <- cl
     RVAL
 }
+
+# free1way factor
 
 free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
 
@@ -994,28 +998,41 @@ norm = TRUE,...)
 
     if (is.null(n)) 
         n <- ceiling(uniroot(function(n)
-             power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio, 
-                                 delta = delta, 
-                                 sig.level = sig.level, link = link, alternative = alternative, 
-                                 nHess = nHess, ...)$power
-             - power, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
+             # power call
+             
+             power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
+                                 strata_ratio = strata_ratio, delta = delta, 
+                                 sig.level = sig.level, link = link, 
+                                 alternative = alternative, 
+                                 nHess = nHess, ...)$power - power
+             
+             , interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
     else if (is.null(delta)) {
         ### 2-sample only
         stopifnot(length(alloc_ratio) == 1L)
         delta <- uniroot(function(delta) 
-            power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio,delta = delta, 
-                                sig.level = sig.level, link = link, alternative = alternative, 
-                                nHess = nHess, ...)$power
-            - power, 
+             # power call
+             
+             power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
+                                 strata_ratio = strata_ratio, delta = delta, 
+                                 sig.level = sig.level, link = link, 
+                                 alternative = alternative, 
+                                 nHess = nHess, ...)$power - power
+             
     ### <TH> interval depending on alternative, symmetry? </TH>
-            interval = c(0, 10), tol = tol, extendInt = "upX")$root
+            , interval = c(0, 10), tol = tol, extendInt = "upX")$root
         }
     else if (is.null(sig.level)) 
         sig.level <- uniroot(function(sig.level) 
-            power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio, delta = delta, 
-                                sig.level = sig.level, link = link, alternative = alternative, 
-                                ...)$power
-            - power, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
+             # power call
+             
+             power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
+                                 strata_ratio = strata_ratio, delta = delta, 
+                                 sig.level = sig.level, link = link, 
+                                 alternative = alternative, 
+                                 nHess = nHess, ...)$power - power
+             
+            , interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
     else if (is.null(power)) {
 
         if (!inherits(link, "linkfun")) {
@@ -1023,6 +1040,8 @@ norm = TRUE,...)
             link <- do.call(link, list())
         }
 
+        # power setup
+        
         ### if not given, assume continuous distribution
         if (is.null(prob)) prob <- rep(1 / n, n)
         ### matrix means control distributions in different strata
@@ -1048,8 +1067,10 @@ norm = TRUE,...)
                  matrix(c(1, strata_ratio), nrow = B, ncol = K)
         rownames(N) <- colnames(prob)
         colnames(N) <- c("Control", names(delta))
+        
+        # estimate Fisher information
+        
         he <- 0
-
         for (i in 1:nHess) {
             x <- as.table(array(0, dim = c(C, K, B)))
             parm <- delta
@@ -1069,6 +1090,7 @@ norm = TRUE,...)
         }
         ### estimate expected Fisher information
         he <- he / nHess
+        
 
         alternative <- match.arg(alternative)
         if ((length(delta) == 1L) && norm) {

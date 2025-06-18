@@ -2414,7 +2414,9 @@ that is, differences on a latent normal scale with variance one:
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way methods}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way confint}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way interfaces}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way formula}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape ppplot}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape power}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
@@ -3200,7 +3202,7 @@ confint(ft, test = "LRT")
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
-\NWtarget{nuweb?}{} $\langle\,${\itshape free1way interfaces}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way formula}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3253,7 +3255,23 @@ confint(ft, test = "LRT")
 \mbox{}\verb@    RVAL$call <- cl@\\
 \mbox{}\verb@    RVAL@\\
 \mbox{}\verb@}@\\
-\mbox{}\verb@ @\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
 \mbox{}\verb@free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    cl <- match.call()@\\
@@ -3277,6 +3295,22 @@ confint(ft, test = "LRT")
 \mbox{}\verb@    RVAL$call <- cl@\\
 \mbox{}\verb@    RVAL@\\
 \mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {@\\
 \mbox{}\verb@@\\
@@ -3431,7 +3465,7 @@ coef(f1w)
 \chapter{Model Diagnostics}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap55}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ppplot}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3512,7 +3546,108 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \chapter{Power and Sample Size}
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@### if not given, assume continuous distribution@\\
+\mbox{}\verb@if (is.null(prob)) prob <- rep(1 / n, n)@\\
+\mbox{}\verb@### matrix means control distributions in different strata@\\
+\mbox{}\verb@if (!is.matrix(prob))@\\
+\mbox{}\verb@    prob <- matrix(prob, nrow = NROW(prob))@\\
+\mbox{}\verb@C <- nrow(prob)@\\
+\mbox{}\verb@K <- length(delta) + 1L@\\
+\mbox{}\verb@B <- ncol(prob)@\\
+\mbox{}\verb@if (is.null(colnames(prob))) @\\
+\mbox{}\verb@    colnames(prob) <- paste0("stratum", seq_len(B))@\\
+\mbox{}\verb@if (is.null(names(delta))) @\\
+\mbox{}\verb@    names(delta) <- paste0("group", LETTERS[seq_len(K)[-1]])@\\
+\mbox{}\verb@p0 <- apply(prob, 2, cumsum)@\\
+\mbox{}\verb@h0 <- .q(link, p0)@\\
+\mbox{}\verb@if (length(alloc_ratio) == 1L) @\\
+\mbox{}\verb@    alloc_ratio <- rep_len(alloc_ratio, K - 1)@\\
+\mbox{}\verb@stopifnot(length(alloc_ratio) == K - 1)@\\
+\mbox{}\verb@if (length(strata_ratio) == 1L) @\\
+\mbox{}\verb@    strata_ratio <- rep_len(strata_ratio, B - 1)@\\
+\mbox{}\verb@stopifnot(length(strata_ratio) == B - 1)@\\
+\mbox{}\verb@### sample size per group (columns) and stratum (rows)@\\
+\mbox{}\verb@N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * @\\
+\mbox{}\verb@         matrix(c(1, strata_ratio), nrow = B, ncol = K)@\\
+\mbox{}\verb@rownames(N) <- colnames(prob)@\\
+\mbox{}\verb@colnames(N) <- c("Control", names(delta))@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@he <- 0@\\
+\mbox{}\verb@for (i in 1:nHess) {@\\
+\mbox{}\verb@    x <- as.table(array(0, dim = c(C, K, B)))@\\
+\mbox{}\verb@    parm <- delta@\\
+\mbox{}\verb@    for (b in seq_len(B)) {@\\
+\mbox{}\verb@        h1 <- h0[,b] - matrix(delta, nrow = C, ncol = K - 1, byrow = TRUE)@\\
+\mbox{}\verb@        p1 <- .p(link, h1)@\\
+\mbox{}\verb@        p <- cbind(p0[,b], p1)@\\
+\mbox{}\verb@        x[,,b] <- sapply(seq_len(K), function(k) @\\
+\mbox{}\verb@                         rmultinom(1, size = N[b, k], prob = c(p[1,k], diff(p[,k]))))@\\
+\mbox{}\verb@        rs <- rowSums(x[,,b]) > 0@\\
+\mbox{}\verb@        h <- h0[rs,b]@\\
+\mbox{}\verb@        theta <- c(h[1], diff(h[-length(h)]))@\\
+\mbox{}\verb@        parm <- c(parm, theta)@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@    ### evaluate observed hessian for true parameters parm and x data@\\
+\mbox{}\verb@    he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@### estimate expected Fisher information@\\
+\mbox{}\verb@he <- he / nHess@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, @\\
+\mbox{}\verb@                    strata_ratio = strata_ratio, delta = delta, @\\
+\mbox{}\verb@                    sig.level = sig.level, link = link, @\\
+\mbox{}\verb@                    alternative = alternative, @\\
+\mbox{}\verb@                    nHess = nHess, ...)$power - power@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3533,28 +3668,20 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (is.null(n)) @\\
 \mbox{}\verb@        n <- ceiling(uniroot(function(n)@\\
-\mbox{}\verb@             power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio, @\\
-\mbox{}\verb@                                 delta = delta, @\\
-\mbox{}\verb@                                 sig.level = sig.level, link = link, alternative = alternative, @\\
-\mbox{}\verb@                                 nHess = nHess, ...)$power@\\
-\mbox{}\verb@             - power, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)@\\
+\mbox{}\verb@             @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@             , interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)@\\
 \mbox{}\verb@    else if (is.null(delta)) {@\\
 \mbox{}\verb@        ### 2-sample only@\\
 \mbox{}\verb@        stopifnot(length(alloc_ratio) == 1L)@\\
 \mbox{}\verb@        delta <- uniroot(function(delta) @\\
-\mbox{}\verb@            power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio,delta = delta, @\\
-\mbox{}\verb@                                sig.level = sig.level, link = link, alternative = alternative, @\\
-\mbox{}\verb@                                nHess = nHess, ...)$power@\\
-\mbox{}\verb@            - power, @\\
+\mbox{}\verb@             @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    ### <TH> interval depending on alternative, symmetry? </TH>@\\
-\mbox{}\verb@            interval = c(0, 10), tol = tol, extendInt = "upX")$root@\\
+\mbox{}\verb@            , interval = c(0, 10), tol = tol, extendInt = "upX")$root@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    else if (is.null(sig.level)) @\\
 \mbox{}\verb@        sig.level <- uniroot(function(sig.level) @\\
-\mbox{}\verb@            power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, strata_ratio = strata_ratio, delta = delta, @\\
-\mbox{}\verb@                                sig.level = sig.level, link = link, alternative = alternative, @\\
-\mbox{}\verb@                                ...)$power@\\
-\mbox{}\verb@            - power, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root@\\
+\mbox{}\verb@             @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@            , interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root@\\
 \mbox{}\verb@    else if (is.null(power)) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@        if (!inherits(link, "linkfun")) {@\\
@@ -3562,52 +3689,8 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \mbox{}\verb@            link <- do.call(link, list())@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@        ### if not given, assume continuous distribution@\\
-\mbox{}\verb@        if (is.null(prob)) prob <- rep(1 / n, n)@\\
-\mbox{}\verb@        ### matrix means control distributions in different strata@\\
-\mbox{}\verb@        if (!is.matrix(prob))@\\
-\mbox{}\verb@            prob <- matrix(prob, nrow = NROW(prob))@\\
-\mbox{}\verb@        C <- nrow(prob)@\\
-\mbox{}\verb@        K <- length(delta) + 1L@\\
-\mbox{}\verb@        B <- ncol(prob)@\\
-\mbox{}\verb@        if (is.null(colnames(prob))) @\\
-\mbox{}\verb@            colnames(prob) <- paste0("stratum", seq_len(B))@\\
-\mbox{}\verb@        if (is.null(names(delta))) @\\
-\mbox{}\verb@            names(delta) <- paste0("group", LETTERS[seq_len(K)[-1]])@\\
-\mbox{}\verb@        p0 <- apply(prob, 2, cumsum)@\\
-\mbox{}\verb@        h0 <- .q(link, p0)@\\
-\mbox{}\verb@        if (length(alloc_ratio) == 1L) @\\
-\mbox{}\verb@            alloc_ratio <- rep_len(alloc_ratio, K - 1)@\\
-\mbox{}\verb@        stopifnot(length(alloc_ratio) == K - 1)@\\
-\mbox{}\verb@        if (length(strata_ratio) == 1L) @\\
-\mbox{}\verb@            strata_ratio <- rep_len(strata_ratio, B - 1)@\\
-\mbox{}\verb@        stopifnot(length(strata_ratio) == B - 1)@\\
-\mbox{}\verb@        ### sample size per group (columns) and stratum (rows)@\\
-\mbox{}\verb@        N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * @\\
-\mbox{}\verb@                 matrix(c(1, strata_ratio), nrow = B, ncol = K)@\\
-\mbox{}\verb@        rownames(N) <- colnames(prob)@\\
-\mbox{}\verb@        colnames(N) <- c("Control", names(delta))@\\
-\mbox{}\verb@        he <- 0@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@        for (i in 1:nHess) {@\\
-\mbox{}\verb@            x <- as.table(array(0, dim = c(C, K, B)))@\\
-\mbox{}\verb@            parm <- delta@\\
-\mbox{}\verb@            for (b in seq_len(B)) {@\\
-\mbox{}\verb@                h1 <- h0[,b] - matrix(delta, nrow = C, ncol = K - 1, byrow = TRUE)@\\
-\mbox{}\verb@                p1 <- .p(link, h1)@\\
-\mbox{}\verb@                p <- cbind(p0[,b], p1)@\\
-\mbox{}\verb@                x[,,b] <- sapply(seq_len(K), function(k) @\\
-\mbox{}\verb@                                 rmultinom(1, size = N[b, k], prob = c(p[1,k], diff(p[,k]))))@\\
-\mbox{}\verb@                rs <- rowSums(x[,,b]) > 0@\\
-\mbox{}\verb@                h <- h0[rs,b]@\\
-\mbox{}\verb@                theta <- c(h[1], diff(h[-length(h)]))@\\
-\mbox{}\verb@                parm <- c(parm, theta)@\\
-\mbox{}\verb@            }@\\
-\mbox{}\verb@            ### evaluate observed hessian for true parameters parm and x data@\\
-\mbox{}\verb@            he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian@\\
-\mbox{}\verb@        }@\\
-\mbox{}\verb@        ### estimate expected Fisher information@\\
-\mbox{}\verb@        he <- he / nHess@\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@        alternative <- match.arg(alternative)@\\
 \mbox{}\verb@        if ((length(delta) == 1L) && norm) {@\\
@@ -3706,10 +3789,13 @@ power.free1way.test(n = N, delta = delta)
 }
 \item $\langle\,$d vec\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$delta vec\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way confint\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
-\item $\langle\,$free1way interfaces\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way factor\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way formula\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way methods\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way numeric\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way summary\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$Hessian\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$Hessian prep\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
@@ -3730,6 +3816,8 @@ power.free1way.test(n = N, delta = delta)
 \item $\langle\,$Permutation\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$post processing\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$power\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$power call\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$power setup\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$ppplot\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$probit\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$profile\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
