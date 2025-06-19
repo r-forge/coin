@@ -1756,6 +1756,8 @@ free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
         DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))
 
     stopifnot(is.factor(x))
+    if (nlevels(x) > 2L)
+        stopifnot(is.ordered(x))
     d <- data.frame(y = y, x = x, w = 1)
     if (!is.null(weights)) d$w <- weights
     if (!is.null(z)) {
@@ -1812,7 +1814,7 @@ vcov(ft)
 
 \section{Tests}
 
-Mantel-Haenszel test
+\subsection{Mantel-Haenszel test}
 
 <<mh>>=
 example(mantelhaen.test, echo = FALSE)
@@ -1827,7 +1829,7 @@ sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
        fisher.test(UCBAdmissions[,,dept], conf.int = TRUE)$conf.int)
 @@
 
-Kruskal-Wallis
+\subsection{Kruskal-Wallis}
 
 <<kw>>=
 example(kruskal.test, echo = FALSE)
@@ -1835,7 +1837,7 @@ kruskal.test(x ~ g)
 free1way.test(x ~ g)
 @@
 
-Savage
+\subsection{Savage}
 
 <<sw>>=
 library("survival")
@@ -1866,7 +1868,7 @@ print(ft, test = "LRT")
 print(ft, test = "Rao")
 @@
 
-Normal
+\subsection{van der Waerden}
 
 <<normal>>=
 nd$y <- rnorm(nrow(nd))
@@ -1875,7 +1877,7 @@ independence_test(y ~ g | s, data = nd, ytrafo = function(...)
                   trafo(..., numeric_trafo = normal_trafo, block = nd$s), teststat = "quad")
 @@
 
-Friedman
+\subsection{Friedman}
 
 <<friedman>>=
 example(friedman.test, echo = FALSE)
@@ -1888,6 +1890,32 @@ coef(f1w)
 @@
 
 \chapter{Model Diagnostics}
+
+@d ROC bands
+@{
+ if (!is.null(conf.level)) {
+    prb <- seq_len(1000) / 1001
+    res <- c(x, y)
+    grp <- gl(2, 1, labels = c(xlab, ylab))
+    grp <- grp[rep(1:2, c(length(x), length(y)))]
+    args <- conf.args
+    args$y <- res
+    args$x <- grp
+    args$border <- args$col <- args$type <- NULL
+    f1w <- do.call("free1way.test", args)
+
+    ci <- confint(f1w, level = conf.level, type = args$type)
+    lwr <- .p(f1w$link, .q(f1w$link, prb) - ci[1,1])
+    upr <- .p(f1w$link, .q(f1w$link, prb) - ci[1,2])
+    x <- c(prb, rev(prb))
+    y <- c(lwr, rev(upr))
+    xn <- c(x[1L], rep(x[-1L], each = 2))
+    yn <- c(rep(y[-length(y)], each = 2), y[length(y)])
+    polygon(x = xn, y = yn, col = conf.args$col, border = conf.args$border)
+    lines(prb, .p(f1w$link, .q(f1w$link, prb) - coef(f1w)))
+}
+@}
+
 
 @d ppplot
 @{
@@ -1919,27 +1947,8 @@ ppplot <- function(x, y, plot.it = TRUE,
     plot(px, py, xlim = c(0, 1), ylim = c(0, 1), 
          xlab = xlab, ylab = ylab, type = "n", ...)
 
-    if (!is.null(conf.level)) {
-        prb <- seq_len(1000) / 1001
-        res <- c(x, y)
-        grp <- gl(2, 1, labels = c(xlab, ylab))
-        grp <- grp[rep(1:2, c(length(x), length(y)))]
-        args <- conf.args
-        args$y <- res
-        args$x <- grp
-        args$border <- args$col <- args$type <- NULL
-        f1w <- do.call("free1way.test", args)
+    @<ROC bands@>
 
-        ci <- confint(f1w, level = conf.level, type = args$type)
-        lwr <- .p(f1w$link, .q(f1w$link, prb) - ci[1,1])
-        upr <- .p(f1w$link, .q(f1w$link, prb) - ci[1,2])
-        x <- c(prb, rev(prb))
-        y <- c(lwr, rev(upr))
-        xn <- c(x[1L], rep(x[-1L], each = 2))
-        yn <- c(rep(y[-length(y)], each = 2), y[length(y)])
-        polygon(x = xn, y = yn, col = conf.args$col, border = conf.args$border)
-        lines(prb, .p(f1w$link, .q(f1w$link, prb) - coef(f1w)))
-    }
     points(px, py, ...)
     return(invisible(ret)) 
 }
@@ -1980,7 +1989,7 @@ r2dsim <- function(n, r, c, delta = 0,
     
     K <- length(colsums)
     if (is.null(names(colsums))) 
-        names(colsums) <- paste0("group", LETTERS[seq_len(K)])
+        names(colsums) <- LETTERS[seq_len(K)]
     delta <- rep_len(delta, K - 1L)
 
     @<link2fun@>
@@ -2034,7 +2043,7 @@ B <- ncol(prob)
 if (is.null(colnames(prob))) 
     colnames(prob) <- paste0("stratum", seq_len(B))
 if (is.null(names(delta))) 
-    names(delta) <- paste0("group", LETTERS[seq_len(K)[-1]])
+    names(delta) <- LETTERS[seq_len(K)[-1]]
 p0 <- apply(prob, 2, cumsum)
 h0 <- .q(link, p0)
 if (length(alloc_ratio) == 1L) 
@@ -2083,6 +2092,24 @@ power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio,
                     sig.level = sig.level, link = link, 
                     alternative = alternative, 
                     nsim = nsim, seed = seed, tol = tol)$power - power
+@}
+
+@d power htest output
+@{
+ss <- paste(colSums(N), paste0("(", colnames(N), ")"), collapse = " + ")
+ret <- list(n = n, 
+            "Total sample size" = paste(ss, "=", sum(N)),
+            power = power, 
+            sig.level = sig.level)
+ret[[link$parm]] <- delta
+ret$note <- "'n' is sample size in control group"
+if (B > 1) ret$note <- paste(ret$note, "of first stratum")
+alias <- link$alias
+if (length(link$alias) == 2L) alias <- alias[1L + (K > 2L)]
+ret$method <- paste(ifelse(B > 1L, "Stratified", ""), 
+                    paste0(K, "-sample"), alias, 
+                    "test against", link$model, "alternatives")
+class(ret) <- "power.htest"
 @}
 
 @d power
@@ -2138,7 +2165,10 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
         qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
         power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)
     }
-    list(power = power, n = n, delta = delta, sig.level = sig.level, N = N)
+
+    @<power htest output@>
+
+    ret
 }
 @}
 

@@ -913,6 +913,8 @@ free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
         DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))
 
     stopifnot(is.factor(x))
+    if (nlevels(x) > 2L)
+        stopifnot(is.ordered(x))
     d <- data.frame(y = y, x = x, w = 1)
     if (!is.null(weights)) d$w <- weights
     if (!is.null(z)) {
@@ -957,7 +959,9 @@ ppplot <- function(x, y, plot.it = TRUE,
     plot(px, py, xlim = c(0, 1), ylim = c(0, 1), 
          xlab = xlab, ylab = ylab, type = "n", ...)
 
-    if (!is.null(conf.level)) {
+    # ROC bands
+    
+     if (!is.null(conf.level)) {
         prb <- seq_len(1000) / 1001
         res <- c(x, y)
         grp <- gl(2, 1, labels = c(xlab, ylab))
@@ -978,6 +982,8 @@ ppplot <- function(x, y, plot.it = TRUE,
         polygon(x = xn, y = yn, col = conf.args$col, border = conf.args$border)
         lines(prb, .p(f1w$link, .q(f1w$link, prb) - coef(f1w)))
     }
+    
+
     points(px, py, ...)
     return(invisible(ret)) 
 }
@@ -1005,7 +1011,7 @@ r2dsim <- function(n, r, c, delta = 0,
     
     K <- length(colsums)
     if (is.null(names(colsums))) 
-        names(colsums) <- paste0("group", LETTERS[seq_len(K)])
+        names(colsums) <- LETTERS[seq_len(K)]
     delta <- rep_len(delta, K - 1L)
 
     # link2fun
@@ -1124,7 +1130,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
     if (is.null(colnames(prob))) 
         colnames(prob) <- paste0("stratum", seq_len(B))
     if (is.null(names(delta))) 
-        names(delta) <- paste0("group", LETTERS[seq_len(K)[-1]])
+        names(delta) <- LETTERS[seq_len(K)[-1]]
     p0 <- apply(prob, 2, cumsum)
     h0 <- .q(link, p0)
     if (length(alloc_ratio) == 1L) 
@@ -1178,6 +1184,25 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
         qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
         power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)
     }
-    list(power = power, n = n, delta = delta, sig.level = sig.level, N = N)
+
+    # power htest output
+    
+    ss <- paste(colSums(N), paste0("(", colnames(N), ")"), collapse = " + ")
+    ret <- list(n = n, 
+                "Total sample size" = paste(ss, "=", sum(N)),
+                power = power, 
+                sig.level = sig.level)
+    ret[[link$parm]] <- delta
+    ret$note <- "'n' is sample size in control group"
+    if (B > 1) ret$note <- paste(ret$note, "of first stratum")
+    alias <- link$alias
+    if (length(link$alias) == 2L) alias <- alias[1L + (K > 2L)]
+    ret$method <- paste(ifelse(B > 1L, "Stratified", ""), 
+                        paste0(K, "-sample"), alias, 
+                        "test against", link$model, "alternatives")
+    class(ret) <- "power.htest"
+    
+
+    ret
 }
 
