@@ -1090,7 +1090,8 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio 
                                  nHess = nHess, ...)$power - power
              
             , interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
-    else if (is.null(power)) {
+    
+#    else if (is.null(power)) {
 
         ### if not given, assume continuous distribution
         if (is.null(prob)) prob <- rep(1 / n, n)
@@ -1129,7 +1130,11 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio 
         N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
                  matrix(c(1, strata_ratio), nrow = B, ncol = K)
         rownames(N) <- colnames(prob)
-        colnames(N) <- c("Control", names(delta))
+        ctrl <- "Control"
+        dn <- dimnames(prob)
+        if (!is.null(names(dn)[1L]))
+            ctrl <- names(dn)[1L]
+        colnames(N) <- c(ctrl, names(delta))
         
         # estimate Fisher information
         
@@ -1166,7 +1171,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio 
             qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
             power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)
         }
-    }
+#    }
     list(power = power, n = n, delta = delta, sig.level = sig.level, N = N)
 }
 

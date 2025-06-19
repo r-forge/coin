@@ -2033,7 +2033,11 @@ stopifnot(length(strata_ratio) == B - 1)
 N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
          matrix(c(1, strata_ratio), nrow = B, ncol = K)
 rownames(N) <- colnames(prob)
-colnames(N) <- c("Control", names(delta))
+ctrl <- "Control"
+dn <- dimnames(prob)
+if (!is.null(names(dn)[1L]))
+    ctrl <- names(dn)[1L]
+colnames(N) <- c(ctrl, names(delta))
 @}
 
 @d estimate Fisher information
@@ -2099,7 +2103,8 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio 
         sig.level <- uniroot(function(sig.level) 
              @<power call@>
             , interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
-    else if (is.null(power)) {
+    
+#    else if (is.null(power)) {
 
         ### if not given, assume continuous distribution
         if (is.null(prob)) prob <- rep(1 / n, n)
@@ -2122,7 +2127,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio 
             qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
             power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)
         }
-    }
+#    }
     list(power = power, n = n, delta = delta, sig.level = sig.level, N = N)
 }
 @}
@@ -2158,7 +2163,7 @@ power.free1way.test(n = N, delta = delta, norm = FALSE)
 @@
 
 <<kruskal>>=
-delta <- c(log(2), log(3))
+delta <- c("B" = log(2), "C" = log(3))
 N <- 15
 w <- gl(3, N)
 pw <- numeric(1000)
@@ -2171,10 +2176,14 @@ mean(pw < .05)
 power.free1way.test(n = N, delta = delta)
 @@
 
+Sample from $4 \times 3$ tables with odds ratios $2$ and $3$
+
 <<table, fig = TRUE>>=
-x <- r2dsim(1000, r = rep(1, 4), c = table(w), delta = delta)
+prb <- rep(1, 4)
+x <- r2dsim(1000, r = prb, c = table(w), delta = delta)
 pw <- numeric(length(x))
 cf <- matrix(0, nrow = length(x), ncol = length(delta))
+colnames(cf) <- names(delta)
 for (i in seq_along(x)) {
     ft <- free1way.test(x[[i]])
     cf[i,] <- coef(ft)
@@ -2186,16 +2195,26 @@ points(c(1:2), delta, pch = 19, col = "red")
 power.free1way.test(n = N, prob = rep(1, 4), delta = delta)
 @@
 
+Sample from $4 \times 3$ tables with odds ratios $2$ and $3$ for three
+strata with different control distributions
+
 <<stable, fig = TRUE>>=
-x1 <- r2dsim(1000, r = rep(1, 4), c = table(w), delta = delta)
-x2 <- r2dsim(1000, r = c(1, 2, 1, 2), c = table(w), delta = delta)
-x3 <- r2dsim(1000, r = 1:4, c = table(w), delta = delta)
+prb <- cbind(S1 = rep(1, 4), 
+             S2 = c(1, 2, 1, 2), 
+             S3 = 1:4)
+dimnames(prb) <- list(Ctrl = paste0("i", seq_len(nrow(prb))),
+                      Strata = colnames(prb))
+
+x1 <- r2dsim(1000, r = prb[, "S1"], c = table(w), delta = delta)
+x2 <- r2dsim(1000, r = prb[, "S2"], c = table(w), delta = delta)
+x3 <- r2dsim(1000, r = prb[, "S3"], c = table(w), delta = delta)
 stab <- function(...) {
     args <- list(...)
     as.table(array(unlist(args), dim = c(dim(args[[1]]), length(args))))
 }
 pw <- numeric(length(x1))
 cf <- matrix(0, nrow = length(x1), ncol = length(delta))
+colnames(cf) <- names(delta)
 for (i in seq_along(x)) {
     ft <- free1way.test(stab(x1[[i]], x2[[i]], x3[[i]]))
     cf[i,] <- coef(ft)
@@ -2204,7 +2223,11 @@ for (i in seq_along(x)) {
 mean(pw < .05)
 boxplot(cf)
 points(c(1:2), delta, pch = 19, col = "red")
-power.free1way.test(n = N, prob = cbind(rep(1, 4), c(1, 2, 1, 2), 1:4), delta = delta)
+
+power.free1way.test(n = N, prob = prb, delta = delta)
+
+power.free1way.test(power = .8, prob = prb, delta = delta)
+
 @@
 
 \chapter*{Index}
