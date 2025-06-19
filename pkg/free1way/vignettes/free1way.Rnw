@@ -3705,12 +3705,15 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
+Make sure power function is non-stochastic
+
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
 \NWtarget{nuweb57}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {57}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
+\mbox{}\verb@assign(".Random.seed", R.seed, envir = .GlobalEnv)@\\
 \mbox{}\verb@power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, @\\
 \mbox{}\verb@                    strata_ratio = strata_ratio, delta = delta, @\\
 \mbox{}\verb@                    sig.level = sig.level, link = link, @\\
@@ -3747,24 +3750,28 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \mbox{}\verb@    stats:::assert_NULL_or_prob(sig.level)@\\
 \mbox{}\verb@    stats:::assert_NULL_or_prob(power)@\\
 \mbox{}\verb@@\\
+\mbox{}\verb@    if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) @\\
+\mbox{}\verb@        runif(1)@\\
+\mbox{}\verb@    R.seed <- get(".Random.seed", envir = .GlobalEnv)@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    tol <- sqrt(.Machine$double.eps)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (is.null(n)) @\\
-\mbox{}\verb@        n <- ceiling(uniroot(function(n)@\\
-\mbox{}\verb@             @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57}{57}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@             , interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)@\\
+\mbox{}\verb@        n <- ceiling(uniroot(function(n) {@\\
+\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57}{57}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@             }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)@\\
 \mbox{}\verb@    else if (is.null(delta)) {@\\
 \mbox{}\verb@        ### 2-sample only@\\
 \mbox{}\verb@        stopifnot(length(alloc_ratio) == 1L)@\\
-\mbox{}\verb@        delta <- uniroot(function(delta) @\\
-\mbox{}\verb@             @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57}{57}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@        delta <- uniroot(function(delta) {@\\
+\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57}{57}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    ### <TH> interval depending on alternative, symmetry? </TH>@\\
-\mbox{}\verb@            , interval = c(0, 10), tol = tol, extendInt = "upX")$root@\\
+\mbox{}\verb@            }, interval = c(0, 10), tol = tol, extendInt = "upX")$root@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    else if (is.null(sig.level)) @\\
-\mbox{}\verb@        sig.level <- uniroot(function(sig.level) @\\
-\mbox{}\verb@             @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57}{57}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@            , interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root@\\
+\mbox{}\verb@        sig.level <- uniroot(function(sig.level) {@\\
+\mbox{}\verb@                @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57}{57}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@            }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root@\\
 \mbox{}\verb@    @\\
 \mbox{}\verb@#    else if (is.null(power)) {@\\
 \mbox{}\verb@@\\
@@ -3895,10 +3902,12 @@ mean(pw < .05)
 boxplot(cf)
 points(c(1:2), delta, pch = 19, col = "red")
 
+set.seed(3)
 power.free1way.test(n = N, prob = prb, delta = delta)
-
+set.seed(3)
 power.free1way.test(power = .8, prob = prb, delta = delta)
-
+set.seed(3)
+power.free1way.test(n = 19, prob = prb, delta = delta)
 @
 
 \chapter*{Index}

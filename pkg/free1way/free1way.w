@@ -2060,8 +2060,11 @@ for (i in 1:nHess) {
 he <- he / nHess
 @}
 
+Make sure power function is non-stochastic
+
 @d power call
 @{
+assign(".Random.seed", R.seed, envir = .GlobalEnv)
 power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
                     strata_ratio = strata_ratio, delta = delta, 
                     sig.level = sig.level, link = link, 
@@ -2085,24 +2088,28 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio 
     stats:::assert_NULL_or_prob(sig.level)
     stats:::assert_NULL_or_prob(power)
 
+    if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) 
+        runif(1)
+    R.seed <- get(".Random.seed", envir = .GlobalEnv)
+
     tol <- sqrt(.Machine$double.eps)
 
     if (is.null(n)) 
-        n <- ceiling(uniroot(function(n)
-             @<power call@>
-             , interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
+        n <- ceiling(uniroot(function(n) {
+                 @<power call@>
+             }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
     else if (is.null(delta)) {
         ### 2-sample only
         stopifnot(length(alloc_ratio) == 1L)
-        delta <- uniroot(function(delta) 
-             @<power call@>
+        delta <- uniroot(function(delta) {
+                 @<power call@>
     ### <TH> interval depending on alternative, symmetry? </TH>
-            , interval = c(0, 10), tol = tol, extendInt = "upX")$root
+            }, interval = c(0, 10), tol = tol, extendInt = "upX")$root
         }
     else if (is.null(sig.level)) 
-        sig.level <- uniroot(function(sig.level) 
-             @<power call@>
-            , interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
+        sig.level <- uniroot(function(sig.level) {
+                @<power call@>
+            }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
     
 #    else if (is.null(power)) {
 
@@ -2224,10 +2231,12 @@ mean(pw < .05)
 boxplot(cf)
 points(c(1:2), delta, pch = 19, col = "red")
 
+set.seed(3)
 power.free1way.test(n = N, prob = prb, delta = delta)
-
+set.seed(3)
 power.free1way.test(power = .8, prob = prb, delta = delta)
-
+set.seed(3)
+power.free1way.test(n = 19, prob = prb, delta = delta)
 @@
 
 \chapter*{Index}
