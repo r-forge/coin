@@ -4,7 +4,7 @@ useDynLib(free1way, .registration = TRUE)
 importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
            "quantile", "uniroot","r2dtable", "pnorm", "dnorm", 
            "pchisq", "qchisq", "coef", "confint", "model.matrix", "printCoefmat",
-             "splinefun", "vcov",
+             "splinefun", "vcov", "runif",
            "ecdf", "na.pass", "terms", "model.weights", "xtabs", "rmultinom")
 importFrom("graphics", "lines", "points", "polygon")
 
