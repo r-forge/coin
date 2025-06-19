@@ -2005,6 +2005,20 @@ r2dsim <- function(n, r, c, delta = 0,
 }
 @}
 
+@d random seed
+@{
+if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) 
+    runif(1)
+if (is.null(seed)) 
+    seed <- RNGstate <- get(".Random.seed", envir = .GlobalEnv)
+else {
+    R.seed <- get(".Random.seed", envir = .GlobalEnv)
+    set.seed(seed)
+    RNGstate <- structure(seed, kind = as.list(RNGkind()))
+    on.exit(assign(".Random.seed", R.seed, envir = .GlobalEnv))
+}
+@}
+
 @d power setup
 @{
 
@@ -2043,7 +2057,7 @@ colnames(N) <- c(ctrl, names(delta))
 @d estimate Fisher information
 @{
 he <- 0
-for (i in 1:nHess) {
+for (i in seq_len(nsim)) {
     parm <- delta
     x <- as.table(array(0, dim = c(C, K, B)))
     for (b in seq_len(B)) {
@@ -2057,29 +2071,28 @@ for (i in 1:nHess) {
     he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian
 }
 ### estimate expected Fisher information
-he <- he / nHess
+he <- he / nsim
 @}
 
 Make sure power function is non-stochastic
 
 @d power call
 @{
-assign(".Random.seed", R.seed, envir = .GlobalEnv)
 power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
                     strata_ratio = strata_ratio, delta = delta, 
                     sig.level = sig.level, link = link, 
                     alternative = alternative, 
-                    nHess = nHess, ...)$power - power
+                    nsim = nsim, seed = seed, tol = tol)$power - power
 @}
 
 @d power
 @{
-power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio = 1, 
-                                strata_ratio = 1, delta = NULL, sig.level = .05, 
-                                power = NULL,
+power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n), 
+                                alloc_ratio = 1, strata_ratio = 1, 
+                                delta = NULL, sig.level = .05, power = NULL,
                                 link = c("logit", "probit", "cloglog", "loglog"),
                                 alternative = c("two.sided", "less", "greater"), 
-                                nHess = 100, norm = TRUE,...) 
+                                nsim = 100, seed = NULL, tol = .Machine$double.eps^0.25) 
 {
 
     if (sum(vapply(list(n, delta, power, sig.level), is.null, 
@@ -2088,11 +2101,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio 
     stats:::assert_NULL_or_prob(sig.level)
     stats:::assert_NULL_or_prob(power)
 
-    if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) 
-        runif(1)
-    R.seed <- get(".Random.seed", envir = .GlobalEnv)
-
-    tol <- sqrt(.Machine$double.eps)
+    @<random seed@>
 
     if (is.null(n)) 
         n <- ceiling(uniroot(function(n) {
@@ -2100,7 +2109,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio 
              }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
     else if (is.null(delta)) {
         ### 2-sample only
-        stopifnot(length(alloc_ratio) == 1L)
+        stopifnot(K == 2L)
         delta <- uniroot(function(delta) {
                  @<power call@>
     ### <TH> interval depending on alternative, symmetry? </TH>
@@ -2111,30 +2120,24 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio 
                 @<power call@>
             }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
     
-#    else if (is.null(power)) {
+    @<power setup@>
+    @<estimate Fisher information@>
 
-        ### if not given, assume continuous distribution
-        if (is.null(prob)) prob <- rep(1 / n, n)
-
-        @<power setup@>
-        @<estimate Fisher information@>
-
-        alternative <- match.arg(alternative)
-        if ((length(delta) == 1L) && norm) {
-            se <- 1 / sqrt(c(he))
-            power  <- switch(alternative, 
-                "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + 
-                              pnorm(qnorm(sig.level / 2) - delta / se),
-                "less" = pnorm(qnorm(sig.level) - delta / se),
-                "greater" = pnorm(qnorm(sig.level) + delta / se)
-            )
-        } else {
-            stopifnot(alternative == "two.sided")
-            ncp <- sum((chol(he) %*% delta)^2)
-            qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
-            power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)
-        }
-#    }
+    alternative <- match.arg(alternative)
+    if (K == 2L) {
+        se <- 1 / sqrt(c(he))
+        power  <- switch(alternative, 
+            "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + 
+                          pnorm(qnorm(sig.level / 2) - delta / se),
+            "less" = pnorm(qnorm(sig.level) - delta / se),
+            "greater" = pnorm(qnorm(sig.level) + delta / se)
+        )
+    } else {
+        stopifnot(alternative == "two.sided")
+        ncp <- sum((chol(he) %*% delta)^2)
+        qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
+        power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)
+    }
     list(power = power, n = n, delta = delta, sig.level = sig.level, N = N)
 }
 @}
@@ -2163,10 +2166,7 @@ for (i in seq_along(pw)) {
 }
 mean(pw < .05)
 
-set.seed(29)
 power.free1way.test(n = N, delta = delta)
-set.seed(29)
-power.free1way.test(n = N, delta = delta, norm = FALSE)
 @@
 
 <<kruskal>>=
@@ -2231,12 +2231,9 @@ mean(pw < .05)
 boxplot(cf)
 points(c(1:2), delta, pch = 19, col = "red")
 
-set.seed(3)
-power.free1way.test(n = N, prob = prb, delta = delta)
-set.seed(3)
-power.free1way.test(power = .8, prob = prb, delta = delta)
-set.seed(3)
-power.free1way.test(n = 19, prob = prb, delta = delta)
+power.free1way.test(n = N, prob = prb, delta = delta, seed = 3)
+power.free1way.test(power = .8, prob = prb, delta = delta, seed = 3)
+power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 @@
 
 \chapter*{Index}

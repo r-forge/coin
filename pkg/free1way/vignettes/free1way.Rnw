@@ -2957,7 +2957,7 @@ Distribution-free
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb36}{36}\NWlink{nuweb55}{, 55}\NWlink{nuweb56a}{, 56a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb36}{36}\NWlink{nuweb55}{, 55}\NWlink{nuweb56b}{, 56b}.
 
 \item{}
 \end{list}
@@ -3626,7 +3626,34 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
-\NWtarget{nuweb56a}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {56a}}$\,\rangle\equiv$
+\NWtarget{nuweb56a}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {56a}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) @\\
+\mbox{}\verb@    runif(1)@\\
+\mbox{}\verb@if (is.null(seed)) @\\
+\mbox{}\verb@    seed <- RNGstate <- get(".Random.seed", envir = .GlobalEnv)@\\
+\mbox{}\verb@else {@\\
+\mbox{}\verb@    R.seed <- get(".Random.seed", envir = .GlobalEnv)@\\
+\mbox{}\verb@    set.seed(seed)@\\
+\mbox{}\verb@    RNGstate <- structure(seed, kind = as.list(RNGkind()))@\\
+\mbox{}\verb@    on.exit(assign(".Random.seed", R.seed, envir = .GlobalEnv))@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb58}{58}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
+\NWtarget{nuweb56b}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {56b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3673,13 +3700,13 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
-\NWtarget{nuweb56b}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {56b}}$\,\rangle\equiv$
+\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
+\NWtarget{nuweb57a}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {57a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@he <- 0@\\
-\mbox{}\verb@for (i in 1:nHess) {@\\
+\mbox{}\verb@for (i in seq_len(nsim)) {@\\
 \mbox{}\verb@    parm <- delta@\\
 \mbox{}\verb@    x <- as.table(array(0, dim = c(C, K, B)))@\\
 \mbox{}\verb@    for (b in seq_len(B)) {@\\
@@ -3693,7 +3720,7 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \mbox{}\verb@    he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@### estimate expected Fisher information@\\
-\mbox{}\verb@he <- he / nHess@\\
+\mbox{}\verb@he <- he / nsim@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -3708,17 +3735,16 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 Make sure power function is non-stochastic
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
-\NWtarget{nuweb57}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {57}}$\,\rangle\equiv$
+\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
+\NWtarget{nuweb57b}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {57b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@assign(".Random.seed", R.seed, envir = .GlobalEnv)@\\
 \mbox{}\verb@power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, @\\
 \mbox{}\verb@                    strata_ratio = strata_ratio, delta = delta, @\\
 \mbox{}\verb@                    sig.level = sig.level, link = link, @\\
 \mbox{}\verb@                    alternative = alternative, @\\
-\mbox{}\verb@                    nHess = nHess, ...)$power - power@\\
+\mbox{}\verb@                    nsim = nsim, seed = seed, tol = tol)$power - power@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -3731,17 +3757,17 @@ Make sure power function is non-stochastic
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
 \NWtarget{nuweb58}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {58}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio = 1, @\\
-\mbox{}\verb@                                strata_ratio = 1, delta = NULL, sig.level = .05, @\\
-\mbox{}\verb@                                power = NULL,@\\
+\mbox{}\verb@power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n), @\\
+\mbox{}\verb@                                alloc_ratio = 1, strata_ratio = 1, @\\
+\mbox{}\verb@                                delta = NULL, sig.level = .05, power = NULL,@\\
 \mbox{}\verb@                                link = c("logit", "probit", "cloglog", "loglog"),@\\
 \mbox{}\verb@                                alternative = c("two.sided", "less", "greater"), @\\
-\mbox{}\verb@                                nHess = 100, norm = TRUE,...) @\\
+\mbox{}\verb@                                nsim = 100, seed = NULL, tol = .Machine$double.eps^0.25) @\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (sum(vapply(list(n, delta, power, sig.level), is.null, @\\
@@ -3750,53 +3776,43 @@ Make sure power function is non-stochastic
 \mbox{}\verb@    stats:::assert_NULL_or_prob(sig.level)@\\
 \mbox{}\verb@    stats:::assert_NULL_or_prob(power)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) @\\
-\mbox{}\verb@        runif(1)@\\
-\mbox{}\verb@    R.seed <- get(".Random.seed", envir = .GlobalEnv)@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@    tol <- sqrt(.Machine$double.eps)@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape random seed}\nobreak\ {\footnotesize \NWlink{nuweb56a}{56a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (is.null(n)) @\\
 \mbox{}\verb@        n <- ceiling(uniroot(function(n) {@\\
-\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57}{57}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57b}{57b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@             }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)@\\
 \mbox{}\verb@    else if (is.null(delta)) {@\\
 \mbox{}\verb@        ### 2-sample only@\\
-\mbox{}\verb@        stopifnot(length(alloc_ratio) == 1L)@\\
+\mbox{}\verb@        stopifnot(K == 2L)@\\
 \mbox{}\verb@        delta <- uniroot(function(delta) {@\\
-\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57}{57}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57b}{57b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    ### <TH> interval depending on alternative, symmetry? </TH>@\\
 \mbox{}\verb@            }, interval = c(0, 10), tol = tol, extendInt = "upX")$root@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    else if (is.null(sig.level)) @\\
 \mbox{}\verb@        sig.level <- uniroot(function(sig.level) {@\\
-\mbox{}\verb@                @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57}{57}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57b}{57b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@            }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root@\\
 \mbox{}\verb@    @\\
-\mbox{}\verb@#    else if (is.null(power)) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb57a}{57a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@        ### if not given, assume continuous distribution@\\
-\mbox{}\verb@        if (is.null(prob)) prob <- rep(1 / n, n)@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb56a}{56a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@        alternative <- match.arg(alternative)@\\
-\mbox{}\verb@        if ((length(delta) == 1L) && norm) {@\\
-\mbox{}\verb@            se <- 1 / sqrt(c(he))@\\
-\mbox{}\verb@            power  <- switch(alternative, @\\
-\mbox{}\verb@                "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + @\\
-\mbox{}\verb@                              pnorm(qnorm(sig.level / 2) - delta / se),@\\
-\mbox{}\verb@                "less" = pnorm(qnorm(sig.level) - delta / se),@\\
-\mbox{}\verb@                "greater" = pnorm(qnorm(sig.level) + delta / se)@\\
-\mbox{}\verb@            )@\\
-\mbox{}\verb@        } else {@\\
-\mbox{}\verb@            stopifnot(alternative == "two.sided")@\\
-\mbox{}\verb@            ncp <- sum((chol(he) %*% delta)^2)@\\
-\mbox{}\verb@            qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)@\\
-\mbox{}\verb@            power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)@\\
-\mbox{}\verb@        }@\\
-\mbox{}\verb@#    }@\\
+\mbox{}\verb@    alternative <- match.arg(alternative)@\\
+\mbox{}\verb@    if (K == 2L) {@\\
+\mbox{}\verb@        se <- 1 / sqrt(c(he))@\\
+\mbox{}\verb@        power  <- switch(alternative, @\\
+\mbox{}\verb@            "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + @\\
+\mbox{}\verb@                          pnorm(qnorm(sig.level / 2) - delta / se),@\\
+\mbox{}\verb@            "less" = pnorm(qnorm(sig.level) - delta / se),@\\
+\mbox{}\verb@            "greater" = pnorm(qnorm(sig.level) + delta / se)@\\
+\mbox{}\verb@        )@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        stopifnot(alternative == "two.sided")@\\
+\mbox{}\verb@        ncp <- sum((chol(he) %*% delta)^2)@\\
+\mbox{}\verb@        qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)@\\
+\mbox{}\verb@        power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)@\\
+\mbox{}\verb@    }@\\
 \mbox{}\verb@    list(power = power, n = n, delta = delta, sig.level = sig.level, N = N)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -3834,10 +3850,7 @@ for (i in seq_along(pw)) {
 }
 mean(pw < .05)
 
-set.seed(29)
 power.free1way.test(n = N, delta = delta)
-set.seed(29)
-power.free1way.test(n = N, delta = delta, norm = FALSE)
 @
 
 <<kruskal>>=
@@ -3902,12 +3915,9 @@ mean(pw < .05)
 boxplot(cf)
 points(c(1:2), delta, pch = 19, col = "red")
 
-set.seed(3)
-power.free1way.test(n = N, prob = prb, delta = delta)
-set.seed(3)
-power.free1way.test(power = .8, prob = prb, delta = delta)
-set.seed(3)
-power.free1way.test(n = 19, prob = prb, delta = delta)
+power.free1way.test(n = N, prob = prb, delta = delta, seed = 3)
+power.free1way.test(power = .8, prob = prb, delta = delta, seed = 3)
+power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 @
 
 \chapter*{Index}
@@ -3934,7 +3944,7 @@ power.free1way.test(n = 19, prob = prb, delta = delta)
 }
 \item $\langle\,$d vec\nobreak\ {\footnotesize \NWlink{nuweb12b}{12b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14a}{14a}.}
 \item $\langle\,$delta vec\nobreak\ {\footnotesize \NWlink{nuweb13b}{13b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14a}{14a}.}
-\item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
+\item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb57a}{57a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
 \item $\langle\,$free1way\nobreak\ {\footnotesize \NWlink{nuweb36}{36}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
 \item $\langle\,$free1way confint\nobreak\ {\footnotesize \NWlink{nuweb39}{39}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
 \item $\langle\,$free1way factor\nobreak\ {\footnotesize \NWlink{nuweb43b}{43b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
@@ -3944,7 +3954,7 @@ power.free1way.test(n = 19, prob = prb, delta = delta)
 \item $\langle\,$free1way summary\nobreak\ {\footnotesize \NWlink{nuweb38}{38}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
 \item $\langle\,$Hessian\nobreak\ {\footnotesize \NWlink{nuweb6b}{6b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27}{27}.}
 \item $\langle\,$Hessian prep\nobreak\ {\footnotesize \NWlink{nuweb5a}{5a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb6b}{6b}.}
-\item $\langle\,$link2fun\nobreak\ {\footnotesize \NWlink{nuweb35}{35}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb36}{36}\NWlink{nuweb55}{, 55}\NWlink{nuweb56a}{, 56a}.
+\item $\langle\,$link2fun\nobreak\ {\footnotesize \NWlink{nuweb35}{35}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb36}{36}\NWlink{nuweb55}{, 55}\NWlink{nuweb56b}{, 56b}.
 }
 \item $\langle\,$linkfun\nobreak\ {\footnotesize \NWlink{nuweb19}{19}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb18}{18}.}
 \item $\langle\,$logit\nobreak\ {\footnotesize \NWlink{nuweb20}{20}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb18}{18}.}
@@ -3963,13 +3973,14 @@ power.free1way.test(n = 19, prob = prb, delta = delta)
 \item $\langle\,$Permutation\nobreak\ {\footnotesize \NWlink{nuweb31b}{31b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb30a}{30a}.}
 \item $\langle\,$post processing\nobreak\ {\footnotesize \NWlink{nuweb26}{26}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27}{27}.}
 \item $\langle\,$power\nobreak\ {\footnotesize \NWlink{nuweb58}{58}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
-\item $\langle\,$power call\nobreak\ {\footnotesize \NWlink{nuweb57}{57}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
-\item $\langle\,$power setup\nobreak\ {\footnotesize \NWlink{nuweb56a}{56a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
+\item $\langle\,$power call\nobreak\ {\footnotesize \NWlink{nuweb57b}{57b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
+\item $\langle\,$power setup\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
 \item $\langle\,$ppplot\nobreak\ {\footnotesize \NWlink{nuweb52}{52}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
 \item $\langle\,$probit\nobreak\ {\footnotesize \NWlink{nuweb23}{23}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb18}{18}.}
 \item $\langle\,$profile\nobreak\ {\footnotesize \NWlink{nuweb25a}{25a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27}{27}.}
 \item $\langle\,$R wcrossprod\nobreak\ {\footnotesize \NWlink{nuweb17}{17}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
 \item $\langle\,$r2dsim\nobreak\ {\footnotesize \NWlink{nuweb55}{55}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
+\item $\langle\,$random seed\nobreak\ {\footnotesize \NWlink{nuweb56a}{56a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
 \item $\langle\,$Rao\nobreak\ {\footnotesize \NWlink{nuweb31a}{31a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb30a}{30a}.}
 \item $\langle\,$resampling\nobreak\ {\footnotesize \NWlink{nuweb33}{33}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb36}{36}.}
 \item $\langle\,$setup\nobreak\ {\footnotesize \NWlink{nuweb24b}{24b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27}{27}.}

@@ -1037,12 +1037,12 @@ r2dsim <- function(n, r, c, delta = 0,
 
 # power
 
-power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio = 1, 
-                                strata_ratio = 1, delta = NULL, sig.level = .05, 
-                                power = NULL,
+power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n), 
+                                alloc_ratio = 1, strata_ratio = 1, 
+                                delta = NULL, sig.level = .05, power = NULL,
                                 link = c("logit", "probit", "cloglog", "loglog"),
                                 alternative = c("two.sided", "less", "greater"), 
-                                nHess = 100, norm = TRUE,...) 
+                                nsim = 100, seed = NULL, tol = .Machine$double.eps^0.25) 
 {
 
     if (sum(vapply(list(n, delta, power, sig.level), is.null, 
@@ -1051,36 +1051,42 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio 
     stats:::assert_NULL_or_prob(sig.level)
     stats:::assert_NULL_or_prob(power)
 
+    # random seed
+    
     if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) 
         runif(1)
-    R.seed <- get(".Random.seed", envir = .GlobalEnv)
-
-    tol <- sqrt(.Machine$double.eps)
+    if (is.null(seed)) 
+        seed <- RNGstate <- get(".Random.seed", envir = .GlobalEnv)
+    else {
+        R.seed <- get(".Random.seed", envir = .GlobalEnv)
+        set.seed(seed)
+        RNGstate <- structure(seed, kind = as.list(RNGkind()))
+        on.exit(assign(".Random.seed", R.seed, envir = .GlobalEnv))
+    }
+    
 
     if (is.null(n)) 
         n <- ceiling(uniroot(function(n) {
                  # power call
                  
-                 assign(".Random.seed", R.seed, envir = .GlobalEnv)
                  power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
                                      strata_ratio = strata_ratio, delta = delta, 
                                      sig.level = sig.level, link = link, 
                                      alternative = alternative, 
-                                     nHess = nHess, ...)$power - power
+                                     nsim = nsim, seed = seed, tol = tol)$power - power
                  
              }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
     else if (is.null(delta)) {
         ### 2-sample only
-        stopifnot(length(alloc_ratio) == 1L)
+        stopifnot(K == 2L)
         delta <- uniroot(function(delta) {
                  # power call
                  
-                 assign(".Random.seed", R.seed, envir = .GlobalEnv)
                  power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
                                      strata_ratio = strata_ratio, delta = delta, 
                                      sig.level = sig.level, link = link, 
                                      alternative = alternative, 
-                                     nHess = nHess, ...)$power - power
+                                     nsim = nsim, seed = seed, tol = tol)$power - power
                  
     ### <TH> interval depending on alternative, symmetry? </TH>
             }, interval = c(0, 10), tol = tol, extendInt = "upX")$root
@@ -1089,96 +1095,89 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio 
         sig.level <- uniroot(function(sig.level) {
                 # power call
                 
-                assign(".Random.seed", R.seed, envir = .GlobalEnv)
                 power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
                                     strata_ratio = strata_ratio, delta = delta, 
                                     sig.level = sig.level, link = link, 
                                     alternative = alternative, 
-                                    nHess = nHess, ...)$power - power
+                                    nsim = nsim, seed = seed, tol = tol)$power - power
                 
             }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
     
-#    else if (is.null(power)) {
+    # power setup
+    
 
-        ### if not given, assume continuous distribution
-        if (is.null(prob)) prob <- rep(1 / n, n)
+    # link2fun
 
-        # power setup
-        
+    if (!inherits(link, "linkfun")) {
+        link <- match.arg(link)
+        link <- do.call(link, list())
+    }
+    
 
-        # link2fun
-
-        if (!inherits(link, "linkfun")) {
-            link <- match.arg(link)
-            link <- do.call(link, list())
+    ### matrix means control distributions in different strata
+    if (!is.matrix(prob))
+        prob <- matrix(prob, nrow = NROW(prob))
+    prob <- prop.table(prob, margin = 2L)
+    C <- nrow(prob)
+    K <- length(delta) + 1L
+    B <- ncol(prob)
+    if (is.null(colnames(prob))) 
+        colnames(prob) <- paste0("stratum", seq_len(B))
+    if (is.null(names(delta))) 
+        names(delta) <- paste0("group", LETTERS[seq_len(K)[-1]])
+    p0 <- apply(prob, 2, cumsum)
+    h0 <- .q(link, p0)
+    if (length(alloc_ratio) == 1L) 
+        alloc_ratio <- rep_len(alloc_ratio, K - 1)
+    stopifnot(length(alloc_ratio) == K - 1)
+    if (length(strata_ratio) == 1L) 
+        strata_ratio <- rep_len(strata_ratio, B - 1)
+    stopifnot(length(strata_ratio) == B - 1)
+    ### sample size per group (columns) and stratum (rows)
+    N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
+             matrix(c(1, strata_ratio), nrow = B, ncol = K)
+    rownames(N) <- colnames(prob)
+    ctrl <- "Control"
+    dn <- dimnames(prob)
+    if (!is.null(names(dn)[1L]))
+        ctrl <- names(dn)[1L]
+    colnames(N) <- c(ctrl, names(delta))
+    
+    # estimate Fisher information
+    
+    he <- 0
+    for (i in seq_len(nsim)) {
+        parm <- delta
+        x <- as.table(array(0, dim = c(C, K, B)))
+        for (b in seq_len(B)) {
+            x[,,b] <- r2dsim(1L, r = prob[, b], c = N[b,], delta = delta, link = link)[[1L]]
+            rs <- rowSums(x[,,b]) > 0
+            h <- h0[rs, b]
+            theta <- c(h[1], diff(h[-length(h)]))
+            parm <- c(parm, theta)
         }
-        
+        ### evaluate observed hessian for true parameters parm and x data
+        he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian
+    }
+    ### estimate expected Fisher information
+    he <- he / nsim
+    
 
-        ### matrix means control distributions in different strata
-        if (!is.matrix(prob))
-            prob <- matrix(prob, nrow = NROW(prob))
-        prob <- prop.table(prob, margin = 2L)
-        C <- nrow(prob)
-        K <- length(delta) + 1L
-        B <- ncol(prob)
-        if (is.null(colnames(prob))) 
-            colnames(prob) <- paste0("stratum", seq_len(B))
-        if (is.null(names(delta))) 
-            names(delta) <- paste0("group", LETTERS[seq_len(K)[-1]])
-        p0 <- apply(prob, 2, cumsum)
-        h0 <- .q(link, p0)
-        if (length(alloc_ratio) == 1L) 
-            alloc_ratio <- rep_len(alloc_ratio, K - 1)
-        stopifnot(length(alloc_ratio) == K - 1)
-        if (length(strata_ratio) == 1L) 
-            strata_ratio <- rep_len(strata_ratio, B - 1)
-        stopifnot(length(strata_ratio) == B - 1)
-        ### sample size per group (columns) and stratum (rows)
-        N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
-                 matrix(c(1, strata_ratio), nrow = B, ncol = K)
-        rownames(N) <- colnames(prob)
-        ctrl <- "Control"
-        dn <- dimnames(prob)
-        if (!is.null(names(dn)[1L]))
-            ctrl <- names(dn)[1L]
-        colnames(N) <- c(ctrl, names(delta))
-        
-        # estimate Fisher information
-        
-        he <- 0
-        for (i in 1:nHess) {
-            parm <- delta
-            x <- as.table(array(0, dim = c(C, K, B)))
-            for (b in seq_len(B)) {
-                x[,,b] <- r2dsim(1L, r = prob[, b], c = N[b,], delta = delta, link = link)[[1L]]
-                rs <- rowSums(x[,,b]) > 0
-                h <- h0[rs, b]
-                theta <- c(h[1], diff(h[-length(h)]))
-                parm <- c(parm, theta)
-            }
-            ### evaluate observed hessian for true parameters parm and x data
-            he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian
-        }
-        ### estimate expected Fisher information
-        he <- he / nHess
-        
-
-        alternative <- match.arg(alternative)
-        if ((length(delta) == 1L) && norm) {
-            se <- 1 / sqrt(c(he))
-            power  <- switch(alternative, 
-                "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + 
-                              pnorm(qnorm(sig.level / 2) - delta / se),
-                "less" = pnorm(qnorm(sig.level) - delta / se),
-                "greater" = pnorm(qnorm(sig.level) + delta / se)
-            )
-        } else {
-            stopifnot(alternative == "two.sided")
-            ncp <- sum((chol(he) %*% delta)^2)
-            qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
-            power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)
-        }
-#    }
+    alternative <- match.arg(alternative)
+    if (K == 2L) {
+        se <- 1 / sqrt(c(he))
+        power  <- switch(alternative, 
+            "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + 
+                          pnorm(qnorm(sig.level / 2) - delta / se),
+            "less" = pnorm(qnorm(sig.level) - delta / se),
+            "greater" = pnorm(qnorm(sig.level) + delta / se)
+        )
+    } else {
+        stopifnot(alternative == "two.sided")
+        ncp <- sum((chol(he) %*% delta)^2)
+        qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
+        power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)
+    }
     list(power = power, n = n, delta = delta, sig.level = sig.level, N = N)
 }
 
