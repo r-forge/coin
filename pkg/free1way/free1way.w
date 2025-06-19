@@ -1092,6 +1092,7 @@ probit <- function()
 @<free1way numeric@>
 @<free1way factor@>
 @<ppplot@>
+@<r2dsim@>
 @<power@>
 @}
 
@@ -1452,6 +1453,14 @@ kruskal_test(u ~ w, distribution = approximate(100000))
 
 Distribution-free
 
+@d link2fun
+@{
+if (!inherits(link, "linkfun")) {
+    link <- match.arg(link)
+    link <- do.call(link, list())
+}
+@}
+
 @d free1way
 @{
 free1way.test <- function(y, ...)
@@ -1470,10 +1479,7 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
             DNAME <- paste(DNAME, "\n\t stratified by", names(dn)[3])
     }
 
-    if (!inherits(link, "linkfun")) {
-        link <- match.arg(link)
-        link <- do.call(link, list())
-    }
+    @<link2fun@>
 
     ret <- .free1wayML(y, link = link, mu = mu, ...)
     ret$link <- link
@@ -1546,8 +1552,7 @@ print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"),
         null.value = x$mu, alternative = alternative, method = x$method, 
         data.name = x$data.name)
     class(RVAL) <- "htest"
-    print(RVAL)
-    invisible(RVAL)
+    RVAL
 
 }
 summary.free1way <- function(object, alternative = c("two.sided", "less", "greater"), ...)
@@ -1952,13 +1957,63 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 
 \chapter{Power and Sample Size}
 
+@d r2dsim
+@{
+r2dsim <- function(n, r, c, delta = 0,
+                   link = c("logit", "probit", "cloglog", "loglog")) 
+{
+
+    if (length(n <- as.integer(n)) == 0L || (n < 0) || is.na(n)) 
+        stop("invalid argument 'n'")
+    colsums <- c
+    if (length(colsums[] <- as.integer(c)) <= 1L || 
+        any(colsums < 0) || anyNA(colsums)) 
+        stop("invalid argument 'c'")
+
+    prob <- r
+    if (length(prob[] <- as.double(r / sum(r))) <= 1L || 
+        any(prob < 0) || anyNA(prob)) 
+        stop("invalid argument 'r'")
+
+    if (is.null(names(prob))) 
+        names(prob) <- paste0("i", seq_along(prob))
+    
+    K <- length(colsums)
+    if (is.null(names(colsums))) 
+        names(colsums) <- paste0("group", LETTERS[seq_len(K)])
+    delta <- rep_len(delta, K - 1L)
+
+    @<link2fun@>
+
+    p0 <- cumsum(prob)
+    h0 <- .q(link, p0)
+
+    h1 <- h0 - matrix(delta, nrow = length(prob), ncol = K - 1, byrow = TRUE)
+    p1 <- .p(link, h1)
+    p <- cbind(p0, p1)
+    ret <- vector(mode = "list", length = n)
+
+    for (i in seq_len(n)) {
+        tab <- sapply(seq_len(K), function(k) 
+            rmultinom(1L, size = colsums[k], 
+                      prob = c(p[1,k], diff(p[,k]))))
+        ret[[i]] <- as.table(array(tab, dim = c(length(prob), K), 
+                          dimnames = list(names(prob), 
+                                          names(colsums))))
+    }
+    return(ret)
+}
+@}
+
 @d power setup
 @{
-### if not given, assume continuous distribution
-if (is.null(prob)) prob <- rep(1 / n, n)
+
+@<link2fun@>
+
 ### matrix means control distributions in different strata
 if (!is.matrix(prob))
     prob <- matrix(prob, nrow = NROW(prob))
+prob <- prop.table(prob, margin = 2L)
 C <- nrow(prob)
 K <- length(delta) + 1L
 B <- ncol(prob)
@@ -1985,16 +2040,12 @@ colnames(N) <- c("Control", names(delta))
 @{
 he <- 0
 for (i in 1:nHess) {
-    x <- as.table(array(0, dim = c(C, K, B)))
     parm <- delta
+    x <- as.table(array(0, dim = c(C, K, B)))
     for (b in seq_len(B)) {
-        h1 <- h0[,b] - matrix(delta, nrow = C, ncol = K - 1, byrow = TRUE)
-        p1 <- .p(link, h1)
-        p <- cbind(p0[,b], p1)
-        x[,,b] <- sapply(seq_len(K), function(k) 
-                         rmultinom(1, size = N[b, k], prob = c(p[1,k], diff(p[,k]))))
+        x[,,b] <- r2dsim(1L, r = prob[, b], c = N[b,], delta = delta, link = link)[[1L]]
         rs <- rowSums(x[,,b]) > 0
-        h <- h0[rs,b]
+        h <- h0[rs, b]
         theta <- c(h[1], diff(h[-length(h)]))
         parm <- c(parm, theta)
     }
@@ -2016,10 +2067,12 @@ power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio,
 
 @d power
 @{
-power.free1way.test <- function(n = NULL, prob = NULL, alloc_ratio = 1, strata_ratio = 1, delta = NULL, sig.level = .05, power = NULL,
+power.free1way.test <- function(n = NULL, prob = rep.int(1, n) / n, alloc_ratio = 1, 
+                                strata_ratio = 1, delta = NULL, sig.level = .05, 
+                                power = NULL,
                                 link = c("logit", "probit", "cloglog", "loglog"),
-                                alternative = c("two.sided", "less", "greater"), nHess = 100,
-norm = TRUE,...) 
+                                alternative = c("two.sided", "less", "greater"), 
+                                nHess = 100, norm = TRUE,...) 
 {
 
     if (sum(vapply(list(n, delta, power, sig.level), is.null, 
@@ -2048,10 +2101,8 @@ norm = TRUE,...)
             , interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root
     else if (is.null(power)) {
 
-        if (!inherits(link, "linkfun")) {
-            link <- match.arg(link)
-            link <- do.call(link, list())
-        }
+        ### if not given, assume continuous distribution
+        if (is.null(prob)) prob <- rep(1 / n, n)
 
         @<power setup@>
         @<estimate Fisher information@>
@@ -2118,6 +2169,42 @@ for (i in seq_along(pw)) {
 mean(pw < .05)
 
 power.free1way.test(n = N, delta = delta)
+@@
+
+<<table, fig = TRUE>>=
+x <- r2dsim(1000, r = rep(1, 4), c = table(w), delta = delta)
+pw <- numeric(length(x))
+cf <- matrix(0, nrow = length(x), ncol = length(delta))
+for (i in seq_along(x)) {
+    ft <- free1way.test(x[[i]])
+    cf[i,] <- coef(ft)
+    pw[i] <- print(ft)$p.value
+}
+mean(pw < .05)
+boxplot(cf)
+points(c(1:2), delta, pch = 19, col = "red")
+power.free1way.test(n = N, prob = rep(1, 4), delta = delta)
+@@
+
+<<stable, fig = TRUE>>=
+x1 <- r2dsim(1000, r = rep(1, 4), c = table(w), delta = delta)
+x2 <- r2dsim(1000, r = c(1, 2, 1, 2), c = table(w), delta = delta)
+x3 <- r2dsim(1000, r = 1:4, c = table(w), delta = delta)
+stab <- function(...) {
+    args <- list(...)
+    as.table(array(unlist(args), dim = c(dim(args[[1]]), length(args))))
+}
+pw <- numeric(length(x1))
+cf <- matrix(0, nrow = length(x1), ncol = length(delta))
+for (i in seq_along(x)) {
+    ft <- free1way.test(stab(x1[[i]], x2[[i]], x3[[i]]))
+    cf[i,] <- coef(ft)
+    pw[i] <- print(ft)$p.value
+}
+mean(pw < .05)
+boxplot(cf)
+points(c(1:2), delta, pch = 19, col = "red")
+power.free1way.test(n = N, prob = cbind(rep(1, 4), c(1, 2, 1, 2), 1:4), delta = delta)
 @@
 
 \chapter*{Index}

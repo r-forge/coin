@@ -8,7 +8,7 @@ importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
            "ecdf", "na.pass", "terms", "model.weights", "xtabs", "rmultinom")
 importFrom("graphics", "lines", "points", "polygon")
 
-export(free1way.test, power.free1way.test, ppplot, wcrossprod)
+export(free1way.test, power.free1way.test, ppplot, r2dsim, wcrossprod)
 
 S3method("free1way.test", "formula")
 S3method("free1way.test", "numeric")
