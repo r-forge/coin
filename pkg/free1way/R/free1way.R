@@ -554,7 +554,7 @@ logLik.free1way <- function(object, ...)
 
 # free1way summary
 
-print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
+.print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
                            alternative = c("two.sided", "less", "greater"), 
                            tol = .Machine$double.eps, ...)
 {
@@ -654,12 +654,21 @@ print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"),
         null.value = x$mu, alternative = alternative, method = x$method, 
         data.name = x$data.name)
     class(RVAL) <- "htest"
-    RVAL
-
+    return(RVAL)
 }
-summary.free1way <- function(object, alternative = c("two.sided", "less", "greater"), ...)
+
+print.free1way <- function(x, ...) {
+    print(ret <- .print.free1way(x))
+    return(invisible(x))
+}
+
+summary.free1way <- function(object, test, alternative = c("two.sided", "less", "greater"), 
+                             tol = .Machine$double.eps, ...)
 {
 
+    if (!missing(test))
+        return(.print.free1way(object, test = test, alternative = alternative, tol = tol))
+   
     alternative <- match.arg(alternative)
 
     ESTIMATE <- coef(object)
@@ -702,14 +711,12 @@ confint.free1way <- function(object, parm,
     if (missing(parm)) 
         parm <- seq_along(cf)
 
-    ESTIMATE <- cf[parm]
-    qSE <- qnorm(conf.level) * sqrt(diag(vcov(object)))[parm]
-    CINT <- cbind(ESTIMATE - qSE, ESTIMATE + qSE)
-    colnames(CINT) <- paste0(100 * c(1 - conf.level, conf.level), "%")
+    wlevel <- level
+    if (test != "Wald")
+        wlevel <- 1 - (1 - level) / 10
+    CINT <- confint.default(object, level = wlevel)
     if (test == "Wald")
         return(CINT)
-
-    CINT[] <- cbind(ESTIMATE - qSE * 5, ESTIMATE + qSE * 5)
 
     sfun <- function(value, parm, quantile) {
         x <- object
@@ -821,7 +828,6 @@ confint.free1way <- function(object, parm,
                          "OVL" = object$link$parm2OVL(CINT))
     return(CINT)
 }
-# power.free1way.test <- function()
 
 # free1way formula
 
@@ -894,7 +900,7 @@ free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...
     } else {
         breaks <- c(-Inf, sort(uy), Inf)
     }
-    r <- cut(y, breaks = breaks)[, drop = TRUE]
+    r <- cut(y, breaks = breaks, ordered_result = TRUE)[, drop = TRUE]
     RVAL <- free1way.test(y = r, x = x, z = z, weights = weights, ...)
     RVAL$data.name <- DNAME
     RVAL$call <- cl
@@ -913,8 +919,8 @@ free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
         DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))
 
     stopifnot(is.factor(x))
-    if (nlevels(x) > 2L)
-        stopifnot(is.ordered(x))
+    if (nlevels(y) > 2L)
+        stopifnot(is.ordered(y))
     d <- data.frame(y = y, x = x, w = 1)
     if (!is.null(weights)) d$w <- weights
     if (!is.null(z)) {

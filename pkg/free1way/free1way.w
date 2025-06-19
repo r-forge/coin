@@ -603,7 +603,7 @@ solve(op$hessian)[1:2,1:2]
 \chapter{Schur Complement}
 \label{ch:schur}
 
-@o Schur_src.c -cc
+@o Schur.c -cc
 @{
 #define STRICT_R_HEADERS
 #include <R.h>
@@ -1529,7 +1529,7 @@ logLik.free1way <- function(object, ...)
 
 @d free1way summary
 @{
-print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
+.print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
                            alternative = c("two.sided", "less", "greater"), 
                            tol = .Machine$double.eps, ...)
 {
@@ -1552,12 +1552,21 @@ print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"),
         null.value = x$mu, alternative = alternative, method = x$method, 
         data.name = x$data.name)
     class(RVAL) <- "htest"
-    RVAL
-
+    return(RVAL)
 }
-summary.free1way <- function(object, alternative = c("two.sided", "less", "greater"), ...)
+
+print.free1way <- function(x, ...) {
+    print(ret <- .print.free1way(x))
+    return(invisible(x))
+}
+
+summary.free1way <- function(object, test, alternative = c("two.sided", "less", "greater"), 
+                             tol = .Machine$double.eps, ...)
 {
 
+    if (!missing(test))
+        return(.print.free1way(object, test = test, alternative = alternative, tol = tol))
+   
     alternative <- match.arg(alternative)
 
     ESTIMATE <- coef(object)
@@ -1601,14 +1610,12 @@ confint.free1way <- function(object, parm,
     if (missing(parm)) 
         parm <- seq_along(cf)
 
-    ESTIMATE <- cf[parm]
-    qSE <- qnorm(conf.level) * sqrt(diag(vcov(object)))[parm]
-    CINT <- cbind(ESTIMATE - qSE, ESTIMATE + qSE)
-    colnames(CINT) <- paste0(100 * c(1 - conf.level, conf.level), "%")
+    wlevel <- level
+    if (test != "Wald")
+        wlevel <- 1 - (1 - level) / 10
+    CINT <- confint.default(object, level = wlevel)
     if (test == "Wald")
         return(CINT)
-
-    CINT[] <- cbind(ESTIMATE - qSE * 5, ESTIMATE + qSE * 5)
 
     sfun <- function(value, parm, quantile) {
         x <- object
@@ -1643,7 +1650,6 @@ confint.free1way <- function(object, parm,
                          "OVL" = object$link$parm2OVL(CINT))
     return(CINT)
 }
-# power.free1way.test <- function()
 @}
 
 <<free>>=
@@ -1653,11 +1659,11 @@ vcov(ft)
 summary(ft)
 library("multcomp")
 summary(glht(ft), test = Chisqtest())
-print(ft, test = "Wald")
+summary(ft, test = "Wald")
 summary(glht(ft), test = Chisqtest())
-print(ft, test = "Rao")
-print(ft, test = "Permutation")
-print(ft, test = "LRT")
+summary(ft, test = "Rao")
+summary(ft, test = "Permutation")
+summary(ft, test = "LRT")
 confint(glht(ft), calpha = univariate_calpha())
 confint(ft, test = "Wald")
 confint(ft, test = "Rao")
@@ -1736,7 +1742,7 @@ free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...
     } else {
         breaks <- c(-Inf, sort(uy), Inf)
     }
-    r <- cut(y, breaks = breaks)[, drop = TRUE]
+    r <- cut(y, breaks = breaks, ordered_result = TRUE)[, drop = TRUE]
     RVAL <- free1way.test(y = r, x = x, z = z, weights = weights, ...)
     RVAL$data.name <- DNAME
     RVAL$call <- cl
@@ -1756,8 +1762,8 @@ free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
         DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))
 
     stopifnot(is.factor(x))
-    if (nlevels(x) > 2L)
-        stopifnot(is.ordered(x))
+    if (nlevels(y) > 2L)
+        stopifnot(is.ordered(y))
     d <- data.frame(y = y, x = x, w = 1)
     if (!is.null(weights)) d$w <- weights
     if (!is.null(z)) {
@@ -1784,16 +1790,16 @@ ft0 <- free1way.test(y ~ w + strata(s), B = 10000)
 ft <- free1way.test(y ~ strata(s) + w, B = 10000)
 all.equal(ft0, ft0)
 summary(ft)
-print(ft, test = "Permutation", alternative = "less")
-print(ft, test = "Permutation", alternative = "greater")
-print(ft, test = "Permutation")
-print(ft, test = "Wald", alternative = "less")
-print(ft, test = "Wald", alternative = "greater")
-print(ft, test = "Wald")
-print(ft, test = "LRT")
-print(ft, test = "Rao", alternative = "less")
-print(ft, test = "Rao", alternative = "greater")
-print(ft, test = "Rao")
+summary(ft, test = "Permutation", alternative = "less")
+summary(ft, test = "Permutation", alternative = "greater")
+summary(ft, test = "Permutation")
+summary(ft, test = "Wald", alternative = "less")
+summary(ft, test = "Wald", alternative = "greater")
+summary(ft, test = "Wald")
+summary(ft, test = "LRT")
+summary(ft, test = "Rao", alternative = "less")
+summary(ft, test = "Rao", alternative = "greater")
+summary(ft, test = "Rao")
 summary(ft)
 confint(ft, test = "Permutation")
 confint(ft, test = "LRT")
@@ -1812,15 +1818,13 @@ vcov(ft)
 @@
 
 
-\section{Tests}
-
-\subsection{Mantel-Haenszel test}
+\section{Mantel-Haenszel test}
 
 <<mh>>=
 example(mantelhaen.test, echo = FALSE)
 mantelhaen.test(UCBAdmissions, correct = FALSE)
 a <- free1way.test(UCBAdmissions)
-print(a, test = "Wald")
+summary(a, test = "Wald")
 exp(coef(a))
 exp(confint(a, test = "Wald"))
 exp(sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
@@ -1829,7 +1833,7 @@ sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
        fisher.test(UCBAdmissions[,,dept], conf.int = TRUE)$conf.int)
 @@
 
-\subsection{Kruskal-Wallis}
+\section{Kruskal-Wallis}
 
 <<kw>>=
 example(kruskal.test, echo = FALSE)
@@ -1837,7 +1841,7 @@ kruskal.test(x ~ g)
 free1way.test(x ~ g)
 @@
 
-\subsection{Savage}
+\section{Savage}
 
 <<sw>>=
 library("survival")
@@ -1850,25 +1854,27 @@ cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
 summary(cm)$sctest
 summary(cm)$logtest
 summary(cm)$waldtest
-ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "cloglog")
-print(ft)
-print(ft, test = "Rao")
-print(ft, test = "LRT")
-print(ft, test = "Rao")
+(ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "cloglog"))
+summary(ft)
+summary(ft, test = "Rao")
+summary(ft, test = "LRT")
+summary(ft, test = "Wald")
+summary(ft, test = "Permutation")
 
 library("coin")
 independence_test(Surv(tm, ev) ~ g | s, data = nd, ytrafo = function(...)
                   trafo(..., numeric_trafo = logrank_trafo, block = nd$s), teststat = "quad")
 
 survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 1)$chisq
-ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "logit")
-print(ft)
-print(ft, test = "Rao")
-print(ft, test = "LRT")
-print(ft, test = "Rao")
+(ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "logit"))
+summary(ft)
+summary(ft, test = "Rao")
+summary(ft, test = "LRT")
+summary(ft, test = "Wald")
+summary(ft, test = "Permutation")
 @@
 
-\subsection{van der Waerden}
+\section{van der Waerden}
 
 <<normal>>=
 nd$y <- rnorm(nrow(nd))
@@ -1877,7 +1883,7 @@ independence_test(y ~ g | s, data = nd, ytrafo = function(...)
                   trafo(..., numeric_trafo = normal_trafo, block = nd$s), teststat = "quad")
 @@
 
-\subsection{Friedman}
+\section{Friedman}
 
 <<friedman>>=
 example(friedman.test, echo = FALSE)
@@ -2224,7 +2230,7 @@ colnames(cf) <- names(delta)
 for (i in seq_along(x)) {
     ft <- free1way.test(x[[i]])
     cf[i,] <- coef(ft)
-    pw[i] <- print(ft)$p.value
+    pw[i] <- summary(ft, test = "Permutation")$p.value
 }
 mean(pw < .05)
 boxplot(cf)
@@ -2255,7 +2261,7 @@ colnames(cf) <- names(delta)
 for (i in seq_along(x)) {
     ft <- free1way.test(stab(x1[[i]], x2[[i]], x3[[i]]))
     cf[i,] <- coef(ft)
-    pw[i] <- print(ft)$p.value
+    pw[i] <- summary(ft, test = "Permutation")$p.value
 }
 mean(pw < .05)
 boxplot(cf)
