@@ -1179,7 +1179,7 @@ if (any(parm >= K)) return(ret)
 
 ret$coefficients <- ret$par[parm]
 dn2 <- dimnames(x)[2L]
-names(ret$coefficients) <- cnames <- dn2[[1L]][1L + parm]
+names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
 if (score)
     ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
@@ -1699,11 +1699,12 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
     m$... <- NULL
     mf <- eval(m, parent.frame())
     response <- attr(attr(mf, "terms"), "response")
-    DNAME <- paste(c(names(mf)[response], group), collapse = " by ") # works in all cases
+    DNAME <- paste(vn <- c(names(mf)[response], group), collapse = " by ") # works in all cases
     w <- as.vector(model.weights(mf))
     y <- mf[[response]]
-    lev <- sort(unique(mf[[group]]))
-    g <- factor(mf[[group]], levels = lev, labels = paste0(group, lev))
+    g <- mf[[group]]
+    stopifnot(is.factor(g))
+    lev <- levels(g)
     DNAME <- paste(DNAME, paste0("(", paste0(lev, collapse = ", "), ")"))
     if (nlevels(g) < 2L)
         stop("grouping factor must have at least 2 levels")
@@ -1711,11 +1712,13 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
         st <- factor(mf[[stratum]], levels = )
         if (nlevels(st) < 2L)
             stop("at least two strata must be present")
-        RVAL <- free1way.test(y = y, x = g, z = st, weights = w, ...)
+        vn <- c(vn, names(mf)[stratum])
+        RVAL <- free1way.test(y = y, x = g, z = st, weights = w, 
+                              varnames = vn, ...)
         DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[stratum]))
     } else {
         ## Call the default method.
-        RVAL <- free1way.test(y = y, x = g, weights = w, ...)
+        RVAL <- free1way.test(y = y, x = g, weights = w, varnames = vn, ...)
     }
     RVAL$data.name <- DNAME
     RVAL$call <- cl
@@ -1725,15 +1728,17 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
 
 @d free1way numeric
 @{
-free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {
+free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, 
+    varnames = c(deparse1(substitute(y)), 
+                 deparse1(substitute(x)), 
+                 deparse1(substitute(z))), ...) {
 
     cl <- match.call()
-    DNAME <- paste(deparse1(substitute(y)), "by",
-                   deparse1(substitute(x)))
+    DNAME <- paste(varnames[1], "by", varnames[2])
     DNAME <- paste(DNAME, paste0("(", paste0(levels(x), collapse = ", "), ")"))
 
     if (!is.null(z))
-        DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))
+        DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])
 
     uy <- unique(y)
     if (nbins && nbins < length(uy)) {
@@ -1743,7 +1748,8 @@ free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...
         breaks <- c(-Inf, sort(uy), Inf)
     }
     r <- cut(y, breaks = breaks, ordered_result = TRUE)[, drop = TRUE]
-    RVAL <- free1way.test(y = r, x = x, z = z, weights = weights, ...)
+    RVAL <- free1way.test(y = r, x = x, z = z, weights = weights, 
+                          varnames = varnames, ...)
     RVAL$data.name <- DNAME
     RVAL$call <- cl
     RVAL
@@ -1752,14 +1758,17 @@ free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...
 
 @d free1way factor
 @{
-free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
+free1way.test.factor <- function(y, x, z = NULL, weights = NULL, 
+    varnames = c(deparse1(substitute(y)), 
+                 deparse1(substitute(x)), 
+                 deparse1(substitute(z))), ...) {
 
     cl <- match.call()
-    DNAME <- paste(deparse1(substitute(y)), "by",
-                   deparse1(substitute(x)))
+    DNAME <- paste(varnames[1], "by", varnames[2])
     DNAME <- paste(DNAME, paste0("(", paste0(levels(x), collapse = ", "), ")"))
+
     if (!is.null(z))
-        DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))
+        DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])
 
     stopifnot(is.factor(x))
     if (nlevels(y) > 2L)
@@ -1769,8 +1778,14 @@ free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {
     if (!is.null(z)) {
         d$z <- z
         tab <- xtabs(w ~ y + x + z, data = d)
+        dn <- dimnames(tab)
+        names(dn) <- varnames
+        dimnames(tab) <- dn
     } else {
         tab <- xtabs(w ~ y + x, data = d)
+        dn <- dimnames(tab)
+        names(dn) <- varnames[1:2]
+        dimnames(tab) <- dn
     }
     RVAL <- free1way.test(tab, ...)
     RVAL$data.name <- DNAME

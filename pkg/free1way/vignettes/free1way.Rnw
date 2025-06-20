@@ -836,7 +836,7 @@ whose element $(c, k, b)$ is the number of observations with configuration $(y =
 
     ret$coefficients <- ret$par[parm]
     dn2 <- dimnames(x)[2L]
-    names(ret$coefficients) <- cnames <- dn2[[1L]][1L + parm]
+    names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
     if (score)
         ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
@@ -2417,9 +2417,9 @@ that is, differences on a latent normal scale with variance one:
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way formula}\nobreak\ {\footnotesize \NWlink{nuweb42}{42}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize \NWlink{nuweb43a}{43a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize \NWlink{nuweb43b}{43b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape ppplot}\nobreak\ {\footnotesize \NWlink{nuweb52}{52}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize \NWlink{nuweb55}{55}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape power}\nobreak\ {\footnotesize \NWlink{nuweb58}{58}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape ppplot}\nobreak\ {\footnotesize \NWlink{nuweb53}{53}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize \NWlink{nuweb56}{56}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape power}\nobreak\ {\footnotesize \NWlink{nuweb59}{59}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2556,7 +2556,7 @@ $\thetavec$.
 \mbox{}\verb@@\\
 \mbox{}\verb@ret$coefficients <- ret$par[parm]@\\
 \mbox{}\verb@dn2 <- dimnames(x)[2L]@\\
-\mbox{}\verb@names(ret$coefficients) <- cnames <- dn2[[1L]][1L + parm]@\\
+\mbox{}\verb@names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (score)@\\
 \mbox{}\verb@    ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]@\\
@@ -2957,7 +2957,7 @@ Distribution-free
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb36}{36}\NWlink{nuweb55}{, 55}\NWlink{nuweb56b}{, 56b}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb36}{36}\NWlink{nuweb56}{, 56}\NWlink{nuweb57b}{, 57b}.
 
 \item{}
 \end{list}
@@ -3257,11 +3257,12 @@ confint(ft, test = "LRT")
 \mbox{}\verb@    m$... <- NULL@\\
 \mbox{}\verb@    mf <- eval(m, parent.frame())@\\
 \mbox{}\verb@    response <- attr(attr(mf, "terms"), "response")@\\
-\mbox{}\verb@    DNAME <- paste(c(names(mf)[response], group), collapse = " by ") # works in all cases@\\
+\mbox{}\verb@    DNAME <- paste(vn <- c(names(mf)[response], group), collapse = " by ") # works in all cases@\\
 \mbox{}\verb@    w <- as.vector(model.weights(mf))@\\
 \mbox{}\verb@    y <- mf[[response]]@\\
-\mbox{}\verb@    lev <- sort(unique(mf[[group]]))@\\
-\mbox{}\verb@    g <- factor(mf[[group]], levels = lev, labels = paste0(group, lev))@\\
+\mbox{}\verb@    g <- mf[[group]]@\\
+\mbox{}\verb@    stopifnot(is.factor(g))@\\
+\mbox{}\verb@    lev <- levels(g)@\\
 \mbox{}\verb@    DNAME <- paste(DNAME, paste0("(", paste0(lev, collapse = ", "), ")"))@\\
 \mbox{}\verb@    if (nlevels(g) < 2L)@\\
 \mbox{}\verb@        stop("grouping factor must have at least 2 levels")@\\
@@ -3269,11 +3270,13 @@ confint(ft, test = "LRT")
 \mbox{}\verb@        st <- factor(mf[[stratum]], levels = )@\\
 \mbox{}\verb@        if (nlevels(st) < 2L)@\\
 \mbox{}\verb@            stop("at least two strata must be present")@\\
-\mbox{}\verb@        RVAL <- free1way.test(y = y, x = g, z = st, weights = w, ...)@\\
+\mbox{}\verb@        vn <- c(vn, names(mf)[stratum])@\\
+\mbox{}\verb@        RVAL <- free1way.test(y = y, x = g, z = st, weights = w, @\\
+\mbox{}\verb@                              varnames = vn, ...)@\\
 \mbox{}\verb@        DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[stratum]))@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        ## Call the default method.@\\
-\mbox{}\verb@        RVAL <- free1way.test(y = y, x = g, weights = w, ...)@\\
+\mbox{}\verb@        RVAL <- free1way.test(y = y, x = g, weights = w, varnames = vn, ...)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    RVAL$data.name <- DNAME@\\
 \mbox{}\verb@    RVAL$call <- cl@\\
@@ -3296,15 +3299,17 @@ confint(ft, test = "LRT")
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, ...) {@\\
+\mbox{}\verb@free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, @\\
+\mbox{}\verb@    varnames = c(deparse1(substitute(y)), @\\
+\mbox{}\verb@                 deparse1(substitute(x)), @\\
+\mbox{}\verb@                 deparse1(substitute(z))), ...) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    cl <- match.call()@\\
-\mbox{}\verb@    DNAME <- paste(deparse1(substitute(y)), "by",@\\
-\mbox{}\verb@                   deparse1(substitute(x)))@\\
+\mbox{}\verb@    DNAME <- paste(varnames[1], "by", varnames[2])@\\
 \mbox{}\verb@    DNAME <- paste(DNAME, paste0("(", paste0(levels(x), collapse = ", "), ")"))@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!is.null(z))@\\
-\mbox{}\verb@        DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))@\\
+\mbox{}\verb@        DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    uy <- unique(y)@\\
 \mbox{}\verb@    if (nbins && nbins < length(uy)) {@\\
@@ -3314,7 +3319,8 @@ confint(ft, test = "LRT")
 \mbox{}\verb@        breaks <- c(-Inf, sort(uy), Inf)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    r <- cut(y, breaks = breaks, ordered_result = TRUE)[, drop = TRUE]@\\
-\mbox{}\verb@    RVAL <- free1way.test(y = r, x = x, z = z, weights = weights, ...)@\\
+\mbox{}\verb@    RVAL <- free1way.test(y = r, x = x, z = z, weights = weights, @\\
+\mbox{}\verb@                          varnames = varnames, ...)@\\
 \mbox{}\verb@    RVAL$data.name <- DNAME@\\
 \mbox{}\verb@    RVAL$call <- cl@\\
 \mbox{}\verb@    RVAL@\\
@@ -3336,14 +3342,17 @@ confint(ft, test = "LRT")
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@free1way.test.factor <- function(y, x, z = NULL, weights = NULL, ...) {@\\
+\mbox{}\verb@free1way.test.factor <- function(y, x, z = NULL, weights = NULL, @\\
+\mbox{}\verb@    varnames = c(deparse1(substitute(y)), @\\
+\mbox{}\verb@                 deparse1(substitute(x)), @\\
+\mbox{}\verb@                 deparse1(substitute(z))), ...) {@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    cl <- match.call()@\\
-\mbox{}\verb@    DNAME <- paste(deparse1(substitute(y)), "by",@\\
-\mbox{}\verb@                   deparse1(substitute(x)))@\\
+\mbox{}\verb@    DNAME <- paste(varnames[1], "by", varnames[2])@\\
 \mbox{}\verb@    DNAME <- paste(DNAME, paste0("(", paste0(levels(x), collapse = ", "), ")"))@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    if (!is.null(z))@\\
-\mbox{}\verb@        DNAME <- paste(DNAME, "\n\t stratified by", deparse1(substitute(z)))@\\
+\mbox{}\verb@        DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    stopifnot(is.factor(x))@\\
 \mbox{}\verb@    if (nlevels(y) > 2L)@\\
@@ -3353,8 +3362,14 @@ confint(ft, test = "LRT")
 \mbox{}\verb@    if (!is.null(z)) {@\\
 \mbox{}\verb@        d$z <- z@\\
 \mbox{}\verb@        tab <- xtabs(w ~ y + x + z, data = d)@\\
+\mbox{}\verb@        dn <- dimnames(tab)@\\
+\mbox{}\verb@        names(dn) <- varnames@\\
+\mbox{}\verb@        dimnames(tab) <- dn@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        tab <- xtabs(w ~ y + x, data = d)@\\
+\mbox{}\verb@        dn <- dimnames(tab)@\\
+\mbox{}\verb@        names(dn) <- varnames[1:2]@\\
+\mbox{}\verb@        dimnames(tab) <- dn@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    RVAL <- free1way.test(tab, ...)@\\
 \mbox{}\verb@    RVAL$data.name <- DNAME@\\
@@ -3492,7 +3507,7 @@ coef(f1w)
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
-\NWtarget{nuweb51}{} $\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize {51}}$\,\rangle\equiv$
+\NWtarget{nuweb52}{} $\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize {52}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3522,7 +3537,7 @@ coef(f1w)
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb52}{52}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb53}{53}.
 
 \item{}
 \end{list}
@@ -3530,7 +3545,7 @@ coef(f1w)
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
-\NWtarget{nuweb52}{} $\langle\,${\itshape ppplot}\nobreak\ {\footnotesize {52}}$\,\rangle\equiv$
+\NWtarget{nuweb53}{} $\langle\,${\itshape ppplot}\nobreak\ {\footnotesize {53}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3562,7 +3577,7 @@ coef(f1w)
 \mbox{}\verb@    plot(px, py, xlim = c(0, 1), ylim = c(0, 1), @\\
 \mbox{}\verb@         xlab = xlab, ylab = ylab, type = "n", ...)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize \NWlink{nuweb51}{51}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize \NWlink{nuweb52}{52}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    points(px, py, ...)@\\
 \mbox{}\verb@    return(invisible(ret)) @\\
@@ -3592,7 +3607,7 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
-\NWtarget{nuweb55}{} $\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize {55}}$\,\rangle\equiv$
+\NWtarget{nuweb56}{} $\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize {56}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3653,7 +3668,7 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
-\NWtarget{nuweb56a}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {56a}}$\,\rangle\equiv$
+\NWtarget{nuweb57a}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {57a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3672,7 +3687,7 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb58}{58}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb59}{59}.
 
 \item{}
 \end{list}
@@ -3680,7 +3695,7 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
-\NWtarget{nuweb56b}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {56b}}$\,\rangle\equiv$
+\NWtarget{nuweb57b}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {57b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3720,7 +3735,7 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb58}{58}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb59}{59}.
 
 \item{}
 \end{list}
@@ -3728,7 +3743,7 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
-\NWtarget{nuweb57a}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {57a}}$\,\rangle\equiv$
+\NWtarget{nuweb58a}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {58a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3753,7 +3768,7 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb58}{58}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb59}{59}.
 
 \item{}
 \end{list}
@@ -3763,7 +3778,7 @@ Make sure power function is non-stochastic
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
-\NWtarget{nuweb57b}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {57b}}$\,\rangle\equiv$
+\NWtarget{nuweb58b}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {58b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3777,7 +3792,7 @@ Make sure power function is non-stochastic
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb58}{58}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb59}{59}.
 
 \item{}
 \end{list}
@@ -3785,7 +3800,7 @@ Make sure power function is non-stochastic
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
-\NWtarget{nuweb57c}{} $\langle\,${\itshape power htest output}\nobreak\ {\footnotesize {57c}}$\,\rangle\equiv$
+\NWtarget{nuweb58c}{} $\langle\,${\itshape power htest output}\nobreak\ {\footnotesize {58c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3808,7 +3823,7 @@ Make sure power function is non-stochastic
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb58}{58}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb59}{59}.
 
 \item{}
 \end{list}
@@ -3816,7 +3831,7 @@ Make sure power function is non-stochastic
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
-\NWtarget{nuweb58}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {58}}$\,\rangle\equiv$
+\NWtarget{nuweb59}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {59}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3834,27 +3849,27 @@ Make sure power function is non-stochastic
 \mbox{}\verb@    stats:::assert_NULL_or_prob(sig.level)@\\
 \mbox{}\verb@    stats:::assert_NULL_or_prob(power)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape random seed}\nobreak\ {\footnotesize \NWlink{nuweb56a}{56a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape random seed}\nobreak\ {\footnotesize \NWlink{nuweb57a}{57a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (is.null(n)) @\\
 \mbox{}\verb@        n <- ceiling(uniroot(function(n) {@\\
-\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57b}{57b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb58b}{58b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@             }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)@\\
 \mbox{}\verb@    else if (is.null(delta)) {@\\
 \mbox{}\verb@        ### 2-sample only@\\
 \mbox{}\verb@        stopifnot(K == 2L)@\\
 \mbox{}\verb@        delta <- uniroot(function(delta) {@\\
-\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57b}{57b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb58b}{58b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    ### <TH> interval depending on alternative, symmetry? </TH>@\\
 \mbox{}\verb@            }, interval = c(0, 10), tol = tol, extendInt = "upX")$root@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    else if (is.null(sig.level)) @\\
 \mbox{}\verb@        sig.level <- uniroot(function(sig.level) {@\\
-\mbox{}\verb@                @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb57b}{57b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb58b}{58b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@            }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root@\\
 \mbox{}\verb@    @\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb57a}{57a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb57b}{57b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb58a}{58a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    alternative <- match.arg(alternative)@\\
 \mbox{}\verb@    if (K == 2L) {@\\
@@ -3872,7 +3887,7 @@ Make sure power function is non-stochastic
 \mbox{}\verb@        power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape power htest output}\nobreak\ {\footnotesize \NWlink{nuweb57c}{57c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape power htest output}\nobreak\ {\footnotesize \NWlink{nuweb58c}{58c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ret@\\
 \mbox{}\verb@}@\\
@@ -4005,7 +4020,7 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 }
 \item $\langle\,$d vec\nobreak\ {\footnotesize \NWlink{nuweb12b}{12b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14a}{14a}.}
 \item $\langle\,$delta vec\nobreak\ {\footnotesize \NWlink{nuweb13b}{13b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14a}{14a}.}
-\item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb57a}{57a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
+\item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb58a}{58a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb59}{59}.}
 \item $\langle\,$free1way\nobreak\ {\footnotesize \NWlink{nuweb36}{36}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
 \item $\langle\,$free1way confint\nobreak\ {\footnotesize \NWlink{nuweb39}{39}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
 \item $\langle\,$free1way factor\nobreak\ {\footnotesize \NWlink{nuweb43b}{43b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
@@ -4015,7 +4030,7 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 \item $\langle\,$free1way summary\nobreak\ {\footnotesize \NWlink{nuweb38}{38}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
 \item $\langle\,$Hessian\nobreak\ {\footnotesize \NWlink{nuweb6b}{6b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27}{27}.}
 \item $\langle\,$Hessian prep\nobreak\ {\footnotesize \NWlink{nuweb5a}{5a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb6b}{6b}.}
-\item $\langle\,$link2fun\nobreak\ {\footnotesize \NWlink{nuweb35}{35}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb36}{36}\NWlink{nuweb55}{, 55}\NWlink{nuweb56b}{, 56b}.
+\item $\langle\,$link2fun\nobreak\ {\footnotesize \NWlink{nuweb35}{35}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb36}{36}\NWlink{nuweb56}{, 56}\NWlink{nuweb57b}{, 57b}.
 }
 \item $\langle\,$linkfun\nobreak\ {\footnotesize \NWlink{nuweb19}{19}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb18}{18}.}
 \item $\langle\,$logit\nobreak\ {\footnotesize \NWlink{nuweb20}{20}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb18}{18}.}
@@ -4033,19 +4048,19 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 }
 \item $\langle\,$Permutation\nobreak\ {\footnotesize \NWlink{nuweb31b}{31b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb30a}{30a}.}
 \item $\langle\,$post processing\nobreak\ {\footnotesize \NWlink{nuweb26}{26}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27}{27}.}
-\item $\langle\,$power\nobreak\ {\footnotesize \NWlink{nuweb58}{58}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
-\item $\langle\,$power call\nobreak\ {\footnotesize \NWlink{nuweb57b}{57b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
-\item $\langle\,$power htest output\nobreak\ {\footnotesize \NWlink{nuweb57c}{57c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
-\item $\langle\,$power setup\nobreak\ {\footnotesize \NWlink{nuweb56b}{56b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
-\item $\langle\,$ppplot\nobreak\ {\footnotesize \NWlink{nuweb52}{52}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
+\item $\langle\,$power\nobreak\ {\footnotesize \NWlink{nuweb59}{59}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
+\item $\langle\,$power call\nobreak\ {\footnotesize \NWlink{nuweb58b}{58b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb59}{59}.}
+\item $\langle\,$power htest output\nobreak\ {\footnotesize \NWlink{nuweb58c}{58c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb59}{59}.}
+\item $\langle\,$power setup\nobreak\ {\footnotesize \NWlink{nuweb57b}{57b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb59}{59}.}
+\item $\langle\,$ppplot\nobreak\ {\footnotesize \NWlink{nuweb53}{53}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
 \item $\langle\,$probit\nobreak\ {\footnotesize \NWlink{nuweb23}{23}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb18}{18}.}
 \item $\langle\,$profile\nobreak\ {\footnotesize \NWlink{nuweb25a}{25a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27}{27}.}
 \item $\langle\,$R wcrossprod\nobreak\ {\footnotesize \NWlink{nuweb17}{17}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
-\item $\langle\,$r2dsim\nobreak\ {\footnotesize \NWlink{nuweb55}{55}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
-\item $\langle\,$random seed\nobreak\ {\footnotesize \NWlink{nuweb56a}{56a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb58}{58}.}
+\item $\langle\,$r2dsim\nobreak\ {\footnotesize \NWlink{nuweb56}{56}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb24a}{24a}.}
+\item $\langle\,$random seed\nobreak\ {\footnotesize \NWlink{nuweb57a}{57a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb59}{59}.}
 \item $\langle\,$Rao\nobreak\ {\footnotesize \NWlink{nuweb31a}{31a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb30a}{30a}.}
 \item $\langle\,$resampling\nobreak\ {\footnotesize \NWlink{nuweb33}{33}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb36}{36}.}
-\item $\langle\,$ROC bands\nobreak\ {\footnotesize \NWlink{nuweb51}{51}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb52}{52}.}
+\item $\langle\,$ROC bands\nobreak\ {\footnotesize \NWlink{nuweb52}{52}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb53}{53}.}
 \item $\langle\,$setup\nobreak\ {\footnotesize \NWlink{nuweb24b}{24b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27}{27}.}
 \item $\langle\,$statistics\nobreak\ {\footnotesize \NWlink{nuweb30a}{30a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb38}{38}\NWlink{nuweb39}{, 39}.
 }
