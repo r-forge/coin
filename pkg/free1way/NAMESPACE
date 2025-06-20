@@ -5,7 +5,9 @@ importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
            "quantile", "uniroot","r2dtable", "pnorm", "dnorm", 
            "pchisq", "qchisq", "coef", "confint", "model.matrix", "printCoefmat",
              "splinefun", "vcov", "runif",
-           "ecdf", "na.pass", "terms", "model.weights", "xtabs", "rmultinom")
+           "ecdf", "na.pass", "terms", "model.weights", "xtabs", "rmultinom",
+           "as.formula", "confint.default", "delete.response",
+           "model.frame")
 importFrom("graphics", "lines", "points", "polygon")
 
 export(free1way.test, power.free1way.test, ppplot, r2dsim, wcrossprod)
@@ -19,5 +21,7 @@ S3method("vcov", "free1way")
 S3method("logLik", "free1way")
 S3method("confint", "free1way")
 S3method("summary", "free1way")
+S3method("model.frame", "free1way")
+S3method("model.matrix", "free1way")
 S3method("print", "free1way")
 S3method("print", "summary.free1way")

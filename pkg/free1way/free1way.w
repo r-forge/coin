@@ -1505,6 +1505,11 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
 
     ret$perm <- .resample(res, y, B = B)
 
+    if (!is.null(names(dn))) {
+        fm <- as.formula(paste(names(dn)[1:2], collapse = "~"))
+        ret$terms <- terms(fm, data = as.data.frame(y))
+    }
+
     class(ret) <- "free1way"
     return(ret)
 }
@@ -1525,6 +1530,20 @@ vcov.free1way <- function(object, ...)
     object$vcov
 logLik.free1way <- function(object, ...)
     -object$value
+### the next two could go into multcomp
+model.frame.free1way <- function(formula, ...)
+    as.data.frame(formula$table)
+model.matrix.free1way <- function (object, ...) 
+{
+    mm <- model.matrix(delete.response(terms(object)), data = model.frame(object))
+    at <- attributes(mm)
+    mm <- mm[, -1]
+    at$dim[2] <- at$dim[2] - 1
+    at$dimnames[[2]] <- at$dimnames[[2]][-1]
+    at$assign <- at$assign[-1]
+    attributes(mm) <- at
+    mm
+}
 @}
 
 @d free1way summary
