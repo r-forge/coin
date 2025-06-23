@@ -3,7 +3,7 @@ free1way.Rnw:	free1way.w
 	nuweb -r free1way.w
 	mv free1way.tex free1way.Rnw
 	cp free1way.Rnw vignettes
-	mv Schur.c src
+	# mv Schur.c src
 	#mv Makevars src
 	#mv *def src
 	mv free1way.R R

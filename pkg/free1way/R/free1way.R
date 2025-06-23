@@ -1,19 +1,9 @@
 
-# R wcrossprod
-
-wcrossprod <- function(x, A, tol = .Machine$double.eps) {
-    storage.mode(x) <- "double"
-    .Call(R_wcrossprod, a = as.double(A$a), 
-                        b = as.double(A$b),
-                        X = x,
-                        tol = tol)
-}
-
 # ML estimation
 
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
-                   residuals = TRUE, score = TRUE, hessian = TRUE, 
-                   tol = sqrt(.Machine$double.eps), ...) {
+                        residuals = TRUE, score = TRUE, hessian = TRUE, 
+                        tol = sqrt(.Machine$double.eps), ...) {
 
     stopifnot(is.table(x))
     dx <- dim(x)
@@ -22,6 +12,11 @@ wcrossprod <- function(x, A, tol = .Machine$double.eps) {
         x <- as.table(array(c(x), dim = dx <- c(dx, 1L)))
         dimnames(x) <- dn <- c(dn, list(A = "A"))
     }
+    x <- x[marginSums(x, 1) > 0, 
+           marginSums(x, 2) > 0, 
+           marginSums(x, 3) > 0, drop = FALSE]
+    dx <- dim(x)
+    dn <- dimnames(x)
     stopifnot(length(dx) == 3L)
     stopifnot(dx[1L] > 1L)
     K <- dx[2L]
@@ -211,7 +206,17 @@ wcrossprod <- function(x, A, tol = .Machine$double.eps) {
         if (length(Z) > 1L) Z <- diag(Z)
         
 
-        return(Z - wcrossprod(x = X, list(a = Adiag, b = Aoffdiag)))
+        if (length(Adiag) > 1L) {
+            if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))
+                    stop(gettextf("%s needs package 'Matrix' correctly installed",
+                                  "free1way.test"),
+                         domain = NA)
+            A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), 
+                                    symmetric = TRUE)
+        } else {
+            A <- matrix(Adiag)
+        }
+        return(Z - crossprod(X, solve(A, X)))
     }
     
     # stratified negative logLik

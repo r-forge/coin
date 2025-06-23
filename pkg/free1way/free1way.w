@@ -436,7 +436,17 @@ implemented in Chapter~\ref{ch:schur}.
     @<Adiag@>
     @<X and Z@>
 
-    return(Z - wcrossprod(x = X, list(a = Adiag, b = Aoffdiag)))
+    if (length(Adiag) > 1L) {
+        if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))
+                stop(gettextf("%s needs package 'Matrix' correctly installed",
+                              "free1way.test"),
+                     domain = NA)
+        A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), 
+                                symmetric = TRUE)
+    } else {
+        A <- matrix(Adiag)
+    }
+    return(Z - crossprod(X, solve(A, X)))
 }
 @}
 
@@ -600,249 +610,6 @@ solve(op$hessian)[1:2,1:2]
 @@
 
 	
-\chapter{Schur Complement}
-\label{ch:schur}
-
-@o Schur.c -cc
-@{
-#define STRICT_R_HEADERS
-#include <R.h>
-#include <Rinternals.h>
-@<C_symtrisolve@>
-@<NROW@>
-@<NCOL@>
-@<wcrossprod@>
-@}
-
-For a symmetric tridiagonal quadratic $N \times N$ matrix $\mA$ we compute $\X^\top \mA^{-1} \X$
-utilising that the inverse $\mA^{-1}_{ij} = u_i v_j$ for $1 \le i \le j \le N$
-can be characterised by two vectors $\uvec$ and $\vvec$, each of length $N$
-\citep{Meurant1992}.
-
-We begin with the diagonal $(a_1, \dots, a_N)^\top = \text{diag}(\mA)$ and the
-negative lower- and upper off-diagonal $(-b_1, \dots, -b_{N - 1}) =
-\text{diag}(\mA_{-N,-1})$. \cite{Meurant1992} starts with a decomposition
-$\mA = \mU \D_U^{-1} \mU^\top$ with $(d_1, \dots, d_N)^\top =
-\text{diag}(\D_U)$ where $\mU$ is upper triangular. The
-decomposition also allows to compute the determinant of $\mA$ as $\prod_{i =
-1}^N d_i$.
-
-@d d vec
-@{
-d[n] = a[n];
-det = d[n];
-for (i = n - 1; i >= 0; i--) {
-    d[i] = a[i] - pow(b[i], 2) / d[i + 1];
-    /* DOI:10.1137/0613045 page 710: T = U D^-1 U^t with
-       diag(U) = d (upper triangular),
-       diag(D) = d (diagonal) => det(T) = prod(d)
-    */
-    det *= d[i];
-}
-@}
-
-Following Proposition 1 in \cite{Meurant1992}, we compute $\uvec$
-
-@d u vec
-@{
-u[0] = 1 / d[0];
-prodb = 1.0;
-for (i = 1; i <= n; i++) {
-    prodb *= -b[i - 1] / d[i - 1];
-    u[i] = prodb / d[i];
-}
-@}
-
-Based on the next decomposition $\mA = \mL \D_L^{-1} \mL^\top$ with lower
-triangular $\mL$ and $(\delta_1, \dots, \delta_N)^\top = \text{diag}(\D_L)$, we
-compute
-
-@d delta vec
-@{
-delta[0] = a[0];
-for (i = 1; i <= n; i++)
-    delta[i] = a[i] - pow(b[i - 1], 2) / delta[i - 1];
-@}
-
-and then, following Proposition 2, $\vvec$
-
-@d v vec
-@{
-v[n] = 1 / (ans[n] * delta[n]);
-v[0] = 1.0;
-prodb = 1.0;
-for (i = 1; i < n; i++) {
-    prodb *= -b[n - i] / delta[n - i];
-    v[n - i] = prodb * v[n];
-}
-@}
-
-We wrap everything up in a function with arguments \code{a} and \code{b} of
-length \code{n + 1} $=N$ and \code{n} $=N - 1$, respectively. The two
-vectors $\uvec$ and $\vvec$ are stored in an $N \times 2$ real matrix \code{ans}.
-We check if the determinant is larger than a small tolerance \code{tol}
-before computing $\uvec$ and $\vvec$. The memory allocated for the $d$'s is
-reused for computing $\delta$'s.
-
-@d C_symtrisolve
-@{
-void C_symtrisolve (double *a, double *b, R_xlen_t n, double tol, double *ans)
-{
-    SEXP Rd;
-    double *d, *delta, *u, *v, prodb, det;
-    R_xlen_t i;
-
-    /* output vectors */
-    u = ans;
-    v = ans + n + 1;
-
-    /* n = N - 1 */
-    PROTECT(Rd = allocVector(REALSXP, n + 1));
-    d = REAL(Rd);
-
-    @<d vec@>
-
-    if (fabs(det) < tol) {
-        error("Matrix not invertible");
-    } else {
-        @<u vec@>
-        delta = d;
-        @<delta vec@>
-        @<v vec@>
-    }
-    UNPROTECT(1);
-}
-@}
-
-In the next step, we compute the weighted crossproduct 
-$\X^\top \mA^{-1} \X$$\X^\top \mA^{-1} \X$
-without memory allocation for the full $N \times N$ matrix $\mA^{-1}$.
-Because the resulting matrix is symmetric, we first compute the lower
-triangular elements only.
-
-@d lower wcrossprod
-@{
-for (p = 0; p < P; p++) {
-    i = 0;
-    dcs[i] = dx[p * N + i] * dvu[i];
-    dcs[N + i] = dx[p * N + i] * dvu[N + i];
-    for (i = 1; i < N; i++) {
-        dcs[i] = dcs[i - 1] + dx[p * N + i] * dvu[i];
-        dcs[N + i] = dcs[N + i - 1] + dx[p * N + i] * dvu[N + i];
-    }
-    for (j = 0; j < N; j++) {
-        dxA = 0.0;
-        dxA1 = dcs[N + j];
-        dxA2 = dcs[N - 1] - dcs[j];
-        dxA = dxA1 * dvu[j] + dxA2 * dvu[N + j];
-        for (pp = p; pp < P; pp++)
-            dans[p * P + pp] += dxA * dx[pp * N + j];
-    }
-}
-@}
-
-@d upper wcrossprod
-@{
-for (p = 0; p < P; p++) {
-    for (pp = p + 1; pp < P; pp++)
-        dans[pp * P + p] = dans[p * P + pp];
-}
-@}
-
-The \proglang{R} interface requires access to the number of rows and columns
-of matrices
-
-@d NROW
-@{
-R_xlen_t NROW
-(
-    SEXP x
-) {
-    SEXP a;
-    a = getAttrib(x, R_DimSymbol);
-    if (a == R_NilValue) return(XLENGTH(x));
-    if (TYPEOF(a) == REALSXP)
-        return(REAL(a)[0]);
-    return((R_xlen_t) INTEGER(a)[0]);
-}
-@}
-
-@d NCOL
-@{
-R_xlen_t NCOL
-(
-    SEXP x
-) {
-    SEXP a;
-    a = getAttrib(x, R_DimSymbol);
-    if (a == R_NilValue) return(1);
-    if (TYPEOF(a) == REALSXP)
-        return(REAL(a)[1]);
-    return((R_xlen_t) INTEGER(a)[1]);
-}
-@}
-
-@d wcrossprod
-@{
-SEXP R_wcrossprod (SEXP a, SEXP b, SEXP X, SEXP tol)
-{
-
-    SEXP ans, vu, cumsumvux;
-    double *dans, *dx, dxA, dxA1, dxA2, *dvu, *dcs;
-    R_xlen_t N, i, j;
-    int p, pp, P;
-    
-    N = XLENGTH(a);
-
-    if (NROW(X) != N)
-        error("incorrect number of rows in X");
-    if (!isReal(X))
-        error("incorrect type of X");
-    dx = REAL(X);
-    P = (int) NCOL(X);
-
-    PROTECT(ans = allocMatrix(REALSXP, P, P));
-    dans = REAL(ans);
-
-    if (XLENGTH(b) != N - 1)
-        error("incorrect length of b");
-
-    if (!isReal(a))
-        error("incorrect type of a");
-
-    if (!isReal(b))
-        error("incorrect type of b");
-
-    if (!isReal(tol))
-        error("incorrect type of tol");
-
-    PROTECT(vu = allocMatrix(REALSXP, N, 2));
-    dvu = REAL(vu);
-    C_symtrisolve(REAL(a), REAL(b), N - 1, REAL(tol)[0], dvu);
-    PROTECT(cumsumvux = allocMatrix(REALSXP, N, 2));
-    dcs = REAL(cumsumvux);
-
-    for (p = 0; p < P * P; p++)
-        dans[p] = 0.0;
-
-    @<lower wcrossprod@>
-    @<upper wcrossprod@>
-
-    UNPROTECT(3);
-    return(ans);
-}
-@}
-
-@d R wcrossprod
-@{
-wcrossprod <- function(x, A, tol = .Machine$double.eps) {
-    storage.mode(x) <- "double"
-    .Call(R_wcrossprod, a = as.double(A$a), 
-                        b = as.double(A$b),
-                        X = x,
-                        tol = tol)
-}
-@}
 
 \chapter{Link Functions}
 \label{ch:link}
@@ -1082,7 +849,6 @@ probit <- function()
 
 @o free1way.R -cp
 @{
-@<R wcrossprod@>
 @<ML estimation@>
 @<free1way@>
 @<free1way methods@>
@@ -1205,8 +971,8 @@ names(ret$mu) <- link$parm
 @d ML estimation
 @{
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
-                   residuals = TRUE, score = TRUE, hessian = TRUE, 
-                   tol = sqrt(.Machine$double.eps), ...) {
+                        residuals = TRUE, score = TRUE, hessian = TRUE, 
+                        tol = sqrt(.Machine$double.eps), ...) {
 
     stopifnot(is.table(x))
     dx <- dim(x)
@@ -1215,6 +981,11 @@ names(ret$mu) <- link$parm
         x <- as.table(array(c(x), dim = dx <- c(dx, 1L)))
         dimnames(x) <- dn <- c(dn, list(A = "A"))
     }
+    x <- x[marginSums(x, 1) > 0, 
+           marginSums(x, 2) > 0, 
+           marginSums(x, 3) > 0, drop = FALSE]
+    dx <- dim(x)
+    dn <- dimnames(x)
     stopifnot(length(dx) == 3L)
     stopifnot(dx[1L] > 1L)
     K <- dx[2L]
@@ -2327,3 +2098,247 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 \bibliography{\Sexpr{gsub("\\.bib", "", system.file("refs.bib", package = "free1way"))}}
 
 \end{document}
+
+\chapter{Schur Complement}
+\label{ch:schur}
+
+@o Schur.c -cc
+@{
+#define STRICT_R_HEADERS
+#include <R.h>
+#include <Rinternals.h>
+@<C_symtrisolve@>
+@<NROW@>
+@<NCOL@>
+@<wcrossprod@>
+@}
+
+For a symmetric tridiagonal quadratic $N \times N$ matrix $\mA$ we compute $\X^\top \mA^{-1} \X$
+utilising that the inverse $\mA^{-1}_{ij} = u_i v_j$ for $1 \le i \le j \le N$
+can be characterised by two vectors $\uvec$ and $\vvec$, each of length $N$
+\citep{Meurant1992}.
+
+We begin with the diagonal $(a_1, \dots, a_N)^\top = \text{diag}(\mA)$ and the
+negative lower- and upper off-diagonal $(-b_1, \dots, -b_{N - 1}) =
+\text{diag}(\mA_{-N,-1})$. \cite{Meurant1992} starts with a decomposition
+$\mA = \mU \D_U^{-1} \mU^\top$ with $(d_1, \dots, d_N)^\top =
+\text{diag}(\D_U)$ where $\mU$ is upper triangular. The
+decomposition also allows to compute the determinant of $\mA$ as $\prod_{i =
+1}^N d_i$.
+
+@d d vec
+@{
+d[n] = a[n];
+det = d[n];
+for (i = n - 1; i >= 0; i--) {
+    d[i] = a[i] - pow(b[i], 2) / d[i + 1];
+    /* DOI:10.1137/0613045 page 710: T = U D^-1 U^t with
+       diag(U) = d (upper triangular),
+       diag(D) = d (diagonal) => det(T) = prod(d)
+    */
+    det *= d[i];
+}
+@}
+
+Following Proposition 1 in \cite{Meurant1992}, we compute $\uvec$
+
+@d u vec
+@{
+u[0] = 1 / d[0];
+prodb = 1.0;
+for (i = 1; i <= n; i++) {
+    prodb *= -b[i - 1] / d[i - 1];
+    u[i] = prodb / d[i];
+}
+@}
+
+Based on the next decomposition $\mA = \mL \D_L^{-1} \mL^\top$ with lower
+triangular $\mL$ and $(\delta_1, \dots, \delta_N)^\top = \text{diag}(\D_L)$, we
+compute
+
+@d delta vec
+@{
+delta[0] = a[0];
+for (i = 1; i <= n; i++)
+    delta[i] = a[i] - pow(b[i - 1], 2) / delta[i - 1];
+@}
+
+and then, following Proposition 2, $\vvec$
+
+@d v vec
+@{
+v[n] = 1 / (ans[n] * delta[n]);
+v[0] = 1.0;
+prodb = 1.0;
+for (i = 1; i < n; i++) {
+    prodb *= -b[n - i] / delta[n - i];
+    v[n - i] = prodb * v[n];
+}
+@}
+
+We wrap everything up in a function with arguments \code{a} and \code{b} of
+length \code{n + 1} $=N$ and \code{n} $=N - 1$, respectively. The two
+vectors $\uvec$ and $\vvec$ are stored in an $N \times 2$ real matrix \code{ans}.
+We check if the determinant is larger than a small tolerance \code{tol}
+before computing $\uvec$ and $\vvec$. The memory allocated for the $d$'s is
+reused for computing $\delta$'s.
+
+@d C_symtrisolve
+@{
+void C_symtrisolve (double *a, double *b, R_xlen_t n, double tol, double *ans)
+{
+    SEXP Rd;
+    double *d, *delta, *u, *v, prodb, det;
+    R_xlen_t i;
+
+    /* output vectors */
+    u = ans;
+    v = ans + n + 1;
+
+    /* n = N - 1 */
+    PROTECT(Rd = allocVector(REALSXP, n + 1));
+    d = REAL(Rd);
+
+    @<d vec@>
+
+    if (fabs(det) < tol) {
+        error("Matrix not invertible");
+    } else {
+        @<u vec@>
+        delta = d;
+        @<delta vec@>
+        @<v vec@>
+    }
+    UNPROTECT(1);
+}
+@}
+
+In the next step, we compute the weighted crossproduct 
+$\X^\top \mA^{-1} \X$$\X^\top \mA^{-1} \X$
+without memory allocation for the full $N \times N$ matrix $\mA^{-1}$.
+Because the resulting matrix is symmetric, we first compute the lower
+triangular elements only.
+
+@d lower wcrossprod
+@{
+for (p = 0; p < P; p++) {
+    i = 0;
+    dcs[i] = dx[p * N + i] * dvu[i];
+    dcs[N + i] = dx[p * N + i] * dvu[N + i];
+    for (i = 1; i < N; i++) {
+        dcs[i] = dcs[i - 1] + dx[p * N + i] * dvu[i];
+        dcs[N + i] = dcs[N + i - 1] + dx[p * N + i] * dvu[N + i];
+    }
+    for (j = 0; j < N; j++) {
+        dxA = 0.0;
+        dxA1 = dcs[N + j];
+        dxA2 = dcs[N - 1] - dcs[j];
+        dxA = dxA1 * dvu[j] + dxA2 * dvu[N + j];
+        for (pp = p; pp < P; pp++)
+            dans[p * P + pp] += dxA * dx[pp * N + j];
+    }
+}
+@}
+
+@d upper wcrossprod
+@{
+for (p = 0; p < P; p++) {
+    for (pp = p + 1; pp < P; pp++)
+        dans[pp * P + p] = dans[p * P + pp];
+}
+@}
+
+The \proglang{R} interface requires access to the number of rows and columns
+of matrices
+
+@d NROW
+@{
+R_xlen_t NROW
+(
+    SEXP x
+) {
+    SEXP a;
+    a = getAttrib(x, R_DimSymbol);
+    if (a == R_NilValue) return(XLENGTH(x));
+    if (TYPEOF(a) == REALSXP)
+        return(REAL(a)[0]);
+    return((R_xlen_t) INTEGER(a)[0]);
+}
+@}
+
+@d NCOL
+@{
+R_xlen_t NCOL
+(
+    SEXP x
+) {
+    SEXP a;
+    a = getAttrib(x, R_DimSymbol);
+    if (a == R_NilValue) return(1);
+    if (TYPEOF(a) == REALSXP)
+        return(REAL(a)[1]);
+    return((R_xlen_t) INTEGER(a)[1]);
+}
+@}
+
+@d wcrossprod
+@{
+SEXP R_wcrossprod (SEXP a, SEXP b, SEXP X, SEXP tol)
+{
+
+    SEXP ans, vu, cumsumvux;
+    double *dans, *dx, dxA, dxA1, dxA2, *dvu, *dcs;
+    R_xlen_t N, i, j;
+    int p, pp, P;
+    
+    N = XLENGTH(a);
+
+    if (NROW(X) != N)
+        error("incorrect number of rows in X");
+    if (!isReal(X))
+        error("incorrect type of X");
+    dx = REAL(X);
+    P = (int) NCOL(X);
+
+    PROTECT(ans = allocMatrix(REALSXP, P, P));
+    dans = REAL(ans);
+
+    if (XLENGTH(b) != N - 1)
+        error("incorrect length of b");
+
+    if (!isReal(a))
+        error("incorrect type of a");
+
+    if (!isReal(b))
+        error("incorrect type of b");
+
+    if (!isReal(tol))
+        error("incorrect type of tol");
+
+    PROTECT(vu = allocMatrix(REALSXP, N, 2));
+    dvu = REAL(vu);
+    C_symtrisolve(REAL(a), REAL(b), N - 1, REAL(tol)[0], dvu);
+    PROTECT(cumsumvux = allocMatrix(REALSXP, N, 2));
+    dcs = REAL(cumsumvux);
+
+    for (p = 0; p < P * P; p++)
+        dans[p] = 0.0;
+
+    @<lower wcrossprod@>
+    @<upper wcrossprod@>
+
+    UNPROTECT(3);
+    return(ans);
+}
+@}
+
+@d R wcrossprod
+@{
+wcrossprod <- function(x, A, tol = .Machine$double.eps) {
+    storage.mode(x) <- "double"
+    .Call(R_wcrossprod, a = as.double(A$a), 
+                        b = as.double(A$b),
+                        X = x,
+                        tol = tol)
+}
+@}
