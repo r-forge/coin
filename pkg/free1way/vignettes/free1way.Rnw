@@ -3767,8 +3767,9 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@he <- 0@\\
+\mbox{}\verb@deltamu <- delta - mu@\\
 \mbox{}\verb@for (i in seq_len(nsim)) {@\\
-\mbox{}\verb@    parm <- delta@\\
+\mbox{}\verb@    parm <- deltamu@\\
 \mbox{}\verb@    x <- as.table(array(0, dim = c(C, K, B)))@\\
 \mbox{}\verb@    for (b in seq_len(B)) {@\\
 \mbox{}\verb@        x[,,b] <- r2dsim(1L, r = prob[, b], c = N[b,], delta = delta, link = link)[[1L]]@\\
@@ -3778,7 +3779,7 @@ ppplot(y, x, conf.level = .95, interpolate = TRUE)
 \mbox{}\verb@        parm <- c(parm, theta)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    ### evaluate observed hessian for true parameters parm and x data@\\
-\mbox{}\verb@    he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian@\\
+\mbox{}\verb@    he <- he + .free1wayML(x, link = link, mu = mu, start = parm, fix = seq_along(parm))$hessian@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@### estimate expected Fisher information@\\
 \mbox{}\verb@he <- he / nsim@\\
@@ -3802,7 +3803,7 @@ Make sure power function is non-stochastic
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, @\\
-\mbox{}\verb@                    strata_ratio = strata_ratio, delta = delta, @\\
+\mbox{}\verb@                    strata_ratio = strata_ratio, delta = delta, mu = mu,@\\
 \mbox{}\verb@                    sig.level = sig.level, link = link, @\\
 \mbox{}\verb@                    alternative = alternative, @\\
 \mbox{}\verb@                    nsim = nsim, seed = seed, tol = tol)$power - power@\\
@@ -3828,6 +3829,7 @@ Make sure power function is non-stochastic
 \mbox{}\verb@            "Total sample size" = paste(ss, "=", sum(N)),@\\
 \mbox{}\verb@            power = power, @\\
 \mbox{}\verb@            sig.level = sig.level)@\\
+\mbox{}\verb@if (mu != 0) ret$mu <- mu@\\
 \mbox{}\verb@ret[[link$parm]] <- delta@\\
 \mbox{}\verb@ret$note <- "'n' is sample size in control group"@\\
 \mbox{}\verb@if (B > 1) ret$note <- paste(ret$note, "of first stratum")@\\
@@ -3856,7 +3858,7 @@ Make sure power function is non-stochastic
 \mbox{}\verb@@\\
 \mbox{}\verb@power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n), @\\
 \mbox{}\verb@                                alloc_ratio = 1, strata_ratio = 1, @\\
-\mbox{}\verb@                                delta = NULL, sig.level = .05, power = NULL,@\\
+\mbox{}\verb@                                delta = NULL, mu = 0, sig.level = .05, power = NULL,@\\
 \mbox{}\verb@                                link = c("logit", "probit", "cloglog", "loglog"),@\\
 \mbox{}\verb@                                alternative = c("two.sided", "less", "greater"), @\\
 \mbox{}\verb@                                nsim = 100, seed = NULL, tol = .Machine$double.eps^0.25) @\\
@@ -3890,18 +3892,19 @@ Make sure power function is non-stochastic
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    alternative <- match.arg(alternative)@\\
 \mbox{}\verb@    if (K == 2L) {@\\
 \mbox{}\verb@        se <- 1 / sqrt(c(he))@\\
 \mbox{}\verb@        power  <- switch(alternative, @\\
-\mbox{}\verb@            "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + @\\
-\mbox{}\verb@                          pnorm(qnorm(sig.level / 2) - delta / se),@\\
-\mbox{}\verb@            "less" = pnorm(qnorm(sig.level) - delta / se),@\\
-\mbox{}\verb@            "greater" = pnorm(qnorm(sig.level) + delta / se)@\\
+\mbox{}\verb@            "two.sided" = pnorm(qnorm(sig.level / 2) + deltamu / se) + @\\
+\mbox{}\verb@                          pnorm(qnorm(sig.level / 2) - deltamu / se),@\\
+\mbox{}\verb@            "less" = pnorm(qnorm(sig.level) - deltamu / se),@\\
+\mbox{}\verb@            "greater" = pnorm(qnorm(sig.level) + deltamu / se)@\\
 \mbox{}\verb@        )@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        stopifnot(alternative == "two.sided")@\\
-\mbox{}\verb@        ncp <- sum((chol(he) %*% delta)^2)@\\
+\mbox{}\verb@        ncp <- sum((chol(he) %*% deltamu)^2)@\\
 \mbox{}\verb@        qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)@\\
 \mbox{}\verb@        power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)@\\
 \mbox{}\verb@    }@\\

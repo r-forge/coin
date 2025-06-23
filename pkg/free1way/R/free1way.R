@@ -1085,7 +1085,7 @@ r2dsim <- function(n, r, c, delta = 0,
 
 power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n), 
                                 alloc_ratio = 1, strata_ratio = 1, 
-                                delta = NULL, sig.level = .05, power = NULL,
+                                delta = NULL, mu = 0, sig.level = .05, power = NULL,
                                 link = c("logit", "probit", "cloglog", "loglog"),
                                 alternative = c("two.sided", "less", "greater"), 
                                 nsim = 100, seed = NULL, tol = .Machine$double.eps^0.25) 
@@ -1116,7 +1116,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
                  # power call
                  
                  power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
-                                     strata_ratio = strata_ratio, delta = delta, 
+                                     strata_ratio = strata_ratio, delta = delta, mu = mu,
                                      sig.level = sig.level, link = link, 
                                      alternative = alternative, 
                                      nsim = nsim, seed = seed, tol = tol)$power - power
@@ -1129,7 +1129,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
                  # power call
                  
                  power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
-                                     strata_ratio = strata_ratio, delta = delta, 
+                                     strata_ratio = strata_ratio, delta = delta, mu = mu,
                                      sig.level = sig.level, link = link, 
                                      alternative = alternative, 
                                      nsim = nsim, seed = seed, tol = tol)$power - power
@@ -1142,7 +1142,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
                 # power call
                 
                 power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
-                                    strata_ratio = strata_ratio, delta = delta, 
+                                    strata_ratio = strata_ratio, delta = delta, mu = mu,
                                     sig.level = sig.level, link = link, 
                                     alternative = alternative, 
                                     nsim = nsim, seed = seed, tol = tol)$power - power
@@ -1192,8 +1192,9 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
     # estimate Fisher information
     
     he <- 0
+    deltamu <- delta - mu
     for (i in seq_len(nsim)) {
-        parm <- delta
+        parm <- deltamu
         x <- as.table(array(0, dim = c(C, K, B)))
         for (b in seq_len(B)) {
             x[,,b] <- r2dsim(1L, r = prob[, b], c = N[b,], delta = delta, link = link)[[1L]]
@@ -1203,24 +1204,25 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
             parm <- c(parm, theta)
         }
         ### evaluate observed hessian for true parameters parm and x data
-        he <- he + .free1wayML(x, link = link, start = parm, fix = seq_along(parm))$hessian
+        he <- he + .free1wayML(x, link = link, mu = mu, start = parm, fix = seq_along(parm))$hessian
     }
     ### estimate expected Fisher information
     he <- he / nsim
     
 
+
     alternative <- match.arg(alternative)
     if (K == 2L) {
         se <- 1 / sqrt(c(he))
         power  <- switch(alternative, 
-            "two.sided" = pnorm(qnorm(sig.level / 2) + delta / se) + 
-                          pnorm(qnorm(sig.level / 2) - delta / se),
-            "less" = pnorm(qnorm(sig.level) - delta / se),
-            "greater" = pnorm(qnorm(sig.level) + delta / se)
+            "two.sided" = pnorm(qnorm(sig.level / 2) + deltamu / se) + 
+                          pnorm(qnorm(sig.level / 2) - deltamu / se),
+            "less" = pnorm(qnorm(sig.level) - deltamu / se),
+            "greater" = pnorm(qnorm(sig.level) + deltamu / se)
         )
     } else {
         stopifnot(alternative == "two.sided")
-        ncp <- sum((chol(he) %*% delta)^2)
+        ncp <- sum((chol(he) %*% deltamu)^2)
         qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
         power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)
     }
@@ -1232,6 +1234,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
                 "Total sample size" = paste(ss, "=", sum(N)),
                 power = power, 
                 sig.level = sig.level)
+    if (mu != 0) ret$mu <- mu
     ret[[link$parm]] <- delta
     ret$note <- "'n' is sample size in control group"
     if (B > 1) ret$note <- paste(ret$note, "of first stratum")
