@@ -3174,12 +3174,12 @@ Distribution-free
 \mbox{}\verb@    if (missing(parm)) @\\
 \mbox{}\verb@        parm <- seq_along(cf)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    wlevel <- level@\\
-\mbox{}\verb@    if (test != "Wald")@\\
-\mbox{}\verb@        wlevel <- 1 - (1 - level) / 10@\\
-\mbox{}\verb@    CINT <- confint.default(object, level = wlevel)@\\
+\mbox{}\verb@    CINT <- confint.default(object, level = level)@\\
 \mbox{}\verb@    if (test == "Wald")@\\
 \mbox{}\verb@        return(CINT)@\\
+\mbox{}\verb@    wlevel <- level@\\
+\mbox{}\verb@    wlevel <- 1 - (1 - level) / 10@\\
+\mbox{}\verb@    CINT[] <- confint.default(object, level = wlevel)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    sfun <- function(value, parm, quantile) {@\\
 \mbox{}\verb@        x <- object@\\

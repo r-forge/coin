@@ -730,12 +730,12 @@ confint.free1way <- function(object, parm,
     if (missing(parm)) 
         parm <- seq_along(cf)
 
-    wlevel <- level
-    if (test != "Wald")
-        wlevel <- 1 - (1 - level) / 10
-    CINT <- confint.default(object, level = wlevel)
+    CINT <- confint.default(object, level = level)
     if (test == "Wald")
         return(CINT)
+    wlevel <- level
+    wlevel <- 1 - (1 - level) / 10
+    CINT[] <- confint.default(object, level = wlevel)
 
     sfun <- function(value, parm, quantile) {
         x <- object
