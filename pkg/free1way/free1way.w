@@ -422,8 +422,7 @@ if (length(Z) > 1L) Z <- diag(Z)
 @}
 
 We return the Fisher information for $\beta_2, \dots, \beta_K$ as the Schur
-complement $\Z - \X^\top \mA^{-1} \X$ by means of a weighted crossproduct
-implemented in Chapter~\ref{ch:schur}.
+complement $\Z - \X^\top \mA^{-1} \X$.
 
 @d Hessian
 @{
@@ -511,11 +510,11 @@ if (is.table(x)) {
     sidx <- gl(B, C - 1)
     x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
 } else {
-    C <- sapply(x, nrow)
-    K <- unique(sapply(x, ncol))
+    C <- sapply(x, NROW)
+    K <- unique(do.call("c", lapply(x, ncol)))
     stopifnot(length(K) == 1L)
     B <- length(x)
-    sidx <- factor(rep(seq_len(B), times = C - 1L), levels = seq_len(B))
+    sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
 }
 bidx <- seq_len(K - 1L)
 beta <- parm[bidx]
@@ -527,8 +526,10 @@ intercepts <- split(parm[-bidx], sidx)
 .snll <- function(parm, x, mu = 0) {
     @<stratum prep@>
     ret <- 0
-    for (b in seq_len(B))
-        ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+    for (b in seq_len(B)) {
+        if (!is.null(x[[b]]))
+            ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+    }
     return(ret)
 }
 @}
@@ -543,9 +544,11 @@ intercept parameters are only concatenated.
     @<stratum prep@>
     ret <- numeric(length(bidx))
     for (b in seq_len(B)) {
-        nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu)
-        ret[bidx] <- ret[bidx] + nsc[bidx]
-        ret <- c(ret, nsc[-bidx])
+        if (!is.null(x[[b]])) {
+            nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+            ret[bidx] <- ret[bidx] + nsc[bidx]
+            ret <- c(ret, nsc[-bidx])
+        }
     }
     return(ret)
 }
@@ -560,10 +563,12 @@ row of zeros in the table.
     @<stratum prep@>
     ret <- c()
     for (b in seq_len(B)) {
-        idx <- attr(x[[b]], "idx")
-        sr <- numeric(length(idx))
-        sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu)
-        ret <- c(ret, sr)
+        if (!is.null(x[[b]])) {
+            idx <- attr(x[[b]], "idx")
+            sr <- numeric(length(idx))
+            sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+            ret <- c(ret, sr)
+        }
     }
     return(ret)
 }
@@ -596,8 +601,10 @@ logLik(m) + op$value
 .shes <- function(parm, x, mu = 0) {
     @<stratum prep@>
     ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
-    for (b in seq_len(B))
-        ret <- ret + .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+    for (b in seq_len(B)) {
+        if (!is.null(x[[b]]))
+            ret <- ret + .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+    }
     ret
 }
 @}
@@ -873,14 +880,16 @@ lwr <- rep(-Inf, times = K - 1)
 for (b in seq_len(B)) {
     xb <- matrix(x[,,b, drop = TRUE], ncol = K)
     xw <- rowSums(abs(xb)) > tol
-    xlist[[b]] <- xb[xw,,drop = FALSE]
-    attr(xlist[[b]], "idx") <- xw
-    lwr <- c(lwr, -Inf, rep.int(tol, times = sum(xw) - 2L))
-    if (NS) {
-        ecdf0 <- cumsum(rowSums(xlist[[b]]))
-        ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
-        Qecdf <- Q(ecdf0)
-        start <- c(start, Qecdf[1], diff(Qecdf))
+    if (sum(xw) > 1L) {
+        xlist[[b]] <- xb[xw,,drop = FALSE]
+        attr(xlist[[b]], "idx") <- xw
+        lwr <- c(lwr, -Inf, rep.int(tol, times = sum(xw) - 2L))
+        if (NS) {
+            ecdf0 <- cumsum(rowSums(xlist[[b]]))
+            ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
+            Qecdf <- Q(ecdf0)
+            start <- c(start, Qecdf[1], diff(Qecdf))
+        }
     }
 }
 @}
@@ -965,6 +974,7 @@ ret$profile <- function(start, fix)
 
 ret$table <- x
 ret$mu <- mu
+ret$strata <- !sapply(xlist, is.null)
 names(ret$mu) <- link$parm
 @}
 
@@ -1274,6 +1284,7 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
     @<Strasser Weber@>
     @<resampling@>
 
+    if (length(dim(y)) == 3L) y <- y[,,ret$strata, drop = FALSE]
     ret$perm <- .resample(res, y, B = B)
 
     if (!is.null(names(dn))) {
