@@ -254,8 +254,12 @@ tmb <- intercepts - matrix(beta, nrow = length(intercepts),
                                  ncol = ncol(x),
                                  byrow = TRUE)
 Ftmb <- F(tmb)
-prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-            Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+if (rightcensored) {
+    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+} else {
+    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+} 
 @}
 
 With default null values $\mu_k = 0, k = 2, \dots, K$, we define the
@@ -264,7 +268,7 @@ the log-probabilities
 
 @d negative logLik
 @{
-.nll <- function(parm, x, mu = 0) {
+.nll <- function(parm, x, mu = 0, rightcensored = FALSE) {
     @<parm to prob@>
     return(- sum(x * log(prb)))
 }
@@ -287,6 +291,7 @@ We begin computing the ratio of $f(\vartheta_{c,1} -
 @{
 ftmb <- f(tmb)
 zu <- x * ftmb[- 1, , drop = FALSE] / prb
+if (rightcensored) zu[] <- 0
 zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
 @}
 
@@ -294,7 +299,7 @@ and compute the negative score function
 
 @d negative score
 @{
-.nsc <- function(parm, x, mu = 0) {
+.nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
     @<parm to prob@>
     @<d p ratio@>
 
@@ -328,7 +333,7 @@ zero:
 
 @d negative score residuals
 @{
-.nsr <- function(parm, x, mu = 0) {
+.nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
     @<parm to prob@>
     @<d p ratio@>
 
@@ -364,8 +369,10 @@ fptmb <- fp(tmb)
 
 dl <- ftmb[- nrow(ftmb), , drop = FALSE]
 du <- ftmb[- 1, , drop = FALSE]
+if (rightcensored) du[] <- 0
 dpl <- fptmb[- nrow(ftmb), , drop = FALSE]
 dpu <- fptmb[- 1, , drop = FALSE]
+if (rightcensored) dpu[] <- 0
 dlm1 <- dl[,-1L, drop = FALSE]
 dum1 <- du[,-1L, drop = FALSE]
 dplm1 <- dpl[,-1L, drop = FALSE]
@@ -426,7 +433,7 @@ complement $\Z - \X^\top \mA^{-1} \X$.
 
 @d Hessian
 @{
-.hes <- function(parm, x, mu = 0) {
+.hes <- function(parm, x, mu = 0, rightcensored = FALSE) {
     @<parm to prob@>
 
     @<Hessian prep@>
@@ -523,12 +530,13 @@ intercepts <- split(parm[-bidx], sidx)
 
 @d stratified negative logLik
 @{
-.snll <- function(parm, x, mu = 0) {
+.snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
     @<stratum prep@>
     ret <- 0
     for (b in seq_len(B)) {
         if (!is.null(x[[b]]))
-            ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+            ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+                              rightcensored = rightcensored)
     }
     return(ret)
 }
@@ -540,12 +548,13 @@ intercept parameters are only concatenated.
 
 @d stratified negative score
 @{
-.snsc <- function(parm, x, mu = 0) {
+.snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
     @<stratum prep@>
     ret <- numeric(length(bidx))
     for (b in seq_len(B)) {
         if (!is.null(x[[b]])) {
-            nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+            nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+                        rightcensored = rightcensored)
             ret[bidx] <- ret[bidx] + nsc[bidx]
             ret <- c(ret, nsc[-bidx])
         }
@@ -559,14 +568,15 @@ row of zeros in the table.
 
 @d stratified negative score residual
 @{
-.snsr <- function(parm, x, mu = 0) {
+.snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
     @<stratum prep@>
     ret <- c()
     for (b in seq_len(B)) {
         if (!is.null(x[[b]])) {
             idx <- attr(x[[b]], "idx")
             sr <- numeric(length(idx))
-            sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+            sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+                            rightcensored = rightcensored)
             ret <- c(ret, sr)
         }
     }
@@ -598,12 +608,13 @@ logLik(m) + op$value
 
 @d stratified Hessian
 @{
-.shes <- function(parm, x, mu = 0) {
+.shes <- function(parm, x, mu = 0, rightcensored = FALSE) {
     @<stratum prep@>
     ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
     for (b in seq_len(B)) {
         if (!is.null(x[[b]]))
-            ret <- ret + .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+            ret <- ret + .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+                              rightcensored = rightcensored)
     }
     ret
 }
@@ -869,27 +880,77 @@ probit <- function()
 @<power@>
 @}
 
+@d table2list
+@{
+.table2list <- function(x) {
+
+    dx <- dim(x)
+    if (length(dx) == 1L)
+        stop("")
+    if (length(dx) == 2L)
+        x <- as.table(array(x, dim = c(dx, 1)))
+    ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
+    ms$drop <- FALSE
+    x <- do.call("[", ms)
+    dx <- dim(x)
+    stopifnot(length(dx) >= 3L)
+    K <- dim(x)[2L]
+    B <- dim(x)[3L]
+    stopifnot(dx[1L] > 1L)
+    stopifnot(K > 1L)
+
+    xrc <- NULL
+    if (length(dx) == 4L) {
+        if (dx[4] == 2L) {
+            xrc <- x[,,,2, drop = TRUE]
+            x <- x[,,,1, drop = TRUE]
+        } else {
+            stop("")
+        }
+    }
+
+    K <- dim(x)[2L]
+    B <- dim(x)[3L]
+    xlist <- xrclist <- vector(mode = "list", length = B)
+
+    lwr <- rep(-Inf, times = K - 1)
+    for (b in seq_len(B)) {
+        xb <- matrix(x[,,b, drop = TRUE], ncol = K)
+        xw <- rowSums(abs(xb)) > 0
+        if (sum(xw) > 1L) {
+            xlist[[b]] <- xb[xw,,drop = FALSE]
+            attr(xlist[[b]], "idx") <- xw
+            if (!is.null(xrc))
+                xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
+        }
+    }
+    nn <- !sapply(xlist, is.null)
+    ret <- list(xlist = xlist[nn])
+    if (!is.null(xrc))
+        ret$xrclist <- xrclist[nn]
+    ret
+}
+@}
+
 @d setup
 @{
+@<table2list@>
 K <- dim(x)[2L]
 B <- dim(x)[3L]
-xlist <- vector(mode = "list", length = B)
+xl <- .table2list(x)
+xlist <- xl$xlist
+xrclist <- xl$xrclist
 if (NS <- is.null(start))
     start <- rep.int(0, K - 1)
 lwr <- rep(-Inf, times = K - 1)
 for (b in seq_len(B)) {
-    xb <- matrix(x[,,b, drop = TRUE], ncol = K)
-    xw <- rowSums(abs(xb)) > tol
-    if (sum(xw) > 1L) {
-        xlist[[b]] <- xb[xw,,drop = FALSE]
-        attr(xlist[[b]], "idx") <- xw
-        lwr <- c(lwr, -Inf, rep.int(tol, times = sum(xw) - 2L))
-        if (NS) {
-            ecdf0 <- cumsum(rowSums(xlist[[b]]))
-            ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
-            Qecdf <- Q(ecdf0)
-            start <- c(start, Qecdf[1], diff(Qecdf))
-        }
+    if (is.null(xlist[[b]])) next();
+    lwr <- c(lwr, -Inf, rep.int(tol, times = nrow(xlist[[b]]) - 2L))
+    if (NS) {
+        ecdf0 <- cumsum(rowSums(xlist[[b]]))
+        ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
+        Qecdf <- Q(ecdf0)
+        start <- c(start, Qecdf[1], diff(Qecdf))
     }
 }
 @}
@@ -908,13 +969,19 @@ $\thetavec$.
                      p <- numeric(length(par) + length(fix))
                      p[fix] <- beta
                      p[-fix] <- par
-                     .snll(p, x = xlist, mu = mu)
+                     ret <- .snll(p, x = xlist, mu = mu)
+                     if (!is.null(xrclist))
+                         ret <- ret + .snll(p, x = xrclist, mu = mu, rightcensored = TRUE)
+                     ret
                  },
                  gr = function(par) {
                      p <- numeric(length(par) + length(fix))
                      p[fix] <- beta
                      p[-fix] <- par
-                     .snsc(p, x = xlist, mu = mu)[-fix]
+                     ret <- .snsc(p, x = xlist, mu = mu)[-fix]
+                     if (!is.null(xrclist))
+                         ret <- ret + .snsc(p, x = xrclist, mu = mu, rightcensored = TRUE)[-fix]
+                     ret
                  },
                  lower = lwr[-fix], method = "L-BFGS-B", 
                  hessian = FALSE, ...)
@@ -930,15 +997,29 @@ $\thetavec$.
 @{
 if (!length(fix)) {
     ret <- optim(par = start, 
-                 fn = function(parm)
-                     .snll(parm, x = xlist, mu = mu),
-                 gr = function(parm)
-                     .snsc(parm, x = xlist, mu = mu),
+                 fn = function(par) {
+                     ret <- .snll(par, x = xlist, mu = mu)
+                     if (!is.null(xrclist))
+                         ret <- ret + .snll(par, x = xrclist, mu = mu, rightcensored = TRUE)
+                     ret
+                 },
+                 gr = function(par) {
+                     ret <- .snsc(par, x = xlist, mu = mu)
+                     if (!is.null(xrclist))
+                         ret <- ret + .snsc(par, x = xrclist, mu = mu, rightcensored = TRUE)
+                     ret
+                 },
                  lower = lwr, method = "L-BFGS-B", 
                  hessian = FALSE, ...)
 } else if (length(fix) == length(start)) {
+    fn <- function(par) {
+                     ret <- .snll(par, x = xlist, mu = mu)
+                     if (!is.null(xrclist))
+                         ret <- ret + .snll(par, x = xrclist, mu = mu, rightcensored = TRUE)
+                     ret
+                 }
     ret <- list(par = start, 
-                value = .snll(start, x = xlist, mu = mu))
+                value = fn(start))
 } else {
     ret <- .profile(start, fix = fix)
 }
@@ -958,8 +1039,12 @@ names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
 if (score)
     ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
+    if (!is.null(xrclist))
+        ret$negscore <- ret$negscore + .snsc(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
 if (hessian) {
     ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
+    if (!is.null(xrclist))
+        ret$hessian <- ret$hessian + .shes(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
     if (length(parm) != nrow(ret$hessian))
        ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
     ret$vcov <- solve(ret$hessian)
@@ -968,6 +1053,9 @@ if (hessian) {
 }
 if (residuals)
     ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
+    if (!is.null(xrclist))
+        ret$residuals <- c(ret$residuals, .snsr(ret$par, x = xrclist, mu = mu, rightcensored = TRUE))
+
 
 ret$profile <- function(start, fix)
     .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
