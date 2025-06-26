@@ -41,7 +41,8 @@
 \section{Changes in version 1.4-4 (20YY-MM-DD)}{
   \subsection{Bug fixes}{
     \itemize{
-      \item
+      \item \code{zheng_trafo()} using \code{increment = 1} failed to print in
+            \R \eqn{\ge}{>=}4.2.0 (due to changes in \code{format}).
     }
   }
   \subsection{User-visible changes}{

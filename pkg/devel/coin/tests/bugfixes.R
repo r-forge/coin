@@ -612,3 +612,6 @@ try(independence_test(tab, distr = exact(), teststat = "quad"))
 
 ### partial matching of teststat
 it <- independence_test(y ~ x, test = "quadratic")
+
+### failed to print in R >= 4.2.0
+zheng_trafo(gl(3, 1, ordered = TRUE), increment = 1)
