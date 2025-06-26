@@ -31,8 +31,9 @@
 
 SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
     /* Compute the joint permutation distribution of the sum of the first 'm_a'
-       elements of 'score_a' and 'score_b'.  In this case the exact conditional
-       distribution in the independent two-sample problem is computed. */
+       elements of 'score_a' = (1,...,1) and 'score_b'.  In this case the exact
+       conditional distribution in the independent two-sample problem is 
+       computed. */
 
     int n, sum_a, sum_b = 0, sum_bp1, s_a = 0, s_b = 0, min_b, idx, idx2, ic;
     double msum = 0.0;
@@ -69,7 +70,7 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
 
     /* start the shift algorithm with H[0,0] = 1 */
     dH[0] = 1.0;
-    ic = 10000;
+    ic = 10000; /* interrupt check */
     for (int k = 0; k < n; k++) {
         s_a += 1; /* remember: score_a = (1,...,1) */
         s_b += iscore_b[k];
@@ -153,14 +154,14 @@ SEXP R_cpermdist1(SEXP scores) {
 
     /* start the shift algorithm with H[0] = 1.0 */
     dH[0] = 1.0;
-    ic = 10000;
+    ic = 10000; /* interrupt checking */
     for (int k = 0; k < n; k++) {
         s_a += iscores[k];
         for (int i = s_a; i >= iscores[k]; i--) {
             if (!(--ic)) {
                 R_CheckUserInterrupt();
                 ic = 10000;
-             }
+            }
             dH[i] += dH[i - iscores[k]];
         }
     }
