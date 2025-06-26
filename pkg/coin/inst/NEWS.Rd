@@ -1,6 +1,24 @@
 \name{NEWS}
 \title{News for Package \pkg{coin}}
 
+\section{Changes in version 1.4-4 (20YY-MM-DD)}{
+  \subsection{Bug fixes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{User-visible changes}{
+    \itemize{
+      \item
+    }
+  }
+  \subsection{Other changes}{
+    \itemize{
+      \item
+    }
+  }
+}
+
 \section{Changes in version 1.4-3 (2023-09-26)}{
   \subsection{Bug fixes}{
     \itemize{
