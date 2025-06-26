@@ -506,9 +506,6 @@ setAttributes <- function(object, value) {
 
 ### heuristic for determining the printed number of decimal digits
 ### note that, e.g., 1.00 --> 0, 1.10 --> 1, 1.01 --> 2
-n_decimal_digits <-
-    function(x)
-{
-    nchar(sub("^-?[[:space:]]?[[:digit:]]*[.]?", "",
-              format(x, digits = 15, scientific = FALSE)[1]))
-}
+.ndecimals <-
+function(x)
+    nchar(sub("^[^.]*\\.?", "", format(x, digits = 15, scientific = FALSE)[1]))
