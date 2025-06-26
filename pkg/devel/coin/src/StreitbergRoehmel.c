@@ -105,7 +105,7 @@ SEXP R_cpermdist2(SEXP score_b, SEXP m_a) {
     /* compute probabilities and return the density x to R
        Note: the support is min(score_b):sum(score_b) */
     for (int j = 0; j < sum_b; j++)
-        dx[j] = dx[j] / msum;
+        dx[j] /= msum;
 
     UNPROTECT(1);
     return(x);
@@ -177,7 +177,7 @@ SEXP R_cpermdist1(SEXP scores) {
 
     /* compute probabilities and return the density H to R */
     for (int i = 0; i <= sum_a; i++)
-        dH[i] = dH[i] / msum; /* 0 is a possible realization */
+        dH[i] /= msum; /* 0 is a possible realization */
 
     UNPROTECT(1);
     return(H);
