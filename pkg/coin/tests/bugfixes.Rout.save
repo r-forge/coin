@@ -1,6 +1,6 @@
 
-R Under development (unstable) (2023-07-23 r84741 ucrt) -- "Unsuffered Consequences"
-Copyright (C) 2023 The R Foundation for Statistical Computing
+R Under development (unstable) (2025-06-24 r88352 ucrt) -- "Unsuffered Consequences"
+Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -995,6 +995,13 @@ Error in .local(object, ...) :
 > ### partial matching of teststat
 > it <- independence_test(y ~ x, test = "quadratic")
 > 
+> ### failed to print in R >= 4.2.0
+> zheng_trafo(gl(3, 1, ordered = TRUE), increment = 1)
+  gamma = (0, 0, 1) gamma = (0, 1, 1)
+1                 0                 0
+2                 0                 1
+3                 1                 1
+> 
 > proc.time()
    user  system elapsed 
-   3.17    0.35    3.53 
+   2.45    0.31    2.75 
