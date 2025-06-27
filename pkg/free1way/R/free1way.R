@@ -12,12 +12,14 @@
         x <- as.table(array(c(x), dim = dx <- c(dx, 1L)))
         dimnames(x) <- dn <- c(dn, list(A = "A"))
     }
-    x <- x[marginSums(x, 1) > 0, 
-           marginSums(x, 2) > 0, 
-           marginSums(x, 3) > 0, drop = FALSE]
+
+    ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
+    ms$drop <- FALSE
+    x <- do.call("[", ms)
+
     dx <- dim(x)
     dn <- dimnames(x)
-    stopifnot(length(dx) == 3L)
+    stopifnot(length(dx) >= 3L)
     stopifnot(dx[1L] > 1L)
     K <- dx[2L]
     stopifnot(K > 1L)
@@ -51,35 +53,41 @@
         xrc <- NULL
         if (length(dx) == 4L) {
             if (dx[4] == 2L) {
-                xrc <- x[,,,2, drop = TRUE]
-                x <- x[,,,1, drop = TRUE]
+                xrc <- array(x[,,,"FALSE", drop = TRUE], dim = dx[1:3])
+                x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])
             } else {
                 stop("")
             }
         }
 
-        K <- dim(x)[2L]
-        B <- dim(x)[3L]
         xlist <- xrclist <- vector(mode = "list", length = B)
 
         lwr <- rep(-Inf, times = K - 1)
         for (b in seq_len(B)) {
             xb <- matrix(x[,,b, drop = TRUE], ncol = K)
             xw <- rowSums(abs(xb)) > 0
+            ### do not remove last parameter if there are corresponding
+            ### right-censored observations
+            if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))
+                xw[length(xw)] <- TRUE
             if (sum(xw) > 1L) {
                 xlist[[b]] <- xb[xw,,drop = FALSE]
                 attr(xlist[[b]], "idx") <- xw
-                if (!is.null(xrc))
+                if (!is.null(xrc)) {
                     xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
+                    attr(xrclist[[b]], "idx") <- xw
+                }
             }
         }
         nn <- !sapply(xlist, is.null)
         ret <- list(xlist = xlist[nn])
         if (!is.null(xrc))
             ret$xrclist <- xrclist[nn]
+        ret$strata <- nn
         ret
     }
     
+    C <- dim(x)[1L]
     K <- dim(x)[2L]
     B <- dim(x)[3L]
     xl <- .table2list(x)
@@ -88,14 +96,14 @@
     if (NS <- is.null(start))
         start <- rep.int(0, K - 1)
     lwr <- rep(-Inf, times = K - 1)
-    for (b in seq_len(B)) {
-        if (is.null(xlist[[b]])) next();
+    for (b in seq_len(length(xlist))) {
         lwr <- c(lwr, -Inf, rep.int(tol, times = nrow(xlist[[b]]) - 2L))
         if (NS) {
             ecdf0 <- cumsum(rowSums(xlist[[b]]))
             ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
             Qecdf <- Q(ecdf0)
             start <- c(start, Qecdf[1], diff(Qecdf))
+            start[!is.finite(start)] <- 0
         }
     }
     
@@ -194,7 +202,9 @@
         zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
         
 
-        rowSums(zu - zl) / rowSums(x)
+        ret <- rowSums(zu - zl) / rowSums(x)
+        ret[!is.finite(ret)] <- 0
+        ret
     }
     
     # Hessian
@@ -286,7 +296,7 @@
         } else {
             A <- matrix(Adiag)
         }
-        return(Z - crossprod(X, solve(A, X)))
+        return(list(A = A, X = X, Z = Z))
     }
     
     # stratified negative logLik
@@ -312,11 +322,9 @@
         intercepts <- split(parm[-bidx], sidx)
         
         ret <- 0
-        for (b in seq_len(B)) {
-            if (!is.null(x[[b]]))
-                ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu,
-                                  rightcensored = rightcensored)
-        }
+        for (b in seq_len(B))
+            ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+                              rightcensored = rightcensored)
         return(ret)
     }
     
@@ -344,19 +352,17 @@
         
         ret <- numeric(length(bidx))
         for (b in seq_len(B)) {
-            if (!is.null(x[[b]])) {
-                nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu,
-                            rightcensored = rightcensored)
-                ret[bidx] <- ret[bidx] + nsc[bidx]
-                ret <- c(ret, nsc[-bidx])
-            }
+            nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+                        rightcensored = rightcensored)
+            ret[bidx] <- ret[bidx] + nsc[bidx]
+            ret <- c(ret, nsc[-bidx])
         }
         return(ret)
     }
     
     # stratified Hessian
     
-    .shes <- function(parm, x, mu = 0, rightcensored = FALSE) {
+    .shes <- function(parm, x, mu = 0, xrc = NULL) {
         # stratum prep
         
         if (is.table(x)) {
@@ -378,9 +384,15 @@
         
         ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
         for (b in seq_len(B)) {
-            if (!is.null(x[[b]]))
-                ret <- ret + .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu,
-                                  rightcensored = rightcensored)
+            H <- .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+            if (!is.null(xrc)) {
+                Hrc <- .hes(c(beta, intercepts[[b]]), xrc[[b]], mu = mu, 
+                            rightcensored = TRUE)
+                H$X <- H$X + Hrc$X
+                H$A <- H$A + Hrc$A
+                H$Z <- H$Z + Hrc$Z
+            }
+            ret <- ret + (H$Z - crossprod(H$X, solve(H$A, H$X)))
         }
         ret
     }
@@ -409,13 +421,11 @@
         
         ret <- c()
         for (b in seq_len(B)) {
-            if (!is.null(x[[b]])) {
-                idx <- attr(x[[b]], "idx")
-                sr <- numeric(length(idx))
-                sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu,
-                                rightcensored = rightcensored)
-                ret <- c(ret, sr)
-            }
+            idx <- attr(x[[b]], "idx")
+            sr <- numeric(length(idx))
+            sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+                            rightcensored = rightcensored)
+            ret <- c(ret, sr)
         }
         return(ret)
     }
@@ -498,29 +508,29 @@
     if (score)
         ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
         if (!is.null(xrclist))
-            ret$negscore <- ret$negscore + .snsc(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
+            ret$negscore <- ret$negscore + .snsc(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)[parm]
     if (hessian) {
-        ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
-        if (!is.null(xrclist))
-            ret$hessian <- ret$hessian + .shes(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
+        ret$hessian <- .shes(ret$par, x = xlist, mu = mu, xrc = xrclist)
         if (length(parm) != nrow(ret$hessian))
            ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
         ret$vcov <- solve(ret$hessian)
         rownames(ret$vcov) <- colnames(ret$vcov) <- rownames(ret$hessian) <-
             colnames(ret$hessian) <-  cnames
     }
-    if (residuals)
+    if (residuals) {
         ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
-        if (!is.null(xrclist))
-            ret$residuals <- c(ret$residuals, .snsr(ret$par, x = xrclist, mu = mu, rightcensored = TRUE))
-
-
+        if (!is.null(xrclist)) {
+            rcr <- .snsr(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
+            ret$residuals <- c(rbind(matrix(ret$residuals, nrow = C),
+                  matrix(rcr, nrow = C)))
+         }
+    }
     ret$profile <- function(start, fix)
         .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
 
     ret$table <- x
     ret$mu <- mu
-    ret$strata <- !sapply(xlist, is.null)
+    ret$strata <- xl$strata
     names(ret$mu) <- link$parm
     
 
@@ -646,6 +656,13 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
     
 
     if (length(dim(y)) == 3L) y <- y[,,ret$strata, drop = FALSE]
+    if (length(dim(y)) == 4L) {
+        y <- y[,,ret$strata,, drop = FALSE]
+        dy <- dim(y)
+        dy[1] <- dy[1] * 2
+        y <- apply(y, 3, function(x) rbind(x[,,2], x[,,1]))
+        y <- array(y, dim = dy[1:3])
+    }
     ret$perm <- .resample(res, y, B = B)
 
     if (!is.null(names(dn))) {
@@ -1021,7 +1038,7 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
 
 # free1way numeric
 
-free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0, 
+free1way.test.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, nbins = 0, 
     varnames = c(deparse1(substitute(y)), 
                  deparse1(substitute(x)), 
                  deparse1(substitute(z))), ...) {
@@ -1032,16 +1049,24 @@ free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0,
 
     if (!is.null(z))
         DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])
+    varnames <- varnames[varnames != "NULL"]
 
-    uy <- unique(y)
+    if (!is.null(event)) {
+        stopifnot(is.logical(event))
+        uy <- sort(unique(y[event]))
+        if (all(y[!event] < uy[length(uy)]))
+            uy <- uy[-length(uy)]
+    } else {
+        uy <- sort(unique(y))
+    }
     if (nbins && nbins < length(uy)) {
         nbins <- ceiling(nbins)
         breaks <- c(-Inf, quantile(y, prob = seq_len(nbins) / (nbins + 1L)), Inf)
     } else {
-        breaks <- c(-Inf, sort(uy), Inf)
+        breaks <- c(-Inf, uy, Inf)
     }
     r <- cut(y, breaks = breaks, ordered_result = TRUE)[, drop = TRUE]
-    RVAL <- free1way.test(y = r, x = x, z = z, weights = weights, 
+    RVAL <- free1way.test(y = r, x = x, z = z, event = event, weights = weights, 
                           varnames = varnames, ...)
     RVAL$data.name <- DNAME
     RVAL$call <- cl
@@ -1050,7 +1075,7 @@ free1way.test.numeric <- function(y, x, z = NULL, weights = NULL, nbins = 0,
 
 # free1way factor
 
-free1way.test.factor <- function(y, x, z = NULL, weights = NULL, 
+free1way.test.factor <- function(y, x, z = NULL, event = NULL, weights = NULL, 
     varnames = c(deparse1(substitute(y)), 
                  deparse1(substitute(x)), 
                  deparse1(substitute(z))), ...) {
@@ -1061,24 +1086,23 @@ free1way.test.factor <- function(y, x, z = NULL, weights = NULL,
 
     if (!is.null(z))
         DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])
+    varnames <- varnames[varnames != "NULL"]
 
     stopifnot(is.factor(x))
     if (nlevels(y) > 2L)
         stopifnot(is.ordered(y))
-    d <- data.frame(y = y, x = x, w = 1)
+    d <- data.frame(w = 1, y = y, x = x)
     if (!is.null(weights)) d$w <- weights
-    if (!is.null(z)) {
-        d$z <- z
-        tab <- xtabs(w ~ y + x + z, data = d)
-        dn <- dimnames(tab)
-        names(dn) <- varnames
-        dimnames(tab) <- dn
-    } else {
-        tab <- xtabs(w ~ y + x, data = d)
-        dn <- dimnames(tab)
-        names(dn) <- varnames[1:2]
-        dimnames(tab) <- dn
+    if (is.null(z)) z <- gl(1, nrow(d))
+    d$z <- z 
+    if (!is.null(event)) {
+        stopifnot(is.logical(event))
+        d$event <- event
     }
+    tab <- xtabs(w ~ ., data = d)
+    dn <- dimnames(tab)
+    names(dn)[seq_along(varnames)] <- varnames
+    dimnames(tab) <- dn
     RVAL <- free1way.test(tab, ...)
     RVAL$data.name <- DNAME
     RVAL$call <- cl
