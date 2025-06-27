@@ -62,9 +62,8 @@ setMethod("pvalue",
 
             C <- attr(object@statistic@xtrans, "contrast")
             if (!is.null(C) && method != "global")
-                warning("p-values may be incorrect due to violation\n",
-                        "  of the subset pivotality condition")
-            ## NOTE: Two ^^ spaces needed for correct rendering
+                warning(paste("p-values may be incorrect due to violation of",
+                              "the subset pivotality condition"))
 
             if (method == "global")
                 callNextMethod(object, ...)
