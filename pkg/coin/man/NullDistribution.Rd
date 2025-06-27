@@ -95,16 +95,16 @@ exact(algorithm = c("auto", "shift", "split-up"), fact = NULL)
   \code{"shift"} or \code{"split-up"}, respectively.
 }
 \note{
-  Starting with \pkg{coin} version 1.1-0, the default for \code{algorithm} is
+  Starting with version 1.1-0, the default for \code{algorithm} is
   \code{"auto"}, having identical behaviour to \code{"shift"} in previous
   versions.  In earlier versions of the package, \code{algorithm = "shift"}
   silently switched to the split-up algorithm if non-integer scores were
   detected, whereas the current version exits with a warning.
 
-  In versions of \pkg{coin} prior to 1.3-0, the number of Monte Carlo replicates
-  in \code{approximate()} was specified using the now deprecated \code{B}
-  argument.  \strong{This will be made defunct and removed in a future release.}
-  It has been replaced by the \code{nresample} argument (for conformity with the
+  In versions prior to 1.3-0, the number of Monte Carlo replicates in
+  \code{approximate()} was specified using the now deprecated \code{B} argument.
+  \strong{This will be made defunct and removed in a future release.}  It has
+  been replaced by the \code{nresample} argument (for consistency with the
   \pkg{libcoin}, \pkg{party} and \pkg{partykit} packages).
 }
 \references{

@@ -164,7 +164,7 @@
   permutation distributions or exact permutation distributions obtained by the
   split-up algorithm is reported as \code{NA}.
 
-  In versions of \pkg{coin} prior to 1.1-0, a min-\eqn{P} procedure computing
+  In versions prior to 1.1-0, a min-\eqn{P} procedure computing
   \enc{Šidák}{Sidak} single-step adjusted \eqn{p}-values accounting for
   discreteness was available when specifying \code{method = "discrete"}.  This
   was made \strong{defunct} in version 1.2-0 due to the introduction of a more

@@ -275,19 +275,19 @@
   user-supplied logrank weights (see \code{\link{GTSG}} for tests against
   Weibull-type or crossing-curve alternatives).
 
-  Starting with \pkg{coin} version 1.1-0, \code{logrank_test()} replaced
-  \code{surv_test()} which was made \strong{defunct} in version 1.2-0.
-  Furthermore, \code{logrank_trafo()} is now an increasing function for all
-  choices of \code{ties.method}, implying that the test statistic has the same
-  sign irrespective of the ties handling method.  Consequently, the sign of the
-  test statistic will now be the opposite of what it was in earlier versions
-  unless \code{ties.method = "average-scores"}.  (In versions of \pkg{coin}
-  prior to 1.1-0, \code{logrank_trafo()} was a decreasing function when
+  Starting with version 1.1-0, \code{logrank_test()} replaced \code{surv_test()}
+  which was made \strong{defunct} in version 1.2-0.  Furthermore,
+  \code{logrank_trafo()} is now an increasing function for all choices of
+  \code{ties.method}, implying that the test statistic has the same sign
+  irrespective of the ties handling method.  Consequently, the sign of the test
+  statistic will now be the opposite of what it was in earlier versions unless
+  \code{ties.method = "average-scores"}.  (In versions prior to 1.1-0,
+  \code{logrank_trafo()} was a decreasing function when
   \code{ties.method} was other than \code{"average-scores"}.)
 
-  Starting with \pkg{coin} version 1.2-0, mid-ranks and the Hothorn-Lausen
-  method can no longer be specified with \code{ties.method = "logrank"} and
-  \code{ties-method = "HL"} respectively.
+  Starting with version 1.2-0, mid-ranks and the Hothorn-Lausen method can no
+  longer be specified with \code{ties.method = "logrank"} and
+  \code{ties-method = "HL"}, respectively.
 }
 \references{
   Andersen, P. K., Borgan, \enc{Ø}{O}., Gill, R. and Keiding, N.  (1982).
