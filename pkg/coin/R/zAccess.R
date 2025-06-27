@@ -6,8 +6,8 @@ setGeneric("pvalue",
 )
 
 ### <DEPRECATED>
-### The "PValue" class was deprecated in 1.3-0 and at the same time this
-### method was added as a temporary solution.  To be removed in 2.0-0.
+### Class "PValue" was deprecated in 1.3-0 (this method was then added as a
+### temporary solution).  To be removed in 2.0-0.
 setMethod("pvalue",
     signature = "PValue",
     definition = function(object, q, ...) {
@@ -54,9 +54,13 @@ setMethod("pvalue",
                           choices = c("global", "single-step", "step-down",
                                       "unadjusted", "discrete"),
                           several.ok = TRUE)[1]
+            ## <DEFUNCT>
+            ## Option "discrete" was deprecated in 1.1-0 and made defunct in
+            ## 1.2-0.  To be removed in 2.0-0.
             if (method == "discrete")
-                stop(sQuote(paste("method =", dQuote(method))),
-                        " is defunct; see ", sQuote("?pvalue"))
+                .Defunct(msg = paste(sQuote(paste("method =", dQuote(method))),
+                                     "is defunct; see", sQuote("?pvalue")))
+            ## </DEFUNCT>
             distribution <- match.arg(distribution)
             type <- match.arg(type)
 
@@ -495,8 +499,8 @@ setGeneric("covariance",
 )
 
 ### <DEPRECATED>
-### Note: The "CovarianceMatrix", "Variance" and "VarCovar" classes were
-### deprecated in 1.4-0.  To be removed in 2.0-0.
+### Classes "CovarianceMatrix", "Variance" and "VarCovar" were deprecated in
+### 1.4-0.  To be removed in 2.0-0.
 setMethod("covariance",
     signature = "CovarianceMatrix",
     definition = function(object, ...) {
@@ -575,8 +579,8 @@ setGeneric("variance",
 )
 
 ### <DEPRECATED>
-### Note: The "CovarianceMatrix", "Variance" and "VarCovar" classes were
-### deprecated in 1.4-0.  To be removed in 2.0-0.
+### Classes "CovarianceMatrix", "Variance" and "VarCovar" were deprecated in
+### 1.4-0.  To be removed in 2.0-0.
 setMethod("variance",
     signature = "Variance",
     definition = function(object, ...) {

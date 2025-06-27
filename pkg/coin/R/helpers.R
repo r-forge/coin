@@ -7,9 +7,10 @@ asymptotic <- function(maxpts = 25000, abseps = 0.001, releps = 0) {
 approximate <- function(nresample = 10000L, parallel = c("no", "multicore", "snow"),
                         ncpus = 1L, cl = NULL, B) {
     ## <DEPRECATED>
+    ## Argument 'B' was deprecated in 1.3-0.  To be removed in 2.0-0.
     if (!missing(B)) {
-        warning(sQuote("B"), " is deprecated; use ", sQuote("nresample"),
-                " instead")
+        .Deprecated(msg = paste(sQuote("B"), "is deprecated; use",
+                                sQuote("nresample"), "instead"))
         nresample <- B
     }
     ## </DEPRECATED>

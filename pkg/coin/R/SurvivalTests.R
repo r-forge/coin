@@ -1,7 +1,7 @@
 ### <DEFUNCT>
 surv_test <- function(object, ...) {
-    .Defunct(msg = paste(sQuote("surv_test"), "is defunct.  Use",
-                         sQuote("logrank_test"), "instead."))
+    .Defunct(msg = paste(sQuote("surv_test()"), "is defunct; use",
+                         sQuote("logrank_test()"), "instead"))
 }
 ### </DEFUNCT>
 
