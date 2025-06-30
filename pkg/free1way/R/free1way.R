@@ -1298,12 +1298,12 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
             parm <- c(parm, theta)
         }
         ### evaluate observed hessian for true parameters parm and x data
-        he <- he + .free1wayML(x, link = link, mu = mu, start = parm, fix = seq_along(parm))$hessian
+        he <- he + .free1wayML(x, link = link, mu = mu, start = parm, 
+                               fix = seq_along(parm))$hessian
     }
     ### estimate expected Fisher information
     he <- he / nsim
     
-
 
     alternative <- match.arg(alternative)
     if (K == 2L) {

@@ -2178,6 +2178,20 @@ ppplot(y, x, conf.args = list(link = "cloglog", type = "Wald",
 
 \chapter{Power and Sample Size}
 
+The term ``distribution-free'' refers to the invariance of the reference
+distribution with respect to the distribution of an absolutely continuous
+outcome under control. Unfortunately, this is no longer true for
+non-continuous outcomes (due to ties) and under the alternative. That means
+that sample size assessments always take place under certain assumptions
+regarding the outcome distribution.
+
+We start implementing a function for simulating $C \times K$ tables. We need
+to specify the number of observations in each treatment group (\code{c}),
+the discrete distribution of the control (\code{r}), a model (\code{link}), and a
+treatment effect (\code{delta}, in line with \code{power.XYZ.test}). In
+essence, we draw samples from the multinomial distribution after computing
+the relevant discrete density.
+
 @d r2dsim
 @{
 r2dsim <- function(n, r, c, delta = 0,
@@ -2225,6 +2239,15 @@ r2dsim <- function(n, r, c, delta = 0,
     return(ret)
 }
 @}
+
+We are now ready to put together a function for power evaluation and sample
+size assessment. The core idea is to draw samples from the relevant data
+(under a specific model in the alternative) and to estimate the Fisher
+information of the treatment effect parameters for this configuration. The
+power of the global Wald test can than be approximated by a non-central
+$\chi^2$ distribution. This is much faster than approximating the power
+directly. Nevertheless, this is a random experiment, so we first make
+computations reproducible:
 
 @d random seed
 @{
@@ -2290,13 +2313,20 @@ for (i in seq_len(nsim)) {
         parm <- c(parm, theta)
     }
     ### evaluate observed hessian for true parameters parm and x data
-    he <- he + .free1wayML(x, link = link, mu = mu, start = parm, fix = seq_along(parm))$hessian
+    he <- he + .free1wayML(x, link = link, mu = mu, start = parm, 
+                           fix = seq_along(parm))$hessian
 }
 ### estimate expected Fisher information
 he <- he / nsim
 @}
 
-Make sure power function is non-stochastic
+The power function now depends on sample size (\code{n}; the number of
+control observations in the first stratum), a discrete control distribution
+(\code{prob}, this can be a $C \times B$ matrix for stratum-specific control
+distributions), a vector of allocation ratios (\code{alloc_ratio = 2} means
+control:treatment = 1:2) and the sample size ratios between strata.
+
+The treatment effects are contained in $K - 1$ vector \code{delta}:
 
 @d power call
 @{
@@ -2364,7 +2394,6 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
     @<power setup@>
     @<estimate Fisher information@>
 
-
     alternative <- match.arg(alternative)
     if (K == 2L) {
         se <- 1 / sqrt(c(he))
@@ -2387,10 +2416,22 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
 }
 @}
 
-<<power>>=
+We start with the power of a binomial experiment with $N = 2 \times 25$
+observations. In the control group, the odds of winning is 1. Under
+treatment, we increase this odds by $50\%$. We compare the results with
+\code{power.prop.test}:
+
+<<power.prop.test>>=
 delta <- log(1.5)
 power.prop.test(n = 25, p1 = .5, p2 = plogis(qlogis(.5) - delta))
 power.free1way.test(n = 25, prob = c(.5, .5), delta = delta)
+@@
+
+Under stratification (twice as many observations in the second stratum) 
+and with an ordered outcome at four levels, we might want to compare four
+groups, with $25\%$, $50\%$, and $75\%$ increase compared to the odds of the
+control:
+<<power.odds.test>>=
 prb <- matrix(c(.25, .25, .25, .25,
                 .10, .20, .30, .40), ncol = 2)
 colnames(prb) <- c("s1", "s2")
@@ -2399,6 +2440,9 @@ power.free1way.test(n = 20, prob = prb,
                     alloc_ratio = c(1.5, 2, 2), 
                     delta = log(c("low" = 1.25, "med" = 1.5, "high" = 1.75)))
 @@
+
+We now estimate the power of a Wilcoxon test with, first by simulation from
+a logistic distribution, and then by our power function:
 
 <<wilcox>>=
 Nsim <- 100
@@ -2415,6 +2459,9 @@ mean(pw < .05)
 power.free1way.test(n = N, delta = delta)
 @@
 
+The power of the Kruskal-Wallis test only needs one additional treatment
+effect
+
 <<kruskal>>=
 delta <- c("B" = log(2), "C" = log(3))
 N <- 15
@@ -2429,7 +2476,10 @@ mean(pw < .05)
 power.free1way.test(n = N, delta = delta)
 @@
 
-Sample from $4 \times 3$ tables with odds ratios $2$ and $3$
+We next use the \code{r2dsim} function to sample from $4 \times 3$ tables with odds ratios $2$ and $3$
+and compare the resulting power with result obtained from the approximated
+Fisher information. The plot shows the distribution of the parameter
+estimates and the corresponding population values as red dots.	
 
 <<table, fig = TRUE>>=
 prb <- rep(1, 4)
@@ -2448,10 +2498,11 @@ points(c(1:2), delta, pch = 19, col = "red")
 power.free1way.test(n = N, prob = rep(1, 4), delta = delta)
 @@
 
-Sample from $4 \times 3$ tables with odds ratios $2$ and $3$ for three
-strata with different control distributions
+In the last example, we sample from $4 \times 3$ tables with odds ratios $2$ and $3$ for three
+strata with different control distributions, and again compare the
+simulation results to the power function:
 
-<<stable, fig = TRUE, eval = FALSE>>=
+<<stable, fig = TRUE>>=
 prb <- cbind(S1 = rep(1, 4), 
              S2 = c(1, 2, 1, 2), 
              S3 = 1:4)
