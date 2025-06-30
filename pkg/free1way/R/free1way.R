@@ -154,11 +154,11 @@
                         Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
         } 
         
-        # d p ratio
+        # density prob ratio
         
         ftmb <- f(tmb)
         zu <- x * ftmb[- 1, , drop = FALSE] / prb
-        if (rightcensored) zu[] <- 0
+        if (rightcensored) zu[] <- 0 ### derivative of a constant
         zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
         
 
@@ -194,11 +194,11 @@
                         Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
         } 
         
-        # d p ratio
+        # density prob ratio
         
         ftmb <- f(tmb)
         zu <- x * ftmb[- 1, , drop = FALSE] / prb
-        if (rightcensored) zu[] <- 0
+        if (rightcensored) zu[] <- 0 ### derivative of a constant
         zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
         
 
@@ -248,12 +248,12 @@
         i2 <- 1L
         
 
-        # Aoffdiag
+        # off-diagonal elements for Hessian of intercepts
         
         Aoffdiag <- -rowSums(x * du * dl / prb^2)[-i2]
         Aoffdiag <- Aoffdiag[-length(Aoffdiag)]
         
-        # Adiag
+        # diagonal elements for Hessian of intercepts
         
         Adiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
                           (x * dpl / prb)[-i2,,drop = FALSE] - 
@@ -263,7 +263,7 @@
                          )
                           
         
-        # X and Z
+        # intercept / shift contributions to Hessian
         
         xm1 <- x[,-1L,drop = FALSE] 
         X <- ((xm1 * dpum1 / prbm1)[-i1,,drop = FALSE] - 
@@ -304,19 +304,10 @@
     .snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
         # stratum prep
         
-        if (is.table(x)) {
-            C <- dim(x)[1]
-            K <- dim(x)[2]
-            B <- dim(x)[3]
-            sidx <- gl(B, C - 1)
-            x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
-        } else {
-            C <- sapply(x, NROW)
-            K <- unique(do.call("c", lapply(x, ncol)))
-            stopifnot(length(K) == 1L)
-            B <- length(x)
-            sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
-        }
+        C <- sapply(x, NROW) ### might differ by stratum
+        K <- unique(do.call("c", lapply(x, ncol))) ### the same
+        B <- length(x)
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         beta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -333,19 +324,10 @@
     .snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
         # stratum prep
         
-        if (is.table(x)) {
-            C <- dim(x)[1]
-            K <- dim(x)[2]
-            B <- dim(x)[3]
-            sidx <- gl(B, C - 1)
-            x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
-        } else {
-            C <- sapply(x, NROW)
-            K <- unique(do.call("c", lapply(x, ncol)))
-            stopifnot(length(K) == 1L)
-            B <- length(x)
-            sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
-        }
+        C <- sapply(x, NROW) ### might differ by stratum
+        K <- unique(do.call("c", lapply(x, ncol))) ### the same
+        B <- length(x)
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         beta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -365,19 +347,10 @@
     .shes <- function(parm, x, mu = 0, xrc = NULL) {
         # stratum prep
         
-        if (is.table(x)) {
-            C <- dim(x)[1]
-            K <- dim(x)[2]
-            B <- dim(x)[3]
-            sidx <- gl(B, C - 1)
-            x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
-        } else {
-            C <- sapply(x, NROW)
-            K <- unique(do.call("c", lapply(x, ncol)))
-            stopifnot(length(K) == 1L)
-            B <- length(x)
-            sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
-        }
+        C <- sapply(x, NROW) ### might differ by stratum
+        K <- unique(do.call("c", lapply(x, ncol))) ### the same
+        B <- length(x)
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         beta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
@@ -402,19 +375,10 @@
     .snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
         # stratum prep
         
-        if (is.table(x)) {
-            C <- dim(x)[1]
-            K <- dim(x)[2]
-            B <- dim(x)[3]
-            sidx <- gl(B, C - 1)
-            x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
-        } else {
-            C <- sapply(x, NROW)
-            K <- unique(do.call("c", lapply(x, ncol)))
-            stopifnot(length(K) == 1L)
-            B <- length(x)
-            sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
-        }
+        C <- sapply(x, NROW) ### might differ by stratum
+        K <- unique(do.call("c", lapply(x, ncol))) ### the same
+        B <- length(x)
+        sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
         bidx <- seq_len(K - 1L)
         beta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)

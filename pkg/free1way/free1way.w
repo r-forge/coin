@@ -121,7 +121,8 @@ urlcolor={linkcolor}%
 
 \author{Torsten Hothorn \\ Universit\"at Z\"urich}
 
-\title{Distribution-free Stratified $K$-sample Inference}
+\title{Semiparametrically Efficient Population and Permutation Inference in 
+       Distribution-free Stratified $K$-sample Oneway Layouts}
 
 \begin{document}
 
@@ -133,35 +134,55 @@ urlcolor={linkcolor}%
 \label{ch:model}
 \pagenumbering{arabic}
 
-Treatment group $\rT \in \{1, \dots, K\}, K \ge 2$, outcome $Y \in \samY$ at least ordered,
-stratum $S \in \{1, \dots, B\}$ in $B \ge 1$ blocks with conditional
+We consider $K$ treatment groups $\rT \in \{1, \dots, K\}, K \ge 2$ for an
+at least ordered outcome $Y \in \samY$ observed in
+stratum $S \in \{1, \dots, B\}$ out of $B \ge 1$ blocks with conditional
 cumulative distribution function (cdf)
-$F_Y(y \mid S = b, \rT = k) = \Prob(Y \le y \mid S = b, \rT = k)$.
+$F_Y(y \mid S = b, \rT = k) = \Prob(Y \le y \mid S = b, \rT = k)$. Detecting
+and describing differential distributions arising from different treatments
+is our main objetive. We refer to the first treatment $\rT = 1$ as
+``control''.
 
 \paragraph{Model}
 
-With $g: [0,1] \times \R \rightarrow [0,1]$, we model
-$F(y \mid S = b, \rT = k) = g(F(y \mid S = b, \rT = 1), \beta_k)$ for all $b = 1,
-\dots, B$, $k = 2, \dots, K$, and $y \in \samY$ based on parameters
-$\beta_2, \dots, \beta_K \in \R$. For notational convenience: $\beta_1 := 0$. For
-example, $g_\text{L}(p, \beta) = p^{\exp(-\beta)}$ (Lehmann alternative),
+With model function $g: [0,1] \times \R \rightarrow [0,1]$, we describe
+the conditional distribution under treatment $k$ as a function of the 
+conditional distribution under control and a scalar parameter
+$\beta_k$:
+\begin{eqnarray*}
+F(y \mid S = b, \rT = k) = g(F(y \mid S = b, \rT = 1), \beta_k).
+\end{eqnarray*}
+The model is assumed to hold for all blocks $b = 1,
+\dots, B$, treatments $k = 2, \dots, K$, and outcome values $y \in \samY$ based on parameters
+$\beta_2, \dots, \beta_K \in \R$. For notational convenience, we define $\beta_1 := 0$. 
+
+This model formulation gives rise to several specific models, for
+example, $g_\text{L}(p, \beta) = p^{\exp(-\beta)}$ (Lehmann alternatives),
 $g_\text{PH}(p, \beta) = 1 - (1 -
-p)^{\exp(-\beta)}$ proportional hazards, or
-$g_\text{PO}(p, \beta) = \text{expit}(\text{logit}(p) - \beta)$ proportional odds, or
-$g_\text{Cd}(p, \beta) =
+p)^{\exp(-\beta)}$ (proportional hazards),
+$g_\text{PO}(p, \beta) = \text{expit}(\text{logit}(p) - \beta)$ (proportional
+odds), or $g_\text{Cd}(p, \beta) =
 \Phi(\Phi^{-1}(p) - \beta)$ (generalised Cohen's $d$).
 
-For some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
-and corresponding derivative $f^\prime$, we write
-$$F_Y(y \mid S = b, \rT = k) = F\left(F^{-1}\left(F_Y(y \mid S = b, \rT =
-1)\right) - \beta_k\right), \quad k = 2, \dots, K.$$
-The negative shift term ensures that positive values of $\beta_k$ correspond
-to the situation of outcomes being stochastically larger in group $k$ than
-in group one.
+Instead of directly working with $g$, we parameterise the model in terms of
+some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
+and corresponding derivative $f^\prime$. The location model 
+\begin{eqnarray*}
+F_Y(y \mid S = b, \rT = k) = F\left(F^{-1}\left(F_Y(y \mid S = b, \rT = 1)\right) - \beta_k\right), \quad k = 2, \dots, K
+\end{eqnarray*}
+describes different distributions by means of shift parameter on a latent
+scale defined by $F$. The negative shift term ensures that positive values of $\beta_k$ correspond
+to the situation of outcomes being stochastically larger in group $k$
+compared to control.
 
-Note that $F(z) = \exp(-\exp(-z))$ gives rise to $g_\text{L}$, 
-$F(z) = 1 - \exp(-\exp(z))$ to $g_\text{PH}$, $F = \text{expit}$ to
-$g_\text{PO}$, and $F = \Phi$ to $g_\text{Cd}$.
+The choise $F(z) = \exp(-\exp(-z))$ gives rise to $g_\text{L}$, 
+$F(z) = 1 - \exp(-\exp(z))$ corresponds to $g_\text{PH}$, $F = \text{expit}$
+leads to  $g_\text{PO}$, and $F = \Phi$ results in $g_\text{Cd}$. The choice
+of $F$ is made a priori and determines the interpretation of $\beta_k$. 
+
+This document describes the implementation of estimators of these shift parameters,
+as well as of confidence intervals and formal hypothesis tests for contrasts thereof under
+the permutation and population model.
 
 \paragraph{Hypthesis}
 
@@ -172,20 +193,24 @@ confidence intervals and hypothesis tests of the form
 & & H_0: \beta_k - \mu_k \ge 0, \text{``less''}, \quad k = K = 2, \\
 & & H_0: \beta_k - \mu_k \le 0, \text{``greater''}, \quad k = K = 2,
 \end{eqnarray*}
-with the latter two options only for the two-sample case.
+with the latter two options only for the two-sample case ($K = 2$).
 
 \paragraph{Likelihood}
 
 For an ordered categorical outcome $Y$ from sample space $\samY = \{y_1 < y_2 < \cdots <
 y_C\}$, we parameterise the model in terms of intercept ($\vartheta_\cdot$) and
 shift ($\beta_\cdot$) parameters
-
-$$F_Y(y_c \mid S = b, \rT = k) = F(\vartheta_{c,b} - \beta_k), \quad c = 1, \dots, C.$$
-
-The $C - 1$ intercept parameters are block-specific and monotone increasing
+\begin{eqnarray*}
+F_Y(y_c \mid S = b, \rT = k) = F(\vartheta_{c,b} - \beta_k), \quad c = 1, \dots,
+C,
+\end{eqnarray*}
+that is we replace the transformed control outcome $F^{-1}\left(F_Y(y_c \mid S = b, \rT = 1)\right) =
+\vartheta_{c,b}$ with a corresponding intercept parameter.
+These $C - 1$ intercept parameters are block-specific and monotone increasing
 $\vartheta_{0,b} = -\infty < \vartheta_{1,b} < \cdots < \vartheta_{C,b} = \infty$
 within each block $b = 1, \dots, B$.
-We collect all parameters in a vector
+
+We collect all model parameters in a vector
 \begin{eqnarray*}
 \thetavec = (\theta_1 & := & \beta_2, \\
                & \dots & , \\
@@ -199,24 +224,49 @@ We collect all parameters in a vector
                \theta_{B (C - 1) + K - 1} & := & \vartheta_{C-1,B} - \vartheta_{C-2,B} >
                0)
 \end{eqnarray*}
+featuring contrasts of the intercept parameters $\vartheta_{\cdot}$ such that monotonicity of
+the intercept parameters can be ensured by box constraints for $\thetavec$.
 
 For the $i$th observation $(y_i = y_c, s_i = b, \rt_i = k)$ from block $b$
 under treatment $k$, the log-likelihood contribution is
-$$\log(\Prob(y_{c - 1} < Y \le y_c \mid S = b, \rT = k)) = \log(F(\vartheta_{c,b} - \beta_k) - F(\vartheta_{c - 1,b} - \beta_k)).$$
+\begin{eqnarray*}
+\log(\Prob(y_{c - 1} < Y \le y_c \mid S = b, \rT = k)) = \log(F(\vartheta_{c,b} - \beta_k) - F(\vartheta_{c - 1,b} - \beta_k)).
+\end{eqnarray*}
 
 For an absolutely continuous outcome $Y \in \R$, we define $y_c := y_{(c)}$,
 the $c$th distinct ordered observation in the sample. The log-likelihood
 above is then the empirical or nonparametric log-likelihood.
 
+If observations were independently right-censored, the contribution of the
+event $Y > \tilde{y}$ to the log-likelihood is
+\begin{eqnarray*}
+\log(\Prob(Y > \tilde{y} \mid S = b, \rT = k)) = \log(1 - F(\vartheta_{c - 1,b} - \beta_k))
+\end{eqnarray*}
+where $y_{c - 1} = \max \{y \in \samY \mid y \le \tilde{y}\}$, that is,
+observations right-censored between $y_{c - 1}$ and $y_c$ correspond to the
+parameter $\vartheta_{c - 1,b}$.
+
+Maximising this form of the log-likelihood leads to semiparametrically efficient
+estimators \citep[Chapter 15.5][]{vdVaart1998}. In this framework, tests
+against deviations from the hyptheses $H_0$ above are locally most
+powerful rank tests, for example against proportional odds ($F =
+\text{expit})$ or proportional hazards alternatives 
+\citep[$F(z) = 1 - \exp(-\exp(z))$,][Example 15.16]{vdVaart1998}.
+
 We represent the data in form of a $C \times K \times B$ contingency table,
 whose element $(c, k, b)$ is the number of observations with configuration $(y = y_c, s = b,
-\rt = k)$.
+\rt = k)$. In the presence of right-censoring, a fourth dimension is added 
+($C \times K \times B \times 2)$ whose first $C \times K \times B$ table presents
+right-censoring and the second table contains numbers of events.
+
+
 	
 \chapter{Parameter Estimation}
 \label{ch:est}
 
 <<localfun, echo = FALSE>>=
 @<cumsumrev@>
+@<table2list@>
 @<negative logLik@>
 @<negative score@>
 @<negative score residuals@>
@@ -262,6 +312,9 @@ if (rightcensored) {
 } 
 @}
 
+If the table \code{x} represents right-censored observations, we compute
+\code{prb} $ = 1 - \Prob(Y \le y_c \mid S = 1, \rT = k)$.
+
 With default null values $\mu_k = 0, k = 2, \dots, K$, we define the
 negative log-likelihood function as the weighted (by number of observations) sum of
 the log-probabilities
@@ -273,6 +326,10 @@ the log-probabilities
     return(- sum(x * log(prb)))
 }
 @}
+
+The code assumes that all elements of the margins of the table \code{x} are larger than
+zero; otherwise, the corresponding parameter is not identified. We will
+handle such situation at a higher level later on.
 
 It is important to note that, with $F$ corresponding to distribution with
 log-concave density $f$, the negative log-likelihood is a convex function of
@@ -287,21 +344,21 @@ parameters $\vartheta_\cdot$ and $\beta_\cdot$ is given in many places
 We begin computing the ratio of $f(\vartheta_{c,1} -
 \beta_k)$ and the corresponding likelihood
 
-@d d p ratio
+@d density prob ratio
 @{
 ftmb <- f(tmb)
 zu <- x * ftmb[- 1, , drop = FALSE] / prb
-if (rightcensored) zu[] <- 0
+if (rightcensored) zu[] <- 0 ### derivative of a constant
 zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
 @}
 
-and compute the negative score function
+and then compute the negative score function:
 
 @d negative score
 @{
 .nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
     @<parm to prob@>
-    @<d p ratio@>
+    @<density prob ratio@>
 
     ret <- numeric(length(parm))
     ret[bidx] <- colSums(zl)[-1L] -
@@ -318,7 +375,7 @@ and compute the negative score function
 @}
 
 Adjustment for the parameterisation in terms of differences between
-intercepts needs this small helper function
+intercepts needs this small helper function:
 
 @d cumsumrev
 @{
@@ -326,6 +383,8 @@ intercepts needs this small helper function
     # Reduce('+', z, accumulate = TRUE, right = TRUE)
     rev.default(cumsum(rev.default(z)))
 @}
+
+(<TH>maybe add \code{rev = TRUE} to \code{cumsum}?</TH>).
 
 In addition, we define negative score residuals, that is, the derivative of the
 negative log-likelihood with respect to an intercept term constrained to
@@ -335,7 +394,7 @@ zero:
 @{
 .nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
     @<parm to prob@>
-    @<d p ratio@>
+    @<density prob ratio@>
 
     ret <- rowSums(zu - zl) / rowSums(x)
     ret[!is.finite(ret)] <- 0
@@ -361,8 +420,8 @@ of the Schur complement $\Z - \X^\top \mA^{-1} \X$.
 
 In addition to probabilities \code{prb}, the Hessian necessitates the
 computation of $f(\vartheta_{c,1} - \beta_k)$ and $f^\prime(\vartheta_{c,1} -
-\beta_k)$. We start preparing these objects
-
+\beta_k)$. We start preparing these objects, keeping in mind to remove terms
+not being present under right-censoring:
 
 @d Hessian prep
 @{
@@ -386,14 +445,14 @@ i2 <- 1L
 @}
 
 The off-diagonal elements of $\mA$ are now available as
-@d Aoffdiag
+@d off-diagonal elements for Hessian of intercepts
 @{
 Aoffdiag <- -rowSums(x * du * dl / prb^2)[-i2]
 Aoffdiag <- Aoffdiag[-length(Aoffdiag)]
 @}
 
 and the diagonal elements of $\mA$ as
-@d Adiag
+@d diagonal elements for Hessian of intercepts
 @{
 Adiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
                   (x * dpl / prb)[-i2,,drop = FALSE] - 
@@ -407,7 +466,7 @@ Adiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] -
 For the computation of $\X$ and $\Z$, the observations corresponding to the
 control group ($k = 1$) are irrelevant, we remove these first
 
-@d X and Z
+@d intercept / shift contributions to Hessian
 @{
 xm1 <- x[,-1L,drop = FALSE] 
 X <- ((xm1 * dpum1 / prbm1)[-i1,,drop = FALSE] - 
@@ -430,8 +489,11 @@ Z <- -colSums(xm1 * (dpum1 / prbm1 -
 if (length(Z) > 1L) Z <- diag(Z)
 @}
 
-We return the Fisher information for $\beta_2, \dots, \beta_K$ as the Schur
-complement $\Z - \X^\top \mA^{-1} \X$.
+We return the three matrices $\mA$, $\X$, and $\Z$ necessary for the
+computation of the Fisher information for $\beta_2, \dots, \beta_K$ as the Schur
+complement $\Z - \X^\top \mA^{-1} \X$. Because the matrix $\mA$ is symmetric
+tridiagonal, we use infrastructure from the \pkg{Matrix} package to
+represent this matrix:
 
 @d Hessian
 @{
@@ -440,9 +502,9 @@ complement $\Z - \X^\top \mA^{-1} \X$.
 
     @<Hessian prep@>
 
-    @<Aoffdiag@>
-    @<Adiag@>
-    @<X and Z@>
+    @<off-diagonal elements for Hessian of intercepts@>
+    @<diagonal elements for Hessian of intercepts@>
+    @<intercept / shift contributions to Hessian@>
 
     if (length(Adiag) > 1L) {
         if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))
@@ -467,27 +529,23 @@ library("free1way")
 d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 1))
 d$x <- c(x)
 m <- glm(y ~ t, data = d, weights = x, family = binomial())
-logLik(m)
 (cf <- coef(m))
-vcov(m)[-1,-1]
 @@
 
 Replicating these results requires specification of the inverse link
 function $F = \text{expit}$ and the density function $f$ of the standard
-logistic.
+logistic. Note that \code{glm} operates with a positive linear predictor, so
+we need to change the sign of the log-odds ratios:
 
 <<glm-op>>=
 F <- plogis
 f <- dlogis
-(op <- optim(par = c("mt2" = 0, "mt3" = 0, "(Intercept)" = 0), 
-             fn = .nll, gr = .nsc, 
-             x = x, method = "BFGS", hessian = TRUE))
-c(cf[-1] * -1, cf[1]) - op$par
-logLik(m) + op$value
-.nsr(op$par, x)
-obj <- .free1wayML(as.table(x), link = logit())
-obj$coefficients
-obj$value
+op <- optim(par = c("mt2" = 0, "mt3" = 0, "(Intercept)" = 0), 
+            fn = .nll, gr = .nsc, 
+            x = x, method = "BFGS", hessian = TRUE)
+cbind(c(cf[-1] * -1, cf[1]), op$par)
+logLik(m)
+-op$value
 @@
 
 Parameter estimates and the in-sample log-likelihood are practically
@@ -498,37 +556,105 @@ fp <- function(x) {
     p <- plogis(x)
     p * (1 - p)^2 - p^2 * (1 - p)
 }
-solve(H <- .hes(op$par, x))
-vcov(m)[-1,-1]
+H <- .hes(op$par, x)
+### analytical covariance of parameters
+solve(H$Z - crossprod(H$X, solve(H$A, H$X)))
+### numerical covariance
 solve(op$hessian)[1:2,1:2]
+### from glm
+vcov(m)[-1,-1]
+@@
+Also here we see practically identical results. We will later implement a
+low-level function \code{.free1way} taking a table and an object describing the inverse link
+$F$ as arguments; these results are also in line with \code{glm}:
+<<glm-free1way>>=
+obj <- .free1wayML(as.table(x), link = logit())
+obj$coefficients
+-obj$value
+### analytical covariance
 obj$vcov
 @@
-Also here we see practically identical results.
 
 In the next step, we extend our results to the stratified case. We iterate
 over all blocks and evaluate the negative log-likelihood for the same values
 of the shift parameters but block-specific values of the intercept
-parameters.
+parameters. Before we begin, we convert the table $C \times K \times B
+(\times 2)$ table \code{x} into a list of non-empty $C^\prime \times K$
+tables with non-zero row sums:
+
+@d table2list
+@{
+.table2list <- function(x) {
+
+    dx <- dim(x)
+    if (length(dx) == 1L)
+        stop("")
+    if (length(dx) == 2L)
+        x <- as.table(array(x, dim = c(dx, 1)))
+    ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
+    ms$drop <- FALSE
+    x <- do.call("[", ms)
+    dx <- dim(x)
+    stopifnot(length(dx) >= 3L)
+    K <- dim(x)[2L]
+    B <- dim(x)[3L]
+    stopifnot(dx[1L] > 1L)
+    stopifnot(K > 1L)
+
+    xrc <- NULL
+    if (length(dx) == 4L) {
+        if (dx[4] == 2L) {
+            xrc <- array(x[,,,"FALSE", drop = TRUE], dim = dx[1:3])
+            x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])
+        } else {
+            stop("")
+        }
+    }
+
+    xlist <- xrclist <- vector(mode = "list", length = B)
+
+    lwr <- rep(-Inf, times = K - 1)
+    for (b in seq_len(B)) {
+        xb <- matrix(x[,,b, drop = TRUE], ncol = K)
+        xw <- rowSums(abs(xb)) > 0
+        ### do not remove last parameter if there are corresponding
+        ### right-censored observations
+        if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))
+            xw[length(xw)] <- TRUE
+        if (sum(xw) > 1L) {
+            xlist[[b]] <- xb[xw,,drop = FALSE]
+            attr(xlist[[b]], "idx") <- xw
+            if (!is.null(xrc)) {
+                xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
+                attr(xrclist[[b]], "idx") <- xw
+            }
+        }
+    }
+    nn <- !sapply(xlist, is.null)
+    ret <- list(xlist = xlist[nn])
+    if (!is.null(xrc))
+        ret$xrclist <- xrclist[nn]
+    ret$strata <- nn
+    ret
+}
+@}
+
+We first extract the shift parameters $\beta_{\cdot}$ and then, separately
+for each stratum, the corresponding contrasts of the intercept parameters:
 
 @d stratum prep
 @{
-if (is.table(x)) {
-    C <- dim(x)[1]
-    K <- dim(x)[2]
-    B <- dim(x)[3]
-    sidx <- gl(B, C - 1)
-    x <- lapply(seq_len(B), function(b) x[,,b,drop = TRUE])
-} else {
-    C <- sapply(x, NROW)
-    K <- unique(do.call("c", lapply(x, ncol)))
-    stopifnot(length(K) == 1L)
-    B <- length(x)
-    sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
-}
+C <- sapply(x, NROW) ### might differ by stratum
+K <- unique(do.call("c", lapply(x, ncol))) ### the same
+B <- length(x)
+sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
 bidx <- seq_len(K - 1L)
 beta <- parm[bidx]
 intercepts <- split(parm[-bidx], sidx)
 @}
+
+before we loop over the non-empty strata and return the sum of the
+corresponding log-likelihoods:
 
 @d stratified negative logLik
 @{
@@ -544,7 +670,7 @@ intercepts <- split(parm[-bidx], sidx)
 
 In a similar way, we evaluate the gradients for each block and sum-up the
 contributions by the shift parameters whereas the gradients for the
-intercept parameters are only concatenated.
+intercept parameters are only concatenated:
 
 @d stratified negative score
 @{
@@ -562,7 +688,7 @@ intercept parameters are only concatenated.
 @}
 
 The score residuum is zero for an observation with weight zero, that is, a
-row of zeros in the table.
+row of zeros in the table:
 
 @d stratified negative score residual
 @{
@@ -585,22 +711,27 @@ row of zeros in the table.
                         9, 4, 8, 15, 5, 4), dim = c(2, 3, 2))))
 d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 1), s = gl(2, 1))
 d$x <- c(x)
-m <- glm(y ~ s + t, data = d, weights = x, family = binomial())
+m <- glm(y ~ 0 + s + t, data = d, weights = x, family = binomial())
 logLik(m)
 (cf <- coef(m))
-vcov(m)[-(1:2),-(1:2)]
 @@
 
 <<glm-op-stratum>>=
-(op <- optim(par = c("mt2" = 0, "mt3" = 0, "(Intercept 1)" = 0, "(Intercept 2)" = 0), 
-             fn = .snll, gr = .snsc, 
-             x = x, 
-             method = "BFGS", 
-             hessian = TRUE))
-c(cf[-(1:2)] * -1, cf[1:2]) - op$par
-logLik(m) + op$value
-.snsr(op$par, x)
+xl <- .table2list(x)$xlist
+op <- optim(par = c("mt2" = 0, "mt3" = 0, "(Intercept 1)" = 0, "(Intercept 2)" = 0), 
+            fn = .snll, gr = .snsc, 
+            x = xl, 
+            method = "BFGS", 
+            hessian = TRUE)
+cbind(c(cf[-(1:2)] * -1, cf[1:2]), op$par)
+logLik(m)
+-op$value
 @@
+
+For the analytical Hessian, we sum-up over the stratum-specific
+Hessians of the shift parameters. For right-censored observations, we need
+to compute the contributions by the events and obtain the joint Hessian for
+shift- and intercept parameters first:
 
 @d stratified Hessian
 @{
@@ -623,12 +754,21 @@ logLik(m) + op$value
 @}
 
 <<glm-H-stratum>>=
-H <- .shes(op$par, x)
-solve(H)
-vcov(m)[-(1:2),-(1:2)]
+### analytical covariance of parameters
+solve(.shes(op$par, xl))
+### numerical covariance
 solve(op$hessian)[1:2,1:2]
+### from glm
+vcov(m)[-(1:2),-(1:2)]
 @@
 
+<<glm-free1way-strata>>=
+obj <- .free1wayML(as.table(x), link = logit())
+obj$coefficients
+-obj$value
+### analytical covariance
+obj$vcov
+@@
 	
 
 \chapter{Link Functions}
@@ -882,62 +1022,6 @@ probit <- function()
 @<power@>
 @}
 
-@d table2list
-@{
-.table2list <- function(x) {
-
-    dx <- dim(x)
-    if (length(dx) == 1L)
-        stop("")
-    if (length(dx) == 2L)
-        x <- as.table(array(x, dim = c(dx, 1)))
-    ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
-    ms$drop <- FALSE
-    x <- do.call("[", ms)
-    dx <- dim(x)
-    stopifnot(length(dx) >= 3L)
-    K <- dim(x)[2L]
-    B <- dim(x)[3L]
-    stopifnot(dx[1L] > 1L)
-    stopifnot(K > 1L)
-
-    xrc <- NULL
-    if (length(dx) == 4L) {
-        if (dx[4] == 2L) {
-            xrc <- array(x[,,,"FALSE", drop = TRUE], dim = dx[1:3])
-            x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])
-        } else {
-            stop("")
-        }
-    }
-
-    xlist <- xrclist <- vector(mode = "list", length = B)
-
-    lwr <- rep(-Inf, times = K - 1)
-    for (b in seq_len(B)) {
-        xb <- matrix(x[,,b, drop = TRUE], ncol = K)
-        xw <- rowSums(abs(xb)) > 0
-        ### do not remove last parameter if there are corresponding
-        ### right-censored observations
-        if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))
-            xw[length(xw)] <- TRUE
-        if (sum(xw) > 1L) {
-            xlist[[b]] <- xb[xw,,drop = FALSE]
-            attr(xlist[[b]], "idx") <- xw
-            if (!is.null(xrc)) {
-                xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
-                attr(xrclist[[b]], "idx") <- xw
-            }
-        }
-    }
-    nn <- !sapply(xlist, is.null)
-    ret <- list(xlist = xlist[nn])
-    if (!is.null(xrc))
-        ret$xrclist <- xrclist[nn]
-    ret$strata <- nn
-    ret
-}
-@}
 
 @d setup
 @{
@@ -2123,10 +2207,11 @@ power.free1way.test(n = 20, prob = prb,
 @@
 
 <<wilcox>>=
+Nsim <- 100
 delta <- log(3)
 N <- 15
 w <- gl(2, N)
-pw <- numeric(1000)
+pw <- numeric(Nsim)
 for (i in seq_along(pw)) {
     y <- rlogis(length(w), location = c(0, delta)[w])
     pw[i] <- wilcox.test(y ~ w)$p.value
@@ -2140,7 +2225,7 @@ power.free1way.test(n = N, delta = delta)
 delta <- c("B" = log(2), "C" = log(3))
 N <- 15
 w <- gl(3, N)
-pw <- numeric(1000)
+pw <- numeric(Nsim)
 for (i in seq_along(pw)) {
     y <- rlogis(length(w), location = c(0, delta)[w])
     pw[i] <- kruskal.test(y ~ w)$p.value
@@ -2154,7 +2239,7 @@ Sample from $4 \times 3$ tables with odds ratios $2$ and $3$
 
 <<table, fig = TRUE>>=
 prb <- rep(1, 4)
-x <- r2dsim(1000, r = prb, c = table(w), delta = delta)
+x <- r2dsim(Nsim, r = prb, c = table(w), delta = delta)
 pw <- numeric(length(x))
 cf <- matrix(0, nrow = length(x), ncol = length(delta))
 colnames(cf) <- names(delta)
@@ -2172,16 +2257,16 @@ power.free1way.test(n = N, prob = rep(1, 4), delta = delta)
 Sample from $4 \times 3$ tables with odds ratios $2$ and $3$ for three
 strata with different control distributions
 
-<<stable, fig = TRUE>>=
+<<stable, fig = TRUE, eval = FALSE>>=
 prb <- cbind(S1 = rep(1, 4), 
              S2 = c(1, 2, 1, 2), 
              S3 = 1:4)
 dimnames(prb) <- list(Ctrl = paste0("i", seq_len(nrow(prb))),
                       Strata = colnames(prb))
 
-x1 <- r2dsim(1000, r = prb[, "S1"], c = table(w), delta = delta)
-x2 <- r2dsim(1000, r = prb[, "S2"], c = table(w), delta = delta)
-x3 <- r2dsim(1000, r = prb[, "S3"], c = table(w), delta = delta)
+x1 <- r2dsim(Nsim, r = prb[, "S1"], c = table(w), delta = delta)
+x2 <- r2dsim(Nsim, r = prb[, "S2"], c = table(w), delta = delta)
+x3 <- r2dsim(Nsim, r = prb[, "S3"], c = table(w), delta = delta)
 stab <- function(...) {
     args <- list(...)
     as.table(array(unlist(args), dim = c(dim(args[[1]]), length(args))))
