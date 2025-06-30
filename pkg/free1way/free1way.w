@@ -1557,6 +1557,8 @@ The \code{formula} method allows formulae \code{outcome ~ treatment +
 strata(s)} for model specification
 
 <TH>strata is only defined in \pkg{survival}, import? </TH>
+<TH>something like cbind(time, event) ~ treatment + strata(s)? Or
+\code{Surv}?</TH>
 
 @d free1way formula
 @{
