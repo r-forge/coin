@@ -1,0 +1,1435 @@
+
+> .rcr <- function(z) rev.default(cumsum(rev.default(z)))
+
+> .table2list <- function(x) {
++     dx <- dim(x)
++     if (length(dx) == 1) 
++         stop("")
++     if (length(dx) == 2) 
++         x <- as.table(a .... [TRUNCATED] 
+
+> .nll <- function(parm, x, mu = 0, rightcensored = FALSE) {
++     bidx <- seq_len(ncol(x) - 1)
++     beta <- c(0, mu + parm[bidx])
++     intercepts < .... [TRUNCATED] 
+
+> .nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
++     bidx <- seq_len(ncol(x) - 1)
++     beta <- c(0, mu + parm[bidx])
++     intercepts < .... [TRUNCATED] 
+
+> .nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
++     bidx <- seq_len(ncol(x) - 1)
++     beta <- c(0, mu + parm[bidx])
++     intercepts < .... [TRUNCATED] 
+
+> .hes <- function(parm, x, mu = 0, rightcensored = FALSE) {
++     bidx <- seq_len(ncol(x) - 1)
++     beta <- c(0, mu + parm[bidx])
++     intercepts < .... [TRUNCATED] 
+
+> .snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
++     C <- sapply(x, NROW)
++     K <- unique(do.call("c", lapply(x, ncol)))
++     B <- l .... [TRUNCATED] 
+
+> .snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
++     C <- sapply(x, NROW)
++     K <- unique(do.call("c", lapply(x, ncol)))
++     B <- l .... [TRUNCATED] 
+
+> .shes <- function(parm, x, mu = 0, xrc = NULL) {
++     C <- sapply(x, NROW)
++     K <- unique(do.call("c", lapply(x, ncol)))
++     B <- length(x)
++  .... [TRUNCATED] 
+
+> .snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
++     C <- sapply(x, NROW)
++     K <- unique(do.call("c", lapply(x, ncol)))
++     B <- l .... [TRUNCATED] 
+
+> .free1wayML <- function(x, link, mu = 0, start = NULL, 
++     fix = NULL, residuals = TRUE, score = TRUE, hessian = TRUE, 
++     tol = sqrt(.Machine .... [TRUNCATED] 
+
+> .SW <- function(res, xt) {
++     if (length(dim(xt)) == 3) {
++         res <- matrix(res, nrow = dim(xt)[1], ncol = dim(xt)[3])
++         STAT <- Ex .... [TRUNCATED] 
+
+> .resample <- function(res, xt, B = 10000) {
++     if (length(dim(xt)) == 2) 
++         xt <- as.table(array(xt, dim = c(dim(xt), 1)))
++     res <- m .... [TRUNCATED] 
+
+> .p <- function(link, q, ...) link$linkinv(q = q, ...)
+
+> .q <- function(link, p, ...) link$link(p = p, ...)
+
+> .d <- function(link, x, ...) link$dlinkinv(x = x, 
++     ...)
+
+> .dd <- function(link, x, ...) link$ddlinkinv(x = x, 
++     ...)
+
+> .ddd <- function(link, x, ...) link$dddlinkinv(x = x, 
++     ...)
+
+> .dd2d <- function(link, x, ...) link$dd2dlinkinv(x = x, 
++     ...)
+
+> linkfun <- function(alias, model, parm, link, linkinv, 
++     dlinkinv, ddlinkinv, ...) {
++     ret <- list(alias = alias, model = model, parm = par .... [TRUNCATED] 
+
+> logit <- function() linkfun(alias = c("Wilcoxon", 
++     "Kruskal-Wallis"), model = "proportional odds", parm = "log-odds ratio", 
++     link = qlog .... [TRUNCATED] 
+
+> probit <- function() linkfun(alias = "van der Waerden normal scores", 
++     model = "latent normal shift", parm = "generalised Cohen's d", 
++     l .... [TRUNCATED] 
+
+> cloglog <- function() linkfun(alias = "Savage", model = "proportional hazards", 
++     parm = "log-hazard ratio", link = function(p, log.p = FALSE)  .... [TRUNCATED] 
+
+> loglog <- function() linkfun(alias = "Lehmann", model = "Lehmann", 
++     parm = "log-reverse time hazard ratio", link = function(p, 
++         log. .... [TRUNCATED] 
+
+> library("free1way")
+
+> (x <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2))
+     [,1] [,2] [,3]
+[1,]   10    7    8
+[2,]    5   11    9
+
+> d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 
++     1))
+
+> d$x <- c(x)
+
+> m <- glm(y ~ t, data = d, weights = x, family = binomial())
+
+> (cf <- coef(m))
+(Intercept)          t2          t3 
+  0.6931472  -1.1451323  -0.8109302 
+
+> F <- plogis
+
+> f <- dlogis
+
+> op <- optim(par = c(mt2 = 0, mt3 = 0, `(Intercept)` = 0), 
++     fn = .nll, gr = .nsc, x = x, method = "BFGS", hessian = TRUE)
+
+> cbind(c(cf[-1] * -1, cf[1]), op$par)
+                 [,1]      [,2]
+t2          1.1451323 1.1451325
+t3          0.8109302 0.8109298
+(Intercept) 0.6931472 0.6931471
+
+> logLik(m)
+'log Lik.' -33.33026 (df=3)
+
+> -op$value
+[1] -33.33026
+
+> fp <- function(x) {
++     p <- plogis(x)
++     p * (1 - p)^2 - p^2 * (1 - p)
++ }
+
+> H <- .hes(op$par, x)
+
+> solve(H$Z - crossprod(H$X, solve(H$A, H$X)))
+          [,1]      [,2]
+[1,] 0.5337662 0.3000000
+[2,] 0.3000000 0.5361111
+
+> solve(op$hessian)[1:2, 1:2]
+          mt2       mt3
+mt2 0.5337663 0.3000000
+mt3 0.3000000 0.5361111
+
+> vcov(m)[-1, -1]
+          t2        t3
+t2 0.5337661 0.2999998
+t3 0.2999998 0.5361109
+
+> obj <- .free1wayML(as.table(x), link = logit())
+
+> obj$coefficients
+        B         C 
+1.1451276 0.8109297 
+
+> -obj$value
+[1] -33.33026
+
+> obj$vcov
+         B         C
+B 0.533766 0.3000000
+C 0.300000 0.5361111
+
+> (x <- as.table(array(c(10, 5, 7, 11, 8, 9, 9, 4, 8, 
++     15, 5, 4), dim = c(2, 3, 2))))
+, , A
+
+   A  B  C
+A 10  7  8
+B  5 11  9
+
+, , B
+
+   A  B  C
+A  9  8  5
+B  4 15  4
+
+
+> d <- expand.grid(y = relevel(gl(2, 1), "2"), t = gl(3, 
++     1), s = gl(2, 1))
+
+> d$x <- c(x)
+
+> m <- glm(y ~ 0 + s + t, data = d, weights = x, family = binomial())
+
+> logLik(m)
+'log Lik.' -62.52285 (df=4)
+
+> (cf <- coef(m))
+        s1         s2         t2         t3 
+ 0.7243308  0.7738535 -1.3022394 -0.7414725 
+
+> xl <- .table2list(x)$xlist
+
+> op <- optim(par = c(mt2 = 0, mt3 = 0, `(Intercept 1)` = 0, 
++     `(Intercept 2)` = 0), fn = .snll, gr = .snsc, x = xl, method = "BFGS", 
++     hess .... [TRUNCATED] 
+
+> cbind(c(cf[-(1:2)] * -1, cf[1:2]), op$par)
+        [,1]      [,2]
+t2 1.3022394 1.3022474
+t3 0.7414725 0.7414934
+s1 0.7243308 0.7243482
+s2 0.7738535 0.7738600
+
+> logLik(m)
+'log Lik.' -62.52285 (df=4)
+
+> -op$value
+[1] -62.52285
+
+> solve(.shes(op$par, xl))
+          [,1]      [,2]
+[1,] 0.2709537 0.1615355
+[2,] 0.1615355 0.3200629
+
+> solve(op$hessian)[1:2, 1:2]
+          mt2       mt3
+mt2 0.2709537 0.1615355
+mt3 0.1615355 0.3200629
+
+> vcov(m)[-(1:2), -(1:2)]
+          t2        t3
+t2 0.2709530 0.1615346
+t3 0.1615346 0.3200620
+
+> obj <- .free1wayML(as.table(x), link = logit())
+
+> obj$coefficients
+        B         C 
+1.3022386 0.7414736 
+
+> -obj$value
+[1] -62.52285
+
+> obj$vcov
+          B         C
+B 0.2709531 0.1615348
+C 0.1615348 0.3200621
+
+> N <- 10
+
+> a <- matrix(c(5, 6, 4, 3, 5, 7, 3, 4, 5, 3, 5, 6, 
++     0, 0, 0, 4, 6, 5), ncol = 3, byrow = TRUE)
+
+> x <- as.table(array(c(a[1:3, ], a[-(1:3), ]), dim = c(3, 
++     3, 2)))
+
+> x
+, , A
+
+  A B C
+A 5 6 4
+B 3 5 7
+C 3 4 5
+
+, , B
+
+  A B C
+A 3 5 6
+B 0 0 0
+C 4 6 5
+
+
+> ret <- .free1wayML(x, logit())
+
+> ret[c("value", "par")]
+$value
+[1] 65.93157
+
+$par
+[1]  0.05263822  0.20473820 -0.48965977  1.51012888  0.02848283
+
+
+> cf <- ret$par
+
+> cf[1:2] <- cf[1:2] + 0.5
+
+> cf
+[1]  0.55263822  0.70473820 -0.48965977  1.51012888  0.02848283
+
+> .free1wayML(x, logit(), start = cf, fix = 1:2)[c("value", 
++     "par")]
+$value
+[1] 66.38115
+
+$par
+[1]  0.5526382  0.7047382 -0.1188547  1.5268159  0.4084081
+
+
+> .free1wayML(x, logit(), start = cf, fix = 2)[c("value", 
++     "par")]
+$value
+[1] 66.29862
+
+$par
+[1]  0.3609434  0.7047382 -0.1877177  1.5292408  0.3344191
+
+
+> .free1wayML(x, logit(), start = cf, fix = seq_along(ret$par))[c("value", 
++     "par")]
+$value
+[1] 67.77112
+
+$par
+[1]  0.55263822  0.70473820 -0.48965977  1.51012888  0.02848283
+
+
+> set.seed(29)
+
+> w <- gl(2, 15)
+
+> (s <- .SW(r <- rank(u <- runif(length(w))), model.matrix(~0 + 
++     w)))
+$Statistic
+   [,1]
+x2  287
+
+$Expectation
+[1] 232.5
+
+$Covariance
+       [,1]
+[1,] 581.25
+
+
+> ps <- .resample(r, model.matrix(~0 + w), B = 1e+05)
+
+> ps$testStat^2
+[1] 5.110108
+
+> mean(abs(ps$permStat) > abs(ps$testStat) - .Machine$double.eps)
+[1] 0.02435
+
+> pchisq(ps$testStat^ifelse(ps$DF == 1, 2, 1), df = ps$DF, 
++     lower.tail = FALSE)
+[1] 0.02378685
+
+> kruskal.test(u ~ w)
+
+	Kruskal-Wallis rank sum test
+
+data:  u by w
+Kruskal-Wallis chi-squared = 5.1101, df = 1, p-value = 0.02379
+
+
+> library("coin")
+Loading required package: survival
+
+> kruskal_test(u ~ w, distribution = approximate(1e+05))
+
+	Approximative Kruskal-Wallis Test
+
+data:  u by w (1, 2)
+chi-squared = 5.1101, p-value = 0.02385
+
+
+> x
+, , A
+
+  A B C
+A 5 6 4
+B 3 5 7
+C 3 4 5
+
+, , B
+
+  A B C
+A 3 5 6
+B 0 0 0
+C 4 6 5
+
+
+> ft <- free1way.test(x)
+
+> coef(ft)
+         B          C 
+0.05263822 0.20473820 
+
+> vcov(ft)
+          B         C
+B 0.3491630 0.2083442
+C 0.2083442 0.3385029
+
+> summary(ft)
+
+Call:
+free1way.test.table(y = x)
+
+Coefficients:
+  log-odds ratio Std. Error  z value P(>|z|)
+B       0.052638   0.590900 0.089081  0.9290
+C       0.204738   0.581810 0.351899  0.7249
+
+> library("multcomp")
+Loading required package: mvtnorm
+Loading required package: TH.data
+Loading required package: MASS
+
+Attaching package: ‘TH.data’
+
+The following object is masked from ‘package:MASS’:
+
+    geyser
+
+
+> summary(glht(ft), test = univariate())
+
+	 Simultaneous Tests for General Linear Hypotheses
+
+Fit: free1way.test.table(y = x)
+
+Linear Hypotheses:
+       Estimate Std. Error z value Pr(>|z|)
+B == 0  0.05264    0.59090   0.089    0.929
+C == 0  0.20474    0.58181   0.352    0.725
+(Univariate p values reported)
+
+
+> summary(ft, test = "Wald")
+
+	Stratified 3-sample Kruskal-Wallis test against proportional odds
+	alternatives
+
+data:   by  (c("A", "B", "C")) 
+	 stratified by 
+Wald chi-squared = 0.1482, df = 2, p-value = 0.9286
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(glht(ft), test = Chisqtest())
+
+	 General Linear Hypotheses
+
+Linear Hypotheses:
+       Estimate
+B == 0  0.05264
+C == 0  0.20474
+
+Global Test:
+   Chisq DF Pr(>Chisq)
+1 0.1482  2     0.9286
+
+> summary(ft, test = "Rao")
+
+	Stratified 3-sample Kruskal-Wallis test against proportional odds
+	alternatives
+
+data:   by  (c("A", "B", "C")) 
+	 stratified by 
+Rao chi-squared = 0.14834, df = 2, p-value = 0.9285
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "Permutation")
+
+	Stratified 3-sample Kruskal-Wallis test against proportional odds
+	alternatives
+
+data:   by  (c("A", "B", "C")) 
+	 stratified by 
+Perm chi-squared = 0.1449, df = 2, p-value = 0.9301
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "LRT")
+
+	Stratified 3-sample Kruskal-Wallis test against proportional odds
+	alternatives
+
+data:   by  (c("A", "B", "C")) 
+	 stratified by 
+logLR chi-squared = 0.14837, df = 2, p-value = 0.9285
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> confint(glht(ft), calpha = univariate_calpha())
+
+	 Simultaneous Confidence Intervals
+
+Fit: free1way.test.table(y = x)
+
+Quantile = 1.96
+95% confidence level
+ 
+
+Linear Hypotheses:
+       Estimate lwr      upr     
+B == 0  0.05264 -1.10550  1.21078
+C == 0  0.20474 -0.93559  1.34506
+
+
+> confint(ft, test = "Wald")
+       2.5 %   97.5 %
+B -1.1055048 1.210781
+C -0.9355885 1.345065
+
+> confint(ft, test = "Rao")
+       2.5 %   97.5 %
+B -1.0907445 1.195429
+C -0.9207791 1.330116
+
+> confint(ft, test = "LRT")
+       2.5 %   97.5 %
+B -1.1112642 1.220531
+C -0.9386868 1.357290
+
+> N <- 25
+
+> w <- gl(2, N)
+
+> y <- rlogis(length(w), location = c(0, 1)[w])
+
+> ft <- free1way.test(y ~ w)
+
+> summary(ft)
+
+Call:
+free1way.test.formula(formula = y ~ w)
+
+Coefficients:
+   log-odds ratio Std. Error z value P(>|z|)
+w2        1.29022    0.52394 2.46255  0.0138
+
+> wilcox.test(y ~ w, alternative = "greater", correct = FALSE)$p.value
+[1] 0.9928186
+
+> pvalue(wilcox_test(y ~ w, alternative = "greater"))
+[1] 0.9921465
+
+> summary(ft, test = "Permutation", alternative = "less")$p.value
+   Perm Z 
+0.9921451 
+
+> wilcox.test(y ~ w, alternative = "less", correct = FALSE)$p.value
+[1] 0.007597083
+
+> pvalue(wilcox_test(y ~ w, alternative = "less"))
+[1] 0.007853472
+
+> summary(ft, test = "Permutation", alternative = "greater")$p.value
+     Perm Z 
+0.007854926 
+
+> wilcox.test(y ~ w, correct = FALSE)$p.value
+[1] 0.01519417
+
+> kruskal.test(y ~ w)$p.value
+[1] 0.01570694
+
+> pvalue(wilcox_test(y ~ w))
+[1] 0.01570694
+
+> summary(ft, test = "Permutation")$p.value
+    Perm Z 
+0.01570985 
+
+> summary(ft, test = "Wald", alternative = "less")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  y by w (1, 2)
+Wald Z.w2 = 2.4625, p-value = 0.9931
+alternative hypothesis: true log-odds ratio is less than 0
+
+
+> summary(ft, test = "Wald", alternative = "greater")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  y by w (1, 2)
+Wald Z.w2 = 2.4625, p-value = 0.006898
+alternative hypothesis: true log-odds ratio is greater than 0
+
+
+> summary(ft, test = "Wald")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  y by w (1, 2)
+Wald chi-squared = 6.0641, df = 1, p-value = 0.0138
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "Rao", alternative = "less")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  y by w (1, 2)
+Rao Z = 2.4974, p-value = 0.9937
+alternative hypothesis: true log-odds ratio is less than 0
+
+
+> summary(ft, test = "Rao", alternative = "greater")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  y by w (1, 2)
+Rao Z = 2.4974, p-value = 0.006256
+alternative hypothesis: true log-odds ratio is greater than 0
+
+
+> summary(ft, test = "Rao")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  y by w (1, 2)
+Rao chi-squared = 6.2369, df = 1, p-value = 0.01251
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "LRT")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  y by w (1, 2)
+logLR chi-squared = 6.3305, df = 1, p-value = 0.01187
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> confint(ft, test = "Permutation")
+       2.5 %   97.5 %
+w2 0.2384727 2.342405
+
+> confint(ft, test = "LRT")
+       2.5 %   97.5 %
+w2 0.2815064 2.344558
+
+> confint(ft, test = "Wald")
+       2.5 %   97.5 %
+w2 0.2633217 2.317114
+
+> confint(ft, test = "Rao")
+       2.5 %  97.5 %
+w2 0.2722092 2.30831
+
+> confint(ft, test = "Rao", what = "AUC")
+       2.5 %    97.5 %
+w2 0.5452564 0.8274162
+
+> library("rms")
+Loading required package: Hmisc
+
+Attaching package: ‘Hmisc’
+
+The following object is masked _by_ ‘.GlobalEnv’:
+
+    .q
+
+The following objects are masked from ‘package:base’:
+
+    format.pval, units
+
+
+> rev(coef(or <- orm(y ~ w)))[1]
+     w=2 
+1.289951 
+
+> coef(ft)
+      w2 
+1.290218 
+
+> logLik(or)
+'log Lik.' -192.4359 (df=50)
+
+> logLik(ft)
+[1] -192.4359
+
+> vcov(or)[2, 2]
+[1] 0.2744981
+
+> vcov(ft)
+          w2
+w2 0.2745091
+
+> ci <- confint(or)
+
+> ci[nrow(ci), ]
+    2.5 %    97.5 % 
+0.2630757 2.3168266 
+
+> confint(ft, test = "Wald")
+       2.5 %   97.5 %
+w2 0.2633217 2.317114
+
+> example(mantelhaen.test, echo = FALSE)
+
+> mantelhaen.test(UCBAdmissions, correct = FALSE)
+
+	Mantel-Haenszel chi-squared test without continuity correction
+
+data:  UCBAdmissions
+Mantel-Haenszel X-squared = 1.5246, df = 1, p-value = 0.2169
+alternative hypothesis: true common odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.7719074 1.0603298
+sample estimates:
+common odds ratio 
+        0.9046968 
+
+
+> ft <- free1way.test(UCBAdmissions)
+
+> summary(ft, test = "Wald")
+
+	Stratified 2-sample Wilcoxon test against proportional odds
+	alternatives
+
+data:  Admit by Gender (c("Male", "Female")) 
+	 stratified by Dept
+Wald chi-squared = 1.5241, df = 1, p-value = 0.217
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> exp(coef(ft))
+GenderFemale 
+   0.9050107 
+
+> exp(confint(ft, test = "Wald"))
+                 2.5 %   97.5 %
+GenderFemale 0.7723915 1.060401
+
+> exp(sapply(dimnames(UCBAdmissions)[[3]], function(dept) confint(free1way.test(UCBAdmissions[, 
++     , dept]), test = "Permutation")))
+             A         B        C         D         E         F
+[1,] 0.2096661 0.3479569 0.854703 0.6864446 0.8258503 0.4582909
+[2,] 0.5818487 1.8529511 1.502110 1.2364568 1.8073777 1.4955806
+
+> sapply(dimnames(UCBAdmissions)[[3]], function(dept) fisher.test(UCBAdmissions[, 
++     , dept], conf.int = TRUE)$conf.int)
+             A         B         C         D         E         F
+[1,] 0.1970420 0.2944986 0.8452173 0.6789572 0.8064776 0.4332888
+[2,] 0.5920417 2.0040231 1.5162918 1.2504742 1.8385155 1.5756278
+
+> example(kruskal.test, echo = FALSE)
+
+> kruskal.test(x ~ g)
+
+	Kruskal-Wallis rank sum test
+
+data:  x by g
+Kruskal-Wallis chi-squared = 0.77143, df = 2, p-value = 0.68
+
+
+> free1way.test(x ~ g)
+
+	3-sample Kruskal-Wallis test against proportional odds alternatives
+
+data:  x by g (Normal subjects, Subjects with obstructive airway disease, Subjects with asbestosis)
+Perm chi-squared = 0.77152, df = 2, p-value = 0.6799
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> library("survival")
+
+> N <- 10
+
+> nd <- expand.grid(g = gl(3, N), s = gl(3, N))
+
+> nd$tm <- rexp(nrow(nd))
+
+> nd$ev <- TRUE
+
+> survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, 
++     rho = 0)$chisq
+[1] 5.032305
+
+> cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
+
+> (ft <- free1way.test(tm ~ g + strata(s), data = nd, 
++     link = "cloglog"))
+
+	Stratified 3-sample Savage test against proportional hazards
+	alternatives
+
+data:  tm by g (1, 2, 3) 
+	 stratified by strata(s)
+Perm chi-squared = 4.6207, df = 2, p-value = 0.09923
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> coef(cm)
+        g2         g3 
+-0.1598108 -0.1602095 
+
+> coef(ft)
+       g2        g3 
+0.1589030 0.1591066 
+
+> vcov(cm)
+            g2          g3
+g2 0.006782578 0.003416264
+g3 0.003416264 0.006778489
+
+> vcov(ft)
+            g2          g3
+g2 0.006793257 0.003425135
+g3 0.003425135 0.006789585
+
+> summary(ft)
+
+Call:
+free1way.test.formula(formula = tm ~ g + strata(s), data = nd, 
+    link = "cloglog")
+
+Coefficients:
+   log-hazard ratio Std. Error  z value P(>|z|)
+g2         0.158903   0.082421 1.927938  0.0539
+g3         0.159107   0.082399 1.930931  0.0535
+
+> summary(cm)$sctest
+      test         df     pvalue 
+5.03230471 2.00000000 0.08076978 
+
+> summary(ft, test = "Rao")
+
+	Stratified 3-sample Savage test against proportional hazards
+	alternatives
+
+data:  tm by g (1, 2, 3) 
+	 stratified by strata(s)
+Rao chi-squared = 5.0246, df = 2, p-value = 0.08108
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> summary(cm)$logtest
+      test         df     pvalue 
+4.93315433 2.00000000 0.08487487 
+
+> summary(ft, test = "LRT")
+
+	Stratified 3-sample Savage test against proportional hazards
+	alternatives
+
+data:  tm by g (1, 2, 3) 
+	 stratified by strata(s)
+logLR chi-squared = 4.9391, df = 2, p-value = 0.08462
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> summary(cm)$waldtest
+      test         df     pvalue 
+5.02000000 2.00000000 0.08119292 
+
+> summary(ft, test = "Wald")
+
+	Stratified 3-sample Savage test against proportional hazards
+	alternatives
+
+data:  tm by g (1, 2, 3) 
+	 stratified by strata(s)
+Wald chi-squared = 4.9493, df = 2, p-value = 0.08419
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> summary(ft, test = "Permutation")
+
+	Stratified 3-sample Savage test against proportional hazards
+	alternatives
+
+data:  tm by g (1, 2, 3) 
+	 stratified by strata(s)
+Perm chi-squared = 4.6207, df = 2, p-value = 0.09923
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> library("coin")
+
+> independence_test(Surv(tm, ev) ~ g | s, data = nd, 
++     ytrafo = function(...) trafo(..., numeric_trafo = logrank_trafo, 
++         block = nd$s), .... [TRUNCATED] 
+
+	Asymptotic General Independence Test
+
+data:  Surv(tm, ev) by g (1, 2, 3) 
+	 stratified by s
+chi-squared = 4.7482, df = 2, p-value = 0.0931
+
+
+> survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, 
++     rho = 1)$chisq
+[1] 5.331837
+
+> (ft <- free1way.test(tm ~ g + strata(s), data = nd, 
++     link = "logit"))
+
+	Stratified 3-sample Kruskal-Wallis test against proportional odds
+	alternatives
+
+data:  tm by g (1, 2, 3) 
+	 stratified by strata(s)
+Perm chi-squared = 5.198, df = 2, p-value = 0.07435
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft)
+
+Call:
+free1way.test.formula(formula = tm ~ g + strata(s), data = nd, 
+    link = "logit")
+
+Coefficients:
+   log-odds ratio Std. Error z value P(>|z|)
+g2        0.29721    0.14186 2.09509  0.0362
+g3        0.25749    0.14240 1.80819  0.0706
+
+> summary(ft, test = "Rao")
+
+	Stratified 3-sample Kruskal-Wallis test against proportional odds
+	alternatives
+
+data:  tm by g (1, 2, 3) 
+	 stratified by strata(s)
+Rao chi-squared = 5.2698, df = 2, p-value = 0.07173
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "LRT")
+
+	Stratified 3-sample Kruskal-Wallis test against proportional odds
+	alternatives
+
+data:  tm by g (1, 2, 3) 
+	 stratified by strata(s)
+logLR chi-squared = 5.2456, df = 2, p-value = 0.0726
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "Wald")
+
+	Stratified 3-sample Kruskal-Wallis test against proportional odds
+	alternatives
+
+data:  tm by g (1, 2, 3) 
+	 stratified by strata(s)
+Wald chi-squared = 5.1405, df = 2, p-value = 0.07652
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "Permutation")
+
+	Stratified 3-sample Kruskal-Wallis test against proportional odds
+	alternatives
+
+data:  tm by g (1, 2, 3) 
+	 stratified by strata(s)
+Perm chi-squared = 5.198, df = 2, p-value = 0.07435
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> library("survival")
+
+> data("GBSG2", package = "TH.data")
+
+> survdiff(Surv(time, cens) ~ horTh + strata(tgrade), 
++     data = GBSG2, rho = 0)$chisq
+[1] 7.395797
+
+> cm <- coxph(Surv(time, cens) ~ horTh + strata(tgrade), 
++     data = GBSG2)
+
+> ft <- with(GBSG2, free1way.test(y = time, x = horTh, 
++     z = tgrade, event = cens == 1, link = "cloglog"))
+
+> coef(cm)
+  horThyes 
+-0.3397231 
+
+> coef(ft)
+ horThyes 
+0.3935559 
+
+> vcov(cm)
+           horThyes
+horThyes 0.01575409
+
+> vcov(ft)
+           horThyes
+horThyes 0.01606776
+
+> summary(ft)
+
+Call:
+free1way.test.numeric(y = time, x = horTh, z = tgrade, event = cens == 
+    1, link = "cloglog")
+
+Coefficients:
+         log-hazard ratio Std. Error z value P(>|z|)
+horThyes          0.39356    0.12676 3.10477  0.0019
+
+> summary(cm)$sctest
+       test          df      pvalue 
+7.393532542 1.000000000 0.006545881 
+
+> summary(ft, test = "Rao")
+
+	Stratified 2-sample Savage test against proportional hazards
+	alternatives
+
+data:  time by horTh (no, yes) 
+	 stratified by tgrade
+Rao chi-squared = 9.4793, df = 1, p-value = 0.002078
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> summary(cm)$logtest
+       test          df      pvalue 
+7.602754967 1.000000000 0.005827918 
+
+> summary(ft, test = "LRT")
+
+	Stratified 2-sample Savage test against proportional hazards
+	alternatives
+
+data:  time by horTh (no, yes) 
+	 stratified by tgrade
+logLR chi-squared = 9.6476, df = 1, p-value = 0.001896
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> summary(cm)$waldtest
+       test          df      pvalue 
+7.330000000 1.000000000 0.006797068 
+
+> summary(ft, test = "Wald")
+
+	Stratified 2-sample Savage test against proportional hazards
+	alternatives
+
+data:  time by horTh (no, yes) 
+	 stratified by tgrade
+Wald chi-squared = 9.6396, df = 1, p-value = 0.001904
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> summary(ft, test = "Permutation")
+
+	Stratified 2-sample Savage test against proportional hazards
+	alternatives
+
+data:  time by horTh (no, yes) 
+	 stratified by tgrade
+Perm Z = 3.0989, p-value = 0.001942
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> (ft <- with(GBSG2, free1way.test(y = time, x = horTh, 
++     z = pnodes, event = cens == 1, link = "cloglog")))
+
+	Stratified 2-sample Savage test against proportional hazards
+	alternatives
+
+data:  time by horTh (no, yes) 
+	 stratified by pnodes
+Perm Z = 2.7021, p-value = 0.006891
+alternative hypothesis: true log-hazard ratio is not equal to 0
+
+
+> survdiff(Surv(time, cens) ~ horTh + strata(tgrade), 
++     data = GBSG2, rho = 1)$chisq
+[1] 7.593803
+
+> (ft <- with(GBSG2, free1way.test(y = time, x = horTh, 
++     z = tgrade, event = as.logical(cens), link = "logit")))
+
+	Stratified 2-sample Wilcoxon test against proportional odds
+	alternatives
+
+data:  time by horTh (no, yes) 
+	 stratified by tgrade
+Perm Z = 3.0406, p-value = 0.002361
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft)
+
+Call:
+free1way.test.numeric(y = time, x = horTh, z = tgrade, event = as.logical(cens), 
+    link = "logit")
+
+Coefficients:
+         log-odds ratio Std. Error z value P(>|z|)
+horThyes        0.55655    0.17303 3.21653  0.0013
+
+> summary(ft, test = "Rao")
+
+	Stratified 2-sample Wilcoxon test against proportional odds
+	alternatives
+
+data:  time by horTh (no, yes) 
+	 stratified by tgrade
+Rao chi-squared = 9.3397, df = 1, p-value = 0.002242
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "LRT")
+
+	Stratified 2-sample Wilcoxon test against proportional odds
+	alternatives
+
+data:  time by horTh (no, yes) 
+	 stratified by tgrade
+logLR chi-squared = 9.328, df = 1, p-value = 0.002257
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "Wald")
+
+	Stratified 2-sample Wilcoxon test against proportional odds
+	alternatives
+
+data:  time by horTh (no, yes) 
+	 stratified by tgrade
+Wald chi-squared = 10.346, df = 1, p-value = 0.001298
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft, test = "Permutation")
+
+	Stratified 2-sample Wilcoxon test against proportional odds
+	alternatives
+
+data:  time by horTh (no, yes) 
+	 stratified by tgrade
+Perm Z = 3.0406, p-value = 0.002361
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> nd$y <- rnorm(nrow(nd))
+
+> free1way.test(y ~ g + strata(s), data = nd, link = "probit")
+
+	Stratified 3-sample van der Waerden normal scores test against latent
+	normal shift alternatives
+
+data:  y by g (1, 2, 3) 
+	 stratified by strata(s)
+Perm chi-squared = 1.0111, df = 2, p-value = 0.6032
+alternative hypothesis: true generalised Cohen's d is not equal to 0
+
+
+> independence_test(y ~ g | s, data = nd, ytrafo = function(...) trafo(..., 
++     numeric_trafo = normal_trafo, block = nd$s), teststat = "quad")
+
+	Asymptotic General Independence Test
+
+data:  y by g (1, 2, 3) 
+	 stratified by s
+chi-squared = 1.0571, df = 2, p-value = 0.5895
+
+
+> example(friedman.test, echo = FALSE)
+
+> rt <- expand.grid(str = gl(22, 1), trt = gl(3, 1, 
++     labels = c("Round Out", "Narrow Angle", "Wide Angle")))
+
+> rt$tm <- c(RoundingTimes)
+
+> friedman.test(RoundingTimes)
+
+	Friedman rank sum test
+
+data:  RoundingTimes
+Friedman chi-squared = 11.143, df = 2, p-value = 0.003805
+
+
+> (ft <- free1way.test(tm ~ trt + strata(str), data = rt))
+
+	Stratified 3-sample Kruskal-Wallis test against proportional odds
+	alternatives
+
+data:  tm by trt (Round Out, Narrow Angle, Wide Angle) 
+	 stratified by strata(str)
+Perm chi-squared = 11.143, df = 2, p-value = 0.003805
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
+> summary(ft)
+
+Call:
+free1way.test.formula(formula = tm ~ trt + strata(str), data = rt)
+
+Coefficients:
+                log-odds ratio Std. Error  z value P(>|z|)
+trtNarrow Angle       -1.26537    0.68265 -1.85362  0.0638
+trtWide Angle         -3.28930    0.79368 -4.14435  0.0000
+
+> y <- rlogis(50)
+
+> x <- rlogis(50, location = 3)
+
+> ppplot(y, x, conf.level = 0.95)
+
+> ppplot(y, x, conf.args = list(link = "cloglog", type = "Wald", 
++     col = NA, border = NULL), conf.level = 0.95)
+
+> delta <- log(1.5)
+
+> power.prop.test(n = 25, p1 = 0.5, p2 = plogis(qlogis(0.5) - 
++     delta))
+
+     Two-sample comparison of proportions power calculation 
+
+              n = 25
+             p1 = 0.5
+             p2 = 0.4
+      sig.level = 0.05
+          power = 0.104621
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+
+> power.free1way.test(n = 25, prob = c(0.5, 0.5), delta = delta)
+
+      2-sample Wilcoxon test against proportional odds alternatives 
+
+                n = 25
+Total sample size = 25 (Control) + 25 (B) = 50
+            power = 0.1093493
+        sig.level = 0.05
+   log-odds ratio = 0.4054651
+
+NOTE: 'n' is sample size in control group
+
+
+> prb <- matrix(c(0.25, 0.25, 0.25, 0.25, 0.1, 0.2, 
++     0.3, 0.4), ncol = 2)
+
+> colnames(prb) <- c("s1", "s2")
+
+> power.free1way.test(n = 20, prob = prb, strata_ratio = 2, 
++     alloc_ratio = c(1.5, 2, 2), delta = log(c(low = 1.25, med = 1.5, 
++         high =  .... [TRUNCATED] 
+
+     Stratified 4-sample Kruskal-Wallis test against proportional odds alternatives 
+
+                n = 20
+Total sample size = 60 (Control) + 90 (low) + 120 (med) + 120 (high) = 390
+            power = 0.378275
+        sig.level = 0.05
+   log-odds ratio = 0.2231436, 0.4054651, 0.5596158
+
+NOTE: 'n' is sample size in control group of first stratum
+
+
+> Nsim <- 100
+
+> delta <- log(3)
+
+> N <- 15
+
+> w <- gl(2, N)
+
+> pw <- numeric(Nsim)
+
+> for (i in seq_along(pw)) {
++     y <- rlogis(length(w), location = c(0, delta)[w])
++     pw[i] <- wilcox.test(y ~ w)$p.value
++ }
+
+> mean(pw < 0.05)
+[1] 0.41
+
+> power.free1way.test(n = N, delta = delta)
+
+      2-sample Wilcoxon test against proportional odds alternatives 
+
+                n = 15
+Total sample size = 15 (Control) + 15 (B) = 30
+            power = 0.3697044
+        sig.level = 0.05
+   log-odds ratio = 1.098612
+
+NOTE: 'n' is sample size in control group
+
+
+> delta <- c(B = log(2), C = log(3))
+
+> N <- 15
+
+> w <- gl(3, N)
+
+> pw <- numeric(Nsim)
+
+> for (i in seq_along(pw)) {
++     y <- rlogis(length(w), location = c(0, delta)[w])
++     pw[i] <- kruskal.test(y ~ w)$p.value
++ }
+
+> mean(pw < 0.05)
+[1] 0.31
+
+> power.free1way.test(n = N, delta = delta)
+
+      3-sample Kruskal-Wallis test against proportional odds alternatives 
+
+                n = 15
+Total sample size = 15 (Control) + 15 (B) + 15 (C) = 45
+            power = 0.3027677
+        sig.level = 0.05
+   log-odds ratio = 0.6931472, 1.0986123
+
+NOTE: 'n' is sample size in control group
+
+
+> prb <- rep(1, 4)
+
+> x <- r2dsim(Nsim, r = prb, c = table(w), delta = delta)
+
+> pw <- numeric(length(x))
+
+> cf <- matrix(0, nrow = length(x), ncol = length(delta))
+
+> colnames(cf) <- names(delta)
+
+> for (i in seq_along(x)) {
++     ft <- free1way.test(x[[i]])
++     cf[i, ] <- coef(ft)
++     pw[i] <- summary(ft, test = "Permutation")$p.value
++ }
+
+> mean(pw < 0.05)
+[1] 0.29
+
+> boxplot(cf)
+
+> points(c(1:2), delta, pch = 19, col = "red")
+
+> power.free1way.test(n = N, prob = rep(1, 4), delta = delta)
+
+      3-sample Kruskal-Wallis test against proportional odds alternatives 
+
+                n = 15
+Total sample size = 15 (Control) + 15 (B) + 15 (C) = 45
+            power = 0.2904494
+        sig.level = 0.05
+   log-odds ratio = 0.6931472, 1.0986123
+
+NOTE: 'n' is sample size in control group
+
+
+> prb <- cbind(S1 = rep(1, 4), S2 = c(1, 2, 1, 2), S3 = 1:4)
+
+> dimnames(prb) <- list(Ctrl = paste0("i", seq_len(nrow(prb))), 
++     Strata = colnames(prb))
+
+> x1 <- r2dsim(Nsim, r = prb[, "S1"], c = table(w), 
++     delta = delta)
+
+> x2 <- r2dsim(Nsim, r = prb[, "S2"], c = table(w), 
++     delta = delta)
+
+> x3 <- r2dsim(Nsim, r = prb[, "S3"], c = table(w), 
++     delta = delta)
+
+> stab <- function(...) {
++     args <- list(...)
++     as.table(array(unlist(args), dim = c(dim(args[[1]]), length(args))))
++ }
+
+> pw <- numeric(length(x1))
+
+> cf <- matrix(0, nrow = length(x1), ncol = length(delta))
+
+> colnames(cf) <- names(delta)
+
+> for (i in seq_along(x)) {
++     ft <- free1way.test(stab(x1[[i]], x2[[i]], x3[[i]]))
++     cf[i, ] <- coef(ft)
++     pw[i] <- summary(ft, test = "Pe ..." ... [TRUNCATED] 
+
+> mean(pw < 0.05)
+[1] 0.66
+
+> boxplot(cf)
+
+> points(c(1:2), delta, pch = 19, col = "red")
+
+> power.free1way.test(n = N, prob = prb, delta = delta, 
++     seed = 3)
+
+     Stratified 3-sample Kruskal-Wallis test against proportional odds alternatives 
+
+                n = 15
+Total sample size = 45 (Ctrl) + 45 (B) + 45 (C) = 135
+            power = 0.6926091
+        sig.level = 0.05
+   log-odds ratio = 0.6931472, 1.0986123
+
+NOTE: 'n' is sample size in control group of first stratum
+
+
+> power.free1way.test(power = 0.8, prob = prb, delta = delta, 
++     seed = 3)
+
+     Stratified 3-sample Kruskal-Wallis test against proportional odds alternatives 
+
+                n = 20
+Total sample size = 60 (Ctrl) + 60 (B) + 60 (C) = 180
+            power = 0.8215771
+        sig.level = 0.05
+   log-odds ratio = 0.6931472, 1.0986123
+
+NOTE: 'n' is sample size in control group of first stratum
+
+
+> power.free1way.test(n = 19, prob = prb, delta = delta, 
++     seed = 3)
+
+     Stratified 3-sample Kruskal-Wallis test against proportional odds alternatives 
+
+                n = 19
+Total sample size = 57 (Ctrl) + 57 (B) + 57 (C) = 171
+            power = 0.7998793
+        sig.level = 0.05
+   log-odds ratio = 0.6931472, 1.0986123
+
+NOTE: 'n' is sample size in control group of first stratum
+
+
+ *** Run successfully completed ***
+> proc.time()
+   user  system elapsed 
+ 21.462   0.172  21.640 
