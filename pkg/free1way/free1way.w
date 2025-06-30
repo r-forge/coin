@@ -1459,6 +1459,7 @@ asymptotic and approximated reference distribution and corresponding
 p-values for a test statistics in quadratic form:
 
 <<SW>>=
+set.seed(29)
 w <- gl(2, 15)
 (s <- .SW(r <- rank(u <- runif(length(w))), model.matrix(~ 0 + w)))
 ps <- .resample(r, model.matrix(~ 0 + w), B = 100000)
@@ -1487,6 +1488,11 @@ if (!inherits(link, "linkfun")) {
     link <- do.call(link, list())
 }
 @}
+
+<TH>\code{B = 0} comes from \code{chisq.test} and means the default
+asymptotic permutation distribution. \code{B = 1000} means 1000 random
+permuations. Can we use \code{B = Inf} for the exact distribution once
+available?</TH>
 
 @d free1way
 @{
@@ -1927,7 +1933,6 @@ The second example is a Wilcoxon test for a single log-odds ratio
 comparing to treatment groups:
 
 <<formula>>=
-set.seed(29)
 N <- 25
 w <- gl(2, N)
 y <- rlogis(length(w), location = c(0, 1)[w])
