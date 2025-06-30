@@ -9,7 +9,7 @@ set.seed(29)
 N <- 25
 x <- gl(2, N, labels = c("A", "B"))
 y <- rlogis(length(x), location = c(0, 1)[x])
-y <- cut(y, breaks = c(-Inf, -1, 0, 1, Inf), ordered = TRUE)
+y <- cut(y, breaks = c(-Inf, -1, 0, 1, Inf), ordered_result = TRUE)
 
 ci <- confint(m <- polr(y ~ x, method = "logistic"))
 c(coef(m)["xB"], ci)

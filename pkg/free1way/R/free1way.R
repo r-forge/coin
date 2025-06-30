@@ -5,6 +5,7 @@
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
                         tol = sqrt(.Machine$double.eps), ...) {
 
+    ### convert to three-way table
     stopifnot(is.table(x))
     dx <- dim(x)
     dn <- dimnames(x)
@@ -13,86 +14,61 @@
         dimnames(x) <- dn <- c(dn, list(A = "A"))
     }
 
-    ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
-    ms$drop <- FALSE
-    x <- do.call("[", ms)
-
-    dx <- dim(x)
-    dn <- dimnames(x)
-    stopifnot(length(dx) >= 3L)
-    stopifnot(dx[1L] > 1L)
-    K <- dx[2L]
-    stopifnot(K > 1L)
-
+    ### short-cuts for link functions
     F <- function(q) .p(link, q = q)
     Q <- function(p) .q(link, p = p)
     f <- function(q) .d(link, x = q)
     fp <- function(q) .dd(link, x = q)
 
-    # setup
+    # setup and starting values
     
-    # table2list
+    # table2list body
 
-    .table2list <- function(x) {
-
-        dx <- dim(x)
-        if (length(dx) == 1L)
-            stop("")
-        if (length(dx) == 2L)
-            x <- as.table(array(x, dim = c(dx, 1)))
-        ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
-        ms$drop <- FALSE
-        x <- do.call("[", ms)
-        dx <- dim(x)
-        stopifnot(length(dx) >= 3L)
-        K <- dim(x)[2L]
-        B <- dim(x)[3L]
-        stopifnot(dx[1L] > 1L)
-        stopifnot(K > 1L)
-
-        xrc <- NULL
-        if (length(dx) == 4L) {
-            if (dx[4] == 2L) {
-                xrc <- array(x[,,,"FALSE", drop = TRUE], dim = dx[1:3])
-                x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])
-            } else {
-                stop("")
-            }
-        }
-
-        xlist <- xrclist <- vector(mode = "list", length = B)
-
-        lwr <- rep(-Inf, times = K - 1)
-        for (b in seq_len(B)) {
-            xb <- matrix(x[,,b, drop = TRUE], ncol = K)
-            xw <- rowSums(abs(xb)) > 0
-            ### do not remove last parameter if there are corresponding
-            ### right-censored observations
-            if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))
-                xw[length(xw)] <- TRUE
-            if (sum(xw) > 1L) {
-                xlist[[b]] <- xb[xw,,drop = FALSE]
-                attr(xlist[[b]], "idx") <- xw
-                if (!is.null(xrc)) {
-                    xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
-                    attr(xrclist[[b]], "idx") <- xw
-                }
-            }
-        }
-        nn <- !sapply(xlist, is.null)
-        ret <- list(xlist = xlist[nn])
-        if (!is.null(xrc))
-            ret$xrclist <- xrclist[nn]
-        ret$strata <- nn
-        ret
-    }
-    
-    C <- dim(x)[1L]
+    dx <- dim(x)
+    if (length(dx) == 1L)
+        stop("")
+    if (length(dx) == 2L)
+        x <- as.table(array(x, dim = c(dx, 1)))
+    ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
+    ms$drop <- FALSE
+    x <- do.call("[", ms)
+    dx <- dim(x)
+    stopifnot(length(dx) >= 3L)
     K <- dim(x)[2L]
     B <- dim(x)[3L]
-    xl <- .table2list(x)
-    xlist <- xl$xlist
-    xrclist <- xl$xrclist
+    stopifnot(dx[1L] > 1L)
+    stopifnot(K > 1L)
+    xrc <- NULL
+    if (length(dx) == 4L) {
+        if (dx[4] == 2L) {
+            xrc <- array(x[,,,"FALSE", drop = TRUE], dim = dx[1:3])
+            x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])
+        } else {
+            stop("")
+        }
+    }
+
+    xlist <- xrclist <- vector(mode = "list", length = B)
+
+    lwr <- rep(-Inf, times = K - 1)
+    for (b in seq_len(B)) {
+        xb <- matrix(x[,,b, drop = TRUE], ncol = K)
+        xw <- rowSums(abs(xb)) > 0
+        ### do not remove last parameter if there are corresponding
+        ### right-censored observations
+        if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))
+            xw[length(xw)] <- TRUE
+        if (sum(xw) > 1L) {
+            xlist[[b]] <- xb[xw,,drop = FALSE]
+            attr(xlist[[b]], "idx") <- xw
+            if (!is.null(xrc)) {
+                xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
+                attr(xrclist[[b]], "idx") <- xw
+            }
+        }
+    }
+    strata <- !sapply(xlist, is.null)
+    
     if (NS <- is.null(start))
         start <- rep.int(0, K - 1)
     lwr <- rep(-Inf, times = K - 1)
@@ -404,8 +380,9 @@
                          p[fix] <- beta
                          p[-fix] <- par
                          ret <- .snll(p, x = xlist, mu = mu)
-                         if (!is.null(xrclist))
-                             ret <- ret + .snll(p, x = xrclist, mu = mu, rightcensored = TRUE)
+                         if (!is.null(xrc))
+                             ret <- ret + .snll(p, x = xrclist, mu = mu, 
+                                                rightcensored = TRUE)
                          ret
                      },
                      gr = function(par) {
@@ -413,8 +390,9 @@
                          p[fix] <- beta
                          p[-fix] <- par
                          ret <- .snsc(p, x = xlist, mu = mu)[-fix]
-                         if (!is.null(xrclist))
-                             ret <- ret + .snsc(p, x = xrclist, mu = mu, rightcensored = TRUE)[-fix]
+                         if (!is.null(xrc))
+                             ret <- ret + .snsc(p, x = xrclist, mu = mu, 
+                                                rightcensored = TRUE)[-fix]
                          ret
                      },
                      lower = lwr[-fix], method = "L-BFGS-B", 
@@ -428,29 +406,25 @@
     
     # optim
     
+    fn <- function(par) {
+        ret <- .snll(par, x = xlist, mu = mu)
+        if (!is.null(xrc))
+            ret <- ret + .snll(par, x = xrclist, mu = mu, 
+                               rightcensored = TRUE)
+        return(ret)
+    }
+    gr <- function(par) {
+        ret <- .snsc(par, x = xlist, mu = mu)
+        if (!is.null(xrc))
+            ret <- ret + .snsc(par, x = xrclist, mu = mu, 
+                               rightcensored = TRUE)
+        return(ret)
+    }
     if (!length(fix)) {
-        ret <- optim(par = start, 
-                     fn = function(par) {
-                         ret <- .snll(par, x = xlist, mu = mu)
-                         if (!is.null(xrclist))
-                             ret <- ret + .snll(par, x = xrclist, mu = mu, rightcensored = TRUE)
-                         ret
-                     },
-                     gr = function(par) {
-                         ret <- .snsc(par, x = xlist, mu = mu)
-                         if (!is.null(xrclist))
-                             ret <- ret + .snsc(par, x = xrclist, mu = mu, rightcensored = TRUE)
-                         ret
-                     },
+        ret <- optim(par = start, fn = fn, gr = gr,
                      lower = lwr, method = "L-BFGS-B", 
                      hessian = FALSE, ...)
     } else if (length(fix) == length(start)) {
-        fn <- function(par) {
-                         ret <- .snll(par, x = xlist, mu = mu)
-                         if (!is.null(xrclist))
-                             ret <- ret + .snll(par, x = xrclist, mu = mu, rightcensored = TRUE)
-                         ret
-                     }
         ret <- list(par = start, 
                     value = fn(start))
     } else {
@@ -471,10 +445,15 @@
 
     if (score)
         ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
-        if (!is.null(xrclist))
-            ret$negscore <- ret$negscore + .snsc(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)[parm]
+        if (!is.null(xrc))
+            ret$negscore <- ret$negscore + .snsc(ret$par, x = xrclist, mu = mu, 
+                                                 rightcensored = TRUE)[parm]
     if (hessian) {
-        ret$hessian <- .shes(ret$par, x = xlist, mu = mu, xrc = xrclist)
+        if (!is.null(xrc)) {
+            ret$hessian <- .shes(ret$par, x = xlist, mu = mu, xrc = xrclist)
+        } else {
+            ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
+        }
         if (length(parm) != nrow(ret$hessian))
            ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
         ret$vcov <- solve(ret$hessian)
@@ -483,18 +462,19 @@
     }
     if (residuals) {
         ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
-        if (!is.null(xrclist)) {
+        if (!is.null(xrc)) {
             rcr <- .snsr(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
+            C <- sapply(xlist, NROW) 
             ret$residuals <- c(rbind(matrix(ret$residuals, nrow = C),
-                  matrix(rcr, nrow = C)))
+                                     matrix(rcr, nrow = C)))
          }
     }
     ret$profile <- function(start, fix)
-        .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
-
+        .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, 
+                   ...) 
     ret$table <- x
     ret$mu <- mu
-    ret$strata <- xl$strata
+    ret$strata <- strata
     names(ret$mu) <- link$parm
     
 
@@ -506,7 +486,9 @@
 
 free1way.test <- function(y, ...)
     UseMethod("free1way.test")
-free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), mu = 0, B = 0, ...)
+
+free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), 
+                                mu = 0, B = 0, ...)
 {
 
     cl <- match.call()
@@ -515,7 +497,8 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
     dn <- dimnames(y)
     DNAME <- NULL
     if (!is.null(dn)) {
-        DNAME <- paste(names(dn)[1], "by", names(dn)[2], paste0("(", paste0(dn[2], collapse = ", "), ")"))
+        DNAME <- paste(names(dn)[1], "by", names(dn)[2], 
+                       paste0("(", paste0(dn[2], collapse = ", "), ")"))
         if (length(dn) == 3L)
             DNAME <- paste(DNAME, "\n\t stratified by", names(dn)[3])
     }
@@ -535,8 +518,8 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
 
     alias <- link$alias
     if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]
-    ret$method <- paste(ifelse(length(d) == 3L, "Stratified", ""), 
-                        paste0(d[2], "-sample"), alias, 
+    ret$method <- paste(ifelse(d[3L] > 1L, "Stratified", ""), 
+                        paste0(d[2L], "-sample"), alias, 
                         "test against", link$model, "alternatives")
 
     cf <- ret$par
@@ -668,7 +651,7 @@ model.matrix.free1way <- function (object, ...)
     mm
 }
 
-# free1way summary
+# free1way print
 
 .print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
                            alternative = c("two.sided", "less", "greater"), 
@@ -774,9 +757,11 @@ model.matrix.free1way <- function (object, ...)
 }
 
 print.free1way <- function(x, ...) {
-    print(ret <- .print.free1way(x))
+    print(ret <- .print.free1way(x, ...))
     return(invisible(x))
 }
+
+# free1way summary
 
 summary.free1way <- function(object, test, alternative = c("two.sided", "less", "greater"), 
                              tol = .Machine$double.eps, ...)
@@ -924,8 +909,10 @@ confint.free1way <- function(object, parm,
         if (is.null(object$perm$permStat)) {
             qu <- qnorm(conf.level) * c(-1, 1)
         } else {
-            qu <- quantile(object$perm$permStat, probs = c(1 - conf.level, conf.level))
-            att.level <- mean(object$perm$permStat > qu[1] & object$perm$permStat < qu[2])
+            qu <- quantile(object$perm$permStat, 
+                           probs = c(1 - conf.level, conf.level))
+            att.level <- mean(object$perm$permStat > qu[1] & 
+                              object$perm$permStat < qu[2])
             attr(CINT, "Attained level") <- att.level
         }
     } else {
@@ -933,8 +920,10 @@ confint.free1way <- function(object, parm,
     }
 
     for (p in parm) {
-        CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), parm = p, quantile = qu[2])$root
-        CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), parm = p, quantile = qu[1])$root
+        CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), 
+                              parm = p, quantile = qu[2])$root
+        CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), 
+                              parm = p, quantile = qu[1])$root
     }
 
     what <- match.arg(what)
@@ -992,7 +981,7 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
                               varnames = vn, ...)
         DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[stratum]))
     } else {
-        ## Call the default method.
+        ## Call the corresponding method
         RVAL <- free1way.test(y = y, x = g, weights = w, varnames = vn, ...)
     }
     RVAL$data.name <- DNAME
@@ -1025,7 +1014,7 @@ free1way.test.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, 
     }
     if (nbins && nbins < length(uy)) {
         nbins <- ceiling(nbins)
-        breaks <- c(-Inf, quantile(y, prob = seq_len(nbins) / (nbins + 1L)), Inf)
+        breaks <- c(-Inf, quantile(y, probs = seq_len(nbins) / (nbins + 1L)), Inf)
     } else {
         breaks <- c(-Inf, uy, Inf)
     }
@@ -1076,10 +1065,11 @@ free1way.test.factor <- function(y, x, z = NULL, event = NULL, weights = NULL,
 # ppplot
 
 ppplot <- function(x, y, plot.it = TRUE,
-            xlab = deparse1(substitute(x)),
-            ylab = deparse1(substitute(y)), 
-            interpolate = FALSE, ...,
-            conf.level = NULL, conf.args = list(type = "Wald", col = NA, border = NULL)) {
+                   xlab = deparse1(substitute(x)),
+                   ylab = deparse1(substitute(y)), 
+                   ..., conf.level = NULL, 
+                   conf.args = list(link = "logit", type = "Wald", 
+                                    col = NA, border = NULL)) {
 
     force(xlab)
     force(ylab)

@@ -167,9 +167,9 @@ odds), or $g_\text{Cd}(p, \beta) =
 Instead of directly working with $g$, we parameterise the model in terms of
 some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
 and corresponding derivative $f^\prime$. The location model 
-\begin{eqnarray*}
+\begin{eqnarray} \label{model}
 F_Y(y \mid S = b, \rT = k) = F\left(F^{-1}\left(F_Y(y \mid S = b, \rT = 1)\right) - \beta_k\right), \quad k = 2, \dots, K
-\end{eqnarray*}
+\end{eqnarray}
 describes different distributions by means of shift parameter on a latent
 scale defined by $F$. The negative shift term ensures that positive values of $\beta_k$ correspond
 to the situation of outcomes being stochastically larger in group $k$
@@ -582,59 +582,64 @@ parameters. Before we begin, we convert the table $C \times K \times B
 (\times 2)$ table \code{x} into a list of non-empty $C^\prime \times K$
 tables with non-zero row sums:
 
+@d table2list body
+@{
+dx <- dim(x)
+if (length(dx) == 1L)
+    stop("")
+if (length(dx) == 2L)
+    x <- as.table(array(x, dim = c(dx, 1)))
+ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
+ms$drop <- FALSE
+x <- do.call("[", ms)
+dx <- dim(x)
+stopifnot(length(dx) >= 3L)
+K <- dim(x)[2L]
+B <- dim(x)[3L]
+stopifnot(dx[1L] > 1L)
+stopifnot(K > 1L)
+xrc <- NULL
+if (length(dx) == 4L) {
+    if (dx[4] == 2L) {
+        xrc <- array(x[,,,"FALSE", drop = TRUE], dim = dx[1:3])
+        x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])
+    } else {
+        stop("")
+    }
+}
+
+xlist <- xrclist <- vector(mode = "list", length = B)
+
+lwr <- rep(-Inf, times = K - 1)
+for (b in seq_len(B)) {
+    xb <- matrix(x[,,b, drop = TRUE], ncol = K)
+    xw <- rowSums(abs(xb)) > 0
+    ### do not remove last parameter if there are corresponding
+    ### right-censored observations
+    if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))
+        xw[length(xw)] <- TRUE
+    if (sum(xw) > 1L) {
+        xlist[[b]] <- xb[xw,,drop = FALSE]
+        attr(xlist[[b]], "idx") <- xw
+        if (!is.null(xrc)) {
+            xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
+            attr(xrclist[[b]], "idx") <- xw
+        }
+    }
+}
+strata <- !sapply(xlist, is.null)
+@}
+
 @d table2list
 @{
 .table2list <- function(x) {
 
-    dx <- dim(x)
-    if (length(dx) == 1L)
-        stop("")
-    if (length(dx) == 2L)
-        x <- as.table(array(x, dim = c(dx, 1)))
-    ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
-    ms$drop <- FALSE
-    x <- do.call("[", ms)
-    dx <- dim(x)
-    stopifnot(length(dx) >= 3L)
-    K <- dim(x)[2L]
-    B <- dim(x)[3L]
-    stopifnot(dx[1L] > 1L)
-    stopifnot(K > 1L)
+    @<table2list body@>
 
-    xrc <- NULL
-    if (length(dx) == 4L) {
-        if (dx[4] == 2L) {
-            xrc <- array(x[,,,"FALSE", drop = TRUE], dim = dx[1:3])
-            x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])
-        } else {
-            stop("")
-        }
-    }
-
-    xlist <- xrclist <- vector(mode = "list", length = B)
-
-    lwr <- rep(-Inf, times = K - 1)
-    for (b in seq_len(B)) {
-        xb <- matrix(x[,,b, drop = TRUE], ncol = K)
-        xw <- rowSums(abs(xb)) > 0
-        ### do not remove last parameter if there are corresponding
-        ### right-censored observations
-        if (!is.null(xrc) && any(xrc[dx[1],,b,drop = TRUE] > 0))
-            xw[length(xw)] <- TRUE
-        if (sum(xw) > 1L) {
-            xlist[[b]] <- xb[xw,,drop = FALSE]
-            attr(xlist[[b]], "idx") <- xw
-            if (!is.null(xrc)) {
-                xrclist[[b]] <- matrix(xrc[xw,,b,drop = TRUE], ncol = K)
-                attr(xrclist[[b]], "idx") <- xw
-            }
-        }
-    }
-    nn <- !sapply(xlist, is.null)
-    ret <- list(xlist = xlist[nn])
+    ret <- list(xlist = xlist[strata])
     if (!is.null(xrc))
-        ret$xrclist <- xrclist[nn]
-    ret$strata <- nn
+        ret$xrclist <- xrclist[strata]
+    ret$strata <- strata
     ret
 }
 @}
@@ -778,6 +783,9 @@ Similar to \code{family} objects, we provide some infrastructure for
 \code{link} functions $F^{-1}$ and derived quantities (\code{linkinv} $F$,
 \code{dlinkinv} $f$, and \code{ddlinkinv} $f^\prime$). If not provided, we also
 set-up the ratio $f^\prime / f$ in the constructor.
+
+Although there is some overlap with \code{family} objects for binomial
+outcomes, it doesn't seem beneficial to extend this richer class.
 
 @o linkfun.R -cp
 @{
@@ -1012,6 +1020,7 @@ probit <- function()
 @<ML estimation@>
 @<free1way@>
 @<free1way methods@>
+@<free1way print@>
 @<free1way summary@>
 @<free1way confint@>
 @<free1way formula@>
@@ -1022,16 +1031,17 @@ probit <- function()
 @<power@>
 @}
 
+We now put together a low-level function for parameter estimation and
+evaluation of scores, Hessians, and residuals. We also set-up a profile
+likelihood function for later re-use. 
 
-@d setup
+Assuming all shift effects been zero, we compute starting values for the
+intercept parameters from the empirical cumulative distribution function
+after merging all treatment groups:
+
+@d setup and starting values
 @{
-@<table2list@>
-C <- dim(x)[1L]
-K <- dim(x)[2L]
-B <- dim(x)[3L]
-xl <- .table2list(x)
-xlist <- xl$xlist
-xrclist <- xl$xrclist
+@<table2list body@>
 if (NS <- is.null(start))
     start <- rep.int(0, K - 1)
 lwr <- rep(-Inf, times = K - 1)
@@ -1062,8 +1072,9 @@ $\thetavec$.
                      p[fix] <- beta
                      p[-fix] <- par
                      ret <- .snll(p, x = xlist, mu = mu)
-                     if (!is.null(xrclist))
-                         ret <- ret + .snll(p, x = xrclist, mu = mu, rightcensored = TRUE)
+                     if (!is.null(xrc))
+                         ret <- ret + .snll(p, x = xrclist, mu = mu, 
+                                            rightcensored = TRUE)
                      ret
                  },
                  gr = function(par) {
@@ -1071,8 +1082,9 @@ $\thetavec$.
                      p[fix] <- beta
                      p[-fix] <- par
                      ret <- .snsc(p, x = xlist, mu = mu)[-fix]
-                     if (!is.null(xrclist))
-                         ret <- ret + .snsc(p, x = xrclist, mu = mu, rightcensored = TRUE)[-fix]
+                     if (!is.null(xrc))
+                         ret <- ret + .snsc(p, x = xrclist, mu = mu, 
+                                            rightcensored = TRUE)[-fix]
                      ret
                  },
                  lower = lwr[-fix], method = "L-BFGS-B", 
@@ -1085,37 +1097,41 @@ $\thetavec$.
 }
 @}
 
+The heart of the function is a call to \code{optim}, trying to obtain
+parameter estimates of $\thetavec$ by minimising the negative
+log-likelihood. We allow some (or all) parameters to be fixed at some
+constants, and provide a profile version of the likelihood:
+
 @d optim
 @{
+fn <- function(par) {
+    ret <- .snll(par, x = xlist, mu = mu)
+    if (!is.null(xrc))
+        ret <- ret + .snll(par, x = xrclist, mu = mu, 
+                           rightcensored = TRUE)
+    return(ret)
+}
+gr <- function(par) {
+    ret <- .snsc(par, x = xlist, mu = mu)
+    if (!is.null(xrc))
+        ret <- ret + .snsc(par, x = xrclist, mu = mu, 
+                           rightcensored = TRUE)
+    return(ret)
+}
 if (!length(fix)) {
-    ret <- optim(par = start, 
-                 fn = function(par) {
-                     ret <- .snll(par, x = xlist, mu = mu)
-                     if (!is.null(xrclist))
-                         ret <- ret + .snll(par, x = xrclist, mu = mu, rightcensored = TRUE)
-                     ret
-                 },
-                 gr = function(par) {
-                     ret <- .snsc(par, x = xlist, mu = mu)
-                     if (!is.null(xrclist))
-                         ret <- ret + .snsc(par, x = xrclist, mu = mu, rightcensored = TRUE)
-                     ret
-                 },
+    ret <- optim(par = start, fn = fn, gr = gr,
                  lower = lwr, method = "L-BFGS-B", 
                  hessian = FALSE, ...)
 } else if (length(fix) == length(start)) {
-    fn <- function(par) {
-                     ret <- .snll(par, x = xlist, mu = mu)
-                     if (!is.null(xrclist))
-                         ret <- ret + .snll(par, x = xrclist, mu = mu, rightcensored = TRUE)
-                     ret
-                 }
     ret <- list(par = start, 
                 value = fn(start))
 } else {
     ret <- .profile(start, fix = fix)
 }
 @}
+
+After parameter estimation, we evaluate scores, the Hessian, and residuals
+as requested:
 
 @d post processing
 @{
@@ -1131,10 +1147,15 @@ names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
 if (score)
     ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
-    if (!is.null(xrclist))
-        ret$negscore <- ret$negscore + .snsc(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)[parm]
+    if (!is.null(xrc))
+        ret$negscore <- ret$negscore + .snsc(ret$par, x = xrclist, mu = mu, 
+                                             rightcensored = TRUE)[parm]
 if (hessian) {
-    ret$hessian <- .shes(ret$par, x = xlist, mu = mu, xrc = xrclist)
+    if (!is.null(xrc)) {
+        ret$hessian <- .shes(ret$par, x = xlist, mu = mu, xrc = xrclist)
+    } else {
+        ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
+    }
     if (length(parm) != nrow(ret$hessian))
        ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
     ret$vcov <- solve(ret$hessian)
@@ -1143,20 +1164,24 @@ if (hessian) {
 }
 if (residuals) {
     ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
-    if (!is.null(xrclist)) {
+    if (!is.null(xrc)) {
         rcr <- .snsr(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
+        C <- sapply(xlist, NROW) 
         ret$residuals <- c(rbind(matrix(ret$residuals, nrow = C),
-              matrix(rcr, nrow = C)))
+                                 matrix(rcr, nrow = C)))
      }
 }
 ret$profile <- function(start, fix)
-    .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, ...) 
-
+    .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, 
+               ...) 
 ret$table <- x
 ret$mu <- mu
-ret$strata <- xl$strata
+ret$strata <- strata
 names(ret$mu) <- link$parm
 @}
+
+Finally, we put everything into one function which returns an object of
+class \code{free1wayML} for later use:
 
 @d ML estimation
 @{
@@ -1164,6 +1189,7 @@ names(ret$mu) <- link$parm
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
                         tol = sqrt(.Machine$double.eps), ...) {
 
+    ### convert to three-way table
     stopifnot(is.table(x))
     dx <- dim(x)
     dn <- dimnames(x)
@@ -1172,23 +1198,13 @@ names(ret$mu) <- link$parm
         dimnames(x) <- dn <- c(dn, list(A = "A"))
     }
 
-    ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
-    ms$drop <- FALSE
-    x <- do.call("[", ms)
-
-    dx <- dim(x)
-    dn <- dimnames(x)
-    stopifnot(length(dx) >= 3L)
-    stopifnot(dx[1L] > 1L)
-    K <- dx[2L]
-    stopifnot(K > 1L)
-
+    ### short-cuts for link functions
     F <- function(q) .p(link, q = q)
     Q <- function(p) .q(link, p = p)
     f <- function(q) .d(link, x = q)
     fp <- function(q) .dd(link, x = q)
 
-    @<setup@>
+    @<setup and starting values@>
     @<cumsumrev@>
     @<negative logLik@>
     @<negative score@>
@@ -1207,9 +1223,10 @@ names(ret$mu) <- link$parm
 }
 @}
 
+As an example, consider a stratified (two stata) $3 \times 3$ problem where
+outcome category B is missing from the second stratum:
+
 <<workhorse>>=
-.free1wayML(x, logit())$coefficients
-op
 N <- 10
 a <- matrix(c(5, 6, 4,
                     3, 5, 7,
@@ -1219,16 +1236,26 @@ a <- matrix(c(5, 6, 4,
                     4, 6, 5), ncol = 3, byrow = TRUE)
 x <- as.table(array(c(a[1:3,], a[-(1:3),]), dim = c(3, 3, 2)))
 x
-(ret <- .free1wayML(x, logit()))
-.free1wayML(x, logit(), start = ret$par, fix = 1:2)$coefficients
-.free1wayML(x, logit(), start = ret$par, fix = 2)$coefficients
-.free1wayML(x, logit(), start = ret$par, fix =
-seq_along(ret$par))$coefficients
+ret <- .free1wayML(x, logit())
+ret[c("value", "par")]
+cf <- ret$par
+cf[1:2] <- cf[1:2] + .5
+cf
+### profile for cf[1:2]
+.free1wayML(x, logit(), start = cf, fix = 1:2)[c("value", "par")]
+### profile for cf[2]
+.free1wayML(x, logit(), start = cf, fix = 2)[c("value", "par")]
+### evaluate log-likelihood at cf
+.free1wayML(x, logit(), start = cf, 
+            fix = seq_along(ret$par))[c("value", "par")]
 @@
 
 \chapter{ML Inference}
 \label{ch:MLinf}
 
+Based on an object of class \code{free1wayML}, we can setup different test
+statistics and obtain the limiting null distribution based on classical ML
+theory under the population model:
 
 @d statistics
 @{
@@ -1246,6 +1273,9 @@ if (test == "Wald") {
 
 \section{Wald}
 
+We only need access to the parameter estimates $\hat{\beta}_2, \dots,
+\hat{\beta}_K$ and the corresponding Hessian:
+
 @d Wald statistic
 @{
 if (alternative == "two.sided") {
@@ -1260,6 +1290,10 @@ if (alternative == "two.sided") {
 
 \section{Likelihood-ratio}
 
+In addition to the log-likelihood evaluated at the ML estimates, we need to
+evaluate the profile log-likelihood at some value corresponding the null
+hypothesis to be tested:
+
 @d LRT
 @{
 par <- x$par
@@ -1272,6 +1306,10 @@ PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
 @}
 
 \section{Rao Score}
+
+For the Rao score test, the inverse of the Hessian as well as the score
+function of the shift parameters evaluated for some null values need to be
+computed:
 
 @d Rao
 @{
@@ -1288,7 +1326,14 @@ if (alternative == "two.sided") {
 }
 @}
 
-\section{Permutation}
+\chapter{Permutation Inference}
+\label{ch:Perminf}
+
+Under the permutation model, that is, in randomised experiments where the
+random treatment allocation is the only relevant source of randomness, we
+compute a permuation variant of the Rao score test, based on the conditional
+asymptotic distribution or based on a Monte-Carlo estimate of the reference
+distribution:
 
 @d Permutation
 @{
@@ -1325,6 +1370,9 @@ if (alternative == "two.sided" && length(cf) > 1L) {
     }
 }
 @}
+
+The mean and variance of the linear permutation statistic under the null was
+given by \cite{strasserweber1999}:
 
 @d Strasser Weber
 @{
@@ -1365,6 +1413,9 @@ if (alternative == "two.sided" && length(cf) > 1L) {
 }
 @}
 
+For small samples, we used the \code{r2dtable} function to sample from
+tables with fixed marginal distributions:
+
 @d resampling
 @{
 .resample <- function(res, xt, B = 10000) {
@@ -1399,22 +1450,32 @@ if (alternative == "two.sided" && length(cf) > 1L) {
 }
 @}
 
+As an example, consider the Wilcoxon rank sum test, where the scores under
+the null are a linear function of the ranks of the data. We compute the
+asymptotic and approximated reference distribution and corresponding
+p-values for a test statistics in quadratic form:
+
 <<SW>>=
 w <- gl(2, 15)
 (s <- .SW(r <- rank(u <- runif(length(w))), model.matrix(~ 0 + w)))
 ps <- .resample(r, model.matrix(~ 0 + w), B = 100000)
-ps$testStat
+ps$testStat^2
 mean(abs(ps$permStat) > abs(ps$testStat) - .Machine$double.eps)
 pchisq(ps$testStat^ifelse(ps$DF == 1, 2, 1), df = ps$DF, lower.tail = FALSE)
+### exactly the same
 kruskal.test(u ~ w)
 library("coin")
+### almost the same
 kruskal_test(u ~ w, distribution = approximate(100000))
 @@
 
 
-\chapter{Distribution-free Tests in Stratified One-way Layouts}
+\chapter{Distribution-free Tests in Stratified $K$-sample Oneway Layouts}
 
-Distribution-free
+\section{\code{free1way.test}}
+
+We provide a new test procedure in a generic \code{free1way.test}, featuring
+a method for tables (the main workhorse) and additional user interfaces. 
 
 @d link2fun
 @{
@@ -1428,7 +1489,9 @@ if (!inherits(link, "linkfun")) {
 @{
 free1way.test <- function(y, ...)
     UseMethod("free1way.test")
-free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), mu = 0, B = 0, ...)
+
+free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), 
+                                mu = 0, B = 0, ...)
 {
 
     cl <- match.call()
@@ -1437,7 +1500,8 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
     dn <- dimnames(y)
     DNAME <- NULL
     if (!is.null(dn)) {
-        DNAME <- paste(names(dn)[1], "by", names(dn)[2], paste0("(", paste0(dn[2], collapse = ", "), ")"))
+        DNAME <- paste(names(dn)[1], "by", names(dn)[2], 
+                       paste0("(", paste0(dn[2], collapse = ", "), ")"))
         if (length(dn) == 3L)
             DNAME <- paste(DNAME, "\n\t stratified by", names(dn)[3])
     }
@@ -1451,8 +1515,8 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
 
     alias <- link$alias
     if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]
-    ret$method <- paste(ifelse(length(d) == 3L, "Stratified", ""), 
-                        paste0(d[2], "-sample"), alias, 
+    ret$method <- paste(ifelse(d[3L] > 1L, "Stratified", ""), 
+                        paste0(d[2L], "-sample"), alias, 
                         "test against", link$model, "alternatives")
 
     cf <- ret$par
@@ -1486,179 +1550,10 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
 }
 @}
 
-@d free1way methods
-@{
-coef.free1way <- function(object, what = c("shift", "PI", "AUC", "OVL"), ...)
-{
-    what <- match.arg(what)
-    cf <- object$coefficients
-    return(switch(what, "shift" = cf,
-                        "PI" = object$link$parm2PI(cf),
-                        "AUC" = object$link$parm2PI(cf),	### same as PI
-                        "OVL" = object$link$parm2OVL(cf)))
-}
-vcov.free1way <- function(object, ...)
-    object$vcov
-logLik.free1way <- function(object, ...)
-    -object$value
-### the next two could go into multcomp
-model.frame.free1way <- function(formula, ...)
-    as.data.frame(formula$table)
-model.matrix.free1way <- function (object, ...) 
-{
-    mm <- model.matrix(delete.response(terms(object)), data = model.frame(object))
-    at <- attributes(mm)
-    mm <- mm[, -1]
-    at$dim[2] <- at$dim[2] - 1
-    at$dimnames[[2]] <- at$dimnames[[2]][-1]
-    at$assign <- at$assign[-1]
-    attributes(mm) <- at
-    mm
-}
-@}
+The \code{formula} method allows formulae \code{outcome ~ treatment +
+strata(s)} for model specification
 
-@d free1way summary
-@{
-.print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
-                           alternative = c("two.sided", "less", "greater"), 
-                           tol = .Machine$double.eps, ...)
-{
-
-    test <- match.arg(test)
-    alternative <- match.arg(alternative)
-
-    ### global
-    cf <- coef(x)
-    if ((length(cf) > 1L || test == "LRT") && alternative != "two.sided") 
-        stop("Cannot compute one-sided p-values")
-
-    DF <- NULL
-    parm <- seq_along(cf)
-    value <- 0
-
-    @<statistics@>
-
-    RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, 
-        null.value = x$mu, alternative = alternative, method = x$method, 
-        data.name = x$data.name)
-    class(RVAL) <- "htest"
-    return(RVAL)
-}
-
-print.free1way <- function(x, ...) {
-    print(ret <- .print.free1way(x))
-    return(invisible(x))
-}
-
-summary.free1way <- function(object, test, alternative = c("two.sided", "less", "greater"), 
-                             tol = .Machine$double.eps, ...)
-{
-
-    if (!missing(test))
-        return(.print.free1way(object, test = test, alternative = alternative, tol = tol))
-   
-    alternative <- match.arg(alternative)
-
-    ESTIMATE <- coef(object)
-    SE <- sqrt(diag(vcov(object)))
-    STATISTIC <- unname(ESTIMATE / SE)
-    if (alternative == "less") {
-        PVAL <- pnorm(STATISTIC)
-    } else if (alternative == "greater") {
-        PVAL <- pnorm(STATISTIC, lower.tail = FALSE)
-    } else {
-        PVAL <- 2 * pnorm(-abs(STATISTIC))
-    }
-    cfmat <- cbind(ESTIMATE, SE, STATISTIC, PVAL)
-    colnames(cfmat) <- c(object$link$parm, "Std. Error", "z value",
-                         switch(alternative, "two.sided" = "P(>|z|)",
-                                             "less" = "P(<z)",
-                                             "greater" = "P(>z)"))
-    ret <- list(call = object$call, coefficients = cfmat)
-    class(ret) <- "summary.free1way"
-    return(ret)
-}
-print.summary.free1way <- function(x, ...) {
-    cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
-        "\n\n", sep = "")
-    cat("Coefficients:\n")
-    printCoefmat(x$coefficients)
-}
-@}
-
-@d free1way confint
-@{
-confint.free1way <- function(object, parm,
-    level = .95, test = c("Permutation", "Wald", "LRT", "Rao"), 
-    what = c("shift", "PI", "AUC", "OVL"), ...)
-{
-
-    test <- match.arg(test)
-    conf.level <- 1 - (1 - level) / 2
-
-    cf <- coef(object)
-    if (missing(parm)) 
-        parm <- seq_along(cf)
-
-    CINT <- confint.default(object, level = level)
-    if (test == "Wald")
-        return(CINT)
-    wlevel <- level
-    wlevel <- 1 - (1 - level) / 10
-    CINT[] <- confint.default(object, level = wlevel)
-
-    sfun <- function(value, parm, quantile) {
-        x <- object
-        alternative <- "two.sided"
-        tol <- .Machine$double.eps
-        @<statistics@>
-        return(STATISTIC - quantile)
-    }
-
-    if (test == "Permutation") {
-        stopifnot(length(cf) == 1L)
-        if (is.null(object$perm$permStat)) {
-            qu <- qnorm(conf.level) * c(-1, 1)
-        } else {
-            qu <- quantile(object$perm$permStat, probs = c(1 - conf.level, conf.level))
-            att.level <- mean(object$perm$permStat > qu[1] & object$perm$permStat < qu[2])
-            attr(CINT, "Attained level") <- att.level
-        }
-    } else {
-        qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided
-    }
-
-    for (p in parm) {
-        CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), parm = p, quantile = qu[2])$root
-        CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), parm = p, quantile = qu[1])$root
-    }
-
-    what <- match.arg(what)
-    CINT <- switch(what, "shift" = CINT,
-                         "PI" = object$link$parm2PI(CINT),
-                         "AUC" = object$link$parm2PI(CINT), ### same as PI 
-                         "OVL" = object$link$parm2OVL(CINT))
-    return(CINT)
-}
-@}
-
-<<free>>=
-ft <- free1way.test(x)
-coef(ft)
-vcov(ft)
-summary(ft)
-library("multcomp")
-summary(glht(ft), test = Chisqtest())
-summary(ft, test = "Wald")
-summary(glht(ft), test = Chisqtest())
-summary(ft, test = "Rao")
-summary(ft, test = "Permutation")
-summary(ft, test = "LRT")
-confint(glht(ft), calpha = univariate_calpha())
-confint(ft, test = "Wald")
-confint(ft, test = "Rao")
-confint(ft, test = "LRT")
-@@
+<TH>strata is only defined in \pkg{survival}, import? </TH>
 
 @d free1way formula
 @{
@@ -1707,7 +1602,7 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
                               varnames = vn, ...)
         DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[stratum]))
     } else {
-        ## Call the default method.
+        ## Call the corresponding method
         RVAL <- free1way.test(y = y, x = g, weights = w, varnames = vn, ...)
     }
     RVAL$data.name <- DNAME
@@ -1715,6 +1610,13 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
     RVAL
 }
 @}
+
+The method for numeric outcomes provides a discretisation at the unique
+observed outcome values, or (for very large sample sizes), for binned
+outcomes. The \code{event} argument is a logical where \code{TRUE} is
+interpreted as an event and \code{FALSE} as right-censored observation
+
+<TH>add event to formula interface</TH>
 
 @d free1way numeric
 @{
@@ -1741,7 +1643,7 @@ free1way.test.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, 
     }
     if (nbins && nbins < length(uy)) {
         nbins <- ceiling(nbins)
-        breaks <- c(-Inf, quantile(y, prob = seq_len(nbins) / (nbins + 1L)), Inf)
+        breaks <- c(-Inf, quantile(y, probs = seq_len(nbins) / (nbins + 1L)), Inf)
     } else {
         breaks <- c(-Inf, uy, Inf)
     }
@@ -1753,6 +1655,9 @@ free1way.test.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, 
     RVAL
 }
 @}
+
+The \code{factor} method also allows right-censoring but otherwise is just a
+call to \code{xtabs}:
 
 @d free1way factor
 @{
@@ -1791,42 +1696,288 @@ free1way.test.factor <- function(y, x, z = NULL, event = NULL, weights = NULL,
 }
 @}
 
+\section{\code{free1way} Methods}
+
+We start with \code{coef}, \code{vcov}, and
+\code{model.frame}/\code{model.matrix} methods such that multiple comparison
+procedures from \pkg{multcomp} will work out of the box. The \code{coef}
+method allows to obtain effects at alternative scales: probabilistic indices
+(\code{AUC} = \code{PI}) or the overlap coefficient:
+
+@d free1way methods
+@{
+coef.free1way <- function(object, what = c("shift", "PI", "AUC", "OVL"), ...)
+{
+    what <- match.arg(what)
+    cf <- object$coefficients
+    return(switch(what, "shift" = cf,
+                        "PI" = object$link$parm2PI(cf),
+                        "AUC" = object$link$parm2PI(cf),	### same as PI
+                        "OVL" = object$link$parm2OVL(cf)))
+}
+vcov.free1way <- function(object, ...)
+    object$vcov
+logLik.free1way <- function(object, ...)
+    -object$value
+### the next two could go into multcomp
+model.frame.free1way <- function(formula, ...)
+    as.data.frame(formula$table)
+model.matrix.free1way <- function (object, ...) 
+{
+    mm <- model.matrix(delete.response(terms(object)), data = model.frame(object))
+    at <- attributes(mm)
+    mm <- mm[, -1]
+    at$dim[2] <- at$dim[2] - 1
+    at$dimnames[[2]] <- at$dimnames[[2]][-1]
+    at$assign <- at$assign[-1]
+    attributes(mm) <- at
+    mm
+}
+@}
+
+We use the \code{print} method to report different test statistics and
+corresponding $p$-values via the \code{test} and \code{alternative}
+arguments. The reason for doing so is that the parameter estimation only
+needs to be performed once in cases users are interested in different
+tests or (see below) confidence intervals. By default, an asymptotic  
+permutation test is performed, mainly because the $p$-values coincide with
+some special cases (\code{wilcox,kruskal,friedman.test}):
+
+@d free1way print
+@{
+.print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
+                           alternative = c("two.sided", "less", "greater"), 
+                           tol = .Machine$double.eps, ...)
+{
+
+    test <- match.arg(test)
+    alternative <- match.arg(alternative)
+
+    ### global
+    cf <- coef(x)
+    if ((length(cf) > 1L || test == "LRT") && alternative != "two.sided") 
+        stop("Cannot compute one-sided p-values")
+
+    DF <- NULL
+    parm <- seq_along(cf)
+    value <- 0
+
+    @<statistics@>
+
+    RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, 
+        null.value = x$mu, alternative = alternative, method = x$method, 
+        data.name = x$data.name)
+    class(RVAL) <- "htest"
+    return(RVAL)
+}
+
+print.free1way <- function(x, ...) {
+    print(ret <- .print.free1way(x, ...))
+    return(invisible(x))
+}
+@}
+
+The \code{summary} method performs population Wald inference unless the
+\code{test} argument is specified:
+
+@d free1way summary
+@{
+summary.free1way <- function(object, test, alternative = c("two.sided", "less", "greater"), 
+                             tol = .Machine$double.eps, ...)
+{
+
+    if (!missing(test))
+        return(.print.free1way(object, test = test, alternative = alternative, tol = tol))
+   
+    alternative <- match.arg(alternative)
+
+    ESTIMATE <- coef(object)
+    SE <- sqrt(diag(vcov(object)))
+    STATISTIC <- unname(ESTIMATE / SE)
+    if (alternative == "less") {
+        PVAL <- pnorm(STATISTIC)
+    } else if (alternative == "greater") {
+        PVAL <- pnorm(STATISTIC, lower.tail = FALSE)
+    } else {
+        PVAL <- 2 * pnorm(-abs(STATISTIC))
+    }
+    cfmat <- cbind(ESTIMATE, SE, STATISTIC, PVAL)
+    colnames(cfmat) <- c(object$link$parm, "Std. Error", "z value",
+                         switch(alternative, "two.sided" = "P(>|z|)",
+                                             "less" = "P(<z)",
+                                             "greater" = "P(>z)"))
+    ret <- list(call = object$call, coefficients = cfmat)
+    class(ret) <- "summary.free1way"
+    return(ret)
+}
+print.summary.free1way <- function(x, ...) {
+    cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"), 
+        "\n\n", sep = "")
+    cat("Coefficients:\n")
+    printCoefmat(x$coefficients)
+}
+@}
+
+Confidence intervals are computed by inversion of the corresponding test
+statistics. Because LRT and Rao confidence intervals are invariant wrt to
+transformations, proper LRT or Rao confidence intervals for probabilistic
+indices or overlap coefficients can also be computed. The computation always
+starts with Wald intervals, which are either returned or used as starting
+values for the inversion:
+
+@d free1way confint
+@{
+confint.free1way <- function(object, parm,
+    level = .95, test = c("Permutation", "Wald", "LRT", "Rao"), 
+    what = c("shift", "PI", "AUC", "OVL"), ...)
+{
+
+    test <- match.arg(test)
+    conf.level <- 1 - (1 - level) / 2
+
+    cf <- coef(object)
+    if (missing(parm)) 
+        parm <- seq_along(cf)
+
+    CINT <- confint.default(object, level = level)
+    if (test == "Wald")
+        return(CINT)
+    wlevel <- level
+    wlevel <- 1 - (1 - level) / 10
+    CINT[] <- confint.default(object, level = wlevel)
+
+    sfun <- function(value, parm, quantile) {
+        x <- object
+        alternative <- "two.sided"
+        tol <- .Machine$double.eps
+        @<statistics@>
+        return(STATISTIC - quantile)
+    }
+
+    if (test == "Permutation") {
+        stopifnot(length(cf) == 1L)
+        if (is.null(object$perm$permStat)) {
+            qu <- qnorm(conf.level) * c(-1, 1)
+        } else {
+            qu <- quantile(object$perm$permStat, 
+                           probs = c(1 - conf.level, conf.level))
+            att.level <- mean(object$perm$permStat > qu[1] & 
+                              object$perm$permStat < qu[2])
+            attr(CINT, "Attained level") <- att.level
+        }
+    } else {
+        qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided
+    }
+
+    for (p in parm) {
+        CINT[p, 1] <- uniroot(sfun, interval = c(CINT[p,1], cf[p]), 
+                              parm = p, quantile = qu[2])$root
+        CINT[p, 2] <- uniroot(sfun, interval = c(cf[p], CINT[p, 2]), 
+                              parm = p, quantile = qu[1])$root
+    }
+
+    what <- match.arg(what)
+    CINT <- switch(what, "shift" = CINT,
+                         "PI" = object$link$parm2PI(CINT),
+                         "AUC" = object$link$parm2PI(CINT), ### same as PI 
+                         "OVL" = object$link$parm2OVL(CINT))
+    return(CINT)
+}
+@}
+
+As an example, we compute log-odds ratios for the table introduced above and
+report some tests and confidence intervals:
+
+<<free>>=
+x
+ft <- free1way.test(x)
+coef(ft)
+vcov(ft)
+### Wald per parameter
+summary(ft)
+library("multcomp")
+summary(glht(ft), test = univariate())
+
+### global Wald
+summary(ft, test = "Wald")
+summary(glht(ft), test = Chisqtest())
+
+### Rao score, Permutation score, LRT
+summary(ft, test = "Rao")
+summary(ft, test = "Permutation")
+summary(ft, test = "LRT")
+
+### Wald confidence intervals, unadjusted
+confint(glht(ft), calpha = univariate_calpha())
+confint(ft, test = "Wald")
+
+### Rao and LRT intervals
+confint(ft, test = "Rao")
+confint(ft, test = "LRT")
+@@
+
+\section{Wilcoxon Test}
+
+The second example is a Wilcoxon test for a single log-odds ratio
+comparing to treatment groups:
+
 <<formula>>=
 set.seed(29)
 N <- 25
 w <- gl(2, N)
-s <- sample(gl(2, N))
 y <- rlogis(length(w), location = c(0, 1)[w])
-print(try(free1way.test(y ~ w + s, B = 10000)))
-ft0 <- free1way.test(y ~ w + strata(s), B = 10000)
-ft <- free1way.test(y ~ strata(s) + w, B = 10000)
-all.equal(ft0, ft0)
+
+#### link = logit is default
+ft <- free1way.test(y ~ w)
+
+### Wald 
 summary(ft)
-summary(ft, test = "Permutation", alternative = "less")
-summary(ft, test = "Permutation", alternative = "greater")
-summary(ft, test = "Permutation")
+
+### Permutation test
+wilcox.test(y ~ w, alternative = "greater", correct = FALSE)$p.value
+pvalue(wilcox_test(y ~ w, alternative = "greater"))
+summary(ft, test = "Permutation", alternative = "less")$p.value
+wilcox.test(y ~ w, alternative = "less", correct = FALSE)$p.value
+pvalue(wilcox_test(y ~ w, alternative = "less"))
+summary(ft, test = "Permutation", alternative = "greater")$p.value
+wilcox.test(y ~ w, correct = FALSE)$p.value
+kruskal.test(y ~ w)$p.value
+pvalue(wilcox_test(y ~ w))
+summary(ft, test = "Permutation")$p.value
+
+### Wald tests
 summary(ft, test = "Wald", alternative = "less")
 summary(ft, test = "Wald", alternative = "greater")
 summary(ft, test = "Wald")
-summary(ft, test = "LRT")
+
+### Rao score tests
 summary(ft, test = "Rao", alternative = "less")
 summary(ft, test = "Rao", alternative = "greater")
 summary(ft, test = "Rao")
-summary(ft)
+
+### LRT (only two-sided)
+summary(ft, test = "LRT")
+
+### confidence intervals for log-odds ratios
 confint(ft, test = "Permutation")
 confint(ft, test = "LRT")
 confint(ft, test = "Wald")
 confint(ft, test = "Rao")
+
+### confidence interval for "Wilcoxon Parameter" = PI = AUC
 confint(ft, test = "Rao", what = "AUC")
-wilcox.test(y ~ w)
+
+### comparison with rms::orm
 library("rms")
 rev(coef(or <- orm(y ~ w)))[1]
+coef(ft)
 logLik(or)
 logLik(ft)
+vcov(or)[2,2]
+vcov(ft)
 ci <- confint(or)
 ci[nrow(ci),]
-vcov(or)
-vcov(ft)
+confint(ft, test = "Wald")
 @@
 
 
@@ -1835,10 +1986,10 @@ vcov(ft)
 <<mh>>=
 example(mantelhaen.test, echo = FALSE)
 mantelhaen.test(UCBAdmissions, correct = FALSE)
-a <- free1way.test(UCBAdmissions)
-summary(a, test = "Wald")
-exp(coef(a))
-exp(confint(a, test = "Wald"))
+ft <- free1way.test(UCBAdmissions)
+summary(ft, test = "Wald")
+exp(coef(ft))
+exp(confint(ft, test = "Wald"))
 exp(sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
        confint(free1way.test(UCBAdmissions[,,dept]), test = "Permutation")))
 sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
@@ -1853,7 +2004,9 @@ kruskal.test(x ~ g)
 free1way.test(x ~ g)
 @@
 
-\section{Savage}
+\section{Savage / Log-rank}
+
+We start without censoring (Savage test) and add strata
 
 <<sw>>=
 library("survival")
@@ -1863,20 +2016,30 @@ nd$tm <- rexp(nrow(nd))
 nd$ev <- TRUE
 survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 0)$chisq
 cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
-summary(cm)$sctest
-summary(cm)$logtest
-summary(cm)$waldtest
+
+
 (ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "cloglog"))
+coef(cm)
+coef(ft)
+vcov(cm)
+vcov(ft)
 summary(ft)
+summary(cm)$sctest
 summary(ft, test = "Rao")
+summary(cm)$logtest
 summary(ft, test = "LRT")
+summary(cm)$waldtest
 summary(ft, test = "Wald")
 summary(ft, test = "Permutation")
 
 library("coin")
 independence_test(Surv(tm, ev) ~ g | s, data = nd, ytrafo = function(...)
                   trafo(..., numeric_trafo = logrank_trafo, block = nd$s), teststat = "quad")
+@@
 
+Wilcoxon against proportional odds
+
+<<Peto>>=
 survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 1)$chisq
 (ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "logit"))
 summary(ft)
@@ -1888,6 +2051,8 @@ summary(ft, test = "Permutation")
 
 \section{van der Waerden}
 
+Normal scores test against a generalised Cohen's $d$:
+
 <<normal>>=
 nd$y <- rnorm(nrow(nd))
 free1way.test(y ~ g + strata(s), data = nd, link = "probit")
@@ -1897,17 +2062,30 @@ independence_test(y ~ g | s, data = nd, ytrafo = function(...)
 
 \section{Friedman}
 
+Each observation is a block
+
 <<friedman>>=
 example(friedman.test, echo = FALSE)
 rt <- expand.grid(str = gl(22, 1),
                   trt = gl(3, 1, labels = c("Round Out", "Narrow Angle", "Wide Angle")))
 rt$tm <- c(RoundingTimes)
 friedman.test(RoundingTimes)
-(f1w <- free1way.test(tm ~ trt + strata(str), data = rt))
-coef(f1w)
+(ft <- free1way.test(tm ~ trt + strata(str), data = rt))
+summary(ft)
 @@
 
 \chapter{Model Diagnostics}
+
+The classical shift model $F_Y(y \mid T = 2) = F_Y(y - \mu \mid T = 1)$
+can be critisised using confidence bands for QQ-plots in \code{qqplot},
+because the parameter $\mu$ shows up as a vertical shift of the diagonal
+if the model is appropriate.
+
+Likewise, model~(\ref{model}) can be graphically assessed using the PP-plot.
+We concentrate on the two-sample case. The shift parameter $\beta_2$ gives
+rise to the model-based PP graph $(p, F(F^{-1}(p) - \beta_2))$ and a
+confidence \emph{band} can be obtained from a confidence \emph{interval} for
+$\beta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
 
 @d ROC bands
 @{
@@ -1934,14 +2112,19 @@ coef(f1w)
 }
 @}
 
+We introduce a new function \code{ppplot}, closely following the
+implementation of \code{qqplot}, allowing to plot the empirical and
+corresponding model-based PP-plot, the latter for a certain choice of link
+function:
 
 @d ppplot
 @{
 ppplot <- function(x, y, plot.it = TRUE,
-            xlab = deparse1(substitute(x)),
-            ylab = deparse1(substitute(y)), 
-            interpolate = FALSE, ...,
-            conf.level = NULL, conf.args = list(type = "Wald", col = NA, border = NULL)) {
+                   xlab = deparse1(substitute(x)),
+                   ylab = deparse1(substitute(y)), 
+                   ..., conf.level = NULL, 
+                   conf.args = list(link = "logit", type = "Wald", 
+                                    col = NA, border = NULL)) {
 
     force(xlab)
     force(ylab)
@@ -1972,15 +2155,26 @@ ppplot <- function(x, y, plot.it = TRUE,
 }
 @}
 
+Correct logistic model with log-odds ratio three:
+
 \begin{figure}
 <<ppplot, fig = TRUE>>=
-y <- rnorm(50)
-x <- rnorm(50)
-layout(matrix(1:2, nrow = 1))
+y <- rlogis(50)
+x <- rlogis(50, location = 3)
 ppplot(y, x, conf.level = .95)
-ppplot(y, x, conf.level = .95, interpolate = TRUE)
 @@
 \end{figure}
+
+Incorrect proportional hazards alternative:
+
+\begin{figure}
+<<ppplot-savage, fig = TRUE>>=
+ppplot(y, x, conf.args = list(link = "cloglog", type = "Wald", 
+                              col = NA, border = NULL),
+       conf.level = .95)
+@@
+\end{figure}
+
 
 \chapter{Power and Sample Size}
 
