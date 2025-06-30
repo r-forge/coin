@@ -6,6 +6,7 @@
                         tol = sqrt(.Machine$double.eps), ...) {
 
     ### convert to three-way table
+    xt <- x
     stopifnot(is.table(x))
     dx <- dim(x)
     dn <- dimnames(x)
@@ -34,6 +35,7 @@
     x <- do.call("[", ms)
     dx <- dim(x)
     stopifnot(length(dx) >= 3L)
+    C <- dim(x)[1L]
     K <- dim(x)[2L]
     B <- dim(x)[3L]
     stopifnot(dx[1L] > 1L)
@@ -68,6 +70,8 @@
         }
     }
     strata <- !sapply(xlist, is.null)
+    xlist <- xlist[strata]
+    xrclist <- xrclist[strata]
     
     if (NS <- is.null(start))
         start <- rep.int(0, K - 1)
@@ -440,7 +444,7 @@
     if (any(parm >= K)) return(ret)
 
     ret$coefficients <- ret$par[parm]
-    dn2 <- dimnames(x)[2L]
+    dn2 <- dimnames(xt)[2L]
     names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
     if (score)
@@ -464,15 +468,14 @@
         ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
         if (!is.null(xrc)) {
             rcr <- .snsr(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
-            C <- sapply(xlist, NROW) 
             ret$residuals <- c(rbind(matrix(ret$residuals, nrow = C),
                                      matrix(rcr, nrow = C)))
          }
     }
     ret$profile <- function(start, fix)
-        .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, 
+        .free1wayML(xt, link = link, mu = mu, start = start, fix = fix, tol = tol, 
                    ...) 
-    ret$table <- x
+    ret$table <- xt
     ret$mu <- mu
     ret$strata <- strata
     names(ret$mu) <- link$parm
@@ -1079,10 +1082,6 @@ ppplot <- function(x, y, plot.it = TRUE,
     }
 
     ex <- ecdf(x)
-    if (interpolate) {
-        vals <- sort(unique(x))
-        ex <- splinefun(vals, ex(vals), method = "hyman")
-    }
     sy <- sort(unique(y))
     py <- ecdf(y)(sy)
     px <- ex(sy)

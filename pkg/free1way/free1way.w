@@ -594,6 +594,7 @@ ms$drop <- FALSE
 x <- do.call("[", ms)
 dx <- dim(x)
 stopifnot(length(dx) >= 3L)
+C <- dim(x)[1L]
 K <- dim(x)[2L]
 B <- dim(x)[3L]
 stopifnot(dx[1L] > 1L)
@@ -628,6 +629,8 @@ for (b in seq_len(B)) {
     }
 }
 strata <- !sapply(xlist, is.null)
+xlist <- xlist[strata]
+xrclist <- xrclist[strata]
 @}
 
 @d table2list
@@ -636,9 +639,9 @@ strata <- !sapply(xlist, is.null)
 
     @<table2list body@>
 
-    ret <- list(xlist = xlist[strata])
+    ret <- list(xlist = xlist)
     if (!is.null(xrc))
-        ret$xrclist <- xrclist[strata]
+        ret$xrclist <- xrclist
     ret$strata <- strata
     ret
 }
@@ -1142,7 +1145,7 @@ else
 if (any(parm >= K)) return(ret)
 
 ret$coefficients <- ret$par[parm]
-dn2 <- dimnames(x)[2L]
+dn2 <- dimnames(xt)[2L]
 names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
 if (score)
@@ -1166,15 +1169,14 @@ if (residuals) {
     ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
     if (!is.null(xrc)) {
         rcr <- .snsr(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
-        C <- sapply(xlist, NROW) 
         ret$residuals <- c(rbind(matrix(ret$residuals, nrow = C),
                                  matrix(rcr, nrow = C)))
      }
 }
 ret$profile <- function(start, fix)
-    .free1wayML(x, link = link, mu = mu, start = start, fix = fix, tol = tol, 
+    .free1wayML(xt, link = link, mu = mu, start = start, fix = fix, tol = tol, 
                ...) 
-ret$table <- x
+ret$table <- xt
 ret$mu <- mu
 ret$strata <- strata
 names(ret$mu) <- link$parm
@@ -1190,6 +1192,7 @@ class \code{free1wayML} for later use:
                         tol = sqrt(.Machine$double.eps), ...) {
 
     ### convert to three-way table
+    xt <- x
     stopifnot(is.table(x))
     dx <- dim(x)
     dn <- dimnames(x)
@@ -2004,7 +2007,7 @@ kruskal.test(x ~ g)
 free1way.test(x ~ g)
 @@
 
-\section{Savage / Log-rank}
+\section{Savage}
 
 We start without censoring (Savage test) and add strata
 
@@ -2048,6 +2051,55 @@ summary(ft, test = "LRT")
 summary(ft, test = "Wald")
 summary(ft, test = "Permutation")
 @@
+
+\section{Log-rank}
+
+And now with censoring. We cannot expect this to be identical with what
+\pkg{survival} reports, as this package is based on the partial likelihood
+and we operate on the full likelihood.
+
+<<sw>>=
+library("survival")
+data("GBSG2", package = "TH.data")
+survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 0)$chisq
+cm <- coxph(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2)
+
+### no formula interface yet
+ft <- with(GBSG2, free1way.test(y = time, x = horTh, z = tgrade, 
+                         event = cens == 1, 
+                         link = "cloglog"))
+coef(cm)
+coef(ft)
+vcov(cm)
+vcov(ft)
+summary(ft)
+summary(cm)$sctest
+summary(ft, test = "Rao")
+summary(cm)$logtest
+summary(ft, test = "LRT")
+summary(cm)$waldtest
+summary(ft, test = "Wald")
+summary(ft, test = "Permutation")
+
+### test with many small strata 
+(ft <- with(GBSG2, free1way.test(y = time, x = horTh, z = pnodes, 
+                         event = cens == 1, 
+                         link = "cloglog")))
+@@
+
+Wilcoxon against proportional odds
+
+<<Peto>>=
+survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 1)$chisq
+(ft <- with(GBSG2, free1way.test(y = time, x = horTh, z = tgrade, 
+                                 event = as.logical(cens), link = "logit")))
+summary(ft)
+summary(ft, test = "Rao")
+summary(ft, test = "LRT")
+summary(ft, test = "Wald")
+summary(ft, test = "Permutation")
+@@
+
 
 \section{van der Waerden}
 
@@ -2134,10 +2186,6 @@ ppplot <- function(x, y, plot.it = TRUE,
     }
 
     ex <- ecdf(x)
-    if (interpolate) {
-        vals <- sort(unique(x))
-        ex <- splinefun(vals, ex(vals), method = "hyman")
-    }
     sy <- sort(unique(y))
     py <- ecdf(y)(sy)
     px <- ex(sy)
