@@ -396,9 +396,9 @@ zero:
     @<parm to prob@>
     @<density prob ratio@>
 
-    ret <- rowSums(zu - zl) / rowSums(x)
+    ret <- rowSums(zl - zu) / rowSums(x)
     ret[!is.finite(ret)] <- 0
-    ret
+    - ret
 }
 @}
 
@@ -1031,6 +1031,7 @@ probit <- function()
 @<free1way factor@>
 @<ppplot@>
 @<r2dsim@>
+@<rfree1way@>
 @<power@>
 @}
 
@@ -1133,8 +1134,8 @@ if (!length(fix)) {
 }
 @}
 
-After parameter estimation, we evaluate scores, the Hessian, and residuals
-as requested:
+After parameter estimation, we evaluate negative scores, the Hessian, and
+negative residuals as requested:
 
 @d post processing
 @{
@@ -1166,11 +1167,11 @@ if (hessian) {
         colnames(ret$hessian) <-  cnames
 }
 if (residuals) {
-    ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
+    ret$negresiduals <- .snsr(ret$par, x = xlist, mu = mu)
     if (!is.null(xrc)) {
         rcr <- .snsr(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
-        ret$residuals <- c(rbind(matrix(ret$residuals, nrow = C),
-                                 matrix(rcr, nrow = C)))
+        ret$negresiduals <- c(rbind(matrix(ret$negresiduals, nrow = C),
+                                    matrix(rcr, nrow = C)))
      }
 }
 ret$profile <- function(start, fix)
@@ -1286,7 +1287,7 @@ if (alternative == "two.sided") {
     DF <- c("df" = length(parm))
     PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
 } else {
-    STATISTIC <- c("Wald Z" = c(cf * sqrt(c(x$hessian))))
+    STATISTIC <- c("Wald Z" = unname(c(cf * sqrt(c(x$hessian)))))
     PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
 }
 @}
@@ -1324,7 +1325,7 @@ if (alternative == "two.sided") {
     DF <- c("df" = length(parm))
     PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
 } else {
-    STATISTIC <- c("Rao Z" = -ret$negscore * sqrt(c(ret$vcov)))
+    STATISTIC <- c("Rao Z" = unname(- ret$negscore * sqrt(c(ret$vcov))))
     PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
 }
 @}
@@ -1343,7 +1344,7 @@ distribution:
 par <- x$par
 par[parm] <- value
 ret <- x$profile(par, parm)
-sc <- -ret$negscore
+sc <- - ret$negscore
 if (length(cf) == 1L)
    sc <- sc / sqrt(c(ret$hessian))
 Esc <- sc - x$perm$Expectation
@@ -1494,6 +1495,13 @@ asymptotic permutation distribution. \code{B = 1000} means 1000 random
 permuations. Can we use \code{B = Inf} for the exact distribution once
 available?</TH>
 
+We use the positive residuals for defining a permutation test with treatment
+effect coding using the first group as control, that is, the test statistic
+is defined through the sum of the positive residuals in all but the control
+group. Unfortunately, most \code{stats::*.test} procedures use the second
+group as control, so factors need to be releveled to obtain identical
+results (this is relevant for the one-sided case).
+
 @d free1way
 @{
 free1way.test <- function(y, ...)
@@ -1531,10 +1539,9 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
     cf <- ret$par
     cf[idx <- seq_len(d[2L] - 1L)] <- 0
     pr <- ret$profile(cf, idx)
+    res <- - pr$negresiduals
     if (d[2L] == 2L)
-        res <- pr$residuals / sqrt(c(pr$hessian))
-    else
-        res <- pr$residuals
+        res <- res / sqrt(c(pr$hessian))
 
     @<Strasser Weber@>
     @<resampling@>
@@ -2295,6 +2302,8 @@ r2dsim <- function(n, r, c, delta = 0,
 }
 @}
 
+
+
 We are now ready to put together a function for power evaluation and sample
 size assessment. The core idea is to draw samples from the relevant data
 (under a specific model in the alternative) and to estimate the Fisher
@@ -2587,6 +2596,34 @@ power.free1way.test(n = N, prob = prb, delta = delta, seed = 3)
 power.free1way.test(power = .8, prob = prb, delta = delta, seed = 3)
 power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 @@
+
+\chapter{Ideas}
+
+<TH> Maybe we need something for simulating continuous data? </TH>
+
+@d rfree1way
+@{
+rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) {
+
+    logU <- log(runif(n))
+
+    @<link2fun@>
+
+    return(.p(link, .q(link, logU, log.p = TRUE) + delta))
+}
+@}
+
+<<rfree1way>>=
+nd <- data.frame(w = gl(3, 150))
+(logOR <- c(0, log(1.5), log(2)))
+nd$u <- rfree1way(nrow(nd), delta = logOR[nd$w])
+coef(ft <- free1way.test(u ~ w, data = nd))
+logLik(ft)
+nd$y <- qchisq(nd$u, df = 3)
+coef(ft <- free1way.test(y ~ w, data = nd))
+logLik(ft)
+@@
+
 
 \chapter*{Index}
 

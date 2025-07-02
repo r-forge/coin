@@ -182,9 +182,9 @@
         zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
         
 
-        ret <- rowSums(zu - zl) / rowSums(x)
+        ret <- rowSums(zl - zu) / rowSums(x)
         ret[!is.finite(ret)] <- 0
-        ret
+        - ret
     }
     
     # Hessian
@@ -465,11 +465,11 @@
             colnames(ret$hessian) <-  cnames
     }
     if (residuals) {
-        ret$residuals <- .snsr(ret$par, x = xlist, mu = mu)
+        ret$negresiduals <- .snsr(ret$par, x = xlist, mu = mu)
         if (!is.null(xrc)) {
             rcr <- .snsr(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
-            ret$residuals <- c(rbind(matrix(ret$residuals, nrow = C),
-                                     matrix(rcr, nrow = C)))
+            ret$negresiduals <- c(rbind(matrix(ret$negresiduals, nrow = C),
+                                        matrix(rcr, nrow = C)))
          }
     }
     ret$profile <- function(start, fix)
@@ -528,10 +528,9 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
     cf <- ret$par
     cf[idx <- seq_len(d[2L] - 1L)] <- 0
     pr <- ret$profile(cf, idx)
+    res <- - pr$negresiduals
     if (d[2L] == 2L)
-        res <- pr$residuals / sqrt(c(pr$hessian))
-    else
-        res <- pr$residuals
+        res <- res / sqrt(c(pr$hessian))
 
     # Strasser Weber
     
@@ -683,7 +682,7 @@ model.matrix.free1way <- function (object, ...)
             DF <- c("df" = length(parm))
             PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
         } else {
-            STATISTIC <- c("Wald Z" = c(cf * sqrt(c(x$hessian))))
+            STATISTIC <- c("Wald Z" = unname(c(cf * sqrt(c(x$hessian)))))
             PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
         }
         
@@ -709,7 +708,7 @@ model.matrix.free1way <- function (object, ...)
             DF <- c("df" = length(parm))
             PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
         } else {
-            STATISTIC <- c("Rao Z" = -ret$negscore * sqrt(c(ret$vcov)))
+            STATISTIC <- c("Rao Z" = unname(- ret$negscore * sqrt(c(ret$vcov))))
             PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
         }
         
@@ -719,7 +718,7 @@ model.matrix.free1way <- function (object, ...)
         par <- x$par
         par[parm] <- value
         ret <- x$profile(par, parm)
-        sc <- -ret$negscore
+        sc <- - ret$negscore
         if (length(cf) == 1L)
            sc <- sc / sqrt(c(ret$hessian))
         Esc <- sc - x$perm$Expectation
@@ -836,7 +835,7 @@ confint.free1way <- function(object, parm,
                 DF <- c("df" = length(parm))
                 PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
             } else {
-                STATISTIC <- c("Wald Z" = c(cf * sqrt(c(x$hessian))))
+                STATISTIC <- c("Wald Z" = unname(c(cf * sqrt(c(x$hessian)))))
                 PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
             }
             
@@ -862,7 +861,7 @@ confint.free1way <- function(object, parm,
                 DF <- c("df" = length(parm))
                 PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
             } else {
-                STATISTIC <- c("Rao Z" = -ret$negscore * sqrt(c(ret$vcov)))
+                STATISTIC <- c("Rao Z" = unname(- ret$negscore * sqrt(c(ret$vcov))))
                 PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")
             }
             
@@ -872,7 +871,7 @@ confint.free1way <- function(object, parm,
             par <- x$par
             par[parm] <- value
             ret <- x$profile(par, parm)
-            sc <- -ret$negscore
+            sc <- - ret$negscore
             if (length(cf) == 1L)
                sc <- sc / sqrt(c(ret$hessian))
             Esc <- sc - x$perm$Expectation
@@ -1172,6 +1171,23 @@ r2dsim <- function(n, r, c, delta = 0,
                                           names(colsums))))
     }
     return(ret)
+}
+
+# rfree1way
+
+rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) {
+
+    logU <- log(runif(n))
+
+    # link2fun
+    
+    if (!inherits(link, "linkfun")) {
+        link <- match.arg(link)
+        link <- do.call(link, list())
+    }
+    
+
+    return(.p(link, .q(link, logU, log.p = TRUE) + delta))
 }
 
 # power
