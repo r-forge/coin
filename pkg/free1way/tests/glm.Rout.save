@@ -146,10 +146,10 @@ alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
        2.5 %   97.5 %
-xB 0.9180895 1.263972
+xB 0.9180893 1.263972
 attr(,"Attained level")
 [1] 0.9403
 > 
 > proc.time()
    user  system elapsed 
-  0.376   0.027   0.398 
+  0.373   0.033   0.400 

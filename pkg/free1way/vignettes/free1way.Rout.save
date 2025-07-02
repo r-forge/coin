@@ -540,7 +540,7 @@ w2        1.29022    0.52394 2.46255  0.0138
 
 > summary(ft, test = "Permutation", alternative = "less")$p.value
    Perm Z 
-0.9921451 
+0.9921464 
 
 > wilcox.test(y ~ w, alternative = "less", correct = FALSE)$p.value
 [1] 0.007597083
@@ -550,7 +550,7 @@ w2        1.29022    0.52394 2.46255  0.0138
 
 > summary(ft, test = "Permutation", alternative = "greater")$p.value
      Perm Z 
-0.007854926 
+0.007853589 
 
 > wilcox.test(y ~ w, correct = FALSE)$p.value
 [1] 0.01519417
@@ -563,14 +563,14 @@ w2        1.29022    0.52394 2.46255  0.0138
 
 > summary(ft, test = "Permutation")$p.value
     Perm Z 
-0.01570985 
+0.01570718 
 
 > summary(ft, test = "Wald", alternative = "less")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Wald Z.w2 = 2.4625, p-value = 0.9931
+Wald Z = 2.4625, p-value = 0.9931
 alternative hypothesis: true log-odds ratio is less than 0
 
 
@@ -579,7 +579,7 @@ alternative hypothesis: true log-odds ratio is less than 0
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Wald Z.w2 = 2.4625, p-value = 0.006898
+Wald Z = 2.4625, p-value = 0.006898
 alternative hypothesis: true log-odds ratio is greater than 0
 
 
@@ -629,8 +629,8 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 
 > confint(ft, test = "Permutation")
-       2.5 %   97.5 %
-w2 0.2384727 2.342405
+       2.5 %  97.5 %
+w2 0.2385067 2.34217
 
 > confint(ft, test = "LRT")
        2.5 %   97.5 %
@@ -733,8 +733,8 @@ GenderFemale 0.7723915 1.060401
 > exp(sapply(dimnames(UCBAdmissions)[[3]], function(dept) confint(free1way.test(UCBAdmissions[, 
 +     , dept]), test = "Permutation")))
              A         B        C         D         E         F
-[1,] 0.2096661 0.3479569 0.854703 0.6864446 0.8258503 0.4582909
-[2,] 0.5818487 1.8529511 1.502110 1.2364568 1.8073777 1.4955806
+[1,] 0.2096661 0.3479569 0.854703 0.6864447 0.8258502 0.4582909
+[2,] 0.5818487 1.8529511 1.502110 1.2364569 1.8073777 1.4955806
 
 > sapply(dimnames(UCBAdmissions)[[3]], function(dept) fisher.test(UCBAdmissions[, 
 +     , dept], conf.int = TRUE)$conf.int)
@@ -757,7 +757,7 @@ Kruskal-Wallis chi-squared = 0.77143, df = 2, p-value = 0.68
 	3-sample Kruskal-Wallis test against proportional odds alternatives
 
 data:  x by g (Normal subjects, Subjects with obstructive airway disease, Subjects with asbestosis)
-Perm chi-squared = 0.77152, df = 2, p-value = 0.6799
+Perm chi-squared = 0.77142, df = 2, p-value = 0.68
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -785,7 +785,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Perm chi-squared = 4.6207, df = 2, p-value = 0.09923
+Perm chi-squared = 4.6822, df = 2, p-value = 0.09622
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -870,7 +870,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Perm chi-squared = 4.6207, df = 2, p-value = 0.09923
+Perm chi-squared = 4.6822, df = 2, p-value = 0.09622
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -899,7 +899,7 @@ chi-squared = 4.7482, df = 2, p-value = 0.0931
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Perm chi-squared = 5.198, df = 2, p-value = 0.07435
+Perm chi-squared = 5.2036, df = 2, p-value = 0.07414
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -954,7 +954,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Perm chi-squared = 5.198, df = 2, p-value = 0.07435
+Perm chi-squared = 5.2036, df = 2, p-value = 0.07414
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1050,7 +1050,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0989, p-value = 0.001942
+Perm Z = 3.0942, p-value = 0.001973
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -1062,7 +1062,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  time by horTh (no, yes) 
 	 stratified by pnodes
-Perm Z = 2.7021, p-value = 0.006891
+Perm Z = 2.703, p-value = 0.006873
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -1078,7 +1078,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0406, p-value = 0.002361
+Perm Z = 3.0554, p-value = 0.002248
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1132,7 +1132,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0406, p-value = 0.002361
+Perm Z = 3.0554, p-value = 0.002248
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1145,7 +1145,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  y by g (1, 2, 3) 
 	 stratified by strata(s)
-Perm chi-squared = 1.0111, df = 2, p-value = 0.6032
+Perm chi-squared = 1.0155, df = 2, p-value = 0.6019
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 
@@ -1429,7 +1429,30 @@ Total sample size = 57 (Ctrl) + 57 (B) + 57 (C) = 171
 NOTE: 'n' is sample size in control group of first stratum
 
 
+> nd <- data.frame(w = gl(3, 150))
+
+> (logOR <- c(0, log(1.5), log(2)))
+[1] 0.0000000 0.4054651 0.6931472
+
+> nd$u <- rfree1way(nrow(nd), delta = logOR[nd$w])
+
+> coef(ft <- free1way.test(u ~ w, data = nd))
+       w2        w3 
+0.5516505 0.7786014 
+
+> logLik(ft)
+[1] -2741.278
+
+> nd$y <- qchisq(nd$u, df = 3)
+
+> coef(ft <- free1way.test(y ~ w, data = nd))
+       w2        w3 
+0.5516505 0.7786014 
+
+> logLik(ft)
+[1] -2741.278
+
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 21.462   0.172  21.640 
+ 21.160   0.180  21.347 

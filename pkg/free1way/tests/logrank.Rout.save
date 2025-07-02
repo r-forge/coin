@@ -108,7 +108,7 @@ R.Surv.time..cens...as.R.ordered...TRUE.(0.655,0.656]
 	2-sample Savage test against proportional hazards alternatives
 
 data:  time by w (1, 2)
-Perm Z = 0.015121, p-value = 0.9879
+Perm Z = 0.015267, p-value = 0.9878
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > perm_test(m)
@@ -174,7 +174,7 @@ horThyes 0.0155353
 	2-sample Savage test against proportional hazards alternatives
 
 data:  time by horTh (no, yes)
-Perm Z = 2.99, p-value = 0.00279
+Perm Z = 2.9732, p-value = 0.002947
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > 
@@ -216,11 +216,11 @@ horThyes 0.01606776
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0989, p-value = 0.001942
+Perm Z = 3.0942, p-value = 0.001973
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > 
 > 
 > proc.time()
    user  system elapsed 
-  1.526   0.072   1.594 
+  1.536   0.068   1.601 

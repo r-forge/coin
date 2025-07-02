@@ -140,12 +140,12 @@ sample estimates:
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.4604, p-value = 0.1585
+Perm Z = 1.4604, p-value = 0.134
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
         2.5 %   97.5 %
-xB -0.2642693 1.806938
+xB -0.2633487 1.807859
 attr(,"Attained level")
 [1] 0.9497
 > 
@@ -247,12 +247,12 @@ sample estimates:
 	2-sample Savage test against proportional hazards alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.512, p-value = 0.1333
+Perm Z = 1.512, p-value = 0.1211
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
-       2.5 %  97.5 %
-xB -0.146263 1.28091
+        2.5 %   97.5 %
+xB -0.1615012 1.265669
 attr(,"Attained level")
 [1] 0.9474
 > 
@@ -355,12 +355,12 @@ sample estimates:
 	2-sample Lehmann test against Lehmann alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.1825, p-value = 0.2357
+Perm Z = 1.1825, p-value = 0.248
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
         2.5 %   97.5 %
-xB -0.2629587 1.054298
+xB -0.2629614 1.054296
 attr(,"Attained level")
 [1] 0.9483
 > 
@@ -465,15 +465,15 @@ sample estimates:
 	alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.4074, p-value = 0.1662
+Perm Z = 1.4074, p-value = 0.1556
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 > confint(ft, test = "Permutation")
         2.5 %   97.5 %
-xB -0.1780872 1.080264
+xB -0.1780851 1.080266
 attr(,"Attained level")
 [1] 0.947
 > 
 > proc.time()
    user  system elapsed 
-  3.049   0.036   3.080 
+  3.021   0.075   3.096 
