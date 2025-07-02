@@ -163,18 +163,18 @@ log-hazard ratio for horThyes
 +                          event = cens == 1, 
 +                          link = "cloglog"))
 > coef(ft)
- horThyes 
-0.3491686 
+horThyes 
+0.364121 
 > vcov(ft)
-          horThyes
-horThyes 0.0155353
+           horThyes
+horThyes 0.01563388
 > 
 > ft
 
 	2-sample Savage test against proportional hazards alternatives
 
 data:  time by horTh (no, yes)
-Perm Z = 2.9732, p-value = 0.002947
+Perm Z = 2.9725, p-value = 0.002954
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > 
@@ -204,23 +204,22 @@ horThyes 0.01575409
 +                          link = "cloglog"))
 > coef(ft)
  horThyes 
-0.3935559 
+0.3876685 
 > vcov(ft)
            horThyes
-horThyes 0.01606776
+horThyes 0.01604782
 > 
 > ft
 
-	Stratified 2-sample Savage test against proportional hazards
-	alternatives
+	2-sample Savage test against proportional hazards alternatives
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0942, p-value = 0.001973
+Perm Z = 3.0938, p-value = 0.001976
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > 
 > 
 > proc.time()
    user  system elapsed 
-  1.536   0.068   1.601 
+  2.772   0.088   2.855 

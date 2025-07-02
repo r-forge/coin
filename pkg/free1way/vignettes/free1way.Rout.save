@@ -742,6 +742,29 @@ GenderFemale 0.7723915 1.060401
 [1,] 0.1970420 0.2944986 0.8452173 0.6789572 0.8064776 0.4332888
 [2,] 0.5920417 2.0040231 1.5162918 1.2504742 1.8385155 1.5756278
 
+> prop.test(UCBAdmissions[, , 1], correct = FALSE)
+
+	2-sample test for equality of proportions without continuity correction
+
+data:  UCBAdmissions[, , 1]
+X-squared = 17.248, df = 1, p-value = 3.28e-05
+alternative hypothesis: two.sided
+95 percent confidence interval:
+ -0.1286815 -0.0530337
+sample estimates:
+   prop 1    prop 2 
+0.8519135 0.9427711 
+
+
+> summary(free1way.test(UCBAdmissions[, , 1]), test = "Rao")
+
+	2-sample Wilcoxon test against proportional odds alternatives
+
+data:  Admit by Gender (c("Male", "Female"))
+Rao chi-squared = 17.248, df = 1, p-value = 3.28e-05
+alternative hypothesis: true log-odds ratio is not equal to 0
+
+
 > example(kruskal.test, echo = FALSE)
 
 > kruskal.test(x ~ g)
@@ -785,7 +808,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Perm chi-squared = 4.6822, df = 2, p-value = 0.09622
+Perm chi-squared = 4.6807, df = 2, p-value = 0.09629
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -795,7 +818,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > coef(ft)
        g2        g3 
-0.1589030 0.1591066 
+0.1607342 0.1609430 
 
 > vcov(cm)
             g2          g3
@@ -804,8 +827,8 @@ g3 0.003416264 0.006778489
 
 > vcov(ft)
             g2          g3
-g2 0.006793257 0.003425135
-g3 0.003425135 0.006789585
+g2 0.006787227 0.003419067
+g3 0.003419067 0.006783594
 
 > summary(ft)
 
@@ -815,8 +838,8 @@ free1way.test.formula(formula = tm ~ g + strata(s), data = nd,
 
 Coefficients:
    log-hazard ratio Std. Error  z value P(>|z|)
-g2         0.158903   0.082421 1.927938  0.0539
-g3         0.159107   0.082399 1.930931  0.0535
+g2         0.160734   0.082385 1.951022  0.0511
+g3         0.160943   0.082363 1.954079  0.0507
 
 > summary(cm)$sctest
       test         df     pvalue 
@@ -829,7 +852,7 @@ g3         0.159107   0.082399 1.930931  0.0535
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Rao chi-squared = 5.0246, df = 2, p-value = 0.08108
+Rao chi-squared = 5.0473, df = 2, p-value = 0.08016
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -844,7 +867,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-logLR chi-squared = 4.9391, df = 2, p-value = 0.08462
+logLR chi-squared = 4.9536, df = 2, p-value = 0.08401
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -859,7 +882,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Wald chi-squared = 4.9493, df = 2, p-value = 0.08419
+Wald chi-squared = 5.0701, df = 2, p-value = 0.07926
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -870,7 +893,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Perm chi-squared = 4.6822, df = 2, p-value = 0.09622
+Perm chi-squared = 4.6807, df = 2, p-value = 0.09629
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -899,7 +922,7 @@ chi-squared = 4.7482, df = 2, p-value = 0.0931
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Perm chi-squared = 5.2036, df = 2, p-value = 0.07414
+Perm chi-squared = 5.2035, df = 2, p-value = 0.07414
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -911,8 +934,8 @@ free1way.test.formula(formula = tm ~ g + strata(s), data = nd,
 
 Coefficients:
    log-odds ratio Std. Error z value P(>|z|)
-g2        0.29721    0.14186 2.09509  0.0362
-g3        0.25749    0.14240 1.80819  0.0706
+g2        0.30115    0.14185 2.12301  0.0338
+g3        0.26123    0.14239 1.83463  0.0666
 
 > summary(ft, test = "Rao")
 
@@ -921,7 +944,7 @@ g3        0.25749    0.14240 1.80819  0.0706
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Rao chi-squared = 5.2698, df = 2, p-value = 0.07173
+Rao chi-squared = 5.299, df = 2, p-value = 0.07069
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -932,7 +955,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-logLR chi-squared = 5.2456, df = 2, p-value = 0.0726
+logLR chi-squared = 5.2715, df = 2, p-value = 0.07166
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -943,7 +966,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Wald chi-squared = 5.1405, df = 2, p-value = 0.07652
+Wald chi-squared = 5.2832, df = 2, p-value = 0.07125
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -954,7 +977,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by strata(s)
-Perm chi-squared = 5.2036, df = 2, p-value = 0.07414
+Perm chi-squared = 5.2035, df = 2, p-value = 0.07414
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -978,7 +1001,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > coef(ft)
  horThyes 
-0.3935559 
+0.3876685 
 
 > vcov(cm)
            horThyes
@@ -986,7 +1009,7 @@ horThyes 0.01575409
 
 > vcov(ft)
            horThyes
-horThyes 0.01606776
+horThyes 0.01604782
 
 > summary(ft)
 
@@ -996,7 +1019,7 @@ free1way.test.numeric(y = time, x = horTh, z = tgrade, event = cens ==
 
 Coefficients:
          log-hazard ratio Std. Error z value P(>|z|)
-horThyes          0.39356    0.12676 3.10477  0.0019
+horThyes          0.38767    0.12668 3.06022  0.0022
 
 > summary(cm)$sctest
        test          df      pvalue 
@@ -1004,12 +1027,11 @@ horThyes          0.39356    0.12676 3.10477  0.0019
 
 > summary(ft, test = "Rao")
 
-	Stratified 2-sample Savage test against proportional hazards
-	alternatives
+	2-sample Savage test against proportional hazards alternatives
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Rao chi-squared = 9.4793, df = 1, p-value = 0.002078
+Rao chi-squared = 9.4757, df = 1, p-value = 0.002082
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -1019,12 +1041,11 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > summary(ft, test = "LRT")
 
-	Stratified 2-sample Savage test against proportional hazards
-	alternatives
+	2-sample Savage test against proportional hazards alternatives
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-logLR chi-squared = 9.6476, df = 1, p-value = 0.001896
+logLR chi-squared = 9.7477, df = 1, p-value = 0.001795
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -1034,35 +1055,32 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > summary(ft, test = "Wald")
 
-	Stratified 2-sample Savage test against proportional hazards
-	alternatives
+	2-sample Savage test against proportional hazards alternatives
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Wald chi-squared = 9.6396, df = 1, p-value = 0.001904
+Wald chi-squared = 9.3649, df = 1, p-value = 0.002212
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
 > summary(ft, test = "Permutation")
 
-	Stratified 2-sample Savage test against proportional hazards
-	alternatives
+	2-sample Savage test against proportional hazards alternatives
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0942, p-value = 0.001973
+Perm Z = 3.0938, p-value = 0.001976
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
 > (ft <- with(GBSG2, free1way.test(y = time, x = horTh, 
 +     z = pnodes, event = cens == 1, link = "cloglog")))
 
-	Stratified 2-sample Savage test against proportional hazards
-	alternatives
+	2-sample Savage test against proportional hazards alternatives
 
 data:  time by horTh (no, yes) 
 	 stratified by pnodes
-Perm Z = 2.703, p-value = 0.006873
+Perm Z = 2.7021, p-value = 0.00689
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -1073,12 +1091,11 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 > (ft <- with(GBSG2, free1way.test(y = time, x = horTh, 
 +     z = tgrade, event = as.logical(cens), link = "logit")))
 
-	Stratified 2-sample Wilcoxon test against proportional odds
-	alternatives
+	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0554, p-value = 0.002248
+Perm Z = 3.0559, p-value = 0.002244
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1090,49 +1107,45 @@ free1way.test.numeric(y = time, x = horTh, z = tgrade, event = as.logical(cens),
 
 Coefficients:
          log-odds ratio Std. Error z value P(>|z|)
-horThyes        0.55655    0.17303 3.21653  0.0013
+horThyes        0.52798    0.17282 3.05500  0.0023
 
 > summary(ft, test = "Rao")
 
-	Stratified 2-sample Wilcoxon test against proportional odds
-	alternatives
+	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Rao chi-squared = 9.3397, df = 1, p-value = 0.002242
+Rao chi-squared = 9.4064, df = 1, p-value = 0.002162
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
 > summary(ft, test = "LRT")
 
-	Stratified 2-sample Wilcoxon test against proportional odds
-	alternatives
+	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-logLR chi-squared = 9.328, df = 1, p-value = 0.002257
+logLR chi-squared = 9.4816, df = 1, p-value = 0.002075
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
 > summary(ft, test = "Wald")
 
-	Stratified 2-sample Wilcoxon test against proportional odds
-	alternatives
+	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Wald chi-squared = 10.346, df = 1, p-value = 0.001298
+Wald chi-squared = 9.333, df = 1, p-value = 0.002251
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
 > summary(ft, test = "Permutation")
 
-	Stratified 2-sample Wilcoxon test against proportional odds
-	alternatives
+	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  time by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0554, p-value = 0.002248
+Perm Z = 3.0559, p-value = 0.002244
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1438,21 +1451,21 @@ NOTE: 'n' is sample size in control group of first stratum
 
 > coef(ft <- free1way.test(u ~ w, data = nd))
        w2        w3 
-0.5516505 0.7786014 
+0.5489555 0.7759044 
 
 > logLik(ft)
-[1] -2741.278
+[1] -2741.244
 
 > nd$y <- qchisq(nd$u, df = 3)
 
 > coef(ft <- free1way.test(y ~ w, data = nd))
        w2        w3 
-0.5516505 0.7786014 
+0.5489555 0.7759044 
 
 > logLik(ft)
-[1] -2741.278
+[1] -2741.244
 
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 21.160   0.180  21.347 
+ 31.736   0.203  31.949 

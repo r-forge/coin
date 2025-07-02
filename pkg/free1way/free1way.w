@@ -755,7 +755,10 @@ shift- and intercept parameters first:
             H$A <- H$A + Hrc$A
             H$Z <- H$Z + Hrc$Z
         }
-        ret <- ret + (H$Z - crossprod(H$X, solve(H$A, H$X)))
+        sAH <- try(solve(H$A, H$X))
+        if (inherits(sAH, "try-error"))
+            stop("Error computing the Hessian in free1way.test")
+        ret <- ret + (H$Z - crossprod(H$X, sAH))
     }
     ret
 }
@@ -1066,33 +1069,60 @@ parameters in $\thetavec$ (denoted as \code{fix}), the remaining parameters
 are updated. Note that \code{start} must contain the full parameter vector
 $\thetavec$.
 
+We call \code{optim} and will increase the \code{maxit} control parameter if
+we encounter optimisation issues and restart at the current solution:
+
+@d do optim
+@{
+maxit <- 100
+while(maxit < 10001) {
+   ret <- do.call("optim", opargs)
+   maxit <- 5 * maxit
+   if (ret$convergence) {
+       if (is.null(opargs$control))
+           opargs$control <- list(maxit = maxit)
+        else 
+           opargs$control$maxit <- maxit
+       opargs$par <- ret$par
+   }
+}
+if (ret$convergence)
+    stop(paste("Unsuccessful optimisation in free1way.test", ret$message))
+@}
+
+The profile negative log-likelihood is then
+
 @d profile
 @{
 .profile <- function(start, fix = seq_len(K - 1)) {
     stopifnot(all(fix %in% seq_len(K - 1)))
     beta <- start[fix]
-    ret <- optim(par = start[-fix], fn = function(par) {
-                     p <- numeric(length(par) + length(fix))
-                     p[fix] <- beta
-                     p[-fix] <- par
-                     ret <- .snll(p, x = xlist, mu = mu)
-                     if (!is.null(xrc))
-                         ret <- ret + .snll(p, x = xrclist, mu = mu, 
-                                            rightcensored = TRUE)
-                     ret
-                 },
-                 gr = function(par) {
-                     p <- numeric(length(par) + length(fix))
-                     p[fix] <- beta
-                     p[-fix] <- par
-                     ret <- .snsc(p, x = xlist, mu = mu)[-fix]
-                     if (!is.null(xrc))
-                         ret <- ret + .snsc(p, x = xrclist, mu = mu, 
-                                            rightcensored = TRUE)[-fix]
-                     ret
-                 },
-                 lower = lwr[-fix], method = "L-BFGS-B", 
-                 hessian = FALSE, ...)
+    opargs <- c(list(par = start[-fix], 
+                     fn = function(par) {
+                         p <- numeric(length(par) + length(fix))
+                         p[fix] <- beta
+                         p[-fix] <- par
+                         ret <- .snll(p, x = xlist, mu = mu)
+                         if (!is.null(xrc))
+                             ret <- ret + .snll(p, x = xrclist, mu = mu, 
+                                                rightcensored = TRUE)
+                         ret
+                     },
+                     gr = function(par) {
+                         p <- numeric(length(par) + length(fix))
+                         p[fix] <- beta
+                         p[-fix] <- par
+                         ret <- .snsc(p, x = xlist, mu = mu)[-fix]
+                         if (!is.null(xrc))
+                             ret <- ret + .snsc(p, x = xrclist, mu = mu, 
+                                                rightcensored = TRUE)[-fix]
+                         ret
+                     },
+                     lower = lwr[-fix], 
+                     method = "L-BFGS-B", 
+                     hessian = FALSE),
+                     list(...))
+    @<do optim@>
     p <- numeric(length(start))
     p[fix] <- beta
     p[-fix] <- ret$par
@@ -1123,9 +1153,10 @@ gr <- function(par) {
     return(ret)
 }
 if (!length(fix)) {
-    ret <- optim(par = start, fn = fn, gr = gr,
-                 lower = lwr, method = "L-BFGS-B", 
-                 hessian = FALSE, ...)
+    opargs <- c(list(par = start, fn = fn, gr = gr,
+                    lower = lwr, method = "L-BFGS-B", 
+                    hessian = FALSE), list(...))
+    @<do optim@>
 } else if (length(fix) == length(start)) {
     ret <- list(par = start, 
                 value = fn(start))
@@ -1160,9 +1191,9 @@ if (hessian) {
     } else {
         ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
     }
-    if (length(parm) != nrow(ret$hessian))
-       ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
     ret$vcov <- solve(ret$hessian)
+    if (length(parm) != nrow(ret$hessian))
+       ret$hessian <- solve(ret$vcov <- ret$vcov[parm, parm, drop = FALSE])
     rownames(ret$vcov) <- colnames(ret$vcov) <- rownames(ret$hessian) <-
         colnames(ret$hessian) <-  cnames
 }
@@ -1275,7 +1306,7 @@ if (test == "Wald") {
 @}
 
 
-\section{Wald}
+\section{Wald Statistics}
 
 We only need access to the parameter estimates $\hat{\beta}_2, \dots,
 \hat{\beta}_K$ and the corresponding Hessian:
@@ -1292,7 +1323,7 @@ if (alternative == "two.sided") {
 }
 @}
 
-\section{Likelihood-ratio}
+\section{Likelihood-ratio Statistics}
 
 In addition to the log-likelihood evaluated at the ML estimates, we need to
 evaluate the profile log-likelihood at some value corresponding the null
@@ -1309,7 +1340,7 @@ DF <- c("df" = length(parm))
 PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
 @}
 
-\section{Rao Score}
+\section{Rao Score Statistics}
 
 For the Rao score test, the inverse of the Hessian as well as the score
 function of the shift parameters evaluated for some null values need to be
@@ -1348,11 +1379,13 @@ sc <- - ret$negscore
 if (length(cf) == 1L)
    sc <- sc / sqrt(c(ret$hessian))
 Esc <- sc - x$perm$Expectation
+### avoid p-values == 0
+.pm <- function(x) (1 + sum(x)) / (1 + length(x))
 if (alternative == "two.sided" && length(cf) > 1L) {
-    STATISTIC <- c("Perm chi-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
+    STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
     ps <- x$perm$permStat
     if (!is.null(x$perm$permStat))
-        PVAL <- mean(ps > STATISTIC + tol)
+        PVAL <- .pm(ps > STATISTIC + tol)
     else {
         DF <- c("df" = x$perm$DF)
         PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
@@ -1361,11 +1394,11 @@ if (alternative == "two.sided" && length(cf) > 1L) {
     STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
     if (!is.null(x$perm$permStat)) {
         if (alternative == "two.sided")
-            PVAL <- mean(abs(x$perm$permStat) > abs(STATISTIC) + tol)
+            PVAL <- .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)
         else if (alternative == "less")
-            PVAL <- mean(x$perm$permStat < STATISTIC - tol)
+            PVAL <- .pm(x$perm$permStat < STATISTIC - tol)
         else
-            PVAL <- mean(x$perm$permStat > STATISTIC + tol)
+            PVAL <- .pm(x$perm$permStat > STATISTIC + tol)
     } else {
         if (alternative == "two.sided")
             PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)
@@ -1433,8 +1466,8 @@ tables with fixed marginal distributions:
     if (dim(xt)[2L] == 2L) {
         ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(c(ret$Covariance)))
     } else {
-        ES <- t(ret$Statistic - ret$Expectation)
-        ret$testStat <- sum(ES %*% solve(ret$Covariance) * ES)
+        ES <- ret$Statistic - ret$Expectation
+        ret$testStat <- sum(ES * solve(ret$Covariance, ES))
     }
     ret$DF <- dim(xt)[2L] - 1L
 
@@ -1446,8 +1479,8 @@ tables with fixed marginal distributions:
         if (dim(xt)[2L] == 2L) {
              ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
         } else {
-            ES <- t(matrix(stat, ncol = B) - ret$Expectation)
-            ret$permStat <- rowSums(ES %*% solve(ret$Covariance) * ES)
+            ES <- matrix(stat, ncol = B) - ret$Expectation
+            ret$permStat <- rowSums(crossprod(ES, solve(ret$Covariance, ES)))
         }
     }
     ret
@@ -1532,7 +1565,9 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
 
     alias <- link$alias
     if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]
-    ret$method <- paste(ifelse(d[3L] > 1L, "Stratified", ""), 
+    stratified <- FALSE
+    if (length(d) == 3L) stratified <- d[3L] > 1
+    ret$method <- paste(ifelse(stratified, "Stratified", ""), 
                         paste0(d[2L], "-sample"), alias, 
                         "test against", link$model, "alternatives")
 
@@ -1998,7 +2033,7 @@ confint(ft, test = "Wald")
 @@
 
 
-\section{Mantel-Haenszel test}
+\section{Mantel-Haenszel Test}
 
 <<mh>>=
 example(mantelhaen.test, echo = FALSE)
@@ -2013,7 +2048,15 @@ sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
        fisher.test(UCBAdmissions[,,dept], conf.int = TRUE)$conf.int)
 @@
 
-\section{Kruskal-Wallis}
+\section{\code{prop.test}}
+
+<<pt>>=
+prop.test(UCBAdmissions[,,1], correct = FALSE)
+summary(free1way.test(UCBAdmissions[,,1]), test = "Rao")
+@@
+
+
+\section{Kruskal-Wallis Test}
 
 <<kw>>=
 example(kruskal.test, echo = FALSE)
@@ -2021,7 +2064,7 @@ kruskal.test(x ~ g)
 free1way.test(x ~ g)
 @@
 
-\section{Savage}
+\section{Savage Test}
 
 We start without censoring (Savage test) and add strata
 
@@ -2066,7 +2109,7 @@ summary(ft, test = "Wald")
 summary(ft, test = "Permutation")
 @@
 
-\section{Log-rank}
+\section{Log-rank Test}
 
 And now with censoring. We cannot expect this to be identical with what
 \pkg{survival} reports, as this package is based on the partial likelihood
@@ -2115,7 +2158,7 @@ summary(ft, test = "Permutation")
 @@
 
 
-\section{van der Waerden}
+\section{van der Waerden Test}
 
 Normal scores test against a generalised Cohen's $d$:
 
@@ -2126,7 +2169,7 @@ independence_test(y ~ g | s, data = nd, ytrafo = function(...)
                   trafo(..., numeric_trafo = normal_trafo, block = nd$s), teststat = "quad")
 @@
 
-\section{Friedman}
+\section{Friedman Test}
 
 Each observation is a block
 

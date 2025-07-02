@@ -49,6 +49,11 @@ clean:
 	rm -rf Makevars
 	rm -rf nw*
 	rm -rf *bbl
+	rm -rf *aux
+	rm -rf *log
+	rm -rf *blg
+	rm -rf *out
+	rm -rf *toc
 	rm -rf *brf
 	rm -rf *wk
 

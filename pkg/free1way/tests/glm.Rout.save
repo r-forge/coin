@@ -78,7 +78,7 @@ xB -2.166422 -1.558402
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Perm Z = -12.656, p-value < 2.2e-16
+Perm Z = -12.656, p-value = 9.999e-05
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
@@ -141,7 +141,7 @@ xB 0.921183 1.260879
 	2-sample Lehmann test against Lehmann alternatives
 
 data:  y by x (A, B)
-Perm Z = 12.656, p-value < 2.2e-16
+Perm Z = 12.656, p-value = 9.999e-05
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
@@ -152,4 +152,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  0.373   0.033   0.400 
+  0.494   0.039   0.529 

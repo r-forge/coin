@@ -284,7 +284,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0.5065346
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -0.0002107, p-value = 0.494
+Perm Z = -0.0002107, p-value = 0.4945
 alternative hypothesis: true log-odds ratio is greater than 0.5065346
 
 > summary(ftc, test = "Permutation", alternative = "less")
@@ -292,7 +292,7 @@ alternative hypothesis: true log-odds ratio is greater than 0.5065346
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -0.0002107, p-value = 0.506
+Perm Z = -0.0002107, p-value = 0.5065
 alternative hypothesis: true log-odds ratio is less than 0.5065346
 
 > summary(ftc, test = "Permutation")
@@ -312,4 +312,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  2.094   0.063   2.153 
+  4.267   0.075   4.337 

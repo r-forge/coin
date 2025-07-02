@@ -345,7 +345,10 @@
                 H$A <- H$A + Hrc$A
                 H$Z <- H$Z + Hrc$Z
             }
-            ret <- ret + (H$Z - crossprod(H$X, solve(H$A, H$X)))
+            sAH <- try(solve(H$A, H$X))
+            if (inherits(sAH, "try-error"))
+                stop("Error computing the Hessian in free1way.test")
+            ret <- ret + (H$Z - crossprod(H$X, sAH))
         }
         ret
     }
@@ -379,28 +382,48 @@
     .profile <- function(start, fix = seq_len(K - 1)) {
         stopifnot(all(fix %in% seq_len(K - 1)))
         beta <- start[fix]
-        ret <- optim(par = start[-fix], fn = function(par) {
-                         p <- numeric(length(par) + length(fix))
-                         p[fix] <- beta
-                         p[-fix] <- par
-                         ret <- .snll(p, x = xlist, mu = mu)
-                         if (!is.null(xrc))
-                             ret <- ret + .snll(p, x = xrclist, mu = mu, 
-                                                rightcensored = TRUE)
-                         ret
-                     },
-                     gr = function(par) {
-                         p <- numeric(length(par) + length(fix))
-                         p[fix] <- beta
-                         p[-fix] <- par
-                         ret <- .snsc(p, x = xlist, mu = mu)[-fix]
-                         if (!is.null(xrc))
-                             ret <- ret + .snsc(p, x = xrclist, mu = mu, 
-                                                rightcensored = TRUE)[-fix]
-                         ret
-                     },
-                     lower = lwr[-fix], method = "L-BFGS-B", 
-                     hessian = FALSE, ...)
+        opargs <- c(list(par = start[-fix], 
+                         fn = function(par) {
+                             p <- numeric(length(par) + length(fix))
+                             p[fix] <- beta
+                             p[-fix] <- par
+                             ret <- .snll(p, x = xlist, mu = mu)
+                             if (!is.null(xrc))
+                                 ret <- ret + .snll(p, x = xrclist, mu = mu, 
+                                                    rightcensored = TRUE)
+                             ret
+                         },
+                         gr = function(par) {
+                             p <- numeric(length(par) + length(fix))
+                             p[fix] <- beta
+                             p[-fix] <- par
+                             ret <- .snsc(p, x = xlist, mu = mu)[-fix]
+                             if (!is.null(xrc))
+                                 ret <- ret + .snsc(p, x = xrclist, mu = mu, 
+                                                    rightcensored = TRUE)[-fix]
+                             ret
+                         },
+                         lower = lwr[-fix], 
+                         method = "L-BFGS-B", 
+                         hessian = FALSE),
+                         list(...))
+        # do optim
+        
+        maxit <- 100
+        while(maxit < 10001) {
+           ret <- do.call("optim", opargs)
+           maxit <- 5 * maxit
+           if (ret$convergence) {
+               if (is.null(opargs$control))
+                   opargs$control <- list(maxit = maxit)
+                else 
+                   opargs$control$maxit <- maxit
+               opargs$par <- ret$par
+           }
+        }
+        if (ret$convergence)
+            stop(paste("Unsuccessful optimisation in free1way.test", ret$message))
+        
         p <- numeric(length(start))
         p[fix] <- beta
         p[-fix] <- ret$par
@@ -425,9 +448,26 @@
         return(ret)
     }
     if (!length(fix)) {
-        ret <- optim(par = start, fn = fn, gr = gr,
-                     lower = lwr, method = "L-BFGS-B", 
-                     hessian = FALSE, ...)
+        opargs <- c(list(par = start, fn = fn, gr = gr,
+                        lower = lwr, method = "L-BFGS-B", 
+                        hessian = FALSE), list(...))
+        # do optim
+        
+        maxit <- 100
+        while(maxit < 10001) {
+           ret <- do.call("optim", opargs)
+           maxit <- 5 * maxit
+           if (ret$convergence) {
+               if (is.null(opargs$control))
+                   opargs$control <- list(maxit = maxit)
+                else 
+                   opargs$control$maxit <- maxit
+               opargs$par <- ret$par
+           }
+        }
+        if (ret$convergence)
+            stop(paste("Unsuccessful optimisation in free1way.test", ret$message))
+        
     } else if (length(fix) == length(start)) {
         ret <- list(par = start, 
                     value = fn(start))
@@ -458,9 +498,9 @@
         } else {
             ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
         }
-        if (length(parm) != nrow(ret$hessian))
-           ret$hessian <- solve(ret$vcov <- solve(ret$hessian)[parm,parm])
         ret$vcov <- solve(ret$hessian)
+        if (length(parm) != nrow(ret$hessian))
+           ret$hessian <- solve(ret$vcov <- ret$vcov[parm, parm, drop = FALSE])
         rownames(ret$vcov) <- colnames(ret$vcov) <- rownames(ret$hessian) <-
             colnames(ret$hessian) <-  cnames
     }
@@ -521,7 +561,9 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
 
     alias <- link$alias
     if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]
-    ret$method <- paste(ifelse(d[3L] > 1L, "Stratified", ""), 
+    stratified <- FALSE
+    if (length(d) == 3L) stratified <- d[3L] > 1
+    ret$method <- paste(ifelse(stratified, "Stratified", ""), 
                         paste0(d[2L], "-sample"), alias, 
                         "test against", link$model, "alternatives")
 
@@ -583,8 +625,8 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
         if (dim(xt)[2L] == 2L) {
             ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(c(ret$Covariance)))
         } else {
-            ES <- t(ret$Statistic - ret$Expectation)
-            ret$testStat <- sum(ES %*% solve(ret$Covariance) * ES)
+            ES <- ret$Statistic - ret$Expectation
+            ret$testStat <- sum(ES * solve(ret$Covariance, ES))
         }
         ret$DF <- dim(xt)[2L] - 1L
 
@@ -596,8 +638,8 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
             if (dim(xt)[2L] == 2L) {
                  ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
             } else {
-                ES <- t(matrix(stat, ncol = B) - ret$Expectation)
-                ret$permStat <- rowSums(ES %*% solve(ret$Covariance) * ES)
+                ES <- matrix(stat, ncol = B) - ret$Expectation
+                ret$permStat <- rowSums(crossprod(ES, solve(ret$Covariance, ES)))
             }
         }
         ret
@@ -722,11 +764,13 @@ model.matrix.free1way <- function (object, ...)
         if (length(cf) == 1L)
            sc <- sc / sqrt(c(ret$hessian))
         Esc <- sc - x$perm$Expectation
+        ### avoid p-values == 0
+        .pm <- function(x) (1 + sum(x)) / (1 + length(x))
         if (alternative == "two.sided" && length(cf) > 1L) {
-            STATISTIC <- c("Perm chi-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
+            STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
             ps <- x$perm$permStat
             if (!is.null(x$perm$permStat))
-                PVAL <- mean(ps > STATISTIC + tol)
+                PVAL <- .pm(ps > STATISTIC + tol)
             else {
                 DF <- c("df" = x$perm$DF)
                 PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
@@ -735,11 +779,11 @@ model.matrix.free1way <- function (object, ...)
             STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
             if (!is.null(x$perm$permStat)) {
                 if (alternative == "two.sided")
-                    PVAL <- mean(abs(x$perm$permStat) > abs(STATISTIC) + tol)
+                    PVAL <- .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)
                 else if (alternative == "less")
-                    PVAL <- mean(x$perm$permStat < STATISTIC - tol)
+                    PVAL <- .pm(x$perm$permStat < STATISTIC - tol)
                 else
-                    PVAL <- mean(x$perm$permStat > STATISTIC + tol)
+                    PVAL <- .pm(x$perm$permStat > STATISTIC + tol)
             } else {
                 if (alternative == "two.sided")
                     PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)
@@ -875,11 +919,13 @@ confint.free1way <- function(object, parm,
             if (length(cf) == 1L)
                sc <- sc / sqrt(c(ret$hessian))
             Esc <- sc - x$perm$Expectation
+            ### avoid p-values == 0
+            .pm <- function(x) (1 + sum(x)) / (1 + length(x))
             if (alternative == "two.sided" && length(cf) > 1L) {
-                STATISTIC <- c("Perm chi-squared" = sum(Esc %*% solve(x$perm$Covariance) * Esc))
+                STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
                 ps <- x$perm$permStat
                 if (!is.null(x$perm$permStat))
-                    PVAL <- mean(ps > STATISTIC + tol)
+                    PVAL <- .pm(ps > STATISTIC + tol)
                 else {
                     DF <- c("df" = x$perm$DF)
                     PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
@@ -888,11 +934,11 @@ confint.free1way <- function(object, parm,
                 STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
                 if (!is.null(x$perm$permStat)) {
                     if (alternative == "two.sided")
-                        PVAL <- mean(abs(x$perm$permStat) > abs(STATISTIC) + tol)
+                        PVAL <- .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)
                     else if (alternative == "less")
-                        PVAL <- mean(x$perm$permStat < STATISTIC - tol)
+                        PVAL <- .pm(x$perm$permStat < STATISTIC - tol)
                     else
-                        PVAL <- mean(x$perm$permStat > STATISTIC + tol)
+                        PVAL <- .pm(x$perm$permStat > STATISTIC + tol)
                 } else {
                     if (alternative == "two.sided")
                         PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)
