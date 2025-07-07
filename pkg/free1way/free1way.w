@@ -1515,6 +1515,10 @@ kruskal_test(u ~ w, distribution = approximate(100000))
 We provide a new test procedure in a generic \code{free1way.test}, featuring
 a method for tables (the main workhorse) and additional user interfaces. 
 
+<TH>Maybe avoid the \code{.test} and use \code{free1way}? This would better
+reflect the richer return values (it is not just an \code{htest}
+object)?</TH>
+
 @d link2fun
 @{
 if (!inherits(link, "linkfun")) {
@@ -1833,6 +1837,10 @@ print.free1way <- function(x, ...) {
 The \code{summary} method performs population Wald inference unless the
 \code{test} argument is specified:
 
+<TH>Just using \code{free1way} (and not \code{free1way.test}) would maybe
+make the rather flexible model interrogation via \code{summary},
+\code{confint} etc seem more natural?</TH>
+
 @d free1way summary
 @{
 summary.free1way <- function(object, test, alternative = c("two.sided", "less", "greater"), 
@@ -1943,7 +1951,8 @@ report some tests and confidence intervals:
 
 <<free>>=
 x
-ft <- free1way.test(x)
+### asymptotic permutation test
+(ft <- free1way.test(x))
 coef(ft)
 vcov(ft)
 ### Wald per parameter
