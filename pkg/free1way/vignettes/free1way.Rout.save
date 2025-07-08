@@ -381,7 +381,16 @@ B 0 0 0
 C 4 6 5
 
 
-> ft <- free1way.test(x)
+> (ft <- free1way.test(x))
+
+	Stratified 3-sample Kruskal-Wallis test against proportional odds
+	alternatives
+
+data:   by  (c("A", "B", "C")) 
+	 stratified by 
+Perm chi-squared = 0.1449, df = 2, p-value = 0.9301
+alternative hypothesis: true log-odds ratio is not equal to 0
+
 
 > coef(ft)
          B          C 
@@ -1468,4 +1477,4 @@ NOTE: 'n' is sample size in control group of first stratum
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 31.736   0.203  31.949 
+ 31.850   0.176  32.045 

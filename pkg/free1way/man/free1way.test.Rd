@@ -130,6 +130,9 @@ the log-log link (\code{link = "loglog"})
 \deqn{F_k(y) = F_1(y)^{\exp(- \beta_k)},} and a shift alternative on a
 latent normal scale on the probit link (\code{link = "probit"})
 \deqn{\Phi^{-1}(F_1(Y_k)) \sim N(\beta_k, 1).}
+If strata are present, the distribution functions may be stratum-specific
+but the shift parameters are assumed to be constant across strata, such that
+the above model holds for each stratum.
 
 The control distribution function \eqn{F_1} is treated as a nuisance
 parameter and the shift parameters \eqn{\beta_2, \dots, \beta_K} are

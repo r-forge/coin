@@ -1507,6 +1507,7 @@ library("coin")
 kruskal_test(u ~ w, distribution = approximate(100000))
 @@
 
+<TH>What about ordered alternatives? Jonckheere? Cochran-Armitage?</TH>
 
 \chapter{Distribution-free Tests in Stratified $K$-sample Oneway Layouts}
 
@@ -1608,7 +1609,8 @@ free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglo
 The \code{formula} method allows formulae \code{outcome ~ treatment +
 strata(s)} for model specification
 
-<TH>strata is only defined in \pkg{survival}, import? </TH>
+<TH>strata is only defined in \pkg{survival}, import? or copy friedman.test
+with y ~ groups | block? </TH>
 <TH>something like cbind(time, event) ~ treatment + strata(s)? Or
 \code{Surv}?</TH>
 
@@ -1674,6 +1676,7 @@ outcomes. The \code{event} argument is a logical where \code{TRUE} is
 interpreted as an event and \code{FALSE} as right-censored observation
 
 <TH>add event to formula interface</TH>
+<TH>maybe use y, groups, blocks interface as friedman.test?</TH>
 
 @d free1way numeric
 @{
