@@ -256,7 +256,7 @@ setMethod("initialize",
                                weights
 
         if (!validObject(.Object))
-            stop("not a valid object of class ", sQuote("SymmetryProblem"))
+            stop("not a valid object of class ", dQuote("SymmetryProblem"))
 
         .Object
     }
