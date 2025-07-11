@@ -5,8 +5,8 @@
 \alias{symmetry_test.SymmetryProblem}
 \title{General Symmetry Test}
 \description{
-  Testing the symmetry of set of repeated measurements variables measured on
-  arbitrary scales in a complete block design.
+  Testing the symmetry of a set of variables measured on arbitrary scales in a
+  complete block design.
 }
 % NOTE: the markup in the following section is necessary for correct rendering
 \usage{
