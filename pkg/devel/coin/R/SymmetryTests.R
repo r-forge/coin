@@ -1,9 +1,13 @@
 ### Sign test
 sign_test <- function(object, ...) UseMethod("sign_test")
 
-sign_test.formula <- function(formula, data = list(), subset = NULL, ...)
+sign_test.formula <- function(formula, data = list(), subset = NULL,
+                              weights = NULL, ...)
 {
-    object <- formula2data(formula, data, subset, frame = parent.frame(), ...)
+    object <- formula2data(formula, data, subset, weights,
+                           frame = parent.frame(), ...)
+### <FIXME> This doesn't really handle weights, but makes sure an error is
+###         issued if weights are supplied.
     if (is.null(object$block)) {
         y <- object$y[[1]]
         if (!is.numeric(y) || is.Surv(y))
@@ -14,10 +18,12 @@ sign_test.formula <- function(formula, data = list(), subset = NULL, ...)
         n <- length(x)
         object <- list(x = data.frame(x = gl(2, n)),
                        y = data.frame(y = c(y, x)),
-                       block = gl(n, 1, 2 * n))
+                       block = gl(n, 1, 2 * n),
+                       weights = object$weights)
     }
     object <- new("SymmetryProblem", x = object$x, y = object$y,
-                  block = object$block)
+                  block = object$block, weights = object$weights)
+### </FIXME>
     do.call(sign_test, c(object = object, list(...)))
 }
 
@@ -63,9 +69,13 @@ sign_test.SymmetryProblem <- function(object, ...) {
 ### Wilcoxon signed-rank test
 wilcoxsign_test <- function(object, ...) UseMethod("wilcoxsign_test")
 
-wilcoxsign_test.formula <- function(formula, data = list(), subset = NULL, ...)
+wilcoxsign_test.formula <- function(formula, data = list(), subset = NULL,
+                                    weights = NULL, ...)
 {
-    object <- formula2data(formula, data, subset, frame = parent.frame(), ...)
+    object <- formula2data(formula, data, subset, weights,
+                           frame = parent.frame(), ...)
+### <FIXME> This doesn't really handle weights, but makes sure an error is
+###         issued if weights are supplied.
     if (is.null(object$block)) {
         y <- object$y[[1]]
         if (!is.numeric(y) || is.Surv(y))
@@ -76,10 +86,12 @@ wilcoxsign_test.formula <- function(formula, data = list(), subset = NULL, ...)
         n <- length(x)
         object <- list(x = data.frame(x = gl(2, n)),
                        y = data.frame(y = c(y, x)),
-                       block = gl(n, 1, 2 * n))
+                       block = gl(n, 1, 2 * n),
+                       weights = object$weights)
     }
     object <- new("SymmetryProblem", x = object$x, y = object$y,
-                  block = object$block)
+                  block = object$block, weights = object$weights)
+### </FIXME>
     do.call(wilcoxsign_test, c(object = object, list(...)))
 }
 
@@ -140,9 +152,10 @@ wilcoxsign_test.SymmetryProblem <- function(object,
 ### Friedman test
 friedman_test <- function(object, ...) UseMethod("friedman_test")
 
-friedman_test.formula <- function(formula, data = list(), subset = NULL, ...) {
+friedman_test.formula <- function(formula, data = list(), subset = NULL,
+    weights = NULL, ...) {
 
-    ft("friedman_test", "SymmetryProblem", formula, data, subset,
+    ft("friedman_test", "SymmetryProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
@@ -185,9 +198,10 @@ friedman_test.SymmetryProblem <- function(object, ...) {
 ### Quade test
 quade_test <- function(object, ...) UseMethod("quade_test")
 
-quade_test.formula <- function(formula, data = list(), subset = NULL, ...) {
+quade_test.formula <- function(formula, data = list(), subset = NULL,
+    weights = NULL, ...) {
 
-    ft("quade_test", "SymmetryProblem", formula, data, subset,
+    ft("quade_test", "SymmetryProblem", formula, data, subset, weights,
        frame = parent.frame(), ...)
 }
 
