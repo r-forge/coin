@@ -22,16 +22,16 @@
   block design.
 }
 \usage{
-\method{sign_test}{formula}(formula, data, subset = NULL, ...)
+\method{sign_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{sign_test}{SymmetryProblem}(object, ...)
 
-\method{wilcoxsign_test}{formula}(formula, data, subset = NULL, ...)
+\method{wilcoxsign_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{wilcoxsign_test}{SymmetryProblem}(object, zero.method = c("Pratt", "Wilcoxon"), ...)
 
-\method{friedman_test}{formula}(formula, data, subset = NULL, ...)
+\method{friedman_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{friedman_test}{SymmetryProblem}(object, ...)
 
-\method{quade_test}{formula}(formula, data, subset = NULL, ...)
+\method{quade_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{quade_test}{SymmetryProblem}(object, ...)
 }
 \arguments{
@@ -47,6 +47,11 @@
   \item{subset}{
     an optional vector specifying a subset of observations to be used.  Defaults
     to \code{NULL}.
+  }
+  \item{weights}{
+    an optional formula of the form \code{~ w} defining integer valued case
+    weights for each observation.  Defaults to \code{NULL}, implying equal
+    weight for all observations.  (Not yet implemented!)
   }
   \item{object}{
     an object inheriting from class \code{"\linkS4class{SymmetryProblem}"}.

@@ -13,7 +13,7 @@
   complete block design.
 }
 \usage{
-\method{mh_test}{formula}(formula, data, subset = NULL, ...)
+\method{mh_test}{formula}(formula, data, subset = NULL, weights = NULL, ...)
 \method{mh_test}{table}(object, ...)
 \method{mh_test}{SymmetryProblem}(object, ...)
 }
@@ -29,6 +29,11 @@
   \item{subset}{
     an optional vector specifying a subset of observations to be used.  Defaults
     to \code{NULL}.
+  }
+  \item{weights}{
+    an optional formula of the form \code{~ w} defining integer valued case
+    weights for each observation.  Defaults to \code{NULL}, implying equal
+    weight for all observations.  (Not yet implemented!)
   }
   \item{object}{
     an object inheriting from classes \code{"table"} (with identical

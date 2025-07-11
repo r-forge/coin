@@ -6,6 +6,10 @@
     \itemize{
       \item \code{zheng_trafo()} using \code{increment = 1} failed to print in
             \R \eqn{\ge}{>=}4.2.0 (due to changes in \code{format}).
+
+      \item Supplying case weights to the sign and Wilcoxon signed-rank tests
+            appeared to work, but were not taken into account; it now results in
+            an error.
     }
   }
   \subsection{User-visible changes}{
@@ -24,8 +28,8 @@
   \subsection{Bug fixes}{
     \itemize{
       \item Supplying case weights to tests for marginal homogeneity or symmetry
-            hypotheses appeared to work, but returned incorrect test statistics
-            and \eqn{p}-values; it now results in an error.
+            hypotheses appeared to work, but were not taken into account; it now
+            results in an error.
     }
   }
   \subsection{User-visible changes}{
