@@ -105,6 +105,8 @@ wilcoxsign_test.SymmetryProblem <- function(object,
         stop(sQuote("object"),
              " does not represent a paired two-sample problem",
              " (maybe the grouping variable is not a factor?)")
+    if (!is_unity(object@weights))
+        warning("rank transformation doesn't take weights into account")
 
     y <- object@y[[1]]
     x <- object@x[[1]]
@@ -170,6 +172,8 @@ friedman_test.SymmetryProblem <- function(object, ...) {
                      " (maybe the grouping variable is not a factor?)")
             if (!is_numeric_y(object))
                 stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            if (!is_unity(object@weights))
+                warning("rank transformation doesn't take weights into account")
             TRUE
         }
     )
@@ -223,6 +227,8 @@ quade_test.SymmetryProblem <- function(object, ...) {
                      " (maybe the grouping variable is not a factor?)")
             if (!is_numeric_y(object))
                 stop(sQuote(colnames(object@y)), " is not a numeric variable")
+            if (!is_unity(object@weights))
+                warning("rank transformation doesn't take weights into account")
             TRUE
         }
     )

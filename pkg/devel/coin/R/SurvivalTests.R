@@ -32,6 +32,8 @@ logrank_test.IndependenceProblem <- function(object,
                      " (maybe the grouping variable is not a factor?)")
             if (!is_censored_y(object))
                 stop(sQuote(colnames(object@y)), " is not a censored variable")
+            if (!is_unity(object@weights))
+                warning("rank transformation doesn't take weights into account")
             TRUE
         }
     )

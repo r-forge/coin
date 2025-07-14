@@ -486,9 +486,10 @@ alternative hypothesis: true mu is not equal to 0
 > try(wilcoxsign_test(x ~ y))
 Error in wilcoxsign_test.SymmetryProblem(object = new("SymmetryProblem",  : 
   all pairwise differences equal zero
-In addition: Warning message:
-In max(abs(object@weights - floor(object@weights))) :
+In addition: Warning messages:
+1: In max(abs(object@weights - floor(object@weights))) :
   no non-missing arguments to max; returning -Inf
+2: In max(abs(x - 1)) : no non-missing arguments to max; returning -Inf
 > 
 > ### problem in coin 1.0-12 fixed
 > x <- c(1, 2, 3)
@@ -1045,4 +1046,4 @@ Error in validityMethod(object) :
 > 
 > proc.time()
    user  system elapsed 
-   2.76    0.40    3.34 
+   2.98    0.42    3.62 
