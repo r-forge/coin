@@ -91,20 +91,8 @@ ft <- function(name, class, formula, data = list(), subset = NULL,
     args <- list(...)
     args$frame <- NULL
 
-    ## warn users of weighted rank tests
-    if (name %in% ranktests && !is.null(object@weights) &&
-        !is_unity(object@weights))
-        warning("rank transformation doesn't take weights into account")
-
     do.call(name, c(object = object, args))
 }
-
-ranktests <-
-    c("wilcox_test", "kruskal_test", "normal_test", "median_test",
-      "savage_test", "taha_test", "klotz_test", "mood_test", "ansari_test",
-      "fligner_test", "conover_test", "logrank_test", "quade_test",
-      "friedman_test", "wilcoxsign_test", "spearman_test", "fisyat_test",
-      "quadrant_test", "koziol_test")
 
 formula2data <- function(formula, data, subset, weights = NULL, ...) {
     no_weights <- is.null(weights)
