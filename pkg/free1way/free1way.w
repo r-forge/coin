@@ -134,6 +134,9 @@ urlcolor={linkcolor}%
 \label{ch:model}
 \pagenumbering{arabic}
 
+<TH>Use $G \in \{1, \dots, K\}$ for groups, $B \in \{1, \dots, J}$ for
+blocks (avoid strata terminology)</TH>
+
 We consider $K$ treatment groups $\rT \in \{1, \dots, K\}, K \ge 2$ for an
 at least ordered outcome $Y \in \samY$ observed in
 stratum $S \in \{1, \dots, B\}$ out of $B \ge 1$ blocks with conditional
@@ -1507,7 +1510,7 @@ library("coin")
 kruskal_test(u ~ w, distribution = approximate(100000))
 @@
 
-<TH>What about ordered alternatives? Jonckheere? Cochran-Armitage?</TH>
+<TH>Ordered alternatives: Use contrast based tests in multcomp</TH>
 
 \chapter{Distribution-free Tests in Stratified $K$-sample Oneway Layouts}
 
@@ -1516,9 +1519,9 @@ kruskal_test(u ~ w, distribution = approximate(100000))
 We provide a new test procedure in a generic \code{free1way.test}, featuring
 a method for tables (the main workhorse) and additional user interfaces. 
 
-<TH>Maybe avoid the \code{.test} and use \code{free1way}? This would better
+<TH>Maybe avoid the \code{.test} and use \code{free1way}/\code{freeoneway}? This would better
 reflect the richer return values (it is not just an \code{htest}
-object)?</TH>
+object). Yes.</TH>
 
 @d link2fun
 @{
@@ -1610,9 +1613,9 @@ The \code{formula} method allows formulae \code{outcome ~ treatment +
 strata(s)} for model specification
 
 <TH>strata is only defined in \pkg{survival}, import? or copy friedman.test
-with y ~ groups | block? </TH>
+with y ~ groups | block. yes </TH>
 <TH>something like cbind(time, event) ~ treatment + strata(s)? Or
-\code{Surv}?</TH>
+\code{Surv}. Doesn't matter as survival can be loaded by users</TH>
 
 @d free1way formula
 @{
@@ -1842,7 +1845,10 @@ The \code{summary} method performs population Wald inference unless the
 
 <TH>Just using \code{free1way} (and not \code{free1way.test}) would maybe
 make the rather flexible model interrogation via \code{summary},
-\code{confint} etc seem more natural?</TH>
+\code{confint} etc seem more natural. Yes.</TH>
+
+<TH>add \code{global = TRUE/FALSE} to \code{summary}. TRUE returns htest
+object and FALSE coefMat? Or use test?</TH>
 
 @d free1way summary
 @{
@@ -2446,6 +2452,8 @@ distributions), a vector of allocation ratios (\code{alloc_ratio = 2} means
 control:treatment = 1:2) and the sample size ratios between strata.
 
 The treatment effects are contained in $K - 1$ vector \code{delta}:
+
+<TH>name is OK as there is also \code{power.anova.test}</TH>
 
 @d power call
 @{
