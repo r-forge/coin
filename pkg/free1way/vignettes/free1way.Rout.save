@@ -1093,12 +1093,12 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 +     data = GBSG2, rho = 1)$chisq
 [1] 7.593803
 
-> (ft <- with(GBSG2, free1way(y = time, x = horTh, z = tgrade, 
-+     event = as.logical(cens), link = "logit")))
+> (ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | 
++     tgrade, link = "logit")))
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
-data:  time by horTh (no, yes) 
+data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
 Perm Z = 3.0559, p-value = 0.002244
 alternative hypothesis: true log-odds ratio is not equal to 0
@@ -1107,7 +1107,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 > summary(ft)
 
 Call:
-free1way.numeric(y = time, x = horTh, z = tgrade, event = as.logical(cens), 
+free1way.formula(formula = Surv(time, cens) ~ horTh | tgrade, 
     link = "logit")
 
 Coefficients:
@@ -1118,7 +1118,7 @@ horThyes        0.52798    0.17282 3.05500  0.0023
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
-data:  time by horTh (no, yes) 
+data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
 Rao chi-squared = 9.4064, df = 1, p-value = 0.002162
 alternative hypothesis: true log-odds ratio is not equal to 0
@@ -1128,7 +1128,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
-data:  time by horTh (no, yes) 
+data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
 logLR chi-squared = 9.4816, df = 1, p-value = 0.002075
 alternative hypothesis: true log-odds ratio is not equal to 0
@@ -1138,7 +1138,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
-data:  time by horTh (no, yes) 
+data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
 Wald chi-squared = 9.333, df = 1, p-value = 0.002251
 alternative hypothesis: true log-odds ratio is not equal to 0
@@ -1148,7 +1148,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
-data:  time by horTh (no, yes) 
+data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
 Perm Z = 3.0559, p-value = 0.002244
 alternative hypothesis: true log-odds ratio is not equal to 0
@@ -1473,4 +1473,4 @@ NOTE: 'n' is sample size in control group of first stratum
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 33.562   0.227  33.819 
+ 32.001   0.187  32.225 

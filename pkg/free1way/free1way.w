@@ -1544,7 +1544,7 @@ free1way <- function(y, ...)
     UseMethod("free1way")
 
 free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), 
-                                mu = 0, B = 0, ...)
+                           mu = 0, B = 0, ...)
 {
 
     cl <- match.call()
@@ -1660,12 +1660,12 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
         if (nlevels(st) < 2L)
             stop("at least two strata must be present")
         vn <- c(vn, names(mf)[3L])
-        RVAL <- free1way(y = y, x = g, z = st, event = event, weights = w,
+        RVAL <- free1way(y = y, groups = g, blocks = st, event = event, weights = w,
                          varnames = vn, ...)
         DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[3L]))
     } else {
         ## Call the corresponding method
-        RVAL <- free1way(y = y, x = g, event = event, weights = w, varnames = vn, ...)
+        RVAL <- free1way(y = y, groups = g, event = event, weights = w, varnames = vn, ...)
     }
     RVAL$data.name <- DNAME
     RVAL$call <- cl
@@ -1678,23 +1678,32 @@ observed outcome values, or (for very large sample sizes), for binned
 outcomes. The \code{event} argument is a logical where \code{TRUE} is
 interpreted as an event and \code{FALSE} as right-censored observation
 
-<TH>add event to formula interface</TH>
 <TH>maybe use y, groups, blocks interface as friedman.test?</TH>
+
+@d variable names and checks
+@{
+cl <- match.call()
+stopifnot(is.factor(groups))
+stopifnot(nlevels(groups) > 1L)
+DNAME <- paste(varnames[1], "by", varnames[2])
+DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), ")"))
+
+if (!is.null(blocks)) {
+    stopifnot(is.factor(blocks))
+    stopifnot(nlevels(blocks) > 1L)
+    DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])
+}
+varnames <- varnames[varnames != "NULL"]
+@}
 
 @d free1way numeric
 @{
-free1way.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, nbins = 0, 
+free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, 
     varnames = c(deparse1(substitute(y)), 
-                 deparse1(substitute(x)), 
-                 deparse1(substitute(z))), ...) {
+                 deparse1(substitute(groups)), 
+                 deparse1(substitute(blocks))), ...) {
 
-    cl <- match.call()
-    DNAME <- paste(varnames[1], "by", varnames[2])
-    DNAME <- paste(DNAME, paste0("(", paste0(levels(x), collapse = ", "), ")"))
-
-    if (!is.null(z))
-        DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])
-    varnames <- varnames[varnames != "NULL"]
+    @<variable names and checks@>
 
     if (!is.null(event)) {
         stopifnot(is.logical(event))
@@ -1711,7 +1720,8 @@ free1way.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, nbins
         breaks <- c(-Inf, uy, Inf)
     }
     r <- cut(y, breaks = breaks, ordered_result = TRUE)[, drop = TRUE]
-    RVAL <- free1way(y = r, x = x, z = z, event = event, weights = weights, 
+    RVAL <- free1way(y = r, groups = groups, blocks = blocks, 
+                     event = event, weights = weights, 
                      varnames = varnames, ...)
     RVAL$data.name <- DNAME
     RVAL$call <- cl
@@ -1724,26 +1734,19 @@ call to \code{xtabs}:
 
 @d free1way factor
 @{
-free1way.factor <- function(y, x, z = NULL, event = NULL, weights = NULL, 
+free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NULL, 
     varnames = c(deparse1(substitute(y)), 
-                 deparse1(substitute(x)), 
-                 deparse1(substitute(z))), ...) {
+                 deparse1(substitute(groups)), 
+                 deparse1(substitute(blocks))), ...) {
 
-    cl <- match.call()
-    DNAME <- paste(varnames[1], "by", varnames[2])
-    DNAME <- paste(DNAME, paste0("(", paste0(levels(x), collapse = ", "), ")"))
+    @<variable names and checks@>
 
-    if (!is.null(z))
-        DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])
-    varnames <- varnames[varnames != "NULL"]
-
-    stopifnot(is.factor(x))
     if (nlevels(y) > 2L)
         stopifnot(is.ordered(y))
-    d <- data.frame(w = 1, y = y, x = x)
+    d <- data.frame(w = 1, y = y, groups = groups)
     if (!is.null(weights)) d$w <- weights
-    if (is.null(z)) z <- gl(1, nrow(d))
-    d$z <- z 
+    if (is.null(blocks)) blocks <- gl(1, nrow(d))
+    d$blocks <- blocks 
     if (!is.null(event)) {
         stopifnot(is.logical(event))
         d$event <- event
@@ -2156,8 +2159,8 @@ Wilcoxon against proportional odds
 
 <<Peto>>=
 survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 1)$chisq
-(ft <- with(GBSG2, free1way(y = time, x = horTh, z = tgrade, 
-                            event = as.logical(cens), link = "logit")))
+(ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | tgrade, 
+                            link = "logit")))
 summary(ft)
 summary(ft, test = "Rao")
 summary(ft, test = "LRT")
@@ -2213,7 +2216,7 @@ $\beta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
     grp <- grp[rep(1:2, c(length(x), length(y)))]
     args <- conf.args
     args$y <- res
-    args$x <- grp
+    args$groups <- grp
     args$border <- args$col <- args$type <- NULL
     f1w <- do.call("free1way", args)
 

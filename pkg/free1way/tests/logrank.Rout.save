@@ -62,7 +62,7 @@ R.Surv.time..cens...as.R.ordered...TRUE.(0.655,0.656]
                                                    w2 
                                            0.01655364 
 > 
-> ft <- with(d, free1way(y = time, x = w, 
+> ft <- with(d, free1way(y = time, groups = w, 
 +                        event = cens, 
 +                        link = "cloglog"))
 > logLik(ft)
@@ -159,8 +159,7 @@ log-hazard ratio for horThyes
                    -0.3640099 
 
 > 
-> ft <- with(GBSG2, free1way(y = time, x = horTh, 
-+                            event = cens == 1, 
+> ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh,
 +                            link = "cloglog"))
 > coef(ft)
 horThyes 
@@ -173,7 +172,7 @@ horThyes 0.01563388
 
 	2-sample Savage test against proportional hazards alternatives
 
-data:  time by horTh (no, yes)
+data:  Surv(time, cens) by horTh (no, yes)
 Perm Z = 2.9725, p-value = 0.002954
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
@@ -199,8 +198,7 @@ horThyes 0.01575409
 > 
 > # perm_test(m)
 > 
-> ft <- with(GBSG2, free1way(y = time, x = horTh, z = tgrade, 
-+                            event = cens == 1, 
+> ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | tgrade, 
 +                            link = "cloglog"))
 > coef(ft)
  horThyes 
@@ -213,7 +211,7 @@ horThyes 0.01604782
 
 	2-sample Savage test against proportional hazards alternatives
 
-data:  time by horTh (no, yes) 
+data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
 Perm Z = 3.0938, p-value = 0.001976
 alternative hypothesis: true log-hazard ratio is not equal to 0
@@ -222,4 +220,4 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-  2.662   0.083   2.740 
+  2.674   0.068   2.739 

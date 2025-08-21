@@ -23,14 +23,14 @@ hazard ratio alternatives along with corresponding confidence intervals.
 \usage{
 free1way(y, ...)
 \S3method{free1way}{formula}(formula, data, weights, subset, na.action = na.pass, ...)
-\S3method{free1way}{numeric}(y, x, z = NULL, event = NULL, weights = NULL, nbins = 0, 
+\S3method{free1way}{numeric}(y, groups, blocks = NULL, event = NULL, weights = NULL, nbins = 0, 
     varnames = c(deparse1(substitute(y)), 
-                 deparse1(substitute(x)), 
-                 deparse1(substitute(z))), ...)
-\S3method{free1way}{factor}(y, x, z = NULL, event = NULL, weights = NULL, 
+                 deparse1(substitute(groups)), 
+                 deparse1(substitute(blocks))), ...)
+\S3method{free1way}{factor}(y, groups, blocks = NULL, event = NULL, weights = NULL, 
     varnames = c(deparse1(substitute(y)), 
-                 deparse1(substitute(x)), 
-                 deparse1(substitute(z))), ...)
+                 deparse1(substitute(groups)), 
+                 deparse1(substitute(blocks))), ...)
 \S3method{free1way}{table}(y, link = c("logit", "probit", "cloglog", "loglog"), 
     mu = 0, B = 0, ...)
 \S3method{summary}{free1way}(object, test, alternative = c("two.sided", "less", "greater"), 
@@ -52,8 +52,8 @@ free1way(y, ...)
     cut the observations at breaks given by the uniquely observed values (\code{nbins = 0}). In
     the presence of right-censoring, uniquely observed event times define
     the breaks.}
-  \item{x}{a grouping factor.}
-  \item{z}{a stratification factor, optional.}
+  \item{groups}{a grouping factor.}
+  \item{blocks}{a stratification factor, optional.}
   \item{event}{a logical vector representing events (\code{TRUE}) and
     independently right-censored observations (\code{FALSE}), optional.}
   \item{formula}{a formula of the form \code{y ~ x + strata(z)} where \code{y} gives 

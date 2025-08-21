@@ -36,7 +36,7 @@ Waiting for profiling to be done...
        xB     2.5 %    97.5 % 
 -1.862398 -2.165825 -1.558914 
 > 
-> ft <- free1way(y = y, x = x, B = 10000)
+> ft <- free1way(y = y, groups = x, B = 10000)
 > coef(ft)
        xB 
 -1.862412 
@@ -99,7 +99,7 @@ Waiting for profiling to be done...
        xB     2.5 %    97.5 % 
 1.0910314 0.9209405 1.2604888 
 > 
-> ft <- free1way(y = y, x = x, link = "loglog", B = 10000)
+> ft <- free1way(y = y, groups = x, link = "loglog", B = 10000)
 > coef(ft)
       xB 
 1.091031 
@@ -152,4 +152,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  0.488   0.047   0.531 
+  0.529   0.021   0.544 
