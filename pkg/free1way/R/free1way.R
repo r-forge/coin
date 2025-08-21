@@ -698,8 +698,8 @@ model.matrix.free1way <- function (object, ...)
 # free1way print
 
 .print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
-                           alternative = c("two.sided", "less", "greater"), 
-                           tol = .Machine$double.eps, ...)
+                            alternative = c("two.sided", "less", "greater"), 
+                            tol = .Machine$double.eps, ...)
 {
 
     test <- match.arg(test)
@@ -1201,10 +1201,10 @@ r2dsim <- function(n, r, c, delta = 0,
     
 
     p0 <- cumsum(prob)
-    h0 <- .q(link, p0)
+    h0 <- .q(link, p0[-length(p0)])
 
-    h1 <- h0 - matrix(delta, nrow = length(prob), ncol = K - 1, byrow = TRUE)
-    p1 <- .p(link, h1)
+    h1 <- h0 - matrix(delta, nrow = length(prob) - 1L, ncol = K - 1, byrow = TRUE)
+    p1 <- rbind(.p(link, h1), 1)
     p <- cbind(p0, p1)
     ret <- vector(mode = "list", length = n)
 
