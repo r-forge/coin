@@ -19,9 +19,9 @@ residuals(m)
 
 (cf <- coef(as.mlt(m)))
 
-ft <- with(d, free1way.test(y = time, x = w, 
-                         event = cens, 
-                         link = "cloglog"))
+ft <- with(d, free1way(y = time, x = w, 
+                       event = cens, 
+                       link = "cloglog"))
 logLik(ft)
 logLik(m)
 
@@ -48,9 +48,9 @@ vcov(m)
 
 perm_test(m)
 
-ft <- with(GBSG2, free1way.test(y = time, x = horTh, 
-                         event = cens == 1, 
-                         link = "cloglog"))
+ft <- with(GBSG2, free1way(y = time, x = horTh, 
+                           event = cens == 1, 
+                           link = "cloglog"))
 coef(ft)
 vcov(ft)
 
@@ -64,9 +64,9 @@ vcov(m)
 
 # perm_test(m)
 
-ft <- with(GBSG2, free1way.test(y = time, x = horTh, z = tgrade, 
-                         event = cens == 1, 
-                         link = "cloglog"))
+ft <- with(GBSG2, free1way(y = time, x = horTh, z = tgrade, 
+                           event = cens == 1, 
+                           link = "cloglog"))
 coef(ft)
 vcov(ft)
 

@@ -1,9 +1,9 @@
-\name{free1way.test}
-\alias{free1way.test}
-\alias{free1way.test.formula}
-\alias{free1way.test.table}
-\alias{free1way.test.numeric}
-\alias{free1way.test.factor}
+\name{free1way}
+\alias{free1way}
+\alias{free1way.formula}
+\alias{free1way.table}
+\alias{free1way.numeric}
+\alias{free1way.factor}
 \alias{print.free1way}
 \alias{coef.free1way}
 \alias{vcov.free1way}
@@ -21,17 +21,17 @@ semiparametrically efficient score tests against Lehmann, odds ratio, or
 hazard ratio alternatives along with corresponding confidence intervals.
 }
 \usage{
-free1way.test(y, ...)
-\S3method{free1way.test}{formula}(formula, data, weights, subset, na.action = na.pass, ...)
-\S3method{free1way.test}{numeric}(y, x, z = NULL, event = NULL, weights = NULL, nbins = 0, 
+free1way(y, ...)
+\S3method{free1way}{formula}(formula, data, weights, subset, na.action = na.pass, ...)
+\S3method{free1way}{numeric}(y, x, z = NULL, event = NULL, weights = NULL, nbins = 0, 
     varnames = c(deparse1(substitute(y)), 
                  deparse1(substitute(x)), 
                  deparse1(substitute(z))), ...)
-\S3method{free1way.test}{factor}(y, x, z = NULL, event = NULL, weights = NULL, 
+\S3method{free1way}{factor}(y, x, z = NULL, event = NULL, weights = NULL, 
     varnames = c(deparse1(substitute(y)), 
                  deparse1(substitute(x)), 
                  deparse1(substitute(z))), ...)
-\S3method{free1way.test}{table}(y, link = c("logit", "probit", "cloglog", "loglog"), 
+\S3method{free1way}{table}(y, link = c("logit", "probit", "cloglog", "loglog"), 
     mu = 0, B = 0, ...)
 \S3method{summary}{free1way}(object, test, alternative = c("two.sided", "less", "greater"), 
     tol = .Machine$double.eps, ...)
@@ -82,7 +82,7 @@ free1way.test(y, ...)
     permutation test, \code{B > 0} uses \code{B} Monte Carlo replications to
     approximate the permutation distribution.}
   \item{object}{an object of class \code{free1way} as returned by
-    \code{free1way.test}.}
+    \code{free1way}.}
   \item{test}{a character vector defining the global test procedure for all
     parameters: \code{"Permutation"} performs a conditional permutation score test
     under the randomisation model, \code{"Wald"} performs a Wald test,
@@ -172,7 +172,7 @@ An object of class \code{free1way} with corresponding \code{logLik},
 
 ### Friedman test
 library("survival")
-free1way.test(extra ~ group + strata(ID), data = sleep)
+free1way(extra ~ group + strata(ID), data = sleep)
 
 }
 \keyword{htest}

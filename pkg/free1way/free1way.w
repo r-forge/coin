@@ -115,7 +115,8 @@ urlcolor={linkcolor}%
 \newcommand{\mub}{\boldsymbol{\mu}}
 \newcommand{\Sigmab}{\boldsymbol{\Sigma}}
 \def \thetavec        {\text{\boldmath$\theta$}}
-\newcommand{\rT}{T}
+\newcommand{\rT}{G}
+\newcommand{\rS}{S}
 \newcommand{\rt}{t}
 
 
@@ -134,14 +135,11 @@ urlcolor={linkcolor}%
 \label{ch:model}
 \pagenumbering{arabic}
 
-<TH>Use $G \in \{1, \dots, K\}$ for groups, $B \in \{1, \dots, J\}$ for
-blocks (avoid strata terminology)</TH>
-
 We consider $K$ treatment groups $\rT \in \{1, \dots, K\}, K \ge 2$ for an
 at least ordered outcome $Y \in \samY$ observed in
-stratum $S \in \{1, \dots, B\}$ out of $B \ge 1$ blocks with conditional
+stratum $\rS \in \{1, \dots, B\}$ out of $B \ge 1$ blocks with conditional
 cumulative distribution function (cdf)
-$F_Y(y \mid S = b, \rT = k) = \Prob(Y \le y \mid S = b, \rT = k)$. Detecting
+$F_Y(y \mid \rS = b, \rT = k) = \Prob(Y \le y \mid \rS = b, \rT = k)$. Detecting
 and describing differential distributions arising from different treatments
 is our main objetive. We refer to the first treatment $\rT = 1$ as
 ``control''.
@@ -153,7 +151,7 @@ the conditional distribution under treatment $k$ as a function of the
 conditional distribution under control and a scalar parameter
 $\beta_k$:
 \begin{eqnarray*}
-F(y \mid S = b, \rT = k) = g(F(y \mid S = b, \rT = 1), \beta_k).
+F(y \mid \rS = b, \rT = k) = g(F(y \mid \rS = b, \rT = 1), \beta_k).
 \end{eqnarray*}
 The model is assumed to hold for all blocks $b = 1,
 \dots, B$, treatments $k = 2, \dots, K$, and outcome values $y \in \samY$ based on parameters
@@ -171,7 +169,7 @@ Instead of directly working with $g$, we parameterise the model in terms of
 some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
 and corresponding derivative $f^\prime$. The location model 
 \begin{eqnarray} \label{model}
-F_Y(y \mid S = b, \rT = k) = F\left(F^{-1}\left(F_Y(y \mid S = b, \rT = 1)\right) - \beta_k\right), \quad k = 2, \dots, K
+F_Y(y \mid \rS = b, \rT = k) = F\left(F^{-1}\left(F_Y(y \mid \rS = b, \rT = 1)\right) - \beta_k\right), \quad k = 2, \dots, K
 \end{eqnarray}
 describes different distributions by means of shift parameter on a latent
 scale defined by $F$. The negative shift term ensures that positive values of $\beta_k$ correspond
@@ -204,10 +202,11 @@ For an ordered categorical outcome $Y$ from sample space $\samY = \{y_1 < y_2 < 
 y_C\}$, we parameterise the model in terms of intercept ($\vartheta_\cdot$) and
 shift ($\beta_\cdot$) parameters
 \begin{eqnarray*}
-F_Y(y_c \mid S = b, \rT = k) = F(\vartheta_{c,b} - \beta_k), \quad c = 1, \dots,
+F_Y(y_c \mid \rS = b, \rT = k) = F(\vartheta_{c,b} - \beta_k), \quad c = 1, \dots,
 C,
 \end{eqnarray*}
-that is we replace the transformed control outcome $F^{-1}\left(F_Y(y_c \mid S = b, \rT = 1)\right) =
+that is we replace the transformed control outcome $F^{-1}\left(F_Y(y_c \mid
+\rS = b, \rT = 1)\right) =
 \vartheta_{c,b}$ with a corresponding intercept parameter.
 These $C - 1$ intercept parameters are block-specific and monotone increasing
 $\vartheta_{0,b} = -\infty < \vartheta_{1,b} < \cdots < \vartheta_{C,b} = \infty$
@@ -233,7 +232,7 @@ the intercept parameters can be ensured by box constraints for $\thetavec$.
 For the $i$th observation $(y_i = y_c, s_i = b, \rt_i = k)$ from block $b$
 under treatment $k$, the log-likelihood contribution is
 \begin{eqnarray*}
-\log(\Prob(y_{c - 1} < Y \le y_c \mid S = b, \rT = k)) = \log(F(\vartheta_{c,b} - \beta_k) - F(\vartheta_{c - 1,b} - \beta_k)).
+\log(\Prob(y_{c - 1} < Y \le y_c \mid \rS = b, \rT = k)) = \log(F(\vartheta_{c,b} - \beta_k) - F(\vartheta_{c - 1,b} - \beta_k)).
 \end{eqnarray*}
 
 For an absolutely continuous outcome $Y \in \R$, we define $y_c := y_{(c)}$,
@@ -243,7 +242,7 @@ above is then the empirical or nonparametric log-likelihood.
 If observations were independently right-censored, the contribution of the
 event $Y > \tilde{y}$ to the log-likelihood is
 \begin{eqnarray*}
-\log(\Prob(Y > \tilde{y} \mid S = b, \rT = k)) = \log(1 - F(\vartheta_{c - 1,b} - \beta_k))
+\log(\Prob(Y > \tilde{y} \mid \rS = b, \rT = k)) = \log(1 - F(\vartheta_{c - 1,b} - \beta_k))
 \end{eqnarray*}
 where $y_{c - 1} = \max \{y \in \samY \mid y \le \tilde{y}\}$, that is,
 observations right-censored between $y_{c - 1}$ and $y_c$ correspond to the
@@ -295,7 +294,7 @@ $= \thetavec$ (assuming only a single block) with data from a two-way $C
 From $\thetavec$, we first extract the shift parameters $\beta_\cdot$ and
 then the intercept parameters $\vartheta_\cdot$, compute the differences
 $\vartheta_{c,1} - \beta_k$ and evaluate the probabilities
-\code{prb} $ = \Prob(y_{c - 1} < Y \le y_c \mid S = 1, \rT = k)$ for all
+\code{prb} $ = \Prob(y_{c - 1} < Y \le y_c \mid \rS = 1, \rT = k)$ for all
 groups:
 
 @d parm to prob
@@ -316,7 +315,7 @@ if (rightcensored) {
 @}
 
 If the table \code{x} represents right-censored observations, we compute
-\code{prb} $ = 1 - \Prob(Y \le y_c \mid S = 1, \rT = k)$.
+\code{prb} $ = 1 - \Prob(Y \le y_c \mid \rS = 1, \rT = k)$.
 
 With default null values $\mu_k = 0, k = 2, \dots, K$, we define the
 negative log-likelihood function as the weighted (by number of observations) sum of
@@ -512,7 +511,7 @@ represent this matrix:
     if (length(Adiag) > 1L) {
         if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))
                 stop(gettextf("%s needs package 'Matrix' correctly installed",
-                              "free1way.test"),
+                              "free1way"),
                      domain = NA)
         A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), 
                                 symmetric = TRUE)
@@ -760,7 +759,7 @@ shift- and intercept parameters first:
         }
         sAH <- try(solve(H$A, H$X))
         if (inherits(sAH, "try-error"))
-            stop("Error computing the Hessian in free1way.test")
+            stop("Error computing the Hessian in free1way")
         ret <- ret + (H$Z - crossprod(H$X, sAH))
     }
     ret
@@ -1090,7 +1089,7 @@ while(maxit < 10001) {
    }
 }
 if (ret$convergence)
-    stop(paste("Unsuccessful optimisation in free1way.test", ret$message))
+    stop(paste("Unsuccessful optimisation in free1way", ret$message))
 @}
 
 The profile negative log-likelihood is then
@@ -1514,14 +1513,10 @@ kruskal_test(u ~ w, distribution = approximate(100000))
 
 \chapter{Distribution-free Tests in Stratified $K$-sample Oneway Layouts}
 
-\section{\code{free1way.test}}
+\section{\code{free1way}}
 
-We provide a new test procedure in a generic \code{free1way.test}, featuring
+We provide a new test procedure in a generic \code{free1way}, featuring
 a method for tables (the main workhorse) and additional user interfaces. 
-
-<TH>Maybe avoid the \code{.test} and use \code{free1way}/\code{freeoneway}? This would better
-reflect the richer return values (it is not just an \code{htest}
-object). Yes.</TH>
 
 @d link2fun
 @{
@@ -1545,10 +1540,10 @@ results (this is relevant for the one-sided case).
 
 @d free1way
 @{
-free1way.test <- function(y, ...)
-    UseMethod("free1way.test")
+free1way <- function(y, ...)
+    UseMethod("free1way")
 
-free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), 
+free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), 
                                 mu = 0, B = 0, ...)
 {
 
@@ -1619,7 +1614,7 @@ with y ~ groups | block. yes </TH>
 
 @d free1way formula
 @{
-free1way.test.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
+free1way.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
 {
 
     cl <- match.call()
@@ -1660,12 +1655,12 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
         if (nlevels(st) < 2L)
             stop("at least two strata must be present")
         vn <- c(vn, names(mf)[stratum])
-        RVAL <- free1way.test(y = y, x = g, z = st, weights = w, 
-                              varnames = vn, ...)
+        RVAL <- free1way(y = y, x = g, z = st, weights = w, 
+                         varnames = vn, ...)
         DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[stratum]))
     } else {
         ## Call the corresponding method
-        RVAL <- free1way.test(y = y, x = g, weights = w, varnames = vn, ...)
+        RVAL <- free1way(y = y, x = g, weights = w, varnames = vn, ...)
     }
     RVAL$data.name <- DNAME
     RVAL$call <- cl
@@ -1683,7 +1678,7 @@ interpreted as an event and \code{FALSE} as right-censored observation
 
 @d free1way numeric
 @{
-free1way.test.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, nbins = 0, 
+free1way.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, nbins = 0, 
     varnames = c(deparse1(substitute(y)), 
                  deparse1(substitute(x)), 
                  deparse1(substitute(z))), ...) {
@@ -1711,8 +1706,8 @@ free1way.test.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, 
         breaks <- c(-Inf, uy, Inf)
     }
     r <- cut(y, breaks = breaks, ordered_result = TRUE)[, drop = TRUE]
-    RVAL <- free1way.test(y = r, x = x, z = z, event = event, weights = weights, 
-                          varnames = varnames, ...)
+    RVAL <- free1way(y = r, x = x, z = z, event = event, weights = weights, 
+                     varnames = varnames, ...)
     RVAL$data.name <- DNAME
     RVAL$call <- cl
     RVAL
@@ -1724,7 +1719,7 @@ call to \code{xtabs}:
 
 @d free1way factor
 @{
-free1way.test.factor <- function(y, x, z = NULL, event = NULL, weights = NULL, 
+free1way.factor <- function(y, x, z = NULL, event = NULL, weights = NULL, 
     varnames = c(deparse1(substitute(y)), 
                  deparse1(substitute(x)), 
                  deparse1(substitute(z))), ...) {
@@ -1752,7 +1747,7 @@ free1way.test.factor <- function(y, x, z = NULL, event = NULL, weights = NULL,
     dn <- dimnames(tab)
     names(dn)[seq_along(varnames)] <- varnames
     dimnames(tab) <- dn
-    RVAL <- free1way.test(tab, ...)
+    RVAL <- free1way(tab, ...)
     RVAL$data.name <- DNAME
     RVAL$call <- cl
     RVAL
@@ -1843,7 +1838,7 @@ print.free1way <- function(x, ...) {
 The \code{summary} method performs population Wald inference unless the
 \code{test} argument is specified:
 
-<TH>Just using \code{free1way} (and not \code{free1way.test}) would maybe
+<TH>Just using \code{free1way} (and not \code{free1way}) would maybe
 make the rather flexible model interrogation via \code{summary},
 \code{confint} etc seem more natural. Yes.</TH>
 
@@ -1961,7 +1956,7 @@ report some tests and confidence intervals:
 <<free>>=
 x
 ### asymptotic permutation test
-(ft <- free1way.test(x))
+(ft <- free1way(x))
 coef(ft)
 vcov(ft)
 ### Wald per parameter
@@ -1998,7 +1993,7 @@ w <- gl(2, N)
 y <- rlogis(length(w), location = c(0, 1)[w])
 
 #### link = logit is default
-ft <- free1way.test(y ~ w)
+ft <- free1way(y ~ w)
 
 ### Wald 
 summary(ft)
@@ -2056,12 +2051,12 @@ confint(ft, test = "Wald")
 <<mh>>=
 example(mantelhaen.test, echo = FALSE)
 mantelhaen.test(UCBAdmissions, correct = FALSE)
-ft <- free1way.test(UCBAdmissions)
+ft <- free1way(UCBAdmissions)
 summary(ft, test = "Wald")
 exp(coef(ft))
 exp(confint(ft, test = "Wald"))
 exp(sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
-       confint(free1way.test(UCBAdmissions[,,dept]), test = "Permutation")))
+       confint(free1way(UCBAdmissions[,,dept]), test = "Permutation")))
 sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
        fisher.test(UCBAdmissions[,,dept], conf.int = TRUE)$conf.int)
 @@
@@ -2070,7 +2065,7 @@ sapply(dimnames(UCBAdmissions)[[3L]], function(dept)
 
 <<pt>>=
 prop.test(UCBAdmissions[,,1], correct = FALSE)
-summary(free1way.test(UCBAdmissions[,,1]), test = "Rao")
+summary(free1way(UCBAdmissions[,,1]), test = "Rao")
 @@
 
 
@@ -2079,7 +2074,7 @@ summary(free1way.test(UCBAdmissions[,,1]), test = "Rao")
 <<kw>>=
 example(kruskal.test, echo = FALSE)
 kruskal.test(x ~ g)
-free1way.test(x ~ g)
+free1way(x ~ g)
 @@
 
 \section{Savage Test}
@@ -2095,8 +2090,7 @@ nd$ev <- TRUE
 survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 0)$chisq
 cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
 
-
-(ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "cloglog"))
+(ft <- free1way(tm ~ g + strata(s), data = nd, link = "cloglog"))
 coef(cm)
 coef(ft)
 vcov(cm)
@@ -2119,7 +2113,7 @@ Wilcoxon against proportional odds
 
 <<Peto>>=
 survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 1)$chisq
-(ft <- free1way.test(tm ~ g + strata(s), data = nd, link = "logit"))
+(ft <- free1way(tm ~ g + strata(s), data = nd, link = "logit"))
 summary(ft)
 summary(ft, test = "Rao")
 summary(ft, test = "LRT")
@@ -2140,9 +2134,9 @@ survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 0)$chisq
 cm <- coxph(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2)
 
 ### no formula interface yet
-ft <- with(GBSG2, free1way.test(y = time, x = horTh, z = tgrade, 
-                         event = cens == 1, 
-                         link = "cloglog"))
+ft <- with(GBSG2, free1way(y = time, x = horTh, z = tgrade, 
+                           event = cens == 1, 
+                           link = "cloglog"))
 coef(cm)
 coef(ft)
 vcov(cm)
@@ -2157,17 +2151,17 @@ summary(ft, test = "Wald")
 summary(ft, test = "Permutation")
 
 ### test with many small strata 
-(ft <- with(GBSG2, free1way.test(y = time, x = horTh, z = pnodes, 
-                         event = cens == 1, 
-                         link = "cloglog")))
+(ft <- with(GBSG2, free1way(y = time, x = horTh, z = pnodes, 
+                            event = cens == 1, 
+                            link = "cloglog")))
 @@
 
 Wilcoxon against proportional odds
 
 <<Peto>>=
 survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 1)$chisq
-(ft <- with(GBSG2, free1way.test(y = time, x = horTh, z = tgrade, 
-                                 event = as.logical(cens), link = "logit")))
+(ft <- with(GBSG2, free1way(y = time, x = horTh, z = tgrade, 
+                            event = as.logical(cens), link = "logit")))
 summary(ft)
 summary(ft, test = "Rao")
 summary(ft, test = "LRT")
@@ -2182,7 +2176,7 @@ Normal scores test against a generalised Cohen's $d$:
 
 <<normal>>=
 nd$y <- rnorm(nrow(nd))
-free1way.test(y ~ g + strata(s), data = nd, link = "probit")
+free1way(y ~ g + strata(s), data = nd, link = "probit")
 independence_test(y ~ g | s, data = nd, ytrafo = function(...)
                   trafo(..., numeric_trafo = normal_trafo, block = nd$s), teststat = "quad")
 @@
@@ -2197,7 +2191,7 @@ rt <- expand.grid(str = gl(22, 1),
                   trt = gl(3, 1, labels = c("Round Out", "Narrow Angle", "Wide Angle")))
 rt$tm <- c(RoundingTimes)
 friedman.test(RoundingTimes)
-(ft <- free1way.test(tm ~ trt + strata(str), data = rt))
+(ft <- free1way(tm ~ trt + strata(str), data = rt))
 summary(ft)
 @@
 
@@ -2225,7 +2219,7 @@ $\beta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
     args$y <- res
     args$x <- grp
     args$border <- args$col <- args$type <- NULL
-    f1w <- do.call("free1way.test", args)
+    f1w <- do.call("free1way", args)
 
     ci <- confint(f1w, level = conf.level, type = args$type)
     lwr <- .p(f1w$link, .q(f1w$link, prb) - ci[1,1])
@@ -2453,8 +2447,6 @@ control:treatment = 1:2) and the sample size ratios between strata.
 
 The treatment effects are contained in $K - 1$ vector \code{delta}:
 
-<TH>name is OK as there is also \code{power.anova.test}</TH>
-
 @d power call
 @{
 power.free1way.test(n = n, prob = prob, alloc_ratio = alloc_ratio, 
@@ -2615,7 +2607,7 @@ pw <- numeric(length(x))
 cf <- matrix(0, nrow = length(x), ncol = length(delta))
 colnames(cf) <- names(delta)
 for (i in seq_along(x)) {
-    ft <- free1way.test(x[[i]])
+    ft <- free1way(x[[i]])
     cf[i,] <- coef(ft)
     pw[i] <- summary(ft, test = "Permutation")$p.value
 }
@@ -2647,7 +2639,7 @@ pw <- numeric(length(x1))
 cf <- matrix(0, nrow = length(x1), ncol = length(delta))
 colnames(cf) <- names(delta)
 for (i in seq_along(x)) {
-    ft <- free1way.test(stab(x1[[i]], x2[[i]], x3[[i]]))
+    ft <- free1way(stab(x1[[i]], x2[[i]], x3[[i]]))
     cf[i,] <- coef(ft)
     pw[i] <- summary(ft, test = "Permutation")$p.value
 }
@@ -2680,10 +2672,10 @@ rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "logl
 nd <- data.frame(w = gl(3, 150))
 (logOR <- c(0, log(1.5), log(2)))
 nd$u <- rfree1way(nrow(nd), delta = logOR[nd$w])
-coef(ft <- free1way.test(u ~ w, data = nd))
+coef(ft <- free1way(u ~ w, data = nd))
 logLik(ft)
 nd$y <- qchisq(nd$u, df = 3)
-coef(ft <- free1way.test(y ~ w, data = nd))
+coef(ft <- free1way(y ~ w, data = nd))
 logLik(ft)
 @@
 

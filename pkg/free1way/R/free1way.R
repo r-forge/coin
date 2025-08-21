@@ -269,7 +269,7 @@
         if (length(Adiag) > 1L) {
             if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))
                     stop(gettextf("%s needs package 'Matrix' correctly installed",
-                                  "free1way.test"),
+                                  "free1way"),
                          domain = NA)
             A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), 
                                     symmetric = TRUE)
@@ -347,7 +347,7 @@
             }
             sAH <- try(solve(H$A, H$X))
             if (inherits(sAH, "try-error"))
-                stop("Error computing the Hessian in free1way.test")
+                stop("Error computing the Hessian in free1way")
             ret <- ret + (H$Z - crossprod(H$X, sAH))
         }
         ret
@@ -422,7 +422,7 @@
            }
         }
         if (ret$convergence)
-            stop(paste("Unsuccessful optimisation in free1way.test", ret$message))
+            stop(paste("Unsuccessful optimisation in free1way", ret$message))
         
         p <- numeric(length(start))
         p[fix] <- beta
@@ -466,7 +466,7 @@
            }
         }
         if (ret$convergence)
-            stop(paste("Unsuccessful optimisation in free1way.test", ret$message))
+            stop(paste("Unsuccessful optimisation in free1way", ret$message))
         
     } else if (length(fix) == length(start)) {
         ret <- list(par = start, 
@@ -527,10 +527,10 @@
 
 # free1way
 
-free1way.test <- function(y, ...)
-    UseMethod("free1way.test")
+free1way <- function(y, ...)
+    UseMethod("free1way")
 
-free1way.test.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), 
+free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), 
                                 mu = 0, B = 0, ...)
 {
 
@@ -984,7 +984,7 @@ confint.free1way <- function(object, parm,
 
 # free1way formula
 
-free1way.test.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
+free1way.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
 {
 
     cl <- match.call()
@@ -1025,12 +1025,12 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
         if (nlevels(st) < 2L)
             stop("at least two strata must be present")
         vn <- c(vn, names(mf)[stratum])
-        RVAL <- free1way.test(y = y, x = g, z = st, weights = w, 
-                              varnames = vn, ...)
+        RVAL <- free1way(y = y, x = g, z = st, weights = w, 
+                         varnames = vn, ...)
         DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[stratum]))
     } else {
         ## Call the corresponding method
-        RVAL <- free1way.test(y = y, x = g, weights = w, varnames = vn, ...)
+        RVAL <- free1way(y = y, x = g, weights = w, varnames = vn, ...)
     }
     RVAL$data.name <- DNAME
     RVAL$call <- cl
@@ -1039,7 +1039,7 @@ free1way.test.formula <- function(formula, data, weights, subset, na.action = na
 
 # free1way numeric
 
-free1way.test.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, nbins = 0, 
+free1way.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, nbins = 0, 
     varnames = c(deparse1(substitute(y)), 
                  deparse1(substitute(x)), 
                  deparse1(substitute(z))), ...) {
@@ -1067,8 +1067,8 @@ free1way.test.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, 
         breaks <- c(-Inf, uy, Inf)
     }
     r <- cut(y, breaks = breaks, ordered_result = TRUE)[, drop = TRUE]
-    RVAL <- free1way.test(y = r, x = x, z = z, event = event, weights = weights, 
-                          varnames = varnames, ...)
+    RVAL <- free1way(y = r, x = x, z = z, event = event, weights = weights, 
+                     varnames = varnames, ...)
     RVAL$data.name <- DNAME
     RVAL$call <- cl
     RVAL
@@ -1076,7 +1076,7 @@ free1way.test.numeric <- function(y, x, z = NULL, event = NULL, weights = NULL, 
 
 # free1way factor
 
-free1way.test.factor <- function(y, x, z = NULL, event = NULL, weights = NULL, 
+free1way.factor <- function(y, x, z = NULL, event = NULL, weights = NULL, 
     varnames = c(deparse1(substitute(y)), 
                  deparse1(substitute(x)), 
                  deparse1(substitute(z))), ...) {
@@ -1104,7 +1104,7 @@ free1way.test.factor <- function(y, x, z = NULL, event = NULL, weights = NULL,
     dn <- dimnames(tab)
     names(dn)[seq_along(varnames)] <- varnames
     dimnames(tab) <- dn
-    RVAL <- free1way.test(tab, ...)
+    RVAL <- free1way(tab, ...)
     RVAL$data.name <- DNAME
     RVAL$call <- cl
     RVAL
@@ -1148,7 +1148,7 @@ ppplot <- function(x, y, plot.it = TRUE,
         args$y <- res
         args$x <- grp
         args$border <- args$col <- args$type <- NULL
-        f1w <- do.call("free1way.test", args)
+        f1w <- do.call("free1way", args)
 
         ci <- confint(f1w, level = conf.level, type = args$type)
         lwr <- .p(f1w$link, .q(f1w$link, prb) - ci[1,1])
