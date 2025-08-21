@@ -44,7 +44,6 @@ clean:
 	rm -rf *.o
 	rm -rf *.so	
 	rm -rf *.def
-	rm -rf *.Rd
 	rm -rf *.R
 	rm -rf Makevars
 	rm -rf nw*
@@ -60,7 +59,6 @@ clean:
 distclean: clean
 	rm -rf src/Schur.c
 	rm -rf R/*
-	rm -rf man/*
 	rm -rf vignettes/*Rnw
 	rm -rf tests/free1way.R*
 	
