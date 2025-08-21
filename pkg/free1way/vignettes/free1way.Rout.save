@@ -381,7 +381,7 @@ B 0 0 0
 C 4 6 5
 
 
-> (ft <- free1way.test(x))
+> (ft <- free1way(x))
 
 	Stratified 3-sample Kruskal-Wallis test against proportional odds
 	alternatives
@@ -404,7 +404,7 @@ C 0.2083442 0.3385029
 > summary(ft)
 
 Call:
-free1way.test.table(y = x)
+free1way.table(y = x)
 
 Coefficients:
   log-odds ratio Std. Error  z value P(>|z|)
@@ -427,7 +427,7 @@ The following object is masked from ‘package:MASS’:
 
 	 Simultaneous Tests for General Linear Hypotheses
 
-Fit: free1way.test.table(y = x)
+Fit: free1way.table(y = x)
 
 Linear Hypotheses:
        Estimate Std. Error z value Pr(>|z|)
@@ -497,7 +497,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 	 Simultaneous Confidence Intervals
 
-Fit: free1way.test.table(y = x)
+Fit: free1way.table(y = x)
 
 Quantile = 1.96
 95% confidence level
@@ -530,12 +530,12 @@ C -0.9386868 1.357290
 
 > y <- rlogis(length(w), location = c(0, 1)[w])
 
-> ft <- free1way.test(y ~ w)
+> ft <- free1way(y ~ w)
 
 > summary(ft)
 
 Call:
-free1way.test.formula(formula = y ~ w)
+free1way.formula(formula = y ~ w)
 
 Coefficients:
    log-odds ratio Std. Error z value P(>|z|)
@@ -718,7 +718,7 @@ common odds ratio
         0.9046968 
 
 
-> ft <- free1way.test(UCBAdmissions)
+> ft <- free1way(UCBAdmissions)
 
 > summary(ft, test = "Wald")
 
@@ -739,7 +739,7 @@ GenderFemale
                  2.5 %   97.5 %
 GenderFemale 0.7723915 1.060401
 
-> exp(sapply(dimnames(UCBAdmissions)[[3]], function(dept) confint(free1way.test(UCBAdmissions[, 
+> exp(sapply(dimnames(UCBAdmissions)[[3]], function(dept) confint(free1way(UCBAdmissions[, 
 +     , dept]), test = "Permutation")))
              A         B        C         D         E         F
 [1,] 0.2096661 0.3479569 0.854703 0.6864447 0.8258502 0.4582909
@@ -765,7 +765,7 @@ sample estimates:
 0.8519135 0.9427711 
 
 
-> summary(free1way.test(UCBAdmissions[, , 1]), test = "Rao")
+> summary(free1way(UCBAdmissions[, , 1]), test = "Rao")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
@@ -784,7 +784,7 @@ data:  x by g
 Kruskal-Wallis chi-squared = 0.77143, df = 2, p-value = 0.68
 
 
-> free1way.test(x ~ g)
+> free1way(x ~ g)
 
 	3-sample Kruskal-Wallis test against proportional odds alternatives
 
@@ -809,8 +809,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
 
-> (ft <- free1way.test(tm ~ g + strata(s), data = nd, 
-+     link = "cloglog"))
+> (ft <- free1way(tm ~ g + strata(s), data = nd, link = "cloglog"))
 
 	Stratified 3-sample Savage test against proportional hazards
 	alternatives
@@ -842,8 +841,7 @@ g3 0.003419067 0.006783594
 > summary(ft)
 
 Call:
-free1way.test.formula(formula = tm ~ g + strata(s), data = nd, 
-    link = "cloglog")
+free1way.formula(formula = tm ~ g + strata(s), data = nd, link = "cloglog")
 
 Coefficients:
    log-hazard ratio Std. Error  z value P(>|z|)
@@ -923,8 +921,7 @@ chi-squared = 4.7482, df = 2, p-value = 0.0931
 +     rho = 1)$chisq
 [1] 5.331837
 
-> (ft <- free1way.test(tm ~ g + strata(s), data = nd, 
-+     link = "logit"))
+> (ft <- free1way(tm ~ g + strata(s), data = nd, link = "logit"))
 
 	Stratified 3-sample Kruskal-Wallis test against proportional odds
 	alternatives
@@ -938,8 +935,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 > summary(ft)
 
 Call:
-free1way.test.formula(formula = tm ~ g + strata(s), data = nd, 
-    link = "logit")
+free1way.formula(formula = tm ~ g + strata(s), data = nd, link = "logit")
 
 Coefficients:
    log-odds ratio Std. Error z value P(>|z|)
@@ -1001,8 +997,8 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 > cm <- coxph(Surv(time, cens) ~ horTh + strata(tgrade), 
 +     data = GBSG2)
 
-> ft <- with(GBSG2, free1way.test(y = time, x = horTh, 
-+     z = tgrade, event = cens == 1, link = "cloglog"))
+> ft <- with(GBSG2, free1way(y = time, x = horTh, z = tgrade, 
++     event = cens == 1, link = "cloglog"))
 
 > coef(cm)
   horThyes 
@@ -1023,7 +1019,7 @@ horThyes 0.01604782
 > summary(ft)
 
 Call:
-free1way.test.numeric(y = time, x = horTh, z = tgrade, event = cens == 
+free1way.numeric(y = time, x = horTh, z = tgrade, event = cens == 
     1, link = "cloglog")
 
 Coefficients:
@@ -1082,8 +1078,8 @@ Perm Z = 3.0938, p-value = 0.001976
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
-> (ft <- with(GBSG2, free1way.test(y = time, x = horTh, 
-+     z = pnodes, event = cens == 1, link = "cloglog")))
+> (ft <- with(GBSG2, free1way(y = time, x = horTh, z = pnodes, 
++     event = cens == 1, link = "cloglog")))
 
 	2-sample Savage test against proportional hazards alternatives
 
@@ -1097,8 +1093,8 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 +     data = GBSG2, rho = 1)$chisq
 [1] 7.593803
 
-> (ft <- with(GBSG2, free1way.test(y = time, x = horTh, 
-+     z = tgrade, event = as.logical(cens), link = "logit")))
+> (ft <- with(GBSG2, free1way(y = time, x = horTh, z = tgrade, 
++     event = as.logical(cens), link = "logit")))
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
@@ -1111,7 +1107,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 > summary(ft)
 
 Call:
-free1way.test.numeric(y = time, x = horTh, z = tgrade, event = as.logical(cens), 
+free1way.numeric(y = time, x = horTh, z = tgrade, event = as.logical(cens), 
     link = "logit")
 
 Coefficients:
@@ -1160,7 +1156,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > nd$y <- rnorm(nrow(nd))
 
-> free1way.test(y ~ g + strata(s), data = nd, link = "probit")
+> free1way(y ~ g + strata(s), data = nd, link = "probit")
 
 	Stratified 3-sample van der Waerden normal scores test against latent
 	normal shift alternatives
@@ -1196,7 +1192,7 @@ data:  RoundingTimes
 Friedman chi-squared = 11.143, df = 2, p-value = 0.003805
 
 
-> (ft <- free1way.test(tm ~ trt + strata(str), data = rt))
+> (ft <- free1way(tm ~ trt + strata(str), data = rt))
 
 	Stratified 3-sample Kruskal-Wallis test against proportional odds
 	alternatives
@@ -1210,7 +1206,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 > summary(ft)
 
 Call:
-free1way.test.formula(formula = tm ~ trt + strata(str), data = rt)
+free1way.formula(formula = tm ~ trt + strata(str), data = rt)
 
 Coefficients:
                 log-odds ratio Std. Error  z value P(>|z|)
@@ -1347,7 +1343,7 @@ NOTE: 'n' is sample size in control group
 > colnames(cf) <- names(delta)
 
 > for (i in seq_along(x)) {
-+     ft <- free1way.test(x[[i]])
++     ft <- free1way(x[[i]])
 +     cf[i, ] <- coef(ft)
 +     pw[i] <- summary(ft, test = "Permutation")$p.value
 + }
@@ -1398,9 +1394,9 @@ NOTE: 'n' is sample size in control group
 > colnames(cf) <- names(delta)
 
 > for (i in seq_along(x)) {
-+     ft <- free1way.test(stab(x1[[i]], x2[[i]], x3[[i]]))
++     ft <- free1way(stab(x1[[i]], x2[[i]], x3[[i]]))
 +     cf[i, ] <- coef(ft)
-+     pw[i] <- summary(ft, test = "Pe ..." ... [TRUNCATED] 
++     pw[i] <- summary(ft, test = "Permuta ..." ... [TRUNCATED] 
 
 > mean(pw < 0.05)
 [1] 0.66
@@ -1458,7 +1454,7 @@ NOTE: 'n' is sample size in control group of first stratum
 
 > nd$u <- rfree1way(nrow(nd), delta = logOR[nd$w])
 
-> coef(ft <- free1way.test(u ~ w, data = nd))
+> coef(ft <- free1way(u ~ w, data = nd))
        w2        w3 
 0.5489555 0.7759044 
 
@@ -1467,7 +1463,7 @@ NOTE: 'n' is sample size in control group of first stratum
 
 > nd$y <- qchisq(nd$u, df = 3)
 
-> coef(ft <- free1way.test(y ~ w, data = nd))
+> coef(ft <- free1way(y ~ w, data = nd))
        w2        w3 
 0.5489555 0.7759044 
 
@@ -1477,4 +1473,4 @@ NOTE: 'n' is sample size in control group of first stratum
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 31.850   0.176  32.045 
+ 31.832   0.143  31.981 

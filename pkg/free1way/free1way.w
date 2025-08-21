@@ -1838,13 +1838,6 @@ print.free1way <- function(x, ...) {
 The \code{summary} method performs population Wald inference unless the
 \code{test} argument is specified:
 
-<TH>Just using \code{free1way} (and not \code{free1way}) would maybe
-make the rather flexible model interrogation via \code{summary},
-\code{confint} etc seem more natural. Yes.</TH>
-
-<TH>add \code{global = TRUE/FALSE} to \code{summary}. TRUE returns htest
-object and FALSE coefMat? Or use test?</TH>
-
 @d free1way summary
 @{
 summary.free1way <- function(object, test, alternative = c("two.sided", "less", "greater"), 

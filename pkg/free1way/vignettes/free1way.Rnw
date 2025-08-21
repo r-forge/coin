@@ -3491,13 +3491,6 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
 The \code{summary} method performs population Wald inference unless the
 \code{test} argument is specified:
 
-<TH>Just using \code{free1way} (and not \code{free1way}) would maybe
-make the rather flexible model interrogation via \code{summary},
-\code{confint} etc seem more natural. Yes.</TH>
-
-<TH>add \code{global = TRUE/FALSE} to \code{summary}. TRUE returns htest
-object and FALSE coefMat? Or use test?</TH>
-
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap46}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
