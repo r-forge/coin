@@ -1201,7 +1201,7 @@ r2dsim <- function(n, r, c, delta = 0,
     
 
     p0 <- cumsum(prob)
-    h0 <- .q(link, p0[-length(p0)])
+    h0 <- .q(link, p0[-length(p0)]) ### last element of p0 is one
 
     h1 <- h0 - matrix(delta, nrow = length(prob) - 1L, ncol = K - 1, byrow = TRUE)
     p1 <- rbind(.p(link, h1), 1)

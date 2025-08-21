@@ -134,7 +134,7 @@ urlcolor={linkcolor}%
 \label{ch:model}
 \pagenumbering{arabic}
 
-<TH>Use $G \in \{1, \dots, K\}$ for groups, $B \in \{1, \dots, J}$ for
+<TH>Use $G \in \{1, \dots, K\}$ for groups, $B \in \{1, \dots, J\}$ for
 blocks (avoid strata terminology)</TH>
 
 We consider $K$ treatment groups $\rT \in \{1, \dots, K\}, K \ge 2$ for an

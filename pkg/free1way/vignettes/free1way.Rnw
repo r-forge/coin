@@ -149,7 +149,7 @@ urlcolor={linkcolor}%
 \label{ch:model}
 \pagenumbering{arabic}
 
-<TH>Use $G \in \{1, \dots, K\}$ for groups, $B \in \{1, \dots, J}$ for
+<TH>Use $G \in \{1, \dots, K\}$ for groups, $B \in \{1, \dots, J\}$ for
 blocks (avoid strata terminology)</TH>
 
 We consider $K$ treatment groups $\rT \in \{1, \dots, K\}, K \ge 2$ for an
@@ -4053,7 +4053,7 @@ the relevant discrete density.
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape link2fun}\nobreak\ {\footnotesize \NWlink{nuweb32}{32}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    p0 <- cumsum(prob)@\\
-\mbox{}\verb@    h0 <- .q(link, p0[-length(p0)])@\\
+\mbox{}\verb@    h0 <- .q(link, p0[-length(p0)]) ### last element of p0 is one@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    h1 <- h0 - matrix(delta, nrow = length(prob) - 1L, ncol = K - 1, byrow = TRUE)@\\
 \mbox{}\verb@    p1 <- rbind(.p(link, h1), 1)@\\
