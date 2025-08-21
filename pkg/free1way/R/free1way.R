@@ -986,24 +986,27 @@ confint.free1way <- function(object, parm,
 
 free1way.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
 {
-
     cl <- match.call()
 
     if(missing(formula) || (length(formula) != 3L))
         stop("'formula' missing or incorrect")
 
-    strata <- function(object) object
-    formula <- terms(formula, specials = "strata")
+    if (stratum <- (length(formula[[3L]]) > 1)) {
+      if ((length(formula[[3L]]) != 3L) || 
+          (formula[[3L]][[1L]] != as.name("|")) || 
+          (length(formula[[3L]][[2L]]) !=  1L) || 
+          (length(formula[[3L]][[3L]]) != 1L)) 
+        stop("incorrect specification for 'formula'")
+      formula[[3L]][[1L]] <- as.name("+")
+    }
 
-    stratum <- attr(formula, "specials")$strata
-    if (is.null(stratum)) stratum <- 0L
-    
+    formula <- terms(formula)
     if (length(attr(formula, "term.labels")) > 1L + stratum)
         stop("'formula' missing or incorrect")
-    group <- attr(formula, "term.labels") 
-    if (stratum) group <- group[-(stratum - 1L)]
+    group <- attr(formula, "term.labels")[1L]
 
     m <- match.call(expand.dots = FALSE)
+    m$formula <- formula
     if (is.matrix(eval(m$data, parent.frame())))
         m$data <- as.data.frame(data)
     ## need stats:: for non-standard evaluation
@@ -1014,6 +1017,13 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     DNAME <- paste(vn <- c(names(mf)[response], group), collapse = " by ") # works in all cases
     w <- as.vector(model.weights(mf))
     y <- mf[[response]]
+    event <- NULL
+    if (inherits(y, "Surv")) {
+        if (attr(y, "type") != "right")
+            stop("free1way only supports right-censoring")
+        event <- (y[,2] > 0)
+        y <- y[,1]
+    }
     g <- mf[[group]]
     stopifnot(is.factor(g))
     lev <- levels(g)
@@ -1021,16 +1031,16 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     if (nlevels(g) < 2L)
         stop("grouping factor must have at least 2 levels")
     if (stratum) {
-        st <- factor(mf[[stratum]], levels = )
+        st <- factor(mf[[3L]], levels = )
         if (nlevels(st) < 2L)
             stop("at least two strata must be present")
-        vn <- c(vn, names(mf)[stratum])
-        RVAL <- free1way(y = y, x = g, z = st, weights = w, 
+        vn <- c(vn, names(mf)[3L])
+        RVAL <- free1way(y = y, x = g, z = st, event = event, weights = w,
                          varnames = vn, ...)
-        DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[stratum]))
+        DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[3L]))
     } else {
         ## Call the corresponding method
-        RVAL <- free1way(y = y, x = g, weights = w, varnames = vn, ...)
+        RVAL <- free1way(y = y, x = g, event = event, weights = w, varnames = vn, ...)
     }
     RVAL$data.name <- DNAME
     RVAL$call <- cl

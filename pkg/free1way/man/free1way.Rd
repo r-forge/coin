@@ -171,8 +171,10 @@ An object of class \code{free1way} with corresponding \code{logLik},
 \examples{
 
 ### Friedman test
-library("survival")
-free1way(extra ~ group + strata(ID), data = sleep)
+friedman.test(extra ~ group | ID, data = sleep)
+ft <- free1way(extra ~ group | ID, data = sleep)
+print(ft)
+summary(ft)
 
 }
 \keyword{htest}

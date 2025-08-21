@@ -809,13 +809,13 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
 
-> (ft <- free1way(tm ~ g + strata(s), data = nd, link = "cloglog"))
+> (ft <- free1way(tm ~ g | s, data = nd, link = "cloglog"))
 
 	Stratified 3-sample Savage test against proportional hazards
 	alternatives
 
 data:  tm by g (1, 2, 3) 
-	 stratified by strata(s)
+	 stratified by s
 Perm chi-squared = 4.6807, df = 2, p-value = 0.09629
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
@@ -841,7 +841,7 @@ g3 0.003419067 0.006783594
 > summary(ft)
 
 Call:
-free1way.formula(formula = tm ~ g + strata(s), data = nd, link = "cloglog")
+free1way.formula(formula = tm ~ g | s, data = nd, link = "cloglog")
 
 Coefficients:
    log-hazard ratio Std. Error  z value P(>|z|)
@@ -858,7 +858,7 @@ g3         0.160943   0.082363 1.954079  0.0507
 	alternatives
 
 data:  tm by g (1, 2, 3) 
-	 stratified by strata(s)
+	 stratified by s
 Rao chi-squared = 5.0473, df = 2, p-value = 0.08016
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
@@ -873,7 +873,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 	alternatives
 
 data:  tm by g (1, 2, 3) 
-	 stratified by strata(s)
+	 stratified by s
 logLR chi-squared = 4.9536, df = 2, p-value = 0.08401
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
@@ -888,7 +888,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 	alternatives
 
 data:  tm by g (1, 2, 3) 
-	 stratified by strata(s)
+	 stratified by s
 Wald chi-squared = 5.0701, df = 2, p-value = 0.07926
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
@@ -899,7 +899,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 	alternatives
 
 data:  tm by g (1, 2, 3) 
-	 stratified by strata(s)
+	 stratified by s
 Perm chi-squared = 4.6807, df = 2, p-value = 0.09629
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
@@ -921,13 +921,13 @@ chi-squared = 4.7482, df = 2, p-value = 0.0931
 +     rho = 1)$chisq
 [1] 5.331837
 
-> (ft <- free1way(tm ~ g + strata(s), data = nd, link = "logit"))
+> (ft <- free1way(tm ~ g | s, data = nd, link = "logit"))
 
 	Stratified 3-sample Kruskal-Wallis test against proportional odds
 	alternatives
 
 data:  tm by g (1, 2, 3) 
-	 stratified by strata(s)
+	 stratified by s
 Perm chi-squared = 5.2035, df = 2, p-value = 0.07414
 alternative hypothesis: true log-odds ratio is not equal to 0
 
@@ -935,7 +935,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 > summary(ft)
 
 Call:
-free1way.formula(formula = tm ~ g + strata(s), data = nd, link = "logit")
+free1way.formula(formula = tm ~ g | s, data = nd, link = "logit")
 
 Coefficients:
    log-odds ratio Std. Error z value P(>|z|)
@@ -948,7 +948,7 @@ g3        0.26123    0.14239 1.83463  0.0666
 	alternatives
 
 data:  tm by g (1, 2, 3) 
-	 stratified by strata(s)
+	 stratified by s
 Rao chi-squared = 5.299, df = 2, p-value = 0.07069
 alternative hypothesis: true log-odds ratio is not equal to 0
 
@@ -959,7 +959,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 	alternatives
 
 data:  tm by g (1, 2, 3) 
-	 stratified by strata(s)
+	 stratified by s
 logLR chi-squared = 5.2715, df = 2, p-value = 0.07166
 alternative hypothesis: true log-odds ratio is not equal to 0
 
@@ -970,7 +970,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 	alternatives
 
 data:  tm by g (1, 2, 3) 
-	 stratified by strata(s)
+	 stratified by s
 Wald chi-squared = 5.2832, df = 2, p-value = 0.07125
 alternative hypothesis: true log-odds ratio is not equal to 0
 
@@ -981,7 +981,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 	alternatives
 
 data:  tm by g (1, 2, 3) 
-	 stratified by strata(s)
+	 stratified by s
 Perm chi-squared = 5.2035, df = 2, p-value = 0.07414
 alternative hypothesis: true log-odds ratio is not equal to 0
 
@@ -997,8 +997,8 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 > cm <- coxph(Surv(time, cens) ~ horTh + strata(tgrade), 
 +     data = GBSG2)
 
-> ft <- with(GBSG2, free1way(y = time, x = horTh, z = tgrade, 
-+     event = cens == 1, link = "cloglog"))
+> ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | 
++     tgrade, link = "cloglog"))
 
 > coef(cm)
   horThyes 
@@ -1019,8 +1019,8 @@ horThyes 0.01604782
 > summary(ft)
 
 Call:
-free1way.numeric(y = time, x = horTh, z = tgrade, event = cens == 
-    1, link = "cloglog")
+free1way.formula(formula = Surv(time, cens) ~ horTh | tgrade, 
+    link = "cloglog")
 
 Coefficients:
          log-hazard ratio Std. Error z value P(>|z|)
@@ -1034,7 +1034,7 @@ horThyes          0.38767    0.12668 3.06022  0.0022
 
 	2-sample Savage test against proportional hazards alternatives
 
-data:  time by horTh (no, yes) 
+data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
 Rao chi-squared = 9.4757, df = 1, p-value = 0.002082
 alternative hypothesis: true log-hazard ratio is not equal to 0
@@ -1048,7 +1048,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 	2-sample Savage test against proportional hazards alternatives
 
-data:  time by horTh (no, yes) 
+data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
 logLR chi-squared = 9.7477, df = 1, p-value = 0.001795
 alternative hypothesis: true log-hazard ratio is not equal to 0
@@ -1062,7 +1062,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 	2-sample Savage test against proportional hazards alternatives
 
-data:  time by horTh (no, yes) 
+data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
 Wald chi-squared = 9.3649, df = 1, p-value = 0.002212
 alternative hypothesis: true log-hazard ratio is not equal to 0
@@ -1072,18 +1072,18 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 	2-sample Savage test against proportional hazards alternatives
 
-data:  time by horTh (no, yes) 
+data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
 Perm Z = 3.0938, p-value = 0.001976
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
-> (ft <- with(GBSG2, free1way(y = time, x = horTh, z = pnodes, 
-+     event = cens == 1, link = "cloglog")))
+> (ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | 
++     pnodes, link = "cloglog")))
 
 	2-sample Savage test against proportional hazards alternatives
 
-data:  time by horTh (no, yes) 
+data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by pnodes
 Perm Z = 2.7021, p-value = 0.00689
 alternative hypothesis: true log-hazard ratio is not equal to 0
@@ -1156,13 +1156,13 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > nd$y <- rnorm(nrow(nd))
 
-> free1way(y ~ g + strata(s), data = nd, link = "probit")
+> free1way(y ~ g | s, data = nd, link = "probit")
 
 	Stratified 3-sample van der Waerden normal scores test against latent
 	normal shift alternatives
 
 data:  y by g (1, 2, 3) 
-	 stratified by strata(s)
+	 stratified by s
 Perm chi-squared = 1.0155, df = 2, p-value = 0.6019
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 
@@ -1192,13 +1192,13 @@ data:  RoundingTimes
 Friedman chi-squared = 11.143, df = 2, p-value = 0.003805
 
 
-> (ft <- free1way(tm ~ trt + strata(str), data = rt))
+> (ft <- free1way(tm ~ trt | str, data = rt))
 
 	Stratified 3-sample Kruskal-Wallis test against proportional odds
 	alternatives
 
 data:  tm by trt (Round Out, Narrow Angle, Wide Angle) 
-	 stratified by strata(str)
+	 stratified by str
 Perm chi-squared = 11.143, df = 2, p-value = 0.003805
 alternative hypothesis: true log-odds ratio is not equal to 0
 
@@ -1206,7 +1206,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 > summary(ft)
 
 Call:
-free1way.formula(formula = tm ~ trt + strata(str), data = rt)
+free1way.formula(formula = tm ~ trt | str, data = rt)
 
 Coefficients:
                 log-odds ratio Std. Error  z value P(>|z|)
@@ -1473,4 +1473,4 @@ NOTE: 'n' is sample size in control group of first stratum
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 31.832   0.143  31.981 
+ 33.562   0.227  33.819 

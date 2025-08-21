@@ -1604,36 +1604,34 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
 }
 @}
 
-The \code{formula} method allows formulae \code{outcome ~ treatment +
-strata(s)} for model specification
-
-<TH>strata is only defined in \pkg{survival}, import? or copy friedman.test
-with y ~ groups | block. yes </TH>
-<TH>something like cbind(time, event) ~ treatment + strata(s)? Or
-\code{Surv}. Doesn't matter as survival can be loaded by users</TH>
+The \code{formula} method allows formulae \code{outcome ~ treatment |
+stratum)} for model specification
 
 @d free1way formula
 @{
 free1way.formula <- function(formula, data, weights, subset, na.action = na.pass, ...)
 {
-
     cl <- match.call()
 
     if(missing(formula) || (length(formula) != 3L))
         stop("'formula' missing or incorrect")
 
-    strata <- function(object) object
-    formula <- terms(formula, specials = "strata")
+    if (stratum <- (length(formula[[3L]]) > 1)) {
+      if ((length(formula[[3L]]) != 3L) || 
+          (formula[[3L]][[1L]] != as.name("|")) || 
+          (length(formula[[3L]][[2L]]) !=  1L) || 
+          (length(formula[[3L]][[3L]]) != 1L)) 
+        stop("incorrect specification for 'formula'")
+      formula[[3L]][[1L]] <- as.name("+")
+    }
 
-    stratum <- attr(formula, "specials")$strata
-    if (is.null(stratum)) stratum <- 0L
-    
+    formula <- terms(formula)
     if (length(attr(formula, "term.labels")) > 1L + stratum)
         stop("'formula' missing or incorrect")
-    group <- attr(formula, "term.labels") 
-    if (stratum) group <- group[-(stratum - 1L)]
+    group <- attr(formula, "term.labels")[1L]
 
     m <- match.call(expand.dots = FALSE)
+    m$formula <- formula
     if (is.matrix(eval(m$data, parent.frame())))
         m$data <- as.data.frame(data)
     ## need stats:: for non-standard evaluation
@@ -1644,6 +1642,13 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     DNAME <- paste(vn <- c(names(mf)[response], group), collapse = " by ") # works in all cases
     w <- as.vector(model.weights(mf))
     y <- mf[[response]]
+    event <- NULL
+    if (inherits(y, "Surv")) {
+        if (attr(y, "type") != "right")
+            stop("free1way only supports right-censoring")
+        event <- (y[,2] > 0)
+        y <- y[,1]
+    }
     g <- mf[[group]]
     stopifnot(is.factor(g))
     lev <- levels(g)
@@ -1651,16 +1656,16 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     if (nlevels(g) < 2L)
         stop("grouping factor must have at least 2 levels")
     if (stratum) {
-        st <- factor(mf[[stratum]], levels = )
+        st <- factor(mf[[3L]], levels = )
         if (nlevels(st) < 2L)
             stop("at least two strata must be present")
-        vn <- c(vn, names(mf)[stratum])
-        RVAL <- free1way(y = y, x = g, z = st, weights = w, 
+        vn <- c(vn, names(mf)[3L])
+        RVAL <- free1way(y = y, x = g, z = st, event = event, weights = w,
                          varnames = vn, ...)
-        DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[stratum]))
+        DNAME <- paste(DNAME, paste("\n\t stratified by", names(mf)[3L]))
     } else {
         ## Call the corresponding method
-        RVAL <- free1way(y = y, x = g, weights = w, varnames = vn, ...)
+        RVAL <- free1way(y = y, x = g, event = event, weights = w, varnames = vn, ...)
     }
     RVAL$data.name <- DNAME
     RVAL$call <- cl
@@ -2083,7 +2088,7 @@ nd$ev <- TRUE
 survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 0)$chisq
 cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
 
-(ft <- free1way(tm ~ g + strata(s), data = nd, link = "cloglog"))
+(ft <- free1way(tm ~ g | s, data = nd, link = "cloglog"))
 coef(cm)
 coef(ft)
 vcov(cm)
@@ -2106,7 +2111,7 @@ Wilcoxon against proportional odds
 
 <<Peto>>=
 survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, rho = 1)$chisq
-(ft <- free1way(tm ~ g + strata(s), data = nd, link = "logit"))
+(ft <- free1way(tm ~ g | s, data = nd, link = "logit"))
 summary(ft)
 summary(ft, test = "Rao")
 summary(ft, test = "LRT")
@@ -2127,8 +2132,7 @@ survdiff(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2, rho = 0)$chisq
 cm <- coxph(Surv(time, cens) ~ horTh + strata(tgrade), data = GBSG2)
 
 ### no formula interface yet
-ft <- with(GBSG2, free1way(y = time, x = horTh, z = tgrade, 
-                           event = cens == 1, 
+ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | tgrade, 
                            link = "cloglog"))
 coef(cm)
 coef(ft)
@@ -2144,8 +2148,7 @@ summary(ft, test = "Wald")
 summary(ft, test = "Permutation")
 
 ### test with many small strata 
-(ft <- with(GBSG2, free1way(y = time, x = horTh, z = pnodes, 
-                            event = cens == 1, 
+(ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | pnodes, 
                             link = "cloglog")))
 @@
 
@@ -2169,7 +2172,7 @@ Normal scores test against a generalised Cohen's $d$:
 
 <<normal>>=
 nd$y <- rnorm(nrow(nd))
-free1way(y ~ g + strata(s), data = nd, link = "probit")
+free1way(y ~ g | s, data = nd, link = "probit")
 independence_test(y ~ g | s, data = nd, ytrafo = function(...)
                   trafo(..., numeric_trafo = normal_trafo, block = nd$s), teststat = "quad")
 @@
@@ -2184,7 +2187,7 @@ rt <- expand.grid(str = gl(22, 1),
                   trt = gl(3, 1, labels = c("Round Out", "Narrow Angle", "Wide Angle")))
 rt$tm <- c(RoundingTimes)
 friedman.test(RoundingTimes)
-(ft <- free1way(tm ~ trt + strata(str), data = rt))
+(ft <- free1way(tm ~ trt | str, data = rt))
 summary(ft)
 @@
 
