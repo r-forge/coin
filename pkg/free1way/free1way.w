@@ -1678,8 +1678,6 @@ observed outcome values, or (for very large sample sizes), for binned
 outcomes. The \code{event} argument is a logical where \code{TRUE} is
 interpreted as an event and \code{FALSE} as right-censored observation
 
-<TH>maybe use y, groups, blocks interface as friedman.test?</TH>
-
 @d variable names and checks
 @{
 cl <- match.call()
