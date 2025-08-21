@@ -355,7 +355,7 @@ sample estimates:
 	2-sample Lehmann test against Lehmann alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.1825, p-value = 0.2481
+Perm Z = 1.1825, p-value = 0.2358
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
@@ -476,4 +476,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  3.307   0.072   3.375 
+  3.351   0.075   3.422 

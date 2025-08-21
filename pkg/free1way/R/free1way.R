@@ -699,7 +699,7 @@ model.matrix.free1way <- function (object, ...)
 
 .print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
                             alternative = c("two.sided", "less", "greater"), 
-                            tol = .Machine$double.eps, ...)
+                            tol = sqrt(.Machine$double.eps), ...)
 {
 
     test <- match.arg(test)
