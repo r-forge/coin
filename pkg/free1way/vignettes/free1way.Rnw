@@ -318,7 +318,6 @@ right-censoring and the second table contains numbers of events.
 
     xlist <- xrclist <- vector(mode = "list", length = B)
 
-    lwr <- rep(-Inf, times = K - 1)
     for (b in seq_len(B)) {
         xb <- matrix(x[,,b, drop = TRUE], ncol = K)
         xw <- rowSums(abs(xb)) > 0
@@ -659,7 +658,6 @@ right-censoring and the second table contains numbers of events.
 
     xlist <- xrclist <- vector(mode = "list", length = B)
 
-    lwr <- rep(-Inf, times = K - 1)
     for (b in seq_len(B)) {
         xb <- matrix(x[,,b, drop = TRUE], ncol = K)
         xw <- rowSums(abs(xb)) > 0
@@ -684,12 +682,14 @@ right-censoring and the second table contains numbers of events.
         start <- rep.int(0, K - 1)
     lwr <- rep(-Inf, times = K - 1)
     for (b in seq_len(length(xlist))) {
-        lwr <- c(lwr, -Inf, rep.int(tol, times = nrow(xlist[[b]]) - 2L))
+        bC <- nrow(xlist[[b]]) - 1L
+        lwr <- c(lwr, -Inf, rep.int(tol, times = bC - 1L))
         if (NS) {
             ecdf0 <- cumsum(rowSums(xlist[[b]]))
             ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
             Qecdf <- Q(ecdf0)
-            start <- c(start, Qecdf[1], diff(Qecdf))
+            bstart <- diff(Qecdf)
+            start <- c(start, Qecdf[1], bstart)
             start[!is.finite(start)] <- 0
         }
     }
@@ -962,6 +962,20 @@ right-censoring and the second table contains numbers of events.
     }
     
     
+    fn <- function(par) {
+        ret <- .snll(par, x = xlist, mu = mu)
+        if (!is.null(xrc))
+            ret <- ret + .snll(par, x = xrclist, mu = mu, 
+                               rightcensored = TRUE)
+        return(ret)
+    }
+    gr <- function(par) {
+        ret <- .snsc(par, x = xlist, mu = mu)
+        if (!is.null(xrc))
+            ret <- ret + .snsc(par, x = xrclist, mu = mu, 
+                               rightcensored = TRUE)
+        return(ret)
+    }
     .profile <- function(start, fix = seq_len(K - 1)) {
         stopifnot(all(fix %in% seq_len(K - 1)))
         beta <- start[fix]
@@ -970,21 +984,13 @@ right-censoring and the second table contains numbers of events.
                              p <- numeric(length(par) + length(fix))
                              p[fix] <- beta
                              p[-fix] <- par
-                             ret <- .snll(p, x = xlist, mu = mu)
-                             if (!is.null(xrc))
-                                 ret <- ret + .snll(p, x = xrclist, mu = mu, 
-                                                    rightcensored = TRUE)
-                             ret
+                             fn(p)
                          },
                          gr = function(par) {
                              p <- numeric(length(par) + length(fix))
                              p[fix] <- beta
                              p[-fix] <- par
-                             ret <- .snsc(p, x = xlist, mu = mu)[-fix]
-                             if (!is.null(xrc))
-                                 ret <- ret + .snsc(p, x = xrclist, mu = mu, 
-                                                    rightcensored = TRUE)[-fix]
-                             ret
+                             gr(p)[-fix]
                          },
                          lower = lwr[-fix], 
                          method = "L-BFGS-B", 
@@ -1014,20 +1020,6 @@ right-censoring and the second table contains numbers of events.
     }
     
     
-    fn <- function(par) {
-        ret <- .snll(par, x = xlist, mu = mu)
-        if (!is.null(xrc))
-            ret <- ret + .snll(par, x = xrclist, mu = mu, 
-                               rightcensored = TRUE)
-        return(ret)
-    }
-    gr <- function(par) {
-        ret <- .snsc(par, x = xlist, mu = mu)
-        if (!is.null(xrc))
-            ret <- ret + .snsc(par, x = xrclist, mu = mu, 
-                               rightcensored = TRUE)
-        return(ret)
-    }
     if (!length(fix)) {
         opargs <- c(list(par = start, fn = fn, gr = gr,
                         lower = lwr, method = "L-BFGS-B", 
@@ -1833,7 +1825,6 @@ tables with non-zero row sums:
 \mbox{}\verb@@\\
 \mbox{}\verb@xlist <- xrclist <- vector(mode = "list", length = B)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@lwr <- rep(-Inf, times = K - 1)@\\
 \mbox{}\verb@for (b in seq_len(B)) {@\\
 \mbox{}\verb@    xb <- matrix(x[,,b, drop = TRUE], ncol = K)@\\
 \mbox{}\verb@    xw <- rowSums(abs(xb)) > 0@\\
@@ -2453,12 +2444,14 @@ after merging all treatment groups:
 \mbox{}\verb@    start <- rep.int(0, K - 1)@\\
 \mbox{}\verb@lwr <- rep(-Inf, times = K - 1)@\\
 \mbox{}\verb@for (b in seq_len(length(xlist))) {@\\
-\mbox{}\verb@    lwr <- c(lwr, -Inf, rep.int(tol, times = nrow(xlist[[b]]) - 2L))@\\
+\mbox{}\verb@    bC <- nrow(xlist[[b]]) - 1L@\\
+\mbox{}\verb@    lwr <- c(lwr, -Inf, rep.int(tol, times = bC - 1L))@\\
 \mbox{}\verb@    if (NS) {@\\
 \mbox{}\verb@        ecdf0 <- cumsum(rowSums(xlist[[b]]))@\\
 \mbox{}\verb@        ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]@\\
 \mbox{}\verb@        Qecdf <- Q(ecdf0)@\\
-\mbox{}\verb@        start <- c(start, Qecdf[1], diff(Qecdf))@\\
+\mbox{}\verb@        bstart <- diff(Qecdf)@\\
+\mbox{}\verb@        start <- c(start, Qecdf[1], bstart)@\\
 \mbox{}\verb@        start[!is.finite(start)] <- 0@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
@@ -2512,7 +2505,10 @@ we encounter optimisation issues and restart at the current solution:
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
-The profile negative log-likelihood is then
+We first set-up the target function (the negative log-likelihood, also
+dealing with right-censoring) and the corresponding gradient. We then add
+the profile negative log-likelihood, which in turn calls the two functions
+defined first
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap28}\raggedright\small
@@ -2520,6 +2516,20 @@ The profile negative log-likelihood is then
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
+\mbox{}\verb@fn <- function(par) {@\\
+\mbox{}\verb@    ret <- .snll(par, x = xlist, mu = mu)@\\
+\mbox{}\verb@    if (!is.null(xrc))@\\
+\mbox{}\verb@        ret <- ret + .snll(par, x = xrclist, mu = mu, @\\
+\mbox{}\verb@                           rightcensored = TRUE)@\\
+\mbox{}\verb@    return(ret)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@gr <- function(par) {@\\
+\mbox{}\verb@    ret <- .snsc(par, x = xlist, mu = mu)@\\
+\mbox{}\verb@    if (!is.null(xrc))@\\
+\mbox{}\verb@        ret <- ret + .snsc(par, x = xrclist, mu = mu, @\\
+\mbox{}\verb@                           rightcensored = TRUE)@\\
+\mbox{}\verb@    return(ret)@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@.profile <- function(start, fix = seq_len(K - 1)) {@\\
 \mbox{}\verb@    stopifnot(all(fix %in% seq_len(K - 1)))@\\
 \mbox{}\verb@    beta <- start[fix]@\\
@@ -2528,21 +2538,13 @@ The profile negative log-likelihood is then
 \mbox{}\verb@                         p <- numeric(length(par) + length(fix))@\\
 \mbox{}\verb@                         p[fix] <- beta@\\
 \mbox{}\verb@                         p[-fix] <- par@\\
-\mbox{}\verb@                         ret <- .snll(p, x = xlist, mu = mu)@\\
-\mbox{}\verb@                         if (!is.null(xrc))@\\
-\mbox{}\verb@                             ret <- ret + .snll(p, x = xrclist, mu = mu, @\\
-\mbox{}\verb@                                                rightcensored = TRUE)@\\
-\mbox{}\verb@                         ret@\\
+\mbox{}\verb@                         fn(p)@\\
 \mbox{}\verb@                     },@\\
 \mbox{}\verb@                     gr = function(par) {@\\
 \mbox{}\verb@                         p <- numeric(length(par) + length(fix))@\\
 \mbox{}\verb@                         p[fix] <- beta@\\
 \mbox{}\verb@                         p[-fix] <- par@\\
-\mbox{}\verb@                         ret <- .snsc(p, x = xlist, mu = mu)[-fix]@\\
-\mbox{}\verb@                         if (!is.null(xrc))@\\
-\mbox{}\verb@                             ret <- ret + .snsc(p, x = xrclist, mu = mu, @\\
-\mbox{}\verb@                                                rightcensored = TRUE)[-fix]@\\
-\mbox{}\verb@                         ret@\\
+\mbox{}\verb@                         gr(p)[-fix]@\\
 \mbox{}\verb@                     },@\\
 \mbox{}\verb@                     lower = lwr[-fix], @\\
 \mbox{}\verb@                     method = "L-BFGS-B", @\\
@@ -2577,20 +2579,6 @@ constants, and provide a profile version of the likelihood:
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@fn <- function(par) {@\\
-\mbox{}\verb@    ret <- .snll(par, x = xlist, mu = mu)@\\
-\mbox{}\verb@    if (!is.null(xrc))@\\
-\mbox{}\verb@        ret <- ret + .snll(par, x = xrclist, mu = mu, @\\
-\mbox{}\verb@                           rightcensored = TRUE)@\\
-\mbox{}\verb@    return(ret)@\\
-\mbox{}\verb@}@\\
-\mbox{}\verb@gr <- function(par) {@\\
-\mbox{}\verb@    ret <- .snsc(par, x = xlist, mu = mu)@\\
-\mbox{}\verb@    if (!is.null(xrc))@\\
-\mbox{}\verb@        ret <- ret + .snsc(par, x = xrclist, mu = mu, @\\
-\mbox{}\verb@                           rightcensored = TRUE)@\\
-\mbox{}\verb@    return(ret)@\\
-\mbox{}\verb@}@\\
 \mbox{}\verb@if (!length(fix)) {@\\
 \mbox{}\verb@    opargs <- c(list(par = start, fn = fn, gr = gr,@\\
 \mbox{}\verb@                    lower = lwr, method = "L-BFGS-B", @\\
@@ -3278,8 +3266,6 @@ The method for numeric outcomes provides a discretisation at the unique
 observed outcome values, or (for very large sample sizes), for binned
 outcomes. The \code{event} argument is a logical where \code{TRUE} is
 interpreted as an event and \code{FALSE} as right-censored observation
-
-<TH>maybe use y, groups, blocks interface as friedman.test?</TH>
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap42}\raggedright\small

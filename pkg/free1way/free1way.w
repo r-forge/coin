@@ -613,7 +613,6 @@ if (length(dx) == 4L) {
 
 xlist <- xrclist <- vector(mode = "list", length = B)
 
-lwr <- rep(-Inf, times = K - 1)
 for (b in seq_len(B)) {
     xb <- matrix(x[,,b, drop = TRUE], ncol = K)
     xw <- rowSums(abs(xb)) > 0
@@ -1055,12 +1054,14 @@ if (NS <- is.null(start))
     start <- rep.int(0, K - 1)
 lwr <- rep(-Inf, times = K - 1)
 for (b in seq_len(length(xlist))) {
-    lwr <- c(lwr, -Inf, rep.int(tol, times = nrow(xlist[[b]]) - 2L))
+    bC <- nrow(xlist[[b]]) - 1L
+    lwr <- c(lwr, -Inf, rep.int(tol, times = bC - 1L))
     if (NS) {
         ecdf0 <- cumsum(rowSums(xlist[[b]]))
         ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
         Qecdf <- Q(ecdf0)
-        start <- c(start, Qecdf[1], diff(Qecdf))
+        bstart <- diff(Qecdf)
+        start <- c(start, Qecdf[1], bstart)
         start[!is.finite(start)] <- 0
     }
 }
@@ -1092,10 +1093,27 @@ if (ret$convergence)
     stop(paste("Unsuccessful optimisation in free1way", ret$message))
 @}
 
-The profile negative log-likelihood is then
+We first set-up the target function (the negative log-likelihood, also
+dealing with right-censoring) and the corresponding gradient. We then add
+the profile negative log-likelihood, which in turn calls the two functions
+defined first
 
 @d profile
 @{
+fn <- function(par) {
+    ret <- .snll(par, x = xlist, mu = mu)
+    if (!is.null(xrc))
+        ret <- ret + .snll(par, x = xrclist, mu = mu, 
+                           rightcensored = TRUE)
+    return(ret)
+}
+gr <- function(par) {
+    ret <- .snsc(par, x = xlist, mu = mu)
+    if (!is.null(xrc))
+        ret <- ret + .snsc(par, x = xrclist, mu = mu, 
+                           rightcensored = TRUE)
+    return(ret)
+}
 .profile <- function(start, fix = seq_len(K - 1)) {
     stopifnot(all(fix %in% seq_len(K - 1)))
     beta <- start[fix]
@@ -1104,21 +1122,13 @@ The profile negative log-likelihood is then
                          p <- numeric(length(par) + length(fix))
                          p[fix] <- beta
                          p[-fix] <- par
-                         ret <- .snll(p, x = xlist, mu = mu)
-                         if (!is.null(xrc))
-                             ret <- ret + .snll(p, x = xrclist, mu = mu, 
-                                                rightcensored = TRUE)
-                         ret
+                         fn(p)
                      },
                      gr = function(par) {
                          p <- numeric(length(par) + length(fix))
                          p[fix] <- beta
                          p[-fix] <- par
-                         ret <- .snsc(p, x = xlist, mu = mu)[-fix]
-                         if (!is.null(xrc))
-                             ret <- ret + .snsc(p, x = xrclist, mu = mu, 
-                                                rightcensored = TRUE)[-fix]
-                         ret
+                         gr(p)[-fix]
                      },
                      lower = lwr[-fix], 
                      method = "L-BFGS-B", 
@@ -1140,20 +1150,6 @@ constants, and provide a profile version of the likelihood:
 
 @d optim
 @{
-fn <- function(par) {
-    ret <- .snll(par, x = xlist, mu = mu)
-    if (!is.null(xrc))
-        ret <- ret + .snll(par, x = xrclist, mu = mu, 
-                           rightcensored = TRUE)
-    return(ret)
-}
-gr <- function(par) {
-    ret <- .snsc(par, x = xlist, mu = mu)
-    if (!is.null(xrc))
-        ret <- ret + .snsc(par, x = xrclist, mu = mu, 
-                           rightcensored = TRUE)
-    return(ret)
-}
 if (!length(fix)) {
     opargs <- c(list(par = start, fn = fn, gr = gr,
                     lower = lwr, method = "L-BFGS-B", 
