@@ -1055,12 +1055,12 @@ if (NS <- is.null(start))
 lwr <- rep(-Inf, times = K - 1)
 for (b in seq_len(length(xlist))) {
     bC <- nrow(xlist[[b]]) - 1L
-    lwr <- c(lwr, -Inf, rep.int(tol, times = bC - 1L))
+    lwr <- c(lwr, -Inf, rep.int(0, times = bC - 1L))
     if (NS) {
         ecdf0 <- cumsum(rowSums(xlist[[b]]))
         ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
         Qecdf <- Q(ecdf0)
-        bstart <- diff(Qecdf)
+        bstart <- log(diff(Qecdf))
         start <- c(start, Qecdf[1], bstart)
         start[!is.finite(start)] <- 0
     }
@@ -1081,15 +1081,17 @@ maxit <- 100
 while(maxit < 10001) {
    ret <- do.call("optim", opargs)
    maxit <- 5 * maxit
-   if (ret$convergence) {
+   if (ret$convergence > 0) {
        if (is.null(opargs$control))
            opargs$control <- list(maxit = maxit)
         else 
            opargs$control$maxit <- maxit
        opargs$par <- ret$par
+   } else {
+       break()
    }
 }
-if (ret$convergence)
+if (ret$convergence > 0)
     stop(paste("Unsuccessful optimisation in free1way", ret$message))
 @}
 
@@ -1101,6 +1103,7 @@ defined first
 @d profile
 @{
 fn <- function(par) {
+    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
     ret <- .snll(par, x = xlist, mu = mu)
     if (!is.null(xrc))
         ret <- ret + .snll(par, x = xrclist, mu = mu, 
@@ -1108,11 +1111,13 @@ fn <- function(par) {
     return(ret)
 }
 gr <- function(par) {
+    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
     ret <- .snsc(par, x = xlist, mu = mu)
     if (!is.null(xrc))
         ret <- ret + .snsc(par, x = xrclist, mu = mu, 
                            rightcensored = TRUE)
-    return(ret)
+    par[!is.finite(lwr)] <- 1
+    return(ret * par)
 }
 .profile <- function(start, fix = seq_len(K - 1)) {
     stopifnot(all(fix %in% seq_len(K - 1)))
@@ -1130,8 +1135,7 @@ gr <- function(par) {
                          p[-fix] <- par
                          gr(p)[-fix]
                      },
-                     lower = lwr[-fix], 
-                     method = "L-BFGS-B", 
+                     method = "BFGS", 
                      hessian = FALSE),
                      list(...))
     @<do optim@>
@@ -1152,8 +1156,9 @@ constants, and provide a profile version of the likelihood:
 @{
 if (!length(fix)) {
     opargs <- c(list(par = start, fn = fn, gr = gr,
-                    lower = lwr, method = "L-BFGS-B", 
-                    hessian = FALSE), list(...))
+                     # lower = lwr, 
+                     method = "BFGS", 
+                     hessian = FALSE), list(...))
     @<do optim@>
 } else if (length(fix) == length(start)) {
     ret <- list(par = start, 
@@ -1178,16 +1183,20 @@ ret$coefficients <- ret$par[parm]
 dn2 <- dimnames(xt)[2L]
 names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
-if (score)
-    ret$negscore <- .snsc(ret$par, x = xlist, mu = mu)[parm]
+par <- ret$par
+par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
+
+if (score) {
+    ret$negscore <- .snsc(par, x = xlist, mu = mu)[parm]
     if (!is.null(xrc))
-        ret$negscore <- ret$negscore + .snsc(ret$par, x = xrclist, mu = mu, 
+        ret$negscore <- ret$negscore + .snsc(par, x = xrclist, mu = mu, 
                                              rightcensored = TRUE)[parm]
+}
 if (hessian) {
     if (!is.null(xrc)) {
-        ret$hessian <- .shes(ret$par, x = xlist, mu = mu, xrc = xrclist)
+        ret$hessian <- .shes(par, x = xlist, mu = mu, xrc = xrclist)
     } else {
-        ret$hessian <- .shes(ret$par, x = xlist, mu = mu)
+        ret$hessian <- .shes(par, x = xlist, mu = mu)
     }
     ret$vcov <- solve(ret$hessian)
     if (length(parm) != nrow(ret$hessian))
@@ -1196,9 +1205,9 @@ if (hessian) {
         colnames(ret$hessian) <-  cnames
 }
 if (residuals) {
-    ret$negresiduals <- .snsr(ret$par, x = xlist, mu = mu)
+    ret$negresiduals <- .snsr(par, x = xlist, mu = mu)
     if (!is.null(xrc)) {
-        rcr <- .snsr(ret$par, x = xrclist, mu = mu, rightcensored = TRUE)
+        rcr <- .snsr(par, x = xrclist, mu = mu, rightcensored = TRUE)
         ret$negresiduals <- c(rbind(matrix(ret$negresiduals, nrow = C),
                                     matrix(rcr, nrow = C)))
      }
@@ -2421,7 +2430,7 @@ for (i in seq_len(nsim)) {
         x[,,b] <- r2dsim(1L, r = prob[, b], c = N[b,], delta = delta, link = link)[[1L]]
         rs <- rowSums(x[,,b]) > 0
         h <- h0[rs, b]
-        theta <- c(h[1], diff(h[-length(h)]))
+        theta <- c(h[1], log(diff(h[-length(h)])))
         parm <- c(parm, theta)
     }
     ### evaluate observed hessian for true parameters parm and x data
