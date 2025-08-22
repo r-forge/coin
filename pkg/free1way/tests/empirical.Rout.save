@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2025-08-22 r88676) -- "Unsuffered Consequences"
+R version 4.5.1 (2025-06-13) -- "Great Square Root"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -301,4 +301,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
- 13.868   0.184  14.063 
+ 13.808   0.215  14.022 

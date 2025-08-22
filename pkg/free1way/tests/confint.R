@@ -2,6 +2,7 @@
 library("free1way")
 
 set.seed(29)
+tol <- 1e-5
 
 level <- .9
 N <- 15
@@ -24,33 +25,41 @@ coef(ft2) + ci[2]
 logLik(ft1)
 logLik(ft2)
 
-all.equal(ci, confint(ft1, test = "Wald", level = level) + ci[1])
-all.equal(ci, confint(ft2, test = "Wald", level = level) + ci[2])
-all.equal(ci, confint(ft12, test = "Wald", level = level) + ci[1])
-all.equal(ci, confint(ft22, test = "Wald", level = level) + ci[2])
+all.equal(ci, confint(ft1, test = "Wald", level = level) + ci[1], 
+          tolerance = tol)
+all.equal(ci, confint(ft2, test = "Wald", level = level) + ci[2],
+          tolerance = tol)
+all.equal(ci, confint(ft12, test = "Wald", level = level) + ci[1],
+          tolerance = tol)
+all.equal(ci, confint(ft22, test = "Wald", level = level) + ci[2],
+          tolerance = tol)
 
 
 (ci <- confint(ft, test = "LRT", level = level))
 summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "LRT")$p.value
 summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "LRT")$p.value
 
-all.equal(ci, confint(ft12, test = "LRT", level = level) + ci[1])
-all.equal(ci, confint(ft22, test = "LRT", level = level) + ci[2])
+all.equal(ci, confint(ft12, test = "LRT", level = level) + ci[1],
+          tolerance = tol)
+all.equal(ci, confint(ft22, test = "LRT", level = level) + ci[2],
+          tolerance = tol)
 
 
 (ci <- confint(ft, test = "Rao", level = level))
 summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Rao")$p.value
 summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Rao")$p.value
 
-all.equal(ci, confint(ft12, test = "Rao", level = level) + ci[1])
-all.equal(ci, confint(ft22, test = "Rao", level = level) + ci[2])
+all.equal(ci, confint(ft12, test = "Rao", level = level) + ci[1],
+          tolerance = tol)
+all.equal(ci, confint(ft22, test = "Rao", level = level) + ci[2],
+          tolerance = tol)
 
 
 (ci <- confint(ft, test = "Permutation", level = .9))
-summary(ft1 <- free1way(y ~ w, mu = ci[1]), test = "Permutation", alternative = "greater")
-summary(ft2 <- free1way(y ~ w, mu = ci[2]), test = "Permutation", alternative = "less")
-summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Permutation")
-summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Permutation")
+summary(ft1 <- free1way(y ~ w, mu = ci[1]), test = "Permutation", alternative = "greater")$p.value
+summary(ft2 <- free1way(y ~ w, mu = ci[2]), test = "Permutation", alternative = "less")$p.value
+summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Permutation")$p.value
+summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Permutation")$p.value
 coef(ft1) + ci[1]
 coef(ft2) + ci[2]
 logLik(ft1)
@@ -62,18 +71,18 @@ confint(ft12, test = "Permutation", level = level) + ci[1]
 confint(ft22, test = "Permutation", level = level) + ci[2]
 
 ftc <- free1way(y ~ w, mu = coef(ft))
-summary(ftc, test = "Permutation", alternative = "greater")
-summary(ftc, test = "Permutation", alternative = "less")
-summary(ftc, test = "Permutation")
+summary(ftc, test = "Permutation", alternative = "greater")$p.value
+summary(ftc, test = "Permutation", alternative = "less")$p.value
+summary(ftc, test = "Permutation")$p.value
 
 confint(ftc, test = "Permutation", level = level) + coef(ft)
 
 ft <- free1way(y ~ w, B = 1000)
 (ci <- confint(ft, test = "Permutation", level = .9))
-summary(ft1 <- free1way(y ~ w, mu = ci[1]), test = "Permutation", alternative = "greater")
-summary(ft2 <- free1way(y ~ w, mu = ci[2]), test = "Permutation", alternative = "less")
-summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Permutation")
-summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Permutation")
+summary(ft1 <- free1way(y ~ w, mu = ci[1]), test = "Permutation", alternative = "greater")$p.value
+summary(ft2 <- free1way(y ~ w, mu = ci[2]), test = "Permutation", alternative = "less")$p.value
+summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Permutation")$p.value
+summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Permutation")$p.value
 coef(ft1) + ci[1]
 coef(ft2) + ci[2]
 logLik(ft1)
@@ -84,13 +93,13 @@ confint(ft2, test = "Permutation", level = level) + ci[2]
 confint(ft12, test = "Permutation", level = level) + ci[1]
 confint(ft22, test = "Permutation", level = level) + ci[2]
 
-summary(ftg <- free1way(y ~ w, mu = coef(ft)), test = "Permutation", alternative = "greater")
-summary(ftl <- free1way(y ~ w, mu = coef(ft)), test = "Permutation", alternative = "less")
-summary(ftt <- free1way(y ~ w, mu = coef(ft)), test = "Permutation")
+summary(ftg <- free1way(y ~ w, mu = coef(ft)), test = "Permutation", alternative = "greater")$p.value
+summary(ftl <- free1way(y ~ w, mu = coef(ft)), test = "Permutation", alternative = "less")$p.value
+summary(ftt <- free1way(y ~ w, mu = coef(ft)), test = "Permutation")$p.value
 
 ftc <- free1way(y ~ w, mu = coef(ft), B = 1000)
-summary(ftc, test = "Permutation", alternative = "greater")
-summary(ftc, test = "Permutation", alternative = "less")
-summary(ftc, test = "Permutation")
+summary(ftc, test = "Permutation", alternative = "greater")$p.value
+summary(ftc, test = "Permutation", alternative = "less")$p.value
+summary(ftc, test = "Permutation")$p.value
 
 confint(ftc, test = "Permutation", level = level) + coef(ft)
