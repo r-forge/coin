@@ -1,5 +1,5 @@
 
-R version 4.5.1 (2025-06-13) -- "Great Square Root"
+R Under development (unstable) (2025-08-22 r88676) -- "Unsuffered Consequences"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -108,7 +108,7 @@ sample estimates:
 > ft <- free1way(y = y, groups = x, B = 10000)
 > coef(ft)
        xB 
-0.7716646 
+0.7716714 
 > logLik(ft)
 [1] -65.29232
 > print(ft, test = "Rao")
@@ -121,7 +121,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Rao")
         2.5 %   97.5 %
-xB -0.2439622 1.787535
+xB -0.2439635 1.787535
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
 	Approximative Permutation Transformation Score Test
@@ -140,12 +140,12 @@ sample estimates:
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.4604, p-value = 0.1341
+Perm Z = 1.4604, p-value = 0.1335
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
         2.5 %   97.5 %
-xB -0.2633487 1.807859
+xB -0.2633524 1.807858
 attr(,"Attained level")
 [1] 0.9497
 > 
@@ -214,8 +214,8 @@ sample estimates:
 
 > ft <- free1way(y = y, groups = x, link = "cloglog", B = 10000)
 > coef(ft)
-     xB 
-0.55974 
+       xB 
+0.5597288 
 > logLik(ft)
 [1] -65.21707
 > print(ft, test = "Rao")
@@ -223,12 +223,12 @@ sample estimates:
 	2-sample Savage test against proportional hazards alternatives
 
 data:  y by x (A, B)
-Rao chi-squared = 2.3788, df = 1, p-value = 0.123
+Rao chi-squared = 2.3789, df = 1, p-value = 0.123
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > confint(ft, test = "Rao")
         2.5 %   97.5 %
-xB -0.1464007 1.265807
+xB -0.1464096 1.265794
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
 	Approximative Permutation Transformation Score Test
@@ -252,7 +252,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
         2.5 %   97.5 %
-xB -0.1615012 1.265669
+xB -0.1615268 1.265656
 attr(,"Attained level")
 [1] 0.9474
 > 
@@ -323,7 +323,7 @@ sample estimates:
 > ft <- free1way(y = y, groups = x, link = "loglog", B = 10000)
 > coef(ft)
        xB 
-0.3957142 
+0.3957133 
 > logLik(ft)
 [1] -65.67419
 > print(ft, test = "Rao")
@@ -336,7 +336,7 @@ alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Rao")
         2.5 %   97.5 %
-xB -0.2392848 1.030638
+xB -0.2392854 1.030697
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
 	Approximative Permutation Transformation Score Test
@@ -360,7 +360,7 @@ alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
         2.5 %   97.5 %
-xB -0.2629614 1.054296
+xB -0.2629625 1.054372
 attr(,"Attained level")
 [1] 0.9483
 > 
@@ -430,8 +430,8 @@ Likelihood-ratio Test: Chisq = 2.049718 on 1 degrees of freedom; p = 0.1522
 
 > ft <- free1way(y = y, groups = x, link = "probit", B = 10000)
 > coef(ft)
-       xB 
-0.4510943 
+      xB 
+0.451097 
 > logLik(ft)
 [1] -65.37282
 > print(ft, test = "Rao")
@@ -440,12 +440,12 @@ Likelihood-ratio Test: Chisq = 2.049718 on 1 degrees of freedom; p = 0.1522
 	alternatives
 
 data:  y by x (A, B)
-Rao chi-squared = 2.0459, df = 1, p-value = 0.1526
+Rao chi-squared = 2.0441, df = 1, p-value = 0.1528
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 > confint(ft, test = "Rao")
         2.5 %   97.5 %
-xB -0.1668288 1.069009
+xB -0.1667299 1.068971
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
 	Approximative Permutation Transformation Score Test
@@ -470,10 +470,10 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 > confint(ft, test = "Permutation")
         2.5 %   97.5 %
-xB -0.1780851 1.080266
+xB -0.1772833 1.080421
 attr(,"Attained level")
 [1] 0.947
 > 
 > proc.time()
    user  system elapsed 
-  3.334   0.079   3.409 
+  3.222   0.080   3.308 

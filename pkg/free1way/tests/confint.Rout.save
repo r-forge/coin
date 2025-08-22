@@ -1,5 +1,5 @@
 
-R version 4.5.1 (2025-06-13) -- "Great Square Root"
+R Under development (unstable) (2025-08-22 r88676) -- "Unsuffered Consequences"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -29,120 +29,120 @@ Type 'q()' to quit R.
 > ft <- free1way(y ~ w)
 > coef(ft)
        w2 
-0.5065346 
+0.5063922 
 > logLik(ft)
 [1] -101.7243
 > (ci <- confint(ft, test = "Wald", level = level))
           5 %     95 %
-w2 -0.5520518 1.565121
+w2 -0.5521949 1.564979
 > summary(ft1 <- free1way(y ~ w, mu = ci[1]), test = "Wald", alternative =
 + "greater")$p.value
     Wald Z 
-0.05006779 
+0.05000147 
 > summary(ft2 <- free1way(y ~ w, mu = ci[2]), test = "Wald", alternative =
 + "less")$p.value
-  Wald Z 
-0.049996 
+    Wald Z 
+0.05000081 
 > summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Wald")$p.value
 Wald chi-squared 
-       0.1001356 
+       0.1000029 
 > summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Wald")$p.value
 Wald chi-squared 
-      0.09999201 
+       0.1000016 
 > coef(ft1) + ci[1]
        w2 
-0.5061288 
+0.5063868 
 > coef(ft2) + ci[2]
        w2 
-0.5064986 
+0.5063933 
 > logLik(ft1)
 [1] -101.7243
 > logLik(ft2)
 [1] -101.7243
 > 
 > all.equal(ci, confint(ft1, test = "Wald", level = level) + ci[1])
-[1] "Mean relative difference: 0.0003833451"
+[1] "Mean relative difference: 5.086475e-06"
 > all.equal(ci, confint(ft2, test = "Wald", level = level) + ci[2])
-[1] "Mean relative difference: 3.398312e-05"
+[1] "Mean relative difference: 3.74626e-06"
 > all.equal(ci, confint(ft12, test = "Wald", level = level) + ci[1])
-[1] "Mean relative difference: 0.0003833451"
+[1] "Mean relative difference: 5.086475e-06"
 > all.equal(ci, confint(ft22, test = "Wald", level = level) + ci[2])
-[1] "Mean relative difference: 3.398312e-05"
+[1] "Mean relative difference: 3.74626e-06"
 > 
 > 
 > (ci <- confint(ft, test = "LRT", level = level))
           5 %     95 %
-w2 -0.5475836 1.579653
+w2 -0.5475837 1.579653
 > summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "LRT")$p.value
 logLR chi-squared 
-       0.09999963 
+        0.0999996 
 > summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "LRT")$p.value
 logLR chi-squared 
        0.09999976 
 > 
 > all.equal(ci, confint(ft12, test = "LRT", level = level) + ci[1])
-[1] "Mean relative difference: 1.010153e-07"
+[1] TRUE
 > all.equal(ci, confint(ft22, test = "LRT", level = level) + ci[2])
-[1] "Mean relative difference: 3.525714e-08"
+[1] TRUE
 > 
 > 
 > (ci <- confint(ft, test = "Rao", level = level))
           5 %     95 %
-w2 -0.5425071 1.555466
+w2 -0.5423726 1.555464
 > summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Rao")$p.value
 Rao chi-squared 
-     0.09999536 
+     0.09999948 
 > summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Rao")$p.value
 Rao chi-squared 
-     0.09999832 
+     0.09999957 
 > 
 > all.equal(ci, confint(ft12, test = "Rao", level = level) + ci[1])
-[1] "Mean relative difference: 4.403305e-05"
+[1] "Mean relative difference: 9.499311e-08"
 > all.equal(ci, confint(ft22, test = "Rao", level = level) + ci[2])
-[1] "Mean relative difference: 1.475942e-05"
+[1] "Mean relative difference: 8.422457e-08"
 > 
 > 
 > (ci <- confint(ft, test = "Permutation", level = .9))
-          5 %     95 %
-w2 -0.5712936 1.583552
+          5 %    95 %
+w2 -0.5707828 1.58395
 > summary(ft1 <- free1way(y ~ w, mu = ci[1]), test = "Permutation", alternative = "greater")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = 1.5916, p-value = 0.05574
-alternative hypothesis: true log-odds ratio is greater than -0.5712936
+Perm Z = 1.5909, p-value = 0.05582
+alternative hypothesis: true log-odds ratio is greater than -0.5707828
 
 > summary(ft2 <- free1way(y ~ w, mu = ci[2]), test = "Permutation", alternative = "less")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -1.4935, p-value = 0.06765
-alternative hypothesis: true log-odds ratio is less than 1.583552
+Perm Z = -1.494, p-value = 0.06759
+alternative hypothesis: true log-odds ratio is less than 1.58395
 
 > summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = 1.5916, p-value = 0.1115
-alternative hypothesis: true log-odds ratio is not equal to -0.5712936
+Perm Z = 1.5909, p-value = 0.1116
+alternative hypothesis: true log-odds ratio is not equal to -0.5707828
 
 > summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -1.4935, p-value = 0.1353
-alternative hypothesis: true log-odds ratio is not equal to 1.583552
+Perm Z = -1.494, p-value = 0.1352
+alternative hypothesis: true log-odds ratio is not equal to 1.58395
 
 > coef(ft1) + ci[1]
        w2 
-0.5064606 
+0.5063861 
 > coef(ft2) + ci[2]
        w2 
-0.5061928 
+0.5063934 
 > logLik(ft1)
 [1] -101.7243
 > logLik(ft2)
@@ -150,16 +150,16 @@ alternative hypothesis: true log-odds ratio is not equal to 1.583552
 > 
 > confint(ft1, test = "Permutation", level = level) + ci[1]
           5 %     95 %
-w2 -0.6067274 1.619964
+w2 -0.6065823 1.619772
 > confint(ft2, test = "Permutation", level = level) + ci[2]
-          5 %     95 %
-w2 -0.6774704 1.690618
+         5 %     95 %
+w2 -0.677129 1.690488
 > confint(ft12, test = "Permutation", level = level) + ci[1]
           5 %     95 %
-w2 -0.6067274 1.619964
+w2 -0.6065823 1.619772
 > confint(ft22, test = "Permutation", level = level) + ci[2]
-          5 %     95 %
-w2 -0.6774704 1.690618
+         5 %     95 %
+w2 -0.677129 1.690488
 > 
 > ftc <- free1way(y ~ w, mu = coef(ft))
 > summary(ftc, test = "Permutation", alternative = "greater")
@@ -167,34 +167,34 @@ w2 -0.6774704 1.690618
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -0.0002107, p-value = 0.5001
-alternative hypothesis: true log-odds ratio is greater than 0.5065346
+Perm Z = -4.0008e-06, p-value = 0.5
+alternative hypothesis: true log-odds ratio is greater than 0.5063922
 
 > summary(ftc, test = "Permutation", alternative = "less")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -0.0002107, p-value = 0.4999
-alternative hypothesis: true log-odds ratio is less than 0.5065346
+Perm Z = -4.0008e-06, p-value = 0.5
+alternative hypothesis: true log-odds ratio is less than 0.5063922
 
 > summary(ftc, test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -0.0002107, p-value = 0.9998
-alternative hypothesis: true log-odds ratio is not equal to 0.5065346
+Perm Z = -4.0008e-06, p-value = 1
+alternative hypothesis: true log-odds ratio is not equal to 0.5063922
 
 > 
 > confint(ftc, test = "Permutation", level = level) + coef(ft)
           5 %     95 %
-w2 -0.5725836 1.585652
+w2 -0.5723987 1.585536
 > 
 > ft <- free1way(y ~ w, B = 1000)
 > (ci <- confint(ft, test = "Permutation", level = .9))
           5 %     95 %
-w2 -0.5152057 1.607587
+w2 -0.5145946 1.607792
 attr(,"Attained level")
 [1] 0.9
 > summary(ft1 <- free1way(y ~ w, mu = ci[1]), test = "Permutation", alternative = "greater")
@@ -202,39 +202,39 @@ attr(,"Attained level")
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = 1.5145, p-value = 0.06495
-alternative hypothesis: true log-odds ratio is greater than -0.5152057
+Perm Z = 1.5137, p-value = 0.06505
+alternative hypothesis: true log-odds ratio is greater than -0.5145946
 
 > summary(ft2 <- free1way(y ~ w, mu = ci[2]), test = "Permutation", alternative = "less")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -1.5224, p-value = 0.06396
-alternative hypothesis: true log-odds ratio is less than 1.607587
+Perm Z = -1.5227, p-value = 0.06391
+alternative hypothesis: true log-odds ratio is less than 1.607792
 
 > summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = 1.5145, p-value = 0.1299
-alternative hypothesis: true log-odds ratio is not equal to -0.5152057
+Perm Z = 1.5137, p-value = 0.1301
+alternative hypothesis: true log-odds ratio is not equal to -0.5145946
 
 > summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -1.5224, p-value = 0.1279
-alternative hypothesis: true log-odds ratio is not equal to 1.607587
+Perm Z = -1.5227, p-value = 0.1278
+alternative hypothesis: true log-odds ratio is not equal to 1.607792
 
 > coef(ft1) + ci[1]
        w2 
-0.5067221 
+0.5063885 
 > coef(ft2) + ci[2]
        w2 
-0.5064467 
+0.5063934 
 > logLik(ft1)
 [1] -101.7243
 > logLik(ft2)
@@ -242,40 +242,40 @@ alternative hypothesis: true log-odds ratio is not equal to 1.607587
 > 
 > confint(ft1, test = "Permutation", level = level) + ci[1]
           5 %     95 %
-w2 -0.6011317 1.614854
+w2 -0.6013309 1.614511
 > confint(ft2, test = "Permutation", level = level) + ci[2]
           5 %     95 %
-w2 -0.6810732 1.694176
+w2 -0.6808969 1.694255
 > confint(ft12, test = "Permutation", level = level) + ci[1]
           5 %     95 %
-w2 -0.6011317 1.614854
+w2 -0.6013309 1.614511
 > confint(ft22, test = "Permutation", level = level) + ci[2]
           5 %     95 %
-w2 -0.6810732 1.694176
+w2 -0.6808969 1.694255
 > 
 > summary(ftg <- free1way(y ~ w, mu = coef(ft)), test = "Permutation", alternative = "greater")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -0.0002107, p-value = 0.5001
-alternative hypothesis: true log-odds ratio is greater than 0.5065346
+Perm Z = -4.0008e-06, p-value = 0.5
+alternative hypothesis: true log-odds ratio is greater than 0.5063922
 
 > summary(ftl <- free1way(y ~ w, mu = coef(ft)), test = "Permutation", alternative = "less")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -0.0002107, p-value = 0.4999
-alternative hypothesis: true log-odds ratio is less than 0.5065346
+Perm Z = -4.0008e-06, p-value = 0.5
+alternative hypothesis: true log-odds ratio is less than 0.5063922
 
 > summary(ftt <- free1way(y ~ w, mu = coef(ft)), test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -0.0002107, p-value = 0.9998
-alternative hypothesis: true log-odds ratio is not equal to 0.5065346
+Perm Z = -4.0008e-06, p-value = 1
+alternative hypothesis: true log-odds ratio is not equal to 0.5063922
 
 > 
 > ftc <- free1way(y ~ w, mu = coef(ft), B = 1000)
@@ -284,32 +284,32 @@ alternative hypothesis: true log-odds ratio is not equal to 0.5065346
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -0.0002107, p-value = 0.4945
-alternative hypothesis: true log-odds ratio is greater than 0.5065346
+Perm Z = -4.0008e-06, p-value = 0.4945
+alternative hypothesis: true log-odds ratio is greater than 0.5063922
 
 > summary(ftc, test = "Permutation", alternative = "less")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -0.0002107, p-value = 0.5065
-alternative hypothesis: true log-odds ratio is less than 0.5065346
+Perm Z = -4.0008e-06, p-value = 0.5065
+alternative hypothesis: true log-odds ratio is less than 0.5063922
 
 > summary(ftc, test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Perm Z = -0.0002107, p-value = 1
-alternative hypothesis: true log-odds ratio is not equal to 0.5065346
+Perm Z = -4.0008e-06, p-value = 1
+alternative hypothesis: true log-odds ratio is not equal to 0.5063922
 
 > 
 > confint(ftc, test = "Permutation", level = level) + coef(ft)
           5 %     95 %
-w2 -0.4765986 1.545699
+w2 -0.4764816 1.545707
 attr(,"Attained level")
 [1] 0.9
 > 
 > proc.time()
    user  system elapsed 
-  4.333   0.067   4.396 
+  1.589   0.054   1.638 

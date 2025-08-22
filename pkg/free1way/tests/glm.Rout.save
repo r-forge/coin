@@ -1,5 +1,5 @@
 
-R version 4.5.1 (2025-06-13) -- "Great Square Root"
+R Under development (unstable) (2025-08-22 r88676) -- "Unsuffered Consequences"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -39,7 +39,7 @@ Waiting for profiling to be done...
 > ft <- free1way(y = y, groups = x, B = 10000)
 > coef(ft)
        xB 
--1.862412 
+-1.862277 
 > print(ft, test = "LRT")
 
 	2-sample Wilcoxon test against proportional odds alternatives
@@ -61,18 +61,18 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Rao")
        2.5 %    97.5 %
-xB -2.165828 -1.558912
+xB -2.165829 -1.558907
 > print(ft, test = "Wald")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Wald chi-squared = 144.17, df = 1, p-value < 2.2e-16
+Wald chi-squared = 144.15, df = 1, p-value < 2.2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Wald")
        2.5 %    97.5 %
-xB -2.166422 -1.558402
+xB -2.166287 -1.558267
 > print(ft, test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
@@ -83,7 +83,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
        2.5 %    97.5 %
-xB -2.163205 -1.561537
+xB -2.163205 -1.561532
 attr(,"Attained level")
 [1] 0.9348
 > 
@@ -124,7 +124,7 @@ alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Rao")
        2.5 %   97.5 %
-xB 0.9213168 1.260745
+xB 0.9213172 1.260745
 > print(ft, test = "Wald")
 
 	2-sample Lehmann test against Lehmann alternatives
@@ -134,8 +134,8 @@ Wald chi-squared = 158.51, df = 1, p-value < 2.2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Wald")
-      2.5 %   97.5 %
-xB 0.921183 1.260879
+       2.5 %  97.5 %
+xB 0.9211832 1.26088
 > print(ft, test = "Permutation")
 
 	2-sample Lehmann test against Lehmann alternatives
@@ -146,10 +146,10 @@ alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
        2.5 %   97.5 %
-xB 0.9180893 1.263972
+xB 0.9180899 1.263972
 attr(,"Attained level")
 [1] 0.9403
 > 
 > proc.time()
    user  system elapsed 
-  0.529   0.021   0.544 
+  0.410   0.032   0.438 

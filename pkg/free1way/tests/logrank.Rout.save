@@ -1,5 +1,5 @@
 
-R version 4.5.1 (2025-06-13) -- "Great Square Root"
+R Under development (unstable) (2025-08-22 r88676) -- "Unsuffered Consequences"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -72,21 +72,21 @@ R.Surv.time..cens...as.R.ordered...TRUE.(0.655,0.656]
 > 
 > coef(ft)
         w2 
-0.01662233 
+0.01655413 
 > coef(m)
         w2 
 0.01655364 
 > 
 > vcov(ft)
           w2
-w2 0.8666847
+w2 0.8666556
 > vcov(m)
           w2
 w2 0.8666547
 > 
 > pr <- ft$par
 > cumsum(pr[-1])
-[1] -2.85388961 -1.97834555 -1.48721407 -1.02133811 -0.66348718 -0.08279543
+[1] -2.853926 -2.986802 -3.697882 -4.461641 -5.489307 -6.032887
 > cf
  R.Surv.time..cens...as.R.ordered...TRUE.(-Inf,0.122] 
                                           -2.85392519 
@@ -108,7 +108,7 @@ R.Surv.time..cens...as.R.ordered...TRUE.(0.655,0.656]
 	2-sample Savage test against proportional hazards alternatives
 
 data:  time by w (1, 2)
-Perm Z = 0.015267, p-value = 0.9878
+Perm Z = 0.015246, p-value = 0.9878
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > perm_test(m)
@@ -162,18 +162,18 @@ log-hazard ratio for horThyes
 > ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh,
 +                            link = "cloglog"))
 > coef(ft)
-horThyes 
-0.364121 
+ horThyes 
+0.3640442 
 > vcov(ft)
            horThyes
-horThyes 0.01563388
+horThyes 0.01563253
 > 
 > ft
 
 	2-sample Savage test against proportional hazards alternatives
 
 data:  Surv(time, cens) by horTh (no, yes)
-Perm Z = 2.9725, p-value = 0.002954
+Perm Z = 2.9726, p-value = 0.002953
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > 
@@ -202,10 +202,10 @@ horThyes 0.01575409
 +                            link = "cloglog"))
 > coef(ft)
  horThyes 
-0.3876685 
+0.3876014 
 > vcov(ft)
            horThyes
-horThyes 0.01604782
+horThyes 0.01604768
 > 
 > ft
 
@@ -213,11 +213,11 @@ horThyes 0.01604782
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0938, p-value = 0.001976
+Perm Z = 3.0935, p-value = 0.001978
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > 
 > 
 > proc.time()
    user  system elapsed 
-  2.674   0.068   2.739 
+  1.246   0.068   1.308 
