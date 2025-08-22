@@ -346,12 +346,12 @@
                 H$A <- H$A + Hrc$A
                 H$Z <- H$Z + Hrc$Z
             }
-            sAH <- try(solve(H$A, H$X))
+            sAH <- try(Matrix::solve(H$A, H$X))
             if (inherits(sAH, "try-error"))
                 stop("Error computing the Hessian in free1way")
             ret <- ret + (H$Z - crossprod(H$X, sAH))
         }
-        ret
+        as.matrix(ret)
     }
     
     # stratified negative score residual

@@ -578,12 +578,12 @@ right-censoring and the second table contains numbers of events.
             H$A <- H$A + Hrc$A
             H$Z <- H$Z + Hrc$Z
         }
-        sAH <- try(solve(H$A, H$X))
+        sAH <- try(Matrix::solve(H$A, H$X))
         if (inherits(sAH, "try-error"))
             stop("Error computing the Hessian in free1way")
         ret <- ret + (H$Z - crossprod(H$X, sAH))
     }
-    ret
+    as.matrix(ret)
 }
 
 
@@ -931,12 +931,12 @@ right-censoring and the second table contains numbers of events.
                 H$A <- H$A + Hrc$A
                 H$Z <- H$Z + Hrc$Z
             }
-            sAH <- try(solve(H$A, H$X))
+            sAH <- try(Matrix::solve(H$A, H$X))
             if (inherits(sAH, "try-error"))
                 stop("Error computing the Hessian in free1way")
             ret <- ret + (H$Z - crossprod(H$X, sAH))
         }
-        ret
+        as.matrix(ret)
     }
     
     
@@ -1779,7 +1779,7 @@ fp <- function(x) {
 }
 H <- .hes(op$par, x)
 ### analytical covariance of parameters
-solve(H$Z - crossprod(H$X, solve(H$A, H$X)))
+solve(H$Z - crossprod(H$X, Matrix::solve(H$A, H$X)))
 ### numerical covariance
 solve(op$hessian)[1:2,1:2]
 ### from glm
@@ -2057,12 +2057,12 @@ shift- and intercept parameters first:
 \mbox{}\verb@            H$A <- H$A + Hrc$A@\\
 \mbox{}\verb@            H$Z <- H$Z + Hrc$Z@\\
 \mbox{}\verb@        }@\\
-\mbox{}\verb@        sAH <- try(solve(H$A, H$X))@\\
+\mbox{}\verb@        sAH <- try(Matrix::solve(H$A, H$X))@\\
 \mbox{}\verb@        if (inherits(sAH, "try-error"))@\\
 \mbox{}\verb@            stop("Error computing the Hessian in free1way")@\\
 \mbox{}\verb@        ret <- ret + (H$Z - crossprod(H$X, sAH))@\\
 \mbox{}\verb@    }@\\
-\mbox{}\verb@    ret@\\
+\mbox{}\verb@    as.matrix(ret)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}

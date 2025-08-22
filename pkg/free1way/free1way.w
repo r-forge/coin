@@ -560,7 +560,7 @@ fp <- function(x) {
 }
 H <- .hes(op$par, x)
 ### analytical covariance of parameters
-solve(H$Z - crossprod(H$X, solve(H$A, H$X)))
+solve(H$Z - crossprod(H$X, Matrix::solve(H$A, H$X)))
 ### numerical covariance
 solve(op$hessian)[1:2,1:2]
 ### from glm
@@ -756,12 +756,12 @@ shift- and intercept parameters first:
             H$A <- H$A + Hrc$A
             H$Z <- H$Z + Hrc$Z
         }
-        sAH <- try(solve(H$A, H$X))
+        sAH <- try(Matrix::solve(H$A, H$X))
         if (inherits(sAH, "try-error"))
             stop("Error computing the Hessian in free1way")
         ret <- ret + (H$Z - crossprod(H$X, sAH))
     }
-    ret
+    as.matrix(ret)
 }
 @}
 
