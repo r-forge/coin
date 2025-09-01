@@ -2440,9 +2440,9 @@ that is, differences on a latent normal scale with variance one:
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize \NWlink{nuweb37b}{37b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize \NWlink{nuweb38}{38}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape ppplot}\nobreak\ {\footnotesize \NWlink{nuweb58}{58}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize \NWlink{nuweb63a}{63a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize \NWlink{nuweb64}{64}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape rfree1way}\nobreak\ {\footnotesize \NWlink{nuweb62}{62}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape power}\nobreak\ {\footnotesize \NWlink{nuweb72}{72}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape power}\nobreak\ {\footnotesize \NWlink{nuweb68}{68}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -3120,7 +3120,7 @@ a method for tables (the main workhorse) and additional user interfaces.
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb34}{34}\NWlink{nuweb62}{, 62}\NWlink{nuweb63a}{, 63a}\NWlink{nuweb64a}{, 64a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb34}{34}\NWlink{nuweb62}{, 62}\NWlink{nuweb64}{, 64}\NWlink{nuweb66}{, 66}.
 
 \item{}
 \end{list}
@@ -4138,7 +4138,7 @@ the relevant discrete density.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
-\NWtarget{nuweb63a}{} $\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize {63a}}$\,\rangle\equiv$
+\NWtarget{nuweb64}{} $\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize {64}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4177,10 +4177,13 @@ the relevant discrete density.
 \mbox{}\verb@    ret <- vector(mode = "list", length = n)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    for (i in seq_len(n)) {@\\
-\mbox{}\verb@        tab <- sapply(seq_len(K), function(k) @\\
+\mbox{}\verb@        tab <- sapply(seq_len(K), function(k) {@\\
+\mbox{}\verb@            prb <- c(p[1,k], diff(p[,k]))@\\
+\mbox{}\verb@#            unclass(cut(runif(colsums[k]), breaks = c(-Inf, cumsum(prb / sum(prb)))))@\\
 \mbox{}\verb@            rmultinom(1L, size = colsums[k], @\\
-\mbox{}\verb@                      prob = c(p[1,k], diff(p[,k]))))@\\
-\mbox{}\verb@        ret[[i]] <- as.table(array(tab, dim = c(length(prob), K), @\\
+\mbox{}\verb@                      prob = prb / sum(prb))@\\
+\mbox{}\verb@        })@\\
+\mbox{}\verb@        ret[[i]] <- as.table(array(unlist(tab), dim = c(length(prob), K), @\\
 \mbox{}\verb@                          dimnames = list(names(prob), @\\
 \mbox{}\verb@                                          names(colsums))))@\\
 \mbox{}\verb@    }@\\
@@ -4218,7 +4221,7 @@ computations reproducible:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
-\NWtarget{nuweb63b}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {63b}}$\,\rangle\equiv$
+\NWtarget{nuweb65}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {65}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4237,7 +4240,7 @@ computations reproducible:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb72}{72}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb68}{68}.
 
 \item{}
 \end{list}
@@ -4245,7 +4248,7 @@ computations reproducible:
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
-\NWtarget{nuweb64a}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {64a}}$\,\rangle\equiv$
+\NWtarget{nuweb66}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {66}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4264,7 +4267,7 @@ computations reproducible:
 \mbox{}\verb@if (is.null(names(delta))) @\\
 \mbox{}\verb@    names(delta) <- LETTERS[seq_len(K)[-1]]@\\
 \mbox{}\verb@p0 <- apply(prob, 2, cumsum)@\\
-\mbox{}\verb@h0 <- .q(link, p0)@\\
+\mbox{}\verb@h0 <- .q(link, p0[-nrow(p0),,drop = FALSE])@\\
 \mbox{}\verb@if (length(alloc_ratio) == 1L) @\\
 \mbox{}\verb@    alloc_ratio <- rep_len(alloc_ratio, K - 1)@\\
 \mbox{}\verb@stopifnot(length(alloc_ratio) == K - 1)@\\
@@ -4285,7 +4288,7 @@ computations reproducible:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb72}{72}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb68}{68}.
 
 \item{}
 \end{list}
@@ -4301,7 +4304,7 @@ sampling error.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap55}\raggedright\small
-\NWtarget{nuweb64b}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {64b}}$\,\rangle\equiv$
+\NWtarget{nuweb67a}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {67a}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4315,8 +4318,8 @@ sampling error.
 \mbox{}\verb@        x[,,b] <- r2dsim(1L, r = prob[, b], c = Nboost * N[b,], @\\
 \mbox{}\verb@                         delta = delta, link = link)[[1L]]@\\
 \mbox{}\verb@        rs <- rowSums(x[,,b]) > 0@\\
-\mbox{}\verb@        h <- h0[rs, b]@\\
-\mbox{}\verb@        theta <- c(h[1], log(diff(h[-length(h)])))@\\
+\mbox{}\verb@        h <- h0[rs[-length(rs)], b]@\\
+\mbox{}\verb@        theta <- c(h[1], log(diff(h)))@\\
 \mbox{}\verb@        parm <- c(parm, theta)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    ### evaluate observed hessian for true parameters parm and x data@\\
@@ -4330,7 +4333,7 @@ sampling error.
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb72}{72}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb68}{68}.
 
 \item{}
 \end{list}
@@ -4346,7 +4349,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
-\NWtarget{nuweb64c}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {64c}}$\,\rangle\equiv$
+\NWtarget{nuweb67b}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {67b}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4360,7 +4363,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb72}{72}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb68}{68}.
 
 \item{}
 \end{list}
@@ -4368,7 +4371,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
-\NWtarget{nuweb65}{} $\langle\,${\itshape power htest output}\nobreak\ {\footnotesize {65}}$\,\rangle\equiv$
+\NWtarget{nuweb67c}{} $\langle\,${\itshape power htest output}\nobreak\ {\footnotesize {67c}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4392,7 +4395,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb72}{72}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb68}{68}.
 
 \item{}
 \end{list}
@@ -4400,7 +4403,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
-\NWtarget{nuweb72}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {72}}$\,\rangle\equiv$
+\NWtarget{nuweb68}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {68}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4418,27 +4421,27 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@    stats:::assert_NULL_or_prob(sig.level)@\\
 \mbox{}\verb@    stats:::assert_NULL_or_prob(power)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape random seed}\nobreak\ {\footnotesize \NWlink{nuweb63b}{63b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape random seed}\nobreak\ {\footnotesize \NWlink{nuweb65}{65}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (is.null(n)) @\\
 \mbox{}\verb@        n <- ceiling(uniroot(function(n) {@\\
-\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb64c}{64c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb67b}{67b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@             }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)@\\
 \mbox{}\verb@    else if (is.null(delta)) {@\\
 \mbox{}\verb@        ### 2-sample only@\\
 \mbox{}\verb@        stopifnot(K == 2L)@\\
 \mbox{}\verb@        delta <- uniroot(function(delta) {@\\
-\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb64c}{64c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb67b}{67b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    ### <TH> interval depending on alternative, symmetry? </TH>@\\
 \mbox{}\verb@            }, interval = c(0, 10), tol = tol, extendInt = "upX")$root@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    else if (is.null(sig.level)) @\\
 \mbox{}\verb@        sig.level <- uniroot(function(sig.level) {@\\
-\mbox{}\verb@                @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb64c}{64c}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb67b}{67b}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@            }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root@\\
 \mbox{}\verb@    @\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb64a}{64a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb64b}{64b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb66}{66}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb67a}{67a}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    alternative <- match.arg(alternative)@\\
 \mbox{}\verb@    if (K == 2L) {@\\
@@ -4456,7 +4459,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@        power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape power htest output}\nobreak\ {\footnotesize \NWlink{nuweb65}{65}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape power htest output}\nobreak\ {\footnotesize \NWlink{nuweb67c}{67c}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ret@\\
 \mbox{}\verb@}@\\
@@ -4609,7 +4612,7 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 \item $\langle\,$diagonal elements for Hessian of intercepts\nobreak\ {\footnotesize \NWlink{nuweb6a}{6a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb7}{7}.}
 \item $\langle\,$do optim\nobreak\ {\footnotesize \NWlink{nuweb21}{21}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb22}{22}\NWlink{nuweb23}{, 23}.
 }
-\item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb64b}{64b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb72}{72}.}
+\item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb67a}{67a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68}{68}.}
 \item $\langle\,$free1way\nobreak\ {\footnotesize \NWlink{nuweb34}{34}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
 \item $\langle\,$free1way confint\nobreak\ {\footnotesize \NWlink{nuweb42}{42}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
 \item $\langle\,$free1way factor\nobreak\ {\footnotesize \NWlink{nuweb38}{38}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
@@ -4621,7 +4624,7 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 \item $\langle\,$Hessian\nobreak\ {\footnotesize \NWlink{nuweb7}{7}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
 \item $\langle\,$Hessian prep\nobreak\ {\footnotesize \NWlink{nuweb5b}{5b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb7}{7}.}
 \item $\langle\,$intercept / shift contributions to Hessian\nobreak\ {\footnotesize \NWlink{nuweb6b}{6b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb7}{7}.}
-\item $\langle\,$link2fun\nobreak\ {\footnotesize \NWlink{nuweb33}{33}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb34}{34}\NWlink{nuweb62}{, 62}\NWlink{nuweb63a}{, 63a}\NWlink{nuweb64a}{, 64a}.
+\item $\langle\,$link2fun\nobreak\ {\footnotesize \NWlink{nuweb33}{33}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb34}{34}\NWlink{nuweb62}{, 62}\NWlink{nuweb64}{, 64}\NWlink{nuweb66}{, 66}.
 }
 \item $\langle\,$linkfun\nobreak\ {\footnotesize \NWlink{nuweb15}{15}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14}{14}.}
 \item $\langle\,$logit\nobreak\ {\footnotesize \NWlink{nuweb16}{16}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14}{14}.}
@@ -4637,15 +4640,15 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 }
 \item $\langle\,$Permutation\nobreak\ {\footnotesize \NWlink{nuweb29}{29}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27a}{27a}.}
 \item $\langle\,$post processing\nobreak\ {\footnotesize \NWlink{nuweb24}{24}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$power\nobreak\ {\footnotesize \NWlink{nuweb72}{72}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$power call\nobreak\ {\footnotesize \NWlink{nuweb64c}{64c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb72}{72}.}
-\item $\langle\,$power htest output\nobreak\ {\footnotesize \NWlink{nuweb65}{65}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb72}{72}.}
-\item $\langle\,$power setup\nobreak\ {\footnotesize \NWlink{nuweb64a}{64a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb72}{72}.}
+\item $\langle\,$power\nobreak\ {\footnotesize \NWlink{nuweb68}{68}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
+\item $\langle\,$power call\nobreak\ {\footnotesize \NWlink{nuweb67b}{67b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68}{68}.}
+\item $\langle\,$power htest output\nobreak\ {\footnotesize \NWlink{nuweb67c}{67c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68}{68}.}
+\item $\langle\,$power setup\nobreak\ {\footnotesize \NWlink{nuweb66}{66}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68}{68}.}
 \item $\langle\,$ppplot\nobreak\ {\footnotesize \NWlink{nuweb58}{58}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
 \item $\langle\,$probit\nobreak\ {\footnotesize \NWlink{nuweb19}{19}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14}{14}.}
 \item $\langle\,$profile\nobreak\ {\footnotesize \NWlink{nuweb22}{22}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$r2dsim\nobreak\ {\footnotesize \NWlink{nuweb63a}{63a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$random seed\nobreak\ {\footnotesize \NWlink{nuweb63b}{63b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb72}{72}.}
+\item $\langle\,$r2dsim\nobreak\ {\footnotesize \NWlink{nuweb64}{64}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
+\item $\langle\,$random seed\nobreak\ {\footnotesize \NWlink{nuweb65}{65}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb68}{68}.}
 \item $\langle\,$Rao\nobreak\ {\footnotesize \NWlink{nuweb28b}{28b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27a}{27a}.}
 \item $\langle\,$resampling\nobreak\ {\footnotesize \NWlink{nuweb31}{31}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb34}{34}.}
 \item $\langle\,$rfree1way\nobreak\ {\footnotesize \NWlink{nuweb62}{62}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}

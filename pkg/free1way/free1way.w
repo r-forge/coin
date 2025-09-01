@@ -2431,10 +2431,13 @@ r2dsim <- function(n, r, c, delta = 0,
     ret <- vector(mode = "list", length = n)
 
     for (i in seq_len(n)) {
-        tab <- sapply(seq_len(K), function(k) 
+        tab <- sapply(seq_len(K), function(k) {
+            prb <- c(p[1,k], diff(p[,k]))
+#            unclass(cut(runif(colsums[k]), breaks = c(-Inf, cumsum(prb / sum(prb)))))
             rmultinom(1L, size = colsums[k], 
-                      prob = c(p[1,k], diff(p[,k]))))
-        ret[[i]] <- as.table(array(tab, dim = c(length(prob), K), 
+                      prob = prb / sum(prb))
+        })
+        ret[[i]] <- as.table(array(unlist(tab), dim = c(length(prob), K), 
                           dimnames = list(names(prob), 
                                           names(colsums))))
     }
@@ -2495,7 +2498,7 @@ if (is.null(colnames(prob)))
 if (is.null(names(delta))) 
     names(delta) <- LETTERS[seq_len(K)[-1]]
 p0 <- apply(prob, 2, cumsum)
-h0 <- .q(link, p0)
+h0 <- .q(link, p0[-nrow(p0),,drop = FALSE])
 if (length(alloc_ratio) == 1L) 
     alloc_ratio <- rep_len(alloc_ratio, K - 1)
 stopifnot(length(alloc_ratio) == K - 1)
@@ -2533,8 +2536,8 @@ for (i in seq_len(nsim)) {
         x[,,b] <- r2dsim(1L, r = prob[, b], c = Nboost * N[b,], 
                          delta = delta, link = link)[[1L]]
         rs <- rowSums(x[,,b]) > 0
-        h <- h0[rs, b]
-        theta <- c(h[1], log(diff(h[-length(h)])))
+        h <- h0[rs[-length(rs)], b]
+        theta <- c(h[1], log(diff(h)))
         parm <- c(parm, theta)
     }
     ### evaluate observed hessian for true parameters parm and x data
