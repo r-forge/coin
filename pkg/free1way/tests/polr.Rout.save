@@ -147,7 +147,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
         2.5 %   97.5 %
 xB -0.2633524 1.807858
 attr(,"Attained level")
-[1] 0.9497
+[1] 0.9492
 > 
 > ci <- confint(m <- polr(y ~ x, method = "cloglog"))
 Waiting for profiling to be done...
@@ -476,4 +476,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  3.104   0.060   3.160 
+  3.207   0.060   3.262 

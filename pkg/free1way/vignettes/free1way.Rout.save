@@ -1,5 +1,11 @@
 
-> .rcr <- function(z) rev.default(cumsum(rev.default(z)))
+> Nsim <- 100
+
+> .rcr <- function(z) {
++     N <- length(z)
++     s <- cumsum(z)
++     return(s[N] - c(0, s[-N]))
++ }
 
 > .table2list <- function(x) {
 +     dx <- dim(x)
@@ -142,7 +148,7 @@ t3          0.8109302 0.8109298
 
 > H <- .hes(op$par, x)
 
-> solve(H$Z - crossprod(H$X, solve(H$A, H$X)))
+> solve(H$Z - crossprod(H$X, Matrix::solve(H$A, H$X)))
           [,1]      [,2]
 [1,] 0.5337662 0.3000000
 [2,] 0.3000000 0.5361111
@@ -1222,6 +1228,59 @@ trtWide Angle         -3.28921    0.79367 -4.14429  0.0000
 > ppplot(y, x, conf.args = list(link = "cloglog", type = "Wald", 
 +     col = NA, border = NULL), conf.level = 0.95)
 
+> (logOR <- c(log(1.5), log(2)))
+[1] 0.4054651 0.6931472
+
+> nd <- rfree1way(150, delta = logOR)
+
+> coef(ft <- free1way(y ~ trt, data = nd))
+     trtB      trtC 
+0.3501702 0.8105335 
+
+> sqrt(diag(vcov(ft)))
+     trtB      trtC 
+0.2008023 0.2038962 
+
+> logLik(ft)
+[1] -2741.121
+
+> nd$y <- qchisq(nd$y, df = 3)
+
+> coef(ft <- free1way(y ~ trt, data = nd))
+     trtB      trtC 
+0.3501702 0.8105335 
+
+> sqrt(diag(vcov(ft)))
+     trtB      trtC 
+0.2008023 0.2038962 
+
+> logLik(ft)
+[1] -2741.121
+
+> n <- 25
+
+> pvals <- replicate(Nsim, {
++     nd <- rfree1way(n, delta = c(0.25, 0.5), alloc_ratio = 2, 
++         nblocks = 2)
++     summary(free1way(y ~ trt |  .... [TRUNCATED] 
+
+> power.free1way.test(n = n, delta = c(0.25, 0.5), prob = matrix(1/n, 
++     nrow = n, ncol = 2), alloc_ratio = 2)
+
+     Stratified 3-sample Kruskal-Wallis test against proportional odds alternatives 
+
+                n = 25
+Total sample size = 50 (Control) + 100 (B) + 100 (C) = 250
+            power = 0.3105947
+        sig.level = 0.05
+   log-odds ratio = 0.25, 0.50
+
+NOTE: 'n' is sample size in control group of first stratum
+
+
+> mean(pvals < 0.05)
+[1] 0.3
+
 > delta <- log(1.5)
 
 > power.prop.test(n = 25, p1 = 0.5, p2 = plogis(qlogis(0.5) - 
@@ -1265,14 +1324,12 @@ NOTE: 'n' is sample size in control group
 
                 n = 20
 Total sample size = 60 (Control) + 90 (low) + 120 (med) + 120 (high) = 390
-            power = 0.378275
+            power = 0.379143
         sig.level = 0.05
    log-odds ratio = 0.2231436, 0.4054651, 0.5596158
 
 NOTE: 'n' is sample size in control group of first stratum
 
-
-> Nsim <- 100
 
 > delta <- log(3)
 
@@ -1288,7 +1345,7 @@ NOTE: 'n' is sample size in control group of first stratum
 + }
 
 > mean(pw < 0.05)
-[1] 0.41
+[1] 0.4
 
 > power.free1way.test(n = N, delta = delta)
 
@@ -1296,7 +1353,7 @@ NOTE: 'n' is sample size in control group of first stratum
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) = 30
-            power = 0.3697044
+            power = 0.3831552
         sig.level = 0.05
    log-odds ratio = 1.098612
 
@@ -1317,7 +1374,7 @@ NOTE: 'n' is sample size in control group
 + }
 
 > mean(pw < 0.05)
-[1] 0.31
+[1] 0.34
 
 > power.free1way.test(n = N, delta = delta)
 
@@ -1325,7 +1382,7 @@ NOTE: 'n' is sample size in control group
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) + 15 (C) = 45
-            power = 0.3027677
+            power = 0.3128566
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
@@ -1349,7 +1406,7 @@ NOTE: 'n' is sample size in control group
 + }
 
 > mean(pw < 0.05)
-[1] 0.29
+[1] 0.28
 
 > boxplot(cf)
 
@@ -1361,7 +1418,7 @@ NOTE: 'n' is sample size in control group
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) + 15 (C) = 45
-            power = 0.2904494
+            power = 0.2912551
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
@@ -1399,7 +1456,7 @@ NOTE: 'n' is sample size in control group
 +     pw[i] <- summary(ft, test = "Permuta ..." ... [TRUNCATED] 
 
 > mean(pw < 0.05)
-[1] 0.66
+[1] 0.73
 
 > boxplot(cf)
 
@@ -1412,7 +1469,7 @@ NOTE: 'n' is sample size in control group
 
                 n = 15
 Total sample size = 45 (Ctrl) + 45 (B) + 45 (C) = 135
-            power = 0.6926091
+            power = 0.6992779
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
@@ -1424,9 +1481,9 @@ NOTE: 'n' is sample size in control group of first stratum
 
      Stratified 3-sample Kruskal-Wallis test against proportional odds alternatives 
 
-                n = 20
-Total sample size = 60 (Ctrl) + 60 (B) + 60 (C) = 180
-            power = 0.8215771
+                n = 19
+Total sample size = 57 (Ctrl) + 57 (B) + 57 (C) = 171
+            power = 0.8042649
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
@@ -1440,37 +1497,14 @@ NOTE: 'n' is sample size in control group of first stratum
 
                 n = 19
 Total sample size = 57 (Ctrl) + 57 (B) + 57 (C) = 171
-            power = 0.7998793
+            power = 0.8042649
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
 NOTE: 'n' is sample size in control group of first stratum
 
 
-> nd <- data.frame(w = gl(3, 150))
-
-> (logOR <- c(0, log(1.5), log(2)))
-[1] 0.0000000 0.4054651 0.6931472
-
-> nd$u <- rfree1way(nrow(nd), delta = logOR[nd$w])
-
-> coef(ft <- free1way(u ~ w, data = nd))
-       w2        w3 
-0.5503940 0.7772773 
-
-> logLik(ft)
-[1] -2741.244
-
-> nd$y <- qchisq(nd$u, df = 3)
-
-> coef(ft <- free1way(y ~ w, data = nd))
-       w2        w3 
-0.5503940 0.7772773 
-
-> logLik(ft)
-[1] -2741.244
-
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 19.145   0.160  19.325 
+ 31.670   0.151  31.846 
