@@ -175,6 +175,10 @@ describes different distributions by means of shift parameter on a latent
 scale defined by $F$. The negative shift term ensures that positive values of $\beta_k$ correspond
 to the situation of outcomes being stochastically larger in group $k$
 compared to control.
+The shift parameters are invariant with respect to monotone transformations
+of the response values, that is, transforming the observations of all
+treatment groups by the same function does not affect the values of
+$\beta_k$.
 
 The choise $F(z) = \exp(-\exp(-z))$ gives rise to $g_\text{L}$, 
 $F(z) = 1 - \exp(-\exp(z))$ corresponds to $g_\text{PH}$, $F = \text{expit}$
@@ -267,6 +271,7 @@ right-censoring and the second table contains numbers of events.
 \label{ch:est}
 
 <<localfun, echo = FALSE>>=
+Nsim <- 100
 @<cumsumrev@>
 @<table2list@>
 @<negative logLik@>
@@ -381,9 +386,13 @@ intercepts needs this small helper function:
 
 @d cumsumrev
 @{
-.rcr <- function(z)
+.rcr <- function(z) {
     # Reduce('+', z, accumulate = TRUE, right = TRUE)
-    rev.default(cumsum(rev.default(z)))
+    # rev.default(cumsum(rev.default(z)))
+    N <- length(z)
+    s <- cumsum(z)
+    return(s[N] - c(0, s[-N]))
+}
 @}
 
 (<TH>maybe add \code{rev = TRUE} to \code{cumsum}?</TH>).
@@ -2295,16 +2304,90 @@ ppplot(y, x, conf.args = list(link = "cloglog", type = "Wald",
 \end{figure}
 
 
-\chapter{Power and Sample Size}
+\chapter{Random Number Generation} \label{ch:rng}
 
-The term ``distribution-free'' refers to the invariance of the reference
-distribution with respect to the distribution of an absolutely continuous
-outcome under control. Unfortunately, this is no longer true for
-non-continuous outcomes (due to ties) and under the alternative. That means
-that sample size assessments always take place under certain assumptions
-regarding the outcome distribution.
+With~\ref{model} we know that
+\begin{eqnarray*}
+U = F_Y(Y \mid \rS = b, \rT = k) = F\left(F^{-1}\left(F_Y(Y \mid \rS = b, \rT = 1)\right) - \beta_k\right), \quad k = 2, \dots, K
+\end{eqnarray*}
+follows a standard uniform distribution on the unit interval. This means
+that we can sample from the distribution of $Y$ using
+\begin{eqnarray*}
+F_Y^{-1}\left(F(F^{-1}(U) + \beta_k) \mid \rS = b, \rT = 1)\right).
+\end{eqnarray*}
+It is therefore enough to draw samples from $F(F^{-1}(U) + \beta_k)$, that
+is, assuming a uniform distribution for $F_Y$ in each control group. Because
+of the invariance with respect to monotone transformations, transforming all
+observations by the same quantile function changes the outcome distributions
+but not the shift effects.
 
-We start implementing a function for simulating $C \times K$ tables. We need
+@d rfree1way
+@{
+.rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) {
+
+    logU <- log(ret <- runif(n))
+
+    @<link2fun@>
+
+    trt <- (abs(delta) > 0)
+    ret[trt] <- .p(link, .q(link, logU[trt], log.p = TRUE) + delta[trt])
+
+    return(ret)
+}
+
+rfree1way <- function(n, delta = 0, alloc_ratio = 1, nblocks = 1, strata_ratio = 1, 
+                      link = c("logit", "probit", "cloglog", "loglog"))
+{
+
+    K <- length(delta) + 1L
+    if (is.null(names(delta))) 
+        names(delta) <- LETTERS[seq_len(K)[-1]]
+    if (length(alloc_ratio) == 1L) 
+        alloc_ratio <- rep_len(alloc_ratio, K - 1)
+    stopifnot(length(alloc_ratio) == K - 1)
+    B <- nblocks
+    if (length(strata_ratio) == 1L) 
+        strata_ratio <- rep_len(strata_ratio, B - 1)
+    stopifnot(length(strata_ratio) == B - 1)
+    ### sample size per group (columns) and stratum (rows)
+    N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
+             matrix(c(1, strata_ratio), nrow = B, ncol = K)
+    rownames(N) <- paste0("block", seq_len(B))
+    ctrl <- "Control"
+    colnames(N) <- c(ctrl, names(delta))
+    trt <- gl(K, 1, labels = colnames(N))
+    blk <- gl(B, 1, labels = rownames(N))
+    ret <- expand.grid(trt = trt, blk = blk)
+    if (B == 1L) ret$blk <- NULL
+    ret <- ret[rep(seq_len(nrow(ret)), times = N), , drop = FALSE]
+    ret$y <- .rfree1way(nrow(ret), delta = c(0, delta)[ret$trt], link = link)
+    return(ret)
+}
+@}
+
+<<rfree1way>>=
+(logOR <- c(log(1.5), log(2)))
+nd <- rfree1way(150, delta = logOR)
+coef(ft <- free1way(y ~ trt, data = nd))
+sqrt(diag(vcov(ft)))
+logLik(ft)
+nd$y <- qchisq(nd$y, df = 3)
+coef(ft <- free1way(y ~ trt, data = nd))
+sqrt(diag(vcov(ft)))
+logLik(ft)
+n <- 25
+pvals <- replicate(Nsim, 
+{
+  nd <- rfree1way(n, delta = c(.25, .5), alloc_ratio = 2, nblocks = 2)
+  summary(free1way(y ~ trt | blk, data = nd), test = "Permutation")$p.value
+})
+
+power.free1way.test(n = n, delta = c(.25, .5), prob = matrix(1 / n, nrow =
+n, ncol = 2), alloc_ratio = 2)
+mean(pvals < .05)
+@@
+
+Next we start implementing a function for simulating $C \times K$ tables. We need
 to specify the number of observations in each treatment group (\code{c}),
 the discrete distribution of the control (\code{r}), a model (\code{link}), and a
 treatment effect (\code{delta}, in line with \code{power.XYZ.test}). In
@@ -2361,7 +2444,18 @@ r2dsim <- function(n, r, c, delta = 0,
 
 
 
-We are now ready to put together a function for power evaluation and sample
+
+\chapter{Power and Sample Size}
+
+The term ``distribution-free'' refers to the invariance of the reference
+distribution with respect to the distribution of an absolutely continuous
+outcome under control. Unfortunately, this is no longer true for
+non-continuous outcomes (due to ties) and under the alternative. That means
+that sample size assessments always take place under certain assumptions
+regarding the outcome distribution.
+
+With the infrastructure from Chapter~\ref{ch:rng}, 
+we are now ready to put together a function for power evaluation and sample
 size assessment. The core idea is to draw samples from the relevant data
 (under a specific model in the alternative) and to estimate the Fisher
 information of the treatment effect parameters for this configuration. The
@@ -2419,15 +2513,25 @@ if (!is.null(names(dn)[1L]))
 colnames(N) <- c(ctrl, names(delta))
 @}
 
+For estimating the Fisher information, we draw samples from the discrete
+outcome distribution and evaluate the observed Fisher information for the,
+here and now known true parameters. The average of these Fisher information
+matrices is then used as an estimate for the expected Fisher information.
+For small sample sizes less than $100$, we draw larger samples (at least
+$1000$) and adjust the obtained Fisher information accordingly to reduce
+sampling error.
+
 @d estimate Fisher information
 @{
 he <- 0
 deltamu <- delta - mu
+Nboost <- ifelse(n < 100, ceiling(1000 / n), 1)
 for (i in seq_len(nsim)) {
     parm <- deltamu
     x <- as.table(array(0, dim = c(C, K, B)))
     for (b in seq_len(B)) {
-        x[,,b] <- r2dsim(1L, r = prob[, b], c = N[b,], delta = delta, link = link)[[1L]]
+        x[,,b] <- r2dsim(1L, r = prob[, b], c = Nboost * N[b,], 
+                         delta = delta, link = link)[[1L]]
         rs <- rowSums(x[,,b]) > 0
         h <- h0[rs, b]
         theta <- c(h[1], log(diff(h[-length(h)])))
@@ -2435,7 +2539,7 @@ for (i in seq_len(nsim)) {
     }
     ### evaluate observed hessian for true parameters parm and x data
     he <- he + .free1wayML(x, link = link, mu = mu, start = parm, 
-                           fix = seq_along(parm))$hessian
+                           fix = seq_along(parm))$hessian / Nboost
 }
 ### estimate expected Fisher information
 he <- he / nsim
@@ -2566,7 +2670,7 @@ We now estimate the power of a Wilcoxon test with, first by simulation from
 a logistic distribution, and then by our power function:
 
 <<wilcox>>=
-Nsim <- 100
+
 delta <- log(3)
 N <- 15
 w <- gl(2, N)
@@ -2653,34 +2757,6 @@ power.free1way.test(n = N, prob = prb, delta = delta, seed = 3)
 power.free1way.test(power = .8, prob = prb, delta = delta, seed = 3)
 power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 @@
-
-\chapter{Ideas}
-
-<TH> Maybe we need something for simulating continuous data? </TH>
-
-@d rfree1way
-@{
-rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) {
-
-    logU <- log(runif(n))
-
-    @<link2fun@>
-
-    return(.p(link, .q(link, logU, log.p = TRUE) + delta))
-}
-@}
-
-<<rfree1way>>=
-nd <- data.frame(w = gl(3, 150))
-(logOR <- c(0, log(1.5), log(2)))
-nd$u <- rfree1way(nrow(nd), delta = logOR[nd$w])
-coef(ft <- free1way(u ~ w, data = nd))
-logLik(ft)
-nd$y <- qchisq(nd$u, df = 3)
-coef(ft <- free1way(y ~ w, data = nd))
-logLik(ft)
-@@
-
 
 \chapter*{Index}
 

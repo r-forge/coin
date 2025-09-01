@@ -90,9 +90,13 @@
     
     # cumsumrev
     
-    .rcr <- function(z)
+    .rcr <- function(z) {
         # Reduce('+', z, accumulate = TRUE, right = TRUE)
-        rev.default(cumsum(rev.default(z)))
+        # rev.default(cumsum(rev.default(z)))
+        N <- length(z)
+        s <- cumsum(z)
+        return(s[N] - c(0, s[-N]))
+    }
     
     # negative logLik
     
@@ -1251,9 +1255,9 @@ r2dsim <- function(n, r, c, delta = 0,
 
 # rfree1way
 
-rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) {
+.rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) {
 
-    logU <- log(runif(n))
+    logU <- log(ret <- runif(n))
 
     # link2fun
     
@@ -1263,7 +1267,39 @@ rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "logl
     }
     
 
-    return(.p(link, .q(link, logU, log.p = TRUE) + delta))
+    trt <- (abs(delta) > 0)
+    ret[trt] <- .p(link, .q(link, logU[trt], log.p = TRUE) + delta[trt])
+
+    return(ret)
+}
+
+rfree1way <- function(n, delta = 0, alloc_ratio = 1, nblocks = 1, strata_ratio = 1, 
+                      link = c("logit", "probit", "cloglog", "loglog"))
+{
+
+    K <- length(delta) + 1L
+    if (is.null(names(delta))) 
+        names(delta) <- LETTERS[seq_len(K)[-1]]
+    if (length(alloc_ratio) == 1L) 
+        alloc_ratio <- rep_len(alloc_ratio, K - 1)
+    stopifnot(length(alloc_ratio) == K - 1)
+    B <- nblocks
+    if (length(strata_ratio) == 1L) 
+        strata_ratio <- rep_len(strata_ratio, B - 1)
+    stopifnot(length(strata_ratio) == B - 1)
+    ### sample size per group (columns) and stratum (rows)
+    N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
+             matrix(c(1, strata_ratio), nrow = B, ncol = K)
+    rownames(N) <- paste0("block", seq_len(B))
+    ctrl <- "Control"
+    colnames(N) <- c(ctrl, names(delta))
+    trt <- gl(K, 1, labels = colnames(N))
+    blk <- gl(B, 1, labels = rownames(N))
+    ret <- expand.grid(trt = trt, blk = blk)
+    if (B == 1L) ret$blk <- NULL
+    ret <- ret[rep(seq_len(nrow(ret)), times = N), , drop = FALSE]
+    ret$y <- .rfree1way(nrow(ret), delta = c(0, delta)[ret$trt], link = link)
+    return(ret)
 }
 
 # power
@@ -1378,11 +1414,13 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
     
     he <- 0
     deltamu <- delta - mu
+    Nboost <- ifelse(n < 100, ceiling(1000 / n), 1)
     for (i in seq_len(nsim)) {
         parm <- deltamu
         x <- as.table(array(0, dim = c(C, K, B)))
         for (b in seq_len(B)) {
-            x[,,b] <- r2dsim(1L, r = prob[, b], c = N[b,], delta = delta, link = link)[[1L]]
+            x[,,b] <- r2dsim(1L, r = prob[, b], c = Nboost * N[b,], 
+                             delta = delta, link = link)[[1L]]
             rs <- rowSums(x[,,b]) > 0
             h <- h0[rs, b]
             theta <- c(h[1], log(diff(h[-length(h)])))
@@ -1390,7 +1428,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
         }
         ### evaluate observed hessian for true parameters parm and x data
         he <- he + .free1wayML(x, link = link, mu = mu, start = parm, 
-                               fix = seq_along(parm))$hessian
+                               fix = seq_along(parm))$hessian / Nboost
     }
     ### estimate expected Fisher information
     he <- he / nsim
