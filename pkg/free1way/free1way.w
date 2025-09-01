@@ -2335,7 +2335,7 @@ but not the shift effects.
     return(ret)
 }
 
-rfree1way <- function(n, delta = 0, alloc_ratio = 1, nblocks = 1, strata_ratio = 1, 
+rfree1way <- function(n, delta = 0, offset = 0, alloc_ratio = 1, nblocks = 1, strata_ratio = 1, 
                       link = c("logit", "probit", "cloglog", "loglog"))
 {
 
@@ -2358,9 +2358,10 @@ rfree1way <- function(n, delta = 0, alloc_ratio = 1, nblocks = 1, strata_ratio =
     trt <- gl(K, 1, labels = colnames(N))
     blk <- gl(B, 1, labels = rownames(N))
     ret <- expand.grid(trt = trt, blk = blk)
+    ret$offset <- offset
     if (B == 1L) ret$blk <- NULL
     ret <- ret[rep(seq_len(nrow(ret)), times = N), , drop = FALSE]
-    ret$y <- .rfree1way(nrow(ret), delta = c(0, delta)[ret$trt], link = link)
+    ret$y <- .rfree1way(nrow(ret), delta = ret$offset + c(0, delta)[ret$trt], link = link)
     return(ret)
 }
 @}
@@ -2385,6 +2386,21 @@ pvals <- replicate(Nsim,
 power.free1way.test(n = n, delta = c(.25, .5), prob = matrix(1 / n, nrow =
 n, ncol = 2), alloc_ratio = 2)
 mean(pvals < .05)
+@@
+
+This function can also be used to simulate survival times, for example, from
+a proportional hazards model with certain expected censoring probability.
+
+<<rfree1waysurv>>=
+N <- 1000
+nd <- ndT <- rfree1way(N, delta = 1, link = "cloglog")
+ndC <- rfree1way(N, delta = 1, offset = qlogis(.25), link = "cloglog")
+
+nd$y <- Surv(pmin(ndT$y, ndC$y), ndT$y < ndC$y)
+
+mean(nd$y[,2])
+summary(free1way(y ~ trt, data = nd, link = "cloglog"))
+summary(coxph(y ~ trt, data = nd))
 @@
 
 Next we start implementing a function for simulating $C \times K$ tables. We need

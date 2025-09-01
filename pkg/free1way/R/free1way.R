@@ -1272,7 +1272,7 @@ r2dsim <- function(n, r, c, delta = 0,
     return(ret)
 }
 
-rfree1way <- function(n, delta = 0, alloc_ratio = 1, nblocks = 1, strata_ratio = 1, 
+rfree1way <- function(n, delta = 0, offset = 0, alloc_ratio = 1, nblocks = 1, strata_ratio = 1, 
                       link = c("logit", "probit", "cloglog", "loglog"))
 {
 
@@ -1295,9 +1295,10 @@ rfree1way <- function(n, delta = 0, alloc_ratio = 1, nblocks = 1, strata_ratio =
     trt <- gl(K, 1, labels = colnames(N))
     blk <- gl(B, 1, labels = rownames(N))
     ret <- expand.grid(trt = trt, blk = blk)
+    ret$offset <- offset
     if (B == 1L) ret$blk <- NULL
     ret <- ret[rep(seq_len(nrow(ret)), times = N), , drop = FALSE]
-    ret$y <- .rfree1way(nrow(ret), delta = c(0, delta)[ret$trt], link = link)
+    ret$y <- .rfree1way(nrow(ret), delta = ret$offset + c(0, delta)[ret$trt], link = link)
     return(ret)
 }
 
