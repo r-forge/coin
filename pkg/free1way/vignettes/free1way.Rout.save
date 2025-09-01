@@ -1271,7 +1271,7 @@ trtWide Angle         -3.28921    0.79367 -4.14429  0.0000
 
                 n = 25
 Total sample size = 50 (Control) + 100 (B) + 100 (C) = 250
-            power = 0.3105947
+            power = 0.3104482
         sig.level = 0.05
    log-odds ratio = 0.25, 0.50
 
@@ -1324,7 +1324,7 @@ NOTE: 'n' is sample size in control group
 
                 n = 20
 Total sample size = 60 (Control) + 90 (low) + 120 (med) + 120 (high) = 390
-            power = 0.379143
+            power = 0.3790058
         sig.level = 0.05
    log-odds ratio = 0.2231436, 0.4054651, 0.5596158
 
@@ -1345,7 +1345,7 @@ NOTE: 'n' is sample size in control group of first stratum
 + }
 
 > mean(pw < 0.05)
-[1] 0.4
+[1] 0.48
 
 > power.free1way.test(n = N, delta = delta)
 
@@ -1353,7 +1353,7 @@ NOTE: 'n' is sample size in control group of first stratum
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) = 30
-            power = 0.3831552
+            power = 0.3838285
         sig.level = 0.05
    log-odds ratio = 1.098612
 
@@ -1374,7 +1374,7 @@ NOTE: 'n' is sample size in control group
 + }
 
 > mean(pw < 0.05)
-[1] 0.34
+[1] 0.29
 
 > power.free1way.test(n = N, delta = delta)
 
@@ -1382,7 +1382,7 @@ NOTE: 'n' is sample size in control group
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) + 15 (C) = 45
-            power = 0.3128566
+            power = 0.3127796
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
@@ -1406,7 +1406,7 @@ NOTE: 'n' is sample size in control group
 + }
 
 > mean(pw < 0.05)
-[1] 0.28
+[1] 0.33
 
 > boxplot(cf)
 
@@ -1418,7 +1418,7 @@ NOTE: 'n' is sample size in control group
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) + 15 (C) = 45
-            power = 0.2912551
+            power = 0.2912039
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
@@ -1456,7 +1456,7 @@ NOTE: 'n' is sample size in control group
 +     pw[i] <- summary(ft, test = "Permuta ..." ... [TRUNCATED] 
 
 > mean(pw < 0.05)
-[1] 0.73
+[1] 0.75
 
 > boxplot(cf)
 
@@ -1469,7 +1469,7 @@ NOTE: 'n' is sample size in control group
 
                 n = 15
 Total sample size = 45 (Ctrl) + 45 (B) + 45 (C) = 135
-            power = 0.6992779
+            power = 0.6990469
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
@@ -1483,7 +1483,7 @@ NOTE: 'n' is sample size in control group of first stratum
 
                 n = 19
 Total sample size = 57 (Ctrl) + 57 (B) + 57 (C) = 171
-            power = 0.8042649
+            power = 0.8045059
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
@@ -1497,7 +1497,7 @@ NOTE: 'n' is sample size in control group of first stratum
 
                 n = 19
 Total sample size = 57 (Ctrl) + 57 (B) + 57 (C) = 171
-            power = 0.8042649
+            power = 0.8045059
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
@@ -1507,4 +1507,4 @@ NOTE: 'n' is sample size in control group of first stratum
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 31.670   0.151  31.846 
+ 32.555   0.103  32.670 

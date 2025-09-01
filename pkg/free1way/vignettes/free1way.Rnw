@@ -4177,12 +4177,8 @@ the relevant discrete density.
 \mbox{}\verb@    ret <- vector(mode = "list", length = n)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    for (i in seq_len(n)) {@\\
-\mbox{}\verb@        tab <- sapply(seq_len(K), function(k) {@\\
-\mbox{}\verb@            prb <- c(p[1,k], diff(p[,k]))@\\
-\mbox{}\verb@#            unclass(cut(runif(colsums[k]), breaks = c(-Inf, cumsum(prb / sum(prb)))))@\\
-\mbox{}\verb@            rmultinom(1L, size = colsums[k], @\\
-\mbox{}\verb@                      prob = prb / sum(prb))@\\
-\mbox{}\verb@        })@\\
+\mbox{}\verb@        tab <- sapply(seq_len(K), function(k)@\\
+\mbox{}\verb@            unclass(table(cut(runif(colsums[k]), breaks = c(-Inf, p[,k])))))@\\
 \mbox{}\verb@        ret[[i]] <- as.table(array(unlist(tab), dim = c(length(prob), K), @\\
 \mbox{}\verb@                          dimnames = list(names(prob), @\\
 \mbox{}\verb@                                          names(colsums))))@\\

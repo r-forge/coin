@@ -1243,12 +1243,8 @@ r2dsim <- function(n, r, c, delta = 0,
     ret <- vector(mode = "list", length = n)
 
     for (i in seq_len(n)) {
-        tab <- sapply(seq_len(K), function(k) {
-            prb <- c(p[1,k], diff(p[,k]))
-#            unclass(cut(runif(colsums[k]), breaks = c(-Inf, cumsum(prb / sum(prb)))))
-            rmultinom(1L, size = colsums[k], 
-                      prob = prb / sum(prb))
-        })
+        tab <- sapply(seq_len(K), function(k)
+            unclass(table(cut(runif(colsums[k]), breaks = c(-Inf, p[,k])))))
         ret[[i]] <- as.table(array(unlist(tab), dim = c(length(prob), K), 
                           dimnames = list(names(prob), 
                                           names(colsums))))
