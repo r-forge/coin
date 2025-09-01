@@ -16,23 +16,23 @@
 
 > .nll <- function(parm, x, mu = 0, rightcensored = FALSE) {
 +     bidx <- seq_len(ncol(x) - 1)
-+     beta <- c(0, mu + parm[bidx])
-+     intercepts < .... [TRUNCATED] 
++     delta <- c(0, mu + parm[bidx])
++     intercepts  .... [TRUNCATED] 
 
 > .nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
 +     bidx <- seq_len(ncol(x) - 1)
-+     beta <- c(0, mu + parm[bidx])
-+     intercepts < .... [TRUNCATED] 
++     delta <- c(0, mu + parm[bidx])
++     intercepts  .... [TRUNCATED] 
 
 > .nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
 +     bidx <- seq_len(ncol(x) - 1)
-+     beta <- c(0, mu + parm[bidx])
-+     intercepts < .... [TRUNCATED] 
++     delta <- c(0, mu + parm[bidx])
++     intercepts  .... [TRUNCATED] 
 
 > .hes <- function(parm, x, mu = 0, rightcensored = FALSE) {
 +     bidx <- seq_len(ncol(x) - 1)
-+     beta <- c(0, mu + parm[bidx])
-+     intercepts < .... [TRUNCATED] 
++     delta <- c(0, mu + parm[bidx])
++     intercepts  .... [TRUNCATED] 
 
 > .snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
 +     C <- sapply(x, NROW)
@@ -1507,4 +1507,4 @@ NOTE: 'n' is sample size in control group of first stratum
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 32.555   0.103  32.670 
+ 32.494   0.187  32.702 

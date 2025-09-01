@@ -149,41 +149,41 @@ is our main objetive. We refer to the first treatment $\rT = 1$ as
 With model function $g: [0,1] \times \R \rightarrow [0,1]$, we describe
 the conditional distribution under treatment $k$ as a function of the 
 conditional distribution under control and a scalar parameter
-$\beta_k$:
+$\delta_k$:
 \begin{eqnarray*}
-F(y \mid \rS = b, \rT = k) = g(F(y \mid \rS = b, \rT = 1), \beta_k).
+F(y \mid \rS = b, \rT = k) = g(F(y \mid \rS = b, \rT = 1), \delta_k).
 \end{eqnarray*}
 The model is assumed to hold for all blocks $b = 1,
 \dots, B$, treatments $k = 2, \dots, K$, and outcome values $y \in \samY$ based on parameters
-$\beta_2, \dots, \beta_K \in \R$. For notational convenience, we define $\beta_1 := 0$. 
+$\delta_2, \dots, \delta_K \in \R$. For notational convenience, we define $\delta_1 := 0$. 
 
 This model formulation gives rise to several specific models, for
-example, $g_\text{L}(p, \beta) = p^{\exp(-\beta)}$ (Lehmann alternatives),
-$g_\text{PH}(p, \beta) = 1 - (1 -
-p)^{\exp(-\beta)}$ (proportional hazards),
-$g_\text{PO}(p, \beta) = \text{expit}(\text{logit}(p) - \beta)$ (proportional
-odds), or $g_\text{Cd}(p, \beta) =
-\Phi(\Phi^{-1}(p) - \beta)$ (generalised Cohen's $d$).
+example, $g_\text{L}(p, \delta) = p^{\exp(-\delta)}$ (Lehmann alternatives),
+$g_\text{PH}(p, \delta) = 1 - (1 -
+p)^{\exp(-\delta)}$ (proportional hazards),
+$g_\text{PO}(p, \delta) = \text{expit}(\text{logit}(p) - \delta)$ (proportional
+odds), or $g_\text{Cd}(p, \delta) =
+\Phi(\Phi^{-1}(p) - \delta)$ (generalised Cohen's $d$).
 
 Instead of directly working with $g$, we parameterise the model in terms of
 some absolute continuous cdf $F$ with log-concave density $f = F^\prime$
 and corresponding derivative $f^\prime$. The location model 
 \begin{eqnarray} \label{model}
-F_Y(y \mid \rS = b, \rT = k) = F\left(F^{-1}\left(F_Y(y \mid \rS = b, \rT = 1)\right) - \beta_k\right), \quad k = 2, \dots, K
+F_Y(y \mid \rS = b, \rT = k) = F\left(F^{-1}\left(F_Y(y \mid \rS = b, \rT = 1)\right) - \delta_k\right), \quad k = 2, \dots, K
 \end{eqnarray}
 describes different distributions by means of shift parameter on a latent
-scale defined by $F$. The negative shift term ensures that positive values of $\beta_k$ correspond
+scale defined by $F$. The negative shift term ensures that positive values of $\delta_k$ correspond
 to the situation of outcomes being stochastically larger in group $k$
 compared to control.
 The shift parameters are invariant with respect to monotone transformations
 of the response values, that is, transforming the observations of all
 treatment groups by the same function does not affect the values of
-$\beta_k$.
+$\delta_k$.
 
 The choise $F(z) = \exp(-\exp(-z))$ gives rise to $g_\text{L}$, 
 $F(z) = 1 - \exp(-\exp(z))$ corresponds to $g_\text{PH}$, $F = \text{expit}$
 leads to  $g_\text{PO}$, and $F = \Phi$ results in $g_\text{Cd}$. The choice
-of $F$ is made a priori and determines the interpretation of $\beta_k$. 
+of $F$ is made a priori and determines the interpretation of $\delta_k$. 
 
 This document describes the implementation of estimators of these shift parameters,
 as well as of confidence intervals and formal hypothesis tests for contrasts thereof under
@@ -191,12 +191,12 @@ the permutation and population model.
 
 \paragraph{Hypthesis}
 
-We are interested in inference for $\beta_2, \dots, \beta_K$, in terms of
+We are interested in inference for $\delta_2, \dots, \delta_K$, in terms of
 confidence intervals and hypothesis tests of the form
 \begin{eqnarray*}
-& & H_0: \beta_k - \mu_k = 0, \text{``two.sided''}, \quad k = 2, \dots, K, \\
-& & H_0: \beta_k - \mu_k \ge 0, \text{``less''}, \quad k = K = 2, \\
-& & H_0: \beta_k - \mu_k \le 0, \text{``greater''}, \quad k = K = 2,
+& & H_0: \delta_k - \mu_k = 0, \text{``two.sided''}, \quad k = 2, \dots, K, \\
+& & H_0: \delta_k - \mu_k \ge 0, \text{``less''}, \quad k = K = 2, \\
+& & H_0: \delta_k - \mu_k \le 0, \text{``greater''}, \quad k = K = 2,
 \end{eqnarray*}
 with the latter two options only for the two-sample case ($K = 2$).
 
@@ -204,9 +204,9 @@ with the latter two options only for the two-sample case ($K = 2$).
 
 For an ordered categorical outcome $Y$ from sample space $\samY = \{y_1 < y_2 < \cdots <
 y_C\}$, we parameterise the model in terms of intercept ($\vartheta_\cdot$) and
-shift ($\beta_\cdot$) parameters
+shift ($\delta_\cdot$) parameters
 \begin{eqnarray*}
-F_Y(y_c \mid \rS = b, \rT = k) = F(\vartheta_{c,b} - \beta_k), \quad c = 1, \dots,
+F_Y(y_c \mid \rS = b, \rT = k) = F(\vartheta_{c,b} - \delta_k), \quad c = 1, \dots,
 C,
 \end{eqnarray*}
 that is we replace the transformed control outcome $F^{-1}\left(F_Y(y_c \mid
@@ -218,9 +218,9 @@ within each block $b = 1, \dots, B$.
 
 We collect all model parameters in a vector
 \begin{eqnarray*}
-\thetavec = (\theta_1 & := & \beta_2, \\
+\thetavec = (\theta_1 & := & \delta_2, \\
                & \dots & , \\
-               \theta_{K - 1} & := & \beta_K, \\
+               \theta_{K - 1} & := & \delta_K, \\
                \theta_{K} & := & \vartheta_{1,1}, \\
                \theta_{K + 1} & := & \vartheta_{2,1} - \vartheta_{1,1} > 0, \\
                &  \dots, & \\
@@ -236,7 +236,7 @@ the intercept parameters can be ensured by box constraints for $\thetavec$.
 For the $i$th observation $(y_i = y_c, s_i = b, \rt_i = k)$ from block $b$
 under treatment $k$, the log-likelihood contribution is
 \begin{eqnarray*}
-\log(\Prob(y_{c - 1} < Y \le y_c \mid \rS = b, \rT = k)) = \log(F(\vartheta_{c,b} - \beta_k) - F(\vartheta_{c - 1,b} - \beta_k)).
+\log(\Prob(y_{c - 1} < Y \le y_c \mid \rS = b, \rT = k)) = \log(F(\vartheta_{c,b} - \delta_k) - F(\vartheta_{c - 1,b} - \delta_k)).
 \end{eqnarray*}
 
 For an absolutely continuous outcome $Y \in \R$, we define $y_c := y_{(c)}$,
@@ -246,7 +246,7 @@ above is then the empirical or nonparametric log-likelihood.
 If observations were independently right-censored, the contribution of the
 event $Y > \tilde{y}$ to the log-likelihood is
 \begin{eqnarray*}
-\log(\Prob(Y > \tilde{y} \mid \rS = b, \rT = k)) = \log(1 - F(\vartheta_{c - 1,b} - \beta_k))
+\log(\Prob(Y > \tilde{y} \mid \rS = b, \rT = k)) = \log(1 - F(\vartheta_{c - 1,b} - \delta_k))
 \end{eqnarray*}
 where $y_{c - 1} = \max \{y \in \samY \mid y \le \tilde{y}\}$, that is,
 observations right-censored between $y_{c - 1}$ and $y_c$ correspond to the
@@ -296,20 +296,20 @@ We start implementing the log-likelihood function for parameters \code{parm}
 $= \thetavec$ (assuming only a single block) with data from a two-way $C
 \times K$ contingency table \code{x}. 
 
-From $\thetavec$, we first extract the shift parameters $\beta_\cdot$ and
+From $\thetavec$, we first extract the shift parameters $\delta_\cdot$ and
 then the intercept parameters $\vartheta_\cdot$, compute the differences
-$\vartheta_{c,1} - \beta_k$ and evaluate the probabilities
+$\vartheta_{c,1} - \delta_k$ and evaluate the probabilities
 \code{prb} $ = \Prob(y_{c - 1} < Y \le y_c \mid \rS = 1, \rT = k)$ for all
 groups:
 
 @d parm to prob
 @{
 bidx <- seq_len(ncol(x) - 1L)
-beta <- c(0, mu + parm[bidx])
+delta <- c(0, mu + parm[bidx])
 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
-tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
-                                 ncol = ncol(x),
-                                 byrow = TRUE)
+tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
+                                  ncol = ncol(x),
+                                  byrow = TRUE)
 Ftmb <- F(tmb)
 if (rightcensored) {
     prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
@@ -346,10 +346,10 @@ constrained minimisation problem quickly and reliably.
 Next, we implement the gradient of the negative
 log-likelihood, the negative score function for the parameters in
 $\thetavec$. The score function for the empirical likelihood, evaluated at
-parameters $\vartheta_\cdot$ and $\beta_\cdot$ is given in many places
+parameters $\vartheta_\cdot$ and $\delta_\cdot$ is given in many places
 \citep[for example in][Formula~(2)]{HothornMoestBuehlmann2017}. 
 We begin computing the ratio of $f(\vartheta_{c,1} -
-\beta_k)$ and the corresponding likelihood
+\delta_k)$ and the corresponding likelihood
 
 @d density prob ratio
 @{
@@ -415,10 +415,10 @@ zero:
 
 We also need access to the observed Fisher information of the shift
 parameters. We proceed by implementing the Hessian for the intercept
-($\vartheta_\cdot$) and shift ($\beta_\cdot$) parameters, as given in Formula~(4) of
+($\vartheta_\cdot$) and shift ($\delta_\cdot$) parameters, as given in Formula~(4) of
 \cite{HothornMoestBuehlmann2017} first. This partitioned matrix
 \begin{eqnarray*}
-\mH(\vartheta_1, \dots, \vartheta_{C - 1}, \beta_2, \dots, \beta_K) = 
+\mH(\vartheta_1, \dots, \vartheta_{C - 1}, \delta_2, \dots, \delta_K) = 
 \left(\begin{array}{ll}
 \mA & \X \\
 \X^\top & \Z
@@ -430,8 +430,8 @@ compute the Fisher information matrix for the shift parameters only by means
 of the Schur complement $\Z - \X^\top \mA^{-1} \X$.
 
 In addition to probabilities \code{prb}, the Hessian necessitates the
-computation of $f(\vartheta_{c,1} - \beta_k)$ and $f^\prime(\vartheta_{c,1} -
-\beta_k)$. We start preparing these objects, keeping in mind to remove terms
+computation of $f(\vartheta_{c,1} - \delta_k)$ and $f^\prime(\vartheta_{c,1} -
+\delta_k)$. We start preparing these objects, keeping in mind to remove terms
 not being present under right-censoring:
 
 @d Hessian prep
@@ -501,7 +501,7 @@ if (length(Z) > 1L) Z <- diag(Z)
 @}
 
 We return the three matrices $\mA$, $\X$, and $\Z$ necessary for the
-computation of the Fisher information for $\beta_2, \dots, \beta_K$ as the Schur
+computation of the Fisher information for $\delta_2, \dots, \delta_K$ as the Schur
 complement $\Z - \X^\top \mA^{-1} \X$. Because the matrix $\mA$ is symmetric
 tridiagonal, we use infrastructure from the \pkg{Matrix} package to
 represent this matrix:
@@ -533,7 +533,7 @@ represent this matrix:
 
 We start with an example involving $K = 3$ groups for a binary outcome and
 use a binary logistic regression model to estimate the two log-odds ratios
-$\beta_2$ and $\beta_3$ along with their estimated covariance
+$\delta_2$ and $\delta_3$ along with their estimated covariance
 <<glm>>=
 library("free1way")
 (x <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2))
@@ -657,7 +657,7 @@ xrclist <- xrclist[strata]
 }
 @}
 
-We first extract the shift parameters $\beta_{\cdot}$ and then, separately
+We first extract the shift parameters $\delta_{\cdot}$ and then, separately
 for each stratum, the corresponding contrasts of the intercept parameters:
 
 @d stratum prep
@@ -667,7 +667,7 @@ K <- unique(do.call("c", lapply(x, ncol))) ### the same
 B <- length(x)
 sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
 bidx <- seq_len(K - 1L)
-beta <- parm[bidx]
+delta <- parm[bidx]
 intercepts <- split(parm[-bidx], sidx)
 @}
 
@@ -680,7 +680,7 @@ corresponding log-likelihoods:
     @<stratum prep@>
     ret <- 0
     for (b in seq_len(B))
-        ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+        ret <- ret + .nll(c(delta, intercepts[[b]]), x[[b]], mu = mu,
                           rightcensored = rightcensored)
     return(ret)
 }
@@ -696,7 +696,7 @@ intercept parameters are only concatenated:
     @<stratum prep@>
     ret <- numeric(length(bidx))
     for (b in seq_len(B)) {
-        nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+        nsc <- .nsc(c(delta, intercepts[[b]]), x[[b]], mu = mu,
                     rightcensored = rightcensored)
         ret[bidx] <- ret[bidx] + nsc[bidx]
         ret <- c(ret, nsc[-bidx])
@@ -716,7 +716,7 @@ row of zeros in the table:
     for (b in seq_len(B)) {
         idx <- attr(x[[b]], "idx")
         sr <- numeric(length(idx))
-        sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+        sr[idx] <- .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,
                         rightcensored = rightcensored)
         ret <- c(ret, sr)
     }
@@ -757,9 +757,9 @@ shift- and intercept parameters first:
     @<stratum prep@>
     ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
     for (b in seq_len(B)) {
-        H <- .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+        H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu)
         if (!is.null(xrc)) {
-            Hrc <- .hes(c(beta, intercepts[[b]]), xrc[[b]], mu = mu, 
+            Hrc <- .hes(c(delta, intercepts[[b]]), xrc[[b]], mu = mu, 
                         rightcensored = TRUE)
             H$X <- H$X + Hrc$X
             H$A <- H$A + Hrc$A
@@ -1130,17 +1130,17 @@ gr <- function(par) {
 }
 .profile <- function(start, fix = seq_len(K - 1)) {
     stopifnot(all(fix %in% seq_len(K - 1)))
-    beta <- start[fix]
+    delta <- start[fix]
     opargs <- c(list(par = start[-fix], 
                      fn = function(par) {
                          p <- numeric(length(par) + length(fix))
-                         p[fix] <- beta
+                         p[fix] <- delta
                          p[-fix] <- par
                          fn(p)
                      },
                      gr = function(par) {
                          p <- numeric(length(par) + length(fix))
-                         p[fix] <- beta
+                         p[fix] <- delta
                          p[-fix] <- par
                          gr(p)[-fix]
                      },
@@ -1149,7 +1149,7 @@ gr <- function(par) {
                      list(...))
     @<do optim@>
     p <- numeric(length(start))
-    p[fix] <- beta
+    p[fix] <- delta
     p[-fix] <- ret$par
     ret$par <- p
     ret
@@ -1324,8 +1324,8 @@ if (test == "Wald") {
 
 \section{Wald Statistics}
 
-We only need access to the parameter estimates $\hat{\beta}_2, \dots,
-\hat{\beta}_K$ and the corresponding Hessian:
+We only need access to the parameter estimates $\hat{\delta}_2, \dots,
+\hat{\delta}_K$ and the corresponding Hessian:
 
 @d Wald statistic
 @{
@@ -2214,10 +2214,10 @@ because the parameter $\mu$ shows up as a vertical shift of the diagonal
 if the model is appropriate.
 
 Likewise, model~(\ref{model}) can be graphically assessed using the PP-plot.
-We concentrate on the two-sample case. The shift parameter $\beta_2$ gives
-rise to the model-based PP graph $(p, F(F^{-1}(p) - \beta_2))$ and a
+We concentrate on the two-sample case. The shift parameter $\delta_2$ gives
+rise to the model-based PP graph $(p, F(F^{-1}(p) - \delta_2))$ and a
 confidence \emph{band} can be obtained from a confidence \emph{interval} for
-$\beta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
+$\delta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
 
 @d ROC bands
 @{
@@ -2308,14 +2308,14 @@ ppplot(y, x, conf.args = list(link = "cloglog", type = "Wald",
 
 With~\ref{model} we know that
 \begin{eqnarray*}
-U = F_Y(Y \mid \rS = b, \rT = k) = F\left(F^{-1}\left(F_Y(Y \mid \rS = b, \rT = 1)\right) - \beta_k\right), \quad k = 2, \dots, K
+U = F_Y(Y \mid \rS = b, \rT = k) = F\left(F^{-1}\left(F_Y(Y \mid \rS = b, \rT = 1)\right) - \delta_k\right), \quad k = 2, \dots, K
 \end{eqnarray*}
 follows a standard uniform distribution on the unit interval. This means
 that we can sample from the distribution of $Y$ using
 \begin{eqnarray*}
-F_Y^{-1}\left(F(F^{-1}(U) + \beta_k) \mid \rS = b, \rT = 1)\right).
+F_Y^{-1}\left(F(F^{-1}(U) + \delta_k) \mid \rS = b, \rT = 1)\right).
 \end{eqnarray*}
-It is therefore enough to draw samples from $F(F^{-1}(U) + \beta_k)$, that
+It is therefore enough to draw samples from $F(F^{-1}(U) + \delta_k)$, that
 is, assuming a uniform distribution for $F_Y$ in each control group. Because
 of the invariance with respect to monotone transformations, transforming all
 observations by the same quantile function changes the outcome distributions

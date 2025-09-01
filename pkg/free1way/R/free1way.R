@@ -104,11 +104,11 @@
         # parm to prob
         
         bidx <- seq_len(ncol(x) - 1L)
-        beta <- c(0, mu + parm[bidx])
+        delta <- c(0, mu + parm[bidx])
         intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
-        tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
-                                         ncol = ncol(x),
-                                         byrow = TRUE)
+        tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
+                                          ncol = ncol(x),
+                                          byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
             prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
@@ -126,11 +126,11 @@
         # parm to prob
         
         bidx <- seq_len(ncol(x) - 1L)
-        beta <- c(0, mu + parm[bidx])
+        delta <- c(0, mu + parm[bidx])
         intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
-        tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
-                                         ncol = ncol(x),
-                                         byrow = TRUE)
+        tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
+                                          ncol = ncol(x),
+                                          byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
             prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
@@ -166,11 +166,11 @@
         # parm to prob
         
         bidx <- seq_len(ncol(x) - 1L)
-        beta <- c(0, mu + parm[bidx])
+        delta <- c(0, mu + parm[bidx])
         intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
-        tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
-                                         ncol = ncol(x),
-                                         byrow = TRUE)
+        tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
+                                          ncol = ncol(x),
+                                          byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
             prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
@@ -198,11 +198,11 @@
         # parm to prob
         
         bidx <- seq_len(ncol(x) - 1L)
-        beta <- c(0, mu + parm[bidx])
+        delta <- c(0, mu + parm[bidx])
         intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
-        tmb <- intercepts - matrix(beta, nrow = length(intercepts),  
-                                         ncol = ncol(x),
-                                         byrow = TRUE)
+        tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
+                                          ncol = ncol(x),
+                                          byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
             prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
@@ -294,12 +294,12 @@
         B <- length(x)
         sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
         bidx <- seq_len(K - 1L)
-        beta <- parm[bidx]
+        delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
         ret <- 0
         for (b in seq_len(B))
-            ret <- ret + .nll(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+            ret <- ret + .nll(c(delta, intercepts[[b]]), x[[b]], mu = mu,
                               rightcensored = rightcensored)
         return(ret)
     }
@@ -314,12 +314,12 @@
         B <- length(x)
         sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
         bidx <- seq_len(K - 1L)
-        beta <- parm[bidx]
+        delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
         ret <- numeric(length(bidx))
         for (b in seq_len(B)) {
-            nsc <- .nsc(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+            nsc <- .nsc(c(delta, intercepts[[b]]), x[[b]], mu = mu,
                         rightcensored = rightcensored)
             ret[bidx] <- ret[bidx] + nsc[bidx]
             ret <- c(ret, nsc[-bidx])
@@ -337,14 +337,14 @@
         B <- length(x)
         sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
         bidx <- seq_len(K - 1L)
-        beta <- parm[bidx]
+        delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
         ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
         for (b in seq_len(B)) {
-            H <- .hes(c(beta, intercepts[[b]]), x[[b]], mu = mu)
+            H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu)
             if (!is.null(xrc)) {
-                Hrc <- .hes(c(beta, intercepts[[b]]), xrc[[b]], mu = mu, 
+                Hrc <- .hes(c(delta, intercepts[[b]]), xrc[[b]], mu = mu, 
                             rightcensored = TRUE)
                 H$X <- H$X + Hrc$X
                 H$A <- H$A + Hrc$A
@@ -368,14 +368,14 @@
         B <- length(x)
         sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
         bidx <- seq_len(K - 1L)
-        beta <- parm[bidx]
+        delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
         ret <- c()
         for (b in seq_len(B)) {
             idx <- attr(x[[b]], "idx")
             sr <- numeric(length(idx))
-            sr[idx] <- .nsr(c(beta, intercepts[[b]]), x[[b]], mu = mu,
+            sr[idx] <- .nsr(c(delta, intercepts[[b]]), x[[b]], mu = mu,
                             rightcensored = rightcensored)
             ret <- c(ret, sr)
         }
@@ -403,17 +403,17 @@
     }
     .profile <- function(start, fix = seq_len(K - 1)) {
         stopifnot(all(fix %in% seq_len(K - 1)))
-        beta <- start[fix]
+        delta <- start[fix]
         opargs <- c(list(par = start[-fix], 
                          fn = function(par) {
                              p <- numeric(length(par) + length(fix))
-                             p[fix] <- beta
+                             p[fix] <- delta
                              p[-fix] <- par
                              fn(p)
                          },
                          gr = function(par) {
                              p <- numeric(length(par) + length(fix))
-                             p[fix] <- beta
+                             p[fix] <- delta
                              p[-fix] <- par
                              gr(p)[-fix]
                          },
@@ -440,7 +440,7 @@
             stop(paste("Unsuccessful optimisation in free1way", ret$message))
         
         p <- numeric(length(start))
-        p[fix] <- beta
+        p[fix] <- delta
         p[-fix] <- ret$par
         ret$par <- p
         ret
