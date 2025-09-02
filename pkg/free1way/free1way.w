@@ -1043,7 +1043,6 @@ probit <- function()
 @<free1way numeric@>
 @<free1way factor@>
 @<ppplot@>
-@<r2dsim@>
 @<rfree1way@>
 @<power@>
 @}
@@ -2335,7 +2334,9 @@ but not the shift effects.
     return(ret)
 }
 
-rfree1way <- function(n, delta = 0, offset = 0, alloc_ratio = 1, nblocks = 1, strata_ratio = 1, 
+rfree1way <- function(n, prob = NULL, alloc_ratio = 1, 
+                      blocks = ifelse(is.null(prob), 1, NCOL(prob)), 
+                      strata_ratio = 1, delta = 0, offset = 0, 
                       link = c("logit", "probit", "cloglog", "loglog"))
 {
 
@@ -2345,23 +2346,42 @@ rfree1way <- function(n, delta = 0, offset = 0, alloc_ratio = 1, nblocks = 1, st
     if (length(alloc_ratio) == 1L) 
         alloc_ratio <- rep_len(alloc_ratio, K - 1)
     stopifnot(length(alloc_ratio) == K - 1)
-    B <- nblocks
+    B <- blocks
     if (length(strata_ratio) == 1L) 
         strata_ratio <- rep_len(strata_ratio, B - 1)
     stopifnot(length(strata_ratio) == B - 1)
     ### sample size per group (columns) and stratum (rows)
     N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
              matrix(c(1, strata_ratio), nrow = B, ncol = K)
+
     rownames(N) <- paste0("block", seq_len(B))
     ctrl <- "Control"
     colnames(N) <- c(ctrl, names(delta))
+
+    if (length(offset) != K)
+        offset <- rep_len(offset, K)
+
     trt <- gl(K, 1, labels = colnames(N))
     blk <- gl(B, 1, labels = rownames(N))
     ret <- expand.grid(trt = trt, blk = blk)
-    ret$offset <- offset
     if (B == 1L) ret$blk <- NULL
     ret <- ret[rep(seq_len(nrow(ret)), times = N), , drop = FALSE]
-    ret$y <- .rfree1way(nrow(ret), delta = ret$offset + c(0, delta)[ret$trt], link = link)
+    ret$y <- .rfree1way(nrow(ret), 
+                        delta = offset[ret$trt] + c(0, delta)[ret$trt], 
+                        link = link)
+    if (is.null(prob)) return(ret)
+
+    ### return discrete distribution
+    if (!is.matrix(prob))
+        prob <- matrix(prob, nrow = NROW(prob), ncol = B)
+    stopifnot(ncol(prob) == B)
+    prob <- prop.table(prob, margin = 2L)
+    ret <- do.call("rbind", lapply(1:ncol(prob), function(b) {
+        ret <- subset(ret, blk == levels(blk)[b])
+        ret$y <- cut(ret$y, breaks = c(-Inf, cumsum(prob[,b])), 
+                     labels = paste0("Y", 1:nrow(prob)), ordered_result = TRUE)
+        ret
+    }))
     return(ret)
 }
 @}
@@ -2376,29 +2396,30 @@ nd$y <- qchisq(nd$y, df = 3)
 coef(ft <- free1way(y ~ trt, data = nd))
 sqrt(diag(vcov(ft)))
 logLik(ft)
-n <- 25
+N <- 25
 pvals <- replicate(Nsim, 
 {
-  nd <- rfree1way(n, delta = c(.25, .5), alloc_ratio = 2, nblocks = 2)
+  nd <- rfree1way(n = N, blocks = 2, delta = c(.25, .5), alloc_ratio = 2)
   summary(free1way(y ~ trt | blk, data = nd), test = "Permutation")$p.value
 })
 
-power.free1way.test(n = n, delta = c(.25, .5), prob = matrix(1 / n, nrow =
-n, ncol = 2), alloc_ratio = 2)
+power.free1way.test(n = N, blocks = 2, delta = c(.25, .5), alloc_ratio = 2)
 mean(pvals < .05)
 @@
 
 This function can also be used to simulate survival times, for example, from
-a proportional hazards model with certain expected censoring probability.
+a proportional hazards model with a censoring probability of $.25$ in the
+control arm and of $.5$ in the treated arm, under random censoring (that is,
+event and censoring times are independent given treatment).
 
 <<rfree1waysurv>>=
 N <- 1000
-nd <- ndT <- rfree1way(N, delta = 1, link = "cloglog")
-ndC <- rfree1way(N, delta = 1, offset = qlogis(.25), link = "cloglog")
-
-nd$y <- Surv(pmin(ndT$y, ndC$y), ndT$y < ndC$y)
-
-mean(nd$y[,2])
+nd <- rfree1way(N, delta = 1, link = "cloglog")
+nd$C <- rfree1way(n = N, delta = 1, offset = -c(qlogis(.25), qlogis(.5)), 
+                  link = "cloglog")$y
+nd$y <- Surv(pmin(nd$y, nd$C), nd$y < nd$C)
+### check censoring probability
+1 - tapply(nd$y[,2], nd$trt, mean)
 summary(free1way(y ~ trt, data = nd, link = "cloglog"))
 summary(coxph(y ~ trt, data = nd))
 @@
@@ -2412,7 +2433,7 @@ the relevant discrete density.
 
 @d r2dsim
 @{
-r2dsim <- function(n, r, c, delta = 0,
+.r2dsim <- function(n, r, c, delta = 0,
                    link = c("logit", "probit", "cloglog", "loglog")) 
 {
 
@@ -2500,7 +2521,7 @@ else {
 
 ### matrix means control distributions in different strata
 if (!is.matrix(prob))
-    prob <- matrix(prob, nrow = NROW(prob))
+    prob <- matrix(prob, nrow = NROW(prob), ncol = blocks)
 prob <- prop.table(prob, margin = 2L)
 C <- nrow(prob)
 K <- length(delta) + 1L
@@ -2545,8 +2566,8 @@ for (i in seq_len(nsim)) {
     parm <- deltamu
     x <- as.table(array(0, dim = c(C, K, B)))
     for (b in seq_len(B)) {
-        x[,,b] <- r2dsim(1L, r = prob[, b], c = Nboost * N[b,], 
-                         delta = delta, link = link)[[1L]]
+        x[,,b] <- .r2dsim(1L, r = prob[, b], c = Nboost * N[b,], 
+                          delta = delta, link = link)[[1L]]
         rs <- rowSums(x[,,b]) > 0
         h <- h0[rs[-length(rs)], b]
         theta <- c(h[1], log(diff(h)))
@@ -2599,7 +2620,7 @@ class(ret) <- "power.htest"
 @d power
 @{
 power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n), 
-                                alloc_ratio = 1, strata_ratio = 1, 
+                                alloc_ratio = 1, strata_ratio = 1, blocks = NCOL(prob),
                                 delta = NULL, mu = 0, sig.level = .05, power = NULL,
                                 link = c("logit", "probit", "cloglog", "loglog"),
                                 alternative = c("two.sided", "less", "greater"), 
@@ -2613,6 +2634,8 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
     stats:::assert_NULL_or_prob(power)
 
     @<random seed@>
+
+    @<r2dsim@>
 
     if (is.null(n)) 
         n <- ceiling(uniroot(function(n) {
@@ -2716,26 +2739,29 @@ mean(pw < .05)
 power.free1way.test(n = N, delta = delta)
 @@
 
-We next use the \code{r2dsim} function to sample from $4 \times 3$ tables with odds ratios $2$ and $3$
+We next use the \code{rfree1way} function to sample from $4 \times 3$ tables with odds ratios $2$ and $3$
 and compare the resulting power with result obtained from the approximated
-Fisher information. The plot shows the distribution of the parameter
+Fisher information. By default, the continuous control distribution is
+uniform on the unit interval, thus \code{cut} with breaks defined by the
+target control discrete probability distribution generates the outcome.
+The plot shows the distribution of the parameter
 estimates and the corresponding population values as red dots.	
 
 <<table, fig = TRUE>>=
-prb <- rep(1, 4)
-x <- r2dsim(Nsim, r = prb, c = table(w), delta = delta)
-pw <- numeric(length(x))
-cf <- matrix(0, nrow = length(x), ncol = length(delta))
+prb <- rep.int(1, 4) / 4
+pw <- numeric(Nsim)
+cf <- matrix(0, nrow = Nsim, ncol = length(delta))
 colnames(cf) <- names(delta)
-for (i in seq_along(x)) {
-    ft <- free1way(x[[i]])
+for (i in seq_along(pw)) {
+    nd <- rfree1way(n = N, prob = prb, delta = delta)
+    ft <- free1way(y ~ trt, data = nd)
     cf[i,] <- coef(ft)
     pw[i] <- summary(ft, test = "Permutation")$p.value
 }
 mean(pw < .05)
 boxplot(cf)
 points(c(1:2), delta, pch = 19, col = "red")
-power.free1way.test(n = N, prob = rep(1, 4), delta = delta)
+power.free1way.test(n = N, prob = prb, delta = delta)
 @@
 
 In the last example, we sample from $4 \times 3$ tables with odds ratios $2$ and $3$ for three
@@ -2749,18 +2775,12 @@ prb <- cbind(S1 = rep(1, 4),
 dimnames(prb) <- list(Ctrl = paste0("i", seq_len(nrow(prb))),
                       Strata = colnames(prb))
 
-x1 <- r2dsim(Nsim, r = prb[, "S1"], c = table(w), delta = delta)
-x2 <- r2dsim(Nsim, r = prb[, "S2"], c = table(w), delta = delta)
-x3 <- r2dsim(Nsim, r = prb[, "S3"], c = table(w), delta = delta)
-stab <- function(...) {
-    args <- list(...)
-    as.table(array(unlist(args), dim = c(dim(args[[1]]), length(args))))
-}
-pw <- numeric(length(x1))
-cf <- matrix(0, nrow = length(x1), ncol = length(delta))
+pw <- numeric(Nsim)
+cf <- matrix(0, nrow = Nsim, ncol = length(delta))
 colnames(cf) <- names(delta)
-for (i in seq_along(x)) {
-    ft <- free1way(stab(x1[[i]], x2[[i]], x3[[i]]))
+for (i in seq_along(pw)) {
+    nd <- rfree1way(n = N, prob = prb, delta = delta)
+    ft <- free1way(y ~ trt | blk, data = nd)
     cf[i,] <- coef(ft)
     pw[i] <- summary(ft, test = "Permutation")$p.value
 }

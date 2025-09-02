@@ -1257,15 +1257,15 @@ trtWide Angle         -3.28921    0.79367 -4.14429  0.0000
 > logLik(ft)
 [1] -2741.121
 
-> n <- 25
+> N <- 25
 
 > pvals <- replicate(Nsim, {
-+     nd <- rfree1way(n, delta = c(0.25, 0.5), alloc_ratio = 2, 
-+         nblocks = 2)
-+     summary(free1way(y ~ trt |  .... [TRUNCATED] 
++     nd <- rfree1way(n = N, blocks = 2, delta = c(0.25, 0.5), 
++         alloc_ratio = 2)
++     summary(free1way(y ~ trt .... [TRUNCATED] 
 
-> power.free1way.test(n = n, delta = c(0.25, 0.5), prob = matrix(1/n, 
-+     nrow = n, ncol = 2), alloc_ratio = 2)
+> power.free1way.test(n = N, blocks = 2, delta = c(0.25, 
++     0.5), alloc_ratio = 2)
 
      Stratified 3-sample Kruskal-Wallis test against proportional odds alternatives 
 
@@ -1280,6 +1280,48 @@ NOTE: 'n' is sample size in control group of first stratum
 
 > mean(pvals < 0.05)
 [1] 0.3
+
+> N <- 1000
+
+> nd <- rfree1way(N, delta = 1, link = "cloglog")
+
+> nd$C <- rfree1way(n = N, delta = 1, offset = -c(qlogis(0.25), 
++     qlogis(0.5)), link = "cloglog")$y
+
+> nd$y <- Surv(pmin(nd$y, nd$C), nd$y < nd$C)
+
+> 1 - tapply(nd$y[, 2], nd$trt, mean)
+Control       B 
+  0.259   0.529 
+
+> summary(free1way(y ~ trt, data = nd, link = "cloglog"))
+
+Call:
+free1way.formula(formula = y ~ trt, data = nd, link = "cloglog")
+
+Coefficients:
+     log-hazard ratio Std. Error   z value P(>|z|)
+trtB         1.060222   0.061947 17.114935       0
+
+> summary(coxph(y ~ trt, data = nd))
+Call:
+coxph(formula = y ~ trt, data = nd)
+
+  n= 2000, number of events= 1212 
+
+         coef exp(coef) se(coef)     z Pr(>|z|)    
+trtB -1.05877   0.34688  0.06193 -17.1   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+     exp(coef) exp(-coef) lower .95 upper .95
+trtB    0.3469      2.883    0.3072    0.3917
+
+Concordance= 0.625  (se = 0.007 )
+Likelihood ratio test= 306.6  on 1 df,   p=<2e-16
+Wald test            = 292.3  on 1 df,   p=<2e-16
+Score (logrank) test = 316.7  on 1 df,   p=<2e-16
+
 
 > delta <- log(1.5)
 
@@ -1324,7 +1366,7 @@ NOTE: 'n' is sample size in control group
 
                 n = 20
 Total sample size = 60 (Control) + 90 (low) + 120 (med) + 120 (high) = 390
-            power = 0.3790058
+            power = 0.3790663
         sig.level = 0.05
    log-odds ratio = 0.2231436, 0.4054651, 0.5596158
 
@@ -1345,7 +1387,7 @@ NOTE: 'n' is sample size in control group of first stratum
 + }
 
 > mean(pw < 0.05)
-[1] 0.48
+[1] 0.36
 
 > power.free1way.test(n = N, delta = delta)
 
@@ -1353,7 +1395,7 @@ NOTE: 'n' is sample size in control group of first stratum
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) = 30
-            power = 0.3838285
+            power = 0.3837836
         sig.level = 0.05
    log-odds ratio = 1.098612
 
@@ -1374,7 +1416,7 @@ NOTE: 'n' is sample size in control group
 + }
 
 > mean(pw < 0.05)
-[1] 0.29
+[1] 0.26
 
 > power.free1way.test(n = N, delta = delta)
 
@@ -1382,43 +1424,40 @@ NOTE: 'n' is sample size in control group
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) + 15 (C) = 45
-            power = 0.3127796
+            power = 0.3123631
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
 NOTE: 'n' is sample size in control group
 
 
-> prb <- rep(1, 4)
+> prb <- rep.int(1, 4)/4
 
-> x <- r2dsim(Nsim, r = prb, c = table(w), delta = delta)
+> pw <- numeric(Nsim)
 
-> pw <- numeric(length(x))
-
-> cf <- matrix(0, nrow = length(x), ncol = length(delta))
+> cf <- matrix(0, nrow = Nsim, ncol = length(delta))
 
 > colnames(cf) <- names(delta)
 
-> for (i in seq_along(x)) {
-+     ft <- free1way(x[[i]])
-+     cf[i, ] <- coef(ft)
-+     pw[i] <- summary(ft, test = "Permutation")$p.value
-+ }
+> for (i in seq_along(pw)) {
++     nd <- rfree1way(n = N, prob = prb, delta = delta)
++     ft <- free1way(y ~ trt, data = nd)
++     cf[i, ] <- coef(ft .... [TRUNCATED] 
 
 > mean(pw < 0.05)
-[1] 0.33
+[1] 0.29
 
 > boxplot(cf)
 
 > points(c(1:2), delta, pch = 19, col = "red")
 
-> power.free1way.test(n = N, prob = rep(1, 4), delta = delta)
+> power.free1way.test(n = N, prob = prb, delta = delta)
 
       3-sample Kruskal-Wallis test against proportional odds alternatives 
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) + 15 (C) = 45
-            power = 0.2912039
+            power = 0.2914092
         sig.level = 0.05
    log-odds ratio = 0.6931472, 1.0986123
 
@@ -1430,33 +1469,19 @@ NOTE: 'n' is sample size in control group
 > dimnames(prb) <- list(Ctrl = paste0("i", seq_len(nrow(prb))), 
 +     Strata = colnames(prb))
 
-> x1 <- r2dsim(Nsim, r = prb[, "S1"], c = table(w), 
-+     delta = delta)
+> pw <- numeric(Nsim)
 
-> x2 <- r2dsim(Nsim, r = prb[, "S2"], c = table(w), 
-+     delta = delta)
-
-> x3 <- r2dsim(Nsim, r = prb[, "S3"], c = table(w), 
-+     delta = delta)
-
-> stab <- function(...) {
-+     args <- list(...)
-+     as.table(array(unlist(args), dim = c(dim(args[[1]]), length(args))))
-+ }
-
-> pw <- numeric(length(x1))
-
-> cf <- matrix(0, nrow = length(x1), ncol = length(delta))
+> cf <- matrix(0, nrow = Nsim, ncol = length(delta))
 
 > colnames(cf) <- names(delta)
 
-> for (i in seq_along(x)) {
-+     ft <- free1way(stab(x1[[i]], x2[[i]], x3[[i]]))
-+     cf[i, ] <- coef(ft)
-+     pw[i] <- summary(ft, test = "Permuta ..." ... [TRUNCATED] 
+> for (i in seq_along(pw)) {
++     nd <- rfree1way(n = N, prob = prb, delta = delta)
++     ft <- free1way(y ~ trt | blk, data = nd)
++     cf[i, ] <- c .... [TRUNCATED] 
 
 > mean(pw < 0.05)
-[1] 0.75
+[1] 0.73
 
 > boxplot(cf)
 
@@ -1507,4 +1532,4 @@ NOTE: 'n' is sample size in control group of first stratum
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 32.494   0.187  32.702 
+ 33.041   0.119  33.167 

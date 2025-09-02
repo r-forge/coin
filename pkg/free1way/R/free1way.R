@@ -1200,58 +1200,6 @@ ppplot <- function(x, y, plot.it = TRUE,
     return(invisible(ret)) 
 }
 
-# r2dsim
-
-r2dsim <- function(n, r, c, delta = 0,
-                   link = c("logit", "probit", "cloglog", "loglog")) 
-{
-
-    if (length(n <- as.integer(n)) == 0L || (n < 0) || is.na(n)) 
-        stop("invalid argument 'n'")
-    colsums <- c
-    if (length(colsums[] <- as.integer(c)) <= 1L || 
-        any(colsums < 0) || anyNA(colsums)) 
-        stop("invalid argument 'c'")
-
-    prob <- r
-    if (length(prob[] <- as.double(r / sum(r))) <= 1L || 
-        any(prob < 0) || anyNA(prob)) 
-        stop("invalid argument 'r'")
-
-    if (is.null(names(prob))) 
-        names(prob) <- paste0("i", seq_along(prob))
-    
-    K <- length(colsums)
-    if (is.null(names(colsums))) 
-        names(colsums) <- LETTERS[seq_len(K)]
-    delta <- rep_len(delta, K - 1L)
-
-    # link2fun
-    
-    if (!inherits(link, "linkfun")) {
-        link <- match.arg(link)
-        link <- do.call(link, list())
-    }
-    
-
-    p0 <- cumsum(prob)
-    h0 <- .q(link, p0[-length(p0)]) ### last element of p0 is one
-
-    h1 <- h0 - matrix(delta, nrow = length(prob) - 1L, ncol = K - 1, byrow = TRUE)
-    p1 <- rbind(.p(link, h1), 1)
-    p <- cbind(p0, p1)
-    ret <- vector(mode = "list", length = n)
-
-    for (i in seq_len(n)) {
-        tab <- sapply(seq_len(K), function(k)
-            unclass(table(cut(runif(colsums[k]), breaks = c(-Inf, p[,k])))))
-        ret[[i]] <- as.table(array(unlist(tab), dim = c(length(prob), K), 
-                          dimnames = list(names(prob), 
-                                          names(colsums))))
-    }
-    return(ret)
-}
-
 # rfree1way
 
 .rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) {
@@ -1272,7 +1220,9 @@ r2dsim <- function(n, r, c, delta = 0,
     return(ret)
 }
 
-rfree1way <- function(n, delta = 0, offset = 0, alloc_ratio = 1, nblocks = 1, strata_ratio = 1, 
+rfree1way <- function(n, prob = NULL, alloc_ratio = 1, 
+                      blocks = ifelse(is.null(prob), 1, NCOL(prob)), 
+                      strata_ratio = 1, delta = 0, offset = 0, 
                       link = c("logit", "probit", "cloglog", "loglog"))
 {
 
@@ -1282,30 +1232,49 @@ rfree1way <- function(n, delta = 0, offset = 0, alloc_ratio = 1, nblocks = 1, st
     if (length(alloc_ratio) == 1L) 
         alloc_ratio <- rep_len(alloc_ratio, K - 1)
     stopifnot(length(alloc_ratio) == K - 1)
-    B <- nblocks
+    B <- blocks
     if (length(strata_ratio) == 1L) 
         strata_ratio <- rep_len(strata_ratio, B - 1)
     stopifnot(length(strata_ratio) == B - 1)
     ### sample size per group (columns) and stratum (rows)
     N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
              matrix(c(1, strata_ratio), nrow = B, ncol = K)
+
     rownames(N) <- paste0("block", seq_len(B))
     ctrl <- "Control"
     colnames(N) <- c(ctrl, names(delta))
+
+    if (length(offset) != K)
+        offset <- rep_len(offset, K)
+
     trt <- gl(K, 1, labels = colnames(N))
     blk <- gl(B, 1, labels = rownames(N))
     ret <- expand.grid(trt = trt, blk = blk)
-    ret$offset <- offset
     if (B == 1L) ret$blk <- NULL
     ret <- ret[rep(seq_len(nrow(ret)), times = N), , drop = FALSE]
-    ret$y <- .rfree1way(nrow(ret), delta = ret$offset + c(0, delta)[ret$trt], link = link)
+    ret$y <- .rfree1way(nrow(ret), 
+                        delta = offset[ret$trt] + c(0, delta)[ret$trt], 
+                        link = link)
+    if (is.null(prob)) return(ret)
+
+    ### return discrete distribution
+    if (!is.matrix(prob))
+        prob <- matrix(prob, nrow = NROW(prob), ncol = B)
+    stopifnot(ncol(prob) == B)
+    prob <- prop.table(prob, margin = 2L)
+    ret <- do.call("rbind", lapply(1:ncol(prob), function(b) {
+        ret <- subset(ret, blk == levels(blk)[b])
+        ret$y <- cut(ret$y, breaks = c(-Inf, cumsum(prob[,b])), 
+                     labels = paste0("Y", 1:nrow(prob)), ordered_result = TRUE)
+        ret
+    }))
     return(ret)
 }
 
 # power
 
 power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n), 
-                                alloc_ratio = 1, strata_ratio = 1, 
+                                alloc_ratio = 1, strata_ratio = 1, blocks = NCOL(prob),
                                 delta = NULL, mu = 0, sig.level = .05, power = NULL,
                                 link = c("logit", "probit", "cloglog", "loglog"),
                                 alternative = c("two.sided", "less", "greater"), 
@@ -1329,6 +1298,59 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
         set.seed(seed)
         RNGstate <- structure(seed, kind = as.list(RNGkind()))
         on.exit(assign(".Random.seed", R.seed, envir = .GlobalEnv))
+    }
+    
+
+    # r2dsim
+    
+    .r2dsim <- function(n, r, c, delta = 0,
+                       link = c("logit", "probit", "cloglog", "loglog")) 
+    {
+
+        if (length(n <- as.integer(n)) == 0L || (n < 0) || is.na(n)) 
+            stop("invalid argument 'n'")
+        colsums <- c
+        if (length(colsums[] <- as.integer(c)) <= 1L || 
+            any(colsums < 0) || anyNA(colsums)) 
+            stop("invalid argument 'c'")
+
+        prob <- r
+        if (length(prob[] <- as.double(r / sum(r))) <= 1L || 
+            any(prob < 0) || anyNA(prob)) 
+            stop("invalid argument 'r'")
+
+        if (is.null(names(prob))) 
+            names(prob) <- paste0("i", seq_along(prob))
+        
+        K <- length(colsums)
+        if (is.null(names(colsums))) 
+            names(colsums) <- LETTERS[seq_len(K)]
+        delta <- rep_len(delta, K - 1L)
+
+        # link2fun
+        
+        if (!inherits(link, "linkfun")) {
+            link <- match.arg(link)
+            link <- do.call(link, list())
+        }
+        
+
+        p0 <- cumsum(prob)
+        h0 <- .q(link, p0[-length(p0)]) ### last element of p0 is one
+
+        h1 <- h0 - matrix(delta, nrow = length(prob) - 1L, ncol = K - 1, byrow = TRUE)
+        p1 <- rbind(.p(link, h1), 1)
+        p <- cbind(p0, p1)
+        ret <- vector(mode = "list", length = n)
+
+        for (i in seq_len(n)) {
+            tab <- sapply(seq_len(K), function(k)
+                unclass(table(cut(runif(colsums[k]), breaks = c(-Inf, p[,k])))))
+            ret[[i]] <- as.table(array(unlist(tab), dim = c(length(prob), K), 
+                              dimnames = list(names(prob), 
+                                              names(colsums))))
+        }
+        return(ret)
     }
     
 
@@ -1383,7 +1405,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
 
     ### matrix means control distributions in different strata
     if (!is.matrix(prob))
-        prob <- matrix(prob, nrow = NROW(prob))
+        prob <- matrix(prob, nrow = NROW(prob), ncol = blocks)
     prob <- prop.table(prob, margin = 2L)
     C <- nrow(prob)
     K <- length(delta) + 1L
@@ -1419,8 +1441,8 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
         parm <- deltamu
         x <- as.table(array(0, dim = c(C, K, B)))
         for (b in seq_len(B)) {
-            x[,,b] <- r2dsim(1L, r = prob[, b], c = Nboost * N[b,], 
-                             delta = delta, link = link)[[1L]]
+            x[,,b] <- .r2dsim(1L, r = prob[, b], c = Nboost * N[b,], 
+                              delta = delta, link = link)[[1L]]
             rs <- rowSums(x[,,b]) > 0
             h <- h0[rs[-length(rs)], b]
             theta <- c(h[1], log(diff(h)))
