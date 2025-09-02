@@ -6,8 +6,9 @@ Probability-probability Plots
 \description{
 \code{ppplot} produces a PP plot of two numerical variables, essentially
 the Receiver Operating Characteristic (ROC) curve. 
-If \code{conf.level} is given, a confidence band for the ROC curve under a
-distribution-free model is plotted.
+If \code{conf.level} is given, an estimate and corresponding 
+confidence band for the ROC curve under a 
+distribution-free semiparametric model is plotted.
 }
 \usage{
 ppplot(x, y, plot.it = TRUE, xlab = deparse1(substitute(x)), 
@@ -15,13 +16,13 @@ ppplot(x, y, plot.it = TRUE, xlab = deparse1(substitute(x)),
        conf.args = list(link = "logit", type = "Wald", col = NA, border = NULL))
 }
 \arguments{
-  \item{x}{The first sample for \code{ppplot}, a numerical variable.
+  \item{x}{the first sample for \code{ppplot}, a numerical variable.
 }
-  \item{y}{The second sample for \code{ppplot}, a numerical variable.
+  \item{y}{the second sample for \code{ppplot}, a numerical variable.
 }
   \item{plot.it}{logical. Should the result be plotted?
 }
-  \item{xlab, ylab}{The \code{xlab} and \code{ylab} refer to the y
+  \item{xlab, ylab}{the \code{xlab} and \code{ylab} refer to the y
           and x axes respectively.
 }
   \item{\dots}{graphical parameters.
@@ -38,29 +39,24 @@ ppplot(x, y, plot.it = TRUE, xlab = deparse1(substitute(x)),
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+
+The plot produces a ROC curve, however without reordering variables such
+that the curve is above the diagonal.
+
+If the data generating process follows a model where the two distribution
+functions, after appropriate transformation, are horizontally shifted
+versions of each other, the ROC curve is a simple function of this shift and
+confidence bands can be obtained from a confidence interval for this shift
+parameter, see \code{free1way} for the model and
+\bibcitet{free1way::SewakHothorn2023} for the connection to ROC curves.
+
+Substantial deviations of the empirical (points) from the theoretical
+(lines) ROC curve indicates lack of fit of the semiparametric model.
+
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+A list with components \code{x} and \code{y} representing the empirical ROC
+curve.
 }
 \examples{
 
@@ -82,12 +78,5 @@ with(with(nd, split(y, groups)),
 coef(free1way(y ~ groups, data = nd, link = "probit"))
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory (show via RShowDoc("KEYWORDS")):
-% \keyword{ ~kwd1 }
-% \keyword{ ~kwd2 }
-% Use only one keyword per line.
-% For non-standard keywords, use \concept instead of \keyword:
-% \concept{ ~cpt1 }
-% \concept{ ~cpt2 }
-% Use only one concept per line.
+\keyword{hplot}
+\keyword{distribution}

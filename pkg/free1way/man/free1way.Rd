@@ -14,11 +14,11 @@
 Distribution-free Inference in a Stratified One-Way Layout
 }
 \description{
-Estimation, tests and confidence intervals for parameters in the
+Estimation, tests, and confidence intervals for parameters in the
 distribution-free stratified K-sample one-way layout for binary, ordinal,
 numeric and potentially independently right-censored outcomes, including
 semiparametrically efficient score tests against Lehmann, odds ratio, or
-hazard ratio alternatives along with corresponding confidence intervals.
+hazard ratio alternatives with corresponding confidence intervals.
 }
 \usage{
 free1way(y, ...)
@@ -51,14 +51,16 @@ free1way(y, ...)
     divide the range of a numeric response \code{y} into. The default is to
     cut the observations at breaks given by the uniquely observed values (\code{nbins = 0}). In
     the presence of right-censoring, uniquely observed event times define
-    the breaks.}
-  \item{groups}{a grouping factor.}
+    the breaks. For large sample sizes with many unique observations,
+    limiting the number of bins to less than 100, say, dramatically reduces
+    computation time while producing almost the same results as the default.}
+  \item{groups}{a grouping factor at at least two levels.}
   \item{blocks}{a stratification factor, optional.}
   \item{event}{a logical vector representing events (\code{TRUE}) and
     independently right-censored observations (\code{FALSE}), optional.}
-  \item{formula}{a formula of the form \code{y ~ x + strata(z)} where \code{y} gives 
-    the sample values (binary, ordered or numeric) and \code{x} the corresponding groups.
-    In stratified designs, a \code{strata(z)} term specifies the strata.}
+  \item{formula}{a formula of the form \code{y ~ groups | blocks} where \code{y} gives 
+    the sample values (binary, ordered or numeric) and \code{groups} the corresponding groups.
+    In stratified designs, a \code{blocks} term specifies the strata.}
   \item{data}{an optional data frame (or similar: see
     \code{\link{model.frame}}) containing the variables in the
     formula \code{formula}.  By default the variables are taken from
@@ -72,7 +74,7 @@ free1way(y, ...)
     the data contain \code{NA}s.  Defaults to
     \code{getOption("na.action")}.}
   \item{varnames}{a character vector giving the names of the response,
-    grouping, and stratifying varibales.}
+    grouping, and stratifying variables.}
   \item{link}{a character defining a link function and thus the model and
     parameter interpretation. See \sQuote{Details}.}
   \item{mu}{a number specifying an optional parameter used to form the
@@ -102,47 +104,47 @@ free1way(y, ...)
           of names.  If missing, all parameters are considered.}
   \item{level}{the confidence level required.}
   \item{\dots}{additional arguments to \code{\link{optim}}, such as a list of
-    \code{control} parameters for the \code{method = "L-BFGS-B"}.}
+    \code{control} parameters for the \code{method = "BFGS"}.}
 }
 \details{
 
 The distribution function \eqn{F_1} of the response in the control group
-(defined by the first factor level of the grouping factor \code{x}) is
+(defined by the first factor level of the grouping factor \code{groups}) is
 compared to the distribution functions in the remaining groups \eqn{F_k} for
 \eqn{k = 2, \dots, K}.  No assumptions are made regarding the form of \eqn{F_1},
 all inference procedures are thus distribution-free.  However, a
 semiparametric model assumes that each distribution function \eqn{F_k} only
-depends on \eqn{F_1} and a scalar parameter \eqn{\beta_k}.  The link
+depends on \eqn{F_1} and a scalar parameter \eqn{\delta_k}.  The link
 function \eqn{Q} defines the model
-\deqn{F_k(y) = Q^{-1}(Q(F_1(y)) - \beta_k)}
-such that positive values of the parameter \eqn{\beta_k} correspond to
+\deqn{F_k(y) = Q^{-1}(Q(F_1(y)) - \delta_k)}
+such that positive values of the parameter \eqn{\delta_k} correspond to
 stochasically larger response values in group \eqn{k} when compared to the
 control group.
 
 The argument \code{link} is used to define the link function and thus
 specific models: Log-odds ratio alternatives are based on the logit link
 (\code{link = "logit"})
-\deqn{\log\left(\frac{F_k(y)}{1 - F_k(y)}\right) = \log\left(\frac{F_1(y)}{1 - F_1(y)}\right) - \beta_k,}
+\deqn{\log\left(\frac{F_k(y)}{1 - F_k(y)}\right) = \log\left(\frac{F_1(y)}{1 - F_1(y)}\right) - \delta_k,}
 log-hazard ratio alternatives on the complementary log-log link (\code{link =
 "cloglog"})
-\deqn{1 - F_k(y) = (1 - F_1(y))^{\exp(- \beta_k)},} Lehmann alternatives on
+\deqn{1 - F_k(y) = (1 - F_1(y))^{\exp(- \delta_k)},} Lehmann alternatives on
 the log-log link (\code{link = "loglog"})
-\deqn{F_k(y) = F_1(y)^{\exp(- \beta_k)},} and a shift alternative on a
+\deqn{F_k(y) = F_1(y)^{\exp(- \delta_k)},} and a shift alternative on a
 latent normal scale on the probit link (\code{link = "probit"})
-\deqn{\Phi^{-1}(F_1(Y_k)) \sim N(\beta_k, 1).}
+\deqn{\Phi^{-1}(F_1(Y_k)) \sim N(\delta_k, 1).}
 If strata are present, the distribution functions may be stratum-specific
 but the shift parameters are assumed to be constant across strata, such that
 the above model holds for each stratum.
 
 The control distribution function \eqn{F_1} is treated as a nuisance
-parameter and the shift parameters \eqn{\beta_2, \dots, \beta_K} are
+parameter and the shift parameters \eqn{\delta_2, \dots, \delta_K} are
 estimated by empirical maximum-likelihood estimation, the maximised
 log-empirical likelihood is available via \code{logLik}. Parameter estimates and the
 inverse observed Fisher information can be inspected via \code{coef} and
 \code{vcov}.
 
 Several global test procedures for the null hypothesis that all distribution
-functions are identical (and thus \eqn{\beta_2 = \dots = \beta_K = 0}) 
+functions are identical (and thus \eqn{\delta_2 = \dots = \delta_K = 0}) 
 can be specified by the \code{test} argument. Parameter-specific confidence
 intervals are obtained via the inversion of a specific test procedure.
 
@@ -175,6 +177,13 @@ friedman.test(extra ~ group | ID, data = sleep)
 ft <- free1way(extra ~ group | ID, data = sleep)
 print(ft)
 summary(ft)
+
+### Kruskal test
+airquality$Month <- factor(airquality$Month)
+kruskal.test(Ozone ~ Month, data = airquality)
+kt <- free1way(Ozone ~ Month, data = airquality)
+print(kt)
+summary(kt)
 
 }
 \keyword{htest}

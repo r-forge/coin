@@ -2804,6 +2804,6 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 @u
 
 \bibliographystyle{plainnat}
-\bibliography{\Sexpr{gsub("\\.bib", "", system.file("refs.bib", package = "free1way"))}}
+\bibliography{\Sexpr{gsub("\\.bib", "", system.file("REFERENCES.bib", package = "free1way"))}}
 
 \end{document}
