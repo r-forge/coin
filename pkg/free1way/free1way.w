@@ -2616,7 +2616,7 @@ class(ret) <- "power.htest"
 @d power
 @{
 power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n), 
-                                alloc_ratio = 1, strata_ratio = 1, blocks = NCOL(prob),
+                                alloc_ratio = 1, blocks = NCOL(prob), strata_ratio = 1, 
                                 delta = NULL, mu = 0, sig.level = .05, power = NULL,
                                 link = c("logit", "probit", "cloglog", "loglog"),
                                 alternative = c("two.sided", "less", "greater"), 

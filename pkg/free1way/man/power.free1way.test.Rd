@@ -55,11 +55,11 @@ power.free1way.test(n = NULL, prob = rep.int(1 / n, n),
 }
   \item{power}{power of test (1 minus Type II error probability)
 }
-  \item{nsim}{
-%%     ~~Describe \code{link} here~~
+  \item{nsim}{Number of simulations used to approximate the Hessian
+evaluated at the true treatment effects \code{delta}
 }
-  \item{seed}{
-%%     ~~Describe \code{link} here~~
+  \item{seed}{an object specifying if and how the random number generator
+          should be initialized, see \code{\link[stats]{simulate}}.
 }
   \item{tol}{numerical tolerance used in root finding, the default
           providing (at least) four significant digits.
