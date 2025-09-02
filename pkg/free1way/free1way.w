@@ -2320,6 +2320,22 @@ of the invariance with respect to monotone transformations, transforming all
 observations by the same quantile function changes the outcome distributions
 but not the shift effects.
 
+@d design args
+@{
+K <- length(delta) + 1L
+if (is.null(names(delta))) 
+    names(delta) <- LETTERS[seq_len(K)[-1]]
+if (length(alloc_ratio) == 1L) 
+    alloc_ratio <- rep_len(alloc_ratio, K - 1)
+stopifnot(length(alloc_ratio) == K - 1)
+if (length(strata_ratio) == 1L) 
+    strata_ratio <- rep_len(strata_ratio, B - 1)
+stopifnot(length(strata_ratio) == B - 1)
+### sample size per group (columns) and stratum (rows)
+N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
+         matrix(c(1, strata_ratio), nrow = B, ncol = K)
+@}
+
 @d rfree1way
 @{
 .rfree1way <- function(n, delta = 0, link = c("logit", "probit", "cloglog", "loglog")) {
@@ -2339,20 +2355,9 @@ rfree1way <- function(n, prob = NULL, alloc_ratio = 1,
                       strata_ratio = 1, delta = 0, offset = 0, 
                       link = c("logit", "probit", "cloglog", "loglog"))
 {
-
-    K <- length(delta) + 1L
-    if (is.null(names(delta))) 
-        names(delta) <- LETTERS[seq_len(K)[-1]]
-    if (length(alloc_ratio) == 1L) 
-        alloc_ratio <- rep_len(alloc_ratio, K - 1)
-    stopifnot(length(alloc_ratio) == K - 1)
     B <- blocks
-    if (length(strata_ratio) == 1L) 
-        strata_ratio <- rep_len(strata_ratio, B - 1)
-    stopifnot(length(strata_ratio) == B - 1)
-    ### sample size per group (columns) and stratum (rows)
-    N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
-             matrix(c(1, strata_ratio), nrow = B, ncol = K)
+
+    @<design args@>
 
     rownames(N) <- paste0("block", seq_len(B))
     ctrl <- "Control"
@@ -2524,23 +2529,14 @@ if (!is.matrix(prob))
     prob <- matrix(prob, nrow = NROW(prob), ncol = blocks)
 prob <- prop.table(prob, margin = 2L)
 C <- nrow(prob)
-K <- length(delta) + 1L
 B <- ncol(prob)
 if (is.null(colnames(prob))) 
     colnames(prob) <- paste0("stratum", seq_len(B))
-if (is.null(names(delta))) 
-    names(delta) <- LETTERS[seq_len(K)[-1]]
 p0 <- apply(prob, 2, cumsum)
 h0 <- .q(link, p0[-nrow(p0),,drop = FALSE])
-if (length(alloc_ratio) == 1L) 
-    alloc_ratio <- rep_len(alloc_ratio, K - 1)
-stopifnot(length(alloc_ratio) == K - 1)
-if (length(strata_ratio) == 1L) 
-    strata_ratio <- rep_len(strata_ratio, B - 1)
-stopifnot(length(strata_ratio) == B - 1)
-### sample size per group (columns) and stratum (rows)
-N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
-         matrix(c(1, strata_ratio), nrow = B, ncol = K)
+
+@<design args@>
+
 rownames(N) <- colnames(prob)
 ctrl <- "Control"
 dn <- dimnames(prob)
