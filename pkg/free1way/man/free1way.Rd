@@ -156,8 +156,8 @@ permutation score, likelihood ratio, or Rao score test.
 
 Assuming one of the semiparametric models, the parameter estimates are
 semiparametrically efficient and the corresponding score tests and
-confidence intervals are locally most powerful (Chapter 15.5 in van der
-Vaart, 1998).
+confidence intervals are locally most powerful 
+\bibcitep{Chapter 15.5 in |free1way::vdVaart1998|}).
 
 }
 \value{
@@ -184,6 +184,8 @@ kruskal.test(Ozone ~ Month, data = airquality)
 kt <- free1way(Ozone ~ Month, data = airquality)
 print(kt)
 summary(kt)
+coef(kt)
+confint(kt, test = "Wald")
 
 }
 \keyword{htest}
