@@ -2,7 +2,7 @@
 library("free1way")
 library("rms")
 library("survival")
-
+options(digits = 5)
 set.seed(29)
 
 N <- 500

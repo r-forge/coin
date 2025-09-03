@@ -1,6 +1,6 @@
 
 set.seed(29)
-
+options(digits = 5)
 library("survival")
 library("free1way")
 library("tram")

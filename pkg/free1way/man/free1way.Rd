@@ -59,7 +59,7 @@ free1way(y, ...)
   \item{event}{a logical vector representing events (\code{TRUE}) and
     independently right-censored observations (\code{FALSE}), optional.}
   \item{formula}{a formula of the form \code{y ~ groups | blocks} where \code{y} gives 
-    the sample values (binary, ordered or numeric) and \code{groups} the corresponding groups.
+    the sample outcome values (binary, ordered or numeric) and \code{groups} the corresponding groups.
     In stratified designs, a \code{blocks} term specifies the strata.}
   \item{data}{an optional data frame (or similar: see
     \code{\link{model.frame}}) containing the variables in the
@@ -165,10 +165,7 @@ An object of class \code{free1way} with corresponding \code{logLik},
 \code{coef}, \code{vcov}, \code{summary}, and \code{confint} methods.
 }
 \references{
-
-  Aart W. Van der Vaart (1998). \emph{Asymptotic Statistics}. 
-  Cambridge, UK: Cambridge University Press.
-
+  \bibshow{*}
 }
 \examples{
 
@@ -178,8 +175,7 @@ ft <- free1way(extra ~ group | ID, data = sleep)
 print(ft)
 summary(ft)
 
-### Kruskal test
-airquality$Month <- factor(airquality$Month)
+### Kruskal-Wallis test
 kruskal.test(Ozone ~ Month, data = airquality)
 kt <- free1way(Ozone ~ Month, data = airquality)
 print(kt)

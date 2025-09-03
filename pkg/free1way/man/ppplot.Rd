@@ -58,6 +58,9 @@ Substantial deviations of the empirical (points) from the theoretical
 A list with components \code{x} and \code{y} representing the empirical ROC
 curve.
 }
+\references{
+  \bibshow{*}
+}
 \examples{
 
 ### well fitting logistic model

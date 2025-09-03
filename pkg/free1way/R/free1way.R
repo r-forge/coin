@@ -7,7 +7,10 @@
 
     ### convert to three-way table
     xt <- x
-    stopifnot(is.table(x))
+    if (!is.table(x))
+      stop(gettextf("Incorrect argument 'x' in %s",
+                    "free1way"),
+                     domain = NA)
     dx <- dim(x)
     dn <- dimnames(x)
     if (length(dx) == 2L) {
@@ -30,23 +33,25 @@
         stop("")
     if (length(dx) == 2L)
         x <- as.table(array(x, dim = c(dx, 1)))
-    ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
-    ms$drop <- FALSE
-    x <- do.call("[", ms)
     dx <- dim(x)
-    stopifnot(length(dx) >= 3L)
+    if (length(dx) < 3L)
+        stop("Incorrect dimensions")
     C <- dim(x)[1L]
     K <- dim(x)[2L]
     B <- dim(x)[3L]
-    stopifnot(dx[1L] > 1L)
-    stopifnot(K > 1L)
+    if (C < 2L)
+        stop("At least two response categories required")
+    if (K < 2L)
+        stop("At least two groups required")
     xrc <- NULL
     if (length(dx) == 4L) {
         if (dx[4] == 2L) {
             xrc <- array(x[,,,"FALSE", drop = TRUE], dim = dx[1:3])
             x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])
         } else {
-            stop("")
+            stop(gettextf("%s currently only allows independent right-censoring",
+                                  "free1way"),
+                         domain = NA)
         }
     }
 
@@ -352,7 +357,9 @@
             }
             sAH <- try(Matrix::solve(H$A, H$X))
             if (inherits(sAH, "try-error"))
-                stop("Error computing the Hessian in free1way")
+                stop(gettextf("Error computing the Hessian in %s",
+                              "free1way"),
+                         domain = NA)
             ret <- ret + (H$Z - crossprod(H$X, sAH))
         }
         as.matrix(ret)
@@ -402,7 +409,10 @@
         return(ret * par)
     }
     .profile <- function(start, fix = seq_len(K - 1)) {
-        stopifnot(all(fix %in% seq_len(K - 1)))
+        if (!all(fix %in% seq_len(K - 1)))
+            stop(gettextf("Incorrect argument 'fix' in %s",
+                          "free1way"),
+                         domain = NA)
         delta <- start[fix]
         opargs <- c(list(par = start[-fix], 
                          fn = function(par) {
@@ -437,7 +447,9 @@
            }
         }
         if (ret$convergence > 0)
-            stop(paste("Unsuccessful optimisation in free1way", ret$message))
+            stop(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
+                          "free1way"),
+                             domain = NA)
         
         p <- numeric(length(start))
         p[fix] <- delta
@@ -470,7 +482,9 @@
            }
         }
         if (ret$convergence > 0)
-            stop(paste("Unsuccessful optimisation in free1way", ret$message))
+            stop(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
+                          "free1way"),
+                             domain = NA)
         
     } else if (length(fix) == length(start)) {
         ret <- list(par = start, 
@@ -961,7 +975,8 @@ confint.free1way <- function(object, parm,
     }
 
     if (test == "Permutation") {
-        stopifnot(length(cf) == 1L)
+        if (length(cf) > 1L)
+            stop("Permutation confidence intervals only available for two sample comparisons")
         if (is.null(object$perm$permStat)) {
             qu <- qnorm(conf.level) * c(-1, 1)
         } else {
@@ -1028,20 +1043,22 @@ free1way.formula <- function(formula, data, weights, subset, na.action = na.pass
     event <- NULL
     if (inherits(y, "Surv")) {
         if (attr(y, "type") != "right")
-            stop("free1way only supports right-censoring")
+            stop(gettextf("%s currently only allows independent right-censoring",
+                          "free1way"),
+                          domain = NA)
         event <- (y[,2] > 0)
         y <- y[,1]
     }
-    g <- mf[[group]]
-    stopifnot(is.factor(g))
+    g <- factor(mf[[group]])
     lev <- levels(g)
     DNAME <- paste(DNAME, paste0("(", paste0(lev, collapse = ", "), ")"))
     if (nlevels(g) < 2L)
-        stop("grouping factor must have at least 2 levels")
+        stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",
+                      "free1way"),
+                      domain = NA)
     if (stratum) {
-        st <- factor(mf[[3L]], levels = )
-        if (nlevels(st) < 2L)
-            stop("at least two strata must be present")
+        st <- factor(mf[[3L]])
+        ### nlevels(st) == 1L is explicitly allowed
         vn <- c(vn, names(mf)[3L])
         RVAL <- free1way(y = y, groups = g, blocks = st, event = event, weights = w,
                          varnames = vn, ...)
@@ -1065,21 +1082,30 @@ free1way.numeric <- function(y, groups, blocks = NULL, event = NULL, weights = N
     # variable names and checks
     
     cl <- match.call()
-    stopifnot(is.factor(groups))
-    stopifnot(nlevels(groups) > 1L)
     DNAME <- paste(varnames[1], "by", varnames[2])
+    groups <- factor(groups)
+    if (nlevels(groups) < 2L)
+        stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",
+                      "free1way"),
+                      domain = NA)
     DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), ")"))
 
     if (!is.null(blocks)) {
-        stopifnot(is.factor(blocks))
-        stopifnot(nlevels(blocks) > 1L)
-        DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])
+        if (length(unique(blocks)) < 2L) {
+            blocks <- NULL
+        } else {
+            blocks <- factor(blocks)
+            DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])
+        }
     }
     varnames <- varnames[varnames != "NULL"]
     
 
     if (!is.null(event)) {
-        stopifnot(is.logical(event))
+        if (!is.logical(event))
+            stop(gettextf("%s currently only allows independent right-censoring",
+                          "free1way"),
+                          domain = NA)
         uy <- sort(unique(y[event]))
         if (all(y[!event] < uy[length(uy)]))
             uy <- uy[-length(uy)]
@@ -1111,27 +1137,38 @@ free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NU
     # variable names and checks
     
     cl <- match.call()
-    stopifnot(is.factor(groups))
-    stopifnot(nlevels(groups) > 1L)
     DNAME <- paste(varnames[1], "by", varnames[2])
+    groups <- factor(groups)
+    if (nlevels(groups) < 2L)
+        stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",
+                      "free1way"),
+                      domain = NA)
     DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), ")"))
 
     if (!is.null(blocks)) {
-        stopifnot(is.factor(blocks))
-        stopifnot(nlevels(blocks) > 1L)
-        DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])
+        if (length(unique(blocks)) < 2L) {
+            blocks <- NULL
+        } else {
+            blocks <- factor(blocks)
+            DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])
+        }
     }
     varnames <- varnames[varnames != "NULL"]
     
 
-    if (nlevels(y) > 2L)
-        stopifnot(is.ordered(y))
+    if (nlevels(y) > 2L && !is.ordered(y))
+        stop(gettextf("%s is not defined for unordered responses",
+                              "free1way"),
+                     domain = NA)
     d <- data.frame(w = 1, y = y, groups = groups)
     if (!is.null(weights)) d$w <- weights
     if (is.null(blocks)) blocks <- gl(1, nrow(d))
     d$blocks <- blocks 
     if (!is.null(event)) {
-        stopifnot(is.logical(event))
+       if (!is.logical(event))
+            stop(gettextf("%s currently only allows independent right-censoring",
+                          "free1way"),
+                          domain = NA)
         d$event <- event
     }
     tab <- xtabs(w ~ ., data = d)
@@ -1234,10 +1271,12 @@ rfree1way <- function(n, prob = NULL, alloc_ratio = 1,
         names(delta) <- LETTERS[seq_len(K)[-1]]
     if (length(alloc_ratio) == 1L) 
         alloc_ratio <- rep_len(alloc_ratio, K - 1)
-    stopifnot(length(alloc_ratio) == K - 1)
+    if (length(alloc_ratio) != K - 1L)
+        stop("Incorrect argument 'alloc_ratio'")
     if (length(strata_ratio) == 1L) 
         strata_ratio <- rep_len(strata_ratio, B - 1)
-    stopifnot(length(strata_ratio) == B - 1)
+    if (length(strata_ratio) != B - 1L)
+        stop("Incorrect argument 'strata_ratio'")
     ### sample size per group (columns) and stratum (rows)
     N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
              matrix(c(1, strata_ratio), nrow = B, ncol = K)
@@ -1252,21 +1291,25 @@ rfree1way <- function(n, prob = NULL, alloc_ratio = 1,
 
     trt <- gl(K, 1, labels = colnames(N))
     blk <- gl(B, 1, labels = rownames(N))
-    ret <- expand.grid(trt = trt, blk = blk)
-    if (B == 1L) ret$blk <- NULL
+    ret <- expand.grid(groups = trt, blocks = blk)
+    if (B == 1L) ret$blocks <- NULL
     ret <- ret[rep(seq_len(nrow(ret)), times = N), , drop = FALSE]
     ret$y <- .rfree1way(nrow(ret), 
-                        delta = offset[ret$trt] + c(0, delta)[ret$trt], 
+                        delta = offset[ret$groups] + c(0, delta)[ret$groups], 
                         link = link)
     if (is.null(prob)) return(ret)
 
     ### return discrete distribution
     if (!is.matrix(prob))
         prob <- matrix(prob, nrow = NROW(prob), ncol = B)
-    stopifnot(ncol(prob) == B)
+    if (ncol(prob) != B)
+        stop(gettextf("Incorrect number of columns for 'prob' in %s",
+                      "rfree1way"),
+                      domain = NA)
     prob <- prop.table(prob, margin = 2L)
     ret <- do.call("rbind", lapply(1:ncol(prob), function(b) {
-        ret <- subset(ret, blk == levels(blk)[b])
+        if (B > 1)
+            ret <- subset(ret, blocks == levels(blocks)[b])
         ret$y <- cut(ret$y, breaks = c(-Inf, cumsum(prob[,b])), 
                      labels = paste0("Y", 1:nrow(prob)), ordered_result = TRUE)
         ret
@@ -1370,7 +1413,10 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
              }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)
     else if (is.null(delta)) {
         ### 2-sample only
-        stopifnot(K == 2L)
+        if (K != 2L)
+            stop(gettextf("Effect size can only computed for two sample problems in %s",
+                          "power.free1way.test"),
+                          domain = NA)
         delta <- uniroot(function(delta) {
                  # power call
                  
@@ -1424,10 +1470,12 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
         names(delta) <- LETTERS[seq_len(K)[-1]]
     if (length(alloc_ratio) == 1L) 
         alloc_ratio <- rep_len(alloc_ratio, K - 1)
-    stopifnot(length(alloc_ratio) == K - 1)
+    if (length(alloc_ratio) != K - 1L)
+        stop("Incorrect argument 'alloc_ratio'")
     if (length(strata_ratio) == 1L) 
         strata_ratio <- rep_len(strata_ratio, B - 1)
-    stopifnot(length(strata_ratio) == B - 1)
+    if (length(strata_ratio) != B - 1L)
+        stop("Incorrect argument 'strata_ratio'")
     ### sample size per group (columns) and stratum (rows)
     N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * 
              matrix(c(1, strata_ratio), nrow = B, ncol = K)
@@ -1474,7 +1522,10 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
             "greater" = pnorm(qnorm(sig.level) + deltamu / se)
         )
     } else {
-        stopifnot(alternative == "two.sided")
+        if (alternative != "two.sided")
+            stop(gettextf("%s only allows two-sided alternatives in the presence of more than two groups",
+                          "power.free1way.test"),
+                          domain = NA)
         ncp <- sum((chol(he) %*% deltamu)^2)
         qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)
         power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)

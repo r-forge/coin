@@ -1,5 +1,5 @@
 
-R version 4.5.1 (2025-06-13) -- "Great Square Root"
+R Under development (unstable) (2025-09-02 r88766) -- "Unsuffered Consequences"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -32,7 +32,7 @@ The following object is masked from 'package:variables':
 
     support
 
-> 
+> options(digits = 5)
 > set.seed(29)
 > 
 > N <- 25
@@ -46,10 +46,10 @@ Waiting for profiling to be done...
 Re-fitting to get Hessian
 
 > c(coef(m)["xB"], ci)
-        xB      2.5 %     97.5 % 
- 0.7717015 -0.2441288  1.8167676 
+      xB    2.5 %   97.5 % 
+ 0.77170 -0.24413  1.81677 
 > logLik(m)
-'log Lik.' -65.29232 (df=4)
+'log Lik.' -65.292 (df=4)
 > summary(m)
 
 Re-fitting to get Hessian
@@ -58,25 +58,25 @@ Call:
 polr(formula = y ~ x, method = "logistic")
 
 Coefficients:
-    Value Std. Error t value
-xB 0.7717     0.5232   1.475
+   Value Std. Error t value
+xB 0.772      0.523    1.48
 
 Intercepts:
-                 Value   Std. Error t value
-(-Inf,-1]|(-1,0] -0.8200  0.3978    -2.0612
-(-1,0]|(0,1]     -0.1371  0.3756    -0.3651
-(0,1]|(1, Inf]    0.8869  0.4009     2.2124
+                 Value  Std. Error t value
+(-Inf,-1]|(-1,0] -0.820  0.398     -2.061 
+(-1,0]|(0,1]     -0.137  0.376     -0.365 
+(0,1]|(1, Inf]    0.887  0.401      2.212 
 
-Residual Deviance: 130.5846 
-AIC: 138.5846 
+Residual Deviance: 130.58 
+AIC: 138.58 
 > #score_test(m, parm = "xB")
 > 
 > m <- Polr(y ~ x, method = "logistic")
 > coef(m)
-       xB 
-0.7716653 
+     xB 
+0.77167 
 > logLik(m)
-'log Lik.' -65.29232 (df=4)
+'log Lik.' -65.292 (df=4)
 > summary(m)
 
   Proportional Odds Regression Model 
@@ -86,66 +86,66 @@ Polr(formula = y ~ x, method = "logistic")
 
 Coefficients:
    Estimate Std. Error z value Pr(>|z|)
-xB   0.7717     0.5232   1.475     0.14
+xB    0.772      0.523    1.47     0.14
 
 Log-Likelihood:
- -65.29232 (df = 4)
-Likelihood-ratio Test: Chisq = 2.210712 on 1 degrees of freedom; p = 0.1371
+ -65.292 (df = 4)
+Likelihood-ratio Test: Chisq = 2.2107 on 1 degrees of freedom; p = 0.137
 
 > score_test(m, parm = "xB")
 
 	Transformation Score Test
 
 data:  Polr(formula = y ~ x, method = "logistic")
-Z = -1.4831, p-value = 0.138
+Z = -1.48, p-value = 0.14
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.2441117  1.7874262
+ -0.24411  1.78743
 sample estimates:
-   for xB 
-0.7716653 
+ for xB 
+0.77167 
 
 > ft <- free1way(y = y, groups = x, B = 10000)
 > coef(ft)
-       xB 
-0.7716714 
+     xB 
+0.77167 
 > logLik(ft)
-[1] -65.29232
+[1] -65.292
 > print(ft, test = "Rao")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Rao chi-squared = 2.1997, df = 1, p-value = 0.138
+Rao chi-squared = 2.2, df = 1, p-value = 0.14
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Rao")
-        2.5 %   97.5 %
-xB -0.2439635 1.787535
+      2.5 % 97.5 %
+xB -0.24396 1.7875
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
 	Approximative Permutation Transformation Score Test
 
 data:  Polr(formula = y ~ x, method = "logistic")
-Z = -1.4604, p-value = 0.1582
+Z = -1.46, p-value = 0.16
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.2999303  1.8069404
+ -0.29993  1.80694
 sample estimates:
-   for xB 
-0.7716653 
+ for xB 
+0.77167 
 
 > print(ft, test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.4604, p-value = 0.1335
+Perm Z = 1.46, p-value = 0.13
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
-        2.5 %   97.5 %
-xB -0.2633524 1.807858
+      2.5 % 97.5 %
+xB -0.26335 1.8079
 attr(,"Attained level")
 [1] 0.9492
 > 
@@ -155,10 +155,10 @@ Waiting for profiling to be done...
 Re-fitting to get Hessian
 
 > c(coef(m)["xB"], ci)
-        xB      2.5 %     97.5 % 
- 0.5598012 -0.1540684  1.3011025 
+      xB    2.5 %   97.5 % 
+ 0.55980 -0.15407  1.30110 
 > logLik(m)
-'log Lik.' -65.21707 (df=4)
+'log Lik.' -65.217 (df=4)
 > summary(m)
 
 Re-fitting to get Hessian
@@ -167,23 +167,23 @@ Call:
 polr(formula = y ~ x, method = "cloglog")
 
 Coefficients:
-    Value Std. Error t value
-xB 0.5598     0.3674   1.524
+   Value Std. Error t value
+xB  0.56      0.367    1.52
 
 Intercepts:
-                 Value   Std. Error t value
-(-Inf,-1]|(-1,0] -1.0444  0.3211    -3.2522
-(-1,0]|(0,1]     -0.4800  0.2734    -1.7559
-(0,1]|(1, Inf]    0.2473  0.2466     1.0029
+                 Value  Std. Error t value
+(-Inf,-1]|(-1,0] -1.044  0.321     -3.252 
+(-1,0]|(0,1]     -0.480  0.273     -1.756 
+(0,1]|(1, Inf]    0.247  0.247      1.003 
 
-Residual Deviance: 130.4341 
-AIC: 138.4341 
+Residual Deviance: 130.43 
+AIC: 138.43 
 > m <- Polr(y ~ x, method = "cloglog")
 > coef(m)
-       xB 
-0.5597288 
+     xB 
+0.55973 
 > logLik(m)
-'log Lik.' -65.21707 (df=4)
+'log Lik.' -65.217 (df=4)
 > summary(m)
 
   Proportional Hazards Regression Model 
@@ -193,66 +193,66 @@ Polr(formula = y ~ x, method = "cloglog")
 
 Coefficients:
    Estimate Std. Error z value Pr(>|z|)
-xB   0.5597     0.3674   1.523    0.128
+xB    0.560      0.367    1.52     0.13
 
 Log-Likelihood:
- -65.21707 (df = 4)
-Likelihood-ratio Test: Chisq = 2.361227 on 1 degrees of freedom; p = 0.1244
+ -65.217 (df = 4)
+Likelihood-ratio Test: Chisq = 2.3612 on 1 degrees of freedom; p = 0.124
 
 > score_test(m, parm = "xB")
 
 	Transformation Score Test
 
 data:  Polr(formula = y ~ x, method = "cloglog")
-Z = -1.5424, p-value = 0.123
+Z = -1.54, p-value = 0.12
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.1465334  1.2657979
+ -0.14653  1.26580
 sample estimates:
-   for xB 
-0.5597288 
+ for xB 
+0.55973 
 
 > ft <- free1way(y = y, groups = x, link = "cloglog", B = 10000)
 > coef(ft)
-       xB 
-0.5597288 
+     xB 
+0.55973 
 > logLik(ft)
-[1] -65.21707
+[1] -65.217
 > print(ft, test = "Rao")
 
 	2-sample Savage test against proportional hazards alternatives
 
 data:  y by x (A, B)
-Rao chi-squared = 2.3789, df = 1, p-value = 0.123
+Rao chi-squared = 2.38, df = 1, p-value = 0.12
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > confint(ft, test = "Rao")
-        2.5 %   97.5 %
-xB -0.1464096 1.265794
+      2.5 % 97.5 %
+xB -0.14641 1.2658
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
 	Approximative Permutation Transformation Score Test
 
 data:  Polr(formula = y ~ x, method = "cloglog")
-Z = -1.512, p-value = 0.1343
+Z = -1.51, p-value = 0.13
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.1614875  1.2697648
+ -0.16149  1.26976
 sample estimates:
-   for xB 
-0.5597288 
+ for xB 
+0.55973 
 
 > print(ft, test = "Permutation")
 
 	2-sample Savage test against proportional hazards alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.512, p-value = 0.1212
+Perm Z = 1.51, p-value = 0.12
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
-        2.5 %   97.5 %
-xB -0.1615268 1.265656
+      2.5 % 97.5 %
+xB -0.16153 1.2657
 attr(,"Attained level")
 [1] 0.9474
 > 
@@ -262,10 +262,10 @@ Waiting for profiling to be done...
 Re-fitting to get Hessian
 
 > c(coef(m)["xB"], ci)
-        xB      2.5 %     97.5 % 
- 0.3956994 -0.2509369  1.0494255 
+      xB    2.5 %   97.5 % 
+ 0.39570 -0.25094  1.04943 
 > logLik(m)
-'log Lik.' -65.67419 (df=4)
+'log Lik.' -65.674 (df=4)
 > summary(m)
 
 Re-fitting to get Hessian
@@ -274,23 +274,23 @@ Call:
 polr(formula = y ~ x, method = "loglog")
 
 Coefficients:
-    Value Std. Error t value
-xB 0.3957     0.3291   1.203
+   Value Std. Error t value
+xB 0.396      0.329     1.2
 
 Intercepts:
-                 Value   Std. Error t value
-(-Inf,-1]|(-1,0] -0.1723  0.2440    -0.7062
-(-1,0]|(0,1]      0.2212  0.2544     0.8695
-(0,1]|(1, Inf]    0.9400  0.2958     3.1784
+                 Value  Std. Error t value
+(-Inf,-1]|(-1,0] -0.172  0.244     -0.706 
+(-1,0]|(0,1]      0.221  0.254      0.869 
+(0,1]|(1, Inf]    0.940  0.296      3.178 
 
-Residual Deviance: 131.3484 
-AIC: 139.3484 
+Residual Deviance: 131.35 
+AIC: 139.35 
 > m <- Polr(y ~ x, method = "loglog")
 > coef(m)
-       xB 
-0.3957135 
+     xB 
+0.39571 
 > logLik(m)
-'log Lik.' -65.67419 (df=4)
+'log Lik.' -65.674 (df=4)
 > summary(m)
 
   Proportional Reverse time hazards Regression Model 
@@ -300,67 +300,67 @@ Polr(formula = y ~ x, method = "loglog")
 
 Coefficients:
    Estimate Std. Error z value Pr(>|z|)
-xB   0.3957     0.3291   1.203    0.229
+xB    0.396      0.329     1.2     0.23
 
 Log-Likelihood:
- -65.67419 (df = 4)
-Likelihood-ratio Test: Chisq = 1.446973 on 1 degrees of freedom; p = 0.229
+ -65.674 (df = 4)
+Likelihood-ratio Test: Chisq = 1.447 on 1 degrees of freedom; p = 0.229
 
 > score_test(m, parm = "xB")
 
 	Transformation Score Test
 
 data:  Polr(formula = y ~ x, method = "loglog")
-Z = -1.2098, p-value = 0.2264
+Z = -1.21, p-value = 0.23
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.2392474  1.0306056
+ -0.23925  1.03061
 sample estimates:
-   for xB 
-0.3957135 
+ for xB 
+0.39571 
 
 > 
 > ft <- free1way(y = y, groups = x, link = "loglog", B = 10000)
 > coef(ft)
-       xB 
-0.3957133 
+     xB 
+0.39571 
 > logLik(ft)
-[1] -65.67419
+[1] -65.674
 > print(ft, test = "Rao")
 
 	2-sample Lehmann test against Lehmann alternatives
 
 data:  y by x (A, B)
-Rao chi-squared = 1.4637, df = 1, p-value = 0.2263
+Rao chi-squared = 1.46, df = 1, p-value = 0.23
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Rao")
-        2.5 %   97.5 %
-xB -0.2392854 1.030697
+      2.5 % 97.5 %
+xB -0.23929 1.0307
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
 	Approximative Permutation Transformation Score Test
 
 data:  Polr(formula = y ~ x, method = "loglog")
-Z = -1.1825, p-value = 0.2355
+Z = -1.18, p-value = 0.24
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.2635796  1.0543219
+ -0.26358  1.05432
 sample estimates:
-   for xB 
-0.3957135 
+ for xB 
+0.39571 
 
 > print(ft, test = "Permutation")
 
 	2-sample Lehmann test against Lehmann alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.1825, p-value = 0.2358
+Perm Z = 1.18, p-value = 0.24
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
-        2.5 %   97.5 %
-xB -0.2629625 1.054372
+      2.5 % 97.5 %
+xB -0.26296 1.0544
 attr(,"Attained level")
 [1] 0.9483
 > 
@@ -370,10 +370,10 @@ Waiting for profiling to be done...
 Re-fitting to get Hessian
 
 > c(coef(m)["xB"], ci)
-        xB      2.5 %     97.5 % 
- 0.4510915 -0.1662077  1.0709640 
+      xB    2.5 %   97.5 % 
+ 0.45109 -0.16621  1.07096 
 > logLik(m)
-'log Lik.' -65.37282 (df=4)
+'log Lik.' -65.373 (df=4)
 > summary(m)
 
 Re-fitting to get Hessian
@@ -382,36 +382,36 @@ Call:
 polr(formula = y ~ x, method = "probit")
 
 Coefficients:
-    Value Std. Error t value
-xB 0.4511     0.3155    1.43
+   Value Std. Error t value
+xB 0.451      0.315    1.43
 
 Intercepts:
-                 Value   Std. Error t value
-(-Inf,-1]|(-1,0] -0.5028  0.2419    -2.0786
-(-1,0]|(0,1]     -0.0935  0.2342    -0.3994
-(0,1]|(1, Inf]    0.5380  0.2435     2.2096
+                 Value  Std. Error t value
+(-Inf,-1]|(-1,0] -0.503  0.242     -2.079 
+(-1,0]|(0,1]     -0.094  0.234     -0.399 
+(0,1]|(1, Inf]    0.538  0.243      2.210 
 
-Residual Deviance: 130.7456 
-AIC: 138.7456 
+Residual Deviance: 130.75 
+AIC: 138.75 
 > 
 > m <- Polr(y ~ x, method = "probit")
 > coef(m)
-       xB 
-0.4510936 
+     xB 
+0.45109 
 > logLik(m)
-'log Lik.' -65.37282 (df=4)
+'log Lik.' -65.373 (df=4)
 > score_test(m, parm = "xB")
 
 	Transformation Score Test
 
 data:  Polr(formula = y ~ x, method = "probit")
-Z = -1.4303, p-value = 0.1526
+Z = -1.43, p-value = 0.15
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.1668254  1.0689961
+ -0.16683  1.06900
 sample estimates:
-   for xB 
-0.4510936 
+ for xB 
+0.45109 
 
 > summary(m)
 
@@ -422,42 +422,42 @@ Polr(formula = y ~ x, method = "probit")
 
 Coefficients:
    Estimate Std. Error z value Pr(>|z|)
-xB   0.4511     0.3155    1.43    0.153
+xB    0.451      0.315    1.43     0.15
 
 Log-Likelihood:
- -65.37282 (df = 4)
-Likelihood-ratio Test: Chisq = 2.049718 on 1 degrees of freedom; p = 0.1522
+ -65.373 (df = 4)
+Likelihood-ratio Test: Chisq = 2.0497 on 1 degrees of freedom; p = 0.152
 
 > ft <- free1way(y = y, groups = x, link = "probit", B = 10000)
 > coef(ft)
-      xB 
-0.451097 
+    xB 
+0.4511 
 > logLik(ft)
-[1] -65.37282
+[1] -65.373
 > print(ft, test = "Rao")
 
 	2-sample van der Waerden normal scores test against latent normal shift
 	alternatives
 
 data:  y by x (A, B)
-Rao chi-squared = 2.0441, df = 1, p-value = 0.1528
+Rao chi-squared = 2.04, df = 1, p-value = 0.15
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 > confint(ft, test = "Rao")
-        2.5 %   97.5 %
-xB -0.1667299 1.068971
+      2.5 % 97.5 %
+xB -0.16673  1.069
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
 	Approximative Permutation Transformation Score Test
 
 data:  Polr(formula = y ~ x, method = "probit")
-Z = -1.4074, p-value = 0.1773
+Z = -1.41, p-value = 0.18
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.1867426  1.0802504
+ -0.18674  1.08025
 sample estimates:
-   for xB 
-0.4510936 
+ for xB 
+0.45109 
 
 > print(ft, test = "Permutation")
 
@@ -465,15 +465,15 @@ sample estimates:
 	alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.4074, p-value = 0.1557
+Perm Z = 1.41, p-value = 0.16
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 > confint(ft, test = "Permutation")
-        2.5 %   97.5 %
-xB -0.1772833 1.080421
+      2.5 % 97.5 %
+xB -0.17728 1.0804
 attr(,"Attained level")
 [1] 0.947
 > 
 > proc.time()
    user  system elapsed 
-  3.207   0.060   3.262 
+  3.531   0.092   3.619 

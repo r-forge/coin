@@ -16,8 +16,8 @@
 \documentclass[a4paper]{report}
 
 %\VignetteIndexEntry{Stratified K-sample Inference}
-%\VignetteDepends{free1way,rms,coin,multcomp,survival}
-%\VignetteKeywords{conditional inference, conditional Monte Carlo}}
+%\VignetteDepends{free1way,multcomp,survival,Hmisc,coin,rms}
+%\VignetteKeywords{semiparametric model,conditional inference}}
 %\VignettePackage{free1way}
 
 %% packages
@@ -146,6 +146,29 @@ urlcolor={linkcolor}%
 \maketitle
 \tableofcontents
 
+\chapter*{Introduction}
+
+Comparing two or more independent samples with respect to some outcome
+measure is a common task. Many procedures are available in 
+\pkg{stats} and other add-on packages, most of these implementations
+making rather strict assumptions regarding the outcome distribution, the
+number of samples, the presence of blocks or strata and typically offer
+either conditional or unconditional (exact or asymptotic) inference.
+
+This document presents a unified, dense, and yet holistic implementation
+covaring many classical procedures as special cases. Leveraging 
+transformation models, likelihood-based parameter estimation as well as
+permutation- and likelihood-based inference are formulated and implemented. One
+can understand this contribution as a unification of many of
+\code{stats::*.test} procedures, the models available in 
+\code{MASS::polr}, \code{rms::orm}, \code{survival::coxph}, 
+or the \pkg{tram} add-on package (among many others), 
+and permutation-based inference in \pkg{coin}.
+
+This implementation is, however, free of any strong dependencies and only
+uses functionality available in \proglang{R} itself and the \pkg{stats},
+\pkg{graphics}, and \pkg{Matrix} recommended packages.
+
 \chapter{Model and Parameterisation}
 \label{ch:model}
 \pagenumbering{arabic}
@@ -202,9 +225,11 @@ of $F$ is made a priori and determines the interpretation of $\delta_k$.
 
 This document describes the implementation of estimators of these shift parameters,
 as well as of confidence intervals and formal hypothesis tests for contrasts thereof under
-the permutation and population model.
+the permutation and population model. Proportional odds models ($g_\text{PO}$)
+are explained in-depths by \cite{Harrell2015RMS}, although the models are
+presented in terms of survivor, not distribution, functions. 
 
-\paragraph{Hypthesis}
+\paragraph{Hypothesis}
 
 We are interested in inference for $\delta_2, \dots, \delta_K$, in terms of
 confidence intervals and hypothesis tests of the form
@@ -287,6 +312,7 @@ right-censoring and the second table contains numbers of events.
 
 <<localfun, echo = FALSE>>=
 Nsim <- 100
+options(digits = 5)
 
 .rcr <- function(z) {
     # Reduce('+', z, accumulate = TRUE, right = TRUE)
@@ -305,23 +331,25 @@ Nsim <- 100
         stop("")
     if (length(dx) == 2L)
         x <- as.table(array(x, dim = c(dx, 1)))
-    ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
-    ms$drop <- FALSE
-    x <- do.call("[", ms)
     dx <- dim(x)
-    stopifnot(length(dx) >= 3L)
+    if (length(dx) < 3L)
+        stop("Incorrect dimensions")
     C <- dim(x)[1L]
     K <- dim(x)[2L]
     B <- dim(x)[3L]
-    stopifnot(dx[1L] > 1L)
-    stopifnot(K > 1L)
+    if (C < 2L)
+        stop("At least two response categories required")
+    if (K < 2L)
+        stop("At least two groups required")
     xrc <- NULL
     if (length(dx) == 4L) {
         if (dx[4] == 2L) {
             xrc <- array(x[,,,"FALSE", drop = TRUE], dim = dx[1:3])
             x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])
         } else {
-            stop("")
+            stop(gettextf("%s currently only allows independent right-censoring",
+                                  "free1way"),
+                         domain = NA)
         }
     }
 
@@ -589,7 +617,9 @@ Nsim <- 100
         }
         sAH <- try(Matrix::solve(H$A, H$X))
         if (inherits(sAH, "try-error"))
-            stop("Error computing the Hessian in free1way")
+            stop(gettextf("Error computing the Hessian in %s",
+                          "free1way"),
+                     domain = NA)
         ret <- ret + (H$Z - crossprod(H$X, sAH))
     }
     as.matrix(ret)
@@ -624,7 +654,10 @@ Nsim <- 100
 
     ### convert to three-way table
     xt <- x
-    stopifnot(is.table(x))
+    if (!is.table(x))
+      stop(gettextf("Incorrect argument 'x' in %s",
+                    "free1way"),
+                     domain = NA)
     dx <- dim(x)
     dn <- dimnames(x)
     if (length(dx) == 2L) {
@@ -645,23 +678,25 @@ Nsim <- 100
         stop("")
     if (length(dx) == 2L)
         x <- as.table(array(x, dim = c(dx, 1)))
-    ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))
-    ms$drop <- FALSE
-    x <- do.call("[", ms)
     dx <- dim(x)
-    stopifnot(length(dx) >= 3L)
+    if (length(dx) < 3L)
+        stop("Incorrect dimensions")
     C <- dim(x)[1L]
     K <- dim(x)[2L]
     B <- dim(x)[3L]
-    stopifnot(dx[1L] > 1L)
-    stopifnot(K > 1L)
+    if (C < 2L)
+        stop("At least two response categories required")
+    if (K < 2L)
+        stop("At least two groups required")
     xrc <- NULL
     if (length(dx) == 4L) {
         if (dx[4] == 2L) {
             xrc <- array(x[,,,"FALSE", drop = TRUE], dim = dx[1:3])
             x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])
         } else {
-            stop("")
+            stop(gettextf("%s currently only allows independent right-censoring",
+                                  "free1way"),
+                         domain = NA)
         }
     }
 
@@ -946,7 +981,9 @@ Nsim <- 100
             }
             sAH <- try(Matrix::solve(H$A, H$X))
             if (inherits(sAH, "try-error"))
-                stop("Error computing the Hessian in free1way")
+                stop(gettextf("Error computing the Hessian in %s",
+                              "free1way"),
+                         domain = NA)
             ret <- ret + (H$Z - crossprod(H$X, sAH))
         }
         as.matrix(ret)
@@ -993,7 +1030,10 @@ Nsim <- 100
         return(ret * par)
     }
     .profile <- function(start, fix = seq_len(K - 1)) {
-        stopifnot(all(fix %in% seq_len(K - 1)))
+        if (!all(fix %in% seq_len(K - 1)))
+            stop(gettextf("Incorrect argument 'fix' in %s",
+                          "free1way"),
+                         domain = NA)
         delta <- start[fix]
         opargs <- c(list(par = start[-fix], 
                          fn = function(par) {
@@ -1027,7 +1067,9 @@ Nsim <- 100
            }
         }
         if (ret$convergence > 0)
-            stop(paste("Unsuccessful optimisation in free1way", ret$message))
+            stop(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
+                          "free1way"),
+                             domain = NA)
         
         p <- numeric(length(start))
         p[fix] <- delta
@@ -1058,7 +1100,9 @@ Nsim <- 100
            }
         }
         if (ret$convergence > 0)
-            stop(paste("Unsuccessful optimisation in free1way", ret$message))
+            stop(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
+                          "free1way"),
+                             domain = NA)
         
     } else if (length(fix) == length(start)) {
         ret <- list(par = start, 
@@ -1818,7 +1862,7 @@ over all blocks and evaluate the negative log-likelihood for the same values
 of the shift parameters but block-specific values of the intercept
 parameters. Before we begin, we convert the table $C \times K \times B
 (\times 2)$ table \code{x} into a list of non-empty $C^\prime \times K$
-tables with non-zero row sums:
+tables (yet still allowing zero row sums):
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap12}\raggedright\small
@@ -1831,23 +1875,25 @@ tables with non-zero row sums:
 \mbox{}\verb@    stop("")@\\
 \mbox{}\verb@if (length(dx) == 2L)@\\
 \mbox{}\verb@    x <- as.table(array(x, dim = c(dx, 1)))@\\
-\mbox{}\verb@ms <- c(list(x), lapply(seq_along(dx), function(j) marginSums(x, j) > 0))@\\
-\mbox{}\verb@ms$drop <- FALSE@\\
-\mbox{}\verb@x <- do.call("[", ms)@\\
 \mbox{}\verb@dx <- dim(x)@\\
-\mbox{}\verb@stopifnot(length(dx) >= 3L)@\\
+\mbox{}\verb@if (length(dx) < 3L)@\\
+\mbox{}\verb@    stop("Incorrect dimensions")@\\
 \mbox{}\verb@C <- dim(x)[1L]@\\
 \mbox{}\verb@K <- dim(x)[2L]@\\
 \mbox{}\verb@B <- dim(x)[3L]@\\
-\mbox{}\verb@stopifnot(dx[1L] > 1L)@\\
-\mbox{}\verb@stopifnot(K > 1L)@\\
+\mbox{}\verb@if (C < 2L)@\\
+\mbox{}\verb@    stop("At least two response categories required")@\\
+\mbox{}\verb@if (K < 2L)@\\
+\mbox{}\verb@    stop("At least two groups required")@\\
 \mbox{}\verb@xrc <- NULL@\\
 \mbox{}\verb@if (length(dx) == 4L) {@\\
 \mbox{}\verb@    if (dx[4] == 2L) {@\\
 \mbox{}\verb@        xrc <- array(x[,,,"FALSE", drop = TRUE], dim = dx[1:3])@\\
 \mbox{}\verb@        x <- array(x[,,,"TRUE", drop = TRUE], dim = dx[1:3])@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        stop("")@\\
+\mbox{}\verb@        stop(gettextf("%s currently only allows independent right-censoring",@\\
+\mbox{}\verb@                              "free1way"),@\\
+\mbox{}\verb@                     domain = NA)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@\\
@@ -2076,7 +2122,9 @@ shift- and intercept parameters first:
 \mbox{}\verb@        }@\\
 \mbox{}\verb@        sAH <- try(Matrix::solve(H$A, H$X))@\\
 \mbox{}\verb@        if (inherits(sAH, "try-error"))@\\
-\mbox{}\verb@            stop("Error computing the Hessian in free1way")@\\
+\mbox{}\verb@            stop(gettextf("Error computing the Hessian in %s",@\\
+\mbox{}\verb@                          "free1way"),@\\
+\mbox{}\verb@                     domain = NA)@\\
 \mbox{}\verb@        ret <- ret + (H$Z - crossprod(H$X, sAH))@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    as.matrix(ret)@\\
@@ -2522,7 +2570,9 @@ we encounter optimisation issues and restart at the current solution:
 \mbox{}\verb@   }@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@if (ret$convergence > 0)@\\
-\mbox{}\verb@    stop(paste("Unsuccessful optimisation in free1way", ret$message))@\\
+\mbox{}\verb@    stop(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),@\\
+\mbox{}\verb@                  "free1way"),@\\
+\mbox{}\verb@                     domain = NA)@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2563,7 +2613,10 @@ defined first
 \mbox{}\verb@    return(ret * par)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@.profile <- function(start, fix = seq_len(K - 1)) {@\\
-\mbox{}\verb@    stopifnot(all(fix %in% seq_len(K - 1)))@\\
+\mbox{}\verb@    if (!all(fix %in% seq_len(K - 1)))@\\
+\mbox{}\verb@        stop(gettextf("Incorrect argument 'fix' in %s",@\\
+\mbox{}\verb@                      "free1way"),@\\
+\mbox{}\verb@                     domain = NA)@\\
 \mbox{}\verb@    delta <- start[fix]@\\
 \mbox{}\verb@    opargs <- c(list(par = start[-fix], @\\
 \mbox{}\verb@                     fn = function(par) {@\\
@@ -2714,7 +2767,10 @@ class \code{free1wayML} for later use:
 \mbox{}\verb@@\\
 \mbox{}\verb@    ### convert to three-way table@\\
 \mbox{}\verb@    xt <- x@\\
-\mbox{}\verb@    stopifnot(is.table(x))@\\
+\mbox{}\verb@    if (!is.table(x))@\\
+\mbox{}\verb@      stop(gettextf("Incorrect argument 'x' in %s",@\\
+\mbox{}\verb@                    "free1way"),@\\
+\mbox{}\verb@                     domain = NA)@\\
 \mbox{}\verb@    dx <- dim(x)@\\
 \mbox{}\verb@    dn <- dimnames(x)@\\
 \mbox{}\verb@    if (length(dx) == 2L) {@\\
@@ -3261,20 +3317,22 @@ stratum)} for model specification
 \mbox{}\verb@    event <- NULL@\\
 \mbox{}\verb@    if (inherits(y, "Surv")) {@\\
 \mbox{}\verb@        if (attr(y, "type") != "right")@\\
-\mbox{}\verb@            stop("free1way only supports right-censoring")@\\
+\mbox{}\verb@            stop(gettextf("%s currently only allows independent right-censoring",@\\
+\mbox{}\verb@                          "free1way"),@\\
+\mbox{}\verb@                          domain = NA)@\\
 \mbox{}\verb@        event <- (y[,2] > 0)@\\
 \mbox{}\verb@        y <- y[,1]@\\
 \mbox{}\verb@    }@\\
-\mbox{}\verb@    g <- mf[[group]]@\\
-\mbox{}\verb@    stopifnot(is.factor(g))@\\
+\mbox{}\verb@    g <- factor(mf[[group]])@\\
 \mbox{}\verb@    lev <- levels(g)@\\
 \mbox{}\verb@    DNAME <- paste(DNAME, paste0("(", paste0(lev, collapse = ", "), ")"))@\\
 \mbox{}\verb@    if (nlevels(g) < 2L)@\\
-\mbox{}\verb@        stop("grouping factor must have at least 2 levels")@\\
+\mbox{}\verb@        stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",@\\
+\mbox{}\verb@                      "free1way"),@\\
+\mbox{}\verb@                      domain = NA)@\\
 \mbox{}\verb@    if (stratum) {@\\
-\mbox{}\verb@        st <- factor(mf[[3L]], levels = )@\\
-\mbox{}\verb@        if (nlevels(st) < 2L)@\\
-\mbox{}\verb@            stop("at least two strata must be present")@\\
+\mbox{}\verb@        st <- factor(mf[[3L]])@\\
+\mbox{}\verb@        ### nlevels(st) == 1L is explicitly allowed@\\
 \mbox{}\verb@        vn <- c(vn, names(mf)[3L])@\\
 \mbox{}\verb@        RVAL <- free1way(y = y, groups = g, blocks = st, event = event, weights = w,@\\
 \mbox{}\verb@                         varnames = vn, ...)@\\
@@ -3310,15 +3368,21 @@ interpreted as an event and \code{FALSE} as right-censored observation
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@cl <- match.call()@\\
-\mbox{}\verb@stopifnot(is.factor(groups))@\\
-\mbox{}\verb@stopifnot(nlevels(groups) > 1L)@\\
 \mbox{}\verb@DNAME <- paste(varnames[1], "by", varnames[2])@\\
+\mbox{}\verb@groups <- factor(groups)@\\
+\mbox{}\verb@if (nlevels(groups) < 2L)@\\
+\mbox{}\verb@    stop(gettextf("Incorrect argument 'groups' in %s, at least two groups needed",@\\
+\mbox{}\verb@                  "free1way"),@\\
+\mbox{}\verb@                  domain = NA)@\\
 \mbox{}\verb@DNAME <- paste(DNAME, paste0("(", paste0(levels(groups), collapse = ", "), ")"))@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (!is.null(blocks)) {@\\
-\mbox{}\verb@    stopifnot(is.factor(blocks))@\\
-\mbox{}\verb@    stopifnot(nlevels(blocks) > 1L)@\\
-\mbox{}\verb@    DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])@\\
+\mbox{}\verb@    if (length(unique(blocks)) < 2L) {@\\
+\mbox{}\verb@        blocks <- NULL@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        blocks <- factor(blocks)@\\
+\mbox{}\verb@        DNAME <- paste(DNAME, "\n\t stratified by", varnames[3])@\\
+\mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@varnames <- varnames[varnames != "NULL"]@\\
 \mbox{}\verb@@{\NWsep}
@@ -3346,7 +3410,10 @@ interpreted as an event and \code{FALSE} as right-censored observation
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!is.null(event)) {@\\
-\mbox{}\verb@        stopifnot(is.logical(event))@\\
+\mbox{}\verb@        if (!is.logical(event))@\\
+\mbox{}\verb@            stop(gettextf("%s currently only allows independent right-censoring",@\\
+\mbox{}\verb@                          "free1way"),@\\
+\mbox{}\verb@                          domain = NA)@\\
 \mbox{}\verb@        uy <- sort(unique(y[event]))@\\
 \mbox{}\verb@        if (all(y[!event] < uy[length(uy)]))@\\
 \mbox{}\verb@            uy <- uy[-length(uy)]@\\
@@ -3394,14 +3461,19 @@ call to \code{xtabs}:
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    if (nlevels(y) > 2L)@\\
-\mbox{}\verb@        stopifnot(is.ordered(y))@\\
+\mbox{}\verb@    if (nlevels(y) > 2L && !is.ordered(y))@\\
+\mbox{}\verb@        stop(gettextf("%s is not defined for unordered responses",@\\
+\mbox{}\verb@                              "free1way"),@\\
+\mbox{}\verb@                     domain = NA)@\\
 \mbox{}\verb@    d <- data.frame(w = 1, y = y, groups = groups)@\\
 \mbox{}\verb@    if (!is.null(weights)) d$w <- weights@\\
 \mbox{}\verb@    if (is.null(blocks)) blocks <- gl(1, nrow(d))@\\
 \mbox{}\verb@    d$blocks <- blocks @\\
 \mbox{}\verb@    if (!is.null(event)) {@\\
-\mbox{}\verb@        stopifnot(is.logical(event))@\\
+\mbox{}\verb@       if (!is.logical(event))@\\
+\mbox{}\verb@            stop(gettextf("%s currently only allows independent right-censoring",@\\
+\mbox{}\verb@                          "free1way"),@\\
+\mbox{}\verb@                          domain = NA)@\\
 \mbox{}\verb@        d$event <- event@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    tab <- xtabs(w ~ ., data = d)@\\
@@ -3626,7 +3698,8 @@ values for the inversion:
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (test == "Permutation") {@\\
-\mbox{}\verb@        stopifnot(length(cf) == 1L)@\\
+\mbox{}\verb@        if (length(cf) > 1L)@\\
+\mbox{}\verb@            stop("Permutation confidence intervals only available for two sample comparisons")@\\
 \mbox{}\verb@        if (is.null(object$perm$permStat)) {@\\
 \mbox{}\verb@            qu <- qnorm(conf.level) * c(-1, 1)@\\
 \mbox{}\verb@        } else {@\\
@@ -3908,6 +3981,17 @@ friedman.test(RoundingTimes)
 summary(ft)
 @
 
+\section{Contrast Tests}
+
+\code{free1way} output can be used to define multiple contrast tests and
+corresponding confidence intervals via the \pkg{multcomp} package. For
+example, Tukey-style simultaneous all-pair comparisons can be implemented via
+<<Tukey>>=
+tk <- free1way(Ozone ~ Month, data = airquality)
+library("multcomp")
+confint(glht(tk, linfct = mcp(Month = "Tukey")))
+@
+
 \chapter{Model Diagnostics}
 
 The classical shift model $F_Y(y \mid T = 2) = F_Y(y - \mu \mid T = 1)$
@@ -4060,10 +4144,12 @@ but not the shift effects.
 \mbox{}\verb@    names(delta) <- LETTERS[seq_len(K)[-1]]@\\
 \mbox{}\verb@if (length(alloc_ratio) == 1L) @\\
 \mbox{}\verb@    alloc_ratio <- rep_len(alloc_ratio, K - 1)@\\
-\mbox{}\verb@stopifnot(length(alloc_ratio) == K - 1)@\\
+\mbox{}\verb@if (length(alloc_ratio) != K - 1L)@\\
+\mbox{}\verb@    stop("Incorrect argument 'alloc_ratio'")@\\
 \mbox{}\verb@if (length(strata_ratio) == 1L) @\\
 \mbox{}\verb@    strata_ratio <- rep_len(strata_ratio, B - 1)@\\
-\mbox{}\verb@stopifnot(length(strata_ratio) == B - 1)@\\
+\mbox{}\verb@if (length(strata_ratio) != B - 1L)@\\
+\mbox{}\verb@    stop("Incorrect argument 'strata_ratio'")@\\
 \mbox{}\verb@### sample size per group (columns) and stratum (rows)@\\
 \mbox{}\verb@N <- n * matrix(c(1, alloc_ratio), nrow = B, ncol = K, byrow = TRUE) * @\\
 \mbox{}\verb@         matrix(c(1, strata_ratio), nrow = B, ncol = K)@\\
@@ -4114,21 +4200,25 @@ but not the shift effects.
 \mbox{}\verb@@\\
 \mbox{}\verb@    trt <- gl(K, 1, labels = colnames(N))@\\
 \mbox{}\verb@    blk <- gl(B, 1, labels = rownames(N))@\\
-\mbox{}\verb@    ret <- expand.grid(trt = trt, blk = blk)@\\
-\mbox{}\verb@    if (B == 1L) ret$blk <- NULL@\\
+\mbox{}\verb@    ret <- expand.grid(groups = trt, blocks = blk)@\\
+\mbox{}\verb@    if (B == 1L) ret$blocks <- NULL@\\
 \mbox{}\verb@    ret <- ret[rep(seq_len(nrow(ret)), times = N), , drop = FALSE]@\\
 \mbox{}\verb@    ret$y <- .rfree1way(nrow(ret), @\\
-\mbox{}\verb@                        delta = offset[ret$trt] + c(0, delta)[ret$trt], @\\
+\mbox{}\verb@                        delta = offset[ret$groups] + c(0, delta)[ret$groups], @\\
 \mbox{}\verb@                        link = link)@\\
 \mbox{}\verb@    if (is.null(prob)) return(ret)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ### return discrete distribution@\\
 \mbox{}\verb@    if (!is.matrix(prob))@\\
 \mbox{}\verb@        prob <- matrix(prob, nrow = NROW(prob), ncol = B)@\\
-\mbox{}\verb@    stopifnot(ncol(prob) == B)@\\
+\mbox{}\verb@    if (ncol(prob) != B)@\\
+\mbox{}\verb@        stop(gettextf("Incorrect number of columns for 'prob' in %s",@\\
+\mbox{}\verb@                      "rfree1way"),@\\
+\mbox{}\verb@                      domain = NA)@\\
 \mbox{}\verb@    prob <- prop.table(prob, margin = 2L)@\\
 \mbox{}\verb@    ret <- do.call("rbind", lapply(1:ncol(prob), function(b) {@\\
-\mbox{}\verb@        ret <- subset(ret, blk == levels(blk)[b])@\\
+\mbox{}\verb@        if (B > 1)@\\
+\mbox{}\verb@            ret <- subset(ret, blocks == levels(blocks)[b])@\\
 \mbox{}\verb@        ret$y <- cut(ret$y, breaks = c(-Inf, cumsum(prob[,b])), @\\
 \mbox{}\verb@                     labels = paste0("Y", 1:nrow(prob)), ordered_result = TRUE)@\\
 \mbox{}\verb@        ret@\\
@@ -4149,18 +4239,18 @@ but not the shift effects.
 <<rfree1way>>=
 (logOR <- c(log(1.5), log(2)))
 nd <- rfree1way(150, delta = logOR)
-coef(ft <- free1way(y ~ trt, data = nd))
+coef(ft <- free1way(y ~ groups, data = nd))
 sqrt(diag(vcov(ft)))
 logLik(ft)
 nd$y <- qchisq(nd$y, df = 3)
-coef(ft <- free1way(y ~ trt, data = nd))
+coef(ft <- free1way(y ~ groups, data = nd))
 sqrt(diag(vcov(ft)))
 logLik(ft)
 N <- 25
 pvals <- replicate(Nsim, 
 {
   nd <- rfree1way(n = N, blocks = 2, delta = c(.25, .5), alloc_ratio = 2)
-  summary(free1way(y ~ trt | blk, data = nd), test = "Permutation")$p.value
+  summary(free1way(y ~ groups | blocks, data = nd), test = "Permutation")$p.value
 })
 
 power.free1way.test(n = N, blocks = 2, delta = c(.25, .5), alloc_ratio = 2)
@@ -4179,9 +4269,9 @@ nd$C <- rfree1way(n = N, delta = 1, offset = -c(qlogis(.25), qlogis(.5)),
                   link = "cloglog")$y
 nd$y <- Surv(pmin(nd$y, nd$C), nd$y < nd$C)
 ### check censoring probability
-1 - tapply(nd$y[,2], nd$trt, mean)
-summary(free1way(y ~ trt, data = nd, link = "cloglog"))
-summary(coxph(y ~ trt, data = nd))
+1 - tapply(nd$y[,2], nd$groups, mean)
+summary(free1way(y ~ groups, data = nd, link = "cloglog"))
+summary(coxph(y ~ groups, data = nd))
 @
 
 Next we start implementing a function for simulating $C \times K$ tables. We need
@@ -4473,7 +4563,10 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@             }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)@\\
 \mbox{}\verb@    else if (is.null(delta)) {@\\
 \mbox{}\verb@        ### 2-sample only@\\
-\mbox{}\verb@        stopifnot(K == 2L)@\\
+\mbox{}\verb@        if (K != 2L)@\\
+\mbox{}\verb@            stop(gettextf("Effect size can only computed for two sample problems in %s",@\\
+\mbox{}\verb@                          "power.free1way.test"),@\\
+\mbox{}\verb@                          domain = NA)@\\
 \mbox{}\verb@        delta <- uniroot(function(delta) {@\\
 \mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    ### <TH> interval depending on alternative, symmetry? </TH>@\\
@@ -4497,7 +4590,10 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@            "greater" = pnorm(qnorm(sig.level) + deltamu / se)@\\
 \mbox{}\verb@        )@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        stopifnot(alternative == "two.sided")@\\
+\mbox{}\verb@        if (alternative != "two.sided")@\\
+\mbox{}\verb@            stop(gettextf("%s only allows two-sided alternatives in the presence of more than two groups",@\\
+\mbox{}\verb@                          "power.free1way.test"),@\\
+\mbox{}\verb@                          domain = NA)@\\
 \mbox{}\verb@        ncp <- sum((chol(he) %*% deltamu)^2)@\\
 \mbox{}\verb@        qsig <- qchisq(sig.level, df = K - 1L, lower.tail = FALSE)@\\
 \mbox{}\verb@        power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)@\\
@@ -4559,6 +4655,10 @@ for (i in seq_along(pw)) {
 mean(pw < .05)
 
 power.free1way.test(n = N, delta = delta)
+
+### approximate formula in Hmisc::popower
+library("Hmisc")
+popower(p = rep(1 / N, N), odds.ratio = exp(delta), n = 2 * N)
 @
 
 The power of the Kruskal-Wallis test only needs one additional treatment
@@ -4593,7 +4693,7 @@ cf <- matrix(0, nrow = Nsim, ncol = length(delta))
 colnames(cf) <- names(delta)
 for (i in seq_along(pw)) {
     nd <- rfree1way(n = N, prob = prb, delta = delta)
-    ft <- free1way(y ~ trt, data = nd)
+    ft <- free1way(y ~ groups, data = nd)
     cf[i,] <- coef(ft)
     pw[i] <- summary(ft, test = "Permutation")$p.value
 }
@@ -4619,7 +4719,7 @@ cf <- matrix(0, nrow = Nsim, ncol = length(delta))
 colnames(cf) <- names(delta)
 for (i in seq_along(pw)) {
     nd <- rfree1way(n = N, prob = prb, delta = delta)
-    ft <- free1way(y ~ trt | blk, data = nd)
+    ft <- free1way(y ~ groups | blocks, data = nd)
     cf[i,] <- coef(ft)
     pw[i] <- summary(ft, test = "Permutation")$p.value
 }

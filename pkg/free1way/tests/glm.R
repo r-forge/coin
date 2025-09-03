@@ -1,6 +1,6 @@
 
 library("free1way")
-
+options(digits = 5)
 set.seed(29)
 
 N <- 500

@@ -3,7 +3,7 @@ library("free1way")
 library("MASS")
 library("tram")
 library("coin")
-
+options(digits = 5)
 set.seed(29)
 
 N <- 25

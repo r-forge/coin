@@ -1,5 +1,5 @@
 
-R version 4.5.1 (2025-06-13) -- "Great Square Root"
+R Under development (unstable) (2025-09-02 r88766) -- "Unsuffered Consequences"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -17,7 +17,7 @@ Type 'q()' to quit R.
 
 > 
 > library("free1way")
-> 
+> options(digits = 5)
 > set.seed(29)
 > 
 > N <- 500
@@ -28,62 +28,62 @@ Type 'q()' to quit R.
 > ci <- confint(m <- glm(y ~ x, family = binomial()), test = "LRT")
 Waiting for profiling to be done...
 > c(coef(m)["xB"], ci["xB",])
-       xB     2.5 %    97.5 % 
--1.862398 -2.171654 -1.563040 
+     xB   2.5 %  97.5 % 
+-1.8624 -2.1717 -1.5630 
 > ci <- confint(m <- glm(y ~ x, family = binomial()), test = "Rao")
 Waiting for profiling to be done...
 > c(coef(m)["xB"], ci["xB",])
-       xB     2.5 %    97.5 % 
--1.862398 -2.165825 -1.558914 
+     xB   2.5 %  97.5 % 
+-1.8624 -2.1658 -1.5589 
 > 
 > ft <- free1way(y = y, groups = x, B = 10000)
 > coef(ft)
-       xB 
--1.862277 
+     xB 
+-1.8623 
 > print(ft, test = "LRT")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-logLR chi-squared = 167.62, df = 1, p-value < 2.2e-16
+logLR chi-squared = 168, df = 1, p-value <2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "LRT")
-       2.5 %    97.5 %
-xB -2.171626 -1.563033
+     2.5 % 97.5 %
+xB -2.1716 -1.563
 > print(ft, test = "Rao")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Rao chi-squared = 160.35, df = 1, p-value < 2.2e-16
+Rao chi-squared = 160, df = 1, p-value <2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Rao")
-       2.5 %    97.5 %
-xB -2.165829 -1.558907
+     2.5 %  97.5 %
+xB -2.1658 -1.5589
 > print(ft, test = "Wald")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Wald chi-squared = 144.15, df = 1, p-value < 2.2e-16
+Wald chi-squared = 144, df = 1, p-value <2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Wald")
-       2.5 %    97.5 %
-xB -2.166287 -1.558267
+     2.5 %  97.5 %
+xB -2.1663 -1.5583
 > print(ft, test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Perm Z = -12.656, p-value = 9.999e-05
+Perm Z = -12.7, p-value = 1e-04
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
-       2.5 %    97.5 %
-xB -2.163205 -1.561532
+     2.5 %  97.5 %
+xB -2.1632 -1.5615
 attr(,"Attained level")
 [1] 0.9348
 > 
@@ -91,65 +91,65 @@ attr(,"Attained level")
 > ci <- confint(m <- glm(y ~ x, family = binomial(link = "cloglog")), test = "LRT")
 Waiting for profiling to be done...
 > c(coef(m)["xB"], ci["xB",])
-       xB     2.5 %    97.5 % 
-1.0910314 0.9222621 1.2620976 
+     xB   2.5 %  97.5 % 
+1.09103 0.92226 1.26210 
 > ci <- confint(m <- glm(y ~ x, family = binomial(link = "cloglog")), test = "Rao")
 Waiting for profiling to be done...
 > c(coef(m)["xB"], ci["xB",])
-       xB     2.5 %    97.5 % 
-1.0910314 0.9209405 1.2604888 
+     xB   2.5 %  97.5 % 
+1.09103 0.92094 1.26049 
 > 
 > ft <- free1way(y = y, groups = x, link = "loglog", B = 10000)
 > coef(ft)
-      xB 
-1.091031 
+   xB 
+1.091 
 > print(ft, test = "LRT")
 
 	2-sample Lehmann test against Lehmann alternatives
 
 data:  y by x (A, B)
-logLR chi-squared = 167.62, df = 1, p-value < 2.2e-16
+logLR chi-squared = 168, df = 1, p-value <2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "LRT")
-       2.5 %   97.5 %
-xB 0.9222605 1.262101
+     2.5 % 97.5 %
+xB 0.92226 1.2621
 > print(ft, test = "Rao")
 
 	2-sample Lehmann test against Lehmann alternatives
 
 data:  y by x (A, B)
-Rao chi-squared = 169.44, df = 1, p-value < 2.2e-16
+Rao chi-squared = 169, df = 1, p-value <2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Rao")
-       2.5 %   97.5 %
-xB 0.9213172 1.260745
+     2.5 % 97.5 %
+xB 0.92132 1.2607
 > print(ft, test = "Wald")
 
 	2-sample Lehmann test against Lehmann alternatives
 
 data:  y by x (A, B)
-Wald chi-squared = 158.51, df = 1, p-value < 2.2e-16
+Wald chi-squared = 159, df = 1, p-value <2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Wald")
-       2.5 %  97.5 %
-xB 0.9211832 1.26088
+     2.5 % 97.5 %
+xB 0.92118 1.2609
 > print(ft, test = "Permutation")
 
 	2-sample Lehmann test against Lehmann alternatives
 
 data:  y by x (A, B)
-Perm Z = 12.656, p-value = 9.999e-05
+Perm Z = 12.7, p-value = 1e-04
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
-       2.5 %   97.5 %
-xB 0.9180899 1.263972
+     2.5 % 97.5 %
+xB 0.91809  1.264
 attr(,"Attained level")
 [1] 0.9403
 > 
 > proc.time()
    user  system elapsed 
-  0.386   0.039   0.428 
+  0.823   0.065   0.884 

@@ -1,5 +1,5 @@
 
-R version 4.5.1 (2025-06-13) -- "Great Square Root"
+R Under development (unstable) (2025-09-02 r88766) -- "Unsuffered Consequences"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -27,7 +27,7 @@ The following objects are masked from 'package:base':
     format.pval, units
 
 > library("survival")
-> 
+> options(digits = 5)
 > set.seed(29)
 > 
 > N <- 500
@@ -36,10 +36,10 @@ The following objects are masked from 'package:base':
 > 
 > ci <- confint(m <- orm(y ~ x))
 > c(rev(coef(m))[1], ci[nrow(ci),])
-     x=2    2.5 %   97.5 % 
-1.921277 1.679687 2.162867 
+   x=2  2.5 % 97.5 % 
+1.9213 1.6797 2.1629 
 > logLik(m)
-'log Lik.' -6774.86 (df=1000)
+'log Lik.' -6774.9 (df=1000)
 > 
 > d <- data.frame(y = y, x = x)
 > 
@@ -48,23 +48,23 @@ The following objects are masked from 'package:base':
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (1, 2)
-Perm Z = 15.608, p-value < 2.2e-16
+Perm Z = 15.6, p-value <2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > coef(ft)
-      x2 
-1.921266 
+    x2 
+1.9213 
 > confint(ft)
-      2.5 %   97.5 %
-x2 1.672371 2.169817
+    2.5 % 97.5 %
+x2 1.6724 2.1698
 > logLik(ft)
-[1] -6774.86
+[1] -6774.9
 > (ft <- free1way(y ~ x, data = d))
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (1, 2)
-Perm Z = 15.608, p-value < 2.2e-16
+Perm Z = 15.6, p-value <2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > (ft <- free1way(y = y, groups = x, nbins = 99))
@@ -72,7 +72,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (1, 2)
-Perm Z = 15.614, p-value < 2.2e-16
+Perm Z = 15.6, p-value <2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > (ft <- free1way(y = y, groups = x, nbins = 100))
@@ -80,110 +80,110 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (1, 2)
-Perm Z = 15.602, p-value < 2.2e-16
+Perm Z = 15.6, p-value <2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > 
 > -coef(m <- coxph(Surv(y, rep(TRUE, length(y))) ~ x))
-       x2 
-0.9865179 
+     x2 
+0.98652 
 > -rev(confint(m))
-[1] 0.8564659 1.1165698
+[1] 0.85647 1.11657
 > ### rms: cloglog for P(Y < y) is loglog for P(Y >= y), the latter
 > ### being used in orm()
 > ci <- confint(m <- orm(y ~ x, family = "loglog"))
 > c(rev(coef(m))[1], ci[nrow(ci),])
-      x=2     2.5 %    97.5 % 
-0.9879509 0.8578866 1.1180153 
+    x=2   2.5 %  97.5 % 
+0.98795 0.85789 1.11802 
 > logLik(m)
-'log Lik.' -6800.012 (df=1000)
+'log Lik.' -6800 (df=1000)
 > 
 > ft <- free1way(y = y, groups = x, link = "cloglog")
 > coef(ft)
-       x2 
-0.9878949 
+     x2 
+0.98789 
 > confint(ft)
-      2.5 %   97.5 %
-x2 0.838895 1.136918
+    2.5 % 97.5 %
+x2 0.8389 1.1369
 > logLik(ft)
-[1] -6800.012
+[1] -6800
 > ft <- free1way(y = y, groups = x, link = "cloglog", nbins = 99)
 > coef(ft)
-       x2 
-0.9943897 
+     x2 
+0.99439 
 > confint(ft)
-       2.5 %   97.5 %
-x2 0.8451693 1.143522
+     2.5 % 97.5 %
+x2 0.84517 1.1435
 > ft <- free1way(y = y, groups = x, link = "cloglog", nbins = 100)
 > coef(ft)
-       x2 
-0.9932806 
+     x2 
+0.99328 
 > confint(ft)
-       2.5 %   97.5 %
-x2 0.8440277 1.142394
+     2.5 % 97.5 %
+x2 0.84403 1.1424
 > 
 > ci <- confint(m <- orm(y ~ x, family = "cloglog"))
 > c(rev(coef(m))[1], ci[nrow(ci),])
-      x=2     2.5 %    97.5 % 
-0.9454023 0.8164097 1.0743950 
+    x=2   2.5 %  97.5 % 
+0.94540 0.81641 1.07439 
 > logLik(m)
-'log Lik.' -6807.335 (df=1000)
+'log Lik.' -6807.3 (df=1000)
 > 
 > ft <- free1way(y = y, groups = x, link = "loglog")
 > coef(ft)
-       x2 
-0.9454868 
+     x2 
+0.94549 
 > confint(ft)
-       2.5 %   97.5 %
-x2 0.7993042 1.091464
+    2.5 % 97.5 %
+x2 0.7993 1.0915
 > logLik(ft)
-[1] -6807.335
+[1] -6807.3
 > ft <- free1way(y = y, groups = x, link = "loglog", nbins = 99)
 > coef(ft)
-       x2 
-0.9503941 
+     x2 
+0.95039 
 > confint(ft)
-       2.5 %   97.5 %
-x2 0.8044777 1.096523
+     2.5 % 97.5 %
+x2 0.80448 1.0965
 > ft <- free1way(y = y, groups = x, link = "loglog", nbins = 100)
 > coef(ft)
-       x2 
-0.9505176 
+     x2 
+0.95052 
 > confint(ft)
-       2.5 %  97.5 %
-x2 0.8046361 1.09674
+     2.5 % 97.5 %
+x2 0.80464 1.0967
 > 
 > ### probit
 > ci <- confint(m <- orm(y ~ x, family = "probit"))
 > c(rev(coef(m))[1], ci[nrow(ci),])
-      x=2     2.5 %    97.5 % 
-1.0872527 0.9539179 1.2205875 
+    x=2   2.5 %  97.5 % 
+1.08725 0.95392 1.22059 
 > logLik(m)
-'log Lik.' -6779.161 (df=1000)
+'log Lik.' -6779.2 (df=1000)
 > 
 > ft <- free1way(y = y, groups = x, link = "probit")
 > coef(ft)
-      x2 
-1.087242 
+    x2 
+1.0872 
 > confint(ft)
-       2.5 %   97.5 %
-x2 0.9452306 1.229297
+     2.5 % 97.5 %
+x2 0.94523 1.2293
 > logLik(ft)
-[1] -6779.161
+[1] -6779.2
 > ft <- free1way(y = y, groups = x, link = "probit", nbins = 99)
 > coef(ft)
-      x2 
-1.089303 
+    x2 
+1.0893 
 > confint(ft)
-      2.5 %   97.5 %
-x2 0.946718 1.230854
+     2.5 % 97.5 %
+x2 0.94672 1.2309
 > ft <- free1way(y = y, groups = x, link = "probit", nbins = 100)
 > coef(ft)
-      x2 
-1.087899 
+    x2 
+1.0879 
 > confint(ft)
-     2.5 %   97.5 %
-x2 0.94615 1.229993
+     2.5 % 97.5 %
+x2 0.94615   1.23
 > 
 > 
 > ### with offset
@@ -192,34 +192,34 @@ x2 0.94615 1.229993
 > 
 > ci <- confint(m <- orm(y ~ x + offset(off)))
 > c(rev(coef(m))[1], ci[nrow(ci),])
-      x=2     2.5 %    97.5 % 
-0.9212769 0.6796872 1.1628666 
+    x=2   2.5 %  97.5 % 
+0.92128 0.67969 1.16287 
 > logLik(m)
-'log Lik.' -6774.86 (df=1000)
+'log Lik.' -6774.9 (df=1000)
 > 
 > ft <- free1way(y = y, groups = x, mu = 1)
 > coef(ft)
-       x2 
-0.9213517 
+     x2 
+0.92135 
 > confint(ft)
-       2.5 %  97.5 %
-x2 0.6735414 1.16898
+     2.5 % 97.5 %
+x2 0.67354  1.169
 > logLik(m)
-'log Lik.' -6774.86 (df=1000)
+'log Lik.' -6774.9 (df=1000)
 > ft <- free1way(y = y, groups = x, mu = 1, nbins = 99)
 > coef(ft)
-       x2 
-0.9222895 
+     x2 
+0.92229 
 > confint(ft)
-       2.5 %   97.5 %
-x2 0.6848072 1.158645
+     2.5 % 97.5 %
+x2 0.68481 1.1586
 > ft <- free1way(y = y, groups = x, mu = 1, nbins = 100)
 > coef(ft)
-       x2 
-0.9202331 
+     x2 
+0.92023 
 > confint(ft)
-       2.5 %  97.5 %
-x2 0.6824928 1.15789
+     2.5 % 97.5 %
+x2 0.68249 1.1579
 > 
 > ### permutations
 > N <- 15
@@ -228,10 +228,10 @@ x2 0.6824928 1.15789
 > 
 > ci <- confint(m <- orm(y ~ x))
 > c(rev(coef(m))[1], ci[nrow(ci),])
-       x=2      2.5 %     97.5 % 
- 1.0671231 -0.2207782  2.3550243 
+     x=2    2.5 %   97.5 % 
+ 1.06712 -0.22078  2.35502 
 > logLik(m)
-'log Lik.' -100.6793 (df=30)
+'log Lik.' -100.68 (df=30)
 > 
 > ft <- free1way(y = y, groups = x)
 > print(ft, test = "Wald")
@@ -239,50 +239,50 @@ x2 0.6824928 1.15789
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (1, 2)
-Wald chi-squared = 2.6373, df = 1, p-value = 0.1044
+Wald chi-squared = 2.64, df = 1, p-value = 0.1
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > coef(ft)
-      x2 
-1.067117 
+    x2 
+1.0671 
 > confint(ft, test = "Wald")
-        2.5 %   97.5 %
-x2 -0.2207849 2.355019
+      2.5 % 97.5 %
+x2 -0.22078  2.355
 > logLik(m)
-'log Lik.' -100.6793 (df=30)
+'log Lik.' -100.68 (df=30)
 > print(ft, test = "Rao")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (1, 2)
-Rao chi-squared = 2.6881, df = 1, p-value = 0.1011
+Rao chi-squared = 2.69, df = 1, p-value = 0.1
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Rao")
-        2.5 %  97.5 %
-x2 -0.2034396 2.33921
+      2.5 % 97.5 %
+x2 -0.20344 2.3392
 > print(ft, test = "LRT")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (1, 2)
-logLR chi-squared = 2.7131, df = 1, p-value = 0.09952
+logLR chi-squared = 2.71, df = 1, p-value = 0.1
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "LRT")
-        2.5 %   97.5 %
-x2 -0.2005976 2.392938
+     2.5 % 97.5 %
+x2 -0.2006 2.3929
 > print(ft, test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (1, 2)
-Perm Z = 1.5969, p-value = 0.1103
+Perm Z = 1.6, p-value = 0.11
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
-        2.5 %   97.5 %
-x2 -0.2363558 2.372363
+      2.5 % 97.5 %
+x2 -0.23636 2.3724
 > 
 > ft <- free1way(y = y, groups = x, B = 10000)
 > print(ft, test = "Permutation")
@@ -290,15 +290,15 @@ x2 -0.2363558 2.372363
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (1, 2)
-Perm Z = 1.5969, p-value = 0.1166
+Perm Z = 1.6, p-value = 0.12
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
-        2.5 %   97.5 %
-x2 -0.2429805 2.352057
+      2.5 % 97.5 %
+x2 -0.24298 2.3521
 attr(,"Attained level")
 [1] 0.95
 > 
 > proc.time()
    user  system elapsed 
- 13.808   0.215  14.022 
+  5.038   0.092   5.125 
