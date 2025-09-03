@@ -1546,8 +1546,7 @@ NOTE: 'n' is sample size in control group of first stratum
 > power.free1way.test(power = 0.8, prob = prb, delta = delta, 
 +     seed = 3)
 
-Execution halted
--sample Kruskal-Wallis test against proportional odds alternatives 
+     Stratified 3-sample Kruskal-Wallis test against proportional odds alternatives 
 
                 n = 19
 Total sample size = 57 (Ctrl) + 57 (B) + 57 (C) = 171
@@ -1575,4 +1574,4 @@ NOTE: 'n' is sample size in control group of first stratum
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 33.864   0.155  34.038 
+ 33.448   0.180  33.656 
