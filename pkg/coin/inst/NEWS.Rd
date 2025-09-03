@@ -19,7 +19,8 @@
   }
   \subsection{Other changes}{
     \itemize{
-      \item
+      \item Clarifying comments and more reasonable argument names
+            in coin/src/StreitbergRoehmel.c
     }
   }
 }
