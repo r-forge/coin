@@ -4,7 +4,7 @@
 Probability-probability Plots
 }
 \description{
-\code{ppplot} produces a PP plot of two numerical variables, essentially
+\code{ppplot} produces a probabiliy-probability (PP) plot of two numerical variables, essentially
 the Receiver Operating Characteristic (ROC) curve. 
 If \code{conf.level} is given, an estimate and corresponding 
 confidence band for the ROC curve under a 
@@ -40,8 +40,8 @@ ppplot(x, y, plot.it = TRUE, xlab = deparse1(substitute(x)),
 }
 \details{
 
-The plot produces a ROC curve, however without reordering variables such
-that the curve is above the diagonal.
+The plot produces a ROC curve, however avoiding rearrangements pushing the curve above the
+diagonal: The dots represent pairs \eqn{(\hat{F}_{x}(y), \hat{F}_{y}(y))}.
 
 If the data generating process follows a model where the two distribution
 functions, after appropriate transformation, are horizontally shifted
@@ -63,16 +63,22 @@ curve.
 }
 \examples{
 
-### well fitting logistic model
+### well-fitting logistic model
 nd <- data.frame(groups = gl(2, 50, labels = paste0("G", 1:2)))
 nd$y <- rlogis(nrow(nd), location = c(0, 2)[nd$groups])
 with(with(nd, split(y, groups)),
      ppplot(G1, G2, conf.level = .95,
             conf.args = list(link = "logit", type = "Wald", col = 2)))
-### with appropriate Wilcoxon test and log-odds ratio
-coef(free1way(y ~ groups, data = nd))
+## with appropriate Wilcoxon test and log-odds ratio
+coef(ft <- free1way(y ~ groups, data = nd))
+## area under the (model-based!) ROC curve (AUC) and confidence interval
+coef(ft, what = "AUC")
+confint(ft, test = "Rao", what = "AUC")
+## the model-based ROC curve
+prb <- 1:99 / 100
+points(prb,  plogis(qlogis(prb) - coef(ft)), pch = 3)
 
-### ill fitting normal model
+### ill-fitting normal model
 nd$y <- rnorm(nrow(nd), mean = c(0, .5)[nd$groups], sd = c(1, 1.5)[nd$groups])
 with(with(nd, split(y, groups)),
      ppplot(G1, G2, conf.level = .95,

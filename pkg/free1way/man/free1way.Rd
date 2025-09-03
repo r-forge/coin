@@ -43,9 +43,10 @@ free1way(y, ...)
 \S3method{logLik}{free1way}(object, ...)
 }
 \arguments{
-  \item{y}{a binary factor, an ordered factor, a numeric vector containing
-    the response values or a \code{\link{table}} containing the response in the first
-    dimension, the groups in the second dimension, and, optionally, strata and
+  \item{y}{a binary factor, an ordered factor, a numeric vector, or a
+    \code{\link[survival]{Surv}} object (right-censoring only) containing
+    the response values or a \code{\link{table}} with the response categories in the first
+    dimension, the groups in the second dimension, and, optionally, blocks and
     event indicators as third and fourth dimensions.}
   \item{nbins}{an optional integer defining the number of intervals to
     divide the range of a numeric response \code{y} into. The default is to
@@ -54,12 +55,13 @@ free1way(y, ...)
     the breaks. For large sample sizes with many unique observations,
     limiting the number of bins to less than 100, say, dramatically reduces
     computation time while producing almost the same results as the default.}
-  \item{groups}{a grouping factor at at least two levels.}
+  \item{groups}{a grouping factor with at least two non-empty levels.}
   \item{blocks}{a stratification factor, optional.}
   \item{event}{a logical vector representing events (\code{TRUE}) and
     independently right-censored observations (\code{FALSE}), optional.}
   \item{formula}{a formula of the form \code{y ~ groups | blocks} where \code{y} gives 
-    the sample outcome values (binary, ordered or numeric) and \code{groups} the corresponding groups.
+    the sample outcome values (binary, ordered, numeric, or \code{\link[survival]{Surv}}) 
+    and \code{groups} the corresponding groups.
     In stratified designs, a \code{blocks} term specifies the strata.}
   \item{data}{an optional data frame (or similar: see
     \code{\link{model.frame}}) containing the variables in the
@@ -77,7 +79,7 @@ free1way(y, ...)
     grouping, and stratifying variables.}
   \item{link}{a character defining a link function and thus the model and
     parameter interpretation. See \sQuote{Details}.}
-  \item{mu}{a number specifying an optional parameter used to form the
+  \item{mu}{a vector specifying optional parameters used to form the
     null hypothesis.  See \sQuote{Details}.}	
   \item{B}{an integer specifying the number of replicates used in the
     permutation test. The default (\code{B = 0}) performs an asymptotic
@@ -92,8 +94,7 @@ free1way(y, ...)
     population model.}
   \item{alternative}{a character string specifying the alternative
     hypothesis, must be one of \code{"two.sided"} (default),
-    \code{"greater"} or \code{"less"}.  You can specify just the initial
-    letter.}
+    \code{"greater"} or \code{"less"}.}
   \item{what}{a character defining a monotone transformation of the
     shift parameters: probabilistic indices (\code{"PI"}), area under the
     curves (\code{"AUC"}), or overlap coefficients (\code{"OVL"}). The
@@ -132,7 +133,7 @@ the log-log link (\code{link = "loglog"})
 \deqn{F_k(y) = F_1(y)^{\exp(- \delta_k)},} and a shift alternative on a
 latent normal scale on the probit link (\code{link = "probit"})
 \deqn{\Phi^{-1}(F_1(Y_k)) \sim N(\delta_k, 1).}
-If strata are present, the distribution functions may be stratum-specific
+If strata (independent blocks) are present, the distribution functions may be stratum-specific
 but the shift parameters are assumed to be constant across strata, such that
 the above model holds for each stratum.
 
@@ -157,7 +158,7 @@ permutation score, likelihood ratio, or Rao score test.
 Assuming one of the semiparametric models, the parameter estimates are
 semiparametrically efficient and the corresponding score tests and
 confidence intervals are locally most powerful 
-\bibcitep{Chapter 15.5 in |free1way::vdVaart1998|}).
+\bibcitep{Chapter 15.5 in |free1way::vdVaart1998|}.
 
 }
 \value{
