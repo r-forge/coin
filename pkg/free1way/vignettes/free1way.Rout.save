@@ -1,6 +1,8 @@
 
 > Nsim <- 100
 
+> options(digits = 5)
+
 > .rcr <- function(z) {
 +     N <- length(z)
 +     s <- cumsum(z)
@@ -120,7 +122,7 @@
 
 > (cf <- coef(m))
 (Intercept)          t2          t3 
-  0.6931472  -1.1451323  -0.8109302 
+    0.69315    -1.14513    -0.81093 
 
 > F <- plogis
 
@@ -130,16 +132,16 @@
 +     fn = .nll, gr = .nsc, x = x, method = "BFGS", hessian = TRUE)
 
 > cbind(c(cf[-1] * -1, cf[1]), op$par)
-                 [,1]      [,2]
-t2          1.1451323 1.1451325
-t3          0.8109302 0.8109298
-(Intercept) 0.6931472 0.6931471
+               [,1]    [,2]
+t2          1.14513 1.14513
+t3          0.81093 0.81093
+(Intercept) 0.69315 0.69315
 
 > logLik(m)
-'log Lik.' -33.33026 (df=3)
+'log Lik.' -33.33 (df=3)
 
 > -op$value
-[1] -33.33026
+[1] -33.33
 
 > fp <- function(x) {
 +     p <- plogis(x)
@@ -149,33 +151,33 @@ t3          0.8109302 0.8109298
 > H <- .hes(op$par, x)
 
 > solve(H$Z - crossprod(H$X, Matrix::solve(H$A, H$X)))
-          [,1]      [,2]
-[1,] 0.5337662 0.3000000
-[2,] 0.3000000 0.5361111
+        [,1]    [,2]
+[1,] 0.53377 0.30000
+[2,] 0.30000 0.53611
 
 > solve(op$hessian)[1:2, 1:2]
-          mt2       mt3
-mt2 0.5337663 0.3000000
-mt3 0.3000000 0.5361111
+        mt2     mt3
+mt2 0.53377 0.30000
+mt3 0.30000 0.53611
 
 > vcov(m)[-1, -1]
-          t2        t3
-t2 0.5337661 0.2999998
-t3 0.2999998 0.5361109
+        t2      t3
+t2 0.53377 0.30000
+t3 0.30000 0.53611
 
 > obj <- .free1wayML(as.table(x), link = logit())
 
 > obj$coefficients
-        B         C 
-1.1451325 0.8109298 
+      B       C 
+1.14513 0.81093 
 
 > -obj$value
-[1] -33.33026
+[1] -33.33
 
 > obj$vcov
-          B         C
-B 0.5337662 0.3000000
-C 0.3000000 0.5361111
+        B       C
+B 0.53377 0.30000
+C 0.30000 0.53611
 
 > (x <- as.table(array(c(10, 5, 7, 11, 8, 9, 9, 4, 8, 
 +     15, 5, 4), dim = c(2, 3, 2))))
@@ -200,11 +202,11 @@ B  4 15  4
 > m <- glm(y ~ 0 + s + t, data = d, weights = x, family = binomial())
 
 > logLik(m)
-'log Lik.' -62.52285 (df=4)
+'log Lik.' -62.523 (df=4)
 
 > (cf <- coef(m))
-        s1         s2         t2         t3 
- 0.7243308  0.7738535 -1.3022394 -0.7414725 
+      s1       s2       t2       t3 
+ 0.72433  0.77385 -1.30224 -0.74147 
 
 > xl <- .table2list(x)$xlist
 
@@ -213,46 +215,46 @@ B  4 15  4
 +     hess .... [TRUNCATED] 
 
 > cbind(c(cf[-(1:2)] * -1, cf[1:2]), op$par)
-        [,1]      [,2]
-t2 1.3022394 1.3022474
-t3 0.7414725 0.7414934
-s1 0.7243308 0.7243482
-s2 0.7738535 0.7738600
+      [,1]    [,2]
+t2 1.30224 1.30225
+t3 0.74147 0.74149
+s1 0.72433 0.72435
+s2 0.77385 0.77386
 
 > logLik(m)
-'log Lik.' -62.52285 (df=4)
+'log Lik.' -62.523 (df=4)
 
 > -op$value
-[1] -62.52285
+[1] -62.523
 
 > solve(.shes(op$par, xl))
-          [,1]      [,2]
-[1,] 0.2709537 0.1615355
-[2,] 0.1615355 0.3200629
+        [,1]    [,2]
+[1,] 0.27095 0.16154
+[2,] 0.16154 0.32006
 
 > solve(op$hessian)[1:2, 1:2]
-          mt2       mt3
-mt2 0.2709537 0.1615355
-mt3 0.1615355 0.3200629
+        mt2     mt3
+mt2 0.27095 0.16154
+mt3 0.16154 0.32006
 
 > vcov(m)[-(1:2), -(1:2)]
-          t2        t3
-t2 0.2709530 0.1615346
-t3 0.1615346 0.3200620
+        t2      t3
+t2 0.27095 0.16153
+t3 0.16153 0.32006
 
 > obj <- .free1wayML(as.table(x), link = logit())
 
 > obj$coefficients
-        B         C 
-1.3022341 0.7414706 
+      B       C 
+1.30223 0.74147 
 
 > -obj$value
-[1] -62.52285
+[1] -62.523
 
 > obj$vcov
-          B         C
-B 0.2709530 0.1615346
-C 0.1615346 0.3200620
+        B       C
+B 0.27095 0.16153
+C 0.16153 0.32006
 
 > N <- 10
 
@@ -282,10 +284,10 @@ C 4 6 5
 
 > ret[c("value", "par")]
 $value
-[1] 65.93157
+[1] 65.932
 
 $par
-[1]  0.05262698  0.20474739 -0.48967162  0.41219996  0.02848734
+[1]  0.052627  0.204747 -0.489672  0.412200  0.028487
 
 
 > cf <- ret$par
@@ -293,33 +295,33 @@ $par
 > cf[1:2] <- cf[1:2] + 0.5
 
 > cf
-[1]  0.55262698  0.70474739 -0.48967162  0.41219996  0.02848734
+[1]  0.552627  0.704747 -0.489672  0.412200  0.028487
 
 > .free1wayML(x, logit(), start = cf, fix = 1:2)[c("value", 
 +     "par")]
 $value
-[1] 66.38115
+[1] 66.381
 
 $par
-[1]  0.5526270  0.7047474 -0.1188650  0.4231942  0.4084110
+[1]  0.55263  0.70475 -0.11886  0.42319  0.40841
 
 
 > .free1wayML(x, logit(), start = cf, fix = 2)[c("value", 
 +     "par")]
 $value
-[1] 66.29863
+[1] 66.299
 
 $par
-[1]  0.3609530  0.7047474 -0.1877113  0.4247739  0.3344211
+[1]  0.36095  0.70475 -0.18771  0.42477  0.33442
 
 
 > .free1wayML(x, logit(), start = cf, fix = seq_along(ret$par))[c("value", 
 +     "par")]
 $value
-[1] 67.77114
+[1] 67.771
 
 $par
-[1]  0.55262698  0.70474739 -0.48967162  0.41219996  0.02848734
+[1]  0.552627  0.704747 -0.489672  0.412200  0.028487
 
 
 > set.seed(29)
@@ -343,21 +345,21 @@ $Covariance
 > ps <- .resample(r, model.matrix(~0 + w), B = 1e+05)
 
 > ps$testStat^2
-[1] 5.110108
+[1] 5.1101
 
 > mean(abs(ps$permStat) > abs(ps$testStat) - .Machine$double.eps)
 [1] 0.02435
 
 > pchisq(ps$testStat^ifelse(ps$DF == 1, 2, 1), df = ps$DF, 
 +     lower.tail = FALSE)
-[1] 0.02378685
+[1] 0.023787
 
 > kruskal.test(u ~ w)
 
 	Kruskal-Wallis rank sum test
 
 data:  u by w
-Kruskal-Wallis chi-squared = 5.1101, df = 1, p-value = 0.02379
+Kruskal-Wallis chi-squared = 5.11, df = 1, p-value = 0.024
 
 
 > library("coin")
@@ -368,7 +370,7 @@ Loading required package: survival
 	Approximative Kruskal-Wallis Test
 
 data:  u by w (1, 2)
-chi-squared = 5.1101, p-value = 0.02385
+chi-squared = 5.11, p-value = 0.024
 
 
 > x
@@ -394,18 +396,18 @@ C 4 6 5
 
 data:   by  (c("A", "B", "C")) 
 	 stratified by 
-Perm chi-squared = 0.1449, df = 2, p-value = 0.9301
+Perm chi-squared = 0.145, df = 2, p-value = 0.93
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
 > coef(ft)
-         B          C 
-0.05262698 0.20474739 
+       B        C 
+0.052627 0.204747 
 
 > vcov(ft)
-          B         C
-B 0.3491632 0.2083443
-C 0.2083443 0.3385031
+        B       C
+B 0.34916 0.20834
+C 0.20834 0.33850
 
 > summary(ft)
 
@@ -413,9 +415,9 @@ Call:
 free1way.table(y = x)
 
 Coefficients:
-  log-odds ratio Std. Error  z value P(>|z|)
-B       0.052627   0.590900 0.089062  0.9290
-C       0.204747   0.581810 0.351914  0.7249
+  log-odds ratio Std. Error z value P(>|z|)
+B         0.0526     0.5909  0.0891    0.93
+C         0.2047     0.5818  0.3519    0.72
 
 > library("multcomp")
 Loading required package: mvtnorm
@@ -437,8 +439,8 @@ Fit: free1way.table(y = x)
 
 Linear Hypotheses:
        Estimate Std. Error z value Pr(>|z|)
-B == 0  0.05263    0.59090   0.089    0.929
-C == 0  0.20475    0.58181   0.352    0.725
+B == 0   0.0526     0.5909    0.09     0.93
+C == 0   0.2047     0.5818    0.35     0.72
 (Univariate p values reported)
 
 
@@ -449,7 +451,7 @@ C == 0  0.20475    0.58181   0.352    0.725
 
 data:   by  (c("A", "B", "C")) 
 	 stratified by 
-Wald chi-squared = 0.14822, df = 2, p-value = 0.9286
+Wald chi-squared = 0.148, df = 2, p-value = 0.93
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -459,12 +461,12 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 Linear Hypotheses:
        Estimate
-B == 0  0.05263
-C == 0  0.20475
+B == 0   0.0526
+C == 0   0.2047
 
 Global Test:
-   Chisq DF Pr(>Chisq)
-1 0.1482  2     0.9286
+  Chisq DF Pr(>Chisq)
+1 0.148  2      0.929
 
 > summary(ft, test = "Rao")
 
@@ -473,7 +475,7 @@ Global Test:
 
 data:   by  (c("A", "B", "C")) 
 	 stratified by 
-Rao chi-squared = 0.14834, df = 2, p-value = 0.9285
+Rao chi-squared = 0.148, df = 2, p-value = 0.93
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -484,7 +486,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:   by  (c("A", "B", "C")) 
 	 stratified by 
-Perm chi-squared = 0.1449, df = 2, p-value = 0.9301
+Perm chi-squared = 0.145, df = 2, p-value = 0.93
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -495,7 +497,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:   by  (c("A", "B", "C")) 
 	 stratified by 
-logLR chi-squared = 0.14837, df = 2, p-value = 0.9285
+logLR chi-squared = 0.148, df = 2, p-value = 0.93
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -510,25 +512,25 @@ Quantile = 1.96
  
 
 Linear Hypotheses:
-       Estimate lwr      upr     
-B == 0  0.05263 -1.10552  1.21077
-C == 0  0.20475 -0.93558  1.34507
+       Estimate lwr     upr    
+B == 0  0.0526  -1.1055  1.2108
+C == 0  0.2047  -0.9356  1.3451
 
 
 > confint(ft, test = "Wald")
-       2.5 %   97.5 %
-B -1.1055164 1.210770
-C -0.9355797 1.345074
+     2.5 % 97.5 %
+B -1.10552 1.2108
+C -0.93558 1.3451
 
 > confint(ft, test = "Rao")
-       2.5 %   97.5 %
-B -1.0907259 1.195420
-C -0.9207039 1.330104
+    2.5 % 97.5 %
+B -1.0907 1.1954
+C -0.9207 1.3301
 
 > confint(ft, test = "LRT")
-       2.5 %   97.5 %
-B -1.1112642 1.220531
-C -0.9386868 1.357290
+     2.5 % 97.5 %
+B -1.11126 1.2205
+C -0.93869 1.3573
 
 > N <- 25
 
@@ -545,47 +547,47 @@ free1way.formula(formula = y ~ w)
 
 Coefficients:
    log-odds ratio Std. Error z value P(>|z|)
-w2        1.28994    0.52393 2.46208  0.0138
+w2          1.290      0.524   2.462    0.01
 
 > wilcox.test(y ~ w, alternative = "greater", correct = FALSE)$p.value
-[1] 0.9928186
+[1] 0.99282
 
 > pvalue(wilcox_test(y ~ w, alternative = "greater"))
-[1] 0.9921465
+[1] 0.99215
 
 > summary(ft, test = "Permutation", alternative = "less")$p.value
-   Perm Z 
-0.9921464 
+ Perm Z 
+0.99215 
 
 > wilcox.test(y ~ w, alternative = "less", correct = FALSE)$p.value
-[1] 0.007597083
+[1] 0.0075971
 
 > pvalue(wilcox_test(y ~ w, alternative = "less"))
-[1] 0.007853472
+[1] 0.0078535
 
 > summary(ft, test = "Permutation", alternative = "greater")$p.value
-     Perm Z 
-0.007853575 
+   Perm Z 
+0.0078536 
 
 > wilcox.test(y ~ w, correct = FALSE)$p.value
-[1] 0.01519417
+[1] 0.015194
 
 > kruskal.test(y ~ w)$p.value
-[1] 0.01570694
+[1] 0.015707
 
 > pvalue(wilcox_test(y ~ w))
-[1] 0.01570694
+[1] 0.015707
 
 > summary(ft, test = "Permutation")$p.value
-    Perm Z 
-0.01570715 
+  Perm Z 
+0.015707 
 
 > summary(ft, test = "Wald", alternative = "less")
 
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Wald Z = 2.4621, p-value = 0.9931
+Wald Z = 2.46, p-value = 0.99
 alternative hypothesis: true log-odds ratio is less than 0
 
 
@@ -594,7 +596,7 @@ alternative hypothesis: true log-odds ratio is less than 0
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Wald Z = 2.4621, p-value = 0.006907
+Wald Z = 2.46, p-value = 0.0069
 alternative hypothesis: true log-odds ratio is greater than 0
 
 
@@ -603,7 +605,7 @@ alternative hypothesis: true log-odds ratio is greater than 0
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Wald chi-squared = 6.0618, df = 1, p-value = 0.01381
+Wald chi-squared = 6.06, df = 1, p-value = 0.014
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -612,7 +614,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Rao Z = 2.4975, p-value = 0.9937
+Rao Z = 2.5, p-value = 0.99
 alternative hypothesis: true log-odds ratio is less than 0
 
 
@@ -621,7 +623,7 @@ alternative hypothesis: true log-odds ratio is less than 0
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Rao Z = 2.4975, p-value = 0.006254
+Rao Z = 2.5, p-value = 0.0063
 alternative hypothesis: true log-odds ratio is greater than 0
 
 
@@ -630,7 +632,7 @@ alternative hypothesis: true log-odds ratio is greater than 0
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-Rao chi-squared = 6.2374, df = 1, p-value = 0.01251
+Rao chi-squared = 6.24, df = 1, p-value = 0.013
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -639,29 +641,29 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by w (1, 2)
-logLR chi-squared = 6.3305, df = 1, p-value = 0.01187
+logLR chi-squared = 6.33, df = 1, p-value = 0.012
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
 > confint(ft, test = "Permutation")
-       2.5 %   97.5 %
-w2 0.2382806 2.342336
+     2.5 % 97.5 %
+w2 0.23828 2.3423
 
 > confint(ft, test = "LRT")
-       2.5 %   97.5 %
-w2 0.2815065 2.344559
+     2.5 % 97.5 %
+w2 0.28151 2.3446
 
 > confint(ft, test = "Wald")
-       2.5 %  97.5 %
-w2 0.2630701 2.31682
+     2.5 % 97.5 %
+w2 0.26307 2.3168
 
 > confint(ft, test = "Rao")
-       2.5 %   97.5 %
-w2 0.2721357 2.308395
+     2.5 % 97.5 %
+w2 0.27214 2.3084
 
 > confint(ft, test = "Rao", what = "AUC")
-       2.5 %    97.5 %
-w2 0.5452443 0.8274247
+     2.5 %  97.5 %
+w2 0.54524 0.82742
 
 > library("rms")
 Loading required package: Hmisc
@@ -678,35 +680,35 @@ The following objects are masked from ‘package:base’:
 
 
 > rev(coef(or <- orm(y ~ w)))[1]
-     w=2 
-1.289951 
+ w=2 
+1.29 
 
 > coef(ft)
-      w2 
-1.289945 
+    w2 
+1.2899 
 
 > logLik(or)
-'log Lik.' -192.4359 (df=50)
+'log Lik.' -192.44 (df=50)
 
 > logLik(ft)
-[1] -192.4359
+[1] -192.44
 
 > vcov(or)[2, 2]
-[1] 0.2744981
+[1] 0.2745
 
 > vcov(ft)
-          w2
-w2 0.2744978
+       w2
+w2 0.2745
 
 > ci <- confint(or)
 
 > ci[nrow(ci), ]
-    2.5 %    97.5 % 
-0.2630757 2.3168266 
+  2.5 %  97.5 % 
+0.26308 2.31683 
 
 > confint(ft, test = "Wald")
-       2.5 %  97.5 %
-w2 0.2630701 2.31682
+     2.5 % 97.5 %
+w2 0.26307 2.3168
 
 > example(mantelhaen.test, echo = FALSE)
 
@@ -715,13 +717,13 @@ w2 0.2630701 2.31682
 	Mantel-Haenszel chi-squared test without continuity correction
 
 data:  UCBAdmissions
-Mantel-Haenszel X-squared = 1.5246, df = 1, p-value = 0.2169
+Mantel-Haenszel X-squared = 1.52, df = 1, p-value = 0.22
 alternative hypothesis: true common odds ratio is not equal to 1
 95 percent confidence interval:
- 0.7719074 1.0603298
+ 0.77191 1.06033
 sample estimates:
 common odds ratio 
-        0.9046968 
+           0.9047 
 
 
 > ft <- free1way(UCBAdmissions)
@@ -733,42 +735,42 @@ common odds ratio
 
 data:  Admit by Gender (c("Male", "Female")) 
 	 stratified by Dept
-Wald chi-squared = 1.526, df = 1, p-value = 0.2167
+Wald chi-squared = 1.53, df = 1, p-value = 0.22
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
 > exp(coef(ft))
 GenderFemale 
-   0.9049549 
+     0.90495 
 
 > exp(confint(ft, test = "Wald"))
-                 2.5 %   97.5 %
-GenderFemale 0.7723432 1.060336
+               2.5 % 97.5 %
+GenderFemale 0.77234 1.0603
 
 > exp(sapply(dimnames(UCBAdmissions)[[3]], function(dept) confint(free1way(UCBAdmissions[, 
 +     , dept]), test = "Permutation")))
-             A         B         C         D         E         F
-[1,] 0.2096636 0.3479569 0.8545964 0.6864367 0.8258419 0.4582557
-[2,] 0.5818419 1.8529510 1.5022422 1.2364666 1.8073547 1.4954292
+           A       B      C       D       E       F
+[1,] 0.20966 0.34796 0.8546 0.68644 0.82584 0.45826
+[2,] 0.58184 1.85295 1.5022 1.23647 1.80735 1.49543
 
 > sapply(dimnames(UCBAdmissions)[[3]], function(dept) fisher.test(UCBAdmissions[, 
 +     , dept], conf.int = TRUE)$conf.int)
-             A         B         C         D         E         F
-[1,] 0.1970420 0.2944986 0.8452173 0.6789572 0.8064776 0.4332888
-[2,] 0.5920417 2.0040231 1.5162918 1.2504742 1.8385155 1.5756278
+           A      B       C       D       E       F
+[1,] 0.19704 0.2945 0.84522 0.67896 0.80648 0.43329
+[2,] 0.59204 2.0040 1.51629 1.25047 1.83852 1.57563
 
 > prop.test(UCBAdmissions[, , 1], correct = FALSE)
 
 	2-sample test for equality of proportions without continuity correction
 
 data:  UCBAdmissions[, , 1]
-X-squared = 17.248, df = 1, p-value = 3.28e-05
+X-squared = 17.2, df = 1, p-value = 3.3e-05
 alternative hypothesis: two.sided
 95 percent confidence interval:
- -0.1286815 -0.0530337
+ -0.128682 -0.053034
 sample estimates:
-   prop 1    prop 2 
-0.8519135 0.9427711 
+ prop 1  prop 2 
+0.85191 0.94277 
 
 
 > summary(free1way(UCBAdmissions[, , 1]), test = "Rao")
@@ -776,7 +778,7 @@ sample estimates:
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  Admit by Gender (c("Male", "Female"))
-Rao chi-squared = 17.248, df = 1, p-value = 3.281e-05
+Rao chi-squared = 17.2, df = 1, p-value = 3.3e-05
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -787,7 +789,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 	Kruskal-Wallis rank sum test
 
 data:  x by g
-Kruskal-Wallis chi-squared = 0.77143, df = 2, p-value = 0.68
+Kruskal-Wallis chi-squared = 0.771, df = 2, p-value = 0.68
 
 
 > free1way(x ~ g)
@@ -795,7 +797,7 @@ Kruskal-Wallis chi-squared = 0.77143, df = 2, p-value = 0.68
 	3-sample Kruskal-Wallis test against proportional odds alternatives
 
 data:  x by g (Normal subjects, Subjects with obstructive airway disease, Subjects with asbestosis)
-Perm chi-squared = 0.77141, df = 2, p-value = 0.68
+Perm chi-squared = 0.771, df = 2, p-value = 0.68
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -811,7 +813,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, 
 +     rho = 0)$chisq
-[1] 5.032305
+[1] 5.0323
 
 > cm <- coxph(Surv(tm, ev) ~ g + strata(s), data = nd)
 
@@ -822,27 +824,27 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by s
-Perm chi-squared = 4.6821, df = 2, p-value = 0.09623
+Perm chi-squared = 4.68, df = 2, p-value = 0.096
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
 > coef(cm)
-        g2         g3 
--0.1598108 -0.1602095 
+      g2       g3 
+-0.15981 -0.16021 
 
 > coef(ft)
-       g2        g3 
-0.1603624 0.1606569 
+     g2      g3 
+0.16036 0.16066 
 
 > vcov(cm)
-            g2          g3
-g2 0.006782578 0.003416264
-g3 0.003416264 0.006778489
+          g2        g3
+g2 0.0067826 0.0034163
+g3 0.0034163 0.0067785
 
 > vcov(ft)
-            g2          g3
-g2 0.006788580 0.003420327
-g3 0.003420327 0.006785198
+          g2        g3
+g2 0.0067886 0.0034203
+g3 0.0034203 0.0067852
 
 > summary(ft)
 
@@ -850,13 +852,13 @@ Call:
 free1way.formula(formula = tm ~ g | s, data = nd, link = "cloglog")
 
 Coefficients:
-   log-hazard ratio Std. Error  z value P(>|z|)
-g2         0.160362   0.082393 1.946314  0.0516
-g3         0.160657   0.082372 1.950374  0.0511
+   log-hazard ratio Std. Error z value P(>|z|)
+g2           0.1604     0.0824  1.9463    0.05
+g3           0.1607     0.0824  1.9504    0.05
 
 > summary(cm)$sctest
-      test         df     pvalue 
-5.03230471 2.00000000 0.08076978 
+   test      df  pvalue 
+5.03230 2.00000 0.08077 
 
 > summary(ft, test = "Rao")
 
@@ -865,13 +867,13 @@ g3         0.160657   0.082372 1.950374  0.0511
 
 data:  tm by g (1, 2, 3) 
 	 stratified by s
-Rao chi-squared = 5.0598, df = 2, p-value = 0.07967
+Rao chi-squared = 5.06, df = 2, p-value = 0.08
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
 > summary(cm)$logtest
-      test         df     pvalue 
-4.93315433 2.00000000 0.08487487 
+    test       df   pvalue 
+4.933154 2.000000 0.084875 
 
 > summary(ft, test = "LRT")
 
@@ -880,13 +882,13 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by s
-logLR chi-squared = 4.9566, df = 2, p-value = 0.08389
+logLR chi-squared = 4.96, df = 2, p-value = 0.084
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
 > summary(cm)$waldtest
-      test         df     pvalue 
-5.02000000 2.00000000 0.08119292 
+    test       df   pvalue 
+5.020000 2.000000 0.081193 
 
 > summary(ft, test = "Wald")
 
@@ -895,7 +897,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by s
-Wald chi-squared = 5.0481, df = 2, p-value = 0.08014
+Wald chi-squared = 5.05, df = 2, p-value = 0.08
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -906,7 +908,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by s
-Perm chi-squared = 4.6821, df = 2, p-value = 0.09623
+Perm chi-squared = 4.68, df = 2, p-value = 0.096
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -920,12 +922,12 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  Surv(tm, ev) by g (1, 2, 3) 
 	 stratified by s
-chi-squared = 4.7482, df = 2, p-value = 0.0931
+chi-squared = 4.75, df = 2, p-value = 0.093
 
 
 > survdiff(Surv(tm, ev) ~ g + strata(s), data = nd, 
 +     rho = 1)$chisq
-[1] 5.331837
+[1] 5.3318
 
 > (ft <- free1way(tm ~ g | s, data = nd, link = "logit"))
 
@@ -934,7 +936,7 @@ chi-squared = 4.7482, df = 2, p-value = 0.0931
 
 data:  tm by g (1, 2, 3) 
 	 stratified by s
-Perm chi-squared = 5.2032, df = 2, p-value = 0.07415
+Perm chi-squared = 5.2, df = 2, p-value = 0.074
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -945,8 +947,8 @@ free1way.formula(formula = tm ~ g | s, data = nd, link = "logit")
 
 Coefficients:
    log-odds ratio Std. Error z value P(>|z|)
-g2        0.30066    0.14185 2.11958  0.0340
-g3        0.26060    0.14239 1.83016  0.0672
+g2          0.301      0.142   2.120    0.03
+g3          0.261      0.142   1.830    0.07
 
 > summary(ft, test = "Rao")
 
@@ -955,7 +957,7 @@ g3        0.26060    0.14239 1.83016  0.0672
 
 data:  tm by g (1, 2, 3) 
 	 stratified by s
-Rao chi-squared = 5.2876, df = 2, p-value = 0.07109
+Rao chi-squared = 5.29, df = 2, p-value = 0.071
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -966,7 +968,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by s
-logLR chi-squared = 5.2725, df = 2, p-value = 0.07163
+logLR chi-squared = 5.27, df = 2, p-value = 0.072
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -977,7 +979,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by s
-Wald chi-squared = 5.263, df = 2, p-value = 0.07197
+Wald chi-squared = 5.26, df = 2, p-value = 0.072
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -988,7 +990,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  tm by g (1, 2, 3) 
 	 stratified by s
-Perm chi-squared = 5.2032, df = 2, p-value = 0.07415
+Perm chi-squared = 5.2, df = 2, p-value = 0.074
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -998,7 +1000,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > survdiff(Surv(time, cens) ~ horTh + strata(tgrade), 
 +     data = GBSG2, rho = 0)$chisq
-[1] 7.395797
+[1] 7.3958
 
 > cm <- coxph(Surv(time, cens) ~ horTh + strata(tgrade), 
 +     data = GBSG2)
@@ -1007,20 +1009,20 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 +     tgrade, link = "cloglog"))
 
 > coef(cm)
-  horThyes 
--0.3397231 
+horThyes 
+-0.33972 
 
 > coef(ft)
- horThyes 
-0.3876014 
+horThyes 
+  0.3876 
 
 > vcov(cm)
-           horThyes
-horThyes 0.01575409
+         horThyes
+horThyes 0.015754
 
 > vcov(ft)
-           horThyes
-horThyes 0.01604768
+         horThyes
+horThyes 0.016048
 
 > summary(ft)
 
@@ -1030,11 +1032,11 @@ free1way.formula(formula = Surv(time, cens) ~ horTh | tgrade,
 
 Coefficients:
          log-hazard ratio Std. Error z value P(>|z|)
-horThyes          0.38760    0.12668 3.05970  0.0022
+horThyes            0.388      0.127   3.060       0
 
 > summary(cm)$sctest
-       test          df      pvalue 
-7.393532542 1.000000000 0.006545881 
+     test        df    pvalue 
+7.3935325 1.0000000 0.0065459 
 
 > summary(ft, test = "Rao")
 
@@ -1042,13 +1044,13 @@ horThyes          0.38760    0.12668 3.05970  0.0022
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Rao chi-squared = 9.4585, df = 1, p-value = 0.002102
+Rao chi-squared = 9.46, df = 1, p-value = 0.0021
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
 > summary(cm)$logtest
-       test          df      pvalue 
-7.602754967 1.000000000 0.005827918 
+     test        df    pvalue 
+7.6027550 1.0000000 0.0058279 
 
 > summary(ft, test = "LRT")
 
@@ -1056,13 +1058,13 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-logLR chi-squared = 9.7476, df = 1, p-value = 0.001796
+logLR chi-squared = 9.75, df = 1, p-value = 0.0018
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
 > summary(cm)$waldtest
-       test          df      pvalue 
-7.330000000 1.000000000 0.006797068 
+     test        df    pvalue 
+7.3300000 1.0000000 0.0067971 
 
 > summary(ft, test = "Wald")
 
@@ -1070,7 +1072,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Wald chi-squared = 9.3618, df = 1, p-value = 0.002216
+Wald chi-squared = 9.36, df = 1, p-value = 0.0022
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -1080,7 +1082,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0935, p-value = 0.001978
+Perm Z = 3.09, p-value = 0.002
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -1091,13 +1093,13 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by pnodes
-Perm Z = 2.7019, p-value = 0.006894
+Perm Z = 2.7, p-value = 0.0069
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
 > survdiff(Surv(time, cens) ~ horTh + strata(tgrade), 
 +     data = GBSG2, rho = 1)$chisq
-[1] 7.593803
+[1] 7.5938
 
 > (ft <- with(GBSG2, free1way(Surv(time, cens) ~ horTh | 
 +     tgrade, link = "logit")))
@@ -1106,7 +1108,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0558, p-value = 0.002244
+Perm Z = 3.06, p-value = 0.0022
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1118,7 +1120,7 @@ free1way.formula(formula = Surv(time, cens) ~ horTh | tgrade,
 
 Coefficients:
          log-odds ratio Std. Error z value P(>|z|)
-horThyes        0.52826    0.17283 3.05651  0.0022
+horThyes          0.528      0.173   3.057       0
 
 > summary(ft, test = "Rao")
 
@@ -1126,7 +1128,7 @@ horThyes        0.52826    0.17283 3.05651  0.0022
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Rao chi-squared = 9.4003, df = 1, p-value = 0.00217
+Rao chi-squared = 9.4, df = 1, p-value = 0.0022
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1136,7 +1138,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-logLR chi-squared = 9.4814, df = 1, p-value = 0.002076
+logLR chi-squared = 9.48, df = 1, p-value = 0.0021
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1146,7 +1148,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Wald chi-squared = 9.3423, df = 1, p-value = 0.002239
+Wald chi-squared = 9.34, df = 1, p-value = 0.0022
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1156,7 +1158,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Perm Z = 3.0558, p-value = 0.002244
+Perm Z = 3.06, p-value = 0.0022
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1169,7 +1171,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 data:  y by g (1, 2, 3) 
 	 stratified by s
-Perm chi-squared = 1.0145, df = 2, p-value = 0.6021
+Perm chi-squared = 1.01, df = 2, p-value = 0.6
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 
@@ -1180,7 +1182,7 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 data:  y by g (1, 2, 3) 
 	 stratified by s
-chi-squared = 1.0571, df = 2, p-value = 0.5895
+chi-squared = 1.06, df = 2, p-value = 0.59
 
 
 > example(friedman.test, echo = FALSE)
@@ -1195,7 +1197,7 @@ chi-squared = 1.0571, df = 2, p-value = 0.5895
 	Friedman rank sum test
 
 data:  RoundingTimes
-Friedman chi-squared = 11.143, df = 2, p-value = 0.003805
+Friedman chi-squared = 11.1, df = 2, p-value = 0.0038
 
 
 > (ft <- free1way(tm ~ trt | str, data = rt))
@@ -1205,7 +1207,7 @@ Friedman chi-squared = 11.143, df = 2, p-value = 0.003805
 
 data:  tm by trt (Round Out, Narrow Angle, Wide Angle) 
 	 stratified by str
-Perm chi-squared = 11.143, df = 2, p-value = 0.003805
+Perm chi-squared = 11.1, df = 2, p-value = 0.0038
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1215,9 +1217,40 @@ Call:
 free1way.formula(formula = tm ~ trt | str, data = rt)
 
 Coefficients:
-                log-odds ratio Std. Error  z value P(>|z|)
-trtNarrow Angle       -1.26528    0.68264 -1.85353  0.0638
-trtWide Angle         -3.28921    0.79367 -4.14429  0.0000
+                log-odds ratio Std. Error z value P(>|z|)
+trtNarrow Angle         -1.265      0.683  -1.854    0.06
+trtWide Angle           -3.289      0.794  -4.144    0.00
+
+> tk <- free1way(Ozone ~ Month, data = airquality)
+
+> library("multcomp")
+
+> confint(glht(tk, linfct = mcp(Month = "Tukey")))
+
+	 Simultaneous Confidence Intervals
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: free1way.formula(formula = Ozone ~ Month, data = airquality)
+
+Quantile = 2.718
+95% family-wise confidence level
+ 
+
+Linear Hypotheses:
+           Estimate lwr     upr    
+6 - 5 == 0  0.8126  -0.9379  2.5632
+7 - 5 == 0  2.5282   1.0838  3.9727
+8 - 5 == 0  2.3826   0.9323  3.8330
+9 - 5 == 0  0.7515  -0.5306  2.0335
+7 - 6 == 0  1.7156  -0.0694  3.5006
+8 - 6 == 0  1.5700  -0.2221  3.3621
+9 - 6 == 0 -0.0612  -1.7488  1.6265
+8 - 7 == 0 -0.1456  -1.4745  1.1834
+9 - 7 == 0 -1.7768  -3.1205 -0.4330
+9 - 8 == 0 -1.6312  -2.9842 -0.2782
+
 
 > y <- rlogis(50)
 
@@ -1229,40 +1262,40 @@ trtWide Angle         -3.28921    0.79367 -4.14429  0.0000
 +     col = NA, border = NULL), conf.level = 0.95)
 
 > (logOR <- c(log(1.5), log(2)))
-[1] 0.4054651 0.6931472
+[1] 0.40547 0.69315
 
 > nd <- rfree1way(150, delta = logOR)
 
-> coef(ft <- free1way(y ~ trt, data = nd))
-     trtB      trtC 
-0.3501702 0.8105335 
+> coef(ft <- free1way(y ~ groups, data = nd))
+groupsB groupsC 
+0.48986 0.74859 
 
 > sqrt(diag(vcov(ft)))
-     trtB      trtC 
-0.2008023 0.2038962 
+groupsB groupsC 
+0.20077 0.20210 
 
 > logLik(ft)
-[1] -2741.121
+[1] -2742
 
 > nd$y <- qchisq(nd$y, df = 3)
 
-> coef(ft <- free1way(y ~ trt, data = nd))
-     trtB      trtC 
-0.3501702 0.8105335 
+> coef(ft <- free1way(y ~ groups, data = nd))
+groupsB groupsC 
+0.48986 0.74859 
 
 > sqrt(diag(vcov(ft)))
-     trtB      trtC 
-0.2008023 0.2038962 
+groupsB groupsC 
+0.20077 0.20210 
 
 > logLik(ft)
-[1] -2741.121
+[1] -2742
 
 > N <- 25
 
 > pvals <- replicate(Nsim, {
 +     nd <- rfree1way(n = N, blocks = 2, delta = c(0.25, 0.5), 
 +         alloc_ratio = 2)
-+     summary(free1way(y ~ trt .... [TRUNCATED] 
++     summary(free1way(y ~ gro .... [TRUNCATED] 
 
 > power.free1way.test(n = N, blocks = 2, delta = c(0.25, 
 +     0.5), alloc_ratio = 2)
@@ -1271,7 +1304,7 @@ trtWide Angle         -3.28921    0.79367 -4.14429  0.0000
 
                 n = 25
 Total sample size = 50 (Control) + 100 (B) + 100 (C) = 250
-            power = 0.3104482
+            power = 0.31044
         sig.level = 0.05
    log-odds ratio = 0.25, 0.50
 
@@ -1279,7 +1312,7 @@ NOTE: 'n' is sample size in control group of first stratum
 
 
 > mean(pvals < 0.05)
-[1] 0.3
+[1] 0.4
 
 > N <- 1000
 
@@ -1290,37 +1323,37 @@ NOTE: 'n' is sample size in control group of first stratum
 
 > nd$y <- Surv(pmin(nd$y, nd$C), nd$y < nd$C)
 
-> 1 - tapply(nd$y[, 2], nd$trt, mean)
+> 1 - tapply(nd$y[, 2], nd$groups, mean)
 Control       B 
-  0.259   0.529 
+  0.258   0.524 
 
-> summary(free1way(y ~ trt, data = nd, link = "cloglog"))
+> summary(free1way(y ~ groups, data = nd, link = "cloglog"))
 
 Call:
-free1way.formula(formula = y ~ trt, data = nd, link = "cloglog")
+free1way.formula(formula = y ~ groups, data = nd, link = "cloglog")
 
 Coefficients:
-     log-hazard ratio Std. Error   z value P(>|z|)
-trtB         1.060222   0.061947 17.114935       0
+        log-hazard ratio Std. Error z value P(>|z|)
+groupsB            1.034      0.061  16.958       0
 
-> summary(coxph(y ~ trt, data = nd))
+> summary(coxph(y ~ groups, data = nd))
 Call:
-coxph(formula = y ~ trt, data = nd)
+coxph(formula = y ~ groups, data = nd)
 
-  n= 2000, number of events= 1212 
+  n= 2000, number of events= 1218 
 
-         coef exp(coef) se(coef)     z Pr(>|z|)    
-trtB -1.05877   0.34688  0.06193 -17.1   <2e-16 ***
+          coef exp(coef) se(coef)     z Pr(>|z|)    
+groupsB -1.033     0.356    0.061 -16.9   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-     exp(coef) exp(-coef) lower .95 upper .95
-trtB    0.3469      2.883    0.3072    0.3917
+        exp(coef) exp(-coef) lower .95 upper .95
+groupsB     0.356       2.81     0.316     0.401
 
-Concordance= 0.625  (se = 0.007 )
-Likelihood ratio test= 306.6  on 1 df,   p=<2e-16
-Wald test            = 292.3  on 1 df,   p=<2e-16
-Score (logrank) test = 316.7  on 1 df,   p=<2e-16
+Concordance= 0.627  (se = 0.007 )
+Likelihood ratio test= 299  on 1 df,   p=<2e-16
+Wald test            = 287  on 1 df,   p=<2e-16
+Score (logrank) test = 310  on 1 df,   p=<2e-16
 
 
 > delta <- log(1.5)
@@ -1334,7 +1367,7 @@ Score (logrank) test = 316.7  on 1 df,   p=<2e-16
              p1 = 0.5
              p2 = 0.4
       sig.level = 0.05
-          power = 0.104621
+          power = 0.10462
     alternative = two.sided
 
 NOTE: n is number in *each* group
@@ -1346,9 +1379,9 @@ NOTE: n is number in *each* group
 
                 n = 25
 Total sample size = 25 (Control) + 25 (B) = 50
-            power = 0.1093493
+            power = 0.10935
         sig.level = 0.05
-   log-odds ratio = 0.4054651
+   log-odds ratio = 0.40547
 
 NOTE: 'n' is sample size in control group
 
@@ -1366,9 +1399,9 @@ NOTE: 'n' is sample size in control group
 
                 n = 20
 Total sample size = 60 (Control) + 90 (low) + 120 (med) + 120 (high) = 390
-            power = 0.3790663
+            power = 0.37911
         sig.level = 0.05
-   log-odds ratio = 0.2231436, 0.4054651, 0.5596158
+   log-odds ratio = 0.22314, 0.40547, 0.55962
 
 NOTE: 'n' is sample size in control group of first stratum
 
@@ -1387,7 +1420,7 @@ NOTE: 'n' is sample size in control group of first stratum
 + }
 
 > mean(pw < 0.05)
-[1] 0.36
+[1] 0.37
 
 > power.free1way.test(n = N, delta = delta)
 
@@ -1395,11 +1428,20 @@ NOTE: 'n' is sample size in control group of first stratum
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) = 30
-            power = 0.3837836
+            power = 0.38378
         sig.level = 0.05
-   log-odds ratio = 1.098612
+   log-odds ratio = 1.0986
 
 NOTE: 'n' is sample size in control group
+
+
+> library("Hmisc")
+
+> popower(p = rep(1/N, N), odds.ratio = exp(delta), 
++     n = 2 * N)
+Power: 0.389 
+Efficiency of design compared with continuous response: 0.997 
+Approximate standard error of log odds ratio: 0.655 
 
 
 > delta <- c(B = log(2), C = log(3))
@@ -1416,7 +1458,7 @@ NOTE: 'n' is sample size in control group
 + }
 
 > mean(pw < 0.05)
-[1] 0.26
+[1] 0.31
 
 > power.free1way.test(n = N, delta = delta)
 
@@ -1424,9 +1466,9 @@ NOTE: 'n' is sample size in control group
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) + 15 (C) = 45
-            power = 0.3123631
+            power = 0.31247
         sig.level = 0.05
-   log-odds ratio = 0.6931472, 1.0986123
+   log-odds ratio = 0.69315, 1.09861
 
 NOTE: 'n' is sample size in control group
 
@@ -1441,11 +1483,11 @@ NOTE: 'n' is sample size in control group
 
 > for (i in seq_along(pw)) {
 +     nd <- rfree1way(n = N, prob = prb, delta = delta)
-+     ft <- free1way(y ~ trt, data = nd)
-+     cf[i, ] <- coef(ft .... [TRUNCATED] 
++     ft <- free1way(y ~ groups, data = nd)
++     cf[i, ] <- coef .... [TRUNCATED] 
 
 > mean(pw < 0.05)
-[1] 0.29
+[1] 0.26
 
 > boxplot(cf)
 
@@ -1457,9 +1499,9 @@ NOTE: 'n' is sample size in control group
 
                 n = 15
 Total sample size = 15 (Control) + 15 (B) + 15 (C) = 45
-            power = 0.2914092
+            power = 0.29158
         sig.level = 0.05
-   log-odds ratio = 0.6931472, 1.0986123
+   log-odds ratio = 0.69315, 1.09861
 
 NOTE: 'n' is sample size in control group
 
@@ -1477,8 +1519,8 @@ NOTE: 'n' is sample size in control group
 
 > for (i in seq_along(pw)) {
 +     nd <- rfree1way(n = N, prob = prb, delta = delta)
-+     ft <- free1way(y ~ trt | blk, data = nd)
-+     cf[i, ] <- c .... [TRUNCATED] 
++     ft <- free1way(y ~ groups | blocks, data = nd)
++     cf[i,  .... [TRUNCATED] 
 
 > mean(pw < 0.05)
 [1] 0.73
@@ -1494,9 +1536,9 @@ NOTE: 'n' is sample size in control group
 
                 n = 15
 Total sample size = 45 (Ctrl) + 45 (B) + 45 (C) = 135
-            power = 0.6990469
+            power = 0.69905
         sig.level = 0.05
-   log-odds ratio = 0.6931472, 1.0986123
+   log-odds ratio = 0.69315, 1.09861
 
 NOTE: 'n' is sample size in control group of first stratum
 
@@ -1504,13 +1546,14 @@ NOTE: 'n' is sample size in control group of first stratum
 > power.free1way.test(power = 0.8, prob = prb, delta = delta, 
 +     seed = 3)
 
-     Stratified 3-sample Kruskal-Wallis test against proportional odds alternatives 
+Execution halted
+-sample Kruskal-Wallis test against proportional odds alternatives 
 
                 n = 19
 Total sample size = 57 (Ctrl) + 57 (B) + 57 (C) = 171
-            power = 0.8045059
+            power = 0.80451
         sig.level = 0.05
-   log-odds ratio = 0.6931472, 1.0986123
+   log-odds ratio = 0.69315, 1.09861
 
 NOTE: 'n' is sample size in control group of first stratum
 
@@ -1522,9 +1565,9 @@ NOTE: 'n' is sample size in control group of first stratum
 
                 n = 19
 Total sample size = 57 (Ctrl) + 57 (B) + 57 (C) = 171
-            power = 0.8045059
+            power = 0.80451
         sig.level = 0.05
-   log-odds ratio = 0.6931472, 1.0986123
+   log-odds ratio = 0.69315, 1.09861
 
 NOTE: 'n' is sample size in control group of first stratum
 
@@ -1532,4 +1575,4 @@ NOTE: 'n' is sample size in control group of first stratum
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 33.041   0.119  33.167 
+ 33.864   0.155  34.038 

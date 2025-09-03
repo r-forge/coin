@@ -88,8 +88,8 @@ frame with simulated outcome values (\code{y}) for \code{rfree1way}.
 ### based on odds ratio of 3
 x <- rfree1way(n = 15, delta = log(3), alloc_ratio = 2)
 ### Wilcoxon-Mann-Whitney rank sum test
-summary(free1way(y ~ trt, data = x), test = "Permutation")$p.value
-wilcox.test(y ~ trt, data = x, exact = FALSE, correct = FALSE)$p.value
+summary(free1way(y ~ groups, data = x), test = "Permutation")$p.value
+wilcox.test(y ~ groups, data = x, exact = FALSE, correct = FALSE)$p.value
 
 ### approximate power for this test
 power.free1way.test(n = 15, delta = log(3), alloc_ratio = 2)
