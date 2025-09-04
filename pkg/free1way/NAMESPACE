@@ -2,7 +2,7 @@
 importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
            "quantile", "uniroot","r2dtable", "pnorm", "dnorm", 
            "pchisq", "qchisq", "coef", "confint", "model.matrix", "printCoefmat",
-             "splinefun", "vcov", "runif",
+           "splinefun", "vcov", "runif", "stepfun",
            "ecdf", "na.pass", "terms", "model.weights", "xtabs", "rmultinom",
            "as.formula", "confint.default", "delete.response",
            "model.frame")
