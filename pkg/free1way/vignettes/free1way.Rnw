@@ -4044,9 +4044,10 @@ $\delta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 We introduce a new function \code{ppplot}, closely following the
-implementation of \code{qqplot}, allowing to plot the empirical and
-corresponding model-based PP-plot, the latter for a certain choice of link
-function:
+implementation of \code{qqplot}, allowing to plot the empirical 
+\citep{WilkGnanadesikan1968} and
+corresponding model-based \citep{SewakHothorn2023} probability-probability plot, 
+the latter for a certain choice of link function:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap50}\raggedright\small
@@ -4055,8 +4056,9 @@ function:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@ppplot <- function(x, y, plot.it = TRUE,@\\
-\mbox{}\verb@                   xlab = deparse1(substitute(x)),@\\
-\mbox{}\verb@                   ylab = deparse1(substitute(y)), @\\
+\mbox{}\verb@                   xlab = paste("Cumulative probabilities for", deparse1(substitute(x))),@\\
+\mbox{}\verb@                   ylab = paste("Cumulative probabilities for", deparse1(substitute(y))), @\\
+\mbox{}\verb@                   main = "P-P plot",@\\
 \mbox{}\verb@                   ..., conf.level = NULL, @\\
 \mbox{}\verb@                   conf.args = list(link = "logit", type = "Wald", @\\
 \mbox{}\verb@                                    col = NA, border = NULL)) {@\\
@@ -4069,19 +4071,21 @@ function:
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ex <- ecdf(x)@\\
-\mbox{}\verb@    sy <- sort(unique(y))@\\
+\mbox{}\verb@    sy <- sort(unique(c(x, y)))@\\
 \mbox{}\verb@    py <- ecdf(y)(sy)@\\
 \mbox{}\verb@    px <- ex(sy)@\\
-\mbox{}\verb@    ret <- list(x = px, y = py)@\\
+\mbox{}\verb@    ret <- stepfun(px, c(0, py))@\\
 \mbox{}\verb@    if (!plot.it)@\\
 \mbox{}\verb@        return(ret)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    plot(px, py, xlim = c(0, 1), ylim = c(0, 1), @\\
-\mbox{}\verb@         xlab = xlab, ylab = ylab, type = "n", ...)@\\
+\mbox{}\verb@    plot(ret, xlim = c(0, 1), ylim = c(0, 1), @\\
+\mbox{}\verb@         xlab = xlab, ylab = ylab, main = main, @\\
+\mbox{}\verb@         verticals = FALSE, ...)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    points(px, py, ...)@\\
+\mbox{}\verb@    plot(ret, add = TRUE, verticals = FALSE, ...)@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    return(invisible(ret)) @\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}

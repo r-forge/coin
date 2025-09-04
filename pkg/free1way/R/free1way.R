@@ -1184,8 +1184,9 @@ free1way.factor <- function(y, groups, blocks = NULL, event = NULL, weights = NU
 # ppplot
 
 ppplot <- function(x, y, plot.it = TRUE,
-                   xlab = deparse1(substitute(x)),
-                   ylab = deparse1(substitute(y)), 
+                   xlab = paste("Cumulative probabilities for", deparse1(substitute(x))),
+                   ylab = paste("Cumulative probabilities for", deparse1(substitute(y))), 
+                   main = "P-P plot",
                    ..., conf.level = NULL, 
                    conf.args = list(link = "logit", type = "Wald", 
                                     col = NA, border = NULL)) {
@@ -1198,15 +1199,16 @@ ppplot <- function(x, y, plot.it = TRUE,
     }
 
     ex <- ecdf(x)
-    sy <- sort(unique(y))
+    sy <- sort(unique(c(x, y)))
     py <- ecdf(y)(sy)
     px <- ex(sy)
-    ret <- list(x = px, y = py)
+    ret <- stepfun(px, c(0, py))
     if (!plot.it)
         return(ret)
 
-    plot(px, py, xlim = c(0, 1), ylim = c(0, 1), 
-         xlab = xlab, ylab = ylab, type = "n", ...)
+    plot(ret, xlim = c(0, 1), ylim = c(0, 1), 
+         xlab = xlab, ylab = ylab, main = main, 
+         verticals = FALSE, ...)
 
     # ROC bands
     
@@ -1233,7 +1235,8 @@ ppplot <- function(x, y, plot.it = TRUE,
     }
     
 
-    points(px, py, ...)
+    plot(ret, add = TRUE, verticals = FALSE, ...)
+
     return(invisible(ret)) 
 }
 

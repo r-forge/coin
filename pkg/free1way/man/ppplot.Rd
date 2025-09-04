@@ -4,15 +4,16 @@
 Probability-probability Plots
 }
 \description{
-\code{ppplot} produces a probabiliy-probability (PP) plot of two numerical variables, essentially
-the Receiver Operating Characteristic (ROC) curve. 
-If \code{conf.level} is given, an estimate and corresponding 
-confidence band for the ROC curve under a 
+\code{ppplot} produces a probabiliy-probability (PP) plot of two numerical
+variables. If \code{conf.level} is given, an estimate and corresponding 
+confidence band for the P-P curve under a 
 distribution-free semiparametric model is plotted.
 }
 \usage{
-ppplot(x, y, plot.it = TRUE, xlab = deparse1(substitute(x)), 
-       ylab = deparse1(substitute(y)), ..., conf.level = NULL, 
+ppplot(x, y, plot.it = TRUE, 
+       xlab = paste("Cumulative probabilities for", deparse1(substitute(x))),
+       ylab = paste("Cumulative probabilities for", deparse1(substitute(y))), 
+       main = "P-P plot", ..., conf.level = NULL, 
        conf.args = list(link = "logit", type = "Wald", col = NA, border = NULL))
 }
 \arguments{
@@ -25,6 +26,7 @@ ppplot(x, y, plot.it = TRUE, xlab = deparse1(substitute(x)),
   \item{xlab, ylab}{the \code{xlab} and \code{ylab} refer to the y
           and x axes respectively.
 }
+  \item{main}{a main title for the plot.}
   \item{\dots}{graphical parameters.
 }
   \item{conf.level}{confidence level of the band. The default, \code{NULL}, does not
@@ -34,29 +36,28 @@ ppplot(x, y, plot.it = TRUE, xlab = deparse1(substitute(x)),
          visualisation: \code{link} defines the link function of a
          distribition-free semiparametric model, \code{type} specifies the
          statistical concept the confidence band is derived from; see
-         \code{\link{free1way}} for other options. The remaining
+         \code{\link[free1way]{free1way}} for other options. The remaining
          elements govern how the band is plotted.
 }
 }
 \details{
 
-The plot produces a ROC curve, however avoiding rearrangements pushing the curve above the
-diagonal: The dots represent pairs \eqn{(\hat{F}_{x}(y), \hat{F}_{y}(y))}.
+The function produces a probability-probability plot \bibcitep{free1way::WilkGnanadesikan1968} of pairs
+\eqn{(\hat{F}_{x}(z), \hat{F}_{y}(z))} for observed data \eqn{z = (x, y)}.
 
 If the data generating process follows a model where the two distribution
 functions, after appropriate transformation, are horizontally shifted
-versions of each other, the ROC curve is a simple function of this shift and
+versions of each other, the probability-probability curve is a simple function of this shift and
 confidence bands can be obtained from a confidence interval for this shift
-parameter, see \code{free1way} for the model and
+parameter, see \code{\link[free1way]{free1way}} for the model and
 \bibcitet{free1way::SewakHothorn2023} for the connection to ROC curves.
 
-Substantial deviations of the empirical (points) from the theoretical
-(lines) ROC curve indicates lack of fit of the semiparametric model.
+Substantial deviations of the empirical (step function) from the theoretical
+(smooth) curve indicates lack of fit of the semiparametric model.
 
 }
 \value{
-A list with components \code{x} and \code{y} representing the empirical ROC
-curve.
+An object of class \code{stepfun}.
 }
 \references{
   \bibshow{*}
@@ -71,12 +72,25 @@ with(with(nd, split(y, groups)),
             conf.args = list(link = "logit", type = "Wald", col = 2)))
 ## with appropriate Wilcoxon test and log-odds ratio
 coef(ft <- free1way(y ~ groups, data = nd))
-## area under the (model-based!) ROC curve (AUC) and confidence interval
-coef(ft, what = "AUC")
-confint(ft, test = "Rao", what = "AUC")
-## the model-based ROC curve
+## the model-based probability-probability curve
 prb <- 1:99 / 100
 points(prb,  plogis(qlogis(prb) - coef(ft)), pch = 3)
+
+### the corresponding model-based receiver operating characteristic (ROC)
+### curve, see Sewak and Hothorn (2023)
+plot(prb,  plogis(qlogis(1 - prb) - coef(ft), lower.tail = FALSE),
+     xlab = "1 - Specificity", ylab = "Sensitivity", type = "l", 
+     main = "ROC Curve")
+abline(a = 0, b = 1, col = "lightgrey")
+## with confidence band
+lines(prb, plogis(qlogis(1 - prb) - confint(ft, test = "Rao")[1], 
+      lower.tail = FALSE), lty = 3)
+lines(prb, plogis(qlogis(1 - prb) - confint(ft, test = "Rao")[2], 
+      lower.tail = FALSE), lty = 3)
+## and corresponding area under the ROC curve (AUC)
+## with score confidence interval
+coef(ft, what = "AUC")
+confint(ft, test = "Rao", what = "AUC")
 
 ### ill-fitting normal model
 nd$y <- rnorm(nrow(nd), mean = c(0, .5)[nd$groups], sd = c(1, 1.5)[nd$groups])

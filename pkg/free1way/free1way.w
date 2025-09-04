@@ -2310,15 +2310,17 @@ $\delta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
 @}
 
 We introduce a new function \code{ppplot}, closely following the
-implementation of \code{qqplot}, allowing to plot the empirical and
-corresponding model-based PP-plot, the latter for a certain choice of link
-function:
+implementation of \code{qqplot}, allowing to plot the empirical 
+\citep{WilkGnanadesikan1968} and
+corresponding model-based \citep{SewakHothorn2023} probability-probability plot, 
+the latter for a certain choice of link function:
 
 @d ppplot
 @{
 ppplot <- function(x, y, plot.it = TRUE,
-                   xlab = deparse1(substitute(x)),
-                   ylab = deparse1(substitute(y)), 
+                   xlab = paste("Cumulative probabilities for", deparse1(substitute(x))),
+                   ylab = paste("Cumulative probabilities for", deparse1(substitute(y))), 
+                   main = "P-P plot",
                    ..., conf.level = NULL, 
                    conf.args = list(link = "logit", type = "Wald", 
                                     col = NA, border = NULL)) {
@@ -2331,19 +2333,21 @@ ppplot <- function(x, y, plot.it = TRUE,
     }
 
     ex <- ecdf(x)
-    sy <- sort(unique(y))
+    sy <- sort(unique(c(x, y)))
     py <- ecdf(y)(sy)
     px <- ex(sy)
-    ret <- list(x = px, y = py)
+    ret <- stepfun(px, c(0, py))
     if (!plot.it)
         return(ret)
 
-    plot(px, py, xlim = c(0, 1), ylim = c(0, 1), 
-         xlab = xlab, ylab = ylab, type = "n", ...)
+    plot(ret, xlim = c(0, 1), ylim = c(0, 1), 
+         xlab = xlab, ylab = ylab, main = main, 
+         verticals = FALSE, ...)
 
     @<ROC bands@>
 
-    points(px, py, ...)
+    plot(ret, add = TRUE, verticals = FALSE, ...)
+
     return(invisible(ret)) 
 }
 @}
