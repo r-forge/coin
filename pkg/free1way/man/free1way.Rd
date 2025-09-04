@@ -158,7 +158,9 @@ permutation score, likelihood ratio, or Rao score test.
 Assuming one of the semiparametric models, the parameter estimates are
 semiparametrically efficient and the corresponding score tests and
 confidence intervals are locally most powerful 
-\bibcitep{Chapter 15.5 in |free1way::vdVaart1998|}.
+\bibcitep{Chapter 15.5 in |free1way::vdVaart1998|}. An introduction to
+proportional-odds models in this class is available in
+\bibcitet{free1way::Harrell2015RMS}.
 
 }
 \value{
