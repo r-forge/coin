@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2025-09-02 r88766) -- "Unsuffered Consequences"
+R Under development (unstable) (2025-09-04 r88794) -- "Unsuffered Consequences"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -111,21 +111,21 @@ Rao chi-squared
 [1] TRUE
 > 
 > 
-> (ci <- confint(ft, test = "Permutation", level = .9))
+> (ci <- confint(ft, test = "Permutation", level = level))
         5 %   95 %
 w2 -0.57078 1.5839
 > summary(ft1 <- free1way(y ~ w, mu = ci[1]), test = "Permutation", alternative = "greater")$p.value
-  Perm Z 
-0.055817 
+Perm Z 
+  0.05 
 > summary(ft2 <- free1way(y ~ w, mu = ci[2]), test = "Permutation", alternative = "less")$p.value
-  Perm Z 
-0.067587 
+Perm Z 
+  0.05 
 > summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Permutation")$p.value
- Perm Z 
-0.11163 
+Perm Z 
+   0.1 
 > summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Permutation")$p.value
- Perm Z 
-0.13517 
+Perm Z 
+   0.1 
 > coef(ft1) + ci[1]
      w2 
 0.50639 
@@ -137,52 +137,52 @@ w2 -0.57078 1.5839
 > logLik(ft2)
 [1] -101.72
 > 
-> confint(ft1, test = "Permutation", level = level) + ci[1]
-        5 %   95 %
-w2 -0.60658 1.6198
-> confint(ft2, test = "Permutation", level = level) + ci[2]
-        5 %   95 %
-w2 -0.67713 1.6905
-> confint(ft12, test = "Permutation", level = level) + ci[1]
-        5 %   95 %
-w2 -0.60658 1.6198
-> confint(ft22, test = "Permutation", level = level) + ci[2]
-        5 %   95 %
-w2 -0.67713 1.6905
+> all.equal(ci, confint(ft1, test = "Permutation", level = level) + ci[1], 
++           tolerance = tol)
+[1] TRUE
+> all.equal(ci, confint(ft2, test = "Permutation", level = level) + ci[2],
++           tolerance = tol)
+[1] TRUE
+> all.equal(ci, confint(ft12, test = "Permutation", level = level) + ci[1],
++           tolerance = tol)
+[1] TRUE
+> all.equal(ci, confint(ft22, test = "Permutation", level = level) + ci[2],
++           tolerance = tol)
+[1] TRUE
 > 
 > ftc <- free1way(y ~ w, mu = coef(ft))
 > summary(ftc, test = "Permutation", alternative = "greater")$p.value
-Perm Z 
-   0.5 
+ Perm Z 
+0.49999 
 > summary(ftc, test = "Permutation", alternative = "less")$p.value
-Perm Z 
-   0.5 
+ Perm Z 
+0.50001 
 > summary(ftc, test = "Permutation")$p.value
-Perm Z 
-     1 
+ Perm Z 
+0.99998 
 > 
 > confint(ftc, test = "Permutation", level = level) + coef(ft)
-       5 %   95 %
-w2 -0.5724 1.5855
+        5 %  95 %
+w2 -0.57078 1.584
 > 
 > ft <- free1way(y ~ w, B = 1000)
-> (ci <- confint(ft, test = "Permutation", level = .9))
+> (ci <- confint(ft, test = "Permutation", level = level))
         5 %   95 %
 w2 -0.51459 1.6078
 attr(,"Attained level")
 [1] 0.9
 > summary(ft1 <- free1way(y ~ w, mu = ci[1]), test = "Permutation", alternative = "greater")$p.value
   Perm Z 
-0.065051 
+0.059675 
 > summary(ft2 <- free1way(y ~ w, mu = ci[2]), test = "Permutation", alternative = "less")$p.value
   Perm Z 
-0.063912 
+0.046291 
 > summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Permutation")$p.value
-Perm Z 
-0.1301 
-> summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Permutation")$p.value
  Perm Z 
-0.12782 
+0.11935 
+> summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Permutation")$p.value
+  Perm Z 
+0.092581 
 > coef(ft1) + ci[1]
      w2 
 0.50639 
@@ -195,42 +195,42 @@ Perm Z
 [1] -101.72
 > 
 > confint(ft1, test = "Permutation", level = level) + ci[1]
-        5 %   95 %
-w2 -0.60133 1.6145
+        5 %  95 %
+w2 -0.57078 1.584
 > confint(ft2, test = "Permutation", level = level) + ci[2]
-       5 %   95 %
-w2 -0.6809 1.6943
+        5 %  95 %
+w2 -0.57078 1.584
 > confint(ft12, test = "Permutation", level = level) + ci[1]
-        5 %   95 %
-w2 -0.60133 1.6145
+        5 %  95 %
+w2 -0.57078 1.584
 > confint(ft22, test = "Permutation", level = level) + ci[2]
-       5 %   95 %
-w2 -0.6809 1.6943
+        5 %  95 %
+w2 -0.57078 1.584
 > 
 > summary(ftg <- free1way(y ~ w, mu = coef(ft)), test = "Permutation", alternative = "greater")$p.value
-Perm Z 
-   0.5 
+ Perm Z 
+0.49999 
 > summary(ftl <- free1way(y ~ w, mu = coef(ft)), test = "Permutation", alternative = "less")$p.value
-Perm Z 
-   0.5 
+ Perm Z 
+0.50001 
 > summary(ftt <- free1way(y ~ w, mu = coef(ft)), test = "Permutation")$p.value
-Perm Z 
-     1 
+ Perm Z 
+0.99998 
 > 
 > ftc <- free1way(y ~ w, mu = coef(ft), B = 1000)
 > summary(ftc, test = "Permutation", alternative = "greater")$p.value
-[1] 0.49451
+[1] 0.4995
 > summary(ftc, test = "Permutation", alternative = "less")$p.value
-[1] 0.50649
+[1] 0.5015
 > summary(ftc, test = "Permutation")$p.value
 [1] 1
 > 
 > confint(ftc, test = "Permutation", level = level) + coef(ft)
         5 %   95 %
-w2 -0.47648 1.5457
+w2 -0.48652 1.5531
 attr(,"Attained level")
 [1] 0.9
 > 
 > proc.time()
    user  system elapsed 
-  1.782   0.072   1.850 
+  1.567   0.060   1.623 

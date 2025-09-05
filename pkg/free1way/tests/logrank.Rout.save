@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2025-09-02 r88766) -- "Unsuffered Consequences"
+R Under development (unstable) (2025-09-04 r88794) -- "Unsuffered Consequences"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -219,4 +219,4 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-  1.327   0.060   1.383 
+  1.218   0.088   1.301 

@@ -77,6 +77,8 @@
     xlist <- xlist[strata]
     xrclist <- xrclist[strata]
     
+
+
     if (NS <- is.null(start))
         start <- rep.int(0, K - 1)
     lwr <- rep(-Inf, times = K - 1)
@@ -538,9 +540,14 @@
         .free1wayML(xt, link = link, mu = mu, start = start, fix = fix, tol = tol, 
                    ...) 
     ret$table <- xt
-    ret$mu <- mu
+
     ret$strata <- strata
-    names(ret$mu) <- link$parm
+    ret$mu <- mu
+    if (length(ret$mu) == 1) {
+        names(ret$mu) <- link$parm
+    } else {
+        names(ret$mu) <- c(paste(link$parm, cnames[1L], sep = ":"), cnames[-1L])
+    }
     
 
     class(ret) <- "free1wayML"
@@ -576,6 +583,11 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
     }
     
 
+    if (!(length(mu) == 1L || length(mu) == d[2L] - 1L)) {
+        warning("Incompatible length of argument 'mu'")
+        mu <- rep(mu, length.out = d[2L] - 1L)
+    }
+
     ret <- .free1wayML(y, link = link, mu = mu, ...)
     ret$link <- link
     ret$data.name <- DNAME
@@ -590,7 +602,11 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
                         "test against", link$model, "alternatives")
 
     cf <- ret$par
-    cf[idx <- seq_len(d[2L] - 1L)] <- 0
+    ### compute the permutation distribution always
+    ### for H0: delta = 0, not delta = mu
+    ### otherwise, permutation confidence intervals
+    ### are not aligned with permutation p-values
+    cf[idx <- seq_len(d[2L] - 1L)] <- -mu
     pr <- ret$profile(cf, idx)
     res <- - pr$negresiduals
     if (d[2L] == 2L)
@@ -971,6 +987,9 @@ confint.free1way <- function(object, parm,
             
         }
         
+        ### we also could invert p-values, but the
+        ### p-value function might be discret for permutation
+        ### test, in contrast to the test statistic
         return(STATISTIC - quantile)
     }
 

@@ -722,6 +722,8 @@ options(digits = 5)
     xlist <- xlist[strata]
     xrclist <- xrclist[strata]
     
+
+
     if (NS <- is.null(start))
         start <- rep.int(0, K - 1)
     lwr <- rep(-Inf, times = K - 1)
@@ -1155,9 +1157,14 @@ options(digits = 5)
         .free1wayML(xt, link = link, mu = mu, start = start, fix = fix, tol = tol, 
                    ...) 
     ret$table <- xt
-    ret$mu <- mu
+
     ret$strata <- strata
-    names(ret$mu) <- link$parm
+    ret$mu <- mu
+    if (length(ret$mu) == 1) {
+        names(ret$mu) <- link$parm
+    } else {
+        names(ret$mu) <- c(paste(link$parm, cnames[1L], sep = ":"), cnames[-1L])
+    }
     
 
     class(ret) <- "free1wayML"
@@ -2515,6 +2522,8 @@ after merging all treatment groups:
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@@\hbox{$\langle\,${\itshape table2list body}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@if (NS <- is.null(start))@\\
 \mbox{}\verb@    start <- rep.int(0, K - 1)@\\
 \mbox{}\verb@lwr <- rep(-Inf, times = K - 1)@\\
@@ -2738,9 +2747,14 @@ negative residuals as requested:
 \mbox{}\verb@    .free1wayML(xt, link = link, mu = mu, start = start, fix = fix, tol = tol, @\\
 \mbox{}\verb@               ...) @\\
 \mbox{}\verb@ret$table <- xt@\\
-\mbox{}\verb@ret$mu <- mu@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@ret$strata <- strata@\\
-\mbox{}\verb@names(ret$mu) <- link$parm@\\
+\mbox{}\verb@ret$mu <- mu@\\
+\mbox{}\verb@if (length(ret$mu) == 1) {@\\
+\mbox{}\verb@    names(ret$mu) <- link$parm@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    names(ret$mu) <- c(paste(link$parm, cnames[1L], sep = ":"), cnames[-1L])@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -3220,6 +3234,11 @@ results (this is relevant for the one-sided case).
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape link2fun}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
+\mbox{}\verb@    if (!(length(mu) == 1L || length(mu) == d[2L] - 1L)) {@\\
+\mbox{}\verb@        warning("Incompatible length of argument 'mu'")@\\
+\mbox{}\verb@        mu <- rep(mu, length.out = d[2L] - 1L)@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@    ret <- .free1wayML(y, link = link, mu = mu, ...)@\\
 \mbox{}\verb@    ret$link <- link@\\
 \mbox{}\verb@    ret$data.name <- DNAME@\\
@@ -3234,7 +3253,11 @@ results (this is relevant for the one-sided case).
 \mbox{}\verb@                        "test against", link$model, "alternatives")@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    cf <- ret$par@\\
-\mbox{}\verb@    cf[idx <- seq_len(d[2L] - 1L)] <- 0@\\
+\mbox{}\verb@    ### compute the permutation distribution always@\\
+\mbox{}\verb@    ### for H0: delta = 0, not delta = mu@\\
+\mbox{}\verb@    ### otherwise, permutation confidence intervals@\\
+\mbox{}\verb@    ### are not aligned with permutation p-values@\\
+\mbox{}\verb@    cf[idx <- seq_len(d[2L] - 1L)] <- -mu@\\
 \mbox{}\verb@    pr <- ret$profile(cf, idx)@\\
 \mbox{}\verb@    res <- - pr$negresiduals@\\
 \mbox{}\verb@    if (d[2L] == 2L)@\\
@@ -3694,6 +3717,9 @@ values for the inversion:
 \mbox{}\verb@        alternative <- "two.sided"@\\
 \mbox{}\verb@        tol <- .Machine$double.eps@\\
 \mbox{}\verb@        @\hbox{$\langle\,${\itshape statistics}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@        ### we also could invert p-values, but the@\\
+\mbox{}\verb@        ### p-value function might be discret for permutation@\\
+\mbox{}\verb@        ### test, in contrast to the test statistic@\\
 \mbox{}\verb@        return(STATISTIC - quantile)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
