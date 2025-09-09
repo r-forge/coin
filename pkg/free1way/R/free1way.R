@@ -989,7 +989,7 @@ confint.free1way <- function(object, parm,
         
         ### we also could invert p-values, but the
         ### p-value function might be discret for permutation
-        ### test, in contrast to the test statistic
+        ### tests, in contrast to the test statistic
         return(STATISTIC - quantile)
     }
 
