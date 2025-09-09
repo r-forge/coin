@@ -11,5 +11,4 @@ Description: Basic infrastructure for exact conditional and unconditional as wel
 Imports: stats, graphics
 Suggests: rms, survival, MASS, tram, coin, multcomp, Matrix, TH.data, Hmisc
 Depends: R (>= 4.4.0)
-Encoding: UTF-8
 License: GPL-2
