@@ -3,7 +3,16 @@
 
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
+                        control = list(trace = trace, iter.max = 200,
+                                       eval.max = 200, rel.tol = 1e-10,
+                                       abs.tol = 1e-20, xf.tol = 1e-16),
+                        trace = FALSE, 
                         tol = sqrt(.Machine$double.eps), ...) {
+
+##1    if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))
+##1            stop(gettextf("%s needs package 'Matrix' correctly installed",
+##1                          "free1way"),
+##1                domain = NA)
 
     ### convert to three-way table
     xt <- x
@@ -87,11 +96,13 @@
         lwr <- c(lwr, -Inf, rep.int(0, times = bC - 1L))
         if (NS) {
             ecdf0 <- cumsum(rowSums(xlist[[b]]))
-            ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
+            ### ensure that 0 < ecdf0 < 1 such that quantiles exist
+            ecdf0 <- pmax(1, ecdf0[-length(ecdf0)]) / (max(ecdf0) + 1)
             Qecdf <- Q(ecdf0)
-            bstart <- log(diff(Qecdf))
-            start <- c(start, Qecdf[1], bstart)
-            start[!is.finite(start)] <- 0
+    ##1        bstart <- log(diff(Qecdf))
+    ##1        start <- c(start, Qecdf[1], bstart)
+            start <- c(start, Qecdf)
+    ##1        start[!is.finite(start)] <- 0
         }
     }
     
@@ -112,18 +123,24 @@
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
-        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        intercepts <- c(-Inf, parm[- bidx], Inf)
         tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                           ncol = ncol(x),
                                           byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
-            prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
         } else {
-            prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                        Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+        ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- Ftmb[- 1L, , drop = FALSE] - 
+                   Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
+        if (any(prb < .Machine$double.eps^10)) 
+            return(Inf)
         return(- sum(x * log(prb)))
     }
     
@@ -134,16 +151,20 @@
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
-        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        intercepts <- c(-Inf, parm[- bidx], Inf)
         tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                           ncol = ncol(x),
                                           byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
-            prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
         } else {
-            prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                        Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+        ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- Ftmb[- 1L, , drop = FALSE] - 
+                   Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
         # density prob ratio
@@ -157,13 +178,14 @@
         ret <- numeric(length(parm))
         ret[bidx] <- colSums(zl)[-1L] -
                      colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
-        ret[-bidx] <- Reduce("+", 
-                             lapply(1:ncol(x), 
-                                 function(j) {
-                                     .rcr(zu[-nrow(zu),j]) - 
-                                     .rcr(zl[-1,j])
-                                 })
-                             )
+    ##1    ret[-bidx] <- Reduce("+", 
+    ##1                         lapply(1:ncol(x), 
+    ##1                            function(j) {
+    ##1                                 .rcr(zu[-nrow(zu),j]) - 
+    ##1                                 .rcr(zl[-1,j])
+    ##1                             })
+    ##1                         )
+        ret[- bidx] <- rowSums(zu[-nrow(zu),,drop = FALSE] - zl[-1,,drop = FALSE])
         - ret
     }
     
@@ -174,16 +196,20 @@
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
-        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        intercepts <- c(-Inf, parm[- bidx], Inf)
         tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                           ncol = ncol(x),
                                           byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
-            prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
         } else {
-            prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                        Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+        ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- Ftmb[- 1L, , drop = FALSE] - 
+                   Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
         # density prob ratio
@@ -201,21 +227,25 @@
     
     # Hessian
     
-    .hes <- function(parm, x, mu = 0, rightcensored = FALSE) {
+    .hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {
         # parm to prob
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
-        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        intercepts <- c(-Inf, parm[- bidx], Inf)
         tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                           ncol = ncol(x),
                                           byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
-            prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
         } else {
-            prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                        Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+        ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- Ftmb[- 1L, , drop = FALSE] - 
+                   Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
 
@@ -279,14 +309,18 @@
         
 
         if (length(Adiag) > 1L) {
-            if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))
-                    stop(gettextf("%s needs package 'Matrix' correctly installed",
-                                  "free1way"),
-                         domain = NA)
-            A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), 
-                                    symmetric = TRUE)
+            if (!isFALSE(full)) {
+                A <- list(Adiag = Adiag, Aoffdiag = Aoffdiag)
+            } else {
+                A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), 
+                                        symmetric = TRUE)
+            }
         } else {
-            A <- matrix(Adiag)
+            if (!isFALSE(full)) {
+                A <- list(Adiag = Adiag, Aoffdiag = NULL)
+            } else {
+                A <- matrix(Adiag)
+            }
         }
         return(list(A = A, X = X, Z = Z))
     }
@@ -336,7 +370,7 @@
     
     # stratified Hessian
     
-    .shes <- function(parm, x, mu = 0, xrc = NULL) {
+    .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE) {
         # stratum prep
         
         C <- sapply(x, NROW) ### might differ by stratum
@@ -347,6 +381,48 @@
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
+        if (!isFALSE(ret <- full)) {
+            ret <- matrix(0, nrow = length(parm), ncol = length(parm))
+            for (b in seq_len(B)) {
+                H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu, full = full)
+                if (!is.null(xrc)) {
+                    Hrc <- .hes(c(delta, intercepts[[b]]), xrc[[b]], mu = mu, 
+                                rightcensored = TRUE, full = full)
+                    H$X <- H$X + Hrc$X
+                    H$A$Adiag <- H$A$Adiag + Hrc$A$Adiag
+                    H$A$Aoffdiag <- H$A$Aoffdiag + Hrc$A$Aoffdiag
+                    H$Z <- H$Z + Hrc$Z
+                }
+                if (b == 1L) {
+                    Adiag <- H$A$Adiag
+                    Aoffdiag <- H$A$Aoffdiag
+                    X <- H$X
+                    Z <- H$Z
+                } else {
+                    Adiag <- c(Adiag, H$A$Adiag) ### Matrix::bdiag(A, H$A)
+                    Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag) ### Matrix::bdiag(A, H$A)
+                    X <- rbind(X, H$X)
+                    Z <- Z + H$Z
+                }
+             }
+             sA <- seq_along(Adiag)
+             sAo <- seq_along(Aoffdiag)
+             sZ <- seq_len(NROW(Z))
+             sXr <- seq_len(NROW(X))
+             sXc <- seq_len(NCOL(X))
+
+             idx <- matrix(NROW(Z) + cbind(sA, sA), ncol = 2)
+             ret[idx] <- Adiag
+             if (!is.null(Aoffdiag)) {
+                 idx <- matrix(NROW(Z) + cbind(sA[-1], sA[-length(sA)]), ncol = 2)
+                 ret[idx] <- Aoffdiag
+                 ret[idx[,2:1,drop = FALSE]] <- Aoffdiag
+             }
+             ret[sZ,sZ] <- Z
+             ret[sXc,NROW(Z) + sXr] <- t(X)
+             ret[NROW(Z) + sXr, sXc] <- X
+             return(ret)
+        }
         ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
         for (b in seq_len(B)) {
             H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu)
@@ -394,7 +470,7 @@
     # profile
     
     fn <- function(par) {
-        par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
+    ##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
         ret <- .snll(par, x = xlist, mu = mu)
         if (!is.null(xrc))
             ret <- ret + .snll(par, x = xrclist, mu = mu, 
@@ -402,13 +478,29 @@
         return(ret)
     }
     gr <- function(par) {
-        par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
+    ##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
         ret <- .snsc(par, x = xlist, mu = mu)
         if (!is.null(xrc))
             ret <- ret + .snsc(par, x = xrclist, mu = mu, 
                                rightcensored = TRUE)
-        par[!is.finite(lwr)] <- 1
-        return(ret * par)
+    ##1    par[!is.finite(lwr)] <- 1
+    ##1    return(ret * par)
+        return(ret)
+    }
+
+    ### allocate memory for hessian
+    Hess <- matrix(0, nrow = length(start), ncol = length(start))
+
+    he <- function(par) {
+    ##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
+        if (!is.null(xrc)) {
+            ret <- .shes(par, x = xlist, mu = mu, xrc = xrclist, full = Hess)
+        } else {
+            ret <- .shes(par, x = xlist, mu = mu, full = Hess)
+        }
+    ##1    par[!is.finite(lwr)] <- 1
+    ##1    return(ret * par)
+        return(ret)
     }
     .profile <- function(start, fix = seq_len(K - 1)) {
         if (!all(fix %in% seq_len(K - 1)))
@@ -416,42 +508,69 @@
                           "free1way"),
                          domain = NA)
         delta <- start[fix]
-        opargs <- c(list(par = start[-fix], 
-                         fn = function(par) {
+    ##1    opargs <- c(list(par = start[-fix], 
+    ##                     fn = function(par) {
+    ##                         p <- numeric(length(par) + length(fix))
+    ##                         p[fix] <- delta
+    ##                         p[-fix] <- par
+    ##                         fn(p)
+    ##                     },
+    ##                     gr = function(par) {
+    ##                         p <- numeric(length(par) + length(fix))
+    ##                         p[fix] <- delta
+    ##                         p[-fix] <- par
+    ##                         gr(p)[-fix]
+    ##                     },
+    ##                     method = "BFGS", 
+    ##                     hessian = FALSE),
+    ##                     list(...))
+        opargs <- list(start = start[-fix], 
+                         objective = function(par) {
                              p <- numeric(length(par) + length(fix))
                              p[fix] <- delta
                              p[-fix] <- par
                              fn(p)
                          },
-                         gr = function(par) {
+                         gradient = function(par) {
                              p <- numeric(length(par) + length(fix))
                              p[fix] <- delta
                              p[-fix] <- par
                              gr(p)[-fix]
                          },
-                         method = "BFGS", 
-                         hessian = FALSE),
-                         list(...))
+                         hessian = function(par) {
+                             p <- numeric(length(par) + length(fix))
+                             p[fix] <- delta
+                             p[-fix] <- par
+                             he(p)[-fix, -fix, drop = FALSE]
+                         })
+        opargs$control <- control
         # do optim
         
-        maxit <- 100
+        maxit <- control$iter.max
         while(maxit < 10001) {
-           ret <- do.call("optim", opargs)
+        ##1   ret <- do.call("optim", opargs)
+           ret <- do.call("nlminb", opargs)
            maxit <- 5 * maxit
            if (ret$convergence > 0) {
                if (is.null(opargs$control))
-                   opargs$control <- list(maxit = maxit)
+        ##1           opargs$control <- list(maxit = maxit)
+                   opargs$control <- list(eval.max = maxit)
                 else 
-                   opargs$control$maxit <- maxit
-               opargs$par <- ret$par
+        ##1           opargs$control$maxit <- maxit
+                   opargs$control$eval.max <- maxit
+                   opargs$control$iter.max <- maxit
+        ##1       opargs$par <- ret$par
+                  opargs$start <- ret$par
            } else {
                break()
            }
         }
         if (ret$convergence > 0)
-            stop(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
+            warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
                           "free1way"),
                              domain = NA)
+        ret$value <- ret$objective
+        ret$objective <- NULL
         
         p <- numeric(length(start))
         p[fix] <- delta
@@ -463,30 +582,42 @@
     # optim
     
     if (!length(fix)) {
-        opargs <- c(list(par = start, fn = fn, gr = gr,
-                         # lower = lwr, 
-                         method = "BFGS", 
-                         hessian = FALSE), list(...))
+    ##1    opargs <- c(list(par = start, fn = fn, gr = gr,
+    ##                     # lower = lwr, 
+    ##                     method = "BFGS", 
+    ##                     hessian = FALSE), list(...))
+        opargs <- list(start = start, 
+                       objective = fn, 
+                       gradient = gr,
+                       hessian = he)
+        opargs$control <- control
         # do optim
         
-        maxit <- 100
+        maxit <- control$iter.max
         while(maxit < 10001) {
-           ret <- do.call("optim", opargs)
+        ##1   ret <- do.call("optim", opargs)
+           ret <- do.call("nlminb", opargs)
            maxit <- 5 * maxit
            if (ret$convergence > 0) {
                if (is.null(opargs$control))
-                   opargs$control <- list(maxit = maxit)
+        ##1           opargs$control <- list(maxit = maxit)
+                   opargs$control <- list(eval.max = maxit)
                 else 
-                   opargs$control$maxit <- maxit
-               opargs$par <- ret$par
+        ##1           opargs$control$maxit <- maxit
+                   opargs$control$eval.max <- maxit
+                   opargs$control$iter.max <- maxit
+        ##1       opargs$par <- ret$par
+                  opargs$start <- ret$par
            } else {
                break()
            }
         }
         if (ret$convergence > 0)
-            stop(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
+            warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
                           "free1way"),
                              domain = NA)
+        ret$value <- ret$objective
+        ret$objective <- NULL
         
     } else if (length(fix) == length(start)) {
         ret <- list(par = start, 
@@ -508,7 +639,7 @@
     names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
     par <- ret$par
-    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
+    ##1 par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
 
     if (score) {
         ret$negscore <- .snsc(par, x = xlist, mu = mu)[parm]
@@ -1523,7 +1654,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
                               delta = delta, link = link)[[1L]]
             rs <- rowSums(x[,,b]) > 0
             h <- h0[rs[-length(rs)], b]
-            theta <- c(h[1], log(diff(h)))
+            theta <- h ##1 c(h[1], log(diff(h)))
             parm <- c(parm, theta)
         }
         ### evaluate observed hessian for true parameters parm and x data

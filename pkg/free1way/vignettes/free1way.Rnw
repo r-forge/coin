@@ -388,18 +388,24 @@ options(digits = 5)
     
     bidx <- seq_len(ncol(x) - 1L)
     delta <- c(0, mu + parm[bidx])
-    intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    intercepts <- c(-Inf, parm[- bidx], Inf)
     tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                       ncol = ncol(x),
                                       byrow = TRUE)
     Ftmb <- F(tmb)
     if (rightcensored) {
-        prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
     } else {
-        prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                    Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+    ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        prb <- Ftmb[- 1L, , drop = FALSE] - 
+               Ftmb[- nrow(Ftmb), , drop = FALSE]
     } 
     
+    if (any(prb < .Machine$double.eps^10)) 
+        return(Inf)
     return(- sum(x * log(prb)))
 }
 
@@ -408,16 +414,20 @@ options(digits = 5)
     
     bidx <- seq_len(ncol(x) - 1L)
     delta <- c(0, mu + parm[bidx])
-    intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    intercepts <- c(-Inf, parm[- bidx], Inf)
     tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                       ncol = ncol(x),
                                       byrow = TRUE)
     Ftmb <- F(tmb)
     if (rightcensored) {
-        prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
     } else {
-        prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                    Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+    ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        prb <- Ftmb[- 1L, , drop = FALSE] - 
+               Ftmb[- nrow(Ftmb), , drop = FALSE]
     } 
     
     
@@ -430,13 +440,14 @@ options(digits = 5)
     ret <- numeric(length(parm))
     ret[bidx] <- colSums(zl)[-1L] -
                  colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
-    ret[-bidx] <- Reduce("+", 
-                         lapply(1:ncol(x), 
-                             function(j) {
-                                 .rcr(zu[-nrow(zu),j]) - 
-                                 .rcr(zl[-1,j])
-                             })
-                         )
+##1    ret[-bidx] <- Reduce("+", 
+##1                         lapply(1:ncol(x), 
+##1                            function(j) {
+##1                                 .rcr(zu[-nrow(zu),j]) - 
+##1                                 .rcr(zl[-1,j])
+##1                             })
+##1                         )
+    ret[- bidx] <- rowSums(zu[-nrow(zu),,drop = FALSE] - zl[-1,,drop = FALSE])
     - ret
 }
 
@@ -445,16 +456,20 @@ options(digits = 5)
     
     bidx <- seq_len(ncol(x) - 1L)
     delta <- c(0, mu + parm[bidx])
-    intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    intercepts <- c(-Inf, parm[- bidx], Inf)
     tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                       ncol = ncol(x),
                                       byrow = TRUE)
     Ftmb <- F(tmb)
     if (rightcensored) {
-        prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
     } else {
-        prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                    Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+    ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        prb <- Ftmb[- 1L, , drop = FALSE] - 
+               Ftmb[- nrow(Ftmb), , drop = FALSE]
     } 
     
     
@@ -470,20 +485,24 @@ options(digits = 5)
 }
 
 
-.hes <- function(parm, x, mu = 0, rightcensored = FALSE) {
+.hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {
     
     bidx <- seq_len(ncol(x) - 1L)
     delta <- c(0, mu + parm[bidx])
-    intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+    intercepts <- c(-Inf, parm[- bidx], Inf)
     tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                       ncol = ncol(x),
                                       byrow = TRUE)
     Ftmb <- F(tmb)
     if (rightcensored) {
-        prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
     } else {
-        prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                    Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+    ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+    ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        prb <- Ftmb[- 1L, , drop = FALSE] - 
+               Ftmb[- nrow(Ftmb), , drop = FALSE]
     } 
     
 
@@ -543,14 +562,18 @@ options(digits = 5)
     
 
     if (length(Adiag) > 1L) {
-        if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))
-                stop(gettextf("%s needs package 'Matrix' correctly installed",
-                              "free1way"),
-                     domain = NA)
-        A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), 
-                                symmetric = TRUE)
+        if (!isFALSE(full)) {
+            A <- list(Adiag = Adiag, Aoffdiag = Aoffdiag)
+        } else {
+            A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), 
+                                    symmetric = TRUE)
+        }
     } else {
-        A <- matrix(Adiag)
+        if (!isFALSE(full)) {
+            A <- list(Adiag = Adiag, Aoffdiag = NULL)
+        } else {
+            A <- matrix(Adiag)
+        }
     }
     return(list(A = A, X = X, Z = Z))
 }
@@ -595,7 +618,7 @@ options(digits = 5)
 }
 
 
-.shes <- function(parm, x, mu = 0, xrc = NULL) {
+.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE) {
     
     C <- sapply(x, NROW) ### might differ by stratum
     K <- unique(do.call("c", lapply(x, ncol))) ### the same
@@ -605,6 +628,48 @@ options(digits = 5)
     delta <- parm[bidx]
     intercepts <- split(parm[-bidx], sidx)
     
+    if (!isFALSE(ret <- full)) {
+        ret <- matrix(0, nrow = length(parm), ncol = length(parm))
+        for (b in seq_len(B)) {
+            H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu, full = full)
+            if (!is.null(xrc)) {
+                Hrc <- .hes(c(delta, intercepts[[b]]), xrc[[b]], mu = mu, 
+                            rightcensored = TRUE, full = full)
+                H$X <- H$X + Hrc$X
+                H$A$Adiag <- H$A$Adiag + Hrc$A$Adiag
+                H$A$Aoffdiag <- H$A$Aoffdiag + Hrc$A$Aoffdiag
+                H$Z <- H$Z + Hrc$Z
+            }
+            if (b == 1L) {
+                Adiag <- H$A$Adiag
+                Aoffdiag <- H$A$Aoffdiag
+                X <- H$X
+                Z <- H$Z
+            } else {
+                Adiag <- c(Adiag, H$A$Adiag) ### Matrix::bdiag(A, H$A)
+                Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag) ### Matrix::bdiag(A, H$A)
+                X <- rbind(X, H$X)
+                Z <- Z + H$Z
+            }
+         }
+         sA <- seq_along(Adiag)
+         sAo <- seq_along(Aoffdiag)
+         sZ <- seq_len(NROW(Z))
+         sXr <- seq_len(NROW(X))
+         sXc <- seq_len(NCOL(X))
+
+         idx <- matrix(NROW(Z) + cbind(sA, sA), ncol = 2)
+         ret[idx] <- Adiag
+         if (!is.null(Aoffdiag)) {
+             idx <- matrix(NROW(Z) + cbind(sA[-1], sA[-length(sA)]), ncol = 2)
+             ret[idx] <- Aoffdiag
+             ret[idx[,2:1,drop = FALSE]] <- Aoffdiag
+         }
+         ret[sZ,sZ] <- Z
+         ret[sXc,NROW(Z) + sXr] <- t(X)
+         ret[NROW(Z) + sXr, sXc] <- X
+         return(ret)
+    }
     ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
     for (b in seq_len(B)) {
         H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu)
@@ -650,7 +715,16 @@ options(digits = 5)
 
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
+                        control = list(trace = trace, iter.max = 200,
+                                       eval.max = 200, rel.tol = 1e-10,
+                                       abs.tol = 1e-20, xf.tol = 1e-16),
+                        trace = FALSE, 
                         tol = sqrt(.Machine$double.eps), ...) {
+
+##1    if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))
+##1            stop(gettextf("%s needs package 'Matrix' correctly installed",
+##1                          "free1way"),
+##1                domain = NA)
 
     ### convert to three-way table
     xt <- x
@@ -732,11 +806,13 @@ options(digits = 5)
         lwr <- c(lwr, -Inf, rep.int(0, times = bC - 1L))
         if (NS) {
             ecdf0 <- cumsum(rowSums(xlist[[b]]))
-            ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]
+            ### ensure that 0 < ecdf0 < 1 such that quantiles exist
+            ecdf0 <- pmax(1, ecdf0[-length(ecdf0)]) / (max(ecdf0) + 1)
             Qecdf <- Q(ecdf0)
-            bstart <- log(diff(Qecdf))
-            start <- c(start, Qecdf[1], bstart)
-            start[!is.finite(start)] <- 0
+    ##1        bstart <- log(diff(Qecdf))
+    ##1        start <- c(start, Qecdf[1], bstart)
+            start <- c(start, Qecdf)
+    ##1        start[!is.finite(start)] <- 0
         }
     }
     
@@ -754,18 +830,24 @@ options(digits = 5)
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
-        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        intercepts <- c(-Inf, parm[- bidx], Inf)
         tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                           ncol = ncol(x),
                                           byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
-            prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
         } else {
-            prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                        Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+        ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- Ftmb[- 1L, , drop = FALSE] - 
+                   Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
+        if (any(prb < .Machine$double.eps^10)) 
+            return(Inf)
         return(- sum(x * log(prb)))
     }
     
@@ -774,16 +856,20 @@ options(digits = 5)
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
-        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        intercepts <- c(-Inf, parm[- bidx], Inf)
         tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                           ncol = ncol(x),
                                           byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
-            prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
         } else {
-            prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                        Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+        ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- Ftmb[- 1L, , drop = FALSE] - 
+                   Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
         
@@ -796,13 +882,14 @@ options(digits = 5)
         ret <- numeric(length(parm))
         ret[bidx] <- colSums(zl)[-1L] -
                      colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
-        ret[-bidx] <- Reduce("+", 
-                             lapply(1:ncol(x), 
-                                 function(j) {
-                                     .rcr(zu[-nrow(zu),j]) - 
-                                     .rcr(zl[-1,j])
-                                 })
-                             )
+    ##1    ret[-bidx] <- Reduce("+", 
+    ##1                         lapply(1:ncol(x), 
+    ##1                            function(j) {
+    ##1                                 .rcr(zu[-nrow(zu),j]) - 
+    ##1                                 .rcr(zl[-1,j])
+    ##1                             })
+    ##1                         )
+        ret[- bidx] <- rowSums(zu[-nrow(zu),,drop = FALSE] - zl[-1,,drop = FALSE])
         - ret
     }
     
@@ -811,16 +898,20 @@ options(digits = 5)
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
-        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        intercepts <- c(-Inf, parm[- bidx], Inf)
         tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                           ncol = ncol(x),
                                           byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
-            prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
         } else {
-            prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                        Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+        ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- Ftmb[- 1L, , drop = FALSE] - 
+                   Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
         
@@ -836,20 +927,24 @@ options(digits = 5)
     }
     
     
-    .hes <- function(parm, x, mu = 0, rightcensored = FALSE) {
+    .hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {
         
         bidx <- seq_len(ncol(x) - 1L)
         delta <- c(0, mu + parm[bidx])
-        intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        ##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
+        intercepts <- c(-Inf, parm[- bidx], Inf)
         tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                           ncol = ncol(x),
                                           byrow = TRUE)
         Ftmb <- F(tmb)
         if (rightcensored) {
-            prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
         } else {
-            prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-                        Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+        ##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
+        ##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
+            prb <- Ftmb[- 1L, , drop = FALSE] - 
+                   Ftmb[- nrow(Ftmb), , drop = FALSE]
         } 
         
 
@@ -909,14 +1004,18 @@ options(digits = 5)
         
 
         if (length(Adiag) > 1L) {
-            if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))
-                    stop(gettextf("%s needs package 'Matrix' correctly installed",
-                                  "free1way"),
-                         domain = NA)
-            A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), 
-                                    symmetric = TRUE)
+            if (!isFALSE(full)) {
+                A <- list(Adiag = Adiag, Aoffdiag = Aoffdiag)
+            } else {
+                A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), 
+                                        symmetric = TRUE)
+            }
         } else {
-            A <- matrix(Adiag)
+            if (!isFALSE(full)) {
+                A <- list(Adiag = Adiag, Aoffdiag = NULL)
+            } else {
+                A <- matrix(Adiag)
+            }
         }
         return(list(A = A, X = X, Z = Z))
     }
@@ -961,7 +1060,7 @@ options(digits = 5)
     }
     
     
-    .shes <- function(parm, x, mu = 0, xrc = NULL) {
+    .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE) {
         
         C <- sapply(x, NROW) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
@@ -971,6 +1070,48 @@ options(digits = 5)
         delta <- parm[bidx]
         intercepts <- split(parm[-bidx], sidx)
         
+        if (!isFALSE(ret <- full)) {
+            ret <- matrix(0, nrow = length(parm), ncol = length(parm))
+            for (b in seq_len(B)) {
+                H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu, full = full)
+                if (!is.null(xrc)) {
+                    Hrc <- .hes(c(delta, intercepts[[b]]), xrc[[b]], mu = mu, 
+                                rightcensored = TRUE, full = full)
+                    H$X <- H$X + Hrc$X
+                    H$A$Adiag <- H$A$Adiag + Hrc$A$Adiag
+                    H$A$Aoffdiag <- H$A$Aoffdiag + Hrc$A$Aoffdiag
+                    H$Z <- H$Z + Hrc$Z
+                }
+                if (b == 1L) {
+                    Adiag <- H$A$Adiag
+                    Aoffdiag <- H$A$Aoffdiag
+                    X <- H$X
+                    Z <- H$Z
+                } else {
+                    Adiag <- c(Adiag, H$A$Adiag) ### Matrix::bdiag(A, H$A)
+                    Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag) ### Matrix::bdiag(A, H$A)
+                    X <- rbind(X, H$X)
+                    Z <- Z + H$Z
+                }
+             }
+             sA <- seq_along(Adiag)
+             sAo <- seq_along(Aoffdiag)
+             sZ <- seq_len(NROW(Z))
+             sXr <- seq_len(NROW(X))
+             sXc <- seq_len(NCOL(X))
+
+             idx <- matrix(NROW(Z) + cbind(sA, sA), ncol = 2)
+             ret[idx] <- Adiag
+             if (!is.null(Aoffdiag)) {
+                 idx <- matrix(NROW(Z) + cbind(sA[-1], sA[-length(sA)]), ncol = 2)
+                 ret[idx] <- Aoffdiag
+                 ret[idx[,2:1,drop = FALSE]] <- Aoffdiag
+             }
+             ret[sZ,sZ] <- Z
+             ret[sXc,NROW(Z) + sXr] <- t(X)
+             ret[NROW(Z) + sXr, sXc] <- X
+             return(ret)
+        }
         ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
         for (b in seq_len(B)) {
             H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu)
@@ -1015,7 +1156,7 @@ options(digits = 5)
     
     
     fn <- function(par) {
-        par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
+    ##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
         ret <- .snll(par, x = xlist, mu = mu)
         if (!is.null(xrc))
             ret <- ret + .snll(par, x = xrclist, mu = mu, 
@@ -1023,13 +1164,29 @@ options(digits = 5)
         return(ret)
     }
     gr <- function(par) {
-        par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
+    ##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
         ret <- .snsc(par, x = xlist, mu = mu)
         if (!is.null(xrc))
             ret <- ret + .snsc(par, x = xrclist, mu = mu, 
                                rightcensored = TRUE)
-        par[!is.finite(lwr)] <- 1
-        return(ret * par)
+    ##1    par[!is.finite(lwr)] <- 1
+    ##1    return(ret * par)
+        return(ret)
+    }
+
+    ### allocate memory for hessian
+    Hess <- matrix(0, nrow = length(start), ncol = length(start))
+
+    he <- function(par) {
+    ##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
+        if (!is.null(xrc)) {
+            ret <- .shes(par, x = xlist, mu = mu, xrc = xrclist, full = Hess)
+        } else {
+            ret <- .shes(par, x = xlist, mu = mu, full = Hess)
+        }
+    ##1    par[!is.finite(lwr)] <- 1
+    ##1    return(ret * par)
+        return(ret)
     }
     .profile <- function(start, fix = seq_len(K - 1)) {
         if (!all(fix %in% seq_len(K - 1)))
@@ -1037,41 +1194,68 @@ options(digits = 5)
                           "free1way"),
                          domain = NA)
         delta <- start[fix]
-        opargs <- c(list(par = start[-fix], 
-                         fn = function(par) {
+    ##1    opargs <- c(list(par = start[-fix], 
+    ##                     fn = function(par) {
+    ##                         p <- numeric(length(par) + length(fix))
+    ##                         p[fix] <- delta
+    ##                         p[-fix] <- par
+    ##                         fn(p)
+    ##                     },
+    ##                     gr = function(par) {
+    ##                         p <- numeric(length(par) + length(fix))
+    ##                         p[fix] <- delta
+    ##                         p[-fix] <- par
+    ##                         gr(p)[-fix]
+    ##                     },
+    ##                     method = "BFGS", 
+    ##                     hessian = FALSE),
+    ##                     list(...))
+        opargs <- list(start = start[-fix], 
+                         objective = function(par) {
                              p <- numeric(length(par) + length(fix))
                              p[fix] <- delta
                              p[-fix] <- par
                              fn(p)
                          },
-                         gr = function(par) {
+                         gradient = function(par) {
                              p <- numeric(length(par) + length(fix))
                              p[fix] <- delta
                              p[-fix] <- par
                              gr(p)[-fix]
                          },
-                         method = "BFGS", 
-                         hessian = FALSE),
-                         list(...))
+                         hessian = function(par) {
+                             p <- numeric(length(par) + length(fix))
+                             p[fix] <- delta
+                             p[-fix] <- par
+                             he(p)[-fix, -fix, drop = FALSE]
+                         })
+        opargs$control <- control
         
-        maxit <- 100
+        maxit <- control$iter.max
         while(maxit < 10001) {
-           ret <- do.call("optim", opargs)
+        ##1   ret <- do.call("optim", opargs)
+           ret <- do.call("nlminb", opargs)
            maxit <- 5 * maxit
            if (ret$convergence > 0) {
                if (is.null(opargs$control))
-                   opargs$control <- list(maxit = maxit)
+        ##1           opargs$control <- list(maxit = maxit)
+                   opargs$control <- list(eval.max = maxit)
                 else 
-                   opargs$control$maxit <- maxit
-               opargs$par <- ret$par
+        ##1           opargs$control$maxit <- maxit
+                   opargs$control$eval.max <- maxit
+                   opargs$control$iter.max <- maxit
+        ##1       opargs$par <- ret$par
+                  opargs$start <- ret$par
            } else {
                break()
            }
         }
         if (ret$convergence > 0)
-            stop(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
+            warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
                           "free1way"),
                              domain = NA)
+        ret$value <- ret$objective
+        ret$objective <- NULL
         
         p <- numeric(length(start))
         p[fix] <- delta
@@ -1082,29 +1266,41 @@ options(digits = 5)
     
     
     if (!length(fix)) {
-        opargs <- c(list(par = start, fn = fn, gr = gr,
-                         # lower = lwr, 
-                         method = "BFGS", 
-                         hessian = FALSE), list(...))
+    ##1    opargs <- c(list(par = start, fn = fn, gr = gr,
+    ##                     # lower = lwr, 
+    ##                     method = "BFGS", 
+    ##                     hessian = FALSE), list(...))
+        opargs <- list(start = start, 
+                       objective = fn, 
+                       gradient = gr,
+                       hessian = he)
+        opargs$control <- control
         
-        maxit <- 100
+        maxit <- control$iter.max
         while(maxit < 10001) {
-           ret <- do.call("optim", opargs)
+        ##1   ret <- do.call("optim", opargs)
+           ret <- do.call("nlminb", opargs)
            maxit <- 5 * maxit
            if (ret$convergence > 0) {
                if (is.null(opargs$control))
-                   opargs$control <- list(maxit = maxit)
+        ##1           opargs$control <- list(maxit = maxit)
+                   opargs$control <- list(eval.max = maxit)
                 else 
-                   opargs$control$maxit <- maxit
-               opargs$par <- ret$par
+        ##1           opargs$control$maxit <- maxit
+                   opargs$control$eval.max <- maxit
+                   opargs$control$iter.max <- maxit
+        ##1       opargs$par <- ret$par
+                  opargs$start <- ret$par
            } else {
                break()
            }
         }
         if (ret$convergence > 0)
-            stop(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
+            warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
                           "free1way"),
                              domain = NA)
+        ret$value <- ret$objective
+        ret$objective <- NULL
         
     } else if (length(fix) == length(start)) {
         ret <- list(par = start, 
@@ -1125,7 +1321,7 @@ options(digits = 5)
     names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
     par <- ret$par
-    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
+    ##1 par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
 
     if (score) {
         ret$negscore <- .snsc(par, x = xlist, mu = mu)[parm]
@@ -1439,29 +1635,33 @@ groups:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap1}\raggedright\small
-\NWtarget{nuweb3a}{} $\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize {3a}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@bidx <- seq_len(ncol(x) - 1L)@\\
 \mbox{}\verb@delta <- c(0, mu + parm[bidx])@\\
-\mbox{}\verb@intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)@\\
+\mbox{}\verb@##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)@\\
+\mbox{}\verb@intercepts <- c(-Inf, parm[- bidx], Inf)@\\
 \mbox{}\verb@tmb <- intercepts - matrix(delta, nrow = length(intercepts),  @\\
 \mbox{}\verb@                                  ncol = ncol(x),@\\
 \mbox{}\verb@                                  byrow = TRUE)@\\
 \mbox{}\verb@Ftmb <- F(tmb)@\\
 \mbox{}\verb@if (rightcensored) {@\\
-\mbox{}\verb@    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))@\\
+\mbox{}\verb@##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))@\\
+\mbox{}\verb@    prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]@\\
 \mbox{}\verb@} else {@\\
-\mbox{}\verb@    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - @\\
-\mbox{}\verb@                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))@\\
+\mbox{}\verb@##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - @\\
+\mbox{}\verb@##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))@\\
+\mbox{}\verb@    prb <- Ftmb[- 1L, , drop = FALSE] - @\\
+\mbox{}\verb@           Ftmb[- nrow(Ftmb), , drop = FALSE]@\\
 \mbox{}\verb@} @\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb3b}{3b}\NWlink{nuweb4b}{, 4b}\NWlink{nuweb5a}{, 5a}\NWlink{nuweb7}{, 7}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 
 \item{}
 \end{list}
@@ -1476,12 +1676,14 @@ the log-probabilities
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap2}\raggedright\small
-\NWtarget{nuweb3b}{} $\langle\,${\itshape negative logLik}\nobreak\ {\footnotesize {3b}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape negative logLik}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.nll <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb3a}{3a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    if (any(prb < .Machine$double.eps^10)) @\\
+\mbox{}\verb@        return(Inf)@\\
 \mbox{}\verb@    return(- sum(x * log(prb)))@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -1489,7 +1691,7 @@ the log-probabilities
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -1514,7 +1716,7 @@ We begin computing the ratio of $f(\vartheta_{c,1} -
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap3}\raggedright\small
-\NWtarget{nuweb4a}{} $\langle\,${\itshape density prob ratio}\nobreak\ {\footnotesize {4a}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape density prob ratio}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1527,7 +1729,7 @@ We begin computing the ratio of $f(\vartheta_{c,1} -
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb4b}{4b}\NWlink{nuweb5a}{, 5a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 
 \item{}
 \end{list}
@@ -1537,24 +1739,25 @@ and then compute the negative score function:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap4}\raggedright\small
-\NWtarget{nuweb4b}{} $\langle\,${\itshape negative score}\nobreak\ {\footnotesize {4b}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape negative score}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.nsc <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb3a}{3a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape density prob ratio}\nobreak\ {\footnotesize \NWlink{nuweb4a}{4a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape density prob ratio}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ret <- numeric(length(parm))@\\
 \mbox{}\verb@    ret[bidx] <- colSums(zl)[-1L] -@\\
 \mbox{}\verb@                 colSums(zu[-nrow(zu),,drop = FALSE])[-1L]@\\
-\mbox{}\verb@    ret[-bidx] <- Reduce("+", @\\
-\mbox{}\verb@                         lapply(1:ncol(x), @\\
-\mbox{}\verb@                             function(j) {@\\
-\mbox{}\verb@                                 .rcr(zu[-nrow(zu),j]) - @\\
-\mbox{}\verb@                                 .rcr(zl[-1,j])@\\
-\mbox{}\verb@                             })@\\
-\mbox{}\verb@                         )@\\
+\mbox{}\verb@##1    ret[-bidx] <- Reduce("+", @\\
+\mbox{}\verb@##1                         lapply(1:ncol(x), @\\
+\mbox{}\verb@##1                            function(j) {@\\
+\mbox{}\verb@##1                                 .rcr(zu[-nrow(zu),j]) - @\\
+\mbox{}\verb@##1                                 .rcr(zl[-1,j])@\\
+\mbox{}\verb@##1                             })@\\
+\mbox{}\verb@##1                         )@\\
+\mbox{}\verb@    ret[- bidx] <- rowSums(zu[-nrow(zu),,drop = FALSE] - zl[-1,,drop = FALSE])@\\
 \mbox{}\verb@    - ret@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -1562,7 +1765,7 @@ and then compute the negative score function:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -1573,7 +1776,7 @@ intercepts needs this small helper function:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap5}\raggedright\small
-\NWtarget{nuweb4c}{} $\langle\,${\itshape cumsumrev}\nobreak\ {\footnotesize {4c}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape cumsumrev}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1589,7 +1792,7 @@ intercepts needs this small helper function:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -1613,13 +1816,13 @@ zero:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap6}\raggedright\small
-\NWtarget{nuweb5a}{} $\langle\,${\itshape negative score residuals}\nobreak\ {\footnotesize {5a}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape negative score residuals}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.nsr <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb3a}{3a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape density prob ratio}\nobreak\ {\footnotesize \NWlink{nuweb4a}{4a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape density prob ratio}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ret <- rowSums(zl - zu) / rowSums(x)@\\
 \mbox{}\verb@    ret[!is.finite(ret)] <- 0@\\
@@ -1630,7 +1833,7 @@ zero:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -1659,7 +1862,7 @@ not being present under right-censoring:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap7}\raggedright\small
-\NWtarget{nuweb5b}{} $\langle\,${\itshape Hessian prep}\nobreak\ {\footnotesize {5b}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape Hessian prep}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1685,7 +1888,7 @@ not being present under right-censoring:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb7}{7}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -1694,7 +1897,7 @@ not being present under right-censoring:
 The off-diagonal elements of $\mA$ are now available as
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap8}\raggedright\small
-\NWtarget{nuweb5c}{} $\langle\,${\itshape off-diagonal elements for Hessian of intercepts}\nobreak\ {\footnotesize {5c}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape off-diagonal elements for Hessian of intercepts}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1705,7 +1908,7 @@ The off-diagonal elements of $\mA$ are now available as
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb7}{7}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -1714,7 +1917,7 @@ The off-diagonal elements of $\mA$ are now available as
 and the diagonal elements of $\mA$ as
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap9}\raggedright\small
-\NWtarget{nuweb6a}{} $\langle\,${\itshape diagonal elements for Hessian of intercepts}\nobreak\ {\footnotesize {6a}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape diagonal elements for Hessian of intercepts}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1730,7 +1933,7 @@ and the diagonal elements of $\mA$ as
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb7}{7}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -1741,7 +1944,7 @@ control group ($k = 1$) are irrelevant, we remove these first
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap10}\raggedright\small
-\NWtarget{nuweb6b}{} $\langle\,${\itshape intercept / shift contributions to Hessian}\nobreak\ {\footnotesize {6b}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape intercept / shift contributions to Hessian}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1769,7 +1972,7 @@ control group ($k = 1$) are irrelevant, we remove these first
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb7}{7}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -1783,28 +1986,32 @@ represent this matrix:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap11}\raggedright\small
-\NWtarget{nuweb7}{} $\langle\,${\itshape Hessian}\nobreak\ {\footnotesize {7}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape Hessian}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.hes <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb3a}{3a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@.hes <- function(parm, x, mu = 0, rightcensored = FALSE, full = FALSE) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape parm to prob}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Hessian prep}\nobreak\ {\footnotesize \NWlink{nuweb5b}{5b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Hessian prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape off-diagonal elements for Hessian of intercepts}\nobreak\ {\footnotesize \NWlink{nuweb5c}{5c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape diagonal elements for Hessian of intercepts}\nobreak\ {\footnotesize \NWlink{nuweb6a}{6a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape intercept / shift contributions to Hessian}\nobreak\ {\footnotesize \NWlink{nuweb6b}{6b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape off-diagonal elements for Hessian of intercepts}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape diagonal elements for Hessian of intercepts}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape intercept / shift contributions to Hessian}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (length(Adiag) > 1L) {@\\
-\mbox{}\verb@        if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))@\\
-\mbox{}\verb@                stop(gettextf("%s needs package 'Matrix' correctly installed",@\\
-\mbox{}\verb@                              "free1way"),@\\
-\mbox{}\verb@                     domain = NA)@\\
-\mbox{}\verb@        A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), @\\
-\mbox{}\verb@                                symmetric = TRUE)@\\
+\mbox{}\verb@        if (!isFALSE(full)) {@\\
+\mbox{}\verb@            A <- list(Adiag = Adiag, Aoffdiag = Aoffdiag)@\\
+\mbox{}\verb@        } else {@\\
+\mbox{}\verb@            A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), @\\
+\mbox{}\verb@                                    symmetric = TRUE)@\\
+\mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        A <- matrix(Adiag)@\\
+\mbox{}\verb@        if (!isFALSE(full)) {@\\
+\mbox{}\verb@            A <- list(Adiag = Adiag, Aoffdiag = NULL)@\\
+\mbox{}\verb@        } else {@\\
+\mbox{}\verb@            A <- matrix(Adiag)@\\
+\mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    return(list(A = A, X = X, Z = Z))@\\
 \mbox{}\verb@}@\\
@@ -1813,7 +2020,7 @@ represent this matrix:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -1883,7 +2090,7 @@ tables (yet still allowing zero row sums):
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap12}\raggedright\small
-\NWtarget{nuweb9}{} $\langle\,${\itshape table2list body}\nobreak\ {\footnotesize {9}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape table2list body}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1940,7 +2147,7 @@ tables (yet still allowing zero row sums):
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb10a}{10a}\NWlink{nuweb20b}{, 20b}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 
 \item{}
 \end{list}
@@ -1948,13 +2155,13 @@ tables (yet still allowing zero row sums):
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap13}\raggedright\small
-\NWtarget{nuweb10a}{} $\langle\,${\itshape table2list}\nobreak\ {\footnotesize {10a}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape table2list}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.table2list <- function(x) {@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape table2list body}\nobreak\ {\footnotesize \NWlink{nuweb9}{9}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape table2list body}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ret <- list(xlist = xlist)@\\
 \mbox{}\verb@    if (!is.null(xrc))@\\
@@ -1978,7 +2185,7 @@ for each stratum, the corresponding contrasts of the intercept parameters:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap14}\raggedright\small
-\NWtarget{nuweb10b}{} $\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize {10b}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -1994,7 +2201,7 @@ for each stratum, the corresponding contrasts of the intercept parameters:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb10c}{10c}\NWlink{nuweb11a}{, 11a}\NWlink{nuweb11b}{b}\NWlink{nuweb12}{, 12}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 
 \item{}
 \end{list}
@@ -2005,12 +2212,12 @@ corresponding log-likelihoods:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap15}\raggedright\small
-\NWtarget{nuweb10c}{} $\langle\,${\itshape stratified negative logLik}\nobreak\ {\footnotesize {10c}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape stratified negative logLik}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.snll <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb10b}{10b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    ret <- 0@\\
 \mbox{}\verb@    for (b in seq_len(B))@\\
 \mbox{}\verb@        ret <- ret + .nll(c(delta, intercepts[[b]]), x[[b]], mu = mu,@\\
@@ -2022,7 +2229,7 @@ corresponding log-likelihoods:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2034,12 +2241,12 @@ intercept parameters are only concatenated:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap16}\raggedright\small
-\NWtarget{nuweb11a}{} $\langle\,${\itshape stratified negative score}\nobreak\ {\footnotesize {11a}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape stratified negative score}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb10b}{10b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    ret <- numeric(length(bidx))@\\
 \mbox{}\verb@    for (b in seq_len(B)) {@\\
 \mbox{}\verb@        nsc <- .nsc(c(delta, intercepts[[b]]), x[[b]], mu = mu,@\\
@@ -2054,7 +2261,7 @@ intercept parameters are only concatenated:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2065,12 +2272,12 @@ row of zeros in the table:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap17}\raggedright\small
-\NWtarget{nuweb11b}{} $\langle\,${\itshape stratified negative score residual}\nobreak\ {\footnotesize {11b}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape stratified negative score residual}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb10b}{10b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    ret <- c()@\\
 \mbox{}\verb@    for (b in seq_len(B)) {@\\
 \mbox{}\verb@        idx <- attr(x[[b]], "idx")@\\
@@ -2086,7 +2293,7 @@ row of zeros in the table:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2121,12 +2328,54 @@ shift- and intercept parameters first:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap18}\raggedright\small
-\NWtarget{nuweb12}{} $\langle\,${\itshape stratified Hessian}\nobreak\ {\footnotesize {12}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape stratified Hessian}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@.shes <- function(parm, x, mu = 0, xrc = NULL) {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb10b}{10b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratum prep}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    if (!isFALSE(ret <- full)) {@\\
+\mbox{}\verb@        ret <- matrix(0, nrow = length(parm), ncol = length(parm))@\\
+\mbox{}\verb@        for (b in seq_len(B)) {@\\
+\mbox{}\verb@            H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu, full = full)@\\
+\mbox{}\verb@            if (!is.null(xrc)) {@\\
+\mbox{}\verb@                Hrc <- .hes(c(delta, intercepts[[b]]), xrc[[b]], mu = mu, @\\
+\mbox{}\verb@                            rightcensored = TRUE, full = full)@\\
+\mbox{}\verb@                H$X <- H$X + Hrc$X@\\
+\mbox{}\verb@                H$A$Adiag <- H$A$Adiag + Hrc$A$Adiag@\\
+\mbox{}\verb@                H$A$Aoffdiag <- H$A$Aoffdiag + Hrc$A$Aoffdiag@\\
+\mbox{}\verb@                H$Z <- H$Z + Hrc$Z@\\
+\mbox{}\verb@            }@\\
+\mbox{}\verb@            if (b == 1L) {@\\
+\mbox{}\verb@                Adiag <- H$A$Adiag@\\
+\mbox{}\verb@                Aoffdiag <- H$A$Aoffdiag@\\
+\mbox{}\verb@                X <- H$X@\\
+\mbox{}\verb@                Z <- H$Z@\\
+\mbox{}\verb@            } else {@\\
+\mbox{}\verb@                Adiag <- c(Adiag, H$A$Adiag) ### Matrix::bdiag(A, H$A)@\\
+\mbox{}\verb@                Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag) ### Matrix::bdiag(A, H$A)@\\
+\mbox{}\verb@                X <- rbind(X, H$X)@\\
+\mbox{}\verb@                Z <- Z + H$Z@\\
+\mbox{}\verb@            }@\\
+\mbox{}\verb@         }@\\
+\mbox{}\verb@         sA <- seq_along(Adiag)@\\
+\mbox{}\verb@         sAo <- seq_along(Aoffdiag)@\\
+\mbox{}\verb@         sZ <- seq_len(NROW(Z))@\\
+\mbox{}\verb@         sXr <- seq_len(NROW(X))@\\
+\mbox{}\verb@         sXc <- seq_len(NCOL(X))@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@         idx <- matrix(NROW(Z) + cbind(sA, sA), ncol = 2)@\\
+\mbox{}\verb@         ret[idx] <- Adiag@\\
+\mbox{}\verb@         if (!is.null(Aoffdiag)) {@\\
+\mbox{}\verb@             idx <- matrix(NROW(Z) + cbind(sA[-1], sA[-length(sA)]), ncol = 2)@\\
+\mbox{}\verb@             ret[idx] <- Aoffdiag@\\
+\mbox{}\verb@             ret[idx[,2:1,drop = FALSE]] <- Aoffdiag@\\
+\mbox{}\verb@         }@\\
+\mbox{}\verb@         ret[sZ,sZ] <- Z@\\
+\mbox{}\verb@         ret[sXc,NROW(Z) + sXr] <- t(X)@\\
+\mbox{}\verb@         ret[NROW(Z) + sXr, sXc] <- X@\\
+\mbox{}\verb@         return(ret)@\\
+\mbox{}\verb@    }@\\
 \mbox{}\verb@    ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))@\\
 \mbox{}\verb@    for (b in seq_len(B)) {@\\
 \mbox{}\verb@        H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu)@\\
@@ -2151,7 +2400,7 @@ shift- and intercept parameters first:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2188,15 +2437,15 @@ outcomes, it doesn't seem beneficial to extend this richer class.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap19}\raggedright\small
-\NWtarget{nuweb14}{} \verb@"linkfun.R"@\nobreak\ {\footnotesize {14}}$\equiv$
+\NWtarget{nuweb?}{} \verb@"linkfun.R"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape linkfun}\nobreak\ {\footnotesize \NWlink{nuweb15}{15}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape logit}\nobreak\ {\footnotesize \NWlink{nuweb16}{16}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape probit}\nobreak\ {\footnotesize \NWlink{nuweb19}{19}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape cloglog}\nobreak\ {\footnotesize \NWlink{nuweb18}{18}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape loglog}\nobreak\ {\footnotesize \NWlink{nuweb17}{17}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape linkfun}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape logit}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape probit}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape cloglog}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape loglog}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2209,7 +2458,7 @@ outcomes, it doesn't seem beneficial to extend this richer class.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap20}\raggedright\small
-\NWtarget{nuweb15}{} $\langle\,${\itshape linkfun}\nobreak\ {\footnotesize {15}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape linkfun}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2259,7 +2508,7 @@ outcomes, it doesn't seem beneficial to extend this richer class.
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb14}{14}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2270,7 +2519,7 @@ to Wilcoxon or Kruskal-Wallis type score residuals:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap21}\raggedright\small
-\NWtarget{nuweb16}{} $\langle\,${\itshape logit}\nobreak\ {\footnotesize {16}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape logit}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2313,7 +2562,7 @@ to Wilcoxon or Kruskal-Wallis type score residuals:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb14}{14}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2329,7 +2578,7 @@ against Lehmann alternatives:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap22}\raggedright\small
-\NWtarget{nuweb17}{} $\langle\,${\itshape loglog}\nobreak\ {\footnotesize {17}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape loglog}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2380,7 +2629,7 @@ against Lehmann alternatives:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb14}{14}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2392,7 +2641,7 @@ alternatives:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap23}\raggedright\small
-\NWtarget{nuweb18}{} $\langle\,${\itshape cloglog}\nobreak\ {\footnotesize {18}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape cloglog}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2443,7 +2692,7 @@ alternatives:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb14}{14}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2455,7 +2704,7 @@ that is, differences on a latent normal scale with variance one:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap24}\raggedright\small
-\NWtarget{nuweb19}{} $\langle\,${\itshape probit}\nobreak\ {\footnotesize {19}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape probit}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2480,7 +2729,7 @@ that is, differences on a latent normal scale with variance one:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb14}{14}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2491,22 +2740,22 @@ that is, differences on a latent normal scale with variance one:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap25}\raggedright\small
-\NWtarget{nuweb20a}{} \verb@"free1way.R"@\nobreak\ {\footnotesize {20a}}$\equiv$
+\NWtarget{nuweb?}{} \verb@"free1way.R"@\nobreak\ {\footnotesize {?}}$\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape ML estimation}\nobreak\ {\footnotesize \NWlink{nuweb25}{25}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way}\nobreak\ {\footnotesize \NWlink{nuweb34}{34}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way methods}\nobreak\ {\footnotesize \NWlink{nuweb40}{40}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way print}\nobreak\ {\footnotesize \NWlink{nuweb41}{41}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize \NWlink{nuweb42}{42}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way confint}\nobreak\ {\footnotesize \NWlink{nuweb43}{43}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way formula}\nobreak\ {\footnotesize \NWlink{nuweb36}{36}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize \NWlink{nuweb38}{38}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize \NWlink{nuweb39}{39}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape ppplot}\nobreak\ {\footnotesize \NWlink{nuweb60}{60}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape rfree1way}\nobreak\ {\footnotesize \NWlink{nuweb64}{64}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape power}\nobreak\ {\footnotesize \NWlink{nuweb71}{71}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape ML estimation}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way methods}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way print}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way confint}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way formula}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape ppplot}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape rfree1way}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape power}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
@@ -2527,11 +2776,11 @@ after merging all treatment groups:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap26}\raggedright\small
-\NWtarget{nuweb20b}{} $\langle\,${\itshape setup and starting values}\nobreak\ {\footnotesize {20b}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape setup and starting values}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape table2list body}\nobreak\ {\footnotesize \NWlink{nuweb9}{9}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape table2list body}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (NS <- is.null(start))@\\
@@ -2542,11 +2791,13 @@ after merging all treatment groups:
 \mbox{}\verb@    lwr <- c(lwr, -Inf, rep.int(0, times = bC - 1L))@\\
 \mbox{}\verb@    if (NS) {@\\
 \mbox{}\verb@        ecdf0 <- cumsum(rowSums(xlist[[b]]))@\\
-\mbox{}\verb@        ecdf0 <- ecdf0[-length(ecdf0)] / ecdf0[length(ecdf0)]@\\
+\mbox{}\verb@        ### ensure that 0 < ecdf0 < 1 such that quantiles exist@\\
+\mbox{}\verb@        ecdf0 <- pmax(1, ecdf0[-length(ecdf0)]) / (max(ecdf0) + 1)@\\
 \mbox{}\verb@        Qecdf <- Q(ecdf0)@\\
-\mbox{}\verb@        bstart <- log(diff(Qecdf))@\\
-\mbox{}\verb@        start <- c(start, Qecdf[1], bstart)@\\
-\mbox{}\verb@        start[!is.finite(start)] <- 0@\\
+\mbox{}\verb@##1        bstart <- log(diff(Qecdf))@\\
+\mbox{}\verb@##1        start <- c(start, Qecdf[1], bstart)@\\
+\mbox{}\verb@        start <- c(start, Qecdf)@\\
+\mbox{}\verb@##1        start[!is.finite(start)] <- 0@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -2554,7 +2805,7 @@ after merging all treatment groups:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2570,34 +2821,41 @@ we encounter optimisation issues and restart at the current solution:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap27}\raggedright\small
-\NWtarget{nuweb21}{} $\langle\,${\itshape do optim}\nobreak\ {\footnotesize {21}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape do optim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
-\mbox{}\verb@maxit <- 100@\\
+\mbox{}\verb@maxit <- control$iter.max@\\
 \mbox{}\verb@while(maxit < 10001) {@\\
-\mbox{}\verb@   ret <- do.call("optim", opargs)@\\
+\mbox{}\verb@##1   ret <- do.call("optim", opargs)@\\
+\mbox{}\verb@   ret <- do.call("nlminb", opargs)@\\
 \mbox{}\verb@   maxit <- 5 * maxit@\\
 \mbox{}\verb@   if (ret$convergence > 0) {@\\
 \mbox{}\verb@       if (is.null(opargs$control))@\\
-\mbox{}\verb@           opargs$control <- list(maxit = maxit)@\\
+\mbox{}\verb@##1           opargs$control <- list(maxit = maxit)@\\
+\mbox{}\verb@           opargs$control <- list(eval.max = maxit)@\\
 \mbox{}\verb@        else @\\
-\mbox{}\verb@           opargs$control$maxit <- maxit@\\
-\mbox{}\verb@       opargs$par <- ret$par@\\
+\mbox{}\verb@##1           opargs$control$maxit <- maxit@\\
+\mbox{}\verb@           opargs$control$eval.max <- maxit@\\
+\mbox{}\verb@           opargs$control$iter.max <- maxit@\\
+\mbox{}\verb@##1       opargs$par <- ret$par@\\
+\mbox{}\verb@          opargs$start <- ret$par@\\
 \mbox{}\verb@   } else {@\\
 \mbox{}\verb@       break()@\\
 \mbox{}\verb@   }@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@if (ret$convergence > 0)@\\
-\mbox{}\verb@    stop(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),@\\
+\mbox{}\verb@    warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),@\\
 \mbox{}\verb@                  "free1way"),@\\
 \mbox{}\verb@                     domain = NA)@\\
+\mbox{}\verb@ret$value <- ret$objective@\\
+\mbox{}\verb@ret$objective <- NULL@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb22}{22}\NWlink{nuweb23}{, 23}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 
 \item{}
 \end{list}
@@ -2610,12 +2868,12 @@ defined first
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap28}\raggedright\small
-\NWtarget{nuweb22}{} $\langle\,${\itshape profile}\nobreak\ {\footnotesize {22}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape profile}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@fn <- function(par) {@\\
-\mbox{}\verb@    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])@\\
+\mbox{}\verb@##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])@\\
 \mbox{}\verb@    ret <- .snll(par, x = xlist, mu = mu)@\\
 \mbox{}\verb@    if (!is.null(xrc))@\\
 \mbox{}\verb@        ret <- ret + .snll(par, x = xrclist, mu = mu, @\\
@@ -2623,13 +2881,29 @@ defined first
 \mbox{}\verb@    return(ret)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@gr <- function(par) {@\\
-\mbox{}\verb@    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])@\\
+\mbox{}\verb@##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])@\\
 \mbox{}\verb@    ret <- .snsc(par, x = xlist, mu = mu)@\\
 \mbox{}\verb@    if (!is.null(xrc))@\\
 \mbox{}\verb@        ret <- ret + .snsc(par, x = xrclist, mu = mu, @\\
 \mbox{}\verb@                           rightcensored = TRUE)@\\
-\mbox{}\verb@    par[!is.finite(lwr)] <- 1@\\
-\mbox{}\verb@    return(ret * par)@\\
+\mbox{}\verb@##1    par[!is.finite(lwr)] <- 1@\\
+\mbox{}\verb@##1    return(ret * par)@\\
+\mbox{}\verb@    return(ret)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@### allocate memory for hessian@\\
+\mbox{}\verb@Hess <- matrix(0, nrow = length(start), ncol = length(start))@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@he <- function(par) {@\\
+\mbox{}\verb@##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])@\\
+\mbox{}\verb@    if (!is.null(xrc)) {@\\
+\mbox{}\verb@        ret <- .shes(par, x = xlist, mu = mu, xrc = xrclist, full = Hess)@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        ret <- .shes(par, x = xlist, mu = mu, full = Hess)@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@##1    par[!is.finite(lwr)] <- 1@\\
+\mbox{}\verb@##1    return(ret * par)@\\
+\mbox{}\verb@    return(ret)@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@.profile <- function(start, fix = seq_len(K - 1)) {@\\
 \mbox{}\verb@    if (!all(fix %in% seq_len(K - 1)))@\\
@@ -2637,23 +2911,43 @@ defined first
 \mbox{}\verb@                      "free1way"),@\\
 \mbox{}\verb@                     domain = NA)@\\
 \mbox{}\verb@    delta <- start[fix]@\\
-\mbox{}\verb@    opargs <- c(list(par = start[-fix], @\\
-\mbox{}\verb@                     fn = function(par) {@\\
+\mbox{}\verb@##1    opargs <- c(list(par = start[-fix], @\\
+\mbox{}\verb@##                     fn = function(par) {@\\
+\mbox{}\verb@##                         p <- numeric(length(par) + length(fix))@\\
+\mbox{}\verb@##                         p[fix] <- delta@\\
+\mbox{}\verb@##                         p[-fix] <- par@\\
+\mbox{}\verb@##                         fn(p)@\\
+\mbox{}\verb@##                     },@\\
+\mbox{}\verb@##                     gr = function(par) {@\\
+\mbox{}\verb@##                         p <- numeric(length(par) + length(fix))@\\
+\mbox{}\verb@##                         p[fix] <- delta@\\
+\mbox{}\verb@##                         p[-fix] <- par@\\
+\mbox{}\verb@##                         gr(p)[-fix]@\\
+\mbox{}\verb@##                     },@\\
+\mbox{}\verb@##                     method = "BFGS", @\\
+\mbox{}\verb@##                     hessian = FALSE),@\\
+\mbox{}\verb@##                     list(...))@\\
+\mbox{}\verb@    opargs <- list(start = start[-fix], @\\
+\mbox{}\verb@                     objective = function(par) {@\\
 \mbox{}\verb@                         p <- numeric(length(par) + length(fix))@\\
 \mbox{}\verb@                         p[fix] <- delta@\\
 \mbox{}\verb@                         p[-fix] <- par@\\
 \mbox{}\verb@                         fn(p)@\\
 \mbox{}\verb@                     },@\\
-\mbox{}\verb@                     gr = function(par) {@\\
+\mbox{}\verb@                     gradient = function(par) {@\\
 \mbox{}\verb@                         p <- numeric(length(par) + length(fix))@\\
 \mbox{}\verb@                         p[fix] <- delta@\\
 \mbox{}\verb@                         p[-fix] <- par@\\
 \mbox{}\verb@                         gr(p)[-fix]@\\
 \mbox{}\verb@                     },@\\
-\mbox{}\verb@                     method = "BFGS", @\\
-\mbox{}\verb@                     hessian = FALSE),@\\
-\mbox{}\verb@                     list(...))@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape do optim}\nobreak\ {\footnotesize \NWlink{nuweb21}{21}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                     hessian = function(par) {@\\
+\mbox{}\verb@                         p <- numeric(length(par) + length(fix))@\\
+\mbox{}\verb@                         p[fix] <- delta@\\
+\mbox{}\verb@                         p[-fix] <- par@\\
+\mbox{}\verb@                         he(p)[-fix, -fix, drop = FALSE]@\\
+\mbox{}\verb@                     })@\\
+\mbox{}\verb@    opargs$control <- control@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape do optim}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    p <- numeric(length(start))@\\
 \mbox{}\verb@    p[fix] <- delta@\\
 \mbox{}\verb@    p[-fix] <- ret$par@\\
@@ -2665,7 +2959,7 @@ defined first
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2678,16 +2972,21 @@ constants, and provide a profile version of the likelihood:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap29}\raggedright\small
-\NWtarget{nuweb23}{} $\langle\,${\itshape optim}\nobreak\ {\footnotesize {23}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape optim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@if (!length(fix)) {@\\
-\mbox{}\verb@    opargs <- c(list(par = start, fn = fn, gr = gr,@\\
-\mbox{}\verb@                     # lower = lwr, @\\
-\mbox{}\verb@                     method = "BFGS", @\\
-\mbox{}\verb@                     hessian = FALSE), list(...))@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape do optim}\nobreak\ {\footnotesize \NWlink{nuweb21}{21}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@##1    opargs <- c(list(par = start, fn = fn, gr = gr,@\\
+\mbox{}\verb@##                     # lower = lwr, @\\
+\mbox{}\verb@##                     method = "BFGS", @\\
+\mbox{}\verb@##                     hessian = FALSE), list(...))@\\
+\mbox{}\verb@    opargs <- list(start = start, @\\
+\mbox{}\verb@                   objective = fn, @\\
+\mbox{}\verb@                   gradient = gr,@\\
+\mbox{}\verb@                   hessian = he)@\\
+\mbox{}\verb@    opargs$control <- control@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape do optim}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@} else if (length(fix) == length(start)) {@\\
 \mbox{}\verb@    ret <- list(par = start, @\\
 \mbox{}\verb@                value = fn(start))@\\
@@ -2699,7 +2998,7 @@ constants, and provide a profile version of the likelihood:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2710,7 +3009,7 @@ negative residuals as requested:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap30}\raggedright\small
-\NWtarget{nuweb24}{} $\langle\,${\itshape post processing}\nobreak\ {\footnotesize {24}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape post processing}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2725,7 +3024,7 @@ negative residuals as requested:
 \mbox{}\verb@names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@par <- ret$par@\\
-\mbox{}\verb@par[is.finite(lwr)] <- exp(par[is.finite(lwr)])@\\
+\mbox{}\verb@##1 par[is.finite(lwr)] <- exp(par[is.finite(lwr)])@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@if (score) {@\\
 \mbox{}\verb@    ret$negscore <- .snsc(par, x = xlist, mu = mu)[parm]@\\
@@ -2770,7 +3069,7 @@ negative residuals as requested:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb25}{25}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2781,13 +3080,22 @@ class \code{free1wayML} for later use:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap31}\raggedright\small
-\NWtarget{nuweb25}{} $\langle\,${\itshape ML estimation}\nobreak\ {\footnotesize {25}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape ML estimation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, @\\
 \mbox{}\verb@                        residuals = TRUE, score = TRUE, hessian = TRUE, @\\
+\mbox{}\verb@                        control = list(trace = trace, iter.max = 200,@\\
+\mbox{}\verb@                                       eval.max = 200, rel.tol = 1e-10,@\\
+\mbox{}\verb@                                       abs.tol = 1e-20, xf.tol = 1e-16),@\\
+\mbox{}\verb@                        trace = FALSE, @\\
 \mbox{}\verb@                        tol = sqrt(.Machine$double.eps), ...) {@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@##1    if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))@\\
+\mbox{}\verb@##1            stop(gettextf("%s needs package 'Matrix' correctly installed",@\\
+\mbox{}\verb@##1                          "free1way"),@\\
+\mbox{}\verb@##1                domain = NA)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ### convert to three-way table@\\
 \mbox{}\verb@    xt <- x@\\
@@ -2808,19 +3116,19 @@ class \code{free1wayML} for later use:
 \mbox{}\verb@    f <- function(q) .d(link, x = q)@\\
 \mbox{}\verb@    fp <- function(q) .dd(link, x = q)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape setup and starting values}\nobreak\ {\footnotesize \NWlink{nuweb20b}{20b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape cumsumrev}\nobreak\ {\footnotesize \NWlink{nuweb4c}{4c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape negative logLik}\nobreak\ {\footnotesize \NWlink{nuweb3b}{3b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape negative score}\nobreak\ {\footnotesize \NWlink{nuweb4b}{4b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape negative score residuals}\nobreak\ {\footnotesize \NWlink{nuweb5a}{5a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Hessian}\nobreak\ {\footnotesize \NWlink{nuweb7}{7}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified negative logLik}\nobreak\ {\footnotesize \NWlink{nuweb10c}{10c}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified negative score}\nobreak\ {\footnotesize \NWlink{nuweb11a}{11a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified Hessian}\nobreak\ {\footnotesize \NWlink{nuweb12}{12}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified negative score residual}\nobreak\ {\footnotesize \NWlink{nuweb11b}{11b}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape profile}\nobreak\ {\footnotesize \NWlink{nuweb22}{22}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape optim}\nobreak\ {\footnotesize \NWlink{nuweb23}{23}}$\,\rangle$}\verb@ @\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape post processing}\nobreak\ {\footnotesize \NWlink{nuweb24}{24}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape setup and starting values}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape cumsumrev}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape negative logLik}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape negative score}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape negative score residuals}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Hessian}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified negative logLik}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified negative score}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified Hessian}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape stratified negative score residual}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape profile}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape optim}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@ @\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape post processing}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    class(ret) <- "free1wayML"@\\
 \mbox{}\verb@    ret@\\
@@ -2830,7 +3138,7 @@ class \code{free1wayML} for later use:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2872,25 +3180,25 @@ theory under the population model:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap32}\raggedright\small
-\NWtarget{nuweb27a}{} $\langle\,${\itshape statistics}\nobreak\ {\footnotesize {27a}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape statistics}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@if (test == "Wald") {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Wald statistic}\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Wald statistic}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@} else if (test == "LRT") {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape LRT}\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape LRT}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@} else if (test == "Rao") {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Rao}\nobreak\ {\footnotesize \NWlink{nuweb28b}{28b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Rao}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@} else if (test == "Permutation") {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Permutation}\nobreak\ {\footnotesize \NWlink{nuweb29}{29}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Permutation}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb41}{41}\NWlink{nuweb43}{, 43}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 
 \item{}
 \end{list}
@@ -2903,7 +3211,7 @@ We only need access to the parameter estimates $\hat{\delta}_2, \dots,
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap33}\raggedright\small
-\NWtarget{nuweb27b}{} $\langle\,${\itshape Wald statistic}\nobreak\ {\footnotesize {27b}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape Wald statistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2920,7 +3228,7 @@ We only need access to the parameter estimates $\hat{\delta}_2, \dots,
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb27a}{27a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2934,7 +3242,7 @@ hypothesis to be tested:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap34}\raggedright\small
-\NWtarget{nuweb28a}{} $\langle\,${\itshape LRT}\nobreak\ {\footnotesize {28a}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape LRT}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2950,7 +3258,7 @@ hypothesis to be tested:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb27a}{27a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -2964,7 +3272,7 @@ computed:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap35}\raggedright\small
-\NWtarget{nuweb28b}{} $\langle\,${\itshape Rao}\nobreak\ {\footnotesize {28b}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape Rao}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -2984,7 +3292,7 @@ computed:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb27a}{27a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -3001,7 +3309,7 @@ distribution:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap36}\raggedright\small
-\NWtarget{nuweb29}{} $\langle\,${\itshape Permutation}\nobreak\ {\footnotesize {29}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape Permutation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3044,7 +3352,7 @@ distribution:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb27a}{27a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -3055,7 +3363,7 @@ given by \cite{strasserweber1999}:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap37}\raggedright\small
-\NWtarget{nuweb30}{} $\langle\,${\itshape Strasser Weber}\nobreak\ {\footnotesize {30}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape Strasser Weber}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3099,7 +3407,7 @@ given by \cite{strasserweber1999}:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb34}{34}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -3110,7 +3418,7 @@ tables with fixed marginal distributions:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap38}\raggedright\small
-\NWtarget{nuweb31}{} $\langle\,${\itshape resampling}\nobreak\ {\footnotesize {31}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape resampling}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3149,7 +3457,7 @@ tables with fixed marginal distributions:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb34}{34}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -3186,7 +3494,7 @@ a method for tables (the main workhorse) and additional user interfaces.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap39}\raggedright\small
-\NWtarget{nuweb33}{} $\langle\,${\itshape link2fun}\nobreak\ {\footnotesize {33}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape link2fun}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3199,7 +3507,7 @@ a method for tables (the main workhorse) and additional user interfaces.
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb34}{34}\NWlink{nuweb64}{, 64}\NWlink{nuweb67}{, 67}\NWlink{nuweb69a}{, 69a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 
 \item{}
 \end{list}
@@ -3219,7 +3527,7 @@ results (this is relevant for the one-sided case).
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap40}\raggedright\small
-\NWtarget{nuweb34}{} $\langle\,${\itshape free1way}\nobreak\ {\footnotesize {34}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3242,7 +3550,7 @@ results (this is relevant for the one-sided case).
 \mbox{}\verb@            DNAME <- paste(DNAME, "\n\t stratified by", names(dn)[3])@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape link2fun}\nobreak\ {\footnotesize \NWlink{nuweb33}{33}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape link2fun}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!(length(mu) == 1L || length(mu) == d[2L] - 1L)) {@\\
 \mbox{}\verb@        warning("Incompatible length of argument 'mu'")@\\
@@ -3273,8 +3581,8 @@ results (this is relevant for the one-sided case).
 \mbox{}\verb@    if (d[2L] == 2L)@\\
 \mbox{}\verb@        res <- res / sqrt(c(pr$hessian))@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Strasser Weber}\nobreak\ {\footnotesize \NWlink{nuweb30}{30}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape resampling}\nobreak\ {\footnotesize \NWlink{nuweb31}{31}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Strasser Weber}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape resampling}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (length(dim(y)) == 3L) y <- y[,,ret$strata, drop = FALSE]@\\
 \mbox{}\verb@    if (length(dim(y)) == 4L) {@\\
@@ -3299,7 +3607,7 @@ results (this is relevant for the one-sided case).
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -3310,7 +3618,7 @@ stratum)} for model specification
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap41}\raggedright\small
-\NWtarget{nuweb36}{} $\langle\,${\itshape free1way formula}\nobreak\ {\footnotesize {36}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way formula}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3383,7 +3691,7 @@ stratum)} for model specification
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -3396,7 +3704,7 @@ interpreted as an event and \code{FALSE} as right-censored observation
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap42}\raggedright\small
-\NWtarget{nuweb37}{} $\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize {37}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3423,7 +3731,7 @@ interpreted as an event and \code{FALSE} as right-censored observation
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb38}{38}\NWlink{nuweb39}{, 39}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 
 \item{}
 \end{list}
@@ -3431,7 +3739,7 @@ interpreted as an event and \code{FALSE} as right-censored observation
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap43}\raggedright\small
-\NWtarget{nuweb38}{} $\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize {38}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3440,7 +3748,7 @@ interpreted as an event and \code{FALSE} as right-censored observation
 \mbox{}\verb@                 deparse1(substitute(groups)), @\\
 \mbox{}\verb@                 deparse1(substitute(blocks))), ...) {@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb37}{37}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!is.null(event)) {@\\
 \mbox{}\verb@        if (!is.logical(event))@\\
@@ -3472,7 +3780,7 @@ interpreted as an event and \code{FALSE} as right-censored observation
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -3483,7 +3791,7 @@ call to \code{xtabs}:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap44}\raggedright\small
-\NWtarget{nuweb39}{} $\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize {39}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3492,7 +3800,7 @@ call to \code{xtabs}:
 \mbox{}\verb@                 deparse1(substitute(groups)), @\\
 \mbox{}\verb@                 deparse1(substitute(blocks))), ...) {@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb37}{37}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (nlevels(y) > 2L && !is.ordered(y))@\\
 \mbox{}\verb@        stop(gettextf("%s is not defined for unordered responses",@\\
@@ -3523,7 +3831,7 @@ call to \code{xtabs}:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -3539,7 +3847,7 @@ method allows to obtain effects at alternative scales: probabilistic indices
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap45}\raggedright\small
-\NWtarget{nuweb40}{} $\langle\,${\itshape free1way methods}\nobreak\ {\footnotesize {40}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way methods}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3575,7 +3883,7 @@ method allows to obtain effects at alternative scales: probabilistic indices
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -3591,7 +3899,7 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap46}\raggedright\small
-\NWtarget{nuweb41}{} $\langle\,${\itshape free1way print}\nobreak\ {\footnotesize {41}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way print}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3612,7 +3920,7 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
 \mbox{}\verb@    parm <- seq_along(cf)@\\
 \mbox{}\verb@    value <- 0@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape statistics}\nobreak\ {\footnotesize \NWlink{nuweb27a}{27a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape statistics}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, @\\
 \mbox{}\verb@        null.value = x$mu, alternative = alternative, method = x$method, @\\
@@ -3630,7 +3938,7 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -3641,7 +3949,7 @@ The \code{summary} method performs population Wald inference unless the
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap47}\raggedright\small
-\NWtarget{nuweb42}{} $\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize {42}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3684,7 +3992,7 @@ The \code{summary} method performs population Wald inference unless the
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -3699,7 +4007,7 @@ values for the inversion:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap48}\raggedright\small
-\NWtarget{nuweb43}{} $\langle\,${\itshape free1way confint}\nobreak\ {\footnotesize {43}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape free1way confint}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3726,7 +4034,7 @@ values for the inversion:
 \mbox{}\verb@        x <- object@\\
 \mbox{}\verb@        alternative <- "two.sided"@\\
 \mbox{}\verb@        tol <- .Machine$double.eps@\\
-\mbox{}\verb@        @\hbox{$\langle\,${\itshape statistics}\nobreak\ {\footnotesize \NWlink{nuweb27a}{27a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape statistics}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@        ### we also could invert p-values, but the@\\
 \mbox{}\verb@        ### p-value function might be discret for permutation@\\
 \mbox{}\verb@        ### tests, in contrast to the test statistic@\\
@@ -3768,7 +4076,7 @@ values for the inversion:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -4043,7 +4351,7 @@ $\delta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap49}\raggedright\small
-\NWtarget{nuweb59}{} $\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize {59}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4073,7 +4381,7 @@ $\delta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb60}{60}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -4087,7 +4395,7 @@ the latter for a certain choice of link function:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap50}\raggedright\small
-\NWtarget{nuweb60}{} $\langle\,${\itshape ppplot}\nobreak\ {\footnotesize {60}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape ppplot}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4118,7 +4426,7 @@ the latter for a certain choice of link function:
 \mbox{}\verb@         xlab = xlab, ylab = ylab, main = main, @\\
 \mbox{}\verb@         verticals = FALSE, ...)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize \NWlink{nuweb59}{59}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    plot(ret, add = TRUE, verticals = FALSE, ...)@\\
 \mbox{}\verb@@\\
@@ -4129,7 +4437,7 @@ the latter for a certain choice of link function:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -4175,7 +4483,7 @@ but not the shift effects.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap51}\raggedright\small
-\NWtarget{nuweb63}{} $\langle\,${\itshape design args}\nobreak\ {\footnotesize {63}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape design args}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4198,7 +4506,7 @@ but not the shift effects.
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb64}{64}\NWlink{nuweb69a}{, 69a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 
 \item{}
 \end{list}
@@ -4206,7 +4514,7 @@ but not the shift effects.
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
-\NWtarget{nuweb64}{} $\langle\,${\itshape rfree1way}\nobreak\ {\footnotesize {64}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape rfree1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4214,7 +4522,7 @@ but not the shift effects.
 \mbox{}\verb@@\\
 \mbox{}\verb@    logU <- log(ret <- runif(n))@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape link2fun}\nobreak\ {\footnotesize \NWlink{nuweb33}{33}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape link2fun}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    trt <- (abs(delta) > 0)@\\
 \mbox{}\verb@    ret[trt] <- .p(link, .q(link, logU[trt], log.p = TRUE) + delta[trt])@\\
@@ -4229,7 +4537,7 @@ but not the shift effects.
 \mbox{}\verb@{@\\
 \mbox{}\verb@    B <- blocks@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape design args}\nobreak\ {\footnotesize \NWlink{nuweb63}{63}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape design args}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    rownames(N) <- paste0("block", seq_len(B))@\\
 \mbox{}\verb@    ctrl <- "Control"@\\
@@ -4270,7 +4578,7 @@ but not the shift effects.
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -4323,7 +4631,7 @@ the relevant discrete density.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
-\NWtarget{nuweb67}{} $\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize {67}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4351,7 +4659,7 @@ the relevant discrete density.
 \mbox{}\verb@        names(colsums) <- LETTERS[seq_len(K)]@\\
 \mbox{}\verb@    delta <- rep_len(delta, K - 1L)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape link2fun}\nobreak\ {\footnotesize \NWlink{nuweb33}{33}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape link2fun}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    p0 <- cumsum(prob)@\\
 \mbox{}\verb@    h0 <- .q(link, p0[-length(p0)]) ### last element of p0 is one@\\
@@ -4375,7 +4683,7 @@ the relevant discrete density.
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb71}{71}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -4402,7 +4710,7 @@ computations reproducible:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
-\NWtarget{nuweb68}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {68}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4421,7 +4729,7 @@ computations reproducible:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb71}{71}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -4429,12 +4737,12 @@ computations reproducible:
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap55}\raggedright\small
-\NWtarget{nuweb69a}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {69a}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape link2fun}\nobreak\ {\footnotesize \NWlink{nuweb33}{33}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape link2fun}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@### matrix means control distributions in different strata@\\
 \mbox{}\verb@if (!is.matrix(prob))@\\
@@ -4447,7 +4755,7 @@ computations reproducible:
 \mbox{}\verb@p0 <- apply(prob, 2, cumsum)@\\
 \mbox{}\verb@h0 <- .q(link, p0[-nrow(p0),,drop = FALSE])@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@@\hbox{$\langle\,${\itshape design args}\nobreak\ {\footnotesize \NWlink{nuweb63}{63}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\hbox{$\langle\,${\itshape design args}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@rownames(N) <- colnames(prob)@\\
 \mbox{}\verb@ctrl <- "Control"@\\
@@ -4460,7 +4768,7 @@ computations reproducible:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb71}{71}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -4476,7 +4784,7 @@ sampling error.
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
-\NWtarget{nuweb69b}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {69b}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4491,7 +4799,7 @@ sampling error.
 \mbox{}\verb@                          delta = delta, link = link)[[1L]]@\\
 \mbox{}\verb@        rs <- rowSums(x[,,b]) > 0@\\
 \mbox{}\verb@        h <- h0[rs[-length(rs)], b]@\\
-\mbox{}\verb@        theta <- c(h[1], log(diff(h)))@\\
+\mbox{}\verb@        theta <- h ##1 c(h[1], log(diff(h)))@\\
 \mbox{}\verb@        parm <- c(parm, theta)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    ### evaluate observed hessian for true parameters parm and x data@\\
@@ -4505,7 +4813,7 @@ sampling error.
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb71}{71}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -4521,7 +4829,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
-\NWtarget{nuweb70a}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {70a}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4535,7 +4843,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb71}{71}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -4543,7 +4851,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
-\NWtarget{nuweb70b}{} $\langle\,${\itshape power htest output}\nobreak\ {\footnotesize {70b}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape power htest output}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4567,7 +4875,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb71}{71}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -4575,7 +4883,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{flushleft}
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
-\NWtarget{nuweb71}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {71}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -4593,13 +4901,13 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@    stats:::assert_NULL_or_prob(sig.level)@\\
 \mbox{}\verb@    stats:::assert_NULL_or_prob(power)@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape random seed}\nobreak\ {\footnotesize \NWlink{nuweb68}{68}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape random seed}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize \NWlink{nuweb67}{67}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (is.null(n)) @\\
 \mbox{}\verb@        n <- ceiling(uniroot(function(n) {@\\
-\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb70a}{70a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@             }, interval = c(5, 1e+03), tol = tol, extendInt = "upX")$root)@\\
 \mbox{}\verb@    else if (is.null(delta)) {@\\
 \mbox{}\verb@        ### 2-sample only@\\
@@ -4608,17 +4916,17 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@                          "power.free1way.test"),@\\
 \mbox{}\verb@                          domain = NA)@\\
 \mbox{}\verb@        delta <- uniroot(function(delta) {@\\
-\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb70a}{70a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                 @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    ### <TH> interval depending on alternative, symmetry? </TH>@\\
 \mbox{}\verb@            }, interval = c(0, 10), tol = tol, extendInt = "upX")$root@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    else if (is.null(sig.level)) @\\
 \mbox{}\verb@        sig.level <- uniroot(function(sig.level) {@\\
-\mbox{}\verb@                @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb70a}{70a}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@                @\hbox{$\langle\,${\itshape power call}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@            }, interval = c(1e-10, 1 - 1e-10), tol = tol, extendInt = "yes")$root@\\
 \mbox{}\verb@    @\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb69a}{69a}}$\,\rangle$}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb69b}{69b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape power setup}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    alternative <- match.arg(alternative)@\\
 \mbox{}\verb@    if (K == 2L) {@\\
@@ -4639,7 +4947,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@        power <- pchisq(qsig, df = K - 1L, ncp = ncp, lower.tail = FALSE)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape power htest output}\nobreak\ {\footnotesize \NWlink{nuweb70b}{70b}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape power htest output}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    ret@\\
 \mbox{}\verb@}@\\
@@ -4648,7 +4956,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \vspace{-1.5ex}
 \footnotesize
 \begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \NWtxtMacroRefIn\ \NWlink{nuweb20a}{20a}.
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
 
 \item{}
 \end{list}
@@ -4778,80 +5086,80 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 
 
 {\small\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item \verb@"free1way.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb20a}{20a}.}
-\item \verb@"linkfun.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb14}{14}.}
+\item \verb@"free1way.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb?}{?}.}
+\item \verb@"linkfun.R"@ {\footnotesize {\NWtxtDefBy} \NWlink{nuweb?}{?}.}
 \end{list}}
 
 \section*{Fragments}
 
 
 {\small\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
-\item $\langle\,$cloglog\nobreak\ {\footnotesize \NWlink{nuweb18}{18}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14}{14}.}
-\item $\langle\,$cumsumrev\nobreak\ {\footnotesize \NWlink{nuweb4c}{4c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$density prob ratio\nobreak\ {\footnotesize \NWlink{nuweb4a}{4a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb4b}{4b}\NWlink{nuweb5a}{, 5a}.
+\item $\langle\,$cloglog\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$cumsumrev\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$density prob ratio\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$design args\nobreak\ {\footnotesize \NWlink{nuweb63}{63}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb64}{64}\NWlink{nuweb69a}{, 69a}.
+\item $\langle\,$design args\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$diagonal elements for Hessian of intercepts\nobreak\ {\footnotesize \NWlink{nuweb6a}{6a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb7}{7}.}
-\item $\langle\,$do optim\nobreak\ {\footnotesize \NWlink{nuweb21}{21}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb22}{22}\NWlink{nuweb23}{, 23}.
+\item $\langle\,$diagonal elements for Hessian of intercepts\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$do optim\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb69b}{69b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb71}{71}.}
-\item $\langle\,$free1way\nobreak\ {\footnotesize \NWlink{nuweb34}{34}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$free1way confint\nobreak\ {\footnotesize \NWlink{nuweb43}{43}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$free1way factor\nobreak\ {\footnotesize \NWlink{nuweb39}{39}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$free1way formula\nobreak\ {\footnotesize \NWlink{nuweb36}{36}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$free1way methods\nobreak\ {\footnotesize \NWlink{nuweb40}{40}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$free1way numeric\nobreak\ {\footnotesize \NWlink{nuweb38}{38}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$free1way print\nobreak\ {\footnotesize \NWlink{nuweb41}{41}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$free1way summary\nobreak\ {\footnotesize \NWlink{nuweb42}{42}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$Hessian\nobreak\ {\footnotesize \NWlink{nuweb7}{7}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$Hessian prep\nobreak\ {\footnotesize \NWlink{nuweb5b}{5b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb7}{7}.}
-\item $\langle\,$intercept / shift contributions to Hessian\nobreak\ {\footnotesize \NWlink{nuweb6b}{6b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb7}{7}.}
-\item $\langle\,$link2fun\nobreak\ {\footnotesize \NWlink{nuweb33}{33}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb34}{34}\NWlink{nuweb64}{, 64}\NWlink{nuweb67}{, 67}\NWlink{nuweb69a}{, 69a}.
+\item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way confint\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way factor\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way formula\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way methods\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way numeric\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way print\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$free1way summary\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$Hessian\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$Hessian prep\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$intercept / shift contributions to Hessian\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$link2fun\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$linkfun\nobreak\ {\footnotesize \NWlink{nuweb15}{15}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14}{14}.}
-\item $\langle\,$logit\nobreak\ {\footnotesize \NWlink{nuweb16}{16}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14}{14}.}
-\item $\langle\,$loglog\nobreak\ {\footnotesize \NWlink{nuweb17}{17}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14}{14}.}
-\item $\langle\,$LRT\nobreak\ {\footnotesize \NWlink{nuweb28a}{28a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27a}{27a}.}
-\item $\langle\,$ML estimation\nobreak\ {\footnotesize \NWlink{nuweb25}{25}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$negative logLik\nobreak\ {\footnotesize \NWlink{nuweb3b}{3b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$negative score\nobreak\ {\footnotesize \NWlink{nuweb4b}{4b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$negative score residuals\nobreak\ {\footnotesize \NWlink{nuweb5a}{5a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$off-diagonal elements for Hessian of intercepts\nobreak\ {\footnotesize \NWlink{nuweb5c}{5c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb7}{7}.}
-\item $\langle\,$optim\nobreak\ {\footnotesize \NWlink{nuweb23}{23}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$parm to prob\nobreak\ {\footnotesize \NWlink{nuweb3a}{3a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb3b}{3b}\NWlink{nuweb4b}{, 4b}\NWlink{nuweb5a}{, 5a}\NWlink{nuweb7}{, 7}.
+\item $\langle\,$linkfun\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$logit\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$loglog\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$LRT\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$ML estimation\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$negative logLik\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$negative score\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$negative score residuals\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$off-diagonal elements for Hessian of intercepts\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$optim\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$parm to prob\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$Permutation\nobreak\ {\footnotesize \NWlink{nuweb29}{29}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27a}{27a}.}
-\item $\langle\,$post processing\nobreak\ {\footnotesize \NWlink{nuweb24}{24}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$power\nobreak\ {\footnotesize \NWlink{nuweb71}{71}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$power call\nobreak\ {\footnotesize \NWlink{nuweb70a}{70a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb71}{71}.}
-\item $\langle\,$power htest output\nobreak\ {\footnotesize \NWlink{nuweb70b}{70b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb71}{71}.}
-\item $\langle\,$power setup\nobreak\ {\footnotesize \NWlink{nuweb69a}{69a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb71}{71}.}
-\item $\langle\,$ppplot\nobreak\ {\footnotesize \NWlink{nuweb60}{60}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$probit\nobreak\ {\footnotesize \NWlink{nuweb19}{19}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb14}{14}.}
-\item $\langle\,$profile\nobreak\ {\footnotesize \NWlink{nuweb22}{22}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$r2dsim\nobreak\ {\footnotesize \NWlink{nuweb67}{67}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb71}{71}.}
-\item $\langle\,$random seed\nobreak\ {\footnotesize \NWlink{nuweb68}{68}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb71}{71}.}
-\item $\langle\,$Rao\nobreak\ {\footnotesize \NWlink{nuweb28b}{28b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27a}{27a}.}
-\item $\langle\,$resampling\nobreak\ {\footnotesize \NWlink{nuweb31}{31}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb34}{34}.}
-\item $\langle\,$rfree1way\nobreak\ {\footnotesize \NWlink{nuweb64}{64}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb20a}{20a}.}
-\item $\langle\,$ROC bands\nobreak\ {\footnotesize \NWlink{nuweb59}{59}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb60}{60}.}
-\item $\langle\,$setup and starting values\nobreak\ {\footnotesize \NWlink{nuweb20b}{20b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$statistics\nobreak\ {\footnotesize \NWlink{nuweb27a}{27a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb41}{41}\NWlink{nuweb43}{, 43}.
+\item $\langle\,$Permutation\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$post processing\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$power\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$power call\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$power htest output\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$power setup\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$ppplot\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$probit\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$profile\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$r2dsim\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$random seed\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$Rao\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$resampling\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$rfree1way\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$ROC bands\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$setup and starting values\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$statistics\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$Strasser Weber\nobreak\ {\footnotesize \NWlink{nuweb30}{30}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb34}{34}.}
-\item $\langle\,$stratified Hessian\nobreak\ {\footnotesize \NWlink{nuweb12}{12}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$stratified negative logLik\nobreak\ {\footnotesize \NWlink{nuweb10c}{10c}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$stratified negative score\nobreak\ {\footnotesize \NWlink{nuweb11a}{11a}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$stratified negative score residual\nobreak\ {\footnotesize \NWlink{nuweb11b}{11b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb25}{25}.}
-\item $\langle\,$stratum prep\nobreak\ {\footnotesize \NWlink{nuweb10b}{10b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb10c}{10c}\NWlink{nuweb11a}{, 11a}\NWlink{nuweb11b}{b}\NWlink{nuweb12}{, 12}.
+\item $\langle\,$Strasser Weber\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$stratified Hessian\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$stratified negative logLik\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$stratified negative score\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$stratified negative score residual\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$stratum prep\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$table2list\nobreak\ {\footnotesize \NWlink{nuweb10a}{10a}}$\,\rangle$ {\footnotesize {\NWtxtNoRef}.}
-\item $\langle\,$table2list body\nobreak\ {\footnotesize \NWlink{nuweb9}{9}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb10a}{10a}\NWlink{nuweb20b}{, 20b}.
+\item $\langle\,$table2list\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtNoRef}.}
+\item $\langle\,$table2list body\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$variable names and checks\nobreak\ {\footnotesize \NWlink{nuweb37}{37}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb38}{38}\NWlink{nuweb39}{, 39}.
+\item $\langle\,$variable names and checks\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$Wald statistic\nobreak\ {\footnotesize \NWlink{nuweb27b}{27b}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb27a}{27a}.}
+\item $\langle\,$Wald statistic\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \end{list}}
 
 \section*{Identifiers}
