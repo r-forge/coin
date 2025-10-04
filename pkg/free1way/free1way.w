@@ -420,8 +420,17 @@ intercepts needs this small helper function:
     return(s[N] - c(0, s[-N]))
 }
 @}
-
 (<TH>maybe add \code{rev = TRUE} to \code{cumsum}?</TH>).
+
+implementing right-multiplication with a lower-triangular matrix of ones
+without actually doing the matrix multiplication:
+
+<<check cumsumrev>>=
+A <- diag(5)
+A[lower.tri(A)] <- 1
+z <- 1:5
+.rcr(z) - c(z %*% A)
+@@
 
 In addition, we define negative score residuals, that is, the derivative of the
 negative log-likelihood with respect to an intercept term constrained to
