@@ -146,7 +146,7 @@ transformation models, likelihood-based parameter estimation as well as
 permutation- and likelihood-based inference are formulated and implemented. One
 can understand this contribution as a unification of many of
 \code{stats::*.test} procedures, the models available in 
-\code{MASS::polr}, \code{rms::orm}, \code{survival::coxph}, 
+\code{MASS::polr}, \code{rms::orm}, \code{rms::lrm}, \code{survival::coxph}, 
 or the \pkg{tram} add-on package (among many others), 
 and permutation-based inference in \pkg{coin}.
 
@@ -247,16 +247,22 @@ We collect all model parameters in a vector
                & \dots & , \\
                \theta_{K - 1} & := & \delta_K, \\
                \theta_{K} & := & \vartheta_{1,1}, \\
-               \theta_{K + 1} & := & \vartheta_{2,1} - \vartheta_{1,1} > 0, \\
+               \theta_{K + 1} & := & \vartheta_{2,1} > \vartheta_{1,1}, \\
                &  \dots, & \\
-               \theta_{K + C - 2} & := & \vartheta_{C-1,1} - \vartheta_{C-2,1} > 0, \\
+               \theta_{K + C - 2} & := & \vartheta_{C-1,1} > \vartheta_{C-2,1}, \\
                \theta_{K + C - 1} & := & \vartheta_{1,2}, \\
                & \dots &, \\
-               \theta_{B (C - 1) + K - 1} & := & \vartheta_{C-1,B} - \vartheta_{C-2,B} >
-               0)
+               \theta_{B (C - 1) + K - 1} & := & \vartheta_{C-1,B} >
+               \vartheta_{C-2,B}).
 \end{eqnarray*}
-featuring contrasts of the intercept parameters $\vartheta_{\cdot}$ such that monotonicity of
-the intercept parameters can be ensured by box constraints for $\thetavec$.
+If there is no observation for level $c$ in block $b$, the corresponding
+parameter is not identified and removed from $\thetavec$.
+The parameter space is defined by all parameter vectors $\thetavec$
+satisfying the monotonicity of the intercept parameters. Violations always
+lead to the log-likelihood function being undefined and thus taking the
+value $-\infty$. \cite{Harrell2024} evaluates unconstrained optimisation in
+this context and recommends Newton-based algorithms leveraging the
+analytically available Hessian (see below).
 
 For the $i$th observation $(y_i = y_c, s_i = b, \rt_i = k)$ from block $b$
 under treatment $k$, the log-likelihood contribution is
@@ -298,7 +304,6 @@ right-censoring and the second table contains numbers of events.
 <<localfun, echo = FALSE>>=
 Nsim <- 100
 options(digits = 5)
-@<cumsumrev@>
 @<table2list@>
 @<negative logLik@>
 @<negative score@>
@@ -323,8 +328,7 @@ $= \thetavec$ (assuming only a single block) with data from a two-way $C
 \times K$ contingency table \code{x}. 
 
 From $\thetavec$, we first extract the shift parameters $\delta_\cdot$ and
-then the intercept parameters $\vartheta_\cdot$, compute the differences
-$\vartheta_{c,1} - \delta_k$ and evaluate the probabilities
+then the intercept parameters $\vartheta_\cdot$ and evaluate the probabilities
 \code{prb} $ = \Prob(y_{c - 1} < Y \le y_c \mid \rS = 1, \rT = k)$ for all
 groups:
 
@@ -332,18 +336,14 @@ groups:
 @{
 bidx <- seq_len(ncol(x) - 1L)
 delta <- c(0, mu + parm[bidx])
-##1 intercepts <- c(-Inf, cumsum(parm[- bidx]), Inf)
 intercepts <- c(-Inf, parm[- bidx], Inf)
 tmb <- intercepts - matrix(delta, nrow = length(intercepts),  
                                   ncol = ncol(x),
                                   byrow = TRUE)
 Ftmb <- F(tmb)
 if (rightcensored) {
-##1    prb <- pmax(1 - Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
     prb <- 1 - Ftmb[- nrow(Ftmb), , drop = FALSE]
 } else {
-##1    prb <- pmax(Ftmb[- 1L, , drop = FALSE] - 
-##1                Ftmb[- nrow(Ftmb), , drop = FALSE], sqrt(.Machine$double.eps))
     prb <- Ftmb[- 1L, , drop = FALSE] - 
            Ftmb[- nrow(Ftmb), , drop = FALSE]
 } 
@@ -402,42 +402,11 @@ and then compute the negative score function:
     ret <- numeric(length(parm))
     ret[bidx] <- colSums(zl)[-1L] -
                  colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
-##1    ret[-bidx] <- Reduce("+", 
-##1                         lapply(1:ncol(x), 
-##1                            function(j) {
-##1                                 .rcr(zu[-nrow(zu),j]) - 
-##1                                 .rcr(zl[-1,j])
-##1                             })
-##1                         )
-    ret[- bidx] <- rowSums(zu[-nrow(zu),,drop = FALSE] - zl[-1,,drop = FALSE])
-    - ret
+    ret[- bidx] <- rowSums(zu[-nrow(zu),,drop = FALSE] - 
+                           zl[-1,,drop = FALSE])
+    return(- ret)
 }
 @}
-
-Adjustment for the parameterisation in terms of differences between
-intercepts needs this small helper function:
-
-@d cumsumrev
-@{
-.rcr <- function(z) {
-    # Reduce('+', z, accumulate = TRUE, right = TRUE)
-    # rev.default(cumsum(rev.default(z)))
-    N <- length(z)
-    s <- cumsum(z)
-    return(s[N] - c(0, s[-N]))
-}
-@}
-(<TH>maybe add \code{rev = TRUE} to \code{cumsum}?</TH>).
-
-implementing right-multiplication with a lower-triangular matrix of ones
-without actually doing the matrix multiplication:
-
-<<check cumsumrev>>=
-A <- diag(5)
-A[lower.tri(A)] <- 1
-z <- 1:5
-.rcr(z) - c(z %*% A)
-@@
 
 In addition, we define negative score residuals, that is, the derivative of the
 negative log-likelihood with respect to an intercept term constrained to
@@ -451,7 +420,7 @@ zero:
 
     ret <- rowSums(zl - zu) / rowSums(x)
     ret[!is.finite(ret)] <- 0
-    - ret
+    return(- ret)
 }
 @}
 
@@ -542,7 +511,10 @@ Z <- -colSums(xm1 * (dpum1 / prbm1 -
 if (length(Z) > 1L) Z <- diag(Z)
 @}
 
-We return the three matrices $\mA$, $\X$, and $\Z$ necessary for the
+We return the three matrices $\mA$, $\X$, and $\Z$ necessary for two
+different purposes: We need the \code{full} Hessian for all parameters $\thetavec$ as a
+dense \code{matrix} such that \code{nlminb} can compute updates from this
+object. In addition, the
 computation of the Fisher information for $\delta_2, \dots, \delta_K$ as the Schur
 complement $\Z - \X^\top \mA^{-1} \X$. Because the matrix $\mA$ is symmetric
 tridiagonal, we use infrastructure from the \pkg{Matrix} package to
@@ -563,8 +535,9 @@ represent this matrix:
         if (!isFALSE(full)) {
             A <- list(Adiag = Adiag, Aoffdiag = Aoffdiag)
         } else {
-            A <- Matrix::bandSparse(length(Adiag), k = 0:1, diagonals = list(Adiag, Aoffdiag), 
-                                    symmetric = TRUE)
+            A <- Matrix::bandSparse(length(Adiag), 
+                k = 0:1, diagonals = list(Adiag, Aoffdiag), 
+                symmetric = TRUE)
         }
     } else {
         if (!isFALSE(full)) {
@@ -591,7 +564,9 @@ m <- glm(y ~ t, data = d, weights = x, family = binomial())
 
 Replicating these results requires specification of the inverse link
 function $F = \text{expit}$ and the density function $f$ of the standard
-logistic. Note that \code{glm} operates with a positive linear predictor, so
+logistic. We use \code{optim} with numerically approximated Hessian to be
+able to check the correctness of the analytical Hessian. 
+Note that \code{glm} operates with a positive linear predictor, so
 we need to change the sign of the log-odds ratios:
 
 <<glm-op>>=
@@ -600,7 +575,7 @@ f <- dlogis
 op <- optim(par = c("mt2" = 0, "mt3" = 0, "(Intercept)" = 0), 
             fn = .nll, gr = .nsc, 
             x = x, method = "BFGS", hessian = TRUE)
-cbind(c(cf[-1] * -1, cf[1]), op$par)
+cbind(glm = c(cf[-1] * -1, cf[1]), free1way = op$par)
 logLik(m)
 -op$value
 @@
@@ -789,7 +764,7 @@ op <- optim(par = c("mt2" = 0, "mt3" = 0, "(Intercept 1)" = 0, "(Intercept 2)" =
             x = xl, 
             method = "BFGS", 
             hessian = TRUE)
-cbind(c(cf[-(1:2)] * -1, cf[1:2]), op$par)
+cbind(glm = c(cf[-(1:2)] * -1, cf[1:2]), free1way = op$par)
 logLik(m)
 -op$value
 @@
@@ -797,53 +772,62 @@ logLik(m)
 For the analytical Hessian, we sum-up over the stratum-specific
 Hessians of the shift parameters. For right-censored observations, we need
 to compute the contributions by the events and obtain the joint Hessian for
-shift- and intercept parameters first:
+shift- and intercept parameters first. We differentiate between computing
+the null Hessian for $\thetavec$ as a dense \code{matrix}:
+
+@d full Hessian
+@{
+ret <- matrix(0, nrow = length(parm), ncol = length(parm))
+for (b in seq_len(B)) {
+    H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu, full = full)
+    if (!is.null(xrc)) {
+        Hrc <- .hes(c(delta, intercepts[[b]]), xrc[[b]], mu = mu, 
+                    rightcensored = TRUE, full = full)
+        H$X <- H$X + Hrc$X
+        H$A$Adiag <- H$A$Adiag + Hrc$A$Adiag
+        H$A$Aoffdiag <- H$A$Aoffdiag + Hrc$A$Aoffdiag
+        H$Z <- H$Z + Hrc$Z
+    }
+    if (b == 1L) {
+        Adiag <- H$A$Adiag
+        Aoffdiag <- H$A$Aoffdiag
+        X <- H$X
+        Z <- H$Z
+    } else {
+        Adiag <- c(Adiag, H$A$Adiag) ### Matrix::bdiag(A, H$A)
+        Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag) ### Matrix::bdiag(A, H$A)
+        X <- rbind(X, H$X)
+        Z <- Z + H$Z
+    }
+}
+sA <- seq_along(Adiag)
+sAo <- seq_along(Aoffdiag)
+sZ <- seq_len(NROW(Z))
+sXr <- seq_len(NROW(X))
+sXc <- seq_len(NCOL(X))
+
+idx <- matrix(NROW(Z) + cbind(sA, sA), ncol = 2)
+ret[idx] <- Adiag
+if (!is.null(Aoffdiag)) {
+    idx <- matrix(NROW(Z) + cbind(sA[-1], sA[-length(sA)]), ncol = 2)
+    ret[idx] <- Aoffdiag
+    ret[idx[,2:1,drop = FALSE]] <- Aoffdiag
+}
+ret[sZ,sZ] <- Z
+ret[sXc,NROW(Z) + sXr] <- t(X)
+ret[NROW(Z) + sXr, sXc] <- X
+return(ret)
+@}
+
+and the computation of the Hessian for the shift parameters using
+\code{Matrix} technology:
 
 @d stratified Hessian
 @{
 .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE) {
     @<stratum prep@>
     if (!isFALSE(ret <- full)) {
-        ret <- matrix(0, nrow = length(parm), ncol = length(parm))
-        for (b in seq_len(B)) {
-            H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu, full = full)
-            if (!is.null(xrc)) {
-                Hrc <- .hes(c(delta, intercepts[[b]]), xrc[[b]], mu = mu, 
-                            rightcensored = TRUE, full = full)
-                H$X <- H$X + Hrc$X
-                H$A$Adiag <- H$A$Adiag + Hrc$A$Adiag
-                H$A$Aoffdiag <- H$A$Aoffdiag + Hrc$A$Aoffdiag
-                H$Z <- H$Z + Hrc$Z
-            }
-            if (b == 1L) {
-                Adiag <- H$A$Adiag
-                Aoffdiag <- H$A$Aoffdiag
-                X <- H$X
-                Z <- H$Z
-            } else {
-                Adiag <- c(Adiag, H$A$Adiag) ### Matrix::bdiag(A, H$A)
-                Aoffdiag <- c(Aoffdiag, 0, H$A$Aoffdiag) ### Matrix::bdiag(A, H$A)
-                X <- rbind(X, H$X)
-                Z <- Z + H$Z
-            }
-         }
-         sA <- seq_along(Adiag)
-         sAo <- seq_along(Aoffdiag)
-         sZ <- seq_len(NROW(Z))
-         sXr <- seq_len(NROW(X))
-         sXc <- seq_len(NCOL(X))
-
-         idx <- matrix(NROW(Z) + cbind(sA, sA), ncol = 2)
-         ret[idx] <- Adiag
-         if (!is.null(Aoffdiag)) {
-             idx <- matrix(NROW(Z) + cbind(sA[-1], sA[-length(sA)]), ncol = 2)
-             ret[idx] <- Aoffdiag
-             ret[idx[,2:1,drop = FALSE]] <- Aoffdiag
-         }
-         ret[sZ,sZ] <- Z
-         ret[sXc,NROW(Z) + sXr] <- t(X)
-         ret[NROW(Z) + sXr, sXc] <- X
-         return(ret)
+        @<full Hessian@>
     }
     ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
     for (b in seq_len(B)) {
@@ -1163,39 +1147,34 @@ for (b in seq_len(length(xlist))) {
         ### ensure that 0 < ecdf0 < 1 such that quantiles exist
         ecdf0 <- pmax(1, ecdf0[-length(ecdf0)]) / (max(ecdf0) + 1)
         Qecdf <- Q(ecdf0)
-##1        bstart <- log(diff(Qecdf))
-##1        start <- c(start, Qecdf[1], bstart)
         start <- c(start, Qecdf)
-##1        start[!is.finite(start)] <- 0
     }
 }
 @}
 
 The profile negative log-likelihood can be evaluated for some of the
 parameters in $\thetavec$ (denoted as \code{fix}), the remaining parameters
-are updated. Note that \code{start} must contain the full parameter vector
+are updated. Note that \code{start} must contain the full and feasible
+(meeting monotonicity constraints for the intercept parameters) parameter vector
 $\thetavec$.
 
-We call \code{optim} and will increase the \code{maxit} control parameter if
+We call \code{nlminb} and will increase the \code{eval.max} and
+\code{iter.max} control parameters if
 we encounter optimisation issues and restart at the current solution:
 
-@d do optim
+@d do nlminb
 @{
 maxit <- control$iter.max
 while(maxit < 10001) {
-##1   ret <- do.call("optim", opargs)
    ret <- do.call("nlminb", opargs)
    maxit <- 5 * maxit
    if (ret$convergence > 0) {
        if (is.null(opargs$control))
-##1           opargs$control <- list(maxit = maxit)
            opargs$control <- list(eval.max = maxit)
         else 
-##1           opargs$control$maxit <- maxit
            opargs$control$eval.max <- maxit
            opargs$control$iter.max <- maxit
-##1       opargs$par <- ret$par
-          opargs$start <- ret$par
+           opargs$start <- ret$par
    } else {
        break()
    }
@@ -1216,7 +1195,6 @@ defined first
 @d profile
 @{
 fn <- function(par) {
-##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
     ret <- .snll(par, x = xlist, mu = mu)
     if (!is.null(xrc))
         ret <- ret + .snll(par, x = xrclist, mu = mu, 
@@ -1224,13 +1202,10 @@ fn <- function(par) {
     return(ret)
 }
 gr <- function(par) {
-##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
     ret <- .snsc(par, x = xlist, mu = mu)
     if (!is.null(xrc))
         ret <- ret + .snsc(par, x = xrclist, mu = mu, 
                            rightcensored = TRUE)
-##1    par[!is.finite(lwr)] <- 1
-##1    return(ret * par)
     return(ret)
 }
 
@@ -1238,14 +1213,11 @@ gr <- function(par) {
 Hess <- matrix(0, nrow = length(start), ncol = length(start))
 
 he <- function(par) {
-##1    par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
     if (!is.null(xrc)) {
         ret <- .shes(par, x = xlist, mu = mu, xrc = xrclist, full = Hess)
     } else {
         ret <- .shes(par, x = xlist, mu = mu, full = Hess)
     }
-##1    par[!is.finite(lwr)] <- 1
-##1    return(ret * par)
     return(ret)
 }
 .profile <- function(start, fix = seq_len(K - 1)) {
@@ -1254,22 +1226,6 @@ he <- function(par) {
                       "free1way"),
                      domain = NA)
     delta <- start[fix]
-##1    opargs <- c(list(par = start[-fix], 
-##                     fn = function(par) {
-##                         p <- numeric(length(par) + length(fix))
-##                         p[fix] <- delta
-##                         p[-fix] <- par
-##                         fn(p)
-##                     },
-##                     gr = function(par) {
-##                         p <- numeric(length(par) + length(fix))
-##                         p[fix] <- delta
-##                         p[-fix] <- par
-##                         gr(p)[-fix]
-##                     },
-##                     method = "BFGS", 
-##                     hessian = FALSE),
-##                     list(...))
     opargs <- list(start = start[-fix], 
                      objective = function(par) {
                          p <- numeric(length(par) + length(fix))
@@ -1290,7 +1246,7 @@ he <- function(par) {
                          he(p)[-fix, -fix, drop = FALSE]
                      })
     opargs$control <- control
-    @<do optim@>
+    @<do nlminb@>
     p <- numeric(length(start))
     p[fix] <- delta
     p[-fix] <- ret$par
@@ -1299,7 +1255,7 @@ he <- function(par) {
 }
 @}
 
-The heart of the function is a call to \code{optim}, trying to obtain
+The heart of the function is a call to \code{nlminb}, trying to obtain
 parameter estimates of $\thetavec$ by minimising the negative
 log-likelihood. We allow some (or all) parameters to be fixed at some
 constants, and provide a profile version of the likelihood:
@@ -1307,16 +1263,12 @@ constants, and provide a profile version of the likelihood:
 @d optim
 @{
 if (!length(fix)) {
-##1    opargs <- c(list(par = start, fn = fn, gr = gr,
-##                     # lower = lwr, 
-##                     method = "BFGS", 
-##                     hessian = FALSE), list(...))
     opargs <- list(start = start, 
                    objective = fn, 
                    gradient = gr,
                    hessian = he)
     opargs$control <- control
-    @<do optim@>
+    @<do nlminb@>
 } else if (length(fix) == length(start)) {
     ret <- list(par = start, 
                 value = fn(start))
@@ -1341,7 +1293,6 @@ dn2 <- dimnames(xt)[2L]
 names(ret$coefficients) <- cnames <- paste0(names(dn2), dn2[[1L]][1L + parm])
 
 par <- ret$par
-##1 par[is.finite(lwr)] <- exp(par[is.finite(lwr)])
 
 if (score) {
     ret$negscore <- .snsc(par, x = xlist, mu = mu)[parm]
@@ -1384,7 +1335,8 @@ if (length(ret$mu) == 1) {
 @}
 
 Finally, we put everything into one function which returns an object of
-class \code{free1wayML} for later use:
+class \code{free1wayML} for later use. The control parameters for
+\code{nlminb} are the ones suggested by \cite{Harrell2024}:
 
 @d ML estimation
 @{
@@ -1395,11 +1347,6 @@ class \code{free1wayML} for later use:
                                        abs.tol = 1e-20, xf.tol = 1e-16),
                         trace = FALSE, 
                         tol = sqrt(.Machine$double.eps), ...) {
-
-##1    if(is.null(tryCatch(loadNamespace("Matrix"), error = function(e)NULL)))
-##1            stop(gettextf("%s needs package 'Matrix' correctly installed",
-##1                          "free1way"),
-##1                domain = NA)
 
     ### convert to three-way table
     xt <- x
@@ -1421,7 +1368,6 @@ class \code{free1wayML} for later use:
     fp <- function(q) .dd(link, x = q)
 
     @<setup and starting values@>
-    @<cumsumrev@>
     @<negative logLik@>
     @<negative score@>
     @<negative score residuals@>
@@ -1456,7 +1402,8 @@ ret <- .free1wayML(x, logit())
 ret[c("value", "par")]
 cf <- ret$par
 cf[1:2] <- cf[1:2] + .5
-cf
+### new2old parameterisation
+c(cf[1:2], cf[3], log(cf[4] - cf[3]), cf[5])
 ### profile for cf[1:2]
 .free1wayML(x, logit(), start = cf, fix = 1:2)[c("value", "par")]
 ### profile for cf[2]
@@ -1750,6 +1697,18 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
     ret$data.name <- DNAME
     ret$call <- cl
 
+    @<free1way permutation tests@>
+
+    class(ret) <- "free1way"
+    return(ret)
+}
+@}
+
+where preparations for permutations tests are performed before returning the
+object
+
+@d free1way permutation tests
+@{
     alias <- link$alias
     if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]
     stratified <- FALSE
@@ -1787,9 +1746,6 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
         ret$terms <- terms(fm, data = as.data.frame(y))
     }
 
-    class(ret) <- "free1way"
-    return(ret)
-}
 @}
 
 The \code{formula} method allows formulae \code{outcome ~ treatment |
@@ -2313,7 +2269,8 @@ summary(ft, test = "Permutation")
 
 library("coin")
 independence_test(Surv(tm, ev) ~ g | s, data = nd, ytrafo = function(...)
-                  trafo(..., numeric_trafo = logrank_trafo, block = nd$s), teststat = "quad")
+                  trafo(..., numeric_trafo = logrank_trafo, block = nd$s), 
+                  teststat = "quad")
 @@
 
 Wilcoxon against proportional odds
@@ -2383,7 +2340,8 @@ Normal scores test against a generalised Cohen's $d$:
 nd$y <- rnorm(nrow(nd))
 free1way(y ~ g | s, data = nd, link = "probit")
 independence_test(y ~ g | s, data = nd, ytrafo = function(...)
-                  trafo(..., numeric_trafo = normal_trafo, block = nd$s), teststat = "quad")
+                  trafo(..., numeric_trafo = normal_trafo, block = nd$s), 
+                  teststat = "quad")
 @@
 
 \section{Friedman Test}
@@ -2393,7 +2351,9 @@ Each observation is a block
 <<friedman>>=
 example(friedman.test, echo = FALSE)
 rt <- expand.grid(str = gl(22, 1),
-                  trt = gl(3, 1, labels = c("Round Out", "Narrow Angle", "Wide Angle")))
+                  trt = gl(3, 1, labels = c("Round Out", 
+                                            "Narrow Angle", 
+                                            "Wide Angle")))
 rt$tm <- c(RoundingTimes)
 friedman.test(RoundingTimes)
 (ft <- free1way(tm ~ trt | str, data = rt))
@@ -2492,7 +2452,9 @@ ppplot <- function(x, y, plot.it = TRUE,
 }
 @}
 
-Correct logistic model with log-odds ratio three:
+A correct logistic model with log-odds ratio three is shown in Figure~\ref{fig:PO}
+and an incorrect proportional hazards model for the same data in
+Figure~\ref{fig:PH}.
 
 \begin{figure}
 <<ppplot, fig = TRUE>>=
@@ -2500,9 +2462,12 @@ y <- rlogis(50)
 x <- rlogis(50, location = 3)
 ppplot(y, x, conf.level = .95)
 @@
+\caption{Data sampled from a proportional-odds model with
+probability-probability (PP)  curve and $95\%$ confidence band obtained from
+a proportional-odds model. \label{fig:PO}}
 \end{figure}
 
-Incorrect proportional hazards alternative:
+
 
 \begin{figure}
 <<ppplot-savage, fig = TRUE>>=
@@ -2510,6 +2475,9 @@ ppplot(y, x, conf.args = list(link = "cloglog", type = "Wald",
                               col = NA, border = NULL),
        conf.level = .95)
 @@
+\caption{Data sampled from a proportional-odds model with
+probability-probability (PP)  curve and $95\%$ confidence band obtained from
+a proportional-hazards model. \label{fig:PH}}
 \end{figure}
 
 
@@ -2781,8 +2749,7 @@ for (i in seq_len(nsim)) {
         x[,,b] <- .r2dsim(1L, r = prob[, b], c = Nboost * N[b,], 
                           delta = delta, link = link)[[1L]]
         rs <- rowSums(x[,,b]) > 0
-        h <- h0[rs[-length(rs)], b]
-        theta <- h ##1 c(h[1], log(diff(h)))
+        theta <- h0[rs[-length(rs)], b]
         parm <- c(parm, theta)
     }
     ### evaluate observed hessian for true parameters parm and x data
@@ -2967,8 +2934,10 @@ Fisher information. By default, the continuous control distribution is
 uniform on the unit interval, thus \code{cut} with breaks defined by the
 target control discrete probability distribution generates the outcome.
 The plot shows the distribution of the parameter
-estimates and the corresponding population values as red dots.	
+estimates and the corresponding population values as red dots
+(Figure~\ref{fig:POsim}).	
 
+\begin{figure}
 <<table, fig = TRUE>>=
 prb <- rep.int(1, 4) / 4
 pw <- numeric(Nsim)
@@ -2985,11 +2954,15 @@ boxplot(cf)
 points(c(1:2), delta, pch = 19, col = "red")
 power.free1way.test(n = N, prob = prb, delta = delta)
 @@
+\caption{Power simulation for proportional-odds model and corresponding
+power approximation. \label{fig:POsim}}
+\end{figure}
 
 In the last example, we sample from $4 \times 3$ tables with odds ratios $2$ and $3$ for three
-strata with different control distributions, and again compare the
-simulation results to the power function:
+strata with different control distributions, see Figure~\ref{fig:POstrata}, and again compare the
+simulation results to the power function.
 
+\begin{figure}
 <<stable, fig = TRUE>>=
 prb <- cbind(S1 = rep(1, 4), 
              S2 = c(1, 2, 1, 2), 
@@ -3009,7 +2982,12 @@ for (i in seq_along(pw)) {
 mean(pw < .05)
 boxplot(cf)
 points(c(1:2), delta, pch = 19, col = "red")
+@@
+\caption{Power simulation for stratified proportional-odds model and corresponding
+power approximation. \label{fig:POstrata}}
+\end{figure}
 
+<<powertest>>=
 power.free1way.test(n = N, prob = prb, delta = delta, seed = 3)
 power.free1way.test(power = .8, prob = prb, delta = delta, seed = 3)
 power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
