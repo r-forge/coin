@@ -3,8 +3,10 @@ Title: Semiparametrically Efficient Population- and Permutation-based Inference 
   Distribution-free Stratified K-sample Oneway Layouts
 Date: 2025-10-04
 Version: 0.2-0
-Authors@R: person("Torsten", "Hothorn", role = c("aut", "cre"),
-                  email = "Torsten.Hothorn@R-project.org")
+Authors@R: c(person("Torsten", "Hothorn", role = c("aut", "cre"),
+                  email = "Torsten.Hothorn@R-project.org"),
+             person("Kurt", "Hornik", role = "aut",
+                  email = "Kurt.Hornik@R-project.org"))
 Description: Basic infrastructure for exact conditional and unconditional as well as
   asymptotic conditional and unconditional distribution-free inference for parameters 
   in stratified oneway layouts.

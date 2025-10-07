@@ -120,7 +120,8 @@ urlcolor={linkcolor}%
 \newcommand{\rt}{t}
 
 
-\author{Torsten Hothorn \\ Universit\"at Z\"urich}
+\author{Torsten Hothorn \\ Universit\"at Z\"urich \and
+        Kurt Hornik \\ WU Wirtschaftsuniversit\"at Wien}
 
 \title{Semiparametrically Efficient Population and Permutation Inference in 
        Distribution-free Stratified $K$-sample Oneway Layouts}
