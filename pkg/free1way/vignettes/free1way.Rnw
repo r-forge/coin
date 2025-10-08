@@ -135,7 +135,8 @@ urlcolor={linkcolor}%
 \newcommand{\rt}{t}
 
 
-\author{Torsten Hothorn \\ Universit\"at Z\"urich}
+\author{Torsten Hothorn \\ Universit\"at Z\"urich \and
+        Kurt Hornik \\ WU Wirtschaftsuniversit\"at Wien}
 
 \title{Semiparametrically Efficient Population and Permutation Inference in 
        Distribution-free Stratified $K$-sample Oneway Layouts}
@@ -2619,6 +2620,111 @@ that is, differences on a latent normal scale with variance one:
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
+\chapter{Optimisation}
+
+<<newton>>=
+### adopted from rms:::lrm.fit
+.newton <- function(start, objective, gradient, hessian, 
+                    control = list(iter.max = 150, trace = trace, 
+                                   objtol = 5e-4, gradtol = 1e-5, 
+                                   paramtol = 1e-5, minstepsize = 1e-2, 
+                                   tolsolve = .Machine$double.eps),
+                    trace = FALSE
+                   )
+{
+
+    theta  <- start # Initialize the parameter vector
+    oldobj <- Inf
+    objthe <- objective(theta)
+    if (!is.finite(objthe)) {
+        msg <- "Infeasible starting values"
+        return(list(par = theta, value = objthe, convergence = 1, message = msg)) 
+    }
+
+    ### gradtol <- gradtol * n / 1000.
+
+    for (iter in seq_len(control$iter.max)) {
+
+        gradthe <- gradient(theta)     # Compute the gradient vector
+        hessthe <- hessian(theta)      # Compute the Hessian matrix
+
+        delta <- tryCatch(solve(hessthe, gradthe, tol = control$tolsolve), 
+                          error = function(e) NULL) # Compute the Newton-Raphson step
+
+        if (is.null(delta)) {
+            msg <- "Singular Hessian matrix"
+            return(list(par = theta, value = objthe, convergence = 1, message = msg)) 
+        }
+
+        if (control$trace)
+            cat(iter, ': ', theta, "\n", sep = "")
+
+        step_size <- 1L                # Initialize step size for step-halving
+
+        # Step-halving loop
+        while (TRUE) {
+            new_theta <- theta - step_size * delta # Update parameter vector
+            objnew_the <- objective(new_theta)
+
+            if (control$trace)
+                cat("Old, new, old - new objective:", 
+                    objthe, objnew_the, objthe - objnew_the, "\n")
+
+            # Objective function failed to be reduced or is infinite
+            if (!is.finite(objnew_the) || (objnew_the > objthe + 1e-6)) {
+                step_size <- step_size / 2e0         # Reduce the step size
+
+                if (control$trace) 
+                    cat("Step size reduced to", step_size, "\n")
+
+                if (step_size <= control$minstepsize) {
+                    msg <- paste('Step size ', step_size, ' has reduced below minstepsize')
+                    return(list(par = theta, value = objthe, convergence = 1, message = msg)) 
+                }
+            } else {
+                theta  <- new_theta                   # Accept the new parameter vector
+                oldobj <- objthe
+                objthe <- objnew_the
+                break
+            }
+        }
+ 
+        # Convergence check - must meet 3 criteria
+        if ((objthe <= oldobj + 1e-6 && (oldobj - objthe < control$objtol)) &&
+            (max(abs(gradthe)) < control$gradtol) &&
+            (max(abs(delta)) < control$paramtol))
+
+            return(list(par            = theta,
+                        value          = objthe,
+                        convergence    = 0,
+                        message        = "Normal convergence"))
+    }
+
+    msg <- paste("Reached", maxit, "iterations without convergence")
+    return(list(par = theta, value = objthe, convergence = 1, message = msg)) 
+}
+@
+
+<<newton-test>>=
+N <- 10000
+P <- 30
+X <- matrix(rnorm(N * P), ncol = P)
+y <- X %*% runif(P) + rnorm(nrow(X))
+
+f <- function(par) sum((y - X %*% par)^2)
+g <- function(par) colSums(- 2 * c(y - X %*% par) * X)
+h <- function(par) 2 * crossprod(X)
+
+start <- runif(P)
+
+system.time(cf <- .newton(start = start, objective = f, gradient = g, hessian = h))
+
+system.time(cf2 <- coef(m <- lm(y ~ 0 + X)))
+max(abs(sum((y - fitted(m))^2) - cf$value))
+
+max(abs(cf$par - cf2))
+@
+
 \chapter{ML Estimation}
 \label{ch:ML}
 
