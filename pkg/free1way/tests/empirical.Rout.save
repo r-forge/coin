@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2025-09-04 r88794) -- "Unsuffered Consequences"
+R version 4.5.1 (2025-06-13) -- "Great Square Root"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -56,7 +56,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 1.9213 
 > confint(ft)
     2.5 % 97.5 %
-x2 1.6724 2.1698
+x2 1.6726   2.17
 > logLik(ft)
 [1] -6774.9
 > (ft <- free1way(y ~ x, data = d))
@@ -101,26 +101,26 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 > ft <- free1way(y = y, groups = x, link = "cloglog")
 > coef(ft)
      x2 
-0.98789 
+0.98795 
 > confint(ft)
-    2.5 % 97.5 %
-x2 0.8389 1.1369
+     2.5 % 97.5 %
+x2 0.83895  1.137
 > logLik(ft)
 [1] -6800
 > ft <- free1way(y = y, groups = x, link = "cloglog", nbins = 99)
 > coef(ft)
      x2 
-0.99439 
+0.99438 
 > confint(ft)
      2.5 % 97.5 %
-x2 0.84517 1.1435
+x2 0.84516 1.1436
 > ft <- free1way(y = y, groups = x, link = "cloglog", nbins = 100)
 > coef(ft)
      x2 
-0.99328 
+0.99326 
 > confint(ft)
      2.5 % 97.5 %
-x2 0.84403 1.1424
+x2 0.84409 1.1424
 > 
 > ci <- confint(m <- orm(y ~ x, family = "cloglog"))
 > c(rev(coef(m))[1], ci[nrow(ci),])
@@ -131,27 +131,27 @@ x2 0.84403 1.1424
 > 
 > ft <- free1way(y = y, groups = x, link = "loglog")
 > coef(ft)
-     x2 
-0.94549 
+    x2 
+0.9454 
 > confint(ft)
-    2.5 % 97.5 %
-x2 0.7993 1.0915
+     2.5 % 97.5 %
+x2 0.79934 1.0915
 > logLik(ft)
 [1] -6807.3
 > ft <- free1way(y = y, groups = x, link = "loglog", nbins = 99)
 > coef(ft)
-     x2 
-0.95039 
+    x2 
+0.9506 
 > confint(ft)
      2.5 % 97.5 %
-x2 0.80448 1.0965
+x2 0.80438 1.0968
 > ft <- free1way(y = y, groups = x, link = "loglog", nbins = 100)
 > coef(ft)
      x2 
 0.95052 
 > confint(ft)
      2.5 % 97.5 %
-x2 0.80464 1.0967
+x2 0.80429 1.0967
 > 
 > ### probit
 > ci <- confint(m <- orm(y ~ x, family = "probit"))
@@ -164,7 +164,7 @@ x2 0.80464 1.0967
 > ft <- free1way(y = y, groups = x, link = "probit")
 > coef(ft)
     x2 
-1.0872 
+1.0873 
 > confint(ft)
      2.5 % 97.5 %
 x2 0.94523 1.2293
@@ -173,17 +173,17 @@ x2 0.94523 1.2293
 > ft <- free1way(y = y, groups = x, link = "probit", nbins = 99)
 > coef(ft)
     x2 
-1.0893 
+1.0888 
 > confint(ft)
      2.5 % 97.5 %
-x2 0.94672 1.2309
+x2 0.94676 1.2308
 > ft <- free1way(y = y, groups = x, link = "probit", nbins = 100)
 > coef(ft)
     x2 
 1.0879 
 > confint(ft)
      2.5 % 97.5 %
-x2 0.94615   1.23
+x2 0.94592 1.2299
 > 
 > 
 > ### with offset
@@ -200,26 +200,26 @@ x2 0.94615   1.23
 > ft <- free1way(y = y, groups = x, mu = 1)
 > coef(ft)
      x2 
-0.92135 
+0.92128 
 > confint(ft)
      2.5 % 97.5 %
-x2 0.67228 1.1696
+x2 0.67255   1.17
 > logLik(m)
 'log Lik.' -6774.9 (df=1000)
 > ft <- free1way(y = y, groups = x, mu = 1, nbins = 99)
 > coef(ft)
      x2 
-0.92229 
+0.92232 
 > confint(ft)
      2.5 % 97.5 %
-x2 0.67382 1.1711
+x2 0.67354 1.1711
 > ft <- free1way(y = y, groups = x, mu = 1, nbins = 100)
 > coef(ft)
      x2 
-0.92023 
+0.92024 
 > confint(ft)
      2.5 % 97.5 %
-x2 0.67151 1.1688
+x2 0.67155 1.1689
 > 
 > ### permutations
 > N <- 15
@@ -282,7 +282,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-x2 -0.23636 2.3724
+x2 -0.23643 2.3724
 > 
 > ft <- free1way(y = y, groups = x, B = 10000)
 > print(ft, test = "Permutation")
@@ -290,15 +290,15 @@ x2 -0.23636 2.3724
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (1, 2)
-Perm Z = 1.6, p-value = 0.12
+Perm Z = 1.6, p-value = 0.11
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-x2 -0.24298 2.3521
+x2 -0.24306 2.3521
 attr(,"Attained level")
-[1] 0.95
+[1] 0.9498
 > 
 > proc.time()
    user  system elapsed 
-  4.528   0.116   4.640 
+  3.261   0.100   3.359 

@@ -1,11 +1,106 @@
 
+# NewtonRaphson
+
+### adopted from rms:::lrm.fit
+.NewtonRaphson <- function(start, objective, gradient, hessian, 
+                           control = list(iter.max = 150, trace = trace, 
+                                          objtol = 5e-4, gradtol = 1e-5, 
+                                          paramtol = 1e-5, minstepsize = 1e-2, 
+                                          tolsolve = .Machine$double.eps),
+                           trace = FALSE
+                           )
+{
+
+    theta  <- start # Initialize the parameter vector
+    oldobj <- Inf
+    objthe <- objective(theta)
+    if (!is.finite(objthe)) {
+        msg <- "Infeasible starting values"
+        return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
+    }
+
+    ### Note: This is done in the call to .free1wayML
+    ### gradtol <- gradtol * n / 1000.
+
+    for (iter in seq_len(control$iter.max)) {
+
+        # Newton update
+        
+        gradthe <- gradient(theta)     # Compute the gradient vector
+        hessthe <- hessian(theta)      # Compute the Hessian matrix
+
+        delta <- Matrix::solve(hessthe, gradthe, tol = control$tolsolve)
+
+        if (control$trace)
+            cat(iter, ': ', theta, "\n", sep = "")
+
+        step_size <- 1L                # Initialize step size for step-halving
+        
+
+        # Step-halving loop
+        while (TRUE) {
+            # Newton step halving
+            
+            new_theta <- theta - step_size * delta # Update parameter vector
+            objnew_the <- objective(new_theta)
+
+            if (control$trace)
+                cat("Old, new, old - new objective:", 
+                    objthe, objnew_the, objthe - objnew_the, "\n")
+
+            # Objective function failed to be reduced or is infinite
+            if (!is.finite(objnew_the) || (objnew_the > objthe + 1e-6)) {
+                step_size <- step_size / 2         # Reduce the step size
+
+                if (control$trace) 
+                    cat("Step size reduced to", step_size, "\n")
+
+                if (step_size <= control$minstepsize) {
+                    msg <- paste("Step size ", step_size, " has reduced below minstepsize")
+                    return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
+                }
+            } else {
+                theta  <- new_theta                   # Accept the new parameter vector
+                oldobj <- objthe
+                objthe <- objnew_the
+                break
+            }
+            
+        }
+
+        # Newton convergence
+        
+        # Convergence check - must meet 3 criteria
+        if ((objthe <= oldobj + 1e-6 && (oldobj - objthe < control$objtol)) &&
+            (max(abs(gradthe)) < control$gradtol) &&
+            (max(abs(delta)) < control$paramtol))
+
+            return(list(par            = theta,
+                        objective      = objthe,
+                        convergence    = 0,
+                        message        = "Normal convergence"))
+         
+    }
+
+    msg <- paste("Reached", control$iter.max, "iterations without convergence")
+    return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
+}
+
 # ML estimation
 
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
-                        control = list(trace = trace, iter.max = 200,
-                                       eval.max = 200, rel.tol = 1e-10,
-                                       abs.tol = 1e-20, xf.tol = 1e-16),
+                        dooptim = c(".NewtonRaphson", "nlminb", ".NewtonRaphson"),                         
+                        control = list(
+                            "nlminb" = list(trace = trace, iter.max = 200,
+                                            eval.max = 200, rel.tol = 1e-10,
+                                            abs.tol = 1e-20, xf.tol = 1e-16),
+                            ".NewtonRaphson" = list(iter.max = 200, trace = trace, 
+                                             objtol = 5e-4, 
+                                             gradtol = 1e-5 * sum(x) / 1000, 
+                                             paramtol = 1e-5, minstepsize = 1e-2, 
+                                             tolsolve = .Machine$double.eps)
+                        )[dooptim],
                         trace = FALSE, 
                         tol = sqrt(.Machine$double.eps), ...) {
 
@@ -150,10 +245,12 @@
         
 
         ret <- numeric(length(parm))
-        ret[bidx] <- colSums(zl)[-1L] -
-                     colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
-        ret[- bidx] <- rowSums(zu[-nrow(zu),,drop = FALSE] - 
-                               zl[-1,,drop = FALSE])
+        ret[bidx] <- .colSums(zl, m = nrow(zl), n = ncol(zl))[-1L] -
+                     .colSums(zu[-nrow(zu),,drop = FALSE], 
+                              m = nrow(zu) - 1L, n = ncol(zu))[-1L]
+        ret[- bidx] <- .rowSums(zu[-nrow(zu),,drop = FALSE] - 
+                                zl[-1,,drop = FALSE], 
+                                m = nrow(zu) - 1L, n = ncol(zu))
         return(- ret)
     }
     
@@ -184,7 +281,8 @@
         zl <- x * ftmb[- nrow(ftmb), , drop = FALSE] / prb
         
 
-        ret <- rowSums(zl - zu) / rowSums(x)
+        ret <- .rowSums(zl - zu, m = nrow(zl), n = ncol(zl)) / 
+               .rowSums(x, m = nrow(x), n = ncol(x))
         ret[!is.finite(ret)] <- 0
         return(- ret)
     }
@@ -232,17 +330,17 @@
 
         # off-diagonal elements for Hessian of intercepts
         
-        Aoffdiag <- -rowSums(x * du * dl / prb^2)[-i2]
+        Aoffdiag <- - .rowSums(x * du * dl / prb^2, m = nrow(x), n = ncol(x))[-i2]
         Aoffdiag <- Aoffdiag[-length(Aoffdiag)]
         
         # diagonal elements for Hessian of intercepts
         
-        Adiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
-                          (x * dpl / prb)[-i2,,drop = FALSE] - 
-                          ((x * du^2 / prb^2)[-i1,,drop = FALSE] + 
-                           (x * dl^2 / prb^2)[-i2,,drop = FALSE]
-                          )
-                         )
+        Adiag <- - .rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
+                            (x * dpl / prb)[-i2,,drop = FALSE] - 
+                            ((x * du^2 / prb^2)[-i1,,drop = FALSE] + 
+                             (x * dl^2 / prb^2)[-i2,,drop = FALSE] ), 
+                            m = nrow(x) - length(i1), n = ncol(x)
+                           )
                           
         
         # intercept / shift contributions to Hessian
@@ -257,14 +355,15 @@
               )
              )
 
-        Z <- -colSums(xm1 * (dpum1 / prbm1 - 
-                             dplm1 / prbm1 -
-                             (dum1^2 / prbm1^2 - 
-                              2 * dum1 * dlm1 / prbm1^2 +
-                              dlm1^2 / prbm1^2
-                             )
-                            )
-                     )
+        Z <- - .colSums(xm1 * (dpum1 / prbm1 - 
+                               dplm1 / prbm1 -
+                               (dum1^2 / prbm1^2 - 
+                                2 * dum1 * dlm1 / prbm1^2 +
+                                dlm1^2 / prbm1^2
+                               )
+                              ),
+                        m = nrow(xm1), n = ncol(xm1)
+                        )
         if (length(Z) > 1L) Z <- diag(Z)
         
 
@@ -331,7 +430,7 @@
     
     # stratified Hessian
     
-    .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE) {
+    .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {
         # stratum prep
         
         C <- sapply(x, NROW) ### might differ by stratum
@@ -345,7 +444,6 @@
         if (!isFALSE(ret <- full)) {
             # full Hessian
             
-            ret <- matrix(0, nrow = length(parm), ncol = length(parm))
             for (b in seq_len(B)) {
                 H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu, full = full)
                 if (!is.null(xrc)) {
@@ -368,23 +466,19 @@
                     Z <- Z + H$Z
                 }
             }
-            sA <- seq_along(Adiag)
-            sAo <- seq_along(Aoffdiag)
-            sZ <- seq_len(NROW(Z))
-            sXr <- seq_len(NROW(X))
-            sXc <- seq_len(NCOL(X))
 
-            idx <- matrix(NROW(Z) + cbind(sA, sA), ncol = 2)
-            ret[idx] <- Adiag
-            if (!is.null(Aoffdiag)) {
-                idx <- matrix(NROW(Z) + cbind(sA[-1], sA[-length(sA)]), ncol = 2)
-                ret[idx] <- Aoffdiag
-                ret[idx[,2:1,drop = FALSE]] <- Aoffdiag
+            if (length(Adiag) > 1L) {
+                A <- Matrix::bandSparse(length(Adiag),
+                                        k = 0:1, diagonals = list(Adiag, Aoffdiag),
+                                        symmetric = TRUE)
+            } else {
+                A <- matrix(Adiag)
             }
-            ret[sZ,sZ] <- Z
-            ret[sXc,NROW(Z) + sXr] <- t(X)
-            ret[NROW(Z) + sXr, sXc] <- X
-            return(ret)
+
+            ret <- cbind(Z, t(X))
+            ret <- rbind(ret, cbind(X, A))
+            if (retMatrix) return(ret)
+            return(as.matrix(ret))
             
         }
         ret <- matrix(0, nrow = length(bidx), ncol = length(bidx))
@@ -449,13 +543,15 @@
     }
 
     ### allocate memory for hessian
-    Hess <- matrix(0, nrow = length(start), ncol = length(start))
+    Hess <- Matrix::Matrix(0, nrow = length(start), ncol = length(start))
 
     he <- function(par) {
         if (!is.null(xrc)) {
-            ret <- .shes(par, x = xlist, mu = mu, xrc = xrclist, full = Hess)
+            ret <- .shes(par, x = xlist, mu = mu, xrc = xrclist, full = Hess, 
+                         retMatrix = names(control)[1L] == ".NewtonRaphson")
         } else {
-            ret <- .shes(par, x = xlist, mu = mu, full = Hess)
+            ret <- .shes(par, x = xlist, mu = mu, full = Hess, 
+                         retMatrix = names(control)[1L] == ".NewtonRaphson")
         }
         return(ret)
     }
@@ -484,20 +580,17 @@
                              p[-fix] <- par
                              he(p)[-fix, -fix, drop = FALSE]
                          })
-        opargs$control <- control
-        # do nlminb
+        opargs$control <- control[[1L]]
+        # do optim
         
-        maxit <- control$iter.max
+        maxit <- control[[1L]]$iter.max
         while(maxit < 10001) {
-           ret <- do.call("nlminb", opargs)
+           ret <- do.call(names(control)[[1L]], opargs)
            maxit <- 5 * maxit
            if (ret$convergence > 0) {
-               if (is.null(opargs$control))
-                   opargs$control <- list(eval.max = maxit)
-                else 
-                   opargs$control$eval.max <- maxit
-                   opargs$control$iter.max <- maxit
-                   opargs$start <- ret$par
+               opargs$control$eval.max <- maxit
+               opargs$control$iter.max <- maxit
+               opargs$start <- ret$par
            } else {
                break()
            }
@@ -523,20 +616,17 @@
                        objective = fn, 
                        gradient = gr,
                        hessian = he)
-        opargs$control <- control
-        # do nlminb
+        opargs$control <- control[[1L]]
+        # do optim
         
-        maxit <- control$iter.max
+        maxit <- control[[1L]]$iter.max
         while(maxit < 10001) {
-           ret <- do.call("nlminb", opargs)
+           ret <- do.call(names(control)[[1L]], opargs)
            maxit <- 5 * maxit
            if (ret$convergence > 0) {
-               if (is.null(opargs$control))
-                   opargs$control <- list(eval.max = maxit)
-                else 
-                   opargs$control$eval.max <- maxit
-                   opargs$control$iter.max <- maxit
-                   opargs$start <- ret$par
+               opargs$control$eval.max <- maxit
+               opargs$control$iter.max <- maxit
+               opargs$start <- ret$par
            } else {
                break()
            }
@@ -732,7 +822,8 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
             if (B) {
                 for (j in 1:dim(xt)[3L]) {
                    rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
-                   stat <- stat + sapply(rt, function(x) colSums(x[,-1L, drop = FALSE] * res[,j]))
+                   stat <- stat + sapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
+                                                                  m = nrow(x), n = ncol(x) - 1L))
                 }
                 if (dim(xt)[2L] == 2L) {
                      ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
@@ -1584,7 +1675,7 @@ power.free1way.test <- function(n = NULL, prob = rep.int(1 / n, n),
         for (b in seq_len(B)) {
             x[,,b] <- .r2dsim(1L, r = prob[, b], c = Nboost * N[b,], 
                               delta = delta, link = link)[[1L]]
-            rs <- rowSums(x[,,b]) > 0
+            rs <- .rowSums(x[,,b], m = dim(x)[1L], n = dim(x)[2L]) > 0
             theta <- h0[rs[-length(rs)], b]
             parm <- c(parm, theta)
         }

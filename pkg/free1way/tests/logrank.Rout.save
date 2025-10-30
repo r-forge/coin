@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2025-09-04 r88794) -- "Unsuffered Consequences"
+R version 4.5.1 (2025-06-13) -- "Great Square Root"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -71,7 +71,7 @@ R.Surv.time..cens...as.R.ordered...TRUE.(0.655,0.656]
 > 
 > coef(ft)
       w2 
-0.016554 
+0.016552 
 > coef(m)
       w2 
 0.016554 
@@ -85,7 +85,8 @@ w2 0.86665
 > 
 > pr <- ft$par
 > cumsum(pr[-1])
-[1] -2.8539 -2.9868 -3.6979 -4.4616 -5.4893 -6.0329
+                                                
+-2.8539 -4.8323 -6.3195 -7.3409 -8.0043 -8.0872 
 > cf
  R.Surv.time..cens...as.R.ordered...TRUE.(-Inf,0.122] 
                                             -2.853925 
@@ -162,10 +163,10 @@ log-hazard ratio for horThyes
 +                            link = "cloglog"))
 > coef(ft)
 horThyes 
- 0.36404 
+ 0.36398 
 > vcov(ft)
          horThyes
-horThyes 0.015633
+horThyes 0.015632
 > 
 > ft
 
@@ -201,7 +202,7 @@ horThyes 0.015754
 +                            link = "cloglog"))
 > coef(ft)
 horThyes 
-  0.3876 
+ 0.38762 
 > vcov(ft)
          horThyes
 horThyes 0.016048
@@ -219,4 +220,4 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-  1.218   0.088   1.301 
+  1.269   0.068   1.331 

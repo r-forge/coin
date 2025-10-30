@@ -322,6 +322,7 @@ options(digits = 5)
 @<probit@>
 @<cloglog@>
 @<loglog@>
+@<NewtonRaphson@>
 @@
 
 We start implementing the log-likelihood function for parameters \code{parm}
@@ -401,10 +402,12 @@ and then compute the negative score function:
     @<density prob ratio@>
 
     ret <- numeric(length(parm))
-    ret[bidx] <- colSums(zl)[-1L] -
-                 colSums(zu[-nrow(zu),,drop = FALSE])[-1L]
-    ret[- bidx] <- rowSums(zu[-nrow(zu),,drop = FALSE] - 
-                           zl[-1,,drop = FALSE])
+    ret[bidx] <- .colSums(zl, m = nrow(zl), n = ncol(zl))[-1L] -
+                 .colSums(zu[-nrow(zu),,drop = FALSE], 
+                          m = nrow(zu) - 1L, n = ncol(zu))[-1L]
+    ret[- bidx] <- .rowSums(zu[-nrow(zu),,drop = FALSE] - 
+                            zl[-1,,drop = FALSE], 
+                            m = nrow(zu) - 1L, n = ncol(zu))
     return(- ret)
 }
 @}
@@ -419,7 +422,8 @@ zero:
     @<parm to prob@>
     @<density prob ratio@>
 
-    ret <- rowSums(zl - zu) / rowSums(x)
+    ret <- .rowSums(zl - zu, m = nrow(zl), n = ncol(zl)) / 
+           .rowSums(x, m = nrow(x), n = ncol(x))
     ret[!is.finite(ret)] <- 0
     return(- ret)
 }
@@ -470,19 +474,19 @@ i2 <- 1L
 The off-diagonal elements of $\mA$ are now available as
 @d off-diagonal elements for Hessian of intercepts
 @{
-Aoffdiag <- -rowSums(x * du * dl / prb^2)[-i2]
+Aoffdiag <- - .rowSums(x * du * dl / prb^2, m = nrow(x), n = ncol(x))[-i2]
 Aoffdiag <- Aoffdiag[-length(Aoffdiag)]
 @}
 
 and the diagonal elements of $\mA$ as
 @d diagonal elements for Hessian of intercepts
 @{
-Adiag <- -rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
-                  (x * dpl / prb)[-i2,,drop = FALSE] - 
-                  ((x * du^2 / prb^2)[-i1,,drop = FALSE] + 
-                   (x * dl^2 / prb^2)[-i2,,drop = FALSE]
-                  )
-                 )
+Adiag <- - .rowSums((x * dpu / prb)[-i1,,drop = FALSE] - 
+                    (x * dpl / prb)[-i2,,drop = FALSE] - 
+                    ((x * du^2 / prb^2)[-i1,,drop = FALSE] + 
+                     (x * dl^2 / prb^2)[-i2,,drop = FALSE] ), 
+                    m = nrow(x) - length(i1), n = ncol(x)
+                   )
                   
 @}
 
@@ -501,14 +505,15 @@ X <- ((xm1 * dpum1 / prbm1)[-i1,,drop = FALSE] -
       )
      )
 
-Z <- -colSums(xm1 * (dpum1 / prbm1 - 
-                     dplm1 / prbm1 -
-                     (dum1^2 / prbm1^2 - 
-                      2 * dum1 * dlm1 / prbm1^2 +
-                      dlm1^2 / prbm1^2
-                     )
-                    )
-             )
+Z <- - .colSums(xm1 * (dpum1 / prbm1 - 
+                       dplm1 / prbm1 -
+                       (dum1^2 / prbm1^2 - 
+                        2 * dum1 * dlm1 / prbm1^2 +
+                        dlm1^2 / prbm1^2
+                       )
+                      ),
+                m = nrow(xm1), n = ncol(xm1)
+                )
 if (length(Z) > 1L) Z <- diag(Z)
 @}
 
@@ -778,7 +783,6 @@ the null Hessian for $\thetavec$ as a dense \code{matrix}:
 
 @d full Hessian
 @{
-ret <- matrix(0, nrow = length(parm), ncol = length(parm))
 for (b in seq_len(B)) {
     H <- .hes(c(delta, intercepts[[b]]), x[[b]], mu = mu, full = full)
     if (!is.null(xrc)) {
@@ -801,23 +805,19 @@ for (b in seq_len(B)) {
         Z <- Z + H$Z
     }
 }
-sA <- seq_along(Adiag)
-sAo <- seq_along(Aoffdiag)
-sZ <- seq_len(NROW(Z))
-sXr <- seq_len(NROW(X))
-sXc <- seq_len(NCOL(X))
 
-idx <- matrix(NROW(Z) + cbind(sA, sA), ncol = 2)
-ret[idx] <- Adiag
-if (!is.null(Aoffdiag)) {
-    idx <- matrix(NROW(Z) + cbind(sA[-1], sA[-length(sA)]), ncol = 2)
-    ret[idx] <- Aoffdiag
-    ret[idx[,2:1,drop = FALSE]] <- Aoffdiag
+if (length(Adiag) > 1L) {
+    A <- Matrix::bandSparse(length(Adiag),
+                            k = 0:1, diagonals = list(Adiag, Aoffdiag),
+                            symmetric = TRUE)
+} else {
+    A <- matrix(Adiag)
 }
-ret[sZ,sZ] <- Z
-ret[sXc,NROW(Z) + sXr] <- t(X)
-ret[NROW(Z) + sXr, sXc] <- X
-return(ret)
+
+ret <- cbind(Z, t(X))
+ret <- rbind(ret, cbind(X, A))
+if (retMatrix) return(ret)
+return(as.matrix(ret))
 @}
 
 and the computation of the Hessian for the shift parameters using
@@ -825,7 +825,7 @@ and the computation of the Hessian for the shift parameters using
 
 @d stratified Hessian
 @{
-.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE) {
+.shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {
     @<stratum prep@>
     if (!isFALSE(ret <- full)) {
         @<full Hessian@>
@@ -1105,15 +1105,76 @@ probit <- function()
 
 \chapter{Optimisation}
 
-<<newton>>=
+\cite{Harrell2024} reports on experiments with a number of optimisers for the specific
+optimisation problem arising here and recommends a Newton-Raphson algorithm
+leveraging the sparse matrix structure of the observed Fisher information
+matrix. The following code was adopted from his \pkg{rms} package, function
+\code{rms:::lrm.fit}.
+
+@d Newton update
+@{
+gradthe <- gradient(theta)     # Compute the gradient vector
+hessthe <- hessian(theta)      # Compute the Hessian matrix
+
+delta <- Matrix::solve(hessthe, gradthe, tol = control$tolsolve)
+
+if (control$trace)
+    cat(iter, ': ', theta, "\n", sep = "")
+
+step_size <- 1L                # Initialize step size for step-halving
+@}
+
+@d Newton step halving
+@{
+new_theta <- theta - step_size * delta # Update parameter vector
+objnew_the <- objective(new_theta)
+
+if (control$trace)
+    cat("Old, new, old - new objective:", 
+        objthe, objnew_the, objthe - objnew_the, "\n")
+
+# Objective function failed to be reduced or is infinite
+if (!is.finite(objnew_the) || (objnew_the > objthe + 1e-6)) {
+    step_size <- step_size / 2         # Reduce the step size
+
+    if (control$trace) 
+        cat("Step size reduced to", step_size, "\n")
+
+    if (step_size <= control$minstepsize) {
+        msg <- paste("Step size ", step_size, " has reduced below minstepsize")
+        return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
+    }
+} else {
+    theta  <- new_theta                   # Accept the new parameter vector
+    oldobj <- objthe
+    objthe <- objnew_the
+    break
+}
+@}
+
+@d Newton convergence
+@{
+# Convergence check - must meet 3 criteria
+if ((objthe <= oldobj + 1e-6 && (oldobj - objthe < control$objtol)) &&
+    (max(abs(gradthe)) < control$gradtol) &&
+    (max(abs(delta)) < control$paramtol))
+
+    return(list(par            = theta,
+                objective      = objthe,
+                convergence    = 0,
+                message        = "Normal convergence"))
+@}
+
+@d NewtonRaphson
+@{
 ### adopted from rms:::lrm.fit
-.newton <- function(start, objective, gradient, hessian, 
-                    control = list(iter.max = 150, trace = trace, 
-                                   objtol = 5e-4, gradtol = 1e-5, 
-                                   paramtol = 1e-5, minstepsize = 1e-2, 
-                                   tolsolve = .Machine$double.eps),
-                    trace = FALSE
-                   )
+.NewtonRaphson <- function(start, objective, gradient, hessian, 
+                           control = list(iter.max = 150, trace = trace, 
+                                          objtol = 5e-4, gradtol = 1e-5, 
+                                          paramtol = 1e-5, minstepsize = 1e-2, 
+                                          tolsolve = .Machine$double.eps),
+                           trace = FALSE
+                           )
 {
 
     theta  <- start # Initialize the parameter vector
@@ -1121,74 +1182,36 @@ probit <- function()
     objthe <- objective(theta)
     if (!is.finite(objthe)) {
         msg <- "Infeasible starting values"
-        return(list(par = theta, value = objthe, convergence = 1, message = msg)) 
+        return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
     }
 
+    ### Note: This is done in the call to .free1wayML
     ### gradtol <- gradtol * n / 1000.
 
     for (iter in seq_len(control$iter.max)) {
 
-        gradthe <- gradient(theta)     # Compute the gradient vector
-        hessthe <- hessian(theta)      # Compute the Hessian matrix
-
-        delta <- tryCatch(solve(hessthe, gradthe, tol = control$tolsolve), 
-                          error = function(e) NULL) # Compute the Newton-Raphson step
-
-        if (is.null(delta)) {
-            msg <- "Singular Hessian matrix"
-            return(list(par = theta, value = objthe, convergence = 1, message = msg)) 
-        }
-
-        if (control$trace)
-            cat(iter, ': ', theta, "\n", sep = "")
-
-        step_size <- 1L                # Initialize step size for step-halving
+        @<Newton update@>
 
         # Step-halving loop
         while (TRUE) {
-            new_theta <- theta - step_size * delta # Update parameter vector
-            objnew_the <- objective(new_theta)
-
-            if (control$trace)
-                cat("Old, new, old - new objective:", 
-                    objthe, objnew_the, objthe - objnew_the, "\n")
-
-            # Objective function failed to be reduced or is infinite
-            if (!is.finite(objnew_the) || (objnew_the > objthe + 1e-6)) {
-                step_size <- step_size / 2e0         # Reduce the step size
-
-                if (control$trace) 
-                    cat("Step size reduced to", step_size, "\n")
-
-                if (step_size <= control$minstepsize) {
-                    msg <- paste('Step size ', step_size, ' has reduced below minstepsize')
-                    return(list(par = theta, value = objthe, convergence = 1, message = msg)) 
-                }
-            } else {
-                theta  <- new_theta                   # Accept the new parameter vector
-                oldobj <- objthe
-                objthe <- objnew_the
-                break
-            }
+            @<Newton step halving@>
         }
- 
-        # Convergence check - must meet 3 criteria
-        if ((objthe <= oldobj + 1e-6 && (oldobj - objthe < control$objtol)) &&
-            (max(abs(gradthe)) < control$gradtol) &&
-            (max(abs(delta)) < control$paramtol))
 
-            return(list(par            = theta,
-                        value          = objthe,
-                        convergence    = 0,
-                        message        = "Normal convergence"))
+        @<Newton convergence@> 
     }
 
-    msg <- paste("Reached", maxit, "iterations without convergence")
-    return(list(par = theta, value = objthe, convergence = 1, message = msg)) 
+    msg <- paste("Reached", control$iter.max, "iterations without convergence")
+    return(list(par = theta, objective = objthe, convergence = 1, message = msg)) 
 }
+@}
+
+<<Newton, echo = FALSE>>=
+@<Newton@>
 @@
 
-<<newton-test>>=
+We can now test the optimiser on a least-squares problem
+
+<<Newton-test>>=
 N <- 10000
 P <- 30
 X <- matrix(rnorm(N * P), ncol = P)
@@ -1200,12 +1223,11 @@ h <- function(par) 2 * crossprod(X)
 
 start <- runif(P)
 
-system.time(cf <- .newton(start = start, objective = f, gradient = g, hessian = h))
+cf <- .NewtonRaphson(start = start, objective = f, gradient = g, hessian = h)
 
-system.time(cf2 <- coef(m <- lm(y ~ 0 + X)))
-max(abs(sum((y - fitted(m))^2) - cf$value))
-
-max(abs(cf$par - cf2))
+cf2 <- coef(m <- lm(y ~ 0 + X))
+all.equal(sum((y - fitted(m))^2), cf$objective)
+all.equal(unname(cf$par), unname(cf2))
 @@
 
 \chapter{ML Estimation}
@@ -1213,6 +1235,7 @@ max(abs(cf$par - cf2))
 
 @o free1way.R -cp
 @{
+@<NewtonRaphson@>
 @<ML estimation@>
 @<free1way@>
 @<free1way methods@>
@@ -1266,19 +1289,16 @@ We call \code{nlminb} and will increase the \code{eval.max} and
 \code{iter.max} control parameters if
 we encounter optimisation issues and restart at the current solution:
 
-@d do nlminb
+@d do optim
 @{
-maxit <- control$iter.max
+maxit <- control[[1L]]$iter.max
 while(maxit < 10001) {
-   ret <- do.call("nlminb", opargs)
+   ret <- do.call(names(control)[[1L]], opargs)
    maxit <- 5 * maxit
    if (ret$convergence > 0) {
-       if (is.null(opargs$control))
-           opargs$control <- list(eval.max = maxit)
-        else 
-           opargs$control$eval.max <- maxit
-           opargs$control$iter.max <- maxit
-           opargs$start <- ret$par
+       opargs$control$eval.max <- maxit
+       opargs$control$iter.max <- maxit
+       opargs$start <- ret$par
    } else {
        break()
    }
@@ -1314,13 +1334,15 @@ gr <- function(par) {
 }
 
 ### allocate memory for hessian
-Hess <- matrix(0, nrow = length(start), ncol = length(start))
+Hess <- Matrix::Matrix(0, nrow = length(start), ncol = length(start))
 
 he <- function(par) {
     if (!is.null(xrc)) {
-        ret <- .shes(par, x = xlist, mu = mu, xrc = xrclist, full = Hess)
+        ret <- .shes(par, x = xlist, mu = mu, xrc = xrclist, full = Hess, 
+                     retMatrix = names(control)[1L] == ".NewtonRaphson")
     } else {
-        ret <- .shes(par, x = xlist, mu = mu, full = Hess)
+        ret <- .shes(par, x = xlist, mu = mu, full = Hess, 
+                     retMatrix = names(control)[1L] == ".NewtonRaphson")
     }
     return(ret)
 }
@@ -1349,8 +1371,8 @@ he <- function(par) {
                          p[-fix] <- par
                          he(p)[-fix, -fix, drop = FALSE]
                      })
-    opargs$control <- control
-    @<do nlminb@>
+    opargs$control <- control[[1L]]
+    @<do optim@>
     p <- numeric(length(start))
     p[fix] <- delta
     p[-fix] <- ret$par
@@ -1371,8 +1393,8 @@ if (!length(fix)) {
                    objective = fn, 
                    gradient = gr,
                    hessian = he)
-    opargs$control <- control
-    @<do nlminb@>
+    opargs$control <- control[[1L]]
+    @<do optim@>
 } else if (length(fix) == length(start)) {
     ret <- list(par = start, 
                 value = fn(start))
@@ -1440,15 +1462,29 @@ if (length(ret$mu) == 1) {
 
 Finally, we put everything into one function which returns an object of
 class \code{free1wayML} for later use. The control parameters for
-\code{nlminb} are the ones suggested by \cite{Harrell2024}:
+\code{.NewtonRaphson} and \code{stats::nlminb} are the ones suggested by
+\cite{Harrell2024}. By default, the internal Newton-Raphson implementation
+is used, we can switch to \code{stats::nlminb} by specifying \code{dooptim =
+"nlminb"}. The latter option cannot handle Fisher information matrices in
+form of a \code{Matrix} object and thus computing the updates takes more
+time whenever a larger number of intercept parameters in present in the
+problem.
 
 @d ML estimation
 @{
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
-                        control = list(trace = trace, iter.max = 200,
-                                       eval.max = 200, rel.tol = 1e-10,
-                                       abs.tol = 1e-20, xf.tol = 1e-16),
+                        dooptim = c(".NewtonRaphson", "nlminb", ".NewtonRaphson"),                         
+                        control = list(
+                            "nlminb" = list(trace = trace, iter.max = 200,
+                                            eval.max = 200, rel.tol = 1e-10,
+                                            abs.tol = 1e-20, xf.tol = 1e-16),
+                            ".NewtonRaphson" = list(iter.max = 200, trace = trace, 
+                                             objtol = 5e-4, 
+                                             gradtol = 1e-5 * sum(x) / 1000, 
+                                             paramtol = 1e-5, minstepsize = 1e-2, 
+                                             tolsolve = .Machine$double.eps)
+                        )[dooptim],
                         trace = FALSE, 
                         tol = sqrt(.Machine$double.eps), ...) {
 
@@ -1706,7 +1742,8 @@ tables with fixed marginal distributions:
     if (B) {
         for (j in 1:dim(xt)[3L]) {
            rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
-           stat <- stat + sapply(rt, function(x) colSums(x[,-1L, drop = FALSE] * res[,j]))
+           stat <- stat + sapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
+                                                          m = nrow(x), n = ncol(x) - 1L))
         }
         if (dim(xt)[2L] == 2L) {
              ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
@@ -2852,7 +2889,7 @@ for (i in seq_len(nsim)) {
     for (b in seq_len(B)) {
         x[,,b] <- .r2dsim(1L, r = prob[, b], c = Nboost * N[b,], 
                           delta = delta, link = link)[[1L]]
-        rs <- rowSums(x[,,b]) > 0
+        rs <- .rowSums(x[,,b], m = dim(x)[1L], n = dim(x)[2L]) > 0
         theta <- h0[rs[-length(rs)], b]
         parm <- c(parm, theta)
     }

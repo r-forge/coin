@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2025-09-04 r88794) -- "Unsuffered Consequences"
+R version 4.5.1 (2025-06-13) -- "Great Square Root"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -39,7 +39,7 @@ Waiting for profiling to be done...
 > ft <- free1way(y = y, groups = x, B = 10000)
 > coef(ft)
      xB 
--1.8623 
+-1.8624 
 > print(ft, test = "LRT")
 
 	2-sample Wilcoxon test against proportional odds alternatives
@@ -72,7 +72,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Wald")
      2.5 %  97.5 %
-xB -2.1663 -1.5583
+xB -2.1664 -1.5584
 > print(ft, test = "Permutation")
 
 	2-sample Wilcoxon test against proportional odds alternatives
@@ -152,4 +152,4 @@ attr(,"Attained level")
 > 
 > proc.time()
    user  system elapsed 
-  0.778   0.043   0.817 
+  0.802   0.060   0.858 

@@ -3,12 +3,6 @@
 
 > options(digits = 5)
 
-> .rcr <- function(z) {
-+     N <- length(z)
-+     s <- cumsum(z)
-+     return(s[N] - c(0, s[-N]))
-+ }
-
 > .table2list <- function(x) {
 +     dx <- dim(x)
 +     if (length(dx) == 1) 
@@ -31,10 +25,10 @@
 +     delta <- c(0, mu + parm[bidx])
 +     intercepts  .... [TRUNCATED] 
 
-> .hes <- function(parm, x, mu = 0, rightcensored = FALSE) {
+> .hes <- function(parm, x, mu = 0, rightcensored = FALSE, 
++     full = FALSE) {
 +     bidx <- seq_len(ncol(x) - 1)
-+     delta <- c(0, mu + parm[bidx])
-+     intercepts  .... [TRUNCATED] 
++     delta <- c(0, mu + parm[bid .... [TRUNCATED] 
 
 > .snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
 +     C <- sapply(x, NROW)
@@ -46,11 +40,10 @@
 +     K <- unique(do.call("c", lapply(x, ncol)))
 +     B <- l .... [TRUNCATED] 
 
-> .shes <- function(parm, x, mu = 0, xrc = NULL) {
+> .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, 
++     retMatrix = FALSE) {
 +     C <- sapply(x, NROW)
-+     K <- unique(do.call("c", lapply(x, ncol)))
-+     B <- length(x)
-+  .... [TRUNCATED] 
++     K <- unique(do.call("c", l .... [TRUNCATED] 
 
 > .snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
 +     C <- sapply(x, NROW)
@@ -59,7 +52,7 @@
 
 > .free1wayML <- function(x, link, mu = 0, start = NULL, 
 +     fix = NULL, residuals = TRUE, score = TRUE, hessian = TRUE, 
-+     tol = sqrt(.Machine .... [TRUNCATED] 
++     dooptim = c(".Newto ..." ... [TRUNCATED] 
 
 > .SW <- function(res, xt) {
 +     if (length(dim(xt)) == 3) {
@@ -106,6 +99,10 @@
 +     parm = "log-reverse time hazard ratio", link = function(p, 
 +         log. .... [TRUNCATED] 
 
+> .NewtonRaphson <- function(start, objective, gradient, 
++     hessian, control = list(iter.max = 150, trace = trace, objtol = 5e-04, 
++         grad .... [TRUNCATED] 
+
 > library("free1way")
 
 > (x <- matrix(c(10, 5, 7, 11, 8, 9), nrow = 2))
@@ -131,11 +128,11 @@
 > op <- optim(par = c(mt2 = 0, mt3 = 0, `(Intercept)` = 0), 
 +     fn = .nll, gr = .nsc, x = x, method = "BFGS", hessian = TRUE)
 
-> cbind(c(cf[-1] * -1, cf[1]), op$par)
-               [,1]    [,2]
-t2          1.14513 1.14513
-t3          0.81093 0.81093
-(Intercept) 0.69315 0.69315
+> cbind(glm = c(cf[-1] * -1, cf[1]), free1way = op$par)
+                glm free1way
+t2          1.14513  1.14513
+t3          0.81093  0.81093
+(Intercept) 0.69315  0.69315
 
 > logLik(m)
 'log Lik.' -33.33 (df=3)
@@ -214,12 +211,12 @@ B  4 15  4
 +     `(Intercept 2)` = 0), fn = .snll, gr = .snsc, x = xl, method = "BFGS", 
 +     hess .... [TRUNCATED] 
 
-> cbind(c(cf[-(1:2)] * -1, cf[1:2]), op$par)
-      [,1]    [,2]
-t2 1.30224 1.30225
-t3 0.74147 0.74149
-s1 0.72433 0.72435
-s2 0.77385 0.77386
+> cbind(glm = c(cf[-(1:2)] * -1, cf[1:2]), free1way = op$par)
+       glm free1way
+t2 1.30224  1.30225
+t3 0.74147  0.74149
+s1 0.72433  0.72435
+s2 0.77385  0.77386
 
 > logLik(m)
 'log Lik.' -62.523 (df=4)
@@ -246,7 +243,7 @@ t3 0.16153 0.32006
 
 > obj$coefficients
       B       C 
-1.30223 0.74147 
+1.30224 0.74147 
 
 > -obj$value
 [1] -62.523
@@ -255,6 +252,34 @@ t3 0.16153 0.32006
         B       C
 B 0.27095 0.16153
 C 0.16153 0.32006
+
+> N <- 10000
+
+> P <- 30
+
+> X <- matrix(rnorm(N * P), ncol = P)
+
+> y <- X %*% runif(P) + rnorm(nrow(X))
+
+> f <- function(par) sum((y - X %*% par)^2)
+
+> g <- function(par) colSums(-2 * c(y - X %*% par) * 
++     X)
+
+> h <- function(par) 2 * crossprod(X)
+
+> start <- runif(P)
+
+> cf <- .NewtonRaphson(start = start, objective = f, 
++     gradient = g, hessian = h)
+
+> cf2 <- coef(m <- lm(y ~ 0 + X))
+
+> all.equal(sum((y - fitted(m))^2), cf$objective)
+[1] TRUE
+
+> all.equal(unname(cf$par), unname(cf2))
+[1] TRUE
 
 > N <- 10
 
@@ -287,15 +312,15 @@ $value
 [1] 65.932
 
 $par
-[1]  0.052627  0.204747 -0.489672  0.412200  0.028487
+[1]  0.052627  0.204750 -0.489670  1.020466  0.028488
 
 
 > cf <- ret$par
 
 > cf[1:2] <- cf[1:2] + 0.5
 
-> cf
-[1]  0.552627  0.704747 -0.489672  0.412200  0.028487
+> c(cf[1:2], cf[3], log(cf[4] - cf[3]), cf[5])
+[1]  0.552627  0.704750 -0.489670  0.412200  0.028488
 
 > .free1wayML(x, logit(), start = cf, fix = 1:2)[c("value", 
 +     "par")]
@@ -303,7 +328,7 @@ $value
 [1] 66.381
 
 $par
-[1]  0.55263  0.70475 -0.11886  0.42319  0.40841
+[1]  0.55263  0.70475 -0.11885  1.40796  0.40841
 
 
 > .free1wayML(x, logit(), start = cf, fix = 2)[c("value", 
@@ -312,7 +337,7 @@ $value
 [1] 66.299
 
 $par
-[1]  0.36095  0.70475 -0.18771  0.42477  0.33442
+[1]  0.36095  0.70475 -0.18771  1.34153  0.33443
 
 
 > .free1wayML(x, logit(), start = cf, fix = seq_along(ret$par))[c("value", 
@@ -321,7 +346,7 @@ $value
 [1] 67.771
 
 $par
-[1]  0.552627  0.704747 -0.489672  0.412200  0.028487
+[1]  0.552627  0.704750 -0.489670  1.020466  0.028488
 
 
 > set.seed(29)
@@ -402,7 +427,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > coef(ft)
        B        C 
-0.052627 0.204747 
+0.052627 0.204750 
 
 > vcov(ft)
         B       C
@@ -523,9 +548,9 @@ B -1.10552 1.2108
 C -0.93558 1.3451
 
 > confint(ft, test = "Rao")
-    2.5 % 97.5 %
-B -1.0907 1.1954
-C -0.9207 1.3301
+     2.5 % 97.5 %
+B -1.09074 1.1954
+C -0.92071 1.3301
 
 > confint(ft, test = "LRT")
      2.5 % 97.5 %
@@ -567,7 +592,7 @@ w2          1.290      0.524   2.462    0.01
 
 > summary(ft, test = "Permutation", alternative = "greater")$p.value
    Perm Z 
-0.0078536 
+0.0078535 
 
 > wilcox.test(y ~ w, correct = FALSE)$p.value
 [1] 0.015194
@@ -647,7 +672,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
      2.5 % 97.5 %
-w2 0.23828 2.3423
+w2 0.23829 2.3423
 
 > confint(ft, test = "LRT")
      2.5 % 97.5 %
@@ -655,7 +680,7 @@ w2 0.28151 2.3446
 
 > confint(ft, test = "Wald")
      2.5 % 97.5 %
-w2 0.26307 2.3168
+w2 0.26308 2.3168
 
 > confint(ft, test = "Rao")
      2.5 % 97.5 %
@@ -684,8 +709,8 @@ The following objects are masked from ‘package:base’:
 1.29 
 
 > coef(ft)
-    w2 
-1.2899 
+  w2 
+1.29 
 
 > logLik(or)
 'log Lik.' -192.44 (df=50)
@@ -708,7 +733,7 @@ w2 0.2745
 
 > confint(ft, test = "Wald")
      2.5 % 97.5 %
-w2 0.26307 2.3168
+w2 0.26308 2.3168
 
 > example(mantelhaen.test, echo = FALSE)
 
@@ -750,8 +775,8 @@ GenderFemale 0.77234 1.0603
 > exp(sapply(dimnames(UCBAdmissions)[[3]], function(dept) confint(free1way(UCBAdmissions[, 
 +     , dept]), test = "Permutation")))
            A       B      C       D       E       F
-[1,] 0.20966 0.34796 0.8546 0.68644 0.82584 0.45826
-[2,] 0.58184 1.85295 1.5022 1.23647 1.80735 1.49543
+[1,] 0.20967 0.34796 0.8547 0.68644 0.82584 0.45829
+[2,] 0.58185 1.85295 1.5021 1.23646 1.80738 1.49558
 
 > sapply(dimnames(UCBAdmissions)[[3]], function(dept) fisher.test(UCBAdmissions[, 
 +     , dept], conf.int = TRUE)$conf.int)
@@ -834,7 +859,7 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > coef(ft)
      g2      g3 
-0.16036 0.16066 
+0.16038 0.16058 
 
 > vcov(cm)
           g2        g3
@@ -843,8 +868,8 @@ g3 0.0034163 0.0067785
 
 > vcov(ft)
           g2        g3
-g2 0.0067886 0.0034203
-g3 0.0034203 0.0067852
+g2 0.0067888 0.0034204
+g3 0.0034204 0.0067851
 
 > summary(ft)
 
@@ -853,8 +878,8 @@ free1way.formula(formula = tm ~ g | s, data = nd, link = "cloglog")
 
 Coefficients:
    log-hazard ratio Std. Error z value P(>|z|)
-g2           0.1604     0.0824  1.9463    0.05
-g3           0.1607     0.0824  1.9504    0.05
+g2           0.1604     0.0824  1.9464    0.05
+g3           0.1606     0.0824  1.9494    0.05
 
 > summary(cm)$sctest
    test      df  pvalue 
@@ -947,7 +972,7 @@ free1way.formula(formula = tm ~ g | s, data = nd, link = "logit")
 
 Coefficients:
    log-odds ratio Std. Error z value P(>|z|)
-g2          0.301      0.142   2.120    0.03
+g2          0.301      0.142   2.119    0.03
 g3          0.261      0.142   1.830    0.07
 
 > summary(ft, test = "Rao")
@@ -957,7 +982,7 @@ g3          0.261      0.142   1.830    0.07
 
 data:  tm by g (1, 2, 3) 
 	 stratified by s
-Rao chi-squared = 5.29, df = 2, p-value = 0.071
+Rao chi-squared = 5.27, df = 2, p-value = 0.072
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 
@@ -1014,7 +1039,7 @@ horThyes
 
 > coef(ft)
 horThyes 
-  0.3876 
+ 0.38762 
 
 > vcov(cm)
          horThyes
@@ -1044,7 +1069,7 @@ horThyes            0.388      0.127   3.060       0
 
 data:  Surv(time, cens) by horTh (no, yes) 
 	 stratified by tgrade
-Rao chi-squared = 9.46, df = 1, p-value = 0.0021
+Rao chi-squared = 9.47, df = 1, p-value = 0.0021
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 
@@ -1240,16 +1265,16 @@ Quantile = 2.718
 
 Linear Hypotheses:
            Estimate lwr     upr    
-6 - 5 == 0  0.8126  -0.9379  2.5632
-7 - 5 == 0  2.5282   1.0838  3.9727
-8 - 5 == 0  2.3826   0.9323  3.8330
-9 - 5 == 0  0.7515  -0.5306  2.0335
-7 - 6 == 0  1.7156  -0.0694  3.5006
-8 - 6 == 0  1.5700  -0.2221  3.3621
-9 - 6 == 0 -0.0612  -1.7488  1.6265
+6 - 5 == 0  0.8124  -0.9382  2.5629
+7 - 5 == 0  2.5282   1.0837  3.9726
+8 - 5 == 0  2.3826   0.9322  3.8330
+9 - 5 == 0  0.7513  -0.5308  2.0334
+7 - 6 == 0  1.7158  -0.0692  3.5008
+8 - 6 == 0  1.5702  -0.2219  3.3624
+9 - 6 == 0 -0.0610  -1.7487  1.6266
 8 - 7 == 0 -0.1456  -1.4745  1.1834
-9 - 7 == 0 -1.7768  -3.1205 -0.4330
-9 - 8 == 0 -1.6312  -2.9842 -0.2782
+9 - 7 == 0 -1.7768  -3.1206 -0.4331
+9 - 8 == 0 -1.6313  -2.9843 -0.2783
 
 
 > y <- rlogis(50)
@@ -1268,7 +1293,7 @@ Linear Hypotheses:
 
 > coef(ft <- free1way(y ~ groups, data = nd))
 groupsB groupsC 
-0.48986 0.74859 
+0.48984 0.74855 
 
 > sqrt(diag(vcov(ft)))
 groupsB groupsC 
@@ -1281,7 +1306,7 @@ groupsB groupsC
 
 > coef(ft <- free1way(y ~ groups, data = nd))
 groupsB groupsC 
-0.48986 0.74859 
+0.48984 0.74855 
 
 > sqrt(diag(vcov(ft)))
 groupsB groupsC 
@@ -1334,7 +1359,7 @@ free1way.formula(formula = y ~ groups, data = nd, link = "cloglog")
 
 Coefficients:
         log-hazard ratio Std. Error z value P(>|z|)
-groupsB            1.034      0.061  16.958       0
+groupsB            1.034      0.061  16.957       0
 
 > summary(coxph(y ~ groups, data = nd))
 Call:
@@ -1574,4 +1599,4 @@ NOTE: 'n' is sample size in control group of first stratum
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 33.448   0.180  33.656 
+ 34.161   0.155  34.347 

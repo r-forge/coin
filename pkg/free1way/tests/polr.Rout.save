@@ -1,5 +1,5 @@
 
-R Under development (unstable) (2025-09-04 r88794) -- "Unsuffered Consequences"
+R version 4.5.1 (2025-06-13) -- "Great Square Root"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -130,7 +130,7 @@ data:  Polr(formula = y ~ x, method = "logistic")
 Z = -1.46, p-value = 0.16
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.29993  1.80694
+ -0.2738  1.8069
 sample estimates:
  for xB 
 0.77167 
@@ -140,14 +140,14 @@ sample estimates:
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.46, p-value = 0.13
+Perm Z = 1.46, p-value = 0.14
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-xB -0.26335 1.8079
+xB -0.29993 1.8069
 attr(,"Attained level")
-[1] 0.9492
+[1] 0.9472
 > 
 > ci <- confint(m <- polr(y ~ x, method = "cloglog"))
 Waiting for profiling to be done...
@@ -228,16 +228,16 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > confint(ft, test = "Rao")
       2.5 % 97.5 %
-xB -0.14641 1.2658
+xB -0.14639 1.2658
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
 	Approximative Permutation Transformation Score Test
 
 data:  Polr(formula = y ~ x, method = "cloglog")
-Z = -1.51, p-value = 0.13
+Z = -1.51, p-value = 0.14
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.16149  1.26976
+ -0.17261  1.28092
 sample estimates:
  for xB 
 0.55973 
@@ -252,9 +252,9 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-xB -0.16153 1.2657
+xB -0.14626 1.2809
 attr(,"Attained level")
-[1] 0.9474
+[1] 0.9497
 > 
 > ci <- confint(m <- polr(y ~ x, method = "loglog"))
 Waiting for profiling to be done...
@@ -345,7 +345,7 @@ data:  Polr(formula = y ~ x, method = "loglog")
 Z = -1.18, p-value = 0.24
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.26358  1.05432
+ -0.26296  1.05432
 sample estimates:
  for xB 
 0.39571 
@@ -362,7 +362,7 @@ alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
       2.5 % 97.5 %
 xB -0.26296 1.0544
 attr(,"Attained level")
-[1] 0.9483
+[1] 0.9482
 > 
 > ci <- confint(m <- polr(y ~ x, method = "probit"))
 Waiting for profiling to be done...
@@ -430,8 +430,8 @@ Likelihood-ratio Test: Chisq = 2.0497 on 1 degrees of freedom; p = 0.152
 
 > ft <- free1way(y = y, groups = x, link = "probit", B = 10000)
 > coef(ft)
-    xB 
-0.4511 
+     xB 
+0.45109 
 > logLik(ft)
 [1] -65.373
 > print(ft, test = "Rao")
@@ -440,21 +440,21 @@ Likelihood-ratio Test: Chisq = 2.0497 on 1 degrees of freedom; p = 0.152
 	alternatives
 
 data:  y by x (A, B)
-Rao chi-squared = 2.04, df = 1, p-value = 0.15
+Rao chi-squared = 2.05, df = 1, p-value = 0.15
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 > confint(ft, test = "Rao")
       2.5 % 97.5 %
-xB -0.16673  1.069
+xB -0.16683  1.069
 > perm_test(m, parm = "xB", distribution = approximate(nresample = 10000))
 
 	Approximative Permutation Transformation Score Test
 
 data:  Polr(formula = y ~ x, method = "probit")
-Z = -1.41, p-value = 0.18
+Z = -1.41, p-value = 0.17
 alternative hypothesis: true  for xB is not equal to 0
 95 percent confidence interval:
- -0.18674  1.08025
+ -0.17808  1.08025
 sample estimates:
  for xB 
 0.45109 
@@ -470,10 +470,10 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-xB -0.17728 1.0804
+xB -0.16928 1.0803
 attr(,"Attained level")
-[1] 0.947
+[1] 0.9498
 > 
 > proc.time()
    user  system elapsed 
-  3.258   0.060   3.317 
+  3.739   0.120   3.854 
