@@ -693,7 +693,8 @@ options(digits = 5)
 
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
-                        dooptim = c(".NewtonRaphson", "nlminb", ".NewtonRaphson"),                         
+                        ### use nlminb for small sample sizes
+                        dooptim = c(".NewtonRaphson", "nlminb")[1 + (sum(x) < 20)],                         
                         control = list(
                             "nlminb" = list(trace = trace, iter.max = 200,
                                             eval.max = 200, rel.tol = 1e-10,
@@ -3209,7 +3210,8 @@ problem.
 \mbox{}\verb@@\\
 \mbox{}\verb@.free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, @\\
 \mbox{}\verb@                        residuals = TRUE, score = TRUE, hessian = TRUE, @\\
-\mbox{}\verb@                        dooptim = c(".NewtonRaphson", "nlminb", ".NewtonRaphson"),                         @\\
+\mbox{}\verb@                        ### use nlminb for small sample sizes@\\
+\mbox{}\verb@                        dooptim = c(".NewtonRaphson", "nlminb")[1 + (sum(x) < 20)],                         @\\
 \mbox{}\verb@                        control = list(@\\
 \mbox{}\verb@                            "nlminb" = list(trace = trace, iter.max = 200,@\\
 \mbox{}\verb@                                            eval.max = 200, rel.tol = 1e-10,@\\
@@ -3447,12 +3449,12 @@ distribution:
 \mbox{}\verb@   sc <- sc / sqrt(c(ret$hessian))@\\
 \mbox{}\verb@Esc <- sc - x$perm$Expectation@\\
 \mbox{}\verb@### avoid p-values == 0@\\
-\mbox{}\verb@.pm <- function(x) (1 + sum(x)) / (1 + length(x))@\\
+\mbox{}\verb@.pm <- function(x) sum(x) / length(x) ### (1 + sum(x)) / (1 + length(x))@\\
 \mbox{}\verb@if (alternative == "two.sided" && length(cf) > 1L) {@\\
 \mbox{}\verb@    STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))@\\
 \mbox{}\verb@    ps <- x$perm$permStat@\\
 \mbox{}\verb@    if (!is.null(x$perm$permStat))@\\
-\mbox{}\verb@        PVAL <- .pm(ps > STATISTIC + tol)@\\
+\mbox{}\verb@        PVAL <- .pm(round(ps, 16) >= round(STATISTIC, 16))@\\
 \mbox{}\verb@    else {@\\
 \mbox{}\verb@        DF <- c("df" = x$perm$DF)@\\
 \mbox{}\verb@        PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)@\\
@@ -3460,12 +3462,15 @@ distribution:
 \mbox{}\verb@} else {@\\
 \mbox{}\verb@    STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))@\\
 \mbox{}\verb@    if (!is.null(x$perm$permStat)) {@\\
+\mbox{}\verb@        PVALle <- .pm(round(x$perm$permStat, 16) <= round(STATISTIC, 16))@\\
+\mbox{}\verb@        PVALge <- .pm(round(x$perm$permStat, 16) >= round(STATISTIC, 16))@\\
 \mbox{}\verb@        if (alternative == "two.sided")@\\
-\mbox{}\verb@            PVAL <- .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)@\\
+\mbox{}\verb@            PVAL <- 2 * min(c(PVALle, PVALge))@\\
+\mbox{}\verb@            ### .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)@\\
 \mbox{}\verb@        else if (alternative == "less")@\\
-\mbox{}\verb@            PVAL <- .pm(x$perm$permStat < STATISTIC - tol)@\\
+\mbox{}\verb@            PVAL <- PVALle@\\
 \mbox{}\verb@        else@\\
-\mbox{}\verb@            PVAL <- .pm(x$perm$permStat > STATISTIC + tol)@\\
+\mbox{}\verb@            PVAL <- PVALge@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        if (alternative == "two.sided")@\\
 \mbox{}\verb@            PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)@\\
@@ -4196,10 +4201,17 @@ values for the inversion:
 \mbox{}\verb@        if (is.null(object$perm$permStat)) {@\\
 \mbox{}\verb@            qu <- qnorm(conf.level) * c(-1, 1)@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            qu <- quantile(object$perm$permStat, @\\
-\mbox{}\verb@                           probs = c(1 - conf.level, conf.level))@\\
-\mbox{}\verb@            att.level <- mean(object$perm$permStat > qu[1] & @\\
-\mbox{}\verb@                              object$perm$permStat < qu[2])@\\
+\mbox{}\verb@            .pq <- function(s, alpha) {@\\
+\mbox{}\verb@                su <- sort(unique(s)) @\\
+\mbox{}\verb@                Fs <- cumsum(st <- table(match(s, su)) / length(s))@\\
+\mbox{}\verb@                Ss <- 1 - Fs + st@\\
+\mbox{}\verb@                c(max(su[Fs <= alpha]),@\\
+\mbox{}\verb@                  min(su[Ss <= alpha]))@\\
+\mbox{}\verb@            }@\\
+\mbox{}\verb@            ### cf PVAL computation!!!@\\
+\mbox{}\verb@            rs <- round(object$perm$permStat, 16)@\\
+\mbox{}\verb@            qu <- .pq(rs, alpha = 1 - conf.level)@\\
+\mbox{}\verb@            att.level <- mean(rs > qu[1] & rs < qu[2])@\\
 \mbox{}\verb@            attr(CINT, "Attained level") <- att.level@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\

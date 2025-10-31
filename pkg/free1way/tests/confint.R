@@ -81,27 +81,39 @@ summary(ftc, test = "Permutation")$p.value
 
 confint(ftc, test = "Permutation", level = level) + coef(ft)
 
-ft <- free1way(y ~ w, B = 1000)
+B <- 1000
+set.seed(29)
+ft <- free1way(y ~ w, B = B)
 (ci <- confint(ft, test = "Permutation", level = level))
-summary(ft1 <- free1way(y ~ w, mu = ci[1]), test = "Permutation", alternative = "greater")$p.value
-summary(ft2 <- free1way(y ~ w, mu = ci[2]), test = "Permutation", alternative = "less")$p.value
-summary(ft12 <- free1way(y ~ w, mu = ci[1]), test = "Permutation")$p.value
-summary(ft22 <- free1way(y ~ w, mu = ci[2]), test = "Permutation")$p.value
+set.seed(29)
+summary(ft1 <- free1way(y ~ w, B = B, mu = ci[1]), test = "Permutation", alternative = "greater")$p.value
+set.seed(29)
+summary(ft2 <- free1way(y ~ w, B = B, mu = ci[2]), test = "Permutation", alternative = "less")$p.value
+set.seed(29)
+summary(ft12 <- free1way(y ~ w, B = B, mu = ci[1]), test = "Permutation")$p.value
+set.seed(29)
+summary(ft22 <- free1way(y ~ w, B = B, mu = ci[2]), test = "Permutation")$p.value
 coef(ft1) + ci[1]
 coef(ft2) + ci[2]
 logLik(ft1)
 logLik(ft2)
 
-confint(ft1, test = "Permutation", level = level) + ci[1]
-confint(ft2, test = "Permutation", level = level) + ci[2]
-confint(ft12, test = "Permutation", level = level) + ci[1]
-confint(ft22, test = "Permutation", level = level) + ci[2]
+all.equal(ci, confint(ft1, test = "Permutation", level = level) + ci[1], 
+          tolerance = tol)
+all.equal(ci, confint(ft2, test = "Permutation", level = level) + ci[2],
+          tolerance = tol)
+all.equal(ci, confint(ft12, test = "Permutation", level = level) + ci[1],
+          tolerance = tol)
+all.equal(ci, confint(ft22, test = "Permutation", level = level) + ci[2],
+          tolerance = tol)
+
 
 summary(ftg <- free1way(y ~ w, mu = coef(ft)), test = "Permutation", alternative = "greater")$p.value
 summary(ftl <- free1way(y ~ w, mu = coef(ft)), test = "Permutation", alternative = "less")$p.value
 summary(ftt <- free1way(y ~ w, mu = coef(ft)), test = "Permutation")$p.value
 
-ftc <- free1way(y ~ w, mu = coef(ft), B = 1000)
+set.seed(29)
+ftc <- free1way(y ~ w, mu = coef(ft), B = B)
 summary(ftc, test = "Permutation", alternative = "greater")$p.value
 summary(ftc, test = "Permutation", alternative = "less")$p.value
 summary(ftc, test = "Permutation")$p.value

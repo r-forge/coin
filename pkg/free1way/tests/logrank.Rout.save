@@ -85,8 +85,7 @@ w2 0.86665
 > 
 > pr <- ft$par
 > cumsum(pr[-1])
-                                                
--2.8539 -4.8323 -6.3195 -7.3409 -8.0043 -8.0872 
+[1] -2.8539 -4.8323 -6.3195 -7.3409 -8.0043 -8.0872
 > cf
  R.Surv.time..cens...as.R.ordered...TRUE.(-Inf,0.122] 
                                             -2.853925 
@@ -220,4 +219,4 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-  1.269   0.068   1.331 
+  1.324   0.064   1.383 

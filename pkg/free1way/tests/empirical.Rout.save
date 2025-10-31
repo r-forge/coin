@@ -290,15 +290,15 @@ x2 -0.23643 2.3724
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (1, 2)
-Perm Z = 1.6, p-value = 0.11
+Perm Z = 1.6, p-value = 0.12
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
 x2 -0.24306 2.3521
 attr(,"Attained level")
-[1] 0.9498
+[1] 0.9502
 > 
 > proc.time()
    user  system elapsed 
-  3.261   0.100   3.359 
+  3.276   0.088   3.360 

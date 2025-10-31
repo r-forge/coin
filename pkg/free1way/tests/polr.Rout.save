@@ -147,7 +147,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
       2.5 % 97.5 %
 xB -0.29993 1.8069
 attr(,"Attained level")
-[1] 0.9472
+[1] 0.9509
 > 
 > ci <- confint(m <- polr(y ~ x, method = "cloglog"))
 Waiting for profiling to be done...
@@ -247,14 +247,14 @@ sample estimates:
 	2-sample Savage test against proportional hazards alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.51, p-value = 0.12
+Perm Z = 1.51, p-value = 0.11
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-xB -0.14626 1.2809
+xB -0.15036  1.292
 attr(,"Attained level")
-[1] 0.9497
+[1] 0.9527
 > 
 > ci <- confint(m <- polr(y ~ x, method = "loglog"))
 Waiting for profiling to be done...
@@ -360,9 +360,9 @@ alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-xB -0.26296 1.0544
+xB -0.26358  1.055
 attr(,"Attained level")
-[1] 0.9482
+[1] 0.9535
 > 
 > ci <- confint(m <- polr(y ~ x, method = "probit"))
 Waiting for profiling to be done...
@@ -465,15 +465,15 @@ sample estimates:
 	alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.41, p-value = 0.16
+Perm Z = 1.41, p-value = 0.17
 alternative hypothesis: true generalised Cohen's d is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-xB -0.16928 1.0803
+xB -0.17772 1.0806
 attr(,"Attained level")
-[1] 0.9498
+[1] 0.9527
 > 
 > proc.time()
    user  system elapsed 
-  3.739   0.120   3.854 
+  4.137   0.071   4.250 

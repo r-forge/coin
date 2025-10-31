@@ -78,14 +78,14 @@ xB -2.1664 -1.5584
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Perm Z = -12.7, p-value = 1e-04
+Perm Z = -12.7, p-value <2e-16
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
      2.5 %  97.5 %
-xB -2.1632 -1.5615
+xB -2.1839 -1.5409
 attr(,"Attained level")
-[1] 0.9348
+[1] 0.9532
 > 
 > y <- relevel(y, levels(y)[2])
 > ci <- confint(m <- glm(y ~ x, family = binomial(link = "cloglog")), test = "LRT")
@@ -141,15 +141,15 @@ xB 0.92118 1.2609
 	2-sample Lehmann test against Lehmann alternatives
 
 data:  y by x (A, B)
-Perm Z = 12.7, p-value = 1e-04
+Perm Z = 12.7, p-value <2e-16
 alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
      2.5 % 97.5 %
-xB 0.91809  1.264
+xB 0.90618 1.2759
 attr(,"Attained level")
-[1] 0.9403
+[1] 0.9567
 > 
 > proc.time()
    user  system elapsed 
-  0.802   0.060   0.858 
+  0.811   0.083   0.890 

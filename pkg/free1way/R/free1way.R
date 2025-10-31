@@ -90,7 +90,8 @@
 
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
-                        dooptim = c(".NewtonRaphson", "nlminb", ".NewtonRaphson"),                         
+                        ### use nlminb for small sample sizes
+                        dooptim = c(".NewtonRaphson", "nlminb")[1 + (sum(x) < 20)],                         
                         control = list(
                             "nlminb" = list(trace = trace, iter.max = 200,
                                             eval.max = 200, rel.tol = 1e-10,
@@ -957,12 +958,12 @@ model.matrix.free1way <- function (object, ...)
            sc <- sc / sqrt(c(ret$hessian))
         Esc <- sc - x$perm$Expectation
         ### avoid p-values == 0
-        .pm <- function(x) (1 + sum(x)) / (1 + length(x))
+        .pm <- function(x) sum(x) / length(x) ### (1 + sum(x)) / (1 + length(x))
         if (alternative == "two.sided" && length(cf) > 1L) {
             STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
             ps <- x$perm$permStat
             if (!is.null(x$perm$permStat))
-                PVAL <- .pm(ps > STATISTIC + tol)
+                PVAL <- .pm(round(ps, 16) >= round(STATISTIC, 16))
             else {
                 DF <- c("df" = x$perm$DF)
                 PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
@@ -970,12 +971,15 @@ model.matrix.free1way <- function (object, ...)
         } else {
             STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
             if (!is.null(x$perm$permStat)) {
+                PVALle <- .pm(round(x$perm$permStat, 16) <= round(STATISTIC, 16))
+                PVALge <- .pm(round(x$perm$permStat, 16) >= round(STATISTIC, 16))
                 if (alternative == "two.sided")
-                    PVAL <- .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)
+                    PVAL <- 2 * min(c(PVALle, PVALge))
+                    ### .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)
                 else if (alternative == "less")
-                    PVAL <- .pm(x$perm$permStat < STATISTIC - tol)
+                    PVAL <- PVALle
                 else
-                    PVAL <- .pm(x$perm$permStat > STATISTIC + tol)
+                    PVAL <- PVALge
             } else {
                 if (alternative == "two.sided")
                     PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)
@@ -1112,12 +1116,12 @@ confint.free1way <- function(object, parm,
                sc <- sc / sqrt(c(ret$hessian))
             Esc <- sc - x$perm$Expectation
             ### avoid p-values == 0
-            .pm <- function(x) (1 + sum(x)) / (1 + length(x))
+            .pm <- function(x) sum(x) / length(x) ### (1 + sum(x)) / (1 + length(x))
             if (alternative == "two.sided" && length(cf) > 1L) {
                 STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
                 ps <- x$perm$permStat
                 if (!is.null(x$perm$permStat))
-                    PVAL <- .pm(ps > STATISTIC + tol)
+                    PVAL <- .pm(round(ps, 16) >= round(STATISTIC, 16))
                 else {
                     DF <- c("df" = x$perm$DF)
                     PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
@@ -1125,12 +1129,15 @@ confint.free1way <- function(object, parm,
             } else {
                 STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
                 if (!is.null(x$perm$permStat)) {
+                    PVALle <- .pm(round(x$perm$permStat, 16) <= round(STATISTIC, 16))
+                    PVALge <- .pm(round(x$perm$permStat, 16) >= round(STATISTIC, 16))
                     if (alternative == "two.sided")
-                        PVAL <- .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)
+                        PVAL <- 2 * min(c(PVALle, PVALge))
+                        ### .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)
                     else if (alternative == "less")
-                        PVAL <- .pm(x$perm$permStat < STATISTIC - tol)
+                        PVAL <- PVALle
                     else
-                        PVAL <- .pm(x$perm$permStat > STATISTIC + tol)
+                        PVAL <- PVALge
                 } else {
                     if (alternative == "two.sided")
                         PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)
@@ -1153,10 +1160,17 @@ confint.free1way <- function(object, parm,
         if (is.null(object$perm$permStat)) {
             qu <- qnorm(conf.level) * c(-1, 1)
         } else {
-            qu <- quantile(object$perm$permStat, 
-                           probs = c(1 - conf.level, conf.level))
-            att.level <- mean(object$perm$permStat > qu[1] & 
-                              object$perm$permStat < qu[2])
+            .pq <- function(s, alpha) {
+                su <- sort(unique(s)) 
+                Fs <- cumsum(st <- table(match(s, su)) / length(s))
+                Ss <- 1 - Fs + st
+                c(max(su[Fs <= alpha]),
+                  min(su[Ss <= alpha]))
+            }
+            ### cf PVAL computation!!!
+            rs <- round(object$perm$permStat, 16)
+            qu <- .pq(rs, alpha = 1 - conf.level)
+            att.level <- mean(rs > qu[1] & rs < qu[2])
             attr(CINT, "Attained level") <- att.level
         }
     } else {
