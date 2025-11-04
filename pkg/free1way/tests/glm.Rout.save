@@ -1,5 +1,5 @@
 
-R version 4.5.1 (2025-06-13) -- "Great Square Root"
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -85,7 +85,7 @@ alternative hypothesis: true log-odds ratio is not equal to 0
      2.5 %  97.5 %
 xB -2.1839 -1.5409
 attr(,"Attained level")
-[1] 0.9532
+[1] 0.966
 > 
 > y <- relevel(y, levels(y)[2])
 > ci <- confint(m <- glm(y ~ x, family = binomial(link = "cloglog")), test = "LRT")
@@ -148,8 +148,8 @@ alternative hypothesis: true log-reverse time hazard ratio is not equal to 0
      2.5 % 97.5 %
 xB 0.90618 1.2759
 attr(,"Attained level")
-[1] 0.9567
+[1] 0.9689
 > 
 > proc.time()
    user  system elapsed 
-  0.811   0.083   0.890 
+  0.795   0.056   0.847 

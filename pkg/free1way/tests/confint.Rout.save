@@ -1,5 +1,5 @@
 
-R version 4.5.1 (2025-06-13) -- "Great Square Root"
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -170,21 +170,24 @@ w2 -0.5708 1.5839
 > ft <- free1way(y ~ w, B = B)
 > (ci <- confint(ft, test = "Permutation", level = level))
         5 %   95 %
-w2 -0.59327 1.5798
+w2 -0.59327 1.6065
 attr(,"Attained level")
-[1] 0.9
+[1] 0.91
+> ### check inversion of confidence intervals: These numbers should be
 > set.seed(29)
+> ### <= (1 - level) / 2 = .05
 > summary(ft1 <- free1way(y ~ w, B = B, mu = ci[1]), test = "Permutation", alternative = "greater")$p.value
 [1] 0.05
 > set.seed(29)
 > summary(ft2 <- free1way(y ~ w, B = B, mu = ci[2]), test = "Permutation", alternative = "less")$p.value
-[1] 0.055
+[1] 0.049
 > set.seed(29)
+> ### <= 1 - level = .1
 > summary(ft12 <- free1way(y ~ w, B = B, mu = ci[1]), test = "Permutation")$p.value
 [1] 0.1
 > set.seed(29)
 > summary(ft22 <- free1way(y ~ w, B = B, mu = ci[2]), test = "Permutation")$p.value
-[1] 0.11
+[1] 0.098
 > coef(ft1) + ci[1]
      w2 
 0.50639 
@@ -231,10 +234,10 @@ Perm Z
 > 
 > confint(ftc, test = "Permutation", level = level) + coef(ft)
         5 %   95 %
-w2 -0.59327 1.5798
+w2 -0.59327 1.6065
 attr(,"Attained level")
-[1] 0.9
+[1] 0.91
 > 
 > proc.time()
    user  system elapsed 
-  2.616   0.089   2.733 
+  2.525   0.057   2.576 

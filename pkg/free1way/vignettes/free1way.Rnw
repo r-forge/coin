@@ -3448,22 +3448,28 @@ distribution:
 \mbox{}\verb@if (length(cf) == 1L)@\\
 \mbox{}\verb@   sc <- sc / sqrt(c(ret$hessian))@\\
 \mbox{}\verb@Esc <- sc - x$perm$Expectation@\\
-\mbox{}\verb@### avoid p-values == 0@\\
-\mbox{}\verb@.pm <- function(x) sum(x) / length(x) ### (1 + sum(x)) / (1 + length(x))@\\
+\mbox{}\verb@.pm <- function(x) sum(x) / length(x) @\\
+\mbox{}\verb@ps <- x$perm$permStat@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@.GE <- function(x, y)@\\
+\mbox{}\verb@    (y - x) <= sqrt(.Machine$double.eps)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@.LE <- function(x, y)@\\
+\mbox{}\verb@    (x - y) <= sqrt(.Machine$double.eps)@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@if (alternative == "two.sided" && length(cf) > 1L) {@\\
 \mbox{}\verb@    STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))@\\
-\mbox{}\verb@    ps <- x$perm$permStat@\\
-\mbox{}\verb@    if (!is.null(x$perm$permStat))@\\
-\mbox{}\verb@        PVAL <- .pm(round(ps, 16) >= round(STATISTIC, 16))@\\
-\mbox{}\verb@    else {@\\
+\mbox{}\verb@    if (!is.null(ps)) {@\\
+\mbox{}\verb@        PVAL <- .pm(.GE(ps, STATISTIC))@\\
+\mbox{}\verb@    } else {@\\
 \mbox{}\verb@        DF <- c("df" = x$perm$DF)@\\
 \mbox{}\verb@        PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@} else {@\\
 \mbox{}\verb@    STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))@\\
-\mbox{}\verb@    if (!is.null(x$perm$permStat)) {@\\
-\mbox{}\verb@        PVALle <- .pm(round(x$perm$permStat, 16) <= round(STATISTIC, 16))@\\
-\mbox{}\verb@        PVALge <- .pm(round(x$perm$permStat, 16) >= round(STATISTIC, 16))@\\
+\mbox{}\verb@    if (!is.null(ps)) {@\\
+\mbox{}\verb@        PVALle <- .pm(.LE(ps, STATISTIC))@\\
+\mbox{}\verb@        PVALge <- .pm(.GE(ps, STATISTIC))@\\
 \mbox{}\verb@        if (alternative == "two.sided")@\\
 \mbox{}\verb@            PVAL <- 2 * min(c(PVALle, PVALge))@\\
 \mbox{}\verb@            ### .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)@\\
@@ -4059,7 +4065,10 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
 \mbox{}\verb@@\\
 \mbox{}\verb@.print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), @\\
 \mbox{}\verb@                            alternative = c("two.sided", "less", "greater"), @\\
-\mbox{}\verb@                            tol = sqrt(.Machine$double.eps), ...)@\\
+\mbox{}\verb@                            tol = sqrt(.Machine$double.eps), @\\
+\mbox{}\verb@                            mu = 0, ### allow permutation testing non-null hypotheses@\\
+\mbox{}\verb@                                    ### in alignment with confint(free1way(, B > 0))@\\
+\mbox{}\verb@                            ...)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    test <- match.arg(test)@\\
@@ -4072,7 +4081,7 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
 \mbox{}\verb@@\\
 \mbox{}\verb@    DF <- NULL@\\
 \mbox{}\verb@    parm <- seq_along(cf)@\\
-\mbox{}\verb@    value <- 0@\\
+\mbox{}\verb@    value <- mu@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape statistics}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@@\\
@@ -4112,7 +4121,7 @@ The \code{summary} method performs population Wald inference unless the
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!missing(test))@\\
-\mbox{}\verb@        return(.print.free1way(object, test = test, alternative = alternative, tol = tol))@\\
+\mbox{}\verb@        return(.print.free1way(object, test = test, alternative = alternative, tol = tol, ...))@\\
 \mbox{}\verb@   @\\
 \mbox{}\verb@    alternative <- match.arg(alternative)@\\
 \mbox{}\verb@@\\
@@ -4203,14 +4212,15 @@ values for the inversion:
 \mbox{}\verb@        } else {@\\
 \mbox{}\verb@            .pq <- function(s, alpha) {@\\
 \mbox{}\verb@                su <- sort(unique(s)) @\\
-\mbox{}\verb@                Fs <- cumsum(st <- table(match(s, su)) / length(s))@\\
-\mbox{}\verb@                Ss <- 1 - Fs + st@\\
-\mbox{}\verb@                c(max(su[Fs <= alpha]),@\\
-\mbox{}\verb@                  min(su[Ss <= alpha]))@\\
+\mbox{}\verb@                ### F = P(T <= t), S = P(T >= t)@\\
+\mbox{}\verb@                Fs <- cumsum(st <- table(match(s, su)))@\\
+\mbox{}\verb@                Ss <- length(s) - Fs + st@\\
+\mbox{}\verb@                c(max(su[Fs <= alpha * length(s)]),@\\
+\mbox{}\verb@                  min(su[Ss <= alpha * length(s)]))@\\
 \mbox{}\verb@            }@\\
 \mbox{}\verb@            ### cf PVAL computation!!!@\\
-\mbox{}\verb@            rs <- round(object$perm$permStat, 16)@\\
-\mbox{}\verb@            qu <- .pq(rs, alpha = 1 - conf.level)@\\
+\mbox{}\verb@            rs <- object$perm$permStat@\\
+\mbox{}\verb@            qu <- .pq(round(rs, 10), alpha = 1 - conf.level)@\\
 \mbox{}\verb@            att.level <- mean(rs > qu[1] & rs < qu[2])@\\
 \mbox{}\verb@            attr(CINT, "Attained level") <- att.level@\\
 \mbox{}\verb@        }@\\

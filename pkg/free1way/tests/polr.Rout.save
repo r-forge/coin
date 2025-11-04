@@ -1,5 +1,5 @@
 
-R version 4.5.1 (2025-06-13) -- "Great Square Root"
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -140,14 +140,14 @@ sample estimates:
 	2-sample Wilcoxon test against proportional odds alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.46, p-value = 0.14
+Perm Z = 1.46, p-value = 0.17
 alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-xB -0.29993 1.8069
+xB -0.32601 1.8174
 attr(,"Attained level")
-[1] 0.9509
+[1] 0.957
 > 
 > ci <- confint(m <- polr(y ~ x, method = "cloglog"))
 Waiting for profiling to be done...
@@ -247,7 +247,7 @@ sample estimates:
 	2-sample Savage test against proportional hazards alternatives
 
 data:  y by x (A, B)
-Perm Z = 1.51, p-value = 0.11
+Perm Z = 1.51, p-value = 0.12
 alternative hypothesis: true log-hazard ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
@@ -472,8 +472,8 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
       2.5 % 97.5 %
 xB -0.17772 1.0806
 attr(,"Attained level")
-[1] 0.9527
+[1] 0.9538
 > 
 > proc.time()
    user  system elapsed 
-  4.137   0.071   4.250 
+  3.982   0.052   4.029 

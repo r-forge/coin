@@ -1,5 +1,5 @@
 
-R version 4.5.1 (2025-06-13) -- "Great Square Root"
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
 Copyright (C) 2025 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -295,10 +295,10 @@ alternative hypothesis: true log-odds ratio is not equal to 0
 
 > confint(ft, test = "Permutation")
       2.5 % 97.5 %
-x2 -0.24306 2.3521
+x2 -0.26984  2.379
 attr(,"Attained level")
-[1] 0.9502
+[1] 0.9597
 > 
 > proc.time()
    user  system elapsed 
-  3.276   0.088   3.360 
+  3.315   0.068   3.379 

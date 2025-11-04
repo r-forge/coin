@@ -85,11 +85,14 @@ B <- 1000
 set.seed(29)
 ft <- free1way(y ~ w, B = B)
 (ci <- confint(ft, test = "Permutation", level = level))
+### check inversion of confidence intervals: These numbers should be
 set.seed(29)
+### <= (1 - level) / 2 = .05
 summary(ft1 <- free1way(y ~ w, B = B, mu = ci[1]), test = "Permutation", alternative = "greater")$p.value
 set.seed(29)
 summary(ft2 <- free1way(y ~ w, B = B, mu = ci[2]), test = "Permutation", alternative = "less")$p.value
 set.seed(29)
+### <= 1 - level = .1
 summary(ft12 <- free1way(y ~ w, B = B, mu = ci[1]), test = "Permutation")$p.value
 set.seed(29)
 summary(ft22 <- free1way(y ~ w, B = B, mu = ci[2]), test = "Permutation")$p.value

@@ -892,7 +892,10 @@ model.matrix.free1way <- function (object, ...)
 
 .print.free1way <- function(x, test = c("Permutation", "Wald", "LRT", "Rao"), 
                             alternative = c("two.sided", "less", "greater"), 
-                            tol = sqrt(.Machine$double.eps), ...)
+                            tol = sqrt(.Machine$double.eps), 
+                            mu = 0, ### allow permutation testing non-null hypotheses
+                                    ### in alignment with confint(free1way(, B > 0))
+                            ...)
 {
 
     test <- match.arg(test)
@@ -905,7 +908,7 @@ model.matrix.free1way <- function (object, ...)
 
     DF <- NULL
     parm <- seq_along(cf)
-    value <- 0
+    value <- mu
 
     # statistics
     
@@ -957,22 +960,28 @@ model.matrix.free1way <- function (object, ...)
         if (length(cf) == 1L)
            sc <- sc / sqrt(c(ret$hessian))
         Esc <- sc - x$perm$Expectation
-        ### avoid p-values == 0
-        .pm <- function(x) sum(x) / length(x) ### (1 + sum(x)) / (1 + length(x))
+        .pm <- function(x) sum(x) / length(x) 
+        ps <- x$perm$permStat
+
+        .GE <- function(x, y)
+            (y - x) <= sqrt(.Machine$double.eps)
+
+        .LE <- function(x, y)
+            (x - y) <= sqrt(.Machine$double.eps)
+
         if (alternative == "two.sided" && length(cf) > 1L) {
             STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
-            ps <- x$perm$permStat
-            if (!is.null(x$perm$permStat))
-                PVAL <- .pm(round(ps, 16) >= round(STATISTIC, 16))
-            else {
+            if (!is.null(ps)) {
+                PVAL <- .pm(.GE(ps, STATISTIC))
+            } else {
                 DF <- c("df" = x$perm$DF)
                 PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
             }
         } else {
             STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
-            if (!is.null(x$perm$permStat)) {
-                PVALle <- .pm(round(x$perm$permStat, 16) <= round(STATISTIC, 16))
-                PVALge <- .pm(round(x$perm$permStat, 16) >= round(STATISTIC, 16))
+            if (!is.null(ps)) {
+                PVALle <- .pm(.LE(ps, STATISTIC))
+                PVALge <- .pm(.GE(ps, STATISTIC))
                 if (alternative == "two.sided")
                     PVAL <- 2 * min(c(PVALle, PVALge))
                     ### .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)
@@ -1010,7 +1019,7 @@ summary.free1way <- function(object, test, alternative = c("two.sided", "less", 
 {
 
     if (!missing(test))
-        return(.print.free1way(object, test = test, alternative = alternative, tol = tol))
+        return(.print.free1way(object, test = test, alternative = alternative, tol = tol, ...))
    
     alternative <- match.arg(alternative)
 
@@ -1115,22 +1124,28 @@ confint.free1way <- function(object, parm,
             if (length(cf) == 1L)
                sc <- sc / sqrt(c(ret$hessian))
             Esc <- sc - x$perm$Expectation
-            ### avoid p-values == 0
-            .pm <- function(x) sum(x) / length(x) ### (1 + sum(x)) / (1 + length(x))
+            .pm <- function(x) sum(x) / length(x) 
+            ps <- x$perm$permStat
+
+            .GE <- function(x, y)
+                (y - x) <= sqrt(.Machine$double.eps)
+
+            .LE <- function(x, y)
+                (x - y) <= sqrt(.Machine$double.eps)
+
             if (alternative == "two.sided" && length(cf) > 1L) {
                 STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))
-                ps <- x$perm$permStat
-                if (!is.null(x$perm$permStat))
-                    PVAL <- .pm(round(ps, 16) >= round(STATISTIC, 16))
-                else {
+                if (!is.null(ps)) {
+                    PVAL <- .pm(.GE(ps, STATISTIC))
+                } else {
                     DF <- c("df" = x$perm$DF)
                     PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)
                 }
             } else {
                 STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))
-                if (!is.null(x$perm$permStat)) {
-                    PVALle <- .pm(round(x$perm$permStat, 16) <= round(STATISTIC, 16))
-                    PVALge <- .pm(round(x$perm$permStat, 16) >= round(STATISTIC, 16))
+                if (!is.null(ps)) {
+                    PVALle <- .pm(.LE(ps, STATISTIC))
+                    PVALge <- .pm(.GE(ps, STATISTIC))
                     if (alternative == "two.sided")
                         PVAL <- 2 * min(c(PVALle, PVALge))
                         ### .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)
@@ -1162,14 +1177,15 @@ confint.free1way <- function(object, parm,
         } else {
             .pq <- function(s, alpha) {
                 su <- sort(unique(s)) 
-                Fs <- cumsum(st <- table(match(s, su)) / length(s))
-                Ss <- 1 - Fs + st
-                c(max(su[Fs <= alpha]),
-                  min(su[Ss <= alpha]))
+                ### F = P(T <= t), S = P(T >= t)
+                Fs <- cumsum(st <- table(match(s, su)))
+                Ss <- length(s) - Fs + st
+                c(max(su[Fs <= alpha * length(s)]),
+                  min(su[Ss <= alpha * length(s)]))
             }
             ### cf PVAL computation!!!
-            rs <- round(object$perm$permStat, 16)
-            qu <- .pq(rs, alpha = 1 - conf.level)
+            rs <- object$perm$permStat
+            qu <- .pq(round(rs, 10), alpha = 1 - conf.level)
             att.level <- mean(rs > qu[1] & rs < qu[2])
             attr(CINT, "Attained level") <- att.level
         }
