@@ -2910,9 +2910,9 @@ for (i in seq_len(nsim)) {
     for (b in seq_len(B)) {
         x[,,b] <- .r2dsim(1L, r = prob[, b], c = Nboost * N[b,], 
                           delta = delta, link = link)[[1L]]
-        rs <- .rowSums(x[,,b], m = dim(x)[1L], n = dim(x)[2L]) > 0
-        theta <- h0[rs[-length(rs)], b]
-        parm <- c(parm, theta)
+        rs <- which(.rowSums(x[,,b], m = dim(x)[1L], n = dim(x)[2L]) > 0)
+        theta <- h0[pmin(nrow(h0), rs), b]
+        parm <- c(parm, theta[-length(theta)])
     }
     ### evaluate observed hessian for true parameters parm and x data
     he <- he + .free1wayML(x, link = link, mu = mu, start = parm, 

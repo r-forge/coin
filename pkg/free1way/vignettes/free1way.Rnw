@@ -4980,9 +4980,9 @@ sampling error.
 \mbox{}\verb@    for (b in seq_len(B)) {@\\
 \mbox{}\verb@        x[,,b] <- .r2dsim(1L, r = prob[, b], c = Nboost * N[b,], @\\
 \mbox{}\verb@                          delta = delta, link = link)[[1L]]@\\
-\mbox{}\verb@        rs <- .rowSums(x[,,b], m = dim(x)[1L], n = dim(x)[2L]) > 0@\\
-\mbox{}\verb@        theta <- h0[rs[-length(rs)], b]@\\
-\mbox{}\verb@        parm <- c(parm, theta)@\\
+\mbox{}\verb@        rs <- which(.rowSums(x[,,b], m = dim(x)[1L], n = dim(x)[2L]) > 0)@\\
+\mbox{}\verb@        theta <- h0[pmin(nrow(h0), rs), b]@\\
+\mbox{}\verb@        parm <- c(parm, theta[-length(theta)])@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@    ### evaluate observed hessian for true parameters parm and x data@\\
 \mbox{}\verb@    he <- he + .free1wayML(x, link = link, mu = mu, start = parm, @\\
