@@ -32,7 +32,7 @@ free1way(y, ...)
                  deparse1(substitute(groups)), 
                  deparse1(substitute(blocks))), ...)
 \S3method{free1way}{table}(y, link = c("logit", "probit", "cloglog", "loglog"), 
-    mu = 0, B = 0, ...)
+    mu = 0, B = 0, exact = FALSE, ...)
 \S3method{summary}{free1way}(object, test, alternative = c("two.sided", "less", "greater"), 
     tol = .Machine$double.eps, ...)
 \S3method{coef}{free1way}(object, what = c("shift", "PI", "AUC", "OVL"), ...)
@@ -85,6 +85,9 @@ free1way(y, ...)
     permutation test. The default (\code{B = 0}) performs an asymptotic
     permutation test, \code{B > 0} uses \code{B} Monte Carlo replications to
     approximate the permutation distribution.}
+  \item{exact}{a logical requesting the exact permutation distribution
+    to be computed. Only available for unstratified two-sample proportional odds
+    models.}
   \item{object}{an object of class \code{free1way} as returned by
     \code{free1way}.}
   \item{test}{a character vector defining the global test procedure for all
