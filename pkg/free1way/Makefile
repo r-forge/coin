@@ -15,7 +15,7 @@ free1way.R: free1way.Rnw
 #	mv free1way.R tests
 
 free1way.tex:	free1way.Rnw
-	R CMD Sweave free1way.Rnw
+	Rdev CMD Sweave free1way.Rnw
 	
 free1way.pdf:	free1way.tex
 	texi2dvi --pdf free1way.tex
@@ -23,7 +23,7 @@ free1way.pdf:	free1way.tex
 	### sort-out page numbers
 	nuweb -r free1way.w
 	mv free1way.tex free1way.Rnw
-	R CMD Sweave free1way.Rnw
+	Rdev CMD Sweave free1way.Rnw
 	pdflatex free1way.tex
 	pdflatex free1way.tex
 	# cp free1way.Rnw vignettes

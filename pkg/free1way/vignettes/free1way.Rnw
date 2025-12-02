@@ -3319,7 +3319,7 @@ theory under the population model:
 \mbox{}\verb@} else if (test == "Rao") {@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape Rao}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@} else if (test == "Permutation") {@\\
-\mbox{}\verb@    @\hbox{$\langle\,${\itshape Permutation}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Permutation statistics}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
 \end{list}
@@ -3431,13 +3431,13 @@ computed:
 
 Under the permutation model, that is, in randomised experiments where the
 random treatment allocation is the only relevant source of randomness, we
-compute a permuation variant of the Rao score test, based on the conditional
+compute a permutation variant of the Rao score test, based on the conditional
 asymptotic distribution or based on a Monte-Carlo estimate of the reference
 distribution:
 
 \begin{flushleft} \small
 \begin{minipage}{\linewidth}\label{scrap40}\raggedright\small
-\NWtarget{nuweb?}{} $\langle\,${\itshape Permutation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\NWtarget{nuweb?}{} $\langle\,${\itshape Permutation statistics}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
@@ -3446,42 +3446,75 @@ distribution:
 \mbox{}\verb@ret <- x$profile(par, parm)@\\
 \mbox{}\verb@sc <- - ret$negscore@\\
 \mbox{}\verb@if (length(cf) == 1L)@\\
-\mbox{}\verb@   sc <- sc / sqrt(c(ret$hessian))@\\
-\mbox{}\verb@Esc <- sc - x$perm$Expectation@\\
-\mbox{}\verb@.pm <- function(x) sum(x) / length(x) @\\
-\mbox{}\verb@ps <- x$perm$permStat@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@.GE <- function(x, y)@\\
-\mbox{}\verb@    (y - x) <= sqrt(.Machine$double.eps)@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@.LE <- function(x, y)@\\
-\mbox{}\verb@    (x - y) <= sqrt(.Machine$double.eps)@\\
-\mbox{}\verb@@\\
-\mbox{}\verb@if (alternative == "two.sided" && length(cf) > 1L) {@\\
-\mbox{}\verb@    STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))@\\
-\mbox{}\verb@    if (!is.null(ps)) {@\\
-\mbox{}\verb@        PVAL <- .pm(.GE(ps, STATISTIC))@\\
-\mbox{}\verb@    } else {@\\
-\mbox{}\verb@        DF <- c("df" = x$perm$DF)@\\
-\mbox{}\verb@        PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)@\\
-\mbox{}\verb@    }@\\
+\mbox{}\verb@    sc <- sc / sqrt(c(ret$hessian))@\\
+\mbox{}\verb@if (!is.null(x$exact)) {@\\
+\mbox{}\verb@    STATISTIC = c("W" = sc)@\\
 \mbox{}\verb@} else {@\\
-\mbox{}\verb@    STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))@\\
-\mbox{}\verb@    if (!is.null(ps)) {@\\
-\mbox{}\verb@        PVALle <- .pm(.LE(ps, STATISTIC))@\\
-\mbox{}\verb@        PVALge <- .pm(.GE(ps, STATISTIC))@\\
-\mbox{}\verb@        if (alternative == "two.sided")@\\
-\mbox{}\verb@            PVAL <- 2 * min(c(PVALle, PVALge))@\\
-\mbox{}\verb@            ### .pm(abs(x$perm$permStat) > abs(STATISTIC) + tol)@\\
-\mbox{}\verb@        else if (alternative == "less")@\\
-\mbox{}\verb@            PVAL <- PVALle@\\
-\mbox{}\verb@        else@\\
-\mbox{}\verb@            PVAL <- PVALge@\\
+\mbox{}\verb@    Esc <- sc - x$perm$Expectation@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (alternative == "two.sided" && length(cf) > 1L) {@\\
+\mbox{}\verb@        STATISTIC <- c("Perm chi-squared" = sum(Esc * solve(x$perm$Covariance, Esc)))@\\
 \mbox{}\verb@    } else {@\\
-\mbox{}\verb@        if (alternative == "two.sided")@\\
-\mbox{}\verb@            PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)@\\
-\mbox{}\verb@        else@\\
-\mbox{}\verb@            PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")@\\
+\mbox{}\verb@        STATISTIC <- c("Perm Z" = Esc / sqrt(c(x$perm$Covariance)))@\\
+\mbox{}\verb@    }@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
+In addition, we compute permutation p-values
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap41}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Permutation p-values}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@if (!is.null(x$exact)) {@\\
+\mbox{}\verb@    PVAL <- switch(alternative,@\\
+\mbox{}\verb@                   "two.sided" = 2 * min(c(x$exact$ple(sc), x$exact$pgr(sc))),@\\
+\mbox{}\verb@                   "less" = x$exact$ple(sc),@\\
+\mbox{}\verb@                   "greater" = x$exact$pgr(sc))@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    .pm <- function(x) sum(x) / length(x) @\\
+\mbox{}\verb@    ps <- x$perm$permStat@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    .GE <- function(x, y)@\\
+\mbox{}\verb@        (y - x) <= sqrt(.Machine$double.eps)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    .LE <- function(x, y)@\\
+\mbox{}\verb@        (x - y) <= sqrt(.Machine$double.eps)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (alternative == "two.sided" && length(cf) > 1L) {@\\
+\mbox{}\verb@        if (!is.null(ps)) {@\\
+\mbox{}\verb@            PVAL <- .pm(.GE(ps, STATISTIC))@\\
+\mbox{}\verb@        } else {@\\
+\mbox{}\verb@            DF <- c("df" = x$perm$DF)@\\
+\mbox{}\verb@            PVAL <- pchisq(STATISTIC, df = DF, lower.tail = FALSE)@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@    } else {@\\
+\mbox{}\verb@        if (!is.null(ps)) {@\\
+\mbox{}\verb@            PVALle <- .pm(.LE(ps, STATISTIC))@\\
+\mbox{}\verb@            PVALge <- .pm(.GE(ps, STATISTIC))@\\
+\mbox{}\verb@            if (alternative == "two.sided")@\\
+\mbox{}\verb@                PVAL <- 2 * min(c(PVALle, PVALge))@\\
+\mbox{}\verb@            else if (alternative == "less")@\\
+\mbox{}\verb@                PVAL <- PVALle@\\
+\mbox{}\verb@            else@\\
+\mbox{}\verb@                PVAL <- PVALge@\\
+\mbox{}\verb@        } else {@\\
+\mbox{}\verb@            if (alternative == "two.sided")@\\
+\mbox{}\verb@                PVAL <- pchisq(STATISTIC^2, df = 1, lower.tail = FALSE)@\\
+\mbox{}\verb@            else@\\
+\mbox{}\verb@                PVAL <- pnorm(STATISTIC, lower.tail = alternative == "less")@\\
+\mbox{}\verb@        }@\\
 \mbox{}\verb@    }@\\
 \mbox{}\verb@}@\\
 \mbox{}\verb@@{\NWsep}
@@ -3499,7 +3532,7 @@ The mean and variance of the linear permutation statistic under the null was
 given by \cite{strasserweber1999}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap41}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap42}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Strasser Weber}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3554,7 +3587,7 @@ For small samples, we used the \code{r2dtable} function to sample from
 tables with fixed marginal distributions:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap42}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap43}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape resampling}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3601,6 +3634,56 @@ tables with fixed marginal distributions:
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
+For the special case of the unstratified Wilcoxon two-sample test, we can
+also provide exact p-values computed via the Streitberg-R\"ohmel shift
+algorithm, mainly because the scores can be mapped to integers:
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap44}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape exact proportional odds}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.exact <- function(z, grp, w = rep.int(1, length(z))) {@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    z <- rep(z, times = w)@\\
+\mbox{}\verb@    grp <- rep(grp, times = w)@\\
+\mbox{}\verb@    x <- rank(z)@\\
+\mbox{}\verb@    f <- 2 - all(x == floor(x))@\\
+\mbox{}\verb@    x <- as.integer(x * f)@\\
+\mbox{}\verb@    x <- x - min(x) + 1L@\\
+\mbox{}\verb@    sx <- sort(x)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    m <- as.integer(sum(grp > 0))@\\
+\mbox{}\verb@    stopifnot(m > 1)@\\
+\mbox{}\verb@    stopifnot(m < length(x))@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    d <- .Call(stats:::C_dpermdist2, sx, m)@\\
+\mbox{}\verb@    s <- seq.int(from = 1L, to = sum(rev(sx)[seq_len(m)]), by = 1L)@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    STATISTIC <- sum(x[grp > 0])@\\
+\mbox{}\verb@    F <- cumsum(d)@\\
+\mbox{}\verb@    S <- rev(cumsum(rev(d)))@\\
+\mbox{}\verb@    cf <- lm.fit(x = cbind(1, x), y = as.double(z))$coefficients@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    z2x <- function(z) round((z - m * cf[1]) / cf[2])@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    c(ple = function(z) sum(d[s <= z2x(z)]),    ### s and STATISTIC are integers@\\
+\mbox{}\verb@      pgr = function(z) sum(d[s >= z2x(z)]), @\\
+\mbox{}\verb@      qle = function(q) c(m, max(s[F < q + 1e-08])) %*% cf,@\\
+\mbox{}\verb@      qgr = function(q) c(m, min(s[S < q + 1e-08])) %*% cf)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
 As an example, consider the Wilcoxon rank sum test, where the scores under
 the null are a linear function of the ranks of the data. We compute the
 asymptotic and approximated reference distribution and corresponding
@@ -3620,6 +3703,11 @@ library("coin")
 ### almost the same
 kruskal_test(u ~ w, distribution = approximate(100000))
 @
+and the exact versions are
+<<Wexact>>=
+wilcox_test(u ~ w, distribution = "exact")
+free1way(u ~ w, exact = TRUE)
+@
 
 <TH>Ordered alternatives: Use contrast based tests in multcomp</TH>
 
@@ -3631,7 +3719,7 @@ We provide a new test procedure in a generic \code{free1way}, featuring
 a method for tables (the main workhorse) and additional user interfaces. 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap43}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap45}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape link2fun}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3664,7 +3752,7 @@ group as control, so factors need to be releveled to obtain identical
 results (this is relevant for the one-sided case).
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap44}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap46}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3673,7 +3761,7 @@ results (this is relevant for the one-sided case).
 \mbox{}\verb@    UseMethod("free1way")@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"), @\\
-\mbox{}\verb@                           mu = 0, B = 0, ...)@\\
+\mbox{}\verb@                           mu = 0, B = 0, exact = FALSE, ...)@\\
 \mbox{}\verb@{@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    cl <- match.call()@\\
@@ -3720,7 +3808,7 @@ where preparations for permutations tests are performed before returning the
 object
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap45}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap47}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way permutation tests}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3755,6 +3843,18 @@ object
 \mbox{}\verb@        y <- apply(y, 3, function(x) rbind(x[,,2], x[,,1]))@\\
 \mbox{}\verb@        y <- array(y, dim = dy[1:3])@\\
 \mbox{}\verb@    }@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    ### exact two-sample Wilcoxon w/o stratification@\\
+\mbox{}\verb@    if (exact) {@\\
+\mbox{}\verb@        if (!stratified && link$model == "proportional odds") {@\\
+\mbox{}\verb@            @\hbox{$\langle\,${\itshape exact proportional odds}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@            ret$exact <- .exact(c(res, res), grp = unclass(gl(2, d[1L])) - 1L,@\\
+\mbox{}\verb@                                w = c(y[,,1L]))@\\
+\mbox{}\verb@            B <- 0@\\
+\mbox{}\verb@        } else {@\\
+\mbox{}\verb@            warning("Cannot compute exact distribution")@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@    } @\\
 \mbox{}\verb@    ret$perm <- .resample(res, y, B = B)@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    if (!is.null(names(dn))) {@\\
@@ -3777,7 +3877,7 @@ The \code{formula} method allows formulae \code{outcome ~ treatment |
 stratum)} for model specification
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap46}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap48}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way formula}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3863,7 +3963,7 @@ outcomes. The \code{event} argument is a logical where \code{TRUE} is
 interpreted as an event and \code{FALSE} as right-censored observation
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap47}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap49}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3898,7 +3998,7 @@ interpreted as an event and \code{FALSE} as right-censored observation
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap48}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap50}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3950,7 +4050,7 @@ The \code{factor} method also allows right-censoring but otherwise is just a
 call to \code{xtabs}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap49}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap51}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4006,7 +4106,7 @@ method allows to obtain effects at alternative scales: probabilistic indices
 (\code{AUC} = \code{PI}) or the overlap coefficient:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap50}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way methods}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4058,7 +4158,7 @@ permutation test is performed, mainly because the $p$-values coincide with
 some special cases (\code{wilcox,kruskal,friedman.test}):
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap51}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way print}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4084,6 +4184,10 @@ some special cases (\code{wilcox,kruskal,friedman.test}):
 \mbox{}\verb@    value <- mu@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape statistics}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@    if (test == "Permutation") {@\\
+\mbox{}\verb@        @\hbox{$\langle\,${\itshape Permutation p-values}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@    }@\\
 \mbox{}\verb@@\\
 \mbox{}\verb@    RVAL <- list(statistic = STATISTIC, parameter = DF, p.value = PVAL, @\\
 \mbox{}\verb@        null.value = x$mu, alternative = alternative, method = x$method, @\\
@@ -4111,7 +4215,7 @@ The \code{summary} method performs population Wald inference unless the
 \code{test} argument is specified:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4169,7 +4273,7 @@ starts with Wald intervals, which are either returned or used as starting
 values for the inversion:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap55}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way confint}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4199,7 +4303,7 @@ values for the inversion:
 \mbox{}\verb@        tol <- .Machine$double.eps@\\
 \mbox{}\verb@        @\hbox{$\langle\,${\itshape statistics}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@        ### we also could invert p-values, but the@\\
-\mbox{}\verb@        ### p-value function might be discret for permutation@\\
+\mbox{}\verb@        ### p-value function might be discrete for permutation@\\
 \mbox{}\verb@        ### tests, in contrast to the test statistic@\\
 \mbox{}\verb@        return(STATISTIC - quantile)@\\
 \mbox{}\verb@    }@\\
@@ -4207,22 +4311,27 @@ values for the inversion:
 \mbox{}\verb@    if (test == "Permutation") {@\\
 \mbox{}\verb@        if (length(cf) > 1L)@\\
 \mbox{}\verb@            stop("Permutation confidence intervals only available for two sample comparisons")@\\
-\mbox{}\verb@        if (is.null(object$perm$permStat)) {@\\
-\mbox{}\verb@            qu <- qnorm(conf.level) * c(-1, 1)@\\
+\mbox{}\verb@        if (!is.null(object$exact)) {@\\
+\mbox{}\verb@            qu <- c(object$exact$qle(1 - conf.level),@\\
+\mbox{}\verb@                    object$exact$qgr(1 - conf.level))@\\
 \mbox{}\verb@        } else {@\\
-\mbox{}\verb@            .pq <- function(s, alpha) {@\\
-\mbox{}\verb@                su <- sort(unique(s)) @\\
-\mbox{}\verb@                ### F = P(T <= t), S = P(T >= t)@\\
-\mbox{}\verb@                Fs <- cumsum(st <- table(match(s, su)))@\\
-\mbox{}\verb@                Ss <- length(s) - Fs + st@\\
-\mbox{}\verb@                c(max(su[Fs <= alpha * length(s)]),@\\
-\mbox{}\verb@                  min(su[Ss <= alpha * length(s)]))@\\
+\mbox{}\verb@            if (is.null(object$perm$permStat)) {@\\
+\mbox{}\verb@                qu <- qnorm(conf.level) * c(-1, 1)@\\
+\mbox{}\verb@            } else {@\\
+\mbox{}\verb@                .pq <- function(s, alpha) {@\\
+\mbox{}\verb@                    su <- sort(unique(s)) @\\
+\mbox{}\verb@                    ### F = P(T <= t), S = P(T >= t)@\\
+\mbox{}\verb@                    Fs <- cumsum(st <- table(match(s, su)))@\\
+\mbox{}\verb@                    Ss <- length(s) - Fs + st@\\
+\mbox{}\verb@                    c(max(su[Fs <= alpha * length(s)]),@\\
+\mbox{}\verb@                      min(su[Ss <= alpha * length(s)]))@\\
+\mbox{}\verb@                }@\\
+\mbox{}\verb@                ### cf PVAL computation!!!@\\
+\mbox{}\verb@                rs <- object$perm$permStat@\\
+\mbox{}\verb@                qu <- .pq(round(rs, 10), alpha = 1 - conf.level)@\\
+\mbox{}\verb@                att.level <- mean(rs > qu[1] & rs < qu[2])@\\
+\mbox{}\verb@                attr(CINT, "Attained level") <- att.level@\\
 \mbox{}\verb@            }@\\
-\mbox{}\verb@            ### cf PVAL computation!!!@\\
-\mbox{}\verb@            rs <- object$perm$permStat@\\
-\mbox{}\verb@            qu <- .pq(round(rs, 10), alpha = 1 - conf.level)@\\
-\mbox{}\verb@            att.level <- mean(rs > qu[1] & rs < qu[2])@\\
-\mbox{}\verb@            attr(CINT, "Attained level") <- att.level@\\
 \mbox{}\verb@        }@\\
 \mbox{}\verb@    } else {@\\
 \mbox{}\verb@        qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided@\\
@@ -4525,7 +4634,7 @@ confidence \emph{band} can be obtained from a confidence \emph{interval} for
 $\delta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4569,7 +4678,7 @@ corresponding model-based \citep{SewakHothorn2023} probability-probability plot,
 the latter for a certain choice of link function:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap55}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ppplot}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4665,7 +4774,7 @@ observations by the same quantile function changes the outcome distributions
 but not the shift effects.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape design args}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4696,7 +4805,7 @@ but not the shift effects.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape rfree1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4813,7 +4922,7 @@ essence, we draw samples from the multinomial distribution after computing
 the relevant discrete density.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4892,7 +5001,7 @@ directly. Nevertheless, this is a random experiment, so we first make
 computations reproducible:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4919,7 +5028,7 @@ computations reproducible:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4966,7 +5075,7 @@ $1000$) and adjust the obtained Fisher information accordingly to reduce
 sampling error.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5010,7 +5119,7 @@ control:treatment = 1:2) and the sample size ratios between strata.
 The treatment effects are contained in $K - 1$ vector \code{delta}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5032,7 +5141,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap65}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power htest output}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5064,7 +5173,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5273,6 +5382,40 @@ power.free1way.test(power = .8, prob = prb, delta = delta, seed = 3)
 power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 @
 
+\chapter{Firth Correction}
+
+<<Firth>>=
+N <- 20
+w <- gl(2, N)
+y <- rnorm(length(w), mean = c(-2, 3)[w])
+
+x <- free1way(y ~ w, link = "probit")
+
+pll <- function(cf) {
+
+    start <- x$par
+    start[1] <- cf
+    x$profile(start, fix = 1)
+}
+
+pll(0)
+
+### https://doi.org/10.1111/j.0006-341X.2001.00114.x
+### https://doi.org/10.1111/j.1467-9876.2012.01057.x
+### https://doi.org/10.1186/s12874-017-0313-9
+### https://files.osf.io/v1/resources/fet4d_v3/providers/osfstorage/682fb176db88f967facacb5a?format=pdf&action=download&direct&version=1
+### https://doi.org/10.1002/sim.6537
+fun <- function(cf) {
+    ret <- pll(cf)
+    ret$value - .5 * determinant(ret$hessian, logarithm = TRUE)$modulus
+}
+
+ci <- confint(x, level = .99, test = "Wald")
+grd <- seq(from = ci[1], to = ci[2], length.out = 50)
+
+optim(coef(x), fn = fun, method = "Brent", lower = min(grd), upper = max(grd))
+@
+
 \chapter*{Index}
 
 \section*{Files}
@@ -5296,6 +5439,7 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 \item $\langle\,$do optim\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}.
 }
 \item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$exact proportional odds\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way confint\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way factor\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
@@ -5328,7 +5472,8 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 \item $\langle\,$optim\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$parm to prob\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}\NWlink{nuweb?}{, ?}.
 }
-\item $\langle\,$Permutation\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$Permutation p-values\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$Permutation statistics\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$post processing\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$power\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$power call\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
