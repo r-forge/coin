@@ -5,7 +5,7 @@ importFrom("stats", "dlogis", "optim", "plogis", "qlogis", "qnorm",
            "splinefun", "vcov", "runif", "stepfun",
            "ecdf", "na.pass", "terms", "model.weights", "xtabs", "rmultinom",
            "as.formula", "confint.default", "delete.response",
-           "model.frame")
+           "model.frame", "lm.fit")
 importFrom("graphics", "lines", "points", "polygon")
 importFrom("Matrix", "bandSparse", "solve", "bdiag")
 
