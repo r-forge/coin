@@ -3241,6 +3241,11 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 
 \chapter{Firth Correction}
 
+Sometimes, especially under complete separation, the maximum likelihood
+estimator does not exist. We could think of offering the option to add a
+penalty term to the log-likelihood, for example half of the log-determinant
+of the Hessian as suggested by \cite{Firth_1993}. Here is an example
+
 <<Firth>>=
 N <- 20
 w <- gl(2, N)
