@@ -745,156 +745,155 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
 
     # free1way permutation tests
     
-        alias <- link$alias
-        if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]
-        stratified <- FALSE
-        if (length(d) == 3L) stratified <- d[3L] > 1
-        ret$method <- paste(ifelse(stratified, "Stratified", ""), 
-                            paste0(d[2L], "-sample"), alias, 
-                            "test against", link$model, "alternatives")
+    alias <- link$alias
+    if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]
+    stratified <- FALSE
+    if (length(d) == 3L) stratified <- d[3L] > 1
+    ret$method <- paste(ifelse(stratified, "Stratified", ""), 
+                        paste0(d[2L], "-sample"), alias, 
+                        "test against", link$model, "alternatives")
 
-        cf <- ret$par
-        ### compute the permutation distribution always
-        ### for H0: delta = 0, not delta = mu
-        ### otherwise, permutation confidence intervals
-        ### are not aligned with permutation p-values
-        cf[idx <- seq_len(d[2L] - 1L)] <- -mu
-        pr <- ret$profile(cf, idx)
-        res <- - pr$negresiduals
-        if (d[2L] == 2L)
-            res <- res / sqrt(c(pr$hessian))
+    cf <- ret$par
+    ### compute the permutation distribution always
+    ### for H0: delta = 0, not delta = mu
+    ### otherwise, permutation confidence intervals
+    ### are not aligned with permutation p-values
+    cf[idx <- seq_len(d[2L] - 1L)] <- -mu
+    pr <- ret$profile(cf, idx)
+    res <- - pr$negresiduals
+    if (d[2L] == 2L)
+        res <- res / sqrt(c(pr$hessian))
 
-        # Strasser Weber
-        
-        .SW <- function(res, xt) {
+    # Strasser Weber
 
-            if (length(dim(xt)) == 3L) {
-                res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3])
-                STAT <-  Exp <- Cov <- 0
-                for (b in seq_len(dim(xt)[3L])) {
-                    sw <- .SW(res[,b, drop = TRUE], xt[,,b, drop = TRUE])
-                    STAT <- STAT + sw$Statistic
-                    Exp <- Exp + sw$Expectation
-                    Cov <- Cov + sw$Covariance
-                }
-                return(list(Statistic = STAT, Expectation = as.vector(Exp),
-                            Covariance = Cov))
+    .SW <- function(res, xt) {
+
+        if (length(dim(xt)) == 3L) {
+            res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3])
+            STAT <-  Exp <- Cov <- 0
+            for (b in seq_len(dim(xt)[3L])) {
+                sw <- .SW(res[,b, drop = TRUE], xt[,,b, drop = TRUE])
+                STAT <- STAT + sw$Statistic
+                Exp <- Exp + sw$Expectation
+                Cov <- Cov + sw$Covariance
             }
-
-            Y <- matrix(res, ncol = 1, nrow = length(xt))
-            weights <- c(xt)
-            x <- gl(ncol(xt), nrow(xt))
-            X <- model.matrix(~ x, data = data.frame(x = x))[,-1L,drop = FALSE]
-
-            w. <- sum(weights)
-            wX <- weights * X
-            wY <- weights * Y
-            ExpX <- colSums(wX)
-            ExpY <- colSums(wY) / w.
-            CovX <- crossprod(X, wX)
-            Yc <- t(t(Y) - ExpY)
-            CovY <- crossprod(Yc, weights * Yc) / w.
-            Exp <- kronecker(ExpY, ExpX)
-            Cov <- w. / (w. - 1) * kronecker(CovY, CovX) -
-                   1 / (w. - 1) * kronecker(CovY, tcrossprod(ExpX))
-            STAT <- crossprod(X, wY)
-            list(Statistic = STAT, Expectation = as.vector(Exp),
-                 Covariance = Cov)
+            return(list(Statistic = STAT, Expectation = as.vector(Exp),
+                        Covariance = Cov))
         }
-        
-        # resampling
-        
-        .resample <- function(res, xt, B = 10000) {
 
-            if (length(dim(xt)) == 2L)
-                xt <- as.table(array(xt, dim = c(dim(xt), 1)))
+        Y <- matrix(res, ncol = 1, nrow = length(xt))
+        weights <- c(xt)
+        x <- gl(ncol(xt), nrow(xt))
+        X <- model.matrix(~ x, data = data.frame(x = x))[,-1L,drop = FALSE]
 
-            res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3L])
-            stat <- 0
-            ret <- .SW(res, xt)
+        w. <- sum(weights)
+        wX <- weights * X
+        wY <- weights * Y
+        ExpX <- colSums(wX)
+        ExpY <- colSums(wY) / w.
+        CovX <- crossprod(X, wX)
+        Yc <- t(t(Y) - ExpY)
+        CovY <- crossprod(Yc, weights * Yc) / w.
+        Exp <- kronecker(ExpY, ExpX)
+        Cov <- w. / (w. - 1) * kronecker(CovY, CovX) -
+               1 / (w. - 1) * kronecker(CovY, tcrossprod(ExpX))
+        STAT <- crossprod(X, wY)
+        list(Statistic = STAT, Expectation = as.vector(Exp),
+             Covariance = Cov)
+    }
+    
+    # resampling
+
+    .resample <- function(res, xt, B = 10000) {
+
+        if (length(dim(xt)) == 2L)
+            xt <- as.table(array(xt, dim = c(dim(xt), 1)))
+
+        res <- matrix(res, nrow = dim(xt)[1L], ncol = dim(xt)[3L])
+        stat <- 0
+        ret <- .SW(res, xt)
+        if (dim(xt)[2L] == 2L) {
+            ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(c(ret$Covariance)))
+        } else {
+            ES <- ret$Statistic - ret$Expectation
+            ret$testStat <- sum(ES * solve(ret$Covariance, ES))
+        }
+        ret$DF <- dim(xt)[2L] - 1L
+
+        if (B) {
+            for (j in 1:dim(xt)[3L]) {
+               rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
+               stat <- stat + sapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
+                                                              m = nrow(x), n = ncol(x) - 1L))
+            }
             if (dim(xt)[2L] == 2L) {
-                ret$testStat <- c((ret$Statistic - ret$Expectation) / sqrt(c(ret$Covariance)))
+                 ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
             } else {
-                ES <- ret$Statistic - ret$Expectation
-                ret$testStat <- sum(ES * solve(ret$Covariance, ES))
+                ES <- matrix(stat, ncol = B) - ret$Expectation
+                ret$permStat <- rowSums(crossprod(ES, solve(ret$Covariance, ES)))
             }
-            ret$DF <- dim(xt)[2L] - 1L
+        }
+        ret
+    }
+    
 
-            if (B) {
-                for (j in 1:dim(xt)[3L]) {
-                   rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
-                   stat <- stat + sapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
-                                                                  m = nrow(x), n = ncol(x) - 1L))
-                }
-                if (dim(xt)[2L] == 2L) {
-                     ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
-                } else {
-                    ES <- matrix(stat, ncol = B) - ret$Expectation
-                    ret$permStat <- rowSums(crossprod(ES, solve(ret$Covariance, ES)))
-                }
+    if (length(dim(y)) == 3L) y <- y[,,ret$strata, drop = FALSE]
+    if (length(dim(y)) == 4L) {
+        y <- y[,,ret$strata,, drop = FALSE]
+        dy <- dim(y)
+        dy[1] <- dy[1] * 2
+        y <- apply(y, 3, function(x) rbind(x[,,2], x[,,1]))
+        y <- array(y, dim = dy[1:3])
+    }
+
+    ### exact two-sample Wilcoxon w/o stratification
+    if (exact) {
+        if (!stratified && link$model == "proportional odds") {
+            # exact proportional odds
+            
+            .exact <- function(z, grp, w = rep.int(1, length(z))) {
+
+                z <- rep(z, times = w)
+                grp <- rep(grp, times = w)
+                x <- rank(z)
+                f <- 2 - all(x == floor(x))
+                x <- as.integer(x * f)
+                x <- x - min(x) + 1L
+                sx <- sort(x)
+
+                m <- as.integer(sum(grp > 0))
+                stopifnot(m > 1)
+                stopifnot(m < length(x))
+
+                d <- .Call(stats:::C_dpermdist2, sx, m)
+                s <- seq.int(from = 1L, to = sum(rev(sx)[seq_len(m)]), by = 1L)
+
+                STATISTIC <- sum(x[grp > 0])
+                F <- cumsum(d)
+                S <- rev(cumsum(rev(d)))
+                cf <- lm.fit(x = cbind(1, x), y = as.double(z))$coefficients
+
+                z2x <- function(z) round((z - m * cf[1]) / cf[2])
+
+                c(ple = function(z) sum(d[s <= z2x(z)]),    ### s and STATISTIC are integers
+                  pgr = function(z) sum(d[s >= z2x(z)]), 
+                  qle = function(q) c(m, max(s[F < q + 1e-08])) %*% cf,
+                  qgr = function(q) c(m, min(s[S < q + 1e-08])) %*% cf)
             }
-            ret
+            
+            ret$exact <- .exact(c(res, res), grp = unclass(gl(2, d[1L])) - 1L,
+                                w = c(y[,,1L]))
+            B <- 0
+        } else {
+            warning("Cannot compute exact distribution")
         }
-        
+    } 
+    ret$perm <- .resample(res, y, B = B)
 
-        if (length(dim(y)) == 3L) y <- y[,,ret$strata, drop = FALSE]
-        if (length(dim(y)) == 4L) {
-            y <- y[,,ret$strata,, drop = FALSE]
-            dy <- dim(y)
-            dy[1] <- dy[1] * 2
-            y <- apply(y, 3, function(x) rbind(x[,,2], x[,,1]))
-            y <- array(y, dim = dy[1:3])
-        }
-
-        ### exact two-sample Wilcoxon w/o stratification
-        if (exact) {
-            if (!stratified && link$model == "proportional odds") {
-                # exact proportional odds
-                
-                .exact <- function(z, grp, w = rep.int(1, length(z))) {
-
-                    z <- rep(z, times = w)
-                    grp <- rep(grp, times = w)
-                    x <- rank(z)
-                    f <- 2 - all(x == floor(x))
-                    x <- as.integer(x * f)
-                    x <- x - min(x) + 1L
-                    sx <- sort(x)
-
-                    m <- as.integer(sum(grp > 0))
-                    stopifnot(m > 1)
-                    stopifnot(m < length(x))
-
-                    d <- .Call(stats:::C_dpermdist2, sx, m)
-                    s <- seq.int(from = 1L, to = sum(rev(sx)[seq_len(m)]), by = 1L)
-
-                    STATISTIC <- sum(x[grp > 0])
-                    F <- cumsum(d)
-                    S <- rev(cumsum(rev(d)))
-                    cf <- lm.fit(x = cbind(1, x), y = as.double(z))$coefficients
-
-                    z2x <- function(z) round((z - m * cf[1]) / cf[2])
-
-                    c(ple = function(z) sum(d[s <= z2x(z)]),    ### s and STATISTIC are integers
-                      pgr = function(z) sum(d[s >= z2x(z)]), 
-                      qle = function(q) c(m, max(s[F < q + 1e-08])) %*% cf,
-                      qgr = function(q) c(m, min(s[S < q + 1e-08])) %*% cf)
-                }
-                
-                ret$exact <- .exact(c(res, res), grp = unclass(gl(2, d[1L])) - 1L,
-                                    w = c(y[,,1L]))
-                B <- 0
-            } else {
-                warning("Cannot compute exact distribution")
-            }
-        } 
-        ret$perm <- .resample(res, y, B = B)
-
-        if (!is.null(names(dn))) {
-            fm <- as.formula(paste(names(dn)[1:2], collapse = "~"))
-            ret$terms <- terms(fm, data = as.data.frame(y))
-        }
-
+    if (!is.null(names(dn))) {
+        fm <- as.formula(paste(names(dn)[1:2], collapse = "~"))
+        ret$terms <- terms(fm, data = as.data.frame(y))
+    }
     
 
     class(ret) <- "free1way"

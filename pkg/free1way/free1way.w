@@ -1849,6 +1849,18 @@ wilcox_test(u ~ w, distribution = "exact")
 free1way(u ~ w, exact = TRUE)
 @@
 
+<<Wexact-le>>=
+wilcox_test(u ~ w, distribution = "exact", alternative = "less")
+print(free1way(u ~ w, exact = TRUE), alternative = "greater")
+@@
+
+<<Wexact-gr>>=
+wilcox_test(u ~ w, distribution = "exact", alternative = "greater")
+print(free1way(u ~ w, exact = TRUE), alternative = "less")
+@@
+
+
+
 <TH>Ordered alternatives: Use contrast based tests in multcomp</TH>
 
 \chapter{Distribution-free Tests in Stratified $K$-sample Oneway Layouts}
@@ -1923,55 +1935,54 @@ object
 
 @d free1way permutation tests
 @{
-    alias <- link$alias
-    if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]
-    stratified <- FALSE
-    if (length(d) == 3L) stratified <- d[3L] > 1
-    ret$method <- paste(ifelse(stratified, "Stratified", ""), 
-                        paste0(d[2L], "-sample"), alias, 
-                        "test against", link$model, "alternatives")
+alias <- link$alias
+if (length(link$alias) == 2L) alias <- alias[1L + (d[2] > 2L)]
+stratified <- FALSE
+if (length(d) == 3L) stratified <- d[3L] > 1
+ret$method <- paste(ifelse(stratified, "Stratified", ""), 
+                    paste0(d[2L], "-sample"), alias, 
+                    "test against", link$model, "alternatives")
 
-    cf <- ret$par
-    ### compute the permutation distribution always
-    ### for H0: delta = 0, not delta = mu
-    ### otherwise, permutation confidence intervals
-    ### are not aligned with permutation p-values
-    cf[idx <- seq_len(d[2L] - 1L)] <- -mu
-    pr <- ret$profile(cf, idx)
-    res <- - pr$negresiduals
-    if (d[2L] == 2L)
-        res <- res / sqrt(c(pr$hessian))
+cf <- ret$par
+### compute the permutation distribution always
+### for H0: delta = 0, not delta = mu
+### otherwise, permutation confidence intervals
+### are not aligned with permutation p-values
+cf[idx <- seq_len(d[2L] - 1L)] <- -mu
+pr <- ret$profile(cf, idx)
+res <- - pr$negresiduals
+if (d[2L] == 2L)
+    res <- res / sqrt(c(pr$hessian))
 
-    @<Strasser Weber@>
-    @<resampling@>
+@<Strasser Weber@>
+@<resampling@>
 
-    if (length(dim(y)) == 3L) y <- y[,,ret$strata, drop = FALSE]
-    if (length(dim(y)) == 4L) {
-        y <- y[,,ret$strata,, drop = FALSE]
-        dy <- dim(y)
-        dy[1] <- dy[1] * 2
-        y <- apply(y, 3, function(x) rbind(x[,,2], x[,,1]))
-        y <- array(y, dim = dy[1:3])
+if (length(dim(y)) == 3L) y <- y[,,ret$strata, drop = FALSE]
+if (length(dim(y)) == 4L) {
+    y <- y[,,ret$strata,, drop = FALSE]
+    dy <- dim(y)
+    dy[1] <- dy[1] * 2
+    y <- apply(y, 3, function(x) rbind(x[,,2], x[,,1]))
+    y <- array(y, dim = dy[1:3])
+}
+
+### exact two-sample Wilcoxon w/o stratification
+if (exact) {
+    if (!stratified && link$model == "proportional odds") {
+        @<exact proportional odds@>
+        ret$exact <- .exact(c(res, res), grp = unclass(gl(2, d[1L])) - 1L,
+                            w = c(y[,,1L]))
+        B <- 0
+    } else {
+        warning("Cannot compute exact distribution")
     }
+} 
+ret$perm <- .resample(res, y, B = B)
 
-    ### exact two-sample Wilcoxon w/o stratification
-    if (exact) {
-        if (!stratified && link$model == "proportional odds") {
-            @<exact proportional odds@>
-            ret$exact <- .exact(c(res, res), grp = unclass(gl(2, d[1L])) - 1L,
-                                w = c(y[,,1L]))
-            B <- 0
-        } else {
-            warning("Cannot compute exact distribution")
-        }
-    } 
-    ret$perm <- .resample(res, y, B = B)
-
-    if (!is.null(names(dn))) {
-        fm <- as.formula(paste(names(dn)[1:2], collapse = "~"))
-        ret$terms <- terms(fm, data = as.data.frame(y))
-    }
-
+if (!is.null(names(dn))) {
+    fm <- as.formula(paste(names(dn)[1:2], collapse = "~"))
+    ret$terms <- terms(fm, data = as.data.frame(y))
+}
 @}
 
 The \code{formula} method allows formulae \code{outcome ~ treatment |
@@ -3244,7 +3255,7 @@ power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 Sometimes, especially under complete separation, the maximum likelihood
 estimator does not exist. We could think of offering the option to add a
 penalty term to the log-likelihood, for example half of the log-determinant
-of the Hessian as suggested by \cite{Firth_1993}. Here is an example
+of the Hessian as suggested by \cite{Firth1993}. Here is an example
 
 <<Firth>>=
 N <- 20
@@ -3252,6 +3263,8 @@ w <- gl(2, N)
 y <- rnorm(length(w), mean = c(-2, 3)[w])
 
 x <- free1way(y ~ w, link = "probit")
+coef(x)
+logLik(x)
 
 pll <- function(cf) {
 
@@ -3259,8 +3272,6 @@ pll <- function(cf) {
     start[1] <- cf
     x$profile(start, fix = 1)
 }
-
-pll(0)
 
 ### https://doi.org/10.1111/j.0006-341X.2001.00114.x
 ### https://doi.org/10.1111/j.1467-9876.2012.01057.x
@@ -3275,7 +3286,8 @@ fun <- function(cf) {
 ci <- confint(x, level = .99, test = "Wald")
 grd <- seq(from = ci[1], to = ci[2], length.out = 50)
 
-optim(coef(x), fn = fun, method = "Brent", lower = min(grd), upper = max(grd))
+optim(coef(x), fn = fun, method = "Brent", 
+      lower = min(grd), upper = max(grd))[c("par", "value")]
 @@
 
 \chapter*{Index}
