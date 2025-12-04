@@ -1206,6 +1206,8 @@ confint.free1way <- function(object, parm,
     }
 
     if (test == "Permutation") {
+        # permutation confint
+        
         if (length(cf) > 1L)
             stop("Permutation confidence intervals only available for two sample comparisons")
         if (!is.null(object$exact)) {
@@ -1230,6 +1232,7 @@ confint.free1way <- function(object, parm,
                 attr(CINT, "Attained level") <- att.level
             }
         }
+        
     } else {
         qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided
     }

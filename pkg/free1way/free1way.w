@@ -142,7 +142,7 @@ number of samples, the presence of blocks or strata and typically offer
 either conditional or unconditional (exact or asymptotic) inference.
 
 This document presents a unified, dense, and yet holistic implementation
-covaring many classical procedures as special cases. Leveraging 
+covering many classical procedures as special cases. Leveraging 
 transformation models, likelihood-based parameter estimation as well as
 permutation- and likelihood-based inference are formulated and implemented. One
 can understand this contribution as a unification of many of
@@ -165,7 +165,7 @@ stratum $\rS \in \{1, \dots, B\}$ out of $B \ge 1$ blocks with conditional
 cumulative distribution function (cdf)
 $F_Y(y \mid \rS = b, \rT = k) = \Prob(Y \le y \mid \rS = b, \rT = k)$. Detecting
 and describing differential distributions arising from different treatments
-is our main objetive. We refer to the first treatment $\rT = 1$ as
+is our main objective. We refer to the first treatment $\rT = 1$ as
 ``control''.
 
 \paragraph{Model}
@@ -204,7 +204,7 @@ of the response values, that is, transforming the observations of all
 treatment groups by the same function does not affect the values of
 $\delta_k$.
 
-The choise $F(z) = \exp(-\exp(-z))$ gives rise to $g_\text{L}$, 
+The choice $F(z) = \exp(-\exp(-z))$ gives rise to $g_\text{L}$, 
 $F(z) = 1 - \exp(-\exp(z))$ corresponds to $g_\text{PH}$, $F = \text{expit}$
 leads to  $g_\text{PO}$, and $F = \Phi$ results in $g_\text{Cd}$. The choice
 of $F$ is made a priori and determines the interpretation of $\delta_k$. 
@@ -286,7 +286,7 @@ parameter $\vartheta_{c - 1,b}$.
 
 Maximising this form of the log-likelihood leads to semiparametrically efficient
 estimators \citep[Chapter 15.5][]{vdVaart1998}. In this framework, tests
-against deviations from the hyptheses $H_0$ above are locally most
+against deviations from the hypothesis $H_0$ above are locally most
 powerful rank tests, for example against proportional odds ($F =
 \text{expit})$ or proportional hazards alternatives 
 \citep[$F(z) = 1 - \exp(-\exp(z))$,][Example 15.16]{vdVaart1998}.
@@ -588,7 +588,7 @@ logLik(m)
 
 Parameter estimates and the in-sample log-likelihood are practically
 identical. We now turn to the inverse Hessian of the shift terms, first
-defining the derivative of the density of the standard logistic distribtion
+defining the derivative of the density of the standard logistic distribution
 <<glm-H>>=
 fp <- function(x) {
     p <- plogis(x)
@@ -1880,7 +1880,7 @@ if (!inherits(link, "linkfun")) {
 
 <TH>\code{B = 0} comes from \code{chisq.test} and means the default
 asymptotic permutation distribution. \code{B = 1000} means 1000 random
-permuations. Can we use \code{B = Inf} for the exact distribution once
+permutations. Can we use \code{B = Inf} for the exact distribution once
 available?</TH>
 
 We use the positive residuals for defining a permutation test with treatment
@@ -2289,8 +2289,39 @@ print.summary.free1way <- function(x, ...) {
 Confidence intervals are computed by inversion of the corresponding test
 statistics. Because LRT and Rao confidence intervals are invariant wrt to
 transformations, proper LRT or Rao confidence intervals for probabilistic
-indices or overlap coefficients can also be computed. The computation always
-starts with Wald intervals, which are either returned or used as starting
+indices or overlap coefficients can also be computed. 
+
+We begin computing the critical values for permutation tests, making sure
+the confidence intervals will be in line with one- and two-sided p-values:
+@d permutation confint
+@{
+if (length(cf) > 1L)
+    stop("Permutation confidence intervals only available for two sample comparisons")
+if (!is.null(object$exact)) {
+    qu <- c(object$exact$qle(1 - conf.level),
+            object$exact$qgr(1 - conf.level))
+} else {
+    if (is.null(object$perm$permStat)) {
+        qu <- qnorm(conf.level) * c(-1, 1)
+    } else {
+        .pq <- function(s, alpha) {
+            su <- sort(unique(s)) 
+            ### F = P(T <= t), S = P(T >= t)
+            Fs <- cumsum(st <- table(match(s, su)))
+            Ss <- length(s) - Fs + st
+            c(max(su[Fs <= alpha * length(s)]),
+              min(su[Ss <= alpha * length(s)]))
+        }
+        ### cf PVAL computation!!!
+        rs <- object$perm$permStat
+        qu <- .pq(round(rs, 10), alpha = 1 - conf.level)
+        att.level <- mean(rs > qu[1] & rs < qu[2])
+        attr(CINT, "Attained level") <- att.level
+    }
+}
+@}
+
+The \code{confint} method starts with Wald intervals, which are either returned or used as starting
 values for the inversion:
 
 @d free1way confint
@@ -2326,30 +2357,7 @@ confint.free1way <- function(object, parm,
     }
 
     if (test == "Permutation") {
-        if (length(cf) > 1L)
-            stop("Permutation confidence intervals only available for two sample comparisons")
-        if (!is.null(object$exact)) {
-            qu <- c(object$exact$qle(1 - conf.level),
-                    object$exact$qgr(1 - conf.level))
-        } else {
-            if (is.null(object$perm$permStat)) {
-                qu <- qnorm(conf.level) * c(-1, 1)
-            } else {
-                .pq <- function(s, alpha) {
-                    su <- sort(unique(s)) 
-                    ### F = P(T <= t), S = P(T >= t)
-                    Fs <- cumsum(st <- table(match(s, su)))
-                    Ss <- length(s) - Fs + st
-                    c(max(su[Fs <= alpha * length(s)]),
-                      min(su[Ss <= alpha * length(s)]))
-                }
-                ### cf PVAL computation!!!
-                rs <- object$perm$permStat
-                qu <- .pq(round(rs, 10), alpha = 1 - conf.level)
-                att.level <- mean(rs > qu[1] & rs < qu[2])
-                attr(CINT, "Attained level") <- att.level
-            }
-        }
+        @<permutation confint@>
     } else {
         qu <- rep.int(qchisq(level, df = 1), 2) ### always two.sided
     }
@@ -2631,7 +2639,7 @@ confint(glht(tk, linfct = mcp(Month = "Tukey")))
 \chapter{Model Diagnostics}
 
 The classical shift model $F_Y(y \mid T = 2) = F_Y(y - \mu \mid T = 1)$
-can be critisised using confidence bands for QQ-plots in \code{qqplot},
+can be criticised using confidence bands for QQ-plots in \code{qqplot},
 because the parameter $\mu$ shows up as a vertical shift of the diagonal
 if the model is appropriate.
 
