@@ -667,7 +667,7 @@ for (b in seq_len(B)) {
         }
     }
 }
-strata <- !sapply(xlist, is.null)
+strata <- !vapply(xlist, is.null, NA)
 xlist <- xlist[strata]
 xrclist <- xrclist[strata]
 @}
@@ -691,7 +691,7 @@ for each stratum, the corresponding contrasts of the intercept parameters:
 
 @d stratum prep
 @{
-C <- sapply(x, NROW) ### might differ by stratum
+C <- vapply(x, NROW, 0L) ### might differ by stratum
 K <- unique(do.call("c", lapply(x, ncol))) ### the same
 B <- length(x)
 sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
@@ -840,8 +840,8 @@ and the computation of the Hessian for the shift parameters using
             H$A <- H$A + Hrc$A
             H$Z <- H$Z + Hrc$Z
         }
-        sAH <- try(Matrix::solve(H$A, H$X))
-        if (inherits(sAH, "try-error"))
+        sAH <- tryCatch(Matrix::solve(H$A, H$X), error = function(e) NULL)
+        if (is.null(sAH))
             stop(gettextf("Error computing the Hessian in %s",
                           "free1way"),
                      domain = NA)
@@ -967,8 +967,8 @@ logit <- function()
             PI2parm = function(p) {
                f <- function(x, PI)
                    x + (exp(-x) * (PI + exp(2 * x) * (PI - 1) + exp(x)* (1 - 2 * PI)))
-               ret <- sapply(p, function(p) 
-                   uniroot(f, PI = p, interval = 50 * c(-1, 1))$root)
+               ret <- vapply(p, function(p) 
+                   uniroot(f, PI = p, interval = 50 * c(-1, 1))$root, 0)
                return(ret)
             },
             parm2OVL = function(x) 2 * plogis(-abs(x / 2))
@@ -1772,8 +1772,8 @@ tables with fixed marginal distributions:
     if (B) {
         for (j in 1:dim(xt)[3L]) {
            rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
-           stat <- stat + sapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
-                                                          m = nrow(x), n = ncol(x) - 1L))
+           stat <- stat + vapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
+                                                          m = nrow(x), n = ncol(x) - 1L), 0)
         }
         if (dim(xt)[2L] == 2L) {
              ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))

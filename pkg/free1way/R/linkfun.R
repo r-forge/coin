@@ -73,8 +73,8 @@ logit <- function()
             PI2parm = function(p) {
                f <- function(x, PI)
                    x + (exp(-x) * (PI + exp(2 * x) * (PI - 1) + exp(x)* (1 - 2 * PI)))
-               ret <- sapply(p, function(p) 
-                   uniroot(f, PI = p, interval = 50 * c(-1, 1))$root)
+               ret <- vapply(p, function(p) 
+                   uniroot(f, PI = p, interval = 50 * c(-1, 1))$root, 0)
                return(ret)
             },
             parm2OVL = function(x) 2 * plogis(-abs(x / 2))

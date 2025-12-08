@@ -31,24 +31,24 @@
 +     delta <- c(0, mu + parm[bid .... [TRUNCATED] 
 
 > .snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
-+     C <- sapply(x, NROW)
++     C <- vapply(x, NROW, 0)
 +     K <- unique(do.call("c", lapply(x, ncol)))
-+     B <- l .... [TRUNCATED] 
++     B < .... [TRUNCATED] 
 
 > .snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
-+     C <- sapply(x, NROW)
++     C <- vapply(x, NROW, 0)
 +     K <- unique(do.call("c", lapply(x, ncol)))
-+     B <- l .... [TRUNCATED] 
++     B < .... [TRUNCATED] 
 
 > .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, 
 +     retMatrix = FALSE) {
-+     C <- sapply(x, NROW)
-+     K <- unique(do.call("c", l .... [TRUNCATED] 
++     C <- vapply(x, NROW, 0)
++     K <- unique(do.call("c" .... [TRUNCATED] 
 
 > .snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
-+     C <- sapply(x, NROW)
++     C <- vapply(x, NROW, 0)
 +     K <- unique(do.call("c", lapply(x, ncol)))
-+     B <- l .... [TRUNCATED] 
++     B < .... [TRUNCATED] 
 
 > .free1wayML <- function(x, link, mu = 0, start = NULL, 
 +     fix = NULL, residuals = TRUE, score = TRUE, hessian = TRUE, 
@@ -1700,4 +1700,4 @@ attr(,"logarithm")
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 37.237   0.156  37.518 
+ 32.771   0.163  32.944 

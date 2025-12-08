@@ -173,7 +173,7 @@
             }
         }
     }
-    strata <- !sapply(xlist, is.null)
+    strata <- !vapply(xlist, is.null, NA)
     xlist <- xlist[strata]
     xrclist <- xrclist[strata]
     
@@ -391,7 +391,7 @@
     .snll <- function(parm, x, mu = 0, rightcensored = FALSE) {
         # stratum prep
         
-        C <- sapply(x, NROW) ### might differ by stratum
+        C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
         sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
@@ -411,7 +411,7 @@
     .snsc <- function(parm, x, mu = 0, rightcensored = FALSE) {
         # stratum prep
         
-        C <- sapply(x, NROW) ### might differ by stratum
+        C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
         sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
@@ -434,7 +434,7 @@
     .shes <- function(parm, x, mu = 0, xrc = NULL, full = FALSE, retMatrix = FALSE) {
         # stratum prep
         
-        C <- sapply(x, NROW) ### might differ by stratum
+        C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
         sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
@@ -492,8 +492,8 @@
                 H$A <- H$A + Hrc$A
                 H$Z <- H$Z + Hrc$Z
             }
-            sAH <- try(Matrix::solve(H$A, H$X))
-            if (inherits(sAH, "try-error"))
+            sAH <- tryCatch(Matrix::solve(H$A, H$X), error = function(e) NULL)
+            if (is.null(sAH))
                 stop(gettextf("Error computing the Hessian in %s",
                               "free1way"),
                          domain = NA)
@@ -507,7 +507,7 @@
     .snsr <- function(parm, x, mu = 0, rightcensored = FALSE) {
         # stratum prep
         
-        C <- sapply(x, NROW) ### might differ by stratum
+        C <- vapply(x, NROW, 0L) ### might differ by stratum
         K <- unique(do.call("c", lapply(x, ncol))) ### the same
         B <- length(x)
         sidx <- factor(rep(seq_len(B), times = pmax(0, C - 1L)), levels = seq_len(B))
@@ -823,8 +823,8 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
         if (B) {
             for (j in 1:dim(xt)[3L]) {
                rt <- r2dtable(B, r = rowSums(xt[,,j]), c = colSums(xt[,,j]))
-               stat <- stat + sapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
-                                                              m = nrow(x), n = ncol(x) - 1L))
+               stat <- stat + vapply(rt, function(x) .colSums(x[,-1L, drop = FALSE] * res[,j], 
+                                                              m = nrow(x), n = ncol(x) - 1L), 0)
             }
             if (dim(xt)[2L] == 2L) {
                  ret$permStat <- (stat - ret$Expectation) / sqrt(c(ret$Covariance))
