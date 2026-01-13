@@ -5379,6 +5379,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \mbox{}\verb@            power = power, @\\
 \mbox{}\verb@            sig.level = sig.level)@\\
 \mbox{}\verb@if (mu != 0) ret$mu <- mu@\\
+\mbox{}\verb@if (K == 2L) ret[["Standard error"]] <- se@\\
 \mbox{}\verb@ret[[link$parm]] <- delta@\\
 \mbox{}\verb@ret$note <- "'n' is sample size in control group"@\\
 \mbox{}\verb@if (B > 1) ret$note <- paste(ret$note, "of first stratum")@\\

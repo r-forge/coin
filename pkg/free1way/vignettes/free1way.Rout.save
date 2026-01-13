@@ -52,7 +52,7 @@
 
 > .free1wayML <- function(x, link, mu = 0, start = NULL, 
 +     fix = NULL, residuals = TRUE, score = TRUE, hessian = TRUE, 
-+     dooptim = c(".Newto ..." ... [TRUNCATED] 
++     correctFirth = FALS .... [TRUNCATED] 
 
 > .SW <- function(res, xt) {
 +     if (length(dim(xt)) == 3) {
@@ -1460,6 +1460,7 @@ NOTE: n is number in *each* group
 Total sample size = 25 (Control) + 25 (B) = 50
             power = 0.10935
         sig.level = 0.05
+   Standard error = 0.57155
    log-odds ratio = 0.40547
 
 NOTE: 'n' is sample size in control group
@@ -1509,6 +1510,7 @@ NOTE: 'n' is sample size in control group of first stratum
 Total sample size = 15 (Control) + 15 (B) = 30
             power = 0.38378
         sig.level = 0.05
+   Standard error = 0.66021
    log-odds ratio = 1.0986
 
 NOTE: 'n' is sample size in control group
@@ -1697,7 +1699,17 @@ attr(,"logarithm")
 [1] TRUE
 
 
+> free1way(y ~ w, link = "probit", correctFirth = TRUE)
+
+	2-sample van der Waerden normal scores test against latent normal shift
+	alternatives
+
+data:  y by w (1, 2)
+Perm Z = 5, p-value = 5.7e-07
+alternative hypothesis: true generalised Cohen's d is not equal to 0
+
+
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 32.771   0.163  32.944 
+ 33.482   0.124  33.615 
