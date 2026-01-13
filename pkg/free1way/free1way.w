@@ -1303,10 +1303,25 @@ while(maxit < 10001) {
        break()
    }
 }
+
+if (isTRUE(correctFirth)) {
+    @<Firth correction@>
+} else {
+    if (ret$convergence > 0) {
+        if (is.na(correctFirth)) { ### only after failure
+            warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", 
+                             ret$message),
+                            "free1way"),
+                             domain = NA)
+            @<Firth correction@>
+        }
+   }
+}
 if (ret$convergence > 0)
     warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
-                  "free1way"),
-                     domain = NA)
+                           "free1way"),
+                           domain = NA)
+
 ret$value <- ret$objective
 ret$objective <- NULL
 @}
@@ -1372,12 +1387,50 @@ he <- function(par) {
                          he(p)[-fix, -fix, drop = FALSE]
                      })
     opargs$control <- control[[1L]]
+    correctFirth <- FALSE ### turn off Firth correction in .profile
     @<do optim@>
     p <- numeric(length(start))
     p[fix] <- delta
     p[-fix] <- ret$par
     ret$par <- p
     ret
+}
+@}
+
+Chapter~\ref{ch:Firth} introduces a bias correction \citep{Firth1993},
+essentially by adding a penalty term to the log-likelihood. The
+\code{correctFirth} argument triggers this bias correction to by applied
+when \code{TRUE}, not to be applied when \code{FALSE}, and to applied in
+case the unpenalised ML estimation resulted in a convergance issue
+(\code{NA}). This part is still experimental and needs more testing. It also
+seems unclear if and how the Fisher information needs additional correction
+and it is certainly unclear if one can proceed with permutation testing
+after correcting the bias.
+
+@d Firth correction
+@{
+.Firth_ll <- function(cf, start) {
+    fix <- seq_along(cf)
+    start[fix] <- cf
+    ### compute profile likelihood w/o warnings
+    ret <- suppressWarnings(.profile(start, fix = fix))
+    Hfull <- he(ret$par)
+    Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
+    ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+}
+if (K == 2) {
+    MLcf <- ret$par[seq_len(K - 1)]
+    Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                  method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+} else {
+    ### Nelder-Mead
+    Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+}
+if (Fret$convergence == 0) {
+    start <- ret$par
+    start[seq_len(K - 1)] <- Fret$par
+    ret <- .profile(start, fix = seq_len(K - 1))
+    ret$objective <- ret$value
 }
 @}
 
@@ -1474,6 +1527,7 @@ problem.
 @{
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
+                        correctFirth = FALSE,
                         ### use nlminb for small sample sizes
                         dooptim = c(".NewtonRaphson", "nlminb")[1 + (sum(x) < 20)],                         
                         control = list(
@@ -3258,7 +3312,7 @@ power.free1way.test(power = .8, prob = prb, delta = delta, seed = 3)
 power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 @@
 
-\chapter{Firth Correction}
+\chapter{Firth Correction} \label{ch:Firth}
 
 Sometimes, especially under complete separation, the maximum likelihood
 estimator does not exist. We could think of offering the option to add a
@@ -3296,6 +3350,13 @@ grd <- seq(from = ci[1], to = ci[2], length.out = 50)
 
 optim(coef(x), fn = fun, method = "Brent", 
       lower = min(grd), upper = max(grd))[c("par", "value")]
+@@
+
+The \code{correctFirth} argument can be used to request this type of bias
+correction from \code{free1way} (this argument should be added to
+\code{free1way.table} and documented)
+<<correctFirth>>=
+free1way(y ~ w, link = "probit", correctFirth = TRUE)
 @@
 
 \chapter*{Index}

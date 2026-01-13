@@ -693,6 +693,7 @@ options(digits = 5)
 
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
+                        correctFirth = FALSE,
                         ### use nlminb for small sample sizes
                         dooptim = c(".NewtonRaphson", "nlminb")[1 + (sum(x) < 20)],                         
                         control = list(
@@ -1159,6 +1160,7 @@ options(digits = 5)
                              he(p)[-fix, -fix, drop = FALSE]
                          })
         opargs$control <- control[[1L]]
+        correctFirth <- FALSE ### turn off Firth correction in .profile
         
         maxit <- control[[1L]]$iter.max
         while(maxit < 10001) {
@@ -1172,10 +1174,73 @@ options(digits = 5)
                break()
            }
         }
+
+        if (isTRUE(correctFirth)) {
+            
+            .Firth_ll <- function(cf, start) {
+                fix <- seq_along(cf)
+                start[fix] <- cf
+                ### compute profile likelihood w/o warnings
+                ret <- suppressWarnings(.profile(start, fix = fix))
+                Hfull <- he(ret$par)
+                Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
+                ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+            }
+            if (K == 2) {
+                MLcf <- ret$par[seq_len(K - 1)]
+                Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                              method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+            } else {
+                ### Nelder-Mead
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+            }
+            if (Fret$convergence == 0) {
+                start <- ret$par
+                start[seq_len(K - 1)] <- Fret$par
+                ret <- .profile(start, fix = seq_len(K - 1))
+                ret$objective <- ret$value
+            }
+            
+        } else {
+            if (ret$convergence > 0) {
+                if (is.na(correctFirth)) { ### only after failure
+                    warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", 
+                                     ret$message),
+                                    "free1way"),
+                                     domain = NA)
+                    
+                    .Firth_ll <- function(cf, start) {
+                        fix <- seq_along(cf)
+                        start[fix] <- cf
+                        ### compute profile likelihood w/o warnings
+                        ret <- suppressWarnings(.profile(start, fix = fix))
+                        Hfull <- he(ret$par)
+                        Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
+                        ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                    }
+                    if (K == 2) {
+                        MLcf <- ret$par[seq_len(K - 1)]
+                        Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                                      method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                    } else {
+                        ### Nelder-Mead
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                    }
+                    if (Fret$convergence == 0) {
+                        start <- ret$par
+                        start[seq_len(K - 1)] <- Fret$par
+                        ret <- .profile(start, fix = seq_len(K - 1))
+                        ret$objective <- ret$value
+                    }
+                    
+                }
+           }
+        }
         if (ret$convergence > 0)
             warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
-                          "free1way"),
-                             domain = NA)
+                                   "free1way"),
+                                   domain = NA)
+
         ret$value <- ret$objective
         ret$objective <- NULL
         
@@ -1206,10 +1271,73 @@ options(digits = 5)
                break()
            }
         }
+
+        if (isTRUE(correctFirth)) {
+            
+            .Firth_ll <- function(cf, start) {
+                fix <- seq_along(cf)
+                start[fix] <- cf
+                ### compute profile likelihood w/o warnings
+                ret <- suppressWarnings(.profile(start, fix = fix))
+                Hfull <- he(ret$par)
+                Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
+                ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+            }
+            if (K == 2) {
+                MLcf <- ret$par[seq_len(K - 1)]
+                Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                              method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+            } else {
+                ### Nelder-Mead
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+            }
+            if (Fret$convergence == 0) {
+                start <- ret$par
+                start[seq_len(K - 1)] <- Fret$par
+                ret <- .profile(start, fix = seq_len(K - 1))
+                ret$objective <- ret$value
+            }
+            
+        } else {
+            if (ret$convergence > 0) {
+                if (is.na(correctFirth)) { ### only after failure
+                    warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", 
+                                     ret$message),
+                                    "free1way"),
+                                     domain = NA)
+                    
+                    .Firth_ll <- function(cf, start) {
+                        fix <- seq_along(cf)
+                        start[fix] <- cf
+                        ### compute profile likelihood w/o warnings
+                        ret <- suppressWarnings(.profile(start, fix = fix))
+                        Hfull <- he(ret$par)
+                        Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
+                        ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                    }
+                    if (K == 2) {
+                        MLcf <- ret$par[seq_len(K - 1)]
+                        Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                                      method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                    } else {
+                        ### Nelder-Mead
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                    }
+                    if (Fret$convergence == 0) {
+                        start <- ret$par
+                        start[seq_len(K - 1)] <- Fret$par
+                        ret <- .profile(start, fix = seq_len(K - 1))
+                        ret$objective <- ret$value
+                    }
+                    
+                }
+           }
+        }
         if (ret$convergence > 0)
             warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
-                          "free1way"),
-                             domain = NA)
+                                   "free1way"),
+                                   domain = NA)
+
         ret$value <- ret$objective
         ret$objective <- NULL
         
@@ -2987,10 +3115,25 @@ we encounter optimisation issues and restart at the current solution:
 \mbox{}\verb@       break()@\\
 \mbox{}\verb@   }@\\
 \mbox{}\verb@}@\\
+\mbox{}\verb@@\\
+\mbox{}\verb@if (isTRUE(correctFirth)) {@\\
+\mbox{}\verb@    @\hbox{$\langle\,${\itshape Firth correction}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    if (ret$convergence > 0) {@\\
+\mbox{}\verb@        if (is.na(correctFirth)) { ### only after failure@\\
+\mbox{}\verb@            warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", @\\
+\mbox{}\verb@                             ret$message),@\\
+\mbox{}\verb@                            "free1way"),@\\
+\mbox{}\verb@                             domain = NA)@\\
+\mbox{}\verb@            @\hbox{$\langle\,${\itshape Firth correction}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
+\mbox{}\verb@        }@\\
+\mbox{}\verb@   }@\\
+\mbox{}\verb@}@\\
 \mbox{}\verb@if (ret$convergence > 0)@\\
 \mbox{}\verb@    warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),@\\
-\mbox{}\verb@                  "free1way"),@\\
-\mbox{}\verb@                     domain = NA)@\\
+\mbox{}\verb@                           "free1way"),@\\
+\mbox{}\verb@                           domain = NA)@\\
+\mbox{}\verb@@\\
 \mbox{}\verb@ret$value <- ret$objective@\\
 \mbox{}\verb@ret$objective <- NULL@\\
 \mbox{}\verb@@{\NWsep}
@@ -3069,6 +3212,7 @@ defined first
 \mbox{}\verb@                         he(p)[-fix, -fix, drop = FALSE]@\\
 \mbox{}\verb@                     })@\\
 \mbox{}\verb@    opargs$control <- control[[1L]]@\\
+\mbox{}\verb@    correctFirth <- FALSE ### turn off Firth correction in .profile@\\
 \mbox{}\verb@    @\hbox{$\langle\,${\itshape do optim}\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$}\verb@@\\
 \mbox{}\verb@    p <- numeric(length(start))@\\
 \mbox{}\verb@    p[fix] <- delta@\\
@@ -3087,13 +3231,63 @@ defined first
 \end{list}
 \end{minipage}\vspace{4ex}
 \end{flushleft}
+Chapter~\ref{ch:Firth} introduces a bias correction \citep{Firth1993},
+essentially by adding a penalty term to the log-likelihood. The
+\code{correctFirth} argument triggers this bias correction to by applied
+when \code{TRUE}, not to be applied when \code{FALSE}, and to applied in
+case the unpenalised ML estimation resulted in a convergance issue
+(\code{NA}). This part is still experimental and needs more testing. It also
+seems unclear if and how the Fisher information needs additional correction
+and it is certainly unclear if one can proceed with permutation testing
+after correcting the bias.
+
+\begin{flushleft} \small
+\begin{minipage}{\linewidth}\label{scrap33}\raggedright\small
+\NWtarget{nuweb?}{} $\langle\,${\itshape Firth correction}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
+\vspace{-1ex}
+\begin{list}{}{} \item
+\mbox{}\verb@@\\
+\mbox{}\verb@.Firth_ll <- function(cf, start) {@\\
+\mbox{}\verb@    fix <- seq_along(cf)@\\
+\mbox{}\verb@    start[fix] <- cf@\\
+\mbox{}\verb@    ### compute profile likelihood w/o warnings@\\
+\mbox{}\verb@    ret <- suppressWarnings(.profile(start, fix = fix))@\\
+\mbox{}\verb@    Hfull <- he(ret$par)@\\
+\mbox{}\verb@    Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))@\\
+\mbox{}\verb@    ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@if (K == 2) {@\\
+\mbox{}\verb@    MLcf <- ret$par[seq_len(K - 1)]@\\
+\mbox{}\verb@    Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,@\\
+\mbox{}\verb@                  method = "Brent", lower = MLcf - 5, upper = MLcf + 5)@\\
+\mbox{}\verb@} else {@\\
+\mbox{}\verb@    ### Nelder-Mead@\\
+\mbox{}\verb@    Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@if (Fret$convergence == 0) {@\\
+\mbox{}\verb@    start <- ret$par@\\
+\mbox{}\verb@    start[seq_len(K - 1)] <- Fret$par@\\
+\mbox{}\verb@    ret <- .profile(start, fix = seq_len(K - 1))@\\
+\mbox{}\verb@    ret$objective <- ret$value@\\
+\mbox{}\verb@}@\\
+\mbox{}\verb@@{\NWsep}
+\end{list}
+\vspace{-1.5ex}
+\footnotesize
+\begin{list}{}{\setlength{\itemsep}{-\parsep}\setlength{\itemindent}{-\leftmargin}}
+\item \NWtxtMacroRefIn\ \NWlink{nuweb?}{?}.
+
+\item{}
+\end{list}
+\end{minipage}\vspace{4ex}
+\end{flushleft}
 The heart of the function is a call to \code{nlminb}, trying to obtain
 parameter estimates of $\thetavec$ by minimising the negative
 log-likelihood. We allow some (or all) parameters to be fixed at some
 constants, and provide a profile version of the likelihood:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap33}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap34}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape optim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3126,7 +3320,7 @@ After parameter estimation, we evaluate negative scores, the Hessian, and
 negative residuals as requested:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap34}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap35}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape post processing}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3203,13 +3397,14 @@ time whenever a larger number of intercept parameters in present in the
 problem.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap35}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap36}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ML estimation}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
 \mbox{}\verb@@\\
 \mbox{}\verb@.free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, @\\
 \mbox{}\verb@                        residuals = TRUE, score = TRUE, hessian = TRUE, @\\
+\mbox{}\verb@                        correctFirth = FALSE,@\\
 \mbox{}\verb@                        ### use nlminb for small sample sizes@\\
 \mbox{}\verb@                        dooptim = c(".NewtonRaphson", "nlminb")[1 + (sum(x) < 20)],                         @\\
 \mbox{}\verb@                        control = list(@\\
@@ -3307,7 +3502,7 @@ statistics and obtain the limiting null distribution based on classical ML
 theory under the population model:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap36}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap37}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape statistics}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3338,7 +3533,7 @@ We only need access to the parameter estimates $\hat{\delta}_2, \dots,
 \hat{\delta}_K$ and the corresponding Hessian:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap37}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap38}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Wald statistic}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3369,7 +3564,7 @@ evaluate the profile log-likelihood at some value corresponding the null
 hypothesis to be tested:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap38}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap39}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape LRT}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3399,7 +3594,7 @@ function of the shift parameters evaluated for some null values need to be
 computed:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap39}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap40}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Rao}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3436,7 +3631,7 @@ asymptotic distribution or based on a Monte-Carlo estimate of the reference
 distribution:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap40}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap41}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Permutation statistics}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3472,7 +3667,7 @@ distribution:
 In addition, we compute permutation p-values
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap41}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap42}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Permutation p-values}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3532,7 +3727,7 @@ The mean and variance of the linear permutation statistic under the null was
 given by \cite{strasserweber1999}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap42}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap43}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape Strasser Weber}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3587,7 +3782,7 @@ For small samples, we used the \code{r2dtable} function to sample from
 tables with fixed marginal distributions:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap43}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap44}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape resampling}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3639,7 +3834,7 @@ also provide exact p-values computed via the Streitberg-R\"ohmel shift
 algorithm, mainly because the scores can be mapped to integers:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap44}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap45}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape exact proportional odds}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3731,7 +3926,7 @@ We provide a new test procedure in a generic \code{free1way}, featuring
 a method for tables (the main workhorse) and additional user interfaces. 
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap45}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap46}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape link2fun}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3764,7 +3959,7 @@ group as control, so factors need to be releveled to obtain identical
 results (this is relevant for the one-sided case).
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap46}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap47}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3820,7 +4015,7 @@ where preparations for permutations tests are performed before returning the
 object
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap47}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap48}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way permutation tests}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3888,7 +4083,7 @@ The \code{formula} method allows formulae \code{outcome ~ treatment |
 stratum)} for model specification
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap48}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap49}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way formula}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -3974,7 +4169,7 @@ outcomes. The \code{event} argument is a logical where \code{TRUE} is
 interpreted as an event and \code{FALSE} as right-censored observation
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap49}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap50}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape variable names and checks}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4009,7 +4204,7 @@ interpreted as an event and \code{FALSE} as right-censored observation
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap50}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap51}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way numeric}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4061,7 +4256,7 @@ The \code{factor} method also allows right-censoring but otherwise is just a
 call to \code{xtabs}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap51}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way factor}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4117,7 +4312,7 @@ method allows to obtain effects at alternative scales: probabilistic indices
 (\code{AUC} = \code{PI}) or the overlap coefficient:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap52}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way methods}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4169,7 +4364,7 @@ permutation test is performed, mainly because the $p$-values coincide with
 some special cases (\code{wilcox,kruskal,friedman.test}):
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap53}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way print}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4226,7 +4421,7 @@ The \code{summary} method performs population Wald inference unless the
 \code{test} argument is specified:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap54}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap55}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way summary}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4284,7 +4479,7 @@ indices or overlap coefficients can also be computed.
 We begin computing the critical values for permutation tests, making sure
 the confidence intervals will be in line with one- and two-sided p-values:
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap55}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape permutation confint}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4328,7 +4523,7 @@ The \code{confint} method starts with Wald intervals, which are either returned 
 values for the inversion:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap56}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape free1way confint}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4666,7 +4861,7 @@ confidence \emph{band} can be obtained from a confidence \emph{interval} for
 $\delta_2$. The PP-plot is, up to rescalings, identical to the ROC curve.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap57}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ROC bands}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4710,7 +4905,7 @@ corresponding model-based \citep{SewakHothorn2023} probability-probability plot,
 the latter for a certain choice of link function:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap58}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape ppplot}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4806,7 +5001,7 @@ observations by the same quantile function changes the outcome distributions
 but not the shift effects.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap59}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape design args}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4837,7 +5032,7 @@ but not the shift effects.
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap60}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape rfree1way}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -4954,7 +5149,7 @@ essence, we draw samples from the multinomial distribution after computing
 the relevant discrete density.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap61}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape r2dsim}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5033,7 +5228,7 @@ directly. Nevertheless, this is a random experiment, so we first make
 computations reproducible:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap62}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape random seed}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5060,7 +5255,7 @@ computations reproducible:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap63}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power setup}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5107,7 +5302,7 @@ $1000$) and adjust the obtained Fisher information accordingly to reduce
 sampling error.
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap64}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap65}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape estimate Fisher information}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5151,7 +5346,7 @@ control:treatment = 1:2) and the sample size ratios between strata.
 The treatment effects are contained in $K - 1$ vector \code{delta}:
 
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap65}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power call}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5173,7 +5368,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap66}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap67}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power htest output}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5205,7 +5400,7 @@ The treatment effects are contained in $K - 1$ vector \code{delta}:
 \end{minipage}\vspace{4ex}
 \end{flushleft}
 \begin{flushleft} \small
-\begin{minipage}{\linewidth}\label{scrap67}\raggedright\small
+\begin{minipage}{\linewidth}\label{scrap68}\raggedright\small
 \NWtarget{nuweb?}{} $\langle\,${\itshape power}\nobreak\ {\footnotesize {?}}$\,\rangle\equiv$
 \vspace{-1ex}
 \begin{list}{}{} \item
@@ -5414,7 +5609,7 @@ power.free1way.test(power = .8, prob = prb, delta = delta, seed = 3)
 power.free1way.test(n = 19, prob = prb, delta = delta, seed = 3)
 @
 
-\chapter{Firth Correction}
+\chapter{Firth Correction} \label{ch:Firth}
 
 Sometimes, especially under complete separation, the maximum likelihood
 estimator does not exist. We could think of offering the option to add a
@@ -5454,6 +5649,13 @@ optim(coef(x), fn = fun, method = "Brent",
       lower = min(grd), upper = max(grd))[c("par", "value")]
 @
 
+The \code{correctFirth} argument can be used to request this type of bias
+correction from \code{free1way} (this argument should be added to
+\code{free1way.table} and documented)
+<<correctFirth>>=
+free1way(y ~ w, link = "probit", correctFirth = TRUE)
+@
+
 \chapter*{Index}
 
 \section*{Files}
@@ -5478,6 +5680,7 @@ optim(coef(x), fn = fun, method = "Brent",
 }
 \item $\langle\,$estimate Fisher information\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$exact proportional odds\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
+\item $\langle\,$Firth correction\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way confint\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}
 \item $\langle\,$free1way factor\nobreak\ {\footnotesize \NWlink{nuweb?}{?}}$\,\rangle$ {\footnotesize {\NWtxtRefIn} \NWlink{nuweb?}{?}.}

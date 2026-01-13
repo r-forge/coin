@@ -90,6 +90,7 @@
 
 .free1wayML <- function(x, link, mu = 0, start = NULL, fix = NULL, 
                         residuals = TRUE, score = TRUE, hessian = TRUE, 
+                        correctFirth = FALSE,
                         ### use nlminb for small sample sizes
                         dooptim = c(".NewtonRaphson", "nlminb")[1 + (sum(x) < 20)],                         
                         control = list(
@@ -582,6 +583,7 @@
                              he(p)[-fix, -fix, drop = FALSE]
                          })
         opargs$control <- control[[1L]]
+        correctFirth <- FALSE ### turn off Firth correction in .profile
         # do optim
         
         maxit <- control[[1L]]$iter.max
@@ -596,10 +598,75 @@
                break()
            }
         }
+
+        if (isTRUE(correctFirth)) {
+            # Firth correction
+            
+            .Firth_ll <- function(cf, start) {
+                fix <- seq_along(cf)
+                start[fix] <- cf
+                ### compute profile likelihood w/o warnings
+                ret <- suppressWarnings(.profile(start, fix = fix))
+                Hfull <- he(ret$par)
+                Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
+                ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+            }
+            if (K == 2) {
+                MLcf <- ret$par[seq_len(K - 1)]
+                Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                              method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+            } else {
+                ### Nelder-Mead
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+            }
+            if (Fret$convergence == 0) {
+                start <- ret$par
+                start[seq_len(K - 1)] <- Fret$par
+                ret <- .profile(start, fix = seq_len(K - 1))
+                ret$objective <- ret$value
+            }
+            
+        } else {
+            if (ret$convergence > 0) {
+                if (is.na(correctFirth)) { ### only after failure
+                    warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", 
+                                     ret$message),
+                                    "free1way"),
+                                     domain = NA)
+                    # Firth correction
+                    
+                    .Firth_ll <- function(cf, start) {
+                        fix <- seq_along(cf)
+                        start[fix] <- cf
+                        ### compute profile likelihood w/o warnings
+                        ret <- suppressWarnings(.profile(start, fix = fix))
+                        Hfull <- he(ret$par)
+                        Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
+                        ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                    }
+                    if (K == 2) {
+                        MLcf <- ret$par[seq_len(K - 1)]
+                        Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                                      method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                    } else {
+                        ### Nelder-Mead
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                    }
+                    if (Fret$convergence == 0) {
+                        start <- ret$par
+                        start[seq_len(K - 1)] <- Fret$par
+                        ret <- .profile(start, fix = seq_len(K - 1))
+                        ret$objective <- ret$value
+                    }
+                    
+                }
+           }
+        }
         if (ret$convergence > 0)
             warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
-                          "free1way"),
-                             domain = NA)
+                                   "free1way"),
+                                   domain = NA)
+
         ret$value <- ret$objective
         ret$objective <- NULL
         
@@ -632,10 +699,75 @@
                break()
            }
         }
+
+        if (isTRUE(correctFirth)) {
+            # Firth correction
+            
+            .Firth_ll <- function(cf, start) {
+                fix <- seq_along(cf)
+                start[fix] <- cf
+                ### compute profile likelihood w/o warnings
+                ret <- suppressWarnings(.profile(start, fix = fix))
+                Hfull <- he(ret$par)
+                Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
+                ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+            }
+            if (K == 2) {
+                MLcf <- ret$par[seq_len(K - 1)]
+                Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                              method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+            } else {
+                ### Nelder-Mead
+                Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+            }
+            if (Fret$convergence == 0) {
+                start <- ret$par
+                start[seq_len(K - 1)] <- Fret$par
+                ret <- .profile(start, fix = seq_len(K - 1))
+                ret$objective <- ret$value
+            }
+            
+        } else {
+            if (ret$convergence > 0) {
+                if (is.na(correctFirth)) { ### only after failure
+                    warning(gettextf(paste("Firth correction was applied in %s because initial optimisation failed with:", 
+                                     ret$message),
+                                    "free1way"),
+                                     domain = NA)
+                    # Firth correction
+                    
+                    .Firth_ll <- function(cf, start) {
+                        fix <- seq_along(cf)
+                        start[fix] <- cf
+                        ### compute profile likelihood w/o warnings
+                        ret <- suppressWarnings(.profile(start, fix = fix))
+                        Hfull <- he(ret$par)
+                        Hfix <- as.matrix(solve(solve(Hfull)[fix, fix]))
+                        ret$value - .5 * determinant(Hfix, logarithm = TRUE)$modulus
+                    }
+                    if (K == 2) {
+                        MLcf <- ret$par[seq_len(K - 1)]
+                        Fret <- optim(MLcf, fn = .Firth_ll, start = ret$par,
+                                      method = "Brent", lower = MLcf - 5, upper = MLcf + 5)
+                    } else {
+                        ### Nelder-Mead
+                        Fret <- optim(ret$par[seq_len(K - 1)], fn = .Firth_ll, start = ret$par)
+                    }
+                    if (Fret$convergence == 0) {
+                        start <- ret$par
+                        start[seq_len(K - 1)] <- Fret$par
+                        ret <- .profile(start, fix = seq_len(K - 1))
+                        ret$objective <- ret$value
+                    }
+                    
+                }
+           }
+        }
         if (ret$convergence > 0)
             warning(gettextf(paste("Unsuccessful optimisation in %s:", ret$message),
-                          "free1way"),
-                             domain = NA)
+                                   "free1way"),
+                                   domain = NA)
+
         ret$value <- ret$objective
         ret$objective <- NULL
         
