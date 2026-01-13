@@ -3104,6 +3104,7 @@ ret <- list(n = n,
             power = power, 
             sig.level = sig.level)
 if (mu != 0) ret$mu <- mu
+if (K == 2L) ret[["Standard error"]] <- se
 ret[[link$parm]] <- delta
 ret$note <- "'n' is sample size in control group"
 if (B > 1) ret$note <- paste(ret$note, "of first stratum")
