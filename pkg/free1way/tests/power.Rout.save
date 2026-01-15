@@ -40,6 +40,19 @@ Type 'q()' to quit R.
 7 15     1           3 290875 0.4701
 8 50     1           3 290875 0.9313
 > 
+> ### SWIFT trial
+> delta <- log(1.38)
+> x <- power.free1way.test(delta = delta, power = .8, seed = 29)
+> x1 <- power.free1way.test(n = x$n, power = x$power, delta = delta, sig.level = NULL, seed = 29)
+> x2 <- power.free1way.test(n = x$n, delta = delta, seed = 29)
+> x3 <- power.free1way.test(n = x$n, power = x$power, seed = 29)
+> 
+> stopifnot(isTRUE(all.equal(x, x1, tol = 1e-2)))
+> stopifnot(isTRUE(all.equal(x, x2, tol = 1e-2)))
+> stopifnot(isTRUE(all.equal(x, x3, tol = 1e-2)))
+> 
+> 
+> 
 > proc.time()
    user  system elapsed 
-  2.534   0.067   2.606 
+ 23.535   0.079  23.612 
