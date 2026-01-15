@@ -13,13 +13,13 @@ rfree1way(n, prob = NULL, alloc_ratio = 1,
           blocks = ifelse(is.null(prob), 1, NCOL(prob)), 
           strata_ratio = 1, delta = 0, offset = 0, 
           link = c("logit", "probit", "cloglog", "loglog"))
-power.free1way.test(n = NULL, prob = rep.int(1 / n, n), alloc_ratio = 1, 
-          blocks = NCOL(prob),
-          strata_ratio = 1, delta = NULL, mu = 0, 
-          sig.level = .05, power = NULL,
+power.free1way.test(n = NULL, prob = if (is.null(n)) NULL else
+          rep.int(1/n, n), alloc_ratio = 1, blocks = if
+          (is.null(prob)) 1 else NCOL(prob), strata_ratio = 1,
+          delta = NULL, mu = 0, sig.level = 0.05, power = NULL,
           link = c("logit", "probit", "cloglog", "loglog"),
-          alternative = c("two.sided", "less", "greater"), 
-          nsim = 100, seed = NULL, tol = .Machine$double.eps^0.25) 
+          alternative = c("two.sided", "less", "greater"), nsim
+          = 100, seed = NULL, tol = .Machine$double.eps^0.25)
 }
 \arguments{
   \item{n}{number of observations in the control group of the first block.
