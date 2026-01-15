@@ -123,7 +123,10 @@ function \eqn{Q} defines the model
 \deqn{F_k(y) = Q^{-1}(Q(F_1(y)) - \delta_k)}
 such that positive values of the parameter \eqn{\delta_k} correspond to
 stochasically larger response values in group \eqn{k} when compared to the
-control group.
+control group. Here, \eqn{\mu_k} defines the null hypothesis \eqn{H_0: \delta_k
+- \mu_k = 0} (or the one-sided equivalents thereof); 
+the parameter \code{mu} can be a vector of length \eqn{K - 1} or a
+scalar value to be recycled to this length.
 
 The argument \code{link} is used to define the link function and thus
 specific models: Log-odds ratio alternatives are based on the logit link
@@ -168,7 +171,8 @@ proportional-odds models in this class is available in
 }
 \value{
 An object of class \code{free1way} with corresponding \code{logLik},
-\code{coef}, \code{vcov}, \code{summary}, and \code{confint} methods.
+\code{coef} (which returns \eqn{\delta_k - \mu_k}, not \eqn{\delta_k}
+whenever \code{\mu != 0}), \code{vcov}, \code{summary}, and \code{confint} methods.
 }
 \references{
   \bibshow{*}
