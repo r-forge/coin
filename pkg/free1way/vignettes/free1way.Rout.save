@@ -1702,7 +1702,7 @@ attr(,"logarithm")
 > free1way(y ~ w, link = "probit", correctFirth = TRUE)
 
 	2-sample van der Waerden normal scores test against latent normal shift
-	alternatives
+	alternatives, with Firth bias correction
 
 data:  y by w (1, 2)
 Perm Z = 5, p-value = 5.7e-07
@@ -1712,4 +1712,4 @@ alternative hypothesis: true generalised Cohen's d is not equal to 0
  *** Run successfully completed ***
 > proc.time()
    user  system elapsed 
- 33.482   0.124  33.615 
+ 32.913   0.167  33.103 

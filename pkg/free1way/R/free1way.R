@@ -633,6 +633,7 @@
                                      ret$message),
                                     "free1way"),
                                      domain = NA)
+                    correctFirth <- TRUE
                     # Firth correction
                     
                     .Firth_ll <- function(cf, start) {
@@ -667,6 +668,7 @@
                                    "free1way"),
                                    domain = NA)
 
+        ret$correctFirth <- correctFirth
         ret$value <- ret$objective
         ret$objective <- NULL
         
@@ -734,6 +736,7 @@
                                      ret$message),
                                     "free1way"),
                                      domain = NA)
+                    correctFirth <- TRUE
                     # Firth correction
                     
                     .Firth_ll <- function(cf, start) {
@@ -768,6 +771,7 @@
                                    "free1way"),
                                    domain = NA)
 
+        ret$correctFirth <- correctFirth
         ret$value <- ret$objective
         ret$objective <- NULL
         
@@ -1027,6 +1031,10 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
         ret$terms <- terms(fm, data = as.data.frame(y))
     }
     
+
+    if (ret$correctFirth) 
+        ret$method <- paste(ret$method, 
+            "with Firth bias correction", sep = ", ")
 
     class(ret) <- "free1way"
     return(ret)

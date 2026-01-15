@@ -219,4 +219,4 @@ alternative hypothesis: true log-hazard ratio is not equal to 0
 > 
 > proc.time()
    user  system elapsed 
-  1.234   0.063   1.294 
+  1.258   0.053   1.306 

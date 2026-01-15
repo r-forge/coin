@@ -1313,6 +1313,7 @@ if (isTRUE(correctFirth)) {
                              ret$message),
                             "free1way"),
                              domain = NA)
+            correctFirth <- TRUE
             @<Firth correction@>
         }
    }
@@ -1322,6 +1323,7 @@ if (ret$convergence > 0)
                            "free1way"),
                            domain = NA)
 
+ret$correctFirth <- correctFirth
 ret$value <- ret$objective
 ret$objective <- NULL
 @}
@@ -1978,6 +1980,10 @@ free1way.table <- function(y, link = c("logit", "probit", "cloglog", "loglog"),
     ret$call <- cl
 
     @<free1way permutation tests@>
+
+    if (ret$correctFirth) 
+        ret$method <- paste(ret$method, 
+            "with Firth bias correction", sep = ", ")
 
     class(ret) <- "free1way"
     return(ret)
